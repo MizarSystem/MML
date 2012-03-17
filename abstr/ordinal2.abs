@@ -1,0 +1,540 @@
+:: Sequences of Ordinal Numbers. Beginnings of Ordinal Arithmetics
+::  by Grzegorz Bancerek
+::
+:: Received July 18, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL1, FUNCT_1, BOOLE, SETFAM_1, TARSKI, RELAT_1, ORDINAL2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1,
+      SETFAM_1;
+ constructors ORDINAL1, SETFAM_1, XBOOLE_0;
+ clusters FUNCT_1, SUBSET_1, ORDINAL1, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+ reserve A,A1,A2,B,C,D for Ordinal,
+         X,Y,Z for set,
+         x,y,a,b,c for set,
+         L,L1,L2,L3 for T-Sequence,
+         f for Function;
+
+scheme Ordinal_Ind { P[Ordinal] } :
+  for A holds P[A]
+   provided
+  P[{}] and
+  for A st P[A] holds P[succ A] and
+  for A st A <> {} & A is_limit_ordinal & for B st B in A holds P[B]
+       holds P[A];
+
+theorem :: ORDINAL2:1
+  A c= B iff succ A c= succ B;
+
+theorem :: ORDINAL2:2
+  union succ A = A;
+
+theorem :: ORDINAL2:3
+    succ A c= bool A;
+
+theorem :: ORDINAL2:4
+    {} is_limit_ordinal;
+
+theorem :: ORDINAL2:5
+  union A c= A;
+
+definition let L;
+ func last L -> set equals
+:: ORDINAL2:def 1
+  L.(union dom L);
+end;
+
+canceled;
+
+theorem :: ORDINAL2:7
+  dom L = succ A implies last L = L.A;
+
+definition let X;
+ func On X -> set means
+:: ORDINAL2:def 2
+  x in it iff x in X & x is Ordinal;
+
+ func Lim X -> set means
+:: ORDINAL2:def 3
+ x in it iff x in X & ex A st x = A & A is_limit_ordinal;
+end;
+
+canceled;
+
+theorem :: ORDINAL2:9
+    On X c= X;
+
+theorem :: ORDINAL2:10
+  On A = A;
+
+theorem :: ORDINAL2:11
+  X c= Y implies On X c= On Y;
+
+canceled;
+
+theorem :: ORDINAL2:13
+    Lim X c= X;
+
+theorem :: ORDINAL2:14
+    X c= Y implies Lim X c= Lim Y;
+
+theorem :: ORDINAL2:15
+    Lim X c= On X;
+
+theorem :: ORDINAL2:16
+  for D ex A st D in A & A is_limit_ordinal;
+
+theorem :: ORDINAL2:17
+  (for x st x in X holds x is Ordinal) implies meet X is Ordinal;
+
+definition
+ func one -> non empty Ordinal equals
+:: ORDINAL2:def 4
+  succ {};
+end;
+
+definition
+ func omega -> set means
+:: ORDINAL2:def 5
+ {} in it & it is_limit_ordinal & it is ordinal &
+      for A st {} in A & A is_limit_ordinal holds it c= A;
+end;
+
+definition
+ cluster omega -> non empty ordinal;
+end;
+
+definition
+ let X;
+ func inf X -> Ordinal equals
+:: ORDINAL2:def 6
+  meet On X;
+
+ func sup X -> Ordinal means
+:: ORDINAL2:def 7
+  On X c= it & for A st On X c= A holds it c= A;
+end;
+
+canceled;
+
+theorem :: ORDINAL2:19
+    {} in omega & omega is_limit_ordinal &
+   for A st {} in A & A is_limit_ordinal holds omega c= A;
+
+canceled 2;
+
+theorem :: ORDINAL2:22
+    A in X implies inf X c= A;
+
+theorem :: ORDINAL2:23
+    On X <> {} & (for A st A in X holds D c= A) implies D c= inf X;
+
+theorem :: ORDINAL2:24
+    A in X & X c= Y implies inf Y c= inf X;
+
+theorem :: ORDINAL2:25
+    A in X implies inf X in X;
+
+theorem :: ORDINAL2:26
+  sup A = A;
+
+theorem :: ORDINAL2:27
+  A in X implies A in sup X;
+
+theorem :: ORDINAL2:28
+  (for A st A in X holds A in D) implies sup X c= D;
+
+theorem :: ORDINAL2:29
+    A in sup X implies ex B st B in X & A c= B;
+
+theorem :: ORDINAL2:30
+    X c= Y implies sup X c= sup Y;
+
+theorem :: ORDINAL2:31
+    sup { A } = succ A;
+
+theorem :: ORDINAL2:32
+    inf X c= sup X;
+
+scheme TS_Lambda { A()->Ordinal, F(Ordinal)->set } :
+  ex L st dom L = A() & for A st A in A() holds L.A = F(A);
+
+definition let f;
+ attr f is Ordinal-yielding means
+:: ORDINAL2:def 8
+  ex A st rng f c= A;
+end;
+
+definition
+ cluster Ordinal-yielding T-Sequence;
+end;
+
+definition
+ mode Ordinal-Sequence is Ordinal-yielding T-Sequence;
+end;
+
+definition let A;
+ cluster -> Ordinal-yielding T-Sequence of A;
+end;
+
+definition let L be Ordinal-Sequence; let A;
+ cluster L|A -> Ordinal-yielding;
+
+end;
+
+ reserve fi,psi for Ordinal-Sequence;
+
+canceled;
+
+theorem :: ORDINAL2:34
+  A in dom fi implies fi.A is Ordinal;
+
+definition
+ let f be Ordinal-Sequence, a be Ordinal;
+ cluster f.a -> ordinal;
+end;
+
+ scheme OS_Lambda { A()->Ordinal, F(Ordinal)->Ordinal } :
+  ex fi st dom fi = A() & for A st A in A() holds fi.A = F(A);
+
+ scheme TS_Uniq1 { A()->Ordinal, B()->set, C(Ordinal,set)->set,
+                   D(Ordinal,T-Sequence)->set,
+                   L1()->T-Sequence, L2()->T-Sequence } :
+  L1() = L2() provided
+ dom L1() = A() and
+ {} in A() implies L1().{} = B() and
+ for A st succ A in A() holds L1().(succ A) = C(A,L1().A) and
+ for A st A in A() & A <> {} & A is_limit_ordinal
+         holds L1().A = D(A,L1()|A) and
+ dom L2() = A() and
+ {} in A() implies L2().{} = B() and
+ for A st succ A in A() holds L2().(succ A) = C(A,L2().A) and
+ for A st A in A() & A <> {} & A is_limit_ordinal
+         holds L2().A = D(A,L2()|A);
+
+ scheme TS_Exist1 { A()->Ordinal, B()->set, C(Ordinal,set)->set,
+                    D(Ordinal,T-Sequence)->set } :
+  ex L st dom L = A() &
+   ({} in A() implies L.{} = B() ) &
+   (for A st succ A in A() holds L.(succ A) = C(A,L.A) ) &
+   (for A st A in A() & A <> {} & A is_limit_ordinal
+          holds L.A = D(A,L|A) );
+
+  scheme TS_Result
+   { L()->T-Sequence, F(Ordinal)->set, A()->Ordinal, B()->set,
+     C(Ordinal,set)->set, D(Ordinal,T-Sequence)->set } :
+  for A st A in dom L() holds L().A = F(A)
+   provided
+  for A,x holds x = F(A) iff
+     ex L st x = last L & dom L = succ A & L.{} = B() &
+      (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+       for C st C in succ A & C <> {} & C is_limit_ordinal
+              holds L.C = D(C,L|C) and
+  dom L() = A() and
+  {} in A() implies L().{} = B() and
+  for A st succ A in A() holds L().(succ A) = C(A,L().A) and
+  for A st A in A() & A <> {} & A is_limit_ordinal
+           holds L().A = D(A,L()|A);
+
+ scheme TS_Def { A()->Ordinal, B()->set, C(Ordinal,set)->set,
+                 D(Ordinal,T-Sequence)->set } :
+  (ex x,L st x = last L & dom L = succ A() & L.{} = B() &
+     (for C st succ C in succ A() holds L.succ C = C(C,L.C)) &
+      for C st C in succ A() & C <> {} & C is_limit_ordinal
+             holds L.C = D(C,L|C) ) &
+   for x1,x2 being set st
+    (ex L st x1 = last L & dom L = succ A() & L.{} = B() &
+      (for C st succ C in succ A() holds L.succ C = C(C,L.C)) &
+       for C st C in succ A() & C <> {} & C is_limit_ordinal
+              holds L.C = D(C,L|C) ) &
+    (ex L st x2 = last L & dom L = succ A() & L.{} = B() &
+      (for C st succ C in succ A() holds L.succ C = C(C,L.C)) &
+       for C st C in succ A() & C <> {} & C is_limit_ordinal
+              holds L.C = D(C,L|C) )
+     holds x1 = x2;
+
+  scheme TS_Result0
+   { F(Ordinal)->set, B()->set, C(Ordinal,set)->set,
+     D(Ordinal,T-Sequence)->set } :
+  F({}) = B()
+   provided
+  for A,x holds x = F(A) iff
+     ex L st x = last L & dom L = succ A & L.{} = B() &
+      (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+       for C st C in succ A & C <> {} & C is_limit_ordinal
+              holds L.C = D(C,L|C);
+
+  scheme TS_ResultS
+   { B()->set, C(Ordinal,set)->set,
+     D(Ordinal,T-Sequence)->set, F(Ordinal)->set } :
+  for A holds F(succ A) = C(A,F(A))
+   provided
+  for A,x holds x = F(A) iff
+     ex L st x = last L & dom L = succ A & L.{} = B() &
+      (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+       for C st C in succ A & C <> {} & C is_limit_ordinal
+              holds L.C = D(C,L|C);
+
+  scheme TS_ResultL
+   { L()->T-Sequence, A()->Ordinal, F(Ordinal)->set, B()->set,
+     C(Ordinal,set)->set, D(Ordinal,T-Sequence)->set } :
+  F(A()) = D(A(),L())
+   provided
+  for A,x holds x = F(A) iff
+     ex L st x = last L & dom L = succ A & L.{} = B() &
+      (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+       for C st C in succ A & C <> {} & C is_limit_ordinal
+              holds L.C = D(C,L|C) and
+  A() <> {} & A() is_limit_ordinal and
+  dom L() = A() and
+  for A st A in A() holds L().A = F(A);
+
+ scheme OS_Exist { A()->Ordinal, B()->Ordinal, C(Ordinal,Ordinal)->Ordinal,
+                   D(Ordinal,T-Sequence)->Ordinal } :
+  ex fi st dom fi = A() &
+   ({} in A() implies fi.{} = B() ) &
+   (for A st succ A in A() holds fi.(succ A) = C(A,fi.A) ) &
+   (for A st A in A() & A <> {} & A is_limit_ordinal
+          holds fi.A = D(A,fi|A) );
+
+  scheme OS_Result
+   { fi()->Ordinal-Sequence, F(Ordinal)->Ordinal, A()->Ordinal, B()->Ordinal,
+     C(Ordinal,Ordinal)->Ordinal, D(Ordinal,T-Sequence)->Ordinal } :
+  for A st A in dom fi() holds fi().A = F(A)
+   provided
+  for A,B holds B = F(A) iff
+     ex fi st B = last fi & dom fi = succ A & fi.{} = B() &
+      (for C st succ C in succ A holds fi.succ C = C(C,fi.C)) &
+       for C st C in succ A & C <> {} & C is_limit_ordinal
+              holds fi.C = D(C,fi|C) and
+  dom fi() = A() and
+  {} in A() implies fi().{} = B() and
+  for A st succ A in A() holds fi().(succ A) = C(A,fi().A) and
+  for A st A in A() & A <> {} & A is_limit_ordinal
+           holds fi().A = D(A,fi()|A);
+
+ scheme OS_Def { A()->Ordinal, B()->Ordinal, C(Ordinal,Ordinal)->Ordinal,
+                   D(Ordinal,T-Sequence)->Ordinal } :
+  (ex A,fi st A = last fi & dom fi = succ A() & fi.{} = B() &
+     (for C st succ C in succ A() holds fi.succ C = C(C,fi.C)) &
+      for C st C in succ A() & C <> {} & C is_limit_ordinal
+             holds fi.C = D(C,fi|C) ) &
+   for A1,A2 st
+    (ex fi st A1 = last fi & dom fi = succ A() & fi.{} = B() &
+      (for C st succ C in succ A() holds fi.succ C = C(C,fi.C)) &
+       for C st C in succ A() & C <> {} & C is_limit_ordinal
+              holds fi.C = D(C,fi|C) ) &
+    (ex fi st A2 = last fi & dom fi = succ A() & fi.{} = B() &
+      (for C st succ C in succ A() holds fi.succ C = C(C,fi.C)) &
+       for C st C in succ A() & C <> {} & C is_limit_ordinal
+              holds fi.C = D(C,fi|C) )
+     holds A1 = A2;
+
+  scheme OS_Result0
+   { F(Ordinal)->Ordinal, B()->Ordinal, C(Ordinal,Ordinal)->Ordinal,
+     D(Ordinal,T-Sequence)->Ordinal } :
+  F({}) = B()
+   provided
+  for A,B holds B = F(A) iff
+     ex fi st B = last fi & dom fi = succ A & fi.{} = B() &
+      (for C st succ C in succ A holds fi.succ C = C(C,fi.C)) &
+       for C st C in succ A & C <> {} & C is_limit_ordinal
+              holds fi.C = D(C,fi|C);
+
+  scheme OS_ResultS
+   { B()->Ordinal, C(Ordinal,Ordinal)->Ordinal,
+     D(Ordinal,T-Sequence)->Ordinal, F(Ordinal)->Ordinal } :
+  for A holds F(succ A) = C(A,F(A))
+   provided
+  for A,B holds B = F(A) iff
+     ex fi st B = last fi & dom fi = succ A & fi.{} = B() &
+      (for C st succ C in succ A holds fi.succ C = C(C,fi.C)) &
+       for C st C in succ A & C <> {} & C is_limit_ordinal
+              holds fi.C = D(C,fi|C);
+
+  scheme OS_ResultL
+   { fi()->Ordinal-Sequence, A()->Ordinal, F(Ordinal)->Ordinal, B()->Ordinal,
+     C(Ordinal,Ordinal)->Ordinal, D(Ordinal,T-Sequence)->Ordinal } :
+  F(A()) = D(A(),fi())
+   provided
+  for A,B holds B = F(A) iff
+     ex fi st B = last fi & dom fi = succ A & fi.{} = B() &
+      (for C st succ C in succ A holds fi.succ C = C(C,fi.C)) &
+       for C st C in succ A & C <> {} & C is_limit_ordinal
+              holds fi.C = D(C,fi|C) and
+  A() <> {} & A() is_limit_ordinal and
+  dom fi() = A() and
+  for A st A in A() holds fi().A = F(A);
+
+definition let L;
+ func sup L -> Ordinal equals
+:: ORDINAL2:def 9
+sup rng L;
+ func inf L -> Ordinal equals
+:: ORDINAL2:def 10
+inf rng L;
+end;
+
+theorem :: ORDINAL2:35
+    sup L = sup rng L & inf L = inf rng L;
+
+definition let L;
+ func lim_sup L -> Ordinal means
+:: ORDINAL2:def 11
+    ex fi st it = inf fi & dom fi = dom L &
+       for A st A in dom L holds fi.A = sup rng (L|(dom L \ A));
+
+ func lim_inf L -> Ordinal means
+:: ORDINAL2:def 12
+    ex fi st it = sup fi & dom fi = dom L &
+       for A st A in dom L holds fi.A = inf rng (L|(dom L \ A));
+end;
+
+definition let A,fi;
+ pred A is_limes_of fi means
+:: ORDINAL2:def 13
+   ex B st B in dom fi & for C st B c= C & C in dom fi holds fi.C = {}
+     if A = {} otherwise
+   for B,C st B in A & A in C ex D st D in dom fi &
+    for E being Ordinal st D c= E & E in dom fi holds B in fi.E & fi.E in C;
+end;
+
+definition let fi;
+ given A such that
+   A is_limes_of fi;
+ func lim fi -> Ordinal means
+:: ORDINAL2:def 14
+  it is_limes_of fi;
+end;
+
+definition let A,fi;
+ func lim(A,fi) -> Ordinal equals
+:: ORDINAL2:def 15
+     lim(fi|A);
+end;
+
+definition let L be Ordinal-Sequence;
+ attr L is increasing means
+:: ORDINAL2:def 16
+    for A,B st A in B & B in dom L holds L.A in L.B;
+ attr L is continuous means
+:: ORDINAL2:def 17
+    for A,B st A in dom L & A <> {} & A is_limit_ordinal & B = L.A
+          holds B is_limes_of L|A;
+end;
+
+definition let A,B;
+ func A +^ B -> Ordinal means
+:: ORDINAL2:def 18
+  ex fi st it = last fi & dom fi = succ B &
+         fi.{} = A &
+         (for C st succ C in succ B holds fi.succ C = succ(fi.C)) &
+         for C st C in succ B & C <> {} & C is_limit_ordinal
+                holds fi.C = sup(fi|C);
+end;
+
+definition let A,B;
+ func A *^ B -> Ordinal means
+:: ORDINAL2:def 19
+  ex fi st it = last fi & dom fi = succ A &
+         fi.{} = {} &
+         (for C st succ C in succ A holds fi.succ C = (fi.C)+^B) &
+         for C st C in succ A & C <> {} & C is_limit_ordinal
+                holds fi.C = union sup(fi|C);
+end;
+
+definition let A,B;
+ func exp(A,B) -> Ordinal means
+:: ORDINAL2:def 20
+  ex fi st it = last fi & dom fi = succ B &
+         fi.{} = one &
+         (for C st succ C in succ B holds fi.succ C = A*^(fi.C)) &
+         for C st C in succ B & C <> {} & C is_limit_ordinal
+                holds fi.C = lim(fi|C);
+end;
+
+canceled 8;
+
+theorem :: ORDINAL2:44
+  A+^{} = A;
+
+theorem :: ORDINAL2:45
+  A+^succ B = succ(A+^B);
+
+theorem :: ORDINAL2:46
+  B <> {} & B is_limit_ordinal implies
+   for fi st dom fi = B & for C st C in B holds fi.C = A+^C holds A+^B = sup fi
+;
+
+theorem :: ORDINAL2:47
+  {}+^A = A;
+
+theorem :: ORDINAL2:48
+    A+^one = succ A;
+
+theorem :: ORDINAL2:49
+  A in B implies C +^ A in C +^ B;
+
+theorem :: ORDINAL2:50
+  A c= B implies C +^ A c= C +^ B;
+
+theorem :: ORDINAL2:51
+  A c= B implies A +^ C c= B +^ C;
+
+theorem :: ORDINAL2:52
+  {}*^A = {};
+
+theorem :: ORDINAL2:53
+  (succ B)*^A = B*^A +^ A;
+
+theorem :: ORDINAL2:54
+  B <> {} & B is_limit_ordinal implies
+   for fi st dom fi = B & for C st C in B holds fi.C = C*^A holds
+     B*^A = union sup fi;
+
+theorem :: ORDINAL2:55
+  A*^{} = {};
+
+theorem :: ORDINAL2:56
+  one*^A = A & A*^one = A;
+
+theorem :: ORDINAL2:57
+  C <> {} & A in B implies A*^C in B*^C;
+
+theorem :: ORDINAL2:58
+    A c= B implies A*^C c= B*^C;
+
+theorem :: ORDINAL2:59
+    A c= B implies C*^A c= C*^B;
+
+theorem :: ORDINAL2:60
+  exp(A,{}) = one;
+
+theorem :: ORDINAL2:61
+  exp(A,succ B) = A*^exp(A,B);
+
+theorem :: ORDINAL2:62
+  B <> {} & B is_limit_ordinal implies
+   for fi st dom fi = B & for C st C in B holds fi.C = exp(A,C) holds
+     exp(A,B) = lim fi;
+
+theorem :: ORDINAL2:63
+    exp(A,one) = A & exp(one,A) = one;
+
+definition let A be set;
+ attr A is natural means
+:: ORDINAL2:def 21
+  A in omega;
+end;
+
+canceled;
+
+theorem :: ORDINAL2:65
+   for A ex B,C st B is_limit_ordinal & C is natural & A = B +^ C;

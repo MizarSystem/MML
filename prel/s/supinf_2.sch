@@ -1,0 +1,15 @@
+HIDDEN
+XBOOLE_0
+RELAT_1
+FUNCT_1
+ZFMISC_1
+SUBSET_1
+RELSET_1
+FUNCT_2
+#
+FunctR_ealEx
+#
+M1 W1 ;;M1 ;M1 ;;
+™ùM5 V4 ;V6 F1 ;F2 ;;F1 ;F2 ;;™ùM2 F1 ;;R1 K48 F1 ;F2 ;B1 B2 ;F3 B2 ;;ùM2 F1 ;;R2 F3 B1 ;F2 ;;;
+#
+!

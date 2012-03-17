@@ -1,0 +1,1708 @@
+:: Properties of the Internal Approximation of {J}ordan's Curve
+::  by Robert Milewski
+::
+:: Received June 27, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary JORDAN14, FINSEQ_1, BOOLE, PRE_TOPC, RELAT_2, CONNSP_1, RELAT_1,
+      ARYTM_1, GOBOARD1, EUCLID, MATRIX_1, ABSVALUE, GOBRD13, TOPREAL1,
+      GOBOARD5, TOPS_1, TREES_1, SPPOL_1, MCART_1, TARSKI, SUBSET_1, SEQM_3,
+      GOBOARD9, COMPTS_1, JORDAN8, PSCOMP_1, GROUP_1, ARYTM_3, JORDAN11,
+      JORDAN1H, JORDAN13, TOPREAL2, FINSEQ_4, JORDAN2C;
+ notation TARSKI, XBOOLE_0, SUBSET_1, GOBOARD5, STRUCT_0, XREAL_0, REAL_1,
+      NAT_1, BINARITH, ABSVALUE, CARD_4, FINSEQ_1, FINSEQ_4, MATRIX_1,
+      PRE_TOPC, TOPREAL2, TOPS_1, COMPTS_1, CONNSP_1, EUCLID, TOPREAL1,
+      GOBOARD1, SPPOL_1, PSCOMP_1, GOBOARD9, JORDAN2C, JORDAN8, GOBRD13,
+      JORDAN1H, JORDAN11, JORDAN13;
+ constructors REAL_1, FINSEQ_4, CARD_4, BINARITH, TOPS_1, CONNSP_1, PSCOMP_1,
+      REALSET1, GOBOARD9, GROUP_1, JORDAN1, JORDAN2C, JORDAN1H, JORDAN8,
+      JORDAN11, JORDAN13, WSIERP_1, TOPREAL4;
+ clusters RELSET_1, REVROT_1, SPRECT_2, JORDAN8, TOPREAL1, TOPREAL6, INT_1,
+      SUBSET_1, PRE_TOPC, SPRECT_3, SPRECT_4, BORSUK_2, JORDAN1A, GOBRD14,
+      TOPS_1, JORDAN1B, MEMBERED;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI;
+ theorems NAT_1, FINSEQ_1, GOBOARD1, FINSEQ_4, EUCLID, FINSEQ_3, AXIOMS,
+      REAL_1, HEINE, SPPOL_2, TARSKI, JORDAN3, PSCOMP_1, FINSEQ_5, CQC_THE1,
+      GOBOARD7, TOPREAL1, BINARITH, AMI_5, JORDAN5B, RLVECT_1, GOBOARD5,
+      GROUP_5, GOBOARD9, SUBSET_1, GOBRD11, SPRECT_3, GOBOARD6, TOPS_1,
+      JORDAN8, GOBRD13, SPRECT_4, CONNSP_1, SCMFSA_7, XBOOLE_0, XBOOLE_1,
+      NEWTON, GOBRD14, TOPREAL6, INT_1, JORDAN1, JORDAN2C, PRE_TOPC, JORDAN9,
+      JORDAN1H, TSEP_1, GOBRD12, JORDAN1A, JORDAN1C, JORDAN1E, JORDAN11,
+      JORDAN13, XCMPLX_1;
+ schemes NAT_1;
+
+begin
+
+  theorem Th1:
+   for f be non constant standard special_circular_sequence holds
+    BDD L~f = RightComp f or BDD L~f = LeftComp f
+   proof
+    let f be non constant standard special_circular_sequence;
+      L~f is Bounded by JORDAN2C:73;
+    then BDD L~f is_inside_component_of L~f by JORDAN2C:116;
+    then BDD L~f is_a_component_of (L~f)` by JORDAN2C:def 3;
+    hence thesis by JORDAN1H:30;
+   end;
+
+  theorem
+     for f be non constant standard special_circular_sequence holds
+    UBD L~f = RightComp f or UBD L~f = LeftComp f
+   proof
+    let f be non constant standard special_circular_sequence;
+      L~f is Bounded by JORDAN2C:73;
+    then ex B be Subset of TOP-REAL 2 st B is_outside_component_of L~f &
+     B = UBD L~f by JORDAN2C:76;
+    then UBD L~f is_a_component_of (L~f)` by JORDAN2C:def 4;
+    hence thesis by JORDAN1H:30;
+   end;
+
+  theorem
+     for G be Go-board
+   for f be FinSequence of TOP-REAL 2
+   for k be Nat holds
+    1 <= k & k+1 <= len f & f is_sequence_on G
+     implies left_cell(f,k,G) is closed
+   proof
+    let G be Go-board;
+    let f be FinSequence of TOP-REAL 2;
+    let k be Nat;
+    assume that
+     A1: 1 <= k & k+1 <= len f and
+     A2: f is_sequence_on G;
+    consider i1,j1,i2,j2 be Nat such that
+     A3: [i1,j1] in Indices G & f/.k = G*(i1,j1) and
+     A4: [i2,j2] in Indices G & f/.(k+1) = G*(i2,j2) and
+     A5: i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+         i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1 by A1,A2,JORDAN8:6;
+      i1 = i2 & j1+1 = j2 & left_cell(f,k,G) = cell(G,i1-'1,j1) or
+    i1+1 = i2 & j1 = j2 & left_cell(f,k,G) = cell(G,i1,j1) or
+    i1 = i2+1 & j1 = j2 & left_cell(f,k,G) = cell(G,i2,j2-'1) or
+    i1 = i2 & j1 = j2+1 & left_cell(f,k,G) = cell(G,i1,j2)
+                                            by A1,A2,A3,A4,A5,GOBRD13:def 3;
+    hence thesis by GOBRD11:33;
+   end;
+
+  theorem Th4:
+   for G be Go-board
+   for p be Point of TOP-REAL 2
+   for i,j be Nat st 1 <= i & i+1 <= len G & 1 <= j & j+1 <= width G holds
+    p in Int cell(G,i,j) iff
+    G*(i,j)`1 < p`1 & p`1 < G*(i+1,j)`1 & G*(i,j)`2 < p`2 & p`2 < G*(i,j+1)`2
+   proof
+    let G be Go-board;
+    let p be Point of TOP-REAL 2;
+    let i,j be Nat;
+    assume that
+     A1: 1 <= i & i+1 <= len G and
+     A2: 1 <= j & j+1 <= width G;
+    A3: 1 <= i & i < len G by A1,NAT_1:38;
+    A4: 1 <= j & j < width G by A2,NAT_1:38;
+    set Z = {|[r,s]| where r,s is Real : G*(i,1)`1 < r & r < G*(i+1,1)`1 &
+     G*(1,j)`2 < s & s < G*(1,j+1)`2};
+    A5: G*(i,1)`1 = G*(i,j)`1 by A3,A4,GOBOARD5:3;
+      i+1 >= 1 by NAT_1:29;
+    then A6: G*(i+1,1)`1 = G*(i+1,j)`1 by A1,A4,GOBOARD5:3;
+    A7: G*(1,j)`2 = G*(i,j)`2 by A3,A4,GOBOARD5:2;
+      j+1 >= 1 by NAT_1:29;
+    then A8: G*(1,j+1)`2 = G*(i,j+1)`2 by A2,A3,GOBOARD5:2;
+    thus p in Int cell(G,i,j) implies
+     G*(i,j)`1 < p`1 & p`1 < G*(i+1,j)`1 & G*(i,j)`2 < p`2 & p`2 < G*(i,j+1)`2
+    proof
+     assume p in Int cell(G,i,j);
+     then p in Z by A3,A4,GOBOARD6:29;
+     then consider r,s be Real such that
+      A9: p = |[r,s]| and
+      A10: G*(i,1)`1 < r & r < G*(i+1,1)`1 and
+      A11: G*(1,j)`2 < s & s < G*(1,j+1)`2;
+     thus thesis by A5,A6,A7,A8,A9,A10,A11,EUCLID:56;
+    end;
+    assume A12: G*(i,j)`1 < p`1 & p`1 < G*(i+1,j)`1 &
+           G*(i,j)`2 < p`2 & p`2 < G*(i,j+1)`2;
+      p = |[p`1,p`2]| by EUCLID:57;
+    then p in Z by A5,A6,A7,A8,A12;
+    hence p in Int cell(G,i,j) by A3,A4,GOBOARD6:29;
+   end;
+
+  theorem Th5:
+   for f be non constant standard special_circular_sequence holds
+    BDD L~f is connected
+   proof
+    let f be non constant standard special_circular_sequence;
+      BDD L~f = RightComp f or BDD L~f = LeftComp f by Th1;
+    hence BDD L~f is connected;
+   end;
+
+  definition
+   let f be non constant standard special_circular_sequence;
+   cluster BDD L~f -> connected;
+   coherence by Th5;
+  end;
+
+  definition
+   let C be Simple_closed_curve;
+   let n be Nat;
+   func SpanStart(C,n) -> Point of TOP-REAL 2 equals :Def1:
+    Gauge(C,n)*(X-SpanStart(C,n),Y-SpanStart(C,n));
+   coherence;
+  end;
+
+  theorem Th6:
+   for C be Simple_closed_curve
+   for n be Nat st n is_sufficiently_large_for C holds
+    Span(C,n)/.1 = SpanStart(C,n)
+   proof
+    let C be Simple_closed_curve;
+    let n be Nat;
+    assume n is_sufficiently_large_for C;
+    hence Span(C,n)/.1 = Gauge(C,n)*(X-SpanStart(C,n),Y-SpanStart(C,n))
+                                                           by JORDAN13:def 1
+       .= SpanStart(C,n) by Def1;
+   end;
+
+  theorem Th7:
+   for C be Simple_closed_curve
+   for n be Nat st n is_sufficiently_large_for C holds
+    SpanStart(C,n) in BDD C
+   proof
+    let C be Simple_closed_curve;
+    let n be Nat;
+    assume A1: n is_sufficiently_large_for C;
+    then A2: cell(Gauge(C,n),X-SpanStart(C,n)-'1,Y-SpanStart(C,n)) c= BDD C
+                                                               by JORDAN11:6;
+    A3: 1 <= X-SpanStart(C,n)-'1 & X-SpanStart(C,n)-'1 < len Gauge(C,n)
+                                                              by JORDAN1H:59;
+    A4: 1 < Y-SpanStart(C,n) & Y-SpanStart(C,n) <= width Gauge(C,n)
+                                                            by A1,JORDAN11:7;
+      2 < X-SpanStart(C,n) by JORDAN1H:58;
+    then A5: 1 < X-SpanStart(C,n) by AXIOMS:22;
+      LSeg(Gauge(C,n)*(X-SpanStart(C,n)-'1,Y-SpanStart(C,n)),
+         Gauge(C,n)*(X-SpanStart(C,n)-'1+1,Y-SpanStart(C,n))) c=
+          cell(Gauge(C,n),X-SpanStart(C,n)-'1,Y-SpanStart(C,n))
+                                                        by A3,A4,GOBOARD5:23;
+    then A6: LSeg(Gauge(C,n)*(X-SpanStart(C,n)-'1,Y-SpanStart(C,n)),
+         Gauge(C,n)*(X-SpanStart(C,n)-'1+1,Y-SpanStart(C,n))) c= BDD C
+                                                            by A2,XBOOLE_1:1;
+      Gauge(C,n)*(X-SpanStart(C,n)-'1+1,Y-SpanStart(C,n)) in
+     LSeg(Gauge(C,n)*(X-SpanStart(C,n)-'1,Y-SpanStart(C,n)),
+          Gauge(C,n)*(X-SpanStart(C,n)-'1+1,Y-SpanStart(C,n))) by TOPREAL1:6;
+    then Gauge(C,n)*(X-SpanStart(C,n)-'1+1,Y-SpanStart(C,n)) in BDD C by A6;
+    then Gauge(C,n)*(X-SpanStart(C,n),Y-SpanStart(C,n)) in BDD C by A5,AMI_5:4
+;
+    hence SpanStart(C,n) in BDD C by Def1;
+   end;
+
+  theorem Th8:
+   for C be Simple_closed_curve
+   for n,k be Nat st n is_sufficiently_large_for C holds
+    1 <= k & k+1 <= len Span(C,n) implies
+     right_cell(Span(C,n),k,Gauge(C,n)) misses C &
+     left_cell(Span(C,n),k,Gauge(C,n)) meets C
+   proof
+    let C be Simple_closed_curve;
+    let n,k be Nat;
+    set G = Gauge(C,n);
+    set f = Span(C,n);
+    assume A1: n is_sufficiently_large_for C;
+    then A2: f is_sequence_on G &
+     f/.1 = G*(X-SpanStart(C,n),Y-SpanStart(C,n)) &
+     f/.2 = G*(X-SpanStart(C,n)-'1,Y-SpanStart(C,n)) by JORDAN13:def 1;
+     defpred P[Nat] means
+             for m be Nat st 1 <= m & m+1 <= len(f|$1) holds
+         right_cell(f|$1,m,G) misses C & left_cell(f|$1,m,G) meets C;
+    A3: P[0]
+    proof let m be Nat;
+     assume A4: 1 <= m & m+1 <= len(f|0);
+       1 <= m+1 by NAT_1:37;
+     then 1 <= len(f|0) by A4,AXIOMS:22;
+     then 1 <= 0 by FINSEQ_1:25;
+     hence right_cell(f|0,m,G) misses C & left_cell(f|0,m,G) meets C;
+    end;
+    A5: for k be Nat st P[k] holds P[k+1]
+    proof
+     let k be Nat;
+     A6: f|(k+1) is_sequence_on G by A2,GOBOARD1:38;
+     A7: f|k is_sequence_on G by A2,GOBOARD1:38;
+     assume A8: for m be Nat st 1 <= m & m+1 <= len(f|k) holds
+      right_cell(f|k,m,G) misses C & left_cell(f|k,m,G) meets C;
+     per cases;
+      suppose A9: k >= len f;
+       then k+1 >= len f by NAT_1:37;
+       then f|k = f & f|(k+1) = f by A9,TOPREAL1:2;
+       hence thesis by A8;
+      suppose A10: k < len f;
+       then A11: k+1 <= len f by NAT_1:38;
+       then A12: len(f|(k+1)) = k+1 by TOPREAL1:3;
+       A13: len(f|k) = k by A10,TOPREAL1:3;
+       let m be Nat;
+       assume A14: 1 <= m & m+1 <= len(f|(k+1));
+         now per cases by CQC_THE1:2;
+        suppose A15: k = 0;
+           1 <= m+1 by NAT_1:37;
+         then m+1 = 0+1 by A12,A14,A15,AXIOMS:21;
+         then m = 0 by XCMPLX_1:2;
+         hence right_cell(f|(k+1),m,G) misses C &
+               left_cell(f|(k+1),m,G) meets C by A14;
+        suppose A16: k = 1;
+         set i = X-SpanStart(C,n);
+         set j = Y-SpanStart(C,n);
+           f|(k+1) = <*G*(i,j),G*(i-'1,j)*> by A2,A11,A16,JORDAN8:1;
+         then A17: (f|(k+1))/.1 = G*(i,j) & (f|(k+1))/.2 = G*(i-'1,j)
+                                                              by FINSEQ_4:26;
+         A18: [i,j] in Indices G & [i-'1,j] in Indices G by A1,JORDAN11:8,9;
+           1+1 <= m+1 by A14,AXIOMS:24;
+         then m+1 = 1+1 by A12,A14,A16,AXIOMS:21;
+         then A19: m = 1 by XCMPLX_1:2;
+           i-'1 <= i by GOBOARD9:2;
+         then A20: j <> j+1 & i+1 <> i-'1 by NAT_1:38;
+         then right_cell(f|(k+1),m,G) = cell(G,i-'1,j)
+                                        by A6,A14,A17,A18,A19,GOBRD13:def 2;
+         hence right_cell(f|(k+1),m,G) misses C by A1,JORDAN11:11;
+           left_cell(f|(k+1),m,G) = cell(G,i-'1,j-'1)
+                                   by A6,A14,A17,A18,A19,A20,GOBRD13:def 3;
+         hence left_cell(f|(k+1),m,G) meets C by A1,JORDAN11:10;
+        suppose A21: k > 1;
+         then A22: 1 <= (len(f|k))-'1 by A13,JORDAN3:12;
+         A23: (len(f|k))-'1+1 = len(f|k) by A13,A21,AMI_5:4;
+         then A24: (len(f|k))-'1+(1+1) = (len(f|k))+1 by XCMPLX_1:1;
+         A25: len(f|k) <= len f by FINSEQ_5:18;
+           now per cases;
+          suppose A26: m+1 = len(f|(k+1));
+           then A27: m = len(f|k) by A12,A13,XCMPLX_1:2;
+           consider i1,j1,i2,j2 be Nat such that
+            A28: [i1,j1] in Indices G & f/.(len(f|k)-'1) = G*(i1,j1) and
+            A29: [i2,j2] in Indices G & f/.(len(f|k)) = G*(i2,j2) and
+               i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+             i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1
+                                             by A2,A10,A13,A22,A23,JORDAN8:6;
+           A30: 1 <= i2 & i2 <= len G & 1 <= j2 & j2 <= width G
+                                                           by A29,GOBOARD5:1;
+           then A31: i2-'1+1 = i2 by AMI_5:4;
+           A32: j2-'1+1 = j2 by A30,AMI_5:4;
+             right_cell(f|k,(len(f|k))-'1,G) misses C &
+            left_cell(f|k,(len(f|k))-'1,G) meets C by A8,A22,A23;
+           then A33: right_cell(f,(len(f|k))-'1,G) misses C &
+            left_cell(f,(len(f|k))-'1,G) meets C
+                                           by A2,A13,A22,A23,A25,GOBRD13:32;
+             now per cases;
+            suppose A34: front_right_cell(f,(len(f|k))-'1,G) misses C &
+                         front_left_cell(f,(len(f|k))-'1,G) misses C;
+             then A35: f turns_left (len(f|k))-'1,G
+                                   by A1,A11,A13,A22,A24,JORDAN13:def 1;
+               now per cases by A23,A28,A29,A35,GOBRD13:def 7;
+              suppose that
+               A36: i1 = i2 & j1+1 = j2 and
+               A37: [i2-'1,j2] in Indices G and
+               A38: f/.((len(f|k))-'1+2) = G*(i2-'1,j2);
+                 cell(G,i1-'1,j1+1) misses C
+                               by A2,A22,A23,A25,A28,A29,A34,A36,GOBRD13:35;
+               then right_cell(f,m,G) misses C
+                   by A2,A11,A13,A21,A24,A27,A29,A31,A36,A37,A38,GOBRD13:27;
+               hence right_cell(f|(k+1),m,G) misses C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+                 cell(G,i1-'1,j1) meets C & j1+1-'1 = j1
+                by A2,A10,A13,A22,A23,A28,A29,A33,A36,BINARITH:39,GOBRD13:22;
+               then left_cell(f,m,G) meets C
+                   by A2,A11,A13,A21,A24,A27,A29,A31,A36,A37,A38,GOBRD13:26;
+               hence left_cell(f|(k+1),m,G) meets C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+              suppose that
+               A39: i1+1 = i2 & j1 = j2 and
+               A40: [i2,j2+1] in Indices G and
+               A41: f/.((len(f|k))-'1+2) = G*(i2,j2+1);
+                 cell(G,i2,j2) misses C
+                               by A2,A22,A23,A25,A28,A29,A34,A39,GOBRD13:37;
+               then right_cell(f,m,G) misses C
+                   by A2,A11,A13,A21,A24,A27,A29,A40,A41,GOBRD13:23;
+               hence right_cell(f|(k+1),m,G) misses C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+                 cell(G,i1,j2) meets C & i1+1-'1 = i1
+                by A2,A10,A13,A22,A23,A28,A29,A33,A39,BINARITH:39,GOBRD13:24;
+               then left_cell(f,m,G) meets C
+                   by A2,A11,A13,A21,A24,A27,A29,A39,A40,A41,GOBRD13:22;
+               hence left_cell(f|(k+1),m,G) meets C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+              suppose that
+               A42: i1 = i2+1 & j1 = j2 and
+               A43: [i2,j2-'1] in Indices G and
+               A44: f/.((len(f|k))-'1+2) = G*(i2,j2-'1);
+                 cell(G,i2-'1,j2-'1) misses C
+                               by A2,A22,A23,A25,A28,A29,A34,A42,GOBRD13:39;
+               then right_cell(f,m,G) misses C
+                by A2,A11,A13,A21,A24,A27,A29,A32,A43,A44,GOBRD13:29;
+               hence right_cell(f|(k+1),m,G) misses C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+                 cell(G,i2,j2-'1) meets C
+                            by A2,A10,A13,A22,A23,A28,A29,A33,A42,GOBRD13:26;
+               then left_cell(f,m,G) meets C
+                by A2,A11,A13,A21,A24,A27,A29,A32,A43,A44,GOBRD13:28;
+               hence left_cell(f|(k+1),m,G) meets C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+              suppose that
+               A45: i1 = i2 & j1 = j2+1 and
+               A46: [i2+1,j2] in Indices G and
+               A47: f/.((len(f|k))-'1+2) = G*(i2+1,j2);
+                 cell(G,i1,j2-'1) misses C
+                               by A2,A22,A23,A25,A28,A29,A34,A45,GOBRD13:41;
+               then right_cell(f,m,G) misses C
+                   by A2,A11,A13,A21,A24,A27,A29,A45,A46,A47,GOBRD13:25;
+               hence right_cell(f|(k+1),m,G) misses C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+                 cell(G,i1,j2) meets C
+                            by A2,A10,A13,A22,A23,A28,A29,A33,A45,GOBRD13:28;
+               then left_cell(f,m,G) meets C
+                   by A2,A11,A13,A21,A24,A27,A29,A45,A46,A47,GOBRD13:24;
+               hence left_cell(f|(k+1),m,G) meets C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+             end;
+             hence thesis;
+            suppose A48: front_right_cell(f,(len(f|k))-'1,G) misses C &
+                         front_left_cell(f,(len(f|k))-'1,G) meets C;
+             then A49: f goes_straight (len(f|k))-'1,G
+                                   by A1,A11,A13,A22,A24,JORDAN13:def 1;
+               now per cases by A23,A28,A29,A49,GOBRD13:def 8;
+              suppose that
+               A50: i1 = i2 & j1+1 = j2 and
+               A51: [i2,j2+1] in Indices G and
+               A52: f/.((len(f|k))-'1+2) = G*(i2,j2+1);
+                 cell(G,i1,j1+1) misses C
+                               by A2,A22,A23,A25,A28,A29,A48,A50,GOBRD13:36;
+               then right_cell(f,m,G) misses C
+                   by A2,A11,A13,A21,A24,A27,A29,A50,A51,A52,GOBRD13:23;
+               hence right_cell(f|(k+1),m,G) misses C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+                 cell(G,i2-'1,j2) meets C
+                            by A2,A10,A13,A22,A23,A28,A29,A48,A50,GOBRD13:35;
+               then left_cell(f,m,G) meets C
+                   by A2,A11,A13,A21,A24,A27,A29,A51,A52,GOBRD13:22;
+               hence left_cell(f|(k+1),m,G) meets C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+              suppose that
+               A53: i1+1 = i2 & j1 = j2 and
+               A54: [i2+1,j2] in Indices G and
+               A55: f/.((len(f|k))-'1+2) = G*(i2+1,j2);
+                 cell(G,i1+1,j1-'1) misses C
+                               by A2,A22,A23,A25,A28,A29,A48,A53,GOBRD13:38;
+               then right_cell(f,m,G) misses C
+                   by A2,A11,A13,A21,A24,A27,A29,A53,A54,A55,GOBRD13:25;
+               hence right_cell(f|(k+1),m,G) misses C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+                 cell(G,i1+1,j1) meets C
+                            by A2,A10,A13,A22,A23,A28,A29,A48,A53,GOBRD13:37;
+               then left_cell(f,m,G) meets C
+                   by A2,A11,A13,A21,A24,A27,A29,A53,A54,A55,GOBRD13:24;
+               hence left_cell(f|(k+1),m,G) meets C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+              suppose that
+               A56: i1 = i2+1 & j1 = j2 and
+               A57: [i2-'1,j2] in Indices G and
+               A58: f/.((len(f|k))-'1+2) = G*(i2-'1,j2);
+                 cell(G,i2-'1,j2) misses C
+                               by A2,A22,A23,A25,A28,A29,A48,A56,GOBRD13:40;
+               then right_cell(f,m,G) misses C
+                   by A2,A11,A13,A21,A24,A27,A29,A31,A57,A58,GOBRD13:27;
+               hence right_cell(f|(k+1),m,G) misses C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+                 cell(G,i2-'1,j2-'1) meets C
+                            by A2,A10,A13,A22,A23,A28,A29,A48,A56,GOBRD13:39;
+               then left_cell(f,m,G) meets C
+                   by A2,A11,A13,A21,A24,A27,A29,A31,A57,A58,GOBRD13:26;
+               hence left_cell(f|(k+1),m,G) meets C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+              suppose that
+               A59: i1 = i2 & j1 = j2+1 and
+               A60: [i2,j2-'1] in Indices G and
+               A61: f/.((len(f|k))-'1+2) = G*(i2,j2-'1);
+                 cell(G,i2-'1,j2-'1) misses C & j2-'1+1=j2
+                           by A2,A22,A23,A25,A28,A29,A30,A48,A59,AMI_5:4,
+GOBRD13:42;
+               then right_cell(f,m,G) misses C
+                   by A2,A11,A13,A21,A24,A27,A29,A60,A61,GOBRD13:29;
+               hence right_cell(f|(k+1),m,G) misses C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+                 cell(G,i2,j2-'1) meets C
+                            by A2,A10,A13,A22,A23,A28,A29,A48,A59,GOBRD13:41;
+               then left_cell(f,m,G) meets C
+                by A2,A11,A13,A21,A24,A27,A29,A32,A60,A61,GOBRD13:28;
+               hence left_cell(f|(k+1),m,G) meets C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+             end;
+             hence thesis;
+            suppose A62: front_right_cell(f,(len(f|k))-'1,G) meets C;
+             then A63: f turns_right (len(f|k))-'1,G
+                                   by A1,A11,A13,A22,A24,JORDAN13:def 1;
+               now per cases by A23,A28,A29,A63,GOBRD13:def 6;
+              suppose that
+               A64: i1 = i2 & j1+1 = j2 and
+               A65: [i2+1,j2] in Indices G and
+               A66: f/.((len(f|k))-'1+2) = G*(i2+1,j2);
+                 cell(G,i1,j1) misses C & j1+1-'1 = j1
+                   by A2,A22,A23,A25,A28,A29,A33,A64,BINARITH:39,GOBRD13:23;
+               then right_cell(f,m,G) misses C
+                   by A2,A11,A13,A21,A24,A27,A29,A64,A65,A66,GOBRD13:25;
+               hence right_cell(f|(k+1),m,G) misses C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+                 cell(G,i2,j2) meets C
+                            by A2,A10,A13,A22,A23,A28,A29,A62,A64,GOBRD13:36;
+               then left_cell(f,m,G) meets C
+                   by A2,A11,A13,A21,A24,A27,A29,A65,A66,GOBRD13:24;
+               hence left_cell(f|(k+1),m,G) meets C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+              suppose that
+               A67: i1+1 = i2 & j1 = j2 and
+               A68: [i2,j2-'1] in Indices G and
+               A69: f/.((len(f|k))-'1+2) = G*(i2,j2-'1);
+                 cell(G,i1,j1-'1) misses C & i1+1-'1 = i1
+                   by A2,A22,A23,A25,A28,A29,A33,A67,BINARITH:39,GOBRD13:25;
+               then right_cell(f,m,G) misses C
+                   by A2,A11,A13,A21,A24,A27,A29,A32,A67,A68,A69,GOBRD13:29;
+               hence right_cell(f|(k+1),m,G) misses C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+                 cell(G,i2,j2-'1) meets C
+                            by A2,A10,A13,A22,A23,A28,A29,A62,A67,GOBRD13:38;
+               then left_cell(f,m,G) meets C
+                   by A2,A11,A13,A21,A24,A27,A29,A32,A68,A69,GOBRD13:28;
+               hence left_cell(f|(k+1),m,G) meets C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+              suppose that
+               A70: i1 = i2+1 & j1 = j2 and
+               A71: [i2,j2+1] in Indices G and
+               A72: f/.((len(f|k))-'1+2) = G*(i2,j2+1);
+                 cell(G,i2,j2) misses C
+                               by A2,A22,A23,A25,A28,A29,A33,A70,GOBRD13:27;
+               then right_cell(f,m,G) misses C
+                   by A2,A11,A13,A21,A24,A27,A29,A71,A72,GOBRD13:23;
+               hence right_cell(f|(k+1),m,G) misses C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+                 cell(G,i2-'1,j2) meets C
+                            by A2,A10,A13,A22,A23,A28,A29,A62,A70,GOBRD13:40;
+               then left_cell(f,m,G) meets C
+                   by A2,A11,A13,A21,A24,A27,A29,A71,A72,GOBRD13:22;
+               hence left_cell(f|(k+1),m,G) meets C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+              suppose that
+               A73: i1 = i2 & j1 = j2+1 and
+               A74: [i2-'1,j2] in Indices G and
+               A75: f/.((len(f|k))-'1+2) = G*(i2-'1,j2);
+                 cell(G,i2-'1,j2) misses C
+                               by A2,A22,A23,A25,A28,A29,A33,A73,GOBRD13:29;
+               then right_cell(f,m,G) misses C
+                   by A2,A11,A13,A21,A24,A27,A29,A31,A74,A75,GOBRD13:27;
+               hence right_cell(f|(k+1),m,G) misses C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+                 cell(G,i2-'1,j2-'1) meets C
+                            by A2,A10,A13,A22,A23,A28,A29,A62,A73,GOBRD13:42;
+               then left_cell(f,m,G) meets C
+                   by A2,A11,A13,A21,A24,A27,A29,A31,A74,A75,GOBRD13:26;
+               hence left_cell(f|(k+1),m,G) meets C
+                                            by A2,A11,A12,A14,A26,GOBRD13:32;
+             end;
+             hence thesis;
+           end;
+           hence thesis;
+          suppose m+1 <> len(f|(k+1));
+           then m+1 < len(f|(k+1)) by A14,REAL_1:def 5;
+           then A76: m+1 <= len(f|k) by A12,A13,NAT_1:38;
+           then consider i1,j1,i2,j2 be Nat such that
+            A77: [i1,j1] in Indices G & (f|k)/.m = G*(i1,j1) and
+            A78: [i2,j2] in Indices G & (f|k)/.(m+1) = G*(i2,j2) and
+            A79: i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+                 i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1
+                                                     by A7,A14,JORDAN8:6;
+           A80: 1 <= m+1 by NAT_1:37;
+             m <= len(f|k) by A76,NAT_1:38;
+           then A81: m in dom(f|k) & m+1 in dom(f|k) by A14,A76,A80,FINSEQ_3:27
+;
+           A82: right_cell(f|k,m,G) misses C & left_cell(f|k,m,G) meets C
+                                                                by A8,A14,A76;
+             f|(k+1) = (f|k)^<*f/.(k+1)*> by A11,JORDAN8:2;
+           then A83: (f|(k+1))/.m = G*(i1,j1) & (f|(k+1))/.(m+1) = G*(i2,j2)
+                                               by A77,A78,A81,GROUP_5:95;
+             now per cases by A79;
+            suppose A84: i1 = i2 & j1+1 = j2;
+             then right_cell(f|k,m,G) = cell(G,i1,j1) &
+                  left_cell(f|k,m,G) = cell(G,i1-'1,j1)
+                                         by A7,A14,A76,A77,A78,GOBRD13:22,23;
+             hence thesis by A6,A14,A77,A78,A82,A83,A84,GOBRD13:22,23;
+            suppose A85: i1+1 = i2 & j1 = j2;
+             then right_cell(f|k,m,G) = cell(G,i1,j1-'1) &
+                  left_cell(f|k,m,G) = cell(G,i1,j1)
+                                         by A7,A14,A76,A77,A78,GOBRD13:24,25;
+             hence thesis by A6,A14,A77,A78,A82,A83,A85,GOBRD13:24,25;
+            suppose A86: i1 = i2+1 & j1 = j2;
+             then right_cell(f|k,m,G) = cell(G,i2,j2) &
+                  left_cell(f|k,m,G) = cell(G,i2,j2-'1)
+                                         by A7,A14,A76,A77,A78,GOBRD13:26,27;
+             hence thesis by A6,A14,A77,A78,A82,A83,A86,GOBRD13:26,27;
+            suppose A87: i1 = i2 & j1 = j2+1;
+             then right_cell(f|k,m,G) = cell(G,i2-'1,j2) &
+                  left_cell(f|k,m,G) = cell(G,i1,j2)
+                                         by A7,A14,A76,A77,A78,GOBRD13:28,29;
+             hence thesis by A6,A14,A77,A78,A82,A83,A87,GOBRD13:28,29;
+           end;
+           hence thesis;
+         end;
+         hence thesis;
+       end;
+       hence thesis;
+    end;
+    A88: for k be Nat holds P[k] from Ind(A3,A5);
+      f|len f = f by TOPREAL1:2;
+    hence thesis by A88;
+   end;
+
+  theorem Th9:
+   for C be Simple_closed_curve
+   for n be Nat st n is_sufficiently_large_for C holds
+    C misses L~Span(C,n)
+   proof
+    let C be Simple_closed_curve;
+    let n be Nat;
+    assume A1: n is_sufficiently_large_for C;
+    set f = Span(C,n);
+    set G = Gauge(C,n);
+    assume not thesis;
+    then consider c be set such that
+     A2: c in C & c in L~f by XBOOLE_0:3;
+      L~f = union { LSeg(f,i) where i is Nat: 1 <= i & i+1 <= len f }
+                                                          by TOPREAL1:def 6;
+    then consider Z be set such that
+     A3: c in Z and
+     A4: Z in { LSeg(f,i) where i is Nat: 1 <= i & i+1 <= len f }
+                                                      by A2,TARSKI:def 4;
+    consider i be Nat such that
+     A5: Z = LSeg(f,i) and
+     A6: 1 <= i & i+1 <= len f by A4;
+      f is_sequence_on G by A1,JORDAN13:def 1;
+    then LSeg(f,i) = left_cell(f,i,G) /\ right_cell(f,i,G) by A6,GOBRD13:30;
+    then A7: c in right_cell(f,i,G) by A3,A5,XBOOLE_0:def 3;
+      right_cell(f,i,G) misses C by A1,A6,Th8;
+    hence contradiction by A2,A7,XBOOLE_0:3;
+   end;
+
+  definition
+   let C be Simple_closed_curve;
+   let n be Nat;
+   cluster Cl RightComp Span(C,n) -> compact;
+   coherence by GOBRD14:42;
+  end;
+
+  theorem Th10:
+   for C be Simple_closed_curve
+   for n be Nat st n is_sufficiently_large_for C holds
+    C meets LeftComp Span(C,n)
+   proof
+    let C be Simple_closed_curve;
+    let n be Nat;
+    assume A1: n is_sufficiently_large_for C;
+    then A2: L~Span(C,n) misses C by Th9;
+      len Span(C,n) > 4 by GOBOARD7:36;
+    then A3: 1+1 <= len Span(C,n) by AXIOMS:22;
+    then left_cell(Span(C,n),1,Gauge(C,n)) meets C by A1,Th8;
+    then A4: left_cell(Span(C,n),1,Gauge(C,n))\L~Span(C,n) meets C
+                                                           by A2,XBOOLE_1:84;
+      Span(C,n) is_sequence_on Gauge(C,n) by A1,JORDAN13:def 1;
+    then left_cell(Span(C,n),1,Gauge(C,n))\L~Span(C,n) c= LeftComp Span(C,n)
+                                                            by A3,JORDAN9:29;
+    hence thesis by A4,XBOOLE_1:63;
+   end;
+
+  theorem Th11:
+   for C be Simple_closed_curve
+   for n be Nat st n is_sufficiently_large_for C holds
+    C misses RightComp Span(C,n)
+   proof
+    let C be Simple_closed_curve;
+    let n be Nat;
+    assume A1: n is_sufficiently_large_for C;
+    set f = Span(C,n);
+A2: C misses L~f by A1,Th9;
+    A3: C meets LeftComp f by A1,Th10;
+    assume A4: C meets RightComp f;
+      RightComp f is_a_component_of (L~f)` by GOBOARD9:def 2;
+    then consider L be Subset of (TOP-REAL 2)|(L~f)` such that
+     A5: L = RightComp f and
+     A6: L is_a_component_of (TOP-REAL 2)|(L~f)` by CONNSP_1:def 6;
+      LeftComp f is_a_component_of (L~f)` by GOBOARD9:def 1;
+    then consider R be Subset of (TOP-REAL 2)|(L~f)` such that
+     A7: R = LeftComp f and
+     A8: R is_a_component_of (TOP-REAL 2)|(L~f)` by CONNSP_1:def 6;
+      C c= the carrier of (TOP-REAL 2)|(L~f)`
+    proof
+     let c be set;
+     assume c in C;
+     then c in the carrier of TOP-REAL 2 & not c in L~f by A2,XBOOLE_0:3;
+     then c in (L~f)` by SUBSET_1:50;
+     hence thesis by JORDAN1:1;
+    end;
+    then reconsider C1 = C as Subset of (TOP-REAL 2)|(L~f)`
+                                                         ;
+      C1 is connected by CONNSP_1:24;
+    then L = R by A3,A4,A5,A6,A7,A8,JORDAN2C:100;
+    hence contradiction by A5,A7,SPRECT_4:7;
+   end;
+
+  theorem Th12:
+   for C be Simple_closed_curve
+   for n be Nat st n is_sufficiently_large_for C holds
+    C c= LeftComp Span(C,n)
+   proof
+    let C be Simple_closed_curve;
+    let n be Nat;
+    assume A1: n is_sufficiently_large_for C;
+    set f = Span(C,n);
+    let c be set;
+    assume A2: c in C;
+A3: C misses L~f by A1,Th9;
+      C misses RightComp f by A1,Th11;
+    then not c in RightComp f & not c in L~f by A2,A3,XBOOLE_0:3;
+    hence c in LeftComp f by A2,GOBRD14:28;
+   end;
+
+  theorem Th13:
+   for C be Simple_closed_curve
+   for n be Nat st n is_sufficiently_large_for C holds
+    C c= UBD L~Span(C,n)
+   proof
+    let C be Simple_closed_curve;
+    let n be Nat;
+    assume n is_sufficiently_large_for C;
+    then A1: C c= LeftComp Span(C,n) by Th12;
+      LeftComp Span(C,n) is_outside_component_of L~Span(C,n) by GOBRD14:44;
+    then LeftComp Span(C,n) c= UBD L~Span(C,n) by JORDAN2C:27;
+    hence thesis by A1,XBOOLE_1:1;
+   end;
+
+  theorem Th14:
+   for C be Simple_closed_curve
+   for n be Nat st n is_sufficiently_large_for C holds
+    BDD L~Span(C,n) c= BDD C
+   proof
+    let C be Simple_closed_curve;
+    let n be Nat;
+    assume that
+     A1: n is_sufficiently_large_for C and
+     A2: not BDD L~Span(C,n) c= BDD C;
+    set f = Span(C,n);
+    A3: SpanStart(C,n) in BDD C by A1,Th7;
+    A4: Cl BDD L~f = Cl RightComp f by GOBRD14:47
+       .= (RightComp f) \/ L~f by GOBRD14:31;
+      len f > 4 by GOBOARD7:36;
+    then A5: len f >= 2 & len f >= 1 by AXIOMS:22;
+    then 1 in dom f by FINSEQ_3:27;
+    then f/.1 in L~f by A5,GOBOARD1:16;
+    then SpanStart(C,n) in L~f by A1,Th6;
+    then SpanStart(C,n) in Cl BDD L~f by A4,XBOOLE_0:def 2;
+    then A6: BDD L~f meets BDD C by A3,PRE_TOPC:def 13;
+    A7: BDD L~f misses UBD L~f by JORDAN2C:28;
+    A8: BDD C \/ UBD C = C` by JORDAN2C:31;
+      C c= UBD L~f by A1,Th13;
+    then C misses BDD L~f by A7,XBOOLE_1:63;
+    then A9: BDD L~f c= C` by SUBSET_1:43;
+      BDD C misses UBD C by JORDAN2C:28;
+    then BDD C,UBD C are_separated by TSEP_1:41;
+    then BDD L~f c= UBD C by A2,A8,A9,CONNSP_1:17;
+    then BDD C meets UBD C by A6,XBOOLE_1:63;
+    hence contradiction by JORDAN2C:28;
+   end;
+
+  theorem Th15:
+   for C be Simple_closed_curve
+   for n be Nat st n is_sufficiently_large_for C holds
+    UBD C c= UBD L~Span(C,n)
+   proof
+    let C be Simple_closed_curve;
+    let n be Nat;
+    assume n is_sufficiently_large_for C;
+    then A1: BDD L~Span(C,n) c= BDD C by Th14;
+    then A2: Cl BDD L~Span(C,n) c= Cl BDD C by PRE_TOPC:49;
+    let x be set;
+    A3: BDD C misses UBD C by JORDAN2C:28;
+    assume A4: x in UBD C;
+    then reconsider p = x as Point of TOP-REAL 2;
+      not x in BDD L~Span(C,n) by A1,A3,A4,XBOOLE_0:3;
+    then A5: not x in RightComp Span(C,n) by GOBRD14:47;
+      now assume x in L~Span(C,n);
+     then p in (RightComp Span(C,n)) \/ L~Span(C,n) by XBOOLE_0:def 2;
+     then p in Cl RightComp Span(C,n) by GOBRD14:31;
+     then p in Cl BDD L~Span(C,n) by GOBRD14:47;
+     hence contradiction by A2,A3,A4,PRE_TOPC:def 13;
+    end;
+    then p in LeftComp Span(C,n) by A5,GOBRD14:27;
+    hence x in UBD L~Span(C,n) by GOBRD14:46;
+   end;
+
+  theorem
+     for C be Simple_closed_curve
+   for n be Nat st n is_sufficiently_large_for C holds
+    RightComp Span(C,n) c= BDD C
+   proof
+    let C be Simple_closed_curve;
+    let n be Nat;
+    assume n is_sufficiently_large_for C;
+    then BDD L~Span(C,n) c= BDD C by Th14;
+    hence RightComp Span(C,n) c= BDD C by GOBRD14:47;
+   end;
+
+  theorem Th17:
+   for C be Simple_closed_curve
+   for n be Nat st n is_sufficiently_large_for C holds
+    UBD C c= LeftComp Span(C,n)
+   proof
+    let C be Simple_closed_curve;
+    let n be Nat;
+    assume n is_sufficiently_large_for C;
+    then UBD C c= UBD L~Span(C,n) by Th15;
+    hence UBD C c= LeftComp Span(C,n) by GOBRD14:46;
+   end;
+
+  theorem Th18:
+   for C be Simple_closed_curve
+   for n be Nat st n is_sufficiently_large_for C holds
+    UBD C misses BDD L~Span(C,n)
+   proof
+    let C be Simple_closed_curve;
+    let n be Nat;
+    assume that
+     A1: n is_sufficiently_large_for C and
+     A2: UBD C meets BDD L~Span(C,n);
+      UBD C c= UBD L~Span(C,n) by A1,Th15;
+    then UBD L~Span(C,n) meets BDD L~Span(C,n) by A2,XBOOLE_1:63;
+    hence contradiction by JORDAN2C:28;
+   end;
+
+  theorem
+     for C be Simple_closed_curve
+   for n be Nat st n is_sufficiently_large_for C holds
+    UBD C misses RightComp Span(C,n)
+   proof
+    let C be Simple_closed_curve;
+    let n be Nat;
+    assume n is_sufficiently_large_for C;
+    then UBD C misses BDD L~Span(C,n) by Th18;
+    hence UBD C misses RightComp Span(C,n) by GOBRD14:47;
+   end;
+
+  theorem Th20:
+   for C be Simple_closed_curve
+   for P be Subset of TOP-REAL 2
+   for n be Nat st n is_sufficiently_large_for C holds
+    P is_outside_component_of C implies P misses L~Span(C,n)
+   proof
+    let C be Simple_closed_curve;
+    let P be Subset of TOP-REAL 2;
+    let n be Nat;
+    assume that
+     A1: n is_sufficiently_large_for C and
+     A2: P is_outside_component_of C and
+     A3: P meets L~Span(C,n);
+    consider x be set such that
+     A4: x in P & x in L~Span(C,n) by A3,XBOOLE_0:3;
+      P c= UBD C by A2,JORDAN2C:27;
+    then A5: x in UBD C by A4;
+      UBD C c= LeftComp Span(C,n) by A1,Th17;
+    hence contradiction by A4,A5,GOBRD14:27;
+   end;
+
+  theorem Th21:
+   for C be Simple_closed_curve
+   for n be Nat st n is_sufficiently_large_for C holds
+    UBD C misses L~Span(C,n)
+   proof
+    let C be Simple_closed_curve;
+    let n be Nat;
+    assume A1: n is_sufficiently_large_for C;
+    A2: UBD C = union {B where B is Subset of TOP-REAL 2:
+     B is_outside_component_of C} by JORDAN2C:def 6;
+    assume UBD C meets L~Span(C,n);
+    then consider x be set such that
+     A3: x in UBD C & x in L~Span(C,n) by XBOOLE_0:3;
+    consider Z be set such that
+     A4: x in Z & Z in {B where B is Subset of TOP-REAL 2:
+         B is_outside_component_of C} by A2,A3,TARSKI:def 4;
+    consider B be Subset of TOP-REAL 2 such that
+     A5: Z = B & B is_outside_component_of C by A4;
+      B misses L~Span(C,n) by A1,A5,Th20;
+    hence thesis by A3,A4,A5,XBOOLE_0:3;
+   end;
+
+  theorem Th22:
+   for C be Simple_closed_curve
+   for n be Nat st n is_sufficiently_large_for C holds
+    L~Span(C,n) c= BDD C
+   proof
+    let C be Simple_closed_curve;
+    let n be Nat;
+    assume A1: n is_sufficiently_large_for C;
+    then A2: UBD C misses L~Span(C,n) by Th21;
+      C misses L~Span(C,n) by A1,Th9;
+    then L~Span(C,n) c= C` by SUBSET_1:43;
+    then L~Span(C,n) c= BDD C \/ UBD C by JORDAN2C:31;
+    hence L~Span(C,n) c= BDD C by A2,XBOOLE_1:73;
+   end;
+
+  theorem Th23:
+   for C be Simple_closed_curve
+   for i,j,k,n be Nat st
+    n is_sufficiently_large_for C & 1 <= k & k <= len Span(C,n) &
+     [i,j] in Indices Gauge(C,n) & Span(C,n)/.k = Gauge(C,n)*(i,j) holds
+      i > 1
+   proof
+    let C be Simple_closed_curve;
+    let i,j,k,n be Nat;
+    assume that
+     A1: n is_sufficiently_large_for C and
+     A2: 1 <= k & k <= len Span(C,n) and
+     A3: [i,j] in Indices Gauge(C,n) and
+     A4: Span(C,n)/.k = Gauge(C,n)*(i,j);
+    A5: 1 <= i & i <= len Gauge(C,n) &
+        1 <= j & j <= width Gauge(C,n) by A3,GOBOARD5:1;
+      len Gauge(C,n) = width Gauge(C,n) by JORDAN8:def 1;
+    then A6: Gauge(C,n)*(2,j)`1 = W-bound C by A5,JORDAN8:14;
+      SpanStart(C,n) in BDD C by A1,Th7;
+    then A7: W-bound C <= W-bound BDD C by JORDAN1C:18;
+      C is Bounded by JORDAN2C:73;
+then A8: BDD C is Bounded by JORDAN2C:114;
+    then Cl BDD C is Bounded by TOPREAL6:71;
+    then A9: Cl BDD C is compact by TOPREAL6:88;
+    A10: BDD C c= Cl BDD C by PRE_TOPC:48;
+      L~Span(C,n) c= BDD C by A1,Th22;
+    then L~Span(C,n) c= Cl BDD C by A10,XBOOLE_1:1;
+    then A11: W-bound L~Span(C,n) >= W-bound Cl BDD C by A9,JORDAN1E:4;
+      SpanStart(C,n) in BDD C by A1,Th7;
+    then A12: W-bound BDD C = W-bound Cl BDD C by A8,TOPREAL6:94;
+      len Gauge(C,n) >= 4 by JORDAN8:13;
+    then A13: len Gauge(C,n) >= 2 by AXIOMS:22;
+      len Span(C,n) > 4 by GOBOARD7:36;
+    then A14: len Span(C,n) >= 2 by AXIOMS:22;
+      k in dom Span(C,n) by A2,FINSEQ_3:27;
+    then Span(C,n)/.k in L~Span(C,n) by A14,GOBOARD1:16;
+    then W-bound L~Span(C,n) <= Gauge(C,n)*(i,j)`1 by A4,PSCOMP_1:71;
+    then W-bound BDD C <= Gauge(C,n)*(i,j)`1 by A11,A12,AXIOMS:22;
+    then Gauge(C,n)*(2,j)`1 <= Gauge(C,n)*(i,j)`1 by A6,A7,AXIOMS:22;
+    then i >= 1+1 by A5,A13,GOBOARD5:4;
+    hence i > 1 by NAT_1:38;
+   end;
+
+  theorem Th24:
+   for C be Simple_closed_curve
+   for i,j,k,n be Nat st
+    n is_sufficiently_large_for C & 1 <= k & k <= len Span(C,n) &
+     [i,j] in Indices Gauge(C,n) & Span(C,n)/.k = Gauge(C,n)*(i,j) holds
+      i < len Gauge(C,n)
+   proof
+    let C be Simple_closed_curve;
+    let i,j,k,n be Nat;
+    assume that
+     A1: n is_sufficiently_large_for C and
+     A2: 1 <= k & k <= len Span(C,n) and
+     A3: [i,j] in Indices Gauge(C,n) and
+     A4: Span(C,n)/.k = Gauge(C,n)*(i,j);
+    A5: 1 <= i & i <= len Gauge(C,n) &
+        1 <= j & j <= width Gauge(C,n) by A3,GOBOARD5:1;
+      len Gauge(C,n) = width Gauge(C,n) by JORDAN8:def 1;
+    then A6: Gauge(C,n)*(len Gauge(C,n)-'1,j)`1 = E-bound C by A5,JORDAN8:15;
+      SpanStart(C,n) in BDD C by A1,Th7;
+    then A7: E-bound C >= E-bound BDD C by JORDAN1C:19;
+      C is Bounded by JORDAN2C:73;
+    then A8: BDD C is Bounded by JORDAN2C:114;
+    then Cl BDD C is Bounded by TOPREAL6:71;
+    then A9: Cl BDD C is compact by TOPREAL6:88;
+    A10: BDD C c= Cl BDD C by PRE_TOPC:48;
+      L~Span(C,n) c= BDD C by A1,Th22;
+    then L~Span(C,n) c= Cl BDD C by A10,XBOOLE_1:1;
+    then A11: E-bound L~Span(C,n) <= E-bound Cl BDD C by A9,JORDAN1E:2;
+      SpanStart(C,n) in BDD C by A1,Th7;
+    then A12: E-bound BDD C = E-bound Cl BDD C by A8,TOPREAL6:95;
+    A13: len Gauge(C,n) >= 4 by JORDAN8:13;
+    then A14: len Gauge(C,n) >= 0+1 by AXIOMS:22;
+    then A15: len Gauge(C,n)-1 >= 0 by REAL_1:84;
+      len Gauge(C,n) >= 1+1 by A13,AXIOMS:22;
+    then len Gauge(C,n)-1 >= 1 by REAL_1:84;
+    then A16: len Gauge(C,n)-'1 >= 1 by A15,BINARITH:def 3;
+      len Span(C,n) > 4 by GOBOARD7:36;
+    then A17: len Span(C,n) >= 2 by AXIOMS:22;
+      k in dom Span(C,n) by A2,FINSEQ_3:27;
+    then Span(C,n)/.k in L~Span(C,n) by A17,GOBOARD1:16;
+    then E-bound L~Span(C,n) >= Gauge(C,n)*(i,j)`1 by A4,PSCOMP_1:71;
+    then E-bound BDD C >= Gauge(C,n)*(i,j)`1 by A11,A12,AXIOMS:22;
+    then Gauge(C,n)*(len Gauge(C,n)-'1,j)`1 >= Gauge(C,n)*(i,j)`1
+                                                         by A6,A7,AXIOMS:22;
+    then i <= len Gauge(C,n)-'1 by A5,A16,GOBOARD5:4;
+    then i < len Gauge(C,n)-'1+1 by NAT_1:38;
+    hence i < len Gauge(C,n) by A14,AMI_5:4;
+   end;
+
+  theorem Th25:
+   for C be Simple_closed_curve
+   for i,j,k,n be Nat st
+    n is_sufficiently_large_for C & 1 <= k & k <= len Span(C,n) &
+     [i,j] in Indices Gauge(C,n) & Span(C,n)/.k = Gauge(C,n)*(i,j) holds
+      j > 1
+   proof
+    let C be Simple_closed_curve;
+    let i,j,k,n be Nat;
+    assume that
+     A1: n is_sufficiently_large_for C and
+     A2: 1 <= k & k <= len Span(C,n) and
+     A3: [i,j] in Indices Gauge(C,n) and
+     A4: Span(C,n)/.k = Gauge(C,n)*(i,j);
+    A5: 1 <= i & i <= len Gauge(C,n) &
+        1 <= j & j <= width Gauge(C,n) by A3,GOBOARD5:1;
+    A6: len Gauge(C,n) = width Gauge(C,n) by JORDAN8:def 1;
+    A7: Gauge(C,n)*(i,2)`2 = S-bound C by A5,JORDAN8:16;
+      SpanStart(C,n) in BDD C by A1,Th7;
+    then A8: S-bound C <= S-bound BDD C by JORDAN1C:20;
+      C is Bounded by JORDAN2C:73;
+    then A9: BDD C is Bounded by JORDAN2C:114;
+    then Cl BDD C is Bounded by TOPREAL6:71;
+    then A10: Cl BDD C is compact by TOPREAL6:88;
+    A11: BDD C c= Cl BDD C by PRE_TOPC:48;
+      L~Span(C,n) c= BDD C by A1,Th22;
+    then L~Span(C,n) c= Cl BDD C by A11,XBOOLE_1:1;
+    then A12: S-bound L~Span(C,n) >= S-bound Cl BDD C by A10,JORDAN1E:3;
+      SpanStart(C,n) in BDD C by A1,Th7;
+    then A13: S-bound BDD C = S-bound Cl BDD C by A9,TOPREAL6:97;
+      len Gauge(C,n) >= 4 by JORDAN8:13;
+    then A14: len Gauge(C,n) >= 2 by AXIOMS:22;
+      len Span(C,n) > 4 by GOBOARD7:36;
+    then A15: len Span(C,n) >= 2 by AXIOMS:22;
+      k in dom Span(C,n) by A2,FINSEQ_3:27;
+    then Span(C,n)/.k in L~Span(C,n) by A15,GOBOARD1:16;
+    then S-bound L~Span(C,n) <= Gauge(C,n)*(i,j)`2 by A4,PSCOMP_1:71;
+    then S-bound BDD C <= Gauge(C,n)*(i,j)`2 by A12,A13,AXIOMS:22;
+    then Gauge(C,n)*(i,2)`2 <= Gauge(C,n)*(i,j)`2 by A7,A8,AXIOMS:22;
+    then j >= 1+1 by A5,A6,A14,GOBOARD5:5;
+    hence j > 1 by NAT_1:38;
+   end;
+
+  theorem Th26:
+   for C be Simple_closed_curve
+   for i,j,k,n be Nat st
+    n is_sufficiently_large_for C & 1 <= k & k <= len Span(C,n) &
+     [i,j] in Indices Gauge(C,n) & Span(C,n)/.k = Gauge(C,n)*(i,j) holds
+      j < width Gauge(C,n)
+   proof
+    let C be Simple_closed_curve;
+    let i,j,k,n be Nat;
+    assume that
+     A1: n is_sufficiently_large_for C and
+     A2: 1 <= k & k <= len Span(C,n) and
+     A3: [i,j] in Indices Gauge(C,n) and
+     A4: Span(C,n)/.k = Gauge(C,n)*(i,j);
+    A5: 1 <= i & i <= len Gauge(C,n) &
+        1 <= j & j <= width Gauge(C,n) by A3,GOBOARD5:1;
+    A6: len Gauge(C,n) = width Gauge(C,n) by JORDAN8:def 1;
+    A7: Gauge(C,n)*(i,len Gauge(C,n)-'1)`2 = N-bound C by A5,JORDAN8:17;
+      SpanStart(C,n) in BDD C by A1,Th7;
+    then A8: N-bound C >= N-bound BDD C by JORDAN1C:21;
+      C is Bounded by JORDAN2C:73;
+    then A9: BDD C is Bounded by JORDAN2C:114;
+    then Cl BDD C is Bounded by TOPREAL6:71;
+    then A10: Cl BDD C is compact by TOPREAL6:88;
+    A11: BDD C c= Cl BDD C by PRE_TOPC:48;
+      L~Span(C,n) c= BDD C by A1,Th22;
+    then L~Span(C,n) c= Cl BDD C by A11,XBOOLE_1:1;
+    then A12: N-bound L~Span(C,n) <= N-bound Cl BDD C by A10,JORDAN1E:1;
+      SpanStart(C,n) in BDD C by A1,Th7;
+    then A13: N-bound BDD C = N-bound Cl BDD C by A9,TOPREAL6:96;
+    A14: len Gauge(C,n) >= 4 by JORDAN8:13;
+    then A15: len Gauge(C,n) >= 0+1 by AXIOMS:22;
+    then A16: len Gauge(C,n)-1 >= 0 by REAL_1:84;
+      len Gauge(C,n) >= 1+1 by A14,AXIOMS:22;
+    then len Gauge(C,n)-1 >= 1 by REAL_1:84;
+    then A17: len Gauge(C,n)-'1 >= 1 by A16,BINARITH:def 3;
+      len Span(C,n) > 4 by GOBOARD7:36;
+    then A18: len Span(C,n) >= 2 by AXIOMS:22;
+      k in dom Span(C,n) by A2,FINSEQ_3:27;
+    then Span(C,n)/.k in L~Span(C,n) by A18,GOBOARD1:16;
+    then N-bound L~Span(C,n) >= Gauge(C,n)*(i,j)`2 by A4,PSCOMP_1:71;
+    then N-bound BDD C >= Gauge(C,n)*(i,j)`2 by A12,A13,AXIOMS:22;
+    then Gauge(C,n)*(i,len Gauge(C,n)-'1)`2 >= Gauge(C,n)*(i,j)`2
+                                                         by A7,A8,AXIOMS:22;
+    then j <= len Gauge(C,n)-'1 by A5,A17,GOBOARD5:5;
+    then j < len Gauge(C,n)-'1+1 by NAT_1:38;
+    hence j < width Gauge(C,n) by A6,A15,AMI_5:4;
+   end;
+
+  theorem
+     for C be Simple_closed_curve
+   for n be Nat st n is_sufficiently_large_for C holds
+    Y-SpanStart(C,n) < width Gauge(C,n)
+   proof
+    let C be Simple_closed_curve;
+    let n be Nat;
+    assume A1: n is_sufficiently_large_for C;
+      len Span(C,n) > 4 by GOBOARD7:36;
+    then A2: len Span(C,n) > 1 by AXIOMS:22;
+    A3: [X-SpanStart(C,n),Y-SpanStart(C,n)] in Indices Gauge(C,n)
+                                                            by A1,JORDAN11:8;
+      Span(C,n)/.1 = Gauge(C,n)*(X-SpanStart(C,n),Y-SpanStart(C,n))
+                                                       by A1,JORDAN13:def 1;
+    hence Y-SpanStart(C,n) < width Gauge(C,n) by A1,A2,A3,Th26;
+   end;
+
+  theorem Th28:
+   for C be compact non vertical non horizontal Subset of TOP-REAL 2
+   for n,m be Nat st m >= n & n >= 1 holds
+    X-SpanStart(C,m) = 2|^(m-'n)*(X-SpanStart(C,n)-2)+2
+   proof
+    let C be compact non vertical non horizontal Subset of TOP-REAL 2;
+    let n,m be Nat;
+    A1: X-SpanStart(C,n) = 2|^(n-'1) + 2 by JORDAN1H:def 2;
+    assume A2: m >=n;
+    assume A3: n >= 1;
+    then A4: m >= 1 by A2,AXIOMS:22;
+      (m-'n)+(n-'1) = (m-'n)+(n-1) by A3,SCMFSA_7:3
+       .= (m-'n)+ n-1 by XCMPLX_1:29
+       .= m-1 by A2,AMI_5:4
+       .= m-'1 by A4,SCMFSA_7:3;
+    then 2|^(m-'1) = 2|^(m-'n)*(2|^(n-'1)) by NEWTON:13
+       .= 2|^(m-'n)*(X-SpanStart(C,n)-2) by A1,XCMPLX_1:26;
+    hence X-SpanStart(C,m) = 2|^(m-'n)*(X-SpanStart(C,n)-2)+2
+                                                          by JORDAN1H:def 2;
+   end;
+
+  theorem Th29:
+   for C be compact non vertical non horizontal Subset of TOP-REAL 2
+   for n,m be Nat st n <= m & n is_sufficiently_large_for C holds
+    m is_sufficiently_large_for C
+   proof
+    let C be compact non vertical non horizontal Subset of TOP-REAL 2;
+    let n,m be Nat;
+    assume that
+     A1: n <= m and
+     A2: n is_sufficiently_large_for C;
+    consider j be Nat such that
+     A3: j < width Gauge(C,n) and
+     A4: cell(Gauge(C,n),X-SpanStart(C,n)-'1,j) c= BDD C by A2,JORDAN1H:def 3;
+    set iim = X-SpanStart(C,m);
+    set iin = X-SpanStart(C,n);
+      n >= 1 by A2,JORDAN1H:60;
+    then A5: iim = 2|^(m-'n)*(iin-2)+2 by A1,Th28;
+      iin > 2 by JORDAN1H:58;
+    then A6: iin >= 2+1 by NAT_1:38;
+    A7: iin < len Gauge(C,n) by JORDAN1H:58;
+    A8: j > 1
+    proof
+     A9: X-SpanStart(C,n)-'1 <= len Gauge(C,n) by JORDAN1H:59;
+     assume A10: j <= 1;
+     per cases by A10,CQC_THE1:2;
+      suppose A11: j = 0;
+         width Gauge(C,n) >= 0 by NAT_1:18;
+       then A12: cell(Gauge(C,n),X-SpanStart(C,n)-'1,0) is non empty
+                                                           by A9,JORDAN1A:45;
+         cell(Gauge(C,n),X-SpanStart(C,n)-'1,0) c= UBD C by A9,JORDAN1A:70;
+       then UBD C meets BDD C by A4,A11,A12,XBOOLE_1:68;
+       hence contradiction by JORDAN2C:28;
+      suppose A13: j = 1;
+         width Gauge(C,n) <> 0 by GOBOARD1:def 5;
+       then A14: 0+1 <= width Gauge(C,n) by RLVECT_1:99;
+       then A15: cell(Gauge(C,n),X-SpanStart(C,n)-'1,1) is non empty
+                                                           by A9,JORDAN1A:45;
+       A16: cell(Gauge(C,n),X-SpanStart(C,n)-'1,0) c= UBD C by A9,JORDAN1A:70;
+       set i1 = X-SpanStart(C,n);
+       A17: C is Bounded by JORDAN2C:73;
+       A18: i1 < len Gauge(C,n) by JORDAN1H:58;
+         i1-'1 <= i1 by JORDAN3:7;
+       then A19: i1-'1 < len Gauge(C,n) by A18,AXIOMS:22;
+       A20: 0 < width Gauge(C,n) by A14,NAT_1:38;
+         1 <= i1-'1 by JORDAN1H:59;
+       then cell(Gauge(C,n),i1-'1,0)/\cell(Gauge(C,n),i1-'1,0+1) =
+            LSeg(Gauge(C,n)*(i1-'1,0+1),Gauge(C,n)*(i1-'1+1,0+1))
+                                                      by A19,A20,GOBOARD5:27;
+       then A21: cell(Gauge(C,n),i1-'1,0) meets cell(Gauge(C,n),i1-'1,0+1)
+                                                          by XBOOLE_0:def 7;
+         ex B be Subset of TOP-REAL 2 st B is_outside_component_of C & B = UBD
+C
+                                                          by A17,JORDAN2C:76;
+       then A22: UBD C is_a_component_of C` by JORDAN2C:def 4;
+       A23: cell(Gauge(C,n),X-SpanStart(C,n)-'1,1) is connected
+                                                       by A14,A19,JORDAN1A:46;
+         BDD C c= C` by JORDAN2C:29;
+       then cell(Gauge(C,n),X-SpanStart(C,n)-'1,1) c= C` by A4,A13,XBOOLE_1:1;
+       then cell(Gauge(C,n),X-SpanStart(C,n)-'1,1) c= UBD C
+                                                by A16,A21,A22,A23,GOBOARD9:6;
+       then UBD C meets BDD C by A4,A13,A15,XBOOLE_1:68;
+       hence contradiction by JORDAN2C:28;
+    end;
+    then 2|^(m-'n)*(j-2)+2 > 1 by A1,A3,JORDAN1A:53;
+    then 2|^(m-'n)*(j-2)+2 > 0 by AXIOMS:22;
+    then reconsider j1 = 2|^(m-'n)*(j-2)+2 as Nat by INT_1:16;
+    A24: j1 < width Gauge(C,m) by A1,A3,A8,JORDAN1A:53;
+      j+1 < width Gauge(C,n)
+    proof
+     A25: X-SpanStart(C,n)-'1 <= len Gauge(C,n) by JORDAN1H:59;
+     assume j+1 >= width Gauge(C,n);
+     then A26: j+1 > width Gauge(C,n) or j+1 = width Gauge(C,n) by AXIOMS:21;
+     per cases by A3,A26,NAT_1:38;
+      suppose A27: j = width Gauge(C,n);
+       A28: cell(Gauge(C,n),X-SpanStart(C,n)-'1,width Gauge(C,n)) is non empty
+                                                          by A25,JORDAN1A:45;
+         cell(Gauge(C,n),X-SpanStart(C,n)-'1,width Gauge(C,n)) c= UBD C
+                                                          by A25,JORDAN1A:71;
+       then UBD C meets BDD C by A4,A27,A28,XBOOLE_1:68;
+       hence contradiction by JORDAN2C:28;
+      suppose j + 1 = width Gauge(C,n);
+       then A29: cell(Gauge(C,n),X-SpanStart(C,n)-'1,width Gauge(C,n)-'1)
+                                                  c= BDD C by A4,BINARITH:39;
+         width Gauge(C,n)-'1 <= width Gauge(C,n) by JORDAN3:7;
+       then A30: cell(Gauge(C,n),X-SpanStart(C,n)-'1,width Gauge(C,n)-'1)
+        is non empty by A25,JORDAN1A:45;
+       A31: cell(Gauge(C,n),X-SpanStart(C,n)-'1,width Gauge(C,n)) c= UBD C
+                                                          by A25,JORDAN1A:71;
+       set i1 = X-SpanStart(C,n);
+       A32: C is Bounded by JORDAN2C:73;
+       A33: i1 < len Gauge(C,n) by JORDAN1H:58;
+         width Gauge(C,n)<>0 by GOBOARD1:def 5;
+       then A34: 0+1 <= width Gauge(C,n) by RLVECT_1:99;
+         i1-'1 <= i1 by JORDAN3:7;
+       then A35: i1-'1 < len Gauge(C,n) by A33,AXIOMS:22;
+         width Gauge(C,n)-1 < width Gauge(C,n) by INT_1:26;
+       then A36: width Gauge(C,n)-'1 < width Gauge(C,n) by A34,SCMFSA_7:3;
+       A37: width Gauge(C,n)-'1+1 = width Gauge(C,n) by A34,AMI_5:4;
+         1 <= i1-'1 by JORDAN1H:59;
+       then cell(Gauge(C,n),i1-'1,width Gauge(C,n))/\
+            cell(Gauge(C,n),i1-'1,width Gauge(C,n)-'1)
+          = LSeg(Gauge(C,n)*(i1-'1,width Gauge(C,n)),
+                 Gauge(C,n)*(i1-'1+1,width Gauge(C,n)))
+                                                  by A35,A36,A37,GOBOARD5:27;
+       then A38: cell(Gauge(C,n),i1-'1,width Gauge(C,n)) meets
+        cell(Gauge(C,n),i1-'1,width Gauge(C,n)-'1) by XBOOLE_0:def 7;
+         ex B be Subset of TOP-REAL 2 st B is_outside_component_of C & B = UBD
+C
+                                                          by A32,JORDAN2C:76;
+       then A39: UBD C is_a_component_of C` by JORDAN2C:def 4;
+       A40: cell(Gauge(C,n),X-SpanStart(C,n)-'1,width Gauge(C,n)-'1)
+        is connected by A35,A36,JORDAN1A:46;
+         BDD C c= C` by JORDAN2C:29;
+       then cell(Gauge(C,n),X-SpanStart(C,n)-'1,width Gauge(C,n)-'1) c= C`
+                                                           by A29,XBOOLE_1:1;
+       then cell(Gauge(C,n),X-SpanStart(C,n)-'1,width Gauge(C,n)-'1) c= UBD C
+                                               by A31,A38,A39,A40,GOBOARD9:6;
+       then UBD C meets BDD C by A29,A30,XBOOLE_1:68;
+       hence contradiction by JORDAN2C:28;
+    end;
+    then cell(Gauge(C,m),iim-'1,j1) c= cell(Gauge(C,n),iin-'1,j)
+                                               by A1,A5,A6,A7,A8,JORDAN1A:69;
+    then cell(Gauge(C,m),X-SpanStart(C,m)-'1,j1) c= BDD C by A4,XBOOLE_1:1;
+    hence m is_sufficiently_large_for C by A24,JORDAN1H:def 3;
+   end;
+
+  theorem Th30:
+   for G be Go-board
+   for f be FinSequence of TOP-REAL 2
+   for i,j be Nat holds
+    f is_sequence_on G & f is special & i <= len G & j <= width G implies
+     cell(G,i,j)\L~f is connected
+   proof
+    let G be Go-board;
+    let f be FinSequence of TOP-REAL 2;
+    let i,j be Nat;
+    assume that
+     A1: f is_sequence_on G & f is special and
+     A2: i<=len G & j<=width G;
+    A3: cell(G,i,j)\L~f = cell(G,i,j) /\ (L~f)` by SUBSET_1:32;
+    A4: cell(G,i,j)\L~f c= cell(G,i,j) by XBOOLE_1:36;
+    A5: Int cell(G,i,j) is connected by A2,GOBOARD9:21;
+      Int cell(G,i,j) misses L~f by A1,A2,JORDAN9:16;
+    then A6: Int cell(G,i,j) c= (L~f)` by SUBSET_1:43;
+      Int cell(G,i,j) c= cell(G,i,j) by TOPS_1:44;
+    then A7: Int cell(G,i,j) c= cell(G,i,j)\L~f by A3,A6,XBOOLE_1:19;
+      cell(G,i,j)\L~f c= Cl Int cell(G,i,j) by A2,A4,GOBRD11:35;
+    hence cell(G,i,j)\L~f is connected by A5,A7,CONNSP_1:19;
+   end;
+
+  theorem Th31:
+   for C be Simple_closed_curve
+   for n,k be Nat st n is_sufficiently_large_for C & Y-SpanStart(C,n) <= k &
+    k <= 2|^(n-'ApproxIndex C)*(Y-InitStart C-'2)+2 holds
+     cell(Gauge(C,n),X-SpanStart(C,n)-'1,k)\L~Span(C,n) c= BDD L~Span(C,n)
+   proof
+    let C be Simple_closed_curve;
+    let n,k be Nat;
+    set G = Gauge(C,n);
+    set f = Span(C,n);
+    set AI = ApproxIndex C;
+    set YI = Y-InitStart C;
+    set XS = X-SpanStart(C,n);
+    set YS = Y-SpanStart(C,n);
+    assume that
+     A1: n is_sufficiently_large_for C and
+     A2: YS <= k and
+     A3: k <= 2|^(n-'AI)*(YI-'2)+2;
+    A4: f is_sequence_on G by A1,JORDAN13:def 1;
+    A5: 1 <= XS-'1 & XS-'1 < len G by JORDAN1H:59;
+    reconsider ro = k-YS as Nat by A2,INT_1:18;
+    A6: k = YS+ro by XCMPLX_1:27;
+    A7: ro <= 2|^(n-'AI)*(YI-'2)+2-YS by A3,REAL_1:49;
+      XS > 2 by JORDAN1H:58;
+    then XS > 1 by AXIOMS:22;
+    then A8: XS-'1+1 = XS by AMI_5:4;
+    defpred P[Nat] means
+    $1 <= 2|^(n-'AI)*(YI-'2)+2-YS implies
+     cell(G,XS-'1,YS+$1)\L~f c= BDD L~f;
+    A9: P[0]
+    proof
+     assume 0 <= 2|^(n-'AI)*(YI-'2)+2-YS;
+       len f > 4 by GOBOARD7:36;
+     then A10: len f >= 1+1 by AXIOMS:22;
+     then A11: right_cell(f,1,G)\L~f c= RightComp f by A4,JORDAN9:29;
+     A12: f/.1 = G*(XS,YS) & f/.(1+1) = G*(XS-'1,YS) by A1,JORDAN13:def 1;
+     A13: [XS,YS] in Indices Gauge(C,n) by A1,JORDAN11:8;
+       [XS-'1,YS] in Indices Gauge(C,n) by A1,JORDAN11:9;
+     then right_cell(f,1,G) = cell(G,XS-'1,YS)
+                                       by A4,A8,A10,A12,A13,GOBRD13:27;
+     hence cell(G,XS-'1,YS+0)\L~f c= BDD L~f by A11,GOBRD14:47;
+    end;
+    A14:
+    for t being Nat st P[t] holds P[t+1]
+    proof
+      let t be Nat;
+     assume A15: t <= 2|^(n-'AI)*(YI-'2)+2-YS implies
+      cell(G,XS-'1,YS+t)\L~f c= BDD L~f;
+     assume A16: t+1 <= 2|^(n-'AI)*(YI-'2)+2-YS;
+     A17: YS+t+1 = YS+(t+1) by XCMPLX_1:1;
+     A18: YI > 1 by JORDAN11:2;
+     then YI >= 1+1+0 by NAT_1:38;
+     then YI-2 >= 0 by REAL_1:84;
+     then A19: YI-'2 = YI-2 by BINARITH:def 3;
+     A20: t+1+YS <= 2|^(n-'AI)*(YI-'2)+2 by A16,REAL_1:84;
+     then A21: YS+t+1 <= 2|^(n-'AI)*(YI-'2)+2 by XCMPLX_1:1;
+     A22: AI <= n by A1,JORDAN11:def 1;
+       YI < width Gauge(C,AI) by JORDAN11:def 2;
+     then 2|^(n-'AI)*(YI-2)+2 < width Gauge(C,n) by A18,A22,JORDAN1A:53;
+     then A23: YS+t+1 <= width G by A19,A21,AXIOMS:22;
+     A24: t < t+1 by NAT_1:38;
+     assume not cell(G,XS-'1,YS+(t+1))\L~f c= BDD L~f;
+     then consider x be set such that
+      A25: x in cell(G,XS-'1,YS+(t+1))\L~f and
+      A26: not x in BDD L~f by TARSKI:def 3;
+       x in cell(G,XS-'1,YS+(t+1)) & not x in L~f by A25,XBOOLE_0:def 4;
+     then x in (L~f)` by SUBSET_1:50;
+     then x in (BDD L~f) \/ (UBD L~f) by JORDAN2C:31;
+     then A27: x in UBD L~f by A26,XBOOLE_0:def 2;
+     A28: cell(G,XS-'1,YS+(t+1))\L~f is connected by A4,A5,A17,A23,Th30;
+       LeftComp f is_a_component_of (L~f)` by GOBOARD9:def 1;
+     then A29: UBD L~f is_a_component_of (L~f)` by GOBRD14:46;
+     A30: cell(G,XS-'1,YS+(t+1))\L~f meets UBD L~f by A25,A27,XBOOLE_0:3;
+       cell(G,XS-'1,YS+(t+1))\L~f c= (L~f)`
+     proof
+      let y be set;
+      assume y in cell(G,XS-'1,YS+(t+1))\L~f;
+      then y in cell(G,XS-'1,YS+(t+1)) & not y in L~f by XBOOLE_0:def 4;
+      hence y in (L~f)` by SUBSET_1:50;
+     end;
+     then A31: cell(G,XS-'1,YS+(t+1))\L~f c= UBD L~f by A28,A29,A30,JORDAN1A:8;
+     set Ls = LSeg(G*(XS-'1,YS+(t+1)),G*(XS,YS+(t+1)));
+     set p = (1/2)*(G*(XS-'1,YS+(t+1))+G*(XS,YS+(t+1)));
+     A32: YS+t < width G by A23,NAT_1:38;
+     A33: 1 <= YS+(t+1) by A17,NAT_1:29;
+     A34: now assume p in L~f;
+      then consider i be Nat such that
+       A35: 1 <= i & i+1 <= len f and
+       A36: p in LSeg(f,i) by SPPOL_2:13;
+      A37: LSeg(f,i) = LSeg(f/.i,f/.(i+1)) by A35,TOPREAL1:def 5;
+      consider i1,j1,i2,j2 be Nat such that
+       A38: [i1,j1] in Indices G & f/.i = G*(i1,j1) and
+       A39: [i2,j2] in Indices G & f/.(i+1) = G*(i2,j2) and
+       A40: (i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+        i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1) by A4,A35,JORDAN8:6;
+      A41: 1 <= i1 & i1 <= len G & 1 <= j1 & j1 <= width G by A38,GOBOARD5:1;
+      A42: 1 <= i2 & i2 <= len G & 1 <= j2 & j2 <= width G by A39,GOBOARD5:1;
+      A43: XS < len G by JORDAN1H:58;
+      A44: YS <= YS+(t+1) by NAT_1:29;
+      per cases by A40;
+       suppose i1 = i2 & j1+1 = j2;
+        hence contradiction
+              by A5,A8,A17,A23,A33,A36,A37,A38,A39,A41,A42,A43,GOBOARD7:29;
+       suppose A45: i1+1 = i2 & j1 = j2;
+        then A46: XS-'1 = i1 & YS+(t+1) = j1
+              by A5,A8,A17,A23,A33,A36,A37,A38,A39,A41,A42,A43,GOBOARD7:28;
+        A47: cell(G,XS-'1,YS+(t+1)) c= BDD C by A1,A20,A44,JORDAN11:def 3;
+          left_cell(f,i,G) = cell(G,i1,j1) by A4,A35,A38,A39,A45,GOBRD13:24;
+        then cell(G,XS-'1,YS+(t+1)) meets C by A1,A35,A46,Th8;
+        then BDD C meets C by A47,XBOOLE_1:63;
+        hence contradiction by JORDAN1A:15;
+       suppose A48: i1 = i2+1 & j1 = j2;
+        then A49: XS-'1 = i2 & YS+(t+1) = j2
+              by A5,A8,A17,A23,A33,A36,A37,A38,A39,A41,A42,A43,GOBOARD7:28;
+        A50: YS <= YS+t by NAT_1:29;
+          YS+t <= 2|^(n-'AI)*(YI-'2)+2 by A21,NAT_1:38;
+        then A51: cell(G,XS-'1,YS+t) c= BDD C by A1,A50,JORDAN11:def 3;
+          left_cell(f,i,G) = cell(G,i2,j2-'1) by A4,A35,A38,A39,A48,GOBRD13:26;
+        then cell(G,XS-'1,YS+(t+1)-'1) meets C by A1,A35,A49,Th8;
+        then cell(G,XS-'1,YS+t) meets C by A17,BINARITH:39;
+        then BDD C meets C by A51,XBOOLE_1:63;
+        hence contradiction by JORDAN1A:15;
+       suppose i1 = i2 & j1 = j2+1;
+        hence contradiction
+              by A5,A8,A17,A23,A33,A36,A37,A38,A39,A41,A42,A43,GOBOARD7:29;
+     end;
+     A52: p in Ls by GOBOARD7:7;
+       Ls c= cell(G,XS-'1,YS+t) by A5,A8,A17,A32,GOBOARD5:22;
+     then A53: p in cell(G,XS-'1,YS+t)\L~f by A34,A52,XBOOLE_0:def 4;
+       Ls c= cell(G,XS-'1,YS+(t+1)) by A5,A8,A17,A23,A33,GOBOARD5:23;
+     then p in cell(G,XS-'1,YS+(t+1))\L~f by A34,A52,XBOOLE_0:def 4;
+     then BDD L~f meets UBD L~f by A15,A16,A24,A31,A53,AXIOMS:22,XBOOLE_0:3;
+     hence contradiction by JORDAN2C:28;
+    end;
+      for t be Nat holds P[t] from Ind(A9,A14);
+    hence thesis by A6,A7;
+   end;
+
+  theorem Th32:
+   for C be Subset of TOP-REAL 2
+   for n,m,i be Nat st m <= n & 1 < i & i+1 < len Gauge(C,m) holds
+    2|^(n-'m)*(i-2)+2+1 < len Gauge(C,n)
+   proof
+    let C be Subset of TOP-REAL 2;
+    let n,m,i be Nat;
+    assume that
+     A1: m <= n and
+     A2: 1 < i and
+     A3: i+1 < len Gauge(C,m);
+      1+1 <= i by A2,NAT_1:38;
+    then reconsider i2 = i-2 as Nat by INT_1:18;
+    A4: 2|^(n-'m) > 0 by HEINE:5;
+      len Gauge(C,m) = 2|^m + (2+1) by JORDAN8:def 1
+       .= 2|^m + 2+1 by XCMPLX_1:1;
+    then i < 2|^m + 2 by A3,REAL_1:55;
+    then i2 < 2|^m by REAL_1:84;
+    then 2|^(n-'m)*i2 < 2|^(n-'m)*2|^m by A4,REAL_1:70;
+    then 2|^(n-'m)*i2 < 2|^(n-'m+m) by NEWTON:13;
+    then 2|^(n-'m)*i2 < 2|^n by A1,AMI_5:4;
+    then 2|^(n-'m)*(i2)+2 < 2|^n + 2 by REAL_1:67;
+    then 2|^(n-'m)*(i-2)+2+1 < 2|^n + 2+1 by REAL_1:67;
+    then 2|^(n-'m)*(i-2)+2+1 < 2|^n + (1+2) by XCMPLX_1:1;
+    hence thesis by JORDAN8:def 1;
+   end;
+
+  theorem Th33:
+   for C be Simple_closed_curve
+   for n,m be Nat st n is_sufficiently_large_for C & n <= m holds
+    RightComp Span(C,n) meets RightComp Span(C,m)
+   proof
+    let C be Simple_closed_curve;
+    let n,m be Nat;
+    assume that
+     A1: n is_sufficiently_large_for C and
+     A2: n <= m;
+    set AI = ApproxIndex C;
+    set YI = Y-InitStart C;
+    set G = Gauge(C,n);
+    set f = Span(C,n);
+    set i = X-SpanStart(C,n);
+    set j = Y-SpanStart(C,n);
+    A3: f is_sequence_on G by A1,JORDAN13:def 1;
+    A4: m is_sufficiently_large_for C by A1,A2,Th29;
+    set G1 = Gauge(C,m);
+    set f1 = Span(C,m);
+    set i1 = X-SpanStart(C,m);
+    set j1 = Y-SpanStart(C,m);
+    A5: f1 is_sequence_on G1 by A4,JORDAN13:def 1;
+      j <= 2|^(n-'AI)*(YI-'2)+2 by A1,JORDAN11:5;
+    then A6: cell(G,i-'1,2|^(n-'AI)*(YI-'2)+2)\L~f c= BDD L~f by A1,Th31;
+      j1 <= 2|^(m-'AI)*(YI-'2)+2 by A4,JORDAN11:5;
+    then A7: cell(G1,i1-'1,2|^(m-'AI)*(YI-'2)+2)\L~f1 c= BDD L~f1
+                                                              by A4,Th31;
+    set XSAI = X-SpanStart(C,AI);
+    set p2 = Gauge(C,AI)*(XSAI,YI);
+    A8: i = 2|^(n-'AI)*(XSAI-2)+2 by A1,JORDAN11:4;
+    A9: i1 = 2|^(m-'AI)*(XSAI-2)+2 by A4,JORDAN11:4;
+    A10: AI <= n by A1,JORDAN11:def 1;
+    A11: AI <= m by A4,JORDAN11:def 1;
+      2 < XSAI & XSAI < len Gauge(C,AI) by JORDAN1H:58;
+    then A12: 1 < XSAI & XSAI < len Gauge(C,AI) by AXIOMS:22;
+    A13: YI + 1 < width Gauge(C,AI) by JORDAN11:3;
+    then A14: YI < width Gauge(C,AI) by NAT_1:38;
+    A15: YI > 1 by JORDAN11:2;
+    then YI >= 1+1+0 by NAT_1:38;
+    then A16: YI-2 >= 0 by REAL_1:84;
+    then A17: 2|^(n-'AI)*(YI-'2)+2 = 2|^(n-'AI)*(YI-2)+2 by BINARITH:def 3;
+    then A18: p2 = G*(i,2|^(n-'AI)*(YI-'2)+2)
+                                          by A8,A10,A12,A14,A15,JORDAN1A:54;
+    A19: 2|^(m-'AI)*(YI-'2)+2 = 2|^(m-'AI)*(YI-2)+2 by A16,BINARITH:def 3;
+    then A20: p2 = G1*(i1,2|^(m-'AI)*(YI-'2)+2)
+                                          by A9,A11,A12,A14,A15,JORDAN1A:54;
+    A21: 2 < i & i < len G by JORDAN1H:58;
+    then A22: 1 < i & i < len G by AXIOMS:22;
+    A23: 1 < 2|^(n-'AI)*(YI-'2)+2 & 2|^(n-'AI)*(YI-'2)+2 < width G
+                                              by A10,A14,A15,A17,JORDAN1A:53;
+    A24: 2 < i1 & i1 < len G1 by JORDAN1H:58;
+    then A25: 1 < i1 & i1 < len G1 by AXIOMS:22;
+    A26: 1 < 2|^(m-'AI)*(YI-'2)+2 & 2|^(m-'AI)*(YI-'2)+2 < width G1
+                                              by A11,A14,A15,A19,JORDAN1A:53;
+    set j3 = 2|^(m-'AI)*(YI-'2)+2;
+    set j4 = 2|^(n-'AI)*(YI-'2)+2;
+    set p3 = 1/2*(G1*(i1-'1,j3)+G1*(i1,j3+1));
+    A27: i1-'1+1 = i1 by A25,AMI_5:4;
+    A28: 1 <= i1-'1 & i1-'1 < len G1 by JORDAN1H:59;
+    A29: 1 < j3 & j3+1 <= width G1 by A26,NAT_1:38;
+    then A30: p3 in Int cell(G1,i1-'1,j3) by A24,A27,A28,GOBOARD6:34;
+    A31: Int cell(G1,i1-'1,j3) c= cell(G1,i1-'1,j3) by TOPS_1:44;
+      Int cell(G1,i1-'1,j3) misses L~f1 by A5,A26,A28,JORDAN9:16;
+    then not p3 in L~f1 by A30,XBOOLE_0:3;
+    then p3 in cell(G1,i1-'1,j3)\L~f1 by A30,A31,XBOOLE_0:def 4;
+    then p3 in BDD L~f1 by A7;
+    then A32: p3 in RightComp Span(C,m) by GOBRD14:47;
+    A33: i-'1+1 = i by A22,AMI_5:4;
+    A34: 1 <= i-'1 & i-'1 < len G by JORDAN1H:59;
+    A35: G1*(i1-'1,j3)`1 < p3`1 & p3`1 < G1*(i1,j3)`1 &
+         G1*(i1-'1,j3)`2 < p3`2 & p3`2 < G1*(i1-'1,j3+1)`2
+                                                  by A24,A27,A28,A29,A30,Th4;
+    A36: i-'1 >= 1+1 by A21,A33,NAT_1:38;
+      i-'1+1 <= len G by A34,NAT_1:38;
+    then A37: i-'1 <= len G - 1 by REAL_1:84;
+    A38: j4 >= 1+1 by A23,NAT_1:38;
+      j4 < len G by A23,JORDAN8:def 1;
+    then j4+1 <= len G by NAT_1:38;
+    then j4 <= len G - 1 by REAL_1:84;
+    then consider c,d be Nat such that
+       2 <= c & c <= len G1 - 1 and
+       2 <= d & d <= len G1 - 1 and
+     A39: [c,d] in Indices G1 and
+     A40: G*(i-'1,j4) = G1*(c,d) and
+       c = 2 + 2|^(m-'n)*(i-'1-'2) & d = 2 + 2|^(m-'n)*(j4-'2)
+                                            by A2,A36,A37,A38,GOBRD14:18;
+      G*(i-'1,j4) in {G1*(ii,jj) where ii,jj is Nat: [ii,jj] in Indices G1}
+                                                                  by A39,A40;
+    then G*(i-'1,j4) in Values G1 by GOBRD13:7;
+    then G*(i-'1,j4)`1 <= G1*(i1-'1,j3)`1 by A18,A20,A22,A23,A25,A26,GOBRD13:15
+;
+    then A41: G*(i-'1,j4)`1 < p3`1 & p3`1 < G*(i,j4)`1
+                                                    by A8,A10,A12,A14,A15,A17,
+A20,A35,AXIOMS:22,JORDAN1A:54;
+    A42: j4+1 <= width G by A23,NAT_1:38;
+    A43: G*(i,j4)`2 = G*(1,j4)`2 by A22,A23,GOBOARD5:2
+       .= G*(i-'1,j4)`2 by A23,A34,GOBOARD5:2;
+    A44: G1*(i1,j3)`2 = G1*(1,j3)`2 by A25,A26,GOBOARD5:2
+       .= G1*(i1-'1,j3)`2 by A26,A28,GOBOARD5:2;
+    A45: j3+1 >= 1 & j4+1 >= 1 by NAT_1:29;
+    then A46: G1*(i1,j3+1)`2 = G1*(1,j3+1)`2 by A25,A29,GOBOARD5:2
+       .= G1*(i1-'1,j3+1)`2 by A28,A29,A45,GOBOARD5:2;
+    A47: G*(i,j4+1)`2 = G*(1,j4+1)`2 by A22,A42,A45,GOBOARD5:2
+       .= G*(i-'1,j4+1)`2 by A34,A42,A45,GOBOARD5:2;
+      i+1 <= len G by A21,NAT_1:38;
+    then A48: i <= len G - 1 by REAL_1:84;
+    A49: j4+1 > 1+1 by A23,REAL_1:53;
+      YI+1 < len Gauge(C,AI) by A13,JORDAN8:def 1;
+    then 2|^(n-'AI)*(YI-'2)+2+1 < len G by A10,A15,A17,Th32;
+    then 2|^(n-'AI)*(YI-'2)+2+1+1 <= len G by NAT_1:38;
+    then j4+1 <= len G - 1 by REAL_1:84;
+    then consider c, d be Nat such that
+       2 <= c & c <= len G1 - 1 and
+       2 <= d & d <= len G1 - 1 and
+     A50: [c,d] in Indices G1 and
+     A51: G*(i,j4+1) = G1*(c,d) and
+       c = 2 + 2|^(m-'n)*(i-'2) & d = 2 + 2|^(m-'n)*(j4+1-'2)
+                                            by A2,A21,A48,A49,GOBRD14:18;
+      G*(i,j4+1) in {G1*(ii,jj) where ii,jj is Nat: [ii,jj] in Indices G1}
+                                                                  by A50,A51;
+    then G*(i,j4+1) in Values G1 by GOBRD13:7;
+    then G1*(i1,j3+1)`2 <= G*(i,j4+1)`2 by A18,A20,A22,A23,A25,A26,GOBRD13:16;
+    then G*(i-'1,j4)`2 < p3`2 & p3`2 < G*(i-'1,j4+1)`2
+                                    by A8,A10,A12,A14,A15,A17,A20,A35,A43,A44,
+A46,A47,AXIOMS:22,JORDAN1A:54;
+    then A52: p3 in Int cell(G,i-'1,j4) by A21,A23,A33,A34,A41,A42,Th4;
+    A53: Int cell(G,i-'1,j4) c= cell(G,i-'1,j4) by TOPS_1:44;
+      Int cell(G,i-'1,j4) misses L~f by A3,A23,A34,JORDAN9:16;
+    then not p3 in L~f by A52,XBOOLE_0:3;
+    then p3 in cell(G,i-'1,j4)\L~f by A52,A53,XBOOLE_0:def 4;
+    then p3 in BDD L~f by A6;
+    then p3 in RightComp Span(C,n) by GOBRD14:47;
+    hence RightComp Span(C,n) meets RightComp Span(C,m) by A32,XBOOLE_0:3;
+   end;
+
+  theorem Th34:
+   for G be Go-board
+   for f be FinSequence of TOP-REAL 2 st f is_sequence_on G & f is special
+   for i,j be Nat st i <= len G & j <= width G holds
+    Int cell(G,i,j) c= (L~f)`
+   proof
+    let G be Go-board;
+    let f be FinSequence of TOP-REAL 2;
+    assume A1: f is_sequence_on G & f is special;
+    let i,j be Nat;
+    assume i <= len G & j <= width G;
+    then Int cell(G,i,j) misses (L~f) by A1,JORDAN9:16;
+    hence thesis by SUBSET_1:43;
+   end;
+
+  theorem Th35:
+   for C be Simple_closed_curve
+   for n,m be Nat st n is_sufficiently_large_for C & n <= m holds
+    L~Span(C,m) c= Cl LeftComp(Span(C,n))
+   proof
+    let C be Simple_closed_curve;
+    let i,j be Nat;
+    assume that
+     A1: i is_sufficiently_large_for C and
+     A2: i <= j and
+     A3: not L~Span(C,j) c= Cl LeftComp(Span(C,i));
+    A4: j is_sufficiently_large_for C by A1,A2,Th29;
+    then A5: Span(C,j) is_sequence_on Gauge(C,j) by JORDAN13:def 1;
+    A6: Span(C,i) is_sequence_on Gauge(C,i) by A1,JORDAN13:def 1;
+    consider p be Point of TOP-REAL 2 such that
+     A7: p in L~Span(C,j) and
+     A8: not p in Cl LeftComp(Span(C,i)) by A3,SUBSET_1:7;
+    reconsider D = (L~Span(C,i))` as Subset of TOP-REAL 2;
+    consider i1 be Nat such that
+     A9: 1 <= i1 and
+     A10: i1+1 <= len Span(C,j) and
+     A11: p in LSeg(Span(C,j),i1) by A7,SPPOL_2:13;
+    A12: i1 < len Span(C,j) by A10,NAT_1:38;
+    set f = Span(C,j);
+    set G = Gauge(C,j);
+    A13: now
+     assume A14: not left_cell(Span(C,j),i1,G) c= Cl RightComp Span(C,i);
+       ex i2,j2 be Nat st
+      1 <= i2 & i2+1 <= len Gauge(C,i) & 1 <= j2 & j2+1 <= width Gauge(C,i) &
+      left_cell(Span(C,j),i1,G) c= cell(Gauge(C,i),i2,j2)
+     proof
+      A15: i1 in dom f by A9,A12,FINSEQ_3:27;
+      then consider i4,j4 be Nat such that
+       A16: [i4,j4] in Indices Gauge(C,j) and
+       A17: f/.i1 = (Gauge(C,j))*(i4,j4) by A5,GOBOARD1:def 11;
+      A18: 1 <= i4 & i4 <= len Gauge(C,j) by A16,GOBOARD5:1;
+      A19: 1 <= j4 & j4 <= width Gauge(C,j) by A16,GOBOARD5:1;
+      A20: 1 <= i1+1 by NAT_1:29;
+      then A21: i1+1 in dom f by A10,FINSEQ_3:27;
+      then consider i5,j5 be Nat such that
+       A22: [i5,j5] in Indices Gauge(C,j) and
+       A23: f/.(i1+1) = (Gauge(C,j))*(i5,j5) by A5,GOBOARD1:def 11;
+      A24: 1 <= i5 & i5 <= len Gauge(C,j) by A22,GOBOARD5:1;
+      A25: 1 <= j5 & j5 <= width Gauge(C,j) by A22,GOBOARD5:1;
+        left_cell(f,i1,G) = left_cell(f,i1,G);
+      then A26: i4 = i5 & j4+1 = j5 & left_cell(f,i1,G) = cell(G,i4-'1,j4) or
+       i4+1 = i5 & j4 = j5 & left_cell(f,i1,G) = cell(G,i4,j4) or
+       i4 = i5+1 & j4 = j5 & left_cell(f,i1,G) = cell(G,i5,j5-'1) or
+       i4 = i5 & j4 = j5+1 & left_cell(f,i1,G) = cell(G,i4,j5)
+                                by A5,A9,A10,A16,A17,A22,A23,GOBRD13:def 3;
+      A27: j4+1+1 = j4+(1+1) by XCMPLX_1:1;
+      A28: i4+1+1 = i4+(1+1) by XCMPLX_1:1;
+        abs(i4-i5)+abs(j4-j5) = 1 by A5,A15,A16,A17,A21,A22,A23,GOBOARD1:def 11
+;
+      then A29: abs(i4-i5)=1 & j4=j5 or abs(j4-j5)=1 & i4=i5 by GOBOARD1:2;
+      per cases by A29,GOBOARD1:1;
+       suppose A30: i4 = i5 & j4+1 = j5;
+        A31: i4-'1+1 = i4 by A18,AMI_5:4;
+          1 < i4 by A4,A9,A12,A16,A17,Th23;
+        then 1+1 <= i4 by NAT_1:38;
+        then 1 <= i4-'1 by JORDAN5B:2;
+        hence thesis by A2,A18,A19,A25,A26,A27,A30,A31,JORDAN1H:44,REAL_1:69;
+       suppose A32: i4+1 = i5 & j4 = j5;
+          j4 < width Gauge(C,j) by A4,A9,A12,A16,A17,Th26;
+        then j4+1 <= width Gauge(C,j) by NAT_1:38;
+        hence thesis by A2,A18,A19,A24,A26,A28,A32,JORDAN1H:44,REAL_1:69;
+       suppose A33: i4 = i5+1 & j4 = j5;
+        A34: j5-'1+1 = j5 by A25,AMI_5:4;
+          1 < j5 by A4,A10,A20,A22,A23,Th25;
+        then 1+1 <= j5 by NAT_1:38;
+        then 1 <= j5-'1 by JORDAN5B:2;
+        hence thesis by A2,A18,A24,A25,A26,A28,A33,A34,JORDAN1H:44,REAL_1:69;
+       suppose A35: i4 = i5 & j4 = j5+1;
+          i4 < len Gauge(C,j) by A4,A9,A12,A16,A17,Th24;
+        then i4+1 <= len Gauge(C,j) by NAT_1:38;
+        hence thesis by A2,A18,A19,A25,A26,A27,A35,JORDAN1H:44,REAL_1:69;
+     end;
+     then consider i2,j2 be Nat such that
+      A36: 1 <= i2 & i2+1 <= len Gauge(C,i) and
+      A37: 1 <= j2 & j2+1 <= width Gauge(C,i) and
+      A38: left_cell(Span(C,j),i1,G) c= cell(Gauge(C,i),i2,j2);
+     A39: i2< len Gauge(C,i) by A36,NAT_1:38;
+     A40: j2 < width Gauge(C,i) by A37,NAT_1:38;
+     A41: not cell(Gauge(C,i),i2,j2) c= Cl RightComp Span(C,i)
+                                                       by A14,A38,XBOOLE_1:1;
+       Cl RightComp Span(C,i) \/ LeftComp Span(C,i)
+         = L~Span(C,i) \/ RightComp Span(C,i) \/ LeftComp Span(C,i)
+                                                                by GOBRD14:31
+        .= the carrier of TOP-REAL 2 by GOBRD14:25;
+     then A42: cell(Gauge(C,i),i2,j2) meets LeftComp Span(C,i)
+                                                          by A41,XBOOLE_1:73;
+       cell(Gauge(C,i),i2,j2) = Cl Int cell(Gauge(C,i),i2,j2)
+                                                       by A39,A40,GOBRD11:35;
+     then A43: Int cell(Gauge(C,i),i2,j2) meets LeftComp Span(C,i)
+                                                            by A42,TSEP_1:40;
+     A44: Int cell(Gauge(C,i),i2,j2) c= (L~Span(C,i))`
+                                                      by A6,A39,A40,Th34;
+     A45: LeftComp Span(C,i) is_a_component_of (L~Span(C,i))`
+                                                          by GOBOARD9:def 1;
+       Int cell(Gauge(C,i),i2,j2) is connected by A39,A40,GOBOARD9:21;
+     then A46: Int cell(Gauge(C,i),i2,j2) c= LeftComp Span(C,i)
+                                                   by A43,A44,A45,JORDAN1A:8;
+       Int left_cell(Span(C,j),i1,G) c= Int cell(Gauge(C,i),i2,j2)
+                                                            by A38,TOPS_1:48;
+     then Int left_cell(Span(C,j),i1,G) c= LeftComp Span(C,i)
+                                                           by A46,XBOOLE_1:1;
+     then Cl Int left_cell(Span(C,j),i1,G) c= Cl LeftComp Span(C,i)
+                                                              by PRE_TOPC:49;
+     then A47: left_cell(Span(C,j),i1,G) c= Cl LeftComp Span(C,i)
+                                                  by A5,A9,A10,JORDAN9:13;
+       LSeg(Span(C,j),i1) c= left_cell(Span(C,j),i1,G) by A5,A9,A10,JORDAN1H:26
+;
+     then LSeg(Span(C,j),i1) c= Cl LeftComp Span(C,i) by A47,XBOOLE_1:1;
+     hence contradiction by A8,A11;
+    end;
+    A48: C c= LeftComp Span(C,i) by A1,Th12;
+      left_cell(Span(C,j),i1,Gauge(C,j)) meets C by A4,A9,A10,Th8;
+    then A49: C meets Cl RightComp Span(C,i) by A13,XBOOLE_1:63;
+    A50: Cl RightComp Span(C,i) = RightComp Span(C,i) \/ L~Span(C,i)
+                                                               by GOBRD14:31;
+      C misses L~Span(C,i) by A1,Th9;
+    then A51: C meets RightComp Span(C,i) by A49,A50,XBOOLE_1:70;
+    A52: RightComp Span(C,i) is_a_component_of D by GOBOARD9:def 2;
+      D = RightComp Span(C,i) \/ LeftComp Span(C,i) by GOBRD12:11;
+    then LeftComp Span(C,i) c= D by XBOOLE_1:7;
+    then A53: C c= D by A48,XBOOLE_1:1;
+    A54: LeftComp Span(C,i) is_a_component_of D by GOBOARD9:def 1;
+      C meets C;
+    then C meets LeftComp Span(C,i) by A48,XBOOLE_1:63;
+    then RightComp Span(C,i) = LeftComp Span(C,i)
+                                                by A51,A52,A53,A54,JORDAN9:3;
+    hence contradiction by SPRECT_4:7;
+   end;
+
+  theorem Th36:
+   for C be Simple_closed_curve
+   for n,m be Nat st n is_sufficiently_large_for C & n <= m holds
+    RightComp(Span(C,n)) c= RightComp(Span(C,m))
+   proof
+    let C be Simple_closed_curve;
+    let n,m be Nat;
+    assume that
+     A1: n is_sufficiently_large_for C and
+     A2: n <= m;
+    A3: RightComp(Span(C,n)) meets RightComp(Span(C,m)) by A1,A2,Th33;
+    A4: RightComp(Span(C,m)) is_a_component_of (L~Span(C,m))`
+                                                          by GOBOARD9:def 2;
+    A5: L~Span(C,m) c= Cl LeftComp(Span(C,n)) by A1,A2,Th35;
+    A6: Cl LeftComp Span(C,n) = (LeftComp Span(C,n)) \/ L~Span(C,n)
+                                                               by GOBRD14:32;
+    A7: L~Span(C,n) misses RightComp(Span(C,n)) by SPRECT_3:42;
+      RightComp Span(C,n) misses LeftComp Span(C,n) by GOBRD14:24;
+    then Cl LeftComp(Span(C,n)) misses RightComp(Span(C,n))
+                                                       by A6,A7,XBOOLE_1:70;
+    then L~Span(C,m) misses RightComp(Span(C,n)) by A5,XBOOLE_1:63;
+    then RightComp(Span(C,n)) c= (L~Span(C,m))` by SUBSET_1:43;
+    hence RightComp(Span(C,n)) c= RightComp(Span(C,m)) by A3,A4,JORDAN1A:8;
+   end;
+
+  theorem
+     for C be Simple_closed_curve
+   for n,m be Nat st n is_sufficiently_large_for C & n <= m holds
+    LeftComp(Span(C,m)) c= LeftComp(Span(C,n))
+   proof
+    let C be Simple_closed_curve;
+    let n,m be Nat;
+    assume that
+     A1: n is_sufficiently_large_for C and
+     A2: n <= m;
+      RightComp(Span(C,n)) c= RightComp(Span(C,m)) by A1,A2,Th36;
+    then A3: Cl RightComp(Span(C,n)) c= Cl RightComp(Span(C,m)) by PRE_TOPC:49;
+      (Cl RightComp(Span(C,n)))` = LeftComp(Span(C,n)) &
+     (Cl RightComp(Span(C,m)))` = LeftComp(Span(C,m)) by JORDAN1H:51;
+    hence LeftComp(Span(C,m)) c= LeftComp(Span(C,n)) by A3,SUBSET_1:31;
+   end;

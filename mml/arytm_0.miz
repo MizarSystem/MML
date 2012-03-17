@@ -1,0 +1,2252 @@
+:: Introduction to Arithmetics
+::  by Andrzej Trybulec
+::
+:: Received January 9, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM_0, COMPLEX1, FUNCT_2, FUNCT_1, FUNCOP_1, ARYTM_2, BOOLE,
+      ARYTM_1, ARYTM_3, ORDINAL2, ORDINAL1, OPPCAT_1, RELAT_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
+      FUNCT_4, ORDINAL1, ARYTM_3, ARYTM_2, ARYTM_1, NUMBERS;
+ constructors ARYTM_1, FRAENKEL, FUNCT_4, XBOOLE_0, NUMBERS;
+ clusters XBOOLE_0, ARYTM_2, SUBSET_1, ORDINAL2, ARYTM_3, FRAENKEL, FUNCT_2,
+      FUNCT_4, ZFMISC_1, NUMBERS;
+ requirements BOOLE, SUBSET;
+ theorems XBOOLE_0, ARYTM_1, ZFMISC_1, TARSKI, ARYTM_2, ORDINAL2, XBOOLE_1,
+      ORDINAL1, ORDINAL3, ARYTM_3, FUNCT_2, FUNCT_4, FUNCT_1, ENUMSET1,
+      NUMBERS;
+
+begin :: Arithmetics
+
+Lm1: {} in {{}} by TARSKI:def 1;
+Lm2:
+  now let e be set;
+   assume
+A1: one = [0,e];
+        {0} = 0 \/ {0}
+         .= succ 0 by ORDINAL1:def 1
+         .= {{0},{0,e}} by A1,ORDINAL2:def 4,TARSKI:def 5;
+    then {0} in {0} by TARSKI:def 2;
+   hence contradiction;
+  end;
+
+theorem Th1:
+ REAL+ c= REAL
+proof
+A1: REAL+ c= REAL+ \/ [:{{}},REAL+:] by XBOOLE_1:7;
+    not [{},{}] in REAL+ by ARYTM_2:3;
+ hence thesis by A1,NUMBERS:def 1,ZFMISC_1:40;
+end;
+
+theorem Th2:
+ for x being Element of REAL+ st x <> {} holds [{},x] in REAL
+proof let x be Element of REAL+ such that
+A1: x <> {};
+A2: now assume [{},x] in {[{},{}]};
+     then [{},x] = [{},{}] by TARSKI:def 1;
+    hence contradiction by A1,ZFMISC_1:33;
+   end;
+   {} in {{}} by TARSKI:def 1;
+  then [{},x] in [:{{}},REAL+:] by ZFMISC_1:106;
+  then [{},x] in REAL+ \/ [:{{}},REAL+:] by XBOOLE_0:def 2;
+ hence [{},x] in REAL by A2,NUMBERS:def 1,XBOOLE_0:def 4;
+end;
+
+theorem Th3:
+ for y being set st [{},y] in REAL holds y <> {}
+proof let y be set such that
+A1: [{},y] in REAL and
+A2: y = {};
+    [{},y] in {[{},{}]} by A2,TARSKI:def 1;
+ hence contradiction by A1,NUMBERS:def 1,XBOOLE_0:def 4;
+end;
+
+theorem Th4:
+ for x,y being Element of REAL+ holds x - y in REAL
+proof let x,y be Element of REAL+;
+ per cases;
+ suppose y <=' x;
+  then x - y = x -' y by ARYTM_1:def 2;
+  then x - y in REAL+;
+ hence x - y in REAL by Th1;
+ suppose
+A1: not y <=' x;
+  then A2: x - y = [{},y -' x] by ARYTM_1:def 2;
+    y -' x <> {} by A1,ARYTM_1:9;
+ hence x - y in REAL by A2,Th2;
+end;
+
+theorem Th5:
+ REAL+ misses [:{{}},REAL+:]
+proof
+ assume REAL+ meets [:{{}},REAL+:];
+ then consider x being set such that
+A1: x in REAL+ and
+A2: x in [:{{}},REAL+:] by XBOOLE_0:3;
+  consider x1,x2 being set such that
+A3: x1 in {{}} and
+A4: x2 in REAL+ & x = [x1,x2] by A2,ZFMISC_1:103;
+    x1 = {} by A3,TARSKI:def 1;
+ hence contradiction by A1,A4,ARYTM_2:3;
+end;
+
+begin  :: Real numbers
+
+theorem Th6:
+ for x,y being Element of REAL+ st x - y = {} holds x = y
+ proof let x,y be Element of REAL+;
+A1: {} <> [{},y -' x];
+  assume
+A2: x - y = {};
+   then A3:  y <=' x by A1,ARYTM_1:def 2;
+   then x -' y = {} by A2,ARYTM_1:def 2;
+  hence x = y by A3,ARYTM_1:10;
+ end;
+
+theorem Th7:
+ not ex a,b being set st one = [a,b]
+ proof let a,b be set;
+  assume one = [a,b];
+   then A1:  {{}} = {{a,b},{a}} by ORDINAL3:18,TARSKI:def 5;
+     {a} in {{a,b},{a}} by TARSKI:def 2;
+  hence contradiction by A1,TARSKI:def 1;
+ end;
+
+theorem Th8:
+ for x,y,z being Element of REAL+ st x <> {} & x *' y = x *' z
+   holds y = z
+proof let x,y,z be Element of REAL+;
+ assume that
+A1: x <> {} and
+A2: x *' y = x *' z;
+ per cases;
+ suppose
+A3: z <=' y;
+  then x *' (y -' z) = (x *' y) - (x *' z) by ARYTM_1:26
+    .= {} by A2,ARYTM_1:18;
+  then {} = y -' z by A1,ARYTM_1:2
+    .= y - z by A3,ARYTM_1:def 2;
+ hence y = z by Th6;
+ suppose
+A4: y <=' z;
+  then x *' (z -' y) = x *' z - x *' y by ARYTM_1:26
+      .= {} by A2,ARYTM_1:18;
+  then {} = z -' y by A1,ARYTM_1:2
+    .= z - y by A4,ARYTM_1:def 2;
+ hence y = z by Th6;
+end;
+
+canceled;
+
+begin :: from XREAL_0
+
+definition let x,y be Element of REAL;
+ canceled;
+ func +(x,y) -> Element of REAL means :Def2:
+  ex x',y' being Element of REAL+ st x = x' & y = y' & it = x' + y'
+              if x in REAL+ & y in REAL+,
+  ex x',y' being Element of REAL+ st x = x' & y = [0,y'] & it = x' - y'
+              if x in REAL+ & y in [:{0},REAL+:],
+  ex x',y' being Element of REAL+ st x = [0,x'] & y = y' & it = y' - x'
+              if y in REAL+ & x in [:{0},REAL+:]
+  otherwise
+   ex x',y' being Element of REAL+
+    st x = [0,x'] & y = [0,y'] & it = [0,x'+y'];
+  existence
+   proof
+    hereby assume x in REAL+ & y in REAL+;
+      then reconsider x'=x, y'=y as Element of REAL+;
+        x' + y' in REAL+;
+      then reconsider IT = x' + y' as Element of REAL by Th1;
+     take IT,x',y';
+     thus x = x' & y = y' & IT = x' + y';
+    end;
+    hereby assume x in REAL+;
+      then reconsider x'=x as Element of REAL+;
+     assume y in [:{0},REAL+:];
+      then consider z,y' being set such that
+A1:    z in{0} and
+A2:    y' in REAL+ and
+A3:    y = [z,y'] by ZFMISC_1:103;
+      reconsider y' as Element of REAL+ by A2;
+      reconsider IT = x' - y' as Element of REAL by Th4;
+     take IT,x',y';
+     thus x = x' & y = [0,y'] & IT = x' - y' by A1,A3,TARSKI:def 1;
+    end;
+    hereby assume y in REAL+;
+      then reconsider y'=y as Element of REAL+;
+     assume x in [:{0},REAL+:];
+      then consider z,x' being set such that
+A4:    z in{0} and
+A5:    x' in REAL+ and
+A6:    x = [z,x'] by ZFMISC_1:103;
+      reconsider x' as Element of REAL+ by A5;
+      reconsider IT = y' - x' as Element of REAL by Th4;
+     take IT,x',y';
+     thus x = [0,x'] & y = y' & IT = y' - x' by A4,A6,TARSKI:def 1;
+    end;
+      x in REAL+ \/ [:{0},REAL+:] & y in REAL+ \/ [:{0},REAL+:]
+      by NUMBERS:def 1,XBOOLE_0:def 4;
+then A7:  (x in REAL+ or x in [:{0},REAL+:]) &
+    (y in REAL+ or y in [:{0},REAL+:]) by XBOOLE_0:def 2;
+    assume
+A8:   not(x in REAL+ & y in REAL+) &
+     not(x in REAL+ & y in [:{0},REAL+:]) &
+     not(y in REAL+ & x in [:{0},REAL+:]);
+      then consider z1,x' being set such that
+A9:    z1 in{0} and
+A10:    x' in REAL+ and
+A11:    x = [z1,x'] by A7,ZFMISC_1:103;
+      reconsider x' as Element of REAL+ by A10;
+      consider z2,y' being set such that
+A12:    z2 in{0} and
+A13:    y' in REAL+ and
+A14:    y = [z2,y'] by A7,A8,ZFMISC_1:103;
+      reconsider y' as Element of REAL+ by A13;
+        x = [0,x'] by A9,A11,TARSKI:def 1;
+      then x' <> 0 by Th3;
+      then x' + y' <> 0 by ARYTM_2:6;
+      then reconsider IT = [0,y' + x'] as Element of REAL by Th2;
+     take IT,x',y';
+     thus x = [0,x'] & y = [0,y'] & IT = [0,x' + y']
+                     by A9,A11,A12,A14,TARSKI:def 1;
+   end;
+  uniqueness
+   proof let IT1,IT2 be Element of REAL;
+    thus x in REAL+ & y in REAL+ &
+     (ex x',y' being Element of REAL+ st x = x' & y = y' & IT1 = x' + y') &
+     (ex x',y' being Element of REAL+ st x = x' & y = y' & IT2 = x' + y')
+      implies IT1 = IT2;
+    thus x in REAL+ & y in [:{0},REAL+:] &
+     (ex x',y' being Element of REAL+ st x = x' & y = [0,y'] &IT1 = x' - y') &
+     (ex x'',y'' being Element of REAL+ st
+          x = x'' & y = [0,y''] & IT2 = x'' - y'')
+       implies IT1 = IT2 by ZFMISC_1:33;
+    thus y in REAL+ & x in [:{0},REAL+:] &
+    (ex x',y' being Element of REAL+ st x = [0,x'] & y = y' & IT1 = y' - x') &
+    (ex x'',y'' being Element of REAL+ st
+      x = [0,x''] & y = y'' & IT2 = y'' - x'')
+     implies IT1 = IT2 by ZFMISC_1:33;
+    assume
+        not(x in REAL+ & y in REAL+) &
+      not(x in REAL+ & y in [:{0},REAL+:]) &
+      not(y in REAL+ & x in [:{0},REAL+:]);
+    given x',y' being Element of REAL+ such that
+A15:  x = [0,x'] & y = [0,y'] and
+A16:  IT1 = [0,x'+y'];
+    given x'',y'' being Element of REAL+ such that
+A17:  x = [0,x''] & y = [0,y''] and
+A18:  IT2 = [0,x''+y''];
+       x' = x'' & y' = y'' by A15,A17,ZFMISC_1:33;
+    hence thesis by A16,A18;
+   end;
+  consistency by Th5,XBOOLE_0:3;
+  commutativity;
+
+ func *(x,y) -> Element of REAL means :Def3:
+  ex x',y' being Element of REAL+ st x = x' & y = y' & it = x' *' y'
+              if x in REAL+ & y in REAL+,
+  ex x',y' being Element of REAL+ st x = x' & y = [0,y'] & it = [0,x' *' y']
+              if x in REAL+ & y in [:{0},REAL+:] & x <> 0,
+  ex x',y' being Element of REAL+ st x = [0,x'] & y = y' & it = [0,y' *' x']
+              if y in REAL+ & x in [:{0},REAL+:] & y <> 0,
+  ex x',y' being Element of REAL+ st x = [0,x'] & y = [0,y'] & it = y' *' x'
+              if x in [:{0},REAL+:] & y in [:{0},REAL+:]
+   otherwise it = 0;
+  existence
+   proof
+    hereby assume x in REAL+ & y in REAL+;
+      then reconsider x'=x, y'=y as Element of REAL+;
+              x' *' y' in REAL+;
+      then reconsider IT = x' *' y' as Element of REAL by Th1;
+     take IT,x',y';
+     thus x = x' & y = y' & IT = x' *' y';
+    end;
+    hereby assume x in REAL+;
+      then reconsider x'=x as Element of REAL+;
+     assume y in [:{0},REAL+:];
+      then consider z,y' being set such that
+A19:    z in{0} and
+A20:    y' in REAL+ and
+A21:    y = [z,y'] by ZFMISC_1:103;
+      reconsider y' as Element of REAL+ by A20;
+     assume
+A22:    x <> 0;
+        y = [0,y'] by A19,A21,TARSKI:def 1;
+      then y' <> 0 by Th3;
+      then x' *' y' <> 0 by A22,ARYTM_1:2;
+      then reconsider IT = [0,x' *' y'] as Element of REAL by Th2;
+     take IT,x',y';
+     thus x = x' & y = [0,y'] & IT = [0,x' *' y'] by A19,A21,TARSKI:def 1;
+    end;
+    hereby assume y in REAL+;
+      then reconsider y'=y as Element of REAL+;
+     assume x in [:{0},REAL+:];
+      then consider z,x' being set such that
+A23:    z in{0} and
+A24:    x' in REAL+ and
+A25:    x = [z,x'] by ZFMISC_1:103;
+      reconsider x' as Element of REAL+ by A24;
+     assume
+A26:    y <> 0;
+        x = [0,x'] by A23,A25,TARSKI:def 1;
+      then x' <> 0 by Th3;
+      then x' *' y' <> 0 by A26,ARYTM_1:2;
+      then reconsider IT = [0,y' *' x'] as Element of REAL by Th2;
+     take IT,x',y';
+     thus x = [0,x'] & y = y' & IT = [0,y' *' x'] by A23,A25,TARSKI:def 1;
+    end;
+    hereby assume x in [:{0},REAL+:];
+      then consider z1,x' being set such that
+A27:    z1 in{0} and
+A28:    x' in REAL+ and
+A29:    x = [z1,x'] by ZFMISC_1:103;
+      reconsider x' as Element of REAL+ by A28;
+     assume y in [:{0},REAL+:];
+      then consider z2,y' being set such that
+A30:    z2 in{0} and
+A31:    y' in REAL+ and
+A32:    y = [z2,y'] by ZFMISC_1:103;
+      reconsider y' as Element of REAL+ by A31;
+        x' *' y' in REAL+;
+      then reconsider IT = y' *' x' as Element of REAL by Th1;
+     take IT,x',y';
+     thus x = [0,x'] & y = [0,y'] & IT = y' *' x'
+                   by A27,A29,A30,A32,TARSKI:def 1;
+    end;
+   thus thesis by Th1,ARYTM_2:21;
+   end;
+  uniqueness
+   proof let IT1,IT2 be Element of REAL;
+    thus x in REAL+ & y in REAL+ &
+     (ex x',y' being Element of REAL+ st x = x' & y = y' & IT1 = x' *' y') &
+     (ex x',y' being Element of REAL+ st x = x' & y = y' & IT2 = x' *' y')
+      implies IT1 = IT2;
+    thus x in REAL+ & y in [:{0},REAL+:] & x <> 0 &
+     (ex x',y' being Element of REAL+
+       st x = x' & y = [0,y'] & IT1 = [0,x' *' y']) &
+     (ex x'',y'' being Element of REAL+
+       st x = x'' & y = [0,y''] & IT2 = [0,x'' *' y''])
+     implies IT1 = IT2 by ZFMISC_1:33;
+    thus y in REAL+ & x in [:{0},REAL+:] & y <> 0 &
+     (ex x',y' being Element of REAL+
+        st x = [0,x'] & y = y' & IT1 = [0,y' *' x']) &
+     (ex x'',y'' being Element of REAL+
+       st x = [0,x''] & y = y'' & IT2 = [0,y'' *' x''])
+     implies IT1 = IT2 by ZFMISC_1:33;
+    hereby assume
+        x in [:{0},REAL+:] & y in [:{0},REAL+:];
+    given x',y' being Element of REAL+ such that
+A33:  x = [0,x'] & y = [0,y'] and
+A34:  IT1 = y' *' x';
+    given x'',y'' being Element of REAL+ such that
+A35:  x = [0,x''] & y = [0,y''] and
+A36:  IT2 = y'' *' x'';
+       x' = x'' & y' = y'' by A33,A35,ZFMISC_1:33;
+    hence IT1 = IT2 by A34,A36;
+    end;
+    thus thesis;
+   end;
+  consistency by Th5,XBOOLE_0:3;
+  commutativity;
+end;
+
+ reserve x,y for Element of REAL;
+
+definition let x be Element of REAL;
+  func opp x -> Element of REAL means
+:Def4: +(x,it) = 0;
+  existence
+   proof
+     reconsider z' = 0 as Element of REAL+ by ARYTM_2:21;
+A1:   x in REAL+ \/ [:{0},REAL+:] & not x in {[0,0]}
+                        by NUMBERS:def 1,XBOOLE_0:def 4;
+    per cases by A1,XBOOLE_0:def 2;
+    suppose
+A2:   x = 0;
+     then reconsider x' = x as Element of REAL+ by ARYTM_2:21;
+     take x;
+       x' + x' = 0 by A2,ARYTM_2:def 8;
+    hence thesis by Def2,Th1,ARYTM_2:21;
+    suppose that
+A3:   x in REAL+ and
+A4:  x <> 0;
+       0 in {0} by TARSKI:def 1;
+     then A5:   [0,x] in [:{0},REAL+:] by A3,ZFMISC_1:106;
+     then A6:   [0,x] in REAL+ \/ [:{0},REAL+:] by XBOOLE_0:def 2;
+       [0,x] <> [0,0] by A4,ZFMISC_1:33;
+     then reconsider y = [0,x] as Element of REAL
+        by A6,NUMBERS:def 1,ZFMISC_1:64;
+    take y;
+     reconsider x' = x as Element of REAL+ by A3;
+A7:   x' <=' x';
+       z' + x' = x' by ARYTM_2:def 8;
+     then z' = x' -' x' by A7,ARYTM_1:def 1;
+     then 0 = x' - x' by A7,ARYTM_1:def 2;
+    hence thesis by A5,Def2,Th1,ARYTM_2:21;
+    suppose
+A8:   x in [:{0},REAL+:];
+     then consider a,b being set such that
+A9:   a in {0} and
+A10:   b in REAL+ and
+A11:   x = [a,b] by ZFMISC_1:103;
+     reconsider y = b as Element of REAL by A10,Th1;
+    take y;
+       now per cases;
+      case x in REAL+ & y in REAL+;
+       hence ex x',y' being Element of REAL+ st x = x' & y = y' & 0 = x' + y'
+           by A8,Th5,XBOOLE_0:3;
+      case x in REAL+ & y in [:{0},REAL+:];
+       hence ex x',y' being Element of REAL+ st x = x' & y = [0,y'] &
+                 0 = x' - y' by A10,Th5,XBOOLE_0:3;
+      case y in REAL+ & x in [:{0},REAL+:];
+        reconsider x' = b, y' = y as Element of REAL+ by A10;
+       take x', y';
+       thus x = [0,x'] by A9,A11,TARSKI:def 1;
+       thus y = y';
+       thus 0 = y' - x' by ARYTM_1:18;
+      case not(x in REAL+ & y in REAL+) &
+           not(x in REAL+ & y in [:{0},REAL+:]) &
+           not (y in REAL+ & x in [:{0},REAL+:]);
+       hence ex x',y' being Element of REAL+
+        st x = [0,x'] & y = [0,y'] & 0 = [0,y'+x'] by A8,A10;
+     end;
+    hence thesis by Def2,Th1,ARYTM_2:21;
+   end;
+  uniqueness
+   proof let y,z be Element of REAL such that
+A12: +(x,y) = 0 and
+A13: +(x,z) = 0;
+    per cases;
+    suppose x in REAL+ & y in REAL+ & z in REAL+;
+     then (ex x',y' being Element of REAL+ st x = x' & y = y' & 0 = x' + y')
+      & ex x',y' being Element of REAL+ st x = x' & z = y' & 0 = x' + y'
+                   by A12,A13,Def2;
+    hence y = z by ARYTM_2:12;
+    suppose that
+A14:  x in REAL+ and
+A15:  y in REAL+ and
+A16:  z in [:{0},REAL+:];
+     consider x',y' being Element of REAL+ such that
+A17:   x = x' and y = y' and
+A18:   0 = x' + y' by A12,A14,A15,Def2;
+     consider x'',y'' being Element of REAL+ such that
+A19:   x = x'' and
+A20:   z = [0,y''] and
+A21:   0 = x'' - y'' by A13,A14,A16,Def2;
+A22:   x'' = 0 by A17,A18,A19,ARYTM_2:6;
+       [0,0] in {[0,0]} by TARSKI:def 1;
+     then A23:    not [0,0] in REAL by NUMBERS:def 1,XBOOLE_0:def 4;
+       z in REAL;
+    hence y = z by A20,A21,A22,A23,ARYTM_1:19;
+    suppose that
+A24:  x in REAL+ and
+A25:  z in REAL+ and
+A26:  y in [:{0},REAL+:];
+     consider x',z' being Element of REAL+ such that
+A27:   x = x' and z = z' and
+A28:   0 = x' + z' by A13,A24,A25,Def2;
+     consider x'',y' being Element of REAL+ such that
+A29:   x = x'' and
+A30:   y = [0,y'] and
+A31:   0 = x'' - y' by A12,A24,A26,Def2;
+A32:   x'' = 0 by A27,A28,A29,ARYTM_2:6;
+       [0,0] in {[0,0]} by TARSKI:def 1;
+     then A33:    not [0,0] in REAL by NUMBERS:def 1,XBOOLE_0:def 4;
+       y in REAL;
+    hence z = y by A30,A31,A32,A33,ARYTM_1:19;
+    suppose that
+A34:  x in REAL+ and
+A35:  y in [:{0},REAL+:] and
+A36:  z in [:{0},REAL+:];
+     consider x',y' being Element of REAL+ such that
+A37:   x = x' and
+A38:   y = [0,y'] and
+A39:   0 = x' - y' by A12,A34,A35,Def2;
+     consider x'',z' being Element of REAL+ such that
+A40:   x = x'' and
+A41:   z = [0,z'] and
+A42:   0 = x'' - z' by A13,A34,A36,Def2;
+       y' = x' by A39,Th6 .= z' by A37,A40,A42,Th6;
+    hence y = z by A38,A41;
+    suppose that
+A43:  z in REAL+ and
+A44:  y in REAL+ and
+A45:  x in [:{0},REAL+:];
+     consider x',y' being Element of REAL+ such that
+A46:   x = [0,x'] and
+A47:   y = y' and
+A48:   0 = y' - x' by A12,A44,A45,Def2;
+     consider x'',z' being Element of REAL+ such that
+A49:   x = [0,x''] and
+A50:   z = z' and
+A51:   0 = z' - x'' by A13,A43,A45,Def2;
+       x' = x'' by A46,A49,ZFMISC_1:33;
+     then z' = x' by A51,Th6 .= y' by A48,Th6;
+    hence y = z by A47,A50;
+    suppose not(x in REAL+ & y in REAL+) &
+            not(x in REAL+ & y in [:{0},REAL+:]) &
+            not(y in REAL+ & x in [:{0},REAL+:]);
+     then ex x',y' being Element of REAL+
+      st x = [0,x'] & y = [0,y'] & 0 = [0,x'+y'] by A12,Def2;
+    hence y = z;
+    suppose not(x in REAL+ & z in REAL+) &
+            not(x in REAL+ & z in [:{0},REAL+:]) &
+            not(z in REAL+ & x in [:{0},REAL+:]);
+     then ex x',z' being Element of REAL+
+      st x = [0,x'] & z = [0,z'] & 0 = [0,x'+z'] by A13,Def2;
+    hence y = z;
+   end;
+  involutiveness;
+  func inv x -> Element of REAL means
+:Def5: *(x,it) = one if x <> 0
+    otherwise it = 0;
+  existence
+   proof
+    thus x <> 0 implies ex y st *(x,y) = one
+     proof assume
+A52:   x <> 0;
+A53:   x in REAL+ \/ [:{0},REAL+:] by NUMBERS:def 1,XBOOLE_0:def 4;
+     per cases by A53,XBOOLE_0:def 2;
+     suppose
+    A54:  x in REAL+;
+      then reconsider x' = x as Element of REAL+;
+      consider y' being Element of REAL+ such that
+    A55:  x' *' y' = one by A52,ARYTM_2:15;
+         y' in REAL+;
+      then reconsider y = y' as Element of REAL by Th1;
+     take y;
+      consider x'',y'' being Element of REAL+ such that
+    A56: x = x'' and
+    A57: y = y'' and
+    A58: *(x,y) = x'' *' y'' by A54,Def3;
+     thus *(x,y) = one by A55,A56,A57,A58;
+     suppose
+    A59: x in [:{0},REAL+:];
+     then consider x1,x2 being set such that
+         x1 in {0} and
+    A60: x2 in REAL+ and
+    A61: x = [x1,x2] by ZFMISC_1:103;
+     reconsider x2 as Element of REAL+ by A60;
+       not x in {[0,0]} by NUMBERS:def 1,XBOOLE_0:def 4;
+     then A62: x <> [0,0] by TARSKI:def 1;
+        x1 in {0} by A59,A61,ZFMISC_1:106;
+      then x2 <> 0 by A61,A62,TARSKI:def 1;
+     then consider y2 being Element of REAL+ such that
+    A63:  x2 *' y2 = one by ARYTM_2:15;
+    A64: [0,y2] in [:{0},REAL+:] by Lm1,ZFMISC_1:106;
+    then A65: [0,y2] in REAL+ \/ [:{0},REAL+:] by XBOOLE_0:def 2;
+        now assume [0,y2] in {[0,0]};
+        then [0,y2] = [0,0] by TARSKI:def 1;
+        then y2 = 0 by ZFMISC_1:33;
+       hence contradiction by A63,ARYTM_2:4;
+      end;
+     then reconsider y = [0,y2] as Element of REAL
+        by A65,NUMBERS:def 1,XBOOLE_0:def 4;
+     consider x',y' being Element of REAL+ such that
+    A66: x = [0,x'] and
+    A67: y = [0,y'] and
+    A68: *(x,y) = y' *' x' by A59,A64,Def3;
+    take y;
+       y' = y2 & x' = x2 by A61,A66,A67,ZFMISC_1:33;
+    hence *(x,y) = one by A63,A68;
+    end;
+    thus thesis;
+   end;
+  uniqueness
+   proof let y,z be Element of REAL;
+    thus x <> 0 & *(x,y) = one & *(x,z) = one implies y = z
+     proof assume that
+A69:    x <> 0 and
+A70:    *(x,y) = one and
+A71:    *(x,z) = one;
+A72:     for x,y being Element of REAL st *(x,y) =one holds x <> 0
+        proof let x,y be Element of REAL such that
+A73:       *(x,y) =one and
+A74:       x = 0;
+A75:       not x in [:{0},REAL+:] by A74,Th5,ARYTM_2:21,XBOOLE_0:3;
+A76:      y in REAL+ \/ [:{0},REAL+:] by NUMBERS:def 1,XBOOLE_0:def 4;
+         per cases by A76,XBOOLE_0:def 2;
+         suppose y in REAL+;
+          then ex x',y' being Element of REAL+
+           st x = x' & y = y' & one = x' *' y' by A73,A74,Def3,ARYTM_2:21;
+         hence contradiction by A74,ARYTM_2:4;
+         suppose y in [:{0},REAL+:];
+          then not y in REAL+ by Th5,XBOOLE_0:3;
+         hence contradiction by A73,A74,A75,Def3;
+        end;
+then A77:    y <> 0 by A70;
+A78:    z <> 0 by A71,A72;
+      per cases;
+      suppose x in REAL+ & y in REAL+ & z in REAL+;
+       then (ex x',y' being Element of REAL+ st x = x' & y = y' & one = x' *'
+y')
+        & ex x',y' being Element of REAL+ st x = x' & z = y' & one = x' *' y'
+                   by A70,A71,Def3;
+      hence y = z by A69,Th8;
+      suppose that
+A79:    x in [:{0},REAL+:] and
+A80:    y in [:{0},REAL+:] and
+A81:    z in [:{0},REAL+:];
+       consider x',y' being Element of REAL+ such that
+A82:     x = [0,x'] and
+A83:     y = [0,y'] and
+A84:     one = y' *' x' by A70,A79,A80,Def3;
+       consider x'',z' being Element of REAL+ such that
+A85:     x = [0,x''] and
+A86:     z = [0,z'] and
+A87:     one = z' *' x'' by A71,A79,A81,Def3;
+A88:     x' = x'' by A82,A85,ZFMISC_1:33;
+         x' <> 0 by A82,Th3;
+      hence y = z by A83,A84,A86,A87,A88,Th8;
+      suppose x in REAL+ & y in [:{0},REAL+:];
+       then ex x',y' being Element of REAL+ st
+        x = x' & y = [0,y'] & one = [0,x' *' y'] by A69,A70,Def3;
+       hence y = z by Th7;
+      suppose x in [:{0},REAL+:] & y in REAL+;
+       then ex x',y' being Element of REAL+ st
+        x = [0,x'] & y = y' & one = [0,y' *' x'] by A70,A77,Def3;
+       hence y = z by Th7;
+      suppose x in [:{0},REAL+:] & z in REAL+;
+       then ex x',z' being Element of REAL+ st
+        x = [0,x'] & z = z' & one = [0,z' *' x'] by A71,A78,Def3;
+       hence y = z by Th7;
+      suppose x in REAL+ & z in [:{0},REAL+:];
+       then ex x',z' being Element of REAL+ st
+        x = x' & z = [0,z'] & one = [0,x' *' z'] by A69,A71,Def3;
+       hence y = z by Th7;
+      suppose not (x in REAL+ & y in REAL+) &
+              not (x in REAL+ & y in [:{0},REAL+:] & x <> 0) &
+              not (y in REAL+ & x in [:{0},REAL+:] & y <> 0) &
+              not (x in [:{0},REAL+:] & y in [:{0},REAL+:]);
+      hence thesis by A70,Def3;
+      suppose not (x in REAL+ & z in REAL+) &
+              not (x in REAL+ & z in [:{0},REAL+:] & x <> 0) &
+              not (z in REAL+ & x in [:{0},REAL+:] & z <> 0) &
+              not (x in [:{0},REAL+:] & z in [:{0},REAL+:]);
+      hence thesis by A71,Def3;
+     end;
+    thus thesis;
+   end;
+  consistency;
+  involutiveness
+   proof let x,y be Element of REAL;
+    assume that
+A89:  y <> 0 implies *(y,x) = one and
+A90:  y = 0 implies x = 0;
+    thus x <> 0 implies *(x,y) = one by A89,A90;
+    assume
+A91:  x = 0;
+    assume
+A92:   y <> 0;
+A93:    y in REAL+ \/ [:{0},REAL+:] by NUMBERS:def 1,XBOOLE_0:def 4;
+    per cases by A93,XBOOLE_0:def 2;
+    suppose y in REAL+;
+     then ex x',y' being Element of REAL+
+      st x = x' & y = y' & one = x' *' y' by A89,A91,A92,Def3,ARYTM_2:21;
+     hence contradiction by A91,ARYTM_2:4;
+    suppose y in [:{0},REAL+:];
+      then not y in REAL+ & not x in [:{0},REAL+:]
+          by A91,Th5,ARYTM_2:21,XBOOLE_0:3;
+     hence contradiction by A89,A91,A92,Def3;
+   end;
+end;
+
+begin :: from COMPLEX1
+
+Lm3:
+ for x,y,z being set st [x,y] = {z}
+  holds z = {x} & x = y
+proof let x,y,z be set;
+ assume [x,y] = {z};
+  then {{x,y},{x}} = {z} by TARSKI:def 5;
+  then A1:  {x,y} in {z} & {x} in {z} by TARSKI:def 2;
+ hence
+A2: z = {x} by TARSKI:def 1;
+    {x,y} = z by A1,TARSKI:def 1;
+ hence x = y by A2,ZFMISC_1:9;
+end;
+
+reserve i,j,k for Element of NAT;
+reserve a,b for Element of REAL;
+
+theorem Th10:
+ not (0,one)-->(a,b) in REAL
+proof set f = (0,one)-->(a,b);
+A1: f = {[0,a],[one,b]} by FUNCT_4:71;
+     now assume f in {[i,j]: i,j are_relative_prime & j <> {}};
+     then consider i,j such that
+A2:   f = [i,j] and
+        i,j are_relative_prime and
+        j <> {};
+A3:   f = {{i,j},{i}} by A2,TARSKI:def 5;
+     then A4:    {i} in f by TARSKI:def 2;
+A5:  {i,j} in f by A3,TARSKI:def 2;
+A6:  [0,a] = {{0,a},{0}} by TARSKI:def 5;
+A7:  [one,b] = {{one,b},{one}} by TARSKI:def 5;
+A8: now assume i = j;
+      then {i} = {i,j} by ENUMSET1:69;
+      then [i,j] = {{i}} by A2,A3,ENUMSET1:69;
+      then [0,a] in {{i}} & [one,b] in {{i}} by A1,A2,TARSKI:def 2;
+      then [0,a] = {i} & [one,b] = {i} by TARSKI:def 1;
+     hence contradiction by ZFMISC_1:33;
+    end;
+    per cases by A1,A4,A5,TARSKI:def 2;
+    suppose {i,j} = [0,a] & {i} = [0,a];
+     hence contradiction by A8,ZFMISC_1:9;
+    suppose that
+A9:  {i,j} = [0,a] and
+A10:  {i} = [one,b];
+A11:    i = {one} by A10,Lm3;
+        i in [0,a] by A9,TARSKI:def 2;
+      then i = {0,a} or i = {0} by A6,TARSKI:def 2;
+      then 0 in i by TARSKI:def 1,def 2;
+     hence contradiction by A11,TARSKI:def 1;
+    suppose that
+A12:  {i,j} = [one,b] and
+A13:  {i} = [0,a];
+A14:    i = {0} by A13,Lm3;
+        i in [one,b] by A12,TARSKI:def 2;
+      then i = {one,b} or i = {one} by A7,TARSKI:def 2;
+      then one in i by TARSKI:def 1,def 2;
+     hence contradiction by A14,TARSKI:def 1;
+    suppose {i,j} = [one,b] & {i} = [one,b];
+     hence contradiction by A8,ZFMISC_1:9;
+   end;
+   then A15: not f in
+     {[i,j]: i,j are_relative_prime & j <> {}} \ {[k,one]: not contradiction}
+       by XBOOLE_0:def 4;
+     now assume f in omega;
+     then f is ordinal by ORDINAL1:23;
+     then {} in f by A1,ORDINAL3:10;
+    hence contradiction by A1,TARSKI:def 2;
+   end;
+   then A16: not f in RAT+ by A15,ARYTM_3:def 6,XBOOLE_0:def 2;
+ set IR = { A where A is Subset of RAT+:
+    for r being Element of RAT+ st r in A holds
+    (for s being Element of RAT+ st s <=' r holds s in A) &
+     ex s being Element of RAT+ st s in A & r < s};
+   not ex x,y being set st {[0,x],[one,y]} in IR
+proof given x,y being set such that
+A17: {[0,x],[one,y]} in IR;
+ consider A being Subset of RAT+ such that
+A18: {[0,x],[one,y]} = A and
+A19: for r being Element of RAT+ st r in A holds
+     (for s being Element of RAT+ st s <=' r holds s in A) &
+      ex s being Element of RAT+ st s in A & r < s by A17;
+A20: [0,x] in A by A18,TARSKI:def 2;
+    for r,s being Element of RAT+ st r in A & s <=' r holds s in A by A19;
+  then consider r1,r2,r3 being Element of RAT+ such that
+A21: r1 in A & r2 in A & r3 in A and
+A22: r1 <> r2 & r2 <> r3 & r3 <> r1 by A20,ARYTM_3:82;
+    (r1 = [0,x] or r1 = [one,y]) &
+  (r2 = [0,x] or r2 = [one,y]) &
+  (r3 = [0,x] or r3 = [one,y]) by A18,A21,TARSKI:def 2;
+ hence contradiction by A22;
+end;
+  then not f in IR by A1;
+  then not f in DEDEKIND_CUTS by ARYTM_2:def 1,XBOOLE_0:def 4;
+  then not f in RAT+ \/ DEDEKIND_CUTS by A16,XBOOLE_0:def 2;
+  then A23: not f in REAL+ by ARYTM_2:def 2,XBOOLE_0:def 4;
+    now assume f in [:{{}},REAL+:];
+    then consider x,y being set such that
+A24:  x in {{}} and
+       y in REAL+ and
+A25:  f = [x,y] by ZFMISC_1:103;
+      x = 0 by A24,TARSKI:def 1;
+    then A26:    f = {{0,y},{0}} by A25,TARSKI:def 5;
+      f = {[0,a],[one,b]} by FUNCT_4:71;
+    then [one,b] in f by TARSKI:def 2;
+    then A27:   [one,b] = {0} or [one,b] = {0,y} by A26,TARSKI:def 2;
+   per cases by A27,TARSKI:def 5;
+   suppose {{one,b},{one}} = {0};
+    then 0 in {{one,b},{one}} by TARSKI:def 1;
+   hence contradiction by TARSKI:def 2;
+   suppose {{one,b},{one}} = {0,y};
+    then 0 in {{one,b},{one}} by TARSKI:def 2;
+   hence contradiction by TARSKI:def 2;
+  end;
+  then not f in REAL+ \/ [:{{}},REAL+:] by A23,XBOOLE_0:def 2;
+ hence thesis by NUMBERS:def 1,XBOOLE_0:def 4;
+end;
+
+definition let x,y be Element of REAL;
+ canceled;
+ func [*x,y*] -> Element of COMPLEX equals
+:Def7:  x if y = 0
+   otherwise (0,one) --> (x,y);
+  consistency;
+  coherence
+  proof
+   thus y = 0 implies x is Element of COMPLEX by NUMBERS:def 2,XBOOLE_0:def 2;
+   set z = (0,one)-->(x,y);
+   assume
+A1:  y <> 0;
+A2:  z in Funcs({0,one},REAL) by FUNCT_2:11;
+      now assume z in { r where r is Element of Funcs({0,one},REAL): r.one = 0
+}
+;
+      then ex r being Element of Funcs({0,one},REAL) st z = r & r.one = 0;
+     hence contradiction by A1,FUNCT_4:66;
+    end;
+    then z in
+      Funcs({0,one},REAL)
+        \ { r where r is Element of Funcs({0,one},REAL): r.one = 0}
+       by A2,XBOOLE_0:def 4;
+   hence thesis by NUMBERS:def 2,XBOOLE_0:def 2;
+  end;
+end;
+
+theorem
+   for c being Element of COMPLEX
+  ex r,s being Element of REAL st c = [*r,s*]
+proof let c be Element of COMPLEX;
+ per cases;
+ suppose c in REAL;
+  then reconsider r=c, z=0 as Element of REAL by Th1,ARYTM_2:21;
+  take r,z;
+  thus c = [*r,z*] by Def7;
+ suppose not c in REAL;
+  then A1:  c in Funcs({0,one},REAL)
+      \ { x where x is Element of Funcs({0,one},REAL): x.one = 0}
+           by NUMBERS:def 2,XBOOLE_0:def 2;
+  then A2: c in Funcs({0,one},REAL) by XBOOLE_0:def 4;
+  then consider f being Function such that
+A3: c = f and
+A4: dom f = {0,one} and
+A5: rng f c= REAL by FUNCT_2:def 2;
+    0 in {0,one} & one in {0,one} by TARSKI:def 2;
+  then f.0 in rng f & f.one in rng f by A4,FUNCT_1:12;
+  then reconsider r = f.0, s = f.one as Element of REAL by A5;
+A6: c = (0,one)-->(r,s) by A3,A4,FUNCT_4:69;
+ take r,s;
+    now assume s = 0;
+    then (0,one)-->(r,s).one = 0 by FUNCT_4:66;
+    then c in { x where x is Element of Funcs({0,one},REAL): x.one = 0}
+        by A2,A6;
+   hence contradiction by A1,XBOOLE_0:def 4;
+  end;
+ hence c = [*r,s*] by A6,Def7;
+end;
+
+theorem
+   for x1,x2,y1,y2 being Element of REAL st [*x1,x2*] = [*y1,y2*]
+  holds x1 = y1 & x2 = y2
+proof let x1,x2,y1,y2 be Element of REAL such that
+A1: [*x1,x2*] = [*y1,y2*];
+ per cases;
+ suppose
+A2: x2 = 0;
+  then A3: [*x1,x2*] = x1 by Def7;
+A4: now assume y2 <> 0;
+    then x1 = (0,one) --> (y1,y2) by A1,A3,Def7;
+   hence contradiction by Th10;
+  end;
+ hence x1 = y1 by A1,A3,Def7;
+ thus x2 = y2 by A2,A4;
+ suppose x2 <> 0;
+  then A5: [*y1,y2*] = (0,one) --> (x1,x2) by A1,Def7;
+    now assume y2 = 0;
+    then [*y1,y2*] = y1 by Def7;
+   hence contradiction by A5,Th10;
+  end;
+  then [*y1,y2*] = (0,one) --> (y1,y2) by Def7;
+ hence x1 = y1 & x2 = y2 by A5,FUNCT_4:72;
+end;
+
+set RR = [:{0},REAL+:] \ {[0,0]};
+
+ reconsider o = 0 as Element of REAL by Th1,ARYTM_2:21;
+
+theorem Th13:
+ for x,o being Element of REAL st o = 0 holds +(x,o) = x
+proof let x,o being Element of REAL such that
+A1: o = 0;
+   reconsider y' = 0 as Element of REAL+ by ARYTM_2:21;
+  per cases;
+  suppose x in REAL+;
+   then reconsider x' = x as Element of REAL+;
+     x' = x' + y' by ARYTM_2:def 8;
+  hence +(x,o) = x by A1,Def2;
+  suppose
+A2:  not x in REAL+;
+     x in REAL+ \/ [:{{}},REAL+:] by NUMBERS:def 1,XBOOLE_0:def 4;
+   then A3: x in [:{{}},REAL+:] by A2,XBOOLE_0:def 2;
+   then consider x1,x2 being set such that
+A4: x1 in {{}} and
+A5: x2 in REAL+ and
+A6: x = [x1,x2] by ZFMISC_1:103;
+   reconsider x' = x2 as Element of REAL+ by A5;
+A7:  x1 = 0 by A4,TARSKI:def 1;
+   then x' <> 0 by A6,Th3;
+   then x = y' - x' by A6,A7,ARYTM_1:19;
+  hence thesis by A1,A3,A6,A7,Def2;
+end;
+
+theorem Th14:
+ for x,o being Element of REAL st o = 0 holds *(x,o) = 0
+proof let x,o being Element of REAL such that
+A1: o = 0;
+  per cases;
+  suppose x in REAL+;
+   then reconsider x' = x, y' = 0 as Element of REAL+ by ARYTM_2:21;
+     0 = x' *' y' by ARYTM_2:4;
+  hence *(x,o) = 0 by A1,Def3;
+  suppose
+A2: not x in REAL+;
+     not o in [:{{}},REAL+:] by A1,Th5,ARYTM_2:21,XBOOLE_0:3;
+  hence thesis by A1,A2,Def3;
+end;
+
+theorem Th15:
+ for x,y,z being Element of REAL holds *(x,*(y,z)) = *(*(x,y),z)
+proof let x,y,z be Element of REAL;
+ per cases;
+ suppose that
+A1: x in REAL+ and
+A2: y in REAL+ and
+A3: z in REAL+;
+  consider y',z' being Element of REAL+ such that
+A4: y = y' and
+A5: z = z' and
+A6: *(y,z) = y' *' z' by A2,A3,Def3;
+  consider x',yz' being Element of REAL+ such that
+A7: x = x' and
+A8: *(y,z) = yz' and
+A9: *(x,*(y,z)) = x' *' yz' by A1,A6,Def3;
+  consider x'',y'' being Element of REAL+ such that
+A10: x = x'' and
+A11: y = y'' and
+A12: *(x,y) = x'' *' y'' by A1,A2,Def3;
+  consider xy'',z'' being Element of REAL+ such that
+A13: *(x,y) = xy'' and
+A14: z = z'' and
+A15: *(*(x,y),z) = xy'' *' z'' by A3,A12,Def3;
+thus *(x,*(y,z)) = *(*(x,y),z) by A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,
+ARYTM_2:13;
+ suppose that
+A16: x in REAL+ & x <> 0 and
+A17: y in RR and
+A18: z in REAL+ & z <> 0;
+A19: y in [:{0},REAL+:] by A17,XBOOLE_0:def 4;
+  then consider y',z' being Element of REAL+ such that
+A20: y = [0,y'] and
+A21: z = z' and
+A22: *(y,z) = [0,z' *' y'] by A18,Def3;
+    *(y,z) in [:{0},REAL+:] by A22,Lm1,ZFMISC_1:106;
+  then consider x',yz' being Element of REAL+ such that
+A23: x = x' and
+A24: *(y,z) = [0,yz'] and
+A25: *(x,*(y,z) ) = [0,x' *' yz'] by A16,Def3;
+  consider x'',y'' being Element of REAL+ such that
+A26: x = x'' and
+A27: y = [0,y''] and
+A28: *(x,y) = [0,x'' *' y''] by A16,A19,Def3;
+    *(x,y) in [:{0},REAL+:] by A28,Lm1,ZFMISC_1:106;
+  then consider xy'',z'' being Element of REAL+ such that
+A29: *(x,y) = [0,xy''] and
+A30: z = z'' and
+A31: *(*(x,y),z) = [0,z'' *' xy''] by A18,Def3;
+A32: y' = y'' by A20,A27,ZFMISC_1:33;
+ thus *(x,*(y,z)) = [0,x' *' (y' *' z')] by A22,A24,A25,ZFMISC_1:33
+         .= [0,(x'' *' y'') *' z''] by A21,A23,A26,A30,A32,ARYTM_2:13
+         .= *(*(x,y),z) by A28,A29,A31,ZFMISC_1:33;
+ suppose that
+A33: x in RR and
+A34: y in REAL+ & y <> 0 and
+A35: z in REAL+ & z <> 0;
+A36: x in [:{0},REAL+:] by A33,XBOOLE_0:def 4;
+  consider y',z' being Element of REAL+ such that
+A37: y = y' and
+A38: z = z' and
+A39: *(y,z) = y' *' z' by A34,A35,Def3;
+    y' *' z' <> 0 by A34,A35,A37,A38,ARYTM_1:2;
+  then consider x',yz' being Element of REAL+ such that
+A40: x = [0,x'] and
+A41: *(y,z) = yz' and
+A42: *(x,*(y,z)) = [0,yz' *' x'] by A36,A39,Def3;
+  consider x'',y'' being Element of REAL+ such that
+A43: x = [0,x''] and
+A44: y = y'' and
+A45: *(x,y) = [0,y'' *' x''] by A34,A36,Def3;
+    *(x,y) in [:{0},REAL+:] by A45,Lm1,ZFMISC_1:106;
+  then consider xy'',z'' being Element of REAL+ such that
+A46: *(x,y) = [0,xy''] and
+A47: z = z'' and
+A48: *(*(x,y),z) = [0,z'' *' xy''] by A35,Def3;
+  x' = x'' by A40,A43,ZFMISC_1:33;
+ hence *(x,*(y,z)) = [0,(x'' *' y'') *' z''] by A37,A38,A39,A41,A42,A44,A47,
+ARYTM_2:13
+         .= *(*(x,y),z) by A45,A46,A48,ZFMISC_1:33;
+ suppose that
+A49: x in RR and
+A50: y in RR and
+A51: z in REAL+ & z <> 0;
+A52: x in [:{0},REAL+:] by A49,XBOOLE_0:def 4;
+A53: y in [:{0},REAL+:] by A50,XBOOLE_0:def 4;
+  then consider y',z' being Element of REAL+ such that
+A54: y = [0,y'] and
+A55: z = z' and
+A56: *(y,z) = [0,z' *' y'] by A51,Def3;
+    *(y,z) in [:{0},REAL+:] by A56,Lm1,ZFMISC_1:106;
+  then consider x',yz' being Element of REAL+ such that
+A57: x = [0,x'] and
+A58: *(y,z) = [0,yz'] and
+A59: *(x,*(y,z)) = yz' *' x' by A52,Def3;
+  consider x'',y'' being Element of REAL+ such that
+A60: x = [0,x''] and
+A61: y = [0,y''] and
+A62: *(x,y) = y'' *' x'' by A52,A53,Def3;
+  consider xy'',z'' being Element of REAL+ such that
+A63: *(x,y) = xy'' and
+A64: z = z'' and
+A65: *(*(x,y),z) = xy'' *' z'' by A51,A62,Def3;
+A66: x' = x'' by A57,A60,ZFMISC_1:33;
+A67: y' = y'' by A54,A61,ZFMISC_1:33;
+ thus *(x,*(y,z)) = x' *' (y' *' z') by A56,A58,A59,ZFMISC_1:33
+         .= *(*(x,y),z) by A55,A62,A63,A64,A65,A66,A67,ARYTM_2:13;
+ suppose that
+A68: x in REAL+ & x <> 0 and
+A69: y in REAL+ & y <> 0 and
+A70: z in RR;
+A71: z in [:{0},REAL+:] by A70,XBOOLE_0:def 4;
+  then consider y',z' being Element of REAL+ such that
+A72: y = y' and
+A73: z = [0,z'] and
+A74: *(y,z) = [0,y' *' z'] by A69,Def3;
+    *(y,z) in [:{0},REAL+:] by A74,Lm1,ZFMISC_1:106;
+  then consider x',yz' being Element of REAL+ such that
+A75: x = x' and
+A76: *(y,z) = [0,yz'] and
+A77: *(x,*(y,z)) = [0,x' *' yz'] by A68,Def3;
+  consider x'',y'' being Element of REAL+ such that
+A78: x = x'' and
+A79: y = y'' and
+A80: *(x,y) = x'' *' y'' by A68,A69,Def3;
+    *(x,y) <> 0 by A68,A69,A78,A79,A80,ARYTM_1:2;
+  then consider xy'',z'' being Element of REAL+ such that
+A81: *(x,y) = xy'' and
+A82: z = [0,z''] and
+A83: *(*(x,y),z) = [0,xy'' *' z''] by A71,A80,Def3;
+A84: z' = z'' by A73,A82,ZFMISC_1:33;
+ thus *(x,*(y,z)) = [0,x' *' (y' *' z')] by A74,A76,A77,ZFMISC_1:33
+         .= *(*(x,y),z) by A72,A75,A78,A79,A80,A81,A83,A84,ARYTM_2:13;
+ suppose that
+A85: x in REAL+ & x <> 0 and
+A86: y in RR and
+A87: z in RR;
+A88: y in [:{0},REAL+:] by A86,XBOOLE_0:def 4;
+A89: z in [:{0},REAL+:] by A87,XBOOLE_0:def 4;
+  then consider y',z' being Element of REAL+ such that
+A90: y = [0,y'] and
+A91: z = [0,z'] and
+A92: *(y,z) = z' *' y' by A88,Def3;
+  consider x',yz' being Element of REAL+ such that
+A93: x = x' and
+A94: *(y,z) = yz' and
+A95: *(x,*(y,z)) = x' *' yz' by A85,A92,Def3;
+  consider x'',y'' being Element of REAL+ such that
+A96: x = x'' and
+A97: y = [0,y''] and
+A98: *(x,y) = [0,x'' *' y''] by A85,A88,Def3;
+    *(x,y) in [:{0},REAL+:] by A98,Lm1,ZFMISC_1:106;
+  then consider xy'',z'' being Element of REAL+ such that
+A99: *(x,y) = [0,xy''] and
+A100: z = [0,z''] and
+A101: *(*(x,y),z) = z'' *' xy'' by A89,Def3;
+A102: y' = y'' by A90,A97,ZFMISC_1:33;
+  z' = z'' by A91,A100,ZFMISC_1:33;
+ hence *(x,*(y,z)) = (x'' *' y'') *' z'' by A92,A93,A94,A95,A96,A102,ARYTM_2:13
+         .= *(*(x,y),z) by A98,A99,A101,ZFMISC_1:33;
+ suppose that
+A103: y in REAL+ & y <> 0 and
+A104: x in RR and
+A105: z in RR;
+A106: x in [:{0},REAL+:] by A104,XBOOLE_0:def 4;
+A107: z in [:{0},REAL+:] by A105,XBOOLE_0:def 4;
+  then consider y',z' being Element of REAL+ such that
+A108: y = y' and
+A109: z = [0,z'] and
+A110: *(y,z) = [0,y' *' z'] by A103,Def3;
+    [0,y' *' z'] in [:{0},REAL+:] by Lm1,ZFMISC_1:106;
+  then consider x',yz' being Element of REAL+ such that
+A111: x = [0,x'] and
+A112: *(y,z) = [0,yz'] and
+A113: *(x,*(y,z)) = yz' *' x' by A106,A110,Def3;
+  consider x'',y'' being Element of REAL+ such that
+A114: x = [0,x''] and
+A115: y = y'' and
+A116: *(x,y) = [0,y'' *' x''] by A103,A106,Def3;
+    *(x,y) in [:{0},REAL+:] by A116,Lm1,ZFMISC_1:106;
+  then consider xy'',z'' being Element of REAL+ such that
+A117: *(x,y) = [0,xy''] and
+A118: z = [0,z''] and
+A119: *(*(x,y),z) = z'' *' xy'' by A107,Def3;
+A120: x' = x'' by A111,A114,ZFMISC_1:33;
+A121: z' = z'' by A109,A118,ZFMISC_1:33;
+ thus *(x,*(y,z)) = x' *' (y' *' z') by A110,A112,A113,ZFMISC_1:33
+         .= (x'' *' y'') *' z'' by A108,A115,A120,A121,ARYTM_2:13
+         .= *(*(x,y),z) by A116,A117,A119,ZFMISC_1:33;
+ suppose that
+A122: x in RR and
+A123: y in RR and
+A124: z in RR;
+A125: x in [:{0},REAL+:] by A122,XBOOLE_0:def 4;
+A126: y in [:{0},REAL+:] by A123,XBOOLE_0:def 4;
+A127: z in [:{0},REAL+:] by A124,XBOOLE_0:def 4;
+  then consider y',z' being Element of REAL+ such that
+A128: y = [0,y'] and
+A129: z = [0,z'] and
+A130: *(y,z) = z' *' y' by A126,Def3;
+    not z in {[0,0]} & not y in {[0,0]} by A123,A124,XBOOLE_0:def 4;
+  then z' <> 0 & y' <> 0 by A128,A129,TARSKI:def 1;
+  then *(z,y) <> 0 by A130,ARYTM_1:2;
+  then consider x',yz' being Element of REAL+ such that
+A131: x = [0,x'] and
+A132: *(y,z) = yz' and
+A133: *(x,*(y,z)) = [0,yz' *' x'] by A125,A130,Def3;
+  consider x'',y'' being Element of REAL+ such that
+A134: x = [0,x''] and
+A135: y = [0,y''] and
+A136: *(x,y) = y'' *' x'' by A125,A126,Def3;
+A137: x' = x'' by A131,A134,ZFMISC_1:33;
+A138: y' = y'' by A128,A135,ZFMISC_1:33;
+    not x in {[0,0]} & not y in {[0,0]} by A122,A123,XBOOLE_0:def 4;
+  then x' <> 0 & y' <> 0 by A128,A131,TARSKI:def 1;
+  then *(x,y) <> 0 by A136,A137,A138,ARYTM_1:2;
+  then consider xy'',z'' being Element of REAL+ such that
+A139: *(x,y) = xy'' and
+A140: z = [0,z''] and
+A141: *(*(x,y),z) = [0,xy'' *' z''] by A127,A136,Def3;
+  z' = z'' by A129,A140,ZFMISC_1:33;
+ hence *(x,*(y,z)) = *(*(x,y),z) by A130,A132,A133,A136,A137,A138,A139,A141,
+ARYTM_2:13;
+ suppose
+A142: x = 0;
+  hence *(x,*(y,z)) = 0 by Th14
+           .= *(o,z) by Th14
+           .= *(*(x,y),z) by A142,Th14;
+ suppose
+A143:  y = 0;
+  hence *(x,*(y,z)) = *(x,o) by Th14
+           .= 0 by Th14
+           .= *(o,z) by Th14
+           .= *(*(x,y),z) by A143,Th14;
+ suppose
+A144: z = 0;
+  hence *(x,*(y,z)) = *(x,o) by Th14
+           .= 0 by Th14
+           .= *(*(x,y),z) by A144,Th14;
+ suppose
+A145: not( x in REAL+ & y in REAL+ & z in REAL+) &
+   not(x in REAL+ & y in RR & z in REAL+) &
+   not(y in REAL+ & x in RR & z in REAL+) &
+   not(x in RR & y in RR & z in REAL+) &
+   not( x in REAL+ & y in REAL+ & z in RR) &
+   not(x in REAL+ & y in RR & z in RR) &
+   not(y in REAL+ & x in RR & z in RR) &
+   not(x in RR & y in RR & z in RR);
+A146: not [0,0] in REAL+ by ARYTM_2:3;
+   REAL = (REAL+ \ {[{},{}]}) \/ ([:{{}},REAL+:] \ {[{},{}]})
+         by NUMBERS:def 1,XBOOLE_1:42
+     .= REAL+ \/ RR by A146,ZFMISC_1:65;
+ hence thesis by A145,XBOOLE_0:def 2;
+end;
+
+theorem Th16:
+ for x,y,z being Element of REAL holds *(x,+(y,z)) = +(*(x,y),*(x,z))
+proof let x,y,z be Element of REAL;
+ per cases;
+ suppose
+A1: x = 0;
+  hence *(x,+(y,z)) = 0 by Th14
+        .= +(o,o) by Th13
+        .= +(*(x,y),o) by A1,Th14
+        .= +(*(x,y),*(x,z)) by A1,Th14;
+ suppose that
+A2: x in REAL+ and
+A3: y in REAL+ and
+A4: z in REAL+;
+  consider x',y' being Element of REAL+ such that
+A5: x = x' and
+A6: y = y' and
+A7: *(x,y) = x' *' y' by A2,A3,Def3;
+  consider x'',z' being Element of REAL+ such that
+A8: x = x'' and
+A9: z = z' and
+A10: *(x,z) = x'' *' z' by A2,A4,Def3;
+  consider xy',xz' being Element of REAL+ such that
+A11: *(x,y) = xy' and
+A12: *(x,z) = xz' and
+A13: +(*(x,y),*(x,z)) = xy' + xz' by A7,A10,Def2;
+  consider y'',z'' being Element of REAL+ such that
+A14: y = y'' and
+A15: z = z'' and
+A16: +(y,z) = y'' + z'' by A3,A4,Def2;
+  consider x''',yz' being Element of REAL+ such that
+A17: x = x''' and
+A18: +(y,z) = yz' and
+A19: *(x,+(y,z)) = x''' *' yz' by A2,A16,Def3;
+ thus *(x,+(y,z)) = +(*(x,y),*(x,z)) by A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,
+A16,A17,A18,A19,ARYTM_2:14;
+ suppose that
+A20: x in REAL+ & x <> 0 and
+A21: y in REAL+ and
+A22: z in RR;
+A23: z in [:{0},REAL+:] by A22,XBOOLE_0:def 4;
+  consider x',y' being Element of REAL+ such that
+A24: x = x' and
+A25: y = y' and
+A26: *(x,y) = x' *' y' by A20,A21,Def3;
+  consider x'',z' being Element of REAL+ such that
+A27: x = x'' and
+A28: z = [0,z'] and
+A29: *(x,z) = [0,x'' *' z'] by A20,A23,Def3;
+  consider y'',z'' being Element of REAL+ such that
+A30: y = y'' and
+A31: z = [0,z''] and
+A32: +(y,z) = y'' - z'' by A21,A23,Def2;
+A33: z' = z'' by A28,A31,ZFMISC_1:33;
+    *(x,z) in [:{0},REAL+:] by A29,Lm1,ZFMISC_1:106;
+  then consider xy',xz' being Element of REAL+ such that
+A34: *(x,y) = xy' and
+A35: *(x,z) = [0,xz'] and
+A36: +(*(x,y),*(x,z)) = xy' - xz' by A26,Def2;
+    now per cases;
+   suppose
+A37:   z'' <=' y'';
+    then A38:   +(y,z) = y'' -' z'' by A32,ARYTM_1:def 2;
+    then consider x''',yz' being Element of REAL+ such that
+A39: x = x''' and
+A40: +(y,z) = yz' and
+A41: *(x,+(y,z)) = x''' *' yz' by A20,Def3;
+    thus *(x,+(y,z)) = (x' *' y') - (x'' *' z') by A24,A25,A27,A30,A33,A37,A38,
+A39,A40,A41,ARYTM_1:26
+        .= +(*(x,y),*(x,z)) by A26,A29,A34,A35,A36,ZFMISC_1:33;
+   suppose
+A42:  not z'' <=' y'';
+    then A43:   +(y,z) = [0,z'' -' y''] by A32,ARYTM_1:def 2;
+    then +(y,z) in [:{0},REAL+:] by Lm1,ZFMISC_1:106;
+    then consider x''',yz' being Element of REAL+ such that
+A44:  x = x''' and
+A45:  +(y,z) = [0,yz'] and
+A46:  *(x,+(y,z)) = [0,x''' *' yz'] by A20,Def3;
+    thus *(x,+(y,z)) = [0,x''' *' (z'' -' y'')] by A43,A45,A46,ZFMISC_1:33
+        .= (x' *' y') - (x'' *'
+ z') by A20,A24,A25,A27,A30,A33,A42,A44,ARYTM_1:27
+        .= +(*(x,y),*(x,z)) by A26,A29,A34,A35,A36,ZFMISC_1:33;
+ end;
+ hence thesis;
+ suppose that
+A47: x in REAL+ & x <> 0 and
+A48: z in REAL+ and
+A49: y in RR;
+A50: y in [:{0},REAL+:] by A49,XBOOLE_0:def 4;
+  consider x',z' being Element of REAL+ such that
+A51: x = x' and
+A52: z = z' and
+A53: *(x,z) = x' *' z' by A47,A48,Def3;
+  consider x'',y' being Element of REAL+ such that
+A54: x = x'' and
+A55: y = [0,y'] and
+A56: *(x,y) = [0,x'' *' y'] by A47,A50,Def3;
+  consider z'',y'' being Element of REAL+ such that
+A57: z = z'' and
+A58: y = [0,y''] and
+A59: +(z,y) = z'' - y'' by A48,A50,Def2;
+A60: y' = y'' by A55,A58,ZFMISC_1:33;
+    *(x,y) in [:{0},REAL+:] by A56,Lm1,ZFMISC_1:106;
+  then consider xz',xy' being Element of REAL+ such that
+A61: *(x,z) = xz' and
+A62: *(x,y) = [0,xy'] and
+A63: +(*(x,z),*(x,y)) = xz' - xy' by A53,Def2;
+    now per cases;
+   suppose
+A64:   y'' <=' z'';
+    then A65:   +(z,y) = z'' -' y'' by A59,ARYTM_1:def 2;
+    then consider x''',zy' being Element of REAL+ such that
+A66: x = x''' and
+A67: +(z,y) = zy' and
+A68: *(x,+(z,y)) = x''' *' zy' by A47,Def3;
+    thus *(x,+(z,y)) = (x' *' z') - (x'' *' y') by A51,A52,A54,A57,A60,A64,A65,
+A66,A67,A68,ARYTM_1:26
+        .= +(*(x,z),*(x,y)) by A53,A56,A61,A62,A63,ZFMISC_1:33;
+   suppose
+A69:  not y'' <=' z'';
+    then A70:   +(z,y) = [0,y'' -' z''] by A59,ARYTM_1:def 2;
+    then +(z,y) in [:{0},REAL+:] by Lm1,ZFMISC_1:106;
+    then consider x''',zy' being Element of REAL+ such that
+A71:  x = x''' and
+A72:  +(z,y) = [0,zy'] and
+A73:  *(x,+(z,y)) = [0,x''' *' zy'] by A47,Def3;
+    thus *(x,+(z,y)) = [0,x''' *' (y'' -' z'')] by A70,A72,A73,ZFMISC_1:33
+        .= (x' *' z') - (x'' *' y')
+              by A47,A51,A52,A54,A57,A60,A69,A71,ARYTM_1:27
+        .= +(*(x,z),*(x,y)) by A53,A56,A61,A62,A63,ZFMISC_1:33;
+ end;
+ hence thesis;
+ suppose that
+A74: x in REAL+ & x <> 0 and
+A75: y in RR and
+A76: z in RR;
+A77: y in [:{0},REAL+:] by A75,XBOOLE_0:def 4;
+A78: z in [:{0},REAL+:] by A76,XBOOLE_0:def 4;
+  consider x',y' being Element of REAL+ such that
+A79: x = x' and
+A80: y = [0,y'] and
+A81: *(x,y) = [0,x' *' y'] by A74,A77,Def3;
+  consider x'',z' being Element of REAL+ such that
+A82: x = x'' and
+A83: z = [0,z'] and
+A84: *(x,z) = [0,x'' *' z'] by A74,A78,Def3;
+    *(x,y) in [:{0},REAL+:] & *(x,z) in [:{0},REAL+:]
+       by A81,A84,Lm1,ZFMISC_1:106;
+  then not(*(x,y) in REAL+ & *(x,z) in REAL+) &
+       not(*(x,y) in REAL+ & *(x,z) in [:{0},REAL+:]) &
+       not(*(x,y) in [:{0},REAL+:] & *(x,z) in REAL+) by Th5,XBOOLE_0:3;
+  then consider xy',xz' being Element of REAL+ such that
+A85: *(x,y) = [0,xy'] and
+A86: *(x,z) = [0,xz'] and
+A87: +(*(x,y),*(x,z)) = [0,xy' + xz'] by Def2;
+     not(y in REAL+ & z in REAL+) &
+   not(y in REAL+ & z in [:{0},REAL+:]) &
+   not(y in [:{0},REAL+:] & z in REAL+) by A77,A78,Th5,XBOOLE_0:3;
+  then consider y'',z'' being Element of REAL+ such that
+A88: y = [0,y''] and
+A89: z = [0,z''] and
+A90: +(y,z) = [0,y'' + z''] by Def2;
+    +(y,z) in [:{0},REAL+:] by A90,Lm1,ZFMISC_1:106;
+  then consider x''',yz' being Element of REAL+ such that
+A91: x = x''' and
+A92: +(y,z) = [0,yz'] and
+A93: *(x,+(y,z)) = [0,x''' *' yz'] by A74,Def3;
+A94: xy' = x' *' y' by A81,A85,ZFMISC_1:33;
+A95: y' = y'' by A80,A88,ZFMISC_1:33;
+A96: z' = z'' by A83,A89,ZFMISC_1:33;
+ thus *(x,+(y,z)) = [0,x''' *' (y'' + z'')] by A90,A92,A93,ZFMISC_1:33
+        .= [0,(x' *' y') + (x' *' z')] by A79,A91,A95,A96,ARYTM_2:14
+        .= +(*(x,y),*(x,z)) by A79,A82,A84,A86,A87,A94,ZFMISC_1:33;
+ suppose that
+A97: x in RR and
+A98: y in REAL+ and
+A99: z in REAL+;
+A100: x in [:{0},REAL+:] by A97,XBOOLE_0:def 4;
+  consider y'',z'' being Element of REAL+ such that
+A101: y = y'' and
+A102: z = z'' and
+A103: +(y,z) = y'' + z'' by A98,A99,Def2;
+    now per cases;
+   suppose that
+A104: y <> 0 and
+A105: z <> 0;
+  consider x',y' being Element of REAL+ such that
+A106: x = [0,x'] and
+A107: y = y' and
+A108: *(x,y) = [0,y' *' x'] by A98,A100,A104,Def3;
+  consider x'',z' being Element of REAL+ such that
+A109: x = [0,x''] and
+A110: z = z' and
+A111: *(x,z) = [0,z' *' x''] by A99,A100,A105,Def3;
+    *(x,y) in [:{0},REAL+:] & *(x,z) in [:{0},REAL+:]
+    by A108,A111,Lm1,ZFMISC_1:106;
+  then not(*(x,y) in REAL+ & *(x,z) in REAL+) &
+       not(*(x,y) in REAL+ & *(x,z) in [:{0},REAL+:]) &
+       not(*(x,y) in [:{0},REAL+:] & *(x,z) in REAL+) by Th5,XBOOLE_0:3;
+  then consider xy',xz' being Element of REAL+ such that
+A112: *(x,y) = [0,xy'] and
+A113: *(x,z) = [0,xz'] and
+A114: +(*(x,y),*(x,z)) = [0,xy' + xz'] by Def2;
+    y'' + z'' <> 0 by A102,A105,ARYTM_2:6;
+  then consider x''',yz' being Element of REAL+ such that
+A115: x = [0,x'''] and
+A116: +(y,z) = yz' and
+A117: *(x,+(y,z)) = [0,yz' *' x'''] by A100,A103,Def3;
+A118: xy' = x' *' y' by A108,A112,ZFMISC_1:33;
+A119: x' = x'' by A106,A109,ZFMISC_1:33;
+  x'' = x''' by A109,A115,ZFMISC_1:33;
+ hence *(x,+(y,z)) = [0,(x' *' y') + (x'' *' z')] by A101,A102,A103,A107,A110,
+A116,A117,A119,ARYTM_2:14
+        .= +(*(x,y),*(x,z)) by A111,A113,A114,A118,ZFMISC_1:33;
+   suppose
+A120: x = 0;
+ hence *(x,+(y,z)) = 0 by Th14
+     .= +(o,o) by Th13
+     .= +(*(x,y),o) by A120,Th14
+     .= +(*(x,y),*(x,z)) by A120,Th14;
+   suppose
+A121: z = 0;
+ hence *(x,+(y,z)) = *(x,y) by Th13
+     .= +(*(x,y),o) by Th13
+     .= +(*(x,y),*(x,z)) by A121,Th14;
+   suppose
+A122: y = 0;
+ hence *(x,+(y,z)) = *(x,z) by Th13
+     .= +(o,*(x,z)) by Th13
+     .= +(*(x,y),*(x,z)) by A122,Th14;
+  end;
+ hence thesis;
+ suppose that
+A123: x in RR and
+A124: y in REAL+ and
+A125: z in RR;
+A126: x in [:{0},REAL+:] by A123,XBOOLE_0:def 4;
+A127: z in [:{0},REAL+:] by A125,XBOOLE_0:def 4;
+  then consider x'',z' being Element of REAL+ such that
+A128: x = [0,x''] and
+A129: z = [0,z'] and
+A130: *(x,z) = z' *' x'' by A126,Def3;
+    now per cases;
+   suppose y <> 0;
+  then consider x',y' being Element of REAL+ such that
+A131: x = [0,x'] and
+A132: y = y' and
+A133: *(x,y) = [0,y' *' x'] by A124,A126,Def3;
+  consider y'',z'' being Element of REAL+ such that
+A134: y = y'' and
+A135: z = [0,z''] and
+A136: +(y,z) = y'' - z'' by A127,A132,Def2;
+    *(x,y) in [:{0},REAL+:] by A133,Lm1,ZFMISC_1:106;
+  then consider xy',xz' being Element of REAL+ such that
+A137: *(x,y) = [0,xy'] and
+A138: *(x,z) = xz' and
+A139: +(*(x,y),*(x,z)) = xz' - xy' by A130,Def2;
+A140: z' = z'' by A129,A135,ZFMISC_1:33;
+   now per cases;
+  suppose
+A141: z'' <=' y'';
+then A142: +(y,z) = y'' -' z'' by A136,ARYTM_1:def 2;
+    now per cases;
+   suppose
+A143: +(y,z) <> 0;
+  then consider x''',yz' being Element of REAL+ such that
+A144: x = [0,x'''] and
+A145: +(y,z) = yz' and
+A146: *(x,+(y,z)) = [0,yz' *' x'''] by A126,A142,Def3;
+A147: x' = x'' by A128,A131,ZFMISC_1:33;
+A148: x'' = x''' by A128,A144,ZFMISC_1:33;
+A149: z' = z'' by A129,A135,ZFMISC_1:33;
+    not x in {[0,0]} by NUMBERS:def 1,XBOOLE_0:def 4;
+then x''' <> 0 by A144,TARSKI:def 1;
+ hence *(x,+(y,z)) = (x' *' z') - (x' *' y') by A132,A134,A141,A142,A143,A145,
+A146,A147,A148,A149,ARYTM_1:28
+        .= +(*(x,y),*(x,z)) by A130,A133,A137,A138,A139,A147,ZFMISC_1:33;
+   suppose
+A150:  +(y,z) = 0;
+then A151:  y'' = z'' by A141,A142,ARYTM_1:10;
+A152: xy' = x' *' y' by A133,A137,ZFMISC_1:33;
+A153: x' = x'' by A128,A131,ZFMISC_1:33;
+ thus *(x,+(y,z)) = 0 by A150,Th14
+       .= +(*(x,y),*(x,z)) by A130,A132,A134,A138,A139,A140,A151,A152,A153,
+ARYTM_1:18;
+  end;
+  hence thesis;
+  suppose
+A154: not z'' <=' y'';
+then A155: +(y,z) = [0,z'' -' y''] by A136,ARYTM_1:def 2;
+  then +(y,z) in [:{0},REAL+:] by Lm1,ZFMISC_1:106;
+  then consider x''',yz' being Element of REAL+ such that
+A156: x = [0,x'''] and
+A157: +(y,z) = [0,yz'] and
+A158: *(x,+(y,z)) = yz' *' x''' by A126,Def3;
+A159: x' = x'' by A128,A131,ZFMISC_1:33;
+A160: x'' = x''' by A128,A156,ZFMISC_1:33;
+ thus *(x,+(y,z)) = x''' *' (z'' -' y'') by A155,A157,A158,ZFMISC_1:33
+        .= (x'' *' z') - (x' *' y') by A132,A134,A140,A154,A159,A160,ARYTM_1:26
+        .= +(*(x,y),*(x,z)) by A130,A133,A137,A138,A139,ZFMISC_1:33;
+  end;
+  hence thesis;
+   suppose
+A161: y = 0;
+   hence *(x,+(y,z)) = *(x,z) by Th13
+      .= +(o,*(x,z)) by Th13
+      .= +(*(x,y),*(x,z)) by A161,Th14;
+  end;
+ hence thesis;
+ suppose that
+A162: x in RR and
+A163: z in REAL+ and
+A164: y in RR;
+A165: x in [:{0},REAL+:] by A162,XBOOLE_0:def 4;
+A166: y in [:{0},REAL+:] by A164,XBOOLE_0:def 4;
+  then consider x'',y' being Element of REAL+ such that
+A167: x = [0,x''] and
+A168: y = [0,y'] and
+A169: *(x,y) = y' *' x'' by A165,Def3;
+    now per cases;
+   suppose z <> 0;
+  then consider x',z' being Element of REAL+ such that
+A170: x = [0,x'] and
+A171: z = z' and
+A172: *(x,z) = [0,z' *' x'] by A163,A165,Def3;
+  consider z'',y'' being Element of REAL+ such that
+A173: z = z'' and
+A174: y = [0,y''] and
+A175: +(z,y) = z'' - y'' by A166,A171,Def2;
+    *(x,z) in [:{0},REAL+:] by A172,Lm1,ZFMISC_1:106;
+  then consider xz',xy' being Element of REAL+ such that
+A176: *(x,z) = [0,xz'] and
+A177: *(x,y) = xy' and
+A178: +(*(x,z),*(x,y)) = xy' - xz' by A169,Def2;
+A179: y' = y'' by A168,A174,ZFMISC_1:33;
+   now per cases;
+  suppose
+A180: y'' <=' z'';
+then A181: +(z,y) = z'' -' y'' by A175,ARYTM_1:def 2;
+    now per cases;
+   suppose
+A182: +(z,y) <> 0;
+  then consider x''',zy' being Element of REAL+ such that
+A183: x = [0,x'''] and
+A184: +(z,y) = zy' and
+A185: *(x,+(z,y)) = [0,zy' *' x'''] by A165,A181,Def3;
+A186: x' = x'' by A167,A170,ZFMISC_1:33;
+A187: x'' = x''' by A167,A183,ZFMISC_1:33;
+A188: y' = y'' by A168,A174,ZFMISC_1:33;
+    not x in {[0,0]} by NUMBERS:def 1,XBOOLE_0:def 4;
+then x''' <> 0 by A183,TARSKI:def 1;
+ hence *(x,+(z,y)) = (x' *' y') - (x' *' z') by A171,A173,A180,A181,A182,A184,
+A185,A186,A187,A188,ARYTM_1:28
+        .= +(*(x,z),*(x,y)) by A169,A172,A176,A177,A178,A186,ZFMISC_1:33;
+   suppose
+A189:  +(z,y) = 0;
+then A190:  z'' = y'' by A180,A181,ARYTM_1:10;
+A191: xz' = x' *' z' by A172,A176,ZFMISC_1:33;
+A192: x' = x'' by A167,A170,ZFMISC_1:33;
+ thus *(x,+(z,y)) = 0 by A189,Th14
+    .= +(*(x,z),*(x,y)) by A169,A171,A173,A177,A178,A179,A190,A191,A192,ARYTM_1
+:18;
+  end;
+  hence thesis;
+  suppose
+A193: not y'' <=' z'';
+then A194: +(z,y) = [0,y'' -' z''] by A175,ARYTM_1:def 2;
+  then +(z,y) in [:{0},REAL+:] by Lm1,ZFMISC_1:106;
+  then consider x''',zy' being Element of REAL+ such that
+A195: x = [0,x'''] and
+A196: +(z,y) = [0,zy'] and
+A197: *(x,+(z,y)) = zy' *' x''' by A165,Def3;
+A198: x' = x'' by A167,A170,ZFMISC_1:33;
+A199: x'' = x''' by A167,A195,ZFMISC_1:33;
+ thus *(x,+(y,z)) = x''' *' (y'' -' z'') by A194,A196,A197,ZFMISC_1:33
+        .= (x'' *' y') - (x' *' z') by A171,A173,A179,A193,A198,A199,ARYTM_1:26
+        .= +(*(x,y),*(x,z)) by A169,A172,A176,A177,A178,ZFMISC_1:33;
+  end;
+  hence thesis;
+   suppose
+A200: z = 0;
+   hence *(x,+(y,z)) = *(x,y) by Th13
+       .= +(*(x,y),o) by Th13
+       .= +(*(x,y),*(x,z)) by A200,Th14;
+  end;
+ hence thesis;
+ suppose that
+A201: x in RR and
+A202: y in RR and
+A203: z in RR;
+A204: x in [:{0},REAL+:] by A201,XBOOLE_0:def 4;
+A205: y in [:{0},REAL+:] by A202,XBOOLE_0:def 4;
+A206: z in [:{0},REAL+:] by A203,XBOOLE_0:def 4;
+  consider x',y' being Element of REAL+ such that
+A207: x = [0,x'] and
+A208: y = [0,y'] and
+A209: *(x,y) = y' *' x' by A204,A205,Def3;
+  consider x'',z' being Element of REAL+ such that
+A210: x = [0,x''] and
+A211: z = [0,z'] and
+A212: *(x,z) = z' *' x'' by A204,A206,Def3;
+  consider xy',xz' being Element of REAL+ such that
+A213: *(x,y) = xy' and
+A214: *(x,z) = xz' and
+A215: +(*(x,y),*(x,z)) = xy' + xz' by A209,A212,Def2;
+    not(y in REAL+ & z in REAL+) &
+  not(y in REAL+ & z in [:{0},REAL+:]) &
+  not(y in [:{0},REAL+:] & z in REAL+) by A205,A206,Th5,XBOOLE_0:3;
+  then consider y'',z'' being Element of REAL+ such that
+A216: y = [0,y''] and
+A217: z = [0,z''] and
+A218: +(y,z) = [0,y'' + z''] by Def2;
+    +(y,z) in [:{0},REAL+:] by A218,Lm1,ZFMISC_1:106;
+  then consider x''',yz' being Element of REAL+ such that
+A219: x = [0,x'''] and
+A220: +(y,z) = [0,yz'] and
+A221: *(x,+(y,z)) = yz' *' x''' by A204,Def3;
+A222: x' = x'' by A207,A210,ZFMISC_1:33;
+A223: x' = x''' by A207,A219,ZFMISC_1:33;
+A224: y' = y'' by A208,A216,ZFMISC_1:33;
+A225: z' = z'' by A211,A217,ZFMISC_1:33;
+ thus *(x,+(y,z)) = x''' *' (y'' + z'') by A218,A220,A221,ZFMISC_1:33
+        .= +(*(x,y),*(x,z)) by A209,A212,A213,A214,A215,A222,A223,A224,A225,
+ARYTM_2:14;
+ suppose
+A226: not(x in REAL+ & y in REAL+ & z in REAL+) &
+   not(x in REAL+ & y in REAL+ & z in RR) &
+   not(x in REAL+ & y in RR & z in REAL+) &
+   not(x in REAL+ & y in RR & z in RR) &
+   not(x in RR & y in REAL+ & z in REAL+) &
+   not(x in RR & y in REAL+ & z in RR) &
+   not(x in RR & y in RR & z in REAL+) &
+   not(x in RR & y in RR & z in RR);
+A227: not [0,0] in REAL+ by ARYTM_2:3;
+   REAL = (REAL+ \ {[0,0]}) \/ ([:{0},REAL+:] \ {[0,0]})
+               by NUMBERS:def 1,XBOOLE_1:42
+     .= REAL+ \/ RR by A227,ZFMISC_1:65;
+ hence *(x,+(y,z)) = +(*(x,y),*(x,z)) by A226,XBOOLE_0:def 2;
+end;
+
+theorem
+   for x,y being Element of REAL holds *(opp x,y) = opp *(x,y)
+proof let x,y be Element of REAL;
+    +(*(opp x,y),*(x,y)) = *(+(opp x,x), y) by Th16
+     .= *(o,y) by Def4
+     .= 0 by Th14;
+ hence *(opp x,y) = opp *(x,y) by Def4;
+end;
+
+theorem Th18:
+ for x being Element of REAL holds *(x,x) in REAL+
+ proof let x be Element of REAL;
+A1: x in REAL+ \/ [:{{}},REAL+:] by NUMBERS:def 1,XBOOLE_0:def 4;
+ per cases by A1,XBOOLE_0:def 2;
+ suppose x in REAL+;
+   then ex x',y' being Element of REAL+ st x = x' & x = y' & *(x,x) = x' *' y'
+          by Def3;
+  hence *(x,x) in REAL+;
+ suppose x in [:{0},REAL+:];
+   then ex x',y' being Element of REAL+ st x = [0,x'] & x = [0,y'] &
+     *(x,x) = y' *' x' by Def3;
+  hence *(x,x) in REAL+;
+ end;
+
+theorem
+   for x,y st +(*(x,x),*(y,y)) = 0 holds x = 0
+proof let x,y such that
+A1: +(*(x,x),*(y,y)) = 0;
+    *(x,x) in REAL+ & *(y,y) in REAL+ by Th18;
+  then consider x',y' being Element of REAL+ such that
+A2:  *(x,x) = x' & *(y,y) = y' and
+A3:  0 = x' + y' by A1,Def2;
+A4:  x' = 0 by A3,ARYTM_2:6;
+A5: x in REAL+ \/ [:{{}},REAL+:] by NUMBERS:def 1,XBOOLE_0:def 4;
+ per cases by A5,XBOOLE_0:def 2;
+ suppose x in REAL+;
+  then ex x',y' being Element of REAL+ st x = x' & x = y' & 0 = x' *' y'
+     by A2,A4,Def3;
+ hence x = 0 by ARYTM_1:2;
+ suppose x in [:{0},REAL+:];
+  then consider x',y' being Element of REAL+ such that
+A6:  x = [0,x'] & x = [0,y'] and
+A7:  0 = y' *' x' by A2,A4,Def3;
+    x' = y' by A6,ZFMISC_1:33;
+  then x' = 0 by A7,ARYTM_1:2;
+  then x in {[0,0]} by A6,TARSKI:def 1;
+ hence x = 0 by NUMBERS:def 1,XBOOLE_0:def 4;
+end;
+
+theorem Th20:
+  for x,y,z being Element of REAL st x <> 0 & *(x,y) = one & *(x,z) = one
+  holds y = z
+     proof let x,y,z be Element of REAL;
+      assume that
+A1:    x <> 0 and
+A2:    *(x,y) = one and
+A3:    *(x,z) = one;
+A4:     for x,y being Element of REAL st *(x,y) =one holds x <> 0
+        proof let x,y be Element of REAL such that
+A5:       *(x,y) = one and
+A6:       x = 0;
+A7:       not x in [:{0},REAL+:] by A6,Th5,ARYTM_2:21,XBOOLE_0:3;
+A8:      y in REAL+ \/ [:{0},REAL+:] by NUMBERS:def 1,XBOOLE_0:def 4;
+         per cases by A8,XBOOLE_0:def 2;
+         suppose y in REAL+;
+          then ex x',y' being Element of REAL+
+           st x = x' & y = y' & one = x' *' y'
+               by A5,A6,Def3,ARYTM_2:21;
+         hence contradiction by A6,ARYTM_2:4;
+         suppose y in [:{0},REAL+:];
+          then not y in REAL+ by Th5,XBOOLE_0:3;
+         hence contradiction by A5,A6,A7,Def3;
+        end;
+then A9:    y <> 0 by A2;
+A10:    z <> 0 by A3,A4;
+      per cases;
+      suppose x in REAL+ & y in REAL+ & z in REAL+;
+       then (ex x',y' being Element of REAL+ st x = x' & y = y' & one = x' *'
+y')
+        & ex x',y' being Element of REAL+ st x = x' & z = y' & one = x' *' y'
+                   by A2,A3,Def3;
+      hence y = z by A1,Th8;
+      suppose that
+A11:    x in [:{0},REAL+:] and
+A12:    y in [:{0},REAL+:] and
+A13:    z in [:{0},REAL+:];
+       consider x',y' being Element of REAL+ such that
+A14:     x = [0,x'] and
+A15:     y = [0,y'] and
+A16:     one = y' *' x' by A2,A11,A12,Def3;
+       consider x'',z' being Element of REAL+ such that
+A17:     x = [0,x''] and
+A18:     z = [0,z'] and
+A19:     one = z' *' x'' by A3,A11,A13,Def3;
+A20:     x' = x'' by A14,A17,ZFMISC_1:33;
+         x' <> 0 by A14,Th3;
+      hence y = z by A15,A16,A18,A19,A20,Th8;
+      suppose x in REAL+ & y in [:{0},REAL+:];
+       then ex x',y' being Element of REAL+ st
+        x = x' & y = [0,y'] & one = [0,x' *' y'] by A1,A2,Def3;
+       hence y = z by Lm2;
+      suppose x in [:{0},REAL+:] & y in REAL+;
+       then ex x',y' being Element of REAL+ st
+        x = [0,x'] & y = y' & one = [0,y' *' x'] by A2,A9,Def3;
+       hence y = z by Lm2;
+      suppose x in [:{0},REAL+:] & z in REAL+;
+       then ex x',z' being Element of REAL+ st
+        x = [0,x'] & z = z' & one = [0,z' *' x'] by A3,A10,Def3;
+       hence y = z by Lm2;
+      suppose x in REAL+ & z in [:{0},REAL+:];
+       then ex x',z' being Element of REAL+ st
+        x = x' & z = [0,z'] & one = [0,x' *' z'] by A1,A3,Def3;
+       hence y = z by Lm2;
+      suppose not (x in REAL+ & y in REAL+) &
+              not (x in REAL+ & y in [:{0},REAL+:] & x <> 0) &
+              not (y in REAL+ & x in [:{0},REAL+:] & y <> 0) &
+              not (x in [:{0},REAL+:] & y in [:{0},REAL+:]);
+      hence thesis by A2,Def3;
+      suppose not (x in REAL+ & z in REAL+) &
+              not (x in REAL+ & z in [:{0},REAL+:] & x <> 0) &
+              not (z in REAL+ & x in [:{0},REAL+:] & z <> 0) &
+              not (x in [:{0},REAL+:] & z in [:{0},REAL+:]);
+      hence thesis by A3,Def3;
+     end;
+
+theorem Th21:
+ for x,y st y = one holds *(x,y) = x
+proof let x,y such that
+A1: y = one;
+  per cases;
+  suppose x = 0;
+  hence thesis by Th14;
+  suppose
+A2:  x <> 0;
+A3: now assume
+A4:    inv x = 0;
+     thus one = *(x, inv x) by A2,Def5
+             .= 0 by A4,Th14;
+   end;
+A5: *(x,inv x) = one by A2,Def5;
+A6: ex x',y' being Element of REAL+ st y = x' & y = y' & *(y,y) = x' *' y'
+             by A1,Def3,ARYTM_2:21;
+     *(*(x,y), inv x) = *(*(x,inv x), y) by Th15
+         .= *(y,y) by A1,A2,Def5
+         .= one by A1,A6,ARYTM_2:16;
+  hence *(x,y) = x by A3,A5,Th20;
+end;
+
+ reconsider j = one as Element of REAL by Th1,ARYTM_2:21;
+
+theorem
+   for x,y st y <> 0 holds *(*(x,y),inv y) = x
+proof let x,y such that
+A1: y <> 0;
+ thus *(*(x,y),inv y) = *(x,*(y,inv y)) by Th15
+      .= *(x,j) by A1,Def5
+      .= x by Th21;
+end;
+
+theorem Th23:
+ for x,y st *(x,y) = 0 holds x = 0 or y = 0
+proof let x,y such that
+A1: *(x,y) = 0 and
+A2: x <> 0;
+A3:  *(x, inv x) = one by A2,Def5;
+ thus y = *(j,y) by Th21
+    .= *(*(x,y),inv x) by A3,Th15
+    .= 0 by A1,Th14;
+end;
+
+theorem
+   for x,y holds inv *(x,y) = *(inv x, inv y)
+proof let x,y;
+ per cases;
+ suppose
+A1:  x = 0 or y = 0;
+  then A2:  *(x,y) = 0 by Th14;
+A3: inv x = 0 or inv y = 0 by A1,Def5;
+ thus inv *(x,y) = 0 by A2,Def5
+    .= *(inv x, inv y) by A3,Th14;
+ suppose that
+A4: x <> 0 and
+A5: y <> 0;
+A6: *(y,inv y) = one by A5,Def5;
+A7: *(x,inv x) = one by A4,Def5;
+A8:  *(x,y) <> 0 by A4,A5,Th23;
+    *(*(x,y),*(inv x, inv y)) = *(*(*(x,y),inv x), inv y) by Th15
+     .= *(*(j,y), inv y) by A7,Th15
+     .= one by A6,Th21;
+ hence inv *(x,y) = *(inv x, inv y) by A8,Def5;
+end;
+
+theorem Th25:
+  for x,y,z being Element of REAL holds +(x,+(y,z)) = +(+(x,y),z)
+proof let x,y,z be Element of REAL;
+A1: x in REAL+ \/ [:{0},REAL+:] & y in REAL+ \/ [:{0},REAL+:] &
+    z in REAL+ \/ [:{0},REAL+:] by NUMBERS:def 1,XBOOLE_0:def 4;
+per cases by A1,XBOOLE_0:def 2;
+suppose that
+A2: x in REAL+ and
+A3: y in REAL+ and
+A4: z in REAL+;
+  consider y',z' being Element of REAL+ such that
+A5: y = y' and
+A6: z = z' and
+A7: +(y,z) = y' + z' by A3,A4,Def2;
+  consider x',yz' being Element of REAL+ such that
+A8: x = x' and
+A9: +(y,z) = yz' and
+A10: +(x,+(y,z)) = x' + yz' by A2,A7,Def2;
+  consider x'',y'' being Element of REAL+ such that
+A11: x = x'' and
+A12: y = y'' and
+A13: +(x,y) = x'' + y'' by A2,A3,Def2;
+  consider xy'',z'' being Element of REAL+ such that
+A14: +(x,y) = xy'' and
+A15: z = z'' and
+A16: +(+(x,y),z) = xy'' + z'' by A4,A13,Def2;
+thus +(x,+(y,z)) = +(+(x,y),z) by A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,
+ARYTM_2:7;
+suppose that
+A17: x in REAL+ and
+A18: y in REAL+ and
+A19: z in [:{0},REAL+:];
+  consider y',z' being Element of REAL+ such that
+A20: y = y' and
+A21: z = [0,z'] and
+A22: +(y,z) = y' - z' by A18,A19,Def2;
+  consider x'',y'' being Element of REAL+ such that
+A23: x = x'' and
+A24: y = y'' and
+A25: +(x,y) = x'' + y'' by A17,A18,Def2;
+  consider xy'',z'' being Element of REAL+ such that
+A26: +(x,y) = xy'' and
+A27: z = [0,z''] and
+A28: +(+(x,y),z) = xy'' - z'' by A19,A25,Def2;
+A29:  z' = z'' by A21,A27,ZFMISC_1:33;
+    now per cases;
+   suppose
+A30:   z' <=' y';
+    then A31:   +(y,z) = y' -' z' by A22,ARYTM_1:def 2;
+    then consider x',yz' being Element of REAL+ such that
+A32:  x = x' and
+A33:  +(y,z) = yz' and
+A34:  +(x,+(y,z)) = x' + yz' by A17,Def2;
+   thus +(x,+(y,z)) = +(+(x,y),z) by A20,A23,A24,A25,A26,A28,A29,A30,A31,A32,
+A33,A34,ARYTM_1:20;
+   suppose
+A35:  not z' <=' y';
+    then A36:   +(y,z) = [0,z' -' y'] by A22,ARYTM_1:def 2;
+    then +(y,z) in [:{0},REAL+:] by Lm1,ZFMISC_1:106;
+    then consider x',yz' being Element of REAL+ such that
+A37:  x = x' and
+A38:  +(y,z) = [0,yz'] and
+A39:  +(x,+(y,z)) = x' - yz' by A17,Def2;
+   thus +(x,+(y,z)) = x' - (z' -' y') by A36,A38,A39,ZFMISC_1:33
+           .= +(+(x,y),z) by A20,A23,A24,A25,A26,A28,A29,A35,A37,ARYTM_1:21;
+  end;
+ hence thesis;
+suppose that
+A40: x in REAL+ and
+A41: y in [:{0},REAL+:] and
+A42: z in REAL+;
+  consider z',y' being Element of REAL+ such that
+A43: z = z' and
+A44: y = [0,y'] and
+A45: +(y,z) = z' - y' by A41,A42,Def2;
+  consider x'',y'' being Element of REAL+ such that
+A46: x = x'' and
+A47: y = [0,y''] and
+A48: +(x,y) = x'' - y'' by A40,A41,Def2;
+A49: y' = y'' by A44,A47,ZFMISC_1:33;
+    now per cases;
+   suppose that
+A50: y' <=' x'' and
+A51: y' <=' z';
+A52: +(y,z) = z' -' y' by A45,A51,ARYTM_1:def 2;
+    then consider x',yz' being Element of REAL+ such that
+A53:  x = x' and
+A54:  +(y,z) = yz' and
+A55:  +(x,+(y,z)) = x' + yz' by A40,Def2;
+A56: +(x,y) = x' -' y' by A46,A48,A49,A50,A53,ARYTM_1:def 2;
+    then consider z'',xy'' being Element of REAL+ such that
+A57: z = z'' and
+A58: +(x,y) = xy'' and
+A59: +(z,+(x,y)) = z'' + xy'' by A42,Def2;
+    thus +(x,+(y,z)) = +(+(x,y),z) by A43,A46,A50,A51,A52,A53,A54,A55,A56,A57,
+A58,A59,ARYTM_1:12;
+   suppose that
+A60: y' <=' x'' and
+A61: not y' <=' z';
+A62:   +(y,z) = [0,y' -' z'] by A45,A61,ARYTM_1:def 2;
+    then +(y,z) in [:{0},REAL+:] by Lm1,ZFMISC_1:106;
+    then consider x',yz' being Element of REAL+ such that
+A63:  x = x' and
+A64:  +(y,z) = [0,yz'] and
+A65:  +(x,+(y,z)) = x' - yz' by A40,Def2;
+A66: +(x,y) = x'' -' y' by A48,A49,A60,ARYTM_1:def 2;
+    then consider z'',xy'' being Element of REAL+ such that
+A67: z = z'' and
+A68: +(x,y) = xy'' and
+A69: +(z,+(x,y)) = z'' + xy'' by A42,Def2;
+ thus +(x,+(y,z)) = x' - (y' -' z') by A62,A64,A65,ZFMISC_1:33
+         .= +(+(x,y),z) by A43,A46,A60,A61,A63,A66,A67,A68,A69,ARYTM_1:22;
+   suppose that
+A70: not y' <=' x'' and
+A71: y' <=' z';
+A72:   +(y,x) = [0,y' -' x''] by A48,A49,A70,ARYTM_1:def 2;
+    then +(y,x) in [:{0},REAL+:] by Lm1,ZFMISC_1:106;
+    then consider z'',yx'' being Element of REAL+ such that
+A73:  z = z'' and
+A74:  +(y,x) = [0,yx''] and
+A75:  +(z,+(y,x)) = z'' - yx'' by A42,Def2;
+A76: +(z,y) = z' -' y' by A45,A71,ARYTM_1:def 2;
+    then consider x',zy'' being Element of REAL+ such that
+A77: x = x' and
+A78: +(z,y) = zy'' and
+A79: +(x,+(z,y)) = x' + zy'' by A40,Def2;
+ thus +(x,+(y,z)) = z'' - (y' -' x'') by A43,A46,A70,A71,A73,A76,A77,A78,A79,
+ARYTM_1:22
+         .= +(+(x,y),z) by A72,A74,A75,ZFMISC_1:33;
+   suppose that
+A80: not y' <=' x'' and
+A81: not y' <=' z';
+A82:   +(y,x) = [0,y' -' x''] by A48,A49,A80,ARYTM_1:def 2;
+    then +(y,x) in [:{0},REAL+:] by Lm1,ZFMISC_1:106;
+    then consider z'',yx'' being Element of REAL+ such that
+A83:  z = z'' and
+A84:  +(y,x) = [0,yx''] and
+A85:  +(z,+(y,x)) = z'' - yx'' by A42,Def2;
+A86:   +(y,z) = [0,y' -' z'] by A45,A81,ARYTM_1:def 2;
+    then +(y,z) in [:{0},REAL+:] by Lm1,ZFMISC_1:106;
+    then consider x',yz' being Element of REAL+ such that
+A87:  x = x' and
+A88:  +(y,z) = [0,yz'] and
+A89:  +(x,+(y,z)) = x' - yz' by A40,Def2;
+ thus +(x,+(y,z)) = x' - (y' -' z') by A86,A88,A89,ZFMISC_1:33
+           .= z'' - (y' -' x'') by A43,A46,A80,A81,A83,A87,ARYTM_1:23
+           .= +(+(x,y),z) by A82,A84,A85,ZFMISC_1:33;
+ end;
+ hence thesis;
+suppose that
+A90: x in REAL+ and
+A91: y in [:{0},REAL+:] and
+A92: z in [:{0},REAL+:];
+    not(z in REAL+ & y in REAL+) &
+  not(z in REAL+ & y in [:{0},REAL+:]) &
+  not(y in REAL+ & z in [:{0},REAL+:]) by A91,A92,Th5,XBOOLE_0:3;
+  then consider y',z' being Element of REAL+ such that
+A93: y = [0,y'] and
+A94: z = [0,z'] and
+A95: +(y,z) = [0,y' + z'] by Def2;
+  consider x'',y'' being Element of REAL+ such that
+A96: x = x'' and
+A97: y = [0,y''] and
+A98: +(x,y) = x'' - y'' by A90,A91,Def2;
+    +(y,z) in [:{0},REAL+:] by A95,Lm1,ZFMISC_1:106;
+  then consider x',yz' being Element of REAL+ such that
+A99: x = x' and
+A100: +(y,z) = [0,yz'] and
+A101: +(x,+(y,z)) = x' - yz' by A90,Def2;
+A102:  y' = y'' by A93,A97,ZFMISC_1:33;
+    now per cases;
+   suppose
+A103: y'' <=' x'';
+then A104: +(x,y) = x'' -' y'' by A98,ARYTM_1:def 2;
+   then consider xy'',z'' being Element of REAL+ such that
+A105: +(x,y) = xy'' and
+A106: z = [0,z''] and
+A107: +(+(x,y),z) = xy'' - z'' by A92,Def2;
+A108:  z' = z'' by A94,A106,ZFMISC_1:33;
+   thus +(x,+(y,z)) = x' - (y' + z') by A95,A100,A101,ZFMISC_1:33
+         .= +(+(x,y),z) by A96,A99,A102,A103,A104,A105,A107,A108,ARYTM_1:24;
+   suppose
+A109: not y'' <=' x'';
+    then A110:   +(x,y) = [0,y'' -' x''] by A98,ARYTM_1:def 2;
+    then +(x,y) in [:{0},REAL+:] by Lm1,ZFMISC_1:106;
+    then not(z in REAL+ & +(x,y) in REAL+) &
+    not(z in REAL+ & +(x,y) in [:{0},REAL+:]) &
+    not(+(x,y) in REAL+ & z in [:{0},REAL+:]) by A92,Th5,XBOOLE_0:3;
+    then consider xy'',z'' being Element of REAL+ such that
+A111:  +(x,y) = [0,xy''] and
+A112:  z = [0,z''] and
+A113:  +(+(x,y),z) = [0,xy'' + z''] by Def2;
+A114:  z' = z'' by A94,A112,ZFMISC_1:33;
+A115:  yz' = z' + y' by A95,A100,ZFMISC_1:33;
+    then y'' <=' yz' by A102,ARYTM_2:20;
+    then not yz' <=' x' by A96,A99,A109,ARYTM_1:3;
+   hence +(x,+(y,z)) = [0,z' + y' -' x'] by A101,A115,ARYTM_1:def 2
+           .= [0,z'' + (y'' -' x'')] by A96,A99,A102,A109,A114,ARYTM_1:13
+           .= +(+(x,y),z) by A110,A111,A113,ZFMISC_1:33;
+  end;
+ hence thesis;
+suppose that
+A116: z in REAL+ and
+A117: y in REAL+ and
+A118: x in [:{0},REAL+:];
+  consider y',x' being Element of REAL+ such that
+A119: y = y' and
+A120: x = [0,x'] and
+A121: +(y,x) = y' - x' by A117,A118,Def2;
+  consider z'',y'' being Element of REAL+ such that
+A122: z = z'' and
+A123: y = y'' and
+A124: +(z,y) = z'' + y'' by A116,A117,Def2;
+  consider zy'',x'' being Element of REAL+ such that
+A125: +(z,y) = zy'' and
+A126: x = [0,x''] and
+A127: +(+(z,y),x) = zy'' - x'' by A118,A124,Def2;
+A128:  x' = x'' by A120,A126,ZFMISC_1:33;
+    now per cases;
+   suppose
+A129:   x' <=' y';
+    then A130:   +(y,x) = y' -' x' by A121,ARYTM_1:def 2;
+    then consider z',yx' being Element of REAL+ such that
+A131:  z = z' and
+A132:  +(y,x) = yx' and
+A133:  +(z,+(y,x)) = z' + yx' by A116,Def2;
+   thus +(z,+(y,x)) = +(+(z,y),x) by A119,A122,A123,A124,A125,A127,A128,A129,
+A130,A131,A132,A133,ARYTM_1:20;
+   suppose
+A134:  not x' <=' y';
+    then A135:   +(y,x) = [0,x' -' y'] by A121,ARYTM_1:def 2;
+    then +(y,x) in [:{0},REAL+:] by Lm1,ZFMISC_1:106;
+    then consider z',yx' being Element of REAL+ such that
+A136:  z = z' and
+A137:  +(y,x) = [0,yx'] and
+A138:  +(z,+(y,x)) = z' - yx' by A116,Def2;
+   thus +(z,+(y,x)) = z' - (x' -' y') by A135,A137,A138,ZFMISC_1:33
+           .= +(+(z,y),x) by A119,A122,A123,A124,A125,A127,A128,A134,A136,
+ARYTM_1:21;
+  end;
+ hence thesis;
+suppose that
+A139: x in [:{0},REAL+:] and
+A140: y in REAL+ and
+A141: z in [:{0},REAL+:];
+  consider y',z' being Element of REAL+ such that
+A142: y = y' and
+A143: z = [0,z'] and
+A144: +(y,z) = y' - z' by A140,A141,Def2;
+  consider x'',y'' being Element of REAL+ such that
+A145: x = [0,x''] and
+A146: y = y'' and
+A147: +(x,y) = y'' - x'' by A139,A140,Def2;
+    now per cases;
+   suppose that
+A148: x'' <=' y'' and
+A149: z' <=' y';
+A150: +(y,z) = y' -' z' by A144,A149,ARYTM_1:def 2;
+    then consider x',yz' being Element of REAL+ such that
+A151:  x = [0,x'] and
+A152:  +(y,z) = yz' and
+A153:  +(x,+(y,z)) = yz' - x' by A139,Def2;
+A154:  x' = x'' by A145,A151,ZFMISC_1:33;
+then A155: +(x,y) = y' -' x' by A142,A146,A147,A148,ARYTM_1:def 2;
+    then consider z'',xy'' being Element of REAL+ such that
+A156: z = [0,z''] and
+A157: +(x,y) = xy'' and
+A158: +(z,+(x,y)) = xy'' - z'' by A141,Def2;
+   z' = z'' by A143,A156,ZFMISC_1:33;
+   hence +(x,+(y,z)) = +(+(x,y),z) by A142,A146,A148,A149,A150,A152,A153,A154,
+A155,A157,A158,ARYTM_1:25;
+   suppose that
+A159: not x'' <=' y'' and
+A160: z' <=' y';
+A161: +(y,z) = y' -' z' by A144,A160,ARYTM_1:def 2;
+    then consider x',yz' being Element of REAL+ such that
+A162:  x = [0,x'] and
+A163:  +(y,z) = yz' and
+A164:  +(x,+(y,z)) = yz' - x' by A139,Def2;
+A165:  x' = x'' by A145,A162,ZFMISC_1:33;
+A166:   +(y,x) = [0,x'' -' y''] by A147,A159,ARYTM_1:def 2;
+    then +(y,x) in [:{0},REAL+:] by Lm1,ZFMISC_1:106;
+    then not(z in REAL+ & +(x,y) in REAL+) &
+    not(z in REAL+ & +(x,y) in [:{0},REAL+:]) &
+    not(+(x,y) in REAL+ & z in [:{0},REAL+:]) by A141,Th5,XBOOLE_0:3;
+    then consider z'',yx' being Element of REAL+ such that
+A167:  z = [0,z''] and
+A168:  +(y,x) = [0,yx'] and
+A169:  +(z,+(y,x)) = [0,z'' + yx'] by Def2;
+A170:  z' = z'' by A143,A167,ZFMISC_1:33;
+      yz' <=' y' by A161,A163,ARYTM_1:11;
+    then not x' <=' yz' by A142,A146,A159,A165,ARYTM_1:3;
+   hence +(x,+(y,z)) = [0,x' -' (y' -' z')] by A161,A163,A164,ARYTM_1:def 2
+           .= [0,x'' -' y'' + z''] by A142,A146,A159,A160,A165,A170,ARYTM_1:14
+           .= +(+(x,y),z) by A166,A168,A169,ZFMISC_1:33;
+   suppose that
+A171: not z' <=' y' and
+A172: x'' <=' y'';
+A173: +(y,x) = y'' -' x'' by A147,A172,ARYTM_1:def 2;
+    then consider z'',yx'' being Element of REAL+ such that
+A174:  z = [0,z''] and
+A175:  +(y,x) = yx'' and
+A176:  +(z,+(y,x)) = yx'' - z'' by A141,Def2;
+A177:  z'' = z' by A143,A174,ZFMISC_1:33;
+A178:   +(y,z) = [0,z' -' y'] by A144,A171,ARYTM_1:def 2;
+    then +(y,z) in [:{0},REAL+:] by Lm1,ZFMISC_1:106;
+    then not(x in REAL+ & +(z,y) in REAL+) &
+    not(x in REAL+ & +(z,y) in [:{0},REAL+:]) &
+    not(+(z,y) in REAL+ & x in [:{0},REAL+:]) by A139,Th5,XBOOLE_0:3;
+    then consider x',yz'' being Element of REAL+ such that
+A179:  x = [0,x'] and
+A180:  +(y,z) = [0,yz''] and
+A181:  +(x,+(y,z)) = [0,x' + yz''] by Def2;
+A182:  x'' = x' by A145,A179,ZFMISC_1:33;
+      yx'' <=' y'' by A173,A175,ARYTM_1:11;
+    then A183:  not z'' <=' yx'' by A142,A146,A171,A177,ARYTM_1:3;
+   thus +(x,+(y,z)) = [0,z' -' y' + x'] by A178,A180,A181,ZFMISC_1:33
+           .= [0,z'' -' (y'' -' x'')] by A142,A146,A171,A172,A177,A182,ARYTM_1:
+14
+           .= +(+(x,y),z) by A173,A175,A176,A183,ARYTM_1:def 2;
+   suppose that
+A184: not x'' <=' y'' and
+A185: not z' <=' y';
+A186: +(y,z) = [0,z' -' y'] by A144,A185,ARYTM_1:def 2;
+    then +(y,z) in [:{0},REAL+:] by Lm1,ZFMISC_1:106;
+    then not(x in REAL+ & +(z,y) in REAL+) &
+    not(x in REAL+ & +(z,y) in [:{0},REAL+:]) &
+    not(+(z,y) in REAL+ & x in [:{0},REAL+:]) by A139,Th5,XBOOLE_0:3;
+    then consider x',yz'' being Element of REAL+ such that
+A187:  x = [0,x'] and
+A188:  +(y,z) = [0,yz''] and
+A189:  +(x,+(y,z)) = [0,x' + yz''] by Def2;
+A190:   +(y,x) = [0,x'' -' y''] by A147,A184,ARYTM_1:def 2;
+    then +(y,x) in [:{0},REAL+:] by Lm1,ZFMISC_1:106;
+    then not(z in REAL+ & +(x,y) in REAL+) &
+    not(z in REAL+ & +(x,y) in [:{0},REAL+:]) &
+    not(+(x,y) in REAL+ & z in [:{0},REAL+:]) by A141,Th5,XBOOLE_0:3;
+    then consider z'',yx' being Element of REAL+ such that
+A191:  z = [0,z''] and
+A192:  +(y,x) = [0,yx'] and
+A193:  +(z,+(y,x)) = [0,z'' + yx'] by Def2;
+A194:  z' = z'' by A143,A191,ZFMISC_1:33;
+A195:  x' = x'' by A145,A187,ZFMISC_1:33;
+   thus +(x,+(y,z)) = [0,z' -' y' + x'] by A186,A188,A189,ZFMISC_1:33
+        .= [0,x'' -' y'' + z''] by A142,A146,A184,A185,A194,A195,ARYTM_1:15
+        .= +(+(x,y),z) by A190,A192,A193,ZFMISC_1:33;
+  end;
+ hence thesis;
+suppose that
+A196: z in REAL+ and
+A197: y in [:{0},REAL+:] and
+A198: x in [:{0},REAL+:];
+    not(x in REAL+ & y in REAL+) &
+  not(x in REAL+ & y in [:{0},REAL+:]) &
+  not(y in REAL+ & x in [:{0},REAL+:]) by A197,A198,Th5,XBOOLE_0:3;
+  then consider y',x' being Element of REAL+ such that
+A199: y = [0,y'] and
+A200: x = [0,x'] and
+A201: +(y,x) = [0,y' + x'] by Def2;
+  consider z'',y'' being Element of REAL+ such that
+A202: z = z'' and
+A203: y = [0,y''] and
+A204: +(z,y) = z'' - y'' by A196,A197,Def2;
+    +(y,x) in [:{0},REAL+:] by A201,Lm1,ZFMISC_1:106;
+  then consider z',yx' being Element of REAL+ such that
+A205: z = z' and
+A206: +(y,x) = [0,yx'] and
+A207: +(z,+(y,x)) = z' - yx' by A196,Def2;
+A208:  y' = y'' by A199,A203,ZFMISC_1:33;
+    now per cases;
+   suppose
+A209: y'' <=' z'';
+then A210: +(z,y) = z'' -' y'' by A204,ARYTM_1:def 2;
+   then consider zy'',x'' being Element of REAL+ such that
+A211: +(z,y) = zy'' and
+A212: x = [0,x''] and
+A213: +(+(z,y),x) = zy'' - x'' by A198,Def2;
+A214:  x' = x'' by A200,A212,ZFMISC_1:33;
+   thus +(z,+(y,x)) = z' - (y' + x') by A201,A206,A207,ZFMISC_1:33
+         .= +(+(z,y),x) by A202,A205,A208,A209,A210,A211,A213,A214,ARYTM_1:24;
+   suppose
+A215: not y'' <=' z'';
+    then A216:   +(z,y) = [0,y'' -' z''] by A204,ARYTM_1:def 2;
+    then +(z,y) in [:{0},REAL+:] by Lm1,ZFMISC_1:106;
+    then not(x in REAL+ & +(z,y) in REAL+) &
+    not(x in REAL+ & +(z,y) in [:{0},REAL+:]) &
+    not(+(z,y) in REAL+ & x in [:{0},REAL+:]) by A198,Th5,XBOOLE_0:3;
+    then consider zy'',x'' being Element of REAL+ such that
+A217:  +(z,y) = [0,zy''] and
+A218:  x = [0,x''] and
+A219:  +(+(z,y),x) = [0,zy'' + x''] by Def2;
+A220:  x' = x'' by A200,A218,ZFMISC_1:33;
+A221:  yx' = x' + y' by A201,A206,ZFMISC_1:33;
+    then y'' <=' yx' by A208,ARYTM_2:20;
+    then not yx' <=' z' by A202,A205,A215,ARYTM_1:3;
+   hence +(z,+(y,x)) = [0,x' + y' -' z'] by A207,A221,ARYTM_1:def 2
+           .= [0,x'' + (y'' -' z'')] by A202,A205,A208,A215,A220,ARYTM_1:13
+           .= +(+(z,y),x) by A216,A217,A219,ZFMISC_1:33;
+  end;
+ hence thesis;
+suppose that
+A222: x in [:{0},REAL+:] and
+A223: y in [:{0},REAL+:] and
+A224: z in [:{0},REAL+:];
+    not(z in REAL+ & y in REAL+) &
+  not(z in REAL+ & y in [:{0},REAL+:]) &
+  not(y in REAL+ & z in [:{0},REAL+:]) by A223,A224,Th5,XBOOLE_0:3;
+  then consider y',z' being Element of REAL+ such that
+A225: y = [0,y'] and
+A226: z = [0,z'] and
+A227: +(y,z) = [0,y' + z'] by Def2;
+    not(x in REAL+ & y in REAL+) &
+  not(x in REAL+ & y in [:{0},REAL+:]) &
+  not(y in REAL+ & x in [:{0},REAL+:]) by A222,A223,Th5,XBOOLE_0:3;
+  then consider x'',y'' being Element of REAL+ such that
+A228: x = [0,x''] and
+A229: y = [0,y''] and
+A230: +(x,y) = [0,x'' + y''] by Def2;
+    +(z,y) in [:{0},REAL+:] by A227,Lm1,ZFMISC_1:106;
+  then not(x in REAL+ & +(z,y) in REAL+) &
+  not(x in REAL+ & +(z,y) in [:{0},REAL+:]) &
+  not(+(z,y) in REAL+ & x in [:{0},REAL+:]) by A222,Th5,XBOOLE_0:3;
+  then consider x',yz' being Element of REAL+ such that
+A231: x = [0,x'] and
+A232: +(y,z) = [0,yz'] and
+A233: +(x,+(y,z)) = [0,x' + yz'] by Def2;
+    +(x,y) in [:{0},REAL+:] by A230,Lm1,ZFMISC_1:106;
+  then not(z in REAL+ & +(x,y) in REAL+) &
+  not(z in REAL+ & +(x,y) in [:{0},REAL+:]) &
+  not(+(x,y) in REAL+ & z in [:{0},REAL+:]) by A224,Th5,XBOOLE_0:3;
+  then consider xy'',z'' being Element of REAL+ such that
+A234: +(x,y) = [0,xy''] and
+A235: z = [0,z''] and
+A236: +(+(x,y),z) = [0,xy'' + z''] by Def2;
+A237: z' = z'' by A226,A235,ZFMISC_1:33;
+A238: x' = x'' by A228,A231,ZFMISC_1:33;
+A239: y' = y'' by A225,A229,ZFMISC_1:33;
+ thus +(x,+(y,z)) = [0,z' + y' + x'] by A227,A232,A233,ZFMISC_1:33
+        .= [0,z'' + (y'' + x'')] by A237,A238,A239,ARYTM_2:7
+        .= +(+(x,y),z) by A230,A234,A236,ZFMISC_1:33;
+end;
+
+theorem
+  [*x,y*] in REAL implies y = 0
+proof assume
+A1: [*x,y*] in REAL;
+  assume y <> 0;
+  then [*x,y*] = (0,one) --> (x,y) by Def7;
+  hence contradiction by A1,Th10;
+end;
+
+theorem
+  for x,y being Element of REAL holds opp +(x,y) = +(opp x, opp y)
+proof let x,y be Element of REAL;
+    +(+(x,y),+(opp x, opp y))
+         = +(x,+(y,+(opp x, opp y))) by Th25
+        .= +(x,+(opp x,+(y, opp y))) by Th25
+        .= +(x,+(opp x,o)) by Def4
+        .= +(x,opp x) by Th13
+        .= 0 by Def4;
+  hence thesis by Def4;
+end;
+

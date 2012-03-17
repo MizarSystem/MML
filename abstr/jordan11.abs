@@ -1,0 +1,107 @@
+:: Preparing the Internal Approximations of Simple Closed Curves
+::  by Andrzej Trybulec
+::
+:: Received May 21, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary JORDAN1A, JORDAN11, JORDAN8, EUCLID, GROUP_1, FINSEQ_1, ARYTM_1,
+      SEQ_1, BOOLE, GOBOARD5, SETFAM_1, SQUARE_1, FUNCT_1, PSCOMP_1, RCOMP_1,
+      RELAT_2, JORDAN2C, JORDAN6, JORDAN9, PRE_TOPC, RELAT_1, TARSKI, ORDINAL2,
+      CONNSP_1, COMPTS_1, MCART_1, TOPREAL1, TOPREAL2, GOBOARD9, ARYTM_3,
+      SUBSET_1, LATTICES, NAT_1, INT_1, JORDAN10, SEQ_2, FUNCT_5, TREES_1,
+      MATRIX_1, JORDAN1H, JORDAN1E, ARYTM;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0,
+      REAL_1, INT_1, NAT_1, BINARITH, CARD_4, CQC_SIM1, RELAT_1, FUNCT_2,
+      FINSEQ_1, MATRIX_1, SEQ_1, SEQ_4, RCOMP_1, STRUCT_0, PRE_TOPC, CONNSP_1,
+      COMPTS_1, EUCLID, TOPREAL1, TOPREAL2, GOBOARD5, GOBOARD9, PSCOMP_1,
+      JORDAN2C, JORDAN6, JCT_MISC, JORDAN8, JORDAN9, JORDAN10, JORDAN1A,
+      JORDAN1E, JORDAN1H;
+ constructors TOPREAL2, JORDAN8, JORDAN2C, BINARITH, REALSET1, GOBOARD9,
+      JORDAN1, RCOMP_1, PSCOMP_1, CONNSP_1, CQC_SIM1, REAL_1, CARD_4, TOPS_1,
+      JORDAN6, JORDAN9, JORDAN5C, JORDAN1A, JORDAN10, WSIERP_1, JCT_MISC,
+      JORDAN1H, JORDAN1E, PARTFUN1, INT_1;
+ clusters SPRECT_3, BORSUK_2, TOPREAL6, XREAL_0, SUBSET_1, PSCOMP_1, REVROT_1,
+      JORDAN8, INT_1, JORDAN1A, JORDAN1B, JORDAN10, MEMBERED, NUMBERS,
+      ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+reserve i,j,k,n for Nat,
+        C for being_simple_closed_curve Subset of TOP-REAL 2;
+
+definition let C;
+ func ApproxIndex C -> Nat means
+:: JORDAN11:def 1
+ it is_sufficiently_large_for C &
+  for j st j is_sufficiently_large_for C holds j >= it;
+end;
+
+theorem :: JORDAN11:1
+ ApproxIndex C >= 1;
+
+definition let C;
+ func Y-InitStart C -> Nat means
+:: JORDAN11:def 2
+ it < width Gauge(C,ApproxIndex C) &
+    cell(Gauge(C,ApproxIndex C),X-SpanStart(C,ApproxIndex C)-'1,it) c= BDD C &
+  for j st j < width Gauge(C,ApproxIndex C) &
+       cell(Gauge(C,ApproxIndex C),X-SpanStart(C,ApproxIndex C)-'1,j) c= BDD C
+    holds j >= it;
+end;
+
+theorem :: JORDAN11:2
+ Y-InitStart C > 1;
+
+theorem :: JORDAN11:3
+ Y-InitStart C + 1 < width Gauge(C,ApproxIndex C);
+
+definition
+  let C,n such that
+ n is_sufficiently_large_for C;
+ func Y-SpanStart(C,n) -> Nat means
+:: JORDAN11:def 3
+ it <= width Gauge(C,n) &
+   (for k st it <= k & k <= 2|^(n-'ApproxIndex C)*(Y-InitStart C-'2)+2
+     holds cell(Gauge(C,n),X-SpanStart(C,n)-'1,k) c= BDD C) &
+    for j st j <= width Gauge(C,n) &
+     for k st j <= k & k <= 2|^(n-'ApproxIndex C)*(Y-InitStart C-'2)+2
+       holds cell(Gauge(C,n),X-SpanStart(C,n)-'1,k) c= BDD C
+    holds j >= it;
+end;
+
+theorem :: JORDAN11:4
+ n is_sufficiently_large_for C implies
+ X-SpanStart(C,n) = 2|^(n-'ApproxIndex C)*(X-SpanStart(C,ApproxIndex C)-2)+2;
+
+theorem :: JORDAN11:5
+ n is_sufficiently_large_for C implies
+  Y-SpanStart(C,n) <= 2|^(n-'ApproxIndex C)*(Y-InitStart C-'2)+2;
+
+theorem :: JORDAN11:6
+ n is_sufficiently_large_for C
+  implies cell(Gauge(C,n),X-SpanStart(C,n)-'1,Y-SpanStart(C,n)) c= BDD C;
+
+theorem :: JORDAN11:7
+ n is_sufficiently_large_for C implies
+ 1 < Y-SpanStart(C,n) & Y-SpanStart(C,n) <= width Gauge(C,n);
+
+theorem :: JORDAN11:8
+   n is_sufficiently_large_for C implies
+ [X-SpanStart(C,n),Y-SpanStart(C,n)] in Indices Gauge(C,n);
+
+theorem :: JORDAN11:9
+   n is_sufficiently_large_for C implies
+ [X-SpanStart(C,n)-'1,Y-SpanStart(C,n)] in Indices Gauge(C,n);
+
+theorem :: JORDAN11:10
+   n is_sufficiently_large_for C
+  implies cell(Gauge(C,n),X-SpanStart(C,n)-'1,Y-SpanStart(C,n)-'1) meets C;
+
+theorem :: JORDAN11:11
+   n is_sufficiently_large_for C
+ implies cell(Gauge(C,n),X-SpanStart(C,n)-'1,Y-SpanStart(C,n)) misses C;
+

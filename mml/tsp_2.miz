@@ -1,0 +1,1804 @@
+:: Maximal Kolmogorov Subspaces of a Topological Space as Stone
+:: Retracts of the Ambient Space
+::  by Zbigniew Karno
+::
+:: Received July 26, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, TSP_1, TEX_4, BOOLE, SUBSET_1, TARSKI, TOPS_1, COLLSP,
+      SETFAM_1, FUNCT_1, RELAT_1, NATTRA_1, ORDINAL2, BORSUK_1, TSP_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, RELAT_1, FUNCT_1,
+      FUNCT_2, PRE_TOPC, TOPS_1, BORSUK_1, TSEP_1, TEX_2, TEX_3, TEX_4, TSP_1;
+ constructors TOPS_1, TSEP_1, TEX_2, TEX_3, TEX_4, TSP_1, BORSUK_1, MEMBERED;
+ clusters PRE_TOPC, TSP_1, STRUCT_0, RELSET_1, SUBSET_1, BORSUK_1, MEMBERED,
+      ZFMISC_1;
+ requirements BOOLE, SUBSET;
+ theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, PRE_TOPC, TOPS_1, TOPS_2,
+      PCOMPS_1, BORSUK_1, TSEP_1, TOPS_3, TEX_2, TEX_3, TEX_4, TSP_1, RELAT_1,
+      SETFAM_1, XBOOLE_0, XBOOLE_1;
+ schemes TEX_2;
+
+begin
+:: 1. Maximal T_{0} Subsets.
+
+definition let X be non empty TopSpace;
+  let A be Subset of X;
+ redefine attr A is T_0 means
+:Def1: for a, b being Point of X st a in A & b in A holds
+           a <> b implies MaxADSet(a) misses MaxADSet(b);
+ compatibility
+  proof
+   thus A is T_0 implies
+      for a, b being Point of X st a in A & b in A holds
+                           a <> b implies MaxADSet(a) misses MaxADSet(b)
+    proof
+     assume A1: A is T_0;
+      let a, b be Point of X;
+     assume A2: a in A & b in A;
+     assume A3: a <> b;
+         now per cases by A1,A2,A3,TSP_1:def 8;
+        suppose ex V being Subset of X
+             st V is open & a in V & not b in V;
+           then consider V being Subset of X such that
+                 A4: V is open and A5: a in V and A6: not b in V;
+             now
+            take V;
+            thus V is open by A4;
+            thus MaxADSet(a) c= V by A4,A5,TEX_4:26;
+                V = [#]X \ ([#]X \ V) & b in [#]X by PRE_TOPC:13,22;
+             then [#]X \ V is closed & b in [#]X \ V
+                          by A4,A6,PRE_TOPC:def 6,XBOOLE_0:def 4;
+             then MaxADSet(b) c= [#]X \ V by TEX_4:25;
+             then MaxADSet(b) c= V` by PRE_TOPC:17;
+             hence V misses MaxADSet(b) by PRE_TOPC:21;
+           end;
+         hence (ex V being Subset of X st
+                 V is open & MaxADSet(a) c= V & V misses MaxADSet(b)) or
+              (ex W being Subset of X st
+               W is open & W misses MaxADSet(a) & MaxADSet(b) c= W);
+        suppose ex W being Subset of X
+             st W is open & not a in W & b in W;
+           then consider W being Subset of X such that
+                 A7: W is open and A8: not a in W and A9: b in W;
+             now
+            take W;
+            thus W is open by A7;
+                W = [#]X \ ([#]X \ W) & a in [#]X by PRE_TOPC:13,22;
+             then [#]X \ W is closed & a in [#]X \ W
+                          by A7,A8,PRE_TOPC:def 6,XBOOLE_0:def 4;
+             then MaxADSet(a) c= [#]X \ W by TEX_4:25;
+             then MaxADSet(a) c= W` by PRE_TOPC:17;
+             hence W misses MaxADSet(a) by PRE_TOPC:21;
+            thus MaxADSet(b) c= W by A7,A9,TEX_4:26;
+           end;
+         hence (ex V being Subset of X st
+                 V is open & MaxADSet(a) c= V & V misses MaxADSet(b)) or
+              (ex W being Subset of X st
+               W is open & W misses MaxADSet(a) & MaxADSet(b) c= W);
+       end;
+     hence MaxADSet(a) misses MaxADSet(b) by TEX_4:55;
+    end;
+   assume A10: for a, b being Point of X st a in A & b in A holds
+                           a <> b implies MaxADSet(a) misses MaxADSet(b);
+      now let a, b be Point of X;
+     assume A11: a in A & b in A;
+     assume a <> b;
+      then A12: MaxADSet(a) misses MaxADSet(b) by A10,A11;
+         now per cases by A12,TEX_4:55;
+        suppose ex V being Subset of X st
+                 V is open & MaxADSet(a) c= V & V misses MaxADSet(b);
+         then consider V being Subset of X such that
+                A13: V is open and
+                A14: MaxADSet(a) c= V and
+                A15: V misses MaxADSet(b);
+            now
+           take V;
+           thus V is open by A13;
+               {a} c= MaxADSet(a) by TEX_4:20;
+            then a in MaxADSet(a) by ZFMISC_1:37;
+           hence a in V by A14;
+               now
+              assume A16: b in V;
+                  {b} c= MaxADSet(b) by TEX_4:20;
+               then b in MaxADSet(b) by ZFMISC_1:37;
+               hence contradiction by A15,A16,XBOOLE_0:3;
+             end;
+           hence not b in V;
+          end;
+         hence (ex V being Subset of X
+                   st V is open & a in V & not b in V) or
+                (ex W being Subset of X
+                   st W is open & not a in W & b in W);
+        suppose ex W being Subset of X st
+                 W is open & W misses MaxADSet(a) & MaxADSet(b) c= W;
+         then consider W being Subset of X such that
+                A17: W is open and
+                A18: W misses MaxADSet(a) and
+                A19: MaxADSet(b) c= W;
+            now
+           take W;
+           thus W is open by A17;
+               now
+              assume A20: a in W;
+                  {a} c= MaxADSet(a) by TEX_4:20;
+               then a in MaxADSet(a) by ZFMISC_1:37;
+               hence contradiction by A18,A20,XBOOLE_0:3;
+             end;
+           hence not a in W;
+               {b} c= MaxADSet(b) by TEX_4:20;
+            then b in MaxADSet(b) by ZFMISC_1:37;
+           hence b in W by A19;
+          end;
+         hence (ex V being Subset of X
+                 st V is open & a in V & not b in V) or
+                (ex W being Subset of X
+                 st W is open & not a in W & b in W);
+       end;
+     hence (ex V being Subset of X
+             st V is open & a in V & not b in V) or
+             (ex W being Subset of X
+               st W is open & not a in W & b in W);
+    end;
+   hence A is T_0 by TSP_1:def 8;
+  end;
+ end;
+
+definition let X be non empty TopSpace;
+  let A be Subset of X;
+ redefine attr A is T_0 means
+:Def2: for a being Point of X st a in A holds A /\ MaxADSet(a) = {a};
+ compatibility
+  proof
+   thus A is T_0 implies
+         for a being Point of X st a in A holds A /\ MaxADSet(a) = {a}
+    proof
+     assume A1: A is T_0;
+      let a be Point of X;
+          {a} c= MaxADSet(a) by TEX_4:20;
+       then A2: a in MaxADSet(a) by ZFMISC_1:37;
+     assume A3: a in A;
+       then A4: a in A /\ MaxADSet(a) by A2,XBOOLE_0:def 3;
+     assume A /\ MaxADSet(a) <> {a};
+       then consider b being set such that
+              A5: b in A /\ MaxADSet(a) and A6: b <> a by A4,ZFMISC_1:41;
+          reconsider b as Point of X by A5;
+          b in A by A5,XBOOLE_0:def 3;
+       then A7: MaxADSet(a) misses MaxADSet(b) by A1,A3,A6,Def1;
+          b in MaxADSet(a) by A5,XBOOLE_0:def 3;
+       hence contradiction by A7,TEX_4:23;
+    end;
+   assume A8: for a being Point of X st a in A holds A /\ MaxADSet(a) = {a};
+      now let a, b be Point of X;
+     assume a in A & b in A;
+      then A9: A /\ MaxADSet(a) = {a} & A /\ MaxADSet(b) = {b} by A8;
+     assume A10: a <> b;
+     assume MaxADSet(a) meets MaxADSet(b);
+      then {a} = {b} by A9,TEX_4:24;
+      hence contradiction by A10,ZFMISC_1:6;
+    end;
+   hence A is T_0 by Def1;
+  end;
+end;
+
+definition let X be non empty TopSpace;
+  let A be Subset of X;
+ redefine attr A is T_0 means
+   for a being Point of X st a in A
+   ex D being Subset of X
+   st D is maximal_anti-discrete & A /\ D = {a};
+ compatibility
+  proof
+   thus A is T_0 implies
+      for a being Point of X st a in A
+      ex D being Subset of X
+      st D is maximal_anti-discrete & A /\ D = {a}
+    proof
+     assume A1: A is T_0;
+      let a be Point of X;
+     assume A2: a in A;
+     take D = MaxADSet(a);
+     thus D is maximal_anti-discrete by TEX_4:22;
+     thus A /\ D = {a} by A1,A2,Def2;
+    end;
+   assume A3: for a being Point of X st a in A
+           ex D being Subset of X
+           st D is maximal_anti-discrete & A /\ D = {a};
+       now let a be Point of X;
+      assume a in A;
+       then consider D being Subset of X such that
+             A4: D is maximal_anti-discrete and A5: A /\ D = {a} by A3;
+          a in A /\ D by A5,ZFMISC_1:37;
+       then a in D by XBOOLE_0:def 3;
+       hence A /\ MaxADSet(a) = {a} by A4,A5,TEX_4:29;
+     end;
+   hence A is T_0 by Def2;
+  end;
+end;
+
+definition let Y be TopStruct;
+  let IT be Subset of Y;
+ attr IT is maximal_T_0 means
+:Def4: IT is T_0 &
+  for D being Subset of Y st D is T_0 & IT c= D holds IT = D;
+end;
+
+theorem
+   for Y0, Y1 being TopStruct, D0 being Subset of Y0,
+     D1 being Subset of Y1 st
+    the TopStruct of Y0 = the TopStruct of Y1 & D0 = D1 holds
+   D0 is maximal_T_0 implies D1 is maximal_T_0
+ proof let Y0, Y1 be TopStruct,
+           D0 be Subset of Y0,
+           D1 be Subset of Y1;
+  assume A1: the TopStruct of Y0 = the TopStruct of Y1;
+  assume A2: D0 = D1;
+  assume A3: D0 is maximal_T_0;
+   then D0 is T_0 by Def4;
+   then A4: D1 is T_0 by A1,A2,TSP_1:5;
+       now let D be Subset of Y1;
+      assume A5: D is T_0;
+      assume A6: D1 c= D;
+       reconsider E = D as Subset of Y0 by A1;
+           E is T_0 & D0 c= E by A1,A2,A5,A6,TSP_1:5;
+        hence D1 = D by A2,A3,Def4;
+     end;
+  hence D1 is maximal_T_0 by A4,Def4;
+ end;
+
+definition let X be non empty TopSpace;
+  let M be Subset of X;
+ redefine attr M is maximal_T_0 means
+:Def5: M is T_0 &
+     MaxADSet(M) = the carrier of X;
+ compatibility
+  proof
+   thus M is maximal_T_0 implies M is T_0 & MaxADSet(M) = the carrier of X
+    proof
+     assume A1: M is maximal_T_0;
+     hence A2: M is T_0 by Def4;
+        the carrier of X c= MaxADSet(M)
+       proof
+        assume not the carrier of X c= MaxADSet(M);
+         then consider x being set such that
+               A3: x in the carrier of X and A4: not x in MaxADSet(M)
+                                                     by TARSKI:def 3;
+              reconsider x as Point of X by A3;
+        set A = M \/ {x};
+           for a being Point of X st a in A holds A /\ MaxADSet(a) = {a}
+          proof let a be Point of X;
+           assume a in A;
+            then A5: a in M or a in {x} by XBOOLE_0:def 2;
+                now per cases by A5,TARSKI:def 1;
+               suppose A6: a in M;
+                    {x} /\ MaxADSet(a) = {}
+                        proof
+                         assume {x} /\ MaxADSet(a) <> {};
+                          then {x} meets MaxADSet(a) by XBOOLE_0:def 7;
+                          then A7: x in MaxADSet(a) by ZFMISC_1:56;
+                                {a} c= M by A6,ZFMISC_1:37;
+                            then MaxADSet({a}) c= MaxADSet(M) by TEX_4:33;
+                            then MaxADSet(a) c= MaxADSet(M) by TEX_4:30;
+                           hence contradiction by A4,A7;
+                        end;
+                  then A /\ MaxADSet(a)
+                       = (M /\ MaxADSet(a)) \/ {} by XBOOLE_1:23
+                      .= M /\ MaxADSet(a);
+                hence A /\ MaxADSet(a) = {a} by A2,A6,Def2;
+               suppose A8: a = x;
+                 then A9: {x} c= MaxADSet(a) by TEX_4:20;
+                    M /\ MaxADSet(a) = {}
+                        proof
+                         assume A10: M /\ MaxADSet(a) <> {};
+                              M c= MaxADSet(M) by TEX_4:34;
+                           then M /\ MaxADSet(a) c= MaxADSet(M) /\ MaxADSet(a)
+                                                                  by XBOOLE_1:
+26;
+                           then MaxADSet(a) /\ MaxADSet(M) <> {}
+                            by A10,XBOOLE_1:3;
+                           then MaxADSet(a) meets MaxADSet(M)
+                            by XBOOLE_0:def 7;
+                           then A11: MaxADSet(a) c= MaxADSet(M) by TEX_4:32;
+                                x in MaxADSet(a) by A9,ZFMISC_1:37;
+                            hence contradiction by A4,A11;
+                        end;
+                  then A /\ MaxADSet(a)
+                       = {} \/ ({x} /\ MaxADSet(a)) by XBOOLE_1:23
+                      .= {x} /\ MaxADSet(a);
+                hence A /\ MaxADSet(a) = {a} by A8,A9,XBOOLE_1:28;
+              end;
+           hence thesis;
+          end;
+         then A12: A is T_0 by Def2;
+            M c= A by XBOOLE_1:7;
+         then A13: M = A by A1,A12,Def4;
+               {x} c= A by XBOOLE_1:7;
+           then A14: x in M by A13,ZFMISC_1:37;
+              M c= MaxADSet(M) by TEX_4:34;
+          hence contradiction by A4,A14;
+       end;
+     hence MaxADSet(M) = the carrier of X by XBOOLE_0:def 10;
+    end;
+   assume A15: M is T_0;
+   assume A16: MaxADSet(M) = the carrier of X;
+      for D being Subset of X st D is T_0 & M c= D holds M = D
+     proof let D be Subset of X;
+      assume A17: D is T_0;
+      assume A18: M c= D;
+         D c= M
+        proof
+         assume not D c= M;
+          then consider x being set such that
+                  A19: x in D and A20: not x in M by TARSKI:def 3;
+           A21: x in the carrier of X by A19;
+           reconsider x as Point of X by A19;
+               x in union {MaxADSet(a) where a is Point of X : a in M}
+                                                    by A16,A21,TEX_4:def 11;
+            then consider C being set such that
+              A22: x in C and A23: C in {MaxADSet(a) where a is Point of X : a
+in M} by TARSKI:def 4;
+               consider a being Point of X such that
+                  A24: C = MaxADSet(a) and A25: a in M by A23;
+               MaxADSet(a) = MaxADSet(x) by A22,A24,TEX_4:23;
+            then A26: M /\ MaxADSet(x) = {a} by A15,A25,Def2;
+                M /\ MaxADSet(x) c= D /\ MaxADSet(x) by A18,XBOOLE_1:26;
+             then M /\ MaxADSet(x) c= {x} by A17,A19,Def2;
+           hence contradiction by A20,A25,A26,ZFMISC_1:24;
+        end;
+      hence M = D by A18,XBOOLE_0:def 10;
+     end;
+   hence M is maximal_T_0 by A15,Def4;
+  end;
+end;
+
+reserve X for non empty TopSpace;
+
+theorem Th2:
+ for M being Subset of X holds
+   M is maximal_T_0 implies M is dense
+ proof let M be Subset of X;
+  assume M is maximal_T_0;
+   then A1: MaxADSet(M) = the carrier of X by Def5;
+   then MaxADSet(M) = [#]X by PRE_TOPC:12;
+   then Cl MaxADSet(M) = MaxADSet(M) by PRE_TOPC:52;
+   then Cl M = the carrier of X by A1,TEX_4:64;
+  hence M is dense by TOPS_3:def 2;
+ end;
+
+theorem Th3:
+ for A being Subset of X st A is open or A is closed holds
+   A is maximal_T_0 implies A is not proper
+ proof let A be Subset of X;
+  assume A is open or A is closed;
+   then A1: A = MaxADSet(A) by TEX_4:58,62;
+  assume A is maximal_T_0;
+   then A = the carrier of X by A1,Def5;
+  hence A is non proper by TEX_2:5;
+ end;
+
+theorem Th4:
+ for A being empty Subset of X holds A is not maximal_T_0
+ proof let A be empty Subset of X;
+    consider a being set such that
+           A1: a in the carrier of X by XBOOLE_0:def 1;
+   reconsider a as Point of X by A1;
+      now
+     take C = {a};
+     thus C is T_0 & A c= C & A <> C by TSP_1:14,XBOOLE_1:2;
+    end;
+  hence thesis by Def4;
+ end;
+
+theorem Th5:
+ for M being Subset of X st M is maximal_T_0
+  for A being Subset of X st A is closed
+  holds A = MaxADSet(M /\ A)
+ proof let M be Subset of X;
+  assume A1: M is maximal_T_0;
+   let A be Subset of X;
+  assume A2: A is closed;
+    then MaxADSet(M /\ A) = MaxADSet(M) /\ MaxADSet(A) by TEX_4:66;
+    then A3: MaxADSet(M /\ A) = MaxADSet(M) /\ A by A2,TEX_4:62;
+       A = (the carrier of X) /\ A by XBOOLE_1:28;
+  hence thesis by A1,A3,Def5;
+ end;
+
+theorem Th6:
+ for M being Subset of X st M is maximal_T_0
+  for A being Subset of X st A is open holds A = MaxADSet(M /\ A)
+ proof let M be Subset of X;
+  assume A1: M is maximal_T_0;
+   let A be Subset of X;
+  assume A2: A is open;
+    then MaxADSet(M /\ A) = MaxADSet(M) /\ MaxADSet(A) by TEX_4:67;
+    then A3: MaxADSet(M /\ A) = MaxADSet(M) /\ A by A2,TEX_4:58;
+       A = (the carrier of X) /\ A by XBOOLE_1:28;
+  hence thesis by A1,A3,Def5;
+ end;
+
+theorem
+   for M being Subset of X st M is maximal_T_0
+  for A being Subset of X holds Cl A = MaxADSet(M /\ Cl A)
+ proof let M be Subset of X;
+  assume A1: M is maximal_T_0;
+   let A be Subset of X;
+       Cl A is closed by PCOMPS_1:4;
+  hence thesis by A1,Th5;
+ end;
+
+theorem
+   for M being Subset of X st M is maximal_T_0
+  for A being Subset of X holds Int A = MaxADSet(M /\ Int A)
+ proof let M be Subset of X;
+  assume A1: M is maximal_T_0;
+   let A be Subset of X;
+       Int A is open by TOPS_1:51;
+  hence thesis by A1,Th6;
+ end;
+
+definition let X be non empty TopSpace;
+  let M be Subset of X;
+ redefine attr M is maximal_T_0 means
+:Def6: for x being Point of X
+     ex a being Point of X st a in M & M /\ MaxADSet(x) = {a};
+ compatibility
+  proof
+   thus M is maximal_T_0 implies
+       for x being Point of X
+        ex a being Point of X st a in M & M /\ MaxADSet(x) = {a}
+    proof
+     assume A1: M is maximal_T_0;
+        then A2: M is T_0 by Def4;
+      let x be Point of X;
+          x in the carrier of X;
+       then x in MaxADSet(M) by A1,Def5;
+       then x in union {MaxADSet(a) where a is Point of X : a in M}
+                                                    by TEX_4:def 11;
+       then consider C being set such that
+             A3: x in C and A4: C in {MaxADSet(a) where a is Point of X : a in
+ M}
+                                                              by TARSKI:def 4;
+         consider a being Point of X such that
+           A5: C = MaxADSet(a) and A6: a in M by A4;
+          MaxADSet(a) = MaxADSet(x) by A3,A5,TEX_4:23;
+       then M /\ MaxADSet(x) = {a} by A2,A6,Def2;
+      hence ex a be Point of X st a in M & M /\ MaxADSet(x) = {a}
+         by A6;
+    end;
+   assume A7: for x being Point of X
+                ex a being Point of X st a in M & M /\ MaxADSet(x) = {a};
+       for b being Point of X st b in M holds M /\ MaxADSet(b) = {b}
+      proof let b be Point of X;
+       assume A8: b in M;
+        consider a being Point of X such that
+                 a in M and A9: M /\ MaxADSet(b) = {a} by A7;
+             {b} c= MaxADSet(b) by TEX_4:20;
+          then b in MaxADSet(b) by ZFMISC_1:37;
+          then b in M /\ MaxADSet(b) by A8,XBOOLE_0:def 3;
+          hence M /\ MaxADSet(b) = {b} by A9,TARSKI:def 1;
+      end;
+     then A10: M is T_0 by Def2;
+        the carrier of X c= MaxADSet(M)
+       proof
+           now let x be set;
+          assume x in the carrier of X;
+             then reconsider y = x as Point of X;
+           consider a being Point of X such that
+                A11: a in M and A12: M /\ MaxADSet(y) = {a} by A7;
+               {a} c= MaxADSet(y) by A12,XBOOLE_1:17;
+            then a in MaxADSet(y) by ZFMISC_1:37;
+                   then A13: M /\ MaxADSet(y) <> {} by A11,XBOOLE_0:def 3;
+                M c= MaxADSet(M) by TEX_4:34;
+             then M /\ MaxADSet(y) c= MaxADSet(M) /\ MaxADSet(y) by XBOOLE_1:26
+;
+             then MaxADSet(y) /\ MaxADSet(M) <> {} by A13,XBOOLE_1:3;
+             then MaxADSet(y) meets MaxADSet(M) by XBOOLE_0:def 7;
+            then A14: MaxADSet(y) c= MaxADSet(M) by TEX_4:32;
+                        {y} c= MaxADSet(y) by TEX_4:20;
+                     then y in MaxADSet(y) by ZFMISC_1:37;
+          hence x in MaxADSet(M) by A14;
+         end;
+        hence thesis by TARSKI:def 3;
+       end;
+     then MaxADSet(M) = the carrier of X by XBOOLE_0:def 10;
+   hence M is maximal_T_0 by A10,Def5;
+  end;
+end;
+
+theorem Th9:
+ for A being Subset of X holds A is T_0 implies
+   ex M being Subset of X st A c= M & M is maximal_T_0
+ proof let A be Subset of X;
+  assume A1: A is T_0;
+    set D = [#]X \ MaxADSet(A);
+    set F = {MaxADSet(d) where d is Point of X : d in D};
+       F c= bool the carrier of X
+       proof
+           now let C be set;
+          assume C in F;
+           then consider a being Point of X such that
+                  A2: C = MaxADSet(a) and a in D;
+           thus C in bool the carrier of X by A2;
+         end;
+        hence thesis by TARSKI:def 3;
+       end;
+     then reconsider F as Subset-Family of X by SETFAM_1:def 7;
+     reconsider F as Subset-Family of X;
+   defpred X[Subset of X,set] means $2 in D & $2 in $1;
+  A3: for S being Subset of X st S in F
+               ex x being Point of X st X[S,x]
+       proof let S be Subset of X;
+        assume S in F;
+           then consider d being Point of X such that
+             A4: S = MaxADSet(d) and A5: d in D;
+        take d;
+             {d} c= MaxADSet(d) by TEX_4:20;
+          hence thesis by A4,A5,ZFMISC_1:37;
+       end;
+    consider f being Function of F,the carrier of X such that
+      A6: for S being Subset of X st S in F
+      holds X[S,f.S] from ExChoiceFCol(A3);
+  set M = A \/ (f.: F);
+     A7: f.: F c= D
+           proof
+              now let x be set;
+             assume x in f.: F;
+              then consider S being set such that
+                    A8: S in F and S in F and A9: x = f.S by FUNCT_2:115;
+                 thus x in D by A6,A8,A9;
+            end;
+            hence thesis by TARSKI:def 3;
+           end;
+           A10: D = (MaxADSet(A))` by PRE_TOPC:17;
+           then A11: MaxADSet(A) misses D by TOPS_1:20;
+           then A12:MaxADSet(A) misses (f.:F) by A7,XBOOLE_1:63;
+             A c= MaxADSet(A) by TEX_4:34;
+           then A misses D by A10,TOPS_1:20;
+           then A13: A /\ D = {} by XBOOLE_0:def 7;
+  thus ex M being Subset of X st A c= M & M is maximal_T_0
+   proof
+    take M;
+    thus A14: A c= M by XBOOLE_1:7;
+    thus M is maximal_T_0
+     proof
+        for x being Point of X ex a being Point of X st
+                               a in M & M /\ MaxADSet(x) = {a}
+       proof let x be Point of X;
+          A15: [#]X = MaxADSet(A) \/ D & [#]X = the carrier of X by PRE_TOPC:12
+,24;
+           now per cases by A15,XBOOLE_0:def 2;
+          suppose A16: x in MaxADSet(A);
+              now
+                 x in union {MaxADSet(a) where a is Point of X : a in A}
+                                                     by A16,TEX_4:def 11;
+              then consider C being set such that
+                     A17: x in C and
+                     A18: C in {MaxADSet(a) where a is Point of X : a in A}
+                                                          by TARSKI:def 4;
+                consider a being Point of X such that
+                   A19: C = MaxADSet(a) and A20: a in A by A18;
+                 A21: MaxADSet(a) = MaxADSet(x) by A17,A19,TEX_4:23;
+             take a;
+             thus a in M by A14,A20;
+                  {x} c= MaxADSet(A) by A16,ZFMISC_1:37;
+               then MaxADSet({x}) c= MaxADSet(A) by TEX_4:36;
+               then MaxADSet(x) c= MaxADSet(A) by TEX_4:30;
+               then (f.: F) misses MaxADSet(x) by A12,XBOOLE_1:63;
+               then (f.: F) /\ MaxADSet(x) = {} by XBOOLE_0:def 7;
+                then M /\ MaxADSet(x) = (A /\ MaxADSet(x)) \/ {} by XBOOLE_1:23
+;
+               hence M /\ MaxADSet(x) = {a} by A1,A20,A21,Def2;
+            end;
+           hence ex a being Point of X st a in M & M /\ MaxADSet(x) = {a};
+          suppose A22: x in D;
+           then A23: MaxADSet(x) in F;
+              now
+             reconsider a = f.(MaxADSet(x)) as Point of X by A23,FUNCT_2:7;
+             take a;
+               A24: f.: F c= M by XBOOLE_1:7;
+                A25: a in f.: F by A23,FUNCT_2:43;
+             hence a in M by A24;
+                  a in MaxADSet(x) by A6,A23;
+               then {a} c= MaxADSet(x) & {a} c= M by A24,A25,ZFMISC_1:37;
+               then A26: {a} c= M /\ MaxADSet(x) by XBOOLE_1:19;
+                   M /\ MaxADSet(x) c= {a}
+                  proof
+                      now let y be set;
+                     assume A27: y in M /\ MaxADSet(x);
+                        then reconsider z = y as Point of X;
+                       A28: z in MaxADSet(x) by A27,XBOOLE_0:def 3;
+                      then A29: MaxADSet(z) = MaxADSet(x) by TEX_4:23;
+                              now
+                             assume not MaxADSet(x) c= D;
+                              then MaxADSet(x) meets MaxADSet(A)
+                                                by A10,PRE_TOPC:21;
+                              then A30: MaxADSet(x) c= MaxADSet(A) by TEX_4:32;
+                                  {x} c= MaxADSet(x) by TEX_4:20;
+                               then x in MaxADSet(x) by ZFMISC_1:37;
+                               hence contradiction by A11,A22,A30,XBOOLE_0:3;
+                            end;
+                          then A31: not z in A by A13,A28,XBOOLE_0:def 3;
+                             z in M by A27,XBOOLE_0:def 3;
+                          then z in f.: F by A31,XBOOLE_0:def 2;
+                        then consider C being set such that
+                          A32: C in F and C in
+ F and A33: z = f.C by FUNCT_2:115;
+                         reconsider C as Subset of X by A32;
+                          consider w being Point of X such that
+                            A34: C = MaxADSet(w) and w in D by A32;
+                           z in MaxADSet(w) by A6,A32,A33,A34;
+                          then f.(MaxADSet(w)) = a by A29,TEX_4:23;
+                      hence y in {a} by A33,A34,TARSKI:def 1;
+                    end;
+                   hence thesis by TARSKI:def 3;
+                  end;
+             hence M /\ MaxADSet(x) = {a} by A26,XBOOLE_0:def 10;
+            end;
+           hence ex a being Point of X st a in M & M /\ MaxADSet(x) = {a};
+         end;
+        hence ex a being Point of X st a in M & M /\ MaxADSet(x) = {a};
+       end;
+      hence thesis by Def6;
+     end;
+   end;
+ end;
+
+theorem Th10:
+ ex M being Subset of X st M is maximal_T_0
+ proof
+  set A = {}X;
+      A is discrete by TEX_2:35;
+   then A is T_0 by TSP_1:11;
+   then consider M being Subset of X such that
+            A c= M and A1: M is maximal_T_0 by Th9;
+  take M;
+  thus thesis by A1;
+ end;
+
+
+begin
+:: 2. Maximal Kolmogorov Subspaces.
+
+definition let Y be non empty TopStruct;
+  let IT be SubSpace of Y;
+ attr IT is maximal_T_0 means
+:Def7: for A being Subset of Y st A = the carrier of IT holds
+                                             A is maximal_T_0;
+end;
+
+theorem Th11:
+ for Y being non empty TopStruct, Y0 being SubSpace of Y,
+     A being Subset of Y st
+   A = the carrier of Y0 holds A is maximal_T_0 iff Y0 is maximal_T_0
+ proof let Y be non empty TopStruct, Y0 be SubSpace of Y,
+           A be Subset of Y;
+  assume A1: A = the carrier of Y0;
+  hereby
+   assume A is maximal_T_0;
+   then for A be Subset of Y st A = the carrier of Y0
+     holds A is maximal_T_0 by A1;
+   hence Y0 is maximal_T_0 by Def7;
+  end;
+  thus Y0 is maximal_T_0 implies A is maximal_T_0 by A1,Def7;
+ end;
+
+Lm1:
+ now let Z be non empty TopStruct; let Z0 be SubSpace of Z;
+      [#]Z0 c= [#]Z & [#]Z0 = the carrier of Z0 by PRE_TOPC:12,def 9;
+  hence the carrier of Z0 is Subset of Z by PRE_TOPC:12;
+ end;
+
+definition let Y be non empty TopStruct;
+ cluster maximal_T_0 -> T_0 (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume A1: Y0 is maximal_T_0;
+       the carrier of Y0 is Subset of Y by Lm1;
+     then reconsider A = the carrier of Y0 as Subset of Y;
+         A is maximal_T_0 by A1,Th11;
+      then A is T_0 by Def4;
+    hence thesis by TSP_1:15;
+  end;
+ cluster non T_0 -> non maximal_T_0 (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume A2: Y0 is non T_0;
+   assume A3: Y0 is maximal_T_0;
+       the carrier of Y0 is Subset of Y by Lm1;
+     then reconsider A = the carrier of Y0 as Subset of Y;
+         A is maximal_T_0 by A3,Th11;
+      then A is T_0 by Def4;
+    hence contradiction by A2,TSP_1:15;
+  end;
+end;
+
+definition let X be non empty TopSpace;
+  let X0 be non empty SubSpace of X;
+ redefine attr X0 is maximal_T_0 means
+   X0 is T_0 &
+   for Y0 being T_0 non empty SubSpace of X st X0 is SubSpace of Y0 holds
+                              the TopStruct of X0 = the TopStruct of Y0;
+ compatibility
+  proof
+      the carrier of X0 is Subset of X by TSEP_1:1;
+    then reconsider A = the carrier of X0 as Subset of X;
+   thus X0 is maximal_T_0 implies
+            X0 is T_0 &
+        for Y0 being T_0 non empty SubSpace of X st X0 is SubSpace of Y0 holds
+                              the TopStruct of X0 = the TopStruct of Y0
+    proof
+     assume X0 is maximal_T_0;
+       then A1: A is maximal_T_0 by Th11;
+       then A is T_0 by Def4;
+     hence X0 is T_0 by TSP_1:15;
+     thus for Y0 being T_0 non empty SubSpace of X st X0 is SubSpace of Y0
+         holds the TopStruct of X0 = the TopStruct of Y0
+      proof let Y0 be T_0 non empty SubSpace of X;
+           the carrier of Y0 is Subset of X by TSEP_1:1;
+         then reconsider D = the carrier of Y0 as Subset of X;
+       assume X0 is SubSpace of Y0;
+         then A c= D & D is T_0 by TSEP_1:4,TSP_1:15;
+         then A = D by A1,Def4;
+       hence the TopStruct of X0 = the TopStruct of Y0 by TSEP_1:5;
+      end;
+    end;
+   assume X0 is T_0;
+     then A2: A is T_0 by TSP_1:15;
+   assume A3: for Y0 being T_0 non empty SubSpace of X st
+          X0 is SubSpace of Y0 holds the TopStruct of X0 = the TopStruct of Y0;
+        now let D be Subset of X;
+       assume A4: D is T_0;
+       assume A5: A c= D;
+          then D <> {} by XBOOLE_1:3;
+         then consider Y0 being T_0 strict non empty SubSpace of X such that
+                A6: D = the carrier of Y0 by A4,TSP_1:20;
+            X0 is SubSpace of Y0 by A5,A6,TSEP_1:4;
+        hence A = D by A3,A6;
+      end;
+     then A is maximal_T_0 by A2,Def4;
+   hence X0 is maximal_T_0 by Th11;
+  end;
+end;
+
+reserve X for non empty TopSpace;
+
+theorem Th12:
+ for A0 being non empty Subset of X st A0 is maximal_T_0
+  ex X0 being strict non empty SubSpace of X st
+            X0 is maximal_T_0 & A0 = the carrier of X0
+ proof let A0 be non empty Subset of X;
+  assume A1: A0 is maximal_T_0;
+    consider X0 being strict non empty SubSpace of X such that
+          A2: A0 = the carrier of X0 by TSEP_1:10;
+  take X0;
+   thus thesis by A1,A2,Th11;
+ end;
+
+definition let X be non empty TopSpace;
+ cluster maximal_T_0 -> dense SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A1: X0 is maximal_T_0;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+         A is maximal_T_0 by A1,Th11;
+      then A is dense by Th2;
+    hence thesis by TEX_3:9;
+  end;
+ cluster non dense -> non maximal_T_0 SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A2: X0 is non dense;
+   assume A3: X0 is maximal_T_0;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+         A is maximal_T_0 by A3,Th11;
+      then A is dense by Th2;
+    hence contradiction by A2,TEX_3:9;
+  end;
+ cluster open maximal_T_0 -> non proper SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is open;
+    then A4: A is open by TSEP_1:16;
+   assume X0 is maximal_T_0;
+      then A is maximal_T_0 by Th11;
+      then A is non proper by A4,Th3;
+    hence thesis by TEX_2:13;
+  end;
+ cluster open proper -> non maximal_T_0 SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is open;
+    then A5: A is open by TSEP_1:16;
+   assume A6: X0 is proper;
+   assume X0 is maximal_T_0;
+      then A is maximal_T_0 by Th11;
+      then A is non proper by A5,Th3;
+    hence contradiction by A6,TEX_2:13;
+  end;
+ cluster proper maximal_T_0 -> non open SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+   assume A7: X0 is proper;
+   assume A8: X0 is maximal_T_0;
+   assume X0 is open;
+    then A9: A is open by TSEP_1:16;
+         A is maximal_T_0 by A8,Th11;
+      then A is non proper by A9,Th3;
+    hence contradiction by A7,TEX_2:13;
+  end;
+ cluster closed maximal_T_0 -> non proper SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is closed;
+    then A10: A is closed by TSEP_1:11;
+   assume X0 is maximal_T_0;
+      then A is maximal_T_0 by Th11;
+      then A is non proper by A10,Th3;
+    hence thesis by TEX_2:13;
+  end;
+ cluster closed proper -> non maximal_T_0 SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is closed;
+    then A11: A is closed by TSEP_1:11;
+   assume A12: X0 is proper;
+   assume X0 is maximal_T_0;
+      then A is maximal_T_0 by Th11;
+      then A is non proper by A11,Th3;
+    hence contradiction by A12,TEX_2:13;
+  end;
+ cluster proper maximal_T_0 -> non closed SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+   assume A13: X0 is proper;
+   assume A14: X0 is maximal_T_0;
+   assume X0 is closed;
+    then A15: A is closed by TSEP_1:11;
+      A is maximal_T_0 by A14,Th11;
+    then A is non proper by A15,Th3;
+    hence contradiction by A13,TEX_2:13;
+  end;
+end;
+
+theorem
+   for Y0 being T_0 non empty SubSpace of X
+   ex X0 being strict SubSpace of X st
+            Y0 is SubSpace of X0 & X0 is maximal_T_0
+ proof let Y0 be T_0 non empty SubSpace of X;
+       the carrier of Y0 is Subset of X by Lm1;
+     then reconsider A = the carrier of Y0 as Subset of X;
+      A is T_0 by TSP_1:15;
+   then consider M being Subset of X such that
+         A1: A c= M and A2: M is maximal_T_0 by Th9;
+       M is non empty by A2,Th4;
+    then consider X0 being strict non empty SubSpace of X such that
+          A3: X0 is maximal_T_0 and
+          A4: M = the carrier of X0 by A2,Th12;
+  take X0;
+     thus thesis by A1,A3,A4,TSEP_1:4;
+ end;
+
+definition let X be non empty TopSpace;
+ cluster maximal_T_0 strict non empty SubSpace of X;
+ existence
+  proof
+   consider M being Subset of X such that
+        A1: M is maximal_T_0 by Th10;
+       M is non empty by A1,Th4;
+    then consider X0 being strict non empty SubSpace of X such that
+          A2: X0 is maximal_T_0 and
+                 M = the carrier of X0 by A1,Th12;
+   take X0;
+   thus thesis by A2;
+  end;
+end;
+
+definition let X be non empty TopSpace;
+ mode maximal_Kolmogorov_subspace of X is maximal_T_0 SubSpace of X;
+end;
+
+theorem Th14:
+ for X0 being maximal_Kolmogorov_subspace of X
+  for G being Subset of X, G0 being Subset of X0
+  st G0 = G holds
+      G0 is open iff
+    MaxADSet(G) is open & G0 = MaxADSet(G) /\ the carrier of X0
+ proof let X0 be maximal_Kolmogorov_subspace of X;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider M = the carrier of X0 as Subset of X;
+      A1: M is maximal_T_0 by Th11;
+       let G be Subset of X, G0 be Subset of X0;
+  assume A2: G0 = G;
+  thus G0 is open implies
+    MaxADSet(G) is open & G0 = MaxADSet(G) /\ the carrier of X0
+   proof
+    assume G0 is open;
+      then consider H being Subset of X such that
+              A3: H is open and A4: G0 = H /\ M by TSP_1:def 1;
+    thus MaxADSet(G) is open by A1,A2,A3,A4,Th6;
+    thus G0 = MaxADSet(G) /\ the carrier of X0 by A1,A2,A3,A4,Th6;
+   end;
+  assume A5: MaxADSet(G) is open;
+  assume G0 = MaxADSet(G) /\ the carrier of X0;
+  hence thesis by A5,TSP_1:def 1;
+ end;
+
+theorem
+   for X0 being maximal_Kolmogorov_subspace of X
+  for G being Subset of X holds
+      G is open iff G = MaxADSet(G) &
+    ex G0 being Subset of X0
+    st G0 is open & G0 = G /\ the carrier of X0
+ proof let X0 be maximal_Kolmogorov_subspace of X;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider M = the carrier of X0 as Subset of X;
+      A1: M is maximal_T_0 by Th11;
+       let G be Subset of X;
+  thus G is open implies G = MaxADSet(G) &
+        ex G0 being Subset of X0
+        st G0 is open & G0 = G /\ the carrier of X0
+   proof
+    assume A2: G is open;
+    hence G = MaxADSet(G) by TEX_4:58;
+        reconsider G0 = G /\ M as Subset of X0 by XBOOLE_1:17;
+        reconsider G0 as Subset of X0;
+    take G0;
+    thus G0 is open by A2,TSP_1:def 1;
+    thus G0 = G /\ the carrier of X0;
+   end;
+  assume A3: G = MaxADSet(G);
+  given G0 being Subset of X0 such that
+           A4: G0 is open and A5: G0 = G /\ the carrier of X0;
+  set E = G0;
+       E c= M & M c= the carrier of X;
+    then reconsider E as Subset of X by XBOOLE_1:1;
+          A6: MaxADSet(E) is open by A4,Th14;
+     A7: E c= MaxADSet(G) by A3,A5,XBOOLE_1:17;
+      G c= MaxADSet(E)
+     proof
+        for x being set st x in G holds x in MaxADSet(E)
+       proof let x be set;
+        assume A8: x in G;
+            then reconsider a = x as Point of X;
+             {a} c= G by A8,ZFMISC_1:37;
+          then MaxADSet({a}) c= G by A3,TEX_4:36;
+          then A9: MaxADSet(a) c= G by TEX_4:30;
+             consider b being Point of X such that
+                A10: b in M and A11: M /\ MaxADSet(a) = {b} by A1,Def6;
+           A12: {b} c= MaxADSet(a) by A11,XBOOLE_1:17;
+          then {b} c= G by A9,XBOOLE_1:1;
+          then b in G by ZFMISC_1:37;
+          then b in E by A5,A10,XBOOLE_0:def 3;
+          then {b} c= E by ZFMISC_1:37;
+          then MaxADSet({b}) c= MaxADSet(E) by TEX_4:33;
+          then A13: MaxADSet(b) c= MaxADSet(E) by TEX_4:30;
+              b in MaxADSet(a) by A12,ZFMISC_1:37;
+           then MaxADSet(b) = MaxADSet(a) by TEX_4:23;
+           then {a} c= MaxADSet(b) by TEX_4:20;
+           then a in MaxADSet(b) by ZFMISC_1:37;
+        hence x in MaxADSet(E) by A13;
+       end;
+      hence thesis by TARSKI:def 3;
+     end;
+    hence G is open by A3,A6,A7,TEX_4:37;
+ end;
+
+theorem Th16:
+ for X0 being maximal_Kolmogorov_subspace of X
+  for F being Subset of X, F0 being Subset of X0
+  st F0 = F holds
+      F0 is closed iff
+    MaxADSet(F) is closed & F0 = MaxADSet(F) /\ the carrier of X0
+ proof let X0 be maximal_Kolmogorov_subspace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider M = the carrier of X0 as Subset of X;
+      A1: M is maximal_T_0 by Th11;
+       let F be Subset of X, F0 be Subset of X0;
+  assume A2: F0 = F;
+  thus F0 is closed implies
+    MaxADSet(F) is closed & F0 = MaxADSet(F) /\ the carrier of X0
+   proof
+    assume F0 is closed;
+      then consider H being Subset of X such that
+              A3: H is closed and A4: F0 = H /\ M by TSP_1:def 2;
+    thus MaxADSet(F) is closed by A1,A2,A3,A4,Th5;
+    thus F0 = MaxADSet(F) /\ the carrier of X0 by A1,A2,A3,A4,Th5;
+   end;
+  assume A5: MaxADSet(F) is closed;
+  assume F0 = MaxADSet(F) /\ the carrier of X0;
+  hence thesis by A5,TSP_1:def 2;
+ end;
+
+theorem
+   for X0 being maximal_Kolmogorov_subspace of X
+  for F being Subset of X holds
+      F is closed iff F = MaxADSet(F) &
+    ex F0 being Subset of X0
+    st F0 is closed & F0 = F /\ the carrier of X0
+ proof let X0 be maximal_Kolmogorov_subspace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider M = the carrier of X0 as Subset of X;
+      A1: M is maximal_T_0 by Th11;
+       let F be Subset of X;
+  thus F is closed implies F = MaxADSet(F) &
+        ex F0 being Subset of X0
+        st F0 is closed & F0 = F /\ the carrier of X0
+   proof
+    assume A2: F is closed;
+    hence F = MaxADSet(F) by TEX_4:62;
+    set F0 = F /\ M;
+          F0 is Subset of X0 by XBOOLE_1:17;
+        then reconsider F0 as Subset of X0;
+    take F0;
+    thus F0 is closed by A2,TSP_1:def 2;
+    thus F0 = F /\ the carrier of X0;
+   end;
+  assume A3: F = MaxADSet(F);
+  given F0 being Subset of X0 such that
+           A4: F0 is closed and A5: F0 = F /\ the carrier of X0;
+  set E = F0;
+       E c= M & M c= the carrier of X;
+    then reconsider E as Subset of X by XBOOLE_1:1;
+          A6: MaxADSet(E) is closed by A4,Th16;
+     A7: E c= MaxADSet(F) by A3,A5,XBOOLE_1:17;
+      F c= MaxADSet(E)
+     proof
+        for x being set st x in F holds x in MaxADSet(E)
+       proof let x be set;
+        assume A8: x in F;
+            then reconsider a = x as Point of X;
+             {a} c= F by A8,ZFMISC_1:37;
+          then MaxADSet({a}) c= F by A3,TEX_4:36;
+          then A9: MaxADSet(a) c= F by TEX_4:30;
+             consider b being Point of X such that
+                A10: b in M and A11: M /\ MaxADSet(a) = {b} by A1,Def6;
+           A12: {b} c= MaxADSet(a) by A11,XBOOLE_1:17;
+          then {b} c= F by A9,XBOOLE_1:1;
+          then b in F by ZFMISC_1:37;
+          then b in E by A5,A10,XBOOLE_0:def 3;
+          then {b} c= E by ZFMISC_1:37;
+          then MaxADSet({b}) c= MaxADSet(E) by TEX_4:33;
+          then A13: MaxADSet(b) c= MaxADSet(E) by TEX_4:30;
+              b in MaxADSet(a) by A12,ZFMISC_1:37;
+           then MaxADSet(b) = MaxADSet(a) by TEX_4:23;
+           then {a} c= MaxADSet(b) by TEX_4:20;
+           then a in MaxADSet(b) by ZFMISC_1:37;
+        hence x in MaxADSet(E) by A13;
+       end;
+      hence thesis by TARSKI:def 3;
+     end;
+    hence F is closed by A3,A6,A7,TEX_4:37;
+ end;
+
+
+begin
+:: 3. Stone Retraction Mapping Theorems.
+reserve X for non empty TopSpace,
+        X0 for non empty maximal_Kolmogorov_subspace of X;
+
+theorem Th18:
+ for r being map of X,X0
+  for M being Subset of X st M = the carrier of X0 holds
+    (for a being Point of X holds M /\ MaxADSet(a) = {r.a}) implies
+                          r is continuous map of X,X0
+ proof let r be map of X,X0;
+       let M be Subset of X;
+  assume A1: M = the carrier of X0;
+  assume A2: for a being Point of X holds M /\ MaxADSet(a) = {r.a};
+  reconsider N = M as Subset of X;
+      A3: M = [#]X0 by A1,PRE_TOPC:12;
+      A4: N is maximal_T_0 by A1,Th11;
+     then A5: N is T_0 by Def4;
+      for F being Subset of X0
+    holds F is closed implies r" F is closed
+     proof let F be Subset of X0;
+      assume A6: F is closed;
+        reconsider E = F as Subset of X by A1,XBOOLE_1:1;
+         consider P being Subset of X such that
+           A7: P is closed and
+           A8: P /\ M = F by A3,A6,PRE_TOPC:43;
+      set R = {MaxADSet(a) where a is Point of X : a in E};
+       A9: union R = MaxADSet(E) by TEX_4:def 11;
+         A10: MaxADSet(E) is closed by A4,A7,A8,Th5;
+        A11: union R c= r" F
+               proof
+                   now let C be set;
+                  assume C in R;
+                   then consider a being Point of X such that
+                         A12: C = MaxADSet(a) and A13: a in E;
+                     now let x be set;
+                    assume A14: x in C;
+                     then reconsider b = x as Point of X by A12;
+                           A15: MaxADSet(a) = MaxADSet(b) by A12,A14,TEX_4:23;
+                        A16: M /\ MaxADSet(a) = {a} by A1,A5,A13,Def2;
+                          M /\ MaxADSet(b) = {r.b} by A2;
+                      then a = r.x by A15,A16,ZFMISC_1:6;
+                    hence x in r" F by A12,A13,A14,FUNCT_2:46;
+                   end;
+                  hence C c= r" F by TARSKI:def 3;
+                 end;
+                hence thesis by ZFMISC_1:94;
+               end;
+          r" F c= union R
+          proof
+              now let x be set;
+             assume A17: x in r" F;
+              then reconsider b = x as Point of X;
+                A18:  r.b in F by A17,FUNCT_2:46;
+                    E c= the carrier of X;
+                 then reconsider a = r.b as Point of X by A18;
+                      M /\ MaxADSet(b) = {a} by A2;
+                   then a in M /\ MaxADSet(b) by ZFMISC_1:37;
+                   then a in MaxADSet(b) by XBOOLE_0:def 3;
+                   then A19: MaxADSet(a) = MaxADSet(b) by TEX_4:23;
+                 MaxADSet(a) in R by A18;
+              then A20: MaxADSet(a) c= union R by ZFMISC_1:92;
+                   b in {b} & {b} c= MaxADSet(b) by TARSKI:def 1,TEX_4:20;
+               then b in MaxADSet(a) by A19;
+             hence x in union R by A20;
+            end;
+           hence thesis by TARSKI:def 3;
+          end;
+       hence r" F is closed by A9,A10,A11,XBOOLE_0:def 10;
+     end;
+  hence thesis by PRE_TOPC:def 12;
+ end;
+
+theorem
+   for r being map of X,X0 holds
+   (for a being Point of X holds r.a in MaxADSet(a)) implies
+                                  r is continuous map of X,X0
+ proof let r be map of X,X0;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider M = the carrier of X0 as Subset of X;
+     A1: M c= the carrier of X;
+         M is maximal_T_0 by Th11;
+    then A2: M is T_0 by Def4;
+  assume A3: for a being Point of X holds r.a in MaxADSet(a);
+     for a being Point of X holds M /\ MaxADSet(a) = {r.a}
+    proof let a be Point of X;
+       reconsider s = r.a as Point of X by A1,TARSKI:def 3;
+           A4: M /\ MaxADSet(s) = {s} by A2,Def2;
+          s in MaxADSet(a) by A3;
+       hence M /\ MaxADSet(a) = {r.a} by A4,TEX_4:23;
+    end;
+  hence thesis by Th18;
+ end;
+
+theorem Th20:
+ for r being continuous map of X,X0
+  for M being Subset of X st M = the carrier of X0 holds
+    (for a being Point of X holds M /\ MaxADSet(a) = {r.a}) implies
+                                                    r is_a_retraction
+ proof let r be continuous map of X,X0;
+       let M be Subset of X;
+  assume A1: M = the carrier of X0;
+  assume A2: for a being Point of X holds M /\ MaxADSet(a) = {r.a};
+  reconsider N = M as Subset of X;
+        N is maximal_T_0 by A1,Th11;
+     then A3: N is T_0 by Def4;
+      for x being Point of X st x in the carrier of X0 holds r.x = x
+        proof let x be Point of X;
+         assume x in the carrier of X0;
+          then M /\ MaxADSet(x) = {r.x} & M /\ MaxADSet(x) = {x}
+                                                    by A1,A2,A3,Def2;
+         hence thesis by ZFMISC_1:6;
+        end;
+  hence r is_a_retraction by BORSUK_1:def 19;
+ end;
+
+theorem Th21:
+ for r being continuous map of X,X0 holds
+   (for a being Point of X holds r.a in MaxADSet(a)) implies
+                                                r is_a_retraction
+ proof let r be continuous map of X,X0;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider M = the carrier of X0 as Subset of X;
+     A1: M c= the carrier of X;
+         M is maximal_T_0 by Th11;
+    then A2: M is T_0 by Def4;
+  assume A3: for a being Point of X holds r.a in MaxADSet(a);
+     for a being Point of X holds M /\ MaxADSet(a) = {r.a}
+    proof let a be Point of X;
+       reconsider s = r.a as Point of X by A1,TARSKI:def 3;
+           A4: M /\ MaxADSet(s) = {s} by A2,Def2;
+          s in MaxADSet(a) by A3;
+       hence M /\ MaxADSet(a) = {r.a} by A4,TEX_4:23;
+    end;
+  hence r is_a_retraction by Th20;
+ end;
+
+theorem Th22:
+ ex r being continuous map of X,X0 st r is_a_retraction
+ proof
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider M = the carrier of X0 as Subset of X;
+      A1: M is maximal_T_0 by Th11;
+   defpred X[Point of X,set] means M /\ MaxADSet $1 = {$2};
+   A2: for x being Point of X ex a being Point of X0 st X[x,a]
+         proof let x be Point of X;
+            consider a being Point of X such that
+               A3: a in M and A4: M /\ MaxADSet(x) = {a} by A1,Def6;
+           reconsider a as Point of X0 by A3;
+          take a;
+          thus thesis by A4;
+         end;
+   consider r being map of X,X0 such that
+        A5: for x being Point of X holds X[x,r.x] from MapExChoiceF(A2);
+     reconsider r as continuous map of X,X0 by A5,Th18;
+  take r;
+  thus r is_a_retraction by A5,Th20;
+ end;
+
+theorem
+   X0 is_a_retract_of X
+ proof
+  consider r being continuous map of X,X0 such that
+    A1: r is_a_retraction by Th22;
+  thus thesis by A1,BORSUK_1:def 20;
+ end;
+
+Lm2:
+ for r being continuous map of X,X0 holds
+   r is_a_retraction implies
+  for a being Point of X, b being Point of X0 st a = b holds
+                                              r" Cl {b} = Cl {a}
+ proof let r be continuous map of X,X0;
+  assume A1: r is_a_retraction;
+   let a be Point of X, b be Point of X0;
+  assume A2: a = b;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+       A3: A is maximal_T_0 by Th11;
+    A4: Cl {a} c= r" Cl {b}
+          proof
+                 {b} c= Cl {b} by PRE_TOPC:48;
+              then A5: r" {b} c= r" Cl {b} by RELAT_1:178;
+                    r.a = b & b in {b} by A1,A2,BORSUK_1:def 19,TARSKI:def 1;
+               then a in r" {b} by FUNCT_2:46;
+               then A6: {a} c= r" Cl {b} by A5,ZFMISC_1:37;
+               Cl {b} is closed by PCOMPS_1:4;
+            then r" Cl {b} is closed by PRE_TOPC:def 12;
+           hence thesis by A6,TOPS_1:31;
+          end;
+      r" Cl {b} c= Cl {a}
+     proof
+      assume not r" Cl {b} c= Cl {a};
+       then consider c being set such that
+             A7: c in r" Cl {b} and A8: not c in Cl {a} by TARSKI:def 3;
+        reconsider c as Point of X by A7;
+               Cl {b} is closed by PCOMPS_1:4;
+            then r" Cl {b} is closed by PRE_TOPC:def 12;
+            then A9: MaxADSet(c) c= r" Cl {b} by A7,TEX_4:25;
+          consider d being Point of X such that
+            A10: d in A and A11: A /\ MaxADSet(c) = {d} by A3,Def6;
+          reconsider e = d as Point of X0 by A10;
+            A12: {d} c= MaxADSet(c) by A11,XBOOLE_1:17;
+           then {d} c= r" Cl {b} by A9,XBOOLE_1:1;
+           then A13: d in r" Cl {b} by ZFMISC_1:37;
+                 r.d = e by A1,BORSUK_1:def 19;
+           then A14: e in Cl {b} by A13,FUNCT_2:46;
+               A15: Cl {b} c= Cl {a} by A2,TOPS_3:53;
+               d in MaxADSet(c) by A12,ZFMISC_1:37;
+            then A16: MaxADSet(d) = MaxADSet(c) by TEX_4:23;
+                    {c} c= MaxADSet(c) by TEX_4:20;
+                 then A17: c in MaxADSet(c) by ZFMISC_1:37;
+                 Cl {a} is closed by PCOMPS_1:4;
+             then MaxADSet(d) c= Cl {a} by A14,A15,TEX_4:25;
+           hence contradiction by A8,A16,A17;
+     end;
+  hence r" Cl {b} = Cl {a} by A4,XBOOLE_0:def 10;
+ end;
+
+Lm3:
+ for r being continuous map of X,X0 holds
+   r is_a_retraction implies
+  for A being Subset of X st A = the carrier of X0
+   for a being Point of X holds A /\ MaxADSet(a) = {r.a}
+ proof let r be continuous map of X,X0;
+  assume A1: r is_a_retraction;
+   let A be Subset of X;
+  reconsider N = A as Subset of X;
+  assume A2: A = the carrier of X0;
+    then A3: N is maximal_T_0 by Th11;
+     then A4: N is T_0 by Def4;
+   let a be Point of X;
+     consider c being Point of X such that
+       A5: c in A and A6: A /\ MaxADSet(a) = {c} by A3,Def6;
+      reconsider b = c as Point of X0 by A2,A5;
+           A7: r" Cl {b} = Cl {c} by A1,Lm2;
+           r.a in A by A2;
+        then reconsider d = r.a as Point of X;
+           A8: r" Cl {r.a} = Cl {d} by A1,Lm2;
+                   {r.a} c= Cl {r.a} by PRE_TOPC:48;
+                then r.a in Cl {r.a} by ZFMISC_1:37;
+                then A9: a in Cl {d} by A8,FUNCT_2:46;
+                     A10: Cl {d} is closed by PCOMPS_1:4;
+              {c} c= MaxADSet(a) by A6,XBOOLE_1:17;
+          then c in MaxADSet(a) by ZFMISC_1:37;
+          then A11: MaxADSet(c) = MaxADSet(a) by TEX_4:23;
+          then A12: MaxADSet(c) c= Cl {d} by A9,A10,TEX_4:25;
+               {c} c= MaxADSet(c) by TEX_4:20;
+          then {c} c= Cl {d} by A12,XBOOLE_1:1;
+          then A13: Cl {c} c= Cl {d} by TEX_4:3;
+            A14: {a} c= MaxADSet(a) by TEX_4:20;
+                {c} c= r" Cl {b} by A7,PRE_TOPC:48;
+           then A15: c in r" Cl {b} by ZFMISC_1:37;
+               r" Cl {b} is closed by A7,PCOMPS_1:4;
+           then MaxADSet(a) c= r" Cl {b} by A11,A15,TEX_4:25;
+           then {a} c= r" Cl {b} by A14,XBOOLE_1:1;
+           then a in r" Cl {b} by ZFMISC_1:37;
+           then A16: r.a in Cl {b} by FUNCT_2:46;
+                Cl {b} c= Cl {c} by TOPS_3:53;
+            then {d} c= Cl {c} by A16,ZFMISC_1:37;
+            then Cl {d} c= Cl {c} by TEX_4:3;
+            then Cl {d} = Cl {c} by A13,XBOOLE_0:def 10;
+           then MaxADSet(d) = MaxADSet(a) by A11,TEX_4:51;
+              hence A /\ MaxADSet(a) = {r.a} by A2,A4,Def2;
+ end;
+
+Lm4:
+ for r being continuous map of X,X0 holds
+   r is_a_retraction implies
+  for a being Point of X, b being Point of X0 st a = b holds
+                                         MaxADSet(a) c= r" {b}
+ proof let r be continuous map of X,X0;
+  assume A1: r is_a_retraction;
+       let a be Point of X, b be Point of X0;
+  assume A2: a = b;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+        A is maximal_T_0 by Th11;
+     then A3: A is T_0 by Def4;
+      r.a = b by A1,A2,BORSUK_1:def 19;
+      then A4: A /\ MaxADSet(a) = {b} by A1,Lm3;
+  assume not MaxADSet(a) c= r" {b};
+   then consider s being set such that
+          A5: s in MaxADSet(a) and A6: not s in r" {b} by TARSKI:def 3;
+        reconsider s as Point of X by A5;
+           A7: r" Cl {b} = Cl {a} by A1,A2,Lm2;
+             A c= the carrier of X;
+        then reconsider d = r.s as Point of X by TARSKI:def 3;
+           A8: r" Cl {r.s} = Cl {d} by A1,Lm2;
+                   {r.s} c= Cl {r.s} by PRE_TOPC:48;
+                then r.s in Cl {r.s} by ZFMISC_1:37;
+                then A9: s in Cl {d} by A8,FUNCT_2:46;
+                     A10: Cl {d} is closed by PCOMPS_1:4;
+            A11: MaxADSet(a) = MaxADSet(s) by A5,TEX_4:23;
+          then A12: MaxADSet(a) c= Cl {d} by A9,A10,TEX_4:25;
+               {a} c= MaxADSet(a) by TEX_4:20;
+          then {a} c= Cl {d} by A12,XBOOLE_1:1;
+          then A13: Cl {a} c= Cl {d} by TEX_4:3;
+            A14: {s} c= MaxADSet(s) by TEX_4:20;
+                {a} c= r" Cl {b} by A7,PRE_TOPC:48;
+           then A15: a in r" Cl {b} by ZFMISC_1:37;
+               r" Cl {b} is closed by A7,PCOMPS_1:4;
+           then MaxADSet(s) c= r" Cl {b} by A11,A15,TEX_4:25;
+           then {s} c= r" Cl {b} by A14,XBOOLE_1:1;
+           then s in r" Cl {b} by ZFMISC_1:37;
+           then A16: r.s in Cl {b} by FUNCT_2:46;
+                Cl {b} c= Cl {a} by A2,TOPS_3:53;
+            then {d} c= Cl {a} by A16,ZFMISC_1:37;
+            then Cl {d} c= Cl {a} by TEX_4:3;
+            then Cl {d} = Cl {a} by A13,XBOOLE_0:def 10;
+           then MaxADSet(d) = MaxADSet(a) by TEX_4:51;
+              then {b} = {r.s} by A3,A4,Def2;
+            then r.s in {b} by ZFMISC_1:37;
+       hence contradiction by A6,FUNCT_2:46;
+ end;
+
+Lm5:
+ for r being continuous map of X,X0 holds
+   r is_a_retraction implies
+  for a being Point of X, b being Point of X0 st a = b holds
+                                          r" {b} = MaxADSet(a)
+ proof let r be continuous map of X,X0;
+  assume A1: r is_a_retraction;
+       let a be Point of X, b be Point of X0;
+  assume A2: a = b;
+     then A3: MaxADSet(a) c= r" {b} by A1,Lm4;
+        reconsider A = the carrier of X0 as Subset of X
+        by TSEP_1:1;
+     r" {b} c= MaxADSet(a)
+    proof
+     assume not r" {b} c= MaxADSet(a);
+      then consider s being set such that
+             A4: s in r" {b} and A5: not s in MaxADSet(a) by TARSKI:def 3;
+           reconsider s as Point of X by A4;
+                 r.s in {b} by A4,FUNCT_2:46;
+              then {r.s} c= {b} by ZFMISC_1:37;
+            then {r.s} = {b} by ZFMISC_1:24;
+                   then A /\ MaxADSet(s) = {b} by A1,Lm3;
+                    then {a} c= MaxADSet(s) by A2,XBOOLE_1:17;
+                    then a in MaxADSet(s) by ZFMISC_1:37;
+                    then A6: MaxADSet(s) = MaxADSet(a) by TEX_4:23;
+                   {s} c= MaxADSet(s) by TEX_4:20;
+                hence contradiction by A5,A6,ZFMISC_1:37;
+    end;
+  hence thesis by A3,XBOOLE_0:def 10;
+ end;
+
+Lm6:
+ for r being continuous map of X,X0 holds
+   r is_a_retraction implies
+  for E being Subset of X, F being Subset of X0
+  st F = E holds r" F = MaxADSet(E)
+ proof let r be continuous map of X,X0;
+  assume A1: r is_a_retraction;
+       let E be Subset of X, F be Subset of X0;
+  assume A2: F = E;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+        A is maximal_T_0 by Th11;
+     then A3: A is T_0 by Def4;
+   set R = {MaxADSet(a) where a is Point of X : a in E};
+    A4: MaxADSet(E) = union R by TEX_4:def 11;
+        A5: union R c= r" F
+               proof
+                   now let C be set;
+                  assume C in R;
+                   then consider a being Point of X such that
+                         A6: C = MaxADSet(a) and A7: a in E;
+                     now let x be set;
+                    assume A8: x in C;
+                     then reconsider b = x as Point of X by A6;
+                          A9: MaxADSet(a) = MaxADSet(b) by A6,A8,TEX_4:23;
+                     A10: A /\ MaxADSet(a) = {a} by A2,A3,A7,Def2;
+                       A /\ MaxADSet(b) = {r.b} by A1,Lm3;
+                      then a = r.x by A9,A10,ZFMISC_1:6;
+                    hence x in r" F by A2,A6,A7,A8,FUNCT_2:46;
+                   end;
+                  hence C c= r" F by TARSKI:def 3;
+                 end;
+                hence thesis by ZFMISC_1:94;
+               end;
+          r" F c= union R
+          proof
+              now let x be set;
+             assume A11: x in r" F;
+              then reconsider b = x as Point of X;
+                A12:  r.b in F by A11,FUNCT_2:46;
+                 then reconsider a = r.b as Point of X by A2;
+                      A /\ MaxADSet(b) = {a} by A1,Lm3;
+                   then a in A /\ MaxADSet(b) by ZFMISC_1:37;
+                   then a in MaxADSet(b) by XBOOLE_0:def 3;
+                   then A13: MaxADSet(a) = MaxADSet(b) by TEX_4:23;
+                 MaxADSet(a) in R by A2,A12;
+              then A14: MaxADSet(a) c= union R by ZFMISC_1:92;
+                   {b} c= MaxADSet(b) by TEX_4:20;
+               then b in MaxADSet(a) by A13,ZFMISC_1:37;
+             hence x in union R by A14;
+            end;
+           hence thesis by TARSKI:def 3;
+          end;
+  hence r" F = MaxADSet(E) by A4,A5,XBOOLE_0:def 10;
+ end;
+
+definition let X be non empty TopSpace,
+    X0 be non empty maximal_Kolmogorov_subspace of X;
+ func Stone-retraction(X,X0) -> continuous map of X,X0 means
+:Def9: it is_a_retraction;
+ existence by Th22;
+ uniqueness
+  proof let r1, r2 be continuous map of X,X0;
+   assume A1: r1 is_a_retraction & r2 is_a_retraction;
+    reconsider M = the carrier of X0 as non empty Subset of X
+    by TSEP_1:1;
+       for x being set st x in the carrier of X holds r1.x = r2.x
+      proof let x be set;
+       assume x in the carrier of X;
+           then reconsider a = x as Point of X;
+           M /\ MaxADSet(a) = {r1.a} & M /\ MaxADSet(a) = {r2.a} by A1,Lm3;
+        hence thesis by ZFMISC_1:6;
+      end;
+    hence r1 = r2 by FUNCT_2:18;
+  end;
+end;
+
+theorem
+   for a being Point of X, b being Point of X0 st a = b holds
+                      (Stone-retraction(X,X0))" Cl {b} = Cl {a}
+ proof let a be Point of X, b be Point of X0;
+  assume A1: a = b;
+     Stone-retraction(X,X0) is_a_retraction by Def9;
+  hence thesis by A1,Lm2;
+ end;
+
+theorem Th25:
+ for a being Point of X, b being Point of X0 st a = b holds
+                      (Stone-retraction(X,X0))" {b} = MaxADSet(a)
+ proof let a be Point of X, b be Point of X0;
+  assume A1: a = b;
+     Stone-retraction(X,X0) is_a_retraction by Def9;
+  hence thesis by A1,Lm5;
+ end;
+
+theorem Th26:
+ for E being Subset of X, F being Subset of X0
+ st F = E holds
+                      (Stone-retraction(X,X0))" (F) = MaxADSet(E)
+ proof let E be Subset of X, F be Subset of X0;
+  assume A1: F = E;
+     Stone-retraction(X,X0) is_a_retraction by Def9;
+  hence thesis by A1,Lm6;
+ end;
+
+definition let X be non empty TopSpace,
+      X0 be non empty maximal_Kolmogorov_subspace of X;
+ redefine func Stone-retraction(X,X0) -> continuous map of X,X0 means
+:Def10: for M being Subset of X st M = the carrier of X0
+    for a being Point of X holds M /\ MaxADSet(a) = {it.a};
+ compatibility
+  proof let r be continuous map of X,X0;
+   thus r = Stone-retraction(X,X0) implies
+          for M being Subset of X st M = the carrier of X0
+             for a being Point of X holds M /\ MaxADSet(a) = {r.a}
+     proof
+      assume A1: r = Stone-retraction(X,X0);
+       let M be Subset of X;
+      assume A2: M = the carrier of X0;
+           Stone-retraction(X,X0) is_a_retraction by Def9;
+      hence thesis by A1,A2,Lm3;
+     end;
+    reconsider M = the carrier of X0 as Subset of X by TSEP_1:1;
+   assume for A being Subset of X st A = the carrier of X0
+                 for a being Point of X holds A /\ MaxADSet(a) = {r.a};
+     then for a being Point of X holds M /\ MaxADSet(a) = {r.a};
+     then r is_a_retraction by Th20;
+   hence r = Stone-retraction(X,X0) by Def9;
+  end;
+  coherence;
+end;
+
+definition let X be non empty TopSpace,
+      X0 be non empty maximal_Kolmogorov_subspace of X;
+ redefine func Stone-retraction(X,X0) -> continuous map of X,X0 means
+:Def11: for a being Point of X holds it.a in MaxADSet(a);
+ compatibility
+  proof let r be continuous map of X,X0;
+    reconsider A = the carrier of X0 as Subset of X by TSEP_1:1;
+   thus r = Stone-retraction(X,X0) implies
+             for a being Point of X holds r.a in MaxADSet(a)
+     proof
+      assume A1: r = Stone-retraction(X,X0);
+       let a be Point of X;
+            A /\ MaxADSet(a) = {r.a} by A1,Def10;
+        then {r.a} c= MaxADSet(a) by XBOOLE_1:17;
+      hence thesis by ZFMISC_1:37;
+     end;
+   assume for a being Point of X holds r.a in MaxADSet(a);
+     then r is_a_retraction by Th21;
+   hence r = Stone-retraction(X,X0) by Def9;
+  end;
+  coherence;
+end;
+
+theorem Th27:
+ for a being Point of X holds
+   (Stone-retraction(X,X0))" {(Stone-retraction(X,X0)).a} = MaxADSet(a)
+ proof let a be Point of X;
+   reconsider A = the carrier of X0 as Subset of X by TSEP_1:1;
+  set r = Stone-retraction(X,X0);
+       r.a in A & A c= the carrier of X;
+    then reconsider b = r.a as Point of X;
+      A1: r" {r.a} = MaxADSet(b) by Th25;
+       r.a in MaxADSet(a) by Def11;
+    hence thesis by A1,TEX_4:23;
+ end;
+
+theorem
+   for a being Point of X holds
+   (Stone-retraction(X,X0)).: {a} = (Stone-retraction(X,X0)).: MaxADSet(a)
+ proof let a be Point of X;
+  set r = Stone-retraction(X,X0);
+        dom r = [#]X by TOPS_2:51;
+     then A1: dom r = the carrier of X by PRE_TOPC:12;
+    A2: r" {r.a} = MaxADSet(a) by Th27;
+       then r.: r" {r.a} c= {r.a} & r.: r" {r.a} <> {} by A1,FUNCT_1:145,
+RELAT_1:152;
+     then r.: r" {r.a} = {r.a} by ZFMISC_1:39;
+     hence thesis by A1,A2,FUNCT_1:117;
+ end;
+
+definition let X be non empty TopSpace,
+    X0 be non empty maximal_Kolmogorov_subspace of X;
+ redefine func Stone-retraction(X,X0) -> continuous map of X,X0 means
+:Def12: for M being Subset of X st M = the carrier of X0
+    for A being Subset of X holds M /\ MaxADSet(A) = it.: A;
+ compatibility
+  proof let r be continuous map of X,X0;
+        dom r = [#]X by TOPS_2:51;
+     then A1: dom r = the carrier of X by PRE_TOPC:12;
+   thus r = Stone-retraction(X,X0) implies
+         for M being Subset of X st M = the carrier of X0
+           for A being Subset of X holds M /\ MaxADSet(A) = r.:
+ A
+    proof
+     assume A2: r = Stone-retraction(X,X0);
+      let M be Subset of X;
+  reconsider N = M as Subset of X;
+     assume A3: M = the carrier of X0;
+         then N is maximal_T_0 by Th11;
+         then A4: N is T_0 by Def4;
+      let A be Subset of X;
+       A5: M /\ MaxADSet(A) c= r.: A
+             proof
+                for x being set st x in M /\ MaxADSet(A) holds x in r.: A
+               proof let x be set;
+                assume A6: x in M /\ MaxADSet(A);
+                 then reconsider c = x as Point of X;
+                      c in M by A6,XBOOLE_0:def 3;
+                   then A7: M /\ MaxADSet(c) = {c} by A4,Def2;
+                      c in MaxADSet(A) by A6,XBOOLE_0:def 3;
+                  then c in union {MaxADSet(a) where a is Point of X : a in A}
+                                                             by TEX_4:def 11;
+                  then consider D being set such that
+                        A8: c in D and
+                        A9: D in {MaxADSet(a) where a is Point of X : a in A}
+                                                            by TARSKI:def 4;
+                    consider a being Point of X such that
+                        A10: D = MaxADSet(a) and A11: a in A by A9;
+                        MaxADSet(c) = MaxADSet(a) by A8,A10,TEX_4:23;
+                      then {r.a} = {c} by A2,A3,A7,Def10;
+                     then r.a = c by ZFMISC_1:6;
+                       hence thesis by A11,FUNCT_2:43;
+               end;
+              hence thesis by TARSKI:def 3;
+             end;
+        r.: A c= M /\ MaxADSet(A)
+       proof
+          for x being set st x in r.: A holds x in M /\ MaxADSet(A)
+         proof let x be set;
+          assume A12: x in r.: A;
+              then reconsider b = x as Point of X0;
+              consider a being set such that
+                A13: a in the carrier of X and A14: a in A and A15: b = r.a
+                                                       by A12,FUNCT_2:115;
+              reconsider a as Point of X by A13;
+                             A16: M /\ MaxADSet(a) = {b} by A2,A3,A15,Def10;
+                 {a} c= A by A14,ZFMISC_1:37;
+              then MaxADSet({a}) c= MaxADSet(A) by TEX_4:33;
+              then MaxADSet(a) c= MaxADSet(A) by TEX_4:30;
+              then M /\ MaxADSet(a) c= M /\ MaxADSet(A) by XBOOLE_1:26;
+          hence x in M /\ MaxADSet(A) by A16,ZFMISC_1:37;
+         end;
+        hence thesis by TARSKI:def 3;
+       end;
+     hence thesis by A5,XBOOLE_0:def 10;
+    end;
+   assume
+A17: for M being Subset of X st M = the carrier of X0
+    for A being Subset of X holds M /\ MaxADSet(A) = r.: A;
+       for M being Subset of X st M = the carrier of X0
+       for a being Point of X holds M /\ MaxADSet(a) = {r.a}
+      proof let M be Subset of X;
+       assume A18: M = the carrier of X0;
+            let a be Point of X;
+            M /\ MaxADSet({a}) = r.: {a} by A17,A18;
+         then M /\ MaxADSet(a) = r.: {a} by TEX_4:30;
+                    hence thesis by A1,FUNCT_1:117;
+      end;
+   hence r = Stone-retraction(X,X0) by Def10;
+  end;
+ coherence;
+end;
+
+theorem Th29:
+ for A being Subset of X holds
+   (Stone-retraction(X,X0))"((Stone-retraction(X,X0)).: A) = MaxADSet(A)
+ proof let A be Subset of X;
+   reconsider C = the carrier of X0 as non empty Subset of X
+   by TSEP_1:1;
+  set r = Stone-retraction(X,X0);
+       C c= the carrier of X;
+    then reconsider B = r.: A as Subset of X by XBOOLE_1:1;
+                  A1: r" (r.: A) = MaxADSet(B) by Th26;
+       then A2: A c= MaxADSet(B) by FUNCT_2:50;
+        C /\ MaxADSet(A) = B by Def12;
+     then B c= MaxADSet(A) by XBOOLE_1:17;
+    hence thesis by A1,A2,TEX_4:37;
+ end;
+
+theorem
+   for A being Subset of X holds
+   (Stone-retraction(X,X0)).: A = (Stone-retraction(X,X0)).: MaxADSet(A)
+ proof let A be Subset of X;
+  set r = Stone-retraction(X,X0);
+        A c= the carrier of X & rng r = r.: the carrier of X by FUNCT_2:45;
+     then A1: r.: A c= rng r by RELAT_1:156;
+         r.: r" (r.: A) = r.: MaxADSet(A) by Th29;
+     hence thesis by A1,FUNCT_1:147;
+ end;
+
+theorem
+   for A, B being Subset of X holds
+  (Stone-retraction(X,X0)).:(A \/ B) =
+          (Stone-retraction(X,X0)).:(A) \/ (Stone-retraction(X,X0)).:(B)
+ proof
+   reconsider M = the carrier of X0 as Subset of X by TSEP_1:1;
+  set r = Stone-retraction(X,X0);
+   let A, B be Subset of X;
+       r.: (A \/ B) = M /\ (MaxADSet(A \/ B)) by Def12
+               .= M /\ (MaxADSet(A) \/ MaxADSet(B)) by TEX_4:38
+               .= (M /\ MaxADSet(A)) \/ (M /\ MaxADSet(B)) by XBOOLE_1:23
+               .= (r.: A) \/ (M /\ MaxADSet(B)) by Def12
+               .= (r.: A) \/ (r.: B) by Def12;
+  hence thesis;
+ end;
+
+theorem
+   for A, B being Subset of X st A is open or B is open holds
+  (Stone-retraction(X,X0)).:(A /\ B) =
+          (Stone-retraction(X,X0)).:(A) /\ (Stone-retraction(X,X0)).:(B)
+ proof
+   reconsider M = the carrier of X0 as Subset of X by TSEP_1:1;
+  set r = Stone-retraction(X,X0);
+   let A, B be Subset of X;
+  assume A1: A is open or B is open;
+       r.: (A /\ B) = M /\ (MaxADSet(A /\ B)) by Def12
+               .= (M /\ M) /\ (MaxADSet(A) /\ MaxADSet(B)) by A1,TEX_4:67
+               .= M /\ (M /\ (MaxADSet(A) /\ MaxADSet(B))) by XBOOLE_1:16
+               .= ((M /\ MaxADSet(A)) /\ MaxADSet(B)) /\ M by XBOOLE_1:16
+               .= (M /\ MaxADSet(A)) /\ (M /\ MaxADSet(B)) by XBOOLE_1:16
+               .= (r.: A) /\ (M /\ MaxADSet(B)) by Def12
+               .= (r.: A) /\ (r.: B) by Def12;
+  hence thesis;
+ end;
+
+theorem
+   for A, B being Subset of X st A is closed or B is closed holds
+  (Stone-retraction(X,X0)).:(A /\ B) =
+          (Stone-retraction(X,X0)).:(A) /\ (Stone-retraction(X,X0)).:(B)
+ proof
+   reconsider M = the carrier of X0 as Subset of X by TSEP_1:1;
+  set r = Stone-retraction(X,X0);
+   let A, B be Subset of X;
+  assume A1: A is closed or B is closed;
+       r.: (A /\ B) = M /\ (MaxADSet(A /\ B)) by Def12
+               .= (M /\ M) /\ (MaxADSet(A) /\ MaxADSet(B)) by A1,TEX_4:66
+               .= M /\ (M /\ (MaxADSet(A) /\ MaxADSet(B))) by XBOOLE_1:16
+               .= ((M /\ MaxADSet(A)) /\ MaxADSet(B)) /\ M by XBOOLE_1:16
+               .= (M /\ MaxADSet(A)) /\ (M /\ MaxADSet(B)) by XBOOLE_1:16
+               .= (r.: A) /\ (M /\ MaxADSet(B)) by Def12
+               .= (r.: A) /\ (r.: B) by Def12;
+  hence thesis;
+ end;
+
+theorem
+   for A being Subset of X holds
+   A is open implies (Stone-retraction(X,X0)).:(A) is open
+ proof let A be Subset of X;
+    reconsider M = the carrier of X0 as Subset of X by TSEP_1:1;
+  set B = (Stone-retraction(X,X0)).:(A);
+  assume A1: A is open;
+   then A = MaxADSet(A) by TEX_4:58;
+   then A /\ M = B by Def12;
+  hence (Stone-retraction(X,X0)).:(A) is open by A1,TSP_1:def 1;
+ end;
+
+theorem
+   for A being Subset of X holds
+   A is closed implies (Stone-retraction(X,X0)).:(A) is closed
+ proof let A be Subset of X;
+    reconsider M = the carrier of X0 as Subset of X by TSEP_1:1;
+  set B = (Stone-retraction(X,X0)).:(A);
+  assume A1: A is closed;
+   then A = MaxADSet(A) by TEX_4:62;
+   then A /\ M = B by Def12;
+  hence (Stone-retraction(X,X0)).:A is closed by A1,TSP_1:def 2;
+ end;

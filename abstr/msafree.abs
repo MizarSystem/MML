@@ -1,0 +1,454 @@
+:: Free Many Sorted Universal Algebra
+::  by Beata Perkowska
+::
+:: Received April 27, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, PBOOLE, TDGROUP, CARD_3, RELAT_1, MSUALG_2, PRALG_1,
+      REALSET1, BOOLE, ZF_REFLE, PROB_1, TARSKI, AMI_1, MSUALG_1, FREEALG,
+      PRELAMB, ALG_1, FINSEQ_1, QC_LANG1, LANG1, DTCONSTR, TREES_4, TREES_2,
+      TREES_3, FUNCT_6, MCART_1, UNIALG_2, GROUP_6, MSUALG_3, MSAFREE,
+      FINSEQ_4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, NAT_1, RELAT_1,
+      RELSET_1, STRUCT_0, FUNCT_1, MCART_1, FUNCT_2, FINSEQ_1, FINSEQ_2,
+      TREES_2, PROB_1, CARD_3, FINSEQ_4, LANG1, TREES_3, FUNCT_6, TREES_4,
+      DTCONSTR, PBOOLE, PRALG_1, MSUALG_1, MSUALG_2, MSUALG_3;
+ constructors NAT_1, MCART_1, MSUALG_3, FINSOP_1, FINSEQ_4, FINSEQOP, PROB_1,
+      MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, FUNCT_1, FINSEQ_1, PBOOLE, TREES_3, TREES_4, DTCONSTR,
+      PRALG_1, MSUALG_1, MSUALG_3, RELSET_1, STRUCT_0, XBOOLE_0, ARYTM_3,
+      MEMBERED, ZFMISC_1, NUMBERS, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET;
+
+
+begin
+
+::
+:: Preliminaries
+::
+
+theorem :: MSAFREE:1
+for I be set, J be non empty set, f be Function of I,J*,
+    X be ManySortedSet of J, p be Element of J*, x be set
+st x in I & p = f.x holds (X# * f).x = product (X * p);
+
+definition
+ let I be set,
+     A,B be ManySortedSet of I,
+     C be ManySortedSubset of A,
+     F be ManySortedFunction of A,B;
+func F || C -> ManySortedFunction of C,B means
+:: MSAFREE:def 1
+for i be set st i in I
+ for f be Function of A.i,B.i st f = F.i holds it.i = f | (C.i);
+end;
+
+definition let I be set,
+               X be ManySortedSet of I,
+               i be set;
+ assume  i in I;
+func coprod(i,X) -> set means
+:: MSAFREE:def 2
+for x be set holds x in it iff ex a be set st a in X.i & x = [a,i];
+end;
+
+definition let I be set,
+               X be ManySortedSet of I;
+ redefine func disjoin X -> ManySortedSet of I means
+:: MSAFREE:def 3
+   for i be set st i in I holds it.i = coprod(i,X);
+ synonym coprod X;
+end;
+
+definition
+ let I be non empty set,
+     X be non-empty ManySortedSet of I;
+ cluster coprod X -> non-empty;
+end;
+
+definition
+ let I be non empty set,
+     X be non-empty ManySortedSet of I;
+ cluster Union X -> non empty;
+end;
+
+theorem :: MSAFREE:2
+  for I be set, X be ManySortedSet of I, i be set st i in I holds
+X.i <> {} iff (coprod X).i <> {};
+
+begin
+::
+:: Free Many Sorted Universal Algebra - General Notions
+::
+
+reserve S for non void non empty ManySortedSign,
+        U0 for MSAlgebra over S;
+
+definition
+ let S be non void non empty ManySortedSign,
+     U0 be MSAlgebra over S;
+mode GeneratorSet of U0 -> MSSubset of U0 means
+:: MSAFREE:def 4
+the Sorts of GenMSAlg(it) = the Sorts of U0;
+end;
+
+theorem :: MSAFREE:3
+  for S be non void non empty ManySortedSign,
+    U0 be strict non-empty MSAlgebra over S,
+    A be MSSubset of U0 holds
+          A is GeneratorSet of U0 iff GenMSAlg(A) = U0;
+
+definition
+ let S,U0;
+ let IT be GeneratorSet of U0;
+attr IT is free means
+:: MSAFREE:def 5
+for U1 be non-empty MSAlgebra over S
+ for f be ManySortedFunction of IT,the Sorts of U1
+  ex h be ManySortedFunction of U0,U1
+                  st h is_homomorphism U0,U1 & h || IT = f;
+end;
+
+definition
+ let S be non void non empty ManySortedSign;
+ let IT be MSAlgebra over S;
+attr IT is free means
+:: MSAFREE:def 6
+ ex G being GeneratorSet of IT st G is free;
+end;
+
+theorem :: MSAFREE:4
+for S be non void non empty ManySortedSign,
+    X be ManySortedSet of the carrier of S
+holds Union coprod X misses [:the OperSymbols of S,{the carrier of S}:];
+
+begin
+::
+:: Construction of Free Many Sorted Algebras for Given Signature
+::
+
+definition
+ let S be non void ManySortedSign;
+ cluster the OperSymbols of S -> non empty;
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be ManySortedSet of the carrier of S;
+ canceled 2;
+
+func REL(X) -> Relation of
+   ([:the OperSymbols of S,{the carrier of S}:] \/ Union (coprod X)),
+   (([:the OperSymbols of S,{the carrier of S}:] \/ Union (coprod X))*) means
+:: MSAFREE:def 9
+
+for a be Element of
+        [:the OperSymbols of S,{the carrier of S}:] \/ Union (coprod X),
+    b be Element of
+       ([:the OperSymbols of S,{the carrier of S}:] \/ Union (coprod X))*
+ holds
+ [a,b] in it iff
+  a in [:the OperSymbols of S,{the carrier of S}:] &
+  for o be OperSymbol of S st [o,the carrier of S] = a holds
+   len b = len (the_arity_of o) &
+   for x be set st x in dom b holds
+    (b.x in [:the OperSymbols of S,{the carrier of S}:] implies
+    for o1 be OperSymbol of S st [o1,the carrier of S] = b.x
+      holds the_result_sort_of o1 = (the_arity_of o).x) &
+    (b.x in Union (coprod X) implies b.x in coprod((the_arity_of o).x,X));
+end;
+
+reserve S for non void non empty ManySortedSign,
+         X for ManySortedSet of the carrier of S,
+         o for OperSymbol of S,
+         b for Element of
+            ([:the OperSymbols of S,{the carrier of S}:] \/ Union (coprod X))*
+;
+
+theorem :: MSAFREE:5
+               [[o,the carrier of S],b] in REL(X)
+                            iff
+   len b = len (the_arity_of o) &
+   for x be set st x in dom b holds
+    (b.x in [:the OperSymbols of S,{the carrier of S}:] implies
+     for o1 be OperSymbol of S st [o1,the carrier of S] = b.x
+    holds the_result_sort_of o1 = (the_arity_of o).x) &
+    (b.x in Union (coprod X) implies b.x in coprod((the_arity_of o).x,X));
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be ManySortedSet of the carrier of S;
+func DTConMSA(X) -> DTConstrStr equals
+:: MSAFREE:def 10
+ DTConstrStr (# [:the OperSymbols of S,{the carrier of S}:]
+                   \/ Union (coprod X), REL(X) #);
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be ManySortedSet of the carrier of S;
+ cluster DTConMSA(X) -> strict non empty;
+end;
+
+theorem :: MSAFREE:6
+for S be non void non empty ManySortedSign,
+    X be non-empty ManySortedSet of the carrier of S holds
+NonTerminals(DTConMSA(X)) = [:the OperSymbols of S,{the carrier of S}:] &
+Terminals (DTConMSA(X)) = Union (coprod X);
+
+reserve x for set;
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be non-empty ManySortedSet of the carrier of S;
+cluster DTConMSA(X) -> with_terminals with_nonterminals
+   with_useful_nonterminals;
+end;
+
+theorem :: MSAFREE:7
+for S be non void non empty ManySortedSign,
+    X be non-empty ManySortedSet of the carrier of S,
+    t be set holds
+               t in Terminals DTConMSA(X)
+                          iff
+ ex s be SortSymbol of S, x be set st x in X.s & t = [x,s];
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be non-empty ManySortedSet of the carrier of S,
+     o be OperSymbol of S;
+func Sym(o,X) ->Symbol of DTConMSA(X) equals
+:: MSAFREE:def 11
+ [o,the carrier of S];
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be non-empty ManySortedSet of the carrier of S,
+     s be SortSymbol of S;
+func FreeSort(X,s) -> Subset of TS(DTConMSA(X)) equals
+:: MSAFREE:def 12
+ {a where a is Element of TS(DTConMSA(X)):
+       (ex x be set st x in X.s & a = root-tree [x,s]) or
+       ex o be OperSymbol of S st [o,the carrier of S] = a.{}
+           & the_result_sort_of o = s};
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be non-empty ManySortedSet of the carrier of S,
+     s be SortSymbol of S;
+cluster FreeSort(X,s) -> non empty;
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be non-empty ManySortedSet of the carrier of S;
+func FreeSort(X) -> ManySortedSet of the carrier of S means
+:: MSAFREE:def 13
+for s be SortSymbol of S holds it.s = FreeSort(X,s);
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be non-empty ManySortedSet of the carrier of S;
+cluster FreeSort(X) -> non-empty;
+end;
+
+theorem :: MSAFREE:8
+for S be non void non empty ManySortedSign,
+    X be non-empty ManySortedSet of the carrier of S, o be OperSymbol of S,
+    x be set
+ st x in ((FreeSort X)# * (the Arity of S)).o holds
+    x is FinSequence of TS(DTConMSA(X));
+
+theorem :: MSAFREE:9
+for S be non void non empty ManySortedSign,
+    X be non-empty ManySortedSet of the carrier of S, o be OperSymbol of S,
+    p be FinSequence of TS(DTConMSA(X))
+holds p in ((FreeSort X)# * (the Arity of S)).o iff
+ dom p = dom (the_arity_of o) &
+ for n be Nat st n in dom p holds p.n in FreeSort(X,(the_arity_of o)/.n);
+
+theorem :: MSAFREE:10
+for S be non void non empty ManySortedSign,
+    X be non-empty ManySortedSet of the carrier of S, o be OperSymbol of S,
+    p be FinSequence of TS(DTConMSA(X)) holds
+ Sym(o,X) ==> roots p iff p in ((FreeSort X)# * (the Arity of S)).o;
+
+canceled;
+
+theorem :: MSAFREE:12
+for S be non void non empty ManySortedSign,
+    X be non-empty ManySortedSet of the carrier of S holds
+ union rng (FreeSort X) = TS (DTConMSA(X));
+
+theorem :: MSAFREE:13
+for S be non void non empty ManySortedSign,
+    X be non-empty ManySortedSet of the carrier of S, s1,s2 be SortSymbol of S
+ st s1 <> s2 holds (FreeSort X).s1 misses (FreeSort X).s2;
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be non-empty ManySortedSet of the carrier of S,
+     o be OperSymbol of S;
+func DenOp(o,X) ->
+Function of ((FreeSort X)# * (the Arity of S)).o,
+            ((FreeSort X) * (the ResultSort of S)).o means
+:: MSAFREE:def 14
+for p be FinSequence of TS(DTConMSA(X)) st Sym(o,X) ==> roots p holds
+  it.p = (Sym(o,X))-tree p;
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be non-empty ManySortedSet of the carrier of S;
+func FreeOper(X) -> ManySortedFunction of (FreeSort X)# * (the Arity of S),
+              (FreeSort X) * (the ResultSort of S) means
+:: MSAFREE:def 15
+for o be OperSymbol of S holds it.o = DenOp(o,X);
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be non-empty ManySortedSet of the carrier of S;
+func FreeMSA(X) -> MSAlgebra over S equals
+:: MSAFREE:def 16
+ MSAlgebra (# FreeSort(X), FreeOper(X) #);
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be non-empty ManySortedSet of the carrier of S;
+cluster FreeMSA(X) -> strict non-empty;
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be non-empty ManySortedSet of the carrier of S,
+     s be SortSymbol of S;
+func FreeGen(s,X) -> Subset of (FreeSort(X)).s means
+:: MSAFREE:def 17
+for x be set holds
+     x in it iff ex a be set st a in X.s & x = root-tree [a,s];
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be non-empty ManySortedSet of the carrier of S,
+     s be SortSymbol of S;
+cluster FreeGen(s,X) -> non empty;
+end;
+
+theorem :: MSAFREE:14
+for S be non void non empty ManySortedSign,
+    X be non-empty ManySortedSet of the carrier of S,
+    s be SortSymbol of S holds
+FreeGen(s,X) = {root-tree t where t is Symbol of DTConMSA(X):
+               t in Terminals DTConMSA(X) & t`2 = s};
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be non-empty ManySortedSet of the carrier of S;
+func FreeGen(X) -> GeneratorSet of FreeMSA(X) means
+:: MSAFREE:def 18
+for s be SortSymbol of S holds it.s = FreeGen(s,X);
+end;
+
+theorem :: MSAFREE:15
+  for S be non void non empty ManySortedSign,
+    X be non-empty ManySortedSet of the carrier of S
+holds FreeGen(X)is non-empty;
+
+theorem :: MSAFREE:16
+  for S be non void non empty ManySortedSign,
+     X be non-empty ManySortedSet of the carrier of S holds
+union rng FreeGen(X) = {root-tree t where t is Symbol of DTConMSA(X):
+                           t in Terminals DTConMSA(X)};
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be non-empty ManySortedSet of the carrier of S,
+     s be SortSymbol of S;
+func Reverse(s,X) -> Function of FreeGen(s,X),X.s means
+:: MSAFREE:def 19
+for t be Symbol of DTConMSA(X) st
+  root-tree t in FreeGen(s,X) holds it.(root-tree t) = t`1;
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be non-empty ManySortedSet of the carrier of S;
+func Reverse(X) -> ManySortedFunction of FreeGen(X),X means
+:: MSAFREE:def 20
+for s be SortSymbol of S holds it.s = Reverse(s,X);
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be non-empty ManySortedSet of the carrier of S,
+     A be non-empty ManySortedSet of the carrier of S,
+     F be ManySortedFunction of FreeGen(X), A,
+     t be Symbol of DTConMSA(X);
+assume  t in Terminals (DTConMSA(X));
+func pi(F,A,t) -> Element of Union A means
+:: MSAFREE:def 21
+ for f be Function st f = F.(t`2) holds it = f.(root-tree t);
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be non-empty ManySortedSet of the carrier of S,
+     t be Symbol of DTConMSA(X);
+assume  ex p be FinSequence st t ==> p;
+func @(X,t) -> OperSymbol of S means
+:: MSAFREE:def 22
+  [it,the carrier of S] = t;
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+    U0 be non-empty MSAlgebra over S,
+    o be OperSymbol of S,
+    p be FinSequence;
+assume  p in Args(o,U0);
+func pi(o,U0,p) -> Element of Union (the Sorts of U0) equals
+:: MSAFREE:def 23
+  Den(o,U0).p;
+end;
+
+theorem :: MSAFREE:17
+for S be non void non empty ManySortedSign,
+    X be non-empty ManySortedSet of the carrier of S holds FreeGen(X) is free;
+
+theorem :: MSAFREE:18
+for S be non void non empty ManySortedSign,
+    X be non-empty ManySortedSet of the carrier of S holds
+FreeMSA(X) is free;
+
+definition
+ let S be non void non empty ManySortedSign;
+cluster free strict (non-empty MSAlgebra over S);
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+    U0 be free MSAlgebra over S;
+cluster free GeneratorSet of U0;
+end;
+
+theorem :: MSAFREE:19
+for S be non void non empty ManySortedSign,
+    U1 be non-empty MSAlgebra over S
+ ex U0 be strict free (non-empty MSAlgebra over S),
+    F be ManySortedFunction of U0,U1
+       st F is_epimorphism U0,U1;
+
+theorem :: MSAFREE:20
+  for S be non void non empty ManySortedSign,
+    U1 be strict non-empty MSAlgebra over S
+ ex U0 be strict free (non-empty MSAlgebra over S),
+    F be ManySortedFunction of U0,U1
+       st F is_epimorphism U0,U1 & Image F = U1;

@@ -1,0 +1,1382 @@
+:: Transpose Matrices and Groups of Permutations
+::  by Katarzyna Jankowska
+::
+:: Received May 20, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary VECTSP_1, FINSEQ_1, RELAT_1, FUNCT_1, FUNCOP_1, MATRIX_1, FINSEQ_2,
+      TREES_1, RLVECT_1, BOOLE, CARD_1, INCSP_1, QC_LANG1, FUNCT_2, BINOP_1,
+      GROUP_1, NAT_1, ARYTM_1, FINSET_1, FINSUB_1, MATRIX_2, CARD_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, RELAT_1, FUNCT_1,
+      PARTFUN1, FUNCT_2, STRUCT_0, NAT_1, GROUP_1, GROUP_4, BINOP_1, RLVECT_1,
+      VECTSP_1, FINSEQ_1, CARD_1, MATRIX_1, FINSET_1, FINSUB_1, FINSEQ_2,
+      FINSEQ_4, FINSEQOP;
+ constructors NAT_1, GROUP_4, BINOP_1, MATRIX_1, FINSEQOP, FINSEQ_4, MEMBERED,
+      PARTFUN1, RELAT_2, XBOOLE_0;
+ clusters FUNCT_1, GROUP_1, MATRIX_1, FINSET_1, RELSET_1, STRUCT_0, FINSEQ_1,
+      FINSEQ_2, XREAL_0, ARYTM_3, FUNCT_2, ZFMISC_1, PARTFUN1, XBOOLE_0;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions STRUCT_0;
+ theorems FINSEQ_1, FINSEQ_2, FINSEQ_3, TARSKI, GROUP_1, FUNCT_1, FUNCT_2,
+      ZFMISC_1, NAT_1, BINOP_1, FINSUB_1, FINSET_1, GROUP_4, CARD_2, FRAENKEL,
+      MATRIX_1, VECTSP_1, RELAT_1, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+ schemes BINOP_1, MATRIX_1, COMPTS_1, XBOOLE_0;
+
+begin :: Some Examples of Matrices
+
+ reserve x,y,x1,x2,y1,y2 for set,
+  i,j,k,l,n,m for Nat,
+  D for non empty set,
+  K for Field,
+  s,s2 for FinSequence,
+  a,b,c,d for Element of D,
+  q,r for FinSequence of D;
+
+scheme SeqDEx{D()->non empty set,A()->Nat,P[set,set]}:
+  ex p being FinSequence of D() st dom p = Seg A() &
+                     for k st k in Seg A() holds P[k,p.k]
+ provided
+A1: for k st k in Seg A() ex x being Element of D() st P[k,x]
+proof
+ defpred _P[set,set] means P[$1,$2];
+ A2: for y be set st y in Seg A() ex x st x in D() & _P[y,x]
+  proof
+   let y;
+   assume A3:y in Seg A();
+   then reconsider k=y as Nat;
+   consider x being Element of D() such that A4:P[k,x] by A1,A3;
+   take x;
+   thus thesis by A4;
+  end;
+ consider f being Function such that A5:dom f = Seg A() and A6:rng f c= D() and
+   A7:for y be set st y in Seg A() holds _P[y,f.y] from NonUniqBoundFuncEx(A2);
+ reconsider f as FinSequence by A5,FINSEQ_1:def 2;
+ reconsider p=f as FinSequence of D() by A6,FINSEQ_1:def 4;
+ take p;
+ thus thesis by A5,A7;
+end;
+
+definition let n,m; let a be set;
+ func (n,m) --> a -> tabular FinSequence equals
+:Def1:   n |-> (m |-> a);
+  coherence by MATRIX_1:2;
+end;
+
+ definition
+  let D,n,m;let d;
+  redefine func (n,m) --> d ->Matrix of n,m,D;
+  coherence
+   proof
+      (n,m) --> d =n |->(m |-> d) by Def1;
+    hence thesis by MATRIX_1:10;
+   end;
+ end;
+
+theorem
+Th1: [i,j] in Indices ((n,m)-->a) implies ((n,m)-->a) *(i,j)=a
+    proof
+     set M=((n,m)-->a);
+     assume A1:[i,j] in Indices M;
+     then [i,j] in [:dom M,Seg width M:] by MATRIX_1:def 5;
+     then A2:i in dom M & j in Seg width M by ZFMISC_1:106;
+     then i in Seg len M by FINSEQ_1:def 3;
+     then A3: i in Seg n by MATRIX_1:def 3;
+     then n > 0 by FINSEQ_1:4,NAT_1:19;
+     then A4: j in Seg m by A2,MATRIX_1:24;
+       M=n |->(m|->a) by Def1;
+     then M.i=m|->a & (m|->a).j = a by A3,A4,FINSEQ_2:70;
+     hence M*(i,j)=a by A1,MATRIX_1:def 6;
+    end;
+
+ reserve a',b' for Element of K;
+
+theorem
+  ((n,n)-->a') + ((n,n)-->b')= (n,n)-->(a'+b')
+     proof
+      A1:Indices ((n,n)-->a') =Indices ((n,n)-->b') &
+         Indices ((n,n)-->a') =Indices ((n,n)-->(a'+b')) by MATRIX_1:27;
+        now let i,j;
+       assume A2:[i,j] in Indices ((n,n)-->(a'+b'));
+       then ((n,n)-->a')*(i,j)=a' by A1,Th1;
+       then ((n,n)-->a')*(i,j) +((n,n)-->b')*(i,j)=a'+b' by A1,A2,Th1;
+       hence ((n,n)-->a')*(i,j) +((n,n)-->b')*(i,j)=((n,n)-->(a'+b'))*(i,j)
+         by A2,Th1;
+      end;
+      hence thesis by A1,MATRIX_1:def 14;
+     end;
+
+definition
+ let a,b,c,d be set;
+ func (a,b)][(c,d) ->tabular FinSequence equals
+:Def2: <*<*a,b*>,<*c,d*>*>;
+ correctness
+ proof
+    len <*a,b*>=2 & len <*c,d*>=2 by FINSEQ_1:61;
+  hence thesis by MATRIX_1:4;
+ end;
+ end;
+
+theorem
+Th3:len (x1,x2)][(y1,y2)=2 & width (x1,x2)][(y1,y2)=2 &
+        Indices (x1,x2)][(y1,y2)=[:Seg 2,Seg 2:]
+     proof set M = (x1,x2)][(y1,y2);
+      A1:(x1,x2)][(y1,y2) = <*<*x1,x2*>,<*y1,y2*>*> by Def2;
+      hence A2:len M=2 by FINSEQ_1:61;
+        rng M = { <*x1,x2*>,<*y1,y2*>} by A1,FINSEQ_2:147;
+      then <*x1,x2*> in
+ rng M & len <*x1,x2*>=2 & 0<2 by FINSEQ_1:61,TARSKI:def 2;
+      hence
+A3:      width M=2 by A2,MATRIX_1:def 4;
+        dom M = Seg 2 by A2,FINSEQ_1:def 3;
+      hence thesis by A3,MATRIX_1:def 5;
+     end;
+
+theorem
+Th4: [1,1] in Indices (x1,x2)][(y1,y2) &
+     [1,2] in Indices (x1,x2)][(y1,y2) &
+     [2,1] in Indices (x1,x2)][(y1,y2) &
+     [2,2] in Indices (x1,x2)][(y1,y2)
+     proof
+         Indices (x1,x2)][(y1,y2)=[:Seg 2,Seg 2:] & 1 in Seg 2 & 2 in Seg 2
+        by Th3,FINSEQ_1:4,TARSKI:def 2;
+       hence thesis by ZFMISC_1:106;
+     end;
+
+definition let D;let a be Element of D;
+ redefine func <*a*> -> Element of 1-tuples_on D;
+  coherence by FINSEQ_2:118;
+end;
+
+ definition let D;let n;let p be Element of n-tuples_on D;
+ redefine func <*p*> -> Matrix of 1,n,D;
+  coherence
+  proof
+     len p = n by FINSEQ_2:109;
+   hence thesis by MATRIX_1:11;
+  end;
+ end;
+
+theorem
+   [1,1] in Indices <*<*a*>*> & <*<*a*>*>*(1,1)=a
+   proof set M=<*<*a*>*>;
+     A1:Indices M= [:Seg 1,Seg 1:] by MATRIX_1:25;
+       1 in Seg 1 by FINSEQ_1:4,TARSKI:def 1;
+    hence A2:[1,1] in Indices <*<*a*>*> by A1,ZFMISC_1:106;
+      M.1= <*a*> & <*a*>.1=a by FINSEQ_1:57;
+    hence <*<*a*>*> *(1,1)=a by A2,MATRIX_1:def 6;
+   end;
+
+ definition let D;let a,b,c,d be Element of D;
+  redefine func (a,b)][(c,d) -> Matrix of 2,D;
+  coherence
+   proof
+      (a,b)][(c,d) = <*<*a,b*>,<*c,d*>*> by Def2;
+    hence thesis by MATRIX_1:19;
+   end;
+  end;
+
+theorem
+   (a,b)][(c,d)*(1,1)=a &
+      (a,b)][(c,d)*(1,2)=b &
+      (a,b)][(c,d)*(2,1)=c &
+      (a,b)][(c,d)*(2,2)=d
+     proof
+      set M=(a,b)][(c,d);
+        (a,b)][(c,d) = <*<*a,b*>,<*c,d*>*> by Def2;
+      then M.1= <*a,b*> & M.2=<*c,d*> & <*a,b*>.1=a & <*a,b*>.2=b
+        & <*c,d*>.1=c & <*c,d*>.2=d & [1,1] in Indices M &
+        [1,2] in Indices M & [2,1] in Indices M & [2,2] in Indices M
+         by Th4,FINSEQ_1:61;
+      hence thesis by MATRIX_1:def 6;
+     end;
+
+definition let n;let K be Field;
+mode Upper_Triangular_Matrix of n,K -> Matrix of n,K means
+   for i,j st [i,j] in Indices it holds
+          (i>j implies it*(i,j) = 0.K );
+existence
+ proof
+defpred P[Nat,Nat,Element of K] means
+     ($1 <= $2 implies $3= 1_ K) &
+          ($1 > $2 implies $3 = 0.K );
+A1:  for i,j st [i,j] in [:Seg n, Seg n:]
+     for x1,x2 being Element of K st P[i,j,x1] & P[i,j,x2]
+      holds x1 = x2;
+A2:  for i,j st [i,j] in [:Seg n, Seg n:]
+     ex x being Element of K st P[i,j,x]
+     proof
+      let i,j;
+      assume [i,j] in [:Seg n, Seg n:];
+        (i<=j implies P[i,j,1_ K]) & (i>j implies P[i,j,0.K]);
+       hence thesis;
+     end;
+     consider M being Matrix of n,K such that
+    A3:for i,j st [i,j] in Indices M holds P[i,j,M*
+(i,j)] from MatrixEx(A1,A2);
+      take M;
+     thus thesis by A3;
+ end;
+end;
+
+definition let n;let K;
+mode Lower_Triangular_Matrix of n,K -> Matrix of n,K means
+   for i,j st [i,j] in Indices it holds
+          (i<j implies it*(i,j) = 0.K );
+existence
+ proof
+  consider M being Diagonal of n,K;
+  take M;
+   thus thesis by MATRIX_1:def 15;
+ end;
+end;
+
+theorem
+  for M being Matrix of D st len M=n holds M is Matrix of n,width M,D
+ proof let M be Matrix of D;
+  assume that A1: len M=n
+      and A2:not( M is Matrix of n,width M,D);set m= width M;
+    now per cases by A2,MATRIX_1:def 3;
+   suppose not (len M=n);
+    hence contradiction by A1;
+   suppose ex p be FinSequence of D st p in rng M & not (len p=m);
+    then consider p be FinSequence of D such that
+                                       A3:p in rng M and A4:not (len p=m);
+    consider k such that
+            A5:for x st x in rng M ex q st x = q & len q = k by MATRIX_1:9;
+    reconsider x=p as set;
+A6:    ex q st x = q & len q = k by A3,A5;
+      now per cases by NAT_1:18;
+     suppose n= 0;
+      then M={} by A1,FINSEQ_1:25;
+      hence len p= m by A3,FINSEQ_1:27;
+     suppose n>0;
+      then consider s being FinSequence such that
+          A7:s in rng M and A8:len s = width M by A1,MATRIX_1:def 4;
+      reconsider y=s as set;
+        ex r st y = r & len r = k by A5,A7;
+      hence len p= m by A6,A8;
+    end;
+  hence contradiction by A4;
+  end;
+  hence thesis;
+  end;
+
+begin :: Deleting of Rows and Columns in a Matrix
+
+definition let i; let p be FinSequence;
+func Del(p,i) -> FinSequence equals
+:Def5:   p * Sgm ((dom p) \ {i});
+coherence
+ proof set q = Sgm((dom p) \ {i});
+A1: dom q = Seg len q by FINSEQ_1:def 3;
+A2: dom p = Seg len p by FINSEQ_1:def 3;
+     (Seg len p) \ {i} c= Seg len p by XBOOLE_1:36;
+   then rng q c= dom p by A2,FINSEQ_1:def 13;
+   then dom (p*q) = dom q by RELAT_1:46;
+  hence p*q is FinSequence by A1,FINSEQ_1:def 2;
+ end;
+end;
+
+theorem
+Th8:for p being FinSequence holds
+  (i in dom p implies ex m st len p = m + 1 & len Del(p,i) = m) &
+  (not i in dom p implies Del(p,i) = p)
+  proof
+   let p be FinSequence;
+   hereby assume A1: i in dom p;
+   then p <> {} by FINSEQ_1:26;
+   then A2: len p <> 0 by FINSEQ_1:25;
+   A3: i in Seg len p by A1,FINSEQ_1:def 3;
+   consider m such that A4: len p = m+1 by A2,NAT_1:22;
+   A5:(Seg(len p) \ {i}) c= Seg(len p)
+    proof
+       for x holds x in (Seg(len p) \ {i}) implies x in Seg(len p)
+       by XBOOLE_0:def 4;
+     hence thesis by TARSKI:def 3;
+    end;
+    then A6:rng Sgm(Seg(len p) \ {i}) c= Seg len p by FINSEQ_1:def 13;
+    reconsider D' = dom p as non empty set by A1;
+      dom p = Seg len p by FINSEQ_1:def 3;
+    then reconsider q = Sgm((dom p) \ {i}) as FinSequence of D'
+           by A6,FINSEQ_1:def 4;
+    reconsider D = rng p as non empty set by A1,FUNCT_1:12;
+    reconsider r = p as Function of D',D by FUNCT_2:3;
+A7:    len(r*q) = len q by FINSEQ_2:37;
+A8:    len (Sgm(Seg(len p) \ {i}))=m
+      proof
+       A9:len Sgm(Seg(len p) \ {i})= card (Seg(len p) \ {i}) by A5,FINSEQ_3:44;
+         not i in (Seg(len p) \ {i})
+          proof
+            assume i in (Seg(len p) \ {i});
+            then i in Seg(len p) & not i in {i} by XBOOLE_0:def 4;
+            hence thesis by TARSKI:def 1;
+          end;
+        then A10:card ((Seg(len p) \ {i}) \/ {i})=card (Seg(len p) \ {i}) +1
+            by CARD_2:54;
+          {i} c= Seg(len p)
+          proof
+              for x holds x in {i} implies x in Seg(len p) by A3,TARSKI:def 1;
+            hence thesis by TARSKI:def 3;
+          end;
+        then card Seg(len p)=card (Seg(len p) \ {i}) +1 by A10,XBOOLE_1:45;
+        then card (Seg(len p) \ {i}) +1 = m+1 by A4,FINSEQ_1:78;
+        hence thesis by A9,XCMPLX_1:2;
+      end;
+     take m;
+       dom p = Seg len p by FINSEQ_1:def 3;
+     hence len p=m + 1 & len Del(p,i) = m by A4,A7,A8,Def5;
+    end;
+    assume A11: not i in dom p;
+    A12: Del(p,i) = p * Sgm((dom p) \ {i}) by Def5;
+      for x st x in {i} holds not x in dom p by A11,TARSKI:def 1;
+    then {i} misses dom p by XBOOLE_0:3;
+    hence Del(p,i) = p * Sgm(dom p) by A12,XBOOLE_1:83
+                 .= p * Sgm(Seg len p) by FINSEQ_1:def 3
+                 .= p * (idseq len p) by FINSEQ_3:54
+                 .= p|(Seg len p) by FINSEQ_2:63
+                 .= p|(dom p) by FINSEQ_1:def 3
+                 .= p by RELAT_1:97;
+  end;
+
+theorem
+Th9: for p being FinSequence of D holds Del(p,i) is FinSequence of D
+  proof let p be FinSequence of D;
+   per cases;
+   suppose A1:i in dom p;
+     Seg(len p) \ {i} c= Seg(len p)
+    proof
+       for x holds x in (Seg(len p) \ {i}) implies x in Seg(len p)
+       by XBOOLE_0:def 4;
+     hence thesis by TARSKI:def 3;
+    end;
+    then A2:rng Sgm(Seg(len p) \ {i}) c= Seg(len p) by FINSEQ_1:def 13;
+    reconsider D'=Seg(len p) as non empty set by A1,FINSEQ_1:def 3;
+    reconsider q=Sgm(Seg(len p) \ {i}) as FinSequence of D'
+     by A2,FINSEQ_1:def 4;
+      dom p = Seg len p by FINSEQ_1:def 3;
+    then p * q = Del(p,i) by Def5;
+    hence thesis by FINSEQ_2:35;
+    suppose not i in dom p;
+    hence thesis by Th8;
+   end;
+
+theorem
+Th10:for M be Matrix of n,m,K holds
+  for k st k in Seg n holds M.k=Line(M,k)
+  proof
+   let M be Matrix of n,m,K;
+   let k;
+   assume A1: k in Seg n;
+A2: len M = n by MATRIX_1:26;
+     dom M = Seg len M by FINSEQ_1:def 3;
+   then A3: M.k in rng M by A1,A2,FUNCT_1:def 5;
+   per cases by NAT_1:18;
+    suppose n=0;
+     hence M.k=Line(M,k) by A1,FINSEQ_1:4;
+    suppose A4:0 < n;
+     then A5:width M=m by MATRIX_1:24;
+     consider l such that
+      A6:for x st x in rng M ex p be FinSequence of(the carrier of K)
+           st x = p & len p = l by MATRIX_1:9;
+     consider p being FinSequence of (the carrier of K) such that
+      A7:M.k = p and len p= l by A3,A6;
+     A8:len p=width M by A3,A5,A7,MATRIX_1:def 3;
+       for j st j in Seg width M holds p.j = M*(k,j)
+      proof
+       let j;
+       assume j in Seg width M;
+       then [k,j] in [:Seg n,Seg m:] by A1,A5,ZFMISC_1:106;
+       then [k,j] in Indices M by A4,MATRIX_1:24;
+       then ex q being FinSequence of (the carrier of K) st q=M.k & M*(k,j)=q.
+j
+            by MATRIX_1:def 6;
+       hence thesis by A7;
+      end;
+     hence M.k=Line(M,k) by A7,A8,MATRIX_1:def 8;
+  end;
+
+definition let i;
+let K;
+let M be Matrix of K;
+assume A1:i in Seg (width M);
+func DelCol(M,i) -> Matrix of K means
+  len it=len M & for k st k in dom M holds it.k=Del(Line(M,k),i);
+ existence
+  proof
+   defpred P[Nat,Nat,Element of K] means
+    $3=Del(Line(M,$1),i).$2;
+     now per cases by NAT_1:18;
+suppose len M=0;
+   hence ex N be Matrix of K st len N=len M&
+    for k st k in dom M holds N.k=Del(Line(M,k),i) by A1,FINSEQ_1:4,MATRIX_1:
+def 4;
+ suppose A2:len M>0;set n1=width M;
+     now per cases by NAT_1:18;
+    suppose n1=0;
+    hence ex N be Matrix of K st len N=len M&
+       for k st k in dom M holds N.k=Del(Line(M,k),i) by A1,FINSEQ_1:4;
+    suppose n1>0;
+      then consider m such that A3:n1=m+1 by NAT_1:22;
+     A4:for k st k in dom M holds len (Del(Line(M,k),i))=m
+      proof let k;
+      assume k in dom M;
+       A5:len (Line(M,k))= n1 by MATRIX_1:def 8;
+       then i in dom (Line(M,k)) by A1,FINSEQ_1:def 3;
+       then ex l st len (Line(M,k))=l+1 & len Del(Line(M,k),i)=l
+          by Th8;
+        hence thesis by A3,A5,XCMPLX_1:2;
+      end;
+      A6:for k,l st [k,l] in [:Seg len M, Seg m:]
+        for x1,x2 being Element of K st P[k,l,x1] & P[k,l,x2]
+         holds x1 = x2;
+     A7:for k,l st [k,l] in [:Seg len M, Seg m:]
+        ex x being Element of K st P[k,l,x]
+        proof
+         let k,l;
+         assume A8: [k,l] in [:Seg len M, Seg m:];
+           dom M = Seg len M by FINSEQ_1:def 3;
+         then A9: k in dom M & l in Seg m by A8,ZFMISC_1:106;
+         reconsider p=Del(Line(M,k),i) as FinSequence of
+                                              the carrier of K by Th9;
+         A10:len p = m by A4,A9;
+            dom p = Seg len p by FINSEQ_1:def 3;
+            then reconsider x=p.l as Element of (the carrier of K)
+             by A9,A10,FINSEQ_2:13;
+            take x;
+           thus thesis;
+        end;
+        consider N being Matrix of len M,m,K such that
+         A11:for k,l st [k,l] in Indices N holds P[k,l,N*(k,l)]
+                      from MatrixEx(A6,A7);
+          dom M = Seg len M by FINSEQ_1:def 3;
+        then A12: len N=len M & width N = m & Indices N = [:dom M, Seg m:]
+                                                         by A2,MATRIX_1:24;
+        A13:for k,l st k in dom M & l in Seg m holds N*
+(k,l)=Del(Line(M,k),i).l
+          proof
+            let k,l;
+            assume k in dom M& l in Seg m;
+            then [k,l] in Indices N by A12,ZFMISC_1:106;
+            hence thesis by A11;
+          end;
+        reconsider N as Matrix of K;
+        take N;
+          for k st k in dom M holds N.k=Del(Line(M,k),i)
+         proof
+          let k;
+          assume A14:k in dom M;
+          then k in Seg len M by FINSEQ_1:def 3;
+          then A15: N.k=Line(N,k) by Th10;
+          then reconsider s=N.k as FinSequence;
+          A16:len s= m by A12,A15,MATRIX_1:def 8;
+          A17:len (Del(Line(M,k),i))=m by A4,A14;
+            now let j;
+            assume A18:j in Seg m;
+            then Line(N,k).j=N*(k,j) by A12,MATRIX_1:def 8;
+            hence s.j=Del(Line(M,k),i).j by A13,A14,A15,A18;
+          end;
+         hence thesis by A16,A17,FINSEQ_2:10;
+        end;
+       hence len N=len M&
+        for k st k in dom M holds N.k=Del(Line(M,k),i) by A2,MATRIX_1:24;
+    end;
+      hence thesis;
+      end;
+    hence thesis;
+ end;
+uniqueness
+  proof
+   let M1,M2 be Matrix of K;
+   assume that
+    A19: len M1=len M and
+     A20:for k st k in dom M holds M1.k=Del(Line(M,k),i) and
+    A21: len M2=len M and
+      A22:for k st k in dom M holds M2.k=Del(Line(M,k),i);
+A23: now let k;
+    assume A24:k in dom M;
+    hence M1.k=Del(Line(M,k),i) by A20
+             .=M2.k by A22,A24;
+   end;
+    dom M = Seg len M by FINSEQ_1:def 3;
+  hence M1=M2 by A19,A21,A23,FINSEQ_2:10;
+  end;
+end;
+
+theorem
+Th11: for M1,M2 being Matrix of D st M1@=M2@ & len M1=len M2
+      holds M1 = M2
+  proof
+    let M1,M2 be Matrix of D;
+    assume A1: M1@=M2@ & len M1=len M2;
+      len (M1@) = width M1 &
+     (for i,j holds [i,j] in Indices M1@ iff [j,i] in Indices M1) &
+      for i,j st [j,i] in
+ Indices M1 holds M1@*(i,j)=M1*(j,i) by MATRIX_1:def 7;
+    then A2: width M1=width M2 by A1,MATRIX_1:def 7;
+A3:    Indices M1=[:dom M1,Seg width M1:] &
+    Indices M2=[:dom M2,Seg width M2:] by MATRIX_1:def 5;
+
+      (for i,j st [i,j] in Indices M1 holds M1*(i,j) = M2*(i,j))
+     proof let i,j;
+       assume A4: [i,j] in Indices M1;
+         dom M1 = Seg len M2 by A1,FINSEQ_1:def 3
+             .= dom M2 by FINSEQ_1:def 3;
+       then M2@*(j,i) = M2*(i,j) by A2,A3,A4,MATRIX_1:def 7;
+       hence M1*(i,j)=M2*(i,j) by A1,A4,MATRIX_1:def 7;
+     end;
+    hence M1=M2 by A1,A2,MATRIX_1:21;
+   end;
+
+theorem
+Th12:for M being Matrix of D st width M > 0
+        holds len (M@)=width M & width (M@)=len M
+  proof
+   let M be Matrix of D;
+   assume A1:width M>0;
+   thus len (M@)=width M by MATRIX_1:def 7;
+   per cases by NAT_1:18;
+     suppose len M=0;
+      hence width (M@)=len M by A1,MATRIX_1:def 4;
+     suppose A2: len M>0;
+       dom M = Seg len M by FINSEQ_1:def 3;
+
+     then A3: Seg width M<>{} & dom M<>{} by A1,A2,FINSEQ_1:5;
+       for i,j being set holds [i,j]in [:dom (M@),Seg width (M@):] iff
+                         [i,j] in [:Seg width M,dom M:]
+       proof let i,j be set;
+       thus [i,j]in [:dom (M@),Seg width (M@):] implies
+                [i,j] in [:Seg width M,dom M:]
+         proof
+          assume A4:[i,j]in [:dom (M@),Seg width (M@):];
+          then i in dom (M@)& j in Seg width (M@) by ZFMISC_1:106;
+          then reconsider i,j as Nat;
+             [i,j] in Indices (M@) by A4,MATRIX_1:def 5;
+          then A5:[j,i] in Indices M by MATRIX_1:def 7;
+          reconsider i,j as set;
+            [j,i] in [:dom M,Seg width M:] by A5,MATRIX_1:def 5;
+          hence thesis by ZFMISC_1:107;
+         end;
+         assume A6:[i,j] in [:Seg width M,dom M:];
+         then i in Seg width M & j in dom M by ZFMISC_1:106;
+         then reconsider i,j as Nat;
+           [j,i] in [:dom M,Seg width M:] by A6,ZFMISC_1:107;
+         then A7:[j,i] in Indices M by MATRIX_1:def 5;
+         reconsider i,j as set;
+            [i,j] in Indices (M@) by A7,MATRIX_1:def 7;
+         hence thesis by MATRIX_1:def 5;
+       end;
+      then [:Seg width M,dom M:]=[:dom (M@),Seg width (M@):]
+               by ZFMISC_1:108;
+    then Seg width M= dom (M@) & dom M=Seg width (M@)
+        by A3,ZFMISC_1:134;
+    hence len M=width (M@) by FINSEQ_1:def 3;
+  end;
+
+theorem
+   for M1,M2 being Matrix of D st width M1>0 & width M2>0 &
+     M1@=M2@ & width (M1@) =width (M2@)
+     holds M1=M2
+ proof
+   let M1,M2 be Matrix of D;
+   assume A1:width M1>0 & width M2>0;
+    assume A2: M1@=M2@ & width (M1@) =width (M2@);
+      width (M1@)=len M1 & width (M2@)=len M2 by A1,Th12;
+    hence M1=M2 by A2,Th11;
+ end;
+
+theorem
+Th14: for M1,M2 being Matrix of D st width M1>0 & width M2>0 holds
+     M1=M2 iff M1@=M2@ & width M1 = width M2
+    proof
+     let M1,M2 be Matrix of D;
+     assume A1:width M1>0 & width M2>0;
+     thus M1=M2 implies M1@=M2@ & width (M1) =width (M2);
+     assume A2: M1@=M2@ & width (M1) =width (M2);
+      now
+         now
+           len M1=width (M1@) by A1,Th12;
+         then A3:len M1=len M2 by A1,A2,Th12;
+A4:       Indices M1=[:dom M1,Seg width M1:] &
+         Indices M2=[:dom M2,Seg width M2:] by MATRIX_1:def 5;
+          (for i,j st [i,j] in Indices M1 holds M1*(i,j) = M2*(i,j))
+          proof let i,j;
+           assume A5: [i,j] in Indices M1;
+             dom M1 = Seg len M2 by A3,FINSEQ_1:def 3
+                 .= dom M2 by FINSEQ_1:def 3;
+           then M2@*(j,i)=M2*(i,j) by A2,A4,A5,MATRIX_1:def 7;
+           hence M1*(i,j)=M2*(i,j) by A2,A5,MATRIX_1:def 7;
+          end;
+        hence M1=M2 by A2,A3,MATRIX_1:21;
+       end;
+      hence M1=M2;
+      end;
+    hence M1=M2;
+    end;
+
+theorem
+Th15:for M being Matrix of D st len M>0 & width M>0 holds (M@)@=M
+    proof
+     let M be Matrix of D;
+     assume A1:len M>0 & width M>0;
+     set N=M@;
+A2:  len N = width M &
+   (for i,j holds [i,j] in Indices N iff [j,i] in Indices M) &
+   for i,j st [j,i] in Indices M holds N*(i,j) = M*(j,i) by MATRIX_1:def 7;
+   A3:width N= len M by A1,Th12;
+   A4:width N>0 by A1,Th12;
+A5:  len (N@) = width N &
+   (for i,j holds [i,j] in Indices N@ iff [j,i] in Indices N) &
+   for i,j st [j,i] in Indices N holds N@*(i,j) = N*(j,i) by MATRIX_1:def 7;
+   A6:width (N@)=width M by A2,A4,Th12;
+A7: [:dom (N@),Seg width (N@):]=Indices (N@) &
+     [:dom M ,Seg width M:]=Indices M by MATRIX_1:def 5;
+     dom M = Seg len M & dom (N@) = Seg len (N@) by FINSEQ_1:def 3;
+then A8: Indices (N@)=Indices M by A1,A2,A3,A5,A7,Th12;
+     for i,j st [i,j] in Indices (N@) holds (N@)*(i,j) = M*(i,j)
+    proof
+     let i,j;
+     assume A9:[i,j] in Indices (N@);
+     then [j,i] in Indices N by MATRIX_1:def 7;
+     then (N@)*(i,j)=N*(j,i) by MATRIX_1:def 7;
+     hence (N@)*(i,j)=M*(i,j) by A8,A9,MATRIX_1:def 7;
+    end;
+  hence thesis by A3,A5,A6,MATRIX_1:21;
+     thus thesis;
+    end;
+
+theorem
+Th16:for M being Matrix of D holds
+       for i st i in dom M holds Line(M,i)=Col(M@,i)
+  proof
+       let M be Matrix of D;let i;
+       assume A1:i in dom M;
+   A2:len Line(M,i) = width M
+   & for j st j in Seg width M holds Line(M,i).j = M*(i,j) by MATRIX_1:def 8;
+   A3:len Col(M@,i) = len (M@) &
+   for j st j in dom (M@) holds Col(M@,i).j = M@*(j,i) by MATRIX_1:def 9;
+   A4:len (M@)=width M by MATRIX_1:def 7;
+   A5:len Col(M@,i)=width M by A3,MATRIX_1:def 7;
+     now let j;
+     assume A6:j in Seg width M;
+     then A7:Line(M,i).j=M*(i,j) by MATRIX_1:def 8;
+       Indices M=[:dom M,Seg width M:] by MATRIX_1:def 5;
+     then A8: [i,j] in Indices M by A1,A6,ZFMISC_1:106;
+A9:   dom (M@) = Seg len (M@) by FINSEQ_1:def 3;
+
+     thus Line(M,i).j=M@*(j,i) by A7,A8,MATRIX_1:def 7
+                    .=Col(M@,i).j by A4,A6,A9,MATRIX_1:def 9;
+   end;
+    hence thesis by A2,A5,FINSEQ_2:10;
+       end;
+
+theorem
+Th17:for M being Matrix of D holds
+       for j st j in Seg(width M) holds Line(M@,j)=Col(M,j)
+       proof
+        let M be Matrix of D;let j;
+        assume A1:j in Seg width M;
+        then j in Seg len (M@) by MATRIX_1:def 7;
+        then A2: j in dom (M@) by FINSEQ_1:def 3;
+           now per cases by NAT_1:18;
+          suppose len M=0;
+           hence Line(M@,j)=Col(M,j) by A1,FINSEQ_1:4,MATRIX_1:def 4;
+          suppose A3:len M>0;
+
+             now per cases by NAT_1:18;
+            suppose width M=0;
+             hence Line(M@,j)=Col(M,j) by A1,FINSEQ_1:4;
+            suppose width M>0;
+             then (M@)@=M by A3,Th15;
+             hence Line(M@,j)=Col(M,j) by A2,Th16;
+         end;
+        hence Line(M@,j)=Col(M,j);
+        end;
+        hence thesis;
+       end;
+
+theorem
+Th18:for M being Matrix of D holds for i st i in dom M holds M.i=Line(M,i)
+       proof let M be Matrix of D;let i;
+         assume A1:i in dom M;
+         A2:for i,j holds [i,j] in Indices M iff i in dom M & j in Seg width M
+          proof let i,j;
+             Indices M=[:dom M,Seg (width M):] by MATRIX_1:def 5;
+           hence thesis by ZFMISC_1:106;
+          end;
+        A3:M.i in rng M by A1,FUNCT_1:def 5;
+          rng M c= D* by FINSEQ_1:def 4;
+        then reconsider p=M.i as FinSequence of D by A3,FINSEQ_1:def 11;
+          rng M <> {} by A1,FUNCT_1:12;
+        then M<> {} by FINSEQ_1:27;
+        then len M <> 0 & len M >= 0 by FINSEQ_1:25,NAT_1:18;
+        then M is Matrix of len M,width M,D by MATRIX_1:20;
+         then A4:len p = width M by A3,MATRIX_1:def 3;
+        A5: for j st j in Seg (width M) holds M*(i,j) =p.j
+         proof let j;
+          assume j in Seg(width M);
+          then [i,j] in Indices M by A1,A2;
+          then ex q being FinSequence of D st q=M.i & q.j=M*(i,j)
+             by MATRIX_1:def 6;
+          hence thesis;
+         end;
+        A6:len (Line(M,i))= width M &
+         for j st j in Seg width M holds (Line(M,i)).j=M*(i,j)
+          by MATRIX_1:def 8;
+           now let j;
+           assume A7:j in Seg width M;
+           hence (Line(M,i)).j=M*(i,j) by MATRIX_1:def 8
+                             .=p.j by A5,A7;
+         end;
+        hence thesis by A4,A6,FINSEQ_2:10;
+       end;
+
+definition let i; let K;let M be Matrix of K;
+assume A1:i in dom M & width M>0;
+func DelLine(M,i) -> Matrix of K means
+     it={} if len M=1 otherwise
+     width it=width M &
+     for k st k in Seg (width M) holds Col(it,k)=Del(Col(M,k),i);
+existence
+ proof
+  thus len M=1 implies ex N being Matrix of K st N={}
+    proof
+     assume len M=1;
+     reconsider N={} as Matrix of K by MATRIX_1:13;
+     take N;
+     thus thesis;
+    end;
+  thus not len M=1 implies ex N being Matrix of K st
+     width N=width M & for k st k in Seg (width M) holds
+        Col(N,k)=Del(Col(M,k),i)
+   proof
+     assume A2:not len M=1;
+     defpred P[Nat,Nat,Element of K] means
+         $3=Del(Col(M,$2),i).$1;
+      now per cases by NAT_1:18;
+     suppose len M=0;
+     hence ex N be Matrix of K st width N=width M &
+       for k st k in Seg width M holds Col(N,k)=Del(Col(M,k),i)
+         by A1,FINSEQ_1:4,def 3;
+     suppose A3:len M>0;
+        now
+        consider m such that A4:len M=m+1 by A3,NAT_1:22;
+        A5:for k st k in Seg (width M) holds len (Del(Col(M,k),i))=m
+          proof let k;
+           assume k in Seg (width M);
+           A6:len (Col(M,k))= len M by MATRIX_1:def 9;
+             dom (Col(M,k)) = Seg len (Col(M,k)) by FINSEQ_1:def 3;
+           then i in dom (Col(M,k)) by A1,A6,FINSEQ_1:def 3;
+           then ex l st len (Col(M,k))=l+1 & len Del(Col(M,k),i)=l by Th8;
+           hence thesis by A4,A6,XCMPLX_1:2;
+          end;
+        A7:for k,l st [k,l] in [:Seg m, Seg width M:]
+         for x1,x2 being Element of K st P[k,l,x1] & P[k,l,x2]
+          holds x1 = x2;
+        A8:for k,l st [k,l] in [:Seg m, Seg width M:]
+          ex x being Element of K st P[k,l,x]
+           proof
+            let k,l;
+            assume [k,l] in [:Seg m, Seg width M:];
+then A9:         k in Seg m & l in Seg width M by ZFMISC_1:106;
+            reconsider
+             p=Del(Col(M,l),i) as FinSequence of the carrier of K by Th9;
+A10:         len p= m by A5,A9;
+                dom p = Seg len p by FINSEQ_1:def 3;
+                then reconsider x=p.k as Element of (the carrier of K)
+                 by A9,A10,FINSEQ_2:13;
+                take x;
+                thus thesis;
+          end;
+        consider N being Matrix of m,width M,K such that
+        A11:for k,l st [k,l] in
+ Indices N holds P[k,l,N*(k,l)] from MatrixEx(A7,A8);
+        A12: len N=m & Indices N = [:Seg m, Seg width N:] by MATRIX_1:26;
+        A13:for k,l st k in Seg m & l in Seg width N holds
+         N*(k,l)=Del(Col(M,l),i).k
+           proof
+             let k,l;
+             assume k in Seg m & l in Seg width N;
+             then [k,l] in Indices N by A12,ZFMISC_1:106;
+             hence thesis by A11;
+           end;
+          now per cases by NAT_1:18;
+           suppose m=0;
+             hence ex N being Matrix of K st width N=width M &
+             for k st k in
+ Seg (width M) holds Col(N,k)=Del(Col(M,k),i) by A2,A4;
+           suppose A14: m>0;
+             then A15:width N=width M by MATRIX_1:24;
+             A16: for k st k in Seg (width M) holds Col(N,k)=Del(Col(M,k),i)
+              proof
+               let k;
+               assume A17:k in Seg (width M);
+               reconsider s=Col(N,k) as FinSequence;
+               A18:len s= m by A12,MATRIX_1:def 9;
+               A19:len (Del(Col(M,k),i))=m by A5,A17;
+                 now let j;
+                 assume A20:j in Seg m;
+                   dom N = Seg len N by FINSEQ_1:def 3;
+                 then Col(N,k).j=N*(j,k) by A12,A20,MATRIX_1:def 9;
+                 hence s.j=Del(Col(M,k),i).j by A13,A15,A17,A20;
+               end;
+              hence thesis by A18,A19,FINSEQ_2:10;
+             end;
+             reconsider N as Matrix of K;
+            take N;
+           thus width N=width M &
+            for k st k in
+ Seg width M holds Col(N,k)=Del(Col(M,k),i) by A14,A16,MATRIX_1:24;
+        end;
+      hence ex N being Matrix of K st width N=width M &
+         for k st k in Seg width M holds Col(N,k)=Del(Col(M,k),i);
+      end;
+     hence ex N being Matrix of K st width N=width M &
+        for k st k in Seg width M holds Col(N,k)=Del(Col(M,k),i);
+   end;
+hence thesis;
+ end;
+end;
+uniqueness
+  proof
+   let M1,M2 be Matrix of K;
+  thus len M=1 & M1={} & M2={} implies M1=M2;
+  thus not len M=1 & (width M1=width M &
+   for k st k in Seg (width M) holds Col(M1,k)=Del(Col(M,k),i)) &
+ (width M2=width M &
+ for k st k in Seg (width M) holds Col(M2,k)=Del(Col(M,k),i))
+   implies M1=M2
+   proof
+   assume that
+     not len M=1 and
+    A21:width M1=width M and
+     A22:for k st k in Seg (width M) holds Col(M1,k)=Del(Col(M,k),i) and
+    A23: width M2=width M and
+      A24:for k st k in Seg (width M) holds Col(M2,k)=Del(Col(M,k),i);
+     now
+        now per cases by NAT_1:18;
+       suppose width M=0;
+        hence M1=M2 by A1;
+       suppose A25: width M>0;
+        A26:len (M1@)= width M1 by MATRIX_1:def 7;
+        A27:len (M2@)= width M2 by MATRIX_1:def 7;
+        A28:len (M2@) =width M by A23,MATRIX_1:def 7;
+         now let j;
+        assume A29:j in Seg(width M);
+A30:     dom (M2@) = Seg len (M2@) by FINSEQ_1:def 3;
+          dom (M1@) = Seg len (M1@) by FINSEQ_1:def 3;
+        hence (M1@).j=Line(M1@,j) by A21,A26,A29,Th18
+                    .=Col(M1,j) by A21,A29,Th17
+                    .=Del(Col(M,j),i) by A22,A29
+                    .=Col(M2,j) by A24,A29
+                    .=Line(M2@,j) by A23,A29,Th17
+                    .=(M2@).j by A23,A27,A29,A30,Th18;
+
+       end;
+      then M1@=M2@ by A21,A26,A28,FINSEQ_2:10;
+      hence M1=M2 by A21,A23,A25,Th14;
+     end;
+    hence M1=M2;
+   end;
+  hence M1=M2;
+  end;
+end;
+consistency;
+end;
+
+definition let i,j; let n;let K;let M be Matrix of n,K;
+func Deleting(M,i,j) -> Matrix of K equals
+    {} if n=1 otherwise
+     DelCol((DelLine(M,i)),j);
+coherence by MATRIX_1:13;
+consistency;
+end;
+
+begin :: Sets of Permutations
+
+definition let IT be set;
+  attr IT is permutational means
+:Def9: ex n st for x st x in IT holds x is Permutation of Seg n;
+end;
+
+definition
+ cluster permutational non empty set;
+  existence
+   proof
+   consider n;consider p being Permutation of Seg n;
+   take P={p};
+   thus P is permutational
+    proof
+     take n;let x;
+     assume x in P;
+     hence thesis by TARSKI:def 1;
+    end;
+  thus thesis;
+   end;
+end;
+
+definition let P be permutational non empty set;
+func len P -> Nat means
+:Def10: ex s st s in P & it=len s;
+  existence
+   proof
+    consider x being Element of P;
+    consider n such that A1:for y st y in P holds y is Permutation of Seg n
+                                                                    by Def9;
+    reconsider q = x as Permutation of Seg n by A1;
+    A2:dom q=Seg n by FUNCT_2:67;
+    then reconsider q as FinSequence by FINSEQ_1:def 2;
+    take n,q;
+    thus thesis by A2,FINSEQ_1:def 3;
+   end;
+  uniqueness
+    proof
+     let n1,n2 be Nat;
+     given s1 be FinSequence such that A3:s1 in P & n1=len s1;
+     given s2 such that A4:s2 in P & n2=len s2;
+     consider n such that A5:for y st y in P holds y is Permutation of Seg n
+                                                                    by Def9;
+     A6:s1 is Permutation of Seg n & s2 is Permutation of Seg n by A3,A4,A5;
+       s1 is Function of Seg n,Seg n by A3,A5;
+     then A7:dom s1=Seg n by FUNCT_2:67;
+       dom s2=Seg n by A6,FUNCT_2:67;
+     then len s1=n & len s2=n by A7,FINSEQ_1:def 3;
+     hence thesis by A3,A4;
+    end;
+ end;
+
+definition let P be permutational non empty set;
+redefine mode Element of P -> Permutation of Seg len P;
+ coherence
+  proof
+    let x be Element of P;
+    consider n such that A1:for y st y in P holds y is Permutation of Seg n
+                                                                    by Def9;
+    reconsider q=x as Permutation of Seg n by A1;
+    A2:dom q=Seg n by FUNCT_2:67;
+    then reconsider q as FinSequence by FINSEQ_1:def 2;
+   len q=n by A2,FINSEQ_1:def 3;
+    then Seg (len P) = Seg n by Def10;
+    hence thesis by A1;
+  end;
+ end;
+
+theorem
+   ex P being permutational non empty set st len P =n
+     proof
+      consider p being Permutation of Seg n;
+      set P={p};
+        P is permutational non empty set
+       proof
+          now take n;let x;
+         assume x in P;
+         hence x is Permutation of Seg n by TARSKI:def 1;
+        end;
+        hence thesis by Def9;
+       end;
+      then reconsider P as permutational non empty set;
+      A1:len P= n
+       proof
+        consider x being Element of P;
+       reconsider y=x as Function of Seg n,Seg n by TARSKI:def 1;
+       A2:dom y=Seg n by FUNCT_2:67;
+       then reconsider s=y as FinSequence by FINSEQ_1:def 2;
+         len P= len s by Def10;
+       hence thesis by A2,FINSEQ_1:def 3;
+      end;
+     take P;
+     thus thesis by A1;
+    end;
+
+definition let n;
+func Permutations(n) -> set means
+:Def11:x in it iff x is Permutation of Seg n;
+existence
+ proof
+ defpred P[set] means $1 is Permutation of Seg n;
+ consider P being set such that A1:for x holds x in P iff x in
+ Funcs(Seg n,Seg n) & P[x] from Separation;
+  take P;
+  let x;
+  thus x in P implies x is Permutation of Seg n by A1;
+    assume A2:x is Permutation of Seg n;
+    then x in Funcs(Seg n,Seg n) by FUNCT_2:12;
+    hence thesis by A1,A2;
+end;
+uniqueness
+ proof let P1,P2 be set;
+  assume that A3: for x holds x in P1 iff x is Permutation of Seg n and
+             A4:for x holds x in P2 iff x is Permutation of Seg n;
+ A5:now let x;
+   assume x in P1;
+   then x is Permutation of Seg n by A3;
+   hence x in P2 by A4;
+  end;
+    now let x;
+   assume x in P2;
+   then x is Permutation of Seg n by A4;
+   hence x in P1 by A3;
+  end;
+ hence thesis by A5,TARSKI:2;
+ end;
+end;
+
+definition let n;
+cluster Permutations(n) -> permutational non empty;
+coherence
+ proof
+ defpred P[set] means $1 is Permutation of Seg n;
+ consider P being set such that A1:for x holds x in P iff x in
+ Funcs(Seg n,Seg n) & P[x] from Separation;
+  A2:id Seg n= idseq n & idseq n is Permutation of Seg n by FINSEQ_2:65,def 1;
+    idseq n is Function of Seg n,Seg n by FINSEQ_2:65;
+  then idseq n in Funcs(Seg n,Seg n) by FUNCT_2:12;
+  then reconsider P as non empty set by A1,A2;
+    P is permutational non empty set
+   proof now take n;let x;
+    assume x in P;
+    hence x is Permutation of Seg n by A1;
+    end;
+    hence thesis by Def9;
+   end;
+  then reconsider P as permutational non empty set;
+    x in P iff x is Permutation of Seg n
+   proof
+    thus x in P implies x is Permutation of Seg n by A1;
+    assume A3:x is Permutation of Seg n;
+    then x in Funcs(Seg n,Seg n) by FUNCT_2:12;
+    hence thesis by A1,A3;
+ end;
+ hence thesis by Def11;
+end;
+end;
+
+theorem
+  len Permutations(n)=n
+ proof
+  consider x being Element of Permutations(n);
+  reconsider q=x as Permutation of Seg n by Def11;
+  A1:dom q=Seg n by FUNCT_2:67;
+  then reconsider q as FinSequence by FINSEQ_1:def 2;
+    len q=n by A1,FINSEQ_1:def 3;
+  hence thesis by Def10;
+ end;
+
+theorem
+  Permutations(1)={idseq 1}
+   proof
+      now let p be set;
+     assume p in Permutations(1);
+     then reconsider q=p as Permutation of Seg 1 by Def11;
+     A1:q is Function of Seg 1,Seg 1 & rng q = Seg 1 by FUNCT_2:def 3;
+     A2:dom q=Seg 1 by FUNCT_2:67;
+       1 in {1} by TARSKI:def 1;
+     then q.1 in Seg 1 by A1,FINSEQ_1:4,FUNCT_2:6;
+     then A3:q.1=1 by FINSEQ_1:4,TARSKI:def 1;
+     reconsider q as FinSequence by A2,FINSEQ_1:def 2;
+       len q= 1 by A2,FINSEQ_1:def 3;
+     then q = idseq 1 by A3,FINSEQ_1:57,FINSEQ_2:59;
+     hence p in {idseq 1} by TARSKI:def 1;
+    end;
+    then A4: Permutations(1) c={idseq 1} by TARSKI:def 3;
+      now let x;
+     assume x in {idseq 1};
+     then A5:x= idseq 1 by TARSKI:def 1;
+       idseq 1 is Permutation of Seg 1 by FINSEQ_2:65;
+     hence x in Permutations(1) by A5,Def11;
+    end;
+    then {idseq 1} c=Permutations(1) by TARSKI:def 3;
+    hence thesis by A4,XBOOLE_0:def 10;
+   end;
+
+definition let n;let p be Element of Permutations(n);
+func len p -> Nat means
+:Def12: ex s being FinSequence st s=p & it=len s;
+  existence
+ proof
+  reconsider p as Permutation of Seg n by Def11;
+  A1:dom p=Seg n by FUNCT_2:67;
+  then reconsider q=p as FinSequence by FINSEQ_1:def 2;
+  take n,q;
+  thus thesis by A1,FINSEQ_1:def 3;
+  end;
+  uniqueness;
+end;
+
+theorem
+  for p being Element of Permutations(n) holds len p= n
+ proof
+  let p be Element of Permutations(n);
+  reconsider q=p as Permutation of Seg n by Def11;
+  A1:dom q=Seg n by FUNCT_2:67;
+  then reconsider q as FinSequence by FINSEQ_1:def 2;
+    len q=n by A1,FINSEQ_1:def 3;
+  hence thesis by Def12;
+ end;
+
+begin :: Group of Permutations
+
+reserve p,q for Element of Permutations(n);
+
+definition let n;
+ func Group_of_Perm(n) -> strict HGrStr means
+:Def13: the carrier of it = Permutations(n) &
+  for q,p be Element of Permutations(n) holds (the mult of it).(q,p)=p*q;
+ existence
+ proof
+  defpred P[Element of Permutations(n),Element of Permutations(n),
+            Element of Permutations(n)] means $3 = $2*$1;
+  A1: for q,p being Element of Permutations(n)
+       ex z being Element of Permutations(n) st P[q,p,z]
+      proof
+       let q,p be Element of Permutations(n);
+       reconsider p,q as Permutation of Seg n by Def11;
+       reconsider z=p*q as Element of Permutations(n) by Def11;
+       take z;
+       thus thesis;
+      end;
+    consider o being BinOp of Permutations(n) such that
+    A2:for q,p being Element of Permutations(n)
+      holds P[q,p,o.(q,p)] from BinOpEx(A1);
+   take HGrStr(# Permutations(n),o#);
+   thus thesis by A2;
+end;
+ uniqueness
+ proof
+  let G1,G2 be strict HGrStr;
+  assume that A3:the carrier of G1 = Permutations(n) and
+ A4:for q,p be Element of Permutations(n) holds (the mult of G1).(q,p)=p*q
+    and A5:the carrier of G2 = Permutations(n) and
+    A6:for q,p be Element of Permutations(n) holds
+      (the mult of G2).(q,p)=p*q;
+    now let q,p be Element of G1;
+   reconsider q' = q, p' = p as Element of Permutations(n) by A3;
+   thus (the mult of G1).(q,p)=p'*q' by A4
+                             .=(the mult of G2).(q,p) by A6;
+  end;
+  hence thesis by A3,A5,BINOP_1:2;
+ end;
+end;
+
+definition let n;
+ cluster Group_of_Perm(n) -> non empty;
+ coherence
+  proof
+      the carrier of Group_of_Perm(n) = Permutations(n) by Def13;
+   hence the carrier of Group_of_Perm(n) is non empty;
+  end;
+end;
+
+theorem
+Th23: idseq n is Element of Group_of_Perm(n)
+      proof
+A1:       idseq n= id Seg n by FINSEQ_2:def 1;
+         the carrier of Group_of_Perm(n) = Permutations(n) by Def13;
+       hence thesis by A1,Def11;
+      end;
+
+theorem
+Th24:  p *(idseq n)=p & (idseq n)*p=p
+       proof
+         A1:id Seg n=idseq n by FINSEQ_2:def 1;
+           p is Permutation of Seg n by Def11;
+        then A2: rng p= Seg n by FUNCT_2:def 3;
+         A3:p is Function of Seg n,Seg n by Def11;
+           Seg n = {} implies Seg n= {};
+         then dom p= Seg n by A3,FUNCT_2:def 1;
+          hence thesis by A1,A2,FUNCT_1:42;
+        end;
+
+theorem
+Th25: p *p"=idseq n & p"*p=idseq n
+     proof
+      A1:p is Permutation of Seg n by Def11;
+        id Seg n=idseq n by FINSEQ_2:def 1;
+      hence thesis by A1,FUNCT_2:88;
+     end;
+
+theorem
+Th26:p" is Element of Group_of_Perm(n)
+     proof
+     reconsider p as Permutation of Seg n by Def11;
+       p" is Element of Permutations(n) by Def11;
+     hence thesis by Def13;
+     end;
+
+ definition let n;
+  mode permutation of n is Element of Permutations(n);
+  cluster Group_of_Perm(n) -> associative Group-like;
+ coherence
+ proof
+    A1:for p,q,r being Element of Group_of_Perm(n)
+       holds (p * q) * r = p * (q * r)
+       proof
+        let p,q,r be Element of Group_of_Perm(n);
+        reconsider p'=p,q'=q,r'=r as Element of Permutations(n) by Def13;
+         A2:q'*p' is Permutation of Seg n & r'*q' is Permutation of Seg n
+           proof
+             reconsider p',q',r' as Permutation of Seg n by Def11;
+             A3: q'*p' is Permutation of Seg n;
+                r'*q' is Permutation of Seg n;
+            hence thesis by A3;
+           end;
+        then A4:q' * p' is Element of Permutations(n) by Def11;
+        A5:r' * q' is Element of Permutations(n) by A2,Def11;
+          (p * q) * r = (the mult of Group_of_Perm(n)).((p*q),r)
+                                                     by VECTSP_1:def 10
+                     .=(the mult of Group_of_Perm(n)).
+                    (((the mult of Group_of_Perm(n)).(p',q')),r') by VECTSP_1:
+def 10
+                    .=(the mult of Group_of_Perm(n)).((q'*p'),r') by Def13
+                    .=r'*(q' *p' ) by A4,Def13
+                    .=(r' *q') * p' by RELAT_1:55
+                    .=(the mult of Group_of_Perm(n)).(p',(r'*q'))
+                                                   by A5,Def13
+                    .=(the mult of Group_of_Perm(n)).
+                       (p,(the mult of Group_of_Perm(n)).(q,r)) by Def13
+                    .=(the mult of Group_of_Perm(n)).(p,(q*r))
+                                                 by VECTSP_1:def 10
+                    .=p *(q* r) by VECTSP_1:def 10;
+        hence thesis;
+       end;
+       ex e being Element of Group_of_Perm(n) st
+        for p being Element of Group_of_Perm(n) holds
+         p * e = p & e * p = p &
+           ex g being Element of Group_of_Perm(n) st
+        p * g = e & g * p = e
+         proof
+            idseq n = id Seg n by FINSEQ_2:def 1;
+          then reconsider e'=idseq n as Element of Permutations(n) by Def11;
+          reconsider e=idseq n as Element of Group_of_Perm(n)
+          by Th23;
+       A6:  for p being Element of Group_of_Perm(n) holds
+                p * e =p & e* p=p
+             proof
+              let p be Element of Group_of_Perm(n);
+              reconsider p'=p as Element of Permutations(n) by Def13;
+             A7:p * e =(the mult of Group_of_Perm(n)).(p',e') by VECTSP_1:def
+10
+                    .=e' * p' by Def13
+                    .=p by Th24;
+                 e * p =(the mult of Group_of_Perm(n)).(e',p') by VECTSP_1:def
+10
+                    .=p' * e' by Def13
+                    .=p by Th24;
+            hence thesis by A7;
+          end;
+         take e;
+        for p being Element of Group_of_Perm(n)
+                holds ex g being Element of Group_of_Perm(n) st
+                       p * g= e & g * p=e
+              proof
+               let p be Element of Group_of_Perm(n);
+               reconsider q=p as Element of Permutations(n) by Def13;
+               reconsider r=q as Permutation of Seg n by Def11;
+               reconsider f=r" as Element of Permutations(n) by Def11;
+               reconsider g=f as Element of Group_of_Perm(n)
+               by Th26;
+              A8: p * g=(the mult of Group_of_Perm(n)).(q,f) by VECTSP_1:def 10
+                     .=f*q by Def13
+                     .=e by Th25;
+              A9: g * p=(the mult of Group_of_Perm(n)).(f,q) by VECTSP_1:def 10
+                     .=q*f by Def13
+                     .=e by Th25;
+               take g;
+              thus thesis by A8,A9;
+             end;
+         hence thesis by A6;
+         end;
+  hence thesis by A1,GROUP_1:5;
+ end;
+ end;
+
+canceled;
+
+theorem
+Th28: idseq n= 1.Group_of_Perm(n)
+  proof
+     idseq n = id Seg n by FINSEQ_2:def 1;
+   then reconsider e'=idseq n as Element of Permutations(n) by Def11;
+   reconsider e=idseq n as Element of Group_of_Perm(n) by Th23;
+      for p being Element of Group_of_Perm(n) holds
+                p * e =p & e* p=p
+       proof
+        let p be Element of Group_of_Perm(n);
+        reconsider p'=p as Element of Permutations(n) by Def13;
+        A1:p * e =(the mult of Group_of_Perm(n)).(p',e') by VECTSP_1:def 10
+               .=e' * p' by Def13
+               .=p by Th24;
+            e * p =(the mult of Group_of_Perm(n)).(e',p') by VECTSP_1:def 10
+               .=p' * e' by Def13
+               .=p by Th24;
+        hence thesis by A1;
+       end;
+   hence thesis by GROUP_1:10;
+  end;
+
+definition let n;let p be Permutation of Seg n;
+ attr p is being_transposition means
+     ex i,j st i in dom p & j in dom p & i<>j & p.i=j & p.j=i &
+   for k st k <>i & k<>j & k in dom p holds p.k=k;
+  synonym p is_transposition;
+end;
+
+definition let n;
+  let IT be Permutation of Seg n;
+  attr IT is even means
+:Def15:ex l be FinSequence of the carrier of Group_of_Perm(n)
+   st (len l)mod 2=0 & IT=Product l &
+  for i st i in dom l ex q st l.i=q & q is_transposition;
+ antonym IT is odd;
+end;
+
+theorem
+  id Seg n is even
+ proof
+  set l=<*>(the carrier of Group_of_Perm(n));
+    0 mod 2= 0
+   proof
+       0=2 * 0 + 0;
+     hence thesis by NAT_1:def 2;
+    end;
+  then A1:(len l) mod 2=0 by FINSEQ_1:32;
+    Product <*> the carrier of Group_of_Perm(n)=1.Group_of_Perm(n) by GROUP_4:
+11
+;
+  then idseq n=Product l by Th28;
+  then A2:id Seg n=Product l by FINSEQ_2:def 1;
+     for i st i in dom l ex q st l.i=q & q is_transposition by FINSEQ_1:26;
+  hence thesis by A1,A2,Def15;
+   end;
+
+definition
+ let K,n;let x be Element of K;
+ let p be Element of Permutations(n);
+func -(x,p)-> Element of K equals
+     x if p is even otherwise -x;
+correctness;
+end;
+
+definition let X be set;
+assume A1:X is finite;
+func FinOmega(X) -> Element of Fin X equals
+   X;
+coherence by A1,FINSUB_1:def 5;
+end;
+
+theorem
+   Permutations(n) is finite
+     proof
+    A1: Permutations(n) c= Funcs(Seg n,Seg n)
+       proof
+          now let x;
+         assume x in Permutations(n);
+         then x is Function of Seg n,Seg n by Def11;
+         hence x in Funcs(Seg n,Seg n) by FUNCT_2:12;
+        end;
+        hence thesis by TARSKI:def 3;
+       end;
+        Funcs(Seg n,Seg n) is finite by FRAENKEL:16;
+      hence thesis by A1,FINSET_1:13;
+     end;

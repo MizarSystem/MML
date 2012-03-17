@@ -1,0 +1,391 @@
+:: The canonical formulae
+::  by Andrzej Trybulec
+::
+:: Received July 4, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary INT_1, MATRIX_2, ARYTM_1, REALSET1, FUNCT_1, KNASTER, RELAT_1,
+      PRALG_1, FUNCT_2, FUNCT_6, BOOLE, FUNCOP_1, HILBERT1, FRAENKEL, FUNCT_3,
+      SUBSET_1, CARD_3, PARTFUN1, FINSEQ_4, FUNCT_5, ZF_LANG, ZF_REFLE, PBOOLE,
+      QC_LANG1, HILBERT2, FUNCT_4, CAT_1, HILBERT3, SGRAPH1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      NAT_1, INT_1, RELAT_1, FUNCT_1, REALSET1, CARD_3, ABIAN, PARTFUN1,
+      FUNCT_2, FUNCT_3, FRAENKEL, CQC_LANG, FUNCT_4, FUNCT_5, FUNCT_6,
+      EXTENS_1, PRALG_1, PRALG_2, PBOOLE, MSUALG_1, PRE_CIRC, MSUALG_3,
+      KNASTER, HILBERT1, HILBERT2;
+ constructors MSUALG_3, CQC_LANG, HILBERT2, KNASTER, PRALG_2, EXTENS_1,
+      PRE_CIRC, DOMAIN_1, CAT_2, INT_1, ABIAN, XCMPLX_0;
+ clusters PRALG_1, RELSET_1, PBOOLE, FUNCT_4, FUNCT_1, HILBERT1, CQC_LANG,
+      FRAENKEL, TEX_2, RELAT_1, SUBSET_1, INT_1, ABIAN, FUNCT_2, MEMBERED,
+      PARTFUN1, NUMBERS, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET;
+
+
+begin :: Preliminaries
+
+theorem :: HILBERT3:1
+   for i being Integer holds
+  i is even iff i-1 is odd;
+
+theorem :: HILBERT3:2
+ for i being Integer holds
+  i is odd iff i-1 is even;
+
+theorem :: HILBERT3:3
+ for X being trivial set, x being set st x in X
+ for f being Function of X,X holds x is_a_fixpoint_of f;
+
+definition let A,B,C be set;
+ cluster -> Function-yielding Function of A, Funcs(B,C);
+end;
+
+theorem :: HILBERT3:4
+ for f being Function-yielding Function holds SubFuncs rng f = rng f;
+
+theorem :: HILBERT3:5
+ for A,B,x being set, f being Function st x in A & f in Funcs(A,B)
+  holds f.x in B;
+
+theorem :: HILBERT3:6
+ for A,B,C being set st C = {} implies B = {} or A = {}
+ for f being Function of A, Funcs(B,C)
+  holds doms f = A --> B;
+
+definition
+ cluster {} -> Function-yielding;
+end;
+
+ reserve n for Nat,
+         p,q,r,s for Element of HP-WFF;
+
+theorem :: HILBERT3:7
+ for x being set holds ({}).x = {};
+
+definition let A be set, B be functional set;
+ cluster -> Function-yielding Function of A,B;
+end;
+
+
+
+theorem :: HILBERT3:8
+ for X being set, A being Subset of X
+  holds ((0,1) --> (1,0))*chi(A,X) = chi(A`,X);
+
+theorem :: HILBERT3:9
+ for X being set, A being Subset of X
+  holds ((0,1) --> (1,0))*chi(A`,X) = chi(A,X);
+
+theorem :: HILBERT3:10
+ for a,b,x,y,x',y' being set
+  st a <> b & (a,b) --> (x,y) = (a,b) --> (x',y')
+  holds x = x' & y = y';
+
+theorem :: HILBERT3:11
+ for a,b,x,y,X,Y being set st a<>b & x in X & y in Y
+  holds (a,b) --> (x,y) in product((a,b) --> (X,Y));
+
+theorem :: HILBERT3:12
+ for D being non empty set
+ for f being Function of 2, D
+  ex d1,d2 being Element of D st f = (0,1) --> (d1,d2);
+
+theorem :: HILBERT3:13
+ for a,b,c,d being set st a <> b holds
+  ((a,b) --> (c,d))*((a,b) --> (b,a)) = (a,b) --> (d,c);
+
+theorem :: HILBERT3:14
+ for a,b,c,d being set, f being Function
+    st a <> b & c in dom f & d in dom f
+  holds f*((a,b) --> (c,d)) = (a,b) --> (f.c,f.d);
+
+begin :: the Cartesian product of functions and the Frege function
+
+definition let f,g be one-to-one Function;
+ cluster [:f,g:] -> one-to-one;
+end;
+
+theorem :: HILBERT3:15
+ for A,B being non empty set, C,D being set,
+     f being Function of C,A, g being Function of D,B
+ holds pr1(A,B)*[:f,g:] = f*pr1(C,D);
+
+theorem :: HILBERT3:16
+ for A,B being non empty set, C,D being set,
+     f being Function of C,A, g being Function of D,B
+ holds pr2(A,B)*[:f,g:] = g*pr2(C,D);
+
+theorem :: HILBERT3:17
+  for g being Function holds ({})..g = {};
+
+theorem :: HILBERT3:18
+ for f being Function-yielding Function, g,h being Function holds
+ (f..g)*h = (f*h)..(g*h);
+
+theorem :: HILBERT3:19
+   for C being set, A being non empty set
+ for f being Function of A, Funcs({} qua set,C), g being Function of A,{}
+  holds rng(f..g) = {{}};
+
+theorem :: HILBERT3:20
+ for A,B,C being set st B = {} implies A = {}
+ for f being Function of A, Funcs(B,C), g being Function of A,B
+  holds rng(f..g) c= C;
+
+
+theorem :: HILBERT3:21
+ for A,B,C being set st C = {} implies B = {} or A = {}
+ for f being Function of A, Funcs(B,C)
+  holds dom Frege f = Funcs(A,B);
+
+canceled;
+
+theorem :: HILBERT3:23
+ for A,B,C being set st C = {} implies B = {} or A = {}
+ for f being Function of A, Funcs(B,C)
+  holds rng Frege f c= Funcs(A,C);
+
+theorem :: HILBERT3:24
+ for A,B,C being set st C = {} implies B = {} or A = {}
+ for f being Function of A, Funcs(B,C)
+  holds Frege f is Function of Funcs(A,B), Funcs(A,C);
+
+begin :: about permutations
+
+theorem :: HILBERT3:25
+ for A,B being set, P being Permutation of A, Q being Permutation of B
+  holds [:P,Q:] is bijective;
+
+definition let A,B be non empty set;
+ let P be Permutation of A, Q be Function of B,B;
+ func P => Q -> Function of Funcs(A,B), Funcs(A,B) means
+:: HILBERT3:def 1
+ for f being Function of A,B holds it.f = Q*f*P";
+end;
+
+definition let A,B be non empty set;
+ let P be Permutation of A, Q be Permutation of B;
+ cluster P => Q -> bijective;
+end;
+
+theorem :: HILBERT3:26
+ for A,B being non empty set
+ for P being Permutation of A, Q being Permutation of B
+ for f being Function of A,B
+  holds (P => Q)".f = Q"*f*P;
+
+theorem :: HILBERT3:27
+ for A,B being non empty set
+ for P being Permutation of A, Q being Permutation of B
+  holds (P => Q)" = P" => (Q");
+
+theorem :: HILBERT3:28
+  for A,B,C being non empty set,
+      f being Function of A, Funcs(B,C),
+      g being Function of A,B,
+      P being Permutation of B,
+      Q being Permutation of C
+  holds ((P => Q)*f)..(P*g) = Q*(f..g);
+
+
+begin ::  set valuations
+
+definition
+ mode SetValuation is non-empty ManySortedSet of NAT;
+end;
+
+reserve V for SetValuation;
+
+definition let V;
+ func SetVal V -> ManySortedSet of HP-WFF means
+:: HILBERT3:def 2
+ it.VERUM = 1 &
+  (for n holds it.prop n = V.n) &
+  for p,q holds it.(p '&' q) = [:it.p, it.q:]
+    & it.(p => q) = Funcs(it.p,it.q);
+end;
+
+definition let V,p;
+ func SetVal(V,p) equals
+:: HILBERT3:def 3
+  (SetVal V).p;
+end;
+
+definition let V,p;
+ cluster SetVal(V,p) -> non empty;
+end;
+
+theorem :: HILBERT3:29
+ SetVal(V,VERUM) = 1;
+
+theorem :: HILBERT3:30
+ SetVal(V,prop n) = V.n;
+
+theorem :: HILBERT3:31
+ SetVal(V,p '&' q) = [:SetVal(V,p), SetVal(V,q):];
+
+theorem :: HILBERT3:32
+ SetVal(V,p => q) = Funcs(SetVal(V,p),SetVal(V,q));
+
+definition let V,p,q;
+ cluster SetVal(V,p => q) -> functional;
+end;
+
+definition let V,p,q,r;
+ cluster -> Function-yielding Element of SetVal(V,p => (q => r));
+end;
+
+definition let V,p,q,r;
+ cluster Function-yielding Function of SetVal(V,p => q),SetVal(V,p => r);
+ cluster Function-yielding Element of SetVal(V,p => (q => r));
+end;
+
+
+begin :: permuting set valuations
+
+definition let V;
+ mode Permutation of V -> Function means
+:: HILBERT3:def 4
+  dom it = NAT &
+  for n holds it.n is Permutation of V.n;
+end;
+
+reserve P for Permutation of V;
+
+
+definition let V,P;
+ func Perm P -> ManySortedFunction of SetVal V, SetVal V means
+:: HILBERT3:def 5
+ it.VERUM = id 1 &
+  (for n holds it.prop n = P.n) &
+  for p,q ex p' being Permutation of SetVal(V,p),
+             q' being Permutation of SetVal(V,q) st
+    p' = it.p & q' = it.q &
+    it.(p '&' q) = [:p',q':] &
+    it.(p => q) = p' => q';
+end;
+
+definition let V,P,p;
+ func Perm(P,p) -> Function of SetVal(V,p), SetVal(V,p) equals
+:: HILBERT3:def 6
+  (Perm P).p;
+end;
+
+theorem :: HILBERT3:33
+ Perm(P,VERUM) = id SetVal(V,VERUM);
+
+theorem :: HILBERT3:34
+ Perm(P,prop n) = P.n;
+
+theorem :: HILBERT3:35
+ Perm(P,p '&' q) = [:Perm(P,p),Perm(P,q):];
+
+theorem :: HILBERT3:36
+  for p' being Permutation of SetVal(V,p), q' being Permutation of SetVal(V,q)
+   st p' = Perm(P,p) & q' = Perm(P,q)
+  holds Perm(P,p => q) = p' => q';
+
+definition let V,P,p;
+ cluster Perm(P,p) -> bijective;
+end;
+
+theorem :: HILBERT3:37
+ for g being Function of SetVal(V,p), SetVal(V,q)
+ holds Perm(P,p => q).g = Perm(P,q)*g*Perm(P,p)";
+
+theorem :: HILBERT3:38
+ for g being Function of SetVal(V,p), SetVal(V,q)
+ holds Perm(P,p => q)".g = Perm(P,q)"*g*Perm(P,p);
+
+theorem :: HILBERT3:39
+ for f,g being Function of SetVal(V,p), SetVal(V,q) st f = Perm(P,p => q).g
+ holds Perm(P,q)*g = f*Perm(P,p);
+
+theorem :: HILBERT3:40
+ for V for P being Permutation of V
+ for x being set st x is_a_fixpoint_of Perm(P,p)
+ for f being Function st f is_a_fixpoint_of Perm(P,p => q)
+  holds f.x is_a_fixpoint_of Perm(P,q);
+
+
+begin :: canonical formulae
+
+definition let p;
+ attr p is canonical means
+:: HILBERT3:def 7
+  for V ex x being set st
+   for P being Permutation of V holds x is_a_fixpoint_of Perm(P,p);
+end;
+
+definition
+ cluster VERUM -> canonical;
+end;
+
+theorem :: HILBERT3:41
+ p => (q => p) is canonical;
+
+theorem :: HILBERT3:42
+ (p => (q => r)) => ((p => q) => (p => r)) is canonical;
+
+theorem :: HILBERT3:43
+ (p '&' q) => p is canonical;
+
+theorem :: HILBERT3:44
+ (p '&' q) => q is canonical;
+
+theorem :: HILBERT3:45
+ p => (q => (p '&' q)) is canonical;
+
+theorem :: HILBERT3:46
+  p is canonical & p => q is canonical implies q is canonical;
+
+theorem :: HILBERT3:47
+   p in HP_TAUT implies p is canonical;
+
+definition
+ cluster canonical Element of HP-WFF;
+end;
+
+
+begin :: pseudo-canonical formulae
+
+definition let p;
+ attr p is pseudo-canonical means
+:: HILBERT3:def 8
+  for V for P being Permutation of V
+    ex x being set st x is_a_fixpoint_of Perm(P,p);
+end;
+
+definition
+ cluster canonical -> pseudo-canonical Element of HP-WFF;
+end;
+
+theorem :: HILBERT3:48
+   p => (q => p) is pseudo-canonical;
+
+theorem :: HILBERT3:49
+   (p => (q => r)) => ((p => q) => (p => r)) is pseudo-canonical;
+
+theorem :: HILBERT3:50
+   (p '&' q) => p is pseudo-canonical;
+
+theorem :: HILBERT3:51
+   (p '&' q) => q is pseudo-canonical;
+
+theorem :: HILBERT3:52
+   p => (q => (p '&' q)) is pseudo-canonical;
+
+theorem :: HILBERT3:53
+    p is pseudo-canonical & p => q is pseudo-canonical
+    implies q is pseudo-canonical;
+
+theorem :: HILBERT3:54
+ for p,q for V for P being Permutation of V
+  st (ex f being set st f is_a_fixpoint_of Perm(P,p))
+   & not (ex f being set st f is_a_fixpoint_of Perm(P,q))
+ holds p => q is not pseudo-canonical;
+
+theorem :: HILBERT3:55
+   (prop 0) => (prop 1) => (prop 0) => prop 0 is not pseudo-canonical;
+

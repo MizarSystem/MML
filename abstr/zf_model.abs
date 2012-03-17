@@ -1,0 +1,372 @@
+:: Models and Satisfiability. Defining by Structural Induction and
+:: Free Variables in ZF-formulae
+::  by Grzegorz Bancerek
+::
+:: Received April 14, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ZF_LANG, BOOLE, FUNCT_1, TARSKI, RELAT_1, ORDINAL1, ZF_MODEL;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
+      ZF_LANG, FUNCT_2, ORDINAL1;
+ constructors ENUMSET1, FUNCT_2, ZF_LANG, MEMBERED, XBOOLE_0;
+ clusters ZF_LANG, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, SUBSET, BOOLE;
+
+
+begin
+
+ reserve F,H,H' for ZF-formula,
+
+         x,y,z,t for Variable,
+         a,b,c,d for set,
+         A,X for set;
+
+ scheme ZFsch_ex
+     { F1(Variable,Variable)->set, F2(Variable,Variable)->set,
+       F3(set)->set, F4(set,set)->set, F5(Variable,set)->set,
+       H()->ZF-formula } :
+  ex a,A st
+   (for x,y holds [x '=' y,F1(x,y)] in A & [x 'in' y,F2(x,y)] in A) &
+   [H(),a] in A &
+   for H,a st [H,a] in A holds
+    (H is_equality implies a = F1(Var1 H,Var2 H) ) &
+    (H is_membership implies a = F2(Var1 H,Var2 H) ) &
+    (H is negative implies ex b st a = F3(b) & [the_argument_of H,b] in A) &
+    (H is conjunctive implies ex b,c st (a = F4(b,c) &
+      [the_left_argument_of H,b] in A) & [the_right_argument_of H,c] in A) &
+    (H is universal implies ex b st a = F5(bound_in H,b) &
+      [the_scope_of H,b] in A);
+
+scheme ZFsch_uniq
+     { F1(Variable,Variable)->set, F2(Variable,Variable)->set,
+       F3(set)->set, F4(set,set)->set, F5(Variable,set)->set,
+       H()->ZF-formula, a()->set, b()->set } :
+
+  a() = b()
+    provided
+ ex A st
+    (for x,y holds [x '=' y,F1(x,y)] in A & [x 'in' y,F2(x,y)] in A) &
+    [H(),a()] in A &
+    for H,a st [H,a] in A holds
+     (H is_equality implies a = F1(Var1 H,Var2 H) ) &
+     (H is_membership implies a = F2(Var1 H,Var2 H) ) &
+     (H is negative implies ex b st a = F3(b) & [the_argument_of H,b] in A) &
+     (H is conjunctive implies ex b,c st a = F4(b,c) &
+       [the_left_argument_of H,b] in A & [the_right_argument_of H,c] in A) &
+     (H is universal implies ex b st a = F5(bound_in H,b) &
+       [the_scope_of H,b] in A)
+    and
+ ex A st
+    (for x,y holds [x '=' y,F1(x,y)] in A & [x 'in' y,F2(x,y)] in A) &
+    [H(),b()] in A &
+    for H,a st [H,a] in A holds
+     (H is_equality implies a = F1(Var1 H,Var2 H) ) &
+     (H is_membership implies a = F2(Var1 H,Var2 H) ) &
+     (H is negative implies ex b st a = F3(b) & [the_argument_of H,b] in A) &
+     (H is conjunctive implies ex b,c st a = F4(b,c) &
+       [the_left_argument_of H,b] in A & [the_right_argument_of H,c] in A) &
+     (H is universal implies ex b st a = F5(bound_in H,b) &
+       [the_scope_of H,b] in A);
+
+scheme ZFsch_result
+     { F1(Variable,Variable)->set, F2(Variable,Variable)->set,
+       F3(set)->set, F4(set,set)->set, F5(Variable,set)->set,
+       H()->ZF-formula, f(ZF-formula)->set } :
+
+ ( H() is_equality implies f(H()) = F1(Var1 H(),Var2 H()) ) &
+  ( H() is_membership implies f(H()) = F2(Var1 H(),Var2 H()) ) &
+   ( H() is negative implies f(H()) = F3(f(the_argument_of H())) ) &
+    ( H() is conjunctive implies for a,b st a = f(the_left_argument_of H()) &
+       b = f(the_right_argument_of H()) holds f(H()) = F4(a,b) ) &
+     ( H() is universal implies f(H()) = F5(bound_in H(),f(the_scope_of H())) )
+   provided
+for H',a holds a = f(H') iff
+   ex A st
+    (for x,y holds [x '=' y,F1(x,y)] in A & [x 'in' y,F2(x,y)] in A) &
+    [H',a] in A &
+    for H,a st [H,a] in A holds
+     (H is_equality implies a = F1(Var1 H,Var2 H) ) &
+     (H is_membership implies a = F2(Var1 H,Var2 H) ) &
+     (H is negative implies ex b st a = F3(b) & [the_argument_of H,b] in A) &
+     (H is conjunctive implies ex b,c st a = F4(b,c) &
+       [the_left_argument_of H,b] in A & [the_right_argument_of H,c] in A) &
+     (H is universal implies ex b st a = F5(bound_in H,b) &
+       [the_scope_of H,b] in A);
+
+scheme ZFsch_property
+     { F1(Variable,Variable)->set, F2(Variable,Variable)->set,
+       F3(set)->set, F4(set,set)->set, F5(Variable,set)->set,
+       f(ZF-formula)->set, H()->ZF-formula, P[set] } :
+
+  P[f(H())]
+    provided
+ for H',a holds a = f(H') iff
+    ex A st
+     (for x,y holds [x '=' y,F1(x,y)] in A & [x 'in' y,F2(x,y)] in A) &
+     [H',a] in A &
+     for H,a st [H,a] in A holds
+      (H is_equality implies a = F1(Var1 H,Var2 H) ) &
+      (H is_membership implies a = F2(Var1 H,Var2 H) ) &
+      (H is negative implies ex b st a = F3(b) & [the_argument_of H,b] in A) &
+      (H is conjunctive implies ex b,c st a = F4(b,c) &
+        [the_left_argument_of H,b] in A & [the_right_argument_of H,c] in A) &
+      (H is universal implies ex b st a = F5(bound_in H,b) &
+        [the_scope_of H,b] in A) and
+ for x,y holds P[F1(x,y)] & P[F2(x,y)] and
+ for a st P[a] holds P[F3(a)] and
+ for a,b st P[a] & P[b] holds P[F4(a,b)] and
+ for a,x st P[a] holds P[F5(x,a)];
+ definition let H;
+  func Free H -> set means
+:: ZF_MODEL:def 1
+
+   ex A st
+    (for x,y holds [x '=' y,{ x,y }] in A & [x 'in' y,{ x,y }] in A) &
+    [H,it] in A &
+    for H',a st [H',a] in A holds
+     (H' is_equality implies a = { Var1 H',Var2 H' }) &
+     (H' is_membership implies a = { Var1 H',Var2 H' }) &
+     (H' is negative implies ex b st a = b & [the_argument_of H',b] in A) &
+     (H' is conjunctive implies ex b,c st a = union { b,c } &
+       [the_left_argument_of H',b] in A & [the_right_argument_of H',c] in A) &
+     (H' is universal implies ex b st
+       a = (union { b }) \ { bound_in H' } & [the_scope_of H',b] in A);
+ end;
+
+ definition let H;
+ redefine func Free H -> Subset of VAR;
+ end;
+
+theorem :: ZF_MODEL:1
+    for H holds
+   (H is_equality implies Free H = { Var1 H,Var2 H }) &
+    (H is_membership implies Free H = { Var1 H,Var2 H }) &
+     (H is negative implies Free H = Free the_argument_of H) &
+      (H is conjunctive implies Free H =
+        Free the_left_argument_of H \/ Free the_right_argument_of H) &
+       (H is universal implies Free H = (Free the_scope_of H) \ { bound_in H })
+;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::                                                    ::
+:: The set of all valuations of variables in a model  ::
+::                                                    ::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+ definition let D be non empty set;
+  func VAL D -> set means
+:: ZF_MODEL:def 2
+  a in it iff a is Function of VAR,D;
+ end;
+
+ definition let D be non empty set;
+  cluster VAL D -> non empty;
+ end;
+
+ reserve E for non empty set,
+         f,g,h for Function of VAR,E,
+         v1,v2,v3,v4,v5,u1,u2,u3,u4,u5 for Element of VAL E;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::                                                                  ::
+:: The set of all valuations which satisfy a ZF-formula in a model  ::
+::                                                                  ::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+ definition let H,E;
+  func St(H,E) -> set means
+:: ZF_MODEL:def 3
+   ex A st
+    (for x,y holds [x '=' y,{ v1 : for f st f = v1 holds f.x = f.y }] in A &
+      [x 'in' y,{ v2 : for f st f = v2 holds f.x in f.y }] in A) &
+    [H,it] in A &
+    for H',a st [H',a] in A holds
+     (H' is_equality implies
+       a = { v3 : for f st f = v3 holds f.(Var1 H') = f.(Var2 H') }) &
+     (H' is_membership implies
+       a = { v4 : for f st f = v4 holds f.(Var1 H') in f.(Var2 H') }) &
+     (H' is negative implies ex b st a = (VAL E) \ union { b } &
+       [the_argument_of H',b] in A ) &
+     (H' is conjunctive implies ex b,c st a = (union { b }) /\ union { c } &
+       [the_left_argument_of H',b] in A & [the_right_argument_of H',c] in A) &
+     (H' is universal implies ex b st
+       a = { v5 : for X,f st X = b & f = v5 holds f in X &
+        for g st for y st g.y <> f.y holds bound_in H' = y holds g in X } &
+      [the_scope_of H',b] in A);
+ end;
+
+ definition let H,E;
+ redefine func St(H,E) -> Subset of VAL E;
+ end;
+
+theorem :: ZF_MODEL:2
+  for x,y,f holds f.x = f.y iff f in St(x '=' y,E);
+
+theorem :: ZF_MODEL:3
+  for x,y,f holds f.x in f.y iff f in St(x 'in' y,E);
+
+theorem :: ZF_MODEL:4
+  for H,f holds not f in St(H,E) iff f in St('not' H,E);
+
+theorem :: ZF_MODEL:5
+  for H,H',f holds f in St(H,E) & f in St(H',E) iff f in St(H '&' H',E);
+
+theorem :: ZF_MODEL:6
+  for x,H,f holds
+  ( f in St(H,E) & for g st for y st g.y <> f.y holds x = y holds g in
+ St(H,E) )
+     iff f in St(All(x,H),E);
+
+theorem :: ZF_MODEL:7
+    H is_equality implies
+   for f holds f.(Var1 H) = f.(Var2 H) iff f in St(H,E);
+
+theorem :: ZF_MODEL:8
+    H is_membership implies
+   for f holds f.(Var1 H) in f.(Var2 H) iff f in St(H,E);
+
+theorem :: ZF_MODEL:9
+    H is negative implies
+   for f holds not f in St(the_argument_of H,E) iff f in St(H,E);
+
+theorem :: ZF_MODEL:10
+    H is conjunctive implies
+  for f holds f in St(the_left_argument_of H,E) &
+   f in St(the_right_argument_of H,E) iff f in St(H,E);
+
+theorem :: ZF_MODEL:11
+    H is universal implies
+  for f holds
+   (f in St(the_scope_of H,E) &
+     for g st for y st g.y <> f.y holds bound_in H = y
+           holds g in St(the_scope_of H,E) )
+   iff f in St(H,E);
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::                                                             ::
+::  The satisfaction of a ZF-formula in a model by a valuation ::
+::                                                             ::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+ definition let D be non empty set; let f be Function of VAR,D; let H;
+  pred D,f |= H means
+:: ZF_MODEL:def 4
+  f in St(H,D);
+ end;
+
+theorem :: ZF_MODEL:12
+    for E,f,x,y holds E,f |= x '=' y iff f.x = f.y;
+
+theorem :: ZF_MODEL:13
+    for E,f,x,y holds E,f |= x 'in' y iff f.x in f.y;
+
+theorem :: ZF_MODEL:14
+  for E,f,H holds E,f |= H iff not E,f |= 'not' H;
+
+theorem :: ZF_MODEL:15
+  for E,f,H,H' holds E,f |= H '&' H' iff E,f |= H & E,f |= H';
+
+
+theorem :: ZF_MODEL:16
+  for E,f,H,x holds E,f |= All(x,H) iff
+       for g st for y st g.y <> f.y holds x = y holds E,g |= H;
+
+theorem :: ZF_MODEL:17
+    for E,f,H,H' holds E,f |= H 'or' H' iff E,f |= H or E,f |= H';
+
+theorem :: ZF_MODEL:18
+  for E,f,H,H' holds E,f |= H => H' iff (E,f |= H implies E,f |= H');
+
+theorem :: ZF_MODEL:19
+    for E,f,H,H' holds E,f |= H <=> H' iff (E,f |= H iff E,f |= H');
+
+theorem :: ZF_MODEL:20
+  for E,f,H,x holds E,f |= Ex(x,H) iff
+       ex g st (for y st g.y <> f.y holds x = y) & E,g |= H;
+
+theorem :: ZF_MODEL:21
+  for E,f,x for e being Element of E ex g st g.x = e &
+    for z st z <> x holds g.z = f.z;
+
+theorem :: ZF_MODEL:22
+    E,f |= All(x,y,H) iff
+   for g st for z st g.z <> f.z holds x = z or y = z holds E,g |= H;
+
+theorem :: ZF_MODEL:23
+    E,f |= Ex(x,y,H) iff
+   ex g st (for z st g.z <> f.z holds x = z or y = z) & E,g |= H;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::
+::                                               ::
+::  The satisfaction of a ZF-formula in a model  ::
+::                                               ::
+:::::::::::::::::::::::::::::::::::::::::::::::::::
+
+ definition let E,H;
+  pred E |= H means
+:: ZF_MODEL:def 5
+   for f holds E,f |= H;
+ end;
+
+canceled;
+
+theorem :: ZF_MODEL:25
+    E |= All(x,H) iff E |= H;
+
+:::::::::::::::::::::::::::::::::
+::  The axioms of ZF-language  ::
+:::::::::::::::::::::::::::::::::
+
+ definition
+  func the_axiom_of_extensionality -> ZF-formula equals
+:: ZF_MODEL:def 6
+
+       All(x.0,x.1,All(x.2,x.2 'in' x.0 <=> x.2 'in' x.1) => x.0 '=' x.1);
+  func the_axiom_of_pairs -> ZF-formula equals
+:: ZF_MODEL:def 7
+
+       All(x.0,x.1,Ex(x.2,All(x.3,
+           x.3 'in' x.2 <=> (x.3 '=' x.0 'or' x.3 '=' x.1) )));
+  func the_axiom_of_unions -> ZF-formula equals
+:: ZF_MODEL:def 8
+
+       All(x.0,Ex(x.1,All(x.2,
+           x.2 'in' x.1 <=> Ex(x.3,x.2 'in' x.3 '&' x.3 'in' x.0) )));
+  func the_axiom_of_infinity -> ZF-formula equals
+:: ZF_MODEL:def 9
+
+       Ex(x.0,x.1,x.1 'in' x.0 '&'
+          All(x.2,x.2 'in' x.0 => Ex(x.3,x.3 'in' x.0 '&' 'not' x.3 '=' x.2 '&'
+            All(x.4,x.4 'in' x.2 => x.4 'in' x.3) )));
+  func the_axiom_of_power_sets -> ZF-formula equals
+:: ZF_MODEL:def 10
+
+       All(x.0,Ex(x.1,All(x.2,
+           x.2 'in' x.1 <=> All(x.3,x.3 'in' x.2 => x.3 'in' x.0) )));
+ end;
+
+ definition let H be ZF-formula;
+  func the_axiom_of_substitution_for H -> ZF-formula equals
+:: ZF_MODEL:def 11
+
+       All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) =>
+          All(x.1,Ex(x.2,All(x.4,x.4 'in' x.2 <=> Ex(x.3,x.3 'in'
+ x.1 '&' H))));
+ end;
+
+ definition let E;
+  attr E is being_a_model_of_ZF means
+:: ZF_MODEL:def 12
+
+     E is epsilon-transitive &
+   E |= the_axiom_of_pairs &
+   E |= the_axiom_of_unions &
+   E |= the_axiom_of_infinity &
+   E |= the_axiom_of_power_sets &
+   for H st { x.0,x.1,x.2 } misses Free H holds
+    E |= the_axiom_of_substitution_for H;
+  synonym E is_a_model_of_ZF;
+ end;

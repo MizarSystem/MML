@@ -1,0 +1,1655 @@
+:: Institution of Many-sorted Algebras, Part { I } : Signature Reduct
+:: of an Algebra
+::  by Grzegorz Bancerek
+::
+:: Received December 30, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, PRALG_1, RELAT_1, MSUALG_3, BOOLE, AMI_1, MSUALG_1,
+      ZF_REFLE, PBOOLE, MSATERM, FREEALG, MSAFREE, TDGROUP, FINSEQ_1, DTCONSTR,
+      QC_LANG1, TREES_3, NATTRA_1, TREES_4, CARD_3, FUNCT_6, ALG_1, MSUALG_6,
+      PUA2MSS1, FUNCT_4, REWRITE1, REALSET1, MSUALG_2, CAT_1, GROUP_6,
+      INSTALG1, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, RELAT_1, FUNCT_1,
+      FINSEQ_1, STRUCT_0, FINSEQ_2, CARD_3, FINSEQ_4, LANG1, TREES_3, TREES_4,
+      DTCONSTR, REWRITE1, FUNCT_7, PBOOLE, MSUALG_1, PARTFUN1, FUNCT_2,
+      MSUALG_2, PRALG_2, MSUALG_3, PUA2MSS1, MSAFREE, MSATERM, AUTALG_1,
+      MSUALG_6;
+ constructors NAT_1, REWRITE1, MSATERM, PUA2MSS1, FUNCT_7, AUTALG_1, MSUALG_6,
+      FINSEQ_4;
+ clusters STRUCT_0, RELSET_1, FUNCT_1, TREES_3, PRALG_1, PBOOLE, MSUALG_1,
+      MSAFREE, PRE_CIRC, MSUALG_9, MSATERM, FUNCT_2, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, STRUCT_0, FUNCT_1, MSUALG_1, MSUALG_3, AUTALG_1, PUA2MSS1,
+      MSUALG_6;
+ theorems ZFMISC_1, RELAT_1, FUNCT_1, GRFUNC_1, FUNCT_2, FINSEQ_1, FINSEQ_4,
+      TARSKI, TREES_4, PBOOLE, MSUALG_1, MSUALG_2, MSUALG_3, REWRITE1, PRALG_2,
+      PUA2MSS1, MSAFREE, MSATERM, EXTENS_1, MSUALG_6, RELSET_1, XBOOLE_0;
+ schemes ZFREFLE1, MSATERM, MSUALG_6, COMPTS_1;
+
+begin :: Preliminaries
+
+canceled;
+
+theorem Th2:
+ for S being non empty non void ManySortedSign
+ for o being OperSymbol of S
+ for V being non-empty ManySortedSet of the carrier of S
+ for x being set holds
+   x is ArgumentSeq of Sym(o,V) iff x is Element of Args(o, FreeMSA V)
+  proof let S be non empty non void ManySortedSign;
+   let o be OperSymbol of S;
+   let V be non-empty ManySortedSet of the carrier of S;
+A1:  FreeMSA V = MSAlgebra(#FreeSort V, FreeOper V#) by MSAFREE:def 16;
+A2:  Args(o, FreeMSA V) = ((the Sorts of FreeMSA V)# * the Arity of S).o
+     by MSUALG_1:def 9;
+   let x be set;
+   hereby assume x is ArgumentSeq of Sym(o,V);
+    then reconsider p = x as ArgumentSeq of Sym(o,V);
+    reconsider p as FinSequence of TS DTConMSA V by MSATERM:def 1;
+       Sym(o, V) ==> roots p by MSATERM:21;
+    hence x is Element of Args(o, FreeMSA V) by A1,A2,MSAFREE:10;
+   end;
+   assume x is Element of Args(o, FreeMSA V);
+   then reconsider x as Element of Args(o, FreeMSA V);
+      rng x c= TS DTConMSA V
+     proof let y be set; assume y in rng x;
+      then consider z being set such that
+A3:     z in dom x & y = x.z by FUNCT_1:def 5;
+      reconsider z as Nat by A3;
+         dom x = dom the_arity_of o by MSUALG_6:2;
+       then y in (FreeSort V).((the_arity_of o)/.z) &
+       (FreeSort V).((the_arity_of o)/.z) = FreeSort(V,(the_arity_of o)/.z) &
+       FreeSort(V, (the_arity_of o)/.z) c= S-Terms V
+        by A1,A3,MSAFREE:def 13,MSATERM:12,MSUALG_6:2;
+      hence thesis;
+     end;
+   then reconsider x as FinSequence of TS DTConMSA V by FINSEQ_1:def 4;
+       Sym(o, V) ==> roots x & TS DTConMSA V = S-Terms V
+      by A1,A2,MSAFREE:10,MSATERM:def 1;
+   hence thesis by MSATERM:21;
+  end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let V be non-empty ManySortedSet of the carrier of S;
+ let o be OperSymbol of S;
+ cluster -> DTree-yielding Element of Args(o, FreeMSA V);
+ coherence by Th2;
+end;
+
+theorem Th3:
+ for S being non empty non void ManySortedSign
+ for A1,A2 being MSAlgebra over S st
+   the Sorts of A1 is_transformable_to the Sorts of A2
+ for o being OperSymbol of S st Args(o,A1) <> {} holds Args(o,A2) <> {}
+  proof let S be non void non empty ManySortedSign;
+   let A1,A2 be MSAlgebra over S such that
+A1:  for i be set st i in the carrier of S & (the Sorts of A2).i = {}
+     holds (the Sorts of A1).i = {};
+   let o be OperSymbol of S; assume A2: Args(o,A1) <> {};
+      now let i be Nat; assume i in dom the_arity_of o;
+      then (the Sorts of A1).((the_arity_of o)/.i) <> {} by A2,MSUALG_6:3;
+     hence (the Sorts of A2).((the_arity_of o)/.i) <> {} by A1;
+    end;
+   hence Args(o,A2) <> {} by MSUALG_6:3;
+  end;
+
+theorem Th4:
+ for S being non empty non void ManySortedSign
+ for o being OperSymbol of S
+ for V being non-empty ManySortedSet of the carrier of S
+ for x being Element of Args(o, FreeMSA V) holds
+   Den(o,FreeMSA V).x = [o, the carrier of S]-tree x
+  proof
+   let S be non empty non void ManySortedSign;
+   let o be OperSymbol of S;
+   let V be non-empty ManySortedSet of the carrier of S;
+   let x be Element of Args(o, FreeMSA V);
+   reconsider p = x as ArgumentSeq of Sym(o,V) by Th2;
+      p is FinSequence of TS DTConMSA V & Sym(o, V) ==> roots p &
+    Sym(o, V) = [o, the carrier of S] by MSAFREE:def 11,MSATERM:21,def 1;
+    then DenOp(o,V).x = [o, the carrier of S]-tree x & (FreeOper V).o = DenOp(
+o,V) &
+    FreeMSA V = MSAlgebra(#FreeSort(V), FreeOper(V)#)
+     by MSAFREE:def 14,def 15,def 16;
+   hence thesis by MSUALG_1:def 11;
+  end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ cluster the MSAlgebra of A -> non-empty;
+ coherence
+  proof
+   thus the Sorts of the MSAlgebra of A is non-empty;
+  end;
+end;
+
+theorem Th5:
+ for S being non empty non void ManySortedSign
+ for A,B being MSAlgebra over S st the MSAlgebra of A = the MSAlgebra of B
+ for o being OperSymbol of S holds Den(o,A) = Den(o,B)
+  proof let S be non empty non void ManySortedSign;
+   let A,B be MSAlgebra over S such that
+A1:  the MSAlgebra of A = the MSAlgebra of B;
+   let o be OperSymbol of S;
+   thus Den(o,A) = (the Charact of A).o by MSUALG_1:def 11
+        .= Den(o,B) by A1,MSUALG_1:def 11;
+  end;
+
+theorem Th6:
+ for S being non empty non void ManySortedSign
+ for A1,A2,B1,B2 being MSAlgebra over S
+  st the MSAlgebra of A1 = the MSAlgebra of B1 &
+     the MSAlgebra of A2 = the MSAlgebra of B2
+ for f being ManySortedFunction of A1,A2
+ for g being ManySortedFunction of B1,B2 st f = g
+ for o being OperSymbol of S st Args(o,A1) <> {} & Args(o,A2) <> {}
+ for x being Element of Args(o,A1)
+ for y being Element of Args(o,B1) st x = y
+  holds f#x = g#y
+  proof let S be non empty non void ManySortedSign;
+   let A1,A2,B1,B2 be MSAlgebra over S such that
+A1:  the MSAlgebra of A1 = the MSAlgebra of B1 &
+    the MSAlgebra of A2 = the MSAlgebra of B2;
+   let f be ManySortedFunction of A1,A2;
+   let g be ManySortedFunction of B1,B2 such that
+A2:  f = g;
+   let o be OperSymbol of S such that
+A3:  Args(o,A1) <> {} & Args(o,A2) <> {};
+   let x be Element of Args(o,A1);
+   let y be Element of Args(o,B1); assume
+A4:  x = y;
+A5:  Args(o,A1) = product ((the Sorts of A1)*(the_arity_of o)) &
+    Args(o,B1) = product ((the Sorts of B1)*(the_arity_of o)) &
+    Args(o,A2) = product ((the Sorts of A2)*(the_arity_of o)) &
+    Args(o,B2) = product ((the Sorts of B2)*(the_arity_of o))
+     by PRALG_2:10;
+      f#x = (Frege(f*the_arity_of o)).x by A3,MSUALG_3:def 7;
+   hence thesis by A1,A2,A3,A4,A5,MSUALG_3:def 7;
+  end;
+
+theorem
+   for S being non empty non void ManySortedSign
+ for A1,A2,B1,B2 being MSAlgebra over S
+  st the MSAlgebra of A1 = the MSAlgebra of B1 &
+     the MSAlgebra of A2 = the MSAlgebra of B2 &
+     the Sorts of A1 is_transformable_to the Sorts of A2
+ for h being ManySortedFunction of A1,A2 st h is_homomorphism A1,A2
+ ex h' being ManySortedFunction of B1,B2 st
+   h' = h & h' is_homomorphism B1,B2
+  proof let S be non empty non void ManySortedSign;
+   let A1,A2,B1,B2 be MSAlgebra over S such that
+A1:  the MSAlgebra of A1 = the MSAlgebra of B1 and
+A2:  the MSAlgebra of A2 = the MSAlgebra of B2 and
+A3:  the Sorts of A1 is_transformable_to the Sorts of A2;
+   let h be ManySortedFunction of A1,A2 such that
+A4:  h is_homomorphism A1,A2;
+   reconsider h' = h as ManySortedFunction of B1,B2 by A1,A2;
+   take h'; thus h' = h;
+   let o be OperSymbol of S; assume
+A5:  Args(o,B1) <> {};
+   let x be Element of Args(o,B1);
+A6:  Args(o,A1) = product ((the Sorts of A1)*(the_arity_of o)) &
+    Args(o,B1) = product ((the Sorts of B1)*(the_arity_of o))
+     by PRALG_2:10;
+   then reconsider y = x as Element of Args(o,A1) by A1;
+A7: Args(o,B2) <> {} by A1,A2,A3,A5,Th3;
+   thus (h'.(the_result_sort_of o)).(Den(o,B1).x)
+       = (h.(the_result_sort_of o)).(Den(o,A1).y) by A1,Th5
+      .= Den(o,A2).(h#y) by A1,A4,A5,A6,MSUALG_3:def 9
+      .= Den(o,B2).(h#y) by A2,Th5
+      .= Den(o,B2).(h'#x) by A1,A2,A5,A7,Th6;
+  end;
+
+definition
+ let S be ManySortedSign;
+ attr S is feasible means:
+Def1:
+  the carrier of S = {} implies the OperSymbols of S = {};
+end;
+
+theorem Th8:
+ for S being ManySortedSign holds S is feasible iff
+  dom the ResultSort of S = the OperSymbols of S
+  proof let S be ManySortedSign;
+   hereby assume S is feasible;
+     then the carrier of S = {} implies the OperSymbols of S = {} by Def1;
+    hence dom the ResultSort of S = the OperSymbols of S by FUNCT_2:def 1;
+   end;
+   assume
+   dom the ResultSort of S = the OperSymbols of S & the carrier of S = {} &
+    the OperSymbols of S <> {};
+   hence contradiction by FUNCT_2:def 1,RELAT_1:60;
+  end;
+
+definition
+ cluster non empty -> feasible ManySortedSign;
+ coherence
+  proof let S be ManySortedSign; assume
+      the carrier of S is non empty & the carrier of S = {};
+   hence thesis;
+  end;
+ cluster void -> feasible ManySortedSign;
+ coherence
+  proof let S be ManySortedSign; assume
+      S is void & the carrier of S = {};
+   hence thesis by MSUALG_1:def 5;
+  end;
+ cluster empty feasible -> void ManySortedSign;
+ coherence
+  proof let S be ManySortedSign; assume
+A1:  the carrier of S is empty;
+   assume the carrier of S = {} implies the OperSymbols of S = {};
+   hence thesis by A1,MSUALG_1:def 5;
+  end;
+ cluster non void feasible -> non empty ManySortedSign;
+ coherence
+  proof let S be ManySortedSign; assume
+      S is non void & (the carrier of S = {} implies the OperSymbols of S = {})
+;
+   hence the carrier of S is non empty by MSUALG_1:def 5;
+  end;
+end;
+
+definition
+ cluster non void non empty ManySortedSign;
+ existence
+  proof consider S being non void non empty ManySortedSign;
+   take S; thus thesis;
+  end;
+end;
+
+theorem Th9:
+ for S being feasible ManySortedSign holds
+   id the carrier of S, id the OperSymbols of S form_morphism_between S,S
+  proof let S be feasible ManySortedSign;
+A1:  the carrier of S = {} implies the OperSymbols of S = {} by Def1;
+   set f = id the carrier of S, g = id the OperSymbols of S;
+A2:  dom the ResultSort of S = the OperSymbols of S &
+    rng the ResultSort of S c= the carrier of S &
+    dom the Arity of S = the OperSymbols of S by A1,FUNCT_2:def 1,RELSET_1:12;
+    then f*the ResultSort of S = the ResultSort of S by RELAT_1:79;
+   hence dom f = the carrier of S & dom g = the OperSymbols of S &
+    rng f c= the carrier of S & rng g c= the OperSymbols of S &
+    f*the ResultSort of S = (the ResultSort of S)*g by A2,FUNCT_1:42,RELAT_1:71
+;
+   let o be set, p be Function;
+   assume
+A3:  o in the OperSymbols of S & p = (the Arity of S).o;
+then A4:  g.o = o & p in (the carrier of S)* by FUNCT_1:34,FUNCT_2:7;
+    then p is FinSequence of the carrier of S by FINSEQ_1:def 11;
+    then rng p c= the carrier of S by FINSEQ_1:def 4;
+   hence f*p = (the Arity of S).(g.o) by A3,A4,RELAT_1:79;
+  end;
+
+theorem Th10:
+ for S1,S2 being ManySortedSign
+ for f,g being Function st f,g form_morphism_between S1,S2
+  holds f is Function of the carrier of S1, the carrier of S2 &
+   g is Function of the OperSymbols of S1, the OperSymbols of S2
+  proof let S1,S2 be ManySortedSign;
+   let f,g be Function; assume f,g form_morphism_between S1,S2;
+    then dom g = the OperSymbols of S1 & rng g c= the OperSymbols of S2 &
+    dom f = the carrier of S1 & rng f c= the carrier of S2
+     by PUA2MSS1:def 13;
+   hence thesis by FUNCT_2:4;
+  end;
+
+begin :: Subsignature
+
+definition
+ let S be feasible ManySortedSign;
+ mode Subsignature of S -> ManySortedSign means:
+Def2:
+  id the carrier of it, id the OperSymbols of it form_morphism_between it,S;
+ existence
+  proof take S; thus thesis by Th9;
+  end;
+end;
+
+theorem Th11:
+ for S being feasible ManySortedSign, T being Subsignature of S holds
+   the carrier of T c= the carrier of S &
+   the OperSymbols of T c= the OperSymbols of S
+  proof let S be feasible ManySortedSign, T be Subsignature of S;
+   set g = id the OperSymbols of T;
+      id the carrier of T, g form_morphism_between T,S by Def2;
+    then rng id the carrier of T c= the carrier of S &
+    rng id the OperSymbols of T c= the OperSymbols of S by PUA2MSS1:def 13;
+   hence thesis by RELAT_1:71;
+  end;
+
+definition
+ let S be feasible ManySortedSign;
+ cluster -> feasible Subsignature of S;
+ coherence
+  proof let T be Subsignature of S;
+   set f = id the carrier of T, g = id the OperSymbols of T;
+   assume A1: the carrier of T = {};
+A2:  the OperSymbols of T c= the OperSymbols of S by Th11;
+A3:  the OperSymbols of S = dom the ResultSort of S by Th8;
+      f, g form_morphism_between T,S by Def2;
+    then f*the ResultSort of T = (the ResultSort of S)*g by PUA2MSS1:def 13;
+    then {} = (the ResultSort of S)*g & rng g = the OperSymbols of T &
+    dom g = the OperSymbols of T by A1,RELAT_1:62,71,81;
+   hence thesis by A2,A3,RELAT_1:46,60;
+  end;
+end;
+
+theorem Th12:
+ for S being feasible ManySortedSign, T being Subsignature of S holds
+   the ResultSort of T c= the ResultSort of S &
+   the Arity of T c= the Arity of S
+  proof let S be feasible ManySortedSign, T be Subsignature of S;
+   set f = id the carrier of T, g = id the OperSymbols of T;
+A1:  f, g form_morphism_between T,S by Def2;
+      the carrier of T = {} implies the OperSymbols of T = {} by Def1;
+    then the ResultSort of T = f*the ResultSort of T by FUNCT_2:23
+     .= (the ResultSort of S)*g by A1,PUA2MSS1:def 13;
+   hence the ResultSort of T c= the ResultSort of S by RELAT_1:76;
+A2:  dom the Arity of T = the OperSymbols of T &
+    dom the Arity of S = the OperSymbols of S by FUNCT_2:def 1;
+then A3:  dom the Arity of T c= dom the Arity of S by Th11;
+      now let x be set; assume
+A4:    x in dom the Arity of T;
+      then (the Arity of T).x in rng the Arity of T &
+      rng the Arity of T c= (the carrier of T)*
+       by FUNCT_1:def 5,RELSET_1:12;
+     then reconsider p = (the Arity of T).x as Element of (the carrier of T)*;
+        g.x = x by A2,A4,FUNCT_1:34;
+      then rng p c= the carrier of T & f*p = (the Arity of S).x
+       by A1,A2,A4,FINSEQ_1:def 4,PUA2MSS1:def 13;
+     hence (the Arity of T).x = (the Arity of S).x by RELAT_1:79;
+    end;
+   hence thesis by A3,GRFUNC_1:8;
+  end;
+
+theorem Th13:
+ for S being feasible ManySortedSign, T being Subsignature of S holds
+  the Arity of T = (the Arity of S)|the OperSymbols of T &
+  the ResultSort of T = (the ResultSort of S)|the OperSymbols of T
+  proof let S be feasible ManySortedSign, T be Subsignature of S;
+      the carrier of T = {} implies the OperSymbols of T = {} by Def1;
+    then dom the ResultSort of T = the OperSymbols of T &
+    dom the Arity of T = the OperSymbols of T &
+    the ResultSort of T c= the ResultSort of S &
+    the Arity of T c= the Arity of S by Th12,FUNCT_2:def 1;
+   hence thesis by GRFUNC_1:64;
+  end;
+
+theorem Th14:
+ for S,T being feasible ManySortedSign
+  st the carrier of T c= the carrier of S &
+     the Arity of T c= the Arity of S &
+     the ResultSort of T c= the ResultSort of S
+  holds T is Subsignature of S
+  proof let S,T be feasible ManySortedSign; assume
+A1:  the carrier of T c= the carrier of S &
+    the Arity of T c= the Arity of S &
+    the ResultSort of T c= the ResultSort of S;
+   set f = id the carrier of T, g = id the OperSymbols of T;
+   thus dom f = the carrier of T & dom g = the OperSymbols of T by RELAT_1:71;
+   thus rng f c= the carrier of S by A1,RELAT_1:71;
+A2:  dom the Arity of T = the OperSymbols of T &
+    dom the Arity of S = the OperSymbols of S by FUNCT_2:def 1;
+A3:  dom the ResultSort of T = the OperSymbols of T &
+    dom the ResultSort of S = the OperSymbols of S by Th8;
+A4:  rng the ResultSort of T c= the carrier of T &
+    rng the ResultSort of S c= the carrier of S by RELSET_1:12;
+      rng g = the OperSymbols of T by RELAT_1:71;
+   hence rng g c= the OperSymbols of S by A1,A2,GRFUNC_1:8;
+   thus f*the ResultSort of T = the ResultSort of T by A4,RELAT_1:79
+     .= (the ResultSort of S)|the OperSymbols of T by A1,A3,GRFUNC_1:64
+     .= (the ResultSort of S)*g by RELAT_1:94;
+   let o be set, p be Function;
+   assume
+A5:  o in the OperSymbols of T & p = (the Arity of T).o;
+   then reconsider q = p as Element of (the carrier of T)* by FUNCT_2:7;
+      rng q c= the carrier of T by FINSEQ_1:def 4;
+   hence f*p = p by RELAT_1:79 .= (the Arity of S).o by A1,A2,A5,GRFUNC_1:8
+     .= (the Arity of S).(g.o) by A5,FUNCT_1:34;
+  end;
+
+theorem
+   for S,T being feasible ManySortedSign
+  st the carrier of T c= the carrier of S &
+     the Arity of T = (the Arity of S)|the OperSymbols of T &
+     the ResultSort of T = (the ResultSort of S)|the OperSymbols of T
+  holds T is Subsignature of S
+  proof let S,T be feasible ManySortedSign such that
+A1:  the carrier of T c= the carrier of S;
+   assume
+      the Arity of T = (the Arity of S)|the OperSymbols of T &
+    the ResultSort of T = (the ResultSort of S)|the OperSymbols of T;
+    then the Arity of T c= the Arity of S &
+    the ResultSort of T c= the ResultSort of S by RELAT_1:88;
+   hence thesis by A1,Th14;
+  end;
+
+theorem Th16:
+ for S being feasible ManySortedSign holds S is Subsignature of S
+  proof let S be feasible ManySortedSign;
+   thus id the carrier of S, id the OperSymbols of S form_morphism_between S,S
+     by Th9;
+  end;
+
+theorem
+   for S1 being feasible ManySortedSign
+ for S2 being Subsignature of S1
+ for S3 being Subsignature of S2 holds S3 is Subsignature of S1
+  proof let S1 be feasible ManySortedSign;
+   let S2 be Subsignature of S1, S3 be Subsignature of S2;
+      rng id the carrier of S3 = the carrier of S3 &
+    rng id the OperSymbols of S3 = the OperSymbols of S3 &
+    the OperSymbols of S3 c= the OperSymbols of S2 &
+    the carrier of S3 c= the carrier of S2 by Th11,RELAT_1:71;
+    then (id the carrier of S2)*id the carrier of S3 = id the carrier of S3 &
+    (id the OperSymbols of S2)*id the OperSymbols of S3
+      = id the OperSymbols of S3 &
+    id the carrier of S3,id the OperSymbols of S3 form_morphism_between S3,S2 &
+    id the carrier of S2,id the OperSymbols of S2 form_morphism_between S2,S1
+     by Def2,RELAT_1:79;
+   hence
+      id the carrier of S3,id the OperSymbols of S3 form_morphism_between S3,S1
+      by PUA2MSS1:30;
+  end;
+
+theorem
+   for S1 being feasible ManySortedSign
+ for S2 being Subsignature of S1 st S1 is Subsignature of S2
+  holds the ManySortedSign of S1 = the ManySortedSign of S2
+  proof let S1 be feasible ManySortedSign;
+   let S2 be Subsignature of S1; assume S1 is Subsignature of S2;
+    then the carrier of S1 c= the carrier of S2 &
+    the carrier of S2 c= the carrier of S1 &
+    the OperSymbols of S1 c= the OperSymbols of S2 &
+    the OperSymbols of S2 c= the OperSymbols of S1 &
+    the ResultSort of S1 c= the ResultSort of S2 &
+    the ResultSort of S2 c= the ResultSort of S1 &
+    the Arity of S1 c= the Arity of S2 & the Arity of S2 c= the Arity of S1
+     by Th11,Th12;
+    then the carrier of S1 = the carrier of S2 &
+    the OperSymbols of S1 = the OperSymbols of S2 &
+    the ResultSort of S1 = the ResultSort of S2 &
+    the Arity of S1 = the Arity of S2 by XBOOLE_0:def 10;
+   hence thesis;
+  end;
+
+definition
+ let S be non empty ManySortedSign;
+ cluster non empty Subsignature of S;
+ existence
+  proof reconsider T = S as Subsignature of S by Th16;
+   take T; thus thesis;
+  end;
+end;
+
+definition
+ let S be non void feasible ManySortedSign;
+ cluster non void Subsignature of S;
+ existence
+  proof reconsider T = S as Subsignature of S by Th16;
+   take T; thus thesis;
+  end;
+end;
+
+theorem
+   for S being feasible ManySortedSign, S' being Subsignature of S
+ for T being ManySortedSign, f,g being Function
+  st f,g form_morphism_between S,T
+  holds f|the carrier of S', g|the OperSymbols of S' form_morphism_between S',T
+  proof let S be feasible ManySortedSign, S' be Subsignature of S;
+A1:  id the carrier of S', id the OperSymbols of S' form_morphism_between S',S
+     by Def2;
+   let T be ManySortedSign, f,g be Function;
+      f|the carrier of S' = f*id the carrier of S' &
+    g|the OperSymbols of S' = g*id the OperSymbols of S' by RELAT_1:94;
+   hence thesis by A1,PUA2MSS1:30;
+  end;
+
+theorem
+   for S being ManySortedSign, T being feasible ManySortedSign
+ for T' being Subsignature of T, f,g being Function
+  st f,g form_morphism_between S,T'
+  holds f,g form_morphism_between S,T
+  proof let S be ManySortedSign, T be feasible ManySortedSign;
+   let T' be Subsignature of T, f,g be Function such that
+A1:  f,g form_morphism_between S,T';
+A2:  id the carrier of T', id the OperSymbols of T' form_morphism_between T',T
+     by Def2;
+      rng f c= the carrier of T' & rng g c= the OperSymbols of T'
+     by A1,PUA2MSS1:def 13;
+    then (id the carrier of T')*f = f & (id the OperSymbols of T')*g = g
+     by RELAT_1:79;
+   hence thesis by A1,A2,PUA2MSS1:30;
+  end;
+
+theorem
+   for S being ManySortedSign, T being feasible ManySortedSign
+ for T' being Subsignature of T, f,g being Function
+  st f,g form_morphism_between S,T & rng f c= the carrier of T' &
+     rng g c= the OperSymbols of T'
+  holds f,g form_morphism_between S,T'
+  proof let S be ManySortedSign, T be feasible ManySortedSign;
+   let T' be Subsignature of T, f,g be Function;
+   assume that
+A1:  dom f = the carrier of S & dom g = the OperSymbols of S and
+    rng f c= the carrier of T & rng g c= the OperSymbols of T and
+A2:  f*the ResultSort of S = (the ResultSort of T)*g and
+A3:  for o being set, p being Function
+     st o in the OperSymbols of S & p = (the Arity of S).o
+     holds f*p = (the Arity of T).(g.o) and
+A4:  rng f c= the carrier of T' & rng g c= the OperSymbols of T';
+   thus dom f = the carrier of S & dom g = the OperSymbols of S by A1;
+   thus rng f c= the carrier of T' & rng g c= the OperSymbols of T' by A4;
+   thus f*the ResultSort of S
+      = (the ResultSort of T)*((id the OperSymbols of T')*g) by A2,A4,RELAT_1:
+79
+     .= (the ResultSort of T)*(id the OperSymbols of T')*g by RELAT_1:55
+     .= ((the ResultSort of T)|the OperSymbols of T')*g by RELAT_1:94
+     .= (the ResultSort of T')*g by Th13;
+   let o be set, p be Function; assume
+A5:  o in the OperSymbols of S & p = (the Arity of S).o;
+    then g.o in rng g by A1,FUNCT_1:def 5;
+    then g.o in the OperSymbols of T' & the Arity of T' c= the Arity of T &
+    dom the Arity of T' = the OperSymbols of T' by A4,Th12,FUNCT_2:def 1;
+    then (the Arity of T').(g.o) = (the Arity of T).(g.o) by GRFUNC_1:8;
+   hence f*p = (the Arity of T').(g.o) by A3,A5;
+  end;
+
+begin :: Signature reduct
+
+definition
+ let S1,S2 be non empty ManySortedSign;
+ let A be MSAlgebra over S2;
+ let f,g be Function such that
+A1:   f,g form_morphism_between S1,S2;
+ func A|(S1,f,g) -> strict MSAlgebra over S1 means:
+Def3:
+  the Sorts of it = (the Sorts of A)*f &
+  the Charact of it = (the Charact of A)*g;
+ existence
+  proof
+A2:  dom g = the OperSymbols of S1 & rng g c= the OperSymbols of S2
+     by A1,PUA2MSS1:def 13;
+   then reconsider g' = g as Function of
+        the OperSymbols of S1,the OperSymbols of S2 by FUNCT_2:4;
+      dom f = the carrier of S1 & rng f c= the carrier of S2
+     by A1,PUA2MSS1:def 13;
+   then reconsider f' = f as Function of the carrier of S1,the carrier of S2
+     by FUNCT_2:def 1,RELSET_1:11;
+      dom the Charact of A = the OperSymbols of S2 by PBOOLE:def 3;
+    then dom ((the Charact of A)*g') = the OperSymbols of S1 by A2,RELAT_1:46;
+   then reconsider C = (the Charact of A)*g' as
+     ManySortedSet of the OperSymbols of S1 by PBOOLE:def 3;
+      C is ManySortedFunction of
+      ((the Sorts of A)*f')#*the Arity of S1,
+      (the Sorts of A)*f'*the ResultSort of S1
+     proof let o be set; assume
+A3:    o in the OperSymbols of S1;
+      then reconsider p1 = (the Arity of S1).o as Element of (the carrier of S1
+)*
+        by FUNCT_2:7;
+       A4: g.o in rng g by A2,A3,FUNCT_1:def 5;
+      then reconsider p2 = (the Arity of S2).(g.o) as
+        Element of (the carrier of S2)* by A2,FUNCT_2:7;
+      reconsider o as OperSymbol of S1 by A3;
+A5:    (the Sorts of A)*f'*p1
+         = (the Sorts of A)*(f'*p1) by RELAT_1:55
+        .= (the Sorts of A)*p2 by A1,A3,PUA2MSS1:def 13;
+A6:    (((the Sorts of A)*f')#*the Arity of S1).o
+         = ((the Sorts of A)*f')#.p1 by A3,FUNCT_2:21
+        .= product((the Sorts of A)*f'*p1) by MSUALG_1:def 3
+        .= (the Sorts of A)#.p2 by A5,MSUALG_1:def 3
+        .= ((the Sorts of A)#*the Arity of S2).(g'.o) by A2,A4,FUNCT_2:21;
+         (the Sorts of A)*f'*the ResultSort of S1
+         = (the Sorts of A)*(f'*the ResultSort of S1) by RELAT_1:55
+        .= (the Sorts of A)*((the ResultSort of S2)*g) by A1,PUA2MSS1:def 13
+        .= (the Sorts of A)*(the ResultSort of S2)*g by RELAT_1:55;
+then A7:    ((the Sorts of A)*f'*the ResultSort of S1).o
+         = ((the Sorts of A)*(the ResultSort of S2)).(g'.o)
+          by A2,A3,A4,FUNCT_2:21;
+         C.o = (the Charact of A).(g'.o) by A2,A3,A4,FUNCT_2:21;
+      hence thesis by A2,A4,A6,A7,MSUALG_1:def 2;
+     end;
+   then reconsider C as ManySortedFunction of
+      ((the Sorts of A)*f')#*the Arity of S1,
+      (the Sorts of A)*f'*the ResultSort of S1;
+   take MSAlgebra(#(the Sorts of A)*f', C#); thus thesis;
+  end;
+ correctness;
+end;
+
+definition
+ let S2,S1 be non empty ManySortedSign;
+ let A be MSAlgebra over S2;
+ func A|S1 -> strict MSAlgebra over S1 equals:
+Def4:
+   A|(S1, id the carrier of S1, id the OperSymbols of S1);
+ correctness;
+end;
+
+theorem
+   for S1,S2 being non empty ManySortedSign
+ for A,B being MSAlgebra over S2 st the MSAlgebra of A = the MSAlgebra of B
+ for f,g being Function st f,g form_morphism_between S1,S2
+  holds A|(S1,f,g) = B|(S1,f,g)
+  proof let S1,S2 be non empty ManySortedSign;
+   let A,B be MSAlgebra over S2 such that
+A1:  the MSAlgebra of A = the MSAlgebra of B;
+   let f,g be Function; assume
+A2:  f,g form_morphism_between S1,S2;
+    then the Sorts of A|(S1,f,g) = (the Sorts of A)*f &
+    the Charact of A|(S1,f,g) = (the Charact of A)*g by Def3;
+   hence thesis by A1,A2,Def3;
+  end;
+
+theorem Th23:
+ for S1,S2 being non empty ManySortedSign
+ for A being non-empty MSAlgebra over S2
+ for f,g being Function st f,g form_morphism_between S1,S2
+  holds A|(S1,f,g) is non-empty
+  proof let S1,S2 be non empty ManySortedSign;
+   let A be non-empty MSAlgebra over S2;
+   let f,g be Function; assume f,g form_morphism_between S1,S2;
+    then the Sorts of (A|(S1,f,g)) = (the Sorts of A)*f by Def3;
+   hence the Sorts of (A|(S1,f,g)) is non-empty;
+  end;
+
+definition
+ let S2 be non empty ManySortedSign;
+ let S1 be non empty Subsignature of S2;
+ let A be non-empty MSAlgebra over S2;
+ cluster A|S1 -> non-empty;
+ coherence
+  proof
+      A|S1 = A|(S1, id the carrier of S1, id the OperSymbols of S1) &
+    id the carrier of S1, id the OperSymbols of S1 form_morphism_between S1,S2
+     by Def2,Def4;
+   hence thesis by Th23;
+  end;
+end;
+
+theorem Th24:
+ for S1,S2 being non void non empty ManySortedSign
+ for f,g being Function st f,g form_morphism_between S1,S2
+ for A being MSAlgebra over S2
+ for o1 being OperSymbol of S1, o2 being OperSymbol of S2 st o2 = g.o1
+  holds Den(o1,A|(S1,f,g)) = Den(o2,A)
+  proof let S1,S2 be non void non empty ManySortedSign;
+   let f,g be Function; assume
+A1:  f,g form_morphism_between S1,S2;
+   then reconsider g' = g as
+     Function of the OperSymbols of S1, the OperSymbols of S2 by Th10;
+   let A be MSAlgebra over S2;
+   let o1 be OperSymbol of S1, o2 be OperSymbol of S2; assume
+      o2 = g.o1;
+    then (the Charact of A).o2 = ((the Charact of A)*g').o1 by FUNCT_2:21
+     .= (the Charact of A|(S1,f,g)).o1 by A1,Def3;
+   hence Den(o1,A|(S1,f,g)) = (the Charact of A).o2 by MSUALG_1:def 11
+      .= Den(o2,A) by MSUALG_1:def 11;
+  end;
+
+theorem Th25:
+ for S1,S2 being non void non empty ManySortedSign
+ for f,g being Function st f,g form_morphism_between S1,S2
+ for A being MSAlgebra over S2
+ for o1 being OperSymbol of S1, o2 being OperSymbol of S2 st o2 = g.o1
+  holds Args(o2,A) = Args(o1,A|(S1,f,g)) & Result(o1,A|(S1,f,g)) = Result(o2,A)
+  proof let S1,S2 be non void non empty ManySortedSign;
+   let f,g be Function such that
+A1:  f,g form_morphism_between S1,S2;
+   let A be MSAlgebra over S2;
+   let o1 be OperSymbol of S1, o2 be OperSymbol of S2; assume
+A2:  o2 = g.o1;
+A3:  the_arity_of o1 = (the Arity of S1).o1 &
+    the_arity_of o2 = (the Arity of S2).o2 by MSUALG_1:def 6;
+   thus Args(o2,A) = product ((the Sorts of A)*the_arity_of o2) by PRALG_2:10
+     .= product ((the Sorts of A)*(f*the_arity_of o1))
+        by A1,A2,A3,PUA2MSS1:def 13
+     .= product ((the Sorts of A)*f*the_arity_of o1) by RELAT_1:55
+     .= product ((the Sorts of A|(S1,f,g))*the_arity_of o1) by A1,Def3
+     .= Args(o1,A|(S1,f,g)) by PRALG_2:10;
+A4:  dom g = the OperSymbols of S1 & dom f = the carrier of S1
+     by A1,PUA2MSS1:def 13;
+    the_result_sort_of o2 = (the ResultSort of S2).o2 by MSUALG_1:def 7
+     .= ((the ResultSort of S2)*g).o1 by A2,A4,FUNCT_1:23
+     .= (f*the ResultSort of S1).o1 by A1,PUA2MSS1:def 13
+     .= f.((the ResultSort of S1).o1) by FUNCT_2:21
+     .= f.the_result_sort_of o1 by MSUALG_1:def 7;
+   hence Result(o2,A) = (the Sorts of A).(f.the_result_sort_of o1)
+      by PRALG_2:10
+     .= ((the Sorts of A)*f).the_result_sort_of o1 by A4,FUNCT_1:23
+     .= (the Sorts of A|(S1,f,g)).the_result_sort_of o1 by A1,Def3
+     .= Result(o1,A|(S1,f,g)) by PRALG_2:10;
+  end;
+
+theorem Th26:
+ for S being non empty ManySortedSign
+ for A being MSAlgebra over S holds
+  A|(S, id the carrier of S, id the OperSymbols of S) = the MSAlgebra of A
+  proof let S be non empty ManySortedSign;
+   let A be MSAlgebra over S;
+   set f = id the carrier of S, g = id the OperSymbols of S;
+A1:  f,g form_morphism_between S,S by Th9;
+      dom the Charact of A = the OperSymbols of S &
+    dom the Sorts of A = the carrier of S by PBOOLE:def 3;
+    then the Sorts of the MSAlgebra of A = (the Sorts of A)*f &
+    the Charact of the MSAlgebra of A = (the Charact of A)*g by FUNCT_1:42;
+   hence thesis by A1,Def3;
+  end;
+
+theorem
+   for S being non empty ManySortedSign
+ for A being MSAlgebra over S holds A|S = the MSAlgebra of A
+  proof let S be non empty ManySortedSign;
+   let A be MSAlgebra over S;
+      A|(S, id the carrier of S, id the OperSymbols of S) = the MSAlgebra of A
+     by Th26;
+   hence thesis by Def4;
+  end;
+
+theorem Th28:
+ for S1,S2,S3 being non empty ManySortedSign
+ for f1,g1 being Function st f1,g1 form_morphism_between S1,S2
+ for f2,g2 being Function st f2,g2 form_morphism_between S2,S3
+ for A being MSAlgebra over S3
+  holds A|(S1,f2*f1,g2*g1) = (A|(S2,f2,g2))|(S1,f1,g1)
+  proof let S1,S2,S3 be non empty ManySortedSign;
+   let f1,g1 be Function such that
+A1:  f1,g1 form_morphism_between S1,S2;
+   let f2,g2 be Function such that
+A2:  f2,g2 form_morphism_between S2,S3;
+   let A be MSAlgebra over S3;
+A3:  f2*f1, g2*g1 form_morphism_between S1,S3 by A1,A2,PUA2MSS1:30;
+A4:  the Sorts of (A|(S2,f2,g2))|(S1,f1,g1)
+      = (the Sorts of A|(S2,f2,g2))*f1 by A1,Def3
+     .= (the Sorts of A)*f2*f1 by A2,Def3
+     .= (the Sorts of A)*(f2*f1) by RELAT_1:55;
+      the Charact of (A|(S2,f2,g2))|(S1,f1,g1)
+      = (the Charact of A|(S2,f2,g2))*g1 by A1,Def3
+     .= (the Charact of A)*g2*g1 by A2,Def3
+     .= (the Charact of A)*(g2*g1) by RELAT_1:55;
+   hence thesis by A3,A4,Def3;
+  end;
+
+theorem
+   for S1 being non empty feasible ManySortedSign
+ for S2 being non empty Subsignature of S1
+ for S3 being non empty Subsignature of S2
+ for A being MSAlgebra over S1 holds A|S3 = (A|S2)|S3
+  proof let S1 be non empty feasible ManySortedSign;
+   let S2 be non empty Subsignature of S1;
+   let S3 be non empty Subsignature of S2;
+   let A be MSAlgebra over S1;
+   set f1 = id the carrier of S2, g1 = id the OperSymbols of S2;
+   set f2 = id the carrier of S3, g2 = id the OperSymbols of S3;
+      rng f2 = the carrier of S3 & rng g2 = the OperSymbols of S3 &
+    the carrier of S3 c= the carrier of S2 &
+    the OperSymbols of S3 c= the OperSymbols of S2 by Th11,RELAT_1:71;
+then A1:  f1*f2 = f2 & g1*g2 = g2 by RELAT_1:79;
+      f1,g1 form_morphism_between S2,S1 &
+    f2,g2 form_morphism_between S3,S2 by Def2;
+    then A|(S3,f1*f2,g1*g2) = (A|(S2,f1,g1))|(S3,f2,g2) by Th28;
+   hence A|S3 = (A|(S2,f1,g1))|(S3,f2,g2) by A1,Def4
+      .= (A|(S2,f1,g1))|S3 by Def4
+      .= (A|S2)|S3 by Def4;
+  end;
+
+theorem Th30:
+ for S1,S2 being non empty ManySortedSign
+ for f being Function of the carrier of S1, the carrier of S2
+ for g being Function st f,g form_morphism_between S1,S2
+ for A1,A2 being MSAlgebra over S2
+ for h being ManySortedFunction of the Sorts of A1, the Sorts of A2 holds
+  h*f is ManySortedFunction of
+    the Sorts of A1|(S1,f,g), the Sorts of A2|(S1,f,g)
+  proof
+   let S1,S2 be non empty ManySortedSign;
+   let f be Function of the carrier of S1, the carrier of S2;
+   let g be Function such that
+A1:  f,g form_morphism_between S1,S2;
+   let A1,A2 be MSAlgebra over S2;
+   let h be ManySortedFunction of the Sorts of A1,the Sorts of A2;
+   set B1 = A1|(S1,f,g), B2 = A2|(S1,f,g);
+   let x be set; assume x in the carrier of S1;
+   then reconsider s = x as SortSymbol of S1;
+   reconsider fs = f.s as SortSymbol of S2;
+      (h*f).s = h.fs & (the Sorts of A1).fs = ((the Sorts of A1)*f).s &
+    (the Sorts of A2).fs = ((the Sorts of A2)*f).s &
+    (the Sorts of A1)*f = the Sorts of B1 &
+    (the Sorts of A2)*f = the Sorts of B2 by A1,Def3,FUNCT_2:21;
+   hence thesis;
+  end;
+
+theorem
+   for S1 being non empty ManySortedSign
+ for S2 being non empty Subsignature of S1
+ for A1,A2 being MSAlgebra over S1
+ for h being ManySortedFunction of the Sorts of A1, the Sorts of A2 holds
+  h|the carrier of S2 is
+   ManySortedFunction of the Sorts of A1|S2, the Sorts of A2|S2
+  proof let S1 be non empty ManySortedSign;
+   let S2 be non empty Subsignature of S1;
+   set f = id the carrier of S2, g = id the OperSymbols of S2;
+   let A1,A2 be MSAlgebra over S1;
+   let h be ManySortedFunction of the Sorts of A1, the Sorts of A2;
+A1:  f,g form_morphism_between S2,S1 by Def2;
+   then reconsider f as Function of the carrier of S2, the carrier of S1 by
+Th10;
+      A1|S2 = A1|(S2,f,g) & A2|S2 = A2|(S2,f,g) &
+    h*f is ManySortedFunction of
+     the Sorts of A1|(S2,f,g), the Sorts of A2|(S2,f,g) by A1,Def4,Th30;
+   hence thesis by RELAT_1:94;
+  end;
+
+theorem Th32:
+ for S1,S2 being non empty ManySortedSign
+ for f,g being Function st f,g form_morphism_between S1,S2
+ for A being MSAlgebra over S2 holds
+  (id the Sorts of A)*f = id the Sorts of A|(S1,f,g)
+  proof let S1,S2 be non empty ManySortedSign;
+   let f,g be Function such that
+A1:  f,g form_morphism_between S1,S2;
+   let A be MSAlgebra over S2;
+      dom f = the carrier of S1 & rng f c= the carrier of S2
+     by A1,PUA2MSS1:def 13;
+   then reconsider f as Function of the carrier of S1, the carrier of S2
+     by FUNCT_2:def 1,RELSET_1:11;
+      now let i be set; assume i in the carrier of S1;
+     then reconsider s = i as SortSymbol of S1;
+     thus ((id the Sorts of A)*f).i
+        = (id the Sorts of A).(f.s) by FUNCT_2:21
+       .= id ((the Sorts of A).(f.s)) by MSUALG_3:def 1
+       .= id (((the Sorts of A)*f).s) by FUNCT_2:21
+       .= id ((the Sorts of A|(S1,f,g)).s) by A1,Def3
+       .= (id the Sorts of A|(S1,f,g)).i by MSUALG_3:def 1;
+    end;
+   hence thesis by PBOOLE:3;
+  end;
+
+
+theorem
+   for S1 being non empty ManySortedSign
+ for S2 being non empty Subsignature of S1
+ for A being MSAlgebra over S1 holds
+  (id the Sorts of A)|the carrier of S2 = id the Sorts of A|S2
+  proof let S1 be non empty ManySortedSign;
+   let S2 be non empty Subsignature of S1;
+   set f = id the carrier of S2, g = id the OperSymbols of S2;
+   let A be MSAlgebra over S1;
+      A|S2 = A|(S2,f,g) & f,g form_morphism_between S2,S1 by Def2,Def4;
+    then (id the Sorts of A)*f = id the Sorts of A|S2 by Th32;
+   hence thesis by RELAT_1:94;
+  end;
+
+theorem Th34:
+ for S1,S2 being non void non empty ManySortedSign
+ for f,g being Function st f,g form_morphism_between S1,S2
+ for A,B being MSAlgebra over S2
+ for h2 being ManySortedFunction of A,B
+ for h1 being ManySortedFunction of A|(S1,f,g),B|(S1,f,g) st h1 = h2*f
+ for o1 being OperSymbol of S1, o2 being OperSymbol of S2
+  st o2 = g.o1 & Args(o2,A) <> {} & Args(o2,B) <> {}
+ for x2 being Element of Args(o2,A)
+ for x1 being Element of Args(o1,A|(S1,f,g))
+  st x2 = x1
+  holds h1#x1 = h2#x2
+  proof let S1,S2 be non void non empty ManySortedSign;
+   let f,g be Function such that
+A1:  f,g form_morphism_between S1,S2;
+   let A2,B2 be MSAlgebra over S2;
+   set A1 = A2|(S1,f,g), B1 = B2|(S1,f,g);
+   let h2 be ManySortedFunction of A2,B2;
+   let h1 be ManySortedFunction of A1,B1 such that
+A2:  h1 = h2*f;
+   let o1 be OperSymbol of S1, o2 be OperSymbol of S2 such that
+A3:  o2 = g.o1; assume
+A4:  Args(o2,A2) <> {} & Args(o2,B2) <> {};
+   let x2 be Element of Args(o2,A2);
+   let x1 be Element of Args(o1,A1);
+   assume
+A5:  x2 = x1;
+   then reconsider f1 = x1, f2 = x2, g2 = h2#x2 as Function by A4,MSUALG_6:1;
+A6:  Args(o2,A2) = Args(o1,A1) & Args(o2,B2) = Args(o1,B1) by A1,A3,Th25;
+then A7:  dom f1 = dom the_arity_of o1 & dom f2 = dom the_arity_of o2
+     by A4,MSUALG_3:6;
+      now let i be Nat; assume
+A8:    i in dom f1;
+A9:    the_arity_of o1 = (the Arity of S1).o1 &
+      the_arity_of o2 = (the Arity of S2).o2 by MSUALG_1:def 6;
+        dom f = the carrier of S1 by A1,PUA2MSS1:def 13;
+      then h1.((the_arity_of o1)/.i) = h2.(f.((the_arity_of o1)/.i))
+        by A2,FUNCT_1:23
+             .= h2.(f.((the_arity_of o1).i)) by A7,A8,FINSEQ_4:def 4
+             .= h2.((f*the_arity_of o1).i) by A7,A8,FUNCT_1:23
+             .= h2.((the_arity_of o2).i) by A1,A3,A9,PUA2MSS1:def 13
+             .= h2.((the_arity_of o2)/.i) by A5,A7,A8,FINSEQ_4:def 4;
+     hence g2.i = (h1.((the_arity_of o1)/.i)).(f1.i) by A4,A5,A8,MSUALG_3:24;
+    end;
+   hence h1#x1 = h2#x2 by A4,A6,MSUALG_3:24;
+  end;
+
+theorem Th35:
+ for S,S' being non empty non void ManySortedSign
+ for A1,A2 being MSAlgebra over S st
+   the Sorts of A1 is_transformable_to the Sorts of A2
+ for h being ManySortedFunction of A1,A2 st h is_homomorphism A1,A2
+ for f being Function of the carrier of S', the carrier of S
+ for g being Function st f,g form_morphism_between S',S
+ ex h' being ManySortedFunction of A1|(S',f,g), A2|(S',f,g) st
+  h' = h*f & h' is_homomorphism A1|(S',f,g), A2|(S',f,g)
+  proof
+   let S,S' be non empty non void ManySortedSign;
+   let A1,A2 be MSAlgebra over S such that
+A1:  the Sorts of A1 is_transformable_to the Sorts of A2;
+   let h be ManySortedFunction of A1,A2 such that
+A2:  h is_homomorphism A1,A2;
+   let f be Function of the carrier of S', the carrier of S;
+   let g be Function such that
+A3:  f,g form_morphism_between S',S;
+   set B1 = A1|(S',f,g), B2 = A2|(S',f,g);
+   reconsider h' = h*f as ManySortedFunction of B1,B2 by A3,Th30;
+      dom g = the OperSymbols of S' & rng g c= the OperSymbols of S
+     by A3,PUA2MSS1:def 13;
+   then reconsider g as Function of the OperSymbols of S', the OperSymbols of S
+     by FUNCT_2:def 1,RELSET_1:11;
+   take h'; thus h' = h*f;
+   let o be OperSymbol of S'; assume
+A4:  Args(o,B1) <> {};
+A5:  Args(o,B1) = Args(g.o,A1) & Args(o,B2) = Args(g.o,A2) by A3,Th25;
+then A6:  Args(o,B2) <> {} by A1,A4,Th3;
+   let x be Element of Args(o,B1); set go = g.o;
+   reconsider y = x as Element of Args(go,A1) by A3,Th25;
+A7:  h'#x = h#y by A3,A4,A5,A6,Th34;
+A8:  Den(o,B1) = Den(go,A1) & Den(o,B2) = Den(go,A2) by A3,Th24;
+A9:  f*the ResultSort of S' = (the ResultSort of S)*g by A3,PUA2MSS1:def 13;
+A10:  the_result_sort_of o = (the ResultSort of S').o &
+    the_result_sort_of go = (the ResultSort of S).go by MSUALG_1:def 7;
+      h'.the_result_sort_of o
+      = h.(f.the_result_sort_of o) by FUNCT_2:21
+     .= h.(((the ResultSort of S)*g).o) by A9,A10,FUNCT_2:21
+     .= h.the_result_sort_of go by A10,FUNCT_2:21;
+   hence (h'.the_result_sort_of o).(Den(o,B1).x) = Den(o,B2).(h'#x)
+     by A2,A4,A5,A7,A8,MSUALG_3:def 9;
+  end;
+
+theorem
+   for S being non void feasible ManySortedSign
+ for S' being non void Subsignature of S
+ for A1,A2 being MSAlgebra over S st
+   the Sorts of A1 is_transformable_to the Sorts of A2
+ for h being ManySortedFunction of A1,A2 st h is_homomorphism A1,A2
+ ex h' being ManySortedFunction of A1|S', A2|S' st
+  h' = h|the carrier of S' & h' is_homomorphism A1|S', A2|S'
+  proof let S be non void feasible ManySortedSign;
+   let S' be non void Subsignature of S;
+   let A1,A2 be MSAlgebra over S such that
+A1:  the Sorts of A1 is_transformable_to the Sorts of A2;
+   let h be ManySortedFunction of A1,A2 such that
+A2:  h is_homomorphism A1,A2;
+   set f = id the carrier of S', g = id the OperSymbols of S';
+A3:  f,g form_morphism_between S',S by Def2;
+   then reconsider f as Function of the carrier of S', the carrier of S by Th10
+;
+   consider h' being ManySortedFunction of A1|(S',f,g), A2|(S',f,g) such that
+A4:  h' = h*f & h' is_homomorphism A1|(S',f,g), A2|(S',f,g) by A1,A2,A3,Th35;
+    A1|S' = A1|(S',f,g) & A2|S' = A2|(S',f,g) by Def4;
+   then consider k being ManySortedFunction of A1|S', A2|S' such that
+A5:  k = h' & k is_homomorphism A1|S', A2|S' by A4;
+   take k; thus thesis by A4,A5,RELAT_1:94;
+  end;
+
+theorem Th37:
+ for S,S' being non empty non void ManySortedSign
+ for A being non-empty MSAlgebra over S
+ for f being Function of the carrier of S', the carrier of S
+ for g being Function st f,g form_morphism_between S',S
+ for B being non-empty MSAlgebra over S' st B = A|(S',f,g)
+ for s1,s2 being SortSymbol of S', t being Function
+  st t is_e.translation_of B, s1, s2
+  holds t is_e.translation_of A, f.s1, f.s2
+  proof let S,S' be non empty non void ManySortedSign;
+   let A be non-empty MSAlgebra over S;
+   let f be Function of the carrier of S', the carrier of S;
+   let g be Function such that
+A1:  f,g form_morphism_between S',S;
+   let B be non-empty MSAlgebra over S' such that
+A2:  B = A|(S',f,g);
+      dom g = the OperSymbols of S' & rng g c= the OperSymbols of S
+     by A1,PUA2MSS1:def 13;
+   then reconsider g as Function of the OperSymbols of S', the OperSymbols of S
+     by FUNCT_2:def 1,RELSET_1:11;
+   let s1,s2 be SortSymbol of S', t be Function;
+   given o being OperSymbol of S' such that
+A3:  the_result_sort_of o = s2 and
+A4:  ex i being Nat st i in dom the_arity_of o & (the_arity_of o)/.i = s1 &
+    ex a being Function st a in Args(o,B) & t = transl(o,i,a,B);
+   consider i being Nat, a being Function such that
+A5:  i in dom the_arity_of o & (the_arity_of o)/.i = s1 &
+    a in Args(o,B) & t = transl(o,i,a,B) by A4;
+   take g.o;
+      f*the ResultSort of S' = (the ResultSort of S)*g &
+    the_result_sort_of (g.o) = (the ResultSort of S).(g.o)
+     by A1,MSUALG_1:def 7,PUA2MSS1:def 13;
+   hence
+      the_result_sort_of (g.o) = (f*the ResultSort of S').o by FUNCT_2:21
+      .= f.((the ResultSort of S').o) by FUNCT_2:21
+      .= f.s2 by A3,MSUALG_1:def 7;
+   take i;
+      the_arity_of (g.o) = (the Arity of S).(g.o) &
+    the_arity_of o = (the Arity of S').o by MSUALG_1:def 6;
+then A6:  f*the_arity_of o = the_arity_of (g.o) by A1,PUA2MSS1:def 13;
+      rng the_arity_of o c= the carrier of S' & dom f = the carrier of S'
+     by FINSEQ_1:def 4,FUNCT_2:def 1;
+   hence i in dom the_arity_of (g.o) by A5,A6,RELAT_1:46;
+   hence
+A7:  (the_arity_of (g.o))/.i = (the_arity_of (g.o)).i by FINSEQ_4:def 4
+     .= f.((the_arity_of o).i) by A5,A6,FUNCT_1:23
+     .= f.s1 by A5,FINSEQ_4:def 4;
+   take a; thus
+    a in Args(g.o,A) by A1,A2,A5,Th25;
+A8:  dom transl(g.o, i, a, A) = (the Sorts of A).(f.s1) &
+    dom t = (the Sorts of B).s1 by A5,A7,MSUALG_6:def 4;
+      the Sorts of B = (the Sorts of A)*f by A1,A2,Def3;
+then A9:  (the Sorts of B).s1 = (the Sorts of A).(f.s1) by FUNCT_2:21;
+      now let x be set; assume x in (the Sorts of B).s1;
+then t.x = Den(o,B).(a+*(i,x)) & transl(g.o,i,a,A).x = Den(g.o,A).(a+*(i,x)
+)
+       by A5,A7,A9,MSUALG_6:def 4;
+     hence t.x = transl(g.o,i,a,A).x by A1,A2,Th24;
+    end;
+   hence thesis by A8,A9,FUNCT_1:9;
+  end;
+
+Lm1: for S,S' being non empty non void ManySortedSign
+ for A being non-empty MSAlgebra over S
+ for f being Function of the carrier of S', the carrier of S
+ for g being Function st f,g form_morphism_between S',S
+ for B being non-empty MSAlgebra over S' st B = A|(S',f,g)
+ for s1,s2 being SortSymbol of S' st TranslationRel S' reduces s1,s2
+  holds TranslationRel S reduces f.s1, f.s2 &
+  for t being Translation of B, s1, s2 holds
+        t is Translation of A, f.s1, f.s2
+  proof let S,S' be non void non empty ManySortedSign;
+   let A be non-empty MSAlgebra over S;
+   let f be Function of the carrier of S', the carrier of S;
+   let g be Function such that
+A1:  f,g form_morphism_between S',S;
+   let B be non-empty MSAlgebra over S' such that
+A2:  B = A|(S',f,g);
+   defpred P[set, SortSymbol of S', SortSymbol of S'] means
+     TranslationRel S reduces f.$2, f.$3 &
+     $1 is Translation of A, f.$2,f.$3;
+A3:  for s being SortSymbol of S' holds P[id ((the Sorts of B).s),s,s]
+     proof let s be SortSymbol of S';
+      thus TranslationRel S reduces f.s, f.s by REWRITE1:13;
+         the Sorts of B = (the Sorts of A)*f by A1,A2,Def3;
+       then (the Sorts of B).s = (the Sorts of A).(f.s) by FUNCT_2:21;
+      hence thesis by MSUALG_6:16;
+     end;
+A4:  for s1,s2,s3 being SortSymbol of S' st TranslationRel S' reduces s1,s2
+     for t being Translation of B,s1,s2 st P[t,s1,s2]
+     for h being Function st h is_e.translation_of B,s2,s3 holds P[h*t,s1,s3]
+     proof let s1,s2,s3 be SortSymbol of S' such that
+      TranslationRel S' reduces s1,s2;
+      let t be Translation of B,s1,s2 such that
+A5:    P[t,s1,s2];
+      let h be Function; assume h is_e.translation_of B,s2,s3;
+then A6:    h is_e.translation_of A, f.s2, f.s3 by A1,A2,Th37;
+       then [f.s2, f.s3] in TranslationRel S by MSUALG_6:12;
+       then TranslationRel S reduces f.s2, f.s3 by REWRITE1:16;
+      hence P[h*t,s1,s3] by A5,A6,MSUALG_6:19,REWRITE1:17;
+     end;
+A7:  for s1,s2 being SortSymbol of S' st TranslationRel S' reduces s1,s2
+    for t being Translation of B,s1,s2 holds P[t,s1,s2]
+     from TranslationInd(A3,A4);
+   let s1,s2 be SortSymbol of S'; assume
+      TranslationRel S' reduces s1,s2;
+   hence thesis by A7;
+  end;
+
+theorem
+   for S,S' being non empty non void ManySortedSign
+ for f being Function of the carrier of S', the carrier of S
+ for g being Function st f,g form_morphism_between S',S
+ for s1,s2 being SortSymbol of S' st TranslationRel S' reduces s1,s2
+  holds TranslationRel S reduces f.s1, f.s2
+  proof let S,S' be non empty non void ManySortedSign;
+   consider A being non-empty MSAlgebra over S;
+   let f be Function of the carrier of S', the carrier of S;
+   let g be Function; assume
+A1:  f,g form_morphism_between S',S;
+    then A|(S',f,g) is non-empty MSAlgebra over S' by Th23;
+   hence thesis by A1,Lm1;
+  end;
+
+theorem
+   for S,S' being non void non empty ManySortedSign
+ for A being non-empty MSAlgebra over S
+ for f being Function of the carrier of S', the carrier of S
+ for g being Function st f,g form_morphism_between S',S
+ for B being non-empty MSAlgebra over S' st B = A|(S',f,g)
+ for s1,s2 being SortSymbol of S' st TranslationRel S' reduces s1,s2
+ for t being Translation of B, s1, s2 holds
+     t is Translation of A, f.s1, f.s2 by Lm1;
+
+begin :: Translating homomorphism
+
+scheme GenFuncEx{S() -> non empty non void ManySortedSign,
+  A() -> non-empty MSAlgebra over S(),
+  X() -> non-empty ManySortedSet of the carrier of S(),
+  F(set,set) -> set}:
+ ex h being ManySortedFunction of FreeMSA X(), A() st
+  h is_homomorphism FreeMSA X(), A() &
+  for s being SortSymbol of S() for x being Element of X().s holds
+    h.s.root-tree [x,s] = F(x,s)
+ provided
+A1:  for s being SortSymbol of S() for x being Element of X().s holds
+   F(x,s) in (the Sorts of A()).s
+  proof
+    defpred P[set,set] means
+ ex f being Function of (FreeGen X()).$1, (the Sorts of A()).$1 st $2 = f &
+     for x being Element of X().$1 holds f.root-tree [x,$1] = F(x,$1);
+
+A2:  for a being set st a in the carrier of S()
+     ex y being set st P[a,y]
+     proof let a be set; assume a in the carrier of S();
+      then reconsider s = a as SortSymbol of S();
+A3:     (FreeGen X()).s = FreeGen(s, X()) by MSAFREE:def 18;
+defpred P[set,set] means
+        ex x being Element of X().s st $1 = root-tree [x,s] & $2 = F(x,s);
+A4:     for y being set st y in (FreeGen X()).s
+       ex z being set st z in (the Sorts of A()).s & P[y,z]
+        proof let y be set; assume y in (FreeGen X()).s;
+         then consider a be set such that
+A5:       a in X().s & y = root-tree [a,s] by A3,MSAFREE:def 17;
+         reconsider a as Element of X().s by A5;
+         take z = F(a,s); thus z in (the Sorts of A()).s by A1;
+         take a; thus y = root-tree [a,s] & z = F(a,s) by A5;
+        end;
+      consider f being Function such that
+A6:     dom f = (FreeGen X()).s & rng f c= (the Sorts of A()).s and
+A7:     for y being set st y in (FreeGen X()).s holds P[y,f.y]
+         from NonUniqBoundFuncEx(A4);
+      reconsider f as Function of (FreeGen X()).a, (the Sorts of A()).a
+        by A6,FUNCT_2:4;
+      take y = f, f; thus y = f;
+      let x be Element of X().a; x in X().s;
+       then root-tree [x,s] in (FreeGen X()).s by A3,MSAFREE:def 17;
+      then consider z being Element of X().s such that
+A8:     root-tree [x,s] = root-tree [z,s] & f.root-tree [x,s] = F(z,s) by A7;
+         [x,s] = [z,s] by A8,TREES_4:4;
+      hence thesis by A8,ZFMISC_1:33;
+     end;
+   consider h being Function such that
+A9:  dom h = the carrier of S() and
+A10:  for a being set st a in the carrier of S() holds P[a,h.a]
+      from NonUniqFuncEx(A2);
+   reconsider h as ManySortedSet of the carrier of S() by A9,PBOOLE:def 3;
+      h is ManySortedFunction of FreeGen X(), the Sorts of A()
+     proof let a be set; assume a in the carrier of S();
+       then ex f being Function of (FreeGen X()).a, (the Sorts of A()).a st
+        h.a = f &
+        for x being Element of X().a holds f.root-tree [x,a] = F(x,a) by A10;
+      hence thesis;
+     end;
+   then reconsider h as ManySortedFunction of FreeGen X(), the Sorts of A();
+   consider H being ManySortedFunction of FreeMSA X(), A() such that
+A11:  H is_homomorphism FreeMSA X(), A() & H||FreeGen X() = h by MSAFREE:def 5;
+   take H; thus H is_homomorphism FreeMSA X(), A() by A11;
+   let s be SortSymbol of S(), x be Element of X().s;
+   reconsider t = root-tree [x,s] as Term of S(), X() by MSATERM:4;
+      (FreeGen X()).s = FreeGen(s,X()) by MSAFREE:def 18;
+    then t in (FreeGen X()).s & h.s = (H.s)|((FreeGen X()).s)
+     by A11,MSAFREE:def 1,def 17;
+then A12:  H.s.root-tree [x,s] = h.s.root-tree [x,s] by FUNCT_1:72;
+      ex f being Function of (FreeGen X()).s, (the Sorts of A()).s st h.s = f &
+     for x being Element of X().s holds f.root-tree [x,s] = F(x,s) by A10;
+   hence thesis by A12;
+  end;
+
+theorem Th40:
+ for I being set, A,B being ManySortedSet of I
+ for C being ManySortedSubset of A
+ for F being ManySortedFunction of A,B
+ for i being set st i in I
+ for f,g being Function st f = F.i & g = (F||C).i
+ for x being set st x in C.i holds g.x = f.x
+  proof let I be set, A,B be ManySortedSet of I;
+   let C be ManySortedSubset of A;
+   let F be ManySortedFunction of A,B;
+   let i be set; assume
+A1:  i in I;
+   then reconsider Fi = F.i as Function of A.i, B.i by MSUALG_1:def 2;
+   let f,g be Function; assume
+A2:  f = F.i & g = (F||C).i;
+then A3:  g = Fi|(C.i) by A1,MSAFREE:def 1;
+   let x be set;
+   thus thesis by A2,A3,FUNCT_1:72;
+  end;
+
+definition
+ let S be non void non empty ManySortedSign;
+ let X be non-empty ManySortedSet of the carrier of S;
+ cluster FreeGen X -> non-empty;
+ coherence;
+end;
+
+definition
+ let S1,S2 be non empty non void ManySortedSign;
+ let X be non-empty ManySortedSet of the carrier of S2;
+ let f be Function of the carrier of S1, the carrier of S2;
+ let g be Function such that
+A1:   f,g form_morphism_between S1,S2;
+ func hom(f,g,X,S1,S2) ->
+      ManySortedFunction of FreeMSA(X*f), (FreeMSA X)|(S1,f,g) means:
+Def5:
+  it is_homomorphism FreeMSA(X*f), (FreeMSA X)|(S1,f,g) &
+  for s being SortSymbol of S1, x being Element of (X*f).s holds
+   it.s.root-tree [x,s] = root-tree [x,f.s];
+  existence
+   proof set A = (FreeMSA X)|(S1,f,g);
+     the Sorts of A = (the Sorts of FreeMSA X)*f by A1,Def3;
+    then reconsider A as non-empty MSAlgebra over S1 by MSUALG_1:def 8;
+    deffunc F(set,set)=root-tree [$1,f.$2];
+A2:   now let s be SortSymbol of S1, x be Element of (X*f).s;
+      reconsider fs = f.s as SortSymbol of S2;
+      reconsider y = x as Element of X.fs by FUNCT_2:21;
+      reconsider t = root-tree [y,fs] as Term of S2,X by MSATERM:4;
+         the_sort_of t = fs by MSATERM:14;
+       then t in FreeSort(X,fs) by MSATERM:def 5;
+then A3:    FreeMSA X = MSAlgebra(#FreeSort X,FreeOper X#) &
+       t in (FreeSort X).fs by MSAFREE:def 13,def 16;
+         the Sorts of A = (the Sorts of FreeMSA X)*f by A1,Def3;
+      hence F(x,s) in (the Sorts of A).s by A3,FUNCT_2:21;
+     end;
+    consider H being ManySortedFunction of FreeMSA(X*f), A such that
+A4:   H is_homomorphism FreeMSA(X*f), A and
+A5:   for s being SortSymbol of S1 for x being Element of (X*f).s holds
+      H.s.root-tree [x,s] = F(x,s) from GenFuncEx(A2);
+    reconsider G = H as
+     ManySortedFunction of FreeMSA(X*f), (FreeMSA X)|(S1,f,g);
+    take G; thus thesis by A4,A5;
+   end;
+  uniqueness
+   proof let G1,G2 be ManySortedFunction of the Sorts of FreeMSA(X*f),
+             the Sorts of (FreeMSA X)|(S1,f,g) such that
+A6:  G1 is_homomorphism FreeMSA(X*f), (FreeMSA X)|(S1,f,g) and
+A7:  for s being SortSymbol of S1, x being Element of (X*f).s holds
+      G1.s.root-tree [x,s] = root-tree [x,f.s] and
+A8:  G2 is_homomorphism FreeMSA(X*f), (FreeMSA X)|(S1,f,g) and
+A9:  for s being SortSymbol of S1, x being Element of (X*f).s holds
+      G2.s.root-tree [x,s] = root-tree [x,f.s];
+    set H1 = G1, H2 = G2;
+    reconsider A1 = (FreeMSA X)|(S1,f,g) as non-empty MSAlgebra over S1
+      by A1,Th23;
+       now let x be set; assume x in the carrier of S1;
+      then reconsider s = x as SortSymbol of S1;
+      reconsider g1 = (H1||FreeGen (X*f)).s, g2 = (H2||FreeGen (X*f)).s as
+       Function of (FreeGen (X*f)).s, (the Sorts of A1).s;
+         now let z be Element of (FreeGen (X*f)).s;
+           FreeGen(s,X*f) = (FreeGen(X*f)).s by MSAFREE:def 18;
+        then consider a being set such that
+A10:       a in (X*f).s & z = root-tree [a,s] by MSAFREE:def 17;
+        reconsider a as Element of (X*f).s by A10;
+        thus g1.z = H1.s.z by Th40
+          .= root-tree [a,f.s] by A7,A10
+          .= H2.s.z by A9,A10
+          .= g2.z by Th40;
+       end;
+      hence (H1||FreeGen (X*f)).x = (H2||FreeGen (X*f)).x
+       by FUNCT_2:113;
+     end;
+     then H1||FreeGen (X*f) = H2||FreeGen (X*f) & A1 = (FreeMSA X)|(S1,f,g)
+      by PBOOLE:3;
+    hence thesis by A6,A8,EXTENS_1:18;
+   end;
+end;
+
+theorem Th41:
+ for S1,S2 being non void non empty ManySortedSign
+ for X being non-empty ManySortedSet of the carrier of S2
+ for f being Function of the carrier of S1, the carrier of S2
+ for g being Function st f,g form_morphism_between S1,S2
+ for o being OperSymbol of S1, p being Element of Args(o,FreeMSA(X*f))
+ for q being FinSequence st q = hom(f,g,X,S1,S2)#p
+  holds
+   (hom(f,g,X,S1,S2).the_result_sort_of o).([o,the carrier of S1]-tree p) =
+    [g.o,the carrier of S2]-tree q
+  proof let S1,S2 be non void non empty ManySortedSign;
+   let X be non-empty ManySortedSet of the carrier of S2;
+   let f be Function of the carrier of S1, the carrier of S2;
+   let g be Function; assume
+A1:  f,g form_morphism_between S1,S2;
+   then reconsider h = g as Function of the OperSymbols of S1, the OperSymbols
+of S2
+     by Th10;
+   set F = hom(f,g,X,S1,S2);
+   let o be OperSymbol of S1, p be Element of Args(o,FreeMSA(X*f));
+   let q be FinSequence; assume
+A2:  q = F#p;
+then A3:  q is Element of Args(h.o,FreeMSA X) by A1,Th25;
+      F is_homomorphism FreeMSA(X*f), (FreeMSA X)|(S1,f,g) by A1,Def5;
+    then (F.(the_result_sort_of o)).(Den(o,FreeMSA(X*f)).p)
+      = Den(o,(FreeMSA X)|(S1,f,g)).q by A2,MSUALG_3:def 9;
+   hence (F.the_result_sort_of o).([o,the carrier of S1]-tree p)
+      = Den(o,(FreeMSA X)|(S1,f,g)).q by Th4
+     .= Den(h.o, FreeMSA X).q by A1,Th24
+     .= [g.o, the carrier of S2]-tree q by A3,Th4;
+  end;
+
+theorem Th42:
+ for S1,S2 being non void non empty ManySortedSign
+ for X being non-empty ManySortedSet of the carrier of S2
+ for f being Function of the carrier of S1, the carrier of S2
+ for g being Function st f,g form_morphism_between S1,S2
+ for t being Term of S1, X*f holds
+  (hom(f,g,X,S1,S2).the_sort_of t).t is CompoundTerm of S2, X iff
+  t is CompoundTerm of S1, X*f
+  proof let S1,S2 be non void non empty ManySortedSign;
+   let X be non-empty ManySortedSet of the carrier of S2;
+   let f be Function of the carrier of S1, the carrier of S2;
+   let g be Function; assume
+A1:  f,g form_morphism_between S1,S2;
+   then reconsider h = g as Function of the OperSymbols of S1, the OperSymbols
+of S2
+     by Th10;
+   let t be Term of S1, X*f;
+   hereby assume
+       (hom(f,g,X,S1,S2).the_sort_of t).t is CompoundTerm of S2, X;
+    then reconsider w = (hom(f,g,X,S1,S2).the_sort_of t).t as CompoundTerm of
+S2,X;
+A2:   w.{} in [:the OperSymbols of S2, {the carrier of S2}:] by MSATERM:def 6;
+    assume t is not CompoundTerm of S1, X*f;
+     then not t.{} in [:the OperSymbols of S1, {the carrier of S1}:]
+      by MSATERM:def 6;
+    then consider s being SortSymbol of S1, v being Element of (X*f).s such
+that
+A3:   t.{} = [v,s] by MSATERM:2;
+       t = root-tree [v,s] by A3,MSATERM:5;
+     then hom(f,g,X,S1,S2).s.t = root-tree [v,f.s] & the_sort_of t = s
+      by A1,Def5,MSATERM:14;
+     then w.{} = [v,f.s] by TREES_4:3;
+     then f.s = the carrier of S2 & f.s in the carrier of S2 by A2,ZFMISC_1:129
+;
+    hence contradiction;
+   end;
+   assume t is CompoundTerm of S1, X*f;
+   then reconsider t as CompoundTerm of S1, X*f;
+      t.{} in [:the OperSymbols of S1, {the carrier of S1}:]
+     by MSATERM:def 6;
+   then consider o,r being set such that
+A4:  o in the OperSymbols of S1 & r in {the carrier of S1} & t.{} = [o,r]
+     by ZFMISC_1:def 2;
+   reconsider o as OperSymbol of S1 by A4;
+      r = the carrier of S1 by A4,TARSKI:def 1;
+   then consider a being ArgumentSeq of Sym(o,X*f) such that
+A5:  t = [o,the carrier of S1]-tree a by A4,MSATERM:10;
+   reconsider a as Element of Args(o, FreeMSA(X*f)) by Th2;
+   reconsider b = hom(f,g,X,S1,S2)#a as Element of Args(h.o, FreeMSA X)
+     by A1,Th25;
+      t.{} = [o,the carrier of S1] by A5,TREES_4:def 4;
+then A6:  the_sort_of t = the_result_sort_of o by MSATERM:17;
+A7:  (hom(f,g,X,S1,S2).the_result_sort_of o).([o,the carrier of S1]-tree a) =
+     [g.o,the carrier of S2]-tree b by A1,Th41;
+   reconsider b as ArgumentSeq of Sym(h.o, X) by Th2;
+      Sym(h.o, X)-tree b = [h.o,the carrier of S2]-tree b by MSAFREE:def 11;
+   then reconsider T = [h.o,the carrier of S2]-tree b as Term of S2, X;
+A8:  T.{} = [g.o,the carrier of S2] by TREES_4:def 4;
+      [h.o,the carrier of S2] in [:the OperSymbols of S2, {the carrier of S2}:]
+     by ZFMISC_1:129;
+   hence thesis by A5,A6,A7,A8,MSATERM:def 6;
+  end;
+
+theorem
+   for S1,S2 being non void non empty ManySortedSign
+ for X being non-empty ManySortedSet of the carrier of S2
+ for f being Function of the carrier of S1, the carrier of S2
+ for g being one-to-one Function st f,g form_morphism_between S1,S2
+  holds hom(f,g,X,S1,S2) is_monomorphism FreeMSA(X*f), (FreeMSA X)|(S1,f,g)
+  proof let S1,S2 be non void non empty ManySortedSign;
+   let X be non-empty ManySortedSet of the carrier of S2;
+   let f be Function of the carrier of S1, the carrier of S2;
+   let g be one-to-one Function; assume
+A1:  f,g form_morphism_between S1,S2;
+   then reconsider h = g as Function of the OperSymbols of S1, the OperSymbols
+of S2
+     by Th10;
+   set A = (FreeMSA X)|(S1,f,g);
+   reconsider B = A as non-empty MSAlgebra over S1 by A1,Th23;
+   set H = hom(f,g,X,S1,S2);
+   reconsider H' = H as ManySortedFunction of FreeMSA(X*f), B;
+   thus H is_homomorphism FreeMSA(X*f), A by A1,Def5;
+   defpred P[set] means ex t1 being Term of S1, X*f st t1 = $1 &
+    for t2 being Term of S1, X*f st the_sort_of t1 = the_sort_of t2 &
+      (H.the_sort_of t1).t1 = (H.the_sort_of t1).t2 holds t1 = t2;
+A2:  FreeMSA (X*f) = MSAlgebra(#FreeSort(X*f), FreeOper(X*f)#)
+ by MSAFREE:def 16;
+A3:  for s being SortSymbol of S1, v being Element of (X*f).s
+     holds P[root-tree [v,s]]
+     proof let s be SortSymbol of S1, v be Element of (X*f).s;
+      reconsider t1 = root-tree [v,s] as Term of S1, X*f by MSATERM:4;
+      take t1; thus t1 = root-tree [v,s];
+      let t2 be Term of S1, X*f such that
+A4:    the_sort_of t1 = the_sort_of t2 and
+A5:    (H.the_sort_of t1).t1 = (H.the_sort_of t1).t2;
+A6:    H.s.root-tree [v,s] = root-tree [v,f.s] by A1,Def5;
+A7:    the_sort_of t1 = s by MSATERM:14;
+         now assume t2.{} in [:the OperSymbols of S1,{the carrier of S1}:];
+         then t2 is CompoundTerm of S1, X*f by MSATERM:def 6;
+         then (root-tree [v,f.s]).{} = [v,f.s] &
+         root-tree [v,f.s] is CompoundTerm of S2, X
+          by A1,A4,A5,A6,A7,Th42,TREES_4:3;
+         then [v,f.s] in [:the OperSymbols of S2, {the carrier of S2}:]
+          by MSATERM:def 6;
+         then f.s = the carrier of S2 & f.s in the carrier of S2 by ZFMISC_1:
+129;
+        hence contradiction;
+       end;
+      then consider s2 being SortSymbol of S1, v2 being Element of (X*f).s2
+      such that
+A8:     t2.{} = [v2,s2] by MSATERM:2;
+A9:     t2 = root-tree [v2,s2] by A8,MSATERM:5;
+then A10:     s = s2 by A4,A7,MSATERM:14;
+       then H.s.t2 = root-tree [v2,f.s] by A1,A9,Def5;
+       then [v,f.s] = [v2,f.s] by A5,A6,A7,TREES_4:4;
+      hence t1 = t2 by A9,A10,ZFMISC_1:33;
+     end;
+A11:  for o being OperSymbol of S1, p being ArgumentSeq of Sym(o,X*f)
+     st for t being Term of S1,X*f st t in rng p holds P[t]
+     holds P[[o,the carrier of S1]-tree p]
+     proof let o be OperSymbol of S1, p be ArgumentSeq of Sym(o,X*f) such that
+A12:     for t being Term of S1,X*f st t in rng p holds P[t];
+      reconsider a = p as Element of Args(o, FreeMSA(X*f)) by Th2;
+      take t1 = Sym(o,X*f)-tree p;
+      thus
+A13:     t1 = [o,the carrier of S1]-tree p by MSAFREE:def 11;
+      let t2 be Term of S1, X*f such that
+A14:    the_sort_of t1 = the_sort_of t2 and
+A15:    (H.the_sort_of t1).t1 = (H.the_sort_of t1).t2;
+      reconsider q = H#a as Element of Args(h.o, FreeMSA X) by A1,Th25;
+      reconsider b = q as ArgumentSeq of Sym(h.o, X) by Th2;
+      the_sort_of t1 = the_result_sort_of o by MSATERM:20;
+then A16:    (H.the_sort_of t1).t1 = [g.o,the carrier of S2]-tree q by A1,A13,
+Th41;
+         (Sym(h.o, X)-tree b).{} = Sym(h.o, X) &
+       Sym(h.o, X) = [h.o,the carrier of S2] &
+       [h.o,the carrier of S2] in
+ [:the OperSymbols of S2, {the carrier of S2}:]
+        by MSAFREE:def 11,TREES_4:def 4,ZFMISC_1:129;
+       then [h.o, the carrier of S2]-tree b is CompoundTerm of S2, X
+        by MSATERM:def 6;
+       then t2 is CompoundTerm of S1, X*f by A1,A14,A15,A16,Th42;
+       then t2.{} in [:the OperSymbols of S1, {the carrier of S1}:]
+        by MSATERM:def 6;
+      then consider o',s' being set such that
+A17:    o' in the OperSymbols of S1 & s' in {the carrier of S1} & t2.{} = [o',
+s']
+        by ZFMISC_1:def 2;
+      reconsider o' as OperSymbol of S1 by A17;
+A18:    t2.{} = [o', the carrier of S1] by A17,TARSKI:def 1;
+      then consider r being ArgumentSeq of Sym(o', X*f) such that
+A19:    t2 = [o', the carrier of S1]-tree r by MSATERM:10;
+      reconsider c = r as Element of Args(o', FreeMSA(X*f)) by Th2;
+      reconsider R = H#c as Element of Args(h.o', FreeMSA X) by A1,Th25;
+         the_result_sort_of o' = the_sort_of t2 by A18,MSATERM:17;
+    then (H.the_sort_of t1).t1 = [g.o',the carrier of S2]-tree R
+         by A1,A14,A15,A19,Th41;
+then A20:    [g.o', the carrier of S2] = [g.o,the carrier of S2] & q = R
+        by A16,TREES_4:15;
+       then h.o = h.o' by ZFMISC_1:33;
+then A21:    o = o' by FUNCT_2:25;
+then A22:    dom p = dom the_arity_of o & dom r = dom the_arity_of o by MSATERM
+:22;
+         now let i be Nat; assume
+A23:      i in dom the_arity_of o;
+        then reconsider w1 = p.i, w2 = r.i as Term of S1,X*f by A22,MSATERM:22;
+           w1 in rng p by A22,A23,FUNCT_1:def 5;
+then A24:      P[w1] by A12;
+A25:      the_sort_of w1 = (the_arity_of o)/.i &
+         the_sort_of w2 = (the_arity_of o)/.i by A21,A22,A23,MSATERM:23;
+           q = H'#a;
+         then q.i = (H.the_sort_of w1).w1 & R = H'#c
+         by A22,A23,A25,MSUALG_3:def 8;
+         then (H.the_sort_of w1).w1 = (H.the_sort_of w1).w2
+          by A20,A21,A22,A23,A25,MSUALG_3:def 8;
+        hence p.i = r.i by A24,A25;
+       end;
+      hence t1 = t2 by A13,A19,A21,A22,FINSEQ_1:17;
+     end;
+A26:  for t being Term of S1,X*f holds P[t] from TermInd(A3,A11);
+   let i be set, h be Function;
+   assume i in dom H;
+   then reconsider s = i as SortSymbol of S1 by PBOOLE:def 3;
+   assume
+A27:  H.i = h;
+then A28: dom h = dom (H'.s) .= (FreeSort(X*f)).s by A2,FUNCT_2:def 1
+      .= FreeSort(X*f,s) by MSAFREE:def 13;
+A29: FreeSort(X*f,s) c= S1-Terms (X*f) by MSATERM:12;
+   let x,y be set; assume
+A30: x in dom h & y in dom h;
+   then reconsider t1 = x, t2 = y as Term of S1, X*f by A28,A29;
+      P[t1] & the_sort_of t1 = s & the_sort_of t2 = s by A26,A28,A30,MSATERM:
+def 5;
+   hence thesis by A27;
+  end;
+
+theorem
+   for S being non void non empty ManySortedSign
+ for X being non-empty ManySortedSet of the carrier of S holds
+  hom(id the carrier of S, id the OperSymbols of S, X, S, S)
+   = id the Sorts of FreeMSA X
+  proof let S be non void non empty ManySortedSign;
+   let X be non-empty ManySortedSet of the carrier of S;
+   set f = id the carrier of S;
+   set h = hom(f, id the OperSymbols of S, X, S, S);
+   set I = id the Sorts of FreeMSA X, g = id the OperSymbols of S;
+A1:  f, g form_morphism_between S,S by PUA2MSS1:29;
+then A2:  I is_homomorphism FreeMSA X, FreeMSA X &
+    h is_homomorphism FreeMSA (X*f), (FreeMSA X)|(S,f,g) by Def5,MSUALG_3:9;
+      dom X = the carrier of S by PBOOLE:def 3;
+then A3:  X*f = X & (FreeMSA X)|(S,f,g) = FreeMSA X by Th26,FUNCT_1:42;
+      now let i be set; assume i in the carrier of S;
+     then reconsider s = i as SortSymbol of S;
+A4:    (I||FreeGen X).s = (I.s)|((FreeGen X).s) &
+      (h||FreeGen (X*f)).s = (h.s)|((FreeGen (X*f)).s) by MSAFREE:def 1;
+        FreeMSA X = MSAlgebra(#FreeSort X, FreeOper X#) &
+      FreeGen X c= the Sorts of FreeMSA X
+       by MSAFREE:def 16,MSUALG_2:def 1;
+then A5:    (FreeGen X).s c= (the Sorts of FreeMSA X).s by PBOOLE:def 5;
+      then (I.s)|((FreeGen X).s) is
+        Function of (FreeGen X).s, (the Sorts of FreeMSA X).s &
+      (h.s)|((FreeGen X).s) is
+        Function of (FreeGen X).s, (the Sorts of FreeMSA X).s
+       by A3,FUNCT_2:38;
+then A6:    dom ((I.s)|((FreeGen X).s)) = (FreeGen X).s &
+      dom ((h.s)|((FreeGen X).s)) = (FreeGen X).s by FUNCT_2:def 1;
+        now let a be set; assume
+A7:      a in (FreeGen X).s;
+       then reconsider b = a as Element of FreeMSA X,s by A5;
+          b in FreeGen(s,X) by A7,MSAFREE:def 18;
+       then consider x being set such that
+A8:      x in X.s & b = root-tree [x,s] by MSAFREE:def 17;
+       thus ((I.s)|((FreeGen X).s)).a = I.s.b by A7,FUNCT_1:72
+         .= (id ((the Sorts of FreeMSA X).s)).b by MSUALG_3:def 1
+         .= b by FUNCT_1:35
+         .= root-tree [x,f.s] by A8,FUNCT_1:35
+         .= h.s.b by A1,A3,A8,Def5
+         .= ((h.s)|((FreeGen X).s)).a by A7,FUNCT_1:72;
+      end;
+     hence (I||FreeGen X).i = (h||FreeGen (X*f)).i by A3,A4,A6,FUNCT_1:9;
+    end;
+    then I||FreeGen X = h||FreeGen (X*f) by PBOOLE:3;
+   hence thesis by A2,A3,EXTENS_1:23;
+  end;
+
+theorem
+   for S1,S2,S3 being non void non empty ManySortedSign
+ for X being non-empty ManySortedSet of the carrier of S3
+ for f1 being Function of the carrier of S1, the carrier of S2
+ for g1 being Function st f1,g1 form_morphism_between S1,S2
+ for f2 being Function of the carrier of S2, the carrier of S3
+ for g2 being Function st f2,g2 form_morphism_between S2,S3 holds
+  hom(f2*f1,g2*g1,X,S1,S3) = (hom(f2,g2,X,S2,S3)*f1)**hom(f1,g1,X*f2,S1,S2)
+  proof let S1,S2,S3 be non void non empty ManySortedSign;
+   let X be non-empty ManySortedSet of the carrier of S3;
+   let f1 be Function of the carrier of S1, the carrier of S2;
+   let g1 be Function such that
+A1:  f1,g1 form_morphism_between S1,S2;
+   let f2 be Function of the carrier of S2, the carrier of S3;
+   let g2 be Function;
+   set f = f2*f1, g = g2*g1;
+   assume
+A2:  f2,g2 form_morphism_between S2,S3;
+then A3: f, g form_morphism_between S1,S3 by A1,PUA2MSS1:30;
+then A4:  hom(f,g,X,S1,S3) is_homomorphism FreeMSA(X*f), (FreeMSA X)|(S1,f,g) &
+    hom(f1,g1,X*f2,S1,S2) is_homomorphism
+      FreeMSA(X*f2*f1), (FreeMSA (X*f2))|(S1,f1,g1) &
+    hom(f2,g2,X,S2,S3) is_homomorphism FreeMSA(X*f2), (FreeMSA X)|(S2,f2,g2)
+     by A1,A2,Def5;
+A5:  the Sorts of FreeMSA(X*f2) is_transformable_to
+    the Sorts of (FreeMSA X)|(S2,f2,g2)
+     proof let i be set; assume i in the carrier of S2;
+      then reconsider s = i as SortSymbol of S2;
+         (the Sorts of (FreeMSA X)|(S2,f2,g2)).s =
+       ((the Sorts of FreeMSA X)*f2).s by A2,Def3;
+      hence thesis;
+     end;
+   reconsider Af = (FreeMSA X)|(S1,f,g), Af1 = (FreeMSA(X*f2))|(S1,f1,g1)
+     as non-empty MSAlgebra over S1 by A1,A3,Th23;
+    (FreeMSA X)|(S1,f,g) = ((FreeMSA X)|(S2,f2,g2))|(S1,f1,g1) by A1,A2,Th28
+;
+   then consider hf1 being ManySortedFunction of Af1, Af such that
+A6:  hf1 = hom(f2,g2,X,S2,S3)*f1 & hf1 is_homomorphism Af1, Af by A1,A4,A5,Th35
+;
+A7:  X*f = X*f2*f1 by RELAT_1:55;
+   reconsider hh = hom(f1,g1,X*f2,S1,S2) as
+     ManySortedFunction of FreeMSA(X*f), Af1 by RELAT_1:55;
+   reconsider hf1h = hf1**hh as ManySortedFunction of FreeMSA(X*f),
+     (FreeMSA X)|(S1,f,g);
+    A8: hf1**hh is_homomorphism FreeMSA(X*f), Af by A4,A6,A7,MSUALG_3:10;
+      now let s be SortSymbol of S1, x be Element of (X*f).s;
+A9:    (X*f).s = (X*f2).(f1.s) & (X*f2).(f1.s) = X.(f2.(f1.s)) by A7,FUNCT_2:21
+;
+     reconsider t = root-tree [x,s] as Term of S1, X*f by MSATERM:4;
+        the_sort_of t = s & (FreeSort (X*f)).s = FreeSort(X*f,s) &
+      FreeMSA (X*f) = MSAlgebra(#FreeSort (X*f), FreeOper (X*f)#)
+       by MSAFREE:def 13,def 16,MSATERM:14;
+then A10:    root-tree [x,s] in (the Sorts of FreeMSA(X*f)).s by MSATERM:def 5;
+        hf1h.s.root-tree [x,s]
+       = ((hf1.s)*(hom(f1,g1,X*f2,S1,S2).s)).root-tree [x,s] by MSUALG_3:2
+      .= (hf1.s).(hom(f1,g1,X*f2,S1,S2).s.root-tree [x,s]) by A7,A10,FUNCT_2:21
+      .= (hf1.s).root-tree [x,f1.s] by A1,A7,Def5;
+     hence hf1h.s.root-tree [x,s]
+       = (hom(f2,g2,X,S2,S3).(f1.s)).root-tree [x,f1.s] by A6,FUNCT_2:21
+      .= root-tree [x,f2.(f1.s)] by A2,A9,Def5
+      .= root-tree [x,f.s] by FUNCT_2:21;
+    end;
+   hence thesis by A3,A6,A8,Def5;
+  end;
+

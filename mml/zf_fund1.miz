@@ -1,0 +1,2112 @@
+:: Mostowski's Fundamental Operations - Part I
+::  by Andrzej Kondracki
+::
+:: Received December 17, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary CLASSES2, ZF_REFLE, ORDINAL1, ORDINAL2, FINSUB_1, FUNCT_1, ZF_LANG,
+      SEQ_1, RELAT_1, MCART_1, CARD_1, FINSET_1, ZF_MODEL, FUNCT_2, BOOLE,
+      ORDINAL4, TARSKI, FUNCOP_1, ZF_FUND1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, NAT_1, ORDINAL1,
+      ORDINAL2, ORDINAL4, CARD_1, FINSET_1, RELAT_1, CLASSES2, ZF_REFLE,
+      ZF_LANG, ZF_MODEL, FUNCT_1, FUNCT_2, MCART_1, FINSUB_1, FUNCOP_1;
+ constructors WELLORD2, SETWISEO, ORDINAL4, CLASSES1, ZF_MODEL, MCART_1, NAT_1,
+      FUNCOP_1, PARTFUN1, XREAL_0, MEMBERED, XBOOLE_0;
+ clusters ORDINAL1, CARD_1, ZF_LANG, FUNCT_1, FINSUB_1, FINSET_1, RELSET_1,
+      CLASSES2, MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements NUMERALS, SUBSET, BOOLE;
+ definitions TARSKI, XBOOLE_0;
+ theorems TARSKI, ORDINAL1, ORDINAL2, ORDINAL3, ORDINAL4, CARD_1, CLASSES2,
+      ZFMISC_1, ZF_LANG, ZF_LANG1, ZF_MODEL, ENUMSET1, FUNCT_1, FUNCT_2,
+      FUNCT_5, RELAT_1, MCART_1, FINSUB_1, FINSET_1, GRFUNC_1, NAT_1, FUNCOP_1,
+      WELLORD2, CLASSES1, RELSET_1, FINSEQ_1, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+ schemes FUNCT_1, FUNCT_2, ORDINAL1, FINSET_1, ZF_LANG1, RLVECT_2, COMPLSP1,
+      XBOOLE_0;
+
+begin
+
+ reserve V for Universe,
+         a,b,x,y,z,x',y' for Element of V,
+         X for Subclass of V,
+         o,p,q,r,s,t,u,a1,a2,a3,A,B,C,D for set,
+         K,L,M for Ordinal,
+         n for Element of omega,
+         fs for Finite_Subset of omega,
+         e,g,h for Function,
+         E for non empty set,
+         f for Function of VAR,E,
+         k,k1 for Nat,
+         v1,v2,v3 for Element of VAR,
+         H,H' for ZF-formula;
+
+defpred PAIR[set] means ex p,r st $1=[p,r];
+
+definition let A,B;
+ func A(#)B -> set means
+:Def1:  p in it iff ex q,r,s st p=[q,s] & [q,r] in A & [r,s] in B;
+   existence
+    proof
+     consider C such that A1:for o holds o in C
+                           iff o in A & PAIR[o] from Separation;
+     consider D such that A2:for o holds o in D
+                           iff o in B & PAIR[o] from Separation;
+       for o st o in C holds ex p,r st o=[p,r] by A1;
+     then reconsider C'=C as Relation by RELAT_1:def 1;
+       for o st o in D holds ex p,r st o=[p,r] by A2;
+     then reconsider D'=D as Relation by RELAT_1:def 1;
+     reconsider F=C'*D' as set;
+     take F;
+     A3:now
+      let p;assume A4: p in F;
+      then consider q,s such that A5:p=[q,s] by RELAT_1:def 1;
+      consider r such that A6:[q,r] in C' & [r,s] in D' by A4,A5,RELAT_1:def 8;
+      take q;take r;take s;
+      thus p=[q,s] by A5;
+      thus [q,r] in A by A1,A6;
+      thus [r,s] in B by A2,A6;
+     end;
+       now let p;
+      given q,r,s such that A7:p=[q,s] & [q,r] in A & [r,s] in B;
+      A8:[q,r] in C' by A1,A7;
+        [r,s] in D' by A2,A7;
+      hence p in F by A7,A8,RELAT_1:def 8;
+     end;
+     hence thesis by A3;
+    end;
+   uniqueness
+    proof defpred P[set] means ex q,r,s st $1=[q,s] & [q,r] in A & [r,s] in B;
+     let C,D such that
+        A9:for p holds p in C iff P[p]
+    and A10:for p holds p in D iff P[p];
+     thus thesis from Extensionality(A9,A10);
+    end;
+end;
+
+definition let V,x,y;
+ redefine func x(#)y -> Element of V;
+ coherence
+  proof
+   set Z=x(#)y;
+   A1: Z c= V
+    proof
+     let o; assume o in Z;
+     then consider q,r,s such that
+     A2:o=[q,s] & [q,r] in x & [r,s] in y by Def1;
+       x c= V & y c= V by ORDINAL1:def 2;
+     then [q,r] in V & [r,s] in V by A2;
+     then {{q,r},{q}} in V & {{r,s},{r}} in V by TARSKI:def 5;
+     then {{q,r},{q}} c= V & {{r,s},{r}} c= V by ORDINAL1:def 2;
+     then {q} in V & {r,s} in V by ZFMISC_1:38;
+     then {q} c= V & {r,s} c= V by ORDINAL1:def 2;
+     then q in V & s in V by ZFMISC_1:37,38;
+     hence thesis by A2,CLASSES2:64;
+    end;
+     now
+    consider A such that
+    A3:o in A iff o in x & PAIR[o] from Separation;
+    consider B such that
+    A4:o in B iff o in y & PAIR[o] from Separation;
+      ex g st dom g = [:A,B:] & Z c= rng g
+     proof deffunc G(set) = [$1`1`1,$1`2`2];
+      consider g such that A5:dom g=[:A,B:] & for o st o in [:A,B:]
+       holds g.o=G(o) from Lambda;
+      take g;
+      thus dom g=[:A,B:] by A5;
+      thus Z c= rng g
+      proof
+       let o; assume o in Z;
+       then consider p,q,r such that
+       A6:o=[p,r] & [p,q] in x & [q,r] in y by Def1;
+       set s=[[p,q],[q,r]];
+         ([p,q]) in A & ([q,r]) in B by A3,A4,A6;
+       then A7:s in [:A,B:] by ZFMISC_1:def 2;
+       then g.s=[s`1`1,s`2`2] by A5
+         .=[[p,q]`1,s`2`2] by MCART_1:7
+         .=[[p,q]`1,[q,r]`2] by MCART_1:7
+         .=[p,[q,r]`2] by MCART_1:7
+         .=o by A6,MCART_1:7;
+       hence o in rng g by A5,A7,FUNCT_1:def 5;
+      end;
+     end;
+    then A8:Card Z <=` Card [:A,B:] by CARD_1:28;
+      A c= x & B c= y
+     proof
+        o in A implies o in x by A3;
+      hence A c= x by TARSKI:def 3;
+        o in B implies o in y by A4;
+      hence B c= y by TARSKI:def 3;
+     end;
+    then A in V & B in V by CLASSES1:def 1;
+    then [:A,B:] in V by CLASSES2:67;
+    then Card [:A,B:] <` Card V by CLASSES2:1;
+    hence Card Z <` Card V by A8,ORDINAL1:22;
+   end;
+   hence thesis by A1,CLASSES1:2;
+  end;
+end;
+
+definition
+   deffunc F(Element of omega) = x.card $1;
+ func decode -> Function of omega,VAR means
+:Def2: for p being Element of omega holds it.p = x.card p;
+ existence
+  proof
+    thus ex f being Function of omega, VAR st
+      for x being Element of omega holds f.x = F(x) from LambdaD;
+  end;
+ uniqueness
+  proof
+    thus for f1,f2 being Function of omega,VAR st
+    (for x being Element of omega holds f1.x = F(x)) &
+    (for x being Element of omega holds f2.x = F(x))
+    holds f1 = f2 from FuncDefUniq;
+  end;
+end;
+
+definition let v1;
+  func x".v1 -> Nat means :Def3: x.it=v1;
+ existence
+  proof
+     v1 in VAR;
+   then consider k such that A1:v1=k & k>=5 by ZF_LANG:def 1;
+   consider m being Nat such that A2:k=5+m by A1,NAT_1:28;
+   take m;
+   thus x.m=v1 by A1,A2,ZF_LANG:def 2;
+  end;
+ uniqueness
+  proof
+   let k,k' be Nat such that A3:x.k=v1 and A4:x.k'=v1;
+     5+k=v1 & 5+k'=v1 by A3,A4,ZF_LANG:def 2;
+   hence thesis by XCMPLX_1:2;
+  end;
+end;
+
+Lm1:
+ dom decode = omega & rng decode = VAR
+ & decode is one-to-one & decode" is one-to-one
+ & dom(decode") = VAR & rng(decode") = omega
+  proof
+   thus A1:dom decode = omega by FUNCT_2:def 1;
+   thus A2:rng decode = VAR
+    proof
+       now let p;
+       now assume p in VAR;
+      then reconsider p'=p as Element of VAR;
+      take q= x".p';
+      thus q in dom decode by A1;
+      thus decode.q=x.card (x".p') by Def2
+                   .=x.(x".p') by FINSEQ_1:78
+                   .=p by Def3;
+      end;
+      hence p in VAR iff ex q st q in dom decode & p=decode.q by A1,FUNCT_2:7;
+     end;
+     hence thesis by FUNCT_1:def 5;
+    end;
+   thus A3:decode is one-to-one
+    proof
+       now let p,q; assume
+         A4:p in dom decode & q in dom decode & decode.p=decode.q;
+       then reconsider p'=p, q'=q as Element of omega by FUNCT_2:def 1;
+        x.card p' = decode.q by A4,Def2
+                .= x.card q' by Def2;
+      then A5: 5+card p' = x.card q' by ZF_LANG:def 2
+                     .= 5+card q' by ZF_LANG:def 2;
+      consider k such that A6:p'= k;
+      consider k1 such that A7:q'= k1;
+        k=card p' by A6,FINSEQ_1:78
+      .=card k1 by A5,A7,XCMPLX_1:2
+      .=k1 by FINSEQ_1:78;
+      hence p=q by A6,A7;
+     end;
+     hence thesis by FUNCT_1:def 8;
+    end;
+   hence decode" is one-to-one by FUNCT_1:62;
+   thus thesis by A1,A2,A3,FUNCT_1:55;
+  end;
+
+definition
+  let A be Finite_Subset of VAR;
+ func code A -> Finite_Subset of omega equals
+:Def4: (decode").:A;
+ coherence
+  proof
+     (decode").:A c= omega by Lm1,RELAT_1:144;
+   hence thesis by FINSUB_1:def 5;
+  end;
+end;
+
+definition let H;
+ redefine func Free H -> Finite_Subset of VAR;
+   coherence
+    proof
+       Free H is finite by ZF_LANG1:85;
+     hence thesis by FINSUB_1:def 5;
+    end;
+end;
+
+definition let n;
+ redefine func {n} -> Finite_Subset of omega;
+  coherence
+   proof
+      {n} c= omega by ZFMISC_1:37;
+    hence thesis by FINSUB_1:def 5;
+   end;
+end;
+
+definition let v1;
+  redefine func {v1} -> Finite_Subset of VAR;
+ coherence
+  proof
+     {v1} c= VAR by ZFMISC_1:37;
+   hence thesis by FINSUB_1:def 5;
+  end;
+
+ let v2;
+  func {v1,v2} -> Finite_Subset of VAR;
+ coherence
+  proof
+     {v1,v2} c= VAR by ZFMISC_1:38;
+   hence thesis by FINSUB_1:def 5;
+  end;
+end;
+
+definition let H,E;
+ func Diagram(H,E) -> set means
+:Def5:p in it iff ex f st p=(f*decode)|code Free(H) & f in St(H,E);
+  existence
+   proof
+    defpred P[set] means
+     ex f st $1=(f*decode)|code Free(H) & f in St(H,E);
+    consider B such that
+      A1: p in B iff p in Funcs(code Free(H),E) &
+       P[p] from Separation;
+    take B;
+      p in B iff ex f st p=(f*decode)|code Free(H) & f in St(H,E)
+     proof
+        now
+       given f such that
+           A2: p=(f*decode)|code Free(H) & f in St(H,E);
+       A3:dom (f*decode)=omega & rng (f*decode) c= E
+             by FUNCT_2:def 1,RELSET_1:12;
+       then A4:dom((f*decode)|code Free(H))=omega /\ code Free(H)
+                                                            by RELAT_1:90;
+         code Free(H) c= omega by FINSUB_1:def 5;
+       then A5:dom((f*decode)|code Free(H))=code Free(H) by A4,XBOOLE_1:28;
+         rng((f*decode)|code Free(H)) c= rng (f*decode) by FUNCT_1:76;
+       then rng((f*decode)|code Free(H)) c= E by A3,XBOOLE_1:1;
+       then p in Funcs(code Free(H),E) by A2,A5,FUNCT_2:def 2;
+       hence p in B by A1,A2;
+      end;
+      hence thesis by A1;
+     end;
+    hence thesis;
+   end;
+  uniqueness
+   proof
+    let B,C such that
+       A6:p in B iff ex f st p=(f*decode)|code Free(H) & f in St(H,E)
+   and A7:p in C iff ex f st p=(f*decode)|code Free(H) & f in St(H,E);
+    thus B c= C
+    proof
+     let p;assume p in B;
+     then ex f st p=(f*decode)|code Free(H) & f in St(H,E) by A6;
+     hence p in C by A7;
+    end;
+     let p;assume p in C;
+     then ex f st p=(f*decode)|code Free(H) & f in St(H,E) by A7;
+     hence p in B by A6;
+   end;
+end;
+
+definition let V,X;
+ attr X is closed_wrt_A1 means
+:Def6: for a st a in X holds
+ {{[0-element_of(V),x],[1-element_of(V),y]}: x in y & x in a & y in a} in X;
+
+ attr X is closed_wrt_A2 means
+:Def7: for a,b st a in X & b in X holds {a,b} in X;
+
+ attr X is closed_wrt_A3 means
+:Def8: for a st a in X holds union a in X;
+
+ attr X is closed_wrt_A4 means
+:Def9: for a,b st a in X & b in X holds {{[x,y]}: x in a & y in b} in X;
+
+ attr X is closed_wrt_A5 means
+:Def10: for a,b st a in X & b in X holds {x \/ y: x in a & y in b} in X;
+
+ attr X is closed_wrt_A6 means
+:Def11: for a,b st a in X & b in X holds {x\y: x in a & y in b} in X;
+
+ attr X is closed_wrt_A7 means
+:Def12: for a,b st a in X & b in X holds {x(#)y: x in a & y in b} in X;
+end;
+
+definition let V,X;
+ attr X is closed_wrt_A1-A7 means
+:Def13: X is closed_wrt_A1 closed_wrt_A2 closed_wrt_A3
+  closed_wrt_A4 closed_wrt_A5 closed_wrt_A6 closed_wrt_A7;
+end;
+
+Lm2:
+ for A being Element of omega holds A = x".x.card A
+  proof
+   let A be Element of omega;
+     A = card A by FINSEQ_1:78;
+   hence thesis by Def3;
+  end;
+
+Lm3:
+ dom((f*decode)|fs)=fs & rng((f*decode)|fs) c= E
+ & (f*decode)|fs in Funcs(fs,E) & dom(f*decode)=omega
+ & rng(f*decode) c= E
+  proof
+   A1:dom(f*decode)=omega & rng(f*decode) c= E by FUNCT_2:def 1,RELSET_1:12;
+     fs c= omega by FINSUB_1:def 5;
+   hence A2:dom((f*decode)|fs)=fs by A1,RELAT_1:91;
+     rng((f*decode)|fs) c= rng(f*decode) by FUNCT_1:76;
+   hence rng((f*decode)|fs) c= E by A1,XBOOLE_1:1;
+   hence (f*decode)|fs in Funcs(fs,E) by A2,FUNCT_2:def 2;
+   thus thesis by FUNCT_2:def 1,RELSET_1:12;
+  end;
+
+Lm4:
+ decode.(x".v1)=v1 & (decode").v1= x".v1
+ & (f*decode).( x".v1)=f.v1
+  proof
+   A1: x".v1 in omega;
+   thus A2:decode.( x".v1)=x.card ( x".v1) by Def2
+                             .=x.x".v1 by FINSEQ_1:78
+                             .=v1 by Def3;
+   hence decode".v1= x".v1 by Lm1,FUNCT_1:56;
+      x".v1 in dom(f*decode) by A1,Lm3;
+   hence (f*decode).( x".v1)=f.v1 by A2,FUNCT_1:22;
+  end;
+
+Lm5: for A being Finite_Subset of VAR holds
+  p in code A iff ex v1 st v1 in A & p= x".v1
+ proof
+  let A be Finite_Subset of VAR;
+A1:  p in code A iff p in (decode").:A by Def4;
+  then A2:p in code A iff ex q st q in dom(decode") & q in A & p=(decode").q
+                                                     by FUNCT_1:def 12;
+  A3:A c= VAR & code A c= omega by FINSUB_1:def 5;
+  thus p in code A implies ex v1 st v1 in A & p= x".v1
+   proof
+    assume A4:p in code A;
+    then consider q such that
+    A5:q in A & q in dom(decode") & p=(decode").q by A2;
+    reconsider p' = p as Element of omega by A3,A4;
+    reconsider q as Element of VAR by A3,A5;
+A6:    q=decode.p by A5,Lm1,FUNCT_1:57
+    .=x.card p' by Def2;
+    take q;
+    thus thesis by A5,A6,Lm2;
+   end;
+  given v1 such that A7:v1 in A & p= x".v1;
+    p=decode".v1 by A7,Lm4;
+  hence p in code A by A1,A7,Lm1,FUNCT_1:def 12;
+ end;
+
+Lm6:
+ code {v1} = {x".v1}
+  proof
+   thus code {v1} c= { x".v1}
+   proof let p;assume p in code {v1};
+    then consider v2 such that A1:v2 in {v1} & p= x".v2 by Lm5;
+      v2=v1 by A1,TARSKI:def 1;
+    hence p in { x".v1} by A1,TARSKI:def 1;
+   end;
+   let p;assume p in { x".v1};
+    then A2:p= x".v1 by TARSKI:def 1;
+      v1 in {v1} by TARSKI:def 1;
+    hence p in code {v1} by A2,Lm5;
+  end;
+
+Lm7:
+ code {v1,v2} = {x".v1 , x".v2}
+  proof
+   thus code {v1,v2} c= { x".v1 , x".v2}
+   proof let p;assume p in code {v1,v2};
+    then ex v3 st v3 in {v1,v2} & p= x".v3 by Lm5;
+    then p= x".v1 or p= x".v2 by TARSKI:def 2;
+    hence p in { x".v1 , x".v2} by TARSKI:def 2;
+   end;
+   let p such that A1:p in { x".v1 , x".v2};
+      now per cases by A1,TARSKI:def 2;
+     suppose A2:p= x".v1;
+        v1 in {v1,v2} by TARSKI:def 2;
+      hence p in code {v1,v2} by A2,Lm5;
+     suppose A3:p= x".v2;
+        v2 in {v1,v2} by TARSKI:def 2;
+      hence p in code {v1,v2} by A3,Lm5;
+    end;
+    hence p in code {v1,v2};
+  end;
+
+Lm8:
+ for A being Finite_Subset of VAR holds A,code A are_equipotent
+  proof
+   let A be Finite_Subset of VAR;
+   A1:A c= VAR by FINSUB_1:def 5;
+   A2:(decode")|A is one-to-one by Lm1,FUNCT_1:84;
+   A3:dom((decode")|A)=dom(decode") /\ A by RELAT_1:90
+                    .=A by A1,Lm1,XBOOLE_1:28;
+     rng((decode")|A)=(decode").:A by RELAT_1:148
+                  .=code A by Def4;
+   hence thesis by A2,A3,WELLORD2:def 4;
+  end;
+
+Lm9:
+ for A,B being Finite_Subset of VAR holds
+   code(A \/ B)=code A \/ code B & code(A\B)=(code A)\(code B)
+  proof
+   let A,B be Finite_Subset of VAR;
+   A1:code(A \/ B)=(decode").:(A \/ B) & code(A\B)=(decode").:(A\B)
+    & code A=(decode").:A & code B=(decode").:B by Def4;
+   hence code(A \/ B)=code A \/ code B by RELAT_1:153;
+   thus thesis by A1,Lm1,FUNCT_1:123;
+  end;
+
+Lm10:
+ v1 in Free H implies ((f*decode)|code Free H).( x".v1)=f.v1
+  proof
+   assume A1:v1 in Free H;
+   A2:dom((f*decode)|code Free H)=code Free H by Lm3;
+      x".v1 in code Free H by A1,Lm5;
+   hence ((f*decode)|code Free H).( x".v1)=(f*decode).( x".v1)
+                                                     by A2,FUNCT_1:70
+                                           .=f.v1 by Lm4;
+  end;
+
+Lm11:
+ for f,g being Function of VAR,E st
+  (f*decode)|code Free H=(g*decode)|code Free H &
+  f in St(H,E) holds g in St(H,E)
+  proof
+   let f,g be Function of VAR,E such that
+     A1:(f*decode)|code Free H=(g*decode)|code Free H & f in St(H,E);
+   A2:for v1 st v1 in Free H holds f.v1=g.v1
+    proof
+     let v1; assume A3:v1 in Free H;
+     hence f.v1=((g*decode)|code Free H).( x".v1) by A1,Lm10
+             .=g.v1 by A3,Lm10;
+    end;
+     E,f |= H by A1,ZF_MODEL:def 4;
+   then E,g |= H by A2,ZF_LANG1:84;
+   hence thesis by ZF_MODEL:def 4;
+  end;
+
+Lm12:
+ p in Funcs(fs,E) implies ex f st p=(f*decode)|fs
+  proof
+   assume p in Funcs(fs,E);
+   then A1: ex e st e=p & dom e=fs & rng e c= E by FUNCT_2:def 2;
+   then reconsider g=p as Function of fs,E by FUNCT_2:def 1,RELSET_1:11;
+   consider ElofE being Element of E;
+   defpred C[set] means $1 in dom g;
+   deffunc F(set) = g.$1;
+   deffunc G(set) = ElofE;
+   A2:now
+    let q such that q in omega;
+      now assume q in dom g;
+     then g.q in rng g by FUNCT_1:def 5;
+     hence g.q in E by A1;
+    end;
+    hence (C[q] implies F(q) in E) & (not C[q] implies G(q) in E);
+   end;
+   consider h being Function of omega,E such that
+       A3: for q st q in omega holds (C[q] implies h.q=F(q)) &
+              (not C[q] implies h.q=G(q)) from Lambda1C(A2);
+     decode" is Function of VAR,omega by Lm1,FUNCT_2:def 1,RELSET_1:11;
+   then reconsider f=h*(decode")
+                   as Function of VAR,E by FUNCT_2:19;
+   take f;
+   A4:dom h = omega by FUNCT_2:def 1;
+   then A5:h=h*(id dom decode) by Lm1,RELAT_1:77
+           .=h*(decode"*decode) by Lm1,FUNCT_1:61
+           .=f*decode by RELAT_1:55;
+     g=h|fs
+    proof
+     A6:fs c= omega by FINSUB_1:def 5;
+     then A7: dom g = dom h /\ fs by A1,A4,XBOOLE_1:28;
+       for p st p in dom g holds h.p=g.p by A1,A3,A6;
+     hence thesis by A7,FUNCT_1:68;
+    end;
+   hence thesis by A5;
+  end;
+
+theorem Th1:
+  X c= V & (o in X implies o is Element of V) &
+   (o in A & A in X implies o is Element of V)
+  proof
+   thus X c= V & (o in X implies o is Element of V);
+   assume A1:o in A & A in X;
+   then A c= V by ORDINAL1:def 2;
+   hence thesis by A1;
+  end;
+
+theorem Th2:
+ X is closed_wrt_A1-A7 implies
+ (o in X iff {o} in X) & (A in X implies union A in X)
+  proof
+   assume A1:X is closed_wrt_A1-A7;
+   then A2:X is closed_wrt_A2 by Def13;
+   A3:X is closed_wrt_A3 by A1,Def13;
+   A4:now assume o in X;
+    then {o,o} in X by A2,Def7;
+    hence {o} in X by ENUMSET1:69;
+   end;
+     now assume {o} in X;
+    then union {o} in X by A3,Def8;
+    hence o in X by ZFMISC_1:31;
+   end;
+   hence o in X iff {o} in X by A4;
+   assume A in X;
+   hence thesis by A3,Def8;
+  end;
+
+theorem Th3:
+ X is closed_wrt_A1-A7 implies {} in X
+  proof
+   assume A1:X is closed_wrt_A1-A7;
+   consider o being Element of X;
+   reconsider p=o as Element of V;
+   A2:{p} in X by A1,Th2;
+   set D={{[0-element_of(V),x],[1-element_of(V),y]}: x in y & x in {p} &
+     y in {p}};
+A3:   X is closed_wrt_A1 by A1,Def13;
+     now assume
+A4:   D <> {};
+    consider q being Element of D;
+       q in D by A4;
+    then consider x,y such that A5:q={[0-element_of(V),x],[1-element_of(V),y]}
+                                     & x in y & x in {p} & y in {p};
+      x=p & y=p by A5,TARSKI:def 1;
+    hence contradiction by A5;
+   end;
+   hence thesis by A2,A3,Def6;
+  end;
+
+theorem Th4:
+ X is closed_wrt_A1-A7 & A in X & B in X implies
+  A \/ B in X & A\B in X & A(#)B in X
+  proof
+   assume A1:X is closed_wrt_A1-A7 & A in X & B in X;
+   then reconsider a=A as Element of V;
+   reconsider b=B as Element of V by A1;
+   A2:{a} in X & {b} in X by A1,Th2;
+   A3:X is closed_wrt_A5 by A1,Def13;
+   A4:X is closed_wrt_A6 by A1,Def13;
+   A5:X is closed_wrt_A7 by A1,Def13;
+   set D={x \/ y: x in {a} & y in {b}};
+   A6:D in X by A2,A3,Def10;
+     now let o;
+    A7:now assume o in D;
+     then consider x,y such that A8:o=x \/ y & x in {a} & y in {b};
+       x=a & y=b by A8,TARSKI:def 1;
+     hence o=a \/ b by A8;
+    end;
+      now assume A9:o=a \/ b;
+       a in {a} & b in {b} by TARSKI:def 1;
+     hence o in D by A9;
+    end;
+    hence o in D iff o=a \/ b by A7;
+   end;
+   then {a \/ b} in X by A6,TARSKI:def 1;
+   hence A \/ B in X by A1,Th2;
+   set D={x\y: x in {a} & y in {b}};
+   A10:D in X by A2,A4,Def11;
+     now let o;
+    A11:now assume o in D;
+     then consider x,y such that A12:o=x\y & x in {a} & y in {b};
+       x=a & y=b by A12,TARSKI:def 1;
+     hence o=a\b by A12;
+    end;
+      now assume A13:o=a\b;
+       a in {a} & b in {b} by TARSKI:def 1;
+     hence o in D by A13;
+    end;
+    hence o in D iff o=a\b by A11;
+   end;
+   then {a\b} in X by A10,TARSKI:def 1;
+   hence A\B in X by A1,Th2;
+   set D={x(#)y: x in {a} & y in {b}};
+   A14:D in X by A2,A5,Def12;
+     now let o;
+    A15:now assume o in D;
+     then consider x,y such that A16:o=x(#)y & x in {a} & y in {b};
+       x=a & y=b by A16,TARSKI:def 1;
+     hence o=a(#)b by A16;
+    end;
+      now assume A17:o=a(#)b;
+       a in {a} & b in {b} by TARSKI:def 1;
+     hence o in D by A17;
+    end;
+    hence o in D iff o=a(#)b by A15;
+   end;
+   then {a(#)b} in X by A14,TARSKI:def 1;
+   hence A(#)B in X by A1,Th2;
+  end;
+
+theorem Th5:
+ X is closed_wrt_A1-A7 & A in X & B in X implies A/\B in X
+  proof
+   assume A1:X is closed_wrt_A1-A7 & A in X & B in X;
+   then A\B in X by Th4;
+   then A\(A\B) in X by A1,Th4;
+   hence A/\B in X by XBOOLE_1:48;
+  end;
+
+theorem Th6:
+ X is closed_wrt_A1-A7 & o in X & p in X implies {o,p} in X & [o,p] in X
+  proof
+   assume A1:X is closed_wrt_A1-A7 & o in X & p in X;
+   then A2:X is closed_wrt_A2 by Def13;
+   reconsider a=o,b=p as Element of V by A1;
+   A3:{a,b} in X by A1,A2,Def7;
+   thus {o,p} in X by A1,A2,Def7;
+    {o} in X by A1,Th2;
+   then {{o,p},{o}} in X by A2,A3,Def7;
+   hence thesis by TARSKI:def 5;
+  end;
+
+theorem Th7:
+ X is closed_wrt_A1-A7 implies omega c= X
+  proof
+   assume A1:X is closed_wrt_A1-A7;
+   assume not thesis;
+   then consider o such that A2:o in omega & not o in X by TARSKI:def 3;
+   reconsider K=o as Ordinal by A2,ORDINAL1:23;
+   defpred P[Ordinal] means
+    $1 in omega & not $1 in X;
+     K in omega & not K in X by A2; then
+A3: ex K st P[K];
+   consider L such that
+A4: P[L] & for M st P[M] holds L c= M from Ordinal_Min(A3);
+     L<>{} by A1,A4,Th3;
+   then A5:{} in L by ORDINAL3:10;
+   A6:L c= omega by A4,ORDINAL1:def 2;
+   A7:L<>omega by A4;
+     now
+    assume A8:omega c= L;
+      L c= omega by A4,ORDINAL1:def 2;
+    hence contradiction by A7,A8,XBOOLE_0:def 10;
+   end;
+   then not L is_limit_ordinal by A5,ORDINAL2:def 5;
+   then consider M such that A9:succ M = L by ORDINAL1:42;
+   A10: M in L by A9,ORDINAL1:10;
+   A11:now assume not M in X;
+    then A12:L c= M by A4,A6,A10;
+      M c= L by A10,ORDINAL1:def 2;
+    then M=L by A12,XBOOLE_0:def 10;
+    hence contradiction by A9,ORDINAL1:14;
+   end;
+   then {M} in X by A1,Th2;
+   then M \/ {M} in X by A1,A11,Th4;
+   hence contradiction by A4,A9,ORDINAL1:def 1;
+  end;
+
+theorem Th8:
+ X is closed_wrt_A1-A7 implies Funcs(fs,omega) c= X
+  proof defpred P[set] means Funcs($1,omega) c= X;
+   assume A1:X is closed_wrt_A1-A7;
+   then A2:omega c= X by Th7;
+   A3:fs is finite;
+   A4:P[{}]
+    proof
+     A5:Funcs({},omega)={{}} by FUNCT_5:64;
+       {} in X by A1,Th3;
+     hence thesis by A5,ZFMISC_1:37;
+    end;
+   A6:for o,B being set st o in fs & B c= fs & P[B]
+                                   holds P[B \/ {o}]
+    proof
+     let o,B be set;
+     assume A7:o in fs & B c= fs & Funcs(B,omega) c= X;
+       now
+      let p such that A8: p in Funcs(B \/ {o},omega);
+        fs c= omega by FINSUB_1:def 5;
+      then A9:o in omega by A7;
+      consider g such that
+       A10: p=g & dom g = B \/ {o} & rng g c= omega by A8,FUNCT_2:def 2;
+      set A=g|B; set C=g|{o};
+      A11:A in X
+       proof
+        A12: dom A=(B \/ {o}) /\ B by A10,RELAT_1:90
+                .=B by XBOOLE_1:21;
+          rng A c= rng g by FUNCT_1:76;
+        then rng A c= omega by A10,XBOOLE_1:1;
+        then A in Funcs(B,omega) by A12,FUNCT_2:def 2;
+        hence thesis by A7;
+       end;
+A13:      C in X
+       proof
+        A14: dom C=(B \/ {o}) /\ {o} by A10,RELAT_1:90
+                .={o} by XBOOLE_1:21;
+        then A15: C={[o,C.o]} by GRFUNC_1:18;
+          rng C c= rng g by FUNCT_1:76;
+        then A16: rng C c= omega by A10,XBOOLE_1:1;
+          o in dom C by A14,TARSKI:def 1;
+        then C.o in rng C by FUNCT_1:def 5;
+        then C.o in omega by A16;
+        then [o,C.o] in X by A1,A2,A9,Th6;
+        hence thesis by A1,A15,Th2;
+       end;
+        g = (g|(B \/ {o})) by A10,RELAT_1:97
+             .= A \/ C by RELAT_1:107;
+      hence p in X by A1,A10,A11,A13,Th4;
+     end;
+     hence thesis by TARSKI:def 3;
+    end;
+   thus P[fs] from Finite(A3,A4,A6);
+  end;
+
+theorem Th9:
+ X is closed_wrt_A1-A7 & a in X implies Funcs(fs,a) in X
+  proof defpred P[set] means Funcs($1,a) in X;
+   assume A1:X is closed_wrt_A1-A7 & a in X;
+   then A2:X is closed_wrt_A5 by Def13;
+   A3:X is closed_wrt_A4 by A1,Def13;
+   A4:fs is finite;
+   A5:P[{}]
+    proof
+     A6:Funcs({},a)={{}} by FUNCT_5:64;
+       {} in X by A1,Th3;
+     hence thesis by A1,A6,Th2;
+    end;
+   A7:for o,B being set st o in fs & B c= fs & P[B]
+                                   holds P[B \/ {o}]
+    proof
+     let o,B be set such that A8:o in fs & B c= fs & Funcs(B,a) in X;
+     per cases;
+      suppose B meets {o};
+        then o in B by ZFMISC_1:56;
+        hence thesis by A8,ZFMISC_1:46;
+      suppose A9:B misses {o};
+        A10:omega c= X by A1,Th7;
+          fs c= omega by FINSUB_1:def 5;
+        then A11: o in omega by A8;
+        then A12:o in X by A10;
+        A13:{o} in X by A1,A10,A11,Th2;
+        set r = {o};
+        reconsider p=o as Element of V by A12;
+        set A={{[x,y]}: x in r & y in a};
+          Funcs({o},a)=A
+         proof
+          thus Funcs({o},a) c= A
+          proof
+           let q;
+           assume q in Funcs({o},a);
+           then consider g such that
+               A14: q=g & dom g={o} & rng g c= a by FUNCT_2:def 2;
+             o in dom g by A14,TARSKI:def 1;
+           then A15: g.o in rng g by FUNCT_1:def 5;
+           A16:o in r by TARSKI:def 1;
+           reconsider s=g.o as Element of V by A1,A14,A15,Th1;
+             g={[p,s]} by A14,GRFUNC_1:18;
+           hence q in A by A14,A15,A16;
+          end;
+           let q; assume q in A;
+           then consider x,y such that A17:q={[x,y]} & x in r & y in a;
+           reconsider g=q as Function by A17,GRFUNC_1:15;
+             x=o by A17,TARSKI:def 1;
+           then A18: dom g={o} & rng g={y} by A17,RELAT_1:23;
+           then rng g c= a by A17,ZFMISC_1:37;
+           hence q in Funcs({o},a) by A18,FUNCT_2:def 2;
+         end;
+        then A19:Funcs({o},a) in X by A1,A3,A13,Def9;
+        reconsider x=Funcs(B,a) as Element of V by A8;
+        reconsider y=Funcs({o},a) as Element of V by A19;
+        set Z={x' \/ y': x' in x & y' in y};
+          Funcs(B \/ {o},a)=Z
+         proof
+          thus Funcs(B \/ {o},a) c= Z
+          proof
+           let q;
+           assume q in Funcs(B \/ {o},a);
+           then consider g such that
+               A20: q=g & dom g=B \/ {o} & rng g c= a by FUNCT_2:def 2;
+           set A=g|B; set C=g|{o};
+           A21:dom A=(B \/ {o}) /\ B by A20,RELAT_1:90
+                  .=B by XBOOLE_1:21;
+             rng A c= rng g by FUNCT_1:76;
+           then rng A c= a by A20,XBOOLE_1:1;
+           then A22:A in x by A21,FUNCT_2:def 2;
+           then reconsider x'=A as Element of V by A8,Th1;
+           A23:dom C=(B \/ {o}) /\ {o} by A20,RELAT_1:90
+                  .={o} by XBOOLE_1:21;
+             rng C c= rng g by FUNCT_1:76;
+           then rng C c= a by A20,XBOOLE_1:1;
+           then A24:C in y by A23,FUNCT_2:def 2;
+           then reconsider y'=C as Element of V by A19,Th1;
+             g=(g|(B \/ {o})) by A20,RELAT_1:97
+                 .=A \/ C by RELAT_1:107;
+           then q=x' \/ y' by A20;
+           hence q in Z by A22,A24;
+          end;
+           let q;
+           assume q in Z;
+           then consider x',y' such that A25:q=x' \/ y' & x' in x & y' in y;
+           consider e such that
+                    A26:x'=e & dom e=B & rng e c= a by A25,FUNCT_2:def 2;
+           consider g such that
+                    A27:y'=g & dom g={o} & rng g c= a by A25,FUNCT_2:def 2;
+           reconsider h=e \/ g as Function by A9,A26,A27,GRFUNC_1:31;
+           A28:dom h=B \/ {o} by A26,A27,GRFUNC_1:33;
+             rng h=rng e \/ rng g by GRFUNC_1:33;
+           then rng h c= a \/ a by A26,A27,XBOOLE_1:13;
+           hence thesis by A25,A26,A27,A28,FUNCT_2:def 2;
+         end;
+        hence Funcs(B \/ {o},a) in X by A2,A8,A19,Def10;
+    end;
+   thus P[fs] from Finite(A4,A5,A7);
+  end;
+
+theorem Th10:
+ X is closed_wrt_A1-A7 & a in Funcs(fs,omega) &
+  b in X implies {a(#)x: x in b} in X
+  proof
+   assume A1:X is closed_wrt_A1-A7 & a in Funcs(fs,omega) & b in X;
+   then Funcs(fs,omega) c= X by Th8;
+   then A2:{a} in X by A1,Th2;
+   set s={a};
+   set A={a(#)x: x in b}; set B={y(#)x: y in s & x in b};
+   A3:A=B
+    proof
+     thus A c= B proof let q;
+      assume q in A;
+       then A4: ex x st q=a(#)x & x in b;
+         a in s by TARSKI:def 1;
+       hence q in B by A4;
+      end;
+      thus B c= A proof
+       let q; assume q in B;
+       then consider y,x such that A5:q=y(#)x & y in s & x in b;
+         q=a(#)x by A5,TARSKI:def 1;
+       hence q in A by A5;
+      end;
+    end;
+     X is closed_wrt_A7 by A1,Def13;
+   hence thesis by A1,A2,A3,Def12;
+  end;
+
+Lm13:
+ X is closed_wrt_A1-A7 implies n in X
+  proof
+   assume X is closed_wrt_A1-A7;
+   then omega c= X by Th7;
+   hence thesis by TARSKI:def 3;
+  end;
+
+Lm14:
+ X is closed_wrt_A1-A7 implies 0-element_of(V) in X & 1-element_of(V) in X
+  proof
+   assume A1:X is closed_wrt_A1-A7;
+   then A2:{} in X by Th3;
+   hence 0-element_of(V) in X by ORDINAL4:35;
+     {} \/ {{}} in X by A1,A2,Th2;
+   then one in X by ORDINAL1:def 1,ORDINAL2:def 4;
+   hence thesis by ORDINAL4:35;
+  end;
+
+theorem Th11:
+ X is closed_wrt_A1-A7 & n in fs & a in X & b in X & b c= Funcs(fs,a)
+       implies {x: x in Funcs(fs\{n},a) & ex u st {[n,u]} \/ x in b} in X
+  proof
+   assume
+   A1:X is closed_wrt_A1-A7 & n in fs & a in X & b in X & b c= Funcs(fs,a);
+   then A2:X is closed_wrt_A6 by Def13;
+   set T={[n,x]: x in a};
+   A3:Funcs({n},a) in X by A1,Th9;
+   then reconsider F=Funcs({n},a) as Element of V;
+A4:   T=union F
+    proof
+     thus T c= union F
+     proof
+      let q;assume q in T;
+      then consider x such that A5:q=[n,x] & x in a;
+      reconsider g={[n,x]} as Function by GRFUNC_1:15;
+      A6:dom g={n} & rng g={x} by RELAT_1:23;
+      then rng g c= a by A5,ZFMISC_1:37;
+      then A7:g in F by A6,FUNCT_2:def 2;
+        q in g by A5,TARSKI:def 1;
+      hence q in union F by A7,TARSKI:def 4;
+     end;
+      let q;assume q in union F;
+      then consider A such that A8:q in A & A in F by TARSKI:def 4;
+      consider g such that A9:A=g & dom g={n} & rng g c= a by A8,FUNCT_2:def 2;
+      A10: q in {[n,g.n]} by A8,A9,GRFUNC_1:18;
+        n in dom g by A9,TARSKI:def 1;
+      then A11:g.n in rng g by FUNCT_1:def 5;
+      then reconsider o=g.n as Element of V by A1,A9,Th1;
+        q=[n,o] by A10,TARSKI:def 1;
+      hence q in T by A9,A11;
+    end;
+   then T in X by A1,A3,Th2;
+   then A12:{T} in X by A1,Th2;
+   then reconsider t={T} as Element of V;
+   set Z={y\z: y in b & z in t};
+   set Y={x: x in Funcs(fs\{n},a) & ex u st {[n,u]} \/ x in b};
+     Z=Y
+    proof
+     thus Z c= Y
+     proof let q;assume q in Z;
+      then consider y,z such that A13:q=y\z & y in b & z in t;
+      A14:q=y\T & y in b by A13,TARSKI:def 1;
+      consider g such that
+      A15:y=g & dom g=fs & rng g c= a by A1,A13,FUNCT_2:def 2;
+      set h=g|(fs\{n});
+      A16:dom h=fs /\ (fs\{n}) by A15,RELAT_1:90
+             .=fs /\ fs \ fs /\ {n} by XBOOLE_1:50
+             .=fs\{n} by XBOOLE_1:47;
+        rng h c= rng g by FUNCT_1:76;
+      then A17:rng h c= a by A15,XBOOLE_1:1;
+        h=g\T
+       proof
+        thus h c= g\T
+        proof let p;assume A18:p in h;
+         then consider r,s such that A19:p=[r,s] by RELAT_1:def 1;
+           r in fs\{n} by A16,A18,A19,FUNCT_1:8;
+         then not r in {n} by XBOOLE_0:def 4;
+         then A20:r<>n by TARSKI:def 1;
+         A21:not [r,s] in T
+         proof
+           assume [r,s] in T;
+           then ex x st [r,s]=[n,x] & x in a;
+           hence contradiction by A20,ZFMISC_1:33;
+         end;
+           [r,s] in g by A18,A19,RELAT_1:def 11;
+         hence p in g\T by A19,A21,XBOOLE_0:def 4;
+        end;
+        let p;assume A22: p in g\T;
+         then A23:p in g & not p in T by XBOOLE_0:def 4;
+         then consider r,s such that A24:p=[r,s] by RELAT_1:def 1;
+         A25:r in dom g & s=g.r by A23,A24,FUNCT_1:8;
+         then A26:s in rng g by FUNCT_1:def 5;
+           n<>r
+         proof
+           assume A27:n=r;
+           reconsider a1=s as Element of V by A1,A15,A26,Th1;
+             [r,a1] in T by A15,A26,A27;
+           hence contradiction by A22,A24,XBOOLE_0:def 4;
+         end;
+         then not r in {n} by TARSKI:def 1;
+         then A28:r in fs\{n} by A15,A25,XBOOLE_0:def 4;
+         then s=h.r by A25,FUNCT_1:72;
+         hence p in h by A16,A24,A28,FUNCT_1:8;
+       end;
+      then A29:q in Funcs(fs\{n},a) by A14,A15,A16,A17,FUNCT_2:def 2;
+        {[n,g.n]}=y/\T
+       proof
+        thus {[n,g.n]} c= y/\T
+        proof let p;assume p in {[n,g.n]};
+         then A30:p=[n,g.n] by TARSKI:def 1;
+         then A31:p in y by A1,A15,FUNCT_1:8;
+         A32: g.n in rng g by A1,A15,FUNCT_1:def 5;
+         then reconsider a1=g.n as Element of V by A1,A15,Th1;
+           [n,a1] in T by A15,A32;
+         hence p in y/\T by A30,A31,XBOOLE_0:def 3;
+        end;
+        let p;assume p in y/\T;
+         then A33:p in T & p in y by XBOOLE_0:def 3;
+         then ex x st p=[n,x] & x in a;
+         then p=[n,g.n] by A15,A33,FUNCT_1:8;
+         hence p in {[n,g.n]} by TARSKI:def 1;
+       end;
+      then A34:{[n,g.n]} \/ (y\T) in b by A13,XBOOLE_1:51;
+        Funcs(fs\{n},a) in X by A1,Th9;
+      then reconsider a2=q as Element of V by A29,Th1;
+        a2 in Y by A14,A29,A34;
+      hence q in Y;
+     end;
+      let q;assume q in Y;
+      then consider x such that
+         A35:q=x & x in Funcs(fs\{n},a) & ex u st {[n,u]} \/ x in b;
+      consider u such that A36:{[n,u]} \/ x in b by A35;
+      reconsider y={[n,u]} \/ x as Element of V by A1,A36,Th1;
+      reconsider z=T as Element of V by A4;
+      A37:z in t by TARSKI:def 1;
+        x=y\z
+       proof
+        consider g such that
+               A38:x=g & dom g=fs\{n} & rng g c= a by A35,FUNCT_2:def 2;
+        thus x c= y\z
+        proof
+         let p;assume A39:p in x;
+         then A40:p in y by XBOOLE_0:def 2;
+         consider a1,a2 such that A41:p=[a1,a2] by A38,A39,RELAT_1:def 1;
+           a1 in dom g by A38,A39,A41,FUNCT_1:8;
+         then A42:not a1 in {n} by A38,XBOOLE_0:def 4;
+           not p in z
+          proof
+           assume p in z;
+           then ex x' st p=[n,x'] & x' in a;
+           then a1=n by A41,ZFMISC_1:33;
+           hence contradiction by A42,TARSKI:def 1;
+          end;
+         hence p in y\z by A40,XBOOLE_0:def 4;
+        end;
+        thus y\z c= x
+        proof
+         let p such that A43:p in y\z;
+         A44: x misses z
+          proof
+           assume not thesis;
+           then consider r being set such that
+           A45:r in g & r in z by A38,XBOOLE_0:3;
+           consider a1,a2 such that A46:r=[a1,a2] by A45,RELAT_1:def 1;
+             a1 in dom g by A45,A46,FUNCT_1:8;
+           then A47:not a1 in {n} by A38,XBOOLE_0:def 4;
+             not r in z
+            proof
+             assume r in z;
+             then ex x' st r=[n,x'] & x' in a;
+             then a1=n by A46,ZFMISC_1:33;
+             hence contradiction by A47,TARSKI:def 1;
+            end;
+           hence contradiction by A45;
+          end;
+           {[n,u]} c= z
+          proof
+           assume not thesis;
+           then A48: ex r st r in {[n,u]} & not r in z by TARSKI:def 3;
+           consider g such that
+A49:       {[n,u]} \/ x = g & dom g=fs & rng g c= a by A1,A36,FUNCT_2:def 2;
+             {[n,u]} c= g by A49,XBOOLE_1:7;
+           then [n,u] in g by ZFMISC_1:37;
+           then n in dom g & u=g.n by FUNCT_1:8;
+           then A50: u in rng g by FUNCT_1:def 5;
+           then reconsider a1=u as Element of V by A1,A49,Th1;
+             [n,a1] in z by A49,A50;
+           hence contradiction by A48,TARSKI:def 1;
+          end;
+         then {[n,u]}\z={} by XBOOLE_1:37;
+         then (x\z)\/({[n,u]}\z)=x by A44,XBOOLE_1:83;
+         hence p in x by A43,XBOOLE_1:42;
+        end;
+       end;
+      hence q in Z by A35,A36,A37;
+    end;
+   hence thesis by A1,A2,A12,Def11;
+  end;
+
+theorem Th12:
+ X is closed_wrt_A1-A7 & not n in fs & a in X & b in X & b c= Funcs(fs,a)
+   implies {{[n,x]} \/ y: x in a & y in b} in X
+    proof
+     assume
+A1:X is closed_wrt_A1-A7 & not n in fs & a in X & b in X & b c= Funcs(fs,a);
+     set Z={{[n,x]} \/ y: x in a & y in b};
+     A2:Funcs({n},a) in X by A1,Th9;
+     then reconsider F=Funcs({n},a) as Element of V;
+     set Y={x \/ y: x in F & y in b};
+A3:     X is closed_wrt_A5 by A1,Def13;
+       Y=Z
+      proof
+       thus Y c= Z
+       proof
+        let p;assume p in Y;
+        then consider x,y such that
+            A4:p=x \/ y & x in F & y in b;
+        consider g such that
+            A5:x=g & dom g={n} & rng g c= a by A4,FUNCT_2:def 2;
+          n in dom g by A5,TARSKI:def 1;
+        then A6: g.n in rng g by FUNCT_1:def 5;
+        then reconsider z=g.n as Element of V by A1,A5,Th1;
+          p={[n,z]} \/ y by A4,A5,GRFUNC_1:18;
+        hence p in Z by A4,A5,A6;
+       end;
+        let p;assume p in Z;
+        then consider x,y such that
+            A7:p={[n,x]} \/ y & x in a & y in b;
+        reconsider g={[n,x]} as Function by GRFUNC_1:15;
+        A8:dom g={n} by RELAT_1:23;
+          rng g={x} by RELAT_1:23;
+        then rng g c= a by A7,ZFMISC_1:37;
+        then A9:{[n,x]} in F by A8,FUNCT_2:def 2;
+        then reconsider z={[n,x]} as Element of V by A2,Th1;
+          p=z \/ y by A7;
+        hence p in Y by A7,A9;
+      end;
+     hence Z in X by A1,A2,A3,Def10;
+    end;
+
+theorem Th13:
+ (X is closed_wrt_A1-A7 & B is finite & for o st o in B holds o in X)
+ implies B in X
+   proof defpred P[set] means $1 in X;
+    assume
+    A1:X is closed_wrt_A1-A7 & B is finite & for o st o in B holds o in X;
+    then A2:P[{}] by Th3;
+    A3:B is finite by A1;
+    A4:for o,C being set st o in B & C c= B & P[C] holds P[C \/ {o}]
+     proof
+      let o,C be set; assume A5: o in B & C c= B & C in X;
+      then o in X by A1;
+      then {o} in X by A1,Th2;
+      hence thesis by A1,A5,Th4;
+     end;
+    thus P[B] from Finite(A3,A2,A4);
+   end;
+
+theorem Th14:
+ X is closed_wrt_A1-A7 & A c= X & y in Funcs(fs,A) implies y in X
+  proof
+   assume A1:X is closed_wrt_A1-A7 & A c= X & y in Funcs(fs,A);
+   then consider g such that A2:y=g & dom g=fs & rng g c= A by FUNCT_2:def 2;
+     rng g is finite by A2,FINSET_1:26;
+   then A3:[:dom g,rng g:] is finite by A2,FINSET_1:19;
+     g c= [:dom g,rng g:] by RELAT_1:21;
+   then A4:y is finite by A2,A3,FINSET_1:13;
+     now
+    let o; assume A5: o in y;
+   then consider p,q such that A6:o=[p,q] by A2,RELAT_1:def 1;
+    A7:p in dom g & q=g.p by A2,A5,A6,FUNCT_1:8;
+    A8:omega c= X by A1,Th7;
+      fs c= omega by FINSUB_1:def 5;
+    then A9:p in omega by A2,A7;
+      q in rng g by A7,FUNCT_1:def 5;
+    then q in A by A2;
+    hence o in X by A1,A6,A8,A9,Th6;
+   end;
+   hence thesis by A1,A4,Th13;
+  end;
+
+theorem Th15:
+ X is closed_wrt_A1-A7 & not n in fs & a in X & a c= X & y in Funcs(fs,a)
+   implies {{[n,x]} \/ y: x in a} in X
+  proof
+   assume
+   A1:X is closed_wrt_A1-A7 & not n in fs & a in X & a c= X & y in Funcs(fs,a);
+   then y in X by Th14;
+   then A2:{y} in X by A1,Th2;
+   set s={y};
+   set Z={{[n,x]} \/ y: x in a};
+   set Y={{[n,x]} \/ z: x in a & z in s};
+A3:   s c= Funcs(fs,a) by A1,ZFMISC_1:37;
+     Y=Z
+    proof
+     thus Y c= Z
+     proof
+      let p;assume p in Y;
+      then consider x,z such that A4:p={[n,x]} \/ z & x in a & z in s;
+        z=y by A4,TARSKI:def 1;
+      hence p in Z by A4;
+     end;
+      let p;assume p in Z;
+      then A5: ex x st p={[n,x]} \/ y & x in a;
+        y in s by TARSKI:def 1;
+      hence p in Y by A5;
+    end;
+   hence thesis by A1,A2,A3,Th12;
+  end;
+
+theorem
+   X is closed_wrt_A1-A7 & not n in fs & a in X & a c= X
+ & y in Funcs(fs,a) & b c= Funcs(fs \/ {n},a) & b in X
+  implies {x: x in a & {[n,x]} \/ y in b} in X
+   proof
+    assume A1:X is closed_wrt_A1-A7 & not n in fs & a in X & a c= X
+                & y in Funcs(fs,a) & b c= Funcs(fs \/ {n},a) & b in X;
+    then A2:X is closed_wrt_A6 by Def13;
+    A3: {[n,x]} \/ y in b implies x in a
+     proof
+      assume {[n,x]} \/ y in b;
+      then consider g such that
+A4:{[n,x]} \/ y = g & dom g=fs \/ {n} & rng g c= a by A1,FUNCT_2:def 2;
+      A5:{[n,x]} c= g by A4,XBOOLE_1:7;
+        [n,x] in {[n,x]} by TARSKI:def 1;
+      then n in dom g & x=g.n by A5,FUNCT_1:8;
+      then x in rng g by FUNCT_1:def 5;
+      hence x in a by A4;
+     end;
+    set T={{[n,x]} \/ y: x in a};
+    A6: T in X by A1,Th15;
+    set T'= T /\ b;
+    A7: T' in X by A1,A6,Th5;
+    then reconsider t'=T' as Element of V;
+      y in X by A1,Th14;
+    then A8: {y} in X by A1,Th2;
+    set s={y};
+    set R={x\z: x in t' & z in s};
+    A9: R in X by A2,A7,A8,Def11;
+    set S={{[n,x]}: {[n,x]} \/ y in b};
+      R = S
+     proof
+      thus R c= S
+      proof let p;assume p in R;
+       then consider x,z such that A10: p=x\z & x in t' & z in s;
+       A11:z=y by A10,TARSKI:def 1;
+       A12:x in T & x in b by A10,XBOOLE_0:def 3;
+       then consider x' such that A13:x={[n,x']} \/ y & x' in a;
+       A14:{[n,x']} misses y
+        proof
+         assume not thesis;
+         then consider r being set such that
+         A15:r in {[n,x']} & r in y by XBOOLE_0:3;
+         consider g such that A16:y=g & dom g=fs & rng g c= a by A1,FUNCT_2:def
+2;
+           r=[n,x'] by A15,TARSKI:def 1;
+         hence contradiction by A1,A15,A16,FUNCT_1:8;
+        end;
+         x\z=({[n,x']}\y) \/ (y\y) by A11,A13,XBOOLE_1:42
+         .={[n,x']} \/ (y\y) by A14,XBOOLE_1:83
+         .={[n,x']} \/ {} by XBOOLE_1:37
+         .={[n,x']};
+       hence p in S by A10,A12,A13;
+      end;
+       let p;assume p in S;
+       then consider x such that A17:p={[n,x]} & {[n,x]} \/ y in b;
+       A18:{[n,x]} misses y
+        proof
+         assume not thesis;
+         then consider r being set such that
+         A19:r in {[n,x]} & r in y by XBOOLE_0:3;
+         consider g such that
+         A20:y=g & dom g=fs & rng g c= a by A1,FUNCT_2:def 2;
+           r=[n,x] by A19,TARSKI:def 1;
+         hence contradiction by A1,A19,A20,FUNCT_1:8;
+        end;
+       reconsider x'={[n,x]} \/ y as Element of V by A1,A17,Th1;
+       A21: y in s by TARSKI:def 1;
+         x in a by A3,A17;
+       then x' in T;
+       then A22: x' in t' by A17,XBOOLE_0:def 3;
+         x'\y=({[n,x]}\y) \/ (y\y) by XBOOLE_1:42
+          .={[n,x]} \/ (y\y) by A18,XBOOLE_1:83
+          .={[n,x]} \/ {} by XBOOLE_1:37
+          .={[n,x]};
+       hence p in R by A17,A21,A22;
+     end;
+    then union S in X by A1,A9,Th2;
+    then union union S in X by A1,Th2;
+    then A23: union union union S in X by A1,Th2;
+    set Z={x: x in a & {[n,x]} \/ y in b};
+    A24: Z c= union union union S
+       proof
+         let p;assume p in Z;
+         then consider x such that A25:p=x & x in a & {[n,x]} \/ y in b;
+         A26:{[n,x]} in S by A25;
+           [n,x] in {[n,x]} by TARSKI:def 1;
+         then {{n,x},{n}} in {[n,x]} by TARSKI:def 5;
+         then A27:{{n,x},{n}} in union S by A26,TARSKI:def 4;
+           {n,x} in {{n,x},{n}} by TARSKI:def 2;
+         then A28:{n,x} in union union S by A27,TARSKI:def 4;
+           x in {n,x} by TARSKI:def 2;
+         hence p in union union union S by A25,A28,TARSKI:def 4;
+       end;
+    A29: union union union S c= Z \/ {n}
+       proof
+         let p;assume p in union union union S;
+         then consider C such that
+         A30:p in C & C in union union S by TARSKI:def 4;
+         consider D such that A31:C in D & D in union S by A30,TARSKI:def 4;
+         consider E being set such that
+         A32:D in E & E in S by A31,TARSKI:def 4;
+         consider x such that A33:E={[n,x]} & {[n,x]} \/ y in b by A32;
+A34:         x in a by A3,A33;
+           D=[n,x] by A32,A33,TARSKI:def 1;
+         then D={{n,x},{n}} by TARSKI:def 5;
+         then p in {n,x} or p in {n} by A30,A31,TARSKI:def 2;
+         then p=n or p=x or p in {n} by TARSKI:def 2;
+         then p in Z or p in {n} by A33,A34,TARSKI:def 1;
+         hence p in Z \/ {n} by XBOOLE_0:def 2;
+       end;
+    per cases;
+     suppose n in Z;
+       then {n} c= Z by ZFMISC_1:37;
+       then Z \/ {n} = Z by XBOOLE_1:12;
+       hence thesis by A23,A24,A29,XBOOLE_0:def 10;
+     suppose not n in Z;
+       then A35: Z misses {n} by ZFMISC_1:56;
+         Z \ {n} c= (union union union S) \ {n} by A24,XBOOLE_1:33;
+       then A36: Z c= (union union union S) \ {n} by A35,XBOOLE_1:83;
+         (union union union S) \ {n} c= (Z \/ {n}) \ {n} by A29,XBOOLE_1:33;
+       then (union union union S) \ {n} c= (Z\{n}) \/ ({n}\{n}) by XBOOLE_1:42
+;
+       then (union union union S) \ {n} c= Z \/ ({n}\{n}) by A35,XBOOLE_1:83;
+       then (union union union S) \ {n} c= Z \/ {} by XBOOLE_1:37;
+       then A37:(union union union S) \ {n} = Z by A36,XBOOLE_0:def 10;
+         n in X by A1,Lm13;
+       then {n} in X by A1,Th2;
+       hence thesis by A1,A23,A37,Th4;
+   end;
+
+Lm15:{[o,p],[p,p]}(#){[p,q]}={[o,q],[p,q]}
+ proof
+  thus {[o,p],[p,p]}(#){[p,q]} c= {[o,q],[p,q]}
+  proof
+   let r;assume r in {[o,p],[p,p]}(#){[p,q]};
+   then consider s,t,u such that
+      A1:r=[s,u] & [s,t] in {[o,p],[p,p]} & [t,u] in {[p,q]} by Def1;
+     [t,u]=[p,q] by A1,TARSKI:def 1;
+   then A2: u=q by ZFMISC_1:33;
+     [s,t]=[o,p] or [s,t]=[p,p] by A1,TARSKI:def 2;
+   then r=[o,q] or r=[p,q] by A1,A2,ZFMISC_1:33;
+   hence r in {[o,q],[p,q]} by TARSKI:def 2;
+  end;
+   let r such that A3:r in {[o,q],[p,q]};
+   per cases by A3,TARSKI:def 2;
+    suppose A4:r=[o,q];
+     A5:[o,p] in {[o,p],[p,p]} by TARSKI:def 2;
+       [p,q] in {[p,q]} by TARSKI:def 1;
+     hence r in {[o,p],[p,p]}(#){[p,q]} by A4,A5,Def1;
+    suppose A6:r=[p,q];
+     A7:[p,p] in {[o,p],[p,p]} by TARSKI:def 2;
+       [p,q] in {[p,q]} by TARSKI:def 1;
+     hence r in {[o,p],[p,p]}(#){[p,q]} by A6,A7,Def1;
+ end;
+
+theorem Th17:
+ X is closed_wrt_A1-A7 & a in X implies {{[0-element_of(V),x],
+ [1-element_of(V),x]} : x in a} in X
+  proof
+   assume A1:X is closed_wrt_A1-A7 & a in X;
+   then A2:X is closed_wrt_A7 by Def13;
+   A3:X is closed_wrt_A4 by A1,Def13;
+   set f={[0-element_of(V),1-element_of(V)],[1-element_of(V),1-element_of(V)]};
+   set F={{[1-element_of(V),x]}:x in a};
+   set Z={{[0-element_of(V),x],[1-element_of(V),x]}: x in a};
+   A4:f in X
+    proof
+     A5:0-element_of(V) in X & 1-element_of(V) in X by A1,Lm14;
+     then A6:[0-element_of(V),1-element_of(V)] in X by A1,Th6;
+       [1-element_of(V),1-element_of(V)] in X by A1,A5,Th6;
+     hence thesis by A1,A6,Th6;
+    end;
+   then A7:{f} in X by A1,Th2;
+   set f'={f};
+   A8:F in X
+    proof
+     A9:1-element_of(V) in X by A1,Lm14;
+     then A10:{1-element_of(V)} in X by A1,Th2;
+     then reconsider s={1-element_of(V)} as Element of V;
+       F={{[y,x]}: y in s & x in a}
+      proof
+       thus F c= {{[y,x]}: y in s & x in a}
+       proof
+        let p;assume p in F;
+        then A11: ex x st p={[1-element_of(V),x]} & x in a;
+        reconsider y=1-element_of(V) as Element of V by A9;
+          y in s by TARSKI:def 1;
+        hence p in {{[y',x']}: y' in s & x' in a} by A11;
+       end;
+        let p;assume p in {{[y,x]}: y in s & x in a};
+        then consider y,x such that A12:p={[y,x]} & y in s & x in a;
+          p={[1-element_of(V),x]} by A12,TARSKI:def 1;
+        hence p in F by A12;
+      end;
+     hence thesis by A1,A3,A10,Def9;
+    end;
+   then reconsider F'=F as Element of V;
+     Z={x(#)y: x in f' & y in F'}
+    proof
+     thus Z c= {x(#)y: x in f' & y in F'}
+     proof
+      let p;assume p in Z;
+      then consider x such that
+      A13:p={[0-element_of(V),x],[1-element_of(V),x]} & x in a;
+      reconsider x'=f as Element of V by A4;
+        1-element_of(V) in X by A1,Lm14;
+      then [1-element_of(V),x] in V by CLASSES2:64;
+      then reconsider y={[1-element_of(V),x]} as Element of V by CLASSES2:63;
+      A14: y in F' by A13;
+      A15: x' in f' by TARSKI:def 1;
+        p=x'(#)y by A13,Lm15;
+      hence p in {z(#)y': z in f' & y' in F'} by A14,A15;
+     end;
+      let p;assume p in {x(#)y: x in f' & y in F'};
+      then consider x,y such that A16:p=x(#)y & x in f' & y in F';
+      A17:x={[0-element_of(V),1-element_of(V)],[1-element_of(V),
+      1-element_of(V)]} by A16,TARSKI:def 1;
+      consider x' such that A18: y={[1-element_of(V),x']} & x' in a by A16;
+        p={[0-element_of(V),x'],[1-element_of(V),x']} by A16,A17,A18,Lm15;
+      hence p in Z by A18;
+    end;
+   hence thesis by A2,A7,A8,Def12;
+  end;
+
+Lm16:
+ p<>r implies {[o,p],[q,r]}(#){[p,s],[r,t]}={[o,s],[q,t]}
+  proof
+   assume A1:p<>r;
+   thus {[o,p],[q,r]}(#){[p,s],[r,t]} c= {[o,s],[q,t]}
+   proof
+    let u;assume u in {[o,p],[q,r]}(#){[p,s],[r,t]};
+    then consider a1,a2,a3 such that
+     A2:u=[a1,a3] & [a1,a2] in {[o,p],[q,r]} &
+     [a2,a3] in {[p,s],[r,t]} by Def1;
+      [a1,a2]=[o,p] or [a1,a2]=[q,r] by A2,TARSKI:def 2;
+    then A3:a1=o & a2=p or a1=q & a2=r by ZFMISC_1:33;
+      [a2,a3]=[p,s] or [a2,a3]=[r,t] by A2,TARSKI:def 2;
+    then a1=o & a2=p & a3=s or a1=q & a2=r & a3=t by A1,A3,ZFMISC_1:33;
+    hence u in {[o,s],[q,t]} by A2,TARSKI:def 2;
+   end;
+    let u such that A4: u in {[o,s],[q,t]};
+    per cases by A4,TARSKI:def 2;
+     suppose A5:u=[o,s];
+        [o,p] in {[o,p],[q,r]} & [p,s] in {[p,s],[r,t]} by TARSKI:def 2;
+      hence u in {[o,p],[q,r]}(#){[p,s],[r,t]} by A5,Def1;
+     suppose A6:u=[q,t];
+        [q,r] in {[o,p],[q,r]} & [r,t] in {[p,s],[r,t]} by TARSKI:def 2;
+      hence u in {[o,p],[q,r]}(#){[p,s],[r,t]} by A6,Def1;
+  end;
+
+Lm17:
+ for g be Function holds dom g={o,q} iff g={[o,g.o],[q,g.q]}
+  proof
+   let g be Function;
+   hereby assume A1:dom g={o,q};
+        now let p;
+       A2:now assume A3:p in g;
+        then consider r,s such that A4:p=[r,s] by RELAT_1:def 1;
+          r in dom g & s=g.r by A3,A4,FUNCT_1:8;
+        then r=o or r=q by A1,TARSKI:def 2;
+        hence p=[o,g.o] or p=[q,g.q] by A3,A4,FUNCT_1:8;
+       end;
+         now assume A5:p=[o,g.o] or p=[q,g.q];
+          now per cases by A5;
+         suppose A6:p=[o,g.o];
+            o in dom g by A1,TARSKI:def 2;
+          hence p in g by A6,FUNCT_1:8;
+         suppose A7:p=[q,g.q];
+            q in dom g by A1,TARSKI:def 2;
+          hence p in g by A7,FUNCT_1:8;
+        end;
+        hence p in g;
+       end;
+       hence p in g iff p=[o,g.o] or p=[q,g.q] by A2;
+      end;
+      hence g={[o,g.o],[q,g.q]} by TARSKI:def 2;
+     end;
+   assume A8:g={[o,g.o],[q,g.q]};
+      now let p;
+     A9:now assume p in dom g;
+      then [p,g.p] in g by FUNCT_1:8;
+      then [p,g.p]=[o,g.o] or [p,g.p]=[q,g.q] by A8,TARSKI:def 2;
+      hence p=o or p=q by ZFMISC_1:33;
+     end;
+       now assume A10:p=o or p=q;
+        now per cases by A10;
+       suppose p=o;
+        then [p,g.p] in g by A8,TARSKI:def 2;
+        hence p in dom g by FUNCT_1:8;
+       suppose p=q;
+        then [p,g.p] in g by A8,TARSKI:def 2;
+        hence p in dom g by FUNCT_1:8;
+      end;
+      hence p in dom g;
+     end;
+     hence p in dom g iff p=o or p=q by A9;
+    end;
+    hence dom g={o,q} by TARSKI:def 2;
+  end;
+
+theorem Th18:
+     X is closed_wrt_A1-A7 & E in X implies
+ for v1,v2 holds Diagram(v1 '=' v2,E) in X & Diagram(v1 'in' v2,E) in X
+  proof
+   assume A1:X is closed_wrt_A1-A7 & E in X;
+   then A2:X is closed_wrt_A4 by Def13;
+   A3:X is closed_wrt_A1 by A1,Def13;
+   let v1,v2;set H=v1 '=' v2;set H'=v1 'in' v2;
+   A4:Free(H)={v1,v2} by ZF_LANG1:63;
+   A5:Free(H')={v1,v2} by ZF_LANG1:64;
+then A6:v1 in Free H & v2 in Free H & v1 in Free H' & v2 in Free H'
+   by A4,TARSKI:def 2;
+   A7:omega c= X by A1,Th7;
+   reconsider m=E as Element of V by A1;
+    per cases;
+     suppose A8:v1=v2;
+      then A9:Free(H)={v1} & Free(H')={v1} by A4,A5,ENUMSET1:69;
+      A10: x".v1 in X by A7,TARSKI:def 3;
+      then {x".v1} in X by A1,Th2;
+      then A11:code Free(H) in X by A9,Lm6;
+      set a=code Free(H);
+      set Z={{[z,y]}: z in a & y in m};
+        Z=Diagram(H,E)
+       proof
+        thus Z c= Diagram(H,E)
+        proof
+         let p;assume p in Z;
+         then consider z,y such that A12:p={[z,y]} & z in a & y in m;
+           z in { x".v1} by A9,A12,Lm6;
+         then A13:z= x".v1 by TARSKI:def 1;
+         reconsider f =VAR --> y as Function of VAR,E by A12,FUNCOP_1:57;
+           dom((f*decode)|code Free(H))=code Free H by Lm3
+                                    .={z} by A9,A13,Lm6;
+         then ((f*decode)|code Free H)={[z,((f*decode)|code Free(H)).z]}
+                                                         by GRFUNC_1:18;
+         then (f*decode)|code Free H={[z,f.v1]} by A6,A13,Lm10;
+         then A14:(f*decode)|code Free H=p by A12,FUNCOP_1:13;
+         A15:f.(Var1 H)=f.v2 by A8,ZF_LANG1:1
+                          .=f.(Var2 H) by ZF_LANG1:1;
+           H is_equality by ZF_LANG:16;
+         then f in St(H,E) by A15,ZF_MODEL:7;
+         hence p in Diagram(H,E) by A14,Def5;
+        end;
+         let p;assume p in Diagram(H,E);
+         then consider f such that
+              A16:p=(f*decode)|code Free(H) & f in St(H,E) by Def5;
+         reconsider z= x".v1 as Element of V by A10;
+           dom((f*decode)|code Free H)=code Free H by Lm3
+                                     .={z} by A9,Lm6;
+         then A17: ((f*decode)|code Free H)={[z,((f*decode)|code Free(H)).z]}
+                                                         by GRFUNC_1:18;
+         reconsider y=f.v1 as Element of V by A1,Th1;
+         A18:p={[z,y]} by A6,A16,A17,Lm10;
+           z in {z} by TARSKI:def 1;
+         then z in a by A9,Lm6;
+         hence p in Z by A18;
+       end;
+      hence Diagram(H,E) in X by A1,A2,A11,Def9;
+        Diagram(H',E)={}
+       proof
+        assume
+A19:     not thesis;
+        consider p being Element of Diagram(H',E);
+        consider f being Function of VAR,E such that
+                 A20:p=(f*decode)|code Free(H') & f in St(H',E) by A19,Def5;
+          H' is_membership by ZF_LANG:16;
+        then f.(Var1 H') in f.(Var2 H') by A20,ZF_MODEL:8;
+        then f.v1 in f.(Var2 H') by ZF_LANG1:2;
+        then f.v1 in f.v2 by ZF_LANG1:2;
+        hence contradiction by A8;
+       end;
+      hence Diagram(H',E) in X by A1,Th3;
+     suppose A21:v1<>v2;
+      A22:now assume x".v1= x".v2;
+       then v1=x.(x".v2) by Def3
+             .=v2 by Def3;
+       hence contradiction by A21;
+      end;
+      set fs=code Free H;
+      A23:fs={ x".v1, x".v2} by A4,Lm7;
+        ({[ x".v1,0-element_of(V)],[ x".v2,1-element_of(V)]}) in X
+       proof
+        A24: x".v1 in X & x".v2 in X by A7,TARSKI:def 3;
+          0-element_of(V) in X & 1-element_of(V) in X by A1,Lm14;
+        then [ x".v1,0-element_of(V)] in X & [ x".v2,1-element_of(V)] in X
+        by A1,A24,Th6;
+        hence thesis by A1,Th6;
+       end;
+      then reconsider d={[ x".v1,0-element_of(V)],[ x".v2,1-element_of(V)]}
+      as Element of V;
+      set a={{[0-element_of(V),x],[1-element_of(V),x]}: x in m};
+      A25: a in X by A1,Th17;
+      then reconsider a as Element of V;
+      set b={{[0-element_of(V),x],[1-element_of(V),y]}: x in y & x in m &
+      y in m};
+      A26: b in X by A1,A3,Def6;
+      then reconsider b as Element of V;
+      set Y={d(#)x: x in a};
+      set Z={d(#)x: x in b};
+A27:      d in Funcs(fs,omega)
+       proof
+        reconsider e=d as Function by A22,GRFUNC_1:19;
+        reconsider g={[x".v1,0-element_of(V)]}, h={[x".v2,1-element_of(V)]}
+        as Function by GRFUNC_1:15;
+        A28:e=g \/ h by ENUMSET1:41;
+        then A29:dom e=dom g \/ dom h by GRFUNC_1:33
+                   .={ x".v1} \/ dom h by RELAT_1:23
+                   .={ x".v1} \/ { x".v2} by RELAT_1:23
+                   .=fs by A23,ENUMSET1:41;
+        A30:rng e=rng g \/ rng h by A28,GRFUNC_1:33
+              .={0-element_of(V)} \/ rng h by RELAT_1:23
+              .={0-element_of(V)} \/ {1-element_of(V)} by RELAT_1:23
+              .={0-element_of(V),1-element_of(V)} by ENUMSET1:41;
+          one in omega by ORDINAL1:41,ORDINAL2:19,def 4;
+        then 0-element_of(V) in omega & 1-element_of(V) in omega
+        by ORDINAL2:19,ORDINAL4:35;
+        then rng e c= omega by A30,ZFMISC_1:38;
+        hence thesis by A29,FUNCT_2:def 2;
+       end;
+      A31: 0-element_of(V)<>1-element_of(V) by ORDINAL4:35;
+        Y=Diagram(H,E)
+       proof
+        thus Y c= Diagram(H,E)
+        proof
+         let p;assume p in Y;
+         then consider x such that A32: p=d(#)x & x in a;
+         consider y such that
+         A33:x={[0-element_of(V),y],[1-element_of(V),y]} & y in m by A32;
+         A34:p={[ x".v1,y],[ x".v2,y]} by A31,A32,A33,Lm16;
+         reconsider f=VAR --> y as Function of VAR,E by A33,FUNCOP_1:57;
+         A35:dom((f*decode)|code Free(H))={ x".v1, x".v2} by A23,Lm3;
+         A36:((f*decode)|code Free H).( x".v1)=f.v1 by A6,Lm10
+                                                .=y by FUNCOP_1:13;
+           ((f*decode)|code Free H).( x".v2)=f.v2 by A6,Lm10
+                                            .=y by FUNCOP_1:13;
+         then A37:(f*decode)|code Free(H)=p by A34,A35,A36,Lm17;
+         A38:H is_equality by ZF_LANG:16;
+           f.(Var1 H)=y by FUNCOP_1:13
+                  .=f.(Var2 H) by FUNCOP_1:13;
+         then f in St(H,E) by A38,ZF_MODEL:7;
+         hence p in Diagram(H,E) by A37,Def5;
+        end;
+         let p;assume p in Diagram(H,E);
+         then consider f such that
+           A39:p=(f*decode)|code Free(H) & f in St(H,E) by Def5;
+         A40:dom((f*decode)|code Free(H))={ x".v1, x".v2} by A23,Lm3;
+           H is_equality by ZF_LANG:16;
+         then f.(Var1 H)=f.(Var2 H) by A39,ZF_MODEL:7;
+         then A41:f.v1=f.(Var2 H) by ZF_LANG1:1
+                    .=f.v2 by ZF_LANG1:1;
+         reconsider y=f.v1 as Element of V by A1,Th1;
+         A42:((f*decode)|code Free H).( x".v1)=y by A6,Lm10;
+           ((f*decode)|code Free H).( x".v2)=y by A6,A41,Lm10;
+         then A43:p={[ x".v1,y],[ x".v2,y]} by A39,A40,A42,Lm17;
+         A44:({[0-element_of(V),y],[1-element_of(V),y]}) in a;
+         then reconsider x={[0-element_of(V),y],[1-element_of(V),y]} as
+         Element of V by A25,Th1;
+           p=d(#)x by A31,A43,Lm16;
+         hence p in Y by A44;
+       end;
+      hence Diagram(H,E) in X by A1,A25,A27,Th10;
+        Z=Diagram(H',E)
+       proof
+        thus Z c= Diagram(H',E)
+        proof
+         let p;assume p in Z;
+         then consider x such that A45:p=d(#)x & x in b;
+         consider y,z such that
+A46:x={[0-element_of(V),y],[1-element_of(V),z]} & y in z & y in m & z in m
+by A45;
+         A47:p={[ x".v1,y],[ x".v2,z]} by A31,A45,A46,Lm16;
+         reconsider y'=y, z'=z as Element of E by A46;
+         reconsider a1=v1 as Element of VAR;
+         deffunc F(set) = z';
+         consider f being Function of VAR,E such that
+            A48:f.a1=y' & for v3 being Element of VAR
+                              st v3<>a1 holds f.v3=F(v3) from LambdaSep1;
+         A49:dom((f*decode)|code Free H')={ x".v1, x".v2}
+                                                       by A4,A5,A23,Lm3;
+         A50:((f*decode)|code Free H').( x".v1)=y by A6,A48,Lm10;
+           ((f*decode)|code Free H').( x".v2)=f.v2 by A6,Lm10
+                                             .=z by A21,A48;
+         then A51:p=(f*decode)|code Free(H') by A47,A49,A50,Lm17;
+         A52:H' is_membership by ZF_LANG:16;
+           f.v1 in f.v2 by A21,A46,A48;
+         then f.(Var1 H') in f.v2 by ZF_LANG1:2;
+         then f.(Var1 H') in f.(Var2 H') by ZF_LANG1:2;
+         then f in St(H',E) by A52,ZF_MODEL:8;
+         hence p in Diagram(H',E) by A51,Def5;
+        end;
+         let p;assume p in Diagram(H',E);
+         then consider f being Function of VAR,E such that
+            A53:p=(f*decode)|code Free(H') & f in St(H',E) by Def5;
+         A54:dom((f*decode)|code Free(H'))={ x".v1, x".v2}
+                                                 by A4,A5,A23,Lm3;
+         A55:((f*decode)|code Free H').( x".v1)=f.v1
+         & ((f*decode)|code Free H').( x".v2)=f.v2 by A6,Lm10;
+         reconsider y=f.v1 as Element of V by A1,Th1;
+         reconsider z=f.v2 as Element of V by A1,Th1;
+         A56:p={[ x".v1,y],[ x".v2,z]} by A53,A54,A55,Lm17;
+           H' is_membership by ZF_LANG:16;
+         then f.(Var1 H') in f.(Var2 H') by A53,ZF_MODEL:8;
+         then f.v1 in f.(Var2 H') by ZF_LANG1:2;
+         then y in z by ZF_LANG1:2;
+         then A57:({[0-element_of(V),y],[1-element_of(V),z]}) in b;
+         then reconsider x={[0-element_of(V),y],[1-element_of(V),z]} as
+         Element of V by A26,Th1;
+           p=d(#)x by A31,A56,Lm16;
+         hence p in Z by A57;
+       end;
+      hence Diagram(H',E) in X by A1,A26,A27,Th10;
+  end;
+
+theorem Th19:
+     X is closed_wrt_A1-A7 & E in X implies
+ for H st Diagram(H,E) in X holds Diagram('not' H,E) in X
+  proof
+   assume A1:X is closed_wrt_A1-A7 & E in X;
+   let H such that A2: Diagram(H,E) in X;
+   set fs=code Free(H);
+   reconsider m=E as Element of V by A1;
+   A3:Funcs(fs,m) in X by A1,Th9;
+     Diagram('not' H,E)=Funcs(fs,E)\Diagram(H,E)
+    proof
+     A4:fs=code Free('not' H) by ZF_LANG1:65;
+       now let p;
+      A5:now assume p in Diagram('not' H,E);
+       then consider f such that
+           A6:p=(f*decode)|fs & f in St('not' H,E) by A4,Def5;
+       thus p in Funcs(fs,E) by A6,Lm3;
+       thus not p in Diagram(H,E)
+        proof
+         assume not thesis;
+         then ex g being Function of VAR,E st
+         p=(g*decode)|fs & g in St(H,E) by Def5;
+         then f in St(H,E) by A6,Lm11;
+         hence contradiction by A6,ZF_MODEL:4;
+        end;
+      end;
+        now assume A7:p in Funcs(fs,E) & not p in Diagram(H,E);
+       then consider e such that
+           A8: p=e & dom e = fs & rng e c= E by FUNCT_2:def 2;
+       consider f such that A9:e=(f*decode)|fs by A7,A8,Lm12;
+       A10:Free('not' H)=Free(H) by ZF_LANG1:65;
+         not f in St(H,E) by A7,A8,A9,Def5;
+       then f in St('not' H,E) by ZF_MODEL:4;
+       hence p in Diagram('not' H,E) by A8,A9,A10,Def5;
+      end;
+      hence p in Diagram('not' H,E) iff
+      p in Funcs(fs,E) & not p in Diagram(H,E) by A5;
+     end;
+     hence thesis by XBOOLE_0:def 4;
+    end;
+   hence thesis by A1,A2,A3,Th4;
+  end;
+
+theorem Th20:
+     X is closed_wrt_A1-A7 & E in X implies
+ for H,H' st Diagram(H,E) in X &
+ Diagram(H',E) in X holds Diagram(H '&' H',E) in X
+  proof
+   assume A1: X is closed_wrt_A1-A7 & E in X;
+   let H,H' such that A2: Diagram(H,E) in X & Diagram(H',E) in X;
+   set fs=code Free(H), fs'=code Free(H');
+   reconsider E'=E as Element of V by A1;
+   A3: (Funcs(fs'\fs,E')) in X by A1,Th9;
+   then reconsider F1=Funcs(fs'\fs,E') as Element of V;
+   A4:(Funcs(fs\fs',E')) in X by A1,Th9;
+   then reconsider F2=Funcs(fs\fs',E') as Element of V;
+   reconsider D1=Diagram(H,E),D2=Diagram(H',E) as Element of V by A2;
+   set A={x \/ y : x in D1 & y in F1}, B={x \/ y : x in D2 & y in F2};
+     X is closed_wrt_A5 by A1,Def13;
+   then A5: A in X & B in X by A2,A3,A4,Def10;
+     A /\ B = Diagram(H '&' H',E)
+    proof
+       now
+      let p;assume p in A /\ B;
+      then A6:p in A & p in B by XBOOLE_0:def 3;
+      then consider x,y such that A7:p=x \/ y & x in D1 & y in F1;
+      consider x',y' such that A8:p=x' \/ y' & x' in D2 & y' in F2 by A6;
+      consider f being Function of VAR,E such that
+              A9: x=(f*decode)|fs & f in St(H,E) by A7,Def5;
+      consider g being Function of VAR,E such that
+              A10: x'=(g*decode)|fs' & g in St(H',E) by A8,Def5;
+      consider e such that
+           A11: y=e & dom e=fs'\fs & rng e c= E by A7,FUNCT_2:def 2;
+      consider h such that
+           A12: y'=h & dom h=fs\fs' & rng h c= E by A8,FUNCT_2:def 2;
+      A13:dom((f*decode)|fs)=fs & rng((f*decode)|fs) c= E by Lm3;
+      then dom((f*decode)|fs) misses dom e by A11,XBOOLE_1:79;
+      then reconsider gg=((f*decode)|fs) \/ e as Function by GRFUNC_1:31;
+        dom gg=fs \/ (fs'\fs) & rng gg=rng((f*decode)|fs) \/ rng e
+                                        by A11,A13,GRFUNC_1:33;
+      then dom gg=fs \/ fs' & rng gg c= E by A11,A13,XBOOLE_1:8,39;
+      then gg in Funcs(fs \/ fs',E) by FUNCT_2:def 2;
+      then consider ff being Function of VAR,E such that
+         A14:gg=(ff*decode)|(fs \/ fs') by Lm12;
+      A15:(ff*decode)|fs=(f*decode)|fs
+       proof
+          now
+         thus A16:fs=dom((ff*decode)|fs) & dom((f*decode)|fs)=fs by Lm3;
+         let q such that A17:q in fs;
+           ((ff*decode)|(fs \/ fs'))=
+                    ((ff*decode)|fs) \/ ((ff*decode)|fs') by RELAT_1:107;
+         hence ((ff*decode)|fs).q=((ff*decode)|(fs \/ fs')).q
+                                                 by A16,A17,GRFUNC_1:34
+                    .=((f*decode)|fs).q by A14,A16,A17,GRFUNC_1:34;
+        end;
+        hence thesis by FUNCT_1:9;
+       end;
+        (ff*decode)|fs'=(g*decode)|fs'
+       proof
+          now
+         thus A18:fs'=dom((ff*decode)|fs') & dom((g*decode)|fs')=fs' by Lm3;
+         let q such that A19:q in fs';
+           ((ff*decode)|(fs \/ fs'))
+                =((ff*decode)|fs) \/ ((ff*decode)|fs') by RELAT_1:107;
+         hence ((ff*decode)|fs').q=((ff*decode)|(fs \/ fs')).q
+                                                  by A18,A19,GRFUNC_1:35
+                                 .=((g*decode)|fs').q
+                    by A7,A8,A9,A10,A11,A12,A14,A18,A19,GRFUNC_1:34;
+        end;
+        hence thesis by FUNCT_1:9;
+       end;
+      then ff in St(H,E) & ff in St(H',E) by A9,A10,A15,Lm11;
+      then A20:ff in St(H '&' H',E) by ZF_MODEL:5;
+        p=(ff*decode)|code (Free H \/ Free H') by A7,A9,A11,A14,Lm9
+      .=(ff*decode)|code Free(H '&' H') by ZF_LANG1:66;
+      hence p in Diagram(H '&' H',E) by A20,Def5;
+     end;
+     hence A /\ B c= Diagram(H '&' H',E) by TARSKI:def 3;
+     thus Diagram(H '&' H',E) c= A /\ B
+     proof
+      let p; assume p in Diagram(H '&' H',E);
+      then consider f being Function of VAR,E such that
+         A21: p=(f*decode)|code Free(H '&' H') & f in St(H '&' H',E) by Def5;
+      A22: f in St(H,E) & f in St(H',E) by A21,ZF_MODEL:5;
+      A23: Free(H '&' H')=Free(H) \/ Free(H') by ZF_LANG1:66;
+      then A24:p=(f*decode)|(fs \/ fs') by A21,Lm9
+             .=((f*decode)|(fs \/ (fs'\fs))) by XBOOLE_1:39
+             .=((f*decode)|fs) \/ ((f*decode)|(fs'\fs)) by RELAT_1:107;
+      A25:((f*decode)|fs) in D1 by A22,Def5;
+      then reconsider x=((f*decode)|fs) as Element of V by A2,Th1;
+        fs'\fs c= omega by FINSUB_1:def 5;
+      then (f*decode)|(fs'\fs) is Function of fs'\fs,E by FUNCT_2:38;
+      then A26:((f*decode)|(fs'\fs)) in F1 by FUNCT_2:11;
+      then reconsider y=((f*decode)|(fs'\fs)) as Element of V by A3,Th1;
+        p=x \/ y by A24;
+      then A27: p in A by A25,A26;
+      A28:p=(f*decode)|(fs' \/ fs) by A21,A23,Lm9
+         .=((f*decode)|(fs' \/ (fs\fs'))) by XBOOLE_1:39
+         .=((f*decode)|fs') \/ ((f*decode)|(fs\fs')) by RELAT_1:107;
+      A29:((f*decode)|fs') in D2 by A22,Def5;
+      then reconsider z=((f*decode)|fs') as Element of V by A2,Th1;
+        fs\fs' c= omega by FINSUB_1:def 5;
+      then (f*decode)|(fs\fs') is Function of fs\fs',E by FUNCT_2:38;
+      then A30:((f*decode)|(fs\fs')) in F2 by FUNCT_2:11;
+      then reconsider t=((f*decode)|(fs\fs')) as Element of V by A4,Th1;
+        p=z \/ t by A28;
+      then p in B by A29,A30;
+      hence p in A /\ B by A27,XBOOLE_0:def 3;
+     end;
+    end;
+   hence thesis by A1,A5,Th5;
+  end;
+
+theorem Th21:
+     X is closed_wrt_A1-A7 & E in X implies
+ for H,v1 st Diagram(H,E) in X holds Diagram(All(v1,H),E) in X
+  proof
+   assume A1: X is closed_wrt_A1-A7 & E in X;
+   let H,v1 such that A2: Diagram(H,E) in X;
+   per cases;
+    suppose A3:not v1 in Free(H);
+     then Free(H)=Free(H)\{v1} by ZFMISC_1:65;
+     then A4:Free(All(v1,H))=Free(H) by ZF_LANG1:67;
+       Diagram(All(v1,H),E)=Diagram(H,E)
+      proof
+       thus Diagram(All(v1,H),E)c=Diagram(H,E)
+        proof
+         let p;
+         assume p in Diagram(All(v1,H),E);
+         then consider f such that
+A5:      p=(f*decode)|code Free(All(v1,H)) & f in St(All(v1,H),E) by Def5;
+           f in St(H,E) by A5,ZF_MODEL:6;
+         hence p in Diagram(H,E) by A4,A5,Def5;
+        end;
+       let p;
+       assume p in Diagram(H,E);
+       then consider f such that
+          A6:p=(f*decode)|code Free(H) & f in St(H,E) by Def5;
+         for g being Function of VAR,E st for v2 st g.v2<>f.v2 holds v1=v2
+                                                  holds g in St(H,E)
+        proof
+         let g be Function of VAR,E; assume
+                  for v2 st g.v2<>f.v2 holds v1=v2;
+         then A7:for v2 st v2 in Free(H) holds f.v2=g.v2 by A3;
+           E,f |= H by A6,ZF_MODEL:def 4;
+         then E,g |= H by A7,ZF_LANG1:84;
+         hence g in St(H,E) by ZF_MODEL:def 4;
+        end;
+       then f in St(All(v1,H),E) by A6,ZF_MODEL:6;
+       hence p in Diagram(All(v1,H),E) by A4,A6,Def5;
+      end;
+     hence thesis by A2;
+    suppose A8:v1 in Free(H);
+     set n= x".v1;
+     set fs=code Free(H);
+     A9:Diagram('not' H,E) in X by A1,A2,Th19;
+     then reconsider Dn=Diagram('not' H,E) as Element of V;
+     A10: n in fs by A8,Lm5;
+       {v1}c=Free(H) by A8,ZFMISC_1:37;
+     then Free(H)=(Free(H)\{v1}) \/ {v1} by XBOOLE_1:45;
+     then A11:fs=code(Free(H)\{v1}) \/ code {v1} by Lm9
+                 .=code(Free(H)\{v1}) \/ {n} by Lm6;
+     A12:fs\{n}=(code Free H)\(code {v1}) by Lm6
+                .=code((Free H)\{v1}) by Lm9;
+     then A13:fs\{n}=code Free(All(v1,H)) by ZF_LANG1:67;
+     A14:Diagram('not' H,E) c= Funcs(fs,E)
+      proof
+       let p;assume p in Diagram('not' H,E);
+       then A15: ex f being Function of VAR,E st
+p=(f*decode)|code Free('not' H) & f in St('not' H,E) by Def5;
+         Free('not' H)=Free H by ZF_LANG1:65;
+       hence p in Funcs(fs,E) by A15,Lm3;
+      end;
+     reconsider m=E as Element of V by A1;
+     set C={x: x in Funcs(fs\{n},m) & ex u st {[n,u]} \/ x in Dn};
+     A16: C in X by A1,A9,A10,A14,Th11;
+     A17: Funcs(fs\{n},m) in X by A1,Th9;
+       Funcs(fs\{n},m)\C=Diagram(All(v1,H),E)
+      proof
+       thus Funcs(fs\{n},m)\C c= Diagram(All(v1,H),E)
+        proof
+         let p;assume p in Funcs(fs\{n},m)\C;
+         then A18:p in Funcs(fs\{n},m) & not p in C by XBOOLE_0:def 4;
+         then consider h such that
+             A19: p=h & dom h = fs\{n} & rng h c= E by FUNCT_2:def 2;
+         consider f such that
+                A20:h=(f*decode)|(fs\{n}) by A18,A19,Lm12;
+           f in St(All(v1,H),E)
+          proof
+           A21:for ff being Function of VAR,E
+                    st p=(ff*decode)|code Free(All(v1,H)) holds ff in St(H,E)
+           proof
+            let ff be Function of VAR,E; assume
+        A22:p=(ff*decode)|code Free(All(v1,H));
+            assume not ff in St(H,E);
+            then ff in St('not' H,E) by ZF_MODEL:4;
+            then (ff*decode)|code Free('not' H) in Dn by Def5;
+            then ((ff*decode)|((fs\{n}) \/ {n})) in Dn
+                                            by A11,A12,ZF_LANG1:65;
+            then A23:((ff*decode)|(fs\{n})) \/ ((ff*decode)|{n}) in Dn
+                                                              by RELAT_1:107;
+              (ff*decode)|(fs\{n}) in Funcs(fs\{n},m) by Lm3;
+            then reconsider x=((ff*decode)|(fs\{n})) as Element of V by A17,Th1
+;
+              dom((ff*decode)|{n})={n} by Lm3;
+            then {[n,((ff*decode)|{n}).n]} \/ x in Dn by A23,GRFUNC_1:18;
+            hence contradiction by A13,A18,A22;
+           end;
+           then A24:f in St(H,E) by A13,A19,A20;
+           assume not f in St(All(v1,H),E);
+           then consider e being Function of VAR,E such that
+            A25:(for v2 st e.v2<>f.v2 holds v2=v1) & not e in St(H,E)
+                                                     by A24,ZF_MODEL:6;
+             (e*decode)|(fs\{n})=(f*decode)|(fs\{n})
+            proof
+               now
+              thus A26:fs\{n}=dom((e*decode)|(fs\{n}))
+                & fs\{n}=dom((f*decode)|(fs\{n})) by Lm3;
+              let q; assume A27:q in fs\{n};
+              then A28:q in fs & not q in {n} by XBOOLE_0:def 4;
+               fs\{n} c= omega by FINSUB_1:def 5;
+              then reconsider p'' = q as Element of omega by A27;
+              A29:q= x".x.card p'' by Lm2;
+              then A30: x.card p'' <> v1 by A28,TARSKI:def 1;
+              thus ((e*decode)|(fs\{n})).q=(e*decode).q by A26,A27,FUNCT_1:70
+                                         .=e.(x.card p'') by A29,Lm4
+                                         .=f.(x.card p'') by A25,A30
+                                         .=(f*decode).q by A29,Lm4
+                                         .=((f*decode)|(fs\{n})).q
+                                                       by A26,A27,FUNCT_1:70;
+             end;
+             hence thesis by FUNCT_1:9;
+            end;
+           hence contradiction by A13,A19,A20,A21,A25;
+          end;
+         hence p in Diagram(All(v1,H),E) by A13,A19,A20,Def5;
+        end;
+       let p;assume p in Diagram(All(v1,H),E);
+       then consider f such that
+          A31:p=(f*decode)|code Free(All(v1,H)) & f in St(All(v1,H),E) by Def5;
+       A32:p in Funcs(fs\{n},m) by A13,A31,Lm3;
+       then reconsider x=p as Element of V by A17,Th1;
+       A33:now
+        given u such that A34:{[n,u]} \/ x in Dn;
+        consider h being Function of VAR,E such that
+          A35:{[n,u]} \/ x=(h*decode)|fs by A14,A34,Lm12;
+ A36:        ex hh being Function of VAR,E st
+ {[n,u]} \/ x=(hh*decode)|code Free('not' H) & hh in St('not' H,E) by A34,Def5;
+          fs=code Free('not' H) by ZF_LANG1:65;
+        then h in St('not' H,E) by A35,A36,Lm11;
+        then A37:not h in St(H,E) by ZF_MODEL:4;
+          (h*decode)|(fs\{n})=(f*decode)|(fs\{n})
+         proof
+            now
+           thus A38:dom((h*decode)|(fs\{n}))=(fs\{n})
+             & dom((f*decode)|(fs\{n}))=(fs\{n}) by Lm3;
+           let q such that A39:q in (fs\{n});
+           reconsider g={[n,u]} as Function by GRFUNC_1:15;
+           A40:g={[n,u]};
+             (fs\{n}) c= fs by XBOOLE_1:36;
+           then ((h*decode)|(fs\{n})) c= ((h*decode)|fs) by RELAT_1:104;
+           hence ((h*decode)|(fs\{n})).q=((h*decode)|fs).q
+             by A38,A39,GRFUNC_1:8 .=((f*decode)|(fs\{n})).q
+                        by A13,A31,A35,A38,A39,A40,GRFUNC_1:35;
+          end;
+          hence thesis by FUNCT_1:9;
+         end;
+        then h in St(All(v1,H),E) by A13,A31,Lm11;
+        hence contradiction by A37,ZF_MODEL:6;
+       end;
+         now
+        assume x in C;
+        then ex y st y=x & y in Funcs(fs\{n},m)
+               & ex u st {[n,u]} \/ y in Dn;
+        hence contradiction by A33;
+       end;
+       hence p in Funcs(fs\{n},m)\C by A32,XBOOLE_0:def 4;
+      end;
+     hence thesis by A1,A16,A17,Th4;
+  end;
+
+theorem
+   X is closed_wrt_A1-A7 & E in X implies Diagram(H,E) in X
+  proof defpred P[ZF-formula] means Diagram($1,E) in X;
+   assume A1:X is closed_wrt_A1-A7 & E in X;
+   then A2:for v1,v2 holds P[v1 '=' v2] & P[v1 'in' v2] by Th18;
+   A3:for H st P[H] holds P['not' H] by A1,Th19;
+   A4:for H,H' st P[H] & P[H'] holds P[H '&' H'] by A1,Th20;
+   A5:for H,v1 st P[H] holds P[All(v1,H)] by A1,Th21;
+     for H holds P[H] from ZF_Induction(A2,A3,A4,A5);
+   hence thesis;
+  end;
+
+:: Auxiliary theorems
+
+theorem
+   X is closed_wrt_A1-A7 implies
+ n in X & 0-element_of(V) in X & 1-element_of(V) in X by Lm13,Lm14;
+
+theorem
+   {[o,p],[p,p]}(#){[p,q]}={[o,q],[p,q]} by Lm15;
+
+theorem
+   p<>r implies {[o,p],[q,r]}(#){[p,s],[r,t]}={[o,s],[q,t]} by Lm16;
+
+canceled;
+
+theorem
+   code {v1} = { x".v1} & code {v1,v2} = { x".v1 , x".v2} by Lm6,Lm7;
+
+theorem
+   for f being Function holds
+  dom f={o,q} iff f={[o,f.o],[q,f.q]} by Lm17;
+
+theorem
+   dom decode = omega & rng decode = VAR
+ & decode is one-to-one & decode" is one-to-one
+ & dom(decode") = VAR & rng(decode") = omega by Lm1;
+
+theorem
+   for A being Finite_Subset of VAR holds A,code A are_equipotent by Lm8;
+
+theorem
+   for A being Element of omega holds A = x".x.card A by Lm2;
+
+theorem
+   dom((f*decode)|fs)=fs & rng((f*decode)|fs) c= E
+ & (f*decode)|fs in Funcs(fs,E) & dom(f*decode)=omega
+ & rng(f*decode) c= E by Lm3;
+
+theorem
+   decode.(x".v1)=v1 & (decode").v1= x".v1
+ & (f*decode).(x".v1)=f.v1 by Lm4;
+
+theorem
+   for A being Finite_Subset of VAR holds
+  p in code A iff ex v1 st v1 in A & p= x".v1 by Lm5;
+
+theorem
+   for A,B being Finite_Subset of VAR holds
+   code(A \/ B)=code A \/ code B & code(A\B)=(code A)\(code B) by Lm9;
+
+theorem
+   v1 in Free H implies ((f*decode)|code Free H).( x".v1)=f.v1 by Lm10;
+
+theorem
+   for f,g being Function of VAR,E st
+  (f*decode)|code Free H=(g*decode)|code Free H &
+  f in St(H,E) holds g in St(H,E) by Lm11;
+
+theorem
+   p in Funcs(fs,E) implies ex f st p=(f*decode)|fs by Lm12;

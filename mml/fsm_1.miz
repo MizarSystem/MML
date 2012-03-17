@@ -1,0 +1,4130 @@
+:: Minimization of finite state machines
+::  by Miroslava Kaloper and Piotr Rudnicki
+::
+:: Received November 18, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, ARYTM_1, INT_1, FUNCT_1, RELAT_1, SGRAPH1, EQREL_1,
+      TARSKI, FINSET_1, BOOLE, CARD_1, BORSUK_1, SETFAM_1, AMI_1, MATRIX_2,
+      MCART_1, RELAT_2, FUNCOP_1, FUNCT_4, FSM_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1,
+      INT_1, SETFAM_1, STRUCT_0, FINSET_1, GROUP_1, MCART_1, DOMAIN_1, RELAT_1,
+      FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, FINSEQ_1, CARD_1, EQREL_1, BORSUK_1,
+      MATRIX_2;
+ constructors NAT_1, DOMAIN_1, FUNCT_4, BORSUK_1, MATRIX_2, PARTFUN1, GROUP_1,
+      MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, FUNCT_1, INT_1, FINSET_1, CARD_1, XBOOLE_0, RELSET_1,
+      FINSEQ_1, STRUCT_0, BORSUK_1, NAT_1, XREAL_0, MEMBERED, ZFMISC_1,
+      FUNCT_2, PARTFUN1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, SETFAM_1, XBOOLE_0;
+ theorems TARSKI, AXIOMS, SUBSET_1, SETFAM_1, MCART_1, FINSET_1, FUNCOP_1,
+      RELSET_1, REAL_1, NAT_1, INT_1, CARD_1, CARD_2, FINSEQ_1, FINSEQ_2,
+      FINSEQ_3, FINSEQ_4, FUNCT_1, FUNCT_2, FUNCT_4, RLVECT_1, EQREL_1,
+      BORSUK_1, ZFMISC_1, MATRIX_2, GOBOARD1, STRUCT_0, GROUP_1, XBOOLE_0,
+      XBOOLE_1, RELAT_1, XCMPLX_1;
+ schemes NAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, RECDEF_1, EQREL_1;
+
+begin :: Preliminaries
+
+ reserve m, n, i, k for Nat;
+
+theorem Th1:
+  for m, n being Nat holds
+   m < n implies ex p being Nat st n = m+p & 1 <= p
+proof
+  let m, n be Nat;
+assume
+A1: m < n; then consider p being Nat such that
+A2: n=m+p by NAT_1:28;
+  take p; thus n = m+p by A2;
+ assume p < 1; then p < 0+1; then p <= 0 & 0 <= p by NAT_1:18,38;
+   then p = 0; hence contradiction by A1,A2;
+end;
+
+theorem Th2:
+ i in Seg n implies i+m in Seg (n+m)
+proof assume i in Seg n;
+  then 1 <= i & i <= n & i <= i+m by FINSEQ_1:3,NAT_1:29;
+  then 1 <= i+m & i+m <= n+m by AXIOMS:22,REAL_1:55;
+ hence thesis by FINSEQ_1:3;
+end;
+
+theorem Th3:
+ i>0 & i+m in Seg (n+m) implies i in Seg n & i in Seg (n+m)
+proof assume
+A1: i > 0 & i+m in Seg (n+m); 1 = 0+1;
+then A2: 1 <= i by A1,NAT_1:38;
+A3: i+m <= n+m by A1,FINSEQ_1:3; then i <= n by REAL_1:53;
+ hence i in Seg n by A2,FINSEQ_1:3;
+    i <= i+m by NAT_1:29; then i <= n+m by A3,AXIOMS:22;
+ hence thesis by A2,FINSEQ_1:3;
+end;
+
+theorem Th4:
+ k < i implies ex j being Nat st j = i-k & 1 <= j
+proof
+ assume k < i; then k - k < i - k by REAL_1:54;
+then A1: 0 < i - k by XCMPLX_1:14;
+  then reconsider j = i - k as Nat by INT_1:16;
+  take j; thus j = i - k;
+  reconsider j' = j, 0' = 0 as Integer;
+    0' + 1 <= j' by A1,INT_1:20;
+ hence 1 <= j;
+end;
+
+theorem Th5:
+ for D being non empty set, df being FinSequence of D holds
+ df is non empty implies ex d being Element of D, df1 being FinSequence of D
+ st d = df.1 & df = <*d*>^df1
+proof
+ let D be non empty set, df be FinSequence of D;
+ assume df is non empty;
+ then len df <> 0 by FINSEQ_1:25;
+then A1: 1 <= len df by RLVECT_1:99; then 1 in dom df by FINSEQ_3:27;
+  then reconsider d = df.1 as Element of D by FINSEQ_2:13;
+  take d;
+  reconsider lend1 = len df - 1 as Nat by A1,INT_1:18;
+  deffunc F(Nat) = df.($1+1);
+  consider dta being FinSequence such that
+A2: len dta = lend1 and
+A3: for j being Nat st j in Seg lend1 holds dta.j=F(j) from SeqLambda;
+    now let j be Nat; assume
+      j in dom dta;
+then A4:  j in Seg len dta by FINSEQ_1:def 3;
+    then j + 1 in Seg (len dta + 1) by Th2;
+    then j+1 in Seg len df by A2,XCMPLX_1:27;
+    then j+1 in dom df by FINSEQ_1:def 3;
+    then df.(j+1) in D by FINSEQ_2:13;
+   hence dta.j in D by A2,A3,A4;
+  end; then reconsider dta as FinSequence of D by FINSEQ_2:14;
+  take dta; thus d = df.1;
+    now thus len df = len df;
+   thus
+A5: len (<*d*>^dta) = len <*d*> + len dta by FINSEQ_1:35
+                   .= 1 + (len df - 1) by A2,FINSEQ_1:57
+                   .= len df by XCMPLX_1:27;
+   let i be Nat; assume i in Seg len df;
+then A6:  1 <= i & i <= len df by FINSEQ_1:3;
+   per cases by A6,REAL_1:def 5;
+   suppose i = 1; hence df.i = (<*d*>^dta).i by FINSEQ_1:58;
+   suppose
+A7:  i > 1; then consider j being Nat such that
+A8:  j = i-1 & 1 <= j by Th4; i - 1 <= lend1 by A6,REAL_1:49;
+then A9:  j in Seg lend1 by A8,FINSEQ_1:3;
+      len <*d*> = 1 by FINSEQ_1:57;
+    then (<*d*>^dta).i = dta.j by A5,A6,A7,A8,FINSEQ_1:37
+                 .= df.(j+1) by A3,A9 .= df.i by A8,XCMPLX_1:27;
+   hence df.i = (<*d*>^dta).i;
+  end;
+ hence thesis by FINSEQ_2:10;
+end;
+
+theorem Th6:
+ for df being FinSequence, d being set holds
+  i in dom df implies (<*d*>^df).(i+1) = df.i proof
+ let df be FinSequence, d be set;
+  assume
+A1: i in dom df;
+then A2: i in Seg len df by FINSEQ_1:def 3;
+   len (<*d*>^df) = len <*d*> + len df by FINSEQ_1:35
+               .= 1 + len df by FINSEQ_1:57;
+  then i+1 in Seg len (<*d*>^df) by A2,Th2;
+then A3: i+1 in dom (<*d*>^df) by FINSEQ_1:def 3;
+A4: len <*d*> = 1 by FINSEQ_1:57; 1 <= i by A1,FINSEQ_3:27;
+then A5: 1 < i+1 by NAT_1:38;
+   i+1 <= len (<*d*>^df) by A3,FINSEQ_3:27;
+  hence (<*d*>^df).(i+1) = df.(i + 1 - len <*d*>) by A4,A5,FINSEQ_1:37
+                       .= df.i by A4,XCMPLX_1:26;
+ end;
+
+theorem Th7:
+  for S being set, D1, D2 being non empty set,
+      f1 being Function of S, D1, f2 being Function of D1, D2 holds
+  f1 is bijective & f2 is bijective implies f2*f1 is bijective
+proof
+  let S be set, D1, D2 be non empty set,
+      f1 be Function of S, D1, f2 be Function of D1, D2;
+  assume f1 is bijective & f2 is bijective;
+then A1: f1 is one-to-one onto & f2 is one-to-one onto by FUNCT_2:def 4;
+ set f3 = f2*f1;
+   rng f2 = D2 & rng f1 = D1 & dom f2 = D1 by A1,FUNCT_2:def 1,def 3;
+ then rng f3 = D2 by RELAT_1:47;
+ then f3 is one-to-one onto by A1,FUNCT_1:46,FUNCT_2:def 3;
+ hence thesis by FUNCT_2:def 4;
+end;
+
+:: Partitions & Equivalence Relations
+
+theorem Th8:
+ for Y being set, E1, E2 being Equivalence_Relation of Y
+  holds Class E1 = Class E2 implies E1 = E2
+proof
+ let Y be set, E1, E2 be Equivalence_Relation of Y such that
+A1: Class E1 = Class E2;
+   now let x be set;
+  hereby assume
+A2: x in E1; then consider a, b being set such that
+A3: x = [a, b] & a in Y & b in Y by RELSET_1:6;
+   reconsider a,b as Element of Y by A3;
+A4: b in Class (E1, b) by A3,EQREL_1:28;
+A5: a in Class (E1, b) by A2,A3,EQREL_1:27;
+     Class (E1, b) in Class E2 by A1,A3,EQREL_1:def 5;
+   then consider c being set such that
+A6: c in Y & Class (E1, b) = Class (E2, c) by EQREL_1:def 5;
+     [a, c] in E2 & [b, c] in E2 by A4,A5,A6,EQREL_1:27;
+   then [a, c] in E2 & [c, b] in E2 by EQREL_1:12;
+   hence x in E2 by A3,EQREL_1:13;
+  end;
+  assume
+A7: x in E2; then consider a, b being set such that
+A8: x = [a, b] & a in Y & b in Y by RELSET_1:6;
+   reconsider a, b as Element of Y by A8;
+A9: b in Class (E2, b) by A8,EQREL_1:28;
+A10: a in Class (E2, b) by A7,A8,EQREL_1:27;
+     Class (E2, b) in Class E1 by A1,A8,EQREL_1:def 5;
+   then consider c being set such that
+A11: c in Y & Class (E2, b) = Class (E1, c) by EQREL_1:def 5;
+     [a, c] in E1 & [b, c] in E1 by A9,A10,A11,EQREL_1:27;
+   then [a, c] in E1 & [c, b] in E1 by EQREL_1:12;
+   hence x in E1 by A8,EQREL_1:13;
+  end;
+ hence thesis by TARSKI:2;
+end;
+
+theorem Th9:
+ for W being non empty set, PW being a_partition of W
+  holds PW is non empty
+proof
+ let W be non empty set, PW be a_partition of W;
+ consider x being Element of W;
+   union PW = W by EQREL_1:def 6;
+ then consider Y being set such that
+A1: x in Y & Y in PW by TARSKI:def 4;
+ thus thesis by A1;
+end;
+
+theorem Th10:
+ for Z being finite set, PZ being a_partition of Z
+  holds PZ is finite proof let Z be finite set, PZ be a_partition of Z;
+    bool Z is finite & PZ c= bool Z by FINSET_1:24;
+ hence PZ is finite by FINSET_1:13;
+end;
+
+definition let W be non empty set;
+ cluster -> non empty a_partition of W;
+ coherence by Th9;
+end;
+
+definition let Z be finite set;
+ cluster -> finite a_partition of Z;
+ coherence by Th10;
+end;
+
+definition let X be non empty finite set;
+ cluster non empty finite a_partition of X;
+ existence proof consider p being a_partition of X;
+   take p; thus p is non empty & p is finite; end;
+end;
+
+ reserve X, A for non empty finite set,
+         PX for a_partition of X,
+         PA1, PA2 for a_partition of A;
+
+theorem Th11:
+for X being non empty set, PX being a_partition of X
+ for Pi being set st Pi in PX ex x being Element of X st x in Pi
+proof
+ let X be non empty set, PX be a_partition of X;
+ let Pi be set; assume Pi in PX; then reconsider Pi as Element of PX;
+A1: Pi <> {} by EQREL_1:def 6; consider q being Element of Pi;
+    q in Pi by A1; then reconsider q as Element of X;
+ take q; thus thesis by A1;
+end;
+
+theorem Th12:
+ card PX <= card X proof assume card PX > card X;
+  then Card card X <` Card card PX by CARD_1:73;
+  then Card X<`Card card PX by CARD_1:def 11; then Card X<`Card PX by CARD_1:
+def 11;
+  then consider P_i being set such that
+A1: P_i in PX and
+A2: for x being set st x in X holds (proj PX).x <> P_i by FINSEQ_4:81;
+ reconsider P_i as Element of PX by A1; consider q being Element of X such that
+A3: q in P_i by Th11;
+  reconsider P_q = (proj PX).q as Element of PX;
+A4: q in P_q by BORSUK_1:def 1;
+     P_q = P_i or P_q misses P_i by EQREL_1:def 6;
+   hence contradiction by A2,A3,A4,XBOOLE_0:3;
+end;
+
+theorem Th13:
+ PA1 is_finer_than PA2 implies card PA2 <= card PA1 proof assume
+A1: PA1 is_finer_than PA2; assume card PA1 < card PA2;
+  then Card card PA1 <` Card card PA2 by CARD_1:73;
+  then Card PA1 <` Card card PA2 by CARD_1:def 11;
+then A2: Card PA1 <` Card PA2 by CARD_1:def 11;
+   defpred P[set,set] means $1 c= $2;
+A3: for e being set st e in PA1 ex u being set st u in PA2 & P[e,u]
+                                                         by A1,SETFAM_1:def 2;
+   consider f being Function of PA1, PA2 such that
+A4: for e being set st e in PA1 holds P[e,f.e] from FuncEx1 (A3);
+  consider p2_i being set such that
+A5: p2_i in PA2 and
+A6: for x being set st x in PA1 holds f.x <> p2_i by A2,FINSEQ_4:81;
+   reconsider p2_i as Element of PA2 by A5;
+   consider q being Element of A such that
+A7: q in p2_i by Th11;
+   reconsider p2_q = f.((proj PA1).q) as Element of PA2;
+A8: q in (proj PA1).q by BORSUK_1:def 1; A9:(proj PA1).q c= p2_q by A4;
+     p2_q=p2_i or p2_q misses p2_i by EQREL_1:def 6;
+   hence contradiction by A6,A7,A8,A9,XBOOLE_0:3;
+end;
+
+theorem Th14: PA1 is_finer_than PA2 implies
+for p2 being Element of PA2 ex p1 being Element of PA1 st p1 c=p2 proof assume
+A1: PA1 is_finer_than PA2;
+  consider E1 being Equivalence_Relation of A such that
+A2: PA1 = Class E1 by EQREL_1:43;
+  consider E2 being Equivalence_Relation of A such that
+A3: PA2 = Class E2 by EQREL_1:43;
+ let p2 be Element of PA2; reconsider p2' = p2 as Subset of A;
+  consider a being set such that
+A4: a in A & p2' = Class (E2, a) by A3,EQREL_1:def 5;
+   reconsider E1a = Class (E1, a) as Element of PA1 by A2,A4,EQREL_1:def 5;
+  take E1a; consider p22 being set such that
+A5: p22 in PA2 & E1a c= p22 by A1,SETFAM_1:def 2;
+  reconsider p22' = p22 as Subset of A by A5;
+  consider b being set such that
+A6: b in A & p22' = Class (E2, b) by A3,A5,EQREL_1:def 5;
+    a in Class (E1, a) by A4,EQREL_1:28; hence E1a c= p2 by A4,A5,A6,EQREL_1:31
+;
+end;
+
+theorem Th15:
+  PA1 is_finer_than PA2 & card PA1 = card PA2 implies PA1 = PA2 proof
+   defpred P[set,set] means $1 c= $2;
+assume A1: PA1 is_finer_than PA2 & card PA1 = card PA2;
+then A2: for e being set st e in PA1 ex u being set st
+                                      u in PA2 & P[e,u] by SETFAM_1:def 2;
+   consider f being Function of PA1, PA2 such that
+A3: for e being set st e in PA1 holds P[e,f.e] from FuncEx1 (A2);
+A4: dom f = PA1 & rng f c= PA2 by FUNCT_2:def 1,RELSET_1:12;
+ A5: PA2 c= rng f proof let p2 be set; assume
+   p2 in PA2; then reconsider p2' = p2 as Element of PA2;
+   consider p1 being Element of PA1 such that
+A6: p1 c= p2' by A1,Th14;
+A7: p1 c= f.p1 by A3;
+A8: p2' meets f.p1 proof consider x being Element of A such that
+A9:   x in p1 by Th11;
+     thus thesis by A6,A7,A9,XBOOLE_0:3;
+   end;
+   reconsider fp1 = f.p1 as Subset of A by TARSKI:def 3;
+   p2' = fp1 by A8,EQREL_1:def 6; hence p2 in rng f by A4,FUNCT_1:def 5;
+ end;
+then rng f = PA2 by A4,XBOOLE_0:def 10;
+then A10: f is one-to-one by A1,FINSEQ_4:79;
+A11: for x being Element of PA1 holds x = f.x proof let x be Element of PA1;
+A12:   x c= f.x by A3;
+     reconsider fx = f.x as Subset of A by TARSKI:def 3;
+A13:   fx c= A;
+    assume x <> f.x; then consider a being set such that
+A14:   a in x & not a in f.x or a in f.x & not a in x by TARSKI:2;
+     consider E1 being Equivalence_Relation of A such that
+A15:   PA1 = Class E1 by EQREL_1:43;
+A16:   a in Class (E1, a) by A13,A14,EQREL_1:28;
+   reconsider CE1a = Class (E1, a) as Element of PA1
+     by A13,A14,A15,EQREL_1:def 5;
+A17: CE1a c= f.CE1a by A3;
+     reconsider fCE1a = f.CE1a as Subset of A by TARSKI:def 3;
+       fx meets fCE1a by A12,A14,A16,A17,XBOOLE_0:3;
+    then fx = fCE1a by EQREL_1:def 6;
+   hence contradiction by A4,A10,A12,A14,A16,FUNCT_1:def 8;
+   end;
+   now let x be set;
+  hereby assume
+   x in PA1; then reconsider x' = x as Element of PA1;
+    set fx = f.x';
+      fx in PA2; hence x in PA2 by A11;
+  end;
+  assume x in PA2; then consider y being set such that
+A18: y in dom f & x = f.y by A5,FUNCT_1:def 5;
+   reconsider y' = y as Element of PA1 by A18,FUNCT_2:def 1; y' = f.y' by A11
+;
+  hence x in PA1 by A18;
+ end;
+ hence thesis by TARSKI:2;
+end;
+
+begin :: Definitions and terminology for FSM
+
+definition let IAlph be set;
+  struct (1-sorted) FSM over IAlph (#
+        carrier -> set,
+           Tran -> Function of [: the carrier, IAlph :], the carrier,
+          InitS -> Element of the carrier #);
+end;
+
+definition let IAlph be set, fsm be FSM over IAlph;
+  mode State of fsm is Element of fsm;
+end;
+
+definition let X be set;
+  cluster non empty finite FSM over X;
+  existence
+  proof
+    consider A being non empty finite set,
+             T being Function of [: A, X :], A,
+             I being Element of A;
+    take S = FSM (# A, T, I #);
+    thus S is non empty by STRUCT_0:def 1;
+    thus S is finite by GROUP_1:def 13;
+  end;
+end;
+
+definition :: WAYBEL11
+  cluster finite non empty 1-sorted;
+  existence
+  proof
+   take 1-sorted(#{{}}#);
+   thus thesis by GROUP_1:def 13,STRUCT_0:def 1;
+  end;
+end;
+
+definition let S be finite 1-sorted; :: YELLOW13
+ cluster the carrier of S -> finite;
+ coherence by GROUP_1:def 13;
+end;
+
+ reserve IAlph, OAlph for non empty set,
+         fsm for non empty FSM over IAlph,
+         s for Element of IAlph,
+         w, w1, w2 for FinSequence of IAlph,
+         q, q', q1, q2 for State of fsm;
+
+definition let IAlph be non empty set;
+ let fsm be non empty FSM over IAlph;
+ let s be Element of IAlph, q be State of fsm;
+ func s -succ_of q -> State of fsm equals
+:Def1:  (the Tran of fsm).[q, s];
+ correctness;
+end;
+
+definition let IAlph be non empty set; let fsm be non empty FSM over IAlph;
+           let q be State of fsm; let w be FinSequence of IAlph;
+ func (q, w)-admissible -> FinSequence of the carrier of fsm means
+:Def2:
+  it.1 = q & len it = len w + 1 &
+  for i st 1 <= i & i <= len w
+   ex wi being Element of IAlph, qi, qi1 being State of fsm st
+    wi = w.i & qi = it.i & qi1 = it.(i+1) & wi-succ_of qi = qi1;
+ existence proof set D = the carrier of fsm; set N = len w + 1;
+ defpred P[Nat, set, set] means
+       ex wn being Element of IAlph, q', q'' being Element of D st
+           w.$1 = wn & q' = $2 & q'' = $3 & wn-succ_of q' = q'';
+A1: for n being Nat st 1 <= n & n < N holds
+     for x being Element of D ex y being Element of D st P[n, x, y] proof
+ let n be Nat; assume
+A2: 1 <= n;
+  assume n < N;
+  then n <= len w by NAT_1:38; then n in dom w by A2,FINSEQ_3:27;
+  then reconsider wn = w.n as Element of IAlph by FINSEQ_2:13;
+ let x be Element of D; wn-succ_of x = (the Tran of fsm).[x, wn] by Def1;
+ hence thesis;
+end;
+ consider p being FinSequence of D such that
+A3:  len p = N & (p.1 = q or N = 0) &
+     for n being Nat st 1 <= n & n < N holds P[n, p.n, p.(n+1)]
+                                from FinRecExD (A1);
+ take p; thus p.1 = q by A3;
+ thus len p = len w + 1 by A3;
+ let i be Nat; assume
+A4: 1 <= i;
+  assume i <= len w;
+  then i < N by NAT_1:38; hence thesis by A3,A4;
+ end;
+ uniqueness proof let qs1, qs2 be FinSequence of the carrier of fsm such that
+A5: qs1.1 = q & len qs1 = len w + 1 &
+    for i being Nat st 1 <= i & i <= len w
+     ex wi being Element of IAlph, qs1i, qs1i1 being State of fsm
+     st wi=w.i & qs1i=qs1.i & qs1i1 = qs1.(i+1) & wi-succ_of qs1i = qs1i1
+ and
+A6: qs2.1 = q & len qs2 = len w + 1 &
+    for i being Nat st 1 <= i & i <= len w
+     ex wi being Element of IAlph, qs2i, qs2i1 being State of fsm
+     st wi = w.i & qs2i = qs2.i & qs2i1 = qs2.(i+1) & wi-succ_of qs2i = qs2i1;
+   defpred P[Nat] means 1<=$1 & $1<=len qs1 implies qs1.$1 = qs2.$1;
+A7:  P[0];
+A8: now let k be Nat; assume
+A9:    P[k];
+       thus P[k+1]
+       proof
+       assume
+A10:    1 <= k+1 & k+1 <= len qs1;
+A11:    0 = k or 0 < k & 0+1 = 1 by NAT_1:19;
+     per cases by A11,NAT_1:38;
+     suppose 0 = k; hence qs1.(k+1) = qs2.(k+1) by A5,A6;
+     suppose
+A12:    1 <= k;
+A13:    k <= len w by A5,A10,REAL_1:53;
+     then consider i1 being Element of IAlph,qs1i,qs1i1 being State of fsm such
+that
+A14:   i1 = w.k & qs1i = qs1.k & qs1i1 = qs1.(k+1) &
+      i1-succ_of qs1i = qs1i1 by A5,A12;
+     consider i2 being Element of IAlph,qs2i,qs2i1 being State of fsm such that
+A15:   i2 = w.k & qs2i = qs2.k & qs2i1 = qs2.(k+1) &
+      i2-succ_of qs2i = qs2i1 by A6,A12,A13;
+     thus qs1.(k+1) = qs2.(k+1) by A5,A9,A12,A13,A14,A15,NAT_1:37;
+     end;
+    end;
+   for k being Nat holds P[k] from Ind (A7,A8);
+  hence qs1 = qs2 by A5,A6,FINSEQ_1:18;
+ end;
+end;
+
+theorem Th16:
+ (q, <*>IAlph)-admissible = <*q*> proof set eis = <*>IAlph;
+A1:  len eis = 0 by FINSEQ_1:25;
+then A2:  len <*q*> = len eis + 1 by FINSEQ_1:57;
+A3:  <*q*>.1 = q by FINSEQ_1:57;
+    for i being Nat st 1 <= i & i <= len eis
+   ex wi being Element of IAlph, qi, qi1 being State of fsm st
+    wi=eis.i & qi=<*q*>.i & qi1=<*q*>.(i+1)& wi-succ_of qi=qi1 by A1,AXIOMS:22;
+ hence thesis by A2,A3,Def2;
+end;
+
+definition let IAlph be non empty set;
+           let fsm be non empty FSM over IAlph;
+           let w be FinSequence of IAlph;
+           let q1, q2 be State of fsm;
+ pred q1, w-leads_to q2 means
+:Def3: (q1, w)-admissible.(len w + 1) = q2;
+end;
+
+theorem Th17:
+ q, <*>IAlph-leads_to q proof set eis = <*>IAlph;
+A1: (q, eis)-admissible = <*q*> by Th16;
+     <*q*>.(len eis + 1) = <*q*>.(0+1) by FINSEQ_1:25 .= q by FINSEQ_1:57;
+ hence thesis by A1,Def3;
+end;
+
+definition let IAlph be non empty set;
+ let fsm be non empty FSM over IAlph;
+ let w be FinSequence of IAlph;
+ let q_seq be FinSequence of the carrier of fsm;
+ pred q_seq is_admissible_for w means
+:Def4: ex q1 being State of fsm st q1 = q_seq.1 & (q1, w)-admissible = q_seq;
+end;
+
+theorem <*q*> is_admissible_for <*>IAlph proof
+   (q, <*>IAlph)-admissible = <*q*> & q = <*q*>.1 by Th16,FINSEQ_1:57;
+ hence thesis by Def4;
+end;
+
+definition let IAlph, fsm, q, w;
+ func q leads_to_under w -> State of fsm means
+:Def5: q, w-leads_to it;
+ existence proof len (q, w)-admissible=len w +1 & len w +1 in Seg (len w +1)
+                                by Def2,FINSEQ_1:6;
+  then len w +1 in dom (q, w)-admissible by FINSEQ_1:def 3;
+  then reconsider IT =(q,w)-admissible.(len w +1) as Element of
+fsm
+                                        by FINSEQ_2:13;
+  take IT; thus thesis by Def3;
+ end;
+ uniqueness proof let it1, it2 be Element of fsm; assume
+     q, w-leads_to it1 & q, w-leads_to it2;
+   then (q, w)-admissible.(len w + 1) = it1 &
+   (q, w)-admissible.(len w + 1) = it2 by Def3;
+  hence it1 = it2;
+ end;
+end;
+
+theorem Th19:
+   ((q, w)-admissible).(len (q, w)-admissible) = q' iff q, w-leads_to q' proof
+ hereby set qs = (q, w)-admissible; assume
+A1: qs.(len qs) = q'; qs.1 = q & len qs = len w + 1 &
+  for i being Nat st 1 <= i & i <= len w
+   ex wi being Element of IAlph, qi, qi1 being State of fsm st
+    wi=w.i & qi = qs.i & qi1 = qs.(i+1) & wi-succ_of qi = qi1 by Def2;
+  hence q, w-leads_to q' by A1,Def3;
+ end;
+ assume q, w-leads_to q'; then (q, w)-admissible.(len w +1) = q' by Def3;
+ hence thesis by Def2;
+end;
+
+theorem Th20:
+ for k st 1 <= k & k <= len w1
+   holds (q1,w1^w2)-admissible.k = (q1,w1)-admissible.k
+proof set q1w = (q1,w1^w2)-admissible; set q1w1 = (q1,w1)-admissible;
+  defpred P[Nat] means 1 <= $1 & $1 <= len w1 implies q1w.$1 = q1w1.$1;
+A1: P[0];
+A2:now let k be Nat; assume
+A3:  P[k];
+     thus P[k+1] proof assume
+A4:  1 <= k+1 & k+1 <= len w1; A5: 0 = k or 0 < k & 0 + 1= 1 by NAT_1:19;
+     per cases by A4,A5,NAT_1:38;
+     suppose
+A6:   k = 0;
+      hence q1w.(k+1) = q1 by Def2 .= q1w1.(k+1) by A6,Def2;
+     suppose
+A7:   1 <= k & k <= len w1; len w1 <= len w1 + len w2 by NAT_1:29;
+      then k <= len w1 + len w2 by A7,AXIOMS:22;
+      then 1 <= k & k <= len (w1^w2) by A7,FINSEQ_1:35;
+      then consider wk being Element of IAlph,qwk,qwk1 being State of fsm such
+that
+A8:  wk = (w1^w2).k & qwk = q1w.k & qwk1 = q1w.(k+1) &
+      wk-succ_of qwk = qwk1 by Def2;
+      consider w1k being Element of IAlph,
+               qw1k, qw1k1 being State of fsm such that
+A9:  w1k = w1.k & qw1k = q1w1.k & qw1k1 = q1w1.(k+1) &
+      w1k-succ_of qw1k = qw1k1 by A7,Def2;
+        k in dom w1 by A7,FINSEQ_3:27;
+      hence q1w.(k+1) = q1w1.(k+1) by A3,A7,A8,A9,FINSEQ_1:def 7;
+     end;
+    end;
+    thus for k being Nat holds P[k] from Ind (A1,A2);
+end;
+
+theorem Th21:
+  q1,w1-leads_to q2 implies
+ (q1,w1^w2)-admissible.(len w1 + 1) = q2 proof assume
+A1:  q1,w1-leads_to q2;
+    set q1w = (q1,w1^w2)-admissible; set q1w1 = (q1,w1)-admissible;
+      per cases by NAT_1:19;
+      suppose
+A2:    len w1 = 0; q1w1.1=q1 & q1w1.(len w1 + 1)=q2 by A1,Def2,Def3;
+       hence q1w.(len w1 + 1) = q2 by A2,Def2;
+      suppose
+A3:    len w1 > 0; 0+1 = 1;
+then A4:   1 <= len w1 by A3,NAT_1:38;
+         len (w1^w2) = len w1 + len w2 by FINSEQ_1:35;
+       then len w1 <= len (w1^w2) by NAT_1:37;
+      then consider wk being Element of IAlph,qwk,qwk1 being State of fsm such
+that
+A5:     wk = (w1^w2).(len w1) & qwk = q1w.(len w1) & qwk1 = q1w.((len w1)+1) &
+        wk-succ_of qwk = qwk1 by A4,Def2;
+      consider w1k being Element of IAlph,
+               qw1k, qw1k1 being State of fsm such that
+A6:     w1k = w1.(len w1) & qw1k = q1w1.(len w1) & qw1k1 = q1w1.((len w1)+1) &
+        w1k-succ_of qw1k = qw1k1 by A4,Def2;
+          len w1 in Seg len w1 by A3,FINSEQ_1:5;
+      then len w1 in dom w1 by FINSEQ_1:def 3;
+then A7:   wk = w1k by A5,A6,FINSEQ_1:def 7;
+A8: len q1w1 = len w1 + 1 by Def2;
+  thus (q1,w1^w2)-admissible.(len w1 + 1)
+        = (the Tran of fsm).[qwk, wk] by A5,Def1
+       .= (the Tran of fsm).[qw1k, w1k] by A4,A5,A6,A7,Th20
+       .= qw1k1 by A6,Def1 .= q2 by A1,A6,A8,Th19;
+end;
+
+theorem Th22:
+  q1,w1-leads_to q2 implies
+  for k st 1 <= k & k <= len w2 + 1
+        holds (q1,w1^w2)-admissible.(len w1 + k) = (q2,w2)-admissible.k
+ proof assume
+A1: q1,w1-leads_to q2;
+    set q1w = (q1,w1^w2)-admissible;
+    set q2w2 = (q2,w2)-admissible;
+    defpred P[Nat] means
+      1 <= $1 & $1 <= len w2 + 1 implies q1w.(len w1 + $1) = q2w2.$1;
+A2: P[0];
+A3: for k being Nat st P[k] holds P[k+1]
+    proof let k be Nat; assume
+A4:   1 <= k & k <= len w2 + 1 implies q1w.(len w1 + k) = q2w2.k; assume
+A5:   1 <= k+1 & k+1 <= len w2 + 1;
+      per cases by NAT_1:19;
+      suppose
+A6:    k = 0;
+       hence q1w.(len w1 + (k+1)) = q2 by A1,Th21
+                                .= q2w2.(k+1) by A6,Def2;
+      suppose
+A7:    0 < k; A8: 0+1 = 1;
+then A9:    1 <= k by A7,NAT_1:38;
+A10:    k <= len w2 by A5,REAL_1:53;
+A11:    1 <= len w1 + k by A9,NAT_1:37;
+         len (w1^w2) = len w1 + len w2 by FINSEQ_1:35;
+       then len w1 + k <= len (w1^w2) by A10,REAL_1:55;
+        then consider wi being Element of IAlph, qi,qi1 being State of fsm such
+that
+A12:     wi = (w1^w2).(len w1 + k) & qi = q1w.(len w1 + k) &
+        qi1 = q1w.((len w1 + k)+1) & wi-succ_of qi = qi1 by A11,Def2;
+      consider w2i being Element of IAlph,q2i,q2i1 being State of fsm such that
+A13:     w2i = w2.k & q2i = q2w2.k & q2i1 = q2w2.(k+1) &
+        w2i-succ_of q2i = q2i1 by A9,A10,Def2;
+         k in dom w2 by A9,A10,FINSEQ_3:27;
+then wi = w2i by A12,A13,FINSEQ_1:def 7;
+       hence q1w.(len w1 + (k+1)) = q2w2.(k+1) by A4,A5,A7,A8,A12,A13,NAT_1:38,
+XCMPLX_1:1;
+    end;
+    thus for n being Nat holds P[n] from Ind(A2,A3);
+end;
+
+theorem Th23:
+ q1,w1-leads_to q2
+ implies (q1,w1^w2)-admissible =
+          Del((q1,w1)-admissible,(len w1 + 1))^(q2,w2)-admissible proof assume
+A1: q1,w1-leads_to q2;
+  set q1w = (q1,w1^w2)-admissible; set q1w1 = (q1,w1)-admissible;
+  set q2w2 = (q2,w2)-admissible; set Dw1 = Del ((q1,w1)-admissible,(len w1+1));
+A2: len q1w1 = len w1 + 1 by Def2;
+   dom q1w1 = Seg (len q1w1) by FINSEQ_1:def 3;
+ then len w1+1 in dom q1w1 by A2,FINSEQ_1:5; then consider m be Nat such that
+A3:  len q1w1 = m + 1 & len Dw1 = m by MATRIX_2:8;
+A4:  len q1w1 = len w1 + 1 by Def2;
+then A5: len Dw1 = len w1 by A3,XCMPLX_1:2;
+A6: len q1w = len (w1^w2) +1 by Def2 .= len w1 + len w2 +1 by FINSEQ_1:35
+     .= len Dw1 +(len w2 +1) by A5,XCMPLX_1:1 .=len Dw1 + len q2w2 by Def2
+     .= len (Dw1^q2w2) by FINSEQ_1:35;
+      now let k be Nat; assume A7: 1 <= k & k <= len q1w;
+      per cases by A7,NAT_1:38;
+      suppose
+A8:     1 <= k & k <= len w1;
+then A9:     k in dom Dw1 by A5,FINSEQ_3:27;
+A10:     1 <= k & k < len w1 + 1 by A8,NAT_1:38;
+        thus q1w.k = q1w1.k by A8,Th20 .= Dw1.k by A4,A10,GOBOARD1:8
+                  .= (Dw1^q2w2).k by A9,FINSEQ_1:def 7;
+      suppose
+A11:   len w1+1 <= k & k <= len q1w;
+       then len w1 + 1 - len w1 <= k - len w1 by REAL_1:49;
+       then 1 <= k - len w1 by XCMPLX_1:26; then 0 <= k - len w1 by AXIOMS:22
+;
+       then reconsider i = k - len w1 as Nat by INT_1:16;
+A12:   k = len w1 + i by XCMPLX_1:27; len q1w = len (w1^w2) + 1 by Def2;
+       then len w1+1 <= k & k <= len w1 + len w2 +1 by A11,FINSEQ_1:35;
+       then len w1+1 <= k & k <= len w1 + (len w2 +1) by XCMPLX_1:1;
+then A13:   1 <= i & i <= len w2 +1 by A12,REAL_1:53;
+         len Dw1+1 <= k & k <= len Dw1 + len q2w2 by A3,A6,A11,Def2,FINSEQ_1:35
+;
+       then (Dw1^q2w2).k = q2w2.(k - len w1) by A5,FINSEQ_1:36;
+       hence q1w.k = (Dw1^q2w2).k by A1,A12,A13,Th22;
+      end;
+    hence thesis by A6,FINSEQ_1:18;
+end;
+
+begin :: Mealy and Moore machines and their responses
+
+definition let IAlph be set, OAlph be non empty set;
+  struct (FSM over IAlph) Mealy-FSM over IAlph, OAlph (#
+        carrier -> set,
+           Tran -> Function of [: the carrier, IAlph :], the carrier,
+           OFun -> Function of [: the carrier, IAlph :], OAlph,
+          InitS -> Element of the carrier #);
+
+  struct (FSM over IAlph) Moore-FSM over IAlph, OAlph (#
+        carrier -> set,
+           Tran -> Function of [: the carrier, IAlph :], the carrier,
+           OFun -> Function of the carrier, OAlph,
+          InitS -> Element of the carrier #);
+end;
+
+definition let IAlph be set,
+               X be finite non empty set,
+               T be Function of [: X, IAlph :], X,
+               I be Element of X;
+  cluster FSM (# X, T, I #) -> finite non empty;
+  coherence by GROUP_1:def 13,STRUCT_0:def 1;
+end;
+
+definition let IAlph be set, OAlph be non empty set,
+               X be finite non empty set,
+               T be Function of [: X, IAlph :], X,
+               O be Function of [: X, IAlph :], OAlph,
+               I be Element of X;
+  cluster Mealy-FSM (# X, T, O, I #) -> finite non empty;
+  coherence by GROUP_1:def 13,STRUCT_0:def 1;
+end;
+
+definition let IAlph be set, OAlph be non empty set,
+               X be finite non empty set,
+               T be Function of [: X, IAlph :], X,
+               O be Function of X, OAlph,
+               I be Element of X;
+  cluster Moore-FSM (# X, T, O, I #) -> finite non empty;
+  coherence by GROUP_1:def 13,STRUCT_0:def 1;
+end;
+
+definition let IAlph be set, OAlph be non empty set;
+  cluster finite non empty Mealy-FSM over IAlph, OAlph;
+  existence
+  proof
+    consider X be finite non empty set,
+             T be Function of [: X, IAlph :], X,
+             O be Function of [: X, IAlph :], OAlph,
+             I be Element of X;
+    take Mealy-FSM (# X, T, O, I #);
+    thus thesis;
+  end;
+
+  cluster finite non empty Moore-FSM over IAlph, OAlph;
+  existence
+  proof
+    consider X be finite non empty set,
+             T be Function of [: X, IAlph :], X,
+             O be Function of X, OAlph,
+             I be Element of X;
+    take Moore-FSM (# X, T, O, I #);
+    thus thesis;
+  end;
+end;
+
+ reserve tfsm, tfsm1, tfsm2, tfsm3 for non empty Mealy-FSM over IAlph, OAlph,
+         sfsm for non empty Moore-FSM over IAlph, OAlph,
+         qs for State of sfsm,
+         q, q1, q2, q3, qa, qb, qc, qa', qt, q1t, q2t for State of tfsm,
+         q11, q12 for State of tfsm1,
+         q21, q22 for State of tfsm2;
+
+definition let IAlph, OAlph, tfsm, qt, w;
+ func (qt, w)-response -> FinSequence of OAlph means
+:Def6:
+  len it = len w &
+  for i st i in dom w holds
+     it.i = (the OFun of tfsm).[(qt, w)-admissible.i, w.i];
+ existence proof set qs = (qt, w)-admissible;
+A1:   Seg len w = dom w by FINSEQ_1:def 3;
+   deffunc F(Nat) = (the OFun of tfsm).[qs.$1, w.$1];
+   consider p being FinSequence such that
+A2: len p = len w &
+   for i being Nat st i in Seg len w holds p.i = F(i) from SeqLambda;
+     rng p c= OAlph proof
+    let y be set; assume y in rng p; then consider x being set such that
+A3:   x in dom p & y = p.x by FUNCT_1:def 5;
+     reconsider x as Nat by A3;
+A4:   dom p = Seg len p by FINSEQ_1:def 3;
+A5:   1 <= x & x <= len p by A3,FINSEQ_3:27;
+A6:  len qs = len p + 1 by A2,Def2; x <= len p + 1 by A5,NAT_1:37;
+     then x in dom qs by A5,A6,FINSEQ_3:27;
+    then reconsider qsx = qs.x as Element of tfsm by FINSEQ_2:13
+;
+     reconsider wx = w.x as Element of IAlph by A1,A2,A3,A4,FINSEQ_2:13;
+       p.x = (the OFun of tfsm).[qsx, wx] by A2,A3,A4;
+    hence y in OAlph by A3;
+   end;
+   then reconsider p' = p as FinSequence of OAlph by FINSEQ_1:def 4;
+     len p' = len w &
+   for i being Nat st i in dom w holds
+     p'.i = (the OFun of tfsm).[qs.i, w.i] by A1,A2;
+  hence thesis;
+ end;
+ uniqueness proof set qs = (qt, w)-admissible;
+  let it1, it2 be FinSequence of OAlph; assume
+A7: len it1 = len w &
+   for i being Nat st i in dom w holds
+     it1.i = (the OFun of tfsm).[qs.i, w.i]; assume
+A8: len it2 = len w &
+   for i being Nat st i in dom w holds
+     it2.i = (the OFun of tfsm).[qs.i, w.i];
+then A9:  dom w = dom it1 & dom it1 = dom it2 by A7,FINSEQ_3:31;
+     now thus len it1 = len it2 by A7,A8;
+    let i be Nat; assume
+       1 <= i & i <= len it1; then i in dom it1 by FINSEQ_3:27;
+     then it1.i = (the OFun of tfsm).[qs.i, w.i] &
+     it2.i = (the OFun of tfsm).[qs.i, w.i] by A7,A8,A9;
+    hence it1.i = it2.i;
+   end;
+  hence it1 = it2 by FINSEQ_1:18;
+ end;
+end;
+
+theorem Th24:
+   (qt, <*>IAlph)-response = <*>OAlph proof
+    len (qt, <*>IAlph)-response = len <*>IAlph by Def6
+                               .= 0 by FINSEQ_1:32;
+  hence thesis by FINSEQ_1:32;
+end;
+
+definition let IAlph, OAlph, sfsm, qs, w;
+ func (qs, w)-response -> FinSequence of OAlph means :Def7:
+  len it = len w + 1 &
+  for i st i in Seg (len w + 1) holds
+     it.i = (the OFun of sfsm).((qs, w)-admissible.i);
+ existence proof set qs' = (qs, w)-admissible;
+A1:  Seg len qs' = dom qs' by FINSEQ_1:def 3;
+   deffunc F(Nat) = (the OFun of sfsm).(qs'.$1);
+   consider p being FinSequence such that
+A2: len p = len qs' &
+   for i being Nat st i in Seg len qs' holds
+     p.i = F(i) from SeqLambda;
+     rng p c= OAlph proof
+    let y be set; assume y in rng p; then consider x being set such that
+A3:   x in dom p & y = p.x by FUNCT_1:def 5;
+     reconsider x as Nat by A3;
+A4:   dom p = Seg len p by FINSEQ_1:def 3;
+    then reconsider qsx = qs'.x as State of sfsm by A1,A2,A3,FINSEQ_2:13;
+       p.x = (the OFun of sfsm).qsx by A2,A3,A4;
+    hence y in OAlph by A3;
+   end;
+   then reconsider p' = p as FinSequence of OAlph by FINSEQ_1:def 4;
+A5: len qs' = len w + 1 by Def2;
+     len p' = len qs' &
+   for i being Nat st i in dom qs' holds
+                                   p'.i = (the OFun of sfsm).(qs'.i) by A1,A2;
+  hence thesis by A1,A5;
+ end;
+ uniqueness proof set qs' = (qs, w)-admissible;
+  let it1, it2 be FinSequence of OAlph; assume
+A6: len it1 = len w + 1 &
+   for i being Nat st i in Seg (len w + 1) holds
+     it1.i = (the OFun of sfsm).(qs'.i); assume
+A7: len it2 = len w + 1 &
+   for i being Nat st i in Seg (len w + 1) holds
+     it2.i = (the OFun of sfsm).(qs'.i);
+     now thus len it1 = len it2 by A6,A7;
+    let i be Nat; assume 1 <= i & i <= len it1;
+     then i in Seg len it1 by FINSEQ_1:3;
+     then it1.i = (the OFun of sfsm).(qs'.i) &
+     it2.i = (the OFun of sfsm).(qs'.i) by A6,A7;
+    hence it1.i = it2.i;
+   end;
+  hence it1 = it2 by FINSEQ_1:18;
+ end;
+end;
+
+theorem Th25:
+ ((qs, w)-response).1 = (the OFun of sfsm).qs proof
+     1 <= 1 & 1 <= len w + 1 by NAT_1:37;
+ then 1 in Seg (len w + 1) by FINSEQ_1:3;
+ hence ((qs, w)-response).1
+               = (the OFun of sfsm).((qs, w)-admissible.1) by Def7
+              .= (the OFun of sfsm).qs by Def2;
+end;
+
+theorem Th26:
+  q1t,w1-leads_to q2t implies
+     (q1t,w1^w2)-response = (q1t,w1)-response ^ (q2t,w2)-response
+proof assume
+A1:  q1t,w1-leads_to q2t;
+    set q1w1 = (q1t,w1)-response, q2w2 = (q2t,w2)-response;
+    set q1w1w2 = (q1t, w1^w2)-response;
+    set Dq1w1w2a = Del((q1t,w1)-admissible,(len w1 + 1));
+    set OF = the OFun of tfsm;
+A2:  len q1w1w2 = len (w1^w2) by Def6 .= len w1 + len w2 by FINSEQ_1:35
+       .= len q1w1 + len w2 by Def6 .= len q1w1 + len q2w2 by Def6
+       .= len (q1w1 ^ q2w2) by FINSEQ_1:35;
+      now let k be Nat; assume
+A3:    1 <= k & k <= len q1w1w2;
+A4:    len (q1t,w1)-admissible = len w1 + 1 by Def2;
+         dom (q1t,w1)-admissible =Seg (len (q1t,w1)-admissible)by FINSEQ_1:def
+3
+;
+       then dom (q1t,w1)-admissible = Seg (len w1 + 1) by Def2;
+    then len w1 + 1 in dom (q1t,w1)-admissible by FINSEQ_1:5;
+      then consider m being Nat such that
+A5:    len (q1t,w1)-admissible = m+1 & (len Dq1w1w2a = m) by MATRIX_2:8;
+      A6: m+1 = len w1 + 1 by A5,Def2;
+then A7:   len Dq1w1w2a = len w1 by A5,XCMPLX_1:2;
+A8:   len q1w1 = len w1 by Def6;
+      per cases by A3,NAT_1:38;
+      suppose
+A9:     1 <= k & k <= len q1w1;
+then A10:    1 <= k & k <= len w1 by Def6;
+then A11:     k in dom w1 by FINSEQ_3:27;
+         1 <= k & k <= len (w1^w2) by A3,Def6;
+then A12:     k in dom (w1^w2) by FINSEQ_3:27;
+A13:     k in dom q1w1 by A9,FINSEQ_3:27;
+A14:    1 <= k & k < len w1 + 1 by A10,NAT_1:38;
+A15:    k in dom Dq1w1w2a by A7,A10,FINSEQ_3:27;
+      thus q1w1w2.k
+        = OF.[(q1t,w1^w2)-admissible.k,(w1^w2).k] by A12,Def6
+       .= OF.[(Dq1w1w2a ^ (q2t,w2)-admissible).k,(w1^w2).k] by A1,Th23
+       .= OF.[Dq1w1w2a.k,(w1^w2).k] by A15,FINSEQ_1:def 7
+       .= OF.[Dq1w1w2a.k,w1.k] by A11,FINSEQ_1:def 7
+       .= OF.[(q1t,w1)-admissible.k, w1.k] by A4,A14,GOBOARD1:8
+       .= (q1t,w1)-response.k by A11,Def6
+       .= ((q1t,w1)-response ^ (q2t,w2)-response).k by A13,FINSEQ_1:def 7;
+     suppose
+A16:   len q1w1 + 1 <= k & k <= len q1w1w2;
+        1 <= k & k <= len (w1^w2) by A3,Def6;
+then A17:   k in dom (w1^w2) by FINSEQ_3:27;
+A18:   len q1w1w2 = len (w1^w2) by Def6 .= len w1 + len w2 by FINSEQ_1:35
+        .= len q1w1 + len w2 by Def6
+        .= len q1w1 + len q2w2 by Def6;
+then A19:   k <= len Dq1w1w2a + len w2 by A7,A8,A16,Def6;
+        len w2 <= len w2 + 1 by NAT_1:29;
+      then len Dq1w1w2a + len w2 <= len Dq1w1w2a + (len w2 +1) by AXIOMS:24;
+      then len Dq1w1w2a + len w2 <= (len Dq1w1w2a + len w2) +1 by XCMPLX_1:1;
+      then k <= (len Dq1w1w2a + len w2) + 1 by A19,AXIOMS:22;
+      then k <= len Dq1w1w2a + (len w2 + 1) by XCMPLX_1:1;
+then A20:   len Dq1w1w2a + 1 <= k & k <= len Dq1w1w2a + len (q2t,w2)-admissible
+                                    by A5,A6,A16,Def2,Def6;
+   A21: len q1w1w2 = len (w1^w2) by Def6
+                .= len w1 + len w2 by FINSEQ_1:35;
+then A22:  len w1 + 1 <= k & k <= len w1 + len w2 by A16,Def6;
+A23:  q1w1w2.k = OF.[(q1t,w1^w2)-admissible.k,(w1^w2).k] by A17,Def6
+    .= OF.[( Del((q1t,w1)-admissible,(len w1 + 1))
+                   ^ (q2t,w2)-admissible).k, (w1^w2).k] by A1,Th23
+    .= OF.[(q2t,w2)-admissible.(k - len Dq1w1w2a),(w1^w2).k] by A20,FINSEQ_1:36
+    .= OF.[(q2t,w2)-admissible.(k - len w1 ),w2.(k-len w1)] by A7,A22,FINSEQ_1:
+36;
+        len q1w1 + 1 - len q1w1 <= k - len q1w1 by A16,REAL_1:49;
+then A24:   1 <= k - len q1w1 by XCMPLX_1:26;
+      then 0 <= k - len q1w1 by AXIOMS:22;
+      then reconsider p = k - len q1w1 as Nat by INT_1:16;
+        k <= len q1w1 + len w2 by A16,A21,Def6;
+      then k - len q1w1 <= len q1w1 + len w2 - len q1w1 by REAL_1:49;
+      then k - len q1w1 <= len w2 by XCMPLX_1:26;
+then A25:   p in dom w2 by A24,FINSEQ_3:27;
+        (q1w1^q2w2).k = (q2t,w2)-response.p by A16,A18,FINSEQ_1:36
+      .= OF.[(q2t,w2)-admissible.p,w2.p] by A25,Def6
+      .= OF.[(q2t,w2)-admissible.(k-len w1),w2.(k-len q1w1)] by Def6
+      .= OF.[(q2t,w2)-admissible.(k-len w1),w2.(k-len w1)] by Def6;
+     hence q1w1w2.k = (q1w1 ^ q2w2).k by A23;
+    end;
+    hence thesis by A2,FINSEQ_1:18;
+end;
+
+theorem Th27:
+   q11, w1 -leads_to q12 & q21, w1 -leads_to q22 &
+   (q12,w2)-response <> (q22,w2)-response
+ implies (q11,w1^w2)-response <> (q21,w1^w2)-response
+proof assume
+A1: q11, w1 -leads_to q12 & q21, w1 -leads_to q22 &
+   (q12,w2)-response <> (q22,w2)-response; assume
+A2: (q11,w1^w2)-response = (q21,w1^w2)-response;
+    set r12 = (q12,w2)-response, r22 = (q22,w2)-response;
+    set r1w1 = (q11,w1)-response, r2w1 = (q21,w1)-response;
+    set w = w1 ^ w2;
+    set r11 = (q11,w)-response; set r21 = (q21,w)-response;
+A3: len r2w1 = len w1 & len r1w1 = len w1 by Def6;
+A4: len r12 = len w2 & len r22 = len w2 by Def6;
+    then consider j being Nat such that
+A5: j in Seg len w2 & r12.j <> r22.j by A1,FINSEQ_2:10;
+A6: j in dom r12 & j in dom r22 by A4,A5,FINSEQ_1:def 3;
+      r11 = r1w1 ^ r12 & r21 = r2w1 ^ r22 by A1,Th26;
+   then r11.(len w1 + j)=r12.j & r21.(len w1 + j)=r22.j by A3,A6,FINSEQ_1:def 7
+;
+ hence contradiction by A2,A5;
+end;
+
+ reserve OAlph_f for finite non empty set,
+         tfsm_f for finite non empty Mealy-FSM over IAlph, OAlph_f,
+         sfsm_f for finite non empty Moore-FSM over IAlph, OAlph_f;
+
+definition let IAlph, OAlph;
+           let tfsm be non empty Mealy-FSM over IAlph, OAlph;
+           let sfsm be non empty Moore-FSM over IAlph, OAlph;
+ pred tfsm is_similar_to sfsm means
+   for tw being FinSequence of IAlph holds
+  <*(the OFun of sfsm).(the InitS of sfsm)*>^((the InitS of tfsm, tw)-response)
+                            = (the InitS of sfsm, tw)-response;
+end;
+
+theorem
+    for sfsm being non empty finite Moore-FSM over IAlph, OAlph
+  ex tfsm being non empty finite Mealy-FSM over IAlph, OAlph
+    st tfsm is_similar_to sfsm
+proof
+  let sfsm be non empty finite Moore-FSM over IAlph, OAlph;
+  set S = the carrier of sfsm, T = the Tran of sfsm;
+  set sOF = the OFun of sfsm, IS = the InitS of sfsm;
+  deffunc F(Element of S,Element of IAlph) = sOF.(T.[$1, $2]);
+ consider tOF being Function of [: S, IAlph:], OAlph such that
+A1: for q being Element of S, s be Element of IAlph
+     holds tOF.[q, s] = F(q,s) from Lambda2D;
+ take tfsm = Mealy-FSM (# S, T, tOF, IS #);
+ let tw be FinSequence of IAlph;
+  set tIS = the InitS of tfsm; set twa = (tIS, tw)-admissible;
+  set swa = (IS, tw)-admissible;
+    defpred P[Nat] means $1 in Seg (len tw + 1) implies twa.$1 = swa.$1;
+A2: P[0] by FINSEQ_1:3;
+A3: for i being Nat st P[i] holds P[i+1]
+    proof let i be Nat; assume
+A4:   i in Seg (len tw + 1) implies twa.i = swa.i;
+     assume (i+1) in Seg (len tw + 1);
+then A5:  i+1 <= len tw + 1 by FINSEQ_1:3;
+     per cases by A5,NAT_1:19,REAL_1:53;
+     suppose
+A6:   i = 0; twa.1=the InitS of tfsm & swa.1 = the InitS of sfsm by Def2;
+      hence twa.(i+1) = swa.(i+1) by A6;
+     suppose i > 0 & i <= len tw;
+then A7:   0+1=1 implies 1 <= i & i <= len tw by NAT_1:38;
+      then A8: 1<=i & i<=len tw + 1 by NAT_1:37; consider twi being Element of
+IAlph,
+               tqi, tqi1 being Element of tfsm such that
+A9:   twi = tw.i & tqi = twa.i & tqi1 = twa.(i+1) & twi-succ_of tqi = tqi1
+                                                by A7,Def2;
+      consider swi being Element of IAlph,
+               sqi, sqi1 being Element of sfsm such that
+A10:   swi = tw.i & sqi = swa.i & sqi1 = swa.(i+1) & swi-succ_of sqi = sqi1
+                                                by A7,Def2;
+      thus twa.(i+1) = (the Tran of sfsm).[sqi, swi] by A4,A8,A9,A10,Def1,
+FINSEQ_1:3
+      .= swa.(i+1) by A10,Def1;
+    end;
+A11: for i being Nat holds P[i] from Ind( A2, A3 );
+   now thus len (<*sOF.IS*>^((tIS, tw)-response))
+         = len <*sOF.IS*> + len ((tIS, tw)-response) by FINSEQ_1:35
+        .= 1+len ((tIS, tw)-response) by FINSEQ_1:57 .=len tw +1 by Def6;
+  thus len ((IS, tw)-response) = len tw + 1 by Def7;
+  let i be Nat; assume
+A12: i in Seg (len tw + 1);
+then A13: 1 <= i & i <= len tw + 1 by FINSEQ_1:3;
+  per cases by A13,REAL_1:def 5;
+  suppose
+A14: i = 1; then i in Seg 1 by FINSEQ_1:4,TARSKI:def 1;
+ then i in dom <*sOF.IS*> by FINSEQ_1:55;
+  hence (<*sOF.IS*>^((tIS, tw)-response)).i = <*sOF.IS*>.i by FINSEQ_1:def 7
+      .= sOF.IS by A14,FINSEQ_1:57 .= ((IS, tw)-response).i by A14,Th25;
+  suppose 1 < i; then consider j being Nat such that
+A15: j = i - 1 & 1 <= j by Th4; A16: i = j + 1 by A15,XCMPLX_1:27;
+A17: len <*sOF.IS*> = 1 by FINSEQ_1:57; A18: j <= len tw by A13,A16,REAL_1:53;
+then A19: j in Seg len tw by A15,FINSEQ_1:3;
+      1 <= j & j <= len tw + 1 by A15,A18,NAT_1:37;
+then A20:j in Seg (len tw + 1) by FINSEQ_1:3;
+      len ((tIS, tw)-response) = len tw by Def6;
+then A21:j in dom ((tIS, tw)-response) by A19,FINSEQ_1:def 3;
+   consider swj being Element of IAlph,
+            swaj, swai being Element of sfsm such that
+A22:swj = tw.j & swaj = swa.j & swai = swa.(j+1) &
+   swj-succ_of swaj = swai by A15,A18,Def2;
+A23: T.[swaj, swj] = swai by A22,Def1;
+A24: j in dom tw by A19,FINSEQ_1:def 3;
+    (<*sOF.IS*>^((tIS, tw)-response)).i
+    = (tIS, tw)-response.j by A16,A17,A21,FINSEQ_1:def 7
+   .= (the OFun of tfsm).[(tIS, tw)-admissible.j, tw.j] by A24,Def6
+   .= tOF.[(IS, tw)-admissible.j, tw.j] by A11,A20
+   .= sOF.(T.[swaj, swj]) by A1,A22
+   .= (IS, tw)-response.i by A12,A16,A22,A23,Def7;
+  hence (<*sOF.IS*>^((tIS, tw)-response)).i = (IS, tw)-response.i;
+ end;
+ hence thesis by FINSEQ_2:10;
+end;
+
+theorem ex sfsm_f st tfsm_f is_similar_to sfsm_f proof
+  set S = the carrier of tfsm_f, T = the Tran of tfsm_f;
+  set tOF = the OFun of tfsm_f, IS = the InitS of tfsm_f;
+  set sS = [: S, OAlph_f :];
+  deffunc F(Element of sS,Element of IAlph) = [ T.[$1`1, $2], tOF.[$1`1, $2]];
+  consider sT being Function of [:sS, IAlph:], sS such that
+A1: for q being Element of sS, s being Element of IAlph
+    holds sT.[q, s] = F(q,s) from Lambda2D;
+  deffunc F(Element of S,Element of OAlph_f) = $2;
+  consider sOF being Function of sS, OAlph_f such that
+A2: for q being Element of S, r being Element of OAlph_f
+    holds sOF.[q, r] = F(q,r) from Lambda2D;
+  consider r0 being Element of OAlph_f;
+  set sSs = sS, sTs = sT;
+  reconsider sOFs = sOF as Function of sSs, OAlph_f;
+  set sI = [IS, r0];
+  reconsider sfsm_f = Moore-FSM (# sSs, sTs, sOFs, sI #) as finite non empty
+     Moore-FSM over IAlph, OAlph_f;
+  take sfsm_f;
+  reconsider SI = sI as Element of sfsm_f;
+  thus tfsm_f is_similar_to sfsm_f proof let tw be FinSequence of IAlph;
+  set twa = (the InitS of tfsm_f, tw)-admissible;
+  set swa = (the InitS of sfsm_f, tw)-admissible;
+    defpred P[Nat] means $1 in Seg (len tw + 1) implies twa.$1 = (swa.$1)`1;
+A3: P[0] by FINSEQ_1:3;
+A4: for i being Nat st P[i] holds P[i+1]
+    proof let i be Nat; assume
+A5:   P[i];
+    assume i+1 in Seg (len tw +1);
+then A6: i+1 <= len tw +1 by FINSEQ_1:3;
+     per cases by A6,NAT_1:19,REAL_1:53;
+     suppose
+A7:  i = 0; twa.1 = IS by Def2 .= [IS, r0]`1 by MCART_1:def 1
+                 .= (swa.1)`1 by Def2;
+     hence twa.(i+1) = (swa.(i+1))`1 by A7;
+     suppose i > 0 & i <= len tw;
+then A8:   0+1=1 implies 1 <= i & i <= len tw by NAT_1:38;
+      then A9: 1 <= i & i <= len tw + 1 by NAT_1:37; consider twi being Element
+of IAlph,
+               tqi, tqi1 being Element of tfsm_f such that
+A10:   twi = tw.i & tqi = twa.i & tqi1 = twa.(i+1) & twi-succ_of tqi = tqi1
+                                           by A8,Def2;
+      consider swi being Element of IAlph,
+               sqi, sqi1 being Element of sfsm_f such that
+A11:   swi = tw.i & sqi = swa.i & sqi1 = swa.(i+1) & swi-succ_of sqi = sqi1
+                                           by A8,Def2;
+A12:   sqi1 = sT.[sqi, swi] by A11,Def1
+          .= [T.[sqi`1, swi], tOF.[sqi`1, swi]] by A1;
+     thus twa.(i+1) = T.[tqi, twi] by A10,Def1
+            .= (swa.(i+1))`1 by A5,A9,A10,A11,A12,FINSEQ_1:3,MCART_1:def 1;
+    end;
+A13: for i being Nat holds P[i] from Ind ( A3, A4 );
+   now thus len (<*sOF.sI*>^((IS, tw)-response))
+     = len <*sOF.sI*> + len ((IS, tw)-response) by FINSEQ_1:35
+    .= 1 + len ((IS, tw)-response) by FINSEQ_1:57 .= len tw + 1 by Def6;
+  thus len ((SI, tw)-response) = len tw + 1 by Def7;
+  let i be Nat; assume
+A14: i in Seg (len tw + 1);
+then A15: 1 <= i & i <= len tw + 1 by FINSEQ_1:3;
+  per cases by A15,REAL_1:def 5;
+  suppose
+A16: i = 1; then i in Seg 1 by FINSEQ_1:4,TARSKI:def 1;
+  then i in dom <*sOF.sI*> by FINSEQ_1:55;
+  hence (<*sOF.sI*>^((IS, tw)-response)).i = <*sOF.sI*>.i by FINSEQ_1:def 7
+         .= sOF.sI by A16,FINSEQ_1:57 .= ((SI, tw)-response).i by A16,Th25;
+  suppose 1 < i; then consider j being Nat such that
+A17:j = i-1 & 1 <= j by Th4; A18: i = j + 1 by A17,XCMPLX_1:27;
+A19:len <*sOF.sI*> = 1 by FINSEQ_1:57;
+    A20: j <= len tw by A15,A18,REAL_1:53;
+then A21:j in Seg len tw by A17,FINSEQ_1:3;
+      j <= len tw + 1 by A20,NAT_1:37;
+then A22:j in Seg (len tw + 1) by A17,FINSEQ_1:3;
+      len ((IS, tw)-response) = len tw by Def6;
+then A23:j in dom ((IS, tw)-response) by A21,FINSEQ_1:def 3;
+   consider swj being Element of IAlph,
+            swaj, swai being Element of sfsm_f such that
+A24: swj = tw.j & swaj = swa.j & swai = swa.(j+1) &
+   swj-succ_of swaj = swai by A17,A20,Def2;
+   reconsider swaj as Element of sS;
+A25: swai = sT.[swaj, swj] by A24,Def1
+       .= [T.[swaj`1, swj], tOF.[swaj`1, swj]] by A1;
+A26:  j in dom tw by A21,FINSEQ_1:def 3;
+    (<*sOF.sI*>^((IS, tw)-response)).i
+    = ((IS, tw)-response).j by A18,A19,A23,FINSEQ_1:def 7
+   .= (the OFun of tfsm_f).[(IS, tw)-admissible.j, tw.j] by A26,Def6
+   .= tOF.[swaj`1, swj] by A13,A22,A24
+   .= (the OFun of sfsm_f).(swa.i) by A2,A18,A24,A25
+   .= (SI, tw)-response.i by A14,Def7;
+  hence (<*sOF.sI*>^((IS, tw)-response)).i = (SI, tw)-response.i;
+ end;
+ hence thesis by FINSEQ_2:10;
+ end;
+end;
+
+begin :: Equivalence of states and machines (for Mealy machines)
+
+definition let IAlph, OAlph be non empty set,
+           tfsm1, tfsm2 be non empty Mealy-FSM over IAlph, OAlph;
+ pred tfsm1, tfsm2-are_equivalent means :Def9:
+ for w being FinSequence of IAlph holds
+   (the InitS of tfsm1,w)-response = (the InitS of tfsm2,w)-response;
+ reflexivity;
+ symmetry;
+end;
+
+theorem Th30:
+ tfsm1, tfsm2-are_equivalent & tfsm2, tfsm3-are_equivalent
+  implies tfsm1, tfsm3-are_equivalent proof assume
+A1:  tfsm1, tfsm2-are_equivalent & tfsm2, tfsm3-are_equivalent;
+   set IS1 = the InitS of tfsm1, IS2 = the InitS of tfsm2;
+   set IS3 = the InitS of tfsm3;
+  let w1 be FinSequence of IAlph;
+  thus (IS1, w1)-response = (IS2, w1)-response by A1,Def9
+  .= (IS3, w1)-response by A1,Def9;
+end;
+
+definition let IAlph, OAlph, tfsm, qa, qb;
+ pred qa, qb-are_equivalent means
+:Def10: for w holds (qa, w)-response = (qb, w)-response;
+ reflexivity;
+ symmetry;
+end;
+
+canceled 2;
+
+theorem
+    q1, q2-are_equivalent & q2, q3-are_equivalent implies q1, q3-are_equivalent
+ proof assume
+A1:  q1, q2-are_equivalent & q2, q3-are_equivalent;
+   thus q1, q3-are_equivalent proof let w be FinSequence of IAlph;
+     (q1, w)-response = (q2, w)-response &
+        (q2, w)-response = (q3, w)-response by A1,Def10;
+   hence (q1, w)-response = (q3, w)-response;
+ end;
+end;
+
+theorem Th34: qa' = (the Tran of tfsm).[qa, s]
+  implies for i st i in Seg (len w + 1) holds
+           (qa, <*s*>^w)-admissible.(i+1) = (qa', w)-admissible.i proof assume
+A1: qa' = (the Tran of tfsm).[qa, s]; set sw = (<*s*>^w);
+A2: len sw = len <*s*> + len w by FINSEQ_1:35 .= len w + 1 by FINSEQ_1:57;
+A3: sw.1 = s by FINSEQ_1:58;
+    defpred P[Nat] means
+     $1 in Seg (len w + 1) implies
+      (qa, <*s*>^w)-admissible.($1+1) = (qa', w)-admissible.$1;
+A4: P[0] by FINSEQ_1:3;
+A5: for j being Nat st P[j] holds P[j+1]
+    proof let j be Nat; assume
+A6:  j in Seg (len w + 1) implies
+        (qa, <*s*>^w)-admissible.(j+1) = (qa', w)-admissible.j; assume
+A7:  j+1 in Seg (len w + 1);
+     per cases;
+     suppose
+A8:  j = 0;
+A9:  (qa', w)-admissible.1 = qa' by Def2;
+A10:  1 <= 1 & 1 <= len sw by A2,A7,A8,FINSEQ_1:3;
+      set a_adm = (qa, sw)-admissible; consider swi1 being Element of IAlph,
+               a1, a11 being Element of tfsm such that
+A11:  swi1 = sw.1 & a1 = a_adm.1 & a11 = a_adm.(1+1) &
+      swi1-succ_of a1 = a11 by A10,Def2;
+        (the Tran of tfsm).[a1, swi1] = a11 by A11,Def1;
+      hence (qa, <*s*>^w)-admissible.(j+1+1) = (qa', w)-admissible.(j+1)
+                              by A1,A3,A8,A9,A11,Def2;
+     suppose j <> 0;
+then A12: j > 0 by NAT_1:19;
+then A13:  j in Seg len w by A7,Th3;
+then A14:  1 <= j & j <= len w by FINSEQ_1:3;
+then A15: 1 <= j+1 & j+1 <= len sw by A2,NAT_1:37,REAL_1:55;
+     set a_adm = (qa, sw)-admissible, a_adm' = (qa', w)-admissible;
+     consider swj1 being Element of IAlph,
+              aj1, aj11 being Element of tfsm such that
+A16:  swj1 = sw.(j+1) & aj1 = a_adm.(j+1) & aj11 = a_adm.(j+1+1) &
+      swj1-succ_of aj1 = aj11 by A15,Def2;
+     consider wj being Element of IAlph,
+              aj', aj1' being Element of tfsm such that
+A17:  wj = w.j & aj' = a_adm'.j & aj1' = a_adm'.(j+1) &
+      wj-succ_of aj' = aj1' by A14,Def2;
+        j in dom w by A13,FINSEQ_1:def 3;
+      hence (qa,<*s*>^w)-admissible.(j+1+1) = (qa',w)-admissible.(j+1)
+        by A6,A7,A12,A16,A17,Th3,Th6;
+ end;
+ thus for i being Nat holds P[i] from Ind(A4,A5);
+end;
+
+theorem Th35:  qa' = (the Tran of tfsm).[qa, s] implies
+  (qa, <*s*>^w)-response = <*(the OFun of tfsm).[qa, s]*>^(qa', w)-response
+ proof assume
+A1:   qa' = (the Tran of tfsm).[qa, s];
+ set OF=the OFun of tfsm; set a_sresp = OF.[qa, s];
+A2:len (<*s*>^w) = len <*s*> + len w by FINSEQ_1:35
+                .= 1+len w by FINSEQ_1:57;
+       now thus len ((qa, <*s*>^w)-response) = 1 + len w by A2,Def6;
+      thus
+A3:   len (<*a_sresp*>^(qa', w)-response)
+       = len <*a_sresp*> + len ((qa', w)-response) by FINSEQ_1:35
+      .= 1 + len ((qa', w)-response) by FINSEQ_1:57 .= 1 + len w by Def6;
+      let j be Nat; assume
+A4:   j in Seg (1 + len w);
+then A5:   1 <= j & j <= 1 + len w by FINSEQ_1:3;
+A6:   j in dom(<*s*>^w) by A2,A4,FINSEQ_1:def 3;
+      per cases by A5,REAL_1:def 5;
+      suppose A7:j = 1; thus (qa, <*s*>^w)-response.j
+        = OF.[(qa, <*s*>^w)-admissible.j, (<*s*>^w).j] by A6,Def6
+       .= OF.[qa,(<*s*>^w).j] by A7,Def2 .= a_sresp by A7,FINSEQ_1:58
+       .= (<*a_sresp*>^(qa', w)-response).j by A7,FINSEQ_1:58;
+      suppose
+A8:   j > 1; then consider i being Nat such that
+A9:    i = j - 1 & 1 <= i by Th4;
+A10:   len <*a_sresp*> = 1 by FINSEQ_1:57; j <= len w + 1 by A4,FINSEQ_1:3;
+       then j - 1 <= len w + 1-1 by REAL_1:49;
+       then i <= len w by A9,XCMPLX_1:26;
+then A11:   i in Seg len w by A9,FINSEQ_1:3;
+then A12:   i+1 in Seg (1 + len w) by Th2;
+A13:   i in Seg (1 + len w) by A11,FINSEQ_2:9;
+A14:   i in dom w by A11,FINSEQ_1:def 3;
+A15:   i+1 in dom(<*s*>^w) by A2,A12,FINSEQ_1:def 3;
+         (<*a_sresp*>^((qa', w)-response)).j
+        = (qa', w)-response.i by A3,A5,A8,A9,A10,FINSEQ_1:37
+       .= OF.[(qa', w)-admissible.i, w.i] by A14,Def6
+       .= OF.[(qa', w)-admissible.i, (<*s*>^w).(i+1)] by A14,Th6
+       .= OF.[(qa, <*s*>^w)-admissible.(i+1), (<*s*>^w).(i+1)]by A1,A13,Th34
+       .= (qa, <*s*>^w)-response.(i+1) by A15,Def6
+       .= ((qa, <*s*>^w)-response).j by A9,XCMPLX_1:27;
+      hence (qa, <*s*>^w)-response.j = (<*a_sresp*>^(qa', w)-response).j;
+     end;
+ hence thesis by FINSEQ_2:10;
+end;
+
+theorem Th36: qa, qb-are_equivalent iff
+   for s holds (the OFun of tfsm).[qa, s] = (the OFun of tfsm).[qb, s] &
+     (the Tran of tfsm).[qa, s], (the Tran of tfsm).[qb, s]-are_equivalent
+proof
+  set OF= the OFun of tfsm;
+ hereby assume A1:qa, qb-are_equivalent;
+ let s be Element of IAlph; len <*s*> = 1 by FINSEQ_1:57;
+then A2: 1 in dom <*s*> by FINSEQ_3:27;
+ thus
+A3: OF.[qa, s] = OF.[(qa, <*s*>)-admissible.1, s] by Def2
+   .= OF.[(qa, <*s*>)-admissible.1, <*s*>.1] by FINSEQ_1:57
+   .= (qa, <*s*>)-response.1 by A2,Def6 .= (qb, <*s*>)-response.1 by A1,Def10
+   .= OF.[(qb, <*s*>)-admissible.1, <*s*>.1] by A2,Def6
+   .= OF.[(qb,<*s*>)-admissible.1,s] by FINSEQ_1:57 .= OF.[qb,s] by Def2;
+  set qa' = (the Tran of tfsm).[qa, s]; set qb' = (the Tran of tfsm).[qb, s];
+    now let w be FinSequence of IAlph;
+     (qa, <*s*>^w)-response = <*OF.[qa,s]*>^(qa', w)-response &
+   (qb, <*s*>^w)-response = <*OF.[qb,s]*>^(qb', w)-response &
+   (qa, <*s*>^w)-response = (qb, <*s*>^w)-response by A1,Def10,Th35;
+   hence (qa', w)-response = (qb', w)-response by A3,FINSEQ_1:46;
+  end;
+hence (the Tran of tfsm).[qa, s], (the Tran of tfsm).[qb, s]-are_equivalent
+by Def10;
+ end;
+ assume
+A4: for s being Element of IAlph
+    holds (the OFun of tfsm).[qa, s] = (the OFun of tfsm).[qb, s] &
+     (the Tran of tfsm).[qa, s], (the Tran of tfsm).[qb, s]-are_equivalent;
+   let w be FinSequence of IAlph;
+   per cases;
+   suppose A5: w = <*>IAlph;
+     hence (qa, w)-response = <*>OAlph by Th24
+                          .= (qb, w)-response by A5,Th24;
+   suppose w <> {};
+then consider s being Element of IAlph, wt being FinSequence of IAlph such that
+A6:  s = w.1 & w = <*s*>^wt by Th5;
+    set qa' = (the Tran of tfsm).[qa, s]; set qb' = (the Tran of tfsm).[qb, s];
+        qa', qb'-are_equivalent by A4;
+then A7:  (qa', wt)-response = (qb', wt)-response by Def10;
+set a_sresp =(the OFun of tfsm).[qa,s]; set b_sresp =(the OFun of tfsm).[qb,s];
+   thus (qa, w)-response = <*a_sresp*>^(qa', wt)-response by A6,Th35
+ .= <*b_sresp*>^(qb',wt)-response by A4,A7.= (qb,w)-response by A6,Th35;
+end;
+
+theorem qa, qb-are_equivalent implies
+     for w, i st i in dom w ex qai, qbi being State of tfsm
+               st qai = (qa, w)-admissible.i & qbi = ((qb, w)-admissible.i) &
+                  qai, qbi-are_equivalent proof assume
+A1: qa, qb-are_equivalent;
+   let w be FinSequence of IAlph;
+   defpred P[Nat] means $1 in Seg len w implies
+           ex qai, qbi being Element of tfsm
+           st qai = (qa, w)-admissible.$1 & qbi = ((qb, w)-admissible.$1) &
+              qai, qbi-are_equivalent;
+A2:  P[0] by FINSEQ_1:3;
+A3:  for i being Nat st P[i] holds P[i+1]
+     proof let i be Nat; assume
+A4:    i in Seg len w implies
+       ex qai, qbi being Element of tfsm st
+       qai = (qa, w)-admissible.i & qbi = (qb, w)-admissible.i &
+       qai, qbi-are_equivalent; assume (i+1) in Seg len w;
+then A5: 1<=i+1 & i+1<=len w by FINSEQ_1:3; i=0 or 0<i & 0+1=1 by NAT_1:19;
+then A6:    0 = i or 1 <= i & i <= len w by A5,NAT_1:38;
+       per cases by A6,FINSEQ_1:3;
+       suppose
+A7:      i = 0;
+        reconsider qai = (qa,w)-admissible.1, qbi = (qb,w)-admissible.1
+          as Element of tfsm by Def2;
+        take qai, qbi;
+A8:     qai = qa by Def2;
+        thus qai = (qa, w)-admissible.(i+1) by A7;
+        thus qbi = (qb, w)-admissible.(i+1) by A7;
+        thus qai, qbi-are_equivalent by A1,A8,Def2;
+       suppose
+A9:    i in Seg len w;
+        then consider qai, qbi being Element of tfsm such that
+A10:      qai = (qa, w)-admissible.i & qbi = (qb, w)-admissible.i &
+         qai, qbi-are_equivalent by A4;
+A11:     1 <= i & i <= len w by A9,FINSEQ_1:3;
+        then consider wi being Element of IAlph,
+        qai', qai1' being Element of tfsm such that
+A12: wi = w.i & qai' = (qa, w)-admissible.i & qai1' = (qa, w)-admissible.(i+1)
+&
+         wi-succ_of qai' = qai1' by Def2;
+        consider wi' being Element of IAlph,
+        qbi', qbi1' being Element of tfsm such that
+A13: wi' = w.i & qbi' = (qb, w)-admissible.i & qbi1' = (qb, w)-admissible.(i+1)
+&
+         wi'-succ_of qbi' = qbi1' by A11,Def2;
+        take qai1'; take qbi1'; thus qai1' = (qa, w)-admissible.(i+1) by A12;
+        thus qbi1' = (qb, w)-admissible.(i+1) by A13;
+A14:     (the Tran of tfsm).[qai',wi] = qai1' by A12,Def1;
+       (the Tran of tfsm).[qbi',wi'] = qbi1' by A13,Def1;
+        hence qai1', qbi1'-are_equivalent by A10,A12,A13,A14,Th36;
+  end;
+A15: Seg len w = dom w by FINSEQ_1:def 3;
+     for i being Nat holds P[i] from Ind (A2, A3);
+  hence thesis by A15;
+end;
+
+definition let IAlph, OAlph,tfsm, qa, qb, k;
+ pred k-equivalent qa, qb means
+:Def11: for w st len w<=k holds (qa,w)-response = (qb,w)-response;
+end;
+
+theorem Th38: k-equivalent qa, qa proof let w be FinSequence of IAlph;
+  assume len w <= k; thus thesis; end;
+
+theorem Th39: k-equivalent qa, qb implies k-equivalent qb, qa proof assume
+A1: k-equivalent qa, qb; thus k-equivalent qb, qa proof
+   let w be FinSequence of IAlph; assume len w <= k;
+hence thesis by A1,Def11; end; end;
+
+theorem Th40:
+  k-equivalent qa, qb & k-equivalent qb, qc implies k-equivalent qa, qc
+ proof assume
+A1: k-equivalent qa, qb & k-equivalent qb, qc;
+  thus k-equivalent qa, qc proof
+   let w be FinSequence of IAlph; assume len w <= k;
+   then (qa, w)-response = (qb, w)-response &
+   (qb, w)-response = (qc, w)-response by A1,Def11;
+   hence thesis; end; end;
+
+theorem Th41:
+ qa,qb-are_equivalent implies k-equivalent qa,qb proof assume
+A1:  qa,qb-are_equivalent; thus k-equivalent qa,qb proof
+     let w be FinSequence of IAlph; assume len w <= k;
+    thus thesis by A1,Def10; end; end;
+
+theorem Th42: 0-equivalent qa, qb proof
+ let w be FinSequence of IAlph; assume
+ len w <= 0; then len w = 0 by NAT_1:18;
+then A1: w = <*>IAlph by FINSEQ_1:32;
+ hence (qa,w)-response=<*>OAlph by Th24.=(qb,w)-response by A1,Th24;
+end;
+
+theorem Th43:
+ (k+m)-equivalent qa, qb implies k-equivalent qa, qb proof assume
+A1: (k+m)-equivalent qa, qb;
+A2: k <= k+m by NAT_1:29;let w be FinSequence of IAlph; assume
+    len w <= k; then len w <= k+m by A2,AXIOMS:22;
+  hence thesis by A1,Def11; end;
+
+theorem Th44:
+ 1 <= k implies
+ (k-equivalent qa, qb iff
+  1-equivalent qa, qb &
+  for s being Element of IAlph, k1 being Nat st k1 = k - 1
+    holds k1-equivalent (the Tran of tfsm).[qa, s], (the Tran of tfsm).[qb, s])
+ proof set OF = the OFun of tfsm; assume
+A1: 1 <= k;
+ hereby assume
+A2: k-equivalent qa, qb;
+  thus
+A3: (1-equivalent qa, qb) proof let w be FinSequence of IAlph;
+     assume len w <= 1; then len w <= k by A1,AXIOMS:22;
+     hence (qa, w)-response = (qb, w)-response by A2,Def11;
+    end;
+  let s be Element of IAlph, k1 be Nat such that
+A4: k1 = k - 1;
+  set qa' = (the Tran of tfsm).[qa, s]; set qb' = (the Tran of tfsm).[qb, s];
+  thus k1-equivalent qa', qb' proof let w be FinSequence of IAlph; assume
+A5:  len w <= k1;set sw = <*s*>^w;
+A6: len (<*s*>^w) = len <*s*> + len w by FINSEQ_1:35 .=1+ len w by FINSEQ_1:57;
+     len w + 1 <= k1 + 1 by A5,REAL_1:55;
+then A7: len sw <= k by A4,A6,XCMPLX_1:27;
+A8: (qa, sw)-response = <*OF.[qa, s]*>^(qa', w)-response &
+   (qb, sw)-response = <*OF.[qb, s]*>^(qb', w)-response by Th35;
+A9: 0+1 in Seg (0+1) & len <*s*> = 1 by FINSEQ_1:6,57;
+then A10:  1 in dom <*s*> by FINSEQ_1:def 3;
+A11: OF.[qa, s] = OF.[(qa, <*s*>)-admissible.1, s] by Def2
+             .= OF.[(qa, <*s*>)-admissible.1, <*s*>.1] by FINSEQ_1:def 8
+             .= (qa, <*s*>)-response.1 by A10,Def6
+             .= (qb, <*s*>)-response.1 by A3,A9,Def11
+             .= OF.[(qb, <*s*>)-admissible.1, <*s*>.1] by A10,Def6
+             .= OF.[(qb, <*s*>)-admissible.1, s] by FINSEQ_1:def 8
+             .= OF.[qb, s] by Def2;
+   (qa, sw)-response = (qb, sw)-response by A2,A7,Def11;
+   hence (qa', w)-response = (qb', w)-response by A8,A11,FINSEQ_1:46;
+  end;
+ end;
+ assume that
+A12: (1-equivalent qa, qb) and
+A13: for s being Element of IAlph, k1 being Nat st k1 = k - 1
+     holds k1-equivalent (the Tran of tfsm).[qa, s],(the Tran of tfsm).[qb, s];
+ thus k-equivalent qa, qb proof let w be FinSequence of IAlph such that
+A14: len w <= k;
+  per cases;
+  suppose
+A15: w = <*>IAlph;
+  hence (qa,w)-response=<*>OAlph by Th24.=(qb,w)-response by A15,Th24;
+  suppose w is non empty;
+   then consider s being Element of IAlph, w' being FinSequence of IAlph such
+that
+A16: s = w.1 & w = <*s*>^w' by Th5;
+  set qa' = (the Tran of tfsm).[qa, s], qb' = (the Tran of tfsm).[qb, s];
+A17: (qa, w)-response = <*OF.[qa, s]*>^(qa', w')-response &
+   (qb, w)-response = <*OF.[qb, s]*>^(qb', w')-response by A16,Th35;
+A18: 0+1 in Seg (0+1) & len <*s*> = 1 by FINSEQ_1:6,57;
+then A19: 1 in dom <*s*> by FINSEQ_1:def 3;
+A20: OF.[qa, s] = OF.[(qa, <*s*>)-admissible.1, s] by Def2
+             .= OF.[(qa, <*s*>)-admissible.1, <*s*>.1] by FINSEQ_1:def 8
+             .= (qa, <*s*>)-response.1 by A19,Def6
+             .= (qb, <*s*>)-response.1 by A12,A18,Def11
+             .= OF.[(qb, <*s*>)-admissible.1, <*s*>.1] by A19,Def6
+             .= OF.[(qb, <*s*>)-admissible.1, s] by FINSEQ_1:def 8
+             .= OF.[qb, s] by Def2;
+      reconsider k1 = k-1 as Nat by A1,INT_1:18;
+A21:  k1-equivalent qa', qb' by A13;
+    len w = len <*s*> + len w' by A16,FINSEQ_1:35 .= len w' + 1 by FINSEQ_1:57;
+    then len w' + 1 - 1 <= k1 by A14,REAL_1:49;
+    then len w' <= k1 by XCMPLX_1:26;
+hence (qa, w)-response = (qb, w)-response by A17,A20,A21,Def11;
+ end;
+end;
+
+definition let IAlph, OAlph, tfsm, i;
+ func i-eq_states_EqR tfsm -> Equivalence_Relation of the carrier of tfsm
+ means
+:Def12: for qa, qb holds [qa, qb] in it iff i-equivalent qa, qb;
+ existence proof set S = the carrier of tfsm;
+  defpred P[set, set] means
+    ex qa, qb being Element of S st qa = $1 & qb = $2 & i-equivalent qa, qb;
+A1: now let x be set; assume x in S; then reconsider q = x as Element of S;
+       i-equivalent q, q by Th38; hence P[x, x];
+    end;
+A2: now let x, y be set;
+     assume P[x,y];
+     then consider qa, qb being Element of S such that
+A3:  qa=x & qb=y & i-equivalent qa, qb; i-equivalent qb, qa by A3,Th39;
+     hence P[y, x] by A3;
+    end;
+A4: now let x, y, z be set;
+     assume P[x,y];
+     then consider qa, qb being Element of S such that
+A5:  qa = x & qb = y & i-equivalent qa, qb;
+     assume P[y,z];
+     then consider qb', qc being Element of S such that
+A6:qb'=y & qc=z & i-equivalent qb',qc; i-equivalent qa,qc by A5,A6,Th40;
+     hence P[x, z] by A5,A6;
+    end;
+  consider EqR being Equivalence_Relation of S such that
+A7: for x, y being set holds [x, y] in EqR iff x in S & y in S &
+     P[x,y] from Ex_Eq_Rel (A1, A2, A4);
+  take EqR; let qa, qb be Element of S;
+  hereby assume [qa, qb] in EqR;
+   then consider qa', qb' being Element of S such that
+A8:  qa' = qa & qb' = qb & i-equivalent qa', qb' by A7;
+   thus i-equivalent qa, qb by A8;
+  end; assume i-equivalent qa, qb; hence [qa, qb] in EqR by A7;
+ end;
+ uniqueness proof set S = the carrier of tfsm;
+  let IT1, IT2 be Equivalence_Relation of S; assume
+A9: for qa, qb being Element of S holds [qa,qb] in IT1 iff
+   i-equivalent qa, qb;
+  assume
+A10: for qa, qb being Element of S holds [qa,qb] in IT2 iff
+   i-equivalent qa, qb;
+  assume IT1 <> IT2; then consider x being set such that
+A11:  x in IT1 & not x in IT2 or x in IT2 & not x in IT1 by TARSKI:2;
+  per cases by A11;
+  suppose
+A12: x in IT1 & not x in IT2; then consider qa, qb being set such that
+A13:  x = [qa, qb] & qa in S & qb in S by RELSET_1:6;
+    reconsider qa, qb as Element of S by A13;
+      i-equivalent qa, qb by A9,A12,A13;
+  hence contradiction by A10,A12,A13;
+  suppose
+A14: x in IT2 & not x in IT1; then consider qa, qb being set such that
+A15:  x = [qa, qb] & qa in S & qb in S by RELSET_1:6;
+    reconsider qa, qb as Element of S by A15;
+      i-equivalent qa, qb by A10,A14,A15;
+  hence contradiction by A9,A14,A15;
+ end;
+end;
+
+definition let IAlph, OAlph;
+           let tfsm be non empty Mealy-FSM over IAlph, OAlph;
+           let i;
+ func i-eq_states_partition tfsm ->
+                  non empty a_partition of the carrier of tfsm equals
+:Def13:  Class (i-eq_states_EqR tfsm);
+ coherence proof
+   thus Class (i-eq_states_EqR tfsm) is a_partition of the carrier of tfsm
+    by EQREL_1:42;
+  end;
+end;
+
+theorem Th45:
+ (k+1)-eq_states_partition tfsm is_finer_than k-eq_states_partition tfsm
+ proof
+ set K = k-eq_states_partition tfsm; set K1 = (k+1)-eq_states_partition tfsm;
+ set S = the carrier of tfsm;
+  let X be set; assume
+A1: X in K1; then reconsider X' = X as Subset of S;
+   consider q being Element of S such that
+A2:  q in X by A1,Th11; reconsider Y = (proj K).q as Element of K;
+A3:  K = Class (k-eq_states_EqR tfsm ) by Def13;
+   reconsider Y' = Y as Element of Class (k-eq_states_EqR tfsm) by Def13;
+  take Y; thus Y in K; let x be set; assume
+A4:  x in X; then x in X'; then reconsider x'=x as Element of S;
+A5: K1 = Class ((k+1)-eq_states_EqR tfsm) by Def13;
+    reconsider X' as Element of Class ((k+1)-eq_states_EqR tfsm) by A1,Def13;
+    consider Q being set such that
+A6:  Q in S & X' = Class ((k+1)-eq_states_EqR tfsm, Q) by A5,EQREL_1:def 5;
+A7: [q, Q] in (k+1)-eq_states_EqR tfsm by A2,A6,EQREL_1:27;
+      [x', Q] in (k+1)-eq_states_EqR tfsm by A4,A6,EQREL_1:27;
+    then [Q, x'] in (k+1)-eq_states_EqR tfsm by EQREL_1:12;
+    then [q, x'] in (k+1)-eq_states_EqR tfsm by A7,EQREL_1:13;
+    then (k+1)-equivalent q, x' by Def12;
+    then k-equivalent q, x' by Th43;
+    then [q, x'] in k-eq_states_EqR tfsm by Def12;
+then A8:  [x', q] in k-eq_states_EqR tfsm by EQREL_1:12;
+    consider Q being set such that
+A9:  Q in S & Y' = Class (k-eq_states_EqR tfsm, Q) by A3,EQREL_1:def 5;
+    reconsider Q as Element of S by A9; q in Y by BORSUK_1:def 1;
+    then Class(k-eq_states_EqR tfsm,Q)=Class(k-eq_states_EqR tfsm,q)by A9,
+EQREL_1:31
+;
+   hence thesis by A8,A9,EQREL_1:27;
+end;
+
+theorem Th46:
+ Class (k-eq_states_EqR tfsm) = Class ((k+1)-eq_states_EqR tfsm)implies
+   for m holds Class ((k+m)-eq_states_EqR tfsm) = Class (k-eq_states_EqR tfsm)
+ proof set S = the carrier of tfsm; set CEk = Class (k-eq_states_EqR tfsm);
+  set Ek = (k-eq_states_EqR tfsm); set CEk1 = Class ((k+1)-eq_states_EqR tfsm);
+  set Ek1 = ((k+1)-eq_states_EqR tfsm);
+ assume CEk = CEk1;
+then A1: Ek = Ek1 by Th8;
+   defpred P[Nat] means Class ((k+$1)-eq_states_EqR tfsm) = CEk;
+A2: P[0];
+A3: for m being Nat st P[m] holds P[m+1]
+    proof let m be Nat;
+ set CEkm=Class ((k+m)-eq_states_EqR tfsm); set Ekm=((k+m)-eq_states_EqR tfsm);
+ set CEkm1 = Class ((k+(m+1))-eq_states_EqR tfsm);
+ set Ekm1 = ((k+(m+1))-eq_states_EqR tfsm);
+     assume CEkm = CEk;
+then A4:  Ekm = Ek by Th8;
+       now let x be set;
+      hereby assume
+A5:      x in CEkm1; then reconsider x' = x as Subset of S;
+A6:     x' c= S; consider qa being set such that
+A7:      qa in S & x' = Class (Ekm1, qa) by A5,EQREL_1:def 5;
+        reconsider qa as Element of S by A7;
+          now let y be set;
+         hereby assume
+A8:         y in x;
+           then reconsider y' = y as Element of S by A6;
+             [y, qa] in Ekm1 by A7,A8,EQREL_1:27;
+           then (k+(m+1))-equivalent y', qa by Def12;
+           then k-equivalent y', qa by Th43;
+           then [y', qa] in Ek by Def12;
+          hence y in Class (Ek, qa) by EQREL_1:27;
+         end; assume
+A9:        y in Class (Ek, qa);
+          then reconsider y' = y as Element of S;
+A10:       [y', qa] in Ek by A9,EQREL_1:27;
+A11:        1 <= k+m+1 by NAT_1:29;
+A12:       (k+1)-equivalent y', qa by A1,A10,Def12;
+A13:       1 <= k+1 by NAT_1:29;
+then A14:        1-equivalent y', qa by A12,Th44;
+            now let s be Element of IAlph, k1 be Nat; assume
+            k1 = k+m+1-1;
+then A15:         k1 = k+m by XCMPLX_1:26;
+    set Sy' = (the Tran of tfsm).[y', s]; set Sqa = (the Tran of tfsm).[qa, s];
+              k = k+1-1 by XCMPLX_1:26; then k-equivalent Sy', Sqa by A12,A13,
+Th44;
+            then [Sy', Sqa] in Ek by Def12;
+            hence k1-equivalent Sy', Sqa by A4,A15,Def12;
+          end; then (k+m+1)-equivalent y', qa by A11,A14,Th44;
+          then (k+(m+1))-equivalent y', qa by XCMPLX_1:1;
+          then [y', qa] in Ekm1 by Def12;
+         hence y in x by A7,EQREL_1:27;
+        end; then x = Class (Ek, qa) by TARSKI:2;
+       hence x in CEk by EQREL_1:def 5;
+      end; assume
+A16:     x in CEk; then reconsider x' = x as Subset of S;
+       consider qa being set such that
+A17:     qa in S & x' = Class (Ek, qa) by A16,EQREL_1:def 5;
+       reconsider qa as Element of S by A17;
+         now let y be set;
+        hereby assume
+A18:        y in x;
+          then reconsider y' = y as Element of S by A17;
+A19:       [y', qa] in Ek by A17,A18,EQREL_1:27;
+A20:       1 <= k+m+1 by NAT_1:29;
+A21:       (k+1)-equivalent y', qa by A1,A19,Def12;
+A22:       1 <= k+1 by NAT_1:29;
+then A23:       1-equivalent y', qa by A21,Th44;
+            now let s be Element of IAlph, k1 be Nat; assume
+             k1 = k+m+1-1;
+then A24:       k1 = k+m by XCMPLX_1:26;
+    set Sy' = (the Tran of tfsm).[y', s]; set Sqa = (the Tran of tfsm).[qa, s];
+              k = k+1-1 by XCMPLX_1:26; then k-equivalent Sy', Sqa by A21,A22,
+Th44;
+            then [Sy', Sqa] in Ek by Def12;
+            hence k1-equivalent Sy', Sqa by A4,A24,Def12;
+          end; then (k+m+1)-equivalent y', qa by A20,A23,Th44;
+          then (k+(m+1))-equivalent y', qa by XCMPLX_1:1;
+          then [y', qa] in Ekm1 by Def12;
+         hence y in Class (Ekm1, qa) by EQREL_1:27;
+        end; assume
+A25:       y in Class (Ekm1, qa);
+         then reconsider y' = y as Element of S;
+           [y, qa] in Ekm1 by A25,EQREL_1:27;
+         then (k+(m+1))-equivalent y', qa by Def12;
+         then k-equivalent y', qa by Th43;
+         then [y', qa] in Ek by Def12;
+        hence y in x by A17,EQREL_1:27;
+       end; then x = Class (Ekm1, qa) by TARSKI:2;
+      hence x in CEkm1 by EQREL_1:def 5;
+     end; hence CEkm1 = CEk by TARSKI:2;
+    end;
+thus for m being Nat holds P[m] from Ind(A2,A3);
+end;
+
+theorem Th47:
+ k-eq_states_partition tfsm = (k+1)-eq_states_partition tfsm implies
+ for m holds (k+m)-eq_states_partition tfsm = k-eq_states_partition tfsm
+ proof assume
+A1: k-eq_states_partition tfsm = (k+1)-eq_states_partition tfsm;
+A2: k-eq_states_partition tfsm = Class (k-eq_states_EqR tfsm) &
+   (k+1)-eq_states_partition tfsm = Class ((k+1)-eq_states_EqR tfsm) by Def13;
+ let m be Nat;
+   (k+m)-eq_states_partition tfsm = Class ((k+m)-eq_states_EqR tfsm) by Def13;
+hence thesis by A1,A2,Th46;
+end;
+
+theorem Th48:
+ (k+1)-eq_states_partition tfsm <> k-eq_states_partition tfsm implies
+  for i st i <= k holds
+         (i+1)-eq_states_partition tfsm <> i-eq_states_partition tfsm proof
+  assume
+A1: (k+1)-eq_states_partition tfsm <> k-eq_states_partition tfsm;
+ let i be Nat such that
+A2: i <= k; assume
+A3: (i+1)-eq_states_partition tfsm = i-eq_states_partition tfsm;
+ consider d being Nat such that
+A4: k = i+d by A2,NAT_1:28;
+A5: k-eq_states_partition tfsm = i-eq_states_partition tfsm by A3,A4,Th47;
+    i <= k+1 by A2,NAT_1:37; then consider e being Nat such that
+A6: k+1 = i+e by NAT_1:28;
+  thus contradiction by A1,A3,A5,A6,Th47;
+end;
+
+theorem Th49:
+for tfsm being finite non empty Mealy-FSM over IAlph, OAlph holds
+k-eq_states_partition tfsm = (k+1)-eq_states_partition tfsm or
+   card (k-eq_states_partition tfsm) < card ((k+1)-eq_states_partition tfsm)
+ proof
+ let tfsm be finite non empty Mealy-FSM over IAlph, OAlph;
+ set kp = k-eq_states_partition tfsm; set k1p = (k+1)-eq_states_partition tfsm;
+ assume
+A1: kp <> k1p;
+A2: k1p is_finer_than kp by Th45; then card kp <= card k1p by Th13;
+  then card kp = card k1p or card kp < card k1p by REAL_1:def 5;
+ hence card kp < card k1p by A1,A2,Th15;
+end;
+
+theorem Th50: Class (0-eq_states_EqR tfsm, q) = the carrier of tfsm proof
+ set 0e = 0-eq_states_EqR tfsm; set S = the carrier of tfsm;
+   now let z be set;
+  thus z in Class (0e, q) implies z in S;
+  assume z in S; then reconsider z' = z as Element of S;
+     0-equivalent z', q by Th42; then [z,q] in 0e by Def12;
+  hence z in Class (0e, q) by EQREL_1:27;
+ end;
+ hence thesis by TARSKI:2;
+end;
+
+theorem Th51: 0-eq_states_partition tfsm = { the carrier of tfsm } proof
+ set S = the carrier of tfsm; set SS = { the carrier of tfsm };
+ set 0p = 0-eq_states_partition tfsm; set 0e = 0-eq_states_EqR tfsm;
+A1: 0p = Class 0e by Def13;
+   now let x be set;
+  hereby assume
+A2:  x in 0p; then reconsider x' = x as Subset of S;
+    consider y being set such that
+A3:  y in S & x' = Class (0e, y) by A1,A2,EQREL_1:def 5;
+    reconsider y as Element of S by A3; Class (0e, y) = S by Th50;
+   hence x in SS by A3,TARSKI:def 1;
+  end; assume x in SS;
+then A4: x = S by TARSKI:def 1; consider y being Element of S;
+   Class (0e, y) in Class 0e by EQREL_1:def 5; hence x in 0p by A1,A4,Th50;
+ end; hence thesis by TARSKI:2;
+end;
+
+theorem Th52:
+for tfsm being finite non empty Mealy-FSM over IAlph, OAlph st
+  n+1 = card the carrier of tfsm holds
+  (n+1)-eq_states_partition tfsm = n-eq_states_partition tfsm
+proof
+  let tfsm be finite non empty Mealy-FSM over IAlph, OAlph;
+assume
+A1: n+1 = card the carrier of tfsm; assume
+A2: (n+1)-eq_states_partition tfsm <> n-eq_states_partition tfsm;
+    defpred P[Nat] means
+    $1 <= n+1 implies card ($1-eq_states_partition tfsm) > $1;
+A3: P[0]
+    proof assume 0 <= n+1;
+A4:  0-eq_states_partition tfsm = { the carrier of tfsm } by Th51;
+      set x = the carrier of tfsm;
+        card { x } = 1 by CARD_1:79;
+     hence card (0-eq_states_partition tfsm) > 0 by A4;
+    end;
+A5: for k being Nat st P[k] holds P[k+1]
+     proof let k be Nat; assume
+A6:   k <= n+1 implies card (k-eq_states_partition tfsm) > k;
+     assume A7: k+1 <= n+1;
+then A8:  k <= n by REAL_1:53;
+A9:  k+1 <= card (k-eq_states_partition tfsm) by A6,A7,NAT_1:38;
+    (k+1)-eq_states_partition tfsm<>k-eq_states_partition tfsm by A2,A8,Th48;
+  then card((k+1)-eq_states_partition tfsm)>card(k-eq_states_partition tfsm)
+by Th49;
+     hence card ((k+1)-eq_states_partition tfsm) > k+1 by A9,AXIOMS:22;
+    end;
+     for k being Nat holds P[k] from Ind(A3, A5);
+ then card ((n+1)-eq_states_partition tfsm) > n+1;
+   hence contradiction by A1,Th12;
+end;
+
+definition let IAlph, OAlph;
+           let tfsm be non empty Mealy-FSM over IAlph, OAlph;
+ let IT be a_partition of the carrier of tfsm;
+ attr IT is final means :Def14:
+  for qa, qb being State of tfsm holds qa, qb-are_equivalent iff
+             ex X being Element of IT st qa in X & qb in X;
+end;
+
+theorem Th53: k-eq_states_partition tfsm is final implies
+     (k+1)-eq_states_EqR tfsm = k-eq_states_EqR tfsm proof assume
+A1: k-eq_states_partition tfsm is final;
+ set S = the carrier of tfsm; set k_eq = k-eq_states_EqR tfsm;
+ set k1_eq = (k+1)-eq_states_EqR tfsm; set k_part = k-eq_states_partition tfsm;
+     now let x be set;
+    hereby assume
+A2:   x in k1_eq; then consider a, b be set such that
+A3:   x=[a,b] & a in S & b in S by RELSET_1:6;
+     reconsider a as Element of S by A3; reconsider b as Element of S by A3;
+       (k+1)-equivalent a,b by A2,A3,Def12;
+     then k-equivalent a,b by Th43;
+     hence x in k_eq by A3,Def12;
+    end; assume
+A4:   x in k_eq; then consider a, b be set such that
+A5:   x=[a,b] & a in S & b in S by RELSET_1:6;
+     reconsider a as Element of S by A5; reconsider b as Element of S by A5;
+       Class(k_eq,b) in Class k_eq by EQREL_1:def 5;
+     then reconsider cl = Class(k_eq,b) as Element of k_part by Def13;
+       a in cl & b in cl by A4,A5,EQREL_1:27,28;
+     then a,b-are_equivalent by A1,Def14;
+     then (k+1)-equivalent a,b by Th41; hence x in k1_eq by A5,Def12;
+   end; hence thesis by TARSKI:2;
+end;
+
+theorem Th54:
+ k-eq_states_partition tfsm = (k+1)-eq_states_partition tfsm
+   iff k-eq_states_partition tfsm is final proof
+ set S = the carrier of tfsm; set k_part = k-eq_states_partition tfsm;
+ set k1_part = (k+1)-eq_states_partition tfsm; set k_eq = k-eq_states_EqR tfsm;
+ set k1_eq = (k+1)-eq_states_EqR tfsm;
+ hereby assume
+A1: k_part = k1_part;
+     now let qa, qb be Element of tfsm;
+   hereby assume qa,qb-are_equivalent; then k-equivalent qa,qb by Th41;
+then A2:  [qa,qb] in k_eq by Def12;
+       Class(k_eq,qb) in Class k_eq by EQREL_1:def 5;
+     then reconsider X= Class(k_eq,qb) as Element of k_part by Def13;
+     take X; thus qa in X & qb in X by A2,EQREL_1:27,28;
+   end; given X being Element of k_part such that
+A3: qa in X & qb in X; X in k_part;
+    then X in Class(k_eq) by Def13; then consider qc being set such that
+A4: qc in S & X = Class(k_eq,qc) by EQREL_1:def 5;
+      [qb,qc] in k_eq by A3,A4,EQREL_1:27;
+then A5: [qc,qb] in k_eq by EQREL_1:12; [qa,qc] in k_eq by A3,A4,EQREL_1:27;
+then A6: [qa,qb] in k_eq by A5,EQREL_1:13;
+then A7: k-equivalent qa,qb by Def12;
+    thus qa,qb-are_equivalent proof let w be FinSequence of IAlph;
+      consider n being Nat such that
+A8:    dom w=Seg n by FINSEQ_1:def 2; A9:
+          n = len w by A8,FINSEQ_1:def 3;
+          per cases;
+          suppose n <= k;
+          hence (qa,w)-response = (qb,w)-response by A7,A9,Def11;
+          suppose n > k; then consider m be Nat such that
+A10:      n=k+m & 1 <= m by Th1;
+A11:      n-eq_states_partition tfsm = k_part by A1,A10,Th47;
+            n-eq_states_partition tfsm = Class(n-eq_states_EqR tfsm)
+                                         by Def13;
+          then Class(n-eq_states_EqR tfsm) = Class(k_eq) by A11,Def13;
+          then [qa,qb] in n-eq_states_EqR tfsm by A6,Th8;
+          then n-equivalent qa,qb by Def12;
+          hence (qa,w)-response = (qb,w)-response by A9,Def11;
+         end;
+        end;
+   hence k-eq_states_partition tfsm is final by Def14;
+ end;
+ assume k-eq_states_partition tfsm is final;
+then k1_eq = k_eq by Th53;
+   hence k_part = Class(k1_eq) by Def13
+              .= k1_part by Def13;
+ end;
+
+theorem
+  for tfsm being finite non empty Mealy-FSM over IAlph, OAlph st
+n+1 = card the carrier of tfsm holds
+     ex k being Nat st k <= n & k-eq_states_partition tfsm is final
+ proof
+ let tfsm be finite non empty Mealy-FSM over IAlph, OAlph;
+ assume A1: n+1 = card the carrier of tfsm;
+   take n; thus n <= n;
+       n-eq_states_partition tfsm = (n+1)-eq_states_partition tfsm by A1,Th52;
+   hence thesis by Th54;
+end;
+
+definition let IAlph, OAlph;
+           let tfsm be finite non empty Mealy-FSM over IAlph, OAlph;
+ func final_states_partition tfsm -> a_partition of the carrier of tfsm
+ means
+:Def15: it is final;
+ existence proof reconsider n = card the carrier of tfsm as Nat;
+     card the carrier of tfsm <> 0 by CARD_2:59;
+   then consider m being Nat such that
+A1: n=m+1 by NAT_1:22;
+A2: m-eq_states_partition tfsm=(m+1)-eq_states_partition tfsm by A1,Th52;
+   take (m-eq_states_partition tfsm); thus thesis by A2,Th54;
+ end;
+ uniqueness proof let it1, it2 be a_partition of the carrier of tfsm; assume
+A3: it1 is final & it2 is final;
+     now assume it1 <> it2; then not for X being set holds
+    X in it1 iff X in it2 by TARSKI:2; then consider X being set such that
+A4:  X in it1 & not X in it2 or not X in it1 & X in it2;
+    per cases by A4;
+    suppose
+A5:   X in it1 & not X in it2;
+     then reconsider X as Subset of tfsm;
+     consider qx be Element of tfsm such that
+A6:  qx in X by A5,Th11;
+    union it2 = the carrier of tfsm by EQREL_1:def 6;
+     then consider Z being set such that
+A7:  qx in Z & Z in it2 by TARSKI:def 4;
+     reconsider Z as Subset of tfsm by A7;
+     set XZ= X\Z, ZX= Z\X, Y'= XZ \/ ZX;
+       Y' <> {} proof assume Y' = {};
+      then X\Z = {} & Z\X = {} by XBOOLE_1:15;
+      then X c= Z & Z c= X by XBOOLE_1:37
+; hence contradiction by A5,A7,XBOOLE_0:def 10
+;
+     end; then consider qy be Element of tfsm such that
+A8:  qy in Y' by SUBSET_1:10;
+     reconsider X as Element of it1 by A5;
+A9:   now assume A10: qy in X\Z;
+then A11:    qy in X & not qy in Z by XBOOLE_0:def 4;
+         not qx,qy-are_equivalent
+       proof assume qx,qy-are_equivalent;
+         then consider Z' be Element of it2 such that
+A12:      qx in Z' & qy in Z' by A3,Def14;
+         per cases;
+         suppose Z = Z'; hence contradiction by A10,A12,XBOOLE_0:def 4;
+         suppose Z <> Z'; then Z misses Z' by A7,EQREL_1:def 6;
+        then Z /\ Z' = {} by XBOOLE_0:def 7; hence contradiction by A7,A12,
+XBOOLE_0:def 3;
+       end; hence contradiction by A3,A6,A11,Def14;
+     end;
+       now assume A13: qy in Z\X;
+then A14:    qy in Z & not qy in X by XBOOLE_0:def 4;
+         not qx,qy-are_equivalent proof assume qx,qy-are_equivalent;
+         then consider Z' be Element of it1 such that
+A15:      qx in Z' & qy in Z' by A3,Def14;
+         per cases;
+         suppose X = Z'; hence contradiction by A13,A15,XBOOLE_0:def 4;
+         suppose X <> Z'; then X misses Z' by EQREL_1:def 6;
+         then X /\ Z' = {} by XBOOLE_0:def 7;
+         hence contradiction by A6,A15,XBOOLE_0:def 3;
+       end; hence contradiction by A3,A7,A14,Def14;
+     end; hence contradiction by A8,A9,XBOOLE_0:def 2;
+    suppose
+A16:   not X in it1 & X in it2;
+     then reconsider X as Subset of tfsm;
+     consider qx be Element of tfsm such that
+A17:  qx in X by A16,Th11;
+    union it1 = the carrier of tfsm by EQREL_1:def 6;
+     then consider Z being set such that
+A18:  qx in Z & Z in it1 by TARSKI:def 4;
+     reconsider Z as Subset of tfsm by A18;
+     set XZ= X\Z; set ZX= Z\X; set Y'= XZ \/ ZX;
+         Y' <> {} proof assume Y' = {}; then X\Z={} & Z\X={} by XBOOLE_1:15;
+       then X c= Z & Z c= X by XBOOLE_1:37;
+       hence contradiction by A16,A18,XBOOLE_0:def 10;
+     end; then consider qy be Element of tfsm such that
+A19:  qy in Y' by SUBSET_1:10;
+     reconsider X as Element of it2 by A16;
+A20:   now assume A21: qy in X\Z;
+then A22:    qy in X & not qy in Z by XBOOLE_0:def 4;
+         not qx,qy-are_equivalent proof assume qx,qy-are_equivalent;
+         then consider Z' be Element of it1 such that
+A23:      qx in Z' & qy in Z' by A3,Def14;
+         per cases;
+         suppose Z = Z'; hence contradiction by A21,A23,XBOOLE_0:def 4;
+         suppose Z <> Z'; then Z misses Z' by A18,EQREL_1:def 6;
+        then Z /\ Z' = {} by XBOOLE_0:def 7
+; hence contradiction by A18,A23,XBOOLE_0:def 3;
+       end; hence contradiction by A3,A17,A22,Def14;
+     end;
+       now assume A24: qy in Z\X;
+then A25:    qy in Z & not qy in X by XBOOLE_0:def 4;
+         not qx,qy-are_equivalent proof assume qx,qy-are_equivalent;
+         then consider Z' be Element of it2 such that
+A26:      qx in Z' & qy in Z' by A3,Def14;
+         per cases;
+         suppose X = Z'; hence contradiction by A24,A26,XBOOLE_0:def 4;
+         suppose X <> Z'; then X misses Z' by EQREL_1:def 6;
+        then X /\ Z' = {} by XBOOLE_0:def 7
+; hence contradiction by A17,A26,XBOOLE_0:def 3;
+       end; hence contradiction by A3,A18,A25,Def14;
+     end; hence contradiction by A19,A20,XBOOLE_0:def 2;
+   end; hence it1 = it2;
+ end;
+end;
+
+theorem Th56:
+for tfsm being finite non empty Mealy-FSM over IAlph, OAlph holds
+n+1 = card the carrier of tfsm implies
+  final_states_partition tfsm = n-eq_states_partition tfsm
+proof
+let tfsm be finite non empty Mealy-FSM over IAlph, OAlph;
+assume n+1 = card the carrier of tfsm;
+  then (n+1)-eq_states_partition tfsm = n-eq_states_partition tfsm by Th52;
+  then n-eq_states_partition tfsm is final by Th54; hence thesis by Def15;
+end;
+
+begin :: The reduction of a Mealy machine
+
+ reserve tfsm, rtfsm for finite non empty Mealy-FSM over IAlph, OAlph,
+         q for State of tfsm;
+
+definition let IAlph, OAlph be non empty set;
+           let tfsm be finite non empty Mealy-FSM over IAlph, OAlph;
+           let qf be Element of final_states_partition tfsm;
+           let s be Element of IAlph;
+ func (s,qf)-succ_class -> Element of final_states_partition tfsm means
+:Def16:
+  ex q being State of tfsm, n being Nat st
+   q in qf & (n+1) = card the carrier of tfsm &
+             it = Class(n-eq_states_EqR tfsm, (the Tran of tfsm).[q,s]);
+ existence proof set m = card the carrier of tfsm;
+      card the carrier of tfsm <> 0 by CARD_2:59;
+    then consider n being Nat such that
+A1:  m=n+1 by NAT_1:22; consider q1 be Element of tfsm such that
+A2: q1 in qf by Th11;
+      final_states_partition tfsm = n-eq_states_partition tfsm
+                 by A1,Th56;
+then A3:  final_states_partition tfsm = Class(n-eq_states_EqR tfsm)
+                 by Def13;
+    set q' = (the Tran of tfsm).[q1,s];
+    reconsider IT = Class(n-eq_states_EqR tfsm,q')
+              as Element of final_states_partition tfsm by A3,EQREL_1:def 5;
+    take IT; thus thesis by A1,A2;
+ end;
+ uniqueness proof let it1, it2 be Element of final_states_partition tfsm;
+   given q1 be Element of tfsm, n1 being Nat such that
+A4: q1 in qf & (n1+1) = card the carrier of tfsm &
+   it1 = Class(n1-eq_states_EqR tfsm, (the Tran of tfsm).[q1,s]);
+   given q2 be Element of tfsm, n2 being Nat such that
+A5: q2 in qf & (n2+1) = card the carrier of tfsm &
+   it2 = Class(n2-eq_states_EqR tfsm, (the Tran of tfsm).[q2,s]);
+   set m = n1 + 1;A6: n1 = n2 by A4,A5,XCMPLX_1:2;
+   A7: 1 <= m by INT_1:19; A8: n1 = m-1 by XCMPLX_1:26;
+   set q1' = (the Tran of tfsm).[q1,s]; set q2' = (the Tran of tfsm).[q2,s];
+   final_states_partition tfsm is final by Def15;
+   then q1,q2-are_equivalent by A4,A5,Def14;
+   then m-equivalent q1,q2 by Th41; then n1-equivalent q1',q2' by A7,A8,Th44;
+   then [q1',q2'] in n1-eq_states_EqR tfsm by Def12;
+hence it1 = it2 by A4,A5,A6,EQREL_1:44;
+   end;
+end;
+
+definition let IAlph, OAlph, tfsm;
+           let qf be Element of final_states_partition tfsm, s;
+ func (qf,s)-class_response -> Element of OAlph means
+:Def17: ex q st q in qf & it = (the OFun of tfsm).[q,s];
+ existence proof consider q1 be Element of tfsm such that
+A1: q1 in qf by Th11; take (the OFun of tfsm).[q1,s]; thus thesis by A1;
+ end;
+ uniqueness proof let it1, it2 be Element of OAlph;
+   given q1 be Element of tfsm such that
+A2: q1 in qf & it1 = (the OFun of tfsm).[q1,s];
+   given q2 be Element of tfsm such that
+A3: q2 in qf & it2 = (the OFun of tfsm).[q2,s];
+   final_states_partition tfsm is final by Def15;
+   then q1,q2-are_equivalent by A2,A3,Def14; hence it1 = it2 by A2,A3,Th36;
+ end;
+end;
+
+definition let IAlph, OAlph, tfsm;
+ func the_reduction_of tfsm -> strict Mealy-FSM over IAlph, OAlph means
+:Def18:
+ the carrier of it = final_states_partition tfsm &
+ (for Q being State of it, s for q being State of tfsm st q in Q
+   holds (the Tran of tfsm).[q, s] in (the Tran of it).[Q, s] &
+         (the OFun of tfsm).[q, s] = (the OFun of it).[Q, s]) &
+  the InitS of tfsm in the InitS of it;
+ existence proof set TR = the Tran of tfsm;
+   reconsider m = card the carrier of tfsm as Nat;
+     card the carrier of tfsm <> 0 by CARD_2:59;
+   then consider n be Nat such that
+A1: m = n+1 by NAT_1:22;
+  set IS = Class(n-eq_states_EqR tfsm, the InitS of tfsm);
+  set part=final_states_partition tfsm;
+  deffunc F(Element of part,Element of IAlph) = ($2,$1)-succ_class;
+  consider Trf being Function of [: part, IAlph:], part such that
+A2: for q being Element of part for i being Element of IAlph
+   holds Trf.[q,i] = F(q,i) from Lambda2D;
+  deffunc F(Element of part,Element of IAlph) = ($1,$2)-class_response;
+   consider OF being Function of [:part,IAlph:],OAlph such that
+A3: for q being Element of part for i being Element of IAlph
+   holds OF.[q,i] =F(q,i) from Lambda2D;
+   A4: IS in Class (n-eq_states_EqR tfsm) by EQREL_1:def 5;
+     part=n-eq_states_partition tfsm by A1,Th56;
+then reconsider IS as Element of part by A4,Def13;
+   take IT = Mealy-FSM (# final_states_partition tfsm, Trf, OF, IS #);
+  now let Q be Element of IT, s, q such that
+A5:  q in Q; reconsider Q' = Q as Element of final_states_partition tfsm;
+     reconsider s' = s as Element of IAlph;
+     consider Q1 being Element of tfsm, n1 being Nat such that
+A6:  Q1 in Q' & (n1+1) = card the carrier of tfsm &
+   (s',Q')-succ_class = Class(n1-eq_states_EqR tfsm, TR.[Q1,s']) by Def16;
+A7:  (the Tran of IT).[Q',s']=Class(n1-eq_states_EqR tfsm,TR.[Q1,s']) by A2,A6;
+    final_states_partition tfsm is final by Def15;
+ then q, Q1-are_equivalent by A5,A6,Def14;
+then A8:  (n1+1)-equivalent q,Q1 by Th41;
+     reconsider n1' = n1 as Integer; reconsider 1' = 1 as Integer;
+A9:  1 <= n1+1 by NAT_1:29; (n1' + 1') - 1' = n1' by XCMPLX_1:26;
+     then n1-equivalent TR.[q,s'],TR.[Q1,s']by A8,A9,Th44;
+     then [TR.[q,s'],TR.[Q1,s']] in n1-eq_states_EqR tfsm by Def12;
+hence TR.[q, s] in (the Tran of IT).[Q, s] by A7,EQREL_1:27;
+A10:  (the OFun of IT).[Q',s'] = (Q',s')-class_response by A3;
+     consider Q1 be Element of tfsm such that
+A11:  Q1 in Q' & (Q',s')-class_response = (the OFun of tfsm).[Q1,s']
+               by Def17;
+    final_states_partition tfsm is final by Def15;
+then q, Q1-are_equivalent by A5,A11,Def14;
+hence (the OFun of tfsm).[q, s] = (the OFun of IT).[Q, s] by A10,A11,Th36;
+   end;
+   hence thesis by EQREL_1:28;
+ end;
+ uniqueness proof set TR = the Tran of tfsm;
+   let it1, it2 be strict Mealy-FSM over IAlph,OAlph; assume
+A12: the carrier of it1 = final_states_partition tfsm &
+   (for Q being Element of it1, s, q st q in Q
+     holds TR.[q, s] in (the Tran of it1).[Q, s] &
+           (the OFun of tfsm).[q, s] = (the OFun of it1).[Q, s]) &
+   the InitS of tfsm in the InitS of it1; assume
+A13: the carrier of it2 = final_states_partition tfsm &
+   (for Q being Element of it2, s, q st q in Q
+      holds TR.[q, s] in (the Tran of it2).[Q, s] &
+          (the OFun of tfsm).[q, s] = (the OFun of it2).[Q, s]) &
+    the InitS of tfsm in the InitS of it2;
+A14: the Tran of it1 = the Tran of it2 proof
+     reconsider T1 = the Tran of it1 as Function of
+      [: final_states_partition tfsm, IAlph:],final_states_partition tfsm by
+A12;
+     reconsider T2 = the Tran of it2 as Function of
+      [: final_states_partition tfsm, IAlph:],final_states_partition tfsm by
+A13;
+       now let Q be Element of final_states_partition tfsm, s;
+       consider q be Element of tfsm such that
+A15:    q in Q by Th11;
+A16:    TR.[q,s] in T1.[Q,s] by A12,A15; A17: TR.[q,s] in T2.[Q,s] by A13,A15;
+      reconsider T1' = T1.[Q,s], T2' = T2.[Q,s]
+        as Subset of tfsm by TARSKI:def 3;
+         T1' = T2' or T1' misses T2' by EQREL_1:def 6;
+       hence T1.[Q,s] = T2.[Q,s] by A16,A17,XBOOLE_0:3;
+     end; hence thesis by FUNCT_2:120;
+   end;
+A18: the OFun of it1 = the OFun of it2 proof
+     reconsider OF1 = the OFun of it1 as Function of
+                  [: final_states_partition tfsm, IAlph :], OAlph by A12;
+     reconsider OF2 = the OFun of it2 as Function of
+                   [: final_states_partition tfsm, IAlph :], OAlph by A13;
+       now let Q be Element of final_states_partition tfsm, s;
+       consider q be Element of tfsm such that
+A19:    q in Q by Th11;
+       thus OF1.[Q,s] = (the OFun of tfsm).[q,s] by A12,A19
+       .= OF2.[Q,s] by A13,A19;
+     end; hence thesis by FUNCT_2:120;
+   end;
+     the InitS of it1 = the InitS of it2 proof
+     the InitS of it1 in final_states_partition tfsm by A12;
+  then reconsider IS1=the InitS of it1 as Subset of tfsm;
+    the InitS of it2 in final_states_partition tfsm by A13;
+  then reconsider IS2=the InitS of it2 as Subset of tfsm;
+    IS1 = IS2 or IS1 misses IS2 by A12,A13,EQREL_1:def 6;
+  hence thesis by A12,A13,XBOOLE_0:3;
+   end; hence it1 = it2 by A12,A13,A14,A18;
+ end;
+end;
+
+definition let IAlph, OAlph, tfsm;
+ cluster the_reduction_of tfsm -> non empty finite;
+ coherence
+ proof
+     the carrier of the_reduction_of tfsm = final_states_partition tfsm
+     by Def18;
+   hence thesis by GROUP_1:def 13,STRUCT_0:def 1;
+ end;
+end;
+
+theorem Th57:
+for qr being State of rtfsm st
+ rtfsm = the_reduction_of tfsm & q in qr holds
+  for k being Nat st k in Seg (len w +1) holds
+   (q,w)-admissible.k in (qr,w)-admissible.k
+proof
+ let qr be State of rtfsm;
+set TR = the Tran of tfsm; assume
+A1:  rtfsm = the_reduction_of tfsm & q in qr;
+    defpred P[Nat] means
+      $1 in Seg(len w +1) implies (q,w)-admissible.$1 in (qr,w)-admissible.$1;
+A2: P[0] by FINSEQ_1:3;
+A3: for k being Nat st P[k] holds P[k + 1]
+    proof let k be Nat; assume
+A4:    k in Seg (len w + 1) implies
+       (q,w)-admissible.k in (qr,w)-admissible.k; assume
+A5:    (k+1) in Seg (len w + 1); A6: k = 0 or 0 < k & 0+1 = 1 by NAT_1:19;
+       per cases by A6,NAT_1:38;
+       suppose
+A7:     k = 0;
+        then (q,w)-admissible.(k+1) = q by Def2;
+        hence (q,w)-admissible.(k+1) in (qr,w)-admissible.(k+1) by A1,A7,Def2;
+       suppose
+A8:     1 <= k;
+A9:     1 <= k+1 & k+1 <= len w + 1 by A5,FINSEQ_1:3;
+          k <= k+1 by NAT_1:29; then A10: k <= len w + 1 by A9,AXIOMS:22;
+A11:    1 <= k & k <= len w by A8,A9,REAL_1:53;
+        then consider w1i being Element of IAlph,
+                 q1i, q1i1 being Element of tfsm such that
+A12:     w1i = w.k & q1i = (q,w)-admissible.k &
+        q1i1 = (q,w)-admissible.(k+1) & w1i-succ_of q1i = q1i1 by Def2;
+        consider w2i being Element of IAlph,
+                 q2i, q2i1 being Element of rtfsm such that
+A13:     w2i = w.k & q2i = (qr,w)-admissible.k &
+    q2i1 = (qr,w)-admissible.(k+1) & w2i-succ_of q2i = q2i1 by A11,Def2;
+A14:  TR.[q1i,w1i] in (the Tran of rtfsm).[q2i,w2i] by A1,A4,A8,A10,A12,A13,
+Def18,FINSEQ_1:3;
+       q1i1 = TR.[q1i,w1i] by A12,Def1;
+     hence (q,w)-admissible.(k+1) in (qr,w)-admissible.(k+1) by A12,A13,A14,
+Def1;
+    end;
+   thus for k being Nat holds P[k] from Ind(A2,A3);
+end;
+
+theorem Th58:
+ tfsm, the_reduction_of tfsm-are_equivalent proof
+   now let w1 be FinSequence of IAlph;
+set rtfsm = the_reduction_of tfsm; set ad1 = (the InitS of tfsm,w1)-admissible;
+set ad2 = (the InitS of rtfsm, w1)-admissible;
+set r1=(the InitS of tfsm,w1)-response;set r2=(the InitS of rtfsm,w1)-response;
+A1: the InitS of tfsm in the InitS of rtfsm by Def18;
+A2:  len r1 = len w1 by Def6 .= len r2 by Def6;
+       now let k be Nat; assume 1 <= k & k <= len r1;
+         then 1 <= k & k <= len w1 by Def6;
+then A3:    k in Seg len w1 by FINSEQ_1:3;
+then A4:    k in Seg (len w1 + 1) by FINSEQ_2:9;
+A5:    k in dom w1 by A3,FINSEQ_1:def 3;
+        k in Seg len ad1 by A4,Def2;
+      then k in dom ad1 by FINSEQ_1:def 3;
+then A6:      ad1.k is Element of tfsm &
+         w1.k is Element of IAlph by A5,FINSEQ_2:13;
+       k in Seg len ad2 by A4,Def2;
+     then k in dom ad2 by FINSEQ_1:def 3;
+then A7:      w1.k is Element of IAlph &
+         ad2.k is Element of rtfsm by A5,FINSEQ_2:13;
+A8:       ad1.k in ad2.k by A1,A4,Th57;
+         thus r2.k = (the OFun of rtfsm).[ad2.k, w1.k] by A5,Def6
+            .= (the OFun of tfsm).[ad1.k, w1.k] by A6,A7,A8,Def18
+            .= r1.k by A5,Def6;
+      end; hence r1 = r2 by A2,FINSEQ_1:18;
+   end; hence thesis by Def9;
+end;
+
+begin :: Machine Isomorphism
+
+reserve qr1, qr2 for State of rtfsm,
+        Tf for Function of the carrier of tfsm1, the carrier of tfsm2;
+
+definition let IAlph, OAlph, tfsm1, tfsm2;
+ pred tfsm1, tfsm2-are_isomorphic means
+:Def19:
+  ex Tf st Tf is bijective & Tf.the InitS of tfsm1 = the InitS of tfsm2 &
+           for q11, s holds
+        Tf.((the Tran of tfsm1).[q11,s])=(the Tran of tfsm2).[Tf.q11, s] &
+        (the OFun of tfsm1).[q11,s] = (the OFun of tfsm2).[Tf.q11, s];
+ reflexivity proof let tfsm1 be non empty Mealy-FSM over IAlph, OAlph;
+   take Tf = id the carrier of tfsm1;
+   thus Tf is bijective;
+   thus Tf.the InitS of tfsm1 = the InitS of tfsm1 by FUNCT_1:34;
+   let q be Element of tfsm1, s;
+   thus Tf.((the Tran of tfsm1).[q, s])
+                 = (the Tran of tfsm1).[q, s] by FUNCT_1:34
+                .= (the Tran of tfsm1).[Tf.q, s] by FUNCT_1:34;
+   thus thesis by FUNCT_1:34;
+ end;
+ symmetry proof let tfsm1, tfsm2 be
+   non empty Mealy-FSM over IAlph, OAlph;
+  given Tf being Function of the carrier of tfsm1, the carrier of tfsm2
+    such that
+A1:   Tf is bijective & Tf.the InitS of tfsm1 = the InitS of tfsm2 &
+     for q being Element of tfsm1, s being Element of IAlph
+     holds
+         Tf.((the Tran of tfsm1).[q, s]) = (the Tran of tfsm2).[Tf.q, s] &
+         (the OFun of tfsm1).[q,s] = (the OFun of tfsm2).[Tf.q, s];
+A2: Tf is one-to-one & Tf is onto by A1,FUNCT_2:def 4;
+then A3: rng Tf = the carrier of tfsm2 by FUNCT_2:def 3;
+then A4: the carrier of tfsm2 = dom(Tf") by A2,FUNCT_1:55;
+A5: dom Tf = the carrier of tfsm1 by FUNCT_2:def 1;
+    then A6:  rng(Tf") = the carrier of tfsm1 by A2,FUNCT_1:55;
+    then reconsider Tf' = Tf" as Function of the carrier of tfsm2,
+                            the carrier of tfsm1 by A4,FUNCT_2:3;
+    take Tf';
+      Tf' is one-to-one & Tf' is onto by A2,A6,FUNCT_1:62,FUNCT_2:def 3;
+    hence Tf' is bijective by FUNCT_2:def 4;
+    thus the InitS of tfsm1
+               = Tf'.the InitS of tfsm2 by A1,A2,A5,FUNCT_1:56;
+      now let q be Element of tfsm2, s be Element of IAlph;
+A7:   q = Tf.(Tf'.q) by A2,A3,FUNCT_1:57;
+   thus (the Tran of tfsm1).[Tf'.q, s]
+           = Tf'.(Tf.((the Tran of tfsm1).[Tf'.q, s])) by A2,A5,FUNCT_1:56
+          .= Tf'.((the Tran of tfsm2).[q,s]) by A1,A7;
+      thus (the OFun of tfsm1).[Tf'.q,s]= (the OFun of tfsm2).[q,s] by A1,A7;
+    end; hence thesis;
+ end;
+end;
+
+theorem Th59:
+ tfsm1,tfsm2-are_isomorphic & tfsm2,tfsm3-are_isomorphic
+ implies tfsm1,tfsm3-are_isomorphic proof assume
+A1: tfsm1,tfsm2-are_isomorphic & tfsm2,tfsm3-are_isomorphic;
+   then consider Tf1 being Function of the carrier of tfsm1, the carrier of
+tfsm2
+   such that
+A2: Tf1 is bijective & Tf1.the InitS of tfsm1 = the InitS of tfsm2 &
+   for q being Element of tfsm1, s1 being Element of IAlph holds
+       Tf1.((the Tran of tfsm1).[q, s1]) = (the Tran of tfsm2).[Tf1.q, s1] &
+       (the OFun of tfsm1).[q,s1] = (the OFun of tfsm2).[Tf1.q, s1]
+        by Def19;
+   consider Tf2 being Function of the carrier of tfsm2, the carrier of tfsm3
+   such that
+A3: Tf2 is bijective & Tf2.the InitS of tfsm2 = the InitS of tfsm3 &
+   for q being Element of tfsm2, s1 being Element of IAlph holds
+       Tf2.((the Tran of tfsm2).[q, s1]) = (the Tran of tfsm3).[Tf2.q, s1] &
+       (the OFun of tfsm2).[q,s1] = (the OFun of tfsm3).[Tf2.q, s1]
+       by A1,Def19;
+    take Tf = Tf2 * Tf1; thus Tf is bijective by A2,A3,Th7;
+A4: dom Tf1 = the carrier of tfsm1 by FUNCT_2:def 1;
+hence Tf.the InitS of tfsm1 = the InitS of tfsm3 by A2,A3,FUNCT_1:23;
+      now let q be Element of tfsm1, s1 be Element of IAlph;
+      thus (the Tran of tfsm3).[Tf.q, s1]
+            = (the Tran of tfsm3).[Tf2.(Tf1.q), s1] by A4,FUNCT_1:23
+           .= Tf2.((the Tran of tfsm2).[Tf1.q, s1]) by A3
+           .= Tf2.(Tf1.((the Tran of tfsm1).[q,s1])) by A2
+           .= Tf.((the Tran of tfsm1).[q, s1]) by A4,FUNCT_1:23;
+      thus (the OFun of tfsm3).[Tf.q, s1]
+            = (the OFun of tfsm3).[Tf2.(Tf1.q), s1] by A4,FUNCT_1:23
+           .= (the OFun of tfsm2).[Tf1.q, s1] by A3
+           .= (the OFun of tfsm1).[q,s1] by A2;
+    end; hence thesis;
+end;
+
+theorem Th60: (for q being State of tfsm1, s
+    holds Tf.((the Tran of tfsm1).[q,s]) = (the Tran of tfsm2).[Tf.q,s])
+ implies for k st 1 <= k & k <= len w + 1
+          holds Tf.((q11,w)-admissible.k) = (Tf.q11,w)-admissible.k
+proof assume
+A1: for q being State of tfsm1, s
+    holds Tf.((the Tran of tfsm1).[q,s]) = (the Tran of tfsm2).[Tf.q,s];
+    defpred P[Nat] means
+    1 <= $1 & $1 <= len w + 1 implies
+          Tf.((q11,w)-admissible.$1) = (Tf.q11,w)-admissible.$1;
+A2: P[0];
+A3: for k being Nat st P[k] holds P[k + 1]
+    proof let k be Nat; assume
+A4:   1 <= k & k <= len w + 1 implies
+          Tf.((q11,w)-admissible.k) = (Tf.q11,w)-admissible.k; assume
+A5:   1<=k+1 & k+1<=len w+1;
+A6:   k=0 or 0<k & 0 + 1 = 1 by NAT_1:19;
+      per cases by A6,NAT_1:38;
+      suppose
+A7:    k = 0; hence Tf.((q11,w)-admissible.(k+1)) = Tf.q11 by Def2
+                 .= (Tf.q11,w)-admissible.(k+1) by A7,Def2;
+      suppose
+A8:    1 <= k;
+A9:    k <= len w by A5,REAL_1:53; A10: len w <= len w + 1 by NAT_1:29;
+       consider wi being Element of IAlph,qi,qi1 being State of tfsm1 such that
+A11:    wi = w.k & qi = (q11,w)-admissible.k &
+       qi1 = (q11,w)-admissible.(k+1) & wi-succ_of qi =qi1 by A8,A9,Def2;
+       consider wri being Element of IAlph,
+                qri, qri1 being State of tfsm2 such that
+A12:    wri = w.k & qri = (Tf.q11,w)-admissible.k &
+       qri1 = (Tf.q11,w)-admissible.(k+1) & wri-succ_of qri = qri1
+                                         by A8,A9,Def2;
+       thus Tf.((q11,w)-admissible.(k+1)) =
+            Tf.((the Tran of tfsm1).[qi, wi]) by A11,Def1
+         .= (the Tran of tfsm2).[qri, wri] by A1,A4,A8,A9,A10,A11,A12,AXIOMS:22
+         .= (Tf.q11,w)-admissible.(k+1) by A12,Def1;
+    end;
+    thus for k being Nat holds P[k] from Ind(A2,A3);
+end;
+
+theorem Th61:
+  (Tf.the InitS of tfsm1 = the InitS of tfsm2 &
+   for q being State of tfsm1, s holds
+         Tf.((the Tran of tfsm1).[q, s]) = (the Tran of tfsm2).[Tf.q, s] &
+            (the OFun of tfsm1).[q,s] = (the OFun of tfsm2).[Tf.q, s])
+   implies (q11,q12-are_equivalent iff Tf.q11, Tf.q12 -are_equivalent)
+proof set S_tfsm1 = the carrier of tfsm1; set S_tfsm2 = the carrier of tfsm2;
+ set OF1 = the OFun of tfsm1, OF2 = the OFun of tfsm2;
+ assume
+A1:  Tf.the InitS of tfsm1 = the InitS of tfsm2 &
+        for q being Element of S_tfsm1, s holds
+        Tf.((the Tran of tfsm1).[q, s]) = (the Tran of tfsm2).[Tf.q, s] &
+        (the OFun of tfsm1).[q,s] = (the OFun of tfsm2).[Tf.q, s];
+  hereby assume
+A2: q11,q12-are_equivalent;
+   reconsider Tq1 = Tf.q11 as Element of S_tfsm2;
+   reconsider Tq2 = Tf.q12 as Element of S_tfsm2;
+     now let w be FinSequence of IAlph;
+A3:len(Tq1,w)-response=len w by Def6.=len (Tq2,w)-response by Def6;
+       now let k be Nat; assume
+A4:    1 <= k & k <= len (Tq1,w)-response;
+         len (Tq1,w)-response = len w by Def6;
+then A5:    k in Seg len w by A4,FINSEQ_1:3;
+then A6:    k in Seg (len w + 1) by FINSEQ_2:9;
+then A7:    1 <= k & k <= len w + 1 by FINSEQ_1:3;
+A8:    k in dom w by A5,FINSEQ_1:def 3;
+         len (q11,w)-admissible = len w + 1 by Def2;
+       then k in dom (q11,w)-admissible by A6,FINSEQ_1:def 3;
+       then reconsider q1a = (q11,w)-admissible.k
+                               as Element of S_tfsm1 by FINSEQ_2:13;
+         len (q12,w)-admissible = len w + 1 by Def2;
+       then k in dom (q12,w)-admissible by A6,FINSEQ_1:def 3;
+       then reconsider q2a = (q12,w)-admissible.k
+                               as Element of S_tfsm1 by FINSEQ_2:13;
+       reconsider wk = w.k as Element of IAlph by A8,FINSEQ_2:13;
+       thus (Tq1,w)-response.k=OF2.[(Tq1,w)-admissible.k, w.k]
+            by A8,Def6
+         .= OF2.[Tf.q1a, wk] by A1,A7,Th60 .= OF1.[q1a, wk] by A1
+         .= (q11,w)-response.k by A8,Def6
+         .= (q12,w)-response.k by A2,Def10
+         .= OF1.[q2a, wk] by A8,Def6 .= OF2.[Tf.q2a, wk] by A1
+         .= OF2.[(Tq2,w)-admissible.k, w.k] by A1,A7,Th60
+         .= (Tq2,w)-response.k by A8,Def6;
+     end; hence (Tq1,w)-response = (Tq2,w)-response by A3,FINSEQ_1:18;
+   end;
+   hence Tf.q11, Tf.q12-are_equivalent by Def10;
+  end; assume
+A9:  Tf.q11, Tf.q12-are_equivalent;
+      now let w be FinSequence of IAlph;
+A10:   len (q11,w)-response = len w by Def6
+                         .= len (q12,w)-response by Def6;
+        now let k be Nat; assume
+A11:    1 <= k & k <= len (q11,w)-response;
+         len (q11,w)-response = len w by Def6;
+then A12:    k in Seg len w by A11,FINSEQ_1:3;
+then A13:    k in Seg (len w + 1) by FINSEQ_2:9;
+then A14:    1 <= k & k <= len w + 1 by FINSEQ_1:3;
+A15:    k in dom w by A12,FINSEQ_1:def 3;
+         len (q11,w)-admissible = len w + 1 by Def2;
+       then k in dom (q11,w)-admissible by A13,FINSEQ_1:def 3;
+       then reconsider q1a = (q11,w)-admissible.k
+                               as Element of S_tfsm1 by FINSEQ_2:13;
+         len (q12,w)-admissible = len w + 1 by Def2;
+       then k in dom (q12,w)-admissible by A13,FINSEQ_1:def 3;
+       then reconsider q2a = (q12,w)-admissible.k
+                               as Element of S_tfsm1 by FINSEQ_2:13;
+       reconsider wk = w.k as Element of IAlph by A15,FINSEQ_2:13;
+       thus (q11,w)-response.k
+          = OF1.[(q11,w)-admissible.k, w.k] by A15,Def6
+         .= OF2.[Tf.q1a, wk] by A1
+         .= OF2.[(Tf.q11,w)-admissible.k,wk] by A1,A14,Th60
+         .= (Tf.q11,w)-response.k by A15,Def6
+         .= (Tf.q12,w)-response.k by A9,Def10
+         .= OF2.[(Tf.q12,w)-admissible.k, w.k] by A15,Def6
+         .= OF2.[Tf.q2a, wk] by A1,A14,Th60 .= OF1.[q2a, w.k] by A1
+         .= (q12,w)-response.k by A15,Def6;
+      end; hence (q11,w)-response = (q12,w)-response by A10,FINSEQ_1:18;
+    end;
+    hence thesis by Def10;
+end;
+
+theorem Th62: rtfsm = the_reduction_of tfsm & qr1<>qr2 implies
+                  not qr1,qr2 -are_equivalentproof assume
+A1: rtfsm = the_reduction_of tfsm & qr1 <> qr2;
+then A2: the carrier of rtfsm = final_states_partition tfsm by Def18;
+    then reconsider q1' = qr1 as Subset of tfsm by TARSKI:def 3;
+    consider x being Element of tfsm such that
+A3: x in q1' by A2,Th11;
+    reconsider q2' = qr2 as Subset of tfsm by A2,TARSKI:def 3;
+    consider y being Element of tfsm such that
+A4: y in q2' by A2,Th11;
+A5: final_states_partition tfsm is final by Def15;
+      not x,y-are_equivalent proof assume x,y-are_equivalent;
+      then consider X being Element of rtfsm such that
+A6:   x in X & y in X by A2,A5,Def14;
+        X is Subset of tfsm by A2,TARSKI:def 3;
+then A7:   X = q1' or X misses q1' by A2,EQREL_1:def 6;
+        q2' misses q1' by A1,A2,EQREL_1:def 6;
+      hence contradiction by A3,A4,A6,A7,XBOOLE_0:3;
+    end; then consider w being FinSequence of IAlph such that
+A8: (x,w)-response <> (y,w)-response by Def10;
+    set xresp = (x,w)-response, yresp = (y,w)-response;
+    set xadm = (x,w)-admissible, yadm = (y,w)-admissible;
+      len xresp = len w by Def6 .= len yresp by Def6;
+    then consider k be Nat such that
+A9: 1 <= k & k <= len xresp & xresp.k <> yresp.k by A8,FINSEQ_1:18;
+A10: k in Seg len xresp by A9,FINSEQ_1:3;
+    set q1resp = (qr1,w)-response, q2resp = (qr2,w)-response;
+    set q1adm = (qr1,w)-admissible, q2adm = (qr2,w)-admissible;
+      len q1adm = len w + 1 by Def2 .= len xresp + 1 by Def6;
+then A11: k in Seg len q1adm by A10,FINSEQ_2:9;
+    then k in dom q1adm by FINSEQ_1:def 3;
+then A12: q1adm.k is Element of rtfsm by FINSEQ_2:13;
+      len xresp = len w by Def6;
+then A13: k in Seg len w by A9,FINSEQ_1:3;
+    then k in dom w by FINSEQ_1:def 3;
+then A14: w.k is Element of IAlph by FINSEQ_2:13;
+      k in Seg (len w + 1) by A13,FINSEQ_2:9;
+then A15: xadm.k in q1adm.k by A1,A3,Th57;
+A16: len q1adm = len w + 1 by Def2 .= len xadm by Def2;
+    then k in dom xadm by A11,FINSEQ_1:def 3;
+then A17: xadm.k is Element of tfsm by FINSEQ_2:13;
+      len q2adm = len w + 1 by Def2 .= len q1adm by Def2;
+    then k in dom q2adm by A11,FINSEQ_1:def 3;
+then A18: q2adm.k is Element of rtfsm by FINSEQ_2:13;
+      k in Seg (len w + 1) by A13,FINSEQ_2:9;
+then A19: yadm.k in q2adm.k by A1,A4,Th57;
+      len yadm = len w + 1 by Def2 .= len xadm by Def2;
+    then k in dom yadm by A11,A16,FINSEQ_1:def 3;
+then A20: yadm.k is Element of tfsm by FINSEQ_2:13;
+      now assume
+A21:  q1resp = q2resp; len w = len xresp by Def6;
+then A22:  k in dom w by A9,FINSEQ_3:27;
+then A23:  q1resp.k = (the OFun of rtfsm).[q1adm.k,w.k] by Def6
+          .= (the OFun of tfsm).[xadm.k,w.k] by A1,A12,A14,A15,A17,Def18;
+A24:  q2resp.k = (the OFun of rtfsm).[q2adm.k,w.k] by A22,Def6
+          .= (the OFun of tfsm).[yadm.k,w.k] by A1,A14,A18,A19,A20,Def18;
+    xresp.k = (the OFun of tfsm).[xadm.k,w.k] by A22,Def6;
+     hence contradiction by A9,A21,A22,A23,A24,Def6;
+    end; hence thesis by Def10;
+end;
+
+begin :: Reduced and Connected Machines
+
+definition let IAlph, OAlph be non empty set;
+ let IT be non empty Mealy-FSM over IAlph,OAlph;
+ attr IT is reduced means
+:Def20: for qa, qb being State of IT
+           st qa <> qb holds not qa, qb-are_equivalent;
+end;
+
+theorem Th63:
+ the_reduction_of tfsm is reduced proof
+  let qa,qb be State of the_reduction_of tfsm; thus thesis by Th62; end;
+
+definition let IAlph, OAlph;
+ cluster reduced finite (non empty Mealy-FSM over IAlph,OAlph);
+ existence
+ proof consider M being finite non empty Mealy-FSM over IAlph, OAlph;
+  take the_reduction_of M; thus thesis by Th63;
+ end;
+end;
+
+reserve Rtfsm for reduced (finite non empty Mealy-FSM over IAlph, OAlph);
+
+theorem Th64:
+ Rtfsm, the_reduction_of Rtfsm-are_isomorphic proof
+set m = Rtfsm; set rm = the_reduction_of m; set fpm = final_states_partition m;
+A1: the carrier of rm = fpm by Def18;
+A2: the InitS of m in the InitS of rm by Def18;
+   deffunc F(Element of m) = (proj fpm).$1;
+  consider Tf being Function of the carrier of m, fpm such that
+A3:for q being Element of m holds Tf.q=F(q) from LambdaD;
+A4: now assume not Tf is one-to-one; then consider q1, q2 being set such that
+A5:  q1 in the carrier of m & q2 in the carrier of m & Tf.q1 = Tf.q2 &
+     q1 <> q2 by FUNCT_2:25; reconsider q1, q2 as State of m by A5;
+A6: not q1, q2-are_equivalent by A5,Def20;
+A7: fpm is final by Def15;
+      Tf.q1 = (proj fpm).q1 & Tf.q2 = (proj fpm).q2 by A3;
+    then q1 in Tf.q1 & q2 in Tf.q2 by BORSUK_1:def 1;
+    hence contradiction by A5,A6,A7,Def14;
+   end;
+     rng Tf = fpm proof thus rng Tf c= fpm by RELSET_1:12;
+    thus fpm c= rng Tf proof let x be set; assume
+A8: x in fpm; then reconsider pq=x as Subset of m;
+      consider q being Element of m such that
+A9:   q in pq by A8,Th11;
+        pq = (proj fpm).q by A8,A9,BORSUK_1:29; then Tf.q = pq by A3;
+     hence x in rng Tf by FUNCT_2:6;
+    end;
+   end; then Tf is onto by FUNCT_2:def 3;
+then A10: Tf is bijective by A4,FUNCT_2:def 4;
+   set Im = the InitS of m;
+     the InitS of rm = (proj fpm).Im by A1,A2,BORSUK_1:29;
+then A11: Tf.the InitS of m = the InitS of rm by A3;
+  now let q be State of m, s be Element of IAlph;
+    reconsider Tfq = Tf.q as State of rm by Def18;
+      Tf.q = (proj fpm).q by A3;
+then A12:  q in Tf.q by BORSUK_1:def 1;
+then A13:  (the Tran of m).[q, s] in (the Tran of rm).[Tf.q, s] by A1,Def18;
+       (the Tran of rm).[Tfq, s] is State of rm;
+     then (the Tran of rm).[Tf.q, s] = (proj fpm).((the Tran of m).[q, s])
+                                           by A1,A13,BORSUK_1:29;
+    hence Tf.((the Tran of m).[q, s]) = (the Tran of rm).[Tf.q, s] by A3;
+    thus (the OFun of m).[q,s] = (the OFun of rm).[Tf.q, s] by A1,A12,Def18;
+   end; hence thesis by A1,A10,A11,Def19;
+end;
+
+theorem Th65: tfsm is reduced iff
+  ex M being finite non empty Mealy-FSM over IAlph,OAlph
+                 st tfsm, the_reduction_of M-are_isomorphic
+proof set M = tfsm;
+ hereby assume M is reduced;
+   then M, the_reduction_of M-are_isomorphic by Th64;
+ hence ex M being finite non empty Mealy-FSM over IAlph,OAlph
+                               st tfsm, the_reduction_of M-are_isomorphic;
+ end;
+ given MM being finite non empty Mealy-FSM over IAlph,OAlph such that
+A1: M, the_reduction_of MM-are_isomorphic;let qa, qb be State of M such that
+A2: qa <> qb; set rMM = the_reduction_of MM;
+ consider Tf being Function of the carrier of M, the carrier of rMM such that
+A3: Tf is bijective & Tf.the InitS of M = the InitS of rMM &
+   for q being State of M, s being Element of IAlph holds
+     Tf.((the Tran of M).[q, s]) = (the Tran of rMM).[Tf.q, s] &
+     (the OFun of M).[q,s]=(the OFun of rMM).[Tf.q, s] by A1,Def19;
+     Tf is one-to-one by A3,FUNCT_2:def 4; then Tf.qa <> Tf.qb by A2,FUNCT_2:25
+;
+   then not Tf.qa, Tf.qb-are_equivalent by Th62;
+ hence thesis by A3,Th61;
+end;
+
+definition let IAlph, OAlph;
+           let tfsm be non empty Mealy-FSM over IAlph,OAlph;
+ let IT be State of tfsm;
+ attr IT is accessible means
+:Def21: ex w st the InitS of tfsm, w-leads_to IT;
+end;
+
+definition let IAlph, OAlph;
+ let IT be non empty Mealy-FSM over IAlph, OAlph;
+ attr IT is connected means
+:Def22: for q being State of IT holds q is accessible;
+end;
+
+definition let IAlph, OAlph;
+ cluster connected (finite non empty Mealy-FSM over IAlph,OAlph);
+ existence proof
+  reconsider S = {1} as finite non empty set;
+  reconsider IS = 1 as Element of S by TARSKI:def 1;
+  set dF = [:S, IAlph:]; set Tr = dF --> 1;
+    dom Tr = dF & rng Tr c= S by FUNCOP_1:19;
+  then reconsider T = Tr as Function of dF, S by FUNCT_2:def 1,RELSET_1:11;
+  consider out being Element of OAlph;
+  reconsider OF = dF --> out as Function of [:S, IAlph:], OAlph;
+  reconsider M = Mealy-FSM(#S, T, OF, IS#) as
+    finite non empty Mealy-FSM over IAlph, OAlph;
+  take M; let q be State of M;
+A1: q = 1 by TARSKI:def 1;
+     the InitS of M, <*>IAlph-leads_to the InitS of M by Th17;
+   hence q is accessible by A1,Def21;
+ end;
+end;
+
+reserve Ctfsm, Ctfsm1, Ctfsm2 for connected (finite
+  non empty Mealy-FSM over IAlph, OAlph);
+
+theorem Th66: the_reduction_of Ctfsm is connected
+proof set c = Ctfsm; set rtfsm = the_reduction_of c; assume
+     not rtfsm is connected; then consider Q be State of rtfsm such that
+A1: not Q is accessible by Def22;
+A2: the carrier of rtfsm = final_states_partition c by Def18;
+A3: Q in the carrier of rtfsm;
+   reconsider Q' = Q as Subset of c by A2,TARSKI:def 3;
+     Q' in final_states_partition c by A3,Def18;
+   then consider q be Element of c such that
+A4:  q in Q by Th11;
+     q is accessible by Def22; then consider w such that
+A5: the InitS of c,w-leads_to q by Def21;
+A6: (the InitS of c,w)-admissible.(len w + 1) = q by A5,Def3;
+A7: the InitS of c in the InitS of rtfsm by Def18;
+     1 <= len w + 1 & len w + 1 <= len w + 1 by NAT_1:29;
+then A8: len w + 1 in Seg (len w + 1) by FINSEQ_1:3;
+then A9: q in (the InitS of rtfsm,w)-admissible.(len w + 1) by A6,A7,Th57;
+     len w + 1 in Seg (len (the InitS of rtfsm,w)-admissible) by A8,Def2;
+   then len w + 1 in dom (the InitS of rtfsm,w)-admissible by FINSEQ_1:def 3;
+   then A10: (the InitS of rtfsm,w)-admissible.(len w + 1) in the carrier of
+rtfsm by FINSEQ_2:13;
+   then reconsider QQ = (the InitS of rtfsm,w)-admissible.(len w + 1)
+                     as Subset of c by A2;
+     Q' = QQ or Q' misses QQ by A2,A10,EQREL_1:def 6;
+   then the InitS of rtfsm,w-leads_to Q by A4,A9,Def3,XBOOLE_0:3;
+   hence contradiction by A1,Def21;
+end;
+
+definition let IAlph, OAlph;
+ cluster connected reduced finite (non empty Mealy-FSM over IAlph,OAlph);
+ existence proof consider cm being connected
+   finite (non empty Mealy-FSM over IAlph, OAlph);
+  take the_reduction_of cm; thus thesis by Th63,Th66;end;
+end;
+
+definition let IAlph, OAlph;
+           let tfsm be non empty Mealy-FSM over IAlph,OAlph;
+ func accessibleStates tfsm equals
+:Def23:  { q where q is State of tfsm : q is accessible };
+ coherence;
+end;
+
+definition let IAlph, OAlph, tfsm;
+ cluster accessibleStates tfsm -> finite non empty;
+ coherence proof set m = tfsm;
+  set AS = { q where q is State of m : q is accessible };
+    AS c= the carrier of m proof let x be set; assume x in AS;
+    then consider q being State of m such that
+A1:  x = q & q is accessible; thus x in the carrier of m by A1; end;
+then A2: AS is finite by FINSET_1:13;
+     the InitS of m,<*>IAlph-leads_to the InitS of m by Th17;
+   then the InitS of m is accessible by Def21; then the InitS of m in AS;
+  hence thesis by A2,Def23;
+ end;
+end;
+
+theorem Th67:
+ accessibleStates tfsm c= the carrier of tfsm &
+ for q holds q in accessibleStates tfsm iff q is accessible
+proof set AS = { q where q is State of tfsm: q is accessible };
+A1: AS = accessibleStates tfsm by Def23;
+   AS c= the carrier of tfsm proof let x be set; assume x in AS;
+   then consider q being State of tfsm such that A2:  x = q & q is accessible;
+   thus x in the carrier of tfsm by A2;
+   end;
+  hence accessibleStates tfsm c= the carrier of tfsm by Def23;
+  let q be State of tfsm;
+  hereby assume q in accessibleStates tfsm;
+   then consider q' being State of tfsm such that
+A3:  q' = q & q' is accessible by A1;
+   thus q is accessible by A3;
+  end; assume q is accessible; hence thesis by A1;
+end;
+
+theorem Th68:
+ (the Tran of tfsm)|[:accessibleStates tfsm, IAlph:] is
+     Function of [:accessibleStates tfsm, IAlph:], accessibleStates tfsm proof
+ set cTran = (the Tran of tfsm) | [:accessibleStates tfsm, IAlph:];
+A1:accessibleStates tfsm c= the carrier of tfsm & IAlph c= IAlph
+                                                by Th67;
+   then [:accessibleStates tfsm, IAlph:] c= [:the carrier of tfsm, IAlph:]
+                                                by ZFMISC_1:119;
+   then cTran is Function of [:accessibleStates tfsm, IAlph:], the carrier of
+tfsm
+                                                by FUNCT_2:38;
+then A2: dom cTran = [:accessibleStates tfsm, IAlph:] by FUNCT_2:def 1;
+  rng cTran c= accessibleStates tfsm proof let x be set; assume
+A3:   x in rng cTran;
+       rng cTran c= rng the Tran of tfsm &
+     rng the Tran of tfsm c= the carrier of tfsm
+         by FUNCT_1:76,RELSET_1:12;
+     then rng cTran c= the carrier of tfsm by XBOOLE_1:1;
+then reconsider q1=x as State of tfsm by A3;
+     consider d being set such that
+A4:   d in dom cTran & x = cTran.d by A3,FUNCT_1:def 5;
+A5:   d`1 in accessibleStates tfsm & d`2 in IAlph by A2,A4,MCART_1:10;
+     then reconsider q = d`1 as State of tfsm by A1;
+     reconsider s = d`2 as Element of IAlph by A2,A4,MCART_1:10;
+     set I = the InitS of tfsm; q is accessible by A5,Th67;
+     then consider w being FinSequence of IAlph such that
+A6:   I, w-leads_to q by Def21;
+A7:   len (w^<*s*>) = len w + len <*s*> by FINSEQ_1:35;
+     set qsa = (q, <*s*>)-admissible;
+A8:  qsa.1 = q by Def2;
+A9:  <*s*>.1 = s by FINSEQ_1:57; 1 <= len <*s*> by FINSEQ_1:56;
+     then consider wi being Element of IAlph, qi, qi1 being State of tfsm such
+that
+A10:   wi=<*s*>.1 & qi=qsa.1 & qi1=qsa.(1+1) & wi-succ_of qi = qi1 by Def2;
+       (the Tran of tfsm).d = q1 by A2,A4,FUNCT_1:72;
+     then (the Tran of tfsm).[q, s] = q1 by A2,A4,MCART_1:23;
+then A11: qsa.(1+1) = q1 by A8,A9,A10,Def1;
+A12: len(w^<*s*>)+1 =len w +1+1 by A7,FINSEQ_1:56
+                  .= len w +(1+1) by XCMPLX_1:1;
+      1+1 =2; then 1 <= 2 & 2 <= len <*s*> + 1 by FINSEQ_1:56;
+    then (I, w^<*s*>)-admissible.(len (w^<*s*>) + 1) = q1 by A6,A11,A12,Th22;
+    then I,w^<*s*>-leads_to q1 by Def3; then q1 is accessible by Def21;
+    hence x in accessibleStates tfsm by Th67;
+   end;
+ hence thesis by A2,FUNCT_2:def 1,RELSET_1:11;
+end;
+
+theorem
+   for cTran being Function of [:accessibleStates tfsm, IAlph:],
+                             accessibleStates tfsm,
+     cOFun being Function of [:accessibleStates tfsm, IAlph:], OAlph,
+     cInitS being Element of accessibleStates tfsm
+  st cTran = (the Tran of tfsm) | [:accessibleStates tfsm, IAlph:] &
+     cOFun = (the OFun of tfsm) | [:accessibleStates tfsm, IAlph:] &
+     cInitS = the InitS of tfsm
+  holds tfsm, Mealy-FSM(#accessibleStates tfsm, cTran, cOFun, cInitS#)
+                       -are_equivalent
+proof set M = tfsm;
+ let cTran be Function of [:accessibleStates M, IAlph:], accessibleStates M,
+     cOFun be Function of [:accessibleStates M, IAlph:], OAlph,
+     cInitS be Element of accessibleStates M such that
+A1:  cTran = (the Tran of M) | [:accessibleStates M, IAlph:] and
+A2:  cOFun = (the OFun of M) | [:accessibleStates M, IAlph:] and
+A3:  cInitS = the InitS of M;
+  set cm = Mealy-FSM(#accessibleStates M, cTran, cOFun, cInitS#);
+  let w be FinSequence of IAlph;
+set ma= (the InitS of M,w)-admissible;set cma= (the InitS of cm, w)-admissible;
+A4: now thus len ma = len w + 1 & len cma = len w + 1 by Def2;
+    defpred P[Nat] means $1 in Seg (len w + 1) implies ma.$1 = cma.$1;
+A5: P[0] by FINSEQ_1:3;
+A6: for k being Nat st P[k] holds P[k + 1]
+    proof let j be Nat such that
+A7:  j in Seg (len w + 1) implies ma.j = cma.j;
+     assume j+1 in Seg (len w + 1);
+      then 1<=j+1 & j+1<=len w + 1 by FINSEQ_1:3;
+then A8: j<=len w&j<len w +1 by NAT_1:38,REAL_1:53;
+A9: 0=j or 0<j & 0+1=1 by NAT_1:19;
+     per cases by A9,NAT_1:38;
+     suppose A10:0 = j; hence ma.(j+1) = the InitS of M by Def2
+                             .= cma.(j+1) by A3,A10,Def2;
+     suppose
+A11:    1 <= j;
+then consider mwj being Element of IAlph, mqj,mqj1 being State of M such that
+A12:     mwj = w.j & mqj = ma.j & mqj1 = ma.(j+1) & mwj-succ_of mqj = mqj1
+                                                           by A8,Def2;
+   consider cmwj being Element of IAlph,cmqj,cmqj1 being State of cm such that
+A13:   cmwj = w.j & cmqj = cma.j & cmqj1 = cma.(j+1) & cmwj-succ_of cmqj=cmqj1
+                                                           by A8,A11,Def2;
+        mwj-succ_of mqj = (the Tran of M).[mqj, mwj] by Def1
+                     .= cTran.[cmqj, cmwj] by A1,A7,A8,A11,A12,A13,FINSEQ_1:3,
+FUNCT_1:72
+                     .= cmwj-succ_of cmqj by Def1;
+      hence ma.(j+1) = cma.(j+1) by A12,A13;
+    end;
+    thus for j be Nat holds P[j] from Ind (A5, A6);
+  end;
+then A14: ma = cma by FINSEQ_2:10;
+set mr = (the InitS of M, w)-response; set cmr = (the InitS of cm, w)-response;
+   now thus len mr = len w & len cmr = len w by Def6;
+  let j be Nat; assume
+A15: j in Seg len w;
+then A16: j in dom w by FINSEQ_1:def 3;
+A17: j in Seg (len w + 1) by A15,FINSEQ_2:9;
+   then j in dom ma by A4,FINSEQ_1:def 3;
+then A18: ma.j in the carrier of M & w.j in IAlph by A16,FINSEQ_2:13;
+     j in dom cma by A4,A17,FINSEQ_1:def 3;
+   then cma.j in accessibleStates M by FINSEQ_2:13;
+then A19: [cma.j, w.j] in [:accessibleStates M, IAlph:] by A18,ZFMISC_1:106;
+  thus mr.j = (the OFun of M).[ma.j, w.j] by A16,Def6
+    .= cOFun.[cma.j, w.j] by A2,A14,A19,FUNCT_1:72 .= cmr.j
+      by A16,Def6;
+ end;
+hence thesis by FINSEQ_2:10;
+end;
+
+theorem ex Ctfsm st
+   the Tran of Ctfsm = (the Tran of tfsm)|[:accessibleStates tfsm, IAlph:] &
+   the OFun of Ctfsm = (the OFun of tfsm)|[:accessibleStates tfsm, IAlph:] &
+   the InitS of Ctfsm = the InitS of tfsm & tfsm, Ctfsm-are_equivalent
+proof set M = tfsm;
+  reconsider cTran = (the Tran of M) | [:accessibleStates M, IAlph:]
+   as Function of [:accessibleStates M,IAlph:],accessibleStates M by Th68;
+    accessibleStates M c= the carrier of M & IAlph c= IAlph by Th67;
+  then [:accessibleStates M, IAlph:] c= [:the carrier of M, IAlph:]
+                                                by ZFMISC_1:119;
+  then reconsider cOFun = (the OFun of M) | [:accessibleStates M, IAlph:]
+             as Function of [:accessibleStates M, IAlph:], OAlph by FUNCT_2:38;
+  set I = the InitS of M; I, <*>IAlph-leads_to I by Th17;
+  then I is accessible by Def21;
+  then reconsider cInitS = the InitS of M as Element of accessibleStates M by
+Th67;
+  set cm = Mealy-FSM(#accessibleStates M, cTran, cOFun, cInitS#);
+A1: now let w be FinSequence of IAlph;
+ set ma= (the InitS of M,w)-admissible;
+ set cma= (the InitS of cm,w)-admissible;
+    now thus len ma = len w + 1 & len cma = len w + 1 by Def2;
+    defpred P[Nat] means $1 in Seg (len w + 1) implies ma.$1 = cma.$1;
+A2: P[0] by FINSEQ_1:3;
+A3: for k being Nat st P[k] holds P[k + 1]
+    proof let j be Nat such that
+A4:  j in Seg (len w + 1) implies ma.j = cma.j;
+  assume j+1 in Seg(len w +1);
+    then 1<=j+1&j+1<=len w +1 by FINSEQ_1:3;
+then A5: j<=len w&j<len w +1 by NAT_1:38,REAL_1:53;
+    A6: 0=j or 0<j & 0+1 = 1 by NAT_1:19;
+     per cases by A6,NAT_1:38;
+     suppose A7:0 = j;
+     hence ma.(j+1) = the InitS of M by Def2
+                             .= cma.(j+1) by A7,Def2;
+     suppose
+A8:    1 <= j;
+     then consider mwj being Element of IAlph, mqj,mqj1 being State of M such
+that
+A9:     mwj = w.j & mqj = ma.j & mqj1 = ma.(j+1) & mwj-succ_of mqj = mqj1
+                                                           by A5,Def2;
+  consider cmwj being Element of IAlph, cmqj, cmqj1 being State of cm such that
+A10:   cmwj = w.j & cmqj = cma.j & cmqj1 = cma.(j+1) & cmwj-succ_of cmqj=cmqj1
+                                                           by A5,A8,Def2;
+        mwj-succ_of mqj = (the Tran of M).[mqj, mwj] by Def1
+                     .= cTran.[cmqj, cmwj] by A4,A5,A8,A9,A10,FINSEQ_1:3,
+FUNCT_1:72
+                     .= cmwj-succ_of cmqj by Def1;
+      hence ma.(j+1) = cma.(j+1) by A9,A10;
+    end;
+    thus for j be Nat holds P[j] from Ind (A2, A3);
+  end; hence ma = cma by FINSEQ_2:10;
+  end;
+    now let q be State of cm; q in accessibleStates M &
+    accessibleStates M c= the carrier of M by Th67;
+then reconsider q' = q as State of M;
+     q' is accessible by Th67;
+   then consider w being FinSequence of IAlph such that
+A11:  the InitS of M, w-leads_to q' by Def21;
+     (the InitS of M, w)-admissible.(len w + 1) = q' by A11,Def3;
+   then (the InitS of cm, w)-admissible.(len w + 1) = q by A1;
+    then the InitS of cm, w-leads_to q by Def3;
+   hence q is accessible by Def21;
+ end; then reconsider cm as
+   connected (finite non empty Mealy-FSM over IAlph, OAlph) by Def22;
+ take cm;
+ thus the Tran of cm = (the Tran of M) | [:accessibleStates M, IAlph:];
+ thus the OFun of cm = (the OFun of M) | [:accessibleStates M, IAlph:];
+ thus the InitS of cm = the InitS of M; let w be FinSequence of IAlph;
+set ma= (the InitS of M,w)-admissible; set cma= (the InitS of cm,w)-admissible;
+A12: len ma = len w + 1 & len cma = len w + 1 by Def2;
+set mr = (the InitS of M, w)-response; set cmr = (the InitS of cm, w)-response;
+   now thus len mr = len w & len cmr = len w by Def6;let j be Nat; assume
+A13: j in Seg len w;
+then A14: j in Seg (len w + 1) by FINSEQ_2:9;
+A15: [ma.j, w.j] = [cma.j, w.j] by A1;
+A16:  j in dom w by A13,FINSEQ_1:def 3;
+     j in dom ma by A12,A14,FINSEQ_1:def 3;
+then A17: ma.j in the carrier of M & w.j in IAlph by A16,FINSEQ_2:13;
+     j in dom cma by A12,A14,FINSEQ_1:def 3;
+   then cma.j in accessibleStates M by FINSEQ_2:13;
+then A18: [cma.j, w.j] in [:accessibleStates M, IAlph:] by A17,ZFMISC_1:106;
+  thus mr.j = (the OFun of M).[ma.j, w.j] by A16,Def6
+        .= cOFun.[cma.j, w.j] by A15,A18,FUNCT_1:72 .= cmr.j by A16,Def6;
+ end;
+hence thesis by FINSEQ_2:10;
+end;
+
+begin :: Machine union
+
+definition let IAlph be set, OAlph be non empty set;
+           let tfsm1, tfsm2 be non empty Mealy-FSM over IAlph, OAlph;
+ func tfsm1-Mealy_union tfsm2 -> strict Mealy-FSM over IAlph, OAlph means
+ :Def24:
+  the carrier of it = (the carrier of tfsm1) \/ (the carrier of tfsm2) &
+  the Tran of it = (the Tran of tfsm1) +* (the Tran of tfsm2) &
+  the OFun of it = (the OFun of tfsm1) +* (the OFun of tfsm2) &
+  the InitS of it = the InitS of tfsm1;
+ existence proof
+   set S_tfsm1 = the carrier of tfsm1, S_tfsm2 = the carrier of tfsm2;
+   set Tr_tfsm1 = the Tran of tfsm1, Tr_tfsm2 = the Tran of tfsm2;
+   set Of_tfsm1 = the OFun of tfsm1, Of_tfsm2 = the OFun of tfsm2;
+   set Tr = Tr_tfsm1 +* Tr_tfsm2, Of = Of_tfsm1 +* Of_tfsm2;
+   reconsider S = S_tfsm1 \/ S_tfsm2 as non empty set;
+A1: dom Tr_tfsm1 = [: S_tfsm1, IAlph :] by FUNCT_2:def 1;
+     dom Tr_tfsm2 = [: S_tfsm2, IAlph :] by FUNCT_2:def 1;
+then A2: dom Tr = [: S_tfsm1, IAlph :] \/ [: S_tfsm2, IAlph :] by A1,FUNCT_4:
+def 1
+         .= [: S_tfsm1 \/ S_tfsm2, IAlph :] by ZFMISC_1:120;
+A3: rng Tr_tfsm1 c= S_tfsm1 & rng Tr_tfsm2 c= S_tfsm2 by RELSET_1:12;
+A4: rng Tr c= rng Tr_tfsm1 \/ rng Tr_tfsm2 by FUNCT_4:18;
+     rng Tr_tfsm1 \/ rng Tr_tfsm2 c= S_tfsm1 \/ S_tfsm2 by A3,XBOOLE_1:13;
+   then rng Tr c= S by A4,XBOOLE_1:1;
+   then reconsider Tr as Function of [: S, IAlph :], S by A2,FUNCT_2:4;
+A5: dom Of_tfsm1 = [: S_tfsm1, IAlph :] by FUNCT_2:def 1;
+     dom Of_tfsm2 = [: S_tfsm2, IAlph :] by FUNCT_2:def 1;
+then A6: dom Of = [: S_tfsm1, IAlph :] \/ [: S_tfsm2, IAlph :] by A5,FUNCT_4:
+def 1
+         .= [: S_tfsm1 \/ S_tfsm2, IAlph :] by ZFMISC_1:120;
+A7: rng Of_tfsm1 c= OAlph & rng Of_tfsm2 c= OAlph by RELSET_1:12;
+A8: rng Of c= rng Of_tfsm1 \/ rng Of_tfsm2 by FUNCT_4:18;
+     rng Of_tfsm1 \/ rng Of_tfsm2 c= OAlph \/ OAlph by A7,XBOOLE_1:13;
+    then rng Of c= OAlph \/ OAlph by A8,XBOOLE_1:1;
+    then reconsider Of as Function of [: S, IAlph :], OAlph by A6,FUNCT_2:4;
+    reconsider IS = the InitS of tfsm1 as Element of S by XBOOLE_0:def 2;
+    take Mealy-FSM (# S, Tr, Of, IS #);
+    thus thesis;
+ end;
+ uniqueness;
+end;
+
+definition let IAlph be set, OAlph be non empty set;
+           let tfsm1, tfsm2 be non empty finite Mealy-FSM over IAlph, OAlph;
+ cluster tfsm1-Mealy_union tfsm2 -> non empty finite;
+ coherence
+ proof
+     the carrier of tfsm1-Mealy_union tfsm2 =
+      (the carrier of tfsm1) \/ (the carrier of tfsm2) by Def24;
+   hence thesis by GROUP_1:def 13,STRUCT_0:def 1;
+ end;
+end;
+
+theorem Th71:
+  tfsm = tfsm1-Mealy_union tfsm2 &
+    the carrier of tfsm1 misses the carrier of tfsm2 & q11 = q
+  implies (q11,w)-admissible = (q,w)-admissible
+ proof assume
+A1: tfsm = tfsm1-Mealy_union tfsm2 &
+  (the carrier of tfsm1) misses (the carrier of tfsm2) & q11 = q;
+   set ad1 = (q11,w)-admissible, ad = (q,w)-admissible;
+A2: len ad1 = len w + 1 by Def2 .= len ad by Def2;
+    defpred P[Nat] means 1 <= $1 & $1 <= len ad1 implies ad1.$1 = ad.$1;
+A3: P[0];
+A4: for k being Nat st P[k] holds P[k + 1]
+    proof let k be Nat; assume
+A5:   1 <= k & k <= len ad1 implies ad1.k = ad.k; assume
+A6:   1 <= (k+1) & (k+1) <= len ad1;
+      A7: k = 0 or 0 < k & 0 + 1 = 1 by NAT_1:19;
+      per cases by A7,NAT_1:38;
+      suppose
+A8:    k = 0;
+       hence ad1.(k+1) = q11 by Def2
+                     .= ad.(k+1) by A1,A8,Def2;
+      suppose
+A9:    1 <= k; (k+1) <= len w + 1 by A6,Def2;
+then A10:    1 <= k & k <= len w by A9,REAL_1:53;
+       then consider w1k being Element of IAlph,
+             q1k, q1k1 being Element of tfsm1 such that
+A11:    w1k = w.k & q1k = ad1.k & q1k1 = ad1.(k+1) & w1k-succ_of q1k = q1k1
+                    by Def2;
+       consider wk being Element of IAlph,
+                qk, qk1 being Element of tfsm such that
+A12:    wk = w.k & qk = ad.k & qk1 = ad.(k+1) & wk-succ_of qk = qk1
+                                                   by A10,Def2;
+         len w <= len w + 1 by NAT_1:29;
+       then A13: k <= len w + 1 by A10,AXIOMS:22;
+A14:  dom (the Tran of tfsm2) = [:the carrier of tfsm2,IAlph:]by FUNCT_2:def 1;
+         [:the carrier of tfsm1, IAlph :] misses
+        [:the carrier of tfsm2, IAlph :] by A1,ZFMISC_1:127;
+then A15:   not [q1k,w1k] in [:the carrier of tfsm2,IAlph:] by XBOOLE_0:3;
+       thus ad1.(k+1) = (the Tran of tfsm1).[q1k,w1k] by A11,Def1
+           .= ((the Tran of tfsm1) +* (the Tran of tfsm2)).[q1k,w1k]
+                               by A14,A15,FUNCT_4:12
+           .= (the Tran of tfsm).[qk,wk] by A1,A5,A9,A11,A12,A13,Def2,Def24
+           .= ad.(k+1) by A12,Def1;
+   end;
+     for k being Nat holds P[k] from Ind(A3, A4);
+   hence thesis by A2,FINSEQ_1:18;
+end;
+
+theorem Th72:
+    tfsm = tfsm1-Mealy_union tfsm2 &
+    the carrier of tfsm1 misses the carrier of tfsm2 & q11 = q
+  implies (q11,w)-response = (q,w)-response proof set q1 = q11; assume
+A1: tfsm = tfsm1-Mealy_union tfsm2 &
+   (the carrier of tfsm1) misses (the carrier of tfsm2) & q1 = q;
+   set res = (q,w)-response, res1 = (q1,w)-response;
+   set ad1 = (q1,w)-admissible;
+A2: len res1 = len w by Def6 .= len res by Def6;
+A3: len res1 = len w by Def6;
+     now let k be Nat; assume 1 <= k & k <= len res1;
+then A4:  k in Seg len w by A3,FINSEQ_1:3;
+then A5:  k in dom w by FINSEQ_1:def 3;
+       k in Seg (len w + 1) by A4,FINSEQ_2:9;
+     then k in Seg len ad1 by Def2;
+then A6:  k in dom ad1 by FINSEQ_1:def 3;
+A7:  dom (the OFun of tfsm2) = [:the carrier of tfsm2,IAlph :]
+       by FUNCT_2:def 1;
+A8: ad1.k in the carrier of tfsm1 by A6,FINSEQ_2:13;
+       w.k in IAlph by A5,FINSEQ_2:13;
+then A9:  [ad1.k,w.k] in [: the carrier of tfsm1, IAlph :] by A8,ZFMISC_1:106;
+       [:the carrier of tfsm1,IAlph :] misses
+     [:the carrier of tfsm2,IAlph:] by A1,ZFMISC_1:127;
+then A10: not [ad1.k,w.k] in [: the carrier of tfsm2, IAlph :]
+                                             by A9,XBOOLE_0:3;
+       res1.k = (the OFun of tfsm1).[(q1,w)-admissible.k,w.k] by A5,Def6
+.= ((the OFun of tfsm1) +* (the OFun of tfsm2)).[ad1.k,w.k]
+   by A7,A10,FUNCT_4:12
+.= ((the OFun of tfsm1) +* (the OFun of tfsm2)).
+                             [(q,w)-admissible.k,w.k] by A1,Th71
+.= (the OFun of tfsm).[(q,w)-admissible.k, w.k] by A1,Def24
+      .= res.k by A5,Def6;
+     hence res1.k = res.k;
+   end;
+   hence thesis by A2,FINSEQ_1:18;
+end;
+
+theorem Th73:
+   tfsm = tfsm1-Mealy_union tfsm2 &
+   the carrier of tfsm1 misses the carrier of tfsm2 & q21 = q
+  implies (q21,w)-admissible = (q,w)-admissible proof set q' = q21; assume
+A1: tfsm = tfsm1-Mealy_union tfsm2 &
+   (the carrier of tfsm1) /\ (the carrier of tfsm2) = {} & q' = q;
+   set ad' = (q',w)-admissible, ad = (q,w)-admissible;
+A2: len ad' = len w + 1 by Def2 .= len ad by Def2;
+   defpred P[Nat] means 1<=$1 & $1 <= len ad' implies ad'.$1= ad.$1;
+A3: P[0];
+A4: for k being Nat st P[k] holds P[k + 1]
+    proof let k be Nat; assume
+A5:   1 <= k & k <= len ad' implies ad'.k = ad.k; assume
+A6:   1 <= (k+1) & (k+1) <= len ad';
+      A7: k = 0 or 0 < k & 0 + 1 = 1 by NAT_1:19;
+      per cases by A7,NAT_1:38;
+      suppose
+A8:    k = 0;
+       hence ad'.(k+1) = q' by Def2
+                     .= ad.(k+1) by A1,A8,Def2;
+      suppose
+A9:    1 <= k; k+1 <= len w + 1 by A6,Def2;
+then A10:    1 <= k & k <= len w by A9,REAL_1:53;
+       then consider w'k being Element of IAlph,
+             q'k, q'k1 being Element of tfsm2 such that
+A11:    w'k = w.k & q'k = ad'.k & q'k1 = ad'.(k+1) & w'k-succ_of q'k = q'k1
+                    by Def2;
+       consider wk being Element of IAlph,
+       qk, qk1 being Element of tfsm such that
+A12:    wk = w.k & qk = ad.k & qk1 = ad.(k+1) & wk-succ_of qk = qk1
+                                                   by A10,Def2;
+         len w <= len w + 1 by NAT_1:29;
+       then A13: k <= len w + 1 by A10,AXIOMS:22;
+A14:dom (the Tran of tfsm2) = [:the carrier of tfsm2,IAlph:]by FUNCT_2:def 1;
+       thus ad'.(k+1) = (the Tran of tfsm2).[q'k,w'k] by A11,Def1
+   .= ((the Tran of tfsm1) +* (the Tran of tfsm2)).[q'k,w'k]by A14,FUNCT_4:14
+   .= (the Tran of tfsm).[qk,wk] by A1,A5,A9,A11,A12,A13,Def2,Def24 .= ad.(k+1)
+by A12,Def1;
+   end;
+  for k being Nat holds P[k] from Ind(A3, A4);
+   hence thesis by A2,FINSEQ_1:18;
+end;
+
+theorem Th74:
+    tfsm = tfsm1-Mealy_union tfsm2 &
+    the carrier of tfsm1 misses the carrier of tfsm2 & q21 = q
+  implies (q21,w)-response = (q,w)-response proof set q' = q21; assume
+A1: tfsm = tfsm1-Mealy_union tfsm2 &
+  (the carrier of tfsm1) misses (the carrier of tfsm2) & q' = q;
+   set res = (q,w)-response, res' = (q',w)-response;
+   set ad' = (q',w)-admissible;
+A2: len res' = len w by Def6 .= len res by Def6;
+A3: len res' = len w by Def6;
+     now let k be Nat; assume 1 <= k & k <= len res';
+then A4:   k in Seg len w by A3,FINSEQ_1:3;
+then A5:  k in dom w by FINSEQ_1:def 3;
+       k in Seg (len w + 1) by A4,FINSEQ_2:9;
+     then k in Seg len ad' by Def2;
+then A6:  k in dom ad' by FINSEQ_1:def 3;
+A7:  dom (the OFun of tfsm2) = [:the carrier of tfsm2,IAlph:] by FUNCT_2:def 1;
+A8:  w.k in IAlph by A5,FINSEQ_2:13;
+       ad'.k in the carrier of tfsm2 by A6,FINSEQ_2:13;
+then A9:  [ad'.k, w.k ] in dom (the OFun of tfsm2) by A7,A8,ZFMISC_1:106;
+       res'.k = (the OFun of tfsm2).[(q',w)-admissible.k,w.k] by A5,Def6
+.= ((the OFun of tfsm1) +* (the OFun of tfsm2)).[ad'.k,w.k] by A9,FUNCT_4:14
+     .= ((the OFun of tfsm1) +* (the OFun of tfsm2)).
+                                        [(q,w)-admissible.k,w.k] by A1,Th73
+      .= (the OFun of tfsm).[(q,w)-admissible.k, w.k] by A1,Def24
+      .= res.k by A5,Def6;
+     hence res'.k = res.k;
+   end;
+   hence thesis by A2,FINSEQ_1:18;
+end;
+
+reserve Rtfsm1, Rtfsm2 for reduced (non empty Mealy-FSM over IAlph, OAlph);
+
+theorem Th75:
+   tfsm = Rtfsm1-Mealy_union Rtfsm2 &
+   the carrier of Rtfsm1 misses the carrier of Rtfsm2 &
+   Rtfsm1, Rtfsm2-are_equivalent
+ implies ex Q being State of the_reduction_of tfsm
+           st the InitS of Rtfsm1 in Q & the InitS of Rtfsm2 in Q &
+              Q = the InitS of the_reduction_of tfsm proof
+  set rtfsm1 = Rtfsm1; set rtfsm2 = Rtfsm2; assume
+A1: tfsm = rtfsm1-Mealy_union rtfsm2 &
+   (the carrier of rtfsm1) misses (the carrier of rtfsm2) &
+    rtfsm1, rtfsm2-are_equivalent;
+    set RUN = the_reduction_of tfsm; set SRUN = the carrier of RUN;
+    set S_tfsm = the carrier of tfsm, S_rtfsm1 = the carrier of rtfsm1;
+    set S_rtfsm2 = the carrier of rtfsm2;
+A2: S_tfsm = S_rtfsm1 \/ S_rtfsm2 by A1,Def24;
+    reconsider IS1 = the InitS of rtfsm1 as Element of S_tfsm by A1,Def24;
+    reconsider IS2 = the InitS of rtfsm2 as Element of S_tfsm by A2,XBOOLE_0:
+def 2
+;
+A3:  SRUN = final_states_partition tfsm by Def18;
+A4:  final_states_partition tfsm is final by Def15;
+      now let w be FinSequence of IAlph;
+     (the InitS of rtfsm1,w)-response = (the InitS of rtfsm2,w)-response
+                                           by A1,Def9;
+      hence (IS1, w)-response
+           = (the InitS of rtfsm2,w)-response by A1,Th72
+          .= (IS2, w)-response by A1,Th74;
+    end; then IS1,IS2-are_equivalent by Def10;
+   then consider X being Element of SRUN such that
+A5: IS1 in X & IS2 in X by A3,A4,Def14;
+    take X; thus the InitS of rtfsm1 in X & the InitS of rtfsm2 in X by A5;
+      the InitS of tfsm = the InitS of rtfsm1 by A1,Def24;
+then A6: the InitS of rtfsm1 in the InitS of RUN by Def18;
+A7: X is Subset of S_tfsm by A3,TARSKI:def 3;
+      the InitS of RUN is Subset of S_tfsm by A3,TARSKI:def 3;
+    then X = the InitS of RUN or X misses the InitS of RUN by A3,A7,EQREL_1:def
+6;
+    hence thesis by A5,A6,XBOOLE_0:3;
+end;
+
+reserve CRtfsm1, CRtfsm2 for connected reduced
+                 (non empty Mealy-FSM over IAlph, OAlph),
+        q1u, q2u for State of tfsm;
+
+theorem Th76:
+  for crq11, crq12 being State of CRtfsm1 holds
+   crq11 = q1u & crq12 = q2u &
+   the carrier of CRtfsm1 misses the carrier of CRtfsm2 &
+   CRtfsm1, CRtfsm2-are_equivalent & tfsm = CRtfsm1-Mealy_union CRtfsm2 &
+   not crq11, crq12-are_equivalent
+ implies not q1u,q2u-are_equivalent proof
+  let crq11, crq12 be State of CRtfsm1;
+  set rtfsm1 = CRtfsm1, rtfsm2 = CRtfsm2, q1 = crq11, q2 = crq12;
+   assume
+A1: q1 = q1u & q2 = q2u &
+   (the carrier of rtfsm1) misses (the carrier of rtfsm2) &
+   rtfsm1, rtfsm2-are_equivalent & tfsm = rtfsm1-Mealy_union rtfsm2; assume
+     not q1,q2-are_equivalent; then consider w be FinSequence of IAlph such
+that
+A2:  (q1,w)-response <> (q2,w)-response by Def10;
+   (q1u,w)-response = (q1,w)-response by A1,Th72;
+   then (q1u,w)-response <> (q2u,w)-response by A1,A2,Th72;
+   hence thesis by Def10;
+end;
+
+theorem Th77:
+  for crq21, crq22 being State of CRtfsm2 holds
+    crq21 = q1u & crq22 = q2u &
+    the carrier of CRtfsm1 misses the carrier of CRtfsm2 &
+    CRtfsm1, CRtfsm2-are_equivalent & tfsm = CRtfsm1-Mealy_union CRtfsm2 &
+    not crq21, crq22-are_equivalent
+  implies not q1u, q2u-are_equivalent
+proof
+  let crq21, crq22 be State of CRtfsm2;
+  set rtfsm1 = CRtfsm1, rtfsm2 = CRtfsm2, q1 = crq21, q2 = crq22;
+ assume
+A1: q1 = q1u & q2 = q2u &
+   (the carrier of rtfsm1) misses (the carrier of rtfsm2) &
+   rtfsm1, rtfsm2-are_equivalent & tfsm = rtfsm1-Mealy_union rtfsm2; assume
+      not q1,q2-are_equivalent;
+   then consider w be FinSequence of IAlph such that
+A2:  (q1,w)-response <> (q2,w)-response by Def10;
+     (q1u,w)-response = (q1,w)-response by A1,Th74;
+   then (q1u,w)-response <> (q2u,w)-response by A1,A2,Th74;
+   hence thesis by Def10;
+end;
+
+reserve CRtfsm1, CRtfsm2 for connected reduced (finite non empty
+                 Mealy-FSM over IAlph, OAlph);
+
+theorem Th78:
+   the carrier of CRtfsm1 misses the carrier of CRtfsm2 &
+   CRtfsm1, CRtfsm2-are_equivalent &
+   tfsm = CRtfsm1-Mealy_union CRtfsm2
+ implies for Q being State of the_reduction_of tfsm holds
+    not ex q1, q2 being Element of Q st
+      q1 in the carrier of CRtfsm1 & q2 in the carrier of CRtfsm1 & q1 <> q2
+proof set rtfsm1 = CRtfsm1; set rtfsm2 = CRtfsm2; assume
+A1: (the carrier of rtfsm1) misses (the carrier of rtfsm2) &
+   rtfsm1, rtfsm2-are_equivalent & tfsm = rtfsm1-Mealy_union rtfsm2;
+   consider tfsm1 be finite non empty Mealy-FSM over IAlph, OAlph such that
+A2: rtfsm1, the_reduction_of tfsm1-are_isomorphic by Th65;
+    given Q be Element of the_reduction_of tfsm,
+            q1, q2 being Element of Q such that
+A3:  q1 in the carrier of rtfsm1 & q2 in the carrier of rtfsm1 & q1 <> q2;
+   set tfsm1_r = the_reduction_of tfsm1;
+  consider Tf being Function of the carrier of rtfsm1, the carrier of tfsm1_r
+   such that
+A4: Tf is bijective &
+    Tf.the InitS of rtfsm1 = the InitS of tfsm1_r &
+           for q being State of rtfsm1, s being Element of IAlph holds
+        Tf.((the Tran of rtfsm1).[q, s]) = (the Tran of tfsm1_r).[Tf.q, s] &
+        (the OFun of rtfsm1).[q,s] = (the OFun of tfsm1_r).[Tf.q, s]
+                                  by A2,Def19;
+     Tf is one-to-one onto by A4,FUNCT_2:def 4;
+then A5: Tf is one-to-one & rng Tf=the carrier of tfsm1_r by FUNCT_2:def 3;
+   A6: dom Tf = the carrier of rtfsm1 by FUNCT_2:def 1;
+then A7: Tf.q1 in the carrier of tfsm1_r & Tf.q2 in the carrier of tfsm1_r &
+    Tf.q1 <> Tf.q2 by A3,A5,FUNCT_1:def 5,def 8;
+   reconsider Tq1 = Tf.q1, Tq2 = Tf.q2
+     as Element of tfsm1_r by A3,A5,A6,FUNCT_1:def 5;
+A8: not Tq1, Tq2 -are_equivalent by A7,Th62;
+    set rtfsm = the_reduction_of tfsm;
+      the carrier of tfsm = (the carrier of rtfsm1) \/ (the carrier of rtfsm2)
+                          by A1,Def24;
+    then reconsider q1, q2 as Element of tfsm by A3,XBOOLE_0:def
+2;
+A9: final_states_partition tfsm is final by Def15;
+A10:the carrier of rtfsm = final_states_partition tfsm by Def18;
+    then reconsider Q as Subset of tfsm by TARSKI:def 3;
+      Q <> {} by A10,EQREL_1:def 6;
+then A11:q1,q2-are_equivalent by A9,A10,Def14;
+    reconsider q1' = q1, q2' = q2 as Element of rtfsm1 by A3;
+      not q1',q2'-are_equivalent by A4,A8,Th61;
+    hence contradiction by A1,A11,Th76;
+end;
+
+theorem Th79:
+  the carrier of CRtfsm1 misses the carrier of CRtfsm2 &
+  CRtfsm1, CRtfsm2-are_equivalent & tfsm = CRtfsm1-Mealy_union CRtfsm2
+ implies for Q being State of the_reduction_of tfsm holds
+   not ex q1, q2 being Element of Q st
+       q1 in the carrier of CRtfsm2 & q2 in the carrier of CRtfsm2 & q1 <> q2
+proof set rtfsm1 = CRtfsm1; set rtfsm2 = CRtfsm2; assume
+A1: (the carrier of rtfsm1) misses (the carrier of rtfsm2) &
+   rtfsm1, rtfsm2-are_equivalent & tfsm = rtfsm1-Mealy_union rtfsm2;
+   consider tfsm2 be finite non empty Mealy-FSM over IAlph, OAlph such that
+A2: rtfsm2, the_reduction_of tfsm2-are_isomorphic by Th65;
+    given Q be Element of the_reduction_of tfsm,
+            q1, q2 being Element of Q such that
+A3:  q1 in the carrier of rtfsm2 & q2 in the carrier of rtfsm2 & q1 <> q2;
+   set tfsm2_r = the_reduction_of tfsm2;
+  consider Tf being Function of the carrier of rtfsm2, the carrier of tfsm2_r
+   such that
+A4: Tf is bijective &
+    Tf.the InitS of rtfsm2 = the InitS of tfsm2_r &
+           for q being State of rtfsm2, s being Element of IAlph holds
+        Tf.((the Tran of rtfsm2).[q, s]) = (the Tran of tfsm2_r).[Tf.q, s] &
+        (the OFun of rtfsm2).[q,s] = (the OFun of tfsm2_r).[Tf.q, s]
+                                  by A2,Def19;
+     Tf is one-to-one onto by A4,FUNCT_2:def 4;
+then A5: Tf is one-to-one & rng Tf=the carrier of tfsm2_r by FUNCT_2:def 3;
+   A6: dom Tf = the carrier of rtfsm2 by FUNCT_2:def 1;
+then A7: Tf.q1 in the carrier of tfsm2_r & Tf.q2 in the carrier of tfsm2_r &
+    Tf.q1 <> Tf.q2 by A3,A5,FUNCT_1:def 5,def 8;
+    reconsider Tq1 = Tf.q1, Tq2 = Tf.q2 as Element of tfsm2_r
+by A3,A5,A6,FUNCT_1:def 5;
+A8: not Tq1, Tq2 -are_equivalent by A7,Th62;
+    set rtfsm = the_reduction_of tfsm;
+A9: the carrier of tfsm = (the carrier of rtfsm1) \/ (the carrier of rtfsm2)
+                          by A1,Def24;
+    then reconsider q1 as Element of tfsm by A3,XBOOLE_0:def 2;
+    reconsider q2 as Element of tfsm by A3,A9,XBOOLE_0:def 2;
+A10:  final_states_partition tfsm is final by Def15;
+A11: the carrier of rtfsm = final_states_partition tfsm by Def18;
+    then reconsider Q as Subset of tfsm by TARSKI:def 3;
+      Q <> {} by A11,EQREL_1:def 6;
+then A12:  q1,q2-are_equivalent by A10,A11,Def14;
+    reconsider q1' = q1 as Element of rtfsm2 by A3;
+    reconsider q2' = q2 as Element of rtfsm2 by A3;
+      not q1',q2'-are_equivalent by A4,A8,Th61;
+hence contradiction by A1,A12,Th77;
+end;
+
+theorem Th80:
+  the carrier of CRtfsm1 misses the carrier of CRtfsm2 &
+  CRtfsm1, CRtfsm2-are_equivalent &
+  tfsm = CRtfsm1-Mealy_union CRtfsm2
+ implies for Q being State of the_reduction_of tfsm
+    ex q1, q2 being Element of Q st
+        q1 in the carrier of CRtfsm1 & q2 in the carrier of CRtfsm2 &
+        for q being Element of Q holds q = q1 or q = q2
+proof set rtfsm1 = CRtfsm1; set rtfsm2 = CRtfsm2; assume
+A1: (the carrier of rtfsm1) misses (the carrier of rtfsm2) &
+   rtfsm1, rtfsm2-are_equivalent & tfsm = rtfsm1-Mealy_union rtfsm2; assume
+     not thesis;
+   then consider Q be Element of the_reduction_of tfsm such that
+A2:  for q1, q2 being Element of Q holds
+      not q1 in the carrier of rtfsm1 or not q2 in the carrier of rtfsm2 or
+      not for q being Element of Q holds q = q1 or q = q2;
+A3:  (the carrier of rtfsm1) /\ (the carrier of rtfsm2) = {} by A1,XBOOLE_0:def
+7;
+    set rtfsm = the_reduction_of tfsm; set S_rtfsm1 = the carrier of rtfsm1;
+    set IS_rtfsm1 = the InitS of rtfsm1; set S_rtfsm2 = the carrier of rtfsm2;
+    set IS_rtfsm2 = the InitS of rtfsm2; set S_tfsm = the carrier of tfsm;
+    set S_rtfsm = the carrier of rtfsm;
+A4: S_rtfsm = final_states_partition tfsm by Def18;
+    then reconsider Q as Subset of S_tfsm by TARSKI:def 3; Q in S_rtfsm;
+then A5: Q in final_states_partition tfsm by Def18;
+then A6: Q <> {} by EQREL_1:def 6;
+    then consider q being Element of S_tfsm such that
+A7:  q in Q by SUBSET_1:10;
+      union final_states_partition tfsm = S_tfsm by EQREL_1:def 6
+                                 .= S_rtfsm1 \/ S_rtfsm2 by A1,Def24;
+then A8: Q c= S_rtfsm1 \/ S_rtfsm2 by A4,ZFMISC_1:92;
+    per cases by A7,A8,XBOOLE_0:def 2;
+    suppose
+A9:  q in S_rtfsm1; set Q' = Q \ {q};
+A10:  now assume
+A11:   Q' = {};
+      reconsider q as Element of S_rtfsm1 by A9; q is accessible by Def22;
+      then consider w be FinSequence of IAlph such that
+A12:     IS_rtfsm1, w-leads_to q by Def21;
+    set ad_l = IS_rtfsm2 leads_to_under w;
+A13:     now assume
+A14:      ad_l in Q;
+        ad_l <> q by A3,XBOOLE_0:def 3;
+      hence contradiction by A11,A14,ZFMISC_1:64;
+        end;
+         now assume
+A15:     not ad_l in Q; A16: ad_l in S_rtfsm1 \/ S_rtfsm2 by XBOOLE_0:def 2;
+        reconsider q as Element of S_tfsm;
+        reconsider ad_l as Element of S_tfsm by A1,A16,Def24;
+A17:     final_states_partition tfsm is final by Def15;
+          not ex Y being Element of S_rtfsm st q in Y & ad_l in Y
+        proof assume not thesis;
+          then consider Y be Element of S_rtfsm such that
+A18:       q in Y & ad_l in Y;
+          reconsider Y as Subset of S_tfsm by A4,TARSKI:def 3;
+          reconsider Q as Subset of S_tfsm; Y in S_rtfsm;
+          then Y in final_states_partition tfsm by Def18;
+then Y misses Q by A5,A15,A18,EQREL_1:def 6;
+          hence contradiction by A7,A18,XBOOLE_0:3;
+        end;
+        then not q, ad_l-are_equivalent by A4,A17,Def14;
+        then consider dseq being FinSequence of IAlph such that
+A19:     (q,dseq)-response <> (ad_l,dseq)-response by Def10;
+        reconsider ad_l2 = ad_l as Element of S_rtfsm2;
+        reconsider q_1 = q as Element of S_rtfsm1;
+A20:     IS_rtfsm2, w -leads_to ad_l2 by Def5;
+       (q,dseq)-response = (q_1,dseq)-response by A1,Th72;
+        then (q_1,dseq)-response <> (ad_l2,dseq)-response by A1,A19,Th74;
+        then (IS_rtfsm1,w^dseq)-response <> (IS_rtfsm2,w^dseq)-response
+                                  by A12,A20,Th27;
+        hence contradiction by A1,Def9;
+       end;
+       hence contradiction by A13;
+     end;
+       now assume
+A21:   Q' <> {};
+A22:   Q' c= Q by XBOOLE_1:36;
+      reconsider Q as Subset of S_tfsm;
+      reconsider Q' as Subset of S_tfsm;
+      consider x being Element of S_tfsm such that
+A23:    x in Q' by A21,SUBSET_1:10;
+A24:  Q' c= S_rtfsm1 \/ S_rtfsm2 by A8,A22,XBOOLE_1:1;
+      per cases by A23,A24,XBOOLE_0:def 2;
+      suppose A25: x in S_rtfsm1;
+       reconsider q as Element of Q by A7;
+       reconsider x as Element of Q by A23,XBOOLE_0:def 4;
+         not q in S_rtfsm1 or not x in S_rtfsm1 or q = x by A1,Th78;
+       hence contradiction by A9,A23,A25,ZFMISC_1:64;
+      suppose
+A26:     x in S_rtfsm2; set Q'' = Q' \ {x};
+A27:     now assume
+A28:      Q'' = {};
+A29:      for z being Element of Q holds z = q or z = x proof
+          given z being Element of Q such that
+A30:        z <> q & z <> x; z in Q' by A6,A30,ZFMISC_1:64;
+           hence contradiction by A28,A30,ZFMISC_1:64;
+         end;
+         reconsider q as Element of Q by A7;
+         reconsider x as Element of Q by A23,ZFMISC_1:64;
+           not q in S_rtfsm1 or not x in S_rtfsm2 or
+                           ex z being Element of Q st z <> q & z <> x by A2;
+         hence contradiction by A9,A26,A29;
+        end;
+          now assume
+A31:      Q'' <> {};
+A32:      Q'' c= Q' by XBOOLE_1:36;
+         reconsider Q' as Subset of S_tfsm;
+         reconsider Q'' as Subset of S_tfsm;
+         consider y being Element of S_tfsm such that
+A33:      y in Q'' by A31,SUBSET_1:10;
+         A34: Q'' c= S_rtfsm1 \/ S_rtfsm2 by A24,A32,XBOOLE_1:1;
+         per cases by A33,A34,XBOOLE_0:def 2;
+         suppose
+A35:       y in S_rtfsm1;
+A36:      y in Q' by A33,ZFMISC_1:64;
+          reconsider q as Element of Q by A7; reconsider y as Element of Q by
+A36,ZFMISC_1:64;
+            not q in S_rtfsm1 or not y in S_rtfsm1 or q = y by A1,Th78;
+          hence contradiction by A9,A35,A36,ZFMISC_1:64;
+         suppose A37: y in S_rtfsm2;
+          reconsider x as Element of Q by A23,ZFMISC_1:64;
+            y in Q' by A33,ZFMISC_1:64;
+          then reconsider y as Element of Q by ZFMISC_1:64;
+          not x in S_rtfsm2 or not y in S_rtfsm2 or x = y by A1,Th79;
+          hence contradiction by A26,A33,A37,ZFMISC_1:64;
+        end;
+        hence contradiction by A27;
+     end;
+     hence contradiction by A10;
+    suppose
+A38:  q in S_rtfsm2;
+     set Q' = Q \ {q};
+A39:  now assume
+A40:   Q' = {}; reconsider q as Element of S_rtfsm2 by A38;
+        q is accessible by Def22;
+      then consider w be FinSequence of IAlph such that
+A41:     IS_rtfsm2, w-leads_to q by Def21;
+        set ad_l = IS_rtfsm1 leads_to_under w;
+A42:     now assume
+A43:      ad_l in Q;
+       ad_l <> q by A1,XBOOLE_0:3; hence contradiction by A40,A43,ZFMISC_1:64;
+        end;
+         now assume
+A44:     not ad_l in Q; A45: ad_l in S_rtfsm1 \/ S_rtfsm2 by XBOOLE_0:def 2;
+        reconsider q as Element of S_tfsm;
+        reconsider ad_l as Element of S_tfsm by A1,A45,Def24;
+A46:     final_states_partition tfsm is final by Def15;
+          not ex Y being Element of S_rtfsm st q in Y & ad_l in Y
+        proof assume not thesis;
+          then consider Y be Element of S_rtfsm such that
+A47:       q in Y & ad_l in Y;
+          reconsider Y as Subset of S_tfsm by A4,TARSKI:def 3;
+            Y in S_rtfsm;
+          then Y in final_states_partition tfsm by Def18;
+          then Y misses Q by A5,A44,A47,EQREL_1:def 6;
+          hence contradiction by A7,A47,XBOOLE_0:3;
+        end; then not q, ad_l-are_equivalent by A4,A46,Def14;
+        then consider dseq being FinSequence of IAlph such that
+A48:     (q,dseq)-response <> (ad_l,dseq)-response by Def10;
+        reconsider ad_l2 = ad_l as Element of S_rtfsm1;
+        reconsider q_1 = q as Element of S_rtfsm2;
+A49:     IS_rtfsm1, w -leads_to ad_l2 by Def5;
+       (q,dseq)-response = (q_1,dseq)-response by A1,Th74;
+     then (q_1,dseq)-response <> (ad_l2,dseq)-response by A1,A48,Th72;
+        then (IS_rtfsm2,w^dseq)-response <> (IS_rtfsm1,w^dseq)-response
+                                  by A41,A49,Th27;
+         hence contradiction by A1,Def9;
+       end;
+       hence contradiction by A42;
+     end;
+       now assume
+A50:   Q' <> {};
+A51:   Q' c= Q by XBOOLE_1:36;
+      reconsider Q as Subset of S_tfsm;
+      reconsider Q' as Subset of S_tfsm;
+      consider x being Element of S_tfsm such that
+A52:    x in Q' by A50,SUBSET_1:10;
+A53:  Q' c= S_rtfsm1 \/ S_rtfsm2 by A8,A51,XBOOLE_1:1;
+      per cases by A52,A53,XBOOLE_0:def 2;
+      suppose
+A54:     x in S_rtfsm1;
+        set Q'' = Q' \ {x};
+A55:     now assume
+A56:      Q'' = {};
+A57:      for z being Element of Q holds z = q or z = x proof
+          given z being Element of Q such that
+A58:        z <> q & z <> x; z in Q' by A6,A58,ZFMISC_1:64;
+           hence contradiction by A56,A58,ZFMISC_1:64;
+         end;
+         reconsider q as Element of Q by A7;
+         reconsider x as Element of Q by A52,ZFMISC_1:64;
+           not x in S_rtfsm1 or not q in S_rtfsm2 or
+         ex z being Element of Q st z <> x & z <> q by A2;
+         hence contradiction by A38,A54,A57;
+        end;
+          now assume
+A59:      Q'' <> {};
+A60:      Q'' c= Q' by XBOOLE_1:36;
+         reconsider Q' as Subset of S_tfsm;
+         reconsider Q'' as Subset of S_tfsm;
+         consider y being Element of S_tfsm such that
+A61:      y in Q'' by A59,SUBSET_1:10;
+         A62: Q'' c= S_rtfsm1 \/ S_rtfsm2 by A53,A60,XBOOLE_1:1;
+         per cases by A61,A62,XBOOLE_0:def 2;
+         suppose A63: y in S_rtfsm1;
+          reconsider x as Element of Q by A52,ZFMISC_1:64;
+            y in Q' by A61,ZFMISC_1:64;
+          then reconsider y as Element of Q by ZFMISC_1:64;
+            not x in S_rtfsm1 or not y in S_rtfsm1 or x = y by A1,Th78;
+          hence contradiction by A54,A61,A63,ZFMISC_1:64;
+         suppose
+A64:       y in S_rtfsm2;
+A65:        y in Q' by A61,ZFMISC_1:64;
+          reconsider q as Element of Q by A7;
+          reconsider y as Element of Q by A65,ZFMISC_1:64;
+          not q in S_rtfsm2 or not y in S_rtfsm2 or q = y by A1,Th79;
+          hence contradiction by A38,A64,A65,ZFMISC_1:64;
+        end;
+        hence contradiction by A55;
+      suppose A66: x in S_rtfsm2;
+       reconsider q as Element of Q by A7;
+       reconsider x as Element of Q by A52,XBOOLE_0:def 4;
+          not q in S_rtfsm2 or not x in S_rtfsm2 or q = x by A1,Th79;
+       hence contradiction by A38,A52,A66,ZFMISC_1:64;
+     end;
+     hence contradiction by A39;
+end;
+
+begin :: The minimization theorem
+
+theorem Th81:
+ for tfsm1, tfsm2 being finite non empty Mealy-FSM over IAlph, OAlph
+  ex fsm1, fsm2 being finite non empty Mealy-FSM over IAlph, OAlph st
+    the carrier of fsm1 misses the carrier of fsm2 &
+      fsm1, tfsm1-are_isomorphic & fsm2,tfsm2-are_isomorphic
+proof
+ let tfsm1, tfsm2 be finite non empty Mealy-FSM over IAlph, OAlph;
+      set S_tfsm1 = the carrier of tfsm1, Tr1 = the Tran of tfsm1;
+      set Of1 = the OFun of tfsm1, S_tfsm2 = the carrier of tfsm2;
+      set Tr2 = the Tran of tfsm2, Of2 = the OFun of tfsm2;
+      set S_fsm1 = [:{0}, S_tfsm1:], S_fsm2 = [:{1}, S_tfsm2:];
+     deffunc F(Element of S_fsm1, Element of IAlph) = [ $1`1, Tr1.[$1`2,$2] ];
+     consider T1 be Function of [: S_fsm1, IAlph :], S_fsm1 such that
+A1:   for q being Element of S_fsm1, s being Element of IAlph holds
+            T1.[q,s] = F(q,s) from Lambda2D;
+     deffunc F(Element of S_fsm1, Element of IAlph) = Of1.[$1`2, $2];
+     consider O1 be Function of [: S_fsm1, IAlph :], OAlph such that
+A2:   for q being Element of S_fsm1, s being Element of IAlph holds
+            O1.[q,s] = F(q,s) from Lambda2D;
+     deffunc F(Element of S_fsm2, Element of IAlph) = [ $1`1, Tr2.[$1`2,$2] ];
+     consider T2 be Function of [: S_fsm2, IAlph :], S_fsm2 such that
+A3:   for q being Element of S_fsm2, s being Element of IAlph holds
+            T2.[q,s] = F(q,s) from Lambda2D;
+     deffunc F(Element of S_fsm2, Element of IAlph) = Of2.[$1`2,$2];
+     consider O2 be Function of [: S_fsm2, IAlph :], OAlph such that
+A4:   for q being Element of S_fsm2, s being Element of IAlph holds
+            O2.[q,s] = F(q,s) from Lambda2D;
+     set z = 0, zz = 1, A = {z}, B = {zz};
+     set sS_fsm1 = [: A, S_tfsm1 :];
+     reconsider sT1 = T1 as Function of [: sS_fsm1, IAlph :], sS_fsm1;
+     reconsider sO1 = O1 as Function of [: sS_fsm1, IAlph :], OAlph;
+     reconsider I1 = [ 0, the InitS of tfsm1 ] as Element of S_fsm1 by ZFMISC_1
+:128;
+     set sI1 = I1;
+     take fsm1 = Mealy-FSM (# sS_fsm1, sT1, sO1, sI1 #);
+     reconsider sS_fsm2 = [: B, S_tfsm2 :] as finite non empty set;
+     reconsider sT2 = T2 as Function of [: sS_fsm2, IAlph :], sS_fsm2;
+     reconsider sO2 = O2 as Function of [: sS_fsm2, IAlph :], OAlph;
+     reconsider I2 = [ 1, the InitS of tfsm2 ] as Element of S_fsm2 by ZFMISC_1
+:128;
+     reconsider sI2 = I2 as Element of sS_fsm2;
+     take fsm2 = Mealy-FSM (# sS_fsm2, sT2, sO2, sI2 #);
+A5:   A misses B by ZFMISC_1:17;
+       S_fsm1 /\ S_fsm2 = [: A /\ B, S_tfsm1 /\ S_tfsm2 :] by ZFMISC_1:123
+                .= [: {}, S_tfsm1 /\ S_tfsm2 :] by A5,XBOOLE_0:def 7
+                .= {} by ZFMISC_1:113;
+  hence (the carrier of fsm1) /\ (the carrier of fsm2) = {};
+  thus fsm1, tfsm1-are_isomorphic
+  proof
+    deffunc F(set) = $1`2;
+    consider Tf1 being Function such that
+A6:  dom Tf1 = the carrier of fsm1 &
+    for q being set st q in the carrier of fsm1 holds Tf1.q = F(q)
+      from Lambda;
+A7:  rng Tf1 = S_tfsm1 proof assume A8: not rng Tf1 = S_tfsm1;
+      per cases by A8,XBOOLE_0:def 10;
+      suppose not rng Tf1 c= S_tfsm1;
+       then consider q being set such that
+A9:     q in rng Tf1 & not q in S_tfsm1 by TARSKI:def 3;
+       consider x be set such that
+A10:     x in dom Tf1 & q = Tf1.x by A9,FUNCT_1:def 5;
+        reconsider x2 = x`2 as Element of S_tfsm1 by A6,A10,MCART_1:10;
+          x2 in S_tfsm1; hence contradiction by A6,A9,A10;
+      suppose not S_tfsm1 c= rng Tf1; then consider x being set such that
+A11:   x in S_tfsm1 & not x in rng Tf1 by TARSKI:def 3;
+         0 in {0} by TARSKI:def 1;
+then A12:   [0,x] in sS_fsm1 by A11,ZFMISC_1:106;
+then A13:   Tf1.[0,x] in rng Tf1 by A6,FUNCT_1:def 5; Tf1.[0,x]=[0,x]`2 by A6,
+A12;
+       hence contradiction by A11,A13,MCART_1:7;
+    end; then reconsider Tf1s = Tf1 as Function of
+         the carrier of fsm1, the carrier of tfsm1 by A6,FUNCT_2:3;
+    take Tf1s;
+      now let x1, x2 be set; assume
+A14:   x1 in dom Tf1 & x2 in dom Tf1 & Tf1.x1 = Tf1.x2;
+then A15:  x1 = [x1`1, x1`2] & x2 = [x2`1,x2`2] by A6,MCART_1:23;
+      A16: Tf1.x1 = x1`2 & Tf1.x2 = x2`2 by A6,A14;
+A17:   x1`1 in A by A6,A14,MCART_1:10; x2`1 in A by A6,A14,MCART_1:10;
+      then x1`1 = 0 & x2`1 = 0 by A17,TARSKI:def 1;
+      hence x1 = x2 by A14,A15,A16;
+    end; then Tf1s is one-to-one onto by A7,FUNCT_1:def 8,FUNCT_2:def 3;
+    hence Tf1s is bijective by FUNCT_2:def 4;
+    thus Tf1s.the InitS of fsm1 = sI1`2 by A6
+              .= the InitS of tfsm1 by MCART_1:7;
+      now let q be State of fsm1, s be Element of IAlph;
+A18:   q`1 in A & q`2 in S_tfsm1 by MCART_1:10;
+      reconsider q1 = q`2 as Element of S_tfsm1 by MCART_1:10;
+      reconsider Tq1 = Tr1.[q1, s] as Element of S_tfsm1;
+A19:  [q`1,Tq1] in [: A, S_tfsm1 :] by A18,ZFMISC_1:106;
+      thus Tf1s.((the Tran of fsm1).[q, s]) = Tf1s.[q`1, Tr1.[q`2, s]] by A1
+       .= [q`1, Tr1.[q`2, s]]`2 by A6,A19 .= Tr1.[q`2, s] by MCART_1:7
+       .= (the Tran of tfsm1).[Tf1s.q, s] by A6;
+      thus (the OFun of fsm1).[q,s] =
+ Of1.[q`2, s] by A2 .= (the OFun of tfsm1).[Tf1s.q, s] by A6;
+    end;
+    hence for q being State of fsm1, s being Element of IAlph holds
+        Tf1s.((the Tran of fsm1).[q, s]) = (the Tran of tfsm1).[Tf1s.q, s] &
+        (the OFun of fsm1).[q,s] = (the OFun of tfsm1).[Tf1s.q, s];
+  end;
+    deffunc F(set) = $1`2;
+   consider Tf1 being Function such that
+A20:  dom Tf1 = the carrier of fsm2 &
+    for q being set st q in the carrier of fsm2 holds Tf1.q = F(q) from Lambda;
+A21:rng Tf1 = S_tfsm2 proof assume A22:not rng Tf1 = S_tfsm2;
+      per cases by A22,XBOOLE_0:def 10;
+      suppose not rng Tf1 c= S_tfsm2; then consider q being set such that
+A23:     q in rng Tf1 & not q in S_tfsm2 by TARSKI:def 3;
+       consider x be set such that
+A24:   x in dom Tf1 & q = Tf1.x by A23,FUNCT_1:def 5;
+       reconsider x2 = x`2 as Element of S_tfsm2 by A20,A24,MCART_1:10; x2 in
+S_tfsm2; hence contradiction by A20,A23,A24;
+      suppose not S_tfsm2 c= rng Tf1; then consider x being set such that
+A25:     x in S_tfsm2 & not x in rng Tf1 by TARSKI:def 3;
+         1 in {1} by TARSKI:def 1;
+then A26:   [1,x] in sS_fsm2 by A25,ZFMISC_1:106;
+then A27:    Tf1.[1,x] in rng Tf1 by A20,FUNCT_1:def 5;
+          Tf1.[1,x] = [1,x]`2 by A20,A26;
+       hence contradiction by A25,A27,MCART_1:7;
+    end; then reconsider Tf1s = Tf1 as Function of
+              the carrier of fsm2, the carrier of tfsm2 by A20,FUNCT_2:3;
+    take Tf1s;
+      now let x1, x2 be set; assume
+A28:   x1 in dom Tf1 & x2 in dom Tf1 & Tf1.x1 = Tf1.x2;
+then A29:  x1 = [x1`1, x1`2] & x2 = [x2`1,x2`2] by A20,MCART_1:23;
+      A30: Tf1.x1 = x1`2 & Tf1.x2 = x2`2 by A20,A28;
+A31:   x1`1 in B by A20,A28,MCART_1:10; x2`1 in B by A20,A28,MCART_1:10;
+      then x1`1 = 1 & x2`1 = 1 by A31,TARSKI:def 1;
+      hence x1 = x2 by A28,A29,A30;
+    end; then Tf1s is one-to-one onto by A21,FUNCT_1:def 8,FUNCT_2:def 3;
+    hence Tf1s is bijective by FUNCT_2:def 4;
+    thus Tf1s.the InitS of fsm2 = sI2`2 by A20
+      .= the InitS of tfsm2 by MCART_1:7;
+      now let q be State of fsm2, s be Element of IAlph;
+A32:   q`1 in B & q`2 in S_tfsm2 by MCART_1:10;
+      reconsider q1 = q`2 as Element of S_tfsm2 by MCART_1:10;
+      set Tq1 = Tr2.[q1, s];
+A33:  [q`1,Tq1] in [: B, S_tfsm2 :] by A32,ZFMISC_1:106;
+      thus Tf1s.((the Tran of fsm2).[q, s]) = Tf1s.[q`1, Tr2.[q`2, s]] by A3
+           .= [q`1, Tr2.[q`2, s]]`2 by A20,A33.= Tr2.[q`2, s] by MCART_1:7
+           .= (the Tran of tfsm2).[Tf1s.q, s] by A20;
+      thus (the OFun of fsm2).[q,s] = Of2.[q`2, s] by A4
+      .= (the OFun of tfsm2).[Tf1s.q, s] by A20;
+    end;
+    hence thesis;
+ end;
+
+theorem Th82:
+  tfsm1, tfsm2-are_isomorphic implies tfsm1, tfsm2-are_equivalent proof assume
+    tfsm1, tfsm2-are_isomorphic; then consider Tf such that
+A1:  Tf is bijective & Tf.the InitS of tfsm1 = the InitS of tfsm2 &
+     for q being Element of tfsm1, s being Element of IAlph
+       holds
+       Tf.((the Tran of tfsm1).[q, s]) = (the Tran of tfsm2).[Tf.q, s] &
+       (the OFun of tfsm1).[q,s] = (the OFun of tfsm2).[Tf.q, s]
+        by Def19;
+      now let w1 be FinSequence of IAlph;
+      set rw1 = (the InitS of tfsm1,w1)-response;
+      set rw2 = (the InitS of tfsm2, w1)-response;
+      set aw1 = (the InitS of tfsm1,w1)-admissible;
+      set aw2 = (the InitS of tfsm2,w1)-admissible;
+A2:for k being Nat st 1<=k & k<= len w1 +1 holds Tf.(aw1.k) = aw2.k proof
+   defpred P[Nat] means
+     1 <= $1 & $1 <= len w1 + 1 implies Tf.(aw1.$1) = aw2.$1;
+A3:   P[0];
+A4:   for k being Nat st P[k] holds P[k + 1]
+      proof let k be Nat; assume
+A5:      1 <= k & k <= len w1 + 1 implies Tf.(aw1.k) = aw2.k; assume
+A6:      1 <= (k+1) & (k+1) <= len w1 + 1;
+         A7: 0 = k or 0 < k & 0+1 = 1 by NAT_1:19;
+         per cases by A7,NAT_1:38;
+         suppose
+A8:       0 = k;
+          hence Tf.(aw1.(k+1)) = the InitS of tfsm2 by A1,Def2
+                .= aw2.(k+1) by A8,Def2;
+         suppose 1 <= k;
+then A9:        1 <= k & k <= len w1 by A6,REAL_1:53;
+           then consider w1k be Element of IAlph,
+                    qk, qk1 be Element of tfsm1 such that
+A10:        w1k= w1.k & qk = aw1.k & qk1 = aw1.(k+1) & w1k-succ_of qk = qk1
+                    by Def2;
+           consider w2k be Element of IAlph,
+                    q2k, q2k1 be Element of tfsm2 such that
+A11:        w2k= w1.k & q2k = aw2.k & q2k1 = aw2.(k+1) &
+           w2k-succ_of q2k = q2k1 by A9,Def2;
+           A12: len w1 <= len w1 + 1 by NAT_1:29;
+           thus Tf.(aw1.(k+1))
+                   = Tf.((the Tran of tfsm1).[qk, w1k]) by A10,Def1
+                  .= (the Tran of tfsm2).[q2k, w2k] by A1,A5,A9,A10,A11,A12,
+AXIOMS:22
+                  .= aw2.(k+1) by A11,Def1;
+       end;
+       thus for i being Nat holds P[i] from Ind (A3, A4);
+      end;
+A13:   len rw1 = len w1 by Def6 .= len rw2 by Def6;
+        now let k be Nat; assume 1 <= k & k <= len rw1;
+         then 1 <= k & k <= len w1 by Def6;
+then A14:      k in dom w1 by FINSEQ_3:27;
+         then k in Seg len w1 by FINSEQ_1:def 3;
+         then k in Seg (len w1 + 1) by FINSEQ_2:9;
+         then k in Seg len aw1 by Def2;
+then A15:      k in dom aw1 by FINSEQ_1:def 3;
+         then 1 <= k & k <= len aw1 by FINSEQ_3:27;
+then A16:      1 <= k & k <= len w1 + 1 by Def2;
+A17:      aw1.k is Element of tfsm1 &
+         w1.k is Element of IAlph by A14,A15,FINSEQ_2:13;
+         thus rw2.k = (the OFun of tfsm2).[aw2.k, w1.k] by A14,Def6
+            .= (the OFun of tfsm2).[Tf.(aw1.k), w1.k] by A2,A16
+            .= (the OFun of tfsm1).[aw1.k, w1.k] by A1,A17
+            .= rw1.k by A14,Def6;
+      end;
+      hence rw1 = rw2 by A13,FINSEQ_1:18;
+    end;
+    hence thesis by Def9;
+end;
+
+theorem Th83:
+   the carrier of CRtfsm1 misses the carrier of CRtfsm2 &
+   CRtfsm1, CRtfsm2-are_equivalent
+ implies CRtfsm1, CRtfsm2-are_isomorphic
+proof set rtfsm1 = CRtfsm1; set rtfsm2 = CRtfsm2; assume
+A1: (the carrier of rtfsm1) misses (the carrier of rtfsm2) &
+   rtfsm1, rtfsm2-are_equivalent;
+   set UN = rtfsm1-Mealy_union rtfsm2;
+   set RUN = the_reduction_of UN; set SRUN = the carrier of RUN;
+   set S_rtfsm1 = the carrier of rtfsm1; set S_rtfsm2 = the carrier of rtfsm2;
+A2: SRUN = final_states_partition UN by Def18;
+   defpred P[set, set] means
+   ex part being Element of SRUN st $1 in part & $2 in part \ { $1 };
+A3: for x,y1,y2 being set st x in S_rtfsm1 & P[x,y1] & P[x,y2] holds y1 = y2
+    proof let x, y1, y2 be set; assume
+A4:   x in S_rtfsm1 & P[x,y1] & P[x,y2];
+      then reconsider x' = x as Element of S_rtfsm1;
+      consider part1 being Element of SRUN such that
+A5:     x' in part1 & y1 in part1 \ { x' } by A4;
+      consider part2 being Element of SRUN such that
+A6:     x' in part2 & y2 in part2 \ { x' } by A4; assume
+A7:   y1 <> y2;
+A8:   y1 in part1 by A5,ZFMISC_1:64;
+        part1 is Subset of UN by A2,TARSKI:def 3;
+      then part1 is Subset of S_rtfsm1 \/ S_rtfsm2 by Def24;
+then A9:    y1 in S_rtfsm1 or y1 in S_rtfsm2 by A8,XBOOLE_0:def 2;
+A10:    not y1 in S_rtfsm1 proof assume
+A11:    y1 in S_rtfsm1; reconsider y1 as Element of part1 by A5,ZFMISC_1:64;
+        reconsider x' as Element of part1 by A5;
+          y1 <> x' by A5,ZFMISC_1:64; hence contradiction by A1,A11,Th78;
+      end;
+A12:   y2 in part2 by A6,ZFMISC_1:64;
+        part2 is Subset of UN by A2,TARSKI:def 3;
+      then part2 is Subset of S_rtfsm1 \/ S_rtfsm2 by Def24;
+then A13:  y2 in S_rtfsm1 or y2 in S_rtfsm2 by A12,XBOOLE_0:def 2;
+A14:    not y2 in S_rtfsm1 proof assume
+A15:     y2 in S_rtfsm1; reconsider y2 as Element of part2 by A6,ZFMISC_1:64;
+        reconsider x' as Element of part2 by A6; y2 <> x' by A6,ZFMISC_1:64;
+        hence contradiction by A1,A15,Th78;
+      end;
+A16:  part1 is Subset of UN by A2,TARSKI:def 3;
+        part2 is Subset of UN by A2,TARSKI:def 3;
+      then part1 = part2 or part1 misses part2 by A2,A16,EQREL_1:def 6;
+      hence contradiction
+        by A1,A5,A6,A7,A8,A9,A10,A12,A13,A14,Th79,XBOOLE_0:3;
+    end;
+A17: for x being set st x in S_rtfsm1 ex y being set st P[x,y] proof
+     let x be set; assume
+A18:   x in S_rtfsm1; then x in S_rtfsm1 \/ S_rtfsm2 by XBOOLE_0:def 2;
+then A19:    x in the carrier of UN by Def24;
+        union SRUN= the carrier of UN by A2,EQREL_1:def 6;
+      then consider part being set such that
+A20:  x in part & part in SRUN by A19,TARSKI:def 4;
+      reconsider part as Element of SRUN by A20;
+      set xs = { x };
+      consider p, y be Element of part such that
+A21:       p in S_rtfsm1 & y in S_rtfsm2 &
+        for z being Element of part holds z = p or z = y by A1,Th80;
+          x <> y by A1,A18,A21,XBOOLE_0:3;
+then A22:    y in part \ xs by A20,ZFMISC_1:64;
+      set IT = y;
+      take IT;
+      thus thesis by A20,A22;
+    end;
+   consider f being Function such that
+A23: dom f = S_rtfsm1 & for x being set st x in S_rtfsm1 holds P[x,f.x]
+                                                      from FuncEx( A3,A17 );
+A24: f is one-to-one proof
+      now let x1, x2 be set; assume
+A25:  x1 in dom f & x2 in dom f & f.x1 = f.x2; assume
+A26:  x1 <> x2; consider part1 be Element of SRUN such that
+A27:  x1 in part1 & f.x1 in part1 \ { x1 } by A23,A25;
+      consider part2 be Element of SRUN such that
+A28:  x2 in part2 & f.x2 in part2 \ { x2 } by A23,A25;
+A29:  f.x1 in part1 by A27,ZFMISC_1:64;
+A30:  f.x1 in part2 by A25,A28,ZFMISC_1:64;
+A31:  part1 is Subset of UN by A2,TARSKI:def 3;
+        part2 is Subset of UN by A2,TARSKI:def 3;
+      then part1 = part2 or part1 misses part2 by A2,A31,EQREL_1:def 6;
+      hence contradiction by A1,A23,A25,A26,A27,A28,A29,A30,Th78,XBOOLE_0:3;
+    end;
+    hence thesis by FUNCT_1:def 8;
+   end;
+A32:rng f = S_rtfsm2 proof
+      now assume
+A33:   not rng f c= S_rtfsm2 or not S_rtfsm2 c= rng f;
+      per cases by A33;
+      suppose not rng f c= S_rtfsm2; then consider y1 being set such that
+A34:     y1 in rng f & not y1 in S_rtfsm2 by TARSKI:def 3;
+       consider x1 being set such that
+A35:     x1 in S_rtfsm1 & y1 = f.x1 by A23,A34,FUNCT_1:def 5;
+       consider part1 be Element of SRUN such that
+A36:     x1 in part1 & f.x1 in part1 \ { x1 } by A23,A35;
+A37:    y1 in part1 by A35,A36,ZFMISC_1:64;
+         part1 is Subset of UN by A2,TARSKI:def 3;
+       then A38: part1 is Subset of S_rtfsm1 \/ S_rtfsm2 by Def24;
+A39:    y1 is Element of part1 by A35,A36,ZFMISC_1:64;
+         now assume
+A40:     y1 in S_rtfsm1; y1 <> x1 by A35,A36,ZFMISC_1:64;
+         hence contradiction by A1,A35,A36,A39,A40,Th78;
+       end;
+       hence contradiction by A34,A37,A38,XBOOLE_0:def 2;
+      suppose not S_rtfsm2 c= rng f; then consider y1 being set such that
+A41:     y1 in S_rtfsm2 & not y1 in rng f by TARSKI:def 3;
+         y1 in S_rtfsm1 \/ S_rtfsm2 by A41,XBOOLE_0:def 2;
+then A42:    y1 in the carrier of UN by Def24;
+         union SRUN = the carrier of UN by A2,EQREL_1:def 6;
+       then consider Z being set such that
+A43:     y1 in Z & Z in SRUN by A42,TARSKI:def 4;
+       reconsider Z as Element of SRUN by A43;
+       consider q1, q2 being Element of Z such that
+A44:     q1 in S_rtfsm1 & q2 in S_rtfsm2 &
+        for q being Element of Z holds q = q1 or q = q2 by A1,Th80;
+       consider F being Element of SRUN such that
+A45:     q1 in F & f.q1 in F \ {q1} by A23,A44;
+A46:    Z is Subset of UN by A2,TARSKI:def 3;
+         F is Subset of UN by A2,TARSKI:def 3;
+    then A47: Z = F or Z misses F by A2,A46,EQREL_1:def 6;
+A48:    f.q1 in F by A45,ZFMISC_1:64;
+         now assume
+A49:     y1 <> f.q1;
+          Z is Subset of S_rtfsm1 \/ S_rtfsm2 by A46,Def24;
+then A50:     f.q1 in S_rtfsm1 or f.q1 in S_rtfsm2 by A43,A45,A47,A48,XBOOLE_0:
+3,def 2;
+          now assume
+A51:      f.q1 in S_rtfsm1;
+A52:      f.q1 is Element of Z by A43,A45,A47,XBOOLE_0:3,ZFMISC_1:64;
+            f.q1 <> q1 by A45,ZFMISC_1:64;
+          hence contradiction by A1,A44,A51,A52,Th78;
+        end; hence contradiction by A1,A41,A43,A45,A47,A48,A49,A50,Th79,
+XBOOLE_0:3;
+       end;
+       hence contradiction by A23,A41,A44,FUNCT_1:def 5;
+    end; hence thesis by XBOOLE_0:def 10;
+   end;
+   then reconsider f as Function of S_rtfsm1, S_rtfsm2 by A23,FUNCT_2:3;
+     f is one-to-one onto by A24,A32,FUNCT_2:def 3;
+then A53: f is bijective by FUNCT_2:def 4;
+A54: f.the InitS of rtfsm1 = the InitS of rtfsm2 proof assume
+A55:  f.the InitS of rtfsm1 <> the InitS of rtfsm2;
+     consider Q being Element of SRUN such that
+A56:   the InitS of rtfsm1 in Q & the InitS of rtfsm2 in Q &
+      Q = the InitS of RUN by A1,Th75;
+     consider part being Element of SRUN such that
+A57:   the InitS of rtfsm1 in part &
+      f.the InitS of rtfsm1 in part \ { the InitS of rtfsm1 } by A23;
+A58:   Q is Subset of UN by A2,TARSKI:def 3;
+       part is Subset of UN by A2,TARSKI:def 3;
+     then Q = part or Q misses part by A2,A58,EQREL_1:def 6;
+then f.the InitS of rtfsm1 is Element of Q by A56,A57,XBOOLE_0:3,ZFMISC_1:64;
+      hence contradiction by A1,A55,A56,Th79;
+   end;
+  for q being State of rtfsm1, s being Element of IAlph holds
+   f.((the Tran of rtfsm1).[q, s]) = (the Tran of rtfsm2).[f.q, s] &
+   (the OFun of rtfsm1).[q,s] = (the OFun of rtfsm2).[f.q, s] proof
+     let q be State of rtfsm1, s be Element of IAlph;
+A59:   the carrier of UN = S_rtfsm1 \/ S_rtfsm2 by Def24;
+      then reconsider q' = q as Element of UN by XBOOLE_0:def 2;
+        f.q in rng f by A23,FUNCT_1:def 5;
+      then reconsider fq' = f.q' as Element of UN by A59,
+XBOOLE_0:def 2;
+A60:   final_states_partition UN is final by Def15;
+      consider part be Element of SRUN such that
+A61:    q in part & f.q in part \ { q } by A23;
+        f.q in part by A61,ZFMISC_1:64;
+then A62:    q', fq'-are_equivalent by A2,A60,A61,Def14;
+   set qu = (the Tran of UN).[q',s], qfu = (the Tran of UN).[fq',s];
+   set q1 = (the Tran of rtfsm1).[q,s], fq = f.q;
+   set q2 = (the Tran of rtfsm2).[fq,s];
+        qu,qfu-are_equivalent by A62,Th36;
+      then consider X being Element of SRUN such that
+A63:   qu in X & qfu in X by A2,A60,Def14;
+A64:   dom (the Tran of rtfsm1) = [: S_rtfsm1,IAlph :] by FUNCT_2:def 1;
+A65:  (the carrier of rtfsm1) /\ (the carrier of rtfsm2) = {} by A1,XBOOLE_0:
+def 7;
+     dom (the Tran of rtfsm1) /\ dom (the Tran of rtfsm2)
+         = [: S_rtfsm1,IAlph :] /\ [: S_rtfsm2,IAlph :] by A64,FUNCT_2:def 1
+        .= [: {} ,IAlph :] by A65,ZFMISC_1:122 .= {} by ZFMISC_1:113;
+then A66:     dom (the Tran of rtfsm1) misses dom (the Tran of rtfsm2)
+         by XBOOLE_0:def 7;
+A67:   qu = ((the Tran of rtfsm1)+*(the Tran of rtfsm2)).[q',s] by Def24
+        .=q1 by A64,A66,FUNCT_4:17;
+A68:   dom (the Tran of rtfsm2) = [: S_rtfsm2,IAlph :] by FUNCT_2:def 1;
+A69:   qfu = ((the Tran of rtfsm1)+*(the Tran of rtfsm2)).[fq',s] by Def24
+       .= q2 by A68,FUNCT_4:14;
+       consider XX be Element of SRUN such that
+A70:     q1 in XX & f.q1 in XX \ { q1 } by A23;
+A71:    f.q1 in XX by A70,ZFMISC_1:64;
+A72:    X is Subset of UN by A2,TARSKI:def 3;
+        now assume
+A73:    f.q1 <> q2;
+         XX is Subset of UN by A2,TARSKI:def 3;
+       then X = XX or X misses XX by A2,A72,EQREL_1:def 6;
+       hence contradiction by A1,A63,A67,A69,A70,A71,A73,Th79,XBOOLE_0:3;
+      end;
+      hence f.((the Tran of rtfsm1).[q, s]) = (the Tran of rtfsm2).[f.q, s];
+A74:   dom (the OFun of rtfsm1) = [: S_rtfsm1,IAlph :] by FUNCT_2:def 1;
+A75:   dom (the OFun of rtfsm2) = [: S_rtfsm2,IAlph :] by FUNCT_2:def 1;
+      then dom (the OFun of rtfsm1) /\ dom (the OFun of rtfsm2)
+         = [: S_rtfsm1 /\ S_rtfsm2, IAlph :] by A74,ZFMISC_1:122
+        .= {} by A65,ZFMISC_1:113;
+      then dom (the OFun of rtfsm1) misses dom (the OFun of rtfsm2) by XBOOLE_0
+:def 7;
+      hence (the OFun of rtfsm1).[q,s]
+= ((the OFun of rtfsm1) +* (the OFun of rtfsm2)).[q,s] by A74,FUNCT_4:17
+.= (the OFun of UN).[q',s] by Def24 .= (the OFun of UN).[fq',s] by A62,Th36
+.= ((the OFun of rtfsm1) +* (the OFun of rtfsm2)).[f.q,s] by Def24
+.= (the OFun of rtfsm2).[f.q, s] by A75,FUNCT_4:14;
+   end;
+   hence thesis by A53,A54,Def19;
+end;
+
+theorem Th84:
+  Ctfsm1, Ctfsm2-are_equivalent implies
+  the_reduction_of Ctfsm1, the_reduction_of Ctfsm2-are_isomorphic
+proof assume
+A1: Ctfsm1, Ctfsm2-are_equivalent;
+   set rtfsm1 = the_reduction_of Ctfsm1; set rtfsm2 = the_reduction_of Ctfsm2;
+   consider fsm1, fsm2 being finite non empty Mealy-FSM
+     over IAlph, OAlph such that
+A2:  (the carrier of fsm1) misses (the carrier of fsm2)
+    & fsm1,rtfsm1-are_isomorphic & fsm2,rtfsm2-are_isomorphic by Th81;
+   set IS_fsm1= the InitS of fsm1, IS_fsm2= the InitS of fsm2;
+   set IS_rtfsm1= the InitS of rtfsm1, IS_rtfsm2= the InitS of rtfsm2;
+   set S_fsm1 = the carrier of fsm1, S_fsm2 = the carrier of fsm2;
+   set S_rtfsm1 = the carrier of rtfsm1, S_rtfsm2 = the carrier of rtfsm2;
+A3: rtfsm1 is connected by Th66;
+A4: fsm1 is connected proof assume not fsm1 is connected;
+    then consider q1 being Element of S_fsm1 such that
+A5: not q1 is accessible by Def22;
+   consider Tf being Function of the carrier of fsm1, S_rtfsm1 such that
+A6:  Tf is bijective & Tf.the InitS of fsm1 = IS_rtfsm1 &
+      for q being State of fsm1, s being Element of IAlph holds
+        Tf.((the Tran of fsm1).[q, s]) = (the Tran of rtfsm1).[Tf.q, s] &
+           (the OFun of fsm1).[q,s] = (the OFun of rtfsm1).[Tf.q, s]
+                                          by A2,Def19;
+A7: Tf is one-to-one by A6,FUNCT_2:def 4;
+    set q = Tf.q1;
+      q is accessible by A3,Def22;
+    then consider w being FinSequence of IAlph such that
+A8: IS_rtfsm1,w-leads_to q by Def21;
+A9: 1 <= len w + 1 & len w + 1 <= len w + 1 by NAT_1:29;
+    then A10: Tf.((IS_fsm1,w)-admissible.(len w + 1)) =
+                   (IS_rtfsm1,w)-admissible.(len w + 1) by A6,Th60;
+A11: dom Tf = S_fsm1 by FUNCT_2:def 1;
+      len (IS_fsm1,w)-admissible = len w + 1 by Def2;
+    then len w + 1 in Seg (len (IS_fsm1,w)-admissible) by A9,FINSEQ_1:3;
+    then len w + 1 in dom (IS_fsm1,w)-admissible by FINSEQ_1:def 3;
+then A12: (the InitS of fsm1,w)-admissible.(len w + 1) in dom Tf by A11,
+FINSEQ_2:13;
+      Tf".(Tf.((IS_fsm1,w)-admissible.(len w + 1))) = Tf".q by A8,A10,Def3;
+    then (IS_fsm1,w)-admissible.(len w + 1)
+     = Tf".(Tf.q1) by A7,A12,FUNCT_1:56 .= q1 by A7,A11,FUNCT_1:56;
+    then IS_fsm1,w-leads_to q1 by Def3;
+    hence contradiction by A5,Def21;
+   end;
+A13: rtfsm2 is connected by Th66;
+A14: fsm2 is connected proof assume not fsm2 is connected;
+    then consider q1 being Element of S_fsm2 such that
+A15: not q1 is accessible by Def22;
+   consider Tf being Function of S_fsm2, S_rtfsm2 such that
+A16:  Tf is bijective & Tf.IS_fsm2 = IS_rtfsm2 &
+      for q being State of fsm2, s being Element of IAlph holds
+        Tf.((the Tran of fsm2).[q, s]) = (the Tran of rtfsm2).[Tf.q, s] &
+           (the OFun of fsm2).[q,s] = (the OFun of rtfsm2).[Tf.q, s]
+                                          by A2,Def19;
+A17: Tf is one-to-one by A16,FUNCT_2:def 4;
+    set q = Tf.q1;
+      q is accessible by A13,Def22;
+    then consider w being FinSequence of IAlph such that
+A18: IS_rtfsm2,w-leads_to q by Def21;
+A19: 1 <= len w + 1 & len w + 1 <= len w + 1 by NAT_1:29;
+   then A20: Tf.((IS_fsm2,w)-admissible.(len w + 1)) =
+                   (IS_rtfsm2,w)-admissible.(len w + 1) by A16,Th60;
+A21: dom Tf = S_fsm2 by FUNCT_2:def 1;
+      len (IS_fsm2,w)-admissible = len w + 1 by Def2;
+    then len w + 1 in Seg (len (IS_fsm2,w)-admissible) by A19,FINSEQ_1:3;
+    then len w + 1 in dom (IS_fsm2,w)-admissible by FINSEQ_1:def 3;
+then A22: (IS_fsm2,w)-admissible.(len w + 1) in dom Tf by A21,FINSEQ_2:13;
+      Tf".(Tf.((IS_fsm2,w)-admissible.(len w + 1))) = Tf".q by A18,A20,Def3;
+    then (IS_fsm2,w)-admissible.(len w + 1)
+     = Tf".(Tf.q1) by A17,A22,FUNCT_1:56 .= q1 by A17,A21,FUNCT_1:56;
+    then IS_fsm2,w-leads_to q1 by Def3;
+    hence contradiction by A15,Def21;
+   end;
+A23:rtfsm1,Ctfsm1-are_equivalent & rtfsm2,Ctfsm2-are_equivalent by Th58;
+     fsm1,rtfsm1-are_equivalent & fsm2,rtfsm2-are_equivalent by A2,Th82;
+then A24: fsm1,Ctfsm1-are_equivalent & fsm2,Ctfsm2-are_equivalent by A23,Th30;
+ then fsm1,Ctfsm2-are_equivalent by A1,Th30;
+   then A25: fsm1,fsm2-are_equivalent by A24,Th30;
+   reconsider fsm1, fsm2 as reduced (finite non empty Mealy-FSM
+     over IAlph,OAlph) by A2,Th65;
+     fsm1, fsm2-are_isomorphic by A2,A4,A14,A25,Th83;
+   then fsm1,rtfsm2-are_isomorphic by A2,Th59;
+   hence thesis by A2,Th59;
+end;
+
+theorem
+   for M1, M2 being connected reduced
+   (finite non empty Mealy-FSM over IAlph, OAlph)
+  holds M1, M2-are_isomorphic iff M1, M2-are_equivalent proof
+ let M1, M2 be connected reduced
+   (finite non empty Mealy-FSM over IAlph, OAlph);
+ thus M1, M2-are_isomorphic implies M1, M2-are_equivalent by Th82;
+ assume M1, M2-are_equivalent;
+then A1: the_reduction_of M1, the_reduction_of M2-are_isomorphic by Th84;
+A2: M1, the_reduction_of M1-are_isomorphic &
+   M2, the_reduction_of M2-are_isomorphic by Th64;
+   then M1, the_reduction_of M2-are_isomorphic by A1,Th59;
+ hence thesis by A2,Th59;
+end;
+

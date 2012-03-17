@@ -1,0 +1,1489 @@
+:: On the Lattice of Subgroups of a Group
+::  by Janusz Ganczarski
+::
+:: Received May 23, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary REALSET1, GROUP_2, BOOLE, GROUP_3, GROUP_4, LATTICES, GROUP_6,
+      RELAT_1, FUNCT_1, GROUP_1, SETFAM_1, RLSUB_2, BHSP_3, LATTICE3, VECTSP_8;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, RELAT_1, SETFAM_1,
+      PARTFUN1, FUNCT_2, BINOP_1, STRUCT_0, LATTICES, RLVECT_1, VECTSP_1,
+      GROUP_1, GROUP_2, GROUP_3, GROUP_4, GROUP_6, LATTICE3, LATTICE4,
+      VECTSP_8;
+ constructors DOMAIN_1, BINOP_1, GROUP_4, GROUP_6, LATTICE3, LATTICE4,
+      VECTSP_8;
+ clusters STRUCT_0, GROUP_1, GROUP_3, RELSET_1, SUBSET_1, GROUP_4, FUNCT_2,
+      PARTFUN1, XBOOLE_0;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, LATTICE3, VECTSP_8, XBOOLE_0;
+ theorems TARSKI, FUNCT_1, SUBSET_1, SETFAM_1, FUNCT_2, LATTICES, RLVECT_1,
+      GROUP_2, GROUP_3, GROUP_4, GROUP_6, LATTICE3, VECTSP_8, RELAT_1,
+      XBOOLE_0, XBOOLE_1;
+ schemes FUNCT_2;
+
+begin
+
+theorem Th1:
+ for G being Group
+ for H1, H2 being Subgroup of G holds
+ the carrier of H1 /\ H2 = (the carrier of H1) /\ the carrier of H2
+  proof
+   let G be Group;
+   let H1, H2 be Subgroup of G;
+     the carrier of H2 = carr H2 by GROUP_2:def 9;
+   then (the carrier of H1) /\ the carrier of H2 = carr H1 /\
+ carr H2 by GROUP_2:def 9
+;
+   hence thesis by GROUP_2:def 10;
+  end;
+
+theorem Th2:
+ for G being Group
+ for h being set holds
+  h in Subgroups G iff ex H being strict Subgroup of G st h = H
+   proof
+    let G be Group;
+    let h be set;
+    thus h in Subgroups G implies ex H being strict Subgroup of G st h = H
+     proof
+      assume h in Subgroups G;
+      then h is strict Subgroup of G by GROUP_3:def 1;
+      hence thesis;
+     end;
+    thus (ex H being strict Subgroup of G st h = H) implies h in Subgroups G
+     by GROUP_3:def 1;
+   end;
+
+theorem Th3:
+ for G being Group
+ for A being Subset of G
+ for H being strict Subgroup of G st
+  A = the carrier of H holds gr A = H
+   proof
+    let G be Group;
+    let A be Subset of G;
+    let H be strict Subgroup of G such that
+A1: A = the carrier of H;
+      gr carr H = H by GROUP_4:40;
+    hence thesis by A1,GROUP_2:def 9;
+   end;
+
+theorem Th4:
+ for G being Group
+ for H1, H2 being Subgroup of G
+ for A being Subset of G st
+  A = (the carrier of H1) \/ the carrier of H2 holds
+   H1 "\/" H2 = gr A
+    proof
+     let G be Group;
+     let H1, H2 be Subgroup of G;
+     let A be Subset of G such that
+A1:  A = (the carrier of H1) \/ the carrier of H2;
+       the carrier of H2 = carr H2 by GROUP_2:def 9;
+     then A = carr H1 \/ carr H2 by A1,GROUP_2:def 9;
+     hence thesis by GROUP_4:def 10;
+    end;
+
+theorem Th5:
+ for G being Group
+ for H1, H2 being Subgroup of G
+ for g being Element of G holds
+  g in H1 or g in H2 implies g in H1 "\/" H2
+   proof
+    let G be Group;
+    let H1, H2 be Subgroup of G;
+    let g be Element of G;
+    assume
+A1: g in H1 or g in H2;
+       now per cases by A1;
+      suppose
+         g in H1;
+then A2:    g in the carrier of H1 by RLVECT_1:def 1;
+         the carrier of H1 c= the carrier of G &
+       the carrier of H2 c= the carrier of G by GROUP_2:def 5;
+       then reconsider A = (the carrier of H1) \/ the carrier of H2 as
+        Subset of G by XBOOLE_1:8;
+         g in A by A2,XBOOLE_0:def 2;
+       then g in gr A by GROUP_4:38;
+      hence thesis by Th4;
+      suppose
+         g in H2;
+then A3:    g in the carrier of H2 by RLVECT_1:def 1;
+         the carrier of H1 c= the carrier of G &
+       the carrier of H2 c= the carrier of G by GROUP_2:def 5;
+       then reconsider A = (the carrier of H1) \/ the carrier of H2 as
+        Subset of G by XBOOLE_1:8;
+         g in A by A3,XBOOLE_0:def 2;
+       then g in gr A by GROUP_4:38;
+      hence thesis by Th4;
+     end;
+    hence thesis;
+   end;
+
+theorem
+   for G1, G2 being Group
+ for f being Homomorphism of G1, G2
+  for H1 being Subgroup of G1 holds
+   ex H2 being strict Subgroup of G2 st
+    the carrier of H2 = f.:the carrier of H1
+     proof
+      let G1, G2 be Group;
+      let f be Homomorphism of G1, G2;
+      let H1 be Subgroup of G1;
+A1:   dom f = the carrier of G1 by FUNCT_2:def 1;
+        1.G1 in H1 by GROUP_2:55;
+then A2:   1.G1 in the carrier of H1 by RLVECT_1:def 1;
+      reconsider y = f.1.G1 as Element of G2;
+A3:   y in f.:the carrier of H1 by A1,A2,FUNCT_1:def 12;
+A4:   for g being Element of G2 st
+      g in f.:the carrier of H1 holds
+      g" in f.:the carrier of H1
+       proof
+        let g be Element of G2; assume
+          g in f.:the carrier of H1;
+        then consider x being Element of G1 such that
+A5:     x in the carrier of H1 & g = f.x by FUNCT_2:116;
+          x in H1 by A5,RLVECT_1:def 1;
+        then x" in H1 by GROUP_2:60;
+then A6:     x" in the carrier of H1 by RLVECT_1:def 1;
+          f.x" = (f.x)" by GROUP_6:41;
+        hence thesis by A5,A6,FUNCT_2:43;
+       end;
+        for g1, g2 being Element of G2 st
+      g1 in f.:the carrier of H1 & g2 in f.:the carrier of H1 holds
+      g1 * g2 in f.:the carrier of H1
+       proof
+        let g1, g2 be Element of G2; assume
+A7:     g1 in f.:the carrier of H1 & g2 in f.:the carrier of H1;
+        then consider x being Element of G1 such that
+A8:     x in the carrier of H1 & g1 = f.x by FUNCT_2:116;
+A9:     x in H1 by A8,RLVECT_1:def 1;
+        consider y being Element of G1 such that
+A10:     y in the carrier of H1 & g2 = f.y by A7,FUNCT_2:116;
+          y in H1 by A10,RLVECT_1:def 1;
+        then x * y in H1 by A9,GROUP_2:59;
+then A11:     x * y in the carrier of H1 by RLVECT_1:def 1;
+          f.(x * y) = f.x * f.y by GROUP_6:def 7;
+        hence thesis by A8,A10,A11,FUNCT_2:43;
+       end;
+      then consider H2 being strict Subgroup of G2 such that
+A12:   the carrier of H2 = f.:the carrier of H1 by A3,A4,GROUP_2:61;
+      take H2;
+      thus thesis by A12;
+     end;
+
+theorem
+   for G1, G2 being Group
+ for f being Homomorphism of G1, G2
+  for H2 being Subgroup of G2
+   ex H1 being strict Subgroup of G1 st
+    the carrier of H1 = f"the carrier of H2
+     proof
+      let G1, G2 be Group;
+      let f be Homomorphism of G1, G2;
+      let H2 be Subgroup of G2;
+        1.G2 in H2 by GROUP_2:55;
+      then 1.G2 in the carrier of H2 by RLVECT_1:def 1;
+      then f.1.G1 in the carrier of H2 by GROUP_6:40;
+then A1:   f"the carrier of H2 <> {} by FUNCT_2:46;
+A2:   for g being Element of G1 st
+      g in f"the carrier of H2 holds
+      g" in f"the carrier of H2
+       proof
+        let g be Element of G1; assume
+       g in f"the carrier of H2;
+        then f.g in the carrier of H2 by FUNCT_2:46;
+        then f.g in H2 by RLVECT_1:def 1;
+        then (f.g)" in H2 by GROUP_2:60;
+        then f.g" in H2 by GROUP_6:41;
+        then f.g" in the carrier of H2 by RLVECT_1:def 1;
+        hence thesis by FUNCT_2:46;
+       end;
+        for g1, g2 being Element of G1 st
+      g1 in f"the carrier of H2 & g2 in f"the carrier of H2 holds
+      g1 * g2 in f"the carrier of H2
+       proof
+        let g1, g2 be Element of G1; assume
+       g1 in f"the carrier of H2 & g2 in f"the carrier of H2;
+        then f.g1 in the carrier of H2 & f.g2 in the carrier of H2
+                                                       by FUNCT_2:46;
+        then f.g1 in H2 & f.g2 in H2 by RLVECT_1:def 1;
+        then f.g1 * f.g2 in H2 by GROUP_2:59;
+        then f.(g1 * g2) in H2 by GROUP_6:def 7;
+        then f.(g1 * g2) in the carrier of H2 by RLVECT_1:def 1;
+        hence thesis by FUNCT_2:46;
+       end;
+      then consider H1 being strict Subgroup of G1 such that
+A3:   the carrier of H1 = f"the carrier of H2 by A1,A2,GROUP_2:61;
+      take H1;
+      thus thesis by A3;
+     end;
+
+canceled 2;
+
+theorem
+   for G1, G2 being Group
+ for f being Homomorphism of G1, G2
+  for H1, H2 being Subgroup of G1
+   for H3, H4 being Subgroup of G2 st
+    the carrier of H3 = f.:the carrier of H1 &
+    the carrier of H4 = f.:the carrier of H2 holds
+     H1 is Subgroup of H2 implies H3 is Subgroup of H4
+      proof
+       let G1, G2 be Group;
+       let f be Homomorphism of G1, G2;
+       let H1, H2 be Subgroup of G1;
+       let H3, H4 be Subgroup of G2 such that
+A1:    the carrier of H3 = f.:the carrier of H1 &
+       the carrier of H4 = f.:the carrier of H2;
+         assume H1 is Subgroup of H2;
+         then the carrier of H1 c= the carrier of H2 by GROUP_2:def 5;
+         then the carrier of H3 c= the carrier of H4 by A1,RELAT_1:156;
+         hence thesis by GROUP_2:66;
+      end;
+
+theorem
+   for G1, G2 being Group
+ for f being Homomorphism of G1, G2
+  for H1, H2 being Subgroup of G2
+   for H3, H4 being Subgroup of G1 st
+    the carrier of H3 = f"the carrier of H1 &
+    the carrier of H4 = f"the carrier of H2 holds
+     H1 is Subgroup of H2 implies H3 is Subgroup of H4
+      proof
+       let G1, G2 be Group;
+       let f be Homomorphism of G1, G2;
+       let H1, H2 be Subgroup of G2;
+       let H3, H4 be Subgroup of G1 such that
+A1:    the carrier of H3 = f"the carrier of H1 &
+       the carrier of H4 = f"the carrier of H2;
+         assume H1 is Subgroup of H2;
+         then the carrier of H1 c= the carrier of H2 by GROUP_2:def 5;
+         then the carrier of H3 c= the carrier of H4 by A1,RELAT_1:178;
+         hence thesis by GROUP_2:66;
+      end;
+
+theorem
+   for G1, G2 being Group
+ for f being Function of the carrier of G1, the carrier of G2
+  for A being Subset of G1 holds
+   f.:A c= f.:the carrier of gr A
+    proof
+     let G1, G2 be Group;
+     let f be Function of the carrier of G1, the carrier of G2;
+     let A be Subset of G1;
+       A c= the carrier of gr A by GROUP_4:def 5;
+     hence thesis by RELAT_1:156;
+    end;
+
+theorem
+   for G1, G2 being Group
+ for H1, H2 being Subgroup of G1
+ for f being Function of the carrier of G1, the carrier of G2
+  for A being Subset of G1 st
+  A = (the carrier of H1) \/ the carrier of H2 holds
+   f.:the carrier of H1 "\/" H2 = f.:the carrier of gr A by Th4;
+
+theorem Th14:
+ for G being Group
+ for A being Subset of G st
+  A = {1.G} holds gr A = (1).G
+   proof
+    let G be Group;
+    let A be Subset of G; assume A = {1.G};
+    then A = the carrier of (1).G by GROUP_2:def 7;
+    hence thesis by Th3;
+   end;
+
+definition
+ let G be Group;
+ func carr G -> Function of Subgroups G, bool the carrier of G means
+ :Def1: for H being strict Subgroup of G holds it.H = the carrier of H;
+  existence
+   proof
+    defpred P [set, set] means
+    for h being strict Subgroup of G st h = $1 holds
+    $2 = the carrier of h;
+A1: for e being set st e in Subgroups G
+    ex u being set st u in bool the carrier of G & P [e,u]
+     proof
+      let e be set; assume e in Subgroups G;
+      then reconsider E = e as strict Subgroup of G by GROUP_3:def 1;
+      reconsider u = carr E as Subset of G;
+      take u;
+      thus thesis by GROUP_2:def 9;
+     end;
+    consider f being Function of Subgroups G, bool the carrier of G such that
+A2: for e being set st e in Subgroups G holds
+    P [e,f.e] from FuncEx1 (A1);
+    take f;
+    let H be strict Subgroup of G;
+      H in Subgroups G by GROUP_3:def 1;
+    hence thesis by A2;
+   end;
+  uniqueness
+   proof
+    let F1, F2 be Function of Subgroups G,
+    bool the carrier of G such that
+A3: for H1 being strict Subgroup of G holds F1.H1 = the carrier of H1 and
+A4: for H2 being strict Subgroup of G holds F2.H2 = the carrier of H2;
+      for h being set st h in Subgroups G holds F1.h = F2.h
+     proof
+      let h be set; assume
+        h in Subgroups G;
+      then reconsider H = h as strict Subgroup of G by GROUP_3:def 1;
+      thus F1.h = the carrier of H by A3
+               .= F2.h by A4;
+     end;
+    hence thesis by FUNCT_2:18;
+   end;
+end;
+
+canceled 3;
+
+theorem Th18:
+ for G being Group
+ for H being strict Subgroup of G
+ for x being Element of G holds
+  x in carr G.H iff x in H
+   proof
+    let G be Group;
+    let H be strict Subgroup of G;
+    let x be Element of G;
+    thus x in carr G.H implies x in H
+     proof
+      assume x in carr G.H;
+      then x in the carrier of H by Def1;
+      hence thesis by RLVECT_1:def 1;
+     end;
+      assume
+A1:   x in H;
+        carr G.H = the carrier of H by Def1;
+      hence thesis by A1,RLVECT_1:def 1;
+   end;
+
+theorem
+   for G being Group
+ for H being strict Subgroup of G holds
+  1.G in carr G.H
+   proof
+    let G be Group;
+    let H be strict Subgroup of G;
+A1: carr G.H = the carrier of H by Def1;
+      1.H = 1.G by GROUP_2:53;
+    hence thesis by A1;
+   end;
+
+theorem
+   for G being Group
+ for H being strict Subgroup of G holds
+  carr G.H <> {}
+   proof
+    let G be Group;
+    let H be strict Subgroup of G;
+      carr G.H = the carrier of H by Def1;
+    hence thesis;
+   end;
+
+theorem
+   for G being Group
+ for H being strict Subgroup of G
+ for g1, g2 being Element of G holds
+  g1 in carr G.H & g2 in carr G.H implies
+   g1 * g2 in carr G.H
+    proof
+     let G be Group;
+     let H be strict Subgroup of G;
+     let g1, g2 be Element of G;
+     assume g1 in carr G.H & g2 in carr G.H;
+     then g1 in H & g2 in H by Th18;
+     then g1 * g2 in H by GROUP_2:59;
+     hence thesis by Th18;
+    end;
+
+theorem
+   for G being Group
+ for H being strict Subgroup of G
+ for g being Element of G holds
+  g in carr G.H implies g" in carr G.H
+   proof
+    let G be Group;
+    let H be strict Subgroup of G;
+    let g be Element of G;
+    assume g in carr G.H;
+    then g in H by Th18;
+    then g" in H by GROUP_2:60;
+    hence thesis by Th18;
+   end;
+
+theorem Th23:
+ for G being Group
+ for H1, H2 being strict Subgroup of G holds
+  the carrier of H1 /\ H2 = carr G.H1 /\ carr G.H2
+   proof
+    let G be Group;
+    let H1, H2 be strict Subgroup of G;
+      carr G.H1 = the carrier of H1 & carr G.H2 = the carrier of H2 by Def1;
+    hence thesis by Th1;
+   end;
+
+theorem
+   for G being Group
+ for H1, H2 being strict Subgroup of G holds
+  carr G.(H1 /\ H2) = carr G.H1 /\ carr G.H2
+   proof
+    let G be Group;
+    let H1, H2 be strict Subgroup of G;
+      carr G.H1 /\ carr G.H2 = the carrier of H1 /\ H2 by Th23;
+    hence thesis by Def1;
+   end;
+
+definition
+ let G be Group;
+ let F be non empty Subset of Subgroups G;
+  func meet F -> strict Subgroup of G means
+   :Def2: the carrier of it = meet (carr G.:F);
+  existence
+   proof
+A1: carr G.:F <> {}
+     proof
+      consider x being Element of Subgroups G such that
+A2:   x in F by SUBSET_1:10;
+        carr G.x in carr G.:F by A2,FUNCT_2:43;
+      hence thesis;
+     end;
+      for X being set st X in carr G.:F holds 1.G in X
+     proof
+      let X be set; assume
+A3:   X in carr G.:F;
+      then reconsider X as Subset of G;
+      consider X1 being Element of Subgroups G such that
+A4:   X1 in F & X = carr G.X1 by A3,FUNCT_2:116;
+      reconsider X1 as strict Subgroup of G by GROUP_3:def 1;
+A5:   X = the carrier of X1 by A4,Def1;
+        1.G in X1 by GROUP_2:55;
+      hence thesis by A5,RLVECT_1:def 1;
+     end;
+then A6: meet (carr G.:F) <> {} by A1,SETFAM_1:def 1;
+A7: for g1, g2 being Element of G st
+    g1 in meet (carr G.:F) & g2 in meet (carr G.:F) holds
+    g1 * g2 in meet (carr G.:F)
+     proof
+      let g1, g2 be Element of G such that
+A8:   g1 in meet (carr G.:F) & g2 in meet (carr G.:F);
+        for X being set st X in carr G.:F holds g1 * g2 in X
+       proof
+        let X be set; assume
+A9:     X in carr G.:F;
+then A10:     g1 in X & g2 in X by A8,SETFAM_1:def 1;
+        reconsider X as Subset of G by A9;
+        consider X1 being Element of Subgroups G such that
+A11:     X1 in F & X = carr G.X1 by A9,FUNCT_2:116;
+        reconsider X1 as strict Subgroup of G by GROUP_3:def 1;
+A12:     X = the carrier of X1 by A11,Def1;
+        reconsider h1 = g1, h2 = g2 as Element of G;
+          h1 in X1 & h2 in X1
+         by A10,A12,RLVECT_1:def 1;
+        then h1 * h2 in X1 by GROUP_2:59;
+        hence thesis by A12,RLVECT_1:def 1;
+       end;
+      hence thesis by A1,SETFAM_1:def 1;
+     end;
+    reconsider CG = carr G.:F as Subset-Family of G
+      by SETFAM_1:def 7;
+      for g being Element of G st g in meet CG holds
+    g" in meet CG
+     proof
+      let g be Element of G such that
+A13:   g in meet CG;
+        for X being set st X in carr G.:F holds g" in X
+       proof
+        let X be set; assume
+A14:     X in carr G.:F;
+then A15:     g in X by A13,SETFAM_1:def 1;
+        reconsider X as Subset of G by A14;
+        consider X1 being Element of Subgroups G such that
+A16:     X1 in F & X = carr G.X1 by A14,FUNCT_2:116;
+        reconsider X1 as strict Subgroup of G by GROUP_3:def 1;
+A17:     X = the carrier of X1 by A16,Def1;
+        reconsider h = g as Element of G;
+          h in X1 by A15,A17,RLVECT_1:def 1;
+        then h" in X1 by GROUP_2:60;
+        hence thesis by A17,RLVECT_1:def 1;
+       end;
+      hence thesis by A1,SETFAM_1:def 1;
+     end;
+    hence thesis by A6,A7,GROUP_2:61;
+   end;
+  uniqueness by GROUP_2:68;
+end;
+
+theorem
+   for G being Group
+ for F being non empty Subset of Subgroups G holds
+  (1).G in F implies meet F = (1).G
+   proof
+    let G be Group;
+    let F be non empty Subset of Subgroups G;
+    assume
+A1: (1).G in F;
+      (1).G is Subgroup of meet F by GROUP_2:77;
+    then the carrier of (1).G c= the carrier of meet F by GROUP_2:def 5;
+then A2: {1.G} c= the carrier of meet F by GROUP_2:def 7;
+    reconsider 1G = (1).G as Element of Subgroups G by GROUP_3:def 1;
+      carr G.1G = the carrier of (1).G by Def1;
+    then the carrier of (1).G in carr G.:F by A1,FUNCT_2:43;
+    then {1.G} in carr G.:F by GROUP_2:def 7;
+    then meet (carr G.:F) c= {1.G} by SETFAM_1:4;
+    then the carrier of meet F c= {1.G} by Def2;
+    then the carrier of meet F = {1.G} by A2,XBOOLE_0:def 10;
+    hence thesis by GROUP_2:def 7;
+   end;
+
+theorem
+   for G being Group
+ for h being Element of Subgroups G
+  for F being non empty Subset of Subgroups G st
+  F = { h } holds meet F = h
+   proof
+    let G be Group;
+    let h be Element of Subgroups G;
+    let F be non empty Subset of Subgroups G such that
+A1: F = { h };
+A2: the carrier of meet F = meet (carr G.:F) by Def2;
+      h in Subgroups G;
+    then h in dom carr G by FUNCT_2:def 1;
+    then meet (carr G.:{ h }) = meet {carr G.h} by FUNCT_1:117;
+then A3: meet (carr G.:{ h }) = carr G.h by SETFAM_1:11;
+    reconsider H = h as strict Subgroup of G by GROUP_3:def 1;
+      the carrier of meet F = the carrier of H by A1,A2,A3,Def1;
+    hence thesis by GROUP_2:68;
+   end;
+
+theorem Th27:
+ for G being Group
+ for H1, H2 being Subgroup of G
+ for h1, h2 being Element of lattice G st
+  h1 = H1 & h2 = H2 holds
+   h1 "\/" h2 = H1 "\/" H2
+    proof
+     let G be Group;
+     let H1, H2 be Subgroup of G;
+     let h1, h2 be Element of lattice G;
+A1:  lattice G = LattStr (# Subgroups G, SubJoin G, SubMeet G #)
+                                                           by GROUP_4:def 13
+;
+     then h1 "\/" h2 = SubJoin G.(h1,h2) by LATTICES:def 1;
+     hence thesis by A1,GROUP_4:def 11;
+    end;
+
+theorem Th28:
+ for G being Group
+ for H1, H2 being Subgroup of G
+ for h1, h2 being Element of lattice G st
+  h1 = H1 & h2 = H2 holds
+   h1 "/\" h2 = H1 /\ H2
+    proof
+     let G be Group;
+     let H1, H2 be Subgroup of G;
+     let h1, h2 be Element of lattice G;
+A1:  lattice G = LattStr (# Subgroups G, SubJoin G, SubMeet G #)
+                                                           by GROUP_4:def 13
+;
+     then h1 "/\" h2 = SubMeet G.(h1,h2) by LATTICES:def 2;
+     hence thesis by A1,GROUP_4:def 12;
+    end;
+
+theorem Th29:
+ for G being Group
+ for p being Element of lattice G
+ for H being Subgroup of G st p = H holds
+  H is strict Subgroup of G
+   proof
+    let G be Group;
+    let p be Element of lattice G;
+    let H be Subgroup of G such that
+A1: p = H;
+      the carrier of lattice G = Subgroups G by GROUP_4:92;
+    then reconsider h = p as strict Subgroup of G by GROUP_3:def 1;
+      h = H by A1;
+    hence thesis;
+   end;
+
+theorem Th30:
+ for G being Group
+ for H1, H2 being Subgroup of G
+ for p, q being Element of lattice G st
+  p = H1 & q = H2 holds
+   p [= q iff the carrier of H1 c= the carrier of H2
+    proof
+     let G be Group;
+     let H1, H2 be Subgroup of G;
+     let p, q be Element of lattice G such that
+A1:  p = H1 & q = H2;
+A2:  lattice G = LattStr (# Subgroups G, SubJoin G, SubMeet G #) by GROUP_4:def
+13;
+A3:  H1 is strict Subgroup of G & H2 is strict Subgroup of G by A1,Th29;
+     thus p [= q implies the carrier of H1 c= the carrier of H2
+      proof
+       assume p [= q;
+then A4:    p "/\" q = p by LATTICES:21;
+         p "/\" q = (the L_meet of lattice G).(p,q) by LATTICES:def 2
+             .= H1 /\ H2 by A1,A2,GROUP_4:def 12;
+       then (the carrier of H1) /\ the carrier of H2 = the carrier of H1
+                                                               by A1,A4,Th1;
+       hence thesis by XBOOLE_1:17;
+      end;
+     thus the carrier of H1 c= the carrier of H2 implies p [= q
+      proof
+       assume the carrier of H1 c= the carrier of H2;
+       then H1 is Subgroup of H2 by GROUP_2:66;
+then A5:    H1 /\ H2 = H1 by A3,GROUP_2:107;
+         H1 /\ H2 = (the L_meet of lattice G).(p,q) by A1,A2,GROUP_4:def 12
+              .= p "/\" q by LATTICES:def 2;
+       hence thesis by A1,A5,LATTICES:21;
+      end;
+    end;
+
+theorem
+   for G being Group
+ for H1, H2 being Subgroup of G
+ for p, q being Element of lattice G st
+  p = H1 & q = H2 holds
+   p [= q iff H1 is Subgroup of H2
+    proof
+     let G be Group;
+     let H1, H2 be Subgroup of G;
+     let p, q be Element of lattice G; assume
+A1:  p = H1 & q = H2;
+then A2:  H1 is strict Subgroup of G & H2 is strict Subgroup of G by Th29;
+     thus p [= q implies H1 is Subgroup of H2
+      proof
+       assume p [= q;
+       then the carrier of H1 c= the carrier of H2 by A1,Th30;
+       hence thesis by GROUP_2:66;
+      end;
+     thus H1 is Subgroup of H2 implies p [= q
+      proof
+       assume H1 is Subgroup of H2;
+then A3:    H1 /\ H2 = H1 by A2,GROUP_2:107;
+         lattice G = LattStr (# Subgroups G, SubJoin G, SubMeet G #)
+                                              by GROUP_4:def 13;
+       then H1 /\ H2 = (the L_meet of lattice G).(p,q) by A1,GROUP_4:def 12
+              .= p "/\" q by LATTICES:def 2;
+       hence thesis by A1,A3,LATTICES:21;
+      end;
+    end;
+
+theorem
+   for G being Group holds lattice G is complete
+   proof
+    let G be Group;
+A1: lattice G = LattStr (# Subgroups G, SubJoin G, SubMeet G #) by GROUP_4:def
+13;
+    let Y be Subset of lattice G;
+    per cases;
+     suppose
+A2:  Y = {};
+       take Top lattice G;
+       thus Top lattice G is_less_than Y
+        proof
+         let q be Element of lattice G;
+         thus thesis by A2;
+        end;
+       let b be Element of lattice G;
+       assume b is_less_than Y;
+       thus thesis by LATTICES:45;
+     suppose Y <> {};
+     then reconsider X = Y as non empty Subset of Subgroups G by A1;
+     reconsider p = meet X as Element of lattice G
+     by A1,GROUP_3:def 1;
+     take p;
+     thus p is_less_than Y
+      proof
+       let q be Element of lattice G;
+       reconsider H = q as strict Subgroup of G by A1,GROUP_3:def 1;
+       reconsider h = q as Element of Subgroups G by A1;
+A3:    carr G.h = the carrier of H by Def1;
+       assume q in Y;
+       then the carrier of H in carr G.:X by A3,FUNCT_2:43;
+       then meet (carr G.:X) c= the carrier of H by SETFAM_1:4;
+       then the carrier of meet X c= the carrier of H by Def2;
+       hence thesis by Th30;
+      end;
+     let r be Element of lattice G;
+     assume
+A4:  r is_less_than Y;
+     reconsider H = r as Subgroup of G by A1,GROUP_3:def 1;
+     consider x being Element of X;
+A5:  carr G.x in carr G.:X by FUNCT_2:43;
+       for Z1 being set st Z1 in carr G.:X holds
+     the carrier of H c= Z1
+      proof
+       let Z1 be set;
+       assume
+A6:    Z1 in carr G.:X;
+       then reconsider Z2 = Z1 as Subset of G;
+       consider z1 being Element of Subgroups G such that
+A7:    z1 in X & Z2 = carr G.z1 by A6,FUNCT_2:116;
+       reconsider z1 as Element of lattice G by A1;
+       reconsider z3 = z1 as strict Subgroup of G by GROUP_3:def 1;
+A8:    Z1 = the carrier of z3 by A7,Def1;
+         r [= z1 by A4,A7,LATTICE3:def 16;
+       hence thesis by A8,Th30;
+      end;
+     then the carrier of H c= meet (carr G.:X) by A5,SETFAM_1:6;
+     then the carrier of H c= the carrier of meet X by Def2;
+    hence thesis by Th30;
+   end;
+
+definition
+ let G1, G2 be Group;
+ let f be Function of the carrier of G1, the carrier of G2;
+ func FuncLatt f -> Function of the carrier of lattice G1,
+  the carrier of lattice G2 means
+  :Def3: for H being strict Subgroup of G1, A being Subset of G2
+    st A = f.:the carrier of H holds it.H = gr A;
+  existence
+   proof
+    defpred P [set, set] means
+    for H being strict Subgroup of G1 st H = $1
+    for A being Subset of G2 st A = f.:the carrier of H holds
+    $2 = gr (f.:the carrier of H);
+A1: for e being set st e in the carrier of lattice G1
+    ex u being set st u in the carrier of
+    lattice G2 & P [e,u]
+     proof
+      let e be set; assume e in the carrier of lattice G1;
+      then e in Subgroups G1 by GROUP_4:92;
+      then reconsider E = e as strict Subgroup of G1 by GROUP_3:def 1;
+      reconsider u = gr (f.:the carrier of E) as strict Subgroup of G2;
+        the carrier of lattice G2 = Subgroups G2 by GROUP_4:92;
+      then reconsider u as Element of lattice G2 by GROUP_3:def
+1;
+      take u;
+      thus thesis;
+     end;
+    consider f1 being Function of the carrier of lattice G1,
+    the carrier of lattice G2 such that
+A2: for e being set st e in the carrier of lattice G1 holds
+    P [e,f1.e] from FuncEx1 (A1);
+    take f1;
+      let H be strict Subgroup of G1;
+      let A be Subset of G2;
+      assume
+A3:   A = f.:the carrier of H;
+        Subgroups G1 = the carrier of lattice G1 by GROUP_4:92;
+      then H in the carrier of lattice G1 by GROUP_3:def 1;
+      hence thesis by A2,A3;
+    end;
+  uniqueness
+   proof
+    let f1, f2 be Function of the carrier of lattice G1,
+    the carrier of lattice G2 such that
+A4: for H being strict Subgroup of G1,
+    A being Subset of G2 st A = f.:the carrier of H holds
+    f1.H = gr A and
+A5: for H being strict Subgroup of G1,
+    A being Subset of G2 st A = f.:the carrier of H holds
+    f2.H = gr A;
+      for h being set st h in the carrier of lattice G1 holds f1.h = f2.h
+     proof
+      let h be set; assume h in the carrier of lattice G1;
+      then h is Element of Subgroups G1 by GROUP_4:92;
+      then reconsider H = h as strict Subgroup of G1 by GROUP_3:def 1;
+      thus f1.h = gr (f.:the carrier of H) by A4
+               .= f2.h by A5;
+     end;
+    hence thesis by FUNCT_2:18;
+  end;
+end;
+
+theorem
+   for G being Group holds
+   FuncLatt id the carrier of G = id the carrier of lattice G
+    proof
+     let G be Group;
+     set f = id the carrier of G;
+A1:  dom FuncLatt f = the carrier of lattice G by FUNCT_2:def 1;
+       for x being set st x in the carrier of lattice G holds
+     (FuncLatt f).x = x
+      proof
+       let x be set; assume x in the carrier of lattice G;
+       then x in Subgroups G by GROUP_4:92;
+       then reconsider x as strict Subgroup of G by GROUP_3:def 1;
+A2:    f.:the carrier of x = the carrier of x
+        proof
+         thus f.:the carrier of x c= the carrier of x
+          proof
+           let z be set;
+           assume
+A3:        z in f.:the carrier of x;
+           then reconsider z as Element of G;
+           consider Z being Element of G such that
+A4:        Z in the carrier of x & z = f.Z by A3,FUNCT_2:116;
+           thus thesis by A4,FUNCT_1:34;
+          end;
+         thus the carrier of x c= f.:the carrier of x
+          proof
+           let z be set;
+           assume
+A5:        z in the carrier of x;
+             the carrier of x c= the carrier of G by GROUP_2:def 5;
+           then reconsider z as Element of G by A5;
+             f.z = z by FUNCT_1:34;
+           hence thesis by A5,FUNCT_2:43;
+          end;
+        end;
+       then reconsider X = the carrier of x as Subset of G;
+         (FuncLatt f).x = gr X by A2,Def3;
+       hence thesis by Th3;
+      end;
+     hence thesis by A1,FUNCT_1:34;
+    end;
+
+theorem
+   for G1, G2 being Group
+  for f being Homomorphism of G1, G2 st f is one-to-one holds
+   FuncLatt f is one-to-one
+    proof
+     let G1, G2 be Group;
+     let f be Homomorphism of G1, G2 such that
+A1:  f is one-to-one;
+       for x1, x2 being set st x1 in dom FuncLatt f & x2 in dom FuncLatt f &
+     (FuncLatt f).x1 = (FuncLatt f).x2 holds x1 = x2
+      proof
+       let x1, x2 be set; assume
+A2:    x1 in dom FuncLatt f & x2 in dom FuncLatt f &
+       (FuncLatt f).x1 = (FuncLatt f).x2;
+       then x1 in the carrier of lattice G1 & x2 in the carrier of lattice G1
+                                                     by FUNCT_2:def 1;
+then A3:    x1 in Subgroups G1 & x2 in Subgroups G1 by GROUP_4:92;
+       then reconsider x1 as strict Subgroup of G1 by GROUP_3:def 1;
+       reconsider x2 as strict Subgroup of G1 by A3,GROUP_3:def 1;
+       reconsider A1 = f.:the carrier of x1, A2 = f.:the carrier of x2
+         as Subset of G2;
+A4:    (FuncLatt f).x1 = gr A1 & (FuncLatt f).x2 = gr A2 by Def3;
+A5:    dom f = the carrier of G1 by FUNCT_2:def 1;
+         1.G1 in x1 by GROUP_2:55;
+then A6:    1.G1 in the carrier of x1 by RLVECT_1:def 1;
+       reconsider y = f.(1.G1) as Element of G2;
+A7:    y in f.:the carrier of x1 by A5,A6,FUNCT_1:def 12;
+A8:    for g being Element of G2 st
+       g in f.:the carrier of x1 holds g" in f.:the carrier of x1
+        proof
+         let g be Element of G2; assume
+           g in f.:the carrier of x1;
+         then consider x being Element of G1 such that
+A9:      x in the carrier of x1 & g = f.x by FUNCT_2:116;
+           x in x1 by A9,RLVECT_1:def 1;
+         then x" in x1 by GROUP_2:60;
+then A10:      x" in the carrier of x1 by RLVECT_1:def 1;
+           f.x" = (f.x)" by GROUP_6:41;
+         hence thesis by A9,A10,FUNCT_2:43;
+        end;
+         for g1, g2 being Element of G2 st
+       g1 in f.:the carrier of x1 & g2 in f.:the carrier of x1 holds
+       g1 * g2 in f.:the carrier of x1
+        proof
+         let g1, g2 be Element of G2; assume
+A11:      g1 in f.:the carrier of x1 & g2 in f.:the carrier of x1;
+         then consider x being Element of G1 such that
+A12:      x in the carrier of x1 & g1 = f.x by FUNCT_2:116;
+A13:      x in x1 by A12,RLVECT_1:def 1;
+         consider y being Element of G1 such that
+A14:      y in the carrier of x1 & g2 = f.y by A11,FUNCT_2:116;
+           y in x1 by A14,RLVECT_1:def 1;
+         then x * y in x1 by A13,GROUP_2:59;
+then A15:      x * y in the carrier of x1 by RLVECT_1:def 1;
+           f.(x * y) = f.x * f.y by GROUP_6:def 7;
+         hence thesis by A12,A14,A15,FUNCT_2:43;
+        end;
+       then consider B1 being strict Subgroup of G2 such that
+A16:    the carrier of B1 = f.:the carrier of x1 by A7,A8,GROUP_2:61;
+         1.G1 in x2 by GROUP_2:55;
+then A17:    1.G1 in the carrier of x2 by RLVECT_1:def 1;
+       consider y being Element of G2 such that
+A18:    y = f.(1.G1);
+A19:    f.:the carrier of x2 <> {} by A5,A17,A18,FUNCT_1:def 12;
+A20:    for g being Element of G2 st
+       g in f.:the carrier of x2 holds
+       g" in f.:the carrier of x2
+        proof
+         let g be Element of G2; assume
+        g in f.:the carrier of x2;
+         then consider x being Element of G1 such that
+A21:      x in the carrier of x2 & g = f.x by FUNCT_2:116;
+           x in x2 by A21,RLVECT_1:def 1;
+         then x" in x2 by GROUP_2:60;
+then A22:      x" in the carrier of x2 by RLVECT_1:def 1;
+           f.x" = (f.x)" by GROUP_6:41;
+         hence thesis by A21,A22,FUNCT_2:43;
+        end;
+         for g1, g2 being Element of G2 st
+       g1 in f.:the carrier of x2 & g2 in f.:the carrier of x2 holds
+       g1 * g2 in f.:the carrier of x2
+        proof
+         let g1, g2 be Element of G2; assume
+A23:      g1 in f.:the carrier of x2 & g2 in f.:the carrier of x2;
+         then consider x being Element of G1 such that
+A24:      x in the carrier of x2 & g1 = f.x by FUNCT_2:116;
+A25:      x in x2 by A24,RLVECT_1:def 1;
+         consider y being Element of G1 such that
+A26:      y in the carrier of x2 & g2 = f.y by A23,FUNCT_2:116;
+           y in x2 by A26,RLVECT_1:def 1;
+         then x * y in x2 by A25,GROUP_2:59;
+then A27:      x * y in the carrier of x2 by RLVECT_1:def 1;
+           f.(x * y) = f.x * f.y by GROUP_6:def 7;
+         hence thesis by A24,A26,A27,FUNCT_2:43;
+        end;
+       then consider B2 being strict Subgroup of G2 such that
+A28:    the carrier of B2 = f.:the carrier of x2 by A19,A20,GROUP_2:61;
+         gr (f.:the carrier of x2) = B2 by A28,Th3;
+then A29:    f.:the carrier of x1 = f.:the carrier of x2 by A2,A4,A16,A28,Th3;
+         the carrier of x1 c= dom f & the carrier of x2 c= dom f
+                                                        by A5,GROUP_2:def 5;
+       then the carrier of x1 c= the carrier of x2 &
+       the carrier of x2 c= the carrier of x1 by A1,A29,FUNCT_1:157;
+       then the carrier of x1 = the carrier of x2 by XBOOLE_0:def 10;
+       hence thesis by GROUP_2:68;
+      end;
+     hence thesis by FUNCT_1:def 8;
+    end;
+
+theorem
+   for G1, G2 being Group
+  for f being Homomorphism of G1, G2 holds
+   (FuncLatt f).(1).G1 = (1).G2
+    proof
+     let G1, G2 be Group;
+     let f be Homomorphism of G1, G2;
+     consider A being Subset of G2 such that
+A1:  A = f.:the carrier of (1).G1;
+A2:  A = f.:{1.G1} by A1,GROUP_2:def 7;
+A3:  1.G1 in {1.G1} & 1.G2 = f.1.G1 by GROUP_6:40,TARSKI:def 1;
+       for x being set holds x in A iff x = 1.G2
+      proof
+       let x be set;
+       thus x in A implies x = 1.G2
+        proof
+         assume
+A4:      x in A;
+         then reconsider x as Element of G2;
+         consider y being Element of G1 such that
+A5:      y in {1.G1} & x = f.y by A2,A4,FUNCT_2:116;
+           y = 1.G1 by A5,TARSKI:def 1;
+         hence thesis by A5,GROUP_6:40;
+        end;
+       thus x = 1.G2 implies x in A by A2,A3,FUNCT_2:43;
+      end;
+     then A = {1.G2} by TARSKI:def 1;
+     then gr A = (1).G2 by Th14;
+     hence thesis by A1,Def3;
+    end;
+
+theorem Th36:
+ for G1, G2 being Group
+  for f being Homomorphism of G1, G2 st f is one-to-one holds
+   FuncLatt f is Semilattice-Homomorphism of lattice G1, lattice G2
+    proof
+     let G1, G2 be Group;
+     let f be Homomorphism of G1, G2 such that
+A1:  f is one-to-one;
+       for a, b being Element of lattice G1 holds
+     (FuncLatt f).(a "/\" b) = (FuncLatt f).a "/\" (FuncLatt f).b
+      proof
+       let a, b be Element of lattice G1;
+A2:    lattice G1 = LattStr (# Subgroups G1, SubJoin G1, SubMeet G1 #)
+                                                           by GROUP_4:def 13
+;
+       then consider A1 being strict Subgroup of G1 such that
+A3:    A1 = a by Th2;
+       consider B1 being strict Subgroup of G1 such that
+A4:    B1 = b by A2,Th2;
+       thus thesis
+        proof
+A5:      (FuncLatt f).a = gr (f.:the carrier of A1) by A3,Def3;
+A6:      (FuncLatt f).b = gr (f.:the carrier of B1) by A4,Def3;
+A7:      (FuncLatt f).(A1 /\ B1) = gr (f.:the carrier of A1 /\ B1) by Def3;
+A8:      dom f = the carrier of G1 by FUNCT_2:def 1;
+           1.G1 in A1 by GROUP_2:55;
+then A9:      1.G1 in the carrier of A1 by RLVECT_1:def 1;
+         consider y being Element of G2 such that
+A10:      y = f.1.G1;
+A11:      f.:the carrier of A1 <> {} by A8,A9,A10,FUNCT_1:def 12;
+A12:      for g being Element of G2 st
+         g in f.:the carrier of A1 holds
+         g" in f.:the carrier of A1
+          proof
+           let g be Element of G2; assume
+          g in f.:the carrier of A1;
+           then consider x being Element of G1 such that
+A13:        x in the carrier of A1 & g = f.x by FUNCT_2:116;
+             x in A1 by A13,RLVECT_1:def 1;
+           then x" in A1 by GROUP_2:60;
+then A14:        x" in the carrier of A1 by RLVECT_1:def 1;
+             f.x" = (f.x)" by GROUP_6:41;
+           hence thesis by A13,A14,FUNCT_2:43;
+          end;
+           for g1, g2 being Element of G2 st
+         g1 in f.:the carrier of A1 & g2 in f.:the carrier of A1 holds
+         g1 * g2 in f.:the carrier of A1
+          proof
+           let g1, g2 be Element of G2; assume
+A15:        g1 in f.:the carrier of A1 & g2 in f.:the carrier of A1;
+           then consider x being Element of G1 such that
+A16:        x in the carrier of A1 & g1 = f.x by FUNCT_2:116;
+A17:        x in A1 by A16,RLVECT_1:def 1;
+           consider y being Element of G1 such that
+A18:        y in the carrier of A1 & g2 = f.y by A15,FUNCT_2:116;
+             y in A1 by A18,RLVECT_1:def 1;
+           then x * y in A1 by A17,GROUP_2:59;
+then A19:        x * y in the carrier of A1 by RLVECT_1:def 1;
+             f.(x * y) = f.x * f.y by GROUP_6:def 7;
+           hence thesis by A16,A18,A19,FUNCT_2:43;
+          end;
+         then consider A3 being strict Subgroup of G2 such that
+A20:      the carrier of A3 = f.:the carrier of A1 by A11,A12,GROUP_2:61;
+           1.G1 in B1 by GROUP_2:55;
+then A21:      1.G1 in the carrier of B1 by RLVECT_1:def 1;
+         consider y1 being Element of G2 such that
+A22:      y1 = f.1.G1;
+A23:      f.:the carrier of B1 <> {} by A8,A21,A22,FUNCT_1:def 12;
+A24:      for g being Element of G2 st
+         g in f.:the carrier of B1 holds
+         g" in f.:the carrier of B1
+          proof
+           let g be Element of G2; assume
+          g in f.:the carrier of B1;
+           then consider x being Element of G1 such that
+A25:        x in the carrier of B1 & g = f.x by FUNCT_2:116;
+             x in B1 by A25,RLVECT_1:def 1;
+           then x" in B1 by GROUP_2:60;
+then A26:        x" in the carrier of B1 by RLVECT_1:def 1;
+             f.x" = (f.x)" by GROUP_6:41;
+           hence thesis by A25,A26,FUNCT_2:43;
+          end;
+           for g1, g2 being Element of G2 st
+         g1 in f.:the carrier of B1 & g2 in f.:the carrier of B1 holds
+         g1 * g2 in f.:the carrier of B1
+          proof
+           let g1, g2 be Element of G2; assume
+A27:        g1 in f.:the carrier of B1 & g2 in f.:the carrier of B1;
+           then consider x being Element of G1 such that
+A28:        x in the carrier of B1 & g1 = f.x by FUNCT_2:116;
+A29:        x in B1 by A28,RLVECT_1:def 1;
+           consider y being Element of G1 such that
+A30:        y in the carrier of B1 & g2 = f.y by A27,FUNCT_2:116;
+             y in B1 by A30,RLVECT_1:def 1;
+           then x * y in B1 by A29,GROUP_2:59;
+then A31:        x * y in the carrier of B1 by RLVECT_1:def 1;
+             f.(x * y) = f.x * f.y by GROUP_6:def 7;
+           hence thesis by A28,A30,A31,FUNCT_2:43;
+          end;
+         then consider B3 being strict Subgroup of G2 such that
+A32:      the carrier of B3 = f.:the carrier of B1 by A23,A24,GROUP_2:61;
+A33:      gr (f.:the carrier of B1) = B3 by A32,Th3;
+         consider C1 being strict Subgroup of G1 such that
+A34:      C1 = A1 /\ B1;
+           1.G1 in C1 by GROUP_2:55;
+then A35:      1.G1 in the carrier of C1 by RLVECT_1:def 1;
+         consider y2 being Element of G2 such that
+A36:      y2 = f.1.G1;
+A37:      f.:the carrier of C1 <> {} by A8,A35,A36,FUNCT_1:def 12;
+A38:      for g being Element of G2 st
+         g in f.:the carrier of C1 holds
+         g" in f.:the carrier of C1
+          proof
+           let g be Element of G2; assume
+          g in f.:the carrier of C1;
+           then consider x being Element of G1 such that
+A39:        x in the carrier of C1 & g = f.x by FUNCT_2:116;
+             x in C1 by A39,RLVECT_1:def 1;
+           then x" in C1 by GROUP_2:60;
+then A40:        x" in the carrier of C1 by RLVECT_1:def 1;
+             f.x" = (f.x)" by GROUP_6:41;
+           hence thesis by A39,A40,FUNCT_2:43;
+          end;
+           for g1, g2 being Element of G2 st
+         g1 in f.:the carrier of C1 & g2 in f.:the carrier of C1 holds
+         g1 * g2 in f.:the carrier of C1
+          proof
+           let g1, g2 be Element of G2; assume
+A41:        g1 in f.:the carrier of C1 & g2 in f.:the carrier of C1;
+           then consider x being Element of G1 such that
+A42:        x in the carrier of C1 & g1 = f.x by FUNCT_2:116;
+A43:        x in C1 by A42,RLVECT_1:def 1;
+           consider y being Element of G1 such that
+A44:        y in the carrier of C1 & g2 = f.y by A41,FUNCT_2:116;
+             y in C1 by A44,RLVECT_1:def 1;
+           then x * y in C1 by A43,GROUP_2:59;
+then A45:        x * y in the carrier of C1 by RLVECT_1:def 1;
+             f.(x * y) = f.x * f.y by GROUP_6:def 7;
+           hence thesis by A42,A44,A45,FUNCT_2:43;
+          end;
+         then consider C3 being strict Subgroup of G2 such that
+A46:      the carrier of C3 = f.:the carrier of C1 by A37,A38,GROUP_2:61;
+           the carrier of A3 /\ B3 = the carrier of C3
+          proof
+           thus the carrier of A3 /\ B3 c= the carrier of C3
+            proof
+             let x be set;
+             assume x in the carrier of A3 /\ B3;
+          then x in (the carrier of A3) /\ the carrier of B3 by Th1;
+             then x in f.:((the carrier of A1) /\ the carrier of B1)
+                                                   by A1,A20,A32,FUNCT_1:121;
+             hence thesis by A34,A46,Th1;
+            end;
+           thus the carrier of C3 c= the carrier of A3 /\ B3
+            proof
+             let x be set;
+             assume
+A47:          x in the carrier of C3;
+               the carrier of C3 c= the carrier of G2 by GROUP_2:def 5;
+             then reconsider x as Element of G2 by A47;
+             consider y being Element of G1 such that
+A48:          y in the carrier of A1 /\
+ B1 & x = f.y by A34,A46,A47,FUNCT_2:116;
+A49:          f.:the carrier of A1 /\ B1 c= f.:the carrier of A1
+              proof
+               let x be set;
+               assume
+A50:            x in f.:the carrier of A1 /\ B1;
+               then reconsider x as Element of G2;
+               consider y being Element of G1 such that
+A51:            y in the carrier of A1 /\ B1 & x = f.y by A50,FUNCT_2:116;
+                 y in (the carrier of A1) /\ the carrier of B1 by A51,Th1;
+               then y in the carrier of A1 & y in the carrier of B1 by XBOOLE_0
+:def 3;
+               hence thesis by A51,FUNCT_2:43;
+              end;
+A52:          f.:the carrier of A1 /\ B1 c= f.:the carrier of B1
+              proof
+               let x be set;
+               assume
+A53:            x in f.:the carrier of A1 /\ B1;
+               then reconsider x as Element of G2;
+               consider y being Element of G1 such that
+A54:            y in the carrier of A1 /\ B1 & x = f.y by A53,FUNCT_2:116;
+                 y in (the carrier of A1) /\ the carrier of B1 by A54,Th1;
+               then y in the carrier of A1 & y in the carrier of B1 by XBOOLE_0
+:def 3;
+               hence thesis by A54,FUNCT_2:43;
+              end;
+               f.y in f.:the carrier of A1 /\ B1 & f.y in f.:the carrier of A1
+/\
+ B1
+                                             by A48,FUNCT_2:43;
+             then f.y in (the carrier of A3) /\ the carrier of B3
+                                                   by A20,A32,A49,A52,XBOOLE_0:
+def 3;
+             hence thesis by A48,Th1;
+            end;
+           end;
+          then gr (f.:the carrier of A1 /\ B1) = A3 /\ B3 by A34,A46,Th3
+               .= gr (f.:the carrier of A1) /\ gr (f.:the carrier of B1)
+                                                                by A20,A33,Th3
+               .= (FuncLatt f).a "/\" (FuncLatt f).b by A5,A6,Th28;
+          hence thesis by A3,A4,A7,Th28;
+         end;
+       end;
+      hence thesis by VECTSP_8:def 8;
+     end;
+
+theorem Th37:
+ for G1, G2 being Group
+  for f being Homomorphism of G1, G2 holds
+   FuncLatt f is sup-Semilattice-Homomorphism of lattice G1, lattice G2
+    proof
+     let G1, G2 be Group;
+     let f be Homomorphism of G1, G2;
+       for a, b being Element of lattice G1 holds
+     (FuncLatt f).(a "\/" b) = (FuncLatt f).a "\/" (FuncLatt f).b
+      proof
+       let a, b be Element of lattice G1;
+A1:    lattice G1 = LattStr (# Subgroups G1, SubJoin G1, SubMeet G1 #)
+                                                           by GROUP_4:def 13
+;
+       then consider A1 being strict Subgroup of G1 such that
+A2:    A1 = a by Th2;
+       consider B1 being strict Subgroup of G1 such that
+A3:    B1 = b by A1,Th2;
+       thus thesis
+        proof
+A4:      (FuncLatt f).a = gr (f.:the carrier of A1) by A2,Def3;
+A5:      (FuncLatt f).b = gr (f.:the carrier of B1) by A3,Def3;
+A6:      (FuncLatt f).(A1 "\/" B1) = gr (f.:the carrier of A1 "\/" B1) by Def3;
+A7:      dom f = the carrier of G1 by FUNCT_2:def 1;
+           1.G1 in A1 by GROUP_2:55;
+then A8:      1.G1 in the carrier of A1 by RLVECT_1:def 1;
+         consider y being Element of G2 such that
+A9:      y = f.1.G1;
+A10:      f.:the carrier of A1 <> {} by A7,A8,A9,FUNCT_1:def 12;
+A11:      for g being Element of G2 st
+         g in f.:the carrier of A1 holds g" in f.:the carrier of A1
+          proof
+           let g be Element of G2; assume
+          g in f.:the carrier of A1;
+           then consider x being Element of G1 such that
+A12:        x in the carrier of A1 & g = f.x by FUNCT_2:116;
+             x in A1 by A12,RLVECT_1:def 1;
+           then x" in A1 by GROUP_2:60;
+then A13:        x" in the carrier of A1 by RLVECT_1:def 1;
+             f.x" = (f.x)" by GROUP_6:41;
+           hence thesis by A12,A13,FUNCT_2:43;
+          end;
+           for g1, g2 being Element of G2 st
+         g1 in f.:the carrier of A1 & g2 in f.:the carrier of A1 holds
+         g1 * g2 in f.:the carrier of A1
+          proof
+           let g1, g2 be Element of G2; assume
+A14:        g1 in f.:the carrier of A1 & g2 in f.:the carrier of A1;
+           then consider x being Element of G1 such that
+A15:        x in the carrier of A1 & g1 = f.x by FUNCT_2:116;
+A16:        x in A1 by A15,RLVECT_1:def 1;
+           consider y being Element of G1 such that
+A17:        y in the carrier of A1 & g2 = f.y by A14,FUNCT_2:116;
+             y in A1 by A17,RLVECT_1:def 1;
+           then x * y in A1 by A16,GROUP_2:59;
+then A18:        x * y in the carrier of A1 by RLVECT_1:def 1;
+             f.(x * y) = f.x * f.y by GROUP_6:def 7;
+           hence thesis by A15,A17,A18,FUNCT_2:43;
+          end;
+         then consider A3 being strict Subgroup of G2 such that
+A19:      the carrier of A3 = f.:the carrier of A1 by A10,A11,GROUP_2:61;
+           1.G1 in B1 by GROUP_2:55;
+then A20:      1.G1 in the carrier of B1 by RLVECT_1:def 1;
+         consider y1 being Element of G2 such that
+A21:      y1 = f.1.G1;
+A22:      f.:the carrier of B1 <> {} by A7,A20,A21,FUNCT_1:def 12;
+A23:      for g being Element of G2 st
+         g in f.:the carrier of B1 holds
+         g" in f.:the carrier of B1
+          proof
+           let g be Element of G2; assume
+          g in f.:the carrier of B1;
+           then consider x being Element of G1 such that
+A24:        x in the carrier of B1 & g = f.x by FUNCT_2:116;
+             x in B1 by A24,RLVECT_1:def 1;
+           then x" in B1 by GROUP_2:60;
+then A25:        x" in the carrier of B1 by RLVECT_1:def 1;
+             f.x" = (f.x)" by GROUP_6:41;
+           hence thesis by A24,A25,FUNCT_2:43;
+          end;
+           for g1, g2 being Element of G2 st
+         g1 in f.:the carrier of B1 & g2 in f.:the carrier of B1 holds
+         g1 * g2 in f.:the carrier of B1
+          proof
+           let g1, g2 be Element of G2; assume
+A26:        g1 in f.:the carrier of B1 & g2 in f.:the carrier of B1;
+           then consider x being Element of G1 such that
+A27:        x in the carrier of B1 & g1 = f.x by FUNCT_2:116;
+A28:        x in B1 by A27,RLVECT_1:def 1;
+           consider y being Element of G1 such that
+A29:        y in the carrier of B1 & g2 = f.y by A26,FUNCT_2:116;
+             y in B1 by A29,RLVECT_1:def 1;
+           then x * y in B1 by A28,GROUP_2:59;
+then A30:        x * y in the carrier of B1 by RLVECT_1:def 1;
+             f.(x * y) = f.x * f.y by GROUP_6:def 7;
+           hence thesis by A27,A29,A30,FUNCT_2:43;
+          end;
+         then consider B3 being strict Subgroup of G2 such that
+A31:      the carrier of B3 = f.:the carrier of B1 by A22,A23,GROUP_2:61;
+A32:      gr (f.:the carrier of B1) = B3 by A31,Th3;
+         consider C1 being strict Subgroup of G1 such that
+A33:      C1 = A1 "\/" B1;
+           1.G1 in C1 by GROUP_2:55;
+then A34:      1.G1 in the carrier of C1 by RLVECT_1:def 1;
+         consider y being Element of G2 such that
+A35:      y = f.1.G1;
+A36:      f.:the carrier of C1 <> {} by A7,A34,A35,FUNCT_1:def 12;
+A37:      for g being Element of G2 st
+         g in f.:the carrier of C1 holds
+         g" in f.:the carrier of C1
+          proof
+           let g be Element of G2; assume
+          g in f.:the carrier of C1;
+           then consider x being Element of G1 such that
+A38:        x in the carrier of C1 & g = f.x by FUNCT_2:116;
+             x in C1 by A38,RLVECT_1:def 1;
+           then x" in C1 by GROUP_2:60;
+then A39:        x" in the carrier of C1 by RLVECT_1:def 1;
+             f.x" = (f.x)" by GROUP_6:41;
+           hence thesis by A38,A39,FUNCT_2:43;
+          end;
+           for g1, g2 being Element of G2 st
+         g1 in f.:the carrier of C1 & g2 in f.:the carrier of C1 holds
+         g1 * g2 in f.:the carrier of C1
+          proof
+           let g1, g2 be Element of G2; assume
+A40:        g1 in f.:the carrier of C1 & g2 in f.:the carrier of C1;
+           then consider x being Element of G1 such that
+A41:        x in the carrier of C1 & g1 = f.x by FUNCT_2:116;
+A42:        x in C1 by A41,RLVECT_1:def 1;
+           consider y being Element of G1 such that
+A43:        y in the carrier of C1 & g2 = f.y by A40,FUNCT_2:116;
+             y in C1 by A43,RLVECT_1:def 1;
+           then x * y in C1 by A42,GROUP_2:59;
+then A44:        x * y in the carrier of C1 by RLVECT_1:def 1;
+             f.(x * y) = f.x * f.y by GROUP_6:def 7;
+           hence thesis by A41,A43,A44,FUNCT_2:43;
+          end;
+         then consider C3 being strict Subgroup of G2 such that
+A45:      the carrier of C3 = f.:the carrier of C1 by A36,A37,GROUP_2:61;
+           the carrier of A1 c= the carrier of G1 &
+         the carrier of B1 c= the carrier of G1 by GROUP_2:def 5;
+         then reconsider A = (the carrier of A1) \/ the carrier of B1 as
+           Subset of G1 by XBOOLE_1:8;
+         reconsider B = (f.:the carrier of A1) \/ f.:the carrier of B1 as
+           Subset of G2;
+           the carrier of A3 "\/" B3 = the carrier of C3
+          proof
+A46:        f.:the carrier of A1 c= the carrier of C3
+            proof
+             let x be set;
+             assume
+A47:          x in f.:the carrier of A1;
+             then reconsider x as Element of G2;
+             consider y being Element of G1 such that
+A48:          y in the carrier of A1 & x = f.y by A47,FUNCT_2:116;
+               y in A by A48,XBOOLE_0:def 2;
+             then y in gr A by GROUP_4:38;
+             then y in the carrier of gr A by RLVECT_1:def 1;
+             then y in the carrier of A1 "\/" B1 by Th4;
+             hence thesis by A33,A45,A48,FUNCT_2:43;
+            end;
+             f.:the carrier of B1 c= the carrier of C3
+            proof
+             let x be set;
+             assume
+A49:          x in f.:the carrier of B1;
+             then reconsider x as Element of G2;
+             consider y being Element of G1 such that
+A50:          y in the carrier of B1 & x = f.y by A49,FUNCT_2:116;
+               y in A by A50,XBOOLE_0:def 2;
+             then y in gr A by GROUP_4:38;
+             then y in the carrier of gr A by RLVECT_1:def 1;
+             then y in the carrier of A1 "\/" B1 by Th4;
+             hence thesis by A33,A45,A50,FUNCT_2:43;
+            end;
+           then B c= the carrier of C3 by A46,XBOOLE_1:8;
+           then gr B is Subgroup of C3 by GROUP_4:def 5;
+           then the carrier of gr B c= the carrier of C3 by GROUP_2:def 5;
+           hence the carrier of A3 "\/" B3 c= the carrier of C3
+                                                            by A19,A31,Th4;
+             the carrier of A1 c= the carrier of G1 by GROUP_2:def 5;
+then A51:        the carrier of A1 c= f"the carrier of A3 by A19,FUNCT_2:50;
+             the carrier of B1 c= the carrier of G1 by GROUP_2:def 5;
+then A52:        the carrier of B1 c= f"the carrier of B3 by A31,FUNCT_2:50;
+A53:        f"the carrier of A3 c= f"the carrier of A3 "\/" B3
+            proof
+             let x be set;
+             assume
+A54:          x in f"the carrier of A3;
+             then f.x in the carrier of A3 by FUNCT_2:46;
+then A55:          f.x in A3 by RLVECT_1:def 1;
+               f.x in the carrier of G2 by A54,FUNCT_2:7;
+             then f.x in A3 "\/" B3 by A55,Th5;
+             then f.x in the carrier of A3 "\/" B3 by RLVECT_1:def 1;
+             hence thesis by A54,FUNCT_2:46;
+            end;
+             f"the carrier of B3 c= f"the carrier of A3 "\/" B3
+            proof
+             let x be set;
+             assume
+A56:          x in f"the carrier of B3;
+             then f.x in the carrier of B3 by FUNCT_2:46;
+then A57:          f.x in B3 by RLVECT_1:def 1;
+               f.x in the carrier of G2 by A56,FUNCT_2:7;
+             then f.x in A3 "\/" B3 by A57,Th5;
+             then f.x in the carrier of A3 "\/" B3 by RLVECT_1:def 1;
+             hence thesis by A56,FUNCT_2:46;
+            end;
+then A58:        (f"the carrier of A3) \/ f"the carrier of B3 c=
+           f"the carrier of A3 "\/" B3 by A53,XBOOLE_1:8;
+           reconsider AA = (f"the carrier of A3) \/ f"the carrier of B3
+             as Subset of G1;
+A59:        A c= AA by A51,A52,XBOOLE_1:13;
+             1.G2 in A3 "\/" B3 by GROUP_2:55;
+           then 1.G2 in the carrier of A3 "\/" B3 by RLVECT_1:def 1;
+           then f.1.G1 in the carrier of A3 "\/" B3 by GROUP_6:40;
+then A60:        f"the carrier of A3 "\/" B3 <> {} by FUNCT_2:46;
+A61:        for g being Element of G1 st
+           g in f"the carrier of A3 "\/" B3 holds
+           g" in f"the carrier of A3 "\/" B3
+            proof
+             let g be Element of G1; assume
+               g in f"the carrier of A3 "\/" B3;
+             then f.g in the carrier of A3 "\/" B3 by FUNCT_2:46;
+             then f.g in A3 "\/" B3 by RLVECT_1:def 1;
+             then (f.g)" in A3 "\/" B3 by GROUP_2:60;
+             then f.g" in A3 "\/" B3 by GROUP_6:41;
+             then f.g" in the carrier of A3 "\/" B3 by RLVECT_1:def 1;
+             hence thesis by FUNCT_2:46;
+            end;
+             for g1, g2 being Element of G1 st
+           g1 in f"the carrier of A3 "\/" B3 &
+           g2 in f"the carrier of A3 "\/" B3 holds
+           g1 * g2 in f"the carrier of A3 "\/" B3
+            proof
+             let g1, g2 be Element of G1; assume
+            g1 in f"the carrier of A3 "\/" B3 & g2 in f"the carrier of A3 "\/"
+ B3;
+             then f.g1 in the carrier of A3 "\/" B3 & f.g2 in the carrier of
+A3 "\/" B3
+                                                       by FUNCT_2:46;
+             then f.g1 in A3 "\/" B3 & f.g2 in A3 "\/" B3 by RLVECT_1:def 1;
+             then f.g1 * f.g2 in A3 "\/" B3 by GROUP_2:59;
+             then f.(g1 * g2) in A3 "\/" B3 by GROUP_6:def 7;
+             then f.(g1 * g2) in the carrier of A3 "\/" B3 by RLVECT_1:def 1;
+             hence thesis by FUNCT_2:46;
+            end;
+           then consider H being strict Subgroup of G1 such that
+A62:        the carrier of H = f"the carrier of A3 "\/"
+ B3 by A60,A61,GROUP_2:61;
+             A c= the carrier of H by A58,A59,A62,XBOOLE_1:1;
+           then gr A is Subgroup of H by GROUP_4:def 5;
+           then the carrier of gr A c= the carrier of H by GROUP_2:def 5;
+then A63:        the carrier of C1 c= f"the carrier of A3 "\/" B3 by A33,A62,
+Th4;
+A64:        f.:the carrier of C1 c= f.:(f"the carrier of A3 "\/" B3)
+            proof
+             let x be set;
+             assume
+A65:          x in f.:the carrier of C1;
+             then reconsider x as Element of G2;
+             consider y being Element of G1 such that
+A66:          y in the carrier of C1 & x = f.y by A65,FUNCT_2:116;
+             thus thesis by A63,A66,FUNCT_2:43;
+            end;
+             f.:f"the carrier of A3 "\/" B3 c= the carrier of A3 "\/" B3
+                                                               by FUNCT_1:145;
+           hence the carrier of C3 c= the carrier of A3 "\/" B3
+                                                         by A45,A64,XBOOLE_1:1;
+          end;
+         then gr (f.:the carrier of A1 "\/" B1) = A3 "\/" B3 by A33,A45,Th3
+                  .= gr (f.:the carrier of A1) "\/" gr (f.:the carrier of B1)
+                                                                by A19,A32,Th3
+                  .= (FuncLatt f).a "\/" (FuncLatt f).b by A4,A5,Th27;
+         hence thesis by A2,A3,A6,Th27;
+        end;
+       end;
+      hence thesis by VECTSP_8:def 9;
+     end;
+
+theorem
+   for G1, G2 being Group
+  for f being Homomorphism of G1, G2 st f is one-to-one holds
+   FuncLatt f is Homomorphism of lattice G1, lattice G2
+    proof
+     let G1, G2 be Group;
+     let f be Homomorphism of G1, G2;
+     assume f is one-to-one;
+     then FuncLatt f is Semilattice-Homomorphism of lattice G1, lattice G2 &
+     FuncLatt f is sup-Semilattice-Homomorphism of lattice G1, lattice G2
+      by Th36,Th37;
+     hence thesis by VECTSP_8:11;
+    end;

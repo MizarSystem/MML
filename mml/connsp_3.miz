@@ -1,0 +1,1040 @@
+:: Components and Unions of Components
+::  by Yatsuka Nakamura and Andrzej Trybulec
+::
+:: Received February 5, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, RELAT_1, CONNSP_1, SETFAM_1, RELAT_2, TARSKI, BOOLE,
+      SUBSET_1, CONNSP_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SETFAM_1, STRUCT_0, PRE_TOPC, CONNSP_1;
+ constructors CONNSP_1, MEMBERED;
+ clusters PRE_TOPC, STRUCT_0, SUBSET_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, XBOOLE_0;
+ theorems TARSKI, ZFMISC_1, SETFAM_1, PRE_TOPC, SUBSET_1, CONNSP_1, JORDAN1,
+      XBOOLE_0, XBOOLE_1;
+ schemes PRE_TOPC;
+
+begin :: The component of a subset in a topological space
+
+ reserve x,X,X2,Y,Y2 for set;
+ reserve GX for non empty TopSpace;
+ reserve A2,B2 for Subset of GX;
+ reserve B for Subset of GX;
+
+definition let GX be TopStruct, V be Subset of GX;
+  func skl V -> Subset of GX means
+   :Def1:ex F being Subset-Family of GX st
+      (for A being Subset of GX holds A in F iff
+      A is connected & V c= A) & union F = it;
+   existence
+   proof
+        defpred P[set] means
+          ex A1 being Subset of GX st A1 = $1 & A1 is connected & V c= $1;
+        consider F being Subset-Family of GX such that
+   A1:  for A being Subset of GX
+         holds A in F iff P[A] from SubFamExS;
+        take union F, F;
+      thus for A being Subset of GX holds A in F iff A is connected & V c= A
+      proof
+       let A be Subset of GX;
+       thus A in F implies A is connected & V c= A
+       proof
+        assume A in F;
+        then ex A1 being Subset of GX st A1 = A & A1 is connected & V c= A by
+A1;
+        hence A is connected & V c= A;
+       end;
+       thus thesis by A1;
+      end;
+      thus thesis;
+   end;
+   uniqueness
+   proof let S,S' be Subset of GX; assume
+   A2:  (ex F being Subset-Family of GX st
+        (for A being Subset of GX
+          holds A in F iff A is connected &
+        V c= A) & union F = S) & ex F' being Subset-Family of GX st
+        (for A being Subset of GX
+         holds A in F' iff A is connected &
+        V c= A) & union F' = S';
+        then consider F being Subset-Family of GX such that
+   A3:  (for A being Subset of GX holds A in F iff A is connected
+        & V c= A) & union F = S;
+        consider F' being Subset-Family of GX such that
+   A4: (for A being Subset of GX holds A in F' iff A is connected
+       & V c= A) & union F' = S' by A2;
+         now let y be set;
+       A5:  now assume
+                 y in S;
+               then consider B being set such that
+           A6: y in B & B in F by A3,TARSKI:def 4;
+               reconsider B as Subset of GX by A6;
+                 B is connected & V c= B & y in B by A3,A6;
+               then B in F'& y in B by A4;
+              hence y in S' by A4,TARSKI:def 4;
+           end;
+             now assume
+                 y in S';
+               then consider B being set such that
+           A7: y in B & B in F' by A4,TARSKI:def 4;
+               reconsider B as Subset of GX by A7;
+                 B is connected & V c= B & y in B by A4,A7;
+               then B in F & y in B by A3;
+             hence y in S by A3,TARSKI:def 4;
+           end;
+         hence y in S iff y in S' by A5;
+       end;
+     hence S = S' by TARSKI:2;
+   end;
+end;
+
+theorem Th1:
+for GX being TopSpace, V being Subset of GX st
+ (ex A being Subset of GX st A is connected & V c= A)
+  holds V c= skl V
+proof
+let GX be TopSpace, V be Subset of GX;
+given A being Subset of GX such that
+A1: A is connected & V c= A;
+    consider F being Subset-Family of GX such that
+A2: (for A being Subset of GX holds A in F iff A is connected
+    & V c= A) and
+A3: skl V = union F by Def1;
+A4: F <> {} by A1,A2;
+      for A being set holds A in F implies V c= A by A2;
+   then A5: V c= meet F by A4,SETFAM_1:6;
+      meet F c= union F by SETFAM_1:3;
+  hence V c= skl V by A3,A5,XBOOLE_1:1;
+end;
+
+theorem
+  for GX being TopSpace, V being Subset of GX st
+ (not ex A being Subset of GX st A is connected & V c= A)
+  holds skl V = {}
+proof
+let GX be TopSpace, V be Subset of GX such that
+A1: not ex A being Subset of GX st A is connected & V c= A;
+    consider F being Subset-Family of GX such that
+A2: (for A being Subset of GX holds A in F iff A is connected
+    & V c= A) and
+A3: skl V = union F by Def1;
+    now assume F <> {};
+    then consider A being Subset of GX such that
+A4:   A in F by SUBSET_1:10;
+    reconsider A as Subset of GX;
+      A is connected & V c= A by A2,A4;
+   hence contradiction by A1;
+  end;
+ hence thesis by A3,ZFMISC_1:2;
+end;
+
+theorem Th3:
+ skl {}GX = the carrier of GX
+proof
+  defpred P[set] means
+    ex A1 being Subset of GX st A1 = $1 & A1 is connected & {}GX c= $1;
+  consider F being Subset-Family of GX such that
+A1: for A being Subset of GX
+     holds A in F iff P[A] from SubFamExS;
+A2: for A being Subset of GX holds A in F iff A is connected & {}GX c= A
+    proof
+     let A be Subset of GX;
+     thus A in F implies A is connected & {}GX c= A
+     proof
+       assume A in F;
+       then ex A1 being Subset of GX st A1 = A & A1 is connected & {}GX c= A
+by A1;
+       hence thesis;
+     end;
+     thus thesis by A1;
+    end;
+    now let x be set;
+   hereby assume x in the carrier of GX;
+     then reconsider p = x as Point of GX;
+    reconsider Y = skl p as set;
+    take Y;
+    thus x in Y by CONNSP_1:40;
+       skl p is connected & {}GX c= Y by CONNSP_1:41,XBOOLE_1:2;
+    hence Y in F by A2;
+   end;
+   given Y being set such that
+A3: x in Y and
+A4: Y in F;
+   thus x in the carrier of GX by A3,A4;
+  end;
+  then union F = the carrier of GX by TARSKI:def 4;
+ hence thesis by A2,Def1;
+end;
+
+theorem
+   for V being Subset of GX st V is connected holds skl V <>{}
+proof let V be Subset of GX such that
+A1: V is connected;
+ per cases;
+ suppose V = {};
+  then V = {}GX;
+  then skl V = the carrier of GX by Th3;
+ hence thesis;
+ suppose
+A2: V <>{};
+    now assume A3:skl V={};
+      V c= skl V by A1,Th1;
+   hence contradiction by A2,A3,XBOOLE_1:3;
+  end;
+ hence thesis;
+end;
+
+theorem Th5:
+for GX being TopSpace, V being Subset of GX st
+ V is connected & V <> {} holds skl V is connected
+proof let GX be TopSpace;let V be Subset of GX;
+assume A1:V is connected & V<>{};
+    consider F being Subset-Family of GX such that
+A2: for A being Subset of GX holds
+    A in F iff A is connected & V c= A and
+A3: skl V = union F by Def1;
+A4: for A being set st A in F holds V c= A by A2;
+A5: for A being Subset of GX st A in F holds A is connected by A2;
+      F <> {} by A1,A2;
+    then V c= meet F by A4,SETFAM_1:6;
+    then meet F<>{}(GX) by A1,XBOOLE_1:3;
+  hence skl V is connected by A3,A5,CONNSP_1:27;
+end;
+
+theorem Th6:
+  for V,C being Subset of GX st V is connected & C is connected
+holds skl V c= C implies C = skl V
+proof let V,C be Subset of GX;
+assume that
+A1: V is connected and
+A2: C is connected; assume
+A3: skl V c= C;
+    consider F being Subset-Family of GX such that
+A4: for A being Subset of GX holds
+    (A in F iff A is connected & V c= A) and
+A5: skl V = union F by Def1;
+      V c= skl V by A1,Th1; then V c= C by A3,XBOOLE_1:1;
+    then C in F by A2,A4;
+    then C c= skl V by A5,ZFMISC_1:92;
+  hence C = skl V by A3,XBOOLE_0:def 10;
+end;
+
+theorem Th7:
+ for A being Subset of GX st A is_a_component_of GX
+  holds skl A=A
+proof let A be Subset of GX;assume A1:A is_a_component_of GX;
+ then A2:A is connected by CONNSP_1:def 5;
+ then A3:A c= skl A by Th1;
+   A <>{}(GX) by A1,CONNSP_1:34;
+ then skl A is connected by A2,Th5;
+ hence thesis by A1,A3,CONNSP_1:def 5;
+end;
+
+theorem Th8:for A being Subset of GX holds
+ A is_a_component_of GX iff
+   ex V being Subset of GX st V is connected &
+ V <> {} & A = skl V
+proof let A be Subset of GX;
+A1:  now assume
+A2:  A is_a_component_of GX;
+then A3:   A <> {}(GX) & A is connected by CONNSP_1:34,def 5;
+      take V = A;
+     thus V is connected & V<>{} & A = skl V by A2,A3,Th7;
+    end;
+      now given V being Subset of GX such that
+A4: V is connected and A5:V<>{} and
+A6:   A = skl V;
+A7:   A is connected by A4,A5,A6,Th5;
+         for B being Subset of GX st B is connected
+      holds A c= B implies A = B by A4,A6,Th6;
+     hence A is_a_component_of GX by A7,CONNSP_1:def 5;
+    end;
+  hence thesis by A1;
+end;
+
+theorem
+    for V being Subset of GX st V is connected & V<>{}
+   holds skl V is_a_component_of GX by Th8;
+
+theorem Th10:
+ for A, V be Subset of GX st
+  A is_a_component_of GX & V is connected & V c= A & V<>{}
+   holds A = skl V
+proof
+ let A, V be Subset of GX;
+ assume that
+A1: A is_a_component_of GX and
+A2:V is connected and
+A3: V c= A and A4:V<>{}; assume
+A5: A <> skl V;
+    reconsider A' = A as Subset of GX;
+      V c= skl V by A2,Th1;
+then A6: A meets (skl V) by A3,A4,XBOOLE_1:67;
+      skl V is_a_component_of GX by A2,A4,Th8;
+    then A',skl V are_separated by A1,A5,CONNSP_1:36;
+  hence contradiction by A6,CONNSP_1:2;
+end;
+
+theorem
+  Th11: for V being Subset of GX st V is connected & V<>{} holds
+    skl (skl V)=skl V
+proof let V be Subset of GX;assume A1:V is connected & V<>{};
+ then A2:skl V is_a_component_of GX by Th8;
+ then skl V <> {}(GX) by CONNSP_1:34;
+ then skl V is connected & skl V <> {} by A1,Th5;
+hence thesis by A2,Th10;
+end;
+
+theorem
+  Th12: for A,B being Subset of GX st A is connected &
+   B is connected & A<>{} & A c= B
+  holds skl A = skl B
+proof let A,B be Subset of GX;assume
+ A1: A is connected & B is connected & A<>{} & A c= B;
+ then A2:B<>{} by XBOOLE_1:3;
+ A3: B c= skl B by A1,Th1;
+ then A4: A c= skl B by A1,XBOOLE_1:1;
+ A5: skl B is connected by A1,A2,Th5;
+ A6: skl A is connected by A1,Th5;
+ A7:skl B c= skl A
+ proof
+  consider F being Subset-Family of GX such that
+   A8:   (for D being Subset of GX holds D in F iff
+      D is connected & A c= D) & union F = skl A by Def1;
+      skl B in F by A4,A5,A8;
+  hence thesis by A8,ZFMISC_1:92;
+ end;
+  skl A c= skl B
+ proof
+  consider F being Subset-Family of GX such that
+   A9:   (for D being Subset of GX holds D in F iff
+      D is connected & B c= D) & union F = skl B by Def1;
+     B c= skl A by A3,A7,XBOOLE_1:1;
+   then skl A in F by A6,A9;
+  hence thesis by A9,ZFMISC_1:92;
+ end;
+hence thesis by A7,XBOOLE_0:def 10;
+end;
+
+theorem
+  Th13: for A,B being Subset of GX st A is connected &
+   B is connected & A<>{} & A c= B
+  holds B c= skl A
+proof let A,B be Subset of GX;
+ assume A1: A is connected & B is connected & A<>{} & A c= B;
+  then skl A = skl B by Th12;
+hence thesis by A1,Th1;
+end;
+
+theorem
+  Th14: for A being Subset of GX,B being Subset of GX st
+   A is connected & A \/ B is connected & A<>{}
+  holds A \/ B c= skl A
+proof
+  let A be Subset of GX,B be Subset of GX;assume that
+  A1: A is connected & A \/ B is connected & A<>{};
+     A c= A \/ B by XBOOLE_1:7;
+   then skl (A \/ B) = skl A by A1,Th12;
+  hence A \/ B c= skl A by A1,Th1;
+end;
+
+theorem
+ Th15: for A being Subset of GX, p being Point of GX
+  st A is connected & p in A holds
+  skl p=skl A
+proof let A be Subset of GX, p be Point of GX;
+  assume A1:A is connected & p in A;
+   then A2: A c= skl A by Th1;
+     skl A is_a_component_of GX by A1,Th8;
+ hence thesis by A1,A2,CONNSP_1:44;
+end;
+
+theorem
+    for A,B being Subset of GX st A is connected &
+  B is connected & A meets B
+  holds A \/ B c= skl A & A \/ B c= skl B & A c= skl B & B c= skl A
+proof let A,B be Subset of GX;
+ assume A1: A is connected & B is connected & A /\ B <>{};
+    for C,D being Subset of GX st C is connected &
+  D is connected & C /\ D <>{}
+  holds C \/ D c= skl C
+  proof let C,D be Subset of GX;
+   assume A2: C is connected & D is connected & C /\ D <>{};
+    then A3: C <>{};
+      C meets D by A2,XBOOLE_0:def 7;
+    then not C,D are_separated by CONNSP_1:2;
+    then C \/ D is connected by A2,CONNSP_1:18;
+    hence thesis by A2,A3,Th14;
+   end;
+   then A4: A \/ B c= skl A & A \/ B c= skl B by A1;
+     A c= A \/ B & B c= A \/ B by XBOOLE_1:7;
+ hence thesis by A4,XBOOLE_1:1;
+end;
+
+theorem
+   for A being Subset of GX st A is connected & A<>{}
+ holds Cl A c= skl A
+proof let A be Subset of GX;
+ assume that A1: A is connected and
+       A2: A<>{};
+  A3: A c= Cl A by PRE_TOPC:48;
+    Cl A is connected by A1,CONNSP_1:20;
+hence thesis by A1,A2,A3,Th13;
+end;
+
+theorem
+   for A,B being Subset of GX
+   st A is_a_component_of GX & B is connected & B<>{} & A misses B
+  holds A misses skl B
+proof let A,B be Subset of GX;assume
+ A1: A is_a_component_of GX & B is connected & B<>{} &
+  A /\ B ={};
+   now assume A /\ skl B <>{};
+  then consider x being Point of GX such that A2:x in A /\ skl B by SUBSET_1:10
+;
+  A3: x in A & x in skl B by A2,XBOOLE_0:def 3;
+  A4:skl A=A by A1,Th7;
+    A is connected by A1,CONNSP_1:def 5;
+  then A5:skl x=skl A by A3,Th15;
+  A6:skl B=skl skl B by A1,Th11;
+    skl B is connected by A1,Th5;
+  then A7:(skl B) /\ B={} by A1,A3,A4,A5,A6,Th15;
+    B c= skl B by A1,Th1;
+ hence contradiction by A1,A7,XBOOLE_1:28;
+ end;
+:: then A /\ skl B ={};
+hence thesis by XBOOLE_0:def 7;
+end;
+
+begin :: On unions of components
+
+Lm1:
+ now let GX be TopStruct;
+    {} c= bool (the carrier of GX) by XBOOLE_1:2;
+  then {} is Subset-Family of GX by SETFAM_1:def 7;
+  then reconsider S={} as Subset-Family of GX;
+    (for B being Subset of GX st B in S holds B is_a_component_of GX) &
+  {}(GX)=union S by ZFMISC_1:2;
+  hence ex F being Subset-Family of GX st (for B being
+  Subset of GX st B in F holds B is_a_component_of GX) &
+  {}(GX)=union F;
+ end;
+
+definition let GX be TopStruct;
+   mode a_union_of_components of GX -> Subset of GX means
+    :Def2:ex F being Subset-Family of GX st (for B being
+    Subset of GX st B in F holds B is_a_component_of GX) &
+    it = union F;
+ existence
+  proof
+   take {}GX;
+   thus thesis by Lm1;
+  end;
+end;
+
+theorem
+ Th19: {}(GX) is a_union_of_components of GX
+proof
+ thus ex F being Subset-Family of GX st (for B being
+    Subset of GX st B in F holds B is_a_component_of GX) &
+    {}(GX) = union F by Lm1;
+end;
+
+theorem
+    for A being Subset of GX st A=(the carrier of GX) holds
+      A is a_union_of_components of GX
+proof let A be Subset of GX;assume A1: A=(the carrier of GX);
+      {B : B is_a_component_of GX} c=
+     bool (the carrier of GX)
+    proof let x;assume x in {B : B is_a_component_of GX};
+    then ex B being Subset of GX st x=B & B is_a_component_of GX;
+    hence thesis;
+    end;
+    then {B: B is_a_component_of GX} is Subset-Family of (the carrier of GX)
+      by SETFAM_1:def 7;
+    then reconsider S={B: B is_a_component_of GX} as Subset-Family of GX
+             ;
+    A2:the carrier of GX=union S
+     proof
+         the carrier of GX c= union S
+        proof let x;assume x in the carrier of GX;
+         then reconsider p=x as Point of GX;
+         A3:p in skl p by CONNSP_1:40;
+         set B3=skl p;
+           B3 is_a_component_of GX by CONNSP_1:43;
+         then B3 in S;
+         hence x in union S by A3,TARSKI:def 4;
+        end;
+      hence thesis by XBOOLE_0:def 10;
+     end;
+      for B being Subset of GX st B in S holds B is_a_component_of GX
+     proof let B be Subset of GX;assume B in S;
+       then ex B2 being Subset of GX st B=B2 & B2 is_a_component_of GX;
+      hence thesis;
+     end;
+hence thesis by A1,A2,Def2;
+end;
+
+theorem
+ Th21: for A being Subset of GX,p being Point of GX st p in A
+  & A is a_union_of_components of GX holds
+  skl p c= A
+proof let A be Subset of GX,p be Point of GX;
+ assume A1:p in A & A is a_union_of_components of GX;
+    then consider F being Subset-Family of GX such that
+    A2:(for B being Subset of GX st B in F holds B is_a_component_of GX) &
+    A=union F by Def2;
+    consider X such that A3:p in X & X in F by A1,A2,TARSKI:def 4;
+     reconsider B2=X as Subset of GX by A3;
+       B2 is_a_component_of GX by A2,A3;
+    then B2=skl p by A3,CONNSP_1:44;
+ hence thesis by A2,A3,ZFMISC_1:92;
+end;
+
+theorem
+   for A,B being Subset of GX st
+ A is a_union_of_components of GX &
+ B is a_union_of_components of GX holds
+  A \/ B is a_union_of_components of GX &
+  A /\ B is a_union_of_components of GX
+proof let A,B be Subset of GX;assume
+ A1: A is a_union_of_components of GX &
+  B is a_union_of_components of GX;
+ then consider Fa being Subset-Family of GX such that
+ A2:   (for Ba being Subset of GX st Ba in Fa holds Ba is_a_component_of GX) &
+    A=union Fa by Def2;
+ consider Fb being Subset-Family of GX such that
+ A3:   (for Bb being Subset of GX st Bb in Fb holds Bb is_a_component_of GX) &
+    B=union Fb by A1,Def2;
+ reconsider Fc = Fa \/ Fb as Subset-Family of GX;
+    A4:A \/ B =union Fc by A2,A3,ZFMISC_1:96;
+    A5: for B2 being Subset of GX st B2 in Fa \/ Fb
+      holds B2 is_a_component_of GX
+    proof let B2 be Subset of GX;assume
+       B2 in Fa \/ Fb;
+    then B2 in Fa or B2 in Fb by XBOOLE_0:def 2;
+    hence B2 is_a_component_of GX by A2,A3;
+    end;
+    A /\ B is a_union_of_components of GX
+  proof
+     reconsider Fd= Fa /\ Fb as Subset-Family of GX;
+     A6: for B4 being Subset of GX st B4 in Fd holds B4 is_a_component_of GX
+     proof let B4 be Subset of GX;assume B4 in Fd;
+      then B4 in Fa & B4 in Fb by XBOOLE_0:def 3;
+     hence B4 is_a_component_of GX by A2;
+     end;
+       A /\ B =union Fd
+     proof
+     A7: A /\ B c= union Fd
+      proof let x be set;assume x in A /\ B;
+        then A8: x in A & x in B by XBOOLE_0:def 3;
+        then consider F1 being set such that
+        A9: x in F1 & F1 in Fa by A2,TARSKI:def 4;
+        consider F2 being set such that
+        A10: x in F2 & F2 in Fb by A3,A8,TARSKI:def 4;
+        A11: F1 /\ F2 <>{} by A9,A10,XBOOLE_0:def 3;
+        reconsider C1=F1 as Subset of GX by A9;
+        reconsider C2=F2 as Subset of GX by A10;
+        A12: C1 is_a_component_of GX by A2,A9;
+          C2 is_a_component_of GX by A3,A10;
+        then C1 = C2 or C1 misses C2 by A12,CONNSP_1:37;
+        then C1 in Fa /\ Fb by A9,A10,A11,XBOOLE_0:def 3,def 7;
+       hence thesis by A9,TARSKI:def 4;
+      end;
+       union Fd c= A /\ B
+      proof let x be set;assume x in union Fd;
+       then consider X4 being set such that
+       A13: x in X4 & X4 in Fd by TARSKI:def 4;
+       A14:X4 in Fa & X4 in Fb by A13,XBOOLE_0:def 3;
+       then A15: x in union Fa by A13,TARSKI:def 4;
+         x in union Fb by A13,A14,TARSKI:def 4;
+       hence thesis by A2,A3,A15,XBOOLE_0:def 3;
+      end;
+     hence thesis by A7,XBOOLE_0:def 10;
+     end;
+    hence thesis by A6,Def2;
+  end;
+hence thesis by A4,A5,Def2;
+end;
+
+theorem
+    for Fu being Subset-Family of GX st
+ (for A being Subset of GX st A in Fu
+  holds A is a_union_of_components of GX)
+ holds union Fu is a_union_of_components of GX
+ proof let Fu be Subset-Family of GX;assume
+  A1: (for A being Subset of GX st
+   A in Fu holds A is a_union_of_components of GX);
+    {B: ex B2 st B2 in Fu & B c= B2 & B is_a_component_of GX}
+   c= bool (the carrier of GX)
+    proof let x;assume x in
+     {B: ex B2 st B2 in Fu & B c= B2 & B is_a_component_of GX};
+     then ex B st x=B & ex B2 st B2 in Fu & B c= B2 & B is_a_component_of GX;
+     hence x in bool the carrier of GX;
+    end;
+  then {B: ex B2 st B2 in Fu & B c= B2 & B is_a_component_of GX}
+   is Subset-Family of (the carrier of GX) by SETFAM_1:def 7;
+   then reconsider F2={B: ex B2 st B2 in Fu & B c= B2 & B is_a_component_of GX}
+    as Subset-Family of GX;
+    A2:union Fu = union F2
+     proof
+      A3:union Fu c= union F2
+       proof let x;assume x in union Fu;
+        then consider X2 such that A4: x in X2 & X2 in Fu by TARSKI:def 4;
+        reconsider B3=X2 as Subset of GX by A4;
+          B3 is a_union_of_components of GX by A1,A4;
+        then consider F being Subset-Family of GX such that
+        A5: (for B being Subset of GX st B in F holds B is_a_component_of GX) &
+        B3=union F by Def2;
+        consider Y2 such that A6:x in Y2 & Y2 in F by A4,A5,TARSKI:def 4;
+        reconsider A3=Y2 as Subset of GX by A6;
+        A7: A3 is_a_component_of GX by A5,A6;
+          Y2 c= B3 by A5,A6,ZFMISC_1:92;
+        then A3 in F2 by A4,A7;
+       hence x in union F2 by A6,TARSKI:def 4;
+       end;
+        union F2 c= union Fu
+       proof let x;assume x in union F2;
+        then consider X such that A8:x in X & X in F2 by TARSKI:def 4;
+          ex B st X=B & ex B2 st B2 in Fu & B c= B2 & B is_a_component_of GX
+           by A8;
+        hence x in union Fu by A8,TARSKI:def 4;
+       end;
+      hence thesis by A3,XBOOLE_0:def 10;
+     end;
+      for B being Subset of GX st B in F2
+     holds B is_a_component_of GX
+     proof let B be Subset of GX;assume B in F2;
+       then ex A2 being Subset of GX st B=A2 &
+       ex B2 st B2 in Fu & A2 c= B2 & A2 is_a_component_of GX;
+      hence B is_a_component_of GX;
+     end;
+ hence union Fu is a_union_of_components of GX by A2,Def2;
+ end;
+
+theorem
+    for Fu being Subset-Family of GX st
+ (for A being Subset of GX st A in Fu
+  holds A is a_union_of_components of GX)
+ holds meet Fu is a_union_of_components of GX
+proof
+let Fu be Subset-Family of GX;assume A1:
+  (for A being Subset of GX st A in Fu
+   holds A is a_union_of_components of GX);
+  now per cases;
+case A2:Fu<>{};
+    {B:B is_a_component_of GX & for A2 st A2 in Fu holds B c= A2}
+   c= bool(the carrier of GX)
+    proof let x;assume
+       x in {B:B is_a_component_of GX & for A2 st A2 in Fu holds B c= A2};
+     then ex B st x=B &
+       B is_a_component_of GX & for A2 st A2 in Fu holds B c= A2;
+     hence x in bool(the carrier of GX);
+    end;
+  then {B:B is_a_component_of GX & for A2 st A2 in Fu holds B c= A2}
+   is Subset-Family of GX by SETFAM_1:def 7;
+  then reconsider F1={B:B is_a_component_of GX & for A2 st A2 in Fu holds B c=
+A2}
+  as Subset-Family of GX;
+  A3: meet Fu=union F1
+   proof
+    A4:meet Fu c= union F1
+     proof
+         meet Fu c= union F1
+        proof let x;assume A5: x in meet Fu;
+         consider Y2 such that A6:Y2 in Fu by A2,XBOOLE_0:def 1;
+         A7:x in Y2 by A5,A6,SETFAM_1:def 1;
+         reconsider B2=Y2 as Subset of GX by A6;
+           B2 is a_union_of_components of GX by A1,A6;
+         then consider F being Subset-Family of GX such that
+         A8: (for B being Subset of GX st B in F
+           holds B is_a_component_of GX) &
+          B2=union F by Def2;
+          consider Y3 being set such that A9:x in Y3 & Y3 in F
+                 by A7,A8,TARSKI:def 4;
+          reconsider B3=Y3 as Subset of GX by A9;
+          A10:B3 is_a_component_of GX by A8,A9;
+           for A2 st A2 in Fu holds B3 c= A2
+           proof let A2;assume A11:A2 in Fu;
+            then A12:A2 is a_union_of_components of GX by A1;
+            A13:B3 is_a_component_of GX by A8,A9;
+            A14:x in A2 by A5,A11,SETFAM_1:def 1;
+            reconsider p=x as Point of GX by A5;
+              skl p c= A2 by A12,A14,Th21;
+           hence thesis by A9,A13,CONNSP_1:44;
+           end;
+         then Y3 in F1 by A10;
+        hence x in union F1 by A9,TARSKI:def 4;
+        end;
+     hence thesis;
+     end;
+      union F1 c= meet Fu
+     proof let x;assume x in union F1;
+      then consider X such that A15: x in X & X in F1 by TARSKI:def 4;
+      consider B such that A16:X=B &
+      (B is_a_component_of GX & for A2 st A2 in Fu holds B c= A2) by A15;
+        for Y st Y in Fu holds x in Y
+       proof let Y;assume Y in Fu;
+        then B c= Y by A16;
+       hence x in Y by A15,A16;
+       end;
+     hence x in meet Fu by A2,SETFAM_1:def 1;
+     end;
+   hence thesis by A4,XBOOLE_0:def 10;
+   end;
+    for B being Subset of GX st B in F1 holds B is_a_component_of GX
+   proof let B be Subset of GX;assume B in F1;
+     then ex B1 be Subset of GX st B=B1 &
+     B1 is_a_component_of GX & for A2 st A2 in Fu holds B1 c= A2;
+    hence B is_a_component_of GX;
+   end;
+ hence meet Fu is a_union_of_components of GX by A3,Def2;
+case Fu={};
+ then meet Fu={}(GX) by SETFAM_1:def 1;
+ hence meet Fu is a_union_of_components of GX by Th19;
+end;
+ hence meet Fu is a_union_of_components of GX;
+end;
+
+theorem
+    for A,B being Subset of GX st A is a_union_of_components of
+GX
+  & B is a_union_of_components of GX holds
+  A \ B is a_union_of_components of GX
+proof let A,B be Subset of GX;assume
+  A1: A is a_union_of_components of GX
+   & B is a_union_of_components of GX;
+  then consider Fa being Subset-Family of GX such that
+  A2: (for B2 being
+    Subset of GX st B2 in Fa holds B2 is_a_component_of GX) &
+    A=union Fa by Def2;
+  consider Fb being Subset-Family of GX such that
+  A3: (for B3 being Subset of GX st B3 in Fb holds B3 is_a_component_of GX) &
+    B=union Fb by A1,Def2;
+  reconsider Fd=Fa\Fb as Subset-Family of GX;
+  A4:A \ B=union Fd
+   proof
+    A5:A \ B c= union Fd
+     proof let x;assume A6: x in A \ B;
+      then x in A & not x in B by XBOOLE_0:def 4;
+      then consider X such that
+      A7:x in X & X in Fa by A2,TARSKI:def 4;
+      reconsider A2=X as Subset of GX by A7;
+        now assume A2 in Fb; then A2 c= B by A3,ZFMISC_1:92;
+      hence contradiction by A6,A7,XBOOLE_0:def 4;
+      end;
+      then A2 in Fd by A7,XBOOLE_0:def 4;
+      hence thesis by A7,TARSKI:def 4;
+     end;
+      union Fd c= A \ B
+     proof let x;assume x in union Fd;
+      then consider X such that A8:x in X & X in Fd by TARSKI:def 4;
+      A9:X in Fa & not X in Fb by A8,XBOOLE_0:def 4;
+      reconsider A2=X as Subset of GX by A8;
+      A10:A2 is_a_component_of GX by A2,A9;
+      A11: A2 c= A by A2,A9,ZFMISC_1:92;
+        now assume x in B;
+       then consider Y3 being set such that
+        A12: x in Y3 & Y3 in Fb by A3,TARSKI:def 4;
+       reconsider B3=Y3 as Subset of GX by A12;
+       A13:B3 is_a_component_of GX by A3,A12;
+         A2 /\ B3 <>{} by A8,A12,XBOOLE_0:def 3;
+       then A2 meets B3 by XBOOLE_0:def 7;
+      hence contradiction by A9,A10,A12,A13,CONNSP_1:37;
+      end;
+     hence thesis by A8,A11,XBOOLE_0:def 4;
+     end;
+    hence thesis by A5,XBOOLE_0:def 10;
+   end;
+    for B4 being Subset of GX st B4 in Fd holds B4 is_a_component_of GX
+   proof let B4 be Subset of GX;assume B4 in Fd;
+    then B4 in Fa by XBOOLE_0:def 4;
+   hence thesis by A2;
+   end;
+ hence thesis by A4,Def2;
+end;
+
+begin :: Operations Down and Up
+
+definition let GX be TopStruct, B be Subset of GX,
+   p be Point of GX;
+  assume A1: p in B;
+  func Down(p,B) -> Point of GX|B equals
+   :Def3:p;
+   coherence
+   proof B=the carrier of (GX|B)
+       proof
+          B=[#](GX|B) by PRE_TOPC:def 10;
+        hence thesis by PRE_TOPC:12;
+       end;
+     hence p is Point of GX|B by A1;
+   end;
+end;
+
+definition let GX be TopStruct, B be Subset of GX,
+   p be Point of GX|B;
+  assume A1:B<>{};
+  func Up(p) -> Point of GX equals
+     p;
+   coherence
+   proof B=the carrier of (GX|B) by JORDAN1:1;
+       then p in B by A1;
+     hence p is Point of GX;
+   end;
+end;
+
+definition let GX be TopStruct, V,B be Subset of GX;
+  func Down(V,B) -> Subset of GX|B equals
+   :Def5:V /\ B;
+   coherence
+   proof A1:V /\ B c= B by XBOOLE_1:17;
+         B=the carrier of (GX|B)
+       proof
+          B=[#](GX|B) by PRE_TOPC:def 10;
+        hence thesis by PRE_TOPC:12;
+       end;
+     hence thesis by A1;
+   end;
+end;
+
+definition let GX be TopStruct, B be Subset of GX;
+  let V be Subset of GX|B;
+  func Up(V) -> Subset of GX equals
+   :Def6:V;
+   coherence
+   proof
+         B=the carrier of (GX|B) by JORDAN1:1;
+       then V c= the carrier of GX by XBOOLE_1:1;
+     hence thesis;
+   end;
+end;
+
+definition let GX be TopStruct, B be Subset of GX,
+ p be Point of GX;
+ assume A1: p in B;
+ func skl(p,B) -> Subset of GX means
+   :Def7:for q being Point of GX|B st q=p holds it=skl q;
+   existence
+   proof
+       A2:B=the carrier of (GX|B)
+       proof
+          B=[#](GX|B) by PRE_TOPC:def 10;
+        hence thesis by PRE_TOPC:12;
+       end;
+     then reconsider q3=p as Point of GX|B by A1;
+     reconsider C=skl q3 as Subset of GX by A2,XBOOLE_1:1;
+     take C;
+     thus thesis;
+   end;
+   uniqueness
+   proof let S,S' be Subset of GX; assume
+   A3:(for q being Point of GX|B st q=p holds S=skl q)&
+   (for q2 being Point of GX|B st q2=p holds S'=skl q2);
+         B=the carrier of (GX|B)
+       proof B=[#](GX|B) by PRE_TOPC:def 10;
+        hence thesis by PRE_TOPC:12;
+       end;
+     then reconsider q3=p as Point of GX|B by A1;
+       S=skl q3 & S'=skl q3 by A3;
+    hence S = S';
+   end;
+end;
+
+theorem
+   for B being Subset of GX, p be Point of GX st p in B
+  holds skl(p,B)<>{}
+proof let B be Subset of GX, p be Point of GX;assume
+  A1: p in B;
+  then reconsider B' = B as non empty Subset of GX;
+  reconsider q=p as Point of GX|B' by A1,JORDAN1:1;
+     q in skl q by CONNSP_1:40;
+ hence skl(p,B)<>{} by A1,Def7;
+end;
+
+theorem
+ Th27: for B being Subset of GX, p be Point of GX st p in B
+  holds skl(p,B)=skl Down(p,B)
+proof let B be Subset of GX, p be Point of GX;
+  assume A1: p in B;
+  then p=Down(p,B) by Def3;
+ hence thesis by A1,Def7;
+end;
+
+theorem
+ Th28: for V,B being Subset of GX st V c= B holds Down(V,B)=V
+proof let V,B be Subset of GX; assume A1:V c= B;
+      Down(V,B)=V /\ B by Def5;
+ hence Down(V,B)=V by A1,XBOOLE_1:28;
+end;
+
+theorem
+ Th29: for GX being TopSpace
+ for V,B being Subset of GX st V is open holds
+  Down(V,B) is open
+proof let GX be TopSpace;
+ let V,B be Subset of GX;assume V is open;
+ then A1: V in the topology of GX by PRE_TOPC:def 5;
+   Down(V,B)=V /\ B by Def5;
+ then Down(V,B)=V /\ [#](GX|B) by PRE_TOPC:def 10;
+ then Down(V,B) in the topology of GX|B by A1,PRE_TOPC:def 9;
+ hence Down(V,B) is open by PRE_TOPC:def 5;
+end;
+
+theorem
+ Th30:for V,B being Subset of GX st V c= B holds
+  Cl Down(V,B) =(Cl V) /\ B
+proof let V,B be Subset of GX;
+   assume V c= B;
+  then Down(V,B)=V by Th28;
+  then Cl Down(V,B) =(Cl V) /\ ([#](GX|B)) by PRE_TOPC:47;
+ hence thesis by PRE_TOPC:def 10;
+end;
+
+theorem
+   for B being Subset of GX,V being Subset of GX|
+B
+  holds Cl V =(Cl Up(V)) /\ B
+proof let B be Subset of GX,
+          V be Subset of GX|B;
+  A1: B=the carrier of (GX|B)
+    proof
+          B=[#](GX|B) by PRE_TOPC:def 10;
+        hence thesis by PRE_TOPC:12;
+    end;
+  A2:Up(V)=V by Def6;
+  then Cl Down(Up(V),B)=(Cl Up(V))/\ B by A1,Th30;
+ hence Cl V =(Cl Up(V)) /\ B by A1,A2,Th28;
+end;
+
+theorem
+   for V,B being Subset of GX st V c= B holds
+  Cl Down(V,B) c= Cl V
+proof let V,B be Subset of GX;assume V c= B;
+  then Cl Down(V,B) = (Cl V) /\ B by Th30;
+ hence Cl Down(V,B) c= Cl V by XBOOLE_1:17;
+end;
+
+theorem
+   for B being Subset of GX,
+    V being Subset of GX|B st
+ V c= B holds Down(Up(V),B)=V
+proof let B be Subset of GX,
+          V be Subset of GX|B;
+ assume A1:V c= B;
+    V=Up(V) by Def6;
+ hence Down(Up(V),B)=V by A1,Th28;
+end;
+
+theorem
+ Th34: for GX being TopSpace
+ for V,B being Subset of GX,
+   W being Subset of GX|B st V=W & W is connected holds V is connected
+proof let GX be TopSpace;
+ let V,B be Subset of GX, W be Subset of GX|B;
+ assume A1:V=W & W is connected;
+    then (GX|B)|W is connected by CONNSP_1:def 3;
+   then A2:for A2,B2 being Subset of (GX|B)|W
+    st [#]((GX|B)|W) = A2 \/ B2 & A2 <> {}((GX|B)|W)
+    & B2 <> {}((GX|B)|W) & A2 is open &
+    B2 is open holds A2 meets B2 by CONNSP_1:12;
+     for A3,B3 being Subset of GX|V
+    st [#](GX|V) = A3 \/ B3 & A3 <> {}(GX|V)
+    & B3 <> {}(GX|V) & A3 is open & B3 is open holds A3 meets B3
+      proof let A3,B3 be Subset of GX|V;assume
+        A3:[#](GX|V) = A3 \/ B3 & A3 <> {}(GX|V)
+        & B3 <> {}(GX|V) & A3 is open &
+        B3 is open;
+        then A4: A3 in the topology of GX|V &
+        B3 in the topology of GX|V by PRE_TOPC:def 5;
+         then consider Qa being Subset of GX such that
+        A5:  Qa in the topology of GX &
+         A3 = Qa /\ [#](GX|V) by PRE_TOPC:def 9;
+         reconsider Qa as Subset of GX;
+        A6: Qa is open by A5,PRE_TOPC:def 5;
+         consider Qb being Subset of GX such that
+        A7:  Qb in the topology of GX &
+         B3 = Qb /\ [#](GX|V) by A4,PRE_TOPC:def 9;
+         reconsider Qb as Subset of GX;
+     [#](GX|V) c= (Qa \/ Qb)/\ [#](GX|V) by A3,A5,A7,XBOOLE_1:23;
+        then for x st x in [#](GX|V) holds x in (Qa \/ Qb) by XBOOLE_0:def 3
+;
+        then A8:[#](GX|V) c= Qa \/ Qb by TARSKI:def 3;
+        A9:V=[#](GX|V) by PRE_TOPC:def 10;
+        A10: Qb is open by A7,PRE_TOPC:def 5;
+         reconsider A4=Down(Qa,B), B4=Down(Qb,B) as Subset of (GX|B);
+         reconsider A6=Down(A4,W), B6=Down(B4,W) as Subset of (GX|B)|W;
+        A11: A4 is open by A6,Th29;
+        A12: B4 is open by A10,Th29;
+        A13: A4=Qa /\ B by Def5;
+        A14: B4=Qb /\ B by Def5;
+        then A15: A4 \/ B4 =(Qa \/ Qb)/\ B by A13,XBOOLE_1:23;
+        A16: A6 is open by A11,Th29;
+        A17: B6 is open by A12,Th29;
+           W c= the carrier of GX|B;
+        then A18: W c= B by JORDAN1:1;
+           A3 c= the carrier of GX|V;
+        then A19: A3 c= V by JORDAN1:1;
+        then A20: A3 c=B by A1,A18,XBOOLE_1:1;
+           ex x being Point of GX|V st x in A3 by A3,SUBSET_1:10;
+         then consider x0 being set such that
+        A21: x0 in A3;
+        A22: x0 in Qa by A5,A21,XBOOLE_0:def 3;
+           A4=Qa /\ B by Def5;
+        then A23: x0 in A4 by A20,A21,A22,XBOOLE_0:def 3;
+        A24: W c= A4 \/ B4 by A1,A8,A9,A15,A18,XBOOLE_1:19;
+        A25: A6=A4 /\ W by Def5; then A26: x0 in A6 by A1,A19,A21,A23,XBOOLE_0:
+def 3;
+           B3 c= the carrier of GX|V;
+        then A27: B3 c= V by JORDAN1:1;
+        then A28: B3 c=B by A1,A18,XBOOLE_1:1;
+           ex x being Point of GX|V st x in B3 by A3,SUBSET_1:10;
+         then consider y0 being set such that
+        A29: y0 in B3;
+        A30: y0 in Qb by A7,A29,XBOOLE_0:def 3;
+           B4=Qb /\ B by Def5;
+        then A31: y0 in B4 by A28,A29,A30,XBOOLE_0:def 3;
+        A32: B6=B4 /\ W by Def5;
+        then A33: B6<>{} by A1,A27,A29,A31,XBOOLE_0:def 3;
+          A6 \/ B6=(A4 \/ B4)/\ W by A25,A32,XBOOLE_1:23;
+        then A34:W c= A6 \/ B6 by A24,XBOOLE_1:19;
+          A6 \/ B6 c= the carrier of (GX|B)|W;
+        then A6 \/ B6 c= W by JORDAN1:1;
+        then A6 \/ B6=W by A34,XBOOLE_0:def 10
+               .= [#]((GX|B)|W) by PRE_TOPC:def 10;
+         then A6 meets B6 by A2,A16,A17,A26,A33;
+         then A6 /\ B6 <> {} by XBOOLE_0:def 7;
+         then consider x1 being set such that A35: x1 in A6 /\ B6 by XBOOLE_0:
+def 1
+;
+           x1 in A6 & x1 in B6 by A35,XBOOLE_0:def 3;
+         then x1 in A4 & x1 in W & x1 in B4 by A25,A32,XBOOLE_0:def 3;
+         then x1 in Qa & x1 in B & x1 in W & x1 in Qb & x1 in B
+         by A13,A14,XBOOLE_0:def 3;
+         then x1 in Qa /\ Qb & x1 in W by XBOOLE_0:def 3;
+         then A36:Qa /\ Qb /\ [#](GX|V)<>{} by A1,A9,XBOOLE_0:def 3;
+           Qa /\ Qb /\ [#](GX|V) c=(Qa /\ [#](GX|V))/\(Qb /\ [#](GX|V))
+         proof let x;assume x in Qa /\ Qb /\ [#](GX|V);
+          then x in Qa /\ Qb & x in [#](GX|V) by XBOOLE_0:def 3;
+          then x in Qa & x in Qb & x in [#](GX|V) by XBOOLE_0:def 3;
+          then x in Qa /\ [#](GX|V) & x in Qb /\ [#](GX|V) by XBOOLE_0:def 3;
+          hence x in (Qa /\ [#](GX|V))/\(Qb /\ [#](GX|V)) by XBOOLE_0:def 3;
+         end;
+        hence A3 /\ B3 <> {} by A5,A7,A36,XBOOLE_1:3;
+      end;
+    then GX|V is connected by CONNSP_1:12;
+ hence thesis by CONNSP_1:def 3;
+end;
+
+theorem
+   for B being Subset of GX, p be Point of GX st p in B
+  holds skl(p,B) is connected
+proof let B be Subset of GX, p be Point of GX;
+ assume A1: p in B;
+ then reconsider B' = B as non empty Subset of GX;
+  A2:skl Down(p,B') is connected by CONNSP_1:41;
+    skl(p,B)=skl Down(p,B) by A1,Th27;
+ hence thesis by A2,Th34;
+end;

@@ -1,0 +1,1188 @@
+:: On the {H}ausdorff Distance Between Compact Subsets
+::  by Adam Grabowski
+::
+:: Received January 27, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, PRE_TOPC, COMPTS_1, METRIC_1, SUBSET_1, PCOMPS_1, RELAT_1,
+      ORDINAL2, SEQ_4, SEQ_2, FUNCT_1, CONNSP_2, TOPS_1, ARYTM_1, HAUSDORF,
+      SQUARE_1, WEIERSTR, TOPMETR, LATTICES, TBSP_1, EUCLID, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, NAT_1, SQUARE_1, RELAT_1, FUNCT_1, STRUCT_0, PRE_TOPC, TOPS_1,
+      COMPTS_1, TBSP_1, TOPMETR, METRIC_1, PCOMPS_1, EUCLID, PSCOMP_1,
+      WEIERSTR, CONNSP_2, SEQ_4;
+ constructors REAL_1, CONNSP_1, SQUARE_1, PSCOMP_1, TOPS_1, WEIERSTR, COMPTS_1,
+      TBSP_1;
+ clusters XREAL_0, RELSET_1, SUBSET_1, STRUCT_0, PRE_TOPC, EUCLID, METRIC_1,
+      PCOMPS_1, TOPMETR, WAYBEL_2, BORSUK_4, MEMBERED;
+ requirements SUBSET, BOOLE, NUMERALS;
+ definitions XBOOLE_0, TARSKI, SEQ_4;
+ theorems METRIC_1, REAL_1, YELLOW_6, TOPMETR, CONNSP_2, GOBOARD6, XBOOLE_1,
+      PRE_TOPC, FUNCT_2, PSCOMP_1, XBOOLE_0, FUNCT_1, AXIOMS, SQUARE_1, TARSKI,
+      WEIERSTR, SEQ_4, TBSP_1, JORDAN1K, COMPTS_1, JORDAN1, PCOMPS_1, EUCLID;
+
+begin :: Preliminaries
+
+definition let r be real number; :: repeated from SEQ_4
+  redefine func { r } -> Subset of REAL;
+  coherence
+  proof
+      {r} c= REAL;
+    hence thesis;
+  end;
+end;
+
+definition let M be non empty MetrSpace;
+  cluster TopSpaceMetr M -> being_T2;
+  coherence by PCOMPS_1:38;
+end;
+
+theorem Th1:
+  for x, y being real number st
+      x >= 0 & y >= 0 & max (x,y) = 0 holds
+    x = 0
+  proof
+    let x, y be real number;
+    assume
+A1: x >= 0 & y >= 0 & max (x,y) = 0;
+    per cases by SQUARE_1:49;
+    suppose max (x,y) = x;
+    hence thesis by A1;
+    suppose A2: max (x,y) = y;
+    then x <= y by SQUARE_1:46;
+    hence thesis by A1,A2,AXIOMS:21;
+  end;
+
+theorem Th2:
+  for M being non empty MetrSpace,
+      x being Point of M holds
+    (dist x) . x = 0
+  proof
+    let M be non empty MetrSpace,
+        x be Point of M;
+      (dist x).x = dist (x, x) by WEIERSTR:def 6
+              .= 0 by METRIC_1:1;
+    hence thesis;
+  end;
+
+theorem Th3:
+  for M being non empty MetrSpace,
+      P being Subset of TopSpaceMetr M,
+      x being Point of M st x in P holds
+    0 in (dist x) .: P
+  proof
+    let M be non empty MetrSpace,
+        P be Subset of TopSpaceMetr M,
+        x be Point of M;
+    assume
+A1: x in P;
+      dom dist x = the carrier of TopSpaceMetr M by FUNCT_2:def 1;
+    then (dist x).x in ((dist x) .: P) by A1,FUNCT_1:def 12;
+    hence thesis by Th2;
+  end;
+
+theorem Th4:
+  for M being non empty MetrSpace,
+      P being Subset of TopSpaceMetr M,
+      x being Point of M,
+      y being real number st y in (dist x) .: P holds
+    y >= 0
+  proof
+    let M be non empty MetrSpace,
+        P be Subset of TopSpaceMetr M,
+        x be Point of M,
+        y be real number;
+    assume y in (dist x) .: P;
+    then consider z being set such that
+      z in dom dist x and
+A1: z in P and
+A2: y = (dist x).z by FUNCT_1:def 12;
+    reconsider z' = z as Point of M by A1,TOPMETR:16;
+      y = dist (x, z') by A2,WEIERSTR:def 6;
+    hence thesis by METRIC_1:5;
+  end;
+
+theorem Th5:
+  for M being non empty MetrSpace,
+      P being Subset of TopSpaceMetr M,
+      x being set st x in P holds
+    (dist_min P) . x = 0
+  proof
+    let M be non empty MetrSpace,
+        P be Subset of TopSpaceMetr M,
+        x be set;
+    assume
+A1: x in P;
+    then reconsider x as Point of M by TOPMETR:16;
+    set X = (dist x) .: P;
+    reconsider X as non empty Subset of REAL by A1,Th3,TOPMETR:24;
+      lower_bound ((dist x) .: P) = lower_bound [#] ((dist x) .: P)
+      by WEIERSTR:def 5
+        .= lower_bound X by WEIERSTR:def 3;
+then A2: (dist_min P) . x = lower_bound X by WEIERSTR:def 8;
+A3: for p being real number st p in X holds p >= 0 by Th4;
+      for q being real number st for p being real number st p in X holds
+      p >= q holds 0 >= q
+    proof
+      let q be real number;
+      assume
+A4:   for p being real number st p in X holds p >= q;
+        0 in X by A1,Th3;
+      hence 0 >= q by A4;
+    end;
+    hence thesis by A2,A3,PSCOMP_1:9;
+  end;
+
+theorem Th6:
+  for M being non empty MetrSpace,
+      p being Point of M,
+      q being Point of TopSpaceMetr M,
+      r being real number st p = q & r > 0 holds
+     Ball (p, r) is a_neighborhood of q
+  proof
+    let M be non empty MetrSpace,
+        p be Point of M,
+        q be Point of TopSpaceMetr M,
+        r be real number;
+      Ball (p, r) is Subset of TopSpaceMetr M by TOPMETR:16;
+    then reconsider A = Ball (p, r) as Subset of TopSpaceMetr M;
+    assume p = q & r > 0;
+then A1: q in A by GOBOARD6:4;
+      A is open by TOPMETR:21;
+    hence thesis by A1,CONNSP_2:5;
+  end;
+
+theorem Th7:
+  for M being non empty MetrSpace,
+      A being Subset of TopSpaceMetr M,
+      p being Point of M holds
+     p in Cl A iff
+      for r being real number st r > 0 holds Ball (p, r) meets A
+  proof
+    let M be non empty MetrSpace,
+        A be Subset of TopSpaceMetr M,
+        p be Point of M;
+    reconsider p' = p as Point of TopSpaceMetr M by TOPMETR:16;
+    hereby assume
+A1:   p in Cl A;
+      let r be real number;
+      assume
+A2:   r > 0;
+        Ball (p, r) is Subset of TopSpaceMetr M
+        by TOPMETR:16;
+      then reconsider B = Ball (p, r) as Subset of TopSpaceMetr M
+       ;
+        B is a_neighborhood of p' by A2,Th6;
+      hence Ball (p, r) meets A by A1,YELLOW_6:6;
+    end;
+    assume
+A3: for r being real number st r > 0 holds Ball (p, r) meets A;
+      for G being a_neighborhood of p' holds G meets A
+    proof
+      let G be a_neighborhood of p';
+        p in Int G by CONNSP_2:def 1;
+      then consider r being real number such that
+A4:   r > 0 & Ball (p, r) c= G by GOBOARD6:7;
+        Ball (p, r) meets A by A3,A4;
+      hence thesis by A4,XBOOLE_1:63;
+    end;
+    hence thesis by YELLOW_6:6;
+  end;
+
+theorem Th8:
+  for M being non empty MetrSpace,
+      p being Point of M,
+      A being Subset of TopSpaceMetr M holds
+     p in Cl A iff
+      for r being real number st r > 0
+       ex q being Point of M st q in A & dist (p, q) < r
+  proof
+    let M be non empty MetrSpace,
+        p be Point of M,
+        A be Subset of TopSpaceMetr M;
+    hereby assume
+A1:   p in Cl A;
+      let r be real number;
+      assume r > 0;
+      then Ball (p, r) meets A by A1,Th7;
+      then consider x being set such that
+A2:   x in Ball (p, r) & x in A by XBOOLE_0:3;
+      reconsider q = x as Point of M by A2;
+      take q;
+      thus q in A by A2;
+      thus dist (p, q) < r by A2,METRIC_1:12;
+    end;
+    assume
+A3: for r being real number st r > 0
+      ex q being Point of M st q in A & dist (p, q) < r;
+      for r being real number st r > 0 holds Ball (p, r) meets A
+    proof
+      let r be real number;
+      assume r > 0;
+      then consider q being Point of M such that
+A4:   q in A & dist (p, q) < r by A3;
+        q in Ball (p, r) by A4,METRIC_1:12;
+      hence thesis by A4,XBOOLE_0:3;
+    end;
+    hence thesis by Th7;
+  end;
+
+theorem Th9:
+  for M being non empty MetrSpace,
+      P being non empty Subset of TopSpaceMetr M,
+      x being Point of M holds
+    (dist_min P) . x = 0 iff
+      for r being real number st r > 0
+       ex p being Point of M st p in P & dist (x, p) < r
+  proof
+    let M be non empty MetrSpace,
+        P be non empty Subset of TopSpaceMetr M,
+        x be Point of M;
+    reconsider X = (dist(x)).:P as non empty Subset of REAL by TOPMETR:24;
+    hereby assume
+A1:   (dist_min P) . x = 0;
+      let r be real number;
+      assume
+A2:   r > 0;
+      assume
+A3:   for p being Point of M st p in P holds dist (x, p) >= r;
+        for p being real number st p in X holds p >= r
+      proof
+        let p be real number;
+        assume p in X;
+        then consider y being set such that
+A4:     y in dom dist x & y in P & p = (dist x).y by FUNCT_1:def 12;
+        reconsider z = y as Point of M by A4,TOPMETR:16;
+          dist (x, z) >= r by A3,A4;
+        hence thesis by A4,WEIERSTR:def 6;
+      end;
+then A5:   lower_bound X >= r by PSCOMP_1:8;
+        lower_bound ((dist x) .: P) = lower_bound [#] ((dist x) .: P)
+        by WEIERSTR:def 5
+          .= lower_bound X by WEIERSTR:def 3;
+      hence contradiction by A1,A2,A5,WEIERSTR:def 8;
+    end;
+    assume
+A6: for r being real number st r > 0
+     ex p being Point of M st p in P & dist (x, p) < r;
+A7: lower_bound ((dist x) .: P) = lower_bound [#] ((dist x) .: P)
+      by WEIERSTR:def 5
+        .= lower_bound X by WEIERSTR:def 3;
+A8: for p being real number st p in X holds p >= 0
+    proof
+      let p be real number;
+      assume p in X;
+      then consider y being set such that
+A9:   y in dom dist x & y in P & p = (dist x).y by FUNCT_1:def 12;
+      reconsider z = y as Point of M by A9,TOPMETR:16;
+        dist (x, z) >= 0 by METRIC_1:5;
+      hence thesis by A9,WEIERSTR:def 6;
+    end;
+      for q being real number st
+       for p being real number st p in X holds p >= q
+       holds 0 >= q
+    proof
+      let q be real number;
+      assume
+A10:   for z being real number st z in X holds z >= q;
+      assume 0 < q;
+      then consider p being Point of M such that
+A11:   p in P & dist (x, p) < q by A6;
+A12:   (dist x).p < q by A11,WEIERSTR:def 6;
+      set z = (dist x).p;
+        p in the carrier of TopSpaceMetr M by A11;
+      then p in dom dist x by FUNCT_2:def 1;
+      then z in X by A11,FUNCT_1:def 12;
+      hence thesis by A10,A12;
+    end;
+    then lower_bound((dist(x)).:P) = 0 by A7,A8,PSCOMP_1:9;
+    hence thesis by WEIERSTR:def 8;
+  end;
+
+theorem Th10:
+  for M being non empty MetrSpace,
+      P being non empty Subset of TopSpaceMetr M,
+      x being Point of M holds
+    x in Cl P iff (dist_min P) . x = 0
+  proof
+    let M be non empty MetrSpace,
+        P be non empty Subset of TopSpaceMetr M,
+        x be Point of M;
+    hereby assume x in Cl P;
+      then for a being real number st a > 0
+        ex p being Point of M st p in P & dist (x, p) < a by Th8;
+      hence (dist_min P) . x = 0 by Th9;
+    end;
+    assume (dist_min P) . x = 0;
+    then for a being real number st a > 0
+     ex p being Point of M st p in P & dist (x, p) < a by Th9;
+    hence thesis by Th8;
+  end;
+
+theorem Th11:
+  for M being non empty MetrSpace,
+      P being non empty closed Subset of TopSpaceMetr M,
+      x being Point of M holds
+    x in P iff (dist_min P) . x = 0
+  proof
+    let M be non empty MetrSpace,
+        P be non empty closed Subset of TopSpaceMetr M,
+        x be Point of M;
+      P = Cl P by PRE_TOPC:52;
+    hence x in P iff (dist_min P) . x = 0 by Th10;
+  end;
+
+theorem Th12:
+  for A being non empty Subset of R^1
+   ex X being non empty Subset of REAL st
+    A = X & lower_bound A = inf X
+  proof
+    let A be non empty Subset of R^1;
+    reconsider X = A as non empty Subset of REAL by TOPMETR:24;
+    take X;
+      lower_bound A = lower_bound [#] A by WEIERSTR:def 5
+        .= lower_bound X by WEIERSTR:def 3;
+    hence thesis;
+  end;
+
+theorem Th13:
+  for A being non empty Subset of R^1
+   ex X being non empty Subset of REAL st
+    A = X & upper_bound A = sup X
+  proof
+    let A be non empty Subset of R^1;
+    reconsider X = A as non empty Subset of REAL by TOPMETR:24;
+    take X;
+      upper_bound A = upper_bound [#] A by WEIERSTR:def 4
+        .= upper_bound X by WEIERSTR:def 3;
+    hence thesis;
+  end;
+
+theorem Th14:
+  for M being non empty MetrSpace,
+      P being non empty Subset of TopSpaceMetr M,
+      x being Point of M,
+      X being Subset of REAL st X = (dist x) .: P holds
+    X is bounded_below
+  proof
+    let M be non empty MetrSpace,
+        P be non empty Subset of TopSpaceMetr M,
+        x be Point of M,
+        X be Subset of REAL;
+    assume X = (dist x).:P;
+    then for y being real number st y in X holds 0 <= y by Th4;
+    hence thesis by SEQ_4:def 2;
+  end;
+
+theorem Th15:
+  for M being non empty MetrSpace,
+      P being non empty Subset of TopSpaceMetr M,
+      x, y being Point of M st y in P holds
+    (dist_min P) . x <= dist (x, y)
+  proof
+    let M be non empty MetrSpace,
+        P be non empty Subset of TopSpaceMetr M,
+        x, y be Point of M;
+    assume
+A1: y in P;
+    consider X being non empty Subset of REAL such that
+A2: X = (dist x) .: P & lower_bound ((dist x).:P) = inf X by Th12;
+A3: (dist_min P) . x = inf X by A2,WEIERSTR:def 8;
+A4: X is bounded_below by A2,Th14;
+A5: dom dist x = the carrier of TopSpaceMetr M by FUNCT_2:def 1;
+  dist (x, y) = (dist x).y by WEIERSTR:def 6;
+    then dist (x, y) in X by A1,A2,A5,FUNCT_1:def 12;
+    hence thesis by A3,A4,SEQ_4:def 5;
+  end;
+
+theorem Th16:
+  for M being non empty MetrSpace,
+      P being non empty Subset of TopSpaceMetr M,
+      r being real number,
+      x being Point of M holds
+      (for y being Point of M st y in P holds dist (x,y) >= r) implies
+    (dist_min P) . x >= r
+  proof
+    let M be non empty MetrSpace,
+        P be non empty Subset of TopSpaceMetr M,
+        r be real number,
+        x be Point of M;
+    assume
+A1: for y being Point of M st y in P holds dist (x,y) >= r;
+    consider X being non empty Subset of REAL such that
+A2: X = (dist x).:P & lower_bound ((dist x).:P) = inf X by Th12;
+    for p being real number st p in X holds p >= r
+    proof
+      let p be real number;
+      assume p in X;
+      then consider y being set such that
+A3:   y in dom dist x & y in P & (dist x).y = p by A2,FUNCT_1:def 12;
+      reconsider y as Point of M by A3,TOPMETR:16;
+        p = dist (x, y) by A3,WEIERSTR:def 6;
+      hence p >= r by A1,A3;
+    end;
+    then inf X >= r by PSCOMP_1:8;
+    hence thesis by A2,WEIERSTR:def 8;
+  end;
+
+theorem Th17:
+  for M being non empty MetrSpace,
+      P being non empty Subset of TopSpaceMetr M,
+      x, y being Point of M holds
+    (dist_min P) . x <= dist (x, y) + (dist_min P) . y
+  proof
+    let M be non empty MetrSpace,
+        P be non empty Subset of TopSpaceMetr M,
+        x, y be Point of M;
+      now let z be Point of M such that
+A1:   z in P;
+        dist (x, z) <= dist (x, y) + dist (y, z) by METRIC_1:4;
+then A2:   dist (y, z) >= dist (x, z) - dist (x, y) by REAL_1:86;
+        (dist_min P) . x <= dist (x, z) by A1,Th15;
+      then dist (x, z) - dist (x, y) >= (dist_min P) . x - dist (x, y)
+        by REAL_1:92;
+      hence dist (y, z) >= (dist_min P) . x - dist (x, y) by A2,AXIOMS:22;
+    end;
+    then (dist_min P) . y >= (dist_min P) . x - dist (x, y) by Th16;
+    hence thesis by REAL_1:86;
+  end;
+
+theorem Th18:
+  for M being non empty MetrSpace,
+      P being Subset of TopSpaceMetr M,
+      Q being non empty Subset of M holds
+    P = Q implies (TopSpaceMetr M)|P = TopSpaceMetr(M|Q)
+  proof
+    let M be non empty MetrSpace,
+        P be Subset of TopSpaceMetr M,
+        Q be non empty Subset of M;
+    assume
+A1: P = Q;
+    reconsider N = TopSpaceMetr(M|Q) as SubSpace of TopSpaceMetr M
+      by TOPMETR:19;
+      the carrier of N = the carrier of M|Q & the carrier of M|Q = Q
+      by TOPMETR:16,def 2;
+    then [#]N = P & [#]((TopSpaceMetr M)|P) = P by A1,PRE_TOPC:12,def 10;
+    hence thesis by PRE_TOPC:def 10;
+  end;
+
+theorem Th19:
+  for M being non empty MetrSpace,
+      A being Subset of M,
+      B being non empty Subset of M,
+      C being Subset of M|B st
+    A c= B & A = C & C is bounded holds A is bounded
+  proof
+    let M be non empty MetrSpace,
+        A be Subset of M,
+        B be non empty Subset of M,
+        C be Subset of M|B;
+    assume
+A1: A c= B & A = C & C is bounded;
+    then consider r0 being Real such that
+A2: 0 < r0 & for x, y being Point of M|B
+    st x in C & y in C holds dist(x,y) <= r0 by TBSP_1:def 9;
+      for x, y being Point of M st x in A & y in A holds dist(x,y) <= r0
+    proof
+      let x, y be Point of M;
+      assume
+A3:   x in A & y in A;
+      then reconsider x0 = x, y0 = y as Point of M|B by A1;
+A4:   dist(x0,y0) <= r0 by A1,A2,A3;
+A5:   (the distance of (M|B)).(x0,y0) =
+      (the distance of M).(x,y) by TOPMETR:def 1;
+        (the distance of (M|B)).(x0,y0) = dist(x0,y0) by METRIC_1:def 1;
+      hence dist(x,y) <= r0 by A4,A5,METRIC_1:def 1;
+    end;
+    hence thesis by A2,TBSP_1:def 9;
+  end;
+
+theorem
+    for M being non empty MetrSpace,
+      B being Subset of M,
+      A being Subset of TopSpaceMetr M st A = B &
+    A is compact holds B is bounded
+  proof
+    let M be non empty MetrSpace,
+        B be Subset of M,
+        A be Subset of TopSpaceMetr M;
+    set TA = TopSpaceMetr M;
+    assume that
+A1: A = B and
+A2: A is compact;
+      A c= the carrier of (TA|A) by JORDAN1:1;
+    then reconsider A2 = A as Subset of (TA|A);
+    per cases;
+    suppose
+A3: A <> {};
+      [#](TA|A) = A2 by PRE_TOPC:def 10;
+    then [#](TA|A) is compact by A2,COMPTS_1:11;
+then A4: TA|A is compact by COMPTS_1:10;
+      A is non empty Subset of M by A3,TOPMETR:16;
+    then reconsider A1 = A as non empty Subset of M;
+      TopSpaceMetr (M|A1) = TA|A by Th18;
+    then M|A1 is totally_bounded by A4,TBSP_1:12;
+    then M|A1 is bounded by TBSP_1:26;
+then A5: [#](M|A1) is bounded by TBSP_1:25;
+      [#](M|A1) = the carrier of M|A1 by PRE_TOPC:12
+             .= A1 by TOPMETR:def 2;
+    hence thesis by A1,A5,Th19;
+    suppose A = {};
+    then A = {} M;
+    hence thesis by A1,TBSP_1:14;
+  end;
+
+theorem Th21:
+  for M being non empty MetrSpace,
+      P being non empty Subset of TopSpaceMetr M,
+      z being Point of M holds
+    ex w being Point of M st
+       w in P & (dist_min P) . z <= dist (w, z)
+  proof
+    let M be non empty MetrSpace,
+        P be non empty Subset of TopSpaceMetr M,
+        z be Point of M;
+    consider w being set such that
+A1: w in P by XBOOLE_0:def 1;
+    reconsider w as Point of M by A1,TOPMETR:16;
+    take w;
+    thus w in P by A1;
+    thus (dist_min P) . z <= dist (w, z) by A1,Th15;
+  end;
+
+definition let M be non empty MetrSpace, x be Point of M;
+  cluster dist x -> continuous;
+  coherence by WEIERSTR:22;
+end;
+
+definition let M be non empty MetrSpace,
+               X be compact non empty Subset of TopSpaceMetr M;
+  cluster dist_max X -> continuous;
+  coherence by WEIERSTR:30;
+  cluster dist_min X -> continuous;
+  coherence by WEIERSTR:33;
+end;
+
+Lm1:
+  for M being non empty MetrSpace,
+      P being non empty Subset of TopSpaceMetr M,
+      x being Point of M,
+      X being Subset of REAL st
+     X = (dist x) .: P & P is compact holds
+    X is bounded_above
+  proof
+    let M be non empty MetrSpace,
+        P be non empty Subset of TopSpaceMetr M,
+        x be Point of M,
+        X be Subset of REAL;
+    assume
+A1: X = (dist x) .: P & P is compact;
+    then (dist x) .: P is compact by WEIERSTR:15;
+then A2: [#]((dist x) .: P) is bounded by WEIERSTR:17;
+      X = [#]((dist x) .: P) by A1,WEIERSTR:def 3;
+    hence thesis by A2,SEQ_4:def 3;
+  end;
+
+theorem Th22:
+  for M being non empty MetrSpace,
+      P being non empty Subset of TopSpaceMetr M,
+      x, y being Point of M st
+     y in P & P is compact holds
+    (dist_max P) . x >= dist (x, y)
+  proof
+    let M be non empty MetrSpace,
+        P be non empty Subset of TopSpaceMetr M,
+        x, y be Point of M;
+    assume that
+A1: y in P and
+A2: P is compact;
+    consider X being non empty Subset of REAL such that
+A3: X = (dist x) .: P & upper_bound ((dist x).:P) = sup X by Th13;
+A4: (dist_max P) . x = sup X by A3,WEIERSTR:def 7;
+A5: X is bounded_above by A2,A3,Lm1;
+A6: dom dist x = the carrier of TopSpaceMetr M by FUNCT_2:def 1;
+      dist (x, y) = (dist x).y by WEIERSTR:def 6;
+    then dist (x, y) in X by A1,A3,A6,FUNCT_1:def 12;
+    hence thesis by A4,A5,SEQ_4:def 4;
+  end;
+
+theorem
+    for M being non empty MetrSpace,
+      P being non empty Subset of TopSpaceMetr M,
+      z being Point of M st
+    P is compact holds
+    ex w being Point of M st
+       w in P & (dist_max P) . z >= dist (w, z)
+  proof
+    let M be non empty MetrSpace,
+        P be non empty Subset of TopSpaceMetr M,
+        z be Point of M;
+    assume
+A1: P is compact;
+    consider w being set such that
+A2: w in P by XBOOLE_0:def 1;
+    reconsider w as Point of M by A2,TOPMETR:16;
+    take w;
+    thus w in P by A2;
+    thus (dist_max P) . z >= dist (w, z) by A1,A2,Th22;
+  end;
+
+theorem Th24:
+  for M being non empty MetrSpace,
+      P, Q being non empty Subset of TopSpaceMetr M,
+      z being Point of M st
+      P is compact & Q is compact & z in Q holds
+    (dist_min P) . z <= max_dist_max (P, Q)
+  proof
+    let M be non empty MetrSpace,
+        P, Q be non empty Subset of TopSpaceMetr M,
+        z be Point of M;
+    assume that
+A1: P is compact & Q is compact and
+A2: z in Q;
+    consider w being Point of M such that
+A3: w in P & (dist_min P) . z <= dist (w, z) by Th21;
+      dist (w, z) <= max_dist_max (P, Q) by A1,A2,A3,WEIERSTR:40;
+    hence thesis by A3,AXIOMS:22;
+  end;
+
+theorem Th25:
+  for M being non empty MetrSpace,
+      P, Q being non empty Subset of TopSpaceMetr M,
+      z being Point of M st
+      P is compact & Q is compact & z in Q holds
+    (dist_max P) . z <= max_dist_max (P, Q)
+  proof
+    let M be non empty MetrSpace,
+        P, Q be non empty Subset of TopSpaceMetr M,
+        z be Point of M;
+    assume
+A1: P is compact & Q is compact;
+    then reconsider P as non empty compact Subset of TopSpaceMetr M;
+    assume
+A2: z in Q;
+A3: upper_bound ((dist_max P) .: Q) = max_dist_max (P, Q) by WEIERSTR:def 12;
+    set A = (dist_max P) .: Q;
+    consider X being non empty Subset of REAL such that
+A4: A = X & max_dist_max (P, Q) = sup X by A3,Th13;
+      A is compact by A1,WEIERSTR:15;
+    then [#]A is bounded by WEIERSTR:17;
+    then X is bounded by A4,WEIERSTR:def 3;
+then A5: X is bounded_above by SEQ_4:def 3;
+      dom dist_max P = the carrier of TopSpaceMetr M by FUNCT_2:def 1;
+    then (dist_max P) . z in A by A2,FUNCT_1:def 12;
+    hence thesis by A4,A5,SEQ_4:def 4;
+  end;
+
+theorem
+    for M being non empty MetrSpace,
+      P, Q being non empty Subset of TopSpaceMetr M,
+      X being Subset of REAL st
+      X = (dist_max P) .: Q & P is compact & Q is compact holds
+    X is bounded_above
+  proof
+    let M be non empty MetrSpace,
+        P, Q be non empty Subset of TopSpaceMetr M,
+        X be Subset of REAL;
+    assume that
+A1: X = (dist_max P).:Q and
+A2: P is compact and
+A3: Q is compact;
+    the carrier of M = the carrier of TopSpaceMetr M by TOPMETR:16; then
+      P is Subset of M &
+      Q is Subset of M;
+    then reconsider Q' = Q as non empty Subset of M;
+      X is bounded_above
+    proof
+      take r = max_dist_max (P, Q);
+      let p be real number;
+      assume p in X;
+      then consider z being set such that
+A4:   z in dom dist_max P & z in Q & p = (dist_max P).z by A1,FUNCT_1:def 12;
+        z in Q' by A4;
+      then reconsider z as Point of M;
+        (dist_max P) . z <= r by A2,A3,A4,Th25;
+      hence thesis by A4;
+    end;
+    hence thesis;
+  end;
+
+theorem Th27:
+  for M being non empty MetrSpace,
+      P, Q being non empty Subset of TopSpaceMetr M,
+      X being Subset of REAL st
+      X = (dist_min P) .: Q & P is compact & Q is compact holds
+    X is bounded_above
+  proof
+    let M be non empty MetrSpace,
+        P, Q be non empty Subset of TopSpaceMetr M,
+        X be Subset of REAL;
+    assume that
+A1: X = (dist_min P).:Q and
+A2: P is compact and
+A3: Q is compact;
+    the carrier of TopSpaceMetr M = the carrier of M by TOPMETR:16; then
+      P is Subset of M &
+      Q is Subset of M;
+    then reconsider Q' = Q as non empty Subset of M;
+      X is bounded_above
+    proof
+      take r = max_dist_max (P, Q);
+      let p be real number;
+      assume p in X;
+      then consider z being set such that
+A4:   z in dom dist_min P & z in Q & p = (dist_min P).z by A1,FUNCT_1:def 12;
+        z in Q' by A4;
+      then reconsider z as Point of M;
+        (dist_min P) . z <= r by A2,A3,A4,Th24;
+      hence thesis by A4;
+    end;
+    hence thesis;
+  end;
+
+theorem
+    for M being non empty MetrSpace,
+      P being non empty Subset of TopSpaceMetr M,
+      z being Point of M st
+      P is compact holds
+    (dist_min P) . z <= (dist_max P) . z
+  proof
+    let M be non empty MetrSpace,
+        P be non empty Subset of TopSpaceMetr M,
+        z be Point of M;
+    assume
+A1: P is compact;
+    consider w being Point of M such that
+A2: w in P & (dist_min P) . z <= dist (w, z) by Th21;
+      (dist_max P) . z >= dist (z, w) by A1,A2,Th22;
+    hence thesis by A2,AXIOMS:22;
+  end;
+
+theorem Th29:
+  for M being non empty MetrSpace,
+      P being non empty Subset of TopSpaceMetr M holds
+    (dist_min P) .: P = { 0 }
+  proof
+    let M be non empty MetrSpace,
+        P be non empty Subset of TopSpaceMetr M;
+    thus (dist_min P) .: P c= { 0 }
+    proof
+      let y be set;
+      assume y in (dist_min P) .: P;
+      then consider x being set such that
+        x in dom dist_min P and
+A1:   x in P and
+A2:   y = (dist_min P).x by FUNCT_1:def 12;
+        y = 0 by A1,A2,Th5;
+      hence thesis by TARSKI:def 1;
+    end;
+    let y be set;
+    assume y in { 0 };
+then A3: y = 0 by TARSKI:def 1;
+    consider x being set such that
+A4: x in P by XBOOLE_0:def 1;
+A5: y = (dist_min P).x by A3,A4,Th5;
+      dom dist_min P = the carrier of TopSpaceMetr M by FUNCT_2:def 1;
+    hence thesis by A4,A5,FUNCT_1:def 12;
+  end;
+
+theorem Th30:
+  for M being non empty MetrSpace,
+      P, Q being non empty Subset of TopSpaceMetr M st
+     P is compact & Q is compact holds
+    max_dist_min (P, Q) >= 0
+  proof
+    let M be non empty MetrSpace,
+        P, Q be non empty Subset of TopSpaceMetr M;
+    assume P is compact & Q is compact;
+    then consider x1, x2 being Point of M such that
+A1: x1 in P & x2 in Q & dist(x1,x2) = max_dist_min(P,Q) by WEIERSTR:38;
+    thus thesis by A1,METRIC_1:5;
+  end;
+
+theorem Th31:
+  for M being non empty MetrSpace,
+      P being non empty Subset of TopSpaceMetr M holds
+    max_dist_min (P, P) = 0
+  proof
+    let M be non empty MetrSpace,
+        P be non empty Subset of TopSpaceMetr M;
+A1: [#] ((dist_min P).:P) = (dist_min P) .: P by WEIERSTR:def 3
+                         .= { 0 } by Th29;
+      max_dist_min (P, P) = upper_bound ((dist_min P).:P) by WEIERSTR:def 10
+      .= upper_bound { 0 } by A1,WEIERSTR:def 4;
+    hence thesis by SEQ_4:22;
+  end;
+
+theorem
+    for M being non empty MetrSpace,
+      P, Q being non empty Subset of TopSpaceMetr M st
+     P is compact & Q is compact holds
+    min_dist_max (P, Q) >= 0
+  proof
+    let M be non empty MetrSpace,
+        P, Q be non empty Subset of TopSpaceMetr M;
+    assume P is compact & Q is compact;
+    then consider x1, x2 being Point of M such that
+A1: x1 in P & x2 in Q &
+    dist(x1,x2) = min_dist_max (P,Q) by WEIERSTR:37;
+    thus thesis by A1,METRIC_1:5;
+  end;
+
+theorem Th33:
+  for M being non empty MetrSpace,
+      Q, R being non empty Subset of TopSpaceMetr M,
+      y being Point of M st
+     Q is compact & R is compact & y in Q holds
+    (dist_min R) . y <= max_dist_min (R, Q)
+  proof
+    let M be non empty MetrSpace,
+        Q, R be non empty Subset of TopSpaceMetr M,
+        y be Point of M;
+    assume that
+A1: Q is compact & R is compact and
+A2: y in Q;
+A3: max_dist_min (R, Q) = upper_bound ((dist_min R) .: Q) by WEIERSTR:def 10;
+    set A = (dist_min R) .: Q;
+    consider X being non empty Subset of REAL such that
+A4: A = X & upper_bound A = sup X by Th13;
+A5: X is bounded_above by A1,A4,Th27;
+      dom dist_min R = the carrier of TopSpaceMetr M by FUNCT_2:def 1;
+    then (dist_min R).y in X by A2,A4,FUNCT_1:def 12;
+    hence thesis by A3,A4,A5,SEQ_4:def 4;
+  end;
+
+begin :: Hausdorff Distance
+
+definition let M be non empty MetrSpace,
+               P, Q be Subset of TopSpaceMetr M;
+  func HausDist (P, Q) -> Real equals :Def1:
+    max ( max_dist_min (P, Q), max_dist_min (Q, P) );
+  coherence;
+  commutativity;
+end;
+
+theorem Th34:
+  for M being non empty MetrSpace,
+      Q, R being non empty Subset of TopSpaceMetr M,
+      y being Point of M st
+     Q is compact & R is compact & y in Q holds
+    (dist_min R).y <= HausDist (Q, R)
+  proof
+    let M be non empty MetrSpace,
+        Q, R be non empty Subset of TopSpaceMetr M,
+        y be Point of M;
+    assume that
+A1: Q is compact & R is compact and
+A2: y in Q;
+A3: max_dist_min (R, Q) <= max (max_dist_min (R, Q), max_dist_min (Q, R))
+      by SQUARE_1:46;
+      (dist_min R).y <= max_dist_min (R, Q) by A1,A2,Th33;
+    then (dist_min R).y <= max (max_dist_min (R, Q), max_dist_min (Q, R))
+      by A3,AXIOMS:22;
+    hence thesis by Def1;
+  end;
+
+theorem Th35:
+  for M being non empty MetrSpace,
+      P, Q, R being non empty Subset of TopSpaceMetr M st
+     P is compact & Q is compact & R is compact holds
+    max_dist_min (P, R) <= HausDist (P, Q) + HausDist (Q, R)
+  proof
+    let M be non empty MetrSpace,
+        P, Q, R be non empty Subset of TopSpaceMetr M;
+    assume that
+A1: P is compact & Q is compact and
+A2: R is compact;
+    reconsider DPR = (dist_min P) .: R as non empty Subset of REAL
+      by TOPMETR:24;
+A3: sup DPR = upper_bound [#]((dist_min P).:R) by WEIERSTR:def 3
+           .= upper_bound ((dist_min P).:R) by WEIERSTR:def 4
+           .= max_dist_min (P, R) by WEIERSTR:def 10;
+      for w being real number st w in DPR holds
+        w <= HausDist (P, Q) + HausDist (Q, R)
+    proof
+      let w be real number;
+      assume w in DPR;
+      then consider y being set such that
+        y in dom dist_min P and
+A4:   y in R and
+A5:   w = (dist_min P).y by FUNCT_1:def 12;
+      reconsider y as Point of M by A4,TOPMETR:16;
+        for z being Point of M st z in Q holds
+        dist (y, z) >= (dist_min P).y - HausDist (Q, P)
+      proof
+        let z be Point of M;
+        assume
+A6:     z in Q;
+A7:     (dist_min P).y <= dist (y, z) + (dist_min P).z by Th17;
+          (dist_min P).z <= HausDist (Q, P) by A1,A6,Th34;
+        then dist (y, z) + (dist_min P).z <= dist (y, z) + HausDist (Q, P)
+          by AXIOMS:24;
+        then (dist_min P).y <= dist (y, z) + HausDist (Q, P) by A7,AXIOMS:22;
+        hence thesis by REAL_1:86;
+      end;
+      then (dist_min P).y - HausDist (Q, P) <= (dist_min Q).y by Th16;
+then A8:   (dist_min P).y <= HausDist (Q, P) + (dist_min Q).y by REAL_1:86;
+        (dist_min Q).y <= HausDist (R, Q) by A1,A2,A4,Th34;
+      then HausDist (Q, P) + (dist_min Q).y <= HausDist (Q, P) + HausDist (Q,
+R)
+        by AXIOMS:24;
+      hence thesis by A5,A8,AXIOMS:22;
+    end;
+    hence thesis by A3,PSCOMP_1:10;
+  end;
+
+theorem Th36:
+  for M being non empty MetrSpace,
+      P, Q, R being non empty Subset of TopSpaceMetr M st
+     P is compact & Q is compact & R is compact holds
+    max_dist_min (R, P) <= HausDist (P, Q) + HausDist (Q, R)
+  proof
+    let M be non empty MetrSpace,
+        P, Q, R be non empty Subset of TopSpaceMetr M;
+    assume that
+A1: P is compact & Q is compact and
+A2: R is compact;
+    reconsider DPR = (dist_min R).:P as non empty Subset of REAL
+      by TOPMETR:24;
+A3: sup DPR = upper_bound [#]((dist_min R).:P) by WEIERSTR:def 3
+           .= upper_bound ((dist_min R).:P) by WEIERSTR:def 4
+           .= max_dist_min (R, P) by WEIERSTR:def 10;
+      for w being real number st w in DPR holds
+        w <= HausDist (P, Q) + HausDist (Q, R)
+    proof
+      let w be real number;
+      assume w in DPR;
+      then consider y being set such that
+        y in dom dist_min R and
+A4:   y in P and
+A5:   w = (dist_min R).y by FUNCT_1:def 12;
+      reconsider y as Point of M by A4,TOPMETR:16;
+        for z being Point of M st z in Q holds
+        dist (y, z) >= (dist_min R).y - HausDist (Q, R)
+      proof
+        let z be Point of M;
+        assume
+A6:     z in Q;
+A7:     (dist_min R).y <= dist (y, z) + (dist_min R).z by Th17;
+          (dist_min R).z <= HausDist (Q, R) by A1,A2,A6,Th34;
+        then dist (y, z) + (dist_min R).z <= dist (y, z) + HausDist (Q, R)
+          by AXIOMS:24;
+        then (dist_min R).y <= dist (y, z) + HausDist (Q, R) by A7,AXIOMS:22;
+        hence thesis by REAL_1:86;
+      end;
+then A8:   (dist_min R).y - HausDist (Q, R) <= (dist_min Q).y by Th16;
+        (dist_min Q).y <= HausDist (P, Q) by A1,A4,Th34;
+      then (dist_min R).y - HausDist (Q, R) <= HausDist (P, Q) by A8,AXIOMS:22
+;
+      hence thesis by A5,REAL_1:86;
+    end;
+    hence thesis by A3,PSCOMP_1:10;
+  end;
+
+theorem Th37:
+  for M being non empty MetrSpace,
+      P, Q being non empty Subset of TopSpaceMetr M st
+     P is compact & Q is compact holds
+    HausDist (P, Q) >= 0
+  proof
+    let M be non empty MetrSpace,
+        P, Q be non empty Subset of TopSpaceMetr M;
+    assume
+A1: P is compact & Q is compact;
+A2: HausDist (P, Q) = max ( max_dist_min (P, Q), max_dist_min (Q, P) )
+      by Def1;
+    per cases by A2,SQUARE_1:49;
+    suppose HausDist (P, Q) = max_dist_min (P, Q);
+    hence thesis by A1,Th30;
+    suppose HausDist (P, Q) = max_dist_min (Q, P);
+    hence thesis by A1,Th30;
+  end;
+
+theorem Th38:
+  for M being non empty MetrSpace,
+      P being non empty Subset of TopSpaceMetr M holds
+    HausDist (P, P) = 0
+  proof
+    let M be non empty MetrSpace,
+        P be non empty Subset of TopSpaceMetr M;
+      HausDist (P, P) = max ( max_dist_min (P, P), max_dist_min (P, P) )
+      by Def1
+      .= max ( 0, 0 ) by Th31;
+    hence thesis;
+  end;
+
+theorem Th39:
+  for M being non empty MetrSpace,
+      P, Q being non empty Subset of TopSpaceMetr M st
+     P is compact & Q is compact & HausDist (P, Q) = 0 holds
+    P = Q
+  proof
+    let M be non empty MetrSpace,
+        P, Q be non empty Subset of TopSpaceMetr M;
+    assume
+A1: P is compact & Q is compact;
+then A2: P is closed & Q is closed by COMPTS_1:16;
+A3: max_dist_min (P, Q) >= 0 & max_dist_min (Q, P) >= 0 by A1,Th30;
+    assume HausDist (P, Q) = 0;
+    then max ( max_dist_min (P, Q), max_dist_min (Q, P) ) = 0 by Def1;
+    then max_dist_min (P, Q) = 0 & max_dist_min (Q, P) = 0 by A3,Th1;
+then A4: upper_bound ((dist_min P).:Q) = 0 &
+      upper_bound ((dist_min Q).:P) = 0 by WEIERSTR:def 10;
+    then consider X being non empty Subset of REAL such that
+A5: (dist_min P) .: Q = X & 0 = sup X by Th13;
+    consider Y being non empty Subset of REAL such that
+A6: (dist_min Q) .: P = Y & 0 = sup Y by A4,Th13;
+A7: Y is bounded_above by A1,A6,Th27;
+A8: X is bounded_above by A1,A5,Th27;
+    thus P c= Q
+    proof
+      let x be set;
+      assume
+A9:   x in P;
+      then reconsider x' = x as Point of M by TOPMETR:16;
+        dom dist_min Q = the carrier of TopSpaceMetr M by FUNCT_2:def 1;
+      then (dist_min Q) . x in Y by A6,A9,FUNCT_1:def 12;
+then A10:   (dist_min Q) . x <= 0 by A6,A7,SEQ_4:def 4;
+        (dist_min Q) . x >= 0 by A9,JORDAN1K:9;
+      then (dist_min Q) . x = 0 by A10,AXIOMS:21;
+      then x' in Q by A2,Th11;
+      hence thesis;
+    end;
+    let x be set;
+    assume
+A11: x in Q;
+    then reconsider x' = x as Point of M by TOPMETR:16;
+      dom dist_min P = the carrier of TopSpaceMetr M by FUNCT_2:def 1;
+    then (dist_min P) . x in X by A5,A11,FUNCT_1:def 12;
+then A12: (dist_min P) . x <= 0 by A5,A8,SEQ_4:def 4;
+      (dist_min P) . x >= 0 by A11,JORDAN1K:9;
+    then (dist_min P) . x = 0 by A12,AXIOMS:21;
+    then x' in P by A2,Th11;
+    hence thesis;
+  end;
+
+theorem Th40:
+  for M being non empty MetrSpace,
+      P, Q, R being non empty Subset of TopSpaceMetr M st
+     P is compact & Q is compact & R is compact holds
+    HausDist (P, R) <= HausDist (P, Q) + HausDist (Q, R)
+  proof
+    let M be non empty MetrSpace,
+        P, Q, R be non empty Subset of TopSpaceMetr M;
+    assume that
+A1:   P is compact and
+A2:   Q is compact and
+A3:   R is compact;
+A4: max_dist_min (P, R) <= HausDist (P, Q) + HausDist (Q, R)
+      by A1,A2,A3,Th35;
+      max_dist_min (R, P) <= HausDist (P, Q) + HausDist (Q, R)
+      by A1,A2,A3,Th36;
+    then max (max_dist_min (P, R), max_dist_min (R, P)) <=
+      HausDist (P, Q) + HausDist (Q, R) by A4,SQUARE_1:50;
+    hence thesis by Def1;
+  end;
+
+definition let n be Nat;
+           let P, Q be Subset of TOP-REAL n;
+  func max_dist_min (P, Q) -> Real means
+    ex P', Q' being Subset of TopSpaceMetr Euclid n st
+     P = P' & Q = Q' & it = max_dist_min (P', Q');
+  existence
+  proof
+      TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+    then reconsider P' = P, Q' = Q as Subset of TopSpaceMetr Euclid n
+        ;
+    take max_dist_min(P',Q'), P', Q';
+    thus thesis;
+  end;
+  uniqueness;
+end;
+
+definition let n be Nat;
+           let P, Q be Subset of TOP-REAL n;
+  func HausDist (P, Q) -> Real means :Def3:
+  ex P', Q' being Subset of TopSpaceMetr Euclid n st
+     P = P' & Q = Q' & it = HausDist (P', Q');
+  existence
+  proof
+      TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+    then reconsider P' = P, Q' = Q as Subset of TopSpaceMetr Euclid n
+        ;
+    take HausDist (P', Q'), P', Q';
+    thus thesis;
+  end;
+  uniqueness;
+  commutativity;
+end;
+
+reserve n for Nat;
+
+Lm2:
+  for P being non empty Subset of TOP-REAL n holds
+      P is non empty Subset of TopSpaceMetr Euclid n
+  proof
+    let P be non empty Subset of TOP-REAL n;
+      TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+    hence thesis;
+  end;
+
+theorem
+    for P, Q being non empty Subset of TOP-REAL n st
+      P is compact & Q is compact holds
+    HausDist (P, Q) >= 0
+  proof
+    let P, Q be non empty Subset of TOP-REAL n;
+    assume
+A1: P is compact & Q is compact;
+    reconsider P1 = P, Q1 = Q as non empty Subset of TopSpaceMetr Euclid n
+      by Lm2;
+      TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+    then HausDist (P1, Q1) >= 0 by A1,Th37;
+    hence thesis by Def3;
+  end;
+
+theorem
+    for P being non empty Subset of TOP-REAL n holds
+    HausDist (P, P) = 0
+  proof
+    let P be non empty Subset of TOP-REAL n;
+    reconsider P1 = P as non empty Subset of TopSpaceMetr Euclid n by Lm2;
+      HausDist (P1, P1) = 0 by Th38;
+    hence thesis by Def3;
+  end;
+
+theorem
+    for P, Q being non empty Subset of TOP-REAL n st
+      P is compact & Q is compact & HausDist (P, Q) = 0 holds P = Q
+  proof
+    let P, Q be non empty Subset of TOP-REAL n;
+    assume that
+A1: P is compact & Q is compact and
+A2: HausDist (P, Q) = 0;
+    reconsider P1 = P, Q1 = Q as non empty Subset of TopSpaceMetr Euclid n
+      by Lm2;
+A3: TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+      HausDist (P1, Q1) = 0 by A2,Def3;
+    hence thesis by A1,A3,Th39;
+  end;
+
+theorem
+    for P, Q, R being non empty Subset of TOP-REAL n st
+      P is compact & Q is compact & R is compact holds
+    HausDist (P, R) <= HausDist (P, Q) + HausDist (Q, R)
+  proof
+    let P, Q, R be non empty Subset of TOP-REAL n;
+    assume
+A1: P is compact & Q is compact & R is compact;
+    reconsider P1 = P, Q1 = Q, R1 = R as non empty Subset of
+      TopSpaceMetr Euclid n by Lm2;
+A2: TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+      HausDist (P1, R1) = HausDist (P, R) &
+    HausDist (P1, Q1) = HausDist (P, Q) &
+    HausDist (Q1, R1) = HausDist (Q, R) by Def3;
+    hence thesis by A1,A2,Th40;
+  end;

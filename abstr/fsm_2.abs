@@ -1,0 +1,418 @@
+:: On state machines of calculating type
+::  by Hisayoshi Kunimune , Grzegorz Bancerek and Yatsuka Nakamura
+::
+:: Received December 3, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, ARYTM_1, FUNCT_1, RELAT_1, BOOLE, AMI_1, MATRIX_2,
+      CARD_5, FSM_1, FSM_2, ZFMISC_1, PARTFUN1, BINOP_1, FUNCOP_1, SQUARE_1,
+      ABSVALUE, REALSET1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, REAL_1,
+      NAT_1, DOMAIN_1, FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCOP_1, MATRIX_2,
+      FINSEQ_1, FINSEQ_4, STRUCT_0, BORSUK_1, FSM_1, SCMPDS_1, SQUARE_1,
+      ABSVALUE, REALSET1;
+ constructors REAL_1, DOMAIN_1, BORSUK_1, MATRIX_2, FSM_1, REALSET1, FINSEQ_4,
+      SCMPDS_1, LIMFUNC1, BINARITH, MEMBERED;
+ clusters SUBSET_1, RELSET_1, FINSEQ_1, FSM_1, NAT_2, STRUCT_0, XBOOLE_0,
+      REALSET1, NAT_1, XREAL_0, MEMBERED;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Calculating type
+
+reserve
+        x,y for Real,
+        i, j, h for non empty Nat,
+        I, O for non empty set,
+        s,s1,s2,s3 for Element of I,
+        w, w1, w2 for FinSequence of I,
+        t for Element of O,
+        S for non empty FSM over I,
+        q, q1 for State of S;
+
+definition let I, S, q, w;
+ redefine func (q,w)-admissible;
+ synonym GEN(w,q);
+end;
+
+definition let I, S, q, w;
+ cluster GEN(w, q) -> non empty;
+end;
+
+theorem :: FSM_2:1
+    GEN(<*s*>, q) = <*q, (the Tran of S).[q, s]*>;
+
+theorem :: FSM_2:2
+    GEN(<*s1,s2*>, q) = <*q, (the Tran of S).[q, s1],
+      (the Tran of S).[(the Tran of S).[q, s1], s2]*>;
+
+theorem :: FSM_2:3
+      GEN(<*s1,s2,s3*>, q) = <*q, (the Tran of S).[q, s1],
+      (the Tran of S).[(the Tran of S).[q, s1], s2],
+      (the Tran of S).[(the Tran of S).[(the Tran of S).[q, s1], s2],s3]
+      *>;
+
+definition
+ let I, S;
+ attr S is calculating_type means
+:: FSM_2:def 1
+
+  for j holds for w1, w2 st w1.1 = w2.1 & j <= len(w1)+1 &
+    j <= len(w2)+1 holds
+  GEN(w1, the InitS of S).j = GEN(w2, the InitS of S).j;
+end;
+
+theorem :: FSM_2:4
+  S is calculating_type implies
+  for w1, w2 st w1.1 = w2.1 holds
+  GEN(w1, the InitS of S), GEN(w2, the InitS of S) are_c=-comparable;
+
+theorem :: FSM_2:5
+  (for w1, w2 st w1.1 = w2.1 holds
+     GEN(w1, the InitS of S), GEN(w2, the InitS of S) are_c=-comparable)
+ implies S is calculating_type;
+
+theorem :: FSM_2:6
+    S is calculating_type implies
+    for w1, w2 st w1.1 = w2.1 & len w1 = len w2 holds
+      GEN(w1, the InitS of S) = GEN(w2, the InitS of S);
+
+theorem :: FSM_2:7
+  (for w1, w2 st w1.1 = w2.1 & len w1 = len w2 holds
+     GEN(w1, the InitS of S) = GEN(w2, the InitS of S))
+ implies S is calculating_type;
+
+definition
+ let I, S, q, s;
+ pred q is_accessible_via s means
+:: FSM_2:def 2
+
+   ex w be FinSequence of I st
+     the InitS of S,<*s*>^w-leads_to q;
+end;
+
+definition
+ let I, S, q;
+ attr q is accessible means
+:: FSM_2:def 3
+
+   ex w be FinSequence of I st the InitS of S,w-leads_to q;
+end;
+
+theorem :: FSM_2:8
+    q is_accessible_via s implies q is accessible;
+
+theorem :: FSM_2:9
+    q is accessible & q <> the InitS of S implies ex s st q is_accessible_via s
+;
+
+theorem :: FSM_2:10
+    the InitS of S is accessible;
+
+theorem :: FSM_2:11
+   S is calculating_type & q is_accessible_via s implies
+  ex m being non empty Nat st
+   for w st len w+1 >= m & w.1 = s holds q = GEN(w, the InitS of S).m &
+      for i st i < m holds GEN(w, the InitS of S).i <> q;
+
+definition
+ let I, S;
+ attr S is regular means
+:: FSM_2:def 4
+
+  for q being State of S holds q is accessible;
+end;
+
+theorem :: FSM_2:12
+    (for s1,s2,q holds
+    (the Tran of S).[q,s1] = (the Tran of S).[ q,s2]) implies
+   S is calculating_type;
+
+theorem :: FSM_2:13
+    for S st
+    (for s1,s2,q st q<>the InitS of S holds
+      (the Tran of S).[q,s1] = (the Tran of S).[q,s2]) &
+    for s,q1 holds
+      (the Tran of S).[q1,s] <> the InitS of S holds
+  S is calculating_type;
+
+theorem :: FSM_2:14
+  S is regular & S is calculating_type implies
+      for s1, s2, q st q<>the InitS of S holds
+      GEN(<*s1*>,q).2 = GEN(<*s2*>,q).2;
+
+theorem :: FSM_2:15
+    S is regular & S is calculating_type implies
+      for s1, s2, q st q<>the InitS of S holds
+      (the Tran of S).[q,s1] = (the Tran of S).[q,s2];
+
+theorem :: FSM_2:16
+    S is regular & S is calculating_type implies
+    for s, s1, s2, q st
+      (the Tran of S).[the InitS of S,s1] <>
+      (the Tran of S).[the InitS of S,s2] holds
+        (the Tran of S).[q,s] <> the InitS of S;
+
+begin :: Machines with final states
+
+definition let I be set;
+  struct (FSM over I) SM_Final over I (#
+    carrier -> set,
+       Tran -> Function of [: the carrier, I :], the carrier,
+      InitS -> Element of the carrier,
+     FinalS -> Subset of the carrier #);
+end;
+
+definition let I be set;
+  cluster non empty SM_Final over I;
+end;
+
+definition
+ let I, s;
+ let S be non empty SM_Final over I;
+ pred s leads_to_final_state_of S means
+:: FSM_2:def 5
+
+ ex q being State of S st q is_accessible_via s & q in the FinalS of S;
+end;
+
+definition
+ let I;
+ let S be non empty SM_Final over I;
+ attr S is halting means
+:: FSM_2:def 6
+
+  s leads_to_final_state_of S;
+end;
+
+definition let I be set, O be non empty set;
+ struct (SM_Final over I, Moore-FSM over I, O)
+    Moore-SM_Final over I,O
+  (#
+     carrier -> set,
+        Tran -> Function of [: the carrier, I :], the carrier,
+        OFun -> Function of the carrier, O,
+       InitS -> Element of the carrier,
+      FinalS -> Subset of the carrier #);
+end;
+
+definition let I be set, O be non empty set;
+  cluster non empty strict Moore-SM_Final over I, O;
+end;
+
+definition
+ let I, O;
+ let i,f be set;
+ let o be Function of {i,f}, O;
+ func I-TwoStatesMooreSM(i,f,o) -> non empty strict Moore-SM_Final over I, O
+ means
+:: FSM_2:def 7
+   the carrier of it = {i,f} &
+   the Tran of it = [:{i,f}, I :] --> f &
+   the OFun of it = o &
+   the InitS of it = i &
+   the FinalS of it = {f};
+end;
+
+theorem :: FSM_2:17
+ for i,f being set, o being Function of {i,f}, O
+ for j st 1 < j & j <= len w+1 holds
+   GEN(w, the InitS of I-TwoStatesMooreSM(i,f,o)).j = f;
+
+definition
+ let I, O;
+ let i,f be set;
+ let o be Function of {i,f}, O;
+ cluster I-TwoStatesMooreSM(i,f,o) -> calculating_type;
+end;
+
+definition
+ let I, O;
+ let i,f be set;
+ let o be Function of {i,f}, O;
+ cluster I-TwoStatesMooreSM(i,f,o) -> halting;
+end;
+
+reserve n, m, o, p for non empty Nat,
+        M for non empty Moore-SM_Final over I, O,
+        q for State of M;
+
+theorem :: FSM_2:18
+ M is calculating_type & s leads_to_final_state_of M &
+ not the InitS of M in the FinalS of M
+ implies
+  ex m being non empty Nat st
+   (for w st len w+1 >= m & w.1 = s holds
+      GEN(w, the InitS of M).m in the FinalS of M) &
+   (for w,j st j <= len w +1 & w.1 = s & j < m holds
+       not GEN(w, the InitS of M).j in the FinalS of M);
+
+begin :: Correctness of a result of state machine
+
+definition let I, O, M, s;
+  let t be set;
+  pred t is_result_of s,M means
+:: FSM_2:def 8
+
+  ex m st
+      for w st w.1=s holds
+        (m <= len w+1 implies
+          t = (the OFun of M).(GEN(w, the InitS of M).m) &
+          GEN(w, the InitS of M).m in the FinalS of M) &
+        for n st n < m & n <= len w+1 holds
+         not GEN(w, the InitS of M).n in the FinalS of M;
+end;
+
+theorem :: FSM_2:19
+ the InitS of M in the FinalS of M
+ implies
+  (the OFun of M).the InitS of M is_result_of s, M;
+
+theorem :: FSM_2:20
+ M is calculating_type & s leads_to_final_state_of M &
+ not the InitS of M in the FinalS of M
+ implies
+  ex t st t is_result_of s, M;
+
+theorem :: FSM_2:21
+ M is calculating_type & s leads_to_final_state_of M
+  implies
+   for t1, t2 being Element of O
+    st t1 is_result_of s, M & t2 is_result_of s, M
+    holds t1 = t2;
+
+theorem :: FSM_2:22
+ for X being non empty set
+ for f being BinOp of X
+ for M being non empty Moore-SM_Final over [:X, X:], X \/ {X}
+  st M is calculating_type &
+     the carrier of M = X \/ {X} &
+     the FinalS of M = X &
+     the InitS of M = X &
+     the OFun of M = id the carrier of M &
+     for x,y being Element of X holds
+       (the Tran of M).[the InitS of M, [x,y]] = f.(x,y)
+  holds
+   M is halting &
+   for x,y being Element of X holds f.(x,y) is_result_of [x,y], M;
+
+theorem :: FSM_2:23
+ for M being non empty Moore-SM_Final over [:REAL, REAL:], REAL \/ {REAL}
+  st M is calculating_type &
+     the carrier of M = REAL \/ {REAL} &
+     the FinalS of M = REAL &
+     the InitS of M = REAL &
+     the OFun of M = id the carrier of M &
+     (for x,y st x >= y holds (the Tran of M).[the InitS of M, [x,y]] = x) &
+     (for x,y st x < y holds (the Tran of M).[the InitS of M, [x,y]] = y)
+ for x,y being Element of REAL holds max(x,y) is_result_of [x,y], M;
+
+theorem :: FSM_2:24
+ for M being non empty Moore-SM_Final over [:REAL, REAL:], REAL \/ {REAL}
+  st M is calculating_type &
+     the carrier of M = REAL \/ {REAL} &
+     the FinalS of M = REAL &
+     the InitS of M = REAL &
+     the OFun of M = id the carrier of M &
+     (for x,y st x < y holds (the Tran of M).[the InitS of M, [x,y]] = x) &
+     (for x,y st x >= y holds (the Tran of M).[the InitS of M, [x,y]] = y)
+ for x,y being Element of REAL holds min(x,y) is_result_of [x,y], M;
+
+theorem :: FSM_2:25
+ for M being non empty Moore-SM_Final over [:REAL, REAL:], REAL \/ {REAL}
+  st M is calculating_type &
+     the carrier of M = REAL \/ {REAL} &
+     the FinalS of M = REAL &
+     the InitS of M = REAL &
+     the OFun of M = id the carrier of M &
+     (for x,y holds (the Tran of M).[the InitS of M, [x,y]] = x+y)
+ for x,y being Element of REAL holds x+y is_result_of [x,y], M;
+
+theorem :: FSM_2:26
+ for M being non empty Moore-SM_Final over [:REAL, REAL:], REAL \/ {REAL}
+  st M is calculating_type &
+     the carrier of M = REAL \/ {REAL} &
+     the FinalS of M = REAL &
+     the InitS of M = REAL &
+     the OFun of M = id the carrier of M &
+    (for x,y st x>0 or y>0 holds (the Tran of M).[the InitS of M, [x,y]] = 1) &
+    (for x,y st (x=0 or y=0) & x <= 0 & y <=0
+      holds (the Tran of M).[the InitS of M, [x,y]] = 0) &
+    (for x,y st x<0 & y<0 holds (the Tran of M).[the InitS of M, [x,y]] = -1)
+ for x,y being Element of REAL holds max(sgn x,sgn y) is_result_of [x,y], M;
+
+definition
+ let I, O;
+ cluster calculating_type halting (non empty Moore-SM_Final over I, O);
+end;
+
+definition
+ let I;
+ cluster calculating_type halting (non empty SM_Final over I);
+end;
+
+definition
+ let I, O;
+ let M be calculating_type halting
+     (non empty Moore-SM_Final over I, O);
+ let s;
+ func Result(s, M) -> Element of O means
+:: FSM_2:def 9
+
+ it is_result_of s, M;
+end;
+
+theorem :: FSM_2:27
+   for f being Function of {0, 1}, O holds
+  Result(s, I-TwoStatesMooreSM(0,1,f)) = f.1;
+
+theorem :: FSM_2:28
+   for M being calculating_type halting
+    (non empty Moore-SM_Final over [:REAL, REAL:], REAL \/ {REAL})
+  st the carrier of M = REAL \/ {REAL} &
+     the FinalS of M = REAL &
+     the InitS of M = REAL &
+     the OFun of M = id the carrier of M &
+     (for x,y st x >= y holds (the Tran of M).[the InitS of M, [x,y]] = x) &
+     (for x,y st x < y holds (the Tran of M).[the InitS of M, [x,y]] = y)
+ for x,y being Element of REAL holds
+   Result([x,y], M) = max(x,y);
+
+theorem :: FSM_2:29
+   for M being calculating_type halting
+    (non empty Moore-SM_Final over [:REAL, REAL:], REAL \/ {REAL})
+  st the carrier of M = REAL \/ {REAL} &
+     the FinalS of M = REAL &
+     the InitS of M = REAL &
+     the OFun of M = id the carrier of M &
+     (for x,y st x < y holds (the Tran of M).[the InitS of M, [x,y]] = x) &
+     (for x,y st x >= y holds (the Tran of M).[the InitS of M, [x,y]] = y)
+ for x,y being Element of REAL holds
+   Result([x,y], M) = min(x,y);
+
+theorem :: FSM_2:30
+   for M being calculating_type halting
+    (non empty Moore-SM_Final over [:REAL, REAL:], REAL \/ {REAL})
+  st the carrier of M = REAL \/ {REAL} &
+     the FinalS of M = REAL &
+     the InitS of M = REAL &
+     the OFun of M = id the carrier of M &
+     (for x,y holds (the Tran of M).[the InitS of M, [x,y]] = x+y)
+ for x,y being Element of REAL holds
+   Result([x,y], M) = x+y;
+
+theorem :: FSM_2:31
+   for M being calculating_type halting
+    (non empty Moore-SM_Final over [:REAL, REAL:], REAL \/ {REAL})
+  st the carrier of M = REAL \/ {REAL} &
+     the FinalS of M = REAL &
+     the InitS of M = REAL &
+     the OFun of M = id the carrier of M &
+    (for x,y st x>0 or y>0 holds (the Tran of M).[the InitS of M, [x,y]] = 1) &
+    (for x,y st (x=0 or y=0) & x <= 0 & y <=0
+      holds (the Tran of M).[the InitS of M, [x,y]] = 0) &
+    (for x,y st x<0 & y<0 holds (the Tran of M).[the InitS of M, [x,y]] = -1)
+ for x,y being Element of REAL holds
+   Result([x,y], M) = max(sgn x, sgn y);

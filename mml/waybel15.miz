@@ -1,0 +1,1585 @@
+:: More on the Algebraic and Arithmetic Lattices
+::  by Robert Milewski
+::
+:: Received October 29, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary ORDERS_1, CAT_1, YELLOW_0, WELLORD1, PRE_TOPC, SGRAPH1, FUNCT_1,
+      RELAT_1, YELLOW_1, WAYBEL_0, LATTICES, RELAT_2, WAYBEL_1, GROUP_6,
+      SEQM_3, WAYBEL_8, COMPTS_1, FINSET_1, BOOLE, LATTICE3, QUANTAL1,
+      WAYBEL_3, ORDINAL2, YELLOW_2, FILTER_2, BINOP_1, BHSP_3, WAYBEL_6,
+      OPPCAT_1, FILTER_0, ZF_LANG, WAYBEL_5, WAYBEL15;
+ notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, WELLORD1, FUNCT_1, FUNCT_2,
+      FINSET_1, STRUCT_0, ORDERS_1, PRE_TOPC, QUANTAL1, GRCAT_1, LATTICE3,
+      YELLOW_0, YELLOW_1, YELLOW_2, YELLOW_7, WAYBEL_0, WAYBEL_1, WAYBEL_3,
+      WAYBEL_5, WAYBEL_6, WAYBEL_8;
+ constructors ORDERS_3, TOLER_1, QUANTAL1, TOPS_2, GRCAT_1, YELLOW_3, WAYBEL_1,
+      WAYBEL_3, WAYBEL_5, WAYBEL_6, WAYBEL_8;
+ clusters STRUCT_0, RELSET_1, FINSET_1, FUNCT_1, LATTICE3, YELLOW_0, YELLOW_2,
+      WAYBEL_0, WAYBEL_1, WAYBEL_2, WAYBEL_3, WAYBEL_5, WAYBEL_8, WAYBEL10,
+      SUBSET_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI;
+ theorems TARSKI, RELAT_1, FINSET_1, WELLORD1, FUNCT_1, FUNCT_2, ORDERS_1,
+      QUANTAL1, LATTICE3, GRCAT_1, YELLOW_0, YELLOW_1, YELLOW_2, YELLOW_5,
+      YELLOW_6, YELLOW_7, WAYBEL_0, WAYBEL_1, WAYBEL_3, WAYBEL_5, WAYBEL_6,
+      WAYBEL_8, WAYBEL13, EXTENS_1, BORSUK_1, XBOOLE_0, XBOOLE_1, WAYBEL14;
+ schemes YELLOW_2, WAYBEL_3;
+
+begin :: Preliminaries
+
+  theorem Th1:
+   for R be RelStr
+   for S be full SubRelStr of R
+   for T be full SubRelStr of S
+    holds T is full SubRelStr of R
+   proof
+    let R be RelStr;
+    let S be full SubRelStr of R;
+    let T be full SubRelStr of S;
+    reconsider T1 = T as SubRelStr of R by YELLOW_6:16;
+    A1: the InternalRel of S = (the InternalRel of R)|_2 the carrier of S
+                                                         by YELLOW_0:def 14;
+    A2: the carrier of T c= the carrier of S by YELLOW_0:def 13;
+      the InternalRel of T =
+         ((the InternalRel of R)|_2 the carrier of S)|_2the carrier of T
+                                                       by A1,YELLOW_0:def 14
+        .= (the InternalRel of R)|_2 the carrier of T by A2,WELLORD1:29;
+    then T1 is full by YELLOW_0:def 14;
+    hence T is full SubRelStr of R;
+   end;
+
+  theorem Th2:
+   for X be 1-sorted, Y,Z be non empty 1-sorted
+   for f be map of X,Y
+   for g be map of Y,Z
+      holds
+    f is onto & g is onto implies g*f is onto
+   proof
+    let X be 1-sorted, Y,Z be non empty 1-sorted;
+    let f be map of X,Y;
+    let g be map of Y,Z;
+    assume that
+     A1: f is onto and
+     A2: g is onto;
+       rng f = the carrier of Y by A1,FUNCT_2:def 3
+          .= dom g by FUNCT_2:def 1;
+     then rng(g*f) = rng g by RELAT_1:47
+          .= the carrier of Z by A2,FUNCT_2:def 3;
+     hence g*f is onto by FUNCT_2:def 3;
+   end;
+
+  theorem Th3:
+   for X be 1-sorted
+   for Y be Subset of X holds
+    (id X).:Y = Y
+   proof
+    let X be 1-sorted;
+    let Y be Subset of X;
+      id X = id the carrier of X by GRCAT_1:def 11;
+    hence thesis by BORSUK_1:3;
+   end;
+
+  theorem
+     for X be set
+   for a be Element of BoolePoset X holds
+    uparrow a = {Y where Y is Subset of X : a c= Y}
+   proof
+    let X be set;
+    let a be Element of BoolePoset X;
+    A1: uparrow a c= {Y where Y is Subset of X : a c= Y}
+    proof
+     let x be set;
+     assume A2: x in uparrow a;
+     then reconsider x' = x as Element of BoolePoset X;
+     A3: x' is Subset of X by WAYBEL_8:28;
+       a <= x' by A2,WAYBEL_0:18;
+     then a c= x by YELLOW_1:2;
+     hence x in {Y where Y is Subset of X : a c= Y} by A3;
+    end;
+      {Y where Y is Subset of X : a c= Y} c= uparrow a
+    proof
+     let x be set;
+     assume x in {Y where Y is Subset of X : a c= Y};
+     then consider x' be Subset of X such that
+      A4: x' = x and
+      A5: a c= x';
+     reconsider x' as Element of BoolePoset X by WAYBEL_8:28;
+       a <= x' by A5,YELLOW_1:2;
+     hence x in uparrow a by A4,WAYBEL_0:18;
+    end;
+    hence thesis by A1,XBOOLE_0:def 10;
+   end;
+
+  theorem
+     for L be upper-bounded non empty antisymmetric RelStr
+   for a be Element of L holds
+    Top L <= a implies a = Top L
+   proof
+    let L be upper-bounded non empty antisymmetric RelStr;
+    let a be Element of L;
+    assume A1: Top L <= a;
+      a <= Top L by YELLOW_0:45;
+    hence thesis by A1,YELLOW_0:def 3;
+   end;
+
+  theorem Th6:
+   for S,T be non empty Poset
+   for g be map of S,T
+   for d be map of T,S
+      holds
+    g is onto & [g,d] is Galois implies T,Image d are_isomorphic
+   proof
+    let S,T be non empty Poset;
+    let g be map of S,T;
+    let d be map of T,S;
+    assume that
+     A1: g is onto and
+     A2: [g,d] is Galois;
+      d is one-to-one by A1,A2,WAYBEL_1:26;
+    then (the carrier of Image d)|d is one-to-one by FUNCT_1:99;
+    then A3: corestr(d) is one-to-one by WAYBEL_1:def 16;
+    A4: rng corestr(d) = the carrier of Image d by FUNCT_2:def 3;
+      d is monotone by A2,WAYBEL_1:9;
+    then A5: corestr(d) is monotone by WAYBEL_1:33;
+      now let x,y be Element of T;
+     thus x <= y implies (corestr(d)).x <=
+ (corestr(d)).y by A5,WAYBEL_1:def 2;
+     thus (corestr(d)).x <= (corestr(d)).y implies x <= y
+     proof
+      A6: d.x = (corestr(d)).x & d.y = (corestr(d)).y by WAYBEL_1:32;
+      A7: g is monotone by A2,WAYBEL_1:9;
+        for t be Element of T holds d.t is_minimum_of g"{t}
+                                                        by A1,A2,WAYBEL_1:23;
+      then A8: g*d = id T by WAYBEL_1:24;
+        x in the carrier of T;
+      then A9: x in dom d by FUNCT_2:def 1;
+        y in the carrier of T;
+      then A10: y in dom d by FUNCT_2:def 1;
+      assume (corestr(d)).x <= (corestr(d)).y;
+      then d.x <= d.y by A6,YELLOW_0:60;
+      then g.(d.x) <= g.(d.y) by A7,WAYBEL_1:def 2;
+      then (g*d).x <= g.(d.y) by A9,FUNCT_1:23;
+      then (g*d).x <= (g*d).y by A10,FUNCT_1:23;
+      then (id T).x <= y by A8,GRCAT_1:11;
+      hence x <= y by GRCAT_1:11;
+     end;
+    end;
+    then corestr(d) is isomorphic by A3,A4,WAYBEL_0:66;
+    hence T,Image d are_isomorphic by WAYBEL_1:def 8;
+   end;
+
+  theorem Th7:
+   for L1,L2,L3 be non empty Poset
+   for g1 be map of L1,L2
+   for g2 be map of L2,L3
+   for d1 be map of L2,L1
+   for d2 be map of L3,L2
+      st [g1,d1] is Galois & [g2,d2] is Galois holds
+    [g2*g1,d1*d2] is Galois
+   proof
+    let L1,L2,L3 be non empty Poset;
+    let g1 be map of L1,L2;
+    let g2 be map of L2,L3;
+    let d1 be map of L2,L1;
+    let d2 be map of L3,L2;
+    assume that
+     A1: [g1,d1] is Galois and
+     A2: [g2,d2] is Galois;
+    A3: g1 is monotone & d1 is monotone by A1,WAYBEL_1:9;
+    A4: g2 is monotone & d2 is monotone by A2,WAYBEL_1:9;
+    then A5: g2*g1 is monotone by A3,YELLOW_2:14;
+    A6: d1*d2 is monotone by A3,A4,YELLOW_2:14;
+      now let s be Element of L3,
+            t be Element of L1;
+       g1 is Function of the carrier of L1,the carrier of L2 &
+      t in the carrier of L1;
+     then A7: t in dom g1 by FUNCT_2:def 1;
+       d2 is Function of the carrier of L3,the carrier of L2 &
+      s in the carrier of L3;
+     then A8: s in dom d2 by FUNCT_2:def 1;
+     thus s <= (g2*g1).t implies (d1*d2).s <= t
+     proof
+        d1*g1 <= id L1 by A1,WAYBEL_1:19;
+      then A9: (d1*g1).t <= (id L1).t by YELLOW_2:10;
+      assume s <= (g2*g1).t;
+      then s <= g2.(g1.t) by A7,FUNCT_1:23;
+      then d2.s <= g1.t by A2,WAYBEL_1:9;
+      then d1.(d2.s) <= d1.(g1.t) by A3,WAYBEL_1:def 2;
+      then d1.(d2.s) <= (d1*g1).t by A7,FUNCT_1:23;
+      then d1.(d2.s) <= (id L1).t by A9,ORDERS_1:26;
+      then d1.(d2.s) <= t by GRCAT_1:11;
+      hence (d1*d2).s <= t by A8,FUNCT_1:23;
+     end;
+     thus (d1*d2).s <= t implies s <= (g2*g1).t
+     proof
+        id L3 <= g2*d2 by A2,WAYBEL_1:19;
+      then A10: (id L3).s <= (g2*d2).s by YELLOW_2:10;
+      assume (d1*d2).s <= t;
+      then d1.(d2.s) <= t by A8,FUNCT_1:23;
+      then d2.s <= g1.t by A1,WAYBEL_1:9;
+      then g2.(d2.s) <= g2.(g1.t) by A4,WAYBEL_1:def 2;
+      then (g2*d2).s <= g2.(g1.t) by A8,FUNCT_1:23;
+      then (id L3).s <= g2.(g1.t) by A10,ORDERS_1:26;
+      then s <= g2.(g1.t) by GRCAT_1:11;
+      hence s <= (g2*g1).t by A7,FUNCT_1:23;
+     end;
+    end;
+    hence [g2*g1,d1*d2] is Galois by A5,A6,WAYBEL_1:9;
+   end;
+
+  theorem Th8:
+   for L1,L2 be non empty Poset
+   for f be map of L1,L2
+   for f1 be map of L2,L1 st f1 = (f qua Function)" & f is isomorphic holds
+    [f,f1] is Galois & [f1,f] is Galois
+   proof
+    let L1,L2 be non empty Poset;
+    let f be map of L1,L2;
+    let f1 be map of L2,L1;
+    assume that
+     A1: f1 = (f qua Function)" and
+     A2: f is isomorphic;
+    A3: f is one-to-one monotone by A2,WAYBEL_0:def 38;
+      f1 is isomorphic by A1,A2,WAYBEL_0:68;
+    then A4: f1 is monotone by WAYBEL_0:def 38;
+      now let t be Element of L2,
+            s be Element of L1;
+       s in the carrier of L1;
+     then A5: s in dom f by FUNCT_2:def 1;
+       t in the carrier of L2;
+     then A6: t in dom f1 by FUNCT_2:def 1;
+     A7: f1*f = id dom f by A1,A3,FUNCT_1:61
+          .= id (the carrier of L1) by FUNCT_2:def 1
+          .= id L1 by GRCAT_1:def 11;
+     A8: f*f1 = id rng f by A1,A3,FUNCT_1:61
+          .= id (the carrier of L2) by A2,WAYBEL_0:66
+          .= id L2 by GRCAT_1:def 11;
+     thus t <= f.s implies f1.t <= s
+     proof
+      assume t <= f.s;
+      then f1.t <= f1.(f.s) by A4,WAYBEL_1:def 2;
+      then f1.t <= (f1*f).s by A5,FUNCT_1:23;
+      hence f1.t <= s by A7,GRCAT_1:11;
+     end;
+     thus f1.t <= s implies t <= f.s
+     proof
+      assume f1.t <= s;
+      then f.(f1.t) <= f.s by A3,WAYBEL_1:def 2;
+      then (f*f1).t <= f.s by A6,FUNCT_1:23;
+      hence t <= f.s by A8,GRCAT_1:11;
+     end;
+    end;
+    hence [f,f1] is Galois by A3,A4,WAYBEL_1:9;
+      now let t be Element of L1,
+            s be Element of L2;
+       s in the carrier of L2;
+     then A9: s in dom f1 by FUNCT_2:def 1;
+       t in the carrier of L1;
+     then A10: t in dom f by FUNCT_2:def 1;
+     A11: f1*f = id dom f by A1,A3,FUNCT_1:61
+          .= id (the carrier of L1) by FUNCT_2:def 1
+          .= id L1 by GRCAT_1:def 11;
+     A12: f*f1 = id rng f by A1,A3,FUNCT_1:61
+          .= id (the carrier of L2) by A2,WAYBEL_0:66
+          .= id L2 by GRCAT_1:def 11;
+     thus t <= f1.s implies f.t <= s
+     proof
+      assume t <= f1.s;
+      then f.t <= f.(f1.s) by A3,WAYBEL_1:def 2;
+      then f.t <= (f*f1).s by A9,FUNCT_1:23;
+      hence f.t <= s by A12,GRCAT_1:11;
+     end;
+     thus f.t <= s implies t <= f1.s
+     proof
+      assume f.t <= s;
+      then f1.(f.t) <= f1.s by A4,WAYBEL_1:def 2;
+      then (f1*f).t <= f1.s by A10,FUNCT_1:23;
+      hence t <= f1.s by A11,GRCAT_1:11;
+     end;
+    end;
+    hence [f1,f] is Galois by A3,A4,WAYBEL_1:9;
+   end;
+
+  theorem Th9:
+   for X be set holds BoolePoset X is arithmetic
+   proof
+    let X be set;
+      now let x,y be Element of CompactSublatt BoolePoset X;
+     reconsider x' = x , y' = y as Element of BoolePoset X by YELLOW_0:59;
+     x' is compact & y' is compact by WAYBEL_8:def 1;
+     then x' is finite & y' is finite by WAYBEL_8:30;
+     then x' /\ y' is finite by FINSET_1:15;
+     then x' "/\" y' is finite by YELLOW_1:17;
+     then x' "/\" y' is compact by WAYBEL_8:30;
+     then x' "/\" y' in the carrier of CompactSublatt BoolePoset X
+                                                          by WAYBEL_8:def 1;
+     then reconsider xy = x' "/\" y' as Element of CompactSublatt BoolePoset X
+                                                         ;
+       x' /\ y' c= x' & x' /\ y' c= y' by XBOOLE_1:17;
+     then x' "/\" y' c= x' & x' "/\" y' c= y' by YELLOW_1:17;
+     then x' "/\" y' <= x' & x' "/\" y' <= y' by YELLOW_1:2;
+     then A1: xy <= x & xy <= y by YELLOW_0:61;
+       now let z be Element of CompactSublatt BoolePoset X;
+      reconsider z' = z as Element of BoolePoset X by YELLOW_0:59;
+      assume z <= x & z <= y;
+      then z' <= x' & z' <= y' by YELLOW_0:60;
+      then z' c= x' & z' c= y' by YELLOW_1:2;
+      then z' c= x' /\ y' by XBOOLE_1:19;
+      then z' c= x' "/\" y' by YELLOW_1:17;
+      then z' <= x' "/\" y' by YELLOW_1:2;
+      hence xy >= z by YELLOW_0:61;
+     end;
+     hence ex_inf_of {x,y},CompactSublatt BoolePoset X by A1,YELLOW_0:19;
+    end;
+    then CompactSublatt BoolePoset X is with_infima by YELLOW_0:21;
+    hence BoolePoset X is arithmetic by WAYBEL_8:21;
+   end;
+
+  definition
+   let X be set;
+   cluster BoolePoset X -> arithmetic;
+   coherence by Th9;
+  end;
+
+  Lm1:
+   for L1,L2 be non empty RelStr
+   for f be map of L1,L2 holds
+    f is sups-preserving implies f is directed-sups-preserving
+   proof
+    let L1,L2 be non empty RelStr;
+    let f be map of L1,L2;
+    assume f is sups-preserving;
+    then for X be Subset of L1 st X is non empty directed holds
+     f preserves_sup_of X by WAYBEL_0:def 33;
+    hence f is directed-sups-preserving by WAYBEL_0:def 37;
+   end;
+
+  theorem Th10:
+   for L1,L2 be up-complete (non empty Poset)
+   for f be map of L1,L2 st f is isomorphic
+   for x be Element of L1 holds
+    f.:(waybelow x) = waybelow f.x
+   proof
+    let L1,L2 be up-complete (non empty Poset);
+    let f be map of L1,L2;
+    assume A1: f is isomorphic;
+    then A2: f is one-to-one by WAYBEL_0:def 38;
+    reconsider g = (f qua Function)" as map of L2,L1 by A1,WAYBEL_0:67;
+    let x be Element of L1;
+    A3: f.:(waybelow x) c= waybelow f.x
+    proof
+     let z be set;
+     assume z in f.:(waybelow x);
+     then consider v be set such that
+        v in dom f and
+      A4: v in waybelow x and
+      A5: z = f.v by FUNCT_1:def 12;
+       v in { y where y is Element of L1 : y << x } by A4,WAYBEL_3:def 3;
+     then consider v1 be Element of L1 such that
+      A6: v1 = v and
+      A7: v1 << x;
+       f.v1 << f.x by A1,A7,WAYBEL13:27;
+     hence z in waybelow f.x by A5,A6,WAYBEL_3:7;
+    end;
+      waybelow f.x c= f.:(waybelow x)
+    proof
+     let z be set;
+     assume z in waybelow f.x;
+     then z in { y where y is Element of L2 : y << f.x } by WAYBEL_3:def 3;
+     then consider z1 be Element of L2 such that
+      A8: z1 = z and
+      A9: z1 << f.x;
+       g.z1 in the carrier of L1 & the carrier of L2 is non empty;
+     then A10: g.z1 in dom f by FUNCT_2:def 1;
+       z1 in the carrier of L2 & the carrier of L1 is non empty;
+     then z1 in dom g by FUNCT_2:def 1;
+     then z1 in rng f by A2,FUNCT_1:55;
+     then A11: z1 = f.(g.z1) by A2,FUNCT_1:57;
+     then g.z1 << x by A1,A9,WAYBEL13:27;
+     then g.z1 in waybelow x by WAYBEL_3:7;
+     hence z in f.:(waybelow x) by A8,A10,A11,FUNCT_1:def 12;
+    end;
+    hence f.:(waybelow x) = waybelow f.x by A3,XBOOLE_0:def 10;
+   end;
+
+  theorem Th11:
+   for L1,L2 be non empty Poset
+    st L1,L2 are_isomorphic & L1 is continuous holds
+     L2 is continuous
+   proof
+    let L1,L2 be non empty Poset;
+    assume that
+     A1: L1,L2 are_isomorphic and
+     A2: L1 is continuous;
+    consider f be map of L1,L2 such that
+     A3: f is isomorphic by A1,WAYBEL_1:def 8;
+    A4: f is one-to-one by A3,WAYBEL_0:def 38;
+    reconsider g = (f qua Function)" as map of L2,L1 by A3,WAYBEL_0:67;
+    A5: g is isomorphic by A3,WAYBEL_0:68;
+    A6: (for x be Element of L1 holds waybelow x is non empty directed) &
+         L1 is up-complete satisfying_axiom_of_approximation
+                                                       by A2,WAYBEL_3:def 6;
+    then A7: L2 is up-complete by A1,WAYBEL13:30;
+    A8: L1 is up-complete (non empty Poset) &
+        L2 is up-complete (non empty Poset) by A1,A6,WAYBEL13:30;
+      now let y be Element of L2;
+       f is sups-preserving by A3,WAYBEL13:20;
+     then A9: f preserves_sup_of waybelow (g.y) by WAYBEL_0:def 33;
+       waybelow (g.y) is non empty directed Subset of L1 by A2,WAYBEL_3:def 6;
+     then A10: ex_sup_of waybelow (g.y),L1 by A6,WAYBEL_0:75;
+       y in the carrier of L2;
+     then A11: y in rng f by A3,WAYBEL_0:66;
+     hence y = f.(g.y) by A4,FUNCT_1:57
+            .= f.(sup waybelow (g.y)) by A6,WAYBEL_3:def 5
+            .= sup (f.:(waybelow (g.y))) by A9,A10,WAYBEL_0:def 31
+            .= sup waybelow f.(g.y) by A3,A8,Th10
+            .= sup waybelow y by A4,A11,FUNCT_1:57;
+    end;
+    then A12: L2 is satisfying_axiom_of_approximation by WAYBEL_3:def 5;
+      now let y be Element of L2;
+       for Y be finite Subset of waybelow y
+      ex z be Element of L2 st z in waybelow y & z is_>=_than Y
+     proof
+      let Y be finite Subset of waybelow y;
+        now let u be set;
+       assume u in g.:Y;
+       then consider v be set such that
+          v in dom g and
+        A13: v in Y and
+        A14: u = g.v by FUNCT_1:def 12;
+         v in waybelow y by A13;
+       then v in { k where k is Element of L2 : k << y } by WAYBEL_3:def 3;
+       then consider v1 be Element of L2 such that
+        A15: v1 = v and
+        A16: v1 << y;
+         g.v1 << g.y by A5,A8,A16,WAYBEL13:27;
+       hence u in waybelow g.y by A14,A15,WAYBEL_3:7;
+      end;
+      then reconsider X = g.:Y as finite Subset of waybelow g.y
+                                                            by TARSKI:def 3;
+        waybelow g.y is non empty directed by A2,WAYBEL_3:def 6;
+      then consider x be Element of L1 such that
+       A17: x in waybelow g.y and
+       A18: x is_>=_than X by WAYBEL_0:1;
+      take z = f.x;
+        y in the carrier of L2;
+      then y in rng f by A3,WAYBEL_0:66;
+      then A19: f.(g.y) = y by A4,FUNCT_1:57;
+        x << g.y by A17,WAYBEL_3:7;
+      then z << y by A3,A8,A19,WAYBEL13:27;
+      hence z in waybelow y by WAYBEL_3:7;
+        Y c= the carrier of L2 by XBOOLE_1:1;
+      then A20: Y c= rng f by A3,WAYBEL_0:66;
+        f.:X = f.:(f"Y) by A4,FUNCT_1:155
+         .= Y by A20,FUNCT_1:147;
+      hence z is_>=_than Y by A3,A18,WAYBEL13:19;
+     end;
+     hence waybelow y is non empty directed by WAYBEL_0:1;
+    end;
+    hence L2 is continuous by A7,A12,WAYBEL_3:def 6;
+   end;
+
+  theorem Th12:
+   for L1,L2 be LATTICE
+    st L1,L2 are_isomorphic & L1 is lower-bounded arithmetic holds
+     L2 is arithmetic
+   proof
+    let L1,L2 be LATTICE;
+    assume that
+     A1: L1,L2 are_isomorphic and
+     A2: L1 is lower-bounded arithmetic;
+    consider f be map of L1,L2 such that
+     A3: f is isomorphic by A1,WAYBEL_1:def 8;
+    reconsider g = (f qua Function)" as map of L2,L1 by A3,WAYBEL_0:67;
+    A4: g is isomorphic by A3,WAYBEL_0:68;
+      L1 is algebraic by A2,WAYBEL_8:def 5;
+    then A5: L2 is algebraic by A1,A2,WAYBEL13:32;
+    A6: L1 is arithmetic LATTICE by A2;
+    then A7: L2 is up-complete LATTICE by A1,WAYBEL13:30;
+      now let x2,y2 be Element of L2;
+     assume that
+      A8: x2 in the carrier of CompactSublatt L2 and
+      A9: y2 in the carrier of CompactSublatt L2 and
+      A10: ex_inf_of {x2,y2},L2;
+       x2 is compact & y2 is compact by A8,A9,WAYBEL_8:def 1;
+     then g.x2 is compact & g.y2 is compact by A4,A6,A7,WAYBEL13:28;
+     then A11: g.x2 in the carrier of CompactSublatt L1 &
+              g.y2 in the carrier of CompactSublatt L1 by WAYBEL_8:def 1;
+       x2 in the carrier of L2 & y2 in the carrier of L2 &
+      the carrier of L1 is non empty;
+     then A12: x2 in dom g & y2 in dom g by FUNCT_2:def 1;
+       g is infs-preserving by A4,WAYBEL13:20;
+     then A13: g preserves_inf_of {x2,y2} by WAYBEL_0:def 32;
+     then A14: g.(inf {x2,y2}) = inf (g.:{x2,y2}) by A10,WAYBEL_0:def 30
+                         .= inf {g.x2,g.y2} by A12,FUNCT_1:118;
+       ex_inf_of g.:{x2,y2},L1 by A10,A13,WAYBEL_0:def 30;
+     then A15: ex_inf_of {g.x2,g.y2},L1 by A12,FUNCT_1:118;
+       CompactSublatt L1 is meet-inheriting by A2,WAYBEL_8:def 5;
+     then inf {g.x2,g.y2} in the carrier of CompactSublatt L1
+                                                   by A11,A15,YELLOW_0:def 16;
+     then inf {g.x2,g.y2} is compact by WAYBEL_8:def 1;
+     then inf {x2,y2} is compact by A4,A6,A7,A14,WAYBEL13:28;
+     hence inf {x2,y2} in the carrier of CompactSublatt L2 by WAYBEL_8:def 1;
+    end;
+    then CompactSublatt L2 is meet-inheriting by YELLOW_0:def 16;
+    hence L2 is arithmetic by A5,WAYBEL_8:def 5;
+   end;
+
+  Lm2:
+   for L be lower-bounded LATTICE holds
+    L is continuous implies
+    ex A be arithmetic lower-bounded LATTICE,
+       g be map of A,L st
+     g is onto & g is infs-preserving & g is directed-sups-preserving
+   proof
+    let L be lower-bounded LATTICE;
+    assume A1: L is continuous;
+    reconsider A = InclPoset Ids L as arithmetic lower-bounded LATTICE
+                                                              by WAYBEL13:14;
+    take A;
+    reconsider g = SupMap L as map of A,L;
+    take g;
+      the carrier of L c= rng g
+    proof
+     let y be set;
+     assume y in the carrier of L;
+     then reconsider y' = y as Element of L;
+       downarrow y' is Element of A by YELLOW_2:43;
+     then downarrow y' in the carrier of A & the carrier of L is non empty;
+     then A2: downarrow y' in dom g by FUNCT_2:def 1;
+       g.(downarrow y') = sup (downarrow y') by YELLOW_2:def 3
+                     .= y' by WAYBEL_0:34;
+     hence y in rng g by A2,FUNCT_1:def 5;
+    end;
+    then rng g = the carrier of L by XBOOLE_0:def 10;
+    hence g is onto by FUNCT_2:def 3;
+    thus g is infs-preserving by A1,WAYBEL13:33;
+      g is sups-preserving by A1,WAYBEL13:33;
+    then for X be Subset of A st X is non empty directed holds
+     g preserves_sup_of X by WAYBEL_0:def 33;
+    hence g is directed-sups-preserving by WAYBEL_0:def 37;
+   end;
+
+  theorem Th13:
+   for L1,L2,L3 be non empty Poset
+   for f be map of L1,L2
+   for g be map of L2,L3 st
+    f is directed-sups-preserving & g is directed-sups-preserving holds
+     g*f is directed-sups-preserving
+   proof
+    let L1,L2,L3 be non empty Poset;
+    let f be map of L1,L2;
+    let g be map of L2,L3;
+    assume that
+     A1: f is directed-sups-preserving and
+     A2: g is directed-sups-preserving;
+       now let X be Subset of L1;
+      assume A3: X is non empty directed;
+      then consider xx be set such that
+       A4: xx in X by XBOOLE_0:def 1;
+        dom f = the carrier of L1 by FUNCT_2:def 1;
+      then A5: f.xx in f.:X by A4,FUNCT_1:def 12;
+        for X1 be Ideal of L1 holds f preserves_sup_of X1
+                                                      by A1,WAYBEL_0:def 37;
+      then f is monotone by WAYBEL_0:72;
+      then A6: f.:X is non empty directed by A3,A5,YELLOW_2:17;
+        now assume A7: ex_sup_of X,L1;
+         f preserves_sup_of X by A1,A3,WAYBEL_0:def 37;
+       then A8: ex_sup_of f.:X,L2 & sup (f.:
+X) = f.sup X by A7,WAYBEL_0:def 31;
+         g preserves_sup_of f.:X by A2,A6,WAYBEL_0:def 37;
+       then A9: ex_sup_of g.:(f.:X),L3 & sup (g.:(f.:X)) = g.sup (f.:X)
+                                                      by A8,WAYBEL_0:def 31;
+       hence ex_sup_of (g*f).:X,L3 by RELAT_1:159;
+         sup X in the carrier of L1 & the carrier of L2 is non empty;
+       then A10: sup X in dom f by FUNCT_2:def 1;
+       thus sup ((g*f).:X) = g.(f.sup X) by A8,A9,RELAT_1:159
+                         .= (g*f).sup X by A10,FUNCT_1:23;
+      end;
+      hence g*f preserves_sup_of X by WAYBEL_0:def 31;
+     end;
+     hence g*f is directed-sups-preserving by WAYBEL_0:def 37;
+   end;
+
+begin :: Maps Preserving Sup's and Inf's
+
+  theorem Th14:
+   for L1,L2 be non empty RelStr
+   for f be map of L1,L2
+   for X be Subset of Image f holds
+    (inclusion f).:X = X
+   proof
+    let L1,L2 be non empty RelStr;
+    let f be map of L1,L2;
+    let X be Subset of Image f;
+    thus (inclusion f).:X = (id Image f).:X by WAYBEL_1:def 17
+                        .= X by Th3;
+   end;
+
+  theorem Th15:
+   for X be set
+   for c be map of BoolePoset X,BoolePoset X st
+     c is idempotent directed-sups-preserving holds
+    inclusion c is directed-sups-preserving
+   proof
+    let X be set;
+    let c be map of BoolePoset X,BoolePoset X;
+    assume A1: c is idempotent directed-sups-preserving;
+      now let Y be Ideal of Image c;
+       now assume ex_sup_of Y,Image c;
+      A2: ex_sup_of Y,BoolePoset X by YELLOW_0:17;
+        Y c= the carrier of Image c;
+      then A3: Y c= rng c by YELLOW_2:11;
+      reconsider Y' = Y as non empty directed Subset of BoolePoset X
+                                                               by YELLOW_2:7;
+      A4: c preserves_sup_of Y' by A1,WAYBEL_0:def 37;
+        "\/"(Y,BoolePoset X) in the carrier of BoolePoset X;
+      then "\/"(Y,BoolePoset X) in dom c by FUNCT_2:def 1;
+      then c.("\/"(Y,BoolePoset X)) in rng c by FUNCT_1:def 5;
+      then "\/"(c.:Y,BoolePoset X) in rng c by A2,A4,WAYBEL_0:def 31;
+      then "\/"(Y,BoolePoset X) in rng c by A1,A3,YELLOW_2:22;
+      then "\/"(Y,BoolePoset X) in the carrier of Image c by YELLOW_2:11;
+      then A5: "\/"(Y,BoolePoset X) is Element of Image c;
+      thus ex_sup_of (inclusion c).:Y,BoolePoset X by YELLOW_0:17;
+      thus sup ((inclusion c).:Y) = "\/"(Y,BoolePoset X) by Th14
+                                .= sup Y by A2,A5,WAYBEL_8:19
+                                .= (inclusion c).sup Y by WAYBEL_1:34;
+     end;
+     hence inclusion c preserves_sup_of Y by WAYBEL_0:def 31;
+    end;
+    hence inclusion c is directed-sups-preserving by WAYBEL_0:73;
+   end;
+
+  Lm3:
+   for L be lower-bounded LATTICE holds
+    (ex A be algebraic lower-bounded LATTICE,
+       g be map of A,L st
+     g is onto & g is infs-preserving & g is directed-sups-preserving)
+        implies
+    ex X be non empty set,
+       p be projection map of BoolePoset X,BoolePoset X st
+     p is directed-sups-preserving & L,Image p are_isomorphic
+   proof
+    let L be lower-bounded LATTICE;
+    given A be algebraic lower-bounded LATTICE, g be map of A,L
+      such that
+     A1: g is onto and
+     A2: g is infs-preserving and
+     A3: g is directed-sups-preserving;
+    consider X be non empty set,
+             c be closure map of BoolePoset X,BoolePoset X such that
+     A4: c is directed-sups-preserving and
+     A5: A,Image c are_isomorphic by WAYBEL13:35;
+    consider f be map of A,Image c such that
+     A6: f is isomorphic by A5,WAYBEL_1:def 8;
+    A7: f is one-to-one by A6,WAYBEL_0:def 38;
+    reconsider f1 = (f qua Function)" as map of Image c,A by A6,WAYBEL_0:67;
+    A8: f1 is isomorphic by A6,WAYBEL_0:68;
+      g has_a_lower_adjoint by A2,WAYBEL_1:17;
+    then consider d be map of L,A such that
+     A9: [g,d] is Galois by WAYBEL_1:def 11;
+      g is monotone & d is monotone by A9,WAYBEL_1:9;
+    then d*g is monotone by YELLOW_2:14;
+    then reconsider k = d*g as kernel map of A,A by A9,WAYBEL_1:44;
+      d is lower_adjoint by A9,WAYBEL_1:10;
+    then d is sups-preserving by WAYBEL_1:14;
+    then d is directed-sups-preserving by Lm1;
+    then A10: k is directed-sups-preserving by A3,Th13;
+    A11: f1*f = id dom f by A7,FUNCT_1:61
+              .= id (the carrier of A) by FUNCT_2:def 1
+              .= id A by GRCAT_1:def 11;
+    reconsider p = (inclusion c)*f*k*f1*(corestr c) as
+                                            map of BoolePoset X,BoolePoset X;
+    A12: (inclusion c)*f*k*(f1*(id(Image c)))*(f*(k*(f1*(corestr c))))
+      = (inclusion c)*f*k*f1*(f*(k*(f1*(corestr c)))) by GRCAT_1:12
+     .= (inclusion c)*f*k*f1*f*(k*(f1*(corestr c))) by RELAT_1:55
+     .= (inclusion c)*f*k*(id A)*(k*(f1*(corestr c))) by A11,RELAT_1:55
+     .= (inclusion c)*f*k*(k*(f1*(corestr c))) by GRCAT_1:12
+     .= (inclusion c)*f*k*k*(f1*(corestr c)) by RELAT_1:55
+     .= (inclusion c)*f*(k*k)*(f1*(corestr c)) by RELAT_1:55
+     .= (inclusion c)*f*k*(f1*(corestr c)) by QUANTAL1:def 9
+     .= p by RELAT_1:55;
+      p * p =
+        (inclusion c)*f*k*f1*(corestr c)*((inclusion c)*f*k*(f1*(corestr c)))
+                                                                by RELAT_1:55
+     .= (inclusion c)*f*k*f1*(corestr c)*
+                         ((inclusion c)*f*(k*(f1*(corestr c)))) by RELAT_1:55
+     .= (inclusion c)*f*k*f1*(corestr c)*((inclusion c)*
+                                      (f*(k*(f1*(corestr c))))) by RELAT_1:55
+     .= (inclusion c)*f*k*f1*(corestr c)*(inclusion c)*
+                                       (f*(k*(f1*(corestr c)))) by RELAT_1:55
+     .= (inclusion c)*f*k*f1*((corestr c)*(inclusion c))*
+                                       (f*(k*(f1*(corestr c)))) by RELAT_1:55
+     .= (inclusion c)*f*k*f1*(id(Image c))*(f*(k*(f1*(corestr c))))
+                                                               by WAYBEL_1:36
+     .= p by A12,RELAT_1:55;
+    then A13: p is idempotent by QUANTAL1:def 9;
+    A14: f is monotone by A6,WAYBEL_0:def 38;
+    A15: f1 is monotone by A8,WAYBEL_0:def 38;
+      (inclusion c)*f is monotone by A14,YELLOW_2:14;
+    then (inclusion c)*f*k is monotone by YELLOW_2:14;
+    then (inclusion c)*f*k*f1 is monotone by A15,YELLOW_2:14;
+    then p is monotone by YELLOW_2:14;
+    then reconsider p as projection map of BoolePoset X,BoolePoset X
+                                                      by A13,WAYBEL_1:def 13;
+    take X;
+    take p;
+    A16: inclusion c is directed-sups-preserving by A4,Th15;
+      f is sups-preserving by A6,WAYBEL13:20;
+    then A17: f is directed-sups-preserving by Lm1;
+      f1 is sups-preserving by A8,WAYBEL13:20;
+    then A18: f1 is directed-sups-preserving by Lm1;
+      corestr c is sups-preserving by WAYBEL_1:58;
+    then A19: corestr c is directed-sups-preserving by Lm1;
+      (inclusion c)*f is directed-sups-preserving by A16,A17,Th13;
+    then (inclusion c)*f*k is directed-sups-preserving by A10,Th13;
+    then (inclusion c)*f*k*f1 is directed-sups-preserving by A18,Th13;
+    hence p is directed-sups-preserving by A19,Th13;
+      rng f1 = the carrier of A by A8,WAYBEL_0:66;
+    then f1 is onto by FUNCT_2:def 3;
+    then A20: g*f1 is onto by A1,Th2;
+    then A21: g*f1*(corestr c) is onto by Th2;
+      [f1,f] is Galois by A6,Th8;
+    then [g*f1,f*d] is Galois by A9,Th7;
+    then A22: L,Image(f*d) are_isomorphic by A20,Th6;
+    A23: dom (f*d) = the carrier of L by FUNCT_2:def 1;
+    A24: dom (inclusion(c)*f*d) = the carrier of L by FUNCT_2:def 1;
+      now let x be set;
+     assume A25: x in the carrier of L;
+     then (f*d).x in the carrier of Image c by FUNCT_2:7;
+     then (f*d).x is Element of Image c;
+     hence (f*d).x = (inclusion(c)).((f*d).x) by WAYBEL_1:34
+        .= (inclusion(c)*(f*d)).x by A23,A25,FUNCT_1:23
+        .= (inclusion(c)*f*d).x by RELAT_1:55;
+    end;
+    then rng (f*d) = rng (inclusion(c)*f*d) by A23,A24,FUNCT_1:9;
+    then A26: the carrier of (subrelstr rng (f*d)) = rng (inclusion(c)*f*d)
+                                                         by YELLOW_0:def 15;
+      subrelstr rng (f*d) is full strict SubRelStr of BoolePoset X by Th1;
+    then subrelstr rng (f*d) = subrelstr rng (inclusion(c)*f*d)
+                                                      by A26,YELLOW_0:def 15;
+    then A27: subrelstr rng (f*d) = Image(inclusion(c)*f*d) by YELLOW_2:def 2;
+    A28: rng(g*f1*(corestr c)) = the carrier of L by A21,FUNCT_2:def 3
+       .= dom(inclusion(c)*f*d) by FUNCT_2:def 1;
+      p = inclusion(c)*f*d*g*f1*(corestr c) by RELAT_1:55
+     .= inclusion(c)*f*d*g*(f1*(corestr c)) by RELAT_1:55
+     .= inclusion(c)*f*d*(g*(f1*(corestr c))) by RELAT_1:55
+     .= inclusion(c)*f*d*(g*f1*(corestr c)) by RELAT_1:55;
+    then rng(inclusion(c)*f*d) = rng p by A28,RELAT_1:47;
+    then Image(inclusion(c)*f*d) = subrelstr rng p by YELLOW_2:def 2
+       .= Image p by YELLOW_2:def 2;
+    hence L,Image p are_isomorphic by A22,A27,YELLOW_2:def 2;
+   end;
+
+  theorem Th16: :: THEOREM 2.10.
+   for L be continuous complete LATTICE
+   for p be kernel map of L,L st p is directed-sups-preserving holds
+    Image p is continuous LATTICE
+   proof
+    let L be continuous complete LATTICE;
+    let p be kernel map of L,L such that
+     A1: p is directed-sups-preserving;
+    A2: corestr(p) is infs-preserving by WAYBEL_1:59;
+      now let X be Subset of L;
+     assume X is non empty directed;
+     then A3: p preserves_sup_of X by A1,WAYBEL_0:def 37;
+     A4: Image p is sups-inheriting by WAYBEL_1:56;
+       now assume A5: ex_sup_of X,L;
+        Image p is complete by WAYBEL_1:57;
+      hence ex_sup_of (corestr(p)).:X,Image p by YELLOW_0:17;
+A6:   (corestr(p)).:X = p.:X by WAYBEL_1:32;
+        ex_sup_of (p).:X,L by YELLOW_0:17;
+      then "\/"((corestr p).:X,L) in the carrier of Image p
+       by A4,A6,YELLOW_0:def 19;
+      hence sup ((corestr(p)).:X) = sup (p.:X) by A6,YELLOW_0:69
+         .= p.sup X by A3,A5,WAYBEL_0:def 31
+         .= (corestr(p)).sup X by WAYBEL_1:32;
+     end;
+     hence corestr(p) preserves_sup_of X by WAYBEL_0:def 31;
+    end;
+    then corestr(p) is directed-sups-preserving by WAYBEL_0:def 37;
+    hence Image p is continuous LATTICE by A2,WAYBEL_5:33;
+   end;
+
+  theorem Th17: :: THEOREM 2.14.
+   for L be continuous complete LATTICE
+   for p be projection map of L,L st p is directed-sups-preserving holds
+    Image p is continuous LATTICE
+   proof
+    let L be continuous complete LATTICE;
+    let p be projection map of L,L such that
+     A1: p is directed-sups-preserving;
+    reconsider Lk = {k where k is Element of L: p.k <= k}
+                                     as non empty Subset of L by WAYBEL_1:46;
+    A2: subrelstr Lk is infs-inheriting by WAYBEL_1:53;
+      subrelstr Lk is directed-sups-inheriting by A1,WAYBEL_1:55;
+    then A3: subrelstr Lk is continuous LATTICE by A2,WAYBEL_5:28;
+    A4: subrelstr Lk is complete by A2,YELLOW_2:32;
+    reconsider pk = p|Lk as map of subrelstr Lk, subrelstr Lk by WAYBEL_1:49;
+    A5: pk is kernel by WAYBEL_1:51;
+    A6: subrelstr rng pk is full SubRelStr of L by Th1;
+    A7: the carrier of subrelstr rng p = rng p by YELLOW_0:def 15
+       .= rng pk by WAYBEL_1:47
+       .= the carrier of subrelstr rng pk by YELLOW_0:def 15;
+    A8: Image p = subrelstr rng p by YELLOW_2:def 2
+               .= subrelstr rng pk by A6,A7,YELLOW_0:58
+               .= Image pk by YELLOW_2:def 2;
+      now let X be Subset of subrelstr Lk;
+     assume A9: X is non empty directed;
+     reconsider X' = X as Subset of L by WAYBEL13:3;
+     reconsider X' as non empty directed Subset of L by A9,YELLOW_2:7;
+     A10: p preserves_sup_of X' by A1,WAYBEL_0:def 37;
+       now assume ex_sup_of X,subrelstr Lk;
+        subrelstr Lk is infs-inheriting by WAYBEL_1:53;
+      then subrelstr Lk is complete LATTICE by YELLOW_2:32;
+      hence ex_sup_of pk.:X,subrelstr Lk by YELLOW_0:17;
+      A11: dom pk = the carrier of subrelstr Lk by FUNCT_2:def 1;
+      A12: ex_sup_of X,L by YELLOW_0:17;
+      A13: ex_sup_of p.:X,L by YELLOW_0:17;
+        pk is projection by A5,WAYBEL_1:def 15;
+      then pk is monotone by WAYBEL_1:def 13;
+      then A14: pk.:X is directed Subset of subrelstr Lk by A9,YELLOW_2:17;
+        for Y be non empty Subset of subrelstr Lk holds pk.:Y is non empty;
+      then A15: pk.:X <> {} by A9;
+      A16: subrelstr Lk is directed-sups-inheriting by A1,WAYBEL_1:55;
+      then A17: sup X' = sup X by A9,A12,WAYBEL_0:7;
+        X c= the carrier of subrelstr Lk;
+      then X c= Lk by YELLOW_0:def 15;
+      then pk.:X = p.:X by EXTENS_1:1;
+      hence sup (pk.:X) = sup (p.:X) by A13,A14,A15,A16,WAYBEL_0:7
+        .= p.sup X' by A10,A12,WAYBEL_0:def 31
+        .= pk.sup X by A11,A17,FUNCT_1:70;
+     end;
+     hence pk preserves_sup_of X by WAYBEL_0:def 31;
+    end;
+    then pk is directed-sups-preserving by WAYBEL_0:def 37;
+    hence Image p is continuous LATTICE by A3,A4,A5,A8,Th16;
+   end;
+
+  Lm4:
+   for L be LATTICE holds
+    (ex X be set, p be projection map of BoolePoset X,BoolePoset X st
+     p is directed-sups-preserving & L,Image p are_isomorphic)
+        implies
+    L is continuous
+   proof
+    let L be LATTICE;
+    given X be set, p be projection map of BoolePoset X,BoolePoset X such that
+     A1: p is directed-sups-preserving and
+     A2: L,Image p are_isomorphic;
+    A3: Image p,L are_isomorphic by A2,WAYBEL_1:7;
+      Image p is continuous by A1,Th17;
+    hence L is continuous by A3,Th11;
+   end;
+
+  theorem  :: THEOREM 4.16. (1) iff (2)
+     for L be lower-bounded LATTICE holds
+    L is continuous iff
+    ex A be arithmetic lower-bounded LATTICE,
+       g be map of A,L st
+     g is onto & g is infs-preserving & g is directed-sups-preserving
+   proof
+    let L be lower-bounded LATTICE;
+    thus L is continuous implies
+     ex A be arithmetic lower-bounded LATTICE,
+        g be map of A,L st
+      g is onto & g is infs-preserving & g is directed-sups-preserving
+                                                                     by Lm2;
+    thus (ex A be arithmetic lower-bounded LATTICE,
+             g be map of A,L st
+      g is onto & g is infs-preserving & g is directed-sups-preserving)
+         implies L is continuous
+    proof
+     assume ex A be arithmetic lower-bounded LATTICE,
+               g be map of A,L st
+      g is onto & g is infs-preserving & g is directed-sups-preserving;
+     then ex X be non empty set,
+             p be projection map of BoolePoset X,BoolePoset X st
+     p is directed-sups-preserving & L,Image p are_isomorphic by Lm3;
+     hence L is continuous by Lm4;
+    end;
+   end;
+
+  theorem  :: THEOREM 4.16. (1) iff (3)
+     for L be lower-bounded LATTICE holds
+    L is continuous iff
+    ex A be algebraic lower-bounded LATTICE,
+       g be map of A,L st
+     g is onto & g is infs-preserving & g is directed-sups-preserving
+   proof
+    let L be lower-bounded LATTICE;
+    thus L is continuous implies
+     ex A be algebraic lower-bounded LATTICE,
+        g be map of A,L st
+      g is onto & g is infs-preserving & g is directed-sups-preserving
+    proof
+     assume L is continuous;
+     then ex A be arithmetic lower-bounded LATTICE,
+             g be map of A,L st
+      g is onto & g is infs-preserving & g is directed-sups-preserving
+                                                                     by Lm2;
+     hence ex A be algebraic lower-bounded LATTICE,
+              g be map of A,L st
+      g is onto & g is infs-preserving & g is directed-sups-preserving;
+    end;
+    thus (ex A be algebraic lower-bounded LATTICE,
+            g be map of A,L st
+     g is onto & g is infs-preserving & g is directed-sups-preserving)
+        implies L is continuous
+    proof
+     assume ex A be algebraic lower-bounded LATTICE,
+               g be map of A,L st
+      g is onto & g is infs-preserving & g is directed-sups-preserving;
+     then ex X be non empty set,
+             p be projection map of BoolePoset X,BoolePoset X st
+      p is directed-sups-preserving & L,Image p are_isomorphic by Lm3;
+     hence L is continuous by Lm4;
+    end;
+   end;
+
+  theorem  :: THEOREM 4.16. (1) iff (4)
+     for L be lower-bounded LATTICE holds
+    ( L is continuous implies
+    ex X be non empty set, p be projection map of BoolePoset X,BoolePoset X st
+     p is directed-sups-preserving & L,Image p are_isomorphic ) &
+
+    (( ex X be set, p be projection map of BoolePoset X,BoolePoset X st
+     p is directed-sups-preserving & L,Image p are_isomorphic ) implies
+       L is continuous )
+   proof
+    let L be lower-bounded LATTICE;
+    thus L is continuous implies
+     ex X be non empty set,
+        p be projection map of BoolePoset X,BoolePoset X st
+      p is directed-sups-preserving & L,Image p are_isomorphic
+    proof
+     assume L is continuous;
+     then ex A be arithmetic lower-bounded LATTICE,
+             g be map of A,L st
+      g is onto & g is infs-preserving & g is directed-sups-preserving
+                                                                     by Lm2;
+     hence thesis by Lm3;
+    end;
+    thus thesis by Lm4;
+   end;
+
+begin :: Atoms Elements
+
+  theorem
+     for L be non empty RelStr
+   for x be Element of L holds
+    x in PRIME (L opp) iff x is co-prime
+   proof
+    let L be non empty RelStr;
+    let x be Element of L;
+    hereby assume x in PRIME (L opp);
+     then x~ in PRIME (L opp) by LATTICE3:def 6;
+     then x~ is prime by WAYBEL_6:def 7;
+     hence x is co-prime by WAYBEL_6:def 8;
+    end;
+    assume x is co-prime;
+    then x~ is prime by WAYBEL_6:def 8;
+    then x~ in PRIME (L opp) by WAYBEL_6:def 7;
+    hence x in PRIME (L opp) by LATTICE3:def 6;
+   end;
+
+  definition
+   let L be non empty RelStr;
+   let a be Element of L;
+   attr a is atom means :Def1:
+    Bottom L < a & for b be Element of L st Bottom L < b & b <= a holds b = a;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   func ATOM L -> Subset of L means :Def2:
+    for x be Element of L holds x in it iff x is atom;
+   existence
+   proof
+    defpred P[Element of L] means $1 is atom;
+    consider X be Subset of L such that
+     A1: for x be Element of L holds x in X iff P[x] from SSubsetEx;
+    take X;
+    thus thesis by A1;
+   end;
+   uniqueness
+   proof
+    let A1,A2 be Subset of L such that
+     A2: for x be Element of L holds x in A1 iff x is atom and
+     A3: for x be Element of L holds x in A2 iff x is atom;
+      now let x be set;
+     thus x in A1 implies x in A2
+     proof
+      assume A4: x in A1;
+      then reconsider x' = x as Element of L;
+        x' is atom by A2,A4;
+      hence x in A2 by A3;
+     end;
+     thus x in A2 implies x in A1
+     proof
+      assume A5: x in A2;
+      then reconsider x' = x as Element of L;
+        x' is atom by A3,A5;
+      hence x in A1 by A2;
+     end;
+    end;
+    hence A1 = A2 by TARSKI:2;
+   end;
+  end;
+
+canceled;
+
+  theorem Th23:
+   for L be Boolean LATTICE
+   for a be Element of L holds
+    a is atom iff a is co-prime & a <> Bottom L
+   proof
+    let L be Boolean LATTICE;
+    let a be Element of L;
+    thus a is atom implies a is co-prime & a <> Bottom L
+    proof
+     assume A1: a is atom;
+       now let x,y be Element of L;
+      assume that
+       A2: a <= x "\/" y and
+       A3: not a <= x;
+      A4: a "/\" x <> a by A3,YELLOW_0:25;
+        a "/\" x <= a by YELLOW_0:23;
+      then not Bottom L < a "/\" x by A1,A4,Def1;
+      then A5: (not Bottom L <= a "/\" x) or (not Bottom L <> a "/\"
+ x) by ORDERS_1:def 10;
+        a = a "/\" (x "\/" y) by A2,YELLOW_0:25
+       .= (a "/\" x) "\/" (a "/\" y) by WAYBEL_1:def 3
+       .= a "/\" y by A5,WAYBEL_1:4,YELLOW_0:44;
+      hence a <= y by YELLOW_0:25;
+     end;
+     hence a is co-prime by WAYBEL14:14;
+     thus a <> Bottom L by A1,Def1;
+    end;
+     assume that
+      A6: a is co-prime and
+      A7: a <> Bottom L;
+       Bottom L <= a by YELLOW_0:44;
+     then A8: Bottom L < a by A7,ORDERS_1:def 10;
+       now let b be Element of L;
+     assume that
+      A9: Bottom L < b and
+      A10: b <= a;
+     consider c be Element of L such that
+      A11: c is_a_complement_of b by WAYBEL_1:def 24;
+     A12: b "\/" c = Top L & b "/\" c = Bottom L by A11,WAYBEL_1:def 23;
+     then A13: a <= b "\/" c by YELLOW_0:45;
+       not a <= c
+     proof
+      assume a <= c;
+      then b <= c by A10,ORDERS_1:26;
+      hence contradiction by A9,A12,YELLOW_0:25;
+     end;
+     then a <= b by A6,A13,WAYBEL14:14;
+     hence b = a by A10,ORDERS_1:25;
+     end;
+     hence a is atom by A8,Def1;
+   end;
+
+  definition
+   let L be Boolean LATTICE;
+   cluster atom -> co-prime Element of L;
+   coherence by Th23;
+  end;
+
+  theorem
+     for L be Boolean LATTICE holds
+    ATOM L = (PRIME (L opp)) \ {Bottom L}
+   proof
+    let L be Boolean LATTICE;
+    A1: ATOM L c= (PRIME (L opp)) \ {Bottom L}
+    proof
+     let x be set;
+     assume A2: x in ATOM L;
+     then reconsider x' = x as Element of L;
+     A3: x' is atom by A2,Def2;
+     then x' is co-prime by Th23;
+     then x'~ is prime by WAYBEL_6:def 8;
+     then x'~ in PRIME (L opp) by WAYBEL_6:def 7;
+     then A4: x in PRIME (L opp) by LATTICE3:def 6;
+       x <> Bottom L by A3,Th23;
+     then not x in {Bottom L} by TARSKI:def 1;
+     hence x in (PRIME (L opp)) \ {Bottom L} by A4,XBOOLE_0:def 4;
+    end;
+      (PRIME (L opp)) \ {Bottom L} c= ATOM L
+    proof
+     let x be set;
+     assume x in (PRIME (L opp)) \ {Bottom L};
+     then A5: x in PRIME (L opp) & not x in {Bottom L} by XBOOLE_0:def 4;
+     then reconsider x' = x as Element of (L opp);
+       x' <> Bottom L by A5,TARSKI:def 1;
+     then A6: ~x' <> Bottom L by LATTICE3:def 7;
+     A7: x' is prime by A5,WAYBEL_6:def 7;
+       (~x')~ = ~x' by LATTICE3:def 6
+           .= x' by LATTICE3:def 7;
+     then ~x' is co-prime by A7,WAYBEL_6:def 8;
+     then ~x' is atom by A6,Th23;
+     then ~x' in ATOM L by Def2;
+     hence x in ATOM L by LATTICE3:def 7;
+    end;
+    hence thesis by A1,XBOOLE_0:def 10;
+   end;
+
+  theorem
+     for L be Boolean LATTICE
+   for x,a be Element of L st a is atom holds
+    a <= x iff not a <= 'not' x
+   proof
+    let L be Boolean LATTICE;
+    let x,a be Element of L;
+    assume A1: a is atom;
+    thus a <= x implies not a <= 'not' x
+    proof
+     assume that
+      A2: a <= x and
+      A3: a <= 'not' x;
+       a = a "\/" Bottom L by WAYBEL_1:4
+      .= a "\/" (x "/\" 'not' x) by YELLOW_5:37
+      .= (a "\/" x) "/\" ('not' x "\/" a) by WAYBEL_1:6
+      .= x "/\" ('not' x "\/" a) by A2,YELLOW_0:24
+      .= x "/\" 'not' x by A3,YELLOW_0:24
+      .= Bottom L by YELLOW_5:37;
+     hence contradiction by A1,Th23;
+    end;
+    thus not a <= 'not' x implies a <= x
+    proof
+     assume that
+      A4: not a <= 'not' x and
+      A5: not a <= x;
+     A6: a is co-prime by A1,Th23;
+       a <= Top L by YELLOW_0:45;
+     then a <= (x "\/" 'not' x) by YELLOW_5:37;
+     hence contradiction by A4,A5,A6,WAYBEL14:14;
+    end;
+   end;
+
+  theorem Th26:
+   for L be complete Boolean LATTICE
+   for X be Subset of L
+   for x be Element of L
+    holds x "/\" sup X = "\/"({x"/\"y where y is Element of L: y in X},L)
+   proof
+    let L be complete Boolean LATTICE;
+    let X be Subset of L;
+    let x be Element of L;
+      for y be Element of L holds y "/\"
+ has_an_upper_adjoint by WAYBEL_1:def 19;
+    hence x "/\" sup X = "\/"({x"/\"y where y is Element of L: y in X},L)
+                                                              by WAYBEL_1:67;
+   end;
+
+  theorem Th27:
+   for L be lower-bounded with_infima antisymmetric non empty RelStr
+   for x,y be Element of L st x is atom & y is atom & x <> y holds
+    x "/\" y = Bottom L
+   proof
+    let L be lower-bounded with_infima antisymmetric non empty RelStr;
+    let x,y be Element of L;
+    assume that
+     A1: x is atom and
+     A2: y is atom and
+     A3: x <> y and
+     A4: x "/\" y <> Bottom L;
+      Bottom L <= x "/\" y by YELLOW_0:44;
+    then A5: Bottom L < x "/\" y by A4,ORDERS_1:def 10;
+    A6: x "/\" y <= x & x "/\" y <= y by YELLOW_0:23;
+    then x = x "/\" y by A1,A5,Def1
+     .= y by A2,A5,A6,Def1;
+    hence contradiction by A3;
+   end;
+
+  theorem Th28:
+   for L be complete Boolean LATTICE
+   for x be Element of L
+   for A be Subset of L st A c= ATOM L holds
+    x in A iff x is atom & x <= sup A
+   proof
+    let L be complete Boolean LATTICE;
+    let x be Element of L;
+    let A be Subset of L;
+    assume A1: A c= ATOM L;
+    thus x in A implies x is atom & x <= sup A
+    proof
+     assume A2: x in A;
+     hence x is atom by A1,Def2;
+       sup A is_>=_than A by YELLOW_0:32;
+     hence x <= sup A by A2,LATTICE3:def 9;
+    end;
+    thus x is atom & x <= sup A implies x in A
+    proof
+     assume that
+      A3: x is atom and
+      A4: x <= sup A and
+      A5: not x in A;
+       now let b be Element of L;
+      assume b in { x "/\" y where y is Element of L: y in A };
+      then consider y be Element of L such that
+       A6: b = x "/\" y and
+       A7: y in A;
+        y is atom by A1,A7,Def2;
+      hence b <= Bottom L by A3,A5,A6,A7,Th27;
+     end;
+     then A8: Bottom L is_>=_than { x "/\" y where y is Element of L: y in A }
+                                                          by LATTICE3:def 9;
+       x = x "/\" sup A by A4,YELLOW_0:25
+      .= "\/"({ x "/\" y where y is Element of L: y in A },L) by Th26;
+     then x <= Bottom L by A8,YELLOW_0:32;
+     then x = Bottom L by YELLOW_5:22;
+     hence contradiction by A3,Th23;
+    end;
+   end;
+
+  theorem Th29:
+   for L be complete Boolean LATTICE
+   for X,Y be Subset of L st
+    X c= ATOM L & Y c= ATOM L holds
+     X c= Y iff sup X <= sup Y
+   proof
+    let L be complete Boolean LATTICE;
+    let X,Y be Subset of L;
+    assume that
+     A1: X c= ATOM L and
+     A2: Y c= ATOM L;
+     thus X c= Y implies sup X <= sup Y
+     proof
+      assume A3: X c= Y;
+        ex_sup_of X,L & ex_sup_of Y,L by YELLOW_0:17;
+      hence sup X <= sup Y by A3,YELLOW_0:34;
+     end;
+     thus sup X <= sup Y implies X c= Y
+     proof
+      assume A4: sup X <= sup Y;
+      thus X c= Y
+      proof
+       let z be set;
+       assume A5: z in X;
+       then reconsider z1 = z as Element of L;
+       A6: z1 is atom by A1,A5,Def2;
+         sup X is_>=_than X by YELLOW_0:32;
+       then z1 <= sup X by A5,LATTICE3:def 9;
+       then z1 <= sup Y by A4,ORDERS_1:26;
+       hence z in Y by A2,A6,Th28;
+      end;
+     end;
+   end;
+
+  Lm5: :: (1) => (2)
+   for L be Boolean LATTICE holds
+    ( ex X be set st L,BoolePoset X are_isomorphic ) implies
+     L is arithmetic
+   proof
+    let L be Boolean LATTICE;
+    given X be set such that
+     A1: L,BoolePoset X are_isomorphic;
+      BoolePoset X,L are_isomorphic by A1,WAYBEL_1:7;
+    hence L is arithmetic by Th12;
+   end;
+
+  Lm6: :: (4) => (5)
+   for L be Boolean LATTICE holds
+    L is continuous implies L opp is continuous
+   proof
+    let L be Boolean LATTICE;
+    assume A1: L is continuous;
+      L , L opp are_isomorphic by YELLOW_7:38;
+    hence L opp is continuous by A1,Th11;
+   end;
+
+  Lm7: :: (5) <=> (6)
+   for L be Boolean LATTICE holds
+    ( L is continuous & L opp is continuous ) iff
+     L is completely-distributive
+   proof
+    let L be Boolean LATTICE;
+    thus ( L is continuous & L opp is continuous ) implies
+     L is completely-distributive
+    proof
+     assume that
+      A1: L is continuous and
+      A2: L opp is continuous;
+       L is continuous LATTICE by A1;
+     then L is up-complete lower-bounded LATTICE;
+     hence thesis by A1,A2,WAYBEL_6:39;
+    end;
+    thus L is completely-distributive implies
+     ( L is continuous & L opp is continuous )
+    proof
+     assume L is completely-distributive;
+     then L is completely-distributive LATTICE;
+     hence thesis by WAYBEL_6:39;
+    end;
+   end;
+
+  Lm8: :: (6) => (7)
+   for L be Boolean LATTICE holds
+    L is completely-distributive implies
+    ( L is complete &
+      for x be Element of L ex X be Subset of L st X c= ATOM L & x = sup X )
+   proof
+    let L be Boolean LATTICE;
+    assume L is completely-distributive;
+    then A1: L is completely-distributive LATTICE;
+    hence L is complete;
+    let x be Element of L;
+    consider X1 be Subset of L such that
+     A2: x = sup X1 and
+     A3: for y be Element of L st y in X1 holds y is co-prime
+                                                          by A1,WAYBEL_6:38;
+    reconsider X = X1 \ {Bottom L} as Subset of L;
+    take X;
+    thus X c= ATOM L
+    proof
+     let z be set;
+     assume A4: z in X;
+     then A5: z in X1 & not z in {Bottom L} by XBOOLE_0:def 4;
+     reconsider z' = z as Element of L by A4;
+     A6: z' <> Bottom L by A5,TARSKI:def 1;
+       z' is co-prime by A3,A5;
+     then z' is atom by A6,Th23;
+     hence z in ATOM L by Def2;
+    end;
+    A7: x is_>=_than X1 &
+     for b be Element of L st b is_>=_than X1 holds x <= b
+                                                       by A1,A2,YELLOW_0:32;
+      now let c be Element of L;
+     assume c in X;
+     then c in X1 by XBOOLE_0:def 4;
+     hence c <= x by A7,LATTICE3:def 9;
+    end;
+    then A8: x is_>=_than X by LATTICE3:def 9;
+      now let b be Element of L;
+     assume A9: b is_>=_than X;
+       now let c be Element of L;
+      assume A10: c in X1;
+        now per cases;
+       suppose c <> Bottom L;
+        then not c in {Bottom L} by TARSKI:def 1;
+        then c in X by A10,XBOOLE_0:def 4;
+        hence c <= b by A9,LATTICE3:def 9;
+       suppose c = Bottom L;
+        hence c <= b by YELLOW_0:44;
+      end;
+      hence c <= b;
+     end;
+     then b is_>=_than X1 by LATTICE3:def 9;
+     hence x <= b by A1,A2,YELLOW_0:32;
+    end;
+    hence x = sup X by A1,A8,YELLOW_0:32;
+   end;
+
+  Lm9: :: (7) => (1)
+   for L be Boolean LATTICE holds
+   ( L is complete &
+     for x be Element of L ex X be Subset of L st X c= ATOM L & x = sup X )
+      implies
+    ex Y be set st L,BoolePoset Y are_isomorphic
+   proof
+    let L be Boolean LATTICE;
+    assume that
+     A1: L is complete and
+     A2: for x be Element of L ex X be Subset of L st X c= ATOM L & x = sup X;
+    take Y = ATOM L;
+    defpred P[set,set] means
+     ex x' be Subset of L st x' = $1 & $2 = sup x';
+    A3: for x be Element of BoolePoset Y ex y be Element of L st P[x, y]
+    proof
+     let x be Element of BoolePoset Y;
+       x c= Y by WAYBEL_8:28;
+     then x c= the carrier of L by XBOOLE_1:1;
+     then reconsider x' = x as Subset of L;
+     take y = sup x';
+     take x';
+     thus x' = x & y = sup x';
+    end;
+    consider f be map of BoolePoset Y,L such that
+     A4: for x be Element of BoolePoset Y holds P[x, f.x]
+       from NonUniqExMD(A3);
+      now let z,v be Element of BoolePoset Y;
+     consider z' be Subset of L such that
+      A5: z' = z and
+      A6: f.z = sup z' by A4;
+     consider v' be Subset of L such that
+      A7: v' = v and
+      A8: f.v = sup v' by A4;
+     A9: z' c= ATOM L by A5,WAYBEL_8:28;
+     A10: v' c= ATOM L by A7,WAYBEL_8:28;
+     assume f.z = f.v;
+     then z c= v & v c= z by A1,A5,A6,A7,A8,A9,A10,Th29;
+     hence z = v by XBOOLE_0:def 10;
+    end;
+    then A11: f is one-to-one by WAYBEL_1:def 1;
+      the carrier of L c= rng f
+    proof
+     let k be set;
+     assume k in the carrier of L;
+     then k is Element of L;
+     then consider K be Subset of L such that
+      A12: K c= ATOM L and
+      A13: k = sup K by A2;
+     A14: K is Element of BoolePoset Y by A12,WAYBEL_8:28;
+     then K in the carrier of BoolePoset Y & the carrier of L is non empty;
+     then A15: K in dom f by FUNCT_2:def 1;
+     consider K' be Subset of L such that
+      A16: K' = K and
+      A17: f.K = sup K' by A4,A14;
+     thus k in rng f by A13,A15,A16,A17,FUNCT_1:def 5;
+    end;
+    then A18: rng f = the carrier of L by XBOOLE_0:def 10;
+      now let z,v be Element of BoolePoset Y;
+     consider z' be Subset of L such that
+      A19: z' = z and
+      A20: f.z = sup z' by A4;
+     consider v' be Subset of L such that
+      A21: v' = v and
+      A22: f.v = sup v' by A4;
+     A23: ex_sup_of z',L by A1,YELLOW_0:17;
+     A24: ex_sup_of v',L by A1,YELLOW_0:17;
+     A25: z' c= ATOM L by A19,WAYBEL_8:28;
+     A26: v' c= ATOM L by A21,WAYBEL_8:28;
+     thus z <= v implies f.z <= f.v
+     proof
+      assume z <= v;
+      then z c= v by YELLOW_1:2;
+      hence f.z <= f.v by A19,A20,A21,A22,A23,A24,YELLOW_0:34;
+     end;
+     thus f.z <= f.v implies z <= v
+     proof
+      assume f.z <= f.v;
+      then z c= v by A1,A19,A20,A21,A22,A25,A26,Th29;
+      hence z <= v by YELLOW_1:2;
+     end;
+    end;
+    then f is isomorphic by A11,A18,WAYBEL_0:66;
+    then BoolePoset Y,L are_isomorphic by WAYBEL_1:def 8;
+    hence L,BoolePoset Y are_isomorphic by WAYBEL_1:7;
+   end;
+
+begin :: More on the Boolean Lattice
+
+  theorem  :: THEOREM 4.18. (2) iff (1)
+     for L be Boolean LATTICE holds
+    L is arithmetic iff ex X be set st L,BoolePoset X are_isomorphic
+   proof
+    let L be Boolean LATTICE;
+    hereby assume L is arithmetic;
+     then L is algebraic by WAYBEL_8:def 5;
+     then L is continuous by WAYBEL_8:7;
+     then L is continuous & L opp is continuous by Lm6;
+     then L is completely-distributive by Lm7;
+     then L is complete &
+      for x be Element of L ex X be Subset of L st X c= ATOM L & x = sup X
+                                                                    by Lm8;
+     hence ex X be set st L,BoolePoset X are_isomorphic by Lm9;
+    end;
+    thus thesis by Lm5;
+   end;
+
+  theorem  :: THEOREM 4.18. (2) iff (3)
+     for L be Boolean LATTICE holds
+    L is arithmetic iff L is algebraic
+   proof
+    let L be Boolean LATTICE;
+    thus L is arithmetic implies L is algebraic by WAYBEL_8:def 5;
+     assume L is algebraic;
+     then L is continuous by WAYBEL_8:7;
+     then L is continuous & L opp is continuous by Lm6;
+     then L is completely-distributive by Lm7;
+     then L is complete &
+      for x be Element of L ex X be Subset of L st X c= ATOM L & x = sup X
+                                                                    by Lm8;
+     then ex X be set st L,BoolePoset X are_isomorphic by Lm9;
+     hence L is arithmetic by Lm5;
+   end;
+
+  theorem  :: THEOREM 4.18. (2) iff (4)
+     for L be Boolean LATTICE holds
+    L is arithmetic iff L is continuous
+   proof
+    let L be Boolean LATTICE;
+    thus L is arithmetic implies L is continuous
+    proof
+     assume L is arithmetic;
+     then L is algebraic by WAYBEL_8:def 5;
+     hence L is continuous by WAYBEL_8:7;
+    end;
+     assume L is continuous;
+     then L is continuous & L opp is continuous by Lm6;
+     then L is completely-distributive by Lm7;
+     then L is complete &
+      for x be Element of L ex X be Subset of L st X c= ATOM L & x = sup X
+                                                                    by Lm8;
+     then ex X be set st L,BoolePoset X are_isomorphic by Lm9;
+     hence L is arithmetic by Lm5;
+   end;
+
+  theorem  :: THEOREM 4.18. (2) iff (5)
+     for L be Boolean LATTICE holds
+    L is arithmetic iff (L is continuous & L opp is continuous)
+   proof
+    let L be Boolean LATTICE;
+    thus L is arithmetic implies (L is continuous & L opp is continuous)
+    proof
+     assume L is arithmetic;
+     then L is algebraic by WAYBEL_8:def 5;
+     then L is continuous by WAYBEL_8:7;
+     hence L is continuous & L opp is continuous by Lm6;
+    end;
+     assume L is continuous & L opp is continuous;
+     then L is completely-distributive by Lm7;
+     then L is complete &
+      for x be Element of L ex X be Subset of L st X c= ATOM L & x = sup X
+                                                                    by Lm8;
+     then ex X be set st L,BoolePoset X are_isomorphic by Lm9;
+     hence L is arithmetic by Lm5;
+   end;
+
+  theorem  :: THEOREM 4.18. (2) iff (6)
+     for L be Boolean LATTICE holds
+    L is arithmetic iff L is completely-distributive
+   proof
+    let L be Boolean LATTICE;
+    thus L is arithmetic implies L is completely-distributive
+    proof
+     assume L is arithmetic;
+     then L is algebraic by WAYBEL_8:def 5;
+     then L is continuous by WAYBEL_8:7;
+     then L is continuous & L opp is continuous by Lm6;
+     hence L is completely-distributive by Lm7;
+    end;
+     assume L is completely-distributive;
+     then L is complete &
+      for x be Element of L ex X be Subset of L st X c= ATOM L & x = sup X
+                                                                    by Lm8;
+     then ex X be set st L,BoolePoset X are_isomorphic by Lm9;
+     hence L is arithmetic by Lm5;
+   end;
+
+  theorem  :: THEOREM 4.18. (2) iff (7)
+     for L be Boolean LATTICE holds
+    L is arithmetic iff
+    ( L is complete &
+      for x be Element of L ex X be Subset of L st X c= ATOM L & x = sup X )
+   proof
+    let L be Boolean LATTICE;
+    hereby assume L is arithmetic;
+     then L is algebraic by WAYBEL_8:def 5;
+     then L is continuous by WAYBEL_8:7;
+     then L is continuous & L opp is continuous by Lm6;
+     then L is completely-distributive by Lm7;
+     hence L is complete &
+      for x be Element of L ex X be Subset of L st X c= ATOM L & x = sup X
+                                                                    by Lm8;
+    end;
+     assume L is complete &
+      for x be Element of L ex X be Subset of L st X c= ATOM L & x = sup X;
+     then ex X be set st L,BoolePoset X are_isomorphic by Lm9;
+     hence L is arithmetic by Lm5;
+   end;

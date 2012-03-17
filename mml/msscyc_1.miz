@@ -1,0 +1,1355 @@
+:: The Correspondence Between Monotonic Many Sorted Signatures
+:: and Well-Founded Graphs. {P}art {I}
+::  by Czes{\l}aw Byli\'nski and Piotr Rudnicki
+::
+:: Received February 14, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary FINSET_1, FUNCT_1, RELAT_1, CARD_3, PROB_1, FUNCT_2, GRAPH_1,
+      ORDERS_1, FINSEQ_1, GRAPH_2, QUANTAL1, BOOLE, RELAT_2, FUNCOP_1,
+      PARTFUN1, CARD_1, ARYTM_1, TREES_2, TREES_4, TREES_1, AMI_1, MSUALG_1,
+      ZF_REFLE, PBOOLE, MSATERM, TREES_9, FREEALG, MSUALG_2, MSAFREE2,
+      PRE_CIRC, PRALG_1, MSAFREE, GROUP_6, PRELAMB, ALG_1, REALSET1, MSUALG_3,
+      FUNCT_6, TARSKI, TDGROUP, QC_LANG1, UNIALG_2, DTCONSTR, TREES_3,
+      MSSCYC_1, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1,
+      CARD_1, STRUCT_0, PROB_1, CARD_3, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      FINSET_1, FINSEQ_1, FINSEQ_4, GRAPH_1, GRAPH_2, TOPREAL1, TREES_1,
+      TREES_2, TREES_3, FUNCT_6, TREES_4, LANG1, DTCONSTR, PBOOLE, MSUALG_1,
+      MSUALG_2, MSUALG_3, MSAFREE, PRE_CIRC, MSAFREE2, TREES_9, MSATERM;
+ constructors NAT_1, WELLORD2, GRAPH_2, TOPREAL1, MSUALG_3, PRE_CIRC, MSAFREE2,
+      TREES_9, MSATERM, EXTENS_1, FINSEQ_4, INT_1;
+ clusters STRUCT_0, RELSET_1, FINSEQ_1, FINSEQ_5, RELAT_1, FINSET_1, GRAPH_1,
+      GRAPH_2, TREES_2, TREES_3, DTCONSTR, TREES_9, MSUALG_1, MSUALG_2,
+      MSAFREE, PRE_CIRC, MSAFREE2, EXTENS_1, PRELAMB, MSATERM, INT_1, XREAL_0;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, GRAPH_1, GRAPH_2, MSAFREE, PBOOLE, PRE_CIRC, MSUALG_2,
+      MSUALG_3;
+ theorems TARSKI, AXIOMS, REAL_1, NAT_1, ZFMISC_1, TOPREAL1, FINSET_1,
+      FRAENKEL, GRAPH_1, GRAPH_2, RLVECT_1, FUNCOP_1, FUNCT_1, FUNCT_2,
+      FUNCT_6, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FINSEQ_5, RELAT_1,
+      CARD_1, CARD_3, CARD_4, TREES_1, TREES_3, TREES_4, PBOOLE, MSUALG_1,
+      MSUALG_2, MSUALG_3, MSAFREE, MSAFREE2, PRE_CIRC, MSATERM, EXTENS_1,
+      RELSET_1, INT_1, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1;
+ schemes NAT_1, FRAENKEL, MSUALG_1, COMPLSP1;
+
+begin :: Some properties of graphs and trees
+
+theorem
+    for f being finite Function st
+    for x being set st x in dom f holds f.x is finite
+  holds product f is finite proof
+ let f be finite Function;
+  assume
+   for x being set st x in dom f holds f.x is finite;
+   then Union f is finite by CARD_4:63;
+then A1: Funcs(dom f, Union f) is finite by FRAENKEL:16;
+     product f c= Funcs(dom f, Union f) by FUNCT_6:10;
+  hence thesis by A1,FINSET_1:13;
+end;
+
+reserve G for Graph,
+        k, m, n for Nat;
+
+ definition let G be Graph;
+  redefine mode Chain of G means
+:Def1: it is FinSequence of the Edges of G &
+    ex p being FinSequence of the Vertices of G st
+          p is_vertex_seq_of it;
+ compatibility
+  proof let c be FinSequence;
+   hereby assume
+A1:   c is Chain of G; then consider p being FinSequence such that
+A2:   len p = len c + 1 and
+A3:   for n st 1 <= n & n <= len p holds p.n in the Vertices of G and
+A4:   for n st 1 <= n & n <= len c
+           ex x', y' being Element of the Vertices of G st
+             x' = p.n & y' = p.(n+1) & c.n joins x', y' by GRAPH_1:def 11;
+       now let i be Nat; assume i in dom p;
+       then 1<=i & i<=len p by FINSEQ_3:27;
+      hence p.i in the Vertices of G by A3;
+     end;
+     then reconsider p as FinSequence of the Vertices of G by FINSEQ_2:14;
+     thus c is FinSequence of the Edges of G by A1;
+     take p;
+     thus p is_vertex_seq_of c
+     proof
+      thus len p = len c + 1 by A2;
+      let n; assume
+A5:     1<=n & n<=len c;
+       then 1<=n+1 & n<=len p & n+1<=len p by A2,AXIOMS:24,NAT_1:37;
+       then A6: p/.n=p.n & p/.(n+1)=p.(n+1) by A5,FINSEQ_4:24;
+             ex x', y' being Element of the Vertices of G st
+             x' = p.n & y' = p.(n+1) & c.n joins x', y' by A4,A5;
+      hence c.n joins p/.n, p/.(n+1) by A6;
+     end;
+   end; assume
+   A7: c is FinSequence of the Edges of G;
+    given p being FinSequence of the Vertices of G such that
+   A8: p is_vertex_seq_of c;
+     hereby let n; assume
+        1 <= n & n <= len c; then n in dom c by FINSEQ_3:27;
+      then c.n in rng c & rng c c= the Edges of G by A7,FINSEQ_1:def 4,FUNCT_1:
+def 5
+;
+      hence c.n in the Edges of G;
+     end;
+     take p;
+     thus
+   A9:  len p = len c + 1 by A8,GRAPH_2:def 7;
+     hereby let n; assume
+        1 <= n & n <= len p; then n in dom p by FINSEQ_3:27;
+      then p.n in rng p & rng p c= the Vertices of G by FINSEQ_1:def 4,FUNCT_1:
+def 5
+;
+      hence p.n in the Vertices of G;
+     end;
+     let n; assume
+   A10:  1 <= n & n <= len c;
+     take x'=p/.n, y'=p/.(n+1);
+        1<=n+1 & n<=len p & n+1<=len p by A9,A10,AXIOMS:24,NAT_1:37;
+     hence x' = p.n & y' = p.(n+1) by A10,FINSEQ_4:24;
+     thus c.n joins x', y' by A8,A10,GRAPH_2:def 7;
+  end;
+ end;
+
+theorem
+   for p,q being FinSequence st n<=len p
+  holds (1,n)-cut p = (1,n)-cut (p^q) proof
+let p,q be FinSequence; assume that
+A1: n<=len p;
+A2: 1<=n+1 by NAT_1:29;
+  set cp = (1,n)-cut p, cpq = (1,n)-cut (p^q);
+    now
+      len (p^q) = len p + len q by FINSEQ_1:35;
+then A3:  n<=len (p^q) by A1,NAT_1:37;
+    then A4: len cp +1 = n+1 & len cpq +1 = n +1 by A1,A2,GRAPH_2:def 1;
+then A5:    len cp = n & len cpq = n by XCMPLX_1:2;
+   thus len cp = len cpq by A4,XCMPLX_1:2;
+   let k; assume
+A6:  1 <=k & k <= len cp; 0+1 = 1; then consider i being Nat such that
+A7:  0<=i & i<len cp & k=i+1 by A6,GRAPH_2:1;
+      k<=len p by A1,A5,A6,AXIOMS:22;
+then A8:  k in dom p by A6,FINSEQ_3:27;
+   thus cp.k = p.k by A1,A2,A7,GRAPH_2:def 1
+            .= (p^q).k by A8,FINSEQ_1:def 7
+            .= cpq.k by A2,A3,A5,A7,GRAPH_2:def 1;
+  end;
+ hence thesis by FINSEQ_1:18;
+end;
+
+definition let G be Graph;
+  let IT be Chain of G;
+ redefine attr IT is oriented;
+ synonym IT is directed;
+end;
+
+definition let G be Graph;
+ let IT be Chain of G;
+ attr IT is cyclic means
+:Def2: ex p being FinSequence of the Vertices of G st
+        p is_vertex_seq_of IT & p.1 = p.(len p);
+end;
+
+definition let IT be Graph;
+ attr IT is empty means
+:Def3: the Edges of IT is empty;
+end;
+
+definition
+ cluster empty Graph;
+ existence proof
+  set V = {1}, E = {};
+  consider S, T being Function of E, V;
+  reconsider G = MultiGraphStruct (# V, E, S, T #) as Graph by GRAPH_1:def 1;
+  take G;
+  thus the Edges of G is empty;
+ end;
+end;
+
+theorem Th3: for G being Graph holds
+ rng (the Source of G) \/ rng (the Target of G) c= the Vertices of G proof
+let G be Graph;
+   rng (the Source of G) c= the Vertices of G &
+ rng (the Target of G) c= the Vertices of G by RELSET_1:12;
+ hence rng (the Source of G) \/ rng (the Target of G) c= the Vertices of G
+                                                by XBOOLE_1:8;
+end;
+
+definition
+  cluster finite simple connected non empty strict Graph;
+existence proof
+ set V = {1,2}, E = {1};
+A1:  1 in E by TARSKI:def 1;
+  1 in V & 2 in V by TARSKI:def 2;
+ then reconsider S = E --> 1, T = E --> 2 as Function of E, V by FUNCOP_1:57;
+ reconsider G = MultiGraphStruct(# V, E, S, T #) as Graph by GRAPH_1:def 1;
+
+A2: S.1 = 1 & T.1 = 2 by A1,FUNCOP_1:13;
+ take G;
+ thus G is finite by GRAPH_1:def 8;
+ thus G is simple proof given x be set such that
+A3: x in the Edges of G & (the Source of G).x = (the Target of G).x;
+    x = 1 by A3,TARSKI:def 1;
+  hence contradiction by A2,A3;
+ end;
+ thus G is connected proof given G1, G2 being Graph such that
+A4: (the Vertices of G1) misses (the Vertices of G2) & G is_sum_of G1, G2;
+  set MSG = the MultiGraphStruct of G;
+A5:  (the Target of G1) tolerates (the Target of G2) &
+    (the Source of G1) tolerates (the Source of G2) &
+    the MultiGraphStruct of G = G1 \/ G2 by A4,GRAPH_1:def 3;
+then A6:  the Vertices of MSG = (the Vertices of G1) \/ (the Vertices of G2) &
+    the Edges of MSG = (the Edges of G1) \/ (the Edges of G2) by GRAPH_1:def 2;
+    set E1 = the Edges of G1, E2 = the Edges of G2;
+    set S1 = the Source of G1, S2 = the Source of G2;
+    set T1 = the Target of G1, T2 = the Target of G2;
+    set V1 = the Vertices of G1, V2 = the Vertices of G2;
+A7: rng S1 \/ rng T1 c= V1 by Th3;
+A8: rng S2 \/ rng T2 c= V2 by Th3;
+   per cases by A6,ZFMISC_1:43;
+   suppose A9: E1 = E & E2 = E;
+    then S1.1 = S.1 & S2.1 = S.1 by A1,A5,GRAPH_1:def 2;
+    then 1 in rng S1 & 1 in rng S2 by A1,A2,A9,FUNCT_2:6;
+    then 1 in rng S1 \/ rng T1 & 1 in rng S2 \/ rng T2 by XBOOLE_0:def 2;
+    hence contradiction by A4,A7,A8,XBOOLE_0:3;
+   suppose A10: E1 = E & E2 = {};
+    then S1.1 = S.1 & T1.1 = T.1 by A1,A5,GRAPH_1:def 2;
+    then 1 in rng S1 & 2 in rng T1 by A1,A2,A10,FUNCT_2:6;
+    then 1 in rng S1 \/ rng T1 & 2 in rng S1 \/ rng T1 by XBOOLE_0:def 2;
+    then V c=V1 & V1 c=V by A6,A7,XBOOLE_1:7,ZFMISC_1:38; then V = V1 by
+XBOOLE_0:def 10;
+    then V2 c= V2 & V2 c=V1 by A6,XBOOLE_1:7;
+    hence contradiction by A4,XBOOLE_1:67;
+   suppose A11: E1 = {} & E2 = E;
+    then S2.1 = S.1 & T2.1 = T.1 by A1,A5,GRAPH_1:def 2;
+    then 1 in rng S2 & 2 in rng T2 by A1,A2,A11,FUNCT_2:6;
+    then 1 in rng S2 \/ rng T2 & 2 in rng S2 \/ rng T2 by XBOOLE_0:def 2;
+    then V c=V2 & V2 c=V by A6,A8,XBOOLE_1:7,ZFMISC_1:38; then V = V2 by
+XBOOLE_0:def 10;
+    then V1 c= V1 & V1 c=V2 by A6,XBOOLE_1:7;
+    hence contradiction by A4,XBOOLE_1:67;
+ end;
+ thus G is non empty by Def3;
+ thus thesis;
+end;
+end;
+
+definition let G be non empty Graph;
+ cluster the Edges of G -> non empty;
+ coherence by Def3;
+end;
+
+theorem Th4: for e being set
+             for s, t being Element of the Vertices of G
+ st s = (the Source of G).e & t = (the Target of G).e
+  holds <*s, t*> is_vertex_seq_of <*e*> proof
+ let e be set; let s, t be Element of the Vertices of G; assume
+A1: s = (the Source of G).e & t = (the Target of G).e;
+  set vs = <*s, t*>; set c = <*e*>;
+A2: len c = 1 by FINSEQ_1:56;
+ hence len vs = len c + 1 by FINSEQ_1:61;
+ let n be Nat; assume 1<=n & n<=len c;
+then A3: n = 1 by A2,AXIOMS:21;
+    c.1 = e & vs.1 = s & vs.(1+1) = t & vs/.1 = s & vs/.(1+1) = t
+                                   by FINSEQ_1:57,61,FINSEQ_4:26;
+ hence c.n joins vs/.n, vs/.(n+1) by A1,A3,GRAPH_1:def 9;
+end;
+
+theorem Th5: for e being set st e in the Edges of G
+              holds <*e*> is directed Chain of G proof
+ let e be set; assume
+A1: e in the Edges of G;
+ then reconsider s = (the Source of G).e, t = (the Target of G).e
+                as Element of the Vertices of G by FUNCT_2:7;
+ reconsider E = the Edges of G as non empty set by A1;
+ reconsider e as Element of E by A1;
+   <*s,t*> is_vertex_seq_of <*e*> by Th4;
+ then reconsider c = <*e*> as Chain of G by Def1;
+   c is directed proof let n be Nat; assume 1 <= n & n < len c;
+ hence thesis by FINSEQ_1:56;
+ end;
+ hence thesis;
+end;
+
+reserve G for non empty Graph;
+
+definition let G;
+ cluster directed non empty one-to-one Chain of G;
+ existence proof
+  consider e being Element of the Edges of G;
+  reconsider c = <*e*> as directed Chain of G by Th5;
+  take c;
+  thus c is directed;
+  thus c is non empty;
+  let n, m be Nat; assume
+A1: 1 <= n & n < m & m <= len c; then 1 < m by AXIOMS:22;
+  hence thesis by A1,FINSEQ_1:56;
+ end;
+end;
+
+Lm1:
+for G being non empty Graph,
+    c being Chain of G, p being FinSequence of the Vertices of G
+  st c is cyclic & p is_vertex_seq_of c holds p.1 = p.(len p) proof
+let G be non empty Graph;
+let c be Chain of G, p be FinSequence of the Vertices of G; assume
+A1: c is cyclic & p is_vertex_seq_of c;
+  then consider P being FinSequence of the Vertices of G such that
+A2: P is_vertex_seq_of c & P.1 = P.(len P) by Def2;
+ per cases;
+ suppose
+   Card the Vertices of G = 1 or c <>{} & not c alternates_vertices_in G;
+  then P = vertex-seq c & p = vertex-seq c by A1,A2,GRAPH_2:def 9;
+  hence p.1 = p.(len p) by A2;
+ suppose
+A3:not(Card the Vertices of G =1 or c <>{}&not c alternates_vertices_in G);
+A4: len p = len c+1 & len P = len c +1 by A1,A2,GRAPH_2:def 7;
+    now
+   per cases by A3;
+   suppose Card the Vertices of G <>1& c ={}; then len c =0 by FINSEQ_1:25;
+   hence p.1 = p.(len p) by A4;
+   suppose
+A5: Card the Vertices of G <>1 & c alternates_vertices_in G;
+then A6:  p is TwoValued Alternating & P is TwoValued Alternating by A1,A2,
+GRAPH_2:40;
+      now assume
+   p<>P;
+     set S=the Source of G, T=the Target of G;
+A7:   rng p ={S.(c.1),T.(c.1)} & rng P ={S.(c.1),T.(c.1)} by A1,A2,A5,GRAPH_2:
+39;
+A8:  1<=len p by A4,NAT_1:29;
+     then 1 in dom p & len p in dom p & 1 in dom P & len p in dom P
+                                              by A4,FINSEQ_3:27;
+     then p.1 in rng p & P.1 in rng p & p.(len p) in rng p & P.(len p) in rng
+p
+                                              by A7,FUNCT_1:def 5;
+     then (p.1 = S.(c.1) or p.1 = T.(c.1)) &
+     (p.(len p) = S.(c.1) or p.(len p) = T.(c.1)) &
+     (P.1 = S.(c.1) or P.1 = T.(c.1)) &
+     (P.(len p) = S.(c.1) or P.(len p) = T.(c.1)) by A7,TARSKI:def 2;
+     hence p.1 = p.(len p) by A2,A4,A6,A7,A8,GRAPH_2:21;
+    end;
+   hence p.1 = p.(len p) by A2;
+  end;
+ hence p.1 = p.(len p);
+end;
+
+theorem Th6:
+ for G being Graph,
+     c being Chain of G, vs being FinSequence of the Vertices of G st
+  c is cyclic & vs is_vertex_seq_of c holds vs.1 = vs.(len vs)
+proof
+ let G be Graph,
+     c be Chain of G, vs be FinSequence of the Vertices of G;
+assume
+A1: c is cyclic & vs is_vertex_seq_of c;
+ per cases;
+ suppose A2: c is empty;
+      len vs = len c +1 by A1,GRAPH_2:def 7 .= 0+1 by A2,FINSEQ_1:25;
+  hence vs.1 = vs.(len vs);
+ suppose c is non empty; then rng c is non empty by RELAT_1:64;
+     then consider x being set such that
+ A3: x in rng c by XBOOLE_0:def 1;
+       c is FinSequence of the Edges of G by Def1;
+     then rng c c= the Edges of G by FINSEQ_1:def 4;
+     then G is non empty by A3,Def3;
+  hence thesis by A1,Lm1;
+end;
+
+theorem Th7: for G being Graph, e being set st e in the Edges of G
+             for fe being directed Chain of G st fe = <*e*>
+         holds vertex-seq fe = <*(the Source of G).e, (the Target of G).e*>
+proof let G be Graph; let e be set; assume
+A1: e in the Edges of G;
+ let fe be directed Chain of G; assume
+A2: fe = <*e*>;
+   reconsider so = (the Source of G).e, ta = (the Target of G).e as
+                        Element of the Vertices of G by A1,FUNCT_2:7;
+   reconsider sota = <*so, ta*> as FinSequence of the Vertices of G;
+A3: e = fe.1 by A2,FINSEQ_1:57;
+A4: len fe = 1 by A2,FINSEQ_1:56;
+A5: sota is_vertex_seq_of fe proof
+     thus len sota = len fe + 1 by A4,FINSEQ_1:61;
+     let n; assume 1<=n & n<=len fe;
+then A6:    n=1 by A4,AXIOMS:21;
+        e joins so, ta & sota/.1 = so & sota/.2=ta
+                                by FINSEQ_4:26,GRAPH_1:def 9;
+     hence fe.n joins sota/.n, sota/.(n+1) by A2,A6,FINSEQ_1:57;
+    end;
+      sota.1 = (the Source of G).(fe.1) by A3,FINSEQ_1:61;
+ hence thesis by A2,A5,GRAPH_2:def 11;
+end;
+
+theorem
+   for f being FinSequence holds len (m,n)-cut f <= len f
+proof let f be FinSequence;
+ set lmnf = len (m,n)-cut f; set lf = len f;
+ per cases;
+ suppose A1: 1<=m & m<=n+1 & n<=len f;
+  then lmnf +m = n+1 by GRAPH_2:def 1;
+  then n+(lmnf +m) <= n+1+lf by A1,AXIOMS:24;
+  then n+(lmnf +m) <= n+(1+lf) by XCMPLX_1:1;
+  then lmnf +m <= 1+lf by REAL_1:53;
+  then (lmnf +m)+1 <= m+(1+lf) by A1,REAL_1:55;
+  then lmnf +(m+1) <= m+(1+lf) by XCMPLX_1:1;
+  then lmnf +(m+1) <= m+1+lf by XCMPLX_1:1;
+ hence len (m,n)-cut f <= len f by REAL_1:53;
+ suppose not (1<=m & m<=n+1 & n<=len f);
+  then (m,n)-cut f is empty by GRAPH_2:def 1; then lmnf = 0 by FINSEQ_1:25;
+ hence thesis by NAT_1:18;
+end;
+
+theorem
+   for c being directed Chain of G st 1<=m & m<=n & n<=len c
+   holds (m,n)-cut c is directed Chain of G proof
+ let c be directed Chain of G; assume
+A1: 1<=m & m<=n & n<=len c;
+  then reconsider mnc = (m,n)-cut c as Chain of G by GRAPH_2:44;
+    n<=n+1 by NAT_1:29;
+then A2: m<=n+1 by A1,AXIOMS:22;
+then A3: len mnc +m = n+1 by A1,GRAPH_2:def 1;
+    now let k; assume
+A4:  1 <= k & k < len mnc;
+    then 0+1<=k; then consider i being Nat such that
+A5:  0<=i & i<len mnc & k=i+1 by A4,GRAPH_2:1;
+A6: mnc.(k+1) = c.(m+k) by A1,A2,A4,GRAPH_2:def 1;
+A7: mnc.(i+1) = c.(m+i) by A1,A2,A5,GRAPH_2:def 1;
+A8: m+k = (m+i)+1 by A5,XCMPLX_1:1;
+      m+(i+1)<len mnc +m & len mnc +m<=len c +1
+                                by A1,A3,A4,A5,AXIOMS:24,REAL_1:53;
+    then m+(i+1) < len c + 1 by AXIOMS:22;
+    then m+i+1 < len c + 1 by XCMPLX_1:1;
+    then 1<=m+i & m+i<len c by A1,AXIOMS:24,NAT_1:37;
+   hence (the Source of G).(mnc.(k+1)) = (the Target of G).(mnc.k) by A5,A6,A7,
+A8,GRAPH_1:def 12;
+  end;
+ hence thesis by GRAPH_1:def 12;
+end;
+
+theorem Th10: for oc being non empty directed Chain of G holds
+ len vertex-seq oc = len oc +1 proof let oc be non empty directed Chain of G;
+   vertex-seq oc is_vertex_seq_of oc by GRAPH_2:def 11;
+ hence len vertex-seq oc = len oc +1 by GRAPH_2:def 7;
+end;
+
+definition let G; let oc be directed non empty Chain of G;
+ cluster vertex-seq oc -> non empty;
+ coherence proof len vertex-seq oc = len oc +1 by Th10; then len vertex-seq
+oc <> 0 by NAT_1:29;
+ hence thesis by FINSEQ_1:25; end;
+end;
+
+theorem Th11: for oc being directed non empty Chain of G, n
+                st 1<=n & n<=len oc
+                 holds (vertex-seq oc).n = (the Source of G).(oc.n) &
+                       (vertex-seq oc).(n+1) = (the Target of G).(oc.n)
+proof let oc be directed non empty Chain of G;
+ set vsoc = vertex-seq oc, S = the Source of G, T = the Target of G;
+ defpred P[Nat] means  1<=$1 & $1<=len oc implies
+          vsoc.$1 = S.(oc.$1) & vsoc.($1+1) = T.(oc.$1);
+A1: P[0];
+A2: for k be Nat st P[k] holds P[k+1]
+  proof let n; assume
+A3:   1<=n & n<=len oc implies vsoc.n = S.(oc.n) & vsoc.(n+1) = T.(oc.n);
+     assume
+A4:    1<=n+1 & n+1<=len oc;
+A5:   vsoc is_vertex_seq_of oc by GRAPH_2:def 11;
+     per cases;
+     suppose A6: n=0;
+     hence
+A7:   vsoc.(n+1) = S.(oc.(n+1)) by GRAPH_2:def 11;
+A8: 1<=len oc by A4,AXIOMS:22;
+then A9:    oc.1 joins vsoc/.1,vsoc/.(1+1) by A5,GRAPH_2:def 7;
+A10:   vsoc/.1=vsoc/.(1+1) or vsoc/.1<>vsoc/.(1+1);
+        len vsoc = len oc +1 by Th10;
+      then 1<=1+1 & 1+1<=len vsoc by A8,AXIOMS:24;
+      then 1 in dom vsoc & 1+1 in dom vsoc by FINSEQ_3:27,FINSEQ_5:6;
+      then vsoc/.1=vsoc.1 & vsoc/.(1+1)=vsoc.(1+1) by FINSEQ_4:def 4;
+     hence vsoc.(n+1+1) = T.(oc.(n+1)) by A6,A7,A9,A10,GRAPH_1:def 9;
+     suppose n<>0;
+then A11:  1<=n & n<=n+1 by NAT_1:29,RLVECT_1:99;
+then A12:  n<=len oc by A4,AXIOMS:22;
+  n<len oc by A4,NAT_1:38;
+     hence
+A13:  vsoc.(n+1) = S.(oc.(n+1)) by A3,A11,GRAPH_1:def 12;
+A14:    oc.(n+1) joins vsoc/.(n+1),vsoc/.(n+1+1) by A4,A5,GRAPH_2:def 7;
+A15:   vsoc/.(n+1)=vsoc/.(n+1+1) or vsoc/.(n+1)<>vsoc/.(n+1+1);
+        len vsoc = len oc +1 by Th10;
+      then n+1<=len vsoc & 1<=n+1+1 & n+1+1<=len vsoc
+                                           by A4,A12,AXIOMS:24,NAT_1:29;
+      then n+1 in dom vsoc & n+1+1 in dom vsoc by A4,FINSEQ_3:27;
+      then vsoc/.(n+1)=vsoc.(n+1) & vsoc/.(n+1+1)=vsoc.(n+1+1) by FINSEQ_4:def
+4;
+     hence vsoc.(n+1+1) = T.(oc.(n+1)) by A13,A14,A15,GRAPH_1:def 9;
+    end;
+ thus for n holds P[n] from Ind (A1, A2);
+end;
+
+theorem Th12: for f being non empty FinSequence st 1<=m & m<=n & n<=len f
+ holds (m,n)-cut f is non empty proof let f be non empty FinSequence; assume
+A1: 1<=m & m<=n & n<=len f;
+then A2: m<n+1 by NAT_1:38;
+ set lmn = len (m,n)-cut f; lmn+m = n+1 by A1,A2,GRAPH_2:def 1;
+  then m-(lmn+m)<(n+1)-(n+1) by A2,REAL_1:54
+; then m-(lmn+m)<0 by XCMPLX_1:14;
+  then m-lmn-m<0 by XCMPLX_1:36; then m+-lmn-m<0 by XCMPLX_0:def 8;
+  then -lmn<0 by XCMPLX_1:26; then --lmn>0 by REAL_1:66;
+ hence thesis by FINSEQ_1:25;
+end;
+
+theorem
+   for c, c1 being directed Chain of G
+ st 1<=m & m<=n & n<=len c & c1 = (m,n)-cut c
+  holds vertex-seq c1 = (m,n+1)-cut vertex-seq c proof
+ let c, c1 be directed Chain of G; assume
+A1: 1<=m & m<=n & n<=len c & c1 = (m,n)-cut c;
+   set mn1c=(m,n+1)-cut vertex-seq c;
+   set vsc = vertex-seq c;
+    len c <> 0 by A1,AXIOMS:22;
+then A2: c is non empty by FINSEQ_1:25;
+then A3:   vertex-seq c is_vertex_seq_of c by GRAPH_2:def 11;
+then A4: mn1c is_vertex_seq_of c1 by A1,GRAPH_2:45;
+A5: c1 is non empty by A1,A2,Th12;
+then A6: len c1 <> 0 by FINSEQ_1:25;
+A7: m<=len c by A1,AXIOMS:22;
+A8: m<=n+1 & 0<len c1 by A1,A6,NAT_1:19,37;
+then A9: c1.(0+1) = c.(m+0) by A1,GRAPH_2:def 1;
+A10: len vsc = len c +1 by A3,GRAPH_2:def 7;
+then A11: n+1<=len vsc by A1,AXIOMS:24; len vsc <> 0 by A10,NAT_1:29;
+    then vsc is non empty by FINSEQ_1:25;
+    then mn1c is non empty by A1,A8,A11,Th12;
+    then len mn1c <> 0 by FINSEQ_1:25;
+    then 0<len mn1c & m<=n+1+1 by A8,NAT_1:19,37;
+then vsc.(m+0) = mn1c.(0+1) by A1,A11,GRAPH_2:def 1;
+    then mn1c.1 = (the Source of G).(c1.1) by A1,A2,A7,A9,Th11;
+ hence thesis by A4,A5,GRAPH_2:def 11;
+end;
+
+theorem Th14: for oc being directed non empty Chain of G
+            holds (vertex-seq oc).(len oc +1) = (the Target of G).(oc.len oc)
+proof
+ let oc be directed non empty Chain of G;
+   1 in dom oc by FINSEQ_5:6; then 1<=len oc by FINSEQ_3:27;
+ hence thesis by Th11;
+end;
+
+theorem Th15: for c1, c2 being directed non empty Chain of G
+              holds (vertex-seq c1).(len c1 + 1) = (vertex-seq c2).1 iff
+                    c1^c2 is directed non empty Chain of G proof
+ let c1, c2 be directed non empty Chain of G;
+ set vsc1 = vertex-seq c1, vsc2 = vertex-seq c2;
+A1:  vsc1 is_vertex_seq_of c1 & vsc2 is_vertex_seq_of c2 by GRAPH_2:def 11;
+then A2: len vsc1 = len c1 +1 by GRAPH_2:def 7;
+A3: len (c1^c2) = len c1 + len c2 by FINSEQ_1:35;
+ hereby assume
+A4: (vertex-seq c1).(len c1 + 1) = (vertex-seq c2).1;
+   then reconsider c1c2 = c1^c2 as Chain of G by A1,A2,GRAPH_2:46;
+     c1c2 is directed proof let n; assume
+A5:   1 <= n & n < len c1c2;
+    per cases by REAL_1:def 5;
+    suppose
+A6: n<len c1;
+     then 1<=n+1 & n+1<=len c1 by NAT_1:29,38;
+     then n in dom c1 & n+1 in dom c1 by A5,A6,FINSEQ_3:27;
+     then c1c2.(n+1) = c1.(n+1) & c1c2.n = c1.n by FINSEQ_1:def 7;
+     hence (the Source of G).(c1c2.(n+1)) = (the Target of G).(c1c2.n)
+                                        by A5,A6,GRAPH_1:def 12;
+    suppose
+A7: n=len c1;
+A8:  vsc1.(len c1 +1) =(the Target of G).(c1.(len c1)) by Th14;
+        1 in dom c2 & n in dom c1 by A7,FINSEQ_5:6;
+      then c1c2.(n+1) = c2.1 & c1c2.n = c1.n by A7,FINSEQ_1:def 7;
+     hence (the Source of G).(c1c2.(n+1)) = (the Target of G).(c1c2.n)
+                                                by A4,A7,A8,GRAPH_2:def 11;
+    suppose
+A9: n>len c1;
+     then reconsider k = n-len c1 as Nat by INT_1:18;
+         n>=len c1 +1 by A9,NAT_1:38;
+then A10:    1<=k by REAL_1:84;
+A11:    k<len c2 by A3,A5,REAL_1:84;
+       then 1<=k+1 & k+1<=len c2 by NAT_1:29,38;
+then A12:    k in dom c2 & k+1 in dom c2 by A10,A11,FINSEQ_3:27;
+A13:    n = len c1 + k by XCMPLX_1:27;
+       then n+1 = len c1 +(k+1) by XCMPLX_1:1;
+      then c1c2.(n+1) = c2.(k+1) & c1c2.n = c2.k by A12,A13,FINSEQ_1:def 7;
+     hence (the Source of G).(c1c2.(n+1)) = (the Target of G).(c1c2.n)
+                                                by A10,A11,GRAPH_1:def 12;
+   end;
+  hence c1^c2 is directed non empty Chain of G by FINSEQ_1:48;
+ end; assume c1^c2 is directed non empty Chain of G;
+   then reconsider c1c2 = c1^c2 as directed non empty Chain of G;
+   set n = len c1;
+A14:  vsc1.(len c1 +1) =(the Target of G).(c1.(len c1)) by Th14;
+A15:   n in dom c1 by FINSEQ_5:6;
+then A16:   1<=n & n<=len c1 by FINSEQ_3:27;
+        0<>len c2 by FINSEQ_1:25; then 0<len c2 by NAT_1:19;
+      then n<len c1c2 by A3,REAL_1:69;
+then A17:   (the Source of G).(c1c2.(n+1)) = (the Target of G).(c1c2.n)
+                                                by A16,GRAPH_1:def 12;
+        1 in dom c2 by FINSEQ_5:6;
+      then c1c2.(n+1) = c2.1 & c1c2.n = c1.n by A15,FINSEQ_1:def 7;
+ hence thesis by A14,A17,GRAPH_2:def 11;
+end;
+
+theorem Th16: for c, c1, c2 being directed non empty Chain of G st c =c1^c2
+   holds (vertex-seq c).1 = (vertex-seq c1).1 &
+         (vertex-seq c).(len c +1) = (vertex-seq c2).(len c2 +1)
+proof let c, c1, c2 be directed non empty Chain of G; assume
+A1: c =c1^c2;
+A2: 1 in dom c & 1 in dom c1 & 1 in dom c2 & len c2 in dom c2 by FINSEQ_5:6;
+   A3: len c = len c1 + len c2 by A1,FINSEQ_1:35;
+     1<=len c & 1<=len c1 & 1<=len c2 by A2,FINSEQ_3:27;
+   then (vertex-seq c).1 = (the Source of G).(c.1) &
+   (vertex-seq c1).1 = (the Source of G).(c1.1) &
+   (vertex-seq c).(len c +1) = (the Target of G).(c.len c) &
+   (vertex-seq c2).(len c2 +1) = (the Target of G).(c2.len c2) by Th11;
+ hence thesis by A1,A2,A3,FINSEQ_1:def 7;
+end;
+
+theorem Th17: for oc being directed non empty Chain of G st oc is cyclic
+              holds (vertex-seq oc).1 = (vertex-seq oc).(len oc +1)
+proof let oc be directed non empty Chain of G; assume
+A1: oc is cyclic;
+  set vsoc = vertex-seq oc;
+A2: vsoc is_vertex_seq_of oc by GRAPH_2:def 11;
+    then len vsoc = len oc +1 by GRAPH_2:def 7;
+ hence thesis by A1,A2,Th6;
+end;
+
+theorem Th18:
+ for c being directed non empty Chain of G st c is cyclic
+ for n ex ch being directed Chain of G st
+              len ch = n & ch^c is directed non empty Chain of G proof
+ let c be directed non empty Chain of G; assume
+A1: c is cyclic;
+     c is FinSequence of the Edges of G by Def1;
+then A2: rng c c= the Edges of G by FINSEQ_1:def 4;
+defpred Z[Nat] means ex ch being directed Chain of G st
+      rng ch c= rng c & len ch = $1 & ch^c is directed non empty Chain of G;
+A3: Z[0]
+proof reconsider ch = {} as empty Chain of G by GRAPH_1:14;
+        reconsider ch as directed Chain of G;
+     take ch;
+        rng ch = {} by FINSEQ_1:27;
+     hence rng ch c= rng c by XBOOLE_1:2;
+     thus len ch = 0 by FINSEQ_1:25;
+     thus ch^c is directed non empty Chain of G by FINSEQ_1:47;
+    end;
+A4: for i be Nat st Z[i] holds Z[i+1]
+proof let n be Nat; given ch being directed Chain of G such that
+A5:   rng ch c= rng c & len ch = n & ch^c is directed non empty Chain of G;
+        len c in dom c by FINSEQ_5:6;
+then A6:  c.len c in rng c by FUNCT_1:def 5;
+      then reconsider clc = c.len c as Element of the Edges of G by A2;
+      reconsider ch'= <*clc*> as directed Chain of G by Th5;
+A7: len ch' = 1 by FINSEQ_1:56; A8: rng ch' = {c.len c} by FINSEQ_1:55;
+then A9: rng ch' c= rng c by A6,ZFMISC_1:37;
+    per cases;
+    suppose
+A10:  n = 0;
+     take ch';
+     thus rng ch' c= rng c by A6,A8,ZFMISC_1:37;
+     thus len ch' = n+1 by A10,FINSEQ_1:56;
+      set vsch' = vertex-seq ch';
+       vsch' = <*(the Source of G).clc, (the Target of G).clc*> by Th7;
+      then vsch'.(len ch' +1) = (the Target of G).clc by A7,FINSEQ_1:61
+                        .= (vertex-seq c).(len c +1) by Th14
+                        .= (vertex-seq c).1 by A1,Th17;
+     hence ch'^c is directed non empty Chain of G by Th15;
+    suppose n<>0;
+then A11:  ch is non empty by A5,FINSEQ_1:25;
+      then 1 in dom ch by FINSEQ_5:6; then ch.1 in rng ch by FUNCT_1:def 5;
+then consider i being Nat such that
+A12:    i in dom c & c.i = ch.1 by A5,FINSEQ_2:11;
+A13:    1<=i & i<=len c by A12,FINSEQ_3:27;
+      now per cases;
+     suppose
+A14:  i = 1;
+      set vsch' = vertex-seq ch';
+        vsch' = <*(the Source of G).clc, (the Target of G).clc*> by Th7;
+      then A15: vsch'.(len ch' +1) = (the Target of G).clc by A7,FINSEQ_1:61
+                        .= (vertex-seq c).(len c +1) by Th14
+                        .= (vertex-seq c).1 by A1,Th17
+                        .= (the Source of G).(ch.1) by A12,A14,GRAPH_2:def 11
+                        .= (vertex-seq ch).1 by A11,GRAPH_2:def 11;
+then A16:   ch'^ch is directed non empty Chain of G by A11,Th15;
+      reconsider ch1 = ch'^ch as directed Chain of G by A11,A15,Th15;
+      take ch1;
+         rng ch1 = rng ch' \/ rng ch by FINSEQ_1:44;
+      hence rng ch1 c= rng c by A5,A9,XBOOLE_1:8;
+      thus len ch1 = n+1 by A5,A7,FINSEQ_1:35;
+         (vertex-seq ch1).(len ch1 +1)
+             = (vertex-seq ch).(len ch +1) by A11,A16,Th16
+            .= (vertex-seq c).1 by A5,A11,Th15;
+      hence ch1^c is directed non empty Chain of G by A16,Th15;
+     suppose i <> 1; then 1<i by A13,REAL_1:def 5; then 1+1<=i by NAT_1:38;
+      then consider k being Nat such that
+A17:     1<=k & k<len c & i=k+1 by A13,GRAPH_2:1;
+         k in dom c by A17,FINSEQ_3:27;
+then A18:   c.k in rng c by FUNCT_1:def 5;
+      then reconsider ck = c.k as Element of the Edges of G by A2;
+      reconsider ch'= <*ck*> as directed Chain of G by Th5;
+A19: len ch' = 1 by FINSEQ_1:56; rng ch' = {c.k} by FINSEQ_1:55;
+then A20: rng ch' c= rng c by A18,ZFMISC_1:37;
+      set vsch' = vertex-seq ch';
+        vsch' = <*(the Source of G).ck, (the Target of G).ck*> by Th7;
+      then A21: vsch'.(len ch' +1) = (the Target of G).ck by A19,FINSEQ_1:61
+                        .= (the Source of G).(ch.1) by A12,A17,GRAPH_1:def 12
+                        .= (vertex-seq ch).1 by A11,GRAPH_2:def 11;
+then A22:   ch'^ch is directed non empty Chain of G by A11,Th15;
+       reconsider ch1 = ch'^ch as directed Chain of G by A11,A21,Th15;
+      take ch1;
+         rng ch1 = rng ch' \/ rng ch by FINSEQ_1:44;
+      hence rng ch1 c= rng c by A5,A20,XBOOLE_1:8;
+      thus len ch1 = n+1 by A5,A19,FINSEQ_1:35;
+         (vertex-seq ch1).(len ch1 +1)
+             = (vertex-seq ch).(len ch +1) by A11,A22,Th16
+            .= (vertex-seq c).1 by A5,A11,Th15;
+      hence ch1^c is directed non empty Chain of G by A22,Th15;
+    end;
+    hence ex ch being directed Chain of G st
+        rng ch c= rng c & len ch = n+1 & ch^c is directed non empty Chain of G;
+    end;
+A23:  for n being Nat holds Z[n] from Ind (A3, A4);
+ let n be Nat;
+    ex ch being directed Chain of G st
+     rng ch c= rng c & len ch = n & ch^c is directed non empty Chain of G by
+A23;
+ hence thesis;
+end;
+
+definition let IT be Graph;
+ attr IT is directed_cycle-less means
+:Def4: for dc being directed Chain of IT st dc is non empty
+  holds dc is non cyclic;
+ antonym IT is with_directed_cycle;
+end;
+
+definition
+ cluster empty -> directed_cycle-less Graph;
+ coherence proof let G be Graph; assume
+A1: G is empty;
+  let c be directed Chain of G; assume
+      c is non empty; then 1 in dom c by FINSEQ_5:6;
+then A2: c.1 in rng c by FUNCT_1:def 5;
+     c is FinSequence of the Edges of G by Def1;
+   then rng c c= the Edges of G by FINSEQ_1:def 4;
+  hence thesis by A1,A2,Def3;
+ end;
+end;
+
+definition let IT be Graph;
+ attr IT is well-founded means
+:Def5: for v being Element of the Vertices of IT
+  ex n st for c being directed Chain of IT
+    st c is non empty & (vertex-seq c).(len c +1) = v holds len c <= n;
+end;
+
+definition let G be empty Graph;
+ cluster -> empty Chain of G;
+ coherence proof let c be Chain of G; assume
+     c is non empty; then 1 in dom c by FINSEQ_5:6;
+then A1: c.1 in rng c by FUNCT_1:def 5;
+     c is FinSequence of the Edges of G by Def1;
+   then rng c c= the Edges of G by FINSEQ_1:def 4;
+   hence thesis by A1,Def3;
+ end;
+end;
+
+definition
+ cluster empty -> well-founded Graph;
+ coherence proof let G be Graph; assume G is empty;
+  then reconsider G' = G as empty Graph;
+  let v be Element of the Vertices of G;
+  take 0;
+  let c be directed Chain of G;
+  reconsider c as Chain of G';
+    c is empty;
+  hence thesis;
+ end;
+end;
+
+definition
+ cluster non well-founded -> non empty Graph;
+ coherence proof let G be Graph; assume
+A1: G is non well-founded; assume G is empty; then reconsider G as empty Graph
+;
+     G is well-founded;
+ hence contradiction by A1;
+end;
+end;
+
+definition
+ cluster well-founded Graph;
+ existence proof consider G being empty Graph; G is well-founded;
+  hence thesis;
+ end;
+end;
+
+definition
+ cluster well-founded -> directed_cycle-less Graph;
+ coherence proof let G be Graph;
+ per cases;
+ suppose G is empty; then reconsider G as empty Graph; G is
+directed_cycle-less;
+  hence thesis;
+ suppose G is non empty; then reconsider G'=G as non empty Graph; assume that
+A1: G is well-founded and
+A2: G is non directed_cycle-less;
+   consider dc being directed Chain of G' such that
+A3: dc is non empty & dc is cyclic by A2,Def4;
+   set p = vertex-seq dc;
+     len p = len dc +1 by A3,Th10; then 1<=len p by NAT_1:29;
+   then 1 in dom p by FINSEQ_3:27;
+   then reconsider v = p.1 as Element of the Vertices of G by FINSEQ_2:13;
+   consider n such that
+A4:  for c being directed Chain of G'
+     st c is non empty & (vertex-seq c).(len c +1) = v holds len c <= n
+                                                                by A1,Def5;
+   consider ch being directed Chain of G' such that
+A5: len ch = n+1 & ch^dc is directed non empty Chain of G' by A3,Th18; n+1<>0
+by NAT_1:29;
+   then reconsider ch as directed non empty Chain of G' by A5,FINSEQ_1:25;
+   reconsider cc = ch^dc as directed non empty Chain of G' by A5;
+     (vertex-seq dc).1 = (vertex-seq dc).(len dc +1) by A3,Th17;
+   then (vertex-seq cc).(len cc +1) = v by A3,Th16;
+then A6: len cc <=n by A4;
+     len cc = n+1 + len dc by A5,FINSEQ_1:35; then n+1<=len cc by NAT_1:29;
+  hence contradiction by A6,NAT_1:38;
+ end;
+end;
+
+definition
+ cluster non well-founded Graph;
+ existence proof
+ set V = {1}, E = {1};
+A1:  1 in E by TARSKI:def 1;
+   1 in V by TARSKI:def 1;
+ then reconsider S = E --> 1, T = E --> 1 as Function of E, V by FUNCOP_1:57;
+ reconsider G = MultiGraphStruct(# V, E, S, T #) as Graph by GRAPH_1:def 1;
+ reconsider v = 1 as Element of the Vertices of G by TARSKI:def 1;
+A2: S.1 = 1 & T.1 = 1 by A1,FUNCOP_1:13;
+A3: G is with_directed_cycle proof
+  reconsider dc = <*1*> as directed Chain of G by A1,Th5;
+  take dc;
+  thus dc is non empty;
+A4: <*v,v*> is_vertex_seq_of dc by A2,Th4;
+    <*v,v*>.1 = v & <*v,v*>.2 = v & len <*v,v*> = 2 by FINSEQ_1:61;
+  hence dc is cyclic by A4,Def2;
+ end;
+  take G; assume G is well-founded; then reconsider G as well-founded Graph;
+     G is directed_cycle-less;
+  hence contradiction by A3;
+ end;
+end;
+
+definition
+ cluster directed_cycle-less Graph;
+ existence proof consider G being well-founded Graph;
+    G is directed_cycle-less;
+  hence thesis;
+ end;
+end;
+
+theorem
+  for t being DecoratedTree, p being Node of t, k being Nat
+ holds p|k is Node of t proof
+ let t be DecoratedTree, p be Node of t, k be Nat;
+    p|k = p|Seg k by TOPREAL1:def 1;
+  then p|k is_a_prefix_of p by TREES_1:def 1;
+ hence thesis by TREES_1:45;
+end;
+
+begin :: Some properties of many sorted algebras
+
+theorem
+   for S being non void (non empty ManySortedSign),
+        X being non-empty ManySortedSet of the carrier of S,
+        t being Term of S,X st t is not root
+ ex o being OperSymbol of S st t.{} = [o,the carrier of S] proof
+ let S be non void (non empty ManySortedSign),
+     X be non-empty ManySortedSet of the carrier of S,
+     t be Term of S,X; assume
+A1: t is not root;
+ per cases by MSATERM:2;
+ suppose ex s being SortSymbol of S,v being Element of X.s st t.{} = [v,s];
+ then consider s being SortSymbol of S, v being Element of X.s such that
+A2: t.{} = [v,s];
+    t = root-tree [v,s] by A2,MSATERM:5;
+  hence thesis by A1;
+ suppose t.{} in [:the OperSymbols of S,{the carrier of S}:];
+  then consider o, c being set such that
+A3: o in the OperSymbols of S & c in {the carrier of S} & t.{} = [o,c]
+                            by ZFMISC_1:def 2;
+  reconsider o as OperSymbol of S by A3;
+  take o;
+  thus thesis by A3,TARSKI:def 1;
+end;
+
+theorem Th21:
+ for S being non void non empty ManySortedSign,
+     A being MSAlgebra over S,
+     G being GeneratorSet of A,
+     B being MSSubset of A
+  st G c= B holds B is GeneratorSet of A proof
+ let S be non void non empty ManySortedSign, A be MSAlgebra over S,
+     G be GeneratorSet of A, B be MSSubset of A; assume
+A1: G c= B;
+A2: the Sorts of GenMSAlg(G) = the Sorts of A by MSAFREE:def 4;
+ then the Sorts of GenMSAlg B is MSSubset of GenMSAlg G by MSUALG_2:def 10;
+then A3: the Sorts of GenMSAlg B c= the Sorts of GenMSAlg G by MSUALG_2:def 1;
+     B is MSSubset of GenMSAlg B by MSUALG_2:def 18;
+   then B c= the Sorts of GenMSAlg B by MSUALG_2:def 1;
+   then G c= the Sorts of GenMSAlg B by A1,PBOOLE:15;
+   then G is MSSubset of GenMSAlg B by MSUALG_2:def 1;
+  then GenMSAlg G is MSSubAlgebra of GenMSAlg B by MSUALG_2:def 18;
+  then the Sorts of GenMSAlg G is MSSubset of GenMSAlg B by MSUALG_2:def 10;
+  then the Sorts of GenMSAlg G c= the Sorts of GenMSAlg B by MSUALG_2:def 1;
+ hence the Sorts of GenMSAlg(B) = the Sorts of A by A2,A3,PBOOLE:def 13;
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+     A be finitely-generated (non-empty MSAlgebra over S);
+ cluster non-empty locally-finite GeneratorSet of A;
+ existence
+  proof
+  consider G being GeneratorSet of A such that
+A1: G is locally-finite by MSAFREE2:def 10;
+  consider B being ManySortedSet of the carrier of S such that
+A2: B in the Sorts of A by PBOOLE:146;
+  deffunc F(set) = {B.$1};
+  consider C being ManySortedSet of the carrier of S such that
+A3: for i being set st i in the carrier of S holds C.i = F(i) from MSSLambda;
+     now let i be set; assume i in the carrier of S;
+    then C.i = {B.i} by A3;
+    hence C.i is non empty;
+   end;
+then A4: C is non-empty by PBOOLE:def 16;
+  set H = G \/ C;
+  A5: C c= H by PBOOLE:16;
+A6: G c= the Sorts of A by MSUALG_2:def 1;
+     now let i be set; assume
+   A7: i in the carrier of S;
+     then B.i in (the Sorts of A).i by A2,PBOOLE:def 4;
+     then {B.i} c= (the Sorts of A).i by ZFMISC_1:37;
+    hence C.i c= (the Sorts of A).i by A3,A7;
+   end;
+   then C c= the Sorts of A by PBOOLE:def 5;
+   then G \/ C c= the Sorts of A by A6,PBOOLE:18;
+  then reconsider H as non-empty MSSubset of A by A4,A5,MSUALG_2:def 1,PBOOLE:
+143;
+    G c= H by PBOOLE:16;
+  then reconsider H as GeneratorSet of A by Th21;
+  take H;
+  thus H is non-empty;
+  let i be set; assume
+A8: i in the carrier of S;
+then A9: G.i is finite by A1,PRE_CIRC:def 3; A10: C.i = {B.i} by A3,A8;
+     H.i = G.i \/ C.i by A8,PBOOLE:def 7;
+  hence H.i is finite by A9,A10,FINSET_1:14;
+  end;
+end;
+
+theorem Th22:
+ for S being non void non empty ManySortedSign,
+     A being non-empty MSAlgebra over S,
+     X being non-empty GeneratorSet of A
+   ex F being ManySortedFunction of FreeMSA X, A
+    st F is_epimorphism FreeMSA X, A proof
+  let S be non void non empty ManySortedSign,
+      A be non-empty MSAlgebra over S,
+      X be non-empty GeneratorSet of A;
+     now let i be set such that
+   A1: i in the carrier of S;
+        X c= the Sorts of A by MSUALG_2:def 1;
+   then A2: X.i c= (the Sorts of A).i by A1,PBOOLE:def 5;
+   A3: X.i is non empty by A1,PBOOLE:def 16;
+        (Reverse X).i is Function of (FreeGen X).i, X.i by A1,MSUALG_1:def 2;
+    hence (Reverse X).i is Function of (FreeGen X).i, (the Sorts of A).i
+                                              by A2,A3,FUNCT_2:9;
+   end;
+   then reconsider ff = Reverse X as ManySortedFunction of FreeGen X,the Sorts
+of A
+                                     by MSUALG_1:def 2;
+     FreeGen X is free by MSAFREE:17;
+   then consider h being ManySortedFunction of FreeMSA X, A such that
+A4:  h is_homomorphism FreeMSA X, A & h || FreeGen X = ff by MSAFREE:def 5;
+   take h;
+   thus h is_homomorphism FreeMSA X, A by A4;
+   let i be set;
+   consider g being ManySortedFunction of FreeMSA X, Image h such that
+A5:  h = g & g is_epimorphism FreeMSA X, Image h by A4,MSUALG_3:21;
+   reconsider X' = X as MSSubset of A;
+     X is MSSubset of Image h
+   proof let i be set; assume
+A6: i in the carrier of S;
+    let x be set; assume
+A7:  x in X.i;
+     reconsider s = i as SortSymbol of S by A6;
+     reconsider hs = h.s as Function of (the Sorts of FreeMSA X).s,
+                                        (the Sorts of A).s;
+       the Sorts of Image h = h.:.:(the Sorts of FreeMSA X)
+                                                by A4,MSUALG_3:def 14;
+then A8: (the Sorts of Image h).s = hs.:((the Sorts of FreeMSA X).s)
+                                                by MSUALG_3:def 6;
+A9:   ff.s = hs | ((FreeGen X).s) by A4,MSAFREE:def 1;
+A10:  rngs Reverse X = X by EXTENS_1:14;
+       s in dom Reverse X by A6,PBOOLE:def 3;
+     then (rngs Reverse X).s = rng ((Reverse X).s) by FUNCT_6:31;
+     then consider c being set such that
+A11:  c in dom (ff.s) & x = ff.s.c by A7,A10,FUNCT_1:def 5;
+   dom (ff.s) = dom hs /\ (FreeGen X).s & ff.s.c = hs.c
+                                                 by A9,A11,FUNCT_1:68;
+then A12:  c in dom hs & c in (FreeGen X).s by A11,XBOOLE_0:def 3;
+       FreeGen X c= the Sorts of FreeMSA X by MSUALG_2:def 1;
+     then (FreeGen X).s c= (the Sorts of FreeMSA X).s by PBOOLE:def 5;
+     then c in dom hs & c in (the Sorts of FreeMSA X).s & x = hs.c
+                                     by A9,A11,A12,FUNCT_1:68;
+    hence x in (the Sorts of Image h).i by A8,FUNCT_1:def 12;
+   end;
+   then GenMSAlg X' is MSSubAlgebra of Image h by MSUALG_2:def 18;
+   then the Sorts of GenMSAlg X' is MSSubset of Image h by MSUALG_2:def 10;
+then A13:the Sorts of GenMSAlg X' c= the Sorts of Image h by MSUALG_2:def 1;
+A14: the Sorts of GenMSAlg X' = the Sorts of A by MSAFREE:def 4;
+      the Sorts of Image h is MSSubset of A by MSUALG_2:def 10;
+    then the Sorts of Image h c= the Sorts of A by MSUALG_2:def 1;
+then A15: the Sorts of Image h = the Sorts of A by A13,A14,PBOOLE:def 13;
+   assume
+   i in the carrier of S;
+     then reconsider s = i as SortSymbol of S;
+     set f = h.s;
+A16: g is_homomorphism FreeMSA X, Image h by A5,MSUALG_3:def 10;
+   then the Sorts of Image g = h.:.:(the Sorts of FreeMSA X)
+                          by A5,MSUALG_3:def 14;
+then A17: (the Sorts of Image g).i = f.:((the Sorts of FreeMSA X).i)
+                                                      by MSUALG_3:def 6;
+  Image g = Image h by A5,A16,MSUALG_3:19;
+   hence thesis by A15,A17,FUNCT_2:45;
+end;
+
+theorem
+   for S being non void non empty ManySortedSign,
+     A being non-empty MSAlgebra over S,
+     X being non-empty GeneratorSet of A
+  st A is non locally-finite
+   holds FreeMSA X is non locally-finite proof
+let S be non void non empty ManySortedSign,
+    A be non-empty MSAlgebra over S,
+    X be non-empty GeneratorSet of A such that
+A1: A is non locally-finite and
+A2: FreeMSA X is locally-finite;
+   consider F being ManySortedFunction of FreeMSA X, A such that
+A3: F is_epimorphism FreeMSA X, A by Th22;
+A4: F is "onto" by A3,MSUALG_3:def 10;
+      the Sorts of A is non locally-finite by A1,MSAFREE2:def 11;
+   then consider i being set such that
+A5:  i in the carrier of S & (the Sorts of A).i is infinite by PRE_CIRC:def 3;
+      the Sorts of FreeMSA X is locally-finite by A2,MSAFREE2:def 11;
+then A6: (the Sorts of FreeMSA X).i is finite by A5,PRE_CIRC:def 3;
+    reconsider SAi = (the Sorts of A).i as non empty set by A5;
+    reconsider FXi = (the Sorts of FreeMSA X).i as non empty set
+                                                         by A5,PBOOLE:def 16;
+    reconsider i as Element of S by A5;
+    reconsider Fi = F.i as Function of FXi, SAi;
+A7: rng Fi = SAi by A4,MSUALG_3:def 3;
+       dom Fi = FXi by FUNCT_2:def 1;
+ hence contradiction by A5,A6,A7,FINSET_1:26;
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+     X be non-empty locally-finite ManySortedSet of the carrier of S,
+     v be SortSymbol of S;
+ cluster FreeGen(v, X) -> finite;
+ coherence
+  proof
+A1: X.v,FreeGen(v, X) are_equipotent proof
+   set Z = {[a, root-tree[a,v]] where a is Element of X.v: not contradiction};
+   take Z;
+   hereby let x be set such that
+   A2: x in X.v;
+      reconsider y = root-tree [x, v] as set;
+    take y;
+    thus y in FreeGen(v,X) by A2,MSAFREE:def 17;
+    thus [x,y] in Z by A2;
+   end;
+   hereby let y be set; assume
+      y in FreeGen(v, X);
+       then consider x being set such that
+   A3: x in X.v & y = root-tree [x,v] by MSAFREE:def 17;
+    take x;
+    thus x in X.v by A3;
+    thus [x,y] in Z by A3;
+   end;
+   let x,y,z,u be set; assume
+A4: [x,y] in Z & [z,u] in Z;
+    then consider a being Element of X.v such that
+A5: [x,y] = [a, root-tree[a,v]];
+    consider b being Element of X.v such that
+A6: [z,u] = [b, root-tree[b,v]] by A4;
+A7: x = a & y = root-tree[a,v] & z = b & u = root-tree[b,v]
+                                                       by A5,A6,ZFMISC_1:33;
+   hence x = z implies y = u;
+   assume y = u; then [a,v] = [b,v] by A7,TREES_4:4;
+   hence x = z by A7,ZFMISC_1:33;
+   end;
+    X.v is finite by PRE_CIRC:def 3;
+ hence FreeGen(v, X) is finite by A1,CARD_1:68;
+  end;
+end;
+
+canceled;
+
+theorem Th25:
+ for S being non void non empty ManySortedSign,
+     A being non-empty MSAlgebra over S, o be OperSymbol of S
+  st (the Arity of S).o = {} holds dom Den(o, A) = {{}} proof
+let S be non void non empty ManySortedSign,
+    A be non-empty MSAlgebra over S, o be OperSymbol of S such that
+A1: (the Arity of S).o = {};
+:: stolen from MSUALG_2
+   A2: dom ((the Sorts of A)# qua ManySortedSet of(the carrier of S)*)
+    = (the carrier of S)* by PBOOLE:def 3;
+   A3: dom (the Arity of S) = the OperSymbols of S &
+   rng(the Arity of S) c= (the carrier of S)* by FUNCT_2:def 1,RELSET_1:12;
+   then (the Arity of S).o in rng (the Arity of S) by FUNCT_1:def 5;
+   then A4: o in dom ((the Sorts of A)# * the Arity of S) by A2,A3,FUNCT_1:21;
+     dom {} = {} & rng {} = {};
+   then reconsider b = {} as Function of {},{} by FUNCT_2:3;
+ thus dom Den(o,A) = Args(o,A) by FUNCT_2:def 1
+       .= ((the Sorts of A)# * the Arity of S).o by MSUALG_1:def 9
+       .= (the Sorts of A)# . ((the Arity of S).o) by A4,FUNCT_1:22
+       .= (the Sorts of A)# . (the_arity_of o) by MSUALG_1:def 6
+       .= product ((the Sorts of A) * (the_arity_of o)) by MSUALG_1:def 3
+       .= product ((the Sorts of A) * b) by A1,MSUALG_1:def 6
+       .= {{}} by CARD_3:19,RELAT_1:62;
+end;
+
+definition let IT be non void non empty ManySortedSign;
+ attr IT is finitely_operated means
+:Def6: for s being SortSymbol of IT holds
+  {o where o is OperSymbol of IT: the_result_sort_of o = s} is finite;
+end;
+
+theorem
+   for S being non void non empty ManySortedSign,
+     A being non-empty MSAlgebra over S, v be SortSymbol of S
+  st S is finitely_operated holds Constants(A, v) is finite
+proof
+ let S be non void non empty ManySortedSign,
+     A be non-empty MSAlgebra over S,
+     v be SortSymbol of S such that
+A1: S is finitely_operated;
+    consider Av being non empty set such that
+A2: Av =(the Sorts of A).v &
+    Constants(A,v) = { a where a is Element of Av :
+       ex o be OperSymbol of S st (the Arity of S).o = {} &
+       (the ResultSort of S).o = v & a in rng Den(o,A)}
+                                                   by MSUALG_2:def 4;
+ set Ov = {o where o is OperSymbol of S: the_result_sort_of o = v};
+A3: Ov is finite by A1,Def6;
+A4: now assume
+A5:  Ov is empty;
+       now assume Constants(A, v) is non empty;
+        then consider c being set such that
+A6:    c in Constants(A,v) by XBOOLE_0:def 1;
+        consider a being Element of Av such that
+A7:    a = c & ex o be OperSymbol of S st (the Arity of S).o = {} &
+       (the ResultSort of S).o = v & a in rng Den(o,A) by A2,A6;
+        consider o being OperSymbol of S such that
+A8:    (the Arity of S).o = {} &
+       (the ResultSort of S).o = v & a in rng Den(o,A) by A7;
+         the_result_sort_of o = (the ResultSort of S).o by MSUALG_1:def 7;
+       then o in Ov by A8;
+      hence contradiction by A5;
+     end;
+    hence Constants(A, v) is finite;
+   end;
+   now assume Ov is non empty;
+    then reconsider Ov as non empty set;
+    defpred P[Element of Ov] means (the Arity of S).$1 = {};
+    deffunc F(Element of Ov) = $1;
+    set COv = {F(o) where o is Element of Ov: P[o]};
+      COv is Subset of Ov from SubsetFD;
+then A9: COv is finite by A3,FINSET_1:13;
+     deffunc G(Element of the OperSymbols of S)=Den($1,A).{};
+      set aCOv = {G(o) where o is Element of the OperSymbols of S
+                                                                : o in COv };
+A10: aCOv is finite from FraenkelFin(A9);
+       Constants(A,v) c= aCOv proof let c be set;
+      assume c in Constants(A,v);
+        then consider a being Element of Av such that
+A11:    a = c & ex o be OperSymbol of S st (the Arity of S).o = {} &
+       (the ResultSort of S).o = v & a in rng Den(o,A) by A2;
+        consider o being OperSymbol of S such that
+A12:    (the Arity of S).o = {} &
+       (the ResultSort of S).o = v & a in rng Den(o,A) by A11;
+         the_result_sort_of o = (the ResultSort of S).o by MSUALG_1:def 7;
+       then o in Ov by A12;
+       then reconsider o' = o as Element of Ov;
+       A13: o' in COv by A12;
+   set f = Den(o,A);
+A14: dom f = {{}} by A12,Th25;
+         consider x being set such that
+A15:    x in dom f & a = f.x by A12,FUNCT_1:def 5;
+         x = {} by A14,A15,TARSKI:def 1;
+      hence c in aCOv by A11,A13,A15;
+     end;
+  hence Constants(A, v) is finite by A10,FINSET_1:13;
+ end;
+ hence thesis by A4;
+end;
+
+theorem
+   for S being non void non empty ManySortedSign,
+     X being non-empty ManySortedSet of the carrier of S,
+     v being SortSymbol of S
+ holds
+   {t where t is Element of (the Sorts of FreeMSA X).v: depth t = 0}
+ = FreeGen(v, X) \/ Constants(FreeMSA X, v) proof
+let S be non void non empty ManySortedSign,
+    X be non-empty ManySortedSet of the carrier of S,
+    v be SortSymbol of S;
+ set SF = the Sorts of FreeMSA X;
+A1:FreeMSA X = MSAlgebra (#FreeSort(X), FreeOper(X)#)by MSAFREE:def 16;
+ set d0 = {t where t is Element of SF.v: depth t = 0};
+A2: d0 c= FreeGen(v, X) \/ Constants(FreeMSA X, v) proof let x be set; assume
+      x in d0; then consider t being Element of SF.v such that
+A3: x = t & depth t = 0;
+    consider dt being finite DecoratedTree, ft being finite Tree such that
+A4:  dt = t & ft = dom dt & depth t = height ft by MSAFREE2:def 14;
+      t in SF.v;
+    then t in FreeSort(X, v) by A1,MSAFREE:def 13;
+    then t in {a where a is Element of TS(DTConMSA(X)):
+       (ex x be set st x in X.v & a = root-tree [x,v]) or
+       ex o be OperSymbol of S st [o,the carrier of S] = a.{}
+           & the_result_sort_of o = v} by MSAFREE:def 12;
+      then consider a being Element of TS(DTConMSA(X)) such that
+A5: t = a &
+    ((ex x be set st x in X.v & a = root-tree [x,v]) or
+     ex o be OperSymbol of S st [o,the carrier of S] = a.{}
+         & the_result_sort_of o = v);
+    per cases by A5;
+     suppose ex x be set st x in X.v & a = root-tree [x,v];
+       then consider x1 being set such that
+A6:    x1 in X.v & a = root-tree [x1,v];
+         t in FreeGen(v,X) by A5,A6,MSAFREE:def 17;
+      hence thesis by A3,XBOOLE_0:def 2;
+     suppose ex o be OperSymbol of S st [o,the carrier of S] = a.{}
+         & the_result_sort_of o = v;
+       then consider o be OperSymbol of S such that
+A7:     [o,the carrier of S] = a.{} & the_result_sort_of o = v;
+       reconsider t'= t as Term of S, X by A5,MSATERM:def 1;
+       consider ars being ArgumentSeq of Sym(o,X) such that
+A8:    t' = [o,the carrier of S]-tree ars by A5,A7,MSATERM:10;
+         dom dt = elementary_tree 0 by A3,A4,TREES_1:80;
+    then dt = root-tree (dt.{}) by TREES_4:5;
+then A9:    ars = {} by A4,A8,TREES_4:17;
+       then 0 = len ars by FINSEQ_1:25 .= len the_arity_of o by MSATERM:22;
+       then the_arity_of o = {} by FINSEQ_1:25;
+then A10:     (the Arity of S).o = {} by MSUALG_1:def 6;
+A11:     (the ResultSort of S).o = v by A7,MSUALG_1:def 7;
+A12:    Den(o, FreeMSA X) = (FreeOper X).o by A1,MSUALG_1:def 11
+                        .= DenOp(o, X) by MSAFREE:def 15;
+A13:    Sym(o, X) ==> roots ars by MSATERM:21;
+       reconsider ars' = ars as FinSequence of TS DTConMSA X by A9,FINSEQ_1:29
+;
+A14:    DenOp(o, X).ars' = (Sym(o,X))-tree ars' by A13,MSAFREE:def 14
+                       .= t by A8,MSAFREE:def 11;
+         dom Den(o, FreeMSA X) = {{}} by A10,Th25;
+       then {} in dom Den(o, FreeMSA X) by TARSKI:def 1;
+then A15:    t in rng Den(o, FreeMSA X) by A9,A12,A14,FUNCT_1:def 5;
+    consider Av being non empty set such that
+A16: Av = SF.v &
+    Constants(FreeMSA X,v) = { a1 where a1 is Element of Av :
+       ex o be OperSymbol of S st (the Arity of S).o = {} &
+       (the ResultSort of S).o = v & a1 in rng Den(o, FreeMSA X)}
+                                                   by MSUALG_2:def 4;
+         t in Constants(FreeMSA X, v) by A10,A11,A15,A16;
+      hence thesis by A3,XBOOLE_0:def 2;
+   end;
+
+A17: FreeGen(v, X) c= d0 proof let x be set; assume
+A18:    x in FreeGen(v, X);
+      then consider a being set such that
+A19:     a in X.v & x = root-tree [a,v] by MSAFREE:def 17;
+      reconsider x' = x as Element of SF.v by A1,A18;
+      consider dt being finite DecoratedTree, t being finite Tree such that
+A20:     dt = x' & t = dom dt & depth x' = height t by MSAFREE2:def 14;
+         height t = 0 by A19,A20,TREES_1:79,TREES_4:3;
+      hence x in d0 by A20;
+     end;
+  Constants(FreeMSA X, v) c= d0 proof let x be set; assume
+A21:    x in Constants(FreeMSA X, v);
+       consider Av being non empty set such that
+A22:    Av =(the Sorts of FreeMSA X).v &
+       Constants(FreeMSA X,v) = { a where a is Element of Av :
+        ex o be OperSymbol of S st (the Arity of S).o = {} &
+        (the ResultSort of S).o = v & a in rng Den(o,FreeMSA X)}
+                                                   by MSUALG_2:def 4;
+       consider a being Element of Av such that
+A23:    x = a &
+       ex o be OperSymbol of S st (the Arity of S).o = {} &
+         (the ResultSort of S).o = v & a in rng Den(o,FreeMSA X) by A21,A22;
+       consider o being OperSymbol of S such that
+A24:    (the Arity of S).o = {} &
+         (the ResultSort of S).o = v & a in rng Den(o,FreeMSA X) by A23;
+       reconsider a as Element of (the Sorts of FreeMSA X).v by A22;
+       consider dt being finite DecoratedTree, t being finite Tree such that
+A25:     dt = a & t = dom dt & depth a = height t by MSAFREE2:def 14;
+A26:     dom Den(o, FreeMSA X) = {{}} by A24,Th25;
+       consider d being set such that
+A27:     d in dom Den(o,FreeMSA X) & a = Den(o,FreeMSA X).d by A24,FUNCT_1:def
+5;
+A28:     d = {} by A26,A27,TARSKI:def 1;
+A29:    Den(o, FreeMSA X) = (FreeOper X).o by A1,MSUALG_1:def 11
+                        .= DenOp(o, X) by MSAFREE:def 15;
+       reconsider p = {} as FinSequence of TS(DTConMSA(X)) by FINSEQ_1:29;
+         ((FreeSort X)# * (the Arity of S)).o
+        = Args(o,FreeMSA X) by A1,MSUALG_1:def 9
+       .= dom Den(o,FreeMSA X) by FUNCT_2:def 1;
+       then p in ((FreeSort X)# * (the Arity of S)).o by A26,TARSKI:def 1;
+       then Sym(o,X) ==> roots p by MSAFREE:10;
+       then DenOp(o,X).p = (Sym(o,X))-tree p by MSAFREE:def 14;
+then a = root-tree (Sym(o,X)) by A27,A28,A29,TREES_4:20;
+       then height t = 0 by A25,TREES_1:79,TREES_4:3;
+      hence x in d0 by A23,A25;
+     end;
+     then FreeGen(v, X) \/ Constants(FreeMSA X, v) c= d0 by A17,XBOOLE_1:8;
+ hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+theorem
+   for S being non void non empty ManySortedSign,
+     X being non-empty ManySortedSet of the carrier of S,
+     v, vk being SortSymbol of S, o being OperSymbol of S,
+     t being Element of (the Sorts of FreeMSA X).v,
+     a being (ArgumentSeq of Sym(o,X)), k being Nat,
+     ak being Element of (the Sorts of FreeMSA X).vk
+  st t = [o,the carrier of S]-tree a & k in dom a & ak = a.k
+   holds depth ak < depth t proof
+ let S be non void non empty ManySortedSign,
+     X be non-empty ManySortedSet of the carrier of S,
+     v, vk be SortSymbol of S, o be OperSymbol of S,
+     t be Element of (the Sorts of FreeMSA X).v,
+     a be (ArgumentSeq of Sym(o,X)), k be Nat,
+     ak be Element of (the Sorts of FreeMSA X).vk; assume
+A1: t = [o,the carrier of S]-tree a & k in dom a & ak = a.k;
+   consider dt being finite DecoratedTree, tt being finite Tree such that
+A2: dt = t & tt = dom dt & depth t = height tt by MSAFREE2:def 14;
+   consider dtk being finite DecoratedTree, ttk being finite Tree such that
+A3: dtk = ak & ttk = dom dtk & depth ak = height ttk by MSAFREE2:def 14;
+   reconsider a' = a as DTree-yielding FinSequence;
+   consider q being DTree-yielding FinSequence such that
+A4: a' = q & dom t = tree doms q by A1,TREES_4:def 4;
+   reconsider da = doms a as FinTree-yielding FinSequence;
+ A5: dom doms a' = dom a' by TREES_3:39;
+   ttk = da.k by A1,A3,FUNCT_6:31;
+   then ttk in rng da by A1,A5,FUNCT_1:def 5;
+ hence thesis by A2,A3,A4,TREES_3:81;
+end;
+

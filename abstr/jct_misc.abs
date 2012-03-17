@@ -1,0 +1,158 @@
+:: Miscellaneous { I }
+::  by Andrzej Trybulec
+::
+:: Received August 28, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, TARSKI, FUNCT_1, RELAT_1, SUBSET_1, ARYTM_1, ARYTM, RCOMP_1,
+      ARYTM_3, ORDINAL2, SEQM_3, PROB_1, ABSVALUE, SQUARE_1, FUNCT_3, MCART_1,
+      PRE_TOPC, SETFAM_1, COMPTS_1, SEQ_1, SEQ_2, RELAT_2, PSCOMP_1, LIMFUNC1,
+      CONNSP_1, METRIC_1, SEQ_4, TOPMETR, INTEGRA1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, FUNCT_1,
+      RELSET_1, FUNCT_2, DTCONSTR, INTEGRA1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, REAL_1, NAT_1, ABSVALUE, BINARITH, SQUARE_1, SEQ_1, SEQ_2,
+      SEQ_4, RCOMP_1, STRUCT_0, PRE_TOPC, COMPTS_1, BORSUK_1, PSCOMP_1, SEQM_3,
+      TOPMETR, LIMFUNC1, CONNSP_1;
+ constructors BINARITH, REAL_1, SEQM_3, COMPTS_1, MCART_1, DTCONSTR, INTEGRA1,
+      RFUNCT_2, ABSVALUE, PSCOMP_1, PARTFUN1, TOPMETR, TSP_1, INT_1, PROB_1,
+      LIMFUNC1, CONNSP_1, MEMBERED;
+ clusters XREAL_0, INT_1, STRUCT_0, PRE_TOPC, RELSET_1, SUBSET_1, INTEGRA1,
+      SEQM_3, PSCOMP_1, BORSUK_1, BORSUK_3, SEQ_1, TOPREAL6, MEMBERED,
+      ZFMISC_1, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE;
+
+
+begin :: Preliminaries
+
+scheme NonEmpty{ A()-> non empty set, F(set)-> set}:
+ { F(a) where a is Element of A(): not contradiction } is non empty;
+
+canceled 2;
+
+theorem :: JCT_MISC:3
+ for A,B being set, f being Function st A c= dom f & f.:A c= B
+  holds A c= f"B;
+
+theorem :: JCT_MISC:4
+ for f being Function, A,B being set st A misses B
+  holds f"A misses f"B;
+
+theorem :: JCT_MISC:5
+ for S,X being set, f being Function of S,X, A being Subset of X
+   st X = {} implies S = {}
+  holds (f"A)` = f"(A`);
+
+theorem :: JCT_MISC:6
+ for S being 1-sorted, X being non empty set,
+     f being Function of the carrier of S,X,
+     A being Subset of X
+  holds (f"A)` = f"(A`);
+
+ reserve i,j,m,n for Nat,
+         r,s,r0,s0,t for real number;
+
+theorem :: JCT_MISC:7
+   m <= n implies n-'(n-'m) = m;
+
+canceled;
+
+theorem :: JCT_MISC:9
+ for a,b being real number st r in [.a,b.] & s in [.a,b.]
+  holds (r + s)/2 in [.a,b.];
+
+theorem :: JCT_MISC:10
+ for Nseq being increasing Seq_of_Nat, i,j st i <= j
+  holds Nseq.i <= Nseq.j;
+
+theorem :: JCT_MISC:11
+ abs(abs(r0-s0)-abs(r-s)) <= abs(r0-r) + abs(s0-s);
+
+theorem :: JCT_MISC:12
+   t in ].r,s.[ implies abs(t) < max(abs(r),abs(s));
+
+definition let A,B,C be non empty set;
+ let f be Function of A, [:B,C:];
+ redefine func pr1 f -> Function of A,B means
+:: JCT_MISC:def 1
+  for x being Element of A holds it.x = (f.x)`1;
+ func pr2 f -> Function of A,C means
+:: JCT_MISC:def 2
+ for x being Element of A holds it.x = (f.x)`2;
+end;
+
+scheme DoubleChoice{ A,B,C() -> non empty set, P[set,set,set]}:
+ ex a being Function of A(), B(),
+    b being Function of A(), C() st
+  for i being Element of A() holds P[i,a.i,b.i]
+ provided
+ for i being Element of A()
+  ex ai being Element of B(),
+     bi being Element of C() st P[i,ai,bi];
+
+theorem :: JCT_MISC:13
+ for S,T being non empty TopSpace, G being Subset of [:S,T:]
+  st for x being Point of [:S,T:] st x in G
+      ex GS being Subset of S, GT being Subset of T
+        st GS is open & GT is open & x in [:GS,GT:] & [:GS,GT:] c= G
+  holds G is open;
+
+begin :: topological properties of sets of real numbers
+
+theorem :: JCT_MISC:14
+ for A,B being compact Subset of REAL holds A /\ B is compact;
+
+definition let A be Subset of REAL;
+ attr A is connected means
+:: JCT_MISC:def 3
+ for r,s being real number st r in A & s in A holds [.r,s.] c= A;
+end;
+
+theorem :: JCT_MISC:15
+   for T being non empty TopSpace
+ for f being continuous RealMap of T
+ for A being Subset of T st A is connected holds
+  f.:A is connected;
+
+definition let A,B be Subset of REAL;
+ func dist(A,B) -> real number means
+:: JCT_MISC:def 4
+ ex X being Subset of REAL st
+    X = {abs(r - s) where r is Element of REAL, s is Element of REAL :
+            r in A & s in B}
+          & it = lower_bound X;
+ commutativity;
+end;
+
+theorem :: JCT_MISC:16
+ for A,B being Subset of REAL, r, s st r in A & s in B
+  holds abs(r-s) >= dist(A,B);
+
+theorem :: JCT_MISC:17
+ for A,B being Subset of REAL,
+     C,D being non empty Subset of REAL st C c= A & D c= B
+  holds dist(A,B) <= dist(C,D);
+
+theorem :: JCT_MISC:18
+ for A, B being non empty compact Subset of REAL
+  ex r,s being real number st r in A & s in B &
+       dist(A,B) = abs(r - s);
+
+theorem :: JCT_MISC:19
+ for A, B being non empty compact Subset of REAL
+  holds dist(A,B) >= 0;
+
+theorem :: JCT_MISC:20
+ for A,B being non empty compact Subset of REAL st A misses B
+  holds dist(A,B) > 0;
+
+theorem :: JCT_MISC:21
+   for e,f being real number, A,B being compact Subset of REAL st
+  A misses B & A c= [.e,f.] & B c= [.e,f.]
+ for S being Function of NAT, bool REAL st
+  for i being Nat holds S.i is connected &
+       S.i meets A & S.i meets B
+ ex r being real number st r in [.e,f.] & not r in A \/ B &
+  for i being Nat ex k being Nat st i <= k & r in S.k;
+

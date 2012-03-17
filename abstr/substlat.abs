@@ -1,0 +1,197 @@
+:: Lattice of Substitutions
+::  by Adam Grabowski
+::
+:: Received May 21, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary FINSUB_1, PARTFUN1, FINSET_1, BOOLE, NORMFORM, FUNCT_1, RELAT_1,
+      FINSEQ_1, FUNCT_4, LATTICES, BINOP_1, SUBSTLAT;
+ notation TARSKI, XBOOLE_0, SUBSET_1, FINSET_1, FINSUB_1, BINOP_1, RELAT_1,
+      STRUCT_0, FUNCT_1, PARTFUN1, LATTICES, FUNCT_4, RELSET_1;
+ constructors PARTFUN1, FINSET_1, NORMFORM, FUNCT_4;
+ clusters RELSET_1, LATTICES, FINSET_1, FINSUB_1, PARTFUN1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin :: Preliminaries
+
+reserve V, C for set;
+
+definition let V, C;
+  func SubstitutionSet (V, C) -> Subset of Fin PFuncs (V, C) equals
+:: SUBSTLAT:def 1
+    { A where A is Element of Fin PFuncs (V,C) :
+      ( for u being set st u in A holds u is finite ) &
+       for s, t being Element of PFuncs (V, C) holds
+        ( s in A & t in A & s c= t implies s = t ) };
+end;
+
+theorem :: SUBSTLAT:1
+  {} in SubstitutionSet (V, C);
+
+theorem :: SUBSTLAT:2
+  { {} } in SubstitutionSet (V, C);
+
+definition let V, C;
+  cluster SubstitutionSet (V, C) -> non empty;
+end;
+
+definition let V, C;
+  let A, B be Element of SubstitutionSet (V, C);
+  redefine func A \/ B -> Element of Fin PFuncs (V, C);
+end;
+
+definition let V, C;
+  cluster non empty Element of SubstitutionSet (V, C);
+end;
+
+definition let V, C;
+  cluster -> finite Element of SubstitutionSet (V, C);
+end;
+
+definition let V, C;
+  let A be Element of Fin PFuncs (V, C);
+  func mi A -> Element of SubstitutionSet (V, C) equals
+:: SUBSTLAT:def 2
+  { t where t is Element of PFuncs (V, C) : t is finite &
+    for s being Element of PFuncs (V, C) holds
+     ( s in A & s c= t iff s = t ) };
+end;
+
+definition let V, C;
+ let A be non empty Element of SubstitutionSet (V, C);
+ cluster -> Function-like Relation-like Element of A;
+end;
+
+definition let V, C;
+ cluster -> Function-like Relation-like Element of PFuncs (V, C);
+end;
+
+definition let V, C;
+  let A, B be Element of Fin PFuncs (V, C);
+  func A^B -> Element of Fin PFuncs (V, C) equals
+:: SUBSTLAT:def 3
+    { s \/ t where s,t is Element of PFuncs (V,C) :
+      s in A & t in B & s tolerates t };
+end;
+
+reserve A, B, D for Element of Fin PFuncs (V, C);
+
+theorem :: SUBSTLAT:3
+  A^B = B^A;
+
+theorem :: SUBSTLAT:4
+ B = { {} } implies A ^ B = A;
+
+theorem :: SUBSTLAT:5
+ for a, b be set holds
+   B in SubstitutionSet (V, C) & a in B & b in B & a c= b implies a = b;
+
+theorem :: SUBSTLAT:6
+ for a be set holds
+  a in mi B implies a in B & (for b be set holds b in B & b c= a implies b = a)
+;
+
+reserve s for Element of PFuncs (V,C);
+
+definition let V, C;
+  cluster finite Element of PFuncs (V,C);
+end;
+
+theorem :: SUBSTLAT:7
+ for a be finite set holds a in B & (for b be finite set st
+    b in B & b c= a holds b = a) implies a in mi B;
+
+theorem :: SUBSTLAT:8
+ mi A c= A;
+
+theorem :: SUBSTLAT:9
+   A = {} implies mi A = {};
+
+theorem :: SUBSTLAT:10
+ for b be finite set holds b in B implies ex c be set st c c= b & c in mi B;
+
+theorem :: SUBSTLAT:11
+ for K be Element of SubstitutionSet (V, C) holds
+  mi K = K;
+
+theorem :: SUBSTLAT:12
+ mi (A \/ B) c= mi A \/ B;
+
+theorem :: SUBSTLAT:13
+ mi(mi A \/ B) = mi (A \/ B);
+
+theorem :: SUBSTLAT:14
+ A c= B implies A ^ D c= B ^ D;
+
+theorem :: SUBSTLAT:15
+  for a be set holds a in A^B implies ex b,c be set
+    st b in A & c in B & a = b \/ c;
+
+theorem :: SUBSTLAT:16
+ for b, c be Element of PFuncs (V, C) holds
+   b in A & c in B & b tolerates c implies b \/ c in A^B;
+
+theorem :: SUBSTLAT:17
+ mi(A ^ B) c= mi A ^ B;
+
+theorem :: SUBSTLAT:18
+ A c= B implies D ^ A c= D ^ B;
+
+theorem :: SUBSTLAT:19
+ mi(mi A ^ B) = mi (A ^ B);
+
+theorem :: SUBSTLAT:20
+ mi(A ^ mi B) = mi (A ^ B);
+
+theorem :: SUBSTLAT:21
+ for K, L, M being Element of Fin PFuncs (V, C) holds
+  K^(L^M) = K^L^M;
+
+theorem :: SUBSTLAT:22
+ for K, L, M being Element of Fin PFuncs (V, C) holds
+  K^(L \/ M) = K^L \/ K^M;
+
+theorem :: SUBSTLAT:23
+ B c= B ^ B;
+
+theorem :: SUBSTLAT:24
+  mi (A ^ A) = mi A;
+
+theorem :: SUBSTLAT:25
+   for K be Element of SubstitutionSet (V, C) holds
+  mi (K^K) = K;
+
+begin :: Definition of the lattice
+
+definition let V, C;
+ func SubstLatt (V, C) -> strict LattStr means
+:: SUBSTLAT:def 4
+  the carrier of it = SubstitutionSet (V, C) &
+   for A, B being Element of SubstitutionSet (V, C) holds
+     (the L_join of it).(A,B) = mi (A \/ B) &
+     (the L_meet of it).(A,B) = mi (A^B);
+end;
+
+definition let V, C;
+  cluster SubstLatt (V, C) -> non empty;
+end;
+
+reserve K, L, M for Element of SubstitutionSet (V,C);
+
+definition let V, C;
+  cluster SubstLatt (V, C) -> Lattice-like;
+end;
+
+definition let V, C;
+  cluster SubstLatt (V, C) -> distributive bounded;
+end;
+
+theorem :: SUBSTLAT:26
+   Bottom SubstLatt (V,C) = {};
+
+theorem :: SUBSTLAT:27
+   Top SubstLatt (V,C) = { {} };
+

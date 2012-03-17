@@ -1,0 +1,2408 @@
+:: Complex Numbers - Basic Theorems
+::  by Library Committee
+::
+:: Received April 10, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, ARYTM_1, RELAT_1, ARYTM_3, XCMPLX_0, COMPLEX1, OPPCAT_1;
+ notation SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0;
+ constructors ARYTM_0, XREAL_0, XCMPLX_0, ARYTM_3, XBOOLE_0;
+ clusters NUMBERS, XREAL_0, XCMPLX_0, ARYTM_3, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE, NUMERALS, ARITHM;
+ theorems XCMPLX_0, ARYTM_0;
+
+begin
+
+ reserve a, b, c, d, e for complex number;
+
+:: '+' operation only
+
+theorem Th1: :: AXIOMS'13
+  a + (b + c) = (a + b) + c
+proof
+   consider x1,x2,y1,y2 being Element of REAL such that
+A1: a = [*x1,x2*] and
+A2: b = [*y1,y2*] and
+A3: a+b = [*+(x1,y1),+(x2,y2)*] by XCMPLX_0:def 4;
+   consider y3,y4,z1,z2 being Element of REAL such that
+A4: b = [*y3,y4*] and
+A5: c = [*z1,z2*] and
+A6: b+c = [*+(y3,z1),+(y4,z2)*] by XCMPLX_0:def 4;
+A7: y1 = y3 & y2 = y4 by A2,A4,ARYTM_0:12;
+   consider x3,x4,yz1,yz2 being Element of REAL such that
+A8: a = [*x3,x4*] and
+A9: b+c = [*yz1,yz2*] and
+A10: a+(b+c) = [*+(x3,yz1),+(x4,yz2)*] by XCMPLX_0:def 4;
+A11: x1 = x3 & x2 = x4 by A1,A8,ARYTM_0:12;
+   consider xy1,xy2,z3,z4 being Element of REAL such that
+A12: a+b = [*xy1,xy2*] and
+A13: c = [*z3,z4*] and
+A14: (a+b)+c = [*+(xy1,z3),+(xy2,z4)*] by XCMPLX_0:def 4;
+A15: z1 = z3 & z2 = z4 by A5,A13,ARYTM_0:12;
+A16: xy1 = +(x1,y1) & xy2 = +(x2,y2) by A3,A12,ARYTM_0:12;
+A17: yz1 = +(y1,z1) & yz2 = +(y2,z2) by A6,A7,A9,ARYTM_0:12;
+   then +(x3,yz1) = +(xy1,z3) by A11,A15,A16,ARYTM_0:25;
+  hence thesis by A10,A11,A14,A15,A16,A17,ARYTM_0:25;
+end;
+
+theorem Th2: :: REAL_1'10
+  a + c = b + c implies a = b
+proof
+  assume a + c = b + c;
+  then a + (c + -c) = b + c + -c by Th1;
+  then a + 0 = b + c + -c by XCMPLX_0:def 6;
+  then a = b + (c + -c) by Th1;
+  then a = b + 0 by XCMPLX_0:def 6;
+  hence thesis;
+end;
+
+:: '*' operation only
+
+Lm1:
+  a-a=0
+proof
+  thus a-a = a+ -a by XCMPLX_0:def 8
+          .= 0 by XCMPLX_0:def 6;
+end;
+
+Lm2: a + b - c = a - c + b
+proof
+  thus a + b - c = a + b + - c by XCMPLX_0:def 8
+                .= a + - c + b by Th1
+                .= a - c + b by XCMPLX_0:def 8;
+end;
+
+theorem  :: INT_1'24
+    a = a + b implies b = 0
+proof
+  assume a = a + b;
+  then 0 = a + b - a by Lm1
+   .= a - a + b by Lm2;
+  then 0 = 0 + b by Lm1;
+  hence thesis;
+end;
+
+:: using operation '*'
+
+Lm3: for x,y being Element of REAL holds opp +(x,y) = +(opp x, opp y)
+proof let x,y be Element of REAL;
+     +(+(x,y),+(opp x, opp y))
+         = +(x,+(y,+(opp x, opp y))) by ARYTM_0:25
+        .= +(x,+(opp x,+(y, opp y))) by ARYTM_0:25
+        .= +(x,+(opp x,0)) by ARYTM_0:def 4
+        .= +(x,opp x) by ARYTM_0:13
+        .= 0 by ARYTM_0:def 4;
+  hence thesis by ARYTM_0:def 4;
+end;
+
+theorem Th4: :: AXIOMS'16
+  a * (b * c) = (a * b) * c
+proof
+   consider x1,x2,y1,y2 being Element of REAL such that
+A1: a = [*x1,x2*] and
+A2: b = [*y1,y2*] and
+A3: a*b = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *]
+      by XCMPLX_0:def 5;
+   consider y3,y4,z1,z2 being Element of REAL such that
+A4: b = [*y3,y4*] and
+A5: c = [*z1,z2*] and
+A6: b*c = [* +(*(y3,z1),opp*(y4,z2)), +(*(y3,z2),*(y4,z1)) *]
+      by XCMPLX_0:def 5;
+A7: y1 = y3 & y2 = y4 by A2,A4,ARYTM_0:12;
+   consider x3,x4,yz1,yz2 being Element of REAL such that
+A8: a = [*x3,x4*] and
+A9: b*c = [*yz1,yz2*] and
+A10: a*(b*c) = [* +(*(x3,yz1),opp*(x4,yz2)), +(*(x3,yz2),*(x4,yz1)) *]
+      by XCMPLX_0:def 5;
+A11: x1 = x3 & x2 = x4 by A1,A8,ARYTM_0:12;
+   consider xy1,xy2,z3,z4 being Element of REAL such that
+A12: a*b = [*xy1,xy2*] and
+A13: c = [*z3,z4*] and
+A14: (a*b)*c = [* +(*(xy1,z3),opp*(xy2,z4)), +(*(xy1,z4),*(xy2,z3)) *]
+       by XCMPLX_0:def 5;
+A15: z1 = z3 & z2 = z4 by A5,A13,ARYTM_0:12;
+A16: xy1 = +(*(x1,y1),opp*(x2,y2)) & xy2 = +(*(x1,y2),*(x2,y1))
+          by A3,A12,ARYTM_0:12;
+A17: yz1 = +(*(y3,z1),opp*(y4,z2)) & yz2 = +(*(y3,z2),*(y4,z1))
+          by A6,A9,ARYTM_0:12;
+       +(*(opp x4,*(y3,z2)),*(opp x4,*(y4,z1)))
+       = +(*(opp x4,*(y4,z1)),*(*(opp x2,y1),z4)) by A7,A11,A15,ARYTM_0:15
+      .= +(*(*(opp x2,y2),z3),*(*(opp x2,y1),z4)) by A7,A11,A15,ARYTM_0:15;
+     then A18:     +(*(x3,*(opp y4,z2)),+(*(opp x4,*(y3,z2)),*(opp x4,*(y4,z1))
+))
+       = +(*(*(x1,opp y2),z4), +(*(*(opp x2,y2),z3),*(*(opp x2,y1),z4)))
+                 by A7,A11,A15,ARYTM_0:15
+      .= +(*(opp *(x1,y2),z4), +(*(*(opp x2,y2),z3),*(*(opp x2,y1),z4)))
+                by ARYTM_0:17
+      .= +(*(*(opp x1,y2),z4), +(*(*(opp x2,y2),z3),*(*(opp x2,y1),z4)))
+                by ARYTM_0:17
+      .= +(*(*(opp x2,y2),z3), +(*(*(opp x1,y2),z4),*(*(opp x2,y1),z4)))
+                              by ARYTM_0:25;
+A19:  +(*(x3,yz1),opp*(x4,yz2)) = +(*(x3,yz1),*(opp x4,yz2)) by ARYTM_0:17
+       .= +(*(x3,+(*(y3,z1),*(opp y4,z2))),*(opp x4,yz2)) by A17,ARYTM_0:17
+       .= +(+(*(x3,*(y3,z1)),*(x3,*(opp y4,z2))),
+            *(opp x4,+(*(y3,z2),*(y4,z1)))) by A17,ARYTM_0:16
+       .= +(+(*(x3,*(y3,z1)),*(x3,*(opp y4,z2))),
+            +(*(opp x4,*(y3,z2)),*(opp x4,*(y4,z1)))) by ARYTM_0:16
+       .= +(*(x3,*(y3,z1)),+(*(*(opp x2,y2),z3),
+            +(*(*(opp x1,y2),z4),*(*(opp x2,y1),z4)))) by A18,ARYTM_0:25
+      .= +(+(*(x3,*(y3,z1)),*(*(opp x2,y2),z3)),
+            +(*(*(opp x1,y2),z4),*(*(opp x2,y1),z4))) by ARYTM_0:25
+       .= +(+(*(*(x1,y1),z3),*(*(opp x2,y2),z3)),
+            +(*(*(opp x1,y2),z4),*(*(opp x2,y1),z4))) by A7,A11,A15,ARYTM_0:15
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            +(*(*(opp x1,y2),z4),*(*(opp x2,y1),z4))) by ARYTM_0:16
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            +(*(*(opp x1,y2),z4),*(opp *(x2,y1),z4))) by ARYTM_0:17
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            +(*(*(opp x1,y2),z4),opp *(*(x2,y1),z4))) by ARYTM_0:17
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            +(*(opp *(x1,y2),z4),opp *(*(x2,y1),z4))) by ARYTM_0:17
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            +(opp *(*(x1,y2),z4),opp *(*(x2,y1),z4))) by ARYTM_0:17
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            opp +(*(*(x1,y2),z4),*(*(x2,y1),z4))) by Lm3
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            opp*( +(*(x1,y2),*(x2,y1)),z4)) by ARYTM_0:16
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),*(opp xy2,z4)) by A16,ARYTM_0:17
+       .= +(*(xy1,z3),*(opp xy2,z4)) by A16,ARYTM_0:17
+       .= +(*(xy1,z3),opp*(xy2,z4)) by ARYTM_0:17;
+A20: +(*(opp*(x2,y2),z4),*(*(x2,y1),z3))
+       = +(opp*(*(x2,y2),z4),*(*(x2,y1),z3)) by ARYTM_0:17
+      .= +(*(x4,*(y3,z1)),opp*(*(x2,y2),z4)) by A7,A11,A15,ARYTM_0:15
+      .= +(*(x4,*(y3,z1)),opp*(x4,*(y4,z2))) by A7,A11,A15,ARYTM_0:15
+      .= +(*(x4,*(y3,z1)),*(x4,opp*(y4,z2))) by ARYTM_0:17;
+A21: +(*(opp*(x2,y2),z4),*(xy2,z3))
+        = +(*(opp*(x2,y2),z4),+(*(*(x1,y2),z3),*(*(x2,y1),z3)))
+               by A16,ARYTM_0:16
+       .= +(*(*(x1,y2),z3),+(*(opp*(x2,y2),z4),*(*(x2,y1),z3))) by ARYTM_0:25
+       .= +(*(x3,*(y4,z1)),+(*(x4,*(y3,z1)),*(x4,opp*(y4,z2))))
+                 by A7,A11,A15,A20,ARYTM_0:15
+       .= +(*(x3,*(y4,z1)),*(x4,yz1)) by A17,ARYTM_0:16;
+     +(*(xy1,z4),*(xy2,z3))
+        = +(+(*(*(x1,y1),z4),*(opp*(x2,y2),z4)),*(xy2,z3)) by A16,ARYTM_0:16
+       .= +(*(*(x1,y1),z4),+(*(opp*(x2,y2),z4),*(xy2,z3))) by ARYTM_0:25
+       .= +(*(x3,*(y3,z2)),+(*(x3,*(y4,z1)),*(x4,yz1)))
+                   by A7,A11,A15,A21,ARYTM_0:15
+       .= +(+(*(x3,*(y3,z2)),*(x3,*(y4,z1))),*(x4,yz1)) by ARYTM_0:25
+       .= +(*(x3,yz2),*(x4,yz1)) by A17,ARYTM_0:16;
+  hence thesis by A10,A14,A19;
+end;
+
+Lm4:
+  a-(b+c)=a-b-c
+proof
+      a-(b+c) =a+ -(b+c) + 0 by XCMPLX_0:def 8
+    .=a+ -(b+c) + (b+ -b) by XCMPLX_0:def 6
+    .=a+ -(b+c) + b+ -b + 0 by Th1
+    .=a+ -(b+c) + b+ -b + (c + -c) by XCMPLX_0:def 6
+    .=a+ -(b+c) + b+ -b + c + -c by Th1
+    .=a+(-(b+c) + b)+ -b + c + -c by Th1
+    .=a+ -b + (-(b+c) + b) + c + -c by Th1
+    .=a+ -b + (-(b+c) + b + c) + -c by Th1
+    .=a+ -b + -c +( -(b+c) + b + c) by Th1
+    .=a+ -b + -c +( -(b+c)+ (b + c)) by Th1
+    .=a+ -b + -c + 0 by XCMPLX_0:def 6
+    .=a-b + -c by XCMPLX_0:def 8
+    .=a-b-c by XCMPLX_0:def 8;
+   hence thesis;
+end;
+
+Lm5:
+  a-(b-c)=a-b+c
+proof
+    a-(b-c)=a-(b+ -c) by XCMPLX_0:def 8
+   .=a-b-(-c) by Lm4
+   .=a-b+ -(-c) by XCMPLX_0:def 8
+   .=a-b+c;
+  hence thesis;
+end;
+
+theorem  :: REAL_1'9
+    c <> 0 & a * c = b * c implies a = b
+proof
+  assume A1: c<>0;
+  assume a * c = b * c;
+  then a * (c * c") = b * c * c" by Th4;
+  then a * 1 = b * c * c" by A1,XCMPLX_0:def 7;
+  then a = b * (c * c") by Th4;
+  then a = b * 1 by A1,XCMPLX_0:def 7;
+  hence thesis;
+end;
+
+theorem Th6: :: REAL_1'23  :: right to left - requirements REAL
+ a*b=0 implies a=0 or b=0
+proof
+  assume A1:a*b=0;
+  assume A2:a<>0;
+    a"*a*b=a"*0 by A1,Th4;
+  then 1*b=0 by A2,XCMPLX_0:def 7;
+  hence thesis;
+end;
+
+theorem Th7: :: REAL_2'37
+  b <> 0 & a * b = b implies a = 1
+proof
+  assume A1:b<>0 & a*b=b;
+  then a*b*b"=1 by XCMPLX_0:def 7;
+  then a*1=1 by A1,Th4;
+  hence a=1;
+end;
+
+:: operations '+' and '*' only
+
+theorem Th8: :: AXIOMS'18
+  a * (b + c) = a * b + a * c
+proof
+   consider y3,y4,z1,z2 being Element of REAL such that
+A1: b = [*y3,y4*] and
+A2: c = [*z1,z2*] and
+A3: b+c = [*+(y3,z1),+(y4,z2)*] by XCMPLX_0:def 4;
+   consider x3,x4,yz1,yz2 being Element of REAL such that
+A4: a = [*x3,x4*] and
+A5: b+c = [*yz1,yz2*] and
+A6: a*(b+c) = [* +(*(x3,yz1),opp*(x4,yz2)), +(*(x3,yz2),*(x4,yz1)) *]
+      by XCMPLX_0:def 5;
+   consider x1,x2,y1,y2 being Element of REAL such that
+A7: a = [*x1,x2*] and
+A8: b = [*y1,y2*] and
+A9: a*b = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *]
+      by XCMPLX_0:def 5;
+A10: y1 = y3 & y2 = y4 by A1,A8,ARYTM_0:12;
+   consider x5,x6,z3,z4 being Element of REAL such that
+A11: a = [*x5,x6*] and
+A12: c = [*z3,z4*] and
+A13: a*c = [* +(*(x5,z3),opp*(x6,z4)), +(*(x5,z4),*(x6,z3)) *]
+      by XCMPLX_0:def 5;
+A14: x1 = x3 & x2 = x4 & x1 = x5 & x2 = x6 by A4,A7,A11,ARYTM_0:12;
+A15: z1 = z3 & z2 = z4 by A2,A12,ARYTM_0:12;
+   consider xy3,xy4,xz1,xz2 being Element of REAL such that
+A16: a*b = [*xy3,xy4*] and
+A17: a*c = [*xz1,xz2*] and
+A18: a*b+a*c = [*+(xy3,xz1),+(xy4,xz2)*] by XCMPLX_0:def 4;
+A19: yz1 = +(y3,z1) & yz2 = +(y4,z2) by A3,A5,ARYTM_0:12;
+A20: xy3 = +(*(x1,y1),opp*(x2,y2)) & xy4 = +(*(x1,y2),*(x2,y1))
+                     by A9,A16,ARYTM_0:12;
+A21: xz1 = +(*(x5,z3),opp*(x6,z4)) & xz2 = +(*(x5,z4),*(x6,z3))
+                     by A13,A17,ARYTM_0:12;
+     *(x4,yz2) = +(*(x2,y2),*(x6,z4)) by A10,A14,A15,A19,ARYTM_0:16;
+   then opp*(x4,yz2) = +(opp*(x2,y2),opp*(x6,z4)) by Lm3;
+   then A22: +(*(x3,z1),opp*(x4,yz2))
+          = +(opp*(x2,y2),xz1) by A14,A15,A21,ARYTM_0:25;
+A23: +(*(x3,yz1),opp*(x4,yz2))
+        = +(+(*(x3,y3),*(x3,z1)),opp*(x4,yz2)) by A19,ARYTM_0:16
+       .= +(*(x1,y1),+(opp*(x2,y2),xz1)) by A10,A14,A22,ARYTM_0:25
+       .= +(xy3,xz1) by A20,ARYTM_0:25;
+     *(x4,yz1) = +(*(x2,y1),*(x6,z3)) by A10,A14,A15,A19,ARYTM_0:16;
+   then A24: +(*(x3,z2),*(x4,yz1)) = +(*(x2,y1),xz2) by A14,A15,A21,ARYTM_0:25;
+    +(*(x3,yz2),*(x4,yz1))
+        = +(+(*(x3,y4),*(x3,z2)),*(x4,yz1)) by A19,ARYTM_0:16
+       .= +(*(x1,y2),+(*(x2,y1),xz2)) by A10,A14,A24,ARYTM_0:25
+       .= +(xy4,xz2) by A20,ARYTM_0:25;
+ hence thesis by A6,A18,A23;
+end;
+
+
+theorem  :: REAL_2'99_1
+    (a + b + c) * d = a * d + b * d + c * d
+proof
+  thus (a+b+c)*d=(a+b)*d+c*d by Th8
+               .=a*d+b*d+c*d by Th8;
+end;
+
+theorem  :: REAL_2'101_1
+    (a + b) * (c + d) = a * c + a * d + b * c + b * d
+proof
+  thus (a+b)*(c+d)=a*(c+d)+b*(c+d) by Th8
+                 .=a*c+a*d+b*(c+d) by Th8
+                 .=a*c+a*d+(b*c+b*d) by Th8
+                 .=a*c+a*d+b*c+b*d by Th1;
+end;
+
+theorem Th11: :: SQUARE_1'5
+  2 * a = a + a
+proof
+A1: 1*a = a;
+   thus 2*a = (1 + 1)*a .= a + a by A1,Th8;
+end;
+
+theorem Th12: :: REAL_2'88_1
+  3 * a = a + a + a
+proof
+A1:2*a = a+a by Th11;
+   thus 3*a=(2+1)*a
+            .=a+a+1*a by A1,Th8
+            .=a+a+a;
+end;
+
+theorem Th13: :: REAL_2'88_2
+  4 * a = a + a + a + a
+proof
+A1:2*a = a+a by Th11;
+A2:3*a=(2+1)*a
+            .=a+a+1*a by A1,Th8
+            .=a+a+a;
+   thus 4*a=(3+1)*a
+          .=3*a+1*a by Th8
+          .=a+a+a+a by A2;
+end;
+
+:: using operation '-'
+
+theorem  :: REAL_1'36
+    a - a = 0 by Lm1;
+
+theorem Th15: :: SQUARE_1'8
+  a - b = 0 implies a = b
+proof assume a - b = 0;
+  then a + -b = 0 by XCMPLX_0:def 8;
+  then -b = -a & --b = b & --a = a by XCMPLX_0:def 6;
+  hence thesis;
+end;
+
+theorem  :: REAL_2'1
+    b - a = b implies a = 0
+proof
+  assume b-a=b;
+  then -b+(b-a)=0 by XCMPLX_0:def 6;
+  then -b+(b+-a)=0 by XCMPLX_0:def 8;
+  then -b+b+-a=0 by Th1;
+  then 0+-a=--0 by XCMPLX_0:def 6;
+  hence a=0;
+end;
+
+:: 2 times '-'
+
+theorem  :: REAL_2'17_2
+    a = a - (b - b)
+proof
+    a=a-0;
+  hence thesis by Lm1;
+end;
+
+theorem  :: SEQ_4'3
+    a - (a - b) = b
+proof
+  thus a-(a-b)=a-a+b by Lm5
+    .=0+b by Lm1
+    .=b;
+end;
+
+theorem  :: REAL_2'2_3
+    a - c = b - c implies a = b
+proof
+  assume a-c =b-c;
+  then a-c =b+-c by XCMPLX_0:def 8; then a+-c =b+-c by XCMPLX_0:def 8;
+  hence a=b by Th2;
+end;
+
+theorem  :: REAL_2'2_5
+    c - a = c - b implies a = b
+proof
+  assume c-a=c-b;
+  then c-a=c+-b by XCMPLX_0:def 8; then c+-a=c+-b by XCMPLX_0:def 8;
+  then -a=-b by Th2;
+  then --a=b;hence a=b;
+end;
+
+:: 4 times '-'
+
+Lm6:
+  a + b - c = a - c + b
+proof
+    a+b-c =a+b+-c by XCMPLX_0:def 8;
+  hence a+b-c =a+-c+b by Th1
+             .=a-c+b by XCMPLX_0:def 8;
+end;
+
+theorem Th21: :: REAL_2'24_1
+  a - b - c = a - c - b
+proof
+    a-b-c =a+-b-c by XCMPLX_0:def 8;
+  hence a-b-c =a-c+-b by Lm6
+             .=a-c-b by XCMPLX_0:def 8;
+end;
+
+Lm7:
+  a = a - b + b
+proof
+   thus a = a - 0
+         .= a - (b - b) by Lm1
+         .= (a-b)+b by Lm5;
+end;
+
+theorem  Th22: :: REAL_2'29_1
+    a - c = (a - b) - (c - b)
+proof
+  thus a-c =a-c-b+b by Lm7
+          .=a-b-c+b by Th21
+          .=a-b-(c-b) by Lm5;
+end;
+
+Lm8:
+  a = a + b - b
+proof
+    a+(b+ -b)=a+b+ -b by Th1;
+  then a+0=a+b+ -b by XCMPLX_0:def 6;
+  hence thesis by XCMPLX_0:def 8;
+end;
+
+theorem Th23: :: JGRAPH_6'1_1
+  (c - a) - (c - b) = b - a
+proof
+  thus (c-a)-(c-b)=c-a-c+b by Lm5 .=c+-a-c+b by XCMPLX_0:def 8
+      .=-a+b by Lm8 .=b-a by XCMPLX_0:def 8;
+end;
+
+Lm9:
+  a=a+b+-b
+proof
+    a+(b+-b)=a+b+-b by Th1;
+  then a+0=a+b+-b by XCMPLX_0:def 6;
+  hence thesis;
+end;
+
+Lm10:
+  a+b=c+d implies a-c =d-b
+proof
+   assume a+b=c+d;
+   then a=c+d+-b by Lm9; then a=c+(d+-b) by Th1;
+   then a-c =d+-b by Lm8;hence thesis by XCMPLX_0:def 8;
+end;
+
+Lm11: a+b=a--b
+proof
+  thus a--b=a+--b by XCMPLX_0:def 8 .=a+b;
+end;
+
+Lm12:
+  a-c =d-b implies a+b=c+d
+proof
+  assume a-c =d-b; then a+-c =d-b by XCMPLX_0:def 8;
+  then a+-c =d+-b by XCMPLX_0:def 8;
+  then a--b=d--c by Lm10;
+  then a+b=d--c by Lm11;
+  hence thesis by Lm11;
+end;
+
+theorem  :: REAL_2'15
+    a - b = c - d implies a - c = b - d
+proof
+  assume a-b=c-d;
+  then a+d=c+b by Lm12;
+  hence thesis by Lm10;
+end;
+
+:: using '-' and '+'
+
+Lm13:
+  a"*b"=(a*b)"
+proof
+  per cases;
+  suppose
+A1: a = 0 or b = 0;
+    then a" = 0 or b" = 0 by XCMPLX_0:def 7;
+   hence a"*b"= (a*b)" by A1,XCMPLX_0:def 7;
+  suppose that
+A2: a<>0 and
+A3: b<>0;
+A4: a*b<>0 by A2,A3,Th6;
+   thus a"*b"=a"*b"*1
+   .=a"*b"*((a*b)*(a*b)") by A4,XCMPLX_0:def 7
+   .=a"*b"*(a*b)*(a*b)" by Th4
+   .=a"*b"*a*b*(a*b)" by Th4
+   .=a"*a*b"*b*(a*b)" by Th4
+   .=a"*a*(b"*b)*(a*b)" by Th4
+   .=1*(b"*b)*(a*b)" by A2,XCMPLX_0:def 7
+   .=1*(a*b)" by A3,XCMPLX_0:def 7
+   .=(a*b)";
+end;
+
+Lm14:
+  a/(b/c)=(a*c)/b
+proof
+  thus a/(b/c)=a/(b*c") by XCMPLX_0:def 9
+    .=a*(b*c")" by XCMPLX_0:def 9
+    .=a*(b"*c"") by Lm13
+    .=a*c*b" by Th4
+    .=(a*c)/b by XCMPLX_0:def 9;
+end;
+
+Lm15:
+  b<>0 implies a/b*b=a
+proof
+  assume A1:b<>0;
+  thus a/b*b=a*b"*b by XCMPLX_0:def 9
+    .=a*(b"*b) by Th4
+    .=a*1 by A1,XCMPLX_0:def 7
+    .=a;
+end;
+
+Lm16: 1/a=a"
+proof
+  thus 1/a= 1 * a" by XCMPLX_0:def 9 .=a";
+end;
+
+Lm17:
+  a<>0 implies a/a = 1
+proof
+  assume A1: a<>0;
+  thus a/a=a*a" by XCMPLX_0:def 9
+   .=1 by A1,XCMPLX_0:def 7;
+end;
+
+:: using operations '-' and '+'
+
+theorem Th25:  :: REAL_2'17_1
+    a = a + (b - b)
+proof
+    a=a+0;
+  hence a=a+(b-b) by Lm1;
+end;
+
+theorem  :: REAL_1'30
+    a = a + b - b by Lm8;
+
+theorem  :: SQUARE_1'6
+    a = a - b + b by Lm7;
+
+theorem  :: REAL_2'28_1
+    a + c = a + b + (c - b)
+proof
+  thus a+c =a+c+b-b by Lm8
+          .=a+b+c-b by Th1
+          .=a+b+(c-b) by Lm2;
+end;
+
+:: 2 times '-'
+
+theorem  :: REAL_2'22_1, INT_1'1, REAL_1'17
+    a + b - c = a - c + b by Lm2;
+
+theorem  :: REAL_2'23_1
+    a - b + c = c - b + a
+proof
+    a-b+c =a+-b+c by XCMPLX_0:def 8;
+  hence a-b+c =c+-b+a by Th1
+             .=c-b+a by XCMPLX_0:def 8;
+end;
+
+Lm18:
+  -(a-b)=b-a
+proof
+    (a-b) + (b-a) = a-b+b-a by Lm2
+  .=a-(b-b)-a by Lm5
+  .=a-0-a by Lm1
+  .=0 by Lm1;
+  hence thesis by XCMPLX_0:def 6;
+end;
+
+Lm19:
+  a-(b-c)=a+(c-b)
+proof
+  thus a-(b-c)=a+-(b-c) by XCMPLX_0:def 8
+             .=a+(c-b) by Lm18;
+end;
+
+theorem  :: REAL_2'28_2
+    a + c = a + b - (b - c)
+proof
+    a+c =a+c+b-b by Lm8
+        .=a+b+c-b by Th1
+        .=a+b+(c-b) by Lm2;
+  hence thesis by Lm19;
+end;
+
+theorem  :: REAL_2'29_3
+    a - c = a + b - (c + b)
+proof
+  thus a-c =a-c+b-b by Lm8
+          .=a+b-c-b by Lm2
+          .=a+b-(c+b) by Lm4;
+end;
+
+theorem  :: REAL_2'13
+    a + b = c + d implies a - c = d - b by Lm10;
+
+theorem  :: REAL_2'14
+    a - c = d - b implies a + b = c + d by Lm12;
+
+theorem  :: REAL_2'16
+    a + b = c - d implies a + d = c - b
+proof
+  assume a+b=c-d;
+  then a+b=c+-d by XCMPLX_0:def 8;
+  then a--d=c-b by Lm10;
+  hence thesis by Lm11;
+end;
+
+:: 3 times '-'
+
+theorem  :: REAL_1'27
+    a - (b + c) = a - b - c by Lm4;
+
+theorem  :: REAL_1'28
+    a - (b - c) = a - b + c by Lm5;
+
+theorem  :: REAL_2'18
+    a - (b - c) = a + (c - b) by Lm19;
+
+theorem  :: REAL_2'29_2
+    a - c = (a - b) + (b - c)
+proof
+    a-c = a-c-b+b by Lm7
+     .=a-b-c+b by Th21
+     .=a-b-(c-b) by Lm5;
+  hence thesis by Lm19;
+end;
+
+:: using operations '-' and '*'
+
+Lm20:
+  (-a)*b = -(a*b)
+proof
+  thus (-a)*b = (-a)*b + 0
+    .= (-a)*b + (a*b + -(a*b)) by XCMPLX_0:def 6
+    .= (-a)*b + a*b + -(a*b) by Th1
+    .= (-a + a)*b + -(a*b) by Th8
+    .= 0*b+ -(a*b) by XCMPLX_0:def 6
+    .= -(a*b);
+end;
+
+theorem Th40: :: REAL_1'29
+  a * (b - c) = a * b - a * c
+proof
+  thus a*(b-c)=a*(b+ -c) by XCMPLX_0:def 8
+      .=a*b + a*(-c) by Th8
+      .=a*b + -(a*c) by Lm20
+      .=a*b - a*c by XCMPLX_0:def 8;
+end;
+
+Lm21:
+  (-a)*b=a*(-b)
+proof
+    a*(-b)=-(a*b) by Lm20;
+  hence thesis by Lm20;
+end;
+
+theorem  :: REAL_2'98
+    (a - b) * (c - d) = (b - a) * (d - c)
+proof
+  thus (a-b)*(c-d)=(-(b-a))*(c-d) by Lm18
+                 .=(b-a)*(-(c-d)) by Lm21
+                 .=(b-a)*(d-c) by Lm18;
+end;
+
+theorem  :: REAL_2'99_4
+    (a - b - c) * d = a * d - b * d - c * d
+proof
+  thus (a-b-c)*d=(a-b)*d-c*d by Th40
+               .=a*d-b*d-c*d by Th40;
+end;
+
+:: using operations '-' and '*', '+'
+
+theorem  :: REAL_2'99_2
+    (a + b - c) * d = a * d + b * d - c * d
+proof
+  thus (a+b-c)*d=(a+b)*d-c*d by Th40
+               .=a*d+b*d-c*d by Th8;
+end;
+
+theorem  :: REAL_2'99_3
+    (a - b + c) * d = a * d - b * d + c * d
+proof
+  thus (a-b+c)*d=(a-b)*d+c*d by Th8
+               .=a*d-b*d+c*d by Th40;
+end;
+
+theorem  :: REAL_2'101_2
+    (a + b) * (c - d) = a * c - a * d + b * c - b * d
+proof
+  thus (a+b)*(c-d)=a*(c-d)+b*(c-d) by Th8
+                 .=a*c-a*d+b*(c-d) by Th40
+                 .=a*c-a*d+(b*c-b*d) by Th40
+                 .=a*c-a*d+b*c-b*d by Lm2;
+end;
+
+theorem  :: REAL_2'101_3
+    (a - b) * (c + d) = a * c + a * d - b * c - b * d
+proof
+  thus (a-b)*(c+d)=(a-b)*c+(a-b)*d by Th8
+                 .=a*c-b*c+(a-b)*d by Th40
+                 .=a*c-b*c+(a*d-b*d) by Th40
+                 .=a*c-b*c+a*d-b*d by Lm2
+                 .=a*c+a*d-b*c-b*d by Lm2;
+end;
+
+theorem  :: REAL_2'101_4
+    (a - b) * (e - d) = a * e - a * d - b * e + b * d
+proof
+  thus (a-b)*(e-d)=a*(e-d)-b*(e-d) by Th40
+                 .=a*e-a*d-b*(e-d) by Th40
+                 .=a*e-a*d-(b*e-b*d) by Th40
+                 .=a*e-a*d-b*e+b*d by Lm5;
+end;
+
+:: using operation '/'
+
+theorem  :: REAL_2'67_1
+    a / b / c = a / c / b
+proof
+  thus a/b/c =a*b"/c by XCMPLX_0:def 9
+            .=a*b"*c" by XCMPLX_0:def 9
+            .=a*c"*b" by Th4
+            .=a/c*b" by XCMPLX_0:def 9
+            .=a/c/b by XCMPLX_0:def 9;
+end;
+
+:: 0
+
+theorem Th49: :: REAL_2'19
+  a / 0 = 0
+proof
+  thus a/0 = a*0" by XCMPLX_0:def 9 .= 0;
+end;
+
+Lm22:
+  a<>0 implies a"<>0
+proof
+  assume A1:a<>0;
+  assume a"=0;
+  then a*a"=0;
+  hence contradiction by A1,XCMPLX_0:def 7;
+end;
+
+theorem Th50: :: REAL_2'42_2
+  a <> 0 & b <> 0 implies a / b <> 0
+proof
+  assume A1:a<>0 & b<>0;
+  then a"<>0 & b"<>0 by Lm22;
+  then b"*a<>0 by A1,Th6;
+  hence thesis by XCMPLX_0:def 9;
+end;
+
+:: 2 times '/'
+
+theorem  :: REAL_2'62_4
+    b <> 0 implies a = a / (b / b)
+proof
+  assume A1:b<>0;
+    a=a/1;
+  hence a=a/(b/b) by A1,Lm17;
+end;
+
+Lm23:
+  (a/b) * (c/d) = (a*c)/(b*d)
+proof
+  thus (a/b) * (c/d) =(a*b")*(c/d) by XCMPLX_0:def 9
+   .=(a*b")*(c*d") by XCMPLX_0:def 9
+   .=a*b"*c*d" by Th4
+   .=a*c*b"*d" by Th4
+   .=(a*c)*(b"*d") by Th4
+   .=(a*c)*(b*d)" by Lm13
+   .=(a*c)/(b*d) by XCMPLX_0:def 9;
+end;
+
+Lm24:
+  (a/b)"=b/a
+proof
+  per cases;
+  suppose
+A1: a = 0;
+  hence (a/b)" =b*0"
+          .=b/a by A1,XCMPLX_0:def 9;
+  suppose
+A2: b = 0;
+  hence (a/b)" =(a*0")" by XCMPLX_0:def 9
+          .=b/a by A2;
+  suppose A3: a<>0 & b<>0;
+A4:  (a/b) * (b/a) =(a*b)/(a*b) by Lm23;
+      a*b<>0 by A3,Th6;
+then A5:  (a/b)*(b/a) = 1 by A4,Lm17;
+A6:  a/b=a*b" by XCMPLX_0:def 9;
+      b"<>0 by A3,Lm22;
+    then a/b<>0 by A3,A6,Th6;
+  hence thesis by A5,XCMPLX_0:def 7;
+end;
+
+Lm25:
+  a*(b/c) = (a*b)/c
+proof
+  thus a*(b/c) = (a/1)*(b/c)
+               .= (a*b)/(1*c) by Lm23
+               .= (a*b)/c;
+end;
+
+theorem  :: TOPREAL6'5
+    a <> 0 implies a / (a / b) = b
+proof
+   assume
+A1:a <> 0;
+   thus a/(a/b) = a * (a/b)" by XCMPLX_0:def 9
+      .= a * (b/a) by Lm24
+      .= a*b/a by Lm25
+      .= a/a*b by Lm25
+      .= 1 * b by A1,Lm17
+      .= b;
+end;
+
+theorem  :: REAL_2'31
+    c <> 0 & a / c = b / c implies a = b
+proof
+  assume A1:c<>0 & a/c =b/c;
+  then a=b/c*c by Lm15;
+  hence thesis by A1,Lm15;
+end;
+
+:: 3 times '/'
+
+Lm26:
+  b<>0 implies a=a*b/b
+proof
+  assume A1:b<>0;
+    a=a*1;
+  then a=a*(b/b) by A1,Lm17;
+  then a=a*(b*b") by XCMPLX_0:def 9;
+  then a=a*b*b" by Th4;
+  hence thesis by XCMPLX_0:def 9;
+end;
+
+theorem  :: REAL_2'74
+    a / b <> 0 implies b = a / (a / b)
+proof
+  assume A1: a/b<>0;
+  then b<>0 by Th49;
+  then a/b*b = a by Lm15;
+  hence thesis by A1,Lm26;
+end;
+
+:: 4 times '/'
+
+Lm27:
+  c<>0 implies a/b=(a*c)/(b*c)
+proof
+  assume A1: c<>0;
+  thus a/b =a*b"*1 by XCMPLX_0:def 9
+    .=a*b"*(c*c") by A1,XCMPLX_0:def 7
+    .=a*b"*c*c" by Th4
+    .=a*c*b"*c" by Th4
+    .=(a*c)*(b"*c") by Th4
+    .=(a*c)*(b*c)" by Lm13
+    .=(a*c)/(b*c) by XCMPLX_0:def 9;
+end;
+
+theorem  :: REAL_2'55_1
+    c <> 0 implies a / b = (a / c) / (b / c)
+proof
+  assume c<>0; then c"<>0 by Lm22;
+  hence a/b=(a*c")/(b*c") by Lm27
+         .=(a/c)/(b*c") by XCMPLX_0:def 9
+         .=(a/c)/(b/c) by XCMPLX_0:def 9;
+end;
+
+:: 1
+
+theorem  :: SQUARE_1'16
+    1 / (1 / a) = a
+proof
+  thus 1/(1/a) = (1*a) /1 by Lm14 .= a;
+end;
+
+Lm28:
+  (a*b")"=a"*b
+proof
+  thus (a*b")"=a"*b"" by Lm13
+             .=a"*b;
+end;
+
+theorem  :: REAL_2'48_1
+    1 / (a / b) = b / a
+proof
+  thus 1/(a/b)=1/(a*b") by XCMPLX_0:def 9
+             .=(a*b")" by Lm16
+             .=b*a" by Lm28
+             .=b/a by XCMPLX_0:def 9;
+end;
+
+theorem Th58: :: REAL_2'30_1
+  a / b = 1 implies a = b
+proof
+   assume
+A1:a/b = 1;
+   then b <> 0 by Th49;
+   then a=1*b by A1,Lm15;
+   hence thesis;
+end;
+
+Lm29: a"=b" implies a=b
+proof
+  assume a"=b";
+  then a=b"";
+  hence thesis;
+end;
+
+theorem Th59: :: REAL_2'33_2
+  1 / a = 1 / b implies a = b
+proof
+  assume 1/a=1/b; then a"=1/b by Lm16;
+  then a" = b" by Lm16;
+  hence thesis by Lm29;
+end;
+
+:: 0 and 1
+
+theorem  :: REAL_1'37
+    a <> 0 implies a / a = 1 by Lm17;
+
+theorem  :: REAL_2'39
+    b <> 0 & b / a = b implies a = 1
+proof
+  assume A1: b<>0 & b/a=b;
+  then a <> 0 by Th49;
+  then b=b*a by A1,Lm15;
+  hence a=1 by A1,Th7;
+end;
+
+theorem  :: REAL_2'41
+    a <> 0 implies 1 / a <> 0
+proof
+  assume a<>0;
+  then a"<>0 by Lm22;
+  hence thesis by Lm16;
+end;
+
+:: using operations '/' and '+'
+
+theorem Th63: :: REAL_1'40_1
+  a / c + b / c = (a + b) / c
+proof
+  thus a/c + b/c =a*c" + b/c by XCMPLX_0:def 9
+       .= a*c" + b*c" by XCMPLX_0:def 9
+       .= (a+b)*c" by Th8
+       .= (a+b)/c by XCMPLX_0:def 9;
+end;
+
+theorem  :: REAL_2'100_1
+    (a + b + e) / d = a / d + b / d + e / d
+proof
+  thus (a+b+e)/d=(a+b)/d+e/d by Th63
+               .=a/d+b/d+e/d by Th63;
+end;
+
+Lm30: a/2 + a/2=a
+proof
+  thus a/2 +a/2 = 2*(a/2) by Th11
+    .= a by Lm15;
+end;
+
+:: 2
+
+theorem  :: SQUARE_1'15
+    (a + a) / 2 = a
+proof thus (a + a) /2 = a/2 + a/2 by Th63 .= a by Lm30; end;
+
+theorem  :: SEQ_2'2_1
+    a/2 + a/2 = a by Lm30;
+
+theorem  :: TOPREAL3'4
+    a = (a + b) / 2 implies a = b
+proof
+  assume a = (a+b)/2;
+  then a + a = a + b by Lm30;
+  hence thesis by Th2;
+end;
+
+:: 3
+
+theorem Th68: :: REAL_2'89_1
+  (a + a + a)/3 = a
+proof
+  thus (a+a+a)/3=3*a/3 by Th12
+               .=a by Lm26;
+end;
+
+theorem  :: SEQ_4'5
+    a/3 + a/3 + a/3 = a
+proof
+  thus a/3+a/3+a/3 = (a+a)/3 +a/3 by Th63
+    .= (a+a+a)/3 by Th63
+    .= a by Th68;
+end;
+
+:: 4
+
+theorem Th70: :: REAL_2'89_2
+  (a + a + a + a) / 4 = a
+proof
+  thus (a+a+a+a)/4=a*4/4 by Th13
+                 .=a by Lm26;
+end;
+
+theorem  :: REAL_2'90
+    a/4 + a/4 + a/4 + a/4 = a
+proof
+  thus a/4+a/4+a/4+a/4=(a+a)/4+a/4+a/4 by Th63
+                     .=(a+a+a)/4+a/4 by Th63
+                     .=(a+a+a+a)/4 by Th63
+                     .=a by Th70;
+end;
+
+theorem  :: SEQ_2'2_2
+    a / 4 + a / 4 = a / 2
+proof
+  thus a/4 +a/4=(1*a+1*a)/4 by Th63
+    .=((1+1)*a)/4 by Th8
+    .=a*2*(2*2)" by XCMPLX_0:def 9
+    .=a*(2*(2"*2")) by Th4
+    .=a/2 by XCMPLX_0:def 9;
+end;
+
+theorem  :: REAL_2'89_3
+    (a + a) / 4 = a / 2
+proof
+  thus (a+a)/4=2*a/(2*2) by Th11
+             .=a/2 by Lm27;
+end;
+
+:: using operations '/' and '*'
+
+theorem  :: REAL_2'35_1
+    a * b = 1 implies a = 1 / b
+proof
+  assume A1: a*b=1;
+  then b<>0;
+  then a*1=1*b" by A1,XCMPLX_0:def 7;
+  hence a=1/b by Lm16;
+end;
+
+theorem  :: SQUARE_1'18
+    a * (b / c) = (a * b) / c by Lm25;
+
+theorem  :: REAL_2'80_1
+    a / b * e = e / b * a
+proof
+  thus a/b*e=a*e/b by Lm25
+           .=e/b*a by Lm25;
+end;
+
+:: 3 times '/'
+
+theorem  :: REAL_1'35
+    (a / b) * (c / d) = (a * c) / (b * d) by Lm23;
+
+theorem  :: REAL_1'42
+    a / (b / c) = (a * c) / b by Lm14;
+
+Lm31:
+  (a/b)/(c/d)=(a*d)/(b*c)
+proof
+  thus (a/b)/(c/d) = (a/b) * (c/d)" by XCMPLX_0:def 9
+    .=(a/b) * (d/c) by Lm24
+    .=(a*d)/(b*c) by Lm23;
+end;
+
+theorem Th79: :: SQUARE_1'17
+  a / (b * c) = a / b / c
+proof
+  thus a/(b*c) = a*1/(b*c)
+         .= a/b/(c/1) by Lm31
+         .= a/b/c;
+end;
+
+theorem  :: REAL_2'61_1
+    a / (b / c) = a * (c / b)
+proof
+  thus a/(b/c)=(a*c)/b by Lm14
+             .=a*c*b" by XCMPLX_0:def 9
+             .=a*(c*b") by Th4
+             .=a*(c/b) by XCMPLX_0:def 9;
+end;
+
+theorem  :: REAL_2'61_2
+    a / (b / c) = c / b * a
+proof
+    a/(b/c)=(a*c)/b by Lm14
+        .=a*c*b" by XCMPLX_0:def 9
+        .=a*(c*b") by Th4
+        .=a*(c/b) by XCMPLX_0:def 9;
+  hence thesis;
+end;
+
+theorem Th82: :: REAL_2'61_3
+  a / (b / e) = e * (a / b)
+proof
+  thus a/(b/e)=(a*e)/b by Lm14
+             .=e*a*b" by XCMPLX_0:def 9
+             .=e*(a*b") by Th4
+             .=e*(a/b) by XCMPLX_0:def 9;
+end;
+
+theorem  :: REAL_2'61_4
+    a / (b / c) = a / b * c
+proof
+    a/(b/c)=(a*c)/b by Lm14
+        .=c*a*b" by XCMPLX_0:def 9
+        .=c*(a*b") by Th4
+        .=c*(a/b) by XCMPLX_0:def 9;
+  hence thesis;
+end;
+
+Lm32:
+  a*(1/b)=a/b
+proof
+  thus a/b=a*b" by XCMPLX_0:def 9
+         .=a*(1/b) by Lm16;
+end;
+
+Lm33:
+  1/c*(a/b)=a/(b*c)
+proof
+    a/b/c =c"*(a/b) by XCMPLX_0:def 9
+       .=1/c*(a/b) by Lm16;
+  hence thesis by Th79;
+end;
+
+theorem  :: REAL_2'70
+    (a * b) / (c * d) = (a / c * b) / d
+proof
+  thus a*b/(c*d)=1/c*(a*b/d) by Lm33
+               .=1/c*(a*b)/d by Lm25
+               .=1/c*a*b/d by Th4
+               .=a/c*b/d by Lm32;
+end;
+
+:: 4 times '/'
+
+theorem  :: REAL_1'82
+    (a / b) / (c / d) = (a * d) / (b * c) by Lm31;
+
+theorem  :: REAL_2'53
+    (a / c) * (b / d) = (a / d) * (b / c)
+proof
+  thus a/c*(b/d)=a*b/(d*c) by Lm23
+               .=a/d*(b/c) by Lm23;
+end;
+
+theorem  :: IRRAT_1'5
+    a / (b * c * (d / e)) = (e / c) * (a / (b * d))
+proof
+  thus a/(b*c*(d/e)) = a/(b*c*(d*e")) by XCMPLX_0:def 9
+    .= a/(c*(b*(d*e"))) by Th4
+    .= a/(c*(b*d*e")) by Th4
+    .= a/(c*((b*d)/e)) by XCMPLX_0:def 9
+    .= a/((b*d)/(e/c)) by Th82
+    .= (e/c)*(a/(b*d)) by Th82;
+end;
+
+:: 0
+
+theorem  :: REAL_1'43
+    b <> 0 implies a / b * b = a by Lm15;
+
+theorem  :: REAL_2'62_1
+    b <> 0 implies a = a * (b / b)
+proof
+  assume A1:b<>0;
+    a=a*1;
+  hence thesis by A1,Lm17;
+end;
+
+theorem  :: REAL_2'62_2
+    b <> 0 implies a = a * b / b by Lm26;
+
+theorem  :: REAL_2'78
+    b <> 0 implies a * c = a * b * (c / b)
+proof
+  assume A1:b<>0;
+  thus a*c =a*1*c
+          .=a*(b*b")*c by A1,XCMPLX_0:def 7
+          .=a*b*b"*c by Th4
+          .=a*b*(b"*c) by Th4
+          .=a*b*(c/b) by XCMPLX_0:def 9;
+end;
+
+:: 2 times '/'
+
+theorem  :: REAL_1'38
+    c <> 0 implies a / b = (a * c) / (b * c) by Lm27;
+
+theorem  :: REAL_2'55_2
+    c <> 0 implies a / b = a / (b * c) * c
+proof
+  assume A1: c<>0;
+    c*(a/(b*c))=c*((a*1)/(b*c))
+            .=c*(1/c*(a/b)) by Lm23
+            .=1/c*c*(a/b) by Th4
+            .=1*(a/b) by A1,Lm15
+            .=a/b;
+  hence thesis;
+end;
+
+theorem  :: REAL_2'79
+    b <> 0 implies a * c = a * b / (b / c)
+proof
+  assume A1:b<>0;
+  thus a*c =a*1*c
+          .=a*(b*b")*c by A1,XCMPLX_0:def 7
+          .=a*b*b"*c by Th4
+          .=a*b*(b"*c) by Th4
+          .=a*b*(b*c")" by Lm28
+          .=a*b/(b*c") by XCMPLX_0:def 9
+          .=a*b/(b/c) by XCMPLX_0:def 9;
+end;
+
+theorem Th95: :: REAL_2'75
+  c <> 0 & d <> 0 & a * c = b * d implies a / d = b / c
+proof
+  assume A1:c<>0 & d<>0;
+  assume a*c = b*d;
+  then a=b*d/c by A1,Lm26;
+  then a=d*(b/c) by Lm25;
+  hence thesis by A1,Lm26;
+end;
+
+theorem Th96: :: REAL_2'76
+  c <> 0 & d<>0 & a/d=b/c implies a*c = b*d
+proof
+  assume A1:c<>0 & d<>0 & a/d=b/c;
+  then c*(a/d)=b by Lm15;
+  then a*c/d=b by Lm25;
+  hence thesis by A1,Lm15;
+end;
+
+theorem  :: REAL_2'77
+    c <> 0 & d <> 0 & a * c = b / d implies a * d = b / c
+proof
+  assume A1:c<>0 & d<>0;
+  assume a*c =b/d;
+  then a*c*d=b by A1,Lm15;
+  then a*d*c =b by Th4;
+  hence thesis by A1,Lm26;
+end;
+
+:: 3 times '/'
+
+theorem  :: REAL_2'55_3
+    c <> 0 implies a / b = c * (a / c / b)
+proof
+  assume A1: c<>0;
+  thus a/b=a*b" by XCMPLX_0:def 9
+         .=c*(a/c)*b" by A1,Lm15
+         .=c*(a/c*b") by Th4
+         .=c*(a/c/b) by XCMPLX_0:def 9;
+end;
+
+theorem  :: REAL_2'55
+    c <> 0 implies a / b = a / c * (c / b)
+proof
+  assume A1: c<>0;
+  thus a/b=a*b" by XCMPLX_0:def 9
+         .=a/c*c*b" by A1,Lm15
+         .=a/c*(c*b") by Th4
+         .=a/c*(c/b) by XCMPLX_0:def 9;
+end;
+
+:: 1
+
+theorem  :: REAL_2'56:
+    a * (1 / b) = a / b by Lm32;
+
+Lm34:
+  1/a"=a
+proof
+    1/a"=a"" by Lm16
+     .=a;
+  hence thesis;
+end;
+
+theorem  :: REAL_2'57
+    a / (1 / b) = a * b
+proof
+  thus a/(1/b)=a/b" by Lm16
+             .=a*(1/b") by Lm32
+             .=a*b by Lm34;
+end;
+
+theorem  :: REAL_2'80_3
+    a / b * c = 1 / b * c * a
+proof
+    a/b*c = 1/b*a*c by Lm32;
+  hence thesis by Th4;
+end;
+
+:: 3 times '/'
+
+theorem  :: REAL_2'51
+    (1 / a) * (1 / b) = 1 / (a * b)
+proof
+  thus (1/a)*(1/b)=a"*(1/b) by Lm16
+                 .=a"*b" by Lm16
+                 .=(a*b)" by Lm13
+                 .=1/(a*b) by Lm16;
+end;
+
+theorem  :: REAL_2'67_4
+    1 / c * (a / b) = a / (b * c) by Lm33;
+
+:: 4 times '/'
+
+theorem  :: REAL_2'67_2
+    a / b / c = 1 / b * (a / c)
+proof
+    a/b/c =a*b"/c by XCMPLX_0:def 9
+       .=a*b"*c" by XCMPLX_0:def 9
+       .=a*c"*b" by Th4
+       .=a/c*b" by XCMPLX_0:def 9
+       .=a/c/b by XCMPLX_0:def 9;
+  hence a/b/c =b"*(a/c) by XCMPLX_0:def 9
+             .=1/b*(a/c) by Lm16;
+end;
+
+theorem  :: REAL_2'67_3
+    a / b / c = 1 / c * (a / b)
+proof
+  thus a/b/c =c"*(a/b) by XCMPLX_0:def 9
+            .=1/c*(a/b) by Lm16;
+end;
+
+:: 1 and 0
+
+theorem Th107: :: REAL_1'34
+  a <> 0 implies a * (1 / a) = 1
+proof
+  assume A1:a<>0;
+  thus a*(1/a)=a*a" by Lm16
+             .=1 by A1,XCMPLX_0:def 7;
+end;
+
+theorem  :: REAL_2'62_3
+    b <> 0 implies a = a * b * (1 / b)
+proof
+  assume A1:b<>0;
+    a=a*1;
+  then a=a*(b/b) by A1,Lm17;
+  then a=a*(b*b") by XCMPLX_0:def 9
+  .=a*(b*(1/b)) by Lm16;
+  hence thesis by Th4;
+end;
+
+theorem  :: REAL_2'62_6
+    b <> 0 implies a = a * (1 / b * b)
+proof
+  assume A1:b<>0;
+  thus a=a*1 .=a*(1/b*b) by A1,Lm15;
+end;
+
+theorem  :: REAL_2'62_7
+    b <> 0 implies a = a * (1 / b) * b
+proof
+  assume A1:b<>0;
+    a=a*1 .=a*(1/b*b) by A1,Lm15;
+  hence thesis by Th4;
+end;
+
+theorem  :: REAL_2'62_5
+    b <> 0 implies a = a / (b * (1 / b))
+proof
+  assume A1:b<>0;
+  thus a=a/1 .=a/(b*(1/b)) by A1,Th107;
+end;
+
+theorem  :: REAL_2'42_4
+    a <> 0 & b <> 0 implies 1 / (a * b) <> 0
+proof
+  assume a<>0 & b<>0;
+  then a"<>0 & b"<>0 by Lm22;
+  then a"*b"<>0 by Th6;
+  then (a*b)"<>0 by Lm13;
+  hence thesis by Lm16;
+end;
+
+theorem  :: JGRAPH_2'1
+    a <> 0 & b <> 0 implies (a / b) * (b / a) = 1
+proof assume A1: a<>0 & b<>0;
+  A2:(b/a)=(a/b)" by Lm24;
+    a/b<>0 by A1,Th50;
+  hence thesis by A2,XCMPLX_0:def 7;
+end;
+
+:: using operations '*', '+' and '/'
+
+theorem Th114: :: REAL_2'65
+  b <> 0 implies a / b + c = (a + b * c) / b
+proof
+  assume A1:b<>0;
+    a/b+c =a/b+1*c
+       .=a/b+b*b"*c by A1,XCMPLX_0:def 7
+       .=a/b+b*c*b" by Th4
+       .=a/b+c*b/b by XCMPLX_0:def 9
+       .=(a+c*b)/b by Th63;
+  hence thesis;
+end;
+
+theorem Th115: :: REAL_2'92
+  c <> 0 implies a + b = c * (a / c + b / c)
+proof
+  assume A1:c<>0;
+  hence a+b=c*(a/c)+b by Lm15
+          .=c*(a/c)+c*(b/c) by A1,Lm15
+          .=c*(a/c+b/c) by Th8;
+end;
+
+theorem Th116: :: REAL_2'94
+  c <> 0 implies a + b = (a * c + b * c) / c
+proof
+  assume A1:c<>0;
+  hence a+b=a*c/c+b by Lm26
+          .=a*c/c+b*c/c by A1,Lm26
+          .=(a*c+b*c)/c by Th63;
+end;
+
+theorem Th117: :: REAL_1'41_1
+  b <> 0 & d <> 0 implies a / b + c / d =(a * d + c * b) / (b * d)
+proof
+  assume A1: b<>0;
+  assume d<>0;
+  hence a/b + c/d=(a*d)/(b*d) + c/d by Lm27
+    .=(a*d)/(b*d) + (c*b)/(b*d) by A1,Lm27
+    .=(a*d + c*b)/(b*d) by Th63;
+end;
+
+theorem Th118: :: REAL_2'96
+  a <> 0 implies a + b = a * (1 + b / a)
+proof
+  assume A1:a<>0;
+  hence a+b=a*(a/a+b/a) by Th115
+          .=a*(1+b/a) by A1,Lm17;
+end;
+
+:: 2
+
+theorem  :: REAL_2'91_1
+    a / (2 * b) + a / (2 * b) = a / b
+proof
+  thus a/(2*b)+a/(2*b)=(a+a)/(2*b) by Th63
+                     .=2*a/(2*b) by Th11
+                     .=a/b by Lm27;
+end;
+
+:: 3
+
+theorem  :: REAL_2'91_2
+    a / (3 * b) + a / (3 * b) + a / (3 * b) = a / b
+proof
+  thus a/(3*b)+a/(3*b)+a/(3*b)=(a+a)/(3*b)+a/(3*b) by Th63
+                             .=(a+a+a)/(3*b) by Th63
+                             .=3*a/(3*b) by Th12
+                             .=a/b by Lm27;
+end;
+
+:: using operations '-' and '/'
+
+Lm35:
+  -a/b=(-a)/b
+proof
+  thus -a/b=-(a*b") by XCMPLX_0:def 9
+      .=(-a)*b" by Lm20
+      .=(-a)/b by XCMPLX_0:def 9;
+end;
+
+theorem Th121: :: REAL_1'40_2
+  a / c - b / c = (a - b) / c
+proof
+  thus a/c - b/c = a/c+ -b/c by XCMPLX_0:def 8
+        .=a/c+(-b)/c by Lm35
+        .=(a+ -b)/c by Th63
+        .=(a-b)/c by XCMPLX_0:def 8;
+end;
+
+theorem  :: TOPREAL6'4
+    a - a / 2 = a / 2
+proof
+  thus a - a/2 = a/2 + a/2 - a/2 by Lm30
+     .= a/2 + (a/2 - a/2) by Lm2
+     .= a/2 + 0 by Lm1
+     .= a/2;
+end;
+
+theorem  :: REAL_2'100_4
+    (a - b - c) / d = a / d - b / d - c / d
+proof
+  thus (a-b-c)/d=(a-b)/d-c/d by Th121
+               .=a/d-b/d-c/d by Th121;
+end;
+
+theorem  :: REAL_2'82
+    b <> 0 & d <> 0 & b <> d & a / b = e / d implies a / b = (a - e) / (b - d)
+proof
+  assume A1:b<>0 & d<>0 & b<>d & a/b=e/d;
+  then A2:b-d<>0 by Th15;
+    a*d=e*b by A1,Th96;
+  then a*(b-d)=a*b-e*b by Th40;
+  then a*(b-d)=(a-e)*b by Th40;
+  hence thesis by A1,A2,Th95;
+end;
+
+:: using operations '-', '/' and '+'
+
+theorem  :: REAL_2'100_2
+    (a + b - e) / d = a / d + b / d - e / d
+proof
+  thus (a+b-e)/d=(a+b)/d-e/d by Th121
+               .=a/d+b/d-e/d by Th63;
+end;
+
+theorem  :: REAL_2'100_3
+    (a - b + e) / d = a / d - b / d + e / d
+proof
+  thus (a-b+e)/d=(a-b)/d+e/d by Th63
+               .=a/d-b/d+e/d by Th121;
+end;
+
+:: using operations '-', '/' and '*'
+
+theorem Th127: :: REAL_2'66_1
+  b <> 0 implies a / b - e = (a - e * b) / b
+proof
+   assume A1:b<>0;
+   thus a/b-e=a/b+-e by XCMPLX_0:def 8
+              .=(a+(-e)*b)/b by A1,Th114
+              .=(a+-e*b)/b by Lm20
+              .=(a-e*b)/b by XCMPLX_0:def 8;
+end;
+
+theorem  :: REAL_2'66_2
+    b <> 0 implies c - a / b = (c * b - a) / b
+proof
+  assume A1:b<>0;
+  thus c-a/b = -(a/b-c) by Lm18
+            .=-(a-c*b)/b by A1,Th127
+            .=(-(a-c*b))/b by Lm35
+            .=(c*b-a)/b by Lm18;
+end;
+
+theorem  :: REAL_2'93
+    c <> 0 implies a - b = c * (a / c - b / c)
+proof
+  assume A1:c<>0;
+  hence a-b=c*(a/c)-b by Lm15
+          .=c*(a/c)-c*(b/c) by A1,Lm15
+          .=c*(a/c-b/c) by Th40;
+end;
+
+theorem  :: REAL_2'95
+    c <> 0 implies a - b = (a * c - b * c) / c
+proof
+  assume A1:c<>0;
+  thus a-b=a+-b by XCMPLX_0:def 8
+         .=(a*c+(-b)*c)/c by A1,Th116
+         .=(a*c+-b*c)/c by Lm20
+         .=(a*c-b*c)/c by XCMPLX_0:def 8;
+end;
+
+theorem  :: REAL_1'41_2
+    b <> 0 & d <> 0 implies a / b - c / d = (a * d - c * b) / (b * d)
+proof
+  assume A1: b<>0;
+  assume A2: d<>0;
+  thus a/b - c/d =a/b + -c/d by XCMPLX_0:def 8
+  .=a/b + (-c)/d by Lm35
+  .=(a*d + (-c)*b)/(b*d) by A1,A2,Th117
+  .=(a*d + -(c*b))/(b*d) by Lm20
+  .=(a*d - c*b)/(b*d) by XCMPLX_0:def 8;
+end;
+
+theorem  :: REAL_2'97
+    a <> 0 implies a - b = a * (1 - b / a)
+proof
+  assume A1:a<>0;
+  thus a-b=a+-b by XCMPLX_0:def 8
+         .=a*(1+(-b)/a) by A1,Th118
+         .=a*(1+-b/a) by Lm35
+         .=a*(1-b/a) by XCMPLX_0:def 8;
+end;
+
+:: using operation '-', '/', '*' and '+'
+
+theorem  :: POLYEQ_1'24
+    a <> 0 implies c = (a * c + b - b) / a
+proof
+  assume A1:a <> 0;
+    a*c = a*c+b-b by Lm8;
+  hence thesis by A1,Lm26;
+end;
+
+:: using unary operation '-'
+
+theorem  :: REAL_2'2_2
+    -a = -b implies a = b
+proof
+  assume -a=-b;
+  then a=--b;hence a=b;
+end;
+
+theorem Th135: :: REAL_1'22:  :: right to left - requirements REAL
+  -a = 0 implies a = 0
+proof
+  assume -a=0;
+  then 0=a +0 by XCMPLX_0:def 6;
+  hence thesis;
+end;
+
+theorem  :: REAL_2'2_1
+    a + -b = 0 implies a = b
+proof
+  assume a+-b=0;
+  then a+(-b+b)=0+b by Th1;
+  then a+0=0+b by XCMPLX_0:def 6;
+  hence a=b;
+end;
+
+theorem  :: REAL_2'11
+    a = a + b + -b by Lm9;
+
+theorem Th138:  :: REAL_2'17_1
+    a = a + (b + -b)
+proof
+    a=a+0;
+  then a=a+(b-b) by Lm1;
+  hence thesis by XCMPLX_0:def 8;
+end;
+
+theorem  Th139:  :: INT_1'3
+    a = (- b + a) + b
+proof
+    a = 0 + a .= b + (- b) + a by XCMPLX_0:def 6;
+  hence thesis by Th1;
+end;
+
+theorem Th140: :: REAL_2'6_1
+  - (a + b) = -a + -b
+proof
+    -(a+b)+(a+b)=0 by XCMPLX_0:def 6;
+  then -(a+b)+a+b=0 by Th1;
+  then -(a+b)+a+0=0+-b by XCMPLX_0:def 6;
+  then -(a+b)+(a+-a)=-b+-a by Th1;
+  then -(a+b)+0=-b+-a by XCMPLX_0:def 6;
+  hence thesis;
+end;
+
+theorem  :: REAL_2'9_2
+    - (-a + b) = a + -b
+proof
+    -(-a+b)=--a+-b by Th140
+        .=a-b by XCMPLX_0:def 8;
+  hence thesis by XCMPLX_0:def 8;
+end;
+
+Lm36: -(a-b)=-a+b
+proof
+  thus -(a-b)=-(a+-b) by XCMPLX_0:def 8
+            .=-a+--b by Th140
+            .=-a+b;
+end;
+
+theorem :: REAL_2'10_2
+   a+b=-(-a+-b)
+proof
+    a+b=--a+b .=-(-a-b) by Lm36;
+  hence thesis by XCMPLX_0:def 8;
+end;
+
+:: using unary and binary operation '-'
+
+theorem  :: REAL_1'83
+    -(a - b) = b - a by Lm18;
+
+theorem  :: REAL_2'5
+    - a - b = - b - a
+proof
+    -a-b=-b+-a by XCMPLX_0:def 8;
+  hence thesis by XCMPLX_0:def 8;
+end;
+
+Lm37: -(a+b)=-b-a
+proof
+    -(a+b)+(a+b)=0 by XCMPLX_0:def 6;
+  then -(a+b)+a+b=0 by Th1;
+  then -(a+b)+a+0=0+-b by XCMPLX_0:def 6;
+  then -(a+b)+(a+-a)=-b+-a by Th1;
+  then -(a+b)+0=-b+-a by XCMPLX_0:def 6;
+  hence thesis by XCMPLX_0:def 8;
+end;
+
+theorem  :: REAL_2'17_4
+    a = - b - (- a - b)
+proof
+    a=a+0;
+  then a=a+(b-b) by Lm1;
+  then a=a+(b+-b) by XCMPLX_0:def 8;
+  then a=-b+(a+b) by Th1;
+  then a=-b--(a+b) by Lm11;
+  hence thesis by Lm37;
+end;
+
+:: binary '-' 4 times
+
+theorem  :: REAL_2'26_1
+    - a - b - c = - a - c - b
+proof
+    -a-b-c =-a+-b-c by XCMPLX_0:def 8
+        .=-a+-b+-c by XCMPLX_0:def 8;
+  hence -a-b-c =-a+-c+-b by Th1
+              .=-a-c+-b by XCMPLX_0:def 8
+              .=-a-c-b by XCMPLX_0:def 8;
+end;
+
+theorem  :: REAL_2'26_2
+    - a - b - c = - b - c - a
+proof
+    -a-b-c =-a+-b-c by XCMPLX_0:def 8
+        .=-a+-b+-c by XCMPLX_0:def 8;
+  hence -a-b-c =-b+-c+-a by Th1
+              .=-b-c+-a by XCMPLX_0:def 8
+              .=-b-c-a by XCMPLX_0:def 8;
+end;
+
+theorem  :: REAL_2'26_4
+    - a - b - c = - c - b - a
+proof
+    -a-b-c = -a+-b-c by XCMPLX_0:def 8
+        .=-a+-b+-c by XCMPLX_0:def 8;
+  hence -a-b-c = -c+-b+-a by Th1
+              .=-c-b+-a by XCMPLX_0:def 8
+              .=-c-b-a by XCMPLX_0:def 8;
+end;
+
+theorem  :: JGRAPH_6'1_2
+    (c - a) - (c - b) = - (a - b)
+proof
+  thus (c-a)-(c-b)=b-a by Th23
+                 .=b+-a by XCMPLX_0:def 8 .=-(a-b) by Lm36;
+end;
+
+:: 0
+
+theorem  :: REAL_1'19
+    0 - a = - a
+proof
+  thus 0-a=0+ -a by XCMPLX_0:def 8
+     .=-a;
+end;
+
+:: using unary and binary operations '-' and '+'
+
+theorem  :: REAL_2'10_3
+    a + b = a - - b by Lm11;
+
+theorem  :: REAL_2'17_3
+    a = a - (b + -b)
+proof
+    a=a-0;
+  then a=a-(b-b) by Lm1;
+  hence thesis by XCMPLX_0:def 8;
+end;
+
+theorem  :: REAL_2'2_4
+    a - c = b + - c implies a = b
+proof
+  assume a-c =b+-c;
+  then a+-c =b+-c by XCMPLX_0:def 8;
+  hence a=b by Th2;
+end;
+
+theorem  :: REAL_2'2_6
+    c - a = c + - b implies a = b
+proof
+  assume c-a=c+-b;
+  then c+-a=c+-b by XCMPLX_0:def 8; then -a=-b by Th2;
+  then --a=b; hence a=b;
+end;
+
+:: '+' 3 times
+
+theorem Th155: :: REAL_2'22_2
+  a + b - c = - c + a + b
+proof
+    a+b-c =a+b+-c by XCMPLX_0:def 8;
+  hence thesis by Th1;
+end;
+
+theorem  :: REAL_2'23_2
+    a - b + c = - b + c + a
+proof
+    a-b+c =a+-b+c by XCMPLX_0:def 8;
+  hence thesis by Th1;
+end;
+
+:: binary '-' 2 times
+
+Lm38: a+b=-(-a-b)
+proof
+  thus a+b=--a+b .=-(-a-b) by Lm36;
+end;
+
+theorem  :: REAL_2'20_2
+    a - (- b - c) = a + b + c
+proof
+  thus a-(-b-c)=a+-(-b-c) by XCMPLX_0:def 8
+              .=a+(b+c) by Lm38
+              .=a+b+c by Th1;
+end;
+
+:: binary '-' 3 times
+
+theorem  :: REAL_2'20_1
+    a - b - c = - b - c + a
+proof
+  thus -b-c+a=a+-b-c by Lm2
+            .=a-b-c by XCMPLX_0:def 8;
+end;
+
+theorem  :: REAL_2'24_3
+    a - b - c = - c + a - b
+proof
+    a-b-c =a+-b-c by XCMPLX_0:def 8;
+  hence a-b-c =-c+a+-b by Th155
+            .=-c+a-b by XCMPLX_0:def 8;
+end;
+
+theorem  :: REAL_2'24_4
+    a - b - c = - c - b + a
+proof
+    a-b-c = a+-b-c by XCMPLX_0:def 8;
+  hence a-b-c =-c+-b+a by Th155
+             .=-c-b+a by XCMPLX_0:def 8;
+end;
+
+:: using unary and binary operations '-' and '+'
+
+theorem  :: REAL_2'6_2
+    - (a + b) = - b - a by Lm37;
+
+theorem  :: REAL_2'8
+    - (a - b) = - a + b by Lm36;
+
+theorem Th163: :: REAL_2'9_1
+ -(-a+b)=a-b
+proof
+  thus -(-a+b)=--a+-b by Th140
+             .=a-b by XCMPLX_0:def 8;
+end;
+
+theorem  :: REAL_2'10_1
+    a + b = -(- a - b) by Lm38;
+
+theorem  :: REAL_2'25_1
+    - a + b - c = - c + b - a
+proof
+  thus -a+b-c = -c+b+-a by Th155
+             .= -c+b-a by XCMPLX_0:def 8;
+end;
+
+:: using unary and binary operations '-' and '+' (both '-' 2 times)
+
+theorem  :: REAL_2'25_2
+    - a + b - c = - c - a + b
+proof
+  thus -a+b-c = -c+-a+b by Th155
+             .= -c-a+b by XCMPLX_0:def 8;
+end;
+
+theorem  :: REAL_2'27_1
+    - (a + b + c) = - a - b - c
+proof
+  thus -(a+b+c)=-(a+b)-c by Lm37
+              .=-a-b-c by Lm37;
+end;
+
+theorem  :: REAL_2'27_2
+    - (a + b - c) = - a - b + c
+proof
+  thus -(a+b-c)=-(a+b)+c by Lm36
+              .=-a-b+c by Lm37;
+end;
+
+theorem  :: REAL_2'27_3
+    - (a - b + c) = - a + b - c
+proof
+  thus -(a-b+c)=-(a-b)-c by Lm37
+              .=-a+b-c by Lm36;
+end;
+
+theorem  :: REAL_2'27_5
+    - (a - b - c) = - a + b + c
+proof
+  thus -(a-b-c)=-(a-b)+c by Lm36
+              .=-a+b+c by Lm36;
+end;
+
+theorem  :: REAL_2'27_4
+    - (- a + b + c) = a - b - c
+proof
+  thus -(-a+b+c)=-(-a+b)-c by Lm37
+               .=a-b-c by Th163;
+end;
+
+theorem  :: REAL_2'27_6
+    - (- a + b - c) = a - b + c
+proof
+  thus -(-a+b-c)=-(-a+b)+c by Lm36
+               .=a-b+c by Th163;
+end;
+
+theorem  :: REAL_2'27_7
+    - (- a - b + c) = a + b - c
+proof
+  thus -(-a-b+c)=-(-a-b)-c by Lm37
+               .=a+b-c by Lm38;
+end;
+
+theorem  :: REAL_2'27_8
+    - (- a - b - c) = a + b + c
+proof
+  thus -(-a-b-c)=-(-a-b)+c by Lm36
+               .=a+b+c by Lm38;
+end;
+
+:: using unary operations '-' and '*'
+
+theorem  :: REAL_1'21_1
+    (- a) * b = -(a * b) by Lm20;
+
+theorem  :: REAL_1'21_2
+    (- a) * b = a * (- b) by Lm21;
+
+theorem  :: REAL_2'49_1
+    (- a) * (- b) = a * b
+proof
+  thus (-a)*(-b)=-a*(-b) by Lm20
+               .=--a*b by Lm20
+               .=a*b;
+end;
+
+theorem  :: REAL_2'49_2
+    - a * (- b) = a * b
+proof
+  thus -a*(-b)=--a*b by Lm20 .=a*b;
+end;
+
+theorem  :: REAL_2'49_3
+    -(-a) * b = a * b
+proof
+  thus -(-a)*b=--a*b by Lm20 .=a*b;
+end;
+
+theorem Th180: :: REAL_2'71_1
+  (-1) * a = -a
+proof
+  thus (-1)*a=-1*a by Lm20 .=-a;
+end;
+
+theorem  :: REAL_2'71_2
+    (- a) * (- 1) = a
+proof
+    (-1)*a=-1*a by Lm20 .=-a;
+  hence (-a)*(-1)=--a by Lm20 .=a;
+end;
+
+theorem Th182: :: REAL_2'38
+  b<>0 & a*b=-b implies a=-1
+proof
+  assume A1:b<>0 & a*b=-b;
+  then a*(b*b")=(-b)*b" by Th4;
+  then a*1=(-b)*b" by A1,XCMPLX_0:def 7;
+  hence a=-b*b" by Lm20
+        .=-1 by A1,XCMPLX_0:def 7;
+end;
+
+theorem Th183: :: Thx
+  a * a = 1 implies a = 1 or a = -1
+proof assume
+A1: a*a=1;
+     (a-1)*(a+1) = a*(a+1) - 1*(a+1) by Th40
+       .= a*a+a*1 - 1*(a+1) by Th8
+       .= a*a+a*1 - 1*a-1*1 by Lm4
+       .= a*a+(a*1 - 1*a)-1*1 by Lm2
+       .= a*a+0-1*1 by Lm1
+       .=0 by A1;
+   then a-1=0 or a+1=0 by Th6;
+   then a-1+1=1 or a+1-1=0-1;
+   hence thesis by Lm7,Lm8;
+end;
+
+Lm39:
+  a - 2*a = -a
+proof
+  thus a - 2*a = 1 * a - 2*a
+      .= (1-2) * a by Th40
+      .= -a by Th180;
+end;
+
+theorem  :: TOPREAL6'3
+    -a + 2 * a = a
+proof
+  thus -a + 2*a = -(a - 2*a) by Lm36
+    .= --a by Lm39
+    .= a;
+end;
+
+theorem  :: REAL_2'85_1
+    (a - b) * c = (b - a) * (- c)
+proof
+  thus (a-b)*c =(-(b-a))*c by Lm18
+             .=(b-a)*(-c) by Lm21;
+end;
+
+theorem  :: REAL_2'85_2
+    (a - b) * c = - (b - a) * c
+proof
+    (a-b)*c =(-(b-a))*c by Lm18
+         .=(b-a)*(-c) by Lm21;
+  hence thesis by Lm20;
+end;
+
+theorem  :: TOPREAL6'2
+    a - 2 * a = -a by Lm39;
+
+:: using unary operations '-' and '/'
+
+theorem  :: REAL_1'39_1
+    -a / b = (-a) / b by Lm35;
+
+theorem Th189: :: REAL_1'39_2
+  a / (- b) = -a / b
+proof
+    a/(-b)=(a*(-1))/((-b)*(-1)) by Lm27;
+  then a/(-b)=(-a*1)/((-b)*(-1)) by Lm20
+   .= (-a)/((-(-b))*1) by Lm21
+   .= -a/b by Lm35;
+  hence thesis;
+end;
+
+theorem  :: REAL_2'58_1
+    - a / (- b) = a / b
+proof
+  thus -a/(-b)=--a/b by Th189 .=a/b;
+end;
+
+theorem Th191: :: REAL_2'58_2
+  -(- a) / b = a / b
+proof
+  thus -(-a)/b=--a/b by Lm35 .=a/b;
+end;
+
+theorem  :: REAL_2'58_3
+    (- a) / (- b) = a / b
+proof
+    -(-a)/b=a/b by Th191;
+  hence thesis by Th189;
+end;
+
+theorem  :: REAL_2'58
+    (-a) / b = a / (-b)
+proof
+  thus (-a)/b=-a/b by Lm35
+            .=a/(-b) by Th189;
+end;
+
+theorem  :: REAL_2'71_3
+    -a = a / (-1)
+proof
+  thus a / (-1) = -a/1 by Th189 .=-a;
+end;
+
+theorem  :: REAL_2'71
+    a = (- a) / (-1)
+proof
+  thus (-a)/(-1)=-(-a)/1 by Th189 .=a;
+end;
+
+theorem  :: REAL_2'34
+    a / b = - 1 implies a = - b & b = - a
+proof
+   assume
+A1:a/b=-1;
+   then b <> 0 by Th49;
+   then a=(-1)*b by A1,Lm15;
+   then a=-1*b by Lm20;
+   hence thesis;
+end;
+
+theorem  :: REAL_2'40
+    b <> 0 & b / a = - b implies a = -1
+proof
+   assume A1: b<>0 & b/a=-b;
+   then -b <> 0 by Th135;
+   then a <> 0 by A1,Th49;
+   then b=(-b)*a by A1,Lm15;
+   then b=-b*a by Lm20;
+   hence thesis by A1,Th182;
+end;
+
+theorem  :: REAL_2'45_2
+    a <> 0 implies (-a) / a = -1
+proof
+  assume A1:a<>0;
+  thus (-a)/a=-a/a by Lm35
+            .=-1 by A1,Lm17;
+end;
+
+theorem  :: REAL_2'45_3
+    a <> 0 implies a / (- a) = -1
+proof
+  assume A1:a<>0;
+  thus a/(-a)=-a/a by Th189
+            .=-1 by A1,Lm17;
+end;
+
+Lm40: a<>0 & a=a" implies a=1 or a=-1
+proof
+   assume A1:a<>0;
+     assume a=a";
+     then a*a=1 by A1,XCMPLX_0:def 7;
+     hence thesis by Th183;
+end;
+
+theorem  :: REAL_2'46_2
+    a <> 0 & a = 1 / a implies a = 1 or a = -1
+proof
+  assume a<>0;
+  then a=a" implies a=1 or a=-1 by Lm40;
+  hence thesis by Lm16;
+end;
+
+theorem  :: REAL_2'83:
+    b <> 0 & d <> 0 & b <> -d & a / b = e / d implies a / b = (a + e) / (b + d)
+proof
+  assume A1:b<>0 & d<>0 & b<>-d & a/b=e/d;
+  then A2:b+d<>0 by XCMPLX_0:def 6;
+    a*d=e*b by A1,Th96;
+  then a*(b+d)=a*b+e*b by Th8;
+  then a*(b+d)=(a+e)*b by Th8;
+  hence thesis by A1,A2,Th95;
+end;
+
+:: using operation '"'
+
+theorem  :: REAL_2'33_1
+    a" = b" implies a = b by Lm29;
+
+theorem  :: REAL_1'31
+    a" = 0 implies a = 0 by Lm22;
+
+:: using '"' and '*'
+
+theorem
+     b <> 0 implies a = a*b*b"
+ proof assume
+A1:  b <> 0;
+    a*(b*b") = a*b*b" by Th4;
+  then a*1 = a*b*b" by A1,XCMPLX_0:def 7;
+  hence a = a*b*b";
+ end;
+
+theorem  :: REAL_1'24
+   a" * b" = (a * b)" by Lm13;
+
+theorem  :: REAL_2'47_1
+    (a * b")" = a" * b by Lm28;
+
+theorem  :: REAL_2'47_2
+    (a" * b")" = a * b
+proof
+  thus (a"*b")"=a""*b"" by Lm13
+              .=a*b;
+end;
+
+theorem  :: REAL_2'42_1:
+    a <> 0 & b <> 0 implies a * b" <> 0
+proof
+  assume A1:a<>0 & b<>0;
+  then a"<>0 & b"<>0 by Lm22;
+  hence thesis by A1,Th6;
+end;
+
+theorem  :: REAL_2'42_3
+    a <> 0 & b <> 0 implies a" * b" <> 0
+proof
+  assume a<>0 & b<>0;
+  then a"<>0 & b"<>0 by Lm22;
+  hence thesis by Th6;
+end;
+
+theorem  :: REAL_2'30_2
+    a * b" = 1 implies a = b
+proof
+  assume a*b"=1;
+  then a/b = 1 by XCMPLX_0:def 9;
+  hence thesis by Th58;
+end;
+
+theorem  :: REAL_2'35_2
+    a * b = 1 implies a = b"
+proof
+  assume A1: a*b=1;
+  then b<>0;
+  hence a=b" by A1,XCMPLX_0:def 7;
+end;
+
+:: using '"', '*', and '+'
+
+canceled;
+
+theorem Th213:
+   a <> 0 & b <> 0 implies a" + b" = (a + b)*(a*b)"
+ proof assume
+A1:   a <> 0 & b <> 0;
+     a" = a"*1 & b" = b"*1;
+   then a" = a"*(b"*b) & b" = b"*(a"*a) by A1,XCMPLX_0:def 7;
+   then a" = (a"*b")*b & b" = (a"*b")*a by Th4;
+   then a" = (a*b)"*b & b" = (a*b)"*a by Lm13;
+   hence a" + b" = (a + b)*(a*b)" by Th8;
+ end;
+
+Lm41:  (- a)" = -a"
+proof
+  thus (-a)"=1/(-a) by Lm16
+           .=-1/a by Th189
+           .=-a" by Lm16;
+end;
+
+:: using '"', '*', and '-'
+
+theorem
+     a <> 0 & b <> 0 implies a" - b" = (b - a)*(a*b)"
+ proof assume
+A1:  a <> 0 & b <> 0;
+then A2:  -b <> 0 by Th135;
+  thus a" - b" = a" + -(b") by XCMPLX_0:def 8
+                .= a" + (-b)" by Lm41
+                .= (a + -b)*(a*-b)" by A1,A2,Th213
+                .= (a + -b)*(-a*b)" by Lm20
+                .= (a + -b)*-((a*b)") by Lm41
+                .= -((a + -b)*(a*b)") by Lm20
+                .= (-(a + -b))*(a*b)" by Lm20
+                .= (-(a - b))*(a*b)" by XCMPLX_0:def 8
+                .= (b - a)*(a*b)" by Lm18;
+ end;
+
+:: using '"' and '/'
+
+theorem  :: REAL_1'81
+    (a / b)" = b / a by Lm24;
+
+theorem
+     (a"/b") = b/a
+ proof
+   thus (a"/b") = a"*b"" by XCMPLX_0:def 9
+                  .= b/a by XCMPLX_0:def 9;
+ end;
+
+theorem  :: REAL_1'33_1
+    1 / a = a" by Lm16;
+
+theorem  :: REAL_1'33_2
+    1 / a" = a by Lm34;
+
+theorem  :: REAL_2'36_21
+    (1 / a)" = a
+proof
+    1/a=a" implies (1/a)"=a;
+  hence thesis by Lm16;
+end;
+
+theorem  :: REAL_2'33_3
+    1 / a = b" implies a = b
+proof
+    1/a=1/b implies a=b by Th59;
+  hence thesis by Lm16;
+end;
+
+:: using '"', '*', and '/'
+
+theorem
+     a/b" = a*b
+ proof
+  thus a/b" = a*b"" by XCMPLX_0:def 9 .= a*b;
+ end;
+
+theorem
+     a"*(c/b) = c/(a*b)
+ proof
+   thus a"*(c/b) = a"*(c*b") by XCMPLX_0:def 9
+                  .= c*(a"*b") by Th4
+                  .= c*(a*b)" by Lm13
+                  .= c/(a*b) by XCMPLX_0:def 9;
+ end;
+
+theorem
+     a"/b = (a*b)"
+ proof
+   thus a"/b = a"*b" by XCMPLX_0:def 9 .= (a*b)" by Lm13;
+ end;
+
+:: both unary operations
+
+theorem  :: REAL_2'45_1
+    (- a)" = -a" by Lm41;
+
+theorem  :: REAL_2'46_1
+    a <> 0 & a = a" implies a = 1 or a = -1 by Lm40;
+
+begin :: additional
+
+:: from JORDAN4
+
+theorem
+ a+b+c-b=a+c
+proof a+b+c-b=a+b-b+c by Lm2;
+ hence a+b+c-b=a+c by Lm8;
+end;
+
+theorem
+ a-b+c+b=a+c
+proof
+    a-b+c+b=a+c-b+b by Lm2;
+ hence a-b+c+b=a+c by Lm7;
+end;
+
+theorem
+  a+b-c-b=a-c
+proof
+ thus a+b-c-b=b+(a-c)-b by Lm2 .=a-c by Lm8;
+end;
+
+theorem
+  a-b-c+b=a-c
+proof
+ thus a-b-c+b=a-b-(c-b) by Lm5 .=a-c by Th22;
+end;
+
+theorem
+ a-a-b=-b
+proof
+ thus a-a-b=a-a+-b by XCMPLX_0:def 8 .=-b by Th25;
+end;
+
+theorem
+ -a+a-b=-b
+proof
+ thus -a+a-b=-a+a+-b by XCMPLX_0:def 8 .=-b by Th138;
+end;
+
+theorem
+ a-b-a=-b
+proof
+ thus a-b-a=a+-b-a by XCMPLX_0:def 8 .=-b by Lm8;
+end;
+
+theorem
+  -a-b+a=-b
+proof
+ thus -a-b+a=-a+-b+a by XCMPLX_0:def 8 .=-b by Th139;
+end;
+

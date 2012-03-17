@@ -1,0 +1,1157 @@
+:: Compact Spaces
+::  by Agata Darmochwa{\l}
+::
+:: Received September 19, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, RELAT_1, BOOLE, MCART_1, FINSET_1, ORDERS_1, TARSKI,
+      PRE_TOPC, SETFAM_1, SUBSET_1, ORDINAL2, TOPS_2, COMPTS_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, FUNCT_1,
+      FUNCT_2, FUNCT_3, SETFAM_1, FINSET_1, ORDERS_1, DOMAIN_1, STRUCT_0,
+      PRE_TOPC, TOPS_2;
+ constructors FUNCT_3, FINSET_1, ORDERS_1, DOMAIN_1, TOPS_2, MEMBERED;
+ clusters FUNCT_1, PRE_TOPC, STRUCT_0, RELSET_1, SUBSET_1, FINSET_1, MEMBERED,
+      ZFMISC_1;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, TOPS_2, XBOOLE_0;
+ theorems TARSKI, FINSET_1, MCART_1, SETFAM_1, FUNCT_1, FUNCT_2, FUNCT_3,
+      ZFMISC_1, ORDERS_1, PRE_TOPC, TOPS_1, TOPS_2, RELAT_1, STRUCT_0,
+      WELLORD2, XBOOLE_0, XBOOLE_1;
+ schemes FUNCT_1, XBOOLE_0;
+
+begin
+
+reserve x, y, z, X, Y, Z for set;
+reserve f for Function;
+
+scheme NonUniqBoundFuncEx { X() -> set, Y() -> set, P[set,set] }:
+ ex f being Function st dom f = X() & rng f c= Y() &
+   for x st x in X() holds P[x,f.x]
+  provided
+A1: for x st x in X() ex y st y in Y() & P[x,y]
+  proof defpred Q[set,set] means
+    ex X st $2 = X & for y holds y in X iff y in Y() & P[$1,y];
+A2:  for e,u1,u2 being set st e in X() & Q[e,u1] & Q[e,u2] holds u1 = u2
+     proof let e,u1,u2 be set such that e in X();
+      given X such that
+A3:    u1 = X and
+A4:    for y holds y in X iff y in Y() & P[e,y];
+      given Y such that
+A5:    u2 = Y and
+A6:    for y holds y in Y iff y in Y() & P[e,y];
+       defpred A[set] means $1 in Y() & P[e,$1];
+A7:    for x be set holds x in X iff A[x] by A4;
+A8:    for x be set holds x in Y iff A[x] by A6;
+        X = Y from Extensionality(A7,A8);
+      hence thesis by A3,A5;
+     end;
+A9:  for x st x in X() ex y st Q[x,y]
+     proof let x such that x in X();
+       defpred R[set] means P[x,$1];
+      consider X such that
+A10:    y in X iff y in Y() & R[y] from Separation;
+      take X,X; thus thesis by A10;
+     end;
+   consider G being Function such that
+A11:  dom G = X() & for x st x in X() holds Q[x,G.x] from FuncEx(A2,A9);
+A12:  now assume
+A13:   X() = {};
+     deffunc G(set) = 0;
+     consider F being Function such that
+A14:   dom F = {} & for x st x in {} holds F.x = G(x) from Lambda;
+     thus thesis
+       proof take F; thus dom F = X() by A13,A14; rng F = {} by A14,RELAT_1:65;
+        hence thesis by A13,XBOOLE_1:2;
+       end;
+    end;
+      now assume X() <> {};
+     then reconsider D = rng G as non empty set by A11,RELAT_1:65;
+        now let X; assume X in D;
+       then consider x such that
+A15:     x in dom G & X = G.x by FUNCT_1:def 5;
+A16:     ex Y st X = Y & for y holds y in Y iff y in Y() & P[x,y] by A11,A15;
+       consider y such that
+A17:     y in Y() & P[x,y] by A1,A11,A15;
+       thus X <> {} by A16,A17;
+      end;
+     then consider F be Function such that
+A18:   dom F = D and
+A19:   for X st X in D holds F.X in X by WELLORD2:28;
+A20:   dom (F*G) = X() & rng (F*G) = rng F by A11,A18,RELAT_1:46,47;
+     thus thesis
+       proof take f = F*G; thus dom f = X() by A11,A18,RELAT_1:46;
+           rng F c= Y()
+          proof let x; assume x in rng F;
+           then consider y such that
+A21:         y in dom F & x = F.y by FUNCT_1:def 5;
+           consider z such that
+A22:         z in dom G & y = G.z by A18,A21,FUNCT_1:def 5;
+           consider X such that
+A23:         y = X & for x holds x in X iff x in Y() & P[z,x] by A11,A22;
+              x in X by A18,A19,A21,A23;
+           hence x in Y() by A23;
+          end;
+        hence rng f c= Y() by A18,RELAT_1:47;
+        let x; assume
+A24:       x in X();
+        then consider X such that
+A25:      G.x = X & for y holds y in X iff y in Y() & P[x,y] by A11;
+           f.x = F.X & X in D by A11,A20,A24,A25,FUNCT_1:22,def 5;
+         then f.x in X by A19;
+        hence P[x,f.x] by A25;
+       end;
+    end;
+   hence thesis by A12;
+  end;
+
+scheme BiFuncEx{A()->set,B()->set,C()->set,P[set,set,set]}:
+ ex f,g being Function st dom f = A() & dom g = A() &
+  for x st x in A() holds P[x,f.x,g.x]
+provided
+A1: x in A() implies ex y,z st y in B() & z in C() & P[x,y,z]
+   proof
+    defpred H[set,set] means
+      for y,z st $2`1 = y & $2`2 = z holds P[$1,y,z];
+A2:  x in A() implies ex p being set st p in [:B(),C():] & H[x,p]
+      proof
+       assume x in A();
+       then consider y,z such that A3: y in B() & z in C() & P[x,y,z] by A1;
+       take p=[y,z];
+       thus p in [:B(),C():] by A3,ZFMISC_1:106;
+       thus for y,z st p`1 = y & p`2 = z holds P[x,y,z]
+        proof
+         let x1,x2 be set; assume p`1 = x1 & p`2 = x2;
+         then x1=y & x2=z by MCART_1:7;
+         hence thesis by A3;
+        end;
+      end;
+    consider h being Function such that
+      dom h = A() & rng h c= [:B(),C():] and
+     A4: for x st x in A() holds H[x,h.x] from NonUniqBoundFuncEx(A2);
+     deffunc f(set) = (h.$1)`1;
+     consider f being Function such that A5: dom f = A() and
+     A6: for x st x in A() holds f.x = f(x) from Lambda;
+     deffunc g(set) = (h.$1)`2;
+     consider g being Function such that A7: dom g = A() and
+     A8: for x st x in A() holds g.x = g(x) from Lambda;
+     take f,g;
+     thus dom f = A() & dom g = A() by A5,A7;
+     thus for x st x in A() holds P[x,f.x,g.x]
+      proof
+       let x; assume A9: x in A();
+       then f.x = (h.x)`1 & g.x = (h.x)`2 by A6,A8;
+       hence thesis by A4,A9;
+      end;
+   end;
+
+theorem Th1:
+  Z is finite & Z c= rng f implies
+  ex Y st Y c= dom f & Y is finite & f.:Y = Z
+   proof
+    assume that A1: Z is finite and A2: Z c= rng f;
+    per cases;
+     suppose A3: Z = {};
+     take Y = {};
+     thus Y c= dom f & Y is finite by XBOOLE_1:2;
+     thus f.:Y = Z by A3,RELAT_1:149;
+     suppose A4: Z <> {};
+     deffunc F(set) = f"{$1};
+    consider g being Function such that A5: dom g = Z and
+     A6: for x st x in Z holds g.x = F(x) from Lambda;
+    reconsider AA = rng g as non empty set by A4,A5,RELAT_1:65;
+    A7: for X being set st X in AA holds X <> {}
+        proof
+         let X be set; assume X in AA;
+         then consider x such that A8: x in dom g and A9: g.x=X by FUNCT_1:def
+5;
+            g.x = f"{x} by A5,A6,A8;
+         hence thesis by A2,A5,A8,A9,FUNCT_1:142;
+        end;
+    then A10: not {} in AA;
+    consider ff being Choice_Function of AA;
+    consider z being Element of AA;
+A11: z <> {} by A7;
+    consider y being Element of z;
+      y in z by A11;
+    then reconsider AA'=union AA as non empty set by TARSKI:def 4;
+    reconsider f'= ff as Function of AA,AA';
+    A12: dom f' = AA by FUNCT_2:def 1;
+    take Y = ff.:AA;
+    thus A13: Y c= dom f
+     proof
+      let x; assume x in Y;
+      then consider y such that y in dom ff and A14: y in AA and
+       A15: ff.y=x by FUNCT_1:def 12;
+        y in g.:Z by A5,A14,RELAT_1:146;
+      then consider z such that A16: z in dom g & z in Z and
+       A17: g.z=y by FUNCT_1:def 12;
+      A18: g.z = f"{z} by A6,A16;
+        x in g.z by A10,A14,A15,A17,ORDERS_1:def 1;
+      hence x in dom f by A18,FUNCT_1:def 13;
+     end;
+      AA = g.:Z by A5,RELAT_1:146;
+    then AA is finite by A1,FINSET_1:17;
+    hence Y is finite by FINSET_1:17;
+      x in f.:Y iff x in Z
+     proof
+      thus x in f.:Y implies x in Z
+       proof
+        assume x in f.:(Y);
+        then consider y such that y in dom f and A19: y in Y and
+         A20: f.y = x by FUNCT_1:def 12;
+        consider z such that A21: z in dom ff & z in AA and A22: ff.z=y
+         by A19,FUNCT_1:def 12;
+        consider a being set such that A23:a in dom g and A24: g.a=z
+         by A21,FUNCT_1:def 5;
+           g.a = f"{a} by A5,A6,A23;
+        then y in f"{a} by A10,A21,A22,A24,ORDERS_1:def 1;
+        then f.y in {a} by FUNCT_1:def 13;
+        hence thesis by A5,A20,A23,TARSKI:def 1;
+       end;
+      assume A25: x in Z;
+      set y=ff.(g.x);
+      A26: g.x in AA by A5,A25,FUNCT_1:def 5;
+      then ff.(g.x) in rng ff by A12,FUNCT_1:def 5;
+      then A27: y in Y by A12,RELAT_1:146;
+        g.x = f"{x} by A6,A25;
+      then y in f"{x} by A10,A26,ORDERS_1:def 1;
+      then f.y in {x} by FUNCT_1:def 13;
+      then y in dom f & y in Y & f.y = x by A13,A27,TARSKI:def 1;
+      hence thesis by FUNCT_1:def 12;
+     end;
+    hence f.:Y = Z by TARSKI:2;
+  end;
+
+reserve T for TopStruct;
+reserve A for SubSpace of T;
+reserve P, Q for Subset of T;
+
+definition let T be 1-sorted, F be Subset-Family of T,
+   P be Subset of T;
+ pred F is_a_cover_of P means
+    :Def1: P c= union F;
+end;
+
+definition let F be set;
+  attr F is centered means
+   :Def2: F <> {} &
+  for G being set st G <> {} & G c= F & G is finite holds meet G <> {};
+end;
+
+definition let T be TopStruct;
+  attr T is compact means :Def3:
+   for F being Subset-Family of T st
+     F is_a_cover_of T & F is open
+      ex G being Subset-Family of T
+       st G c= F & G is_a_cover_of T & G is finite;
+
+  attr T is being_T2 means :Def4:
+     for p, q being Point of T st not p = q
+      ex W, V being Subset of T st W is open & V is open &
+       p in W & q in V & W misses V;
+  synonym T is_T2;
+
+  attr T is being_T3 means
+       for p being Point of T, P being Subset of T
+      st P <> {} & P is closed & not p in P
+      ex W, V being Subset of T st W is open & V is open &
+       p in W & P c= V & W misses V;
+  synonym T is_T3;
+
+  attr T is being_T4 means
+      for W, V being Subset of T st W <> {} & V <> {} &
+      W is closed & V is closed & W misses V
+     ex P, Q being Subset of T st P is open & Q is open &
+         W c= P & V c= Q & P misses Q;
+  synonym T is_T4;
+end;
+
+definition let T be TopStruct, P be Subset of T;
+  attr P is compact means :Def7:
+   for F being Subset-Family of T st
+    F is_a_cover_of P & F is open
+    ex G being Subset-Family of T st G c= F & G is_a_cover_of P & G is finite;
+end;
+
+canceled 7;
+
+theorem Th9:
+{}T is compact
+  proof
+    let F be Subset-Family of T such that
+       F is_a_cover_of {} T and F is open;
+      {}T c= bool the carrier of T by XBOOLE_1:2;
+    then {} T is Subset-Family of T by SETFAM_1:def 7;
+    then reconsider F' = {} T as Subset-Family of T;
+    take F';
+      {} T c= union F' by XBOOLE_1:2;
+    hence F' c= F & F' is_a_cover_of {} T & F' is finite
+     by Def1,XBOOLE_1:2;
+  end;
+
+theorem Th10:
+T is compact iff [#]T is compact
+  proof
+   thus T is compact implies [#] T is compact
+    proof
+     assume A1: T is compact;
+     let F be Subset-Family of T;
+     assume that A2: F is_a_cover_of [#] T and A3: F is open;
+       union F c= [#] T & [#] T c= union F by A2,Def1,PRE_TOPC:14;
+     then union F = [#] T by XBOOLE_0:def 10;
+     then F is_a_cover_of T by PRE_TOPC:def 8;
+     then consider G be Subset-Family of T such that
+A4:   G c= F and A5: G is_a_cover_of T
+      and A6: G is finite by A1,A3,Def3;
+     take G;
+       union G = [#] T by A5,PRE_TOPC:def 8;
+     hence thesis by A4,A6,Def1;
+    end;
+   assume A7: [#] T is compact;
+    let F be Subset-Family of T such that
+A8:  F is_a_cover_of T and A9: F is open;
+      union F = [#] T by A8,PRE_TOPC:def 8;
+    then F is_a_cover_of [#] T by Def1;
+    then consider G be Subset-Family of T such that
+A10:  G c= F and A11: G is_a_cover_of [#] T
+     and A12: G is finite by A7,A9,Def7;
+    take G;
+      union G c= [#] T & [#] T c= union G by A11,Def1,PRE_TOPC:14;
+    then union G = [#] T by XBOOLE_0:def 10;
+    hence thesis by A10,A12,PRE_TOPC:def 8;
+  end;
+
+theorem Th11:
+ Q c= [#] A implies
+  (Q is compact iff
+   (for P being Subset of A st P=Q holds P is compact))
+  proof
+      [#] A c= [#] T by PRE_TOPC:def 9;
+    then [#] A is Subset of T by PRE_TOPC:12;
+    then reconsider AA = [#] A as Subset of T;
+   assume A1: Q c= [#] A;
+    then A2: Q /\ AA = Q by XBOOLE_1:28;
+   thus Q is compact implies
+    for P being Subset of A st P=Q holds P is compact
+    proof
+     assume A3: Q is compact;
+     let P be Subset of A such that A4: P = Q;
+     thus P is compact
+      proof
+       let G be Subset-Family of A;
+       reconsider GG = G as Subset-Family of A;
+       assume that A5: G is_a_cover_of P and A6: G is open;
+       consider F being Subset-Family of T such that
+A7:     F is open and
+A8:     for AA being Subset of T st AA = [#] A
+          holds GG=F|AA by A6,TOPS_2:49;
+         P c= union G & union(F|AA) c= union F by A5,Def1,TOPS_2:44;
+       then Q c= union G & union G c= union F by A4,A8;
+       then Q c= union F by XBOOLE_1:1;
+       then F is_a_cover_of Q by Def1;
+       then consider F' being Subset-Family of T
+        such that A9: F' c= F and A10: F' is_a_cover_of Q
+        and A11: F' is finite by A3,A7,Def7;
+         F'|AA c= bool [#](T|AA) by TOPS_2:1;
+       then F'|AA c= bool [#] A by PRE_TOPC:def 10;
+       then F'|AA c= bool the carrier of A by PRE_TOPC:12;
+       then F'|AA is Subset-Family of A by SETFAM_1:def 7;
+       then reconsider G' = F'|AA as Subset-Family of A;
+      take G';
+        F'|AA c= F|AA by A9,TOPS_2:40;
+      hence G' c= G by A8;
+         Q c= union F' by A10,Def1;
+       then P c= union G' by A2,A4,TOPS_2:42;
+      hence G' is_a_cover_of P by Def1;
+      thus G' is finite by A11,TOPS_2:46;
+     end;
+   end;
+   thus (for P being Subset of A st P=Q holds P is compact)
+    implies Q is compact
+    proof
+     assume
+A12:   for P being Subset of A st P=Q holds P is compact;
+       Q is Subset of A by A1,PRE_TOPC:12;
+     then reconsider QQ = Q as Subset of A;
+A13:  QQ is compact by A12;
+     thus Q is compact
+      proof
+       let F be Subset-Family of T;
+       reconsider F' = F as Subset-Family of T;
+       assume that A14: F is_a_cover_of Q and A15: F is open;
+       consider f being Function such that
+        A16: dom f = F' and A17: rng f = F'|AA and
+        A18: for x st x in F
+           for Q being Subset of T st Q = x holds f.x = Q /\ AA
+                by TOPS_2:50;
+         F'|AA c= bool [#](T|AA) by TOPS_2:1;
+       then F'|AA c= bool [#] A by PRE_TOPC:def 10;
+       then F'|AA c= bool the carrier of A by PRE_TOPC:12;
+      then rng f is Subset-Family of A by A17,SETFAM_1:def 7;
+       then reconsider F' = rng f as Subset-Family of A;
+         Q c= union F by A14,Def1;
+       then QQ c= union F' by A2,A17,TOPS_2:42;
+       then A19: F' is_a_cover_of QQ by Def1;
+         F' is open
+        proof let X be Subset of A;
+         assume A20: X in F';
+          then reconsider Y = X as Subset of T|AA by A17;
+          consider R being Subset of T such that
+A21:           R in F & R /\ AA = Y by A17,A20,TOPS_2:def 3;
+          reconsider R as Subset of T;
+            R is open by A15,A21,TOPS_2:def 1;
+          then R in the topology of T by PRE_TOPC:def 5;
+          then X in the topology of A by A21,PRE_TOPC:def 9;
+         hence X is open by PRE_TOPC:def 5;
+        end;
+       then consider G being Subset-Family of A
+        such that A22: G c= F' and A23: G is_a_cover_of QQ
+         and A24: G is finite by A13,A19,Def7;
+        consider X being set such that A25: X c= dom f and
+         A26: X is finite and A27: f.:X=G by A22,A24,Th1;
+         reconsider G'=X as Subset-Family of T by A16,A25,TOPS_2:3;
+         reconsider G' as Subset-Family of T;
+         reconsider G' as Subset-Family of T;
+        take G';
+           Q c= union G'
+          proof
+           let x;
+           assume A28: x in Q;
+             QQ c= union G by A23,Def1;
+           then consider Y being set such that
+            A29: x in Y and A30: Y in G by A28,TARSKI:def 4;
+           consider z such that A31: z in dom f and A32: z in X and A33: f.z=Y
+            by A27,A30,FUNCT_1:def 12;
+           reconsider Z=z as Subset of T by A16,A31;
+             Y = Z /\ AA by A16,A18,A31,A33;
+           then x in Z by A29,XBOOLE_0:def 3;
+           hence thesis by A32,TARSKI:def 4;
+          end;
+         hence G' c= F & G' is_a_cover_of Q & G' is finite
+          by A16,A25,A26,Def1;
+      end;
+    end;
+  end;
+
+theorem Th12:
+ ( P = {} implies (P is compact iff T|P is compact) ) &
+ ( T is TopSpace-like & P <> {} implies (P is compact iff T|P is compact) )
+ proof
+A1: [#](T|P) = P by PRE_TOPC:def 10;
+   hereby assume
+A2:   P = {};
+     hereby assume P is compact;
+         {}(T|P) = {};
+       then [#](T|P) is compact by A1,A2,Th9;
+       hence T|P is compact by Th10;
+     end;
+     assume T|P is compact;
+       {}T = {};
+     hence P is compact by A2,Th9;
+   end;
+   assume that
+A3:  T is TopSpace-like and
+A4:  P <> {};
+     the carrier of T is non empty by A4,XBOOLE_1:3;
+   then reconsider T' = T as non empty TopSpace by A3,STRUCT_0:def 1;
+   reconsider P' = P as non empty Subset of T' by A4;
+A5: [#](T'|P') is compact iff T'|P' is compact by Th10;
+   hence P is compact implies T|P is compact by A1,Th11;
+    assume T|P is compact;
+    then for Q being Subset of T|P st Q=P holds Q is compact
+       by A5,PRE_TOPC:def 10;
+     hence thesis by A1,Th11;
+  end;
+
+theorem Th13:
+for T being non empty TopSpace holds
+ T is compact iff
+  for F being Subset-Family of T st F is centered & F is closed
+   holds meet F <> {}
+ proof
+  let T be non empty TopSpace;
+ thus T is compact implies for F being Subset-Family of T
+   st F is centered & F is closed holds meet F <> {}
+    proof
+     assume A1: T is compact;
+     let F be Subset-Family of T such that A2: F is centered
+      and A3: F is closed;
+     assume A4: meet F = {};
+     reconsider C = COMPLEMENT(F) as Subset-Family of T;
+       F <> {} by A2,Def2;
+     then union COMPLEMENT(F) = (meet F)` by TOPS_2:12
+            .= [#] T \ meet F by PRE_TOPC:17
+            .= [#] T by A4;
+     then A5: COMPLEMENT(F) is_a_cover_of T by PRE_TOPC:def 8;
+       COMPLEMENT(F) is open by A3,TOPS_2:16;
+     then consider G' being Subset-Family of T such that
+      A6: G' c= C and
+      A7: G' is_a_cover_of T and A8: G' is finite by A1,A5,Def3;
+     set F'= COMPLEMENT(G');
+A9:   F' c= F
+      proof
+       let X be set; assume A10: X in F';
+        then reconsider X1=X as Subset of T;
+          X1` in G' by A10,SETFAM_1:def 8;
+        then (X1`)` in F by A6,SETFAM_1:def 8;
+       hence thesis;
+      end;
+A11:   F' is finite by A8,TOPS_2:13;
+A12:   G' <> {} by A7,TOPS_2:5;
+then A13:   meet F' = (union G')` by TOPS_2:11
+             .= [#] T \ union G' by PRE_TOPC:17
+             .= ([#] T) \ ([#] T) by A7,PRE_TOPC:def 8
+             .= {} by XBOOLE_1:37;
+       F' <> {} by A12,TOPS_2:10;
+     hence contradiction by A2,A9,A11,A13,Def2;
+    end;
+   assume A14: for F being Subset-Family of T st
+   F is centered & F is closed holds meet F <> {};
+   thus T is compact
+    proof
+    let F be Subset-Family of T such that
+     A15: F is_a_cover_of T and A16: F is open;
+         reconsider G=COMPLEMENT(F) as Subset-Family of T;
+          A17: G is closed by A16,TOPS_2:17;
+          A18: F <> {} by A15,TOPS_2:5;
+          then A19: meet G = (union F)` by TOPS_2:11
+                         .= [#] T \ union F by PRE_TOPC:17
+                         .= ([#] T) \ ([#] T) by A15,PRE_TOPC:def 8
+                         .= {} by XBOOLE_1:37;
+          A20: G <> {} by A18,TOPS_2:10;
+            not G is centered by A14,A17,A19;
+          then consider G' being set
+           such that A21: G' <> {} and A22: G' c= G and A23: G' is finite and
+            A24: meet G' = {} by A20,Def2;
+            G' is Subset of bool the carrier of T by A22,XBOOLE_1:1;
+          then G' is Subset-Family of T by SETFAM_1:def 7;
+          then reconsider G' as Subset-Family of T;
+          take F'=COMPLEMENT(G');
+          thus F' c= F
+           proof
+            let A be set; assume A25: A in F';
+            then reconsider A1=A as Subset of T;
+              A1` in G' by A25,SETFAM_1:def 8;
+            then (A1`)` in F by A22,SETFAM_1:def 8;
+            hence A in F;
+           end;
+            union F' = (meet G')` by A21,TOPS_2:12
+                  .= [#] T \ {} by A24,PRE_TOPC:17
+                  .= [#] T;
+          hence F' is_a_cover_of T by PRE_TOPC:def 8;
+          thus F' is finite by A23,TOPS_2:13;
+     end;
+end;
+
+theorem
+  for T being non empty TopSpace holds
+  T is compact iff for F being Subset-Family of T st F <> {} & F is closed &
+   meet F = {}
+ ex G being Subset-Family of T st G <> {} & G c= F & G is finite & meet G = {}
+    proof
+  let T be non empty TopSpace;
+  thus T is compact implies
+   for F being Subset-Family of T st F <> {} & F is closed & meet F = {}
+  ex G being Subset-Family of T st G <> {} & G c= F & G is finite & meet G = {}
+      proof
+       assume A1: T is compact;
+       let F be Subset-Family of T such that
+      A2: F <> {} and A3: F is closed and A4: meet F = {};
+          not F is centered by A1,A3,A4,Th13;
+        then consider G being set such that A5: G <> {}
+ & G c= F & G is finite &
+         meet G = {} by A2,Def2;
+          G is Subset of bool the carrier of T by A5,XBOOLE_1:1;
+        then G is Subset-Family of T by SETFAM_1:def 7;
+        then reconsider G as Subset-Family of T;
+        take X=G;
+        thus X <> {} & X c= F & X is finite & meet X = {} by A5;
+       end;
+   assume
+   A6: for F being Subset-Family of T st F <> {} & F is closed & meet F = {}
+ ex G being Subset-Family of T st G <> {} & G c= F & G is finite & meet G = {};
+      for F being Subset-Family of T st F is centered & F is closed holds
+     meet F <> {}
+     proof
+      let F be Subset-Family of T;
+      assume that A7: F is centered and A8: F is closed;
+      assume A9: meet F = {};
+        F <> {} by A7,Def2;
+      then ex G being Subset-Family of T st G <> {} & G c= F & G is finite &
+       meet G = {} by A6,A8,A9;
+      hence contradiction by A7,Def2;
+     end;
+    hence T is compact by Th13;
+    end;
+
+reserve TS for TopSpace;
+reserve PS, QS for Subset of TS;
+
+theorem Th15:
+ TS is_T2 implies
+  for A being Subset of TS st A <> {} & A is compact
+   for p being Point of TS st not p in A
+ ex PS,QS st PS is open & QS is open & p in PS & A c= QS & PS misses QS
+ proof
+  assume A1: TS is_T2;
+  let F be Subset of TS such that A2: F <> {} and
+   A3: F is compact;
+  let a be Point of TS such that A4: not a in F;
+    defpred P[set,set,set] means
+     ex PS,QS st $2=PS & $3=QS & PS is open & QS is open &
+       a in PS & $1 in QS & PS /\ QS = {};
+A5:  x in F implies
+     ex y,z st y in the topology of TS & z in the topology of TS & P[x,y,z]
+     proof
+      assume A6: x in F;
+      then reconsider p=x as Point of TS;
+      consider W,V being Subset of TS such that
+      A7: W is open and A8: V is open
+      and A9: a in W and A10: p in V and A11: W misses V by A1,A4,A6,Def4;
+      reconsider PS=W, QS=V as set;
+      take PS,QS;
+     thus PS in the topology of TS & QS in the topology of TS
+       by A7,A8,PRE_TOPC:def 5;
+      take W,V;
+     thus thesis by A7,A8,A9,A10,A11,XBOOLE_0:def 7;
+    end;
+    consider f,g being Function such that
+A12:  dom f = F & dom g = F and
+A13:  for x st x in F holds P[x,f.x,g.x] from BiFuncEx(A5);
+        g.:F c= bool the carrier of TS
+      proof
+       let x; assume x in g.:F;
+       then consider y such that y in dom g and A14: y in F and A15: g.y=x
+        by FUNCT_1:def 12;
+          ex PS,QS st f.y=PS & g.y=QS &
+        PS is open & QS is open & a in PS &
+        y in QS & PS /\ QS = {} by A13,A14;
+       hence thesis by A15;
+      end;
+     then g.:F is Subset-Family of TS by SETFAM_1:def 7;
+     then reconsider C = g.:F as Subset-Family of TS;
+       F c= union C
+      proof
+       let x; assume A16: x in F;
+       then consider PS,QS such that f.x=PS and A17: g.x=QS and
+          PS is open and QS is open and a in PS and
+        A18: x in QS and PS /\ QS = {} by A13;
+          QS in C by A12,A16,A17,FUNCT_1:def 12;
+       hence thesis by A18,TARSKI:def 4;
+      end;
+     then A19: C is_a_cover_of F by Def1;
+     A20: C is open
+      proof
+       let G be Subset of TS; assume G in C;
+        then consider x such that x in dom g
+        and A21: x in F and A22: G = g.x by FUNCT_1:def 12;
+          ex PS,QS st f.x=PS & g.x=QS &
+        PS is open & QS is open & a in PS &
+        x in QS & PS /\ QS = {} by A13,A21;
+       hence G is open by A22;
+      end;
+     then consider C' being Subset-Family of TS such that
+ A23: C' c= C and A24: C' is_a_cover_of F and
+ A25: C' is finite by A3,A19,Def7;
+        C' c= rng g by A12,A23,RELAT_1:146;
+     then consider H' being set such that A26: H' c= dom g and
+     A27: H' is finite and A28: g.:H' = C' by A25,Th1;
+       f.:H' c= bool the carrier of TS
+      proof
+       let x; assume x in f.:H';
+       then consider y such that y in dom f and A29: y in H' and A30: f.y=x
+        by FUNCT_1:def 12;
+         ex PS,QS st f.y=PS & g.y=QS &
+        PS is open & QS is open & a in PS &
+        y in QS & PS /\ QS = {} by A12,A13,A26,A29;
+       hence thesis by A30;
+      end;
+     then f.:H' is Subset-Family of TS by SETFAM_1:def 7;
+     then reconsider B = f.:H' as Subset-Family of TS;
+ take G0 = meet B, G1 = union C';
+     A31: B is finite by A27,FINSET_1:17;
+       B is open
+      proof
+       let G be Subset of TS; assume G in B;
+        then consider x such that A32: x in dom f and x in H'
+         and A33: G = f.x by FUNCT_1:def 12;
+          ex PS,QS st f.x=PS & g.x=QS & PS is open & QS is open & a in PS &
+        x in QS & PS /\ QS = {} by A12,A13,A32;
+       hence G is open by A33;
+     end;
+ hence G0 is open by A31,TOPS_2:27;
+       C' is open by A20,A23,TOPS_2:18;
+ hence G1 is open by TOPS_2:26;
+   consider z being Element of F;
+     F c= union C' by A24,Def1;
+   then z in union C' by A2,TARSKI:def 3;
+    then consider D being set such that z in D and A34: D in
+ C' by TARSKI:def 4;
+    reconsider D' = D as Subset of TS by A34;
+    consider y such that A35: y in dom g and A36: y in H'
+     and D' = g.y by A28,A34,FUNCT_1:def 12;
+    consider PS,QS such that A37: f.y=PS and g.y=QS and
+       PS is open and QS is open and a in PS and
+        y in QS and PS /\ QS = {} by A12,A13,A35;
+    A38: B <> {} by A12,A35,A36,A37,FUNCT_1:def 12;
+      for G being set st G in B holds a in G
+     proof
+      let G be set; assume A39: G in B;
+       then reconsider G' = G as Subset of TS;
+       consider x such that A40: x in dom f and x in H'
+        and A41: G' = f.x by A39,FUNCT_1:def 12;
+         ex PS,QS st f.x=PS & g.x=QS &
+       PS is open & QS is open & a in PS &
+       x in QS & PS /\ QS = {} by A12,A13,A40;
+      hence a in G by A41;
+     end;
+ hence a in G0 by A38,SETFAM_1:def 1;
+ thus F c= G1 by A24,Def1;
+ thus G0 /\ G1 = {}
+     proof
+      assume A42: G0 /\ G1 <> {};
+       consider x being Element of (meet B) /\ (union C');
+       A43: x in union C' & x in meet B by A42,XBOOLE_0:def 3;
+       then consider A being set such that
+        A44: x in A and A45: A in C' by TARSKI:def 4;
+       consider z such that A46: z in dom g and A47: z in H'
+        and A48: A = g.z by A28,A45,FUNCT_1:def 12;
+      consider PS,QS such that A49: f.z=PS and A50: g.z=QS and
+         PS is open and QS is open and a in PS and
+         z in QS and A51: PS /\ QS = {} by A12,A13,A46;
+         PS in B by A12,A46,A47,A49,FUNCT_1:def 12;
+       then x in QS & x in PS by A43,A44,A48,A50,SETFAM_1:def 1;
+      hence contradiction by A51,XBOOLE_0:def 3;
+     end;
+ end;
+
+theorem Th16:
+  TS is_T2 & PS is compact implies PS is closed
+   proof
+    assume that A1: TS is_T2 and A2: PS is compact;
+       now per cases;
+      suppose PS = {};
+       then PS = {} TS;
+       hence PS is closed by TOPS_1:22;
+      suppose A3: PS <> {};
+         now let a be set;
+      thus a in PS` implies ex Q being Subset of TS
+          st Q is open & Q c= PS` & a in Q
+       proof
+        assume A4: a in PS`;
+        then reconsider p=a as Point of TS;
+          a in [#] TS \ PS by A4,PRE_TOPC:17;
+        then not p in PS by XBOOLE_0:def 4;
+        then consider W,V being Subset of TS such that
+         A5: W is open and V is open and A6: p in W and
+         A7: PS c= V and A8: W misses V by A1,A2,A3,Th15;
+          W misses V`` by A8;
+        then A9: W c= V` & V` c= PS` by A7,PRE_TOPC:19,TOPS_1:20;
+       take Q = W;
+       thus Q is open & Q c= PS` & a in Q by A5,A6,A9,XBOOLE_1:1;
+       end;
+     thus (ex Q being Subset of TS
+         st Q is open & Q c= PS` & a in Q)
+      implies a in PS`;
+      end;
+     then PS` is open by TOPS_1:57;
+     hence PS is closed by TOPS_1:29;
+     end;
+    hence thesis;
+   end;
+
+theorem Th17:
+ T is compact & P is closed implies P is compact
+ proof
+  assume that A1: T is compact and A2: P is closed;
+  thus P is compact
+   proof
+    let F be Subset-Family of T such that
+A3: F is_a_cover_of P
+     and A4: F is open;
+    reconsider pp = {P`} as Subset-Family of T
+      by SETFAM_1:def 7;
+    reconsider FP = F \/ pp as Subset-Family of T;
+      P c= union F by A3,Def1;
+    then P \/ (P`) c= (union F) \/ (P`) by XBOOLE_1:9;
+    then [#] T c= (union F) \/ (P`) & (union F) \/ (P`) c= [#] T
+     by PRE_TOPC:14,18;
+    then [#] T = (union F) \/ (P`) by XBOOLE_0:def 10
+            .= (union F) \/ (union {P`}) by ZFMISC_1:31
+            .= union (F \/ {P`}) by ZFMISC_1:96;
+then A5: FP is_a_cover_of T by PRE_TOPC:def 8;
+    A6: P` is open by A2,TOPS_1:29;
+      FP is open
+     proof
+      let H be Subset of T; assume H in FP;
+       then H in F or H in {P`} by XBOOLE_0:def 2;
+       hence H is open by A4,A6,TARSKI:def 1,TOPS_2:def 1;
+     end;
+    then consider G being Subset-Family of T such that
+     A7: G c= FP and
+     A8: G is_a_cover_of T and A9: G is finite
+      by A1,A5,Def3;
+   reconsider G' = G \ pp as Subset-Family of T;
+   take G';
+    A10: G' c= (F \/ {P`}) \ {P`} by A7,XBOOLE_1:33;
+      (F \/ {P`}) \ {P`} = F \ {P`} by XBOOLE_1:40;
+    then (F \/ {P`}) \ {P`} c= F by XBOOLE_1:36;
+   hence G' c= F by A10,XBOOLE_1:1;
+   reconsider M = {P`} as Subset-Family of T by SETFAM_1:def 7;
+   reconsider M as Subset-Family of T;
+      (union G) \ union M = [#] T \ (union {P`}) by A8,PRE_TOPC:def 8
+     .= [#] T \ (P`) by ZFMISC_1:31
+     .= P`` by PRE_TOPC:17
+     .= P;
+    then P c= union G' by TOPS_2:6;
+   hence G' is_a_cover_of P by Def1;
+   thus G' is finite by A9,FINSET_1:16;
+  end;
+ end;
+
+theorem Th18:
+ PS is compact & QS c= PS & QS is closed implies QS is compact
+  proof
+   assume that A1: PS is compact and A2: QS c= PS and A3: QS is closed;
+     now per cases;
+    suppose PS = {};
+     then QS = {} TS by A2,XBOOLE_1:3;
+    hence QS is compact by Th9;
+    suppose A4: PS <> {};
+     A5: PS = [#] (TS|PS) by PRE_TOPC:def 10;
+     then QS is Subset of TS|PS by A2,PRE_TOPC:12;
+     then reconsider QQ = QS as Subset of TS|PS;
+     A6: QQ is closed by A3,TOPS_2:34;
+       TS|PS is compact by A1,A4,Th12;
+     then for QQ being Subset of TS|PS st QQ=QS holds QQ is compact
+       by A6,Th17;
+    hence thesis by A2,A5,Th11;
+   end;
+   hence thesis;
+  end;
+
+theorem
+   P is compact & Q is compact implies P \/ Q is compact
+ proof
+  assume that A1: P is compact and A2: Q is compact;
+  thus P \/ Q is compact
+   proof
+    let F be Subset-Family of T such that
+    A3: F is_a_cover_of (P \/ Q) and A4: F is open;
+     A5: P \/ Q c= union F by A3,Def1;
+       P c= P \/ Q by XBOOLE_1:7;
+     then P c= union F by A5,XBOOLE_1:1;
+     then F is_a_cover_of P by Def1;
+     then consider G1 being Subset-Family of T such that
+      A6: G1 c= F and A7: G1 is_a_cover_of P and
+      A8: G1 is finite by A1,A4,Def7;
+       Q c= P \/ Q by XBOOLE_1:7;
+     then Q c= union F by A5,XBOOLE_1:1;
+     then F is_a_cover_of Q by Def1;
+     then consider G2 being Subset-Family of T such that
+     A9: G2 c= F and A10: G2 is_a_cover_of Q and
+     A11: G2 is finite by A2,A4,Def7;
+    reconsider G = G1 \/ G2 as Subset-Family of T;
+    take G;
+    thus G c= F by A6,A9,XBOOLE_1:8;
+       P c= union G1 & Q c= union G2 by A7,A10,Def1;
+     then P \/ Q c= union G1 \/ union G2 by XBOOLE_1:13;
+     then P \/ Q c= union (G1 \/ G2) by ZFMISC_1:96;
+    hence G is_a_cover_of (P \/ Q) by Def1;
+    thus G is finite by A8,A11,FINSET_1:14;
+   end;
+ end;
+
+theorem
+   TS is_T2 & PS is compact & QS is compact implies PS /\ QS is compact
+  proof
+   assume A1: TS is_T2 & PS is compact & QS is compact;
+    then PS is closed & QS is closed by Th16;
+    then A2: PS /\ QS is closed by TOPS_1:35;
+      PS /\ QS c= PS by XBOOLE_1:17;
+   hence thesis by A1,A2,Th18;
+  end;
+
+theorem
+   TS is_T2 & TS is compact implies TS is_T3
+ proof
+  assume that A1: TS is_T2 and A2: TS is compact;
+  thus TS is_T3
+   proof
+    let p be Point of TS;
+    let F be Subset of TS such that A3: F <> {} and
+     A4: F is closed and A5: not p in F;
+       F is compact by A2,A4,Th17;
+    hence thesis by A1,A3,A5,Th15;
+   end;
+ end;
+
+theorem
+   TS is_T2 & TS is compact implies TS is_T4
+ proof
+  assume that A1: TS is_T2 and A2: TS is compact;
+  thus TS is_T4
+    proof
+     let A,B be Subset of TS such that A3: A <> {} and
+      A4: B <> {} and A5: A is closed and
+      A6: B is closed and A7: A /\ B = {};
+      A8: A is compact by A2,A5,Th17;
+      A9: B is compact by A2,A6,Th17;
+    defpred P[set,set,set] means
+    ex P,Q being Subset of TS st $2 = P & $3 = Q &
+        P is open & Q is open & $1 in P & B c= Q & P /\ Q = {};
+A10: x in A implies ex y,z st y in the topology of TS &
+      z in  the topology of TS & P[x,y,z]
+       proof
+        assume A11: x in A;
+         then reconsider p=x as Point of TS;
+           not p in B by A7,A11,XBOOLE_0:def 3;
+         then consider W,V being Subset of TS such that
+         A12: W is open and
+          A13: V is open and A14: p in W and
+           A15: B c= V and A16: W misses V by A1,A4,A9,Th15;
+         reconsider X = W, Y = V as set;
+        take X,Y;
+        thus X in the topology of TS & Y in the topology of TS
+          by A12,A13,PRE_TOPC:def 5;
+          W /\ V = {} by A16,XBOOLE_0:def 7;
+        hence thesis by A12,A13,A14,A15;
+       end;
+      consider f,g being Function such that
+A17:    dom f = A & dom g = A and
+A18:     for x st x in A holds P[x,f.x,g.x] from BiFuncEx(A10);
+        f.:A c= bool the carrier of TS
+       proof
+        let x; assume x in f.:A;
+        then consider y such that y in dom f and A19: y in A and A20: f.y=x
+         by FUNCT_1:def 12;
+           ex P,Q being Subset of TS st f.y=P & g.y=Q &
+         P is open & Q is open & y in P &
+         B c= Q & P /\ Q = {} by A18,A19;
+        hence thesis by A20;
+       end;
+      then f.:A is Subset-Family of TS by SETFAM_1:def 7;
+      then reconsider Cf = f.:A as Subset-Family of TS;
+        A c= union Cf
+       proof
+        let x; assume A21: x in A;
+        then consider P,Q being Subset of TS such that
+        A22: f.x=P and g.x=Q and
+           P is open and Q is open and
+         A23: x in P and B c= Q & P /\ Q = {} by A18;
+          P in Cf by A17,A21,A22,FUNCT_1:def 12;
+        hence thesis by A23,TARSKI:def 4;
+       end;
+      then A24: Cf is_a_cover_of A by Def1;
+      A25: Cf is open
+       proof
+        let G be Subset of TS; assume G in Cf;
+         then consider x such that x in dom f and A26: x in A
+          and A27: G = f.x by FUNCT_1:def 12;
+            ex P,Q being Subset of TS
+           st f.x=P & g.x=Q & P is open & Q is open & x in P &
+          B c= Q & P /\ Q = {} by A18,A26;
+         hence G is open by A27;
+       end;
+      then consider C being Subset-Family of TS such that
+       A28: C c= Cf and A29: C is_a_cover_of A and
+       A30: C is finite by A8,A24,Def7;
+         C c= rng f by A17,A28,RELAT_1:146;
+      then consider H' being set such that
+       A31: H' c= dom f and A32: H' is finite and A33: f.:H' = C by A30,Th1;
+        g.:H' c= bool the carrier of TS
+       proof
+        let x; assume x in g.:H';
+        then consider y such that y in dom g and A34: y in H' and A35: g.y=x
+         by FUNCT_1:def 12;
+          ex P,Q being Subset of TS st f.y=P & g.y=Q &
+         P is open & Q is open & y in P &
+         B c= Q & P /\ Q = {} by A17,A18,A31,A34;
+        hence thesis by A35;
+       end;
+      then g.:H' is Subset-Family of TS by SETFAM_1:def 7;
+      then reconsider Bk = g.:H' as Subset-Family of TS;
+    take W = union C, V = meet Bk;
+        C is open by A25,A28,TOPS_2:18;
+    hence W is open by TOPS_2:26;
+      A36: Bk is finite by A32,FINSET_1:17;
+        Bk is open
+       proof
+        let G be Subset of TS; assume G in Bk;
+         then consider x such that A37: x in dom g and x in H'
+          and A38: G = g.x by FUNCT_1:def 12;
+           ex P,Q being Subset of TS st f.x = P & g.x = Q &
+        P is open & Q is open & x in P & B c= Q & P /\ Q = {} by A17,A18,A37;
+        hence G is open by A38;
+       end;
+    hence V is open by A36,TOPS_2:27;
+    thus A c= W by A29,Def1;
+      consider z being Element of A;
+        A c= union C by A29,Def1;
+      then z in union C by A3,TARSKI:def 3;
+      then consider D being set such that A39: z in D & D in C by TARSKI:def 4;
+      consider y such that A40: y in dom f and A41: y in H'
+       and D = f.y by A33,A39,FUNCT_1:def 12;
+      consider P,Q being Subset of TS such that f.y = P and
+      A42: g.y = Q and P is open and
+         Q is open and y in P and B c= Q and P /\ Q = {} by A17,A18,A40;
+      A43: Bk <> {} by A17,A40,A41,A42,FUNCT_1:def 12;
+        for X being set st X in Bk holds B c= X
+       proof
+        let X be set; assume A44: X in Bk;
+         then reconsider X' = X as Subset of TS;
+         consider x such that A45: x in dom g and x in H'
+         and A46: X' = g.x by A44,FUNCT_1:def 12;
+            ex P,Q being Subset of TS
+           st f.x = P & g.x = Q & P is open &
+         Q is open & x in P & B c= Q & P /\ Q = {} by A17,A18,A45;
+        hence B c= X by A46;
+       end;
+     hence B c= V by A43,SETFAM_1:6;
+     thus W /\ V = {}
+       proof
+        assume A47: W /\ V <> {};
+         consider x being Element of (union C) /\ (meet Bk);
+         A48: x in (union C) & x in meet Bk by A47,XBOOLE_0:def 3;
+         then consider D being set such that
+          A49: x in D and A50: D in C by TARSKI:def 4;
+         consider z such that A51: z in dom f and
+          A52: z in H' and A53: D = f.z by A33,A50,FUNCT_1:def 12;
+         consider P,Q being Subset of TS such that
+         A54: f.z = P and A55: g.z = Q and P is open
+         and Q is open and z in P and B c= Q and A56:P /\
+ Q = {} by A17,A18,A51;
+           Q in Bk by A17,A51,A52,A55,FUNCT_1:def 12;
+         then x in Q by A48,SETFAM_1:def 1;
+        hence contradiction by A49,A53,A54,A56,XBOOLE_0:def 3;
+       end;
+    end;
+  end;
+
+reserve S for non empty TopStruct;
+reserve f for map of T,S;
+
+theorem
+   T is compact & f is continuous & rng f = [#] S implies S is compact
+ proof
+  assume A1: T is compact;
+  assume that A2: f is continuous and A3: rng f = [#] S;
+    let F be Subset-Family of S such that
+     A4: F is_a_cover_of S and A5: F is open;
+     reconsider F1=F as Subset-Family of S;
+     reconsider G = ("f).:F1 as Subset-Family of T by TOPS_2:54;
+       F1 c= bool rng f by A3,TOPS_2:1;
+     then A6: union G = f"(union F) by FUNCT_3:30
+           .= f"(rng f) by A3,A4,PRE_TOPC:def 8
+           .= f"(f.: (dom f)) by RELAT_1:146
+           .= f"(f.:([#] T)) by TOPS_2:51;
+       [#] T c= dom f by TOPS_2:51;
+     then [#] T c= f"(f.:([#] T)) & f"(f.:([#] T)) c= [#] T
+      by FUNCT_1:146,PRE_TOPC:14;
+     then union G = [#] T by A6,XBOOLE_0:def 10;
+     then A7: G is_a_cover_of T by PRE_TOPC:def 8;
+       G is open by A2,A5,TOPS_2:59;
+     then consider G' being Subset-Family of T such that
+     A8: G' c= G and A9: G' is_a_cover_of T and
+     A10: G' is finite by A1,A7,Def3;
+    reconsider F'=(.:f).:G' as Subset-Family of S
+      by SETFAM_1:def 7;
+    reconsider F' as Subset-Family of S;
+    take F';
+     A11: (.:f).:G' c= (.:f).:G by A8,RELAT_1:156;
+       ("f).:F c= (.:f)"F by FUNCT_3:33;
+     then (.:f).:(("f).:F) c= (.:f).:((.:f)"F) & (.:f).:((.:f)"F) c= F
+      by FUNCT_1:145,RELAT_1:156;
+     then (.:f).:G c= F by XBOOLE_1:1;
+    hence F' c= F by A11,XBOOLE_1:1;
+       dom f = [#] T by TOPS_2:51;
+     then G' c= bool dom f by TOPS_2:1;
+     then union F' = f.:(union G') by FUNCT_3:16
+         .= f.:([#] T) by A9,PRE_TOPC:def 8
+         .= f.:dom f by TOPS_2:51
+         .= [#] S by A3,RELAT_1:146;
+    hence F' is_a_cover_of S by PRE_TOPC:def 8;
+    thus F' is finite by A10,FINSET_1:17;
+ end;
+
+theorem Th24:
+ f is continuous & rng f = [#] S & P is compact implies f.:P is compact
+ proof
+  assume A1: f is continuous & rng f = [#] S;
+  assume A2: P is compact;
+  thus f.:P is compact
+    proof
+     let F be Subset-Family of S such that
+      A3: F is_a_cover_of f.:P and A4: F is open;
+      reconsider G = ("f).:F as Subset-Family of T by TOPS_2:54;
+         F c= bool rng f by A1,TOPS_2:1;
+      then A5:union G = f"(union F) by FUNCT_3:30;
+        f.:P c= union F by A3,Def1;
+      then A6: f"(f.:P) c= f"(union F) by RELAT_1:178;
+        P c= [#] T by PRE_TOPC:14;
+      then P c= dom f by TOPS_2:51;
+      then P c= f"(f.:P) by FUNCT_1:146;
+      then P c= union G by A5,A6,XBOOLE_1:1;
+      then A7: G is_a_cover_of P by Def1;
+        G is open by A1,A4,TOPS_2:59;
+      then consider G' being Subset-Family of T such that
+      A8: G' c= G and A9: G' is_a_cover_of P and
+       A10: G' is finite by A2,A7,Def7;
+     reconsider F'= (.:f).:G' as Subset-Family of S
+       by SETFAM_1:def 7;
+     reconsider F' as Subset-Family of S;
+     take F';
+      A11: (.:f).:G' c= (.:f).:G by A8,RELAT_1:156;
+        ("f).:F c= (.:f)"F by FUNCT_3:33;
+      then (.:f).:(("f).:F) c= (.:f).:((.:f)"F) & (.:f).:((.:f)"F) c= F
+       by FUNCT_1:145,RELAT_1:156;
+      then (.:f).:G c= F by XBOOLE_1:1;
+     hence F' c= F by A11,XBOOLE_1:1;
+        dom f = [#] T by TOPS_2:51;
+      then G' c= bool dom f by TOPS_2:1;
+      then A12: union F' = f.:(union G') by FUNCT_3:16;
+        P c= union G' by A9,Def1;
+      then f.:P c= union F' by A12,RELAT_1:156;
+     hence F' is_a_cover_of f.:P by Def1;
+     thus F' is finite by A10,FINSET_1:17;
+    end;
+  end;
+
+reserve SS for non empty TopSpace;
+reserve f for map of TS,SS;
+
+theorem Th25:
+ TS is compact & SS is_T2 & rng f = [#] SS & f is continuous implies
+  for PS st PS is closed holds f.:PS is closed
+ proof
+  assume that A1: TS is compact and A2: SS is_T2;
+  assume that A3: rng f = [#] SS and A4: f is continuous;
+  let PS; assume PS is closed;
+   then PS is compact by A1,Th17;
+   then f.:PS is compact by A3,A4,Th24;
+  hence thesis by A2,Th16;
+ end;
+
+theorem
+   TS is compact & SS is_T2 & dom f = [#]TS & rng f = [#]SS & f is one-to-one &
+  f is continuous implies f is_homeomorphism
+  proof
+   assume that A1: TS is compact and A2: SS is_T2;
+   assume that A3: dom f = [#]TS & rng f = [#] SS and
+    A4: f is one-to-one and A5: f is continuous;
+     for P being Subset of TS holds P is closed iff f.:P is closed
+    proof
+     let P be Subset of TS;
+     thus P is closed implies f.:P is closed by A1,A2,A3,A5,Th25;
+     assume f.:P is closed;
+      then A6: f"(f.:P) is closed by A5,PRE_TOPC:def 12;
+      A7: f"(f.:P) c= P by A4,FUNCT_1:152;
+        dom f = [#] TS by TOPS_2:51;
+      then P c= dom f by PRE_TOPC:14;
+      then P c= f"(f.:P) by FUNCT_1:146;
+      hence P is closed by A6,A7,XBOOLE_0:def 10;
+     end;
+   hence f is_homeomorphism by A3,A4,TOPS_2:72;
+end;

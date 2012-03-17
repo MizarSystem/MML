@@ -1,0 +1,3474 @@
+:: Introducing Spans
+::  by Andrzej Trybulec
+::
+:: Received May 27, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary JORDAN13, JORDAN11, FINSEQ_1, TOPREAL1, GOBOARD1, BOOLE, JORDAN1H,
+      FINSEQ_4, EUCLID, MATRIX_1, PRE_TOPC, SEQM_3, SPPOL_1, SPRECT_2,
+      GOBOARD5, ABSVALUE, CONNSP_1, TOPREAL2, ARYTM_1, TOPS_1, RELAT_1,
+      FUNCT_1, SUBSET_1, RELAT_2, RFINSEQ, GOBOARD9, TARSKI, TREES_1, CARD_1,
+      JORDAN8, GOBRD13, FINSEQ_5, JORDAN2C, METRIC_1, PCOMPS_1, GROUP_1, ARYTM;
+ notation TARSKI, GOBOARD5, XBOOLE_0, SUBSET_1, STRUCT_0, ORDINAL1, NUMBERS,
+      XREAL_0, REAL_1, NAT_1, BINARITH, ABSVALUE, RELAT_1, FUNCT_1, FUNCT_2,
+      CARD_1, CARD_4, PARTFUN1, FINSEQ_1, FINSEQ_2, FINSEQ_4, RFINSEQ,
+      MATRIX_1, METRIC_1, PRE_TOPC, TOPS_1, CONNSP_1, PCOMPS_1, EUCLID,
+      TOPREAL1, TOPREAL2, GOBOARD1, SPPOL_1, SPRECT_2, GOBOARD9, JORDAN8,
+      GOBRD13, JORDAN2C, JORDAN1H, JORDAN11;
+ constructors REAL_1, FINSEQ_4, CARD_4, RFINSEQ, BINARITH, TOPS_1, CONNSP_1,
+      PSCOMP_1, REALSET1, SPRECT_2, GOBOARD9, JORDAN8, JORDAN2C, JORDAN11,
+      GROUP_1, TOPREAL4, PARTFUN1, JORDAN1H, MEMBERED;
+ clusters RELSET_1, FINSEQ_1, SPPOL_2, REVROT_1, SPRECT_2, XREAL_0, GOBOARD9,
+      JORDAN8, GOBRD13, SUBSET_1, TOPREAL6, SPRECT_3, INT_1, EUCLID, JORDAN1A,
+      MEMBERED, ZFMISC_1, NUMBERS, ORDINAL2;
+ requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
+ definitions TARSKI, XBOOLE_0, GOBOARD1, GOBOARD5;
+ theorems NAT_1, FINSEQ_1, GOBOARD1, FINSEQ_4, EUCLID, FINSEQ_3, AXIOMS,
+      REAL_1, TOPREAL4, SPPOL_2, JORDAN3, FINSEQ_5, FINSEQ_6, CQC_THE1,
+      GOBOARD7, TOPREAL1, BINARITH, AMI_5, XBOOLE_0, XBOOLE_1, RLVECT_1,
+      GOBOARD5, SPPOL_1, ABSVALUE, FUNCT_1, FUNCT_2, GROUP_5, GOBOARD9,
+      RELAT_1, FINSEQ_2, UNIFORM1, SUBSET_1, GOBRD11, JORDAN4, GOBOARD2,
+      SPRECT_3, CARD_1, RFINSEQ, GOBOARD6, TOPREAL3, TOPMETR, TOPS_1, JORDAN8,
+      GOBRD13, SPRECT_4, CONNSP_1, GOBRD14, JORDAN9, JORDAN5B, JORDAN2C,
+      PARTFUN2, RELSET_1, TBSP_1, SCMFSA_7, JORDAN1H, JORDAN11, XREAL_0,
+      ZFMISC_1, XCMPLX_0, XCMPLX_1;
+ schemes NAT_1, LATTICE5;
+
+begin :: Spans
+
+ reserve i, j, k, l, m, n, i1, i2, j1, j2 for Nat;
+
+definition let C be non vertical non horizontal non empty
+                      being_simple_closed_curve Subset of TOP-REAL 2,
+               n be Nat;
+  assume
+A1: n is_sufficiently_large_for C;
+  func Span(C,n) -> clockwise_oriented
+    (standard non constant special_circular_sequence) means
+      it is_sequence_on Gauge(C,n) &
+    it/.1 = Gauge(C,n)*(X-SpanStart(C,n),Y-SpanStart(C,n)) &
+    it/.2 = Gauge(C,n)*(X-SpanStart(C,n)-'1,Y-SpanStart(C,n)) &
+    for k being Nat st 1 <= k & k+2 <= len it holds
+      (front_right_cell(it,k,Gauge(C,n)) misses C &
+        front_left_cell(it,k,Gauge(C,n)) misses C
+          implies it turns_left k,Gauge(C,n)) &
+      (front_right_cell(it,k,Gauge(C,n)) misses C &
+        front_left_cell(it,k,Gauge(C,n)) meets C
+          implies it goes_straight k,Gauge(C,n)) &
+      (front_right_cell(it,k,Gauge(C,n)) meets C
+        implies it turns_right k,Gauge(C,n));
+existence
+proof
+   set G = Gauge(C,n);
+A2:   len G = 2|^n+3 & len G = width G by JORDAN8:def 1;
+   defpred P[Nat,set,set] means
+      ($1 = 0 implies $3 = <*G*(X-SpanStart(C,n),Y-SpanStart(C,n))*>) &
+      ($1 = 1 implies $3 = <*G*(X-SpanStart(C,n),Y-SpanStart(C,n)),
+                   G*(X-SpanStart(C,n)-'1,Y-SpanStart(C,n))*>) &
+      ($1 > 1 & $2 is FinSequence of TOP-REAL 2 implies
+        for f being FinSequence of TOP-REAL 2 st $2 = f holds
+         (len f = $1 implies
+          (f is_sequence_on G & left_cell(f,len f-'1,G) meets C implies
+           (front_right_cell(f,(len f)-'1,G) misses C &
+              front_left_cell(f,(len f)-'1,G) misses C
+             implies ex i,j st
+                f^<*G*(i,j)*> turns_left (len f)-'1,G &
+              $3 = f^<*G*(i,j)*>) &
+           (front_right_cell(f,(len f)-'1,G) misses C &
+              front_left_cell(f,(len f)-'1,G) meets C
+             implies ex i,j st
+               f^<*G*(i,j)*> goes_straight (len f)-'1,G &
+              $3 = f^<*G*(i,j)*>) &
+           (front_right_cell(f,(len f)-'1,G) meets C
+             implies ex i,j st
+               f^<*G*(i,j)*> turns_right (len f)-'1,G &
+              $3 = f^<*G*(i,j)*>)) &
+          (not f is_sequence_on G or left_cell(f,len f-'1,G) misses C
+           implies $3 = f^<*G*(1,1)*>)) &
+         (len f <> $1 implies $3 = {})) &
+       ($1 > 1 & $2 is not FinSequence of TOP-REAL 2 implies $3 = {});
+A3:  for k being Nat, x being set ex y being set st P[k,x,y]
+   proof
+    let k be Nat, x be set;
+    per cases by CQC_THE1:2;
+    suppose
+A4:    k=0;
+     take <*G*(X-SpanStart(C,n),Y-SpanStart(C,n))*>;
+     thus thesis by A4;
+    suppose
+A5:    k = 1;
+     take <*G*(X-SpanStart(C,n),Y-SpanStart(C,n)),
+            G*(X-SpanStart(C,n)-'1,Y-SpanStart(C,n))*>;
+     thus thesis by A5;
+    suppose that
+A6:    k > 1 and
+A7:    x is FinSequence of TOP-REAL 2;
+     reconsider f = x as FinSequence of TOP-REAL 2 by A7;
+     thus thesis
+     proof per cases;
+      suppose
+A8:      len f = k;
+       thus thesis
+        proof per cases;
+         suppose
+A9:         f is_sequence_on G & left_cell(f,len f-'1,G) meets C;
+A10:         1 <= (len f)-'1 by A6,A8,JORDAN3:12;
+A11:         (len f) -'1 +1 = len f by A6,A8,AMI_5:4;
+         then consider i1,j1,i2,j2 being Nat such that
+A12:         [i1,j1] in Indices G & f/.((len f)-'1) = G*(i1,j1) and
+A13:         [i2,j2] in Indices G & f/.((len f) -'1+1) = G*(i2,j2) and
+A14:         i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+            i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1 by A9,A10,JORDAN8:6;
+A15:        1 <= i1 & i1 <= len G & 1 <= j1 & j1 <= width G by A12,GOBOARD5:1;
+A16:        1 <= i2 & i2 <= len G & 1 <= j2 & j2 <= width G by A13,GOBOARD5:1;
+A17:       i1-'1 <= len G & j1-'1 <= width G by A15,JORDAN3:7;
+A18:        1 <= i2+1 & 1 <= j2+1 by NAT_1:37;
+A19:       i2-'1 <= len G & j2-'1 <= width G by A16,JORDAN3:7;
+              (len f)-'1 <= len f by GOBOARD9:2;
+then A20:        (len f)-'1 in dom f & (len f)-'1+1 in dom f
+              by A6,A8,A10,A11,FINSEQ_3:27;
+A21:        (len f)-'1+(1+1) = (len f)+1 by A11,XCMPLX_1:1;
+          thus thesis
+          proof per cases;
+           suppose
+A22:          front_right_cell(f,(len f)-'1,G) misses C &
+              front_left_cell(f,(len f)-'1,G) misses C;
+            thus thesis
+             proof per cases by A14;
+              suppose
+A23:              i1 = i2 & j1+1 = j2;
+               take f1 = f^<*G*(i2-'1,j2)*>;
+                 now
+                take i=i2-'1 ,j=j2;
+                   now let i1',j1',i2',j2' be Nat;
+                  assume that
+A24:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
+A25:                 f1/.((len f)-'1) = G*(i1',j1') &
+                    f1/.((len f)-'1+1) = G*(i2',j2');
+                    f/.((len f)-'1) = G*(i1',j1') &
+                    f/.((len f)-'1+1) = G*(i2',j2') by A20,A25,GROUP_5:95;
+then A26:                 i1 = i1' & j1 = j1' & i2 = i2' & j2 = j2'
+                     by A12,A13,A24,GOBOARD1:21;
+                    now assume i2-'1 < 1;
+                   then i2-'1 = 0 by RLVECT_1:98;
+                   then i2 <= 1 by JORDAN4:1;
+                   then i2 = 1 by A16,AXIOMS:21;
+                   then cell(G,1-'1,j1) meets C
+                        by A9,A10,A11,A12,A13,A23,GOBRD13:22;
+                   then cell(G,0,j1) meets C by GOBOARD9:1;
+                   hence contradiction by A2,A15,JORDAN8:21;
+                  end;
+                  hence
+                     i1' = i2' & j1'+1 = j2' & [i2'-'1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'-'1,j2') or
+                   i1'+1 = i2' & j1' = j2' & [i2',j2'+1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'+1) or
+                   i1' = i2'+1 & j1' = j2' & [i2',j2'-'1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'-'1) or
+                   i1' = i2' & j1' = j2'+1 & [i2'+1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'+1,j2')
+                           by A16,A19,A21,A23,A26,GOBOARD7:10,TOPREAL4:1;
+                 end;
+                 hence f1 turns_left (len f)-'1,G by GOBRD13:def 7;
+                 thus f1 = f^<*G*(i,j)*>;
+               end;
+               hence thesis by A6,A8,A9,A22;
+              suppose
+A27:             i1+1 = i2 & j1 = j2;
+               take f1 = f^<*G*(i2,j2+1)*>;
+                 now
+                take i=i2 ,j=j2+1;
+                   now let i1',j1',i2',j2' be Nat;
+                  assume that
+A28:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
+A29:                 f1/.((len f)-'1) = G*(i1',j1') &
+                    f1/.((len f)-'1+1) = G*(i2',j2');
+                    f/.((len f)-'1) = G*(i1',j1') &
+                    f/.((len f)-'1+1) = G*(i2',j2') by A20,A29,GROUP_5:95;
+then A30:                 i1 = i1' & j1 = j1' & i2 = i2' & j2 = j2'
+                     by A12,A13,A28,GOBOARD1:21;
+                    now assume j2+1 > len G;
+                   then j2+1 <= (len G)+1 & (len G)+1 <= j2+1
+                     by A2,A16,AXIOMS:24,NAT_1:38;
+                   then j2+1 = (len G)+1 by AXIOMS:21;
+                   then j2 = len G by XCMPLX_1:2;
+                   then cell(G,i1,len G) meets C
+                    by A9,A10,A11,A12,A13,A27,GOBRD13:24;
+                   hence contradiction by A15,JORDAN8:18;
+                  end;
+                  hence
+                     i1' = i2' & j1'+1 = j2' & [i2'-'1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'-'1,j2') or
+                   i1'+1 = i2' & j1' = j2' & [i2',j2'+1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'+1) or
+                   i1' = i2'+1 & j1' = j2' & [i2',j2'-'1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'-'1) or
+                   i1' = i2' & j1' = j2'+1 & [i2'+1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'+1,j2')
+                      by A2,A16,A18,A21,A27,A30,GOBOARD7:10,TOPREAL4:1;
+                 end;
+                 hence f1 turns_left (len f)-'1,G by GOBRD13:def 7;
+                 thus f1 = f^<*G*(i,j)*>;
+               end;
+               hence thesis by A6,A8,A9,A22;
+              suppose
+A31:             i1 = i2+1 & j1 = j2;
+               take f1 = f^<*G*(i2,j2-'1)*>;
+                 now
+                take i=i2 ,j=j2-'1;
+                   now let i1',j1',i2',j2' be Nat;
+                  assume that
+A32:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
+A33:                 f1/.((len f)-'1) = G*(i1',j1') &
+                    f1/.((len f)-'1+1) = G*(i2',j2');
+                    f/.((len f)-'1) = G*(i1',j1') &
+                    f/.((len f)-'1+1) = G*(i2',j2') by A20,A33,GROUP_5:95;
+then A34:                 i1 = i1' & j1 = j1' & i2 = i2' & j2 = j2'
+                     by A12,A13,A32,GOBOARD1:21;
+                    now assume j2-'1 < 1;
+                   then j2-'1 = 0 by RLVECT_1:98;
+                   then j2 <= 1 by JORDAN4:1;
+                   then j2 = 1 by A16,AXIOMS:21;
+                   then cell(G,i2,1-'1) meets C
+                    by A9,A10,A11,A12,A13,A31,GOBRD13:26;
+                   then cell(G,i2,0) meets C by GOBOARD9:1;
+                   hence contradiction by A16,JORDAN8:20;
+                  end;
+                  hence
+                     i1' = i2' & j1'+1 = j2' & [i2'-'1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'-'1,j2') or
+                   i1'+1 = i2' & j1' = j2' & [i2',j2'+1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'+1) or
+                   i1' = i2'+1 & j1' = j2' & [i2',j2'-'1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'-'1) or
+                   i1' = i2' & j1' = j2'+1 & [i2'+1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'+1,j2')
+                     by A16,A19,A21,A31,A34,GOBOARD7:10,TOPREAL4:1;
+                 end;
+                 hence f1 turns_left (len f)-'1,G by GOBRD13:def 7;
+                 thus f1 = f^<*G*(i,j)*>;
+               end;
+               hence thesis by A6,A8,A9,A22;
+              suppose
+A35:             i1 = i2 & j1 = j2+1;
+               take f1 = f^<*G*(i2+1,j2)*>;
+                 now
+                take i=i2+1 ,j=j2;
+                   now let i1',j1',i2',j2' be Nat;
+                  assume that
+A36:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
+A37:                 f1/.((len f)-'1) = G*(i1',j1') &
+                    f1/.((len f)-'1+1) = G*(i2',j2');
+                    f/.((len f)-'1) = G*(i1',j1') &
+                    f/.((len f)-'1+1) = G*(i2',j2') by A20,A37,GROUP_5:95;
+then A38:                 i1 = i1' & j1 = j1' & i2 = i2' & j2 = j2'
+                     by A12,A13,A36,GOBOARD1:21;
+                    now assume i2+1 > len G;
+                   then i2+1 <= (len G)+1 & (len G)+1 <= i2+1
+                    by A16,AXIOMS:24,NAT_1:38;
+                   then i2+1 = (len G)+1 by AXIOMS:21;
+                   then i2 = len G by XCMPLX_1:2;
+                   then cell(G,len G,j2) meets C
+                    by A9,A10,A11,A12,A13,A35,GOBRD13:28;
+                   hence contradiction by A2,A16,JORDAN8:19;
+                  end;
+                  hence
+                     i1' = i2' & j1'+1 = j2' & [i2'-'1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'-'1,j2') or
+                   i1'+1 = i2' & j1' = j2' & [i2',j2'+1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'+1) or
+                   i1' = i2'+1 & j1' = j2' & [i2',j2'-'1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'-'1) or
+                   i1' = i2' & j1' = j2'+1 & [i2'+1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'+1,j2')
+                       by A16,A18,A21,A35,A38,GOBOARD7:10,TOPREAL4:1;
+                 end;
+                 hence f1 turns_left (len f)-'1,G by GOBRD13:def 7;
+                 thus f1 = f^<*G*(i,j)*>;
+               end;
+               hence thesis by A6,A8,A9,A22;
+             end;
+           suppose
+A39:          front_right_cell(f,(len f)-'1,G) misses C &
+               front_left_cell(f,(len f)-'1,G) meets C;
+            thus thesis
+             proof per cases by A14;
+              suppose
+A40:              i1 = i2 & j1+1 = j2;
+               take f1 = f^<*G*(i2,j2+1)*>;
+                 now
+                take i=i2 ,j=j2+1;
+                   now let i1',j1',i2',j2' be Nat;
+                  assume that
+A41:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
+A42:                 f1/.((len f)-'1) = G*(i1',j1') &
+                    f1/.((len f)-'1+1) = G*(i2',j2');
+                    f/.((len f)-'1) = G*(i1',j1') &
+                    f/.((len f)-'1+1) = G*(i2',j2') by A20,A42,GROUP_5:95;
+then A43:                 i1 = i1' & j1 = j1' & i2 = i2' & j2 = j2'
+                     by A12,A13,A41,GOBOARD1:21;
+                    now assume j2+1 > len G;
+                   then j2+1 <= (len G)+1 & (len G)+1 <= j2+1
+                     by A2,A16,AXIOMS:24,NAT_1:38;
+                   then j2+1 = (len G)+1 by AXIOMS:21;
+                   then j2 = len G by XCMPLX_1:2;
+                   then cell(G,i1-'1,len G) meets C
+                    by A9,A10,A11,A12,A13,A39,A40,GOBRD13:35;
+                   hence contradiction by A17,JORDAN8:18;
+                  end;
+                  hence
+                     i1' = i2' & j1'+1 = j2' & [i2',j2'+1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'+1) or
+                   i1'+1 = i2' & j1' = j2' & [i2'+1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'+1,j2') or
+                   i1' = i2'+1 & j1' = j2' & [i2'-'1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'-'1,j2') or
+                   i1' = i2' & j1' = j2'+1 & [i2',j2'-'1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'-'1)
+                    by A2,A16,A18,A21,A40,A43,GOBOARD7:10,TOPREAL4:1;
+                 end;
+                 hence f1 goes_straight (len f)-'1,G by GOBRD13:def 8;
+                 thus f1 = f^<*G*(i,j)*>;
+               end;
+               hence thesis by A6,A8,A9,A39;
+              suppose
+A44:             i1+1 = i2 & j1 = j2;
+               take f1 = f^<*G*(i2+1,j2)*>;
+                 now
+                take i=i2+1 ,j=j2;
+                   now let i1',j1',i2',j2' be Nat;
+                  assume that
+A45:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
+A46:                 f1/.((len f)-'1) = G*(i1',j1') &
+                    f1/.((len f)-'1+1) = G*(i2',j2');
+                    f/.((len f)-'1) = G*(i1',j1') &
+                    f/.((len f)-'1+1) = G*(i2',j2') by A20,A46,GROUP_5:95;
+then A47:                 i1 = i1' & j1 = j1' & i2 = i2' & j2 = j2'
+                     by A12,A13,A45,GOBOARD1:21;
+                    now assume i2+1 > len G;
+                   then i2+1 <= (len G)+1 & (len G)+1 <= i2+1
+                     by A16,AXIOMS:24,NAT_1:38;
+                   then i2+1 = (len G)+1 by AXIOMS:21;
+                   then i2 = len G by XCMPLX_1:2;
+                   then cell(G,len G,j1) meets C
+                     by A9,A10,A11,A12,A13,A39,A44,GOBRD13:37;
+                   hence contradiction by A2,A15,JORDAN8:19;
+                  end;
+                  hence
+                     i1' = i2' & j1'+1 = j2' & [i2',j2'+1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'+1) or
+                   i1'+1 = i2' & j1' = j2' & [i2'+1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'+1,j2') or
+                   i1' = i2'+1 & j1' = j2' & [i2'-'1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'-'1,j2') or
+                   i1' = i2' & j1' = j2'+1 & [i2',j2'-'1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'-'1)
+                       by A16,A18,A21,A44,A47,GOBOARD7:10,TOPREAL4:1;
+                 end;
+                 hence f1 goes_straight (len f)-'1,G by GOBRD13:def 8;
+                 thus f1 = f^<*G*(i,j)*>;
+               end;
+               hence thesis by A6,A8,A9,A39;
+              suppose
+A48:             i1 = i2+1 & j1 = j2;
+               take f1 = f^<*G*(i2-'1,j2)*>;
+                 now
+                take i=i2-'1 ,j=j2;
+                   now let i1',j1',i2',j2' be Nat;
+                  assume that
+A49:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
+A50:                 f1/.((len f)-'1) = G*(i1',j1') &
+                    f1/.((len f)-'1+1) = G*(i2',j2');
+                    f/.((len f)-'1) = G*(i1',j1') &
+                    f/.((len f)-'1+1) = G*(i2',j2') by A20,A50,GROUP_5:95;
+then A51:                 i1 = i1' & j1 = j1' & i2 = i2' & j2 = j2'
+                     by A12,A13,A49,GOBOARD1:21;
+                    now assume i2-'1 < 1;
+                   then i2-'1 = 0 by RLVECT_1:98;
+                   then i2 <= 1 by JORDAN4:1;
+                   then i2 = 1 by A16,AXIOMS:21;
+                   then cell(G,1-'1,j1-'1) meets C
+                    by A9,A10,A11,A12,A13,A39,A48,GOBRD13:39;
+                   then cell(G,0,j1-'1) meets C by GOBOARD9:1;
+                   hence contradiction by A2,A17,JORDAN8:21;
+                  end;
+                  hence
+                     i1' = i2' & j1'+1 = j2' & [i2',j2'+1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'+1) or
+                   i1'+1 = i2' & j1' = j2' & [i2'+1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'+1,j2') or
+                   i1' = i2'+1 & j1' = j2' & [i2'-'1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'-'1,j2') or
+                   i1' = i2' & j1' = j2'+1 & [i2',j2'-'1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'-'1)
+                      by A16,A19,A21,A48,A51,GOBOARD7:10,TOPREAL4:1;
+                 end;
+                 hence f1 goes_straight (len f)-'1,G by GOBRD13:def 8;
+                 thus f1 = f^<*G*(i,j)*>;
+               end;
+               hence thesis by A6,A8,A9,A39;
+              suppose
+A52:             i1 = i2 & j1 = j2+1;
+               take f1 = f^<*G*(i2,j2-'1)*>;
+                 now
+                take i=i2 ,j=j2-'1;
+                   now let i1',j1',i2',j2' be Nat;
+                  assume that
+A53:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
+A54:                 f1/.((len f)-'1) = G*(i1',j1') &
+                    f1/.((len f)-'1+1) = G*(i2',j2');
+                    f/.((len f)-'1) = G*(i1',j1') &
+                    f/.((len f)-'1+1) = G*(i2',j2') by A20,A54,GROUP_5:95;
+then A55:                 i1 = i1' & j1 = j1' & i2 = i2' & j2 = j2'
+                     by A12,A13,A53,GOBOARD1:21;
+                    now assume j2-'1 < 1;
+                   then j2-'1 = 0 by RLVECT_1:98;
+                   then j2 <= 1 by JORDAN4:1;
+                   then j2 = 1 by A16,AXIOMS:21;
+                   then cell(G,i1,1-'1) meets C
+                     by A9,A10,A11,A12,A13,A39,A52,GOBRD13:41;
+                   then cell(G,i1,0) meets C by GOBOARD9:1;
+                   hence contradiction by A15,JORDAN8:20;
+                  end;
+                  hence
+                     i1' = i2' & j1'+1 = j2' & [i2',j2'+1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'+1) or
+                   i1'+1 = i2' & j1' = j2' & [i2'+1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'+1,j2') or
+                   i1' = i2'+1 & j1' = j2' & [i2'-'1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'-'1,j2') or
+                   i1' = i2' & j1' = j2'+1 & [i2',j2'-'1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'-'1)
+                      by A16,A19,A21,A52,A55,GOBOARD7:10,TOPREAL4:1;
+                 end;
+                 hence f1 goes_straight (len f)-'1,G by GOBRD13:def 8;
+                 thus f1 = f^<*G*(i,j)*>;
+               end;
+               hence thesis by A6,A8,A9,A39;
+             end;
+           suppose
+A56:          front_right_cell(f,(len f)-'1,G) meets C;
+            thus thesis
+             proof per cases by A14;
+              suppose
+A57:              i1 = i2 & j1+1 = j2;
+               take f1 = f^<*G*(i2+1,j2)*>;
+                 now
+                take i=i2+1 ,j=j2;
+                   now let i1',j1',i2',j2' be Nat;
+                  assume that
+A58:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
+A59:                 f1/.((len f)-'1) = G*(i1',j1') &
+                    f1/.((len f)-'1+1) = G*(i2',j2');
+                    f/.((len f)-'1) = G*(i1',j1') &
+                    f/.((len f)-'1+1) = G*(i2',j2') by A20,A59,GROUP_5:95;
+then A60:                 i1 = i1' & j1 = j1' & i2 = i2' & j2 = j2'
+                     by A12,A13,A58,GOBOARD1:21;
+                    now assume i2+1 > len G;
+                   then i2+1 <= (len G)+1 & (len G)+1 <= i2+1
+                    by A16,AXIOMS:24,NAT_1:38;
+                   then i2+1 = (len G)+1 by AXIOMS:21;
+                   then i2 = len G by XCMPLX_1:2;
+                   then cell(G,len G,j2) meets C
+                     by A9,A10,A11,A12,A13,A56,A57,GOBRD13:36;
+                   hence contradiction by A2,A16,JORDAN8:19;
+                  end;
+                  hence
+                     i1' = i2' & j1'+1 = j2' & [i2'+1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'+1,j2') or
+                   i1'+1 = i2' & j1' = j2' & [i2',j2'-'1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'-'1) or
+                   i1' = i2'+1 & j1' = j2' & [i2',j2'+1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'+1) or
+                   i1' = i2' & j1' = j2'+1 & [i2'-'1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'-'1,j2')
+                        by A16,A18,A21,A57,A60,GOBOARD7:10,TOPREAL4:1;
+                 end;
+                 hence f1 turns_right (len f)-'1,G by GOBRD13:def 6;
+                 thus f1 = f^<*G*(i,j)*>;
+               end;
+               hence thesis by A6,A8,A9,A56;
+              suppose
+A61:             i1+1 = i2 & j1 = j2;
+               take f1 = f^<*G*(i2,j2-'1)*>;
+                 now
+                take i=i2 ,j=j2-'1;
+                   now let i1',j1',i2',j2' be Nat;
+                  assume that
+A62:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
+A63:                 f1/.((len f)-'1) = G*(i1',j1') &
+                    f1/.((len f)-'1+1) = G*(i2',j2');
+                    f/.((len f)-'1) = G*(i1',j1') &
+                    f/.((len f)-'1+1) = G*(i2',j2') by A20,A63,GROUP_5:95;
+then A64:                 i1 = i1' & j1 = j1' & i2 = i2' & j2 = j2'
+                     by A12,A13,A62,GOBOARD1:21;
+                    now assume j2-'1 < 1;
+                   then j2-'1 = 0 by RLVECT_1:98;
+                   then j2 <= 1 by JORDAN4:1;
+                   then j2 = 1 by A16,AXIOMS:21;
+                   then cell(G,i2,1-'1) meets C
+                     by A9,A10,A11,A12,A13,A56,A61,GOBRD13:38;
+                   then cell(G,i2,0) meets C by GOBOARD9:1;
+                   hence contradiction by A16,JORDAN8:20;
+                  end;
+                  hence
+                     i1' = i2' & j1'+1 = j2' & [i2'+1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'+1,j2') or
+                   i1'+1 = i2' & j1' = j2' & [i2',j2'-'1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'-'1) or
+                   i1' = i2'+1 & j1' = j2' & [i2',j2'+1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'+1) or
+                   i1' = i2' & j1' = j2'+1 & [i2'-'1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'-'1,j2')
+                           by A16,A19,A21,A61,A64,GOBOARD7:10,TOPREAL4:1;
+                 end;
+                 hence f1 turns_right (len f)-'1,G by GOBRD13:def 6;
+                 thus f1 = f^<*G*(i,j)*>;
+               end;
+               hence thesis by A6,A8,A9,A56;
+              suppose
+A65:             i1 = i2+1 & j1 = j2;
+               take f1 = f^<*G*(i2,j2+1)*>;
+                 now
+                take i=i2 ,j=j2+1;
+                   now let i1',j1',i2',j2' be Nat;
+                  assume that
+A66:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
+A67:                 f1/.((len f)-'1) = G*(i1',j1') &
+                    f1/.((len f)-'1+1) = G*(i2',j2');
+                    f/.((len f)-'1) = G*(i1',j1') &
+                    f/.((len f)-'1+1) = G*(i2',j2') by A20,A67,GROUP_5:95;
+then A68:                 i1 = i1' & j1 = j1' & i2 = i2' & j2 = j2'
+                     by A12,A13,A66,GOBOARD1:21;
+                    now assume j2+1 > len G;
+                   then j2+1 <= (len G)+1 & (len G)+1 <= j2+1
+                      by A2,A16,AXIOMS:24,NAT_1:38;
+                   then j2+1 = (len G)+1 by AXIOMS:21;
+                   then j2 = len G by XCMPLX_1:2;
+                   then cell(G,i2-'1,len G) meets C
+                     by A9,A10,A11,A12,A13,A56,A65,GOBRD13:40;
+                   hence contradiction by A19,JORDAN8:18;
+                  end;
+                  hence
+                     i1' = i2' & j1'+1 = j2' & [i2'+1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'+1,j2') or
+                   i1'+1 = i2' & j1' = j2' & [i2',j2'-'1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'-'1) or
+                   i1' = i2'+1 & j1' = j2' & [i2',j2'+1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'+1) or
+                   i1' = i2' & j1' = j2'+1 & [i2'-'1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'-'1,j2')
+                      by A2,A16,A18,A21,A65,A68,GOBOARD7:10,TOPREAL4:1;
+                 end;
+                 hence f1 turns_right (len f)-'1,G by GOBRD13:def 6;
+                 thus f1 = f^<*G*(i,j)*>;
+               end;
+               hence thesis by A6,A8,A9,A56;
+              suppose
+A69:             i1 = i2 & j1 = j2+1;
+               take f1 = f^<*G*(i2-'1,j2)*>;
+                 now
+                take i=i2-'1 ,j=j2;
+                   now let i1',j1',i2',j2' be Nat;
+                  assume that
+A70:                 [i1',j1'] in Indices G & [i2',j2'] in Indices G and
+A71:                 f1/.((len f)-'1) = G*(i1',j1') &
+                    f1/.((len f)-'1+1) = G*(i2',j2');
+                    f/.((len f)-'1) = G*(i1',j1') &
+                    f/.((len f)-'1+1) = G*(i2',j2') by A20,A71,GROUP_5:95;
+then A72:                 i1 = i1' & j1 = j1' & i2 = i2' & j2 = j2'
+                     by A12,A13,A70,GOBOARD1:21;
+                    now assume i2-'1 < 1;
+                   then i2-'1 = 0 by RLVECT_1:98;
+                   then i2 <= 1 by JORDAN4:1;
+                   then i2 = 1 by A16,AXIOMS:21;
+                   then cell(G,1-'1,j2-'1) meets C
+                    by A9,A10,A11,A12,A13,A56,A69,GOBRD13:42;
+                   then cell(G,0,j2-'1) meets C by GOBOARD9:1;
+                   hence contradiction by A2,A19,JORDAN8:21;
+                  end;
+                  hence
+                     i1' = i2' & j1'+1 = j2' & [i2'+1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'+1,j2') or
+                   i1'+1 = i2' & j1' = j2' & [i2',j2'-'1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'-'1) or
+                   i1' = i2'+1 & j1' = j2' & [i2',j2'+1] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2',j2'+1) or
+                   i1' = i2' & j1' = j2'+1 & [i2'-'1,j2'] in Indices G &
+                         f1/.(len f -'1+2) = G*(i2'-'1,j2')
+                     by A16,A19,A21,A69,A72,GOBOARD7:10,TOPREAL4:1;
+                 end;
+                 hence f1 turns_right (len f)-'1,G by GOBRD13:def 6;
+                 thus f1 = f^<*G*(i,j)*>;
+               end;
+               hence thesis by A6,A8,A9,A56;
+             end;
+          end;
+         suppose
+A73:         not f is_sequence_on G or left_cell(f,len f-'1,G) misses C;
+          take f^<*G*(1,1)*>;
+          thus thesis by A6,A8,A73;
+       end;
+      suppose
+A74:      len f <> k;
+       take {};
+       thus thesis by A6,A74;
+     end;
+    suppose
+A75:    k > 1 & x is not FinSequence of TOP-REAL 2;
+     take {};
+     thus thesis by A75;
+   end;
+  consider F being Function such that
+A76:   dom F = NAT and
+A77:   F.0 = {} and
+A78:   for k being Element of NAT holds P[k,F.k,F.(k+1)] from RecChoice(A3);
+defpred P[Nat] means F.$1 is FinSequence of TOP-REAL 2;
+A79:   {} = <*>(the carrier of TOP-REAL 2);
+then A80:  P[0] by A77;
+A81:  for k st P[k] holds P[k+1]
+   proof let k such that
+A82:   F.k is FinSequence of TOP-REAL 2;
+    per cases by CQC_THE1:2;
+     suppose k = 0;
+      hence F.(k+1) is FinSequence of TOP-REAL 2 by A78;
+     suppose k = 1;
+      hence F.(k+1) is FinSequence of TOP-REAL 2 by A78;
+     suppose
+A83:     k > 1;
+      thus thesis
+      proof
+        reconsider f = F.k as FinSequence of TOP-REAL 2 by A82;
+       per cases;
+        suppose
+A84:        len f = k;
+          thus thesis
+          proof per cases;
+           suppose f is_sequence_on G & left_cell(f,len f-'1,G) meets C;
+            then (front_right_cell(f,(len f)-'1,G) misses C &
+              front_left_cell(f,(len f)-'1,G) misses C
+             implies ex i,j st
+                 f^<*G*(i,j)*> turns_left (len f)-'1,G &
+               F.(k+1) = f^<*G*(i,j)*>) &
+            (front_right_cell(f,(len f)-'1,G) misses C &
+              front_left_cell(f,(len f)-'1,G) meets C
+             implies ex i,j st
+                 f^<*G*(i,j)*> goes_straight (len f)-'1,G &
+               F.(k+1) = f^<*G*(i,j)*>) &
+            (front_right_cell(f,(len f)-'1,G) meets C
+             implies ex i,j st
+                 f^<*G*(i,j)*> turns_right (len f)-'1,G &
+               F.(k+1) = f^<*G*(i,j)*>) by A78,A83,A84;
+            hence F.(k+1) is FinSequence of TOP-REAL 2;
+           suppose
+A85:           not f is_sequence_on G or left_cell(f,len f-'1,G) misses C;
+               f^<*G*(1,1)*> is FinSequence of TOP-REAL 2;
+            hence F.(k+1) is FinSequence of TOP-REAL 2
+             by A78,A83,A84,A85;
+          end;
+        suppose len f <> k;
+         hence F.(k+1) is FinSequence of TOP-REAL 2 by A78,A79,A83;
+      end;
+   end;
+A86:  for k holds P[k] from Ind(A80,A81);
+     rng F c= (the carrier of TOP-REAL 2)*
+    proof let y be set;
+     assume y in rng F;
+     then ex x being set st x in dom F & F.x = y by FUNCT_1:def 5;
+     then y is FinSequence of TOP-REAL 2 by A76,A86;
+     hence thesis by FINSEQ_1:def 11;
+    end;
+  then reconsider F as Function of NAT,(the carrier of TOP-REAL 2)*
+   by A76,FUNCT_2:def 1,RELSET_1:11;
+   defpred P[Nat] means len(F.$1) = $1;
+A87:  P[0] by A77,FINSEQ_1:25;
+A88:  for k st P[k] holds P[k+1]
+    proof let k such that
+A89:   len(F.k) = k;
+A90:   P[k,F.k,F.(k+1)] by A78;
+     per cases by CQC_THE1:2;
+     suppose k = 0;
+      hence thesis by A90,FINSEQ_1:56;
+     suppose k = 1;
+      hence thesis by A90,FINSEQ_1:61;
+     suppose
+A91:     k > 1;
+      thus thesis
+      proof per cases;
+       suppose
+       F.k is_sequence_on G & left_cell(F.k,len(F.k)-'1,G) meets C;
+            then (front_right_cell(F.k,(len(F.k))-'1,G) misses C &
+              front_left_cell(F.k,(len(F.k))-'1,G) misses C
+             implies ex i,j st
+                 (F.k)^<*G*(i,j)*> turns_left (len(F.k))-'1,G &
+               F.(k+1) = (F.k)^<*G*(i,j)*>) &
+            (front_right_cell(F.k,(len(F.k))-'1,G) misses C &
+              front_left_cell(F.k,(len(F.k))-'1,G) meets C
+             implies ex i,j st
+                 (F.k)^<*G*(i,j)*> goes_straight (len(F.k))-'1,G &
+               F.(k+1) = (F.k)^<*G*(i,j)*>) &
+            (front_right_cell(F.k,(len(F.k))-'1,G) meets C
+             implies ex i,j st
+                 (F.k)^<*G*(i,j)*> turns_right (len(F.k))-'1,G &
+               F.(k+1) = (F.k)^<*G*(i,j)*>) by A78,A89,A91;
+            hence thesis by A89,FINSEQ_2:19;
+       suppose
+          not F.k is_sequence_on G or left_cell(F.k,len(F.k)-'1,G) misses C;
+        then F.(k+1) = (F.k)^<*G*(1,1)*> by A78,A89,A91;
+        hence thesis by A89,FINSEQ_2:19;
+      end;
+    end;
+
+A92:   for k holds P[k] from Ind(A87,A88);
+      set XS = X-SpanStart(C,n), YS = Y-SpanStart(C,n);
+       2 < XS by JORDAN1H:58;
+     then A93: 1 <= XS by AXIOMS:22;
+     defpred Q[Nat] means
+     F.$1 is_sequence_on G &
+      for m st 1 <= m & m+1 <= len(F.$1)
+       holds right_cell(F.$1,m,G) misses C & left_cell(F.$1,m,G) meets C;
+A94: Q[0]
+  proof
+      (for n st n in dom(F.0)
+      ex i,j st [i,j] in Indices G & (F.0)/.n = G*(i,j)) &
+    (for n st n in dom(F.0) & n+1 in dom(F.0) holds
+      for m,k,i,j st [m,k] in Indices G & [i,j] in Indices G &
+                    (F.0)/.n = G*(m,k) & (F.0)/.(n+1) = G*(i,j) holds
+      abs(m-i)+abs(k-j) = 1) by A77,RELAT_1:60;
+   hence F.0 is_sequence_on G by GOBOARD1:def 11;
+   let m; assume
+A95:  1 <= m & m+1 <= len(F.0);
+     1 <= m+1 by NAT_1:37;
+   then 1 <= len(F.0) by A95,AXIOMS:22;
+   then 1 <= 0 by A77,FINSEQ_1:25;
+   hence right_cell(F.0,m,G) misses C & left_cell(F.0,m,G) meets C;
+  end;
+A96:   [X-SpanStart(C,n),Y-SpanStart(C,n)] in Indices G by A1,JORDAN11:8;
+      1+1 <= XS by JORDAN1H:58;
+    then A97:   1 <= XS-'1 & XS <= len G by JORDAN1H:58,SPRECT_3:8;
+A98: for k st Q[k] holds Q[k+1]
+   proof let k such that
+A99:   F.k is_sequence_on G and
+A100:   for m st 1 <= m & m+1 <= len(F.k)
+        holds right_cell(F.k,m,G) misses C & left_cell(F.k,m,G) meets C;
+A101:   len(F.k) = k by A92;
+A102:   len(F.(k+1)) = k+1 by A92;
+    per cases by CQC_THE1:2;
+    suppose
+A103:   k = 0;
+     then A104:  F.(k+1) = <*G*(X-SpanStart(C,n),Y-SpanStart(C,n))*> by A78;
+A105:   now let l;
+       assume l in dom(F.(k+1));
+       then 1 <= l & l <= 1 by A102,A103,FINSEQ_3:27;
+       then l = 1 by AXIOMS:21;
+       then (F.(k+1))/.l = G*(X-SpanStart(C,n),Y-SpanStart(C,n))
+                     by A104,FINSEQ_4:25;
+       hence ex i,j st [i,j] in Indices G & (F.(k+1))/.l = G*(i,j) by A96;
+      end;
+       now let l;
+      assume l in dom(F.(k+1)) & l+1 in dom(F.(k+1));
+      then 1 <= l & l <= 1 & 1 <= l+1 & l+1 <= 1 by A102,A103,FINSEQ_3:27;
+      then l = 1 & 1 = l+1 by AXIOMS:21;
+      hence for i1,j1,i2,j2 st [i1,j1] in Indices G & [i2,j2] in Indices G &
+                    (F.(k+1))/.l = G*(i1,j1) & (F.(k+1))/.(l+1) = G*(i2,j2)
+       holds abs(i1-i2)+abs(j1-j2) = 1;
+     end;
+     hence F.(k+1) is_sequence_on G by A105,GOBOARD1:def 11;
+     let m;
+     assume
+A106:   1 <= m & m+1 <= len(F.(k+1));
+       1 <= m+1 by NAT_1:37;
+     then m+1 = 0+1 by A102,A103,A106,AXIOMS:21;
+     then m = 0 by XCMPLX_1:2;
+     hence right_cell(F.(k+1),m,G) misses C &
+              left_cell(F.(k+1),m,G) meets C by A106;
+    suppose
+A107:   k = 1;
+     then F.(k+1) = <*G*(X-SpanStart(C,n),Y-SpanStart(C,n)),
+                  G*(X-SpanStart(C,n)-'1,Y-SpanStart(C,n))*> by A78;
+then A108:   (F.(k+1))/.1 = G*(X-SpanStart(C,n),Y-SpanStart(C,n)) &
+      (F.(k+1))/.2 = G*(X-SpanStart(C,n)-'1,Y-SpanStart(C,n))
+        by FINSEQ_4:26;
+A109:   [X-SpanStart(C,n),Y-SpanStart(C,n)] in Indices G &
+      [X-SpanStart(C,n)-'1,Y-SpanStart(C,n)] in Indices G
+        by A1,JORDAN11:8,9;
+A110:   now let l;
+       assume
+A111: l in dom(F.(k+1));
+       then 1 <= l & l <= 2 by A102,A107,FINSEQ_3:27;
+       then l = 0 or l = 1 or l = 2 by CQC_THE1:3;
+       hence ex i,j st [i,j] in Indices G & (F.(k+1))/.l = G*(i,j)
+         by A108,A109,A111,FINSEQ_3:27;
+      end;
+       now let l;
+      assume A112: l in dom(F.(k+1)) & l+1 in dom(F.(k+1));
+      then 1 <= l & l <= 2 & 1 <= l+1 & l+1 <= 2 by A102,A107,FINSEQ_3:27;
+      then A113:    l = 0 or l = 1 or l = 2 by CQC_THE1:3;
+      let i1,j1,i2,j2 be Nat such that
+A114:      [i1,j1] in Indices G & [i2,j2]in Indices G &
+        (F.(k+1))/.l = G*(i1,j1) & (F.(k+1))/.(l+1) = G*(i2,j2);
+A115:     i1 = XS & j1 = YS & i2 = XS-'1 & j2 = YS
+         by A102,A107,A108,A109,A112,A113,A114,FINSEQ_3:27,GOBOARD1:21;
+      then i2+1 = i1 by A97,JORDAN3:6;
+      then i1-i2 = 1 & j1-j2 = 0 by A115,XCMPLX_1:14,26;
+      then abs(i1-i2) = 1 & abs(j1-j2) = 0 by ABSVALUE:def 1;
+      hence abs(i1-i2)+abs(j1-j2) = 1;
+     end;
+     hence
+A116:    F.(k+1) is_sequence_on G by A110,GOBOARD1:def 11;
+     let m;
+     assume
+A117:   1 <= m & m+1 <= len(F.(k+1));
+     then 1+1 <= m+1 by AXIOMS:24;
+     then m+1 = 1+1 by A102,A107,A117,AXIOMS:21;
+then A118:   m = 1 by XCMPLX_1:2;
+A119:   XS-'1 < XS & XS-'1 < XS-'1+1 by A93,JORDAN5B:1,NAT_1:38;
+       A120: XS <= XS+1 by NAT_1:29;
+then A121:   right_cell(F.(k+1),m,G) = cell(G,XS-'1,YS)
+        by A108,A109,A116,A117,A118,A119,GOBRD13:def 2;
+A122:   left_cell(F.(k+1),m,G) = cell(G,XS-'1,YS-'1)
+        by A108,A109,A116,A117,A118,A119,A120,GOBRD13:def 3;
+     thus right_cell(F.(k+1),m,G) misses C by A1,A121,JORDAN11:11;
+     thus left_cell(F.(k+1),m,G) meets C by A1,A122,JORDAN11:10;
+    suppose
+A123:   k > 1;
+    then k > 0 by AXIOMS:22;
+then A124:   F.k is non empty by A101,FINSEQ_1:25;
+A125:   1 <= (len(F.k))-'1 by A101,A123,JORDAN3:12;
+A126:   (len(F.k)) -'1 +1 = len(F.k) by A101,A123,AMI_5:4;
+     then consider i1,j1,i2,j2 being Nat such that
+A127:   [i1,j1] in Indices G & (F.k)/.(len(F.k)-'1) = G*(i1,j1) and
+A128:   [i2,j2] in Indices G & (F.k)/.len(F.k) = G*(i2,j2) and
+        i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+        i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1 by A99,A125,JORDAN8:6;
+A129:   1 <= i2 & i2 <= len G & 1 <= j2 & j2 <= width G by A128,GOBOARD5:1;
+        (len(F.k))-'1 <= len(F.k) by GOBOARD9:2;
+then A130:  (len(F.k))-'1 in dom(F.k) & len(F.k) in dom(F.k)
+        by A101,A123,A125,FINSEQ_3:27;
+A131:  (len(F.k))-'1+(1+1) = (len(F.k))+1 by A126,XCMPLX_1:1;
+A132:  right_cell(F.k,(len(F.k))-'1,G) misses C &
+       left_cell(F.k,(len(F.k))-'1,G) meets C by A100,A125,A126;
+then A133: i1 = i2 & j1+1 = j2 implies [i1-'1,j1+1] in Indices G
+        by A99,A101,A123,A127,A128,JORDAN1H:61;
+A134: i1+1 = i2 & j1 = j2 implies [i1+1,j1+1] in Indices G
+        by A99,A101,A123,A127,A128,A132,JORDAN1H:62;
+A135: i1 = i2+1 & j1 = j2 implies [i2,j1-'1] in Indices G
+        by A99,A101,A123,A127,A128,A132,JORDAN1H:63;
+A136: i1 = i2 & j1 = j2+1 implies [i1+1,j2] in Indices G
+       by A99,A101,A123,A127,A128,A132,JORDAN1H:64;
+       j1+1+1 = j1+(1+1) by XCMPLX_1:1 .= j1+2;
+then A137: front_left_cell(F.k,(len(F.k))-'1,G) meets C &
+     i1 = i2 & j1+1 = j2 implies [i1,j2+1] in Indices G
+       by A99,A101,A123,A127,A128,JORDAN1H:65;
+       i1+1+1 = i1+(1+1) by XCMPLX_1:1 .= i1+2;
+then A138: front_left_cell(F.k,(len(F.k))-'1,G) meets C &
+     i1+1 = i2 & j1 = j2 implies [i2+1,j2] in Indices G
+      by A99,A101,A123,A127,A128,JORDAN1H:66;
+A139: front_left_cell(F.k,(len(F.k))-'1,G) meets C &
+     i1 = i2+1 & j1 = j2 implies [i2-'1,j2] in Indices G
+      by A99,A101,A123,A127,A128,JORDAN1H:67;
+A140: front_left_cell(F.k,(len(F.k))-'1,G) meets C &
+     i1 = i2 & j1 = j2+1 implies [i2,j2-'1] in Indices G
+      by A99,A101,A123,A127,A128,JORDAN1H:68;
+A141: front_right_cell(F.k,(len(F.k))-'1,G) meets C &
+     i1 = i2 & j1+1 = j2 implies [i2+1,j2] in Indices G
+      by A99,A101,A123,A127,A128,JORDAN1H:69;
+A142: front_right_cell(F.k,(len(F.k))-'1,G) meets C &
+     i1+1 = i2 & j1 = j2 implies [i2,j2-'1] in Indices G
+      by A99,A101,A123,A127,A128,JORDAN1H:70;
+A143: front_right_cell(F.k,(len(F.k))-'1,G) meets C &
+     i1 = i2+1 & j1 = j2 implies [i2,j2+1] in Indices G
+      by A99,A101,A123,A127,A128,JORDAN1H:71;
+A144: front_right_cell(F.k,(len(F.k))-'1,G) meets C &
+     i1 = i2 & j1 = j2+1 implies [i2-'1,j2] in Indices G
+      by A99,A101,A123,A127,A128,JORDAN1H:72;
+   thus
+A145: F.(k+1) is_sequence_on G
+      proof per cases;
+       suppose front_right_cell(F.k,(len(F.k))-'1,G) misses C &
+            front_left_cell(F.k,(len(F.k))-'1,G) misses C;
+        then consider i,j such that
+A146:       (F.k)^<*G*(i,j)*> turns_left (len(F.k))-'1,G and
+A147:       F.(k+1) = (F.k)^<*G*(i,j)*> by A78,A99,A101,A123,A132;
+        set f = (F.k)^<*G*(i,j)*>;
+A148:       f/.(len(F.k)-'1) = G*(i1,j1) & f/.len(F.k) = G*(i2,j2)
+           by A127,A128,A130,GROUP_5:95;
+A149:       f/.(len(F.k)+1) = G*(i,j) by TOPREAL4:1;
+        thus thesis
+         proof per cases by A126,A127,A128,A131,A146,A148,GOBRD13:def 7;
+          suppose that
+A150:         i1 = i2 & j1+1 = j2 and
+A151:         f/.(len(F.k)+1) = G*(i2-'1,j2);
+             now let i1',j1',i2',j2' be Nat;
+            assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
+                (F.k)/.len(F.k) = G*(i1',j1') & G*(i2-'1,j2) = G*(i2',j2');
+             then A152:           i2 = i1' & j2 = j1' & i2-'1 = i2' & j2 = j2'
+                by A128,A133,A150,GOBOARD1:21;
+             then i1'-i2' = i2-(i2-1) by A129,SCMFSA_7:3;
+             then j2'-j1' = 0 & i1'-i2' = 1 by A152,XCMPLX_1:14,18;
+             then abs(j2'-j1') = 0 & abs(i1'-i2') = 1 by ABSVALUE:def 1;
+            hence abs(i2'-i1')+abs(j2'-j1') = 1 by UNIFORM1:13;
+           end;
+           hence F.(k+1) is_sequence_on G
+                by A99,A124,A133,A147,A149,A150,A151,JORDAN8:9;
+          suppose that
+A153:          i1+1 = i2 & j1 = j2 and
+A154:          f/.(len(F.k)+1) = G*(i2,j2+1);
+             now let i1',j1',i2',j2' be Nat;
+            assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
+              (F.k)/.len(F.k) = G*(i1',j1') & G*(i2,j2+1) = G*(i2',j2');
+              then i2 = i1' & j2 = j1' & i2 = i2' & j2+1 = j2'
+                by A128,A134,A153,GOBOARD1:21;
+             then i2'-i1' = 0 & j2'-j1' = 1 by XCMPLX_1:14,26;
+             then abs(i2'-i1') = 0 & abs(j2'-j1') = 1 by ABSVALUE:def 1;
+            hence abs(i2'-i1')+abs(j2'-j1') = 1;
+           end;
+           hence F.(k+1) is_sequence_on G
+              by A99,A124,A134,A147,A149,A153,A154,JORDAN8:9;
+          suppose that
+A155:          i1 = i2+1 & j1 = j2 and
+A156:          f/.(len(F.k)+1) = G*(i2,j2-'1);
+             now let i1',j1',i2',j2' be Nat;
+            assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
+                (F.k)/.len(F.k) = G*(i1',j1') & G*(i2,j2-'1) = G*(i2',j2');
+             then A157:           i2 = i1' & j2 = j1' & i2 = i2' & j2-'1 = j2'
+                by A128,A135,A155,GOBOARD1:21;
+             then j1'-j2' = j2-(j2-1) by A129,SCMFSA_7:3;
+             then i2'-i1' = 0 & j1'-j2' = 1 by A157,XCMPLX_1:14,18;
+             then abs(i2'-i1') = 0 & abs(j1'-j2') = 1 by ABSVALUE:def 1;
+            hence abs(i2'-i1')+abs(j2'-j1') = 1 by UNIFORM1:13;
+           end;
+           hence F.(k+1) is_sequence_on G
+                by A99,A124,A135,A147,A149,A155,A156,JORDAN8:9;
+          suppose that
+A158:          i1 = i2 & j1 = j2+1 and
+A159:          f/.(len(F.k)+1) = G*(i2+1,j2);
+             now let i1',j1',i2',j2' be Nat;
+            assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
+              (F.k)/.len(F.k) = G*(i1',j1') & G*(i2+1,j2) = G*(i2',j2');
+              then i2 = i1' & j2 = j1' & i2+1 = i2' & j2 = j2'
+                by A128,A136,A158,GOBOARD1:21;
+             then i2'-i1' = 1 & j2'-j1' = 0 by XCMPLX_1:14,26;
+             then abs(i2'-i1') = 1 & abs(j2'-j1') = 0 by ABSVALUE:def 1;
+            hence abs(i2'-i1')+abs(j2'-j1') = 1;
+           end;
+           hence F.(k+1) is_sequence_on G
+               by A99,A124,A136,A147,A149,A158,A159,JORDAN8:9;
+         end;
+       suppose
+A160:       front_right_cell(F.k,(len(F.k))-'1,G) misses C &
+             front_left_cell(F.k,(len(F.k))-'1,G) meets C;
+        then consider i,j such that
+A161:       (F.k)^<*G*(i,j)*> goes_straight (len(F.k))-'1,G and
+A162:       F.(k+1) = (F.k)^<*G*(i,j)*> by A78,A99,A101,A123,A132;
+        set f = (F.k)^<*G*(i,j)*>;
+A163:       f/.(len(F.k)-'1) = G*(i1,j1) & f/.len(F.k) = G*(i2,j2)
+           by A127,A128,A130,GROUP_5:95;
+A164:       f/.(len(F.k)+1) = G*(i,j) by TOPREAL4:1;
+        thus thesis
+         proof per cases by A126,A127,A128,A131,A161,A163,GOBRD13:def 8;
+          suppose that
+A165:         i1 = i2 & j1+1 = j2 and
+A166:         f/.(len(F.k)+1) = G*(i2,j2+1);
+             now let i1',j1',i2',j2' be Nat;
+            assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
+                (F.k)/.len(F.k) = G*(i1',j1') & G*(i2,j2+1) = G*(i2',j2');
+             then i2 = i1' & j2 = j1' & i2 = i2' & j2+1 = j2'
+                by A128,A137,A160,A165,GOBOARD1:21;
+             then i2'-i1' = 0 & j2'-j1' = 1 by XCMPLX_1:14,26;
+             then abs(i2'-i1') = 0 & abs(j2'-j1') = 1 by ABSVALUE:def 1;
+            hence abs(i2'-i1')+abs(j2'-j1') = 1;
+           end;
+           hence F.(k+1) is_sequence_on G
+                 by A99,A124,A137,A160,A162,A164,A165,A166,JORDAN8:9;
+          suppose that
+A167:          i1+1 = i2 & j1 = j2 and
+A168:          f/.(len(F.k)+1) = G*(i2+1,j2);
+             now let i1',j1',i2',j2' be Nat;
+            assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
+              (F.k)/.len(F.k) = G*(i1',j1') & G*(i2+1,j2) = G*(i2',j2');
+              then i2 = i1' & j2 = j1' & i2+1 = i2' & j2 = j2'
+                by A128,A138,A160,A167,GOBOARD1:21;
+             then i2'-i1' = 1 & j2'-j1' = 0 by XCMPLX_1:14,26;
+             then abs(i2'-i1') = 1 & abs(j2'-j1') = 0 by ABSVALUE:def 1;
+            hence abs(i2'-i1')+abs(j2'-j1') = 1;
+           end;
+           hence F.(k+1) is_sequence_on G
+                by A99,A124,A138,A160,A162,A164,A167,A168,JORDAN8:9;
+          suppose that
+A169:          i1 = i2+1 & j1 = j2 and
+A170:          f/.(len(F.k)+1) = G*(i2-'1,j2);
+             now let i1',j1',i2',j2' be Nat;
+            assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
+                (F.k)/.len(F.k) = G*(i1',j1') & G*(i2-'1,j2) = G*(i2',j2');
+             then A171:           i2 = i1' & j2 = j1' & i2-'1 = i2' & j2 = j2'
+                by A128,A139,A160,A169,GOBOARD1:21;
+             then i1'-i2' = i2-(i2-1) by A129,SCMFSA_7:3;
+             then j2'-j1' = 0 & i1'-i2' = 1 by A171,XCMPLX_1:14,18;
+             then abs(j2'-j1') = 0 & abs(i1'-i2') = 1 by ABSVALUE:def 1;
+            hence abs(i2'-i1')+abs(j2'-j1') = 1 by UNIFORM1:13;
+           end;
+           hence F.(k+1) is_sequence_on G
+                by A99,A124,A139,A160,A162,A164,A169,A170,JORDAN8:9;
+          suppose that
+A172:          i1 = i2 & j1 = j2+1 and
+A173:          f/.(len(F.k)+1) = G*(i2,j2-'1);
+             now let i1',j1',i2',j2' be Nat;
+            assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
+              (F.k)/.len(F.k) = G*(i1',j1') & G*(i2,j2-'1) = G*(i2',j2');
+then A174:           i2 = i1' & j2 = j1' & i2 = i2' & j2-'1 = j2'
+                by A128,A140,A160,A172,GOBOARD1:21;
+             then j1'-j2' = j2-(j2-1) by A129,SCMFSA_7:3;
+             then i2'-i1' = 0 & j1'-j2' = 1 by A174,XCMPLX_1:14,18;
+             then abs(i2'-i1') = 0 & abs(j1'-j2') = 1 by ABSVALUE:def 1;
+            hence abs(i2'-i1')+abs(j2'-j1') = 1 by UNIFORM1:13;
+           end;
+           hence F.(k+1) is_sequence_on G
+               by A99,A124,A140,A160,A162,A164,A172,A173,JORDAN8:9;
+         end;
+       suppose
+A175:       front_right_cell(F.k,(len(F.k))-'1,G) meets C;
+        then consider i,j such that
+A176:       (F.k)^<*G*(i,j)*> turns_right (len(F.k))-'1,G and
+A177:       F.(k+1) = (F.k)^<*G*(i,j)*> by A78,A99,A101,A123,A132;
+        set f = (F.k)^<*G*(i,j)*>;
+A178:       f/.(len(F.k)-'1) = G*(i1,j1) & f/.len(F.k) = G*(i2,j2)
+           by A127,A128,A130,GROUP_5:95;
+A179:       f/.(len(F.k)+1) = G*(i,j) by TOPREAL4:1;
+        thus thesis
+         proof per cases by A126,A127,A128,A131,A176,A178,GOBRD13:def 6;
+          suppose that
+A180:         i1 = i2 & j1+1 = j2 and
+A181:         f/.(len(F.k)+1) = G*(i2+1,j2);
+             now let i1',j1',i2',j2' be Nat;
+            assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
+                (F.k)/.len(F.k) = G*(i1',j1') & G*(i2+1,j2) = G*(i2',j2');
+             then i2 = i1' & j2 = j1' & i2+1 = i2' & j2 = j2'
+                by A128,A141,A175,A180,GOBOARD1:21;
+             then i2'-i1' = 1 & j2'-j1' = 0 by XCMPLX_1:14,26;
+             then abs(i2'-i1') = 1 & abs(j2'-j1') = 0 by ABSVALUE:def 1;
+            hence abs(i2'-i1')+abs(j2'-j1') = 1;
+           end;
+           hence F.(k+1) is_sequence_on G
+    by A99,A124,A141,A175,A177,A179,A180,A181,JORDAN8:9;
+          suppose that
+A182:          i1+1 = i2 & j1 = j2 and
+A183:          f/.(len(F.k)+1) = G*(i2,j2-'1);
+             now let i1',j1',i2',j2' be Nat;
+            assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
+              (F.k)/.len(F.k) = G*(i1',j1') & G*(i2,j2-'1) = G*(i2',j2');
+then A184:           i2 = i1' & j2 = j1' & i2 = i2' & j2-'1 = j2'
+                by A128,A142,A175,A182,GOBOARD1:21;
+             then j1'-j2' = j2-(j2-1) by A129,SCMFSA_7:3;
+             then i2'-i1' = 0 & j1'-j2' = 1 by A184,XCMPLX_1:14,18;
+             then abs(i2'-i1') = 0 & abs(j1'-j2') = 1 by ABSVALUE:def 1;
+            hence abs(i2'-i1')+abs(j2'-j1') = 1 by UNIFORM1:13;
+           end;
+         hence F.(k+1) is_sequence_on G by A99,A124,A142,A175,A177,A179,A182,
+A183,JORDAN8:9;
+          suppose that
+A185:          i1 = i2+1 & j1 = j2 and
+A186:          f/.(len(F.k)+1) = G*(i2,j2+1);
+             now let i1',j1',i2',j2' be Nat;
+            assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
+                (F.k)/.len(F.k) = G*(i1',j1') & G*(i2,j2+1) = G*(i2',j2');
+             then i2 = i1' & j2 = j1' & i2 = i2' & j2+1 = j2'
+                by A128,A143,A175,A185,GOBOARD1:21;
+             then i2'-i1' = 0 & j2'-j1' = 1 by XCMPLX_1:14,26;
+             then abs(i2'-i1') = 0 & abs(j2'-j1') = 1 by ABSVALUE:def 1;
+            hence abs(i2'-i1')+abs(j2'-j1') = 1;
+           end;
+           hence F.(k+1) is_sequence_on G
+               by A99,A124,A143,A175,A177,A179,A185,A186,JORDAN8:9;
+          suppose that
+A187:          i1 = i2 & j1 = j2+1 and
+A188:          f/.(len(F.k)+1) = G*(i2-'1,j2);
+             now let i1',j1',i2',j2' be Nat;
+            assume [i1',j1'] in Indices G & [i2',j2'] in Indices G &
+              (F.k)/.len(F.k) = G*(i1',j1') & G*(i2-'1,j2) = G*(i2',j2');
+then A189:           i2 = i1' & j2 = j1' & i2-'1 = i2' & j2 = j2'
+                by A128,A144,A175,A187,GOBOARD1:21;
+             then i1'-i2' = i2-(i2-1) by A129,SCMFSA_7:3;
+             then j2'-j1' = 0 & i1'-i2' = 1 by A189,XCMPLX_1:14,18;
+             then abs(j2'-j1') = 0 & abs(i1'-i2') = 1 by ABSVALUE:def 1;
+            hence abs(i2'-i1')+abs(j2'-j1') = 1 by UNIFORM1:13;
+           end;
+           hence F.(k+1) is_sequence_on G
+ by A99,A124,A144,A175,A177,A179,A187,A188,JORDAN8:9;
+         end;
+      end;
+     let m such that
+A190:    1 <= m & m+1 <= len(F.(k+1));
+       now per cases;
+      suppose m+1 = len(F.(k+1));
+then A191:    m = len(F.k) by A101,A102,XCMPLX_1:2;
+A192:    (i2-'1)+1 = i2 by A129,AMI_5:4;
+A193:    (j2-'1)+1 = j2 by A129,AMI_5:4;
+       thus thesis
+        proof per cases;
+         suppose
+A194:        front_right_cell(F.k,(len(F.k))-'1,G) misses C &
+            front_left_cell(F.k,(len(F.k))-'1,G) misses C;
+          then consider i,j such that
+A195:        (F.k)^<*G*(i,j)*> turns_left (len(F.k))-'1,G and
+A196:        F.(k+1) = (F.k)^<*G*(i,j)*> by A78,A99,A101,A123,A132;
+A197:        (F.(k+1))/.(len(F.k)-'1) = G*(i1,j1) &
+            (F.(k+1))/.len(F.k) = G*(i2,j2)
+            by A127,A128,A130,A196,GROUP_5:95;
+            now per cases by A126,A127,A128,A131,A195,A196,A197,GOBRD13:def 7;
+           suppose that
+A198:           i1 = i2 & j1+1 = j2 and
+A199:           (F.(k+1))/.(len(F.k)+1) = G*(i2-'1,j2);
+               front_left_cell(F.k,(len(F.k))-'1,G) = cell(G,i1-'1,j2)
+               by A99,A125,A126,A127,A128,A198,GOBRD13:35;
+            hence right_cell(F.(k+1),m,G) misses C
+               by A128,A133,A145,A190,A191,A192,A194,A197,A198,A199,GOBRD13:27;
+               j2-'1 = j1 &
+             cell(G,i1-'1,j1) meets C
+               by A99,A125,A126,A127,A128,A132,A198,BINARITH:39,GOBRD13:22;
+            hence left_cell(F.(k+1),m,G) meets C
+               by A128,A133,A145,A190,A191,A192,A197,A198,A199,GOBRD13:26;
+           suppose that
+A200:           i1+1 = i2 & j1 = j2 and
+A201:           (F.(k+1))/.(len(F.k)+1) = G*(i2,j2+1);
+               front_left_cell(F.k,(len(F.k))-'1,G) = cell(G,i2,j2)
+               by A99,A125,A126,A127,A128,A200,GOBRD13:37;
+             hence right_cell(F.(k+1),m,G) misses C
+               by A128,A134,A145,A190,A191,A194,A197,A200,A201,GOBRD13:23;
+               i1+1-'1 = i1 & cell(G,i1,j1) meets C
+               by A99,A125,A126,A127,A128,A132,A200,BINARITH:39,GOBRD13:24;
+            hence left_cell(F.(k+1),m,G) meets C
+               by A128,A134,A145,A190,A191,A197,A200,A201,GOBRD13:22;
+           suppose that
+A202:           i1 = i2+1 & j1 = j2 and
+A203:           (F.(k+1))/.(len(F.k)+1) = G*(i2,j2-'1);
+               front_left_cell(F.k,(len(F.k))-'1,G) = cell(G,i2-'1,j2-'1)
+               by A99,A125,A126,A127,A128,A202,GOBRD13:39;
+            hence right_cell(F.(k+1),m,G) misses C
+               by A128,A135,A145,A190,A191,A193,A194,A197,A202,A203,GOBRD13:29;
+               cell(G,i2,j2-'1) meets C by A99,A125,A126,A127,A128,A132,A202,
+GOBRD13:26;
+            hence left_cell(F.(k+1),m,G) meets C
+               by A128,A135,A145,A190,A191,A193,A197,A202,A203,GOBRD13:28;
+           suppose that
+A204:           i1 = i2 & j1 = j2+1 and
+A205:           (F.(k+1))/.(len(F.k)+1) = G*(i2+1,j2);
+               front_left_cell(F.k,(len(F.k))-'1,G) = cell(G,i2,j2-'1)
+               by A99,A125,A126,A127,A128,A204,GOBRD13:41;
+            hence right_cell(F.(k+1),m,G) misses C
+               by A128,A136,A145,A190,A191,A194,A197,A204,A205,GOBRD13:25;
+               cell(G,i2,j2) meets C by A99,A125,A126,A127,A128,A132,A204,
+GOBRD13:28;
+            hence left_cell(F.(k+1),m,G) meets C
+               by A128,A136,A145,A190,A191,A197,A204,A205,GOBRD13:24;
+          end;
+          hence thesis;
+         suppose
+A206:        front_right_cell(F.k,(len(F.k))-'1,G) misses C &
+             front_left_cell(F.k,(len(F.k))-'1,G) meets C;
+          then consider i,j such that
+A207:        (F.k)^<*G*(i,j)*> goes_straight (len(F.k))-'1,G and
+A208:        F.(k+1) = (F.k)^<*G*(i,j)*> by A78,A99,A101,A123,A132;
+A209:        (F.(k+1))/.(len(F.k)-'1) = G*(i1,j1) &
+           (F.(k+1))/.len(F.k) = G*(i2,j2)
+            by A127,A128,A130,A208,GROUP_5:95;
+            now per cases by A126,A127,A128,A131,A207,A208,A209,GOBRD13:def 8;
+           suppose that
+A210:           i1 = i2 & j1+1 = j2 and
+A211:           (F.(k+1))/.(len(F.k)+1) = G*(i2,j2+1);
+               front_right_cell(F.k,(len(F.k))-'1,G) = cell(G,i1,j2)
+               by A99,A125,A126,A127,A128,A210,GOBRD13:36;
+             hence right_cell(F.(k+1),m,G) misses C
+               by A128,A137,A145,A190,A191,A206,A209,A210,A211,GOBRD13:23;
+              front_left_cell(F.k,(len(F.k))-'1,G) = cell(G,i1-'1,j2)
+               by A99,A125,A126,A127,A128,A210,GOBRD13:35;
+            hence left_cell(F.(k+1),m,G) meets C
+               by A128,A137,A145,A190,A191,A206,A209,A210,A211,GOBRD13:22;
+           suppose that
+A212:           i1+1 = i2 & j1 = j2 and
+A213:           (F.(k+1))/.(len(F.k)+1) = G*(i2+1,j2);
+               front_right_cell(F.k,(len(F.k))-'1,G) = cell(G,i2,j2-'1)
+               by A99,A125,A126,A127,A128,A212,GOBRD13:38;
+            hence right_cell(F.(k+1),m,G) misses C
+               by A128,A138,A145,A190,A191,A206,A209,A212,A213,GOBRD13:25;
+               front_left_cell(F.k,(len(F.k))-'1,G) = cell(G,i2,j2)
+               by A99,A125,A126,A127,A128,A212,GOBRD13:37;
+            hence left_cell(F.(k+1),m,G) meets C
+               by A128,A138,A145,A190,A191,A206,A209,A212,A213,GOBRD13:24;
+           suppose that
+A214:          i1 = i2+1 & j1 = j2 and
+A215:          (F.(k+1))/.(len(F.k)+1) = G*(i2-'1,j2);
+               front_right_cell(F.k,(len(F.k))-'1,G) = cell(G,i2-'1,j2)
+               by A99,A125,A126,A127,A128,A214,GOBRD13:40;
+            hence right_cell(F.(k+1),m,G) misses C
+               by A128,A139,A145,A190,A191,A192,A206,A209,A214,A215,GOBRD13:27;
+               front_left_cell(F.k,(len(F.k))-'1,G) = cell(G,i2-'1,j2-'1)
+               by A99,A125,A126,A127,A128,A214,GOBRD13:39;
+            hence left_cell(F.(k+1),m,G) meets C
+               by A128,A139,A145,A190,A191,A192,A206,A209,A214,A215,GOBRD13:26;
+           suppose that
+A216:          i1 = i2 & j1 = j2+1 and
+A217:          (F.(k+1))/.(len(F.k)+1) = G*(i2,j2-'1);
+               front_right_cell(F.k,(len(F.k))-'1,G) = cell(G,i2-'1,j2-'1)
+               by A99,A125,A126,A127,A128,A216,GOBRD13:42;
+            hence right_cell(F.(k+1),m,G) misses C
+               by A128,A140,A145,A190,A191,A193,A206,A209,A216,A217,GOBRD13:29;
+               front_left_cell(F.k,(len(F.k))-'1,G) = cell(G,i2,j2-'1)
+               by A99,A125,A126,A127,A128,A216,GOBRD13:41;
+            hence left_cell(F.(k+1),m,G) meets C
+               by A128,A140,A145,A190,A191,A193,A206,A209,A216,A217,GOBRD13:28;
+          end;
+          hence thesis;
+         suppose
+A218:        front_right_cell(F.k,(len(F.k))-'1,G) meets C;
+          then consider i,j such that
+A219:        (F.k)^<*G*(i,j)*> turns_right (len(F.k))-'1,G and
+A220:        F.(k+1) = (F.k)^<*G*(i,j)*> by A78,A99,A101,A123,A132;
+A221:        (F.(k+1))/.(len(F.k)-'1) = G*(i1,j1) &
+           (F.(k+1))/.len(F.k) = G*(i2,j2)
+             by A127,A128,A130,A220,GROUP_5:95;
+            now per cases by A126,A127,A128,A131,A219,A220,A221,GOBRD13:def 6;
+           suppose that
+A222:           i1 = i2 & j1+1 = j2 and
+A223:           (F.(k+1))/.(len(F.k)+1) = G*(i2+1,j2);
+               j2 -'1 = j1 &
+             cell(G,i1,j1) misses C
+               by A99,A125,A126,A127,A128,A132,A222,BINARITH:39,GOBRD13:23;
+            hence right_cell(F.(k+1),m,G) misses C
+               by A128,A141,A145,A190,A191,A218,A221,A222,A223,GOBRD13:25;
+               front_right_cell(F.k,(len(F.k))-'1,G) = cell(G,i2,j2)
+               by A99,A125,A126,A127,A128,A222,GOBRD13:36;
+            hence left_cell(F.(k+1),m,G) meets C
+               by A128,A141,A145,A190,A191,A218,A221,A222,A223,GOBRD13:24;
+           suppose that
+A224:           i1+1 = i2 & j1 = j2 and
+A225:           (F.(k+1))/.(len(F.k)+1) = G*(i2,j2-'1);
+               i2 -'1 = i1 &
+             cell(G,i1,j1-'1) misses C
+               by A99,A125,A126,A127,A128,A132,A224,BINARITH:39,GOBRD13:25;
+            hence right_cell(F.(k+1),m,G) misses C
+               by A128,A142,A145,A190,A191,A193,A218,A221,A224,A225,GOBRD13:29;
+               front_right_cell(F.k,(len(F.k))-'1,G) = cell(G,i2,j2-'1)
+               by A99,A125,A126,A127,A128,A224,GOBRD13:38;
+            hence left_cell(F.(k+1),m,G) meets C
+               by A128,A142,A145,A190,A191,A193,A218,A221,A224,A225,GOBRD13:28;
+           suppose that
+A226:           i1 = i2+1 & j1 = j2 and
+A227:           (F.(k+1))/.(len(F.k)+1) = G*(i2,j2+1);
+               cell(G,i2,j2) misses C by A99,A125,A126,A127,A128,A132,A226,
+GOBRD13:27;
+            hence right_cell(F.(k+1),m,G) misses C
+               by A128,A143,A145,A190,A191,A218,A221,A226,A227,GOBRD13:23;
+               front_right_cell(F.k,(len(F.k))-'1,G) = cell(G,i2-'1,j2)
+               by A99,A125,A126,A127,A128,A226,GOBRD13:40;
+            hence left_cell(F.(k+1),m,G) meets C
+               by A128,A143,A145,A190,A191,A218,A221,A226,A227,GOBRD13:22;
+           suppose that
+A228:           i1 = i2 & j1 = j2+1 and
+A229:           (F.(k+1))/.(len(F.k)+1) = G*(i2-'1,j2);
+               cell(G,i2-'1,j2) misses C by A99,A125,A126,A127,A128,A132,A228,
+GOBRD13:29;
+            hence right_cell(F.(k+1),m,G) misses C
+              by A128,A144,A145,A190,A191,A192,A218,A221,A228,A229,GOBRD13:27;
+               front_right_cell(F.k,(len(F.k))-'1,G) = cell(G,i2-'1,j2-'1)
+               by A99,A125,A126,A127,A128,A228,GOBRD13:42;
+            hence left_cell(F.(k+1),m,G) meets C
+             by A128,A144,A145,A190,A191,A192,A218,A221,A228,A229,GOBRD13:26;
+          end;
+          hence thesis;
+       end;
+      suppose m+1 <> len(F.(k+1));
+       then m+1 < len(F.(k+1)) by A190,REAL_1:def 5;
+       then A230:     m+1 <= len(F.k)by A101,A102,NAT_1:38;
+       then consider i1,j1,i2,j2 being Nat such that
+A231:     [i1,j1] in Indices G & (F.k)/.m = G*(i1,j1) and
+A232:     [i2,j2] in Indices G & (F.k)/.(m+1) = G*(i2,j2) and
+A233:      i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+          i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1 by A99,A190,JORDAN8:6;
+A234:    1 <= m+1 by NAT_1:37;
+          m <= len(F.k) by A230,NAT_1:38;
+then A235:    m in dom(F.k) & m+1 in dom(F.k)
+         by A190,A230,A234,FINSEQ_3:27;
+A236:     right_cell(F.k,m,G) misses C & left_cell(F.k,m,G) meets C
+         by A100,A190,A230;
+         now per cases;
+         suppose
+            front_right_cell(F.k,(len(F.k))-'1,G) misses C &
+            front_left_cell(F.k,(len(F.k))-'1,G) misses C;
+          then consider i,j such that
+             (F.k)^<*G*(i,j)*> turns_left (len(F.k))-'1,G and
+A237:        F.(k+1) = (F.k)^<*G*(i,j)*> by A78,A99,A101,A123,A132;
+          take i,j;
+          thus F.(k+1) = (F.k)^<*G*(i,j)*> by A237;
+         suppose
+             front_right_cell(F.k,(len(F.k))-'1,G) misses C &
+             front_left_cell(F.k,(len(F.k))-'1,G) meets C;
+          then consider i,j such that
+             (F.k)^<*G*(i,j)*> goes_straight (len(F.k))-'1,G and
+A238:        F.(k+1) = (F.k)^<*G*(i,j)*> by A78,A99,A101,A123,A132;
+          take i,j;
+          thus F.(k+1) = (F.k)^<*G*(i,j)*> by A238;
+         suppose
+            front_right_cell(F.k,(len(F.k))-'1,G) meets C;
+          then consider i,j such that
+             (F.k)^<*G*(i,j)*> turns_right (len(F.k))-'1,G and
+A239:        F.(k+1) = (F.k)^<*G*(i,j)*> by A78,A99,A101,A123,A132;
+          take i,j;
+          thus F.(k+1) = (F.k)^<*G*(i,j)*> by A239;
+       end;
+       then consider i,j such that
+A240:      F.(k+1) = (F.k)^<*G*(i,j)*>;
+A241:      (F.(k+1))/.m = G*(i1,j1) & (F.(k+1))/.(m+1) = G*(i2,j2)
+            by A231,A232,A235,A240,GROUP_5:95;
+         now per cases by A233;
+        suppose
+A242:        i1 = i2 & j1+1 = j2;
+          then left_cell(F.k,m,G) = cell(G,i1-'1,j1) &
+            right_cell(F.k,m,G) = cell(G,i1,j1)
+           by A99,A190,A230,A231,A232,GOBRD13:22,23;
+         hence thesis by A145,A190,A231,A232,A236,A241,A242,GOBRD13:22,23;
+        suppose
+A243:        i1+1 = i2 & j1 = j2;
+          then left_cell(F.k,m,G) = cell(G,i1,j1) &
+            right_cell(F.k,m,G) = cell(G,i1,j1-'1)
+           by A99,A190,A230,A231,A232,GOBRD13:24,25;
+         hence thesis by A145,A190,A231,A232,A236,A241,A243,GOBRD13:24,25;
+        suppose
+A244:        i1 = i2+1 & j1 = j2;
+          then left_cell(F.k,m,G) = cell(G,i2,j2-'1) &
+            right_cell(F.k,m,G) = cell(G,i2,j2)
+           by A99,A190,A230,A231,A232,GOBRD13:26,27;
+         hence thesis by A145,A190,A231,A232,A236,A241,A244,GOBRD13:26,27;
+        suppose
+A245:        i1 = i2 & j1 = j2+1;
+          then left_cell(F.k,m,G) = cell(G,i2,j2) &
+            right_cell(F.k,m,G) = cell(G,i1-'1,j2)
+           by A99,A190,A230,A231,A232,GOBRD13:28,29;
+         hence thesis by A145,A190,A231,A232,A236,A241,A245,GOBRD13:28,29;
+       end;
+       hence thesis;
+     end;
+     hence thesis;
+   end;
+
+A246: for k holds Q[k] from Ind(A94,A98);
+  A247: P[0,F.0,F.(0+1)] by A78;
+  A248: P[1,F.1,F.(1+1)] by A78;
+A249: for k,i1,i2,j1,j2 st k > 1 &
+        [i1,j1] in Indices G & (F.k)/.(len(F.k)-'1) = G*(i1,j1) &
+        [i2,j2] in Indices G & (F.k)/.len(F.k) = G*(i2,j2)
+      holds
+       (front_right_cell(F.k,(len(F.k))-'1,G) misses C &
+          front_left_cell(F.k,(len(F.k))-'1,G) misses C
+         implies F.(k+1) turns_left (len(F.k))-'1,G &
+          (i1 = i2 & j1+1 = j2 implies [i2-'1,j2] in Indices G &
+            F.(k+1) = (F.k)^<*G*(i2-'1,j2)*>) &
+          (i1+1 = i2 & j1 = j2 implies [i2,j2+1] in Indices G &
+            F.(k+1) = (F.k)^<*G*(i2,j2+1)*>) &
+          (i1 = i2+1 & j1 = j2 implies [i2,j2-'1] in Indices G &
+            F.(k+1) = (F.k)^<*G*(i2,j2-'1)*>)&
+          (i1 = i2 & j1 = j2+1 implies [i2+1,j2] in Indices G &
+            F.(k+1) = (F.k)^<*G*(i2+1,j2)*>))
+  proof let k,i1,i2,j1,j2 such that
+A250:  k > 1 and
+A251:  [i1,j1] in Indices G & (F.k)/.(len(F.k)-'1) = G*(i1,j1) and
+A252:  [i2,j2] in Indices G & (F.k)/.len(F.k) = G*(i2,j2);
+A253:  (len(F.k))-'1 <= len(F.k) by GOBOARD9:2;
+A254:   F.k is_sequence_on G by A246;
+A255:   len(F.k) = k by A92;
+then A256:  1 <= (len(F.k))-'1 by A250,JORDAN3:12;
+A257:  (len(F.k)) -'1 +1 = len(F.k) by A250,A255,AMI_5:4;
+then A258: left_cell(F.k,(len(F.k))-'1,G) meets C by A246,A256;
+A259: (len(F.k))-'1 in dom(F.k) & len(F.k) in dom(F.k)
+       by A250,A253,A255,A256,FINSEQ_3:27;
+A260: (len(F.k))-'1+(1+1) = (len(F.k))+1 by A257,XCMPLX_1:1;
+A261: i1+1 > i1 & i2+1 > i2 & j1+1 > j1 & j2+1 > j2 by NAT_1:38;
+    hereby assume
+        front_right_cell(F.k,(len(F.k))-'1,G) misses C &
+        front_left_cell(F.k,(len(F.k))-'1,G) misses C;
+     then consider i,j such that
+A262:   (F.k)^<*G*(i,j)*> turns_left (len(F.k))-'1,G and
+A263:   F.(k+1) = (F.k)^<*G*(i,j)*> by A78,A250,A254,A255,A258;
+A264:   (F.(k+1))/.(len(F.k)-'1) = G*(i1,j1) & (F.(k+1))/.len(F.k) = G*(i2,j2)
+        by A251,A252,A259,A263,GROUP_5:95;
+A265:   (F.(k+1))/.(len(F.k)+1) = G*(i,j) by A263,TOPREAL4:1;
+     thus F.(k+1) turns_left (len(F.k))-'1,G by A262,A263;
+    thus i1 = i2 & j1+1 = j2 implies
+      [i2-'1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2-'1,j2)*>
+       by A251,A252,A257,A260,A261,A262,A263,A264,A265,GOBRD13:def 7;
+    thus i1+1 = i2 & j1 = j2 implies
+      [i2,j2+1] in Indices G & F.(k+1) = (F.k)^<*G*(i2,j2+1)*>
+       by A251,A252,A257,A260,A261,A262,A263,A264,A265,GOBRD13:def 7;
+    thus i1 = i2+1 & j1 = j2 implies
+      [i2,j2-'1] in Indices G & F.(k+1) = (F.k)^<*G*(i2,j2-'1)*>
+       by A251,A252,A257,A260,A261,A262,A263,A264,A265,GOBRD13:def 7;
+    thus i1 = i2 & j1 = j2+1 implies
+      [i2+1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2+1,j2)*>
+       by A251,A252,A257,A260,A261,A262,A263,A264,A265,GOBRD13:def 7;
+    end;
+ end;
+
+A266: for k,i1,i2,j1,j2 st k > 1 &
+        [i1,j1] in Indices G & (F.k)/.(len(F.k)-'1) = G*(i1,j1) &
+        [i2,j2] in Indices G & (F.k)/.len(F.k) = G*(i2,j2)
+      holds
+       (front_right_cell(F.k,(len(F.k))-'1,G) misses C &
+          front_left_cell(F.k,(len(F.k))-'1,G) meets C
+         implies F.(k+1) goes_straight (len(F.k))-'1,G &
+          (i1 = i2 & j1+1 = j2 implies [i2,j2+1] in Indices G &
+            F.(k+1) = (F.k)^<*G*(i2,j2+1)*>) &
+          (i1+1 = i2 & j1 = j2 implies [i2+1,j2] in Indices G &
+            F.(k+1) = (F.k)^<*G*(i2+1,j2)*>) &
+          (i1 = i2+1 & j1 = j2 implies [i2-'1,j2] in Indices G &
+            F.(k+1) = (F.k)^<*G*(i2-'1,j2)*>)&
+          (i1 = i2 & j1 = j2+1 implies [i2,j2-'1] in Indices G &
+            F.(k+1) = (F.k)^<*G*(i2,j2-'1)*>))
+  proof let k,i1,i2,j1,j2 such that
+A267:  k > 1 and
+A268:  [i1,j1] in Indices G & (F.k)/.(len(F.k)-'1) = G*(i1,j1) and
+A269:  [i2,j2] in Indices G & (F.k)/.len(F.k) = G*(i2,j2);
+A270:  (len(F.k))-'1 <= len(F.k) by GOBOARD9:2;
+A271:   F.k is_sequence_on G by A246;
+A272:   len(F.k) = k by A92;
+then A273:  1 <= (len(F.k))-'1 by A267,JORDAN3:12;
+A274:  (len(F.k)) -'1 +1 = len(F.k) by A267,A272,AMI_5:4;
+then A275: left_cell(F.k,(len(F.k))-'1,G) meets C by A246,A273;
+A276: (len(F.k))-'1 in dom(F.k) & len(F.k) in dom(F.k)
+       by A267,A270,A272,A273,FINSEQ_3:27;
+A277: (len(F.k))-'1+(1+1) = (len(F.k))+1 by A274,XCMPLX_1:1;
+A278: i1+1 > i1 & i2+1 > i2 & j1+1 > j1 & j2+1 > j2 by NAT_1:38;
+   hereby assume front_right_cell(F.k,(len(F.k))-'1,G) misses C &
+        front_left_cell(F.k,(len(F.k))-'1,G) meets C;
+    then consider i,j such that
+A279:   (F.k)^<*G*(i,j)*> goes_straight (len(F.k))-'1,G and
+A280:   F.(k+1) = (F.k)^<*G*(i,j)*> by A78,A267,A271,A272,A275;
+A281:   (F.(k+1))/.(len(F.k)-'1) = G*(i1,j1) & (F.(k+1))/.len(F.k) = G*(i2,j2)
+        by A268,A269,A276,A280,GROUP_5:95;
+A282:   (F.(k+1))/.(len(F.k)+1) = G*(i,j) by A280,TOPREAL4:1;
+    thus F.(k+1) goes_straight (len(F.k))-'1,G by A279,A280;
+    thus i1 = i2 & j1+1 = j2 implies
+      [i2,j2+1] in Indices G & F.(k+1) = (F.k)^<*G*(i2,j2+1)*>
+       by A268,A269,A274,A277,A278,A279,A280,A281,A282,GOBRD13:def 8;
+     thus i1+1 = i2 & j1 = j2 implies
+      [i2+1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2+1,j2)*>
+       by A268,A269,A274,A277,A278,A279,A280,A281,A282,GOBRD13:def 8;
+    thus i1 = i2+1 & j1 = j2 implies
+      [i2-'1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2-'1,j2)*>
+       by A268,A269,A274,A277,A278,A279,A280,A281,A282,GOBRD13:def 8;
+    thus i1 = i2 & j1 = j2+1 implies
+      [i2,j2-'1] in Indices G & F.(k+1) = (F.k)^<*G*(i2,j2-'1)*>
+       by A268,A269,A274,A277,A278,A279,A280,A281,A282,GOBRD13:def 8;
+   end;
+ end;
+
+A283: for k,i1,i2,j1,j2 st k > 1 &
+        [i1,j1] in Indices G & (F.k)/.(len(F.k)-'1) = G*(i1,j1) &
+        [i2,j2] in Indices G & (F.k)/.len(F.k) = G*(i2,j2)
+      holds
+       (front_right_cell(F.k,(len(F.k))-'1,G) meets C
+         implies F.(k+1) turns_right (len(F.k))-'1,G &
+          (i1 = i2 & j1+1 = j2 implies [i2+1,j2] in Indices G &
+            F.(k+1) = (F.k)^<*G*(i2+1,j2)*>) &
+          (i1+1 = i2 & j1 = j2 implies [i2,j2-'1] in Indices G &
+            F.(k+1) = (F.k)^<*G*(i2,j2-'1)*>) &
+          (i1 = i2+1 & j1 = j2 implies [i2,j2+1] in Indices G &
+            F.(k+1) = (F.k)^<*G*(i2,j2+1)*>)&
+          (i1 = i2 & j1 = j2+1 implies [i2-'1,j2] in Indices G &
+            F.(k+1) = (F.k)^<*G*(i2-'1,j2)*>))
+  proof let k,i1,i2,j1,j2 such that
+A284:  k > 1 and
+A285:  [i1,j1] in Indices G & (F.k)/.(len(F.k)-'1) = G*(i1,j1) and
+A286:  [i2,j2] in Indices G & (F.k)/.len(F.k) = G*(i2,j2);
+A287:  (len(F.k))-'1 <= len(F.k) by GOBOARD9:2;
+A288:   F.k is_sequence_on G by A246;
+A289:   len(F.k) = k by A92;
+then A290:  1 <= (len(F.k))-'1 by A284,JORDAN3:12;
+A291:  (len(F.k)) -'1 +1 = len(F.k) by A284,A289,AMI_5:4;
+then A292: left_cell(F.k,(len(F.k))-'1,G) meets C by A246,A290;
+A293: (len(F.k))-'1 in dom(F.k) & len(F.k) in dom(F.k)
+       by A284,A287,A289,A290,FINSEQ_3:27;
+A294: (len(F.k))-'1+(1+1) = (len(F.k))+1 by A291,XCMPLX_1:1;
+A295: i1+1 > i1 & i2+1 > i2 & j1+1 > j1 & j2+1 > j2 by NAT_1:38;
+   assume front_right_cell(F.k,(len(F.k))-'1,G) meets C;
+   then consider i,j such that
+A296:   (F.k)^<*G*(i,j)*> turns_right (len(F.k))-'1,G and
+A297:   F.(k+1) = (F.k)^<*G*(i,j)*> by A78,A284,A288,A289,A292;
+A298:   (F.(k+1))/.(len(F.k)-'1) = G*(i1,j1) & (F.(k+1))/.len(F.k) = G*(i2,j2)
+        by A285,A286,A293,A297,GROUP_5:95;
+A299:   (F.(k+1))/.(len(F.k)+1) = G*(i,j) by A297,TOPREAL4:1;
+   thus F.(k+1) turns_right (len(F.k))-'1,G by A296,A297;
+   thus i1 = i2 & j1+1 = j2 implies
+    [i2+1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2+1,j2)*>
+       by A285,A286,A291,A294,A295,A296,A297,A298,A299,GOBRD13:def 6;
+   thus i1+1 = i2 & j1 = j2 implies
+    [i2,j2-'1] in Indices G & F.(k+1) = (F.k)^<*G*(i2,j2-'1)*>
+       by A285,A286,A291,A294,A295,A296,A297,A298,A299,GOBRD13:def 6;
+   thus i1 = i2+1 & j1 = j2 implies
+    [i2,j2+1] in Indices G & F.(k+1) = (F.k)^<*G*(i2,j2+1)*>
+       by A285,A286,A291,A294,A295,A296,A297,A298,A299,GOBRD13:def 6;
+   thus i1 = i2 & j1 = j2+1 implies
+    [i2-'1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2-'1,j2)*>
+       by A285,A286,A291,A294,A295,A296,A297,A298,A299,GOBRD13:def 6;
+ end;
+
+A300:
+  for k holds ex i,j st [i,j] in Indices G & F.(k+1) = (F.k)^<*G*(i,j)*>
+   proof let k;
+A301:  F.k is_sequence_on G by A246;
+A302:  len(F.k) = k by A92;
+    per cases by REAL_1:def 5;
+    suppose k < 1;
+then A303:   k = 0 by RLVECT_1:98;
+      take X-SpanStart(C,n),Y-SpanStart(C,n);
+      thus [X-SpanStart(C,n),Y-SpanStart(C,n)] in Indices G by A1,JORDAN11:8;
+      thus thesis by A77,A247,A303,FINSEQ_1:47;
+    suppose
+A304:   k = 1;
+     take X-SpanStart(C,n)-'1,Y-SpanStart(C,n);
+     thus [X-SpanStart(C,n)-'1,Y-SpanStart(C,n)] in Indices G
+       by A1,JORDAN11:9;
+     thus thesis by A247,A248,A304,FINSEQ_1:def 9;
+    suppose
+A305:   k > 1;
+then A306:   1 <= (len(F.k))-'1 by A302,JORDAN3:12;
+        (len(F.k)) -'1 +1 = len(F.k) by A302,A305,AMI_5:4;
+     then consider i1,j1,i2,j2 being Nat such that
+A307:   [i1,j1] in Indices G & (F.k)/.(len(F.k)-'1) = G*(i1,j1) and
+A308:   [i2,j2] in Indices G & (F.k)/.len(F.k) = G*(i2,j2) and
+A309:   i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+        i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1 by A301,A306,JORDAN8:6;
+       now per cases;
+       suppose
+A310:       front_right_cell(F.k,(len(F.k))-'1,G) misses C &
+          front_left_cell(F.k,(len(F.k))-'1,G) misses C;
+           now per cases by A309;
+          suppose i1 = i2 & j1+1 = j2;
+           then [i2-'1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2-'1,j2)*>
+             by A249,A305,A307,A308,A310;
+            hence thesis;
+          suppose i1+1 = i2 & j1 = j2;
+           then [i2,j2+1] in Indices G & F.(k+1) = (F.k)^<*G*(i2,j2+1)*>
+             by A249,A305,A307,A308,A310;
+            hence thesis;
+          suppose i1 = i2+1 & j1 = j2;
+           then [i2,j2-'1] in Indices G & F.(k+1) = (F.k)^<*G*(i2,j2-'1)*>
+             by A249,A305,A307,A308,A310;
+            hence thesis;
+          suppose i1 = i2 & j1 = j2+1;
+           then [i2+1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2+1,j2)*>
+             by A249,A305,A307,A308,A310;
+            hence thesis;
+         end;
+        hence thesis;
+       suppose
+A311:       front_right_cell(F.k,(len(F.k))-'1,G) misses C &
+          front_left_cell(F.k,(len(F.k))-'1,G) meets C;
+           now per cases by A309;
+          suppose i1 = i2 & j1+1 = j2;
+           then [i2,j2+1] in Indices G & F.(k+1) = (F.k)^<*G*(i2,j2+1)*>
+             by A266,A305,A307,A308,A311;
+            hence thesis;
+          suppose i1+1 = i2 & j1 = j2;
+           then [i2+1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2+1,j2)*>
+             by A266,A305,A307,A308,A311;
+            hence thesis;
+          suppose i1 = i2+1 & j1 = j2;
+           then [i2-'1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2-'1,j2)*>
+             by A266,A305,A307,A308,A311;
+            hence thesis;
+          suppose i1 = i2 & j1 = j2+1;
+           then [i2,j2-'1] in Indices G & F.(k+1) = (F.k)^<*G*(i2,j2-'1)*>
+             by A266,A305,A307,A308,A311;
+            hence thesis;
+         end;
+        hence thesis;
+       suppose
+A312:       front_right_cell(F.k,(len(F.k))-'1,G) meets C;
+           now per cases by A309;
+          suppose i1 = i2 & j1+1 = j2;
+           then [i2+1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2+1,j2)*>
+             by A283,A305,A307,A308,A312;
+            hence thesis;
+          suppose i1+1 = i2 & j1 = j2;
+           then [i2,j2-'1] in Indices G & F.(k+1) = (F.k)^<*G*(i2,j2-'1)*>
+             by A283,A305,A307,A308,A312;
+            hence thesis;
+          suppose i1 = i2+1 & j1 = j2;
+           then [i2,j2+1] in Indices G & F.(k+1) = (F.k)^<*G*(i2,j2+1)*>
+             by A283,A305,A307,A308,A312;
+            hence thesis;
+          suppose i1 = i2 & j1 = j2+1;
+           then [i2-'1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2-'1,j2)*>
+             by A283,A305,A307,A308,A312;
+            hence thesis;
+         end;
+        hence thesis;
+     end;
+     hence thesis;
+   end;
+defpred P[Nat] means for m st m <= $1 holds (F.$1)|m = F.m;
+A313: P[0]
+   proof let m;
+    assume
+A314:  m <= 0;
+A315:  0 <= m by NAT_1:18;
+ 0 = m by A314,NAT_1:18;
+    then (F.0)|m = (F.m)|Seg 0 by TOPREAL1:def 1;
+    then (F.0)|m = {} by FINSEQ_1:4,RELAT_1:110;
+    hence thesis by A77,A314,A315,AXIOMS:21;
+   end;
+A316: for k st P[k] holds P[k+1]
+   proof let k such that
+A317:   for m st m <= k holds (F.k)|m = F.m;
+    let m such that
+A318:   m <= k+1;
+    per cases by A318,REAL_1:def 5;
+    suppose m < k+1;
+then A319:    m <= k by NAT_1:38;
+A320:    len(F.k) = k by A92;
+     consider i,j such that
+         [i,j] in Indices G and
+A321:    F.(k+1) = F.k^<*G*(i,j)*> by A300;
+       (F.(k+1))|m = (F.k)|m by A319,A320,A321,FINSEQ_5:25;
+     hence (F.(k+1))|m = F.m by A317,A319;
+    suppose
+A322:    m = k+1;
+       len(F.(k+1)) = k+1 by A92;
+     hence (F.(k+1))|m = F.m by A322,TOPREAL1:2;
+   end;
+
+A323: for k holds P[k] from Ind(A313,A316);
+A324: for k st k > 1 holds
+       (front_right_cell(F.k,k-'1,Gauge(C,n)) misses C &
+          front_left_cell(F.k,k-'1,Gauge(C,n)) misses C
+         implies F.(k+1) turns_left k-'1,Gauge(C,n)) &
+       (front_right_cell(F.k,k-'1,Gauge(C,n)) misses C &
+          front_left_cell(F.k,k-'1,Gauge(C,n)) meets C
+         implies F.(k+1) goes_straight k-'1,Gauge(C,n)) &
+       (front_right_cell(F.k,k-'1,Gauge(C,n)) meets C
+         implies F.(k+1) turns_right k-'1,Gauge(C,n))
+   proof
+     let k such that
+A325:  k > 1;
+A326:  F.k is_sequence_on G by A246;
+A327:  len(F.k) = k by A92;
+then A328:  1 <= (len(F.k))-'1 by A325,JORDAN3:12;
+      (len(F.k)) -'1 +1 = len(F.k) by A325,A327,AMI_5:4;
+    then ex i1,j1,i2,j2 being Nat st
+         [i1,j1] in Indices G & (F.k)/.(len(F.k)-'1) = G*(i1,j1) &
+         [i2,j2] in Indices G & (F.k)/.len(F.k) = G*(i2,j2) &
+         (i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+      i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1) by A326,A328,JORDAN8:6;
+    hence thesis by A249,A266,A283,A325,A327;
+   end;
+   defpred P[Nat] means F.$1 is unfolded;
+     len(F.0) = 0 by A77,FINSEQ_1:25;
+then A329: P[0] by SPPOL_2:27;
+A330: for k st P[k] holds P[k+1]
+   proof let k such that
+A331:  F.k is unfolded;
+A332:  F.k is_sequence_on G by A246;
+    per cases;
+    suppose k <= 1;
+     then k+1 <= 1+1 by AXIOMS:24;
+     then len(F.(k+1)) <= 2 by A92;
+     hence F.(k+1) is unfolded by SPPOL_2:27;
+    suppose
+A333:   k > 1;
+    set m = k-'1;
+A334:   1 <= m by A333,JORDAN3:12;
+A335:   m+1 = k by A333,AMI_5:4;
+A336:   len(F.k) = k by A92;
+     then consider i1,j1,i2,j2 being Nat such that
+A337:   [i1,j1] in Indices G & (F.k)/.m = G*(i1,j1) and
+A338:   [i2,j2] in Indices G & (F.k)/.len(F.k) = G*(i2,j2) and
+A339:   i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+        i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1 by A332,A334,A335,JORDAN8:6;
+A340:  1 <= i1 & i1 <= len G & 1 <= j1 & j1 <= width G by A337,GOBOARD5:1;
+A341:  1 <= i2 & i2 <= len G & 1 <= j2 & j2 <= width G by A338,GOBOARD5:1;
+then A342:  (i2-'1)+1 = i2 by AMI_5:4;
+A343:  (j2-'1)+1 = j2 by A341,AMI_5:4;
+A344:   LSeg(F.k,m) = LSeg(G*(i1,j1),G*(i2,j2)) by A334,A335,A336,A337,A338,
+TOPREAL1:def 5;
+      now per cases;
+     suppose
+A345:     front_right_cell(F.k,(len(F.k))-'1,G) misses C &
+          front_left_cell(F.k,(len(F.k))-'1,G) misses C;
+        now per cases by A339;
+       suppose
+A346:       i1 = i2 & j1+1 = j2;
+then A347:       [i2-'1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2-'1,j2)*>
+           by A249,A333,A336,A337,A338,A345;
+         then 1 <= i2-'1 by GOBOARD5:1;
+         then LSeg(F.k,m) /\ LSeg((F.k)/.len(F.k),G*(i2-'1,j2)) =
+         {(F.k)/.len(F.k)}
+          by A338,A340,A341,A342,A344,A346,GOBOARD7:18;
+        hence F.(k+1) is unfolded by A331,A335,A336,A347,SPPOL_2:31;
+       suppose
+A348:       i1+1 = i2 & j1 = j2;
+then A349:       [i2,j2+1] in Indices G & F.(k+1) = (F.k)^<*G*(i2,j2+1)*>
+           by A249,A333,A336,A337,A338,A345;
+         then j2+1 <= width G &
+          LSeg((F.k)/.len(F.k),G*(i2,j2+1))=LSeg(G*(i2,j2+1),(F.k)/.len(F.k))
+           by GOBOARD5:1;
+         then LSeg(F.k,m) /\ LSeg((F.k)/.len(F.k),G*(i2,j2+1)) = {(F.k)/.len(F
+.k)}
+           by A338,A340,A341,A344,A348,GOBOARD7:20;
+        hence F.(k+1) is unfolded by A331,A335,A336,A349,SPPOL_2:31;
+       suppose
+A350:       i1 = i2+1 & j1 = j2;
+then A351:       [i2,j2-'1] in Indices G & F.(k+1) = (F.k)^<*G*(i2,j2-'1)*>
+           by A249,A333,A336,A337,A338,A345;
+         then 1 <= j2-'1 by GOBOARD5:1;
+         then LSeg(F.k,m) /\ LSeg((F.k)/.len(F.k),G*(i2,j2-'1)) =
+           {(F.k)/.len(F.k)}
+          by A338,A340,A341,A343,A344,A350,GOBOARD7:17;
+        hence F.(k+1) is unfolded by A331,A335,A336,A351,SPPOL_2:31;
+       suppose
+A352:       i1 = i2 & j1 = j2+1;
+then A353:       [i2+1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2+1,j2)*>
+           by A249,A333,A336,A337,A338,A345;
+         then i2+1 <= len G by GOBOARD5:1;
+         then LSeg(F.k,m) /\ LSeg((F.k)/.len(F.k),G*(i2+1,j2)) = {(F.k)/.len(F
+.k)}
+          by A338,A340,A341,A344,A352,GOBOARD7:19;
+        hence F.(k+1) is unfolded by A331,A335,A336,A353,SPPOL_2:31;
+      end;
+      hence F.(k+1) is unfolded;
+     suppose
+A354:     front_right_cell(F.k,(len(F.k))-'1,G) misses C &
+              front_left_cell(F.k,(len(F.k))-'1,G) meets C;
+        now per cases by A339;
+       suppose
+A355:       i1 = i2 & j1+1 = j2;
+then A356:       [i2,j2+1] in Indices G & F.(k+1) = (F.k)^<*G*(i2,j2+1)*>
+           by A266,A333,A336,A337,A338,A354;
+         then 1 <= j2+1 & j2+1 <= width G & j2+1 = j1+(1+1)
+          by A355,GOBOARD5:1,XCMPLX_1:1;
+         then LSeg(F.k,m) /\ LSeg((F.k)/.len(F.k),G*(i2,j2+1)) = {(F.k)/.len(F
+.k)}
+          by A338,A340,A344,A355,GOBOARD7:15;
+        hence F.(k+1) is unfolded by A331,A335,A336,A356,SPPOL_2:31;
+       suppose
+A357:       i1+1 = i2 & j1 = j2;
+then A358:       [i2+1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2+1,j2)*>
+           by A266,A333,A336,A337,A338,A354;
+         then 1 <= i2+1 & i2+1 <= len G & i2+1 = i1+(1+1)
+          by A357,GOBOARD5:1,XCMPLX_1:1;
+         then LSeg(F.k,m) /\ LSeg((F.k)/.len(F.k),G*(i2+1,j2)) = {(F.k)/.len(F
+.k)}
+          by A338,A340,A344,A357,GOBOARD7:16;
+        hence F.(k+1) is unfolded by A331,A335,A336,A358,SPPOL_2:31;
+       suppose
+A359:       i1 = i2+1 & j1 = j2;
+then A360:       [i2-'1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2-'1,j2)*>
+           by A266,A333,A336,A337,A338,A354;
+         then 1 <= i2-'1 & i2-'1+1+1 = i2-'1+(1+1)
+          by GOBOARD5:1,XCMPLX_1:1;
+         then LSeg(F.k,m) /\ LSeg((F.k)/.len(F.k),G*(i2-'1,j2)) =
+          {(F.k)/.len(F.k)}
+          by A338,A340,A342,A344,A359,GOBOARD7:16;
+        hence F.(k+1) is unfolded by A331,A335,A336,A360,SPPOL_2:31;
+       suppose
+A361:       i1 = i2 & j1 = j2+1;
+then A362:       [i2,j2-'1] in Indices G & F.(k+1) = (F.k)^<*G*(i2,j2-'1)*>
+           by A266,A333,A336,A337,A338,A354;
+         then 1 <= j2-'1 & j2-'1+1+1 = j2-'1+(1+1)
+          by GOBOARD5:1,XCMPLX_1:1;
+         then LSeg(F.k,m) /\ LSeg((F.k)/.len(F.k),G*(i2,j2-'1)) =
+         {(F.k)/.len(F.k)}
+          by A338,A340,A343,A344,A361,GOBOARD7:15;
+        hence F.(k+1) is unfolded by A331,A335,A336,A362,SPPOL_2:31;
+      end;
+      hence F.(k+1) is unfolded;
+     suppose
+A363:     front_right_cell(F.k,(len(F.k))-'1,G) meets C;
+        now per cases by A339;
+       suppose
+A364:       i1 = i2 & j1+1 = j2;
+then A365:       [i2+1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2+1,j2)*>
+           by A283,A333,A336,A337,A338,A363;
+         then i2+1 <= len G by GOBOARD5:1;
+         then LSeg(F.k,m) /\ LSeg((F.k)/.len(F.k),G*(i2+1,j2)) = {(F.k)/.len(F
+.k)}
+          by A338,A340,A341,A344,A364,GOBOARD7:17;
+        hence F.(k+1) is unfolded by A331,A335,A336,A365,SPPOL_2:31;
+       suppose
+A366:       i1+1 = i2 & j1 = j2;
+then A367:       [i2,j2-'1] in Indices G & F.(k+1) = (F.k)^<*G*(i2,j2-'1)*>
+           by A283,A333,A336,A337,A338,A363;
+         then 1 <= j2-'1 by GOBOARD5:1;
+         then LSeg(F.k,m) /\ LSeg((F.k)/.len(F.k),G*(i2,j2-'1)) =
+         {(F.k)/.len(F.k)}
+          by A338,A340,A341,A343,A344,A366,GOBOARD7:18;
+        hence F.(k+1) is unfolded by A331,A335,A336,A367,SPPOL_2:31;
+       suppose
+A368:       i1 = i2+1 & j1 = j2;
+then A369:       [i2,j2+1] in Indices G & F.(k+1) = (F.k)^<*G*(i2,j2+1)*>
+           by A283,A333,A336,A337,A338,A363;
+         then j2+1 <= width G by GOBOARD5:1;
+         then LSeg(F.k,m) /\ LSeg((F.k)/.len(F.k),G*(i2,j2+1)) = {(F.k)/.len(F
+.k)}
+          by A338,A340,A341,A344,A368,GOBOARD7:19;
+        hence F.(k+1) is unfolded by A331,A335,A336,A369,SPPOL_2:31;
+       suppose
+A370:       i1 = i2 & j1 = j2+1;
+then A371:       [i2-'1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2-'1,j2)*>
+           by A283,A333,A336,A337,A338,A363;
+         then 1 <= i2-'1 by GOBOARD5:1;
+         then LSeg(F.k,m) /\ LSeg((F.k)/.len(F.k),G*(i2-'1,j2)) =
+         {(F.k)/.len(F.k)}
+          by A338,A340,A341,A342,A344,A370,GOBOARD7:20;
+        hence F.(k+1) is unfolded by A331,A335,A336,A371,SPPOL_2:31;
+      end;
+      hence F.(k+1) is unfolded;
+    end;
+    hence F.(k+1) is unfolded;
+   end;
+
+A372: for k holds P[k] from Ind(A329,A330);
+   defpred K[Nat] means $1 >= 1 &
+   ex m st m in dom(F.$1) & m <> len(F.$1) & (F.$1)/.m = (F.$1)/.len(F.$1);
+now assume
+A373:   for k st k >= 1 holds
+        for m st m in dom(F.k) & m <> len(F.k)
+         holds (F.k)/.m <> (F.k)/.len(F.k);
+         defpred P[Nat] means F.$1 is one-to-one;
+A374:    P[0] by A77;
+A375:    for k st P[k] holds P[k+1]
+     proof let k; assume
+A376: F.k is one-to-one;
+        now let n,m such that
+A377:     n in dom(F.(k+1)) & m in dom(F.(k+1)) and
+A378:     (F.(k+1))/.n = (F.(k+1))/.m;
+       consider i,j such that
+          [i,j] in Indices G and
+A379:     F.(k+1) = (F.k)^<*G*(i,j)*> by A300;
+A380:     1 <= n & n <= len(F.(k+1)) & 1 <= m & m <= len(F.(k+1))
+         by A377,FINSEQ_3:27;
+A381:     len(F.k) = k & len(F.(k+1)) = k+1 by A92;
+A382:     1 <= k+1 by NAT_1:37;
+       per cases by A380,A381,NAT_1:26;
+        suppose n <= k & m <= k;
+then A383:        n in dom(F.k) & m in dom(F.k) by A380,A381,FINSEQ_3:27;
+         then (F.(k+1))/.n = (F.k)/.n & (F.(k+1))/.m = (F.k)/.m
+          by A379,GROUP_5:95;
+         hence n = m by A376,A378,A383,PARTFUN2:17;
+        suppose n = k+1 & m <= k;
+         hence n = m by A373,A377,A378,A381,A382;
+        suppose n <= k & m = k+1;
+         hence n = m by A373,A377,A378,A381,A382;
+        suppose n = k+1 & m = k+1;
+         hence n = m;
+      end;
+      hence F.(k+1) is one-to-one by PARTFUN2:16;
+     end;
+A384:   for k holds P[k] from Ind(A374,A375);
+A385:   for k holds card rng(F.k) = k
+     proof let k;
+        F.k is one-to-one by A384;
+      hence card rng(F.k) = len(F.k) by FINSEQ_4:77
+                         .= k by A92;
+     end;
+    set k = (len G)*(width G)+1;
+A386:   k > (len G)*(width G) by NAT_1:38;
+A387:   card Values G <= (len G)*(width G) by GOBRD13:8;
+      F.k is_sequence_on G by A246;
+    then rng(F.k) c= Values G by GOBRD13:9;
+    then card rng(F.k) <= card Values G by CARD_1:80;
+    then card rng(F.k) <= (len G)*(width G) by A387,AXIOMS:22;
+    hence contradiction by A385,A386;
+   end;
+   then A388: ex k st K[k];
+   consider k such that
+A389:  K[k] and
+A390:  for l st K[l]
+       holds k <= l from Min(A388);
+
+   consider m such that
+A391:  m in dom(F.k) and
+A392:  m <> len(F.k) and
+A393:  (F.k)/.m = (F.k)/.len(F.k) by A389;
+A394:  len(F.k) = k by A92;
+    0<k by A389,AXIOMS:22;
+  then reconsider f = F.k as non empty FinSequence of TOP-REAL 2 by A394,
+FINSEQ_1:25;
+A395: f is_sequence_on G by A246;
+A396: 1 <= m & m <= len f by A391,FINSEQ_3:27;
+then A397: m < len f by A392,REAL_1:def 5;
+   then 1 < len f by A396,AXIOMS:22;
+then A398: len f >= 1+1 by NAT_1:38;
+then A399: k >= 2 by A92;
+  reconsider f as non constant special unfolded non empty
+    FinSequence of TOP-REAL 2 by A372,A395,A398,JORDAN8:7,8;
+  set g = f/^(m-'1);
+A400: m+1 <= len f by A397,NAT_1:38;
+    m-'1 <= m & m < m+1 by JORDAN3:7,NAT_1:38;
+  then m-'1 < m+1 by AXIOMS:22;
+then A401: m-'1 < len f by A400,AXIOMS:22;
+then A402: len g = len f - (m-'1) by RFINSEQ:def 2;
+  then (m-'1)-(m-'1) < len g by A401,REAL_1:54;
+     then len g > 0 by XCMPLX_1:14;
+  then reconsider g as non empty FinSequence of TOP-REAL 2
+   by FINSEQ_1:25;
+    1 in dom g by FINSEQ_5:6;
+then A403:  g/.1 = f/.(m-'1+1) by FINSEQ_5:30
+            .= f/.m by A396,AMI_5:4;
+    len g in dom g by FINSEQ_5:6;
+then A404:  g/.len g = f/.(m-'1+len g) by FINSEQ_5:30
+                .= f/.len f by A402,XCMPLX_1:27;
+A405: g is_sequence_on G by A395,JORDAN8:5;
+then A406: g is standard by JORDAN8:7;
+A407: for i st 1 <= i & i < len g & 1 <= j & j < len g & g/.i = g/.j
+      holds i = j
+   proof let i such that
+A408:  1 <= i & i < len g and
+A409:  1 <= j & j < len g and
+A410:  g/.i = g/.j and
+A411:  i <> j;
+       i in dom g by A408,FINSEQ_3:27;
+then A412:  g/.i = f/.(m-'1+i) by FINSEQ_5:30;
+       j in dom g by A409,FINSEQ_3:27;
+then A413:  g/.j = f/.(m-'1+j) by FINSEQ_5:30;
+A414:  0 <= m-'1 by NAT_1:18;
+    per cases by A411,REAL_1:def 5;
+    suppose
+A415:    i < j;
+     set l = m-'1+j, m'= m-'1+i;
+A416:    m' < l by A415,REAL_1:53;
+A417:    l < k by A394,A402,A409,REAL_1:86;
+then A418:    f|l = F.l by A323;
+       0+j <= l by A414,AXIOMS:24;
+then A419:    1 <= l by A409,AXIOMS:22;
+A420:    len(F.l) = l by A92;
+       0+i <= m' by A414,AXIOMS:24;
+     then 1 <= m' by A408,AXIOMS:22;
+then A421:    m' in dom(F.l) by A416,A420,FINSEQ_3:27;
+then A422:    (F.l)/.m' = f/.m' by A418,TOPREAL1:1;
+       l in dom(F.l) by A419,A420,FINSEQ_3:27;
+     then (F.l)/.l = f/.l by A418,TOPREAL1:1;
+     hence contradiction by A390,A410,A412,A413,A416,A417,A419,A420,A421,A422;
+    suppose
+A423:    j < i;
+     set l = m-'1+i, m'= m-'1+j;
+A424:    m' < l by A423,REAL_1:53;
+A425:    l < k by A394,A402,A408,REAL_1:86;
+then A426:    f|l = F.l by A323;
+       0+i <= l by A414,AXIOMS:24;
+then A427:    1 <= l by A408,AXIOMS:22;
+A428:    len(F.l) = l by A92;
+       0+j <= m' by A414,AXIOMS:24;
+     then 1 <= m' by A409,AXIOMS:22;
+then A429:    m' in dom(F.l) by A424,A428,FINSEQ_3:27;
+then A430:    (F.l)/.m' = f/.m' by A426,TOPREAL1:1;
+       l in dom(F.l) by A427,A428,FINSEQ_3:27;
+     then (F.l)/.l = f/.l by A426,TOPREAL1:1;
+     hence contradiction by A390,A410,A412,A413,A424,A425,A427,A428,A429,A430;
+   end;
+A431: for i st 1 < i & i < j & j <= len g holds g/.i <> g/.j
+   proof let i such that
+A432:   1 < i and
+A433:   i < j and
+A434:   j <= len g and
+A435:   g/.i = g/.j;
+A436:   1 < j by A432,A433,AXIOMS:22;
+A437:   i < len g by A433,A434,AXIOMS:22;
+then A438:   1 < len g by A432,AXIOMS:22;
+    per cases;
+    suppose j <> len g;
+     then j < len g by A434,REAL_1:def 5;
+     hence contradiction by A407,A432,A433,A435,A436,A437;
+    suppose j = len g;
+     hence contradiction by A393,A403,A404,A407,A432,A433,A435,A438;
+   end;
+A439: for i st 1 <= i & i < j & j < len g holds g/.i <> g/.j
+   proof let i such that
+A440:   1 <= i and
+A441:   i < j and
+A442:   j < len g and
+A443:   g/.i = g/.j;
+A444:   1 < j by A440,A441,AXIOMS:22;
+      i < len g by A441,A442,AXIOMS:22;
+    hence contradiction by A407,A440,A441,A442,A443,A444;
+   end;
+A445: for i st 1 <= i & i+1 <= len f
+       holds left_cell(f,i,G) = Cl Int left_cell(f,i,G)
+   proof let i such that
+A446:    1 <= i & i+1 <= len f;
+     consider i1,j1,i2,j2 such that
+A447:    [i1,j1] in Indices G and
+A448:    f/.i = G*(i1,j1) and
+A449:    [i2,j2] in Indices G and
+A450:    f/.(i+1) = G*(i2,j2) and
+A451:    i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+        i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1 by A395,A446,JORDAN8:6;
+A452:    1 <= i1 & i1 <= len G & 1 <= j1 & j1 <= width G by A447,GOBOARD5:1;
+A453:    1 <= i2 & i2 <= len G & 1 <= j2 & j2 <= width G by A449,GOBOARD5:1;
+A454:    i1+1 > i1 & j1+1 > j1 & i2+1 > i2 & j2+1 > j2 by NAT_1:38;
+    per cases by A451;
+    suppose
+A455:   i1 = i2 & j1+1 = j2;
+A456:   i1-'1 <= len G by A452,JORDAN3:7;
+       left_cell(f,i,G) = cell(G,i1-'1,j1)
+      by A395,A446,A447,A448,A449,A450,A454,A455,GOBRD13:def 3;
+     hence thesis by A452,A456,GOBRD11:35;
+    suppose
+    i1+1 = i2 & j1 = j2;
+     then left_cell(f,i,G) = cell(G,i1,j1)
+      by A395,A446,A447,A448,A449,A450,A454,GOBRD13:def 3;
+     hence thesis by A452,GOBRD11:35;
+    suppose
+A457:  i1 = i2+1 & j1 = j2;
+A458:   j2-'1 <= width G by A453,JORDAN3:7;
+       left_cell(f,i,G) = cell(G,i2,j2-'1)
+      by A395,A446,A447,A448,A449,A450,A454,A457,GOBRD13:def 3;
+     hence thesis by A453,A458,GOBRD11:35;
+    suppose
+    i1 = i2 & j1 = j2+1;
+     then left_cell(f,i,G) = cell(G,i1,j2)
+      by A395,A446,A447,A448,A449,A450,A454,GOBRD13:def 3;
+     hence thesis by A452,A453,GOBRD11:35;
+   end;
+A459: g is s.c.c.
+   proof
+    let i,j such that
+A460:   i+1 < j and
+A461:   i > 1 & j < len g or j+1 < len g;
+A462:   j <= j+1 by NAT_1:37;
+then A463:  i+1 < j+1 by A460,AXIOMS:22;
+A464:   1 <= i+1 by NAT_1:37;
+A465:   1 < j by A460,NAT_1:37;
+     i < j by A460,NAT_1:38;
+then A466:    i < j+1 by A462,AXIOMS:22;
+    per cases by A461,RLVECT_1:99;
+    suppose
+A467:    i > 1 & j < len g;
+then A468:    i+1 < len g by A460,AXIOMS:22;
+then A469:    LSeg(g,i) = LSeg(g/.i,g/.(i+1)) by A467,TOPREAL1:def 5;
+A470:   1 < i+1 by A467,NAT_1:38;
+A471:    i < len g by A468,NAT_1:38;
+     consider i1,j1,i2,j2 such that
+A472:    [i1,j1] in Indices G and
+A473:    g/.i = G*(i1,j1) and
+A474:    [i2,j2] in Indices G and
+A475:    g/.(i+1) = G*(i2,j2) and
+A476:    i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+        i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1 by A405,A467,A468,JORDAN8:6;
+A477:    1 <= i1 & i1 <= len G & 1 <= j1 & j1 <= width G by A472,GOBOARD5:1;
+A478:    1 <= i2 & i2 <= len G & 1 <= j2 & j2 <= width G by A474,GOBOARD5:1;
+A479:    j+1 <= len g by A467,NAT_1:38;
+then A480:    LSeg(g,j) = LSeg(g/.j,g/.(j+1)) by A465,TOPREAL1:def 5;
+     consider i1',j1',i2',j2' being Nat such that
+A481:    [i1',j1'] in Indices G and
+A482:    g/.j = G*(i1',j1') and
+A483:    [i2',j2'] in Indices G and
+A484:    g/.(j+1) = G*(i2',j2') and
+A485:    i1' = i2' & j1'+1 = j2' or i1'+1 = i2' & j1' = j2' or
+        i1' = i2'+1 & j1' = j2' or i1' = i2' & j1' = j2'+1
+         by A405,A465,A479,JORDAN8:6;
+A486:    1 <= i1' & i1' <= len G & 1 <= j1' & j1' <= width G by A481,GOBOARD5:1
+;
+A487:    1 <= i2' & i2' <= len G & 1 <= j2' & j2' <= width G by A483,GOBOARD5:1
+;
+     assume LSeg(g,i) /\ LSeg(g,j) <> {};
+then A488:    LSeg(g,i) meets LSeg(g,j) by XBOOLE_0:def 7;
+        now per cases by A476,A485;
+       suppose
+A489:      i1 = i2 & j1+1 = j2 & i1' = i2' & j1'+1 = j2';
+then A490:      i1 = i1' by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,GOBOARD7:21;
+          now per cases by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,A489,GOBOARD7:24;
+        suppose j1 = j1';
+         hence contradiction by A407,A460,A462,A465,A467,A471,A473,A482,A490;
+        suppose j1 = j1'+1;
+         hence contradiction by A431,A466,A467,A473,A479,A484,A489,A490;
+        suppose j1+1 = j1';
+         hence contradiction by A407,A460,A464,A465,A467,A468,A475,A482,A489,
+A490;
+        end;
+        hence contradiction;
+       suppose
+A491:      i1 = i2 & j1+1 = j2 & i1'+1 = i2' & j1' = j2';
+          now per cases by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,A491,GOBOARD7:23;
+         suppose i1 = i1' & j1 = j1';
+          hence contradiction by A407,A460,A462,A465,A467,A471,A473,A482;
+         suppose i1 = i1' & j1+1 = j1';
+          hence contradiction by A431,A460,A467,A470,A475,A482,A491;
+         suppose i1 = i1'+1 & j1 = j1';
+          hence contradiction by A431,A466,A467,A473,A479,A484,A491;
+         suppose i1 = i1'+1 & j1+1 = j1';
+          hence contradiction by A431,A463,A470,A475,A479,A484,A491;
+        end;
+        hence contradiction;
+       suppose
+A492:      i1 = i2 & j1+1 = j2 & i1' = i2'+1 & j1' = j2';
+          now per cases by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,A492,GOBOARD7:23;
+         suppose i1 = i2' & j1' = j1;
+          hence contradiction by A431,A466,A467,A473,A479,A484,A492;
+         suppose i1 = i2' & j1+1 = j1';
+          hence contradiction by A431,A463,A470,A475,A479,A484,A492;
+         suppose i1 = i2'+1 & j1' = j1;
+          hence contradiction by A407,A460,A462,A465,A467,A471,A473,A482,A492;
+         suppose i1 = i2'+1 & j1+1 = j1';
+          hence contradiction by A407,A460,A464,A465,A467,A468,A475,A482,A492;
+        end;
+        hence contradiction;
+       suppose
+A493:      i1 = i2 & j1+1 = j2 & i1' = i2' & j1' = j2'+1;
+then A494:      i1 = i1' by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,GOBOARD7:21;
+          now per cases by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,A493,GOBOARD7:24;
+         suppose j1 = j2';
+          hence contradiction by A407,A460,A464,A465,A467,A468,A475,A482,A493,
+A494;
+         suppose j1 = j2'+1;
+          hence contradiction by A407,A460,A462,A465,A467,A471,A473,A482,A493,
+A494;
+         suppose j1+1 = j2';
+          hence contradiction by A431,A463,A470,A475,A479,A484,A493,A494;
+        end;
+        hence contradiction;
+       suppose
+A495:      i1+1 = i2 & j1 = j2 & i1' = i2' & j1'+1 = j2';
+          now per cases by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,A495,GOBOARD7:23;
+         suppose i1' = i1 & j1 = j1';
+          hence contradiction by A407,A460,A462,A465,A467,A471,A473,A482;
+         suppose i1' = i1 & j1'+1 = j1;
+          hence contradiction by A431,A466,A467,A473,A479,A484,A495;
+         suppose i1' = i1+1 & j1 = j1';
+          hence contradiction by A407,A460,A464,A465,A467,A468,A475,A482,A495;
+         suppose i1' = i1+1 & j1'+1 = j1;
+          hence contradiction by A431,A463,A470,A475,A479,A484,A495;
+        end;
+        hence contradiction;
+       suppose
+A496:      i1+1 = i2 & j1 = j2 & i1'+1 = i2' & j1' = j2';
+then A497:      j1 = j1' by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,GOBOARD7:22;
+          now per cases by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,A496,GOBOARD7:25;
+         suppose i1 = i1';
+          hence contradiction by A407,A460,A462,A465,A467,A471,A473,A482,A497;
+         suppose i1 = i1'+1;
+          hence contradiction by A431,A466,A467,A473,A479,A484,A496,A497;
+         suppose i1+1 = i1';
+          hence contradiction by A407,A460,A464,A465,A467,A468,A475,A482,A496,
+A497;
+        end;
+        hence contradiction;
+       suppose
+A498:      i1+1 = i2 & j1 = j2 & i1' = i2'+1 & j1' = j2';
+then A499:      j1 = j1' by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,GOBOARD7:22;
+          now per cases by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,A498,GOBOARD7:25;
+         suppose i1 = i2';
+          hence contradiction by A431,A466,A467,A473,A479,A484,A498,A499;
+         suppose i1 = i2'+1;
+          hence contradiction by A407,A460,A462,A465,A467,A471,A473,A482,A498,
+A499;
+         suppose i1+1 = i2';
+          hence contradiction by A431,A463,A470,A475,A479,A484,A498,A499;
+        end;
+        hence contradiction;
+       suppose
+A500:      i1+1 = i2 & j1 = j2 & i1' = i2' & j1' = j2'+1;
+          now per cases by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,A500,GOBOARD7:23;
+         suppose i1' = i1 & j1 = j2';
+          hence contradiction by A431,A466,A467,A473,A479,A484,A500;
+         suppose i1' = i1 & j2'+1 = j1;
+          hence contradiction by A407,A460,A462,A465,A467,A471,A473,A482,A500;
+         suppose i1' = i1+1 & j1 = j2';
+          hence contradiction by A431,A463,A470,A475,A479,A484,A500;
+         suppose i1' = i1+1 & j2'+1 = j1;
+          hence contradiction by A407,A460,A464,A465,A467,A468,A475,A482,A500;
+        end;
+        hence contradiction;
+       suppose
+A501:      i1 = i2+1 & j1 = j2 & i1' = i2' & j1'+1 = j2';
+          now per cases by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,A501,GOBOARD7:23;
+         suppose i1' = i2 & j1' = j1;
+          hence contradiction by A407,A460,A464,A465,A467,A468,A475,A482,A501;
+         suppose i1' = i2 & j1'+1 = j1;
+          hence contradiction by A431,A463,A470,A475,A479,A484,A501;
+         suppose i1' = i2+1 & j1' = j1;
+          hence contradiction by A407,A460,A462,A465,A467,A471,A473,A482,A501;
+         suppose i1' = i2+1 & j1'+1 = j1;
+          hence contradiction by A431,A466,A467,A473,A479,A484,A501;
+        end;
+        hence contradiction;
+       suppose
+A502:      i1 = i2+1 & j1 = j2 & i1'+1 = i2' & j1' = j2';
+then A503:      j1 = j1' by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,GOBOARD7:22;
+          now per cases by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,A502,GOBOARD7:25;
+         suppose i2 = i1';
+          hence contradiction by A407,A460,A464,A465,A467,A468,A475,A482,A502,
+A503;
+         suppose i2 = i1'+1;
+          hence contradiction by A431,A463,A470,A475,A479,A484,A502,A503;
+         suppose i2+1 = i1';
+          hence contradiction by A407,A460,A462,A465,A467,A471,A473,A482,A502,
+A503;
+        end;
+        hence contradiction;
+       suppose
+A504:      i1 = i2+1 & j1 = j2 & i1' = i2'+1 & j1' = j2';
+then A505:      j1 = j1' by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,GOBOARD7:22;
+          now per cases by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,A504,GOBOARD7:25;
+         suppose i2 = i2';
+          hence contradiction by A431,A463,A470,A475,A479,A484,A504,A505;
+         suppose i2 = i2'+1;
+          hence contradiction by A407,A460,A464,A465,A467,A468,A475,A482,A504,
+A505;
+         suppose i2+1 = i2';
+          hence contradiction by A431,A466,A467,A473,A479,A484,A504,A505;
+        end;
+        hence contradiction;
+       suppose
+A506:      i1 = i2+1 & j1 = j2 & i1' = i2' & j1' = j2'+1;
+          now per cases by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,A506,GOBOARD7:23;
+         suppose i1' = i2 & j2' = j1;
+          hence contradiction by A431,A463,A470,A475,A479,A484,A506;
+         suppose i1' = i2 & j2'+1 = j1;
+          hence contradiction by A407,A460,A464,A465,A467,A468,A475,A482,A506;
+         suppose i1' = i2+1 & j2' = j1;
+          hence contradiction by A431,A466,A467,A473,A479,A484,A506;
+         suppose i1' = i2+1 & j2'+1 = j1;
+          hence contradiction by A407,A460,A462,A465,A467,A471,A473,A482,A506;
+        end;
+        hence contradiction;
+       suppose
+A507:      i1 = i2 & j1 = j2+1 & i1' = i2' & j1'+1 = j2';
+then A508:      i1 = i1' by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,GOBOARD7:21;
+          now per cases by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,A507,GOBOARD7:24;
+         suppose j2 = j1';
+          hence contradiction by A407,A460,A464,A465,A467,A468,A475,A482,A507,
+A508;
+         suppose j2 = j1'+1;
+          hence contradiction by A431,A463,A470,A475,A479,A484,A507,A508;
+         suppose j2+1 = j1';
+          hence contradiction by A407,A460,A462,A465,A467,A471,A473,A482,A507,
+A508;
+        end;
+        hence contradiction;
+       suppose
+A509:      i1 = i2 & j1 = j2+1 & i1'+1 = i2' & j1' = j2';
+          now per cases by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,A509,GOBOARD7:23;
+         suppose i1 = i1' & j2 = j1';
+          hence contradiction by A407,A460,A464,A465,A467,A468,A475,A482,A509;
+         suppose i1 = i1' & j2+1 = j1';
+          hence contradiction by A407,A460,A462,A465,A467,A471,A473,A482,A509;
+         suppose i1 = i1'+1 & j2 = j1';
+          hence contradiction by A431,A463,A470,A475,A479,A484,A509;
+         suppose i1 = i1'+1 & j2+1 = j1';
+          hence contradiction by A431,A466,A467,A473,A479,A484,A509;
+        end;
+        hence contradiction;
+       suppose
+A510:      i1 = i2 & j1 = j2+1 & i1' = i2'+1 & j1' = j2';
+          now per cases by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,A510,GOBOARD7:23;
+         suppose i1 = i2' & j2 = j1';
+          hence contradiction by A431,A463,A470,A475,A479,A484,A510;
+         suppose i1 = i2' & j2+1 = j1';
+          hence contradiction by A431,A466,A467,A473,A479,A484,A510;
+         suppose i1 = i2'+1 & j2 = j1';
+          hence contradiction by A407,A460,A464,A465,A467,A468,A475,A482,A510;
+         suppose i1 = i2'+1 & j2+1 = j1';
+          hence contradiction by A407,A460,A462,A465,A467,A471,A473,A482,A510;
+        end;
+        hence contradiction;
+       suppose
+A511:      i1 = i2 & j1 = j2+1 & i1' = i2' & j1' = j2'+1;
+then A512:      i1 = i1' by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,GOBOARD7:21;
+          now per cases by A469,A473,A475,A477,A478,A480,A482,A484,A486,A487,
+A488,A511,GOBOARD7:24;
+         suppose j2 = j2';
+          hence contradiction by A431,A463,A470,A475,A479,A484,A511,A512;
+         suppose j2 = j2'+1;
+          hence contradiction by A407,A460,A464,A465,A467,A468,A475,A482,A511,
+A512;
+         suppose j2+1 = j2';
+          hence contradiction by A431,A466,A467,A473,A479,A484,A511,A512;
+        end;
+        hence contradiction;
+      end;
+     hence contradiction;
+    suppose i = 0 & j+1 < len g;
+     then LSeg(g,i) = {} by TOPREAL1:def 5;
+     hence LSeg(g,i) /\ LSeg(g,j) = {};
+    suppose
+A513:   1 <= i & j+1 < len g;
+then A514:   i+1 < len g by A463,AXIOMS:22;
+then A515:    LSeg(g,i) = LSeg(g/.i,g/.(i+1)) by A513,TOPREAL1:def 5;
+A516:   1 < i+1 by A513,NAT_1:38;
+A517:    i < len g by A514,NAT_1:38;
+A518:   j < len g by A513,NAT_1:37;
+     consider i1,j1,i2,j2 such that
+A519:    [i1,j1] in Indices G and
+A520:    g/.i = G*(i1,j1) and
+A521:    [i2,j2] in Indices G and
+A522:    g/.(i+1) = G*(i2,j2) and
+A523:    i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+        i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1 by A405,A513,A514,JORDAN8:6;
+A524:    1 <= i1 & i1 <= len G & 1 <= j1 & j1 <= width G by A519,GOBOARD5:1;
+A525:    1 <= i2 & i2 <= len G & 1 <= j2 & j2 <= width G by A521,GOBOARD5:1;
+A526:    LSeg(g,j) = LSeg(g/.j,g/.(j+1)) by A465,A513,TOPREAL1:def 5;
+     consider i1',j1',i2',j2' being Nat such that
+A527:    [i1',j1'] in Indices G and
+A528:    g/.j = G*(i1',j1') and
+A529:    [i2',j2'] in Indices G and
+A530:    g/.(j+1) = G*(i2',j2') and
+A531:    i1' = i2' & j1'+1 = j2' or i1'+1 = i2' & j1' = j2' or
+        i1' = i2'+1 & j1' = j2' or i1' = i2' & j1' = j2'+1
+         by A405,A465,A513,JORDAN8:6;
+A532:    1 <= i1' & i1' <= len G & 1 <= j1' & j1' <= width G by A527,GOBOARD5:1
+;
+A533:    1 <= i2' & i2' <= len G & 1 <= j2' & j2' <= width G by A529,GOBOARD5:1
+;
+     assume LSeg(g,i) /\ LSeg(g,j) <> {};
+then A534:    LSeg(g,i) meets LSeg(g,j) by XBOOLE_0:def 7;
+        now per cases by A523,A531;
+       suppose
+A535:      i1 = i2 & j1+1 = j2 & i1' = i2' & j1'+1 = j2';
+then A536:      i1 = i1' by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,GOBOARD7:21;
+          now per cases by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,A535,GOBOARD7:24;
+        suppose j1 = j1';
+         hence contradiction by A407,A460,A462,A465,A513,A517,A518,A520,A528,
+A536;
+        suppose j1 = j1'+1;
+         hence contradiction by A439,A466,A513,A520,A530,A535,A536;
+        suppose j1+1 = j1';
+         hence contradiction by A407,A460,A464,A465,A514,A518,A522,A528,A535,
+A536;
+        end;
+        hence contradiction;
+       suppose
+A537:      i1 = i2 & j1+1 = j2 & i1'+1 = i2' & j1' = j2';
+          now per cases by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,A537,GOBOARD7:23;
+         suppose i1 = i1' & j1 = j1';
+          hence contradiction by A407,A460,A462,A465,A513,A517,A518,A520,A528;
+         suppose i1 = i1' & j1+1 = j1';
+          hence contradiction by A431,A460,A516,A518,A522,A528,A537;
+         suppose i1 = i1'+1 & j1 = j1';
+          hence contradiction by A439,A466,A513,A520,A530,A537;
+         suppose i1 = i1'+1 & j1+1 = j1';
+          hence contradiction by A431,A463,A513,A516,A522,A530,A537;
+        end;
+        hence contradiction;
+       suppose
+A538:      i1 = i2 & j1+1 = j2 & i1' = i2'+1 & j1' = j2';
+          now per cases by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,A538,GOBOARD7:23;
+         suppose i1 = i2' & j1' = j1;
+          hence contradiction by A439,A466,A513,A520,A530,A538;
+         suppose i1 = i2' & j1+1 = j1';
+          hence contradiction by A431,A463,A513,A516,A522,A530,A538;
+         suppose i1 = i2'+1 & j1' = j1;
+          hence contradiction by A407,A460,A462,A465,A513,A517,A518,A520,A528,
+A538;
+         suppose i1 = i2'+1 & j1+1 = j1';
+          hence contradiction by A407,A460,A464,A465,A514,A518,A522,A528,A538;
+        end;
+        hence contradiction;
+       suppose
+A539:      i1 = i2 & j1+1 = j2 & i1' = i2' & j1' = j2'+1;
+then A540:      i1 = i1' by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,GOBOARD7:21;
+          now per cases by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,A539,GOBOARD7:24;
+         suppose j1 = j2';
+          hence contradiction by A407,A460,A464,A465,A514,A518,A522,A528,A539,
+A540;
+         suppose j1 = j2'+1;
+          hence contradiction by A407,A460,A462,A465,A513,A517,A518,A520,A528,
+A539,A540;
+         suppose j1+1 = j2';
+          hence contradiction by A431,A463,A513,A516,A522,A530,A539,A540;
+        end;
+        hence contradiction;
+       suppose
+A541:      i1+1 = i2 & j1 = j2 & i1' = i2' & j1'+1 = j2';
+          now per cases by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,A541,GOBOARD7:23;
+         suppose i1' = i1 & j1 = j1';
+          hence contradiction by A407,A460,A462,A465,A513,A517,A518,A520,A528;
+         suppose i1' = i1 & j1'+1 = j1;
+          hence contradiction by A439,A466,A513,A520,A530,A541;
+         suppose i1' = i1+1 & j1 = j1';
+          hence contradiction by A407,A460,A464,A465,A514,A518,A522,A528,A541;
+         suppose i1' = i1+1 & j1'+1 = j1;
+          hence contradiction by A431,A463,A513,A516,A522,A530,A541;
+        end;
+        hence contradiction;
+       suppose
+A542:      i1+1 = i2 & j1 = j2 & i1'+1 = i2' & j1' = j2';
+then A543:      j1 = j1' by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,GOBOARD7:22;
+          now per cases by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,A542,GOBOARD7:25;
+         suppose i1 = i1';
+          hence contradiction by A407,A460,A462,A465,A513,A517,A518,A520,A528,
+A543;
+         suppose i1 = i1'+1;
+          hence contradiction by A439,A466,A513,A520,A530,A542,A543;
+         suppose i1+1 = i1';
+          hence contradiction by A407,A460,A464,A465,A514,A518,A522,A528,A542,
+A543;
+        end;
+        hence contradiction;
+       suppose
+A544:      i1+1 = i2 & j1 = j2 & i1' = i2'+1 & j1' = j2';
+then A545:      j1 = j1' by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,GOBOARD7:22;
+          now per cases by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,A544,GOBOARD7:25;
+         suppose i1 = i2';
+          hence contradiction by A439,A466,A513,A520,A530,A544,A545;
+         suppose i1 = i2'+1;
+          hence contradiction by A407,A460,A462,A465,A513,A517,A518,A520,A528,
+A544,A545;
+         suppose i1+1 = i2';
+          hence contradiction by A431,A463,A513,A516,A522,A530,A544,A545;
+        end;
+        hence contradiction;
+       suppose
+A546:      i1+1 = i2 & j1 = j2 & i1' = i2' & j1' = j2'+1;
+          now per cases by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,A546,GOBOARD7:23;
+         suppose i1' = i1 & j1 = j2';
+          hence contradiction by A439,A466,A513,A520,A530,A546;
+         suppose i1' = i1 & j2'+1 = j1;
+          hence contradiction by A407,A460,A462,A465,A513,A517,A518,A520,A528,
+A546;
+         suppose i1' = i1+1 & j1 = j2';
+          hence contradiction by A431,A463,A513,A516,A522,A530,A546;
+         suppose i1' = i1+1 & j2'+1 = j1;
+          hence contradiction by A407,A460,A464,A465,A514,A518,A522,A528,A546;
+        end;
+        hence contradiction;
+       suppose
+A547:      i1 = i2+1 & j1 = j2 & i1' = i2' & j1'+1 = j2';
+          now per cases by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,A547,GOBOARD7:23;
+         suppose i1' = i2 & j1' = j1;
+          hence contradiction by A407,A460,A464,A465,A514,A518,A522,A528,A547;
+         suppose i1' = i2 & j1'+1 = j1;
+          hence contradiction by A431,A463,A513,A516,A522,A530,A547;
+         suppose i1' = i2+1 & j1' = j1;
+          hence contradiction by A407,A460,A462,A465,A513,A517,A518,A520,A528,
+A547;
+         suppose i1' = i2+1 & j1'+1 = j1;
+          hence contradiction by A439,A466,A513,A520,A530,A547;
+        end;
+        hence contradiction;
+       suppose
+A548:      i1 = i2+1 & j1 = j2 & i1'+1 = i2' & j1' = j2';
+then A549:      j1 = j1' by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,GOBOARD7:22;
+          now per cases by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,A548,GOBOARD7:25;
+         suppose i2 = i1';
+          hence contradiction by A407,A460,A464,A465,A514,A518,A522,A528,A548,
+A549;
+         suppose i2 = i1'+1;
+          hence contradiction by A431,A463,A513,A516,A522,A530,A548,A549;
+         suppose i2+1 = i1';
+          hence contradiction by A407,A460,A462,A465,A513,A517,A518,A520,A528,
+A548,A549;
+        end;
+        hence contradiction;
+       suppose
+A550:      i1 = i2+1 & j1 = j2 & i1' = i2'+1 & j1' = j2';
+then A551:      j1 = j1' by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,GOBOARD7:22;
+          now per cases by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,A550,GOBOARD7:25;
+         suppose i2 = i2';
+          hence contradiction by A431,A463,A513,A516,A522,A530,A550,A551;
+         suppose i2 = i2'+1;
+          hence contradiction by A407,A460,A464,A465,A514,A518,A522,A528,A550,
+A551;
+         suppose i2+1 = i2';
+          hence contradiction by A439,A466,A513,A520,A530,A550,A551;
+        end;
+        hence contradiction;
+       suppose
+A552:      i1 = i2+1 & j1 = j2 & i1' = i2' & j1' = j2'+1;
+          now per cases by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,A552,GOBOARD7:23;
+         suppose i1' = i2 & j2' = j1;
+          hence contradiction by A431,A463,A513,A516,A522,A530,A552;
+         suppose i1' = i2 & j2'+1 = j1;
+          hence contradiction by A407,A460,A464,A465,A514,A518,A522,A528,A552;
+         suppose i1' = i2+1 & j2' = j1;
+          hence contradiction by A439,A466,A513,A520,A530,A552;
+         suppose i1' = i2+1 & j2'+1 = j1;
+          hence contradiction by A407,A460,A462,A465,A513,A517,A518,A520,A528,
+A552;
+        end;
+        hence contradiction;
+       suppose
+A553:      i1 = i2 & j1 = j2+1 & i1' = i2' & j1'+1 = j2';
+then A554:      i1 = i1' by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,GOBOARD7:21;
+          now per cases by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,A553,GOBOARD7:24;
+         suppose j2 = j1';
+          hence contradiction by A407,A460,A464,A465,A514,A518,A522,A528,A553,
+A554;
+         suppose j2 = j1'+1;
+          hence contradiction by A431,A463,A513,A516,A522,A530,A553,A554;
+         suppose j2+1 = j1';
+          hence contradiction by A407,A460,A462,A465,A513,A517,A518,A520,A528,
+A553,A554;
+        end;
+        hence contradiction;
+       suppose
+A555:      i1 = i2 & j1 = j2+1 & i1'+1 = i2' & j1' = j2';
+          now per cases by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,A555,GOBOARD7:23;
+         suppose i1 = i1' & j2 = j1';
+          hence contradiction by A407,A460,A464,A465,A514,A518,A522,A528,A555;
+         suppose i1 = i1' & j2+1 = j1';
+          hence contradiction by A407,A460,A462,A465,A513,A517,A518,A520,A528,
+A555;
+         suppose i1 = i1'+1 & j2 = j1';
+          hence contradiction by A431,A463,A513,A516,A522,A530,A555;
+         suppose i1 = i1'+1 & j2+1 = j1';
+          hence contradiction by A439,A466,A513,A520,A530,A555;
+        end;
+        hence contradiction;
+       suppose
+A556:      i1 = i2 & j1 = j2+1 & i1' = i2'+1 & j1' = j2';
+          now per cases by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,A556,GOBOARD7:23;
+         suppose i1 = i2' & j2 = j1';
+          hence contradiction by A431,A463,A513,A516,A522,A530,A556;
+         suppose i1 = i2' & j2+1 = j1';
+          hence contradiction by A439,A466,A513,A520,A530,A556;
+         suppose i1 = i2'+1 & j2 = j1';
+          hence contradiction by A407,A460,A464,A465,A514,A518,A522,A528,A556;
+         suppose i1 = i2'+1 & j2+1 = j1';
+          hence contradiction by A407,A460,A462,A465,A513,A517,A518,A520,A528,
+A556;
+        end;
+        hence contradiction;
+       suppose
+A557:      i1 = i2 & j1 = j2+1 & i1' = i2' & j1' = j2'+1;
+then A558:      i1 = i1' by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,GOBOARD7:21;
+          now per cases by A515,A520,A522,A524,A525,A526,A528,A530,A532,A533,
+A534,A557,GOBOARD7:24;
+         suppose j2 = j2';
+          hence contradiction by A431,A463,A513,A516,A522,A530,A557,A558;
+         suppose j2 = j2'+1;
+          hence contradiction by A407,A460,A464,A465,A514,A518,A522,A528,A557,
+A558;
+         suppose j2+1 = j2';
+          hence contradiction by A439,A466,A513,A520,A530,A557,A558;
+        end;
+        hence contradiction;
+      end;
+     hence contradiction;
+   end;
+    m+1-(m-'1) <= len g by A400,A402,REAL_1:49;
+  then m+1-(m-1) <= len g by A396,SCMFSA_7:3;
+  then 1+m-m+1 <= len g by XCMPLX_1:37;
+then A559:  1+1 <= len g by XCMPLX_1:26;
+    g is non constant
+   proof
+    take 1,2;
+    thus
+A560:   1 in dom g by FINSEQ_5:6;
+    thus
+A561:   2 in dom g by A559,FINSEQ_3:27;
+    then g/.1 <> g/.(1+1) by A406,A560,GOBOARD7:31;
+    then g.1 <> g/.(1+1) by A560,FINSEQ_4:def 4;
+    hence g.1 <> g.2 by A561,FINSEQ_4:def 4;
+   end;
+  then reconsider g as standard non constant special_circular_sequence
+   by A393,A403,A404,A405,A459,FINSEQ_6:def 1,JORDAN8:7;
+
+A562: for j,k st 1 <= j & j <= k holds (F.k)/.j = (F.j)/.j
+  proof
+    let j,k;
+    assume that
+  A563: 1 <= j and
+  A564: j <= k;
+  A565: (F.k)|j = F.j by A323,A564;
+        j <= len(F.k) by A92,A564;
+  then len(F.k|j) = j by TOPREAL1:3;
+      then j in dom((F.k)|j) by A563,FINSEQ_3:27;
+      hence (F.k)/.j = (F.j)/.j by A565,TOPREAL1:1;
+  end;
+    reconsider Lg' = (L~g)` as Subset of TOP-REAL 2;
+A566:   C c= Lg'
+    proof
+     let c be set;
+     assume that
+A567:   c in C and
+A568:   not c in Lg';
+     reconsider c as Point of TOP-REAL 2 by A567;
+       c in L~g by A568,SUBSET_1:50;
+     then consider i such that
+A569:   1 <= i & i+1 <= len g and
+A570:   c in LSeg(g/.i,g/.(i+1)) by SPPOL_2:14;
+       i in dom g & i+1 in dom g by A569,GOBOARD2:3;
+then A571:   g/.i = f/.(i+(m-'1)) & g/.(i+1) = f/.(i+1+(m-'1)) by FINSEQ_5:30;
+A572:   1 <= i+(m-'1) by A569,NAT_1:37;
+A573:   i+1+(m-'1) = i+(m-'1)+1 by XCMPLX_1:1;
+     then i+(m-'1)+1 <= (len g)+(m-'1) by A569,AXIOMS:24;
+then A574:   i+(m-'1)+1 <= len f by A402,XCMPLX_1:27;
+     then c in LSeg(f,i+(m-'1)) by A570,A571,A572,A573,TOPREAL1:def 5;
+     then c in right_cell(f,i+(m-'1),G) /\ left_cell(f,i+(m-'1),G)
+      by A395,A572,A574,GOBRD13:30;
+     then c in right_cell(f,i+(m-'1),G) by XBOOLE_0:def 3;
+      then right_cell(f,i+(m-'1),G) meets C by A567,XBOOLE_0:3;
+     hence contradiction by A246,A572,A574;
+    end;
+A575:   TOP-REAL 2 = TopSpaceMetr (Euclid 2) by EUCLID:def 8;
+A576:   the carrier of TOP-REAL 2 = the carrier of Euclid 2 by TOPREAL3:13;
+      L~g is closed by SPPOL_1:49;
+    then (L~g)` is open by TOPS_1:29;
+    then Lg' is open;
+then A577:  (L~g)` = Int (L~g)` by TOPS_1:55;
+A578:  L~g c= L~f by JORDAN3:75;
+A579:  LeftComp g is_a_component_of (L~g)` &
+       RightComp g is_a_component_of (L~g)` by GOBOARD9:def 1,def 2;
+A580: for h being standard non constant special_circular_sequence st L~h c= L~f
+    for Comp being Subset of TOP-REAL 2 st Comp is_a_component_of (L~h)`
+    for n st 1 <= n & n+1 <= len f & f/.n in Comp & not f/.n in L~h
+      holds
+     C meets Comp
+  proof
+    let h be standard non constant special_circular_sequence such that
+  A581: L~h c= L~f;
+    let Comp be Subset of TOP-REAL 2 such that
+  A582: Comp is_a_component_of (L~h)`;
+    let n such that
+  A583: 1 <= n & n+1 <= len f and
+  A584: f/.n in Comp and
+  A585: not f/.n in L~h;
+
+    set rc=left_cell(f,n,G)\L~h;
+    reconsider rc as Subset of TOP-REAL 2;
+  A586: rc c= left_cell(f,n,G) by XBOOLE_1:36;
+  A587: rc = left_cell(f,n,G) /\ (L~h)` by SUBSET_1:32;
+
+  A588: rc meets C
+  proof
+      left_cell(f,n,G) meets C by A246,A583;
+    then consider p being set such that
+  A589: p in left_cell(f,n,G) & p in C by XBOOLE_0:3;
+    reconsider p as Element of TOP-REAL 2 by A589;
+      now take p;
+      now
+     assume p in L~h;
+      then consider j such that
+    A590: 1 <= j and
+    A591: j+1 <= len f and
+    A592: p in LSeg(f,j) by A581,SPPOL_2:13;
+        p in right_cell(f,j,G) /\ left_cell(f,j,G) by A395,A590,A591,A592,
+GOBRD13:30;
+      then A593: p in right_cell(f,j,G) by XBOOLE_0:def 3;
+        right_cell(f,j,G) misses C by A246,A590,A591;
+      hence contradiction by A589,A593,XBOOLE_0:3;
+    end;
+    hence p in rc by A589,XBOOLE_0:def 4;
+    thus p in C by A589;
+    end; hence thesis by XBOOLE_0:3;
+  end;
+  A594: Int left_cell(f,n,G) is connected by A395,A583,JORDAN9:12;
+      Int left_cell(f,n,G) misses L~f by A395,A583,JORDAN9:17;
+    then Int left_cell(f,n,G) misses L~h by A581,XBOOLE_1:63;
+  then A595: Int left_cell(f,n,G) c= (L~h)` by SUBSET_1:43;
+      Int left_cell(f,n,G) c= left_cell(f,n,G) by TOPS_1:44;
+  then A596: Int left_cell(f,n,G) c= rc by A587,A595,XBOOLE_1:19;
+      rc c= Cl Int left_cell(f,n,G) by A395,A583,A586,JORDAN9:13;
+  then A597: rc is connected by A594,A596,CONNSP_1:19;
+      f/.n in left_cell(f,n,G) by A395,A583,JORDAN9:10;
+    then f/.n in rc by A585,XBOOLE_0:def 4;
+  then A598: rc meets Comp by A584,XBOOLE_0:3;
+      rc c= (L~h)` by A587,XBOOLE_1:17;
+    then rc c= Comp by A582,A597,A598,GOBOARD9:6;
+    hence C meets Comp by A588,XBOOLE_1:63;
+  end;
+
+A599:
+   C meets LeftComp g
+   proof
+      left_cell(f,m,G) meets C by A246,A396,A400;
+    then consider p being set such that
+A600:  p in left_cell(f,m,G) & p in C by XBOOLE_0:3;
+    reconsider p as Element of TOP-REAL 2 by A600;
+      now take p;
+    thus p in C by A600;
+    reconsider u = p as Element of Euclid 2 by A576;
+    consider r being real number such that
+A601:   r > 0 and
+A602:   Ball(u,r) c= (L~g)` by A566,A577,A600,GOBOARD6:8;
+    reconsider r as Real by XREAL_0:def 1;
+A603:   p in Ball(u,r) by A601,TBSP_1:16;
+      Ball(u,r) is Subset of TOP-REAL 2 by A575,TOPMETR:16;
+    then reconsider B = Ball(u,r) as non empty Subset of TOP-REAL 2
+       by A601,TBSP_1:16;
+A604:   B is connected by SPRECT_3:17;
+      left_cell(g,1,G) c= left_cell(g,1) by A405,A559,GOBRD13:34;
+then A605:   Int left_cell(g,1,G) c= Int left_cell(g,1) by TOPS_1:48;
+      Int left_cell(g,1) c= LeftComp g by A559,GOBOARD9:24;
+    then Int left_cell(g,1,G) c= LeftComp g by A605,XBOOLE_1:1;
+    then Int left_cell(f,m-'1+1,G) c= LeftComp g by A395,A401,A559,GOBRD13:33;
+    then A606:  Int left_cell(f,m,G) c= LeftComp g by A396,AMI_5:4;
+A607:   left_cell(f,m,G) = Cl Int left_cell(f,m,G) by A396,A400,A445;
+      B is open by GOBOARD6:6;
+then A608:   Int left_cell(f,m,G) meets B by A600,A603,A607,TOPS_1:39;
+A609:   p in B by A601,TBSP_1:16;
+      B c= LeftComp g by A579,A602,A604,A606,A608,GOBOARD9:6;
+    hence p in LeftComp g by A609;
+    end; hence thesis by XBOOLE_0:3;
+   end;
+
+   m = 1
+  proof
+    assume m <> 1;
+then A610:  1 < m by A396,REAL_1:def 5;
+A611: for n st 1 <= n & n <= m-'1 holds not f/.n in L~g
+     proof let n such that
+  A612: 1 <= n and
+  A613: n <= m-'1;
+  A614: n <= len f by A401,A613,AXIOMS:22;
+
+    set p = f/.n;
+    assume p in L~g;
+    then consider j such that
+  A615: m-'1+1 <= j and
+  A616: j+1 <= len f and
+  A617: p in LSeg(f,j) by A401,JORDAN9:9;
+
+  A618: n < m-'1+1 by A613,NAT_1:38;
+  then A619: n < j by A615,AXIOMS:22;
+
+  A620: m-'1+1=m by A396,AMI_5:4;
+  then A621: 1 < j by A610,A615,AXIOMS:22;
+  A622: j+1 <= k by A92,A616;
+  A623: j < k by A394,A616,NAT_1:38;
+  A624: 2 <= len G & 2 <= width G by A2,NAT_1:37;
+
+  A625: p in Values G by A395,A612,A614,JORDAN9:8;
+    per cases by A395,A616,A617,A621,A624,A625,JORDAN9:25;
+    suppose
+    A626: p = f/.j;
+        n <= len(F.j) by A92,A619;
+    then A627: n in dom(F.j) by A612,FINSEQ_3:27;
+    A628: n <> len(F.j) by A92,A615,A618;
+        (F.j)/.n = (F.n)/.n by A562,A612,A619
+              .= p by A394,A562,A612,A614
+              .= (F.j)/.j by A562,A621,A623,A626
+              .= (F.j)/.len(F.j) by A92;
+      hence contradiction by A390,A621,A623,A627,A628;
+
+    suppose
+    A629: p = f/.(j+1);
+        now
+        per cases by A622,REAL_1:def 5;
+        suppose
+        A630: j+1 = k;
+            n <= len(F.m) by A92,A618,A620;
+        then A631: n in dom(F.m) by A612,FINSEQ_3:27;
+        A632: n <> len(F.m) by A92,A618,A620;
+            (F.m)/.n = (F.n)/.n by A562,A612,A618,A620
+                  .= p by A394,A562,A612,A614
+                  .= (F.m)/.m by A393,A394,A396,A562,A629,A630
+                  .= (F.m)/.len(F.m) by A92;
+          hence contradiction by A390,A394,A396,A397,A631,A632;
+        suppose
+        A633: j+1 < k;
+          set l = j+1;
+        A634: 1 <= l by NAT_1:29;
+          A635: n < n+1 & n+1 < l by A619,REAL_1:53,69;
+        then A636: n < l by AXIOMS:22;
+          then n <= len(F.l) by A92;
+        then A637: n in dom(F.l) by A612,FINSEQ_3:27;
+        A638: n <> len(F.l) by A92,A635;
+            (F.l)/.n = (F.n)/.n by A562,A612,A636
+                  .= p by A394,A562,A612,A614
+                  .= (F.l)/.l by A562,A629,A633,A634
+                  .= (F.l)/.len(F.l) by A92;
+          hence contradiction by A390,A633,A634,A637,A638;
+      end;
+      hence contradiction;
+     end;
+A639: for n st 1 <= n holds n-'1+2 = n+1
+proof
+  let n;
+  assume 1 <= n;
+  hence n-'1+2 = n+2-'1 by JORDAN4:3
+            .= n+(1+1) - 1 by JORDAN4:2
+            .= n+1+1 - 1 by XCMPLX_1:1
+            .= n+1 by XCMPLX_1:26;
+end;
+
+  C meets LeftComp Rev g
+  proof
+   set rg = Rev g;
+
+  A640: rg is_sequence_on G by A405,JORDAN9:7;
+
+  A641: 1+1 <= len rg by A559,FINSEQ_5:def 3;
+    then 1+1-'1 <= len rg-'1 by JORDAN3:5;
+  then A642: 1 <= len rg -'1 by BINARITH:39;
+      1 < len rg by A641,NAT_1:38;
+  then A643: len rg -'1+1 = len rg by AMI_5:4;
+
+    set p = rg/.1, q = rg/.2;
+    set a = f/.(m-'1);
+    set l = (m-'1)+(len g-'1);
+
+  A644: p = f/.m by A393,A404,FINSEQ_5:68;
+  A645: m-'1+1 = m by A396,AMI_5:4;
+  then A646: 1 <= m-'1 by A610,NAT_1:38;
+
+      1+1-'1 <= len g-'1 by A559,JORDAN3:5;
+  then A647: 1 <= len g-'1 by BINARITH:39;
+      1+1 - 1 <= len g - 1 by A559,REAL_1:49;
+  then A648: 0 <= len g - 1 by AXIOMS:22;
+    A649: 1 - 1 < m - 1 by A610,REAL_1:54;
+
+      l = m+(len g -'1)-'1 by A396,JORDAN4:3
+       .= (len g -'1)+m - 1 by A647,JORDAN4:2
+       .= (len g - 1)+m - 1 by A648,BINARITH:def 3
+       .= ((k - (m - 1)) - 1)+m - 1 by A394,A402,A649,BINARITH:def 3
+       .= ((k - m+1) - 1)+m - 1 by XCMPLX_1:37
+       .= k - m+m - 1 by XCMPLX_1:26
+       .= (k+-m+m) - 1 by XCMPLX_0:def 8
+       .= k - 1 by XCMPLX_1:139;
+  then A650: k = l+1 by XCMPLX_1:27;
+  then A651: l < k by REAL_1:69;
+      len g-'1 <= l by NAT_1:29;
+  then A652: 1 <= l by A647,AXIOMS:22;
+      len g-'1 <= len g by JORDAN3:7;
+  then A653: len g-'1 in dom g by A647,FINSEQ_3:27;
+      1 <= len g by A559,SPPOL_1:5;
+  then A654: len g-'1+2 = len g+1 by A639;
+  then A655: q = g/.(len g -'1) by A653,FINSEQ_5:69
+       .= f/.l by A653,FINSEQ_5:30;
+  A656: p = f/.(l+1) by A394,A404,A650,FINSEQ_5:68;
+
+  A657: left_cell(f,m-'1,G) meets C by A246,A396,A645,A646;
+  A658: left_cell(f,l,G) meets C by A246,A394,A650,A652;
+
+      not a in L~g by A611,A646;
+  then A659: not a in L~rg by SPPOL_2:22;
+
+  A660: m-'1+2 = m+1 by A396,A639;
+
+  A661: m-'1 <= l by NAT_1:29;
+    then m-'1 <= len(F.l) by A92;
+  then A662: m-'1 in dom(F.l) by A646,FINSEQ_3:27;
+      (m-'1)+1 <= l by A647,AXIOMS:24;
+    then m-'1 < l by NAT_1:38;
+  then A663: m-'1 <> len(F.l) by A92;
+
+    consider p1,p2,q1,q2 being Nat such that
+  A664: [p1,p2] in Indices G and
+  A665: p = G*(p1,p2) and
+  A666: [q1,q2] in Indices G and
+  A667: q = G*(q1,q2) and
+  A668: p1 = q1 & p2+1 = q2 or p1+1 = q1 & p2 = q2 or
+        p1 = q1+1 & p2 = q2 or p1 = q1 & p2 = q2+1 by A640,A641,JORDAN8:6;
+
+  A669: 1 <= p1 & p1 <= len G & 1 <= p2 & p2 <= width G by A664,GOBOARD5:1;
+
+    per cases by A668;
+    suppose ::A
+    A670: p1 = q1 & p2+1 = q2;
+      consider a1,a2,p'1,p'2 being Nat such that
+    A671: [a1,a2] in Indices G and
+    A672: a = G*(a1,a2) and
+    A673: [p'1,p'2] in Indices G and
+    A674: p = G*(p'1,p'2) and
+    A675: a1 = p'1 & a2+1 = p'2 or a1+1 = p'1 & a2 = p'2 or
+          a1 = p'1+1 & a2 = p'2 or a1 = p'1 & a2 = p'2+1
+            by A395,A396,A644,A645,A646,JORDAN8:6;
+    A676: 1 <= a1 & a1 <= len G & 1 <= a2 & a2 <= width G by A671,GOBOARD5:1;
+
+      thus thesis
+      proof
+        per cases by A675;
+        suppose ::I
+            a1 = p'1 & a2+1 = p'2;
+        then A677: a1 = p1 & a2+1 = p2 by A664,A665,A673,A674,GOBOARD1:21;
+        A678: F.m is_sequence_on G by A246;
+        A679: m-'1+1 <= len (F.m) by A92,A645;
+        A680: m-'1 <= m by A645,NAT_1:29;
+        A681: F.k|(m+1)=F.(m+1) by A323,A394,A400;
+          A682: p2+1 > a2+1 & a2+1 > a2 by A677,NAT_1:38;
+        A683: f/.(m-'1) = (F.(m-'1))/.(m-'1) by A394,A401,A562,A646
+                     .= (F.m)/.(m-'1) by A562,A646,A680;
+        A684: f/.(m-'1+1) = (F.m)/.m by A394,A396,A562,A645;
+            left_cell(f,l,G) = cell(G,p1,p2)
+                 by A394,A395,A650,A652,A655,A656,A664,A665,A666,A667,A670,
+GOBRD13:28
+            .= front_right_cell(F.m,m-'1,G) by A644,A645,A646,A664,A665,A671,
+A672,A677,A678,A679,A683,A684,GOBRD13:36;
+          then F.(m+1) turns_right m-'1,G by A324,A610,A658;
+          then f turns_right m-'1,G by A400,A646,A660,A681,GOBRD13:44;
+        then A685: f/.(m+1) = G*(p1+1,p2) & [p1+1,p2] in Indices G
+            by A644,A645,A660,A664,A665,A671,A672,A682,GOBRD13:def 6;
+        then A686: 1 <= p1+1 & p1+1 <= len G by GOBOARD5:1;
+          set rc = left_cell(rg,len rg-'1,G)\L~rg;
+        A687: rc c= LeftComp rg by A640,A642,A643,JORDAN9:29;
+        A688: p2-'1 = a2 & p1-'1+1 = p1 by A669,A677,AMI_5:4,BINARITH:39;
+        A689: 2 in dom g by A559,FINSEQ_3:27;
+             len rg-'1+2 = len g +1 by A654,FINSEQ_5:def 3;
+        then A690: rg/.(len rg -' 1) = g/.2 by A689,FINSEQ_5:69
+                           .= f/.(m+1) by A660,A689,FINSEQ_5:30;
+          p = g/.1 by A393,A403,A404,FINSEQ_5:68
+              .= rg/.len g by FINSEQ_5:68
+              .= rg/.len rg by FINSEQ_5:def 3;
+          then left_cell(rg,len rg-'1,G) = cell(G,p1,a2)
+            by A640,A642,A643,A664,A665,A685,A688,A690,GOBRD13:26;
+          then a in left_cell(rg,len rg-'1,G)
+            by A669,A672,A676,A677,A686,JORDAN9:22;
+          then A691: a in rc by A659,XBOOLE_0:def 4;
+        A692: L~rg c= L~f by A578,SPPOL_2:22;
+            LeftComp rg is_a_component_of (L~rg)` by GOBOARD9:def 1;
+          hence C meets LeftComp Rev g by A396,A580,A645,A646,A659,A687,A691,
+A692;
+
+        suppose ::II
+          A693: a1+1 = p'1 & a2 = p'2;
+        then A694: a1+1 = p1 & a2 = p2 by A664,A665,A673,A674,GOBOARD1:21;
+        then q1-'1 = a1 by A670,BINARITH:39;
+          then right_cell(f,l,G) = cell(G,a1,a2)
+                 by A394,A395,A650,A652,A655,A656,A664,A665,A666,A667,A670,A694
+,GOBRD13:29
+            .= left_cell(f,m-'1,G)
+                 by A395,A396,A644,A645,A646,A671,A672,A673,A674,A693,GOBRD13:
+24;
+          hence C meets LeftComp Rev g by A246,A394,A650,A652,A657;
+
+        suppose ::III
+            a1 = p'1+1 & a2 = p'2;
+        then a1 = p1+1 & a2 = p2 by A664,A665,A673,A674,GOBOARD1:21;
+          then right_cell(f,m-'1,G) = cell(G,p1,p2)
+                 by A395,A396,A644,A645,A646,A664,A665,A671,A672,GOBRD13:27
+            .= left_cell(f,l,G)
+                 by A394,A395,A650,A652,A655,A656,A664,A665,A666,A667,A670,
+GOBRD13:28;
+          hence C meets LeftComp Rev g by A246,A396,A645,A646,A658;
+
+        suppose ::IV
+            a1 = p'1 & a2 = p'2+1;
+        then A695: a1 = q1 & a2 = q2 by A664,A665,A670,A673,A674,GOBOARD1:21;
+            (F.l)/.(m-'1) = (F.(m-'1))/.(m-'1) by A562,A646,A661
+                     .= q by A394,A401,A562,A646,A667,A672,A695
+                     .= (F.l)/.l by A562,A651,A652,A655
+                     .= (F.l)/.len(F.l) by A92;
+          hence C meets LeftComp Rev g by A390,A651,A652,A662,A663;
+      end;
+
+    suppose ::B
+    A696: p1+1 = q1 & p2 = q2;
+      consider a1,a2,p'1,p'2 being Nat such that
+    A697: [a1,a2] in Indices G and
+    A698: a = G*(a1,a2) and
+    A699: [p'1,p'2] in Indices G and
+    A700: p = G*(p'1,p'2) and
+    A701: a1 = p'1 & a2+1 = p'2 or a1+1 = p'1 & a2 = p'2 or
+          a1 = p'1+1 & a2 = p'2 or a1 = p'1 & a2 = p'2+1
+            by A395,A396,A644,A645,A646,JORDAN8:6;
+    A702: 1 <= a1 & a1 <= len G & 1 <= a2 & a2 <= width G by A697,GOBOARD5:1;
+
+      thus thesis
+      proof
+        per cases by A701;
+        suppose ::I
+          A703: a1 = p'1 & a2+1 = p'2;
+        then A704: a1 = p1 & a2+1 = p2 by A664,A665,A699,A700,GOBOARD1:21;
+        then A705: q2-'1 = a2 by A696,BINARITH:39;
+            right_cell(f,m-'1,G) = cell(G,a1,a2)
+                 by A395,A396,A644,A645,A646,A697,A698,A699,A700,A703,GOBRD13:
+23
+            .= left_cell(f,l,G)
+                 by A394,A395,A650,A652,A655,A656,A664,A665,A666,A667,A696,A704
+,A705,GOBRD13:26;
+          hence C meets LeftComp Rev g by A246,A396,A645,A646,A658;
+
+        suppose ::II
+            a1+1 = p'1 & a2 = p'2;
+        then A706: a1+1 = p1 & a2 = p2 by A664,A665,A699,A700,GOBOARD1:21;
+        A707: F.m is_sequence_on G by A246;
+        A708: m-'1+1 <= len (F.m) by A92,A645;
+        A709: m-'1 <= m by A645,NAT_1:29;
+        A710: F.k|(m+1)=F.(m+1) by A323,A394,A400;
+          A711: a1 < a1+1 & p1 < p1+1 by REAL_1:69;
+        A712: f/.(m-'1) = (F.(m-'1))/.(m-'1) by A394,A401,A562,A646
+                     .= (F.m)/.(m-'1) by A562,A646,A709;
+        A713: f/.(m-'1+1) = (F.m)/.m by A394,A396,A562,A645;
+            left_cell(f,l,G) = cell(G,p1,p2-'1)
+                 by A394,A395,A650,A652,A655,A656,A664,A665,A666,A667,A696,
+GOBRD13:26
+            .= front_right_cell(F.m,m-'1,G) by A644,A645,A646,A664,A665,A697,
+A698,A706,A707,A708,A712,A713,GOBRD13:38;
+          then F.(m+1) turns_right m-'1,G by A324,A610,A658;
+          then f turns_right m-'1,G by A400,A646,A660,A710,GOBRD13:44;
+        then A714: f/.(m+1) = G*(p1,p2-'1) & [p1,p2-'1] in Indices G
+            by A644,A645,A660,A664,A665,A697,A698,A706,A711,GOBRD13:def 6;
+          set rc = left_cell(rg,len rg-'1,G)\L~rg;
+        A715: rc c= LeftComp rg by A640,A642,A643,JORDAN9:29;
+        A716: a1 = p1-'1 by A706,BINARITH:39;
+        A717: 2 in dom g by A559,FINSEQ_3:27;
+             len rg-'1+2 = len g +1 by A654,FINSEQ_5:def 3;
+        then A718: rg/.(len rg -' 1) = g/.2 by A717,FINSEQ_5:69
+                           .= f/.(m+1) by A660,A717,FINSEQ_5:30;
+A719:    a2-'1+1 = a2 by A702,AMI_5:4;
+A720:    1 <= a2-'1 by A706,A714,GOBOARD5:1;
+             p = g/.1 by A393,A403,A404,FINSEQ_5:68
+              .= rg/.len g by FINSEQ_5:68
+              .= rg/.len rg by FINSEQ_5:def 3;
+          then left_cell(rg,len rg-'1,G) = cell(G,a1,a2-'1)
+            by A640,A642,A643,A664,A665,A706,A714,A716,A718,A719,GOBRD13:22
+;
+          then a in left_cell(rg,len rg-'1,G)
+            by A669,A698,A702,A706,A719,A720,JORDAN9:22;
+          then A721: a in rc by A659,XBOOLE_0:def 4;
+        A722: L~rg c= L~f by A578,SPPOL_2:22;
+            LeftComp rg is_a_component_of (L~rg)` by GOBOARD9:def 1;
+          hence C meets LeftComp Rev g by A396,A580,A645,A646,A659,A715,A721,
+A722;
+
+        suppose ::III
+            a1 = p'1+1 & a2 = p'2;
+        then A723: a1 = q1 & a2 = q2 by A664,A665,A696,A699,A700,GOBOARD1:21;
+            (F.l)/.(m-'1) = (F.(m-'1))/.(m-'1) by A562,A646,A661
+                     .= q by A394,A401,A562,A646,A667,A698,A723
+                     .= (F.l)/.l by A562,A651,A652,A655
+                     .= (F.l)/.len(F.l) by A92;
+          hence C meets LeftComp Rev g by A390,A651,A652,A662,A663;
+
+        suppose ::IV
+            a1 = p'1 & a2 = p'2+1;
+        then A724: a1 = p1 & a2 = p2+1 by A664,A665,A699,A700,GOBOARD1:21;
+            right_cell(f,l,G) = cell(G,p1,p2)
+                 by A394,A395,A650,A652,A655,A656,A664,A665,A666,A667,A696,
+GOBRD13:27
+            .= left_cell(f,m-'1,G)
+                 by A395,A396,A644,A645,A646,A664,A665,A697,A698,A724,GOBRD13:
+28;
+          hence C meets LeftComp Rev g by A246,A394,A650,A652,A657;
+      end;
+
+    suppose ::C
+    A725: p1 = q1+1 & p2 = q2;
+      consider a1,a2,p'1,p'2 being Nat such that
+    A726: [a1,a2] in Indices G and
+    A727: a = G*(a1,a2) and
+    A728: [p'1,p'2] in Indices G and
+    A729: p = G*(p'1,p'2) and
+    A730: a1 = p'1 & a2+1 = p'2 or a1+1 = p'1 & a2 = p'2 or
+          a1 = p'1+1 & a2 = p'2 or a1 = p'1 & a2 = p'2+1
+            by A395,A396,A644,A645,A646,JORDAN8:6;
+    A731: 1 <= a1 & a1 <= len G & 1 <= a2 & a2 <= width G by A726,GOBOARD5:1;
+
+      thus thesis
+      proof
+        per cases by A730;
+        suppose ::I
+          A732: a1 = p'1 & a2+1 = p'2;
+        then A733: a1 = p1 & a2+1 = p2 by A664,A665,A728,A729,GOBOARD1:21;
+        then A734: q1 = a1-'1 by A725,BINARITH:39;
+        A735: q2-'1 = a2 by A725,A733,BINARITH:39;
+            right_cell(f,l,G) = cell(G,q1,q2-'1)
+              by A394,A395,A650,A652,A655,A656,A664,A665,A666,A667,A725,GOBRD13
+:25
+            .= left_cell(f,m-'1,G)
+              by A395,A396,A644,A645,A646,A726,A727,A728,A729,A732,A734,A735,
+GOBRD13:22;
+          hence C meets LeftComp Rev g by A246,A394,A650,A652,A657;
+
+        suppose ::II
+            a1+1 = p'1 & a2 = p'2;
+          then a1+1 = p1 & a2 = p2 by A664,A665,A728,A729,GOBOARD1:21;
+        then A736: a1 = q1 & a2 = q2 by A725,XCMPLX_1:2;
+            (F.l)/.(m-'1) = (F.(m-'1))/.(m-'1) by A562,A646,A661
+                     .= q by A394,A401,A562,A646,A667,A727,A736
+                     .= (F.l)/.l by A562,A651,A652,A655
+                     .= (F.l)/.len(F.l) by A92;
+          hence C meets LeftComp Rev g by A390,A651,A652,A662,A663;
+
+        suppose ::III
+            a1 = p'1+1 & a2 = p'2;
+        then A737: a1 = p1+1 & a2 = p2 by A664,A665,A728,A729,GOBOARD1:21;
+        A738: p1-'1 = q1 by A725,BINARITH:39;
+        A739: F.m is_sequence_on G by A246;
+        A740: m-'1+1 <= len (F.m) by A92,A645;
+        A741: m-'1 <= m by A645,NAT_1:29;
+        A742: F.k|(m+1)=F.(m+1) by A323,A394,A400;
+             p1+1>p1 by REAL_1:69;
+        then A743: a2+1 > p2 & a1+1 > p1 & a2 < p2+1 by A737,NAT_1:38;
+        A744: f/.(m-'1) = (F.(m-'1))/.(m-'1) by A394,A401,A562,A646
+                     .= (F.m)/.(m-'1) by A562,A646,A741;
+        A745: f/.(m-'1+1) = (F.m)/.m by A394,A396,A562,A645;
+            left_cell(f,l,G) = cell(G,q1,q2)
+                 by A394,A395,A650,A652,A655,A656,A664,A665,A666,A667,A725,
+GOBRD13:24
+            .= front_right_cell(F.m,m-'1,G) by A644,A645,A646,A664,A665,A725,
+A726,A727,A737,A738,A739,A740,A744,A745,GOBRD13:40
+;
+          then F.(m+1) turns_right m-'1,G by A324,A610,A658;
+          then f turns_right m-'1,G by A400,A646,A660,A742,GOBRD13:44;
+        then A746: f/.(m+1) = G*(p1,p2+1) & [p1,p2+1] in Indices G
+            by A644,A645,A660,A664,A665,A726,A727,A743,GOBRD13:def 6;
+        then A747: 1 <= p2+1 & p2+1 <= width G by GOBOARD5:1;
+          set rc = left_cell(rg,len rg-'1,G)\L~rg;
+        A748: rc c= LeftComp rg by A640,A642,A643,JORDAN9:29;
+        A749: 2 in dom g by A559,FINSEQ_3:27;
+             len rg-'1+2 = len g +1 by A654,FINSEQ_5:def 3;
+        then A750: rg/.(len rg -' 1) = g/.2 by A749,FINSEQ_5:69
+                           .= f/.(m+1) by A660,A749,FINSEQ_5:30;
+              p = g/.1 by A393,A403,A404,FINSEQ_5:68
+              .= rg/.len g by FINSEQ_5:68
+              .= rg/.len rg by FINSEQ_5:def 3;
+          then left_cell(rg,len rg-'1,G) = cell(G,p1,p2)
+            by A640,A642,A643,A664,A665,A746,A750,GOBRD13:28;
+          then a in left_cell(rg,len rg-'1,G)
+            by A669,A727,A731,A737,A747,JORDAN9:22;
+          then A751: a in rc by A659,XBOOLE_0:def 4;
+        A752: L~rg c= L~f by A578,SPPOL_2:22;
+            LeftComp rg is_a_component_of (L~rg)` by GOBOARD9:def 1;
+          hence C meets LeftComp Rev g by A396,A580,A645,A646,A659,A748,A751,
+A752;
+
+        suppose ::IV
+            a1 = p'1 & a2 = p'2+1;
+        then A753: a1 = p1 & a2 = p2+1 by A664,A665,A728,A729,GOBOARD1:21;
+        then q1 = a1-'1 by A725,BINARITH:39;
+          then right_cell(f,m-'1,G) = cell(G,q1,q2)
+                 by A395,A396,A644,A645,A646,A664,A665,A725,A726,A727,A753,
+GOBRD13:29
+            .= left_cell(f,l,G)
+                 by A394,A395,A650,A652,A655,A656,A664,A665,A666,A667,A725,
+GOBRD13:24;
+          hence C meets LeftComp Rev g by A246,A396,A645,A646,A658;
+      end;
+
+    suppose ::D
+    A754: p1 = q1 & p2 = q2+1;
+      consider a1,a2,p'1,p'2 being Nat such that
+    A755: [a1,a2] in Indices G and
+    A756: a = G*(a1,a2) and
+    A757: [p'1,p'2] in Indices G and
+    A758: p = G*(p'1,p'2) and
+    A759: a1 = p'1 & a2+1 = p'2 or a1+1 = p'1 & a2 = p'2 or
+          a1 = p'1+1 & a2 = p'2 or a1 = p'1 & a2 = p'2+1
+            by A395,A396,A644,A645,A646,JORDAN8:6;
+    A760: 1 <= a1 & a1 <= len G & 1 <= a2 & a2 <= width G by A755,GOBOARD5:1;
+
+      thus thesis
+      proof
+        per cases by A759;
+        suppose ::I
+            a1 = p'1 & a2+1 = p'2;
+          then a1 = p1 & a2+1 = p2 by A664,A665,A757,A758,GOBOARD1:21;
+        then A761: a1 = q1 & a2 = q2 by A754,XCMPLX_1:2;
+
+            (F.l)/.(m-'1) = (F.(m-'1))/.(m-'1) by A562,A646,A661
+                     .= q by A394,A401,A562,A646,A667,A756,A761
+                     .= (F.l)/.l by A562,A651,A652,A655
+                     .= (F.l)/.len(F.l) by A92;
+          hence C meets LeftComp Rev g by A390,A651,A652,A662,A663;
+
+        suppose ::II
+          A762: a1+1 = p'1 & a2 = p'2;
+        then A763: a1+1 = p1 & a2 = p2 by A664,A665,A757,A758,GOBOARD1:21;
+        then A764: a1 = q1-'1 by A754,BINARITH:39;
+        A765: a2-'1 = q2 by A754,A763,BINARITH:39;
+            right_cell(f,m-'1,G) = cell(G,a1,a2-'1)
+                 by A395,A396,A644,A645,A646,A755,A756,A757,A758,A762,GOBRD13:
+25
+            .= left_cell(f,l,G)
+                 by A394,A395,A650,A652,A655,A656,A664,A665,A666,A667,A754,A764
+,A765,GOBRD13:22;
+          hence C meets LeftComp Rev g by A246,A396,A645,A646,A658;
+
+        suppose ::III
+            a1 = p'1+1 & a2 = p'2;
+        then A766: a1 = p1+1 & a2 = p2 by A664,A665,A757,A758,GOBOARD1:21;
+        then A767: a2-'1 = q2 by A754,BINARITH:39;
+            right_cell(f,l,G) = cell(G,q1,q2)
+                 by A394,A395,A650,A652,A655,A656,A664,A665,A666,A667,A754,
+GOBRD13:23
+            .= left_cell(f,m-'1,G)
+                 by A395,A396,A644,A645,A646,A664,A665,A754,A755,A756,A766,A767
+,GOBRD13:26;
+          hence C meets LeftComp Rev g by A246,A394,A650,A652,A657;
+
+        suppose ::IV
+            a1 = p'1 & a2 = p'2+1;
+        then A768: a1 = p1 & a2 = p2+1 by A664,A665,A757,A758,GOBOARD1:21;
+        A769: p2-'1 = q2 by A754,BINARITH:39;
+        A770: F.m is_sequence_on G by A246;
+        A771: m-'1+1 <= len (F.m) by A92,A645;
+        A772: m-'1 <= m by A645,NAT_1:29;
+        A773: F.k|(m+1)=F.(m+1) by A323,A394,A400;
+          A774: a2+1>p2+1 & p2+1>p2 by A768,NAT_1:38;
+        A775: f/.(m-'1) = (F.(m-'1))/.(m-'1) by A394,A401,A562,A646
+                     .= (F.m)/.(m-'1) by A562,A646,A772;
+        A776: f/.(m-'1+1) = (F.m)/.m by A394,A396,A562,A645;
+            left_cell(f,l,G) = cell(G,q1-'1,q2)
+                 by A394,A395,A650,A652,A655,A656,A664,A665,A666,A667,A754,
+GOBRD13:22
+            .= front_right_cell(F.m,m-'1,G) by A644,A645,A646,A664,A665,A754,
+A755,A756,A768,A769,A770,A771,A775,A776,GOBRD13:42
+;
+          then F.(m+1) turns_right m-'1,G by A324,A610,A658;
+          then f turns_right m-'1,G by A400,A646,A660,A773,GOBRD13:44;
+        then A777: f/.(m+1) = G*(p1-'1,p2) & [p1-'1,p2] in Indices G
+            by A644,A645,A660,A664,A665,A755,A756,A774,GOBRD13:def 6;
+          set rc = left_cell(rg,len rg-'1,G)\L~rg;
+        A778: rc c= LeftComp rg by A640,A642,A643,JORDAN9:29;
+        A779: 2 in dom g by A559,FINSEQ_3:27;
+             len rg-'1+2 = len g +1 by A654,FINSEQ_5:def 3;
+        then A780: rg/.(len rg -' 1) = g/.2 by A779,FINSEQ_5:69
+                           .= f/.(m+1) by A660,A779,FINSEQ_5:30;
+        A781: p = g/.1 by A393,A403,A404,FINSEQ_5:68
+              .= rg/.len g by FINSEQ_5:68
+              .= rg/.len rg by FINSEQ_5:def 3;
+A782: 1 <= p1-'1 by A777,GOBOARD5:1;
+A783: p1-'1+1 = p1 by A669,AMI_5:4;
+        then left_cell(rg,len rg-'1,G) = cell(G,p1-'1,p2)
+            by A640,A642,A643,A664,A665,A777,A780,A781,GOBRD13:24;
+          then a in left_cell(rg,len rg-'1,G)
+            by A669,A756,A760,A768,A782,A783,JORDAN9:22;
+          then A784: a in rc by A659,XBOOLE_0:def 4;
+        A785: L~rg c= L~f by A578,SPPOL_2:22;
+            LeftComp rg is_a_component_of (L~rg)` by GOBOARD9:def 1;
+          hence C meets LeftComp Rev g by A396,A580,A645,A646,A659,A778,A784,
+A785;
+      end;
+  end;
+    then C meets RightComp g by GOBOARD9:26;
+    then LeftComp g = RightComp g by A566,A579,A599,JORDAN9:3;
+    hence contradiction by SPRECT_4:7;
+ end;
+ then A786:  g = f/^0 by GOBOARD9:1
+      .= f by FINSEQ_5:31;
+  then reconsider f as standard non constant special_circular_sequence;
+    F.(0+1) = <*G*(XS,YS)*> by A78;
+  then A787: G*(XS,YS) = (F.1)/.1 by FINSEQ_4:25
+                .= f/.1 by A389,A562;
+    F.(1+1) = <*G*(XS,YS),G*(XS-'1,YS)*> by A78;
+  then A788: G*(XS-'1,YS) = (F.2)/.2 by FINSEQ_4:26
+                 .= f/.2 by A399,A562;
+    f is clockwise_oriented
+  proof
+A789: LeftComp f is_a_component_of (L~f)` by GOBOARD9:def 1;
+      L~f is Bounded by JORDAN2C:73;
+    then ex B being Subset of TOP-REAL 2 st
+      B is_outside_component_of L~f & B=UBD L~f by JORDAN2C:76;
+    then A790:  UBD L~f is_a_component_of (L~f)` by JORDAN2C:def 4;
+A791:  Int right_cell(f,1,G) c= right_cell(f,1,G) by TOPS_1:44;
+A792:  cell(G,XS-'1,YS) c= BDD C by A1,JORDAN11:6;
+A793:  XS-'1+1 = XS by A93,AMI_5:4;
+      [XS-'1,YS] in Indices G by A1,JORDAN11:9;
+    then right_cell(f,1,G) c= BDD C by A96,A395,A398,A787,A788,A792,A793,
+GOBRD13:27;
+    then A794:  Int right_cell(f,1,G) c= BDD C by A791,XBOOLE_1:1;
+A795:  Int right_cell(f,1,G) c= RightComp f by A395,A398,JORDAN1H:31;
+      Int right_cell(f,1,G) <> {} by A395,A398,JORDAN9:11;
+    then A796:   BDD C meets RightComp f by A794,A795,XBOOLE_1:68;
+A797: C c= LeftComp f by A566,A599,A786,A789,GOBOARD9:6;
+    set W = {B where B is Subset of TOP-REAL 2: B is_inside_component_of C};
+      BDD C = union W by JORDAN2C:def 5;
+    then consider e being set such that
+A798: e in W and
+A799: RightComp f meets e by A796,ZFMISC_1:98;
+    consider B being Subset of TOP-REAL 2 such that
+A800: e = B and
+A801: B is_inside_component_of C by A798;
+A802:  B is_a_component_of C` by A801,JORDAN2C:def 3;
+      LeftComp f misses RightComp f by GOBRD14:24;
+    then RightComp f misses C by A797,XBOOLE_1:63;
+    then RightComp f c= C` by SUBSET_1:43;
+then A803:  RightComp f c= B by A799,A800,A802,GOBOARD9:6;
+      B is Bounded by A801,JORDAN2C:def 3;
+then A804: RightComp f is Bounded by A803,JORDAN2C:16;
+A805: UBD L~f = RightComp f or UBD L~f = LeftComp f by A790,JORDAN1H:30;
+      L~f is Bounded by JORDAN2C:73;
+   hence thesis by A804,A805,JORDAN1H:47,49;
+  end;
+  then reconsider f as
+   clockwise_oriented (standard non constant special_circular_sequence);
+  take f;
+  thus f is_sequence_on G by A246;
+  thus f/.1 = G*(XS,YS) by A787;
+  thus f/.2 = G*(XS-'1,YS) by A788;
+   let m such that
+A806:  1 <= m & m+2 <= len f;
+     m+1 < m+2 by REAL_1:53;
+then A807:  m+1 <= len f by A806,AXIOMS:22;
+then A808:  f|(m+1) = F.(m+1) by A323,A394;
+A809:  m = m+1-'1 by BINARITH:39;
+A810:  m+1 > 1 by A806,NAT_1:38;
+A811:  front_right_cell(F.(m+1),m,G) = front_right_cell(f,m,G) &
+       front_left_cell(F.(m+1),m,G) = front_left_cell(f,m,G)
+        by A395,A806,A807,A808,GOBRD13:43;
+A812:  m+1+1 = m+(1+1) by XCMPLX_1:1;
+then A813:  F.(m+1+1) = f|(m+1+1) by A323,A394,A806;
+   hereby assume front_right_cell(f,m,G) misses C &
+          front_left_cell(f,m,G) misses C;
+    then F.(m+1+1) turns_left m,G by A324,A809,A810,A811;
+    hence f turns_left m,G by A806,A812,A813,GOBRD13:45;
+   end;
+   hereby assume front_right_cell(f,m,G) misses C &
+          front_left_cell(f,m,G) meets C;
+    then F.(m+1+1) goes_straight m,G by A324,A809,A810,A811;
+    hence f goes_straight m,G by A806,A812,A813,GOBRD13:46;
+   end;
+   assume front_right_cell(f,m,G) meets C;
+    then F.(m+1+1) turns_right m,G by A324,A809,A810,A811;
+   hence f turns_right m,G by A806,A812,A813,GOBRD13:44;
+ end;
+uniqueness
+proof
+  let f1,f2 be clockwise_oriented
+     (standard non constant special_circular_sequence)
+   such that
+A814:   f1 is_sequence_on Gauge(C,n) and
+A815: f1/.1 = Gauge(C,n)*(X-SpanStart(C,n),Y-SpanStart(C,n)) and
+A816: f1/.2 = Gauge(C,n)*(X-SpanStart(C,n)-'1,Y-SpanStart(C,n)) and
+A817: for k st 1 <= k & k+2 <= len f1 holds
+      (front_right_cell(f1,k,Gauge(C,n)) misses C &
+         front_left_cell(f1,k,Gauge(C,n)) misses C
+       implies f1 turns_left k,Gauge(C,n)) &
+      (front_right_cell(f1,k,Gauge(C,n)) misses C &
+        front_left_cell(f1,k,Gauge(C,n)) meets C
+       implies f1 goes_straight k,Gauge(C,n)) &
+      (front_right_cell(f1,k,Gauge(C,n)) meets C
+       implies f1 turns_right k,Gauge(C,n)) and
+A818:   f2 is_sequence_on Gauge(C,n) and
+A819: f2/.1 = Gauge(C,n)*(X-SpanStart(C,n),Y-SpanStart(C,n)) and
+A820: f2/.2 = Gauge(C,n)*(X-SpanStart(C,n)-'1,Y-SpanStart(C,n)) and
+A821: for k st 1 <= k & k+2 <= len f2 holds
+      (front_right_cell(f2,k,Gauge(C,n)) misses C &
+         front_left_cell(f2,k,Gauge(C,n)) misses C
+       implies f2 turns_left k,Gauge(C,n)) &
+      (front_right_cell(f2,k,Gauge(C,n)) misses C &
+        front_left_cell(f2,k,Gauge(C,n)) meets C
+       implies f2 goes_straight k,Gauge(C,n)) &
+      (front_right_cell(f2,k,Gauge(C,n)) meets C
+       implies f2 turns_right k,Gauge(C,n));
+       defpred P[Nat] means f1|$1 = f2|$1;
+       f1|0 = f1|{} by FINSEQ_1:4,TOPREAL1:def 1
+      .= {} by RELAT_1:110 .= f2|Seg 0 by FINSEQ_1:4,RELAT_1:110 .= f2|0 by
+TOPREAL1:def 1; then A822: P[0];
+A823: for k st P[k] holds P[k+1]
+     proof let k such that
+A824:    f1|k = f2|k;
+A825:    f1|1 = <*f1/.1 *> & f2|1 = <*f2/.1 *> by FINSEQ_5:23;
+A826:    len f1 > 4 & len f2 > 4 by GOBOARD7:36;
+      per cases by CQC_THE1:2;
+      suppose k = 0;
+       hence f1|(k+1) = f2|(k+1) by A815,A819,A825;
+      suppose
+A827:      k = 1;
+         len f1 > 2 & len f2 > 2 by A826,AXIOMS:22;
+       then f1|2 = <*f1/.1,f1/.2*> & f2|2 = <*f2/.1,f2/.2*>
+        by JORDAN8:1;
+       hence f1|(k+1) = f2|(k+1) by A815,A816,A819,A820,A827;
+      suppose
+A828:      k > 1;
+A829:      f1/.1 = f1/.len f1 & f2/.1 = f2/.len f2 by FINSEQ_6:def 1;
+         now
+        per cases;
+        suppose
+A830:       len f1 > k;
+         set m = k-'1;
+A831:       1 <= m by A828,JORDAN3:12;
+then A832:       m+1 = k by JORDAN3:6;
+A833:      now assume
+A834:        len f2 <= k;
+then A835:        f2 = f2|k by TOPREAL1:2;
+          then 1 in dom(f2|k) by FINSEQ_5:6;
+then A836:        (f1|k)/.1 = f1/.1 by A824,TOPREAL1:1;
+            len f2 in dom(f2|k) by A835,FINSEQ_5:6;
+then A837:        (f1|k)/.len f2 = f1/.len f2 by A824,TOPREAL1:1;
+            1 < len f2 & len f2 <= len f1 by A824,A826,A835,AXIOMS:22,FINSEQ_5:
+18;
+          hence contradiction by A824,A829,A830,A834,A835,A836,A837,GOBOARD7:40
+;
+         end;
+then A838:       k+1 <= len f2 by NAT_1:38;
+A839:       k+1 <= len f1 by A830,NAT_1:38;
+A840:       front_right_cell(f1,m,Gauge(C,n))
+              = front_right_cell(f1|k,m,Gauge(C,n))
+              by A814,A830,A831,A832,GOBRD13:43;
+A841:       front_left_cell(f1,m,Gauge(C,n))
+              = front_left_cell(f1|k,m,Gauge(C,n))
+              by A814,A830,A831,A832,GOBRD13:43;
+A842:       front_right_cell(f2,m,Gauge(C,n))
+              = front_right_cell(f2|k,m,Gauge(C,n))
+              by A818,A831,A832,A833,GOBRD13:43;
+A843:       front_left_cell(f2,m,Gauge(C,n))
+              = front_left_cell(f2|k,m,Gauge(C,n))
+              by A818,A831,A832,A833,GOBRD13:43;
+A844:      m+(1+1) = k+1 by A832,XCMPLX_1:1;
+           now per cases;
+          suppose front_right_cell(f1,m,Gauge(C,n)) misses C &
+             front_left_cell(f1,m,Gauge(C,n)) misses C;
+           then f1 turns_left m,Gauge(C,n) & f2 turns_left m,Gauge(C,n)
+            by A817,A821,A824,A831,A838,A839,A840,A841,A842,A843,A844;
+          hence f1|(k+1) = f2|(k+1) by A818,A824,A828,A838,A839,GOBRD13:48;
+         suppose front_right_cell(f1,m,Gauge(C,n)) misses C &
+              front_left_cell(f1,m,Gauge(C,n)) meets C;
+            then f1 goes_straight m,Gauge(C,n) & f2 goes_straight m,Gauge(C,n)
+             by A817,A821,A824,A831,A838,A839,A840,A841,A842,A843,A844;
+            hence f1|(k+1) = f2|(k+1) by A818,A824,A828,A838,A839,GOBRD13:49;
+         suppose front_right_cell(f1,m,Gauge(C,n)) meets C;
+           then f1 turns_right m,Gauge(C,n) & f2 turns_right m,Gauge(C,n)
+             by A817,A821,A824,A831,A838,A839,A840,A842,A844;
+           hence f1|(k+1) = f2|(k+1) by A818,A824,A828,A838,A839,GOBRD13:47;
+         end;
+         hence f1|(k+1) = f2|(k+1);
+        suppose
+A845:       k >= len f1;
+then A846:       f1 = f1|k by TOPREAL1:2;
+         then 1 in dom(f1|k) by FINSEQ_5:6;
+then A847:       (f2|k)/.1 = f2/.1 by A824,TOPREAL1:1;
+           len f1 in dom(f1|k) by A846,FINSEQ_5:6;
+then A848:       (f2|k)/.len f1 = f2/.len f1 by A824,TOPREAL1:1;
+           1 < len f1 & len f1 <= len f2 by A824,A826,A846,AXIOMS:22,FINSEQ_5:
+18
+;
+         then len f2 = len f1 by A824,A829,A846,A847,A848,GOBOARD7:40;
+         hence f1|(k+1) = f2|(k+1) by A824,A845,A846,TOPREAL1:2;
+        end;
+       hence f1|(k+1) = f2|(k+1);
+     end;
+     for k holds P[k] from Ind(A822,A823);
+   hence f1 = f2 by JORDAN9:4;
+ end;
+end;

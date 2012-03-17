@@ -1,0 +1,301 @@
+:: The Well Ordering Relations
+::  by Grzegorz Bancerek
+::
+:: Received April 4, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, RELAT_2, BOOLE, FUNCT_1, ZFMISC_1, WELLORD1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1;
+ constructors TARSKI, RELAT_2, FUNCT_1, SUBSET_1, XBOOLE_0;
+ clusters FUNCT_1, XBOOLE_0, ZFMISC_1;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+ reserve a,b,c,d,x,y,z,X,Y,Z for set;
+ reserve R,S,T for Relation;
+
+ definition let R,a;
+   func R-Seg(a) -> set means
+:: WELLORD1:def 1
+  x in it iff x <> a & [x,a] in R;
+ end;
+
+canceled;
+
+theorem :: WELLORD1:2
+  x in field R or R-Seg(x) = {};
+
+ definition let R;
+  attr R is well_founded means
+:: WELLORD1:def 2
+   for Y st Y c= field R & Y <> {} ex a st a in Y & R-Seg a misses Y;
+  let X;
+  pred R is_well_founded_in X means
+:: WELLORD1:def 3
+   for Y st Y c= X & Y <> {} ex a st a in Y & R-Seg a misses Y;
+ end;
+
+canceled 2;
+
+theorem :: WELLORD1:5
+  R is well_founded iff R is_well_founded_in field R;
+
+ definition let R;
+  attr R is well-ordering means
+:: WELLORD1:def 4
+
+   R is reflexive & R is transitive & R is antisymmetric &
+    R is connected & R is well_founded;
+  let X;
+  pred R well_orders X means
+:: WELLORD1:def 5
+
+   R is_reflexive_in X & R is_transitive_in X & R is_antisymmetric_in X &
+    R is_connected_in X & R is_well_founded_in X;
+ end;
+
+canceled 2;
+
+theorem :: WELLORD1:8
+    R well_orders field R iff R is well-ordering;
+
+theorem :: WELLORD1:9
+    R well_orders X implies
+   for Y st Y c= X & Y <> {}
+    ex a st a in Y & for b st b in Y holds [a,b] in R;
+
+theorem :: WELLORD1:10
+  R is well-ordering implies
+   for Y st Y c= field R & Y <> {}
+    ex a st a in Y & for b st b in Y holds [a,b] in R;
+
+theorem :: WELLORD1:11
+    for R st R is well-ordering & field R <> {}
+       ex a st a in field R & for b st b in field R holds [a,b] in R;
+
+theorem :: WELLORD1:12
+    for R st R is well-ordering & field R <> {} for a st a in field R
+    holds (for b st b in field R holds [b,a] in R) or
+          (ex b st b in field R & [a,b] in R &
+            for c st c in field R & [a,c] in R holds c = a or [b,c] in R );
+
+ reserve F,G for Function;
+
+theorem :: WELLORD1:13
+  R-Seg(a) c= field R;
+
+ definition let R,Y;
+   func R |_2 Y -> Relation equals
+:: WELLORD1:def 6
+   R /\ [:Y,Y:];
+ end;
+
+canceled;
+
+theorem :: WELLORD1:15
+    R |_2 X c= R & R |_2 X c= [:X,X:];
+
+theorem :: WELLORD1:16
+  x in R |_2 X iff x in R & x in [:X,X:];
+
+theorem :: WELLORD1:17
+  R |_2 X = X|R|X;
+
+theorem :: WELLORD1:18
+  R |_2 X = X|(R|X);
+
+theorem :: WELLORD1:19
+  x in field(R |_2 X) implies x in field R & x in X;
+
+theorem :: WELLORD1:20
+  field(R |_2 X) c= field R & field(R |_2 X) c= X;
+
+theorem :: WELLORD1:21
+  (R |_2 X)-Seg(a) c= R-Seg(a);
+
+theorem :: WELLORD1:22
+  R is reflexive implies R |_2 X is reflexive;
+
+theorem :: WELLORD1:23
+  R is connected implies R |_2 Y is connected;
+
+theorem :: WELLORD1:24
+  R is transitive implies R |_2 Y is transitive;
+
+theorem :: WELLORD1:25
+  R is antisymmetric implies R |_2 Y is antisymmetric;
+
+theorem :: WELLORD1:26
+  (R |_2 X) |_2 Y = R |_2 (X /\ Y);
+
+theorem :: WELLORD1:27
+    (R |_2 X) |_2 Y = (R |_2 Y) |_2 X;
+
+theorem :: WELLORD1:28
+    (R |_2 Y) |_2 Y = R |_2 Y;
+
+theorem :: WELLORD1:29
+  Z c= Y implies (R |_2 Y) |_2 Z = R |_2 Z;
+
+theorem :: WELLORD1:30
+  R |_2 field R = R;
+
+theorem :: WELLORD1:31
+  R is well_founded implies R |_2 X is well_founded;
+
+theorem :: WELLORD1:32
+  R is well-ordering implies R |_2 Y is well-ordering;
+
+theorem :: WELLORD1:33
+  R is well-ordering implies R-Seg(a),R-Seg(b) are_c=-comparable;
+
+canceled;
+
+theorem :: WELLORD1:35
+  R is well-ordering & a in field R & b in R-Seg(a) implies
+     (R |_2 (R-Seg(a)))-Seg(b) = R-Seg(b);
+
+theorem :: WELLORD1:36
+   R is well-ordering & Y c= field R implies
+    (Y = field R or (ex a st a in field R & Y = R-Seg(a) ) iff
+     for a st a in Y for b st [b,a] in R holds b in Y );
+
+theorem :: WELLORD1:37
+  R is well-ordering & a in field R & b in field R implies
+        ( [a,b] in R iff R-Seg(a) c= R-Seg(b) );
+
+theorem :: WELLORD1:38
+  R is well-ordering & a in field R & b in field R implies
+      ( R-Seg(a) c= R-Seg(b) iff a = b or a in R-Seg(b) );
+
+theorem :: WELLORD1:39
+  R is well-ordering & X c= field R implies field(R |_2 X) = X;
+
+theorem :: WELLORD1:40
+  R is well-ordering implies field(R |_2 R-Seg(a)) = R-Seg(a);
+
+theorem :: WELLORD1:41
+
+  R is well-ordering implies
+    for Z st for a st a in field R & R-Seg(a) c= Z holds a in Z
+          holds field R c= Z;
+
+theorem :: WELLORD1:42
+  R is well-ordering & a in field R & b in field R &
+  (for c st c in R-Seg(a) holds [c,b] in R & c <> b)
+    implies [a,b] in R;
+
+theorem :: WELLORD1:43
+  R is well-ordering & dom F = field R & rng F c= field R &
+      (for a,b st [a,b] in R & a <> b holds [F.a,F.b] in R & F.a <> F.b)
+    implies for a st a in field R holds [a,F.a] in R;
+
+ definition let R,S,F;
+  pred F is_isomorphism_of R,S means
+:: WELLORD1:def 7
+ dom F = field R & rng F = field S & F is one-to-one &
+    for a,b holds [a,b] in R iff a in field R & b in field R & [F.a,F.b] in S;
+ end;
+
+canceled;
+
+theorem :: WELLORD1:45
+  F is_isomorphism_of R,S implies
+   for a,b st [a,b] in R & a <> b holds [F.a,F.b] in S & F.a <> F.b;
+
+ definition let R,S;
+  pred R,S are_isomorphic means
+:: WELLORD1:def 8
+ ex F st F is_isomorphism_of R,S;
+ end;
+
+canceled;
+
+theorem :: WELLORD1:47
+  id(field R) is_isomorphism_of R,R;
+
+theorem :: WELLORD1:48
+    R,R are_isomorphic;
+
+theorem :: WELLORD1:49
+  F is_isomorphism_of R,S implies F" is_isomorphism_of S,R;
+
+theorem :: WELLORD1:50
+  R,S are_isomorphic implies S,R are_isomorphic;
+
+theorem :: WELLORD1:51
+  F is_isomorphism_of R,S & G is_isomorphism_of S,T implies
+    G*F is_isomorphism_of R,T;
+
+theorem :: WELLORD1:52
+  R,S are_isomorphic & S,T are_isomorphic implies R,T are_isomorphic;
+
+theorem :: WELLORD1:53
+   F is_isomorphism_of R,S implies
+     ( R is reflexive implies S is reflexive ) &
+     ( R is transitive implies S is transitive ) &
+     ( R is connected implies S is connected ) &
+     ( R is antisymmetric implies S is antisymmetric ) &
+     ( R is well_founded implies S is well_founded );
+
+theorem :: WELLORD1:54
+  R is well-ordering & F is_isomorphism_of R,S implies
+  S is well-ordering;
+
+theorem :: WELLORD1:55
+  R is well-ordering implies
+    for F,G st F is_isomorphism_of R,S & G is_isomorphism_of R,S holds F = G;
+
+ definition let R,S;
+  assume
+ R is well-ordering & R,S are_isomorphic;
+  func canonical_isomorphism_of(R,S) -> Function means
+:: WELLORD1:def 9
+ it is_isomorphism_of R,S;
+ end;
+
+canceled;
+
+theorem :: WELLORD1:57
+  R is well-ordering implies
+    for a st a in field R holds not R,R |_2 (R-Seg(a)) are_isomorphic;
+
+theorem :: WELLORD1:58
+   R is well-ordering & a in field R & b in field R & a <> b
+    implies not R |_2 (R-Seg(a)),R |_2 (R-Seg(b)) are_isomorphic;
+
+theorem :: WELLORD1:59
+  R is well-ordering & Z c= field R & F is_isomorphism_of R,S
+   implies F|Z is_isomorphism_of R |_2 Z,S |_2 (F.:Z) &
+     R |_2 Z,S |_2 (F.:Z) are_isomorphic;
+
+theorem :: WELLORD1:60
+  R is well-ordering & F is_isomorphism_of R,S implies
+    for a st a in field R ex b st b in field S & F.:(R-Seg(a)) = S-Seg(b);
+
+theorem :: WELLORD1:61
+  R is well-ordering & F is_isomorphism_of R,S implies
+    for a st a in field R ex b st b in field S &
+     R |_2 (R-Seg(a)),S |_2 (S-Seg(b)) are_isomorphic;
+
+theorem :: WELLORD1:62
+  R is well-ordering & S is well-ordering &
+   a in field R & b in field S & c in
+ field S & R,S |_2 (S-Seg(b)) are_isomorphic &
+    R |_2 (R-Seg(a)),S |_2 (S-Seg(c)) are_isomorphic implies
+     S-Seg(c) c= S-Seg(b) & [c,b] in S;
+
+theorem :: WELLORD1:63
+  R is well-ordering & S is well-ordering implies
+   R,S are_isomorphic or
+    (ex a st a in field R & R |_2 (R-Seg(a)),S are_isomorphic ) or
+     (ex a st a in field S & R,S |_2 (S-Seg(a)) are_isomorphic );
+
+theorem :: WELLORD1:64
+    Y c= field R & R is well-ordering implies
+   R,R |_2 Y are_isomorphic or
+    ex a st a in field R & R |_2 (R-Seg(a)),R |_2 Y are_isomorphic;

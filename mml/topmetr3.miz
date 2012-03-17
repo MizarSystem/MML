@@ -1,0 +1,1466 @@
+:: Sequences of Metric Spaces and an Abstract Intermediate Value Theorem
+::  by Yatsuka Nakamura and Andrzej Trybulec
+::
+:: Received September 11, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, PRE_TOPC, SUBSET_1, COMPTS_1, BOOLE, RELAT_1, ORDINAL2,
+      FUNCT_1, METRIC_1, RCOMP_1, ABSVALUE, ARYTM_1, PCOMPS_1, EUCLID,
+      BORSUK_1, ARYTM_3, TOPMETR, SEQ_2, SEQ_1, NORMSP_1, PROB_1, PSCOMP_1,
+      SEQ_4, SQUARE_1, JORDAN6, TOPREAL1, TOPS_2, JORDAN5C, TOPREAL2, MCART_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, STRUCT_0, METRIC_1,
+      PRE_TOPC, TOPS_2, COMPTS_1, PCOMPS_1, RCOMP_1, ABSVALUE, EUCLID,
+      PSCOMP_1, TOPMETR, SEQ_1, SEQ_2, SEQ_4, SEQM_3, TBSP_1, NORMSP_1,
+      SQUARE_1, JORDAN6, TOPREAL1, JORDAN5C, TOPREAL2;
+ constructors REAL_1, TOPS_2, RCOMP_1, ABSVALUE, TREAL_1, NAT_1, INT_1, TBSP_1,
+      SQUARE_1, JORDAN6, TOPREAL1, JORDAN5C, TOPREAL2, PSCOMP_1;
+ clusters FUNCT_1, PRE_TOPC, STRUCT_0, XREAL_0, METRIC_1, RELSET_1, EUCLID,
+      TOPMETR, INT_1, PCOMPS_1, PSCOMP_1, MEMBERED, NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI;
+ theorems PRE_TOPC, TOPMETR, XREAL_0, TBSP_1, XBOOLE_0, METRIC_1, FUNCT_1,
+      XBOOLE_1, FUNCT_2, JGRAPH_2, GOBOARD6, SEQ_2, TOPREAL5, AXIOMS, TREAL_1,
+      SEQ_4, REAL_1, SQUARE_1, NAT_1, SEQM_3, REAL_2, UNIFORM1, JGRAPH_3,
+      BORSUK_1, JORDAN6, TOPREAL1, TOPS_2, TARSKI, JORDAN1A, RELAT_1, TOPREAL3,
+      JORDAN5B, PREPOWER, XCMPLX_0, XCMPLX_1;
+ schemes RCOMP_1, RECDEF_1, NAT_1;
+
+begin
+
+theorem Th1:
+ for R being non empty Subset of REAL,r0 being real number st
+  for r being real number st r in R holds r <= r0
+ holds upper_bound R <= r0
+proof let R be non empty Subset of REAL,r0 be real number;
+ assume
+A1: for r being real number st r in R holds r<=r0;
+then A2: R is bounded_above by SEQ_4:def 1;
+    now assume A3: upper_bound R >r0;
+    set r1=(upper_bound R) -r0;
+      r1>0 by A3,SQUARE_1:11;
+    then consider r being real number such that
+    A4: (r in R & (upper_bound R)-r1<r) by A2,SEQ_4:def 4;
+      (upper_bound R)-r1=r0 by XCMPLX_1:18;
+   hence contradiction by A1,A4;
+  end;
+ hence upper_bound R <=r0;
+end;
+
+theorem Th2: for X being non empty MetrSpace, S being sequence of X,
+ F being Subset of TopSpaceMetr(X) st
+ S is convergent & (for n being Nat holds S.n in F) & F is closed
+ holds lim S in F
+proof let X be non empty MetrSpace, S be sequence of X,
+ F be Subset of TopSpaceMetr(X);
+  assume A1: S is convergent & (for n being Nat holds S.n in F)
+    & F is closed;
+     lim S in the carrier of X;
+   then A2: lim S in the carrier of TopSpaceMetr(X) by TOPMETR:16;
+   A3: for G being Subset of TopSpaceMetr(X) st G is open holds
+                        lim S in G implies F meets G
+    proof let G be Subset of TopSpaceMetr(X);
+     assume A4: G is open;
+        now assume lim S in G;
+        then consider r1 being real number such that
+         A5: r1>0 & Ball(lim S,r1) c= G by A4,TOPMETR:22;
+        reconsider r2=r1 as Real by XREAL_0:def 1;
+        consider n being Nat such that
+        A6: for m being Nat st m>=n holds dist(S.m,lim S)<r2
+                     by A1,A5,TBSP_1:def 4;
+          dist(S.n,lim S)<r2 by A6;
+        then A7: S.n in Ball(lim S,r1) by METRIC_1:12;
+          S.n in F by A1;
+        then S.n in F /\ G by A5,A7,XBOOLE_0:def 3;
+       hence F meets G by XBOOLE_0:def 7;
+      end;
+     hence lim S in G implies F meets G;
+    end;
+ reconsider F0=F as Subset of TopSpaceMetr(X);
+    lim S in Cl F0 by A2,A3,PRE_TOPC:def 13;
+ hence lim S in F by A1,PRE_TOPC:52;
+end;
+
+theorem Th3: for X,Y being non empty MetrSpace,
+ f being map of TopSpaceMetr(X),TopSpaceMetr(Y),S being sequence of X
+ holds f*S is sequence of Y
+proof let X,Y be non empty MetrSpace, f be map of TopSpaceMetr(X),
+   TopSpaceMetr(Y),S be sequence of X;
+  A1: dom S=NAT & rng S c= the carrier of X by TBSP_1:def 2;
+  A2: dom f=the carrier of TopSpaceMetr(X) by FUNCT_2:def 1
+      .=the carrier of X by TOPMETR:16;
+  A3: the carrier of Y=the carrier of TopSpaceMetr(Y) by TOPMETR:16;
+    rng (f*S) c= rng f by RELAT_1:45;
+  then dom (f*S)=NAT & rng (f*S) c= the carrier of Y by A1,A2,A3,RELAT_1:46,
+XBOOLE_1:1;
+ hence f*S is sequence of Y by TBSP_1:def 2;
+end;
+
+theorem Th4: for X,Y being non empty MetrSpace,
+ f being map of TopSpaceMetr(X),TopSpaceMetr(Y),S being sequence of X,
+ T being sequence of Y st
+ S is convergent & T= f*S & f is continuous holds T is convergent
+proof let X,Y be non empty MetrSpace, f be map of TopSpaceMetr(X),
+  TopSpaceMetr(Y),S be sequence of X,T be sequence of Y;
+ assume A1: S is convergent & T= f*S & f is continuous;
+  A2: dom f=the carrier of TopSpaceMetr(X) by FUNCT_2:def 1
+           .=the carrier of X by TOPMETR:16;
+  then f.(lim S) in rng f by FUNCT_1:def 5;
+  then reconsider x0=f.(lim S) as Element of Y by TOPMETR:16;
+  set z0=lim S;
+  reconsider p=z0 as Point of TopSpaceMetr(X) by TOPMETR:16;
+    for r being Real st r>0 ex n being Nat st for m being Nat
+        st n<=m holds dist(T.m,x0)<r
+  proof let r be Real;assume A3: r>0;
+      the carrier of Y=the carrier of TopSpaceMetr(Y) by TOPMETR:16;
+    then reconsider V=Ball(x0,r) as Subset of TopSpaceMetr(Y);
+    A4: V is open by TOPMETR:21;
+      x0 in V by A3,GOBOARD6:4;
+    then consider W being Subset of TopSpaceMetr(X) such that
+    A5: p in W & W is open & f.:W c= V by A1,A4,JGRAPH_2:20;
+    consider r0 being real number such that
+    A6: r0>0 & Ball(z0,r0) c= W by A5,TOPMETR:22;
+    reconsider r00=r0 as Real by XREAL_0:def 1;
+    consider n0 being Nat such that
+    A7: for m being Nat st n0<=m holds dist(S.m,z0)<r00 by A1,A6,TBSP_1:def 4;
+      for m being Nat
+        st n0<=m holds dist(T.m,x0)<r
+    proof let m be Nat;assume n0<=m;
+      then dist(S.m,z0)<r0 by A7;
+      then S.m in Ball(z0,r0) by METRIC_1:12;
+      then A8: f.(S.m) in f.:W by A2,A6,FUNCT_1:def 12;
+        dom T=NAT by FUNCT_2:def 1;
+      then T.m in f.:W by A1,A8,FUNCT_1:22;
+     hence dist(T.m,x0)<r by A5,METRIC_1:12;
+    end;
+   hence ex n being Nat st for m being Nat
+        st n<=m holds dist(T.m,x0)<r;
+  end;
+ hence T is convergent by TBSP_1:def 3;
+end;
+
+theorem Th5: for X being non empty MetrSpace,
+S being Function of NAT,the carrier of X holds S is sequence of X
+proof let X be non empty MetrSpace,
+S be Function of NAT,the carrier of X;
+  A1: dom S=NAT by FUNCT_2:def 1;
+    rng S c= the carrier of X;
+ hence S is sequence of X by A1,TBSP_1:def 2;
+end;
+
+theorem Th6: for s being Real_Sequence,S being sequence of RealSpace st
+ s=S holds (s is convergent iff S is convergent) &
+ (s is convergent implies lim s=lim S)
+proof let s be Real_Sequence,S be sequence of RealSpace;
+ assume A1: s=S;
+  A2: s is convergent implies S is convergent
+   proof assume s is convergent;
+     then consider g being real number such that
+     A3: for p being real number st 0<p
+     ex n being Nat st for m being Nat st n<=m holds
+                         abs (s.m-g) < p by SEQ_2:def 6;
+     reconsider x0=g as Point of RealSpace by METRIC_1:def 14,XREAL_0:def 1;
+     reconsider g0=g as Real by XREAL_0:def 1;
+       for r being Real st r>0 ex n being Nat st
+              for m being Nat st n<=m holds dist(S.m,x0)<r
+      proof let r be Real;assume r>0;
+        then consider n0 being Nat such that
+        A4: for m being Nat st n0<=m holds abs (s.m-g) < r by A3;
+          for m being Nat st n0<=m holds dist(S.m,x0)<r
+         proof let m be Nat;assume A5: n0<=m;
+           reconsider t=s.m as Real;
+             dist(S.m,x0)=real_dist.(t,g) by A1,METRIC_1:def 1,def 14
+                       .=abs(t-g0) by METRIC_1:def 13;
+          hence dist(S.m,x0)<r by A4,A5;
+         end;
+       hence ex n being Nat st
+              for m being Nat st n<=m holds dist(S.m,x0)<r;
+      end;
+    hence S is convergent by TBSP_1:def 3;
+   end;
+    S is convergent implies s is convergent
+  proof assume S is convergent;
+     then consider x being Element of RealSpace such that
+     A6: for r being Real st r>0 ex n being Nat st
+              for m being Nat st n<=m holds dist(S.m,x)<r
+                                by TBSP_1:def 3;
+     reconsider g0=x as Real by METRIC_1:def 14;
+        for p being real number st 0<p
+       ex n being Nat st for m being Nat st n<=m holds
+                         abs (s.m-g0) < p
+       proof let p be real number;
+        assume A7: 0<p;
+         reconsider p0=p as Real by XREAL_0:def 1;
+         consider n0 being Nat such that
+         A8: for m being Nat st n0<=m holds dist(S.m,x)<p0 by A6,A7;
+           for m being Nat st n0<=m holds abs (s.m-g0) < p
+          proof let m be Nat;
+           assume A9: n0<=m;
+            reconsider t=s.m as Real;
+              dist(S.m,x)=real_dist.(t,g0) by A1,METRIC_1:def 1,def 14
+                       .=abs(t-g0) by METRIC_1:def 13;
+           hence abs (s.m-g0) < p by A8,A9;
+          end;
+        hence ex n being Nat st for m being Nat st n<=m holds
+                         abs (s.m-g0) < p;
+       end;
+   hence s is convergent by SEQ_2:def 6;
+  end;
+ hence (s is convergent iff S is convergent) by A2;
+ thus s is convergent implies lim s=lim S
+ proof assume A10: s is convergent;
+   reconsider g0=lim S as Real by METRIC_1:def 14;
+     for r being real number st 0 < r ex m being Nat st
+    for n being Nat st m <= n holds abs(s.n-g0) < r
+   proof let r be real number;
+    assume A11: 0 < r;
+     reconsider r0=r as Real by XREAL_0:def 1;
+     consider m0 being Nat such that
+     A12: for n being Nat st m0<=n holds dist(S.n,lim S)<r0 by A2,A10,A11,
+TBSP_1:def 4;
+       for n being Nat st m0 <= n holds abs(s.n -g0) < r
+     proof let n be Nat;
+       assume A13: m0 <= n;
+          dist(S.n,lim S)=real_dist.(s.n,g0) by A1,METRIC_1:def 1,def 14
+                     .=abs(s.n-g0) by METRIC_1:def 13;
+      hence abs(s.n -g0) < r by A12,A13;
+     end;
+    hence ex m being Nat st
+    for n being Nat st m <= n holds abs(s.n-g0) < r;
+   end;
+  hence lim s=lim S by A10,SEQ_2:def 7;
+ end;
+end;
+
+theorem Th7: for a,b being real number,s being Real_Sequence st
+ rng s c= [.a,b.] holds
+ s is sequence of Closed-Interval-MSpace(a,b)
+proof let a,b be real number,s be Real_Sequence;
+ assume A1: rng s c= [.a,b.];
+  A2: dom s=NAT by FUNCT_2:def 1;
+  then A3: s.0 in rng s by FUNCT_1:def 5;
+  reconsider t=s.0 as Real;
+    a<=t & t<=b by A1,A3,TOPREAL5:1;
+  then a<=b by AXIOMS:22;
+  then the carrier of Closed-Interval-MSpace(a,b)=[.a,b.] by TOPMETR:14;
+  then s is Function of NAT,the carrier of Closed-Interval-MSpace(a,b)
+                     by A1,A2,FUNCT_2:4;
+ hence s is sequence of Closed-Interval-MSpace(a,b) by Th5;
+end;
+
+theorem Th8: for a,b being real number,
+ S being sequence of Closed-Interval-MSpace(a,b) st a<=b holds
+ S is sequence of RealSpace
+proof let a,b be real number,
+  S be sequence of Closed-Interval-MSpace(a,b);
+  assume A1: a<=b;
+  A2: dom S=NAT by FUNCT_2:def 1;
+    the carrier of Closed-Interval-MSpace(a,b)=[.a,b.] by A1,TOPMETR:14;
+  then rng S c= the carrier of RealSpace by METRIC_1:def 14,XBOOLE_1:1;
+  then S is Function of NAT,the carrier of RealSpace by A2,FUNCT_2:4;
+ hence S is sequence of RealSpace by Th5;
+end;
+
+theorem Th9: for a,b being real number,
+S1 being sequence of Closed-Interval-MSpace(a,b),
+S being sequence of RealSpace st S=S1 & a<=b holds
+ (S is convergent iff S1 is convergent)&
+ (S is convergent implies lim S=lim S1)
+proof let a,b be real number,
+S1 be sequence of Closed-Interval-MSpace(a,b),
+S be sequence of RealSpace;
+ assume A1: S=S1 & a<=b;
+  then A2: the carrier of Closed-Interval-MSpace(a,b)=[.a,b.]
+                  by TOPMETR:14;
+  reconsider P=[.a,b.] as Subset of R^1 by TOPMETR:24;
+ A3: S is convergent implies S1 is convergent
+ proof assume A4: S is convergent;
+   then consider x0 being Element of RealSpace such that
+   A5: for r being Real st r>0 ex n being Nat st
+         for m being Nat st n<=m holds dist(S.m,x0)<r by TBSP_1:def 3;
+   A6: x0=lim S by A4,A5,TBSP_1:def 4;
+   A7: for m being Nat holds S.m in [.a,b.]
+   proof let m be Nat;
+       dom S1=NAT by TBSP_1:def 2;
+     then S1.m in rng S1 by FUNCT_1:def 5;
+    hence S.m in [.a,b.] by A1,A2;
+   end;
+     P is closed by TREAL_1:4;
+   then reconsider x1=x0 as Element of Closed-Interval-MSpace(a,
+b)
+                       by A2,A4,A6,A7,Th2,TOPMETR:def 7;
+     for r being Real st r>0 ex n being Nat st
+              for m being Nat st n<=m holds dist(S1.m,x1)<r
+    proof let r be Real;assume r>0;
+      then consider n0 being Nat such that
+       A8:  for m being Nat st n0<=m holds dist(S.m,x0)<r by A5;
+         for m being Nat st n0<=m holds dist(S1.m,x1)<r
+       proof let m be Nat;assume A9: n0<=m;
+           dist(S1.m,x1)
+             =(the distance of Closed-Interval-MSpace(a,b)).(S1.m,x1)
+                    by METRIC_1:def 1
+             .=(the distance of RealSpace).(S1.m,x1) by TOPMETR:def 1
+             .=dist(S.m,x0) by A1,METRIC_1:def 1;
+        hence dist(S1.m,x1)<r by A8,A9;
+       end;
+     hence ex n being Nat st
+              for m being Nat st n<=m holds dist(S1.m,x1)<r;
+    end;
+  hence S1 is convergent by TBSP_1:def 3;
+ end;
+   S1 is convergent implies S is convergent
+ proof assume S1 is convergent;
+   then consider x0 being Element of Closed-Interval-MSpace(a,b)
+    such that
+   A10: for r being Real st r>0 ex n being Nat st
+         for m being Nat st n<=m holds dist(S1.m,x0)<r by TBSP_1:def 3;
+     x0 in [.a,b.] by A2;
+   then reconsider x1=x0 as Element of RealSpace by METRIC_1:def
+14;
+      for r being Real st r>0 ex n being Nat st
+         for m being Nat st n<=m holds dist(S.m,x1)<r
+     proof let r be Real;assume
+         r>0;
+       then consider n0 being Nat such that
+       A11: for m being Nat st n0<=m holds dist(S1.m,x0)<r by A10;
+          for m being Nat st n0<=m holds dist(S.m,x1)<r
+        proof let m be Nat;assume A12: n0<=m;
+           dist(S1.m,x0)
+             =(the distance of Closed-Interval-MSpace(a,b)).(S1.m,x0)
+                    by METRIC_1:def 1
+             .=(the distance of RealSpace).(S1.m,x0) by TOPMETR:def 1
+             .=dist(S.m,x1) by A1,METRIC_1:def 1;
+         hence dist(S.m,x1)<r by A11,A12;
+        end;
+       hence ex n being Nat st
+         for m being Nat st n<=m holds dist(S.m,x1)<r;
+     end;
+  hence S is convergent by TBSP_1:def 3;
+ end;
+ hence (S is convergent iff S1 is convergent) by A3;
+ thus S is convergent implies lim S=lim S1
+ proof assume A13: S is convergent;
+     lim S1 in the carrier of Closed-Interval-MSpace(a,b);
+   then reconsider t0=lim S1 as Point of RealSpace by A2,METRIC_1:def 14;
+     for r1 being Real st 0 < r1 ex m1 being Nat st
+   for n1 being Nat st m1 <= n1 holds dist(S.n1,t0) < r1
+   proof let r1 being Real;assume 0<r1;
+     then consider m1 being Nat such that
+     A14: for n1 being Nat st m1 <= n1 holds
+       dist(S1.n1,lim S1) < r1 by A3,A13,TBSP_1:def 4;
+     for n1 being Nat st m1 <= n1 holds dist(S.n1,t0) < r1
+   proof
+    let n1 be Nat;assume
+     A15: m1 <= n1;
+           dist(S1.n1,lim S1)
+             =(the distance of Closed-Interval-MSpace(a,b)).(S1.n1,lim S1)
+                    by METRIC_1:def 1
+             .=(the distance of RealSpace).(S1.n1,lim S1) by TOPMETR:def 1
+             .=dist(S.n1,t0) by A1,METRIC_1:def 1;
+    hence dist(S.n1,t0) < r1 by A14,A15;
+    end;
+    hence thesis;
+   end;
+  hence lim S=lim S1 by A13,TBSP_1:def 4;
+ end;
+end;
+
+theorem Th10: for a,b being real number,s being Real_Sequence,
+S being sequence of Closed-Interval-MSpace(a,b) st S=s & a<=b &
+ s is convergent holds S is convergent & lim s=lim S
+proof let a,b be real number,s be Real_Sequence,
+S be sequence of Closed-Interval-MSpace(a,b);
+ assume A1: S=s & a<=b & s is convergent;
+  then reconsider S0=S as sequence of RealSpace by Th8;
+  A2: S0 is convergent by A1,Th6;
+ hence S is convergent by A1,Th9;
+    lim S0=lim S by A1,A2,Th9;
+ hence lim s=lim S by A1,Th6;
+end;
+
+theorem for a,b being real number,s being Real_Sequence,
+S being sequence of Closed-Interval-MSpace(a,b) st S=s & a<=b &
+s is non-decreasing holds S is convergent
+proof let a,b be real number,s be Real_Sequence,
+S be sequence of Closed-Interval-MSpace(a,b);
+ assume A1: S=s & a<=b & s is non-decreasing;
+    for n being Nat holds s.n<b+1
+  proof let n be Nat;
+      dom S=NAT by TBSP_1:def 2;
+    then A2: s.n in rng S by A1,FUNCT_1:def 5;
+      the carrier of Closed-Interval-MSpace(a,b)=[.a,b.]
+                  by A1,TOPMETR:14;
+    then A3: a<=s.n & s.n <=b by A2,TOPREAL5:1;
+      b<b+1 by REAL_1:69;
+   hence s.n <b+1 by A3,AXIOMS:22;
+  end;
+  then s is bounded_above by SEQ_2:def 3;
+  then s is convergent by A1,SEQ_4:51;
+ hence S is convergent by A1,Th10;
+end;
+
+theorem for a,b being real number,s being Real_Sequence,
+S being sequence of Closed-Interval-MSpace(a,b) st S=s & a<=b &
+s is non-increasing holds S is convergent
+proof let a,b be real number,s be Real_Sequence,
+S be sequence of Closed-Interval-MSpace(a,b);
+ assume A1: S=s & a<=b & s is non-increasing;
+    for n being Nat holds s.n>a-1
+  proof let n be Nat;
+      dom S=NAT by TBSP_1:def 2;
+    then A2: s.n in rng S by A1,FUNCT_1:def 5;
+      the carrier of Closed-Interval-MSpace(a,b)=[.a,b.]
+                  by A1,TOPMETR:14;
+    then A3: a<=s.n & s.n <=b by A2,TOPREAL5:1;
+      a<a+1 by REAL_1:69;
+    then a-1<a by REAL_1:84;
+   hence s.n >a-1 by A3,AXIOMS:22;
+  end;
+  then s is bounded_below by SEQ_2:def 4;
+  then s is convergent by A1,SEQ_4:52;
+ hence S is convergent by A1,Th10;
+end;
+
+canceled 2;
+
+theorem Th15: for R being non empty Subset of REAL
+ st R is bounded_above
+ holds ex s being Real_Sequence
+  st s is non-decreasing convergent & rng s c= R & lim s=upper_bound R
+proof let R be non empty Subset of REAL;
+ assume A1: R is bounded_above;
+  reconsider rs=upper_bound R as real number;
+   defpred X[Element of NAT, real number] means
+       ($2 in R & (for r00 being real number st r00=$2 holds
+       (rs)-(1/($1+1) qua real number)<r00));
+  A2: for n being Nat ex r being real number st X[n,r]
+   proof let n be Nat;
+     A3: 0<=n by NAT_1:18;
+       n<n+1 by REAL_1:69;
+     then (n+1)">0 by A3,REAL_1:72;
+     then 1/(n+1)>0 by XCMPLX_1:217;
+     then consider r0 being real number such that
+     A4: (r0 in R & (rs) -(1/(n+1) qua real number)<r0) by A1,SEQ_4:def 4;
+       for r00 being real number st r00=r0
+                        holds (rs)-(1/(n+1) qua real number)<r00 by A4;
+    hence ex r being real number st
+      (r in R & (for r00 being real number st r00=r
+                        holds (rs)-(1/(n+1) qua real number)<r00)) by A4;
+   end;
+    ex s1 being Function of NAT, REAL st for n being Nat holds X[n,s1.n]
+                        from RealSeqChoice(A2);
+  then consider s1 being Function of NAT, REAL such that
+  A5: for n being Nat holds
+   (s1.n in R &
+      (for r0 being real number st r0=s1.n holds
+      (rs)-(1/(n+1) qua real number)<r0));
+  defpred P[set,set,set] means
+  ($2 is real number implies
+  (for r1,r2 being real number,n1 being Nat st r1=$2 & r2=s1.(n1+1) & n1=$1
+    holds (r1>=r2 implies $3=$2)&(r1<r2 implies $3=s1.(n1+1))))
+    & (not $2 is real number implies $3=1);
+  A6: for n being Nat for x being set
+        ex y being set st P[n,x,y]
+   proof let n be Nat;
+    thus for x being set
+        ex y being set st P[n,x,y]
+    proof let x be set;
+        now per cases;
+      case not x is real number;
+         hence ex y being set st (x is real number implies
+          (for r1,r2 being real number,n1 being Nat st
+           r1=x & r2=s1.(n1+1) & n1=n
+           holds (r1>=r2 implies y=x)&(r1<r2 implies y=s1.(n1+1))))
+           &(not x is real number implies y=1);
+      case A7: x is real number;
+        then reconsider r10=x as real number;
+        reconsider r20=s1.(n+1) as real number;
+          now per cases;
+        case r10>=r20;
+          then (for r1,r2 being real number,n1 being Nat st
+           r1=x & r2=s1.(n1+1) & n1=n
+           holds (r1>=r2 implies x=x)&(r1<r2 implies x=s1.(n1+1)));
+         hence ex y being set st (x is real number implies
+          (for r1,r2 being real number,n1 being Nat st
+           r1=x & r2=s1.(n1+1) & n1=n
+           holds (r1>=r2 implies y=x)&(r1<r2 implies y=s1.(n1+1))))
+           &(not x is real number implies y=1) by A7;
+
+        case r10<r20;
+          then (for r1,r2 being real number,n1 being Nat st
+           r1=x & r2=s1.(n1+1) & n1=n
+           holds (r1>=r2 implies s1.(n+1)=x)&
+           (r1<r2 implies s1.(n+1)=s1.(n1+1)));
+         hence ex y being set st (x is real number implies
+          (for r1,r2 being real number,n1 being Nat st
+           r1=x & r2=s1.(n1+1) & n1=n
+           holds (r1>=r2 implies y=x)&(r1<r2 implies y=s1.(n1+1))))
+           &(not x is real number implies y=1) by A7;
+        end;
+        hence ex y being set st (x is real number implies
+          (for r1,r2 being real number,n1 being Nat st
+           r1=x & r2=s1.(n1+1) & n1=n
+           holds (r1>=r2 implies y=x)&(r1<r2 implies y=s1.(n1+1))))
+           &(not x is real number implies y=1);
+      end;
+     hence ex y being set st P[n,x,y];
+    end;
+   end;
+  A8: for n being Nat for x,y1,y2 being set
+                         st P[n,x,y1] & P[n,x,y2] holds y1=y2
+   proof let n be Nat;
+    thus for x,y1,y2 being set
+          st P[n,x,y1] & P[n,x,y2] holds y1=y2
+    proof let x,y1,y2 be set;
+     assume A9: P[n,x,y1] & P[n,x,y2];
+        now per cases;
+      case not x is real number;
+       hence y1=y2 by A9;
+      case x is real number;
+         then reconsider r1=x as real number;
+        reconsider r2=s1.(n+1) as real number;
+          now per cases;
+        case A10: r1>=r2;
+          then y1=x by A9;
+         hence y1=y2 by A9,A10;
+        case A11: r1<r2;
+          then y1=s1.(n+1) by A9;
+         hence y1=y2 by A9,A11;
+        end;
+       hence y1=y2;
+      end;
+     hence y1=y2;
+    end;
+   end;
+     ex f being Function st dom f = NAT & f.0 = s1.0 &
+          for n being Element of NAT holds P[n,f.n,f.(n+1)]
+                          from RecEx(A6,A8);
+   then consider s2 being Function such that
+   A12: dom s2 = NAT & s2.0 = s1.0 &
+          for n being Element of NAT holds P[n,s2.n,s2.(n+1)];
+   A13: rng s2 c= REAL
+   proof let y be set;assume y in rng s2;
+     then consider x being set such that
+     A14: x in dom s2 & y=s2.x by FUNCT_1:def 5;
+     reconsider n=x as Nat by A12,A14;
+   defpred X[Nat] means s2.$1 in REAL;
+     A15: X[0] by A12;
+     A16: for k being Nat st X[k] holds X[k+1]
+      proof let k be Nat;assume A17: s2.k in REAL;
+        reconsider r2=s1.(k+1) as Real;
+        reconsider r1=s2.k as Real by A17;
+          now per cases;
+        case r1>=r2;
+         hence s2.(k+1) in REAL by A12,A17;
+        case r1<r2; then s2.(k+1)=s1.(k+1) by A12;
+         hence s2.(k+1) in REAL;
+        end;
+       hence s2.(k+1) in REAL;
+      end;
+       for m being Nat holds X[m] from Ind(A15,A16);
+     then s2.n in REAL;
+    hence y in REAL by A14;
+   end;
+   then reconsider s3=s2 as Real_Sequence by A12,FUNCT_2:4;
+   defpred X[Nat] means s1.$1<=s3.$1;
+   A18: X[0] by A12;
+   A19: for k being Nat st X[k] holds X[k+1]
+    proof let k be Nat;assume s1.k<=s3.k;
+          s2.k in rng s2 by A12,FUNCT_1:def 5;
+        then s2.k is Real by A13;
+        then reconsider r1=s2.k as real number;
+        reconsider r2=s1.(k+1) as real number;
+          now per cases;
+        case r1>=r2;
+         hence s1.(k+1)<=s3.(k+1) by A12;
+        case r1<r2;
+         hence s1.(k+1)<=s3.(k+1) by A12;
+        end;
+     hence s1.(k+1)<=s3.(k+1);
+    end;
+   A20: for n4 being Nat holds X[n4] from Ind(A18,A19);
+   A21: for n4 being Nat holds s3.n4<=s3.(n4+1)
+   proof let n4 be Nat;
+       dom s3=NAT by FUNCT_2:def 1;
+     then s3.n4 in rng s3 by FUNCT_1:def 5;
+     then reconsider r1=s2.n4 as real number;
+     reconsider r2=s1.(n4+1) as real number;
+       now per cases;
+     case r1>=r2;
+      hence s3.n4<=s3.(n4+1) by A12;
+     case r1<r2;
+      hence s3.n4<=s3.(n4+1) by A12;
+     end;
+    hence s3.n4<=s3.(n4+1);
+   end;
+   defpred X[Nat] means 0<$1 implies s3.0<=s3.$1;
+   A22: X[0];
+   A23: for k being Nat st X[k] holds X[k+1]
+    proof let k be Nat;assume A24: (0<k implies s3.0<=s3.k);
+        now assume A25: 0<k+1;
+        A26: s3.k<=s3.(k+1) by A21;
+          now per cases by A25,NAT_1:38;
+        case 0<k;
+         hence s3.0<=s3.(k+1) by A24,A26,AXIOMS:22;
+        case 0=k;
+         hence s3.0<=s3.(k+1) by A21;
+        end;
+       hence s3.0<=s3.(k+1);
+      end;
+     hence (0<k+1 implies s3.0<=s3.(k+1));
+    end;
+   defpred Y[Nat] means for n4 being Nat st $1<n4 holds s3.$1<=s3.n4;
+     for n4 being Nat holds X[n4] from Ind(A22,A23);
+   then A27: Y[0];
+   A28: for k being Nat st Y[k] holds Y[k+1]
+    proof let k be Nat;assume
+       (for n5 being Nat st k<n5 holds s3.k<=s3.n5);
+   defpred Z[Nat] means k+1<$1 implies s3.(k+1)<=s3.$1;
+     A29: Z[0]  by NAT_1:18;
+     A30:  for i being Nat st Z[i] holds Z[i+1]
+      proof let i be Nat;assume
+        A31: (k+1<i implies s3.(k+1)<=s3.i);
+          s2.i in rng s2 by A12,FUNCT_1:def 5;
+        then s2.i is Real by A13;
+        then reconsider r1=s2.i as real number;
+        reconsider r2=s1.(i+1) as real number;
+        A32: now per cases;
+        case r1>=r2;
+         hence s3.i<=s3.(i+1) by A12;
+        case r1<r2;
+         hence s3.i<=s3.(i+1) by A12;
+        end;
+          now assume k+1<i+1;
+          then A33: k+1<=i by NAT_1:38;
+            now per cases by A33,REAL_1:def 5;
+          case k+1<i;
+           hence s3.(k+1)<=s3.(i+1) by A31,A32,AXIOMS:22;
+          case k+1=i;
+           hence s3.(k+1)<=s3.(i+1) by A32;
+          end;
+         hence s3.(k+1)<=s3.(i+1);
+        end;
+       hence k+1<i+1 implies s3.(k+1)<=s3.(i+1);
+      end;
+      for n4 being Nat holds Z[n4] from Ind(A29,A30);
+     hence Y[k+1];
+    end;
+     for m4 being Nat holds Y[m4] from Ind(A27,A28);
+   then for m4,n4 being Nat st m4 in dom s3 & n4 in dom s3 & m4 < n4 holds
+                            s3.m4 <= s3.n4;
+   then A34: s3 is non-decreasing by SEQM_3:def 3;
+   A35: rng s3 c= R
+   proof let y be set;assume y in rng s3;
+     then consider x being set such that
+     A36: x in dom s3 & y=s3.x by FUNCT_1:def 5;
+     reconsider nx=x as Nat by A36,FUNCT_2:def 1;
+   defpred X[set] means s3.$1 in R;
+     A37: X[0] by A5,A12;
+     A38: for k being Nat st X[k] holds X[k+1]
+      proof let k be Nat;assume A39: s3.k in R;
+          s2.k in rng s2 by A12,FUNCT_1:def 5;
+        then s2.k is Real by A13;
+        then reconsider r1=s2.k as real number;
+        reconsider r2=s1.(k+1) as real number;
+          now per cases;
+        case r1>=r2;
+         hence s3.(k+1) in R by A12,A39;
+        case r1<r2;
+          then s2.(k+1)=s1.(k+1) by A12;
+         hence s3.(k+1) in R by A5;
+        end;
+       hence s3.(k+1) in R;
+      end;
+       for nn being Nat holds X[nn] from Ind(A37,A38);
+     then s3.nx in R;
+    hence y in R by A36;
+   end;
+     for n being Nat holds s3.n < upper_bound R +1
+    proof let n be Nat;
+        s3.n in rng s3 by A12,FUNCT_1:def 5;
+      then A40: s3.n <=upper_bound R by A1,A35,SEQ_4:def 4;
+        upper_bound R < upper_bound R +1 by REAL_1:69;
+     hence s3.n < upper_bound R +1 by A40,AXIOMS:22;
+    end;
+   then A41: s3 is bounded_above by SEQ_2:def 3;
+   A42: for n being Nat holds s3.n <=upper_bound R
+   proof let n be Nat;
+       dom s3=NAT by FUNCT_2:def 1;
+     then s3.n in rng s3 by FUNCT_1:def 5;
+    hence s3.n <= upper_bound R by A1,A35,SEQ_4:def 4;
+   end;
+     for n being Nat holds s3.n < upper_bound R +1
+   proof let n be Nat;
+     A43: upper_bound R<upper_bound R +1 by REAL_1:69;
+       s3.n<=upper_bound R by A42;
+    hence s3.n< upper_bound R +1 by A43,AXIOMS:22;
+   end;
+   then s3 is bounded_above by SEQ_2:def 3;
+then A44:   s3 is convergent by A34,SEQ_4:51;
+   then A45: lim s3<=upper_bound R by A42,PREPOWER:3;
+   A46: for r being Real st r>0 holds upper_bound R -r<lim s3
+    proof let r be Real;assume
+      A47: r>0;
+      then A48: 1/r>=0 by SQUARE_1:27;
+      consider n2 being Nat such that
+      A49: 1/r<n2 by SEQ_4:10;
+        n2<n2+1 by REAL_1:69;
+      then A50: 1/r<n2+1 by A49,AXIOMS:22;
+       then 1/r*r<(n2+1)*r by A47,REAL_1:70;
+      then 1<(n2+1)*r by A47,XCMPLX_1:107;
+      then 1/(n2+1)<(n2+1)*r/(n2+1) by A48,A50,REAL_1:73;
+      then 1/(n2+1)<r by A48,A50,XCMPLX_1:90;
+      then A51: rs-1/(n2+1)>rs-r by REAL_2:105;
+        rs-1/(n2+1)<s1.n2 by A5;
+      then A52: rs-r<s1.n2 by A51,AXIOMS:22;
+        s1.n2<=s3.n2 by A20;
+      then A53: rs-r<s3.n2 by A52,AXIOMS:22;
+        s3.n2<=lim s3 by A34,A41,SEQ_4:54;
+     hence upper_bound R -r<lim s3 by A53,AXIOMS:22;
+    end;
+     now assume A54: upper_bound R>lim s3;
+     reconsider r=upper_bound R -lim s3 as Real;
+       r>0 by A54,SQUARE_1:11;
+     then upper_bound R -r<lim s3 by A46;
+     then upper_bound R - upper_bound R +lim s3<lim s3 by XCMPLX_1:37;
+    hence contradiction by XCMPLX_1:25;
+   end;
+   then lim s3=upper_bound R by A45,AXIOMS:21;
+ hence thesis by A34,A35,A44;
+end;
+
+theorem Th16: for R being non empty Subset of REAL
+ st R is bounded_below
+ holds ex s being Real_Sequence
+  st s is non-increasing convergent & rng s c= R & lim s=lower_bound R
+proof let R be non empty Subset of REAL;
+ assume A1: R is bounded_below;
+  reconsider rs=lower_bound R as real number;
+   defpred X[Element of NAT, real number] means
+  ($2 in R & (for r00 being real number st r00=$2 holds
+       (rs)+(1/($1+1) qua real number)>r00));
+  A2: for n being Nat ex r being real number st X[n,r]
+   proof let n be Nat;
+     A3: 0<=n by NAT_1:18;
+       n<n+1 by REAL_1:69;
+     then (n+1)">0 by A3,REAL_1:72;
+     then 1/(n+1)>0 by XCMPLX_1:217;
+     then consider r0 being real number such that
+     A4: (r0 in R & (rs) +(1/(n+1) qua real number)>r0) by A1,SEQ_4:def 5;
+       for r00 being real number st r00=r0
+                        holds (rs)+(1/(n+1) qua real number)>r00 by A4;
+    hence ex r being real number st
+      (r in R & (for r00 being real number st r00=r
+                        holds (rs)+(1/(n+1) qua real number)>r00)) by A4;
+   end;
+    ex s1 being Function of NAT, REAL st for n being Nat holds X[n,s1.n]
+                        from RealSeqChoice(A2);
+  then consider s1 being Function of NAT, REAL such that
+  A5: for n being Nat holds
+   (s1.n in R &
+      (for r0 being real number st r0=s1.n holds
+      (rs)+(1/(n+1) qua real number)>r0));
+  defpred P[set,set,set] means
+  ($2 is real number implies
+  (for r1,r2 being real number,n1 being Nat st r1=$2 & r2=s1.(n1+1) & n1=$1
+    holds (r1<=r2 implies $3=$2)&(r1>r2 implies $3=s1.(n1+1))))
+    & (not $2 is real number implies $3=1);
+  A6: for n being Nat for x being set
+        ex y being set st P[n,x,y]
+   proof let n be Nat;
+    thus for x being set
+        ex y being set st P[n,x,y]
+    proof let x be set;
+        now per cases;
+      case not x is real number;
+         hence ex y being set st (x is real number implies
+          (for r1,r2 being real number,n1 being Nat st
+           r1=x & r2=s1.(n1+1) & n1=n
+           holds (r1>=r2 implies y=x)&(r1<r2 implies y=s1.(n1+1))))
+           &(not x is real number implies y=1);
+      case A7: x is real number;
+        then reconsider r10=x as real number;
+        reconsider r20=s1.(n+1) as real number;
+          now per cases;
+        case r10<=r20;
+          then (for r1,r2 being real number,n1 being Nat st
+           r1=x & r2=s1.(n1+1) & n1=n
+           holds (r1<=r2 implies x=x)&(r1>r2 implies x=s1.(n1+1)));
+         hence ex y being set st (x is real number implies
+          (for r1,r2 being real number,n1 being Nat st
+           r1=x & r2=s1.(n1+1) & n1=n
+           holds (r1<=r2 implies y=x)&(r1>r2 implies y=s1.(n1+1))))
+           &(not x is real number implies y=1) by A7;
+
+        case r10>r20;
+          then (for r1,r2 being real number,n1 being Nat st
+           r1=x & r2=s1.(n1+1) & n1=n
+           holds (r1<=r2 implies s1.(n+1)=x)&
+           (r1>r2 implies s1.(n+1)=s1.(n1+1)));
+         hence ex y being set st (x is real number implies
+          (for r1,r2 being real number,n1 being Nat st
+           r1=x & r2=s1.(n1+1) & n1=n
+           holds (r1<=r2 implies y=x)&(r1>r2 implies y=s1.(n1+1))))
+           &(not x is real number implies y=1) by A7;
+        end;
+        hence ex y being set st (x is real number implies
+          (for r1,r2 being real number,n1 being Nat st
+           r1=x & r2=s1.(n1+1) & n1=n
+           holds (r1<=r2 implies y=x)&(r1>r2 implies y=s1.(n1+1))))
+           &(not x is real number implies y=1);
+      end;
+     hence ex y being set st P[n,x,y];
+    end;
+   end;
+  A8: for n being Nat for x,y1,y2 being set
+                         st P[n,x,y1] & P[n,x,y2] holds y1=y2
+   proof let n be Nat;
+    thus for x,y1,y2 being set
+          st P[n,x,y1] & P[n,x,y2] holds y1=y2
+    proof let x,y1,y2 be set;
+     assume A9: P[n,x,y1] & P[n,x,y2];
+        now per cases;
+      case not x is real number;
+       hence y1=y2 by A9;
+      case x is real number;
+         then reconsider r1=x as real number;
+        reconsider r2=s1.(n+1) as real number;
+          now per cases;
+        case A10: r1<=r2;
+          then y1=x by A9;
+         hence y1=y2 by A9,A10;
+        case A11: r1>r2;
+          then y1=s1.(n+1) by A9;
+         hence y1=y2 by A9,A11;
+        end;
+       hence y1=y2;
+      end;
+     hence y1=y2;
+    end;
+   end;
+     ex f being Function st dom f = NAT & f.0 = s1.0 &
+          for n being Element of NAT holds P[n,f.n,f.(n+1)]
+                          from RecEx(A6,A8);
+   then consider s2 being Function such that
+   A12: dom s2 = NAT & s2.0 = s1.0 &
+          for n being Element of NAT holds P[n,s2.n,s2.(n+1)];
+   A13: rng s2 c= REAL
+   proof let y be set;assume y in rng s2;
+     then consider x being set such that
+     A14: x in dom s2 & y=s2.x by FUNCT_1:def 5;
+     reconsider n=x as Nat by A12,A14;
+   defpred X[Nat] means s2.$1 in REAL;
+     A15: X[0] by A12;
+     A16: for k being Nat st X[k] holds X[k+1]
+      proof let k be Nat;assume A17: s2.k in REAL;
+        reconsider r2=s1.(k+1) as Real;
+        reconsider r1=s2.k as Real by A17;
+          now per cases;
+        case r1<=r2;
+         hence s2.(k+1) in REAL by A12,A17;
+        case r1>r2; then s2.(k+1)=s1.(k+1) by A12;
+         hence s2.(k+1) in REAL;
+        end;
+       hence s2.(k+1) in REAL;
+      end;
+       for m being Nat holds X[m] from Ind(A15,A16);
+     then s2.n in REAL;
+    hence y in REAL by A14;
+   end;
+   then reconsider s3=s2 as Real_Sequence by A12,FUNCT_2:4;
+   defpred X[Nat] means s1.$1>=s3.$1;
+   A18: X[0] by A12;
+   A19: for k being Nat st X[k] holds X[k+1]
+    proof let k be Nat;assume s1.k>=s3.k;
+          s2.k in rng s2 by A12,FUNCT_1:def 5;
+        then s2.k is Real by A13;
+        then reconsider r1=s2.k as real number;
+        reconsider r2=s1.(k+1) as real number;
+          now per cases;
+        case r1<=r2;
+         hence s1.(k+1)>=s3.(k+1) by A12;
+        case r1>r2;
+         hence s1.(k+1)>=s3.(k+1) by A12;
+        end;
+     hence s1.(k+1)>=s3.(k+1);
+    end;
+   A20: for n4 being Nat holds X[n4] from Ind(A18,A19);
+   A21: for n4 being Nat holds s3.n4>=s3.(n4+1)
+   proof let n4 be Nat;
+       dom s3=NAT by FUNCT_2:def 1;
+     then s3.n4 in rng s3 by FUNCT_1:def 5;
+     then reconsider r1=s2.n4 as real number;
+     reconsider r2=s1.(n4+1) as real number;
+       now per cases;
+     case r1<=r2;
+      hence s3.n4>=s3.(n4+1) by A12;
+     case r1>r2;
+      hence s3.n4>=s3.(n4+1) by A12;
+     end;
+    hence s3.n4>=s3.(n4+1);
+   end;
+   defpred X[Nat] means 0<$1 implies s3.0>=s3.$1;
+   A22: X[0];
+   A23: for k being Nat st X[k] holds X[k+1]
+    proof let k be Nat;assume A24: (0<k implies s3.0>=s3.k);
+        now assume A25: 0<k+1;
+        A26: s3.k>=s3.(k+1) by A21;
+          now per cases by A25,NAT_1:38;
+        case 0<k;
+         hence s3.0>=s3.(k+1) by A24,A26,AXIOMS:22;
+        case 0=k;
+         hence s3.0>=s3.(k+1) by A21;
+        end;
+       hence s3.0>=s3.(k+1);
+      end;
+     hence (0<k+1 implies s3.0>=s3.(k+1));
+    end;
+   defpred Y[Nat] means for n4 being Nat st $1<n4 holds s3.$1>=s3.n4;
+     for n4 being Nat holds X[n4] from Ind(A22,A23);
+   then A27: Y[0];
+   A28: for k being Nat st Y[k] holds Y[k+1]
+    proof let k be Nat;assume
+       (for n5 being Nat st k<n5 holds s3.k>=s3.n5);
+   defpred X[Nat] means k+1<$1 implies s3.(k+1)>=s3.$1;
+     A29:  X[0] by NAT_1:18;
+     A30:  for i being Nat st X[i] holds X[i+1]
+      proof let i be Nat;assume
+        A31: k+1<i implies s3.(k+1)>=s3.i;
+          s2.i in rng s2 by A12,FUNCT_1:def 5;
+        then s2.i is Real by A13;
+        then reconsider r1=s2.i as real number;
+        reconsider r2=s1.(i+1) as real number;
+        A32: now per cases;
+        case r1<=r2;
+         hence s3.i>=s3.(i+1) by A12;
+        case r1>r2;
+         hence s3.i>=s3.(i+1) by A12;
+        end;
+          now assume k+1<i+1;
+          then A33: k+1<=i by NAT_1:38;
+            now per cases by A33,REAL_1:def 5;
+          case k+1<i;
+           hence s3.(k+1)>=s3.(i+1) by A31,A32,AXIOMS:22;
+          case k+1=i;
+           hence s3.(k+1)>=s3.(i+1) by A32;
+          end;
+         hence s3.(k+1)>=s3.(i+1);
+        end;
+       hence k+1<i+1 implies s3.(k+1)>=s3.(i+1);
+      end;
+     thus for n4 being Nat holds X[n4] from Ind(A29,A30);
+    end;
+     for m4 being Nat holds Y[m4] from Ind(A27,A28);
+   then for m4,n4 being Nat st m4 in dom s3 & n4 in dom s3 & m4 < n4 holds
+                            s3.m4 >= s3.n4;
+   then A34: s3 is non-increasing by SEQM_3:def 4;
+   A35: rng s3 c= R
+   proof let y be set;assume y in rng s3;
+     then consider x being set such that
+     A36: x in dom s3 & y=s3.x by FUNCT_1:def 5;
+     reconsider nx=x as Nat by A36,FUNCT_2:def 1;
+   defpred Z[Nat] means s3.$1 in R;
+     A37: Z[0] by A5,A12;
+     A38: for k being Nat st Z[k] holds Z[k+1]
+      proof let k be Nat;assume A39: s3.k in R;
+          s2.k in rng s2 by A12,FUNCT_1:def 5;
+        then s2.k is Real by A13;
+        then reconsider r1=s2.k as real number;
+        reconsider r2=s1.(k+1) as real number;
+          now per cases;
+        case r1<=r2;
+         hence s3.(k+1) in R by A12,A39;
+        case r1>r2;
+          then s2.(k+1)=s1.(k+1) by A12;
+         hence s3.(k+1) in R by A5;
+        end;
+       hence s3.(k+1) in R;
+      end;
+       for nn being Nat holds Z[nn] from Ind(A37,A38);
+     then s3.nx in R;
+    hence y in R by A36;
+   end;
+     for n being Nat holds s3.n > lower_bound R -1
+    proof let n be Nat;
+        s3.n in rng s3 by A12,FUNCT_1:def 5;
+      then A40: s3.n >=lower_bound R by A1,A35,SEQ_4:def 5;
+        lower_bound R < lower_bound R +1 by REAL_1:69;
+      then lower_bound R > lower_bound R -1 by REAL_1:84;
+     hence s3.n > lower_bound R -1 by A40,AXIOMS:22;
+    end;
+   then A41: s3 is bounded_below by SEQ_2:def 4;
+   A42: for n being Nat holds s3.n >=lower_bound R
+   proof let n be Nat;
+       dom s3=NAT by FUNCT_2:def 1;
+     then s3.n in rng s3 by FUNCT_1:def 5;
+    hence s3.n >= lower_bound R by A1,A35,SEQ_4:def 5;
+   end;
+     for n being Nat holds s3.n > lower_bound R -1
+   proof let n be Nat;
+       lower_bound R<lower_bound R +1 by REAL_1:69;
+     then A43: lower_bound R>lower_bound R -1 by REAL_1:84;
+       s3.n>=lower_bound R by A42;
+    hence s3.n> lower_bound R -1 by A43,AXIOMS:22;
+   end;
+   then s3 is bounded_below by SEQ_2:def 4;
+then A44:   s3 is convergent by A34,SEQ_4:52;
+   then A45: lim s3>=lower_bound R by A42,PREPOWER:2;
+   A46: for r being Real st r>0 holds lower_bound R +r>lim s3
+    proof let r be Real;assume
+      A47: r>0;
+      then A48: 1/r>=0 by SQUARE_1:27;
+      consider n2 being Nat such that
+      A49: 1/r<n2 by SEQ_4:10;
+        n2<n2+1 by REAL_1:69;
+      then A50: 1/r<n2+1 by A49,AXIOMS:22;
+       then 1/r*r<(n2+1)*r by A47,REAL_1:70;
+      then 1<(n2+1)*r by A47,XCMPLX_1:107;
+      then 1/(n2+1)<(n2+1)*r/(n2+1) by A48,A50,REAL_1:73;
+      then 1/(n2+1)<r by A48,A50,XCMPLX_1:90;
+      then A51: rs+1/(n2+1)<rs+r by REAL_1:67;
+        rs+1/(n2+1)>s1.n2 by A5;
+      then A52: rs+r>s1.n2 by A51,AXIOMS:22;
+        s1.n2>=s3.n2 by A20;
+      then A53: rs+r>s3.n2 by A52,AXIOMS:22;
+        s3.n2>=lim s3 by A34,A41,SEQ_4:55;
+     hence lower_bound R +r>lim s3 by A53,AXIOMS:22;
+    end;
+     now assume A54: lower_bound R<lim s3;
+     reconsider r=(lim s3) -lower_bound R as Real;
+       r>0 by A54,SQUARE_1:11;
+     then lower_bound R +r>lim s3 by A46;
+     then lower_bound R +((lim s3)+-lower_bound R)>lim s3 by XCMPLX_0:def 8;
+     then lower_bound R +(-lower_bound R)+lim s3>lim s3 by XCMPLX_1:1;
+    hence contradiction by XCMPLX_1:138;
+   end;
+   then lim s3=lower_bound R by A45,AXIOMS:21;
+ hence thesis by A34,A35,A44;
+end;
+
+theorem Th17:  :: An Abstract Intermediate Value Theorem for Closed Sets
+ for X being non empty MetrSpace, f being map of I[01],TopSpaceMetr(X),
+ F1,F2 being Subset of TopSpaceMetr(X),r1,r2 being Real st
+  0<=r1 & r2<=1 & r1<=r2 &
+ f.r1 in F1 & f.r2 in F2 &
+ F1 is closed & F2 is closed & f is continuous &
+ F1 \/ F2 =the carrier of X
+ ex r being Real st r1<=r & r<=r2 & f.r in F1 /\ F2
+proof let X be non empty MetrSpace, f be map of I[01],TopSpaceMetr(X),
+ F1,F2 be Subset of TopSpaceMetr(X),r1,r2 be Real;
+ assume that
+A1: 0<=r1 and
+A2: r2<=1 and
+A3: r1<=r2 and
+A4: f.r1 in F1 and
+A5: f.r2 in F2 and
+A6: F1 is closed and
+A7: F2 is closed and
+A8: f is continuous and
+A9: F1 \/ F2 =the carrier of X;
+   A10: r1 in {r3 where r3 is Real: r1<=r3 & r3<=r2 & f.r3 in F1} by A3,A4;
+    {r3 where r3 is Real: r1<=r3 & r3<=r2 & f.r3 in F1} c= REAL
+  proof let x be set;assume x in
+    {r3 where r3 is Real: r1<=r3 & r3<=r2 & f.r3 in F1};
+    then consider r3 being Real such that
+    A11: r3=x & (r1<=r3 & r3<=r2 & f.r3 in F1);
+   thus x in REAL by A11;
+  end;
+  then reconsider R={r3 where r3 is Real: r1<=r3 & r3<=r2 & f.r3 in F1}
+                        as non empty Subset of REAL by A10;
+  A12: {r3 where r3 is Real: r1<=r3 & r3<=r2 & f.r3 in F1} c= [.0,1.]
+  proof let x be set;assume x in
+    {r3 where r3 is Real: r1<=r3 & r3<=r2 & f.r3 in F1};
+    then consider r3 being Real such that
+    A13: r3=x & (r1<=r3 & r3<=r2 & f.r3 in F1);
+      r3<=1 by A2,A13,AXIOMS:22;
+   hence x in [.0,1.] by A1,A13,TOPREAL5:1;
+  end;
+  A14: for r being real number st r in R holds r<=r2
+  proof let r be real number;assume r in R;
+    then consider r3 being Real such that
+    A15: r3=r & r1<=r3 & r3<=r2 & f.r3 in F1;
+   thus r<=r2 by A15;
+  end;
+  then A16: R is bounded_above by SEQ_4:def 1;
+  A17: r2>=upper_bound R by A14,Th1;
+  A18: r1<= upper_bound R by A10,A16,SEQ_4:def 4;
+  A19: 0<=upper_bound R by A1,A10,A16,SEQ_4:def 4;
+   A20: r2 in
+   {r3 where r3 is Real: upper_bound R <=r3 & r3<=r2 & f.r3 in F2}
+     by A5,A17;
+    {r3 where r3 is Real: upper_bound R<=r3 & r3<=r2 & f.r3 in F2} c= REAL
+  proof let x be set;assume x in
+    {r3 where r3 is Real: upper_bound R<=r3 & r3<=r2 & f.r3 in F2};
+    then consider r3 being Real such that
+    A21: r3=x & (upper_bound R<=r3 & r3<=r2 & f.r3 in F2);
+   thus x in REAL by A21;
+  end;
+  then reconsider R2={r3 where r3 is Real: upper_bound R<=r3 & r3<=r2
+  & f.r3 in F2} as non empty Subset of REAL by A20;
+  A22: {r3 where r3 is Real: upper_bound R <=r3 & r3<=r2
+    & f.r3 in F2} c= [.0,1.]
+  proof let x be set;assume x in
+    {r3 where r3 is Real: upper_bound R<=r3 & r3<=r2 & f.r3 in F2};
+    then consider r3 being Real such that
+    A23: r3=x & (upper_bound R<=r3 & r3<=r2 & f.r3 in F2);
+      r3<=1 by A2,A23,AXIOMS:22;
+   hence x in [.0,1.] by A19,A23,TOPREAL5:1;
+  end;
+  A24: for r being real number st r in R2 holds r>=upper_bound R
+  proof let r be real number;assume r in R2;
+    then consider r3 being Real such that
+    A25: r3=r & upper_bound R<=r3 & r3<=r2 & f.r3 in F2;
+   thus r>=upper_bound R by A25;
+  end;
+  then A26: R2 is bounded_below by SEQ_4:def 2;
+    for s being real number st 0<s ex r being real number st
+      (r in R2 & r<upper_bound R+s)
+  proof let s be real number;assume
+    A27: 0<s;
+      now assume A28: for r being real number st r<upper_bound R+s
+          holds not r in R2;
+        now per cases by A17,SQUARE_1:12;
+      case r2-upper_bound R=0;
+        then r2=0+upper_bound R by XCMPLX_1:27.=upper_bound R;
+        then r2<upper_bound R+s by A27,REAL_1:69;
+       hence contradiction by A20,A28;
+      case A29: r2-upper_bound R>0;
+        set rs0=min(r2-upper_bound R,s);
+        A30: rs0>0 by A27,A29,JGRAPH_3:6;
+        then A31: rs0/2>0 by SEQ_2:3;
+        set r0=upper_bound R + rs0/2;
+        A32: upper_bound R <r0 by A31,REAL_1:69;
+        A33: rs0<=s by SQUARE_1:35;
+        A34: rs0/2<rs0 by A30,SEQ_2:4;
+        then rs0/2<s by A33,AXIOMS:22;
+        then r0<upper_bound R+s by REAL_1:67;
+        then A35: not r0 in R2 by A28;
+        A36: upper_bound R <= upper_bound R + rs0/2 by A31,REAL_1:69;
+        A37: upper_bound R +rs0/2<upper_bound R +rs0 by A34,REAL_1:67;
+          rs0<=r2-upper_bound R by SQUARE_1:35;
+        then A38: upper_bound R +rs0<=upper_bound R +(r2-upper_bound R)
+                             by REAL_1:55;
+          upper_bound R +(r2-upper_bound R)=r2 by XCMPLX_1:27;
+        then A39: r1<=r0 & r0<=r2 by A18,A36,A37,A38,AXIOMS:22;
+        A40: r0 is Real by XREAL_0:def 1;
+          r0<=1 by A2,A39,AXIOMS:22;
+        then r0 in the carrier of I[01] by A1,A18,A36,BORSUK_1:83,TOPREAL5:1;
+        then r0 in dom f by FUNCT_2:def 1;
+        then f.r0 in rng f by FUNCT_1:def 5;
+        then f.r0 in the carrier of TopSpaceMetr(X);
+        then f.r0 in the carrier of X by TOPMETR:16;
+        then f.r0 in F1 or f.r0 in F2
+           by A9,XBOOLE_0:def 2;
+        then A41: r0 in R by A32,A35,A39,A40;
+          upper_bound R<r0 by A31,REAL_1:69;
+       hence contradiction by A16,A41,SEQ_4:def 4;
+      end;
+     hence contradiction;
+    end;
+   hence ex r being real number st
+      (r in R2 & r<upper_bound R+s);
+  end;
+  then A42: upper_bound R=lower_bound R2 by A24,A26,SEQ_4:def 5;
+  consider s1 being Real_Sequence such that
+  A43: s1 is non-decreasing convergent & rng s1 c= R & lim s1=upper_bound R
+  by A16,Th15;
+  reconsider S2=s1 as sequence of RealSpace by Th5,METRIC_1:def 14;
+    rng s1 c= [.0,1.] by A12,A43,XBOOLE_1:1;
+  then reconsider S1=s1 as sequence of Closed-Interval-MSpace(0,1) by Th7;
+  A44: S1 is convergent by A43,Th10;
+  then S2 is convergent by Th9;
+  then lim S2=lim S1 by Th9;
+  then A45: lim s1=lim S1 by A43,Th6;
+  A46: I[01]=TopSpaceMetr(Closed-Interval-MSpace(0,1))
+                        by TOPMETR:27,def 8;
+  then reconsider S00=f*S1 as sequence of X by Th3;
+  A47: S00 is convergent by A8,A44,A46,Th4;
+    for n4 being Nat holds S00.n4 in F1
+  proof let n4 be Nat;
+    A48: dom S00=NAT by TBSP_1:5;
+      dom s1=NAT by FUNCT_2:def 1;
+    then s1.n4 in rng s1 by FUNCT_1:def 5;
+    then s1.n4 in R by A43;
+    then consider r3 being Real such that
+    A49: r3=s1.n4 & r1<=r3 & r3<=r2 & f.r3 in F1;
+   thus S00.n4 in F1 by A48,A49,FUNCT_1:22;
+  end;
+  then A50: lim S00 in F1 by A6,A47,Th2;
+    dom f=the carrier of I[01] by FUNCT_2:def 1
+       .=the carrier of Closed-Interval-MSpace(0,1) by A46,TOPMETR:16;
+  then f.(lim S1) in rng f by FUNCT_1:12;
+  then reconsider t1=f.(lim S1) as Point of X by TOPMETR:16;
+    for r being Real st r>0 ex n being Nat st
+    for m being Nat st m>=n holds dist(S00.m,t1)<r
+   proof let r be Real;
+     assume r>0;
+      then consider r7 being Real such that
+      A51: r7>0 & for w being Point of Closed-Interval-MSpace(0,1),
+         w1 being Point of X st w1=f.w &
+          dist(lim S1,w)<r7 holds dist(t1,w1)<r
+             by A8,A46,UNIFORM1:5;
+      consider n0 being Nat such that
+      A52:  for m being Nat st m>=n0 holds dist(S1.m,lim S1)<r7
+                           by A44,A51,TBSP_1:def 4;
+        for m being Nat st m>=n0 holds dist(S00.m,t1)<r
+      proof let m be Nat;
+        assume m>=n0;
+         then A53: dist(lim S1,S1.m)<r7 by A52;
+           dom S00=NAT by TBSP_1:5;
+         then S00.m=f.(S1.m) by FUNCT_1:22;
+        hence dist(S00.m,t1)<r by A51,A53;
+      end;
+     hence ex n being Nat st
+      for m being Nat st m>=n holds dist(S00.m,t1)<r;
+   end;
+  then A54: f.(lim s1) in F1 by A45,A47,A50,TBSP_1:def 4;
+  consider s2 being Real_Sequence such that
+  A55: s2 is non-increasing convergent & rng s2 c= R2 & lim s2=lower_bound R2
+                          by A26,Th16;
+  reconsider S2=s2 as sequence of RealSpace by Th5,METRIC_1:def 14;
+    rng s2 c= [.0,1.] by A22,A55,XBOOLE_1:1;
+  then reconsider S1=s2 as sequence of Closed-Interval-MSpace(0,1) by Th7;
+  A56: S1 is convergent by A55,Th10;
+  then S2 is convergent by Th9;
+  then lim S2=lim S1 by Th9;
+  then A57: lim s2=lim S1 by A55,Th6;
+  A58: I[01]=TopSpaceMetr(Closed-Interval-MSpace(0,1))
+                        by TOPMETR:27,def 8;
+  then reconsider S00=f*S1 as sequence of X by Th3;
+  A59: S00 is convergent by A8,A56,A58,Th4;
+    for n4 being Nat holds S00.n4 in F2
+  proof let n4 be Nat;
+    A60: dom S00=NAT by TBSP_1:5;
+      dom s2=NAT by FUNCT_2:def 1;
+    then s2.n4 in rng s2 by FUNCT_1:def 5;
+    then s2.n4 in R2 by A55;
+    then consider r3 being Real such that
+    A61: r3=s2.n4 & upper_bound R<=r3 & r3<=r2 & f.r3 in F2;
+   thus S00.n4 in F2 by A60,A61,FUNCT_1:22;
+  end;
+  then A62: lim S00 in F2 by A7,A59,Th2;
+    dom f=the carrier of I[01] by FUNCT_2:def 1
+       .=the carrier of Closed-Interval-MSpace(0,1) by A58,TOPMETR:16;
+  then f.(lim S1) in rng f by FUNCT_1:12;
+  then reconsider t1=f.(lim S1) as Point of X by TOPMETR:16;
+    for r being Real st r>0 ex n being Nat st
+    for m being Nat st m>=n holds dist(S00.m,t1)<r
+   proof let r be Real;
+     assume r>0;
+      then consider r7 being Real such that
+      A63: r7>0 & for w being Point of Closed-Interval-MSpace(0,1),
+         w1 being Point of X st w1=f.w &
+          dist(lim S1,w)<r7 holds dist(t1,w1)<r
+            by A8,A58,UNIFORM1:5;
+      consider n0 being Nat such that
+      A64:  for m being Nat st m>=n0 holds dist(S1.m,lim S1)<r7
+                           by A56,A63,TBSP_1:def 4;
+        for m being Nat st m>=n0 holds dist(S00.m,t1)<r
+      proof let m be Nat;
+        assume m>=n0;
+         then A65: dist(lim S1,S1.m)<r7 by A64;
+       dom S00=NAT by TBSP_1:5;
+         then S00.m=f.(S1.m) by FUNCT_1:22;
+        hence dist(S00.m,t1)<r by A63,A65;
+      end;
+     hence ex n being Nat st
+      for m being Nat st m>=n holds dist(S00.m,t1)<r;
+   end;
+  then f.(lim S1)=lim S00 by A59,TBSP_1:def 4;
+  then f.(lim s1) in F1 /\ F2 by A42,A43,A54,A55,A57,A62,XBOOLE_0:def 3;
+ hence ex r being Real st r1<=r & r<=r2 & f.r in F1 /\ F2 by A17,A18,A43;
+end;
+
+theorem Th18: for n being Nat,p1,p2 being Point of TOP-REAL n,
+P,P1 being non empty Subset of TOP-REAL n st
+P is_an_arc_of p1,p2 & P1 is_an_arc_of p2,p1 & P1 c= P
+holds P1=P
+proof let n be Nat,p1,p2 be Point of TOP-REAL n,
+  P,P1 be non empty Subset of TOP-REAL n;
+ assume A1: P is_an_arc_of p1,p2 & P1 is_an_arc_of p2,p1 & P1 c= P;
+  then P1 is_an_arc_of p1,p2 by JORDAN5B:14;
+ hence P1=P by A1,JORDAN6:59;
+end;
+
+theorem
+   for P,P1 being compact non empty Subset of TOP-REAL 2
+ st P is_simple_closed_curve & P1 is_an_arc_of W-min(P),E-max(P) & P1 c= P
+ holds P1=Upper_Arc(P) or P1=Lower_Arc(P)
+proof let P,P1 be compact non empty Subset of TOP-REAL 2;
+ assume A1: P is_simple_closed_curve & P1 is_an_arc_of W-min(P),E-max(P)
+   & P1 c= P;
+   then A2: Upper_Arc(P) is_an_arc_of W-min(P),E-max(P) &
+    ex P2 being non empty Subset of TOP-REAL 2 st
+    P2 is_an_arc_of E-max(P),W-min(P)
+    & Upper_Arc(P) /\ P2={W-min(P),E-max(P)}
+    & Upper_Arc(P) \/ P2=P
+    & First_Point(Upper_Arc(P),W-min(P),E-max(P),
+    Vertical_Line((W-bound(P)+E-bound(P))/2))`2>
+     Last_Point(P2,E-max(P),W-min(P),
+     Vertical_Line((W-bound(P)+E-bound(P))/2))`2 by JORDAN6:def 8;
+    A3: Lower_Arc(P) is_an_arc_of E-max(P),W-min(P)
+     & Upper_Arc(P) /\ Lower_Arc(P)={W-min(P),E-max(P)}
+     & Upper_Arc(P) \/ Lower_Arc(P)=P
+     & First_Point(Upper_Arc(P),W-min(P),E-max(P),
+    Vertical_Line((W-bound(P)+E-bound(P))/2))`2>
+     Last_Point(Lower_Arc(P),E-max(P),W-min(P),
+     Vertical_Line((W-bound(P)+E-bound(P))/2))`2 by A1,JORDAN6:def 9;
+   then A4: E-max(P) in Upper_Arc(P) /\ Lower_Arc(P) by TARSKI:def 2;
+   A5: W-min(P) in Upper_Arc(P) /\ Lower_Arc(P) by A3,TARSKI:def 2;
+   consider f being map of I[01], (TOP-REAL 2)|P1 such that
+   A6: f is_homeomorphism & f.0 = W-min(P) & f.1 = E-max(P)
+                            by A1,TOPREAL1:def 2;
+   A7: the carrier of (TOP-REAL 2)|P=[#]((TOP-REAL 2)|P) by PRE_TOPC:12
+                                .=P by PRE_TOPC:def 10;
+   A8: f is one-to-one by A6,TOPS_2:def 5;
+   A9: f is continuous by A6,TOPS_2:def 5;
+   A10: dom f=[#](I[01]) by A6,TOPS_2:def 5;
+   then A11: dom f=the carrier of I[01] by PRE_TOPC:12;
+   A12: rng f=[#]((TOP-REAL 2)|P1) by A6,TOPS_2:def 5
+              .=P1 by PRE_TOPC:def 10;
+   A13: Upper_Arc(P) c= P & Lower_Arc(P) c= P by A1,JORDAN1A:16;
+   then reconsider U2=Upper_Arc(P) as Subset of (TOP-REAL 2)|P
+                               by A7;
+   A14: U2=Upper_Arc(P) /\ P by A13,XBOOLE_1:28;
+     Upper_Arc(P) is closed by A2,JORDAN6:12;
+   then A15: U2 is closed by A14,JORDAN6:3;
+   reconsider U3=Lower_Arc(P) as Subset of (TOP-REAL 2)|P
+                               by A7,A13;
+   A16: U3=Lower_Arc(P) /\ P by A13,XBOOLE_1:28;
+     Lower_Arc(P) is closed by A3,JORDAN6:12;
+   then A17: U3 is closed by A16,JORDAN6:3;
+     now per cases;
+   case A18: for r being Real st 0<r & r<1 holds f.r in Lower_Arc(P);
+       P1 c= Lower_Arc(P)
+     proof let y be set;assume y in P1;
+       then consider x being set such that
+       A19: x in dom f & y=f.x by A12,FUNCT_1:def 5;
+       reconsider r=x as Real by A11,A19,BORSUK_1:83;
+       A20: 0<=r & r<=1 by A10,A19,BORSUK_1:83,TOPREAL5:1;
+         now per cases by A20,REAL_1:def 5;
+       case 0<r & r<1;
+        hence y in Lower_Arc(P) by A18,A19;
+       case r=0;
+        hence y in Lower_Arc(P) by A5,A6,A19,XBOOLE_0:def 3;
+       case r=1;
+        hence y in Lower_Arc(P) by A4,A6,A19,XBOOLE_0:def 3;
+       end;
+      hence y in Lower_Arc(P);
+     end;
+    hence P1=Upper_Arc(P) or P1=Lower_Arc(P) by A1,A3,Th18;
+   case A21: ex r being Real st 0<r & r<1 & not f.r in Lower_Arc(P);
+       now per cases;
+     case A22: for r being Real st 0<r & r<1 holds f.r in Upper_Arc(P);
+       P1 c= Upper_Arc(P)
+     proof let y be set;assume y in P1;
+       then consider x being set such that
+       A23: x in dom f & y=f.x by A12,FUNCT_1:def 5;
+       reconsider r=x as Real by A11,A23,BORSUK_1:83;
+       A24: 0<=r & r<=1 by A10,A23,BORSUK_1:83,TOPREAL5:1;
+         now per cases by A24,REAL_1:def 5;
+       case 0<r & r<1;
+        hence y in Upper_Arc(P) by A22,A23;
+       case r=0;
+        hence y in Upper_Arc(P) by A5,A6,A23,XBOOLE_0:def 3;
+       case r=1;
+        hence y in Upper_Arc(P) by A4,A6,A23,XBOOLE_0:def 3;
+       end;
+      hence y in Upper_Arc(P);
+     end;
+    hence P1=Upper_Arc(P) or P1=Lower_Arc(P) by A1,A2,JORDAN6:59;
+     case ex r being Real st 0<r & r<1 & not f.r in Upper_Arc(P);
+       then consider r2 being Real such that
+       A25: 0<r2 & r2<1 & not f.r2 in Upper_Arc(P);
+       consider r1 being Real such that
+       A26: 0<r1 & r1<1 & not f.r1 in Lower_Arc(P) by A21;
+         r2 in [.0,1.] by A25,TOPREAL5:1;
+       then f.r2 in rng f by A11,BORSUK_1:83,FUNCT_1:def 5;
+       then A27: f.r2 in Lower_Arc(P) by A1,A3,A12,A25,XBOOLE_0:def 2;
+        r1 in [.0,1.] by A26,TOPREAL5:1;
+       then A28: f.r1 in rng f by A11,BORSUK_1:83,FUNCT_1:def 5;
+       then A29: f.r1 in Upper_Arc(P) by A1,A3,A12,A26,XBOOLE_0:def 2;
+         now per cases;
+       case A30: r1<=r2;
+          now per cases by A30,REAL_1:def 5;
+        case r1=r2;
+          hence contradiction by A1,A3,A12,A25,A26,A28,XBOOLE_0:def 2;
+        case A31: r1<r2;
+         A32: the carrier of (TOP-REAL 2)|P=[#]((TOP-REAL 2)|P)
+                                         by PRE_TOPC:12
+                                     .=P by PRE_TOPC:def 10;
+           the carrier of (TOP-REAL 2)|P1=[#]((TOP-REAL 2)|P1)
+                                          by PRE_TOPC:12
+                                     .=P1 by PRE_TOPC:def 10;
+         then rng f c= the carrier of (TOP-REAL 2)|P by A1,A32,XBOOLE_1:1;
+         then f is Function of the carrier of I[01],
+                  the carrier of (TOP-REAL 2)|P by A11,FUNCT_2:4;
+         then reconsider g=f as map of I[01],(TOP-REAL 2)|P;
+           the carrier of Euclid 2=the carrier of TOP-REAL 2
+                             by TOPREAL3:13;
+         then reconsider Q=P as non empty Subset of Euclid 2;
+           P=P1 \/ P by A1,XBOOLE_1:12;
+         then (TOP-REAL 2)|P1 is SubSpace of (TOP-REAL 2)|P by TOPMETR:5;
+         then A33: g is continuous by A9,TOPMETR:7;
+         A34: U2 \/ U3 =the carrier of ((Euclid 2)|Q) by A3,TOPMETR:def 2;
+           (TOP-REAL 2)|P=TopSpaceMetr((Euclid 2)|Q) by TOPMETR:20;
+         then consider r0 being Real such that
+         A35: r1<=r0 & r0<=r2 & g.r0 in U2 /\ U3
+                   by A15,A17,A25,A26,A27,A29,A31,A33,A34,Th17;
+         A36: 0<r0 by A26,A35;
+           r0<1 by A25,A35,AXIOMS:22;
+         then A37: r0 in dom f by A11,A36,BORSUK_1:83,TOPREAL5:1;
+         A38: 0 in dom f by A11,BORSUK_1:83,TOPREAL5:1;
+         A39: 1 in dom f by A11,BORSUK_1:83,TOPREAL5:1;
+           now per cases by A3,A35,TARSKI:def 2;
+         case g.r0=W-min(P);
+          hence contradiction by A6,A8,A26,A35,A37,A38,FUNCT_1:def 8;
+         case g.r0=E-max(P);
+          hence contradiction by A6,A8,A25,A35,A37,A39,FUNCT_1:def 8;
+         end;
+         hence contradiction;
+        end;
+        hence contradiction;
+       case A40: r1>r2;
+         A41: the carrier of (TOP-REAL 2)|P=[#]((TOP-REAL 2)|P)
+                                         by PRE_TOPC:12
+                                     .=P by PRE_TOPC:def 10;
+           the carrier of (TOP-REAL 2)|P1=[#]((TOP-REAL 2)|P1)
+                                          by PRE_TOPC:12
+                                     .=P1 by PRE_TOPC:def 10;
+         then rng f c= the carrier of (TOP-REAL 2)|P by A1,A41,XBOOLE_1:1;
+         then f is Function of the carrier of I[01],
+                  the carrier of (TOP-REAL 2)|P by A11,FUNCT_2:4;
+         then reconsider g=f as map of I[01],(TOP-REAL 2)|P;
+           the carrier of Euclid 2=the carrier of TOP-REAL 2
+                             by TOPREAL3:13;
+         then reconsider Q=P as non empty Subset of Euclid 2;
+           P=P1 \/ P by A1,XBOOLE_1:12;
+         then (TOP-REAL 2)|P1 is SubSpace of (TOP-REAL 2)|P by TOPMETR:5;
+         then A42: g is continuous by A9,TOPMETR:7;
+         A43: U2 \/ U3 =the carrier of ((Euclid 2)|Q) by A3,TOPMETR:def 2;
+           (TOP-REAL 2)|P=TopSpaceMetr((Euclid 2)|Q) by TOPMETR:20;
+         then consider r0 being Real such that
+         A44: r2<=r0 & r0<=r1 & g.r0 in U2 /\ U3
+                   by A15,A17,A25,A26,A27,A29,A40,A42,A43,Th17;
+         A45: 0<r0 by A25,A44;
+           r0<1 by A26,A44,AXIOMS:22;
+         then A46: r0 in dom f by A11,A45,BORSUK_1:83,TOPREAL5:1;
+         A47: 0 in dom f by A11,BORSUK_1:83,TOPREAL5:1;
+         A48: 1 in dom f by A11,BORSUK_1:83,TOPREAL5:1;
+           now per cases by A3,A44,TARSKI:def 2;
+         case g.r0=W-min(P);
+          hence contradiction by A6,A8,A25,A44,A46,A47,FUNCT_1:def 8;
+         case g.r0=E-max(P);
+          hence contradiction by A6,A8,A26,A44,A46,A48,FUNCT_1:def 8;
+         end;
+         hence contradiction;
+        end;
+        hence contradiction;
+       end;
+      hence P1=Upper_Arc(P) or P1=Lower_Arc(P);
+     end;
+    hence P1=Upper_Arc(P) or P1=Lower_Arc(P);
+   end;
+

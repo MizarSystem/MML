@@ -1,0 +1,1854 @@
+:: Completeness of the $\sigma$-Additive Measure. Measure Theory
+::  by J\'ozef Bia{\l}as
+::
+:: Received February 22, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary SUPINF_1, FUNCT_1, SUPINF_2, ARYTM_3, ORDINAL2, RELAT_1, MEASURE1,
+      MEASURE2, SETFAM_1, BOOLE, TARSKI, ARYTM_1, RLVECT_1, PROB_1, MEASURE3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, RELAT_1,
+      FUNCT_1, FUNCT_2, REAL_1, NAT_1, SETFAM_1, SUPINF_1, SUPINF_2, MEASURE1,
+      MEASURE2;
+ constructors NAT_1, REAL_1, SUPINF_2, MEASURE2, PROB_2, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, SUPINF_1, MEASURE1, RELSET_1, ARYTM_3, MEMBERED, ZFMISC_1,
+      XBOOLE_0, ORDINAL2;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, XBOOLE_0;
+ theorems TARSKI, FUNCT_1, FUNCT_2, ZFMISC_1, NAT_1, SETFAM_1, SUPINF_1,
+      SUPINF_2, MEASURE1, MEASURE2, RELSET_1, PROB_2, XBOOLE_0, XBOOLE_1,
+      XCMPLX_0, XCMPLX_1;
+ schemes NAT_1, FUNCT_2, XBOOLE_0;
+
+begin
+::
+::             Some additional properties about R_eal numbers
+::
+
+ reserve X for set;
+
+theorem
+     for x being R_eal holds
+   (-infty <'x & x <'+infty) implies x is Real
+proof
+   let x be R_eal;
+   assume
+A1:-infty <'x & x <'+infty;
+     (x in REAL) or (x in {-infty,+infty}) by SUPINF_1:def 6,XBOOLE_0:def 2;
+   hence thesis by A1,TARSKI:def 2;
+end;
+
+theorem Th2:
+   for x being R_eal holds
+   ((not x = -infty) & (not x = +infty)) implies x is Real
+proof
+   let x be R_eal;
+   assume
+A1:(not x = -infty) & (not x = +infty);
+     (x in REAL) or (x in {-infty,+infty}) by SUPINF_1:def 6,XBOOLE_0:def 2;
+   hence thesis by A1,TARSKI:def 2;
+end;
+
+theorem Th3:
+   for F1,F2 being Function of NAT,ExtREAL st
+   (for n being Nat holds Ser(F1).n <=' Ser(F2).n) holds
+   (SUM(F1) <=' SUM(F2))
+proof
+   let F1,F2 be Function of NAT,ExtREAL;
+   assume
+A1:for n being Nat holds Ser(F1).n <=' Ser(F2).n;
+A2:SUM(F1) = sup(rng Ser(F1)) by SUPINF_2:def 23;
+A3:SUM(F2) = sup(rng Ser(F2)) by SUPINF_2:def 23;
+     for x being R_eal st x in rng Ser(F1) holds
+   (ex y being R_eal st y in rng Ser(F2) & x <=' y)
+   proof
+      let x be R_eal;
+      assume
+   A4:x in rng Ser(F1);
+   A5:dom Ser(F1) = NAT & dom Ser(F2) = NAT & rng Ser(F2) c= ExtREAL
+      by FUNCT_2:def 1;
+      then consider n being set such that
+  A6:n in NAT & x = Ser(F1).n by A4,FUNCT_1:def 5;
+      reconsider n as Nat by A6;
+      reconsider y = Ser(F2).n as R_eal;
+      take y;
+      thus thesis by A1,A5,A6,FUNCT_1:def 5;
+   end;
+   hence thesis by A2,A3,SUPINF_1:99;
+end;
+
+theorem
+     for F1,F2 being Function of NAT,ExtREAL holds
+   ((for n being Nat holds Ser(F1).n = Ser(F2).n) implies
+   (SUM(F1) = SUM(F2)))
+proof
+   let F1,F2 be Function of NAT,ExtREAL;
+   assume
+A1:for n being Nat holds Ser(F1).n = Ser(F2).n;
+then A2:for n being Nat holds Ser(F1).n <=' Ser(F2).n;
+A3:for n being Nat holds Ser(F2).n <=' Ser(F1).n by A1;
+A4:SUM(F1) <=' SUM(F2) by A2,Th3;
+     SUM(F2) <=' SUM(F1) by A3,Th3;
+   hence thesis by A4,SUPINF_1:22;
+end;
+
+::
+::         Some additional theorems about measures and functions
+::
+
+definition
+   let X be set;
+   let S be sigma_Field_Subset of X;
+   redefine mode N_Measure_fam of S;
+    synonym N_Sub_fam of S;
+end;
+
+definition
+   let X be set;
+   let S be sigma_Field_Subset of X;
+   let F be Function of NAT,S;
+   redefine func rng F -> N_Measure_fam of S;
+coherence
+proof
+A1:rng F is N_Sub_set_fam of X by MEASURE1:52;
+     rng F c= S by RELSET_1:12;
+   hence thesis by A1,MEASURE2:def 1;
+end;
+end;
+
+theorem
+     for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S,
+       F being Function of NAT,S,
+       A being Element of S holds
+   (meet rng F c= A & (for n being Element of NAT holds A c= F.n)) implies
+   M.A = M.(meet rng F)
+proof
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+   let F be Function of NAT,S;
+   let A be Element of S;
+   assume
+A1:(meet rng F c= A) & (for n being Element of NAT holds A c= F.n);
+then A2:M.(meet rng F) <=' M.(A) by MEASURE1:62;
+     A c= meet rng F
+   proof
+      let x be set;
+      assume
+   A3:x in A;
+        for Y being set holds Y in rng F implies x in Y
+      proof
+         let Y be set;
+         assume
+      A4:Y in rng F;
+           dom F = NAT by FUNCT_2:def 1;
+         then ex n being set st n in NAT & Y = F.n by A4,FUNCT_1:def 5;
+         then A c= Y by A1;
+         hence thesis by A3;
+      end;
+      hence thesis by SETFAM_1:def 1;
+   end;
+   then M.(A) <=' M.(meet rng F) by MEASURE1:62;
+   hence thesis by A2,SUPINF_1:22;
+end;
+
+theorem Th6:
+   for S being sigma_Field_Subset of X holds
+   for G,F being Function of NAT,S holds
+       (G.0 = {} & for n being Element of NAT holds
+       (G.(n+1) = F.0 \ F.n & F.(n+1) c= F.n)) implies
+       union rng G = F.0 \ meet rng F
+proof
+   let S be sigma_Field_Subset of X;
+   let G,F be Function of NAT,S;
+   assume
+A1:G.0 = {} & for n being Element of NAT holds
+   (G.(n+1) = F.0 \ F.n & F.(n+1) c= F.n);
+A2:dom F = NAT & dom G = NAT & rng F c= S & rng G c= S
+     by FUNCT_2:def 1,RELSET_1:12;
+   thus union rng G c= F.0 \ meet rng F
+   proof
+     let A be set;
+     assume A in union rng G;
+     then consider Z being set such that
+  A3:A in Z & Z in rng G by TARSKI:def 4;
+     consider n being set such that
+  A4:n in NAT & Z = G.n by A2,A3,FUNCT_1:def 5;
+     reconsider n as Nat by A4;
+     consider k being Nat such that
+  A5:n = k + 1 by A1,A3,A4,NAT_1:22;
+A6:  A in F.0 \ F.k by A1,A3,A4,A5;
+  then A7:A in F.0 & not A in F.k by XBOOLE_0:def 4;
+     set Y = F.k;
+       rng F <> {} & Y in rng F & not A in Y by A6,FUNCT_2:6,XBOOLE_0:def 4;
+     then not A in meet rng F by SETFAM_1:def 1;
+     hence thesis by A7,XBOOLE_0:def 4;
+   end;
+   let A be set;
+   assume A in F.0 \ meet rng F;
+   then A in F.0 & not A in meet rng F by XBOOLE_0:def 4;
+   then A in F.0 & ex Y being set st (Y in rng F & not A in Y)
+   by SETFAM_1:def 1;
+   then consider Y being set such that
+A8:A in F.0 & Y in rng F & not A in Y;
+   consider n being set such that
+A9:n in NAT & Y = F.n by A2,A8,FUNCT_1:def 5;
+   reconsider n as Nat by A9;
+     A in F.0 \ F.n by A8,A9,XBOOLE_0:def 4;
+then A10:A in G.(n+1) by A1;
+     G.(n + 1) in rng G by FUNCT_2:6;
+   hence thesis by A10,TARSKI:def 4;
+end;
+
+theorem Th7:
+   for S being sigma_Field_Subset of X holds
+   for G,F being Function of NAT,S holds
+       (G.0 = {} & for n being Element of NAT holds
+       (G.(n+1) = F.0 \ F.n & F.(n+1) c= F.n)) implies
+       meet rng F = F.0 \ union rng G
+proof
+   let S be sigma_Field_Subset of X;
+   let G,F be Function of NAT,S;
+   assume
+A1:G.0 = {} & for n being Element of NAT holds
+       (G.(n+1) = F.0 \ F.n & F.(n+1) c= F.n);
+A2:for n being Element of NAT holds F.n c= F.0
+   proof
+     defpred P[Nat] means F.$1 c= F.0;
+   A3: P[0];
+   A4:for k being Nat st P[k] holds P[k+1]
+     proof
+        let k be Nat;
+        assume
+     A5:F.k c= F.0;
+          F.(k+1) c= F.k by A1;
+        hence thesis by A5,XBOOLE_1:1;
+     end;
+     thus for n being Nat holds P[n] from Ind(A3,A4);
+   end;
+A6:union rng G = F.0 \ meet rng F by A1,Th6;
+A7:meet rng F c= F.0
+   proof
+     let A be set;
+     assume
+  A8:A in meet rng F;
+  A9:dom F = NAT by FUNCT_2:def 1;
+     consider X being Element of rng F;
+ A10:A in X by A8,SETFAM_1:def 1;
+       ex n being set st n in NAT & F.n = X by A9,FUNCT_1:def 5;
+     then X c= F.0 by A2;
+     hence thesis by A10;
+   end;
+     F.0 /\ meet rng F = F.0 \ (F.0 \ meet rng F) by XBOOLE_1:48;
+   hence thesis by A6,A7,XBOOLE_1:28;
+end;
+
+theorem Th8:
+   for S being sigma_Field_Subset of X holds
+   for M being sigma_Measure of S holds
+   for G,F being Function of NAT,S holds
+       (M.(F.0) <'+infty & G.0 = {} & for n being Element of NAT holds
+       (G.(n+1) = F.0 \ F.n & F.(n+1) c= F.n))
+   implies
+       M.(meet rng F) = M.(F.0) - M.(union rng G)
+proof
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+   let G,F be Function of NAT,S;
+   assume
+A1:M.(F.0) <'+infty & G.0 = {} & for n being Element of NAT holds
+   (G.(n+1) = F.0 \ F.n & F.(n+1) c= F.n);
+then A2:union rng G = F.0 \ meet rng F by Th6;
+A3:M.(F.0 \ union rng G) = M.(meet rng F) by A1,Th7;
+A4:   not M.(F.0 \ meet rng F) = +infty
+   proof
+      assume
+   A5:M.(F.0 \ meet rng F) = +infty;
+        union rng G c= F.0 by A2,XBOOLE_1:36;
+      hence thesis by A1,A2,A5,MEASURE1:62;
+   end;
+     M.(union rng G) <=' +infty by SUPINF_1:20;
+then A6:M.(union rng G) <'+infty by A2,A4,SUPINF_1:22;
+     union rng G c= F.0 by A2,XBOOLE_1:36;
+   hence thesis by A3,A6,MEASURE1:63;
+end;
+
+theorem Th9:
+   for S being sigma_Field_Subset of X holds
+   for M being sigma_Measure of S holds
+   for G,F being Function of NAT,S holds
+       (M.(F.0) <'+infty & G.0 = {} & for n being Element of NAT holds
+       (G.(n+1) = F.0 \ F.n & F.(n+1) c= F.n))
+   implies
+       M.(union rng G) = M.(F.0) - M.(meet rng F)
+proof
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+   let G,F be Function of NAT,S;
+   assume
+A1:M.(F.0) <'+infty & G.0 = {} & for n being Element of NAT holds
+   (G.(n+1) = F.0 \ F.n & F.(n+1) c= F.n);
+then A2:meet rng F = F.0 \ union rng G by Th7;
+A3:M.(F.0 \ meet rng F) = M.(union rng G) by A1,Th6;
+A4:   not M.(F.0 \ union rng G) = +infty
+   proof
+      assume
+  A5:M.(F.0 \ union rng G) = +infty;
+        meet rng F c= F.0 by A2,XBOOLE_1:36;
+      hence thesis by A1,A2,A5,MEASURE1:62;
+   end;
+     M.(meet rng F) <=' +infty by SUPINF_1:20;
+then A6:M.(meet rng F) <'+infty by A2,A4,SUPINF_1:22;
+     meet rng F c= F.0 by A2,XBOOLE_1:36;
+   hence thesis by A3,A6,MEASURE1:63;
+end;
+
+theorem
+     for S being sigma_Field_Subset of X holds
+   for M being sigma_Measure of S holds
+   for G,F being Function of NAT,S holds
+       (M.(F.0) <'+infty & G.0 = {} & for n being Element of NAT holds
+       (G.(n+1) = F.0 \ F.n & F.(n+1) c= F.n))
+   implies
+       M.(meet rng F) = M.(F.0) - sup(rng (M*G))
+proof
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+   let G,F be Function of NAT,S;
+   assume
+A1:M.(F.0) <'+infty & G.0 = {} & for n being Element of NAT holds
+   (G.(n+1) = F.0 \ F.n & F.(n+1) c= F.n);
+   then for n being Element of NAT holds G.n c= G.(n+1) by MEASURE2:15;
+   then M.(union rng G) = sup(rng (M*G)) by MEASURE2:27;
+   hence thesis by A1,Th8;
+end;
+
+theorem Th11:
+   for S being sigma_Field_Subset of X holds
+   for M being sigma_Measure of S holds
+   for G,F being Function of NAT,S holds
+       (M.(F.0) <'+infty & G.0 = {} &
+        for n being Element of NAT holds
+       (G.(n+1) = F.0 \ F.n & F.(n+1) c= F.n))
+   implies
+       sup(rng (M*G)) is Real & M.(F.0) is Real & inf(rng (M*F)) is Real
+proof
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+   let G,F be Function of NAT,S;
+   assume
+A1:M.(F.0) <'+infty & G.0 = {} &
+   for n being Element of NAT holds (G.(n+1) = F.0 \ F.n & F.(n+1) c= F.n);
+   reconsider P = {} as Element of S by MEASURE1:45;
+     P c= F.0 by XBOOLE_1:2;
+   then M.P <=' M.(F.0) by MEASURE1:62;
+   then A2:0. <=' M.(F.0) by MEASURE1:def 11;
+     ex x being R_eal st x in rng(M*F) & x = M.(F.0)
+   proof
+  A3:dom (M*F) = NAT by FUNCT_2:def 1;
+     take (M*F).0;
+     thus thesis by A3,FUNCT_1:22,FUNCT_2:6;
+   end;
+   then A4:inf(rng(M*F)) <=' M.(F.0) by SUPINF_1:79;
+     for x being R_eal holds x in rng(M*F) implies 0.<=' x
+   proof
+      let x be R_eal;
+      assume
+  A5:x in rng(M*F);
+        dom (M*F) = NAT by FUNCT_2:def 1;
+then A6:  ex n being set st n in NAT & (M*F).n = x by A5,FUNCT_1:def 5;
+        (M*F) is nonnegative by MEASURE2:1;
+      hence thesis by A6,SUPINF_2:58;
+   end;
+   then 0. is minorant of rng(M*F) by SUPINF_1:def 10;
+then A7:not inf(rng(M*F)) = -infty by SUPINF_1:def 17,SUPINF_2:19;
+     for x being R_eal holds x in rng(M*G) implies x <=' M.(F.0)
+   proof
+      let x be R_eal;
+      assume
+  A8:x in rng(M*G);
+  A9:dom (M*G) = NAT by FUNCT_2:def 1;
+      then consider n being set such that
+  A10:n in NAT & (M*G).n = x by A8,FUNCT_1:def 5;
+      reconsider n as Nat by A10;
+  A11:x = M.(G.n) by A9,A10,FUNCT_1:22;
+  A12:n = 0 implies x <=' M.(F.0)
+      proof
+         assume n = 0;
+         then G.n c= F.0 by A1,XBOOLE_1:2;
+         hence thesis by A11,MEASURE1:62;
+      end;
+        (ex k being Nat st n = k + 1) implies x <=' M.(F.0)
+      proof
+         given k being Nat such that
+     A13:n = k + 1;
+           G.n = F.0 \ F.k by A1,A13;
+         then G.n c= F.0 by XBOOLE_1:36;
+         hence thesis by A11,MEASURE1:62;
+      end;
+      hence thesis by A12,NAT_1:22;
+   end;
+   then A14: M.(F.0) is majorant of rng(M*G) by SUPINF_1:def 9;
+A15:0. <=' sup(rng(M*G))
+   proof
+  A16:for x being R_eal holds x in rng(M*G) implies 0.<=' x
+      proof
+         let x be R_eal;
+         assume
+     A17:x in rng(M*G);
+       dom (M*G) = NAT by FUNCT_2:def 1;
+then A18:            ex n being set st n in NAT & (M*G).n = x by A17,FUNCT_1:
+def 5;
+           (M*G) is nonnegative by MEASURE2:1;
+         hence thesis by A18,SUPINF_2:58;
+      end;
+  A19:(M*G).0 in rng(M*G) by FUNCT_2:6;
+      set x = (M*G).0;
+  A20:0. <=' x by A16,A19;
+        x <=' sup rng(M*G) by A19,SUPINF_1:76;
+      hence thesis by A20,SUPINF_1:29;
+   end;
+     not sup(rng(M*G)) = +infty by A1,A14,SUPINF_1:def 16;
+   hence thesis by A1,A2,A4,A7,A15,Th2,SUPINF_2:19;
+end;
+
+theorem Th12:
+   for S being sigma_Field_Subset of X holds
+   for M being sigma_Measure of S holds
+   for G,F being Function of NAT,S holds
+       (M.(F.0) <'+infty & G.0 = {} &
+        for n being Element of NAT holds
+       (G.(n+1) = F.0 \ F.n & F.(n+1) c= F.n))
+   implies
+       sup(rng (M*G)) = M.(F.0) - inf(rng (M*F))
+proof
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+   let G,F be Function of NAT,S;
+   assume
+A1:M.(F.0) <'+infty & G.0 = {} &
+   for n being Element of NAT holds (G.(n+1) = F.0 \ F.n & F.(n+1) c= F.n);
+then A2:for n being Element of NAT holds G.n c= G.(n+1) by MEASURE2:15;
+   reconsider P = {} as Element of S by MEASURE1:45;
+     P c= F.0 by XBOOLE_1:2;
+then M.P <=' M.(F.0) by MEASURE1:62;
+then A3:0. <=' M.(F.0) by MEASURE1:def 11;
+   set l = M.(F.0) - inf(rng (M*F));
+A4:l is majorant of rng (M*G)
+   proof
+        for x being R_eal holds x in rng (M*G) implies x <=' l
+      proof
+         let x be R_eal;
+         assume
+      A5:x in rng (M*G);
+      A6:dom (M*F) = NAT & dom (M*G) = NAT by FUNCT_2:def 1;
+         then consider n being set such that
+      A7:n in NAT & (M*G).n = x by A5,FUNCT_1:def 5;
+         reconsider n as Nat by A7;
+         A8: M*G is nonnegative by MEASURE2:1;
+      then A9:0. <=' x by A7,SUPINF_2:58;
+      A10:x = M.(G.n) by A6,A7,FUNCT_1:22;
+     A11:n = 0 implies G.n c= F.0 by A1,XBOOLE_1:2;
+A12:     (ex k being Nat st n = k + 1) implies G.n c= F.0
+         proof
+            given k being Nat such that
+        A13:n = k + 1;
+              G.n = F.0 \ F.k by A1,A13;
+            hence thesis by XBOOLE_1:36;
+         end;
+     then A14: x <=' M.(F.0) by A10,A11,MEASURE1:62,NAT_1:22;
+     A15:not x = +infty by A1,A10,A11,A12,MEASURE1:62,NAT_1:22;
+     A16:not x = -infty by A7,A8,SUPINF_2:19,58;
+       A17:x is Real by A9,A15,Th2,SUPINF_2:19;
+         A18:inf(rng (M*F)) <=' M.(F.0) - x
+            proof
+             M.(G.n) <'+infty by A10,A17,SUPINF_1:31;
+           then A19:M.(F.0) - x = M.(F.0 \ G.n) by A10,A11,A12,MEASURE1:63,
+NAT_1:22;
+                 M.(F.0 \ G.n) in rng (M*F)
+               proof
+              A20:n = 0 implies M.(F.0 \ G.n) in rng (M*F)
+                  proof
+                     assume A21: n = 0;
+                   M.(F.0) = (M*F).0 by A6,FUNCT_1:22;
+                     hence thesis by A1,A21,FUNCT_2:6;
+                  end;
+                    (ex k being Nat st n = k + 1)
+                  implies M.(F.0 \ G.n) in rng (M*F)
+                  proof
+                     given k being Nat such that
+                 A22:n = k + 1;
+                       for n being Element of NAT holds F.n c= F.0
+                     proof
+                      defpred P[Nat] means F.$1 c= F.0;
+                      A23: P[0];
+                      A24:for k being Nat st P[k] holds P[k+1]
+                        proof
+                           let k be Nat;
+                           assume
+                         A25:F.k c= F.0;
+                             F.(k+1) c= F.k by A1;
+                           hence thesis by A25,XBOOLE_1:1;
+                        end;
+                        thus for n being Nat holds P[n] from Ind(A23,A24);
+                     end;
+                 then A26:F.k c= F.0;
+A27:                 F.0 \ G.n = F.0 \ ( F.0 \ F.k) by A1,A22
+                              .= F.0 /\ F.k by XBOOLE_1:48
+                              .= F.k by A26,XBOOLE_1:28;
+                       M.(F.k) = (M*F).k by A6,FUNCT_1:22;
+                     hence thesis by A27,FUNCT_2:6;
+                  end;
+                  hence thesis by A20,NAT_1:22;
+               end;
+               hence thesis by A19,SUPINF_1:79;
+            end;
+          A28:M.(F.0) is Real by A1,Th11;
+          A29:inf(rng(M*F)) is Real by A1,Th11;
+            then consider a,b,c being Real such that
+        A30:a = M.(F.0) & b = x & c = inf(rng (M*F)) by A17,A28;
+              M.(F.0) - x = a - b by A30,SUPINF_2:5;
+            then (M.(F.0) - x) + x = (a - b) + b by A30,SUPINF_2:1
+                              .= (a + -b) + b by XCMPLX_0:def 8
+                              .= a + (-b + b) by XCMPLX_1:1
+                              .= a + 0 by XCMPLX_0:def 6
+                              .= M.(F.0) by A30;
+        then A31:inf(rng (M*F)) + x <=' M.(F.0) by A1,A14,A16,A18,SUPINF_2:14;
+A32:        not ((M.(F.0) = +infty & inf(rng (M*F)) = +infty) or
+            (M.(F.0) = -infty & inf(rng (M*F)) = -infty)) &
+            not ((inf(rng (M*F)) + x = +infty & inf(rng (M*F)) = +infty) or
+            (inf(rng (M*F)) + x = -infty & inf(rng (M*F)) = -infty))
+              by A29,SUPINF_1:2,6;
+              inf(rng (M*F)) + x = c + b by A30,SUPINF_2:1;
+            then inf(rng (M*F)) + x - inf(rng (M*F)) = b + c - c by A30,
+SUPINF_2:5
+                        .= b + c + -c by XCMPLX_0:def 8
+                        .= b + (c + -c) by XCMPLX_1:1
+                        .= b + 0 by XCMPLX_0:def 6
+                        .= x by A30;
+         hence thesis by A31,A32,SUPINF_2:15;
+      end;
+      hence thesis by SUPINF_1:def 9;
+   end;
+     for y being R_eal holds y is majorant of rng (M*G) implies l <=' y
+   proof
+      let y be R_eal;
+      assume
+   A33:y is majorant of rng (M*G);
+        l <=' y
+      proof
+         set Q = union rng G;
+           sup(rng(M*G)) = M.(Q) by A2,MEASURE2:27;
+     then A34:M.Q <=' y by A33,SUPINF_1:def 16;
+           l <=' M.Q
+         proof
+A35:        M.(F.0) - M.(meet rng F) = M.(union rng G) by A1,Th9;
+              M.(F.0) - inf(rng (M*F)) <=' M.(union rng G)
+            proof
+                 for x being R_eal holds
+               x in rng (M*F) implies M.(meet rng F) <=' x
+               proof
+                  let x be R_eal;
+                  assume
+              A36:x in rng (M*F);
+              A37:dom (M*F) = NAT by FUNCT_2:def 1;
+                  then consider n being set such that
+              A38:n in NAT & (M*F).n = x by A36,FUNCT_1:def 5;
+                  reconsider n as Nat by A38;
+              A39:x = M.(F.n) by A37,A38,FUNCT_1:22;
+                    meet rng F c= F.n
+                  proof
+                       F.n in rng F by FUNCT_2:6;
+                     hence thesis by SETFAM_1:4;
+                  end;
+                  hence thesis by A39,MEASURE1:62;
+               end;
+               then M.(meet rng F) is minorant of rng (M*F) by SUPINF_1:def 10
+;
+           then M.(meet rng F) <=' inf(rng (M*F)) by SUPINF_1:def 17;
+               hence thesis by A1,A3,A35,SUPINF_2:15,19;
+            end;
+            hence thesis;
+         end;
+         hence thesis by A34,SUPINF_1:29;
+      end;
+      hence thesis;
+   end;
+   hence thesis by A4,SUPINF_1:def 16;
+end;
+
+theorem Th13:
+   for S being sigma_Field_Subset of X holds
+   for M being sigma_Measure of S holds
+   for G,F being Function of NAT,S holds
+       (M.(F.0) <'+infty & G.0 = {} &
+        for n being Element of NAT holds
+       (G.(n+1) = F.0 \ F.n & F.(n+1) c= F.n))
+   implies
+       inf(rng (M*F)) = M.(F.0) - sup(rng (M*G))
+proof
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+   let G,F be Function of NAT,S;
+   assume
+A1:M.(F.0) <'+infty & G.0 = {} &
+   for n being Element of NAT holds (G.(n+1) = F.0 \ F.n & F.(n+1) c= F.n);
+   set l = M.(F.0) - sup(rng (M*G));
+A2:l is minorant of rng (M*F)
+   proof
+        for x being R_eal holds x in rng (M*F) implies l <=' x
+      proof
+         let x be R_eal;
+         assume
+      A3:x in rng (M*F);
+           l <=' x
+         proof
+              not x = +infty implies l <='x
+            proof
+               assume
+            A4:not x = +infty;
+            A5:dom (M*F) = NAT & dom (M*G) = NAT by FUNCT_2:def 1;
+               then consider n being set such that
+            A6:n in NAT & (M*F).n = x by A3,FUNCT_1:def 5;
+               reconsider n as Nat by A6;
+                 M*F is nonnegative by MEASURE2:1;
+            then A7:0. <=' x by A6,SUPINF_2:58;
+            A8:M.(F.0) - x <=' sup(rng (M*G))
+               proof
+                    for n being Element of NAT holds F.n c= F.0
+                  proof
+                   defpred P[Nat] means F.$1 c= F.0;
+                   A9: P[0];
+                   A10:for k being Nat st P[k] holds P[k+1]
+                     proof
+                        let k be Nat;
+                        assume
+                     A11:F.k c= F.0;
+                          F.(k+1) c= F.k by A1;
+                        hence thesis by A11,XBOOLE_1:1;
+                     end;
+                      thus for k being Nat holds P[k] from Ind(A9,A10);
+                  end;
+              then A12:F.n c= F.0;
+              then M.(F.n) <=' M.(F.0) by MEASURE1:62;
+              then A13:M.(F.n) <'+infty by A1,SUPINF_1:29;
+              A14:M.(F.0) - x = M.(F.0) - M.(F.n) by A5,A6,FUNCT_1:22
+                             .= M.(F.0 \ F.n) by A12,A13,MEASURE1:63
+                             .= M.(G.(n+1)) by A1;
+                  set k = n + 1;
+              A15:M.(F.0) - x = (M*G).k by A5,A14,FUNCT_1:22;
+                    (M*G).k in rng (M*G) by FUNCT_2:6;
+                  hence thesis by A15,SUPINF_1:76;
+               end;
+             A16:M.(F.0) is Real by A1,Th11;
+             A17:x is Real by A4,A7,Th2,SUPINF_2:19;
+             A18:sup(rng(M*G)) is Real by A1,Th11;
+               then consider a,b,c being Real such that
+           A19:a = M.(F.0) & b = x & c = sup(rng (M*G)) by A16,A17;
+                 M.(F.0) - x = a - b by A19,SUPINF_2:5;
+               then (M.(F.0) - x) + x = (a - b) + b by A19,SUPINF_2:1
+                                 .= (a + -b) + b by XCMPLX_0:def 8
+                                 .= a + (-b + b) by XCMPLX_1:1
+                                 .= a + 0 by XCMPLX_0:def 6
+                                 .= M.(F.0) by A19;
+           then A20:M.(F.0) <=' sup(rng (M*G)) + x by A4,A7,A8,SUPINF_2:14,19;
+A21:               not ((M.(F.0) = +infty & sup(rng (M*G)) = +infty) or
+                    (M.(F.0) = -infty & sup(rng (M*G)) = -infty)) &
+               not ((sup(rng (M*G)) + x = +infty & sup(rng (M*G)) = +infty) or
+                    (sup(rng (M*G)) + x = -infty & sup(rng (M*G)) = -infty
+)) by A18,SUPINF_1:2,6;
+                 sup(rng (M*G)) + x = c + b by A19,SUPINF_2:1;
+           then sup(rng (M*G)) + x - sup(rng (M*G)) = b + c - c by A19,SUPINF_2
+:5
+                        .= b + c + -c by XCMPLX_0:def 8
+                        .= b + (c + -c) by XCMPLX_1:1
+                        .= b + 0 by XCMPLX_0:def 6
+                        .= x by A19;
+               hence thesis by A20,A21,SUPINF_2:15;
+            end;
+            hence thesis by SUPINF_1:20;
+         end;
+         hence thesis;
+      end;
+      hence thesis by SUPINF_1:def 10;
+   end;
+     for y being R_eal holds (y is minorant of rng (M*F) implies y <=' l)
+  proof
+      let y be R_eal;
+      assume
+  A22:y is minorant of rng (M*F);
+A23:  sup(rng (M*G)) = M.(F.0) - inf(rng (M*F)) by A1,Th12;
+        sup(rng (M*G)) is Real & M.(F.0) is Real & inf(rng (M*F)) is Real
+      by A1,Th11;
+      then consider a,b,c being Real such that
+   A24:a = sup(rng (M*G)) & b = M.(F.0) & c = inf(rng (M*F));
+      consider s,t,r being R_eal such that
+  A25:s = sup(rng (M*G)) & t = M.(F.0) - inf(rng (M*F)) &
+      r = inf(rng (M*F));
+        M.(F.0) - inf(rng (M*F)) = b - c by A24,SUPINF_2:5;
+then A26:  M.(F.0) - inf(rng (M*F)) + r = b - c + c by A24,A25,SUPINF_2:1
+                                  .= b + -c + c by XCMPLX_0:def 8
+                                  .= b + (-c + c) by XCMPLX_1:1
+                                  .= b + 0 by XCMPLX_0:def 6
+                                  .= M.(F.0) by A24;
+        sup(rng (M*G)) + inf(rng (M*F)) = a + c by A24,SUPINF_2:1;
+      then sup(rng (M*G)) + inf(rng (M*F)) - sup(rng (M*G)) = c + a - a
+        by A24,SUPINF_2:5
+                   .= c + a + -a by XCMPLX_0:def 8
+                   .= c + (a + -a) by XCMPLX_1:1
+                   .= c + 0 by XCMPLX_0:def 6
+                   .= inf(rng (M*F)) by A24;
+       hence thesis by A22,A23,A25,A26,SUPINF_1:def 17;
+   end;
+   hence thesis by A2,SUPINF_1:def 17;
+end;
+
+theorem
+     for S being sigma_Field_Subset of X holds
+   for M being sigma_Measure of S holds
+   for F being Function of NAT,S holds
+   ((for n being Element of NAT holds F.(n+1) c= F.n) &
+   M.(F.0) <'+infty) implies
+   (M.(meet rng F) = inf(rng (M*F)))
+proof
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+   let F be Function of NAT,S;
+   assume
+A1:(for n being Element of NAT holds F.(n+1) c= F.n) &
+   M.(F.0) <'+infty;
+      consider G being Function of NAT,S such that
+   A2:G.0 = {} & for n being Element of NAT holds G.(n+1) = F.0 \ F.n
+      by MEASURE2:10;
+     for n being Element of NAT holds G.n c= G.(n+1) by A1,A2,MEASURE2:15;
+   then A3:M.(union rng G) = sup(rng (M*G)) by MEASURE2:27;
+  A4:union rng G = F.0 \ meet rng F by A1,A2,Th6;
+   A5:M.(F.0 \ union rng G) = M.(meet rng F) by A1,A2,Th7;
+     for A being Element of S holds
+      A = union rng G implies M.(meet rng F) = M.(F.0) - M.A
+      proof
+         let A be Element of S;
+         assume
+     A6:A = union rng G;
+A7:      not M.(F.0 \ meet rng F) = +infty
+         proof
+            assume
+        A8:M.(F.0 \ meet rng F) = +infty;
+               A c= F.0 by A4,A6,XBOOLE_1:36;
+            hence thesis by A1,A4,A6,A8,MEASURE1:62;
+         end;
+           M.A <=' +infty by SUPINF_1:20;
+     then A9:M.A <'+infty by A4,A6,A7,SUPINF_1:22;
+           A c= F.0 by A4,A6,XBOOLE_1:36;
+         hence thesis by A5,A6,A9,MEASURE1:63;
+      end;
+   then M.(meet rng F) = M.(F.0) - sup(rng (M*G)) by A3;
+   hence thesis by A1,A2,Th13;
+end;
+
+theorem Th15:
+   for S being sigma_Field_Subset of X holds
+   for M being Measure of S holds
+   for T being N_Measure_fam of S holds
+   for F being Sep_Sequence of S holds
+   T = rng F implies
+   SUM(M*F) <=' M.(union T)
+proof
+   let S be sigma_Field_Subset of X;
+   let M be Measure of S;
+   let T be N_Measure_fam of S;
+   let F be Sep_Sequence of S;
+   assume
+A1:T = rng F;
+        union T is Subset of X & {} is Subset of X by XBOOLE_1:2;
+      then consider H being Function of NAT,bool X such that
+   A2:(rng H = {union T,{}}) & (H.0 = union T) &
+      (for n being Nat st 0 < n holds H.n = {}) by MEASURE1:40;
+        rng H c= S
+      proof
+        let a be set;
+        assume a in rng H;
+        then a = union T or a = {} by A2,TARSKI:def 2;
+        hence thesis by MEASURE1:45;
+      end;
+      then reconsider H as Function of NAT,S by FUNCT_2:8;
+        M is nonnegative by MEASURE1:def 5;
+   then A3:M*F is nonnegative & M*H is nonnegative by MEASURE1:54;
+      consider G being Function of NAT,S such that
+   A4:G.0 = F.0 &
+      for n being Element of NAT holds G.(n+1) = F.(n+1) \/ G.n by MEASURE2:5;
+   A5:for n being Nat holds G.n /\ F.(n+1) = {}
+      proof
+         let n be Nat;
+      A6:for n being Nat holds
+         for k being Nat st n < k holds G.n /\ F.k = {}
+         proof
+           defpred P[Nat] means
+              for k being Nat holds $1 < k implies G.$1 /\ F.k = {};
+           A7: P[0]
+            proof
+              let k be Nat; assume 0 < k;
+              then F.0 misses F.k by PROB_2:def 3;
+              hence thesis by A4,XBOOLE_0:def 7;
+            end;
+          A8:for n being Nat st P[n] holds P[n+1]
+            proof
+               let n be Nat;
+               assume
+            A9:for k being Nat st n < k holds G.n /\ F.k = {};
+               let k be Nat;
+               assume
+           A10:n+1 < k;
+           A11:G.(n+1) /\ F.k = (F.(n+1) \/ G.n) /\ F.k by A4
+                            .= (F.(n+1) /\ F.k) \/ (G.n /\ F.k) by XBOOLE_1:23;
+               A12: n < k by A10,NAT_1:38;
+                 F.(n+1) misses F.k by A10,PROB_2:def 3;
+               then F.(n+1) /\ F.k = {} by XBOOLE_0:def 7;
+               hence thesis by A9,A11,A12;
+            end;
+            thus for n being Nat holds P[n] from Ind(A7,A8);
+         end;
+           n < n + 1 by NAT_1:38;
+         hence thesis by A6;
+      end;
+  A13:Ser(M*F).0 = (M*F).0 by SUPINF_2:63;
+  defpred P[Nat] means Ser(M*F).$1 = M.(G.$1);
+  A14:dom F = NAT & dom (M*F) = NAT by FUNCT_2:def 1;
+  then A15: P[0] by A4,A13,FUNCT_1:22;
+   A16:for n being Nat holds Ser(M*F).n = M.(G.n)
+      proof
+       A17:for k being Nat st P[k] holds P[k+1]
+         proof
+            let k be Nat;
+            assume Ser(M*F).k = M.(G.k);
+            then A18:Ser(M*F).(k+1) = M.(G.k) + (M*F).(k+1) by SUPINF_2:63;
+              G.k /\ F.(k+1) = {} by A5;
+then A19:        G.k misses F.(k+1) by XBOOLE_0:def 7;
+              Ser(M*F).(k+1) = M.(G.k) + M.(F.(k+1)) by A14,A18,FUNCT_1:22
+                          .= M.(F.(k+1) \/ G.k) by A19,MEASURE1:def 5
+                          .= M.(G.(k+1)) by A4;
+            hence thesis;
+         end;
+         thus for n being Nat holds P[n] from Ind(A15,A17);
+      end;
+   A20:for n being Nat holds G.n c= union T
+      proof
+        defpred P[Nat] means G.$1 c= union T;
+          G.0 in rng F by A4,FUNCT_2:6;
+      then A21: P[0] by A1,ZFMISC_1:92;
+      A22:for n being Nat st P[n] holds P[n+1]
+        proof
+           let n be Nat;
+           assume
+        A23:G.n c= union T;
+        A24:G.(n+1) = F.(n+1) \/ G.n by A4;
+             F.(n+1) in T by A1,FUNCT_2:6;
+           then F.(n+1) c= union T by ZFMISC_1:92;
+           hence thesis by A23,A24,XBOOLE_1:8;
+        end;
+        thus for n being Nat holds P[n] from Ind(A21,A22);
+     end;
+    defpred P[Nat] means Ser(M*H).$1 = M.(union T);
+    A25: P[0]
+      proof
+      A26:Ser(M*H).0 = (M*H).0 by SUPINF_2:63;
+           dom (M*H) = NAT by FUNCT_2:def 1;
+         hence thesis by A2,A26,FUNCT_1:22;
+      end;
+   A27:for n being Nat holds Ser(M*H).n = M.(union T)
+      proof
+       A28:for n being Nat st P[n] holds P[n+1]
+         proof
+            let n be Nat;
+            assume Ser(M*H).n = M.(union T);
+         then A29:Ser(M*H).(n+1) = M.(union T) + (M*H).(n+1) by SUPINF_2:63;
+              0 <= n by NAT_1:18; then 0 < n + 1 by NAT_1:38;
+         then A30:H.(n+1) = {} by A2;
+              dom (M*H) = NAT by FUNCT_2:def 1;
+            then (M*H).(n+1) = M.({}) by A30,FUNCT_1:22;
+            then (M*H).(n+1) = 0. by MEASURE1:def 5;
+            hence thesis by A29,SUPINF_2:18;
+         end;
+         thus for n being Nat holds P[n] from Ind(A25,A28);
+      end;
+A31:   for n being Nat holds Ser(M*F).n <=' Ser(M*H).n
+      proof
+         let n be Nat;
+      A32:Ser(M*F).n = M.(G.n) by A16;
+           G.n c= union T by A20;
+         then Ser(M*F).n <=' M.(union T) by A32,MEASURE1:25;
+         hence thesis by A27;
+      end;
+        for r being Nat st 1 <= r holds (M*H).r = 0.
+      proof
+         let r be Nat;
+         assume 1 <= r;
+         then 0 + 1 <= r;
+         then 0 < r by NAT_1:38;
+      then A33:H.r = {} by A2;
+           dom (M*H) = NAT by FUNCT_2:def 1;
+         then (M*H).r = M.({}) by A33,FUNCT_1:22;
+         hence thesis by MEASURE1:def 5;
+      end;
+      then SUM(M*H) = Ser(M*H).1 by A3,SUPINF_2:67;
+      then SUM(M*H) = M.(union T) by A27;
+      hence thesis by A31,Th3;
+end;
+
+theorem
+    for S being sigma_Field_Subset of X holds
+   for M being Measure of S holds
+   for F being Sep_Sequence of S holds
+   SUM(M*F) <=' M.(union rng F) by Th15;
+
+theorem
+     for S being sigma_Field_Subset of X holds
+   for M being Measure of S st
+   (for F being Sep_Sequence of S holds
+   M.(union rng F) <=' SUM(M*F)) holds
+   M is sigma_Measure of S
+proof
+   let S be sigma_Field_Subset of X;
+   let M be Measure of S;
+   assume
+A1:for F being Sep_Sequence of S holds
+   M.(union rng F) <=' SUM(M*F);
+A2:for F being Sep_Sequence of S holds
+   SUM(M*F) = M.(union rng F)
+   proof
+      let F be Sep_Sequence of S;
+   A3:M.(union rng F) <=' SUM(M*F) by A1;
+        SUM(M*F) <=' M.(union rng F) by Th15;
+      hence thesis by A3,SUPINF_1:22;
+   end;
+     M is nonnegative & M.{} = 0. by MEASURE1:def 5;
+   hence thesis by A2,MEASURE1:def 11;
+end;
+
+::
+::                Completeness  of  sigma_additive  Measure
+::
+
+definition
+   let X be set;
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+ canceled;
+
+   pred M is_complete S means
+:Def2:for A being Subset of X for B being set st B in S holds
+     (A c= B & M.B = 0.) implies A in S;
+end;
+
+definition
+   let X be set;
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+   mode thin of M -> Subset of X means
+:Def3:ex B being set st B in S & it c= B & M.B = 0.;
+existence
+proof
+   reconsider A = {} as Subset of X by XBOOLE_1:2;
+   take A;
+   take B={};
+   thus B in S by MEASURE1:45;
+   thus A c= B;
+   thus thesis by MEASURE1:def 11;
+end;
+end;
+
+definition
+   let X be set;
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+func COM(S,M) -> non empty Subset-Family of X means
+:Def4:for A being set holds (A in it iff
+   (ex B being set st B in S & ex C being thin of M st A = B \/ C));
+existence
+proof
+   defpred P[set] means
+   for A being set st A = $1 holds
+   ex B being set st B in S & ex C being thin of M st A = B \/ C;
+   consider D being set such that
+A1:for y being set holds y in D iff y in bool X & P[y] from Separation;
+A2:D c= bool X
+   proof
+     let x be set; assume x in D;
+     hence x in bool X by A1;
+   end;
+A3:for A being set holds (A in D iff
+   (ex B being set st (B in S & ex C being thin of M st A = B \/ C)))
+   proof
+      let A be set;
+   A4:A in D iff (A in bool X &
+      for y being set holds (y = A implies
+      (ex B being set st (B in S & ex C being thin of M st y = B \/ C))))
+      by A1;
+        (ex B being set st (B in S & ex C being thin of M st A = B \/ C))
+      implies A in D
+      proof
+         assume
+      A5:ex B being set st (B in S & ex C being thin of M st A = B \/ C);
+         then consider B being set such that
+      A6:B in S & ex C being thin of M st A = B \/ C;
+           A c= X by A6,XBOOLE_1:8;
+         hence thesis by A4,A5;
+      end;
+      hence thesis by A1;
+   end;
+   A7:{} is Subset of X by XBOOLE_1:2;
+     ex B being set st B in S & {} c= B & M.B = 0.
+   proof
+        {} in S by MEASURE1:45;
+      then consider B being set such that
+   A8:B = {} & B in S;
+      take B;
+      thus thesis by A8,MEASURE1:def 11;
+   end;
+then A9:{} is thin of M by A7,Def3;
+A10:{} c= X by XBOOLE_1:2;
+     for A being set st A = {} holds
+   ex B being set st B in S & ex C being thin of M st A = B \/ C
+   proof
+      let A be set;
+      assume
+  A11:A = {};
+        {} in S by MEASURE1:45;
+      then consider B being set such that
+   A12:B = {} & B in S;
+      consider C being thin of M such that
+   A13:C = {} by A9;
+        A = B \/ C by A11,A12,A13;
+      hence thesis by A12;
+   end;
+   then reconsider D as non empty Subset-Family of X by A1,A2,A10,SETFAM_1:def
+7;
+   take D;
+   thus thesis by A3;
+end;
+uniqueness
+proof
+   let D1,D2 be non empty Subset-Family of X such that
+A14:for A being set holds (A in D1 iff
+   (ex B being set st (B in S & ex C being thin of M st A = B \/ C))) and
+A15:for A being set holds (A in D2 iff
+   (ex B being set st (B in S & ex C being thin of M st A = B \/ C)));
+     for A being set holds A in D1 iff A in D2
+   proof
+      let A be set;
+      thus A in D1 implies A in D2
+      proof
+         assume A in D1;
+         then ex B being set st (B in S & ex C being thin of M st A = B \/ C)
+         by A14;
+         hence thesis by A15;
+      end;
+      assume A in D2;
+      then ex B being set st (B in S & ex C being thin of M st A = B \/ C) by
+A15;
+      hence thesis by A14;
+   end;
+   hence thesis by TARSKI:2;
+end;
+end;
+
+definition
+   let X be set;
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+   let A be Element of COM(S,M);
+func MeasPart(A) -> non empty Subset-Family of X means
+:Def5:for B being set holds (B in it iff (B in S & B c= A &
+   A \ B is thin of M));
+existence
+proof
+   defpred P[set] means
+   for t being set holds (t = $1 implies (t in S & t c= A &
+   A \ t is thin of M));
+   consider D being set such that
+A1:for t being set holds (t in D iff t in bool X & P[t]) from Separation;
+A2:for B being set holds (B in D iff B in S & B c= A &
+   A \ B is thin of M)
+   proof
+      let B be set;
+        B in S & B c= A & A \ B is thin of M implies B in D
+      proof
+         assume
+      A3:B in S & B c= A & A \ B is thin of M;
+         then for t being set holds t = B implies
+         (t in S & t c= A & A \ t is thin of M);
+         hence thesis by A1,A3;
+      end;
+      hence thesis by A1;
+   end;
+  D <> {}
+   proof
+      consider B being set such that
+   A4:B in S & ex C being thin of M st A = B \/ C by Def4;
+      consider C being thin of M such that
+   A5:A = B \/ C by A4;
+      consider E being set such that
+   A6:E in S & C c= E & M.E = 0. by Def3;
+        A \ B = C \ B by A5,XBOOLE_1:40;
+      then A7: A \ B c= C by XBOOLE_1:36;
+   then A8:A \ B c= E by A6,XBOOLE_1:1;
+        A \ B c= X by A7,XBOOLE_1:1;
+  then A9:A \ B is thin of M by A6,A8,Def3;
+        B c= A by A5,XBOOLE_1:7;
+      hence thesis by A2,A4,A9;
+   end;
+   then consider x being set such that A10: x in D by XBOOLE_0:def 1;
+     D c= bool X
+   proof
+      let B be set;
+      assume B in D;
+      then B in S by A2;
+      hence thesis;
+   end;
+   then reconsider D as non empty Subset-Family of X by A10,SETFAM_1:def 7;
+   take D;
+   thus thesis by A2;
+end;
+uniqueness
+proof
+   let D1,D2 be non empty Subset-Family of X such that
+A11:for B being set holds B in D1 iff (B in S & B c= A &
+   A \ B is thin of M) and
+A12:for B being set holds B in D2 iff (B in S & B c= A &
+   A \ B is thin of M);
+     for B being set holds B in D1 iff B in D2
+   proof
+      let B be set;
+      thus B in D1 implies B in D2
+      proof
+         assume B in D1;
+         then B in S & B c= A & A \ B is thin of M by A11;
+         hence thesis by A12;
+      end;
+      assume B in D2;
+      then B in S & B c= A & A \ B is thin of M by A12;
+      hence thesis by A11;
+   end;
+   hence thesis by TARSKI:2;
+end;
+end;
+
+theorem Th18:
+   for S being sigma_Field_Subset of X holds
+   for M being sigma_Measure of S holds
+   for F being Function of NAT,COM(S,M) holds
+   ex G being Function of NAT,S st
+   for n being Element of NAT holds G.n in MeasPart(F.n)
+proof
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+   let F be Function of NAT,COM(S,M);
+   defpred P[Element of NAT, set] means
+   for n being Element of NAT for y being set holds
+   (n = $1 & y = $2 implies y in MeasPart(F.n));
+A1: for t being Element of NAT
+   ex A being Element of S st P[t,A]
+   proof
+      let t be Element of NAT;
+      consider A being Element of MeasPart(F.t);
+      reconsider A as Element of S by Def5;
+      take A;
+      thus thesis;
+   end;
+     ex G being Function of NAT,S st
+   for t being Element of NAT holds P[t,G.t] from FuncExD(A1);
+   then consider G being Function of NAT,S such that
+A2: for t being Element of NAT holds
+   for n being Element of NAT for y being set holds
+      (n = t & y = G.t implies y in MeasPart(F.n));
+   take G;
+   thus thesis by A2;
+end;
+
+theorem Th19:
+   for S being sigma_Field_Subset of X holds
+   for M being sigma_Measure of S holds
+   for F being Function of NAT,COM(S,M) holds
+   for G being Function of NAT,S holds
+   (ex H being Function of NAT,bool X st
+   for n being Element of NAT holds H.n = F.n \ G.n)
+proof
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+   let F be Function of NAT,COM(S,M);
+   let G be Function of NAT,S;
+   defpred P[Element of NAT, set] means
+   for n being Element of NAT for y being set holds
+   (n = $1 & y = $2 implies y = F.n \ G.n);
+A1: for t being Element of NAT
+   ex A being Element of bool X st P[t,A]
+   proof
+      let t be Element of NAT;
+      A2: F.t is Element of COM(S,M);
+        F.t \ G.t c= F.t by XBOOLE_1:36;
+      then reconsider A = F.t \ G.t as Element of bool X by A2,XBOOLE_1:1;
+      take A;
+      thus thesis;
+   end;
+     ex H being Function of NAT,bool X st
+   for t being Element of NAT holds P[t,H.t] from FuncExD(A1);
+   then consider H being Function of NAT,bool X such that
+A3: for t being Element of NAT holds
+   for n being Element of NAT for y being set holds
+   (n = t & y = H.t implies y = F.n \ G.n);
+   take H;
+   thus thesis by A3;
+end;
+
+theorem Th20:
+   for S being sigma_Field_Subset of X holds
+   for M being sigma_Measure of S holds
+   for F being Function of NAT,bool X st
+   (for n being Element of NAT holds F.n is thin of M) holds
+   ex G being Function of NAT,S st
+   (for n being Element of NAT holds
+   F.n c= G.n & M.(G.n) = 0.)
+proof
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+   let F be Function of NAT,bool X;
+   assume
+A1:for n being Element of NAT holds F.n is thin of M;
+   defpred P[Element of NAT, set] means
+   for n being Element of NAT for y being set holds
+   (n = $1 & y = $2 implies y in S & F.n c= y & M.y = 0.);
+A2: for t being Element of NAT
+   ex A being Element of S st P[t,A]
+   proof
+      let t be Element of NAT;
+        F.t is thin of M by A1;
+      then consider A being set such that
+   A3:A in S & F.t c= A & M.A = 0. by Def3;
+      reconsider A as Element of S by A3;
+      take A;
+      thus thesis by A3;
+   end;
+     ex G being Function of NAT,S st
+   for t being Element of NAT holds P[t,G.t] from FuncExD(A2);
+   then consider G being Function of NAT,S such that
+A4: for t being Element of NAT holds
+   for n being Element of NAT for y being set holds
+   (n = t & y = G.t implies y in S & F.n c= y & M.y = 0.);
+   take G;
+   thus thesis by A4;
+end;
+
+Lm1:
+  for P,G,C being set holds
+  C c= G implies P \ C = (P \ G) \/ (P /\ (G \ C))
+ proof
+    let P,G,C be set;
+    assume
+A1:C c= G;
+    thus P \ C c= (P \ G) \/ (P /\ (G \ C))
+    proof
+       let x be set;
+       assume x in P \ C;
+       then (x in P & not x in G) or (x in P & (x in G &
+       not x in C)) by XBOOLE_0:def 4;
+       then x in P \ G or (x in P & x in G \ C) by XBOOLE_0:def 4;
+       then x in P \ G or x in P /\ (G \ C) by XBOOLE_0:def 3;
+       hence thesis by XBOOLE_0:def 2;
+    end;
+    let x be set;
+    assume
+ x in (P \ G) \/ (P /\ (G \ C));
+    then x in P \ G or x in (P /\ (G \ C)) by XBOOLE_0:def 2;
+    then x in P \ G or (x in P & x in (G \ C)) by XBOOLE_0:def 3;
+    then x in P & not x in C by A1,XBOOLE_0:def 4;
+    hence thesis by XBOOLE_0:def 4;
+ end;
+
+theorem Th21:
+   for S being sigma_Field_Subset of X holds
+   for M being sigma_Measure of S holds
+   for D being non empty Subset-Family of X holds
+   (for A being set holds
+   (A in D iff ex B being set st B in S & ex C being thin of M st A = B \/ C))
+   implies D is sigma_Field_Subset of X
+proof
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+   let D be non empty Subset-Family of X;
+   assume
+A1:for A being set holds A in D iff
+   (ex B being set st B in S & ex C being thin of M st A = B \/ C);
+A2:for A being set holds A in D implies X\A in D
+   proof
+      let A be set;
+      assume
+   A3:A in D;
+        ex Q being set st Q in S & ex W being thin of M st X \ A = Q \/ W
+      proof
+         consider B being set such that
+      A4:B in S & ex C being thin of M st A = B \/ C by A1,A3;
+         consider C being thin of M such that
+      A5:A = B \/ C by A4;
+         consider G being set such that
+      A6:G in S & C c= G & M.G = 0. by Def3;
+         set P = X \ B;
+      A7:X \ B in S by A4,MEASURE1:def 3;
+      A8:X \ A = P \ C by A5,XBOOLE_1:41;
+         set Q = P \ G;
+     A9:ex W being thin of M st X \ A = Q \/ W
+         proof
+            set W = P /\ (G \ C);
+        A10:ex R being set st (R in S & W c= R & M.R = 0.)
+            proof
+               take G;
+           A11:W c= G \ C by XBOOLE_1:17;
+                 G \ C c= G by XBOOLE_1:36;
+               hence thesis by A6,A11,XBOOLE_1:1;
+            end;
+         W c= P by XBOOLE_1:17;
+            then reconsider W as Subset of X by A7,XBOOLE_1:1;
+            reconsider W as thin of M by A10,Def3;
+            take W;
+            thus thesis by A6,A8,Lm1;
+         end;
+         take Q;
+         thus thesis by A6,A7,A9,MEASURE1:47;
+      end;
+      hence thesis by A1;
+   end;
+     for K being N_Sub_set_fam of X holds K c= D implies union K in D
+   proof
+      let K be N_Sub_set_fam of X;
+      assume
+   A12:K c= D;
+      consider F being Function of NAT,bool X such that
+  A13:K = rng F by SUPINF_2:def 14;
+  A14:dom F = NAT by FUNCT_2:def 1;
+  A15:for n being Nat holds F.n in D
+      proof
+         let n be Nat;
+           F.n in K by A13,FUNCT_2:6;
+         hence thesis by A12;
+      end;
+  A16:for n being Nat holds
+      ex B being set st B in S & ex C being thin of M st F.n = B \/ C
+      proof
+         let n be Nat;
+           F.n in D by A15;
+         hence thesis by A1;
+      end;
+        for n being Nat holds F.n in COM(S,M)
+      proof
+         let n be Nat;
+           ex B being set st (B in S & ex C being thin of M st F.n = B \/ C)
+         by A16;
+         hence thesis by Def4;
+      end;
+      then for n being set st n in NAT holds F.n in COM(S,M);
+      then reconsider F as Function of NAT,COM(S,M) by A14,FUNCT_2:5;
+      consider G being Function of NAT,S such that
+   A17:for n being Element of NAT holds G.n in MeasPart(F.n) by Th18;
+   A18:for n being Element of NAT holds G.n in S & G.n c= F.n &
+      F.n \ G.n is thin of M
+      proof
+         let n be Element of NAT;
+           G.n in MeasPart(F.n) by A17;
+         hence thesis by Def5;
+      end;
+      consider H be Function of NAT,bool X such that
+   A19:for n being Element of NAT holds (H.n = F.n \ G.n) by Th19;
+        for n being Element of NAT holds H.n is thin of M
+      proof
+         let n be Element of NAT;
+           F.n \ G.n is thin of M by A18;
+         hence thesis by A19;
+      end;
+      then consider L being Function of NAT,S such that
+  A20:for n being Element of NAT holds H.n c= L.n & M.(L.n) = 0. by Th20;
+        ex B being set st B in S & ex C being thin of M st union K = B \/ C
+      proof
+         set B = union rng G;
+     A21:union rng G c= union rng F
+         proof
+            let x be set;
+            assume x in union rng G;
+            then consider Z being set such that
+        A22:x in Z & Z in rng G by TARSKI:def 4;
+              dom G = NAT by FUNCT_2:def 1;
+            then consider n being set such that
+        A23:n in NAT & Z = G.n by A22,FUNCT_1:def 5;
+            reconsider n as Element of NAT by A23;
+            set P = F.n;
+A24:        G.n c= P by A18;
+              ex P being set st P in rng F & x in P
+            proof
+               take P;
+               thus thesis by A14,A22,A23,A24,FUNCT_1:def 5;
+            end;
+            hence thesis by TARSKI:def 4;
+         end;
+     A25:ex C being thin of M st union K = B \/ C
+         proof
+            set C = union K \ B;
+        A26:union K = C \/ union rng F /\ union rng G by A13,XBOOLE_1:51
+                   .= B \/ C by A21,XBOOLE_1:28;
+            reconsider C as Subset of X;
+              C is thin of M
+            proof
+           A27:C c= union rng H
+               proof
+                 let x be set;
+                 assume x in C;
+             then A28:x in union rng F & not x in union rng G by A13,XBOOLE_0:
+def 4;
+                 then consider Z being set such that
+             A29:x in Z & Z in rng F by TARSKI:def 4;
+                 consider n being set such that
+             A30:n in NAT & Z = F.n by A14,A29,FUNCT_1:def 5;
+                 reconsider n as Element of NAT by A30;
+                   not x in G.n
+                 proof
+                    assume
+                A31:x in G.n;
+                      dom G = NAT by FUNCT_2:def 1;
+                    then G.n in rng G by FUNCT_1:def 5;
+                    hence thesis by A28,A31,TARSKI:def 4;
+                 end;
+then A32:             x in F.n \ G.n by A29,A30,XBOOLE_0:def 4;
+                   ex Z being set st x in Z & Z in rng H
+                 proof
+A33:                dom H = NAT by FUNCT_2:def 1;
+                    take H.n;
+                    thus thesis by A19,A32,A33,FUNCT_1:def 5;
+                 end;
+                 hence thesis by TARSKI:def 4;
+               end;
+                 union rng H c= union rng L
+               proof
+                  let x be set;
+                  assume x in union rng H;
+                  then consider Z being set such that
+              A34:x in Z & Z in rng H by TARSKI:def 4;
+                    dom H = NAT by FUNCT_2:def 1;
+                  then consider n being set such that
+              A35:n in NAT & Z = H.n by A34,FUNCT_1:def 5;
+                  reconsider n as Element of NAT by A35;
+                  A36: x in H.n & H.n c= L.n by A20,A34,A35;
+                    n in dom L by A35,FUNCT_2:def 1;
+                  then L.n in rng L by FUNCT_1:def 5;
+                  hence thesis by A36,TARSKI:def 4;
+               end;
+           then A37:C c= union rng L by A27,XBOOLE_1:1;
+                 for A being set holds A in rng L implies
+               A is measure_zero of M
+               proof
+                  let A be set;
+                  assume
+              A38:A in rng L;
+A39:              rng L c= S by MEASURE2:def 1;
+                    dom L = NAT by FUNCT_2:def 1;
+                  then A40: ex n being set st
+                  n in NAT & A = L.n by A38,FUNCT_1:def 5;
+                  reconsider A as Element of S by A38,A39;
+                    M.A = 0. by A20,A40;
+                  hence thesis by MEASURE1:def 13;
+               end;
+               then union rng L is measure_zero of M by MEASURE2:16;
+           then M.(union rng L) = 0. by MEASURE1:def 13;
+               hence thesis by A37,Def3;
+            end;
+            then consider C being thin of M such that
+        A41:union K = B \/ C by A26;
+            take C;
+            thus thesis by A41;
+         end;
+         take B;
+         thus thesis by A25;
+      end;
+      hence thesis by A1;
+   end;
+   hence thesis by A2,MEASURE1:def 3,def 9;
+end;
+
+definition
+   let X be set;
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+ cluster COM(S,M) -> sigma_Field_Subset-like compl-closed non empty;
+coherence
+proof
+     for A being set holds (A in COM(S,M) iff
+   (ex B being set st B in S & ex C being thin of M st A = B \/ C)) by Def4;
+   hence thesis by Th21;
+end;
+end;
+
+theorem Th22:
+   for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S,
+       B1,B2 being set st B1 in S & B2 in S holds
+   for C1,C2 being thin of M holds
+   B1 \/ C1 = B2 \/ C2 implies M.B1 = M.B2
+proof
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+   let B1,B2 be set;
+   assume
+A1:B1 in S & B2 in S;
+   let C1,C2 be thin of M;
+   assume
+A2:B1 \/ C1 = B2 \/ C2;
+   consider D1 being set such that
+A3:D1 in S & C1 c= D1 & M.D1 = 0. by Def3;
+   consider D2 being set such that
+A4:D2 in S & C2 c= D2 & M.D2 = 0. by Def3;
+     B1 c= B2 \/ C2 & B2 \/ C2 c= B2 \/ D2 by A2,A4,XBOOLE_1:7,9
+;
+then A5:B1 c= B2 \/ D2 by XBOOLE_1:1;
+     B2 c= B1 \/ C1 & B1 \/ C1 c= B1 \/ D1 by A2,A3,XBOOLE_1:7,9
+;
+then A6:B2 c= B1 \/ D1 by XBOOLE_1:1;
+   reconsider B1,B2,D1,D2 as Element of S by A1,A3,A4;
+A7:M.B1 <=' M.(B2 \/ D2) by A5,MEASURE1:62;
+A8:M.(B2 \/ D2) <=' M.B2 + M.D2 by MEASURE1:64;
+     M.B2 + M.D2 = M.B2 by A4,SUPINF_2:18;
+   then A9:M.B1 <=' M.B2 by A7,A8,SUPINF_1:29;
+A10:M.B2 <=' M.(B1 \/ D1) by A6,MEASURE1:62;
+A11:M.(B1 \/ D1) <=' M.B1 + M.D1 by MEASURE1:64;
+     M.B1 + M.D1 = M.B1 by A3,SUPINF_2:18;
+   then M.B2 <=' M.B1 by A10,A11,SUPINF_1:29;
+   hence thesis by A9,SUPINF_1:22;
+end;
+
+definition
+   let X be set;
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+func COM(M) -> sigma_Measure of COM(S,M) means
+:Def6:for B being set st B in S
+     for C being thin of M holds it.(B \/ C) = M.B;
+existence
+proof
+   defpred P[set,set] means
+   for x,y being set st x in COM(S,M) holds
+   (x = $1 & y = $2 implies (for B being set st B in S
+   for C being thin of M holds (x = B \/ C implies y = M.B)));
+A1: for x being set st x in COM(S,M)
+   ex y being set st y in ExtREAL & P[x,y]
+   proof
+      let x be set;
+      assume x in COM(S,M);
+      then consider B being set such that
+   A2:B in S & ex C being thin of M st x = B \/ C by Def4;
+      take M.B;
+      thus thesis by A2,Th22,FUNCT_2:7;
+   end;
+   consider comM being Function of COM(S,M),ExtREAL such that
+A3: for x being set st x in COM(S,M) holds P[x,comM.x] from FuncEx1(A1);
+A4: comM is nonnegative
+   proof
+        for x being Element of COM(S,M) holds 0. <=' comM.x
+      proof
+         let x be Element of COM(S,M);
+         consider B being set such that
+      A5:B in S & ex C being thin of M st x = B \/ C by Def4;
+         reconsider B as Element of S by A5;
+A6:     comM.x = M.B by A3,A5;
+           M is nonnegative by MEASURE1:def 11;
+         hence thesis by A6,MEASURE1:def 4;
+      end;
+      hence thesis by MEASURE1:def 4;
+   end;
+A7: for B being set st B in S
+   for C being thin of M holds comM.(B \/ C) = M.B
+   proof
+      let B be set;
+      assume
+  A8:B in S;
+      let C be thin of M;
+        B \/ C in COM(S,M) by A8,Def4;
+      hence thesis by A3,A8;
+   end;
+     {} is thin of M
+   proof
+   A9:ex B1 being set st B1 in S & {} c= B1 & M.B1 = 0.
+      proof
+         take {};
+         thus thesis by MEASURE1:45,def 11;
+      end;
+        {} is Subset of X by XBOOLE_1:2;
+      hence thesis by A9,Def3;
+   end;
+   then reconsider C = {} as thin of M;
+   set B = {};
+A10:B in S by MEASURE1:45;
+     {} = B \/ C;
+then A11:comM.{} = M.{} by A7,A10
+         .= 0. by MEASURE1:def 11;
+     for F being Sep_Sequence of COM(S,M) holds
+   SUM(comM*F) = comM.(union rng F)
+   proof
+      let F be Sep_Sequence of COM(S,M);
+   A12:dom F = NAT by FUNCT_2:def 1;
+      consider G being Function of NAT,S such that
+   A13:for n being Element of NAT holds G.n in MeasPart(F.n) by Th18;
+   A14:for n being Element of NAT holds G.n in S & G.n c= F.n &
+      F.n \ G.n is thin of M
+      proof
+         let n be Element of NAT;
+           G.n in MeasPart(F.n) by A13;
+         hence thesis by Def5;
+      end;
+      consider H be Function of NAT,bool X such that
+   A15:for n being Element of NAT holds (H.n = F.n \ G.n) by Th19;
+    for n being Element of NAT holds H.n is thin of M
+      proof
+         let n be Element of NAT;
+           F.n \ G.n is thin of M by A14;
+         hence thesis by A15;
+      end;
+      then consider L being Function of NAT,S such that
+  A16:for n being Element of NAT holds H.n c= L.n & M.(L.n) = 0. by Th20;
+      consider B being set such that
+  A17:B = union rng G;
+  A18:B c= union rng F
+      proof
+         let x be set;
+         assume x in B;
+         then consider Z being set such that
+     A19:x in Z & Z in rng G by A17,TARSKI:def 4;
+       dom G = NAT by FUNCT_2:def 1;
+         then consider n being set such that
+     A20:n in NAT & Z = G.n by A19,FUNCT_1:def 5;
+         reconsider n as Element of NAT by A20;
+         set P = F.n;
+A21:        G.n c= P by A14;
+           ex P being set st P in rng F & x in P
+         proof
+            take P;
+            thus thesis by A12,A19,A20,A21,FUNCT_1:def 5;
+         end;
+         hence thesis by TARSKI:def 4;
+      end;
+A22:  ex C being thin of M st union rng F = B \/ C
+      proof
+         set C = union rng F \ B;
+     A23:union rng F = C \/ union rng F /\ B by XBOOLE_1:51
+                    .= B \/ C by A18,XBOOLE_1:28;
+           C c= X
+         proof
+              union rng F \ B c= union rng F by XBOOLE_1:36;
+            hence thesis by XBOOLE_1:1;
+         end;
+         then reconsider C as Subset of X;
+           C is thin of M
+         proof
+        A24:C c= union rng H
+            proof
+               let x be set;
+               assume x in C;
+           then A25:x in union rng F & not x in union rng G by A17,XBOOLE_0:def
+4;
+               then consider Z being set such that
+           A26:x in Z & Z in rng F by TARSKI:def 4;
+               consider n being set such that
+           A27:n in NAT & Z = F.n by A12,A26,FUNCT_1:def 5;
+               reconsider n as Element of NAT by A27;
+                 not x in G.n
+               proof
+                  assume
+              A28:x in G.n;
+                    dom G = NAT by FUNCT_2:def 1;
+                  then G.n in rng G by FUNCT_1:def 5;
+                  hence thesis by A25,A28,TARSKI:def 4;
+               end;
+then A29:           x in F.n \ G.n by A26,A27,XBOOLE_0:def 4;
+                 ex Z being set st x in Z & Z in rng H
+               proof
+A30:              dom H = NAT by FUNCT_2:def 1;
+                  take H.n;
+                  thus thesis by A15,A29,A30,FUNCT_1:def 5;
+               end;
+               hence thesis by TARSKI:def 4;
+            end;
+              union rng H c= union rng L
+            proof
+               let x be set;
+               assume x in union rng H;
+               then consider Z being set such that
+           A31:x in Z & Z in rng H by TARSKI:def 4;
+                 dom H = NAT by FUNCT_2:def 1;
+               then consider n being set such that
+           A32:n in NAT & Z = H.n by A31,FUNCT_1:def 5;
+               reconsider n as Element of NAT by A32;
+               A33: x in H.n & H.n c= L.n by A16,A31,A32;
+                 n in dom L by A32,FUNCT_2:def 1;
+               then L.n in rng L by FUNCT_1:def 5;
+               hence thesis by A33,TARSKI:def 4;
+            end;
+        then A34:C c= union rng L by A24,XBOOLE_1:1;
+         M.(union rng L) = 0.
+            proof
+                 for A being set holds A in rng L implies
+               A is measure_zero of M
+               proof
+                  let A be set;
+                  assume
+              A35:A in rng L;
+A36:              rng L c= S by MEASURE2:def 1;
+                    dom L = NAT by FUNCT_2:def 1;
+                  then A37: ex n being set st
+                  n in NAT & A = L.n by A35,FUNCT_1:def 5;
+                  reconsider A as Element of S by A35,A36;
+                    M.A = 0. by A16,A37;
+                  hence thesis by MEASURE1:def 13;
+               end;
+               then union rng L is measure_zero of M by MEASURE2:16;
+               hence thesis by MEASURE1:def 13;
+            end;
+            hence thesis by A34,Def3;
+         end;
+         then consider C being thin of M such that
+     A38:union rng F = B \/ C by A23;
+         take C;
+         thus thesis by A38;
+      end;
+        for n,m being set st n <> m holds G.n misses G.m
+      proof
+         let n,m be set;
+         assume n <> m;
+         then F.n misses F.m by PROB_2:def 3;
+         then A39:F.n /\ F.m = {} by XBOOLE_0:def 7;
+A40:       dom F = NAT by FUNCT_2:def 1 .= dom G by FUNCT_2:def 1;
+           for n being set holds G.n c= F.n
+         proof
+           let n be set;
+           per cases;
+           suppose n in dom F;
+           then n in NAT by FUNCT_2:def 1;
+           hence thesis by A14;
+           suppose A41:not n in dom F;
+           then F.n = {} by FUNCT_1:def 4 .= G.n by A40,A41,FUNCT_1:def 4;
+           hence thesis;
+         end;
+         then G.n c= F.n & G.m c= F.m;
+         then G.n /\ G.m c= {} by A39,XBOOLE_1:27;
+         then G.n /\ G.m = {} by XBOOLE_1:3;
+         hence thesis by XBOOLE_0:def 7;
+      end;
+      then reconsider G as Sep_Sequence of S by PROB_2:def 3;
+  A42:SUM(M*G) = M.(union rng G) by MEASURE1:def 11;
+  A43:comM*F is nonnegative by A4,MEASURE1:54;
+        M is nonnegative by MEASURE1:def 11;
+  then A44:M*G is nonnegative by MEASURE1:54;
+        SUM(comM*F) = SUM(M*G)
+      proof
+     A45:for n being Nat holds comM.(F.n) = M.(G.n)
+         proof
+            let n be Nat;
+        A46:G.n in S & G.n c= F.n & F.n \ G.n is thin of M by A14;
+            then consider C being thin of M such that
+        A47:C = F.n \ G.n;
+              F.n = (F.n /\ G.n) \/ (F.n \ G.n) by XBOOLE_1:51
+               .= G.n \/ C by A46,A47,XBOOLE_1:28;
+            hence thesis by A7;
+         end;
+     A48:for n being Nat holds (comM*F).n = (M*G).n
+         proof
+            let n be Nat;
+              (comM*F).n = comM.(F.n) by FUNCT_2:21
+                          .= M.(G.n) by A45
+                          .= (M*G).n by FUNCT_2:21;
+            hence thesis;
+         end;
+     then for n being Nat holds (comM*F).n <=' (M*G).n;
+     then A49:SUM(comM*F) <=' SUM(M*G) by A43,SUPINF_2:62;
+       for n being Nat holds (M*G).n <=' (comM*F).n by A48;
+         then SUM(M*G) <=' SUM(comM*F) by A44,SUPINF_2:62;
+         hence thesis by A49,SUPINF_1:22;
+      end;
+      hence thesis by A7,A17,A22,A42;
+   end;
+   then reconsider comM as sigma_Measure of COM(S,M) by A4,A11,MEASURE1:def 11;
+   take comM;
+   thus thesis by A7;
+end;
+uniqueness
+proof
+   let M1,M2 be sigma_Measure of COM(S,M) such that
+A50:(for B being set st B in S
+   for C being thin of M holds M1.(B \/ C) = M.B) and
+A51:(for B being set st B in S
+   for C being thin of M holds M2.(B \/ C) = M.B);
+     for x being set holds x in COM(S,M) implies M1.x = M2.x
+   proof
+      let x be set;
+      assume x in COM(S,M);
+      then consider B being set such that
+   A52:B in S & ex C being thin of M st x = B \/ C by Def4;
+        M1.x = M.B by A50,A52
+          .= M2.x by A51,A52;
+      hence thesis;
+   end;
+   hence thesis by FUNCT_2:18;
+end;
+end;
+
+theorem
+     for S being sigma_Field_Subset of X holds
+   for M being sigma_Measure of S holds
+   COM(M) is_complete COM(S,M)
+proof
+   let S be sigma_Field_Subset of X;
+   let M be sigma_Measure of S;
+     for A being Subset of X for B being set st B in COM(S,M) holds
+   ((A c= B & (COM(M)).B = 0.) implies A in COM(S,M))
+   proof
+      let A be Subset of X;
+      let B be set;
+      assume
+   A1:B in COM(S,M);
+         assume
+      A2:A c= B & (COM(M)).B = 0.;
+           ex B1 being set st (B1 in S & ex C1 being thin of M st A = B1 \/ C1)
+         proof
+            consider B2 being set such that
+         A3:B2 in S & ex C2 being thin of M st B = B2 \/ C2 by A1,Def4;
+            consider C2 being thin of M such that
+         A4:B = B2 \/ C2 by A3;
+         A5:M.B2 = 0. by A2,A3,Def6;
+            consider D2 being set such that
+         A6:D2 in S & C2 c= D2 & M.D2 = 0. by Def3;
+            set C1 = (A /\ B2) \/ (A /\ C2);
+         A7:A = A /\ (B2 \/ C2) by A2,A4,XBOOLE_1:28
+             .= {} \/ C1 by XBOOLE_1:23;
+            set O = B2 \/ D2;
+        A8:O in S by A3,A6,MEASURE1:46;
+              A /\ B2 c= B2 & A /\ C2 c= C2 by XBOOLE_1:17;
+then A9:            A /\ B2 c= B2 & A /\ C2 c= D2 by A6,XBOOLE_1:1;
+        then A10:C1 c= O by XBOOLE_1:13;
+         A11:C1 is thin of M
+            proof
+           A12:ex O being set st (O in S & C1 c= O & M.O = 0.)
+               proof
+                  consider O1 being Element of S such that
+              A13:O1 = O by A8;
+                  reconsider B2,D2 as Element of S by A3,A6;
+                    M.(B2 \/ D2) <=' 0. + 0. by A5,A6,MEASURE1:64;
+              then A14:M.O1 <=' 0. by A13,SUPINF_2:18;
+                    M is nonnegative by MEASURE1:def 11;
+then A15:                  0. <=' M.O1 by MEASURE1:def 4;
+                  take O;
+                  thus thesis by A9,A13,A14,A15,SUPINF_1:22,XBOOLE_1:13;
+               end;
+                 C1 c= X by A8,A10,XBOOLE_1:1;
+               hence thesis by A12,Def3;
+            end;
+            take {};
+            thus thesis by A7,A11,MEASURE1:45;
+         end;
+         hence thesis by Def4;
+   end;
+   hence thesis by Def2;
+end;

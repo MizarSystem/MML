@@ -1,0 +1,671 @@
+:: Natural Numbers
+::  by Robert Milewski
+::
+:: Received February 23, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, FUNCT_1, INT_1, ARYTM_1, ARYTM_3, NAT_1, POWER, MATRIX_2,
+      FINSEQ_4, ORDINAL2, REALSET1, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XCMPLX_0, XREAL_0, REALSET1,
+      INT_1, NAT_1, POWER, ABIAN, SERIES_1, FUNCT_1, FINSEQ_1, FINSEQ_4,
+      BINARITH, ORDINAL2;
+ constructors ABIAN, SERIES_1, BINARITH, FINSEQ_4, INT_1, REALSET1, MEMBERED;
+ clusters XREAL_0, RELSET_1, ABIAN, BINARITH, INT_1, REALSET1, MEMBERED, NAT_1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions REALSET1;
+ theorems AXIOMS, REAL_1, REAL_2, INT_1, NAT_1, ABIAN, POWER, FINSEQ_1,
+      FINSEQ_4, BINARITH, AMI_5, GROUP_4, GOBOARD9, UNIFORM1, SCMFSA_7,
+      CQC_THE1, ORDINAL2, REALSET1, TARSKI, RLVECT_1, XCMPLX_1;
+ schemes BINARITH, RECDEF_1;
+
+begin :: Preliminaries
+
+  scheme NonUniqPiFinRecExD{D() -> non empty set, A() -> Element of D(),
+                          N() -> Nat, P[set,set,set]}:
+   ex p be FinSequence of D() st len p = N() & (p/.1 = A() or N() = 0) &
+    for n be Nat st 1 <= n & n < N() holds P[n,p/.n,p/.(n+1)]
+   provided
+    A1: for n be Nat st 1 <= n & n < N() holds for x be Element of D()
+         ex y be Element of D() st P[n,x,y]
+   proof
+      defpred _P[set,set,set] means P[$1,$2,$3];
+  A2: for n be Nat st 1 <= n & n < N() holds for x be Element of D()
+         ex y be Element of D() st _P[n,x,y] by A1;
+    consider p be FinSequence of D() such that
+     A3: len p = N() and
+     A4: (p.1 = A() or N() = 0) and
+     A5: for n be Nat st 1 <= n & n < N() holds _P[n,p.n,p.(n+1)]
+                                                   from FinRecExD(A2);
+    take p;
+    thus len p = N() by A3;
+      now assume N() <> 0;
+     then N() > 0 by NAT_1:19;
+     then N() >= 0 + 1 by NAT_1:38;
+     hence p/.1 = A() by A3,A4,FINSEQ_4:24;
+    end;
+    hence p/.1 = A() or N() = 0;
+    let n be Nat;
+    assume that
+     A6: 1 <= n and
+     A7: n < N();
+    A8: 1 <= n + 1 by NAT_1:29;
+          n + 1 <= N() by A7,NAT_1:38;
+    then p.n = p/.n & p.(n+1) = p/.(n+1) by A3,A6,A7,A8,FINSEQ_4:24;
+    hence P[n,p/.n,p/.(n+1)] by A5,A6,A7;
+   end;
+
+ theorem Th1:
+  for x be real number holds
+   x < [\ x /] + 1 by INT_1:52;
+
+  theorem
+     for x,y be real number st x >= 0 & y > 0 holds
+    x / ( [\ x / y /] + 1 ) < y
+   proof
+    let x,y be real number such that
+     A1: x >= 0 and
+     A2: y > 0;
+      x / y >= 0 by A1,A2,REAL_2:125;
+    then [\ x / y /] >= 0 by UNIFORM1:12;
+    then A3: [\ x / y /] + 1 > 0 + 0 by REAL_1:67;
+      x / y < [\ (x / y) /] + 1 by Th1;
+    then (x / y) * y < ( [\ x / y /] + 1 ) * y by A2,REAL_1:70;
+    then x < ( [\ x / y /] + 1 ) * y by A2,XCMPLX_1:88;
+    hence x / ( [\ x / y /] + 1 ) < y by A3,REAL_2:178;
+   end;
+
+begin :: Division and Rest of Division
+
+canceled;
+
+  theorem Th4:
+   for n be natural number holds
+    0 div n = 0
+   proof
+    let n be natural number;
+      now per cases by NAT_1:def 1;
+     suppose ex t be Nat st 0 = n * (0 div n) + t & t < n;
+      then consider t be Nat such that
+       A1: 0 = n * (0 div n) + t and
+       A2: t < n;
+      A3: n * (0 div n) = 0 by A1,NAT_1:23;
+        0 <= t by NAT_1:18;
+      hence 0 div n = 0 by A2,A3,XCMPLX_1:6;
+     suppose 0 div n = 0 & n = 0;
+      hence 0 div n = 0;
+    end;
+    hence 0 div n = 0;
+   end;
+
+  theorem
+   for n be non empty Nat holds n div n = 1
+   proof
+    let n be non empty Nat;
+    n*1 div n = 1 by GROUP_4:107;
+    hence thesis;
+   end;
+
+  theorem
+     for n be Nat holds n div 1 = n
+   proof
+    let n be Nat;
+      n = 1 * n + 0 & 0 < 1;
+    hence n div 1 = n by NAT_1:def 1;
+   end;
+
+  theorem
+     for i,j,k,l be natural number st i <= j & k <= j holds
+    i = j -' k + l implies k = j -' i + l
+   proof
+    let i,j,k,l be natural number;
+    assume that
+     A1: i <= j and
+     A2: k <= j and
+     A3: i = j -' k + l;
+      i - l = j -' k by A3,XCMPLX_1:26
+       .= j - k by A2,SCMFSA_7:3;
+    hence k = j - (i - l) by XCMPLX_1:18
+       .= j - i + l by XCMPLX_1:37
+       .= j -' i + l by A1,SCMFSA_7:3;
+   end;
+
+  theorem
+     for i,n be natural number holds
+    i in Seg n implies n -' i + 1 in Seg n
+   proof
+    let i,n be natural number;
+    assume i in Seg n;
+    then A1: 1 <= i & i <= n by FINSEQ_1:3;
+    then n - i <= n - 1 by REAL_1:92;
+    then n - i + 1 <= n by REAL_1:84;
+    then A2: n -' i + 1 <= n by A1,SCMFSA_7:3;
+      1 <= n -' i + 1 by NAT_1:29;
+    hence n -' i + 1 in Seg n by A2,FINSEQ_1:3;
+   end;
+
+  theorem
+     for i,j be natural number st j < i holds
+    i -' (j + 1) + 1 = i -' j
+   proof
+    let i,j be natural number;
+    assume A1: j < i;
+    then j + 1 <= i by NAT_1:38;
+    hence i -' (j + 1) + 1 = i - (j + 1) + 1 by SCMFSA_7:3
+       .= i - j - 1 + 1 by XCMPLX_1:36
+       .= i - j by XCMPLX_1:27
+       .= i -' j by A1,SCMFSA_7:3;
+   end;
+
+  theorem Th10:
+   for i,j be natural number st i >= j holds
+    j -' i = 0
+   proof
+    let i,j be natural number;
+    assume A1: i >= j;
+    per cases by A1,REAL_1:def 5;
+     suppose i = j;
+      hence j -' i = 0 by GOBOARD9:1;
+     suppose i > j;
+      then j - i < 0 by REAL_2:105;
+      hence j -' i = 0 by BINARITH:def 3;
+   end;
+
+  theorem Th11:
+   for i,j be non empty natural number holds
+    i -' j < i
+   proof
+    let i,j be non empty natural number;
+    per cases;
+     suppose A1: j <= i;
+        j >= 0 by NAT_1:18;
+      then i - j < i - 0 by REAL_1:92;
+      hence i -' j < i by A1,SCMFSA_7:3;
+     suppose j > i;
+      then i -' j = 0 by Th10;
+      hence i -' j < i by NAT_1:19;
+   end;
+
+  theorem Th12:
+   for n,k be natural number st k <= n holds
+    2 to_power n = (2 to_power k) * (2 to_power (n-'k))
+   proof
+    let n,k be natural number;
+    assume k <= n;
+    then n = k + (n -' k) by AMI_5:4;
+    hence 2 to_power n
+        = (2 to_power k) * (2 to_power (n-'k)) by POWER:32;
+   end;
+
+  theorem
+     for n,k be Nat st k <= n holds
+    2 to_power k divides 2 to_power n
+   proof
+    let n,k be Nat;
+    assume k <= n;
+    then 2 to_power n = (2 to_power k) * (2 to_power (n-'k)) by Th12;
+    hence thesis by NAT_1:def 3;
+   end;
+
+  theorem Th14:
+   for n,k be natural number st k > 0 & n div k = 0 holds n < k
+   proof
+    let n,k be natural number;
+    assume that
+     A1: k > 0 and
+     A2: n div k = 0;
+    consider t be Nat such that
+     A3: n = k * (n div k) + t and
+     A4: t < k by A1,NAT_1:def 1;
+    thus n < k by A2,A3,A4;
+   end;
+
+ reserve n, k, i for natural number;
+
+  theorem
+  k > 0 & k <= n implies n div k >= 1
+   proof
+    assume that
+     A1: k > 0 and
+     A2: k <= n;
+      n div k <> 0 by A1,A2,Th14;
+    then n div k > 0 by NAT_1:19;
+    then n div k >= 0 + 1 by NAT_1:38;
+    hence n div k >= 1;
+   end;
+
+  theorem
+  k <> 0 implies (n+k) div k = (n div k) + 1
+   proof
+    assume k <> 0;
+    then consider t be Nat such that
+     A1: n = k * (n div k) + t and
+     A2: t < k by NAT_1:def 1;
+      n + k = k * (n div k) + k * 1 + t by A1,XCMPLX_1:1
+       .= k * ((n div k) + 1) + t by XCMPLX_1:8;
+    hence (n+k) div k = (n div k) + 1 by A2,NAT_1:def 1;
+   end;
+
+  theorem
+  k divides n & 1 <= n & 1 <= i & i <= k implies
+    (n -' i) div k = (n div k) - 1
+   proof
+    assume that
+     A1: k divides n and
+     A2: 1 <= n and
+     A3: 1 <= i and
+     A4: i <= k;
+    A5: k > 0 by A3,A4,AXIOMS:22;
+    A6: n = k * (n div k) by A1,NAT_1:49;
+      n >= 0 + 1 by A2;
+    then n > 0 by NAT_1:38;
+    then A7: k <= n by A1,NAT_1:54;
+      n div k > 0
+    proof
+     assume not n div k > 0;
+     then n div k = 0 by NAT_1:19;
+     hence contradiction by A5,A7,Th14;
+    end;
+    then n div k >= 0 + 1 by NAT_1:38;
+    then A8: (n div k)-'1 = (n div k) - 1 by SCMFSA_7:3;
+      i >= 0 + 1 by A3;
+    then i > 0 by NAT_1:38;
+    then A9: k-'i < k by A4,Th11;
+      i + k <= k + n by A4,A7,REAL_1:55;
+    then i <= n by REAL_1:53;
+    then n -' i = k * (n div k) - i by A6,SCMFSA_7:3
+       .= k * (n div k) - k * 1 + k - i by XCMPLX_1:27
+       .= k * ((n div k) - 1) + k - i by XCMPLX_1:40
+       .= k * ((n div k)-'1) + (k - i) by A8,XCMPLX_1:29
+       .= k * ((n div k)-'1) + (k-'i) by A4,SCMFSA_7:3;
+    hence thesis by A8,A9,NAT_1:def 1;
+   end;
+
+  theorem
+     for n,k be Nat st k <= n holds
+    (2 to_power n) div (2 to_power k) = 2 to_power (n -' k)
+   proof
+    let n,k be Nat;
+A1: 2 to_power k > 0 by POWER:39;
+    assume k <= n;
+    then 2 to_power n = (2 to_power k) * (2 to_power (n-'k)) by Th12;
+    hence (2 to_power n) div (2 to_power k) = 2 to_power (n -' k)
+                                                           by A1,GROUP_4:107;
+   end;
+
+  theorem
+     for n be Nat st n > 0 holds
+    2 to_power n mod 2 = 0
+   proof
+    let n be Nat;
+    assume n > 0;
+    then A1: n >= 0 + 1 by NAT_1:38;
+      2 to_power n
+        = 2 to_power (n - 1 + 1) by XCMPLX_1:27
+       .= 2 to_power (n-'1 + 1) by A1,SCMFSA_7:3
+       .= 2 to_power (n-'1) * (2 to_power 1) by POWER:32
+       .= 2 to_power (n-'1) * 2 by POWER:30;
+    hence 2 to_power n mod 2 = 0 by GROUP_4:101;
+   end;
+
+  theorem
+     for n be Nat st n > 0 holds
+    n mod 2 = 0 iff (n -' 1) mod 2 = 1
+   proof
+    let n be Nat;
+    assume A1: n > 0;
+    thus n mod 2 = 0 implies (n -' 1) mod 2 = 1
+    proof
+     assume A2: n mod 2 = 0;
+     consider t be Nat such that
+      A3: n = 2 * t + (n mod 2) and
+        (n mod 2) < 2 by NAT_1:def 2;
+       t > 0
+     proof
+      assume not t > 0;
+      then t = 0 by NAT_1:19;
+      hence contradiction by A1,A2,A3;
+     end;
+     then A4: t >= 0 + 1 by NAT_1:38;
+       n >= 0 + 1 by A1,NAT_1:38;
+     then n -' 1 = 2 * t - 1 by A2,A3,SCMFSA_7:3
+        .= 2 * (t - 1 + 1) - 1 by XCMPLX_1:27
+        .= 2 * (t - 1) + (2 * 1) - 1 by XCMPLX_1:8
+        .= 2 * (t - 1) + (1 + 1 - 1) by XCMPLX_1:29
+        .= 2 * (t-'1) + 1 by A4,SCMFSA_7:3;
+     hence (n -' 1) mod 2 = 1 by NAT_1:def 2;
+    end;
+    assume (n -' 1) mod 2 = 1;
+    then consider t be Nat such that
+     A5: n -' 1 = 2 * t + 1 and
+       1 < 2 by NAT_1:def 2;
+      n >= 0 + 1 by A1,NAT_1:38;
+    then n = 2 * t + 1 + 1 by A5,AMI_5:4
+          .= 2 * t + (1 + 1) by XCMPLX_1:1
+          .= 2 * t + 2 * 1
+          .= 2 * (t + 1) + 0 by XCMPLX_1:8;
+    hence n mod 2 = 0 by NAT_1:def 2;
+   end;
+
+  theorem
+     for n be non empty natural number st n <> 1 holds
+    n > 1
+   proof
+    let n be non empty natural number;
+    assume A1: n <> 1;
+      n >= 1 by RLVECT_1:99;
+    hence n > 1 by A1,REAL_1:def 5;
+   end;
+
+  theorem
+     for n, k be natural number st n <= k & k < n + n holds
+    k div n = 1
+   proof
+    let n, k be natural number;
+    assume that
+     A1: n <= k and
+     A2: k < n + n;
+      k - n < n + n - n by A2,REAL_1:54;
+    then k - n < n by XCMPLX_1:26;
+    then A3: k-'n < n by A1,SCMFSA_7:3;
+      k = n + k - n by XCMPLX_1:26
+     .= n + (k - n) by XCMPLX_1:29
+     .= n * 1 + (k-'n) by A1,SCMFSA_7:3;
+    hence k div n = 1 by A3,NAT_1:def 1;
+   end;
+
+  theorem Th23:
+   for n be Nat holds n is even iff n mod 2 = 0
+   proof
+    let n be Nat;
+    thus n is even implies n mod 2 = 0
+    proof
+     assume n is even;
+     then consider k be Nat such that
+      A1: n = 2*k by ABIAN:def 2;
+       n = 2*k + 0 by A1;
+     hence n mod 2 = 0 by NAT_1:def 2;
+    end;
+    assume n mod 2 = 0;
+    then ex k be Nat st
+      n = 2*k + 0 & 0 < 2 by NAT_1:def 2;
+    hence n is even;
+   end;
+
+  theorem
+     for n be Nat holds n is odd iff n mod 2 = 1
+   proof
+    let n be Nat;
+      n is odd iff not n mod 2 = 0 by Th23;
+    hence n is odd iff n mod 2 = 1 by GROUP_4:100;
+   end;
+
+  theorem
+     for n,k,t be Nat st 1 <= t & k <= n & 2*t divides k holds
+    n div t is even iff (n-'k) div t is even
+   proof
+    let n,k,t be Nat;
+    assume that
+     A1: 1 <= t and
+     A2: k <= n and
+     A3: 2*t divides k;
+    thus n div t is even implies (n-'k) div t is even
+    proof
+     assume n div t is even;
+     then consider p be Nat such that
+      A4: n div t = 2 * p by ABIAN:def 2;
+       t >= 0 + 1 by A1;
+     then A5: t > 0 by NAT_1:38;
+     then consider q be Nat such that
+      A6: n = t * (2 * p) + q and
+      A7: q < t by A4,NAT_1:def 1;
+     consider r be Nat such that
+      A8: k = 2 * t * r by A3,NAT_1:def 3;
+     A9: 2 * t <> 0 by A5,XCMPLX_1:6;
+     then A10: 2 * t > 0 by NAT_1:19;
+       2 * t * r <= t * 2 * p + q by A2,A6,A8,XCMPLX_1:4;
+     then 2 * t * r <= 2 * t * p + q / (2 * t) * (2 * t) by A9,XCMPLX_1:88;
+     then 2 * t * r <= 2 * t * (p + q / (2 * t)) by XCMPLX_1:8;
+     then A11: r <= p + q / (2 * t) by A10,REAL_1:70;
+       1 * t < 2 * t by A5,REAL_1:70;
+     then t + q < 2 * t + t by A7,REAL_1:67;
+     then A12: q < 2 * t by AXIOMS:24;
+       now per cases;
+      suppose q <> 0;
+       then q > 0 by NAT_1:19;
+       hence q / (2 * t) < 1 by A12,REAL_2:142;
+      suppose q = 0;
+       hence q / (2 * t) < 1;
+     end;
+     then p + q / (2 * t) < p + 1 by REAL_1:53;
+     then p + q / (2 * t) + r < p + 1 + (p + q / (2 * t)) by A11,REAL_1:67;
+     then r < p + 1 by AXIOMS:24;
+     then A13: r <= p by NAT_1:38;
+       (n-'k) = t * (2 * p) + q - 2 * t * r by A2,A6,A8,SCMFSA_7:3
+        .= t * (2 * p) - 2 * t * r + q by XCMPLX_1:29
+        .= t * 2 * p - 2 * t * r + q by XCMPLX_1:4
+        .= t * 2 * (p - r) + q by XCMPLX_1:40
+        .= t * (2 * (p - r)) + q by XCMPLX_1:4
+        .= t * (2 * (p-'r)) + q by A13,SCMFSA_7:3;
+     hence (n-'k) div t is even by A7,NAT_1:def 1;
+    end;
+    assume (n-'k) div t is even;
+    then consider p be Nat such that
+     A14: (n-'k) div t = 2 * p by ABIAN:def 2;
+      t >= 0 + 1 by A1;
+    then t > 0 by NAT_1:38;
+    then consider q be Nat such that
+     A15: n-'k = t * (2 * p) + q and
+     A16: q < t by A14,NAT_1:def 1;
+      n - k = t * (2 * p) + q by A2,A15,SCMFSA_7:3;
+    then A17: n = t * (2 * p) + q + k by XCMPLX_1:27;
+    consider r be Nat such that
+     A18: k = 2 * t * r by A3,NAT_1:def 3;
+      n = t * 2 * p + q + (2 * t * r) by A17,A18,XCMPLX_1:4
+     .= t * 2 * p + (2 * t * r) + q by XCMPLX_1:1
+     .= t * 2 * (p + r) + q by XCMPLX_1:8
+     .= t * (2 * (p + r)) + q by XCMPLX_1:4;
+    hence n div t is even by A16,NAT_1:def 1;
+   end;
+
+  theorem Th26:
+   for n,m,k be Nat st n <= m holds
+    n div k <= m div k
+   proof
+    let n,m,k be Nat;
+    assume that
+     A1: n <= m and
+     A2: n div k > m div k;
+    set r = (n div k) -' (m div k);
+    A3: k >= 0 by NAT_1:18;
+    A4: r = (n div k) - (m div k) by A2,SCMFSA_7:3;
+    then r > (m div k) - (m div k) by A2,REAL_1:54;
+    then r > 0 by XCMPLX_1:14;
+    then r >= 0 + 1 by NAT_1:38;
+    then k * r >= k * 1 by A3,AXIOMS:25;
+    then A5: k * r + k * (m div k) >= k + k * (m div k) by AXIOMS:24;
+    per cases;
+     suppose A6: k <> 0;
+      then consider t1 be Nat such that
+       A7: n = k * (n div k) + t1 and
+         t1 < k by NAT_1:def 1;
+      consider t2 be Nat such that
+       A8: m = k * (m div k) + t2 and
+       A9: t2 < k by A6,NAT_1:def 1;
+      A10: m < k + k * (m div k) by A8,A9,REAL_1:53;
+      A11: k * (n div k) <= n by A7,NAT_1:29;
+        k * (n div k) = k * (r + (m div k)) by A4,XCMPLX_1:27
+         .= k * r + k * (m div k) by XCMPLX_1:8;
+      then m - (k * (n div k)) < (k + k * (m div k)) - (k + k * (m div k))
+                                                         by A5,A10,REAL_1:92;
+      then m - (k * (n div k)) < 0 by XCMPLX_1:14;
+      then m < 0 + k * (n div k) by REAL_1:84;
+      then m - n < (k * (n div k)) - (k * (n div k)) by A11,REAL_1:92;
+      then m - n < 0 by XCMPLX_1:14;
+      then m < 0 + n by REAL_1:84;
+      hence contradiction by A1;
+     suppose A12: k = 0;
+      then n div k = 0 by NAT_1:def 1;
+      hence contradiction by A2,A12,NAT_1:def 1;
+   end;
+
+  theorem
+     for n,k be Nat st k <= 2 * n holds
+    (k+1) div 2 <= n
+   proof
+    let n,k be Nat;
+    assume k <= 2 * n;
+    then k + 1 <= 2 * n + 1 by AXIOMS:24;
+    then (k + 1) div 2 <= (2 * n + 1) div 2 by Th26;
+    hence (k + 1) div 2 <= n by NAT_1:def 1;
+   end;
+
+  theorem
+     for n be even Nat holds
+    n div 2 = (n + 1) div 2
+   proof
+    let n be even Nat;
+      n = 2 * (n div 2) + (n mod 2) by NAT_1:47
+     .= 2 * (n div 2) + 0 by Th23;
+    hence n div 2 = (n + 1) div 2 by NAT_1:def 1;
+   end;
+
+  theorem
+     for n,k,i be Nat holds
+    (n div k) div i = n div (k*i)
+   proof
+    let n,k,i be Nat;
+      now per cases;
+     suppose A1: i = 0;
+      hence (n div k) div i = 0 by NAT_1:def 1
+         .= n div (k*i) by A1,NAT_1:def 1;
+     suppose A2: i <> 0;
+        now per cases;
+       suppose A3: k = 0;
+        then n div k = 0 by NAT_1:def 1;
+        hence (n div k) div i = n div (k*i) by A3,Th4;
+       suppose k <> 0;
+        then consider t1 be Nat such that
+         A4: n = k * (n div k) + t1 and
+         A5: t1 < k by NAT_1:def 1;
+        consider t2 be Nat such that
+         A6: n div k = i * ((n div k) div i) + t2 and
+         A7: t2 < i by A2,NAT_1:def 1;
+        A8: n = k * (i * ((n div k) div i)) + k * t2 + t1 by A4,A6,XCMPLX_1:8
+           .= k * i * ((n div k) div i) + k * t2 + t1 by XCMPLX_1:4
+           .= k * i * ((n div k) div i) + (k * t2 + t1) by XCMPLX_1:1;
+        A9: k >= 0 by NAT_1:18;
+          t2 + 1 <= i by A7,NAT_1:38;
+        then A10: k * (t2 + 1) <= k * i by A9,AXIOMS:25;
+          k * t2 + t1 < k * t2 + k * 1 by A5,REAL_1:53;
+        then k * t2 + t1 < k * (t2 + 1) by XCMPLX_1:8;
+        then (k * t2 + t1) - (k * i) < (k * (t2 + 1)) - (k * (t2 + 1))
+                                                             by A10,REAL_1:92;
+        then (k * t2 + t1) - (k * i) < 0 by XCMPLX_1:14;
+        then k * t2 + t1 < 0 + k * i by REAL_1:84;
+        hence (n div k) div i = n div (k*i) by A8,NAT_1:def 1;
+      end;
+      hence (n div k) div i = n div (k*i);
+    end;
+    hence (n div k) div i = n div (k*i);
+   end;
+
+  definition
+   let n be natural number;
+   redefine attr n is trivial means :Def1:
+    n = 0 or n = 1;
+   compatibility
+    proof
+     thus n is trivial implies n = 0 or n = 1
+      proof assume
+A1:     n is trivial;
+       assume
+A2:     n <> 0 & n <> 1;
+        then A3:       n > 1+0 by CQC_THE1:2;
+        reconsider n as Nat by ORDINAL2:def 21;
+A4:      n = { k where k is Nat : k < n } by AXIOMS:30;
+          0 < n by A2,NAT_1:19;
+        then A5:       0 in n & 1 in n by A3,A4;
+        consider x being set such that
+A6:        n = {x} by A1,A2,REALSET1:def 12;
+          0 = x & 1 = x by A5,A6,TARSKI:def 1;
+       hence contradiction;
+      end;
+     assume
+A7:    n = 0 or n = 1;
+     per cases by A7;
+     suppose n = 0;
+     hence n is empty or ex x being set st n = {x};
+     suppose
+A8:    n = 1;
+A9:    for x being set holds x in { k where k is Nat : k < 1 } iff x in { 0 }
+      proof let x be set;
+       hereby assume x in { k where k is Nat : k < 1 };
+         then ex k being Nat st x = k & k < 1;
+         then x = 0 by RLVECT_1:99;
+        hence x in {0 } by TARSKI:def 1;
+       end;
+       assume x in {0};
+        then x = 0 by TARSKI:def 1;
+       hence x in { k where k is Nat : k < 1 };
+      end;
+        1 = { k where k is Nat : k < 1 } by AXIOMS:30;
+      then n = {0} by A8,A9,TARSKI:2;
+     hence n is empty or ex x being set st n = {x};
+    end;
+  end;
+
+  definition
+   cluster non trivial Nat;
+   existence
+   proof
+    take 2;
+    thus thesis by Def1;
+   end;
+   cluster non trivial natural number;
+   existence
+   proof
+    take 2;
+    thus thesis by Def1;
+   end;
+  end;
+
+  theorem
+   for k be natural number holds
+    k is non trivial iff k is non empty & k <> 1 by Def1;
+
+  theorem
+     for k be non trivial natural number holds
+    k >= 2
+   proof
+    let k be non trivial natural number;
+      k >= 1 by RLVECT_1:99;
+    then k > 1 or k = 1 by REAL_1:def 5;
+    then k >= 1 + 1 by Def1,NAT_1:38;
+    hence thesis;
+   end;
+
+  scheme Ind_from_2 { P[Nat] } :
+   for k be non trivial Nat holds P[k]
+   provided
+    A1: P[2] and
+    A2: for k be non trivial Nat st P[k] holds P[k + 1]
+   proof
+    defpred _P[non empty Nat] means $1 is non trivial implies P[$1];
+    A3: _P[1] by Def1;
+    A4: now let k be non empty Nat;
+     assume A5: _P[k];
+     now
+     assume k + 1 is non trivial;
+     per cases;
+      suppose k = 1;
+       hence P[k + 1] by A1;
+      suppose k <> 1;
+       then k is non trivial by Def1;
+       hence P[k + 1] by A2,A5;
+     end; hence _P[k+1];
+    end;
+      for k be non empty Nat holds _P[k] from Ind_from_1(A3,A4);
+    hence thesis;
+   end;

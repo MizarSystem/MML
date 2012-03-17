@@ -1,0 +1,415 @@
+:: Associated Matrix of Linear Map
+::  by Robert Milewski
+::
+:: Received June 30, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_2, PARTFUN1, FINSEQ_4, MATRIX_1, RELAT_1, FUNCT_1, INCSP_1,
+      FINSEQ_1, MATRIX_2, BOOLE, TREES_1, ARYTM_1, FUNCT_2, CARD_1, SUBSET_1,
+      FUNCOP_1, MEASURE6, VECTSP_1, RLVECT_2, RLVECT_3, RLVECT_1, FINSET_1,
+      RLSUB_1, PRE_TOPC, BINOP_1, LATTICES, QC_LANG1, SEQ_1, SQUARE_1, RVSUM_1,
+      RLSUB_2, CAT_3, MATRLIN;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1,
+      MOD_2, STRUCT_0, FINSEQ_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3,
+      MATRIX_1, MATRIX_2, MATRIX_3, FVSUM_1, RLVECT_1, VECTSP_1, VECTSP_4,
+      VECTSP_6, VECTSP_7, FINSET_1, FINSEQ_4, FUNCOP_1, FINSEQ_3, CARD_1,
+      FINSEQ_2, FINSEQOP, BINOP_1, SQUARE_1, PRE_TOPC;
+ constructors REAL_1, NAT_1, MOD_2, FUNCT_3, MATRIX_3, FVSUM_1, VECTSP_6,
+      VECTSP_7, FINSEQ_3, BINOP_1, SQUARE_1, TOPS_2, FINSEQ_4, MEMBERED,
+      PARTFUN1;
+ clusters FINSET_1, MATRIX_1, FUNCT_1, VECTSP_1, FINSEQ_3, RELSET_1, STRUCT_0,
+      FINSEQ_1, FUNCOP_1, XREAL_0, FUNCT_2, NAT_1, MEMBERED, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: PRELIMINARIES
+
+definition
+  let A be set;
+  let X be set, D be FinSequence-DOMAIN of A, p be PartFunc of X,D, i be set;
+ redefine func p/.i -> Element of D;
+end;
+
+  reserve k,t,i,j,m,n for Nat;
+  reserve x,y,y1,y2 for set;
+  reserve D for non empty set;
+
+canceled;
+
+  theorem :: MATRLIN:2
+    for p be FinSequence holds rng Del(p,i) c= rng p;
+
+  definition
+    let D be non empty set;
+    let k; let M be Matrix of D;
+    redefine func Del(M,k) -> Matrix of D;
+  end;
+
+  theorem :: MATRLIN:3
+    for M be FinSequence st len M = n+1 holds
+     len Del(M,n+1) = n;
+
+  theorem :: MATRLIN:4
+    for M be Matrix of n+1,m,D
+    for M1 be Matrix of D holds
+     ( n > 0 implies width M = width Del(M,n+1) ) &
+     ( M1 = <*M.(n+1)*> implies width M = width M1 );
+
+  theorem :: MATRLIN:5
+    for M be Matrix of n+1,m,D holds
+     Del(M,n+1) is Matrix of n,m,D;
+
+  theorem :: MATRLIN:6
+    for M being FinSequence st len M = n + 1 holds
+     M = Del(M,len M) ^ <*M.(len M)*>;
+
+  definition
+    let D; let P be FinSequence of D;
+    redefine func <*P*> -> Matrix of 1,len P,D;
+  end;
+
+  begin :: MORE ON FINITE SEQUENCE
+
+  theorem :: MATRLIN:7
+    for A being set, F being FinSequence
+     holds Sgm(F"A)^Sgm(F"(rng F \ A)) is Permutation of dom F;
+
+  theorem :: MATRLIN:8
+    for F being FinSequence, A be Subset of rng F st F is one-to-one
+     ex p being Permutation of dom F st
+      (F-A`)^(F-A) = F*p;
+
+  definition let IT be Function;
+    attr IT is FinSequence-yielding means
+:: MATRLIN:def 1
+       for x st x in dom IT holds IT.x is FinSequence;
+  end;
+
+  definition
+    cluster FinSequence-yielding Function;
+  end;
+
+  definition
+    let F,G be FinSequence-yielding Function;
+    func F^^G -> FinSequence-yielding Function means
+:: MATRLIN:def 2
+      dom it = dom F /\ dom G &
+     for i being set st i in dom it
+     for f,g being FinSequence st f = F.i & g = G.i
+       holds it.i = f^g;
+  end;
+
+  begin :: CIAGI I MACIERZE DOTYCZACE PRZESTRZENI LINIOWYCH
+
+  reserve K for Field;
+  reserve V for VectSp of K;
+  reserve a for Element of K;
+  reserve W for Element of V;
+  reserve KL1,KL2,KL3 for Linear_Combination of V;
+  reserve X for Subset of V;
+
+  theorem :: MATRLIN:9
+    X is linearly-independent &
+    Carrier(KL1) c= X & Carrier(KL2) c= X &
+    Sum(KL1) = Sum(KL2) implies KL1 = KL2;
+
+  theorem :: MATRLIN:10
+    X is linearly-independent &
+    Carrier(KL1) c= X & Carrier(KL2) c= X & Carrier(KL3) c= X &
+    Sum(KL1) = Sum(KL2) + Sum(KL3) implies KL1 = KL2 + KL3;
+
+  theorem :: MATRLIN:11
+    X is linearly-independent &
+    Carrier(KL1) c= X & Carrier(KL2) c= X & a <> 0.K &
+    Sum(KL1) = a * Sum(KL2) implies KL1 = a * KL2;
+
+  theorem :: MATRLIN:12
+    for b2 be Basis of V ex KL be Linear_Combination of V st
+    W = Sum(KL) & Carrier KL c= b2;
+
+  definition
+    let K be Field;
+    let V be VectSp of K;
+    attr V is finite-dimensional means
+:: MATRLIN:def 3
+      ex A being finite Subset of V st A is Basis of V;
+  end;
+
+  definition
+    let K be Field;
+    cluster strict finite-dimensional VectSp of K;
+  end;
+
+  definition
+    let K be Field;
+    let V be finite-dimensional VectSp of K;
+    mode OrdBasis of V -> FinSequence of the carrier of V means
+:: MATRLIN:def 4
+      it is one-to-one & rng it is Basis of V;
+  end;
+
+  reserve s,p for FinSequence;
+  reserve V1,V2,V3 for finite-dimensional VectSp of K;
+  reserve f,f1,f2 for map of V1,V2;
+  reserve g for map of V2,V3;
+  reserve b1 for OrdBasis of V1;
+  reserve b2 for OrdBasis of V2;
+  reserve b3 for OrdBasis of V3;
+  reserve v1,v2 for Vector of V2;
+  reserve v,w for Element of V1;
+  reserve p2,F for FinSequence of the carrier of V1;
+  reserve p1,d for FinSequence of the carrier of K;
+  reserve KL for Linear_Combination of V1;
+
+  definition
+    let K be add-associative right_zeroed right_complementable
+      Abelian associative left_unital distributive (non empty doubleLoopStr);
+    let V1,V2 be VectSp of K;
+    let f1,f2 be map of V1, V2;
+    func f1+f2 -> map of V1,V2 means
+:: MATRLIN:def 5
+      for v be Element of V1 holds it.v = f1.v + f2.v;
+  end;
+
+  definition
+    let K; let V1,V2; let f;
+    let a be Element of K;
+    func a*f -> map of V1,V2 means
+:: MATRLIN:def 6
+      for v be Element of V1 holds it.v = a * (f.v);
+  end;
+
+  theorem :: MATRLIN:13
+    for a being Element of V1
+    for F being FinSequence of the carrier of V1
+    for G being FinSequence of the carrier of K
+      st len F = len G &
+      for k for v being Element of K
+       st k in dom F & v = G.k holds F.k = v * a
+         holds Sum(F) = Sum(G) * a;
+
+  theorem :: MATRLIN:14
+    for a be Element of V1
+    for F being FinSequence of the carrier of K
+    for G being FinSequence of the carrier of V1
+     st len F = len G & for k st k in dom F holds G.k = (F/.k) * a
+      holds Sum(G) = Sum(F) * a;
+
+  theorem :: MATRLIN:15
+   for V1 being add-associative right_zeroed right_complementable
+        (non empty LoopStr)
+   for F being FinSequence of the carrier of V1 st
+     for k st k in dom F holds F/.k = 0.V1 holds Sum(F) = 0.V1;
+
+  definition
+    let K; let V1; let p1,p2;
+    func lmlt(p1,p2) -> FinSequence of the carrier of V1 equals
+:: MATRLIN:def 7
+        (the lmult of V1).:(p1,p2);
+  end;
+
+  theorem :: MATRLIN:16
+     dom p1 = dom p2 implies dom lmlt(p1,p2) = dom p1;
+
+  definition
+    let V1 be non empty LoopStr; let M be FinSequence of (the carrier of V1)*;
+    func Sum M -> FinSequence of the carrier of V1 means
+:: MATRLIN:def 8
+      len it = len M & for k st k in dom it holds it/.k = Sum (M/.k);
+  end;
+
+  theorem :: MATRLIN:17
+    for M be Matrix of the carrier of V1 st len M = 0 holds Sum Sum M = 0.V1;
+
+  theorem :: MATRLIN:18
+    for M be Matrix of m+1,0,the carrier of V1 holds Sum Sum M = 0.V1;
+
+  theorem :: MATRLIN:19
+    for x be Element of V1 holds
+     <*<*x*>*> = <*<*x*>*>@;
+
+  theorem :: MATRLIN:20
+    for p being FinSequence of the carrier of V1 st f is linear holds
+      f.Sum(p) = Sum(f*p);
+
+  theorem :: MATRLIN:21
+    for a be FinSequence of the carrier of K
+    for p being FinSequence of the carrier of V1 st len p = len a holds
+     f is linear implies f*lmlt(a,p) = lmlt(a,f*p);
+
+  theorem :: MATRLIN:22
+    for a be FinSequence of the carrier of K st len a = len b2 holds
+     ( g is linear implies g.Sum(lmlt(a,b2)) = Sum(lmlt(a,g*b2)));
+
+  theorem :: MATRLIN:23
+    for F, F1 being FinSequence of the carrier of V1,
+        KL being Linear_Combination of V1,
+        p being Permutation of dom F st F1 = F * p holds
+               KL (#) F1 = (KL (#) F) * p;
+
+  theorem :: MATRLIN:24
+    F is one-to-one & Carrier(KL) c= rng F implies Sum(KL (#) F) = Sum(KL);
+
+  theorem :: MATRLIN:25
+    for A be set
+    for p be FinSequence of the carrier of V1 st rng p c= A holds
+     f1 is linear & f2 is linear & (for v st v in A holds f1.v = f2.v )
+                    implies f1.Sum(p) = f2.Sum(p);
+
+  theorem :: MATRLIN:26
+    f1 is linear & f2 is linear implies
+     for b1 being OrdBasis of V1 st len b1 > 0 holds
+      f1*b1 = f2*b1 implies f1 = f2;
+
+  definition
+    let D be non empty set;
+    cluster -> FinSequence-yielding Matrix of D;
+  end;
+
+  definition
+    let D be non empty set;
+    let F,G be Matrix of D;
+    redefine func F^^G -> Matrix of D;
+  end;
+
+  definition
+    let D be non empty set; let n,m,k;
+    let M1 be Matrix of n,k,D,
+        M2 be Matrix of m,k,D;
+    redefine func M1^M2 -> Matrix of n+m,k,D;
+  end;
+
+  theorem :: MATRLIN:27
+      for M1 be Matrix of n,k,D,
+        M2 be Matrix of m,k,D st i in dom M1 holds
+     Line(M1^M2,i) = Line(M1,i);
+
+  theorem :: MATRLIN:28
+    for M1 be Matrix of n,k,D,
+        M2 be Matrix of m,k,D st width M1 = width M2 holds
+     width (M1^M2) = width M1;
+
+  theorem :: MATRLIN:29
+      for M1 be Matrix of t,k,D,
+        M2 be Matrix of m,k,D st n in dom M2 & i = len M1 + n holds
+     Line(M1^M2,i) = Line(M2,n);
+
+  theorem :: MATRLIN:30
+    for M1 be Matrix of n,k,D,
+        M2 be Matrix of m,k,D st width M1 = width M2
+    for i st i in Seg width M1 holds
+     Col(M1^M2,i) = Col(M1,i)^Col(M2,i);
+
+  theorem :: MATRLIN:31
+   for M1 be Matrix of n,k,the carrier of V,
+       M2 be Matrix of m,k,the carrier of V holds
+    Sum(M1^M2) = (Sum M1)^(Sum M2);
+
+  theorem :: MATRLIN:32
+    for M1 be Matrix of n,k,D,
+        M2 be Matrix of m,k,D st width M1 = width M2 holds
+     (M1^M2)@ = M1@ ^^ M2@;
+
+  theorem :: MATRLIN:33
+    for M1,M2 be Matrix of the carrier of V1 holds
+     (the add of V1).:(Sum M1,Sum M2) = Sum(M1 ^^ M2);
+
+  definition
+    let D be non empty set, F be BinOp of D,
+        P1,P2 be FinSequence of D;
+   redefine func F.:(P1,P2) -> FinSequence of D;
+  end;
+
+  theorem :: MATRLIN:34
+    for P1,P2 be FinSequence of the carrier of V1 st len P1 = len P2 holds
+     Sum((the add of V1).:(P1,P2)) = (Sum P1) + (Sum P2);
+
+  theorem :: MATRLIN:35
+    for M1,M2 be Matrix of the carrier of V1 st len M1 = len M2 holds
+     Sum Sum M1 + Sum Sum M2 = Sum Sum(M1 ^^ M2);
+
+  theorem :: MATRLIN:36
+    for P be FinSequence of the carrier of V1 holds
+     Sum Sum <*P*> = Sum Sum (<*P*>@);
+
+  theorem :: MATRLIN:37
+    for M be Matrix of the carrier of V1 st len M = n holds Sum Sum M = Sum Sum
+(M@);
+
+  theorem :: MATRLIN:38
+    for M being Matrix of n,m,the carrier of K st n > 0 & m > 0
+    for p,d being FinSequence of the carrier of K st
+         len p = n & len d = m &
+         for j st j in dom d holds d/.j = Sum mlt(p,Col(M,j))
+    for b,c being FinSequence of the carrier of V1 st
+         len b = m & len c = n &
+         for i st i in dom c holds c/.i = Sum lmlt(Line(M,i),b)
+      holds Sum lmlt(p,c) = Sum lmlt(d,b);
+
+  begin :: Decomposition of a Vector in Basis
+
+  definition
+    let K be Field;
+    let V be finite-dimensional VectSp of K;
+    let b1 be OrdBasis of V;
+    let W be Element of V;
+    func W|--b1 -> FinSequence of the carrier of K means
+:: MATRLIN:def 9
+      len it = len b1 &
+      ex KL be Linear_Combination of V st
+      W = Sum(KL) & Carrier KL c= rng b1 &
+      for k st 1<=k & k<=len it holds it/.k=KL.(b1/.k);
+  end;
+
+  theorem :: MATRLIN:39
+    v1|--b2 = v2|--b2 implies v1 = v2;
+
+  theorem :: MATRLIN:40
+    v = Sum lmlt(v|--b1,b1);
+
+  theorem :: MATRLIN:41
+    len d = len b1 implies d = Sum(lmlt(d,b1))|--b1;
+
+  theorem :: MATRLIN:42
+    for a,d be FinSequence of the carrier of K st len a = len b2
+    for j be Nat st j in dom b3 & len d = len b2 & for k st k in dom b2 holds
+      d.k = (g.((b2/.k))|--b3)/.j holds
+        len b2 > 0 implies (Sum(lmlt(a,g*b2))|--b3)/.j = Sum(mlt(a,d));
+
+  begin :: MACIERZE PRZEKSZTALCEN LINIOWYCH
+
+  definition
+    let K be Field;
+    let V1,V2 be finite-dimensional VectSp of K;
+    let f be Function of the carrier of V1 ,the carrier of V2;
+    let b1 be FinSequence of the carrier of V1;
+    let b2 be OrdBasis of V2;
+    func AutMt(f,b1,b2) -> Matrix of K means
+:: MATRLIN:def 10
+       len it = len b1 & for k st k in dom b1 holds
+      it/.k = f.(b1/.k)|--b2;
+  end;
+
+  theorem :: MATRLIN:43
+    len b1 = 0 implies AutMt(f,b1,b2) = {};
+
+  theorem :: MATRLIN:44
+    len b1 > 0 implies width AutMt(f,b1,b2) = len b2;
+
+  theorem :: MATRLIN:45
+      f1 is linear & f2 is linear &
+    AutMt(f1,b1,b2) = AutMt(f2,b1,b2) & len b1 > 0 implies f1 = f2;
+
+  theorem :: MATRLIN:46
+      f is linear & g is linear & len b1 > 0 & len b2 > 0 & len b3 > 0
+     implies
+    AutMt(g*f,b1,b3) = AutMt(f,b1,b2) * AutMt(g,b2,b3);
+
+  theorem :: MATRLIN:47
+      AutMt(f1+f2,b1,b2) = AutMt(f1,b1,b2) + AutMt(f2,b1,b2);
+
+  theorem :: MATRLIN:48
+      a <> 0.K implies AutMt(a*f,b1,b2) = a * AutMt(f,b1,b2);
+

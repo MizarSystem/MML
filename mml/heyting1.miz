@@ -1,0 +1,1277 @@
+:: Algebra of Normal Forms Is a Heyting Algebra
+::  by Andrzej Trybulec
+::
+:: Received January 3, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, RELAT_1, FINSUB_1, FUNCT_3, NORMFORM, BOOLE, QC_LANG1,
+      FINSEQ_1, LATTICES, FINSET_1, SETWISEO, LATTICE2, BINOP_1, FUNCT_2,
+      ARYTM_1, MCART_1, TARSKI, FDIFF_1, FUNCOP_1, FILTER_0, ZF_LANG, HEYTING1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, RELAT_1, FUNCT_1,
+      FUNCT_2, FUNCT_3, MCART_1, BINOP_1, FUNCOP_1, FINSET_1, FINSUB_1,
+      DOMAIN_1, LATTICES, LATTICE2, FRAENKEL, SETWISEO, NORMFORM, FILTER_0;
+ constructors FUNCT_3, FUNCOP_1, FINSET_1, DOMAIN_1, LATTICE2, FRAENKEL,
+      SETWISEO, NORMFORM, FILTER_0, MEMBERED, XBOOLE_0;
+ clusters FINSUB_1, FINSET_1, STRUCT_0, NORMFORM, RELSET_1, SUBSET_1, MEMBERED,
+      ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, FILTER_0, XBOOLE_0;
+ theorems LATTICES, LATTICE2, FUNCOP_1, NORMFORM, TARSKI, FUNCT_2, DOMAIN_1,
+      FINSUB_1, FINSET_1, BINOP_1, FUNCT_1, FUNCT_3, FRAENKEL, MCART_1,
+      SETWISEO, FILTER_0, ZFMISC_1, RELAT_1, XBOOLE_0, XBOOLE_1;
+ schemes FRAENKEL, FUNCT_2, BINOP_1;
+
+begin
+:: Preliminaries
+
+theorem Th1:
+  for A,B,C being non empty set, f being Function of A,B st
+        for x being Element of A holds f.x in C
+       holds f is Function of A,C
+   proof let A,B,C be non empty set, f be Function of A,B;
+A1: dom f = A by FUNCT_2:def 1;
+    assume
+     for x being Element of A holds f.x in C;
+     then for x be set holds x in A implies f.x in C;
+    hence f is Function of A,C by A1,FUNCT_2:5;
+   end;
+
+reserve A for non empty set,
+        a for Element of A;
+
+definition let A; let B,C be Element of Fin A;
+  redefine pred B c= C means
+     for a st a in B holds a in C;
+ compatibility
+  proof thus B c= C implies for a st a in B holds a in C;
+   assume
+A1: for a st a in B holds a in C;
+   let x be set; assume
+A2: x in B;
+    then x is Element of A by SETWISEO:14;
+   hence thesis by A1,A2;
+  end;
+end;
+
+definition let A be non empty set; let B be non empty Subset of A;
+  redefine func incl B -> Function of B,A;
+  coherence;
+end;
+
+reserve A for set;
+
+definition let A;
+ assume
+A1: A is non empty;
+ func [A] -> non empty set equals
+:Def2:  A;
+ correctness by A1;
+end;
+
+reserve B,C for Element of Fin DISJOINT_PAIRS A,
+        x for Element of [:Fin A, Fin A:],
+        a,b,c,d,s,t,s',t',t1,t2,s1,s2 for Element of DISJOINT_PAIRS A,
+        u,v,w for Element of NormForm A;
+
+canceled;
+
+theorem Th3:
+  B = {} implies mi B = {}
+   proof mi B c= B by NORMFORM:64; hence thesis by XBOOLE_1:3; end;
+
+Lm1:
+now let A,a;
+  reconsider B = { a } as Element of Fin DISJOINT_PAIRS A;
+     now let c,b such that
+A1:   c in B & b in B and c c= b;
+       c = a & b = a by A1,TARSKI:def 1;
+    hence c = b;
+   end;
+ hence { a } is Element of Normal_forms_on A by NORMFORM:53;
+end;
+
+definition let A;
+ cluster non empty Element of Normal_forms_on A;
+  existence
+   proof consider a;
+       {a} is Element of Normal_forms_on A by Lm1;
+    hence thesis;
+   end;
+end;
+
+definition let A,a;
+  redefine func { a } -> Element of Normal_forms_on A;
+  coherence by Lm1;
+end;
+
+definition let A; let u be Element of NormForm A;
+  func @u -> Element of Normal_forms_on A equals :Def3:
+    u;
+  coherence by NORMFORM:def 14;
+end;
+
+Lm2: mi (@u ^ @v) = (the L_meet of NormForm A).(u,v)
+  proof
+     @u = u & @v = v by Def3;
+   hence mi (@u ^ @v) = (the L_meet of NormForm A).(u,v)
+     by NORMFORM:def 14;
+  end;
+
+Lm3: mi (@u \/ @v) = (the L_join of NormForm A).(u,v)
+  proof
+     @u = u & @v = v by Def3;
+   hence mi (@u \/ @v) = (the L_join of NormForm A).(u,v)
+     by NORMFORM:def 14;
+  end;
+
+reserve K,L for Element of Normal_forms_on A;
+
+canceled 3;
+
+theorem Th7:mi (K^K) = K
+ proof thus mi (K^K) = mi K by NORMFORM:79 .= K by NORMFORM:66; end;
+
+theorem Th8:
+  for X being set st X c= K holds X in Normal_forms_on A
+  proof let X be set;
+   assume
+A1:  X c= K;
+      K c= DISJOINT_PAIRS A & K is finite by FINSUB_1:def 5;
+    then X c= DISJOINT_PAIRS A & X is finite by A1,FINSET_1:13,XBOOLE_1:1;
+    then reconsider B = X as Element of Fin DISJOINT_PAIRS A by FINSUB_1:def 5;
+      for a,b st a in B & b in B & a c= b holds a = b by A1,NORMFORM:52;
+   hence X in Normal_forms_on A by NORMFORM:53;
+  end;
+
+canceled;
+
+theorem Th10:
+  for X being set st X c= u holds
+      X is Element of NormForm A
+ proof let X be set;
+A1: u = @u by Def3;
+  assume X c= u;
+   then X in Normal_forms_on A by A1,Th8;
+  hence X is Element of NormForm A by NORMFORM:def 14;
+ end;
+
+definition let A;
+ func Atom(A) -> Function of DISJOINT_PAIRS A, the carrier of NormForm A
+  means
+:Def4: it.a = { a };
+ existence
+  proof
+A1: the carrier of NormForm A = Normal_forms_on A by NORMFORM:def 14;
+    set f = singleton DISJOINT_PAIRS A;
+A2: now let x be set;
+     assume x in DISJOINT_PAIRS A;
+      then reconsider a = x as Element of DISJOINT_PAIRS A;
+     f.a = { a } by SETWISEO:67;
+     hence f.x in the carrier of NormForm A by A1;
+    end;
+      dom f = DISJOINT_PAIRS A by FUNCT_2:def 1;
+    then reconsider f as Function of DISJOINT_PAIRS A, the carrier of NormForm
+A
+                                                             by A2,FUNCT_2:5;
+   take f; thus thesis by SETWISEO:67;
+  end;
+ uniqueness
+  proof let IT1,IT2 be
+    Function of DISJOINT_PAIRS A, the carrier of NormForm A such that
+A3: (for a holds IT1.a = { a }) & for a holds IT2.a = { a };
+      now let a;
+        IT1.a = { a } & IT2.a = { a } by A3;
+     hence IT1.a = IT2.a;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+end;
+
+theorem Th11:
+  c in Atom(A).a implies c = a
+   proof Atom(A).a = { a } by Def4;
+    hence thesis by TARSKI:def 1;
+   end;
+
+theorem Th12:
+  a in Atom(A).a
+   proof Atom(A).a = { a } by Def4; hence thesis by TARSKI:def 1; end;
+
+theorem
+    Atom(A).a = singleton DISJOINT_PAIRS A .a
+  proof
+    thus (singleton DISJOINT_PAIRS A).a = {a} by SETWISEO:67
+                  .= Atom A.a by Def4;
+  end;
+
+theorem Th14:
+  FinJoin(K, Atom(A)) = FinUnion(K, singleton DISJOINT_PAIRS A)
+  proof
+A1: the L_join of NormForm A is commutative by LATTICE2:27;
+A2: the L_join of NormForm A is associative by LATTICE2:29;
+A3: the L_join of NormForm A is idempotent by LATTICE2:26;
+A4: the L_join of NormForm A has_a_unity by LATTICE2:67;
+    deffunc F(Element of Fin DISJOINT_PAIRS A) = mi $1;
+    consider g
+      being Function of Fin DISJOINT_PAIRS A, Normal_forms_on A
+    such that
+A5:    g.B = F(B) from LambdaD;
+      the carrier of NormForm A = Normal_forms_on A by NORMFORM:def 14;
+    then reconsider g as
+       Function of Fin DISJOINT_PAIRS A,the carrier of NormForm A;
+A6:  mi {}.DISJOINT_PAIRS A c= {}.DISJOINT_PAIRS A & {}.DISJOINT_PAIRS A = {}
+                                        by NORMFORM:64;
+A7:  g.{}.DISJOINT_PAIRS A = mi {}.DISJOINT_PAIRS A by A5
+               .= {} by A6,XBOOLE_1:3
+               .= Bottom NormForm A by NORMFORM:86
+               .= the_unity_wrt the L_join of NormForm A by A4,LATTICE2:28;
+A8:  now let x,y be Element of Fin DISJOINT_PAIRS A;
+A9:  @(g.x) = g.x by Def3 .= mi x by A5;
+A10:  @(g.y) = g.y by Def3 .= mi y by A5;
+      thus g.(x \/ y) = mi (x \/ y) by A5
+               .= mi (mi x \/ y) by NORMFORM:68
+               .= mi (mi x \/ mi y) by NORMFORM:69
+               .= (the L_join of NormForm A).(g.x,g.y) by A9,A10,Lm3;
+     end;
+A11:      now let a;
+        thus (g*singleton DISJOINT_PAIRS A).a
+                   = g.(singleton DISJOINT_PAIRS A .a) by FUNCT_2:21
+                  .= g.{a} by SETWISEO:67
+                  .= mi { a } by A5
+                  .= { a } by NORMFORM:66
+                  .= Atom A.a by Def4;
+      end;
+A12:  mi (FinUnion(K,singleton DISJOINT_PAIRS A))
+            c= FinUnion(K,singleton DISJOINT_PAIRS A) by NORMFORM:64;
+A13:  FinUnion(K,singleton DISJOINT_PAIRS A)
+            c= mi (FinUnion(K,singleton DISJOINT_PAIRS A))
+     proof let a;
+      assume
+A14:     a in FinUnion(K,singleton DISJOINT_PAIRS A);
+       then consider b such that
+A15:      b in K and
+A16:      a in (singleton DISJOINT_PAIRS A).b by SETWISEO:70;
+A17:    a = b by A16,SETWISEO:68;
+         now let s;
+        assume that
+A18:      s in FinUnion(K,singleton DISJOINT_PAIRS A) and
+A19:      s c= a;
+         consider t such that
+A20:       t in K and
+A21:       s in (singleton DISJOINT_PAIRS A).t by A18,SETWISEO:70;
+           s = t by A21,SETWISEO:68;
+        hence s = a by A15,A17,A19,A20,NORMFORM:52;
+       end;
+      hence a in
+ mi (FinUnion(K,singleton DISJOINT_PAIRS A)) by A14,NORMFORM:61;
+     end;
+   thus FinJoin(K, Atom A) = (the L_join of NormForm A) $$(K,Atom A)
+                                                          by LATTICE2:def 3
+         .= (the L_join of NormForm A) $$(K,g*singleton DISJOINT_PAIRS A) by
+A11,FUNCT_2:113
+         .= g.(FinUnion(K,singleton DISJOINT_PAIRS A))
+                                       by A1,A2,A3,A4,A7,A8,SETWISEO:65
+         .= mi (FinUnion(K,singleton DISJOINT_PAIRS A)) by A5
+         .= FinUnion(K,singleton DISJOINT_PAIRS A) by A12,A13,XBOOLE_0:def 10;
+  end;
+
+theorem Th15:
+  u = FinJoin(@u, Atom(A))
+  proof
+   thus u = @u by Def3
+         .= FinUnion(@u, singleton DISJOINT_PAIRS A) by SETWISEO:71
+         .= FinJoin(@u, Atom(A)) by Th14;
+  end;
+
+Lm4: u [= v implies for x st x in u ex b st b in v & b c= x
+ proof
+A1: u = @u & v = @v by Def3;
+  assume
+   u [= v;
+then A2: v = u "\/" v by LATTICES:def 3
+    .= (the L_join of NormForm A).(u,v) by LATTICES:def 1
+    .= mi (@u \/ @v) by Lm3;
+  let x;
+  assume
+A3: x in u;
+   then reconsider c = x as Element of DISJOINT_PAIRS A by A1,SETWISEO:14;
+     c in u \/ v by A3,XBOOLE_0:def 2;
+   then consider b such that
+A4:  b c= c & b in mi (@u \/ @v) by A1,NORMFORM:65;
+  take b;
+  thus b in v & b c= x by A2,A4;
+ end;
+
+Lm5: (for a st a in u ex b st b in v & b c= a) implies u [= v
+ proof assume
+A1: for a st a in u ex b st b in v & b c= a;
+A2: u = @u & v = @v by Def3;
+A3: mi(@u \/ @v) c= @v
+    proof let a;
+     assume
+A4:    a in mi(@u \/ @v);
+      then a in u \/ v by A2,NORMFORM:58;
+      then a in u or a in v by XBOOLE_0:def 2;
+      then consider b such that
+A5:    b in v and
+A6:    b c= a by A1;
+        b in u \/ v by A5,XBOOLE_0:def 2;
+     hence a in @v by A2,A4,A5,A6,NORMFORM:60;
+    end;
+A7: @v c= mi(@u \/ @v)
+    proof let a;
+     assume
+A8:    a in @v;
+then A9:   a in @u \/ @v by XBOOLE_0:def 2;
+A10:   a in mi @v by A8,NORMFORM:66;
+        now let b;
+       assume that
+A11:     b in u \/ v and
+A12:     b c= a;
+          b in u or b in v by A11,XBOOLE_0:def 2;
+        then consider c such that
+A13:      c in v and
+A14:      c c= b by A1;
+          c c= a by A12,A14,NORMFORM:5;
+        then c = a by A2,A10,A13,NORMFORM:60;
+       hence b = a by A12,A14,NORMFORM:4;
+      end;
+     hence a in mi(@u \/ @v) by A2,A9,NORMFORM:61;
+    end;
+     u "\/" v = (the L_join of NormForm A).(u,v) by LATTICES:def 1
+         .= mi (@u \/ @v) by Lm3
+         .= v by A2,A3,A7,XBOOLE_0:def 10;
+  hence u [= v by LATTICES:def 3;
+ end;
+
+reserve f,f' for (Element of Funcs(DISJOINT_PAIRS A, [:Fin A,Fin A:])),
+        g,h for Element of Funcs(DISJOINT_PAIRS A, [A]);
+
+definition let A be set;
+  func pair_diff A -> BinOp of [:Fin A,Fin A:] means :Def5:
+ for a,b being Element of [:Fin A, Fin A:] holds it.(a,b) = a \ b;
+ existence
+  proof
+    deffunc F(Element of [:Fin A,Fin A:], Element of [:Fin A,Fin A:])
+    = $1 \ $2;
+    thus ex f being BinOp of [:Fin A,Fin A:] st
+     for a,b being Element of [:Fin A, Fin A:] holds f.(a,b) = F(a,b)
+     from BinOpLambda;
+  end;
+ correctness
+  proof let IT,IT' be BinOp of [:Fin A,Fin A:] such that
+A1:  (for a,b being Element of [:Fin A, Fin A:] holds IT.(a,b) = a \ b) &
+    (for a,b being Element of [:Fin A, Fin A:] holds IT'.(a,b) = a \ b);
+     now let a,b be Element of [:Fin A, Fin A:];
+       IT.(a,b) = a \ b & IT'.(a,b) = a \ b by A1;
+    hence IT.(a,b) = IT'.(a,b);
+   end;
+   hence thesis by BINOP_1:2;
+  end;
+end;
+
+definition let A,B;
+  func -B -> Element of Fin DISJOINT_PAIRS A equals
+:Def6:  DISJOINT_PAIRS A /\
+    { [{ g.t1 : g.t1 in t1`2 & t1 in B }, { g.t2 : g.t2 in t2`1 & t2 in B }] :
+        s in B implies g.s in s`1 \/ s`2 };
+ coherence
+  proof
+   deffunc _F(Element of Funcs(DISJOINT_PAIRS A, [A])) =
+    [{ $1.s1 : $1.s1 in s1`2 & s1 in B }, { $1.s2 : $1.s2 in s2`1 & s2 in B }];
+   set N = { _F(g) : s in B implies g.s in s`1 \/ s`2 };
+   set N' = { _F(g) : g.:B c= union { s`1 \/ s`2 : s in B } };
+   set M = DISJOINT_PAIRS A /\ N;
+defpred P[Function] means s in B implies $1.s in s`1 \/ s`2;
+defpred Q[Function] means $1.:B c= union { s`1 \/ s`2 : s in B };
+A1:  for g holds P[g] implies Q[g]
+    proof let g such that
+A2:    for s holds s in B implies g.s in s`1 \/ s`2;
+     let x be set;
+     assume x in g.:B;
+      then consider y being set such that
+A3:    y in dom(g) and
+A4:    y in B and
+A5:    x = g.y by FUNCT_1:def 12;
+      reconsider y as Element of DISJOINT_PAIRS A by A3,FUNCT_2:def 1;
+A6:   g.y in y`1 \/ y`2 by A2,A4;
+        y`1 \/ y`2 in { s`1 \/ s`2 : s in B } by A4;
+     hence x in union { s`1 \/ s`2 : s in B } by A5,A6,TARSKI:def 4;
+    end;
+A7: { _F(g) where g is Element of Funcs(DISJOINT_PAIRS A, [A]):P[g] }
+     c= { _F(g) where g is Element of Funcs(DISJOINT_PAIRS A, [A]):Q[g] }
+   from Fraenkel5'(A1);
+A8: B is finite;
+    deffunc G(set)=$1`1 \/ $1`2;
+A9: { G(s) : s in B } is finite from FraenkelFin(A8);
+      now let X be set;
+     assume X in { s`1 \/ s`2 : s in B };
+      then ex s st X = s`1 \/ s`2 & s in B;
+     hence X is finite;
+    end;
+then A10:  union { s`1 \/ s`2 : s in B } is finite by A9,FINSET_1:25;
+A11:  now let g,h;
+     defpred P1[set] means g.$1 in $1`1;
+     defpred P2[set] means g.$1 in $1`2;
+     defpred Q1[set] means h.$1 in $1`1;
+     defpred Q2[set] means h.$1 in $1`2;
+     assume
+A12:    g|B = h|B;
+then A13:    for s st s in B holds P2[s] iff Q2[s] by FRAENKEL:3;
+A14:   { g.s1 where s1 is Element of DISJOINT_PAIRS A:
+         P2[s1] & s1 in B } =
+       { h.t1 where t1 is Element of DISJOINT_PAIRS A:
+         Q2[t1] & t1 in B } from RelevantArgs(A12,A13);
+A15:   for s st s in B holds P1[s] iff Q1[s] by A12,FRAENKEL:3;
+       { g.s2 where s2 is Element of DISJOINT_PAIRS A:
+       P1[s2] & s2 in B } =
+       { h.t2 where t2 is Element of DISJOINT_PAIRS A:
+       Q1[t2] & t2 in B } from RelevantArgs(A12,A15);
+     hence _F(g) = _F(h) by A14;
+   end;
+A16: M c= DISJOINT_PAIRS A by XBOOLE_1:17;
+A17: M c= N by XBOOLE_1:17;
+      N' is finite from ImFin(A8,A10,A11);
+    then N is finite by A7,FINSET_1:13;
+    then M is finite by A17,FINSET_1:13;
+    hence M is Element of Fin DISJOINT_PAIRS A by A16,FINSUB_1:def 5;
+  end;
+  correctness;
+ let C;
+  func B =>> C -> Element of Fin DISJOINT_PAIRS A equals
+:Def7:
+   DISJOINT_PAIRS A /\
+   { FinPairUnion(B,pair_diff A.:(f,incl DISJOINT_PAIRS A)) : f.:B c= C };
+  coherence
+    proof
+      set N =
+       { FinPairUnion(B,pair_diff A.:(f,incl DISJOINT_PAIRS A)): f.:B c= C };
+      set IT = DISJOINT_PAIRS A /\ N;
+  A18: IT c= DISJOINT_PAIRS A by XBOOLE_1:17;
+  A19: IT c= N by XBOOLE_1:17;
+  A20:  B is finite;
+  A21:  C is finite;
+      deffunc F(Element of Funcs(DISJOINT_PAIRS A, [:Fin A,Fin A:]))
+      = FinPairUnion(B,pair_diff A.:($1,incl DISJOINT_PAIRS A));
+  A22:  now let f,f';
+      assume f|B = f'|B;
+        then pair_diff A.:(f,incl DISJOINT_PAIRS A)|B =
+            pair_diff A.:(f',incl DISJOINT_PAIRS A)|B by FUNCOP_1:29;
+      hence F(f)=F(f') by NORMFORM:41;
+      end;
+      { F(f): f.:B c= C } is finite from ImFin(A20,A21,A22);
+      then IT is finite by A19,FINSET_1:13;
+    hence IT is Element of Fin DISJOINT_PAIRS A by A18,FINSUB_1:def 5;
+    end;
+  correctness;
+end;
+
+theorem Th16:
+  c in -B implies
+   ex g st (for s st s in B holds g.s in s`1 \/ s`2) &
+    c = [{ g.t1 : g.t1 in t1`2 & t1 in B }, { g.t2 : g.t2 in t2`1 & t2 in B }]
+  proof assume c in -B;
+    then c in DISJOINT_PAIRS A /\
+    { [{ g.t1 : g.t1 in t1`2 & t1 in B }, { g.t2 : g.t2 in t2`1 & t2 in B }] :
+        s in B implies g.s in s`1 \/ s`2 } by Def6;
+    then c in
+    { [{ g.t1 : g.t1 in t1`2 & t1 in B }, { g.t2 : g.t2 in t2`1 & t2 in B }] :
+        s in B implies g.s in s`1 \/ s`2 } by XBOOLE_0:def 3;
+    then ex g st
+        c = [{ g.t1 : g.t1 in t1`2 & t1 in B }, { g.t2 : g.t2 in t2`1 & t2 in
+ B }]
+        & for s st s in B holds g.s in s`1 \/ s`2;
+   hence thesis;
+  end;
+
+theorem Th17:
+  [{},{}] is Element of DISJOINT_PAIRS A
+ proof
+  A1: [{},{}] = [{}.A,{}.A];
+     [{},{}]`1 = {} by MCART_1:7;
+   then [{},{}]`1 misses [{},{}]`2 by XBOOLE_1:65;
+  hence thesis by A1,NORMFORM:49;
+ end;
+
+theorem Th18:
+  for K st K = {} holds -K = {[{},{}]}
+ proof let K;
+A1:    [{},{}] is Element of DISJOINT_PAIRS A by Th17;
+  assume
+A2: K = {};
+A3: { [{ g.t1 : g.t1 in t1`2 & t1 in K }, { g.t2 : g.t2 in t2`1 & t2 in K }] :
+        s in K implies g.s in s`1 \/ s`2 } = {[{},{}]}
+   proof
+    thus
+       { [{ g.t1 : g.t1 in t1`2 & t1 in K }, { g.t2 : g.t2 in t2`1 & t2 in K }]
+:
+        s in K implies g.s in s`1 \/ s`2 } c= {[{},{}]}
+     proof let x be set; assume x in
+     { [{ g.t1 : g.t1 in t1`2 & t1 in K }, { g.t2 : g.t2 in t2`1 & t2 in K }] :
+        s in K implies g.s in s`1 \/ s`2 };
+       then consider g such that
+A4:    x = [{ g.t1 : g.t1 in t1`2 & t1 in K }, { g.t2 : g.t2 in t2`1 & t2 in
+ K }]
+       and s in K implies g.s in s`1 \/ s`2;
+A5:    x`1 = { g.t1 : g.t1 in t1`2 & t1 in K } &
+       x`2 = { g.t2 : g.t2 in t2`1 & t2 in K } by A4,MCART_1:7;
+A6:    now consider y being Element of x`1;
+        assume x`1 <> {};
+         then y in x`1;
+         then ex t1 st y = g.t1 & g.t1 in t1`2 & t1 in K by A5;
+        hence contradiction by A2;
+       end;
+         now consider y being Element of x`2;
+        assume x`2 <> {};
+         then y in x`2;
+         then ex t1 st y = g.t1 & g.t1 in t1`1 & t1 in K by A5;
+        hence contradiction by A2;
+       end;
+       then x = [{},{}] by A4,A6,MCART_1:8;
+      hence x in {[{},{}]} by TARSKI:def 1;
+     end;
+    thus {[{},{}]} c=
+    { [{ g.t1 : g.t1 in t1`2 & t1 in K }, { g.t2 : g.t2 in t2`1 & t2 in K }] :
+        s in K implies g.s in s`1 \/ s`2 }
+     proof let x be set;
+      assume x in {[{},{}]};
+then A7:    x = [{},{}] by TARSKI:def 1;
+       consider g being Element of Funcs(DISJOINT_PAIRS A, [A]);
+A8:    now consider y being Element of { g.t1 : g.t1 in t1`2 & t1 in K };
+        assume { g.t1 : g.t1 in t1`2 & t1 in K } <> {};
+         then y in { g.t1 : g.t1 in t1`2 & t1 in K };
+         then ex t1 st y = g.t1 & g.t1 in t1`2 & t1 in K;
+        hence contradiction by A2;
+       end;
+A9:       now consider y being Element of { g.t2 : g.t2 in t2`1 & t2 in K };
+        assume { g.t2 : g.t2 in t2`1 & t2 in K } <> {};
+         then y in { g.t2 : g.t2 in t2`1 & t2 in K };
+         then ex t1 st y = g.t1 & g.t1 in t1`1 & t1 in K;
+        hence contradiction by A2;
+       end;
+         s in K implies g.s in s`1 \/ s`2 by A2;
+      hence x in
+       { [{ h.t1 : h.t1 in t1`2 & t1 in K }, { h.t2 : h.t2 in t2`1 & t2 in
+ K }] :
+         s in K implies h.s in s`1 \/ s`2 } by A7,A8,A9;
+     end;
+   end;
+  thus -K = DISJOINT_PAIRS A /\
+    { [{ g.t1 : g.t1 in t1`2 & t1 in K }, { g.t2 : g.t2 in t2`1 & t2 in K }] :
+        s in K implies g.s in s`1 \/ s`2 } by Def6
+   .= {[{},{}]} by A1,A3,ZFMISC_1:52;
+ end;
+
+theorem Th19:
+  for K,L st K = {} & L = {} holds K =>> L = {[{},{}]}
+ proof let K,L;
+A1:    [{},{}] is Element of DISJOINT_PAIRS A by Th17;
+  assume
+A2: K = {} & L = {};
+then A3: K = {}.DISJOINT_PAIRS A;
+A4: FinPairUnion A is commutative & FinPairUnion A is associative &
+    FinPairUnion A has_a_unity by NORMFORM:37;
+A5: {} = {}.A;
+A6:  now let f;
+     thus FinPairUnion(K,pair_diff A.:(f,incl DISJOINT_PAIRS A))
+        = FinPairUnion A $$(K,pair_diff A.:(f,incl DISJOINT_PAIRS A))
+                                                          by NORMFORM:def 7
+       .= the_unity_wrt FinPairUnion A by A3,A4,SETWISEO:40
+       .= [{},{}] by A5,NORMFORM:38;
+    end;
+A7:{ FinPairUnion(K,pair_diff A.:(f,incl DISJOINT_PAIRS A)) : f.:K c= L }
+     = {[{},{}]}
+   proof
+    thus { FinPairUnion(K,pair_diff A.:(f,incl DISJOINT_PAIRS A)) : f.:K c= L
+}
+       c= {[{},{}]}
+    proof let x be set;
+     assume
+        x in
+ { FinPairUnion(K,pair_diff A.:(f,incl DISJOINT_PAIRS A)) : f.:K c= L };
+      then ex f st x = FinPairUnion(K,pair_diff A.:(f,incl DISJOINT_PAIRS A))
+                 & f.:K c= L;
+      then x = [{},{}] by A6;
+     hence x in {[{},{}]} by TARSKI:def 1;
+    end;
+    thus {[{},{}]}
+       c= { FinPairUnion(K,pair_diff A.:(f,incl DISJOINT_PAIRS A)) : f.:
+K c= L }
+    proof let x be set; consider f';
+     assume x in {[{},{}]}; then x = [{},{}] by TARSKI:def 1;
+then A8:   x = FinPairUnion(K,pair_diff A.:(f',incl DISJOINT_PAIRS A)) by A6;
+        f'.:K c= L by A2,RELAT_1:149;
+     hence
+        x in { FinPairUnion(K,pair_diff A.:(f,incl DISJOINT_PAIRS A)) : f.:
+K c= L }
+       by A8;
+     end;
+   end;
+  thus K =>> L = DISJOINT_PAIRS A /\
+   { FinPairUnion(K,pair_diff A.:(f,incl DISJOINT_PAIRS A)) : f.:K c= L }
+                                                                 by Def7
+      .= {[{},{}]} by A1,A7,ZFMISC_1:52;
+ end;
+
+theorem Th20:
+  for a being Element of DISJOINT_PAIRS {} holds a = [{},{}]
+ proof let a be Element of DISJOINT_PAIRS {};
+   consider x,y being Element of Fin {} such that
+A1:   a = [x,y] by DOMAIN_1:9;
+     x = {} & y = {} by FINSUB_1:28,TARSKI:def 1;
+  hence a = [{},{}] by A1;
+ end;
+
+theorem Th21:
+  DISJOINT_PAIRS {} = {[{},{}]}
+ proof
+  thus DISJOINT_PAIRS {} c= {[{},{}]}
+   proof let x be set;
+    assume x in DISJOINT_PAIRS {};
+     then x = [{},{}] by Th20;
+    hence x in {[{},{}]} by TARSKI:def 1;
+   end;
+  thus {[{},{}]} c= DISJOINT_PAIRS {}
+   proof let x be set;
+    assume x in {[{},{}]};
+     then x = [{},{}] by TARSKI:def 1;
+     then x is Element of DISJOINT_PAIRS {} by Th17;
+    hence x in DISJOINT_PAIRS {};
+   end;
+ end;
+
+Lm6:Fin DISJOINT_PAIRS {} = { {}, {[{},{}]}}
+ proof
+  thus Fin DISJOINT_PAIRS {} = bool DISJOINT_PAIRS {} by Th21,FINSUB_1:27
+      .= { {}, {[{},{}]}} by Th21,ZFMISC_1:30;
+ end;
+
+theorem Th22:
+  {[{},{}]} is Element of Normal_forms_on A
+  proof [{},{}] is Element of DISJOINT_PAIRS A by Th17;
+   then {[{},{}]} is finite & {[{},{}]} c= DISJOINT_PAIRS A by ZFMISC_1:37;
+   then reconsider B = {[{},{}]} as Element of Fin DISJOINT_PAIRS A by FINSUB_1
+:def 5;
+      now let a,b be Element of DISJOINT_PAIRS A;
+     assume a in B & b in B & a c= b;
+      then a = [{},{}] & b = [{},{}] by TARSKI:def 1;
+     hence a = b;
+    end;
+   hence thesis by NORMFORM:53;
+  end;
+
+theorem Th23:
+  c in B =>> C implies
+     ex f st f.:B c= C &
+      c = FinPairUnion(B,pair_diff A.:(f,incl DISJOINT_PAIRS A))
+   proof assume c in B =>> C;
+     then c in DISJOINT_PAIRS A /\
+      { FinPairUnion(B,pair_diff A.:(f,incl DISJOINT_PAIRS A)) : f.:B c= C }
+                                                     by Def7;
+     then c in
+      { FinPairUnion(B,pair_diff A.:(f,incl DISJOINT_PAIRS A)) : f.:B c= C }
+                                                     by XBOOLE_0:def 3;
+     then ex f st
+      c = FinPairUnion(B,pair_diff A.:(f,incl DISJOINT_PAIRS A)) & f.:B c= C;
+    hence thesis;
+   end;
+
+theorem Th24:
+  K ^ { a } = {} implies ex b st b in -K & b c= a
+ proof assume
+A1: K ^ { a } = {};
+    now per cases;
+   suppose A is non empty;
+then A2:  A = [A] by Def2;
+defpred P[set,set] means $2 in $1`1 /\ a`2 \/ $1`2 /\ a`1;
+A3:  now let s such that
+A4:     s in K;
+      a in { a } by TARSKI:def 1;
+        then not s \/ a in DISJOINT_PAIRS A by A1,A4,NORMFORM:56;
+       then consider x being Element of [A] such that
+A5:     x in s`1 & x in a`2 or x in a`1 & x in s`2 by A2,NORMFORM:47;
+      take x;
+         x in s`1 /\ a`2 or x in s`2 /\ a`1 by A5,XBOOLE_0:def 3;
+      hence P[s,x] by XBOOLE_0:def 2;
+     end;
+     consider g such that
+A6:   s in K implies
+     P[s,g.s] from FuncsChoice(A3);
+A7:  now let s;
+      assume s in K;
+       then g.s in s`1 /\ a`2 \/ s`2 /\ a`1 by A6;
+       then g.s in s`1 /\ a`2 or g.s in s`2 /\ a`1 by XBOOLE_0:def 2;
+       then g.s in s`1 & g.s in a`2 or g.s in s`2 & g.s in a`1 by XBOOLE_0:def
+3;
+      hence g.s in s`1 \/ s`2 by XBOOLE_0:def 2;
+     end;
+     set c1 = { g.t1 : g.t1 in t1`2 & t1 in K },
+         c2 = { g.t2 : g.t2 in t2`1 & t2 in K };
+A8:  c1 c= a`1
+      proof let x be set;
+       assume x in c1;
+        then consider t such that
+  A9:     x = g.t & g.t in t`2 and
+  A10:     t in K;
+          g.t in t`1 /\ a`2 \/ t`2 /\ a`1 by A6,A10;
+        then g.t in t`1 /\ a`2 or g.t in t`2 /\ a`1 by XBOOLE_0:def 2;
+        then g.t in t`1 & g.t in a`2 or g.t in t`2 & g.t in a`1 by XBOOLE_0:def
+3;
+       hence x in a`1 by A9,NORMFORM:46;
+      end;
+A11:  c2 c= a`2
+      proof
+       let x be set;
+       assume x in c2;
+        then consider t such that
+    A12:   x = g.t & g.t in t`1 and
+    A13:   t in K;
+          g.t in t`1 /\ a`2 \/ t`2 /\ a`1 by A6,A13;
+        then g.t in t`1 /\ a`2 or g.t in t`2 /\ a`1 by XBOOLE_0:def 2;
+        then g.t in t`1 & g.t in a`2 or g.t in t`2 & g.t in a`1 by XBOOLE_0:def
+3;
+       hence x in a`2 by A12,NORMFORM:46;
+      end;
+     then reconsider c = [c1,c2] as Element of DISJOINT_PAIRS A
+       by A8,NORMFORM:50;
+    take c;
+       c in { [{ h.t1 : h.t1 in t1`2 & t1 in K }, { h.t2 : h.t2 in t2`1 & t2 in
+ K }] :
+           s in K implies h.s in s`1 \/ s`2 } by A7;
+     then c in DISJOINT_PAIRS A /\
+      { [{ h.t1 : h.t1 in t1`2 & t1 in K }, { h.t2 : h.t2 in t2`1 & t2 in
+ K }] :
+        s in K implies h.s in s`1 \/ s`2 } by XBOOLE_0:def 3;
+    hence c in -K by Def6;
+       c`1 = c1 & c`2 = c2 by MCART_1:7;
+    hence c c= a by A8,A11,NORMFORM:def 1;
+   suppose A14: not A is non empty;
+then A15:  a = [{},{}] by Th20;
+   take b=a;
+    reconsider Z = {[{},{}]} as Element of Normal_forms_on {} by Th22;
+A16: mi (Z^Z) c= Z^Z by NORMFORM:64;
+      mi (Z^Z) <> {} by Th7;
+    then K <> {[{},{}]} by A1,A14,A15,A16,XBOOLE_1:3;
+    then K = {} by A14,Lm6,TARSKI:def 2;
+    then -K = {[{},{}]} by Th18;
+   hence b in -K by A15,TARSKI:def 1;
+   thus b c= a;
+  end;
+  hence thesis;
+ end;
+
+Lm7: now let A,K,b,f;
+      thus (pair_diff A.:(f,incl DISJOINT_PAIRS A)).b
+           = pair_diff A.(f.b,(incl DISJOINT_PAIRS A).b) by FUNCOP_1:48
+          .= pair_diff A.(f.b,b) by FUNCT_3:55
+          .= f.b \ b by Def5;
+     end;
+
+theorem Th25:
+  (for b st b in u holds b \/ a in DISJOINT_PAIRS A) &
+    (for c st c in u ex b st b in v & b c= c \/ a)
+     implies ex b st b in @u =>> @v & b c= a
+    proof assume that
+        for b st b in u holds b \/ a in DISJOINT_PAIRS A and
+A1:   for b st b in u ex c st c in v & c c= b \/ a;
+A2:   u = @u & v = @v by Def3;
+      defpred P[Element of DISJOINT_PAIRS A,Element of [:Fin A, Fin A:]]
+      means $2 in @v & $2 c= $1 \/ a;
+A3:   now let b; assume b in @u;
+        then consider c such that
+A4:       c in v & c c= b \/ a by A1,A2;
+        reconsider c as Element of [:Fin A, Fin A:];
+        take x = c;
+        thus P[b,x] by A4,Def3;
+      end;
+      consider f' such that
+A5:    b in @u implies P[b,f'.b] from FuncsChoice(A3);
+         b in u implies f'.b in v by A2,A5;
+then A6:    f'.:(@u) c= v by A2,SETWISEO:15;
+      set d = FinPairUnion(@u,pair_diff A.:(f',incl DISJOINT_PAIRS A));
+A7:      now let s;
+A8:     (pair_diff A.:(f',incl DISJOINT_PAIRS A)).s = f'.s \ s by Lm7;
+       assume s in u;
+        then f'.s c= a \/ s by A2,A5;
+       hence (pair_diff A.:
+(f',incl DISJOINT_PAIRS A)).s c= a by A8,NORMFORM:31;
+      end;
+   then d c= a by A2,NORMFORM:40;
+      then reconsider d as Element of DISJOINT_PAIRS A by NORMFORM:45;
+     take d;
+        d in { FinPairUnion(@u,pair_diff A.:(f,incl DISJOINT_PAIRS A)) :
+         f.:@u c= v } by A6;
+      then d in DISJOINT_PAIRS A /\ { FinPairUnion(@u,pair_diff A.:
+        (f,incl DISJOINT_PAIRS A)) : f.:@u c= v } by XBOOLE_0:def 3;
+     hence d in @u =>> @v by A2,Def7;
+     thus thesis by A2,A7,NORMFORM:40;
+    end;
+
+Lm8: a in K ^ (K =>> @u) implies ex b st b in u & b c= a
+ proof assume a in K ^ (K =>> @u); then consider b,c such that
+A1: b in K and
+A2: c in K =>> @u and
+A3: a = b \/ c by NORMFORM:55;
+A4: u = @u by Def3;
+   then consider f such that
+A5: f.:K c= u and
+A6: c = FinPairUnion(K,pair_diff A.:(f,incl DISJOINT_PAIRS A)) by A2,Th23;
+A7:(pair_diff A.:(f,incl DISJOINT_PAIRS A)).b = f.b \ b by Lm7;
+A8:   f.b in f.:K by A1,FUNCT_2:43;
+then reconsider d = f.b as Element of DISJOINT_PAIRS A by A4,A5,SETWISEO:14;
+  take d;
+  thus d in u by A5,A8;
+     d \ b c= c by A1,A6,A7,NORMFORM:35;
+  hence d c= a by A3,NORMFORM:30;
+ end;
+
+theorem Th26:
+  K ^ -K = {}
+ proof
+  assume
+A1: K ^ -K <> {}; consider x being Element of K ^ -K;
+  reconsider a = x as Element of DISJOINT_PAIRS A by A1,SETWISEO:14;
+  consider b,c such that
+A2: b in K and
+A3: c in -K and
+A4: a = b \/ c by A1,NORMFORM:55;
+A5: a`1 = b`1 \/ c`1 & a`2 = b`2 \/ c`2 by A4,NORMFORM:10;
+  consider g such that
+A6: s in K implies g.s in s`1 \/ s`2 and
+A7: c = [{ g.t1 : g.t1 in t1`2 & t1 in K }, { g.t2 : g.t2 in t2`1 & t2 in K }]
+                                                   by A3,Th16;
+A8: g.b in b`1 \/ b`2 by A2,A6;
+     now per cases by A8,XBOOLE_0:def 2;
+    case
+A9:  g.b in b`1;
+     hence g.b in a`1 by A5,XBOOLE_0:def 2;
+        g.b in { g.t2 : g.t2 in t2`1 & t2 in K } by A2,A9;
+      then g.b in c`2 by A7,MCART_1:7;
+     hence g.b in a`2 by A5,XBOOLE_0:def 2;
+    case
+A10:  g.b in b`2;
+     hence g.b in a`2 by A5,XBOOLE_0:def 2;
+        g.b in { g.t1 : g.t1 in t1`2 & t1 in K } by A2,A10;
+      then g.b in c`1 by A7,MCART_1:7;
+     hence g.b in a`1 by A5,XBOOLE_0:def 2;
+   end;
+   then a`1 /\ a`2 <> {} by XBOOLE_0:def 3;
+   then a`1 meets a`2 by XBOOLE_0:def 7;
+  hence contradiction by NORMFORM:44;
+ end;
+
+definition let A;
+  func pseudo_compl(A) -> UnOp of the carrier of NormForm A means
+:Def8: it.u = mi(-@u);
+  existence
+   proof
+     deffunc F(Element of NormForm A) = mi(-@$1);
+     consider IT being
+        Function of the carrier of NormForm A, Normal_forms_on A
+     such that
+A1:    IT.u = F(u) from LambdaD;
+       the carrier of NormForm A = Normal_forms_on A by NORMFORM:def 14;
+     then reconsider IT as UnOp of the carrier of NormForm A;
+    take IT; let u;
+    thus IT.u = mi(-@u) by A1;
+   end;
+  correctness
+   proof
+    let IT,IT' be UnOp of the carrier of NormForm A;
+    assume that
+A2:  IT.u = mi (-@u) and
+A3:  IT'.u = mi (-@u);
+       now let u;
+      thus IT.u = mi (-@u) by A2 .= IT'.u by A3;
+     end;
+    hence IT = IT' by FUNCT_2:113;
+   end;
+  func StrongImpl(A) -> BinOp of the carrier of NormForm A means
+:Def9: it.(u,v) = mi (@u =>> @v);
+  existence
+   proof
+     deffunc F(Element of NormForm A,
+     Element of NormForm A) = mi (@$1 =>> @$2);
+     consider IT being
+       Function of
+          [:(the carrier of NormForm A), the carrier of NormForm A:],
+                   Normal_forms_on A
+      such that
+A4:    IT.[u,v] = F(u,v) from Lambda2D;
+      the carrier of NormForm A = Normal_forms_on A by NORMFORM:def 14;
+    then reconsider IT as BinOp of the carrier of NormForm A;
+    take IT; let u,v;
+    thus IT.(u,v) = IT.[u,v] by BINOP_1:def 1 .= mi (@u =>> @v) by A4;
+   end;
+  correctness
+   proof let IT,IT' be BinOp of the carrier of NormForm A;
+    assume that
+A5:  IT.(u,v) = mi (@u =>> @v) and
+A6:  IT'.(u,v) = mi (@u =>> @v);
+       now let u,v;
+      thus IT.(u,v) = mi (@u =>> @v) by A5 .= IT'.(u,v) by A6;
+     end;
+    hence IT = IT' by BINOP_1:2;
+   end;
+ let u;
+  func SUB u -> Element of Fin the carrier of NormForm A equals
+:Def10:  bool u;
+  coherence
+   proof u = @u by Def3;
+     then u is finite by FINSUB_1:30;
+then A7:   bool u is finite by FINSET_1:24;
+       bool u c= the carrier of NormForm A
+      proof let x be set;
+       assume x in bool u;
+        then x is Element of NormForm A by Th10;
+       hence thesis;
+      end;
+    hence thesis by A7,FINSUB_1:def 5;
+   end;
+  correctness;
+  func diff(u) -> UnOp of the carrier of NormForm A means
+:Def11: it.v = u \ v;
+  existence
+   proof
+     deffunc F(Element of NormForm A) = @u \ @$1;
+     consider IT being
+       Function of the carrier of NormForm A, Fin DISJOINT_PAIRS A
+      such that
+A8:   IT.v = F(v) from LambdaD;
+       now let v be Element of NormForm A;
+         @u \ @v c= @u by XBOOLE_1:36;
+       then @u \ @v in Normal_forms_on A by Th8;
+       then IT.v in Normal_forms_on A by A8;
+      hence IT.v in the carrier of NormForm A by NORMFORM:def 14;
+     end;
+     then reconsider IT as UnOp of the carrier of NormForm A by Th1;
+    take IT; let v;
+       v = @v & u = @u by Def3;
+    hence IT.v = u \ v by A8;
+   end;
+  correctness
+   proof
+    let IT,IT' be UnOp of the carrier of NormForm A;
+    assume that
+A9:  IT.v = u \ v and
+A10:  IT'.v = u \ v;
+       now let v be Element of NormForm A;
+      thus IT.v = u \ v by A9
+               .= IT'.v by A10;
+     end;
+    hence IT = IT' by FUNCT_2:113;
+   end;
+end;
+
+deffunc J(set) = the L_join of NormForm $1;
+deffunc M(set) = the L_meet of NormForm $1;
+
+Lm9:  for u,v st v in SUB u holds v "\/" (diff u).v = u
+   proof let u,v;
+    assume v in SUB u;
+then A1:   v in bool u by Def10;
+A2:  u = @u & v = @v by Def3;
+then A3:  @u \ @v = (diff u).v by Def11 .= @((diff u).v) by Def3;
+    thus v "\/" (diff u).v = J(A).(v, (diff u).v) by LATTICES:def 1
+           .= mi ( @v \/ (@u \ @v)) by A3,Lm3
+           .= mi (@u) by A1,A2,XBOOLE_1:45
+           .= u by A2,NORMFORM:66;
+   end;
+
+theorem Th27:
+  (diff u).v [= u
+   proof (diff u).v = u \ v by Def11;
+     then (diff u).v c= u by XBOOLE_1:36;
+     then for a st a in (diff u).v ex b st b in u & b c= a;
+    hence thesis by Lm5;
+   end;
+
+Lm10: ex v st v in SUB u & @v ^ { a } = {} &
+     for b st b in (diff u).v holds b \/ a in DISJOINT_PAIRS A
+     proof
+       deffunc F(set)=$1;
+       defpred P[Element of DISJOINT_PAIRS A] means
+       not $1 \/ a in DISJOINT_PAIRS A;
+       set M = { F(s) : F(s) in u & P[s]};
+A1:    M c= u from FrSet_1;
+       then reconsider v = M as Element of NormForm A by Th10;
+A2:    M = @v by Def3;
+      take v;
+         v in bool u by A1;
+      hence v in SUB u by Def10;
+      deffunc F1(Element of DISJOINT_PAIRS A) = $1 \/ a;
+      defpred P1[set] means $1 in u;
+      defpred P2[Element of DISJOINT_PAIRS A] means P1[$1] & P[$1];
+      defpred Q[set] means not contradiction;
+A3:   { F1(s): P1[s] & not F1(s) in
+      DISJOINT_PAIRS A } misses DISJOINT_PAIRS A from FrSet_2;
+      { F1(t) where t is Element of DISJOINT_PAIRS A :
+       t in {s where s is Element of DISJOINT_PAIRS A: P2[s]} & Q[t]} =
+       { F1(s) where s is Element of DISJOINT_PAIRS A: P2[s] & Q[s] }
+         from Gen3'; then
+A4:    { F1(t) : t in {s : P2[s]} & Q[t]} =
+       { F1(s1) : P2[s1] & Q[s1] };
+A5: { F1(t) : t in {s : P2[s]} & Q[t]} = { F1(t1) : t1 in {s1 : P2[s1]}}
+ proof
+  thus { F1(t) : t in {s : P2[s]} & Q[t]} c= { F1(t1) : t1 in {s1 : P2[s1]}}
+   proof
+    let x be set; assume x in { F1(t) : t in {s : P2[s]} & Q[t]}; then
+    consider t such that
+A6:  x=F1(t) & t in {s : P2[s]} & Q[t];
+    thus x in { F1(t1) : t1 in {s1 : P2[s1]}} by A6;
+   end;
+  let x be set; assume x in { F1(t) : t in {s : P2[s]}}; then
+  consider t such that
+A7:  x=F1(t) & t in {s : P2[s]};
+  thus x in { F1(t1) : t1 in {s1 : P2[s1]} & Q[t1]} by A7;
+ end;
+A8: { F1(s1) : P2[s1] & Q[s1] } = { F1(s2) : P2[s2]}
+ proof
+   thus { F1(s1) : P2[s1] & Q[s1] } c= { F1(s2) : P2[s2]}
+    proof
+      let x be set; assume x in { F1(s1) : P2[s1] & Q[s1] };
+      then consider s1 such that
+A9:    x=F1(s1) & P2[s1] & Q[s1];
+      thus x in { F1(s2) : P2[s2]} by A9;
+    end;
+   let x be set; assume x in { F1(s1) : P2[s1] };
+   then consider s1 such that
+A10: x=F1(s1) & P2[s1];
+   thus x in { F1(s2) : P2[s2] & Q[s2]} by A10;
+ end;
+    { F1(t) : t in {s : P2[s]} } = { F1(s1) : P2[s1] & Q[s1] } by A4,A5; then
+A11: { F1(t) : t in M } = { F1(s1) : P2[s1] } by A8;
+deffunc G(Element of DISJOINT_PAIRS A, Element of DISJOINT_PAIRS A)=$1 \/ $2;
+defpred D[set,set] means $1 in M & $2 in { a };
+defpred E[set,set] means $2 = a & $1 in M;
+A12:    D[s,t] iff E[s,t] by TARSKI:def 1;
+A13:    { G(s,t): D[s,t] } = { G(s',t'): E[s',t'] } from Fraenkel6''(A12);
+defpred F[set,set] means $1 in M;
+{ G(s,t) where t is Element of DISJOINT_PAIRS A
+                 : t = a & F[s,t] } = { G(s',a): F[s',a]} from FrEqua2;
+      hence @v ^ { a } = DISJOINT_PAIRS A /\ { s \/ a: s in M }
+         by A2,A13,NORMFORM:def 11
+       .= {} by A3,A11,XBOOLE_0:def 7;
+      let b;
+      assume b in (diff u).v;
+       then b in u \ v by Def11;
+       then b in u & not b in M by XBOOLE_0:def 4;
+      hence b \/ a in DISJOINT_PAIRS A;
+     end;
+
+theorem Th28:
+  u "/\" pseudo_compl(A).u = Bottom NormForm A
+    proof
+      reconsider zero = {} as Element of Normal_forms_on A by NORMFORM:51;
+A1:   @(pseudo_compl(A).u) = pseudo_compl(A).u by Def3
+           .= mi(-@u) by Def8;
+     thus u "/\" pseudo_compl(A).u = M(A).(u, pseudo_compl(A).u) by LATTICES:
+def 2
+           .= mi(@u ^ mi(-@u)) by A1,Lm2
+           .= mi(@u ^ -@u) by NORMFORM:75
+           .= mi(zero) by Th26
+           .= {} by Th3
+           .= Bottom NormForm A by NORMFORM:86;
+    end;
+
+theorem Th29:
+  u "/\" StrongImpl(A).(u, v) [= v
+   proof
+       now let a;
+A1:    @(StrongImpl(A).(u, v)) = StrongImpl(A).(u, v) by Def3
+                 .= mi(@u =>> @v) by Def9;
+A2:    u "/\" StrongImpl(A).(u, v)
+           = M(A).(u, StrongImpl(A).(u, v)) by LATTICES:def 2
+          .= mi(@u ^ mi(@u =>> @v)) by A1,Lm2
+          .= mi(@u ^ (@u =>> @v)) by NORMFORM:75;
+      assume a in u "/\" StrongImpl(A).(u, v);
+       then a in @u ^ (@u =>> @v) by A2,NORMFORM:58;
+      hence ex b st b in v & b c= a by Lm8;
+     end;
+    hence thesis by Lm5;
+   end;
+
+theorem Th30:
+  @u ^ { a } = {} implies Atom(A).a [= pseudo_compl(A).u
+   proof assume
+A1:  @u ^ { a } = {};
+       now let c;
+      assume c in Atom(A).a; then c = a by Th11;
+       then consider b such that
+A2:     b in -@u and
+A3:     b c= c by A1,Th24;
+       consider d such that
+A4:     d c= b and
+A5:     d in mi(-@u) by A2,NORMFORM:65;
+      take e = d;
+       thus e in pseudo_compl(A).u by A5,Def8;
+       thus e c= c by A3,A4,NORMFORM:5;
+     end;
+    hence Atom(A).a [= pseudo_compl(A).u by Lm5;
+   end;
+
+theorem Th31:
+  (for b st b in u holds b \/ a in DISJOINT_PAIRS A ) & u "/\" Atom(A).a [= w
+      implies Atom(A).a [= StrongImpl(A).(u, w)
+  proof assume that
+A1: for b st b in u holds b \/ a in DISJOINT_PAIRS A and
+A2: u "/\" Atom(A).a [= w;
+A3:  now let c;
+     assume
+A4:    c in u;
+then A5:   c in @u by Def3;
+        a in Atom(A).a by Th12;
+then A6:   a in @(Atom(A).a) by Def3;
+A7:   c \/ a is Element of DISJOINT_PAIRS A by A1,A4;
+      then c \/ a in @u ^ @(Atom(A).a) by A5,A6,NORMFORM:56;
+      then consider b such that
+A8:    b c= c \/ a and
+A9:    b in mi(@u ^ @(Atom(A).a)) by A7,NORMFORM:65;
+        b in M(A).(u, Atom(A).a) by A9,Lm2;
+      then b in u "/\" Atom(A).a by LATTICES:def 2;
+      then consider d such that
+A10:    d in w and
+A11:    d c= b by A2,Lm4;
+     take e = d;
+     thus e in w by A10;
+     thus e c= c \/ a by A8,A11,NORMFORM:5;
+    end;
+      now let c;
+     assume c in Atom(A).a;
+      then c = a by Th11;
+      then consider b such that
+A12:    b in @u =>> @w and
+A13:    b c= c by A1,A3,Th25;
+      consider d such that
+A14:    d c= b and
+A15:    d in mi(@u =>> @w) by A12,NORMFORM:65;
+     take e = d;
+     thus e in (StrongImpl(A).(u, w)) by A15,Def9;
+     thus e c= c by A13,A14,NORMFORM:5;
+    end;
+   hence Atom(A).a [= StrongImpl(A).(u, w) by Lm5;
+  end;
+
+Lm11:
+  now let A,u,v;
+    deffunc IMPL(Element of NormForm A,
+              Element of NormForm A)
+       = FinJoin(SUB $1,M(A).:
+(pseudo_compl(A), StrongImpl(A)[:](diff $1, $2)));
+    set Psi = M(A).:(pseudo_compl(A), StrongImpl(A)[:](diff u, v));
+A1:  now let w;
+      set u2 = (diff u).w,
+          pc = pseudo_compl(A).w,
+          si = StrongImpl(A).(u2, v);
+     assume w in SUB u;
+then A2:     w "\/" u2 = u by Lm9;
+A3:    w "/\" (pc "/\" si) = (w "/\" pc) "/\" si by LATTICES:def 7
+       .= Bottom NormForm A "/\" si by Th28
+       .= Bottom NormForm A by LATTICES:40;
+A4:    u2 "/\" si [= v by Th29;
+        M(A)[;](u, Psi).w = M(A).(u, Psi.w) by FUNCOP_1:66
+       .= u "/\" Psi.w by LATTICES:def 2
+       .= u "/\" M(A).(pc, StrongImpl(A)[:](diff u, v).w) by FUNCOP_1:48
+       .= u "/\" (pc "/\" StrongImpl(A)[:](diff u, v).w) by LATTICES:def 2
+       .= u "/\" (pc "/\" si) by FUNCOP_1:60
+       .= (w "/\" (pc "/\" si)) "\/" (u2 "/\" (pc "/\"si))
+                 by A2,LATTICES:def 11
+       .= u2 "/\" (si "/\" pc) by A3,LATTICES:39
+       .= (u2 "/\" si) "/\" pc by LATTICES:def 7;
+      then M(A)[;](u, Psi).w [= u2 "/\" si by LATTICES:23;
+     hence M(A)[;](u, Psi).w [= v by A4,LATTICES:25;
+    end;
+      u "/\" IMPL(u,v) = FinJoin(SUB u, M(A)[;](u, Psi)) by LATTICE2:83;
+   hence u "/\" IMPL(u,v) [= v by A1,LATTICE2:70;
+   let w;
+A5: v = FinJoin(@v, Atom(A)) by Th15;
+then A6: u "/\" v = FinJoin(@v, M(A)[;](u, Atom(A))) by LATTICE2:83;
+   assume
+A7:  u "/\" v [= w;
+      now let a;
+     assume a in @v;
+      then M(A)[;](u, Atom(A)).a [= w by A6,A7,LATTICE2:46;
+      then M(A).(u, Atom(A).a) [= w by FUNCOP_1:66;
+then A8:    u "/\" Atom(A).a [= w by LATTICES:def 2;
+      consider v such that
+A9:   v in SUB u and
+A10:   @v ^ { a } = {} and
+A11:   for b st b in (diff u).v holds b \/ a in DISJOINT_PAIRS A by Lm10;
+        (diff u).v [= u by Th27;
+      then (diff u).v "/\" Atom(A).a [= u "/\" Atom(A).a by LATTICES:27;
+then A12:   (diff u).v "/\" Atom(A).a [= w by A8,LATTICES:25;
+      set pf = pseudo_compl(A),
+          sf = StrongImpl(A)[:](diff u, w);
+A13:   Atom(A).a [= pf.v by A10,Th30;
+        Atom(A).a [= StrongImpl(A).((diff u).v, w) by A11,A12,Th31;
+then A14:   Atom(A).a [= sf.v by FUNCOP_1:60;
+        pf.v "/\" sf.v = M(A).(pf.v, sf.v) by LATTICES:def 2
+        .= M(A).:(pf, sf).v by FUNCOP_1:48;
+      then Atom(A).a [= M(A).:(pf, sf).v by A13,A14,FILTER_0:7;
+     hence Atom(A).a [= IMPL(u,w) by A9,LATTICE2:44;
+    end;
+   hence v [= IMPL(u,w) by A5,LATTICE2:70;
+  end;
+
+Lm12:  NormForm A is implicative
+ proof let p,q be Element of NormForm A;
+  take r = FinJoin(SUB p,M(A).:(pseudo_compl(A), StrongImpl(A)[:](diff p, q)));
+  thus p "/\" r [= q &
+     for r1 being Element of NormForm A st
+      p "/\" r1 [= q holds r1 [= r by Lm11;
+ end;
+
+definition let A;
+  cluster NormForm A -> implicative;
+  coherence by Lm12;
+end;
+
+canceled;
+
+theorem Th33:
+ u => v = FinJoin(SUB u,
+   (the L_meet of NormForm A).:(pseudo_compl(A), StrongImpl(A)[:](diff u, v)))
+proof
+  deffunc IMPL(Element of NormForm A,
+            Element of NormForm A)
+       = FinJoin(SUB $1,M(A).:
+(pseudo_compl(A), StrongImpl(A)[:](diff $1, $2)));
+    u "/\" IMPL(u,v) [= v & for w st u "/\" w [= v holds w [= IMPL(u,v) by Lm11
+;
+ hence thesis by FILTER_0:def 8;
+end;
+
+theorem
+   Top NormForm A = {[{},{}]}
+ proof
+   set sd = StrongImpl(A)[:](diff Bottom NormForm A, Bottom NormForm A);
+   set F=M(A).:(pseudo_compl(A), sd);
+A1: Bottom NormForm A = {} by NORMFORM:86;
+then A2: SUB Bottom NormForm A = { Bottom NormForm A } by Def10,ZFMISC_1:1;
+A3: @(Bottom NormForm A) = {} by A1,Def3;
+A4: J(A) is commutative & J(A) is associative by LATTICE2:27,29;
+A5: (diff Bottom NormForm A).Bottom NormForm A = {} \ {} by A1,Def11
+         .= Bottom NormForm A by NORMFORM:86;
+   reconsider O = {[{},{}]} as Element of Normal_forms_on A by Th22;
+A6: @(pseudo_compl(A).Bottom NormForm A) = pseudo_compl(A).Bottom
+NormForm A by Def3
+           .= mi(-@Bottom NormForm A) by Def8
+           .= mi O by A3,Th18
+           .= O by NORMFORM:66;
+A7: @(sd.Bottom NormForm A) = sd.Bottom NormForm A by Def3
+           .= StrongImpl(A).(Bottom NormForm A, Bottom
+NormForm A) by A5,FUNCOP_1:60
+           .= mi(@Bottom NormForm A =>> @Bottom NormForm A) by Def9
+           .= mi O by A3,Th19
+           .= O by NORMFORM:66;
+  thus Top NormForm A = (Bottom NormForm A) => Bottom NormForm A by FILTER_0:38
+    .= FinJoin(SUB Bottom NormForm A,F) by Th33
+    .= J(A)$$(SUB Bottom NormForm A,F) by LATTICE2:def 3
+    .= F.Bottom NormForm A by A2,A4,SETWISEO:26
+    .= M(A).(pseudo_compl(A).Bottom NormForm A, sd.Bottom NormForm A)
+            by FUNCOP_1:48
+    .= mi (O^O) by A6,A7,Lm2
+    .= {[{},{}]} by Th7;
+ end;

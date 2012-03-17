@@ -1,0 +1,690 @@
+:: Bases of Continuous Lattices
+::  by Robert Milewski
+::
+:: Received November 28, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary ORDERS_1, WAYBEL_8, WAYBEL_3, BOOLE, WAYBEL_0, COMPTS_1, RELAT_2,
+      YELLOW_1, TARSKI, FILTER_2, YELLOW_0, ORDINAL2, LATTICE3, LATTICES,
+      FINSET_1, CAT_1, BHSP_3, QUANTAL1, FILTER_0, PRE_TOPC, CARD_1, SETFAM_1,
+      ORDINAL1, SUBSET_1, REALSET1, FUNCT_1, WELLORD2, RELAT_1, SEQM_3,
+      YELLOW_2, WAYBEL_1, WELLORD1, SGRAPH1, WAYBEL23, RLVECT_3;
+ notation TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, REALSET1, FUNCT_1,
+      STRUCT_0, FUNCT_2, FINSET_1, ORDINAL1, ORDINAL2, CARD_1, PRE_TOPC,
+      ORDERS_1, CANTOR_1, LATTICE3, YELLOW_0, YELLOW_1, YELLOW_2, WAYBEL_0,
+      WAYBEL_1, WAYBEL_3, WAYBEL_8;
+ constructors TOPS_2, CANTOR_1, LATTICE3, ORDERS_3, YELLOW_3, WAYBEL_1,
+      WAYBEL_3, WAYBEL_8;
+ clusters STRUCT_0, FINSET_1, CARD_1, LATTICE3, YELLOW_0, YELLOW_1, YELLOW_2,
+      WAYBEL_0, WAYBEL_3, WAYBEL_7, WAYBEL_8, WAYBEL14, RELSET_1, SUBSET_1,
+      XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin  :: Preliminaries
+
+  theorem :: WAYBEL23:1
+   for L be non empty Poset
+   for x be Element of L holds
+    compactbelow x = waybelow x /\ the carrier of CompactSublatt L;
+
+  definition
+   let L be non empty reflexive transitive RelStr;
+   let X be Subset of InclPoset Ids L;
+   redefine func union X -> Subset of L;
+  end;
+
+  theorem :: WAYBEL23:2
+   for L be non empty RelStr
+   for X,Y be Subset of L st X c= Y holds
+    finsups X c= finsups Y;
+
+  theorem :: WAYBEL23:3
+   for L be non empty transitive RelStr
+   for S be sups-inheriting non empty full SubRelStr of L
+   for X be Subset of L
+   for Y be Subset of S st X = Y holds
+    finsups X c= finsups Y;
+
+  theorem :: WAYBEL23:4
+     for L be complete transitive antisymmetric (non empty RelStr)
+   for S be sups-inheriting non empty full SubRelStr of L
+   for X be Subset of L
+   for Y be Subset of S st X = Y holds
+    finsups X = finsups Y;
+
+  theorem :: WAYBEL23:5
+   for L be complete sup-Semilattice
+   for S be join-inheriting non empty full SubRelStr of L
+    st Bottom L in the carrier of S
+   for X be Subset of L
+   for Y be Subset of S st X = Y holds
+    finsups Y c= finsups X;
+
+  theorem :: WAYBEL23:6
+   for L be lower-bounded sup-Semilattice
+   for X be Subset of InclPoset Ids L holds
+    sup X = downarrow finsups union X;
+
+  theorem :: WAYBEL23:7
+   for L be reflexive transitive RelStr
+   for X be Subset of L holds
+    downarrow downarrow X = downarrow X;
+
+  theorem :: WAYBEL23:8
+     for L be reflexive transitive RelStr
+   for X be Subset of L holds
+    uparrow uparrow X = uparrow X;
+
+  theorem :: WAYBEL23:9
+     for L be non empty reflexive transitive RelStr
+   for x be Element of L holds
+    downarrow downarrow x = downarrow x;
+
+  theorem :: WAYBEL23:10
+     for L be non empty reflexive transitive RelStr
+   for x be Element of L holds
+    uparrow uparrow x = uparrow x;
+
+  theorem :: WAYBEL23:11
+   for L be non empty RelStr
+   for S be non empty SubRelStr of L
+   for X be Subset of L
+   for Y be Subset of S st X = Y holds
+    downarrow Y c= downarrow X;
+
+  theorem :: WAYBEL23:12
+   for L be non empty RelStr
+   for S be non empty SubRelStr of L
+   for X be Subset of L
+   for Y be Subset of S st X = Y holds
+    uparrow Y c= uparrow X;
+
+  theorem :: WAYBEL23:13
+     for L be non empty RelStr
+   for S be non empty SubRelStr of L
+   for x be Element of L
+   for y be Element of S st x = y holds
+    downarrow y c= downarrow x;
+
+  theorem :: WAYBEL23:14
+     for L be non empty RelStr
+   for S be non empty SubRelStr of L
+   for x be Element of L
+   for y be Element of S st x = y holds
+    uparrow y c= uparrow x;
+
+begin  :: Relational Subsets
+
+  definition
+   let L be non empty RelStr;
+   let S be Subset of L;
+   attr S is meet-closed means
+:: WAYBEL23:def 1
+    subrelstr S is meet-inheriting;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   let S be Subset of L;
+   attr S is join-closed means
+:: WAYBEL23:def 2
+    subrelstr S is join-inheriting;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   let S be Subset of L;
+   attr S is infs-closed means
+:: WAYBEL23:def 3
+    subrelstr S is infs-inheriting;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   let S be Subset of L;
+   attr S is sups-closed means
+:: WAYBEL23:def 4
+    subrelstr S is sups-inheriting;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   cluster infs-closed -> meet-closed Subset of L;
+   cluster sups-closed -> join-closed Subset of L;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   cluster infs-closed sups-closed non empty Subset of L;
+  end;
+
+  theorem :: WAYBEL23:15
+   for L be non empty RelStr
+   for S be Subset of L holds
+    S is meet-closed iff
+    for x,y be Element of L st x in S & y in S & ex_inf_of {x,y},L
+     holds inf {x,y} in S;
+
+  theorem :: WAYBEL23:16
+   for L be non empty RelStr
+   for S be Subset of L holds
+    S is join-closed iff
+    for x,y be Element of L st x in S & y in S & ex_sup_of {x,y},L
+     holds sup {x,y} in S;
+
+  theorem :: WAYBEL23:17
+     for L be antisymmetric with_infima RelStr
+   for S be Subset of L holds
+    S is meet-closed iff
+    for x,y be Element of L st x in S & y in S holds inf {x,y} in S;
+
+  theorem :: WAYBEL23:18
+   for L be antisymmetric with_suprema RelStr
+   for S be Subset of L holds
+    S is join-closed iff
+    for x,y be Element of L st x in S & y in S holds sup {x,y} in S;
+
+  theorem :: WAYBEL23:19
+     for L be non empty RelStr
+   for S be Subset of L holds
+    S is infs-closed iff
+    for X be Subset of S st ex_inf_of X,L holds "/\"(X,L) in S;
+
+  theorem :: WAYBEL23:20
+     for L be non empty RelStr
+   for S be Subset of L holds
+    S is sups-closed iff
+    for X be Subset of S st ex_sup_of X,L holds "\/"(X,L) in S;
+
+  theorem :: WAYBEL23:21
+   for L be non empty transitive RelStr
+   for S be infs-closed non empty Subset of L
+   for X be Subset of S st ex_inf_of X,L holds
+    ex_inf_of X,subrelstr S & "/\"(X,subrelstr S) = "/\"(X,L);
+
+  theorem :: WAYBEL23:22
+   for L be non empty transitive RelStr
+   for S be sups-closed non empty Subset of L
+   for X be Subset of S st ex_sup_of X,L holds
+    ex_sup_of X,subrelstr S & "\/"(X,subrelstr S) = "\/"(X,L);
+
+  theorem :: WAYBEL23:23
+     for L be non empty transitive RelStr
+   for S be meet-closed non empty Subset of L
+   for x,y be Element of S st ex_inf_of {x,y},L holds
+    ex_inf_of {x,y},subrelstr S & "/\"({x,y},subrelstr S) = "/\"({x,y},L);
+
+  theorem :: WAYBEL23:24
+     for L be non empty transitive RelStr
+   for S be join-closed non empty Subset of L
+   for x,y be Element of S st ex_sup_of {x,y},L holds
+    ex_sup_of {x,y},subrelstr S & "\/"({x,y},subrelstr S) = "\/"({x,y},L);
+
+  theorem :: WAYBEL23:25
+   for L be with_infima antisymmetric transitive RelStr
+   for S be non empty meet-closed Subset of L holds
+    subrelstr S is with_infima;
+
+  theorem :: WAYBEL23:26
+   for L be with_suprema antisymmetric transitive RelStr
+   for S be non empty join-closed Subset of L holds
+    subrelstr S is with_suprema;
+
+  definition
+   let L be with_infima antisymmetric transitive RelStr;
+   let S be non empty meet-closed Subset of L;
+   cluster subrelstr S -> with_infima;
+  end;
+
+  definition
+   let L be with_suprema antisymmetric transitive RelStr;
+   let S be non empty join-closed Subset of L;
+   cluster subrelstr S -> with_suprema;
+  end;
+
+  theorem :: WAYBEL23:27
+     for L be complete transitive antisymmetric (non empty RelStr)
+   for S be infs-closed non empty Subset of L
+   for X be Subset of S holds
+    "/\"(X,subrelstr S) = "/\"(X,L);
+
+  theorem :: WAYBEL23:28
+     for L be complete transitive antisymmetric (non empty RelStr)
+   for S be sups-closed non empty Subset of L
+   for X be Subset of S holds
+    "\/"(X,subrelstr S) = "\/"(X,L);
+
+  theorem :: WAYBEL23:29
+   for L be Semilattice
+   for S be meet-closed Subset of L holds
+    S is filtered;
+
+  theorem :: WAYBEL23:30
+   for L be sup-Semilattice
+   for S be join-closed Subset of L holds
+    S is directed;
+
+  definition
+   let L be Semilattice;
+   cluster meet-closed -> filtered Subset of L;
+  end;
+
+  definition
+   let L be sup-Semilattice;
+   cluster join-closed -> directed Subset of L;
+  end;
+
+  theorem :: WAYBEL23:31
+     for L be Semilattice
+   for S be upper non empty Subset of L holds
+    S is Filter of L iff S is meet-closed;
+
+  theorem :: WAYBEL23:32
+     for L be sup-Semilattice
+   for S be lower non empty Subset of L holds
+    S is Ideal of L iff S is join-closed;
+
+  theorem :: WAYBEL23:33
+   for L be non empty RelStr
+   for S1,S2 be join-closed Subset of L holds
+    S1 /\ S2 is join-closed;
+
+  theorem :: WAYBEL23:34
+     for L be non empty RelStr
+   for S1,S2 be meet-closed Subset of L holds
+    S1 /\ S2 is meet-closed;
+
+  theorem :: WAYBEL23:35
+   for L be sup-Semilattice
+   for x be Element of L holds
+    downarrow x is join-closed;
+
+  theorem :: WAYBEL23:36
+   for L be Semilattice
+   for x be Element of L holds
+    downarrow x is meet-closed;
+
+  theorem :: WAYBEL23:37
+   for L be sup-Semilattice
+   for x be Element of L holds
+    uparrow x is join-closed;
+
+  theorem :: WAYBEL23:38
+   for L be Semilattice
+   for x be Element of L holds
+    uparrow x is meet-closed;
+
+  definition
+   let L be sup-Semilattice;
+   let x be Element of L;
+   cluster downarrow x -> join-closed;
+   cluster uparrow x -> join-closed;
+  end;
+
+  definition
+   let L be Semilattice;
+   let x be Element of L;
+   cluster downarrow x -> meet-closed;
+   cluster uparrow x -> meet-closed;
+  end;
+
+  theorem :: WAYBEL23:39
+   for L be sup-Semilattice
+   for x be Element of L holds
+    waybelow x is join-closed;
+
+  theorem :: WAYBEL23:40
+   for L be Semilattice
+   for x be Element of L holds
+    waybelow x is meet-closed;
+
+  theorem :: WAYBEL23:41
+   for L be sup-Semilattice
+   for x be Element of L holds
+    wayabove x is join-closed;
+
+  definition
+   let L be sup-Semilattice;
+   let x be Element of L;
+   cluster waybelow x -> join-closed;
+   cluster wayabove x -> join-closed;
+  end;
+
+  definition
+   let L be Semilattice;
+   let x be Element of L;
+   cluster waybelow x -> meet-closed;
+  end;
+
+begin  :: About Bases of Continuous Lattices
+
+  definition
+   let T be TopStruct;
+   func weight T -> Cardinal equals
+:: WAYBEL23:def 5
+      meet {Card B where B is Basis of T : not contradiction};
+  end;
+
+  definition
+   let T be TopStruct;
+   attr T is second-countable means
+:: WAYBEL23:def 6
+      weight T c= omega;
+  end;
+
+  definition  :: DEFINITION 4.1
+   let L be continuous sup-Semilattice;
+   mode CLbasis of L -> Subset of L means
+:: WAYBEL23:def 7
+    it is join-closed &
+    for x be Element of L holds x = sup (waybelow x /\ it);
+  end;
+
+  definition
+   let L be non empty RelStr;
+   let S be Subset of L;
+   attr S is with_bottom means
+:: WAYBEL23:def 8
+    Bottom L in S;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   let S be Subset of L;
+   attr S is with_top means
+:: WAYBEL23:def 9
+    Top L in S;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   cluster with_bottom -> non empty Subset of L;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   cluster with_top -> non empty Subset of L;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   cluster with_bottom Subset of L;
+   cluster with_top Subset of L;
+  end;
+
+  definition
+   let L be continuous sup-Semilattice;
+   cluster with_bottom CLbasis of L;
+   cluster with_top CLbasis of L;
+  end;
+
+  theorem :: WAYBEL23:42
+   for L be lower-bounded antisymmetric non empty RelStr
+   for S be with_bottom Subset of L holds
+    subrelstr S is lower-bounded;
+
+  definition
+   let L be lower-bounded antisymmetric non empty RelStr;
+   let S be with_bottom Subset of L;
+   cluster subrelstr S -> lower-bounded;
+  end;
+
+  definition
+   let L be continuous sup-Semilattice;
+   cluster -> join-closed CLbasis of L;
+  end;
+
+  definition
+   cluster bounded non trivial (continuous LATTICE);
+  end;
+
+  definition
+   let L be lower-bounded non trivial (continuous sup-Semilattice);
+   cluster -> non empty CLbasis of L;
+  end;
+
+  theorem :: WAYBEL23:43
+   for L be sup-Semilattice holds
+    the carrier of CompactSublatt L is join-closed Subset of L;
+
+  theorem :: WAYBEL23:44   :: Under 4.1 (i)
+   for L be algebraic lower-bounded LATTICE holds
+    the carrier of CompactSublatt L is with_bottom CLbasis of L;
+
+  theorem :: WAYBEL23:45  :: Under 4.1 (ii)
+     for L be continuous lower-bounded sup-Semilattice
+    st the carrier of CompactSublatt L is CLbasis of L holds
+     L is algebraic;
+
+  theorem :: WAYBEL23:46  :: PROPOSITION 4.2. (1) iff (2)
+   for L be continuous lower-bounded LATTICE
+   for B be join-closed Subset of L holds
+    B is CLbasis of L iff
+    for x,y be Element of L st not y <= x
+     ex b be Element of L st b in B & not b <= x & b << y;
+
+  theorem :: WAYBEL23:47  :: PROPOSITION 4.2. (1) iff (3)
+   for L be continuous lower-bounded LATTICE
+   for B be join-closed Subset of L st Bottom L in B holds
+    B is CLbasis of L iff
+    for x,y be Element of L st x << y
+     ex b be Element of L st b in B & x <= b & b << y;
+
+  theorem :: WAYBEL23:48   :: PROPOSITION 4.2. (1) iff (4)
+   for L be continuous lower-bounded LATTICE
+   for B be join-closed Subset of L st Bottom L in B holds
+    B is CLbasis of L iff
+    (the carrier of CompactSublatt L c= B &
+     for x,y be Element of L st not y <= x
+      ex b be Element of L st b in B & not b <= x & b <= y);
+
+  theorem :: WAYBEL23:49  :: PROPOSITION 4.2. (1) iff (5)
+     for L be continuous lower-bounded LATTICE
+   for B be join-closed Subset of L st Bottom L in B holds
+    B is CLbasis of L iff
+    for x,y be Element of L st not y <= x
+     ex b be Element of L st b in B & not b <= x & b <= y;
+
+  theorem :: WAYBEL23:50
+   for L be lower-bounded sup-Semilattice
+   for S be non empty full SubRelStr of L
+    st Bottom
+L in the carrier of S & the carrier of S is join-closed Subset of L
+   for x be Element of L holds
+    waybelow x /\ (the carrier of S) is Ideal of S;
+
+  definition
+   let L be non empty reflexive transitive RelStr;
+   let S be non empty full SubRelStr of L;
+   func supMap S -> map of InclPoset(Ids S), L means
+:: WAYBEL23:def 10
+    for I be Ideal of S holds it.I = "\/"(I,L);
+  end;
+
+  definition
+   let L be non empty reflexive transitive RelStr;
+   let S be non empty full SubRelStr of L;
+   func idsMap S -> map of InclPoset(Ids S), InclPoset(Ids L) means
+:: WAYBEL23:def 11
+    for I be Ideal of S
+    ex J be Subset of L st
+     I = J & it.I = downarrow J;
+  end;
+
+  definition
+   let L be reflexive RelStr;
+   let B be Subset of L;
+   cluster subrelstr B -> reflexive;
+  end;
+
+  definition
+   let L be transitive RelStr;
+   let B be Subset of L;
+   cluster subrelstr B -> transitive;
+  end;
+
+  definition
+   let L be antisymmetric RelStr;
+   let B be Subset of L;
+   cluster subrelstr B -> antisymmetric;
+  end;
+
+  definition
+   let L be lower-bounded continuous sup-Semilattice;
+   let B be with_bottom CLbasis of L;
+   func baseMap B -> map of L, InclPoset(Ids subrelstr B) means
+:: WAYBEL23:def 12
+    for x be Element of L holds it.x = waybelow x /\ B;
+  end;
+
+  theorem :: WAYBEL23:51
+   for L be non empty reflexive transitive RelStr
+   for S be non empty full SubRelStr of L holds
+    dom supMap S = Ids S & rng supMap S is Subset of L;
+
+  theorem :: WAYBEL23:52
+   for L be non empty reflexive transitive RelStr
+   for S be non empty full SubRelStr of L
+   for x be set holds
+    x in dom supMap S iff x is Ideal of S;
+
+  theorem :: WAYBEL23:53
+   for L be non empty reflexive transitive RelStr
+   for S be non empty full SubRelStr of L holds
+    dom idsMap S = Ids S & rng idsMap S is Subset of Ids L;
+
+  theorem :: WAYBEL23:54
+   for L be non empty reflexive transitive RelStr
+   for S be non empty full SubRelStr of L
+   for x be set holds
+    x in dom idsMap S iff x is Ideal of S;
+
+  theorem :: WAYBEL23:55
+   for L be non empty reflexive transitive RelStr
+   for S be non empty full SubRelStr of L
+   for x be set holds
+    x in rng idsMap S implies x is Ideal of L;
+
+  theorem :: WAYBEL23:56
+   for L be lower-bounded continuous sup-Semilattice
+   for B be with_bottom CLbasis of L holds
+    dom baseMap B = the carrier of L &
+    rng baseMap B is Subset of Ids subrelstr B;
+
+  theorem :: WAYBEL23:57
+     for L be lower-bounded continuous sup-Semilattice
+   for B be with_bottom CLbasis of L
+   for x be set holds
+    x in rng baseMap B implies x is Ideal of subrelstr B;
+
+  theorem :: WAYBEL23:58
+   for L be up-complete (non empty Poset)
+   for S be non empty full SubRelStr of L holds
+    supMap S is monotone;
+
+  theorem :: WAYBEL23:59
+   for L be non empty reflexive transitive RelStr
+   for S be non empty full SubRelStr of L holds
+    idsMap S is monotone;
+
+  theorem :: WAYBEL23:60
+   for L be lower-bounded continuous sup-Semilattice
+   for B be with_bottom CLbasis of L holds
+    baseMap B is monotone;
+
+  definition
+   let L be up-complete (non empty Poset);
+   let S be non empty full SubRelStr of L;
+   cluster supMap S -> monotone;
+  end;
+
+  definition
+   let L be non empty reflexive transitive RelStr;
+   let S be non empty full SubRelStr of L;
+   cluster idsMap S -> monotone;
+  end;
+
+  definition
+   let L be lower-bounded continuous sup-Semilattice;
+   let B be with_bottom CLbasis of L;
+   cluster baseMap B -> monotone;
+  end;
+
+  theorem :: WAYBEL23:61
+   for L be lower-bounded (continuous sup-Semilattice)
+   for B be with_bottom CLbasis of L holds
+    idsMap (subrelstr B) is sups-preserving;
+
+  theorem :: WAYBEL23:62
+   for L be up-complete (non empty Poset)
+   for S be non empty full SubRelStr of L holds
+    supMap S = (SupMap L)*(idsMap S);
+
+  theorem :: WAYBEL23:63   :: PROPOSITION 4.3.(i)
+   for L be lower-bounded continuous sup-Semilattice
+   for B be with_bottom CLbasis of L holds
+    [supMap subrelstr B,baseMap B] is Galois;
+
+  theorem :: WAYBEL23:64   :: PROPOSITION 4.3.(ii)
+   for L be lower-bounded continuous sup-Semilattice
+   for B be with_bottom CLbasis of L holds
+    supMap subrelstr B is upper_adjoint & baseMap B is lower_adjoint;
+
+  theorem :: WAYBEL23:65   :: PROPOSITION 4.3.(iii)
+   for L be lower-bounded (continuous sup-Semilattice)
+   for B be with_bottom CLbasis of L holds
+    rng supMap subrelstr B = the carrier of L;
+
+  theorem :: WAYBEL23:66   :: PROPOSITION 4.3.(iv)
+   for L be lower-bounded (continuous sup-Semilattice)
+   for B be with_bottom CLbasis of L holds
+    supMap (subrelstr B) is infs-preserving sups-preserving;
+
+  theorem :: WAYBEL23:67
+   for L be lower-bounded continuous sup-Semilattice
+   for B be with_bottom CLbasis of L holds
+    baseMap B is sups-preserving;
+
+   definition
+    let L be lower-bounded continuous sup-Semilattice;
+    let B be with_bottom CLbasis of L;
+    cluster supMap subrelstr B -> infs-preserving sups-preserving;
+    cluster baseMap B -> sups-preserving;
+   end;
+
+canceled;
+
+  theorem :: WAYBEL23:69   :: PROPOSITION 4.3.(vi)
+   for L be lower-bounded (continuous sup-Semilattice)
+   for B be with_bottom CLbasis of L holds
+    the carrier of CompactSublatt InclPoset(Ids subrelstr B) =
+     { downarrow b where b is Element of subrelstr B : not contradiction };
+
+  theorem :: WAYBEL23:70  :: PROPOSITION 4.3.(vii)
+     for L be lower-bounded (continuous sup-Semilattice)
+   for B be with_bottom CLbasis of L holds
+    CompactSublatt InclPoset(Ids subrelstr B),subrelstr B are_isomorphic;
+
+  theorem :: WAYBEL23:71
+   for L be continuous lower-bounded LATTICE
+   for B be with_bottom CLbasis of L st
+    for B1 be with_bottom CLbasis of L holds B c= B1
+   for J be Element of InclPoset Ids subrelstr B holds
+    J = waybelow "\/"(J,L) /\ B;
+
+  theorem :: WAYBEL23:72  :: PROPOSITION 4.4. (1) iff (2)
+     for L be continuous lower-bounded LATTICE holds
+    L is algebraic iff
+     the carrier of CompactSublatt L is with_bottom CLbasis of L &
+     for B be with_bottom CLbasis of L holds
+      the carrier of CompactSublatt L c= B;
+
+  theorem :: WAYBEL23:73  :: PROPOSITION 4.4. (1) iff (3)
+     for L be continuous lower-bounded LATTICE holds
+    L is algebraic iff
+     ex B be with_bottom CLbasis of L st
+     for B1 be with_bottom CLbasis of L holds B c= B1;
+

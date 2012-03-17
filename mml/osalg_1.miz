@@ -1,0 +1,1420 @@
+:: Order Sorted Algebras
+::  by Josef Urban
+::
+:: Received September 19, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary ZF_REFLE, PBOOLE, BOOLE, RELAT_1, RELAT_2, EQREL_1, FUNCT_1,
+      PRALG_1, TDGROUP, SEQM_3, NATTRA_1, CARD_3, FINSEQ_1, FUNCOP_1, AMI_1,
+      QC_LANG1, CARD_5, CARD_LAR, SETFAM_1, MSUALG_1, ORDERS_1, OSALG_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1, RELSET_1,
+      STRUCT_0, FUNCT_2, EQREL_1, SETFAM_1, PARTFUN1, FINSEQ_1, FINSEQ_2,
+      CARD_3, PBOOLE, ORDERS_1, MSUALG_1, ORDERS_3, YELLOW18;
+ constructors ORDERS_3, EQREL_1, YELLOW18;
+ clusters FUNCT_1, RELSET_1, STRUCT_0, SUBSET_1, ARYTM_3, MSUALG_1, FILTER_1,
+      ORDERS_3, WAYBEL_7, MSAFREE, PARTFUN1, XBOOLE_0;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI;
+ theorems FUNCT_1, PARTFUN1, FINSEQ_1, FUNCOP_1, PBOOLE, FUNCT_2, CARD_3,
+      FINSEQ_3, FINSEQ_2, RELAT_1, RELSET_1, EQREL_1, ZFMISC_1, ORDERS_3,
+      STRUCT_0, MSUALG_1, ORDERS_1, RELAT_2, WELLFND1, FUNCT_4;
+ schemes MSUALG_2;
+
+begin :: Preliminaries
+
+:: TODO: constant ManySortedSet, constant OrderSortedSet,
+:: constant -> order-sorted ManySortedSet of R
+
+definition
+  let I be set,
+      f be ManySortedSet of I,
+      p be FinSequence of I;
+  cluster f * p -> FinSequence-like;
+  coherence
+  proof
+      rng p c= I;
+    then rng p c= dom f by PBOOLE:def 3;
+    then dom(f*p) = dom p by RELAT_1:46 .= Seg len p by FINSEQ_1:def 3;
+    hence thesis by FINSEQ_1:def 2;
+  end;
+end;
+
+Lm1:
+for I being set, f being ManySortedSet of I, p being FinSequence of I
+holds dom (f * p) = dom p & len (f * p) = len p
+proof
+  let I be set, f be ManySortedSet of I, p be FinSequence of I;
+    rng p c= I;
+  then A1: rng p c= dom f by PBOOLE:def 3;
+  reconsider q = f * p as FinSequence;
+    len q = len p by A1,FINSEQ_2:33;
+  hence thesis by FINSEQ_3:31;
+end;
+
+definition let S be non empty ManySortedSign;
+ mode SortSymbol of S is Element of S;
+end;
+
+definition let S be non empty ManySortedSign;
+  mode OperSymbol of S is Element of the OperSymbols of S;
+end;
+
+definition let S be non void non empty ManySortedSign;
+  let o be OperSymbol of S;
+  canceled;
+  redefine func the_result_sort_of o -> Element of S;
+  coherence;
+end;
+
+:::::::::::::: Some structures :::::::::::::::::::
+:: overloaded MSALGEBRA is modelled using an Equivalence_Relation
+:: on OperSymbols ... partially hack enforced by previous articles,
+:: partially can give more general treatment than the usual definition
+
+definition
+ struct(ManySortedSign) OverloadedMSSign
+       (# carrier -> set,
+         OperSymbols -> set,
+         Overloading -> Equivalence_Relation of the OperSymbols,
+         Arity -> Function of the OperSymbols, the carrier*,
+         ResultSort -> Function of the OperSymbols, the carrier
+       #);
+end;
+
+:: Order Sorted Signatures
+definition
+ struct(ManySortedSign,RelStr) RelSortedSign
+       (# carrier -> set,
+         InternalRel -> (Relation of the carrier),
+         OperSymbols -> set,
+         Arity -> Function of the OperSymbols, the carrier*,
+         ResultSort -> Function of the OperSymbols, the carrier
+       #);
+end;
+
+definition
+ struct(OverloadedMSSign,RelSortedSign) OverloadedRSSign
+       (# carrier -> set,
+         InternalRel -> (Relation of the carrier),
+         OperSymbols -> set,
+         Overloading -> Equivalence_Relation of the OperSymbols,
+         Arity -> Function of the OperSymbols, the carrier*,
+         ResultSort -> Function of the OperSymbols, the carrier
+       #);
+end;
+
+:: The inheritance for structures should be much improved, much of the
+:: following is very bad hacking
+
+reserve A,O for non empty set,
+        R for Order of A,
+        Ol for Equivalence_Relation of O,
+        f for Function of O,A*,
+        g for Function of O,A;
+
+:: following should be possible, but isn't:
+:: set RS0 = RelSortedSign(#A,R,O,f,g #);
+:: inheritance of attributes for structures does not work!!! :
+:: RelStr(#A,R#) is reflexive does not imply that for RelSortedSign(...)
+
+theorem Th1:
+    OverloadedRSSign(#A,R,O,Ol,f,g #) is
+    non empty non void reflexive transitive antisymmetric
+proof
+    set RS0 = OverloadedRSSign(#A,R,O,Ol,f,g #);
+  field the InternalRel of RS0 = the carrier of RS0 by ORDERS_1:97;
+  then
+      the InternalRel of RS0 is_reflexive_in the carrier of RS0 &
+    the InternalRel of RS0 is_transitive_in the carrier of RS0 &
+    the InternalRel of RS0 is_antisymmetric_in the carrier of RS0
+                        by RELAT_2:def 9,def 12,def 16;
+    hence thesis
+    by MSUALG_1:def 5,ORDERS_1:def 4,def 5,def 6,STRUCT_0:def 1;
+end;
+
+definition let A,R,O,Ol,f,g;
+  cluster OverloadedRSSign(#A,R,O,Ol,f,g #) ->
+  strict non empty reflexive transitive antisymmetric;
+  coherence by Th1;
+end;
+
+begin
+:::::::::::::::::::::::::::::::::::::::::::::::::::::
+::   order-sorted, ~=, discernable,  op-discrete
+:::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+reserve S for OverloadedRSSign;
+
+:: should be stated for nonoverloaded, but the inheritance is bad
+definition let S;
+  attr S is order-sorted means :Def2:
+  S is reflexive transitive antisymmetric;
+end;
+
+definition
+  cluster order-sorted ->
+          reflexive transitive antisymmetric OverloadedRSSign;
+  coherence by Def2;
+  cluster strict non empty non void order-sorted OverloadedRSSign;
+  existence
+  proof consider A,R,O,Ol,f,g;
+     take OverloadedRSSign(#A,R,O,Ol,f,g #);
+     thus thesis by Def2,MSUALG_1:def 5;
+  end;
+end;
+
+definition
+  cluster non empty non void OverloadedMSSign;
+  existence
+  proof consider X being non empty non void OverloadedRSSign;
+     take X;
+     thus thesis;
+  end;
+end;
+
+definition let S be non empty non void OverloadedMSSign;
+  let x,y be OperSymbol of S;
+  pred x ~= y means
+  :Def3: [x,y] in the Overloading of S;
+  symmetry
+  proof
+    field the Overloading of S = the OperSymbols of S by ORDERS_1:97;
+    then
+    A1: the Overloading of S is_symmetric_in the OperSymbols of S
+    by RELAT_2:def 11;
+    let x,y be OperSymbol of S;
+    thus thesis by A1,RELAT_2:def 3;
+  end;
+  reflexivity
+  proof
+    field the Overloading of S = the OperSymbols of S by ORDERS_1:97;
+    then
+    A2: the Overloading of S is_reflexive_in the OperSymbols of S
+    by RELAT_2:def 9;
+    let x be OperSymbol of S;
+    thus thesis by A2,RELAT_2:def 1;
+   end;
+end;
+
+:: remove when transitivity implemented
+theorem Th2:
+  for S       being non empty non void OverloadedMSSign,
+      o,o1,o2 being OperSymbol of S
+  holds
+  o ~= o1 & o1 ~= o2 implies o ~= o2
+proof let S be non empty non void OverloadedMSSign;
+  field the Overloading of S = the OperSymbols of S by ORDERS_1:97;
+   then
+  A1: the Overloading of S is_transitive_in the OperSymbols of S
+  by RELAT_2:def 16;
+  let o,o1,o2 be OperSymbol of S;
+  assume o ~= o1 & o1 ~= o2;
+    then [o,o1] in the Overloading of S &
+    [o1,o2] in the Overloading of S by Def3;
+  then [o,o2] in the Overloading of S by A1,RELAT_2:def 8;
+  hence thesis by Def3;
+end;
+
+:: with previous definition, equivalent funcs with same rank could exist
+definition let S be non empty non void OverloadedMSSign;
+  attr S is discernable means :Def4:
+  for x,y be OperSymbol of S st
+    x ~= y & the_arity_of x = the_arity_of y &
+    the_result_sort_of x = the_result_sort_of y
+  holds x = y;
+  attr S is op-discrete means :Def5:
+  the Overloading of S = id (the OperSymbols of S);
+end;
+
+theorem Th3:
+  for S being non empty non void OverloadedMSSign holds
+  S is op-discrete iff
+  for x,y be OperSymbol of S st x ~= y holds x = y
+proof
+  let S be non empty non void OverloadedMSSign;
+  set d = id the OperSymbols of S;
+  set opss = the OperSymbols of S;
+  thus S is op-discrete implies
+  for x,y be OperSymbol of S st x ~= y holds x = y
+  proof
+    assume A1: S is op-discrete;
+    let x,y be OperSymbol of S;
+    assume x ~= y;
+    then [x,y] in the Overloading of S by Def3;
+    then [x,y] in d by A1,Def5;
+    hence x = y by RELAT_1:def 10;
+  end;
+  assume A2: for x,y be OperSymbol of S st x ~= y holds x = y;
+  set ol = the Overloading of S;
+    now let x,y be set;
+    thus [x,y] in ol implies x in opss & x = y
+    proof
+      assume A3: [x,y] in ol;
+      then consider x1,y1 being set such that A4:
+      [x,y] = [x1,y1] & x1 in opss & y1 in opss by RELSET_1:6;
+      reconsider x2 = x, y2 = y as OperSymbol of S by A4,ZFMISC_1:33;
+        x2 ~= y2 by A3,Def3;
+      hence x in opss & x = y by A2;
+    end;
+    assume A5: x in opss & x = y;
+    then reconsider x1 = x, y1 = y as OperSymbol of S;
+      x1 ~= y1 by A5;
+    hence [x,y] in ol by Def3;
+  end;
+  hence the Overloading of S = d by RELAT_1:def 10;
+end;
+
+theorem Th4:
+  for S being non empty non void OverloadedMSSign holds
+  S is op-discrete implies S is discernable
+proof let S be non empty non void OverloadedMSSign;
+  assume A1: S is op-discrete;
+  let x,y be OperSymbol of S;
+  thus thesis by A1,Th3;
+end;
+
+begin
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: OSSign of ManySortedSign, OrderSortedSign
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+reserve S0 for non empty non void ManySortedSign;
+
+:: we require strictness here for simplicity, more interesting is whether
+:: we could do a nonstrict version, keeping the remaining fields of S0;
+definition let S0;
+  func OSSign S0 -> strict non empty non void order-sorted
+  OverloadedRSSign means :Def6:
+    the carrier of S0 = the carrier of it &
+    id the carrier of S0 = the InternalRel of it &
+    the OperSymbols of S0 = the OperSymbols of it &
+    id the OperSymbols of S0 = the Overloading of it &
+    the Arity of S0 = the Arity of it &
+    the ResultSort of S0 = the ResultSort of it;
+  existence
+  proof
+    set s = OverloadedRSSign(#
+      the carrier of S0,
+      id the carrier of S0,
+      the OperSymbols of S0,
+      id the OperSymbols of S0,
+      the Arity of S0,
+      the ResultSort of S0
+    #);
+    reconsider s1 = s as strict non empty non void order-sorted
+    OverloadedRSSign by Def2,MSUALG_1:def 5;
+    take s1;
+    thus thesis;
+  end;
+  uniqueness;
+end;
+
+theorem Th5:
+  OSSign S0 is discrete op-discrete
+proof
+  set s = OSSign S0;
+  set ol = the Overloading of s;
+  A1: the Overloading of OSSign S0 =
+  id the OperSymbols of S0 &
+  the carrier of S0 = the carrier of OSSign S0 &
+  id the carrier of S0 = the InternalRel of OSSign S0 by Def6;
+  hence OSSign S0 is discrete by ORDERS_3:def 1;
+    now
+    let x,y be OperSymbol of s;
+    assume x ~= y;
+    then [x,y] in ol by Def3;
+    hence x = y by A1,RELAT_1:def 10;
+  end;
+  hence thesis by Th3;
+end;
+
+definition
+  cluster discrete op-discrete discernable
+    (strict non empty non void order-sorted OverloadedRSSign);
+  existence
+proof
+  consider S0;
+  take s = OSSign S0;
+  thus s is discrete op-discrete by Th5;
+  hence thesis by Th4;
+end;
+end;
+
+definition
+  cluster op-discrete -> discernable
+    (non empty non void OverloadedRSSign);
+  coherence by Th4;
+end;
+
+::FIXME: the order of this and the previous clusters cannot be exchanged!!
+definition let S0;
+  cluster OSSign S0 -> discrete op-discrete;
+  coherence by Th5;
+end;
+
+definition
+  mode OrderSortedSign is discernable (non empty non void
+     order-sorted OverloadedRSSign);
+end;
+
+::::::::::::::::::::::::::::::::::::::::::::
+:: monotonicity of OrderSortedSign
+:::::::::::::::::::::::::::::::::::::::::::::
+
+:: monotone overloaded signature means monotonicity for equivalent
+:: operations
+:: a stronger property of the Overloading should be stated ...
+:: o1 ~= o2 implies len (the_arity_of o2) = len (the_arity_of o1)
+:: ... probably not, unnecessary
+
+reserve S for non empty Poset;
+reserve s1,s2 for Element of S;
+reserve w1,w2 for Element of (the carrier of S)*;
+
+:: this is mostly done in YELLOW_1, but getting the constructors work
+:: could be major effort;  I don't care now
+definition let S;
+  let w1,w2 be Element of (the carrier of S)*;
+  pred w1 <= w2 means :Def7:
+  len w1 = len w2 &
+  for i being set st i in dom w1
+      for s1,s2 st s1 = w1.i & s2 = w2.i
+  holds s1 <= s2;
+  reflexivity;
+end;
+
+Lm2:
+  for w1 being Element of (the carrier of S)*
+  for i being set st
+  i in dom w1 holds w1.i is Element of S by PARTFUN1:27;
+
+theorem Th6:
+  for w1,w2 being Element of (the carrier of S)* holds
+  w1 <= w2 & w2 <= w1 implies w1 = w2
+proof
+  let w1,w2 be Element of (the carrier of S)*;
+  assume A1:  w1 <= w2 & w2 <= w1;
+  then len w1 = len w2 by Def7;
+  then A2: dom w1 = dom w2 by FINSEQ_3:31;
+    for i being set st i in dom w1 holds w1.i = w2.i
+  proof
+    let i be set such that A3: i in dom w1;
+      w1.i in the carrier of S &
+    w2.i in the carrier of S by A2,A3,PARTFUN1:27;
+    then reconsider s3 = w1.i, s4 = w2.i as Element of S;
+      s3 <= s4 & s4 <= s3 by A1,A2,A3,Def7;
+    hence w1.i = w2.i by ORDERS_1:25;
+  end;
+  hence w1 = w2 by A2,FUNCT_1:9;
+end;
+
+theorem Th7:
+  S is discrete & w1 <= w2 implies w1 = w2
+proof
+  assume A1: S is discrete & w1 <= w2;
+  then reconsider S1 = S as discrete non empty Poset;
+    len w1 = len w2 by A1,Def7;
+  then A2: dom w1 = dom w2 by FINSEQ_3:31;
+    for i being set st i in dom w1 holds w1.i = w2.i
+  proof
+    let i be set such that A3: i in dom w1;
+      w1.i in the carrier of S &
+    w2.i in the carrier of S by A2,A3,PARTFUN1:27;
+    then reconsider s3 = w1.i, s4 = w2.i
+        as Element of S;
+    A4: s3 <= s4 by A1,A3,Def7;
+    reconsider s5 = s3, s6 = s4 as Element of S1;
+      s5 = s6 by A4,ORDERS_3:1;
+    hence w1.i = w2.i;
+  end;
+  hence w1 = w2 by A2,FUNCT_1:9;
+end;
+
+reserve S for OrderSortedSign;
+reserve o,o1,o2 for OperSymbol of S;
+reserve w1 for Element of (the carrier of S)*;
+
+theorem Th8:
+  S is discrete & o1 ~= o2 &
+  (the_arity_of o1) <= (the_arity_of o2) &
+  the_result_sort_of o1 <= the_result_sort_of o2
+  implies o1 = o2
+proof
+  assume A1: S is discrete;
+  then reconsider S1 = S as discrete OrderSortedSign;
+  assume A2: o1 ~= o2 & (the_arity_of o1) <= (the_arity_of o2)
+          & the_result_sort_of o1 <= the_result_sort_of o2;
+  reconsider s1 = the_result_sort_of o1, s2 = the_result_sort_of o2
+             as SortSymbol of S1;
+  A3: s1 = s2 by A2,ORDERS_3:1;
+    (the_arity_of o1) = (the_arity_of o2) by A1,A2,Th7;
+  hence o1 = o2 by A2,A3,Def4;
+end;
+
+:: monotonicity of the signature
+:: this doesnot extend to Overloading!
+definition let S; let o;
+  attr o is monotone means :Def8:
+  for o2 st
+    o ~= o2 & (the_arity_of o) <= (the_arity_of o2)
+  holds
+    the_result_sort_of o <= the_result_sort_of o2;
+end;
+
+definition let S;
+  attr S is monotone means :Def9:
+  for o being OperSymbol of S holds o is monotone;
+end;
+
+theorem Th9:
+  S is op-discrete implies S is monotone
+proof
+  set ol = the Overloading of S;
+  assume S is op-discrete;
+  then A1: ol = id the OperSymbols of S by Def5;
+  let o be OperSymbol of S;
+  let o2 be OperSymbol of S;
+  assume o ~= o2 & (the_arity_of o) <= (the_arity_of o2);
+  then [o,o2] in ol by Def3;
+  hence the_result_sort_of o <= the_result_sort_of o2 by A1,RELAT_1:def 10;
+end;
+
+definition
+  cluster monotone OrderSortedSign;
+  existence
+  proof consider S being op-discrete OrderSortedSign;
+    take S;
+    thus thesis by Th9;
+  end;
+end;
+
+definition
+  let S be monotone OrderSortedSign;
+  cluster monotone OperSymbol of S;
+  existence
+  proof
+    consider o being OperSymbol of S;
+    take o;
+    thus thesis by Def9;
+  end;
+end;
+
+definition
+  let S be monotone OrderSortedSign;
+  cluster -> monotone OperSymbol of S;
+  coherence by Def9;
+end;
+
+definition
+  cluster op-discrete -> monotone OrderSortedSign;
+  coherence by Th9;
+end;
+
+:: constants not overloaded if monotone
+theorem
+    S is monotone &
+  the_arity_of o1 = {} & o1 ~= o2 & the_arity_of o2 = {}
+  implies o1=o2
+proof
+   assume A1: S is monotone &
+     the_arity_of o1 = {} & o1 ~= o2 & the_arity_of o2 = {};
+   then o1 is monotone & o2 is monotone by Def9;
+   then the_result_sort_of o1 <= the_result_sort_of o2 &
+        the_result_sort_of o2 <= the_result_sort_of o1 by A1,Def8;
+   then the_result_sort_of o1 = the_result_sort_of o2 by ORDERS_1:25;
+   hence thesis by A1,Def4;
+end;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: least args,sort,rank,regularity for OperSymbol and
+:: monotone OrderSortedSign
+::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:: least bound for arguments
+definition let S,o,o1,w1;
+  pred o1 has_least_args_for o,w1 means :Def10:
+    o ~= o1 & w1 <= the_arity_of o1 &
+    for o2 st o ~= o2 & w1 <= the_arity_of o2 holds
+        the_arity_of o1 <= the_arity_of o2;
+
+  pred o1 has_least_sort_for o,w1 means :Def11:
+    o ~= o1 & w1 <= the_arity_of o1 &
+    for o2 st o ~= o2 & w1 <= the_arity_of o2 holds
+        the_result_sort_of o1 <= the_result_sort_of o2;
+end;
+
+definition let S,o,o1,w1;
+  pred o1 has_least_rank_for o,w1 means :Def12:
+    o1 has_least_args_for o,w1 & o1 has_least_sort_for o,w1;
+end;
+
+definition let S,o;
+  attr o is regular means :Def13:
+  o is monotone &
+  for w1 st w1 <= the_arity_of o
+    ex o1 st o1 has_least_args_for o,w1;
+end;
+
+definition let SM be monotone OrderSortedSign;
+  attr SM is regular means :Def14:
+  for om being OperSymbol of SM holds om is regular;
+end;
+
+reserve SM for monotone OrderSortedSign,
+        o,o1,o2 for OperSymbol of SM,
+        w1 for Element of (the carrier of SM)*;
+
+theorem Th11:
+  SM is regular iff
+  for o,w1 st w1 <= the_arity_of o
+    ex o1 st o1 has_least_rank_for o,w1
+proof
+  hereby
+    assume A1: SM is regular;
+    let o,w1;
+    A2: o is regular by A1,Def14;
+    assume w1 <= the_arity_of o;
+    then consider o1 such that A3:
+    o1 has_least_args_for o,w1 by A2,Def13;
+    take o1;
+      o1 has_least_sort_for o,w1
+    proof
+      thus A4: o ~= o1 & w1 <= the_arity_of o1 by A3,Def10;
+      let o2;
+      assume A5:  o ~= o2 & w1 <= the_arity_of o2;
+      then A6: the_arity_of o1 <= the_arity_of o2 by A3,Def10;
+        o1 ~= o2 by A4,A5,Th2;
+      hence the_result_sort_of o1 <= the_result_sort_of o2 by A6,Def8;
+    end;
+    hence o1 has_least_rank_for o,w1 by A3,Def12;
+  end;
+  assume A7: for o,w1 st w1 <= the_arity_of o
+  ex o1 st o1 has_least_rank_for o,w1;
+  let o;
+  thus o is monotone;
+  let w1 such that A8: w1 <= the_arity_of o;
+  consider o1 such that A9:
+  o1 has_least_rank_for o,w1 by A7,A8;
+  take o1;
+  thus thesis by A9,Def12;
+end;
+
+theorem Th12:
+  for SM being monotone OrderSortedSign holds
+  SM is op-discrete implies SM is regular
+proof
+  let SM be monotone OrderSortedSign;
+  assume A1: SM is op-discrete;
+  let om be OperSymbol of SM;
+  thus om is monotone;
+  let wm1 be Element of (the carrier of SM)* such that
+  A2: wm1 <= the_arity_of om;
+    om has_least_args_for om,wm1
+  proof
+    thus om ~= om & wm1 <= the_arity_of om by A2;
+    let om2 be OperSymbol of SM;
+    assume om ~= om2 & wm1 <= the_arity_of om2;
+    hence thesis by A1,Th3;
+  end;
+  hence thesis;
+end;
+
+definition
+  cluster regular (monotone OrderSortedSign);
+  existence
+  proof
+    consider SM being op-discrete OrderSortedSign;
+    take SM;
+    thus thesis by Th12;
+  end;
+end;
+
+definition
+  cluster op-discrete -> regular (monotone OrderSortedSign);
+  coherence by Th12;
+end;
+
+definition let SR be regular (monotone OrderSortedSign);
+  cluster -> regular OperSymbol of SR;
+  coherence by Def14;
+end;
+
+reserve SR for regular (monotone OrderSortedSign),
+        o,o1,o2,o3,o4 for OperSymbol of SR,
+        w1 for Element of (the carrier of SR)*;
+
+theorem Th13:
+  ( w1 <= the_arity_of o &
+    o3 has_least_args_for o,w1 & o4 has_least_args_for o,w1 )
+  implies o3 = o4
+proof
+  assume A1:
+    w1 <= the_arity_of o &
+    o3 has_least_args_for o,w1 & o4 has_least_args_for o,w1;
+  then A2:
+    o ~= o3 & w1 <= the_arity_of o3 &
+    for o2 st o ~= o2 & w1 <= the_arity_of o2 holds
+        the_arity_of o3 <= the_arity_of o2 by Def10;
+      o ~= o4 & w1 <= the_arity_of o4 &
+    for o2 st o ~= o2 & w1 <= the_arity_of o2 holds
+        the_arity_of o4 <= the_arity_of o2 by A1,Def10;
+  then A3: o3 ~= o4 &
+        the_arity_of o4 <= the_arity_of o3 &
+        the_arity_of o3 <= the_arity_of o4 by A2,Th2;
+  then A4: the_arity_of o3 = the_arity_of o4 by Th6;
+    the_result_sort_of o3 <= the_result_sort_of o4 &
+       the_result_sort_of o4 <= the_result_sort_of o3 by A3,Def8;
+  then the_result_sort_of o3 = the_result_sort_of o4 by ORDERS_1:25;
+  hence thesis by A3,A4,Def4;
+end;
+
+definition let SR,o,w1;
+  assume A1: w1 <= the_arity_of o;
+  func LBound(o,w1) -> OperSymbol of SR means :Def15:
+  it has_least_args_for o,w1;
+  existence by A1,Def13;
+  uniqueness by A1,Th13;
+end;
+
+theorem Th14:
+  for w1 st w1 <= the_arity_of o holds
+  LBound(o,w1) has_least_rank_for o,w1
+proof
+  let w1;
+  assume A1: w1 <= the_arity_of o;
+  then consider o1 such that A2: o1 has_least_rank_for o,w1 by Th11;
+    o1 has_least_args_for o,w1 by A2,Def12;
+  hence thesis by A1,A2,Def15;
+end;
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+:: ConstOSSet of Poset, OrderSortedSets
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+reserve R for non empty Poset;
+reserve z for non empty set;
+
+:: just to avoid on-the-spot casting in the examples
+definition let R,z;
+  func ConstOSSet(R,z) -> ManySortedSet of the carrier of R
+   equals :Def16: (the carrier of R) --> z;
+  correctness
+  proof
+    the carrier of R = dom ((the carrier of R) --> z) by FUNCT_2:def 1;
+    hence thesis by PBOOLE:def 3;
+  end;
+end;
+
+theorem Th15:
+  ConstOSSet(R,z) is non-empty &
+  for s1,s2 being Element of R st s1 <= s2
+  holds ConstOSSet(R,z).s1 c= ConstOSSet(R,z).s2
+proof
+   set x = ConstOSSet(R,z);
+   set D = (the carrier of R) --> z;
+   A1: x = D by Def16;
+     now let s be set;
+      assume s in the carrier of R;
+      then z = D.s by FUNCOP_1:13 .= x.s by Def16;
+      hence x.s is non empty;
+   end;
+   hence x is non-empty by PBOOLE:def 16;
+   let s1,s2 being Element of R;
+   assume s1 <= s2;
+     D.s1 = z by FUNCOP_1:13 .= D.s2 by FUNCOP_1:13;
+   hence thesis by A1;
+end;
+
+definition let R;
+  let M be ManySortedSet of R;
+  canceled;
+  attr M is order-sorted means :Def18:
+    for s1,s2 being Element of R
+    st s1 <= s2 holds M.s1 c= M.s2;
+end;
+
+theorem Th16:
+  ConstOSSet(R,z) is order-sorted
+proof
+  set x = ConstOSSet(R,z);
+    for s1,s2 being Element of R
+  st s1 <= s2 holds x.s1 c= x.s2 by Th15;
+  hence thesis by Def18;
+end;
+
+definition let R;
+  cluster order-sorted ManySortedSet of R;
+  existence
+proof
+  consider z;
+  take ConstOSSet(R,z);
+  thus thesis by Th16;
+end;
+end;
+
+::FIXME: functor clusters for redefined funcs do not work,
+definition let R,z;
+  redefine func ConstOSSet(R,z) -> order-sorted ManySortedSet of R;
+  coherence by Th16;
+end;
+
+:: OrderSortedSet respects the ordering
+definition let R be non empty Poset;
+  mode OrderSortedSet of R is order-sorted ManySortedSet of R;
+end;
+
+definition let R be non empty Poset;
+  cluster non-empty OrderSortedSet of R;
+  existence
+  proof
+     take ConstOSSet(R,1);
+     thus thesis by Th15;
+  end;
+end;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: order-sorted MSAlgebra, OSAlgebra, ConstOSA, OSAlg of a MSAlgebra
+::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+reserve s1,s2 for SortSymbol of S,
+        o,o1,o2,o3 for OperSymbol of S,
+        w1,w2 for Element of (the carrier of S)*;
+
+definition let S; let M be MSAlgebra over S;
+  attr M is order-sorted means
+  :Def19: for s1,s2 st s1 <= s2 holds
+  (the Sorts of M).s1 c= (the Sorts of M).s2;
+end;
+
+theorem Th17:
+  for M being MSAlgebra over S holds
+  M is order-sorted iff the Sorts of M is OrderSortedSet of S
+proof
+  let M be MSAlgebra over S;
+  set So = the Sorts of M;
+  reconsider So1 = So as ManySortedSet of S;
+  thus M is order-sorted implies So is OrderSortedSet of S
+  proof
+    assume A1: M is order-sorted;
+      So1 is order-sorted
+    proof let s1,s2;
+      thus thesis by A1,Def19;
+    end;
+    hence thesis;
+  end;
+  assume A2: So is OrderSortedSet of S;
+  let s1,s2;
+  thus thesis by A2,Def18;
+end;
+
+reserve CH for ManySortedFunction of
+      ConstOSSet(S,z)# * the Arity of S,
+      ConstOSSet(S,z) * the ResultSort of S;
+
+definition let S,z,CH;
+  func ConstOSA(S,z,CH) -> strict non-empty MSAlgebra over S means :Def20:
+  the Sorts of it = ConstOSSet(S,z) &
+  the Charact of it = CH;
+  existence
+  proof
+      now let i be set;
+      assume i in the carrier of S;
+      then z = ((the carrier of S) --> z).i by FUNCOP_1:13
+      .= ConstOSSet(S,z).i by Def16;
+      hence ConstOSSet(S,z).i is non empty;
+    end;
+    then ConstOSSet(S,z) is non-empty by PBOOLE:def 16;
+    then reconsider T = MSAlgebra(# ConstOSSet(S,z),CH #) as
+    strict non-empty MSAlgebra over S by MSUALG_1:def 8;
+    take T;
+    thus thesis;
+  end;
+  uniqueness;
+end;
+
+theorem Th18:
+  ConstOSA(S,z,CH) is order-sorted
+proof the Sorts of ConstOSA(S,z,CH) = ConstOSSet(S,z) by Def20;
+  hence thesis by Th17;
+end;
+
+definition let S;
+  cluster strict non-empty order-sorted MSAlgebra over S;
+  existence
+  proof consider z,CH;
+    take ConstOSA(S,z,CH);
+    thus thesis by Th18;
+  end;
+end;
+
+definition let S,z,CH;
+  cluster ConstOSA(S,z,CH) -> order-sorted;
+  coherence by Th18;
+end;
+
+definition let S;
+  mode OSAlgebra of S is order-sorted MSAlgebra over S;
+end;
+
+theorem Th19:
+  for S being discrete OrderSortedSign,
+      M being MSAlgebra over S
+  holds M is order-sorted
+proof
+  let S be discrete OrderSortedSign,
+      M be MSAlgebra over S;
+  let s1,s2 be SortSymbol of S;
+  assume s1 <= s2;
+  hence (the Sorts of M).s1 c= (the Sorts of M).s2 by ORDERS_3:1;
+end;
+
+definition let S be discrete OrderSortedSign;
+  cluster -> order-sorted MSAlgebra over S;
+  coherence by Th19;
+end;
+
+reserve A for OSAlgebra of S;
+
+theorem Th20:
+  w1 <= w2 implies
+  (the Sorts of A)#.w1 c= (the Sorts of A)#.w2
+proof
+  assume A1: w1 <= w2;
+  then A2: len w1 = len w2 &
+  for i being set st i in dom w1
+      for s1,s2 st s1 = w1.i & s2 = w2.i holds s1 <= s2 by Def7;
+  set iw1 = (the Sorts of A) * w1,
+      iw2 = (the Sorts of A) * w2;
+  let x be set such that A3: x in (the Sorts of A)#.w1;
+    x in product(iw1) by A3,MSUALG_1:def 3;
+  then consider g being Function such that
+  A4: x = g & dom g = dom iw1 &
+  for y being set st y in dom iw1 holds g.y in iw1.y by CARD_3:def 5;
+  A5: dom iw1 = dom w1 by Lm1 .= dom w2 by A2,FINSEQ_3:31
+       .= dom iw2 by Lm1;
+    for y being set st y in dom iw2 holds g.y in iw2.y
+  proof
+    let y be set such that A6: y in dom iw2;
+    A7: y in dom iw1 & y in dom w1 & y in dom w2 by A5,A6,Lm1;
+    A8: g.y in iw1.y by A4,A5,A6;
+    A9: iw1.y = (the Sorts of A).(w1.y) &
+         iw2.y = (the Sorts of A).(w2.y) by A7,FUNCT_1:23;
+    reconsider s1 = w1.y, s2 = w2.y as SortSymbol of S by A7,Lm2;
+      s1 <= s2 by A1,A7,Def7;
+    then (the Sorts of A).(w1.y) c= (the Sorts of A).(w2.y) by Def19;
+    hence g.y in iw2.y by A8,A9;
+  end;
+  then g in product(iw2) by A4,A5,CARD_3:def 5;
+  hence x in (the Sorts of A)#.w2 by A4,MSUALG_1:def 3;
+end;
+
+reserve M for MSAlgebra over S0;
+
+:: canonical OSAlgebra for MSAlgebra
+definition let S0,M;
+  func OSAlg M -> strict OSAlgebra of OSSign S0 means
+    the Sorts of it = the Sorts of M &
+  the Charact of it = the Charact of M;
+  uniqueness;
+  existence
+  proof
+    set S1 = OSSign S0,
+        s0 = the Sorts of M,
+        c0 = the Charact of M;
+    A1: the carrier of S0 = the carrier of S1 &
+         the Arity of S0 = the Arity of S1 &
+         the ResultSort of S1 = the ResultSort of S0 by Def6;
+    then reconsider s1 = s0 as ManySortedSet of S1;
+    reconsider c1 = c0 as ManySortedFunction of
+                            s1# * the Arity of S1,
+                            s1 * the ResultSort of S1 by A1,Def6;
+      MSAlgebra(# s1, c1 #) is order-sorted;
+    hence thesis;
+  end;
+end;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: monotone OSAlgebra
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+reserve A for OSAlgebra of S;
+
+:: Element of A should mean Element of Union the Sorts of A here ...
+:: MSAFREE3:def 1; Element of A,s is defined in MSUALG_6
+
+theorem Th21:
+  for w1,w2,w3 being Element of (the carrier of S)* holds
+  w1 <= w2 & w2 <= w3 implies w1 <= w3
+proof
+  let w1,w2,w3 be Element of (the carrier of S)*;
+  assume A1:  w1 <= w2 & w2 <= w3;
+  then A2: len w1 = len w2 & len w2 = len w3 by Def7;
+  then A3: dom w1 = dom w2 & dom w2 = dom w3 by FINSEQ_3:31;
+    for i being set st i in dom w1
+  for s1,s2 st s1 = w1.i & s2 = w3.i holds s1 <= s2
+  proof
+    let i be set such that A4: i in dom w1;
+    let s1,s2 such that A5: s1 = w1.i & s2 = w3.i;
+      w1.i in the carrier of S & w2.i in the carrier of S &
+    w3.i in the carrier of S by A3,A4,PARTFUN1:27;
+    then reconsider s3 = w1.i, s4 = w2.i, s5 = w3.i
+    as SortSymbol of S;
+      s3 <= s4 & s4 <= s5 by A1,A3,A4,Def7;
+    hence thesis by A5,ORDERS_1:26;
+  end;
+  hence w1 <= w3 by A2,Def7;
+end;
+
+definition let S,o1,o2;
+pred o1 <= o2 means
+:Def22: o1 ~= o2 & (the_arity_of o1) <= (the_arity_of o2)
+            & the_result_sort_of o1 <= the_result_sort_of o2;
+reflexivity;
+end;
+
+theorem
+    o1 <= o2 & o2 <= o1 implies o1 = o2
+proof
+  assume A1: o1 <= o2 & o2 <= o1;
+  then A2: o1 ~= o2 & (the_arity_of o1) <= (the_arity_of o2)
+            & the_result_sort_of o1 <= the_result_sort_of o2 by Def22;
+    o2 ~= o1 & (the_arity_of o2) <= (the_arity_of o1)
+            & the_result_sort_of o2 <= the_result_sort_of o1 by A1,Def22;
+  then the_arity_of o1 = the_arity_of o2 &
+  the_result_sort_of o1 = the_result_sort_of o2
+  by A2,Th6,ORDERS_1:25;
+  hence o1 = o2 by A2,Def4;
+end;
+
+theorem
+    o1 <= o2 & o2 <= o3 implies o1 <= o3
+proof
+  assume A1: o1 <= o2 & o2 <= o3;
+  then A2: o1 ~= o2 & (the_arity_of o1) <= (the_arity_of o2)
+            & the_result_sort_of o1 <= the_result_sort_of o2 by Def22;
+  A3: o2 ~= o3 & (the_arity_of o2) <= (the_arity_of o3)
+            & the_result_sort_of o2 <= the_result_sort_of o3 by A1,Def22;
+  hence o1 ~= o3 by A2,Th2;
+  thus (the_arity_of o1) <= (the_arity_of o3) by A2,A3,Th21;
+  thus the_result_sort_of o1 <= the_result_sort_of o3
+  by A2,A3,ORDERS_1:26;
+end;
+
+theorem Th24:
+  the_result_sort_of o1 <= the_result_sort_of o2 implies
+  Result(o1,A) c= Result(o2,A)
+proof
+  reconsider M = the Sorts of A as OrderSortedSet of S by Th17;
+  assume the_result_sort_of o1 <= the_result_sort_of o2;
+  then A1: M.(the_result_sort_of o1) c= M.(the_result_sort_of o2) by Def18;
+  A2: Result(o1,A) = ((the Sorts of A) * the ResultSort of S).o1
+       by MSUALG_1:def 10
+       .= (the Sorts of A).((the ResultSort of S).o1) by FUNCT_2:21
+       .= (the Sorts of A).(the_result_sort_of o1) by MSUALG_1:def 7;
+    Result(o2,A) = ((the Sorts of A) * the ResultSort of S).o2
+       by MSUALG_1:def 10
+       .= (the Sorts of A).((the ResultSort of S).o2) by FUNCT_2:21
+       .= (the Sorts of A).(the_result_sort_of o2) by MSUALG_1:def 7;
+  hence thesis by A1,A2;
+end;
+
+theorem Th25:
+  the_arity_of o1 <= the_arity_of o2 implies Args(o1,A) c= Args(o2,A)
+proof
+  reconsider M = the Sorts of A as OrderSortedSet of S by Th17;
+  assume A1: the_arity_of o1 <= the_arity_of o2;
+  A2: M#.(the_arity_of o1) = M#.((the Arity of S).o1) by MSUALG_1:def 6
+       .= (M# * (the Arity of S)).o1 by FUNCT_2:21
+       .= Args(o1,A) by MSUALG_1:def 9;
+    M#.(the_arity_of o2) = M#.((the Arity of S).o2) by MSUALG_1:def 6
+       .= (M# * (the Arity of S)).o2 by FUNCT_2:21
+       .= Args(o2,A) by MSUALG_1:def 9;
+  hence Args(o1,A) c= Args(o2,A) by A1,A2,Th20;
+end;
+
+theorem
+    o1 <= o2 implies Args(o1,A) c= Args(o2,A) & Result(o1,A) c= Result(o2,A)
+proof
+  assume o1 <= o2;
+  then the_arity_of o1 <= the_arity_of o2 &
+       the_result_sort_of o1 <= the_result_sort_of o2 by Def22;
+  hence thesis by Th24,Th25;
+end;
+
+:: OSAlgebra is monotone iff the interpretation of the same symbol on
+:: widening sorts coincides
+:: the definition would be nicer as function inclusion (see TEqMon)
+:: without the restriction to Args(o1,A), but the permissiveness
+:: of FUNCT_2:def 1 spoils that
+definition let S,A;
+  attr A is monotone means :Def23:
+  for o1,o2 st o1 <= o2 holds Den(o2,A)|Args(o1,A) = Den(o1,A);
+end;
+
+:: REVISE:: WELLFND1:1 should be generalised to Relation and moved to RELAT_1
+theorem Th27:
+  for A being non-empty OSAlgebra of S holds
+  A is monotone iff
+  for o1,o2 st o1 <= o2 holds Den(o1,A) c= Den(o2,A)
+proof
+  let A be non-empty OSAlgebra of S;
+  hereby assume A1: A is monotone;
+    let o1,o2 such that A2: o1 <= o2;
+      Den(o2,A)|Args(o1,A) = Den(o1,A) by A1,A2,Def23;
+    hence Den(o1,A) c= Den(o2,A) by RELAT_1:88;
+  end;
+  assume A3: for o1,o2 st o1 <= o2 holds Den(o1,A) c= Den(o2,A);
+  let o1,o2 such that A4: o1 <= o2;
+  A5: Den(o1,A) c= Den(o2,A) by A3,A4;
+  A6: dom Den(o1,A) = Args(o1,A) &
+       dom Den(o2,A) = Args(o2,A) by FUNCT_2:def 1;
+  hence Den(o2,A)|Args(o1,A) = Den(o1,A)|Args(o1,A) by A5,WELLFND1:1
+        .= Den(o1,A) by A6,RELAT_1:98;
+end;
+
+theorem
+    (S is discrete or S is op-discrete) implies A is monotone
+proof
+  assume A1: S is discrete or S is op-discrete;
+  let o1,o2;
+  assume A2: o1 ~= o2 & (the_arity_of o1) <= (the_arity_of o2)
+            & the_result_sort_of o1 <= the_result_sort_of o2;
+    o1 = o2
+  proof
+    per cases by A1;
+    suppose S is discrete;
+    hence thesis by A2,Th8;
+    suppose S is op-discrete;
+    hence thesis by A2,Th3;
+  end;
+  hence thesis by FUNCT_2:40;
+end;
+
+:: TrivialOSA(S,z,z1) interprets all funcs as one constant
+
+definition let S,z; let z1 be Element of z;
+  func TrivialOSA(S,z,z1) -> strict OSAlgebra of S means :Def24:
+  the Sorts of it = ConstOSSet(S,z) &
+  for o holds Den(o,it) = Args(o,it) --> z1;
+  existence
+:: all of this is just casting, the type system should be much
+:: more user-friendly
+  proof
+    set c = ConstOSSet(S,z);
+    deffunc ch1(Element of the OperSymbols of S) =
+    ((c# * the Arity of S).$1) --> z1;
+    consider ch2 being Function such that A1:
+      dom ch2 = the OperSymbols of S &
+      for x being Element of (the OperSymbols of S) holds
+      ch2.x = ch1(x) from LambdaB;
+    reconsider ch4 = ch2
+    as ManySortedSet of (the OperSymbols of S) by A1,PBOOLE:def 3;
+      for i being set st i in (the OperSymbols of S) holds ch4.i
+    is Function of (ConstOSSet(S,z)# * the Arity of S).i,
+    (ConstOSSet(S,z) * the ResultSort of S).i
+    proof let i be set such that A2: i in the OperSymbols of S;
+      reconsider o=i as OperSymbol of S by A2;
+        (the ResultSort of S).o in the carrier of S;
+      then A3: o in ((the ResultSort of S)"(the carrier of S))
+           by FUNCT_2:46;
+        (ConstOSSet(S,z) * the ResultSort of S).o =
+      (((the carrier of S) --> z) * the ResultSort of S).o by Def16
+      .= (((the ResultSort of S)"(the carrier of S)) --> z).o
+           by FUNCOP_1:25 .= z by A3,FUNCOP_1:13;
+      then A4: {z1} c= (ConstOSSet(S,z) * the ResultSort of S).i
+           by ZFMISC_1:37;
+        ch4.i = ch1(o) by A1;
+      hence thesis by A4,FUNCT_2:9;
+    end;
+    then reconsider ch3 = ch4 as ManySortedFunction of
+    (ConstOSSet(S,z)# * the Arity of S),
+    (ConstOSSet(S,z) * the ResultSort of S) by MSUALG_1:def 2;
+    take T = ConstOSA(S,z,ch3);
+    thus A5: the Sorts of T = ConstOSSet(S,z) by Def20;
+    let o;
+      Den(o,T) = (the Charact of T).o by MSUALG_1:def 11 .=
+    ch3.o by Def20 .=
+    ((c# * the Arity of S).o) --> z1 by A1 .=
+    Args(o,T) --> z1 by A5,MSUALG_1:def 9;
+    hence thesis;
+  end;
+
+  uniqueness
+  proof let T1,T2 be strict OSAlgebra of S;
+    assume A6: the Sorts of T1 = ConstOSSet(S,z) &
+    for o holds Den(o,T1) = Args(o,T1) --> z1;
+    assume A7: the Sorts of T2 = ConstOSSet(S,z) &
+    for o holds Den(o,T2) = Args(o,T2) --> z1;
+      now let o1 be set such that A8: o1 in the OperSymbols of S;
+      reconsider o = o1 as OperSymbol of S by A8;
+      thus (the Charact of T1).o1 = Den(o,T1) by MSUALG_1:def 11 .=
+      Args(o,T1) --> z1 by A6 .=
+ ((ConstOSSet(S,z)# * the Arity of S).o) --> z1 by A6,MSUALG_1:def 9 .=
+      Args(o,T2) --> z1 by A7,MSUALG_1:def 9 .= Den(o,T2) by A7 .=
+      (the Charact of T2).o1 by MSUALG_1:def 11;
+    end;
+    hence thesis by A6,A7,PBOOLE:3;
+  end;
+end;
+
+theorem Th29:
+  for z1 being Element of z holds
+  TrivialOSA(S,z,z1) is non-empty & TrivialOSA(S,z,z1) is monotone
+proof
+  let z1 be Element of z;
+  set A = TrivialOSA(S,z,z1);
+  thus A is non-empty
+  proof
+      the Sorts of A = ConstOSSet(S,z) by Def24;
+    then the Sorts of A is non-empty by Th15;
+    hence thesis by MSUALG_1:def 8;
+  end;
+  then reconsider A1 = A as non-empty OSAlgebra of S;
+    for o1,o2 st o1 <= o2 holds Den(o1,A1) c= Den(o2,A1)
+  proof
+    let o1,o2;
+    assume o1 <= o2;
+    then A1: o1 ~= o2 & (the_arity_of o1) <= (the_arity_of o2)
+    & the_result_sort_of o1 <= the_result_sort_of o2 by Def22;
+    A2: Den(o1,A) = Args(o1,A) --> z1 &
+    Den(o2,A) = Args(o2,A) --> z1 by Def24;
+    A3: Args(o1,A) = ((the Sorts of A)# * the Arity of S).o1
+    by MSUALG_1:def 9
+    .= (the Sorts of A)#.((the Arity of S).o1) by FUNCT_2:21 .=
+    (the Sorts of A)#.(the_arity_of o1) by MSUALG_1:def 6;
+      Args(o2,A) = ((the Sorts of A)# * the Arity of S).o2
+    by MSUALG_1:def 9
+    .= (the Sorts of A)#.((the Arity of S).o2) by FUNCT_2:21 .=
+    (the Sorts of A)#.(the_arity_of o2) by MSUALG_1:def 6;
+    then Args(o1,A) c= Args(o2,A) by A1,A3,Th20;
+    hence Den(o1,A1) c= Den(o2,A1) by A2,FUNCT_4:5;
+  end;
+  hence thesis by Th27;
+end;
+
+definition let S;
+  cluster monotone strict non-empty OSAlgebra of S;
+  existence
+  proof
+    consider z;
+    consider z1 being Element of z;
+    take TrivialOSA(S,z,z1);
+    thus thesis by Th29;
+  end;
+end;
+
+definition
+  let S,z; let z1 be Element of z;
+  cluster TrivialOSA(S,z,z1) -> monotone non-empty;
+  coherence by Th29;
+end;
+
+:::::::::::::::::::::::::::::
+:: OperNames, OperName, Name
+:::::::::::::::::::::::::::::
+
+reserve op1,op2 for OperSymbol of S;
+
+definition let S;
+  func OperNames S -> non empty (Subset-Family of the OperSymbols of S)
+  equals :Def25:
+  Class the Overloading of S;
+  coherence;
+end;
+
+definition let S;
+  cluster -> non empty Element of OperNames S;
+  coherence
+  proof let X be Element of OperNames S;
+      X in OperNames S;
+    then X in Class the Overloading of S by Def25;
+    then consider x being set such that
+      A1: x in the OperSymbols of S &
+           X = Class(the Overloading of S,x) by EQREL_1:def 5;
+    thus thesis by A1,EQREL_1:28;
+  end;
+end;
+
+definition let S;
+  mode OperName of S is Element of OperNames S;
+end;
+
+definition let S,op1;
+  func Name op1 -> OperName of S equals :Def26:
+  Class(the Overloading of S,op1);
+  coherence
+  proof
+      Class(the Overloading of S,op1) in Class the Overloading of S
+    by EQREL_1:def 5;
+    hence thesis by Def25;
+  end;
+end;
+
+theorem Th30:
+  op1 ~= op2 iff op2 in Class(the Overloading of S,op1)
+proof
+    op1 ~= op2 iff [op2,op1] in the Overloading of S by Def3;
+  hence thesis by EQREL_1:27;
+end;
+
+theorem Th31:
+  op1 ~= op2 iff Name op1 = Name op2
+proof
+  A1: Class(the Overloading of S,op1) = Name op1 &
+  Class(the Overloading of S,op2) = Name op2 by Def26;
+    op2 in Class(the Overloading of S,op1)
+  iff Class(the Overloading of S,op1) =
+      Class(the Overloading of S,op2) by EQREL_1:31;
+  hence thesis by A1,Th30;
+end;
+
+theorem
+    for X being set holds
+  X is OperName of S iff ex op1 st X = Name op1
+proof let X be set;
+  hereby
+    assume X is OperName of S;
+    then X in OperNames S;
+    then X in Class the Overloading of S by Def25;
+    then consider x being set such that
+    A1: x in the OperSymbols of S &
+         X = Class(the Overloading of S,x) by EQREL_1:def 5;
+    reconsider x1 = x as OperSymbol of S by A1;
+    take x1;
+    thus X = Name x1 by A1,Def26;
+  end;
+  given op1 such that A2: X = Name op1;
+    op1 in the OperSymbols of S & X = Class(the Overloading of S,op1)
+  by A2,Def26;
+  then X in Class the Overloading of S by EQREL_1:def 5;
+  hence X is OperName of S by Def25;
+end;
+
+definition let S; let o be OperName of S;
+  redefine mode Element of o -> OperSymbol of S;
+  coherence
+  proof
+    let x be Element of o;
+    thus thesis;
+  end;
+end;
+
+theorem Th33:
+  for on being OperName of S, op being OperSymbol of S
+  holds op is Element of on iff Name op = on
+proof
+  let on be OperName of S, op1 be OperSymbol of S;
+  hereby
+    assume op1 is Element of on;
+    then reconsider op = op1 as Element of on;
+      on in OperNames S;
+    then on in Class the Overloading of S by Def25;
+    then consider op2 being set such that
+    A1: op2 in the OperSymbols of S and
+    A2: on = Class(the Overloading of S,op2) by EQREL_1:def 5;
+      Name op = Class(the Overloading of S,op) by Def26;
+    hence Name op1 = on by A1,A2,EQREL_1:31;
+  end;
+  assume Name op1 = on;
+  then Class(the Overloading of S,op1) = on by Def26;
+  hence op1 is Element of on by EQREL_1:28;
+end;
+
+theorem Th34:
+  for SR being regular (monotone OrderSortedSign),
+      op1,op2 being OperSymbol of SR,
+      w being Element of (the carrier of SR)*
+   st op1 ~= op2 & len the_arity_of op1 = len the_arity_of op2
+      & w <= the_arity_of op1 & w <= the_arity_of op2
+   holds LBound(op1,w) = LBound(op2,w)
+proof
+  let SR be regular (monotone OrderSortedSign),
+      op1,op2 be OperSymbol of SR,
+      w be Element of (the carrier of SR)* such that
+  A1:  op1 ~= op2 & len the_arity_of op1 = len the_arity_of op2
+      & w <= the_arity_of op1 & w <= the_arity_of op2;
+  set Lo1 = LBound(op1,w), Lo2 = LBound(op2,w);
+  A2: LBound(op1,w) has_least_args_for op1,w
+    & LBound(op2,w) has_least_args_for op2,w by A1,Def15;
+  then A3: op1 ~= Lo1 & w <= the_arity_of Lo1 &
+    for o2 being OperSymbol of SR
+    st op1 ~= o2 & w <= the_arity_of o2 holds
+        the_arity_of Lo1 <= the_arity_of o2 by Def10;
+  A4: op2 ~= Lo2 & w <= the_arity_of Lo2 &
+    for o2 being OperSymbol of SR
+    st op2 ~= o2 & w <= the_arity_of o2 holds
+        the_arity_of Lo2 <= the_arity_of o2 by A2,Def10;
+  then A5: op1 ~= Lo2 & op2 ~= Lo1 by A1,A3,Th2;
+  then A6: Lo1 ~= Lo2 by A3,Th2;
+  A7: the_arity_of Lo1 <= the_arity_of Lo2 &
+  the_arity_of Lo2 <= the_arity_of Lo1 by A3,A4,A5;
+  then A8: the_arity_of Lo1 = the_arity_of Lo2 by Th6;
+    the_result_sort_of Lo1 <= the_result_sort_of Lo2
+   & the_result_sort_of Lo2 <= the_result_sort_of Lo1 by A6,A7,Def8;
+  then the_result_sort_of Lo1 = the_result_sort_of Lo2 by ORDERS_1:25;
+  hence LBound(op1,w) = LBound(op2,w) by A6,A8,Def4;
+end;
+
+definition
+  let SR be regular (monotone OrderSortedSign),
+      on be OperName of SR,
+      w be Element of (the carrier of SR)*;
+assume A1: ex op being Element of on st w <= the_arity_of op;
+func LBound(on,w) -> Element of on means
+    for op being Element of on st w <= the_arity_of op
+  holds it = LBound(op,w);
+existence
+proof
+  consider op being Element of on such that
+  A2: w <= the_arity_of op by A1;
+  set Lo = LBound(op,w);
+    LBound(op,w) has_least_args_for op,w by A2,Def15;
+  then op ~= Lo & w <= the_arity_of Lo &
+    for o2 being OperSymbol of SR st op ~= o2
+    & w <= the_arity_of o2 holds
+        the_arity_of Lo <= the_arity_of o2 by Def10;
+  then A3: Name(op) = Name Lo by Th31;
+  then A4: Name Lo = on by Th33;
+  then reconsider Lo as Element of on by Th33;
+  take Lo;
+  let op1  be Element of on such that
+  A5: w <= the_arity_of op1;
+    Name op1 = on by Th33;
+  then A6: op1 ~= op by A3,A4,Th31;
+    len w = len the_arity_of op1
+  & len w = len the_arity_of op by A2,A5,Def7;
+  hence Lo = LBound(op1,w) by A2,A5,A6,Th34;
+end;
+uniqueness
+proof
+  consider op being Element of on such that
+  A7: w <= the_arity_of op by A1;
+  let op1,op2 be Element of on such that
+  A8: for op3 being Element of on st w <= the_arity_of op3
+       holds op1 = LBound(op3,w) and
+  A9: for op3 being Element of on st w <= the_arity_of op3
+       holds op2 = LBound(op3,w);
+    op1 = LBound(op,w) & op2 = LBound(op,w) by A7,A8,A9;
+  hence thesis;
+end;
+end;
+
+theorem
+    for S being regular (monotone OrderSortedSign),
+      o being OperSymbol of S,
+      w1 being Element of (the carrier of S)* st w1 <= the_arity_of o
+   holds LBound(o,w1) <= o
+proof
+  let S being regular (monotone OrderSortedSign),
+      o being OperSymbol of S,
+      w1 being Element of (the carrier of S)* such that
+  A1: w1 <= the_arity_of o;
+  set lo = LBound(o,w1);
+    lo has_least_rank_for o,w1 by A1,Th14;
+  then lo has_least_args_for o,w1
+  & lo has_least_sort_for o,w1 by Def12;
+  then o ~= lo & the_arity_of lo <= the_arity_of o
+  & the_result_sort_of lo <= the_result_sort_of o by A1,Def10,Def11;
+  hence LBound(o,w1) <= o by Def22;
+end;

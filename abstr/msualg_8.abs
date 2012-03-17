@@ -1,0 +1,191 @@
+:: More on the Lattice of Congruences in a Many Sorted Algebra
+::  by Robert Milewski
+::
+:: Received March 6, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary PBOOLE, FINSEQ_1, AMI_1, MSUALG_1, ZF_REFLE, RELAT_1, FUNCT_1,
+      MSUALG_5, EQREL_1, LATTICES, BOOLE, BHSP_3, LATTICE3, SETFAM_1, TARSKI,
+      REWRITE1, MSUALG_4, CLOSURE2, PRALG_2, QC_LANG1, FUNCT_4, CANTOR_1,
+      FINSET_1, MSUALG_6, MSUALG_7, MSUALG_8, CARD_3, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, SETFAM_1, RELAT_1,
+      RELSET_1, STRUCT_0, NAT_1, BINOP_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1,
+      FINSEQ_1, CARD_3, FINSEQ_4, REWRITE1, EQREL_1, LATTICES, LATTICE3,
+      PBOOLE, MSSUBFAM, CANTOR_1, PRALG_2, MSUALG_1, MSUALG_4, MSUALG_5,
+      CLOSURE2, MSUALG_6, MSUALG_7;
+ constructors BINOP_1, NAT_1, REWRITE1, LATTICE3, CANTOR_1, MSUALG_5, CLOSURE2,
+      MSUALG_6, MSUALG_7, FINSEQ_4, MEMBERED, MSSUBFAM;
+ clusters SUBSET_1, STRUCT_0, FINSET_1, MSUALG_1, MSUALG_3, MSUALG_5, CLOSURE2,
+      MSUALG_7, RELSET_1, PRALG_1, LATTICES, EQREL_1, MSUALG_6, ARYTM_3,
+      MEMBERED, PARTFUN1;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     ::       MORE  ON  THE  LATTICE  OF  EQUIVALENCE  RELATIONS      ::
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  reserve I for non empty set;
+  reserve M for ManySortedSet of I;
+  reserve Y,x,y,y1,z,i,j for set;
+  reserve k for Nat;
+  reserve p for FinSequence;
+  reserve S for non void non empty ManySortedSign;
+  reserve A for non-empty MSAlgebra over S;
+
+  theorem :: MSUALG_8:1
+   for n be Nat,
+       p be FinSequence holds
+    1 <= n & n < len p iff n in dom p & n+1 in dom p;
+
+  scheme NonUniqSeqEx{A()->Nat,P[set,set]}:
+    ex p st dom p = Seg A() & for k st k in Seg A() holds P[k,p.k]
+   provided
+     for k st k in Seg A() ex x st P[k,x];
+
+  theorem :: MSUALG_8:2
+   for a,b be Element of EqRelLatt Y
+   for A,B be Equivalence_Relation of Y st a = A & b = B holds
+    a [= b iff A c= B;
+
+  definition let Y;
+   cluster EqRelLatt Y -> bounded;
+  end;
+
+  theorem :: MSUALG_8:3
+     Bottom EqRelLatt Y = id Y;
+
+  theorem :: MSUALG_8:4
+     Top EqRelLatt Y = nabla Y;
+
+  theorem :: MSUALG_8:5
+   EqRelLatt Y is complete;
+
+  definition
+   let Y;
+   cluster EqRelLatt Y -> complete;
+  end;
+
+  theorem :: MSUALG_8:6
+   for Y be set
+   for X be Subset of EqRelLatt Y holds
+    union X is Relation of Y;
+
+  theorem :: MSUALG_8:7
+   for Y be set
+   for X be Subset of EqRelLatt Y holds
+    union X c= "\/" X;
+
+  theorem :: MSUALG_8:8
+   for Y be set
+   for X be Subset of EqRelLatt Y
+   for R be Relation of Y st R = union X holds
+    "\/" X = EqCl R;
+
+  theorem :: MSUALG_8:9
+   for Y be set
+   for X be Subset of EqRelLatt Y
+   for R be Relation st R = union X holds
+    R = R~;
+
+  theorem :: MSUALG_8:10
+   for Y be set
+   for X be Subset of EqRelLatt Y holds
+    x in Y & y in Y implies ( [x,y] in "\/" X iff
+     ex f being FinSequence st 1 <= len f & x = f.1 & y = f.(len f) &
+     for i be Nat st 1 <= i & i < len f holds [f.i,f.(i+1)] in union X );
+
+begin
+ :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+ ::         LATTICE  OF  CONGRUENCES  IN  A  MANY  SORTED  ALGEBRA        ::
+ :: AS  SUBLATTICE  OF  LATTICE  OF  MANY  SORTED  EQUIVALENCE  RELATIONS ::
+ ::                      INHERITED  SUP'S  AND  INF'S                     ::
+ :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  theorem :: MSUALG_8:11
+   for B be Subset of CongrLatt A holds
+    "/\" (B,EqRelLatt the Sorts of A) is MSCongruence of A;
+
+  definition
+   let S,A;
+   let E be Element of EqRelLatt the Sorts of A;
+   func CongrCl E -> MSCongruence of A equals
+:: MSUALG_8:def 1
+     "/\" ({x where x is Element of EqRelLatt the Sorts of A
+     : x is MSCongruence of A & E [= x},EqRelLatt the Sorts of A);
+  end;
+
+  definition
+   let S,A;
+   let X be Subset of EqRelLatt the Sorts of A;
+   func CongrCl X -> MSCongruence of A equals
+:: MSUALG_8:def 2
+     "/\" ({x where x is Element of EqRelLatt the Sorts of A
+     : x is MSCongruence of A & X is_less_than x},EqRelLatt the Sorts of A);
+  end;
+
+  theorem :: MSUALG_8:12
+     for C be Element of EqRelLatt the Sorts of A st
+    C is MSCongruence of A holds CongrCl C = C;
+
+  theorem :: MSUALG_8:13
+     for X be Subset of EqRelLatt the Sorts of A holds
+    CongrCl "\/" (X,EqRelLatt the Sorts of A) = CongrCl X;
+
+  theorem :: MSUALG_8:14
+     for B1,B2 be Subset of CongrLatt A,
+       C1,C2 be MSCongruence of A st
+        C1 = "\/"(B1,EqRelLatt the Sorts of A) &
+        C2 = "\/"(B2,EqRelLatt the Sorts of A) holds
+    C1 "\/" C2 = "\/"(B1 \/ B2,EqRelLatt the Sorts of A);
+
+  theorem :: MSUALG_8:15
+     for X be Subset of CongrLatt A holds
+    "\/" (X,EqRelLatt the Sorts of A) = "\/" ({ "\/"
+ (X0,EqRelLatt the Sorts of A)
+     where X0 is Subset of EqRelLatt the Sorts of A :
+      X0 is finite Subset of X },EqRelLatt the Sorts of A);
+
+  theorem :: MSUALG_8:16
+   for i be Element of I
+   for e be Equivalence_Relation of M.i
+    ex E be Equivalence_Relation of M st E.i = e &
+     for j be Element of I st j <> i holds E.j = nabla (M.j);
+
+  definition
+   let I be non empty set;
+   let M be ManySortedSet of I;
+   let i be Element of I;
+   let X be Subset of EqRelLatt M;
+   redefine func pi(X,i) -> Subset of EqRelLatt M.i means
+:: MSUALG_8:def 3
+    x in it iff ex Eq be Equivalence_Relation of M st x = Eq.i & Eq in X;
+   synonym EqRelSet (X,i);
+  end;
+
+  theorem :: MSUALG_8:17
+   for i be Element of S
+   for X be Subset of EqRelLatt the Sorts of A
+   for B be Equivalence_Relation of the Sorts of A st
+    B = "\/" X
+     holds
+    B.i = "\/" (EqRelSet (X,i) , EqRelLatt (the Sorts of A).i);
+
+  theorem :: MSUALG_8:18
+   for X be Subset of CongrLatt A holds
+    "\/" (X,EqRelLatt the Sorts of A) is MSCongruence of A;
+
+  theorem :: MSUALG_8:19
+   CongrLatt A is /\-inheriting;
+
+  theorem :: MSUALG_8:20
+   CongrLatt A is \/-inheriting;
+
+  definition
+   let S,A;
+   cluster CongrLatt A -> /\-inheriting \/-inheriting;
+  end;
+

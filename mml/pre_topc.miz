@@ -1,0 +1,1097 @@
+:: Topological Spaces and Continuous Functions
+::  by Beata Padlewska and Agata Darmochwa\l
+::
+:: Received April 14, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary SETFAM_1, TARSKI, BOOLE, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL2,
+      PRE_TOPC;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_2, SETFAM_1,
+      STRUCT_0;
+ constructors STRUCT_0, FUNCT_2, MEMBERED;
+ clusters STRUCT_0, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, STRUCT_0;
+ theorems TARSKI, SUBSET_1, ZFMISC_1, SETFAM_1, STRUCT_0, XBOOLE_0, XBOOLE_1;
+ schemes SETFAM_1, XBOOLE_0;
+
+begin
+
+definition
+  struct(1-sorted) TopStruct (# carrier -> set,
+                             topology -> Subset-Family of the carrier #);
+end;
+
+reserve T for TopStruct;
+
+::
+::                   The topological space
+::
+
+definition let IT be TopStruct;
+ attr IT is TopSpace-like means
+:Def1:
+     the carrier of IT in the topology of IT &
+     (for a being Subset-Family of IT
+      st a c= the topology of IT
+       holds union a in the topology of IT) &
+     (for a,b being Subset of IT st
+      a in the topology of IT & b in the topology of IT
+       holds a /\ b in the topology of IT);
+end;
+
+definition
+ cluster non empty strict TopSpace-like TopStruct;
+  existence
+   proof
+   now
+  take X={{}};
+  set T={{},X};
+    T c= bool X
+   proof
+    let x be set;
+    assume x in T;
+    then x= {} or x = X by TARSKI:def 2;
+    then x c= X by XBOOLE_1:2;
+    hence thesis;
+   end;
+  then reconsider T as Subset-Family of X by SETFAM_1:def 7;
+  take T;
+  set Y=TopStruct(#X,T#);
+  thus the carrier of Y in the topology of Y by TARSKI:def 2;
+  thus for a being Subset-Family of Y st
+   a c= the topology of Y holds union a in the topology of Y
+       proof
+        let a be Subset-Family of Y; assume
+           a c= the topology of Y;
+         then a={} or a={{}} or a={X} or a={{},X} by ZFMISC_1:42;
+          then union a={} or union a=X or union a = {} \/ X by ZFMISC_1:2,31,93
+;
+          hence thesis by TARSKI:def 2;
+        end;
+  let a,b be Subset of Y such that
+      A1:a in the topology of Y and A2:b in the topology of Y;
+        (a={} or a=X) & (b={} or b=X) by A1,A2,TARSKI:def 2;
+    hence a /\ b in the topology of Y by TARSKI:def 2;
+ end;
+     then consider X being non empty set, T being Subset-Family of X such that
+A3:    the carrier of TopStruct(#X,T#) in the topology of TopStruct(#X,T#) &
+      (for a being Subset-Family of TopStruct(#X,T#)
+       st a c= the topology of TopStruct(#X,T#)
+        holds union a in the topology of TopStruct(#X,T#)) &
+      (for a,b being Subset of TopStruct(#X,T#) st
+       a in the topology of TopStruct(#X,T#) &
+       b in the topology of TopStruct(#X,T#)
+        holds a /\ b in the topology of TopStruct(#X,T#));
+    take TopStruct(#X,T#);
+    thus TopStruct(#X,T#) is non empty by STRUCT_0:def 1;
+     thus thesis by A3,Def1;
+   end;
+end;
+
+definition
+  mode TopSpace is TopSpace-like TopStruct;
+end;
+
+definition let S be 1-sorted;
+ mode Point of S is Element of S;
+end;
+
+reserve GX for TopSpace;
+
+canceled 4;
+
+theorem Th5:
+ {} in the topology of GX
+ proof
+    {} c= bool the carrier of GX by XBOOLE_1:2;
+  then reconsider A = {} as Subset-Family of GX by SETFAM_1:def
+7;
+    A c= the topology of GX & union A = {} by XBOOLE_1:2,ZFMISC_1:2;
+  hence thesis by Def1;
+ end;
+
+definition let T be 1-sorted;
+  func {}T -> Subset of T equals
+:Def2: {};
+   coherence
+   proof
+       {} = {}the carrier of T;
+     hence thesis;
+   end;
+  func [#]T -> Subset of T equals
+:Def3: the carrier of T;
+   coherence
+   proof
+       the carrier of T = [#] the carrier of T by SUBSET_1:def 4;
+     hence thesis;
+   end;
+end;
+
+definition let T be 1-sorted;
+ cluster {}T -> empty;
+ coherence by Def2;
+end;
+
+canceled 6;
+
+theorem
+   for T being 1-sorted holds [#]T = the carrier of T by Def3;
+
+definition let T be non empty 1-sorted;
+ cluster [#]T -> non empty;
+ coherence by Def3;
+end;
+
+theorem Th13:
+ for T being non empty 1-sorted, p being Point of T holds p in [#]T
+proof let T be non empty 1-sorted, p be Point of T;
+   p in the carrier of T;
+ hence p in [#]T by Def3;
+end;
+
+theorem Th14:
+ for T being 1-sorted, P being Subset of T holds P c= [#]T
+proof let T be 1-sorted, P be Subset of T;
+   the carrier of T = [#]T by Def3;
+ hence P c= [#]T;
+end;
+
+theorem Th15:
+ for T being 1-sorted, P being Subset of T holds P /\ [#]T = P
+proof let T be 1-sorted, P be Subset of T;
+    P /\ the carrier of T = P by XBOOLE_1:28;
+ hence P /\ [#]T = P by Def3;
+end;
+
+theorem Th16:
+ for T being 1-sorted
+  for A being set st A c= [#]T holds A is Subset of T by Def3;
+
+theorem Th17:
+  for T being 1-sorted, P being Subset of T holds P` = [#]T \ P
+proof let T be 1-sorted, P be Subset of T;
+    P` = (the carrier of T) \ P by SUBSET_1:def 5;
+  hence thesis by Def3;
+ end;
+
+theorem
+    for T being 1-sorted, P being Subset of T holds P \/ P` =
+[#]
+T
+proof let T be 1-sorted, P be Subset of T;
+   P \/ P` = [#] the carrier of T by SUBSET_1:25
+   .= the carrier of T by SUBSET_1:def 4;
+ hence thesis by Def3;
+end;
+
+theorem
+   for T being 1-sorted, P,Q being Subset of T
+ holds P c= Q iff Q` c= P` by SUBSET_1:31;
+
+theorem
+   for T being 1-sorted, P being Subset of T
+ holds P = P``;
+
+theorem Th21:
+  for T being 1-sorted
+  for P,Q being Subset of T holds P c= Q` iff P misses Q by SUBSET_1:43;
+
+theorem Th22:
+  for T being 1-sorted, P being Subset of T
+     holds [#]T \ ([#]T \ P) = P
+proof let T be 1-sorted, P be Subset of T;
+    [#]T \ ([#]T \ P) = (the carrier of T) \ ([#]T \ P) by Def3
+           .= (the carrier of T) \ ((the carrier of T) \ P) by Def3
+           .= (the carrier of T) /\ P by XBOOLE_1:48
+           .= P /\ [#]T by Def3;
+ hence thesis by Th15;
+end;
+
+theorem Th23:
+  for T being 1-sorted, P being Subset of T
+    holds P <> [#]T iff [#]T \ P <> {}
+proof let T be 1-sorted, P be Subset of T;
+    now
+   assume A1:P <> [#]T & [#]T \ P = {};
+   then [#]T c= P & P c= [#]T by Th14,XBOOLE_1:37;
+  hence contradiction by A1,XBOOLE_0:def 10;
+  end;
+ hence thesis by XBOOLE_1:37;
+end;
+
+theorem
+    for T being 1-sorted, P,Q being Subset of T st [#]T \ P = Q
+    holds [#]T = P \/ Q
+proof let T be 1-sorted, P,Q be Subset of T;
+  assume ([#]T) \ P = Q;
+then (the carrier of T) \ P = Q by Def3;
+  then P \/ Q = the carrier of T by XBOOLE_1:45;
+ hence [#]T = P \/ Q by Def3;
+end;
+
+theorem
+    for T being 1-sorted, P,Q being Subset of T
+   st [#]T = P \/ Q & P misses Q
+   holds Q = [#]T \ P
+proof let T be 1-sorted, P,Q be Subset of T;
+ assume A1:[#]T = P \/ Q & P misses Q;
+  then [#]T \ P = Q \ P by XBOOLE_1:40
+          .= Q by A1,XBOOLE_1:83;
+ hence Q = [#]T \ P;
+end;
+
+theorem
+    for T being 1-sorted, P being Subset of T holds P misses P`
+  by SUBSET_1:26;
+
+theorem
+   for T being 1-sorted holds [#]T = ({}T)`
+proof let T be 1-sorted;
+    [#]T = the carrier of T by Def3 .= [#]the carrier of T by SUBSET_1:def 4;
+  then [#]T = ({} the carrier of T)` &
+  {} the carrier of T = {} by SUBSET_1:22;
+ hence [#]T = ({}T)`;
+end;
+
+definition let T be TopStruct, P be Subset of T;
+ canceled;
+
+  attr P is open means :Def5: P in the topology of T;
+end;
+
+definition let T be TopStruct, P be Subset of T;
+  attr P is closed means :Def6: [#]T \ P is open;
+end;
+
+definition let T be 1-sorted, F be Subset-Family of T;
+ redefine func union F -> Subset of T;
+   coherence
+   proof
+    thus union F is Subset of T;
+   end;
+end;
+
+definition let T be 1-sorted, F be Subset-Family of T;
+ redefine func meet F -> Subset of T;
+   coherence
+   proof
+    thus meet F is Subset of T;
+  end;
+end;
+
+definition let T be 1-sorted, F be Subset-Family of T;
+ canceled;
+
+  pred F is_a_cover_of T means
+       [#]T = union F;
+end;
+
+definition let T be TopStruct;
+  mode SubSpace of T -> TopStruct means :Def9:
+           [#]it c= [#]T &
+           for P being Subset of it
+            holds P in the topology of it iff
+           ex Q being Subset of T st Q in the topology of T &
+           P = Q /\ [#]it;
+  existence
+   proof take T;
+    thus [#]T c= [#]T;
+    let P be Subset of T;
+    hereby assume
+A1:    P in the topology of T;
+     take Q = P;
+     thus Q in the topology of T by A1;
+     thus P = Q /\ [#]T by Th15;
+    end;
+    given Q being Subset of T such that
+A2:  Q in the topology of T & P = Q /\ [#]T;
+    thus thesis by A2,Th15;
+   end;
+end;
+
+Lm2:
+ the TopStruct of T is SubSpace of T
+  proof
+    set S = the TopStruct of T;
+      [#]S = the carrier of S by Def3;
+   hence [#]S c= [#]T by Def3;
+   let P be Subset of S;
+   hereby assume
+A1:    P in the topology of S;
+     reconsider Q = P as Subset of T;
+    take Q;
+    thus Q in the topology of T by A1;
+    thus P = Q /\ [#]S by Th15;
+   end;
+   given Q being Subset of T such that
+A2: Q in the topology of T & P = Q /\ [#]S;
+   thus P in the topology of S by A2,Th15;
+  end;
+
+definition let T be TopStruct;
+ cluster strict SubSpace of T;
+  existence
+   proof
+       the TopStruct of T is SubSpace of T by Lm2;
+    hence thesis;
+   end;
+end;
+
+definition let T be non empty TopStruct;
+ cluster strict non empty SubSpace of T;
+  existence
+   proof
+A1:   the TopStruct of T is SubSpace of T by Lm2;
+       the TopStruct of T is non empty by STRUCT_0:def 1;
+    hence thesis by A1;
+   end;
+end;
+
+scheme SubFamExS {A() -> TopStruct, P[Subset of A()]}:
+   ex F being Subset-Family of A() st
+   for B being Subset of A() holds B in F iff P[B]
+proof
+   defpred Q[Subset of A()] means P[$1];
+   consider F being Subset-Family of A() such that
+A1: for B being Subset of A() holds B in F iff Q[B]
+ from SubFamEx;
+   reconsider F as Subset-Family of A();
+   take F;
+   thus thesis by A1;
+end;
+
+definition let T be TopSpace;
+ cluster -> TopSpace-like SubSpace of T;
+ coherence
+  proof let S be SubSpace of T;
+      S is TopSpace-like
+     proof
+      set P = the carrier of S;
+A1:    P = [#] S by Def3;
+      then A2: P c= [#] T by Def9;
+A3:   [#]T = the carrier of T by Def3;
+      then A4:[#]T in the topology of T by Def1;
+        [#]T /\ P = P by A2,A3,Th15;
+     hence the carrier of S in the topology of S by A1,A4,Def9;
+     thus for a being Subset-Family of S st
+          a c= the topology of S
+         holds union a in the topology of S
+      proof
+       let a be Subset-Family of S such that
+        A5:a c= the topology of S;
+        defpred Q[set] means
+         $1 /\ the carrier of S in a & $1 in the topology of T;
+        consider b being Subset-Family of T such that
+        A6:for Z being Subset of T holds Z in b iff Q[Z]
+         from SubFamExS;
+          b c= the topology of T
+        proof
+          let y be set;
+          assume y in b;
+          hence thesis by A6;
+        end;
+        then A7:union b in the topology of T by Def1;
+          union a = union b /\ P
+        proof
+          A8:union a c= union b /\ P
+          proof
+           let x be set;
+            assume A9:x in union a;
+            then consider Z1 being set such that A10:x in Z1 & Z1 in a
+               by TARSKI:def 4;
+            consider Z3 being Subset of T such that
+            A11:Z3 in the topology of T & Z1 = Z3 /\ P by A1,A5,A10,Def9;
+            A12:Z3 in b by A6,A10,A11;
+              x in Z3 by A10,A11,XBOOLE_0:def 3;
+            then x in union b by A12,TARSKI:def 4;
+           hence x in union b /\ P by A9,XBOOLE_0:def 3;
+          end;
+            union b /\ P c= union a
+          proof
+           let x be set;
+            assume x in union b /\ P;
+            then A13:x in union b & x in P by XBOOLE_0:def 3;
+            then consider Z being set such that
+            A14:x in Z & Z in b by TARSKI:def 4;
+            A15:Z /\ P in a by A6,A14;
+              x in Z /\ P by A13,A14,XBOOLE_0:def 3;
+           hence x in union a by A15,TARSKI:def 4;
+          end;
+          hence union a = union b /\ P by A8,XBOOLE_0:def 10;
+         end;
+         hence union a in the topology of S by A1,A7,Def9;
+     end;
+     thus for V,Q being Subset of S st
+      V in the topology of S & Q in the topology of S holds
+      V /\ Q in the topology of S
+      proof
+       let V,Q be Subset of S; assume
+        A16:V in the topology of S & Q in the topology of S;
+        then consider P1 being Subset of T such that
+        A17:P1 in the topology of T & V = P1 /\ P by A1,Def9;
+        consider Q1 being Subset of T such that
+        A18:Q1 in the topology of T & Q = Q1 /\ P by A1,A16,Def9;
+        A19:P1 /\ Q1 in the topology of T by A17,A18,Def1;
+          V /\ Q = P1 /\ ((Q1 /\ P) /\ P) by A17,A18,XBOOLE_1:16
+             .= P1 /\ (Q1 /\ (P /\ P)) by XBOOLE_1:16
+             .= (P1 /\ Q1) /\ P by XBOOLE_1:16;
+       hence V /\ Q in the topology of S by A1,A19,Def9;
+      end;
+     end;
+   hence thesis;
+  end;
+end;
+
+definition let T be TopStruct, P be Subset of T;
+ func T|P -> strict SubSpace of T means :Def10:
+  [#]it = P;
+  existence
+  proof
+    A1: P c= [#] T by Th14;
+    defpred Q[set] means ex Q being Subset of T st
+     Q in the topology of T & $1 = Q /\ P;
+    consider top1 being Subset-Family of P such that
+    A2:for Z being Subset of P holds Z in top1 iff Q[Z] from SubFamEx;
+    reconsider top1 as Subset-Family of P;
+    set Y = TopStruct(#P,top1#);
+    A3:[#]Y c= [#]T by A1,Def3;
+      for P being Subset of Y holds P in the topology of Y iff
+    ex Q being Subset of T st Q in the topology of T &
+    P = Q /\ [#]Y
+    proof
+     let P be Subset of Y;
+       [#] Y = the carrier of Y by Def3;
+     hence P in the topology of Y iff
+           ex Q being Subset of T st Q in the topology of T &
+           P = Q /\ [#]Y by A2;
+    end;
+    then reconsider Y as strict SubSpace of T by A3,Def9;
+    take Y;
+   thus thesis by Def3;
+  end;
+  uniqueness
+  proof
+   let Z1,Z2 be strict SubSpace of T;
+    assume that A4:[#] Z1 = P and A5:[#] Z2 = P;
+A6:    [#] Z1 = the carrier of Z1 & [#] Z2 = the carrier of Z2 by Def3;
+    A7:the topology of Z1 c= the topology of Z2
+    proof
+     let x be set;
+      assume A8:x in the topology of Z1;
+       then A9:ex Q being Subset of T st Q in
+ the topology of T &
+            x = Q /\ [#]Z2 by A4,A5,Def9;
+           x c= [#]Z2 by A4,A5,A8,Th14;
+         then x is Subset of Z2 by Th16;
+        hence thesis by A9,Def9;
+      end;
+        the topology of Z2 c= the topology of Z1
+      proof
+       let x be set;
+        assume A10:x in the topology of Z2;
+        then A11:ex Q being Subset of T st Q in the topology of
+T &
+            x = Q /\ [#]Z1 by A4,A5,Def9;
+          x c= [#]Z1 by A4,A5,A10,Th14;
+        then x is Subset of Z1 by Th16;
+       hence thesis by A11,Def9;
+      end;
+     hence Z1 = Z2 by A4,A5,A6,A7,XBOOLE_0:def 10;
+  end;
+end;
+
+definition let T be non empty TopStruct,
+               P be non empty Subset of T;
+ cluster T|P -> non empty;
+coherence
+  proof
+      [#](T|P) = P by Def10;
+    hence the carrier of T|P is non empty by Def3;
+  end;
+end;
+
+definition let T be TopSpace;
+ cluster TopSpace-like strict SubSpace of T;
+  existence
+   proof consider X being strict SubSpace of T;
+    take X; thus thesis;
+   end;
+end;
+
+definition
+ let T be TopSpace, P be Subset of T;
+ cluster T|P -> TopSpace-like;
+ coherence;
+end;
+
+definition let S, T be 1-sorted;
+  mode map of S, T is Function of the carrier of S, the carrier of T;
+ canceled;
+end;
+
+definition let S, T be 1-sorted,
+               f be Function of the carrier of S, the carrier of T,
+               P be set;
+  redefine func f.:P -> Subset of T;
+   coherence
+    proof
+     thus f.:P is Subset of T;
+    end;
+end;
+
+definition let S, T be 1-sorted,
+               f be Function of the carrier of S, the carrier of T,
+               P be set;
+  redefine func f"P -> Subset of S;
+   coherence
+    proof
+     thus f"P is Subset of S;
+    end;
+end;
+
+definition let S, T be TopStruct, f be map of S,T;
+  attr f is continuous means
+      for P1 being Subset of T st P1 is closed holds f" P1 is closed;
+end;
+
+scheme TopAbstr{A() -> TopStruct,P[set]}:
+  ex P being Subset of A() st
+  for x being set st x in the carrier of A() holds x in P iff P[x]
+proof
+   defpred Q[set] means ex y being Point of A() st $1=y & P[y];
+   consider Z being set such that
+A1:for x being set holds x in Z iff x in the carrier of A() & Q[x]
+    from Separation;
+     for x being set holds x in Z implies x in the carrier of A() by A1;
+   then reconsider Z as Subset of A() by TARSKI:def 3;
+   take Z;
+     for x being set st x in the carrier of A() holds x in Z iff P[x]
+   proof
+    let x be set such that
+A2: x in the carrier of A();
+    thus x in Z implies P[x]
+    proof
+     assume x in Z;
+      then ex y being Point of A() st x=y & P[y] by A1;
+     hence P[x];
+    end;
+    thus P[x] implies x in Z by A1,A2;
+   end;
+ hence thesis;
+end;
+
+canceled 11;
+
+theorem Th39:
+  for X' being SubSpace of T, A being Subset of X'
+   holds A is Subset of T
+proof
+ let X' be SubSpace of T, A be Subset of X';
+  A1:A c= [#]X' by Th14;
+    [#]X' c= [#]T by Def9;
+  then A c= [#]T by A1,XBOOLE_1:1;
+  hence A is Subset of T by Th16;
+end;
+
+canceled;
+
+theorem
+     for A being Subset of T st A <> {}T
+   ex x being Point of T st x in A
+proof
+ let A be Subset of T; assume
+A1:A <> {}T;
+   consider x being Element of A;
+     x is Point of T by A1,TARSKI:def 3;
+  hence thesis by A1;
+end;
+
+theorem Th42:
+ [#]GX is closed
+proof
+  A1:[#]GX \ [#]GX = {}GX by Th23;
+    {}GX in the topology of GX by Th5;
+  then {}GX is open by Def5;
+ hence [#]GX is closed by A1,Def6;
+end;
+
+definition let T be TopSpace;
+ cluster [#]T -> closed;
+coherence by Th42;
+end;
+
+definition let T be TopSpace;
+ cluster closed Subset of T;
+existence
+  proof
+    take [#]T;
+    thus thesis;
+  end;
+end;
+
+definition let T be non empty TopSpace;
+ cluster non empty closed Subset of T;
+existence
+  proof
+    take [#]T;
+    thus thesis;
+  end;
+end;
+
+theorem Th43:
+for X' being SubSpace of T,
+    B being Subset of X' holds
+  B is closed iff ex C being Subset of T st C is closed & C /\ [#](X') = B
+proof
+  let X' be SubSpace of T, B be Subset of X';
+  A1:[#]X' is Subset of T by Th39;
+  A2:now
+    assume B is closed;
+     then [#](X') \ B is open by Def6;
+     then [#](X') \ B in the topology of X' by Def5;
+     then consider V being Subset of T such that
+A3:    V in the topology of T
+     and A4:[#](X') \ B = V /\ [#]X' by Def9;
+     reconsider V1 = V as Subset of T;
+     A5:V1 is open by A3,Def5;
+       [#](T) \ ([#](T) \ V) = V by Th22;
+     then A6:[#](T) \ V is closed by A5,Def6;
+       ([#](T) \ V) /\ ([#]X') = [#]X' /\ V` by Th17
+                        .= ([#](X')) \ V by A1,SUBSET_1:32
+                        .= [#](X') \ (([#](X')) /\ V) by XBOOLE_1:47
+                        .= B by A4,Th22;
+    hence ex C being Subset of T st C is closed &
+          C /\ ([#]X') = B by A6;
+   end;
+     now
+    given C being Subset of T such that A7:C is closed and
+     A8:C /\ [#]X' = B;
+       [#]T \ C is open by A7,Def6;
+     then A9:[#]T \ C in the topology of T by Def5;
+     A10:[#]X' \ B = [#]X' \ C by A8,XBOOLE_1:47
+                .= ([#]X') /\ C` by A1,SUBSET_1:32
+                .= ([#]T \ C) /\ ([#]X') by Th17;
+       ([#]T \ C) /\ ([#]X') c= [#]X' by XBOOLE_1:17;
+     then ([#]T \ C) /\ [#]X' is Subset of X' by Th16;
+     then ([#]T \ C) /\ [#]X' in the topology of X' by A9,Def9;
+     then [#]X' \ B is open by A10,Def5;
+    hence B is closed by Def6;
+   end;
+  hence thesis by A2;
+end;
+
+theorem Th44:
+  for F being Subset-Family of GX st
+  for A being Subset of GX st A in F holds A is closed
+  holds meet F is closed
+proof
+ let F be Subset-Family of GX such that
+  A1:for A being Subset of GX st A in F holds A is closed;
+  per cases;
+  suppose
+A2:  F <> {};
+  defpred Q[set] means [#]GX \ $1 in F;
+  consider R1 being Subset-Family of GX such that
+  A3:for B being Subset of GX holds B in R1 iff Q[B]
+   from SubFamExS;
+    now
+   let B be set;
+    assume A4:B in R1;
+     then reconsider B1=B as Subset of GX;
+     A5:[#]GX \ ([#]GX \ B1) = B1 by Th22;
+       B1 in R1 iff [#]GX \ B1 in F by A3;
+     then [#]GX \ B1 is closed by A1,A4;
+     then B1 is open by A5,Def6;
+   hence B in the topology of GX by Def5;
+  end;
+  then R1 c= the topology of GX by TARSKI:def 3;
+  then union R1 in the topology of GX by Def1;
+  then A6: union R1 is open by Def5;
+    [#]GX \ ([#]GX \ (union R1)) = union R1 by Th22;
+  then A7:[#]GX \ union R1 is closed by A6,Def6;
+  A8:for x being set st x in the carrier of GX holds
+  (for A being Subset of GX st A in F holds x in A) iff
+  (for Z being Subset of GX st Z in R1 holds not x in Z)
+  proof
+   let x be set;
+   assume
+A9: x in the carrier of GX;
+then A10: GX is non empty by STRUCT_0:def 1;
+   thus (for A being Subset of GX st A in F holds x in A)
+   implies (for Z being Subset of GX st Z in R1 holds not x in
+ Z)
+   proof
+     assume A11:for A being Subset of GX st A in F holds x in A;
+     let Z be Subset of GX; assume Z in R1;
+     then [#]GX \ Z in F by A3;
+     then x in [#]GX \ Z by A11;
+    hence not x in Z by XBOOLE_0:def 4;
+   end;
+     assume A12:for Z being Subset of GX st Z in R1 holds
+     not x in Z;
+     let A be Subset of GX such that A13:A in F;
+       [#]GX \ ([#]GX \ A) = A by Th22;
+     then [#]GX \ A in R1 by A3,A13;
+     then not x in [#]GX \ A by A12;
+     then (not x in [#]GX) or x in A by XBOOLE_0:def 4;
+    hence x in A by A9,A10,Th13;
+   end;
+     for x being set holds x in [#]GX \ (union R1) iff x in meet F
+   proof
+    let x be set;
+     thus x in [#]GX \ (union R1) implies x in meet F
+     proof
+     assume A14:x in [#]GX \ union R1;
+      then not x in union R1 by XBOOLE_0:def 4;
+      then for Z being Subset of GX st Z in R1 holds not x in Z
+      by TARSKI:def 4;
+      then for A be set st A in F holds x in A by A8,A14;
+     hence x in meet F by A2,SETFAM_1:def 1;
+    end;
+     assume A15:x in meet F;
+then A16: GX is non empty by STRUCT_0:def 1;
+        for A being Subset of GX st A in F holds x in A
+      by A15,SETFAM_1:def 1;
+      then for Z being set st x in Z holds not Z in R1 by A8;
+      then A17:not x in union R1 by TARSKI:def 4;
+        x in [#]GX by A15,A16,Th13;
+     hence x in [#]GX \ union R1 by A17,XBOOLE_0:def 4;
+  end;
+ hence meet F is closed by A7,TARSKI:2;
+ suppose
+A18: F = {};
+     {}GX is closed
+   proof
+    A19: [#]GX = the carrier of GX by Def3;
+      the carrier of GX in the topology of GX by Def1;
+    then A20: [#]GX is open by A19,Def5;
+      [#]GX = [#]GX \ {}GX;
+    hence {}GX is closed by A20,Def6;
+  end;
+ hence meet F is closed by A18,SETFAM_1:def 1;
+end;
+
+::
+::                    The closure of a set
+::
+
+definition
+ let GX be TopStruct, A be Subset of GX;
+   func Cl A -> Subset of GX means
+:Def13:for p being set st p in the carrier of GX holds p in it iff
+    for G being Subset of GX st G is open holds
+                        p in G implies A meets G;
+    existence
+    proof
+defpred P[set] means
+  for G being Subset of GX st G is open holds $1 in G implies A meets G;
+      consider P being Subset of GX such that
+A1:    for x being set st x in the carrier of GX holds x in P iff P[x]
+        from TopAbstr;
+      reconsider P as Subset of GX;
+      take P;
+      thus thesis by A1;
+    end;
+    uniqueness
+proof
+ let C1,C2 be Subset of GX;
+ assume that
+  A2:for p being set st p in the carrier of GX holds p in C1 iff
+  for G being Subset of GX st G is open holds
+  p in G implies A meets G and
+  A3:for p being set st p in the carrier of GX holds p in C2 iff
+  for V being Subset of GX st V is open holds
+  p in V implies A meets V;
+    for x being set holds x in C1 iff x in C2
+  proof
+    let x be set;
+     thus x in C1 implies x in C2
+     proof
+      assume A4:x in C1;
+      then for G being Subset of GX st G is open holds
+      x in G implies A meets G by A2;
+      hence x in C2 by A3,A4;
+     end;
+     assume A5:x in C2;
+     then for V being Subset of GX st V is open holds
+     x in V implies A meets V by A3;
+     hence x in C1 by A2,A5;
+    end;
+   hence C1 = C2 by TARSKI:2;
+end;
+end;
+
+theorem Th45:
+  for A being Subset of T, p being set
+    st p in the carrier of T holds
+  p in Cl A iff for C being Subset of T st C is closed
+  holds (A c= C implies p in C)
+proof
+ let A be Subset of T, p be set such that
+A1: p in the carrier of T;
+  A2:now
+    assume A3: p in Cl A;
+then A4:   T is non empty by STRUCT_0:def 1;
+     let C be Subset of T; assume C is closed;
+     then [#]T \ C is open by Def6;
+     then p in [#]T \ C implies A meets ([#]T \ C) by A3,Def13;
+     then A c= ([#]T \ C)` implies (p in C or not p in [#]
+T) by Th21,XBOOLE_0:def 4;
+     then A c= [#]T \ ([#]T \ C) implies p in C by A1,A4,Th13,Th17;
+    hence A c= C implies p in C by Th22;
+  end;
+    now
+   assume A5:for C being Subset of T st C is closed holds
+            (A c= C implies p in C);
+      for G being Subset of T st G is open holds
+    (p in G implies A meets G)
+    proof
+     let G be Subset of T such that A6:G is open;
+        [#]T \ ([#]T \ G) = G by Th22;
+      then A7:[#]T \ G is closed by A6,Def6;
+        [#]T \ G = G` by Th17;
+      then A c= G` implies p in [#]T \ G by A5,A7;
+      then A c= G` implies p in [#]T \ G;
+     hence p in G implies A meets G by Th21,XBOOLE_0:def 4;
+    end;
+   hence p in Cl A by A1,Def13;
+  end;
+ hence thesis by A2;
+end;
+
+theorem Th46:
+  for A being Subset of GX ex F being Subset-Family of GX st
+  (for C being Subset of GX holds C in F iff C is closed &
+  A c= C) & Cl A = meet F
+proof
+   let A be Subset of GX;
+   defpred Q[set] means ex C1 being Subset of GX st C1 = $1 & C1 is closed &
+    A c= $1;
+   consider F' being Subset-Family of GX such that
+   A1:for C being Subset of GX holds C in F' iff Q[C]
+    from SubFamExS;
+   take F=F';
+   thus for C being Subset of GX holds C in F iff C is closed & A c= C
+   proof
+     let C be Subset of GX;
+     thus C in F implies C is closed & A c= C
+     proof
+      assume C in F;
+      then ex C1 being Subset of GX st C1 = C & C1 is closed & A c= C by A1;
+      hence thesis;
+     end;
+     thus thesis by A1;
+   end;
+     A c= [#]GX by Th14;
+   then A2:F <> {} by A1;
+     for p being set holds p in Cl A iff p in meet F
+   proof
+    let p be set;
+     A3:now
+      assume A4:p in Cl A;
+         now
+        let C be set; assume C in F;
+         then consider C1 being Subset of GX such that
+A5:        C1 = C & C1 is closed & A c= C by A1;
+        thus p in C by A4,A5,Th45;
+       end;
+      hence p in meet F by A2,SETFAM_1:def 1;
+     end;
+       now
+      assume A6:p in meet F;
+         now
+        let C be Subset of GX; assume C is closed & A c= C;
+         then C in F by A1;
+        hence p in C by A6,SETFAM_1:def 1;
+       end;
+      hence p in Cl A by A6,Th45;
+     end;
+    hence thesis by A3;
+   end;
+  hence Cl A = meet F by TARSKI:2;
+end;
+
+theorem
+   for X' being SubSpace of T, A being Subset of T,
+ A1 being Subset of X'
+  st A = A1 holds Cl A1 = (Cl A) /\ ([#]X')
+proof
+  let X' be SubSpace of T, A be Subset of T,
+   A1 be Subset of X' such that A1:A = A1;
+     for p being set holds p in Cl A1 iff p in (Cl A) /\ ([#]X')
+   proof
+    let p be set;
+    thus p in Cl A1 implies p in (Cl A) /\ ([#]X')
+     proof
+        assume A2:p in Cl A1;
+         A3:for D1 being Subset of T st D1 is closed
+              holds A c= D1 implies p in D1
+         proof
+           let D1 be Subset of T such that A4:D1 is closed;
+            assume A5:A c= D1;
+              A1 c= [#]X' by Th14;
+            then A6:A1 c= D1 /\ [#]X' by A1,A5,XBOOLE_1:19;
+              D1 /\ [#]X' c= [#]X' by XBOOLE_1:17;
+then reconsider D3 = D1 /\ [#]X' as Subset of X' by Th16;
+              D3 is closed by A4,Th43;
+            then p in D3 by A2,A6,Th45;
+           hence p in D1 by XBOOLE_0:def 3;
+          end;
+          reconsider DD = Cl A1 as Subset of T by Th39;
+            p in DD by A2;
+          then A7:p in Cl A by A3,Th45;
+            Cl A1 c= [#]X' by Th14;
+          hence p in (Cl A) /\ ([#]X') by A2,A7,XBOOLE_0:def 3;
+     end;
+    assume p in (Cl A) /\ ([#]X');
+     then A8:p in Cl A & p in [#]X' by XBOOLE_0:def 3;
+       now
+      let D1 be Subset of X' such that
+    A9:D1 is closed;
+       assume A10: A1 c= D1;
+        consider D2 being Subset of T such that
+        A11:D2 is closed and A12:D1 = D2 /\ [#]X'
+        by A9,Th43;
+          D2 /\ [#]X' c= D2 by XBOOLE_1:17;
+        then A c= D2 by A1,A10,A12,XBOOLE_1:1;
+        then p in D2 by A8,A11,Th45;
+       hence p in D1 by A8,A12,XBOOLE_0:def 3;
+     end;
+    hence p in Cl A1 by A8,Th45;
+   end;
+  hence Cl A1 = (Cl A) /\ ([#]X') by TARSKI:2;
+end;
+
+theorem Th48:
+  for A being Subset of T holds A c= Cl A
+proof
+  let A be Subset of T;
+    now
+   let x be set;
+    assume A1:x in A;
+    assume not x in Cl A;
+    then ex C being Subset of T st
+    C is closed & A c= C & not x in C by A1,Th45;
+   hence contradiction by A1;
+  end;
+ hence A c= Cl A by TARSKI:def 3;
+end;
+
+theorem Th49:
+  for A,B being Subset of T st A c= B holds Cl A c= Cl B
+proof
+  let A,B be Subset of T such that A1:A c= B;
+    now
+   let x be set;
+    assume A2:x in Cl A;
+      now
+      let D1 be Subset of T; assume A3:D1 is closed;
+      assume B c= D1;
+      then A c= D1 by A1,XBOOLE_1:1;
+     hence x in D1 by A2,A3,Th45;
+    end;
+   hence x in Cl B by A2,Th45;
+  end;
+ hence thesis by TARSKI:def 3;
+end;
+
+theorem
+    for A,B being Subset of GX holds Cl(A \/ B) = Cl A \/ Cl B
+proof
+  let A,B be Subset of GX;
+       now
+      let x be set;
+       assume A1:x in Cl(A \/ B);
+       assume not x in Cl A \/ Cl B;
+       then A2:not x in Cl A & not x in Cl B by XBOOLE_0:def 2;
+       then consider G1 being Subset of GX such that
+       A3:G1 is open and A4:x in G1 and A5: A misses G1 by A1,Def13;
+       consider G2 being Subset of GX such that
+       A6:G2 is open and A7:x in G2 and A8:B misses G2 by A1,A2,Def13;
+         G1 in the topology of GX & G2 in the topology of GX
+        by A3,A6,Def5;
+       then G1 /\ G2 in the topology of GX by Def1;
+       then A9:G1 /\ G2 is open by Def5;
+       A10:x in G1 /\ G2 by A4,A7,XBOOLE_0:def 3;
+A11:     A /\ G1 = {} & B /\ G2 = {} by A5,A8,XBOOLE_0:def 7;
+         (A \/ B) /\ (G1 /\ G2) = (A /\ (G1 /\ G2)) \/ (B /\ (G2 /\
+ G1)) by XBOOLE_1:23
+                .= ((A /\ G1) /\ G2) \/ (B /\ (G2 /\ G1)) by XBOOLE_1:16
+                .= {} \/ ({} /\ G1) by A11,XBOOLE_1:16
+                .= {}GX;
+     then (A \/ B) misses (G1 /\ G2) by XBOOLE_0:def 7;
+     hence contradiction by A1,A9,A10,Def13;
+    end;
+    then A12:Cl(A \/ B) c= Cl A \/ Cl B by TARSKI:def 3;
+      A c= A \/ B & B c= A \/ B by XBOOLE_1:7;
+    then Cl A c= Cl(A \/ B) & Cl B c= Cl(A \/ B) by Th49;
+    then Cl A \/ Cl B c= Cl(A \/ B) by XBOOLE_1:8;
+  hence Cl(A \/ B) = Cl A \/ Cl B by A12,XBOOLE_0:def 10;
+end;
+
+theorem
+    for A, B being Subset of T holds
+    Cl (A /\ B) c= (Cl A) /\ Cl B
+proof
+  let A,B be Subset of T;
+    A /\ B c= A & A /\ B c= B by XBOOLE_1:17;
+  then Cl(A /\ B) c= Cl A & Cl(A /\ B) c= Cl B by Th49;
+  hence Cl (A /\ B) c= (Cl A) /\ Cl B by XBOOLE_1:19;
+end;
+
+theorem Th52:
+ for A being Subset of T holds
+  (A is closed implies Cl A = A) &
+  (T is TopSpace-like & Cl A = A implies A is closed)
+proof
+  let A be Subset of T;
+  thus A is closed implies Cl A = A
+  proof
+    assume A1:A is closed;
+    A2:A c= Cl A by Th48;
+      for x be set st x in Cl A holds x in A by A1,Th45;
+    then Cl A c= A by TARSKI:def 3;
+  hence Cl A = A by A2,XBOOLE_0:def 10;
+ end;
+ assume A3: T is TopSpace-like;
+ assume A4:Cl A = A;
+ consider F being Subset-Family of T such that
+ A5:for C being Subset of T holds C in F iff C is closed
+  & A c= C and A6:Cl A = meet F by A3,Th46;
+    for C being Subset of T st C in F holds C is closed by A5;
+ hence A is closed by A3,A4,A6,Th44;
+end;
+
+theorem
+   for A being Subset of T holds
+  (A is open implies Cl([#](T) \ A) = [#](T) \ A) &
+  (T is TopSpace-like & Cl([#](T) \ A) = [#](T) \ A implies A is open)
+proof
+  let A be Subset of T;
+    [#](T) \([#]T \ A) = A by Th22;
+then A1: A is open iff [#]T \ A is closed by Def6;
+  hence A is open implies Cl ([#]T \ A) = [#]T \ A by Th52;
+  assume T is TopSpace-like & Cl([#]T \ A) = [#]T \ A;
+  hence thesis by A1,Th52;
+end;
+
+theorem
+    for A being Subset of T,
+      p being Point of T holds
+  p in Cl A iff
+  T is non empty & for G being Subset of T st G is open holds
+   p in G implies A meets G
+proof let A be Subset of T,
+          p be Point of T;
+ thus p in Cl A implies
+   T is non empty & for G being Subset of T
+   st G is open holds p in G implies A meets G by Def13,STRUCT_0:def 1;
+ assume T is non empty;
+then A1: the carrier of T <> {} by STRUCT_0:def 1;
+ assume for G being Subset of T st G is open holds
+   p in G implies A meets G;
+ hence thesis by A1,Def13;
+end;

@@ -1,0 +1,1811 @@
+:: Tarski's Classes and Ranks
+::  by Grzegorz Bancerek
+::
+:: Received March 23, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, TARSKI, SETFAM_1, BOOLE, CARD_1, ORDINAL1, ORDINAL2,
+      RELAT_1, MCART_1, CLASSES1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
+      NUMBERS, NAT_1, ORDINAL1, MCART_1, ORDINAL2, CARD_1;
+ constructors SETFAM_1, NAT_1, MCART_1, WELLORD2, CARD_1, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, ORDINAL1, MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements NUMERALS, SUBSET, BOOLE;
+ definitions TARSKI, ORDINAL1, WELLORD2, FUNCT_1, XBOOLE_0;
+ theorems TARSKI, SETFAM_1, ZFMISC_1, ORDINAL1, MCART_1, ORDINAL2, FUNCT_1,
+      CARD_1, WELLORD2, ENUMSET1, XBOOLE_0, XBOOLE_1;
+ schemes ORDINAL1, ORDINAL2, TARSKI, PARTFUN1, NAT_1, RECDEF_1, XBOOLE_0;
+
+begin
+
+ reserve W,X,Y,Z for set,
+         f,g for Function,
+         a,x,y,z for set;
+
+definition let B be set;
+ attr B is subset-closed means
+:Def1: for X,Y holds X in B & Y c= X implies Y in B;
+end;
+
+definition let B be set;
+ attr B is being_Tarski-Class means
+:Def2:  B is subset-closed &
+       (for X holds X in B implies bool X in B) &
+       (for X holds X c= B implies X,B are_equipotent or X in B);
+  synonym B is_Tarski-Class;
+end;
+
+definition let A,B be set;
+ pred B is_Tarski-Class_of A means
+:Def3: A in B & B is_Tarski-Class;
+end;
+
+definition let A be set;
+ func Tarski-Class A -> set means
+:Def4: it is_Tarski-Class_of A &
+     for D being set st D is_Tarski-Class_of A holds it c= D;
+  existence
+   proof
+    consider Big being set such that
+A1:   A in Big &
+     (for X,Y holds X in Big & Y c= X implies Y in Big) &
+     (for X holds X in Big implies bool X in Big) &
+     (for X holds X c= Big implies X,Big are_equipotent or X in Big)
+     by ZFMISC_1:136;
+       Big is subset-closed by A1,Def1;
+then A2:  Big is_Tarski-Class by A1,Def2;
+defpred P[set] means $1 is_Tarski-Class_of A;
+    consider Classes being set such that
+A3:   X in Classes iff X in bool Big & P[X] from Separation;
+    set IT = meet Classes;
+A4: Big in bool Big & Big is_Tarski-Class_of A by A1,A2,Def3,ZFMISC_1:def 1;
+then A5:  Big in Classes by A3;
+A6:     Classes <> {} by A3,A4;
+A7:     now let X; assume X in Classes;
+       then X is_Tarski-Class_of A by A3;
+      hence A in X by Def3;
+     end;
+then A8:   A in IT by A6,SETFAM_1:def 1;
+    take IT;
+    thus A in IT by A6,A7,SETFAM_1:def 1;
+    thus
+A9:  X in IT & Y c= X implies Y in IT
+      proof assume
+A10:     X in IT & Y c= X;
+          now let Z; assume
+A11:       Z in Classes;
+          then Z is_Tarski-Class_of A by A3;
+          then Z is_Tarski-Class by Def3;
+          then Z is subset-closed by Def2;
+          then (for X,Y holds X in Z & Y c= X implies Y in Z) & X in Z
+           by A10,A11,Def1,SETFAM_1:def 1;
+         hence Y in Z by A10;
+        end;
+       hence Y in IT by A6,SETFAM_1:def 1;
+      end;
+    thus
+A12:  X in IT implies bool X in IT
+      proof assume
+A13:     X in IT;
+          now let Z; assume
+A14:       Z in Classes;
+          then Z is_Tarski-Class_of A by A3;
+          then Z is_Tarski-Class by Def3;
+          then (for X holds X in Z implies bool X in Z) & X in Z
+           by A13,A14,Def2,SETFAM_1:def 1;
+         hence bool X in Z;
+        end;
+       hence bool X in IT by A6,SETFAM_1:def 1;
+      end;
+    thus
+A15:  X c= IT implies X,IT are_equipotent or X in IT
+      proof assume that
+A16:     X c= IT and
+A17:     not X,IT are_equipotent;
+          now let Z; assume
+A18:       Z in Classes;
+          then Z is_Tarski-Class_of A by A3;
+then A19:          Z is_Tarski-Class by Def3;
+A20:       IT c= Z by A18,SETFAM_1:4;
+          then X c= Z by A16,XBOOLE_1:1;
+       then X,Z are_equipotent or X in Z by A19,Def2;
+         hence X in Z by A16,A17,A20,CARD_1:44;
+        end;
+       hence X in IT by A6,SETFAM_1:def 1;
+      end;
+    let D be set; assume
+    D is_Tarski-Class_of A;
+then A21:   A in D & D is_Tarski-Class by Def3;
+then A22: D is subset-closed by Def2;
+A23:   IT /\ D is_Tarski-Class_of A
+      proof
+       thus A in IT /\ D by A8,A21,XBOOLE_0:def 3;
+       thus X in IT /\ D & Y c= X implies Y in IT /\ D
+         proof assume
+A24:        X in IT /\ D & Y c= X;
+           then X in IT & X in D by XBOOLE_0:def 3;
+           then Y in IT & Y in D by A9,A22,A24,Def1;
+          hence Y in IT /\ D by XBOOLE_0:def 3;
+         end;
+       thus X in IT /\ D implies bool X in IT /\ D
+         proof assume X in IT /\ D;
+           then X in IT & X in D by XBOOLE_0:def 3;
+           then bool X in IT & bool X in D by A12,A21,Def2;
+          hence bool X in IT /\ D by XBOOLE_0:def 3;
+         end;
+       let X such that
+A25:     X c= IT /\ D and
+A26:     not X,IT /\ D are_equipotent;
+A27:     IT /\ D c= IT & IT /\ D c= D by XBOOLE_1:17;
+then A28:     X c= IT & X c= D by A25,XBOOLE_1:1;
+          not X,IT are_equipotent & not X,D are_equipotent
+        by A25,A26,A27,CARD_1:44;
+        then X in IT & X in D by A15,A21,A28,Def2;
+       hence X in IT /\ D by XBOOLE_0:def 3;
+      end;
+       IT /\ D c= Big
+      proof let x; assume x in IT /\ D;
+        then x in IT by XBOOLE_0:def 3;
+       hence x in Big by A5,SETFAM_1:def 1;
+      end;
+     then IT /\ D in Classes by A3,A23;
+     then IT c= IT /\ D & IT /\ D c= D by SETFAM_1:4,XBOOLE_1:17;
+    hence thesis by XBOOLE_1:1;
+   end;
+  uniqueness
+   proof let D1,D2 be set such that
+A29:  D1 is_Tarski-Class_of A &
+      for D being set st D is_Tarski-Class_of A holds D1 c= D and
+A30:  D2 is_Tarski-Class_of A &
+      for D being set st D is_Tarski-Class_of A holds D2 c= D;
+    thus D1 c= D2 & D2 c= D1 by A29,A30;
+   end;
+end;
+
+definition let A be set;
+ cluster Tarski-Class A -> non empty;
+coherence
+ proof
+      Tarski-Class A is_Tarski-Class_of A by Def4; hence thesis by Def3;
+ end;
+end;
+
+canceled;
+
+theorem
+   W is_Tarski-Class iff
+   W is subset-closed &
+   (for X st X in W holds bool X in W) &
+   (for X st X c= W & Card X <` Card W holds X in W)
+  proof
+  hereby assume
+A1: W is_Tarski-Class;
+   hence W is subset-closed &
+    for X st X in W holds bool X in W by Def2;
+   let X;
+   assume
+A2: X c= W & Card X <` Card W;
+    then Card X <> Card W;
+    then not X,W are_equipotent by CARD_1:21;
+   hence X in W by A1,A2,Def2;
+  end;
+    now assume
+A3:    for X st X c= W & Card X <` Card W holds X in W;
+     let X; assume X c= W;
+      then Card X <=` Card W & not Card X <` Card W or X in W by A3,CARD_1:27;
+      then Card X = Card W or X in W by CARD_1:13;
+     hence X,W are_equipotent or X in W by CARD_1:21;
+    end;
+   hence thesis by Def2;
+  end;
+
+canceled 2;
+
+theorem
+ Th5: X in Tarski-Class X
+  proof Tarski-Class X is_Tarski-Class_of X by Def4;
+   hence thesis by Def3;
+  end;
+
+theorem
+ Th6: Y in Tarski-Class X & Z c= Y implies Z in Tarski-Class X
+  proof
+    Tarski-Class X is_Tarski-Class_of X by Def4;
+    then Tarski-Class X is_Tarski-Class by Def3;
+    then Tarski-Class X is subset-closed by Def2;
+   hence thesis by Def1;
+  end;
+
+theorem
+ Th7: Y in Tarski-Class X implies bool Y in Tarski-Class X
+  proof Tarski-Class X is_Tarski-Class_of X by Def4;
+    then Tarski-Class X is_Tarski-Class by Def3;
+   hence thesis by Def2;
+  end;
+
+theorem
+ Th8: Y c= Tarski-Class X implies
+      Y,Tarski-Class X are_equipotent or Y in Tarski-Class X
+  proof Tarski-Class X is_Tarski-Class_of X by Def4;
+    then Tarski-Class X is_Tarski-Class by Def3;
+   hence thesis by Def2;
+  end;
+
+theorem
+    Y c= Tarski-Class X & Card Y <` Card Tarski-Class X implies
+   Y in Tarski-Class X
+  proof assume
+A1:  Y c= Tarski-Class X & Card Y <` Card Tarski-Class X;
+    then Card Y <> Card Tarski-Class X;
+    then not Y,Tarski-Class X are_equipotent by CARD_1:21;
+   hence thesis by A1,Th8;
+  end;
+
+ reserve u,v for Element of Tarski-Class(X),
+         A,B,C for Ordinal,
+         L,L1 for T-Sequence;
+
+definition let X,A;
+ func Tarski-Class(X,A) means
+:Def5:
+   ex L st it = last L & dom L = succ A & L.{} = { X } &
+    (for C st succ C in succ A holds
+     L.succ C = { u : ex v st v in L.C & u c= v } \/
+                { bool v : v in L.C } \/
+                bool(L.C) /\ Tarski-Class X) &
+      for C st C in succ A & C <> {} & C is_limit_ordinal
+             holds L.C = (union rng(L|C)) /\ Tarski-Class X;
+  correctness
+proof
+  deffunc C(Ordinal,set) = { u : ex v st v in $2 & u c= v } \/
+                { bool v : v in $2 } \/
+                bool $2 /\ Tarski-Class X;
+  deffunc D(Ordinal,T-Sequence) = (union rng $2) /\ Tarski-Class X;
+  thus (ex x,L st x = last L & dom L = succ A & L.{} = {X} &
+     (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+      for C st C in succ A & C <> {} & C is_limit_ordinal
+             holds L.C = D(C,L|C) ) &
+   for x1,x2 being set st
+    (ex L st x1 = last L & dom L = succ A & L.{} = {X} &
+      (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+       for C st C in succ A & C <> {} & C is_limit_ordinal
+              holds L.C = D(C,L|C) ) &
+    (ex L st x2 = last L & dom L = succ A & L.{} = {X} &
+      (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+       for C st C in succ A & C <> {} & C is_limit_ordinal
+              holds L.C = D(C,L|C) )
+     holds x1 = x2 from TS_Def;
+  end;
+end;
+
+Lm1:
+ now let X;
+   deffunc F(Ordinal) = Tarski-Class(X,$1);
+   deffunc C(Ordinal,set) = { u : ex v st v in $2 & u c= v } \/
+                 { bool v : v in $2 } \/
+                 bool $2 /\ Tarski-Class X;
+   deffunc D(Ordinal,T-Sequence) = (union rng $2) /\ Tarski-Class X;
+A1: for A,x holds x = F(A) iff
+    ex L st x = last L & dom L = succ A & L.{} = { X } &
+     (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+      for C st C in succ A & C <> {} & C is_limit_ordinal
+              holds L.C = D(C,L|C) by Def5;
+  thus F({}) = { X } from TS_Result0(A1);
+  thus for A holds F(succ A) = C(A,F(A)) from TS_ResultS(A1);
+  thus A <> {} & A is_limit_ordinal & dom L = A &
+     (for B st B in A holds L.B = Tarski-Class(X,B)) implies
+      Tarski-Class(X,A) = (union rng L) /\ Tarski-Class X
+    proof assume that
+A2:    A <> {} & A is_limit_ordinal and
+A3:    dom L = A and
+A4:    for B st B in A holds L.B = F(B);
+     thus F(A) = D(A,L) from TS_ResultL(A1,A2,A3,A4);
+    end;
+ end;
+
+definition let X,A;
+ redefine func Tarski-Class(X,A) -> Subset of Tarski-Class X;
+  coherence
+   proof
+     defpred P[Ordinal] means Tarski-Class(X,$1) is Subset of Tarski-Class X;
+     { X } c= Tarski-Class X
+      proof let x; assume x in { X };
+        then x = X by TARSKI:def 1;
+       hence thesis by Th5;
+      end;
+then A1: P[{}] by Lm1;
+A2:   P[B] implies P[succ B]
+      proof assume Tarski-Class(X,B) is Subset of Tarski-Class X;
+       then reconsider S = Tarski-Class(X,B) as Subset of Tarski-Class X;
+       set Y = Tarski-Class(X,succ B);
+          Y c= Tarski-Class X
+         proof let x; assume x in Y;
+           then x in { u : ex v st v in S & u c= v } \/ { bool v : v in S } \/
+               bool S /\ Tarski-Class X by Lm1;
+then A3:           x in { u : ex v st v in S & u c= v } \/ { bool v : v in S }
+or
+           x in bool S /\ Tarski-Class X by XBOOLE_0:def 2;
+A4:        now assume x in { u : ex v st v in S & u c= v };
+             then ex u st x = u & ex v st v in S & u c= v;
+            hence thesis;
+           end;
+          now assume x in { bool v : v in S };
+             then ex v st x = bool v & v in S;
+            hence thesis by Th7;
+           end;
+          hence thesis by A3,A4,XBOOLE_0:def 2,def 3;
+         end;
+       hence thesis;
+      end;
+A5:   for B st B <> {} & B is_limit_ordinal &
+       for C st C in B holds P[C] holds P[B]
+      proof let B such that
+A6:     B <> {} & B is_limit_ordinal and
+          for C st C in B holds Tarski-Class(X,C) is Subset of Tarski-Class X;
+        deffunc f(Ordinal) = Tarski-Class(X,$1);
+       consider L such that
+A7:     dom L = B & for C st C in B holds L.C = f(C) from TS_Lambda;
+          Tarski-Class(X,B) = (union rng L) /\ Tarski-Class X &
+         (union rng L) /\ Tarski-Class X c= Tarski-Class X
+          by A6,A7,Lm1,XBOOLE_1:17;
+       hence thesis;
+      end;
+      for A holds P[A] from Ordinal_Ind(A1,A2,A5);
+    hence thesis;
+   end;
+end;
+
+theorem
+   Tarski-Class(X,{}) = { X } by Lm1;
+
+theorem
+   Tarski-Class(X,succ A) =
+      { u : ex v st v in Tarski-Class(X,A) & u c= v } \/
+      { bool v : v in Tarski-Class(X,A) } \/
+      bool Tarski-Class(X,A) /\ Tarski-Class X by Lm1;
+
+theorem
+ Th12: A <> {} & A is_limit_ordinal implies
+      Tarski-Class(X,A) = { u : ex B st B in A & u in Tarski-Class(X,B) }
+  proof assume
+A1:  A <> {} & A is_limit_ordinal;
+   deffunc f(Ordinal) = Tarski-Class(X,$1);
+   consider L such that
+A2:  dom L = A & for B st B in A holds L.B = f(B) from TS_Lambda;
+A3:  Tarski-Class(X,A) = (union rng L) /\ Tarski-Class X by A1,A2,Lm1;
+   thus Tarski-Class(X,A) c= { u : ex B st B in A & u in Tarski-Class(X,B) }
+     proof let x; assume x in Tarski-Class(X,A);
+       then x in union rng L by A3,XBOOLE_0:def 3;
+      then consider Y such that
+A4:     x in Y & Y in rng L by TARSKI:def 4;
+      consider y such that
+A5:     y in dom L & Y = L.y by A4,FUNCT_1:def 5;
+      reconsider y as Ordinal by A5,ORDINAL1:23;
+         Y = Tarski-Class(X,y) by A2,A5;
+       hence thesis by A2,A4,A5;
+     end;
+   let x; assume x in { u : ex B st B in A & u in Tarski-Class(X,B) };
+   then consider u such that
+A6:  x = u & ex B st B in A & u in Tarski-Class(X,B);
+   consider B such that
+A7:  B in A & u in Tarski-Class(X,B) by A6;
+      L.B = Tarski-Class(X,B) by A2,A7;
+    then Tarski-Class(X,B) in rng L by A2,A7,FUNCT_1:def 5;
+    then u in union rng L & u in Tarski-Class X by A7,TARSKI:def 4;
+   hence thesis by A3,A6,XBOOLE_0:def 3;
+  end;
+
+theorem
+ Th13: Y in Tarski-Class(X,succ A) iff
+   Y c= Tarski-Class(X,A) & Y in Tarski-Class X or
+   ex Z st Z in Tarski-Class(X,A) & (Y c= Z or Y = bool Z)
+  proof
+   set T1 = { u : ex v st v in Tarski-Class(X,A) & u c= v };
+   set T2 = { bool v : v in Tarski-Class(X,A) };
+   set T3 = bool Tarski-Class(X,A) /\ Tarski-Class X;
+A1:  Tarski-Class(X,succ A) = T1 \/ T2 \/ T3 by Lm1;
+   thus Y in Tarski-Class(X,succ A) implies
+      Y c= Tarski-Class(X,A) & Y in Tarski-Class X or
+      ex Z st Z in Tarski-Class(X,A) & (Y c= Z or Y = bool Z)
+     proof assume
+         Y in Tarski-Class(X,succ A);
+then A2:       Y in T1 \/ T2 or Y in T3 by A1,XBOOLE_0:def 2;
+A3:     now assume Y in T1;
+         then ex u st Y = u & ex v st v in Tarski-Class(X,A) & u c= v;
+        hence ex Z st Z in Tarski-Class(X,A) & (Y c= Z or Y = bool Z);
+       end;
+A4:     now assume Y in T2;
+         then ex v st Y = bool v & v in Tarski-Class(X,A);
+        hence ex Z st Z in Tarski-Class(X,A) & (Y c= Z or Y = bool Z);
+       end;
+         now assume Y in T3;
+         then Y in bool Tarski-Class(X,A) & Y in Tarski-Class X by XBOOLE_0:def
+3;
+        hence thesis;
+       end;
+      hence thesis by A2,A3,A4,XBOOLE_0:def 2;
+     end;
+   assume
+A5:  Y c= Tarski-Class(X,A) & Y in Tarski-Class X or
+     ex Z st Z in Tarski-Class(X,A) & (Y c= Z or Y = bool Z);
+A6:  now assume
+     Y c= Tarski-Class(X,A) & Y in Tarski-Class X;
+      then Y in T3 by XBOOLE_0:def 3;
+     hence Y in Tarski-Class(X,succ A) by A1,XBOOLE_0:def 2;
+    end;
+      now given Z such that
+A7:   Z in Tarski-Class(X,A) & (Y c= Z or Y = bool Z);
+     reconsider Z as Element of Tarski-Class X by A7;
+      reconsider y = Y as Element of Tarski-Class X by A7,Th6,Th7;
+A8:   now assume Y c= Z;
+        then y in T1 by A7; then Y in T1 \/ T2 by XBOOLE_0:def 2;
+       hence thesis by A1,XBOOLE_0:def 2;
+      end;
+        now assume Y = bool Z;
+        then y in T2 by A7; then Y in T1 \/ T2 by XBOOLE_0:def 2;
+       hence thesis by A1,XBOOLE_0:def 2;
+      end;
+     hence thesis by A7,A8;
+    end;
+   hence thesis by A5,A6;
+  end;
+
+theorem
+   Y c= Z & Z in Tarski-Class(X,A) implies Y in Tarski-Class(X,succ A) by Th13;
+
+theorem
+   Y in Tarski-Class(X,A) implies bool Y in Tarski-Class(X,succ A) by Th13;
+
+theorem
+ Th16: A <> {} & A is_limit_ordinal implies
+   (x in Tarski-Class(X,A) iff ex B st B in A & x in Tarski-Class(X,B))
+  proof assume
+A1:  A <> {} & A is_limit_ordinal;
+then A2:  Tarski-Class(X,A) = { u : ex B st B in A & u in Tarski-Class(X,B) }
+     by Th12;
+   thus x in Tarski-Class(X,A) implies ex B st B in A & x in Tarski-Class(X,B)
+     proof assume x in Tarski-Class(X,A);
+       then ex u st x = u & ex B st B in A & u in Tarski-Class(X,B) by A2;
+      hence thesis;
+     end;
+   given B such that
+A3:  B in A & x in Tarski-Class(X,B);
+   reconsider u = x as Element of Tarski-Class X by A3;
+      u in { v : ex B st B in A & v in Tarski-Class(X,B) } by A3;
+   hence thesis by A1,Th12;
+  end;
+
+theorem
+    A <> {} & A is_limit_ordinal & Y in Tarski-Class(X,A) &
+   (Z c= Y or Z = bool Y) implies Z in Tarski-Class(X,A)
+  proof assume
+A1:  A <> {} & A is_limit_ordinal & Y in Tarski-Class(X,A);
+   then consider B such that
+A2:  B in A & Y in Tarski-Class(X,B) by Th16;
+A3:  bool Y in Tarski-Class(X,succ B) by A2,Th13;
+A4:  Z c= Y implies Z in Tarski-Class(X,succ B) by A2,Th13;
+A5:  succ B in A by A1,A2,ORDINAL1:41;
+   assume Z c= Y or Z = bool Y;
+   hence thesis by A1,A3,A4,A5,Th16;
+  end;
+
+theorem
+ Th18: Tarski-Class(X,A) c= Tarski-Class(X,succ A)
+  proof let x; assume
+   x in Tarski-Class(X,A);
+    then x in { u : ex v st v in Tarski-Class(X,A) & u c= v };
+then A1:  x in { u : ex v st v in Tarski-Class(X,A) & u c= v } \/
+        { bool v : v in Tarski-Class(X,A) } by XBOOLE_0:def 2;
+      Tarski-Class(X,succ A) =
+      { u : ex v st v in Tarski-Class(X,A) & u c= v } \/
+      { bool v : v in Tarski-Class(X,A) } \/
+      bool Tarski-Class(X,A) /\ Tarski-Class X by Lm1;
+   hence thesis by A1,XBOOLE_0:def 2;
+  end;
+
+theorem
+ Th19: A c= B implies Tarski-Class(X,A) c= Tarski-Class(X,B)
+  proof
+   defpred OnP[Ordinal] means
+    A c= $1 implies Tarski-Class(X,A) c= Tarski-Class(X,$1);
+A1:for B st for C st C in B holds OnP[C] holds OnP[B]
+     proof let B such that
+A2:     for C st C in B holds OnP[C] and
+A3:     A c= B;
+      let x; assume
+A4:     x in Tarski-Class(X,A);
+         now assume A5: A <> B;
+          then A c< B by A3,XBOOLE_0:def 8;
+then A6:       A in B by ORDINAL1:21;
+            A c= B & B <> A iff A c< B by XBOOLE_0:def 8;
+then A7:       B <> {} by A3,A5,ORDINAL1:21;
+A8:       now given C such that
+A9:        B = succ C;
+          A c= C & C in B by A6,A9,ORDINAL1:34;
+           then Tarski-Class(X,A) c= Tarski-Class(X,C) &
+            Tarski-Class(X,C) c= Tarski-Class(X,B) by A2,A9,Th18;
+           then Tarski-Class(X,A) c= Tarski-Class(X,B) by XBOOLE_1:1;
+          hence thesis by A4;
+         end;
+           now assume for C holds B <> succ C;
+           then B is_limit_ordinal by ORDINAL1:42;
+       then Tarski-Class(X,B) = { v : ex C st C in B & v in Tarski-Class(X,C) }
+             by A7,Th12;
+           hence thesis by A4,A6;
+         end;
+        hence thesis by A8;
+       end;
+      hence thesis by A4;
+     end;
+      for B holds OnP[B] from Transfinite_Ind(A1);
+   hence thesis;
+  end;
+
+theorem
+ Th20: ex A st Tarski-Class(X,A) = Tarski-Class(X,succ A)
+  proof assume
+A1:  for A holds Tarski-Class(X,A) <> Tarski-Class(X,succ A);
+defpred P[set] means ex A st $1 in Tarski-Class(X,A);
+   consider Z such that
+A2:  x in Z iff x in Tarski-Class X & P[x] from Separation;
+   defpred P[set,set] means
+    ex A st $2 = A & $1 in Tarski-Class(X,succ A) & not $1 in
+ Tarski-Class(X,A);
+A3:  for x,y,z st P[x,y] & P[x,z] holds y = z
+     proof let x,y,z;
+      given A such that
+A4:    y = A & x in Tarski-Class(X,succ A) & not x in Tarski-Class(X,A);
+      given B such that
+A5:    z = B & x in Tarski-Class(X,succ B) & not x in Tarski-Class(X,B);
+      assume A6: y <> z;
+      A c= B or B c= A;
+then A7:     A c< B or B c< A by A4,A5,A6,XBOOLE_0:def 8;
+         now assume A c< B;
+         then A in B by ORDINAL1:21;
+         then succ A c= B by ORDINAL1:33;
+         then Tarski-Class(X,succ A) c= Tarski-Class(X,B) by Th19;
+        hence contradiction by A4,A5;
+       end;
+       then B in A by A7,ORDINAL1:21;
+       then succ B c= A by ORDINAL1:33;
+       then Tarski-Class(X,succ B) c= Tarski-Class(X,A) by Th19;
+      hence contradiction by A4,A5;
+     end;
+   consider Y such that
+A8:  x in Y iff ex y st y in Z & P[y,x] from Fraenkel(A3);
+      now let A;
+A9:    Tarski-Class(X,A) <> Tarski-Class(X,succ A) &
+       Tarski-Class(X,A) c= Tarski-Class(X,succ A) by A1,Th18;
+     then consider x such that
+A10: not (x in Tarski-Class(X,A) iff x in Tarski-Class(X,succ A)) by TARSKI:2;
+        x in Z by A2,A10;
+     hence A in Y by A8,A9,A10;
+    end;
+   hence contradiction by ORDINAL1:38;
+  end;
+
+theorem
+ Th21: Tarski-Class(X,A) = Tarski-Class(X,succ A) implies
+   Tarski-Class(X,A) = Tarski-Class X
+  proof assume
+A1:  Tarski-Class(X,A) = Tarski-Class(X,succ A);
+      {} = {} & {} c= A by XBOOLE_1:2;
+then A2:    Tarski-Class(X,{}) c= Tarski-Class(X,A) &
+     Tarski-Class(X,{}) = { X } & X in { X }
+      by Lm1,Th19,TARSKI:def 1;
+      Tarski-Class(X,A) is_Tarski-Class_of X
+     proof
+      thus X in Tarski-Class(X,A) by A2;
+A3:     Tarski-Class(X,succ A) =
+        { u : ex v st v in Tarski-Class(X,A) & u c= v } \/
+        { bool v : v in Tarski-Class(X,A) } \/
+        bool Tarski-Class(X,A) /\ Tarski-Class X by Lm1;
+         Tarski-Class X is_Tarski-Class_of X by Def4;
+then A4:       Tarski-Class X is_Tarski-Class by Def3;
+      thus Z in Tarski-Class(X,A) & Y c= Z implies Y in Tarski-Class(X,A)
+        proof assume
+A5:        Z in Tarski-Class(X,A) & Y c= Z;
+           Tarski-Class X is_Tarski-Class_of X by Def4;
+         then Tarski-Class X is_Tarski-Class by Def3;
+         then Tarski-Class X is subset-closed by Def2;
+         then reconsider y = Y as Element of Tarski-Class X
+            by A5,Def1;
+            ex v st v in Tarski-Class(X,A) & y c= v by A5;
+          then Y in { u : ex v st v in Tarski-Class(X,A) & u c= v };
+          then Y in { u : ex v st v in Tarski-Class(X,A) & u c= v } \/
+              { bool v : v in Tarski-Class(X,A) } by XBOOLE_0:def 2;
+         hence Y in Tarski-Class(X,A) by A1,A3,XBOOLE_0:def 2;
+        end;
+      thus Y in Tarski-Class(X,A) implies bool Y in Tarski-Class(X,A)
+        proof assume
+          Y in Tarski-Class(X,A);
+          then bool Y in { bool u : u in Tarski-Class(X,A) };
+          then bool Y in { u : ex v st v in Tarski-Class(X,A) & u c= v } \/
+                   { bool v : v in Tarski-Class(X,A) } by XBOOLE_0:def 2;
+         hence bool Y in Tarski-Class(X,A) by A1,A3,XBOOLE_0:def 2;
+        end;
+      let Y; assume that
+A6:     Y c= Tarski-Class(X,A) and
+A7:     not Y,Tarski-Class(X,A) are_equipotent;
+         Y c= Tarski-Class X by A6,XBOOLE_1:1;
+     then Y,Tarski-Class X are_equipotent or Y in Tarski-Class X by A4,Def2;
+      hence Y in Tarski-Class(X,A) by A1,A6,A7,Th13,CARD_1:44;
+     end; hence Tarski-Class(X,A) c= Tarski-Class X &
+     Tarski-Class X c= Tarski-Class(X,A) by Def4;
+  end;
+
+theorem
+ Th22: ex A st Tarski-Class(X,A) = Tarski-Class X
+  proof
+   consider A such that
+A1:  Tarski-Class(X,A) = Tarski-Class(X,succ A) by Th20;
+   take A;
+   thus thesis by A1,Th21;
+  end;
+
+theorem
+    ex A st Tarski-Class(X,A) = Tarski-Class X &
+    for B st B in A holds Tarski-Class(X,B) <> Tarski-Class X
+  proof
+    defpred P[Ordinal] means Tarski-Class(X,$1) = Tarski-Class X;
+A1:  ex A st P[A] by Th22;
+   consider A such that
+A2:  P[A] & for B st P[B] holds A c= B from Ordinal_Min(A1);
+   take A;
+   thus Tarski-Class(X,A) = Tarski-Class X by A2;
+   let B; assume B in A;
+    then not A c= B by ORDINAL1:7;
+   hence thesis by A2;
+  end;
+
+theorem
+    Y <> X & Y in Tarski-Class X implies
+   ex A st not Y in Tarski-Class(X,A) & Y in Tarski-Class(X,succ A)
+  proof assume
+A1:  Y <> X & Y in Tarski-Class X;
+     defpred P[Ordinal] means Y in Tarski-Class(X,$1);
+      ex A st Tarski-Class(X,A) = Tarski-Class X by Th22;
+then A2:  ex A st P[A] by A1;
+   consider A such that
+A3:  P[A] & for B st P[B] holds A c= B from Ordinal_Min(A2);
+A4:    not Y in { X } & Tarski-Class(X,{}) = { X } by A1,Lm1,TARSKI:def 1;
+      now assume A is_limit_ordinal;
+     then consider B such that
+A5:    B in A & Y in Tarski-Class(X,B) by A3,A4,Th16;
+        A c= B by A3,A5;
+     hence contradiction by A5,ORDINAL1:7;
+    end;
+   then consider B such that
+A6:  A = succ B by ORDINAL1:42;
+   take B;
+      B in A by A6,ORDINAL1:10;
+    then not A c= B by ORDINAL1:7;
+   hence thesis by A3,A6;
+  end;
+
+theorem
+ Th25: X is epsilon-transitive implies
+   for A st A <> {} holds Tarski-Class(X,A) is epsilon-transitive
+  proof assume
+A1:  Y in X implies Y c= X;
+   defpred OnP[Ordinal] means
+    $1 <> {} implies Tarski-Class(X,$1) is epsilon-transitive;
+A2:for A st for B st B in A holds OnP[B] holds OnP[A]
+     proof let A such that
+A3:     for B st B in A holds OnP[B] and
+A4:     A <> {};
+      let Y such that
+A5:     Y in Tarski-Class(X,A);
+A6:     now given B such that
+A7:      A = succ B;
+           B in A by A7,ORDINAL1:10;
+then A8:      B c= A & OnP[B] by A3,ORDINAL1:def 2;
+then A9:      Tarski-Class(X,B) c= Tarski-Class(X,A) by Th19;
+           now assume not Y c= Tarski-Class(X,B);
+          then consider Z such that
+A10:        Z in Tarski-Class(X,B) & (Y c= Z or Y = bool Z) by A5,A7,Th13;
+A11:        now assume
+A12:          Y = bool Z;
+            thus thesis
+              proof let x;
+               assume x in Y;
+               hence thesis by A7,A10,A12,Th13;
+              end;
+           end;
+             now assume
+A13:          Y c= Z;
+            thus thesis
+              proof let x; assume A14: x in Y;
+then A15:             x in Z by A13;
+A16:             now assume B = {};
+                  then Tarski-Class(X,B) = { X } by Lm1;
+then A17:               Z = X by A10,TARSKI:def 1;
+                  then x c= X by A1,A13,A14;
+                 hence x in Tarski-Class(X,A) by A7,A10,A17,Th13;
+                end;
+                  now assume B <> {};
+                  then Z c= Tarski-Class(X,B) by A8,A10,ORDINAL1:def 2;
+                  then x in Tarski-Class(X,B) by A15;
+                 hence thesis by A9;
+                end;
+               hence thesis by A16;
+              end;
+           end;
+          hence thesis by A10,A11;
+         end;
+        hence thesis by A9,XBOOLE_1:1;
+       end;
+         now assume
+A18:       for B holds A <> succ B;
+         then A is_limit_ordinal by ORDINAL1:42;
+        then consider B such that
+A19:       B in A & Y in Tarski-Class(X,B) by A4,A5,Th16;
+A20:      succ B c= A & succ B <> A & succ B <> {} &
+          Tarski-Class(X,B) c= Tarski-Class(X,succ B)
+           by A18,A19,Th18,ORDINAL1:33;
+           then succ B c< A by XBOOLE_0:def 8;
+then A21:       succ B in A & succ B <> {} & Y in Tarski-Class(X,succ B) &
+          Tarski-Class(X,succ B) c= Tarski-Class(X,A)
+           by A19,A20,Th19,ORDINAL1:21;
+         then Tarski-Class(X,succ B) is epsilon-transitive by A3;
+         then Y c= Tarski-Class(X,succ B) by A19,A20,ORDINAL1:def 2;
+        hence thesis by A21,XBOOLE_1:1;
+       end;
+      hence thesis by A6;
+     end;
+   thus for A holds OnP[A] from Transfinite_Ind(A2);
+  end;
+
+theorem
+    Tarski-Class(X,{}) in Tarski-Class(X,one) &
+   Tarski-Class(X,{}) <> Tarski-Class(X,one)
+  proof
+A1:  Tarski-Class(X,{}) = { X } by Lm1;
+    then X in Tarski-Class(X,{}) by TARSKI:def 1;
+then A2:  bool X in Tarski-Class X by Th7;
+      { X } c= bool X
+     proof let a; assume a in { X }; then a = X by TARSKI:def 1;
+      hence a in bool X by ZFMISC_1:def 1;
+     end;
+  then { X } in Tarski-Class X by A2,Th6;
+   hence
+A3:  Tarski-Class(X,{}) in Tarski-Class(X,one) by A1,Th13,ORDINAL2:def 4;
+   assume Tarski-Class(X,{}) = Tarski-Class(X,one);
+   hence contradiction by A3;
+  end;
+
+theorem
+ Th27: X is epsilon-transitive implies Tarski-Class X is epsilon-transitive
+  proof
+   consider A such that
+A1:  Tarski-Class(X,A) = Tarski-Class X by Th22;
+      Tarski-Class(X,A) c= Tarski-Class(X,succ A) &
+     Tarski-Class(X,succ A) c= Tarski-Class X by Th18;
+then A2:  Tarski-Class(X,A) = Tarski-Class(X,succ A) by A1,XBOOLE_0:def 10;
+   assume X is epsilon-transitive;
+   hence thesis by A1,A2,Th25;
+  end;
+
+theorem
+ Th28: Y in Tarski-Class X implies Card Y <` Card Tarski-Class X
+  proof assume
+A1:  Y in Tarski-Class X;
+      bool Y c= Tarski-Class X
+     proof let x;
+      assume x in bool Y;
+      hence x in Tarski-Class X by A1,Th6;
+     end;
+    then Card Y <` Card bool Y & Card bool Y <=` Card Tarski-Class X
+     by CARD_1:27,30;
+   hence Card Y <` Card Tarski-Class X;
+  end;
+
+theorem
+ Th29: Y in Tarski-Class X implies not Y,Tarski-Class X are_equipotent
+  proof assume Y in Tarski-Class X;
+    then Card Y <` Card Tarski-Class X by Th28;
+    then Card Y <> Card Tarski-Class X;
+   hence thesis by CARD_1:21;
+  end;
+
+theorem
+ Th30: x in Tarski-Class X & y in Tarski-Class X implies
+   {x} in Tarski-Class X & {x,y} in Tarski-Class X
+  proof assume
+A1:  x in Tarski-Class X & y in Tarski-Class X;
+    then {x} c= bool x & bool x in Tarski-Class X by Th7,ZFMISC_1:80;
+   hence
+A2:  {x} in Tarski-Class X by Th6;
+    then bool {x} = {{},{x}} & bool {x} in Tarski-Class X by Th7,ZFMISC_1:30;
+then A3:  not {{},{x}},Tarski-Class X are_equipotent by Th29;
+      now assume
+A4:    x <> y;
+        {{},{x}},{x,y} are_equipotent
+       proof
+         defpred C[set] means $1 = {};
+         deffunc f(set) = x;
+         deffunc g(set) = y;
+         consider f such that
+A5:       dom f = {{},{x}} & for z st z in {{},{x}} holds
+          (C[z] implies f.z = f(z)) & (not C[z] implies f.z = g(z))
+           from LambdaC;
+        take f;
+        thus f is one-to-one
+          proof let x1,x2 be set; assume x1 in dom f & x2 in dom f;
+            then {} <> {x} & (x1 = {} or x1 = {x}) & (x2 = {} or x2 = {x}) &
+             (x1 = {} implies f.x1 = x) & (x1 <> {} implies f.x1 = y) &
+              (x2 = {} implies f.x2 = x) & (x2 <> {} implies f.x2 = y)
+             by A5,TARSKI:def 2;
+           hence thesis by A4;
+          end;
+        thus dom f = {{},{x}} by A5;
+        thus rng f c= {x,y}
+          proof let z; assume z in rng f;
+           then consider u being set such that
+A6:          u in dom f & z = f.u by FUNCT_1:def 5;
+              u = {} or u <> {};
+            then z = x or z = y by A5,A6;
+           hence thesis by TARSKI:def 2;
+          end;
+        let z; assume z in {x,y};
+then A7:       z = x or z = y by TARSKI:def 2;
+A8:       {} in dom f & {x} in dom f & {} <> {x} by A5,TARSKI:def 2;
+         then f.{} = x & f.{x} = y by A5;
+        hence z in rng f by A7,A8,FUNCT_1:def 5;
+       end;
+      then not {x,y},Tarski-Class X are_equipotent & {x,y} c= Tarski-Class X
+       by A1,A3,WELLORD2:22,ZFMISC_1:38;
+     hence thesis by Th8;
+    end;
+   hence thesis by A2,ENUMSET1:69;
+  end;
+
+theorem
+ Th31: x in Tarski-Class X & y in Tarski-Class X implies [x,y] in
+ Tarski-Class X
+  proof assume x in Tarski-Class X & y in Tarski-Class X;
+    then {x,y} in Tarski-Class X & {x} in Tarski-Class X by Th30;
+    then {{x,y},{x}} in Tarski-Class X by Th30;
+   hence thesis by TARSKI:def 5;
+  end;
+
+theorem
+   Y c= Tarski-Class X & Z c= Tarski-Class X implies [:Y,Z:] c= Tarski-Class X
+  proof assume
+A1:  Y c= Tarski-Class X & Z c= Tarski-Class X;
+   let x; assume
+A2:  x in [:Y,Z:];
+then A3:  x = [x`1,x`2] by MCART_1:23;
+      x`1 in Y & x`2 in Z by A2,MCART_1:10; hence x in
+ Tarski-Class X by A1,A3,Th31;
+  end;
+
+definition let A;
+ func Rank(A) means
+:Def6:
+   ex L st it = last L & dom L = succ A & L.{} = {} &
+    (for C st succ C in succ A holds L.succ C = bool(L.C)) &
+     for C st C in succ A & C <> {} & C is_limit_ordinal
+           holds L.C = union rng(L|C);
+  correctness
+proof
+  deffunc C(Ordinal,set) = bool $2;
+  deffunc D(Ordinal,T-Sequence) = union rng $2;
+  thus (ex x,L st x = last L & dom L = succ A & L.{} = {} &
+     (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+      for C st C in succ A & C <> {} & C is_limit_ordinal
+             holds L.C = D(C,L|C) ) &
+   for x1,x2 being set st
+    (ex L st x1 = last L & dom L = succ A & L.{} = {} &
+      (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+       for C st C in succ A & C <> {} & C is_limit_ordinal
+              holds L.C = D(C,L|C) ) &
+    (ex L st x2 = last L & dom L = succ A & L.{} = {} &
+      (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+       for C st C in succ A & C <> {} & C is_limit_ordinal
+              holds L.C = D(C,L|C) )
+     holds x1 = x2 from TS_Def;
+  end;
+end;
+
+deffunc F(Ordinal) = Rank $1;
+
+Lm2:
+ now
+   deffunc C(Ordinal,set) = bool $2;
+   deffunc D(Ordinal,T-Sequence) = union rng $2;
+   A1:  for A,x holds x = F(A) iff
+     ex L st x = last L & dom L = succ A & L.{} = {} &
+      (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+       for C st C in succ A & C <> {} & C is_limit_ordinal
+              holds L.C = D(C,L|C) by Def6;
+  thus F({}) = {} from TS_Result0(A1);
+  thus for A holds F(succ A) = C(A,F(A)) from TS_ResultS(A1);
+  thus A <> {} & A is_limit_ordinal & dom L = A &
+     (for B st B in A holds L.B = Rank B) implies Rank A = union rng L
+    proof assume that
+A2:    A <> {} & A is_limit_ordinal and
+A3:    dom L = A and
+A4:    for B st B in A holds L.B = F(B);
+     thus F(A) = D(A,L) from TS_ResultL(A1,A2,A3,A4);
+    end;
+ end;
+
+theorem
+   Rank {} = {} by Lm2;
+
+theorem
+   Rank succ A = bool Rank A by Lm2;
+
+theorem
+ Th35: A <> {} & A is_limit_ordinal implies
+   for x holds x in Rank A iff ex B st B in A & x in Rank B
+  proof assume
+A1:  A <> {} & A is_limit_ordinal;
+   consider L such that
+A2:  dom L = A & for B st B in A holds L.B = F(B) from TS_Lambda;
+A3:  Rank A = union rng L by A1,A2,Lm2;
+   let x;
+   thus x in Rank A implies ex B st B in A & x in Rank B
+     proof assume x in Rank A;
+      then consider Y such that
+A4:     x in Y & Y in rng L by A3,TARSKI:def 4;
+      consider y such that
+A5:     y in dom L & Y = L.y by A4,FUNCT_1:def 5;
+      reconsider y as Ordinal by A5,ORDINAL1:23;
+      take y;
+      thus thesis by A2,A4,A5;
+     end;
+   given B such that
+A6:  B in A & x in Rank B;
+      L.B = Rank B by A2,A6;
+    then Rank B in rng L by A2,A6,FUNCT_1:def 5;
+   hence x in Rank A by A3,A6,TARSKI:def 4;
+  end;
+
+theorem
+ Th36: X c= Rank A iff X in Rank succ A
+  proof
+   thus X c= Rank A implies X in Rank succ A
+     proof assume X c= Rank A;
+       then X in bool Rank A;
+      hence thesis by Lm2;
+     end;
+   assume X in Rank succ A;
+    then X in bool Rank A by Lm2;
+   hence X c= Rank A;
+  end;
+
+theorem
+ Th37: Rank A is epsilon-transitive
+  proof
+   defpred P[Ordinal] means X in Rank $1 implies X c= Rank $1;
+A1:for A st for B st B in A holds P[B] holds P[A]
+     proof let A such that
+A2:     for B st B in A holds P[B];
+      let X such that
+A3:     X in Rank A;
+      let x such that
+A4:     x in X;
+A5:     now assume
+A6:      A is_limit_ordinal;
+        then consider B such that
+A7:      B in A & X in Rank B by A3,Lm2,Th35;
+           X c= Rank B by A2,A7; hence x in Rank A by A4,A6,A7,Th35;
+       end;
+         now assume not A is_limit_ordinal;
+        then consider B such that
+A8:      A = succ B by ORDINAL1:42;
+           B in A & X c= Rank B by A3,A8,Th36,ORDINAL1:10;
+         then x c= Rank B by A2,A4;
+        hence x in Rank A by A8,Th36;
+       end;
+      hence thesis by A5;
+     end;
+      for A holds P[A] from Transfinite_Ind(A1);
+   hence P[A];
+  end;
+
+theorem
+ Th38: X in Rank A implies X c= Rank A
+  proof
+      Rank A is epsilon-transitive by Th37;
+   hence thesis by ORDINAL1:def 2;
+  end;
+
+theorem
+    Rank A c= Rank succ A
+  proof
+      Rank A in bool Rank A by ZFMISC_1:def 1;
+    then Rank A in Rank succ A by Lm2;
+   hence thesis by Th38;
+  end;
+
+theorem
+ Th40: union Rank A c= Rank A
+  proof let x; assume
+      x in union Rank A;
+   then consider X such that
+A1:  x in X & X in Rank A by TARSKI:def 4;
+      X c= Rank A by A1,Th38;
+   hence x in Rank A by A1;
+  end;
+
+theorem
+    X in Rank A implies union X in Rank A
+  proof assume
+A1:  X in Rank A;
+A2:  now given B such that
+A3:   A = succ B;
+        X c= Rank B by A1,A3,Th36;
+      then union X c= union Rank B & union Rank B c= Rank B by Th40,ZFMISC_1:95
+;
+      then union X c= Rank B by XBOOLE_1:1;
+     hence thesis by A3,Th36;
+    end;
+      now assume
+A4:   A <> {} & for B holds A <> succ B;
+then A5:   A is_limit_ordinal by ORDINAL1:42;
+     then consider B such that
+A6:   B in A & X in Rank B by A1,A4,Th35;
+        X c= Rank B by A6,Th38;
+      then union X c= union Rank B & union Rank B c= Rank B by Th40,ZFMISC_1:95
+;
+then A7:    union X c= Rank B & succ B c= A & succ B <> A
+        by A4,A6,ORDINAL1:33,XBOOLE_1:1;
+      then succ B c< A by XBOOLE_0:def 8;
+      then union X in Rank succ B & succ B in A by A7,Th36,ORDINAL1:21;
+     hence thesis by A5,Th35;
+    end;
+   hence union X in Rank A by A1,A2,Lm2;
+  end;
+
+theorem
+ Th42: A in B iff Rank A in Rank B
+  proof
+   defpred OnP[Ordinal,Ordinal] means $1 in $2 implies Rank $1 in Rank $2;
+A1:  now let A;
+defpred P[Ordinal] means OnP[A,$1];
+A2:  for B st for C st C in B holds P[C] holds P[B]
+       proof let B such that
+A3:       for C st C in B holds OnP[A,C] and
+A4:       A in B;
+A5:       now given C such that
+A6:        B = succ C;
+             C in B by A6,ORDINAL1:10;
+then A7:        A in C implies Rank A in Rank C by A3;
+             now assume A8: not A in C;
+              A c= C & A <> C iff A c< C by XBOOLE_0:def 8;
+            hence Rank A = Rank C by A4,A6,A8,ORDINAL1:21,34;
+           end;
+           then Rank A c= Rank C by A7,Th38;
+          hence thesis by A6,Th36;
+         end;
+           now assume for C holds B <> succ C;
+then A9:        B is_limit_ordinal & B <> succ A by ORDINAL1:42;
+           succ A c= B & Rank A c= Rank A by A4,ORDINAL1:33;
+           then succ A c< B by A9,XBOOLE_0:def 8;
+           then succ A in B & Rank A in Rank succ A by Th36,ORDINAL1:21;
+          hence thesis by A9,Th35;
+         end;
+        hence thesis by A5;
+       end;
+     thus for B holds P[B] from Transfinite_Ind(A2);
+    end;
+   hence OnP[A,B];
+   assume
+A10:  Rank A in Rank B & not A in B;
+    then B in A or B = A by ORDINAL1:24;
+   hence contradiction by A1,A10;
+  end;
+
+theorem
+ Th43: A c= B iff Rank A c= Rank B
+  proof
+   thus A c= B implies Rank A c= Rank B
+     proof A1: A c< B iff A c= B & A <> B by XBOOLE_0:def 8;
+       assume A c= B;
+       then A = B or A in B by A1,ORDINAL1:21;
+       then Rank A = Rank B or Rank A in Rank B by Th42;
+      hence thesis by Th38;
+     end;
+   assume
+A2:  Rank A c= Rank B & not A c= B;
+    then B in A by ORDINAL1:26;
+    then Rank B in Rank A by Th42;
+   hence contradiction by A2,ORDINAL1:7;
+  end;
+
+theorem
+ Th44: A c= Rank A
+  proof
+  defpred P[Ordinal] means $1 c= Rank $1;
+A1: P[{}] by XBOOLE_1:2;
+A2:  P[B] implies P[succ B]
+     proof assume B c= Rank B;
+       then B in Rank succ B by Th36;
+       then B c= Rank succ B & {B} c= Rank succ B by Th38,ZFMISC_1:37;
+       then B \/ {B} c= Rank succ B by XBOOLE_1:8;
+      hence thesis by ORDINAL1:def 1;
+     end;
+A3:  for A st A <> {} & A is_limit_ordinal & for B st B in A holds P[B]
+       holds P[A]
+     proof let A such that
+A4:    A <> {} & A is_limit_ordinal and
+A5:    for B st B in A holds B c= Rank B;
+      let x; assume
+A6:    x in A;
+      then reconsider B = x as Ordinal by ORDINAL1:23;
+         succ B in A by A4,A6,ORDINAL1:41;
+       then B c= Rank B & succ B c= A by A5,A6,ORDINAL1:def 2;
+       then B in Rank succ B & Rank succ B c= Rank A by Th36,Th43;
+      hence thesis;
+     end;
+     for B holds P[B] from Ordinal_Ind(A1,A2,A3);
+   hence thesis;
+  end;
+
+theorem
+    for A,X st X in Rank A holds
+  not X,Rank A are_equipotent & Card X <` Card Rank A
+  proof
+   defpred OnP[Ordinal] means
+    for X st X in Rank $1 holds not X,Rank $1 are_equipotent;
+A1:for A st for B st B in A holds OnP[B] holds OnP[A]
+     proof let A such that
+A2:     for B st B in A holds OnP[B];
+      let X; assume
+A3:     X in Rank A;
+A4:     now given B such that
+A5:      A = succ B;
+           B in A by A5,ORDINAL1:10;
+         then B c= A & Rank succ B = bool Rank B by Lm2,ORDINAL1:def 2;
+         then X c= Rank B & not Rank B,Rank A are_equipotent & Rank B c= Rank
+A
+          by A3,A5,Th43,CARD_1:29;
+        hence thesis by CARD_1:44;
+       end;
+         now assume
+A6:      A <> {} & for B holds A <> succ B;
+         then A is_limit_ordinal by ORDINAL1:42;
+        then consider B such that
+A7:      B in A & X in Rank B by A3,A6,Th35;
+A8:      not X,Rank B are_equipotent by A2,A7;
+           Rank B in Rank A by A7,Th42;
+         then X c= Rank B & Rank B c= Rank A by A7,Th38;
+        hence thesis by A8,CARD_1:44;
+       end;
+      hence thesis by A3,A4,Lm2;
+     end;
+A9:  for A holds OnP[A] from Transfinite_Ind(A1);
+   let A,X; assume A10: X in Rank A;
+  then X c= Rank A & not X,Rank A are_equipotent by A9,Th38;
+    then Card X <=` Card Rank A & Card X <> Card Rank A by CARD_1:21,27;
+   hence thesis by A9,A10,CARD_1:13;
+  end;
+
+theorem
+    X c= Rank A iff bool X c= Rank succ A
+  proof
+   thus X c= Rank A implies bool X c= Rank succ A
+     proof assume
+A1:     X c= Rank A;
+      let x;
+      assume x in bool X;
+       then x c= Rank A & Rank succ A = bool Rank A by A1,Lm2,XBOOLE_1:1;
+      hence thesis;
+     end;
+   assume
+A2:  bool X c= Rank succ A;
+   let x; assume x in X;
+    then { x } c= X by ZFMISC_1:37;
+    then { x } in bool X & Rank succ A = bool Rank A by Lm2;
+    then { x } c= Rank A & x in { x } by A2,TARSKI:def 1;
+   hence x in Rank A;
+  end;
+
+theorem
+ Th47: X c= Y & Y in Rank A implies X in Rank A
+  proof assume
+A1:  X c= Y & Y in Rank A;
+A2:  now given B such that
+A3:   A = succ B;
+A4:   Rank succ B = bool Rank B by Lm2;
+      then X c= Rank B by A1,A3,XBOOLE_1:1;
+     hence X in Rank A by A3,A4;
+    end;
+      now assume for B holds A <> succ B;
+then A5:   A is_limit_ordinal by ORDINAL1:42;
+     then consider B such that
+A6:   B in A & Y in Rank B by A1,Lm2,Th35;
+        Y c= Rank B by A6,Th38;
+      then X c= Rank B by A1,XBOOLE_1:1;
+      then X in bool Rank B & bool Rank B = Rank succ B & succ B in A
+       by A5,A6,Lm2,ORDINAL1:41;
+     hence X in Rank A by A5,Th35;
+    end;
+   hence thesis by A2;
+  end;
+
+theorem
+ Th48: X in Rank A iff bool X in Rank succ A
+  proof
+   thus X in Rank A implies bool X in Rank succ A
+     proof assume A1: X in Rank A;
+         bool X c= Rank A
+        proof let x;
+         assume x in bool X;
+         hence x in Rank A by A1,Th47;
+        end;
+      hence thesis by Th36;
+     end;
+   assume bool X in Rank succ A;
+    then X in bool X & bool X c= Rank A by Th36,ZFMISC_1:def 1;
+   hence thesis;
+  end;
+
+theorem
+ Th49: x in Rank A iff {x} in Rank succ A
+  proof
+      (x in Rank A iff {x} c= Rank A) &
+    ({x} c= Rank A iff {x} in Rank succ A) by Th36,ZFMISC_1:37;
+   hence thesis;
+  end;
+
+theorem
+ Th50: x in Rank A & y in Rank A iff {x,y} in Rank succ A
+  proof
+      (x in Rank A & y in Rank A iff {x,y} c= Rank A) &
+    ({x,y} c= Rank A iff {x,y} in Rank succ A) by Th36,ZFMISC_1:38;
+   hence thesis;
+  end;
+
+theorem
+   x in Rank A & y in Rank A iff [x,y] in Rank succ succ A
+  proof
+      (x in Rank A iff {x} in Rank succ A) &
+    (x in Rank A & y in Rank A iff {x,y} in Rank succ A) &
+    ({x} in Rank succ A & {x,y} in Rank succ A iff
+     {{x,y},{x}} in Rank succ succ A) & {{x,y},{x}} = [x,y]
+      by Th49,Th50,TARSKI:def 5;
+   hence thesis;
+  end;
+
+theorem
+ Th52: X is epsilon-transitive &
+  Rank A /\ Tarski-Class X = Rank succ A /\ Tarski-Class X implies
+   Tarski-Class X c= Rank A
+  proof assume that
+A1:  X is epsilon-transitive and
+A2:  Rank A /\ Tarski-Class X = Rank succ A /\ Tarski-Class X;
+   given x such that
+A3:  x in Tarski-Class X & not x in Rank A;
+      x in (Tarski-Class X) \ Rank A by A3,XBOOLE_0:def 4;
+   then consider Y such that
+A4:  Y in (Tarski-Class X) \ Rank A and
+A5:  not ex x st x in (Tarski-Class X) \ Rank A & x in Y by TARSKI:7;
+      Tarski-Class X is epsilon-transitive & Y in Tarski-Class X
+     by A1,A4,Th27,XBOOLE_0:def 4;
+then A6:  Y c= Tarski-Class X by ORDINAL1:def 2;
+      Y c= Rank A
+     proof let x; assume x in Y;
+       then not x in (Tarski-Class X) \ Rank A & x in Tarski-Class X by A5,A6;
+      hence x in Rank A by XBOOLE_0:def 4;
+     end;
+    then Y in Rank succ A & Y in Tarski-Class X by A4,Th36,XBOOLE_0:def 4;
+    then Y in Rank succ A /\ Tarski-Class X & not Y in
+ Rank A by A4,XBOOLE_0:def 3,def 4;
+   hence contradiction by A2,XBOOLE_0:def 3;
+  end;
+
+theorem
+ Th53: X is epsilon-transitive implies ex A st Tarski-Class X c= Rank A
+  proof assume
+A1:  X is epsilon-transitive;
+   assume
+A2: not Tarski-Class X c= Rank A;
+A3:  Rank A /\ Tarski-Class X <> Rank succ A /\ Tarski-Class X
+     proof not Tarski-Class X c= Rank A by A2;
+      hence thesis by A1,Th52;
+     end;
+     defpred P[set] means ex A st $1 in Rank A;
+   consider Power being set such that
+A4:  x in Power iff x in Tarski-Class X & P[x] from Separation;
+   defpred P[set,set] means
+    ex A st $2 = A & not $1 in Rank A & $1 in Rank succ A;
+A5:  for x,y,z st P[x,y] & P[x,z] holds y = z
+     proof let x,y,z;
+      given A1 being Ordinal such that
+A6:    y = A1 & not x in Rank A1 & x in Rank succ A1;
+      given A2 being Ordinal such that
+A7:    z = A2 & not x in Rank A2 & x in Rank succ A2;
+      assume y <> z;
+       then A1 in A2 or A2 in A1 by A6,A7,ORDINAL1:24;
+then A8:    succ A1 c= A2 or succ A2 c= A1 by ORDINAL1:33;
+         now assume succ A1 c= A2;
+         then Rank succ A1 c= Rank A2 by Th43;
+        hence contradiction by A6,A7;
+       end;
+       then Rank succ A2 c= Rank A1 by A8,Th43;
+      hence contradiction by A6,A7;
+     end;
+   consider Y such that
+A9:  x in Y iff ex y st y in Power & P[y,x] from Fraenkel(A5);
+      now let A;
+        Rank A /\ Tarski-Class X <> Rank succ A /\ Tarski-Class X by A3;
+     then consider y such that
+A10:    not (y in Rank A /\ Tarski-Class X iff y in
+ Rank succ A /\ Tarski-Class X)
+        by TARSKI:2;
+        A in succ A by ORDINAL1:10;
+      then A c= succ A by ORDINAL1:def 2;
+      then Rank A c= Rank succ A by Th43;
+      then Rank A /\ Tarski-Class X c= Rank succ A /\
+ Tarski-Class X by XBOOLE_1:26;
+      then y in Rank succ A & y in Tarski-Class X &
+       (not y in Rank A or not y in Tarski-Class X) by A10,XBOOLE_0:def 3;
+      then y in Power & P[y,A] by A4;
+     hence A in Y by A9;
+    end;
+   hence contradiction by ORDINAL1:38;
+  end;
+
+theorem
+ Th54: X is epsilon-transitive implies union X c= X
+  proof assume
+A1:  Y in X implies Y c= X;
+   let x; assume x in union X;
+   then consider Y such that
+A2:  x in Y & Y in X by TARSKI:def 4;
+      Y c= X by A1,A2;
+   hence thesis by A2;
+  end;
+
+theorem
+ Th55: X is epsilon-transitive & Y is epsilon-transitive implies
+  X \/ Y is epsilon-transitive
+  proof assume that
+A1:  Z in X implies Z c= X and
+A2:  Z in Y implies Z c= Y;
+   let Z; assume Z in X \/ Y;
+    then Z in X or Z in Y by XBOOLE_0:def 2;
+    then (Z c= X or Z c= Y) & X c= X \/ Y & Y c= X \/ Y by A1,A2,XBOOLE_1:7;
+   hence thesis by XBOOLE_1:1;
+  end;
+
+theorem
+    X is epsilon-transitive & Y is epsilon-transitive implies
+   X /\ Y is epsilon-transitive
+  proof assume that
+A1:  Z in X implies Z c= X and
+A2:  Z in Y implies Z c= Y;
+   let Z; assume Z in X /\ Y;
+    then Z in X & Z in Y by XBOOLE_0:def 3;
+    then Z c= X & Z c= Y by A1,A2;
+   hence thesis by XBOOLE_1:19;
+  end;
+
+ reserve k,n for Nat;
+
+ deffunc f(set,set) = union $2;
+
+definition let X;
+ func the_transitive-closure_of X -> set means
+:Def7:
+  x in it iff ex f,n st x in f.n & dom f = NAT & f.0 = X &
+   for k holds f.(k+1) = union(f.k);
+  existence
+   proof
+     consider f such that
+A1:   dom f = NAT & f.0 = X &
+     for n being Element of NAT holds f.(n+1) = f(n,f.n) from LambdaRecEx;
+    take UNI = union rng f;
+    let x;
+    thus x in UNI implies
+      ex f,n st x in f.n & dom f = NAT & f.0 = X &
+       for k holds f.(k+1) = union(f.k)
+      proof assume x in UNI;
+       then consider Y such that
+A2:      x in Y & Y in rng f by TARSKI:def 4;
+       consider y such that
+A3:      y in dom f & Y = f.y by A2,FUNCT_1:def 5;
+       reconsider y as Element of NAT by A1,A3;
+       take f,y; thus thesis by A1,A2,A3;
+      end;
+    deffunc f(set,set) = union $2;
+    given g,n such that
+A4:   x in g.n and
+A5:   dom g = NAT & g.0 = X &
+     for k holds g.(k+1) = f(k,g.k);
+A6:   dom f = NAT & f.0 = X &
+     for n holds f.(n+1) = f(n,f.n) by A1;
+     g = f from LambdaRecUn(A5,A6);
+     then g.n in rng f by A1,FUNCT_1:def 5;
+    hence x in UNI by A4,TARSKI:def 4;
+   end;
+  uniqueness
+   proof
+     defpred P[set] means
+     ex f,n st $1 in f.n & dom f = NAT & f.0 = X &
+      for k holds f.(k+1) = union(f.k);
+     let U1,U2 be set such that
+A7:  x in U1 iff P[x] and
+A8:  x in U2 iff P[x];
+    thus U1 = U2 from Extensionality(A7,A8);
+   end;
+end;
+
+canceled;
+
+theorem
+ Th58: the_transitive-closure_of X is epsilon-transitive
+  proof let Y; assume Y in the_transitive-closure_of X;
+   then consider f,n such that
+A1:  Y in f.n and
+A2:  dom f = NAT & f.0 = X &
+     for k holds f.(k+1) = union(f.k) by Def7;
+A3:  f.(n+1) = union(f.n) by A2;
+   let x; assume x in Y;
+    then x in union(f.n) by A1,TARSKI:def 4;
+   hence x in the_transitive-closure_of X by A2,A3,Def7;
+  end;
+
+theorem
+ Th59: X c= the_transitive-closure_of X
+  proof let x such that
+A1:  x in X;
+   ex f st dom f = NAT & f.0 = X &
+     for n being Element of NAT holds f.(n+1) = f(n,f.n)
+     from LambdaRecEx;
+   hence x in the_transitive-closure_of X by A1,Def7;
+  end;
+
+theorem
+ Th60: X c= Y & Y is epsilon-transitive implies
+  the_transitive-closure_of X c= Y
+  proof assume
+A1:  X c= Y & Y is epsilon-transitive;
+   let x; assume x in the_transitive-closure_of X;
+   then consider f,n such that
+A2:  x in f.n & dom f = NAT & f.0 = X &
+     for k holds f.(k+1) = union(f.k) by Def7;
+     defpred P[Nat] means f.$1 c= Y;
+A3:  P[0] by A1,A2;
+A4:  for k st P[k] holds P[k+1]
+     proof let k; assume f.k c= Y;
+       then union (f.k) c= union Y & f.(k+1) = union (f.k) & f.(k+1) = f.(k+1)
+&
+        union Y c= Y by A1,A2,Th54,ZFMISC_1:95;
+      hence thesis by XBOOLE_1:1;
+     end;
+     P[k] from Ind(A3,A4);
+    then f.n = f.n & f.n c= Y;
+   hence x in Y by A2;
+  end;
+
+theorem
+ Th61: (for Z st X c= Z & Z is epsilon-transitive holds Y c= Z) & X c= Y &
+   Y is epsilon-transitive implies the_transitive-closure_of X = Y
+  proof assume
+A1:  (for Z st X c= Z & Z is epsilon-transitive holds Y c= Z);
+   assume X c= Y & Y is epsilon-transitive;
+   hence the_transitive-closure_of X c= Y by Th60;
+      the_transitive-closure_of X is epsilon-transitive &
+     X c= the_transitive-closure_of X by Th58,Th59;
+   hence Y c= the_transitive-closure_of X by A1;
+  end;
+
+theorem
+ Th62: X is epsilon-transitive implies the_transitive-closure_of X = X
+  proof
+      (for Z st X c= Z & Z is epsilon-transitive holds X c= Z) & X c= X;
+   hence thesis by Th61;
+  end;
+
+theorem
+   the_transitive-closure_of {} = {} by Th62;
+
+theorem
+   the_transitive-closure_of A = A by Th62;
+
+theorem Th65:
+ X c= Y implies the_transitive-closure_of X c= the_transitive-closure_of Y
+  proof assume
+A1:  X c= Y;
+      Y c= the_transitive-closure_of Y by Th59;
+    then X c= the_transitive-closure_of Y &
+     the_transitive-closure_of Y is epsilon-transitive by A1,Th58,XBOOLE_1:1;
+   hence thesis by Th60;
+  end;
+
+theorem
+   the_transitive-closure_of the_transitive-closure_of X =
+   the_transitive-closure_of X
+  proof
+      the_transitive-closure_of X is epsilon-transitive by Th58;
+   hence thesis by Th62;
+  end;
+
+theorem
+   the_transitive-closure_of (X \/ Y) =
+   the_transitive-closure_of X \/ the_transitive-closure_of Y
+  proof
+      X c= the_transitive-closure_of X & Y c= the_transitive-closure_of Y
+     by Th59;
+    then X \/ Y c= the_transitive-closure_of X \/ the_transitive-closure_of Y
+&
+     the_transitive-closure_of X is epsilon-transitive &
+      the_transitive-closure_of Y is epsilon-transitive by Th58,XBOOLE_1:13
+;
+    then the_transitive-closure_of (X \/ Y) c=
+     the_transitive-closure_of
+      (the_transitive-closure_of X \/ the_transitive-closure_of Y) &
+      the_transitive-closure_of X \/ the_transitive-closure_of Y
+       is epsilon-transitive by Th55,Th65;
+   hence the_transitive-closure_of (X \/ Y) c=
+      the_transitive-closure_of X \/ the_transitive-closure_of Y by Th62;
+      X c= X \/ Y & Y c= X \/ Y by XBOOLE_1:7;
+    then the_transitive-closure_of X c= the_transitive-closure_of (X \/ Y) &
+     the_transitive-closure_of Y c= the_transitive-closure_of (X \/ Y) by Th65;
+   hence thesis by XBOOLE_1:8;
+  end;
+
+theorem
+   the_transitive-closure_of (X /\ Y) c=
+   the_transitive-closure_of X /\ the_transitive-closure_of Y
+  proof
+      X /\ Y c= X & X /\ Y c= Y by XBOOLE_1:17;
+    then the_transitive-closure_of (X /\ Y) c= the_transitive-closure_of X &
+     the_transitive-closure_of (X /\ Y) c= the_transitive-closure_of Y by Th65;
+   hence thesis by XBOOLE_1:19;
+  end;
+
+theorem
+ Th69: ex A st X c= Rank A
+  proof the_transitive-closure_of X is epsilon-transitive by Th58;
+   then consider A such that
+A1:  Tarski-Class the_transitive-closure_of X c= Rank A by Th53;
+   take A;
+      the_transitive-closure_of X in Tarski-Class the_transitive-closure_of X &
+     X c= the_transitive-closure_of X by Th5,Th59;
+    then X in Tarski-Class the_transitive-closure_of X by Th6;
+    then X in Rank A & Rank A is epsilon-transitive by A1,Th37;
+   hence thesis by ORDINAL1:def 2;
+  end;
+
+definition let X;
+ func the_rank_of X -> Ordinal means
+:Def8:   X c= Rank it & for B st X c= Rank B holds it c= B;
+  existence
+   proof
+      defpred P[Ordinal] means X c= Rank $1;
+A1:   ex A st P[A] by Th69;
+    thus ex A st P[A] & for B st P[B] holds A c= B from Ordinal_Min(A1);
+   end;
+  uniqueness
+   proof let A1,A2 be Ordinal such that
+A2:  X c= Rank A1 & for B st X c= Rank B holds A1 c= B and
+A3:  X c= Rank A2 & for B st X c= Rank B holds A2 c= B;
+    thus A1 c= A2 & A2 c= A1 by A2,A3;
+   end;
+end;
+
+canceled;
+
+theorem
+ Th71: the_rank_of bool X = succ the_rank_of X
+  proof
+A1:  X c= Rank the_rank_of X &
+     for A st X c= Rank A holds the_rank_of X c= A by Def8;
+A2:  bool X c= Rank succ the_rank_of X
+     proof let x;
+      assume x in bool X;
+       then x c= Rank the_rank_of X &
+        bool Rank the_rank_of X = Rank succ the_rank_of X by A1,Lm2,XBOOLE_1:1;
+      hence thesis;
+     end;
+      for A st bool X c= Rank A holds succ the_rank_of X c= A
+     proof let A such that
+A3:     bool X c= Rank A;
+  defpred P[Ordinal] means X in Rank $1;
+       A4: X in bool X by ZFMISC_1:def 1;
+then A5:     ex A st P[A] by A3;
+      consider B such that
+A6:     P[B] & for C st P[C] holds B c= C from Ordinal_Min(A5);
+         now assume for C holds B <> succ C;
+         then B is_limit_ordinal by ORDINAL1:42;
+        then consider C such that
+A7:       C in B & X in Rank C by A6,Lm2,Th35;
+           B c= C by A6,A7;
+        hence contradiction by A7,ORDINAL1:7;
+       end;
+      then consider C such that
+A8:     B = succ C;
+         X c= Rank C by A6,A8,Th36;
+       then the_rank_of X c= C by Def8;
+       then the_rank_of X in B by A8,ORDINAL1:34;
+       then succ the_rank_of X c= B & B c= A by A3,A4,A6,ORDINAL1:33;
+      hence thesis by XBOOLE_1:1;
+     end;
+   hence thesis by A2,Def8;
+  end;
+
+theorem
+   the_rank_of Rank A = A
+  proof
+      Rank A c= Rank A & for B st Rank A c= Rank B holds A c= B by Th43;
+   hence thesis by Def8;
+  end;
+
+theorem
+ Th73: X c= Rank A iff the_rank_of X c= A
+  proof
+   thus X c= Rank A implies the_rank_of X c= A by Def8;
+   assume the_rank_of X c= A;
+    then Rank the_rank_of X c= Rank A & X c= Rank the_rank_of X by Def8,Th43;
+   hence thesis by XBOOLE_1:1;
+  end;
+
+theorem
+ Th74: X in Rank A iff the_rank_of X in A
+  proof
+   thus X in Rank A implies the_rank_of X in A
+     proof assume
+       X in Rank A;
+       then bool X in Rank succ A by Th48;
+       then bool X c= Rank A & the_rank_of bool X = succ the_rank_of X
+        by Th36,Th71;
+       then the_rank_of X in the_rank_of bool X & the_rank_of bool X c= A
+        by Def8,ORDINAL1:10;
+      hence thesis;
+     end;
+   assume the_rank_of X in A;
+    then succ the_rank_of X c= A & X c= Rank the_rank_of X by Def8,ORDINAL1:33
+;
+    then X in Rank succ the_rank_of X & Rank succ the_rank_of X c= Rank A by
+Th36,Th43;
+   hence thesis;
+  end;
+
+theorem
+   X c= Y implies the_rank_of X c= the_rank_of Y
+  proof assume
+A1:  X c= Y;
+      Y c= Rank the_rank_of Y by Def8;
+    then X c= Rank the_rank_of Y by A1,XBOOLE_1:1;
+   hence thesis by Def8;
+  end;
+
+theorem
+ Th76: X in Y implies the_rank_of X in the_rank_of Y
+  proof assume
+A1:  X in Y;
+      Y c= Rank the_rank_of Y by Def8; hence thesis by A1,Th74;
+  end;
+
+theorem
+ Th77: the_rank_of X c= A iff for Y st Y in X holds the_rank_of Y in A
+  proof
+   set R = the_rank_of X;
+A1:  X c= Rank R & for B st X c= Rank B holds R c= B by Def8;
+   thus the_rank_of X c= A implies for Y st Y in X holds the_rank_of Y in A
+     proof assume
+A2:     the_rank_of X c= A;
+      let Y; assume Y in X;
+       then Y in Rank R & Rank R c= Rank A by A1,A2,Th43;
+      hence the_rank_of Y in A by Th74;
+     end;
+   assume
+A3:  for Y st Y in X holds the_rank_of Y in A;
+      X c= Rank A
+     proof let x;
+      assume x in X;
+       then the_rank_of x in A by A3;
+      hence x in Rank A by Th74;
+     end;
+   hence thesis by Def8;
+  end;
+
+theorem
+ Th78: A c= the_rank_of X iff for B st B in A ex Y st Y in
+ X & B c= the_rank_of Y
+  proof
+   thus A c= the_rank_of X implies
+      for B st B in A ex Y st Y in X & B c= the_rank_of Y
+     proof assume
+A1:     A c= the_rank_of X;
+      let B; assume B in A;
+       then not the_rank_of X c= B by A1,ORDINAL1:7;
+       then not X c= Rank B by Def8;
+then A2:     X \ Rank B <> {} by XBOOLE_1:37;
+      consider x being Element of X \ Rank B;
+      take x;
+A3:     x in X & not x in Rank B by A2,XBOOLE_0:def 4;
+      thus x in X by A2,XBOOLE_0:def 4;
+         not the_rank_of x in B by A3,Th74;
+      hence thesis by ORDINAL1:26;
+     end;
+   assume
+A4:  for B st B in A ex Y st Y in X & B c= the_rank_of Y;
+   let x; assume
+A5:  x in A;
+   then reconsider x as Ordinal by ORDINAL1:23;
+   consider Y such that
+A6:  Y in X & x c= the_rank_of Y by A4,A5;
+      the_rank_of Y in the_rank_of X by A6,Th76;
+   hence thesis by A6,ORDINAL1:22;
+  end;
+
+theorem
+   the_rank_of X = {} iff X = {}
+  proof
+   thus the_rank_of X = {} implies X = {}
+     proof assume the_rank_of X = {};
+       then X c= Rank {} & Rank {} = {} by Def8,Lm2;
+      hence X = {} by XBOOLE_1:3;
+     end;
+   assume
+    X = {};
+    then for Y st Y in X holds the_rank_of Y in {};
+   hence the_rank_of X c= {} by Th77;
+   thus {} c= the_rank_of X by XBOOLE_1:2;
+  end;
+
+theorem
+ Th80: the_rank_of X = succ A implies ex Y st Y in X & the_rank_of Y = A
+  proof assume
+A1:  the_rank_of X = succ A;
+    then A in succ A & succ A c= the_rank_of X by ORDINAL1:10;
+   then consider Y such that
+A2:  Y in X & A c= the_rank_of Y by Th78;
+   take Y;
+      the_rank_of Y in the_rank_of X by A2,Th76;
+    then the_rank_of Y c= A by A1,ORDINAL1:34;
+   hence thesis by A2,XBOOLE_0:def 10;
+  end;
+
+theorem
+   the_rank_of A = A
+  proof A c= Rank A by Th44;
+   hence the_rank_of A c= A by Th73;
+     defpred P[Ordinal] means $1 c= the_rank_of $1;
+A1:  for A st for B st B in A holds P[B] holds P[A]
+     proof let A such that
+A2:     for B st B in A holds B c= the_rank_of B;
+         now let B such that
+A3:       B in A;
+        reconsider Y = B as set;
+        take Y; thus Y in A & B c= the_rank_of Y by A2,A3;
+       end;
+      hence thesis by Th78;
+     end;
+     P[B] from Transfinite_Ind(A1);
+   hence thesis;
+  end;
+
+theorem
+    the_rank_of Tarski-Class X <> {} &
+   the_rank_of Tarski-Class X is_limit_ordinal
+  proof
+A1:  Tarski-Class X c= Rank the_rank_of Tarski-Class X &
+     for A st Tarski-Class X c= Rank A holds the_rank_of Tarski-Class X c= A
+      by Def8;
+   thus the_rank_of Tarski-Class X <> {}
+     proof assume the_rank_of Tarski-Class X = {};
+       then Tarski-Class X c= {} by Def8,Lm2;
+      hence contradiction by XBOOLE_1:3;
+     end;
+   assume not thesis;
+   then consider A such that
+A2:  the_rank_of Tarski-Class X = succ A by ORDINAL1:42;
+   consider Y such that
+A3:  Y in Tarski-Class X & the_rank_of Y = A by A2,Th80;
+A4:    bool Y in Tarski-Class X & the_rank_of bool Y = succ A
+     by A3,Th7,Th71;
+    then bool Y c= Rank A by A1,A2,Th36;
+    then succ A c= A by A4,Def8;
+    then A in A by ORDINAL1:33;
+   hence contradiction;
+  end;

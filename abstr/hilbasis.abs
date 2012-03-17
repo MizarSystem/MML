@@ -1,0 +1,321 @@
+:: Hilbert Basis Theorem
+::  by Jonathan Backer and Piotr Rudnicki
+::
+:: Received November 27, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, FUNCT_1, RELAT_1, BOOLE, POLYNOM1, FUNCOP_1, FINSEQ_4,
+      SEQM_3, PBOOLE, ARYTM_3, ARYTM_1, FUNCT_4, CAT_1, ORDINAL1, FINSET_1,
+      TRIANG_1, ORDERS_2, ALGSEQ_1, GROUP_1, REALSET1, VECTSP_1, POLYNOM2,
+      RLVECT_1, LATTICES, NORMSP_1, POLYNOM3, SQUARE_1, FILTER_2, PRE_TOPC,
+      QUOFIELD, GRCAT_1, IDEAL_1, COHSP_1, PRELAMB, MCART_1, ENDALG, SUBSET_1,
+      BINOP_1, VECTSP_2, CARD_1, TARSKI, DTCONSTR, FUNCT_2, GR_CY_1, HILBASIS;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CQC_SIM1, SEQM_3, PBOOLE,
+      CQC_LANG, RELAT_1, FINSET_1, FUNCT_1, FINSEQ_1, VECTSP_1, DTCONSTR,
+      NORMSP_1, NUMBERS, XCMPLX_0, XREAL_0, NAT_1, RELSET_1, RLVECT_1, FUNCT_2,
+      FUNCT_4, BINOP_1, GR_CY_1, PRE_CIRC, MCART_1, FINSEQOP, FINSEQ_2,
+      FINSEQ_4, CARD_1, POLYNOM1, POLYNOM2, POLYNOM3, STRUCT_0, PRE_TOPC,
+      GROUP_1, ALGSEQ_1, BINARITH, BORSUK_1, VECTSP_2, IDEAL_1, TOPS_2, ENDALG,
+      GRCAT_1, REALSET1, ORDINAL1, MATRLIN, WSIERP_1, TOPREAL1, TRIANG_1,
+      ORDERS_2, QUOFIELD;
+ constructors ORDERS_2, TRIANG_1, WAYBEL_1, TOPREAL1, CQC_SIM1, MONOID_0,
+      PRE_CIRC, FINSEQOP, POLYNOM3, REAL_1, BINARITH, POLYNOM2, ALGSEQ_1,
+      FINSOP_1, GRCAT_1, BORSUK_1, IDEAL_1, TOPS_2, ENDALG, QUOFIELD, RFUNCT_3,
+      WSIERP_1;
+ clusters CARD_5, RELSET_1, FINSET_1, SUBSET_1, VECTSP_2, STRUCT_0, FUNCT_1,
+      XBOOLE_0, FINSEQ_5, POLYNOM1, POLYNOM2, POLYNOM3, FUNCT_7, INT_1,
+      WAYBEL_2, BINOM, ORDINAL1, CARD_1, IDEAL_1, GOBRD13, GCD_1, MONOID_0,
+      VECTSP_1, XREAL_0, MEMBERED, RELAT_1, PRE_CIRC, NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Preliminaries
+
+theorem :: HILBASIS:1
+for A,B being FinSequence, f being Function
+ st rng A \/ rng B c= dom f
+  ex fA, fB being FinSequence st fA = f*A & fB = f*B & f*(A^B) = fA^fB;
+
+theorem :: HILBASIS:2
+for b being bag of 0 holds decomp b = <* <* {}, {} *> *>;
+
+theorem :: HILBASIS:3
+for i,j being Nat, b being bag of j st i <= j holds (b|i) is Element of Bags i;
+
+theorem :: HILBASIS:4
+for i, j being set, b1, b2 being bag of j, b1',b2' being bag of i
+ st b1' = (b1|i) & b2' = (b2|i) & b1 divides b2 holds b1' divides b2';
+
+theorem :: HILBASIS:5
+for i,j be set, b1, b2 being bag of j, b1', b2' being bag of i
+ st b1'=(b1|i) & b2'=(b2|i) holds (b1-' b2)|i = b1'-' b2' & (b1+b2)|i = b1'+b2'
+;
+
+definition
+let n,k be Nat, b be bag of n;
+func b bag_extend k -> Element of Bags (n+1) means
+:: HILBASIS:def 1
+     it|n = b & it.n = k;
+end;
+
+theorem :: HILBASIS:6
+for n being Nat holds EmptyBag (n+1) = (EmptyBag n) bag_extend 0;
+
+theorem :: HILBASIS:7
+for n be Ordinal, b, b1 be bag of n holds b1 in rng divisors b iff b1 divides b
+;
+
+definition
+let X be set, x be Element of X;
+func UnitBag x -> Element of Bags X equals
+:: HILBASIS:def 2
+ (EmptyBag X)+*(x, 1);
+end;
+
+theorem :: HILBASIS:8
+for X being non empty set, x being Element of X holds support UnitBag x = {x};
+
+theorem :: HILBASIS:9
+for X being non empty set, x being Element of X
+ holds (UnitBag x).x = 1 &
+       for y being Element of X st x <> y holds (UnitBag x).y = 0;
+
+theorem :: HILBASIS:10
+for X being non empty set, x1, x2 being Element of X
+ st UnitBag x1 = UnitBag x2 holds x1 = x2;
+
+theorem :: HILBASIS:11
+for X being non empty Ordinal, x be Element of X,
+    L being unital non trivial (non empty doubleLoopStr),
+    e being Function of X, L
+holds eval(UnitBag x, e) = e.x;
+
+definition
+let X be set, x be Element of X, L be unital (non empty multLoopStr_0);
+func 1_1(x,L) -> Series of X, L equals
+:: HILBASIS:def 3
+  0_(X,L)+*(UnitBag x,1.L);
+end;
+
+theorem :: HILBASIS:12
+for X being set, L being unital non trivial (non empty doubleLoopStr),
+    x be Element of X
+ holds 1_1(x,L).UnitBag x = 1.L &
+       for b being bag of X st b <> UnitBag x holds 1_1(x,L).b = 0.L;
+
+theorem :: HILBASIS:13
+for X being set, x being Element of X,
+    L being add-associative right_zeroed right_complementable
+            unital right-distributive non trivial (non empty doubleLoopStr)
+ holds Support 1_1(x,L) = {UnitBag x};
+
+definition
+let X be Ordinal, x be Element of X,
+    L be add-associative right_zeroed right_complementable
+         unital right-distributive non trivial (non empty doubleLoopStr);
+cluster 1_1(x,L) -> finite-Support;
+end;
+
+theorem :: HILBASIS:14
+for L being add-associative right_zeroed right_complementable
+            unital right-distributive non trivial (non empty doubleLoopStr),
+    X being non empty set, x1, x2 being Element of X
+  st 1_1(x1,L) = 1_1(x2,L) holds x1 = x2;
+
+theorem :: HILBASIS:15
+for L being add-associative right_zeroed right_complementable distributive
+            (non empty doubleLoopStr),
+    x being Element of Polynom-Ring L, p be sequence of L
+ st x = p holds -x = -p;
+
+theorem :: HILBASIS:16
+for L being add-associative right_zeroed right_complementable distributive
+            (non empty doubleLoopStr),
+    x, y being Element of Polynom-Ring L, p, q be sequence of L
+ st x = p & y = q holds x-y = p-q;
+
+definition
+let L be right_zeroed add-associative right_complementable
+         unital distributive (non empty doubleLoopStr);
+let I be non empty Subset of Polynom-Ring L;
+func minlen(I) -> non empty Subset of I equals
+:: HILBASIS:def 4
+{ x where x is Element of I : for x',y' being Polynomial of L
+                               st x'=x & y' in I holds len x' <= len y' };
+end;
+
+theorem :: HILBASIS:17
+for L be right_zeroed add-associative right_complementable
+         unital distributive (non empty doubleLoopStr),
+    I be non empty Subset of Polynom-Ring L,
+    i1, i2 be Polynomial of L
+ st i1 in minlen(I) & i2 in I holds i1 in I & len i1 <= len i2;
+
+definition
+let L be right_zeroed add-associative right_complementable
+         unital distributive (non empty doubleLoopStr),
+    n be Nat, a be Element of L;
+func monomial(a,n) -> Polynomial of L means
+:: HILBASIS:def 5
+for x being Nat holds (x = n implies it.x = a) & (x <> n implies it.x = 0.L);
+end;
+
+theorem :: HILBASIS:18
+for L be right_zeroed add-associative right_complementable
+           unital distributive (non empty doubleLoopStr),
+    n be Nat, a be Element of L
+holds (a <> 0.L implies len monomial(a,n) = n+1) &
+      (a = 0.L implies len monomial(a,n) = 0) & len monomial (a,n) <= n+1;
+
+theorem :: HILBASIS:19
+for L be right_zeroed add-associative right_complementable
+         unital distributive (non empty doubleLoopStr),
+    n, x be Nat, a be Element of L, p be Polynomial of L
+  holds (monomial(a,n)*'p).(x+n) = a * (p.x);
+
+theorem :: HILBASIS:20
+for L be right_zeroed add-associative right_complementable
+         unital distributive (non empty doubleLoopStr),
+    n, x be Nat, a be Element of L, p be Polynomial of L
+  holds (p*'monomial(a,n)).(x+n) = (p.x) * a;
+
+theorem :: HILBASIS:21
+for L be right_zeroed add-associative right_complementable
+         unital distributive (non empty doubleLoopStr), p, q be Polynomial of L
+  holds len (p*'q) <= (len p)+(len q)-'1;
+
+begin :: On Ring isomorphism
+
+theorem :: HILBASIS:22
+for R,S being non empty doubleLoopStr, I being Ideal of R, P being map of R,S
+  st P is RingIsomorphism holds P.:I is Ideal of S;
+
+theorem :: HILBASIS:23   :: from quofield
+for R,S being add-associative right_zeroed right_complementable
+              (non empty doubleLoopStr), f being map of R, S
+  st f is RingHomomorphism holds f.(0.R) = 0.S;
+
+theorem :: HILBASIS:24
+for R, S being add-associative right_zeroed right_complementable
+                 (non empty doubleLoopStr),
+    F being non empty Subset of R,
+    G being non empty Subset of S, P being map of R, S,
+    lc being LinearCombination of F, LC being LinearCombination of G,
+    E being FinSequence of
+                       [:the carrier of R, the carrier of R, the carrier of R:]
+   st P is RingHomomorphism & len lc = len LC & E represents lc &
+       (for i being set st i in dom LC
+          holds LC.i = (P.(E/.i)`1)*(P.(E/.i)`2)*(P.(E/.i)`3))
+    holds P.(Sum lc) = Sum LC;
+
+theorem :: HILBASIS:25   :: reformulated QUOFIELD:def 26 proof of symmetry
+for R, S be non empty doubleLoopStr, P be map of R, S
+ st P is RingIsomorphism
+  holds ex P1 being map of S,R st P1 is RingIsomorphism & P1=P";
+
+theorem :: HILBASIS:26
+for R,S being Abelian add-associative right_zeroed right_complementable
+              associative distributive well-unital (non empty doubleLoopStr),
+    F being non empty Subset of R, P being map of R,S
+ st P is RingIsomorphism holds P.:(F-Ideal) = (P.:F)-Ideal;
+
+theorem :: HILBASIS:27
+for R,S being Abelian add-associative right_zeroed right_complementable
+              associative distributive well-unital (non empty doubleLoopStr),
+    P being map of R,S
+st P is RingIsomorphism & R is Noetherian holds S is Noetherian;
+
+theorem :: HILBASIS:28
+for R being add-associative right_zeroed right_complementable associative
+            distributive well-unital non trivial (non empty doubleLoopStr)
+  holds ex P being map of R, Polynom-Ring (0,R) st P is RingIsomorphism;
+
+theorem :: HILBASIS:29
+for R being right_zeroed add-associative right_complementable
+            unital distributive non trivial (non empty doubleLoopStr),
+    n being Nat, b being bag of n, p1 being Polynomial of n, R,
+    F being FinSequence of the carrier of Polynom-Ring (n,R)
+ st p1 = Sum F
+   ex g being Function of the carrier of Polynom-Ring (n, R), the carrier of R
+    st (for p being Polynomial of n, R holds g.p = p.b) & p1.b = Sum (g*F);
+
+definition
+let R be Abelian add-associative right_zeroed right_complementable
+         associative distributive well-unital commutative non trivial
+         (non empty doubleLoopStr), n be Nat;
+func upm (n,R) -> map of Polynom-Ring (Polynom-Ring(n,R)), Polynom-Ring(n+1,R)
+     means
+:: HILBASIS:def 6
+for p1 being (Polynomial of Polynom-Ring (n,R)), p2 being (Polynomial of n, R),
+    p3 being (Polynomial of (n+1), R), b being bag of n+1
+  st p3 = it.p1 & p2 = p1.(b.n) holds p3.b = p2.(b|n);
+end;
+
+definition
+  let R be Abelian add-associative right_zeroed right_complementable
+           associative distributive well-unital commutative non trivial
+           (non empty doubleLoopStr), n be Nat;
+  cluster upm (n,R) -> additive;
+  cluster upm (n,R) -> multiplicative;
+  cluster upm (n,R) -> unity-preserving;
+  cluster upm (n,R) -> one-to-one;
+end;
+
+definition
+let R be Abelian add-associative right_zeroed right_complementable
+         associative distributive well-unital commutative non trivial
+         (non empty doubleLoopStr), n be Nat;
+func mpu (n,R) -> map of Polynom-Ring (n+1,R), Polynom-Ring Polynom-Ring(n,R)
+     means
+:: HILBASIS:def 7
+for p1 being (Polynomial of n+1,R), p2 being (Polynomial of n, R),
+    p3 being (Polynomial of Polynom-Ring (n, R)), i being Nat, b being bag of n
+ st p3 = it.p1 & p2 = p3.i holds p2.b = p1.(b bag_extend i); end;
+
+theorem :: HILBASIS:30
+for R being Abelian add-associative right_zeroed right_complementable
+            associative distributive well-unital commutative non trivial
+            (non empty doubleLoopStr),
+    n being Nat, p being Element of Polynom-Ring (n+1,R)
+  holds upm(n,R).(mpu(n,R).p) = p;
+
+theorem :: HILBASIS:31
+for R being Abelian add-associative right_zeroed right_complementable
+            associative distributive well-unital commutative non trivial
+            (non empty doubleLoopStr), n being Nat
+  ex P being map of Polynom-Ring (Polynom-Ring(n,R)),Polynom-Ring(n+1,R)
+   st P is RingIsomorphism;
+
+begin :: Hilbert basis theorem
+
+definition :: Hilbert Basis Theorem
+let R be Noetherian Abelian add-associative right_zeroed right_complementable
+         associative distributive well-unital commutative
+         (non empty doubleLoopStr);
+ cluster Polynom-Ring R -> Noetherian;
+end;
+
+canceled;
+
+theorem :: HILBASIS:33
+for R being Abelian add-associative right_zeroed right_complementable
+            associative distributive well-unital non trivial commutative
+            (non empty doubleLoopStr)
+ st R is Noetherian
+  for n being Nat holds Polynom-Ring (n,R) is Noetherian;
+
+theorem :: HILBASIS:34
+for F being Field holds F is Noetherian;
+
+theorem :: HILBASIS:35
+    for F being Field, n being Nat holds Polynom-Ring (n,F) is Noetherian;
+
+theorem :: HILBASIS:36
+  for R being Abelian right_zeroed add-associative right_complementable
+            well-unital distributive associative commutative
+            non trivial (non empty doubleLoopStr),
+    X be infinite Ordinal
+  holds Polynom-Ring (X,R) is non Noetherian;
+

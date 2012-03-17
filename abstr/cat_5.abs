@@ -1,0 +1,465 @@
+:: Categorial Categories and Slice Categories
+::  by Grzegorz Bancerek
+::
+:: Received October 24, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary COMMACAT, MCART_1, CAT_1, RELAT_1, FUNCT_1, PARTFUN1, CAT_2, BOOLE,
+      GROUP_6, TARSKI, SETFAM_1, GRCAT_1, FRAENKEL, FUNCT_3, CAT_5;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, MCART_1, DOMAIN_1,
+      RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, FRAENKEL, PARTFUN1, CAT_1, CAT_2,
+      COMMACAT;
+ constructors NATTRA_1, SETFAM_1, DOMAIN_1, COMMACAT, PARTFUN1, XBOOLE_0;
+ clusters FRAENKEL, CAT_1, CAT_2, FUNCT_1, RELSET_1, SUBSET_1, XBOOLE_0,
+      ZFMISC_1;
+ requirements SUBSET, BOOLE;
+
+
+begin :: Categories with Triple-like Morphisms
+
+definition let D1,D2,D be non empty set;
+ let x be Element of [:[:D1,D2:],D:];
+ redefine func x`11 -> Element of D1;
+ redefine func x`12 -> Element of D2;
+end;
+
+definition let D1,D2 be non empty set;
+ let x be Element of [:D1,D2:];
+ redefine func x`2 -> Element of D2;
+end;
+
+theorem :: CAT_5:1
+ for C,D being CatStr st the CatStr of C = the CatStr of D holds
+   C is Category-like implies D is Category-like;
+
+definition let IT be CatStr;
+ attr IT is with_triple-like_morphisms means
+:: CAT_5:def 1
+  for f being Morphism of IT ex x being set st f = [[dom f, cod f], x];
+end;
+
+definition
+ cluster with_triple-like_morphisms (strict Category);
+end;
+
+theorem :: CAT_5:2
+ for C being with_triple-like_morphisms CatStr, f being Morphism of C holds
+  dom f = f`11 & cod f = f`12 & f = [[dom f, cod f], f`2];
+
+definition
+ let C be with_triple-like_morphisms CatStr;
+ let f be Morphism of C;
+ redefine func f`11 -> Object of C;
+ redefine func f`12 -> Object of C;
+end;
+
+scheme CatEx
+ { A, B() -> non empty set, P[set, set, set], F(set,set) -> set }:
+ ex C being with_triple-like_morphisms strict Category st
+  the Objects of C = A() &
+  (for a,b being Element of A(), f being Element of B() st
+    P[a,b,f] holds [[a,b],f] is Morphism of C) &
+  (for m being Morphism of C
+    ex a,b being Element of A(), f being Element of B() st
+     m = [[a,b],f] & P[a,b,f]) &
+   for m1,m2 being (Morphism of C), a1,a2,a3 being Element of A(),
+    f1,f2 being Element of B() st m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
+    holds m2*m1 = [[a1,a3], F(f2,f1)]
+ provided
+  for a,b,c being Element of A(), f,g being Element of B() st
+      P[a,b,f] & P[b,c,g] holds F(g,f) in B() & P[a,c,F(g,f)] and
+  for a being Element of A() ex f being Element of B() st P[a,a,f] &
+     for b being Element of A(), g being Element of B() holds
+      (P[a,b,g] implies F(g,f) = g) & (P[b,a,g] implies F(f,g) = g) and
+  for a,b,c,d being Element of A(), f,g,h being Element of B() st
+      P[a,b,f] & P[b,c,g] & P[c,d,h] holds F(h, F(g,f)) = F(F(h,g), f);
+
+scheme CatUniq
+ { A, B() -> non empty set, P[set, set, set], F(set,set) -> set }:
+for C1, C2 being strict with_triple-like_morphisms Category st
+  the Objects of C1 = A() &
+  (for a,b being Element of A(), f being Element of B() st
+    P[a,b,f] holds [[a,b],f] is Morphism of C1) &
+  (for m being Morphism of C1
+    ex a,b being Element of A(), f being Element of B() st
+     m = [[a,b],f] & P[a,b,f]) &
+  (for m1,m2 being (Morphism of C1), a1,a2,a3 being Element of A(),
+    f1,f2 being Element of B() st m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
+    holds m2*m1 = [[a1,a3], F(f2,f1)]) &
+  the Objects of C2 = A() &
+  (for a,b being Element of A(), f being Element of B() st
+    P[a,b,f] holds [[a,b],f] is Morphism of C2) &
+  (for m being Morphism of C2
+    ex a,b being Element of A(), f being Element of B() st
+     m = [[a,b],f] & P[a,b,f]) &
+   for m1,m2 being (Morphism of C2), a1,a2,a3 being Element of A(),
+    f1,f2 being Element of B() st m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
+    holds m2*m1 = [[a1,a3], F(f2,f1)]
+ holds C1 = C2
+ provided
+  for a being Element of A() ex f being Element of B() st P[a,a,f] &
+     for b being Element of A(), g being Element of B() holds
+      (P[a,b,g] implies F(g,f) = g) & (P[b,a,g] implies F(f,g) = g);
+
+scheme FunctorEx
+ { A,B() -> Category,
+   O(set) -> Object of B(),
+   F(set) -> set }:
+ ex F being Functor of A(),B() st
+  for f being Morphism of A() holds F.f = F(f)
+ provided
+  for f being Morphism of A() holds F(f) is Morphism of B() &
+      for g being Morphism of B() st g = F(f) holds
+        dom g = O(dom f) & cod g = O(cod f) and
+  for a being Object of A() holds F(id a) = id O(a) and
+  for f1,f2 being Morphism of A() for g1,g2 being Morphism of B() st
+      g1 = F(f1) & g2 = F(f2) & dom f2 = cod f1 holds F(f2*f1) = g2*g1;
+
+theorem :: CAT_5:3
+ for C1 being Category, C2 being Subcategory of C1 st C1 is Subcategory of C2
+  holds the CatStr of C1 = the CatStr of C2;
+
+theorem :: CAT_5:4
+ for C being Category, D being Subcategory of C, E being Subcategory of D
+  holds E is Subcategory of C;
+
+definition
+ let C1,C2 be Category;
+ given C being Category such that
+ C1 is Subcategory of C & C2 is Subcategory of C;
+ given o1 being Object of C1 such that
+ o1 is Object of C2;
+ func C1 /\ C2 -> strict Category means
+:: CAT_5:def 2
+
+  the Objects of it = (the Objects of C1) /\ the Objects of C2 &
+  the Morphisms of it = (the Morphisms of C1) /\ the Morphisms of C2 &
+  the Dom of it = (the Dom of C1)|the Morphisms of C2 &
+  the Cod of it = (the Cod of C1)|the Morphisms of C2 &
+  the Comp of it =
+    (the Comp of C1)|([:the Morphisms of C2,the Morphisms of C2:]) &
+  the Id of it = (the Id of C1)|the Objects of C2;
+end;
+
+reserve C for Category, C1,C2 for Subcategory of C;
+
+theorem :: CAT_5:5
+ the Objects of C1 meets the Objects of C2 implies C1 /\ C2 = C2 /\ C1;
+
+theorem :: CAT_5:6
+ the Objects of C1 meets the Objects of C2 implies
+  C1 /\ C2 is Subcategory of C1 & C1 /\ C2 is Subcategory of C2;
+
+definition let C,D be Category;
+ let F be Functor of C,D;
+ func Image F -> strict Subcategory of D means
+:: CAT_5:def 3
+  the Objects of it = rng Obj F & rng F c= the Morphisms of it &
+  for E being Subcategory of D st
+    the Objects of E = rng Obj F & rng F c= the Morphisms of E
+   holds it is Subcategory of E;
+end;
+
+theorem :: CAT_5:7
+ for C,D being Category, E be Subcategory of D, F being Functor of C,D st
+  rng F c= the Morphisms of E holds F is Functor of C, E;
+
+theorem :: CAT_5:8
+   for C,D being Category, F being Functor of C,D holds
+  F is Functor of C, Image F;
+
+theorem :: CAT_5:9
+ for C,D being Category, E being Subcategory of D, F being Functor of C,E
+ for G being Functor of C,D st F = G holds Image F = Image G;
+
+begin :: Categorial Categories
+
+definition let IT be set;
+ attr IT is categorial means
+:: CAT_5:def 4
+  for x being set st x in IT holds x is Category;
+end;
+
+definition
+ cluster categorial (non empty set);
+ let X be non empty set;
+ redefine attr X is categorial means
+:: CAT_5:def 5
+
+  for x being Element of X holds x is Category;
+end;
+
+definition let X be non empty categorial set;
+ redefine mode Element of X -> Category;
+end;
+
+definition let C be Category;
+ attr C is Categorial means
+:: CAT_5:def 6
+  the Objects of C is categorial &
+  (for a being Object of C, A being Category st a = A holds
+    id a = [[A,A], id A]) &
+  (for m being Morphism of C
+    for A,B being Category st A = dom m & B = cod m
+     ex F being Functor of A,B st m = [[A,B], F]) &
+   for m1,m2 being Morphism of C
+    for A,B,C being Category
+     for F being Functor of A,B
+      for G being Functor of B,C st m1 = [[A,B],F] & m2 = [[B,C],G]
+      holds m2*m1 = [[A,C],G*F];
+end;
+
+definition
+ cluster Categorial -> with_triple-like_morphisms Category;
+end;
+
+theorem :: CAT_5:10
+ for C,D being Category st the CatStr of C = the CatStr of D holds
+   C is Categorial implies D is Categorial;
+
+theorem :: CAT_5:11
+ for C being Category holds 1Cat(C, [[C,C], id C]) is Categorial;
+
+definition
+ cluster Categorial (strict Category);
+end;
+
+theorem :: CAT_5:12
+ for C being Categorial Category, a being Object of C holds a is Category;
+
+theorem :: CAT_5:13
+ for C being Categorial Category, f being Morphism of C holds
+  dom f = f`11 & cod f = f`12;
+
+definition let C be Categorial Category;
+ let m be Morphism of C;
+ redefine func m`11 -> Category;
+ redefine func m`12 -> Category;
+end;
+
+theorem :: CAT_5:14
+ for C1, C2 being Categorial Category st
+   the Objects of C1 = the Objects of C2 &
+   the Morphisms of C1 = the Morphisms of C2
+  holds the CatStr of C1 = the CatStr of C2;
+
+definition let C be Categorial Category;
+ cluster -> Categorial Subcategory of C;
+end;
+
+theorem :: CAT_5:15
+ for C,D being Categorial Category st the Morphisms of C c= the Morphisms of D
+  holds C is Subcategory of D;
+
+definition
+ let a be set such that
+   a is Category;
+ func cat a -> Category equals
+:: CAT_5:def 7
+
+   a;
+end;
+
+theorem :: CAT_5:16
+ for C being Categorial Category, c being Object of C holds cat c = c;
+
+definition let C be Categorial Category;
+ let m be Morphism of C;
+ redefine func m`2 -> Functor of cat dom m, cat cod m;
+end;
+
+theorem :: CAT_5:17
+ for X being categorial non empty set, Y being non empty set st
+   (for A,B,C being Element of X
+     for F being Functor of A,B, G being Functor of B,C st
+      F in Y & G in Y holds G*F in Y) &
+   (for A being Element of X holds id A in Y)
+ ex C being strict Categorial Category st
+  the Objects of C = X &
+  for A,B being Element of X, F being Functor of A,B holds
+   [[A,B],F] is Morphism of C iff F in Y;
+
+theorem :: CAT_5:18
+ for X being categorial non empty set, Y being non empty set
+ for C1, C2 being strict Categorial Category st
+  the Objects of C1 = X &
+  (for A,B being Element of X, F being Functor of A,B holds
+   [[A,B],F] is Morphism of C1 iff F in Y) &
+  the Objects of C2 = X &
+  (for A,B being Element of X, F being Functor of A,B holds
+   [[A,B],F] is Morphism of C2 iff F in Y)
+ holds C1 = C2;
+
+definition let IT be Categorial Category;
+ attr IT is full means
+:: CAT_5:def 8
+
+  for a,b being Category st a is Object of IT & b is Object of IT
+   for F being Functor of a, b holds [[a,b],F] is Morphism of IT;
+end;
+
+definition
+ cluster full (Categorial strict Category);
+end;
+
+theorem :: CAT_5:19
+   for C1,C2 being full (Categorial Category) st
+  the Objects of C1 = the Objects of C2 holds
+  the CatStr of C1 = the CatStr of C2;
+
+theorem :: CAT_5:20
+ for A being categorial non empty set
+  ex C being full (Categorial strict Category) st the Objects of C = A;
+
+theorem :: CAT_5:21
+ for C being Categorial Category, D being full (Categorial Category) st
+  the Objects of C c= the Objects of D holds C is Subcategory of D;
+
+theorem :: CAT_5:22
+   for C being Category, D1,D2 being Categorial Category
+ for F1 being Functor of C,D1 for F2 being Functor of C,D2 st
+  F1 = F2 holds Image F1 = Image F2;
+
+begin :: Slice category
+
+definition
+ let C be Category;
+ let o be Object of C;
+ func Hom o -> Subset of the Morphisms of C equals
+:: CAT_5:def 9
+
+   (the Cod of C)"{o};
+ func o Hom -> Subset of the Morphisms of C equals
+:: CAT_5:def 10
+
+   (the Dom of C)"{o};
+end;
+
+definition
+ let C be Category;
+ let o be Object of C;
+ cluster Hom o -> non empty;
+ cluster o Hom -> non empty;
+end;
+
+theorem :: CAT_5:23
+ for C being Category, a being Object of C, f being Morphism of C holds
+  f in Hom a iff cod f = a;
+
+theorem :: CAT_5:24
+ for C being Category, a being Object of C, f being Morphism of C holds
+  f in a Hom iff dom f = a;
+
+theorem :: CAT_5:25
+   for C being Category, a,b being Object of C holds
+  Hom(a,b) = (a Hom) /\ (Hom b);
+
+theorem :: CAT_5:26
+   for C being Category, f being Morphism of C holds
+  f in (dom f) Hom & f in Hom (cod f);
+
+theorem :: CAT_5:27
+ for C being Category, f being (Morphism of C),
+     g being Element of Hom dom f
+ holds f*g in Hom cod f;
+
+theorem :: CAT_5:28
+ for C being Category, f being (Morphism of C),
+     g being Element of (cod f) Hom
+ holds g*f in (dom f) Hom;
+
+definition
+ let C be Category, o be Object of C;
+
+ func C-SliceCat(o) -> strict with_triple-like_morphisms Category means
+:: CAT_5:def 11
+
+  the Objects of it = Hom o &
+  (for a,b being Element of Hom o, f being Morphism of C st
+    dom b = cod f & a = b*f holds [[a,b],f] is Morphism of it) &
+  (for m being Morphism of it
+    ex a,b being Element of Hom o, f being Morphism of C st
+     m = [[a,b],f] & dom b = cod f & a = b*f) &
+   for m1,m2 being (Morphism of it), a1,a2,a3 being Element of Hom o,
+    f1,f2 being Morphism of C st m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
+    holds m2*m1 = [[a1,a3], f2*f1];
+
+ func o-SliceCat(C) -> strict with_triple-like_morphisms Category means
+:: CAT_5:def 12
+
+  the Objects of it = o Hom &
+  (for a,b being Element of o Hom, f being Morphism of C st
+    dom f = cod a & f*a = b holds [[a,b],f] is Morphism of it) &
+  (for m being Morphism of it
+    ex a,b being Element of o Hom, f being Morphism of C st
+     m = [[a,b],f] & dom f = cod a & f*a = b) &
+   for m1,m2 being (Morphism of it), a1,a2,a3 being Element of o Hom,
+    f1,f2 being Morphism of C st m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
+    holds m2*m1 = [[a1,a3], f2*f1];
+end;
+
+definition
+ let C be Category;
+ let o be Object of C;
+ let m be Morphism of C-SliceCat(o);
+ redefine func m`2 -> Morphism of C;
+ redefine func m`11 -> Element of Hom o;
+ redefine func m`12 -> Element of Hom o;
+end;
+
+theorem :: CAT_5:29
+ for C being Category, a being Object of C, m being Morphism of C-SliceCat a
+ holds m = [[m`11,m`12],m`2] & dom m`12 = cod m`2 & m`11 = m`12*m`2 &
+   dom m = m`11 & cod m = m`12;
+
+theorem :: CAT_5:30
+ for C being Category, o being Object of C, f being Element of Hom o
+ for a being Object of C-SliceCat o st a = f holds
+  id a = [[a,a], id dom f];
+
+definition
+ let C be Category;
+ let o be Object of C;
+ let m be Morphism of o-SliceCat(C);
+ redefine func m`2 -> Morphism of C;
+ redefine func m`11 -> Element of o Hom;
+ redefine func m`12 -> Element of o Hom;
+end;
+
+theorem :: CAT_5:31
+ for C being Category, a being Object of C, m being Morphism of a-SliceCat C
+ holds m = [[m`11,m`12],m`2] & dom m`2 = cod m`11 & m`2*m`11 = m`12 &
+   dom m = m`11 & cod m = m`12;
+
+theorem :: CAT_5:32
+ for C being Category, o being Object of C, f being Element of o Hom
+ for a being Object of o-SliceCat C st a = f holds
+  id a = [[a,a], id cod f];
+
+begin :: Functors Between Slice Categories
+
+definition
+ let C be Category, f be Morphism of C;
+ func SliceFunctor f -> Functor of C-SliceCat dom f, C-SliceCat cod f means
+:: CAT_5:def 13
+
+  for m being Morphism of C-SliceCat dom f holds
+   it.m = [[f*m`11, f*m`12], m`2];
+ func SliceContraFunctor f ->
+      Functor of (cod f)-SliceCat C, (dom f)-SliceCat C means
+:: CAT_5:def 14
+
+  for m being Morphism of (cod f)-SliceCat C holds
+   it.m = [[m`11*f, m`12*f], m`2];
+end;
+
+theorem :: CAT_5:33
+   for C being Category, f,g being Morphism of C st dom g = cod f holds
+  SliceFunctor (g*f) = (SliceFunctor g)*(SliceFunctor f);
+
+theorem :: CAT_5:34
+   for C being Category, f,g being Morphism of C st dom g = cod f holds
+  SliceContraFunctor (g*f) = (SliceContraFunctor f)*(SliceContraFunctor g);
+

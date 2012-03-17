@@ -1,0 +1,278 @@
+:: The Topological Space ${\calE}^2_{\rm T}$.
+:: Arcs, Line Segments and Special Polygonal Arcs
+::  by Agata Darmochwa{\l} and Yatsuka Nakamura
+::
+:: Received November 21, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary EUCLID, METRIC_1, PCOMPS_1, BOOLE, FINSEQ_1, RELAT_1, FUNCT_1,
+      PRE_TOPC, BORSUK_1, TOPS_2, RCOMP_1, SUBSET_1, MCART_1, ARYTM_1, ARYTM_3,
+      CONNSP_2, TOPS_1, TOPMETR, COMPLEX1, ABSVALUE, ORDINAL2, COMPTS_1,
+      TARSKI, SETFAM_1, TOPREAL1, FINSEQ_4, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XREAL_0,
+      REAL_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, ABSVALUE, STRUCT_0, TOPS_1,
+      TOPS_2, CONNSP_2, COMPTS_1, RCOMP_1, FINSEQ_1, FINSEQ_4, METRIC_1,
+      TOPMETR, PCOMPS_1, EUCLID, PRE_TOPC;
+ constructors REAL_1, NAT_1, ABSVALUE, TOPS_1, TOPS_2, COMPTS_1, RCOMP_1,
+      EUCLID, TOPMETR, FINSEQ_4, INT_1, MEMBERED, XBOOLE_0, PRE_TOPC;
+ clusters SUBSET_1, FUNCT_1, PRE_TOPC, RELSET_1, STRUCT_0, EUCLID, BORSUK_1,
+      XREAL_0, METRIC_1, INT_1, TOPMETR, XBOOLE_0, NAT_1, MEMBERED, ZFMISC_1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+reserve r,y1,y2,lambda for Real, i,j,n for Nat;
+reserve a,m for natural number;
+
+:: PRELIMINARIES
+
+scheme Fraenkel_Alt {A() -> non empty set, P[set], Q[set]}:
+ {v where v is Element of A(): P[v] or Q[v]} =
+  {v1 where v1 is Element of A(): P[v1]} \/
+   {v2 where v2 is Element of A(): Q[v2]};
+
+reserve D for set, p for FinSequence of D;
+
+definition let D, p, m;
+ func p|m -> FinSequence of D equals
+:: TOPREAL1:def 1
+   p|Seg m;
+end;
+
+definition let D be set, f be FinSequence of D;
+ cluster f|0 -> empty;
+end;
+
+theorem :: TOPREAL1:1
+ a in dom(p|m) implies (p|m)/.a = p/.a;
+
+theorem :: TOPREAL1:2
+  len p <= m implies p|m = p;
+
+theorem :: TOPREAL1:3
+ m <= len p implies len(p|m) = m;
+
+definition let T be 1-sorted;
+ mode FinSequence of T is FinSequence of the carrier of T;
+end;
+
+:: PROPER TEXT
+
+reserve p,p1,p2,q1,q2 for Point of TOP-REAL 2,
+        P, P1 for Subset of TOP-REAL 2;
+
+ definition let n;
+    let p1, p2 be Point of TOP-REAL n,
+        P be Subset of TOP-REAL n;
+  pred P is_an_arc_of p1,p2 means
+:: TOPREAL1:def 2
+    ex f being map of I[01], (TOP-REAL n)|P st
+                     f is_homeomorphism & f.0 = p1 & f.1 = p2;
+ end;
+
+theorem :: TOPREAL1:4
+  for P being Subset of TOP-REAL n,
+      p1,p2 being Point of TOP-REAL n
+    st P is_an_arc_of p1,p2 holds p1 in P & p2 in P;
+
+theorem :: TOPREAL1:5
+  for P,Q being Subset of TOP-REAL n,
+  p1,p2,q1 being Point of TOP-REAL n
+   st P is_an_arc_of p1,p2 & Q is_an_arc_of p2,q1 & P /\ Q = {p2}
+   holds P \/ Q is_an_arc_of p1,q1;
+
+ definition
+  func R^2-unit_square -> Subset of TOP-REAL 2 equals
+:: TOPREAL1:def 3
+    { p : p`1 = 0 & p`2 <= 1 & p`2 >= 0 or
+                        p`1 <= 1 & p`1 >= 0 & p`2 = 1 or
+                        p`1 <= 1 & p`1 >= 0 & p`2 = 0 or
+                        p`1 = 1 & p`2 <= 1 & p`2 >= 0};
+ end;
+
+ definition let n; let p1,p2 be Point of TOP-REAL n;
+   func LSeg(p1,p2) -> Subset of TOP-REAL n equals
+:: TOPREAL1:def 4
+ { (1-lambda)*p1 + lambda*p2 : 0 <= lambda & lambda <= 1 };
+ end;
+
+definition let n; let p1,p2 be Point of TOP-REAL n;
+ cluster LSeg(p1,p2) -> non empty;
+end;
+
+theorem :: TOPREAL1:6
+  for p1,p2 being Point of TOP-REAL n holds p1 in LSeg(p1,p2) & p2 in
+ LSeg(p1,p2);
+
+theorem :: TOPREAL1:7
+  for p being Point of TOP-REAL n holds LSeg(p,p) = {p};
+
+theorem :: TOPREAL1:8
+  for p1,p2 being Point of TOP-REAL n holds LSeg(p1,p2) = LSeg(p2,p1);
+
+ definition let n; let p1,p2 be Point of TOP-REAL n;
+  redefine func LSeg(p1,p2); commutativity;
+ end;
+
+theorem :: TOPREAL1:9
+ p1`1 <= p2`1 & p in LSeg(p1,p2) implies p1`1 <= p`1 & p`1 <= p2`1;
+
+theorem :: TOPREAL1:10
+ p1`2 <= p2`2 & p in LSeg(p1,p2) implies p1`2 <= p`2 & p`2 <= p2`2;
+
+theorem :: TOPREAL1:11
+ for p,p1,p2 being Point of TOP-REAL n st p in LSeg(p1,p2)
+   holds LSeg(p1,p2) = LSeg(p1,p) \/ LSeg(p,p2);
+
+theorem :: TOPREAL1:12
+ for p1,p2,q1,q2 being Point of TOP-REAL n
+    st q1 in LSeg(p1,p2) & q2 in LSeg(p1,p2) holds LSeg(q1,q2) c= LSeg(p1,p2);
+
+theorem :: TOPREAL1:13
+   for p,q,p1,p2 being Point of TOP-REAL n st p in LSeg(p1,p2) & q in LSeg(p1,
+p2
+)
+  holds LSeg(p1,p2) = LSeg(p1,p) \/ LSeg(p,q) \/ LSeg(q,p2);
+
+theorem :: TOPREAL1:14
+   p in LSeg(p1,p2) implies LSeg(p1,p) /\ LSeg(p,p2) = {p};
+
+theorem :: TOPREAL1:15
+  for p1,p2 being Point of TOP-REAL n
+   st p1 <> p2 holds LSeg(p1,p2) is_an_arc_of p1,p2;
+
+theorem :: TOPREAL1:16
+  for P being Subset of TOP-REAL n,
+      p1,p2,q1 being Point of TOP-REAL n
+   st P is_an_arc_of p1,p2 & P /\ LSeg(p2,q1) = {p2}
+    holds P \/ LSeg(p2,q1) is_an_arc_of p1,q1;
+
+theorem :: TOPREAL1:17
+  for P being Subset of TOP-REAL n,
+      p1,p2,q1 being Point of TOP-REAL n
+   st P is_an_arc_of p2,p1 & LSeg(q1,p2) /\ P = {p2}
+    holds LSeg(q1,p2) \/ P is_an_arc_of q1,p1;
+
+theorem :: TOPREAL1:18
+    for p1,p2,q1 being Point of TOP-REAL n
+  st (p1 <> p2 or p2 <> q1) & LSeg(p1,p2) /\ LSeg(p2,q1) = {p2}
+   holds LSeg(p1,p2) \/ LSeg(p2,q1) is_an_arc_of p1,q1;
+
+theorem :: TOPREAL1:19
+   LSeg(|[ 0,0 ]|, |[ 0,1 ]|) = { p1 : p1`1 = 0 & p1`2 <= 1 & p1`2 >= 0}
+ & LSeg(|[ 0,1 ]|, |[ 1,1 ]|) = { p2 : p2`1 <= 1 & p2`1 >= 0 & p2`2 = 1}
+ & LSeg(|[ 0,0 ]|, |[ 1,0 ]|) = { q1 : q1`1 <= 1 & q1`1 >= 0 & q1`2 = 0}
+ & LSeg(|[ 1,0 ]|, |[ 1,1 ]|) = { q2 : q2`1 = 1 & q2`2 <= 1 & q2`2 >= 0};
+
+theorem :: TOPREAL1:20
+ R^2-unit_square = (LSeg(|[ 0,0 ]|, |[ 0,1 ]|) \/ LSeg(|[ 0,1 ]|, |[ 1,1 ]|))
+ \/ (LSeg(|[ 0,0 ]|, |[ 1,0 ]|) \/ LSeg(|[ 1,0 ]|, |[ 1,1 ]|));
+
+definition
+ cluster R^2-unit_square -> non empty;
+end;
+
+theorem :: TOPREAL1:21
+   LSeg(|[0,0]|,|[0,1]|) /\ LSeg(|[0,1]|,|[1,1]|) = {|[0,1]|};
+
+theorem :: TOPREAL1:22
+   LSeg(|[0,0]|,|[1,0]|) /\ LSeg(|[1,0]|,|[1,1]|) = {|[1,0]|};
+
+theorem :: TOPREAL1:23
+ LSeg(|[0,0]|,|[0,1]|) /\ LSeg(|[0,0]|,|[1,0]|) = {|[0,0]|};
+
+theorem :: TOPREAL1:24
+ LSeg(|[0,1]|,|[1,1]|) /\ LSeg(|[1,0]|,|[1,1]|) = {|[1,1]|};
+
+theorem :: TOPREAL1:25
+   LSeg(|[0,0]|,|[1,0]|) misses LSeg(|[0,1]|,|[1,1]|);
+
+theorem :: TOPREAL1:26
+ LSeg(|[0,0]|,|[0,1]|) misses LSeg(|[1,0]|,|[1,1]|);
+
+definition let n; let f be FinSequence of TOP-REAL n; let i;
+ func LSeg(f,i) -> Subset of TOP-REAL n equals
+:: TOPREAL1:def 5
+ LSeg(f/.i,f/.(i+1)) if 1 <= i & i+1 <= len f
+         otherwise {};
+end;
+
+theorem :: TOPREAL1:27
+ for f being FinSequence of TOP-REAL n st 1 <= i & i+1 <= len f
+  holds f/.i in LSeg(f,i) & f/.(i+1) in LSeg(f,i);
+
+definition let n; let f be FinSequence of TOP-REAL n;
+ func L~f -> Subset of TOP-REAL n equals
+:: TOPREAL1:def 6
+   union { LSeg(f,i) : 1 <= i & i+1 <= len f };
+end;
+
+theorem :: TOPREAL1:28
+ for f being FinSequence of TOP-REAL n
+  holds (len f = 0 or len f = 1) iff L~f = {};
+
+theorem :: TOPREAL1:29
+ for f being FinSequence of TOP-REAL n holds len f >= 2 implies L~f <> {};
+
+definition let IT be FinSequence of TOP-REAL 2;
+ attr IT is special means
+:: TOPREAL1:def 7
+    for i st 1 <= i & i+1 <= len IT holds
+    (IT/.i)`1 = (IT/.(i+1))`1 or (IT/.i)`2 = (IT/.(i+1))`2;
+ attr IT is unfolded means
+:: TOPREAL1:def 8
+  for i st 1 <= i & i + 2 <= len IT
+       holds LSeg(IT,i) /\ LSeg(IT,i+1) = {IT/.(i+1)};
+ attr IT is s.n.c. means
+:: TOPREAL1:def 9
+ for i,j st i+1 < j holds LSeg(IT,i) misses LSeg(IT,j);
+end;
+
+reserve f,f1,f2,h for FinSequence of TOP-REAL 2;
+
+definition let f;
+ attr f is being_S-Seq means
+:: TOPREAL1:def 10
+  f is one-to-one & len f >= 2 & f is unfolded s.n.c. special;
+  synonym f is_S-Seq;
+end;
+
+theorem :: TOPREAL1:30
+ ex f1,f2 st f1 is_S-Seq & f2 is_S-Seq & R^2-unit_square = L~f1 \/ L~f2 &
+  L~f1 /\ L~f2 = {|[ 0,0 ]|, |[ 1,1 ]|} & f1/.1 = |[0,0]| &
+  f1/.len f1=|[1,1]| & f2/.1 = |[0,0]| & f2/.len f2 = |[1,1]|;
+
+theorem :: TOPREAL1:31
+ h is_S-Seq implies L~h is_an_arc_of h/.1,h/.len h;
+
+ definition let P be Subset of TOP-REAL 2;
+  attr P is being_S-P_arc means
+:: TOPREAL1:def 11
+
+   ex f st f is_S-Seq & P = L~f;
+  synonym P is_S-P_arc;
+ end;
+
+theorem :: TOPREAL1:32
+P1 is_S-P_arc implies P1 <> {};
+
+ definition
+  cluster being_S-P_arc -> non empty Subset of TOP-REAL 2;
+ end;
+
+canceled;
+
+theorem :: TOPREAL1:34
+   ex P1, P2 being non empty Subset of TOP-REAL 2
+  st P1 is_S-P_arc & P2 is_S-P_arc & R^2-unit_square = P1 \/ P2 &
+   P1 /\ P2 = {|[ 0,0 ]|, |[ 1,1 ]|};
+
+theorem :: TOPREAL1:35
+P is_S-P_arc implies ex p1,p2 st P is_an_arc_of p1,p2;
+
+theorem :: TOPREAL1:36
+   P is_S-P_arc implies
+  ex f being map of I[01], (TOP-REAL 2)|P st f is_homeomorphism;

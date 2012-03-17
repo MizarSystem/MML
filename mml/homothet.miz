@@ -1,0 +1,1171 @@
+:: Homotheties and Shears in Affine Planes
+::  by Henryk Oryszczyszyn and Krzysztof Pra\.zmowski
+::
+:: Received September 21, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary DIRAF, FUNCT_2, AFF_2, ANALOAF, INCSP_1, AFF_1, TRANSGEO, FUNCT_1,
+      RELAT_1, HOMOTHET;
+ notation TARSKI, PARTFUN1, FUNCT_2, STRUCT_0, ANALOAF, DIRAF, AFF_1, AFF_2,
+      TRANSGEO;
+ constructors AFF_1, AFF_2, TRANSGEO, PARTFUN1, XBOOLE_0;
+ clusters STRUCT_0, ZFMISC_1, PARTFUN1, FUNCT_2, FUNCT_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ theorems TRANSGEO, AFF_1, AFF_2, TRANSLAC, SUBSET_1, DIRAF, FUNCT_1, XBOOLE_0;
+ schemes TRANSGEO;
+
+begin
+
+reserve AFP for AffinPlane;
+
+reserve a,a',b,b',c,c',d,d',o,p,p',q,q',r,s,t,x,y,z
+                        for Element of AFP;
+
+reserve A,A',C,D,P,B',M,N,K for Subset of AFP;
+
+reserve f for Permutation of the carrier of AFP;
+
+Lm1: AFP satisfies_DES iff
+ (for o,a,a',p,p',q,q' st LIN o,a,a' & LIN o,p,p' & LIN o,q,q' &
+   not LIN o,a,p & not LIN o,a,q & a,p // a',p' & a,q // a',q' holds
+                                                        p,q // p',q')
+ proof thus AFP satisfies_DES implies
+  (for o,a,a',p,p',q,q' st LIN o,a,a' & LIN o,p,p' & LIN o,q,q' &
+   not LIN o,a,p & not LIN o,a,q & a,p // a',p' & a,q // a',q' holds
+                                                        p,q // p',q')
+  proof assume A1: AFP satisfies_DES;
+   let o,a,a',p,p',q,q';
+   assume A2: LIN o,a,a' & LIN o,p,p' & LIN o,q,q' &
+    not LIN o,a,p & not LIN o,a,q & a,p // a',p' & a,q // a',q';
+   then A3: o<>a & o<>p & a<>p & o<>q & a<>q by AFF_1:16;
+   set A=Line(o,a), P=Line(o,p), C=Line(o,q);
+   A4: A is_line & P is_line & C is_line by A3,AFF_1:def 3;
+   A5: o in A & a in A & o in P & p in P & o in C & q in C by AFF_1:26;
+   then A6: a' in A & p' in P & q' in C by A2,A3,A4,AFF_1:39;
+   A7: A<>P by A2,A4,A5,AFF_1:33;
+      A<>C by A2,A4,A5,AFF_1:33;
+   hence p,q // p',q' by A1,A2,A3,A4,A5,A6,A7,AFF_2:def 4; end;
+  assume A8: for o,a,a',p,p',q,q' st LIN o,a,a' & LIN o,p,p' & LIN o,q,q' &
+   not LIN o,a,p & not LIN o,a,q & a,p // a',p' & a,q // a',q' holds
+                                                        p,q // p',q';
+    now let A,P,C,o,a,b,c,a',b',c';
+   assume A9: o in A & o in P & o in C &
+   o<>a & o<>b & o<>c & a in A & a' in A & b in P & b' in P &
+   c in C & c' in C & A is_line & P is_line & C is_line &
+   A<>P & A<>C & a,b // a',b' & a,c // a',c';
+   then A10: LIN o,a,a' & LIN o,b,b' & LIN o,c,c' by AFF_1:33;
+   A11: not LIN o,a,b proof assume LIN o,a,b; then b in A by A9,AFF_1:39;
+    hence contradiction by A9,AFF_1:30; end;
+      not LIN o,a,c proof assume LIN o,a,c; then c in A by A9,AFF_1:39;
+    hence contradiction by A9,AFF_1:30; end;
+   hence b,c // b',c' by A8,A9,A10,A11; end;
+  hence thesis by AFF_2:def 4;
+ end;
+
+Lm2: AFP satisfies_TDES iff
+ (for o,K,c,c',a,b,a',b' st o in K & c in K & c' in K & K is_line &
+  LIN o,a,a' & LIN o,b,b' & not a in K & a,b // K & a',b' // K & a,c // a',c'
+                                                      holds b,c // b',c')
+ proof thus AFP satisfies_TDES implies
+  (for o,K,c,c',a,b,a',b' st o in K & c in K & c' in K & K is_line &
+   LIN o,a,a' & LIN o,b,b' & not a in K & a,b // K & a',b' // K & a,c // a',c'
+                                                      holds b,c // b',c')
+  proof assume A1: AFP satisfies_TDES;
+   let o,K,c,c',a,b,a',b';
+   assume A2: o in K & c in K & c' in K & K is_line &
+    LIN o,a,a' & LIN o,b,b' & not a in
+ K & a,b // K & a',b' // K & a,c // a',c';
+    then A3: a,b // a',b' by AFF_1:45;
+    A4: now assume A5: o=c; then LIN a,c,a' by A2,AFF_1:15;
+     then LIN a,c,c' by A2,AFF_1:18; then A6: LIN c,c',a by AFF_1:15;
+     then A7: c = c' by A2,AFF_1:39; LIN c,b,b' & LIN c',b,b' by A2,A5,A6,AFF_1
+:39;
+      then LIN b,b',c & LIN b',b,c' by AFF_1:15;
+      then b,b' // b,c & b',b // b',c' by AFF_1:def 1;
+then A8:      b,b' // b,c & b,b' // b',c' by AFF_1:13;
+        b=b' implies thesis by A7,AFF_1:11;
+     hence thesis by A8,AFF_1:14; end;
+       now assume A9: o<>c;
+        now assume A10: a=b;
+      then LIN o,a,a' & LIN o,a,b' & LIN o,a,o by A2,AFF_1:16;
+      then LIN a',b',o by A2,AFF_1:17; then A11: a',b' // a',o by AFF_1:def 1;
+        now assume A12: a',o // K & a'<>b'; o,a // o,a' by A2,AFF_1:def 1;
+       then a',o // o,a by AFF_1:13;
+       then A13: o,a // K or a'=o by A12,AFF_1:46;
+A14:       now assume o,a // K; then a,o // K by AFF_1:48;
+        hence contradiction by A2,AFF_1:49; end;
+        A15: b' in K by A2,A13,AFF_1:37;
+         LIN o,b',b by A2,AFF_1:15;hence contradiction by A2,A10,A12,A13,A14,
+A15,AFF_1:39; end;
+       hence thesis by A2,A10,A11,AFF_1:46; end;
+     hence thesis by A1,A2,A3,A9,AFF_2:def 7; end;
+    hence thesis by A4;
+  end;
+  assume
+   A16: for o,K,c,c',a,b,a',b' st o in K & c in K & c' in K & K is_line &
+    LIN o,a,a' & LIN o,b,b' & not a in K & a,b // K & a',b' // K & a,c // a',c'
+                                                       holds b,c // b',c';
+    now let K,o,a,b,c,a',b',c';
+   assume A17: K is_line & o in K & c in K & c' in K & not a in K & o<>c &
+    a<>b & LIN o,a,a' & LIN o,b,b' & a,b // a',b' & a,c // a',c' & a,b // K;
+    then a',b' // K by AFF_1:46;
+   hence b,c // b',c' by A16,A17;
+  end;
+  hence thesis by AFF_2:def 7;
+ end;
+
+Lm3: AFP satisfies_TDES implies
+ (for K,o,a,b,c,a',b',c' st K is_line & o in K & c in K & c' in K &
+     not a in K & a<>b & LIN o,a,a' &
+      a,b // a',b' & b,c // b',c' & a,c // a',c' & a,b // K holds LIN o,b,b')
+  proof assume A1: AFP satisfies_TDES;
+   thus for K,o,a,b,c,a',b',c' st K is_line & o in K & c in K & c' in K &
+     not a in K & a<>b & LIN o,a,a' &
+      a,b // a',b' & b,c // b',c' & a,c // a',c' & a,b // K holds LIN o,b,b'
+    proof let K,o,a,b,c,a',b',c';
+      assume that A2: K is_line and A3: o in K & c in K & c' in K
+      and A4: not a in K and A5: a<>b & LIN o,a,a' &
+      a,b // a',b' & b,c // b',c' & a,c // a',c' & a,b // K;
+      assume A6: not LIN o,b,b'; A7: not b in K by A4,A5,AFF_1:49;
+      A8: b<>c by A3,A4,A5,AFF_1:49;
+      A9: o<>b & o<>a by A3,A4,A6,AFF_1:16; set A=Line(o,b), C=Line(o,a);
+      A10: A is_line & C is_line & o in A & b in A
+       & o in C & a in C by A9,AFF_1:26,def 3;
+      then A11: a' in C by A3,A4,A5,AFF_1:39;
+      consider P such that A12: a' in P & K // P by A2,AFF_1:63;
+      A13: P is_line & P // K by A12,AFF_1:50;
+        not A // P
+        proof assume A // P; then A // K by A12,AFF_1:58;
+         hence contradiction by A3,A7,A10,AFF_1:59;
+        end;
+       then consider x such that
+       A14: x in A & x in P by A10,A13,AFF_1:72;
+       A15: LIN o,b,x by A10,A14,AFF_1:33;
+          a',x // K by A12,A13,A14,AFF_1:54;
+       then b,c // x,c' by A1,A2,A3,A4,A5,A15,Lm2;
+       then b',c' // x,c' by A5,A8,AFF_1:14; then c',b' // c',x by AFF_1:13;
+       then LIN c',b',x by AFF_1:def 1; then A16: LIN b',x,c' by AFF_1:15;
+         a,b // P by A5,A12,AFF_1:57; then a',b' // P by A5,AFF_1:46;
+       then A17: b' in P by A12,A13,AFF_1:37;
+      then LIN b',x,a' & LIN b',x,b' by A12,A13,A14,AFF_1:33;
+      then LIN b',c',a' by A6,A15,A16,AFF_1:17; then b',c' // b',a' by AFF_1:
+def 1;
+      then A18: b',c' // a',b' by AFF_1:13;
+      A19: b'<>c' proof assume A20: b'=c';
+       then P=K by A3,A12,A17,AFF_1:59;
+       then A21: a'=o by A2,A3,A4,A10,A11,A12,AFF_1:30;
+         a',c' // c,a by A5,AFF_1:13;
+       then b'=o by A2,A3,A4,A20,A21,AFF_1:62
+; hence contradiction by A6,AFF_1:16; end;
+      A22: a'<>b' proof assume A23: a'=b';
+       then A24: a,c // b,c or a'=c' by A5,AFF_1:14;
+         now assume a'=c';
+        then b'=o by A2,A3,A4,A10,A11,A23,AFF_1:30
+; hence contradiction by A6,AFF_1:16; end;
+       then c,a // c,b by A24,AFF_1:13; then LIN c,a,b by AFF_1:def 1;
+       then LIN a,c,b by AFF_1:15; then a,c // a,b by AFF_1:def 1;
+       then a,b // a,c by AFF_1:13; then a,c // K by A5,AFF_1:46;
+       then c,a // K by AFF_1:48;
+       hence contradiction by A2,A3,A4,AFF_1:37; end;
+        b,c // a',b' by A5,A18,A19,AFF_1:14;
+      then a,b // b,c by A5,A22,AFF_1:14; then b,c // K by A5,AFF_1:46;
+      then c,b // K by AFF_1:48; hence contradiction by A2,A3,A7,AFF_1:37;
+     end;
+    end;
+
+Lm4: AFP satisfies_TDES implies
+ (for K,A,C,p,q,a,a',b,b' st K // A & K // C & K<>A & K<>C &
+   p in K & q in K & a in A & a' in A & b in C & b' in C &
+   p,a // q,a' & p,b // q,b' holds a,b // a',b')
+ proof assume A1: AFP satisfies_TDES;
+  let K,A,C,p,q,a,a',b,b';
+  assume A2: K // A & K // C & K<>A & K<>C & p in K & q in K &
+   a in A & a' in A & b in C & b' in C & p,a // q,a' & p,b // q,b';
+   A3: AFP satisfies_des by A1,AFF_2:28;
+      K is_line & A is_line & C is_line by A2,AFF_1:50;
+   hence thesis by A2,A3,AFF_2:def 11;
+  end;
+
+theorem
+Th1: not LIN o,a,p & LIN o,a,b & LIN o,a,x & LIN o,a,y & LIN o,p,p' &
+        LIN o,p,q & LIN o,p,q' & p<>q & a<>x & o<>q & o<>x &
+        a,p // b,p' & a,q // b,q' & x,p // y,p' & AFP satisfies_DES
+                                            implies x,q // y,q'
+ proof assume that A1: not LIN o,a,p & LIN o,a,b & LIN o,a,x &
+          LIN o,a,y & LIN o,p,p' & LIN o,p,q & LIN o,p,q' and
+            A2: p<>q & a<>x & o<>q & o<>x
+        and A3: a,p // b,p' & a,q // b,q' & x,p // y,p'
+        and A4: AFP satisfies_DES;
+     A5: o<>a & o<>p by A1,AFF_1:16;
+     then consider d such that
+     A6: LIN x,p,d & d<>x & d<>p by A1,A2,TRANSLAC:2;
+ set K=Line(x,p); set A=Line(o,a); set B'=Line(o,p);
+  A7: K is_line & x in K & p in K & d in K
+                                    by A1,A6,AFF_1:26,def 2,def 3;
+  A8: A is_line & o in A & a in A & x in A
+                                    by A1,A5,AFF_1:26,def 2,def 3;
+  A9: B' is_line & o in B' & p in B' & q in B'
+                                    by A1,A5,AFF_1:26,def 2,def 3;
+ consider M such that A10: y in M & K // M by A7,AFF_1:63;
+  A11: M is_line by A10,AFF_1:50;
+     not o,d // M proof assume o,d // M;
+   then o,d // K by A10,AFF_1:57;
+   then d,o // K by AFF_1:48; then o in K by A7,AFF_1:37;
+   then A=K by A2,A7,A8,AFF_1:30;
+   hence
+                     contradiction by A1,A7,AFF_1:def 2; end;
+  then consider d' such that
+   A12: d' in M & LIN o,d,d' by A11,AFF_1:73;
+     A13: d,x // d',y by A7,A10,A12,AFF_1:53;
+  A14: not LIN o,a,q proof assume LIN o,a,q;
+   then q in A by AFF_1:def 2; then A=B' by A2,A8,A9,AFF_1:30; ::=Line(q,o)
+   hence
+                     contradiction by A1,A9,AFF_1:def 2; end;
+  A15: not LIN o,a,d proof assume LIN o,a,d;
+   then d in A by AFF_1:def 2; then A=K by A6,A7,A8,AFF_1:30; ::=Line(x,d)
+   hence
+                     contradiction by A1,A7,AFF_1:def 2; end;
+  A16: not LIN o,d,q proof assume LIN o,d,q;
+   then LIN o,q,p & LIN o,q,o & LIN o,q,d by A1,AFF_1:15,16;
+   then LIN o,p,d by A2,AFF_1:17;
+   then d in B' by AFF_1:def 2; then B'=K by A6,A7,A9,AFF_1:30; ::=Line(d,p)
+   then A=B' by A2,A7,A8,A9,AFF_1:30;                   ::=Line(o,x)
+   hence
+                     contradiction by A1,A9,AFF_1:def 2; end;
+  A17: not LIN o,d,x proof assume LIN o,d,x; then LIN o,x,d by AFF_1:15;
+   then d in A by A2,A8,AFF_1:39;
+   then A=K by A6,A7,A8,AFF_1:30;                       ::=Line(d,x)
+   hence
+                     contradiction by A1,A7,AFF_1:def 2; end;
+  A18: not LIN o,p,d proof assume LIN o,p,d; then d in B' by AFF_1:def 2;
+   then K=B' by A6,A7,A9,AFF_1:30;                       ::=Line(p,d)
+   hence
+                     contradiction by A7,A9,A17,AFF_1:33; end;
+  A19: not LIN o,p,a by A1,AFF_1:15;
+  A20: LIN o,q,q' proof q in B' & q' in B' by A1,AFF_1:def 2;
+   hence thesis by A9,AFF_1:33; end;
+  A21: LIN o,x,y proof x in A & y in A by A1,AFF_1:def 2;
+   hence thesis by A8,AFF_1:33; end;
+  A22: p,d // p',d' proof x,p // K by A7,AFF_1:37;
+   then x,p // M by A10,AFF_1:57; then y,p' // M by A1,A3,AFF_1:46;
+   then p' in M by A10,A11,AFF_1:37;
+   hence thesis by A7,A10,A12,AFF_1:53; end;
+     a,d // b,d' proof p,a // p',b by A3,AFF_1:13;
+   hence thesis by A1,A4,A12,A18,A19,A22,Lm1; end;
+  then d,q // d',q' by A1,A3,A4,A12,A14,A15,A20,Lm1;
+ hence thesis by A4,A12,A13,A16,A17,A20,A21,Lm1; end;
+
+theorem
+Th2: (for o,a,b st o<>a & o<>b & LIN o,a,b
+                  ex f st f is_Dil & f.o=o & f.a=b) implies
+                                             AFP satisfies_DES
+ proof assume A1: for o,a,b st o<>a & o<>b & LIN o,a,b
+                              ex f st f is_Dil & f.o=o & f.a=b;
+    now let o,a,a',p,p',q,q';
+       assume A2: LIN o,a,a' & LIN o,p,p' & LIN o,q,q' & not LIN o,a,p
+                     & not LIN o,a,q & a,p // a',p' & a,q // a',q';
+       A3: now assume A4: o=a';
+           then o=p' by A2,AFF_1:69;
+           then p'=q' by A2,A4,AFF_1:69;
+           hence p,q // p',q' by AFF_1:12; end;
+          now assume A5: o<>a';
+           o<>a by A2,AFF_1:16;
+        then consider f such that A6: f is_Dil & f.o=o & f.a=a'
+                                                 by A1,A2,A5;
+ set r=f.p; set s=f.q;
+        A7: r=p' proof
+           o,p // o,r & a,p // a',r by A6,TRANSGEO:85;
+         then LIN o,p,r & a,p // a',r by AFF_1:def 1;
+         hence thesis by A2,AFF_1:70; end;
+           s=q' proof
+           o,q // o,s & a,q // a',s by A6,TRANSGEO:85;
+         then LIN o,q,s & a,q // a',s by AFF_1:def 1;
+         hence thesis by A2,AFF_1:70; end;
+        hence p,q // p',q' by A6,A7,TRANSGEO:85; end;
+      hence p,q // p',q' by A3; end;
+      hence thesis by Lm1;
+      end;
+
+Lm5: o<>a & o<>b & LIN o,a,b & LIN o,a,y &
+            ((not LIN o,a,x & LIN o,x,y & a,x // b,y) or
+   (LIN o,a,x & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                   p,x // p',y & LIN o,a,y)) implies LIN o,a,x
+ proof assume that A1: o<>a & o<>b & LIN o,a,b and
+                   A2: LIN o,a,y and
+       A3: (not LIN o,a,x & LIN o,x,y & a,x // b,y) or
+   (LIN o,a,x & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                   p,x // p',y & LIN o,a,y);
+    assume A4: not LIN o,a,x;
+     set A=Line(o,a);
+    A5: A is_line by A1,AFF_1:def 3;
+    A6: b<>y by A1,A3,A4,AFF_1:68;
+    A7: o in A & a in A by AFF_1:26;
+          x in A proof b in A & y in A by A1,A2,AFF_1:def 2;
+            then A8: A=Line(b,y) by A5,A6,AFF_1:38; b,y // a,x by A3,A4,AFF_1:
+13;
+            hence thesis by A6,A7,A8,AFF_1:36; end;
+    hence contradiction by A4,A5,A7,AFF_1:33; end;
+
+Lm6: (o<>a & o<>b & LIN o,a,b &
+            ((not LIN o,a,x & LIN o,x,y & a,x // b,y) or
+   (LIN o,a,x & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                   p,x // p',y & LIN o,a,y))) implies
+          (o<>b & o<>a & LIN o,b,a &
+            ((not LIN o,b,y & LIN o,y,x & b,y // a,x) or
+   (LIN o,b,y & ex p,p' st not LIN o,b,p & LIN o,p,p' & b,p // a,p' &
+                                       p,y // p',x & LIN o,b,x)))
+ proof assume that A1: o<>a & o<>b & LIN o,a,b and
+       A2: (not LIN o,a,x & LIN o,x,y & a,x // b,y) or
+   (LIN o,a,x & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                   p,x // p',y & LIN o,a,y);
+    A3: LIN o,b,a by A1,AFF_1:15;
+    A4: now assume A5: not LIN o,a,x;
+       then A6: not LIN o,a,y by A1,A2,Lm5;
+         not LIN o,b,y proof assume A7: LIN o,b,y;
+           LIN o,b,o & LIN o,b,a by A1,AFF_1:15,16;
+        hence contradiction by A1,A6,A7,AFF_1:17; end;
+      hence thesis by A1,A2,A5,AFF_1:13,15; end;
+        now assume A8: LIN o,a,x; then consider p,q such that
+      A9: not LIN o,a,p & LIN o,p,q & a,p // b,q & p,x // q,y &
+                                                 LIN o,a,y by A2;
+      A10: p,a // q,b & b,q // a,p & q,y // p,x by A9,AFF_1:13;
+         not LIN o,p,a by A9,AFF_1:15;
+      then A11: q<>o by A1,A9,A10,AFF_1:69;
+     set A=Line(o,b); A12: A is_line & o in A & b in A & a in A
+                                     by A1,A3,AFF_1:26,def 2,def 3;
+      A13: LIN o,q,p by A9,AFF_1:15;
+      A14: not LIN o,b,q proof assume LIN o,b,q;
+        then q in A by AFF_1:def 2; then p in A by A11,A12,A13,AFF_1:39;
+        hence contradiction by A9,A12,AFF_1:33; end;
+A15:      y in A by A1,A9,A12,AFF_1:39; LIN o,a,o by AFF_1:16;
+       then LIN o,b,x by A1,A8,AFF_1:17;
+      hence thesis by A1,A10,A13,A14,A15,AFF_1:15,def 2; end;
+ hence thesis by A4; end;
+
+Lm7: (o<>a & o<>b & LIN o,a,b & x=o &
+            ((not LIN o,a,x & LIN o,x,y & a,x // b,y) or
+   (LIN o,a,x & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                   p,x // p',y & LIN o,a,y))) implies y=o
+ proof assume that A1: o<>a & o<>b & LIN o,a,b and A2: x=o and
+            A3: (not LIN o,a,x & LIN o,x,y & a,x // b,y) or
+  (LIN o,a,x & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                                      p,x // p',y & LIN o,a,y);
+ assume A4: y<>o;
+        consider p,p' such that
+       A5: not LIN o,a,p & LIN o,p,p' & a,p // b,p' & p,x // p',y &
+                                                 LIN o,a,y by A2,A3,AFF_1:16;
+      set A=Line(o,a); A6: A is_line by A1,AFF_1:def 3;
+                                 A7: o in A & a in A by AFF_1:26;
+      set K=Line(o,p); A8: o<>p by A5,AFF_1:16;
+      then A9: K is_line by AFF_1:def 3; A10: p in K by AFF_1:26;
+        p' in K by A5,AFF_1:def 2;
+then A11: y in K & o in K by A2,A5,A8,AFF_1:26,36;
+        y in A by A5,AFF_1:def 2;
+      then o in A & a in A & p in A by A4,A6,A7,A9,A10,A11,AFF_1:30;
+     hence contradiction by A5,A6,AFF_1:33; end;
+
+Lm8: for o,a,b,x st o<>a & o<>b & LIN o,a,b ex y st
+            (not LIN o,a,x & LIN o,x,y & a,x // b,y) or
+   (LIN o,a,x & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                                       p,x // p',y & LIN o,a,y)
+   proof let o,a,b,x such that A1: o<>a & o<>b & LIN o,a,b;
+        A2: now assume A3: not LIN o,a,x;
+           o,a // o,b by A1,AFF_1:def 1; then a,o // o,b by AFF_1:13;
+         then consider y such that A4: x,o // o,y & x,a // b,y by A1,DIRAF:47;
+           o,x // o,y by A4,AFF_1:13;
+         then LIN o,x,y & a,x // b,y by A4,AFF_1:13,def 1;
+         hence thesis by A3; end;
+           now assume A5: LIN o,a,x; consider p such that
+         A6: not LIN o,a,p by A1,AFF_1:22;
+         A7: o<>p & o<>a & a<>p by A6,AFF_1:16;
+         set M=Line(o,a); set K=Line(o,p); set A=Line(a,p);
+         A8: o in M & a in M & o in K & p in K & a in A &
+                                               p in A by AFF_1:26;
+         A9: x in M by A5,AFF_1:def 2;
+         A10: M is_line & K is_line & A is_line by A7,AFF_1:def 3;
+         then consider B' such that A11: b in B' & A // B' by AFF_1:63;
+                             A12: B' is_line by A11,AFF_1:50;
+           not B' // K proof
+               assume B' // K; then A // K by A11,AFF_1:58;
+               then A=K by A8,AFF_1:59;
+               hence contradiction by A6,A8,A10,AFF_1:33; end;
+        then consider p' such that
+                       A13: p' in B' & p' in K by A10,A12,AFF_1:72;
+         set C=Line(p,x);
+         A14: p in C & x in C by AFF_1:26;
+         A15: C is_line by A5,A6,AFF_1:def 3;
+         then consider D such that
+                           A16: p' in D & C // D by AFF_1:63;
+         A17: D is_line by A16,AFF_1:50;
+           not D // M proof
+               assume D // M; then C // M by A16,AFF_1:58;
+               then C=M by A9,A14,AFF_1:59;
+               hence contradiction by A6,A8,A14,A15,AFF_1:33; end;
+         then consider y such that
+            A18: y in D & y in M by A10,A17,AFF_1:72;
+          LIN o,p,p' & a,p // b,p' & p,x // p',y & LIN o,a,y
+        by A8,A10,A11,A13,A14,A16,A18,AFF_1:33,53;
+         hence thesis by A5,A6; end;
+  hence thesis by A2; end;
+
+Lm9: for o,a,b,y st o<>a & o<>b & LIN o,a,b ex x st
+            (not LIN o,a,x & LIN o,x,y & a,x // b,y) or
+   (LIN o,a,x & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                                        p,x // p',y & LIN o,a,y)
+ proof let o,a,b,y; assume o<>a & o<>b & LIN o,a,b;
+  then A1: o<>b & o<>a & LIN o,b,a by AFF_1:15;
+  then consider x such that
+ A2: (not LIN o,b,y & LIN o,y,x & b,y // a,x) or
+   (LIN o,b,y & ex p,p' st not LIN o,b,p & LIN o,p,p' & b,p // a,p' &
+                                p,y // p',x & LIN o,b,x) by Lm8;
+              (not LIN o,a,x & LIN o,x,y & a,x // b,y) or
+   (LIN o,a,x & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                     p,x // p',y & LIN o,a,y) by A1,A2,Lm6;
+ hence thesis; end;
+
+
+Lm10: o<>a & o<>b & LIN o,a,b & a=b &
+   ((not LIN o,a,x & LIN o,x,y & a,x // b,y) or
+   (LIN o,a,x & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                   p,x // p',y & LIN o,a,y)) implies x=y
+ proof assume that A1: o<>a & o<>b & LIN o,a,b and
+   A2: a=b and
+   A3: (not LIN o,a,x & LIN o,x,y & a,x // b,y) or
+   (LIN o,a,x & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                                    p,x // p',y & LIN o,a,y);
+  A4: now assume A5: not LIN o,a,x;
+      a,x // a,x & LIN o,a,a & LIN o,x,x by AFF_1:11,16;
+    hence thesis by A2,A3,A5,AFF_1:70; end;
+     now assume A6: LIN o,a,x & x<>o; then consider p,q such that
+    A7: not LIN o,a,p & LIN o,p,q & a,p // b,q &
+                                     p,x // q,y & LIN o,a,y by A3;
+A8:    a,p // a,q & a,p // a,p & LIN o,a,a & LIN
+ o,p,p by A2,A7,AFF_1:11,16;
+
+    A9: not LIN o,p,x proof assume LIN o,p,x;
+      then LIN o,x,o & LIN o,x,p & LIN o,x,a by A6,AFF_1:15,16;
+      hence contradiction by A6,A7,AFF_1:17; end;
+      LIN o,a,o by AFF_1:16; then A10: LIN o,x,y by A1,A6,A7,AFF_1:17;
+      p,x // p,x & p,x // p,y & LIN o,p,p & LIN o,x,x by A7,A8,AFF_1:11,16,70;
+    hence thesis by A9,A10,AFF_1:70; end;
+ hence thesis by A1,A3,A4,Lm7; end;
+
+Lm11: o<>a & o<>b & LIN o,a,b & AFP satisfies_DES & LIN o,a,x &
+   (ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                                    p,x // p',y & LIN o,a,y) &
+   (ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                                    p,x // p',r & LIN o,a,r)
+   implies y=r
+ proof assume that A1: o<>a & o<>b & LIN o,a,b and A2: AFP satisfies_DES and
+   A3: LIN o,a,x and
+   A4: ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                                    p,x // p',y & LIN o,a,y and
+   A5: ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                                    p,x // p',r & LIN o,a,r;
+ consider p,p' such that A6: not LIN o,a,p & LIN o,p,p' &
+                     a,p // b,p' & p,x // p',y & LIN o,a,y by A4;
+ consider q,q' such that A7: not LIN o,a,q & LIN o,q,q' &
+                     a,q // b,q' & q,x // q',r & LIN o,a,r by A5;
+   A8: o<>a & o<>p & o<>q by A6,A7,AFF_1:16;
+ A9: a=b implies thesis proof assume a=b;
+   then x=y & x=r by A1,A3,A4,A5,Lm10; hence thesis; end;
+ A10: o=x implies thesis proof assume A11: o=x;
+   then y=o by A1,A3,A4,Lm7;
+   hence thesis by A1,A3,A5,A11,Lm7; end;
+ A12: p=q & o<>x implies thesis proof assume A13: p=q & o<>x;
+then A14: p'=q' by A1,A6,A7,AFF_1:70;
+     LIN o,a,o by AFF_1:16; then A15: LIN o,x,y & LIN
+ o,x,r by A3,A6,A7,A8,AFF_1:17;
+      not LIN o,p,x proof assume LIN o,p,x;
+      then LIN o,x,o & LIN o,x,p & LIN o,x,a by A3,AFF_1:15,16;
+      hence contradiction by A6,A13,AFF_1:17; end;
+   hence thesis by A6,A7,A13,A14,A15,AFF_1:70; end;
+ A16: a=x implies thesis proof assume A17: a=x;
+   A18: not LIN o,p,a by A6,AFF_1:15;
+     p,a // p',b & p,a // p',y by A6,A17,AFF_1:13;
+   then A19: b=y by A1,A6,A18,AFF_1:70;
+   A20: not LIN o,q,a by A7,AFF_1:15;
+     q,a // q',b & q,a // q',r by A7,A17,AFF_1:13;
+   hence thesis by A1,A7,A19,A20,AFF_1:70; end;
+    a<>b & a<>x & p<>q & o<>x implies thesis proof assume
+  A21: a<>b & a<>x & p<>q & o<>x;
+  A22: now assume A23: LIN o,p,q;
+   then LIN o,q,o & LIN o,q,p & LIN o,q,q' by A7,AFF_1:15,16;
+                                    then A24: LIN o,p,q' by A8,AFF_1:17;
+     x,p // y,p' by A6,AFF_1:13; then x,q // y,q'
+   by A1,A2,A3,A6,A7,A8,A21,A23,A24,Th1; then A25: q,x // q',y by AFF_1:13;
+   set A=Line(o,a); set K=Line(o,p);
+   A26: A is_line & o in A & a in A & b in A & x in A & y in A
+       & r in A by A1,A3,A6,A7,AFF_1:26,def 2,def 3;
+   A27: K is_line & o in K & p in K & q in K & q' in K & p' in K
+                by A6,A8,A23,A24,AFF_1:26,def 2,def 3;
+   A28: not LIN o,q,x proof assume A29: LIN o,q,x;
+      K=Line(o,q) by A8,A27,AFF_1:38; then x in K by A29,AFF_1:def 2;
+    then A is_line & o in A & a in A & p in A
+     by A21,A26,A27,AFF_1:30; hence contradiction by A6,AFF_1:33; end;
+     LIN o,x,y & LIN o,x,r by A26,AFF_1:33;
+   hence thesis by A7,A25,A28,AFF_1:70; end;
+     now assume A30: not LIN o,p,q;
+   A31: p,q // p',q' by A1,A2,A6,A7,Lm1;
+   A32: not LIN o,p,x proof assume LIN o,p,x; then A33: LIN o,x,p by AFF_1:15;
+      LIN o,a,o & LIN o,a,x by A3,AFF_1:16;
+    hence contradiction by A6,A21,A33,AFF_1:20; end;
+   set A=Line(o,a); set K=Line(o,q);
+   A34: A is_line & o in A & a in A & b in A & x in A & y in A
+       & r in A by A1,A3,A6,A7,AFF_1:26,def 2,def 3;
+   A35: K is_line & o in K & q in K & q' in K
+                                   by A7,A8,AFF_1:26,def 2,def 3;
+      LIN o,x,y by A34,AFF_1:33;
+   then A36: q,x // q',y by A2,A6,A7,A30,A31,A32,Lm1;
+   A37: not LIN o,q,x proof assume LIN o,q,x;
+    then x in K by AFF_1:def 2;
+    then A is_line & o in A & a in A & q in A
+    by A21,A34,A35,AFF_1:30; hence contradiction by A7,AFF_1:33; end;
+     LIN o,x,y & LIN o,x,r by A34,AFF_1:33;
+   hence thesis by A7,A36,A37,AFF_1:70; end;
+         hence thesis by A22; end;
+ hence thesis by A9,A10,A12,A16; end;
+
+
+
+Lm12: o<>a & o<>b & LIN o,a,b & AFP satisfies_DES &
+   ((not LIN o,a,x & LIN o,x,y & a,x // b,y) or
+   (LIN o,a,x & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                                    p,x // p',y & LIN o,a,y)) &
+   ((not LIN o,a,r & LIN o,r,y & a,r // b,y) or
+   (LIN o,a,r & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+    p,r // p',y & LIN o,a,y)) implies x=r
+ proof assume that A1: o<>a & o<>b & LIN o,a,b & AFP satisfies_DES and
+   A2: (not LIN o,a,x & LIN o,x,y & a,x // b,y) or
+   (LIN o,a,x & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                                  p,x // p',y & LIN o,a,y) and
+   A3: (not LIN o,a,r & LIN o,r,y & a,r // b,y) or
+   (LIN o,a,r & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                                     p,r // p',y & LIN o,a,y);
+ A4: o<>b & o<>a & LIN o,b,a & AFP satisfies_DES by A1,AFF_1:15;
+    ((not LIN o,b,y & LIN o,y,x & b,y // a,x) or
+   (LIN o,b,y & ex p,p' st not LIN o,b,p & LIN o,p,p' & b,p // a,p' &
+                                     p,y // p',x & LIN o,b,x)) &
+     ((not LIN o,b,y & LIN o,y,r & b,y // a,r) or
+   (LIN o,b,y & ex p,p' st not LIN o,b,p & LIN o,p,p' & b,p // a,p' &
+                                       p,y // p',r & LIN o,b,r))
+   by A1,A2,A3,Lm6; hence thesis by A4,Lm11,AFF_1:70; end;
+
+Lm13: for o,a,b st AFP satisfies_DES & o<>a & o<>b & LIN o,a,b
+   ex f st for x,y holds (f.x=y iff
+   ((not LIN o,a,x & LIN o,x,y & a,x // b,y) or
+   (LIN o,a,x & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                                    p,x // p',y & LIN o,a,y)))
+ proof let o,a,b;
+defpred P[Element of AFP,Element of AFP]
+means
+((not LIN o,a,$1 & LIN o,$1,$2 & a,$1 // b,$2) or
+   (LIN o,a,$1 & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                                    p,$1 // p',$2 & LIN o,a,$2));
+assume A1: AFP satisfies_DES & o<>a & o<>b & LIN o,a,b;
+ then A2: for x ex y st P[x,y] by Lm8;
+ A3: for y ex x st P[x,y] by A1,Lm9;
+ A4: for x,y,r st P[x,y] & P[r,y]
+    holds x=r by A1,Lm12;
+  A5: for x,y,s st P[x,y] & P[x,s]
+    holds y=s by A1,Lm11,AFF_1:70;
+     ex f st for x,y holds (f.x=y iff P[x,y])
+  from EXPermutation(A2,A3,A4,A5); hence thesis;
+ end;
+
+Lm14: (AFP satisfies_DES & o<>a & o<>b & LIN o,a,b &
+    not LIN o,a,x & LIN o,x,y & a,x // b,y &
+    LIN o,a,z & (ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+    p,z // p',t & LIN o,a,t)) implies x,z // y,t
+ proof assume that A1: AFP satisfies_DES and A2: o<>a & o<>b & LIN o,a,b and
+    A3: not LIN o,a,x & LIN o,x,y & a,x // b,y and A4: LIN o,a,z and
+    A5: ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+    p,z // p',t & LIN o,a,t;
+ consider p,p' such that A6: not LIN o,a,p & LIN o,p,p' &
+                      a,p // b,p' & p,z // p',t & LIN o,a,t by A5;
+ A7: p,x // p',y by A1,A2,A3,A6,Lm1;
+ A8: o<>a & o<>x & o<>p by A3,A6,AFF_1:16;
+ A9: now assume A10: z=o; then A11: t=o by A2,A4,A5,Lm7;
+     o,x // o,y by A3,AFF_1:def 1;
+   hence thesis by A10,A11,AFF_1:13; end;
+ A12: now assume A13: z<>o & not LIN o,p,x;
+   A14: not LIN o,p,z proof assume LIN o,p,z;
+     then LIN o,p,o & LIN o,p,z & LIN o,z,a by A4,AFF_1:15,16;
+     then LIN o,p,a by A13,AFF_1:20; hence
+                     contradiction by A6,AFF_1:15; end;
+     LIN o,z,t proof LIN o,a,o & LIN o,a,z & LIN o,a,t by A4,A6,AFF_1:16;
+     hence thesis by A2,AFF_1:17; end;
+   hence thesis by A1,A3,A6,A7,A13,A14,Lm1; end;
+ A15: now assume A16: a=z;
+   A17: not LIN o,p,a by A6,AFF_1:15;
+     p,a // p',b by A6,AFF_1:13;
+   then z,x // t,y by A2,A3,A6,A16,A17,AFF_1:70; hence thesis by AFF_1:13;
+end;
+    now assume A18: z<>o & LIN o,p,x & a<>z;
+     now assume A19: x<>p;
+     LIN o,x,o & LIN o,x,p by A18,AFF_1:15,16;
+   then A20: LIN o,p,x & LIN o,p,y & LIN o,p,p' by A3,A6,A8,A18,AFF_1:17;
+      z,p // t,p' by A6,AFF_1:13; then z,x // t,y
+                     by A1,A2,A3,A4,A6,A8,A18,A19,A20,Th1;
+     hence thesis by AFF_1:13; end;
+    hence thesis by A2,A3,A6,AFF_1:70; end;
+ hence thesis by A9,A12,A15; end;
+
+Lm15: AFP satisfies_DES & o<>a & o<>b & LIN o,a,b &
+    LIN o,a,x & (ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+    p,x // p',y & LIN o,a,y) &
+    not LIN o,a,z & LIN o,z,t & a,z // b,t implies x,z // y,t
+ proof assume AFP satisfies_DES & o<>a & o<>b & LIN o,a,b &
+    LIN o,a,x & (ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+    p,x // p',y & LIN o,a,y) &
+    not LIN o,a,z & LIN o,z,t & a,z // b,t;
+ then z,x // t,y by Lm14; hence thesis by AFF_1:13; end;
+
+Lm16: o<>a & o<>b & LIN o,a,b &
+    LIN o,a,x & (ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+    p,x // p',y & LIN o,a,y) &
+    LIN o,a,z & (ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+    p,z // p',t & LIN o,a,t) implies x,z // y,t
+ proof assume that A1: o<>a & o<>b & LIN o,a,b and
+  A2: LIN o,a,x & (ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+    p,x // p',y & LIN o,a,y) and
+  A3: LIN o,a,z & (ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+    p,z // p',t & LIN o,a,t);
+ set A=Line(o,a); A4: A is_line by A1,AFF_1:def 3;
+    A5: x in A & y in A & z in A & t in A by A2,A3,AFF_1:def 2;
+     now assume A6: x<>z; then A=Line(x,z) by A4,A5,AFF_1:38;
+    hence thesis by A5,A6,AFF_1:36; end;
+ hence thesis by AFF_1:12; end;
+
+Lm17: o<>a & o<>b & LIN o,a,b & AFP satisfies_DES &
+   (for x,y holds (f.x=y iff
+          ((not LIN o,a,x & LIN o,x,y & a,x // b,y) or
+   (LIN o,a,x & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                                     p,x // p',y & LIN o,a,y))))
+   implies f is_Dil & f.o=o & f.a=b
+ proof assume that A1: o<>a & o<>b & LIN o,a,b and A2: AFP satisfies_DES;
+       assume A3: for x,y holds (f.x=y iff
+         ((not LIN o,a,x & LIN o,x,y & a,x // b,y) or
+          (LIN o,a,x & ex p,p' st not LIN o,a,p &
+             LIN o,p,p' & a,p // b,p' & p,x // p',y & LIN o,a,y)));
+    for x,r holds x,r // f.x,f.r proof
+       let x,r; set y=f.x; set s=f.r;
+  A4: (not LIN o,a,x & LIN o,x,y & a,x // b,y) or
+   (LIN o,a,x & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                   p,x // p',y & LIN o,a,y) by A3;
+     (not LIN o,a,r & LIN o,r,s & a,r // b,s) or
+   (LIN o,a,r & ex p,p' st not LIN o,a,p & LIN o,p,p' & a,p // b,p' &
+                   p,r // p',s & LIN o,a,s) by A3;
+  hence thesis by A1,A2,A4,Lm1,Lm14,Lm15,Lm16; end;
+ hence f is_Dil by TRANSGEO:85;
+ thus f.o=o proof set y=f.o;
+      (not LIN o,a,o & LIN o,o,y & a,o // b,y) or
+          (LIN o,a,o & ex p,p' st not LIN o,a,p &
+      LIN o,p,p' & a,p // b,p' & p,o // p',y & LIN o,a,y) by A3;
+     hence thesis by A1,Lm7; end;
+ thus f.a=b proof set y=f.a; LIN o,a,a by AFF_1:16;
+   then consider p,p' such that A5: not LIN o,a,p &
+      LIN o,p,p' & a,p // b,p' & p,a // p',y & LIN o,a,y by A3;
+   A6: not LIN o,p,a by A5,AFF_1:15;
+     p,a // p',b by A5,AFF_1:13;
+   hence thesis by A1,A5,A6,AFF_1:70; end; end;
+
+theorem
+Th3: AFP satisfies_DES implies (for o,a,b st o<>a & o<>b & LIN o,a,b ex f st
+                                      f is_Dil & f.o=o & f.a=b)
+ proof assume A1: AFP satisfies_DES; let o,a,b;
+       assume A2: o<>a & o<>b & LIN o,a,b;
+    then consider f such that A3: for x,y holds (f.x=y iff
+            ((not LIN o,a,x & LIN o,x,y & a,x // b,y) or
+             (LIN o,a,x & ex p,p' st
+  not LIN o,a,p & LIN o,p,p' & a,p // b,p' & p,x // p',y & LIN o,a,y)))
+                                                by A1,Lm13;
+    f is_Dil & f.o=o & f.a=b by A1,A2,A3,Lm17;
+  hence thesis; end;
+
+theorem
+   AFP satisfies_DES iff (for o,a,b st o<>a & o<>b & LIN o,a,b ex f st
+                                      f is_Dil & f.o=o & f.a=b)
+                                                 by Th2,Th3;
+
+definition let AFP,f,K;
+ pred f is_Sc K means
+  :Def1: f is_Col & K is_line & (for x st x in K holds f.x = x) &
+    (for x holds x,f.x // K);
+ end;
+
+theorem
+Th5: f is_Sc K & f.p=p & not p in K implies f=id the carrier of AFP
+ proof assume that A1: f is_Sc K and A2: f.p=p & not p in K;
+         f is_Col & K is_line & for x st x in K holds f.x=x
+                                                  by A1,Def1;
+ hence thesis by A2,TRANSGEO:117; end;
+
+theorem
+Th6: (for a,b,K st a,b // K & not a in K ex f st
+                               f is_Sc K & f.a=b) implies AFP satisfies_TDES
+ proof assume A1: for a,b,K st a,b // K & not a in K ex f st
+                                              f is_Sc K & f.a=b;
+    now let o,K,c,c',a,b,a',b';
+       assume A2:  o in K & c in K & c' in K & K is_line
+       & LIN o,a,a' & LIN o,b,b'& not a in K & a,b // K & a',b' // K
+       & a,c // a',c';
+       then consider f such that A3: f is_Sc K & f.a=b by A1;
+        A4: f is_Col by A3,Def1;
+        A5: a,b // a',b' by A2,AFF_1:45;
+       A6: f.c = c & f.c'=c' by A2,A3,Def1;
+          f.a'=b' proof set x=f.a';
+          A7: now assume a<>b;
+               then A8: not LIN o,a,b by A2,AFF_1:60;
+                 a',x // K by A3,Def1;
+               then A9: a,b // a',x by A2,AFF_1:45;
+                 f.o=o by A2,A3,Def1;
+               then LIN o,b,x by A2,A3,A4,TRANSGEO:108;
+              hence thesis by A2,A5,A8,A9,AFF_1:70; end;
+             now assume A10: a=b; then f=id the carrier of AFP by A2,A3,Th5;
+               then x=a' by FUNCT_1:35;
+              hence thesis by A2,A10,AFF_1:61; end;
+                   hence thesis by A7; end;
+      hence b,c // b',c' by A2,A3,A4,A6,TRANSGEO:107; end;
+     hence thesis by Lm2;
+    end;
+
+Lm18: (a,b // K & not a in K &
+         ((x in K & x=y) or
+       (not x in K & ex p,p' st p in K & p' in K & p,a // p',x
+                        & p,b // p',y & x,y // K))) implies
+         (b,a // K & not b in K &
+         ((y in K & y=x) or
+       (not y in K & ex p,p' st p in K & p' in K & p,b // p',y
+                                      & p,a // p',x & y,x // K)))
+proof assume that A1: a,b // K & not a in K and
+       A2: ((x in K & x=y) or
+       (not x in K & ex p,p' st p in K & p' in K & p,a // p',x
+                                      & p,b // p',y & x,y // K));
+           now assume not x in K;
+           then y,x // K by A2,AFF_1:48;
+          hence thesis by A1,A2,AFF_1:48,49; end;
+ hence thesis by A1,A2,AFF_1:48,49; end;
+
+Lm19: a,b // K & not a in K implies for x ex y st
+       ((x in K & x=y) or
+       (not x in K & ex p,p' st p in K & p' in K & p,a // p',x
+                                      & p,b // p',y & x,y // K))
+ proof assume A1: a,b // K & not a in K; let x;
+       A2: K is_line by A1,AFF_1:40; then consider p,q
+         such that A3: p in K & q in K & p<>q by AFF_1:31;
+       A4: not b in K by A1,AFF_1:49; A5: p<>a & p<>b by A1,A3,AFF_1:49;
+          now assume A6: not x in K; set A=Line(p,a); set B'=Line(p,b);
+          A7: p in A & p in B' & a in A & b in B' by AFF_1:26;
+        A8: A is_line & B' is_line by A5,AFF_1:def 3;
+        A9: not A // K & not B' // K by A1,A3,A4,A7,AFF_1:59;
+         consider M such that A10: x in M & K // M by A2,AFF_1:63;
+        A11: M is_line by A10,AFF_1:50;
+         consider C such that A12: x in C & A // C by A8,AFF_1:63;
+        A13: C is_line by A12,AFF_1:50;
+          not C // K by A9,A12,AFF_1:58;
+        then consider p' such that
+                         A14: p' in C & p' in K by A2,A13,AFF_1:72;
+         consider D such that A15: p' in D & B' // D
+                                                  by A8,AFF_1:63;
+        A16: D is_line by A15,AFF_1:50;
+        A17: M // K by A10;
+          not D // M proof assume D // M; then B' // M
+         by A15,AFF_1:58;hence contradiction by A9,A10,AFF_1:58; end;
+        then consider y such that
+                           A18: y in D & y in M by A11,A16,AFF_1:72;
+        A19: x,y // K by A10,A17,A18,AFF_1:54;
+        A20: p,a // p',x by A7,A12,A14,AFF_1:53;
+           p,b // p',y by A7,A15,A18,AFF_1:53;
+          hence thesis by A3,A6,A14,A19,A20; end;
+   hence thesis; end;
+
+Lm20: a,b // K & not a in K implies for y ex x st
+       ((x in K & x=y) or
+       (not x in K & ex p,p' st p in K & p' in K & p,a // p',x
+                                      & p,b // p',y & x,y // K))
+ proof assume A1: a,b // K & not a in K; let y;
+     A2: b,a // K & not b in K by A1,AFF_1:48,49;
+    then consider x such that
+     A3: (y in K & y=x) or
+     (not y in K & ex p,p' st p in K & p' in K & p,b // p',y &
+                             p,a // p',x & y,x // K) by Lm19;
+       (x in K & x=y) or
+     (not x in K & ex p,p' st p in K & p' in K & p,a // p',x
+                  & p,b // p',y & x,y // K) by A2,A3,Lm18;
+ hence thesis; end;
+
+theorem
+Th7: K // M & p in K & q in K & p' in K & q' in K & AFP satisfies_TDES &
+         a in M & b in M & x in M & y in M & a<>b & q<>p &
+      p,a // p',x & p,b // p',y & q,a // q',x
+                                          implies q,b // q',y
+ proof assume that A1: K // M and
+ A2: p in K & q in K & p' in K & q' in K and A3: AFP satisfies_TDES and
+ A4: a in M & b in M & x in M & y in M and A5: a<>b & q<>p and
+ A6: p,a // p',x & p,b // p',y & q,a // q',x;
+
+ A7: K is_line & M is_line by A1,AFF_1:50;
+ A8: now assume A9: K=M;
+     K // K by A7,AFF_1:55; hence thesis by A2,A4,A9,AFF_1:53; end;
+    now assume A10: K<>M;
+  then A11: a<>p & a<>q & b<>p & b<>q by A1,A2,A4,AFF_1:59;
+  A12: p'<>x & p'<>y & q'<>x & q'<>y by A1,A2,A4,A10,AFF_1:59;
+ set A=Line(p,a); set B'=Line(p,b); set C=Line(q,b); set D=Line(q,a);
+ set A'=Line(p',x); set B''=Line(p',y); set C'=Line(q',y); set D'=Line(q',x);
+ A13: A is_line & B' is_line & C is_line & D is_line &
+     A' is_line & B'' is_line & C' is_line & D' is_line
+                                                by A11,A12,AFF_1:def 3;
+ A14: p in A & a in A & p in B' & b in B' & q in C & b in C &
+     q in D & a in D & p' in A' & x in A' & p' in B'' & y in B'' &
+     q' in C' & y in C' & q' in D' & x in D' by AFF_1:26;
+ A15: A // A' & B' // B'' & D // D' by A6,A11,A12,AFF_1:51;
+ A16: not a in K & not b in K & not x in K & not y in K &
+     not p in M & not q in M & not p' in M & not q' in
+ M by A1,A2,A4,A10,AFF_1:59;
+ A17: A<>K & B'<>K & C<>K & D<>K & A'<>K & B''<>K & C'<>K & D'<>K
+  & A<>M & B'<>M & C<>M & D<>M & A'<>M & B''<>M & C'<>M & D'<>M
+  by A1,A2,A4,A10,A14,AFF_1:59;
+ A18: LIN a,b,x & LIN a,b,y & LIN p,q,p' & LIN p,q,q' by A2,A4,A7,AFF_1:33;
+A19: now assume ex a,b,c st LIN a,b,c & a<>b & a<>c & b<>c;
+ then consider d such that A20: LIN p,b,d & d<>p & d<>b by A11,TRANSLAC:2;
+  A21: d in B' by A20,AFF_1:def 2;
+ consider N such that A22: d in N & K // N by A7,AFF_1:63;
+  A23: N is_line by A22,AFF_1:50;
+    not B'' // N proof assume B'' // N; then B' // N by A15,AFF_1:58;
+     then B' // K by A22,AFF_1:58;
+     hence contradiction by A2,A14,A17,AFF_1:59; end; then consider z such
+that
+  A24: z in B'' & z in N by A13,A23,AFF_1:72;
+   p,a // p',x & p,d // p',z & p in K & p' in K & a in M & x in M &
+ d in N & z in N & K // M & K // N & K<>M & K<>N
+ by A1,A2,A4,A7,A10,A13,A14,A15,A17,A20,A21,A22,A24,AFF_1:30,53;
+ then a,d // x,z & a,q // x,q' & a in M & x in M & d in N & z in N &
+ q in K & q' in K & M // N & M // K & M<>N & M<>K
+ by A2,A3,A4,A7,A13,A14,A15,A17,A20,A21,Lm4,AFF_1:30,53,58;
+ then d,b // z,y & d,q // z,q' & d in N & z in N & b in M & y in M &
+ q in K & q' in K & N // M & N // K & N<>M & N<>K
+ by A2,A3,A4,A7,A13,A14,A15,A17,A20,A21,A22,A24,Lm4,AFF_1:30,53;
+ hence thesis by A3,Lm4; end;
+
+   now assume A25: not ex a,b,c st LIN a,b,c & a<>b & a<>c & b<>c;
+
+
+
+ A26: now assume A27: p=p' & p=q'; then LIN p,a,x by A6,AFF_1:def 1;
+  then LIN a,x,p by AFF_1:15; then a=x by A4,A7,A16,AFF_1:39;
+  then a,q // a,q' by A6,AFF_1:13; then LIN a,q,q' by AFF_1:def 1;
+  then LIN p,q,a by A27,AFF_1:15; hence contradiction by A2,A5,A7,A16,AFF_1:39
+; end;
+ A28: now assume A29: p=p' & q=q';
+  then LIN p,b,y by A6,AFF_1:def 1; then LIN b,y,p by AFF_1:15;
+  then b=y by A4,A7,A16,AFF_1:39; hence thesis by A29,AFF_1:11; end;
+ A30: now assume A31: q=p' & q=q'; then LIN q,a,x by A6,AFF_1:def 1;
+  then LIN a,x,q by AFF_1:15; then a=x by A4,A7,A16,AFF_1:39;
+  then a,q // a,p by A6,A31,AFF_1:13; then LIN a,q,p by AFF_1:def 1;
+  then LIN p,q,a by AFF_1:15; hence contradiction by A2,A5,A7,A16,AFF_1:39;
+end;
+    now assume A32: q=p' & p=q';
+  A33: now assume a=x; then a,p // a,q by A6,A32,AFF_1:13;
+   then LIN a,p,q by AFF_1:def 1; then LIN p,q,a by AFF_1:15;
+   hence contradiction by A2,A5,A7,A16,AFF_1:39; end;
+     now assume A34: b=x;
+   then q,y // q,a by A6,A11,A32,AFF_1:14; then LIN q,y,a by AFF_1:def 1;
+   then LIN a,y,q by AFF_1:15;
+   then q',y // q,b by A4,A6,A7,A16,A32,A34,AFF_1:39; hence thesis by AFF_1:13
+; end;
+  hence thesis by A5,A18,A25,A33; end;
+ hence thesis by A5,A18,A25,A26,A28,A30; end;
+hence thesis by A19; end;
+hence thesis by A8;
+end;
+
+Lm21: a,b // K & not a in K & not x in K & AFP satisfies_TDES &
+   p in K & p' in K & p,a // p',x & p,b // p',y & x,y // K &
+   q in K & q' in K & q,a // q',x
+                                           implies q,b // q',y
+ proof assume that A1: a,b // K & not a in K & not x in K
+ and A2: AFP satisfies_TDES
+ and A3: p in K & p' in K & p,a // p',x & p,b // p',y & x,y // K
+ and A4: q in K & q' in K & q,a // q',x;
+ A5: K is_line by A1,AFF_1:40;
+A6:  a=b implies x=y proof assume A7: a=b; assume A8: x<>y;
+      p',x // p',y by A1,A3,A7,AFF_1:14; then LIN p',x,y by AFF_1:def 1;
+    then A9: LIN x,y,p' by AFF_1:15; set M=Line(x,y);
+    A10: M is_line & x in M & p' in
+ M by A8,A9,AFF_1:26,def 2,def 3;
+      M // K by A3,A8,AFF_1:def 5;hence contradiction by A1,A3,A10,AFF_1:59;
+end;
+
+ A11: now assume A12: p=q; p'=q' proof assume A13: p'<>q';
+         p',x // q',x by A1,A3,A4,A12,AFF_1:14; then x,p' // x,q' by AFF_1:13;
+       then LIN x,p',q' by AFF_1:def 1;
+       then LIN p',q',x by AFF_1:15;
+       hence contradiction by A1,A3,A4,A5,A13,AFF_1:39; end;
+     hence thesis by A3,A12; end;
+ A14: now assume A15: not a,x // K & a<>b;
+         then A16: a<>x by A5,AFF_1:47;
+        set A=Line(a,x);
+         A17: a in A & x in A & A is_line by A16,AFF_1:26,def 3;
+         then not A // K by A15,AFF_1:54;
+        then consider o such that
+         A18: o in A & o in K by A5,A17,AFF_1:72;
+         A19: LIN o,a,x by A17,A18,AFF_1:33;
+         A20: a,b // x,y by A1,A3,A5,AFF_1:45;
+            a,p // x,p' & b,p // y,p' by A3,AFF_1:13;
+         then A21: LIN o,b,y by A1,A2,A3,A5,A15,A18,A19,A20,Lm3;
+           a,q // x,q' by A4,AFF_1:13;
+         then b,q // y,q' by A1,A2,A3,A4,A5,A18,A19,A21,Lm2;
+         hence thesis by AFF_1:13; end;
+    now assume A22: a,x // K & a<>b & p<>q;
+   set M=Line(a,b);
+    A23: M is_line & a in M & b in M by A22,AFF_1:26,def 3;
+    A24: M // K by A1,A22,AFF_1:def 5;
+       x in M & y in M proof a,b // a,x by A1,A5,A22,AFF_1:45;
+     then LIN a,b,x by AFF_1:def 1; hence A25: x in M by AFF_1:def 2;
+       x,y // M by A3,A24,AFF_1:57; hence y in M by A23,A25,AFF_1:37;
+     end;
+   hence thesis by A2,A3,A4,A22,A23,A24,Th7; end;
+hence thesis by A4,A6,A11,A14; end;
+
+Lm22: a,b // K & not a in K & not x in K & AFP satisfies_TDES &
+   p in K & p' in K & p,a // p',x & p,b // p',y & x,y // K &
+   q in K & q' in K & q,a // q',x & x,s // K & q,b // q',s
+                                                   implies s=y
+ proof assume that A1: a,b // K & not a in K & not x in K
+ and A2: AFP satisfies_TDES
+ and A3: p in K & p' in K & p,a // p',x & p,b // p',y & x,y // K
+ and A4: q in K & q' in K & q,a // q',x & x,s // K & q,b // q',s;
+ assume A5: not thesis;
+ A6: q,b // q',y by A1,A2,A3,A4,Lm21;
+ A7: not b in K & K is_line by A1,AFF_1:40,49;
+ then q',s // q',y by A4,A6,AFF_1:14; then LIN q',s,y by AFF_1:def 1;
+then A8: LIN y,s,q' by AFF_1:15;
+ consider M such that A9: x in M & K // M by A7,AFF_1:63;
+ A10: M is_line by A9,AFF_1:50;
+   x,y // M by A3,A9,AFF_1:57; then A11: y in M by A9,A10,AFF_1:37;
+   x,s // M by A4,A9,AFF_1:57; then s in M by A9,A10,AFF_1:37;
+ then M=Line(y,s) by A5,A10,A11,AFF_1:38; then q' in M by A8,AFF_1:def 2;
+ hence
+   contradiction by A1,A4,A9,AFF_1:59; end;
+
+
+
+Lm23: a,b // K & not a in K & AFP satisfies_TDES &
+       ((x in K & x=y) or
+       (not x in K & ex p,p' st p in K & p' in K & p,a // p',x
+                                      & p,b // p',y & x,y // K))
+       & ((r in K & r=y) or
+       (not r in K & ex p,p' st p in K & p' in K & p,a // p',r
+                                      & p,b // p',y & r,y // K))
+                                     implies x=r
+ proof assume that A1: a,b // K & not a in K & AFP satisfies_TDES and
+       A2: (x in K & x=y) or
+       (not x in K & ex p,p' st p in K & p' in K & p,a // p',x
+                             & p,b // p',y & x,y // K) and
+       A3: (r in K & r=y) or
+       (not r in K & ex p,p' st p in K & p' in K & p,a // p',r
+                                      & p,b // p',y & r,y // K);
+    A4: b,a // K & not b in K by A1,AFF_1:48,49;
+    A5: (y in K & y=x) or
+       (not y in K & ex p,p' st p in K & p' in K & p,b // p',y
+                  & p,a // p',x & y,x // K) by A1,A2,Lm18;
+       (y in K & y=r) or
+       (not y in K & ex p,p' st p in K & p' in K & p,b // p',y
+                  & p,a // p',r & y,r // K) by A1,A3,Lm18;
+    hence thesis by A1,A4,A5,Lm22; end;
+
+Lm24: (a,b // K & not a in K & AFP satisfies_TDES) implies
+   ex f st for x,y holds
+       (f.x=y iff
+       ((x in K & x=y) or
+       (not x in K & ex p,p' st p in K & p' in K & p,a // p',x
+                                    & p,b // p',y & x,y // K)))
+ proof
+defpred P[Element of AFP, Element of AFP]
+means (($1 in K & $1=$2) or
+       (not $1 in K & ex p,p' st p in K & p' in K & p,a // p',$1
+          & p,b // p',$2 & $1,$2 // K));
+   assume A1: a,b // K & not a in K & AFP satisfies_TDES;
+ then A2: for x ex y st P[x,y] by Lm19;
+ A3: for y ex x st P[x,y] by A1,Lm20;
+ A4: for x,y,r st P[x,y] & P[r,y] holds x=r by A1,Lm23;
+ A5: for x,y,s st P[x,y] & P[x,s] holds y=s by A1,Lm22;
+     ex f st for x,y holds
+       (f.x=y iff P[x,y]) from EXPermutation(A2,A3,A4,A5);
+  hence thesis;
+ end;
+
+Lm25: (a,b // K & not a in K & for x,y holds (f.x=y iff
+       ((x in K & x=y) or
+       (not x in K & ex p,p' st p in K & p' in K & p,a // p',x
+                                  & p,b // p',y & x,y // K))))
+     implies f.a=b
+ proof assume A1: a,b // K & not a in K;
+       assume A2: for x,y holds (f.x=y iff
+        ((x in K & x=y) or
+        (not x in K & ex p,p' st p in K & p' in K & p,a // p',x
+                                   & p,b // p',y & x,y // K)));
+    K is_line by A1,AFF_1:40;
+ then consider p,q such that A3: p in K & q in K & p<>q by AFF_1:31;
+   p,a // p,a & p,b // p,b by AFF_1:11;hence thesis by A1,A2,A3; end;
+
+Lm26: (a,b // K & not a in K & for x,y holds (f.x=y iff
+        ((x in K & x=y) or
+       (not x in K & ex p,p' st p in K & p' in K & p,a // p',x
+                                   & p,b // p',y & x,y // K))))
+     implies (for x holds x,f.x // K)
+ proof assume that A1: a,b // K & not a in K and
+       A2: for x,y holds (f.x=y iff
+        ((x in K & x=y) or
+       (not x in K & ex p,p' st p in K & p' in K & p,a // p',x
+                                   & p,b // p',y & x,y // K)));
+ A3: K is_line by A1,AFF_1:40;
+ let x; set y=f.x;
+ A4: now assume x in K; then y=x by A2;
+   hence thesis by A3,AFF_1:47; end;
+    now assume not x in K; then ex p,p' st
+ p in K & p' in K & p,a // p',x & p,b // p',y & x,y // K
+     by A2; hence thesis; end;
+ hence thesis by A4; end;
+
+Lm27: (a,b // K & not a in K & AFP satisfies_TDES & for x,y holds (f.x=y iff
+       ((x in K & x=y) or
+       (not x in K & ex p,p' st p in K & p' in K & p,a // p',x
+                                   & p,b // p',y & x,y // K))))
+     implies f is_Col
+ proof assume that A1: a,b // K & not a in K and
+          AFP satisfies_TDES and
+       A2: for x,y holds (f.x=y iff
+        ((x in K & x=y) or
+       (not x in K & ex p,p' st p in K & p' in K & p,a // p',x
+                                   & p,b // p',y & x,y // K)));
+ A3: b,a // K & not b in K by A1,AFF_1:48,49;
+ A4: K is_line by A1,AFF_1:40;
+
+    for A st A is_line holds f.:A is_line
+  proof let A such that A5: A is_line; set B'=f.:A;
+
+  A6: now assume A7: A=K;
+    A8: A c= B' proof now let x such that A9: x in A;
+  set y=f.x;
+       y in B' & x=y by A2,A7,A9,TRANSGEO:110;
+     hence x in B'; end;
+     hence thesis by SUBSET_1:7; end;
+       B' c= A proof now let y; assume y in B';
+    then ex x st x in A & y=f.x by TRANSGEO:111;
+     hence y in A by A2,A7; end;
+     hence thesis by SUBSET_1:7; end;
+    hence thesis by A5,A8,XBOOLE_0:def 10; end;
+
+  A10: now assume A11: A // K & A<>K;
+    A12: B' c= A proof now let y; assume y in B';
+    then consider x such that A13: x in A & y = f.x by TRANSGEO:111;
+         not x in K by A11,A13,AFF_1:59;
+    then ex p,p' st p in K & p' in K & p,a // p',x & p,b // p',y &
+          x,y // K by A2,A13; then x,y // A by A11,AFF_1:57;
+      hence y in A by A5,A13,AFF_1:37;
+      end;
+     hence thesis by SUBSET_1:7; end;
+       A c= B' proof now let x such that A14: x in A;
+    consider y such that A15: f.y=x by TRANSGEO:2;
+         (y in K & y=x) or
+       (not y in K & ex p,p' st p in K & p' in K & p,a // p',y
+                   & p,b // p',x & y,x // K) by A2,A15;
+then x,y // K by A11,A14,AFF_1:48,59;
+      then x,y // A by A11,AFF_1:57;
+      then y in A by A5,A14,AFF_1:37; hence x in B' by A15,TRANSGEO:111; end;
+      hence thesis by SUBSET_1:7; end;
+  hence thesis by A5,A12,XBOOLE_0:def 10; end;
+
+     now assume A16: not A // K & A<>K; then consider p
+  such that A17: p in A & p in K by A4,A5,AFF_1:72;
+  consider M such that A18: a in M & K // M by A4,AFF_1:63;
+   A19: M is_line by A18,AFF_1:50;
+   A20: b in M proof a,b // M by A1,A18,AFF_1:57;
+              hence thesis by A18,A19,AFF_1:37; end;
+  consider A' such that A21: a in A' & A // A' by A5,AFF_1:63;
+                        A22: A' is_line by A21,AFF_1:50;
+     not A' // K by A16,A21,AFF_1:58;
+  then consider q such that A23: q in A' & q in K by A4,A22,AFF_1:72;
+  set C'=Line(q,b);
+     q<>b by A1,A18,A20,A23,AFF_1:59;
+   then A24: C' is_line & q in C' & b in C' by AFF_1:26,def 3;
+  then consider C such that A25: p in C & C' // C by AFF_1:63;
+   A26: C is_line by A25,AFF_1:50;
+   A27: C c= B' proof now let y such that A28: y in C;
+     A29: now assume A30: y=p;
+         f.p=p by A2,A17;
+       hence y in B' by A17,A30,TRANSGEO:111; end;
+        now assume A31: y<>p; consider N such that
+       A32: y in N & K // N by A4,AFF_1:63;
+       A33: N is_line & N // K by A32,AFF_1:50;
+         not N // A by A16,A32,AFF_1:58; then consider x such that
+       A34: x in N & x in A by A5,A33,AFF_1:72;
+       A35: not x in K proof assume x in K;
+        then y in
+ K by A32,A34,AFF_1:59; then C' // K by A4,A17,A25,A26,A28,A31,AFF_1:30;
+        hence
+          contradiction by A3,A23,A24,AFF_1:59; end;
+         p,x // q,a & q,b // p,y & x,y // K by A17,A21,A23,A24,A25,A28,A32,A33,
+A34,AFF_1:53,54;
+        then q,a // p,x & q,b // p,y & x,y // K by AFF_1:13;
+       then y=f.x by A2,A17,A23,A35; hence y in B' by A34,TRANSGEO:111; end;
+     hence y in B' by A29; end;
+    hence thesis by SUBSET_1:7; end;
+       B' c= C proof now let y; assume y in B'; then consider
+     x such that A36: x in A & y=f.x by TRANSGEO:111;
+         now assume A37: x<>p; consider N such that
+        A38: x in N & K // N by A4,AFF_1:63;
+        A39: N is_line & N // K by A38,AFF_1:50;
+        A40: not x in K by A4,A5,A16,A17,A36,A37,AFF_1:30;
+          not C // N proof assume C // N; then C' // N & N // K by A25,A38,
+AFF_1:58; then C' // K & q in C' by AFF_1:26,58;
+          then C'=K by A23,AFF_1:59;
+         hence contradiction by A3,AFF_1:26; end; then consider z
+       such that A41: z in C & z in N by A26,A39,AFF_1:72;
+          p,x // q,a & q,b // p,z & x,z // K by A17,A21,A23,A24,A25,A36,A38,A39
+,A41,AFF_1:53,54;
+        then q,a // p,x & q,b // p,z & x,z // K by AFF_1:13;
+        hence y in C by A2,A17,A23,A36,A40,A41; end;
+       hence y in C by A2,A17,A25,A36; end;
+     hence thesis by SUBSET_1:7; end;
+   hence thesis by A26,A27,XBOOLE_0:def 10; end;
+   hence thesis by A6,A10; end;
+  hence thesis by TRANSGEO:116; end;
+
+Lm28: (a,b // K & not a in K & AFP satisfies_TDES & for x,y holds (f.x=y iff
+        ((x in K & x=y) or
+       (not x in K & ex p,p' st p in K & p' in K & p,a // p',x
+                                   & p,b // p',y & x,y // K))))
+     implies f is_Sc K
+ proof assume that A1: a,b // K & not a in K and
+       A2: AFP satisfies_TDES and
+       A3: for x,y holds (f.x=y iff
+        ((x in K & x=y) or
+       (not x in K & ex p,p' st p in K & p' in K & p,a // p',x
+                                  & p,b // p',y & x,y // K)));
+ A4: K is_line by A1,AFF_1:40;
+ A5: f is_Col by A1,A2,A3,Lm27;
+ A6: for x st x in K holds f.x=x by A3;
+    for x holds x,f.x // K by A1,A3,Lm26;
+ hence thesis by A4,A5,A6,Def1; end;
+
+theorem
+Th8: a,b // K & not a in K & AFP satisfies_TDES implies ex f st f is_Sc K &
+                                                           f.a=b
+ proof assume that A1: a,b // K & not a in K and A2: AFP satisfies_TDES;
+ consider f such that A3: for x,y holds (f.x=y iff
+        ((x in K & x=y) or
+       (not x in K & ex p,p' st p in K & p' in K & p,a // p',x
+              & p,b // p',y & x,y // K))) by A1,A2,Lm24;
+ A4: f is_Sc K by A1,A2,A3,Lm28;
+    f.a=b by A1,A3,Lm25;
+ hence thesis by A4; end;
+
+theorem
+   AFP satisfies_TDES iff (for a,b,K st a,b // K & not a in K ex f
+                                           st f is_Sc K & f.a=b)
+ by Th6,Th8;

@@ -1,0 +1,1429 @@
+:: Category of Rings
+::  by Micha{\l} Muzalewski
+::
+:: Received December 5, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary CLASSES2, VECTSP_1, PRE_TOPC, INCSP_1, FUNCT_1, CAT_1, FUNCSDOM,
+      GRCAT_1, RELAT_1, MIDSP_1, ARYTM_3, ENS_1, FUNCT_2, RLVECT_1, MOD_2,
+      TARSKI, PARTFUN1, RINGCAT1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, MCART_1,
+      PARTFUN1, FUNCT_2, STRUCT_0, PRE_TOPC, RLVECT_1, VECTSP_1, GRCAT_1,
+      FUNCSDOM, CAT_1, CLASSES2, MOD_2;
+ constructors ALGSTR_1, MOD_2, GRCAT_1, TOPS_2, VECTSP_2, MEMBERED, PARTFUN1,
+      XBOOLE_0;
+ clusters VECTSP_2, MOD_2, RELSET_1, STRUCT_0, GRCAT_1, SUBSET_1, MEMBERED,
+      ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ theorems CAT_1, FUNCT_2, GRCAT_1, MCART_1, MOD_2, PARTFUN1, TARSKI, RELAT_1,
+      RELSET_1, ZFMISC_1, XBOOLE_0;
+ schemes FUNCT_2, GRCAT_1, TARSKI;
+
+begin
+
+reserve x,y for set;
+reserve D for non empty set;
+reserve UN for Universe;
+
+               ::
+               ::  1a. Maps of the carriers of rings
+               ::
+
+definition let G,H be non empty doubleLoopStr;
+ let IT be map of G,H;
+ canceled;
+
+ attr IT is linear means
+ :Def2: (for x,y being Scalar of G holds IT.(x+y) = IT.x+IT.y)
+        & (for x,y being Scalar of G holds IT.(x*y) = IT.x*IT.y)
+        & IT.(1_ G) = 1_ H;
+end;
+
+canceled 2;
+
+theorem
+Th3:for G1,G2,G3 being non empty doubleLoopStr,
+        f being map of G1,G2, g being map of G2,G3
+      st f is linear & g is linear holds g*f is linear
+ proof
+   let G1,G2,G3 be non empty doubleLoopStr,
+       f be map of G1,G2, g be map of G2,G3 such that
+   A1: f is linear and
+   A2: g is linear;
+   set h = g*f;
+   A3: now let x,y be Scalar of G1;
+     A4: g.(f.x) = h.x & g.(f.y) = h.y by FUNCT_2:21;
+     thus h.(x+y) = g.(f.(x+y)) by FUNCT_2:21
+                 .= g.(f.x+f.y) by A1,Def2
+                 .= h.x+h.y by A2,A4,Def2;end;
+   A5: now let x,y be Scalar of G1;
+     A6: g.(f.x) = h.x & g.(f.y) = h.y by FUNCT_2:21;
+     thus h.(x*y) = g.(f.(x*y)) by FUNCT_2:21
+                 .= g.(f.x*f.y) by A1,Def2
+                 .= h.x*h.y by A2,A6,Def2;end;
+     h.(1_ G1) = g.(f.(1_ G1)) by FUNCT_2:21
+           .= g.(1_ G2) by A1,Def2
+           .= 1_ G3 by A2,Def2;
+   hence thesis by A3,A5,Def2;
+ end;
+
+                      ::
+                      ::  1b. Morphisms of rings
+                      ::
+
+definition
+  struct RingMorphismStr (# Dom,Cod -> Ring,
+                         Fun -> map of the Dom, the Cod #);
+end;
+
+reserve f for RingMorphismStr;
+
+definition let f;
+ func dom(f) -> Ring equals
+ :Def3:  the Dom of f;
+ coherence;
+ func cod(f) -> Ring equals
+ :Def4:  the Cod of f;
+ coherence;
+ func fun(f) -> map of the Dom of f, the Cod of f equals
+ :Def5:  the Fun of f;
+ coherence;
+end;
+
+reserve G,H,G1,G2,G3,G4 for Ring;
+
+Lm1: for G being non empty doubleLoopStr holds id G is linear
+proof
+  let G be non empty doubleLoopStr;
+  set f = id G;
+  A1: now
+    let x,y be Scalar of G;
+       f.(x+y) = x+y & f.x = x & f.y = y by GRCAT_1:11;
+    hence f.(x+y) = f.x+f.y;end;
+  A2: now
+    let x,y be Scalar of G;
+       f.(x*y) = x*y
+       & f.x = x & f.y = y by GRCAT_1:11;
+    hence f.(x*y) = f.x*f.y;end;
+    f.(1_ G) = 1_ G by GRCAT_1:11;
+  hence thesis by A1,A2,Def2;
+end;
+
+definition let G be non empty doubleLoopStr;
+  cluster id G -> linear;
+  coherence by Lm1;
+end;
+
+definition let IT be RingMorphismStr;
+ attr IT is RingMorphism-like means
+ :Def6: fun(IT) is linear;
+end;
+
+definition
+ cluster strict RingMorphism-like RingMorphismStr;
+  existence
+  proof
+    consider G;
+    set i = RingMorphismStr(# G,G,id G#);
+      fun(i) = id G by Def5;
+    then i is RingMorphism-like by Def6;
+    hence thesis;
+  end;
+end;
+
+definition
+ mode RingMorphism is RingMorphism-like RingMorphismStr;
+end;
+
+definition let G;
+ func ID G -> RingMorphism equals
+ :Def7:  RingMorphismStr(# G,G,id G#);
+  coherence
+   proof
+     set i = RingMorphismStr(# G,G,id G#);
+        dom(i) = G & cod(i) = G & fun(i) = id G by Def3,Def4,Def5;
+     hence i is RingMorphism by Def6;
+   end;
+end;
+
+definition let G;
+ cluster ID G -> strict;
+  coherence
+   proof
+       RingMorphismStr(# G,G,id G#) = ID G by Def7;
+     hence thesis;
+   end;
+end;
+
+reserve F for RingMorphism;
+
+definition let G,H;
+ pred G <= H means
+ :Def8: ex F being RingMorphism st dom(F) = G & cod(F) = H;
+ reflexivity
+ proof let G;
+   set i = ID(G);
+A1:   i = RingMorphismStr(# G,G,id G#) by Def7;
+   take i;
+   thus thesis by A1,Def3,Def4;
+ end;
+end;
+
+Lm2: the RingMorphismStr of F is RingMorphism-like
+ proof set S = the RingMorphismStr of F;
+A1: fun(S) = the Fun of F by Def5 .= fun F by Def5;
+A2: fun F is linear by Def6;
+  hence for x,y being Scalar of the Dom of S holds
+    (fun S).(x+y) = (fun S).x+(fun S).y by A1,Def2;
+  thus for x,y being Scalar of the Dom of S holds
+    (fun S).(x*y) = (fun S).x*(fun S).y by A1,A2,Def2;
+  thus (fun S).(1_ the Dom of S)
+         = 1_ the Cod of S by A1,A2,Def2;
+ end;
+
+definition let G,H;
+ assume A1: G <= H;
+ mode Morphism of G,H -> strict RingMorphism means
+ :Def9: dom(it) = G & cod(it) = H;
+  existence
+   proof
+     consider F being RingMorphism such that
+A2:    dom(F) = G & cod(F) = H by A1,Def8;
+     set S = the RingMorphismStr of F;
+       dom F = the Dom of S & cod F = the Cod of S by Def3,Def4;
+     then S is RingMorphism & dom S = G & cod S = H by A2,Def3,Def4,Lm2;
+    hence thesis;
+   end;
+end;
+
+definition let G,H;
+ cluster strict Morphism of G,H;
+  existence
+   proof consider m being Morphism of G,H;
+       m is RingMorphism;
+    hence thesis;
+   end;
+end;
+
+definition let G;
+ redefine func ID G -> strict Morphism of G,G;
+  coherence
+   proof
+     set i = ID(G);
+       i = RingMorphismStr(# G,G,id G#) by Def7;
+      then dom(i) = G & cod(i) = G by Def3,Def4;
+     hence thesis by Def9;
+   end;
+end;
+
+Lm3: the Fun of F is linear
+ proof
+     the Fun of F = fun(F) by Def5;
+   hence thesis by Def6;
+ end;
+
+Lm4:
+for f being strict RingMorphismStr holds
+ dom(f) = G & cod(f) = H & fun(f) is linear implies f is Morphism of G,H
+ proof let f be strict RingMorphismStr;
+   assume
+   A1: dom(f) = G & cod(f) = H & fun(f) is linear;
+   then reconsider f' = f as RingMorphism by Def6;
+     now
+       dom(f') = G & cod(f') = H by A1;
+     hence G <= H by Def8;end;
+   then f' is Morphism of G,H by A1,Def9;
+   hence thesis;
+ end;
+
+Lm5:for f being map of G,H st f is linear
+       holds RingMorphismStr (#G,H,f#) is Morphism of G,H
+ proof
+   let f be map of G,H such that
+   A1: f is linear;
+   set F = RingMorphismStr (#G,H,f#);
+      dom(F) = G & cod(F) = H & fun(F) = f by Def3,Def4,Def5;
+   hence thesis by A1,Lm4;
+ end;
+
+Lm6:
+for F being RingMorphism
+ ex G,H st G <= H & dom(F) = G & cod(F) = H &
+  the RingMorphismStr of F is Morphism of G,H
+ proof let F be RingMorphism;
+   set G = the Dom of F, H = the Cod of F;
+      dom(F) = G & cod(F) = H by Def3,Def4;
+   then A1: G <= H by Def8;
+   take G,H;
+    reconsider S = the RingMorphismStr of F as RingMorphism by Lm2;
+      dom S = G & cod S = H by Def3,Def4;
+   hence thesis by A1,Def3,Def4,Def9;
+ end;
+
+canceled;
+
+theorem
+Th5:for g,f being RingMorphism st dom(g) = cod(f) ex G1,G2,G3 st
+        G1 <= G2 & G2 <= G3 &
+       the RingMorphismStr of g is Morphism of G2,G3 &
+       the RingMorphismStr of f is Morphism of G1,G2
+ proof
+   defpred P[RingMorphism,RingMorphism] means dom($1) = cod($2);
+   let g,f be RingMorphism such that
+   A1: P[g,f];
+A2:   ex G2,G3 st G2 <= G3 &
+ dom(g) = G2 & cod(g) = G3 &
+ the RingMorphismStr of g is Morphism of G2,G3 by Lm6;
+     ex G1,G2' being Ring st G1 <= G2' &
+ dom(f) = G1 & cod(f) = G2' &
+ the RingMorphismStr of f is Morphism of G1,G2' by Lm6;
+   hence thesis by A1,A2;
+ end;
+
+theorem
+Th6:
+for F being strict RingMorphism
+ holds F is Morphism of dom(F),cod(F) & dom(F) <= cod(F)
+ proof let F be strict RingMorphism;
+     ex G,H st
+   G <= H &
+ dom(F) = G & cod(F) = H &
+ F is Morphism of G,H by Lm6;
+   hence thesis;
+ end;
+
+Lm7:for F being Morphism of G,H st G <= H holds ex f being map of G,H
+       st F = RingMorphismStr(#G,H,f#) & f is linear
+ proof
+   let F be Morphism of G,H such that
+   A1: G <= H;
+   A2: the Dom of F = dom(F) by Def3
+                   .= G by A1,Def9;
+   A3: the Cod of F = cod(F) by Def4
+                   .= H by A1,Def9;
+   then reconsider f = the Fun of F as map of G,H by A2;
+   take f;
+   thus thesis by A2,A3,Lm3;
+ end;
+
+Lm8:for F being Morphism of G,H st G <= H holds ex f being map of G,H
+       st F = RingMorphismStr(#G,H,f#)
+ proof
+   let F be Morphism of G,H; assume
+      G <= H;
+   then consider f being map of G,H such that
+   A1: F = RingMorphismStr(#G,H,f#) & f is linear
+ by Lm7;
+   take f;
+   thus thesis by A1;
+ end;
+
+theorem
+  for F being strict RingMorphism
+ ex G,H st ex f being map of G,H st
+          F is Morphism of G,H
+        & F = RingMorphismStr(#G,H,f#)
+        & f is linear
+ proof let F be strict RingMorphism;
+   consider G,H such that
+   A1: G <= H and
+     dom(F) = G & cod(F) = H and
+   A2: F is Morphism of G,H by Lm6;
+   reconsider F' = F as Morphism of G,H by A2;
+   consider f being map of G,H such that
+   A3: F' = RingMorphismStr(#G,H,f#) & f is linear by A1,Lm7;
+   take G,H,f;
+   thus thesis by A3;
+ end;
+
+definition let G,F be RingMorphism;
+ assume A1: dom(G) = cod(F);
+ func G*F -> strict RingMorphism means
+ :Def10:for G1,G2,G3 for g being map of G2,G3, f being map of G1,G2
+       st the RingMorphismStr of G = RingMorphismStr(#G2,G3,g#) &
+          the RingMorphismStr of F = RingMorphismStr(#G1,G2,f#)
+       holds it = RingMorphismStr(#G1,G3,g*f#);
+ existence
+  proof
+    consider G1',G2',G3' being Ring such that
+    A2: G1' <= G2' & G2' <= G3' and
+    A3: the RingMorphismStr of G is Morphism of G2',G3' and
+    A4: the RingMorphismStr of F is Morphism of G1',G2' by A1,Th5;
+    consider g' being map of G2',G3' such that
+    A5: the RingMorphismStr of G = RingMorphismStr(#G2',G3',g'#) and
+    A6: g' is linear by A2,A3,Lm7;
+    consider f' being map of G1',G2' such that
+    A7: the RingMorphismStr of F = RingMorphismStr(#G1',G2',f'#) and
+    A8: f' is linear by A2,A4,Lm7;
+       g'*f' is linear by A6,A8,Th3;
+    then reconsider T' = (RingMorphismStr(#G1',G3',g'*f'#))
+ as strict RingMorphism by Lm5;
+    take T';
+    thus thesis by A5,A7;
+  end;
+ uniqueness
+  proof
+    let S1,S2 be strict RingMorphism such that
+    A9:for G1,G2,G3 for g being map of G2,G3, f being map of G1,G2
+     st the RingMorphismStr of G = RingMorphismStr(#G2,G3,g#) &
+        the RingMorphismStr of F = RingMorphismStr(#G1,G2,f#)
+     holds S1 = RingMorphismStr(#G1,G3,g*f#) and
+    A10:for G1,G2,G3 for g being map of G2,G3, f being map of G1,G2
+     st the RingMorphismStr of G = RingMorphismStr(#G2,G3,g#) &
+        the RingMorphismStr of F = RingMorphismStr(#G1,G2,f#)
+     holds S2 = RingMorphismStr(#G1,G3,g*f#);
+    consider G2',G3' being Ring such that
+    A11: G2' <= G3' and
+    A12: dom(G) = G2' & cod(G) = G3' and
+    A13: the RingMorphismStr of G is Morphism of G2',G3' by Lm6;
+    reconsider G' = the RingMorphismStr of G as Morphism of G2',G3'
+ by A13;
+    consider G1',G2'' being Ring such that
+    A14: G1' <= G2'' and
+    A15: dom(F) = G1' & cod(F) = G2'' and
+    A16: the RingMorphismStr of F is Morphism of G1',G2'' by Lm6;
+    reconsider F' = the RingMorphismStr of F as Morphism of G1',G2''
+ by A16;
+    reconsider F' as Morphism of G1',G2' by A1,A12,A15;
+    consider g' being map of G2',G3' such that
+    A17: G' = RingMorphismStr(#G2',G3',g'#) by A11,Lm8;
+    consider f' being map of G1',G2' such that
+    A18: F' = RingMorphismStr(#G1',G2',f'#) by A1,A12,A14,A15,Lm8;
+    thus S1 = (RingMorphismStr(#G1',G3',g'*f'#))
+ by A9,A17,A18
+           .= S2 by A10,A17,A18;
+  end;
+end;
+
+theorem
+Th8: G1 <= G2 & G2 <= G3 implies G1 <= G3
+ proof
+   assume A1: G1 <= G2 & G2 <= G3;
+   then consider F0 being RingMorphism such that
+   A2: dom(F0) = G1 & cod(F0) = G2 by Def8;
+   reconsider F = the RingMorphismStr of F0 as RingMorphism by Lm2;
+A3:   dom F = the Dom of F0 & cod F = the Cod of F0 by Def3,Def4;
+   then dom(F) = G1 & cod(F) = G2 by A2,Def3,Def4;
+   then reconsider F' = F as Morphism of G1,G2 by A1,Def9;
+   consider G0 being RingMorphism such that
+   A4: dom(G0) = G2 & cod(G0) = G3 by A1,Def8;
+   reconsider G = the RingMorphismStr of G0 as RingMorphism by Lm2;
+A5:   dom G = the Dom of G0 & cod G = the Cod of G0 by Def3,Def4;
+   then dom(G) = G2 & cod(G) = G3 by A4,Def3,Def4;
+   then reconsider G' = G as Morphism of G2,G3 by A1,Def9;
+   consider g being map of G2,G3 such that
+   A6: G' = RingMorphismStr(#G2,G3,g#) by A1,Lm8;
+   consider f being map of G1,G2 such that
+   A7: F' = RingMorphismStr(#G1,G2,f#) by A1,Lm8;
+     dom(G) = G2 by A4,A5,Def3
+         .= cod(F) by A2,A3,Def4;
+   then G*F = RingMorphismStr(#G1,G3,g*f#) by A6,A7,Def10;
+   then dom(G*F) = G1 & cod(G*F) = G3 by Def3,Def4;
+   hence thesis by Def8;
+ end;
+
+theorem
+Th9:for G being Morphism of G2,G3, F being Morphism of G1,G2
+      st G1 <= G2 & G2 <= G3 holds G*F is Morphism of G1,G3
+ proof
+   let G be Morphism of G2,G3, F be Morphism of G1,G2; assume
+   A1: G1 <= G2 & G2 <= G3;
+   then consider g being map of G2,G3 such that
+   A2: G = RingMorphismStr(#G2,G3,g#) by Lm8;
+   consider f being map of G1,G2 such that
+   A3: F = RingMorphismStr(#G1,G2,f#) by A1,Lm8;
+     dom(G) = G2 by A1,Def9
+         .= cod(F) by A1,Def9;
+   then G*F = RingMorphismStr(#G1,G3,g*f#) by A2,A3,Def10;
+   then A4: dom(G*F) = G1 & cod(G*F) = G3 by Def3,Def4;
+     G1 <= G3 by A1,Th8;
+   hence thesis by A4,Def9;
+ end;
+
+definition let G1,G2,G3; let G be Morphism of G2,G3, F be Morphism of G1,G2;
+ assume A1: G1 <= G2 & G2 <= G3;
+ func G*'F -> strict Morphism of G1,G3 equals
+ :Def11:  G*F;
+ coherence by A1,Th9;
+end;
+
+theorem
+Th10:for f,g being strict RingMorphism st dom g = cod f holds
+       ex G1,G2,G3 st ex f0 being map of G1,G2, g0 being map of G2,G3
+          st f = RingMorphismStr(#G1,G2,f0#)
+           & g = RingMorphismStr(#G2,G3,g0#)
+           & g*f = RingMorphismStr(#G1,G3,g0*f0#)
+  proof
+    let f,g be strict RingMorphism such that
+    A1: dom g = cod f;
+    set G1 = dom f,G2 = cod f, G3 = cod g;
+    A2: G1 <= G2 & G2 <= G3 by A1,Th6;
+    reconsider f' = f as Morphism of G1,G2 by Th6;
+    reconsider g' = g as Morphism of G2,G3 by A1,Th6;
+    consider f0 being map of G1,G2 such that
+    A3: f' = RingMorphismStr(#G1,G2,f0#) by A2,Lm8;
+    consider g0 being map of G2,G3 such that
+    A4: g' = RingMorphismStr(#G2,G3,g0#) by A2,Lm8;
+    take G1,G2,G3,f0,g0;
+    thus thesis by A1,A3,A4,Def10;
+  end;
+
+ theorem
+ Th11:for f,g being strict RingMorphism st dom g = cod f holds
+     dom(g*f) = dom f
+   & cod (g*f) = cod g
+ proof
+   let f,g be strict RingMorphism; assume
+      dom g = cod f;
+   then consider G1,G2,G3 being Ring,
+   f0 being map of G1,G2, g0 being map of G2,G3 such that
+   A1: f = RingMorphismStr(#G1,G2,f0#)
+     & g = RingMorphismStr(#G2,G3,g0#)
+     & g*f = RingMorphismStr(#G1,G3,g0*f0#) by Th10;
+   thus dom(g*f) = G1 by A1,Def3
+                .= dom f by A1,Def3;
+   thus cod(g*f) = G3 by A1,Def4
+                .= cod g by A1,Def4;
+ end;
+
+ theorem
+ Th12:for f being Morphism of G1,G2, g being Morphism of G2,G3,
+          h being Morphism of G3,G4 st G1 <= G2 & G2 <= G3 & G3 <= G4
+         holds h*(g*f) = (h*g)*f
+ proof
+   let f be Morphism of G1,G2, g be Morphism of G2,G3, h be Morphism of G3,G4;
+   assume A1: G1 <= G2 & G2 <= G3 & G3 <= G4;
+   then consider f0 being map of G1,G2 such that
+   A2: f = RingMorphismStr(#G1,G2,f0#) by Lm8;
+   consider g0 being map of G2,G3 such that
+   A3: g = RingMorphismStr(#G2,G3,g0#) by A1,Lm8;
+   consider h0 being map of G3,G4 such that
+   A4: h = RingMorphismStr(#G3,G4,h0#) by A1,Lm8;
+   A5: cod(f) = G2 & dom(g) = G2 & cod(g) = G3 & dom(h) = G3
+ by A2,A3,A4,Def3,Def4;
+   then A6: g*f = RingMorphismStr(#G1,G3,g0*f0#) by A2,A3,Def10;
+   A7: h*g = RingMorphismStr(#G2,G4,h0*g0#) by A3,A4,A5,Def10;
+   A8: cod(g*f) = G3 & dom(h*g) = G2 by A5,Th11;
+   then h*(g*f) = RingMorphismStr(#G1,G4,h0*(g0*f0)#) by A4,A5,A6,Def10
+          .= RingMorphismStr(#G1,G4,(h0*g0)*f0#) by RELAT_1:55
+          .= (h*g)*f by A2,A5,A7,A8,Def10;
+   hence thesis;
+ end;
+
+ theorem
+ Th13:for f,g,h being strict RingMorphism st dom h = cod g & dom g = cod f
+        holds h*(g*f) = (h*g)*f
+  proof
+    let f,g,h be strict RingMorphism such that
+    A1: dom h = cod g & dom g = cod f;
+    set G1 = dom f,G2 = cod f, G3 = cod g, G4 = cod h;
+    A2: G1 <= G2 & G2 <= G3 & G3 <= G4 by A1,Th6;
+    reconsider f' = f as Morphism of G1,G2 by Th6;
+    reconsider g' = g as Morphism of G2,G3 by A1,Th6;
+    reconsider h' = h as Morphism of G3,G4 by A1,Th6;
+      h'*(g'*f') = (h'*g')*f' by A2,Th12;
+    hence thesis;
+  end;
+
+ theorem
+ Th14: dom ID(G) = G
+      & cod ID(G) = G
+      & (for f being strict RingMorphism st cod f = G holds (ID G)*f = f)
+      & (for g being strict RingMorphism st dom g = G holds g*(ID G) = g)
+ proof
+   set i = ID G;
+   thus A1: dom i = G & cod i = G by Def9;
+   thus for f being strict RingMorphism st cod f = G holds i*f = f
+    proof
+      let f be strict RingMorphism such that
+      A2: cod f = G;
+      set H = dom(f);
+      A3: H <= G by A2,Th6;
+      reconsider f' = f as Morphism of H,G by A2,Th6;
+      A4: i = RingMorphismStr(# G,G,id G#) by Def7;
+      consider m being map of H,G such that
+      A5: f' = RingMorphismStr(#H,G,m#) by A3,Lm8;
+         (id G)*m = m by GRCAT_1:12;
+      hence i*f = f by A1,A2,A4,A5,Def10;
+    end;
+   thus for g being strict RingMorphism st dom g = G holds g*(ID G) = g
+    proof
+      let f be strict RingMorphism such that
+      A6: dom f = G;
+      set H = cod(f);
+      A7: G <= H by A6,Th6;
+      reconsider f' = f as Morphism of G,H by A6,Th6;
+      A8: i = RingMorphismStr(# G,G,id G#) by Def7;
+      consider m being map of G,H such that
+      A9: f' = RingMorphismStr(#G,H,m#) by A7,Lm8;
+         m*(id G) = m by GRCAT_1:12;
+      hence f*i = f by A1,A6,A8,A9,Def10;
+    end;
+ end;
+
+                        ::
+                        ::  2. Domains of rings
+                        ::
+
+definition let IT be set;
+ attr IT is Ring_DOMAIN-like means
+ :Def12:for x being Element of IT holds x is strict Ring;
+end;
+
+definition
+ cluster Ring_DOMAIN-like non empty set;
+ existence
+  proof
+    consider X being strict Ring;
+    set D = {X};
+    A1: for x be Element of D holds
+            x is strict Ring by TARSKI:def 1;
+    take D;
+    thus thesis by A1,Def12;
+  end;
+end;
+
+definition
+ mode Ring_DOMAIN is Ring_DOMAIN-like non empty set;
+end;
+
+reserve V for Ring_DOMAIN;
+
+definition let V;
+ redefine mode Element of V -> Ring;
+  coherence by Def12;
+end;
+
+definition let V;
+ cluster strict Element of V;
+  existence
+   proof consider e being Element of V;
+       e is strict Ring by Def12;
+    hence thesis;
+   end;
+end;
+
+definition let IT be set;
+ attr IT is RingMorphism_DOMAIN-like means
+  :Def13:for x being set st x in IT holds x is strict RingMorphism;
+end;
+
+definition
+ cluster RingMorphism_DOMAIN-like (non empty set);
+   existence
+    proof
+      consider G;
+      take {ID G};
+  for x being set st x in {ID G} holds x is strict RingMorphism by TARSKI:def 1
+;
+      hence thesis by Def13;
+    end;
+end;
+
+definition
+ mode RingMorphism_DOMAIN is RingMorphism_DOMAIN-like non empty set;
+end;
+
+definition let M be RingMorphism_DOMAIN;
+ redefine mode Element of M -> RingMorphism;
+  coherence by Def13;
+end;
+
+definition let M be RingMorphism_DOMAIN;
+ cluster strict Element of M;
+  existence
+   proof consider m being Element of M;
+       m is strict RingMorphism by Def13;
+    hence thesis;
+   end;
+end;
+
+canceled 2;
+
+theorem
+Th17:for f being strict RingMorphism holds {f} is RingMorphism_DOMAIN
+ proof
+   let f be strict RingMorphism;
+  for x being set st x in {f} holds x is strict RingMorphism
+ by TARSKI:def 1;
+   hence thesis by Def13;
+ end;
+
+definition let G,H;
+ mode RingMorphism_DOMAIN of G,H -> RingMorphism_DOMAIN means
+ :Def14:for x being Element of it holds x is Morphism of G,H;
+  existence
+   proof
+     consider F being Morphism of G,H;
+     reconsider D = {F} as RingMorphism_DOMAIN by Th17;
+     take D;
+     thus thesis by TARSKI:def 1;
+   end;
+end;
+
+theorem
+Th18: D is RingMorphism_DOMAIN of G,H
+  iff for x being Element of D holds x is Morphism of G,H
+ proof
+   thus D is RingMorphism_DOMAIN of G,H
+    implies for x being Element of D holds x is Morphism of G,H
+ by Def14;
+   thus (for x being Element of D holds x is Morphism of G,H)
+    implies D is RingMorphism_DOMAIN of G,H
+    proof
+      assume
+      A1:for x being Element of D holds x is Morphism of G,H;
+      then for x being set st x in D holds x is strict RingMorphism;
+      then reconsider D' = D as RingMorphism_DOMAIN
+ by Def13;
+  for x being Element of D' holds x is Morphism of G,H
+ by A1;
+      hence thesis by Def14;
+    end;
+ end;
+
+theorem
+  for f being Morphism of G,H holds {f} is RingMorphism_DOMAIN of G,H
+ proof
+   let f be Morphism of G,H;
+  for x being Element of {f} holds x is Morphism of G,H by TARSKI:def 1;
+   hence thesis by Th18;
+ end;
+
+definition let G,H;
+ assume A1: G <= H;
+ func Morphs(G,H) -> RingMorphism_DOMAIN of G,H means
+ :Def15: x in it iff x is Morphism of G,H;
+  existence
+   proof
+     set D = { RingMorphismStr(# G,H,f#) where f is Element of Maps(G,H) :
+                               f is linear };
+     consider F being Morphism of G,H;
+     consider f being map of G,H such that
+       F = RingMorphismStr(#G,H,f#) and
+     A2: f is linear by A1,Lm7;
+       f is Element of Funcs(the carrier of G, the carrier of H) by FUNCT_2:11;
+     then reconsider f0 = f as Element of Maps(G,H) by GRCAT_1:def 26;
+       RingMorphismStr(# G,H,f0#) in D by A2;
+     then reconsider D as non empty set;
+     A3: x in D implies x is Morphism of G,H
+      proof
+        assume x in D;
+        then ex f being Element of Maps(G,H) st
+ x = RingMorphismStr (#G,H,f#) & f is linear;
+        hence thesis by Lm5;
+      end;
+     then A4:for x being Element of D holds x is Morphism of G,H;
+A5:      x is Morphism of G,H implies x in D
+      proof
+        assume x is Morphism of G,H;
+        then reconsider x as Morphism of G,H;
+          dom(x) = G & cod(x) = H by A1,Def9;
+        then A6: the Dom of x = G & the Cod of x = H by Def3,Def4;
+        A7: (the Fun of x) is linear by Lm3;
+        reconsider f = the Fun of x as map of G,H by A6;
+          f is Element of Funcs(the carrier of G, the carrier of H)
+ by FUNCT_2:11;
+        then reconsider g = f as Element of Maps(G,H) by GRCAT_1:def 26;
+          x = RingMorphismStr(# G,H,g #) by A6;
+        hence thesis by A7;
+      end;
+
+     reconsider D as RingMorphism_DOMAIN of G,H by A4,Th18;
+     take D;
+     thus thesis by A3,A5;
+   end;
+  uniqueness
+   proof
+     let D1,D2 be RingMorphism_DOMAIN of G,H such that
+     A8: x in D1 iff x is Morphism of G,H and
+     A9: x in D2 iff x is Morphism of G,H;
+       x in D1 iff x in D2
+      proof
+         hereby assume x in D1;
+           then x is Morphism of G,H by A8;
+           hence x in D2 by A9;
+         end;
+         assume x in D2;
+         then x is Morphism of G,H by A9;
+         hence thesis by A8;
+      end;
+     hence thesis by TARSKI:2;
+   end;
+end;
+
+definition let G,H; let M be RingMorphism_DOMAIN of G,H;
+ redefine mode Element of M -> Morphism of G,H;
+  coherence by Def14;
+end;
+
+definition let G,H; let M be RingMorphism_DOMAIN of G,H;
+ cluster strict Element of M;
+  existence
+   proof consider e being Element of M;
+       e is Morphism of G,H;
+    hence thesis;
+   end;
+end;
+
+                     ::
+                     ::  4a. Category of rings  - objects
+                     ::
+
+definition let x,y;
+ pred GO x,y means
+ :Def16: ex x1,x2,x3,x4,x5,x6 being set st x = [[x1,x2,x3,x4],x5,x6] &
+  ex G being strict Ring
+    st y = G
+    & x1 = the carrier of G
+    & x2 = the add of G
+    & x3 = comp G
+    & x4 = the Zero of G
+    & x5 = the mult of G
+    & x6 = the unity of G;
+end;
+
+theorem
+Th20:for x,y1,y2 being set st GO x,y1 & GO x,y2 holds y1 = y2
+ proof
+   let x,y1,y2 be set such that
+   A1: GO x,y1 and
+   A2: GO x,y2;
+   consider a1,a2,a3,a4,a5,a6 being set such that
+     A3: x = [[a1,a2,a3,a4],a5,a6] and
+     A4: ex G being strict Ring st y1 = G
+                 & a1 = the carrier of G
+                 & a2 = the add of G
+                 & a3 = comp G
+                 & a4 = the Zero of G
+                 & a5 = the mult of G
+                 & a6 = the unity of G by A1,Def16;
+   consider b1,b2,b3,b4,b5,b6 being set such that
+   A5: x = [[b1,b2,b3,b4],b5,b6] and
+   A6: ex G being strict Ring st y2 = G
+               & b1 = the carrier of G
+               & b2 = the add of G
+               & b3 = comp G
+               & b4 = the Zero of G
+               & b5 = the mult of G
+               & b6 = the unity of G by A2,Def16;
+   consider G1 being strict Ring such that
+   A7: y1 = G1
+       & a1 = the carrier of G1
+       & a2 = the add of G1
+       & a3 = comp G1
+       & a4 = the Zero of G1
+       & a5 = the mult of G1
+       & a6 = the unity of G1 by A4;
+   consider G2 being strict Ring such that
+   A8: y2 = G2
+       & b1 = the carrier of G2
+       & b2 = the add of G2
+       & b3 = comp G2
+       & b4 = the Zero of G2
+       & b5 = the mult of G2
+       & b6 = the unity of G2 by A6;
+     [a1,a2,a3,a4] = [b1,b2,b3,b4] & a5 = b5 & a6 = b6
+ by A3,A5,MCART_1:28;
+     then the carrier of G1 = the carrier of G2
+   & the add of G1 = the add of G2
+   & comp G1 = comp G2
+   & the Zero of G1 = the Zero of G2
+   & the mult of G1 = the mult of G2
+   & the unity of G1 = the unity of G2 by A7,A8,MCART_1:33;
+   hence thesis by A7,A8;
+ end;
+
+theorem
+Th21: ex x st x in UN & GO x,Z3
+ proof
+    set G = Z3;
+    reconsider
+        x1 = the carrier of G,
+        x2 = the add of G,
+        x3 = comp G,
+        x4 = the Zero of G,
+        x5 = the mult of G,
+        x6 = the unity of G as Element of UN by MOD_2:40;
+    set x' = [x1,x2,x3,x4]; set x = [x',x5,x6];
+      x' is Element of UN by GRCAT_1:3;
+    then A1: x is Element of UN by GRCAT_1:3;
+    A2: GO x,G
+     proof
+       take x1,x2,x3,x4,x5,x6;
+       thus thesis;
+     end;
+    take x;
+    thus thesis by A1,A2;
+ end;
+
+definition let UN;
+ func RingObjects(UN) -> set means
+ :Def17:for y holds y in it iff ex x st x in UN & GO x,y;
+ existence
+  proof
+    defpred P[set,set] means GO $1,$2;
+    A1: for x,y1,y2 being set st P[x,y1] & P[x,y2] holds y1 = y2 by Th20;
+    consider Y being set such that
+    A2:for y holds y in Y iff ex x st x in UN & P[x,y] from Fraenkel(A1);
+    take Y;
+    thus thesis by A2;
+  end;
+ uniqueness
+  proof
+    let Y1,Y2 be set such that
+    A3:for y holds y in Y1 iff ex x st x in UN & GO x,y and
+    A4:for y holds y in Y2 iff ex x st x in UN & GO x,y;
+      now
+      let y;
+        y in Y1 iff ex x st x in UN & GO x,y by A3;
+      hence y in Y1 iff y in Y2 by A4;end;
+    hence thesis by TARSKI:2;
+  end;
+end;
+
+theorem Th22:
+ Z3 in RingObjects(UN)
+ proof
+     ex x st x in UN & GO x,Z3 by Th21;
+   hence thesis by Def17;
+ end;
+
+definition let UN;
+ cluster RingObjects(UN) -> non empty;
+ coherence by Th22;
+end;
+
+theorem
+Th23:for x being Element of RingObjects(UN) holds x is strict Ring
+ proof
+   let x be Element of RingObjects(UN);
+   consider u being set such that
+   A1: u in UN & GO u,x by Def17;
+     ex x1,x2,x3,x4,x5,x6 being set st u = [[x1,x2,x3,x4],x5,x6] &
+    ex G being strict Ring
+    st x = G
+    & x1 = the carrier of G
+    & x2 = the add of G
+    & x3 = comp G
+    & x4 = the Zero of G
+    & x5 = the mult of G
+    & x6 = the unity of G by A1,Def16;
+   hence thesis;
+ end;
+
+definition let UN;
+  cluster RingObjects(UN) -> Ring_DOMAIN-like;
+   coherence
+    proof
+  for x being Element of RingObjects(UN) holds x is strict Ring by Th23;
+      hence thesis by Def12;
+    end;
+end;
+
+      ::
+      ::  4b. Category of rings  - morphisms
+      ::
+
+definition let V;
+ func Morphs(V) -> RingMorphism_DOMAIN means
+ :Def18:
+  x in it iff ex G,H being Element of V st G <= H & x is Morphism of G,H;
+  existence
+   proof
+     consider G0 being Element of V;
+     set M = Morphs(G0,G0), S = { Morphs(G,H) where
+      G is Element of V, H is Element of V : G <= H };
+     A1: (ID(G0)) is Element of M by Def15;
+       M in S;
+     then reconsider T = union S as non empty set by A1,TARSKI:def 4;
+     A2: x in T iff ex G,H being Element of V st G <= H & x is Morphism of G,H
+      proof
+        thus x in T implies ex G,H being Element of V
+                            st G <= H & x is Morphism of G,H
+         proof
+           assume x in T;
+           then consider Y being set such that
+           A3: x in Y and
+           A4: Y in S by TARSKI:def 4;
+           consider G,H being Element of V such that
+           A5: Y = Morphs(G,H) and
+           A6: G <= H by A4;
+           A7: x is Element of Morphs(G,H) by A3,A5;
+           take G,H;
+           thus thesis by A6,A7;
+         end;
+        thus (ex G,H being Element of V st G <= H & x is Morphism of G,H)
+               implies x in T
+         proof
+           given G,H being Element of V such that
+           A8: G <= H and
+           A9: x is Morphism of G,H;
+           set M = Morphs(G,H);
+           A10: x in M by A8,A9,Def15;
+             M in S by A8;
+           hence thesis by A10,TARSKI:def 4;
+         end;
+     end;
+       now let x be set;
+      assume x in T;
+       then ex G,H being Element of V st
+       G <= H &
+         x is Morphism of G,H by A2;
+       hence x is strict RingMorphism;end;
+     then reconsider T' = T as RingMorphism_DOMAIN
+ by Def13;
+     take T';
+     thus thesis by A2;
+   end;
+  uniqueness
+   proof
+     let D1,D2 be RingMorphism_DOMAIN such that
+     A11: x in
+ D1 iff ex G,H being Element of V st G <= H & x is Morphism of G,H
+                                                 and
+     A12: x in D2 iff ex G,H being Element of V st G <=
+ H & x is Morphism of G,H;
+       now
+       let x;
+         x in D1 iff ex G,H being Element of V st G <= H & x is Morphism of G,H
+ by A11;
+       hence x in D1 iff x in D2 by A12;end;
+     hence thesis by TARSKI:2;
+   end;
+end;
+
+      ::
+      ::  4c. Category of rings  - dom,cod,id
+      ::
+
+definition let V; let F be Element of Morphs(V);
+ redefine func dom(F) -> Element of V;
+  coherence
+   proof
+     consider G,H being Element of V such that
+     A1: G <= H and
+     A2: F is Morphism of G,H by Def18;
+     reconsider F' = F as Morphism of G,H by A2;
+       dom(F') = G by A1,Def9;
+     hence thesis;
+   end;
+ func cod(F) -> Element of V;
+  coherence
+   proof
+     consider G,H being Element of V such that
+     A3: G <= H and
+     A4: F is Morphism of G,H by Def18;
+     reconsider F' = F as Morphism of G,H by A4;
+       cod(F') = H by A3,Def9;
+     hence thesis;
+   end;
+end;
+
+definition let V; let G be Element of V;
+ func ID(G) -> strict Element of Morphs(V) equals
+ :Def19: ID(G);
+ coherence by Def18;
+end;
+
+definition let V;
+ func dom(V) -> Function of Morphs(V),V means
+ :Def20:for f being Element of Morphs(V) holds it.f = dom(f);
+  existence
+    proof
+      deffunc G(Element of Morphs(V))= dom($1);
+      consider F being Function of Morphs(V),V such that
+      A1:for f being Element of Morphs(V) holds F.f = G(f) from LambdaD;
+      take F;
+      thus thesis by A1;
+    end;
+  uniqueness
+   proof
+     let F1,F2 be Function of Morphs(V),V such that
+     A2:for f being Element of Morphs(V) holds F1.f = dom(f) and
+     A3:for f being Element of Morphs(V) holds F2.f = dom(f);
+       now let f be Element of Morphs(V);
+         F1.f = dom(f) by A2;
+       hence F1.f = F2.f by A3;end;
+     hence thesis by FUNCT_2:113;
+   end;
+ func cod(V) -> Function of Morphs(V),V means
+ :Def21:for f being Element of Morphs(V) holds it.f = cod(f);
+  existence
+    proof
+      deffunc G(Element of Morphs(V))=cod($1);
+      consider F being Function of Morphs(V),V such that
+      A4:for f being Element of Morphs(V) holds F.f = G(f) from LambdaD;
+      take F;
+      thus thesis by A4;
+    end;
+  uniqueness
+   proof
+     let F1,F2 be Function of Morphs(V),V such that
+     A5:for f being Element of Morphs(V) holds F1.f = cod(f) and
+     A6:for f being Element of Morphs(V) holds F2.f = cod(f);
+       now let f be Element of Morphs(V);
+         F1.f = cod(f) by A5;
+       hence F1.f = F2.f by A6;end;
+     hence thesis by FUNCT_2:113;
+   end;
+ func ID(V) -> Function of V,Morphs(V) means
+ :Def22:for G being Element of V holds it.G = ID(G);
+  existence
+    proof
+      deffunc H(Element of V)=ID($1);
+      consider F being Function of V,Morphs(V) such that
+      A7:for G being Element of V holds F.G = H(G) from LambdaD;
+      take F;
+      thus thesis by A7;
+    end;
+  uniqueness
+   proof
+     let F1,F2 be Function of V,Morphs(V) such that
+     A8:for G being Element of V holds F1.G = ID(G) and
+     A9:for G being Element of V holds F2.G = ID(G);
+       now let G be Element of V;
+         F1.G = ID(G) by A8;
+       hence F1.G = F2.G by A9;end;
+     hence thesis by FUNCT_2:113;
+   end;
+ end;
+
+             ::
+             ::  4d. Category of rings  - superposition
+             ::
+
+theorem
+Th24:for g,f being Element of Morphs(V) st dom(g) = cod(f)
+      ex G1,G2,G3 being Element of V st G1 <= G2 & G2 <= G3
+       & g is Morphism of G2,G3 & f is Morphism of G1,G2
+ proof
+   set X = Morphs(V);
+   defpred P[Element of X,Element of X] means dom($1) = cod($2);
+   let g,f be Element of X such that
+   A1: P[g,f];
+   consider G2,G3 being Element of V such that
+   A2: G2 <= G3 and
+   A3: g is Morphism of G2,G3 by Def18;
+   A4: G2 = dom(g) by A2,A3,Def9;
+   consider G1,G2' being Element of V such that
+   A5: G1 <= G2' and
+   A6: f is Morphism of G1,G2' by Def18;
+      G2' = cod(f) by A5,A6,Def9;
+   hence thesis by A1,A2,A3,A4,A5,A6;
+ end;
+
+theorem
+Th25:for g,f being Element of Morphs(V) st dom(g) = cod(f)
+      holds g*f in Morphs(V)
+ proof
+   set X = Morphs(V);
+   defpred P[Element of X,Element of X] means dom($1) = cod($2);
+   let g,f be Element of X; assume
+      P[g,f];
+   then consider G1,G2,G3 being Element of V such that
+   A1: G1 <= G2 & G2 <= G3 & g is Morphism of G2,G3 & f is Morphism of G1,G2
+ by Th24;
+   A2: G1 <= G3 by A1,Th8;
+   reconsider g' = g as Morphism of G2,G3 by A1;
+   reconsider f' = f as Morphism of G1,G2 by A1;
+     g'*'f' = g'*f' by A1,Def11;
+   hence thesis by A2,Def18;
+ end;
+
+definition let V;
+ func comp(V) -> PartFunc of [:Morphs(V),Morphs(V):],Morphs(V) means
+ :Def23:
+ (for g,f being Element of Morphs(V) holds [g,f] in dom it iff dom(g) = cod(f))
+ & (for g,f being Element of Morphs(V)
+     st [g,f] in dom it holds it.[g,f] = g*f);
+ existence
+  proof
+    set X = Morphs(V);
+    defpred P[Element of X,Element of X] means dom($1) = cod($2);
+    deffunc F(Element of X,Element of X)=$1*$2;
+    A1:for g,f being Element of X st P[g,f] holds F(g,f) in X
+ by Th25;
+    consider c being PartFunc of [:X,X:],X such that
+    A2:for g,f being Element of X holds [g,f] in dom c iff P[g,f]
+                                                 and
+    A3:for g,f being Element of X
+          st [g,f] in dom c holds c.[g,f] = F(g,f) from PartLambda2D(A1);
+    take c;
+    thus thesis by A2,A3;
+  end;
+ uniqueness
+  proof
+    set X = Morphs(V);
+    defpred P[Element of X,Element of X] means dom($1) = cod($2);
+    let c1,c2 be PartFunc of [:X,X:],X such that
+    A4:for g,f being Element of X holds [g,f] in dom c1 iff P[g,f] and
+    A5:for g,f being Element of X
+         st [g,f] in dom c1 holds c1.[g,f] = g*f and
+    A6:for g,f being Element of X holds [g,f] in dom c2 iff P[g,f] and
+    A7:for g,f being Element of X
+         st [g,f] in dom c2 holds c2.[g,f] = g*f;
+    A8: dom c1 c= [:X,X:] & dom c2 c= [:X,X:] by RELSET_1:12;
+    A9: dom c1 = dom c2
+     proof
+         now let x; assume
+         A10: x in dom c1;
+         then consider g,f being Element of X such that
+         A11: x = [g,f] by A8,GRCAT_1:2;
+           P[g,f] by A4,A10,A11;
+         hence x in dom c2 by A6,A11;end;
+       then A12: dom c1 c= dom c2 by TARSKI:def 3;
+         now let x; assume
+         A13: x in dom c2;
+         then consider g,f being Element of X such that
+         A14: x = [g,f] by A8,GRCAT_1:2;
+           P[g,f] by A6,A13,A14;
+         hence x in dom c1 by A4,A14;end;
+       then dom c2 c= dom c1 by TARSKI:def 3;
+       hence thesis by A12,XBOOLE_0:def 10;
+     end;
+    set V0 = dom c1;
+  for x,y st [x,y] in V0 holds c1.[x,y]=c2.[x,y]
+     proof
+       let x,y;assume
+       A15: [x,y] in V0;
+       then reconsider x,y as Element of X by A8,ZFMISC_1:106;
+         c1.[x,y] = x*y by A5,A15;
+       hence thesis by A7,A9,A15;
+     end;
+    hence thesis by A9,PARTFUN1:35;
+  end;
+end;
+
+             ::
+             ::  4e. Definition of Category of rings
+             ::
+
+definition let UN;
+ func RingCat(UN) -> CatStr equals
+ :Def24:  CatStr(#RingObjects(UN),Morphs(RingObjects(UN)),
+                   dom(RingObjects(UN)),cod(RingObjects(UN)),
+                   comp(RingObjects(UN)),ID(RingObjects(UN))#);
+ coherence;
+end;
+
+definition let UN;
+ cluster RingCat(UN) -> strict;
+ coherence
+ proof
+     RingCat(UN) = CatStr(#RingObjects(UN),Morphs(RingObjects(UN)),
+    dom(RingObjects(UN)),cod(RingObjects(UN)),
+    comp(RingObjects(UN)),ID(RingObjects(UN))#) by Def24;
+   hence thesis;
+ end;
+end;
+
+theorem
+ Th26:for f,g being Morphism of RingCat(UN) holds
+        [g,f] in dom(the Comp of RingCat(UN)) iff dom g = cod f
+  proof
+    set C = RingCat(UN), V = RingObjects(UN);
+A1:    C = CatStr(#V,Morphs(V),dom(V),cod(V),comp(V),ID(V)#) by Def24;
+    let f,g be Morphism of C;
+    reconsider f' = f as Element of Morphs(V) by A1;
+    reconsider g' = g as Element of Morphs(V) by A1;
+    A2: dom g = dom(V).g' by A1,CAT_1:def 2
+             .= dom(g') by Def20;
+       cod f = cod(V).f' by A1,CAT_1:def 3
+             .= cod(f') by Def21;
+    hence thesis by A1,A2,Def23;
+  end;
+
+theorem
+ Th27:for f being (Morphism of RingCat(UN)),
+           f' being Element of Morphs(RingObjects(UN)),
+           b being Object of RingCat(UN),
+           b' being Element of RingObjects(UN)
+       holds f is strict Element of Morphs(RingObjects(UN))
+           & f' is Morphism of RingCat(UN)
+           & b is strict Element of RingObjects(UN)
+           & b' is Object of RingCat(UN)
+ proof
+   set C = RingCat(UN), V = RingObjects(UN); set X = Morphs(V);
+A1:   C = CatStr(#V,X,dom(V),cod(V),comp(V),ID(V)#) by Def24;
+  let f be (Morphism of C),
+      f' be Element of X,
+      b be Object of C,
+      b' be Element of V;
+     ex G,H being Element of V st G <= H & f is Morphism of G,H by A1,Def18;
+  hence f is strict Element of X by A1;
+  thus f' is Morphism of C by A1;
+   consider x such that
+A2:    x in UN & GO x,b by A1,Def17;
+    ex x1,x2,x3,x4,x5,x6 being set st x = [[x1,x2,x3,x4],x5,x6] &
+  ex G being strict Ring
+    st b = G
+    & x1 = the carrier of G
+    & x2 = the add of G
+    & x3 = comp G
+    & x4 = the Zero of G
+    & x5 = the mult of G
+    & x6 = the unity of G by A2,Def16;
+  hence b is strict Element of V by A1;
+  thus b' is Object of C by A1;
+ end;
+
+theorem
+ Th28:for b being Object of RingCat(UN),
+           b' being Element of RingObjects(UN)
+       st b = b' holds id b = ID(b')
+ proof
+   set C = RingCat(UN), V = RingObjects(UN);
+A1:   C = CatStr(#V,(Morphs(V)),dom(V),cod(V),comp(V),ID(V)#) by Def24;
+   let b be Object of C, b' be Element of V; assume
+      b = b';
+   hence id b = (ID(V)).b' by A1,CAT_1:def 5
+            .= ID(b') by Def22;
+ end;
+
+ theorem
+ Th29:for f being Morphism of RingCat(UN)
+for f' being Element of Morphs(RingObjects(UN))
+       st f = f'
+       holds dom f = dom f'
+           & cod f = cod f'
+ proof
+   set C = RingCat(UN), V = RingObjects(UN); set X = Morphs(V);
+A1:   C = CatStr(#V,X,dom(V),cod(V),comp(V),ID(V)#) by Def24;
+  let f be (Morphism of C), f' be Element of X; assume
+  A2: f = f';
+  hence dom f = dom(V).f' by A1,CAT_1:def 2
+            .= dom f' by Def20;
+  thus cod f = cod(V).f' by A1,A2,CAT_1:def 3
+            .= cod f' by Def21;
+ end;
+
+ theorem
+ Th30:for f,g being (Morphism of RingCat(UN)),
+           f',g' being Element of Morphs(RingObjects(UN))
+       st f = f' & g = g'
+       holds (dom g = cod f iff dom g' = cod f')
+           & (dom g = cod f iff [g',f'] in dom comp(RingObjects(UN)))
+           & (dom g = cod f implies g*f = g'*f')
+           & (dom f = dom g iff dom f' = dom g')
+           & (cod f = cod g iff cod f' = cod g')
+ proof
+   set C = RingCat(UN), V = RingObjects(UN); set X = Morphs(V);
+A1:   C = CatStr(#V,X,dom(V),cod(V),comp(V),ID(V)#) by Def24;
+  let f,g be Morphism of C;
+  let f',g' be Element of X; assume
+  A2: f = f' & g = g';
+  then A3: dom g = dom g' by Th29;
+  A4: cod f = cod f' by A2,Th29;
+  A5: dom f = dom f' by A2,Th29;
+  A6: cod g = cod g' by A2,Th29;
+  thus dom g = cod f iff dom g' = cod f' by A2,A4,Th29;
+  thus A7: dom g = cod f iff [g',f'] in dom comp(V)
+ by A3,A4,Def23;
+  thus dom g = cod f implies g*f = g'*f'
+   proof
+     assume A8: dom g = cod f;
+     then [g,f] in dom (the Comp of C) by Th26;
+     hence g*f = (comp(V)).[g',f'] by A1,A2,CAT_1:def 4
+              .= g'*f' by A7,A8,Def23;
+   end;
+  thus dom f = dom g iff dom f' = dom g' by A2,A5,Th29;
+  thus cod f = cod g iff cod f' = cod g' by A2,A6,Th29;
+ end;
+
+ Lm9:for f,g being Morphism of RingCat(UN) st dom g = cod f holds
+     dom(g*f) = dom f
+   & cod (g*f) = cod g
+  proof set X = Morphs((RingObjects(UN)));
+    let f,g be Morphism of (RingCat(UN)) such that
+    A1: dom g = cod f;
+    reconsider f' = f as strict Element of X by Th27;
+    reconsider g' = g as strict Element of X by Th27;
+    A2: dom g' = cod f' by A1,Th30;
+    then A3: dom(g'*f') = dom f'
+      & cod (g'*f') = cod g' by Th11;
+    reconsider gf = g'*f' as Element of X by A2,Th25;
+      gf = g*f by A1,Th30;
+    hence thesis by A3,Th30;
+ end;
+
+ Lm10:for f,g,h being Morphism of RingCat(UN)
+        st dom h = cod g & dom g = cod f holds h*(g*f) = (h*g)*f
+  proof set X = Morphs((RingObjects(UN)));
+    let f,g,h be Morphism of (RingCat(UN)) such that
+    A1: dom h = cod g & dom g = cod f;
+    reconsider f'=f, g'=g, h'=h as strict Element of X by Th27;
+    A2: dom h' = cod g' & dom g' = cod f' by A1,Th30;
+    A3: g'*f' = g*f & h'*g' = h*g by A1,Th30;
+    reconsider gf = g'*f', hg = h'*g' as strict Element of X
+ by A2,Th25;
+    A4: dom(h) = cod(g*f) by A1,Lm9;
+    A5: dom(h*g) = cod(f) by A1,Lm9;
+      h*(g*f) = h'*gf by A3,A4,Th30
+           .= hg*f' by A2,Th13
+           .= (h*g)*f by A3,A5,Th30;
+    hence thesis;
+  end;
+
+ Lm11:for b being Object of RingCat(UN) holds
+    dom id b = b
+  & cod id b = b
+  & (for f being Morphism of RingCat(UN) st cod f = b holds (id b)*f = f)
+  & (for g being Morphism of RingCat(UN) st dom g = b holds g*(id b) = g)
+proof
+  set C = RingCat(UN), V = RingObjects(UN); set X = Morphs(V);
+  let b be Object of C;
+  reconsider b' = b as Element of V by Th27;
+  reconsider b'' = b' as Ring;
+  A1: id b = ID(b') by Th28;
+  hence A2: dom id b = dom ID(b') by Th29
+                   .= dom ID(b'') by Def19
+                   .= b by Th14;
+  thus A3: cod id b = cod ID(b') by A1,Th29
+                   .= cod ID(b'') by Def19
+                   .= b by Th14;
+  thus for f being Morphism of C st cod f = b holds (id b)*f = f
+   proof
+     let f be Morphism of C such that
+     A4: cod f = b;
+     reconsider f1 = f as strict Element of X by Th27;
+     reconsider f' = f1 as strict RingMorphism;
+     A5: cod f' = b'' by A4,Th29;
+     thus (id b)*f = ID(b')*f' by A1,A2,A4,Th30
+                  .= ID(b'')*f' by Def19
+                  .= f by A5,Th14;
+   end;
+  thus for g being Morphism of C st dom g = b holds g*(id b) = g
+   proof
+     let f be Morphism of C such that
+     A6: dom f = b;
+     reconsider f1 = f as strict Element of X by Th27;
+     reconsider f' = f1 as strict RingMorphism;
+     A7: dom f' = b'' by A6,Th29;
+     thus f*(id b) = f'*ID(b') by A1,A3,A6,Th30
+                  .= f'*ID(b'') by Def19
+                  .= f by A7,Th14;
+   end;
+end;
+
+definition let UN;
+ cluster RingCat(UN) -> Category-like;
+ coherence
+  proof
+         (for f,g being Morphism of RingCat(UN)
+          holds [g,f] in dom(the Comp of RingCat(UN)) iff dom g = cod f )
+     & (for f,g being Morphism of RingCat(UN) st dom g = cod f
+          holds dom(g*f) = dom f & cod (g*f) = cod g )
+     & (for f,g,h being Morphism of RingCat(UN)
+          st dom h = cod g & dom g = cod f holds h*(g*f) = (h*g)*f )
+     & (for b being Object of RingCat(UN)
+          holds dom id b = b & cod id b = b &
+           (for f being Morphism of RingCat(UN)
+             st cod f = b holds (id b)*f = f) &
+           (for g being Morphism of RingCat(UN)
+             st dom g = b holds g*(id b) = g) ) by Lm9,Lm10,Lm11,Th26;
+    hence thesis by CAT_1:29;
+  end;
+end;

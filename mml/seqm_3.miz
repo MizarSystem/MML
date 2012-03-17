@@ -1,0 +1,1771 @@
+:: Monotone Real Sequences. Subsequences
+::  by Jaros{\l}aw Kotowicz
+::
+:: Received November 23, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, SEQ_1, PARTFUN1, ORDINAL2, FUNCT_1, PROB_1, RELAT_1,
+      ARYTM_1, SEQ_2, LATTICES, ABSVALUE, SEQM_3, FUNCOP_1;
+ notation TARSKI, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, RELAT_1, PARTFUN1,
+      FUNCT_1, SEQ_1, SEQ_2, ABSVALUE, NAT_1, FUNCOP_1;
+ constructors REAL_1, SEQ_2, ABSVALUE, NAT_1, PARTFUN1, MEMBERED, FUNCOP_1,
+      XBOOLE_0;
+ clusters FUNCT_1, XREAL_0, RELSET_1, SEQ_1, ARYTM_3, MEMBERED, FUNCOP_1,
+      ZFMISC_1, XBOOLE_0, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions SEQ_2;
+ theorems REAL_1, FUNCT_1, SEQ_1, SEQ_2, ABSVALUE, NAT_1, TARSKI, AXIOMS,
+      FUNCT_2, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, FUNCOP_1;
+ schemes NAT_1, SEQ_1;
+
+begin
+
+  reserve n,n1,m,k,k1 for Nat;
+  reserve r,r1,r2 for real number;
+  reserve f,seq,seq1,seq2 for Real_Sequence;
+  reserve x,y for set;
+
+Lm1:n<m implies ex k st m=n+1+k
+ proof
+  assume A1: n<m;
+  then consider k1 such that A2:m=n+k1 by NAT_1:28;
+      k1 <> 0 by A1,A2;
+  then consider n1 such that A3:k1=n1+1 by NAT_1:22;
+  take k=n1;
+  thus m=n+1+k by A2,A3,XCMPLX_1:1;
+ end;
+
+ Lm2:((for n holds seq.n<seq.(n+1)) implies
+              for n,k holds seq.n<seq.(n+1+k)) &
+      ((for n,k holds seq.n<seq.(n+1+k)) implies
+              for n,m st n<m holds seq.n<seq.m) &
+      ((for n,m st n<m holds seq.n<seq.m) implies
+              for n holds seq.n<seq.(n+1))
+ proof
+  thus (for n holds seq.n<seq.(n+1)) implies
+                    for n,k holds seq.n<seq.(n+1+k)
+   proof
+    assume A1:for n holds seq.n<seq.(n+1);
+    let n;
+     defpred X[Nat] means seq.n<seq.(n+1+$1);
+    A2: X[0] by A1;
+     A3:now let k such that A4: X[k];
+        seq.(n+1+k)<seq.(n+1+k+1) by A1;
+      then seq.n<seq.(n+1+k+1) by A4,AXIOMS:22;
+      hence X[k+1] by XCMPLX_1:1;
+     end;
+    thus for k holds X[k] from Ind(A2,A3);
+   end;
+  thus (for n,k holds seq.n<seq.(n+1+k)) implies
+                     for n,m st n<m holds seq.n<seq.m
+   proof
+    assume A5:for n,k holds seq.n<seq.(n+1+k);
+    let n,m; assume n<m;
+    then ex k st m=n+1+k by Lm1;
+    hence seq.n<seq.m by A5;
+   end;
+  assume A6:for n,m st n<m holds seq.n<seq.m;
+  let n;
+    n<n+1 by NAT_1:38;
+  hence seq.n<seq.(n+1) by A6;
+ end;
+
+ Lm3:((for n holds seq.(n+1)<seq.n) implies
+                  for n,k holds seq.(n+1+k)<seq.n) &
+      ((for n,k holds seq.(n+1+k)<seq.n) implies
+                  for n,m st n<m holds seq.m<seq.n) &
+      ((for n,m st n<m holds seq.m<seq.n) implies
+                  for n holds seq.(n+1)<seq.n)
+   proof
+    thus ((for n holds seq.(n+1)<seq.n) implies
+                  for n,k holds seq.(n+1+k)<seq.n)
+     proof
+      assume A1:for n holds seq.(n+1)<seq.n;
+      let n;
+      defpred X[Nat] means seq.(n+1+$1)<seq.n;
+      A2: X[0] by A1;
+       A3:now let k such that A4: X[k];
+          seq.(n+1+k+1)<seq.(n+1+k) by A1;
+        then seq.(n+1+k+1)<seq.n by A4,AXIOMS:22;
+        hence X[k+1] by XCMPLX_1:1;
+       end;
+      thus for k holds X[k] from Ind(A2,A3);
+     end;
+    thus ((for n,k holds seq.(n+1+k)<seq.n) implies
+                  for n,m st n<m holds seq.m<seq.n)
+     proof
+      assume A5:for n,k holds seq.(n+1+k)<seq.n;
+      let n,m; assume n<m;
+      then ex k st m=n+1+k by Lm1;
+      hence seq.m<seq.n by A5;
+     end;
+    assume A6:for n,m st n<m holds seq.m<seq.n;
+    let n;
+      n<n+1 by NAT_1:38;
+    hence seq.(n+1)<seq.n by A6;
+   end;
+
+ Lm4:((for n holds seq.n<=seq.(n+1)) implies
+                  for n,k holds seq.n<=seq.(n+k)) &
+      ((for n,k holds seq.n<=seq.(n+k)) implies
+                  for n,m st n<=m holds seq.n<=seq.m) &
+      ((for n,m st n<=m holds seq.n<=seq.m) implies
+                  for n holds seq.n<=seq.(n+1))
+   proof
+    thus (for n holds seq.n<=seq.(n+1)) implies
+                  for n,k holds seq.n<=seq.(n+k)
+     proof
+      assume A1:for n holds seq.n<=seq.(n+1);
+      let n;
+      defpred X[Nat] means seq.n<=seq.(n+$1);
+      A2: X[0];
+       A3:now let k such that A4: X[k];
+          seq.(n+k)<=seq.(n+k+1) by A1;
+        then seq.n<=seq.(n+k+1) by A4,AXIOMS:22;
+        hence X[k+1] by XCMPLX_1:1;
+       end;
+      thus for k holds X[k] from Ind(A2,A3);
+     end;
+    thus (for n,k holds seq.n<=seq.(n+k)) implies
+                  for n,m st n<=m holds seq.n<=seq.m
+     proof
+      assume A5:for n,k holds seq.n<=seq.(n+k);
+      let n,m; assume n<=m;
+      then ex k1 st m=n+k1 by NAT_1:28;
+      hence seq.n<=seq.m by A5;
+     end;
+    assume A6:for n,m st n<=m holds seq.n<=seq.m;
+    let n;
+      n<=n+1 by NAT_1:38;
+    hence seq.n<=seq.(n+1) by A6;
+   end;
+
+ Lm5:((for n holds seq.(n+1)<=seq.n) implies
+                  for n,k holds seq.(n+k)<=seq.n) &
+      ((for n,k holds seq.(n+k)<=seq.n) implies
+                  for n,m st n<=m holds seq.m<=seq.n) &
+      ((for n,m st n<=m holds seq.m<=seq.n) implies
+                  for n holds seq.(n+1)<=seq.n)
+   proof
+    thus ((for n holds seq.(n+1)<=seq.n) implies
+                  for n,k holds seq.(n+k)<=seq.n)
+     proof
+      assume A1:for n holds seq.(n+1)<=seq.n;
+      let n;
+      defpred X[Nat] means seq.(n+$1)<=seq.n;
+      A2: X[0];
+       A3:now let k such that A4: X[k];
+          seq.(n+k+1)<=seq.(n+k) by A1;
+        then seq.(n+k+1)<=seq.n by A4,AXIOMS:22;
+        hence X[k+1] by XCMPLX_1:1;
+       end;
+      thus for k holds X[k] from Ind(A2,A3);
+     end;
+    thus ((for n,k holds seq.(n+k)<=seq.n) implies
+                  for n,m st n<=m holds seq.m<=seq.n)
+     proof
+      assume A5:for n,k holds seq.(n+k)<=seq.n;
+      let n,m; assume n<=m;
+      then ex k1 st m=n+k1 by NAT_1:28;
+      hence seq.m<=seq.n by A5;
+     end;
+    assume A6:for n,m st n<=m holds seq.m<=seq.n;
+    let n;
+      n<=n+1 by NAT_1:38;
+    hence seq.(n+1)<=seq.n by A6;
+   end;
+
+::
+:: DEFINITIONS OF MONOTONE AND CONSTANT SEQUENCES
+::
+
+definition let f be PartFunc of NAT, REAL;
+  attr f is increasing means :Def1:
+   for m,n st m in dom f & n in dom f & m < n holds f.m < f.n;
+  attr f is decreasing means :Def2:
+   for m,n st m in dom f & n in dom f & m < n holds f.m > f.n;
+  attr f is non-decreasing means :Def3:
+   for m,n st m in dom f & n in dom f & m < n holds f.m <= f.n;
+  attr f is non-increasing means :Def4:
+   for m,n st m in dom f & n in dom f & m < n holds f.m >= f.n;
+end;
+
+Lm6: f is increasing iff for n being Nat holds f.n < f.(n+1)
+  proof
+    thus f is increasing implies for n being Nat holds f.n < f.(n+1)
+    proof
+      assume A1: f is increasing;
+      let n be Nat;
+A2:   dom f = NAT by FUNCT_2:def 1;
+        n < n+1 by NAT_1:38;
+      hence thesis by A1,A2,Def1;
+    end;
+    assume A3:for n being Nat holds f.n < f.(n+1);
+    let m,n; assume m in dom f & n in dom f & m < n;
+    then consider k such that
+A4: n = m+1+k by Lm1;
+    thus thesis by A3,A4,Lm2;
+  end;
+
+Lm7: f is decreasing iff for n being Nat holds f.n > f.(n+1)
+  proof
+    thus f is decreasing implies for n being Nat holds f.n > f.(n+1)
+    proof
+      assume A1: f is decreasing;
+      let n be Nat;
+A2:   dom f = NAT by FUNCT_2:def 1;
+        n < n+1 by NAT_1:38;
+      hence thesis by A1,A2,Def2;
+    end;
+    assume A3:for n being Nat holds f.n > f.(n+1);
+    let m,n; assume m in dom f & n in dom f & m < n;
+    then consider k such that
+A4: n = m+1+k by Lm1;
+    thus thesis by A3,A4,Lm3;
+  end;
+
+Lm8: f is non-decreasing iff for n being Nat holds f.n <= f.(n+1)
+  proof
+    thus f is non-decreasing implies for n being Nat holds f.n <= f.(n+1)
+    proof
+      assume A1: f is non-decreasing;
+      let n be Nat;
+A2:   dom f = NAT by FUNCT_2:def 1;
+        n < n+1 by NAT_1:38;
+      hence thesis by A1,A2,Def3;
+    end;
+    assume A3:for n being Nat holds f.n <= f.(n+1);
+    let m,n; assume m in dom f & n in dom f & m < n;
+    then consider k such that
+A4: n = m+k by NAT_1:28;
+    thus thesis by A3,A4,Lm4;
+  end;
+
+Lm9: f is non-increasing iff for n being Nat holds f.n >= f.(n+1)
+  proof
+    thus f is non-increasing implies for n being Nat holds f.n >= f.(n+1)
+    proof
+      assume A1: f is non-increasing;
+      let n be Nat;
+A2:   dom f = NAT by FUNCT_2:def 1;
+        n < n+1 by NAT_1:38;
+      hence thesis by A1,A2,Def4;
+    end;
+    assume A3:for n being Nat holds f.n >= f.(n+1);
+    let m,n; assume m in dom f & n in dom f & m < n;
+    then consider k such that
+A4: n = m+k by NAT_1:28;
+    thus thesis by A3,A4,Lm5;
+  end;
+
+definition let f be Function;
+  attr f is constant means
+:Def5: for n1,n2 being set st n1 in dom f & n2 in dom f holds f.n1=f.n2;
+end;
+
+definition let seq;
+  redefine attr seq is constant means :Def6: ex r st for n holds seq.n=r;
+ compatibility
+  proof
+A1:dom seq = NAT by FUNCT_2:def 1;
+   hereby assume
+A2:   seq is constant;
+    consider n0 being Nat;
+    reconsider r = seq.n0 as real number;
+    take r;
+    let n be Nat;
+    thus seq.n = r by A1,A2,Def5;
+   end;
+   given r such that
+A3:  for n holds seq.n=r;
+   let n1,n2 be set;
+   assume
+A4:  n1 in dom seq & n2 in dom seq;
+   hence seq.n1 = r by A1,A3 .= seq.n2 by A1,A3,A4;
+  end;
+end;
+
+definition let seq;
+  attr seq is monotone means :Def7:
+   seq is non-decreasing or seq is non-increasing;
+end;
+
+canceled 6;
+
+theorem
+ Th7:seq is increasing iff for n,m st n<m holds seq.n<seq.m
+  proof
+   thus seq is increasing implies for n,m st n<m holds seq.n<seq.m
+   proof
+     assume seq is increasing;
+     then for n holds seq.n<seq.(n+1) by Lm6;
+     then for n,k holds seq.n<seq.(n+1+k) by Lm2;
+     hence thesis by Lm2;
+    end;
+   assume A1: for n,m st n<m holds seq.n<seq.m;
+   let n,m; assume n in dom seq & m in dom seq & n < m;
+   hence thesis by A1;
+  end;
+
+theorem
+   seq is increasing iff for n,k holds seq.n<seq.(n+1+k)
+  proof
+   thus seq is increasing implies for n,k holds seq.n<seq.(n+1+k)
+    proof
+     assume seq is increasing;
+     then for n holds seq.n<seq.(n+1) by Lm6;
+     hence thesis by Lm2;
+    end;
+   assume for n,k holds seq.n<seq.(n+1+k);
+   then for n,m st n<m holds seq.n<seq.m by Lm2;
+   hence thesis by Th7;
+  end;
+
+theorem
+ Th9:seq is decreasing iff for n,k holds seq.(n+1+k)<seq.n
+  proof
+   thus seq is decreasing implies for n,k holds seq.(n+1+k)<seq.n
+    proof
+     assume seq is decreasing;
+     then for n holds seq.(n+1)<seq.n by Lm7;
+     hence thesis by Lm3;
+    end;
+   assume A1: for n,k holds seq.(n+1+k)<seq.n;
+   let n,m; assume n in dom seq & m in dom seq & n < m;
+   hence thesis by A1,Lm3;
+  end;
+
+theorem
+ Th10:seq is decreasing iff for n,m st n<m holds seq.m<seq.n
+  proof
+   thus seq is decreasing implies for n,m st n<m holds seq.m<seq.n
+    proof
+     assume seq is decreasing;
+     then for n,k holds seq.(n+1+k)<seq.n by Th9;
+     hence thesis by Lm3;
+    end;
+   assume A1:for n,m st n<m holds seq.m<seq.n;
+   let n,m; assume n in dom seq & m in dom seq & n < m;
+   hence thesis by A1;
+  end;
+
+theorem
+ Th11:seq is non-decreasing iff for n,k holds seq.n<=seq.(n+k)
+  proof
+   thus seq is non-decreasing implies for n,k holds seq.n<=seq.(n+k)
+    proof
+     assume seq is non-decreasing;
+     then for n holds seq.n<=seq.(n+1) by Lm8;
+     hence thesis by Lm4;
+    end;
+   assume for n,k holds seq.n<=seq.(n+k);
+   then for n holds seq.n<=seq.(n+1);
+   hence thesis by Lm8;
+  end;
+
+theorem
+ Th12:seq is non-decreasing iff for n,m st n<=m holds seq.n<=seq.m
+  proof
+   thus seq is non-decreasing implies for n,m st n<=m holds seq.n<=seq.m
+    proof
+     assume seq is non-decreasing;
+     then for n,k holds seq.n<=seq.(n+k) by Th11;
+     hence thesis by Lm4;
+    end;
+   assume A1:for n,m st n<=m holds seq.n<=seq.m;
+   let n,m; assume n in dom seq & m in dom seq & n < m;
+   hence thesis by A1;
+  end;
+
+theorem
+ Th13:seq is non-increasing iff for n,k holds seq.(n+k)<=seq.n
+  proof
+   thus seq is non-increasing implies for n,k holds seq.(n+k)<=seq.n
+    proof
+     assume seq is non-increasing;
+     then for n holds seq.(n+1)<=seq.n by Lm9;
+     hence thesis by Lm5;
+    end;
+   assume for n,k holds seq.(n+k)<=seq.n;
+   then for n holds seq.(n+1)<=seq.n;
+   hence thesis by Lm9;
+  end;
+
+theorem
+ Th14:seq is non-increasing iff for n,m st n<=m holds seq.m<=seq.n
+  proof
+   thus seq is non-increasing implies for n,m st n<=m holds seq.m<=seq.n
+    proof
+     assume seq is non-increasing;
+     then for n,k holds seq.(n+k)<=seq.n by Th13;
+     hence thesis by Lm5;
+    end;
+   assume A1:for n,m st n<=m holds seq.m<=seq.n;
+   let n,m; assume n in dom seq & m in dom seq & n < m;
+   hence thesis by A1;
+  end;
+
+ Lm10:((ex r st for n holds seq.n=r) implies ex r st rng seq={r}) &
+      ((ex r st rng seq={r}) implies for n holds seq.n=seq.(n+1)) &
+      ((for n holds seq.n=seq.(n+1)) implies
+                 for n,k holds seq.n=seq.(n+k)) &
+      ((for n,k holds seq.n=seq.(n+k)) implies
+                 for n,m holds seq.n=seq.m) &
+      ((for n,m holds seq.n=seq.m) implies ex r st for n holds seq.n=r)
+  proof
+   thus (ex r st for n holds seq.n=r) implies ex r st rng seq={r}
+    proof
+     given r1 such that A1:for n holds seq.n=r1;
+     take r=r1;
+        now let y; assume y in rng seq;
+       then consider x such that A2:x in dom seq and
+                            A3:seq.x=y by FUNCT_1:def 5;
+         x in NAT by A2,FUNCT_2:def 1;
+       then y=r1 by A1,A3;
+       hence y in {r} by TARSKI:def 1;
+      end;
+     then A4:rng seq c={r} by TARSKI:def 3;
+        now let y; assume y in {r};
+       then A5:y=r by TARSKI:def 1;
+          now assume A6:not y in rng seq;
+            now let n;
+             n in NAT;
+           then n in dom seq by FUNCT_2:def 1;
+           then seq.n<>r by A5,A6,FUNCT_1:def 5;
+           hence contradiction by A1;
+          end;
+         hence contradiction;
+        end;
+       hence y in rng seq;
+      end;
+     then {r} c= rng seq by TARSKI:def 3;
+     hence thesis by A4,XBOOLE_0:def 10;
+    end;
+   thus (ex r st rng seq={r}) implies for n holds seq.n=seq.(n+1)
+    proof
+     given r1 such that A7:rng seq={r1};
+     let n;
+       n in NAT & n+1 in NAT;
+     then n in dom seq & n+1 in dom seq by FUNCT_2:def 1;
+     then seq.n in{r1} & seq.(n+1) in{r1} by A7,FUNCT_1:def 5;
+     then seq.n=r1 & seq.(n+1)=r1 by TARSKI:def 1;
+     hence seq.n=seq.(n+1);
+    end;
+   thus (for n holds seq.n=seq.(n+1)) implies
+                for n,k holds seq.n=seq.(n+k)
+    proof
+     assume A8:for n holds seq.n=seq.(n+1);
+     let n;
+      defpred X[Nat] means seq.n=seq.(n+$1);
+     A9: X[0];
+      A10:now let k such that A11: X[k];
+         seq.(n+k)=seq.(n+k+1) by A8;
+       hence X[k+1] by A11,XCMPLX_1:1;
+      end;
+     thus for k holds X[k] from Ind(A9,A10);
+    end;
+   thus (for n,k holds seq.n=seq.(n+k)) implies
+               for n,m holds seq.n=seq.m
+    proof
+     assume A12:for n,k holds seq.n=seq.(n+k);
+     let n,m;
+      A13:now assume n<=m;
+        then ex k st m=n+k by NAT_1:28;
+       hence seq.n=seq.m by A12;
+      end;
+        now assume m<=n;
+        then ex k st n=m+k by NAT_1:28;
+       hence seq.n=seq.m by A12;
+      end;
+     hence seq.n=seq.m by A13;
+    end;
+   assume that A14:for n,m holds seq.n=seq.m and
+               A15:for r ex n st seq.n<>r;
+      now let n;
+        ex n1 st seq.n1<>seq.n by A15;
+     hence contradiction by A14;
+    end;
+   hence thesis;
+  end;
+
+theorem
+ Th15:seq is constant iff ex r st rng seq={r}
+  proof
+   thus seq is constant implies ex r st rng seq={r}
+    proof
+     assume seq is constant;
+     then ex r st for n holds seq.n=r by Def6;
+     hence thesis by Lm10;
+    end;
+   assume ex r st rng seq={r};
+   then for n holds seq.n=seq.(n+1) by Lm10;
+   then for n,k holds seq.n=seq.(n+k) by Lm10;
+   then for n,m holds seq.n=seq.m by Lm10;
+   hence ex r st for n holds seq.n=r by Lm10;
+  end;
+
+theorem
+ Th16:seq is constant iff for n holds seq.n=seq.(n+1)
+  proof
+   thus seq is constant implies for n holds seq.n=seq.(n+1)
+    proof
+     assume seq is constant;
+     then ex r st rng seq={r} by Th15;
+     hence thesis by Lm10;
+    end;
+   assume for n holds seq.n=seq.(n+1);
+   then for n,k holds seq.n=seq.(n+k) by Lm10;
+   then for n,m holds seq.n=seq.m by Lm10;
+   hence ex r st for n holds seq.n=r by Lm10;
+  end;
+
+theorem
+ Th17:seq is constant iff for n,k holds seq.n=seq.(n+k)
+  proof
+   thus seq is constant implies for n,k holds seq.n=seq.(n+k)
+    proof
+     assume seq is constant;
+     then for n holds seq.n=seq.(n+1) by Th16;
+     hence thesis by Lm10;
+    end;
+   assume for n,k holds seq.n=seq.(n+k);
+   then for n,m holds seq.n=seq.m by Lm10;
+   hence ex r st for n holds seq.n=r by Lm10;
+  end;
+
+theorem
+ Th18:seq is constant iff for n,m holds seq.n=seq.m
+  proof
+   thus seq is constant implies for n,m holds seq.n=seq.m
+    proof
+     assume seq is constant;
+     then for n,k holds seq.n=seq.(n+k) by Th17;
+     hence thesis by Lm10;
+    end;
+   assume for n,m holds seq.n=seq.m;
+   hence ex r st for n holds seq.n=r by Lm10;
+  end;
+
+::
+:: PROPORTIES OF MONOTONE AND CONSTANT SEQUENCES
+::
+theorem
+   seq is increasing implies for n st 0<n holds seq.0<seq.n by Th7;
+
+theorem
+   seq is decreasing implies for n st 0<n holds seq.n<seq.0 by Th10;
+
+theorem
+ Th21:seq is non-decreasing implies for n holds seq.0<=seq.n
+  proof
+   assume A1:seq is non-decreasing;
+   let n;
+     0<=n by NAT_1:18;
+   hence seq.0<=seq.n by A1,Th12;
+  end;
+
+theorem
+ Th22:seq is non-increasing implies for n holds seq.n<=seq.0
+  proof
+   assume A1:seq is non-increasing;
+   let n;
+     0<=n by NAT_1:18;
+   hence seq.n<=seq.0 by A1,Th14;
+  end;
+
+theorem
+   seq is increasing implies seq is non-decreasing
+  proof
+   assume seq is increasing;
+   then for n holds seq.n <= seq.(n+1) by Lm6;
+   hence thesis by Lm8;
+  end;
+
+theorem
+   seq is decreasing implies seq is non-increasing
+  proof
+   assume seq is decreasing;
+   then for n holds seq.n >= seq.(n+1) by Lm7;
+   hence thesis by Lm9;
+  end;
+
+theorem
+ Th25:seq is constant implies seq is non-decreasing
+  proof
+   assume seq is constant;
+   then for n holds seq.n <= seq.(n+1) by Th16;
+   hence thesis by Lm8;
+  end;
+
+theorem
+ Th26:seq is constant implies seq is non-increasing
+  proof
+   assume seq is constant;
+   then for n holds seq.n >= seq.(n+1) by Th16;
+   hence thesis by Lm9;
+  end;
+
+theorem
+   seq is non-decreasing & seq is non-increasing implies
+        seq is constant
+  proof
+   assume that A1:seq is non-decreasing and
+               A2:seq is non-increasing;
+      now let n;
+     A3:seq.n<=seq.(n+1) by A1,Lm8;
+       seq.(n+1)<=seq.n by A2,Lm9;
+     hence seq.n=seq.(n+1) by A3,AXIOMS:21;
+    end;
+   hence thesis by Th16;
+  end;
+
+::  DEFINITIONS OF INCREASING SEQUENCE OF NATURAL NUMBERS,
+::  RESTRICTION OF SEQUENCE.
+
+definition let IT be Relation;
+ attr IT is natural-yielding means :Def8:
+  rng IT c= NAT;
+end;
+
+definition
+  cluster increasing natural-yielding Real_Sequence;
+existence
+ proof deffunc U(Nat) = $1;
+  consider seq such that A1:for n holds seq.n=U(n) from ExRealSeq;
+  take seq;
+     now let y; assume y in rng seq;
+    then consider x such that A2:x in dom seq and
+                         A3:seq.x=y by FUNCT_1:def 5;
+      x in NAT by A2,FUNCT_2:def 1;
+    hence y in NAT by A1,A3;
+   end;
+  then A4: rng seq c=NAT by TARSKI:def 3;
+    now let n;
+     seq.n=n & seq.(n+1)=n+1 by A1;
+   hence seq.n<seq.(n+1) by NAT_1:38;
+  end;
+  hence thesis by A4,Def8,Lm6;
+ end;
+end;
+
+definition
+  mode Seq_of_Nat is natural-yielding Real_Sequence;
+end;
+
+definition
+ let seq,k;
+func seq ^\k ->Real_Sequence means :Def9:
+  for n holds it.n=seq.(n+k);
+existence
+ proof deffunc U(Nat) = seq.($1+k);
+  thus ex f being Real_Sequence st
+   for n holds f.n=U(n) from ExRealSeq;
+ end;
+uniqueness
+ proof
+  let seq1,seq2;
+  assume that A1:for n holds seq1.n=seq.(n+k) and
+              A2:for n holds seq2.n=seq.(n+k);
+     now let n;
+      seq1.n=seq.(n+k) & seq2.n=seq.(n+k) by A1,A2;
+    hence seq1.n=seq2.n;
+   end;
+  hence seq1=seq2 by FUNCT_2:113;
+ end;
+end;
+
+reserve Nseq,Nseq1,Nseq2 for increasing Seq_of_Nat;
+
+canceled;
+
+theorem
+ Th29:seq is increasing Seq_of_Nat iff seq is increasing &
+        for n holds seq.n is Nat
+  proof
+   thus seq is increasing Seq_of_Nat implies seq is increasing &
+         for n holds seq.n is Nat
+    proof
+     assume A1:seq is increasing Seq_of_Nat;
+     hence seq is increasing;
+     let n;
+     A2:rng seq c= NAT by A1,Def8;
+       n in NAT;
+     then n in dom seq by FUNCT_2:def 1;
+     then seq.n in rng seq by FUNCT_1:def 5;
+     hence seq.n is Nat by A2;
+    end;
+   assume that A3:seq is increasing and
+               A4:for n holds seq.n is Nat;
+     seq is natural-yielding
+     proof
+         now let y; assume y in rng seq;
+        then consider x such that A5:x in dom seq and
+                             A6:seq.x=y by FUNCT_1:def 5;
+          x in NAT by A5,FUNCT_2:def 1;
+        then seq.x is Nat by A4;
+        hence y in NAT by A6;
+       end;
+      hence rng seq c= NAT by TARSKI:def 3;
+     end;
+    hence thesis by A3;
+   end;
+
+canceled;
+
+theorem
+ Th31:for n holds (seq*Nseq).n=seq.(Nseq.n)
+  proof
+   let n;
+    A1:dom Nseq=NAT by FUNCT_2:def 1;
+      rng Nseq c= NAT by Def8;
+    then rng Nseq c= dom seq by FUNCT_2:def 1;
+    then dom (seq*Nseq)=NAT by A1,RELAT_1:46;
+    hence (seq*Nseq).n=seq.(Nseq.n) by FUNCT_1:22;
+  end;
+
+definition let Nseq,n;
+  redefine func Nseq.n ->Nat;
+coherence by Th29;
+end;
+
+definition let Nseq,seq;
+  redefine func seq*Nseq ->Real_Sequence;
+ coherence
+  proof
+     A1:dom Nseq=NAT by FUNCT_2:def 1;
+     A2:rng seq c= REAL by RELSET_1:12;
+       rng Nseq c= NAT by Def8;
+     then rng Nseq c= dom seq by FUNCT_2:def 1;
+     then A3:   dom (seq*Nseq)=NAT by A1,RELAT_1:46;
+       rng (seq*Nseq) c= rng seq by RELAT_1:45;
+     then rng (seq*Nseq) c= REAL by A2,XBOOLE_1:1;
+   hence thesis by A3,FUNCT_2:def 1,RELSET_1:11;
+  end;
+end;
+
+definition let Nseq,Nseq1;
+  redefine func Nseq1*Nseq -> increasing Seq_of_Nat;
+ coherence
+  proof
+   A1:rng Nseq1 c= NAT by Def8;
+     rng (Nseq1*Nseq) c= rng Nseq1 by RELAT_1:45;
+   then A2:rng (Nseq1*Nseq) c= NAT by A1,XBOOLE_1:1;
+      now let n;
+       Nseq.n<Nseq.(n+1) by Lm6;
+     then Nseq1.(Nseq.n)<Nseq1.(Nseq.(n+1)) by Th7;
+     then (Nseq1*Nseq).n<Nseq1.(Nseq.(n+1)) by Th31;
+     hence (Nseq1*Nseq).n<(Nseq1*Nseq).(n+1) by Th31;
+    end;
+   hence thesis by A2,Def8,Lm6;
+  end;
+end;
+
+definition let Nseq,k;
+  cluster Nseq ^\k -> increasing natural-yielding;
+ coherence
+  proof
+   A1:now let n;
+      (Nseq ^\k).n=Nseq.(n+k) by Def9;
+    hence (Nseq ^\k).n is Nat;
+   end;
+     now let n;
+      Nseq.(n+k)<Nseq.(n+k+1) by Lm6;
+    then (Nseq ^\k).n<Nseq.(n+k+1) by Def9;
+    then (Nseq ^\k).n<Nseq.(n+1+k) by XCMPLX_1:1;
+    hence (Nseq ^\k).n<(Nseq ^\k).(n+1) by Def9;
+   end;
+  then Nseq ^\k is increasing by Lm6;
+  hence thesis by A1,Th29;
+ end;
+end;
+
+::
+:: DEFINITION OF SUBSEQUENCE
+::
+
+definition let seq,seq1;
+  pred seq is_subsequence_of seq1 means :Def10:
+   ex Nseq st seq=seq1*Nseq;
+end;
+
+definition let f be Real_Sequence;
+  redefine attr f is increasing means
+     for n being Nat holds f.n < f.(n+1);
+  compatibility by Lm6;
+  redefine attr f is decreasing means
+     for n being Nat holds f.n > f.(n+1);
+  compatibility by Lm7;
+  redefine attr f is non-decreasing means
+     for n being Nat holds f.n <= f.(n+1);
+  compatibility by Lm8;
+  redefine attr f is non-increasing means
+     for n being Nat holds f.n >= f.(n+1);
+  compatibility by Lm9;
+end;
+
+canceled;
+
+theorem
+   for n holds n<=Nseq.n
+  proof
+      defpred X[Nat] means $1<=Nseq.$1;
+   A1: X[0] by NAT_1:18;
+    A2:now let k such that A3: X[k];
+       Nseq.k<Nseq.(k+1) by Lm6;
+     then k<Nseq.(k+1) by A3,AXIOMS:22;
+     hence X[k+1] by NAT_1:38;
+    end;
+   thus for k holds X[k] from Ind(A1,A2);
+  end;
+
+theorem
+   seq ^\0 =seq
+  proof
+     now let n;
+    thus (seq ^\0).n=seq.(n+0) by Def9
+                  .=seq.n;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem
+   (seq ^\k)^\m=(seq ^\m)^\k
+  proof
+      now let n;
+     thus ((seq ^\k)^\m).n=(seq ^\k).(n+m) by Def9
+      .=seq.(n+m+k) by Def9
+      .=seq.(n+k+m) by XCMPLX_1:1
+      .=(seq ^\m).(n+k) by Def9
+      .=((seq ^\m)^\k).n by Def9;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+
+theorem
+   (seq ^\k)^\m=seq ^\(k+m)
+  proof
+      now let n;
+     thus ((seq ^\k)^\m).n=(seq ^\k).(n+m) by Def9
+      .=seq.(n+m+k) by Def9
+      .=seq.(n+(k+m)) by XCMPLX_1:1
+      .=(seq ^\(k+m)).n by Def9;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+
+theorem
+ Th37:(seq+seq1) ^\k=(seq ^\k) +(seq1 ^\k)
+  proof
+      now let n;
+     thus ((seq+seq1) ^\k).n=(seq+seq1).(n+k) by Def9
+      .=seq.(n+k) + seq1.(n+k) by SEQ_1:11
+      .=(seq ^\k).n +seq1.(n+k) by Def9
+      .=(seq ^\k).n +(seq1 ^\k).n by Def9
+      .=((seq ^\k) +(seq1 ^\k)).n by SEQ_1:11;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+
+theorem
+ Th38:(-seq) ^\k=-(seq ^\k)
+  proof
+      now let n;
+     thus ((-seq) ^\k).n=(-seq).(n+k) by Def9
+      .=-(seq.(n+k)) by SEQ_1:14
+      .=-((seq ^\ k).n) by Def9
+      .=(-(seq ^\k)).n by SEQ_1:14;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+
+theorem
+   (seq-seq1) ^\k=(seq ^\k)-(seq1 ^\k)
+  proof
+   thus (seq-seq1) ^\k=(seq+(-seq1)) ^\k by SEQ_1:15
+    .=(seq ^\k)+((-seq1) ^\k) by Th37
+    .=(seq ^\k)+-(seq1 ^\k) by Th38
+    .=(seq ^\k)-(seq1 ^\k) by SEQ_1:15;
+  end;
+
+theorem
+   seq is_not_0 implies seq ^\k is_not_0
+  proof
+   assume A1:seq is_not_0;
+      now let n;
+       (seq ^\k).n=seq.(n+k) by Def9;
+     hence (seq ^\k).n<>0 by A1,SEQ_1:7;
+    end;
+   hence thesis by SEQ_1:7;
+  end;
+
+theorem
+ Th41:(seq") ^\k=(seq ^\k)"
+  proof
+      now let n;
+     thus ((seq") ^\k).n=(seq").(n+k) by Def9
+      .=(seq.(n+k))" by SEQ_1:def 8
+      .=((seq ^\k).n)" by Def9
+      .=((seq ^\k)").n by SEQ_1:def 8;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+
+theorem
+ Th42:(seq(#)seq1) ^\k=(seq ^\k)(#)(seq1 ^\k)
+  proof
+      now let n;
+     thus ((seq(#)seq1) ^\k).n=(seq(#)seq1).(n+k) by Def9
+      .=seq.(n+k)*seq1.(n+k) by SEQ_1:12
+      .=(seq ^\k).n*seq1.(n+k) by Def9
+      .=(seq ^\k).n*(seq1 ^\k).n by Def9
+      .=((seq ^\k)(#)(seq1 ^\k)).n by SEQ_1:12;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+
+theorem
+   (seq/"seq1) ^\k=(seq ^\k)/"(seq1 ^\k)
+  proof
+   thus (seq/"seq1) ^\k=(seq(#)seq1") ^\k by SEQ_1:def 9
+    .=(seq ^\k)(#)((seq1") ^\k) by Th42
+    .=(seq ^\k)(#)(seq1 ^\k)" by Th41
+    .=(seq ^\k)/"(seq1 ^\k) by SEQ_1:def 9;
+  end;
+
+theorem
+   (r(#)seq) ^\k=r(#)(seq ^\k)
+  proof
+      now let n;
+     thus ((r(#)seq) ^\k).n=(r(#)seq).(n+k) by Def9
+      .=r*(seq.(n+k)) by SEQ_1:13
+      .=r*((seq ^\k).n) by Def9
+      .=(r(#)(seq ^\k)).n by SEQ_1:13;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+
+theorem
+   (seq*Nseq) ^\k=seq*(Nseq ^\k)
+  proof
+     now let n;
+    thus ((seq*Nseq) ^\k).n=(seq*Nseq).(n+k) by Def9
+     .=seq.(Nseq.(n+k)) by Th31
+     .=seq.((Nseq ^\k).n) by Def9
+     .=(seq*(Nseq ^\k)).n by Th31;
+   end;
+   hence thesis by FUNCT_2:113;
+  end;
+
+theorem
+   seq is_subsequence_of seq
+  proof deffunc U(Nat) = $1;
+   consider seq1 such that A1:for n holds seq1.n=U(n) from ExRealSeq;
+      now let n;
+       seq1.n=n & seq1.(n+1)=n+1 by A1;
+     hence seq1.n<seq1.(n+1) by NAT_1:38;
+    end;
+   then A2:seq1 is increasing by Lm6;
+      for n holds seq1.n is Nat by A1;
+   then reconsider seq1 as increasing Seq_of_Nat by A2,Th29;
+   take Nseq=seq1;
+      now let n;
+     thus (seq*Nseq).n=seq.(Nseq.n) by Th31
+       .=seq.n by A1;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+
+theorem
+   seq ^\k is_subsequence_of seq
+  proof deffunc U(Nat) = $1+k;
+   consider seq1 such that A1:for n holds seq1.n=U(n) from ExRealSeq;
+      now let n;
+     A2:seq1.n=n+k & seq1.(n+1)=n+1+k by A1;
+       n+k<n+k+1 by NAT_1:38;
+     hence seq1.n<seq1.(n+1) by A2,XCMPLX_1:1;
+    end;
+   then A3:seq1 is increasing by Lm6;
+      now let n;
+       n+k is Nat;
+     hence seq1.n is Nat by A1;
+    end;
+   then reconsider seq1 as increasing Seq_of_Nat by A3,Th29;
+   take Nseq=seq1;
+      now let n;
+     thus (seq*Nseq).n=seq.(Nseq.n) by Th31
+       .=seq.(n+k) by A1
+       .=(seq ^\k).n by Def9;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+
+theorem
+   seq is_subsequence_of seq1 & seq1 is_subsequence_of seq2
+       implies seq is_subsequence_of seq2
+  proof
+   assume that A1:seq is_subsequence_of seq1 and
+               A2:seq1 is_subsequence_of seq2;
+   consider Nseq1 such that A3:seq=seq1*Nseq1 by A1,Def10;
+   consider Nseq2 such that A4:seq1=seq2*Nseq2 by A2,Def10;
+   take Nseq=Nseq2*Nseq1;
+   thus seq=seq2*Nseq by A3,A4,RELAT_1:55;
+  end;
+
+::
+::  SUBSEQUENCES OF MONOTONE SEQUENCE
+::    SUBSEQUENCE  OF BOUND SEQUENCE
+::
+theorem
+   seq is increasing & seq1 is_subsequence_of seq implies
+       seq1 is increasing
+ proof
+  assume that A1:seq is increasing and
+              A2:seq1 is_subsequence_of seq;
+  consider Nseq such that A3:seq1=seq*Nseq by A2,Def10;
+  let n;
+    Nseq.n<Nseq.(n+1) by Lm6;
+  then (seq.(Nseq.n))<(seq.(Nseq.(n+1))) by A1,Th7;
+  then (seq*Nseq).n<(seq.(Nseq.(n+1))) by Th31;
+  hence seq1.n<seq1.(n+1) by A3,Th31;
+ end;
+
+theorem
+   seq is decreasing & seq1 is_subsequence_of seq implies
+       seq1 is decreasing
+ proof
+  assume that A1:seq is decreasing and
+              A2:seq1 is_subsequence_of seq;
+  consider Nseq such that A3:seq1=seq*Nseq by A2,Def10;
+  let n;
+    Nseq.n<Nseq.(n+1) by Lm6;
+  then seq.(Nseq.(n+1))<seq.(Nseq.n) by A1,Th10;
+  then (seq*Nseq).(n+1)<seq.(Nseq.n) by Th31;
+  hence seq1.(n+1)<seq1.n by A3,Th31;
+ end;
+
+theorem
+ Th51:seq is non-decreasing & seq1 is_subsequence_of seq implies
+       seq1 is non-decreasing
+ proof
+  assume that A1:seq is non-decreasing and
+              A2:seq1 is_subsequence_of seq;
+  consider Nseq such that A3:seq1=seq*Nseq by A2,Def10;
+  let n;
+    Nseq.n<=Nseq.(n+1) by Lm6;
+  then (seq.(Nseq.n))<=(seq.(Nseq.(n+1))) by A1,Th12;
+  then (seq*Nseq).n<=(seq.(Nseq.(n+1))) by Th31;
+  hence seq1.n<=seq1.(n+1) by A3,Th31;
+ end;
+
+theorem
+ Th52:seq is non-increasing & seq1 is_subsequence_of seq implies
+       seq1 is non-increasing
+ proof
+  assume that A1:seq is non-increasing and
+              A2:seq1 is_subsequence_of seq;
+  consider Nseq such that A3:seq1=seq*Nseq by A2,Def10;
+  let n;
+    Nseq.n<=Nseq.(n+1) by Lm6;
+  then (seq.(Nseq.(n+1)))<=(seq.(Nseq.n)) by A1,Th14;
+  then (seq*Nseq).(n+1)<=(seq.(Nseq.n)) by Th31;
+  hence seq1.(n+1)<=seq1.n by A3,Th31;
+ end;
+
+theorem
+   seq is monotone & seq1 is_subsequence_of seq implies
+        seq1 is monotone
+  proof
+   assume that A1:seq is monotone and
+               A2:seq1 is_subsequence_of seq;
+    A3:now assume seq is non-decreasing;
+     then seq1 is non-decreasing by A2,Th51;
+     hence seq1 is monotone by Def7;
+    end;
+      now assume seq is non-increasing;
+     then seq1 is non-increasing by A2,Th52;
+     hence seq1 is monotone by Def7;
+    end;
+   hence thesis by A1,A3,Def7;
+  end;
+
+theorem
+   seq is constant & seq1 is_subsequence_of seq implies
+       seq1 is constant
+ proof
+  assume that A1:seq is constant and
+              A2:seq1 is_subsequence_of seq;
+  consider Nseq such that A3:seq1=seq*Nseq by A2,Def10;
+     now let n;
+      seq.(Nseq.(n+1))=seq.(Nseq.n) by A1,Th18;
+    then (seq*Nseq).(n+1)=seq.(Nseq.n) by Th31;
+    hence seq1.n=seq1.(n+1) by A3,Th31;
+   end;
+  hence thesis by Th16;
+ end;
+
+theorem
+   seq is constant & seq1 is_subsequence_of seq implies seq=seq1
+  proof
+    assume that
+A1: seq is constant and
+A2: seq1 is_subsequence_of seq;
+    consider Nseq such that
+A3: seq1=seq*Nseq by A2,Def10;
+       now let n;
+      thus seq1.n=seq.(Nseq.n) by A3,Th31
+                .=seq.n by A1,Th18;
+     end;
+    hence thesis by FUNCT_2:113;
+  end;
+
+theorem
+ Th56:seq is bounded_above & seq1 is_subsequence_of seq implies
+       seq1 is bounded_above
+ proof
+  assume that A1:seq is bounded_above and
+              A2:seq1 is_subsequence_of seq;
+  consider r1 such that
+  A3:for n holds seq.n<r1 by A1,SEQ_2:def 3;
+  consider Nseq such that A4:seq1=seq*Nseq by A2,Def10;
+  take r=r1;
+  let n;
+    seq1.n=seq.(Nseq.n) by A4,Th31;
+  hence seq1.n<r by A3;
+ end;
+
+theorem
+ Th57:seq is bounded_below & seq1 is_subsequence_of seq implies
+       seq1 is bounded_below
+ proof
+  assume that A1:seq is bounded_below and
+              A2:seq1 is_subsequence_of seq;
+  consider r1 such that
+  A3:for n holds r1<seq.n by A1,SEQ_2:def 4;
+  consider Nseq such that A4:seq1=seq*Nseq by A2,Def10;
+  take r=r1;
+  let n;
+    seq1.n=seq.(Nseq.n) by A4,Th31;
+  hence r<seq1.n by A3;
+ end;
+
+theorem
+   seq is bounded & seq1 is_subsequence_of seq implies
+       seq1 is bounded
+ proof
+  assume that A1:seq is bounded and
+              A2:seq1 is_subsequence_of seq;
+    seq is bounded_above by A1,SEQ_2:def 5;
+  hence seq1 is bounded_above by A2,Th56;
+    seq is bounded_below by A1,SEQ_2:def 5;
+  hence seq1 is bounded_below by A2,Th57;
+ end;
+
+::
+:: OPERATIONS ON MONOTONE SEQUENCES
+::
+theorem
+   (seq is increasing & 0<r implies r(#)seq is increasing) &
+       (0=r implies r(#)seq is constant) &
+       (seq is increasing & r<0 implies r(#)seq is decreasing)
+  proof
+  thus seq is increasing & 0<r implies r(#)seq is increasing
+   proof
+    assume that A1:seq is increasing and
+                A2:0<r;
+    let n;
+      seq.n<seq.(n+1) by A1,Lm6;
+    then r*seq.n<r*seq.(n+1) by A2,REAL_1:70;
+    then (r(#)seq).n<r*seq.(n+1) by SEQ_1:13;
+    hence (r(#)seq).n<(r(#)seq).(n+1) by SEQ_1:13;
+   end;
+  thus 0=r implies r(#)seq is constant
+   proof
+    assume A3:0=r;
+       now let n;
+        r*seq.n=r*seq.(n+1) by A3;
+      then (r(#)seq).n=r*seq.(n+1) by SEQ_1:13;
+      hence (r(#)seq).n=(r(#)seq).(n+1) by SEQ_1:13;
+     end;
+    hence thesis by Th16;
+   end;
+  assume that A4:seq is increasing and
+              A5:r<0;
+  let n;
+    seq.n<seq.(n+1) by A4,Lm6;
+  then r*seq.(n+1)<r*seq.n by A5,REAL_1:71;
+  then (r(#)seq).(n+1)<r*seq.n by SEQ_1:13;
+  hence (r(#)seq).(n+1)<(r(#)seq).n by SEQ_1:13;
+ end;
+
+theorem
+   (seq is decreasing & 0<r implies r(#)seq is decreasing) &
+       (seq is decreasing & r<0 implies r(#)seq is increasing)
+  proof
+  thus seq is decreasing & 0<r implies r(#)seq is decreasing
+   proof
+    assume that A1:seq is decreasing and
+                A2:0<r;
+    let n;
+      seq.(n+1)<seq.n by A1,Lm7;
+    then r*seq.(n+1)<r*seq.n by A2,REAL_1:70;
+    then (r(#)seq).(n+1)<r*seq.n by SEQ_1:13;
+    hence (r(#)seq).(n+1)<(r(#)seq).n by SEQ_1:13;
+   end;
+  assume that A3:seq is decreasing and
+              A4:r<0;
+  let n;
+    seq.(n+1)<seq.n by A3,Lm7;
+  then r*seq.n<r*seq.(n+1) by A4,REAL_1:71;
+  then (r(#)seq).n<r*seq.(n+1) by SEQ_1:13;
+  hence (r(#)seq).n<(r(#)seq).(n+1) by SEQ_1:13;
+ end;
+
+theorem
+   (seq is non-decreasing & 0<=r implies r(#)seq is non-decreasing) &
+       (seq is non-decreasing & r<=0 implies r(#)seq is non-increasing)
+  proof
+  thus seq is non-decreasing & 0<=r implies r(#)seq is non-decreasing
+   proof
+    assume that A1:seq is non-decreasing and
+                A2:0<=r;
+    let n;
+      seq.n<=seq.(n+1) by A1,Lm8;
+    then r*seq.n<=r*seq.(n+1) by A2,AXIOMS:25;
+    then (r(#)seq).n<=r*seq.(n+1) by SEQ_1:13;
+    hence (r(#)seq).n<=(r(#)seq).(n+1) by SEQ_1:13;
+   end;
+  assume that A3:seq is non-decreasing and
+              A4:r<=0;
+  let n;
+    seq.n<=seq.(n+1) by A3,Lm8;
+  then r*seq.(n+1)<=r*seq.n by A4,REAL_1:52;
+  then (r(#)seq).(n+1)<=r*seq.n by SEQ_1:13;
+  hence (r(#)seq).(n+1)<=(r(#)seq).n by SEQ_1:13;
+ end;
+
+theorem
+   (seq is non-increasing & 0<=r implies r(#)seq is non-increasing) &
+       (seq is non-increasing & r<=0 implies r(#)seq is non-decreasing)
+  proof
+  thus seq is non-increasing & 0<=r implies r(#)seq is non-increasing
+   proof
+    assume that A1:seq is non-increasing and
+                A2:0<=r;
+    let n;
+      seq.(n+1)<=seq.n by A1,Lm9;
+    then r*seq.(n+1)<=r*seq.n by A2,AXIOMS:25;
+    then (r(#)seq).(n+1)<=r*seq.n by SEQ_1:13;
+    hence (r(#)seq).(n+1)<=(r(#)seq).n by SEQ_1:13;
+   end;
+  assume that A3:seq is non-increasing and
+              A4:r<=0;
+  let n;
+    seq.(n+1)<=seq.n by A3,Lm9;
+  then r*seq.n<=r*seq.(n+1) by A4,REAL_1:52;
+  then (r(#)seq).n<=r*seq.(n+1) by SEQ_1:13;
+  hence (r(#)seq).n<=(r(#)seq).(n+1) by SEQ_1:13;
+ end;
+
+theorem
+ Th63:(seq is increasing & seq1 is increasing implies
+                                     seq+seq1 is increasing) &
+      (seq is decreasing & seq1 is decreasing implies
+                                     seq+seq1 is decreasing) &
+      (seq is non-decreasing & seq1 is non-decreasing implies
+                                  seq+seq1 is non-decreasing) &
+      (seq is non-increasing & seq1 is non-increasing implies
+                                  seq+seq1 is non-increasing)
+  proof
+  thus seq is increasing & seq1 is increasing implies
+         seq+seq1 is increasing
+   proof
+    assume that A1:seq is increasing and
+                A2:seq1 is increasing;
+    let n;
+    A3:seq.n<seq.(n+1) by A1,Lm6;
+      seq1.n<seq1.(n+1) by A2,Lm6;
+    then seq.n+seq1.n<seq.(n+1)+seq1.(n+1) by A3,REAL_1:67;
+    then (seq+seq1).n<seq.(n+1)+seq1.(n+1) by SEQ_1:11;
+    hence (seq+seq1).n<(seq+seq1).(n+1) by SEQ_1:11;
+   end;
+  thus seq is decreasing & seq1 is decreasing implies
+         seq+seq1 is decreasing
+   proof
+    assume that A4:seq is decreasing and
+                A5:seq1 is decreasing;
+    let n;
+    A6:seq.(n+1)<seq.n by A4,Lm7;
+      seq1.(n+1)<seq1.n by A5,Lm7;
+    then seq.(n+1)+seq1.(n+1)<seq.n+seq1.n by A6,REAL_1:67;
+    then (seq+seq1).(n+1)<seq.n+seq1.n by SEQ_1:11;
+    hence (seq+seq1).(n+1)<(seq+seq1).n by SEQ_1:11;
+   end;
+  thus seq is non-decreasing & seq1 is non-decreasing implies
+         seq+seq1 is non-decreasing
+   proof
+    assume that A7:seq is non-decreasing and
+                A8:seq1 is non-decreasing;
+    let n;
+    A9:seq.n<=seq.(n+1) by A7,Lm8;
+      seq1.n<=seq1.(n+1) by A8,Lm8;
+    then seq.n+seq1.n<=seq.(n+1)+seq1.(n+1) by A9,REAL_1:55;
+    then (seq+seq1).n<=seq.(n+1)+seq1.(n+1) by SEQ_1:11;
+    hence (seq+seq1).n<=(seq+seq1).(n+1) by SEQ_1:11;
+   end;
+  assume that A10:seq is non-increasing and
+              A11:seq1 is non-increasing;
+  let n;
+  A12:seq.(n+1)<=seq.n by A10,Lm9;
+    seq1.(n+1)<=seq1.n by A11,Lm9;
+  then seq.(n+1)+seq1.(n+1)<=seq.n+seq1.n by A12,REAL_1:55;
+  then (seq+seq1).(n+1)<=seq.n+seq1.n by SEQ_1:11;
+  hence (seq+seq1).(n+1)<=(seq+seq1).n by SEQ_1:11;
+ end;
+
+theorem
+   (seq is increasing & seq1 is constant implies
+                                   seq+seq1 is increasing) &
+      (seq is decreasing & seq1 is constant implies
+                                   seq+seq1 is decreasing) &
+      (seq is non-decreasing & seq1 is constant implies
+                                seq+seq1 is non-decreasing) &
+      (seq is non-increasing & seq1 is constant implies
+                                seq+seq1 is non-increasing)
+  proof
+thus seq is increasing & seq1 is constant implies seq+seq1 is increasing
+   proof
+    assume that A1:seq is increasing and
+                A2:seq1 is constant;
+    consider r1 such that A3:for n holds seq1.n=r1 by A2,Def6;
+    let n;
+      seq.n<seq.(n+1) by A1,Lm6;
+    then seq.n+r1<seq.(n+1)+r1 by REAL_1:53;
+    then seq.n+seq1.n<seq.(n+1)+r1 by A3;
+    then seq.n+seq1.n<seq.(n+1)+seq1.(n+1) by A3;
+    then (seq+seq1).n<seq.(n+1)+seq1.(n+1) by SEQ_1:11;
+    hence (seq+seq1).n<(seq+seq1).(n+1) by SEQ_1:11;
+   end;
+thus seq is decreasing & seq1 is constant implies seq+seq1 is decreasing
+   proof
+    assume that A4:seq is decreasing and
+                A5:seq1 is constant;
+    consider r1 such that A6:for n holds seq1.n=r1 by A5,Def6;
+    let n;
+      seq.(n+1)<seq.n by A4,Lm7;
+    then seq.(n+1)+r1<seq.n+r1 by REAL_1:53;
+    then seq.(n+1)+seq1.(n+1)<seq.n+r1 by A6;
+    then seq.(n+1)+seq1.(n+1)<seq.n+seq1.n by A6;
+    then (seq+seq1).(n+1)<seq.n+seq1.n by SEQ_1:11;
+    hence (seq+seq1).(n+1)<(seq+seq1).n by SEQ_1:11;
+   end;
+thus seq is non-decreasing & seq1 is constant implies
+                                seq+seq1 is non-decreasing
+   proof
+    assume that A7:seq is non-decreasing and
+                A8:seq1 is constant;
+      seq1 is non-decreasing by A8,Th25;
+    hence thesis by A7,Th63;
+   end;
+  assume that A9:seq is non-increasing and
+              A10:seq1 is constant;
+    seq1 is non-increasing by A10,Th26;
+  hence thesis by A9,Th63;
+ end;
+
+theorem
+ Th65:seq is constant implies (for r holds r(#)seq is constant) &
+                              -seq is constant &
+                              abs seq is constant
+  proof
+   assume seq is constant;
+   then consider r1 such that A1:for n holds seq.n=r1 by Def6;
+    A2:now let r;
+        now take p=r*r1;
+       let n;
+         r*seq.n=p by A1;
+       hence (r(#)seq).n=p by SEQ_1:13;
+      end;
+     hence r(#)seq is constant by Def6;
+    end;
+   hence for r holds r(#)seq is constant;
+     (-1)(#)seq is constant by A2;
+   hence -seq is constant by SEQ_1:25;
+   take p=abs r1;
+   let n;
+     abs (seq.n)=abs r1 by A1;
+   hence (abs seq).n=p by SEQ_1:16;
+  end;
+
+theorem
+ Th66:seq is constant & seq1 is constant implies
+        seq(#)seq1 is constant & seq+seq1 is constant
+  proof
+   assume that A1:seq is constant and
+               A2:seq1 is constant;
+   consider r1 such that A3:for n holds seq.n=r1 by A1,Def6;
+   consider r2 such that A4:for n holds seq1.n=r2 by A2,Def6;
+      now take p=r1*r2;
+     let n;
+       (seq.n)*r2=r1*r2 by A3;
+     then seq.n*(seq1.n)=r1*r2 by A4;
+     hence (seq(#)seq1).n=p by SEQ_1:12;
+    end;
+   hence seq(#)seq1 is constant by Def6;
+   take p=r1+r2;
+   let n;
+     seq.n+r2=r1+r2 by A3;
+   then seq.n+seq1.n=r1+r2 by A4;
+   hence (seq+seq1).n=p by SEQ_1:11;
+  end;
+
+theorem
+    seq is constant & seq1 is constant implies seq-seq1 is constant
+  proof
+   assume that A1:seq is constant and
+               A2:seq1 is constant;
+     -seq1 is constant by A2,Th65;
+   then seq+-seq1 is constant by A1,Th66;
+   hence thesis by SEQ_1:15;
+  end;
+
+::
+:: OPERATIONS ON BOUND SEQUENCES
+::
+theorem
+ Th68:(seq is bounded_above & 0<r implies r(#)seq is bounded_above) &
+       (0=r implies r(#)seq is bounded) &
+       (seq is bounded_above & r<0 implies r(#)seq is bounded_below)
+  proof
+  thus seq is bounded_above & 0<r implies r(#)seq is bounded_above
+   proof
+    assume that A1:seq is bounded_above and
+                A2:0<r;
+    consider r1 such that
+    A3:for n holds seq.n<r1 by A1,SEQ_2:def 3;
+    take p=r*abs r1;
+    let n;
+    A4:r1<=abs r1 by ABSVALUE:11;
+      seq.n<r1 by A3;
+    then seq.n<abs r1 by A4,AXIOMS:22;
+    then r*seq.n<r*abs r1 by A2,REAL_1:70;
+    hence (r(#)seq).n<p by SEQ_1:13;
+   end;
+  thus 0=r implies r(#)seq is bounded
+   proof
+    assume A5:0=r;
+       now
+      let n;
+         (r(#)seq).n = 0*seq.n by A5,SEQ_1:13;
+      hence (r(#)seq).n < 1;
+     end;
+    hence r(#)seq is bounded_above by SEQ_2:def 3;
+    take p=-1;
+    let n;
+    A6:-1<0;
+      r*seq.n=0 by A5;
+    hence p<(r(#)seq).n by A6,SEQ_1:13;
+   end;
+  assume that A7:seq is bounded_above and
+              A8:r<0;
+  consider r1 such that
+  A9:for n holds seq.n<r1 by A7,SEQ_2:def 3;
+  take p=r*abs r1;
+  let n;
+  A10:r1<=abs r1 by ABSVALUE:11;
+    seq.n<r1 by A9;
+  then seq.n<abs r1 by A10,AXIOMS:22;
+  then r*abs r1<r*seq.n by A8,REAL_1:71;
+  hence p<(r(#)seq).n by SEQ_1:13;
+ end;
+
+theorem
+ Th69:(seq is bounded_below & 0<r implies r(#)seq is bounded_below) &
+       (seq is bounded_below & r<0 implies r(#)seq is bounded_above)
+  proof
+  thus seq is bounded_below & 0<r implies r(#)seq is bounded_below
+   proof
+    assume that A1:seq is bounded_below and
+                A2:0<r;
+    consider r1 such that
+    A3:for n holds r1<seq.n by A1,SEQ_2:def 4;
+    take p=r*r1;
+    let n;
+      r1<seq.n by A3;
+    then r*r1<r*seq.n by A2,REAL_1:70;
+    hence p<(r(#)seq).n by SEQ_1:13;
+   end;
+  assume that A4:seq is bounded_below and
+              A5:r<0;
+  consider r1 such that
+  A6:for n holds r1<seq.n by A4,SEQ_2:def 4;
+  take p=r*(-abs r1);
+  let n;
+  A7:-abs r1<=r1 by ABSVALUE:11;
+    r1<seq.n by A6;
+  then -abs r1<seq.n by A7,AXIOMS:22;
+  then r*seq.n<r*(-abs r1) by A5,REAL_1:71;
+  hence (r(#)seq).n<p by SEQ_1:13;
+ end;
+
+theorem
+ Th70:seq is bounded implies (for r holds r(#)seq is bounded) &
+                              -seq is bounded &
+                              abs seq is bounded
+  proof
+   assume A1:seq is bounded;
+   then A2:seq is bounded_above & seq is bounded_below by SEQ_2:def 5;
+   hereby let r;
+        per cases;
+      suppose A3:0<r;
+       then A4:r(#)seq is bounded_above by A2,Th68;
+         r(#)seq is bounded_below by A2,A3,Th69;
+       hence r(#)seq is bounded by A4,SEQ_2:def 5;
+      suppose 0=r;
+       hence r(#)seq is bounded by Th68;
+      suppose A5:r<0;
+       then A6:r(#)seq is bounded_above by A2,Th69;
+         r(#)seq is bounded_below by A2,A5,Th68;
+       hence r(#)seq is bounded by A6,SEQ_2:def 5;
+    end;
+   then (-1)(#)seq is bounded;
+   hence -seq is bounded by SEQ_1:25;
+   consider r such that A7:0<r and
+                        A8:for n holds abs (seq.n) <r by A1,SEQ_2:15;
+      now
+     thus 0<r by A7;
+     let n;
+       abs (abs (seq.n))<r by A8;
+     hence abs ((abs seq).n)<r by SEQ_1:16;
+    end;
+   hence thesis by SEQ_2:15;
+  end;
+
+theorem
+ Th71:(seq is bounded_above & seq1 is bounded_above implies
+                                 seq+seq1 is bounded_above) &
+      (seq is bounded_below & seq1 is bounded_below implies
+                                 seq+seq1 is bounded_below) &
+      (seq is bounded & seq1 is bounded implies seq+seq1 is bounded)
+  proof
+   thus A1:seq is bounded_above & seq1 is bounded_above implies
+             seq+seq1 is bounded_above
+    proof
+     assume that A2:seq is bounded_above and
+                 A3:seq1 is bounded_above;
+     consider r1 such that
+     A4:for n holds seq.n<r1 by A2,SEQ_2:def 3;
+     consider r2 such that
+     A5:for n holds seq1.n<r2 by A3,SEQ_2:def 3;
+     take r=r1+r2;
+     let n;
+     A6:seq.n<r1 by A4;
+       seq1.n<r2 by A5;
+     then seq.n+seq1.n<r1+r2 by A6,REAL_1:67;
+     hence (seq+seq1).n<r by SEQ_1:11;
+    end;
+   thus A7:seq is bounded_below & seq1 is bounded_below implies
+             seq+seq1 is bounded_below
+    proof
+     assume that A8:seq is bounded_below and
+                 A9:seq1 is bounded_below;
+     consider r1 such that
+     A10:for n holds r1<seq.n by A8,SEQ_2:def 4;
+     consider r2 such that
+     A11:for n holds r2<seq1.n by A9,SEQ_2:def 4;
+     take r=r1+r2;
+     let n;
+     A12:r1<seq.n by A10;
+       r2<seq1.n by A11;
+     then r1+r2<seq.n+seq1.n by A12,REAL_1:67;
+     hence r<(seq+seq1).n by SEQ_1:11;
+    end;
+  assume that A13:seq is bounded and
+              A14:seq1 is bounded;
+  thus seq+seq1 is bounded_above by A1,A13,A14,SEQ_2:def 5;
+  thus seq+seq1 is bounded_below by A7,A13,A14,SEQ_2:def 5;
+ end;
+
+theorem
+ Th72:seq is bounded & seq1 is bounded implies seq(#)seq1 is bounded &
+        seq-seq1 is bounded
+  proof
+   assume that A1:seq is bounded and
+               A2:seq1 is bounded;
+   consider r1 such that
+   A3:0<r1 and A4:for n holds abs (seq.n)<r1 by A1,SEQ_2:15;
+   consider r2 such that A5:0<r2 and
+                         A6:for n holds abs (seq1.n)<r2 by A2,SEQ_2:15;
+      now take r=r1*r2;
+       0*0<r1*r2 by A3,A5,SEQ_2:7;
+     hence 0<r;
+     let n;
+     A7:abs (seq.n)<r1 by A4;
+     A8:abs (seq1.n)<r2 by A6;
+     A9:0<=abs (seq.n) by ABSVALUE:5;
+       0<=abs (seq1.n) by ABSVALUE:5;
+     then abs (seq.n)*abs (seq1.n)<r by A7,A8,A9,SEQ_2:7;
+     then abs ((seq.n)*seq1.n)<r by ABSVALUE:10;
+     hence abs ((seq(#)seq1).n)<r by SEQ_1:12;
+    end;
+   hence seq (#)seq1 is bounded by SEQ_2:15;
+     -seq1 is bounded by A2,Th70;
+   then seq+-seq1 is bounded by A1,Th71;
+   hence thesis by SEQ_1:15;
+  end;
+
+::
+:: OPERATIONS ON BOUND & CONSTANT SEQUENCES
+::
+theorem
+ Th73:seq is constant implies seq is bounded
+  proof
+   assume seq is constant;
+   then consider r1 such that A1:for n holds seq.n=r1 by Def6;
+      now take p=abs r1+1;
+       0<=abs r1 by ABSVALUE:5;
+     then 0+0<abs r1+1 by REAL_1:67;
+     hence 0<p;
+     let n;
+       abs r1=abs (seq.n) by A1;
+     then abs (seq.n)+0<abs r1+1 by REAL_1:53;
+     hence abs (seq.n)<p;
+    end;
+   hence thesis by SEQ_2:15;
+  end;
+
+theorem
+   seq is constant implies (for r holds r(#)seq is bounded) &
+                               (-seq is bounded) &
+                               abs seq is bounded
+  proof
+   assume A1:seq is constant;
+      now let r;
+       r(#)seq is constant by A1,Th65;
+     hence r(#)seq is bounded by Th73;
+    end;
+   hence for r holds r(#)seq is bounded;
+     -seq is constant by A1,Th65;
+   hence -seq is bounded by Th73;
+     abs seq is constant by A1,Th65;
+   hence abs seq is bounded by Th73;
+  end;
+
+theorem
+ Th75:(seq is bounded_above & seq1 is constant implies
+         seq+seq1 is bounded_above) &
+      (seq is bounded_below & seq1 is constant implies
+         seq+seq1 is bounded_below) &
+      (seq is bounded & seq1 is constant implies seq+seq1 is bounded)
+  proof
+   thus seq is bounded_above & seq1 is constant implies
+          seq+seq1 is bounded_above
+    proof
+     assume that A1:seq is bounded_above and
+                 A2:seq1 is constant;
+       seq1 is bounded by A2,Th73;
+     then seq1 is bounded_above by SEQ_2:def 5;
+     hence thesis by A1,Th71;
+    end;
+   thus seq is bounded_below & seq1 is constant implies
+          seq+seq1 is bounded_below
+    proof
+     assume that A3:seq is bounded_below and
+                 A4:seq1 is constant;
+       seq1 is bounded by A4,Th73;
+     then seq1 is bounded_below by SEQ_2:def 5;
+     hence thesis by A3,Th71;
+    end;
+   assume that A5:seq is bounded and
+               A6:seq1 is constant;
+     seq1 is bounded by A6,Th73;
+   hence thesis by A5,Th71;
+  end;
+
+theorem
+   (seq is bounded_above & seq1 is constant implies
+          seq-seq1 is bounded_above) &
+      (seq is bounded_below & seq1 is constant implies
+          seq-seq1 is bounded_below) &
+      (seq is bounded & seq1 is constant implies seq-seq1 is bounded &
+          seq1-seq is bounded & seq(#)seq1 is bounded)
+  proof
+   thus seq is bounded_above & seq1 is constant implies
+          seq-seq1 is bounded_above
+    proof
+     assume that A1:seq is bounded_above and
+                 A2:seq1 is constant;
+       -seq1 is constant by A2,Th65;
+     then seq+-seq1 is bounded_above by A1,Th75;
+     hence thesis by SEQ_1:15;
+    end;
+   thus seq is bounded_below & seq1 is constant implies
+          seq-seq1 is bounded_below
+    proof
+     assume that A3:seq is bounded_below and
+                 A4:seq1 is constant;
+       -seq1 is constant by A4,Th65;
+     then seq+-seq1 is bounded_below by A3,Th75;
+     hence thesis by SEQ_1:15;
+    end;
+   assume that A5:seq is bounded and
+               A6:seq1 is constant;
+       -seq1 is constant by A6,Th65;
+     then seq+-seq1 is bounded by A5,Th75;
+     hence seq-seq1 is bounded by SEQ_1:15;
+ A7: seq1 is bounded by A6,Th73;
+     hence seq1-seq is bounded by A5,Th72;
+     thus thesis by A5,A7,Th72;
+  end;
+
+::
+:: OPERATIONS ON BOUND & MONOTONE SEQUENCES
+::
+theorem
+   seq is bounded_above & seq1 is non-increasing implies
+        seq+seq1 is bounded_above
+  proof
+   assume that A1:seq is bounded_above and
+               A2:seq1 is non-increasing;
+   consider r1 such that
+   A3:for n holds seq.n<r1 by A1,SEQ_2:def 3;
+   take r=r1+seq1.0;
+   let n;
+   A4:seq1.n<=seq1.0 by A2,Th22;
+     seq.n<r1 by A3;
+   then seq.n+seq1.n<r1+seq1.0 by A4,REAL_1:67;
+   hence (seq+seq1).n<r by SEQ_1:11;
+  end;
+
+theorem
+   seq is bounded_below & seq1 is non-decreasing implies
+        seq+seq1 is bounded_below
+  proof
+   assume that A1:seq is bounded_below and
+               A2:seq1 is non-decreasing;
+   consider r1 such that
+   A3:for n holds r1<seq.n by A1,SEQ_2:def 4;
+   take r=r1+seq1.0;
+   let n;
+   A4:seq1.0<=seq1.n by A2,Th21;
+     r1<seq.n by A3;
+   then r1+seq1.0<seq.n+seq1.n by A4,REAL_1:67;
+   hence r<(seq+seq1).n by SEQ_1:11;
+  end;
+
+theorem Th79: :: YELLOW_6:1
+ for X,x being set holds X --> x is constant
+ proof let X,a be set;
+  let x,y be set;
+A1: dom(X --> a) = X by FUNCOP_1:19;
+  assume
+A2:  x in dom(X --> a) & y in dom(X --> a);
+  hence (X --> a).x = a by A1,FUNCOP_1:13 .= (X --> a).y by A1,A2,FUNCOP_1:13;
+ end;
+
+definition let X,x be set;
+ cluster X --> x -> constant;
+ coherence by Th79;
+end;
+

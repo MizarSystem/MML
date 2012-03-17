@@ -1,0 +1,1562 @@
+:: The Algebra of Polynomials
+::  by Ewa Gr\c{a}dzka
+::
+:: Received February 24, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary VECTSP_1, FUNCSDOM, RLVECT_1, BINOP_1, FUNCT_1, FUNCOP_1, VECTSP_2,
+      LATTICES, RELAT_1, NORMSP_1, ARYTM_3, POLYNOM3, ARYTM_1, GROUP_1,
+      ALGSTR_1, ALGSTR_2, FINSEQ_1, RFINSEQ, MATRIX_2, FINSEQ_4, BOOLE,
+      UNIALG_2, RLSUB_1, SETFAM_1, POLYNOM1, ALGSEQ_1, POLYALG1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      STRUCT_0, PRE_TOPC, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_4,
+      FINSOP_1, RFINSEQ, BINOP_1, BINARITH, GROUP_1, RLVECT_1, VECTSP_1,
+      VECTSP_2, NORMSP_1, POLYNOM1, ALGSTR_1, ALGSEQ_1, POLYNOM3, POLYNOM5,
+      VECTSP_4;
+ constructors REAL_1, MONOID_0, DOMAIN_1, ALGSTR_2, FINSOP_1, RFINSEQ,
+      BINARITH, POLYNOM1, GOBOARD1, POLYNOM3, POLYNOM5, VECTSP_4, MEMBERED;
+ clusters SUBSET_1, FUNCT_1, STRUCT_0, RELSET_1, VECTSP_1, VECTSP_2, ALGSTR_2,
+      FINSEQ_5, ARYTM_3, BINOM, POLYNOM3, POLYNOM5, MEMBERED;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, RLVECT_1, VECTSP_1, VECTSP_2, VECTSP_4;
+ theorems AXIOMS, TARSKI, NAT_1, RLVECT_1, VECTSP_1, BINARITH, FUNCT_1,
+      FUNCT_2, FUNCOP_1, FINSEQ_1, FINSEQ_3, FINSEQ_4, FINSEQ_5, RFINSEQ,
+      BINOP_1, GOBOARD1, GOBOARD9, POLYNOM1, POLYNOM3, STRUCT_0, ZFMISC_1,
+      POLYNOM5, BINOM, RELAT_1, VECTSP_4, SETFAM_1, ALGSTR_1, XBOOLE_0,
+      XBOOLE_1, XCMPLX_1;
+ schemes FUNCT_2, SETFAM_1;
+
+begin :: Preliminaries
+
+definition let F be 1-sorted;
+ struct ( doubleLoopStr,VectSpStr over F ) AlgebraStr over F (#
+         carrier -> set,
+         add, mult -> BinOp of the carrier,
+         Zero, unity -> Element of the carrier,
+         lmult -> Function of [:the carrier of F,the carrier:],
+                                      the carrier #);
+end;
+
+definition let L be non empty doubleLoopStr;
+cluster strict non empty AlgebraStr over L;
+existence
+ proof
+  consider a being BinOp of {0};
+  reconsider z=0 as Element of {0} by TARSKI:def 1;
+    0 in {0} by TARSKI:def 1;
+  then reconsider lm = [:the carrier of L,{0}:]-->0 as
+  Function of [:the carrier of L,{0}:],{0} by FUNCOP_1:57;
+  take A = AlgebraStr(#{0}, a, a, z, z, lm #);
+  thus A is strict non empty by STRUCT_0:def 1;
+ end;
+end;
+
+definition
+let L be non empty doubleLoopStr, A be non empty AlgebraStr over L;
+attr A is mix-associative means
+   for a being Element of L, x,y being Element of A holds
+ a*(x*y) = (a*x)*y;
+end;
+
+definition let L be non empty doubleLoopStr;
+  cluster well-unital distributive VectSp-like mix-associative
+    (non empty AlgebraStr over L);
+existence
+proof
+consider a being BinOp of {0};
+reconsider z=0 as Element of {0} by TARSKI:def 1;
+  0 in {0} by TARSKI:def 1;
+then reconsider lm = [:the carrier of L,{0}:]-->0 as
+Function of [:the carrier of L,{0}:],{0} by FUNCOP_1:57;
+reconsider A = AlgebraStr(#{0}, a, a, z, z, lm #)
+  as non empty AlgebraStr over L by STRUCT_0:def 1;
+take A;
+A1: for x,y being Element of A holds x = y
+ proof let x,y be Element of A;
+     x = 0 & y = 0 by TARSKI:def 1;
+  hence thesis;
+ end;
+thus A is well-unital
+proof
+  let x be Element of A;
+  thus x*(1_ A) = x & (1_ A)*x = x by A1;
+end;
+thus A is distributive
+proof
+  let x,y,z be Element of A;
+  thus x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x by A1;
+end;
+thus A is VectSp-like
+proof
+  let x,y be Element of L;
+  let v,w being Element of A;
+  thus x*(v+w) = x*v+x*w &
+      (x+y)*v = x*v+y*v &
+      (x*y)*v = x*(y*v) &
+      (1_ L)*v = v by A1;
+end;
+thus A is mix-associative
+proof
+  let a be Element of L, x,y be Element of A;
+  thus a*(x*y) = (a*x)*y by A1;
+end;
+end;
+end;
+
+definition let L be non empty doubleLoopStr;
+  mode Algebra of L is well-unital distributive VectSp-like mix-associative
+    (non empty AlgebraStr over L);
+end;
+
+theorem Th1:
+for X,Y being set
+for f being Function of [:X,Y:],X holds dom f = [:X,Y:]
+proof
+ let X,Y be set;
+ let f be Function of [:X,Y:],X;
+   X is empty implies [:X,Y:] is empty by ZFMISC_1:113;
+ hence dom f = [:X,Y:] by FUNCT_2:def 1;
+end;
+
+theorem Th2:
+for X,Y being set
+for f being Function of [:X,Y:],Y holds dom f = [:X,Y:]
+proof
+ let X,Y be set;
+ let f be Function of [:X,Y:],Y;
+   Y is empty implies [:X,Y:] is empty by ZFMISC_1:113;
+ hence dom f = [:X,Y:] by FUNCT_2:def 1;
+end;
+
+begin :: The Algebra of Formal Power Series
+
+definition
+ let L be non empty doubleLoopStr;
+ func Formal-Series L -> strict non empty AlgebraStr over L means :Def2:
+    (for x be set holds x in the carrier of it iff x is sequence of L) &
+    (for x,y be Element of it, p,q be sequence of L st
+      x = p & y = q holds x+y = p+q) &
+    (for x,y be Element of it, p,q be sequence of L st
+      x = p & y = q holds x*y = p*'q) &
+    (for a be Element of L, x be Element of it,
+    p be sequence of L st x = p holds a*x = a*p) &
+    0.it = 0_.(L) &
+    1_(it) = 1_.(L);
+  existence
+   proof
+    A1: 0_.(L) in {x where x is sequence of L : not contradiction};
+    then reconsider Ca = {x where x is sequence of L : not contradiction}
+                                                            as non empty set;
+    defpred P[set,set,set] means
+     ex p,q be sequence of L st p=$1 & q=$2 & $3=p+q;
+    A2: for x,y be Element of Ca ex u be Element of Ca st P[x,y,u]
+    proof
+     let x,y be Element of Ca;
+       x in Ca;
+     then consider p be sequence of L such that
+      A3: x=p;
+       y in Ca;
+     then consider q be sequence of L such that
+      A4: y=q;
+       p+q in Ca;
+     then reconsider u=p+q as Element of Ca;
+     take u,p,q;
+     thus thesis by A3,A4;
+    end;
+    consider Ad be Function of [:Ca,Ca:],Ca such that
+     A5: for x,y be Element of Ca holds P[x,y,Ad.[x,y]] from FuncEx2D(A2);
+    defpred P[set,set,set] means
+     ex p,q be sequence of L st p=$1 & q=$2 & $3=p*'q;
+    A6: for x,y be Element of Ca ex u be Element of Ca st P[x,y,u]
+    proof
+     let x,y be Element of Ca;
+       x in Ca;
+     then consider p be sequence of L such that
+      A7: x=p;
+       y in Ca;
+     then consider q be sequence of L such that
+      A8: y=q;
+       p*'q in Ca;
+     then reconsider u=p*'q as Element of Ca;
+     take u,p,q;
+     thus thesis by A7,A8;
+    end;
+    consider Mu be Function of [:Ca,Ca:],Ca such that
+     A9: for x,y be Element of Ca holds P[x,y,Mu.[x,y]] from FuncEx2D(A6);
+      1_.(L) in {x where x is sequence of L : not contradiction};
+    then reconsider Un = 1_.(L) as Element of Ca;
+    reconsider Ze = 0_.(L) as Element of Ca by A1;
+    defpred P[Element of L,set,set] means
+     ex p be sequence of L st p=$2 & $3=$1*p;
+    A10: for a being Element of L,x be Element of Ca
+     ex u be Element of Ca st P[a,x,u]
+    proof
+     let a being Element of L,x be Element of Ca;
+       x in Ca;
+     then consider q be sequence of L such that A11: x = q;
+       a*q in Ca;
+     then reconsider u = a*q as Element of Ca;
+      take u,q;
+      thus thesis by A11;
+    end;
+    consider lm being Function of [:the carrier of L,Ca:],Ca such that
+     A12: for a being Element of L,x be Element of Ca holds
+      P[a,x,lm.[a,x]] from FuncEx2D(A10);
+    reconsider P = AlgebraStr(# Ca, Ad, Mu, Ze, Un, lm #)
+    as strict non empty AlgebraStr over L by STRUCT_0:def 1;
+    take P;
+    thus for x be set holds x in the carrier of P iff x is sequence of L
+    proof
+     let x be set;
+     thus x in the carrier of P implies x is sequence of L
+     proof
+      assume x in the carrier of P;
+      then consider p be sequence of L such that
+       A13: x=p;
+      thus x is sequence of L by A13;
+     end;
+     thus thesis;
+    end;
+    thus for x,y be Element of P, p,q be sequence of L st
+     x = p & y = q holds x+y = p+q
+    proof
+     let x,y be Element of P;
+     let p,q be sequence of L;
+     assume that
+      A14: x = p and
+      A15: y = q;
+     consider p1,q1 be sequence of L such that
+      A16: p1 = x and
+      A17: q1 = y and
+      A18: Ad.[x,y] = p1+q1 by A5;
+     thus x+y = p+q by A14,A15,A16,A17,A18,RLVECT_1:def 3;
+    end;
+    thus for x,y be Element of P, p,q be sequence of L st
+     x = p & y = q holds x*y = p*'q
+    proof
+     let x,y be Element of P;
+     let p,q be sequence of L;
+     assume that
+      A19: x = p and
+      A20: y = q;
+     consider p1,q1 be sequence of L such that
+      A21: p1 = x and
+      A22: q1 = y and
+      A23: Mu.[x,y] = p1*'q1 by A9;
+     thus x*y = Mu.(x,y) by VECTSP_1:def 10
+             .= p*'q by A19,A20,A21,A22,A23,BINOP_1:def 1;
+    end;
+
+    thus for a be Element of L, x be Element of P,
+    p be sequence of L st x = p holds a*x = a*p
+     proof
+      let a be Element of L, x be Element of P,
+    p be sequence of L such that A24:x = p;
+    consider p1 being sequence of L such that A25: x = p1 and
+      A26: lm.[a,x]=a*p1 by A12;
+    thus a*x = (the lmult of P).(a,x) by VECTSP_1:def 24
+            .= a*p by A24,A25,A26,BINOP_1:def 1;
+    end;
+    thus 0.P = 0_.(L) by RLVECT_1:def 2;
+    thus 1_(P) = 1_.(L) by VECTSP_1:def 9;
+   end;
+
+   uniqueness
+   proof
+    let P1,P2 be strict non empty AlgebraStr over L such that
+     A27: for x be set holds x in the carrier of P1 iff x is sequence of L and
+     A28: for x,y be Element of P1, p,q be sequence of L st
+      x = p & y = q holds x+y = p+q and
+     A29: for x,y be Element of P1, p,q be sequence of L st
+      x = p & y = q holds x*y = p*'q and
+     A30: for a be Element of L, x be Element of P1,
+    p be sequence of L st x = p holds a*x = a*p and
+     A31: 0.P1 = 0_.(L) and
+     A32: 1_(P1) = 1_.(L) and
+     A33: for x be set holds x in the carrier of P2 iff x is sequence of L and
+     A34: for x,y be Element of P2, p,q be sequence of L st
+      x = p & y = q holds x+y = p+q and
+     A35: for x,y be Element of P2, p,q be sequence of L st
+      x = p & y = q holds x*y = p*'q and
+     A36: for a be Element of L, x be Element of P2,
+    p be sequence of L st x = p holds a*x = a*p and
+     A37: 0.P2 = 0_.(L) and
+     A38: 1_(P2) = 1_.(L);
+    A39: now let x be set;
+       x in the carrier of P1 iff x is sequence of L by A27;
+     hence x in the carrier of P1 iff x in the carrier of P2 by A33;
+    end;
+    then A40: the carrier of P1 = the carrier of P2 by TARSKI:2;
+      now let x be Element of P1,
+            y be Element of P2;
+     reconsider x1=x as Element of P2 by A39;
+     reconsider y1=y as Element of P1 by A39;
+     reconsider p=x as sequence of L by A27;
+     reconsider q=y as sequence of L by A33;
+     thus (the add of P1).(x,y) = x+y1 by RLVECT_1:5
+        .= p+q by A28
+        .= x1+y by A34
+        .= (the add of P2).(x,y) by RLVECT_1:5;
+    end;
+    then A41: the add of P1 = the add of P2 by A40,BINOP_1:2;
+    A42: now let x be Element of P1,
+            y be Element of P2;
+     reconsider x1=x as Element of P2 by A39;
+     reconsider y1=y as Element of P1 by A39;
+     reconsider p=x as sequence of L by A27;
+     reconsider q=y as sequence of L by A33;
+     thus (the mult of P1).(x,y) = x*y1 by VECTSP_1:def 10
+        .= p*'q by A29
+        .= x1*y by A35
+        .= (the mult of P2).(x,y) by VECTSP_1:def 10;
+    end;
+      now let a be Element of L,
+            x be Element of P1;
+     reconsider a1=a as Element of L;
+     reconsider x1=x as Element of P2 by A39;
+     reconsider p=x as sequence of L by A27;
+     thus (the lmult of P1).(a,x) = a*x by VECTSP_1:def 24
+        .= a1*p by A30
+        .= a1*x1 by A36
+        .= (the lmult of P2).(a,x) by VECTSP_1:def 24;
+    end;
+    then A43: the lmult of P1=the lmult of P2 by A40,BINOP_1:2;
+    A44: the unity of P1 = 1_.(L) by A32,VECTSP_1:def 9
+       .= the unity of P2 by A38,VECTSP_1:def 9;
+      the Zero of P1 = 0_.(L) by A31,RLVECT_1:def 2
+       .= the Zero of P2 by A37,RLVECT_1:def 2;
+    hence P1 = P2 by A40,A41,A42,A43,A44,BINOP_1:2;
+   end;
+  end;
+
+  definition
+   let L be Abelian (non empty doubleLoopStr);
+   cluster Formal-Series L -> Abelian;
+   coherence
+   proof
+    let p,q be Element of Formal-Series L;
+    reconsider p1=p, q1=q as sequence of L by Def2;
+    thus p + q = p1 + q1 by Def2
+       .= q + p by Def2;
+   end;
+  end;
+
+  definition
+   let L be add-associative (non empty doubleLoopStr);
+   cluster Formal-Series L -> add-associative;
+   coherence
+   proof
+    let p,q,r be Element of Formal-Series L;
+    reconsider p1=p, q1=q, r1=r as sequence of L by Def2;
+    A1: q + r = q1 + r1 by Def2;
+      p + q = p1 + q1 by Def2;
+    hence (p + q) + r = (p1 + q1) + r1 by Def2
+       .= p1 + (q1 + r1) by POLYNOM3:26
+       .= p + (q + r) by A1,Def2;
+   end;
+  end;
+
+  definition
+   let L be right_zeroed (non empty doubleLoopStr);
+   cluster Formal-Series L -> right_zeroed;
+   coherence
+   proof
+    let p be Element of Formal-Series L;
+    reconsider p1=p as sequence of L by Def2;
+      0.(Formal-Series L) = 0_.(L) by Def2;
+    hence p + 0.(Formal-Series L) = p1 + 0_.(L) by Def2
+       .= p by POLYNOM3:29;
+   end;
+  end;
+
+  definition
+   let L be add-associative right_zeroed right_complementable
+    (non empty doubleLoopStr);
+   cluster Formal-Series L -> right_complementable;
+   coherence
+   proof
+    let p be Element of Formal-Series L;
+    reconsider p1=p as sequence of L by Def2;
+    reconsider q = -p1 as Element of Formal-Series L by Def2;
+    take q;
+    thus p + q = p1 + -p1 by Def2
+       .= p1 - p1 by POLYNOM3:def 8
+       .= 0_.(L) by POLYNOM3:30
+       .= 0.(Formal-Series L) by Def2;
+   end;
+  end;
+
+  definition
+   let L be Abelian add-associative right_zeroed commutative
+                     (non empty doubleLoopStr);
+   cluster Formal-Series L -> commutative;
+   coherence
+   proof
+    let p,q be Element of Formal-Series L;
+    reconsider p1=p, q1=q as sequence of L by Def2;
+    thus p * q = p1 *' q1 by Def2
+       .= q * p by Def2;
+   end;
+  end;
+
+  definition
+   let L be Abelian add-associative right_zeroed right_complementable
+   unital associative distributive (non empty doubleLoopStr);
+   cluster Formal-Series L -> associative;
+   coherence
+   proof
+    let p,q,r be Element of Formal-Series L;
+    reconsider p1=p, q1=q, r1=r as sequence of L by Def2;
+    A1: q * r = q1 *' r1 by Def2;
+      p * q = p1 *' q1 by Def2;
+    hence (p * q) * r = (p1 *' q1) *' r1 by Def2
+       .= p1 *' (q1 *' r1) by POLYNOM3:34
+       .= p * (q * r) by A1,Def2;
+   end;
+  end;
+
+definition
+   let L be add-associative right_zeroed right_complementable right_unital
+        right-distributive (non empty doubleLoopStr);
+   cluster Formal-Series L -> right_unital;
+   coherence
+   proof
+    let p be Element of Formal-Series L;
+    reconsider p1=p as sequence of L by Def2;
+      1_(Formal-Series L) = 1_.(L) by Def2;
+    hence p * 1_(Formal-Series L) = p1 *' 1_.(L) by Def2
+       .= p by POLYNOM3:36;
+   end;
+end;
+
+definition
+  cluster add-associative associative right_zeroed left_zeroed
+    right_unital left_unital
+    right_complementable distributive (non empty doubleLoopStr);
+  existence
+  proof
+    take F_Real; thus thesis;
+  end;
+end;
+
+  theorem Th3:
+   for D be non empty set
+   for f being non empty FinSequence of D holds
+    f/^1 = Del(f,1)
+    proof
+     let D be non empty set;
+     let f be non empty FinSequence of D;
+     consider i be Nat such that A1: i+1 = len f by FINSEQ_5:7;
+A2:  1 <= len f by A1,NAT_1:29;
+       (len (f/^1) = len Del(f,1)) & for k be Nat st 1 <=k & k <= len (f/^1)
+     holds (f/^1).k=Del(f,1).k
+      proof
+A3:    1 in dom f by FINSEQ_5:6;
+A4:    len (f/^1) = (i+1)-1 by A1,A2,RFINSEQ:def 2
+                 .= i by XCMPLX_1:26;
+       hence len (f/^1) = len Del(f,1) by A1,A3,GOBOARD1:6;
+       let k be Nat such that
+A5:    1 <=k & k <= len (f/^1);
+A6:    1 in dom f & 1<=k & k<=i by A4,A5,FINSEQ_5:6;
+     k in dom (f/^1) by A5,FINSEQ_3:27;
+       hence (f/^1).k= f.(k+1) by A2,RFINSEQ:def 2
+                   .= Del(f,1).k by A1,A6,GOBOARD1:9;
+      end;
+     hence thesis by FINSEQ_1:18;
+    end;
+
+  theorem Th4:
+   for D be non empty set
+   for f being non empty FinSequence of D holds
+   f = <*f.1*>^Del(f,1)
+    proof
+     let D be non empty set;
+     let f be non empty FinSequence of D;
+     A1: 1 in dom f by FINSEQ_5:6;
+     thus f = <*f/.1*>^(f/^1) by FINSEQ_5:32
+           .= <*f.1*>^(f/^1) by A1,FINSEQ_4:def 4
+           .= <*f.1*>^Del(f,1) by Th3;
+    end;
+
+  theorem Th5:
+   for L be add-associative right_zeroed left_unital right_complementable
+    left-distributive (non empty doubleLoopStr)
+   for p be sequence of L holds
+   (1_.(L))*'p = p
+   proof
+    let L be add-associative right_zeroed left_unital right_complementable
+     left-distributive (non empty doubleLoopStr);
+    let p be sequence of L;
+      now let i be Nat;
+     consider r be FinSequence of the carrier of L such that
+      A1: len r = i+1 and
+      A2: ((1_.(L))*'p).i = Sum r and
+      A3: for k be Nat st k in dom r holds r.k = (1_.(L)).(k-'1)*p.(i+1-'k)
+      by POLYNOM3:def 11;
+        i >=0 by NAT_1:18;
+      then i+1>0 by NAT_1:38;
+      then A4: r <> {} by A1,FINSEQ_1:25;
+     then A5: 1 in dom r by FINSEQ_5:6;
+       r = <*r.1*>^Del(r,1) by A4,Th4
+      .= <*r/.1*>^Del(r,1) by A5,FINSEQ_4:def 4;
+     then A6: Sum r = Sum <*r/.1*> + Sum Del(r,1) by RLVECT_1:58
+        .= r/.1 + Sum Del(r,1)by RLVECT_1:61;
+       now let k be Nat;
+       assume A7: k in dom Del(r,1);
+          len Del(r,1) = i by A1,A5,GOBOARD1:6;
+       then A8: 0+1 <= k & k <= i by A7,FINSEQ_3:27;
+      then A9:  k+1 <= i+ 1 by AXIOMS:24;
+          k+1 >= 1 by NAT_1:29;
+      then A10: k+1 in dom r by A1,A9,FINSEQ_3:27;
+      A11: k<>0 by A7,FINSEQ_3:27;
+      thus Del(r,1).k = r.(k+1) by A1,A5,A8,GOBOARD1:9
+         .= (1_.(L)).(k+1-'1)*p.(i+1-'(k+1)) by A3,A10
+         .= (1_.(L)).(k)*p.(i+1-'(k+1)) by BINARITH:39
+         .= 0.(L)*p.(i+1-'(k+1)) by A11,POLYNOM3:31
+         .= 0.(L) by VECTSP_1:39;
+     end;
+     then A12: Sum Del(r,1) = 0.(L) by POLYNOM3:1;
+       r/.1 = r.1 by A5,FINSEQ_4:def 4
+        .= (1_.(L)).(1-'1)*p.(i+1-'1) by A3,A5
+        .= (1_.(L)).(1-'1)*p.i by BINARITH:39
+        .= (1_.(L)).(0)*p.i by GOBOARD9:1
+        .= 1_(L)*p.i by POLYNOM3:31
+        .= p.i by VECTSP_1:def 19;
+     hence ((1_.(L))*'p).i = p.i by A2,A6,A12,RLVECT_1:10;
+    end;
+    hence (1_.(L))*'p = p by FUNCT_2:113;
+   end;
+
+definition
+   let L be add-associative right_zeroed right_complementable left_unital
+    left-distributive (non empty doubleLoopStr);
+   cluster Formal-Series L -> left_unital;
+   coherence
+   proof
+    let p be Element of Formal-Series L;
+    reconsider p1=p as sequence of L by Def2;
+      1_(Formal-Series L) = 1_.(L) by Def2;
+    hence 1_(Formal-Series L)*p = (1_.(L)) *' p1 by Def2
+       .= p by Th5;
+   end;
+end;
+
+definition
+   let L be Abelian add-associative right_zeroed right_complementable
+           distributive (non empty doubleLoopStr);
+   cluster Formal-Series L -> right-distributive;
+   coherence
+   proof
+    let p,q,r be Element of Formal-Series L;
+    reconsider p1=p, q1=q, r1=r as sequence of L by Def2;
+    A1: p*q = p1*'q1 & p*r = p1*'r1 by Def2;
+      q+r = q1+r1 by Def2;
+    hence p*(q+r) = p1*'(q1+r1) by Def2
+       .= p1*'q1+p1*'r1 by POLYNOM3:32
+       .= p*q+p*r by A1,Def2;
+   end;
+
+   cluster Formal-Series L -> left-distributive;
+   coherence
+   proof
+    let p,q,r be Element of Formal-Series L;
+    reconsider p1=p, q1=q, r1=r as sequence of L by Def2;
+    A2: q*p = q1*'p1 & r*p = r1*'p1 by Def2;
+      q+r = q1+r1 by Def2;
+    hence (q+r)*p = (q1+r1)*'p1 by Def2
+       .= q1*'p1+r1*'p1 by POLYNOM3:33
+       .= q*p+r*p by A2,Def2;
+   end;
+end;
+
+theorem Th6:
+   for L be Abelian add-associative right_zeroed
+   right_complementable distributive (non empty doubleLoopStr)
+   for a being Element of L, p,q being sequence of L holds
+   a*(p+q)=a*p + a*q
+   proof
+    let L be Abelian add-associative right_zeroed
+     right_complementable distributive (non empty doubleLoopStr);
+    let a be Element of L, p,q be sequence of L;
+      for i be Element of NAT holds (a*(p+q)).i = (a*p + a*q).i
+     proof
+      let i be Element of NAT;
+         a*((p+q).i) = a*(p.i + q.i) by POLYNOM3:def 6
+                  .= a*(p.i) + a*(q.i) by VECTSP_1:def 18
+                  .= (a*p).i + a*(q.i) by POLYNOM5:def 3
+                  .= (a*p).i + (a*q).i by POLYNOM5:def 3
+                  .= (a*p + a*q).i by POLYNOM3:def 6;
+      hence (a*(p+q)).i = (a*p + a*q).i by POLYNOM5:def 3;
+     end;
+    hence thesis by FUNCT_2:113;
+   end;
+
+theorem Th7:
+   for L be Abelian add-associative right_zeroed
+   right_complementable distributive (non empty doubleLoopStr)
+   for a,b being Element of L, p being sequence of L holds
+   (a+b)*p = a*p + b*p
+   proof
+    let L be Abelian add-associative right_zeroed
+     right_complementable distributive (non empty doubleLoopStr);
+    let a,b be Element of L, p be sequence of L;
+      for i be Element of NAT holds ((a+b)*p).i = (a*p + b*p).i
+     proof
+      let i be Element of NAT;
+      thus ((a+b)*p).i = (a+b)*p.i by POLYNOM5:def 3
+        .= a*p.i + b*p.i by VECTSP_1:def 18
+        .= (a*p).i + b*p.i by POLYNOM5:def 3
+        .= (a*p).i + (b*p).i by POLYNOM5:def 3
+        .= (a*p + b*p).i by POLYNOM3:def 6;
+     end;
+    hence thesis by FUNCT_2:113;
+   end;
+
+theorem Th8:
+   for L be associative (non empty doubleLoopStr)
+   for a,b being Element of L, p being sequence of L holds
+   (a*b)*p = a*(b*p)
+    proof
+     let L be associative (non empty doubleLoopStr);
+     let a,b being Element of L, p being sequence of L;
+       for i be Element of NAT holds ((a*b)*p).i = (a*(b*p)).i
+      proof
+       let i be Element of NAT;
+       thus ((a*b)*p).i = (a*b)*p.i by POLYNOM5:def 3
+         .= a*(b*(p.i)) by VECTSP_1:def 16
+         .= a*(b*p).i by POLYNOM5:def 3
+         .= (a*(b*p)).i by POLYNOM5:def 3;
+      end;
+     hence thesis by FUNCT_2:113;
+    end;
+
+theorem Th9:
+   for L be associative left_unital (non empty doubleLoopStr)
+   for p being sequence of L holds
+   (the unity of L)*p = p
+    proof
+     let L be associative left_unital (non empty doubleLoopStr);
+     let p be sequence of L;
+       for i being Element of NAT holds ((the unity of L)*p).i = p.i
+      proof
+       let i be Element of NAT;
+       thus ((the unity of L)*p).i = (the unity of L)*p.i by POLYNOM5:def 3
+        .= (1_ L)*p.i by VECTSP_1:def 9
+        .= p.i by VECTSP_1:def 19;
+      end;
+     hence thesis by FUNCT_2:113;
+    end;
+
+definition
+   let L be Abelian add-associative associative right_zeroed
+   right_complementable left_unital distributive (non empty doubleLoopStr);
+   cluster Formal-Series L -> VectSp-like;
+   coherence
+   proof
+    let x,y be Element of L;
+    reconsider x'=x, y'=y as Element of L;
+    let v,w being Element of Formal-Series L;
+    reconsider p=v, q=w as sequence of L by Def2;
+A1: x*v = x*p by Def2;
+A2: x*w = x*q by Def2;
+A3: y*v = y*p by Def2;
+    reconsider k=v+w as Element of Formal-Series L;
+    reconsider r=k as sequence of L by Def2;
+  x*k = x*r by Def2;
+hence x*(v+w) = x*(p+q) by Def2
+       .= x'*p + x'*q by Th6
+       .= x*v + x*w by A1,A2,Def2;
+thus (x+y)*v = (x'+y')*p by Def2
+       .= x'*p + y'*p by Th7
+       .= x*v + y*v by A1,A3,Def2;
+thus (x*y)*v = (x'*y')*p by Def2
+       .= x'*(y'*p) by Th8
+       .= x*(y*v) by A3,Def2;
+       reconsider u = the unity of L as Element of L;
+thus (1_ L)*v = (the unity of L)*v by VECTSP_1:def 9
+       .= u*p by Def2
+       .= v by Th9;
+   end;
+end;
+
+theorem Th10:
+  for L be Abelian left_zeroed add-associative associative right_zeroed
+   right_complementable distributive (non empty doubleLoopStr)
+   for a being Element of L, p,q being sequence of L holds
+   a*(p*'q)=(a*p)*'q
+    proof
+     let L be Abelian left_zeroed add-associative associative right_zeroed
+     right_complementable distributive (non empty doubleLoopStr);
+     let a being Element of L, p,q being sequence of L;
+       for x being Element of NAT holds (a*(p*'q)).x = ((a*p)*'q).x
+      proof
+       let i be Element of NAT;
+       consider f1 be FinSequence of the carrier of L such that
+A1:    len f1 = i+1 and
+A2:    (p*'q).i = Sum f1 and
+A3:    for k be Nat st k in dom f1 holds f1.k = p.(k-'1) * q.(i+1-'k) by
+POLYNOM3:def 11;
+       consider f2 be FinSequence of the carrier of L such that
+A4:    len f2 = i+1 and
+A5:    ((a*p)*'q).i = Sum f2 and
+A6:    for k be Nat st k in dom f2 holds f2.k = (a*p).(k-'1) * q.(i+1-'k) by
+POLYNOM3:def 11;
+A7:    dom (a*f1) = dom f1 by POLYNOM1:def 2
+         .= dom f2 by A1,A4,FINSEQ_3:31;
+A8:    for k be Nat st k in dom f2 holds f2.k = (a*f1).k
+        proof
+         let k be Nat such that
+A9:      k in dom f2;
+A10:      k in dom f1 by A1,A4,A9,FINSEQ_3:31;
+then A11:    p.(k-'1) * q.(i+1-'k) = f1.k by A3
+          .= f1/.k by A10,FINSEQ_4:def 4;
+         thus f2.k = (a*p).(k-'1) * q.(i+1-'k) by A6,A9
+         .= a*p.(k-'1) * q.(i+1-'k) by POLYNOM5:def 3
+         .= a*(f1/.k) by A11,VECTSP_1:def 16
+         .= (a*f1)/.k by A10,POLYNOM1:def 2
+         .= (a*f1).k by A7,A9,FINSEQ_4:def 4;
+        end;
+       thus (a*(p*'q)).i = a*(Sum f1) by A2,POLYNOM5:def 3
+         .= Sum (a* f1) by BINOM:4
+         .= ((a*p)*'q).i by A5,A7,A8,FINSEQ_1:17;
+      end;
+     hence thesis by FUNCT_2:113;
+    end;
+
+definition
+   let L be Abelian left_zeroed add-associative associative right_zeroed
+   right_complementable distributive (non empty doubleLoopStr);
+   cluster Formal-Series L -> mix-associative;
+   coherence
+   proof
+    let a be Element of L, x,y be Element of Formal-Series L;
+    reconsider x1=x, y1=y as Element of Formal-Series L;
+    reconsider p=x1, q=y1 as sequence of L by Def2;
+A1:    a*x = a*p by Def2;
+       x*y = p*'q by Def2;
+    hence a*(x*y) = a*(p*'q) by Def2
+         .=(a*p)*'q by Th10
+         .= (a*x)*y by A1,Def2;
+    end;
+end;
+
+definition
+  let L be left_zeroed right_zeroed add-associative left_unital right_unital
+   right_complementable distributive (non empty doubleLoopStr);
+  cluster Formal-Series L -> well-unital;
+  coherence;
+end;
+
+Lm1:
+  now let L be 1-sorted, A be AlgebraStr over L;
+      dom the add of A = [:the carrier of A,the carrier of A:] by Th2;
+    hence
+      the add of A = (the add of A)|[:the carrier of A,the carrier of A:] by
+RELAT_1:98;
+      dom the mult of A = [:the carrier of A,the carrier of A:] by Th2;
+    hence
+      the mult of A = (the mult of A)|[:the carrier of A,the carrier of A:]
+     by RELAT_1:98;
+      dom the lmult of A = [:the carrier of L,the carrier of A:] by Th2;
+    hence
+      the lmult of A = (the lmult of A)|[:the carrier of L,the carrier of A:]
+by RELAT_1:98;
+ end;
+
+definition
+  let L be 1-sorted;
+  let A be AlgebraStr over L;
+ mode Subalgebra of A -> AlgebraStr over L means :Def3:
+  the carrier of it c= the carrier of A & 1_(it) = 1_(A) & 0.it = 0.A &
+  the add of it = (the add of A)|[:the carrier of it,the carrier of it:] &
+  the mult of it = (the mult of A)|[:the carrier of it,the carrier of it:] &
+  the lmult of it = (the lmult of A)|[:the carrier of L,the carrier of it:];
+  existence
+   proof take A; thus thesis by Lm1; end;
+end;
+
+theorem Th11:
+ for L being 1-sorted
+ for A being AlgebraStr over L holds A is Subalgebra of A
+ proof
+  let L be 1-sorted;
+  let A be AlgebraStr over L;
+  thus the carrier of A c= the carrier of A & 1_(A) = 1_(A) & 0.A = 0.A &
+  the add of A = (the add of A)|[:the carrier of A,the carrier of A:] &
+  the mult of A = (the mult of A)|[:the carrier of A,the carrier of A:] &
+  the lmult of A = (the lmult of A)|[:the carrier of L,the carrier of A:]
+   by Lm1;
+ end;
+
+theorem
+   for L being 1-sorted
+ for A,B,C being AlgebraStr over L st A is Subalgebra of B &
+  B is Subalgebra of C holds A is Subalgebra of C
+  proof
+   let L be 1-sorted;
+   let A,B,C be AlgebraStr over L such that
+A1: A is Subalgebra of B and
+A2: B is Subalgebra of C;
+A3: the carrier of A c= the carrier of B by A1,Def3;
+      the carrier of B c= the carrier of C by A2,Def3;
+   hence the carrier of A c= the carrier of C by A3,XBOOLE_1:1;
+   thus 1_(A) = 1_(B) by A1,Def3 .= 1_(C) by A2,Def3;
+   thus 0.A = 0.B by A1,Def3 .= 0.C by A2,Def3;
+A4: [:the carrier of A,the carrier of A:] c=
+        [:the carrier of B,the carrier of B:] by A3,ZFMISC_1:119;
+   thus the add of A = (the add of B)|[:the carrier of A,the carrier of A:]
+      by A1,Def3
+     .= ((the add of C)|[:the carrier of B,the carrier of B:])|
+                             [:the carrier of A,the carrier of A:] by A2,Def3
+     .= (the add of C)|[:the carrier of A,the carrier of A:] by A4,FUNCT_1:82;
+   thus the mult of A = (the mult of B)|[:the carrier of A,the carrier of A:]
+      by A1,Def3
+     .= ((the mult of C)|[:the carrier of B,the carrier of B:])|
+                             [:the carrier of A,the carrier of A:] by A2,Def3
+   .= (the mult of C)|[:the carrier of A,the carrier of A:] by A4,FUNCT_1:82;
+A5: [:the carrier of L,the carrier of A:] c=
+          [:the carrier of L,the carrier of B:] by A3,ZFMISC_1:119;
+   thus
+     the lmult of A = (the lmult of B)|[:the carrier of L,the carrier of A:]
+         by A1,Def3
+       .= ((the lmult of C)|[:the carrier of L,the carrier of B:])|
+            [:the carrier of L,the carrier of A:] by A2,Def3
+   .= (the lmult of C)|[:the carrier of L,the carrier of A:] by A5,FUNCT_1:82;
+  end;
+
+theorem
+   for L being 1-sorted
+ for A,B being AlgebraStr over L st A is Subalgebra of B &
+  B is Subalgebra of A holds the AlgebraStr of A = the AlgebraStr of B
+ proof
+  let L be 1-sorted;
+  let A,B be AlgebraStr over L such that
+A1: A is Subalgebra of B and
+A2: B is Subalgebra of A;
+A3: the carrier of A c= the carrier of B by A1,Def3;
+A4: the carrier of B c= the carrier of A by A2,Def3;
+then A5: the carrier of A = the carrier of B by A3,XBOOLE_0:def 10;
+A6: dom (the add of B) = [:the carrier of B,the carrier of B:] by Th1;
+A7: dom (the mult of B) = [:the carrier of B,the carrier of B:] by Th1;
+A8:dom (the lmult of B) = [:the carrier of L,the carrier of B:] by Th2;
+     A9: [:the carrier of L,the carrier of B:] c=
+              [:the carrier of L,the carrier of A:] by A4,ZFMISC_1:119;
+A10: the add of A = (the add of B)|[:the carrier of A,the carrier of A:]
+      by A1,Def3
+     .= the add of B by A5,A6,RELAT_1:97;
+A11: the mult of A = (the mult of B)|[:the carrier of A,the carrier of A:]
+      by A1,Def3
+     .= the mult of B by A5,A7,RELAT_1:97;
+A12: the lmult of A = (the lmult of B)|[:the carrier of L,the carrier of A:]
+      by A1,Def3
+     .= the lmult of B by A8,A9,RELAT_1:97;
+A13: the Zero of A = 0.A by RLVECT_1:def 2
+     .= 0.B by A1,Def3
+     .= the Zero of B by RLVECT_1:def 2;
+      the unity of A = 1_(A) by VECTSP_1:def 9
+     .= 1_(B) by A1,Def3
+     .= the unity of B by VECTSP_1:def 9;
+  hence the AlgebraStr of A = the AlgebraStr of B
+         by A3,A4,A10,A11,A12,A13,XBOOLE_0:def 10;
+ end;
+
+theorem Th14:
+for L being 1-sorted
+for A,B being AlgebraStr over L st the AlgebraStr of A = the AlgebraStr of B
+ holds A is Subalgebra of B & B is Subalgebra of A
+proof
+let L be 1-sorted;
+let A,B be AlgebraStr over L such that
+A1: the AlgebraStr of A = the AlgebraStr of B;
+A2: dom (the add of B) = [:the carrier of B,the carrier of B:] by Th1;
+A3: dom (the mult of B) = [:the carrier of B,the carrier of B:] by Th1;
+A4:dom (the lmult of B) = [:the carrier of L,the carrier of B:] by Th2;
+A5: dom (the add of A) = [:the carrier of A,the carrier of A:] by Th1;
+A6: dom (the mult of A) = [:the carrier of A,the carrier of A:] by Th1;
+A7:dom (the lmult of A) = [:the carrier of L,the carrier of A:] by Th2;
+thus A is Subalgebra of B
+proof
+thus the carrier of A c= the carrier of B by A1;
+thus 1_(A) = the unity of A by VECTSP_1:def 9
+          .= 1_(B) by A1,VECTSP_1:def 9;
+thus 0.A = the Zero of A by RLVECT_1:def 2
+        .= 0.B by A1,RLVECT_1:def 2;
+thus the add of A = (the add of B)|[:the carrier of A,the carrier of A:]
+            by A1,A2,RELAT_1:97;
+thus the mult of A = (the mult of B)|[:the carrier of A,the carrier of A:]
+           by A1,A3,RELAT_1:97;
+thus the lmult of A = (the lmult of B)|[:the carrier of L,the carrier of A:]
+           by A1,A4,RELAT_1:97;
+end;
+thus B is Subalgebra of A
+proof
+  thus the carrier of B c= the carrier of A by A1;
+  thus 1_(B) = the unity of B by VECTSP_1:def 9
+         .= 1_(A) by A1,VECTSP_1:def 9;
+  thus 0.B = the Zero of B by RLVECT_1:def 2
+       .= 0.A by A1,RLVECT_1:def 2;
+  thus the add of B = (the add of A)|[:the carrier of B,the carrier of B:]
+            by A1,A5,RELAT_1:97;
+  thus the mult of B = (the mult of A)|[:the carrier of B,the carrier of B:]
+         by A1,A6,RELAT_1:97;
+  thus the lmult of B = (the lmult of A)|[:the carrier of L,the carrier of B:]
+         by A1,A7,RELAT_1:97;
+end;
+end;
+
+definition
+  let L be non empty 1-sorted;
+  cluster non empty strict AlgebraStr over L;
+existence
+proof
+  set A = {0};
+  consider a being BinOp of A;
+  reconsider z=0 as Element of {0} by TARSKI:def 1;
+    0 in {0} by TARSKI:def 1;
+  then reconsider lm = [:the carrier of L,{0}:]-->0 as
+  Function of [:the carrier of L,{0}:],{0} by FUNCOP_1:57;
+  take B = AlgebraStr(#{0}, a, a, z, z, lm #);
+  thus B is non empty by STRUCT_0:def 1;
+  thus B is strict;
+end;
+end;
+
+definition
+  let L be 1-sorted;
+  let B be AlgebraStr over L;
+  cluster strict Subalgebra of B;
+existence
+proof
+  reconsider b = AlgebraStr(# the carrier of B, the add of B, the mult of B,
+        the Zero of B, the unity of B, the lmult of B #)
+        as Subalgebra of B by Th14;
+  take b;
+  thus thesis;
+end;
+end;
+
+definition
+  let L be non empty 1-sorted;
+  let B be non empty AlgebraStr over L;
+  cluster strict non empty Subalgebra of B;
+existence
+proof
+reconsider b = AlgebraStr(# the carrier of B, the add of B, the mult of B,
+        the Zero of B, the unity of B, the lmult of B #)
+        as Subalgebra of B by Th14;
+take b;
+thus thesis by STRUCT_0:def 1;
+end;
+end;
+
+definition
+  let L be non empty HGrStr;
+  let B be non empty AlgebraStr over L;
+  let A be Subset of B;
+  attr A is opers_closed means :Def4:
+    A is lineary-closed &
+    (for x,y being Element of B st x in A & y in A holds x*y in A) &
+    1_(B) in A &
+    0.B in A;
+end;
+
+theorem Th15:
+for L being non empty HGrStr
+for B being non empty AlgebraStr over L
+for A being non empty Subalgebra of B holds
+for x,y being Element of B,
+x',y' being Element of A st x = x' & y = y' holds
+x+y = x'+ y'
+proof
+  let L be non empty HGrStr;
+  let B be non empty AlgebraStr over L;
+  let A be non empty Subalgebra of B;
+  let x,y be Element of B,
+      x',y' be Element of A such that
+A1: x = x' & y = y';
+A2: [x',y'] in [:the carrier of A,the carrier of A:] by ZFMISC_1:106;
+thus x+y = (the add of B).[x',y'] by A1,RLVECT_1:def 3
+        .= (the add of B)|[:the carrier of A,the carrier of A:].[x',y']
+           by A2,FUNCT_1:72
+        .= (the add of A).[x',y'] by Def3
+        .= x'+ y' by RLVECT_1:def 3;
+end;
+
+theorem Th16:
+for L be non empty HGrStr
+for B be non empty AlgebraStr over L
+for A be non empty Subalgebra of B holds
+for x,y being Element of B,
+x',y' being Element of A st x = x' & y = y' holds
+ x*y = x'* y'
+proof
+let L be non empty HGrStr;
+let B be non empty AlgebraStr over L;
+let A be non empty Subalgebra of B;
+let x,y be Element of B,
+   x',y' be Element of A such that
+A1: x = x' & y = y';
+A2: [x',y'] in [:the carrier of A,the carrier of A:] by ZFMISC_1:106;
+thus x*y = (the mult of B).(x',y') by A1,VECTSP_1:def 10
+        .= (the mult of B).[x',y'] by BINOP_1:def 1
+        .= (the mult of B)|[:the carrier of A,the carrier of A:].[x',y']
+           by A2,FUNCT_1:72
+        .= (the mult of A).[x',y'] by Def3
+        .= (the mult of A).(x',y') by BINOP_1:def 1
+        .= x'* y' by VECTSP_1:def 10;
+end;
+
+theorem Th17:
+for L be non empty HGrStr
+for B be non empty AlgebraStr over L
+for A be non empty Subalgebra of B holds
+for a being Element of L
+for x being Element of B,
+x' being Element of A st x = x' holds
+ a * x = a * x'
+proof
+let L be non empty HGrStr;
+let B be non empty AlgebraStr over L;
+let A be non empty Subalgebra of B;
+let a be Element of L;
+let x be Element of B,
+    x' be Element of A such that
+A1: x = x';
+A2:  [a,x'] in [:the carrier of L,the carrier of A:] by ZFMISC_1:106;
+thus a * x = (the lmult of B).(a,x') by A1,VECTSP_1:def 24
+        .= (the lmult of B).[a,x'] by BINOP_1:def 1
+        .= (the lmult of B)|[:the carrier of L,the carrier of A:].[a,x']
+           by A2,FUNCT_1:72
+        .= (the lmult of A).[a,x'] by Def3
+        .= (the lmult of A).(a,x') by BINOP_1:def 1
+        .= a * x' by VECTSP_1:def 24;
+end;
+
+canceled;
+
+theorem
+  for L be non empty HGrStr
+for B be non empty AlgebraStr over L
+for A be non empty Subalgebra of B ex C being Subset of B st
+the carrier of A = C & C is opers_closed
+proof
+ let L be non empty HGrStr;
+ let B be non empty AlgebraStr over L;
+ let A be non empty Subalgebra of B;
+A1: the carrier of A c= the carrier of B by Def3;
+ take C = the carrier of A;
+reconsider C as Subset of B by A1;
+A2: C is lineary-closed
+  proof
+   thus for v,u being Element of B st v in C & u in C
+       holds v + u in C
+    proof
+     let v,u be Element of B such that
+A3:   v in C & u in C;
+     reconsider x = u, y = v as Element of A by A3;
+        v + u = y + x by Th15;
+     hence v + u in C;
+    end;
+   thus for a being Element of L,
+        v being Element of B
+     st v in C holds a * v in C
+    proof
+     let a be Element of L,
+      v be Element of B such that
+A4:   v in C;
+     reconsider x = v as Element of A by A4;
+        a * v = a * x by Th17;
+     hence a * v in C;
+    end;
+  end;
+A5: 1_(B) = 1_(A) & 0.B = 0.A by Def3;
+   for x,y being Element of B st x in C & y in C holds x*y in C
+     proof
+      let x,y be Element of B such that
+A6:    x in C & y in C;
+      reconsider x' = x, y' = y as Element of B;
+      reconsider x1 = x', y1 = y' as Element of A by A6;
+         x*y = x1 * y1 by Th16;
+       hence x*y in C;
+     end;
+ hence thesis by A2,A5,Def4;
+end;
+
+theorem Th20:
+for L be non empty HGrStr
+for B be non empty AlgebraStr over L
+for A be Subset of B st A is opers_closed ex C being strict Subalgebra of B
+st the carrier of C = A
+proof
+ let L be non empty HGrStr;
+ let B be non empty AlgebraStr over L;
+ let A be Subset of B such that
+A1: A is opers_closed;
+A2: [:A,A:] c= [:the carrier of B,the carrier of B:] by ZFMISC_1:119;
+ reconsider f1 = (the add of B)|[:A,A:] as Function;
+    dom f1 = [:A,A:] & for x being set st x in [:A,A:] holds f1.x in A
+   proof
+       [:A,A:] c= dom the add of B by A2,Th1;
+    hence dom f1 = [:A,A:] by RELAT_1:91;
+    let x be set such that
+A3:  x in [:A,A:];
+    consider y,z be set such that
+A4:  y in A & z in A & x = [y,z] by A3,ZFMISC_1:def 2;
+    reconsider y,z as Element of B by A4;
+A5:  A is lineary-closed by A1,Def4;
+       f1.x = (the add of B).[y,z] by A3,A4,FUNCT_1:72
+         .= y + z by RLVECT_1:def 3;
+     hence f1.x in A by A4,A5,VECTSP_4:def 1;
+    end;
+ then reconsider ad = f1 as BinOp of A by FUNCT_2:5;
+ reconsider f2 = (the mult of B)|[:A,A:] as Function;
+      [:A,A:] c= dom the mult of B by A2,Th1;
+then A6: dom f2 = [:A,A:] by RELAT_1:91;
+    for x being set st x in [:A,A:] holds f2.x in A
+   proof
+    let x be set such that
+A7:  x in [:A,A:];
+    consider y,z be set such that
+A8:  y in A & z in A & x = [y,z] by A7,ZFMISC_1:def 2;
+    reconsider y,z as Element of B by A8;
+       f2.x = (the mult of B).[y,z] by A7,A8,FUNCT_1:72
+         .= (the mult of B).(y,z) by BINOP_1:def 1
+         .= y * z by VECTSP_1:def 10;
+    hence f2.x in A by A1,A8,Def4;
+   end;
+ then reconsider mu = f2 as BinOp of A by A6,FUNCT_2:5;
+ reconsider f4 = (the lmult of B)|[:the carrier of L,A:] as Function;
+      [:the carrier of L,A:] c= [:the carrier of L,the carrier of B:]
+      by ZFMISC_1:119;
+    then [:the carrier of L,A:] c= dom the lmult of B by Th2;
+then A9: dom f4 = [:the carrier of L,A:] by RELAT_1:91;
+    for x being set st x in [:the carrier of L,A:] holds f4.x in A
+   proof
+    let x be set such that
+A10:  x in [:the carrier of L,A:];
+    consider y,z be set such that
+A11:  y in the carrier of L & z in A & x = [y,z] by A10,ZFMISC_1:def 2;
+    reconsider y as Element of L by A11;
+    reconsider z as Element of B by A11;
+A12:  A is lineary-closed by A1,Def4;
+       f4.x = (the lmult of B).[y,z] by A10,A11,FUNCT_1:72
+         .= (the lmult of B).(y,z) by BINOP_1:def 1
+         .= y * z by VECTSP_1:def 24;
+    hence f4.x in A by A11,A12,VECTSP_4:def 1;
+   end;
+ then reconsider lm = f4 as Function of [:the carrier of L,A:],A by A9,FUNCT_2:
+5;
+    0.B in A by A1,Def4;
+ then reconsider z = the Zero of B as Element of A by RLVECT_1:def 2;
+    1_(B) in A by A1,Def4;
+ then reconsider u = the unity of B as Element of A by VECTSP_1:def 9;
+set c = AlgebraStr(# A, ad, mu, z, u, lm #);
+A13: 1_(c) = the unity of c by VECTSP_1:def 9
+         .= 1_(B) by VECTSP_1:def 9;
+    0.c = the Zero of c by RLVECT_1:def 2
+         .= 0.B by RLVECT_1:def 2;
+ then reconsider C=c as strict Subalgebra of B by A13,Def3;
+ take C;
+ thus thesis;
+end;
+
+theorem Th21:
+for L being non empty HGrStr
+for B being non empty AlgebraStr over L
+for A being non empty Subset of B
+for X being Subset-Family of B st
+(for Y be set holds Y in X iff Y c= the carrier of B &
+   ex C being Subalgebra of B st Y = the carrier of C & A c= Y) holds
+     meet X is opers_closed
+ proof
+  let L being non empty HGrStr;
+  let B being non empty AlgebraStr over L;
+  let A being non empty Subset of B;
+  let X being Subset-Family of B such that
+A1:  for Y be set holds Y in X iff Y c= the carrier of B &
+   ex C being Subalgebra of B st Y = the carrier of C & A c= Y;
+      B is Subalgebra of B by Th11;
+then A2: X <> {} by A1;
+   thus meet X is lineary-closed
+    proof
+    thus for x,y being Element of B st x in meet X & y in meet
+X
+       holds x + y in meet X
+     proof
+      let x,y be Element of B such that
+A3:    x in meet X & y in meet X;
+         now let Y be set;
+        assume A4: Y in X;
+        then consider C be Subalgebra of B such that
+A5:      Y = the carrier of C & A c= Y by A1;
+        consider a be set such that A6: a in A by XBOOLE_0:def 1;
+        reconsider C as non empty Subalgebra of B by A5,A6,STRUCT_0:def 1;
+        reconsider x' = x, y' = y as Element of B;
+        reconsider x1 = x', y1 = y' as Element of C
+             by A3,A4,A5,SETFAM_1:def 1;
+           x + y = x1+ y1 by Th15;
+        hence x + y in Y by A5;
+       end;
+       hence x + y in meet X by A2,SETFAM_1:def 1;
+     end;
+    thus for a being Element of L,
+      v being Element of B st v in meet X holds a * v in meet X
+     proof
+      let a be Element of L,
+       v be Element of B such that
+A7:    v in meet X;
+        now let Y be set;
+       assume A8: Y in X;
+       then consider C be Subalgebra of B such that
+A9:     Y = the carrier of C & A c= Y by A1;
+       consider z be set such that A10: z in A by XBOOLE_0:def 1;
+       reconsider C as non empty Subalgebra of B by A9,A10,STRUCT_0:def 1;
+       reconsider v' = v as Element of C
+           by A7,A8,A9,SETFAM_1:def 1;
+          a * v = a * v' by Th17;
+      hence a * v in Y by A9;
+      end;
+      hence a * v in meet X by A2,SETFAM_1:def 1;
+     end;
+    end;
+   thus for x,y being Element of B st x in meet X & y in meet X holds
+    x*y in meet X
+    proof
+     let x,y be Element of B such that
+A11:   x in meet X & y in meet X;
+       now let Y be set;
+      assume A12: Y in X;
+      then consider C be Subalgebra of B such that
+A13:    Y = the carrier of C & A c= Y by A1;
+      consider a be set such that A14: a in A by XBOOLE_0:def 1;
+      reconsider C as non empty Subalgebra of B by A13,A14,STRUCT_0:def 1;
+      reconsider x' = x, y' = y as Element of B;
+      reconsider x1 = x', y1 = y' as Element of C by A11,A12,A13
+,SETFAM_1:def 1;
+         x*y = x1* y1 by Th16;
+      hence x*y in Y by A13;
+     end;
+     hence x*y in meet X by A2,SETFAM_1:def 1;
+    end;
+      now let Y be set;
+     assume Y in X;
+     then consider C be Subalgebra of B such that
+A15:   Y = the carrier of C & A c= Y by A1;
+      consider a be set such that A16: a in A by XBOOLE_0:def 1;
+     reconsider C as non empty Subalgebra of B by A15,A16,STRUCT_0:def 1;
+        1_(B) = 1_(C) by Def3;
+      then 1_(B) in the carrier of C;
+     hence 1_(B) in Y by A15;
+    end;
+   hence 1_(B) in meet X by A2,SETFAM_1:def 1;
+      now let Y be set;
+     assume Y in X;
+     then consider C be Subalgebra of B such that
+A17:   Y = the carrier of C & A c= Y by A1;
+      consider a be set such that A18: a in A by XBOOLE_0:def 1;
+     reconsider C as non empty Subalgebra of B by A17,A18,STRUCT_0:def 1;
+        0.B = 0.C by Def3;
+      then 0.B in the carrier of C;
+     hence 0.B in Y by A17;
+    end;
+   hence 0.B in meet X by A2,SETFAM_1:def 1;
+ end;
+
+definition
+let L be non empty HGrStr;
+let B be non empty AlgebraStr over L;
+let A be non empty Subset of B;
+ func GenAlg A -> strict non empty Subalgebra of B means :Def5:
+ A c= the carrier of it &
+  for C being Subalgebra of B st A c= the carrier of C holds
+   the carrier of it c= the carrier of C;
+existence
+ proof
+  defpred P[set] means ex C being Subalgebra of B st
+   $1 = the carrier of C & A c= $1;
+  consider X be Subset-Family of B such that
+A1: for Y being Subset of B holds Y in X iff P[Y] from SubFamEx;
+    set M = meet X;
+      B is Subalgebra of B by Th11;
+then the carrier of B in bool the carrier of B & ex C being Subalgebra of B st
+     the carrier of B = the carrier of C & A c= the carrier of B
+     by ZFMISC_1:def 1;
+then A2:  X <> {} by A1;
+      for Y be set holds Y in X iff Y c= the carrier of B &
+       ex C being Subalgebra of B st Y = the carrier of C & A c= Y by A1;
+    then A3: M is opers_closed by Th21;
+    then consider C being strict Subalgebra of B such that
+A4: M = the carrier of C by Th20;
+      the carrier of C is non empty by A3,A4,Def4;
+    then reconsider C as non empty strict Subalgebra of B by STRUCT_0:def 1;
+    take C;
+      now let Y be set such that
+A5:  Y in X;
+       ex C being Subalgebra of B st Y = the carrier of C & A c= Y by A1,A5;
+     hence A c= Y;
+    end;
+    hence A c= the carrier of C by A2,A4,SETFAM_1:6;
+    let C1 be Subalgebra of B such that
+A6:  A c= the carrier of C1;
+       the carrier of C1 c= the carrier of B by Def3;
+     then the carrier of C1 in X by A1,A6;
+    hence the carrier of C c= the carrier of C1 by A4,SETFAM_1:4;
+ end;
+uniqueness
+ proof
+  let P1,P2 be strict non empty Subalgebra of B such that
+A7: A c= the carrier of P1 and
+A8: for C being Subalgebra of B st A c= the carrier of C holds
+     the carrier of P1 c= the carrier of C and
+A9: A c= the carrier of P2 and
+A10: for C being Subalgebra of B st A c= the carrier of C holds
+    the carrier of P2 c= the carrier of C;
+A11: the carrier of P1 c= the carrier of P2 by A8,A9;
+A12: the carrier of P2 c= the carrier of P1 by A7,A10;
+then A13: the carrier of P1 = the carrier of P2 by A11,XBOOLE_0:def 10;
+      now let x be Element of P1,
+            y be Element of P2;
+     reconsider x1=x as Element of P2 by A11,A12,XBOOLE_0:def 10
+;
+     reconsider y1=y as Element of P1 by A11,A12,XBOOLE_0:def 10
+;
+A14:  the carrier of P2 c= the carrier of B by Def3;
+     then reconsider x' = x1 as Element of B by TARSKI:def 3;
+     reconsider y' = y as Element of B by A14,TARSKI:def 3;
+     thus (the add of P1).(x,y) = x + y1 by RLVECT_1:5
+        .= x' + y' by Th15
+        .= x1 + y by Th15
+        .= (the add of P2).(x,y) by RLVECT_1:5;
+    end;
+then A15: the add of P1 = the add of P2 by A13,BINOP_1:2;
+      now let x be Element of P1,
+            y be Element of P2;
+     reconsider x1=x as Element of P2 by A11,A12,XBOOLE_0:def 10
+;
+     reconsider y1=y as Element of P1 by A11,A12,XBOOLE_0:def 10
+;
+A16:  the carrier of P2 c= the carrier of B by Def3;
+     then reconsider x' = x1 as Element of B by TARSKI:def 3;
+     reconsider y' = y as Element of B by A16,TARSKI:def 3;
+     thus (the mult of P1).(x,y) = x * y1 by VECTSP_1:def 10
+        .= x' * y' by Th16
+        .= x1 * y by Th16
+        .= (the mult of P2).(x,y) by VECTSP_1:def 10;
+    end;
+then A17: the mult of P1 = the mult of P2 by A13,BINOP_1:2;
+A18: the Zero of P1 = 0.P1 by RLVECT_1:def 2
+        .= 0.B by Def3
+        .= 0.P2 by Def3
+        .= the Zero of P2 by RLVECT_1:def 2;
+A19: the unity of P1 = 1_(P1) by VECTSP_1:def 9
+        .= 1_(B) by Def3
+        .= 1_(P2) by Def3
+        .= the unity of P2 by VECTSP_1:def 9;
+      now let x be Element of L,
+            y be Element of P1;
+     reconsider y1=y as Element of P2 by A11,A12,XBOOLE_0:def 10
+;
+       the carrier of P2 c= the carrier of B by Def3;
+     then reconsider y' = y1 as Element of B by TARSKI:def 3;
+     thus (the lmult of P1).(x,y) = x * y by VECTSP_1:def 24
+        .= x * y' by Th17
+        .= x * y1 by Th17
+        .= (the lmult of P2).(x,y) by VECTSP_1:def 24;
+    end;
+  hence P1 = P2 by A13,A15,A17,A18,A19,BINOP_1:2;
+ end;
+end;
+
+theorem Th22:
+for L be non empty HGrStr
+for B be non empty AlgebraStr over L
+for A be non empty Subset of B st A is opers_closed holds
+the carrier of GenAlg A = A
+ proof
+  let L be non empty HGrStr;
+  let B be non empty AlgebraStr over L;
+  let A be non empty Subset of B such that
+A1: A is opers_closed;
+A2: A c= the carrier of GenAlg A by Def5;
+  consider C be strict Subalgebra of B such that A3: the carrier of C = A
+   by A1,Th20;
+     the carrier of GenAlg A c= A by A3,Def5;
+  hence thesis by A2,XBOOLE_0:def 10;
+ end;
+
+begin ::The Algebra of Polynomials
+
+definition
+let L be add-associative right_zeroed right_complementable distributive
+ (non empty doubleLoopStr);
+func Polynom-Algebra L -> strict non empty AlgebraStr over L means
+:Def6:
+ ex A being non empty Subset of Formal-Series L st
+  A = the carrier of Polynom-Ring L & it = GenAlg A;
+ existence
+  proof
+    the carrier of Polynom-Ring L c= the carrier of Formal-Series L
+   proof
+    let x be set;
+     assume x in the carrier of Polynom-Ring L;
+      then x is AlgSequence of L by POLYNOM3:def 12;
+    hence thesis by Def2;
+   end;
+  then reconsider A = the carrier of Polynom-Ring L as non empty Subset of
+   Formal-Series L;
+  take GenAlg A;
+  thus thesis;
+  end;
+ uniqueness;
+end;
+
+definition
+let L be add-associative right_zeroed right_complementable
+ distributive (non empty doubleLoopStr);
+cluster Polynom-Ring L -> Loop-like;
+coherence
+proof
+   now thus for a,b be Element of Polynom-Ring L
+        ex x being Element of Polynom-Ring L st a+x=b
+         by RLVECT_1:20;
+ thus for a,b be Element of Polynom-Ring L
+        ex x being Element of Polynom-Ring L st x+a=b
+  proof
+   let a,b be Element of Polynom-Ring L;
+    reconsider x = b - a as Element of Polynom-Ring L;
+    take x;
+    thus x + a = (b + (-a)) + a by RLVECT_1:def 11
+              .= b + ((-a) + a) by RLVECT_1:def 6
+              .= b + 0.(Polynom-Ring L) by RLVECT_1:16
+              .= b by RLVECT_1:10;
+  end;
+ thus for a,x,y be Element of Polynom-Ring L holds a+x=a+y
+         implies x=y by RLVECT_1:21;
+ thus for a,x,y be Element of Polynom-Ring L holds x+a=y+a
+         implies x=y by RLVECT_1:21;
+ end;
+ hence thesis by ALGSTR_1:7;
+end;
+end;
+
+theorem Th23:
+for L being add-associative right_zeroed right_complementable
+  distributive (non empty doubleLoopStr)
+for A being non empty Subset of Formal-Series L st
+   A = the carrier of Polynom-Ring L holds A is opers_closed
+ proof
+  let L be add-associative right_zeroed right_complementable
+  distributive (non empty doubleLoopStr);
+  let A be non empty Subset of Formal-Series L such that
+A1: A = the carrier of Polynom-Ring L;
+   set B = Formal-Series L;
+   thus A is lineary-closed
+    proof
+     thus for v,u being Element of B st v in A & u in A
+       holds v + u in A
+      proof
+       let v,u be Element of B such that
+A2:     v in A & u in A;
+        reconsider p = v, q = u as AlgSequence of L by A1,A2,POLYNOM3:def 12;
+          v + u = p + q by Def2;
+       hence v + u in A by A1,POLYNOM3:def 12;
+      end;
+     thus for a being Element of L,
+        v being Element of B
+     st v in A holds a * v in A
+      proof
+       let a be Element of L,
+           v being Element of B such that
+A3:     v in A;
+        reconsider a' = a as Element of L;
+        reconsider p = v as AlgSequence of L by A1,A3,POLYNOM3:def 12;
+          a * v = a' * p by Def2;
+       hence a * v in A by A1,POLYNOM3:def 12;
+      end;
+    end;
+   thus for u,v being Element of B st u in A & v in A holds u*v in A
+    proof
+     let u,v be Element of B such that
+A4:   u in A & v in A;
+     reconsider p = u,q = v as AlgSequence of L by A1,A4,POLYNOM3:def 12;
+        u * v = p*'q by Def2;
+     hence u * v in A by A1,POLYNOM3:def 12;
+    end;
+      1_(B) = 1_.(L) by Def2
+         .= 1_(Polynom-Ring L) by POLYNOM3:def 12;
+   hence 1_(B) in A by A1;
+      0.B = 0_.(L) by Def2
+       .= 0.(Polynom-Ring L) by POLYNOM3:def 12;
+   hence 0.B in A by A1;
+ end;
+
+theorem
+  for L be add-associative right_zeroed right_complementable
+ distributive (non empty doubleLoopStr) holds
+the doubleLoopStr of Polynom-Algebra L = Polynom-Ring L
+proof
+let L be add-associative right_zeroed right_complementable
+ distributive (non empty doubleLoopStr);
+ consider A being non empty Subset of Formal-Series L such that
+A1: A = the carrier of Polynom-Ring L & Polynom-Algebra L = GenAlg A by Def6;
+A2: A is opers_closed by A1,Th23;
+then A3: the carrier of Polynom-Algebra L = the carrier of Polynom-Ring L
+      by A1,Th22;
+A4: the carrier of Polynom-Algebra L c= the carrier of Formal-Series L
+       by A1,Def3;
+A5: for x being Element of Polynom-Algebra L
+    for y being Element of Polynom-Ring L holds
+    (the add of Polynom-Algebra L).(x,y)=(the add of Polynom-Ring L).(x,y)
+    proof let x be Element of Polynom-Algebra L,
+            y be Element of Polynom-Ring L;
+     reconsider x1=x as Element of Polynom-Ring L
+      by A1,A2,Th22;
+     reconsider y1=y as Element of Polynom-Algebra L
+      by A1,A2,Th22;
+     reconsider x'=x as Element of Formal-Series L
+      by A4,TARSKI:def 3;
+     reconsider y'=y1 as Element of Formal-Series L
+      by A1,TARSKI:def 3;
+     reconsider p=x as AlgSequence of L by A3,POLYNOM3:def 12;
+     reconsider q=y as AlgSequence of L by POLYNOM3:def 12;
+     thus (the add of Polynom-Algebra L).(x,y) = x+y1 by RLVECT_1:5
+        .= x' + y' by A1,Th15
+        .= p+q by Def2
+        .= x1+y by POLYNOM3:def 12
+        .= (the add of Polynom-Ring L).(x,y) by RLVECT_1:5;
+    end;
+      now let x be Element of Polynom-Algebra L,
+            y be Element of Polynom-Ring L;
+     reconsider x1=x as Element of Polynom-Ring L
+      by A1,A2,Th22;
+     reconsider y1=y as Element of Polynom-Algebra L
+      by A1,A2,Th22;
+     reconsider x'=x as Element of Formal-Series L
+      by A4,TARSKI:def 3;
+     reconsider y'=y1 as Element of Formal-Series L
+      by A1,TARSKI:def 3;
+     reconsider p=x as AlgSequence of L by A3,POLYNOM3:def 12;
+     reconsider q=y as AlgSequence of L by POLYNOM3:def 12;
+     thus (the mult of Polynom-Algebra L).(x,y) = x*y1 by VECTSP_1:def 10
+        .= x' * y' by A1,Th16
+        .= p*'q by Def2
+        .= x1*y by POLYNOM3:def 12
+        .= (the mult of Polynom-Ring L).(x,y) by VECTSP_1:def 10;
+    end;
+then A6: the mult of Polynom-Algebra L = the mult of Polynom-Ring L
+  by A3,BINOP_1:2;
+A7: the Zero of Polynom-Algebra L = 0.(Polynom-Algebra L) by RLVECT_1:def 2
+       .= 0.(Formal-Series L) by A1,Def3
+       .= 0_.(L) by Def2
+       .= 0.(Polynom-Ring L) by POLYNOM3:def 12
+       .= the Zero of Polynom-Ring L by RLVECT_1:def 2;
+   the unity of Polynom-Algebra L = 1_(Polynom-Algebra L) by VECTSP_1:def 9
+       .= 1_(Formal-Series L) by A1,Def3
+       .= 1_.(L) by Def2
+       .= 1_(Polynom-Ring L) by POLYNOM3:def 12
+       .= the unity of Polynom-Ring L by VECTSP_1:def 9;
+ hence thesis by A3,A5,A6,A7,BINOP_1:2;
+end;
+

@@ -1,0 +1,396 @@
+:: Directed Geometrical Bundles and Their Analytical Representation
+::  by Grzegorz Lewandowski, Krzysztof Pra\.zmowski and Bo\.zena Lewandowska
+::
+:: Received September 24, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ANALOAF, REALSET1, TDGROUP, DIRAF, BINOP_1, FUNCT_1, RLVECT_1,
+      ARYTM_1, VECTSP_1, MCART_1, RELAT_1, AFVECT0;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, REALSET1, STRUCT_0, ANALOAF,
+      TDGROUP, FUNCT_1, FUNCT_2, MCART_1, BINOP_1, RELAT_1, VECTSP_1, RLVECT_1;
+ constructors TDGROUP, BINOP_1, DOMAIN_1, MEMBERED, XBOOLE_0;
+ clusters TDGROUP, RELSET_1, STRUCT_0, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+definition let IT be non empty AffinStruct;
+  attr IT is WeakAffVect-like means
+:: AFVECT0:def 1
+  (for a,b,c being Element of IT st a,b // c,c holds a=b) &
+  (for a,b,c,d,p,q being Element of IT st
+         a,b // p,q & c,d // p,q holds a,b // c,d) &
+  (for a,b,c  being Element of IT
+      ex d being Element of IT st a,b // c,d) &
+  (for a,b,c,a',b',c' being Element of IT st
+         a,b // a',b' & a,c // a',c' holds b,c // b',c') &
+  (for a,c  being Element of IT
+      ex b being Element of IT st a,b // b,c) &
+  (for a,b,c,d being Element of IT st
+         a,b // c,d holds a,c // b,d);
+end;
+
+definition
+ cluster strict non trivial WeakAffVect-like (non empty AffinStruct);
+end;
+
+definition
+  mode WeakAffVect is non trivial WeakAffVect-like (non empty AffinStruct);
+end;
+
+definition
+ cluster AffVect-like -> WeakAffVect-like (non empty AffinStruct);
+end;
+
+reserve AFV for WeakAffVect;
+reserve a,b,c,d,e,f,a',b',c',d',f',p,q,r,o,x''
+                                      for Element of AFV;
+
+::
+::          Properties of Relation of Congruence of Vectors
+::
+
+canceled;
+
+theorem :: AFVECT0:2
+a,b // a,b;
+
+theorem :: AFVECT0:3
+a,a // a,a;
+
+theorem :: AFVECT0:4
+a,b // c,d implies c,d // a,b;
+
+theorem :: AFVECT0:5
+a,b // a,c implies b = c;
+
+theorem :: AFVECT0:6
+a,b // c,d & a,b // c,d' implies d = d';
+
+theorem :: AFVECT0:7
+for a,b holds a,a // b,b;
+
+theorem :: AFVECT0:8
+a,b // c,d implies b,a // d,c;
+
+theorem :: AFVECT0:9
+a,b // c,d & a,c // b',d implies b = b';
+
+theorem :: AFVECT0:10
+b,c // b',c' & a,d // b,c & a,d' // b',c' implies d = d';
+
+theorem :: AFVECT0:11
+a,b // a',b' & c,d // b,a & c,d' // b',a' implies d = d';
+
+theorem :: AFVECT0:12
+a,b // a',b' & c,d // c',d' & b,f // c,d & b',f' // c',d'
+              implies a,f // a',f';
+
+theorem :: AFVECT0:13
+a,b // a',b' & a,c // c',b' implies b,c // c',a';
+
+
+::
+::                  Relation of Maximal Distance
+::
+
+definition let AFV;let a,b; pred MDist a,b means
+:: AFVECT0:def 2
+  a,b // b,a & a <> b;
+ irreflexivity;
+ symmetry;
+end;
+
+canceled 2;
+
+theorem :: AFVECT0:16
+    ex a,b st (a<>b & not MDist a,b);
+
+canceled;
+
+theorem :: AFVECT0:18
+    MDist a,b & MDist a,c implies b = c or MDist b,c;
+
+theorem :: AFVECT0:19
+    MDist a,b & a,b // c,d implies MDist c,d;
+
+::
+::                        Midpoint Relation
+::
+
+definition let AFV; let a,b,c;
+  pred Mid a,b,c means
+:: AFVECT0:def 3
+  a,b // b,c;
+end;
+
+canceled;
+
+theorem :: AFVECT0:21
+  Mid a,b,c implies Mid c,b,a;
+
+theorem :: AFVECT0:22
+Mid a,b,b iff a = b;
+
+theorem :: AFVECT0:23
+Mid a,b,a iff a = b or MDist a,b;
+
+theorem :: AFVECT0:24
+ex b st Mid a,b,c;
+
+theorem :: AFVECT0:25
+Mid a,b,c & Mid a,b',c implies b =b' or MDist b,b';
+
+theorem :: AFVECT0:26
+ex c st Mid a,b,c;
+
+theorem :: AFVECT0:27
+Mid a,b,c & Mid a,b,c' implies c = c';
+
+theorem :: AFVECT0:28
+Mid a,b,c & MDist b,b' implies Mid a,b',c;
+
+theorem :: AFVECT0:29
+Mid a,b,c & Mid a,b',c' & MDist b,b' implies c = c';
+
+theorem :: AFVECT0:30
+Mid a,p,a' & Mid b,p,b' implies a,b // b',a';
+
+theorem :: AFVECT0:31
+Mid a,p,a' & Mid b,q,b' & MDist p,q implies a,b // b',a';
+
+
+::
+::                         Point Symmetry
+::
+
+definition let AFV; let a,b;
+ func PSym(a,b) -> Element of AFV means
+:: AFVECT0:def 4
+  Mid b,a,it;
+ end;
+
+canceled;
+
+theorem :: AFVECT0:33
+PSym(p,a) = b iff a,p // p,b;
+
+canceled;
+
+theorem :: AFVECT0:35
+PSym(p,a) = a iff a = p or MDist a,p;
+
+theorem :: AFVECT0:36
+PSym(p,PSym(p,a)) = a;
+
+theorem :: AFVECT0:37
+PSym(p,a) = PSym(p,b) implies a = b;
+
+theorem :: AFVECT0:38
+ex a st PSym(p,a) = b;
+
+theorem :: AFVECT0:39
+a,b // PSym(p,b),PSym(p,a);
+
+theorem :: AFVECT0:40
+a,b // c,d iff PSym(p,a),PSym(p,b) // PSym(p,c),PSym(p,d);
+
+theorem :: AFVECT0:41
+MDist a,b iff MDist PSym(p,a),PSym(p,b);
+
+theorem :: AFVECT0:42
+Mid a,b,c iff Mid PSym(p,a),PSym(p,b),PSym(p,c);
+
+theorem :: AFVECT0:43
+PSym(p,a) = PSym(q,a) iff p = q or MDist p,q;
+
+theorem :: AFVECT0:44
+PSym(q,PSym(p,PSym(q,a))) = PSym(PSym(q,p),a);
+
+theorem :: AFVECT0:45
+PSym(p,PSym(q,a)) = PSym(q,PSym(p,a)) iff p = q or MDist p,q or
+              MDist q,PSym(p,q);
+
+theorem :: AFVECT0:46
+PSym(p,PSym(q,PSym(r,a))) = PSym(r,PSym(q,PSym(p,a)));
+
+theorem :: AFVECT0:47
+ex d st PSym(a,PSym(b,PSym(c,p))) = PSym(d,p);
+
+theorem :: AFVECT0:48
+ex c st PSym(a,PSym(c,p)) = PSym(c,PSym(b,p));
+
+::
+::                     Addition on the carrier
+::
+
+definition let AFV,o; let a,b;
+ func Padd(o,a,b) -> Element of AFV means
+:: AFVECT0:def 5
+   o,a // b,it;
+ end;
+
+definition let AFV,o; let a;
+ redefine func PSym(o,a);
+  synonym Pcom(o,a);
+end;
+
+definition let AFV,o;
+ canceled;
+
+  func Padd(o) -> BinOp of the carrier of AFV means
+:: AFVECT0:def 7
+  for a,b holds it.(a,b) = Padd(o,a,b);
+end;
+
+definition let AFV,o;
+  func Pcom(o) -> UnOp of the carrier of AFV means
+:: AFVECT0:def 8
+    for a holds it.a = Pcom(o,a);
+end;
+
+definition let AFV,o;
+  func GroupVect(AFV,o) -> strict LoopStr equals
+:: AFVECT0:def 9
+    LoopStr(#the carrier of AFV,Padd(o),o#);
+ end;
+
+definition let AFV,o;
+ cluster GroupVect(AFV,o) -> non empty;
+end;
+
+canceled 6;
+
+theorem :: AFVECT0:55
+the carrier of GroupVect(AFV,o) = the carrier of AFV
+  & the add of GroupVect(AFV,o) = Padd(o)
+  & the Zero of GroupVect(AFV,o) = o;
+
+reserve a,b,c for Element of GroupVect(AFV,o);
+
+canceled;
+
+theorem :: AFVECT0:57
+ for a,b being Element of GroupVect(AFV,o),
+     a',b' being Element of AFV st a=a' & b=b' holds
+     a + b = (Padd(o)).(a',b');
+
+definition let AFV,o;
+ cluster GroupVect(AFV,o) -> Abelian add-associative right_zeroed
+   right_complementable;
+end;
+
+theorem :: AFVECT0:58
+  for a being Element of GroupVect(AFV,o),
+      a' being Element of AFV st a=a' holds
+     -a = (Pcom(o)).a';
+
+theorem :: AFVECT0:59
+0.GroupVect(AFV,o) = o;
+
+reserve a,b for Element of GroupVect(AFV,o);
+
+canceled 6;
+
+theorem :: AFVECT0:66
+for a ex b st b + b = a;
+
+definition let AFV,o;
+  cluster GroupVect(AFV,o) -> Two_Divisible;
+end;
+
+::
+::        Representation Theorem for Directed Geometrical Bundles
+::
+
+reserve AFV for AffVect, o for Element of AFV;
+
+theorem :: AFVECT0:67
+for a being Element of GroupVect(AFV,o)
+ st a + a = 0.(GroupVect(AFV,o)) holds a = 0.(GroupVect(AFV,o));
+
+definition let AFV,o;
+ cluster GroupVect(AFV,o) -> Fanoian;
+end;
+
+definition
+ cluster strict non trivial Uniquely_Two_Divisible_Group;
+end;
+
+definition
+  mode Proper_Uniquely_Two_Divisible_Group is non trivial
+    Uniquely_Two_Divisible_Group;
+end;
+
+canceled;
+
+theorem :: AFVECT0:69
+GroupVect(AFV,o) is Proper_Uniquely_Two_Divisible_Group;
+
+definition let AFV,o;
+  cluster GroupVect(AFV,o) -> non trivial;
+end;
+
+theorem :: AFVECT0:70
+for ADG being Proper_Uniquely_Two_Divisible_Group holds
+ AV(ADG) is AffVect;
+
+definition let ADG be Proper_Uniquely_Two_Divisible_Group;
+ cluster AV(ADG) -> AffVect-like non trivial;
+end;
+
+theorem :: AFVECT0:71
+ for AFV being strict AffVect
+  holds (for o being Element of AFV holds
+   AFV = AV(GroupVect(AFV,o)));
+
+theorem :: AFVECT0:72
+for AS being strict AffinStruct holds (AS is AffVect iff
+ (ex ADG being Proper_Uniquely_Two_Divisible_Group st AS = AV(ADG)));
+
+definition let X,Y be non empty LoopStr;
+ let f be Function of the carrier of X,the carrier of Y;
+ pred f is_Iso_of X,Y means
+:: AFVECT0:def 10
+  f is one-to-one & rng(f) = the carrier of Y &
+    (for a,b being Element of X holds
+    (f.(a+b) = (f.a)+(f.b) & f.(0.X) = 0.Y & f.(-a) = -(f.a))); end;
+
+definition let X,Y be non empty LoopStr; pred X,Y are_Iso means
+:: AFVECT0:def 11
+  ex f being Function of the carrier of X,the carrier of Y
+            st f is_Iso_of X,Y; end;
+
+reserve ADG for Proper_Uniquely_Two_Divisible_Group;
+reserve f for Function of the carrier of ADG,the carrier of ADG;
+
+canceled 2;
+
+theorem :: AFVECT0:75
+for o' being Element of ADG,
+    o being Element of AV(ADG) st
+  (for x being Element of ADG holds f.x = o'+x) & o=o'
+holds (for a,b being Element of ADG holds
+    (f.(a+b) =(Padd(o)).(f.a,f.b)
+    & f.(0.ADG) = 0.(GroupVect(AV(ADG),o))
+    & f.(-a) = (Pcom(o)).(f.a)));
+
+theorem :: AFVECT0:76
+for o' being Element of ADG st
+  (for b being Element of ADG holds f.b = o'+b)
+  holds f is one-to-one;
+
+theorem :: AFVECT0:77
+for o' being Element of ADG,
+    o being Element of AV(ADG) st
+  (for b being Element of ADG holds f.b = o'+b)
+holds rng(f) = the carrier of GroupVect(AV(ADG),o);
+
+theorem :: AFVECT0:78
+  for ADG being Proper_Uniquely_Two_Divisible_Group,
+  o' being Element of ADG,
+  o being Element of AV(ADG) st o=o' holds
+  ADG,GroupVect(AV(ADG),o) are_Iso;

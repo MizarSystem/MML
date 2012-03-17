@@ -1,0 +1,269 @@
+:: Completely-Irreducible Elements
+::  by Robert Milewski
+::
+:: Received February 9, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary WAYBEL_0, LATTICES, BOOLE, ORDERS_1, ORDERS_2, LATTICE3, OPPCAT_1,
+      RELAT_1, RELAT_2, FILTER_0, QUANTAL1, FILTER_2, BHSP_3, PRE_TOPC,
+      FUNCOP_1, FUNCT_1, YELLOW_0, SEQM_3, FINSET_1, ORDINAL2, YELLOW_1,
+      SETFAM_1, WELLORD2, TARSKI, WAYBEL_1, WAYBEL_6, WAYBEL_2, SUBSET_1,
+      WAYBEL_3, WAYBEL_8, COMPTS_1, WAYBEL16;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, SETFAM_1, RELAT_1,
+      FINSET_1, FUNCT_2, FUNCOP_1, ORDERS_1, PRE_TOPC, LATTICE3, YELLOW_0,
+      YELLOW_1, YELLOW_4, YELLOW_7, WAYBEL_0, WAYBEL_1, WAYBEL_2, WAYBEL_3,
+      WAYBEL_4, WAYBEL_6, WAYBEL_8;
+ constructors ORDERS_3, YELLOW_4, WAYBEL_1, WAYBEL_2, WAYBEL_3, WAYBEL_6,
+      WAYBEL_4, WAYBEL_8, MEMBERED;
+ clusters STRUCT_0, FINSET_1, LATTICE3, YELLOW_1, YELLOW_2, YELLOW_7, WAYBEL_0,
+      WAYBEL_2, WAYBEL_3, WAYBEL_6, WAYBEL_8, RELSET_1, SUBSET_1, MEMBERED,
+      ZFMISC_1;
+ requirements BOOLE, SUBSET;
+
+
+begin  :: Preliminaries
+
+  theorem :: WAYBEL16:1
+   for L be sup-Semilattice
+   for x,y be Element of L holds
+    "/\"((uparrow x) /\ (uparrow y),L) = x "\/" y;
+
+  theorem :: WAYBEL16:2
+     for L be Semilattice
+   for x,y be Element of L holds
+    "\/"((downarrow x) /\ (downarrow y),L) = x "/\" y;
+
+  theorem :: WAYBEL16:3
+   for L be non empty RelStr
+   for x,y be Element of L st
+    x is_maximal_in (the carrier of L) \ uparrow y holds
+     (uparrow x) \ {x} = (uparrow x) /\ (uparrow y);
+
+  theorem :: WAYBEL16:4
+     for L be non empty RelStr
+   for x,y be Element of L st
+    x is_minimal_in (the carrier of L) \ downarrow y holds
+     (downarrow x) \ {x} = (downarrow x) /\ (downarrow y);
+
+  theorem :: WAYBEL16:5
+   for L be with_suprema Poset
+   for X,Y be Subset of L
+   for X',Y' be Subset of L opp st X = X' & Y = Y' holds
+    X "\/" Y = X' "/\" Y';
+
+  theorem :: WAYBEL16:6
+     for L be with_infima Poset
+   for X,Y be Subset of L
+   for X',Y' be Subset of L opp st X = X' & Y = Y' holds
+    X "/\" Y = X' "\/" Y';
+
+  theorem :: WAYBEL16:7
+   for L be non empty reflexive transitive RelStr holds
+    Filt L = Ids (L opp);
+
+  theorem :: WAYBEL16:8
+     for L be non empty reflexive transitive RelStr holds
+    Ids L = Filt (L opp);
+
+begin  :: Free Generation Set
+
+  definition
+   let S,T be complete (non empty Poset);
+   mode CLHomomorphism of S,T -> map of S,T means
+:: WAYBEL16:def 1
+      it is directed-sups-preserving infs-preserving;
+  end;
+
+  definition
+   let S be continuous complete (non empty Poset);
+   let A be Subset of S;
+   pred A is_FG_set means
+:: WAYBEL16:def 2
+      for T be continuous complete (non empty Poset)
+    for f be Function of A,the carrier of T
+    ex h be CLHomomorphism of S,T st
+     h|A = f & for h' be CLHomomorphism of S,T st h'|A = f holds h' = h;
+  end;
+
+  definition
+   let L be upper-bounded non empty Poset;
+   cluster Filt L -> non empty;
+  end;
+
+  theorem :: WAYBEL16:9
+   for X be set
+   for Y be non empty Subset of InclPoset Filt BoolePoset X holds
+    meet Y is Filter of BoolePoset X;
+
+  theorem :: WAYBEL16:10
+     for X be set
+   for Y be non empty Subset of InclPoset Filt BoolePoset X holds
+    ex_inf_of Y,InclPoset Filt BoolePoset X &
+    "/\"(Y,InclPoset Filt BoolePoset X) = meet Y;
+
+  theorem :: WAYBEL16:11
+   for X be set holds
+    bool X is Filter of BoolePoset X;
+
+  theorem :: WAYBEL16:12
+   for X be set holds
+    {X} is Filter of BoolePoset X;
+
+  theorem :: WAYBEL16:13
+     for X be set holds
+    InclPoset Filt BoolePoset X is upper-bounded;
+
+  theorem :: WAYBEL16:14
+     for X be set holds
+    InclPoset Filt BoolePoset X is lower-bounded;
+
+  theorem :: WAYBEL16:15
+     for X be set holds
+    Top (InclPoset Filt BoolePoset X) = bool X;
+
+  theorem :: WAYBEL16:16
+     for X be set holds
+    Bottom (InclPoset Filt BoolePoset X) = {X};
+
+  theorem :: WAYBEL16:17
+     for X be non empty set
+   for Y be non empty Subset of InclPoset X st ex_sup_of Y,InclPoset X holds
+    union Y c= sup Y;
+
+  theorem :: WAYBEL16:18
+   for L be upper-bounded Semilattice holds
+    InclPoset Filt L is complete;
+
+  definition
+   let L be upper-bounded Semilattice;
+   cluster InclPoset Filt L -> complete;
+  end;
+
+begin  :: Completely-irreducible Elements
+
+  definition  :: DEFINITION 4.19
+   let L be non empty RelStr;
+   let p be Element of L;
+   attr p is completely-irreducible means
+:: WAYBEL16:def 3
+    ex_min_of (uparrow p)\{p},L;
+  end;
+
+  theorem :: WAYBEL16:19
+   for L be non empty RelStr
+   for p be Element of L st p is completely-irreducible holds
+    "/\"((uparrow p)\{p},L) <> p;
+
+  definition  :: DEFINITION 4.19
+   let L be non empty RelStr;
+   func Irr L -> Subset of L means
+:: WAYBEL16:def 4
+    for x be Element of L holds x in it iff x is completely-irreducible;
+  end;
+
+  theorem :: WAYBEL16:20  :: THEOREM 4.19 (i)
+   for L be non empty Poset
+   for p be Element of L holds
+    p is completely-irreducible iff
+    ex q be Element of L st
+     p < q &
+     (for s be Element of L st p < s holds q <= s) &
+     uparrow p = {p} \/ uparrow q;
+
+  theorem :: WAYBEL16:21  :: THEOREM 4.19 (ii)
+   for L be upper-bounded non empty Poset holds
+    not Top L in Irr L;
+
+  theorem :: WAYBEL16:22  :: THEOREM 4.19 (iii)
+   for L be Semilattice holds
+    Irr L c= IRR L;
+
+  theorem :: WAYBEL16:23
+   for L be Semilattice
+   for x be Element of L holds
+    x is completely-irreducible implies x is irreducible;
+
+  theorem :: WAYBEL16:24
+   for L be non empty Poset
+   for x be Element of L holds
+    x is completely-irreducible implies
+     for X be Subset of L st ex_inf_of X,L & x = inf X holds x in X;
+
+  theorem :: WAYBEL16:25  :: REMARK 4.20
+   for L be non empty Poset
+   for X be Subset of L st X is order-generating holds
+    Irr L c= X;
+
+  theorem :: WAYBEL16:26  :: PROPOSITION 4.21 (i)
+   for L be complete LATTICE
+   for p be Element of L holds
+    (ex k be Element of L st p is_maximal_in (the carrier of L) \ uparrow k)
+       implies
+    p is completely-irreducible;
+
+  theorem :: WAYBEL16:27
+   for L be transitive antisymmetric with_suprema RelStr
+   for p,q,u be Element of L st
+    p < q & (for s be Element of L st p < s holds q <= s) & not u <= p holds
+     p "\/" u = q "\/" u;
+
+  theorem :: WAYBEL16:28
+   for L be distributive LATTICE
+   for p,q,u be Element of L st
+    p < q & (for s be Element of L st p < s holds q <= s) & not u <= p holds
+     not u "/\" q <= p;
+
+  theorem :: WAYBEL16:29
+   for L be distributive complete LATTICE st L opp is meet-continuous
+   for p be Element of L st p is completely-irreducible holds
+    (the carrier of L) \ downarrow p is Open Filter of L;
+
+  theorem :: WAYBEL16:30  :: PROPOSITION 4.21 (ii)
+     for L be distributive complete LATTICE st L opp is meet-continuous
+   for p be Element of L holds
+    p is completely-irreducible implies
+    (ex k be Element of L st
+      k in the carrier of CompactSublatt L &
+      p is_maximal_in (the carrier of L) \ uparrow k);
+
+  theorem :: WAYBEL16:31  :: THEOREM 4.22
+   for L be lower-bounded algebraic LATTICE
+   for x,y be Element of L holds
+    not y <= x implies
+     ex p be Element of L st
+      p is completely-irreducible & x <= p & not y <= p;
+
+  theorem :: WAYBEL16:32  :: THEOREM 4.23 (i)
+   for L be lower-bounded algebraic LATTICE holds
+    Irr L is order-generating &
+    for X be Subset of L st X is order-generating holds Irr L c= X;
+
+  theorem :: WAYBEL16:33  :: THEOREM 4.23 (ii)
+     for L be lower-bounded algebraic LATTICE
+   for s be Element of L holds
+    s = "/\" (uparrow s /\ Irr L,L);
+
+  theorem :: WAYBEL16:34
+   for L be complete (non empty Poset)
+   for X be Subset of L
+   for p be Element of L st p is completely-irreducible & p = inf X holds
+    p in X;
+
+  theorem :: WAYBEL16:35
+   for L be complete algebraic LATTICE
+   for p be Element of L st p is completely-irreducible holds
+    p = "/\" ({ x where x is Element of L : x in uparrow p &
+              ex k be Element of L st k in the carrier of CompactSublatt L &
+              x is_maximal_in (the carrier of L) \ uparrow k },L);
+
+  theorem :: WAYBEL16:36  :: COROLLARY 4.24
+     for L be complete algebraic LATTICE
+   for p be Element of L holds
+    (ex k be Element of L st
+      k in the carrier of CompactSublatt L &
+      p is_maximal_in (the carrier of L) \ uparrow k)
+       iff
+    p is completely-irreducible;
+

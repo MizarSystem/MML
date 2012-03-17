@@ -1,0 +1,3157 @@
+:: Introduction to Turing Machines
+::  by Jingchao Chen and Yatsuka Nakamura
+::
+:: Received July 27, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, PARTFUN1, FUNCT_4, RELAT_1, BOOLE, CAT_1, ORDINAL2, ARYTM,
+      FINSET_1, INT_1, RLVECT_1, FINSEQ_1, QC_LANG1, QMAX_1, FSM_1, ARYTM_1,
+      AMI_1, FUNCT_2, LANG1, MCART_1, FINSEQ_4, COMPUT_1, FINSEQ_2, BORSUK_1,
+      ORDINAL1, UNIALG_1, PRALG_3, SCMFSA6A, TURING_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, ORDINAL2, REAL_1, NAT_1, INT_1, FINSET_1, MCART_1, DOMAIN_1,
+      FUNCT_1, FUNCT_2, FUNCT_4, FINSEQ_1, FINSEQ_2, FRAENKEL, CQC_LANG,
+      PARTFUN1, GR_CY_1, FINSEQ_4, GROUP_4, SCMPDS_1, RELAT_1, COMPUT_1;
+ constructors REAL_1, NAT_1, DOMAIN_1, CQC_LANG, FINSEQ_4, GROUP_4, SCMPDS_1,
+      COMPUT_1, MEMBERED;
+ clusters SUBSET_1, FUNCT_1, INT_1, FINSET_1, XBOOLE_0, RELSET_1, CQC_LANG,
+      ARYTM_3, COMPUT_1, MOD_2, MEMBERED, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI;
+ theorems CQC_LANG, FUNCT_4, ZFMISC_1, TARSKI, FUNCT_2, INT_1, MCART_1, AXIOMS,
+      NAT_1, RELSET_1, PARTFUN1, DOMAIN_1, GR_CY_1, CQC_THE1, ENUMSET1,
+      FINSEQ_2, SCMFSA8C, FINSEQ_1, FINSEQ_3, REAL_1, REAL_2, FUNCT_1, RELAT_1,
+      FINSEQ_6, GROUP_4, FINSEQ_7, RLVECT_1, SCMPDS_1, COMPUT_1, FINSEQ_4,
+      SCMFSA_7, YELLOW14, ORDINAL2, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1;
+ schemes RECDEF_1, NAT_1, FUNCT_2, COMPLSP1;
+
+begin :: Preliminaries
+
+reserve n,i,j,k for Nat;
+
+definition
+ let A,B be non empty set, f be Function of A,B, g be PartFunc of A,B;
+ redefine func f +* g -> Function of A,B;
+ coherence
+  proof
+A1:  dom f = A by FUNCT_2:def 1;
+A2:  dom g c= A by RELSET_1:12;
+A3:  dom (f +* g) =dom f \/ dom g by FUNCT_4:def 1
+     .=A by A1,A2,XBOOLE_1:12;
+       now
+       let x be set;
+       assume A4:x in A;
+       per cases;
+       suppose A5: x in dom g;
+            then (f +* g).x=g.x by FUNCT_4:14;
+           hence (f +* g).x in B by A5,PARTFUN1:27;
+       suppose not x in dom g;
+           then (f +* g).x = f.x by FUNCT_4:12;
+           hence (f +* g).x in B by A4,FUNCT_2:7;
+     end;
+     hence f +* g is Function of A,B by A3,FUNCT_2:5;
+  end;
+end;
+
+definition
+ let X,Y be non empty set, a be Element of X, b be Element of Y;
+ redefine func a .--> b -> PartFunc of X,Y;
+ coherence
+ proof
+    set p = a .--> b;
+A1: dom p = {a} & rng p ={b} by CQC_LANG:5;
+      p is PartFunc of dom p, rng p by PARTFUN1:24;
+    hence p is PartFunc of X, Y by A1,PARTFUN1:32;
+  end;
+end;
+
+definition let n be natural number;
+ func SegM n -> Subset of NAT equals
+:Def1:  {k : k <= n};
+coherence
+proof
+ set X={k : k <= n};
+   0 <= n by NAT_1:18;
+ then 0 in X;
+ then reconsider X as non empty set;
+   X c= NAT
+ proof
+     let x be set;
+     assume x in X;
+     then ex i st i=x & i <= n;
+     hence thesis;
+ end;
+ hence thesis;
+ end;
+end;
+
+definition let n be natural number;
+ cluster SegM n -> finite non empty;
+ coherence
+ proof
+A1: n is Nat by ORDINAL2:def 21;
+     SegM n = {k : k <= n} by Def1;
+   hence SegM n is finite by A1,CQC_THE1:12;
+     0 <= n by NAT_1:18;
+ then 0 in {k : k <= n};
+   hence SegM n is non empty by Def1;
+ end;
+end;
+
+theorem Th1:   :: GR_CY 10
+ k in SegM n iff k <= n
+proof
+   thus k in SegM n implies k <= n
+   proof
+      assume k in SegM n;
+      then k in {i: i <= n} by Def1;
+      then consider i such that
+A1:      k=i & i <= n;
+      thus thesis by A1;
+   end;
+   assume k <= n;
+   then k in {i: i <= n};
+   hence k in SegM n by Def1;
+end;
+
+theorem Th2:
+   for f be Function,x,y,z,u,v be set st u <> x holds
+     (f +* ([x,y] .--> z)).[u,v]=f.[u,v]
+proof
+    let f be Function,x,y,z,u,v be set;
+    assume u <> x;
+then A1:  [u,v]<>[x,y] by ZFMISC_1:33;
+    set p=[x,y] .--> z;
+      dom p ={ [x,y] } by CQC_LANG:5;
+    then not [u,v] in dom p by A1,TARSKI:def 1;
+    hence (f +* p).[u,v]=f.[u,v] by FUNCT_4:12;
+end;
+
+theorem Th3:
+   for f be Function,x,y,z,u,v be set st v <> y holds
+     (f +* ([x,y] .--> z)).[u,v]=f.[u,v]
+proof
+    let f be Function,x,y,z,u,v be set;
+    assume v <> y;
+then A1:  [u,v]<>[x,y] by ZFMISC_1:33;
+    set p=[x,y] .--> z;
+      dom p ={ [x,y] } by CQC_LANG:5;
+    then not [u,v] in dom p by A1,TARSKI:def 1;
+    hence (f +* p).[u,v]=f.[u,v] by FUNCT_4:12;
+end;
+
+reserve i1,i2,i3,i4 for Element of INT;
+
+theorem Th4:
+ Sum<*i1,i2*>=i1+i2
+proof
+   thus Sum<*i1,i2*>=Sum(<*i1*>^<*i2*>) by FINSEQ_1:def 9
+   .=Sum<*i1*> + @i2 by GR_CY_1:20
+   .=i1+@i2 by GR_CY_1:21
+   .=i1+i2 by GROUP_4:def 2;
+end;
+
+theorem Th5:
+ Sum<*i1,i2,i3*>=i1+i2+i3
+proof
+   thus Sum<*i1,i2,i3*>=Sum(<*i1,i2*>^<*i3*>) by FINSEQ_1:60
+   .=Sum<*i1,i2*> + @i3 by GR_CY_1:20
+   .=i1+i2+@i3 by Th4
+   .=i1+i2+i3 by GROUP_4:def 2;
+end;
+
+theorem Th6:
+  Sum<*i1,i2,i3,i4*>=i1+i2+i3+i4
+proof
+   thus Sum<*i1,i2,i3,i4*>=Sum(<*i1,i2,i3*>^<*i4*>) by SCMPDS_1:def 1
+   .=Sum<*i1,i2,i3*> + @i4 by GR_CY_1:20
+   .=i1+i2+i3+@i4 by Th5
+   .=i1+i2+i3+i4 by GROUP_4:def 2;
+end;
+
+definition let f be FinSequence of NAT,i be Nat;
+ func Prefix(f,i) -> FinSequence of INT equals
+:Def2:     f| Seg i;
+ coherence
+ proof
+     set p=f|Seg i;
+  A1: p is FinSequence by FINSEQ_1:19;
+      now
+        let j be Nat;
+        assume A2: j in dom p;
+        then A3:p.j=f.j by FUNCT_1:70;
+             j in dom f by A2,RELAT_1:86;
+           then f.j in NAT by FINSEQ_2:13;
+        hence p.j in INT by A3,INT_1:14;
+     end;
+     hence thesis by A1,FINSEQ_2:14;
+ end;
+end;
+
+theorem Th7:
+ for x1,x2 being Nat holds Sum Prefix(<*x1,x2*>,1)=x1 &
+ Sum Prefix(<*x1,x2*>,2)=x1+x2
+proof
+    let x1,x2 be Nat;
+A1: Prefix(<*x1,x2*>,1)=<*x1,x2*> | Seg 1 by Def2
+    .=<* x1 *> by FINSEQ_6:5;
+    reconsider y1=x1 as Element of INT by INT_1:12;
+    thus Sum Prefix(<*x1,x2*>,1)=Sum<*y1*> by A1
+    .=x1 by GR_CY_1:21;
+A2: len <*x1,x2*>= 2 by FINSEQ_1:61;
+A3: Prefix(<*x1,x2*>,2)=<*x1,x2*> | Seg 2 by Def2
+    .=<* x1,x2 *> by A2,FINSEQ_3:55;
+    reconsider y2=x2 as Element of INT by INT_1:12;
+    thus Sum Prefix(<*x1,x2*>,2)=Sum<*y1,y2*> by A3
+    .=x1+x2 by Th4;
+end;
+
+theorem Th8:
+ for x1,x2,x3 being Nat holds Sum Prefix(<*x1,x2,x3*>,1)=x1 &
+   Sum Prefix(<*x1,x2,x3*>,2)=x1+x2 & Sum Prefix(<*x1,x2,x3*>,3)=x1+x2+x3
+proof
+    let x1,x2,x3 be Nat;
+A1: Prefix(<*x1,x2,x3*>,1)=<*x1,x2,x3*> | Seg 1 by Def2
+    .=<* x1 *> by FINSEQ_6:6;
+    reconsider y1=x1 as Element of INT by INT_1:12;
+    thus Sum Prefix(<*x1,x2,x3*>,1)=Sum<*y1*> by A1
+    .=x1 by GR_CY_1:21;
+A2: Prefix(<*x1,x2,x3*>,2)=<*x1,x2,x3*> | Seg 2 by Def2
+    .=<* x1,x2 *> by FINSEQ_6:7;
+    reconsider y2=x2 as Element of INT by INT_1:12;
+    thus Sum Prefix(<*x1,x2,x3*>,2)=Sum<*y1,y2*> by A2
+    .=x1+x2 by Th4;
+A3: len <*x1,x2,x3*>= 3 by FINSEQ_1:62;
+A4: Prefix(<*x1,x2,x3*>,3)=<*x1,x2,x3*> | Seg 3 by Def2
+    .=<* x1,x2,x3 *> by A3,FINSEQ_3:55;
+    reconsider y3=x3 as Element of INT by INT_1:12;
+    thus Sum Prefix(<*x1,x2,x3*>,3)=Sum<*y1,y2,y3*> by A4
+    .=x1+x2+x3 by Th5;
+end;
+
+begin :: Definitions and terminology for TURING Machine
+
+definition
+  struct TuringStr (#
+   Symbols, States -> finite non empty set,
+   Tran -> Function of [: the States, the Symbols :],
+           [: the States,the Symbols,{-1,0,1} :],
+   InitS,AcceptS -> Element of the States
+ #);
+end;
+
+definition
+ let T be TuringStr;
+ mode State of T is Element of the States of T;
+ mode Tape of T is Element of Funcs(INT,the Symbols of T);
+ mode Symbol of T is Element of the Symbols of T;
+end;
+
+definition
+ let T be TuringStr,t be Tape of T, h be Integer,s be Symbol of T;
+ func Tape-Chg(t,h,s) -> Tape of T equals
+:Def3:  t +* (h .--> s);
+ coherence
+ proof
+     set X=INT, Y=the Symbols of T;
+     consider f being Function such that
+A1:  t = f & dom f = X & rng f c= Y by FUNCT_2:def 2;
+A2:  h in INT by INT_1:12;
+A3:  dom(t +* (h .--> s)) = dom t \/ dom(h .--> s) by FUNCT_4:def 1
+      .= dom t \/ {h} by CQC_LANG:5
+      .= X by A1,A2,ZFMISC_1:46;
+A4:  rng (t +* (h .--> s)) c= rng t \/ rng (h .--> s) by FUNCT_4:18;
+       rng (h .--> s) ={s} by CQC_LANG:5;
+     then rng t \/ rng (h .--> s) c= Y by A1,XBOOLE_1:8;
+     then rng (t +* (h .--> s)) c= Y by A4,XBOOLE_1:1;
+    hence thesis by A3,FUNCT_2:def 2;
+  end;
+end;
+
+definition let T be TuringStr;
+  mode All-State of T is Element of
+     [: the States of T, INT, Funcs(INT,the Symbols of T) :];
+  mode Tran-Source of T is Element of
+           [: the States of T,the Symbols of T :];
+  mode Tran-Goal of T is Element of
+           [: the States of T,the Symbols of T, {-1,0,1} :];
+end;
+
+definition
+ let T be TuringStr, g be Tran-Goal of T;
+ func offset(g) -> Integer equals
+:Def4:  g`3;
+ coherence by ENUMSET1:def 1;
+end;
+
+definition
+ let T be TuringStr, s be All-State of T;
+ func Head(s) -> Integer equals
+:Def5:   s`2;
+ coherence;
+end;
+
+definition
+ let T be TuringStr, s be All-State of T;
+ func TRAN(s) -> Tran-Goal of T equals
+:Def6:  (the Tran of T).[s`1, (s`3 qua Tape of T).Head(s)];
+ correctness
+ proof
+     reconsider x=Head(s) as Element of INT by INT_1:12;
+       (the Tran of T).[s`1, (s`3 qua Tape of T).x] is Tran-Goal of T;
+     hence thesis;
+ end;
+end;
+
+definition
+ let T be TuringStr, s be All-State of T;
+ func Following s -> All-State of T equals
+:Def7:  [(TRAN(s))`1, Head(s)+ offset TRAN (s),
+      Tape-Chg(s`3, Head(s),(TRAN(s))`2)] if s`1 <> the AcceptS of T
+      otherwise s;
+ correctness
+ proof
+       Head(s) + offset TRAN(s) in INT by INT_1:12;
+     hence thesis by MCART_1:73;
+ end;
+end;
+
+definition
+ let T be TuringStr, s be All-State of T;
+ func Computation s -> Function of NAT,
+     [: the States of T, INT, Funcs(INT,the Symbols of T) :] means
+:Def8: it.0 = s & for i holds it.(i+1) = Following(it.i);
+ existence
+ proof
+   deffunc U(set,All-State of T) = Following $2;
+     consider f being Function of NAT,
+     [: the States of T, INT, Funcs(INT,the Symbols of T) :]
+      such that
+A1:      f.0 = s & for n being Element of NAT holds f.(n+1) = U(n,f.n)
+        from LambdaRecExD;
+      take f;
+      thus thesis by A1;
+   end;
+ uniqueness
+ proof let F1,F2 be Function of NAT,
+     [: the States of T, INT, Funcs(INT,the Symbols of T) :] such that
+A2: F1.0 = s &
+   for i holds F1.(i+1) = Following(F1.i) and
+A3: F2.0 = s &
+   for i holds F2.(i+1) = Following(F2.i);
+   deffunc U(set,All-State of T) = Following $2;
+
+A4: F1.0 = s &
+   for i holds F1.(i+1) = U(i,F1.i) by A2;
+A5: F2.0 = s &
+   for i holds F2.(i+1) = U(i,F2.i) by A3;
+   thus F1 = F2 from LambdaRecUnD(A4,A5);
+  end;
+end;
+
+reserve T for TuringStr, s for All-State of T;
+
+theorem
+  for T being TuringStr, s be All-State of T st s`1 = the AcceptS of T
+ holds s = Following s by Def7;
+
+theorem
+  (Computation s).0 = s by Def8;
+
+theorem
+  (Computation s).(k+1) = Following (Computation s).k by Def8;
+
+theorem Th12:
+ (Computation s).1 = Following s
+proof
+      (Computation s).(0+1) = Following (Computation s).0 by Def8
+  .=Following s by Def8;
+   hence thesis;
+end;
+
+theorem Th13:
+ (Computation s).(i+k) = (Computation (Computation s).i).k
+ proof
+   defpred X[Nat] means
+      (Computation s).(i+$1) = (Computation (Computation s).i).$1;
+A1: X[0] by Def8;
+A2: for k st X[k] holds X[k+1]
+   proof let k;
+    assume
+A3:   (Computation s).(i+k) = (Computation (Computation s).i).k;
+    thus (Computation s).(i+(k+1))
+          = (Computation s).(i+k+1) by XCMPLX_1:1
+         .= Following (Computation s).(i+k) by Def8
+         .= (Computation (Computation s).i).(k+1) by A3,Def8;
+   end;
+     for k holds X[k] from Ind(A1,A2);
+   hence thesis;
+end;
+
+theorem Th14:
+ i <= j & Following (Computation s).i = (Computation s).i
+ implies (Computation s).j = (Computation s).i
+ proof
+   assume
+A1: i <= j & Following (Computation s).i = (Computation s).i;
+     then consider k such that
+A2:   j = i + k by NAT_1:28;
+   defpred X[Nat] means (Computation s).(i+$1) = (Computation s).i;
+A3: X[0];
+A4: for k st X[k] holds X[k+1]
+   proof let k;
+    assume
+A5:  (Computation s).(i+k) = (Computation s).i;
+    thus (Computation s).(i+(k+1)) = (Computation s).(i+k+1) by XCMPLX_1:1
+         .= (Computation s).i by A1,A5,Def8;
+   end;
+     for k holds X[k] from Ind(A3,A4);
+  hence (Computation s).j = (Computation s).i by A2;
+end;
+
+theorem Th15:
+ i <= j & ((Computation s).i)`1 = the AcceptS of T
+ implies (Computation s).j = (Computation s).i
+ proof
+   assume
+A1: i <= j & ((Computation s).i)`1 = the AcceptS of T;
+    then Following (Computation s).i = (Computation s).i by Def7;
+    hence thesis by A1,Th14;
+end;
+
+definition
+ let T be TuringStr, s be All-State of T;
+ attr s is Accept-Halt means
+:Def9: ex k st ((Computation s).k)`1 = the AcceptS of T;
+end;
+
+definition
+ let T be TuringStr, s be All-State of T such that
+A1: s is Accept-Halt;
+ func Result s -> All-State of T means
+:Def10:  ex k st it = (Computation s).k &
+         ((Computation s).k)`1 = the AcceptS of T;
+ uniqueness
+  proof let s1,s2 be All-State of T;
+   given k1 being Nat such that
+A2: s1 = (Computation s).k1 & ((Computation s).k1)`1 = the AcceptS of T;
+   given k2 being Nat such that
+A3: s2 = (Computation s).k2 & ((Computation s).k2)`1 = the AcceptS of T;
+      k1 <= k2 or k2 <= k1;
+   hence s1 = s2 by A2,A3,Th15;
+  end;
+ correctness
+  proof
+      ex k st ((Computation s).k)`1 = the AcceptS of T by A1,Def9;
+   hence thesis;
+  end;
+end;
+
+theorem Th16:
+ for T being TuringStr,s be All-State of T st s is Accept-Halt holds
+  ex k being Nat st ((Computation s).k)`1 = the AcceptS of T &
+   Result s = (Computation s).k & for i be Nat st i < k
+  holds ((Computation s).i)`1 <> the AcceptS of T
+proof
+    let T be TuringStr,s be All-State of T;
+    assume A1: s is Accept-Halt;
+    defpred P[Nat] means
+      ((Computation s).$1)`1 = the AcceptS of T;
+A2: ex k st P[k] by A1,Def9;
+    consider k such that
+A3: P[k] & for n st P[n] holds k <= n from Min(A2);
+    consider j such that
+A4: Result s = (Computation s).j &
+    ((Computation s).j)`1 = the AcceptS of T by A1,Def10;
+    take k;
+    thus P[k] by A3;
+      k <= j by A3,A4;
+    hence Result s=(Computation s).k by A3,A4,Th15;
+    thus thesis by A3;
+end;
+
+definition
+  let A, B be non empty set, y be set such that A1: y in B;
+ func id(A, B, y) -> Function of A, [: A, B :] means
+     for x be Element of A holds it.x=[x,y];
+ existence
+  proof
+  reconsider yy=y as Element of B by A1;
+  deffunc U(Element of A) = [$1,yy];
+  consider f being Function of A, [: A,B :] such that
+A2: for x being Element of A holds f.x = U(x) from LambdaD;
+   take f;
+   thus thesis by A2;
+  end;
+ uniqueness
+  proof  deffunc U(Element of A) = [$1,y];
+   thus  for f1,f2 being Function of A, [: A, B :] st
+   (for x being Element of A holds f1.x = U(x)) &
+   (for x being Element of A holds f2.x = U(x))
+  holds f1 = f2 from FuncDefUniq;
+  end;
+end;
+
+definition
+ func Sum_Tran -> Function of [: SegM 5,{0,1} :],
+      [: SegM 5,{0,1},{ -1,0,1 } :] equals
+:Def12:  id([: SegM 5,{0,1} :],{ -1,0,1 }, 0)
+     +* ([0,0] .--> [0,0,1])
+     +* ([0,1] .--> [1,0,1])
+     +* ([1,1] .--> [1,1,1])
+     +* ([1,0] .--> [2,1,1])
+     +* ([2,1] .--> [2,1,1])
+     +* ([2,0] .--> [3,0,-1])
+     +* ([3,1] .--> [4,0,-1])
+     +* ([4,1] .--> [4,1,-1])
+     +* ([4,0] .--> [5,0,0]);
+ coherence
+ proof
+    set A=[: SegM 5,{0,1} :],
+        B= { -1,0,1 },
+        C=[: SegM 5,{0,1}, B :];
+    reconsider b0=0,b1=1 as Element of {0,1} by TARSKI:def 2;
+    reconsider L=-1 as Element of B by ENUMSET1:def 1;
+    reconsider h=0,R=1 as Element of {-1,0,1} by ENUMSET1:def 1;
+    reconsider p0=0, p1=1, p2=2, p3=3, p4=4, p5=5 as Element of SegM 5 by Th1;
+      C=[: A, B :] by ZFMISC_1:def 3;
+    then reconsider OP=id(A,B,h) as Function of A,C;
+    id(A,B,0)
+     +* ([0,0] .--> [0,0,1])
+     +* ([0,1] .--> [1,0,1])
+     +* ([1,1] .--> [1,1,1])
+     +* ([1,0] .--> [2,1,1])
+     +* ([2,1] .--> [2,1,1])
+     +* ([2,0] .--> [3,0,-1])
+     +* ([3,1] .--> [4,0,-1])
+     +* ([4,1] .--> [4,1,-1])
+     +* ([4,0] .--> [5,0,0])
+     =OP
+     +* ([p0,b0] .--> [p0,b0,R])
+     +* ([p0,b1] .--> [p1,b0,R])
+     +* ([p1,b1] .--> [p1,b1,R])
+     +* ([p1,b0] .--> [p2,b1,R])
+     +* ([p2,b1] .--> [p2,b1,R])
+     +* ([p2,b0] .--> [p3,b0,L])
+     +* ([p3,b1] .--> [p4,b0,L])
+     +* ([p4,b1] .--> [p4,b1,L])
+     +* ([p4,b0] .--> [p5,b0,h]);
+     hence thesis;
+  end;
+end;
+
+theorem Th17:
+     Sum_Tran.[0,0]=[0,0,1] & Sum_Tran.[0,1]=[1,0,1] &
+     Sum_Tran.[1,1]=[1,1,1] & Sum_Tran.[1,0]=[2,1,1] &
+     Sum_Tran.[2,1]=[2,1,1] & Sum_Tran.[2,0]=[3,0,-1] &
+     Sum_Tran.[3,1]=[4,0,-1] & Sum_Tran.[4,1]=[4,1,-1] &
+     Sum_Tran.[4,0]=[5,0,0]
+proof
+     set p1=[0,0] .--> [0,0,1],
+         p2=[0,1] .--> [1,0,1],
+         p3=[1,1] .--> [1,1,1],
+         p4=[1,0] .--> [2,1,1],
+         p5=[2,1] .--> [2,1,1],
+         p6=[2,0] .--> [3,0,-1],
+         p7=[3,1] .--> [4,0,-1],
+         p8=[4,1] .--> [4,1,-1],
+         f= id([: SegM 5,{0,1} :],{ -1,0,1 },0);
+     set x1=[0,0];
+  thus
+     Sum_Tran.x1=(f +* p1+* p2+* p3+* p4+* p5+* p6+* p7+* p8).x1 by Def12,Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5+* p6+* p7).x1 by Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5+* p6).x1 by Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5).x1 by Th2
+    .=(f +* p1+* p2+* p3+* p4).x1 by Th2
+    .=(f +* p1+* p2+* p3).x1 by Th2
+    .=(f +* p1+* p2).x1 by Th2
+    .=(f +* p1).x1 by Th3
+    .=[0,0,1] by YELLOW14:3;
+     set x=[0,1];
+   thus
+     Sum_Tran.x=(f +* p1+* p2+* p3+* p4+* p5+* p6+* p7+* p8).x by Def12,Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5+* p6+* p7).x by Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5+* p6).x by Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5).x by Th2
+    .=(f +* p1+* p2+* p3+* p4).x by Th2
+    .=(f +* p1+* p2+* p3).x by Th2
+    .=(f +* p1+* p2).x by Th2
+    .=[1,0,1] by YELLOW14:3;
+     set x=[1,1];
+   thus
+     Sum_Tran.x=(f +* p1+* p2+* p3+* p4+* p5+* p6+* p7+* p8).x by Def12,Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5+* p6+* p7).x by Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5+* p6).x by Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5).x by Th2
+    .=(f +* p1+* p2+* p3+* p4).x by Th2
+    .=(f +* p1+* p2+* p3).x by Th3
+    .=[1,1,1] by YELLOW14:3;
+     set x=[1,0];
+   thus
+     Sum_Tran.x=(f +* p1+* p2+* p3+* p4+* p5+* p6+* p7+* p8).x by Def12,Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5+* p6+* p7).x by Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5+* p6).x by Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5).x by Th2
+    .=(f +* p1+* p2+* p3+* p4).x by Th2
+    .=[2,1,1] by YELLOW14:3;
+     set x=[2,1];
+   thus
+     Sum_Tran.x=(f +* p1+* p2+* p3+* p4+* p5+* p6+* p7+* p8).x by Def12,Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5+* p6+* p7).x by Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5+* p6).x by Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5).x by Th3
+    .=[2,1,1] by YELLOW14:3;
+     set x=[2,0];
+   thus
+     Sum_Tran.x=(f +* p1+* p2+* p3+* p4+* p5+* p6+* p7+* p8).x by Def12,Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5+* p6+* p7).x by Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5+* p6).x by Th2
+    .=[3,0,-1] by YELLOW14:3;
+     set x=[3,1];
+   thus
+     Sum_Tran.x=(f +* p1+* p2+* p3+* p4+* p5+* p6+* p7+* p8).x by Def12,Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5+* p6+* p7).x by Th2
+    .=[4,0,-1] by YELLOW14:3;
+     set x=[4,1];
+   thus
+     Sum_Tran.x=(f +* p1+* p2+* p3+* p4+* p5+* p6+* p7+* p8).x by Def12,Th3
+    .=[4,1,-1] by YELLOW14:3;
+   thus
+     Sum_Tran.[4,0]
+     =[5,0,0] by Def12,YELLOW14:3;
+end;
+
+definition
+ let T be TuringStr, t be Tape of T, i,j be Integer;
+ pred t is_1_between i,j means
+:Def13: t.i=0 & t.j=0 & for k be Integer st i < k & k < j holds t.k=1;
+end;
+
+definition
+ let f be FinSequence of NAT, T be TuringStr, t be Tape of T;
+ pred t storeData f means
+:Def14: for i be Nat st 1 <= i & i < len f holds
+     t is_1_between Sum Prefix(f,i)+2*(i-1),Sum Prefix(f,i+1)+2*i;
+end;
+
+theorem Th18:
+ for T being TuringStr,t be Tape of T, s,n be Nat st t storeData <*s,n*>
+ holds t is_1_between s,s+n+2
+proof
+    let T be TuringStr,t be Tape of T,s,n be Nat;
+    set f=<*s,n*>;
+    assume A1: t storeData f;
+A2: Sum Prefix(f,1)+2*(1-1)=s by Th7;
+A3: Sum Prefix(f,1+1)+2*1=s+n+2 by Th7;
+      len f=2 by FINSEQ_1:61;
+    hence t is_1_between s,s+n+2 by A1,A2,A3,Def14;
+end;
+
+theorem Th19:
+ for T being TuringStr, t be Tape of T, s,n be Nat st t is_1_between s,s+n+2
+ holds t storeData <*s,n*>
+proof
+    let T be TuringStr,t be Tape of T,s,n be Nat;
+    set f=<*s,n*>;
+    assume A1: t is_1_between s,s+n+2;
+A2: Sum Prefix(f,1+1)+2*1=s+n+2 by Th7;
+      now
+       let i be Nat;
+       assume A3:1 <= i & i < len f;
+         len f=2 by FINSEQ_1:61;
+        then i+1 <= 1+1 by A3,INT_1:20;
+        then i <= 1 by REAL_1:53;
+        then i=1 by A3,AXIOMS:21;
+       hence t is_1_between Sum Prefix(f,i)+2*(i-1),Sum Prefix(f,i+1)+2*i
+       by A1,A2,Th7;
+    end;
+    hence t storeData f by Def14;
+end;
+
+theorem Th20:
+  for T being TuringStr, t be Tape of T, s,n be Nat st
+  t storeData <*s,n *> holds
+  t.s=0 & t.(s+n+2)=0 & for i be Integer st s < i & i < s+n+2 holds t.i=1
+proof
+    let T be TuringStr, t be Tape of T, s,n be Nat;
+    assume t storeData <*s,n*>;
+then A1:  t is_1_between s,s+n+2 by Th18;
+     hence t.s=0 & t.(s+n+2)=0 by Def13;
+     thus thesis by A1,Def13;
+end;
+
+theorem Th21:
+ for T being TuringStr,t be Tape of T,s,n1,n2 be Nat st
+ t storeData <*s,n1,n2*>
+ holds t is_1_between s,s+n1+2 & t is_1_between s+n1+2,s+n1+n2+4
+proof
+    let T be TuringStr,t be Tape of T,s,n1,n2 be Nat;
+    set f=<*s,n1,n2*>;
+    assume A1: t storeData f;
+A2: Sum Prefix(f,1)+2*(1-1)=s by Th8;
+A3: Sum Prefix(f,1+1)+2*1=s+n1+2 by Th8;
+A4: Sum Prefix(f,2)+2*(2-1)=s+n1+2 by Th8;
+A5: Sum Prefix(f,2+1)+2*2=s+n1+n2+4 by Th8;
+A6: len f=3 by FINSEQ_1:62;
+    hence t is_1_between s,s+n1+2 by A1,A2,A3,Def14;
+    thus thesis by A1,A4,A5,A6,Def14;
+end;
+
+theorem Th22:
+  for T being TuringStr, t be Tape of T, s,n1,n2 be Nat
+ st t storeData <*s,n1,n2 *> holds
+  t.s=0 & t.(s+n1+2)=0 & t.(s+n1+n2+4)=0 &
+ (for i be Integer st s < i & i < s+n1+2 holds t.i=1) &
+ for i be Integer st s+n1+2 < i & i < s+n1+n2+4 holds t.i=1
+proof
+    let T be TuringStr, t be Tape of T, s,n1,n2 be Nat;
+    assume t storeData <*s,n1,n2 *>;
+then A1:  t is_1_between s,s+n1+2 & t is_1_between s+n1+2,s+n1+n2+4 by Th21;
+     hence t.s=0 & t.(s+n1+2)=0 & t.(s+n1+n2+4)=0 by Def13;
+     thus thesis by A1,Def13;
+end;
+
+theorem Th23:
+ for f being FinSequence of NAT,s being Nat st len f >= 1
+  holds Sum Prefix(<*s*>^f,1)=s & Sum Prefix(<*s*>^f,2)=s+f/.1
+proof
+   let f be FinSequence of NAT,s be Nat;
+   assume A1: len f >= 1;
+   set g=<*s*>, h=g^f;
+A2: h.1=s by FINSEQ_1:58;
+A3: len g=1 by FINSEQ_1:56;
+A4: f/.1=f.1 by A1,FINSEQ_4:24
+    .=h.(1+1) by A1,A3,FINSEQ_7:3;
+      Seg 1=dom g by A3,FINSEQ_1:def 3;
+then A5: g =h | Seg 1 by RLVECT_1:105
+    .=Prefix(h,1) by Def2;
+    consider n being Nat such that
+A6: len f=1+n by A1,NAT_1:28;
+  len h=1+len f by A3,FINSEQ_1:35
+    .=1+1+n by A6,XCMPLX_1:1
+    .=2+n;
+    then consider p2,q2 being FinSequence of NAT such that
+A7: len p2 = 2 & len q2 = n & h = p2^q2 by FINSEQ_2:26;
+      Seg 2=dom p2 by A7,FINSEQ_1:def 3;
+then A8: p2 =h | Seg 2 by A7,RLVECT_1:105
+    .=Prefix(h,2) by Def2;
+    reconsider x1=s as Element of INT by INT_1:12;
+  thus Sum Prefix(h,1)=Sum<*x1*> by A5
+    .=s by GR_CY_1:21;
+    reconsider x2=f/.1 as Element of INT by INT_1:12;
+A9: p2.1=s by A2,A7,SCMFSA_7:9;
+      p2.2=f/.1 by A4,A7,SCMFSA_7:9;
+  hence Sum Prefix(h,2)=Sum<*x1,x2*> by A7,A8,A9,FINSEQ_1:61
+    .=s+f/.1 by Th4;
+end;
+
+theorem Th24:
+ for f being FinSequence of NAT,s being Nat st len f >= 3
+  holds Sum Prefix(<*s*>^f,1)=s & Sum Prefix(<*s*>^f,2)=s+f/.1 &
+   Sum Prefix(<*s*>^f,3)=s+f/.1+f/.2 & Sum Prefix(<*s*>^f,4)=s+f/.1+f/.2+f/.3
+proof
+   let f be FinSequence of NAT,s be Nat;
+   assume A1: len f >= 3;
+   set g=<*s*>,
+       h=g^f;
+A2: 1 <= len f by A1,AXIOMS:22;
+    hence Sum Prefix(<*s*>^f,1)=s & Sum Prefix(<*s*>^f,2)=s+f/.1 by Th23;
+A3: h.1=s by FINSEQ_1:58;
+A4: len g=1 by FINSEQ_1:56;
+A5: f/.1=f.1 by A2,FINSEQ_4:24
+    .=h.(1+1) by A2,A4,FINSEQ_7:3;
+A6: 2 <= len f by A1,AXIOMS:22;
+then A7: f/.2=f.2 by FINSEQ_4:24
+    .=h.(1+2) by A4,A6,FINSEQ_7:3;
+A8: f/.3=f.3 by A1,FINSEQ_4:24
+    .=h.(1+3) by A1,A4,FINSEQ_7:3;
+    consider n being Nat such that
+A9: len f=3+n by A1,NAT_1:28;
+A10: len h=1+len f by A4,FINSEQ_1:35
+    .=1+3+n by A9,XCMPLX_1:1
+    .=4+n;
+then len h=3+1+n
+    .=3+(1+n) by XCMPLX_1:1;
+    then consider p3,q3 being FinSequence of NAT such that
+A11: len p3 = 3 & len q3 = 1+n & h = p3^q3 by FINSEQ_2:26;
+      Seg 3=dom p3 by A11,FINSEQ_1:def 3;
+then A12: p3 =h | Seg 3 by A11,RLVECT_1:105
+    .=Prefix(h,3) by Def2;
+    consider p4,q4 being FinSequence of NAT such that
+A13: len p4 = 4 & len q4 = n & h = p4^q4 by A10,FINSEQ_2:26;
+      Seg 4=dom p4 by A13,FINSEQ_1:def 3;
+then A14: p4 =h | Seg 4 by A13,RLVECT_1:105
+    .=Prefix(h,4) by Def2;
+   reconsider x1=s as Element of INT by INT_1:12;
+   reconsider x2=f/.1 as Element of INT by INT_1:12;
+   reconsider x3=f/.2 as Element of INT by INT_1:12;
+A15: p3.1=s by A3,A11,SCMFSA_7:9;
+A16: p3.2=f/.1 by A5,A11,SCMFSA_7:9;
+      p3.3=f/.2 by A7,A11,SCMFSA_7:9;
+    then p3=<*s,f/.1,f/.2*> by A11,A15,A16,FINSEQ_1:62;
+  hence Sum Prefix(h,3)=x1+x2+x3 by A12,Th5
+    .=s+f/.1+f/.2;
+  reconsider x4=f/.3 as Element of INT by INT_1:12;
+A17: p4.1=s by A3,A13,SCMFSA_7:9;
+A18: p4.2=f/.1 by A5,A13,SCMFSA_7:9;
+A19: p4.3=f/.2 by A7,A13,SCMFSA_7:9;
+      p4.4=f/.3 by A8,A13,SCMFSA_7:9;
+    then p4=<*s,f/.1,f/.2,f/.3*> by A13,A17,A18,A19,SCMPDS_1:3;
+  hence Sum Prefix(h,4)=x1+x2+x3+x4 by A14,Th6
+    .=s+f/.1+f/.2+f/.3;
+end;
+
+theorem Th25:
+ for T being TuringStr,t be Tape of T, s be Nat,f be FinSequence of NAT st
+ len f >=1 & t storeData <*s*>^f holds t is_1_between s,s+ f/.1+2
+proof
+    let T be TuringStr,t be Tape of T,s be Nat,f be FinSequence of NAT;
+    set g=<*s*>^f;
+    assume A1:len f >=1 & t storeData g;
+then A2: Sum Prefix(g,1)+2*(1-1)=s by Th23;
+A3: Sum Prefix(g,1+1)+2*1=s+f/.1+2 by A1,Th23;
+      len <*s*>=1 by FINSEQ_1:56;
+    then len g=1+len f by FINSEQ_1:35;
+    then len g >= 1+1 by A1,REAL_1:55;
+    then 1 < len g by AXIOMS:22;
+    hence t is_1_between s,s+f/.1+2 by A1,A2,A3,Def14;
+end;
+
+theorem Th26:
+ for T being TuringStr,t be Tape of T, s be Nat,f be FinSequence of NAT st
+ len f >=3 & t storeData <*s*>^f holds
+   t is_1_between s,s+ f/.1+2 &
+   t is_1_between s+f/.1+2, s+f/.1+f/.2+4 &
+   t is_1_between s+f/.1+f/.2+4, s+f/.1+f/.2+f/.3+6
+proof
+    let T be TuringStr,t be Tape of T, s be Nat,f be FinSequence of NAT;
+    set g=<*s*>^f;
+    assume A1:len f >=3 & t storeData g;
+    then 1 <= len f by AXIOMS:22;
+    hence t is_1_between s,s+f/.1+2 by A1,Th25;
+A2: Sum Prefix(g,2)+2*(2-1)=s+f/.1+2 by A1,Th24;
+A3: Sum Prefix(g,2+1)+2*2=s+f/.1+f/.2+4 by A1,Th24;
+      len <*s*>=1 by FINSEQ_1:56;
+    then len g=1+len f by FINSEQ_1:35;
+then A4: len g >= 3+1 by A1,REAL_1:55;
+    then 2 < len g by AXIOMS:22;
+    hence t is_1_between s+f/.1+2,s+f/.1+f/.2+4 by A1,A2,A3,Def14;
+A5: Sum Prefix(g,3)+2*(3-1)=s+f/.1+f/.2+4 by A1,Th24;
+A6: Sum Prefix(g,3+1)+2*3=s+f/.1+f/.2+f/.3+6 by A1,Th24;
+      3 < len g by A4,AXIOMS:22;
+    hence thesis by A1,A5,A6,Def14;
+end;
+
+begin :: Summation of two natural numbers
+
+definition
+ func SumTuring -> strict TuringStr means
+:Def15:  the Symbols of it = { 0,1 } &
+   the States of it = SegM 5 &
+   the Tran of it = Sum_Tran &
+   the InitS of it = 0 &
+   the AcceptS of it = 5;
+   existence
+   proof
+      set Sym = { 0,1 };
+      set St=SegM 5;
+      reconsider p0=0, qF=5 as Element of St by Th1;
+      take TuringStr(# Sym,St, Sum_Tran, p0, qF #);
+      thus thesis;
+   end;
+   uniqueness;
+end;
+
+Lm1:
+ for n be Nat st n <= 5 holds n is State of SumTuring
+proof
+    let n be Nat;
+    assume A1: n <= 5;
+      the States of SumTuring=SegM 5 by Def15;
+    hence thesis by A1,Th1;
+end;
+
+theorem Th27:
+ for T being TuringStr, s be All-State of T,p,h,t be set st s=[p,h,t]
+ holds Head(s)=h
+proof
+    let T be TuringStr, s be All-State of T,p,h,t be set;
+    assume A1: s=[p,h,t];
+    thus Head(s)=s`2 by Def5
+    .=h by A1,MCART_1:68;
+end;
+
+theorem Th28:
+ for T be TuringStr,t be Tape of T, h be Integer,s be Symbol of T
+ st t.h=s holds Tape-Chg(t,h,s) = t
+proof
+     let T be TuringStr,t be Tape of T, h be Integer,s be Symbol of T;
+     assume A1: t.h=s;
+     consider f being Function such that
+A2:  t = f & dom f = INT & rng f c= the Symbols of T by FUNCT_2:def 2;
+A3:  h in dom t by A2,INT_1:12;
+    thus Tape-Chg(t,h,s)=t +* (h .--> s) by Def3
+    .=t by A1,A3,SCMFSA8C:6;
+end;
+
+Lm2:
+   0 in the Symbols of SumTuring & 1 in the Symbols of SumTuring
+proof
+     0 in {0,1} & 1 in {0,1} by TARSKI:def 2;
+   hence thesis by Def15;
+end;
+
+theorem Th29:
+  for T be TuringStr, s be All-State of T, p,h,t be set st s=[p,h,t] &
+  p <> the AcceptS of T holds Following s =
+   [(TRAN(s))`1, Head(s)+offset TRAN(s),Tape-Chg(s`3,Head(s),(TRAN(s))`2)]
+proof
+    let T be TuringStr,s be All-State of T, p,h,t be set;
+    assume A1:s=[p,h,t] & p <> the AcceptS of T;
+    then s`1=p by MCART_1:68;
+    hence thesis by A1,Def7;
+end;
+
+Lm3:
+  for s being All-State of SumTuring, p,h,t be set st s=[p,h,t] &
+  p <> 5 holds Following s =
+     [(TRAN(s))`1,Head(s)+ offset TRAN(s),Tape-Chg(s`3,Head(s),(TRAN(s))`2)]
+proof
+    let s be All-State of SumTuring, p,h,t be set;
+    assume A1:s=[p,h,t] & p <> 5;
+      5=the AcceptS of SumTuring by Def15;
+    hence thesis by A1,Th29;
+end;
+
+theorem Th30:
+ for T being TuringStr,t be Tape of T, h be Integer,
+ s be Symbol of T,i be set
+ holds Tape-Chg(t,h,s).h=s & ( i <> h implies Tape-Chg(t,h,s).i=t.i)
+proof
+    let tm be TuringStr,t be Tape of tm,h be Integer,
+    s be Symbol of tm, i be set;
+    set t1=Tape-Chg(t,h,s),
+        p=h .--> s;
+A1: t1= t +* p by Def3;
+    hence t1.h=s by YELLOW14:3;
+    assume A2:i <> h;
+      dom p ={ h } by CQC_LANG:5;
+    then not i in dom p by A2,TARSKI:def 1;
+    hence t1.i=t.i by A1,FUNCT_4:12;
+end;
+
+Lm4:
+  for tm being TuringStr,s be All-State of tm, p be State of tm,
+  h be Element of INT,t be Tape of tm, m,d be Nat st
+  d=h & 1 is Symbol of tm & s=[p,h,t] & (the Tran of tm).[p,1]=[p,1,1]
+   & p <> the AcceptS of tm & (for i be Integer
+    st d <= i & i < d+m holds t.i=1) holds (Computation s).m=[p,d+m,t]
+proof
+   let tm be TuringStr,s be All-State of tm, p be State of tm,
+    h be Element of INT,t be Tape of tm, m,d be Nat;
+  assume A1: d=h & 1 is Symbol of tm & s=[p,h,t] &
+     (the Tran of tm).[p,1]=[p,1,1] & p <> the AcceptS of tm &
+     (for i be Integer st d <= i & i < d+m holds t.i=1);
+    defpred Q[Nat] means
+     $1 <= m implies (Computation s).$1=[p,d+$1,t];
+A2: Q[0] by A1,Def8;
+A3: for k being Nat st Q[k] holds Q[k+1]
+    proof
+      let k be Nat;
+      assume A4: Q[k];
+        now
+        assume A5: k+1 <= m;
+then A6:     k < m by NAT_1:38;
+        set dk=d+k;
+        reconsider ik=d+k as Element of INT by INT_1:12;
+        set sk=[p,ik,t];
+        reconsider tt=sk`3 as Tape of tm;
+A7:     d <= dk by NAT_1:29;
+          dk < d+m by A6,REAL_1:67;
+then A8:     t.ik=1 by A1,A7;
+A9:     TRAN(sk) =(the Tran of tm).[sk`1, tt.Head(sk)] by Def6
+        .=(the Tran of tm).[p,tt.Head(sk)] by MCART_1:68
+        .=(the Tran of tm).[p,t.Head(sk)] by MCART_1:68
+        .=[p,1,1] by A1,A8,Th27;
+        reconsider T=1 as Symbol of tm by A1;
+A10:     Tape-Chg(sk`3, Head(sk),(TRAN(sk))`2)=Tape-Chg(t,Head(sk),
+        (TRAN(sk))`2) by MCART_1:68
+        .=Tape-Chg(t,dk,(TRAN(sk))`2) by Th27
+        .=Tape-Chg(t,dk,T) by A9,MCART_1:68
+        .=t by A8,Th28;
+A11:     offset TRAN(sk)=(TRAN sk)`3 by Def4
+        .=1 by A9,MCART_1:68;
+        thus
+          (Computation s).(k+1)=Following sk by A4,A5,Def8,NAT_1:38
+        .= [(TRAN(sk))`1, Head(sk)+ offset TRAN(sk), t] by A1,A10,Th29
+        .= [p, Head(sk)+ offset TRAN(sk), t] by A9,MCART_1:68
+        .= [p, dk+1, t] by A11,Th27
+        .= [p, d+(k+1), t] by XCMPLX_1:1;
+      end;
+       hence thesis;
+    end;
+      for k holds Q[k] from Ind(A2,A3);
+    hence (Computation s).m=[p,d+m,t];
+end;
+
+theorem Th31:
+ for s being All-State of SumTuring, t be Tape of SumTuring,
+  head,n1,n2 be Nat
+ st s=[0,head,t] & t storeData <*head,n1,n2 *> holds
+  s is Accept-Halt & (Result s)`2=1+head &
+  (Result s)`3 storeData <*1+head,n1+n2 *>
+proof
+   let s be All-State of SumTuring, t be Tape of SumTuring,h,n1,n2 be Nat;
+   assume A1: s=[0,h,t] & t storeData <*h,n1,n2 *>;
+   reconsider s3=s`3 as Tape of SumTuring;
+   reconsider F=0 as Symbol of SumTuring by Lm2;
+   reconsider T=1 as Symbol of SumTuring by Lm2;
+A2: TRAN(s) =(the Tran of SumTuring).[s`1, s3.Head(s)] by Def6
+    .=Sum_Tran.[s`1, s3.Head(s)] by Def15
+    .=Sum_Tran.[0,s3.Head(s)] by A1,MCART_1:68
+    .=Sum_Tran.[0,t.Head(s)] by A1,MCART_1:68
+    .=Sum_Tran.[0,t.h ] by A1,Th27
+    .=[0,0,1] by A1,Th17,Th22;
+A3:  t.h=0 by A1,Th22;
+A4:  Tape-Chg(s`3, Head(s),(TRAN(s))`2)=Tape-Chg(t, Head(s),(TRAN(s))`2)
+        by A1,MCART_1:68
+    .=Tape-Chg(t,h,(TRAN(s))`2) by A1,Th27
+    .=Tape-Chg(t,h,F) by A2,MCART_1:68
+    .=t by A3,Th28;
+   reconsider p0=0 as State of SumTuring by Lm1;
+   reconsider h1=h+1 as Element of INT by INT_1:12;
+A5:  offset TRAN(s)=(TRAN(s))`3 by Def4
+     .=1 by A2,MCART_1:68;
+     set s1= [p0,h1,t];
+A6:  Following s = [(TRAN(s))`1, Head(s)+offset TRAN(s),t] by A1,A4,Lm3
+    .= [0, Head(s)+ offset TRAN(s),t] by A2,MCART_1:68
+    .= s1 by A1,A5,Th27;
+   reconsider s3=s1`3 as Tape of SumTuring;
+A7: t.h=0 & t.(h+n1+2)=0 & t.(h+n1+n2+4)=0 &
+    (for i be Integer st h < i & i < h+n1+2 holds t.i=1) &
+    for i be Integer st h+n1+2 < i & i < h+n1+n2+4 holds t.i=1 by A1,Th22;
+A8: h < h1 by REAL_1:69;
+      h <= h+n1 by NAT_1:29;
+then A9: h+2 <= h+n1+2 by REAL_1:55;
+    A10: h1 < h+2 by REAL_1:67;
+then A11: h1 < h+n1+2 by A9,AXIOMS:22;
+A12: h+1+1+n1=h+(1+1)+n1 by XCMPLX_1:1
+    .=h+n1+2 by XCMPLX_1:1;
+    set t1=Tape-Chg(t,h1,F);
+      h <= h+(n1+n2) by NAT_1:29;
+    then h <= h+n1+n2 by XCMPLX_1:1;
+then A13: h+4 <= h+n1+n2+4 by REAL_1:55;
+A14: t1.h1=0 by Th30;
+A15: t1.h=0 & t1.(h+n1+2)=0 & t1.(h+n1+n2+4)=0 &
+    (for i be Integer st h1 < i & i < h+1+1+n1 holds t1.i=1) &
+    for i be Integer st h+n1+2 < i & i < h+n1+n2+4 holds t1.i=1
+    proof
+     thus t1.h=0 by A7,A8,Th30;
+     thus t1.(h+n1+2)=0 by A7,A9,A10,Th30;
+         h1 < h+4 by REAL_1:67;
+     hence t1.(h+n1+n2+4)=0 by A7,A13,Th30;
+      hereby
+          let i be Integer;
+          assume A16:h1 < i & i < h+1+1+n1;
+    then A17:   h < i by A8,AXIOMS:22;
+          thus t1.i=t.i by A16,Th30
+          .=1 by A1,A12,A16,A17,Th22;
+       end;
+       hereby
+          let i be Integer;
+          assume A18:h+n1+2 < i & i < h+n1+n2+4;
+          hence t1.i=t.i by A11,Th30
+          .=1 by A1,A18,Th22;
+       end;
+    end;
+A19: TRAN(s1) =(the Tran of SumTuring).[s1`1, s3.Head(s1)] by Def6
+    .=Sum_Tran.[s1`1, s3.Head(s1)] by Def15
+    .=Sum_Tran.[p0,s3.Head(s1)] by MCART_1:68
+    .=Sum_Tran.[p0,t.Head(s1)] by MCART_1:68
+    .=Sum_Tran.[0,t.h1] by Th27
+    .=[1,0,1] by A1,A8,A11,Th17,Th22;
+A20:  Tape-Chg(s1`3, Head(s1),(TRAN(s1))`2)=Tape-Chg(t, Head(s1),(TRAN(s1))`2)
+        by MCART_1:68
+    .=Tape-Chg(t,h1,(TRAN(s1))`2) by Th27
+    .=t1 by A19,MCART_1:68;
+A21: offset TRAN(s1)=(TRAN s1)`3 by Def4
+    .=1 by A19,MCART_1:68;
+   reconsider p1=1 as State of SumTuring by Lm1;
+   reconsider i2=h1+1 as Element of INT by INT_1:12;
+    set s2=[p1,i2,t1];
+A22:  Following s1 = [(TRAN(s1))`1, Head(s1)+ offset TRAN(s1), t1] by A20,Lm3
+    .= [1, Head(s1)+ offset TRAN(s1), t1] by A19,MCART_1:68
+    .= s2 by A21,Th27;
+A23: (the Tran of SumTuring).[p1,1]
+    =[p1,1,1] by Def15,Th17;
+A24: p1 <> the AcceptS of SumTuring by Def15;
+    A25: for i be Integer st h+1+1 <= i & i < h+1+1+n1 holds t1.i=1
+    proof
+       let i be Integer;
+       assume A26: h+1+1 <= i & i < h+1+1+n1;
+          h1 < h1+1 by REAL_1:69;
+        then h1 < i by A26,AXIOMS:22;
+        hence thesis by A15,A26;
+    end;
+    reconsider nk=h1+1+n1 as Element of INT by INT_1:12;
+    set sn=[p1,nk,t1];
+    reconsider sn3=sn`3 as Tape of SumTuring;
+A27: now
+    thus TRAN(sn) =(the Tran of SumTuring).[sn`1, sn3.Head(sn)] by Def6
+     .=Sum_Tran.[sn`1, sn3.Head(sn)] by Def15
+     .=Sum_Tran.[p1,sn3.Head(sn)] by MCART_1:68
+     .=Sum_Tran.[p1,t1.Head(sn)] by MCART_1:68
+     .=[2,1,1] by A12,A15,Th17,Th27;
+    end;
+    set t2=Tape-Chg(t1,nk,T);
+A28: h1+1 <= h+1+1+n1 by NAT_1:29;
+    A29: h1 < h1+1 by REAL_1:69;
+then A30: h1 < h1+1+n1 by A28,AXIOMS:22;
+A31: t2.h1=0 & t2.(h+n1+n2+4)=0 &
+    for i be Integer st h1 < i & i < h+n1+n2+4 holds t2.i=1
+    proof
+       thus t2.h1=0 by A14,A28,A29,Th30;
+           h+n1 <= h+n1+n2 by NAT_1:29;
+     then A32: h+1+1+n1 <= h+n1+n2+2 by A12,REAL_1:55;
+           h+n1+n2+2 < h+n1+n2+4 by REAL_1:67;
+       hence t2.(h+n1+n2+4)=0 by A15,A32,Th30;
+       hereby
+          let i be Integer;
+          assume A33:h1 < i & i < h+n1+n2+4;
+          per cases by REAL_1:def 5;
+          suppose A34: i < h+1+1+n1;
+            hence t2.i=t1.i by Th30
+            .=1 by A15,A33,A34;
+          suppose i = h+1+1+n1;
+            hence t2.i=1 by Th30;
+          suppose A35: i > h+1+1+n1;
+             hence t2.i=t1.i by Th30
+             .=1 by A12,A15,A33,A35;
+        end;
+    end;
+A36: Tape-Chg(sn`3, Head(sn),(TRAN(sn))`2)=Tape-Chg(t1, Head(sn),(TRAN(sn))`2)
+        by MCART_1:68
+    .=Tape-Chg(t1,nk,(TRAN(sn))`2) by Th27
+    .=t2 by A27,MCART_1:68;
+A37: offset TRAN(sn)=(TRAN sn)`3 by Def4
+    .=1 by A27,MCART_1:68;
+    set i3=h+1+1+n1+1;
+    reconsider n3=i3 as Element of INT by INT_1:12;
+    reconsider p2=2 as State of SumTuring by Lm1;
+    set sm=[p2,n3,t2];
+A38:  Following sn = [(TRAN(sn))`1, Head(sn)+ offset TRAN(sn), t2] by A36,Lm3
+    .= [2, Head(sn)+ offset TRAN(sn), t2] by A27,MCART_1:68
+    .= sm by A37,Th27;
+A39: now thus
+       i3+(n2+1) =h+n1+2+1+n2+1 by A12,XCMPLX_1:1
+     .=h+n1+(2+1)+n2+1 by XCMPLX_1:1
+     .=h+n1+n2+3+1 by XCMPLX_1:1
+     .=h+n1+n2+(3+1) by XCMPLX_1:1;
+    end;
+A40: (the Tran of SumTuring).[p2,1]
+    =[p2,1,1] by Def15,Th17;
+A41: p2 <> the AcceptS of SumTuring by Def15;
+      for i be Integer st i3 <= i & i < i3+(n2+1) holds t2.i=1
+    proof
+       let i be Integer;
+       assume A42: i3 <= i & i < i3+(n2+1);
+          nk < i3 by REAL_1:69;
+        then h1 < i3 by A30,AXIOMS:22;
+        then h1 < i by A42,AXIOMS:22;
+        hence thesis by A31,A39,A42;
+    end;
+then A43: (Computation sm).(n2+1)=[2,h+n1+n2+4,t2] by A39,A40,A41,Lm4;
+    set i4=h+n1+n2+4;
+    reconsider n4=i4 as Element of INT by INT_1:12;
+    set sp2=[p2,n4,t2];
+    reconsider sn3=sp2`3 as Tape of SumTuring;
+A44: TRAN(sp2) =(the Tran of SumTuring).[sp2`1, sn3.Head(sp2)] by Def6
+    .=Sum_Tran.[sp2`1, sn3.Head(sp2)] by Def15
+    .=Sum_Tran.[p2,sn3.Head(sp2)] by MCART_1:68
+    .=Sum_Tran.[p2,t2.Head(sp2)] by MCART_1:68
+    .=[3,0,-1] by A31,Th17,Th27;
+    set j3=h+n1+n2+4-1;
+A45: now
+  A46: Tape-Chg(sp2`3, Head(sp2),(TRAN(sp2))`2)=Tape-Chg(t2, Head(sp2),
+     (TRAN(sp2))`2) by MCART_1:68
+    .=Tape-Chg(t2,i4,(TRAN(sp2))`2) by Th27
+    .=Tape-Chg(t2,i4,F) by A44,MCART_1:68
+    .=t2 by A31,Th28;
+A47: offset TRAN(sp2)=(TRAN sp2)`3 by Def4
+    .=-1 by A44,MCART_1:68;
+A48: i4+ -1=j3 by XCMPLX_0:def 8;
+      thus Following sp2 =
+ [(TRAN(sp2))`1, Head(sp2)+ offset TRAN(sp2), t2] by A46,Lm3
+       .= [3, Head(sp2)+ offset TRAN(sp2), t2] by A44,MCART_1:68
+       .= [3, j3,t2] by A47,A48,Th27;
+    end;
+    reconsider p3=3 as State of SumTuring by Lm1;
+    reconsider m3=j3 as Element of INT by INT_1:12;
+    set sp3=[p3,m3,t2];
+    reconsider sn3=sp3`3 as Tape of SumTuring;
+A49: h1 < h+3 by REAL_1:67;
+      h+4-1 <= j3 by A13,REAL_1:49;
+    then A50: h+(4-1) <= j3 by XCMPLX_1:29;
+then A51: h1 < j3 by A49,AXIOMS:22;
+A52: j3 < h+n1+n2+4 by INT_1:26;
+then A53: t2.j3=1 by A31,A51;
+A54: now
+      thus TRAN(sp3) =(the Tran of SumTuring).[sp3`1, sn3.Head(sp3)] by Def6
+      .=Sum_Tran.[sp3`1, sn3.Head(sp3)] by Def15
+      .=Sum_Tran.[p3,sn3.Head(sp3)] by MCART_1:68
+      .=Sum_Tran.[p3,t2.Head(sp3)] by MCART_1:68
+      .=[4,0,-1] by A53,Th17,Th27;
+     end;
+    set t3=Tape-Chg(t2,j3,F);
+A55: t3.h1=0 & t3.j3=0 &
+    for i be Integer st h1 < i & i < j3 holds t3.i=1
+    proof
+       thus t3.h1=0 by A31,A49,A50,Th30;
+       thus t3.j3=0 by Th30;
+       hereby
+          let i be Integer;
+          assume A56: h1 < i & i < j3;
+     then A57:  i < h+n1+n2+4 by A52,AXIOMS:22;
+          thus t3.i=t2.i by A56,Th30
+          .=1 by A31,A56,A57;
+       end;
+    end;
+A58: Tape-Chg(sp3`3, Head(sp3),(TRAN(sp3))`2)=Tape-Chg(t2, Head(sp3),
+       (TRAN(sp3))`2) by MCART_1:68
+      .=Tape-Chg(t2,j3,(TRAN(sp3))`2) by Th27
+      .=t3 by A54,MCART_1:68;
+A59: offset TRAN(sp3)=(TRAN sp3)`3 by Def4
+    .=-1 by A54,MCART_1:68;
+    set j2=j3-1;
+A60: j3+ -1=j2 by XCMPLX_0:def 8;
+    reconsider p4=4 as State of SumTuring by Lm1;
+    reconsider m2=j2 as Element of INT by INT_1:12;
+    set sp4=[p4,m2,t3];
+A61: now
+     thus Following sp3 = [(TRAN(sp3))`1, Head(sp3)+ offset TRAN(sp3), t3]
+by A58,Lm3
+      .= [4, Head(sp3)+ offset TRAN(sp3), t3] by A54,MCART_1:68
+      .= sp4 by A59,A60,Th27;
+    end;
+    defpred R[Nat] means
+     h+$1 < j2 implies (Computation sp4).$1=[4,j2-$1,t3];
+A62: R[0] by Def8;
+A63: for k being Nat st R[k] holds R[k+1]
+    proof
+      let k be Nat;
+      assume A64: R[k];
+        now
+        assume A65: h+(k+1) < j2;
+   A66:  h+k < h+k+1 by REAL_1:69;
+        A67: h+k+1 < j2 by A65,XCMPLX_1:1;
+        set k3=j2-k;
+        reconsider ik=j2-k as Element of INT by INT_1:12;
+        set sk=[p4,ik,t3];
+        reconsider tt=sk`3 as Tape of SumTuring;
+          h1+k < j2+0 by A65,XCMPLX_1:1;
+        then A68: h1-0 < j2-k by REAL_2:168;
+          h1 >= 0 by NAT_1:18;
+        then 0 <= j2-k by A68,AXIOMS:22;
+        then reconsider ii=j2-k as Nat by INT_1:16;
+          j2 <= j2+k by INT_1:19;
+then A69:     j2 -k <= j2 by REAL_1:86;
+          j2 < j3 by INT_1:26;
+        then j2 -k < j3 by A69,AXIOMS:22;
+then A70:     t3.ii=1 by A55,A68;
+A71:     now
+         thus TRAN(sk) =(the Tran of SumTuring).[sk`1, tt.Head(sk)] by Def6
+        .=Sum_Tran.[sk`1, tt.Head(sk)] by Def15
+        .=Sum_Tran.[p4,tt.Head(sk)] by MCART_1:68
+        .=Sum_Tran.[p4,t3.Head(sk)] by MCART_1:68
+        .=[4,1,-1] by A70,Th17,Th27;
+        end;
+A72:     now
+         thus Tape-Chg(sk`3, Head(sk),(TRAN(sk))`2)=Tape-Chg(t3,Head(sk),
+        (TRAN(sk))`2) by MCART_1:68
+        .=Tape-Chg(t3,k3,(TRAN(sk))`2) by Th27
+        .=Tape-Chg(t3,k3,T) by A71,MCART_1:68
+        .=t3 by A70,Th28;
+        end;
+A73:     offset TRAN(sk)=(TRAN sk)`3 by Def4
+        .=-1 by A71,MCART_1:68;
+        thus
+          (Computation sp4).(k+1)=Following sk by A64,A66,A67,Def8,AXIOMS:22
+        .= [(TRAN(sk))`1, Head(sk)+ offset TRAN(sk), t3] by A72,Lm3
+        .= [4, Head(sk)+ offset TRAN(sk), t3] by A71,MCART_1:68
+        .= [4, j2-k+-1, t3] by A73,Th27
+        .= [4, j2-k-1, t3] by XCMPLX_0:def 8
+        .= [4, j2-(k+1), t3] by XCMPLX_1:36;
+      end;
+      hence thesis;
+    end;
+    set j1=n1+n2+1;
+A74: j2-1=j3-(1+1) by XCMPLX_1:36
+    .=h+n1+n2+4-(1+2) by XCMPLX_1:36
+    .=h+n1+n2+(4-3) by XCMPLX_1:29
+    .=h+(n1+n2)+1 by XCMPLX_1:1
+    .=h+j1 by XCMPLX_1:1;
+then A75: h+j1 < j2 by INT_1:26;
+    set sp5=[p4, h1, t3];
+      for k being Nat holds R[k] from Ind(A62,A63);
+then A76: (Computation sp4).j1=[4,j2-j1,t3] by A75
+    .=sp5 by A74,XCMPLX_1:35;
+A77:  now
+     reconsider tt=sp5`3 as Tape of SumTuring;
+A78:  TRAN(sp5) =(the Tran of SumTuring).[sp5`1, tt.Head(sp5)] by Def6
+       .=Sum_Tran.[sp5`1, tt.Head(sp5)] by Def15
+       .=Sum_Tran.[4,tt.Head(sp5)] by MCART_1:68
+       .=Sum_Tran.[4,t3.Head(sp5)] by MCART_1:68
+       .=[5,0,0] by A55,Th17,Th27;
+A79:  Tape-Chg(sp5`3, Head(sp5),(TRAN(sp5))`2)
+     =Tape-Chg(t3, Head(sp5),(TRAN(sp5))`2) by MCART_1:68
+    .=Tape-Chg(t3,h1,(TRAN(sp5))`2) by Th27
+    .=Tape-Chg(t3,h1,F) by A78,MCART_1:68
+    .=t3 by A55,Th28;
+A80:  offset TRAN(sp5)=(TRAN sp5)`3 by Def4
+     .=0 by A78,MCART_1:68;
+   thus Following sp5 = [(TRAN(sp5))`1, Head(sp5)+ offset TRAN(sp5), t3] by A79
+,Lm3
+    .= [5, Head(sp5)+ offset TRAN(sp5), t3] by A78,MCART_1:68
+    .= [5, h1+ 0, t3] by A80,Th27;
+  end;
+    set Rs=(Computation s).(n1+1+(n2+1)+1+1+(1+1)+(j1+1));
+      (Computation s).(1+1)= Following (Computation s).1 by Def8
+    .=s2 by A6,A22,Th12;
+then (Computation s).(n1+1+(n2+1)+1+1+(1+1)) =
+    (Computation s2).(n1+1+(n2+1)+1+1) by Th13;
+then A81: (Computation s).(n1+1+(n2+1)+1+1+(1+1))
+     = Following (Computation s2).(n1+1+(n2+1)+1) by Def8
+    .= Following Following (Computation s2).(n1+1+(n2+1)) by Def8
+    .= Following Following (Computation (Computation s2).(n1+1)).(n2+1)
+      by Th13;
+  now
+      Rs=(Computation Following Following
+       (Computation (Computation s2).(n1+1)).(n2+1)).(j1+1) by A81,Th13
+    .=(Computation Following Following
+       (Computation Following (Computation s2).n1).(n2+1)).(j1+1) by Def8;
+    hence
+      Rs=(Computation Following sp3).(j1+1) by A23,A24,A25,A38,A43,A45,Lm4;
+   end;
+then A82: Rs=[5, h1, t3] by A61,A76,A77,Def8;
+then A83:  Rs`1 = 5 by MCART_1:68
+     .=the AcceptS of SumTuring by Def15;
+     hence s is Accept-Halt by Def9;
+then A84:  Result s =Rs by A83,Def10;
+     hence (Result s)`2= 1+h by A82,MCART_1:68;
+A85: (Result s)`3= t3 by A82,A84,MCART_1:68;
+       now
+      thus j3=h+n1+n2+(4-1) by XCMPLX_1:29
+       .=h+n1+n2+(1+2)
+       .=h+n1+n2+1+2 by XCMPLX_1:1
+       .=h+n1+1+n2+2 by XCMPLX_1:1
+       .=h+1+n1+n2+2 by XCMPLX_1:1
+       .=h+1+(n1+n2)+2 by XCMPLX_1:1;
+     end;
+     then t3 is_1_between h1,h1+(n1+n2)+2 by A55,Def13;
+    hence (Result s)`3 storeData <*1+h,n1+n2 *> by A85,Th19;
+end;
+
+definition
+ let T be TuringStr,F be Function;
+  pred T computes F means
+:Def16:  for s being All-State of T,t being Tape of T, a being Nat,
+   x being FinSequence of NAT st x in dom F &
+   s=[the InitS of T,a,t] & t storeData <*a*>^x holds
+   s is Accept-Halt & ex b, y being Nat st (Result s)`2=b &
+   y=F.x & (Result s)`3 storeData <*b*>^<* y *>;
+end;
+
+theorem Th32:
+ dom [+] c= 2-tuples_on NAT
+proof
+      arity (1 proj 1)=1 by COMPUT_1:41;
+    then dom [+] c= (1+1)-tuples_on NAT by COMPUT_1:60,def 29;
+    hence thesis;
+end;
+
+theorem
+     SumTuring computes [+]
+proof
+    now
+      let s be All-State of SumTuring,t be Tape of SumTuring,h1 be Nat,
+      x be FinSequence of NAT;
+      assume A1: x in dom [+] & s=[the InitS of SumTuring,h1,t] &
+       t storeData <*h1*>^x;
+       then consider i,j such that
+  A2:  x = <*i,j*> by Th32,FINSEQ_2:120;
+  A3:  s = [0,h1,t] by A1,Def15;
+       A4: <*h1*>^x=<*h1,i,j*> by A2,FINSEQ_1:60;
+  A5:  t storeData <*h1,i,j *> by A1,A2,FINSEQ_1:60;
+  A6:  (Result s)`2=1+h1 &
+       (Result s)`3 storeData <*1+h1,i+j *> by A1,A3,A4,Th31;
+       thus s is Accept-Halt by A1,A3,A4,Th31;
+       take h2=1+h1;
+       take y=i+j;
+       thus (Result s)`2=h2 by A3,A5,Th31;
+       thus y=[+].x by A2,COMPUT_1:89;
+       thus (Result s)`3 storeData <*h2*>^<* y *> by A6,FINSEQ_1:def 9;
+  end;
+  hence thesis by Def16;
+end;
+
+begin :: Computing successor function(i.e. s(x)=x+1)
+
+definition
+ func Succ_Tran -> Function of [: SegM 4,{0,1} :],
+      [: SegM 4,{0,1},{ -1,0,1 } :] equals
+:Def17:   id([: SegM 4,{0,1} :],{ -1,0,1 }, 0)
+     +* ([0,0] .--> [1,0,1])
+     +* ([1,1] .--> [1,1,1])
+     +* ([1,0] .--> [2,1,1])
+     +* ([2,0] .--> [3,0,-1])
+     +* ([2,1] .--> [3,0,-1])
+     +* ([3,1] .--> [3,1,-1])
+     +* ([3,0] .--> [4,0,0]);
+ coherence
+ proof
+    set A=[: SegM 4,{0,1} :],
+        B= { -1,0,1 },
+        C=[: SegM 4,{0,1}, B :];
+    reconsider b0=0, b1=1 as Element of {0,1} by TARSKI:def 2;
+    reconsider L=-1 as Element of B by ENUMSET1:def 1;
+    reconsider h=0, R=1 as Element of {-1,0,1} by ENUMSET1:def 1;
+    reconsider p0=0, p1=1, p2=2, p3=3, p4=4 as Element of SegM 4 by Th1;
+      C=[: A, B :] by ZFMISC_1:def 3;
+    then reconsider OP=id(A,B,h) as Function of A,C;
+    id(A,B,0)
+     +* ([0,0] .--> [1,0,1])
+     +* ([1,1] .--> [1,1,1])
+     +* ([1,0] .--> [2,1,1])
+     +* ([2,0] .--> [3,0,-1])
+     +* ([2,1] .--> [3,0,-1])
+     +* ([3,1] .--> [3,1,-1])
+     +* ([3,0] .--> [4,0,0])
+     =OP
+     +* ([p0,b0] .--> [p1,b0,R])
+     +* ([p1,b1] .--> [p1,b1,R])
+     +* ([p1,b0] .--> [p2,b1,R])
+     +* ([p2,b0] .--> [p3,b0,L])
+     +* ([p2,b1] .--> [p3,b0,L])
+     +* ([p3,b1] .--> [p3,b1,L])
+     +* ([p3,b0] .--> [p4,b0,h]);
+     hence thesis;
+  end;
+end;
+
+theorem Th34:
+     Succ_Tran.[0,0]=[1,0,1] & Succ_Tran.[1,1]=[1,1,1] &
+     Succ_Tran.[1,0]=[2,1,1] & Succ_Tran.[2,0]=[3,0,-1] &
+     Succ_Tran.[2,1]=[3,0,-1] & Succ_Tran.[3,1]=[3,1,-1] &
+     Succ_Tran.[3,0]=[4,0,0]
+proof
+     set p1=[0,0] .--> [1,0,1],
+         p2=[1,1] .--> [1,1,1],
+         p3=[1,0] .--> [2,1,1],
+         p4=[2,0] .--> [3,0,-1],
+         p5=[2,1] .--> [3,0,-1],
+         p6=[3,1] .--> [3,1,-1],
+         f= id([: SegM 4,{0,1} :],{ -1,0,1 },0);
+     set x1=[0,0];
+  thus
+     Succ_Tran.x1=(f +* p1+* p2+* p3+* p4+* p5+* p6).x1 by Def17,Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5).x1 by Th2
+    .=(f +* p1+* p2+* p3+* p4).x1 by Th2
+    .=(f +* p1+* p2+* p3).x1 by Th2
+    .=(f +* p1+* p2).x1 by Th2
+    .=(f +* p1).x1 by Th3
+    .=[1,0,1] by YELLOW14:3;
+     set x=[1,1];
+   thus
+     Succ_Tran.x=(f +* p1+* p2+* p3+* p4+* p5+* p6).x by Def17,Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5).x by Th2
+    .=(f +* p1+* p2+* p3+* p4).x by Th2
+    .=(f +* p1+* p2+* p3).x by Th2
+    .=(f +* p1+* p2).x by Th3
+    .=[1,1,1] by YELLOW14:3;
+     set x=[1,0];
+   thus
+     Succ_Tran.x=(f +* p1+* p2+* p3+* p4+* p5+* p6).x by Def17,Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5).x by Th2
+    .=(f +* p1+* p2+* p3+* p4).x by Th2
+    .=(f +* p1+* p2+* p3).x by Th2
+    .=[2,1,1] by YELLOW14:3;
+     set x=[2,0];
+   thus
+     Succ_Tran.x=(f +* p1+* p2+* p3+* p4+* p5+* p6).x by Def17,Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5).x by Th2
+    .=(f +* p1+* p2+* p3+* p4).x by Th3
+    .=[3,0,-1] by YELLOW14:3;
+     set x=[2,1];
+   thus
+     Succ_Tran.x=(f +* p1+* p2+* p3+* p4+* p5+* p6).x by Def17,Th2
+    .=(f +* p1+* p2+* p3+* p4+* p5).x by Th2
+    .=[3,0,-1] by YELLOW14:3;
+     set x=[3,1];
+   thus
+     Succ_Tran.x=(f +* p1+* p2+* p3+* p4+* p5+* p6).x by Def17,Th3
+    .=[3,1,-1] by YELLOW14:3;
+     set x=[3,0];
+   thus
+     Succ_Tran.x=[4,0,0] by Def17,YELLOW14:3;
+end;
+
+definition
+ func SuccTuring -> strict TuringStr means
+:Def18: the Symbols of it = { 0,1 } &
+   the States of it = SegM 4 &
+   the Tran of it = Succ_Tran &
+   the InitS of it = 0 &
+   the AcceptS of it = 4;
+   existence
+   proof
+      set Sym = { 0,1 };
+      set St=SegM 4;
+      reconsider p0=0, qF=4 as Element of St by Th1;
+      take TuringStr(# Sym,St, Succ_Tran, p0, qF #);
+      thus thesis;
+   end;
+   uniqueness;
+end;
+
+Lm5:
+ for n be Nat st n <= 4 holds n is State of SuccTuring
+proof
+    let n be Nat;
+    assume A1: n <= 4;
+      the States of SuccTuring=SegM 4 by Def18;
+    hence thesis by A1,Th1;
+end;
+
+Lm6:
+   0 in the Symbols of SuccTuring & 1 in the Symbols of SuccTuring
+proof
+     0 in {0,1} & 1 in {0,1} by TARSKI:def 2;
+   hence thesis by Def18;
+end;
+
+Lm7:
+  for s being All-State of SuccTuring, p,h,t be set st s=[p,h,t] &
+  p <> 4 holds Following s =
+  [(TRAN(s))`1, Head(s)+ offset TRAN(s), Tape-Chg(s`3, Head(s),(TRAN(s))`2)]
+proof
+    let s be All-State of SuccTuring, p,h,t be set;
+    assume A1:s=[p,h,t] & p <> 4;
+      4=the AcceptS of SuccTuring by Def18;
+    hence thesis by A1,Th29;
+end;
+
+canceled;
+
+theorem Th36:
+ for s being All-State of SuccTuring, t be Tape of SuccTuring,head,n be Nat
+ st s=[0,head,t] & t storeData <*head,n*> holds
+  s is Accept-Halt & (Result s)`2=head & (Result s)`3 storeData <*head,n+1*>
+proof
+   let s be All-State of SuccTuring,t be Tape of SuccTuring,h,n be Nat;
+   assume A1: s=[0,h,t] & t storeData <*h,n *>;
+then A2: t.h=0 & t.(h+n+2)=0 &
+    for i be Integer st h < i & i < h+n+2 holds t.i=1 by Th20;
+   reconsider s3=s`3 as Tape of SuccTuring;
+   reconsider F=0 as Symbol of SuccTuring by Lm6;
+   reconsider T=1 as Symbol of SuccTuring by Lm6;
+A3: TRAN(s) =(the Tran of SuccTuring).[s`1, s3.Head(s)] by Def6
+    .=Succ_Tran.[s`1, s3.Head(s)] by Def18
+    .=Succ_Tran.[0,s3.Head(s)] by A1,MCART_1:68
+    .=Succ_Tran.[0,t.Head(s)] by A1,MCART_1:68
+    .=[1,0,1] by A1,A2,Th27,Th34;
+A4: Tape-Chg(s`3, Head(s),(TRAN(s))`2)=Tape-Chg(t, Head(s),(TRAN(s))`2)
+        by A1,MCART_1:68
+    .=Tape-Chg(t,h,(TRAN(s))`2) by A1,Th27
+    .=Tape-Chg(t,h,F) by A3,MCART_1:68
+    .=t by A2,Th28;
+   reconsider p1=1 as State of SuccTuring by Lm5;
+   reconsider h1=h+1 as Element of INT by INT_1:12;
+A5:  offset TRAN(s)=(TRAN(s))`3 by Def4
+     .=1 by A3,MCART_1:68;
+     set s1= [p1,h1,t];
+A6:  Following s = [(TRAN(s))`1, Head(s)+offset TRAN(s),t] by A1,A4,Lm7
+    .= [1, Head(s)+ offset TRAN(s),t] by A3,MCART_1:68
+    .= s1 by A1,A5,Th27;
+A7: h < h1 by REAL_1:69;
+      h <= h+n by NAT_1:29;
+then A8: h+2 <= h+n+2 by REAL_1:55;
+    A9: h1 < h+2 by REAL_1:67;
+then A10: h1 < h+n+2 by A8,AXIOMS:22;
+A11: h+1+1+n=h+(1+1)+n by XCMPLX_1:1
+    .=h+n+2 by XCMPLX_1:1;
+   reconsider s3=s1`3 as Tape of SuccTuring;
+    set t1=Tape-Chg(t,h1,T);
+A12: t1.h=0 & t1.(h+n+2)=0 &
+    for i be Integer st h < i & i < h+n+2 holds t1.i=1
+    proof
+      thus t1.h=0 by A2,A7,Th30;
+      thus t1.(h+n+2)=0 by A2,A8,A9,Th30;
+      hereby
+          let i be Integer;
+          assume A13:h < i & i < h+n+2;
+          per cases;
+          suppose h1=i;
+            hence t1.i=1 by Th30;
+          suppose h1<>i;
+            hence t1.i=t.i by Th30
+            .=1 by A1,A13,Th20;
+      end;
+    end;
+A14: TRAN(s1) =(the Tran of SuccTuring).[s1`1, s3.Head(s1)] by Def6
+    .=Succ_Tran.[s1`1, s3.Head(s1)] by Def18
+    .=Succ_Tran.[p1,s3.Head(s1)] by MCART_1:68
+    .=Succ_Tran.[p1,t.Head(s1)] by MCART_1:68
+    .=Succ_Tran.[1,t.h1] by Th27
+    .=[1,1,1] by A1,A7,A10,Th20,Th34;
+A15:  Tape-Chg(s1`3, Head(s1),(TRAN(s1))`2)=Tape-Chg(t, Head(s1),(TRAN(s1))`2)
+        by MCART_1:68
+    .=Tape-Chg(t,h1,(TRAN(s1))`2) by Th27
+    .=t1 by A14,MCART_1:68;
+A16: offset TRAN(s1)=(TRAN s1)`3 by Def4
+    .=1 by A14,MCART_1:68;
+   reconsider p1=1 as State of SuccTuring by Lm5;
+   reconsider i2=h1+1 as Element of INT by INT_1:12;
+    set s2=[p1,i2,t1];
+A17:  Following s1 = [(TRAN(s1))`1,Head(s1)+ offset TRAN(s1),t1] by A15,Lm7
+    .= [1,Head(s1)+ offset TRAN(s1),t1] by A14,MCART_1:68
+    .= s2 by A16,Th27;
+A18: (the Tran of SuccTuring).[p1,1]
+    =[p1,1,1] by Def18,Th34;
+A19: p1 <> the AcceptS of SuccTuring by Def18;
+      for i be Integer st h+1+1 <= i & i < h+1+1+n holds t1.i=1
+    proof
+       let i be Integer;
+       assume A20: h+1+1 <= i & i < h+1+1+n;
+          h1 < h1+1 by REAL_1:69;
+        then h1 < i by A20,AXIOMS:22;
+        then h < i by A7,AXIOMS:22;
+        hence thesis by A11,A12,A20;
+    end;
+then A21: (Computation s2).n=[p1,h+1+1+n,t1] by A18,A19,Lm4;
+    reconsider nk=h1+1+n as Element of INT by INT_1:12;
+    set sn=[p1,nk,t1];
+    reconsider sn3=sn`3 as Tape of SuccTuring;
+A22: TRAN(sn) =(the Tran of SuccTuring).[sn`1, sn3.Head(sn)] by Def6
+    .=Succ_Tran.[sn`1, sn3.Head(sn)] by Def18
+    .=Succ_Tran.[p1,sn3.Head(sn)] by MCART_1:68
+    .=Succ_Tran.[p1,t1.Head(sn)] by MCART_1:68
+    .=[2,1,1] by A11,A12,Th27,Th34;
+    set t2=Tape-Chg(t1,nk,T);
+A23: h1+1 <= h+1+1+n by NAT_1:29;
+      h1 < h1+1 by REAL_1:69;
+then A24: h1 < h1+1+n by A23,AXIOMS:22;
+then A25: h < h1+1+n by A7,AXIOMS:22;
+A26: t2.h=0 & for i be Integer st h < i & i <= h+n+2 holds t2.i=1
+    proof
+       thus t2.h=0 by A7,A12,A24,Th30;
+       hereby
+          let i be Integer;
+          assume A27:h < i & i <= h+n+2;
+          per cases;
+          suppose A28: i <> h+n+2;
+          then A29: i < h+n+2 by A27,REAL_1:def 5;
+            thus t2.i=t1.i by A11,A28,Th30
+            .=1 by A12,A27,A29;
+          suppose i = h+n+2;
+            hence t2.i=1 by A11,Th30;
+        end;
+    end;
+A30: Tape-Chg(sn`3,Head(sn),(TRAN(sn))`2)=Tape-Chg(t1, Head(sn),(TRAN(sn))`2)
+        by MCART_1:68
+    .=Tape-Chg(t1,nk,(TRAN(sn))`2) by Th27
+    .=t2 by A22,MCART_1:68;
+A31: offset TRAN(sn)=(TRAN sn)`3 by Def4
+    .=1 by A22,MCART_1:68;
+    set i3=h+1+1+n+1;
+    reconsider n3=i3 as Element of INT by INT_1:12;
+    reconsider p2=2 as State of SuccTuring by Lm5;
+    reconsider p3=3 as State of SuccTuring by Lm5;
+    set sm=[p2,n3,t2];
+A32:  Following sn = [(TRAN(sn))`1, Head(sn)+ offset TRAN(sn), t2] by A30,Lm7
+    .= [2, Head(sn)+ offset TRAN(sn), t2] by A22,MCART_1:68
+    .= sm by A31,Th27;
+    reconsider sm3=sm`3 as Tape of SuccTuring;
+A33: the Symbols of SuccTuring = {0,1} by Def18;
+A34: now
+       per cases by A33,TARSKI:def 2;
+       suppose t2.n3=1;
+         hence Succ_Tran.[2,t2.n3 ]=[p3,0,-1] by Th34;
+       suppose t2.n3=0;
+         hence Succ_Tran.[2,t2.n3 ]=[p3,0,-1] by Th34;
+    end;
+A35: TRAN(sm) =(the Tran of SuccTuring).[sm`1, sm3.Head(sm)] by Def6
+    .=Succ_Tran.[sm`1, sm3.Head(sm)] by Def18
+    .=Succ_Tran.[2,sm3.Head(sm)] by MCART_1:68
+    .=Succ_Tran.[2,t2.Head(sm)] by MCART_1:68
+    .=[p3,0,-1] by A34,Th27;
+    set t3=Tape-Chg(t2,n3,F);
+A36: Tape-Chg(sm`3, Head(sm),(TRAN(sm))`2)
+     =Tape-Chg(t2, Head(sm),(TRAN(sm))`2) by MCART_1:68
+    .=Tape-Chg(t2,n3,(TRAN(sm))`2) by Th27
+    .=t3 by A35,MCART_1:68;
+A37: offset TRAN(sm)=(TRAN sm)`3 by Def4
+    .=-1 by A35,MCART_1:68;
+A38: n3+-1=h+1+1+n by XCMPLX_1:137;
+    set sp3=[p3,nk,t3];
+A39:  Following sm = [(TRAN(sm))`1, Head(sm)+ offset TRAN(sm), t3] by A36,Lm7
+    .= [p3,Head(sm)+ offset TRAN(sm),t3] by A35,MCART_1:68
+    .= sp3 by A37,A38,Th27;
+    A40: h1+1+n < i3 by REAL_1:69;
+A41: i3=h+1+(1+n)+1 by XCMPLX_1:1
+    .=h+(1+n)+1+1 by XCMPLX_1:1
+    .=h+(1+n)+(1+1) by XCMPLX_1:1;
+A42: t3.h=0 & t3.(h+(n+1)+2)=0 &
+    for k be Integer st h < k & k < h+(n+1)+2 holds t3.k=1
+    proof
+       thus t3.h=0 by A25,A26,A40,Th30;
+       thus t3.(h+(n+1)+2)=0 by A41,Th30;
+       hereby
+          let i be Integer;
+          assume A43: h < i & i < h+(n+1)+2;
+            then i+1 <= h+(n+1)+2 by INT_1:20;
+        then A44: i <= h+(n+1)+2-1 by REAL_1:84;
+            A45: h+(n+1)+2-1=h+n+1+2-1 by XCMPLX_1:1
+            .= h+n+2+1-1 by XCMPLX_1:1
+            .= h+n+2 by XCMPLX_1:26;
+          thus t3.i=t2.i by A41,A43,Th30
+          .=1 by A26,A43,A44,A45;
+       end;
+    end;
+    defpred R[Nat] means
+     h+$1 <= nk implies (Computation sp3).$1=[3,nk-$1,t3];
+A46: R[0] by Def8;
+A47: for k being Nat st R[k] holds R[k+1]
+    proof
+      let k be Nat;
+      assume A48: R[k];
+        now
+        assume A49: h+(k+1) <= nk;
+   A50:  h+k < h+k+1 by REAL_1:69;
+   A51:  h+k+1 <= nk by A49,XCMPLX_1:1;
+        set k3=nk-k;
+        reconsider ik=nk-k as Element of INT by INT_1:12;
+        set sk=[p3,ik,t3];
+        reconsider tt=sk`3 as Tape of SuccTuring;
+          h+k < nk+0 by A50,A51,AXIOMS:22;
+        then A52: h-0 < nk-k by REAL_2:168;
+          h >= 0 by NAT_1:18;
+        then 0 <= nk-k by A52,AXIOMS:22;
+        then reconsider ii=nk-k as Nat by INT_1:16;
+          nk <= nk+k by INT_1:19;
+        then A53: nk -k <= nk by REAL_1:86;
+          now h+n+2 < h+n+2+1 by REAL_1:69;
+          then ii < h+n+2+1 by A11,A53,AXIOMS:22;
+          then ii < h+n+1+2 by XCMPLX_1:1;
+        hence ii < h+(n+1)+2 by XCMPLX_1:1;
+        end;
+then A54:     t3.ii=1 by A42,A52;
+A55:     now
+         thus TRAN(sk) =(the Tran of SuccTuring).[sk`1, tt.Head(sk)] by Def6
+        .=Succ_Tran.[sk`1, tt.Head(sk)] by Def18
+        .=Succ_Tran.[p3,tt.Head(sk)] by MCART_1:68
+        .=Succ_Tran.[p3,t3.Head(sk)] by MCART_1:68
+        .=[3,1,-1] by A54,Th27,Th34;
+        end;
+A56:     now
+         thus Tape-Chg(sk`3, Head(sk),(TRAN(sk))`2)=Tape-Chg(t3,Head(sk),
+        (TRAN(sk))`2) by MCART_1:68
+        .=Tape-Chg(t3,k3,(TRAN(sk))`2) by Th27
+        .=Tape-Chg(t3,k3,T) by A55,MCART_1:68
+        .=t3 by A54,Th28;
+        end;
+A57:     offset TRAN(sk)=(TRAN sk)`3 by Def4
+        .=-1 by A55,MCART_1:68;
+        hereby thus
+          (Computation sp3).(k+1)=Following sk by A48,A50,A51,Def8,AXIOMS:22
+        .= [(TRAN(sk))`1, Head(sk)+ offset TRAN(sk), t3] by A56,Lm7
+        .= [3, Head(sk)+ offset TRAN(sk), t3] by A55,MCART_1:68
+        .= [3, nk-k+-1, t3] by A57,Th27
+        .= [3, nk-k-1, t3] by XCMPLX_0:def 8
+        .= [3, nk-(k+1), t3] by XCMPLX_1:36;
+       end;
+      end;
+       hence thesis;
+    end;
+    reconsider hh=h as Element of INT by INT_1:12;
+    set j1=1+1+n,
+        sp5=[p3,hh, t3];
+A58: h+j1 =h+(1+1)+n by XCMPLX_1:1
+    .=nk by XCMPLX_1:1;
+      for k being Nat holds R[k] from Ind(A46,A47);
+then A59: (Computation sp3).j1=[3,nk-j1,t3] by A58
+    .=sp5 by A58,XCMPLX_1:26;
+A60:  now
+     reconsider tt=sp5`3 as Tape of SuccTuring;
+A61:  TRAN(sp5) =(the Tran of SuccTuring).[sp5`1, tt.Head(sp5)] by Def6
+       .=Succ_Tran.[sp5`1, tt.Head(sp5)] by Def18
+       .=Succ_Tran.[3,tt.Head(sp5)] by MCART_1:68
+       .=Succ_Tran.[3,t3.Head(sp5)] by MCART_1:68
+       .=[4,0,0] by A42,Th27,Th34;
+A62:  Tape-Chg(sp5`3, Head(sp5),(TRAN(sp5))`2)
+     =Tape-Chg(t3, Head(sp5),(TRAN(sp5))`2) by MCART_1:68
+    .=Tape-Chg(t3,h,(TRAN(sp5))`2) by Th27
+    .=Tape-Chg(t3,h,F) by A61,MCART_1:68
+    .=t3 by A42,Th28;
+A63:  offset TRAN(sp5)=(TRAN sp5)`3 by Def4
+     .=0 by A61,MCART_1:68;
+   thus Following sp5 = [(TRAN(sp5))`1, Head(sp5)+ offset TRAN(sp5), t3] by A62
+,Lm7
+    .= [4, Head(sp5)+ offset TRAN(sp5), t3] by A61,MCART_1:68
+    .= [4, h+ 0, t3] by A63,Th27;
+   end;
+     set Rs=(Computation s).(1+1+(n+1+1+(j1+1)));
+  Rs=(Computation (Computation s).(1+1)).(n+1+1+(j1+1)) by Th13
+    .=(Computation Following (Computation s).1).(n+1+1+(j1+1)) by Def8
+    .=(Computation Following s1).(n+1+1+(j1+1)) by A6,Th12
+    .=(Computation (Computation s2).(n+1+1)).(j1+1) by A17,Th13
+    .=(Computation Following (Computation s2).(n+1)).(j1+1) by Def8;
+then Rs=(Computation sp3).(j1+1) by A21,A32,A39,Def8;
+then A64: Rs=[4, h, t3] by A59,A60,Def8;
+then A65:  Rs`1 = 4 by MCART_1:68
+     .=the AcceptS of SuccTuring by Def18;
+     hence s is Accept-Halt by Def9;
+then A66:  Result s =Rs by A65,Def10;
+     hence (Result s)`2= h by A64,MCART_1:68;
+A67: (Result s)`3= t3 by A64,A66,MCART_1:68;
+       t3 is_1_between h,h+(n+1)+2 by A42,Def13;
+     hence (Result s)`3 storeData <*h,n+1 *> by A67,Th19;
+end;
+
+theorem
+     SuccTuring computes 1 succ 1
+proof
+    now
+      let s be All-State of SuccTuring,t be Tape of SuccTuring,h be Nat,
+      x be FinSequence of NAT;
+      set sc=1 succ 1;
+      assume A1: x in dom sc & s=[the InitS of SuccTuring,h,t] &
+       t storeData <*h*>^x;
+  A2:  dom sc = 1-tuples_on NAT by COMPUT_1:def 10;
+       then consider i such that
+  A3:  x = <*i*> by A1,FINSEQ_2:117;
+  A4:  s = [0,h,t] by A1,Def18;
+       A5: <*h*>^x=<*h,i*> by A3,FINSEQ_1:def 9;
+       hence s is Accept-Halt by A1,A4,Th36;
+       take h2=h;
+       take y=i+1;
+       thus (Result s)`2=h2 by A1,A4,A5,Th36;
+       thus y=(x/.1)+1 by A3,FINSEQ_4:25
+            .=sc.x by A1,A2,COMPUT_1:def 10;
+         (Result s)`3 storeData <*h2,i+1 *> by A1,A4,A5,Th36;
+       hence (Result s)`3 storeData <*h2*>^<* y *> by FINSEQ_1:def 9;
+  end;
+  hence thesis by Def16;
+end;
+
+begin :: Computing zero function (i.e. O(x)=0)
+
+definition
+ func Zero_Tran -> Function of [: SegM 4,{0,1} :],
+      [: SegM 4,{0,1},{ -1,0,1 } :] equals
+:Def19:   id([: SegM 4,{0,1} :],{ -1,0,1 }, 1)
+     +* ([0,0] .--> [1,0,1])
+     +* ([1,1] .--> [2,1,1])
+     +* ([2,0] .--> [3,0,-1])
+     +* ([2,1] .--> [3,0,-1])
+     +* ([3,1] .--> [4,1,-1]);
+ coherence
+ proof
+    set A=[: SegM 4,{0,1} :],
+        B= { -1,0,1 },
+        C=[: SegM 4,{0,1}, B :];
+    reconsider b0=0,b1=1 as Element of {0,1} by TARSKI:def 2;
+    reconsider L=-1 as Element of B by ENUMSET1:def 1;
+    reconsider R=1 as Element of {-1,0,1} by ENUMSET1:def 1;
+    reconsider p0=0, p1=1, p2=2, p3=3, p4=4 as Element of SegM 4 by Th1;
+      C=[: A, B :] by ZFMISC_1:def 3;
+    then reconsider OP=id(A,B,R) as Function of A,C;
+    id(A,B,1)
+     +* ([0,0] .--> [1,0,1])
+     +* ([1,1] .--> [2,1,1])
+     +* ([2,0] .--> [3,0,-1])
+     +* ([2,1] .--> [3,0,-1])
+     +* ([3,1] .--> [4,1,-1])
+     =OP
+     +* ([p0,b0] .--> [p1,b0,R])
+     +* ([p1,b1] .--> [p2,b1,R])
+     +* ([p2,b0] .--> [p3,b0,L])
+     +* ([p2,b1] .--> [p3,b0,L])
+     +* ([p3,b1] .--> [p4,b1,L]);
+     hence thesis;
+  end;
+end;
+
+theorem Th38:
+     Zero_Tran.[0,0]=[1,0,1] & Zero_Tran.[1,1]=[2,1,1] &
+     Zero_Tran.[2,0]=[3,0,-1] & Zero_Tran.[2,1]=[3,0,-1] &
+     Zero_Tran.[3,1]=[4,1,-1]
+proof
+     set p1=[0,0] .--> [1,0,1],
+         p2=[1,1] .--> [2,1,1],
+         p3=[2,0] .--> [3,0,-1],
+         p4=[2,1] .--> [3,0,-1],
+        f= id([: SegM 4,{0,1} :],{ -1,0,1 },1);
+     set x1=[0,0];
+  thus
+     Zero_Tran.x1=(f +* p1+* p2+* p3+* p4).x1 by Def19,Th2
+    .=(f +* p1+* p2+* p3).x1 by Th2
+    .=(f +* p1+* p2).x1 by Th2
+    .=(f +* p1).x1 by Th3
+    .=[1,0,1] by YELLOW14:3;
+     set x=[1,1];
+   thus
+     Zero_Tran.x=(f +* p1+* p2+* p3+* p4).x by Def19,Th2
+    .=(f +* p1+* p2+* p3).x by Th2
+    .=(f +* p1+* p2).x by Th3
+    .=[2,1,1] by YELLOW14:3;
+     set x=[2,0];
+   thus
+     Zero_Tran.x=(f +* p1+* p2+* p3+* p4).x by Def19,Th3
+    .=(f +* p1+* p2+* p3).x by Th3
+    .=[3,0,-1] by YELLOW14:3;
+     set x=[2,1];
+   thus
+     Zero_Tran.x=(f +* p1+* p2+* p3+* p4).x by Def19,Th2
+    .=[3,0,-1] by YELLOW14:3;
+     set x=[3,1];
+   thus
+     Zero_Tran.x=[4,1,-1] by Def19,YELLOW14:3;
+end;
+
+definition
+ func ZeroTuring -> strict TuringStr means
+:Def20:   the Symbols of it = { 0,1 } &
+   the States of it = SegM 4 &
+   the Tran of it = Zero_Tran &
+   the InitS of it = 0 &
+   the AcceptS of it = 4;
+   existence
+   proof
+      set Sym = { 0,1 };
+      set St=SegM 4;
+      reconsider p0=0 as Element of St by Th1;
+      reconsider qF=4 as Element of St by Th1;
+       take TuringStr(# Sym,St, Zero_Tran, p0, qF #);
+       thus thesis;
+   end;
+   uniqueness;
+end;
+
+Lm8:
+ for n be Nat st n <= 4 holds n is State of ZeroTuring
+proof
+    let n be Nat;
+    assume A1: n <= 4;
+      the States of ZeroTuring=SegM 4 by Def20;
+    hence thesis by A1,Th1;
+end;
+
+Lm9:
+   0 in the Symbols of ZeroTuring & 1 in the Symbols of ZeroTuring
+proof
+     0 in {0,1} & 1 in {0,1} by TARSKI:def 2;
+   hence thesis by Def20;
+end;
+
+Lm10:
+  for s being All-State of ZeroTuring, p,h,t be set st s=[p,h,t] &
+  p <> 4 holds Following s = [(TRAN(s))`1, Head(s)+ offset TRAN(s),
+    Tape-Chg(s`3, Head(s),(TRAN(s))`2)]
+proof
+    let s be All-State of ZeroTuring, p,h,t be set;
+    assume A1:s=[p,h,t] & p <> 4;
+      4=the AcceptS of ZeroTuring by Def20;
+    hence thesis by A1,Th29;
+end;
+
+theorem Th39:
+ for s being All-State of ZeroTuring, t be Tape of ZeroTuring, head be Nat,
+ f be FinSequence of NAT st len f >= 1 & s=[0,head,t] &
+ t storeData <*head*>^f holds
+ s is Accept-Halt & (Result s)`2=head & (Result s)`3 storeData <*head,0*>
+proof
+   let s be All-State of ZeroTuring, t be Tape of ZeroTuring,h be Nat,
+   f be FinSequence of NAT;
+   assume A1: len f >= 1 & s=[0,h,t] & t storeData <*h*>^f;
+    set m=f/.1,
+        n=h+f/.1+2;
+A2: t is_1_between h,n by A1,Th25;
+then A3: t.h=0 & t.n=0 &
+    for k be Integer st h < k & k < n holds t.k=1 by Def13;
+    reconsider h1=h+1 as Element of INT by INT_1:12;
+A4: h < h1 by REAL_1:69;
+      h <= h+m by NAT_1:29;
+then A5: h+2 <= h+m+2 by REAL_1:55;
+      h1 < h+2 by REAL_1:67;
+then A6: h1 < n by A5,AXIOMS:22;
+   reconsider s3=s`3 as Tape of ZeroTuring;
+   reconsider F=0 as Symbol of ZeroTuring by Lm9;
+   reconsider T=1 as Symbol of ZeroTuring by Lm9;
+A7: TRAN(s) =(the Tran of ZeroTuring).[s`1, s3.Head(s)] by Def6
+    .=Zero_Tran.[s`1, s3.Head(s)] by Def20
+    .=Zero_Tran.[0,s3.Head(s)] by A1,MCART_1:68
+    .=Zero_Tran.[0,t.Head(s)] by A1,MCART_1:68
+    .=[1,0,1] by A1,A3,Th27,Th38;
+A8: Tape-Chg(s`3, Head(s),(TRAN(s))`2)=Tape-Chg(t, Head(s),(TRAN(s))`2)
+        by A1,MCART_1:68
+    .=Tape-Chg(t,h,(TRAN(s))`2) by A1,Th27
+    .=Tape-Chg(t,h,F) by A7,MCART_1:68
+    .=t by A3,Th28;
+   reconsider p1=1 as State of ZeroTuring by Lm8;
+A9:  offset TRAN(s)=(TRAN(s))`3 by Def4
+     .=1 by A7,MCART_1:68;
+     set s1= [p1,h1,t];
+A10:  Following s = [(TRAN(s))`1, Head(s)+offset TRAN(s),t] by A1,A8,Lm10
+    .= [1, Head(s)+ offset TRAN(s),t] by A7,MCART_1:68
+    .= s1 by A1,A9,Th27;
+   reconsider s13=s1`3 as Tape of ZeroTuring;
+    set t1=Tape-Chg(t,h1,T);
+A11: t1.h=0 by A3,A4,Th30;
+A12: t1.(h+1)=1 by Th30;
+A13: TRAN(s1) =(the Tran of ZeroTuring).[s1`1, s13.Head(s1)] by Def6
+    .=Zero_Tran.[s1`1, s13.Head(s1)] by Def20
+    .=Zero_Tran.[p1,s13.Head(s1)] by MCART_1:68
+    .=Zero_Tran.[p1,t.Head(s1)] by MCART_1:68
+    .=Zero_Tran.[1,t.h1] by Th27
+    .=[2,1,1] by A2,A4,A6,Def13,Th38;
+A14: Tape-Chg(s1`3,Head(s1),(TRAN(s1))`2)
+    =Tape-Chg(t,Head(s1),(TRAN(s1))`2) by MCART_1:68
+    .=Tape-Chg(t,h1,(TRAN(s1))`2) by Th27
+    .=t1 by A13,MCART_1:68;
+A15: offset TRAN(s1)=(TRAN s1)`3 by Def4
+    .=1 by A13,MCART_1:68;
+   reconsider p2=2 as State of ZeroTuring by Lm8;
+   reconsider i2=h1+1 as Element of INT by INT_1:12;
+    set s2=[p2,i2,t1];
+A16:  Following s1 = [(TRAN(s1))`1, Head(s1)+ offset TRAN(s1), t1] by A14,Lm10
+    .= [2, Head(s1)+ offset TRAN(s1), t1] by A13,MCART_1:68
+    .= s2 by A15,Th27;
+A17: now
+   A18: the Symbols of ZeroTuring = {0,1} by Def20;
+       per cases by A18,TARSKI:def 2;
+       suppose t1.i2=1;
+         hence Zero_Tran.[2,t1.i2 ]=[3,0,-1] by Th38;
+       suppose t1.i2=0;
+         hence Zero_Tran.[2,t1.i2 ]=[3,0,-1] by Th38;
+    end;
+   reconsider s23=s2`3 as Tape of ZeroTuring;
+A19: TRAN(s2) =(the Tran of ZeroTuring).[s2`1, s23.Head(s2)] by Def6
+    .=Zero_Tran.[s2`1, s23.Head(s2)] by Def20
+    .=Zero_Tran.[p2,s23.Head(s2)] by MCART_1:68
+    .=Zero_Tran.[p2,t1.Head(s2)] by MCART_1:68
+    .=[3,0,-1] by A17,Th27;
+     set t2=Tape-Chg(t1,i2,F);
+A20:  Tape-Chg(s2`3, Head(s2),(TRAN(s2))`2)
+      =Tape-Chg(t1, Head(s2),(TRAN(s2))`2) by MCART_1:68
+      .=Tape-Chg(t1,i2,(TRAN(s2))`2) by Th27
+      .=t2 by A19,MCART_1:68;
+A21: h1 < i2 by REAL_1:69;
+then A22: t2.h=0 by A4,A11,Th30;
+A23: t2.(h+1)=1 by A12,A21,Th30;
+A24: t2.i2=0 by Th30;
+A25: offset TRAN(s2)=(TRAN s2)`3 by Def4
+    .=-1 by A19,MCART_1:68;
+A26: i2+-1= h1 by XCMPLX_1:137;
+   reconsider p3=3 as State of ZeroTuring by Lm8;
+    set s3=[p3,h1,t2];
+A27:  Following s2 = [(TRAN(s2))`1, Head(s2)+ offset TRAN(s2), t2] by A20,Lm10
+    .= [3, Head(s2)+ offset TRAN(s2), t2] by A19,MCART_1:68
+    .= s3 by A25,A26,Th27;
+   reconsider s33=s3`3 as Tape of ZeroTuring;
+A28: TRAN(s3) =(the Tran of ZeroTuring).[s3`1, s33.Head(s3)] by Def6
+    .=Zero_Tran.[s3`1, s33.Head(s3)] by Def20
+    .=Zero_Tran.[p3,s33.Head(s3)] by MCART_1:68
+    .=Zero_Tran.[p3,t2.Head(s3)] by MCART_1:68
+    .=[4,1,-1] by A23,Th27,Th38;
+     set t3=Tape-Chg(t2,h1,T);
+A29: t3.h=0 by A4,A22,Th30;
+A30: t3.(h+1)=1 by Th30;
+A31: t3.i2=0 by A21,A24,Th30;
+A32:  Tape-Chg(s3`3, Head(s3),(TRAN(s3))`2)
+      =Tape-Chg(t2, Head(s3),(TRAN(s3))`2) by MCART_1:68
+      .=Tape-Chg(t2,h1,(TRAN(s3))`2) by Th27
+      .=t3 by A28,MCART_1:68;
+A33:  offset TRAN(s3)=(TRAN s3)`3 by Def4
+     .=-1 by A28,MCART_1:68;
+A34:  h1+-1= h by XCMPLX_1:137;
+   reconsider p3=3 as State of ZeroTuring by Lm8;
+    set s3=[p3,h1,t2];
+A35:  Following s3 = [(TRAN(s3))`1, Head(s3)+ offset TRAN(s3), t3] by A32,Lm10
+    .= [4, Head(s3)+ offset TRAN(s3), t3] by A28,MCART_1:68
+    .= [4, h,t3] by A33,A34,Th27;
+     set Rs=(Computation s).(1+1+1+1);
+A36: Rs= Following (Computation s).(1+1+1) by Def8
+     .= Following Following (Computation s).(1+1) by Def8
+     .= Following Following Following (Computation s).1 by Def8
+     .=[4, h,t3] by A10,A16,A27,A35,Th12;
+then A37:  Rs`1 = 4 by MCART_1:68
+     .=the AcceptS of ZeroTuring by Def20;
+     hence s is Accept-Halt by Def9;
+then A38:  Result s =Rs by A37,Def10;
+     hence (Result s)`2= h by A36,MCART_1:68;
+A39: (Result s)`3= t3 by A36,A38,MCART_1:68;
+A40:  h+1+1=h+(1+1) by XCMPLX_1:1
+     .=h+0+2;
+       now
+        let k be Integer;
+        assume A41: h < k & k < h+0+2;
+      then A42: h+1 <= k by INT_1:20;
+            k <= h+1 by A40,A41,INT_1:20;
+        hence t3.k=1 by A30,A42,AXIOMS:21;
+     end;
+     then t3 is_1_between h,h+0+2 by A29,A31,A40,Def13;
+     hence (Result s)`3 storeData <*h,0 *> by A39,Th19;
+end;
+
+theorem
+     n >=1 implies ZeroTuring computes n const 0
+proof
+  assume A1: n>=1;
+    now
+      let s be All-State of ZeroTuring,t be Tape of ZeroTuring,h be Nat,
+      x be FinSequence of NAT;
+      set cs=n const 0;
+      assume A2: x in dom cs & s=[the InitS of ZeroTuring,h,t] &
+       t storeData <*h*>^x;
+         arity cs = n by COMPUT_1:35;
+  then A3:  dom cs c= n-tuples_on NAT by COMPUT_1:24;
+  then x in n-tuples_on NAT by A2;
+       then x in { f where f is Element of NAT*: len f = n }
+       by FINSEQ_2:def 4;
+       then consider f be Element of NAT* such that
+  A4:  x = f & len f = n;
+  A5:  s = [0,h,t] by A2,Def20;
+       hence s is Accept-Halt by A1,A2,A4,Th39;
+       take h2=h;
+       take y=0;
+       thus (Result s)`2=h2 by A1,A2,A4,A5,Th39;
+       thus y=cs.x by A2,A3,COMPUT_1:36;
+         (Result s)`3 storeData <*h2,0*> by A1,A2,A4,A5,Th39;
+       hence (Result s)`3 storeData <*h2*>^<*y*> by FINSEQ_1:def 9;
+  end;
+  hence thesis by Def16;
+end;
+
+begin :: Computing n-ary project function(i.e. U(x1,x2,...,xn)=x3)
+
+definition
+ func U3(n)Tran -> Function of [: SegM 3,{0,1} :],
+      [: SegM 3,{0,1},{ -1,0,1 } :] equals
+:Def21:  id([: SegM 3,{0,1} :],{ -1,0,1 }, 0)
+     +* ([0,0] .--> [1,0,1])
+     +* ([1,1] .--> [1,0,1])
+     +* ([1,0] .--> [2,0,1])
+     +* ([2,1] .--> [2,0,1])
+     +* ([2,0] .--> [3,0,0]);
+coherence
+ proof
+    set A=[: SegM 3,{0,1} :],
+        B= { -1,0,1 },
+        C=[: SegM 3,{0,1}, B :];
+    reconsider b0=0, b1=1 as Element of {0,1} by TARSKI:def 2;
+    reconsider h=0, R=1 as Element of B by ENUMSET1:def 1;
+    reconsider p0=0, p1=1, p2=2, p3=3 as Element of SegM 3 by Th1;
+      C=[: A, B :] by ZFMISC_1:def 3;
+    then reconsider OP=id(A,B,h) as Function of A,C;
+    id(A,B,0)
+     +* ([0,0] .--> [1,0,1])
+     +* ([1,1] .--> [1,0,1])
+     +* ([1,0] .--> [2,0,1])
+     +* ([2,1] .--> [2,0,1])
+     +* ([2,0] .--> [3,0,0])
+     =OP
+     +* ([p0,b0] .--> [p1,b0,R])
+     +* ([p1,b1] .--> [p1,b0,R])
+     +* ([p1,b0] .--> [p2,b0,R])
+     +* ([p2,b1] .--> [p2,b0,R])
+     +* ([p2,b0] .--> [p3,b0,h]);
+     hence thesis;
+  end;
+end;
+
+theorem Th41:
+     U3(n)Tran.[0,0]=[1,0,1] & U3(n)Tran.[1,1]=[1,0,1] &
+     U3(n)Tran.[1,0]=[2,0,1] & U3(n)Tran.[2,1]=[2,0,1] &
+     U3(n)Tran.[2,0]=[3,0,0]
+proof
+     set p1=[0,0] .--> [1,0,1],
+         p2=[1,1] .--> [1,0,1],
+         p3=[1,0] .--> [2,0,1],
+         p4=[2,1] .--> [2,0,1],
+        f= id([: SegM 3,{0,1} :],{ -1,0,1 },0);
+     set x1=[0,0];
+  thus
+     U3(n)Tran.x1=(f +* p1+* p2+* p3+* p4).x1 by Def21,Th2
+    .=(f +* p1+* p2+* p3).x1 by Th2
+    .=(f +* p1+* p2).x1 by Th2
+    .=(f +* p1).x1 by Th3
+    .=[1,0,1] by YELLOW14:3;
+     set x=[1,1];
+   thus
+     U3(n)Tran.x=(f +* p1+* p2+* p3+* p4).x by Def21,Th2
+    .=(f +* p1+* p2+* p3).x by Th2
+    .=(f +* p1+* p2).x by Th3
+    .=[1,0,1] by YELLOW14:3;
+     set x=[1,0];
+   thus
+     U3(n)Tran.x=(f +* p1+* p2+* p3+* p4).x by Def21,Th2
+    .=(f +* p1+* p2+* p3).x by Th3
+    .=[2,0,1] by YELLOW14:3;
+     set x=[2,1];
+   thus
+     U3(n)Tran.x=(f +* p1+* p2+* p3+* p4).x by Def21,Th3
+    .=[2,0,1] by YELLOW14:3;
+     set x=[2,0];
+   thus
+     U3(n)Tran.x=[3,0,0] by Def21,YELLOW14:3;
+end;
+
+definition
+ func U3(n)Turing -> strict TuringStr means
+:Def22:   the Symbols of it = { 0,1 } &
+   the States of it = SegM 3 &
+   the Tran of it = U3(n)Tran &
+   the InitS of it = 0 &
+   the AcceptS of it = 3;
+   existence
+   proof
+      set Sym = { 0,1 };
+      set St=SegM 3;
+      reconsider p0=0 as Element of St by Th1;
+      reconsider qF=3 as Element of St by Th1;
+       take TuringStr(# Sym,St, U3(n)Tran, p0, qF #);
+       thus thesis;
+   end;
+   uniqueness;
+end;
+
+Lm11:
+ for n be Nat st n <= 3 holds n is State of U3(n)Turing
+proof
+    let n be Nat;
+    assume A1: n <= 3;
+      the States of U3(n)Turing=SegM 3 by Def22;
+    hence thesis by A1,Th1;
+end;
+
+Lm12:
+   0 in the Symbols of U3(n)Turing & 1 in the Symbols of U3(n)Turing
+proof
+     0 in {0,1} & 1 in {0,1} by TARSKI:def 2;
+   hence thesis by Def22;
+end;
+
+Lm13:
+  for s being All-State of U3(n)Turing, p,h,t be set st s=[p,h,t] &
+  p <> 3 holds Following s =
+    [(TRAN(s))`1, Head(s)+ offset TRAN(s),Tape-Chg(s`3,Head(s),(TRAN(s))`2)]
+proof
+    let s be All-State of U3(n)Turing, p,h,t be set;
+    assume A1:s=[p,h,t] & p <> 3;
+      3=the AcceptS of U3(n)Turing by Def22;
+    hence thesis by A1,Th29;
+end;
+
+Lm14:
+  for tm being TuringStr,s be All-State of tm, p be State of tm,
+  h be Element of INT,t be Tape of tm, m,d be Nat st
+  d=h & 0 is Symbol of tm & s=[p,h,t] & (the Tran of tm).[p,1]=[p,0,1]
+   & p <> the AcceptS of tm & (for i be Integer
+    st d <= i & i < d+m holds t.i=1) holds
+    ex t1 being Tape of tm st (Computation s).m=[p,d+m,t1] &
+     (for i be Integer st d <= i & i < d+m holds t1.i=0) &
+     (for i be Integer st d > i or i >= d+m holds t1.i=t.i)
+proof
+   let tm be TuringStr,s be All-State of tm, p be State of tm,
+    h be Element of INT,t be Tape of tm, m,d be Nat;
+  assume A1: d=h & 0 is Symbol of tm & s=[p,h,t] &
+     (the Tran of tm).[p,1]=[p,0,1] & p <> the AcceptS of tm &
+     (for i be Integer st d <= i & i < d+m holds t.i=1);
+    defpred Q[Nat] means
+     $1 <= m implies
+      ex t1 being Tape of tm st (Computation s).$1=[p,d+$1,t1] &
+     (for i be Integer st d <= i & i < d+$1 holds t1.i=0) &
+     (for i be Integer st d > i or i >= d+$1 holds t1.i=t.i);
+A2: Q[0]
+    proof
+      assume 0 <= m;
+      take t1=t;
+      thus (Computation s).0=[p,d+0,t1] by A1,Def8;
+      thus for i be Integer st d <= i & i < d+0 holds t1.i=0;
+     thus for i be Integer st d > i or i >= d+0 holds t1.i=t.i;
+     end;
+A3: for k being Nat st Q[k] holds Q[k+1]
+    proof
+      let k be Nat;
+      assume A4: Q[k];
+        now
+        assume A5: k+1 <= m;
+then A6:     k < m by NAT_1:38;
+        consider t1 being Tape of tm such that
+A7:     (Computation s).k=[p,d+k,t1] &
+        (for i be Integer st d <= i & i < d+k holds t1.i=0) &
+        (for i be Integer st d > i or i >= d+k holds t1.i=t.i) by A4,A5,NAT_1:
+38;
+        set dk=d+k;
+        reconsider ik=d+k as Element of INT by INT_1:12;
+        set sk=[p,ik,t1];
+        reconsider tt=sk`3 as Tape of tm;
+A8:     d <= dk by NAT_1:29;
+A9:     dk < d+m by A6,REAL_1:67;
+A10:     t1.ik=t.ik by A7
+        .=1 by A1,A8,A9;
+A11:     TRAN(sk) =(the Tran of tm).[sk`1, tt.Head(sk)] by Def6
+        .=(the Tran of tm).[p,tt.Head(sk)] by MCART_1:68
+        .=(the Tran of tm).[p,t1.Head(sk)] by MCART_1:68
+        .=[p,0,1] by A1,A10,Th27;
+        reconsider F=0 as Symbol of tm by A1;
+        take t2=Tape-Chg(t1,dk,F);
+A12:     Tape-Chg(sk`3, Head(sk),(TRAN(sk))`2)
+        =Tape-Chg(t1,Head(sk),(TRAN(sk))`2) by MCART_1:68
+       .=Tape-Chg(t1,dk,(TRAN(sk))`2) by Th27
+        .=t2 by A11,MCART_1:68;
+A13:     offset TRAN(sk)=(TRAN sk)`3 by Def4
+        .=1 by A11,MCART_1:68;
+        thus
+          (Computation s).(k+1)=Following sk by A7,Def8
+        .= [(TRAN(sk))`1, Head(sk)+ offset TRAN(sk),t2] by A1,A12,Th29
+        .= [p, Head(sk)+ offset TRAN(sk),t2] by A11,MCART_1:68
+        .= [p, dk+1, t2] by A13,Th27
+        .= [p, d+(k+1),t2] by XCMPLX_1:1;
+        hereby
+           let i be Integer;
+           assume A14: d <= i & i < d+(k+1);
+           per cases;
+           suppose i=dk;
+            hence t2.i=0 by Th30;
+           suppose A15:i <> dk;
+              i < d+k+1 by A14,XCMPLX_1:1;
+            then i <= d+k by INT_1:20;
+        then A16: i < dk by A15,REAL_1:def 5;
+            thus t2.i=t1.i by A15,Th30
+            .=0 by A7,A14,A16;
+         end;
+         hereby
+            let i be Integer;
+            assume A17: d > i or i >= d+(k+1);
+            per cases by A17;
+            suppose A18: d > i;
+                d <= d+k by NAT_1:37;
+              hence t2.i=t1.i by A18,Th30
+               .=t.i by A7,A18;
+            suppose A19: i >= d+(k+1);
+                 k < k+1 by NAT_1:38;
+               then A20: d+k < d+(k+1) by REAL_1:67;
+           then A21: i > d+k by A19,AXIOMS:22;
+               thus t2.i=t1.i by A19,A20,Th30
+              .=t.i by A7,A21;
+          end;
+        end;
+        hence thesis;
+    end;
+      for k holds Q[k] from Ind(A2,A3);
+    hence thesis;
+end;
+
+theorem Th42:
+ for s being All-State of U3(n)Turing, t be Tape of U3(n)Turing, head be Nat,
+ f be FinSequence of NAT st len f >= 3 & s=[0,head,t] &
+ t storeData <*head*>^f holds
+  s is Accept-Halt & (Result s)`2=head+f/.1+f/.2+4 &
+ (Result s)`3 storeData <*head+f/.1+f/.2+4,f/.3*>
+proof
+   let s be All-State of U3(n)Turing, t be Tape of U3(n)Turing,h be Nat,
+   f be FinSequence of NAT;
+   assume A1: len f >= 3 & s=[0,h,t] & t storeData <*h*>^f;
+    set n1=h+ f/.1+2,
+        n2=h+f/.1+f/.2+4,
+        n3=h+f/.1+f/.2+f/.3+6;
+A2: t is_1_between h,n1 & t is_1_between n1,n2 &
+    t is_1_between n2,n3 by A1,Th26;
+then A3: t.h=0 & t.n1=0 &
+    for k be Integer st h < k & k < n1 holds t.k=1 by Def13;
+A4: t.n2=0 & t.n3=0 &
+    for k be Integer st n2 < k & k < n3 holds t.k=1 by A2,Def13;
+   reconsider h1=h+1 as Element of INT by INT_1:12;
+   reconsider s03=s`3 as Tape of U3(n)Turing;
+   reconsider F=0 as Symbol of U3(n)Turing by Lm12;
+A5: TRAN(s) =(the Tran of U3(n)Turing).[s`1, s03.Head(s)] by Def6
+    .=U3(n)Tran.[s`1, s03.Head(s)] by Def22
+    .=U3(n)Tran.[0,s03.Head(s)] by A1,MCART_1:68
+    .=U3(n)Tran.[0,t.Head(s)] by A1,MCART_1:68
+    .=[1,0,1] by A1,A3,Th27,Th41;
+A6: Tape-Chg(s`3, Head(s),(TRAN(s))`2)=Tape-Chg(t, Head(s),(TRAN(s))`2)
+        by A1,MCART_1:68
+    .=Tape-Chg(t,h,(TRAN(s))`2) by A1,Th27
+    .=Tape-Chg(t,h,F) by A5,MCART_1:68
+    .=t by A3,Th28;
+   reconsider p1=1 as State of U3(n)Turing by Lm11;
+A7:  offset TRAN(s)=(TRAN(s))`3 by Def4
+     .=1 by A5,MCART_1:68;
+     set s1= [p1,h1,t];
+A8:  Following s = [(TRAN(s))`1, Head(s)+offset TRAN(s),t] by A1,A6,Lm13
+     .= [1, Head(s)+ offset TRAN(s),t] by A5,MCART_1:68
+     .= s1 by A1,A7,Th27;
+A9: (the Tran of U3(n)Turing).[p1,1]
+     =[p1,0,1] by Def22,Th41;
+A10:  p1 <> the AcceptS of U3(n)Turing by Def22;
+     set m1=f/.1+1;
+A11:  h+1+m1=h+(1+f/.1)+1 by XCMPLX_1:1
+    .=h+f/.1+1+1 by XCMPLX_1:1
+    .=h+f/.1+(1+1) by XCMPLX_1:1
+    .=n1;
+A12:  now
+       let i be Integer;
+       assume A13: h+1 <= i & i < h+1+m1;
+         h < h+1 by REAL_1:69;
+       then h < i by A13,AXIOMS:22;
+       hence t.i=1 by A2,A11,A13,Def13;
+     end;
+     set s2=(Computation s1).m1;
+     consider t1 being Tape of U3(n)Turing such that
+A14:  s2=[p1,h+1+m1,t1] &
+     (for i be Integer st h+1 <= i & i < h+1+m1 holds t1.i=0) &
+     (for i be Integer st h+1 > i or i >= h+1+m1 holds t1.i=t.i)
+     by A9,A10,A12,Lm12,Lm14;
+A15:  t1.(h+1+m1)=0 by A3,A11,A14;
+     reconsider s23=s2`3 as Tape of U3(n)Turing;
+A16:  TRAN(s2) =(the Tran of U3(n)Turing).[s2`1, s23.Head(s2)] by Def6
+    .=U3(n)Tran.[s2`1, s23.Head(s2)] by Def22
+    .=U3(n)Tran.[p1,s23.Head(s2)] by A14,MCART_1:68
+    .=U3(n)Tran.[1,t1.Head(s2)] by A14,MCART_1:68
+    .=[2,0,1] by A14,A15,Th27,Th41;
+A17: Tape-Chg(s2`3, Head(s2),(TRAN(s2))`2)
+    =Tape-Chg(t1, Head(s2),(TRAN(s2))`2) by A14,MCART_1:68
+    .=Tape-Chg(t1,h+1+m1,(TRAN(s2))`2) by A14,Th27
+    .=Tape-Chg(t1,h+1+m1,F) by A16,MCART_1:68
+    .=t1 by A15,Th28;
+   reconsider p2=2 as State of U3(n)Turing by Lm11;
+A18:  offset TRAN(s2)=(TRAN(s2))`3 by Def4
+     .=1 by A16,MCART_1:68;
+     set j1=h+1+m1+1;
+   reconsider k1=j1 as Element of INT by INT_1:12;
+     set s3= [p2,k1,t1];
+A19:  Following s2 = [(TRAN(s2))`1, Head(s2)+offset TRAN(s2),t1] by A14,A17,
+Lm13
+     .= [2, Head(s2)+ offset TRAN(s2),t1] by A16,MCART_1:68
+     .= s3 by A14,A18,Th27;
+A20: (the Tran of U3(n)Turing).[p2,1]
+     =[p2,0,1] by Def22,Th41;
+A21:  p2 <> the AcceptS of U3(n)Turing by Def22;
+     set m2=f/.2+1;
+A22:  j1+m2=h+f/.1+(2+1)+m2 by A11,XCMPLX_1:1
+     .=h+f/.1+3+1+f/.2 by XCMPLX_1:1
+     .=h+f/.1+(3+1)+f/.2 by XCMPLX_1:1
+     .=n2 by XCMPLX_1:1;
+A23:  now
+       let i be Integer;
+       assume A24: j1 <= i & i < j1+m2;
+         h+1+m1 < j1 by REAL_1:69;
+    then A25: h+1+m1 < i by A24,AXIOMS:22;
+       hence t1.i=t.i by A14
+        .=1 by A2,A11,A22,A24,A25,Def13;
+     end;
+     set s4=(Computation s3).m2;
+     consider t2 being Tape of U3(n)Turing such that
+A26:  s4=[p2,j1+m2,t2] &
+    (for i be Integer st j1 <= i & i < j1 + m2 holds t2.i=0) &
+     (for i be Integer st j1 > i or i >= j1 + m2 holds t2.i=t1.i)
+     by A20,A21,A23,Lm12,Lm14;
+       2 <= f/.2+4 by NAT_1:37;
+     then n1 <= h+f/.1+(f/.2+4) by REAL_1:55;
+then A27:  n1 <= n2 by XCMPLX_1:1;
+A28:  t2.(j1+m2)=t1.(j1+m2) by A26
+     .=0 by A4,A11,A14,A22,A27;
+     reconsider s43=s4`3 as Tape of U3(n)Turing;
+A29:  TRAN(s4) =(the Tran of U3(n)Turing).[s4`1, s43.Head(s4)]
+     by Def6
+    .=U3(n)Tran.[s4`1, s43.Head(s4)] by Def22
+    .=U3(n)Tran.[p2,s43.Head(s4)] by A26,MCART_1:68
+    .=U3(n)Tran.[2,t2.Head(s4)] by A26,MCART_1:68
+    .=[3,0,0] by A26,A28,Th27,Th41;
+A30: Tape-Chg(s4`3, Head(s4),(TRAN(s4))`2)
+    =Tape-Chg(t2, Head(s4),(TRAN(s4))`2) by A26,MCART_1:68
+    .=Tape-Chg(t2,j1+m2,(TRAN(s4))`2) by A26,Th27
+    .=Tape-Chg(t2,j1+m2,F) by A29,MCART_1:68
+    .=t2 by A28,Th28;
+A31:  offset TRAN(s4)=(TRAN(s4))`3 by Def4
+     .=0 by A29,MCART_1:68;
+A32: Following s4 = [(TRAN(s4))`1, Head(s4)+offset TRAN(s4),t2] by A26,A30,Lm13
+     .= [3, Head(s4)+ offset TRAN(s4),t2] by A29,MCART_1:68
+     .= [3, j1+m2+0,t2] by A26,A31,Th27;
+     set Rs=(Computation s).(m2+1+1+m1+1);
+A33: now thus Rs=(Computation (Computation s).1).(m2+1+1+m1) by Th13
+     .=(Computation s1).(m2+1+1+m1) by A8,Th12
+     .=(Computation s2).(m2+1+1) by Th13;
+    end;
+A34: now thus Rs=(Computation (Computation s2).1).(m2+1)by A33,Th13
+     .=(Computation s3).(m2+1) by A19,Th12
+     .=[3, j1+m2,t2] by A32,Def8;
+    end;
+then A35:  Rs`1 = 3 by MCART_1:68
+     .=the AcceptS of U3(n)Turing by Def22;
+    hence s is Accept-Halt by Def9;
+then A36:  Result s =Rs by A35,Def10;
+    hence (Result s)`2=n2 by A22,A34,MCART_1:68;
+A37: (Result s)`3= t2 by A34,A36,MCART_1:68;
+    set m3=n2+f/.3+2;
+      m3=h+f/.1+f/.2+f/.3+4+2 by XCMPLX_1:1;
+then A38: m3=h+f/.1+f/.2+f/.3+(4+2) by XCMPLX_1:1
+     .=n3;
+      n2 <= n2+(f/.3+2) by NAT_1:29;
+then A39: n2 <= m3 by XCMPLX_1:1;
+then A40: n1 <= m3 by A27,AXIOMS:22;
+A41: t2.m3=t1.m3 by A22,A26,A39
+    .=0 by A4,A11,A14,A38,A40;
+      now
+       let k be Integer;
+       assume A42: n2 < k & k < m3;
+       then A43: n1 <= k by A27,AXIOMS:22;
+         thus t2.k=t1.k by A22,A26,A42
+          .=t.k by A11,A14,A43
+          .=1 by A2,A38,A42,Def13;
+    end;
+    then t2 is_1_between n2,n2+f/.3+2 by A22,A28,A41,Def13;
+    hence (Result s)`3 storeData <*n2,f/.3*> by A37,Th19;
+end;
+
+theorem
+   n >= 3 implies U3(n)Turing computes n proj 3
+proof
+  assume A1: n >= 3;
+    now
+      let s be All-State of U3(n)Turing,t be Tape of U3(n)Turing,h be Nat,
+      x be FinSequence of NAT;
+      set pj=n proj 3;
+      assume A2: x in dom pj & s=[the InitS of U3(n)Turing,h,t] &
+       t storeData <*h*>^x;
+         arity pj = n by COMPUT_1:41;
+  then A3:  dom pj c= n-tuples_on NAT by COMPUT_1:24;
+  then x in n-tuples_on NAT by A2;
+       then x in { f where f is Element of NAT*: len f = n }
+       by FINSEQ_2:def 4;
+       then consider f be Element of NAT* such that
+  A4:  x = f & len f = n;
+  A5:  s = [0,h,t] by A2,Def22;
+       hence s is Accept-Halt by A1,A2,A4,Th42;
+       take h2=h+x/.1+x/.2+4;
+       take y=x/.3;
+       thus (Result s)`2=h2 by A1,A2,A4,A5,Th42;
+       thus y=x.3 by A1,A4,FINSEQ_4:24
+            .=pj.x by A2,A3,COMPUT_1:42;
+         (Result s)`3 storeData <*h2,y*> by A1,A2,A4,A5,Th42;
+       hence (Result s)`3 storeData <*h2*>^<*y*> by FINSEQ_1:def 9;
+  end;
+  hence thesis by Def16;
+end;
+
+begin :: Combining two Turing Machines into one Turing Machine
+
+definition let t1,t2 be TuringStr;
+ func UnionSt(t1,t2) -> finite non empty set equals
+:Def23:   [: the States of t1, {the InitS of t2} :] \/
+    [: {the AcceptS of t1}, the States of t2 :];
+ correctness;
+end;
+
+theorem Th44:
+  for t1,t2 being TuringStr holds
+  [ the InitS of t1, the InitS of t2 ] in UnionSt(t1,t2) &
+  [ the AcceptS of t1,the AcceptS of t2 ] in UnionSt(t1,t2)
+proof
+     let t1,t2 be TuringStr;
+     set p0=the InitS of t1,
+         q0=the InitS of t2,
+         p1=the AcceptS of t1,
+         q1=the AcceptS of t2,
+         A= [: the States of t1, { q0 } :],
+         B= [: {p1}, the States of t2 :];
+     reconsider q=q0 as Element of { q0 } by TARSKI:def 1;
+       [ p0, q ] in A;
+     then [ p0, q0 ] in A \/ B by XBOOLE_0:def 2;
+    hence [ p0, q0 ] in UnionSt(t1,t2) by Def23;
+     reconsider p=p1 as Element of { p1 } by TARSKI:def 1;
+       [ p, q1 ] in B;
+     then [ p1, q1 ] in A \/ B by XBOOLE_0:def 2;
+    hence [ p1,q1 ] in UnionSt(t1,t2) by Def23;
+end;
+
+theorem Th45:
+  for s,t being TuringStr, x be State of s holds
+    [ x, the InitS of t ] in UnionSt(s,t)
+proof
+     let s,t be TuringStr,x be State of s;
+     set q0=the InitS of t,
+         A= [: the States of s, { q0 } :];
+     reconsider q=q0 as Element of { q0 } by TARSKI:def 1;
+       [ x, q ] in A;
+     then [ x, q0 ] in A \/ [: {the AcceptS of s}, the States of t :]
+        by XBOOLE_0:def 2;
+    hence [ x, q0 ] in UnionSt(s,t) by Def23;
+end;
+
+theorem Th46:
+  for s,t being TuringStr, x be State of t holds
+  [ the AcceptS of s, x] in UnionSt(s,t)
+proof
+     let s,t be TuringStr,x be State of t;
+     set p1=the AcceptS of s,
+         B= [:{p1},the States of t :];
+     reconsider p=p1 as Element of { p1 } by TARSKI:def 1;
+       [ p, x] in B;
+     then [ p1, x ] in [: the States of s,{the InitS of t} :] \/ B
+       by XBOOLE_0:def 2;
+    hence [ p1, x ] in UnionSt(s,t) by Def23;
+end;
+
+theorem Th47:
+  for s,t being TuringStr, x be Element of UnionSt(s,t) holds
+  ex x1 be State of s, x2 be State of t st x=[x1, x2]
+proof
+     let s,t be TuringStr,x be Element of UnionSt(s,t);
+     set q0=the InitS of t,
+         p1=the AcceptS of s,
+         A= [: the States of s, { q0 } :],
+         B= [: { p1 }, the States of t :];
+     A1: UnionSt(s,t)= A \/ B by Def23;
+     per cases by A1,XBOOLE_0:def 2;
+     suppose x in A;
+       then consider x1 being State of s, x2 be Element of { q0 } such that
+A2:    x= [x1, x2] by DOMAIN_1:9;
+       take x1,q0;
+       thus thesis by A2,TARSKI:def 1;
+     suppose x in B;
+       then consider x1 being Element of { p1 }, x2 being State of t such that
+A3:    x= [x1, x2] by DOMAIN_1:9;
+       take p1,x2;
+       thus thesis by A3,TARSKI:def 1;
+end;
+
+definition let s,t be TuringStr, x be Tran-Goal of s;
+ func FirstTuringTran(s,t,x) -> Element of [: UnionSt(s,t),(the Symbols of s)
+     \/ the Symbols of t,{-1,0,1} :] equals
+:Def24: [[x`1,the InitS of t], x`2, x`3];
+ coherence
+ proof
+    reconsider y1=[x`1,the InitS of t] as Element of UnionSt(s,t) by Th45;
+    set Sym=(the Symbols of s) \/ the Symbols of t;
+    reconsider y2=x`2 as Element of Sym by XBOOLE_0:def 2;
+      [y1, y2, x`3] in [: UnionSt(s,t),Sym,{-1,0,1} :];
+   hence thesis;
+ end;
+end;
+
+definition let s,t be TuringStr, x be Tran-Goal of t;
+ func SecondTuringTran(s,t,x) -> Element of [: UnionSt(s,t),(the Symbols of s)
+    \/ the Symbols of t,{-1,0,1} :] equals
+:Def25: [[the AcceptS of s,x`1], x`2, x`3];
+ coherence
+ proof
+    reconsider y1=[the AcceptS of s,x`1] as Element of UnionSt(s,t) by Th46;
+    set Sym=(the Symbols of s) \/ the Symbols of t;
+    reconsider y2=x`2 as Element of Sym by XBOOLE_0:def 2;
+      [y1, y2, x`3] in [: UnionSt(s,t),Sym,{-1,0,1} :];
+   hence thesis;
+ end;
+end;
+
+definition
+ let s,t be TuringStr;
+ let x be Element of UnionSt(s,t);
+ redefine func x`1 -> State of s;
+  coherence
+  proof
+    consider x1 being State of s, x2 be State of t such that
+A1:   x=[x1, x2] by Th47;
+     thus thesis by A1,MCART_1:def 1;
+  end;
+  func x`2 -> State of t;
+  coherence
+  proof
+    consider x1 being State of s, x2 be State of t such that
+A2:   x=[x1, x2] by Th47;
+     thus thesis by A2,MCART_1:def 2;
+  end;
+end;
+
+definition let s,t be TuringStr, x be Element of
+ [: UnionSt(s,t), (the Symbols of s) \/ the Symbols of t :];
+ func FirstTuringState x -> State of s equals
+:Def26:   x`1`1;
+ correctness;
+ func SecondTuringState x -> State of t equals
+:Def27:   x`1`2;
+ correctness;
+end;
+
+definition
+   let X,Y,Z be non empty set, x be Element of [: X, Y \/ Z :];
+ given u being set,y be Element of Y such that
+A1:      x = [u,y];
+ func FirstTuringSymbol(x) -> Element of Y equals
+:Def28:   x`2;
+ coherence by A1,MCART_1:def 2;
+end;
+
+definition
+  let X,Y,Z be non empty set, x be Element of [: X, Y \/ Z :];
+ given u being set,z be Element of Z such that
+A1:      x = [u, z];
+ func SecondTuringSymbol(x) -> Element of Z equals
+:Def29:   x`2;
+ coherence by A1,MCART_1:def 2;
+end;
+
+definition let s,t be TuringStr, x be Element of
+ [: UnionSt(s,t), (the Symbols of s) \/ the Symbols of t :];
+ func Uniontran(s,t,x) -> Element of
+    [: UnionSt(s,t), (the Symbols of s) \/ the Symbols of t,{-1,0,1} :]
+    equals
+:Def30: FirstTuringTran(s,t,(the Tran of s).[FirstTuringState x,
+    FirstTuringSymbol(x)])
+     if ex p being State of s,y be Symbol of s st
+          x = [ [p,the InitS of t],y] & p <> the AcceptS of s,
+    SecondTuringTran(s,t,(the Tran of t).
+    [SecondTuringState x,SecondTuringSymbol(x)])
+     if ex q being State of t, y be Symbol of t st
+     x = [ [the AcceptS of s,q],y]
+     otherwise [x`1,x`2,-1];
+ consistency
+  proof let w be Element of
+ [: UnionSt(s,t), (the Symbols of s) \/ the Symbols of t,{-1,0,1} :];
+   thus
+        (ex p be State of s,y be Symbol of s st
+      x = [ [p,the InitS of t],y] & p <> the AcceptS of s) &
+     (ex q being State of t, y be Symbol of t st
+     x = [ [the AcceptS of s,q],y] )
+   implies
+    ( w=FirstTuringTran(s,t,(the Tran of s).
+       [FirstTuringState x,FirstTuringSymbol(x)]) iff
+      w=SecondTuringTran(s,t,(the Tran of t).
+        [SecondTuringState x,SecondTuringSymbol(x)]))
+    proof
+      given p be State of s,y be Symbol of s such that
+A1:   x = [ [p,the InitS of t],y] & p <> the AcceptS of s;
+      given q be State of t, z be Symbol of t such that
+A2:   x = [ [the AcceptS of s,q],z];
+        [p,the InitS of t]=[the AcceptS of s,q] by A1,A2,ZFMISC_1:33;
+     hence thesis by A1,ZFMISC_1:33;
+    end;
+ end;
+ coherence
+ proof
+   reconsider l=-1 as Element of { -1,0,1 } by ENUMSET1:def 1;
+     [x`1,x`2,l]
+   in [: UnionSt(s,t), (the Symbols of s) \/ the Symbols of t,{-1,0,1} :];
+   hence thesis;
+ end;
+end;
+
+definition let s,t be TuringStr;
+ func UnionTran(s,t) -> Function of [: UnionSt(s,t), (the Symbols of s)
+  \/ the Symbols of t :], [: UnionSt(s,t), (the Symbols of s)
+  \/ the Symbols of t,{-1,0,1} :] means
+:Def31:  for x being Element of
+     [: UnionSt(s,t), (the Symbols of s) \/ the Symbols of t :] holds
+    it.x = Uniontran(s,t,x);
+ existence
+  proof
+  set Sm=(the Symbols of s) \/ the Symbols of t,
+      X=[: UnionSt(s,t),Sm :];
+  deffunc U(Element of X) = Uniontran(s,t,$1);
+  consider f being Function of X, [: UnionSt(s,t),Sm,{-1,0,1} :]
+  such that
+A1: for x being Element of X holds f.x = U(x) from LambdaD;
+   take f;
+   thus thesis by A1;
+  end;
+ uniqueness
+  proof
+  set Sm=(the Symbols of s) \/ the Symbols of t,
+      X=[: UnionSt(s,t), Sm :];
+   let f,g be Function of X,[: UnionSt(s,t),Sm,{-1,0,1} :]
+   such that
+A2:  for x being Element of X holds f.x = Uniontran(s,t,x) and
+A3:  for x being Element of X holds g.x = Uniontran(s,t,x);
+      now let x be Element of X;
+     thus f.x =Uniontran(s,t,x) by A2
+          .=g.x by A3;
+    end;
+     hence f = g by FUNCT_2:113;
+  end;
+end;
+
+definition let T1,T2 be TuringStr;
+ func T1 ';' T2 -> strict TuringStr means
+:Def32:   the Symbols of it = (the Symbols of T1) \/ the Symbols of T2 &
+   the States of it = UnionSt(T1,T2) &
+   the Tran of it = UnionTran(T1,T2) &
+   the InitS of it = [the InitS of T1,the InitS of T2] &
+   the AcceptS of it = [the AcceptS of T1,the AcceptS of T2];
+   existence
+   proof
+      set St =UnionSt(T1,T2);
+      set Sym=(the Symbols of T1) \/ the Symbols of T2;
+      reconsider p0=[the InitS of T1,the InitS of T2] as
+       Element of St by Th44;
+      reconsider q1=[the AcceptS of T1,the AcceptS of T2] as
+       Element of St by Th44;
+       take TuringStr(# Sym,St, UnionTran(T1,T2), p0, q1 #);
+       thus thesis;
+   end;
+   uniqueness;
+end;
+
+theorem Th48:
+  for T1,T2 being TuringStr, g be Tran-Goal of T1,p be State of T1,
+  y be Symbol of T1 st p <> the AcceptS of T1 &
+   g = (the Tran of T1).[p, y] holds
+   (the Tran of T1 ';' T2).[ [p,the InitS of T2],y]
+    = [[g`1,the InitS of T2], g`2, g`3]
+proof
+   let t1,t2 be TuringStr, g be Tran-Goal of t1 ,p be State of t1,
+  y be Symbol of t1;
+  assume A1: p <> the AcceptS of t1 & g = (the Tran of t1).[p, y];
+ set q0=the InitS of t2;
+    set x=[[p,q0],y];
+      q0 in { q0 } by TARSKI:def 1;
+    then [p,q0] in [: the States of t1, {q0} :] by ZFMISC_1:def 2;
+    then [p,q0] in [: the States of t1, {q0} :] \/
+    [: {the AcceptS of t1}, the States of t2 :] by XBOOLE_0:def 2;
+then A2: [p,q0] in UnionSt(t1,t2) by Def23;
+      y in (the Symbols of t1) \/ the Symbols of t2 by XBOOLE_0:def 2;
+    then reconsider xx=x as Element of
+    [: UnionSt(t1,t2), (the Symbols of t1) \/ the Symbols of t2 :]
+    by A2,ZFMISC_1:def 2;
+A3: FirstTuringState xx =xx`1`1 by Def26
+    .=[p,q0]`1 by MCART_1:def 1
+    .=p by MCART_1:def 1;
+A4: FirstTuringSymbol(xx)=xx`2 by Def28
+    .=y by MCART_1:def 2;
+    thus
+      (the Tran of t1 ';' t2).x = UnionTran(t1,t2).xx by Def32
+    .=Uniontran(t1,t2,xx) by Def31
+    .=FirstTuringTran(t1,t2,(the Tran of t1).[p,y]) by A1,A3,A4,Def30
+    .=[[g`1,q0], g`2, g`3] by A1,Def24;
+end;
+
+theorem Th49:
+  for T1,T2 being TuringStr, g be Tran-Goal of T2, q be State of T2,
+  y be Symbol of T2 st g = (the Tran of T2).[q, y] holds
+    (the Tran of T1 ';' T2).[ [the AcceptS of T1,q],y]
+     = [[the AcceptS of T1,g`1], g`2, g`3]
+proof
+   let t1,t2 be TuringStr, g be Tran-Goal of t2 ,q be State of t2,
+  y be Symbol of t2;
+  assume A1: g = (the Tran of t2).[q, y];
+ set pF=the AcceptS of t1;
+    set x=[[pF,q],y];
+      pF in { pF } by TARSKI:def 1;
+    then [pF,q] in [: {pF}, the States of t2 :] by ZFMISC_1:def 2;
+    then [pF,q] in [: the States of t1, {the InitS of t2} :] \/
+    [: {pF}, the States of t2 :] by XBOOLE_0:def 2;
+then A2: [pF,q] in UnionSt(t1,t2) by Def23;
+      y in (the Symbols of t1) \/ the Symbols of t2 by XBOOLE_0:def 2;
+    then reconsider xx=x as Element of
+    [: UnionSt(t1,t2), (the Symbols of t1) \/ the Symbols of t2 :]
+    by A2,ZFMISC_1:def 2;
+A3: SecondTuringState xx =xx`1`2 by Def27
+    .=[pF,q]`2 by MCART_1:def 1
+    .=q by MCART_1:def 2;
+A4: SecondTuringSymbol(xx)=xx`2 by Def29
+    .=y by MCART_1:def 2;
+    thus
+      (the Tran of t1 ';' t2).x = UnionTran(t1,t2).xx by Def32
+    .=Uniontran(t1,t2,xx) by Def31
+    .=SecondTuringTran(t1,t2,(the Tran of t2).[q,y]) by A3,A4,Def30
+    .=[[pF,g`1], g`2, g`3] by A1,Def25;
+end;
+
+theorem Th50:
+ for T1,T2 being TuringStr,s1 be All-State of T1,h be Nat,t be Tape of T1,
+ s2 be All-State of T2,s3 be All-State of (T1 ';' T2)
+ st s1 is Accept-Halt & s1=[the InitS of T1,h,t] &
+    s2 is Accept-Halt & s2=[the InitS of T2,(Result s1)`2,(Result s1)`3] &
+    s3=[the InitS of (T1 ';' T2),h,t]
+ holds s3 is Accept-Halt & (Result s3)`2=(Result s2)`2 &
+ (Result s3)`3=(Result s2)`3
+proof
+    let tm1,tm2 be TuringStr,s1 be All-State of tm1,h be Nat,
+    t be Tape of tm1, s2 be All-State of tm2,
+    s3 be All-State of (tm1 ';' tm2);
+    set p0=the InitS of tm1,
+        q0=the InitS of tm2;
+    assume A1:s1 is Accept-Halt & s1=[p0,h,t] &
+    s2 is Accept-Halt & s2=[q0,(Result s1)`2,(Result s1)`3] &
+    s3=[the InitS of (tm1 ';' tm2),h,t];
+    set pF=the AcceptS of tm1,
+        qF=the AcceptS of tm2;
+    consider k such that
+A2: ((Computation s1).k)`1 = pF & Result s1 = (Computation s1).k &
+    for i be Nat st i < k holds ((Computation s1).i)`1 <> pF by A1,Th16;
+A3: s3=[[p0,q0],h,t] by A1,Def32;
+    defpred P[Nat] means
+      $1 <= k implies
+        [((Computation s1).$1)`1,q0]=((Computation s3).$1)`1 &
+        ((Computation s1).$1)`2=((Computation s3).$1)`2 &
+        ((Computation s1).$1)`3=((Computation s3).$1)`3;
+A4:  P[0]
+     proof
+       assume 0 <= k;
+     A5:((Computation s1).0)`1=s1`1 by Def8
+        .=p0 by A1,MCART_1:68;
+          ((Computation s3).0)`1=s3`1 by Def8
+        .=[p0,q0] by A3,MCART_1:68;
+        hence
+          [((Computation s1).0)`1,q0]=((Computation s3).0)`1 by A5;
+       thus ((Computation s1).0)`2=s1`2 by Def8
+         .=h by A1,MCART_1:68
+         .=s3`2 by A1,MCART_1:68
+         .=((Computation s3).0)`2 by Def8;
+       thus ((Computation s1).0)`3=s1`3 by Def8
+         .=t by A1,MCART_1:68
+         .=s3`3 by A1,MCART_1:68
+         .=((Computation s3).0)`3 by Def8;
+     end;
+A6:  for i st P[i] holds P[i + 1]
+     proof
+        let i;
+        assume A7:P[i];
+          now
+           assume A8: i+1 <= k;
+           set s1i1=(Computation s1).(i+1),
+               s1i=(Computation s1).i,
+               s3i1=(Computation s3).(i+1),
+               s3i=(Computation s3).i;
+           A9: i < i+1 by REAL_1:69;
+       then A10: i < k by A8,AXIOMS:22;
+           reconsider ss1=s1i`3 as Tape of tm1;
+           reconsider ss3=s3i`3 as Tape of tm1 ';' tm2;
+           reconsider h=Head(s1i) as Element of INT by INT_1:12;
+           reconsider y=ss1.h as Symbol of tm1;
+           set p=s1i`1,
+               g=TRAN(s1i);
+       A11: p <> pF by A2,A10;
+       A12: s3i`1 <> the AcceptS of tm1 ';' tm2
+           proof
+              assume s3i`1 = the AcceptS of tm1 ';' tm2;
+                then [p,q0] = [pF,qF] by A7,A8,A9,Def32,AXIOMS:22;
+                hence contradiction by A11,ZFMISC_1:33;
+           end;
+       A13: h=s3i`2 by A7,A8,A9,Def5,AXIOMS:22
+           .=Head(s3i) by Def5;
+       A14: g= (the Tran of tm1).[p,y] by Def6;
+           set f=TRAN(s3i);
+       A15: f= (the Tran of tm1 ';' tm2).[[p,q0],y] by A7,A8,A9,A13,Def6,AXIOMS
+:22
+           .= [[g`1,q0], g`2, g`3] by A11,A14,Th48;
+       then A16: g`2=f`2 by MCART_1:def 6;
+       A17: s1i1=Following s1i by Def8
+           .= [g`1, h+ offset(g),Tape-Chg(ss1,h,g`2)] by A11,Def7;
+      A18:  s3i1=Following s3i by Def8
+           .= [f`1, Head(s3i)+ offset (f),Tape-Chg(ss3,Head(s3i),f`2)]
+            by A12,Def7;
+           thus
+             [s1i1`1,q0]=[g`1,q0] by A17,MCART_1:def 5
+           .=f`1 by A15,MCART_1:def 5
+           .=s3i1`1 by A18,MCART_1:def 5;
+        offset g= g`3 by Def4
+          .=f`3 by A15,MCART_1:def 7
+          .=offset f by Def4;
+          hence
+             s1i1`2= Head(s3i) + offset f by A13,A17,MCART_1:def 6
+           .= s3i1`2 by A18,MCART_1:def 6;
+          thus
+             s1i1`3=Tape-Chg(ss1,h,g`2) by A17,MCART_1:def 7
+            .= ss3 +* (h .--> (g`2)) by A7,A8,A9,Def3,AXIOMS:22
+            .= Tape-Chg(ss3, Head(s3i),f`2) by A13,A16,Def3
+            .= s3i1`3 by A18,MCART_1:def 7;
+         end;
+         hence P[i+1];
+     end;
+     set s1k=(Computation s1).k,
+         s3k=(Computation s3).k;
+       for i holds P[i] from Ind(A4,A6);
+then A19: [s1k`1,q0]=s3k`1 & s1k`2=s3k`2 & s1k`3=s3k`3;
+    consider m be Nat such that
+A20: ((Computation s2).m)`1 = qF & Result s2 = (Computation s2).m &
+    for i be Nat st i < m holds ((Computation s2).i)`1 <> qF by A1,Th16;
+    defpred Q[Nat] means
+      $1 <= m implies
+        [pF,((Computation s2).$1)`1]=((Computation s3k).$1)`1 &
+        ((Computation s2).$1)`2=((Computation s3k).$1)`2 &
+        ((Computation s2).$1)`3=((Computation s3k).$1)`3;
+A21:  Q[0]
+     proof
+       assume 0 <= m;
+        thus
+          [pF,((Computation s2).0)`1]=[pF,s2`1] by Def8
+        .=[pF,q0] by A1,MCART_1:68
+        .=((Computation s3k).0)`1 by A2,A19,Def8;
+        thus ((Computation s2).0)`2=s2`2 by Def8
+         .=s3k`2 by A1,A2,A19,MCART_1:68
+         .=((Computation s3k).0)`2 by Def8;
+        thus ((Computation s2).0)`3=s2`3 by Def8
+         .=s3k`3 by A1,A2,A19,MCART_1:68
+         .=((Computation s3k).0)`3 by Def8;
+     end;
+A22:  for i st Q[i] holds Q[i + 1]
+     proof
+        let i;
+        assume A23:Q[i];
+          now
+           assume A24: i+1 <= m;
+           set s2i1=(Computation s2).(i+1),
+               s2i=(Computation s2).i,
+               ski1=(Computation s3k).(i+1),
+               ski=(Computation s3k).i;
+           A25: i < i+1 by REAL_1:69;
+       then A26: i < m by A24,AXIOMS:22;
+           reconsider ss2=s2i`3 as Tape of tm2;
+           reconsider ssk=ski`3 as Tape of tm1 ';' tm2;
+           reconsider h=Head(s2i) as Element of INT by INT_1:12;
+           reconsider y=ss2.h as Symbol of tm2;
+           set q=s2i`1,
+               g=TRAN(s2i);
+       A27: q <> qF by A20,A26;
+       A28: ski`1 <> the AcceptS of tm1 ';' tm2
+           proof
+              assume ski`1 = the AcceptS of tm1 ';' tm2;
+                then [pF,q] = [pF,qF] by A23,A24,A25,Def32,AXIOMS:22;
+                hence contradiction by A27,ZFMISC_1:33;
+           end;
+       A29: h=ski`2 by A23,A24,A25,Def5,AXIOMS:22
+           .=Head(ski) by Def5;
+       A30: g= (the Tran of tm2).[q,y] by Def6;
+           set f=TRAN(ski);
+       A31: f= (the Tran of tm1 ';' tm2).[[pF,q],y] by A23,A24,A25,A29,Def6,
+AXIOMS:22
+           .= [[pF,g`1], g`2, g`3] by A30,Th49;
+       then A32: g`2=f`2 by MCART_1:def 6;
+       A33: s2i1=Following s2i by Def8
+           .= [g`1, h+ offset(g),Tape-Chg(ss2,h,g`2)] by A27,Def7;
+       A34:  ski1=Following ski by Def8
+           .= [f`1, Head(ski)+ offset (f),Tape-Chg(ssk,Head(ski),f`2)]
+            by A28,Def7;
+           thus
+             [pF,s2i1`1]=[pF,g`1] by A33,MCART_1:def 5
+           .=f`1 by A31,MCART_1:def 5
+           .=ski1`1 by A34,MCART_1:def 5;
+        offset g= g`3 by Def4
+          .=f`3 by A31,MCART_1:def 7
+          .=offset f by Def4;
+          hence
+             s2i1`2= Head(ski) + offset f by A29,A33,MCART_1:def 6
+           .= ski1`2 by A34,MCART_1:def 6;
+          thus
+             s2i1`3=Tape-Chg(ss2,h,g`2) by A33,MCART_1:def 7
+            .= ssk +* (h .--> (g`2)) by A23,A24,A25,Def3,AXIOMS:22
+            .= Tape-Chg(ssk, Head(ski),f`2) by A29,A32,Def3
+            .= ski1`3 by A34,MCART_1:def 7;
+         end;
+         hence Q[i+1];
+     end;
+     set s2m=(Computation s2).m,
+         skm=(Computation s3k).m;
+       for i holds Q[i] from Ind(A21,A22);
+then A35: [pF,s2m`1]=skm`1 & s2m`2=skm`2 & s2m`3=skm`3;
+A36: (Computation s3).(k+m)=skm by Th13;
+then A37: ((Computation s3).(k+m))`1=the AcceptS of tm1 ';' tm2 by A20,A35,
+Def32;
+     hence s3 is Accept-Halt by Def9;
+     hence (Result s3)`2=(Result s2)`2 &
+       (Result s3)`3=(Result s2)`3 by A20,A35,A36,A37,Def10;
+end;
+
+theorem
+   for tm1,tm2 being TuringStr,t be Tape of tm1 st the Symbols of tm1
+ = the Symbols of tm2 holds t is Tape of tm1 ';' tm2
+proof
+   let tm1,tm2 be TuringStr,t be Tape of tm1;
+   set S1=the Symbols of tm1,
+       S2=the Symbols of tm2;
+   assume A1: S1=S2;
+     the Symbols of tm1 ';' tm2=S1 \/ S2 by Def32
+   .=S1 by A1;
+   hence thesis;
+end;
+
+theorem
+   for tm1,tm2 being TuringStr,t be Tape of tm1 ';' tm2 st the Symbols of tm1
+ = the Symbols of tm2 holds t is Tape of tm1 & t is Tape of tm2
+proof
+   let tm1,tm2 be TuringStr,t be Tape of tm1 ';' tm2;
+   set S1=the Symbols of tm1,
+       S2=the Symbols of tm2;
+   assume A1: S1=S2;
+     the Symbols of tm1 ';' tm2=S1 \/ S2 by Def32
+   .=S1 by A1;
+   hence thesis by A1;
+end;
+
+theorem Th53:
+ for f being FinSequence of NAT,tm1,tm2 be TuringStr,t1 be Tape of tm1,
+ t2 be Tape of tm2 st t1=t2 & t1 storeData f
+ holds t2 storeData f
+ proof
+   let f be FinSequence of NAT,tm1,tm2 be TuringStr,t1 be Tape of tm1,
+   t2 be Tape of tm2;
+   assume A1: t1=t2 & t1 storeData f;
+     now
+     let i be Nat;
+     assume A2:1 <= i & i < len f;
+     set m=Sum Prefix(f,i)+2*(i-1),
+         n=Sum Prefix(f,i+1)+2*i;
+          t1 is_1_between m,n by A1,A2,Def14;
+        then t1.m=0 & t1.n=0 &
+        for k be Integer st m < k & k < n holds t1.k=1 by Def13;
+        hence t2 is_1_between m,n by A1,Def13;
+   end;
+   hence thesis by Def14;
+end;
+
+Lm15:
+ for s being All-State of ZeroTuring, t be Tape of ZeroTuring, head,n be Nat st
+ s=[0,head,t] & t storeData <*head,n*> holds
+ s is Accept-Halt & (Result s)`2=head & (Result s)`3 storeData <*head,0*>
+proof
+  let s be All-State of ZeroTuring, t be Tape of ZeroTuring, h,n be Nat;
+  assume A1: s=[0,h,t] & t storeData <*h,n*>;
+  set f=<*n*>;
+A2: t storeData <*h*>^f by A1,FINSEQ_1:def 9;
+    len f =1 by FINSEQ_1:56;
+  hence thesis by A1,A2,Th39;
+end;
+
+theorem
+   for s being All-State of ZeroTuring ';' SuccTuring, t be Tape of ZeroTuring,
+ head,n be Nat st s=[[0,0],head,t] & t storeData <*head,n*>
+ holds s is Accept-Halt &
+ (Result s)`2=head & (Result s)`3 storeData <*head,1*>
+proof
+  let s be All-State of ZeroTuring ';' SuccTuring, t be Tape of ZeroTuring,
+  h,n be Nat;
+    assume A1:s=[[0,0],h,t] & t storeData <*h,n*>;
+   reconsider h1=h as Element of INT by INT_1:12;
+    set s1=[the InitS of ZeroTuring,h1,t];
+A2: 0=the InitS of ZeroTuring by Def20;
+then A3: s1 is Accept-Halt & (Result s1)`2=h & (Result s1)`3 storeData <*h,0*>
+    by A1,Lm15;
+      the Symbols of ZeroTuring={0,1} by Def20
+    .=the Symbols of SuccTuring by Def18;
+    then reconsider t2=(Result s1)`3 as Tape of SuccTuring;
+A4: t2 storeData <*h,0*> by A3,Th53;
+    set s2=[the InitS of SuccTuring,h1,t2];
+A5: 0=the InitS of SuccTuring by Def18;
+then A6: s2 is Accept-Halt & (Result s2)`2=h & (Result s2)`3 storeData <*h,0+1
+*>
+    by A4,Th36;
+A7: s=[the InitS of ZeroTuring ';' SuccTuring,h,t] by A1,A2,A5,Def32;
+    hence s is Accept-Halt by A3,A6,Th50;
+A8: (Result s)`2=(Result s2)`2 & (Result s)`3=(Result s2)`3 by A3,A6,A7,Th50;
+    thus (Result s)`2=h by A3,A6,A7,Th50;
+    thus (Result s)`3 storeData <*h,1*> by A6,A8,Th53;
+end;
+

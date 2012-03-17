@@ -1,0 +1,471 @@
+:: Quantales
+::  by Grzegorz Bancerek
+::
+:: Received May 9, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary TARSKI, BOOLE, LATTICES, VECTSP_1, FUNCT_1, LATTICE3, BINOP_1,
+      PRE_TOPC, FINSET_1, FREEALG, MONOID_0, ALGSTR_2, GROUP_1, BHSP_3,
+      SETWISEO, VECTSP_2, SEQM_3, GRAPH_1, FUNCT_3, RELAT_1, QUANTAL1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, VECTSP_1, RELAT_1, FUNCT_1,
+      BINOP_1, SETWISEO, STRUCT_0, FINSET_1, DOMAIN_1, LATTICES, LATTICE3,
+      MONOID_0, PRE_TOPC, PARTFUN1, FUNCT_2;
+ constructors BINOP_1, SETWISEO, DOMAIN_1, LATTICE3, MONOID_0, PRE_TOPC,
+      MEMBERED, PARTFUN1, RELAT_2, XBOOLE_0;
+ clusters LATTICE3, MONOID_0, FINSET_1, STRUCT_0, GROUP_1, RELSET_1, SUBSET_1,
+      LATTICES, MEMBERED, ZFMISC_1, PARTFUN1, FUNCT_2, XBOOLE_0;
+ requirements BOOLE, SUBSET;
+
+
+begin
+
+definition let X be set;
+ let Y be Subset of bool X;
+ redefine func union Y -> Subset of X;
+end;
+
+scheme DenestFraenkel
+ {A()->non empty set, B()->non empty set, F(set)->set,
+  G(set)->Element of B(), P[set]}:
+  {F(a) where a is Element of B(): a in {G(b) where b is Element of A(): P[b]}}
+    = {F(G(a)) where a is Element of A(): P[a]};
+
+scheme EmptyFraenkel {A() -> non empty set, f(set) -> set, P[set]}:
+ {f(a) where a is Element of A(): P[a]} = {}
+  provided
+ not ex a being Element of A() st P[a];
+
+theorem :: QUANTAL1:1
+ for L1,L2 being non empty LattStr st the LattStr of L1 = the LattStr of L2
+  for a1,b1 being Element of L1,
+      a2,b2 being Element of L2, X being set st
+   a1 = a2 & b1 = b2 holds
+    a1"\/"b1 = a2"\/"b2 & a1"/\"b1 = a2"/\"b2 & (a1 [= b1 iff a2 [= b2);
+
+theorem :: QUANTAL1:2
+ for L1,L2 being non empty LattStr st the LattStr of L1 = the LattStr of L2
+  for a being Element of L1,
+      b being Element of L2, X being set st a = b
+   holds (a is_less_than X iff b is_less_than X) &
+    (a is_great_than X iff b is_great_than X);
+
+definition let L be 1-sorted;
+ mode UnOp of L is map of L,L;
+end;
+
+definition let L be non empty LattStr, X be Subset of L;
+ attr X is directed means
+:: QUANTAL1:def 1
+    for Y being finite Subset of X ex x being Element of L st
+   "\/"(Y, L) [= x & x in X;
+end;
+
+theorem :: QUANTAL1:3
+   for L being non empty LattStr, X being Subset of L st X is directed holds
+   X is non empty;
+
+definition
+  struct (LattStr, HGrStr) QuantaleStr
+   (# carrier -> set,
+     L_join, L_meet, mult -> BinOp of the carrier #);
+end;
+
+definition
+ cluster non empty QuantaleStr;
+end;
+
+definition
+  struct (QuantaleStr, multLoopStr) QuasiNetStr
+   (# carrier -> set,
+     L_join, L_meet, mult -> (BinOp of the carrier),
+     unity -> Element of the carrier #);
+end;
+
+definition
+ cluster non empty QuasiNetStr;
+end;
+
+definition let IT be non empty HGrStr;
+ attr IT is with_left-zero means
+:: QUANTAL1:def 2
+    ex a being Element of IT st
+   for b being Element of IT holds a*b = a;
+ attr IT is with_right-zero means
+:: QUANTAL1:def 3
+    ex b being Element of IT st
+   for a being Element of IT holds a*b = b;
+end;
+
+definition let IT be non empty HGrStr;
+ attr IT is with_zero means
+:: QUANTAL1:def 4
+
+  IT is with_left-zero with_right-zero;
+end;
+
+definition
+ cluster with_zero -> with_left-zero with_right-zero (non empty HGrStr);
+ cluster with_left-zero with_right-zero -> with_zero (non empty HGrStr);
+end;
+
+definition
+ cluster with_zero (non empty HGrStr);
+end;
+
+definition let IT be non empty QuantaleStr;
+ attr IT is right-distributive means
+:: QUANTAL1:def 5
+
+  for a being Element of IT, X being set holds
+   a [*] "\/"(X,IT) =
+    "\/"({a [*] b where b is Element of IT: b in X},IT);
+ attr IT is left-distributive means
+:: QUANTAL1:def 6
+
+  for a being Element of IT, X being set holds
+   "\/"(X,IT) [*] a =
+     "\/"({b [*] a where b is Element of IT: b in X},IT);
+ attr IT is times-additive means
+:: QUANTAL1:def 7
+    for a,b,c being Element of IT holds
+     (a"\/"b)[*]c = (a[*]c)"\/"(b[*]c) & c[*](a"\/"b) = (c[*]a)"\/"(c[*]b);
+ attr IT is times-continuous means
+:: QUANTAL1:def 8
+    for X1, X2 being Subset of IT st X1 is directed & X2 is directed holds
+   ("\/"X1)[*]("\/"X2) = "\/"({a [*] b where
+      a is Element of IT, b is Element of IT:
+     a in X1 & b in X2},IT);
+end;
+
+reserve x,y,z for set;
+
+theorem :: QUANTAL1:4
+ for Q being non empty QuantaleStr st the LattStr of Q = BooleLatt {}
+  holds Q is associative commutative unital with_zero
+   complete right-distributive left-distributive Lattice-like;
+
+definition let A be non empty set, b1,b2,b3 be BinOp of A;
+ cluster QuantaleStr(#A,b1,b2,b3#) -> non empty;
+end;
+
+definition
+ cluster associative commutative unital with_zero
+  left-distributive right-distributive complete Lattice-like
+     (non empty QuantaleStr);
+end;
+
+scheme LUBFraenkelDistr
+    {Q() -> complete Lattice-like (non empty QuantaleStr),
+     f(set, set) -> Element of Q(),
+     X, Y() -> set}:
+  "\/"({"\/"({f(a,b) where b is Element of Q(): b in Y()},Q())
+                 where a is Element of Q(): a in X()}, Q()) =
+  "\/"({f(a,b) where a is Element of Q(),
+                   b is Element of Q(): a in X() & b in
+ Y()}, Q());
+
+reserve
+ Q for left-distributive right-distributive complete Lattice-like
+     (non empty QuantaleStr),
+ a, b, c, d for Element of Q;
+
+theorem :: QUANTAL1:5
+ for Q for X,Y being set holds "\/"(X,Q) [*] "\/"(Y,Q) = "\/"({a[*]
+b: a in X & b in Y}, Q);
+
+theorem :: QUANTAL1:6
+ (a"\/"b) [*] c = (a [*] c) "\/" (b [*] c) & c [*] (a"\/"b) = (c [*] a) "\/"
+ (c [*] b);
+
+definition let A be non empty set, b1,b2,b3 be (BinOp of A),
+  e be Element of A;
+ cluster QuasiNetStr(#A,b1,b2,b3,e#) -> non empty;
+end;
+
+definition
+ cluster complete Lattice-like (non empty QuasiNetStr);
+end;
+
+definition
+ cluster left-distributive right-distributive -> times-continuous
+  times-additive (complete Lattice-like (non empty QuasiNetStr));
+end;
+
+definition
+ cluster associative commutative well-unital with_zero with_left-zero
+  left-distributive right-distributive complete Lattice-like
+   (non empty QuasiNetStr);
+end;
+
+definition
+ mode Quantale is associative left-distributive right-distributive
+      complete Lattice-like (non empty QuantaleStr);
+
+ mode QuasiNet is well-unital associative with_left-zero times-continuous
+   times-additive complete Lattice-like (non empty QuasiNetStr);
+end;
+
+definition
+ mode BlikleNet is with_zero (non empty QuasiNet);
+end;
+
+theorem :: QUANTAL1:7
+   for Q being well-unital (non empty QuasiNetStr) st Q is Quantale
+   holds Q is BlikleNet;
+
+reserve Q for Quantale, a,a',b,b',c,d,d1,d2,D for Element of Q;
+
+theorem :: QUANTAL1:8
+ a [= b implies a [*] c [= b [*] c & c [*] a [= c [*] b;
+
+theorem :: QUANTAL1:9
+ a [= b & c [= d implies a [*] c [= b [*] d;
+
+definition let f be Function;
+ attr f is idempotent means
+:: QUANTAL1:def 9
+    f * f = f;
+end;
+
+definition let L be non empty LattStr;
+  let IT be UnOp of L;
+ attr IT is inflationary means
+:: QUANTAL1:def 10
+    for p being Element of L holds p [= IT.p;
+
+ attr IT is deflationary means
+:: QUANTAL1:def 11
+    for p being Element of L holds IT.p [= p;
+
+ attr IT is monotone means
+:: QUANTAL1:def 12
+
+  for p,q being Element of L st p [= q holds IT.p [= IT.q;
+
+ attr IT is \/-distributive means
+:: QUANTAL1:def 13
+    for X being Subset of L holds
+   IT."\/"X [= "\/"({IT.a where a is Element of L: a in X}, L);
+end;
+
+definition
+ let L be Lattice;
+ cluster inflationary deflationary monotone UnOp of L;
+end;
+
+theorem :: QUANTAL1:10
+ for L being complete Lattice, j being UnOp of L st j is monotone holds
+  j is \/-distributive iff for X being Subset of L holds
+    j."\/"X = "\/"({j.a where a is Element of L: a in X}, L);
+
+definition let Q be non empty QuantaleStr;
+   let IT be UnOp of Q;
+  attr IT is times-monotone means
+:: QUANTAL1:def 14
+     for a,b being Element of Q holds IT.a [*] IT.b [= IT.(a [*]
+ b);
+end;
+
+definition let Q be non empty QuantaleStr, a,b be Element of Q;
+  func a -r> b -> Element of Q equals
+:: QUANTAL1:def 15
+
+    "\/"({ c where c is Element of Q: c [*] a [= b }, Q);
+
+  func a -l> b -> Element of Q equals
+:: QUANTAL1:def 16
+
+    "\/"({ c where c is Element of Q: a [*] c [= b }, Q);
+end;
+
+theorem :: QUANTAL1:11
+ a [*] b [= c iff b [= a -l> c;
+
+theorem :: QUANTAL1:12
+ a [*] b [= c iff a [= b -r> c;
+
+theorem :: QUANTAL1:13
+ for Q being Quantale, s,a,b being Element of Q st
+   a [= b holds b-r>s [= a-r>s & b-l>s [= a-l>s;
+
+theorem :: QUANTAL1:14
+   for Q being Quantale, s being Element of Q,
+     j being UnOp of Q
+   st for a being Element of Q holds j.a = (a-r>s)-r>s
+  holds j is monotone;
+
+definition let Q be non empty QuantaleStr;
+   let IT be Element of Q;
+  attr IT is dualizing means
+:: QUANTAL1:def 17
+
+   for a being Element of Q
+    holds (a-r>IT)-l>IT = a & (a-l>IT)-r>IT = a;
+
+  attr IT is cyclic means
+:: QUANTAL1:def 18
+
+   for a being Element of Q holds a -r> IT = a -l> IT;
+end;
+
+theorem :: QUANTAL1:15
+ c is cyclic iff for a,b st a [*] b [= c holds b [*] a [= c;
+
+theorem :: QUANTAL1:16
+ for Q being Quantale, s,a being Element of Q
+   st s is cyclic holds
+   a [= (a-r>s)-r>s & a [= (a-l>s)-l>s;
+
+theorem :: QUANTAL1:17
+   for Q being Quantale, s,a being Element of Q
+   st s is cyclic holds
+   a-r>s = ((a-r>s)-r>s)-r>s & a-l>s = ((a-l>s)-l>s)-l>s;
+
+theorem :: QUANTAL1:18
+   for Q being Quantale, s,a,b being Element of Q
+   st s is cyclic holds
+   ((a-r>s)-r>s)[*]((b-r>s)-r>s) [= ((a[*]b)-r>s)-r>s;
+
+theorem :: QUANTAL1:19
+ D is dualizing implies Q is unital &
+  the_unity_wrt the mult of Q = D -r> D &
+   the_unity_wrt the mult of Q = D -l> D;
+
+theorem :: QUANTAL1:20
+   a is dualizing implies
+  b -r> c = (b [*] (c -l> a)) -r> a & b -l> c = ((c -r> a) [*] b) -l> a;
+
+definition
+  struct (QuasiNetStr) Girard-QuantaleStr
+  (# carrier -> set,
+    L_join, L_meet, mult -> (BinOp of the carrier),
+    unity, absurd -> Element of the carrier #);
+end;
+
+definition
+ cluster non empty Girard-QuantaleStr;
+end;
+
+definition let IT be non empty Girard-QuantaleStr;
+ attr IT is cyclic means
+:: QUANTAL1:def 19
+   the absurd of IT is cyclic;
+ attr IT is dualized means
+:: QUANTAL1:def 20
+   the absurd of IT is dualizing;
+end;
+
+theorem :: QUANTAL1:21
+ for Q being non empty Girard-QuantaleStr st the LattStr of Q = BooleLatt {}
+  holds Q is cyclic dualized;
+
+definition let A be non empty set, b1,b2,b3 be (BinOp of A),
+               e1,e2 be Element of A;
+ cluster Girard-QuantaleStr(#A,b1,b2,b3,e1,e2#) -> non empty;
+end;
+
+definition
+  cluster associative commutative well-unital
+   left-distributive right-distributive complete Lattice-like
+   cyclic dualized strict (non empty Girard-QuantaleStr);
+end;
+
+definition
+  mode Girard-Quantale is associative well-unital
+   left-distributive right-distributive
+   complete Lattice-like cyclic dualized (non empty Girard-QuantaleStr);
+end;
+
+definition let G be Girard-QuantaleStr;
+  func Bottom G -> Element of G equals
+:: QUANTAL1:def 21
+  the absurd of G;
+end;
+
+definition let G be non empty Girard-QuantaleStr;
+  func Top G -> Element of G equals
+:: QUANTAL1:def 22
+   (Bottom G) -r> Bottom G;
+  let a be Element of G;
+  func Bottom a -> Element of G equals
+:: QUANTAL1:def 23
+   a -r> Bottom G;
+end;
+
+definition let G be non empty Girard-QuantaleStr;
+ func Negation G -> UnOp of G means
+:: QUANTAL1:def 24
+     for a being Element of G holds it.a = Bottom a;
+end;
+
+definition let G be non empty Girard-QuantaleStr, u be UnOp of G;
+  func Bottom u -> UnOp of G equals
+:: QUANTAL1:def 25
+     Negation(G)*u;
+end;
+
+definition let G be non empty Girard-QuantaleStr, o be BinOp of G;
+  func Bottom o -> BinOp of G equals
+:: QUANTAL1:def 26
+      Negation(G)*o;
+end;
+
+reserve Q for Girard-Quantale,
+        a,a1,a2,b,b1,b2,c,d for Element of Q,
+ X for set;
+
+theorem :: QUANTAL1:22
+ Bottom Bottom a = a;
+
+theorem :: QUANTAL1:23
+ a [= b implies Bottom b [= Bottom a;
+
+theorem :: QUANTAL1:24
+ Bottom "\/"(X,Q) = "/\"({Bottom a: a in X}, Q);
+
+theorem :: QUANTAL1:25
+ Bottom "/\"(X,Q) = "\/"({Bottom a: a in X}, Q);
+
+theorem :: QUANTAL1:26
+ Bottom (a"\/"b) = Bottom a"/\"Bottom b & Bottom (a"/\"b) = Bottom a"\/"Bottom
+b;
+
+definition let Q,a,b;
+ func a delta b -> Element of Q equals
+:: QUANTAL1:def 27
+   Bottom (Bottom a [*] Bottom b);
+end;
+
+theorem :: QUANTAL1:27
+   a [*] "\/"(X,Q) = "\/"({a [*] b: b in X}, Q) & a delta "/\"(X,Q) =
+   "/\"({a delta c: c in X}, Q);
+
+theorem :: QUANTAL1:28
+   "\/"(X,Q) [*] a = "\/"({b [*] a: b in X}, Q) & "/\"(X,Q) delta a =
+   "/\"({c delta a: c in X}, Q);
+
+
+theorem :: QUANTAL1:29
+   a delta (b"/\"c) = (a delta b)"/\"(a delta c) &
+  (b"/\"c) delta a = (b delta a)"/\"(c delta a);
+
+theorem :: QUANTAL1:30
+   a1 [= b1 & a2 [= b2 implies a1 delta a2 [= b1 delta b2;
+
+theorem :: QUANTAL1:31
+   a delta b delta c = a delta (b delta c);
+
+theorem :: QUANTAL1:32
+ a [*] Top Q = a & Top Q [*] a = a;
+
+theorem :: QUANTAL1:33
+   a delta Bottom Q = a & (Bottom Q) delta a = a;
+
+theorem :: QUANTAL1:34
+   for Q being Quantale for j being UnOp of Q st
+    j is monotone idempotent \/-distributive
+  ex L being complete Lattice st the carrier of L = rng j &
+   for X being Subset of L holds "\/"X = j."\/"(X,Q);
+

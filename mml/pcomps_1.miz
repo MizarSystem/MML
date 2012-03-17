@@ -1,0 +1,1473 @@
+:: Paracompact and Metrizable Spaces
+::  by Leszek Borys
+::
+:: Received June 8, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary METRIC_1, PRE_TOPC, BOOLE, SETFAM_1, TARSKI, SUBSET_1, COMPTS_1,
+      FINSET_1, FINSEQ_1, RELAT_1, FUNCT_1, ARYTM_1, SQUARE_1, ARYTM_3,
+      PCOMPS_1, ARYTM;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0,
+      REAL_1, TOPS_2, SETFAM_1, STRUCT_0, FINSET_1, COMPTS_1, PRE_TOPC,
+      SQUARE_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, NAT_1, METRIC_1;
+ constructors METRIC_1, REAL_1, TOPS_2, COMPTS_1, SQUARE_1, FINSEQ_1, NAT_1,
+      MEMBERED;
+ clusters SUBSET_1, METRIC_1, PRE_TOPC, FINSET_1, STRUCT_0, METRIC_3, COMPLSP1,
+      XREAL_0, RELSET_1, TOPS_1, ARYTM_3, SETFAM_1, MEMBERED, ZFMISC_1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions STRUCT_0;
+ theorems COMPTS_1, PRE_TOPC, TOPS_1, AXIOMS, TOPS_2, NAT_1, REAL_1, FINSET_1,
+      REAL_2, SUBSET_1, SETFAM_1, TARSKI, FINSEQ_1, ZFMISC_1, SQUARE_1,
+      FUNCT_1, FUNCT_2, METRIC_1, RELAT_1, STRUCT_0, XBOOLE_0, XBOOLE_1,
+      XREAL_0, XCMPLX_1;
+ schemes SETFAM_1, FUNCT_2, NAT_1, PRE_TOPC;
+
+begin
+
+ reserve PM for MetrStruct;
+ reserve x,y for Element of PM;
+ reserve r,p,q,s,t for Real;
+
+theorem
+Th1: r <= p implies Ball(x,r) c= Ball(x,p)
+     proof
+      assume A1: r <= p;
+        for y holds y in Ball(x,r) implies y in Ball(x,p)
+      proof
+       let y;
+       assume
+A2:      y in Ball(x,r);
+A3:    PM is non empty
+       proof
+         thus the carrier of PM is non empty by A2;
+       end;
+         dist(x,y) < r by A2,METRIC_1:12;
+       then dist(x,y) < p by A1,AXIOMS:22;
+       hence thesis by A3,METRIC_1:12;
+      end;
+      hence thesis by SUBSET_1:7;
+     end;
+
+ reserve T for TopSpace;
+ reserve A for Subset of T;
+
+theorem
+Th2:Cl(A) <> {} iff A <> {}
+ proof
+  A1: Cl(A) <> {} implies A <> {}
+  proof
+   assume that A2: Cl(A) <> {} and A3: A = {};
+     Cl(A) = {}(T) by A3,PRE_TOPC:52;
+   hence thesis by A2;
+  end;
+    A <> {} implies Cl(A) <> {}
+  proof
+   assume A4: A <> {};
+   A5: A c= Cl A by PRE_TOPC:48;
+   consider x being Element of A;
+     ex x be set st x in Cl A
+   proof
+    take x;
+    thus thesis by A4,A5,TARSKI:def 3;
+   end;
+   hence thesis;
+  end;
+  hence thesis by A1;
+ end;
+
+theorem
+    Cl(A) = {} implies A = {} by Th2;
+
+theorem
+  Cl(A) is closed;
+
+ reserve T for non empty TopSpace;
+ reserve x,y for Point of T;
+ reserve Z,X,V,W,Y,Q for Subset of T;
+ reserve FX for Subset-Family of T;
+
+theorem
+ Th5: FX is_a_cover_of T implies for x ex W st x in W & W in FX
+       proof
+        assume FX is_a_cover_of T;
+        then A1: union FX = [#](T) by PRE_TOPC:def 8;
+        thus thesis
+         proof
+          let x;
+          A2: x in union FX by A1,PRE_TOPC:13;
+          thus ex W st x in W & W in FX
+          proof
+           consider W being set such that A3: x in W and
+                    A4: W in FX by A2,TARSKI:def 4;
+           reconsider W as Subset of T by A4;
+           take W;
+           thus thesis by A3,A4;
+          end;
+         end;
+       end;
+
+definition let X be set;
+redefine func bool X -> non empty Subset-Family of X;
+  coherence by SETFAM_1:def 7;
+end;
+
+definition let D be set;
+ func 1TopSp D -> TopStruct equals
+:Def1:  TopStruct (# D, bool D #);
+coherence;
+end;
+
+definition let D be set;
+ cluster 1TopSp D -> strict TopSpace-like;
+ coherence
+  proof
+  set T = TopStruct (# D, bool D #);
+A1:  1TopSp D = T by Def1;
+   hence 1TopSp D is strict;
+  A2: the carrier of T in the topology of T by ZFMISC_1:def 1;
+  A3: for X being Subset-Family of T st X c= the topology of T
+       holds union X in the topology of T;
+     for p,q being Subset of T st
+      p in the topology of T & q in the topology of T
+       holds p /\ q in the topology of T;
+  hence thesis by A1,A2,A3,PRE_TOPC:def 1;
+  end;
+end;
+
+definition let D be non empty set;
+ cluster 1TopSp D -> non empty;
+ coherence
+  proof
+     1TopSp D = TopStruct (# D, bool D #) by Def1;
+   hence 1TopSp D is non empty;
+  end;
+end;
+
+reserve a for set;
+
+canceled;
+
+theorem
+    the topology of 1TopSp a = bool a
+  proof
+      1TopSp(a) = TopStruct (# a, bool a #) by Def1;
+    hence thesis;
+  end;
+
+theorem
+Th8: the carrier of 1TopSp a = a
+      proof
+         1TopSp(a) = TopStruct (# a, bool a #) by Def1;
+       hence thesis;
+      end;
+
+theorem Th9:
+  1TopSp {a} is compact
+      proof
+         for F being Subset-Family of 1TopSp {a}
+         st F is_a_cover_of 1TopSp {a} & F is open
+          ex G being Subset-Family of 1TopSp {a}
+           st G c= F & G is_a_cover_of 1TopSp {a} & G is finite
+         proof
+          let F be Subset-Family of 1TopSp {a};
+          assume that A1: F is_a_cover_of 1TopSp {a} and F is open;
+          A2: bool {a} is finite by FINSET_1:24;
+A3:       F is Subset of bool {a} by Th8;
+          reconsider F' = F as Subset-Family of 1TopSp {a};
+          take F';
+          thus thesis by A1,A2,A3,FINSET_1:13;
+         end;
+        hence thesis by COMPTS_1:def 3;
+      end;
+
+theorem
+ Th10: T is_T2 implies {x} is closed
+     proof
+      assume A1:T is_T2;
+A2:      {x} c= Cl {x} by PRE_TOPC:48;
+         y in Cl {x} implies y in {x}
+       proof
+        assume that A3:y in Cl {x} and A4:not y in {x};
+        A5:not y = x by A4,TARSKI:def 1;
+          ex W being Subset of T st W is open & y in W & {x} misses W
+        proof
+         consider W,V being Subset of T such that
+         A6:W is open and V is open and
+         A7:y in W and A8:x in V and A9:W misses V by A1,A5,COMPTS_1:def 4;
+A10:       W /\ V = {} by A9,XBOOLE_0:def 7;
+           {x} c= V by A8,ZFMISC_1:37;
+         then A11: W /\ {x} c= W /\ V by XBOOLE_1:26;
+         take W;
+           {x} /\ W = {} by A10,A11,XBOOLE_1:3;
+         hence thesis by A6,A7,XBOOLE_0:def 7;
+        end;
+        hence thesis by A3,PRE_TOPC:54;
+       end;
+      then y in {x} iff y in Cl {x} by A2;
+      hence thesis by SUBSET_1:8;
+     end;
+
+::       Paracompact spaces
+
+ reserve x,y for Point of T;
+ reserve A,B for Subset of T;
+ reserve FX,GX for Subset-Family of T;
+
+ definition let T be TopStruct;
+  let IT be Subset-Family of T;
+  attr IT is locally_finite means
+ :Def2:
+  for x being Point of T ex W being Subset of T st x in W & W is open &
+   { V where V is Subset of T: V in
+ IT & V meets W } is finite;
+ end;
+
+theorem
+Th11: for W holds { V : V in FX & V meets W} c= FX
+    proof
+     let W;
+       now
+      let Y be set;
+      assume Y in { V : V in FX & V meets W };
+      then consider V such that
+A1:     Y = V & V in FX and V meets W;
+      thus Y in FX by A1;
+     end;
+     hence thesis by TARSKI:def 3;
+    end;
+
+theorem
+Th12: FX c= GX & GX is locally_finite implies FX is locally_finite
+     proof
+      assume that A1: FX c= GX and A2: GX is locally_finite;
+        now
+       let x;
+       thus ex W being Subset of T st x in W & W is open &
+           { V : V in FX & V meets W } is finite
+         proof
+          consider Y being Subset of T such that
+         A3: x in Y and A4: Y is open and
+           A5: { X : X in GX & X meets Y } is finite by A2,Def2;
+          take W = Y;
+          A6: { V : V in FX & V meets W } c= { X : X in GX & X meets Y }
+           proof
+              now
+            let Z be set;
+            assume A7: Z in { V : V in FX & V meets W };
+              ex X st Z = X & X in GX & X meets Y
+             proof
+              consider V such that A8: Z = V and A9: V in FX
+                 and A10: V meets W by A7;
+              take X = V;
+              thus Z = X by A8;
+              thus X in GX by A1,A9;
+              thus X meets Y by A10;
+             end;
+            hence Z in { X : X in GX & X meets Y };
+            end;
+            hence thesis by TARSKI:def 3;
+           end;
+          thus x in W by A3;
+          thus W is open by A4;
+          thus thesis by A5,A6,FINSET_1:13;
+         end;
+      end;
+      hence thesis by Def2;
+     end;
+
+theorem
+Th13: FX is finite implies FX is locally_finite
+    proof
+    assume A1:FX is finite;
+      for x ex W being Subset of T st x in W & W is open &
+           { V : V in FX & V meets W } is finite
+     proof
+      let x;
+      take [#]T;
+        the carrier of T = [#]T by PRE_TOPC:12;
+      hence x in [#]T;
+      thus [#]T is open;
+        { V : V in FX & V meets [#]T } c= FX by Th11;
+      hence { V : V in FX & V meets [#]T } is finite by A1,FINSET_1:13;
+     end;
+    hence thesis by Def2;
+    end;
+
+definition let T be TopStruct, FX be Subset-Family of T;
+   func clf FX -> Subset-Family of T means
+ :Def3:  for Z being Subset of T holds
+  Z in it iff ex W being Subset of T st Z = Cl W & W in FX;
+ existence
+ proof
+  defpred P[set] means
+   ex W being Subset of T st $1 = Cl W & W in FX;
+  thus ex S be Subset-Family of T st
+   for Z be Subset of T holds Z in S iff P[Z] from SubFamExS;
+ end;
+ uniqueness
+  proof
+   let HX,GX be Subset-Family of T;
+   assume that
+ A1: for Z being Subset of T holds Z in HX iff
+     ex W being Subset of T st Z = Cl W & W in FX and
+ A2: for X being Subset of T holds X in GX iff
+     ex V being Subset of T st X = Cl V & V in FX;
+     HX = GX
+    proof
+       now
+      let Z be set;
+      assume A3: Z in HX;
+      then reconsider Z'=Z as Subset of T;
+        ex W being Subset of T st Z' = Cl W & W in FX by A1,A3;
+      hence Z in GX by A2;
+     end;
+     then A4: HX c= GX by TARSKI:def 3;
+       now
+      let X be set;
+      assume A5: X in GX;
+      then reconsider X'=X as Subset of T;
+        ex V being Subset of T st X' = Cl V & V in FX by A2,A5;
+      hence X in HX by A1;
+     end;
+     then GX c= HX by TARSKI:def 3;
+     hence thesis by A4,XBOOLE_0:def 10;
+    end;
+   hence thesis;
+  end;
+end;
+
+theorem
+   clf FX is closed
+     proof
+        for V being Subset of T st V in clf FX holds V is closed
+       proof
+        let V be Subset of T;
+        assume V in clf FX;
+        then ex W st V = Cl W & W in FX by Def3;
+        hence thesis;
+       end;
+      hence thesis by TOPS_2:def 2;
+     end;
+
+theorem
+Th15: FX = {} implies clf FX = {}
+     proof
+      assume A1: FX = {};
+      reconsider CFX = clf FX as set;
+      assume
+A2:   not thesis;
+A3:   for X be set holds not X in CFX
+        proof
+         let X be set;
+         assume A4: X in CFX;
+         then reconsider X as Subset of T;
+            ex V st X = Cl V & V in FX by A4,Def3;
+         hence thesis by A1;
+        end;
+      consider X being Element of CFX;
+        X in CFX by A2;
+      hence contradiction by A3;
+     end;
+
+theorem
+ Th16: FX = { V } implies clf FX = { Cl V }
+      proof
+       assume A1: FX = { V };
+
+       reconsider CFX = clf FX as set;
+         for W be set holds W in CFX iff W = Cl V
+        proof
+         let W be set;
+         A2: W in CFX implies W = Cl V
+         proof
+         assume A3: W in CFX;
+         then reconsider W as Subset of T;
+            ex X st W = Cl X & X in FX by A3,Def3;
+         hence thesis by A1,TARSKI:def 1;
+         end;
+           W = Cl V implies W in CFX
+         proof
+         assume A4: W = Cl V;
+           ex X st W = Cl X & X in FX
+          proof
+           take V;
+           thus thesis by A1,A4,TARSKI:def 1;
+          end;
+         hence thesis by Def3;
+         end;
+         hence thesis by A2;
+        end;
+       hence thesis by TARSKI:def 1;
+      end;
+
+theorem
+Th17: FX c= GX implies clf FX c= clf GX
+     proof
+      assume A1: FX c= GX;
+      reconsider CFX = clf FX,CGX = clf GX as set;
+        for X be set st X in CFX holds X in CGX
+        proof
+         let X be set;
+         assume A2: X in CFX;
+         then reconsider X as Subset of T;
+         consider V such that A3: X = Cl V and A4: V in FX by A2,Def3;
+         thus thesis by A1,A3,A4,Def3;
+        end;
+      hence thesis by TARSKI:def 3;
+     end;
+
+theorem
+Th18: clf(FX \/ GX) = (clf FX) \/ (clf GX)
+    proof
+      for X be set holds X in clf(FX \/ GX) iff X in (clf FX) \/ (clf GX)
+     proof
+      let X be set;
+     A1:now
+        assume A2:X in clf(FX \/ GX);
+        then reconsider X'= X as Subset of T;
+        consider W such that A3: X' = Cl W and
+                         A4: W in (FX \/ GX) by A2,Def3;
+          now per cases by A4,XBOOLE_0:def 2;
+        suppose W in FX;
+        then X' in clf FX by A3,Def3;
+        hence X' in (clf FX) \/ (clf GX) by XBOOLE_0:def 2;
+        suppose W in GX;
+        then X' in clf GX by A3,Def3;
+        hence X' in (clf FX) \/ (clf GX) by XBOOLE_0:def 2;
+        end;
+        hence X in (clf FX) \/ (clf GX);
+       end;
+         now
+        assume A5: X in (clf FX) \/ (clf GX);
+
+          now per cases by A5,XBOOLE_0:def 2;
+        suppose A6: X in clf FX;
+        then reconsider X'= X as Subset of T;
+          ex W st X' = Cl W & W in (FX \/ GX)
+         proof
+          consider Z such that A7: X' = Cl Z and
+                         A8: Z in FX by A6,Def3;
+          take Z;
+          thus thesis by A7,A8,XBOOLE_0:def 2;
+         end;
+        hence X in clf(FX \/ GX) by Def3;
+        suppose A9: X in clf GX;
+        then reconsider X'= X as Subset of T;
+          ex W st X' = Cl W & W in (FX \/ GX)
+         proof
+          consider Z such that A10: X' = Cl Z and
+                         A11: Z in GX by A9,Def3;
+          take Z;
+          thus thesis by A10,A11,XBOOLE_0:def 2;
+         end;
+        hence X in clf(FX \/ GX) by Def3;
+        end;
+        hence X in clf(FX \/ GX);
+       end;
+       hence thesis by A1;
+      end;
+     hence thesis by TARSKI:2;
+    end;
+
+reserve k for Nat;
+
+theorem
+Th19: FX is finite implies Cl(union FX) = union (clf FX)
+  proof
+   assume FX is finite;
+   then consider p being FinSequence such that
+A1: rng p = FX by FINSEQ_1:73;
+   consider n being Nat such that A2: dom p = Seg n by FINSEQ_1:def 2;
+   defpred P[Nat] means
+    for GX st GX = p.:(Seg $1) & $1 <= n & 1 <= n holds
+     Cl(union GX) = union (clf GX);
+A3: P[0]
+    proof
+     let GX; assume that A4: GX = p.:(Seg 0) and 0 <= n & 1 <= n;
+     A5: GX = {} by A4,FINSEQ_1:4,RELAT_1:149;
+       union GX = {}(T) by A4,FINSEQ_1:4,RELAT_1:149,ZFMISC_1:2;
+     then Cl(union GX) = {}(T) by PRE_TOPC:52;
+     hence thesis by A5,Th15,ZFMISC_1:2;
+    end;
+A6: for k holds P[k] implies P[k+1]
+    proof
+     let k;
+     assume A7: for GX st GX = p.:(Seg k) & k <= n & 1 <= n holds
+                 Cl(union GX) = union (clf GX);
+     let GX such that A8: GX = p.:(Seg(k+1)); assume A9: k+1 <= n & 1 <= n;
+      now
+A10:  p.:(Seg(k+1)) = p.:(Seg k \/ {k+1}) by FINSEQ_1:11
+                 .= p.:(Seg k) \/ p.:{k+1} by RELAT_1:153;
+       p.:(Seg k) c= FX by A1,RELAT_1:144;
+     then reconsider G1 = p.:(Seg k) as Subset-Family of T by TOPS_2:3;
+       p.:{k+1} c= FX by A1,RELAT_1:144;
+     then reconsider G2 = p.:{k+1} as Subset-Family of T by TOPS_2:3;
+       0 <= k & 0+1 = 1 by NAT_1:18;
+     then 1 <= k+1 & k+1 <= n by A9,REAL_1:55;
+then A11:  k+1 in dom p by A2,FINSEQ_1:3;
+A12:  Cl( union GX) = Cl( union G1 \/ union G2) by A8,A10,ZFMISC_1:96
+                  .= Cl( union G1 ) \/ Cl( union G2 ) by PRE_TOPC:50;
+     A13: G2 = {p.(k+1)} by A11,FUNCT_1:117;
+     then union G2 = p.(k+1) & p.(k+1) in FX by A1,A11,FUNCT_1:def 5,ZFMISC_1:
+31;
+     then reconsider G3 = p.(k+1) as Subset of T;
+A14:  union (clf G2) = union { Cl G3 } by A13,Th16
+                   .= Cl G3 by ZFMISC_1:31
+                   .= Cl (union G2) by A13,ZFMISC_1:31;
+       k+1 <= n+1 by A9,NAT_1:37;
+     then k <= n by REAL_1:53;
+     then Cl( union GX ) = union (clf G1) \/ union (clf G2) by A7,A9,A12,A14;
+     then Cl( union GX ) = union ((clf G1) \/ (clf G2)) by ZFMISC_1:96;
+     hence thesis by A8,A10,Th18;
+    end;
+   hence thesis;
+  end;
+A15: for k holds P[k] from Ind(A3,A6);
+A16: now assume 1 <= n;
+    then FX = p.:(Seg n) & n <= n & 1 <= n by A1,A2,RELAT_1:146;
+    hence Cl(union FX) = union (clf FX) by A15;
+   end;
+A17:now assume n = 0;
+   then A18:FX = p.:{} by A1,A2,FINSEQ_1:4,RELAT_1:146;
+   then A19: FX = {} by RELAT_1:149;
+     union FX = {}(T) by A18,RELAT_1:149,ZFMISC_1:2;
+   then Cl(union FX) = {}(T) by PRE_TOPC:52;
+   hence Cl(union FX) = union (clf FX) by A19,Th15,ZFMISC_1:2;
+  end;
+    now assume n <> 0;
+   then 0 < n & 1 = 0+1 by NAT_1:19;
+   hence 1 <= n by NAT_1:38;
+  end;
+  hence thesis by A16,A17;
+ end;
+
+theorem
+Th20:  FX is_finer_than clf FX
+       proof
+        set GX = clf FX;
+          for X be set st X in FX ex Y be set st Y in GX & X c= Y
+        proof
+         let X be set;
+         assume A1: X in FX;
+         then reconsider X as Subset of T;
+         thus thesis
+          proof
+           reconsider Y = Cl X as set;
+           take Y;
+           thus Y in GX by A1,Def3;
+           thus thesis by PRE_TOPC:48;
+          end;
+        end;
+        hence thesis by SETFAM_1:def 2;
+       end;
+
+scheme Lambda1top{T()->TopSpace,
+                  X()->Subset-Family of T(),
+                  Y()->Subset-Family of T(),
+                  F(set)->Subset of T()}:
+ ex f being Function of X(),Y() st for Z being Subset of T()
+               st Z in X() holds f.Z = F(Z)
+provided
+A1: for Z being Subset of T() st Z in X() holds F(Z) in Y()
+proof
+deffunc G(set) = F($1);
+A2:for x be set st x in X() holds G(x) in Y() by A1;
+consider f being Function of X(),Y() such that
+      A3: for x be set st x in X() holds f.x = G(x) from Lambda1(A2);
+take f;
+thus thesis by A3;
+end;
+
+theorem
+    FX is locally_finite implies clf FX is locally_finite
+     proof
+      assume A1: FX is locally_finite;
+      set GX = (clf FX);
+        for x ex W being Subset of T st x in W & W is open &
+        { V : V in GX & V meets W } is finite
+       proof
+        let x;
+        thus thesis
+         proof
+          consider W being Subset of T such that
+          A2: x in W and A3: W is open and
+          A4: { V : V in FX & V meets W } is finite by A1,Def2;
+          set CGX = { V : V in GX & V meets W },
+              CFX = { V : V in FX & V meets W };
+          deffunc G(Subset of T) = Cl $1;
+          A5: for Y st Y in FX holds G(Y) in GX by Def3;
+          consider f be Function of FX,GX such that A6: for X st X in FX
+            holds f.X = G(X) from Lambda1top(A5);
+          A7: dom f = FX
+           proof
+              GX = {} implies FX = {}
+             proof
+              assume GX = {};
+              then FX is_finer_than {} by Th20;
+              hence thesis by SETFAM_1:21;
+             end;
+            hence thesis by FUNCT_2:def 1;
+           end;
+          A8: f.:CFX = CGX
+              proof
+                 for Z be set holds Z in f.:CFX iff Z in CGX
+                proof
+                 let Z be set;
+                  A9:Z in f.:CFX implies Z in CGX
+                  proof
+                   assume Z in f.:CFX;
+                   then consider Y be set such that A10: Y in dom f and
+                       A11: Y in CFX and A12: Z = f.Y by FUNCT_1:def 12;
+                   reconsider Y as Subset of T by A7,A10;
+                   A13: f.Y = Cl Y by A6,A7,A10;
+                   then reconsider Z as Subset of T by A12;
+                   A14: Z in GX by A7,A10,A12,A13,Def3;
+                   consider V such that A15: Y = V and V in FX and
+                         A16: V meets W by A11;
+                     V c= Z by A12,A13,A15,PRE_TOPC:48;
+                   then Z meets W by A16,XBOOLE_1:63;
+                   hence thesis by A14;
+                  end;
+                    Z in CGX implies Z in f.:CFX
+                  proof
+                   assume A17: Z in CGX;
+                     ex Y be set st Y in dom f & Y in CFX & Z = f.Y
+                    proof
+                    consider V such that A18: Z = V and
+                    A19: V in GX and A20: V meets W by A17;
+A21:                  V /\ W <> {} by A20,XBOOLE_0:def 7;
+                    consider X such that A22: V = Cl X and
+                    A23: X in FX by A19,Def3;
+                    A24: X in CFX
+                     proof
+                        ex Q st X = Q & Q in FX & Q meets W
+                      proof
+                       take Q = X;
+                       thus X = Q;
+                       thus Q in FX by A23;
+                         Cl(W /\ (Cl Q)) <> {} by A21,A22,Th2;
+                       then Cl(W /\ Q) <> {} by A3,TOPS_1:41;
+                       then Q /\ W <> {} by Th2;
+                       hence Q meets W by XBOOLE_0:def 7;
+                      end;
+                      hence thesis;
+                     end;
+                    take X;
+                    thus thesis by A6,A7,A18,A22,A23,A24;
+                    end;
+                   hence Z in f.:CFX by FUNCT_1:def 12;
+                  end;
+                  hence thesis by A9;
+                end;
+               hence thesis by TARSKI:2;
+              end;
+          take W;
+          thus x in W by A2;
+          thus W is open by A3;
+          thus thesis by A4,A8,FINSET_1:17;
+         end;
+       end;
+      hence thesis by Def2;
+     end;
+
+theorem
+Th22: union FX c= union(clf FX)
+proof
+   FX is_finer_than clf FX by Th20;
+ hence thesis by SETFAM_1:18;
+end;
+
+theorem
+Th23: FX is locally_finite implies Cl union FX = union clf FX
+  proof
+   assume A1: FX is locally_finite;
+   set UFX = Cl(union FX), UCFX = union(clf FX);
+   A2: UFX c= UCFX
+     proof
+       for x st x in UFX holds x in UCFX
+      proof
+       let x;
+       assume A3: x in UFX;
+       consider W being Subset of T such that
+       A4:x in W and A5: W is open and
+          A6: { V : V in FX & V meets W } is finite by A1,Def2;
+       set HX = { V : V in FX & V meets W };
+         HX c= FX by Th11;
+       then reconsider HX as Subset-Family of T by TOPS_2:3;
+       set FHX = FX\HX;
+       A7: not x in Cl(union (FHX))
+         proof
+          assume A8: x in Cl union (FHX);
+          reconsider FHX as set;
+            for Z be set st Z in FHX holds Z misses W
+           proof
+            let Z be set;
+            assume A9: Z in FHX;
+            then reconsider Z as Subset of T;
+              Z in FX & not Z in HX by A9,XBOOLE_0:def 4;
+            hence thesis;
+           end;
+         then (union FHX) misses W by ZFMISC_1:98;
+         hence thesis by A4,A5,A8,TOPS_1:39;
+         end;
+A10:    HX c= FX by Th11;
+          HX \/ (FX \ HX) = HX \/ FX by XBOOLE_1:39
+                        .= FX by A10,XBOOLE_1:12;
+       then Cl(union FX) = Cl(union HX \/ union (FX \ HX)) by ZFMISC_1:96
+                       .= (Cl union HX) \/ Cl(union (FX \ HX)) by PRE_TOPC:50;
+       then A11: x in Cl(union HX) by A3,A7,XBOOLE_0:def 2;
+       A12: Cl(union HX) = union(clf HX) by A6,Th19;
+         union(clf HX) c= union(clf FX)
+        proof
+           HX c= FX by Th11;
+         then clf HX c= clf FX by Th17;
+         hence thesis by ZFMISC_1:95;
+        end;
+       hence thesis by A11,A12;
+      end;
+     hence thesis by SUBSET_1:7;
+     end;
+     UCFX c= UFX
+    proof
+       for x st x in UCFX holds x in UFX
+      proof
+       let x;
+       assume x in UCFX;
+       then consider X be set such that
+          A13: x in X and A14: X in clf FX by TARSKI:def 4;
+       reconsider X as Subset of T by A14;
+       consider Y such that A15: X = Cl Y and A16: Y in FX by A14,Def3;
+         for A being Subset of T st A is open & x in A holds (union FX) meets A
+        proof
+         let A be Subset of T;
+         assume that A17: A is open and A18: x in A;
+           ex y st y in (union FX) /\ A
+          proof
+             Y meets A by A13,A15,A17,A18,TOPS_1:39;
+           then consider z be set such that A19:z in Y /\ A by XBOOLE_0:4;
+           take z;
+           A20: z in Y & z in A by A19,XBOOLE_0:def 3;
+           then z in union FX by A16,TARSKI:def 4;
+           hence thesis by A20,XBOOLE_0:def 3;
+          end;
+         hence thesis by XBOOLE_0:4;
+        end;
+       hence thesis by TOPS_1:39;
+      end;
+     hence thesis by SUBSET_1:7;
+    end;
+   hence thesis by A2,XBOOLE_0:def 10;
+  end;
+
+theorem
+    FX is locally_finite & FX is closed implies union FX is closed
+   proof
+    assume that A1: FX is locally_finite and A2: FX is closed;
+      Cl(union FX) = union FX
+     proof
+      A3: Cl(union FX) c= union FX
+       proof
+          union (clf FX) c= union FX
+         proof
+          set UFX = union FX, UCFX = union(clf FX);
+            for x st x in UCFX holds x in UFX
+          proof
+           let x;
+           assume x in UCFX;
+           then consider X be set such that A4: x in X and
+                 A5: X in clf FX by TARSKI:def 4;
+           reconsider X as Subset of T by A5;
+           consider W being Subset of T such that
+           A6: X = Cl W and A7: W in FX by A5,Def3;
+           reconsider W as Subset of T;
+             W is closed by A2,A7,TOPS_2:def 2;
+           then x in W by A4,A6,PRE_TOPC:52;
+           hence x in UFX by A7,TARSKI:def 4;
+          end;
+          hence thesis by SUBSET_1:7;
+         end;
+        hence thesis by A1,Th23;
+       end;
+        union FX c= union(clf FX) by Th22;
+      then union FX c= Cl(union FX) by A1,Th23;
+      hence thesis by A3,XBOOLE_0:def 10;
+     end;
+    hence thesis;
+   end;
+
+ definition let IT be TopStruct;
+  attr IT is paracompact means
+ :Def4:
+     for FX being Subset-Family of IT
+        st FX is_a_cover_of IT & FX is open
+      ex GX being Subset-Family of IT
+         st GX is open & GX is_a_cover_of IT &
+               GX is_finer_than FX & GX is locally_finite;
+ end;
+
+ definition
+  cluster paracompact (non empty TopSpace);
+  existence
+   proof
+    take PT = 1TopSp {1};
+    A1: PT is compact by Th9;
+    let FX be Subset-Family of PT;
+    assume that A2:FX is_a_cover_of PT and A3: FX is open;
+    consider GX being Subset-Family of PT
+      such that A4: GX c= FX and A5: GX is_a_cover_of PT and
+                A6: GX is finite by A1,A2,A3,COMPTS_1:def 3;
+     take GX;
+     thus thesis by A3,A4,A5,A6,Th13,SETFAM_1:17,TOPS_2:18;
+   end;
+ end;
+
+theorem
+     T is compact implies T is paracompact
+      proof
+       assume A1: T is compact;
+        for FX st FX is_a_cover_of T & FX is open
+          ex GX st GX is open & GX is_a_cover_of T &
+               GX is_finer_than FX & GX is locally_finite
+       proof
+        let FX;
+        assume A2: FX is_a_cover_of T & FX is open;
+        then consider GX such that A3:  GX c= FX &
+                 GX is_a_cover_of T & GX is finite by A1,COMPTS_1:def 3;
+        take GX;
+        thus GX is open
+          proof
+             for W being Subset of T st W in GX holds W is open
+            by A2,A3,TOPS_2:def 1;
+           hence thesis by TOPS_2:def 1;
+          end;
+        thus GX is_a_cover_of T by A3;
+        thus GX is_finer_than FX by A3,SETFAM_1:17;
+        thus GX is locally_finite by A3,Th13;
+       end;
+      hence thesis by Def4;
+      end;
+
+theorem
+ Th26: T is paracompact & A is closed & B is closed & A misses B &
+     (for x st x in B ex V,W being Subset of T st V is open & W is open &
+        A c= V & x in W & V misses W)
+          implies ex Y,Z being Subset of T st Y is open & Z is open &
+                  A c=Y & B c= Z & Y misses Z
+      proof
+       assume that A1: T is paracompact and A is closed and
+       A2: B is closed and
+             A misses B and
+       A3: for x st x in B ex V,W being Subset of T st V is open & W is open &
+                A c= V & x in W & V misses W;
+       defpred P[set] means $1=B` or ex V,W being Subset of T, x st
+        x in B & $1 = W & V is open & W is open & A c= V & x in W & V misses W;
+       consider GX such that
+       A4: for X being Subset of T holds
+           X in GX iff P[X] from SubFamExS;
+       A5: GX is_a_cover_of T
+          proof
+             [#](T) = union GX
+           proof
+            A6: [#](T) c= union GX
+              proof
+                 now
+                let x;
+                assume x in [#](T);
+                then A7: x in B \/ B` by PRE_TOPC:18;
+                  now per cases by A7,XBOOLE_0:def 2;
+                suppose A8: x in B;
+                  ex X st x in X & X in GX
+                 proof
+                  consider V,W being Subset of T such that
+                         A9: V is open and A10: W is open and
+                         A11: A c= V and A12: x in W & V misses W by A3,A8;
+                  take X = W;
+                  thus x in X by A12;
+                  thus X in GX by A4,A8,A9,A10,A11,A12;
+                 end;
+                hence x in union GX by TARSKI:def 4;
+                suppose A13: x in B`;
+                  ex X st x in X & X in GX
+                 proof
+                  take X=B`;
+                  thus x in X by A13;
+                  thus X in GX by A4;
+                 end;
+                hence x in union GX by TARSKI:def 4;
+                end;
+                hence x in union GX;
+               end;
+               hence thesis by SUBSET_1:7;
+              end;
+               union GX c= [#](T) by PRE_TOPC:14;
+            hence thesis by A6,XBOOLE_0:def 10;
+           end;
+           hence thesis by PRE_TOPC:def 8;
+          end;
+         GX is open
+        proof
+           for X being Subset of T st X in GX holds X is open
+          proof
+           let X be Subset of T;
+           assume A14: X in GX;
+              now per cases by A4,A14;
+             suppose X = B`;
+             hence X is open by A2,TOPS_1:29;
+             suppose ex V,W being Subset of T,
+                 y st y in B & X = W & V is open &
+                  W is open & A c= V & y in W & V misses W;
+             hence X is open;
+            end;
+           hence thesis;
+          end;
+         hence thesis by TOPS_2:def 1;
+        end;
+       then consider FX such that A15: (FX is open) and
+                       A16: (FX is_a_cover_of T) and
+                       A17: (FX is_finer_than GX) and
+                       A18: (FX is locally_finite) by A1,A5,Def4;
+       set HX = { W : W in FX & W meets B};
+       A19: HX c= FX by Th11;
+       then reconsider HX as Subset-Family of T by TOPS_2:3;
+       A20: for X st X in HX holds A /\ Cl X = {}
+         proof
+          let X;
+          assume X in HX;
+          then consider W such that A21: W = X and A22: W in FX and
+                      A23: W meets B;
+          consider Y being set such that A24: Y in GX and
+                  A25: X c= Y by A17,A21,A22,SETFAM_1:def 2;
+          reconsider Y as Subset of T by A24;
+A26:        B meets Y by A21,A23,A25,XBOOLE_1:63;
+            now per cases by A4,A24;
+          suppose Y = B`;
+          hence A /\ Cl X = {} by A26,PRE_TOPC:26;
+          suppose ex V,W being Subset of T, y st y in B & Y = W & V is open &
+            W is open & A c= V & y in W & V misses W;
+          then consider V,W being Subset of T,
+                      y such that y in B and A27: Y = W and
+                A28: V is open and W is open and A29: A c= V and
+                        y in W and A30: V misses W;
+            V misses X by A25,A27,A30,XBOOLE_1:63;
+          then Cl(V /\ X) = Cl({}(T)) by XBOOLE_0:def 7;
+          then Cl(V /\ X) = {} by PRE_TOPC:52;
+          then Cl(V /\ Cl X) = {} by A28,TOPS_1:41;
+          then V /\ (Cl X) = {} by Th2;
+          then (Cl X) misses V by XBOOLE_0:def 7;
+          then A misses (Cl X) by A29,XBOOLE_1:63;
+          hence A /\ Cl X = {} by XBOOLE_0:def 7;
+          end;
+          hence thesis;
+         end;
+        take Y = (union (clf HX))`;
+        take Z = union HX;
+          HX is locally_finite by A18,A19,Th12;
+        then union (clf HX) = Cl (union HX) by Th23;
+        hence Y is open by TOPS_1:29;
+          HX is open by A15,A19,TOPS_2:18;
+        hence Z is open by TOPS_2:26;
+          A misses (union (clf HX))
+         proof
+          assume A meets (union (clf HX));
+          then consider x being set such that
+          A31: x in A and A32: x in (union (clf HX)) by XBOOLE_0:3;
+          reconsider x as Point of T by A31;
+            now
+           assume x in (union (clf HX));
+           then consider X being set such that
+              A33: x in X and A34: X in (clf HX) by TARSKI:def 4;
+           reconsider X as Subset of T by A34;
+              ex W st X = Cl W & W in HX by A34,Def3;
+           then A /\ X = {} by A20;
+           then A misses X by XBOOLE_0:def 7;
+           hence not x in A by A33,XBOOLE_0:3;
+          end;
+          hence thesis by A31,A32;
+         end;
+        hence A c= Y by PRE_TOPC:21;
+        thus B c= Z
+         proof
+            now
+           let y;
+           assume A35: y in B;
+             ex W st y in W & W in HX
+           proof
+           consider W such that A36: y in W and
+A37:       W in FX by A16,Th5;
+A38:       W meets B by A35,A36,XBOOLE_0:3;
+           take W;
+           thus y in W by A36;
+           thus thesis by A37,A38;
+           end;
+           hence y in Z by TARSKI:def 4;
+          end;
+          hence thesis by SUBSET_1:7;
+         end;
+        thus Y misses Z
+         proof
+            Z c= union(clf HX) by Th22;
+          then Z c= Y`;
+          hence thesis by PRE_TOPC:21;
+         end;
+      end;
+
+theorem
+ Th27: T is_T2 & T is paracompact implies T is_T3
+     proof
+      assume A1: T is_T2;
+      assume A2:T is paracompact;
+        for x for A being Subset of T st A <> {} & A is closed
+       & not x in A
+      ex W,V being Subset of T st W is open & V is open &
+       x in W & A c= V & W misses V
+      proof
+       let x; let A be Subset of T;
+       assume that A <> {} and A3: A is closed
+                       and A4: not x in A;
+       set B = { x };
+       A5: B is closed by A1,Th10;
+       A6: B misses A
+        proof
+          for y being set holds y in B implies not y in A by A4,TARSKI:def 1;
+        hence thesis by XBOOLE_0:3;
+        end;
+         for y st y in A ex V,W being Subset of T st V is open & W is open &
+        B c= V & y in W & V misses W
+        proof
+         let y;
+         assume y in A;
+         then consider V,W being Subset of T such that
+         A7:V is open and A8:W is open and
+                    A9:x in V and A10:y in W and A11:V misses W
+ by A1,A4,COMPTS_1:def 4;
+         take V,W;
+         thus thesis by A7,A8,A9,A10,A11,ZFMISC_1:37;
+        end;
+       then consider Y,Z being Subset of T such that
+       A12:Y is open and A13:Z is open and
+                  A14:B c= Y and A15:A c= Z and A16:Y misses Z
+                   by A2,A3,A5,A6,Th26;
+       take Y,Z;
+       thus thesis by A12,A13,A14,A15,A16,ZFMISC_1:37;
+      end;
+      hence thesis by COMPTS_1:def 5;
+     end;
+
+theorem
+    T is_T2 & T is paracompact implies T is_T4
+     proof
+      assume A1: T is_T2 & T is paracompact;
+        for A,B being Subset of T st A <> {} & B <> {} &
+       A is closed & B is closed & A misses B
+      ex W,V being Subset of T st W is open & V is open &
+       A c= W & B c= V & W misses V
+      proof
+       let A,B be Subset of T;
+       assume that A2: A <> {} and B <> {} and
+               A3: A is closed and A4: B is closed and A5: A misses B;
+         for x st x in B ex W,V being Subset of T st W is open & V is open &
+        A c= W & x in V & W misses V
+        proof
+         let x;
+         assume x in B;
+         then A6: not x in A by A5,XBOOLE_0:3;
+           T is_T3 by A1,Th27;
+         then consider V,W being Subset of T such that
+         A7: V is open and A8: W is open
+                   and A9: x in V and A10: A c= W and
+                   A11: V misses W by A2,A3,A6,COMPTS_1:def 5;
+         take W,V;
+         thus thesis by A7,A8,A9,A10,A11;
+        end;
+       then consider Y,Z being Subset of T such that
+       A12: Y is open & Z is open &
+              A c= Y & B c= Z & Y misses Z by A1,A3,A4,A5,Th26;
+       take Y,Z;
+       thus thesis by A12;
+      end;
+      hence thesis by COMPTS_1:def 6;
+     end;
+
+::     Topological space of metric space
+
+ reserve x,y,z for Element of PM;
+ reserve V,W,Y for Subset of PM;
+
+scheme SubFamExM {A() -> MetrStruct, P[Subset of A()]}:
+   ex F being Subset-Family of A() st
+   for B being Subset of A() holds B in F iff P[B]
+proof
+   defpred Q[Subset of A()] means P[$1];
+   consider F being Subset-Family of A() such that
+A1: for B being Subset of A() holds B in F iff Q[B]
+     from SubFamEx;
+   reconsider F as Subset-Family of A();
+   take F;
+   thus thesis by A1;
+end;
+
+  definition let PM;
+   func Family_open_set(PM) -> Subset-Family of PM means
+:Def5:   for V holds V in it iff for x st x in V holds
+                         ex r st r>0 & Ball(x,r) c= V;
+ existence
+ proof
+  defpred P[set] means for x st x in $1 holds ex r st r>0 & Ball(x,r) c= $1;
+  thus ex S be Subset-Family of PM st for V holds V in S iff P[V]
+   from SubFamExM;
+ end;
+ uniqueness
+  proof
+   let FX,GX be Subset-Family of PM;
+   assume A1:for V holds V in FX iff for x st x in V holds
+                         ex r st r>0 & Ball(x,r) c= V;
+   assume A2:for W holds W in GX iff for y st y in W holds
+                         ex p st p>0 & Ball(y,p) c= W;
+     for Y holds Y in FX iff Y in GX
+    proof
+     let Y;
+     A3: now
+         assume Y in FX;
+         then for x st x in Y holds
+                         ex r st r>0 & Ball(x,r) c= Y by A1;
+         hence Y in GX by A2;
+        end;
+          now
+         assume Y in GX;
+         then for x st x in Y holds
+                         ex r st r>0 & Ball(x,r) c= Y by A2;
+         hence Y in FX by A1;
+        end;
+      hence thesis by A3;
+    end;
+   hence FX = GX by SETFAM_1:44;
+  end;
+ end;
+
+theorem
+Th29: for x ex r st r>0 & Ball(x,r) c= the carrier of PM
+      proof
+       let x;
+       consider r such that A1:r = 1;
+       take r;
+       thus r > 0 by A1;
+       thus thesis;
+      end;
+
+theorem Th30:
+  for r being real number st PM is triangle & y in Ball(x,r) holds
+        ex p st p>0 & Ball(y,p) c= Ball(x,r)
+      proof
+       let r be real number;
+       reconsider r'=r as Real by XREAL_0:def 1;
+       assume A1: PM is triangle;
+       assume
+A2:    y in Ball(x,r);
+then A3:    PM is non empty by STRUCT_0:def 1;
+       A4: dist(x,y) < r by A2,METRIC_1:12;
+       thus thesis
+        proof
+         set p = r' - dist(x,y);
+         A5: for z holds z in Ball(y,p) implies z in Ball(x,r)
+          proof
+           let z;
+           assume z in Ball(y,p);
+           then dist(y,z) < r' - dist(x,y) by METRIC_1:12;
+           then A6: dist(x,y) + dist(y,z) < r by REAL_1:86;
+             dist(x,y) + dist(y,z) >= dist(x,z) by A1,METRIC_1:4;
+           then dist(x,z) < r by A6,AXIOMS:22;
+           hence thesis by A3,METRIC_1:12;
+          end;
+         take p;
+         thus p > 0 by A4,SQUARE_1:11;
+         thus thesis by A5,SUBSET_1:7;
+        end;
+      end;
+
+theorem
+   PM is triangle & y in Ball(x,r) /\ Ball(z,p) implies
+            ex q st Ball(y,q) c= Ball(x,r) & Ball(y,q) c= Ball(z,p)
+     proof
+      assume A1: PM is triangle;
+      assume y in Ball(x,r) /\ Ball(z,p);
+      then A2: y in Ball(x,r) & y in Ball(z,p) by XBOOLE_0:def 3;
+       then consider s such that A3: s > 0 & Ball(y,s) c= Ball(x,r) by A1,Th30;
+       consider t such that A4: t > 0 & Ball(y,t) c= Ball(z,p) by A1,A2,Th30;
+       take q = min(s,t);
+         q <= s & q > 0 by A3,A4,SQUARE_1:35,38;
+       then Ball(y,q) c= Ball(y,s) by Th1;
+       hence Ball(y,q) c= Ball(x,r) by A3,XBOOLE_1:1;
+         q <= t & q > 0 by A3,A4,SQUARE_1:35,38;
+       then Ball(y,q) c= Ball(y,t) by Th1;
+       hence Ball(y,q) c= Ball(z,p) by A4,XBOOLE_1:1;
+     end;
+
+canceled;
+
+theorem Th33:
+  for r being real number st PM is triangle holds
+    Ball(x,r) in Family_open_set(PM)
+   proof
+    let r be real number;
+    assume PM is triangle;
+    then for y st y in Ball(x,r) holds ex p
+    st p>0 & Ball(y,p) c= Ball(x,r) by Th30;
+    hence thesis by Def5;
+   end;
+
+theorem
+Th34: the carrier of PM in Family_open_set(PM)
+     proof
+      A1:the carrier of PM c= the carrier of PM;
+        for y st y in the carrier of PM holds
+          ex p st p>0 & Ball(y,p) c= the carrier of PM by Th29;
+      hence thesis by A1,Def5;
+     end;
+
+theorem
+Th35: for V,W st V in Family_open_set(PM) &
+               W in Family_open_set(PM)
+               holds V /\ W in Family_open_set(PM)
+     proof
+      let V,W;
+      assume that A1: V in Family_open_set(PM) and
+      A2: W in Family_open_set(PM);
+        for z st z in V /\ W ex q st q>0 & Ball(z,q) c= V /\ W
+       proof
+        let z;
+        assume z in V /\ W;
+        then A3: z in V & z in W by XBOOLE_0:def 3;
+        then consider p such that A4: p > 0 & Ball(z,p) c= V by A1,Def5;
+        consider r such that A5: r > 0 & Ball(z,r) c= W by A2,A3,Def5;
+        take q = min(p,r);
+        A6: q <= p & q > 0 by A4,A5,SQUARE_1:35,38;
+        thus q > 0 by A4,A5,SQUARE_1:38;
+          Ball(z,q) c= Ball(z,p) by A6,Th1;
+        then A7: Ball(z,q) c= V by A4,XBOOLE_1:1;
+           q <= r & q > 0 by A4,A5,SQUARE_1:35,38;
+        then Ball(z,q) c= Ball(z,r) by Th1;
+        then Ball(z,q) c= W by A5,XBOOLE_1:1;
+        hence thesis by A7,XBOOLE_1:19;
+       end;
+      hence thesis by Def5;
+     end;
+
+theorem
+Th36: for A being Subset-Family of PM
+        st A c= Family_open_set(PM) holds union A in Family_open_set(PM)
+    proof
+     let A be Subset-Family of PM;
+     assume A1: A c= Family_open_set(PM);
+       for x st x in union A ex r st r>0 & Ball(x,r) c= union A
+      proof
+       let x;
+       assume x in union A;
+       then consider W being set such that
+       A2: x in W and A3: W in A by TARSKI:def 4;
+       reconsider W as Subset of PM by A3;
+       A4: W c= union A by A3,ZFMISC_1:92;
+       consider r such that A5: r>0 & Ball(x,r) c= W by A1,A2,A3,Def5;
+       take r;
+       thus r > 0 by A5;
+       thus thesis by A4,A5,XBOOLE_1:1;
+      end;
+     hence thesis by Def5;
+    end;
+
+theorem
+Th37: TopStruct (#the carrier of PM,Family_open_set(PM)#) is TopSpace
+     proof
+      set T = TopStruct (#the carrier of PM,Family_open_set(PM)#);
+      A1: the carrier of T in the topology of T by Th34;
+      A2: for a being Subset-Family of T st
+         a c= the topology of T holds union a in the topology of T by Th36;
+         for p,q being Subset of T st
+           p in the topology of T & q in the topology of T
+              holds p /\ q in the topology of T by Th35;
+      hence thesis by A1,A2,PRE_TOPC:def 1;
+     end;
+
+definition let PM;
+  func TopSpaceMetr PM -> TopStruct equals
+    :Def6:TopStruct (#the carrier of PM,Family_open_set(PM)#);
+   coherence;
+end;
+
+definition let PM;
+ cluster TopSpaceMetr PM -> strict TopSpace-like;
+ coherence
+  proof
+     TopSpaceMetr PM=TopStruct (#the carrier of PM,Family_open_set(PM)#) by
+Def6
+;
+   hence thesis by Th37;
+  end;
+end;
+
+definition let PM be non empty MetrStruct;
+ cluster TopSpaceMetr PM -> non empty;
+ coherence
+  proof
+     TopSpaceMetr PM=TopStruct (#the carrier of PM,Family_open_set(PM)#) by
+Def6
+;
+   hence thesis;
+  end;
+end;
+
+theorem
+   for PM being non empty MetrSpace holds TopSpaceMetr PM is_T2
+      proof
+        let PM be non empty MetrSpace;
+        set TPS = TopSpaceMetr PM;
+    A1: TPS = TopStruct (#the carrier of PM,Family_open_set(PM)#) by Def6;
+        for x,y being Element of TPS st
+        not x = y
+         ex W,V being Subset of TPS st W is open & V is open &
+          x in W & y in V & W misses V
+       proof
+        let x,y be Element of TPS;
+        assume A2: not x = y;
+        reconsider x,y as Element of PM by A1;
+        A3: dist(x,y) > 0
+         proof
+           dist(x,y) <> 0 by A2,METRIC_1:2;
+          hence thesis by METRIC_1:5;
+         end;
+        set r = dist(x,y)/2;
+        A4:r > 0 by A3,REAL_2:127;
+          ex W,V being Subset of TPS st W is open & V is open &
+         x in W & y in V & W misses V
+         proof
+         set W = Ball(x,r);
+         set V = Ball(y,r);
+         A5: W in Family_open_set(PM) by Th33;
+         A6: V in Family_open_set(PM) by Th33;
+A7:         dist(x,x) = 0 by METRIC_1:1;
+A8:         dist(y,y) = 0 by METRIC_1:1;
+         reconsider W,V as Subset of TPS by A1;
+         A9:W misses V
+         proof
+            for z being set holds not z in W /\ V
+           proof
+            let z be set;
+            assume A10:z in W /\ V;
+            then reconsider z as Element of PM by A1;
+              z in W & z in V by A10,XBOOLE_0:def 3;
+            then dist(x,z) < r & dist(y,z) < r by METRIC_1:12;
+            then A11:dist(x,z) + dist(y,z) < r + r by REAL_1:67;
+              dist(x,y) <= dist(x,z) + dist(z,y) by METRIC_1:4;
+            then dist(x,y) < r + r by A11,AXIOMS:22;
+            then dist(x,y) < 2 * r by XCMPLX_1:11;
+            hence thesis by XCMPLX_1:88;
+           end;
+          hence thesis by XBOOLE_0:4;
+         end;
+         take W, V;
+         thus thesis by A1,A4,A5,A6,A7,A8,A9,METRIC_1:12,PRE_TOPC:def 5;
+         end;
+         hence thesis;
+        end;
+       hence thesis by COMPTS_1:def 4;
+      end;
+
+::   Metric on a set
+
+definition let D be set,f be Function of [:D,D:],REAL;
+  pred f is_metric_of D means
+:Def7:            for a,b,c be Element of D holds
+              (f.(a,b) = 0 iff a=b) &
+              f.(a,b) = f.(b,a) &
+              f.(a,c)<=f.(a,b)+f.(b,c);
+end;
+
+theorem
+Th39: for D being set,f being Function of [:D,D:],REAL
+         holds f is_metric_of D iff
+               MetrStruct (#D,f#) is MetrSpace
+      proof
+      let D be set,f be Function of [:D,D:],REAL;
+      set DF = MetrStruct (#D,f#);
+      A1: f is_metric_of D implies DF is MetrSpace
+       proof
+        assume A2: f is_metric_of D;
+          for a,b,c be Element of DF holds
+                   (dist(a,b) = 0 iff a=b) &
+                   dist(a,b) = dist(b,a) &
+                   dist(a,c)<=dist(a,b)+dist(b,c)
+                 proof
+                  let a,b,c be Element of DF;
+              A3: (the distance of DF).(a,b) = dist(a,b) by METRIC_1:def 1;
+                  hence dist(a,b) = 0 iff a=b by A2,Def7;
+                    (the distance of DF).(b,a) = dist(b,a) by METRIC_1:def 1;
+                  hence dist(a,b) = dist(b,a) by A2,A3,Def7;
+                  A4:(the distance of DF).(a,c) = dist(a,c) by METRIC_1:def 1;
+                    (the distance of DF).(b,c) = dist(b,c) by METRIC_1:def 1;
+                  hence dist(a,c)<=dist(a,b)+dist(b,c) by A2,A3,A4,Def7;
+                 end;
+        hence thesis by METRIC_1:6;
+       end;
+        DF is MetrSpace implies f is_metric_of D
+       proof
+        assume A5: DF is MetrSpace;
+
+           for a,b,c be Element of DF holds
+                   ((the distance of DF).(a,b) = 0 iff a=b) &
+                   (the distance of DF).(a,b) =
+                   (the distance of DF).(b,a) &
+                   (the distance of DF).(a,c)<=
+                   (the distance of DF).(a,b)+
+                   (the distance of DF).(b,c)
+                 proof
+                 let a,b,c be Element of DF;
+                 A6: (the distance of DF).(a,b) = dist(a,b) by METRIC_1:def 1;
+                 hence (the distance of DF).(a,b) = 0 iff a=b
+                     by A5,METRIC_1:1,2;
+                   (the distance of DF).(b,a) = dist(b,a) by METRIC_1:def 1;
+                 hence (the distance of DF).(a,b) =
+                 (the distance of DF).(b,a) by A5,A6,METRIC_1:3;
+                 A7:(the distance of DF).(a,c) = dist(a,c) by METRIC_1:def 1;
+                   (the distance of DF).(b,c) = dist(b,c) by METRIC_1:def 1;
+                 hence (the distance of DF).(a,c)<=
+                 (the distance of DF).(a,b)+
+                 (the distance of DF).(b,c) by A5,A6,A7,METRIC_1:4;
+                 end;
+        hence thesis by Def7;
+       end;
+      hence thesis by A1;
+      end;
+
+definition let D be non empty set, f be Function of [:D,D:],REAL;
+ assume A1: f is_metric_of D;
+ func SpaceMetr(D,f) -> strict non empty MetrSpace equals
+ :Def8:   MetrStruct(#D,f#);
+  coherence by A1,Th39;
+end;
+
+::       Metrizable topological spaces
+
+ definition let IT be non empty TopStruct;
+   attr IT is metrizable means
+      ex f being Function of [:the carrier of IT,the carrier of IT:],REAL
+              st f is_metric_of (the carrier of IT) &
+              Family_open_set( SpaceMetr (the carrier of IT,f) ) =
+               the topology of IT;
+ end;
+
+ definition
+   cluster strict metrizable (non empty TopSpace);
+   existence
+   proof
+    consider MS being strict non empty MetrSpace;
+    take TS = TopSpaceMetr MS;
+    A1: TS = TopStruct (#the carrier of MS,Family_open_set(MS)#) by Def6;
+    then reconsider f = the distance of MS as
+             Function of [:the carrier of TS,the carrier of TS:],REAL;
+    thus TS is strict;
+    take f;
+    thus f is_metric_of the carrier of TS by A1,Th39;
+    hence thesis by A1,Def8;
+   end;
+ end;

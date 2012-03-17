@@ -1,0 +1,404 @@
+:: A Construction of Analytical Ordered Trapezium Spaces
+::  by Henryk Oryszczyszyn and Krzysztof Pra\.zmowski
+::
+:: Received October 29, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, PARSP_1, ANALOAF, ANALMETR, DIRAF, ARYTM_1, TDGROUP,
+      RELAT_1, SYMSP_1, FUNCT_3, BINOP_1, FUNCT_1, MIDSP_1, GEOMTRAP;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, REAL_1, STRUCT_0,
+      DIRAF, RELSET_1, RLVECT_1, MIDSP_1, AFF_1, ANALOAF, BINOP_1, ANALMETR;
+ constructors DOMAIN_1, REAL_1, MIDSP_1, AFF_1, BINOP_1, ANALMETR, XREAL_0,
+      MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, DIRAF, ANALOAF, ANALMETR, RELSET_1, STRUCT_0, MEMBERED,
+      ZFMISC_1, XBOOLE_0;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+reserve V for RealLinearSpace;
+reserve u,u1,u2,v,v1,v2,w,w1,y for VECTOR of V;
+reserve a,a1,a2,b,b1,b2,c,c1,c2 for Real;
+reserve x,z for set;
+
+definition let V; let u,v,u1,v1;
+  pred u,v '||' u1,v1 means
+:: GEOMTRAP:def 1
+  u,v // u1,v1 or u,v // v1,u1;
+end;
+
+theorem :: GEOMTRAP:1
+Gen w,y implies OASpace(V) is OAffinSpace;
+
+theorem :: GEOMTRAP:2
+for p,q,p1,q1 being Element of OASpace(V)
+ st p=u & q=v & p1=u1 & q1=v1 holds (p,q // p1,q1 iff u,v // u1,v1);
+
+theorem :: GEOMTRAP:3
+Gen w,y implies
+ for p,q,p1,q1 being Element of (the carrier of Lambda(OASpace(V)))
+ st p=u & q=v & p1=u1 & q1=v1 holds (p,q // p1,q1 iff u,v '||' u1,v1);
+
+theorem :: GEOMTRAP:4
+ for p,q,p1,q1 being Element of (the carrier of AMSpace(V,w,y))
+ st p=u & q=v & p1=u1 & q1=v1 holds (p,q // p1,q1 iff u,v '||' u1,v1);
+
+definition let V; let u,v;
+  func u#v -> VECTOR of V means
+:: GEOMTRAP:def 2
+  it+it = u+v;
+ commutativity;
+ idempotence;
+end;
+
+canceled 2;
+
+theorem :: GEOMTRAP:7
+ex y st u#y=w;
+
+theorem :: GEOMTRAP:8
+(u#u1)#(v#v1)=(u#v)#(u1#v1);
+
+theorem :: GEOMTRAP:9
+u#y=u#w implies y=w;
+
+theorem :: GEOMTRAP:10
+u,v // y#u,y#v;
+
+theorem :: GEOMTRAP:11
+u,v '||' w#u,w#v;
+
+theorem :: GEOMTRAP:12
+  2*(u#v-u) = v-u & 2*(v-u#v) = v-u;
+
+theorem :: GEOMTRAP:13
+u,u#v // u#v,v
+;
+
+theorem :: GEOMTRAP:14
+u,v // u,u#v & u,v // u#v,v;
+
+theorem :: GEOMTRAP:15
+u,y // y,v implies u#y,y // y,y#v;
+
+theorem :: GEOMTRAP:16
+u,v // u1,v1 implies u,v // (u#u1),(v#v1);
+
+definition let V; let w,y,u,u1,v,v1;
+  pred u,u1,v,v1 are_DTr_wrt w,y means
+:: GEOMTRAP:def 3
+  u,u1 // v,v1 & u,u1,u#u1,v#v1 are_Ort_wrt w,y &
+   v,v1,u#u1,v#v1 are_Ort_wrt w,y;
+end;
+
+theorem :: GEOMTRAP:17
+Gen w,y implies u,u,v,v are_DTr_wrt w,y;
+
+theorem :: GEOMTRAP:18
+Gen w,y implies u,v,u,v are_DTr_wrt w,y;
+
+theorem :: GEOMTRAP:19
+u,v,v,u are_DTr_wrt w,y implies u=v;
+
+theorem :: GEOMTRAP:20
+Gen w,y & v1,u,u,v2 are_DTr_wrt w,y implies v1=u & u=v2;
+
+theorem :: GEOMTRAP:21
+Gen w,y & u,v,u1,v1 are_DTr_wrt w,y & u,v,u2,v2 are_DTr_wrt w,y
+  & u<>v implies u1,v1,u2,v2 are_DTr_wrt w,y;
+
+theorem :: GEOMTRAP:22
+Gen w,y implies ex t being VECTOR of V st
+ (u,v,u1,t are_DTr_wrt w,y or u,v,t,u1 are_DTr_wrt w,y);
+
+theorem :: GEOMTRAP:23
+Gen w,y & u,v,u1,v1 are_DTr_wrt w,y implies
+ u1,v1,u,v are_DTr_wrt w,y;
+
+theorem :: GEOMTRAP:24
+Gen w,y & u,v,u1,v1 are_DTr_wrt w,y implies
+ v,u,v1,u1 are_DTr_wrt w,y;
+
+theorem :: GEOMTRAP:25
+Gen w,y & v,u1,v,u2 are_DTr_wrt w,y implies u1=u2;
+
+theorem :: GEOMTRAP:26
+Gen w,y & u,v,u1,v1 are_DTr_wrt w,y & u,v,u1,v2 are_DTr_wrt w,y
+ implies (u=v or v1=v2);
+
+theorem :: GEOMTRAP:27
+(Gen w,y & u<>u1 & u,u1,v,v1 are_DTr_wrt w,y &
+ (u,u1,v,v2 are_DTr_wrt w,y or u,u1,v2,v are_DTr_wrt w,y)) implies v1=v2;
+
+theorem :: GEOMTRAP:28
+Gen w,y & u,v,u1,v1 are_DTr_wrt w,y implies
+      u,v,(u#u1),(v#v1) are_DTr_wrt w,y;
+
+theorem :: GEOMTRAP:29
+Gen w,y & u,v,u1,v1 are_DTr_wrt w,y implies
+ (u,v,(u#v1),(v#u1) are_DTr_wrt w,y or u,v,(v#u1),(u#v1) are_DTr_wrt w,y);
+
+theorem :: GEOMTRAP:30
+for u,u1,u2,v1,v2,t1,t2,w1,w2 being VECTOR of V holds
+ (Gen w,y & u=u1#t1 & u=u2#t2 & u=v1#w1 & u=v2#w2 &
+  u1,u2,v1,v2 are_DTr_wrt w,y implies t1,t2,w1,w2 are_DTr_wrt w,y);
+
+definition let V,w,y,u such that  Gen w,y;
+  func pr1(w,y,u) -> Real means
+:: GEOMTRAP:def 4
+  ex b st u=it*w+b*y; end;
+
+definition let V,w,y,u such that  Gen w,y;
+  func pr2(w,y,u) -> Real means
+:: GEOMTRAP:def 5
+  ex a st u=a*w+it*y; end;
+
+definition let V,w,y,u,v;
+  func PProJ(w,y,u,v) -> Real equals
+:: GEOMTRAP:def 6
+  pr1(w,y,u)*pr1(w,y,v) + pr2(w,y,u)*pr2(w,y,v);
+
+end;
+
+theorem :: GEOMTRAP:31
+for u,v holds PProJ(w,y,u,v) = PProJ(w,y,v,u);
+
+theorem :: GEOMTRAP:32
+Gen w,y implies for u,v,v1 holds
+  PProJ(w,y,u,v+v1)=PProJ(w,y,u,v)+PProJ(w,y,u,v1) &
+  PProJ(w,y,u,v-v1)=PProJ(w,y,u,v)-PProJ(w,y,u,v1) &
+  PProJ(w,y,v-v1,u)=PProJ(w,y,v,u)-PProJ(w,y,v1,u) &
+  PProJ(w,y,v+v1,u)=PProJ(w,y,v,u)+PProJ(w,y,v1,u);
+
+theorem :: GEOMTRAP:33
+Gen w,y implies for u,v being VECTOR of V, a being Real holds
+ PProJ(w,y,a*u,v)=a*PProJ(w,y,u,v) & PProJ(w,y,u,a*v)=a*PProJ(w,y,u,v) &
+ PProJ(w,y,a*u,v)=PProJ(w,y,u,v)*a & PProJ(w,y,u,a*v)=PProJ(w,y,u,v)*a;
+
+theorem :: GEOMTRAP:34
+Gen w,y implies for u,v being VECTOR of V holds
+  (u,v are_Ort_wrt w,y iff PProJ(w,y,u,v)=0);
+
+theorem :: GEOMTRAP:35
+Gen w,y implies for u,v,u1,v1 being VECTOR of V holds
+ (u,v,u1,v1 are_Ort_wrt w,y iff PProJ
+(w,y,v-u,v1-u1)=0);
+
+theorem :: GEOMTRAP:36
+Gen w,y implies for u,v,v1 being VECTOR of V holds
+ 2*PProJ(w,y,u,v#v1) = PProJ(w,y,u,v)+PProJ(w,y,u,v1);
+
+theorem :: GEOMTRAP:37
+Gen w,y implies for u,v being VECTOR of V st u<>v holds
+     PProJ(w,y,u-v,u-v) <> 0;
+
+theorem :: GEOMTRAP:38
+Gen w,y implies for p,q,u,v,v' being VECTOR of V, A being Real st
+  p,q,u,v are_DTr_wrt w,y & p<>q &
+  A = (PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*(PProJ(w,y,p-q,p-q))" &
+  v'=u+A*(p-q) holds v=v';
+
+theorem :: GEOMTRAP:39
+Gen w,y implies for u,u',u1,u2,v1,v2,t1,t2,w1,w2 being VECTOR of V
+  st u<>u' & u,u',u1,t1 are_DTr_wrt w,y & u,u',u2,t2 are_DTr_wrt w,y &
+ u,u',v1,w1 are_DTr_wrt w,y & u,u',v2,w2 are_DTr_wrt w,y &
+ u1,u2 // v1,v2 holds t1,t2 // w1,w2;
+
+theorem :: GEOMTRAP:40
+Gen w,y implies for u,u',u1,u2,v1,t1,t2,w1 being VECTOR of V
+ st u<>u' & u,u',u1,t1 are_DTr_wrt w,y & u,u',u2,t2 are_DTr_wrt w,y &
+  u,u',v1,w1 are_DTr_wrt w,y & v1=u1#u2 holds w1 = t1#t2;
+
+theorem :: GEOMTRAP:41
+Gen w,y implies for u,u',u1,u2,t1,t2 being VECTOR of V
+ st u<>u' & u,u',u1,t1 are_DTr_wrt w,y & u,u',u2,t2 are_DTr_wrt w,y
+  holds u,u',u1#u2,t1#t2 are_DTr_wrt w,y;
+
+theorem :: GEOMTRAP:42
+Gen w,y implies for u,u',u1,u2,v1,v2,t1,t2,w1,w2 being VECTOR of
+V
+   st u<>u' & u,u',u1,t1 are_DTr_wrt w,y & u,u',u2,t2 are_DTr_wrt w,y &
+ u,u',v1,w1 are_DTr_wrt w,y & u,u',v2,w2 are_DTr_wrt w,y
+ & u1,u2,v1,v2 are_Ort_wrt w,y holds t1,t2,w1,w2 are_Ort_wrt w,y;
+
+theorem :: GEOMTRAP:43
+for u,u',u1,u2,v1,v2,t1,t2,w1,w2 being VECTOR of V holds
+ (Gen w,y & u<>u' & u,u',u1,t1 are_DTr_wrt w,y & u,u',u2,t2 are_DTr_wrt w,y &
+  u,u',v1,w1 are_DTr_wrt w,y & u,u',v2,w2 are_DTr_wrt w,y
+  & u1,u2,v1,v2 are_DTr_wrt w,y implies t1,t2,w1,w2 are_DTr_wrt w,y);
+
+definition let V; let w,y;
+ func DTrapezium(V,w,y) -> Relation of [:the carrier of V,the carrier of V:]
+ means
+:: GEOMTRAP:def 7
+[x,z] in it iff
+     ex u,u1,v,v1 st x=[u,u1] & z=[v,v1] & u,u1,v,v1 are_DTr_wrt w,y; end;
+
+theorem :: GEOMTRAP:44
+[[u,v],[u1,v1]] in DTrapezium(V,w,y)
+ iff u,v,u1,v1 are_DTr_wrt w,y;
+
+definition let V;
+  func MidPoint(V) -> BinOp of the carrier of V means
+:: GEOMTRAP:def 8
+  for u,v holds it.(u,v) = u#v;
+end;
+
+definition
+  struct(AffinStruct,MidStr) AfMidStruct (# carrier -> set,
+                    MIDPOINT -> BinOp of the carrier,
+                    CONGR -> Relation of [:the carrier,the carrier:] #);
+end;
+
+definition
+ cluster non empty strict AfMidStruct;
+end;
+
+definition let V,w,y;
+  func DTrSpace(V,w,y) -> strict AfMidStruct equals
+:: GEOMTRAP:def 9
+  AfMidStruct(#the carrier of V, MidPoint(V),DTrapezium(V,w,y)#);
+ end;
+
+definition let V,w,y;
+ cluster DTrSpace(V,w,y) -> non empty;
+end;
+
+definition let AMS be AfMidStruct;
+  func Af(AMS) -> strict AffinStruct equals
+:: GEOMTRAP:def 10
+   AffinStruct(#the carrier of AMS, the CONGR of AMS#);
+ end;
+
+definition let AMS be non empty AfMidStruct;
+ cluster Af(AMS) -> non empty;
+end;
+
+definition
+ let AMS be non empty AfMidStruct, a,b be Element of AMS;
+ canceled;
+
+ func a#b -> Element of AMS equals
+:: GEOMTRAP:def 12
+   (the MIDPOINT of AMS).(a,b);
+
+ end;
+
+reserve a,b,c,d,a1,a2,b1,c1,d1,d2,p,q
+                       for Element of DTrSpace(V,w,y);
+
+canceled;
+
+theorem :: GEOMTRAP:46
+for x being set holds x is Element of the
+ carrier of DTrSpace(V,w,y) iff x is VECTOR of V;
+
+theorem :: GEOMTRAP:47
+Gen w,y & u=a & v=b & u1=a1 & v1=b1 implies
+                   (a,b // a1,b1 iff u,v,u1,v1 are_DTr_wrt w,y);
+
+theorem :: GEOMTRAP:48
+Gen w,y & u=a & v=b implies u#v = a#b;
+
+definition let IT be non empty AfMidStruct;
+ attr IT is MidOrdTrapSpace-like means
+:: GEOMTRAP:def 13
+
+for a,b,c,d,a1,b1,c1,d1,p,q being Element of IT holds
+  a#b=b#a & a#a=a & (a#b)#(c#d)=(a#c)#(b#d) &
+  (ex p being Element of IT st p#a=b) &
+  (a#b=a#c implies b=c) & (a,b // c,d implies a,b // (a#c),(b#d)) &
+  (a,b // c,d implies (a,b // (a#d),(b#c) or a,b // (b#c),(a#d))) &
+  (a,b // c,d & a#a1=p & b#b1=p & c#c1=p & d#d1=p implies a1,b1 // c1,d1) &
+  (p<>q & p,q // a,a1 & p,q // b,b1 & p,q // c,c1 & p,q // d,d1 &
+   a,b // c,d implies a1,b1 // c1,d1) & (a,b // b,c implies a=b & b=c) &
+  (a,b // a1,b1 & a,b // c1,d1 & a<>b implies a1,b1 // c1,d1) &
+  (a,b // c,d implies c,d // a,b & b,a // d,c) &
+  (ex d being Element of IT st a,b // c,d or a,b // d,c) &
+  (a,b // c,p & a,b // c,q implies a=b or p=q);
+end;
+
+definition
+ cluster strict MidOrdTrapSpace-like (non empty AfMidStruct);
+end;
+
+definition
+ mode MidOrdTrapSpace is MidOrdTrapSpace-like (non empty AfMidStruct);
+end;
+
+theorem :: GEOMTRAP:49
+Gen w,y implies DTrSpace(V,w,y) is MidOrdTrapSpace;
+
+definition let IT be non empty AffinStruct;
+ attr IT is OrdTrapSpace-like means
+:: GEOMTRAP:def 14
+for a,b,c,d,a1,b1,c1,d1,p,q being Element of IT holds
+(a,b // b,c implies a=b & b=c) &
+  (a,b // a1,b1 & a,b // c1,d1 & a<>b implies a1,b1 // c1,d1) &
+  (a,b // c,d implies c,d // a,b & b,a // d,c) &
+  (ex d being Element of IT st a,b // c,d or a,b // d,c) &
+  (a,b // c,p & a,b // c,q implies a=b or p=q);
+end;
+
+definition
+ cluster strict OrdTrapSpace-like (non empty AffinStruct);
+end;
+
+definition
+ mode OrdTrapSpace is OrdTrapSpace-like (non empty AffinStruct);
+end;
+
+definition let MOS be MidOrdTrapSpace;
+  cluster Af(MOS) -> OrdTrapSpace-like;
+end;
+
+reserve OTS for OrdTrapSpace;
+reserve a,b,c,d for Element of OTS;
+reserve a',b',c',d',a1',b1',d1' for Element of Lambda(OTS);
+
+theorem :: GEOMTRAP:50
+for x being set holds (x is Element of OTS iff
+  x is Element of Lambda(OTS));
+
+theorem :: GEOMTRAP:51
+a=a' & b=b' & c =c' & d=d' implies (a',b' // c',d' iff
+  a,b // c,d or a,b // d,c);
+
+definition let IT be non empty AffinStruct;
+ attr IT is TrapSpace-like means
+:: GEOMTRAP:def 15
+ for a',b',c',d',p',q' being Element of IT holds
+  a',b' // b',a' & (a',b' // c',d' & a',b' // c',q' implies a'=b' or d'=q') &
+  (p'<>q' & p',q' // a',b' & p',q' // c',d' implies a',b' // c',d') &
+  (a',b' // c',d' implies c',d' // a',b') &
+   (ex x' being Element of IT st a',b' // c',x');
+end;
+
+definition
+ cluster strict TrapSpace-like (non empty AffinStruct);
+end;
+
+definition
+  mode TrapSpace is TrapSpace-like (non empty AffinStruct);
+end;
+
+definition let OTS be OrdTrapSpace;
+ cluster Lambda(OTS) -> TrapSpace-like;
+end;
+
+definition let IT be non empty AffinStruct;
+ attr IT is Regular means
+:: GEOMTRAP:def 16
+ for p,q,a,a1,b,b1,c,c1,d,d1 being Element of IT
+  st p<>q & p,q // a,a1 & p,q // b,b1 &
+   p,q // c,c1 & p,q // d,d1 & a,b // c,d holds a1,b1 // c1,d1;
+end;
+
+definition cluster strict Regular (non empty OrdTrapSpace);
+end;
+
+definition let MOS be MidOrdTrapSpace;
+ cluster Af(MOS) -> Regular; end;

@@ -1,0 +1,257 @@
+:: Computation in { \bf SCM_FSA }
+::  by Andrzej Trybulec and Yatsuka Nakamura
+::
+:: Received February 7, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary SCMFSA_2, AMI_1, INT_1, AMI_3, RELAT_1, FUNCT_4, FUNCOP_1, AMI_2,
+      BOOLE, FUNCT_1, AMI_5, ABSVALUE, FINSEQ_1, FINSEQ_2, CARD_3, CAT_1,
+      FINSET_1, ARYTM_1, NAT_1, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, XREAL_0, CARD_3, ABSVALUE,
+      RELAT_1, FUNCT_1, FUNCT_4, INT_1, NAT_1, STRUCT_0, CQC_LANG, FINSET_1,
+      FINSEQ_1, FINSEQ_2, FINSEQ_4, CAT_3, AMI_1, AMI_2, AMI_3, AMI_5, FUNCT_7,
+      SCMFSA_2;
+ constructors NAT_1, AMI_5, SCMFSA_1, FUNCT_7, SCMFSA_2, FINSEQ_4, CAT_3,
+      MEMBERED;
+ clusters AMI_1, AMI_3, INT_1, FUNCT_1, RELSET_1, SCMFSA_2, FINSEQ_5, FINSEQ_1,
+      FRAENKEL, ORDINAL2, NUMBERS;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+reserve k for Nat,
+        da,db for Int-Location,
+        fa for FinSeq-Location;
+
+theorem :: SCMFSA_3:1
+ not IC SCM+FSA in Int-Locations;
+
+theorem :: SCMFSA_3:2
+ not IC SCM+FSA in FinSeq-Locations;
+
+theorem :: SCMFSA_3:3
+   for i being Instruction of SCM+FSA, I being Instruction of SCM st i = I
+  for s being State of SCM+FSA, S being State of SCM st
+    S = s|(the carrier of SCM) +*
+       ((the Instruction-Locations of SCM) --> I)
+   holds Exec(i,s) = s +*Exec(I,S) +* s|the Instruction-Locations of SCM+FSA;
+
+theorem :: SCMFSA_3:4
+  for s1,s2 being State of SCM+FSA st
+       (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}))
+          = (s2 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}))
+  for l being Instruction of SCM+FSA
+   holds
+      Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+    = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA});
+
+theorem :: SCMFSA_3:5
+  for N being with_non-empty_elements set
+  for S being steady-programmed (non empty non void AMI-Struct over N)
+  for i being Instruction of S,
+      s being State of S
+   holds
+      Exec (i, s) | the Instruction-Locations of S
+          = s | the Instruction-Locations of S;
+
+begin :: Finite partial states of SCM+FSA
+
+theorem :: SCMFSA_3:6
+ for p being FinPartState of SCM+FSA
+ holds DataPart p = p | (Int-Locations \/ FinSeq-Locations);
+
+theorem :: SCMFSA_3:7
+ for p being FinPartState of SCM+FSA holds
+  p is data-only iff dom p c= Int-Locations \/ FinSeq-Locations;
+
+theorem :: SCMFSA_3:8
+   for p being FinPartState of SCM+FSA
+  holds dom DataPart p c= Int-Locations \/ FinSeq-Locations;
+
+theorem :: SCMFSA_3:9
+ for p being FinPartState of SCM+FSA
+  holds dom ProgramPart p c= the Instruction-Locations of SCM+FSA;
+
+theorem :: SCMFSA_3:10
+    for i being Instruction of SCM+FSA,
+      s being State of SCM+FSA,
+      p being programmed FinPartState of SCM+FSA
+   holds
+      Exec (i, s +* p) = Exec (i,s) +* p;
+
+theorem :: SCMFSA_3:11
+   for s being State of SCM+FSA,
+     iloc being Instruction-Location of SCM+FSA,
+     a being Int-Location
+  holds s.a = (s +* Start-At iloc).a;
+
+theorem :: SCMFSA_3:12
+   for s being State of SCM+FSA,
+     iloc being Instruction-Location of SCM+FSA,
+     a    being FinSeq-Location
+  holds s.a = (s +* Start-At iloc).a;
+
+theorem :: SCMFSA_3:13
+   for s, t being State of SCM+FSA
+  holds s +* t|(Int-Locations \/ FinSeq-Locations) is State of SCM+FSA;
+
+begin :: Autonomic finite partial states of SCM+FSA
+
+definition
+ let la be Int-Location;
+ let a be Integer;
+ redefine func la .--> a -> FinPartState of SCM+FSA;
+end;
+
+theorem :: SCMFSA_3:14
+ for p being autonomic FinPartState of SCM+FSA st DataPart p <> {}
+ holds IC SCM+FSA in dom p;
+
+definition
+ cluster autonomic non programmed FinPartState of SCM+FSA;
+end;
+
+theorem :: SCMFSA_3:15
+ for p being autonomic non programmed FinPartState of SCM+FSA
+ holds IC SCM+FSA in dom p;
+
+theorem :: SCMFSA_3:16
+    for p being autonomic FinPartState of SCM+FSA st IC SCM+FSA in dom p
+   holds IC p in dom p;
+
+theorem :: SCMFSA_3:17
+ for p being autonomic non programmed FinPartState of SCM+FSA,
+     s being State of SCM+FSA st p c= s
+ for i being Nat
+  holds IC (Computation s).i in dom ProgramPart(p);
+
+theorem :: SCMFSA_3:18
+ for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat
+    holds IC (Computation s1).i = IC (Computation s2).i &
+          CurInstr ((Computation s1).i) = CurInstr ((Computation s2).i);
+
+theorem :: SCMFSA_3:19
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat, da, db being Int-Location
+    st CurInstr ((Computation s1).i) = da := db & da in dom p
+ holds (Computation s1).i.db = (Computation s2).i.db;
+
+theorem :: SCMFSA_3:20
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat,
+     da, db being Int-Location
+    st CurInstr ((Computation s1).i) = AddTo(da, db) & da in dom p
+   holds (Computation s1).i.da + (Computation s1).i.db
+         = (Computation s2).i.da + (Computation s2).i.db;
+
+theorem :: SCMFSA_3:21
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat, da, db being Int-Location
+    st CurInstr ((Computation s1).i) = SubFrom(da, db) & da in dom p
+   holds (Computation s1).i.da - (Computation s1).i.db
+         = (Computation s2).i.da - (Computation s2).i.db;
+
+theorem :: SCMFSA_3:22
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat,
+     da, db being Int-Location
+    st CurInstr ((Computation s1).i) = MultBy(da, db) & da in dom p
+   holds (Computation s1).i.da * (Computation s1).i.db
+         = (Computation s2).i.da * (Computation s2).i.db;
+
+theorem :: SCMFSA_3:23
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat,
+     da, db being Int-Location
+    st CurInstr ((Computation s1).i) = Divide(da, db) & da in dom p & da <> db
+   holds (Computation s1).i.da div (Computation s1).i.db
+         = (Computation s2).i.da div (Computation s2).i.db;
+
+theorem :: SCMFSA_3:24
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat, da, db being Int-Location
+    st CurInstr ((Computation s1).i) = Divide(da, db) & db in dom p & da <> db
+   holds (Computation s1).i.da mod (Computation s1).i.db
+         = (Computation s2).i.da mod (Computation s2).i.db;
+
+theorem :: SCMFSA_3:25
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat,
+     da being Int-Location,
+     loc being Instruction-Location of SCM+FSA
+    st CurInstr ((Computation s1).i) = da=0_goto loc &
+       loc <> Next (IC (Computation s1).i)
+   holds ((Computation s1).i.da = 0 iff (Computation s2).i.da = 0);
+
+theorem :: SCMFSA_3:26
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat,
+     da being Int-Location,
+     loc being Instruction-Location of SCM+FSA
+    st CurInstr ((Computation s1).i) = da>0_goto loc &
+       loc <> Next (IC (Computation s1).i)
+   holds ((Computation s1).i.da > 0 iff (Computation s2).i.da > 0);
+
+theorem :: SCMFSA_3:27
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat, da, db being Int-Location, f being FinSeq-Location
+    st CurInstr ((Computation s1).i) = da := (f,db) & da in dom p
+ for k1,k2 being Nat st
+  k1 = abs((Computation s1).i.db) & k2 = abs((Computation s2).i.db)
+ holds
+    ((Computation s1).i.f)/.k1 = ((Computation s2).i.f)/.k2;
+
+theorem :: SCMFSA_3:28
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat, da, db being Int-Location, f being FinSeq-Location
+    st CurInstr ((Computation s1).i) = (f,db):=da & f in dom p
+ for k1,k2 being Nat st
+  k1 = abs((Computation s1).i.db) & k2 = abs((Computation s2).i.db)
+ holds (Computation s1).i.f+*(k1,(Computation s1).i.da)
+       = (Computation s2).i.f+*(k2,(Computation s2).i.da);
+
+theorem :: SCMFSA_3:29
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat, da being Int-Location, f being FinSeq-Location
+    st CurInstr ((Computation s1).i) = da :=len f & da in dom p
+ holds
+    len((Computation s1).i.f) = len((Computation s2).i.f);
+
+theorem :: SCMFSA_3:30
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat, da being Int-Location, f being FinSeq-Location
+    st CurInstr ((Computation s1).i) = f:=<0,...,0>da & f in dom p
+ for k1,k2 being Nat st
+  k1 = abs((Computation s1).i.da) & k2 = abs((Computation s2).i.da)
+ holds k1 |-> 0 = k2 |-> 0;
+

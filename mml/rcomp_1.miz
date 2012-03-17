@@ -1,0 +1,1214 @@
+:: Topological Properties of Subsets in Real Numbers
+::  by Konrad Raczkowski and Pawe{\l} Sadowski
+::
+:: Received June 18, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, SEQ_1, ORDINAL2, SEQM_3, FUNCT_1, SEQ_2, LATTICES, ARYTM_1,
+      ABSVALUE, ARYTM_3, BOOLE, COMPTS_1, RELAT_1, PRE_TOPC, SUBSET_1,
+      SQUARE_1, SEQ_4, RCOMP_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, NAT_1, RELAT_1, FUNCT_2, SEQ_1, SEQ_2, SEQM_3, SEQ_4, ABSVALUE,
+      SQUARE_1;
+ constructors NAT_1, SEQ_2, SEQM_3, SEQ_4, ABSVALUE, SQUARE_1, MEMBERED,
+      XBOOLE_0;
+ clusters XREAL_0, RELSET_1, SEQM_3, SEQ_1, NAT_1, MEMBERED, ZFMISC_1,
+      XBOOLE_0, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, SEQ_2, XBOOLE_0;
+ theorems AXIOMS, TARSKI, SUBSET_1, REAL_1, NAT_1, FUNCT_1, FUNCT_2, SEQ_2,
+      SEQM_3, SEQ_4, ABSVALUE, SQUARE_1, RELAT_1, XREAL_0, XBOOLE_0, XBOOLE_1,
+      XCMPLX_0, XCMPLX_1;
+ schemes REAL_1, FUNCT_2, SEQ_1;
+
+begin
+
+reserve n,n1,m,k for Nat;
+reserve x,y for set;
+reserve s,g,g1,g2,r,p,q,t for real number;
+reserve s1,s2,s3 for Real_Sequence;
+reserve Nseq for increasing Seq_of_Nat;
+reserve X,Y,Y1 for Subset of REAL;
+
+scheme RealSeqChoice { P[set,set] }:
+ ex s1 being Function of NAT, REAL st for n being Nat holds P[n,s1.n]
+provided
+A1: for n being Nat ex r being real number st P[n,r]
+ proof
+  defpred Q[Element of NAT,Element of REAL] means P[$1,$2];
+A2: for t being Element of NAT
+   ex ff being Element of REAL st Q[t,ff]
+   proof
+     let t be Element of NAT;
+     consider ff being real number such that
+A3:      P[t,ff] by A1;
+     reconsider ff as Real by XREAL_0:def 1;
+       P[t,ff] by A3;
+     hence thesis;
+   end;
+  consider f being Function of NAT,REAL such that A4:
+  for t being Element of NAT holds Q[t,f.t] from FuncExD(A2);
+  take f; let n;
+  thus thesis by A4;
+ end;
+
+theorem Th1:
+(for r holds r in X implies r in Y) implies X c= Y
+proof
+  assume A1: for r holds r in X implies r in Y;
+     now let x; assume
+A2:   x in X;
+    then x is Real;
+    hence x in Y by A1,A2;
+   end;
+  hence X c= Y by TARSKI:def 3;
+ end;
+
+canceled;
+
+theorem Th3:
+ Y1 c= Y & Y is bounded_below implies Y1 is bounded_below
+proof
+ assume A1: Y1 c= Y & Y is bounded_below;
+ then consider p such that
+ A2: for r st r in Y holds p<=r by SEQ_4:def 2;
+   for r st r in Y1 holds p<=r by A1,A2;
+ hence thesis by SEQ_4:def 2;
+end;
+
+theorem Th4:
+ Y1 c= Y & Y is bounded_above implies Y1 is bounded_above
+proof
+ assume A1: Y1 c= Y & Y is bounded_above;
+ then consider p such that
+ A2: for r st r in Y holds r<=p by SEQ_4:def 1;
+   for r st r in Y1 holds r<=p by A1,A2;
+ hence thesis by SEQ_4:def 1;
+end;
+
+theorem
+   Y1 c= Y & Y is bounded implies Y1 is bounded
+proof
+ assume A1: Y1 c= Y & Y is bounded;
+ then A2: Y is bounded_above bounded_below by SEQ_4:def 3;
+ then A3: Y1 is bounded_above by A1,Th4;
+   Y1 is bounded_below by A1,A2,Th3;
+ hence thesis by A3,SEQ_4:def 3;
+end;
+
+definition let g,s be real number;
+func [. g,s .] -> Subset of REAL equals : Def1:
+  {r where r is Real: g<=r & r<=s };
+coherence
+ proof
+    now let x;
+   assume x in {r where r is Real: g <= r & r<=s};
+   then ex r be Real st x = r & g <= r & r<=s;
+   hence x in REAL;
+  end;
+  hence thesis by TARSKI:def 3;
+ end;
+end;
+
+definition let g,s be real number;
+func ]. g,s .[ -> Subset of REAL equals : Def2:
+  {r where r is Real : g<r & r<s };
+coherence
+ proof
+    now let x;
+   assume x in {r where r is Real: g<r & r<s};
+   then ex r be Real st x = r & g<r & r<s;
+   hence x in REAL;
+  end;
+  hence thesis by TARSKI:def 3;
+ end;
+end;
+
+canceled 2;
+
+theorem Th8:
+r in ].p-g,p+g.[ iff abs(r-p)<g
+proof
+ thus r in ].p-g,p+g.[ implies abs(r-p)<g
+ proof assume r in ].p-g,p+g.[;
+  then r in {s where s is Real: p-g<s & s<p+g} by Def2;
+ then A1:  ex s be Real st r=s & p-g<s & s<p+g;
+  then p+-g<r by XCMPLX_0:def 8;
+  then A2: -g<r-p by REAL_1:86; r-p<g by A1,REAL_1:84;
+  hence thesis by A2,SEQ_2:9;
+ end;
+A3: r is Real by XREAL_0:def 1;
+ assume abs(r-p)<g;
+ then A4: -g<r-p & r-p<g by SEQ_2:9; then p+-g<r by REAL_1:86;
+ then A5: p-g<r by XCMPLX_0:def 8; r<p+g by A4,REAL_1:84;
+ then r in {s where s is Real: p-g<s & s<p+g} by A3,A5;
+ hence thesis by Def2;
+end;
+
+theorem
+  r in [.p,g.] iff abs(p+g-2*r)<=g-p
+proof
+ thus r in [.p,g.] implies abs(p+g-2*r)<=g-p
+ proof assume r in [.p,g.];
+  then r in {s where s is Real: p<=s & s<=g} by Def1;
+  then ex s be Real st s=r & p<=s & s<=g;
+  then 2*p<=2*r & 2*r<=2*g by AXIOMS:25;
+  then -2*p>=-2*r & -2*r>=-2*g by REAL_1:50;
+  then (p+g)+-2*p>=(p+g)+-2*r & (p+g)+-2*r>=(p+g)+-2*g by REAL_1:55;
+  then (p+g)-2*p>=(p+g)+-2*r & (p+g)+-2*r>=(p+g)+-2*g by XCMPLX_0:def 8;
+  then (p+g)-2*p>=(p+g)-2*r & (p+g)-2*r>=(p+g)+-2*g by XCMPLX_0:def 8;
+  then (g+p)-2*p>=(p+g)-2*r & (p+g)-2*r>=(p+g)-2*g by XCMPLX_0:def 8;
+  then g+(p-2*p)>=p+g-2*r & p+g-2*r>=p+(g-2*g) by XCMPLX_1:29;
+  then g+(p-(p+p))>=p+g-2*r & p+g-2*r>=p+(g-(g+g)) by XCMPLX_1:11;
+  then g+(p-p-p)>=p+g-2*r & p+g-2*r>=p+(g-g-g) by XCMPLX_1:36;
+  then g+(0-p)>=p+g-2*r & p+g-2*r>=p+(0-g) by XCMPLX_1:14;
+  then g+-p>=p+g-2*r & p+g-2*r>=p+-g by XCMPLX_1:150;
+  then g-p>=p+g-2*r & p+g-2*r>=p-g by XCMPLX_0:def 8;
+  then g-p>=p+g-2*r & p+g-2*r>=-(g-p) by XCMPLX_1:143;
+  hence thesis by ABSVALUE:12;
+ end;
+ assume abs(p+g-2*r)<=g-p;
+ then A1: g-p>=p+g-2*r & p+g-2*r>=-(g-p) by ABSVALUE:12;
+ then 2*r+(g-p)>=p+g by REAL_1:86; then 2*r>=p+g-(g-p) by REAL_1:86;
+ then 2*r>=p+(g-(g-p)) by XCMPLX_1:29; then 2*r>=p+p by XCMPLX_1:18;
+ then 2*r>=2*p by XCMPLX_1:11; then 1/2*(2*r)>=1/2*(2*p) by AXIOMS:25;
+ then (1/2*2)*r>=1/2*(2*p) by XCMPLX_1:4;
+ then A2: (1/2*2)*r>=(1/2*2)*p by XCMPLX_1:4;
+A3: r is Real by XREAL_0:def 1;
+   p+g-2*r>=p-g by A1,XCMPLX_1:143; then p+g>=p-g+2*r by REAL_1:84;
+ then p+g-(p-g)>=2*r by REAL_1:84; then p+g-p+g>=2*r by XCMPLX_1:37;
+ then g+g>=2*r by XCMPLX_1:26; then 2*g>=2*r by XCMPLX_1:11;
+ then 1/2*(2*g)>=1/2*(2*r) by AXIOMS:25;
+ then (1/2*2)*g>=1/2*(2*r) by XCMPLX_1:4;
+ then g>=1*r by XCMPLX_1:4;
+ then r in {s where s is Real: p<=s & s<=g} by A2,A3;
+ hence thesis by Def1;
+end;
+
+theorem
+  r in ].p,g.[ iff abs(p+g-2*r)<g-p
+proof
+ thus r in ].p,g.[ implies abs(p+g-2*r)<g-p
+ proof assume r in ].p,g.[;
+  then r in {s where s is Real: p<s & s<g} by Def2;
+  then ex s be Real st s=r & p<s & s<g;
+ then 2*p<2*r & 2*r<2*g by REAL_1:70;
+  then -2*p>-2*r & -2*r>-2*g by REAL_1:50;
+  then (p+g)+-2*p>(p+g)+-2*r & (p+g)+-2*r>(p+g)+-2*g by REAL_1:53;
+  then (p+g)-2*p>(p+g)+-2*r & (p+g)+-2*r>(p+g)+-2*g by XCMPLX_0:def 8;
+  then (p+g)-2*p>(p+g)-2*r & (p+g)-2*r>(p+g)+-2*g by XCMPLX_0:def 8;
+  then (g+p)-2*p>(p+g)-2*r & (p+g)-2*r>(p+g)-2*g by XCMPLX_0:def 8;
+  then g+(p-2*p)>p+g-2*r & p+g-2*r>p+(g-2*g) by XCMPLX_1:29;
+  then g+(p-(p+p))>p+g-2*r & p+g-2*r>p+(g-(g+g)) by XCMPLX_1:11;
+  then g+(p-p-p)>p+g-2*r & p+g-2*r>p+(g-g-g) by XCMPLX_1:36;
+  then g+(0-p)>p+g-2*r & p+g-2*r>p+(0-g) by XCMPLX_1:14;
+  then g+-p>p+g-2*r & p+g-2*r>p+-g by XCMPLX_1:150;
+  then g-p>p+g-2*r & p+g-2*r>p-g by XCMPLX_0:def 8;
+  then g-p>p+g-2*r & p+g-2*r>-(g-p) by XCMPLX_1:143;
+  hence thesis by SEQ_2:9;
+ end;
+ assume abs(p+g-2*r)<g-p;
+ then A1: g-p>p+g-2*r & p+g-2*r>-(g-p) by SEQ_2:9;
+ then 2*r+(g-p)>p+g by REAL_1:84; then 2*r>p+g-(g-p) by REAL_1:84;
+ then 2*r>p+(g-(g-p)) by XCMPLX_1:29; then 2*r>p+p by XCMPLX_1:18;
+ then 2*r>2*p by XCMPLX_1:11; then 1/2*(2*r)>1/2*(2*p) by REAL_1:70;
+ then (1/2*2)*r>1/2*(2*p) by XCMPLX_1:4;
+ then A2: r>1*p by XCMPLX_1:4;
+A3: r is Real by XREAL_0:def 1;
+   p+g-2*r>p-g by A1,XCMPLX_1:143; then p+g>p-g+2*r by REAL_1:86;
+ then p+g-(p-g)>2*r by REAL_1:86; then p+g-p+g>2*r by XCMPLX_1:37;
+ then g+g>2*r by XCMPLX_1:26; then 2*g>2*r by XCMPLX_1:11;
+ then 1/2*(2*g)>1/2*(2*r) by REAL_1:70;
+ then (1/2*2)*g>1/2*(2*r) by XCMPLX_1:4;
+ then g>1*r by XCMPLX_1:4;
+ then r in {s where s is Real: p<s & s<g} by A2,A3;
+ hence thesis by Def2;
+end;
+
+theorem
+  for g,s st g<=s holds [.g,s.] = ].g,s.[ \/ {g,s}
+proof let g,s such that A1: g<=s;
+ thus [.g,s.] c= ].g,s.[ \/ {g,s}
+ proof let x; assume that A2: x in [.g,s.] and
+                          A3: not x in ].g,s.[ \/ {g,s};
+    x in {r where r is Real: g<=r & r<=s} by A2,Def1;
+ then A4:  ex r be Real st r=x & g<=r & r<=s;
+  then reconsider x as Real;
+A5:  not x in ].g,s.[ & not x in {g,s} by A3,XBOOLE_0:def 2;
+then A6:  (not x in ].g,s.[) & x<> g & x <> s by TARSKI:def 2;
+    not (x in {q where q is Real: g<q & q<s}) by A5,Def2;
+     then not g<x or not x<s;
+   hence contradiction by A4,A6,REAL_1:def 5;
+ end;
+ thus ].g,s.[ \/ {g,s} c= [.g,s.]
+ proof let x; assume x in ].g,s.[ \/ {g,s};
+then A7:  x in ].g,s.[ or x in {g,s} by XBOOLE_0:def 2;
+A8: g is Real by XREAL_0:def 1;
+    now per cases by A7,TARSKI:def 2;
+  suppose x in ].g,s.[;
+   then x in {r where r is Real: g<r & r<s} by Def2;
+    then ex r be Real st x = r & g<r & r<s;
+   then x in {r where r is Real: g<=r & r<=s};
+   hence x in [.g,s.] by Def1;
+  suppose A9: x=g;
+     g in {r where r is Real: g<=r & r<=s} by A1,A8;
+   hence x in [.g,s.] by A9,Def1;
+  suppose A10: x=s;
+      s is Real by XREAL_0:def 1;
+   then s in {r where r is Real: g<=r & r<=s} by A1;
+   hence x in [.g,s.] by A10,Def1;
+  end; hence thesis;
+ end;
+end;
+
+theorem Th12:
+p <= g implies ].g,p.[ = {}
+proof assume that A1: p <= g and A2: ].g,p.[ <> {};
+ consider t be Real such that A3: t in ].g,p.[ by A2,SUBSET_1:10;
+   t in {r where r is Real: g<r & r<p} by A3,Def2;
+ then ex r be Real st r=t & g<r & r<p;
+hence contradiction by A1,AXIOMS:22;
+end;
+
+theorem Th13:
+p < g implies [.g,p.] = {}
+proof assume that A1: p < g and A2: [.g,p.] <> {};
+ consider t be Real such that A3: t in [.g,p.] by A2,SUBSET_1:10;
+   t in {r where r is Real: g<=r & r<=p} by A3,Def1;
+ then ex r be Real st r=t & g<=r & r<=p;
+hence contradiction by A1,AXIOMS:22;
+end;
+
+theorem
+  [.p,p.] = {p}
+proof
+A1:p is Real by XREAL_0:def 1;
+   now let x;
+ thus x in [.p,p.] implies x in {p}
+  proof assume x in [.p,p.];
+  then x in {t where t is Real: p<=t & t<=p} by Def1;
+    then ex t be Real st t=x & p<=t & t<=p; then x = p by AXIOMS:21;
+   hence thesis by TARSKI:def 1;
+  end;
+  assume x in {p}; then x=p by TARSKI:def 1;
+  then x in {t where t is Real: p <=t & t<=p} by A1;
+  hence x in [.p,p.] by Def1;
+ end; hence [.p,p.] = {p} by TARSKI:2;
+end;
+
+theorem
+    (p<g implies ].p,g.[ <> {}) &
+  (p<=g implies p in [.p,g.] & g in [.p,g.]) &
+  ].p,g.[ c= [.p,g.]
+proof
+A1: p/2+g/2 is Real by XREAL_0:def 1;
+A2: p is Real by XREAL_0:def 1;
+A3: g is Real by XREAL_0:def 1;
+ thus p<g implies ].p,g.[<>{}
+ proof assume p<g;
+  then A4: p/2<g/2 by REAL_1:73; then p/2+g/2<g/2+g/2 by REAL_1:67;
+  then A5: p/2+g/2<g by XCMPLX_1:66; p/2+p/2<p/2+g/2 by A4,REAL_1:67;
+  then p<p/2+g/2 by XCMPLX_1:66;
+  then p/2+g/2 in {r where r is Real: p<r & r<g} by A1,A5;
+  hence thesis by Def2;
+ end;
+ hereby assume A6: p<=g;
+  then p in {r where r is Real: p<=r & r<=g} by A2;
+  hence p in [.p,g.] by Def1;
+    g in {r where r is Real: p<=r & r<=g} by A3,A6;
+  hence g in [.p,g.] by Def1;
+ end;
+ let y; assume y in ].p,g.[;
+ then y in {r where r is Real:p<r & r<g} by Def2;
+ then consider r be Real such that A7: r=y & p<r & r<g;
+   y in {s where s is Real:p<=s & s<=g} by A7;
+ hence thesis by Def1;
+end;
+
+theorem
+  r in [.p,g.] & s in [.p,g.] implies [.r,s.] c= [.p,g.]
+proof assume A1: r in [.p,g.] & s in [.p,g.];
+ then r in {t where t is Real: p<=t & t<=g} by Def1;
+ then A2: ex t be Real st t=r & p<=t & t<=g;
+   s in {t where t is Real: p<=t & t<=g} by A1,Def1;
+ then A3: ex t be Real st t=s & p<=t & t<=g;
+ let x; assume x in [.r,s.];
+ then x in {t where t is Real: r<=t & t<=s} by Def1;
+ then consider t be Real such that A4: t=x & r<=t & t<=s;
+ A5: p<=t by A2,A4,AXIOMS:22; t<=g by A3,A4,AXIOMS:22;
+ then x in {q where q is Real:p<=q & q<=g} by A4,A5;
+ hence x in [.p,g.] by Def1;
+end;
+
+theorem
+  r in ].p,g.[ & s in ].p,g.[ implies [.r,s.] c= ].p,g.[
+proof assume A1: r in ].p,g.[ & s in ].p,g.[;
+then r in {q where q is Real:p<q & q<g} by Def2;
+then A2: ex q be Real st q=r & p<q & q<g;
+  s in {q where q is Real:p<q & q<g} by A1,Def2;
+then A3: ex q be Real st q=s & p<q & q<g;
+ let y; assume y in [.r,s.];
+ then y in {q where q is Real:r<=q & q<=s} by Def1;
+ then consider q be Real such that A4: q=y & r<=q & q<=s;
+ A5: p<q by A2,A4,AXIOMS:22; q<g by A3,A4,AXIOMS:22;
+ then y in {t where t is Real:p<t & t<g} by A4,A5;
+ hence thesis by Def2;
+end;
+
+theorem
+  p<=g implies [.p,g.] = [.p,g.] \/ [.g,p.]
+proof assume A1: p<=g;
+   now per cases;
+ suppose p=g;
+  hence [.p,g.] \/ [.g,p.] = [.p,g.];
+ suppose p<>g; then p<g by A1,REAL_1:def 5;
+  hence [.p,g.] \/ [.g,p.] = [.p,g.] \/ {} by Th13
+   .= [.p,g.];
+ end;
+ hence thesis;
+end;
+
+definition let X;
+attr X is compact means :Def3:
+ for s1 st rng s1 c= X ex s2 st s2 is_subsequence_of s1 &
+ s2 is convergent & lim s2 in X;
+end;
+
+definition let X;
+attr X is closed means :Def4:
+ for s1 st rng s1 c= X & s1 is convergent holds lim s1 in X;
+end;
+
+definition let X;
+attr X is open means :Def5: X` is closed;
+end;
+
+canceled 3;
+
+theorem Th22:
+ for s1 st rng s1 c= [.s,g.] holds s1 is bounded
+      proof
+       let s1 such that A1: rng s1 c= [.s,g.];
+       thus s1 is bounded_above
+       proof take r = g + 1;
+A2:     for t st t in rng s1 holds t < r
+        proof let t; assume t in rng s1;
+         then t in [.s,g.] by A1; then t in
+ {q where q is Real: s<=q & q<=g } by Def1;
+         then A3:         ex p be Real st t = p & s <= p & p<=g; g < r by
+REAL_1:69;
+         hence thesis by A3,AXIOMS:22;
+        end;
+          for n holds s1.n < r
+        proof let n; n in NAT;
+         then n in dom s1 by FUNCT_2:def 1; then s1.n in rng s1 by FUNCT_1:def
+5;
+         hence thesis by A2;
+        end; hence thesis;
+       end;
+       thus s1 is bounded_below
+       proof take r = s - 1;
+        A4: r + 1 = s - (1-1) by XCMPLX_1:37;
+A5:     for t st t in rng s1 holds r < t
+        proof let t; assume t in rng s1;
+         then t in [.s,g.] by A1; then t in
+ {q where q is Real: s<=q & q<=g } by Def1;
+         then A6:         ex p be Real st t = p & s <= p & p<=g; r < s by A4,
+REAL_1:69;
+         hence thesis by A6,AXIOMS:22;
+        end;
+          for n holds r < s1.n
+        proof let n; n in NAT;
+         then n in dom s1 by FUNCT_2:def 1; then s1.n in rng s1 by FUNCT_1:def
+5;
+         hence thesis by A5;
+        end; hence thesis;
+       end;
+      end;
+
+theorem Th23:
+ [.s,g.] is closed
+ proof
+     for s1 st rng s1 c= [.s,g.] & s1 is convergent holds
+   lim s1 in [.s,g.]
+   proof let s1; assume that
+A1: rng s1 c= [.s,g.] and
+A2: s1 is convergent;
+A3: lim s1 <= g
+    proof
+     deffunc F(Nat) = g;
+     consider s2 be Real_Sequence such that
+ A4: for n holds s2.n = F(n) from ExRealSeq;
+A5: s2.0 = g by A4;
+A6:  s2 is constant by A4,SEQM_3:def 6;
+then A7:  lim s2 = g by A5,SEQ_4:40;
+A8: s2 is convergent by A6,SEQ_4:39;
+       now let n;
+        n in NAT;
+      then n in dom s1 by FUNCT_2:def 1; then s1.n in rng s1 by FUNCT_1:def 5
+;
+      then s1.n in [.s,g.] by A1;
+      then s1.n in {q where q is Real: s<=q & q<=g } by Def1;
+      then ex p be Real st s1.n = p & s <= p & p<=g;hence s1.n<=s2.n by A4;
+     end; hence thesis by A2,A7,A8,SEQ_2:32;
+    end;
+      s <= lim s1
+    proof
+     deffunc F(Nat)=s;
+     consider s2 be Real_Sequence such that
+ A9: for n holds s2.n = F(n) from ExRealSeq;
+A10: s2.0 = s by A9;
+A11:  s2 is constant by A9,SEQM_3:def 6;
+then A12:  lim s2 = s by A10,SEQ_4:40;
+A13: s2 is convergent by A11,SEQ_4:39;
+       now let n;
+        n in NAT;
+      then n in dom s1 by FUNCT_2:def 1; then s1.n in rng s1 by FUNCT_1:def 5
+;
+      then s1.n in [.s,g.] by A1;
+      then s1.n in {q where q is Real: s<=q & q<=g } by Def1;
+      then ex p be Real st s1.n = p & s <= p & p<=g;hence s2.n<=s1.n by A9;
+     end; hence thesis by A2,A12,A13,SEQ_2:32;
+    end; then lim s1 in {r where r is Real: s<=r & r<=g} by A3;
+    hence thesis by Def1;
+   end;
+   hence thesis by Def4;
+ end;
+
+theorem
+   [.s,g.] is compact
+  proof
+      for s1 st rng s1 c= [.s,g.] ex s2 st s2 is_subsequence_of s1 &
+    s2 is convergent & lim s2 in [.s,g.]
+    proof let s1; assume A1: (rng s1) c= [.s,g.];
+   then s1 is bounded by Th22;
+      then consider s2 be Real_Sequence such that
+A2:   s2 is_subsequence_of s1 & s2 is convergent by SEQ_4:57;
+      take s2; A3: [.s,g.] is closed by Th23;
+         ex Nseq st s2 = s1*Nseq by A2,SEQM_3:def 10;
+      then rng s2 c= rng s1 by RELAT_1:45;
+      then rng s2 c= [.s,g.] by A1,XBOOLE_1:1;
+      hence thesis by A2,A3,Def4;
+    end;
+    hence thesis by Def3;
+  end;
+
+theorem Th25:
+ ].p,q.[ is open
+proof
+ defpred P[Real] means $1<=p or q<=$1;
+ consider X such that A1: for r be Real holds r in X iff P[r]
+ from SepReal;
+ A2: ].p,q.[` = X
+ proof thus ].p,q.[` c= X
+  proof
+     now let r; assume
+A3:   r in ].p,q.[`;
+A4: r is Real by XREAL_0:def 1;
+      r in REAL \ ].p,q.[ by A3,SUBSET_1:def 5;
+    then not r in ].p,q.[ by XBOOLE_0:def 4;
+    then not r in {s where s is Real: p<s & s<q} by Def2;
+    then r<=p or q<=r by A4;
+    hence r in X by A1,A4;
+   end;
+   hence thesis by Th1;
+  end;
+    now let r; assume
+A5:  r in X;
+A6: r is Real by XREAL_0:def 1;
+     not ex s be Real st s=r & p<s & s<q by A1,A5;
+   then not r in {s where s is Real: p<s & s<q};
+   then not r in ].p,q.[ by Def2;
+   then r in REAL \ ].p,q.[ by A6,XBOOLE_0:def 4;
+   hence r in ].p,q.[` by SUBSET_1:def 5;
+  end;
+  hence thesis by Th1;
+ end;
+   now let s1 such that A7: (rng s1) c= X & s1 is convergent;
+    lim s1<=p or q<=lim s1
+  proof assume A8:not thesis;
+   then A9: 0<lim s1 - p by SQUARE_1:11;
+     0<q - lim s1 by A8,SQUARE_1:11;
+   then consider n such that A10:
+   for m st n<=m holds abs(s1.m-lim s1)<q-lim s1 by A7,SEQ_2:def 7;
+   consider n1 such that A11:
+   for m st n1<=m holds abs(s1.m-lim s1)<lim s1-p by A7,A9,SEQ_2:def 7;
+   consider k such that A12: max(n,n1)<k by SEQ_4:10;
+   A13: -abs(s1.k-lim s1) <= s1.k-lim s1 &
+   s1.k-lim s1 <= abs(s1.k-lim s1) by ABSVALUE:11;
+   then A14: -(s1.k-lim s1) <= -(-abs(s1.k-lim s1)) by REAL_1:50;
+     n<=max(n,n1) by SQUARE_1:46; then n<=k by A12,AXIOMS:22;
+   then abs(s1.k-lim s1)<q-lim s1 by A10;
+   then s1.k-lim s1 < q-lim s1 by A13,AXIOMS:22;
+   then A15: s1.k < q by REAL_1:49;
+     n1<=max(n,n1) by SQUARE_1:46; then n1<=k by A12,AXIOMS:22;
+   then abs(s1.k-lim s1)<lim s1 - p by A11;
+   then -(s1.k-lim s1)<lim s1 - p by A14,AXIOMS:22;
+   then -(lim s1 - p)< -(-(s1.k-lim s1)) by REAL_1:50;
+   then p - lim s1 < s1.k-lim s1 by XCMPLX_1:143;
+   then A16: p < s1.k by REAL_1:49
+; dom s1 = NAT by FUNCT_2:def 1;
+   then s1.k in rng s1 by FUNCT_1:def 5; hence contradiction by A1,A7,A15,A16;
+  end;
+  hence lim s1 in X by A1;
+ end;
+ then X is closed by Def4;
+ hence thesis by A2,Def5;
+end;
+
+definition let p, q be real number;
+  cluster ].p,q.[ -> open;
+  coherence by Th25;
+end;
+
+theorem Th26:
+X is compact implies X is closed
+proof
+ assume A1: X is compact;
+ assume not X is closed;
+ then consider s1 such that A2:
+ rng s1 c= X & s1 is convergent & not lim s1 in X by Def4;
+    ex s2 st
+ s2 is_subsequence_of s1 & s2 is convergent & (lim s2) in X by A1,A2,Def3;
+ hence contradiction by A2,SEQ_4:30;
+end;
+
+theorem Th27:
+(for p st p in X ex r,n st 0<r & (for m st n<m holds r<abs(s1.m - p)))
+implies
+for s2 st s2 is_subsequence_of s1 holds
+not (s2 is convergent & lim s2 in X)
+proof
+ assume that A1: for p st p in X
+     ex r,n st 0<r & (for m st n<m holds r<abs(s1.m - p)) and
+ A2: not for s2 st s2 is_subsequence_of s1 holds not (s2 is convergent &
+     lim s2 in X);
+ consider s2 such that A3: s2 is_subsequence_of s1 &
+ s2 is convergent & lim s2 in X by A2;
+ consider r,n such that A4: 0<r & for m st n<m holds
+                            r<abs(s1.m - lim s2) by A1,A3;
+ consider n1 such that A5: for m st n1<=m holds
+                           abs(s2.m-(lim s2))<r by A3,A4,SEQ_2:def 7;
+ set k = n + 1 + n1;
+   n + 1 <= k by NAT_1:29;
+ then A6: n < k by NAT_1:38;
+ consider NS being increasing Seq_of_Nat such that
+ A7: s2 = s1*NS by A3,SEQM_3:def 10; n1 <= k by NAT_1:29;
+ then abs((s1*NS).k-(lim s2))<r by A5,A7;
+ then A8: abs(s1.(NS.k)-(lim s2))<r by SEQM_3:31;
+   k<=NS.k by SEQM_3:33; then n<NS.k by A6,AXIOMS:22;
+ hence contradiction by A4,A8;
+end;
+
+theorem Th28:
+ X is compact implies X is bounded
+proof
+ assume A1: X is compact;
+ assume A2: not X is bounded;
+   now per cases by A2,SEQ_4:def 3;
+   suppose A3: not X is bounded_above;
+   defpred P[Element of NAT,Element of REAL] means
+          ex q st q =$2  & q in X & $1<q;
+   A4: for n being Element of NAT
+       ex p being Element of REAL st P[n,p]
+::       st ex q st q=p & q in X & n<q
+       proof let n be Element of NAT;
+        consider t such that A5: t in X & n<t by A3,SEQ_4:def 1;
+        take t;
+        thus thesis by A5;
+       end;
+   consider f being Function of NAT,REAL such that A6:
+   for n being Element of NAT holds P[n,f.n]
+     from FuncExD(A4);
+A7: now let n;
+       ex q st q=f.n & q in X & n<q by A6;
+    hence f.n in X & n<f.n;
+   end;
+A8: for p st p in X
+    ex r,n st 0<r & for m st n<m holds r<abs(f.m - p)
+   proof let p such that p in X;
+    consider q such that A9: q = 1; take r = q;
+    consider k such that A10: p+1<k by SEQ_4:10;
+    take n = k;
+    thus 0 < r by A9;
+    let m; assume n<m;
+then A11: p+1 < m by A10,AXIOMS:22;
+      m < f.m by A7; then p+1 < f.m by A11,AXIOMS:22;
+then A12: 1 < f.m - p by REAL_1:86;
+    then 0 < f.m - p by AXIOMS:22;
+    hence thesis by A9,A12,ABSVALUE:def 1;
+   end;
+  rng f c= X
+    proof let x; assume x in rng f;
+     then consider y such that A13: y in dom f & x = f.y by FUNCT_1:def 5;
+     reconsider y as Nat by A13,FUNCT_2:def 1; f.y in X by A7;
+     hence thesis by A13;
+    end;
+   then ex s2 st s2 is_subsequence_of f & s2 is convergent & lim s2 in X
+          by A1,Def3;
+  hence contradiction by A8,Th27;
+  suppose A14: not X is bounded_below;
+  defpred P[Element of NAT,Element of REAL] means
+          ex q st q=$2 & q in X & q<-$1;
+   A15: for n being Element of NAT
+       ex p being Element of REAL st P[n,p]
+       proof let n be Element of NAT;
+        consider t such that A16: t in X & t<-n by A14,SEQ_4:def 2;
+        take t;
+        thus thesis by A16;
+       end;
+   consider f being Function of NAT,REAL such that A17:
+   for n being Element of NAT holds P[n,f.n] from FuncExD(A15);
+A18: now let n;
+       ex q st q=f.n & q in X & q<-n by A17;
+    hence f.n in X & f.n<-n;
+   end;
+A19: for p st p in X
+    ex r,n st 0<r & for m st n<m holds r<abs(f.m - p)
+   proof let p such that p in X;
+    consider q such that A20: q = 1; take r = q;
+    consider k such that A21: abs(p-1) <k by SEQ_4:10;
+A22:  -k <p-1 by A21,SEQ_2:9;
+    take n = k; thus
+      0 < r by A20;
+    let m; assume n<m;
+    then -m<-n by REAL_1:50;
+then A23: -m < p-1 by A22,AXIOMS:22;
+      f.m < -m by A18; then f.m < p-1 by A23,AXIOMS:22;
+    then f.m +1 < p by REAL_1:86;
+then A24: 1 < p - f.m by REAL_1:86; then 0 < p-f.m by AXIOMS:22;
+    then r < abs( p-f.m ) by A20,A24,ABSVALUE:def 1;
+    then r < abs( -(f.m-p) ) by XCMPLX_1:143;
+    hence thesis by ABSVALUE:17;
+   end;
+     rng f c= X
+    proof let x; assume x in rng f;
+     then consider y such that A25: y in dom f & x = f.y by FUNCT_1:def 5;
+     reconsider y as Nat by A25,FUNCT_2:def 1; f.y in X by A18;
+     hence thesis by A25;
+    end;
+   then ex s2 st s2 is_subsequence_of f & s2 is convergent & lim s2 in X
+      by A1,Def3;
+  hence contradiction by A19,Th27;
+ end;
+hence contradiction;
+end;
+
+theorem
+   X is bounded closed implies X is compact
+proof
+ assume A1: X is bounded & X is closed;
+   now let s1 such that A2: rng s1 c= X;
+    s1 is bounded
+  proof
+   thus s1 is bounded_above
+   proof X is bounded_above by A1,SEQ_4:def 3;
+    then consider p such that
+    A3: for q st q in X holds q<=p by SEQ_4:def 1;
+ take r = p+1;
+    A4: for t st t in rng s1 holds t < r
+        proof let t; assume t in rng s1;
+         then A5: t<=p by A2,A3; p < r by REAL_1:69;
+         hence thesis by A5,AXIOMS:22;
+        end;
+      for n holds s1.n < r
+    proof let n; n in NAT;
+     then n in dom s1 by FUNCT_2:def 1; then s1.n in rng s1 by FUNCT_1:def 5;
+     hence thesis by A4;
+    end; hence thesis;
+   end;
+   thus s1 is bounded_below
+   proof X is bounded_below by A1,SEQ_4:def 3;
+    then consider p such that
+    A6: for q st q in X holds p<=q by SEQ_4:def 2;
+ take r = p - 1;
+    A7: r + 1 = p - (1-1) by XCMPLX_1:37;
+    A8: for t st t in rng s1 holds r < t
+        proof let t; assume t in rng s1;
+         then A9: p<=t by A2,A6; r < p by A7,REAL_1:69;
+         hence thesis by A9,AXIOMS:22;
+        end;
+      for n holds r < s1.n
+    proof let n; n in NAT;
+     then n in dom s1 by FUNCT_2:def 1; then s1.n in rng s1 by FUNCT_1:def 5;
+     hence thesis by A8;
+    end; hence thesis;
+   end;
+  end;
+  then consider s2 be Real_Sequence such that A10:
+  s2 is_subsequence_of s1 & s2 is convergent by SEQ_4:57;
+     ex Nseq st s2 = s1*Nseq by A10,SEQM_3:def 10;
+  then rng s2 c= rng s1 by RELAT_1:45; then rng s2 c= X by A2,XBOOLE_1:1;
+  then lim s2 in X by A1,A10,Def4;
+  hence ex s2 st s2 is_subsequence_of s1 & s2 is convergent &
+  lim s2 in X by A10;
+ end;
+ hence thesis by Def3;
+end;
+
+theorem Th30:
+for X st X<>{} & X is closed & X is bounded_above holds upper_bound X in X
+ proof
+  let X such that A1: X<>{} and
+                  A2: X is closed and
+                  A3: X is bounded_above and
+                  A4: not upper_bound X in X;
+  set s1=upper_bound X;
+  defpred P[Element of NAT,Element of REAL] means
+     ex q st q=$2 & q in X & s1 -q < 1/($1+1);
+A5: for n being Element of NAT
+       ex p being Element of REAL st P[n,p]
+       proof let n be Element of NAT;
+          0<n+1 by NAT_1:19;
+        then 0<(n+1)" by REAL_1:72; then 0<1/(n+1) by XCMPLX_1:217;
+        then consider t such that
+        A6: t in X & s1 -1/(n+1) <t by A1,A3,SEQ_4:def 4;
+           s1 < t + 1/(n+1) by A6,REAL_1:84;
+      then A7: s1 -t < 1/(n+1) by REAL_1:84;
+        take t;
+        thus thesis by A6,A7;
+       end;
+   consider f being Function of NAT,REAL such that A8:
+   for n being Element of NAT holds P[n,f.n] from FuncExD(A5);
+A9: now let n;
+       ex q st q = f.n & q in X & s1 -q < 1/(n+1) by A8;
+    hence f.n in X & s1 - f.n<1/(n+1);
+   end;
+A10: now let s; assume 0<s;
+then A11: 0<s" by REAL_1:72;
+  consider n such that A12: s"<n by SEQ_4:10;
+  take k=n;
+  let m such that A13: k<=m;
+    s"+0 <n+1 by A12,REAL_1:67; then 1/(n+1)<1/s" by A11,SEQ_2:10;
+then A14: 1/(n+1)<s by XCMPLX_1:218;
+A15: 0<n+1 by NAT_1:19; k+1<=m+1 by A13,AXIOMS:24;
+   then 1/(m+1)<=1/(k+1) by A15,SEQ_4:1;
+then A16: 1/(m+1)<s by A14,AXIOMS:22;
+     f.m in X & s1 - f.m<1/(m+1) by A9;
+   then f.m <= s1 & s1 - f.m<s by A3,A16,AXIOMS:22,SEQ_4:def 4;
+   then 0 <= s1-f.m & s1 - f.m<s by SQUARE_1:12;
+   then abs( s1-f.m )<s by ABSVALUE:def 1; then abs(-(f.m - s1) )<s by XCMPLX_1
+:143;
+   hence abs(f.m - s1)<s by ABSVALUE:17;
+  end;
+then A17:f is convergent by SEQ_2:def 6;
+then A18: lim f=s1 by A10,SEQ_2:def 7;
+   rng f c= X
+    proof let x; assume x in rng f;
+    then consider y such that A19: y in dom f & x = f.y by FUNCT_1:def 5;
+    reconsider y as Nat by A19,FUNCT_2:def 1;
+      f.y in X by A9; hence thesis by A19;
+    end;
+  hence contradiction by A2,A4,A17,A18,Def4;
+ end;
+
+theorem Th31:
+for X st X<>{} & X is closed & X is bounded_below holds lower_bound X in X
+proof
+ let X such that A1: X<>{} and
+                 A2: X is closed and
+                 A3: X is bounded_below and
+                 A4: not lower_bound X in X;
+ set i1=lower_bound X;
+  defpred P[Element of NAT,Element of REAL] means
+     ex q st q=$2 & q in X & q-i1 < 1/($1+1);
+ A5: for n being Element of NAT
+     ex p being Element of REAL st P[n,p]
+     proof let n be Element of NAT;
+        0<n+1 by NAT_1:19;
+      then 0<(n+1)" by REAL_1:72; then 0<1/(n+1) by XCMPLX_1:217;
+      then consider t such that
+      A6: t in X & t<i1 + 1/(n+1) by A1,A3,SEQ_4:def 5;
+      A7: t-i1 < 1/(n+1) by A6,REAL_1:84;
+
+      take t;
+      thus thesis by A6,A7;
+     end;
+ consider f being Function of NAT,REAL such that A8:
+ for n being Element of NAT holds P[n,f.n] from FuncExD(A5);
+ A9: now let n;
+     ex q st q = f.n & q in X & q-i1 < 1/(n+1) by A8;
+  hence f.n in X & f.n-i1<1/(n+1);
+ end;
+ A10: now let s; assume 0<s;
+  then A11: 0<s" by REAL_1:72;
+  consider n such that A12: s"<n by SEQ_4:10;
+  take k=n;
+  let m such that A13: k<=m;
+    s"+0 <n+1 by A12,REAL_1:67;
+  then 1/(n+1)<1/s" by A11,SEQ_2:10;
+  then A14: 1/(n+1)<s by XCMPLX_1:218;
+  A15: 0<n+1 by NAT_1:19; k+1<=m+1 by A13,AXIOMS:24;
+  then 1/(m+1)<=1/(k+1) by A15,SEQ_4:1;
+  then A16: 1/(m+1)<s by A14,AXIOMS:22; f.m in X & f.m-i1<1/(m+1) by A9;
+then i1<=f.m & f.m-i1<s by A3,A16,AXIOMS:22,SEQ_4:def 5;
+  then 0 <= f.m-i1 & f.m-i1<s by SQUARE_1:12;
+  hence abs( f.m-i1 )<s by ABSVALUE:def 1;
+ end;
+ then A17:f is convergent by SEQ_2:def 6;
+ then A18: lim f=i1 by A10,SEQ_2:def 7;
+    rng f c= X
+     proof let x; assume x in rng f;
+      then consider y such that A19: y in dom f & x = f.y by FUNCT_1:def 5;
+      reconsider y as Nat by A19,FUNCT_2:def 1;
+        f.y in X by A9; hence thesis by A19;
+     end;
+ hence contradiction by A2,A4,A17,A18,Def4;
+end;
+
+theorem
+  for X st X<>{} & X is compact holds upper_bound X in X & lower_bound X in X
+proof let X such that A1: X<>{} and
+                      A2: X is compact;
+   X is bounded closed by A2,Th26,Th28;
+  then X is bounded_above & X is bounded_below & X is closed by SEQ_4:def 3;
+ hence thesis by A1,Th30,Th31;
+end;
+
+theorem
+  X is compact & (for g1,g2 st g1 in X & g2 in X holds [.g1,g2.] c= X) implies
+ex p,g st X = [.p,g.]
+proof assume that A1: X is compact and
+ A2: for g1,g2 st g1 in X & g2 in X holds [.g1,g2.] c= X;
+ per cases;
+ suppose A3: X={}; take 1; take 0;
+  thus thesis by A3,Th13;
+ suppose A4: X<>{};
+    X is bounded closed by A1,Th26,Th28;
+  then A5: X is bounded_below & X is bounded_above & X is closed by SEQ_4:def 3
+;
+  then A6: upper_bound X in X by A4,Th30;
+  A7: lower_bound X in X by A4,A5,Th31;
+  take p=lower_bound X, g=upper_bound X;
+  A8: [.p,g.] c= X by A2,A6,A7;
+    now let r be Real; assume A9: r in X; then A10: r<=g by A5,SEQ_4:def 4;
+     p<=r by A5,A9,SEQ_4:def 5;
+   then r in {s where s is Real: p<=s & s<=g} by A10;
+   hence r in [.p,g.] by Def1;
+  end; then X c= [.p,g.] by SUBSET_1:7;
+  hence X = [.p,g.] by A8,XBOOLE_0:def 10;
+end;
+
+definition
+cluster open Subset of REAL;
+existence
+ proof take ].0,1.[;
+  thus thesis;
+ end;
+end;
+
+definition let r be real number;
+ canceled;
+
+mode Neighbourhood of r -> Subset of REAL means :Def7:
+  ex g st 0<g & it = ].r-g,r+g.[;
+existence
+ proof
+  take ].r-1,r+1.[;
+  thus thesis;
+ end;
+end;
+
+definition let r be real number;
+  cluster -> open Neighbourhood of r;
+  coherence
+  proof
+    let A be Neighbourhood of r;
+      ex g st 0<g & A = ].r-g,r+g.[ by Def7;
+    hence thesis;
+  end;
+end;
+
+canceled 3;
+
+theorem
+    for N being Neighbourhood of r holds r in N
+proof let N be Neighbourhood of r;
+ A1: ex g st 0<g & N = ].r-g,r+g.[ by Def7;
+   abs(r-r) = abs(0) by XCMPLX_1:14
+        .= 0 by ABSVALUE:7;
+ hence thesis by A1,Th8;
+end;
+
+theorem
+  for r for N1,N2 being Neighbourhood of r
+ex N being Neighbourhood of r st N c= N1 & N c= N2
+proof let r; let N1,N2 be Neighbourhood of r;
+ consider g1 such that A1: 0<g1 & ].r-g1,r+g1.[ = N1 by Def7;
+ consider g2 such that A2: 0<g2 & ].r-g2,r+g2.[ = N2 by Def7;
+ set g = min(g1,g2);
+ A3: 0<g by A1,A2,SQUARE_1:38;
+ A4: g<=g2 & g<=g1 by SQUARE_1:35;
+ then A5: r+g<=r+g2 by REAL_1:55;
+ A6: r+g<=r+g1 by A4,REAL_1:55;
+   -g2<=-g by A4,REAL_1:50; then r+-g2<=r+-g by REAL_1:55;
+ then r+-g2<=r-g by XCMPLX_0:def 8;
+ then A7: r-g2<=r-g by XCMPLX_0:def 8; -g1<=-g by A4,REAL_1:50;
+ then r+-g1<=r+-g by REAL_1:55; then r+-g1<=r-g by XCMPLX_0:def 8;
+ then A8: r-g1<=r-g by XCMPLX_0:def 8;
+A9: now per cases;
+ suppose
+    g1<=g2; then A10: g1=g by SQUARE_1:def 1;
+    now let y; assume y in ].r-g,r+g.[;
+   then y in {p2 where p2 is Real: r-g<p2 & p2<r+g} by Def2;
+   then A11: ex p2 be Real st y = p2 & r-g<p2 & p2<r+g;
+   then reconsider x1=y as Real;
+   A12: x1<r+g2 by A5,A11,AXIOMS:22;
+     r-g2<x1 by A7,A11,AXIOMS:22;
+   then y in {p2 where p2 is Real: r-g2<p2 & p2<r+g2} by A12;
+   hence y in ].r-g2,r+g2.[ by Def2;
+  end;
+  hence ].r-g,r+g.[ c= N1 & ].r-g,r+g.[ c= N2 by A1,A2,A10,TARSKI:def 3;
+ suppose g2<=g1; then A13: g2=g by SQUARE_1:def 1;
+    now let y; assume y in ].r-g,r+g.[;
+   then y in {p2 where p2 is Real: r-g<p2 & p2<r+g} by Def2;
+   then A14: ex p2 be Real st y = p2 & r-g<p2 & p2<r+g;
+   then reconsider x1=y as Real;
+   A15: x1<r+g1 by A6,A14,AXIOMS:22; r-g1<x1 by A8,A14,AXIOMS:22;
+   then y in {p2 where p2 is Real: r-g1<p2 & p2<r+g1} by A15;
+   hence y in ].r-g1,r+g1.[ by Def2;
+  end;
+  hence ].r-g,r+g.[ c= N1 & ].r-g,r+g.[ c= N2 by A1,A2,A13,TARSKI:def 3;
+ end;
+ reconsider N = ].r-g,r+g.[ as Neighbourhood of r by A3,Def7;
+ take N;
+ thus thesis by A9;
+end;
+
+theorem Th39:
+for X being open Subset of REAL, r st r in X
+ex N being Neighbourhood of r st N c= X
+proof let X be open Subset of REAL, r;
+ assume that A1: r in X and
+             A2: for N be Neighbourhood of r holds not N c= X;
+A3: now let N be Neighbourhood of r;
+       not N c= X by A2;
+     then consider x such that A4: x in N & not x in X by TARSKI:def 3;
+     consider g such that A5: 0<g & N = ].r-g,r+g.[ by Def7;
+       x in {s where s is Real: r-g<s & s<r+g} by A4,A5,Def2;
+     then consider s be Real such that A6: x=s & r-g<s & s<r+g;
+     take s;
+     thus s in N by A4,A6;
+       s in REAL \ X by A4,A6,XBOOLE_0:def 4;
+     hence s in X` by SUBSET_1:def 5;
+    end;
+   defpred P[Nat,real number] means
+           $2 in ].r - 1/($1+1),r + 1/($1+1) .[ & $2 in X`;
+A7: for n ex s st P[n,s]
+  proof
+   let n;
+    0+0 < n + 1 by NAT_1:18;
+   then 0 < 1 * (n + 1)" by REAL_1:72;
+ then 0 < 1/(n + 1) by XCMPLX_0:def 9;
+   then reconsider N=]. r - 1/(n+1), r + 1/(n+1) .[ as Neighbourhood of r by
+Def7;
+      ex s be Real st s in N & s in X` by A3;
+   hence thesis;
+  end;
+ deffunc F(Nat)= r - 1/($1+1);
+ consider s1 be Real_Sequence such that
+A8: for n holds s1.n = F(n) from ExRealSeq;
+ deffunc G(Nat)= r + 1/($1+1);
+ consider s2 be Real_Sequence such that
+A9: for n holds s2.n = G(n) from ExRealSeq;
+ consider s3 such that
+A10: for n holds P[n,s3.n]     from RealSeqChoice(A7);
+A11: now
+     let s; assume 0<s;
+ then A12: 0<s" by REAL_1:72;
+     consider n such that A13: s"<n by SEQ_4:10;
+       s" + 0 < n + 1 by A13,REAL_1:67;
+     then 1/(n+1) < 1/s" by A12,SEQ_2:10;
+ then A14: 1/(n+1) < s by XCMPLX_1:218;
+     take n;
+     let m; assume n<=m;
+ then A15: n + 1 <= m + 1 by AXIOMS:24;
+  0 < n + 1 by NAT_1:18;
+ then A16: 1/(m+1) <= 1/(n+1) by A15,SEQ_4:1;
+    0 < m + 1 by NAT_1:18; then 0 < (m+1)" by REAL_1:72;
+ then A17: 0 < 1/(m+1) by XCMPLX_1:217;
+       abs( s1.m - r) = abs( r - 1/(m+1) - r) by A8
+                  .= abs( r + - 1/(m+1) - r) by XCMPLX_0:def 8
+                  .= abs( - 1/(m+1) ) by XCMPLX_1:26
+                  .= abs( 1/(m+1) ) by ABSVALUE:17
+                  .= 1/(m+1) by A17,ABSVALUE:def 1;
+     hence abs( s1.m - r) <s by A14,A16,AXIOMS:22;
+    end;
+then A18: s1 is convergent by SEQ_2:def 6;
+then A19: lim s1 = r by A11,SEQ_2:def 7;
+A20: now
+     let s; assume 0<s;
+ then A21: 0<s" by REAL_1:72;
+     consider n such that A22: s"<n by SEQ_4:10;
+       s" + 0 < n + 1 by A22,REAL_1:67;
+     then 1/(n+1) < 1/s" by A21,SEQ_2:10;
+ then A23: 1/(n+1) < s by XCMPLX_1:218;
+     take n;
+     let m; assume n<=m;
+ then A24: n + 1 <= m + 1 by AXIOMS:24;
+  0 < n + 1 by NAT_1:18;
+ then A25: 1/(m+1) <= 1/(n+1) by A24,SEQ_4:1;
+    0 < m + 1 by NAT_1:18; then 0 < (m+1)" by REAL_1:72;
+ then A26: 0 < 1/(m+1) by XCMPLX_1:217;
+       abs( s2.m - r) = abs( r + 1/(m+1) - r) by A9
+                  .= abs( 1/(m+1) ) by XCMPLX_1:26
+                  .= 1/(m+1) by A26,ABSVALUE:def 1;
+     hence abs( s2.m - r) <s by A23,A25,AXIOMS:22;
+    end;
+then A27: s2 is convergent by SEQ_2:def 6;
+then A28: lim s2 = r by A20,SEQ_2:def 7;
+A29: for n holds s1.n <= s3.n & s3.n <= s2.n
+   proof
+    let n;
+      s3.n in].r - 1/(n+1),r + 1/(n+1) .[ by A10;
+    then s3.n in {s where s is Real: r - 1/(n+1) <s & s<r + 1/(n+1)} by Def2;
+ then A30:    ex s be Real st s = s3.n & r - 1/(n+1) <s & s<r + 1/(n+1);
+    hence s1.n <= s3.n by A8;
+    thus s3.n <= s2.n by A9,A30;
+   end;
+then A31: s3 is convergent by A18,A19,A27,A28,SEQ_2:33;
+A32: lim s3 = r by A18,A19,A27,A28,A29,SEQ_2:34;
+A33: rng s3 c= X`
+    proof
+     let x; assume x in rng s3;
+     then consider y such that A34: y in dom s3 and
+                          A35: s3.y=x by FUNCT_1:def 5;
+     reconsider y as Nat by A34,FUNCT_2:def 1;
+       s3.y in X` by A10;
+     hence x in X` by A35;
+    end; X` is closed by Def5;
+   then r in X` by A31,A32,A33,Def4; then r in REAL \ X by SUBSET_1:def 5;
+   hence contradiction by A1,XBOOLE_0:def 4;
+end;
+
+theorem
+  for X being open Subset of REAL, r st r in X
+ex g st 0<g & ].r-g,r+g.[ c= X
+proof let X be open Subset of REAL, r;
+ assume r in X;
+ then consider N be Neighbourhood of r such that A1: N c= X by Th39;
+ consider g such that A2: 0<g & N = ].r-g,r+g.[ by Def7;
+ take g;
+ thus thesis by A1,A2;
+end;
+
+theorem Th41:
+(for r st r in X holds ex N be Neighbourhood of r st N c= X)
+   implies X is open
+ proof
+ assume that
+A1: for r st r in X holds ex N be Neighbourhood of r st N c= X and
+A2: not X is open;
+   not X` is closed by A2,Def5;
+ then consider s1 such that
+A3: rng s1 c= X` & s1 is convergent & not lim s1 in X` by Def4;
+    lim s1 in X by A3,SUBSET_1:50;
+  then consider N be Neighbourhood of (lim s1) such that A4: N c= X by A1;
+  consider g such that A5: 0<g and
+                       A6: ]. (lim s1) - g, (lim s1) + g .[ = N by Def7;
+  consider n such that
+A7: for m st n<=m holds abs(s1.m - (lim s1) )<g by A3,A5,SEQ_2:def 7;
+    abs(s1.n - (lim s1) )<g by A7;
+  then -g < s1.n - (lim s1) & s1.n - (lim s1) <g by SEQ_2:9;
+  then (lim s1) +- g < (lim s1) + (s1.n - (lim s1)) & s1.n <(lim s1) + g
+    by REAL_1:53,84;
+  then (lim s1) +- g < s1.n & s1.n <(lim s1) + g by XCMPLX_1:27;
+  then (lim s1) - g < s1.n & s1.n <(lim s1) + g by XCMPLX_0:def 8;
+  then s1.n in {s where s is Real: (lim s1) - g < s & s <(lim s1) + g};
+  then A8: s1.n in ]. (lim s1) - g, (lim s1) + g .[ by Def2;
+    n in NAT; then n in dom s1 by FUNCT_2:def 1;
+  then s1.n in rng s1 by FUNCT_1:def 5;
+  hence contradiction by A3,A4,A6,A8,SUBSET_1:54;
+ end;
+
+theorem
+ (for r st r in X holds ex N be Neighbourhood of r st N c= X) iff X is open by
+Th39,Th41;
+
+theorem Th43:
+  X is open bounded_above implies not upper_bound X in X
+proof assume that
+ A1: X is open and
+ A2: X is bounded_above;
+ assume upper_bound X in X;
+ then consider N being Neighbourhood of upper_bound X such that
+ A3: N c= X by A1,Th39;
+ consider t such that
+ A4: t>0 & N = ].upper_bound X-t,upper_bound X+t.[ by Def7;
+A5: t/2>0 by A4,SEQ_2:3;
+ then A6: upper_bound X + t/2 > upper_bound X by REAL_1:69;
+A7: upper_bound X + t/2 is Real by XREAL_0:def 1;
+   upper_bound X + t/2 +t/2 > upper_bound X + t/2 by A5,REAL_1:69;
+ then upper_bound X + (t/2 +t/2) > upper_bound X + t/2 by XCMPLX_1:1;
+ then A8: upper_bound X + t > upper_bound X + t/2 by XCMPLX_1:66;
+   upper_bound X - t < upper_bound X by A4,SQUARE_1:29;
+ then upper_bound X - t < upper_bound X + t/2 by A6,AXIOMS:22;
+ then upper_bound X + t/2 in {s where s is Real:
+ upper_bound X-t<s & s<upper_bound X+t} by A7,A8;
+ then upper_bound X + t/2 in N by A4,Def2; hence contradiction by A2,A3,A6,
+SEQ_4:def 4;
+end;
+
+theorem Th44:
+X is open bounded_below implies not lower_bound X in X
+proof assume that
+ A1: X is open and
+ A2: X is bounded_below;
+ assume lower_bound X in X;
+ then consider N being Neighbourhood of lower_bound X such that
+ A3: N c= X by A1,Th39;
+ consider t such that
+ A4: t>0 & N = ].lower_bound X-t,lower_bound X+t.[ by Def7;
+A5: t/2>0 by A4,SEQ_2:3;
+ then A6: lower_bound X - t/2 < lower_bound X by SQUARE_1:29;
+A7: lower_bound X - t/2 is Real by XREAL_0:def 1;
+   lower_bound X - t/2 - t/2 < lower_bound X - t/2 by A5,SQUARE_1:29;
+ then lower_bound X - (t/2 +t/2) < lower_bound X - t/2 by XCMPLX_1:36;
+ then A8: lower_bound X - t < lower_bound X - t/2 by XCMPLX_1:66;
+   lower_bound X < lower_bound X + t by A4,REAL_1:69;
+ then lower_bound X - t/2 < lower_bound X + t by A6,AXIOMS:22;
+ then lower_bound X - t/2 in {s where s is Real:
+ lower_bound X-t<s & s<lower_bound X+t} by A7,A8;
+ then lower_bound X - t/2 in N by A4,Def2; hence contradiction by A2,A3,A6,
+SEQ_4:def 5;
+end;
+
+theorem
+  X is open bounded & (for g1,g2 st g1 in X & g2 in X holds [.g1,g2.] c= X)
+implies ex p,g st X = ].p,g.[
+proof assume that A1: X is open & X is bounded and
+ A2: for g1,g2 st g1 in X & g2 in X holds [.g1,g2.] c= X;
+ per cases;
+ suppose A3: X={}; take 1; take 0;
+  thus thesis by A3,Th12;
+ suppose A4: X<>{};
+  A5: X is bounded_below & X is bounded_above by A1,SEQ_4:def 3;
+  take p=lower_bound X, g=upper_bound X;
+    now let r be Real;
+   thus r in X implies r in ].p,g.[
+   proof assume A6: r in X;
+    then A7: g<>r & p<>r by A1,A5,Th43,Th44;
+      r<=g by A5,A6,SEQ_4:def 4; then A8: r<g by A7,REAL_1:def 5;
+      p<=r by A5,A6,SEQ_4:def 5; then p<r by A7,REAL_1:def 5;
+    then r in {s where s is Real: p<s & s<g} by A8;
+    hence r in ].p,g.[ by Def2;
+   end;
+   assume r in ].p,g.[; then r in {s where s is Real: p<s & s<g} by Def2;
+then A9:   ex s be Real st s=r & p<s & s<g; then g-r>0 by SQUARE_1:11;
+   then consider g2 such that
+   A10: g2 in X & g-(g-r)<g2 by A4,A5,SEQ_4:def 4;
+     r-p>0 by A9,SQUARE_1:11;
+   then consider g1 such that
+   A11: g1 in X & g1<p+(r-p) by A4,A5,SEQ_4:def 5;
+   reconsider g1, g2 as Real by XREAL_0:def 1;
+   A12: r<=g2 by A10,XCMPLX_1:18;
+     g1<=r by A11,XCMPLX_1:27;
+   then r in {s where s is Real: g1<=s & s<=g2} by A12;
+   then A13: r in [.g1,g2.] by Def1;
+     [.g1,g2.] c= X by A2,A10,A11;
+   hence r in X by A13;
+  end;
+  hence X = ].p,g.[ by SUBSET_1:8;
+end;

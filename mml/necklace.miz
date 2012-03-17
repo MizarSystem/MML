@@ -1,0 +1,2015 @@
+:: The Class of Series --- Parallel Graphs, {I}
+::  by Krzysztof Retel
+::
+:: Received November 18, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL2, ARYTM_3, NECKLACE, FUNCT_3, ARYTM, FUNCT_2, PARTFUN1,
+      ORDERS_1, PRE_TOPC, RELAT_1, RELAT_2, REALSET1, FUNCT_1, BOOLE, SEQM_3,
+      SUBSET_1, WELLORD1, CAT_1, FUNCOP_1, FUNCT_4, ARYTM_1, TARSKI, CARD_1,
+      CARD_2, FINSET_1, SQUARE_1, INCPROJ;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ZFMISC_1, CARD_1, CARD_2,
+      WELLORD1, FINSET_1, SQUARE_1, QUIN_1, REALSET1, ORDINAL1, NUMBERS,
+      XCMPLX_0, XREAL_0, REAL_1, NAT_1, STRUCT_0, ORDERS_1, RELAT_1, RELAT_2,
+      BINARITH, BVFUNC24, FUNCT_3, CQC_LANG, FUNCOP_1, RELSET_1, FUNCT_1,
+      PARTFUN1, FUNCT_2, FUNCT_4, ORDINAL2, WAYBEL_0, WAYBEL_1, ORDERS_3,
+      PRE_TOPC;
+ constructors ORDERS_3, QUIN_1, ENUMSET1, CARD_2, BVFUNC24, SQUARE_1, WELLORD1,
+      WAYBEL_1, SEQM_3, REAL_1, BINARITH, AMISTD_1, MEMBERED, PRE_TOPC;
+ clusters RELSET_1, ORDERS_1, STRUCT_0, SUBSET_1, ARYTM_3, XREAL_0, HILBERT3,
+      TEX_2, FUNCT_1, FUNCT_4, FINSET_1, AFINSQ_1, SQUARE_1, ORDERS_3,
+      TOPREAL8, FUNCOP_1, AMISTD_1, MEMBERED, FUNCT_2, NUMBERS, ORDINAL2;
+ requirements BOOLE, SUBSET, NUMERALS, REAL, ARITHM;
+ definitions WAYBEL_0, WAYBEL_1, ORDERS_3, STRUCT_0, FUNCT_1, RELAT_1, RELAT_2,
+      XBOOLE_0, TARSKI;
+ theorems PRE_TOPC, FUNCT_1, FUNCT_2, FUNCT_4, ENUMSET1, RELSET_1, ZFMISC_1,
+      NAT_1, AXIOMS, CARD_1, ORDINAL2, STRUCT_0, WAYBEL_0, SUBSET_1, XBOOLE_0,
+      XBOOLE_1, MCART_1, QUIN_1, WELLORD2, REAL_1, WELLORD1, RELAT_1, CQC_THE1,
+      KNASTER, FUNCT_3, TARSKI, AMI_1, REALSET1, CQC_LANG, ORDERS_1, RELAT_2,
+      FUNCOP_1, ORDINAL1, CARD_2, CARD_5, SQUARE_1, WAYBEL_1, BVFUNC24,
+      ORDERS_3, SCMFSA_7, YELLOW11, CIRCCMB2, PARTFUN1, EULER_1, XCMPLX_0,
+      XCMPLX_1;
+ schemes NAT_1, FRAENKEL, FUNCT_7;
+
+begin    :: Preliminaries
+
+ reserve i,j,k,n for natural number;
+ reserve x,x1,x2,x3,x4,x5,y1,y2,y3 for set;
+
+definition let x1,x2,x3,x4,x5 be set;
+  pred x1, x2, x3, x4, x5 are_mutually_different means :Def1:
+  x1 <> x2 & x1 <> x3 & x1 <> x4 & x1 <> x5 & x2 <> x3 &
+  x2 <> x4 & x2 <> x5 & x3 <> x4 & x3 <> x5 & x4 <> x5;
+end;
+
+theorem
+     x1,x2,x3,x4,x5 are_mutually_different
+   implies card {x1,x2,x3,x4,x5} = 5
+  proof
+   assume x1,x2,x3,x4,x5 are_mutually_different;
+   then x1 <> x2 & x1 <> x3 & x1 <> x4 & x1 <> x5 & x2 <> x3 &
+      x2 <> x4 & x2 <> x5 & x3 <> x4 & x3 <> x5 & x4 <> x5 by Def1;
+   then card {x1,x2,x3,x4} = 4 & not x5 in {x1,x2,x3,x4} &
+      {x1,x2,x3,x4} is finite & {x1,x2,x3,x4,x5} = {x1,x2,x3,x4} \/ {x5}
+      by CARD_2:78,ENUMSET1:18,50;
+   hence card {x1,x2,x3,x4,x5} = 4+1 by CARD_2:54 .= 5;
+  end;
+
+theorem Th2:
+   4 = {0,1,2,3}
+proof
+  set x = {i where i is Nat: i < 4};
+A1: x c= {0,1,2,3}
+  proof
+   let y be set;
+   assume y in x;
+   then consider i being Nat such that
+A2: y=i & i < 3+1;
+     i <= 3 by A2,NAT_1:38;
+   then i = 0 or i=1 or i=2 or i=3 by CQC_THE1:4;
+   hence y in {0,1,2,3} by A2,ENUMSET1:19;
+  end;
+A3: {0,1,2,3} c= x
+    proof
+     let y be set;
+     assume y in {0,1,2,3};
+     then y=0 or y=1 or y=2 or y=3 by ENUMSET1:18;
+     hence y in x;
+    end;
+  thus 4 = x by AXIOMS:30
+  .= {0,1,2,3} by A1,A3,XBOOLE_0:def 10;
+end;
+
+theorem
+Th3:   [:{x1,x2,x3},{y1,y2,y3}:] =
+   {[x1,y1],[x1,y2],[x1,y3],[x2,y1],[x2,y2],[x2,y3],[x3,y1],[x3,y2],[x3,y3]}
+  proof thus
+     [:{x1,x2,x3},{y1,y2,y3}:] = [:{x1}\/{x2,x3}, {y1,y2,y3}:] by ENUMSET1:42
+             .= [:{x1}\/{x2,x3}, {y1}\/ {y2,y3}:] by ENUMSET1:42
+             .= [:{x1},{y1}:] \/ [:{x1},{y2,y3}:]
+                 \/ [:{x2,x3},{y1}:] \/ [:{x2,x3},{y2,y3}:] by ZFMISC_1:121
+             .= [:{x1},{y1}:] \/ [:{x1},{y2,y3}:] \/ [:{x2,x3},{y1}:]
+                 \/ ([:{x2},{y2,y3}:] \/ [:{x3},{y2,y3}:]) by ZFMISC_1:132
+             .= {[x1,y1]} \/ [:{x1},{y2,y3}:] \/ [:{x2,x3},{y1}:]
+                 \/ ([:{x2},{y2,y3}:] \/ [:{x3},{y2,y3}:]) by ZFMISC_1:35
+             .= {[x1,y1]} \/ {[x1,y2],[x1,y3]} \/ [:{x2,x3},{y1}:]
+                 \/ ([:{x2},{y2,y3}:] \/ [:{x3},{y2,y3}:]) by ZFMISC_1:36
+             .= {[x1,y1]} \/ {[x1,y2],[x1,y3]} \/ {[x2,y1],[x3,y1]}
+                 \/ ([:{x2},{y2,y3}:] \/ [:{x3},{y2,y3}:]) by ZFMISC_1:36
+             .= {[x1,y1]} \/ {[x1,y2],[x1,y3]} \/ {[x2,y1],[x3,y1]}
+                 \/ ({[x2,y2],[x2,y3]} \/ [:{x3},{y2,y3}:]) by ZFMISC_1:36
+             .= {[x1,y1]} \/ {[x1,y2],[x1,y3]} \/ {[x2,y1],[x3,y1]}
+                 \/ ({[x2,y2],[x2,y3]} \/ {[x3,y2],[x3,y3]}) by ZFMISC_1:36
+             .= {[x1,y1],[x1,y2],[x1,y3]} \/ {[x2,y1],[x3,y1]}
+                 \/ ({[x2,y2],[x2,y3]} \/ {[x3,y2],[x3,y3]}) by ENUMSET1:42
+             .= {[x1,y1],[x1,y2],[x1,y3],[x2,y1],[x3,y1]}
+                 \/ ({[x2,y2],[x2,y3]} \/ {[x3,y2],[x3,y3]}) by ENUMSET1:49
+             .= {[x1,y1],[x1,y2],[x1,y3],[x2,y1],[x3,y1]}
+                \/ {[x2,y2],[x2,y3],[x3,y2],[x3,y3]} by ENUMSET1:45
+             .= {[x1,y1],[x1,y2],[x1,y3],[x2,y1],[x3,y1],[x2,y2],[x2,y3],
+                         [x3,y2],[x3,y3]} by BVFUNC24:31
+             .= {[x1,y1],[x1,y2],[x1,y3],[x2,y1]} \/
+                {[x3,y1],[x2,y2],[x2,y3],[x3,y2],[x3,y3]} by BVFUNC24:30
+             .= {[x1,y1],[x1,y2],[x1,y3],[x2,y1]} \/
+              ({[x3,y1],[x2,y2],[x2,y3]} \/ {[x3,y2],[x3,y3]}) by ENUMSET1:49
+             .= {[x1,y1],[x1,y2],[x1,y3],[x2,y1]} \/
+             ({[x2,y2],[x2,y3],[x3,y1]} \/ {[x3,y2],[x3,y3]}) by ENUMSET1:100
+             .= {[x1,y1],[x1,y2],[x1,y3],[x2,y1]} \/
+                ({[x2,y2],[x2,y3],[x3,y1],[x3,y2],[x3,y3]}) by ENUMSET1:49
+             .= {[x1,y1],[x1,y2],[x1,y3],[x2,y1],[x2,y2],[x2,y3],
+                       [x3,y1],[x3,y2],[x3,y3]} by BVFUNC24:30;
+  end;
+
+theorem Th4:
+   for x being set, n be natural number holds
+       x in n implies x is natural number
+proof
+  let x being set,n be natural number;
+  assume
+A1:  x in n;
+  reconsider m=n as Nat by ORDINAL2:def 21;
+    x in {j where j is Nat: j < m} by A1,AXIOMS:30;
+  then ex j being Nat st x=j & j < m;
+  hence thesis;
+ end;
+
+theorem Th5:
+   for x be non empty natural number holds 0 in x
+proof
+ let x be non empty natural number;
+ reconsider n = x as Nat by ORDINAL2:def 21;
+A1:  n = {i where i is Nat: i < n} by AXIOMS:30;
+    0 < n by NAT_1:19;
+ hence thesis by A1;
+end;
+
+definition
+ cluster natural -> cardinal set;
+ coherence
+  proof
+   let X be set;
+   assume X is natural;
+   then X in omega by ORDINAL2:def 21;
+   hence X is cardinal by CARD_1:65;
+  end;
+end;
+
+definition
+ let X be set;
+ cluster delta X -> one-to-one;
+ coherence
+  proof
+   let x1,x2 be set;
+   set f = delta X;
+   assume that A1:x1 in dom f and A2: x2 in dom f and A3: f.x1 = f.x2;
+A4:  f.x1 = [x1,x1] by A1,FUNCT_3:def 7;
+    f.x2 = [x2,x2] by A2,FUNCT_3:def 7;
+  hence thesis by A3,A4,ZFMISC_1:33;
+  end;
+end;
+
+theorem
+Th6:   for X being set holds Card id X = Card X
+ proof
+  let X be set;
+  id X in Funcs(X,X) by FUNCT_2:12;
+  hence thesis by CARD_2:7;
+ end;
+
+definition let R be trivial Relation;
+  cluster dom R -> trivial;
+  coherence
+  proof
+  per cases by REALSET1:def 12;
+  suppose R is empty;
+  hence thesis by RELAT_1:60;
+  suppose ex x being set st R = {x};
+  then consider x being set such that
+A1:  R = {x};
+    x in R by A1,TARSKI:def 1;
+  then consider y,z being set such that
+A2:  x=[y,z] by RELAT_1:def 1;
+    dom R = {y} by A1,A2,RELAT_1:23;
+  hence thesis;
+  end;
+end;
+
+definition
+  cluster trivial -> one-to-one Function;
+  coherence
+  proof
+  let f be Function such that
+A1:  f is trivial;
+  let x1,x2 be set;
+  assume that
+A2:  x1 in dom f & x2 in dom f and
+    f.x1 = f.x2;
+  reconsider f as trivial Function by A1;
+  consider x being set such that
+A3: dom f = {x} by A2,REALSET1:def 12;
+    x1 = x & x2 = x by A2,A3,TARSKI:def 1;
+  hence thesis;
+  end;
+end;
+
+theorem
+Th7:   for f,g be Function st dom f misses dom g holds
+        rng(f +* g) = rng f \/ rng g
+  proof
+   let f,g be Function such that
+A1:    dom f misses dom g;
+      f tolerates g by A1,PARTFUN1:138;
+    hence thesis by CIRCCMB2:5;
+  end;
+
+theorem
+Th8:   for f,g be one-to-one Function st dom f misses dom g &
+   rng f misses rng g holds (f+*g)" = f" +* g"
+proof
+ let f,g be one-to-one Function such that
+A1:  dom f misses dom g and
+A2:  rng f misses rng g;
+A3:  dom (f" +* g") = dom (f") \/ dom (g") by FUNCT_4:def 1
+                .= rng f \/ dom (g") by FUNCT_1:55
+                .= rng f \/ rng g by FUNCT_1:55
+                .= rng (f +* g) by A1,Th7;
+A4: (f+*g) is one-to-one by A2,KNASTER:1;
+    for y,x being set holds y in rng (f+*g) & x = (f" +* g").y
+                     iff x in dom (f+*g) & y = (f+*g).x
+  proof
+   let y,x be set;
+   thus y in rng (f+*g) & x = (f" +* g").y implies x in dom (f+*g) &
+          y = (f+*g).x
+    proof
+     assume that
+A5:  y in rng (f+*g) and
+A6:  x = (f" +* g").y;
+A7:     rng (f+*g) c= rng f \/ rng g by FUNCT_4:18;
+     per cases by A5,A7,XBOOLE_0:def 2;
+     suppose A8: y in rng f;
+     then consider z being set such that
+A9:     z in dom f and
+A10:     y = f.z by FUNCT_1:def 5;
+       dom (f +* g) = dom f \/ dom g by FUNCT_4:def 1;
+     then A11:z in dom (f +* g) by A9,XBOOLE_0:def 2;
+A12:     y = (f +* g).z by A1,A9,A10,FUNCT_4:17;
+     A13: z = f".y by A9,A10,FUNCT_1:54;
+       dom (f") = rng f & dom (g") = rng g by FUNCT_1:55;
+     hence thesis by A2,A6,A8,A11,A12,A13,FUNCT_4:17;
+     suppose A14: y in rng g;
+     then consider z being set such that
+A15:     z in dom g and
+A16:     y = g.z by FUNCT_1:def 5;
+A17:     dom (f +* g) = dom f \/ dom g by FUNCT_4:def 1;
+A18:  y = (g +* f).z by A1,A15,A16,FUNCT_4:17;
+     A19: z = g".y by A15,A16,FUNCT_1:54;
+     A20: dom (f") = rng f & dom (g") = rng g by FUNCT_1:55;
+     then z = (g" +* f").y by A2,A14,A19,FUNCT_4:17;
+     then z = x by A2,A6,A20,FUNCT_4:36;
+     hence thesis by A1,A15,A17,A18,FUNCT_4:36,XBOOLE_0:def 2;
+    end;
+   thus x in dom (f+*g) & y = (f+*g).x implies y in rng (f+*g) &
+          x = (f" +* g").y
+    proof
+     assume that
+A21:   x in dom (f+*g) and
+A22:   y = (f+*g).x;
+A23:    dom (f+*g) = dom f \/ dom g by FUNCT_4:def 1;
+     per cases by A21,A23,XBOOLE_0:def 2;
+     suppose A24: x in dom f;
+then not x in dom g by A1,XBOOLE_0:3;
+then A25:    y = f.x by A22,FUNCT_4:12;
+      then A26:y in rng f by A24,FUNCT_1:def 5;
+      then A27: y in rng f \/ rng g by XBOOLE_0:def 2;
+      A28:x = f".y by A24,A25,FUNCT_1:54;
+        dom (f") = rng f & dom (g") = rng g by FUNCT_1:55;
+     hence thesis by A1,A2,A26,A27,A28,Th7,FUNCT_4:17;
+     suppose A29:x in dom g;
+then A30:    y = g.x by A22,FUNCT_4:14;
+      then A31:y in rng g by A29,FUNCT_1:def 5;
+      then A32:y in rng f \/ rng g by XBOOLE_0:def 2;
+      A33: x = g".y by A29,A30,FUNCT_1:54;
+      A34: dom (f") = rng f & dom (g") = rng g by FUNCT_1:55;
+      then x = (g" +* f").y by A2,A31,A33,FUNCT_4:17;
+     hence thesis by A1,A2,A32,A34,Th7,FUNCT_4:36;
+    end;
+  end;
+  hence thesis by A3,A4,FUNCT_1:54;
+end;
+
+theorem
+    for A,a,b being set holds (A --> a) +* (A --> b) = A --> b
+proof
+ let A,a,b be set;
+ set g = A --> b;
+  dom g = A by FUNCOP_1:19;
+    then dom (A --> a) c= dom g by FUNCOP_1:19;
+ hence thesis by FUNCT_4:20;
+end;
+
+theorem
+Th10:  for a,b being set holds (a .--> b)" = b .--> a
+ proof
+  let a,b be set;
+  set f = a .--> b,
+      g = b .--> a;
+A1:  dom g = {b} by CQC_LANG:5
+          .= rng f by CQC_LANG:5;
+    for y,x be set holds y in rng f & x = g.y iff x in dom f & y = f.x
+  proof
+   let y,x be set;
+   thus y in rng f & x = g.y implies x in dom f & y = f.x
+     proof
+     assume that
+A2:   y in rng f and
+A3:   x = g.y;
+A4:     y in {b} by A2,CQC_LANG:5;
+     then A5: x = g.b by A3,TARSKI:def 1
+               .= a by CQC_LANG:6;
+     then A6:x in {a} by TARSKI:def 1;
+       f.x = b by A5,CQC_LANG:6
+        .= y by A4,TARSKI:def 1;
+     hence thesis by A6,CQC_LANG:5;
+     end;
+     assume that
+A7:   x in dom f and
+A8:    y = f.x;
+A9:     x in {a} by A7,CQC_LANG:5;
+     then A10: y = f.a by A8,TARSKI:def 1
+               .= b by CQC_LANG:6;
+     then A11:y in {b} by TARSKI:def 1;
+       g.y = a by A10,CQC_LANG:6
+        .= x by A9,TARSKI:def 1;
+     hence thesis by A11,CQC_LANG:5;
+  end;
+  hence thesis by A1,FUNCT_1:54;
+ end;
+
+theorem
+Th11:  for a,b,c,d being set st a = b iff c = d
+       holds (a,b) --> (c,d)" = (c,d) --> (a,b)
+ proof
+ let a,b,c,d being set such that A1:a = b iff c = d;
+ per cases by A1;
+  suppose A2: a = b & c = d;
+    (a,a) --> (d,d)" = (a .--> d)" by AMI_1:20
+                  .= (d .--> a) by Th10
+                  .= (d,d) --> (a,a) by AMI_1:20;
+  hence thesis by A2;
+  suppose A3:a <> b & c <> d;
+  set f = (a,b) --> (c,d),
+      g = (c,d) --> (a,b);
+A4: f is one-to-one
+    proof
+     let x1,x2 being set such that
+A5:  x1 in dom f & x2 in dom f and
+A6:  f.x1 = f.x2;
+A7:     dom f = {a,b} by FUNCT_4:65;
+     per cases by A5,A7,TARSKI:def 2;
+      suppose x1 = a & x2 = a or x1 = b & x2 = b;
+      hence thesis;
+      suppose x1 = a & x2 = b;
+      then f.x1 = c & f.x2 = d by A3,FUNCT_4:66;
+      hence thesis by A3,A6;
+      suppose x1 = b & x2 = a;
+      then f.x1 = d & f.x2 = c by A3,FUNCT_4:66;
+      hence thesis by A3,A6;
+     thus thesis;
+    end;
+A8: dom g = {c,d} by FUNCT_4:65
+        .= rng f by A3,FUNCT_4:67;
+    for y,x be set holds y in rng f & x = g.y iff x in dom f & y = f.x
+  proof
+   let y,x be set;
+A9:   y in rng f & x = g.y implies x in dom f & y = f.x
+    proof
+    assume that
+A10:   y in rng f and
+A11:   x = g.y;
+A12:    y in {c,d} by A3,A10,FUNCT_4:67;
+    per cases by A12,TARSKI:def 2;
+    suppose A13: y = c;
+    then A14: x = a by A3,A11,FUNCT_4:66;
+    then x in {a,b} by TARSKI:def 2;
+    hence thesis by A3,A13,A14,FUNCT_4:65,66;
+    suppose A15: y = d;
+    then A16: x = b by A3,A11,FUNCT_4:66;
+    then x in {a,b} by TARSKI:def 2;
+    hence thesis by A3,A15,A16,FUNCT_4:65,66;
+    end;
+      x in dom f & y = f.x implies y in rng f & x = g.y
+    proof
+    assume that
+A17:  x in dom f and
+A18:  y = f.x;
+A19:   x in {a,b} by A17,FUNCT_4:65;
+    per cases by A19,TARSKI:def 2;
+    suppose A20: x = a;
+    then A21: y = c by A3,A18,FUNCT_4:66;
+    then y in {c,d} by TARSKI:def 2;
+    hence thesis by A3,A20,A21,FUNCT_4:66,67;
+    suppose A22: x = b;
+    then A23: y = d by A3,A18,FUNCT_4:66;
+    then y in {c,d} by TARSKI:def 2;
+    hence thesis by A3,A22,A23,FUNCT_4:66,67;
+    end;
+   hence thesis by A9;
+  end;
+  hence thesis by A4,A8,FUNCT_1:54;
+ end;
+
+scheme Convers{X()-> non empty set, R() -> Relation, F,G(set)-> set, P[set]}:
+ R()~ ={[F(x),G(x)] where x is Element of X(): P[x]}
+ provided
+A1:  R() = {[G(x),F(x)] where x is Element of X(): P[x]}
+proof
+ set S = {[F(x),G(x)] where x is Element of X(): P[x]};
+   S is Relation-like
+ proof
+  let x being set;
+  assume x in S;
+  then ex y being Element of X() st x = [F(y),G(y)] & P[y];
+  hence thesis;
+ end;
+ then reconsider S' = S as Relation;
+    for x,y being set holds [x,y] in S' iff [y,x] in R()
+  proof
+A2:   for x,y being set holds [x,y] in S' implies [y,x] in R()
+   proof
+    let x,y being set;
+    assume [x,y] in S';
+    then consider z being Element of X() such that
+A3:   [x,y] = [F(z),G(z)] and
+A4:   P[z];
+     x = F(z) & y = G(z) by A3,ZFMISC_1:33;
+    hence thesis by A1,A4;
+   end;
+     for x,y being set holds [y,x] in R() implies [x,y] in S'
+   proof
+    let x,y being set;
+    assume [y,x] in R();
+    then consider z being Element of X() such that
+A5:   [y,x] = [G(z),F(z)] and
+A6:   P[z] by A1;
+     y = G(z) & x = F(z) by A5,ZFMISC_1:33;
+    hence thesis by A6;
+   end;
+   hence thesis by A2;
+  end;
+ hence S = R()~ by RELAT_1:def 7;
+end;
+
+theorem
+     for i,j,n be natural number holds
+   i < j & j in n implies i in n
+   proof
+     let i,j,n be natural number;
+     assume
+A1:   i < j & j in n;
+     then j < n by EULER_1:1;
+     then i < n by A1,AXIOMS:22;
+     hence thesis by EULER_1:1;
+   end;
+
+begin   :: Auxiliary Concepts
+
+definition let R,S be RelStr;
+  pred S embeds R means
+:Def2:  ex f being map of R,S st f is one-to-one
+  & for x,y being Element of R holds
+  [x,y] in the InternalRel of R iff [f.x,f.y] in the InternalRel of S;
+end;
+
+definition let R,S be non empty RelStr;
+  redefine pred S embeds R;
+ reflexivity
+  proof let R be non empty RelStr;
+    set f = id the carrier of R;
+    reconsider f as map of R,R;
+   take f;
+   thus f is one-to-one by FUNCT_1:52;
+   let x,y be Element of R;
+      x = f.x & y = f.y by FUNCT_1:35;
+    hence thesis;
+  end;
+end;
+
+theorem
+Th13:   for R,S,T be non empty RelStr holds
+   R embeds S & S embeds T implies R embeds T
+ proof
+  let R,S,T be non empty RelStr;
+  assume R embeds S;
+  then consider f being map of S,R such that
+A1: f is one-to-one and
+A2: for x,y being Element of S holds
+  [x,y] in the InternalRel of S iff [f.x,f.y] in the InternalRel of R by Def2;
+  assume S embeds T;
+  then consider g being map of T,S such that
+A3: g is one-to-one and
+A4: for x,y being Element of T holds
+  [x,y] in the InternalRel of T iff [g.x,g.y] in the InternalRel of S by Def2;
+   reconsider h=f*g as map of T,R;
+   take h;
+   thus h is one-to-one by A1,A3,FUNCT_1:46;
+   thus for x,y being Element of T holds
+   [x,y] in the InternalRel of T
+   iff [h.x,h.y] in the InternalRel of R
+   proof
+    let x,y be Element of T;
+    thus [x,y] in the InternalRel of T
+    implies [h.x,h.y] in the InternalRel of R
+      proof
+       assume [x,y] in the InternalRel of T;
+       then A5:[g.x,g.y] in the InternalRel of S by A4;
+        h.x=f.(g.x) & h.y=f.(g.y) by FUNCT_2:21;
+       hence thesis by A2,A5;
+      end;
+    thus [h.x,h.y] in the InternalRel of R
+    implies [x,y] in the InternalRel of T
+      proof
+       assume A6:[h.x,h.y] in the InternalRel of R;
+         h.x=f.(g.x) & h.y=f.(g.y) by FUNCT_2:21;
+       then [g.x,g.y] in the InternalRel of S by A2,A6;
+       hence thesis by A4;
+      end;
+   end;
+ end;
+
+definition let R,S be non empty RelStr;
+ pred R is_equimorphic_to S means
+:Def3: R embeds S & S embeds R;
+ reflexivity;
+ symmetry;
+end;
+
+theorem
+     for R,S,T be non empty RelStr holds
+   R is_equimorphic_to S & S is_equimorphic_to T implies
+   R is_equimorphic_to T
+ proof
+   let R,S,T be non empty RelStr;
+   assume R is_equimorphic_to S & S is_equimorphic_to T;
+   then R embeds S & S embeds R & S embeds T & T embeds S by Def3;
+   then R embeds T & T embeds R by Th13;
+   hence thesis by Def3;
+ end;
+
+definition
+  let R be non empty RelStr;
+  redefine attr R is connected;
+  antonym R is parallel;
+end;
+
+definition let R be RelStr;
+ attr R is symmetric means
+:Def4: the InternalRel of R is_symmetric_in the carrier of R;
+end;
+
+definition let R be RelStr;
+ attr R is asymmetric means
+:Def5: the InternalRel of R is asymmetric;
+end;
+
+theorem
+     for R be RelStr st R is asymmetric holds
+   the InternalRel of R misses (the InternalRel of R)~
+  proof
+   let R be RelStr such that
+A1:     R is asymmetric;
+   assume the InternalRel of R meets (the InternalRel of R)~;
+   then consider x being set such that
+A2:   x in the InternalRel of R and
+A3:   x in (the InternalRel of R)~ by XBOOLE_0:3;
+   consider y,z being set such that
+A4:      x = [y,z] by A3,RELAT_1:def 1;
+A5:   [z,y] in the InternalRel of R by A3,A4,RELAT_1:def 7;
+     the InternalRel of R is asymmetric by A1,Def5;
+   then A6:   the InternalRel of R is_asymmetric_in field
+            (the InternalRel of R) by RELAT_2:def 13;
+     y in field the InternalRel of R &
+   z in field the InternalRel of R by A2,A4,RELAT_1:30;
+   hence contradiction by A2,A4,A5,A6,RELAT_2:def 5;
+  end;
+
+definition let R be RelStr;
+ attr R is irreflexive means
+   for x being set st x in the carrier of R
+ holds not [x,x] in the InternalRel of R;
+end;
+
+definition
+ let n be natural number;
+ func n-SuccRelStr -> strict RelStr means
+:Def7: the carrier of it = n &
+ the InternalRel of it = {[i,i+1] where i is Nat:i+1 < n};
+  existence
+   proof
+    set r = {[i,i+1] where i is Nat:i+1 < n};
+      r c= [:n,n:]
+     proof
+      let x be set;
+      assume x in r;
+      then consider i be Nat such that
+A1:   x = [i,i+1] and
+A2:   i+1 < n;
+        i <= i+1 by NAT_1:29;
+      then i < n by A2,AXIOMS:22;
+      then i in n & i+1 in n by A2,EULER_1:1;
+      hence x in [:n,n:] by A1,ZFMISC_1:106;
+     end;
+    then reconsider r as Relation of n by RELSET_1:def 1;
+    take RelStr (#n,r#);
+    thus thesis;
+   end;
+  uniqueness;
+end;
+
+theorem
+     for n be natural number holds n-SuccRelStr is asymmetric
+  proof
+   let n be natural number;
+   set S = n-SuccRelStr;
+   thus the InternalRel of S is asymmetric
+    proof
+     thus the InternalRel of S is_asymmetric_in field the InternalRel of S
+     proof
+      let x,y be set;
+      assume that
+          x in field the InternalRel of S &
+        y in field the InternalRel of S and
+A1:     [x,y] in the InternalRel of S;
+        [x,y] in {[i,i+1] where i is Nat:i+1 < n} by A1,Def7;
+      then consider i be Nat such that
+A2:               [x,y] = [i,i+1] & i+1<n;
+A3:       x = i & y = i+1 by A2,ZFMISC_1:33;
+       assume [y,x] in the InternalRel of S;
+       then [y,x] in {[i',i'+1] where i' is Nat:i'+1 < n} by Def7;
+       then consider j be Nat such that
+A4:       [y,x] = [j,j+1] & j+1<n;
+        y = j & x = j+1 by A4,ZFMISC_1:33;
+      then i+1+1 < i+1 by A3,NAT_1:38;
+      hence contradiction by NAT_1:29;
+     end;
+    end;
+  end;
+
+theorem
+Th17:   n > 0 implies Card the InternalRel of n-SuccRelStr = n-1
+ proof
+  assume
+A1: n > 0;
+then A2:    n >= 0+1 by NAT_1:38;
+A3:   i in n-'1 implies i+1<n
+     proof
+      assume i in n-'1;
+      then A4:i < n-'1 by EULER_1:1;
+        n >= 0+1 by A1,NAT_1:38;
+      then i < n-1 by A4,SCMFSA_7:3;
+     hence thesis by REAL_1:86;
+     end;
+    deffunc F(Nat) = [$1,$1+1];
+    defpred P[Nat] means $1+1<n;
+    defpred Q[set] means $1 in n-'1;
+A5: for i being Nat holds P[i] iff Q[i] proof
+    let i be Nat;
+    thus i+1<n implies i in n-'1
+     proof
+      assume i+1<n;
+      then i < n-1 by REAL_1:86;
+      then i < n-'1 by A2,SCMFSA_7:3;
+      hence thesis by EULER_1:1;
+     end;
+    thus thesis by A3;
+   end;
+A6: {F(i) where i is Nat: P[i]} = {F(i) where i is Nat: Q[i]}
+    from Fraenkel6'(A5);
+A7: n-'1 c= NAT by ORDINAL1:def 2;
+    deffunc F(Nat) = [$1,$1+1];
+A8: for d1,d2 being Element of NAT st F(d1) = F(d2) holds d1 = d2
+     by ZFMISC_1:33;
+A9: n-'1, {F(i) where i is Nat: i in n-'1} are_equipotent
+                from CardMono'(A7,A8);
+  thus Card the InternalRel of n-SuccRelStr
+           = Card {[i,i+1] where i is Nat:i+1 < n} by Def7
+          .= Card (n-'1) by A6,A9,CARD_1:21
+          .= n-'1 by CARD_1:66
+          .= n-1 by A2,SCMFSA_7:3;
+ end;
+
+definition let R be RelStr;
+ func SymRelStr R -> strict RelStr means
+:Def8: the carrier of it = the carrier of R &
+ the InternalRel of it = (the InternalRel of R) \/ (the InternalRel of R)~;
+ existence
+   proof
+    take RelStr (#the carrier of R, (the InternalRel of R)
+      \/ (the InternalRel of R)~ #);
+    thus thesis;
+   end;
+ uniqueness;
+end;
+
+definition let R be RelStr;
+ cluster SymRelStr R -> symmetric;
+ coherence
+  proof
+   let x,y be set;
+   assume that x in the carrier of SymRelStr R &
+                   y in the carrier of SymRelStr R and
+               A1: [x,y] in the InternalRel of SymRelStr R;
+A2:  [x,y] in (the InternalRel of R) \/ (the InternalRel of R)~ by A1,Def8;
+  per cases by A2,XBOOLE_0:def 2;
+  suppose [x,y] in the InternalRel of R;
+   then [y,x] in (the InternalRel of R)~ by RELAT_1:def 7;
+   then [y,x] in (the InternalRel of R) \/ (the InternalRel of R)~
+                      by XBOOLE_0:def 2;
+  hence thesis by Def8;
+  suppose [x,y] in (the InternalRel of R)~;
+   then [y,x] in the InternalRel of R by RELAT_1:def 7;
+   then [y,x] in (the InternalRel of R) \/ (the InternalRel of R)~
+                      by XBOOLE_0:def 2;
+  hence thesis by Def8;
+  thus thesis;
+  end;
+end;
+
+definition
+ cluster non empty symmetric RelStr;
+ existence
+  proof
+   set R = {[0,0]};
+     R c= [:{0},{0}:] by ZFMISC_1:35;
+   then reconsider R = {[0,0]} as Relation of {0} by RELSET_1:def 1;
+   take S = RelStr (#{0},R#);
+   thus S is non empty;
+   thus the InternalRel of S is_symmetric_in the carrier of S
+    proof
+     let x,y be set;
+     assume that x in the carrier of S &
+                     y in the carrier of S and
+                 A1: [x,y] in the InternalRel of S;
+       x = 0 & y = 0 by A1,ZFMISC_1:34;
+     then [y,x] in [:{0},{0}:] by ZFMISC_1:34;
+     hence [y,x] in the InternalRel of S by ZFMISC_1:35;
+    end;
+  end;
+end;
+
+definition let R be symmetric RelStr;
+ cluster the InternalRel of R -> symmetric;
+ coherence
+ proof
+  let x,y be set;
+  assume that A1: x in field the InternalRel of R &
+                  y in field the InternalRel of R and
+              A2: [x,y] in the InternalRel of R;
+A3:  the InternalRel of R is_symmetric_in the carrier of R by Def4;
+    field the InternalRel of R c= (the carrier of R) \/ the carrier of R
+        by RELSET_1:19;
+  hence thesis by A1,A2,A3,RELAT_2:def 3;
+ end;
+end;
+
+Lm1: for S,R being non empty RelStr holds
+      S,R are_isomorphic implies
+          Card (the InternalRel of S) = Card (the InternalRel of R)
+ proof
+  let S,R being non empty RelStr;
+  set A = the carrier of S,
+      B = the carrier of R,
+      C = the InternalRel of S,
+      D = the InternalRel of R;
+  reconsider C as set;
+  assume S,R are_isomorphic;
+  then consider f being map of S,R such that
+A1:  f is isomorphic by WAYBEL_1:def 8;
+A2:  f is monotone by A1,WAYBEL_0:def 38;
+     reconsider f'=f as one-to-one Function by A1,WAYBEL_0:def 38;
+A3:  [:f',f':] is one-to-one;
+  A4: dom f = A by FUNCT_2:def 1;
+A5:  rng f = B by A1,WAYBEL_0:66;
+    the InternalRel of S,the InternalRel of R are_equipotent
+  proof
+   set F = [:f,f:]|C;
+   set L = dom F;
+   set P = [:f,f:];
+A6:  dom F = dom ([:f,f:]) /\ C by FUNCT_1:68
+                    .= [:dom f, dom f:] /\ C by FUNCT_3:def 9
+                    .= C by A4,XBOOLE_1:28;
+A7:   rng F c= D
+       proof
+        let a be set;
+        assume a in rng F;
+        then consider x being set such that
+   A8:  x in dom F and
+   A9:  a = F.x by FUNCT_1:def 5;
+        consider x1,x2 being set such that
+A10:     x = [x1,x2] by A8,RELAT_1:def 1;
+A11:     x1 in dom f & x2 in dom f by A4,A8,A10,ZFMISC_1:106;
+          a = P.x by A8,A9,FUNCT_1:70;
+then A12:     a = [f.x1,f.x2] by A10,A11,FUNCT_3:def 9;
+        reconsider X1 = x1, X2 = x2 as Element of S by A11;
+          X1 <= X2 by A6,A8,A10,ORDERS_1:def 9;
+        then f.X1 <= f.X2 by A2,ORDERS_3:def 5;
+        hence thesis by A12,ORDERS_1:def 9;
+       end;
+   then rng F c= [:B,B:] by XBOOLE_1:1;
+   then reconsider F as Function of L,[:B,B:] by FUNCT_2:4;
+   reconsider F as Function of L,D by A7,FUNCT_2:8;
+    A13:  F is one-to-one by A3,FUNCT_1:84;
+  rng F = D
+     proof
+      thus rng F c= D by A7;
+      let x be set;
+      assume A14:x in D;
+      then consider x1,x2 being set such that
+A15:   x = [x1,x2] by RELAT_1:def 1;
+A16:   x1 in B & x2 in B by A14,A15,ZFMISC_1:106;
+      reconsider x1' = x1, x2' = x2 as Element of B by A14,A15,ZFMISC_1:106;
+A17:      x1' <= x2' by A14,A15,ORDERS_1:def 9;
+      consider X1 being set such that
+A18:    X1 in dom f and
+A19:    x1 = f.X1 by A5,A16,FUNCT_1:def 5;
+     consider X2 being set such that
+A20:   X2 in dom f and
+A21:   x2 = f.X2 by A5,A16,FUNCT_1:def 5;
+      reconsider X1' = X1, X2' = X2 as Element of S by A18,A20;
+        X1' <= X2' by A1,A17,A19,A21,WAYBEL_0:66;
+then A22:     [X1,X2] in C by ORDERS_1:def 9;
+      set Pi = [X1,X2];
+       Pi in [:dom f,dom f:] by A18,A20,ZFMISC_1:106;
+      then x = [:f,f:].[X1,X2] by A15,A19,A21,FUNCT_3:86
+        .= F.[X1,X2] by A6,A22,FUNCT_1:70;
+      hence thesis by A6,A22,FUNCT_1:def 5;
+     end;
+     hence thesis by A6,A13,WELLORD2:def 4;
+   end;
+  hence thesis by CARD_1:21;
+ end;
+
+definition let R be RelStr;
+  func ComplRelStr R -> strict RelStr means
+:Def9:  the carrier of it = the carrier of R &
+  the InternalRel of it = (the InternalRel of R)` \
+   id (the carrier of R);
+  existence
+   proof
+    reconsider r = (the InternalRel of R)` \ id (the carrier of R)
+    as Relation of the carrier of R by RELSET_1:def 1;
+    take RelStr(#the carrier of R, r#);
+   thus thesis;
+   end;
+  uniqueness;
+end;
+
+definition let R be non empty RelStr;
+ cluster ComplRelStr R -> non empty;
+ coherence
+  proof
+     the carrier of ComplRelStr R = the carrier of R by Def9;
+   hence the carrier of ComplRelStr R is non empty;
+  end;
+end;
+
+theorem
+Th18:   for S,R being RelStr holds
+   S,R are_isomorphic implies
+   Card the InternalRel of S = Card the InternalRel of R
+proof
+  let S,R be RelStr;
+  assume A1: S,R are_isomorphic;
+  then consider f being map of S,R such that
+A2:  f is isomorphic by WAYBEL_1:def 8;
+  per cases by A2,WAYBEL_0:def 38;
+  suppose S is non empty & R is non empty;
+  hence thesis by A1,Lm1;
+  suppose S is empty & R is empty;
+  then reconsider S, R as empty RelStr;
+    the InternalRel of S = {} & the InternalRel of R = {};
+  hence thesis;
+end;
+
+begin   :: Necklace n
+
+definition let n be natural number;
+ func Necklace n -> strict RelStr equals
+:Def10: SymRelStr(n-SuccRelStr);
+ coherence;
+end;
+
+definition let n be natural number;
+ cluster Necklace n -> symmetric;
+ coherence
+ proof
+    Necklace n = SymRelStr(n-SuccRelStr) by Def10;
+  hence thesis;
+ end;
+end;
+
+theorem
+Th19:   the InternalRel of Necklace n
+   = {[i,i+1] where i is Nat:i+1 < n} \/ {[i+1,i] where i is Nat:i+1 < n}
+ proof
+ set A = Necklace n;
+ set B = n-SuccRelStr;
+A1: A = SymRelStr B by Def10;
+ set I = {[i,i+1] where i is Nat:i+1 < n};
+     deffunc F(Nat) = $1;
+    deffunc G(Nat) = $1+1;
+    defpred P[Nat] means $1+1 < n;
+ set R = {[G(i),F(i)] where i is Nat: P[i]};
+   I is Relation-like
+  proof
+  let x be set;
+  assume x in I;
+  then ex i being Nat st x = [i,i+1] & i+1<n;
+  hence thesis;
+  end;
+ then reconsider I as Relation;
+A2: I = {[F(i),G(i)] where i is Nat: P[i]};
+A3: I~ = R from Convers(A2);
+   the InternalRel of B = I by Def7;
+ hence the InternalRel of A
+    = {[i,i+1] where i is Nat:i+1 < n} \/ R by A1,A3,Def8;
+ end;
+
+theorem
+Th20:   for x be set holds x in the InternalRel of Necklace n iff
+           ex i being Nat st i+1 < n & (x = [i,i+1] or x = [i+1,i])
+ proof
+  let x be set;
+  thus x in the InternalRel of Necklace n implies
+       ex i being Nat st i+1< n & (x = [i,i+1] or x = [i+1,i])
+   proof
+   assume that
+A1:   x in the InternalRel of Necklace n;
+     x in ({[i,i+1] where i is Nat:i+1 < n} \/ {[i+1,i] where i is Nat:i+1 < n}
+)
+          by A1,Th19;
+   then x in {[i,i+1] where i is Nat:i+1 < n} or
+        x in {[i+1,i] where i is Nat:i+1 < n} by XBOOLE_0:def 2;
+   then (ex i being Nat st x = [i,i+1] & i+1<n) or
+        (ex i being Nat st x = [i+1,i] & i+1<n);
+   hence thesis;
+   end;
+  thus (ex i being Nat st i+1 < n & (x = [i,i+1] or x = [i+1,i])) implies
+         x in the InternalRel of Necklace n
+   proof
+    given i being Nat such that
+A2:  i+1 < n & (x=[i,i+1] or x=[i+1,i]);
+    per cases by A2;
+    suppose i+1 < n & x=[i,i+1];
+     then x in {[j,j+1] where j is Nat:j+1 < n};
+     then x in ({[j,j+1] where j is Nat:j+1 < n} \/
+               {[j+1,j] where j is Nat:j+1 < n}) by XBOOLE_0:def 2;
+    hence thesis by Th19;
+    suppose i+1 < n & x=[i+1,i];
+     then x in {[j+1,j] where j is Nat:j+1 < n};
+     then x in ({[j+1,j] where j is Nat:j+1 < n} \/
+               {[j,j+1] where j is Nat:j+1 < n}) by XBOOLE_0:def 2;
+    hence thesis by Th19;
+   end;
+ end;
+
+definition let n be natural number;
+  cluster Necklace n -> irreflexive;
+  coherence
+  proof
+  set A = Necklace n;
+  let x be set;
+  assume x in the carrier of A;
+  assume A1:[x,x] in the InternalRel of A;
+A2:  the InternalRel of Necklace n
+    = {[i,i+1] where i is Nat:i+1 < n} \/ {[i+1,i] where i is Nat:i+1 < n}
+      by Th19;
+  per cases by A1,A2,XBOOLE_0:def 2;
+   suppose [x,x] in {[i,i+1] where i is Nat:i+1 < n};
+   then consider i being Nat such that
+A3:   [x,x] = [i,i+1] & i+1 < n;
+     x = i & x = i+1 by A3,ZFMISC_1:33;
+   hence contradiction by REAL_1:69;
+   suppose [x,x] in {[i+1,i] where i is Nat:i+1 < n};
+   then consider i being Nat such that
+A4:   [x,x] = [i+1,i] & i+1 < n;
+     x = i+1 & x = i by A4,ZFMISC_1:33;
+   hence contradiction by REAL_1:69;
+  end;
+end;
+
+theorem
+Th21:   for n be natural number holds the carrier of Necklace n = n
+  proof
+    let n be natural number;
+      the carrier of Necklace n =
+    the carrier of SymRelStr(n-SuccRelStr) by Def10
+    .= the carrier of n-SuccRelStr by Def8
+    .= n by Def7;
+    hence thesis;
+  end;
+
+definition let n be non empty natural number;
+  cluster Necklace n -> non empty;
+   coherence
+   proof
+      the carrier of Necklace n = n by Th21;
+    hence thesis by STRUCT_0:def 1;
+   end;
+end;
+
+definition let n be natural number;
+  cluster the carrier of Necklace n -> finite;
+  coherence by Th21;
+end;
+
+theorem Th22:
+   for n,i be natural number st i+1 < n holds
+   [i,i+1] in the InternalRel of Necklace n
+proof
+  let n,j be natural number such that
+A1:  j+1 < n;
+A2:  the InternalRel of Necklace n
+      = {[i,i+1] where i is Nat:i+1 < n} \/ {[i+1,i] where i is Nat:i+1 < n}
+          by Th19;
+  reconsider j as Nat by ORDINAL2:def 21;
+    [j,j+1] in {[i,i+1] where i is Nat:i+1 < n} by A1;
+  hence thesis by A2,XBOOLE_0:def 2;
+end;
+
+theorem Th23:
+   for n be natural number, i being natural number
+   st i in the carrier of Necklace n holds i < n
+proof
+  let n be natural number, i being natural number such that
+A1:    i in the carrier of Necklace n;
+    i in n by A1,Th21;
+  hence thesis by EULER_1:1;
+end;
+
+theorem
+     for n be non empty natural number holds Necklace n is connected
+  proof
+   let n be non empty natural number;
+   given X,Y being Subset of Necklace n such that
+A1: X <> {} and
+A2:  Y <> {} and
+A3: [#] Necklace n = X \/ Y and
+A4: X misses Y and
+A5: the InternalRel of Necklace n =
+     (the InternalRel of Necklace n)|_2 X \/
+      (the InternalRel of Necklace n) |_2 Y;
+A6:   the carrier of Necklace n = X \/ Y by A3,PRE_TOPC:def 3;
+A7:   the carrier of Necklace n = n by Th21;
+A8:   0 in n by Th5;
+   per cases by A6,A7,A8,XBOOLE_0:def 2;
+   suppose
+A9:   0 in X;
+   defpred P[natural number] means $1 in Y;
+   consider x being Element of Necklace n such that
+A10: x in Y by A2,SUBSET_1:10;
+     x in the carrier of Necklace n;
+   then x in n by Th21;
+   then x is natural by Th4;
+   then x is Nat by ORDINAL2:def 21;
+   then A11: ex x being Nat st P[x] by A10;
+   consider k being Nat such that
+A12:  P[k] and
+A13:  for i being Nat st P[i] holds k <= i from Min (A11);
+     k <> 0 by A4,A9,A12,XBOOLE_0:3;
+   then consider i being Nat such that
+A14:  k = i+1 by NAT_1:22;
+     i < i+1 by REAL_1:69;
+   then A15:   not i in Y by A13,A14;
+A16: not i+1 in X by A4,A12,A14,XBOOLE_0:3;
+     i+1 < n by A12,A14,Th23;
+   then A17:  [i,i+1] in the InternalRel of Necklace n by Th22;
+     now per cases by A5,A17,XBOOLE_0:def 2;
+    suppose [i,i+1] in (the InternalRel of Necklace n) |_2 X;
+     then [i,i+1] in [:X,X:] by WELLORD1:16;
+    hence contradiction by A16,ZFMISC_1:106;
+    suppose [i,i+1] in (the InternalRel of Necklace n) |_2 Y;
+     then [i,i+1] in [:Y,Y:] by WELLORD1:16;
+    hence contradiction by A15,ZFMISC_1:106;
+   end;
+   hence contradiction;
+   suppose
+A18:   0 in Y;
+   defpred P[natural number] means $1 in X;
+   consider y being Element of Necklace n such that
+A19: y in X by A1,SUBSET_1:10;
+     y in the carrier of Necklace n;
+   then y in n by Th21;
+   then y is natural by Th4;
+   then y is Nat by ORDINAL2:def 21;
+   then A20: ex y being Nat st P[y] by A19;
+   consider k being Nat such that
+A21:  P[k] and
+A22:  for i being Nat st P[i] holds k <= i from Min (A20);
+     k <> 0 by A4,A18,A21,XBOOLE_0:3;
+   then consider i being Nat such that
+A23:  k = i+1 by NAT_1:22;
+     i < i+1 by REAL_1:69;
+   then A24:   not i in X by A22,A23;
+A25: not i+1 in Y by A4,A21,A23,XBOOLE_0:3;
+     i+1 < n by A21,A23,Th23;
+   then A26:  [i,i+1] in the InternalRel of Necklace n by Th22;
+     now per cases by A5,A26,XBOOLE_0:def 2;
+    suppose [i,i+1] in (the InternalRel of Necklace n) |_2 Y;
+     then [i,i+1] in [:Y,Y:] by WELLORD1:16;
+    hence contradiction by A25,ZFMISC_1:106;
+    suppose [i,i+1] in (the InternalRel of Necklace n) |_2 X;
+     then [i,i+1] in [:X,X:] by WELLORD1:16;
+    hence contradiction by A24,ZFMISC_1:106;
+   end;
+   hence thesis;
+end;
+
+theorem
+Th25:  for i,j being natural number st [i,j] in the InternalRel of Necklace n
+       holds i = j + 1 or j = i + 1
+proof
+  let i,j be natural number such that
+      A1: [i,j] in the InternalRel of Necklace n;
+    [i,j] in
+   {[k,k+1] where k is Nat:k+1 < n} \/ {[l+1,l] where l is Nat:l+1 < n}
+        by A1,Th19;
+  then A2: [i,j] in {[k,k+1] where k is Nat:k+1 < n} or
+     [i,j] in {[k+1,k] where k is Nat:k+1 < n} by XBOOLE_0:def 2;
+    i + 1 = j or j + 1 = i
+   proof
+    per cases by A2;
+    suppose ex k being Nat st [i,j] = [k,k+1] & k+1 < n;
+     then consider k such that
+A3:    [i,j] = [k,k+1] and k+1 < n;
+       i = k & j = k+1 by A3,ZFMISC_1:33;
+    hence thesis;
+    suppose (ex k being Nat st [i,j] = [k+1,k] & k+1 < n);
+     then consider k such that
+A4:   [i,j] = [k+1,k] and k+1 < n;
+        i = k+1 & j = k by A4,ZFMISC_1:33;
+     hence thesis;
+   end;
+  hence thesis;
+end;
+
+theorem
+Th26:   for i,j being natural number st (i = j + 1 or j = i + 1) &
+   i in the carrier of Necklace n & j in the carrier of Necklace n
+   holds [i,j] in the InternalRel of Necklace n
+proof
+ let i,j be natural number such that A1:  i = j + 1 or j = i + 1 and
+A2:  i in the carrier of Necklace n and
+A3:  j in the carrier of Necklace n;
+  per cases by A1;
+  suppose
+A4:  i=j+1;
+   then j+1 < n by A2,Th23;
+   then [j,j+1] in the InternalRel of Necklace n by Th22;
+   then [j+1,j] in (the InternalRel of Necklace n)~ by RELAT_1:def 7;
+  hence thesis by A4,RELAT_2:30;
+  suppose
+A5:  j=i+1;
+  then i+1 < n by A3,Th23;
+  hence thesis by A5,Th22;
+end;
+
+theorem
+Th27:   n > 0 implies Card ({[i+1,i] where i is Nat:i+1 < n}) = n-1
+  proof
+  assume
+A1: n > 0;
+    then A2: n >= 0+1 by NAT_1:38;
+A3:   i in n-'1 implies i+1<n
+     proof
+      assume i in n-'1;
+      then A4:i < n-'1 by EULER_1:1;
+        n >= 0+1 by A1,NAT_1:38;
+      then i < n-1 by A4,SCMFSA_7:3;
+     hence thesis by REAL_1:86;
+     end;
+     deffunc F(Nat) = [$1+1,$1];
+     defpred P[Nat] means $1+1<n;
+     defpred Q[Nat] means $1 in n-'1;
+A5: for i being Nat holds P[i] iff Q[i]  proof let i being Nat;
+    thus i+1<n implies i in n-'1
+     proof
+      assume i+1<n;
+      then i < n-1 by REAL_1:86;
+      then i < n-'1 by A2,SCMFSA_7:3;
+      hence thesis by EULER_1:1;
+     end;
+    thus thesis by A3;
+   end;
+A6:   {F(i) where i is Nat: P[i]}
+    = {F(i) where i is Nat: Q[i]} from Fraenkel6'(A5);
+A7: n-'1 c= NAT by ORDINAL1:def 2;
+A8: for d1,d2 being Element of NAT st F(d1) = F(d2) holds d1=d2 by ZFMISC_1:33;
+  n-'1, {F(i) where i is Nat: i in n-'1} are_equipotent from CardMono'(A7,A8);
+  hence Card ({[i+1,i] where i is Nat:i+1 < n})
+          = Card (n-'1) by A6,CARD_1:21
+          .= n-'1 by CARD_1:66
+          .= n-1 by A2,SCMFSA_7:3;
+  end;
+
+theorem
+Th28:   n > 0 implies Card the InternalRel of Necklace n = 2*(n-1)
+  proof
+   assume A1: n > 0;
+    then A2: n >= 0+1 by NAT_1:38;
+    deffunc F(Nat) = $1;
+    deffunc G(Nat) = $1+1;
+    defpred P[Nat] means $1+1 < n;
+   set A = {[i,i+1] where i is Nat:i+1 < n},
+       B = {[G(i),F(i)] where i is Nat:P[i]};
+A3:   the InternalRel of Necklace n = A \/ B by Th19;
+     A = the InternalRel of n-SuccRelStr by Def7;
+   then Card A = n-1 by A1,Th17;
+      then A4: Card A = Card (n-1) by CARD_1:def 5;
+        Card B = n-1 by A1,Th27;
+      then A5: Card B = Card (n-1) by CARD_1:def 5;
+     A is Relation-like
+    proof
+     let x be set;
+     assume x in A;
+     then ex i being Nat st x = [i,i+1] & i+1<n;
+     hence thesis;
+    end;
+   then reconsider A as Relation;
+A6:   A = {[F(i),G(i)] where i is Nat: P[i]};
+A7:  A~ = B from Convers(A6);
+A8:   A misses B
+      proof
+       assume A meets B;
+       then consider x being set such that
+A9:     x in A and
+A10:     x in B by XBOOLE_0:3;
+       consider y,z being set such that
+A11:      x = [y,z] by A9,RELAT_1:def 1;
+A12:      [z,y] in A by A7,A10,A11,RELAT_1:def 7;
+       consider i be Nat such that
+A13:      [y,z] = [i,i+1] & i+1<n by A9,A11;
+A14:      y = i & z = i+1 by A13,ZFMISC_1:33;
+       consider j be Nat such that
+A15:      [z,y] = [j,j+1] & j+1<n by A12;
+         z = j & y = j+1 by A15,ZFMISC_1:33;
+       then i+1+1 < i+1 by A14,NAT_1:38;
+       hence contradiction by NAT_1:29;
+      end;
+A16: n-'1 = n-1 by A2,SCMFSA_7:3;
+     Card the InternalRel of Necklace n
+                       = Card (n-1) +` Card (n-1) by A3,A4,A5,A8,CARD_2:48
+                       .= Card ((n-'1) + (n-'1)) by A16,CARD_2:51
+                       .= (n-'1) + (n-'1) by CARD_1:66
+                       .= 2*(n-1) by A16,XCMPLX_1:11;
+   hence Card the InternalRel of Necklace n = 2*(n-1);
+  end;
+
+theorem
+     Necklace 1, ComplRelStr Necklace 1 are_isomorphic
+ proof
+  set S = Necklace 1,
+      T = ComplRelStr S;
+  set f = 0 .--> 0;
+A1:  dom f = {0} by CQC_LANG:5
+       .= the carrier of S by Th21,CARD_5:1;
+A2:  the carrier of S = {0} by Th21,CARD_5:1;
+A3:  the carrier of S = the carrier of T by Def9;
+    f = {0} --> 0 by CQC_LANG:def 2
+    .= [:{0},{0}:] by FUNCOP_1:def 2;
+  then f is Function of the carrier of S, the carrier of T
+                                 by A1,A2,A3,FUNCT_2:def 1,RELSET_1:def 1;
+  then reconsider g = f as map of S,T;
+A4:    dom g = {0} by CQC_LANG:5;
+A5:  rng g = {0} by CQC_LANG:5;
+A6:  g is monotone
+      proof
+       let x,y being Element of S such that
+A7:    x <= y;
+         the carrier of S = 1 by Th21;
+       then reconsider i = x, j = y as natural number by Th4;
+     [x,y] in the InternalRel of S by A7,ORDERS_1:def 9;
+then A8:    i = j + 1 or j = i + 1 by Th25;
+       let a,b being Element of T such that
+         a = g.x & b = g.y;
+A9:     the carrier of S = {0} by Th21,CARD_5:1;
+then A10:       x = 0 by TARSKI:def 1;
+        y = 0 by A9,TARSKI:def 1;
+       hence thesis by A8,A10;
+      end;
+   g = g"
+      proof
+     for y,x being set holds y in rng g & x = g.y iff x in dom g & y = g.x
+        proof
+         let x,y being set;
+A11:    y in rng g & x = g.y implies x in dom g & y=g.x
+        proof
+         assume that
+A12:      y in rng g and
+A13:      x = g.y;
+         A14: y = 0 by A5,A12,TARSKI:def 1;
+         then x = 0 by A13,CQC_LANG:6;
+         hence thesis by A4,A14,CQC_LANG:6,TARSKI:def 1;
+        end;
+     x in dom g & y=g.x implies y in rng g & x = g.y
+        proof
+         assume that
+A15:        x in dom g and
+A16:        y = g.x;
+         the carrier of S = {0} by Th21,CARD_5:1;
+          then A17: x = 0 by A15,TARSKI:def 1;
+          then y = 0 by A16,CQC_LANG:6;
+          hence thesis by A5,A17,CQC_LANG:6,TARSKI:def 1;
+         end;
+         hence thesis by A5,A11,CQC_LANG:5;
+        end;
+       hence thesis by A4,A5,FUNCT_1:54;
+      end;
+  then reconsider h = g" as map of T,S by A3;
+    h is monotone
+   proof
+    let x,y being Element of T such that
+A18:    x <= y;
+A19:   the carrier of T = 1 by A3,Th21;
+    then reconsider i = x, j = y as natural number by Th4;
+      [x,y] in the InternalRel of T by A18,ORDERS_1:def 9;
+    then [x,y] in (the InternalRel of S)` \ id (the carrier of S)
+                                                         by Def9;
+then not [x,y] in id (the carrier of S) by XBOOLE_0:def 4;
+then A20:  (not x in (the carrier of S) or x <> y) by RELAT_1:def 10;
+A21:  x in (the carrier of T) & y in (the carrier of T);
+     A22: i = 0 by A19,CARD_5:1,TARSKI:def 1;
+     A23: j = 0 by A19,CARD_5:1,TARSKI:def 1;
+A24:  i + 1 <> j & j + 1 <> i & i <> j
+       proof
+        hereby assume A25: i+1=j or j+1=i;
+         per cases by A25;
+         suppose i+1 = j;
+         hence contradiction by A19,A22,EULER_1:1;
+         suppose j+1=i;
+         hence contradiction by A19,A23,EULER_1:1;
+        end;
+       thus i <> j by A20,A21,Def9;
+       end;
+      let a,b being Element of S such that
+        a = h.x & b = h.y;
+A26:    the carrier of T = {0} by A3,Th21,CARD_5:1;
+      y = 0 by A19,CARD_5:1,TARSKI:def 1;
+      hence thesis by A24,A26,TARSKI:def 1;
+   end;
+  then g is isomorphic by A6,WAYBEL_0:def 38;
+  hence thesis by WAYBEL_1:def 8;
+ end;
+
+theorem
+     Necklace 4, ComplRelStr Necklace 4 are_isomorphic
+  proof
+   set S = Necklace 4,
+       T = ComplRelStr Necklace 4;
+   set g = (0,1) --> (1,3), h = (2,3) --> (0,2),
+       f = g +* h;
+A1:  dom f = dom (0,1) --> (1,3) \/ dom (2,3) --> (0,2) by FUNCT_4:def 1
+  .= {0,1} \/ dom (2,3) --> (0,2) by FUNCT_4:65
+  .= {0,1} \/ {2,3} by FUNCT_4:65
+  .= {0,1,2,3} by ENUMSET1:45;
+  then A2: dom f = the carrier of S by Th2,Th21;
+A3:  rng g = {1,3} by FUNCT_4:67;
+A4:  rng h = {0,2} by FUNCT_4:67;
+     rng f c= the carrier of T
+   proof
+     let x be set;
+     assume
+A5:  x in rng f;
+A6:  rng f c= rng g \/ rng h by FUNCT_4:18;
+       rng g \/ rng h = {1,3,0,2} by A3,A4,ENUMSET1:45
+     .= {0,1,2,3} by ENUMSET1:112;
+     then x in 4 by A5,A6,Th2;
+     then x in the carrier of S by Th21;
+     hence x in the carrier of T by Def9;
+   end;
+  then f is Function of the carrier of S,
+                         the carrier of T by A2,FUNCT_2:def 1,RELSET_1:11;
+  then reconsider f as map of S,T;
+   take f;
+   per cases;
+   case that
+     S is non empty and
+     T is non empty;
+A7:   g is one-to-one
+    proof
+A8:     g = ({0} --> 1) +* ({1} -->3) by FUNCT_4:def 4;
+A9:     {0} --> 1 = 0 .--> 1 by CQC_LANG:def 2;
+A10:     {1} --> 3 = 1 .--> 3 by CQC_LANG:def 2;
+       rng (0 .--> 1) misses rng (1 .--> 3)
+     proof
+     assume rng (0 .--> 1) meets rng (1 .--> 3);
+     then consider x being set such that
+A11:     x in rng (0 .--> 1) & x in rng (1 .--> 3) by XBOOLE_0:3;
+A12:     rng (0 .--> 1) = {1} by CQC_LANG:5;
+A13:     rng (1 .--> 3) = {3} by CQC_LANG:5;
+       x = 1 by A11,A12,TARSKI:def 1;
+      hence contradiction by A11,A13,TARSKI:def 1;
+     end;
+    hence thesis by A8,A9,A10,KNASTER:1;
+    end;
+A14: h is one-to-one
+    proof
+A15:     h = ({2} --> 0) +* ({3} -->2) by FUNCT_4:def 4;
+A16:     {2} --> 0 = 2 .--> 0 by CQC_LANG:def 2;
+A17:     {3} --> 2 = 3 .--> 2 by CQC_LANG:def 2;
+       rng (2 .--> 0) misses rng (3 .--> 2)
+     proof
+      assume rng (2 .--> 0) meets rng (3 .--> 2);
+      then consider x being set such that
+A18:     x in rng (2 .--> 0) & x in rng (3 .--> 2) by XBOOLE_0:3;
+A19:     rng (2 .--> 0) = {0} by CQC_LANG:5;
+A20:     rng (3 .--> 2) = {2} by CQC_LANG:5;
+          x = 0 by A18,A19,TARSKI:def 1;
+      hence contradiction by A18,A20,TARSKI:def 1;
+     end;
+    hence thesis by A15,A16,A17,KNASTER:1;
+    end;
+A21:     dom g misses dom h
+      proof
+       assume dom g meets dom h;
+       then consider x being set such that
+A22:      x in dom g & x in dom h by XBOOLE_0:3;
+         (x = 0 or x = 1) & (x = 2 or x = 3) by A22,TARSKI:def 2;
+       hence contradiction;
+      end;
+A23:    rng g misses rng h
+     proof
+      assume rng g meets rng h;
+      then consider x being set such that
+A24:     x in rng g & x in rng h by XBOOLE_0:3;
+         (x = 1 or x = 3) & (x = 0 or x = 2) by A3,A4,A24,TARSKI:def 2;
+       hence contradiction;
+     end;
+    hence A25: f is one-to-one by A7,A14,KNASTER:1;
+     set A = the InternalRel of T;
+     set B = {[1,3],[3,1],[0,2],[2,0],[0,3],[3,0]};
+A26:    B c= A
+      proof
+       let x be set;
+       assume x in B;
+then A27:       x = [1,3] or x = [3,1] or x = [0,2] or x = [2,0] or x = [0,3]
+or
+         x = [3,0] by ENUMSET1:28;
+       set C = the carrier of S;
+         0 in C & 1 in C & 2 in C & 3 in C by A1,A2,ENUMSET1:19;
+       then reconsider x'=x as Element of [:C,C:] by A27,ZFMISC_1:106;
+A28:     x' in (the InternalRel of S)`
+        proof
+           not x' in the InternalRel of S
+         proof
+          assume x' in the InternalRel of S;
+          then consider i being Nat such that
+            i+1< 4 and
+A29:           x'= [i,i+1] or x'= [i+1,i] by Th20;
+            i=1 & i+1=3 or i=3 & i+1=1 or i=0 & i+1=2 or i=2 & i+1=0 or
+          i=0 & i+1=3 or i=3 & i+1=0 by A27,A29,ZFMISC_1:33;
+          hence contradiction;
+         end;
+         hence x' in (the InternalRel of S)` by SUBSET_1:50;
+        end;
+         not x in id (the carrier of S) by A27,RELAT_1:def 10;
+       then x in (the InternalRel of S)` \
+             id (the carrier of S) by A28,XBOOLE_0:def 4;
+       hence thesis by Def9;
+      end;
+    thus f is monotone
+    proof
+     let x,y being Element of S such that
+A30:    x <= y;
+       the carrier of S = 4 by Th21;
+     then reconsider i = x, j = y as natural number by Th4;
+      [x,y] in the InternalRel of S by A30,ORDERS_1:def 9;
+then A31:    i = j + 1 or j = i + 1 by Th25;
+     let a,b being Element of T such that
+A32:     a = f.x & b = f.y;
+A33:     dom g = {0,1} by FUNCT_4:65;
+A34:     dom h = {2,3} by FUNCT_4:65;
+A35:     0 in dom g by A33,TARSKI:def 2;
+A36:     1 in dom g by A33,TARSKI:def 2;
+A37:     2 in dom h by A34,TARSKI:def 2;
+A38:     3 in dom h by A34,TARSKI:def 2;
+A39:     f.0 = g.0 by A21,A35,FUNCT_4:17
+         .= 1 by FUNCT_4:66;
+A40:     f.1 = g.1 by A21,A36,FUNCT_4:17
+         .= 3 by FUNCT_4:66;
+A41:     f.2 = h.2 by A37,FUNCT_4:14
+         .= 0 by FUNCT_4:66;
+A42:     f.3 = h.3 by A38,FUNCT_4:14
+         .= 2 by FUNCT_4:66;
+     per cases by A1,A2,ENUMSET1:18;
+     suppose x = 0 & y = 0;
+     hence a <= b by A31;
+     suppose x = 0 & y = 1;
+      then [a,b] in B by A32,A39,A40,ENUMSET1:29;
+     hence a <= b by A26,ORDERS_1:def 9;
+     suppose x = 0 & y = 2;
+     hence a <= b by A31;
+     suppose x = 0 & y = 3;
+     hence a <= b by A31;
+     suppose x = 1 & y = 0;
+      then [a,b] in B by A32,A39,A40,ENUMSET1:29;
+     hence a <= b by A26,ORDERS_1:def 9;
+     suppose x = 1 & y = 1;
+     hence a <= b by A31;
+     suppose x = 1 & y = 2;
+      then [a,b] in B by A32,A40,A41,ENUMSET1:29;
+     hence a <= b by A26,ORDERS_1:def 9;
+     suppose x = 1 & y = 3;
+     hence a <= b by A31;
+     suppose x = 2 & y = 0;
+     hence a <= b by A31;
+     suppose x = 2 & y = 1;
+      then [a,b] in B by A32,A40,A41,ENUMSET1:29;
+     hence a <= b by A26,ORDERS_1:def 9;
+     suppose x = 2 & y = 2;
+     hence a <= b by A31;
+     suppose x = 2 & y = 3;
+      then [a,b] in B by A32,A41,A42,ENUMSET1:29;
+     hence a <= b by A26,ORDERS_1:def 9;
+     suppose x = 3 & y = 0;
+     hence a <= b by A31;
+     suppose x = 3 & y = 1;
+     hence a <= b by A31;
+     suppose x = 3 & y = 2;
+      then [a,b] in B by A32,A41,A42,ENUMSET1:29;
+     hence a <= b by A26,ORDERS_1:def 9;
+     suppose x = 3 & y = 3;
+     hence a <= b by A31;
+    end;
+      rng f = rng g \/ rng h by A21,Th7
+         .= {1,3,0,2} by A3,A4,ENUMSET1:45
+         .= {0,1,2,3} by ENUMSET1:112
+         .= the carrier of S by Th2,Th21
+         .= the carrier of T by Def9;
+    then f" is Function of the carrier of T,the carrier of S
+         by A25,FUNCT_2:31;
+    then reconsider F = f" as map of T,S;
+    take F;
+    thus F = f";
+    thus F is monotone
+     proof
+      let x,y being Element of T such that
+A43:    x <= y;
+A44:   the carrier of T = the carrier of S by Def9
+                       .= 4 by Th21;
+     then x is natural & y is natural by Th4;
+     then reconsider i = x, j = y as Nat by ORDINAL2:def 21;
+       [x,y] in the InternalRel of T by A43,ORDERS_1:def 9;
+     then A45:[x,y] in (the InternalRel of S)` \ id (the carrier of S)
+          by Def9;
+       [x,y] in (the InternalRel of S)` implies
+           not [x,y] in (the InternalRel of S) by SUBSET_1:54;
+     then not [x,y] in
+      ({[k,k+1] where k is Nat:k+1 < 4} \/ {[l+1,l] where l is Nat:l+1 < 4})
+       & not [x,y] in id (the carrier of S) by A45,Th19,XBOOLE_0:def 4;
+     then A46: not [x,y] in {[k,k+1] where k is Nat:k+1 < 4} &
+               not [x,y] in {[k+1,k] where k is Nat:k+1 < 4} by XBOOLE_0:def 2;
+     not [x,y] in id (the carrier of S) by A45,XBOOLE_0:def 4;
+then A47:    (not x in (the carrier of S) or x <> y) by RELAT_1:def 10;
+A48:    x in (the carrier of T) & y in (the carrier of T);
+A49:  i + 1 <> j & j + 1 <> i & i <> j
+       proof
+        hereby assume A50: i+1=j or j+1=i;
+         per cases by A50;
+         suppose
+A51:         i+1 = j;
+         then i+1 < 4 by A44,EULER_1:1;
+         hence contradiction by A46,A51;
+         suppose
+A52:            j+1=i;
+         then j+1 < 4 by A44,EULER_1:1;
+         hence contradiction by A46,A52;
+        end;
+       thus i <> j by A47,A48,Def9;
+       end;
+     let a,b being Element of S such that
+A53:     a = F.x & b = F.y;
+A54:     g" = (1,3) --> (0,1) by Th11;
+A55:     h" = (0,2) --> (2,3) by Th11;
+A56:     dom (g") = {1,3} by A54,FUNCT_4:65;
+A57:     dom (h") = {0,2} by A55,FUNCT_4:65;
+      A58: dom (g") misses dom (h")
+      proof
+       assume dom (g") meets dom (h");
+       then consider x being set such that
+A59:      x in dom (g") & x in dom (h") by XBOOLE_0:3;
+         (x = 1 or x = 3) & (x = 0 or x = 2) by A56,A57,A59,TARSKI:def 2;
+       hence contradiction;
+      end;
+A60:     1 in dom (g") by A56,TARSKI:def 2;
+A61:     3 in dom (g") by A56,TARSKI:def 2;
+A62:     0 in dom (h") by A57,TARSKI:def 2;
+A63:     2 in dom (h") by A57,TARSKI:def 2;
+A64:     F.1 = (g" +* h").1 by A7,A14,A21,A23,Th8
+           .= g".1 by A58,A60,FUNCT_4:17
+           .= 0 by A54,FUNCT_4:66;
+A65:     F.3 = (g" +* h").3 by A7,A14,A21,A23,Th8
+           .= g".3 by A58,A61,FUNCT_4:17
+           .= 1 by A54,FUNCT_4:66;
+A66:     F.0 = (g" +* h").0 by A7,A14,A21,A23,Th8
+           .= h".0 by A62,FUNCT_4:14
+           .= 2 by A55,FUNCT_4:66;
+A67:     F.2 = (g" +* h").2 by A7,A14,A21,A23,Th8
+           .= h".2 by A63,FUNCT_4:14
+           .= 3 by A55,FUNCT_4:66;
+     per cases by A44,Th2,ENUMSET1:18;
+     suppose x = 0 & y = 0;
+     hence a <= b by A49;
+     suppose x = 0 & y = 1;
+     hence a <= b by A49;
+     suppose x = 0 & y = 2;
+      then a = 2 & b = 2+1 by A53,A66,A67;
+      then [a,b] in the InternalRel of S by Th26;
+     hence a <= b by ORDERS_1:def 9;
+     suppose x = 0 & y = 3;
+      then a = 1+1 & b = 1 by A53,A65,A66;
+      then [a,b] in the InternalRel of S by Th26;
+     hence a <= b by ORDERS_1:def 9;
+     suppose x = 1 & y = 0;
+     hence a <= b by A49;
+     suppose x = 1 & y = 1;
+     hence a <= b by A49;
+     suppose x = 1 & y = 2;
+     hence a <= b by A49;
+     suppose x = 1 & y = 3;
+      then a = 0 & b = 0+1 by A53,A64,A65;
+      then [a,b] in the InternalRel of S by Th26;
+     hence a <= b by ORDERS_1:def 9;
+     suppose x = 2 & y = 0;
+      then a = 2+1 & b = 2 by A53,A66,A67;
+      then [a,b] in the InternalRel of S by Th26;
+     hence a <= b by ORDERS_1:def 9;
+     suppose x = 2 & y = 1;
+     hence a <= b by A49;
+     suppose x = 2 & y = 2;
+     hence a <= b by A49;
+     suppose x = 2 & y = 3;
+     hence a <= b by A49;
+     suppose x = 3 & y = 0;
+      then a = 1 & b = 1+1 by A53,A65,A66;
+      then [a,b] in the InternalRel of S by Th26;
+     hence a <= b by ORDERS_1:def 9;
+     suppose x = 3 & y = 1;
+      then a = 0+1 & b = 0 by A53,A64,A65;
+      then [a,b] in the InternalRel of S by Th26;
+     hence a <= b by ORDERS_1:def 9;
+     suppose x = 3 & y = 2;
+     hence a <= b by A49;
+     suppose x = 3 & y = 3;
+     hence a <= b by A49;
+    end;
+   case S is empty or T is empty;
+   hence thesis;
+  end;
+
+theorem
+     Necklace n, ComplRelStr Necklace n are_isomorphic implies
+   n = 0 or n = 1 or n = 4
+ proof
+  assume
+A1:  Necklace n, ComplRelStr Necklace n are_isomorphic;
+  assume A2:not thesis;
+  per cases by A2,CQC_THE1:5;
+  suppose A3: n=2;
+   set S = Necklace 2,
+       T = ComplRelStr S;
+   set X = {[0,1],[1,0]},
+       Y = the InternalRel of S;
+   A4: Card (the InternalRel of S) = 2*(2-1) by Th28
+                                   .= 2;
+A5:   the InternalRel of S =
+  {[i,i+1] where i is Nat:i+1 < 2} \/ {[i+1,i] where i is Nat:i+1 < 2} by Th19;
+   A6: [0,0+1] in {[i,i+1] where i is Nat:i+1 < 2};
+   A7: [0+1,0] in {[i+1,i] where i is Nat:i+1 < 2};
+A8:   X c= Y
+    proof
+     let x be set;
+     assume A9: x in {[0,1],[1,0]};
+     per cases by A9,TARSKI:def 2;
+     suppose x = [0,1];
+     hence thesis by A5,A6,XBOOLE_0:def 2;
+     suppose x = [1,0];
+     hence thesis by A5,A7,XBOOLE_0:def 2;
+    end;
+A10:   Y c= X
+    proof
+     let x be set;
+     assume A11: x in Y;
+     then consider y,z being set such that
+A12:      x = [y,z] by RELAT_1:def 1;
+     per cases by A5,A11,XBOOLE_0:def 2;
+     suppose x in {[i,i+1] where i is Nat:i+1 < 2};
+     then consider i be Nat such that
+A13:      [y,z] = [i,i+1] & i+1 < 2 by A12;
+A14:      y = i & z = i+1 by A13,ZFMISC_1:33;
+       i+1 < 1+1 by A13;
+     then i < 0+1 by REAL_1:55;
+     then i <= 0 by NAT_1:38;
+     then y = 0 by A14,NAT_1:19;
+     hence thesis by A12,A14,TARSKI:def 2;
+     suppose x in {[i+1,i] where i is Nat:i+1 < 2};
+     then consider i be Nat such that
+A15:      [y,z] = [i+1,i] & i+1 < 2 by A12;
+A16:      y = i+1 & z = i by A15,ZFMISC_1:33;
+       i+1 < 1+1 by A15;
+     then i < 0+1 by REAL_1:55;
+     then i <= 0 by NAT_1:38;
+     then z = 0 by A16,NAT_1:19;
+     hence thesis by A12,A16,TARSKI:def 2;
+    end;
+then A17:    X = Y by A8,XBOOLE_0:def 10;
+     the InternalRel of T is empty
+    proof
+     assume the InternalRel of T is non empty;
+     then consider x being set such that
+A18:    x in (the InternalRel of T) by XBOOLE_0:def 1;
+       x in (the InternalRel of S)` \ id (the carrier of S) by A18,Def9;
+     then A19:x in (the InternalRel of S)` &
+          not x in id (the carrier of S) by XBOOLE_0:def 4;
+A20:     the carrier of S = the carrier of SymRelStr(2-SuccRelStr) by Def10
+                    .= the carrier of 2-SuccRelStr by Def8
+                    .= {0,1} by Def7,CARD_5:1;
+A21:   id (the carrier of S) = {[0,0],[1,1]}
+        proof
+A22:      id (the carrier of S) c= {[0,0],[1,1]}
+          proof
+           let x be set;
+           assume A23: x in id (the carrier of S);
+           then consider x1,x2 being set such that
+A24:           x = [x1,x2] by RELAT_1:def 1;
+A25:          x1 in {0,1} & x1 = x2 by A20,A23,A24,RELAT_1:def 10;
+          then x1 = 0 or x1 = 1 by TARSKI:def 2;
+          hence thesis by A24,A25,TARSKI:def 2;
+          end;
+           {[0,0],[1,1]} c= id (the carrier of S)
+          proof
+           let x be set;
+           assume x in {[0,0],[1,1]};
+           then A26:x = [0,0] or x = [1,1] by TARSKI:def 2;
+             0 in the carrier of S & 1 in the carrier of S by A20,TARSKI:def 2;
+           hence thesis by A26,RELAT_1:def 10;
+          end;
+          hence thesis by A22,XBOOLE_0:def 10;
+        end;
+A27:     (the InternalRel of S)` = [:the carrier of S,the carrier of S:] \
+      (the InternalRel of S) by SUBSET_1:def 5;
+   (the InternalRel of S)` = id (the carrier of S)
+       proof
+        thus (the InternalRel of S)` c= id (the carrier of S)
+         proof
+          let x be set;
+          assume x in (the InternalRel of S)`;
+          then A28:x in [:the carrier of S,the carrier of S:] &
+               not x in (the InternalRel of S) by A27,XBOOLE_0:def 4;
+          then x in {[0,0],[0,1],[1,0],[1,1]} by A20,MCART_1:25;
+          then x = [0,0] or x = [0,1] or x = [1,0] or x = [1,1]
+               by ENUMSET1:18;
+          hence thesis by A17,A21,A28,TARSKI:def 2;
+         end;
+        let x be set;
+        assume A29: x in id the carrier of S;
+        then A30: x = [0,0] or x = [1,1] by A21,TARSKI:def 2;
+          not x in the InternalRel of S
+         proof
+          per cases by A21,A29,TARSKI:def 2;
+          suppose A31: x = [0,0];
+          then A32:        x <> [0,1] by ZFMISC_1:33;
+             x <> [1,0] by A31,ZFMISC_1:33;
+          hence thesis by A10,A32,TARSKI:def 2;
+          suppose A33: x = [1,1];
+          then A34:        x <> [0,1] by ZFMISC_1:33;
+             x <> [1,0] by A33,ZFMISC_1:33;
+          hence thesis by A10,A34,TARSKI:def 2;
+         end;
+        then x in {[0,0],[0,1],[1,0],[1,1]} &
+             not x in the InternalRel of S by A30,ENUMSET1:19;
+       then x in [:the carrier of S,the carrier of S:] &
+            (not x in the InternalRel of S) by A20,MCART_1:25;
+       then x in ([:the carrier of S,the carrier of S:] \
+            (the InternalRel of S) ) by XBOOLE_0:def 4;
+       hence thesis by SUBSET_1:def 5;
+       end;
+     hence contradiction by A19;
+    end;
+   hence contradiction by A1,A3,A4,Th18,CARD_1:47;
+  suppose A35: n=3;
+   set S = Necklace 3,
+       T = ComplRelStr S;
+   set X = {[0,1],[1,0],[1,2],[2,1]},
+       Y = the InternalRel of S;
+   A36: the carrier of S = {0,1,2} by Th21,YELLOW11:1;
+   A37: Card (the InternalRel of S) = 2*(3-1) by Th28
+                                   .= 4;
+A38:   the InternalRel of S =
+  {[i,i+1] where i is Nat:i+1 < 3} \/ {[i+1,i] where i is Nat:i+1 < 3} by Th19;
+    A39: [0,0+1] in {[i,i+1] where i is Nat:i+1 < 3};
+    A40: [0+1,0] in {[i+1,i] where i is Nat:i+1 < 3};
+    A41: [0+1,1+1] in {[i,i+1] where i is Nat:i+1 < 3};
+    A42: [1+1,0+1] in {[i+1,i] where i is Nat:i+1 < 3};
+A43:   X c= Y
+    proof
+     let x be set;
+     assume A44: x in X;
+     per cases by A44,ENUMSET1:18;
+     suppose x = [0,1];
+     hence thesis by A38,A39,XBOOLE_0:def 2;
+     suppose x = [1,0];
+     hence thesis by A38,A40,XBOOLE_0:def 2;
+     suppose x = [1,2];
+     hence thesis by A38,A41,XBOOLE_0:def 2;
+     suppose x = [2,1];
+     hence thesis by A38,A42,XBOOLE_0:def 2;
+    end;
+    Y c= X
+    proof
+     let x be set;
+     assume A45: x in Y;
+     then consider y,z being set such that
+A46:      x = [y,z] by RELAT_1:def 1;
+     per cases by A38,A45,XBOOLE_0:def 2;
+     suppose x in {[i,i+1] where i is Nat:i+1 < 3};
+     then consider i be Nat such that
+A47:      [y,z] = [i,i+1] & i+1 < 3 by A46;
+A48:      y = i & z = i+1 by A47,ZFMISC_1:33;
+       i+1 < 1+2 by A47;
+     then i < 1 + 1 by REAL_1:55;
+     then i <= 1 by NAT_1:38;
+     then y = 0 or y = 1 by A48,CQC_THE1:2;
+     hence thesis by A46,A48,ENUMSET1:19;
+     suppose x in {[i+1,i] where i is Nat:i+1 < 3};
+     then consider i be Nat such that
+A49:      [y,z] = [i+1,i] & i+1 < 3 by A46;
+A50:      y = i+1 & z = i by A49,ZFMISC_1:33;
+       i+1 < 1+2 by A49;
+     then i < 1 + 1 by REAL_1:55;
+     then i <= 1 by NAT_1:38;
+     then z = 0 or z = 1 by A50,CQC_THE1:2;
+     hence thesis by A46,A50,ENUMSET1:19;
+    end;
+then A51:  X = Y by A43,XBOOLE_0:def 10;
+A52:  id (the carrier of S) = {[0,0],[1,1],[2,2]}
+      proof
+A53:    id (the carrier of S) c= {[0,0],[1,1],[2,2]}
+         proof
+           let x be set;
+           assume A54: x in id (the carrier of S);
+           then consider x1,x2 being set such that
+A55:           x = [x1,x2] by RELAT_1:def 1;
+A56:          x1 in {0,1,2} & x1 = x2 by A36,A54,A55,RELAT_1:def 10;
+          then x1 = 0 or x1 = 1 or x1 = 2 by ENUMSET1:13;
+          hence thesis by A55,A56,ENUMSET1:14;
+         end;
+         {[0,0],[1,1],[2,2]} c= id (the carrier of S)
+         proof
+           let x be set;
+           assume A57: x in {[0,0],[1,1],[2,2]};
+           per cases by A57,ENUMSET1:def 1;
+           suppose A58: x = [0,0] or x = [1,1];
+             0 in the carrier of S & 1 in the carrier of S by A36,ENUMSET1:def
+1
+;
+           hence thesis by A58,RELAT_1:def 10;
+           suppose A59: x = [2,2];
+             2 in the carrier of S by A36,ENUMSET1:def 1;
+           hence thesis by A59,RELAT_1:def 10;
+          end;
+         hence thesis by A53,XBOOLE_0:def 10;
+        end;
+A60:   the InternalRel of T = (the InternalRel of S)` \
+             id (the carrier of S) by Def9;
+A61:  (the InternalRel of S)` = [:the carrier of S,the carrier of S:] \
+                               (the InternalRel of S) by SUBSET_1:def 5;
+A62:  [:the carrier of S,the carrier of S:] =
+         {[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]} by A36,Th3;
+A63:  (the InternalRel of S)` = {[0,2],[2,0],[0,0],[1,1],[2,2]}
+     proof
+      thus (the InternalRel of S)` c= {[0,2],[2,0],[0,0],[1,1],[2,2]}
+       proof
+        let x be set;
+        assume x in (the InternalRel of S)`;
+        then x in {[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]} &
+         not x in {[0,1],[1,0],[1,2],[2,1]} by A43,A61,A62,XBOOLE_0:def 4;
+       then x in {[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]} &
+         x <> [0,1] & x <> [1,0] & x <> [1,2] & x <> [2,1] by ENUMSET1:19;
+       then x = [0,2] or x = [2,0] or x = [0,0] or x = [1,1] or x = [2,2]
+                by BVFUNC24:26;
+        hence thesis by ENUMSET1:24;
+       end;
+      let x be set;
+      assume x in {[0,2],[2,0],[0,0],[1,1],[2,2]};
+then A64:    x = [0,2] or x = [2,0] or x = [0,0] or x = [1,1] or x = [2,2]
+                                        by ENUMSET1:23;
+      then x <> [0,1] & x <> [1,0] & x <> [1,2] & x <> [2,1] by ZFMISC_1:33;
+      then A65: not x in {[0,1],[1,0],[1,2],[2,1]} by ENUMSET1:18;
+        x in {[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]}
+              by A64,BVFUNC24:49;
+      hence thesis by A51,A61,A62,A65,XBOOLE_0:def 4;
+     end;
+A66:  the InternalRel of T = {[0,2],[2,0]}
+   proof
+    thus the InternalRel of T c= {[0,2],[2,0]}
+     proof
+      let x be set;
+      assume x in the InternalRel of T;
+      then A67: x in {[0,2],[2,0],[0,0],[1,1],[2,2]} &
+           not x in {[0,0],[1,1],[2,2]} by A52,A60,A63,XBOOLE_0:def 4;
+      then x = [0,2] or x = [2,0] or x = [0,0] or x =[1,1] or x = [2,2]
+           by ENUMSET1:23;
+      hence thesis by A67,ENUMSET1:14,TARSKI:def 2;
+     end;
+    let x be set;
+    assume x in {[0,2],[2,0]};
+    then A68: x = [0,2] or x =[2,0] by TARSKI:def 2;
+    then A69: x in {[0,2],[2,0],[0,0],[1,1],[2,2]} by ENUMSET1:24;
+        x <> [0,0] & x <> [1,1] & x <> [2,2] by A68,ZFMISC_1:33;
+    then not x in {[0,0],[1,1],[2,2]} by ENUMSET1:13;
+    hence thesis by A52,A60,A63,A69,XBOOLE_0:def 4;
+   end;
+     [0,2] <> [2,0] by ZFMISC_1:33;
+   then Card (the InternalRel of T) = 2 by A66,CARD_2:76;
+  hence thesis by A1,A35,A37,Th18;
+  suppose A70: n > 4;
+   set S = Necklace n,
+       T = ComplRelStr S;
+A71:  the carrier of S = n by Th21;
+       n > 0 by A70,AXIOMS:22;
+then A72:  Card the InternalRel of S = 2*(n-1) by Th28;
+A73:     (the InternalRel of S)` = [:the carrier of S,the carrier of S:] \
+      (the InternalRel of S) by SUBSET_1:def 5;
+A74:    the carrier of S = n by Th21;
+     n is Nat by ORDINAL2:def 21;
+   then Card n = n by CARD_1:66;
+   then Card [:n,n:] = n*n by CARD_2:65;
+  then A75: Card (the InternalRel of S)` = n*n - 2*(n-1) by A72,A73,A74,CARD_2:
+63;
+         n is Nat by ORDINAL2:def 21;
+    then n = Card n by CARD_1:66;
+    then A76:  Card id (the carrier of S) = n by A71,Th6;
+      id (the carrier of S) misses (the InternalRel of S)
+     proof
+      assume not thesis;
+      then consider x being set such that
+A77:    x in id (the carrier of S) and
+A78:    x in the InternalRel of S by XBOOLE_0:3;
+       consider x1,x2 being set such that
+A79:       x = [x1,x2] by A77,RELAT_1:def 1;
+      A80: x1=x2 by A77,A79,RELAT_1:def 10;
+      consider i being Nat such that
+        i+1 < n and
+A81:      (x = [i,i+1] or x = [i+1,i]) by A78,Th20;
+      per cases by A79,A81;
+      suppose [x1,x2] = [i,i+1];
+      then x1 = i & x2 = i+1 by ZFMISC_1:33;
+      hence thesis by A80,NAT_1:38;
+      suppose [x1,x2] = [i+1,i];
+      then x1 = i+1 & x2 = i by ZFMISC_1:33;
+      hence thesis by A80,NAT_1:38;
+     end;
+   then A82: id (the carrier of S) c= (the InternalRel of S)`
+                                          by A73,XBOOLE_1:86;
+  A83: Card (the InternalRel of T) =
+       Card ((the InternalRel of S)` \ id (the carrier of S)) by Def9
+    .= n*n - 2*(n-1) - n by A75,A76,A82,CARD_2:63;
+      n*n - 2*(n-1) - n <> 2*(n-1)
+     proof
+      assume not thesis;
+      then n*n - (2*n - 2*1) - n = 2*(n-1) by XCMPLX_1:40;
+      then n*n - (2*n - 2) - n - 2*(n-1) = 0 by XCMPLX_1:14;
+      then n*n - (2*n - 2) - n - (2*n - 2*1) = 0 by XCMPLX_1:40;
+      then n*n - (2*n - 2) + (- n - (2*n - 2*1)) = 0 by XCMPLX_1:158;
+      then n*n - (2*n - 2) + (-(2*n - 2) - n) = 0 by XCMPLX_1:144;
+      then n*n - (2*n - 2) - (2*n - 2) - n = 0 by XCMPLX_1:158;
+      then n*n - ((2*n - 2) + (2*n - 2)) - n = 0 by XCMPLX_1:36;
+      then n*n - 2*(2*n - 2) - n = 0 by XCMPLX_1:11;
+      then n*n - (2*(2*n) - 2*2) - n = 0 by XCMPLX_1:40;
+      then n*n - (4*n - 4) - n = 0 by XCMPLX_1:4;
+      then n*n - 4*n + 4 - n = 0 by XCMPLX_1:37;
+      then n*n - 4*n - n + 4 = 0 by XCMPLX_1:29;
+      then n*n - (4*n + n*1) + 4 = 0 by XCMPLX_1:36;
+      then n*n - n*(4+1) + 4 = 0 by XCMPLX_1:8;
+      then n ^2 - 5*n + 4 = 0 by SQUARE_1:def 3;
+      then n ^2 + (- 5*n) + 4 = 0 by XCMPLX_0:def 8;
+      then A84: 1*n ^2 + (- 5)*n + 4 = 0 by XCMPLX_1:175;
+A85:   delta(1,-5,4) = (-5)^2 - 4*1*4 by QUIN_1:def 1
+                    .= (-5)*(-5) - 4*4 by SQUARE_1:def 3
+                    .= 9;
+      then n = (- (-5) - sqrt delta(1,-5,4))/(2 * 1) or
+            n = (- (-5) + sqrt delta(1,-5,4))/(2 * 1) by A84,QUIN_1:15;
+       then n = (5 - sqrt (3*3))/2 or n = (5 + sqrt (3*3))/2 by A85;
+       then n = (5 - sqrt 3^2)/2 or n = (5 + sqrt 3^2)/2 by SQUARE_1:def 3;
+       then A86:n = (5 - 3)/2 or n = (5+3) /2 by SQUARE_1:89;
+       per cases by A86;
+       suppose n =1;
+       hence contradiction by A70;
+       suppose n=4;
+       hence contradiction by A70;
+     end;
+  hence thesis by A1,A72,A83,Th18;
+ end;
+

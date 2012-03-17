@@ -1,0 +1,481 @@
+:: Partially Ordered Sets
+::  by Wojciech A. Trybulec
+::
+:: Received August 30, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, BOOLE, TARSKI, RELAT_1, MCART_1, RELAT_2, WELLORD1,
+      SUBSET_1, ORDERS_1, PARTFUN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1,
+      RELSET_1, PARTFUN1, FUNCT_2, MCART_1, WELLORD1, STRUCT_0, PRE_TOPC;
+ constructors RELAT_2, MCART_1, WELLORD1, PRE_TOPC, PARTFUN1, MEMBERED,
+      XBOOLE_0;
+ clusters RELSET_1, STRUCT_0, PRE_TOPC, SUBSET_1, MEMBERED, ZFMISC_1, PARTFUN1,
+      XBOOLE_0;
+ requirements BOOLE, SUBSET;
+
+
+begin
+
+reserve X,Y for set,
+        x,x1,x2,y,y1,y2,z for set,
+        f,g,h for Function;
+
+::
+::  Choice function.
+::
+
+reserve M for non empty set;
+
+
+definition let M;
+ assume  not {} in M;
+ mode Choice_Function of M -> Function of M, union M means
+:: ORDERS_1:def 1
+   for X st X in M holds it.X in X;
+end;
+
+
+
+reserve D,D1 for non empty set;
+
+definition let D be set;
+ func BOOL D -> set equals
+:: ORDERS_1:def 2
+    bool D \ {{}};
+end;
+
+definition let D;
+ cluster BOOL D -> non empty;
+end;
+
+canceled 3;
+
+theorem :: ORDERS_1:4
+ not {} in BOOL D;
+
+theorem :: ORDERS_1:5
+ D1 c= D iff D1 in BOOL D;
+
+theorem :: ORDERS_1:6
+   D1 is Subset of D iff D1 in BOOL D;
+
+theorem :: ORDERS_1:7
+  D in BOOL D;
+
+reserve P for Relation;
+
+::
+::  Orders.
+::
+
+definition let X;
+ mode Order of X is total reflexive antisymmetric transitive Relation of X;
+end;
+
+reserve O for Order of X;
+
+canceled 4;
+
+theorem :: ORDERS_1:12
+   x in X implies [x,x] in O;
+
+theorem :: ORDERS_1:13
+   x in X & y in X & [x,y] in O & [y,x] in O implies x = y;
+
+theorem :: ORDERS_1:14
+   x in X & y in X & z in X & [x,y] in O & [y,z] in O implies
+  [x,z] in O;
+
+::
+::  Partially ordered sets.
+::
+
+definition
+ canceled;
+  struct(1-sorted) RelStr (#
+    carrier -> set,
+    InternalRel -> Relation of the carrier
+  #);
+end;
+
+definition
+ let X be non empty set;
+ let R be Relation of X;
+ cluster RelStr(#X,R#) -> non empty;
+end;
+
+definition let A be RelStr;
+ attr A is reflexive means
+:: ORDERS_1:def 4
+
+  the InternalRel of A is_reflexive_in the carrier of A;
+ attr A is transitive means
+:: ORDERS_1:def 5
+
+  the InternalRel of A is_transitive_in the carrier of A;
+ attr A is antisymmetric means
+:: ORDERS_1:def 6
+
+  the InternalRel of A is_antisymmetric_in the carrier of A;
+end;
+
+definition
+ cluster non empty reflexive transitive antisymmetric strict RelStr;
+end;
+
+definition
+ mode Poset is reflexive transitive antisymmetric RelStr;
+end;
+
+definition let A be Poset;
+ cluster the InternalRel of A -> total reflexive antisymmetric transitive;
+end;
+
+definition
+ let X be set;
+ let O be Order of X;
+ cluster RelStr(#X,O#) -> reflexive transitive antisymmetric;
+end;
+
+reserve A for non empty Poset;
+
+reserve a,a1,a2,a3,b,c for Element of A;
+reserve S,T for Subset of A;
+
+definition let A be RelStr; let a1,a2 be Element of A;
+ canceled 2;
+
+ pred a1 <= a2 means
+:: ORDERS_1:def 9
+   [a1,a2] in the InternalRel of A;
+ synonym a2 >= a1;
+end;
+
+definition let A be RelStr; let a1,a2 be Element of A;
+ pred a1 < a2 means
+:: ORDERS_1:def 10
+   a1 <= a2 & a1 <> a2;
+ irreflexivity;
+ synonym a2 > a1;
+end;
+
+canceled 9;
+
+theorem :: ORDERS_1:24
+ for A being reflexive non empty RelStr, a being Element of A
+  holds a <= a;
+
+definition let A be reflexive non empty RelStr;
+           let a1,a2 be Element of A;
+ redefine pred a1 <= a2;
+ reflexivity;
+end;
+
+theorem :: ORDERS_1:25
+ for A being antisymmetric RelStr,
+ a1,a2 being Element of A
+  st a1 <= a2 & a2 <= a1 holds a1 = a2;
+
+theorem :: ORDERS_1:26
+ for A being transitive RelStr,
+   a1,a2,a3 being Element of A holds
+ a1 <= a2 & a2 <= a3 implies a1 <= a3;
+
+canceled;
+
+theorem :: ORDERS_1:28
+ for A being antisymmetric RelStr,
+  a1,a2 being Element of A holds
+ not(a1 < a2 & a2 < a1);
+
+theorem :: ORDERS_1:29
+ for A being transitive antisymmetric RelStr
+ for a1,a2,a3 being Element of A holds
+ a1 < a2 & a2 < a3 implies a1 < a3;
+
+theorem :: ORDERS_1:30
+ for A being antisymmetric RelStr,
+  a1,a2 being Element of A holds
+ a1 <= a2 implies not a2 < a1;
+
+canceled;
+
+theorem :: ORDERS_1:32
+   for A being transitive antisymmetric RelStr
+ for a1,a2,a3 being Element of A holds
+ (a1 < a2 & a2 <= a3) or (a1 <= a2 & a2 < a3) implies a1 < a3;
+
+::
+::  Chains.
+::
+
+definition let A be RelStr;
+ let IT be Subset of A;
+ attr IT is strongly_connected means
+:: ORDERS_1:def 11
+   the InternalRel of A is_strongly_connected_in IT;
+end;
+
+definition let A be RelStr;
+ cluster {}A -> strongly_connected;
+end;
+
+definition let A be RelStr;
+ cluster strongly_connected Subset of A;
+end;
+
+definition let A be RelStr;
+ mode Chain of A is strongly_connected Subset of A;
+end;
+
+
+
+canceled 2;
+
+theorem :: ORDERS_1:35
+ for A being non empty reflexive RelStr
+ for a being Element of A holds {a} is Chain of A;
+
+theorem :: ORDERS_1:36
+ for A being non empty reflexive RelStr, a1,a2 being Element of A holds
+ {a1,a2} is Chain of A iff a1 <= a2 or a2 <= a1;
+
+theorem :: ORDERS_1:37
+   for A being RelStr, C being Chain of A, S being Subset of A holds
+ S c= C implies S is Chain of A;
+
+theorem :: ORDERS_1:38
+ for A being reflexive RelStr, a1,a2 being Element of A holds
+ (ex C being Chain of A st a1 in C & a2 in C) iff a1 <= a2 or a2 <= a1;
+
+theorem :: ORDERS_1:39
+ for A being reflexive antisymmetric RelStr, a1,a2 being Element of A holds
+ (ex C being Chain of A st a1 in C & a2 in C) iff (a1 < a2 iff not a2 <= a1);
+
+theorem :: ORDERS_1:40
+ for A being RelStr, T being Subset of A holds
+ the InternalRel of A well_orders T implies
+  T is Chain of A;
+
+::
+::  Upper and lower cones.
+::
+
+definition let A; let S;
+ func UpperCone(S) -> Subset of A equals
+:: ORDERS_1:def 12
+    {a1 : for a2 st a2 in S holds a2 < a1};
+end;
+
+definition let A; let S;
+ func LowerCone(S) -> Subset of A equals
+:: ORDERS_1:def 13
+    {a1 : for a2 st a2 in S holds a1 < a2};
+end;
+
+canceled 2;
+
+theorem :: ORDERS_1:43
+ UpperCone({}(A)) = the carrier of A;
+
+theorem :: ORDERS_1:44
+   UpperCone([#](A)) = {};
+
+theorem :: ORDERS_1:45
+   LowerCone({}(A)) = the carrier of A;
+
+theorem :: ORDERS_1:46
+   LowerCone([#](A)) = {};
+
+theorem :: ORDERS_1:47
+ a in S implies not a in UpperCone(S);
+
+theorem :: ORDERS_1:48
+   not a in UpperCone{a};
+
+theorem :: ORDERS_1:49
+ a in S implies not a in LowerCone(S);
+
+theorem :: ORDERS_1:50
+ not a in LowerCone{a};
+
+theorem :: ORDERS_1:51
+   c < a iff a in UpperCone{c};
+
+theorem :: ORDERS_1:52
+ a < c iff a in LowerCone{c};
+
+::
+::  Initial segments.
+::
+
+definition let A; let S; let a;
+ func InitSegm(S,a) -> Subset of A equals
+:: ORDERS_1:def 14
+    LowerCone{a} /\ S;
+end;
+
+definition let A; let S;
+ mode Initial_Segm of S -> Subset of A means
+:: ORDERS_1:def 15
+   ex a st a in S & it = InitSegm(S,a) if S <> {}
+        otherwise it = {};
+end;
+
+reserve I for Initial_Segm of S;
+
+
+canceled 3;
+
+theorem :: ORDERS_1:56
+ x in InitSegm(S,a) iff x in LowerCone{a} & x in S;
+
+theorem :: ORDERS_1:57
+ a in InitSegm(S,b) iff a < b & a in S;
+
+canceled 2;
+
+theorem :: ORDERS_1:60
+   InitSegm({}(A),a) = {};
+
+theorem :: ORDERS_1:61
+ InitSegm(S,a) c= S;
+
+theorem :: ORDERS_1:62
+ not a in InitSegm(S,a);
+
+canceled;
+
+theorem :: ORDERS_1:64
+   a1 < a2 implies InitSegm(S,a1) c= InitSegm(S,a2);
+
+theorem :: ORDERS_1:65
+   S c= T implies InitSegm(S,a) c= InitSegm(T,a);
+
+canceled;
+
+theorem :: ORDERS_1:67
+ I c= S;
+
+theorem :: ORDERS_1:68
+ S <> {} iff not S is Initial_Segm of S;
+
+theorem :: ORDERS_1:69
+ (S <> {} or T <> {}) & (S is Initial_Segm of T) implies
+   not T is Initial_Segm of S;
+
+theorem :: ORDERS_1:70
+ a1 < a2 & a1 in S & a2 in T & T is Initial_Segm of S implies
+  a1 in T;
+
+theorem :: ORDERS_1:71
+ a in S & S is Initial_Segm of T implies
+  InitSegm(S,a) = InitSegm(T,a);
+
+theorem :: ORDERS_1:72
+   S c= T & the InternalRel of A well_orders T &
+  (for a1,a2 st a2 in S & a1 < a2 holds a1 in S) implies
+    S = T or S is Initial_Segm of T;
+
+theorem :: ORDERS_1:73
+ S c= T & the InternalRel of A well_orders T &
+  (for a1,a2 st a2 in S & a1 in T & a1 < a2 holds a1 in S) implies
+    S = T or S is Initial_Segm of T;
+
+::
+::  Chains of choice function of BOOL of partially ordered sets.
+::
+
+reserve f for Choice_Function of BOOL(the carrier of A);
+
+definition let A; let f;
+ mode Chain of f -> Chain of A means
+:: ORDERS_1:def 16
+   it <> {} &
+        the InternalRel of A well_orders it &
+        for a st a in it holds f.UpperCone(InitSegm(it,a)) = a;
+end;
+
+reserve fC,fC1,fC2 for Chain of f;
+
+canceled 4;
+
+theorem :: ORDERS_1:78
+ {f.(the carrier of A)} is Chain of f;
+
+theorem :: ORDERS_1:79
+ f.(the carrier of A) in fC;
+
+theorem :: ORDERS_1:80
+ a in fC & b = f.(the carrier of A) implies b <= a;
+
+theorem :: ORDERS_1:81
+   a = f.(the carrier of A) implies InitSegm(fC,a) = {};
+
+theorem :: ORDERS_1:82
+   fC1 meets fC2;
+
+theorem :: ORDERS_1:83
+ fC1 <> fC2 implies
+  (fC1 is Initial_Segm of fC2 iff not fC2 is Initial_Segm of fC1);
+
+theorem :: ORDERS_1:84
+ fC1 c< fC2 iff fC1 is Initial_Segm of fC2;
+
+definition let A; let f;
+ func Chains f -> set means
+:: ORDERS_1:def 17
+   x in it iff x is Chain of f;
+end;
+
+definition let A; let f;
+ cluster Chains f -> non empty;
+end;
+
+canceled 2;
+
+theorem :: ORDERS_1:87
+ union(Chains(f)) <> {};
+
+theorem :: ORDERS_1:88
+ fC <> union(Chains(f)) & S = union(Chains(f)) implies
+  fC is Initial_Segm of S;
+
+theorem :: ORDERS_1:89
+   union(Chains(f)) is Chain of f;
+
+::
+::  Auxiliary theorems.
+::
+
+canceled;
+
+theorem :: ORDERS_1:91
+   (ex X st X <> {} & X in Y) iff union Y <> {};
+
+theorem :: ORDERS_1:92
+   P is_strongly_connected_in X iff
+  P is_reflexive_in X & P is_connected_in X;
+
+theorem :: ORDERS_1:93
+   P is_reflexive_in X & Y c= X implies P is_reflexive_in Y;
+
+theorem :: ORDERS_1:94
+   P is_antisymmetric_in X & Y c= X implies P is_antisymmetric_in Y;
+
+theorem :: ORDERS_1:95
+   P is_transitive_in X & Y c= X implies P is_transitive_in Y;
+
+theorem :: ORDERS_1:96
+   P is_strongly_connected_in X & Y c= X implies
+  P is_strongly_connected_in Y;
+
+theorem :: ORDERS_1:97
+ for R being total reflexive Relation of X holds field R = X;
+
+theorem :: ORDERS_1:98
+ for A being set, R being Relation of A st R is_reflexive_in A
+  holds dom R = A & field R = A;

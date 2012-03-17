@@ -1,0 +1,1850 @@
+:: Ordered Rings - Part II
+::  by Micha{\l} Muzalewski and Les{\l}aw W. Szczerba
+::
+:: Received October 11, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary VECTSP_1, FINSEQ_1, RELAT_1, FUNCT_1, O_RING_1;
+ notation XREAL_0, NAT_1, FUNCT_1, FINSEQ_1, STRUCT_0, RLVECT_1, VECTSP_1,
+      O_RING_1;
+ constructors NAT_1, O_RING_1, XREAL_0, XBOOLE_0;
+ clusters VECTSP_1, STRUCT_0, RELSET_1, NAT_1, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, REAL, SUBSET, ARITHM;
+ definitions O_RING_1;
+ theorems REAL_1, NAT_1, FINSEQ_1, O_RING_1, AXIOMS, FINSEQ_3;
+
+begin
+
+reserve i,j,k,l,m,n for Nat;
+
+Lm1:
+  n<1 implies n=0
+    proof
+      assume n<1;
+      then n<0+1;
+      then 0<=n & n<=0 by NAT_1:18,38;
+      hence thesis by AXIOMS:21;
+    end;
+
+Lm2:
+  n<>0 implies 1<=n
+    proof
+      assume n<>0;
+      then 0<n by NAT_1:19;
+      then 0+1<=n by NAT_1:38;
+      hence thesis;
+    end;
+
+Lm3:
+  n<=1 implies n=0 or n=1
+    proof
+      assume n<=1;
+      then n<1 or n=1 by REAL_1:def 5;
+      hence thesis by Lm1;
+    end;
+
+reserve R for non empty doubleLoopStr;
+reserve x,y for Scalar of R;
+reserve f,g,h for FinSequence of the carrier of R;
+
+Lm4:
+  h=f^g iff ( dom h = Seg(len f + len g) &
+     (for k st k in dom f holds h.:k=f.:k) &
+     (for k st k in dom g holds h.:(len f + k)=g.:k))
+     proof
+      thus h=f^g implies
+        (dom h = Seg(len f + len g) &
+        (for k st k in dom f holds h.:k=f.:k) &
+        (for k st k in dom g holds h.:(len f + k)=g.:k))
+        proof
+          assume A1:h=f^g;
+          hence dom h = Seg(len f + len g) by FINSEQ_1:def 7;
+          then A2:len h=len f+len g by FINSEQ_1:def 3;
+          thus for k st k in dom f holds h.:k=f.:k
+            proof
+              let k such that A3:k in dom f;
+              A4:len f<=len f+len g by NAT_1:29;
+              A5:0<>k & k<=len f by A3,FINSEQ_3:27;
+              then 0<>k & k<=len h by A2,A4,AXIOMS:22;
+              then h.:k=h.k by O_RING_1:def 1
+                     .=f.k by A1,A3,FINSEQ_1:def 7
+                     .=f.:k by A5,O_RING_1:def 1;
+              hence thesis;
+            end;
+          thus for k st k in dom g holds h.:(len f + k)=g.:k
+            proof
+              let k; assume A6:k in dom g;
+              then A7:0<>k & k<=len g by FINSEQ_3:27;
+              then 0<>len f+k & len f+k<=len f+len g by NAT_1:23,REAL_1:55;
+              then h.:(len f + k)=h.(len f+k) by A2,O_RING_1:def 1
+                          .=g.k by A1,A6,FINSEQ_1:def 7
+                          .=g.:k by A7,O_RING_1:def 1;
+              hence thesis;
+            end;
+        end;
+      thus (dom h = Seg(len f + len g) &
+      (for k st k in dom f holds h.:k=f.:k) &
+      (for k st k in dom g holds h.:(len f + k)=g.:k)) implies
+        h=f^g
+        proof
+          assume that
+            A8:dom h = Seg(len f + len g) and
+            A9:for k st k in dom f holds h.:k=f.:k and
+            A10:for k st k in dom g holds h.:(len f + k)=g.:k;
+          A11:len h=len f+len g by A8,FINSEQ_1:def 3;
+          A12:for k st k in dom f holds h.k=f.k
+            proof
+              let k such that A13:k in dom f;
+              A14:len f<=len f+len g by NAT_1:29;
+              A15:0<>k & k<=len f by A13,FINSEQ_3:27;
+              then 0<>k & k<=len h by A11,A14,AXIOMS:22;
+              then h.k=h.:k by O_RING_1:def 1
+                     .=f.:k by A9,A13
+                     .=f.k by A15,O_RING_1:def 1;
+              hence thesis;
+            end;
+            for k st k in dom g holds h.(len f + k)=g.k
+            proof
+              let k; assume A16:k in dom g;
+              then A17:0<>k & k<=len g by FINSEQ_3:27;
+              then 0<>len f+k & len f+k<=len f+len g by NAT_1:23,REAL_1:55;
+              then h.(len f + k)=h.:(len f+k) by A11,O_RING_1:def 1
+                          .=g.:k by A10,A16
+                          .=g.k by A17,O_RING_1:def 1;
+              hence thesis;
+            end;
+          hence h=f^g by A8,A12,FINSEQ_1:def 7;
+        end;
+     end;
+
+Lm5:
+  f=<*x*> iff len f =1 & f.:1=x
+    proof
+      thus f=<*x*> implies len f=1 & f.:1=x
+        proof
+          assume A1:f=<*x*>;
+          hence len f=1 by FINSEQ_1:57;
+          then f.:1=f.1 by O_RING_1:def 1
+                  .=x by A1,FINSEQ_1:57;
+          hence thesis;
+        end;
+      thus len f=1 & f.:1=x implies f=<*x*>
+        proof
+          assume that
+            A2:len f=1 and
+            A3:f.:1=x;
+              f.1=x by A2,A3,O_RING_1:def 1;
+            hence thesis by A2,FINSEQ_1:57;
+        end;
+    end;
+
+Lm6:
+  (f^<*x*>).:(len f + 1)=x
+    proof
+        len f+1=len f+len<*x*> by FINSEQ_1:56
+            .=len(f^<*x*>) by FINSEQ_1:35;
+      then 0<>len f+1 & len f+1<=len(f^<*x*>) by NAT_1:21;
+      then (f^<*x*>).:(len f+1)=(f^<*x*>).(len f+1) by O_RING_1:def 1
+                             .=x by FINSEQ_1:59;
+      hence thesis;
+    end;
+
+Lm7:
+  i<>0 & i<=len f implies (f^g).:i=f.:i
+    proof
+      assume i<>0 & i<=len f;
+      then 0<>i & 0<=i & i<=len f by NAT_1:18;
+      then 0<i & i<=len f by REAL_1:def 5;
+      then 0+1<=i & i<=len f by NAT_1:38;
+      then i in dom f by FINSEQ_3:27;
+      hence thesis by Lm4;
+    end;
+
+Lm8:
+  i<>0 & i<=len g implies (f^g).:(len f+i)=g.:i
+    proof
+      assume i<>0 & i<=len g;
+      then 0<>i & 0<=i & i<=len g by NAT_1:18;
+      then 0<i & i<=len g by REAL_1:def 5;
+      then 0+1<=i & i<=len g by NAT_1:38;
+      then i in dom g by FINSEQ_3:27;
+      hence thesis by Lm4;
+    end;
+
+Lm9:
+  x is_a_square implies <*x*> is_a_Sum_of_squares
+    proof
+      assume A1:x is_a_square;
+      A2: len<*x*>=1 by Lm5;
+      A3:<*x*>.:1 is_a_square by A1,Lm5;
+        for n st n<>0 & n<len <*x*>
+        ex y st y is_a_square & <*x*>.:(n+1)=<*x*>.:n+y
+        proof
+          let n; assume n<>0 & n<len <*x*>;
+          then n<>0 & n<1 by Lm5;
+          hence thesis by Lm1;
+        end;
+      hence thesis by A2,A3,O_RING_1:def 4;
+    end;
+
+Lm10:
+  f is_a_Sum_of_squares & x is_a_square
+    implies f^<*f.:len f+x*> is_a_Sum_of_squares
+    proof
+      assume that
+        A1:f is_a_Sum_of_squares and
+        A2:x is_a_square;
+      set g=f^<*f.:len f+x*>;
+      A3:len g=len f+len <*f.:len f+x*> by FINSEQ_1:35
+          .=len f+1 by Lm5;
+      then A4:len g<>0 by NAT_1:21;
+      A5:for n st n<>0 & n<len g holds f.:n=g.:n
+        proof
+          let n; assume n<>0 & n<len g;
+          then 1<=n & n<=len f by A3,Lm2,NAT_1:38;
+          then n in dom f by FINSEQ_3:27;
+          hence thesis by Lm4;
+        end;
+        len f<>0 by A1,O_RING_1:def 4;
+      then 1<=len f by Lm2;
+      then 1<>0 & 1<len g by A3,NAT_1:38;
+      then g.:1=f.:1 by A5;
+      then A6:g.:1 is_a_square by A1,O_RING_1:def 4;
+        for n st n<>0 & n<len g ex y st y is_a_square & g.:(n+1)=g.:n+y
+        proof
+          let n; assume A7:n<>0 & n<len g;
+          then A8:n<=len f by A3,NAT_1:38;
+          A9:now assume A10:n<len f;
+            A11:f.:n=g.:n by A5,A7;
+              n+1<>0 & n+1<len g by A3,A10,NAT_1:21,REAL_1:53
+;
+            then f.:(n+1)=g.:(n+1) by A5;
+            hence thesis by A1,A7,A10,A11,O_RING_1:def 4;
+          end;
+            now assume A12:n=len f;
+            then A13:g.:(n+1)=f.:n+x by Lm6;
+              1<=n & n<=len f by A7,A12,Lm2;
+            then n in dom f by FINSEQ_3:27;
+            then g.:(n+1)=g.:n+x by A13,Lm4;
+            hence thesis by A2;
+          end;
+          hence thesis by A8,A9,REAL_1:def 5;
+        end;
+      hence thesis by A4,A6,O_RING_1:def 4;
+    end;
+
+Lm11:
+  x is_a_sum_of_squares & y is_a_square
+    implies x+y is_a_sum_of_squares
+      proof
+        assume that
+          A1:x is_a_sum_of_squares and
+          A2:y is_a_square;
+        consider f such that A3:f is_a_Sum_of_squares & x=f.:len f
+          by A1,O_RING_1:def 5;
+        take g=f^<*x+y*>;
+          len g=len f+len <*x+y*> by FINSEQ_1:35
+            .=len f+1 by Lm5;
+        hence thesis by A2,A3,Lm6,Lm10;
+      end;
+
+Lm12:
+  x is_a_square implies <*x*> is_a_Product_of_squares
+    proof
+      assume A1:x is_a_square;
+      A2: len<*x*>=1 by Lm5;
+      A3:<*x*>.:1 is_a_square by A1,Lm5;
+        for n st n<>0 & n<len <*x*>
+        ex y st y is_a_square & <*x*>.:(n+1)=<*x*>.:n*y
+        proof
+          let n; assume n<>0 & n<len <*x*>;
+          then n<>0 & n<1 by Lm5;
+          hence thesis by Lm1;
+        end;
+      hence thesis by A2,A3,O_RING_1:def 6;
+    end;
+
+Lm13:
+  x is_a_square implies x is_a_product_of_squares
+    proof
+      assume x is_a_square;
+      then A1:<*x*> is_a_Product_of_squares by Lm12;
+        len<*x*>=1 & <*x*>.:1=x by Lm5;
+      hence thesis by A1,O_RING_1:def 7;
+    end;
+
+Lm14:
+  f is_a_Sum_of_products_of_squares & x is_a_product_of_squares
+    implies f^<*f.:len f+x*> is_a_Sum_of_products_of_squares
+    proof
+      assume that
+        A1:f is_a_Sum_of_products_of_squares and
+        A2:x is_a_product_of_squares;
+      set g=f^<*f.:len f+x*>;
+      A3:len g=len f+len <*f.:len f+x*> by FINSEQ_1:35
+          .=len f+1 by Lm5;
+      then A4:len g<>0 by NAT_1:21;
+      A5:for n st n<>0 & n<len g holds f.:n=g.:n
+        proof
+          let n; assume n<>0 & n<len g;
+          then 1<=n & n<=len f by A3,Lm2,NAT_1:38;
+          then n in dom f by FINSEQ_3:27;
+          hence thesis by Lm4;
+        end;
+        len f<>0 by A1,O_RING_1:def 8;
+      then 1<=len f by Lm2;
+      then 1<>0 & 1<len g by A3,NAT_1:38;
+      then g.:1=f.:1 by A5;
+      then A6:g.:1 is_a_product_of_squares by A1,O_RING_1:def 8;
+        for n st n<>0 & n<len g ex y st y is_a_product_of_squares &
+        g.:(n+1)=g.:n+y
+        proof
+          let n; assume A7:n<>0 & n<len g;
+          then A8:n<=len f by A3,NAT_1:38;
+          A9:now assume A10:n<len f;
+            A11:f.:n=g.:n by A5,A7;
+              n+1<>0 & n+1<len g by A3,A10,NAT_1:21,REAL_1:53
+;
+            then f.:(n+1)=g.:(n+1) by A5;
+            hence thesis by A1,A7,A10,A11,O_RING_1:def 8;
+          end;
+            now assume A12:n=len f;
+            then A13:g.:(n+1)=f.:n+x by Lm6;
+              1<=n by A7,Lm2;
+            then n in dom f by A12,FINSEQ_3:27;
+            then g.:(n+1)=g.:n+x by A13,Lm4;
+            hence thesis by A2;
+          end;
+          hence thesis by A8,A9,REAL_1:def 5;
+        end;
+      hence thesis by A4,A6,O_RING_1:def 8;
+    end;
+
+Lm15:
+  x is_a_sum_of_products_of_squares & y is_a_product_of_squares
+    implies x+y is_a_sum_of_products_of_squares
+      proof
+        assume that
+          A1:x is_a_sum_of_products_of_squares and
+          A2:y is_a_product_of_squares;
+        consider f such that A3:f is_a_Sum_of_products_of_squares &
+          x=f.:len f by A1,O_RING_1:def 9;
+        take g=f^<*x+y*>;
+          len g=len f+len <*x+y*> by FINSEQ_1:35
+            .=len f+1 by Lm5;
+        hence thesis by A2,A3,Lm6,Lm14;
+      end;
+
+Lm16:
+  x is_a_square implies <*x*> is_an_Amalgam_of_squares
+    proof
+      assume x is_a_square;
+      then A1:x is_a_product_of_squares by Lm13;
+      A2: len<*x*>=1 by Lm5;
+      A3:<*x*>.:1 is_a_product_of_squares by A1,Lm5;
+        for n st n<>0 & n<=len <*x*> holds <*x*>.:n is_a_product_of_squares or
+        ex i,j st <*x*>.:n=<*x*>.:i*<*x*>.:j & i<>0 & i<n & j<>0 & j<n
+        proof
+          let n; assume n<>0 & n<=len <*x*>;
+          then n<>0 & n<=1 by Lm5;
+          hence thesis by A3,Lm3;
+        end;
+      hence thesis by A2,O_RING_1:def 10;
+    end;
+
+Lm17:
+  x is_a_square implies x is_an_amalgam_of_squares
+    proof
+      assume x is_a_square;
+      then A1:<*x*> is_an_Amalgam_of_squares by Lm16;
+        len<*x*>=1 & <*x*>.:1=x by Lm5;
+      hence thesis by A1,O_RING_1:def 11;
+    end;
+
+Lm18:
+  f is_a_Sum_of_amalgams_of_squares & x is_an_amalgam_of_squares
+    implies f^<*f.:len f+x*> is_a_Sum_of_amalgams_of_squares
+    proof
+      assume that
+        A1:f is_a_Sum_of_amalgams_of_squares and
+        A2:x is_an_amalgam_of_squares;
+      set g=f^<*f.:len f+x*>;
+      A3:len g=len f+len <*f.:len f+x*> by FINSEQ_1:35
+          .=len f+1 by Lm5;
+      then A4:len g<>0 by NAT_1:21;
+      A5:for n st n<>0 & n<len g holds f.:n=g.:n
+        proof
+          let n; assume n<>0 & n<len g;
+          then 1<=n & n<=len f by A3,Lm2,NAT_1:38;
+          then n in dom f by FINSEQ_3:27;
+          hence thesis by Lm4;
+        end;
+        len f<>0 by A1,O_RING_1:def 12;
+      then 1<=len f by Lm2;
+      then 1<>0 & 1<len g by A3,NAT_1:38;
+      then g.:1=f.:1 by A5;
+      then A6:g.:1 is_an_amalgam_of_squares
+        by A1,O_RING_1:def 12;
+        for n st n<>0 & n<len g ex y st y is_an_amalgam_of_squares &
+        g.:(n+1)=g.:n+y
+        proof
+          let n; assume A7:n<>0 & n<len g;
+          then A8:n<=len f by A3,NAT_1:38;
+          A9:now assume A10:n<len f;
+            A11:f.:n=g.:n by A5,A7;
+              n+1<>0 & n+1<len g by A3,A10,NAT_1:21,REAL_1:53
+;
+            then f.:(n+1)=g.:(n+1) by A5;
+            hence thesis by A1,A7,A10,A11,O_RING_1:def 12;
+          end;
+            now assume A12:n=len f;
+            then A13:g.:(n+1)=f.:n+x by Lm6;
+              1<=n & n<=len f by A7,A12,Lm2;
+            then n in dom f by FINSEQ_3:27;
+            then g.:(n+1)=g.:n+x by A13,Lm4;
+            hence thesis by A2;
+          end;
+          hence thesis by A8,A9,REAL_1:def 5;
+        end;
+      hence thesis by A4,A6,O_RING_1:def 12;
+    end;
+
+Lm19:
+  x is_a_sum_of_amalgams_of_squares & y is_an_amalgam_of_squares
+    implies x+y is_a_sum_of_amalgams_of_squares
+    proof
+      assume that
+        A1:x is_a_sum_of_amalgams_of_squares and
+        A2:y is_an_amalgam_of_squares;
+      consider f such that A3:f is_a_Sum_of_amalgams_of_squares &
+        x=f.:len f by A1,O_RING_1:def 13;
+      take g=f^<*x+y*>;
+        len g=len f+len <*x+y*> by FINSEQ_1:35
+          .=len f+1 by Lm5;
+      hence thesis by A2,A3,Lm6,Lm18;
+    end;
+
+Lm20:
+  f is_a_generation_from_squares & x is_an_amalgam_of_squares
+  implies f^<*x*> is_a_generation_from_squares
+    proof
+      assume A1:f is_a_generation_from_squares &
+        x is_an_amalgam_of_squares;
+      then len f<>0 by O_RING_1:def 14;
+      then len f+len<*x*><>0 by NAT_1:23;
+      then A2:len (f^<*x*>)<>0 by FINSEQ_1:35;
+      set g=f^<*x*>;
+      A3:len g=len f+len<*x*> by FINSEQ_1:35
+            .=len f+1 by Lm5;
+        for n st n<>0 & n<=len g holds
+        g.:n is_an_amalgam_of_squares or
+          ex i,j st (g.:n=g.:i*g.:j or g.:n=g.:i+g.:
+j) & i<>0 & i<n & j<>0 & j<n
+        proof
+          let n such that A4:n<>0 & n<=len g;
+          A5:now assume n<len g;
+            then A6:n<=len f by A3,NAT_1:38;
+            then A7:g.:n=f.:n by A4,Lm7;
+            A8: f.:n is_an_amalgam_of_squares implies thesis by A4,A6,Lm7;
+              now given k,m such that
+                A9:(f.:n=f.:k*f.:m or f.:n=f.:k+f.:m) & k<>0 & k<n & m<>0 &
+                  m<n;
+                k<=len f by A6,A9,AXIOMS:22;
+              then A10:f.:k=g.:k by A9,Lm7;
+                m<=len f by A6,A9,AXIOMS:22;
+              then f.:m=g.:m by A9,Lm7;
+              hence thesis by A7,A9,A10;
+            end;
+            hence thesis by A1,A4,A6,A8,O_RING_1:def 14;
+          end;
+             n=len g implies thesis by A1,A3,Lm6;
+          hence thesis by A4,A5,REAL_1:def 5;
+        end;
+      hence thesis by A2,O_RING_1:def 14;
+    end;
+
+Lm21:
+  f is_a_generation_from_squares & i<>0 & i<=len f & j<>0 & j<=len f
+    implies f^<*f.:i+f.:j*> is_a_generation_from_squares
+    proof
+      assume A1:f is_a_generation_from_squares &
+        i<>0 & i<=len f & j<>0 & j<=len f;
+      then len f<>0 by O_RING_1:def 14;
+      then len f+len<*f.:i+f.:j*><>0 by NAT_1:23;
+      then A2:len (f^<*f.:i+f.:j*>)<>0 by FINSEQ_1:35;
+      set g=f^<*f.:i+f.:j*>;
+      A3:len g=len f+len<*f.:i+f.:j*> by FINSEQ_1:35
+            .=len f+1 by Lm5;
+        for n st n<>0 & n<=len g holds
+        g.:n is_an_amalgam_of_squares or
+          ex i,j st (g.:n=g.:i*g.:j or g.:n=g.:i+g.:
+j) & i<>0 & i<n & j<>0 & j<n
+        proof
+          let n such that A4:n<>0 & n<=len g;
+          A5:now assume n<len g;
+            then A6:n<=len f by A3,NAT_1:38;
+            then A7:g.:n=f.:n by A4,Lm7;
+            A8: f.:n is_an_amalgam_of_squares implies thesis by A4,A6,Lm7;
+              now given k,m such that
+                A9:(f.:n=f.:k*f.:m or f.:n=f.:k+f.:m) & k<>0 & k<n & m<>0 &
+                  m<n;
+                k<=len f by A6,A9,AXIOMS:22;
+              then A10:f.:k=g.:k by A9,Lm7;
+                m<=len f by A6,A9,AXIOMS:22;
+              then f.:m=g.:m by A9,Lm7;
+              hence thesis by A7,A9,A10;
+            end;
+            hence thesis by A1,A4,A6,A8,O_RING_1:def 14;
+          end;
+            now assume A11: n=len g;
+
+            then g.:n=f.:i+f.:j by A3,Lm6
+                     .=g.:i+f.:j by A1,Lm7
+                     .=g.:i+g.:j by A1,Lm7;
+            then g.:n=g.:i+g.:j & i<n & j<n by A1,A3,A11,NAT_1:38;
+            hence thesis by A1;
+          end;
+          hence thesis by A4,A5,REAL_1:def 5;
+        end;
+      hence thesis by A2,O_RING_1:def 14;
+    end;
+
+Lm22:
+  f is_a_generation_from_squares & x is_a_square
+  implies f^<*x*> is_a_generation_from_squares
+    proof
+      assume A1:f is_a_generation_from_squares & x is_a_square;
+      then len f<>0 by O_RING_1:def 14;
+      then len f+len<*x*><>0 by NAT_1:23;
+      then A2:len (f^<*x*>)<>0 by FINSEQ_1:35;
+      set g=f^<*x*>;
+      A3:len g=len f+len<*x*> by FINSEQ_1:35
+            .=len f+1 by Lm5;
+        for n st n<>0 & n<=len g holds
+        g.:n is_an_amalgam_of_squares or
+          ex i,j st (g.:n=g.:i*g.:j or g.:n=g.:i+g.:
+j) & i<>0 & i<n & j<>0 & j<n
+        proof
+          let n such that A4:n<>0 & n<=len g;
+          A5:now assume n<len g;
+            then A6:n<=len f by A3,NAT_1:38;
+            then A7:g.:n=f.:n by A4,Lm7;
+            A8: f.:n is_an_amalgam_of_squares implies thesis by A4,A6,Lm7;
+              now given k,m such that
+                A9:(f.:n=f.:k*f.:m or f.:n=f.:k+f.:m) & k<>0 & k<n & m<>0 &
+                  m<n;
+                k<=len f by A6,A9,AXIOMS:22;
+              then A10:f.:k=g.:k by A9,Lm7;
+                m<=len f by A6,A9,AXIOMS:22;
+              then f.:m=g.:m by A9,Lm7;
+              hence thesis by A7,A9,A10;
+            end;
+            hence thesis
+              by A1,A4,A6,A8,O_RING_1:def 14;
+          end;
+            now assume n=len g;
+            then g.:n=x by A3,Lm6;
+            hence thesis by A1,Lm17;
+          end;
+          hence thesis by A4,A5,REAL_1:def 5;
+        end;
+      hence thesis by A2,O_RING_1:def 14;
+    end;
+
+Lm23:
+  f is_a_generation_from_squares & x is_a_square
+  implies (f^<*x*>)^<*f.:len f+x*> is_a_generation_from_squares
+    proof
+      assume A1:f is_a_generation_from_squares & x is_a_square;
+      then A2:f^<*x*> is_a_generation_from_squares by Lm22;
+      A3:len<*x*>=1 by Lm5;
+      A4:len f<>0 by A1,O_RING_1:def 14;
+A5:      len f<=len f+1 by NAT_1:29;
+
+A6:
+      len f+1<>0 & len f+1=len(f^<*x*>) by A3,FINSEQ_1:35,NAT_1:21;
+
+      A7:(f^<*x*>).:len f=f.:len f by A4,Lm7;
+        (f^<*x*>).:(len f+1)=x by Lm6;
+      hence thesis by A2,A4,A5,A6,A7,Lm21;
+    end;
+
+Lm24:
+  x is_generated_from_squares & y is_a_square
+  implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_generated_from_squares and
+          A2:y is_a_square;
+        consider f such that
+          A3:f is_a_generation_from_squares & x=f.:len f
+            by A1,O_RING_1:def 15;
+        take g=(f^<*y*>)^<*f.:len f+y*>;
+          len g=len(f^<*y*>)+len<*f.:len f+y*> by FINSEQ_1:35
+              .=len(f^<*y*>)+1 by Lm5;
+        hence thesis by A2,A3,Lm6,Lm23;
+      end;
+
+Lm25:
+  f is_a_generation_from_squares & x is_an_amalgam_of_squares
+  implies (f^<*x*>)^<*f.:len f+x*> is_a_generation_from_squares
+    proof
+      assume A1:f is_a_generation_from_squares &
+        x is_an_amalgam_of_squares;
+      then A2:f^<*x*> is_a_generation_from_squares by Lm20;
+      A3:len<*x*>=1 by Lm5;
+      A4:len f<>0 by A1,O_RING_1:def 14;
+A5:      len f<=len f+1 by NAT_1:29;
+
+A6:
+      len f+1<>0 & len f+1=len(f^<*x*>) by A3,FINSEQ_1:35,NAT_1:21;
+
+      A7:(f^<*x*>).:len f=f.:len f by A4,Lm7;
+        (f^<*x*>).:(len f+1)=x by Lm6;
+      hence thesis by A2,A4,A5,A6,A7,Lm21;
+    end;
+
+Lm26:
+  x is_generated_from_squares & y is_an_amalgam_of_squares
+  implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_generated_from_squares and
+          A2:y is_an_amalgam_of_squares;
+        consider f such that
+          A3:f is_a_generation_from_squares & x=f.:len f
+            by A1,O_RING_1:def 15;
+        take g=(f^<*y*>)^<*f.:len f+y*>;
+          len g=len(f^<*y*>)+len<*f.:len f+y*> by FINSEQ_1:35
+              .=len(f^<*y*>)+1 by Lm5;
+        hence thesis by A2,A3,Lm6,Lm25;
+      end;
+
+Lm27:
+  x is_a_square & y is_a_square implies x+y is_a_sum_of_squares
+      proof
+        assume that
+          A1:x is_a_square and
+          A2:y is_a_square;
+          len<*x*>=1 by Lm5;
+        then A3:<*x*>.:len<*x*>=x by Lm5;
+        take g=<*x*>^<*x+y*>;
+A4:        len g=len <*x*>+len <*x+y*> by FINSEQ_1:35
+            .=len <*x*>+1 by Lm5;
+
+          <*x*> is_a_Sum_of_squares by A1,Lm9;
+        hence thesis by A2,A3,A4,Lm6,Lm10;
+      end;
+
+Lm28:
+  f is_a_generation_from_squares & g is_a_generation_from_squares
+    implies f^g is_a_generation_from_squares
+    proof
+      assume that
+        A1:f is_a_generation_from_squares and
+        A2:g is_a_generation_from_squares;
+        len f<>0 by A1,O_RING_1:def 14;
+      then len f+len g<>0 by NAT_1:23;
+      then A3:len(f^g)<>0 by FINSEQ_1:35;
+        for n st n<>0 & n<=len (f^g) holds (f^g).:n is_an_amalgam_of_squares or
+        ex i,j st ((f^g).:n=(f^g).:i*(f^g).:j or (f^g).:n=(f^g).:i+(f^g).:j) &
+          i<>0 & i<n & j<>0 & j<n
+          proof
+            let n; assume A4:n<>0 & n<=len (f^g);
+            then A5:n<=len f+len g by FINSEQ_1:35;
+            A6:now assume A7:n<=len f;
+              then A8:(f^g).:n=f.:n by A4,Lm7;
+              A9: f.:n is_an_amalgam_of_squares implies thesis by A4,A7,Lm7;
+                now given k,l such that
+                  A10:(f.:n=f.:k*f.:l or f.:n=f.:k+f.:l) &
+                    k<>0 & k<n & l<>0 & l<n;
+                  k<=len f by A7,A10,AXIOMS:22;
+                then A11:(f^g).:k=f.:k by A10,Lm7;
+                  l<=len f by A7,A10,AXIOMS:22;
+                then (f^g).:l=f.:l by A10,Lm7;
+                hence thesis by A8,A10,A11;
+              end;
+              hence thesis by A1,A4,A7,A9,O_RING_1:def 14;
+            end;
+              now assume A12: len f<n;
+              then consider m such that A13:n=len f+m by NAT_1:28;
+              A14:m<=len g by A5,A13,REAL_1:53;
+                m<>0 & len f+m<=len f+len g by A4,A12,A13,FINSEQ_1:35;
+              then A15:m<>0 & m<=len g by REAL_1:53;
+              then A16: g.:m is_an_amalgam_of_squares implies thesis by A13,Lm8
+;
+                now given k,l such that
+                  A17:(g.:m=g.:k*g.:l or g.:m=g.:k+g.:l) & k<>0 & k<m &
+                    l<>0 & l<m;
+                A18:k<>0 & k<=len g by A14,A17,AXIOMS:22;
+                A19:l<>0 & l<=len g by A14,A17,AXIOMS:22;
+                A20:(f^g).:n=(f^g).:(len f+k)*(f^g).:(len f+l) or
+                  (f^g).:n=(f^g).:(len f+k)+(f^g).:(len f+l)
+                  proof
+                    A21:now assume g.:m=g.:k*g.:l;
+                      then (f^g).:n=g.:k*g.:l by A13,A15,Lm8
+                                 .=(f^g).:(len f+k)*g.:l by A18,Lm8
+                                 .=(f^g).:(len f+k)*(f^g).:(len f+l)
+                                   by A19,Lm8;
+                      hence thesis;
+                    end;
+                      now assume g.:m=g.:k+g.:l;
+                      then (f^g).:n=g.:k+g.:l by A13,A15,Lm8
+                                 .=(f^g).:(len f+k)+g.:l by A18,Lm8
+                                 .=(f^g).:(len f+k)+(f^g).:(len f+l)
+                                   by A19,Lm8;
+                      hence thesis;
+                    end;
+                    hence thesis by A17,A21;
+                  end;
+                A22:len f+k<>0 & len f+l<>0 by A17,NAT_1:23;
+                  len f+k<n & len f+l<n by A13,A17,REAL_1:53;
+                hence thesis by A20,A22;
+              end;
+              hence thesis
+                by A2,A15,A16,O_RING_1:def 14;
+            end;
+            hence thesis by A6;
+          end;
+      hence thesis by A3,O_RING_1:def 14;
+    end;
+
+Lm29:
+  f is_a_generation_from_squares & g is_a_generation_from_squares
+  implies (f^g)^<*f.:len f+g.:len g*> is_a_generation_from_squares
+    proof
+      assume that
+        A1:f is_a_generation_from_squares and
+        A2:g is_a_generation_from_squares;
+      A3:(f^g) is_a_generation_from_squares by A1,A2,Lm28;
+      A4:len f<>0 by A1,O_RING_1:def 14;
+        len f<=len f+len g by NAT_1:29;
+      then A5:len f<>0 & len f<=len(f^g) by A1,FINSEQ_1:35,O_RING_1:def 14;
+      A6:len g<>0 by A2,O_RING_1:def 14;
+      then A7:len f+len g<>0 & len f+len g<=len(f^g) by FINSEQ_1:35,NAT_1:23;
+        1<=len f & len f<=len f by A4,Lm2;
+      then len f in dom f by FINSEQ_3:27;
+      then A8:(f^g).:len f=f.:len f by Lm4;
+        1<=len g & len g<=len g by A6,Lm2;
+      then len g in dom g by FINSEQ_3:27;
+      then (f^g).:(len f+len g)=g.:len g by Lm4;
+      hence thesis by A3,A5,A7,A8,Lm21;
+    end;
+
+Lm30:
+  x is_generated_from_squares & y is_generated_from_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_generated_from_squares and
+          A2:y is_generated_from_squares;
+        consider f such that
+          A3:f is_a_generation_from_squares and
+          A4:x=f.:len f
+            by A1,O_RING_1:def 15;
+        consider g such that
+          A5:g is_a_generation_from_squares and
+          A6:y=g.:len g
+            by A2,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A7:h is_a_generation_from_squares by A3,A5,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A4,Lm6;
+        hence thesis by A6,A7,O_RING_1:def 15;
+      end;
+
+theorem
+    x is_a_square & y is_a_square or
+  x is_a_sum_of_squares & y is_a_square
+    implies x+y is_a_sum_of_squares
+    by Lm11,Lm27;
+
+Lm31:
+  x is_a_sum_of_products_of_squares & y is_a_square
+    implies x+y is_a_sum_of_products_of_squares
+      proof
+        assume that
+          A1:x is_a_sum_of_products_of_squares and
+          A2:y is_a_square;
+        A3:y is_a_product_of_squares by A2,O_RING_1:1;
+        consider f such that A4:f is_a_Sum_of_products_of_squares &
+          x=f.:len f
+          by A1,O_RING_1:def 9;
+        take g=f^<*x+y*>;
+          len g=len f+len <*x+y*> by FINSEQ_1:35
+            .=len f+1 by Lm5;
+        hence thesis by A3,A4,Lm6,Lm14;
+      end;
+
+theorem
+    x is_a_sum_of_products_of_squares & y is_a_square or
+  x is_a_sum_of_products_of_squares & y is_a_product_of_squares
+    implies x+y is_a_sum_of_products_of_squares
+    by Lm15,Lm31;
+
+Lm32:
+  x is_an_amalgam_of_squares & y is_a_product_of_squares
+    implies x+y is_a_sum_of_amalgams_of_squares
+    proof
+      assume that
+        A1:x is_an_amalgam_of_squares and
+        A2:y is_a_product_of_squares;
+      A3:x is_a_sum_of_amalgams_of_squares by A1,O_RING_1:5;
+      A4:y is_an_amalgam_of_squares by A2,O_RING_1:3;
+      consider f such that A5:f is_a_Sum_of_amalgams_of_squares &
+        x=f.:len f
+        by A3,O_RING_1:def 13;
+      take g=f^<*x+y*>;
+        len g=len f+len <*x+y*> by FINSEQ_1:35
+          .=len f+1 by Lm5;
+      hence thesis by A4,A5,Lm6,Lm18;
+    end;
+
+Lm33:
+  x is_an_amalgam_of_squares & y is_an_amalgam_of_squares
+    implies x+y is_a_sum_of_amalgams_of_squares
+    proof
+      assume that
+        A1:x is_an_amalgam_of_squares and
+        A2:y is_an_amalgam_of_squares;
+        x is_a_sum_of_amalgams_of_squares by A1,O_RING_1:5;
+      then consider f such that A3:f is_a_Sum_of_amalgams_of_squares &
+        x=f.:len f
+        by O_RING_1:def 13;
+      take g=f^<*x+y*>;
+        len g=len f+len <*x+y*> by FINSEQ_1:35
+          .=len f+1 by Lm5;
+      hence thesis by A2,A3,Lm6,Lm18;
+    end;
+
+Lm34:
+  x is_a_sum_of_amalgams_of_squares & y is_a_product_of_squares
+    implies x+y is_a_sum_of_amalgams_of_squares
+    proof
+      assume that
+        A1:x is_a_sum_of_amalgams_of_squares and
+        A2:y is_a_product_of_squares;
+      A3:y is_an_amalgam_of_squares by A2,O_RING_1:3;
+      consider f such that A4:f is_a_Sum_of_amalgams_of_squares &
+        x=f.:len f
+        by A1,O_RING_1:def 13;
+      take g=f^<*x+y*>;
+        len g=len f+len <*x+y*> by FINSEQ_1:35
+          .=len f+1 by Lm5;
+      hence thesis by A3,A4,Lm6,Lm18;
+    end;
+
+Lm35:
+  x is_a_sum_of_amalgams_of_squares & y is_a_square
+    implies x+y is_a_sum_of_amalgams_of_squares
+    proof
+      assume that
+        A1:x is_a_sum_of_amalgams_of_squares and
+        A2:y is_a_square;
+      A3:y is_an_amalgam_of_squares by A2,O_RING_1:1;
+      consider f such that A4:f is_a_Sum_of_amalgams_of_squares &
+        x=f.:len f
+        by A1,O_RING_1:def 13;
+      take g=f^<*x+y*>;
+        len g=len f+len <*x+y*> by FINSEQ_1:35
+          .=len f+1 by Lm5;
+      hence thesis by A3,A4,Lm6,Lm18;
+    end;
+
+theorem
+    x is_an_amalgam_of_squares & y is_a_product_of_squares or
+  x is_an_amalgam_of_squares & y is_an_amalgam_of_squares or
+  x is_a_sum_of_amalgams_of_squares & y is_a_square or
+  x is_a_sum_of_amalgams_of_squares & y is_a_product_of_squares or
+  x is_a_sum_of_amalgams_of_squares & y is_an_amalgam_of_squares
+    implies x+y is_a_sum_of_amalgams_of_squares
+    by Lm19,Lm32,Lm33,Lm34,Lm35;
+
+Lm36:
+  x is_a_square & y is_a_sum_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_square and
+          A2:y is_a_sum_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:1;
+        A4:y is_generated_from_squares by A2,O_RING_1:2;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm37:
+  x is_a_square & y is_a_product_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_square and
+          A2:y is_a_product_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:1;
+        A4:y is_generated_from_squares by A2,O_RING_1:3;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm38:
+  x is_a_square & y is_a_sum_of_products_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_square and
+          A2:y is_a_sum_of_products_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:1;
+        A4:y is_generated_from_squares by A2,O_RING_1:4;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm39:
+  x is_a_square & y is_an_amalgam_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_square and
+          A2:y is_an_amalgam_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:1;
+        A4:y is_generated_from_squares by A2,O_RING_1:5;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm40:
+  x is_a_square & y is_a_sum_of_amalgams_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_square and
+          A2:y is_a_sum_of_amalgams_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:1;
+        A4:y is_generated_from_squares by A2,O_RING_1:6;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm41:
+  x is_a_square & y is_generated_from_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_square and
+          A2:y is_generated_from_squares;
+          x is_generated_from_squares by A1,O_RING_1:1;
+        then consider f such that
+          A3:f is_a_generation_from_squares and
+          A4:x=f.:len f
+            by O_RING_1:def 15;
+        consider g such that
+          A5:g is_a_generation_from_squares and
+          A6:y=g.:len g
+            by A2,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A7:h is_a_generation_from_squares by A3,A5,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A4,Lm6;
+        hence thesis by A6,A7,O_RING_1:def 15;
+      end;
+
+theorem
+    x is_a_square & y is_a_sum_of_squares or
+  x is_a_square & y is_a_product_of_squares or
+  x is_a_square & y is_a_sum_of_products_of_squares or
+  x is_a_square & y is_an_amalgam_of_squares or
+  x is_a_square & y is_a_sum_of_amalgams_of_squares or
+  x is_a_square & y is_generated_from_squares
+    implies x+y is_generated_from_squares
+    by Lm36,Lm37,Lm38,Lm39,Lm40,Lm41;
+
+Lm42:
+  x is_a_sum_of_squares & y is_a_sum_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_sum_of_squares and
+          A2:y is_a_sum_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:2;
+        A4:y is_generated_from_squares by A2,O_RING_1:2;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm43:
+  x is_a_sum_of_squares & y is_a_product_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_sum_of_squares and
+          A2:y is_a_product_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:2;
+        A4:y is_generated_from_squares by A2,O_RING_1:3;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm44:
+  x is_a_sum_of_squares & y is_a_sum_of_products_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_sum_of_squares and
+          A2:y is_a_sum_of_products_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:2;
+        A4:y is_generated_from_squares by A2,O_RING_1:4;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm45:
+  x is_a_sum_of_squares & y is_an_amalgam_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_sum_of_squares and
+          A2:y is_an_amalgam_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:2;
+        A4:y is_generated_from_squares by A2,O_RING_1:5;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm46:
+  x is_a_sum_of_squares & y is_a_sum_of_amalgams_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_sum_of_squares and
+          A2:y is_a_sum_of_amalgams_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:2;
+        A4:y is_generated_from_squares by A2,O_RING_1:6;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm47:
+  x is_a_sum_of_squares & y is_generated_from_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_sum_of_squares and
+          A2:y is_generated_from_squares;
+          x is_generated_from_squares by A1,O_RING_1:2;
+        then consider f such that
+          A3:f is_a_generation_from_squares and
+          A4:x=f.:len f
+            by O_RING_1:def 15;
+        consider g such that
+          A5:g is_a_generation_from_squares and
+          A6:y=g.:len g
+            by A2,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A7:h is_a_generation_from_squares by A3,A5,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A4,Lm6;
+        hence thesis by A6,A7,O_RING_1:def 15;
+      end;
+
+theorem
+    x is_a_sum_of_squares & y is_a_sum_of_squares or
+  x is_a_sum_of_squares & y is_a_product_of_squares or
+  x is_a_sum_of_squares & y is_a_sum_of_products_of_squares or
+  x is_a_sum_of_squares & y is_an_amalgam_of_squares or
+  x is_a_sum_of_squares & y is_a_sum_of_amalgams_of_squares or
+  x is_a_sum_of_squares & y is_generated_from_squares
+    implies x+y is_generated_from_squares
+    by Lm42,Lm43,Lm44,Lm45,Lm46,Lm47;
+
+Lm48:
+  x is_a_product_of_squares & y is_generated_from_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_product_of_squares and
+          A2:y is_generated_from_squares;
+          x is_generated_from_squares by A1,O_RING_1:3;
+        then consider f such that
+          A3:f is_a_generation_from_squares and
+          A4:x=f.:len f
+            by O_RING_1:def 15;
+        consider g such that
+          A5:g is_a_generation_from_squares and
+          A6:y=g.:len g
+            by A2,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A7:h is_a_generation_from_squares by A3,A5,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A4,Lm6;
+        hence thesis by A6,A7,O_RING_1:def 15;
+      end;
+
+Lm49:
+  x is_a_product_of_squares & y is_a_sum_of_amalgams_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_product_of_squares and
+          A2:y is_a_sum_of_amalgams_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:3;
+        A4:y is_generated_from_squares by A2,O_RING_1:6;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm50:
+  x is_a_product_of_squares & y is_an_amalgam_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_product_of_squares and
+          A2:y is_an_amalgam_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:3;
+        A4:y is_generated_from_squares by A2,O_RING_1:5;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm51:
+  x is_a_product_of_squares & y is_a_sum_of_products_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_product_of_squares and
+          A2:y is_a_sum_of_products_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:3;
+        A4:y is_generated_from_squares by A2,O_RING_1:4;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm52:
+  x is_a_product_of_squares & y is_a_product_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_product_of_squares and
+          A2:y is_a_product_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:3;
+        A4:y is_generated_from_squares by A2,O_RING_1:3;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm53:
+  x is_a_product_of_squares & y is_a_sum_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_product_of_squares and
+          A2:y is_a_sum_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:3;
+        A4:y is_generated_from_squares by A2,O_RING_1:2;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm54:
+  x is_a_product_of_squares & y is_a_square
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_product_of_squares and
+          A2:y is_a_square;
+        A3:x is_generated_from_squares by A1,O_RING_1:3;
+        A4:y is_generated_from_squares by A2,O_RING_1:1;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+theorem
+    x is_a_product_of_squares & y is_a_square or
+  x is_a_product_of_squares & y is_a_sum_of_squares or
+  x is_a_product_of_squares & y is_a_product_of_squares or
+  x is_a_product_of_squares & y is_a_sum_of_products_of_squares or
+  x is_a_product_of_squares & y is_an_amalgam_of_squares or
+  x is_a_product_of_squares & y is_a_sum_of_amalgams_of_squares or
+  x is_a_product_of_squares & y is_generated_from_squares
+    implies x+y is_generated_from_squares
+    by Lm48,Lm49,Lm50,Lm51,Lm52,Lm53,Lm54;
+
+Lm55:
+  x is_a_sum_of_products_of_squares & y is_generated_from_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_sum_of_products_of_squares and
+          A2:y is_generated_from_squares;
+          x is_generated_from_squares by A1,O_RING_1:4;
+        then consider f such that
+          A3:f is_a_generation_from_squares and
+          A4:x=f.:len f
+            by O_RING_1:def 15;
+        consider g such that
+          A5:g is_a_generation_from_squares and
+          A6:y=g.:len g
+            by A2,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A7:h is_a_generation_from_squares by A3,A5,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A4,Lm6;
+        hence thesis by A6,A7,O_RING_1:def 15;
+      end;
+
+Lm56:
+  x is_a_sum_of_products_of_squares & y is_a_sum_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_sum_of_products_of_squares and
+          A2:y is_a_sum_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:4;
+        A4:y is_generated_from_squares by A2,O_RING_1:2;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm57:
+  x is_a_sum_of_products_of_squares & y is_a_sum_of_products_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_sum_of_products_of_squares and
+          A2:y is_a_sum_of_products_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:4;
+        A4:y is_generated_from_squares by A2,O_RING_1:4;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares
+          by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm58:
+  x is_a_sum_of_products_of_squares & y is_an_amalgam_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_sum_of_products_of_squares and
+          A2:y is_an_amalgam_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:4;
+        A4:y is_generated_from_squares by A2,O_RING_1:5;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm59:
+  x is_a_sum_of_products_of_squares & y is_a_sum_of_amalgams_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_sum_of_products_of_squares and
+          A2:y is_a_sum_of_amalgams_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:4;
+        A4:y is_generated_from_squares by A2,O_RING_1:6;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares
+          by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+theorem
+    x is_a_sum_of_products_of_squares & y is_a_sum_of_squares or
+  x is_a_sum_of_products_of_squares & y is_a_sum_of_products_of_squares or
+  x is_a_sum_of_products_of_squares & y is_an_amalgam_of_squares or
+  x is_a_sum_of_products_of_squares & y is_a_sum_of_amalgams_of_squares or
+  x is_a_sum_of_products_of_squares & y is_generated_from_squares
+    implies x+y is_generated_from_squares
+    by Lm55,Lm56,Lm57,Lm58,Lm59;
+
+Lm60:
+  x is_an_amalgam_of_squares & y is_generated_from_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_an_amalgam_of_squares and
+          A2:y is_generated_from_squares;
+          x is_generated_from_squares by A1,O_RING_1:5;
+        then consider f such that
+          A3:f is_a_generation_from_squares and
+          A4:x=f.:len f
+            by O_RING_1:def 15;
+        consider g such that
+          A5:g is_a_generation_from_squares and
+          A6:y=g.:len g
+            by A2,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A7:h is_a_generation_from_squares by A3,A5,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A4,Lm6;
+        hence thesis by A6,A7,O_RING_1:def 15;
+      end;
+
+Lm61:
+  x is_an_amalgam_of_squares & y is_a_square
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_an_amalgam_of_squares and
+          A2:y is_a_square;
+        A3:x is_generated_from_squares by A1,O_RING_1:5;
+        A4:y is_generated_from_squares by A2,O_RING_1:1;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm62:
+  x is_an_amalgam_of_squares & y is_a_sum_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_an_amalgam_of_squares and
+          A2:y is_a_sum_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:5;
+        A4:y is_generated_from_squares by A2,O_RING_1:2;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm63:
+  x is_an_amalgam_of_squares & y is_a_sum_of_products_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_an_amalgam_of_squares and
+          A2:y is_a_sum_of_products_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:5;
+        A4:y is_generated_from_squares by A2,O_RING_1:4;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm64:
+  x is_an_amalgam_of_squares & y is_a_sum_of_amalgams_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_an_amalgam_of_squares and
+          A2:y is_a_sum_of_amalgams_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:5;
+        A4:y is_generated_from_squares by A2,O_RING_1:6;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+theorem
+    x is_an_amalgam_of_squares & y is_a_square or
+  x is_an_amalgam_of_squares & y is_a_sum_of_squares or
+  x is_an_amalgam_of_squares & y is_a_sum_of_products_of_squares or
+  x is_an_amalgam_of_squares & y is_a_sum_of_amalgams_of_squares or
+  x is_an_amalgam_of_squares & y is_generated_from_squares
+    implies x+y is_generated_from_squares
+    by Lm60,Lm61,Lm62,Lm63,Lm64;
+
+Lm65:
+  x is_a_sum_of_amalgams_of_squares & y is_a_sum_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_sum_of_amalgams_of_squares and
+          A2:y is_a_sum_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:6;
+        A4:y is_generated_from_squares by A2,O_RING_1:2;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm66:
+  x is_a_sum_of_amalgams_of_squares & y is_a_sum_of_products_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_sum_of_amalgams_of_squares and
+          A2:y is_a_sum_of_products_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:6;
+        A4:y is_generated_from_squares by A2,O_RING_1:4;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares
+         by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm67:
+  x is_a_sum_of_amalgams_of_squares & y is_a_sum_of_amalgams_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_sum_of_amalgams_of_squares and
+          A2:y is_a_sum_of_amalgams_of_squares;
+        A3:x is_generated_from_squares by A1,O_RING_1:6;
+        A4:y is_generated_from_squares by A2,O_RING_1:6;
+        consider f such that
+          A5:f is_a_generation_from_squares and
+          A6:x=f.:len f
+            by A3,O_RING_1:def 15;
+        consider g such that
+          A7:g is_a_generation_from_squares and
+          A8:y=g.:len g
+            by A4,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A9:h is_a_generation_from_squares by A5,A7,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A6,Lm6;
+        hence thesis by A8,A9,O_RING_1:def 15;
+      end;
+
+Lm68:
+  x is_a_sum_of_amalgams_of_squares & y is_generated_from_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_a_sum_of_amalgams_of_squares and
+          A2:y is_generated_from_squares;
+          x is_generated_from_squares by A1,O_RING_1:6;
+        then consider f such that
+          A3:f is_a_generation_from_squares and
+          A4:x=f.:len f
+            by O_RING_1:def 15;
+        consider g such that
+          A5:g is_a_generation_from_squares and
+          A6:y=g.:len g
+            by A2,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A7:h is_a_generation_from_squares by A3,A5,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A4,Lm6;
+        hence thesis by A6,A7,O_RING_1:def 15;
+      end;
+
+theorem
+    x is_a_sum_of_amalgams_of_squares & y is_a_sum_of_squares or
+  x is_a_sum_of_amalgams_of_squares & y is_a_sum_of_products_of_squares or
+  x is_a_sum_of_amalgams_of_squares & y is_a_sum_of_amalgams_of_squares or
+  x is_a_sum_of_amalgams_of_squares & y is_generated_from_squares
+    implies x+y is_generated_from_squares
+    by Lm65,Lm66,Lm67,Lm68;
+
+Lm69:
+  x is_generated_from_squares & y is_a_sum_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_generated_from_squares and
+          A2:y is_a_sum_of_squares;
+        A3:y is_generated_from_squares by A2,O_RING_1:2;
+        consider f such that
+          A4:f is_a_generation_from_squares and
+          A5:x=f.:len f
+            by A1,O_RING_1:def 15;
+        consider g such that
+          A6:g is_a_generation_from_squares and
+          A7:y=g.:len g
+            by A3,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A8:h is_a_generation_from_squares by A4,A6,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A5,Lm6;
+        hence thesis by A7,A8,O_RING_1:def 15;
+      end;
+
+Lm70:
+  x is_generated_from_squares & y is_a_product_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_generated_from_squares and
+          A2:y is_a_product_of_squares;
+        A3:y is_generated_from_squares by A2,O_RING_1:3;
+        consider f such that
+          A4:f is_a_generation_from_squares and
+          A5:x=f.:len f
+            by A1,O_RING_1:def 15;
+        consider g such that
+          A6:g is_a_generation_from_squares and
+          A7:y=g.:len g
+            by A3,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A8:h is_a_generation_from_squares by A4,A6,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A5,Lm6;
+        hence thesis by A7,A8,O_RING_1:def 15;
+      end;
+
+Lm71:
+  x is_generated_from_squares & y is_a_sum_of_products_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_generated_from_squares and
+          A2:y is_a_sum_of_products_of_squares;
+        A3:y is_generated_from_squares by A2,O_RING_1:4;
+        consider f such that
+          A4:f is_a_generation_from_squares and
+          A5:x=f.:len f
+            by A1,O_RING_1:def 15;
+        consider g such that
+          A6:g is_a_generation_from_squares and
+          A7:y=g.:len g
+            by A3,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A8:h is_a_generation_from_squares by A4,A6,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A5,Lm6;
+        hence thesis by A7,A8,O_RING_1:def 15;
+      end;
+
+Lm72:
+  x is_generated_from_squares & y is_a_sum_of_amalgams_of_squares
+    implies x+y is_generated_from_squares
+      proof
+        assume that
+          A1:x is_generated_from_squares and
+          A2:y is_a_sum_of_amalgams_of_squares;
+        A3:y is_generated_from_squares by A2,O_RING_1:6;
+        consider f such that
+          A4:f is_a_generation_from_squares and
+          A5:x=f.:len f
+            by A1,O_RING_1:def 15;
+        consider g such that
+          A6:g is_a_generation_from_squares and
+          A7:y=g.:len g
+            by A3,O_RING_1:def 15;
+        set h=(f^g)^<*f.:len f+g.:len g*>;
+        A8:h is_a_generation_from_squares by A4,A6,Lm29;
+          len h=len(f^g)+len<*f.:len f+g.:len g*> by FINSEQ_1:35
+              .=len(f^g)+1 by Lm5;
+        then h.:len h=x+g.:len g by A5,Lm6;
+        hence thesis by A7,A8,O_RING_1:def 15;
+      end;
+
+theorem
+    x is_generated_from_squares & y is_a_square or
+  x is_generated_from_squares & y is_a_sum_of_squares or
+  x is_generated_from_squares & y is_a_product_of_squares or
+  x is_generated_from_squares & y is_a_sum_of_products_of_squares or
+  x is_generated_from_squares & y is_an_amalgam_of_squares or
+  x is_generated_from_squares & y is_a_sum_of_amalgams_of_squares or
+  x is_generated_from_squares & y is_generated_from_squares
+    implies x+y is_generated_from_squares
+    by Lm24,Lm26,Lm30,Lm69,Lm70,Lm71,Lm72;

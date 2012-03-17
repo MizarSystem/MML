@@ -1,0 +1,420 @@
+:: Groups
+::  by Wojciech A. Trybulec
+::
+:: Received July 3, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary INT_1, VECTSP_1, ABSVALUE, BINOP_1, FUNCT_1, ARYTM_1, REALSET1,
+      RELAT_1, SETWISEO, FINSEQOP, ARYTM_3, CARD_1, FINSET_1, RLVECT_1,
+      GROUP_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      RELAT_1, FUNCT_1, REAL_1, FUNCT_2, STRUCT_0, RLVECT_1, VECTSP_1, INT_1,
+      NAT_1, FINSEQOP, SETWISEO, CARD_1, FINSET_1, BINOP_1, ABSVALUE;
+ constructors REAL_1, VECTSP_1, INT_1, NAT_1, FINSEQOP, SETWISEO, BINOP_1,
+      ABSVALUE, MEMBERED, XBOOLE_0;
+ clusters FINSET_1, VECTSP_1, INT_1, STRUCT_0, RELSET_1, XREAL_0, MEMBERED,
+      ZFMISC_1, XBOOLE_0, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+ reserve k,m,n for Nat;
+ reserve i,j for Integer;
+ reserve S for non empty HGrStr;
+ reserve r,r1,r2,s,s1,s2,t,t1,t2 for Element of S;
+
+definition let i be Integer;
+ redefine func abs i -> Nat;
+end;
+
+definition
+ let A be non empty set, m be BinOp of A;
+ cluster HGrStr(#A,m#) -> non empty;
+end;
+
+definition
+ let IT be non empty HGrStr;
+ attr IT is unital means
+:: GROUP_1:def 1
+   ex e being Element of IT st
+        for h being Element of IT holds
+         h * e = h & e * h = h;
+ canceled;
+
+ attr IT is Group-like means
+:: GROUP_1:def 3
+   ex e being Element of IT st
+        for h being Element of IT holds
+         h * e = h & e * h = h &
+         ex g being Element of IT st h * g = e & g * h = e;
+end;
+
+definition
+ cluster Group-like -> unital (non empty HGrStr);
+end;
+
+definition
+ cluster strict Group-like associative (non empty HGrStr);
+end;
+
+definition
+ mode Group is Group-like associative (non empty HGrStr);
+end;
+
+canceled 4;
+
+theorem :: GROUP_1:5
+   ((for r,s,t holds (r * s) * t = r * (s * t)) &
+   ex t st
+    for s1 holds s1 * t = s1 & t * s1 = s1 &
+     ex s2 st s1 * s2 = t & s2 * s1 = t) implies S is Group;
+
+theorem :: GROUP_1:6
+   (for r,s,t holds r * s * t = r * (s * t)) &
+  (for r,s holds
+   (ex t st r * t = s) & (ex t st t * r = s)) implies
+    S is associative Group-like;
+
+theorem :: GROUP_1:7
+ HGrStr (# REAL, addreal #) is associative Group-like;
+
+ reserve G for Group-like (non empty HGrStr);
+ reserve e,h for Element of G;
+
+definition let G be unital (non empty HGrStr);
+ func 1.G -> Element of G means
+:: GROUP_1:def 4
+   for h being Element of G
+    holds h * it = h & it * h = h;
+end;
+
+canceled 2;
+
+theorem :: GROUP_1:10
+   (for h holds h * e = h & e * h = h) implies e = 1.G;
+
+ reserve G for Group;
+ reserve e,f,g,h for Element of G;
+
+definition let G,h;
+ func h" -> Element of G means
+:: GROUP_1:def 5
+   h * it = 1.G & it * h = 1.G;
+end;
+
+canceled;
+
+theorem :: GROUP_1:12
+   h * g = 1.G & g * h = 1.G implies g = h";
+
+canceled;
+
+theorem :: GROUP_1:14
+ h * g = h * f or g * h = f * h implies g = f;
+
+theorem :: GROUP_1:15
+   h * g = h or g * h = h implies g = 1.G;
+
+theorem :: GROUP_1:16
+ (1.G)" = 1.G;
+
+theorem :: GROUP_1:17
+ h" = g" implies h = g;
+
+theorem :: GROUP_1:18
+   h" = 1.G implies h = 1.G;
+
+theorem :: GROUP_1:19
+ h"" = h;
+
+theorem :: GROUP_1:20
+ h * g = 1.G or g * h = 1.G implies h = g" & g = h";
+
+theorem :: GROUP_1:21
+ h * f = g iff f = h" * g;
+
+theorem :: GROUP_1:22
+ f * h = g iff f = g * h";
+
+theorem :: GROUP_1:23
+   ex f st g * f = h;
+
+theorem :: GROUP_1:24
+   ex f st f * g = h;
+
+theorem :: GROUP_1:25
+ (h * g)" = g" * h";
+
+theorem :: GROUP_1:26
+ g * h = h * g iff (g * h)" = g" * h";
+
+theorem :: GROUP_1:27
+ g * h = h * g iff g" * h" = h" * g";
+
+theorem :: GROUP_1:28
+ g * h = h * g iff g * h" = h" * g;
+
+reserve u for UnOp of the carrier of G;
+
+definition let G;
+ func inverse_op(G) -> UnOp of the carrier of G means
+:: GROUP_1:def 6
+   it.h = h";
+end;
+
+canceled 2;
+
+theorem :: GROUP_1:31
+ for G being associative (non empty HGrStr)
+ holds the mult of G is associative;
+
+theorem :: GROUP_1:32
+  for G being unital (non empty HGrStr)
+ holds 1.G is_a_unity_wrt the mult of G;
+
+theorem :: GROUP_1:33
+   for G being unital (non empty HGrStr)
+ holds the_unity_wrt the mult of G = 1.G;
+
+theorem :: GROUP_1:34
+   for G being unital (non empty HGrStr)
+ holds the mult of G has_a_unity;
+
+theorem :: GROUP_1:35
+ inverse_op(G) is_an_inverseOp_wrt the mult of G;
+
+theorem :: GROUP_1:36
+ the mult of G has_an_inverseOp;
+
+theorem :: GROUP_1:37
+   the_inverseOp_wrt the mult of G = inverse_op(G);
+
+definition let G be unital (non empty HGrStr);
+ func power G -> Function of [:the carrier of G,NAT:], the carrier of G means
+:: GROUP_1:def 7
+   for h being Element of G
+   holds it.(h,0) = 1.G & for n holds it.(h,n + 1) = it.(h,n) * h;
+end;
+
+
+
+definition let G,i,h;
+ func h |^ i -> Element of G equals
+:: GROUP_1:def 8
+    power(G).(h,abs(i)) if 0 <= i otherwise
+        (power(G).(h,abs(i)))";
+end;
+
+definition let G,n,h;
+ redefine func h |^ n equals
+:: GROUP_1:def 9
+    power(G).(h,n);
+end;
+
+canceled 4;
+
+theorem :: GROUP_1:42
+ (1.G) |^ n = 1.G;
+
+theorem :: GROUP_1:43
+   h |^ 0 = 1.G;
+
+theorem :: GROUP_1:44
+ h |^ 1 = h;
+
+theorem :: GROUP_1:45
+ h |^ 2 = h * h;
+
+theorem :: GROUP_1:46
+   h |^ 3 = h * h * h;
+
+theorem :: GROUP_1:47
+   h |^ 2 = 1.G iff h" = h;
+
+theorem :: GROUP_1:48
+ h |^ (n + m) = h |^ n * (h |^ m);
+
+theorem :: GROUP_1:49
+ h |^ (n + 1) = h |^ n * h & h |^ (n + 1) = h * (h |^ n);
+
+theorem :: GROUP_1:50
+ h |^ (n * m) = h |^ n |^ m;
+
+theorem :: GROUP_1:51
+ h" |^ n = (h |^ n)";
+
+theorem :: GROUP_1:52
+ g * h = h * g implies g * (h |^ n) = h |^ n * g;
+
+theorem :: GROUP_1:53
+ g * h = h * g implies g |^ n * (h |^ m) = h |^ m * (g |^ n);
+
+theorem :: GROUP_1:54
+ g * h = h * g implies (g * h) |^ n = g |^ n * (h |^ n);
+
+theorem :: GROUP_1:55
+ 0 <= i implies h |^ i = h |^ abs(i);
+
+theorem :: GROUP_1:56
+ not 0 <= i implies h |^ i = (h |^ abs(i))";
+
+canceled 2;
+
+theorem :: GROUP_1:59
+   i = 0 implies h |^ i = 1.G;
+
+theorem :: GROUP_1:60
+ i <= 0 implies h |^ i = (h |^ abs(i))";
+
+theorem :: GROUP_1:61
+   (1.G) |^ i = 1.G;
+
+theorem :: GROUP_1:62
+ h |^ (- 1) = h";
+
+theorem :: GROUP_1:63
+ h |^ (i + j) = h |^ i * (h |^ j);
+
+theorem :: GROUP_1:64
+   h |^ (n + j) = h |^ n * (h |^ j);
+
+theorem :: GROUP_1:65
+   h |^ (i + m) = h |^ i * (h |^ m);
+
+theorem :: GROUP_1:66
+   h |^ (j + 1) = h |^ j * h & h |^ (j + 1) = h * (h |^ j);
+
+theorem :: GROUP_1:67
+ h |^ (i * j) = h |^ i |^ j;
+
+theorem :: GROUP_1:68
+   h |^ (n * j) = h |^ n |^ j;
+
+theorem :: GROUP_1:69
+   h |^ (i * m) = h |^ i |^ m;
+
+theorem :: GROUP_1:70
+   h |^ (- i) = (h |^ i)";
+
+theorem :: GROUP_1:71
+   h |^ (- n) = (h |^ n)";
+
+theorem :: GROUP_1:72
+   h" |^ i = (h |^ i)";
+
+theorem :: GROUP_1:73
+ g * h = h * g implies (g * h) |^ i = g |^ i * (h |^ i);
+
+theorem :: GROUP_1:74
+ g * h = h * g implies g |^ i * (h |^ j) = h |^ j * (g |^ i);
+
+theorem :: GROUP_1:75
+   g * h = h * g implies g |^ n * (h |^ j) = h |^ j * (g |^ n);
+
+canceled;
+
+theorem :: GROUP_1:77
+   g * h = h * g implies g * (h |^ i) = h |^ i * g;
+
+definition let G,h;
+ attr h is being_of_order_0 means
+:: GROUP_1:def 10
+   h |^ n = 1.G implies n = 0;
+ antonym h is_not_of_order_0;
+  synonym h is_of_order_0;
+end;
+
+canceled;
+
+theorem :: GROUP_1:79
+ 1.G is_not_of_order_0;
+
+definition let G,h;
+ func ord h -> Nat means
+:: GROUP_1:def 11
+   it = 0 if h is_of_order_0 otherwise
+         h |^ it = 1.G & it <> 0 &
+          for m st h |^ m = 1.G & m <> 0 holds it <= m;
+end;
+
+canceled 2;
+
+theorem :: GROUP_1:82
+ h |^ ord h = 1.G;
+
+canceled;
+
+theorem :: GROUP_1:84
+   ord 1.G = 1;
+
+theorem :: GROUP_1:85
+   ord h = 1 implies h = 1.G;
+
+theorem :: GROUP_1:86
+   h |^ n = 1.G implies ord h divides n;
+
+definition let G;
+ func Ord G -> Cardinal equals
+:: GROUP_1:def 12
+      Card(the carrier of G);
+end;
+
+definition let S be 1-sorted;
+  attr S is finite means
+:: GROUP_1:def 13
+   the carrier of S is finite;
+ antonym S is infinite;
+end;
+
+definition let G;
+ assume
+  G is finite;
+ func ord G -> Nat means
+:: GROUP_1:def 14
+   ex B being finite set st B = the carrier of G & it = card B;
+end;
+
+canceled 3;
+
+theorem :: GROUP_1:90
+   G is finite implies ord G >= 1;
+
+definition
+ cluster strict commutative Group;
+end;
+
+canceled;
+
+theorem :: GROUP_1:92
+   HGrStr (# REAL, addreal #) is commutative Group;
+
+reserve A for commutative Group;
+reserve a,b for Element of A;
+
+canceled;
+
+theorem :: GROUP_1:94
+   (a * b)" = a" * b";
+
+theorem :: GROUP_1:95
+   (a * b) |^ n = a |^ n * (b |^ n);
+
+theorem :: GROUP_1:96
+   (a * b) |^ i = a |^ i * (b |^ i);
+
+definition
+ let A be non empty set, m be BinOp of A, u be Element of A;
+ cluster LoopStr(#A,m,u#) -> non empty;
+end;
+
+theorem :: GROUP_1:97
+   LoopStr (# the carrier of A, the mult of A, 1.A #)
+             is Abelian add-associative right_zeroed right_complementable;
+
+reserve B for AbGroup;
+
+theorem :: GROUP_1:98
+   HGrStr (# the carrier of B, the add of B #) is commutative Group;

@@ -1,0 +1,3121 @@
+:: Directed Sets, Nets, Ideals, Filters, and Maps
+::  by Grzegorz Bancerek
+::
+:: Received September 12, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary ORDERS_1, QUANTAL1, RELAT_2, FINSET_1, LATTICE3, BOOLE, SUBSET_1,
+      LATTICES, YELLOW_0, CAT_1, PRE_TOPC, FUNCT_1, RELAT_1, SEQM_3, FUNCOP_1,
+      TARSKI, SETFAM_1, ORDINAL2, FILTER_2, FILTER_0, BHSP_3, REALSET1,
+      WAYBEL_0;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, RELSET_1,
+      FINSET_1, FUNCT_1, FUNCT_2, FUNCOP_1, STRUCT_0, REALSET1, PRE_TOPC,
+      LATTICE3, YELLOW_0, ORDERS_1, ORDERS_3;
+ constructors LATTICE3, YELLOW_0, ORDERS_3, MEMBERED, PRE_TOPC;
+ clusters STRUCT_0, FINSET_1, RELSET_1, ORDERS_1, LATTICE3, YELLOW_0, FUNCOP_1,
+      SUBSET_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, STRUCT_0, REALSET1, LATTICE3, YELLOW_0, ORDERS_3,
+      XBOOLE_0;
+ theorems TARSKI, ZFMISC_1, ORDERS_1, LATTICE3, FUNCT_2, FUNCOP_1, YELLOW_0,
+      RELAT_2, FUNCT_1, RELAT_1, PRE_TOPC, ORDERS_3, RELSET_1, SETFAM_1,
+      XBOOLE_0, XBOOLE_1;
+ schemes FINSET_1, XBOOLE_0;
+
+begin :: Directed subsets
+
+definition
+ let L be RelStr;
+ let X be Subset of L;
+ attr X is directed means:Def1:     :: Definition 1.1
+  for x,y being Element of L st x in X & y in X
+   ex z being Element of L st z in X & x <= z & y <= z;
+ attr X is filtered means:Def2:     :: Definition 1.1
+  for x,y being Element of L st x in X & y in X
+   ex z being Element of L st z in X & z <= x & z <= y;
+end;
+
+:: Original "directed subset" is equivalent to "non empty directed subset"
+:: in our terminology.  It is shown bellow.
+
+theorem Th1:
+ for L being non empty transitive RelStr, X being Subset of L holds
+  X is non empty directed iff
+  for Y being finite Subset of X
+   ex x being Element of L st x in X & x is_>=_than Y
+  proof let L be non empty transitive RelStr, X be Subset of L;
+   hereby assume X is non empty;
+    then reconsider X' = X as non empty set;
+    assume
+A1:   X is directed;
+    let Y be finite Subset of X;
+    defpred P[set] means ex x being Element of L st x in X & x is_>=_than $1;
+A2:   Y is finite;
+    consider x being Element of X'; x in X & X c= the carrier of L;
+    then reconsider x as Element of L;
+       x is_>=_than {} by YELLOW_0:6; then
+A3:  P[{}];
+A4:  now let x,B be set; assume
+A5:    x in Y & B c= Y;
+      assume P[B]; then
+      consider y being Element of L such that
+A6:     y in X & y is_>=_than B;
+         x in X by A5;
+      then reconsider x' = x as Element of L;
+      consider z being Element of L such that
+A7:     z in X & x' <= z & y <= z by A1,A5,A6,Def1;
+      thus P[B \/ {x}]
+       proof take z; thus z in X by A7;
+        let a be Element of L;
+        reconsider a' = a as Element of L;
+        assume a in B \/ {x};
+         then a' in B or a' in {x} by XBOOLE_0:def 2;
+         then y >= a' or a' = x by A6,LATTICE3:def 9,TARSKI:def 1;
+        hence thesis by A7,ORDERS_1:26;
+       end;
+     end;
+    thus P[Y] from Finite(A2,A3,A4);
+   end;
+   assume
+A8:  for Y being finite Subset of X
+     ex x being Element of L st x in X & x is_>=_than Y;
+      {} c= X by XBOOLE_1:2;
+    then ex x being Element of L st x in X & x is_>=_than {} by A8;
+   hence X is non empty;
+   let x,y be Element of L; assume x in X & y in X;
+    then {x,y} c= X by ZFMISC_1:38;
+   then consider z being Element of L such that
+A9:  z in X & z is_>=_than {x,y} by A8;
+   take z; x in {x,y} & y in {x,y} by TARSKI:def 2;
+   hence thesis by A9,LATTICE3:def 9;
+  end;
+
+:: Original "filtered subset" is equivalent to "non empty filtered subset"
+:: in our terminology.  It is shown bellow.
+
+theorem Th2:
+ for L being non empty transitive RelStr, X being Subset of L holds
+  X is non empty filtered iff
+  for Y being finite Subset of X
+   ex x being Element of L st x in X & x is_<=_than Y
+  proof let L be non empty transitive RelStr, X be Subset of L;
+   hereby assume X is non empty;
+    then reconsider X' = X as non empty set;
+    assume
+A1:   X is filtered;
+    let Y be finite Subset of X;
+    defpred P[set] means ex x being Element of L st x in X & x is_<=_than $1;
+A2:   Y is finite;
+    consider x being Element of X'; x in X & X c= the carrier of L;
+    then reconsider x as Element of L;
+       x is_<=_than {} by YELLOW_0:6; then
+A3:  P[{}];
+A4:  now let x,B be set; assume
+A5:    x in Y & B c= Y;
+      assume P[B]; then
+      consider y being Element of L such that
+A6:     y in X & y is_<=_than B;
+         x in X by A5;
+      then reconsider x' = x as Element of L;
+      consider z being Element of L such that
+A7:     z in X & x' >= z & y >= z by A1,A5,A6,Def2;
+      thus P[B \/ {x}]
+       proof take z; thus z in X by A7;
+        let a be Element of L;
+        reconsider a' = a as Element of L;
+        assume a in B \/ {x};
+         then a' in B or a' in {x} by XBOOLE_0:def 2;
+         then y <= a' or a' = x by A6,LATTICE3:def 8,TARSKI:def 1;
+        hence thesis by A7,ORDERS_1:26;
+       end;
+     end;
+    thus P[Y] from Finite(A2,A3,A4);
+   end;
+   assume
+A8:  for Y being finite Subset of X
+     ex x being Element of L st x in X & x is_<=_than Y;
+      {} c= X by XBOOLE_1:2;
+    then ex x being Element of L st x in X & x is_<=_than {} by A8;
+   hence X is non empty;
+   let x,y be Element of L; assume x in X & y in X;
+    then {x,y} c= X by ZFMISC_1:38;
+   then consider z being Element of L such that
+A9:  z in X & z is_<=_than {x,y} by A8;
+   take z; x in {x,y} & y in {x,y} by TARSKI:def 2;
+   hence thesis by A9,LATTICE3:def 8;
+  end;
+
+definition
+ let L be RelStr;
+ cluster {}L -> directed filtered;
+ coherence
+  proof
+   thus {}L is directed proof let x be Element of L; thus thesis; end;
+   let x be Element of L; thus thesis;
+  end;
+end;
+
+definition
+ let L be RelStr;
+ cluster directed filtered Subset of L;
+ existence proof take {}L; thus thesis; end;
+end;
+
+theorem Th3:
+ for L1,L2 being RelStr st the RelStr of L1 = the RelStr of L2
+ for X1 being Subset of L1, X2 being Subset of L2
+  st X1 = X2 & X1 is directed
+  holds X2 is directed
+  proof let L1,L2 be RelStr such that
+A1:  the RelStr of L1 = the RelStr of L2;
+   let X1 be Subset of L1, X2 be Subset of L2 such that
+A2:  X1 = X2;
+   assume
+A3:  for x,y being Element of L1 st x in X1 & y in X1
+     ex z being Element of L1 st z in X1 & x <= z & y <= z;
+   let x,y be Element of L2;
+   reconsider x' = x, y' = y as Element of L1 by A1;
+   assume x in X2 & y in X2;
+   then consider z' being Element of L1 such that
+A4:  z' in X1 & x' <= z' & y' <= z' by A2,A3;
+   reconsider z = z' as Element of L2 by A1;
+   take z; thus thesis by A1,A2,A4,YELLOW_0:1;
+  end;
+
+theorem
+   for L1,L2 being RelStr st the RelStr of L1 = the RelStr of L2
+ for X1 being Subset of L1, X2 being Subset of L2
+  st X1 = X2 & X1 is filtered
+  holds X2 is filtered
+  proof let L1,L2 be RelStr such that
+A1:  the RelStr of L1 = the RelStr of L2;
+   let X1 be Subset of L1, X2 be Subset of L2 such that
+A2:  X1 = X2;
+   assume
+A3:  for x,y being Element of L1 st x in X1 & y in X1
+     ex z being Element of L1 st z in X1 & x >= z & y >= z;
+   let x,y be Element of L2;
+   reconsider x' = x, y' = y as Element of L1 by A1;
+   assume x in X2 & y in X2;
+   then consider z' being Element of L1 such that
+A4:  z' in X1 & x' >= z' & y' >= z' by A2,A3;
+   reconsider z = z' as Element of L2 by A1;
+   take z; thus thesis by A1,A2,A4,YELLOW_0:1;
+  end;
+
+theorem Th5:
+ for L being non empty reflexive RelStr, x being Element of L
+  holds {x} is directed filtered
+  proof let L be non empty reflexive RelStr; let x be Element of L;
+   set X = {x};
+   hereby let z,y be Element of L; assume
+A1:   z in X & y in X;
+    take x; thus x in X & z <= x & y <= x by A1,TARSKI:def 1;
+   end;
+   hereby let z,y be Element of L; assume
+A2:   z in X & y in X;
+    take x; thus x in X & x <= z & x <= y by A2,TARSKI:def 1;
+   end;
+  end;
+
+definition
+ let L be non empty reflexive RelStr;
+ cluster directed filtered non empty finite Subset of L;
+ existence
+  proof consider x being Element of L;
+   take {x}; thus thesis by Th5;
+  end;
+end;
+
+definition
+ let L be with_suprema RelStr;
+ cluster [#]L -> directed;
+ coherence
+  proof set X = [#]L;
+A1:  X = the carrier of L by PRE_TOPC:12;
+   let x,y be Element of L; assume x in X & y in X;
+      ex z being Element of L st x <= z & y <= z &
+    for z' being Element of L st x <= z' & y <= z' holds z <= z'
+     by LATTICE3:def 10;
+   hence thesis by A1;
+  end;
+end;
+
+definition
+ let L be upper-bounded non empty RelStr;
+ cluster [#]L -> directed;
+ coherence
+  proof set X = [#]L;
+A1:  X = the carrier of L by PRE_TOPC:12;
+   let x,y be Element of L; assume x in X & y in X;
+   consider z being Element of L such that
+A2:  z is_>=_than X by A1,YELLOW_0:def 5;
+   take z; thus thesis by A1,A2,LATTICE3:def 9;
+  end;
+end;
+
+definition
+ let L be with_infima RelStr;
+ cluster [#]L -> filtered;
+ coherence
+  proof set X = [#]L;
+A1:  X = the carrier of L by PRE_TOPC:12;
+   let x,y be Element of L such that x in X & y in X;
+      ex z being Element of L st z <= x & z <= y &
+    for z' being Element of L st z' <= x & z' <= y holds z' <= z
+     by LATTICE3:def 11;
+   hence thesis by A1;
+  end;
+end;
+
+definition
+ let L be lower-bounded non empty RelStr;
+ cluster [#]L -> filtered;
+ coherence
+  proof set X = [#]L;
+A1:  X = the carrier of L by PRE_TOPC:12;
+   let x,y be Element of L; assume x in X & y in X;
+   consider z being Element of L such that
+A2:  z is_<=_than X by A1,YELLOW_0:def 4;
+   take z; thus thesis by A1,A2,LATTICE3:def 8;
+  end;
+end;
+
+definition
+ let L be non empty RelStr;
+ let S be SubRelStr of L;
+ attr S is filtered-infs-inheriting means:Def3:
+  for X being filtered Subset of S st X <> {} & ex_inf_of X,L
+   holds "/\"(X,L) in the carrier of S;
+ attr S is directed-sups-inheriting means:Def4:
+  for X being directed Subset of S st X <> {} & ex_sup_of X,L
+   holds "\/"(X,L) in the carrier of S;
+end;
+
+definition
+ let L be non empty RelStr;
+ cluster infs-inheriting -> filtered-infs-inheriting SubRelStr of L;
+ coherence
+  proof let S be SubRelStr of L such that
+A1:  for X being Subset of S st ex_inf_of X,L holds "/\"(X,L) in
+ the carrier of S;
+   let X be filtered Subset of S;
+   thus thesis by A1;
+  end;
+ cluster sups-inheriting -> directed-sups-inheriting SubRelStr of L;
+ coherence
+  proof let S be SubRelStr of L such that
+A2:  for X being Subset of S st ex_sup_of X,L holds "\/"(X,L) in
+ the carrier of S;
+   let X be directed Subset of S;
+   thus thesis by A2;
+  end;
+end;
+
+definition
+ let L be non empty RelStr;
+ cluster infs-inheriting sups-inheriting non empty full strict SubRelStr of L;
+ existence
+  proof
+   consider S being infs-inheriting sups-inheriting non empty full
+     strict SubRelStr of L;
+   take S; thus thesis;
+  end;
+end;
+
+theorem
+   for L being non empty transitive RelStr
+ for S being filtered-infs-inheriting non empty full SubRelStr of L
+ for X being filtered Subset of S st X <> {} & ex_inf_of X,L
+  holds ex_inf_of X,S & "/\"(X,S) = "/\"(X,L)
+  proof let L be non empty transitive RelStr;
+   let S be filtered-infs-inheriting non empty full SubRelStr of L;
+   let X be filtered Subset of S; assume
+A1:  X <> {} & ex_inf_of X,L;
+   then "/\"(X,L) in the carrier of S by Def3;
+   hence thesis by A1,YELLOW_0:64;
+  end;
+
+theorem
+   for L being non empty transitive RelStr
+ for S being directed-sups-inheriting non empty full SubRelStr of L
+ for X being directed Subset of S st X <> {} & ex_sup_of X,L
+  holds ex_sup_of X,S & "\/"(X,S) = "\/"(X,L)
+  proof let L be non empty transitive RelStr;
+   let S be directed-sups-inheriting non empty full SubRelStr of L;
+   let X be directed Subset of S; assume
+A1:  X <> {} & ex_sup_of X,L;
+   then "\/"(X,L) in the carrier of S by Def4;
+   hence thesis by A1,YELLOW_0:65;
+  end;
+
+begin :: Nets
+
+definition
+ let L1,L2 be non empty 1-sorted;
+ let f be map of L1,L2;
+ let x be Element of L1;
+ redefine func f.x -> Element of L2;
+ coherence
+  proof f.x in the carrier of L2;
+   hence thesis;
+  end;
+end;
+
+definition
+ let L1,L2 be RelStr;
+ let f be map of L1,L2;
+ attr f is antitone means
+    for x,y being Element of L1 st x <= y
+   for a,b being Element of L2 st a = f.x & b = f.y holds a >= b;
+end;
+
+:: Definition 1.2
+
+definition let L be 1-sorted;
+ struct (RelStr) NetStr over L (#
+   carrier -> set,
+   InternalRel -> (Relation of the carrier),
+   mapping -> Function of the carrier, the carrier of L
+ #);
+end;
+
+definition let L be 1-sorted;
+ let X be non empty set;
+ let O be Relation of X;
+ let F be Function of X, the carrier of L;
+ cluster NetStr(#X,O,F#) -> non empty;
+ coherence proof thus the carrier of NetStr(#X,O,F#) is non empty; end;
+end;
+
+definition
+ let N be RelStr;
+ attr N is directed means:Def6:
+  [#]N is directed;
+end;
+
+definition let L be 1-sorted;
+ cluster non empty reflexive transitive antisymmetric directed
+         (strict NetStr over L);
+ existence
+  proof consider X being with_suprema Poset;
+   consider M being Function of the carrier of X, the carrier of L;
+   take N = NetStr(#the carrier of X, the InternalRel of X, M#);
+   thus N is non empty;
+      the InternalRel of N is_reflexive_in the carrier of N &
+    the InternalRel of N is_transitive_in the carrier of N &
+    the InternalRel of N is_antisymmetric_in the carrier of N
+     by ORDERS_1:def 4,def 5,def 6;
+   hence N is reflexive transitive antisymmetric
+     by ORDERS_1:def 4,def 5,def 6;
+A1:  the RelStr of N = the RelStr of X;
+      [#]X = the carrier of X by PRE_TOPC:12 .= [#]N by PRE_TOPC:12;
+   hence [#]N is directed by A1,Th3;
+  end;
+end;
+
+definition let L be 1-sorted;
+ mode prenet of L is directed non empty NetStr over L;
+end;
+
+definition let L be 1-sorted;
+ mode net of L is transitive prenet of L;
+end;
+
+definition
+ let L be non empty 1-sorted;
+ let N be non empty NetStr over L;
+ func netmap(N,L) -> map of N,L equals:Def7:
+   the mapping of N;
+ coherence;
+ let i be Element of N;
+ func N.i -> Element of L equals:Def8:
+   (the mapping of N).i;
+ correctness;
+end;
+
+definition
+ let L be non empty RelStr;
+ let N be non empty NetStr over L;
+ attr N is monotone means
+    netmap(N,L) is monotone;
+ attr N is antitone means
+    netmap(N,L) is antitone;
+end;
+
+definition let L be non empty 1-sorted;
+ let N be non empty NetStr over L;
+ let X be set;
+ pred N is_eventually_in X means:Def11:
+  ex i being Element of N st
+   for j being Element of N st i <= j holds N.j in X;
+ pred N is_often_in X means
+    for i being Element of N
+   ex j being Element of N st i <= j & N.j in X;
+end;
+
+theorem
+   for L being non empty 1-sorted, N being non empty NetStr over L
+ for X,Y being set st X c= Y holds
+   (N is_eventually_in X implies N is_eventually_in Y) &
+   (N is_often_in X implies N is_often_in Y)
+  proof let L be non empty 1-sorted, N be non empty NetStr over L;
+   let X,Y be set such that
+A1:  X c= Y;
+   hereby assume N is_eventually_in X;
+    then consider i being Element of N such that
+A2:   for j being Element of N st i <= j holds N.j in X by Def11;
+    thus N is_eventually_in Y
+     proof take i; let j be Element of N; assume i <= j;
+       then N.j in X by A2;
+      hence thesis by A1;
+     end;
+   end;
+   assume
+A3:  for i being Element of N ex j being Element of N st i <= j & N.j in X;
+   let i be Element of N; consider j being Element of N such that
+A4:  i <= j & N.j in X by A3;
+   take j; thus thesis by A1,A4;
+  end;
+
+theorem
+   for L being non empty 1-sorted, N being non empty NetStr over L
+ for X being set holds
+  N is_eventually_in X iff not N is_often_in (the carrier of L) \ X
+  proof let L be non empty 1-sorted, N be non empty NetStr over L, X be set;
+   set Y = (the carrier of L) \ X;
+   thus N is_eventually_in X implies not N is_often_in Y
+    proof given i being Element of N such that
+A1:    for j being Element of N st i <= j holds N.j in X;
+     take i; let j be Element of N;
+     assume i <= j;
+      then N.j in X by A1;
+     hence thesis by XBOOLE_0:def 4;
+    end;
+   given i being Element of N such that
+A2:  for j being Element of N st i <= j holds not N.j in Y;
+   take i; let j be Element of N;
+   assume i <= j;
+    then not N.j in Y by A2;
+   hence thesis by XBOOLE_0:def 4;
+  end;
+
+theorem
+   for L being non empty 1-sorted, N being non empty NetStr over L
+ for X being set holds
+  N is_often_in X iff not N is_eventually_in (the carrier of L) \ X
+  proof let L be non empty 1-sorted, N be non empty NetStr over L, X be set;
+   set Y = (the carrier of L) \ X;
+   thus N is_often_in X implies not N is_eventually_in Y
+    proof assume
+A1:    for i being Element of N ex j being Element of N st i <= j & N.j in X;
+     let i be Element of N; consider j being Element of N such that
+A2:    i <= j & N.j in X by A1;
+     take j; thus thesis by A2,XBOOLE_0:def 4;
+    end;
+   assume
+A3:  for i being Element of N ex j being Element of N st i <= j & not N.j in Y;
+   let i be Element of N; consider j being Element of N such that
+A4:  i <= j & not N.j in Y by A3;
+   take j; thus thesis by A4,XBOOLE_0:def 4;
+  end;
+
+Holds_Eventually
+   {L() -> non empty RelStr, N() -> (non empty NetStr over L()), P[set]}:
+ N() is_eventually_in
+    {N().k where k is Element of N(): P[N().k]} iff
+ ex i being Element of N() st
+  for j being Element of N() st i <= j holds P[N().j]
+ provided for x being Element of L() holds P[x] iff P[x]
+  proof
+   set X = {N().k where k is Element of N(): P[N().k]};
+   hereby assume N() is_eventually_in X;
+    then consider i being Element of N() such that
+A1:   for j being Element of N() st i <= j holds N().j in X by Def11;
+    take i; let j be Element of N(); assume i <= j;
+     then N().j in X by A1;
+     then ex k being Element of N() st N().j = N().k & P[N().k];
+    hence P[N().j];
+   end;
+   given i being Element of N() such that
+A2:  for j being Element of N() st i <= j holds P[N().j];
+   take i; let j be Element of N(); assume i <= j;
+    then P[N().j] by A2;
+   hence N().j in X;
+  end;
+
+definition
+ let L be non empty RelStr;
+ let N be non empty NetStr over L;
+ attr N is eventually-directed means:Def13:
+  for i being Element of N holds N is_eventually_in
+   {N.j where j is Element of N: N.i <= N.j};
+ attr N is eventually-filtered means:Def14:
+  for i being Element of N holds N is_eventually_in
+   {N.j where j is Element of N: N.i >= N.j};
+end;
+
+theorem Th11:
+ for L being non empty RelStr, N being non empty NetStr over L holds
+   N is eventually-directed
+  iff
+   for i being Element of N ex j being Element of N st
+   for k being Element of N st j <= k holds N.i <= N.k
+  proof let L be non empty RelStr, N be non empty NetStr over L;
+A1:  now let i be Element of N;
+     defpred P[Element of L] means N.i <= $1;
+      A2: for x being Element of L holds P[x] iff P[x];
+     thus N is_eventually_in
+      {N.j where j is Element of N: P[N.j]} iff
+      ex k being Element of N st
+       for l being Element of N st k <= l holds P[N.l]
+        from Holds_Eventually(A2);
+    end;
+   hereby assume
+A3:   N is eventually-directed;
+    let i be Element of N;
+       N is_eventually_in
+      {N.j where j is Element of N: N.i <= N.j} by A3,Def13;
+    hence ex j being Element of N st
+     for k being Element of N st j <= k holds N.i <= N.k
+       by A1;
+   end;
+   assume
+A4:  for i being Element of N ex j being Element of N st
+     for k being Element of N st j <= k holds N.i <= N.k;
+   let i be Element of N;
+      ex j being Element of N st
+     for k being Element of N st j <= k holds N.i <= N.k
+      by A4;
+   hence thesis by A1;
+  end;
+
+theorem Th12:
+ for L being non empty RelStr, N being non empty NetStr over L holds
+   N is eventually-filtered
+  iff
+   for i being Element of N ex j being Element of N st
+   for k being Element of N st j <= k holds N.i >= N.k
+  proof let L be non empty RelStr, N be non empty NetStr over L;
+A1:  now let i be Element of N;
+     defpred P[Element of L] means N.i >= $1;
+      A2: for x being Element of L holds P[x] iff P[x];
+     thus N is_eventually_in
+      {N.j where j is Element of N: P[N.j]} iff
+      ex k being Element of N st for l being Element of N st k <=
+ l holds P[N.l]
+        from Holds_Eventually(A2);
+    end;
+   hereby assume
+A3:   N is eventually-filtered;
+    let i be Element of N;
+       N is_eventually_in {N.j where j is Element of N: N.i >= N.j} by A3,Def14
+;
+    hence ex j being Element of N st
+      for k being Element of N st j <= k holds N.i >= N.k by A1;
+   end;
+   assume
+A4:  for i being Element of N ex j being Element of N st
+     for k being Element of N st j <= k holds N.i >= N.k;
+   let i be Element of N;
+      ex j being Element of N st
+     for k being Element of N st j <= k holds N.i >= N.k by A4;
+   hence thesis by A1;
+  end;
+
+definition
+ let L be non empty RelStr;
+ cluster monotone -> eventually-directed prenet of L;
+ coherence
+  proof let N be prenet of L; assume
+A1:  for i,j being Element of N st i <= j
+     for a,b being Element of L st a = netmap(N,L).i & b = netmap(N,L).j
+      holds a <= b;
+A2:  netmap(N,L) = the mapping of N by Def7;
+      now let i be Element of N; take j = i;
+     let k be Element of N; assume j <= k;
+      then netmap(N,L).i <= netmap(N,L).k by A1;
+      then N.i <= netmap(N,L).k by A2,Def8;
+     hence N.i <= N.k by A2,Def8;
+    end;
+   hence thesis by Th11;
+  end;
+ cluster antitone -> eventually-filtered prenet of L;
+ coherence
+  proof let N be prenet of L; assume
+A3:  for i,j being Element of N st i <= j
+     for a,b being Element of L st a = netmap(N,L).i & b = netmap(N,L).j
+      holds a >= b;
+A4:  netmap(N,L) = the mapping of N by Def7;
+      now let i be Element of N; take j = i;
+     let k be Element of N; assume j <= k;
+      then netmap(N,L).i >= netmap(N,L).k by A3;
+      then N.i >= netmap(N,L).k by A4,Def8;
+     hence N.i >= N.k by A4,Def8;
+    end;
+   hence thesis by Th12;
+  end;
+end;
+
+definition
+ let L be non empty reflexive RelStr;
+ cluster monotone antitone strict prenet of L;
+ existence
+  proof consider J being upper-bounded (non empty Poset);
+   consider x being Element of L;
+   set M = (the carrier of J) --> x;
+      rng M c= {x} & {x} c= the carrier of L by FUNCOP_1:19;
+    then dom M = the carrier of J & rng M c= the carrier of L
+     by FUNCOP_1:19,XBOOLE_1:1;
+   then reconsider M as Function of the carrier of J, the carrier of L
+     by FUNCT_2:def 1,RELSET_1:11;
+   set N = NetStr(#the carrier of J, the InternalRel of J, M#);
+A1:  the RelStr of N = the RelStr of J;
+      [#]J = the carrier of J by PRE_TOPC:12 .= [#]N by PRE_TOPC:12;
+    then [#]N is directed by A1,Th3;
+   then reconsider N as prenet of L by Def6;
+   take N;
+A2:  netmap(N,L) = M by Def7;
+   thus N is monotone
+    proof let i,j be Element of N such that i <= j;
+     let a,b be Element of L; assume
+        a = netmap(N,L).i & b = netmap(N,L).j;
+      then a = x & b = x & x <= x by A2,FUNCOP_1:13;
+     hence thesis;
+    end;
+   thus N is antitone
+    proof let i,j be Element of N such that i <= j;
+     let a,b be Element of L; assume
+        a = netmap(N,L).i & b = netmap(N,L).j;
+      then a = x & b = x & x <= x by A2,FUNCOP_1:13;
+     hence thesis;
+    end;
+   thus thesis;
+  end;
+end;
+
+begin :: Closure by lower elements and finite sups
+
+:: Definition 1.3
+
+definition
+ let L be RelStr;
+ let X be Subset of L;
+ func downarrow X -> Subset of L means:Def15:
+  for x being Element of L holds x in it iff
+   ex y being Element of L st y >= x & y in X;
+ existence
+  proof
+    defpred P[set] means ex a,y being Element of L st a = $1 & y >= a & y in X;
+    consider S being set such that
+A1:  for x being set holds x in S iff x in the carrier of L & P[x]
+      from Separation;
+      S c= the carrier of L proof let x be set; thus thesis by A1; end;
+   then reconsider S as Subset of L;
+   take S; let x be Element of L;
+   hereby assume x in S;
+     then ex a,y being Element of L st a = x & y >= a & y in X by A1;
+    hence ex y being Element of L st y >= x & y in X;
+   end;
+   thus thesis by A1;
+  end;
+ uniqueness
+  proof let S1,S2 be Subset of L such that
+A2:  for x being Element of L holds x in S1 iff
+     ex y being Element of L st y >= x & y in X and
+A3:  for x being Element of L holds x in S2 iff
+     ex y being Element of L st y >= x & y in X;
+   thus S1 c= S2
+    proof let x be set; assume
+A4:    x in S1;
+     then reconsider x as Element of L;
+        ex y being Element of L st y >= x & y in X by A2,A4;
+     hence thesis by A3;
+    end;
+   let x be set; assume
+A5:  x in S2;
+   then reconsider x as Element of L;
+      ex y being Element of L st y >= x & y in X by A3,A5;
+   hence thesis by A2;
+  end;
+ func uparrow X -> Subset of L means:Def16:
+  for x being Element of L holds x in it iff
+   ex y being Element of L st y <= x & y in X;
+ existence
+  proof
+    defpred P[set] means ex a,y being Element of L st a = $1 & y <= a & y in X;
+    consider S being set such that
+A6:  for x being set holds x in S iff x in the carrier of L & P[x]
+      from Separation;
+      S c= the carrier of L proof let x be set; thus thesis by A6; end;
+   then reconsider S as Subset of L;
+   take S; let x be Element of L;
+   hereby assume x in S;
+     then ex a,y being Element of L st a = x & y <= a & y in X by A6;
+    hence ex y being Element of L st y <= x & y in X;
+   end;
+   thus thesis by A6;
+  end;
+ correctness
+  proof let S1,S2 be Subset of L such that
+A7:  for x being Element of L holds x in S1 iff
+     ex y being Element of L st y <= x & y in X and
+A8:  for x being Element of L holds x in S2 iff
+     ex y being Element of L st y <= x & y in X;
+   thus S1 c= S2
+    proof let x be set; assume
+A9:    x in S1;
+     then reconsider x as Element of L;
+        ex y being Element of L st y <= x & y in X by A7,A9;
+     hence thesis by A8;
+    end;
+   let x be set; assume
+A10:  x in S2;
+   then reconsider x as Element of L;
+      ex y being Element of L st y <= x & y in X by A8,A10;
+   hence thesis by A7;
+  end;
+end;
+
+theorem Th13:
+ for L1,L2 being RelStr st the RelStr of L1 = the RelStr of L2
+ for X being Subset of L1
+ for Y being Subset of L2
+  st X = Y holds downarrow X = downarrow Y & uparrow X = uparrow Y
+  proof let L1,L2 be RelStr such that
+A1:  the RelStr of L1 = the RelStr of L2;
+   let X be Subset of L1;
+   let Y be Subset of L2 such that
+A2:  X = Y;
+   thus downarrow X c= downarrow Y
+    proof let x be set; assume
+A3:    x in downarrow X;
+     then reconsider x as Element of L1;
+     reconsider x' = x as Element of L2 by A1;
+     consider y being Element of L1 such that
+A4:    y >= x & y in X by A3,Def15;
+     reconsider y' = y as Element of L2 by A1;
+        y' >= x' by A1,A4,YELLOW_0:1;
+     hence thesis by A2,A4,Def15;
+    end;
+   thus downarrow Y c= downarrow X
+    proof let x be set; assume
+A5:    x in downarrow Y;
+     then reconsider x as Element of L2;
+     reconsider x' = x as Element of L1 by A1;
+     consider y being Element of L2 such that
+A6:    y >= x & y in Y by A5,Def15;
+     reconsider y' = y as Element of L1 by A1;
+        y' >= x' by A1,A6,YELLOW_0:1;
+     hence thesis by A2,A6,Def15;
+    end;
+   thus uparrow X c= uparrow Y
+    proof let x be set; assume
+A7:    x in uparrow X;
+     then reconsider x as Element of L1;
+     reconsider x' = x as Element of L2 by A1;
+     consider y being Element of L1 such that
+A8:    y <= x & y in X by A7,Def16;
+     reconsider y' = y as Element of L2 by A1;
+        y' <= x' by A1,A8,YELLOW_0:1;
+     hence thesis by A2,A8,Def16;
+    end;
+   thus uparrow Y c= uparrow X
+    proof let x be set; assume
+A9:    x in uparrow Y;
+     then reconsider x as Element of L2;
+     reconsider x' = x as Element of L1 by A1;
+     consider y being Element of L2 such that
+A10:    y <= x & y in Y by A9,Def16;
+     reconsider y' = y as Element of L1 by A1;
+        y' <= x' by A1,A10,YELLOW_0:1;
+     hence thesis by A2,A10,Def16;
+    end;
+  end;
+
+theorem Th14:
+ for L being non empty RelStr, X being Subset of L holds
+  downarrow X =
+  {x where x is Element of L: ex y being Element of L st x <= y & y in X}
+  proof let L be non empty RelStr, X be Subset of L;
+   set Y={x where x is Element of L: ex y being Element of L st x <=
+ y & y in X};
+   hereby let x be set; assume
+A1:   x in downarrow X;
+    then reconsider y = x as Element of L;
+       ex z being Element of L st z >= y & z in X by A1,Def15;
+    hence x in Y;
+   end;
+   let x be set; assume x in Y;
+    then ex a being Element of L st a = x &
+     ex y being Element of L st a <= y & y in X;
+   hence x in downarrow X by Def15;
+  end;
+
+theorem Th15:
+ for L being non empty RelStr, X being Subset of L holds
+  uparrow X =
+  {x where x is Element of L: ex y being Element of L st x >= y & y in X}
+  proof let L be non empty RelStr, X be Subset of L;
+   set Y={x where x is Element of L: ex y being Element of L st x >=
+ y & y in X};
+   hereby let x be set; assume
+A1:   x in uparrow X;
+    then reconsider y = x as Element of L;
+       ex z being Element of L st z <= y & z in X by A1,Def16;
+    hence x in Y;
+   end;
+   let x be set; assume x in Y;
+    then ex a being Element of L st a = x &
+     ex y being Element of L st a >= y & y in X;
+   hence x in uparrow X by Def16;
+  end;
+
+definition
+ let L be non empty reflexive RelStr;
+ let X be non empty Subset of L;
+ cluster downarrow X -> non empty;
+ coherence
+  proof consider x being Element of X;
+   reconsider x' = x as Element of L;
+      x' <= x';
+   hence thesis by Def15;
+  end;
+ cluster uparrow X -> non empty;
+ coherence
+  proof consider x being Element of X;
+   reconsider x' = x as Element of L;
+      x' <= x';
+   hence thesis by Def16;
+  end;
+end;
+
+theorem Th16:
+ for L being reflexive RelStr, X being Subset of L holds
+  X c= downarrow X & X c= uparrow X
+  proof let L be reflexive RelStr, X be Subset of L;
+A1:  the InternalRel of L is_reflexive_in the carrier of L by ORDERS_1:def 4;
+   hereby let x be set; assume
+A2:   x in X;
+    then reconsider y = x as Element of L;
+       [y,y] in the InternalRel of L by A1,A2,RELAT_2:def 1;
+     then y <= y by ORDERS_1:def 9;
+    hence x in downarrow X by A2,Def15;
+   end;
+   let x be set; assume
+A3:  x in X;
+   then reconsider y = x as Element of L;
+      [y,y] in the InternalRel of L by A1,A3,RELAT_2:def 1;
+    then y <= y by ORDERS_1:def 9;
+   hence x in uparrow X by A3,Def16;
+  end;
+
+definition
+ let L be non empty RelStr;
+ let x be Element of L;
+ func downarrow x -> Subset of L equals:Def17:  :: Definition 1.3 (iii)
+   downarrow {x};
+ correctness;
+ func uparrow x -> Subset of L equals:Def18:    :: Definition 1.3 (iv)
+   uparrow {x};
+ correctness;
+end;
+
+theorem Th17:
+ for L being non empty RelStr, x,y being Element of L
+  holds y in downarrow x iff y <= x
+  proof let L be non empty RelStr, x,y be Element of L;
+      downarrow x = downarrow {x} by Def17;
+then A1:     downarrow x = {z where z is Element of L:
+  ex v being Element of L st z <= v & v in {x}} by Th14;
+    then y in downarrow x iff ex z being Element of L st y = z &
+     ex v being Element of L st z <= v & v in {x};
+   hence y in downarrow x implies y <= x by TARSKI:def 1;
+      x in {x} by TARSKI:def 1;
+   hence thesis by A1;
+  end;
+
+theorem Th18:
+ for L being non empty RelStr, x,y being Element of L
+  holds y in uparrow x iff x <= y
+  proof let L be non empty RelStr, x,y be Element of L;
+      uparrow x = uparrow {x} by Def18;
+then A1:  uparrow x = {z where z is Element of L:
+     ex v being Element of L st z >= v & v in {x}} by Th15;
+    then y in uparrow x iff ex z being Element of L st y = z &
+     ex v being Element of L st z >= v & v in {x};
+   hence y in uparrow x implies y >= x by TARSKI:def 1;
+      x in {x} by TARSKI:def 1;
+   hence thesis by A1;
+  end;
+
+theorem
+   for L being non empty reflexive antisymmetric RelStr
+ for x,y being Element of L
+  st downarrow x = downarrow y holds x = y
+  proof let L be non empty reflexive antisymmetric RelStr;
+   let x,y be Element of L;
+   reconsider x' = x, y' = y as Element of L;
+A1:  x' <= x' & y' <= y';
+   assume
+      downarrow x = downarrow y;
+    then y in downarrow x & x in downarrow y by A1,Th17;
+    then x' <= y' & x' >= y' by Th17;
+   hence thesis by ORDERS_1:25;
+  end;
+
+theorem
+   for L being non empty reflexive antisymmetric RelStr
+ for x,y being Element of L
+  st uparrow x = uparrow y holds x = y
+  proof let L be non empty reflexive antisymmetric RelStr;
+   let x,y be Element of L;
+   reconsider x' = x, y' = y as Element of L;
+A1:  x' <= x' & y' <= y';
+   assume
+      uparrow x = uparrow y;
+    then y in uparrow x & x in uparrow y by A1,Th18;
+    then x' <= y' & x' >= y' by Th18;
+   hence thesis by ORDERS_1:25;
+  end;
+
+theorem Th21:
+ for L being non empty transitive RelStr
+ for x,y being Element of L st x <= y
+  holds downarrow x c= downarrow y
+  proof let L be non empty transitive RelStr;
+   let x,y be Element of L such that
+A1:  x <= y;
+   let z be set; assume
+A2:  z in downarrow x;
+   then reconsider z as Element of L;
+      z <= x by A2,Th17;
+    then z <= y by A1,ORDERS_1:26;
+   hence thesis by Th17;
+  end;
+
+theorem Th22:
+ for L being non empty transitive RelStr
+ for x,y being Element of L st x <= y
+  holds uparrow y c= uparrow x
+  proof let L be non empty transitive RelStr;
+   let x,y be Element of L such that
+A1:  x <= y;
+   let z be set; assume
+A2:  z in uparrow y;
+   then reconsider z as Element of L;
+      y <= z by A2,Th18;
+    then x <= z by A1,ORDERS_1:26;
+   hence thesis by Th18;
+  end;
+
+definition
+ let L be non empty reflexive RelStr;
+ let x be Element of L;
+ cluster downarrow x -> non empty directed;
+ coherence
+  proof reconsider x' = x as Element of L;
+      x' <= x';
+   hence downarrow x is non empty by Th17;
+   let z,y be Element of L; assume
+A1:  z in downarrow x & y in downarrow x;
+   take x'; x' <= x';
+   hence x' in downarrow x & z <= x' & y <= x' by A1,Th17;
+  end;
+ cluster uparrow x -> non empty filtered;
+ coherence
+  proof reconsider x' = x as Element of L;
+      x' <= x';
+   hence uparrow x is non empty by Th18;
+   let z,y be Element of L; assume
+A2:  z in uparrow x & y in uparrow x;
+   take x'; x' <= x';
+   hence x' in uparrow x & x' <= z & x' <= y by A2,Th18;
+  end;
+end;
+
+definition
+ let L be RelStr;
+ let X be Subset of L;
+ attr X is lower means:Def19:                  :: Definition 1.3 (v)
+  for x,y being Element of L st x in X & y <= x holds y in X;
+ attr X is upper means:Def20:                  :: Definition 1.3 (vi)
+  for x,y being Element of L st x in X & x <= y holds y in X;
+end;
+
+definition
+ let L be RelStr;
+ cluster lower upper Subset of L;
+ existence
+  proof the carrier of L c= the carrier of L;
+   then reconsider S = the carrier of L as Subset of L;
+   take S;
+   thus S is lower proof let x be Element of L; thus thesis; end;
+   let x be Element of L; thus thesis;
+  end;
+end;
+
+theorem Th23:
+ for L being RelStr, X being Subset of L holds
+  X is lower iff downarrow X c= X
+   proof let L be RelStr, X be Subset of L;
+    hereby assume
+A1:    X is lower;
+     thus downarrow X c= X
+      proof let x be set; assume
+A2:      x in downarrow X;
+       then reconsider x' = x as Element of L;
+          ex y being Element of L st x' <= y & y in X by A2,Def15;
+       hence x in X by A1,Def19;
+      end;
+    end;
+    assume
+A3:   downarrow X c= X;
+    let x,y be Element of L; assume x in X & y <= x;
+     then y in downarrow X by Def15;
+    hence y in X by A3;
+   end;
+
+theorem Th24:
+ for L being RelStr, X being Subset of L holds
+  X is upper iff uparrow X c= X
+   proof let L be RelStr, X be Subset of L;
+    hereby assume
+A1:    X is upper;
+     thus uparrow X c= X
+      proof let x be set; assume
+A2:      x in uparrow X;
+       then reconsider x' = x as Element of L;
+          ex y being Element of L st x' >= y & y in X by A2,Def16;
+       hence x in X by A1,Def20;
+      end;
+    end;
+    assume
+A3:   uparrow X c= X;
+    let x,y be Element of L; assume x in X & y >= x;
+     then y in uparrow X by Def16;
+    hence y in X by A3;
+   end;
+
+theorem
+   for L1,L2 being RelStr st the RelStr of L1 = the RelStr of L2
+ for X1 being Subset of L1, X2 being Subset of L2
+  st X1 = X2 holds
+   (X1 is lower implies X2 is lower) &
+   (X1 is upper implies X2 is upper)
+  proof let L1,L2 be RelStr such that
+A1:  the RelStr of L1 = the RelStr of L2;
+   let X1 be Subset of L1, X2 be Subset of L2; assume
+A2:  X1 = X2;
+   hereby assume X1 is lower;
+     then downarrow X1 = downarrow X2 & downarrow X1 c= X1 by A1,A2,Th13,Th23;
+    hence X2 is lower by A2,Th23;
+   end;
+   assume X1 is upper;
+    then uparrow X1 = uparrow X2 & uparrow X1 c= X1 by A1,A2,Th13,Th24;
+   hence X2 is upper by A2,Th24;
+  end;
+
+theorem
+   for L being RelStr, A being Subset of bool the carrier of L st
+   for X being Subset of L st X in A holds X is lower
+ holds union A is lower Subset of L
+  proof let L be RelStr, A be Subset of bool the carrier of L such that
+A1:  for X being Subset of L st X in A holds X is lower;
+   reconsider A as Subset-Family of L by SETFAM_1:def 7;
+   reconsider X = union A as Subset of L;
+      X is lower
+     proof let x,y be Element of L; assume x in X;
+      then consider Y being set such that
+A2:     x in Y & Y in A by TARSKI:def 4;
+      reconsider Y as Subset of L by A2;
+A3:     Y is lower by A1,A2;
+      assume y <= x;
+       then y in Y by A2,A3,Def19;
+      hence thesis by A2,TARSKI:def 4;
+     end;
+   hence thesis;
+  end;
+
+theorem Th27:
+ for L being RelStr, X,Y being Subset of L st X is lower & Y is lower
+  holds X /\ Y is lower & X \/ Y is lower
+  proof let L be RelStr; let X,Y be Subset of L such that
+A1:  for x,y being Element of L st x in X & y <= x holds y in X and
+A2:  for x,y being Element of L st x in Y & y <= x holds y in Y;
+   hereby let x,y be Element of L; assume x in X /\ Y;
+then A3:   x in X & x in Y by XBOOLE_0:def 3; assume
+       y <= x;
+     then y in X & y in Y by A1,A2,A3;
+    hence y in X /\ Y by XBOOLE_0:def 3;
+   end;
+   let x,y be Element of L; assume x in X \/ Y;
+then A4:  x in X or x in Y by XBOOLE_0:def 2; assume
+      y <= x;
+    then y in X or y in Y by A1,A2,A4;
+   hence y in X \/ Y by XBOOLE_0:def 2;
+  end;
+
+theorem
+   for L being RelStr, A being Subset of bool the carrier of L st
+   for X being Subset of L st X in A holds X is upper
+ holds union A is upper Subset of L
+  proof let L be RelStr, A be Subset of bool the carrier of L such that
+A1:  for X being Subset of L st X in A holds X is upper;
+   reconsider A as Subset-Family of L by SETFAM_1:def 7;
+   reconsider X = union A as Subset of L;
+      X is upper
+     proof let x,y be Element of L; assume x in X;
+      then consider Y being set such that
+A2:     x in Y & Y in A by TARSKI:def 4;
+      reconsider Y as Subset of L by A2;
+A3:     Y is upper by A1,A2;
+      assume y >= x;
+       then y in Y by A2,A3,Def20;
+      hence thesis by A2,TARSKI:def 4;
+     end;
+   hence thesis;
+  end;
+
+theorem Th29:
+ for L being RelStr, X,Y being Subset of L st X is upper & Y is upper
+  holds X /\ Y is upper & X \/ Y is upper
+  proof let L be RelStr; let X,Y be Subset of L such that
+A1:  for x,y being Element of L st x in X & y >= x holds y in X and
+A2:  for x,y being Element of L st x in Y & y >= x holds y in Y;
+   hereby let x,y be Element of L; assume x in X /\ Y;
+then A3:   x in X & x in Y by XBOOLE_0:def 3; assume
+       y >= x;
+     then y in X & y in Y by A1,A2,A3;
+    hence y in X /\ Y by XBOOLE_0:def 3;
+   end;
+   let x,y be Element of L; assume x in X \/ Y;
+then A4:  x in X or x in Y by XBOOLE_0:def 2; assume
+      y >= x;
+    then y in X or y in Y by A1,A2,A4;
+   hence y in X \/ Y by XBOOLE_0:def 2;
+  end;
+
+definition
+ let L be non empty transitive RelStr;
+ let X be Subset of L;
+ cluster downarrow X -> lower;
+ coherence
+  proof let y,z be Element of L; assume y in downarrow X;
+   then consider x being Element of L such that
+A1:  y <= x & x in X by Def15;
+   assume z <= y; then z <= x by A1,ORDERS_1:26;
+   hence z in downarrow X by A1,Def15;
+  end;
+ cluster uparrow X -> upper;
+ coherence
+  proof let y,z be Element of L; assume y in uparrow X;
+   then consider x being Element of L such that
+A2:  y >= x & x in X by Def16;
+   assume z >= y; then z >= x by A2,ORDERS_1:26;
+   hence z in uparrow X by A2,Def16;
+  end;
+end;
+
+definition
+ let L be non empty transitive RelStr;
+ let x be Element of L;
+ cluster downarrow x -> lower;
+ coherence
+  proof downarrow x = downarrow {x} by Def17;
+   hence thesis;
+  end;
+ cluster uparrow x -> upper;
+ coherence
+  proof uparrow x = uparrow {x} by Def18;
+   hence thesis;
+  end;
+end;
+
+definition
+ let L be non empty RelStr;
+ cluster [#]L -> lower upper;
+ coherence
+  proof set X = [#]L;
+A1:  X = the carrier of L by PRE_TOPC:12;
+   hence for x,y being Element of L st x in X & y <= x holds y in X;
+   thus for x,y being Element of L st x in X & x <= y holds y in X by A1;
+  end;
+end;
+
+definition
+ let L be non empty RelStr;
+ cluster non empty lower upper Subset of L;
+ existence proof take [#]L; thus thesis; end;
+end;
+
+definition
+ let L be non empty reflexive transitive RelStr;
+ cluster non empty lower directed Subset of L;
+ existence
+  proof consider x being Element of L;
+   take downarrow x; thus thesis;
+  end;
+ cluster non empty upper filtered Subset of L;
+ existence
+  proof consider x being Element of L;
+   take uparrow x; thus thesis;
+  end;
+end;
+
+definition
+ let L be with_infima with_suprema Poset;
+ cluster non empty directed filtered lower upper Subset of L;
+ existence proof take [#]L; thus thesis; end;
+end;
+
+theorem Th30:
+ for L being non empty transitive reflexive RelStr, X be Subset of L holds
+  X is directed iff downarrow X is directed
+  proof let L be non empty transitive reflexive RelStr, X be Subset of L;
+   thus X is directed implies downarrow X is directed
+    proof assume
+A1:    for x,y being Element of L st x in X & y in X
+       ex z being Element of L st z in X & x <= z & y <= z;
+     let x,y be Element of L; assume
+A2:    x in downarrow X & y in downarrow X;
+     then consider x' being Element of L such that
+A3:    x <= x' & x' in X by Def15;
+     consider y' being Element of L such that
+A4:    y <= y' & y' in X by A2,Def15;
+     consider z being Element of L such that
+A5:    z in X & x' <= z & y' <= z by A1,A3,A4;
+     take z; z <= z;
+     hence z in downarrow X by A5,Def15;
+     thus thesis by A3,A4,A5,ORDERS_1:26;
+    end;
+   set Y = downarrow X;
+   assume
+A6:  for x,y being Element of L st x in Y & y in Y
+     ex z being Element of L st z in Y & x <= z & y <= z;
+   let x,y be Element of L; assume
+A7:  x in X & y in X; x <= x & y <= y;
+    then x in Y & y in Y by A7,Def15;
+   then consider z being Element of L such that
+A8:  z in Y & x <= z & y <= z by A6;
+   consider z' being Element of L such that
+A9:  z <= z' & z' in X by A8,Def15;
+   take z'; thus z' in X by A9;
+   thus thesis by A8,A9,ORDERS_1:26;
+  end;
+
+definition
+ let L be non empty transitive reflexive RelStr;
+ let X be directed Subset of L;
+ cluster downarrow X -> directed;
+ coherence by Th30;
+end;
+
+theorem Th31:
+ for L being non empty transitive reflexive RelStr, X be Subset of L
+ for x be Element of L holds x is_>=_than X iff x is_>=_than downarrow X
+  proof let L be non empty transitive reflexive RelStr, X be Subset of L;
+   let x be Element of L;
+   thus x is_>=_than X implies x is_>=_than downarrow X
+    proof assume
+A1:    for y being Element of L st y in X holds x >= y;
+     let y be Element of L; assume y in downarrow X;
+     then consider z being Element of L such that
+A2:    y <= z & z in X by Def15;
+        x >= z by A1,A2;
+     hence thesis by A2,ORDERS_1:26;
+    end;
+   assume
+A3:  for y being Element of L st y in downarrow X holds x >= y;
+   let y be Element of L; assume
+A4:  y in X; y <= y;
+    then y in downarrow X by A4,Def15;
+   hence thesis by A3;
+  end;
+
+theorem Th32:
+ for L being non empty transitive reflexive RelStr, X be Subset of L holds
+  ex_sup_of X,L iff ex_sup_of downarrow X,L
+  proof let L be non empty transitive reflexive RelStr, X be Subset of L;
+      for x being Element of L holds x is_>=_than X iff x is_>=_than downarrow
+X
+     by Th31;
+   hence thesis by YELLOW_0:46;
+  end;
+
+theorem Th33:
+ for L being non empty transitive reflexive RelStr, X be Subset of L
+  st ex_sup_of X,L
+  holds sup X = sup downarrow X
+  proof let L be non empty transitive reflexive RelStr, X be Subset of L;
+      for x being Element of L holds x is_>=_than X iff x is_>=_than downarrow
+X
+     by Th31;
+   hence thesis by YELLOW_0:47;
+  end;
+
+theorem
+   for L being non empty Poset, x being Element of L holds
+   ex_sup_of downarrow x, L & sup downarrow x = x
+  proof let L be non empty Poset, x be Element of L;
+A1:  downarrow x = downarrow {x} & ex_sup_of {x}, L by Def17,YELLOW_0:38;
+   hence ex_sup_of downarrow x, L by Th32;
+   thus sup downarrow x = sup {x} by A1,Th33 .= x by YELLOW_0:39;
+  end;
+
+theorem Th35:
+ for L being non empty transitive reflexive RelStr, X be Subset of L holds
+  X is filtered iff uparrow X is filtered
+  proof let L be non empty transitive reflexive RelStr, X be Subset of L;
+   thus X is filtered implies uparrow X is filtered
+    proof assume
+A1:    for x,y being Element of L st x in X & y in X
+       ex z being Element of L st z in X & x >= z & y >= z;
+     let x,y be Element of L; assume
+A2:    x in uparrow X & y in uparrow X;
+     then consider x' being Element of L such that
+A3:    x >= x' & x' in X by Def16;
+     consider y' being Element of L such that
+A4:    y >= y' & y' in X by A2,Def16;
+     consider z being Element of L such that
+A5:    z in X & x' >= z & y' >= z by A1,A3,A4;
+     take z; z >= z by ORDERS_1:24;
+     hence z in uparrow X by A5,Def16;
+     thus thesis by A3,A4,A5,ORDERS_1:26;
+    end;
+   set Y = uparrow X;
+   assume
+A6:  for x,y being Element of L st x in Y & y in Y
+     ex z being Element of L st z in Y & x >= z & y >= z;
+   let x,y be Element of L; assume
+A7:  x in X & y in X; x >= x & y >= y by ORDERS_1:24;
+    then x in Y & y in Y by A7,Def16;
+   then consider z being Element of L such that
+A8:  z in Y & x >= z & y >= z by A6;
+   consider z' being Element of L such that
+A9:  z >= z' & z' in X by A8,Def16;
+   take z'; thus z' in X by A9;
+   thus thesis by A8,A9,ORDERS_1:26;
+  end;
+
+definition
+ let L be non empty transitive reflexive RelStr;
+ let X be filtered Subset of L;
+ cluster uparrow X -> filtered;
+ coherence by Th35;
+end;
+
+theorem Th36:
+ for L being non empty transitive reflexive RelStr, X be Subset of L
+ for x be Element of L holds
+  x is_<=_than X iff x is_<=_than uparrow X
+  proof let L be non empty transitive reflexive RelStr, X be Subset of L;
+   let x be Element of L;
+   thus x is_<=_than X implies x is_<=_than uparrow X
+    proof assume
+A1:    for y being Element of L st y in X holds x <= y;
+     let y be Element of L; assume y in uparrow X;
+     then consider z being Element of L such that
+A2:    y >= z & z in X by Def16;
+        x <= z by A1,A2;
+     hence thesis by A2,ORDERS_1:26;
+    end;
+   assume
+A3:  for y being Element of L st y in uparrow X holds x <= y;
+   let y be Element of L; assume
+A4:  y in X; y <= y;
+    then y in uparrow X by A4,Def16;
+   hence thesis by A3;
+  end;
+
+theorem Th37:
+ for L being non empty transitive reflexive RelStr, X be Subset of L holds
+  ex_inf_of X,L iff ex_inf_of uparrow X,L
+  proof let L be non empty transitive reflexive RelStr, X be Subset of L;
+      for x being Element of L holds x is_<=_than X iff x is_<=_than uparrow X
+     by Th36;
+   hence thesis by YELLOW_0:48;
+  end;
+
+theorem Th38:
+ for L being non empty transitive reflexive RelStr, X be Subset of L
+  st ex_inf_of X,L
+  holds inf X = inf uparrow X
+  proof let L be non empty transitive reflexive RelStr, X be Subset of L;
+      for x being Element of L holds x is_<=_than X iff x is_<=_than uparrow X
+     by Th36;
+   hence thesis by YELLOW_0:49;
+  end;
+
+theorem
+   for L being non empty Poset, x being Element of L holds
+   ex_inf_of uparrow x, L & inf uparrow x = x
+  proof let L be non empty Poset, x be Element of L;
+A1:  uparrow x = uparrow {x} & ex_inf_of {x}, L by Def18,YELLOW_0:38;
+   hence ex_inf_of uparrow x, L by Th37;
+   thus inf uparrow x = inf {x} by A1,Th38 .= x by YELLOW_0:39;
+  end;
+
+begin :: Ideals and filters
+
+definition
+ let L be non empty reflexive transitive RelStr;
+ mode Ideal of L is directed lower non empty Subset of L;
+                                :: Definition 1.3 (vii)
+ mode Filter of L is filtered upper non empty Subset of L;
+                                :: Definition 1.3 (viii)
+end;
+
+theorem Th40:
+ for L being with_suprema antisymmetric RelStr, X being lower Subset of L holds
+  X is directed iff for x,y being Element of L st x in X & y in X holds x"\/"
+y in
+ X
+  proof let L be with_suprema antisymmetric RelStr, X be lower Subset of L;
+   thus X is directed implies
+    for x,y being Element of L st x in X & y in X holds x"\/"y in X
+     proof assume
+A1:     for x,y being Element of L st x in X & y in X
+        ex z being Element of L st z in X & x <= z & y <= z;
+      let x,y be Element of L; assume x in X & y in X;
+      then consider z being Element of L such that
+A2:     z in X & x <= z & y <= z by A1;
+         x"\/"y <= z by A2,YELLOW_0:22;
+      hence x"\/"y in X by A2,Def19;
+     end;
+   assume
+A3:  for x,y being Element of L st x in X & y in X holds x"\/"y in X;
+   let x,y be Element of L; assume x in X & y in X;
+    then x"\/"y in X & x <= x"\/"y & y <= x"\/"y by A3,YELLOW_0:22;
+   hence thesis;
+  end;
+
+theorem Th41:
+ for L being with_infima antisymmetric RelStr, X being upper Subset of L holds
+  X is filtered iff for x,y being Element of L st x in X & y in X holds x"/\"
+y in
+ X
+  proof let L be with_infima antisymmetric RelStr, X be upper Subset of L;
+   thus X is filtered implies
+    for x,y being Element of L st x in X & y in X holds x"/\"y in X
+     proof assume
+A1:     for x,y being Element of L st x in X & y in X
+        ex z being Element of L st z in X & x >= z & y >= z;
+      let x,y be Element of L; assume x in X & y in X;
+      then consider z being Element of L such that
+A2:     z in X & x >= z & y >= z by A1;
+         x"/\"y >= z by A2,YELLOW_0:23;
+      hence x"/\"y in X by A2,Def20;
+     end;
+   assume
+A3:  for x,y being Element of L st x in X & y in X holds x"/\"y in X;
+   let x,y be Element of L; assume x in X & y in X;
+    then x"/\"y in X & x >= x"/\"y & y >= x"/\"y by A3,YELLOW_0:23;
+   hence thesis;
+  end;
+
+theorem Th42:
+ for L being with_suprema Poset
+ for X being non empty lower Subset of L holds
+  X is directed iff for Y being finite Subset of X st Y <> {} holds "\/"
+(Y,L) in
+ X
+  proof let L be with_suprema Poset;
+   let X be non empty lower Subset of L;
+   thus X is directed implies
+    for Y being finite Subset of X st Y <> {} holds "\/"(Y,L) in X
+     proof assume
+A1:     X is directed;
+      let Y be finite Subset of X such that
+A2:     Y <> {};
+      consider z being Element of L such that
+A3:     z in X & Y is_<=_than z by A1,Th1;
+         Y c= the carrier of L by XBOOLE_1:1;
+       then Y is finite Subset of L;
+       then ex_sup_of Y,L by A2,YELLOW_0:54;
+       then "\/"(Y,L) <= z by A3,YELLOW_0:30;
+      hence thesis by A3,Def19;
+     end;
+   assume
+A4:  for Y being finite Subset of X st Y <> {} holds "\/"(Y,L) in X;
+   consider x being Element of X;
+   reconsider x as Element of L;
+      now let Y be finite Subset of X;
+     per cases; suppose Y = {};
+       then x is_>=_than Y by YELLOW_0:6;
+      hence ex x being Element of L st x in X & x is_>=_than Y;
+     suppose
+A5:     Y <> {};
+         Y c= the carrier of L by XBOOLE_1:1;
+       then Y is finite Subset of L;
+       then ex_sup_of Y,L by A5,YELLOW_0:54;
+       then "\/"(Y,L) is_>=_than Y & "\/"(Y,L) in X by A4,A5,YELLOW_0:30;
+      hence ex x being Element of L st x in X & x is_>=_than Y;
+    end;
+   hence thesis by Th1;
+  end;
+
+theorem Th43:
+ for L being with_infima Poset
+ for X being non empty upper Subset of L holds
+  X is filtered iff for Y being finite Subset of X st Y <> {} holds "/\"
+(Y,L) in
+ X
+  proof let L be with_infima Poset, X be non empty upper Subset of L;
+   thus X is filtered implies
+    for Y being finite Subset of X st Y <> {} holds "/\"(Y,L) in X
+     proof assume
+A1:     X is filtered;
+      let Y be finite Subset of X such that
+A2:     Y <> {};
+      consider z being Element of L such that
+A3:     z in X & Y is_>=_than z by A1,Th2;
+         Y c= the carrier of L by XBOOLE_1:1;
+       then Y is finite Subset of L;
+       then ex_inf_of Y,L by A2,YELLOW_0:55;
+       then "/\"(Y,L) >= z by A3,YELLOW_0:31;
+      hence thesis by A3,Def20;
+     end;
+   assume
+A4:  for Y being finite Subset of X st Y <> {} holds "/\"(Y,L) in X;
+   consider x being Element of X;
+   reconsider x as Element of L;
+      now let Y be finite Subset of X;
+     per cases; suppose Y = {};
+       then x is_<=_than Y by YELLOW_0:6;
+      hence ex x being Element of L st x in X & x is_<=_than Y;
+     suppose
+A5:     Y <> {};
+         Y c= the carrier of L by XBOOLE_1:1;
+       then Y is finite Subset of L;
+       then ex_inf_of Y,L by A5,YELLOW_0:55;
+       then "/\"(Y,L) in X & "/\"(Y,L) is_<=_than Y by A4,A5,YELLOW_0:31;
+      hence ex x being Element of L st x in X & x is_<=_than Y;
+    end;
+   hence thesis by Th2;
+  end;
+
+theorem
+   for L being non empty antisymmetric RelStr
+  st L is with_suprema or L is with_infima
+ for X,Y being Subset of L
+  st X is lower directed & Y is lower directed
+  holds X /\ Y is directed
+  proof let L be non empty antisymmetric RelStr such that
+A1:  L is with_suprema or L is with_infima;
+   let X,Y be Subset of L such that
+A2:  X is lower directed and
+A3:  Y is lower directed;
+A4:  X /\ Y is lower by A2,A3,Th27;
+   per cases by A1; suppose
+A5:  L is with_suprema;
+      now let x,y be Element of L; assume x in X /\ Y & y in X /\ Y;
+      then x in X & x in Y & y in X & y in Y by XBOOLE_0:def 3;
+      then x"\/"y in X & x"\/"y in Y by A2,A3,A5,Th40;
+     hence x"\/"y in X /\ Y by XBOOLE_0:def 3;
+    end;
+   hence thesis by A4,A5,Th40;
+   suppose
+A6:  L is with_infima;
+   let x,y be Element of L; assume x in X /\ Y & y in X /\ Y;
+then A7:  x in X & x in Y & y in X & y in Y by XBOOLE_0:def 3;
+   then consider zx being Element of L such that
+A8:  zx in X & x <= zx & y <= zx by A2,Def1;
+   consider zy being Element of L such that
+A9:  zy in Y & x <= zy & y <= zy by A3,A7,Def1;
+   take z = zx"/\"zy;
+      z <= zx & z <= zy by A6,YELLOW_0:23;
+    then z in X & z in Y by A2,A3,A8,A9,Def19;
+   hence z in X /\ Y by XBOOLE_0:def 3;
+   thus thesis by A6,A8,A9,YELLOW_0:23;
+  end;
+
+theorem
+   for L being non empty antisymmetric RelStr
+  st L is with_suprema or L is with_infima
+ for X,Y being Subset of L
+  st X is upper filtered & Y is upper filtered
+  holds X /\ Y is filtered
+  proof let L be non empty antisymmetric RelStr such that
+A1:  L is with_suprema or L is with_infima;
+   let X,Y be Subset of L such that
+A2:  X is upper filtered and
+A3:  Y is upper filtered;
+A4:  X /\ Y is upper by A2,A3,Th29;
+   per cases by A1; suppose
+A5:  L is with_infima;
+      now let x,y be Element of L; assume x in X /\ Y & y in X /\ Y;
+      then x in X & x in Y & y in X & y in Y by XBOOLE_0:def 3;
+      then x"/\"y in X & x"/\"y in Y by A2,A3,A5,Th41;
+     hence x"/\"y in X /\ Y by XBOOLE_0:def 3;
+    end;
+   hence thesis by A4,A5,Th41;
+   suppose
+A6:  L is with_suprema;
+   let x,y be Element of L; assume x in X /\ Y & y in X /\ Y;
+then A7:  x in X & x in Y & y in X & y in Y by XBOOLE_0:def 3;
+   then consider zx being Element of L such that
+A8:  zx in X & x >= zx & y >= zx by A2,Def2;
+   consider zy being Element of L such that
+A9:  zy in Y & x >= zy & y >= zy by A3,A7,Def2;
+   take z = zx"\/"zy;
+      z >= zx & z >= zy by A6,YELLOW_0:22;
+    then z in X & z in Y by A2,A3,A8,A9,Def20;
+   hence z in X /\ Y by XBOOLE_0:def 3;
+   thus thesis by A6,A8,A9,YELLOW_0:22;
+  end;
+
+theorem
+   for L being RelStr, A being Subset of bool the carrier of L st
+   (for X being Subset of L st X in A holds X is directed) &
+   (for X,Y being Subset of L st X in A & Y in A
+     ex Z being Subset of L st Z in A & X \/ Y c= Z)
+ for X being Subset of L st X = union A holds X is directed
+  proof let L be RelStr, A be Subset of bool the carrier of L such that
+A1:  for X being Subset of L st X in A holds X is directed and
+A2:  for X,Y being Subset of L st X in A & Y in A
+     ex Z being Subset of L st Z in A & X \/ Y c= Z;
+   let Z be Subset of L; assume
+A3:  Z = union A;
+   let x,y be Element of L; assume
+      x in Z;
+   then consider X being set such that
+A4:  x in X & X in A by A3,TARSKI:def 4;
+   assume y in Z;
+   then consider Y being set such that
+A5:  y in Y & Y in A by A3,TARSKI:def 4;
+   reconsider X,Y as Subset of L by A4,A5;
+   consider W being Subset of L such that
+A6:  W in A & X \/ Y c= W by A2,A4,A5;
+      X c= X \/ Y & Y c= X \/ Y by XBOOLE_1:7;
+    then x in X \/ Y & y in X \/ Y by A4,A5;
+    then x in W & y in W & W is directed by A1,A6;
+   then consider z being Element of L such that
+A7:  z in W & x <= z & y <= z by Def1;
+   take z; thus thesis by A3,A6,A7,TARSKI:def 4;
+  end;
+
+theorem
+   for L being RelStr, A being Subset of bool the carrier of L st
+   (for X being Subset of L st X in A holds X is filtered) &
+   (for X,Y being Subset of L st X in A & Y in A
+     ex Z being Subset of L st Z in A & X \/ Y c= Z)
+ for X being Subset of L st X = union A holds X is filtered
+  proof let L be RelStr, A be Subset of bool the carrier of L such that
+A1:  for X being Subset of L st X in A holds X is filtered and
+A2:  for X,Y being Subset of L st X in A & Y in A
+     ex Z being Subset of L st Z in A & X \/ Y c= Z;
+   let Z be Subset of L; assume
+A3:  Z = union A;
+   let x,y be Element of L; assume
+      x in Z;
+   then consider X being set such that
+A4:  x in X & X in A by A3,TARSKI:def 4;
+   assume y in Z;
+   then consider Y being set such that
+A5:  y in Y & Y in A by A3,TARSKI:def 4;
+   reconsider X,Y as Subset of L by A4,A5;
+   consider W being Subset of L such that
+A6:  W in A & X \/ Y c= W by A2,A4,A5;
+      X c= X \/ Y & Y c= X \/ Y by XBOOLE_1:7;
+    then x in X \/ Y & y in X \/ Y by A4,A5;
+    then x in W & y in W & W is filtered by A1,A6;
+   then consider z being Element of L such that
+A7:  z in W & x >= z & y >= z by Def2;
+   take z; thus thesis by A3,A6,A7,TARSKI:def 4;
+  end;
+
+definition
+ let L be non empty reflexive transitive RelStr;
+ let I be Ideal of L;
+ attr I is principal means
+    ex x being Element of L st x in I & x is_>=_than I;
+end;
+
+definition
+ let L be non empty reflexive transitive RelStr;
+ let F be Filter of L;
+ attr F is principal means
+    ex x being Element of L st x in F & x is_<=_than F;
+end;
+
+theorem
+   for L being non empty reflexive transitive RelStr, I being Ideal of L holds
+  I is principal iff ex x being Element of L st I = downarrow x
+  proof let L be non empty reflexive transitive RelStr, I be Ideal of L;
+   thus I is principal implies ex x being Element of L st I = downarrow x
+    proof given x being Element of L such that
+A1:    x in I & x is_>=_than I;
+     take x;
+     thus I c= downarrow x
+      proof let y be set; assume
+A2:      y in I;
+       then reconsider y as Element of L;
+          x >= y by A1,A2,LATTICE3:def 9;
+       hence thesis by Th17;
+      end;
+     let z be set; assume
+A3:    z in downarrow x;
+     then reconsider z as Element of L;
+        z <= x by A3,Th17;
+     hence thesis by A1,Def19;
+    end;
+   given x being Element of L such that
+A4:  I = downarrow x;
+   take x; x <= x;
+   hence x in I by A4,Th17;
+   let y be Element of L; thus thesis by A4,Th17;
+  end;
+
+theorem
+   for L being non empty reflexive transitive RelStr, F being Filter of L holds
+  F is principal iff ex x being Element of L st F = uparrow x
+  proof let L be non empty reflexive transitive RelStr, I be Filter of L;
+   thus I is principal implies ex x being Element of L st I = uparrow x
+    proof given x being Element of L such that
+A1:    x in I & x is_<=_than I;
+     take x;
+     thus I c= uparrow x
+      proof let y be set; assume
+A2:      y in I;
+       then reconsider y as Element of L;
+          x <= y by A1,A2,LATTICE3:def 8;
+       hence thesis by Th18;
+      end;
+     let z be set; assume
+A3:    z in uparrow x;
+     then reconsider z as Element of L;
+        z >= x by A3,Th18;
+     hence thesis by A1,Def20;
+    end;
+   given x being Element of L such that
+A4:  I = uparrow x;
+   take x; x <= x;
+   hence x in I by A4,Th18;
+   let y be Element of L; thus thesis by A4,Th18;
+  end;
+
+definition let L be non empty reflexive transitive RelStr;
+ func Ids L -> set equals                 :: Definition 1.3 (xi)
+     {X where X is Ideal of L: not contradiction};
+ correctness;
+ func Filt L -> set equals                :: Definition 1.3 (xi)
+     {X where X is Filter of L: not contradiction};
+ correctness;
+end;
+
+definition let L be non empty reflexive transitive RelStr;
+ func Ids_0 L -> set equals               :: Definition 1.3 (xii)
+     Ids L \/ {{}};
+ correctness;
+ func Filt_0 L -> set equals              :: Definition 1.3 (xiii)
+     Filt L \/ {{}};
+ correctness;
+end;
+
+definition
+ let L be non empty RelStr;
+ let X be Subset of L;
+    set D = {"\/"(Y,L) where Y is finite Subset of X: ex_sup_of Y,L};
+     A1: D c= the carrier of L
+      proof let x be set; assume x in D;
+        then ex Y being finite Subset of X st x = "\/"(Y,L) & ex_sup_of Y,L;
+       hence thesis;
+      end;
+ func finsups X -> Subset of L equals:Def27:
+   {"\/"(Y,L) where Y is finite Subset of X: ex_sup_of Y,L};
+  correctness by A1;
+    set D = {"/\"(Y,L) where Y is finite Subset of X: ex_inf_of Y,L};
+     A2: D c= the carrier of L
+      proof let x be set; assume x in D;
+        then ex Y being finite Subset of X st x = "/\"(Y,L) & ex_inf_of Y,L;
+       hence thesis;
+      end;
+ func fininfs X -> Subset of L equals:Def28:
+   {"/\"(Y,L) where Y is finite Subset of X: ex_inf_of Y,L};
+  correctness by A2;
+end;
+
+definition
+ let L be non empty antisymmetric lower-bounded RelStr;
+ let X be Subset of L;
+ cluster finsups X -> non empty;
+ coherence
+  proof consider Z being empty Subset of X;
+      finsups X = {"\/"(Y,L) where Y is finite Subset of X: ex_sup_of Y,L} &
+    ex_sup_of {},L by Def27,YELLOW_0:42;
+    then "\/"(Z,L) in finsups X;
+   hence thesis;
+  end;
+end;
+
+definition
+ let L be non empty antisymmetric upper-bounded RelStr;
+ let X be Subset of L;
+ cluster fininfs X -> non empty;
+ coherence
+  proof consider Z being empty Subset of X;
+      fininfs X = {"/\"(Y,L) where Y is finite Subset of X: ex_inf_of Y,L} &
+    ex_inf_of {},L by Def28,YELLOW_0:43;
+    then "/\"(Z,L) in fininfs X;
+   hence thesis;
+  end;
+end;
+
+definition
+ let L be non empty reflexive antisymmetric RelStr;
+ let X be non empty Subset of L;
+ cluster finsups X -> non empty;
+ coherence
+  proof consider x being Element of X;
+   reconsider y = x as Element of L;
+   reconsider Z = {y} as finite Subset of X by ZFMISC_1:37;
+      finsups X = {"\/"(Y,L) where Y is finite Subset of X: ex_sup_of Y,L} &
+    ex_sup_of Z,L by Def27,YELLOW_0:38;
+    then "\/"(Z,L) in finsups X;
+   hence thesis;
+  end;
+ cluster fininfs X -> non empty;
+ coherence
+  proof consider x being Element of X;
+   reconsider y = x as Element of L;
+   reconsider Z = {y} as finite Subset of X by ZFMISC_1:37;
+      fininfs X = {"/\"(Y,L) where Y is finite Subset of X: ex_inf_of Y,L} &
+    ex_inf_of Z,L by Def28,YELLOW_0:38;
+    then "/\"(Z,L) in fininfs X;
+   hence thesis;
+  end;
+end;
+
+theorem Th50:
+ for L being non empty reflexive antisymmetric RelStr
+ for X being Subset of L
+  holds X c= finsups X & X c= fininfs X
+  proof let L be non empty reflexive antisymmetric RelStr;
+   let X be Subset of L;
+A1:  finsups X = {"\/"(Y,L) where Y is finite Subset of X: ex_sup_of Y,L}
+     by Def27;
+   hereby let x be set; assume
+A2:   x in X;
+    then reconsider y = x as Element of L;
+    reconsider Y = {x} as finite Subset of X by A2,ZFMISC_1:37;
+       y = "\/"(Y,L) & ex_sup_of {y},L by YELLOW_0:38,39;
+    hence x in finsups X by A1;
+   end;
+A3:  fininfs X = {"/\"(Y,L) where Y is finite Subset of X: ex_inf_of Y,L}
+     by Def28;
+   hereby let x be set; assume
+A4:   x in X;
+    then reconsider y = x as Element of L;
+    reconsider Y = {x} as finite Subset of X by A4,ZFMISC_1:37;
+       y = "/\"(Y,L) & ex_inf_of {y},L by YELLOW_0:38,39;
+    hence x in fininfs X by A3;
+   end;
+  end;
+
+theorem Th51:
+ for L being non empty transitive RelStr
+ for X,F being Subset of L st
+  (for Y being finite Subset of X st Y <> {} holds ex_sup_of Y,L) &
+  (for x being Element of L st x in F
+    ex Y being finite Subset of X st ex_sup_of Y,L & x = "\/"(Y,L)) &
+  (for Y being finite Subset of X st Y <> {} holds "\/"(Y,L) in F)
+ holds F is directed
+  proof let L be non empty transitive RelStr;
+   let X,F be Subset of L such that
+A1:  for Y being finite Subset of X st Y <> {} holds ex_sup_of Y,L and
+A2:  for x being Element of L st x in F
+     ex Y being finite Subset of X st ex_sup_of Y,L & x = "\/"(Y,L) and
+A3:  for Y being finite Subset of X st Y <> {} holds "\/"(Y,L) in F;
+   let x,y be Element of L; assume
+A4: x in F;
+   then consider Y1 being finite Subset of X such that
+A5: ex_sup_of Y1,L & x = "\/"(Y1,L) by A2;
+   assume y in F;
+   then consider Y2 being finite Subset of X such that
+A6: ex_sup_of Y2,L & y = "\/"(Y2,L) by A2;
+   take z = "\/"(Y1 \/ Y2, L);
+A7: Y1 = {} & Y2 = {} & {} \/ {} = {} or Y1 \/ Y2 <> {} by XBOOLE_1:15;
+   hence z in F by A3,A4,A5;
+      ex_sup_of Y1 \/ Y2,L & Y1 c= Y1 \/ Y2 & Y2 c= Y1 \/ Y2 by A1,A5,A7,
+XBOOLE_1:7;
+   hence thesis by A5,A6,YELLOW_0:34;
+  end;
+
+definition
+ let L be with_suprema Poset;
+ let X be Subset of L;
+ cluster finsups X -> directed;
+ coherence
+  proof reconsider X as Subset of L;
+A1:  now let Y be finite Subset of X;
+        Y c= the carrier of L by XBOOLE_1:1;
+      then Y is Subset of L;
+     hence Y <> {} implies ex_sup_of Y,L by YELLOW_0:54;
+    end;
+A2:  finsups X = {"\/"(Y,L) where Y is finite Subset of X: ex_sup_of Y,L}
+     by Def27;
+A3:  now let x be Element of L; assume x in finsups X;
+      then ex Y being finite Subset of X st x = "\/"(Y,L) & ex_sup_of Y,L by A2
+;
+     hence ex Y being finite Subset of X st ex_sup_of Y,L & x = "\/"(Y,L);
+    end;
+      now let Y be finite Subset of X;
+        Y c= the carrier of L by XBOOLE_1:1;
+     then reconsider Z = Y as Subset of L;
+     assume
+        Y <> {};
+      then ex_sup_of Z,L by YELLOW_0:54;
+     hence "\/"(Y,L) in finsups X by A2;
+    end;
+   hence thesis by A1,A3,Th51;
+  end;
+end;
+
+theorem Th52:
+ for L being non empty transitive reflexive RelStr, X,F being Subset of L st
+  (for Y being finite Subset of X st Y <> {} holds ex_sup_of Y,L) &
+  (for x being Element of L st x in F
+    ex Y being finite Subset of X st ex_sup_of Y,L & x = "\/"(Y,L)) &
+  (for Y being finite Subset of X st Y <> {} holds "\/"(Y,L) in F)
+ for x being Element of L holds x is_>=_than X iff x is_>=_than F
+  proof let L be non empty transitive reflexive RelStr;
+   let X,F be Subset of L such that
+A1:  for Y being finite Subset of X st Y <> {} holds ex_sup_of Y,L and
+A2:  for x being Element of L st x in F
+     ex Y being finite Subset of X st ex_sup_of Y,L & x = "\/"(Y,L) and
+A3:  for Y being finite Subset of X st Y <> {} holds "\/"(Y,L) in F;
+   let x be Element of L;
+   thus x is_>=_than X implies x is_>=_than F
+    proof assume
+A4:    x is_>=_than X;
+     let y be Element of L; assume y in F;
+     then consider Y being finite Subset of X such that
+A5:    ex_sup_of Y,L & y = "\/"(Y,L) by A2;
+        x is_>=_than Y by A4,YELLOW_0:9;
+     hence x >= y by A5,YELLOW_0:def 9;
+    end;
+   assume
+A6:  x is_>=_than F;
+   let y be Element of L; assume y in X;
+    then {y} c= X by ZFMISC_1:37;
+    then sup {y} in F & ex_sup_of {y},L by A1,A3;
+then A7:  {y} is_<=_than sup {y} & sup {y} <= x
+     by A6,LATTICE3:def 9,YELLOW_0:def 9;
+    then y <= sup {y} by YELLOW_0:7;
+   hence thesis by A7,ORDERS_1:26;
+  end;
+
+theorem Th53:
+ for L being non empty transitive reflexive RelStr, X,F being Subset of L st
+  (for Y being finite Subset of X st Y <> {} holds ex_sup_of Y,L) &
+  (for x being Element of L st x in F
+    ex Y being finite Subset of X st ex_sup_of Y,L & x = "\/"(Y,L)) &
+  (for Y being finite Subset of X st Y <> {} holds "\/"(Y,L) in F)
+ holds ex_sup_of X,L iff ex_sup_of F,L
+  proof let L be non empty transitive reflexive RelStr;
+   let X,F be Subset of L such that
+A1:  for Y being finite Subset of X st Y <> {} holds ex_sup_of Y,L and
+A2:  for x being Element of L st x in F
+     ex Y being finite Subset of X st ex_sup_of Y,L & x = "\/"(Y,L) and
+A3:  for Y being finite Subset of X st Y <> {} holds "\/"(Y,L) in F;
+      for x being Element of L holds x is_>=_than X iff x is_>=_than F
+     by A1,A2,A3,Th52;
+   hence thesis by YELLOW_0:46;
+  end;
+
+theorem Th54:
+ for L being non empty transitive reflexive RelStr, X,F being Subset of L st
+  (for Y being finite Subset of X st Y <> {} holds ex_sup_of Y,L) &
+  (for x being Element of L st x in F
+    ex Y being finite Subset of X st ex_sup_of Y,L & x = "\/"(Y,L)) &
+  (for Y being finite Subset of X st Y <> {} holds "\/"(Y,L) in F) &
+  ex_sup_of X,L
+ holds sup F = sup X
+  proof let L be non empty transitive reflexive RelStr;
+   let X,F be Subset of L such that
+A1:  for Y being finite Subset of X st Y <> {} holds ex_sup_of Y,L and
+A2:  for x being Element of L st x in F
+     ex Y being finite Subset of X st ex_sup_of Y,L & x = "\/"(Y,L) and
+A3:  for Y being finite Subset of X st Y <> {} holds "\/"(Y,L) in F;
+      for x being Element of L holds x is_>=_than X iff x is_>=_than F
+     by A1,A2,A3,Th52;
+   hence thesis by YELLOW_0:47;
+  end;
+
+theorem
+   for L being with_suprema Poset, X being Subset of L
+  st ex_sup_of X,L or L is complete
+  holds sup X = sup finsups X
+  proof let L be with_suprema Poset, X be Subset of L; assume
+      ex_sup_of X,L or L is complete;
+then A1:  ex_sup_of X,L by YELLOW_0:17;
+A2:  now let Y be finite Subset of X;
+        Y c= the carrier of L by XBOOLE_1:1;
+      then Y is Subset of L;
+     hence Y <> {} implies ex_sup_of Y,L by YELLOW_0:54;
+    end;
+A3:  finsups X = {"\/"(Y,L) where Y is finite Subset of X: ex_sup_of Y,L}
+     by Def27;
+A4:  now let x be Element of L; assume x in finsups X;
+      then ex Y being finite Subset of X st x = "\/"(Y,L) & ex_sup_of Y,L by A3
+;
+     hence ex Y being finite Subset of X st ex_sup_of Y,L & x = "\/"(Y,L);
+    end;
+      now let Y be finite Subset of X;
+        Y c= the carrier of L by XBOOLE_1:1;
+     then reconsider Z = Y as Subset of L;
+     assume
+        Y <> {};
+      then ex_sup_of Z,L by YELLOW_0:54;
+     hence "\/"(Y,L) in finsups X by A3;
+    end;
+   hence thesis by A1,A2,A4,Th54;
+  end;
+
+theorem Th56:
+ for L being non empty transitive RelStr
+ for X,F being Subset of L st
+  (for Y being finite Subset of X st Y <> {} holds ex_inf_of Y,L) &
+  (for x being Element of L st x in F
+    ex Y being finite Subset of X st ex_inf_of Y,L & x = "/\"(Y,L)) &
+  (for Y being finite Subset of X st Y <> {} holds "/\"(Y,L) in F)
+ holds F is filtered
+  proof let L be non empty transitive RelStr;
+   let X,F be Subset of L such that
+A1:  for Y being finite Subset of X st Y <> {} holds ex_inf_of Y,L and
+A2:  for x being Element of L st x in F
+     ex Y being finite Subset of X st ex_inf_of Y,L & x = "/\"(Y,L) and
+A3:  for Y being finite Subset of X st Y <> {} holds "/\"(Y,L) in F;
+   let x,y be Element of L; assume
+A4: x in F;
+   then consider Y1 being finite Subset of X such that
+A5: ex_inf_of Y1,L & x = "/\"(Y1,L) by A2;
+   assume y in F;
+   then consider Y2 being finite Subset of X such that
+A6: ex_inf_of Y2,L & y = "/\"(Y2,L) by A2;
+   take z = "/\"(Y1 \/ Y2, L);
+A7: Y1 = {} & Y2 = {} & {} \/ {} = {} or Y1 \/ Y2 <> {} by XBOOLE_1:15;
+   hence z in F by A3,A4,A5;
+      ex_inf_of Y1 \/ Y2,L & Y1 c= Y1 \/ Y2 & Y2 c= Y1 \/ Y2 by A1,A5,A7,
+XBOOLE_1:7;
+   hence thesis by A5,A6,YELLOW_0:35;
+  end;
+
+definition
+ let L be with_infima Poset;
+ let X be Subset of L;
+ cluster fininfs X -> filtered;
+ coherence
+  proof reconsider X as Subset of L;
+A1:  fininfs X = {"/\"(Y,L) where Y is finite Subset of X: ex_inf_of Y,L}
+     by Def28;
+A2:  now let Y be finite Subset of X;
+        Y c= the carrier of L by XBOOLE_1:1;
+      then Y is Subset of L;
+     hence Y <> {} implies ex_inf_of Y,L by YELLOW_0:55;
+    end;
+A3:  now let x be Element of L; assume x in fininfs X;
+      then ex Y being finite Subset of X st x = "/\"(Y,L) & ex_inf_of Y,L by A1
+;
+     hence ex Y being finite Subset of X st ex_inf_of Y,L & x = "/\"(Y,L);
+    end;
+      now let Y be finite Subset of X;
+        Y c= the carrier of L by XBOOLE_1:1;
+     then reconsider Z = Y as Subset of L;
+     assume
+        Y <> {};
+      then ex_inf_of Z,L by YELLOW_0:55;
+     hence "/\"(Y,L) in fininfs X by A1;
+    end;
+   hence thesis by A2,A3,Th56;
+  end;
+end;
+
+theorem Th57:
+ for L being non empty transitive reflexive RelStr, X,F being Subset of L st
+  (for Y being finite Subset of X st Y <> {} holds ex_inf_of Y,L) &
+  (for x being Element of L st x in F
+    ex Y being finite Subset of X st ex_inf_of Y,L & x = "/\"(Y,L)) &
+  (for Y being finite Subset of X st Y <> {} holds "/\"(Y,L) in F)
+ for x being Element of L holds x is_<=_than X iff x is_<=_than F
+  proof let L be non empty transitive reflexive RelStr;
+   let X,F be Subset of L such that
+A1:  for Y being finite Subset of X st Y <> {} holds ex_inf_of Y,L and
+A2:  for x being Element of L st x in F
+     ex Y being finite Subset of X st ex_inf_of Y,L & x = "/\"(Y,L) and
+A3:  for Y being finite Subset of X st Y <> {} holds "/\"(Y,L) in F;
+   let x be Element of L;
+   thus x is_<=_than X implies x is_<=_than F
+    proof assume
+A4:    x is_<=_than X;
+     let y be Element of L; assume y in F;
+     then consider Y being finite Subset of X such that
+A5:    ex_inf_of Y,L & y = "/\"(Y,L) by A2;
+        x is_<=_than Y by A4,YELLOW_0:9;
+     hence x <= y by A5,YELLOW_0:def 10;
+    end;
+   assume
+A6:  x is_<=_than F;
+   let y be Element of L; assume y in X;
+    then {y} c= X by ZFMISC_1:37;
+    then inf {y} in F & ex_inf_of {y},L by A1,A3;
+then A7:  {y} is_>=_than inf {y} & inf {y} >= x
+     by A6,LATTICE3:def 8,YELLOW_0:def 10;
+    then y >= inf {y} by YELLOW_0:7;
+   hence thesis by A7,ORDERS_1:26;
+  end;
+
+theorem Th58:
+ for L being non empty transitive reflexive RelStr, X,F being Subset of L st
+  (for Y being finite Subset of X st Y <> {} holds ex_inf_of Y,L) &
+  (for x being Element of L st x in F
+    ex Y being finite Subset of X st ex_inf_of Y,L & x = "/\"(Y,L)) &
+  (for Y being finite Subset of X st Y <> {} holds "/\"(Y,L) in F)
+ holds ex_inf_of X,L iff ex_inf_of F,L
+  proof let L be non empty transitive reflexive RelStr;
+   let X,F be Subset of L such that
+A1:  for Y being finite Subset of X st Y <> {} holds ex_inf_of Y,L and
+A2:  for x being Element of L st x in F
+     ex Y being finite Subset of X st ex_inf_of Y,L & x = "/\"(Y,L) and
+A3:  for Y being finite Subset of X st Y <> {} holds "/\"(Y,L) in F;
+      for x being Element of L holds x is_<=_than X iff x is_<=_than F
+     by A1,A2,A3,Th57;
+   hence thesis by YELLOW_0:48;
+  end;
+
+theorem Th59:
+ for L being non empty transitive reflexive RelStr, X,F being Subset of L st
+  (for Y being finite Subset of X st Y <> {} holds ex_inf_of Y,L) &
+  (for x being Element of L st x in F
+    ex Y being finite Subset of X st ex_inf_of Y,L & x = "/\"(Y,L)) &
+  (for Y being finite Subset of X st Y <> {} holds "/\"(Y,L) in F) &
+  ex_inf_of X, L
+ holds inf F = inf X
+  proof let L be non empty transitive reflexive RelStr;
+   let X,F be Subset of L such that
+A1:  for Y being finite Subset of X st Y <> {} holds ex_inf_of Y,L and
+A2:  for x being Element of L st x in F
+     ex Y being finite Subset of X st ex_inf_of Y,L & x = "/\"(Y,L) and
+A3:  for Y being finite Subset of X st Y <> {} holds "/\"(Y,L) in F;
+      for x being Element of L holds x is_<=_than X iff x is_<=_than F
+     by A1,A2,A3,Th57;
+   hence thesis by YELLOW_0:49;
+  end;
+
+theorem
+   for L being with_infima Poset, X being Subset of L
+  st ex_inf_of X,L or L is complete
+  holds inf X = inf fininfs X
+  proof let L be with_infima Poset, X be Subset of L; assume
+      ex_inf_of X,L or L is complete;
+then A1:  ex_inf_of X,L by YELLOW_0:17;
+A2:  now let Y be finite Subset of X;
+        Y c= the carrier of L by XBOOLE_1:1;
+      then Y is Subset of L;
+     hence Y <> {} implies ex_inf_of Y,L by YELLOW_0:55;
+    end;
+A3:  fininfs X = {"/\"(Y,L) where Y is finite Subset of X: ex_inf_of Y,L}
+     by Def28;
+A4:  now let x be Element of L; assume x in fininfs X;
+      then ex Y being finite Subset of X st x = "/\"(Y,L) & ex_inf_of Y,L by A3
+;
+     hence ex Y being finite Subset of X st ex_inf_of Y,L & x = "/\"(Y,L);
+    end;
+      now let Y be finite Subset of X;
+        Y c= the carrier of L by XBOOLE_1:1;
+     then reconsider Z = Y as Subset of L;
+     assume
+        Y <> {};
+      then ex_inf_of Z,L by YELLOW_0:55;
+     hence "/\"(Y,L) in fininfs X by A3;
+    end;
+   hence thesis by A1,A2,A4,Th59;
+  end;
+
+theorem
+   for L being with_suprema Poset, X being Subset of L holds
+   X c= downarrow finsups X &
+   for I being Ideal of L st X c= I holds downarrow finsups X c= I
+  proof let L be with_suprema Poset, X be Subset of L;
+      X c= finsups X & finsups X c= downarrow finsups X by Th16,Th50;
+   hence X c= downarrow finsups X by XBOOLE_1:1;
+   let I be Ideal of L such that
+A1:  X c= I;
+   let x be set; assume
+A2:  x in downarrow finsups X;
+   then reconsider x as Element of L;
+   consider y being Element of L such that
+A3:  x <= y & y in finsups X by A2,Def15;
+      finsups X = {"\/"(Y,L) where Y is finite Subset of X: ex_sup_of Y,L}
+     by Def27;
+   then consider Y being finite Subset of X such that
+A4:  y = "\/"(Y,L) & ex_sup_of Y,L by A3;
+   consider i being Element of I;
+   reconsider i as Element of L;
+A5:  ex_sup_of {i}, L & sup {i} = i & {} c= {i} by XBOOLE_1:2,YELLOW_0:38,39;
+A6:  now assume ex_sup_of {},L;
+      then "\/"({},L) <= sup {i} by A5,YELLOW_0:34;
+     hence "\/"({},L) in I by A5,Def19;
+    end;
+      Y c= I & (Y = {} or Y <> {}) by A1,XBOOLE_1:1;
+    then y in I by A4,A6,Th42;
+   hence thesis by A3,Def19;
+  end;
+
+theorem
+   for L being with_infima Poset, X being Subset of L holds
+   X c= uparrow fininfs X &
+   for F being Filter of L st X c= F holds uparrow fininfs X c= F
+  proof let L be with_infima Poset, X be Subset of L;
+      X c= fininfs X & fininfs X c= uparrow fininfs X by Th16,Th50;
+   hence X c= uparrow fininfs X by XBOOLE_1:1;
+   let I be Filter of L such that
+A1:  X c= I;
+   let x be set; assume
+A2:  x in uparrow fininfs X;
+   then reconsider x as Element of L;
+   consider y being Element of L such that
+A3:  x >= y & y in fininfs X by A2,Def16;
+      fininfs X = {"/\"(Y,L) where Y is finite Subset of X: ex_inf_of Y,L}
+     by Def28;
+   then consider Y being finite Subset of X such that
+A4:  y = "/\"(Y,L) & ex_inf_of Y,L by A3;
+   consider i being Element of I;
+   reconsider i as Element of L;
+A5:  ex_inf_of {i}, L & inf {i} = i & {} c= {i} by XBOOLE_1:2,YELLOW_0:38,39;
+A6:  now assume ex_inf_of {},L;
+      then "/\"({},L) >= inf {i} by A5,YELLOW_0:35;
+     hence "/\"({},L) in I by A5,Def20;
+    end;
+      Y c= I & (Y = {} or Y <> {}) by A1,XBOOLE_1:1;
+    then y in I by A4,A6,Th43;
+   hence thesis by A3,Def20;
+  end;
+
+begin :: Chains
+
+definition
+ let L be non empty RelStr;
+ attr L is connected means:Def29:
+  for x,y being Element of L holds x <= y or y <= x;
+end;
+
+definition
+ cluster trivial -> connected (non empty reflexive RelStr);
+ coherence
+  proof let L be non empty reflexive RelStr; assume
+A1:  for x,y being Element of L holds x = y;
+   let z1,z2 be Element of L;
+      z1 = z2 by A1;
+   hence thesis by ORDERS_1:24;
+  end;
+end;
+
+definition
+ cluster connected (non empty Poset);
+ existence
+  proof consider O being Order of {0};
+   take L = RelStr(#{0},O#);
+   let x,y be Element of L; x = 0 & y = 0 by TARSKI:def 1;
+   hence thesis by ORDERS_1:24;
+  end;
+end;
+
+definition
+ mode Chain is connected (non empty Poset);
+end;
+
+definition
+ let L be Chain;
+ cluster L~ -> connected;
+ coherence
+  proof let x,y be Element of L~;
+A1:  ~x = x & ~y = y & (~x)~ = ~x & (~y)~ = ~y by LATTICE3:def 6,def 7;
+      ~x <= ~y or ~x >= ~y by Def29;
+   hence thesis by A1,LATTICE3:9;
+  end;
+end;
+
+begin :: Semilattices
+
+definition
+ mode Semilattice is with_infima Poset;
+ mode sup-Semilattice is with_suprema Poset;
+ mode LATTICE is with_infima with_suprema Poset;
+end;
+
+theorem
+   for L being Semilattice for X being upper non empty Subset of L holds
+   X is Filter of L iff subrelstr X is meet-inheriting
+  proof let L be Semilattice, X be upper non empty Subset of L;
+   set S = subrelstr X;
+A1:  the carrier of S = X by YELLOW_0:def 15;
+   hereby assume
+A2:   X is Filter of L;
+    thus S is meet-inheriting
+     proof let x,y be Element of L; assume
+A3:     x in the carrier of S & y in the carrier of S & ex_inf_of {x,y},L;
+      then consider z being Element of L such that
+A4:     z in X & x >= z & y >= z by A1,A2,Def2;
+         z is_<=_than {x,y} by A4,YELLOW_0:8;
+       then z <= inf {x,y} by A3,YELLOW_0:def 10;
+      hence inf {x,y} in the carrier of S by A1,A4,Def20;
+     end;
+   end;
+   assume
+A5:  for x,y being Element of L st
+      x in the carrier of S & y in the carrier of S & ex_inf_of {x,y},L
+     holds inf {x,y} in the carrier of S;
+      X is filtered
+     proof let x,y be Element of L; assume
+A6:     x in X & y in X;
+      take z = inf {x,y};
+         z = x "/\" y & ex_inf_of {x,y},L by YELLOW_0:21,40;
+      hence z in X & z <= x & z <= y by A1,A5,A6,YELLOW_0:19;
+     end;
+   hence X is Filter of L;
+  end;
+
+theorem
+   for L being sup-Semilattice for X being lower non empty Subset of L holds
+   X is Ideal of L iff subrelstr X is join-inheriting
+  proof let L be sup-Semilattice, X be lower non empty Subset of L;
+   set S = subrelstr X;
+A1:  the carrier of S = X by YELLOW_0:def 15;
+   hereby assume
+A2:   X is Ideal of L;
+    thus S is join-inheriting
+     proof let x,y be Element of L; assume
+A3:     x in the carrier of S & y in the carrier of S & ex_sup_of {x,y},L;
+      then consider z being Element of L such that
+A4:     z in X & x <= z & y <= z by A1,A2,Def1;
+         z is_>=_than {x,y} by A4,YELLOW_0:8;
+       then z >= sup {x,y} by A3,YELLOW_0:def 9;
+      hence sup {x,y} in the carrier of S by A1,A4,Def19;
+     end;
+   end;
+   assume
+A5:  for x,y being Element of L st
+      x in the carrier of S & y in the carrier of S & ex_sup_of {x,y},L
+     holds sup {x,y} in the carrier of S;
+      X is directed
+     proof let x,y be Element of L; assume
+A6:     x in X & y in X;
+      take z = sup {x,y};
+         z = x "\/" y & ex_sup_of {x,y},L by YELLOW_0:20,41;
+      hence z in X & x <= z & y <= z by A1,A5,A6,YELLOW_0:18;
+     end;
+   hence X is Ideal of L;
+  end;
+
+begin :: Maps
+
+definition
+ let S,T be non empty RelStr;
+ let f be map of S,T;
+ let X be Subset of S;
+ pred f preserves_inf_of X means:Def30:
+  ex_inf_of X,S implies ex_inf_of f.:X,T & inf (f.:X) = f.inf X;
+ pred f preserves_sup_of X means:Def31:
+  ex_sup_of X,S implies ex_sup_of f.:X,T & sup (f.:X) = f.sup X;
+end;
+
+theorem
+   for S1,S2, T1,T2 being non empty RelStr st
+  the RelStr of S1 = the RelStr of T1 & the RelStr of S2 = the RelStr of T2
+ for f being map of S1,S2, g being map of T1,T2 st f = g
+ for X being Subset of S1, Y being Subset of T1 st X = Y holds
+   (f preserves_sup_of X implies g preserves_sup_of Y) &
+   (f preserves_inf_of X implies g preserves_inf_of Y)
+  proof let S1,S2, T1,T2 be non empty RelStr such that
+A1:  the RelStr of S1 = the RelStr of T1 & the RelStr of S2 = the RelStr of T2;
+   let f be map of S1,S2, g be map of T1,T2 such that
+A2:  f = g;
+   let X be Subset of S1, Y be Subset of T1 such that
+A3:  X = Y;
+   thus f preserves_sup_of X implies g preserves_sup_of Y
+     proof assume
+A4:     ex_sup_of X,S1 implies ex_sup_of f.:X,S2 & sup (f.:X) = f.sup X;
+      assume
+A5:      ex_sup_of Y,T1;
+      hence ex_sup_of g.:Y,T2 by A1,A2,A3,A4,YELLOW_0:14;
+         sup (f.:X) = sup (g.:
+Y) & sup X = sup Y by A1,A2,A3,A4,A5,YELLOW_0:14,26;
+      hence thesis by A1,A2,A3,A4,A5,YELLOW_0:14;
+     end;
+   assume
+A6:  ex_inf_of X,S1 implies ex_inf_of f.:X,S2 & inf (f.:X) = f.inf X;
+   assume
+A7:  ex_inf_of Y,T1;
+   hence ex_inf_of g.:Y,T2 by A1,A2,A3,A6,YELLOW_0:14;
+      inf (f.:X) = inf (g.:Y) & inf X = inf Y by A1,A2,A3,A6,A7,YELLOW_0:14,27;
+   hence thesis by A1,A2,A3,A6,A7,YELLOW_0:14;
+  end;
+
+definition
+ let L1,L2 be non empty RelStr;
+ let f be map of L1,L2;
+ attr f is infs-preserving means
+    for X being Subset of L1 holds f preserves_inf_of X;
+ attr f is sups-preserving means
+    for X being Subset of L1 holds f preserves_sup_of X;
+ attr f is meet-preserving means
+    for x,y being Element of L1 holds f preserves_inf_of {x,y};
+ attr f is join-preserving means
+    for x,y being Element of L1 holds f preserves_sup_of {x,y};
+ attr f is filtered-infs-preserving means
+    for X being Subset of L1 st X is non empty filtered
+   holds f preserves_inf_of X;
+ attr f is directed-sups-preserving means
+    for X being Subset of L1 st X is non empty directed
+   holds f preserves_sup_of X;
+end;
+
+definition
+ let L1,L2 be non empty RelStr;
+ cluster infs-preserving ->
+    filtered-infs-preserving meet-preserving map of L1,L2;
+ coherence
+  proof let f be map of L1,L2; assume
+A1:  for X being Subset of L1 holds f preserves_inf_of X;
+   hence for X being Subset of L1 st X is non empty filtered
+     holds f preserves_inf_of X;
+   thus for x,y being Element of L1 holds f preserves_inf_of {x,y} by A1;
+  end;
+ cluster sups-preserving ->
+    directed-sups-preserving join-preserving map of L1,L2;
+ coherence
+  proof let f be map of L1,L2; assume
+A2:  for X being Subset of L1 holds f preserves_sup_of X;
+   hence for X being Subset of L1 st X is non empty directed
+     holds f preserves_sup_of X;
+   thus for x,y being Element of L1 holds f preserves_sup_of {x,y} by A2;
+  end;
+end;
+
+definition
+ let S,T be RelStr;
+ let f be map of S,T;
+ attr f is isomorphic means:Def38:
+  f is one-to-one monotone & ex g being map of T,S st g = f" & g is monotone
+  if S is non empty & T is non empty
+  otherwise S is empty & T is empty;
+ correctness;
+end;
+
+theorem Th66:
+ for S,T being non empty RelStr, f being map of S,T holds f is isomorphic iff
+  f is one-to-one & rng f = the carrier of T &
+   for x,y being Element of S holds x <= y iff f.x <= f.y
+  proof let S,T be non empty RelStr; let f be map of S,T;
+   hereby assume
+A1:   f is isomorphic;
+    hence f is one-to-one by Def38;
+    consider g being map of T,S such that
+A2:   g = f" & g is monotone by A1,Def38;
+A3:   f is one-to-one monotone by A1,Def38;
+     then rng f = dom g & g is Function of the carrier of T, the carrier of S
+      by A2,FUNCT_1:55;
+    hence rng f = the carrier of T by FUNCT_2:def 1;
+    let x,y be Element of S;
+    thus x <= y implies f.x <= f.y by A3,ORDERS_3:def 5;
+    assume
+A4:   f.x <= f.y;
+       g.(f.x) = x & g.(f.y) = y by A2,A3,FUNCT_2:32;
+    hence x <= y by A2,A4,ORDERS_3:def 5;
+   end;
+   assume
+A5:  f is one-to-one & rng f = the carrier of T &
+    for x,y being Element of S holds x <= y iff f.x <= f.y;
+   per cases; case S is non empty & T is non empty;
+   thus f is one-to-one by A5;
+   thus for x,y being Element of S st x <= y
+     for a,b being Element of T st a = f.x & b = f.y holds a <= b by A5;
+      f" is Function of the carrier of T, the carrier of S by A5,FUNCT_2:31;
+   then reconsider g = f" as map of T,S;
+   take g; thus g = f";
+   let x,y be Element of T;
+   consider a being set such that
+A6:  a in dom f & x = f.a by A5,FUNCT_1:def 5;
+   consider b being set such that
+A7:  b in dom f & y = f.b by A5,FUNCT_1:def 5;
+   reconsider a,b as Element of S by A6,A7;
+      g.x = a & g.y = b by A5,A6,A7,FUNCT_2:32;
+   hence thesis by A5,A6,A7;
+   case S is empty or T is empty; hence thesis;
+  end;
+
+definition
+ let S,T be non empty RelStr;
+ cluster isomorphic -> one-to-one monotone map of S,T;
+ coherence by Def38;
+end;
+
+theorem
+   for S,T being non empty RelStr, f being map of S,T st f is isomorphic
+   holds f" is map of T,S & rng (f") = the carrier of S
+  proof let S,T be non empty RelStr, f be map of S,T; assume
+    f is isomorphic;
+then A1:  f is one-to-one & rng f = the carrier of T & dom f = the carrier of S
+     by Th66,FUNCT_2:def 1;
+    then dom (f") = the carrier of T & rng (f") = the carrier of S
+     by FUNCT_1:55;
+    then f" is Function of the carrier of T, the carrier of S by FUNCT_2:3;
+   hence thesis by A1,FUNCT_1:55;
+  end;
+
+theorem
+   for S,T being non empty RelStr, f being map of S,T st f is isomorphic
+  for g being map of T,S st g = f" holds g is isomorphic
+  proof let S,T be non empty RelStr, f be map of S,T; assume
+A1:  f is isomorphic;
+then A2:  f is one-to-one monotone by Def38;
+   consider h being map of T,S such that
+A3:  h = f" & h is monotone by A1,Def38;
+   let g be map of T,S; assume
+A4:  g = f";
+   per cases;
+    case T is non empty & S is non empty;
+     thus g is one-to-one monotone by A2,A3,A4,FUNCT_1:62;
+        f" " = f by A2,FUNCT_1:65;
+     hence thesis by A2,A4;
+    case T is empty or S is empty;
+     hence thesis;
+  end;
+
+theorem Th69:
+ for S,T being non empty Poset, f being map of S,T st
+   for X being Filter of S holds f preserves_inf_of X
+ holds f is monotone
+  proof let S,T be non empty Poset, f be map of S,T; assume
+A1:  for X being Filter of S holds f preserves_inf_of X;
+   let x,y be Element of S;
+A2:  uparrow x = uparrow {x} & uparrow y = uparrow {y} by Def18;
+A3:  ex_inf_of {x}, S & ex_inf_of {y}, S by YELLOW_0:38;
+    then f preserves_inf_of uparrow x & f preserves_inf_of uparrow y &
+    ex_inf_of uparrow x, S & ex_inf_of uparrow y, S by A1,A2,Th37;
+then A4:  ex_inf_of f.:uparrow x, T & ex_inf_of f.:uparrow y, T &
+    inf (f.:uparrow x) = f.inf uparrow x & inf (f.:uparrow y) = f.inf uparrow y
+     by Def30;
+   assume x <= y;
+    then uparrow y c= uparrow x by Th22;
+then A5:  f.:uparrow y c= f.:uparrow x by RELAT_1:156;
+      inf (f.:uparrow x) = f.inf {x} & inf (f.:uparrow y) = f.inf {y}
+     by A2,A3,A4,Th38;
+    then inf (f.:uparrow x) = f.x & inf (f.:uparrow y) = f.y by YELLOW_0:39;
+   hence thesis by A4,A5,YELLOW_0:35;
+  end;
+
+theorem
+   for S,T being non empty Poset, f being map of S,T st
+   for X being Filter of S holds f preserves_inf_of X
+ holds f is filtered-infs-preserving
+  proof let S,T be non empty Poset, f be map of S,T such that
+A1:  for X being Filter of S holds f preserves_inf_of X;
+   let X be Subset of S such that
+A2:  X is non empty filtered and
+A3:  ex_inf_of X,S;
+   reconsider Y = X as non empty filtered Subset of S by A2;
+      uparrow Y is Filter of S;
+    then f preserves_inf_of uparrow X & ex_inf_of uparrow X, S by A1,A3,Th37;
+then A4:  ex_inf_of f.:uparrow X,T & inf (f.:uparrow X) = f.inf uparrow X &
+    inf uparrow X = inf X by A3,Def30,Th38;
+      X c= uparrow X by Th16;
+then A5:  f.:X c= f.:uparrow X by RELAT_1:156;
+A6:  f.:uparrow X is_>=_than f.inf X by A4,YELLOW_0:31;
+A7:  f.:X is_>=_than f.inf X
+     proof let x be Element of T; assume x in f.:X;
+      hence thesis by A5,A6,LATTICE3:def 8;
+     end;
+A8:  now let b be Element of T; assume
+A9:   f.:X is_>=_than b;
+        f.:uparrow X is_>=_than b
+       proof let a be Element of T; assume a in f.:uparrow X;
+        then consider x being set such that
+A10:      x in dom f & x in uparrow X & a = f.x by FUNCT_1:def 12;
+           uparrow X =
+         {z where z is Element of S: ex y being Element of S st z >= y & y in
+ X}
+          by Th15;
+        then consider z being Element of S such that
+A11:      x = z & ex y being Element of S st z >= y & y in X by A10;
+        consider y being Element of S such that
+A12:      z >= y & y in X by A11;
+           f is monotone & f.y in f.:X by A1,A12,Th69,FUNCT_2:43;
+         then f.z >= f.y & f.y >= b by A9,A12,LATTICE3:def 8,ORDERS_3:def 5;
+        hence thesis by A10,A11,ORDERS_1:26;
+       end;
+     hence f.inf X >= b by A4,YELLOW_0:31;
+    end;
+   hence ex_inf_of f.:X,T by A7,YELLOW_0:16;
+   hence inf (f.:X) = f.inf X by A7,A8,YELLOW_0:def 10;
+  end;
+
+theorem
+   for S being Semilattice, T being non empty Poset, f being map of S,T st
+  (for X being finite Subset of S holds f preserves_inf_of X) &
+  (for X being non empty filtered Subset of S holds f preserves_inf_of X)
+ holds f is infs-preserving
+  proof let S be Semilattice, T be non empty Poset, f be map of S,T such that
+A1: for X being finite Subset of S holds f preserves_inf_of X and
+A2: for X being non empty filtered Subset of S holds f preserves_inf_of X;
+   let X be Subset of S such that
+A3:  ex_inf_of X,S;
+   defpred P[set] means
+     ex Y being finite Subset of X st ex_inf_of Y, S & $1 = "/\"(Y,S);
+   consider Z being set such that
+A4:  for x being set holds x in Z iff x in the carrier of S & P[x]
+      from Separation;
+      Z c= the carrier of S proof let x be set; thus thesis by A4; end;
+   then reconsider Z as Subset of S;
+A5:  now let Y be finite Subset of X;
+        Y is Subset of S by XBOOLE_1:1;
+      then Y is finite Subset of S;
+     hence Y <> {} implies ex_inf_of Y, S by YELLOW_0:55;
+    end;
+A6:  now let Y be finite Subset of X;
+        Y is Subset of S by XBOOLE_1:1;
+     then reconsider Y' = Y as Subset of S;
+     assume Y <> {};
+      then ex_inf_of Y', S by YELLOW_0:55;
+     hence "/\"(Y,S) in Z by A4;
+    end;
+      for x being Element of S st x in Z
+     ex Y being finite Subset of X st ex_inf_of Y,S & x = "/\"(Y,S) by A4;
+then A7:  Z is filtered & ex_inf_of Z, S & inf Z = inf X & (Z = {} or Z <> {})
+     by A3,A5,A6,Th56,Th58,Th59;
+    then f preserves_inf_of Z by A1,A2;
+then A8:  ex_inf_of f.:Z,T & inf (f.:Z) = f.inf Z & inf Z = inf X by A7,Def30;
+      X c= Z
+     proof let x be set; assume
+A9:     x in X;
+      then reconsider Y = {x} as finite Subset of X by ZFMISC_1:37;
+      reconsider x as Element of S by A9;
+         Y is Subset of S by XBOOLE_1:1;
+       then Y is Subset of S;
+       then ex_inf_of Y, S & x = "/\"(Y,S) by YELLOW_0:39,55;
+      hence thesis by A4;
+     end;
+then A10:  f.:X c= f.:Z by RELAT_1:156;
+A11:  f.:Z is_>=_than f.inf X by A8,YELLOW_0:31;
+A12:  f.:X is_>=_than f.inf X
+     proof let x be Element of T; assume x in f.:X;
+      hence thesis by A10,A11,LATTICE3:def 8;
+     end;
+A13:  now let b be Element of T; assume
+A14:   f.:X is_>=_than b;
+        f.:Z is_>=_than b
+       proof let a be Element of T; assume a in f.:Z;
+        then consider x being set such that
+A15:      x in dom f & x in Z & a = f.x by FUNCT_1:def 12;
+        consider Y being finite Subset of X such that
+A16:      ex_inf_of Y, S & x = "/\"(Y,S) by A4,A15;
+           Y is Subset of S by XBOOLE_1:1;
+        then reconsider Y as Subset of S;
+           f.:Y c= f.:X & f preserves_inf_of Y by A1,RELAT_1:156;
+         then b is_<=_than f.:Y & a = "/\"(f.:Y,T) & ex_inf_of f.:Y, T
+          by A14,A15,A16,Def30,YELLOW_0:9;
+        hence thesis by YELLOW_0:def 10;
+       end;
+     hence f.inf X >= b by A8,YELLOW_0:31;
+    end;
+   hence ex_inf_of f.:X,T by A12,YELLOW_0:16;
+   hence inf (f.:X) = f.inf X by A12,A13,YELLOW_0:def 10;
+  end;
+
+theorem Th72:
+ for S,T being non empty Poset, f being map of S,T st
+   for X being Ideal of S holds f preserves_sup_of X
+ holds f is monotone
+  proof let S,T be non empty Poset, f be map of S,T; assume
+A1:  for X being Ideal of S holds f preserves_sup_of X;
+   let x,y be Element of S;
+A2:  downarrow x = downarrow {x} & downarrow y = downarrow {y} by Def17;
+A3:  ex_sup_of {x}, S & ex_sup_of {y}, S by YELLOW_0:38;
+    then f preserves_sup_of downarrow x & f preserves_sup_of downarrow y &
+    ex_sup_of downarrow x, S & ex_sup_of downarrow y, S by A1,A2,Th32;
+then A4:  ex_sup_of f.:downarrow x, T & ex_sup_of f.:downarrow y, T &
+    sup (f.:downarrow x) = f.sup downarrow x &
+    sup (f.:downarrow y) = f.sup downarrow y by Def31;
+   assume x <= y;
+    then downarrow x c= downarrow y by Th21;
+then A5:  f.:downarrow x c= f.:downarrow y by RELAT_1:156;
+      sup (f.:downarrow x) = f.sup {x} & sup (f.:downarrow y) = f.sup {y}
+     by A2,A3,A4,Th33;
+    then sup (f.:downarrow x) = f.x & sup (f.:downarrow y) = f.y by YELLOW_0:39
+;
+   hence thesis by A4,A5,YELLOW_0:34;
+  end;
+
+theorem
+   for S,T being non empty Poset, f being map of S,T st
+   for X being Ideal of S holds f preserves_sup_of X
+ holds f is directed-sups-preserving
+  proof let S,T be non empty Poset, f be map of S,T such that
+A1:  for X being Ideal of S holds f preserves_sup_of X;
+   let X be Subset of S such that
+A2:  X is non empty directed and
+A3:  ex_sup_of X,S;
+   reconsider Y = X as non empty directed Subset of S by A2;
+      downarrow Y is Ideal of S;
+    then f preserves_sup_of downarrow X & ex_sup_of downarrow X, S by A1,A3,
+Th32
+;
+then A4:  ex_sup_of f.:downarrow X,T & sup (f.:downarrow X) = f.sup downarrow X
+&
+    sup downarrow X = sup X by A3,Def31,Th33;
+      X c= downarrow X by Th16;
+then A5:  f.:X c= f.:downarrow X by RELAT_1:156;
+A6:  f.:downarrow X is_<=_than f.sup X by A4,YELLOW_0:30;
+A7:  f.:X is_<=_than f.sup X
+     proof let x be Element of T; assume x in f.:X;
+      hence thesis by A5,A6,LATTICE3:def 9;
+     end;
+A8:  now let b be Element of T; assume
+A9:   f.:X is_<=_than b;
+        f.:downarrow X is_<=_than b
+       proof let a be Element of T; assume a in f.:downarrow X;
+        then consider x being set such that
+A10:      x in dom f & x in downarrow X & a = f.x by FUNCT_1:def 12;
+           downarrow X =
+         {z where z is Element of S: ex y being Element of S st z <= y & y in
+ X}
+          by Th14;
+        then consider z being Element of S such that
+A11:      x = z & ex y being Element of S st z <= y & y in X by A10;
+        consider y being Element of S such that
+A12:      z <= y & y in X by A11;
+           f is monotone & f.y in f.:X by A1,A12,Th72,FUNCT_2:43;
+         then f.z <= f.y & f.y <= b by A9,A12,LATTICE3:def 9,ORDERS_3:def 5;
+        hence thesis by A10,A11,ORDERS_1:26;
+       end;
+     hence f.sup X <= b by A4,YELLOW_0:30;
+    end;
+   hence ex_sup_of f.:X,T by A7,YELLOW_0:15;
+   hence sup (f.:X) = f.sup X by A7,A8,YELLOW_0:def 9;
+  end;
+
+theorem
+   for S being sup-Semilattice, T being non empty Poset, f being map of S,T st
+  (for X being finite Subset of S holds f preserves_sup_of X) &
+  (for X being non empty directed Subset of S holds f preserves_sup_of X)
+ holds f is sups-preserving
+  proof let S be sup-Semilattice, T be non empty Poset, f be map of S,T such
+   that
+A1: for X being finite Subset of S holds f preserves_sup_of X and
+A2: for X being non empty directed Subset of S holds f preserves_sup_of X;
+   let X be Subset of S such that
+A3:  ex_sup_of X,S;
+   defpred P[set] means
+     ex Y being finite Subset of X st ex_sup_of Y, S & $1 = "\/"(Y,S);
+   consider Z being set such that
+A4:  for x being set holds x in Z iff x in the carrier of S & P[x]
+      from Separation;
+      Z c= the carrier of S proof let x be set; thus thesis by A4; end;
+   then reconsider Z as Subset of S;
+A5:  now let Y be finite Subset of X;
+        Y is Subset of S by XBOOLE_1:1;
+      then Y is finite Subset of S;
+     hence Y <> {} implies ex_sup_of Y, S by YELLOW_0:54;
+    end;
+A6:  now let Y be finite Subset of X;
+        Y is Subset of S by XBOOLE_1:1;
+     then reconsider Y' = Y as Subset of S;
+     assume Y <> {};
+      then ex_sup_of Y', S by YELLOW_0:54;
+     hence "\/"(Y,S) in Z by A4;
+    end;
+      for x being Element of S st x in Z
+     ex Y being finite Subset of X st ex_sup_of Y,S & x = "\/"(Y,S) by A4;
+then A7:  Z is directed & ex_sup_of Z, S & sup Z = sup X & (Z = {} or Z <> {})
+     by A3,A5,A6,Th51,Th53,Th54;
+    then f preserves_sup_of Z by A1,A2;
+then A8:  ex_sup_of f.:Z,T & sup (f.:Z) = f.sup Z & sup Z = sup X by A7,Def31;
+      X c= Z
+     proof let x be set; assume
+A9:     x in X;
+      then reconsider Y = {x} as finite Subset of X by ZFMISC_1:37;
+      reconsider x as Element of S by A9;
+         Y is Subset of S by XBOOLE_1:1;
+       then Y is Subset of S;
+       then ex_sup_of Y, S & x = "\/"(Y,S) by YELLOW_0:39,54;
+      hence thesis by A4;
+     end;
+then A10:  f.:X c= f.:Z by RELAT_1:156;
+A11:  f.:Z is_<=_than f.sup X by A8,YELLOW_0:30;
+A12:  f.:X is_<=_than f.sup X
+     proof let x be Element of T; assume x in f.:X;
+      hence thesis by A10,A11,LATTICE3:def 9;
+     end;
+A13:  now let b be Element of T; assume
+A14:   f.:X is_<=_than b;
+        f.:Z is_<=_than b
+       proof let a be Element of T; assume a in f.:Z;
+        then consider x being set such that
+A15:      x in dom f & x in Z & a = f.x by FUNCT_1:def 12;
+        consider Y being finite Subset of X such that
+A16:      ex_sup_of Y, S & x = "\/"(Y,S) by A4,A15;
+           Y is Subset of S by XBOOLE_1:1;
+        then reconsider Y as Subset of S;
+           f.:Y c= f.:X & f preserves_sup_of Y by A1,RELAT_1:156;
+         then b is_>=_than f.:Y & a = "\/"(f.:Y,T) & ex_sup_of f.:Y, T
+          by A14,A15,A16,Def31,YELLOW_0:9;
+        hence thesis by YELLOW_0:def 9;
+       end;
+     hence f.sup X <= b by A8,YELLOW_0:30;
+    end;
+   hence ex_sup_of f.:X,T by A12,YELLOW_0:15;
+   hence sup (f.:X) = f.sup X by A12,A13,YELLOW_0:def 9;
+  end;
+
+begin :: Complete Semilattice
+
+definition
+ let L be non empty reflexive RelStr;
+ attr L is up-complete means:Def39:
+  for X being non empty directed Subset of L
+  ex x being Element of L st x is_>=_than X &
+   for y being Element of L st y is_>=_than X holds x <= y;
+end;
+
+definition
+ cluster up-complete -> upper-bounded (with_suprema reflexive RelStr);
+ coherence
+  proof let L be with_suprema reflexive RelStr such that
+A1:  L is up-complete;
+      [#]L = the carrier of L by PRE_TOPC:12;
+    then ex x being Element of L st x is_>=_than the carrier of L &
+     for y being Element of L st y is_>=_than the carrier of L holds x <= y
+      by A1,Def39;
+   hence ex x being Element of L st x is_>=_than the carrier of L;
+  end;
+end;
+
+theorem
+   for L being non empty reflexive antisymmetric RelStr holds
+   L is up-complete
+  iff
+   for X being non empty directed Subset of L holds ex_sup_of X,L
+  proof let L be non empty reflexive antisymmetric RelStr;
+   hereby assume
+A1:   L is up-complete;
+    let X be non empty directed Subset of L;
+    consider x being Element of L such that
+A2:   x is_>=_than X and
+A3:   for y being Element of L st y is_>=_than X holds x <= y by A1,Def39;
+    thus ex_sup_of X,L
+     proof take x;
+      thus X is_<=_than x &
+        for b being Element of L st X is_<=_than b holds b >= x by A2,A3;
+      let c be Element of L; assume X is_<=_than c &
+       for b being Element of L st X is_<=_than b holds b >= c;
+       then c <= x & c >= x by A2,A3;
+      hence thesis by ORDERS_1:25;
+     end;
+   end;
+   assume
+A4:  for X being non empty directed Subset of L holds ex_sup_of X,L;
+   let X be non empty directed Subset of L;
+      ex_sup_of X,L by A4;
+    then ex a being Element of L st X is_<=_than a &
+     (for b being Element of L st X is_<=_than b holds b >= a) &
+     for c being Element of L st X is_<=_than c &
+       for b being Element of L st X is_<=_than b holds b >= c
+     holds c = a by YELLOW_0:def 7;
+   hence thesis;
+  end;
+
+definition
+ let L be non empty reflexive RelStr;
+ attr L is /\-complete means:Def40:
+  for X being non empty Subset of L
+  ex x being Element of L st x is_<=_than X &
+   for y being Element of L st y is_<=_than X holds x >= y;
+end;
+
+theorem Th76:
+ for L being non empty reflexive antisymmetric RelStr holds
+   L is /\-complete
+  iff
+   for X being non empty Subset of L holds ex_inf_of X,L
+  proof let L be non empty reflexive antisymmetric RelStr;
+   hereby assume
+A1:   L is /\-complete;
+    let X be non empty Subset of L;
+    consider x being Element of L such that
+A2:   x is_<=_than X and
+A3:   for y being Element of L st y is_<=_than X holds x >= y by A1,Def40;
+    thus ex_inf_of X,L
+     proof take x;
+      thus X is_>=_than x &
+       for b being Element of L st X is_>=_than b holds b <= x by A2,A3;
+      let c be Element of L; assume X is_>=_than c &
+       for b being Element of L st X is_>=_than b holds b <= c;
+       then c <= x & c >= x by A2,A3;
+      hence thesis by ORDERS_1:25;
+     end;
+   end;
+   assume
+A4:  for X being non empty Subset of L holds ex_inf_of X,L;
+   let X be non empty Subset of L;
+      ex_inf_of X,L by A4;
+    then ex a being Element of L st X is_>=_than a &
+     (for b being Element of L st X is_>=_than b holds b <= a) &
+     for c being Element of L st X is_>=_than c &
+       for b being Element of L st X is_>=_than b holds b <= c
+     holds c = a by YELLOW_0:def 8;
+   hence thesis;
+  end;
+
+definition
+ cluster complete -> up-complete /\-complete (non empty reflexive RelStr);
+ coherence
+  proof let L be non empty reflexive RelStr such that
+A1:  L is complete;
+   thus L is up-complete
+     proof let X be non empty directed Subset of L;
+      thus thesis by A1,LATTICE3:def 12;
+     end;
+   let X be non empty Subset of L;
+   set Y = {y where y is Element of L: y is_<=_than X};
+   consider x being Element of L such that
+A2:  Y is_<=_than x and
+A3:  for b being Element of L st Y is_<=_than b holds x <= b by A1,LATTICE3:def
+12;
+   take x;
+   thus x is_<=_than X
+     proof let y be Element of L such that
+A4:     y in X;
+         y is_>=_than Y
+        proof let z be Element of L; assume z in Y;
+          then ex a being Element of L st z = a & a is_<=_than X;
+         hence thesis by A4,LATTICE3:def 8;
+        end;
+      hence x <= y by A3;
+     end;
+   let y be Element of L; assume
+      y is_<=_than X; then y in Y;
+   hence x >= y by A2,LATTICE3:def 9;
+  end;
+ cluster /\-complete -> lower-bounded (non empty reflexive RelStr);
+ coherence
+  proof let L be non empty reflexive RelStr; assume
+      L is /\-complete;
+    then [#]L = the carrier of L &
+    ex x being Element of L st x is_<=_than [#]L &
+     for y being Element of L st y is_<=_than [#]L holds x >= y
+      by Def40,PRE_TOPC:12;
+   hence ex x being Element of L st x is_<=_than the carrier of L;
+  end;
+ cluster up-complete with_suprema lower-bounded -> complete (non empty Poset);
+ coherence
+  proof let L be non empty Poset; assume
+A5:  L is up-complete with_suprema lower-bounded;
+   then reconsider K = L as with_suprema lower-bounded (non empty Poset);
+   let X be set;
+      X /\ the carrier of L c= the carrier of L by XBOOLE_1:17;
+   then reconsider X' = X /\ the carrier of L as Subset of L;
+   reconsider A = X' as Subset of K;
+A6:  now let Y be finite Subset of X';
+        Y c= the carrier of L by XBOOLE_1:1;
+      then Y is Subset of L;
+     hence Y <> {} implies ex_sup_of Y,L by A5,YELLOW_0:54;
+    end;
+A7:  finsups X' = {"\/"(Y,L) where Y is finite Subset of X': ex_sup_of Y,L}
+     by Def27;
+A8:  now let x be Element of L; assume x in finsups X';
+      then ex Y being finite Subset of X' st x = "\/"(Y,L) & ex_sup_of Y,L by
+A7;
+     hence ex Y being finite Subset of X' st ex_sup_of Y,L & x = "\/"(Y,L);
+    end;
+A9:  now let Y be finite Subset of X';
+        Y c= the carrier of L by XBOOLE_1:1;
+     then reconsider Z = Y as Subset of L;
+     assume
+        Y <> {};
+      then ex_sup_of Z,L by A5,YELLOW_0:54;
+     hence "\/"(Y,L) in finsups X' by A7;
+    end;
+   reconsider fX = finsups A as non empty directed Subset of L;
+   consider x being Element of L such that
+A10:  fX is_<=_than x and
+A11:  for y being Element of L st fX is_<=_than y holds x <= y by A5,Def39;
+   take x;
+      X' is_<=_than x by A6,A8,A9,A10,Th52;
+   hence X is_<=_than x by YELLOW_0:5;
+   let y be Element of L;
+   assume y is_>=_than X;
+    then y is_>=_than X' by YELLOW_0:5;
+    then y is_>=_than fX by A6,A8,A9,Th52;
+   hence y >= x by A11;
+  end;
+:: cluster up-complete /\-complete upper-bounded -> complete (non empty Poset);
+::        to appear in YELLOW_2
+end;
+
+definition
+ cluster /\-complete -> with_infima (non empty reflexive antisymmetric RelStr);
+ coherence
+  proof let L be non empty reflexive antisymmetric RelStr;
+   assume L is /\-complete;
+    then for a,b being Element of L holds ex_inf_of {a,b},L by Th76;
+   hence L is with_infima by YELLOW_0:21;
+  end;
+end;
+
+definition
+ cluster /\-complete -> with_suprema
+  (non empty reflexive antisymmetric upper-bounded RelStr);
+ coherence
+  proof
+   let L be non empty reflexive antisymmetric upper-bounded RelStr such that
+A1:  L is /\-complete;
+      now let a,b be Element of L;
+     set X = {x where x is Element of L: x >= a & x >= b};
+        X c= the carrier of L
+       proof let x be set; assume x in X;
+         then ex z being Element of L st x = z & z >= a & z >= b;
+        hence thesis;
+       end;
+     then reconsider X as Subset of L;
+        Top L >= a & Top L >= b by YELLOW_0:45;
+      then Top L in X;
+      then ex_inf_of X,L by A1,Th76;
+     then consider c being Element of L such that
+A2:    c is_<=_than X and
+A3:    for d being Element of L st d is_<=_than X holds d <= c and
+        for e being Element of L st e is_<=_than X &
+        for d being Element of L st d is_<=_than X holds d <= e
+      holds e = c by YELLOW_0:def 8;
+A4:    c is_>=_than {a,b}
+       proof let x be Element of L; assume A5: x in {a,b};
+           x is_<=_than X
+          proof let y be Element of L; assume y in X;
+            then ex z being Element of L st y = z & z >= a & z >= b;
+           hence thesis by A5,TARSKI:def 2;
+          end;
+        hence thesis by A3;
+       end;
+        now let y be Element of L; assume
+          y is_>=_than {a,b};
+        then y >= a & y >= b by YELLOW_0:8;
+        then y in X;
+       hence c <= y by A2,LATTICE3:def 8;
+      end;
+     hence ex_sup_of {a,b},L by A4,YELLOW_0:15;
+    end;
+   hence thesis by YELLOW_0:20;
+  end;
+end;
+
+definition
+ cluster complete strict LATTICE;
+ existence
+  proof consider L being complete strict LATTICE;
+   take L; thus thesis;
+  end;
+end;
+

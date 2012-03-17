@@ -1,0 +1,340 @@
+:: Definitions and Basic Properties of Measurable Functions
+::  by Noboru Endou , Katsumi Wasaki and Yasunari Shidama
+::
+:: Received September 7, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary INT_1, RAT_1, ARYTM_1, TARSKI, FUNCT_1, FUNCT_2, RELAT_1, BOOLE,
+      ARYTM_3, CARD_4, CARD_1, FINSET_1, PARTFUN1, SUPINF_1, SEQ_1, MEASURE6,
+      RLVECT_1, GROUP_1, COMPLEX1, MEASURE1, SETFAM_1, MESFUNC1, ARYTM;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, MEASURE6, REAL_1, RELAT_1, FUNCT_1, NAT_1, INT_1, RAT_1,
+      FINSET_1, CARD_1, CARD_4, SUPINF_1, SUPINF_2, MEASURE1, MEASURE2,
+      MEASURE3, FUNCT_2, PARTFUN1, EXTREAL1;
+ constructors NAT_1, MEASURE3, MEASURE6, RAT_1, WELLORD2, EXTREAL1, REAL_1,
+      SUPINF_2, MEMBERED;
+ clusters SUBSET_1, SUPINF_1, MEASURE1, XREAL_0, RELSET_1, INT_1, CARD_1,
+      NAT_1, MEMBERED, NUMBERS, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+
+
+begin  :: Cardinal numbers of INT and RAT
+
+reserve k for Nat;
+reserve r for Real;
+reserve i for Integer;
+reserve q for Rational;
+
+definition
+func INT- -> Subset of REAL means
+:: MESFUNC1:def 1
+r in it iff ex k st r = - k;
+end;
+
+definition
+cluster INT- -> non empty;
+end;
+
+theorem :: MESFUNC1:1
+NAT,INT- are_equipotent;
+
+theorem :: MESFUNC1:2
+INT=INT- \/ NAT;
+
+theorem :: MESFUNC1:3
+NAT,INT are_equipotent;
+
+definition
+redefine func INT -> Subset of REAL;
+end;
+
+definition
+let n be Nat;
+func RAT_with_denominator n -> Subset of RAT means
+:: MESFUNC1:def 2
+q in it iff ex i st q = i/n;
+end;
+
+definition
+let n be Nat;
+cluster RAT_with_denominator(n+1) -> non empty;
+end;
+
+theorem :: MESFUNC1:4
+for n being Nat holds INT,RAT_with_denominator (n+1) are_equipotent;
+
+theorem :: MESFUNC1:5
+  NAT,RAT are_equipotent;
+
+begin  :: Basic operations on R_EAL valued functions
+
+definition let C be non empty set, f be PartFunc of C, ExtREAL, x be set;
+ redefine func f.x -> R_eal;
+end;
+
+definition let C be non empty set; let f1,f2 be PartFunc of C,ExtREAL;
+func f1+f2 -> PartFunc of C,ExtREAL means
+:: MESFUNC1:def 3
+ dom it =
+ (dom f1 /\ dom f2)\((f1"{-infty} /\ f2"{+infty}) \/ (f1"{+infty} /\
+ f2"{-infty}))
+ & for c being Element of C st c in dom it holds it.c = f1.c + f2.c;
+
+func f1-f2 -> PartFunc of C,ExtREAL means
+:: MESFUNC1:def 4
+   dom it =
+ (dom f1 /\ dom f2)\((f1"{+infty} /\ f2"{+infty}) \/ (f1"{-infty} /\
+ f2"{-infty}))
+ & for c being Element of C st c in dom it holds it.c = f1.c - f2.c;
+
+func f1(#)f2 -> PartFunc of C,ExtREAL means
+:: MESFUNC1:def 5
+ dom it = dom f1 /\ dom f2
+ & for c being Element of C st c in dom it holds it.c = f1.c * f2.c;
+end;
+
+definition let C be non empty set, f be PartFunc of C,ExtREAL, r be Real;
+func r(#)f -> PartFunc of C,ExtREAL means
+:: MESFUNC1:def 6
+ dom it = dom f
+ & for c being Element of C st c in dom it holds it.c = (R_EAL r) * f.c;
+end;
+
+theorem :: MESFUNC1:6
+for C being non empty set, f being PartFunc of C,ExtREAL, r being Real
+st r <> 0 holds
+for c being Element of C st c in dom(r(#)f) holds f.c = (r(#)f).c / R_EAL r;
+
+definition let C be non empty set; let f be PartFunc of C,ExtREAL;
+  func -f -> PartFunc of C,ExtREAL means
+:: MESFUNC1:def 7
+  dom it = dom f & for c being Element of C st c in dom it holds it.c = -(f.c);
+end;
+
+definition
+   func 1. -> R_eal equals
+:: MESFUNC1:def 8
+ 1;
+end;
+
+definition let C be non empty set; let f be PartFunc of C,ExtREAL;
+let r be Real;
+func r/f -> PartFunc of C,ExtREAL means
+:: MESFUNC1:def 9
+dom it = dom f \ f"{0.} &
+for c being Element of C st c in dom it holds it.c = (R_EAL r)/(f.c);
+end;
+
+theorem :: MESFUNC1:7
+  for C being non empty set, f being PartFunc of C,ExtREAL holds
+dom (1/f) = dom f \ f"{0.} &
+for c being Element of C st c in dom (1/f) holds (1/f).c = 1./(f.c);
+
+definition let C be non empty set; let f be PartFunc of C,ExtREAL;
+func |.f.| -> PartFunc of C,ExtREAL means
+:: MESFUNC1:def 10
+  dom it = dom f &
+for c being Element of C st c in dom it holds it.c = |. f.c .|;
+end;
+
+canceled;
+
+theorem :: MESFUNC1:9
+for C being non empty set, f1,f2 being PartFunc of C,ExtREAL holds
+f1 + f2 = f2 + f1;
+
+theorem :: MESFUNC1:10
+for C being non empty set, f1,f2 being PartFunc of C,ExtREAL holds
+f1 (#) f2 = f2 (#) f1;
+
+definition let C be non empty set; let f1,f2 be PartFunc of C,ExtREAL;
+ redefine func f1+f2;
+ commutativity;
+
+ redefine func f1(#)f2;
+ commutativity;
+end;
+
+begin  :: Level sets
+
+theorem :: MESFUNC1:11
+for r being Real holds ex n being Nat st r <= n;
+
+theorem :: MESFUNC1:12
+for r being Real holds ex n being Nat st -n <= r;
+
+theorem :: MESFUNC1:13
+for r,s being real number st r < s holds
+ex n being Nat st 1/(n+1) < s-r;
+
+theorem :: MESFUNC1:14
+for r,s being real number st for n being Nat holds r-1/(n+1) <= s holds r <= s;
+
+theorem :: MESFUNC1:15
+for a being R_eal st (for r being Real holds R_EAL r <' a) holds a = +infty;
+
+theorem :: MESFUNC1:16
+for a being R_eal st (for r being Real holds a <' R_EAL r) holds a = -infty;
+
+definition
+  let X be set;
+  let S be sigma_Field_Subset of X;
+  let A be set;
+pred A is_measurable_on S means
+:: MESFUNC1:def 11
+A in S;
+end;
+
+theorem :: MESFUNC1:17
+  for X,A being set, S being sigma_Field_Subset of X holds
+A is_measurable_on S iff
+(for M being sigma_Measure of S holds A is_measurable M);
+
+reserve X for non empty set;
+reserve x for Element of X;
+reserve f,g for PartFunc of X,ExtREAL;
+reserve S for sigma_Field_Subset of X;
+reserve F for Function of NAT,S;
+reserve A for set;
+reserve a for R_eal;
+reserve r,s for Real;
+reserve n,m for Nat;
+
+definition
+  let X,f,a;
+func less_dom(f,a) -> Subset of X means
+:: MESFUNC1:def 12
+x in it iff x in dom f & ex y being R_eal st y=f.x & y <' a;
+
+func less_eq_dom(f,a) -> Subset of X means
+:: MESFUNC1:def 13
+x in it iff x in dom f & ex y being R_eal st y=f.x & y <=' a;
+
+func great_dom(f,a) -> Subset of X means
+:: MESFUNC1:def 14
+x in it iff x in dom f & ex y being R_eal st y=f.x & a <' y;
+
+func great_eq_dom(f,a) -> Subset of X means
+:: MESFUNC1:def 15
+x in it iff x in dom f & ex y being R_eal st y=f.x & a <=' y;
+
+func eq_dom(f,a) -> Subset of X means
+:: MESFUNC1:def 16
+x in it iff x in dom f & ex y being R_eal st y=f.x & a=y;
+end;
+
+theorem :: MESFUNC1:18
+for X, S, f, A, a st A c= dom f holds
+A /\ great_eq_dom(f,a) = A\(A /\ less_dom(f,a));
+
+theorem :: MESFUNC1:19
+for X, S, f, A, a st A c= dom f holds
+A /\ great_dom(f,a) = A\(A /\ less_eq_dom(f,a));
+
+theorem :: MESFUNC1:20
+for X, S, f, A, a st A c= dom f holds
+A /\ less_eq_dom(f,a) = A\(A /\ great_dom(f,a));
+
+theorem :: MESFUNC1:21
+for X, S, f, A, a st A c= dom f holds
+A /\ less_dom(f,a) = A\(A /\ great_eq_dom(f,a));
+
+theorem :: MESFUNC1:22
+  for X, S, f, A, a holds
+A /\ eq_dom(f,a) = A /\ great_eq_dom(f,a) /\ less_eq_dom(f,a);
+
+theorem :: MESFUNC1:23
+  for X, S, F, f, A, r st for n holds F.n = A /\ great_dom(f,R_EAL(r-1/(n+1)))
+holds A /\ great_eq_dom(f,R_EAL r) = meet rng F;
+
+theorem :: MESFUNC1:24
+for X, S, F, f, A
+for r being real number st for n holds F.n = A /\ less_dom(f,R_EAL(r+1/(n+1)))
+holds A /\ less_eq_dom(f,R_EAL r) = meet rng F;
+
+theorem :: MESFUNC1:25
+for X, S, F, f, A
+for r being real number st for n
+ holds F.n = A /\ less_eq_dom(f,R_EAL(r-1/(n+1)))
+holds A /\ less_dom(f,R_EAL r) = union rng F;
+
+theorem :: MESFUNC1:26
+for X, S, F, f, A, r st for n holds F.n = A /\
+ great_eq_dom(f,R_EAL(r+1/(n+1)))
+holds A /\ great_dom(f,R_EAL r) = union rng F;
+
+theorem :: MESFUNC1:27
+for X, S, F, f, A st for n holds F.n = A /\ great_dom(f,R_EAL n)
+holds A /\ eq_dom(f,+infty) = meet rng F;
+
+theorem :: MESFUNC1:28
+for X, S, F, f, A st for n holds F.n = A /\ less_dom(f,R_EAL n)
+holds A /\ less_dom(f,+infty) = union rng F;
+
+theorem :: MESFUNC1:29
+for X, S, F, f, A st for n holds F.n = A /\ less_dom(f,R_EAL (-n))
+holds A /\ eq_dom(f,-infty) = meet rng F;
+
+theorem :: MESFUNC1:30
+for X, S, F, f, A st for n holds F.n = A /\ great_dom(f,R_EAL (-n))
+holds A /\ great_dom(f,-infty) = union rng F;
+
+begin :: Measurable functions
+
+definition
+  let X be non empty set;
+  let S be sigma_Field_Subset of X;
+  let f be PartFunc of X,ExtREAL;
+  let A be Element of S;
+pred f is_measurable_on A means
+:: MESFUNC1:def 17
+for r being real number holds A /\ less_dom(f,R_EAL r) is_measurable_on S;
+end;
+
+reserve A,B for Element of S;
+
+theorem :: MESFUNC1:31
+  for X,S,f,A st A c= dom f holds f is_measurable_on A iff
+(for r being real number holds A /\ great_eq_dom(f,R_EAL r) is_measurable_on S)
+;
+
+theorem :: MESFUNC1:32
+for X,S,f,A holds f is_measurable_on A iff
+(for r being real number holds A /\ less_eq_dom(f,R_EAL r) is_measurable_on S);
+
+theorem :: MESFUNC1:33
+for X,S,f,A st A c= dom f holds f is_measurable_on A iff
+(for r being real number holds A /\ great_dom(f,R_EAL r) is_measurable_on S);
+
+theorem :: MESFUNC1:34
+  for X,S,f,A,B st B c= A & f is_measurable_on A holds f is_measurable_on B;
+
+theorem :: MESFUNC1:35
+  for X,S,f,A,B st f is_measurable_on A & f is_measurable_on B holds
+f is_measurable_on (A \/ B);
+
+theorem :: MESFUNC1:36
+  for X,S,f,A,r,s st f is_measurable_on A & A c= dom f holds
+(A /\ great_dom(f,R_EAL r) /\ less_dom(f,R_EAL s)) is_measurable_on S;
+
+theorem :: MESFUNC1:37
+  for X,S,f,A st f is_measurable_on A & A c= dom f holds
+A /\ eq_dom(f,+infty) is_measurable_on S;
+
+theorem :: MESFUNC1:38
+  for X,S,f,A st f is_measurable_on A holds
+A /\ eq_dom(f,-infty) is_measurable_on S;
+
+theorem :: MESFUNC1:39
+  for X,S,f,A st f is_measurable_on A & A c= dom f holds
+A /\ great_dom(f,-infty) /\ less_dom(f,+infty) is_measurable_on S;
+
+theorem :: MESFUNC1:40
+  for X,S,f,g,A,r st f is_measurable_on A & g is_measurable_on A & A c= dom g
+holds A /\ less_dom(f,R_EAL r) /\ great_dom(g,R_EAL r) is_measurable_on S;
+
+theorem :: MESFUNC1:41
+  for X,S,f,A,r st f is_measurable_on A & A c= dom f
+holds r(#)f is_measurable_on A;

@@ -1,0 +1,1261 @@
+:: Rings and Modules - Part II
+::  by Michal Muzalewski
+::
+:: Received October 18, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCSDOM, VECTSP_1, CLASSES2, GRCAT_1, RLVECT_1, BOOLE, MIDSP_1,
+      VECTSP_2, FUNCT_3, FUNCT_1, PRE_TOPC, INCSP_1, ORDINAL4, CAT_1, RELAT_1,
+      ARYTM_3, ORDINAL1, ARYTM_1, BINOP_1, LATTICES, FUNCT_2, MOD_2, ALGSTR_1;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, BINOP_1, FUNCT_2,
+      STRUCT_0, ORDINAL1, RLVECT_1, VECTSP_1, FUNCSDOM, VECTSP_2, CLASSES2,
+      PRE_TOPC, ALGSTR_1, MIDSP_1, GRCAT_1, FUNCT_3;
+ constructors ENUMSET1, BINOP_1, VECTSP_2, GRCAT_1, TOPS_2, ALGSTR_1, MIDSP_1,
+      MEMBERED, PARTFUN1, XBOOLE_0;
+ clusters VECTSP_1, STRUCT_0, RELSET_1, SUBSET_1, ALGSTR_1, MEMBERED, ZFMISC_1,
+      XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions RLVECT_1, STRUCT_0;
+ theorems BINOP_1, CARD_2, CLASSES2, ENUMSET1, GRCAT_1, FUNCT_2, ORDINAL1,
+      ORDINAL2, VECTSP_1, RLVECT_1, TARSKI, RELAT_1, ALGSTR_1;
+ schemes FUNCT_2, BINOP_1;
+
+begin
+
+reserve x,y,z for set;
+reserve D,D' for non empty set;
+reserve R for Ring;
+reserve G,H,S for non empty VectSpStr over R;
+
+
+reserve UN for Universe;
+
+                           ::
+                           ::  Trivial Left Module
+                           ::
+
+Lm1: op0 = {} by TARSKI:def 1 .= Extract {} by ALGSTR_1:def 3;
+Lm2: VectSpStr (#{{}},op2,op0,pr2(the carrier of R,{{}})#)
+      is strict LeftMod of R
+ proof
+   set G = VectSpStr (#{{}},op2,op0,pr2(the carrier of R,{{}})#);
+   set a = 0.L_Trivial;
+     A1: now let a,b be Element of G;
+      let x,y be Element of L_Trivial;
+       assume A2: x = a & b = y;
+      thus a + b = (the add of G).(a,b) by RLVECT_1:5
+                .= x + y by A2,ALGSTR_1:def 4,RLVECT_1:5;
+     end;
+A3: 0.G = the Zero of G by RLVECT_1:def 2 .= 0.L_Trivial by Lm1,ALGSTR_1:def 4,
+RLVECT_1:def 2;
+A4:  G is Abelian add-associative right_zeroed right_complementable
+      proof
+       thus G is Abelian
+        proof let a,b be Element of G;
+        reconsider x = a, y = b as Element of L_Trivial
+ by ALGSTR_1:def 4;
+         thus a + b = y + x by A1
+                   .= b + a by A1;
+        end;
+       hereby let a,b,c be Element of G;
+        reconsider x = a, y = b, z = c as
+          Element of L_Trivial by ALGSTR_1:def 4;
+        A5: a + b = x + y & b + c = y + z by A1;
+       hence a + b + c = x + y + z by A1
+                     .= x + (y + z) by RLVECT_1:def 6
+                     .= a + (b + c) by A1,A5;
+       end;
+       hereby let a be Element of G;
+        reconsider x = a as Element of L_Trivial
+ by ALGSTR_1:def 4;
+       thus a + 0.G = x + 0.L_Trivial by A1,A3
+                    .= a by RLVECT_1:10;
+       end;
+       let a be Element of G;
+        reconsider x = a as Element of L_Trivial
+ by ALGSTR_1:def 4;
+       consider b being Element of L_Trivial such that
+A6:     x + b = 0.L_Trivial by RLVECT_1:def 8;
+       reconsider b' = b as Element of G by ALGSTR_1:def 4;
+       take b';
+       thus a + b' = 0.G by A1,A3,A6;
+      end;
+     now
+     let x,y be Scalar of R, v,w be Vector of G;
+       x*(v+w) = a & x*v+x*w = a &
+     (x+y)*v = a & x*v+y*v = a &
+     (x*y)*v = a & x*(y*v) = a &
+     (1_ R)*v = a & v = a by ALGSTR_1:def 4,GRCAT_1:8;
+     hence x*(v+w) = x*v+x*w & (x+y)*v = x*v+y*v
+           & (x*y)*v = x*(y*v) & (1_ R)*v = v;end;
+  hence thesis by A4,VECTSP_1:def 26;
+end;
+
+definition let R;
+ canceled;
+
+ func TrivialLMod(R) -> strict LeftMod of R equals
+ :Def2:  VectSpStr (#{{}},op2,op0,pr2(the carrier of R,{{}})#);
+  coherence by Lm2;
+end;
+
+theorem
+  for x being Vector of TrivialLMod(R) holds x = 0.TrivialLMod(R)
+ proof
+   let x be Vector of TrivialLMod(R);
+   A1: TrivialLMod(R) = VectSpStr (#{{}},op2,op0,
+     pr2(the carrier of R,{{}})#) by Def2;
+   then 0.L_Trivial = the Zero of TrivialLMod(R) by Lm1,ALGSTR_1:def 4,RLVECT_1
+:def 2
+        .= 0.TrivialLMod(R) by RLVECT_1:def 2;
+   hence thesis by A1,ALGSTR_1:def 4,GRCAT_1:8;
+ end;
+
+definition let R be non empty doubleLoopStr;
+  let G,H be non empty VectSpStr over R; let f be map of G,H;
+ canceled 2;
+
+ attr f is linear means
+ :Def5: (for x,y being Vector of G holds f.(x+y) = f.x+f.y)
+        & for a being Scalar of R, x being Vector of G holds f.(a*x) = a*f.x;
+end;
+
+canceled 2;
+
+theorem
+Th4: for f being map of G,H st f is linear holds f is additive
+ proof
+   let f be map of G,H; assume f is linear;
+   then for x,y be Element of G holds
+     f.(x+y) = f.x+f.y by Def5;
+   hence thesis by GRCAT_1:def 13;
+ end;
+
+canceled;
+
+theorem
+Th6: for f being map of G,H, g being map of H,S
+      st f is linear & g is linear holds g*f is linear
+ proof
+   let f be map of G,H, g be map of H,S; assume
+   A1: f is linear & g is linear;
+   then A2: f is additive & g is additive by Th4;
+   set h = g*f;
+   A3: for x,y being Vector of G holds h.(x+y) = h.x+h.y
+    proof
+      let x,y be Vector of G;
+        h is additive by A2,GRCAT_1:14;
+      hence thesis by GRCAT_1:def 13;
+    end;
+     now let a be Scalar of R, x be Vector of G;
+     thus h.(a*x) = g.(f.(a*x)) by FUNCT_2:21
+                 .= g.(a*f.x) by A1,Def5
+                 .= a*g.(f.x) by A1,Def5
+                 .= a*h.x by FUNCT_2:21;end;
+   hence thesis by A3,Def5;
+ end;
+
+reserve R for Ring;
+reserve G, H for LeftMod of R;
+
+canceled;
+
+theorem Th8:
+ ZeroMap(G,H) is linear
+ proof
+   set f = ZeroMap(G,H);
+   reconsider G'=G, H'=H as AbGroup;
+     ZeroMap( G', H' ) is additive by GRCAT_1:16;
+then A1: for x,y being Vector of G holds f.(x+y) = f.x+f.y by GRCAT_1:def 13;
+     for a being Scalar of R, x being Vector of G holds f.(a*x) = a*f.x
+     proof
+       let a be Scalar of R, x be Vector of G;
+         f.(a*x) = 0.H & f.(x) = 0.H by GRCAT_1:15;
+       hence thesis by VECTSP_1:59;
+     end;
+   hence thesis by A1,Def5;
+ end;
+
+                      ::
+                      ::  Morphisms of Left Modules
+                      ::
+
+ reserve G1, G2, G3 for LeftMod of R;
+
+definition let R;
+  struct LModMorphismStr over R (# Dom,Cod -> LeftMod of R,
+                                Fun -> map of the Dom, the Cod #);
+end;
+
+reserve f for LModMorphismStr over R;
+
+definition let R,f;
+ func dom(f) -> LeftMod of R equals
+ :Def6:  the Dom of f;
+ correctness;
+ func cod(f) -> LeftMod of R equals
+ :Def7:  the Cod of f;
+ correctness;
+end;
+
+definition let R,f;
+ func fun(f) -> map of dom(f),cod(f) equals
+ :Def8:  the Fun of f;
+ coherence
+  proof
+     dom(f) = the Dom of f & cod(f) = the Cod of f by Def6,Def7;
+   hence thesis;
+  end;
+end;
+
+theorem
+  for f0 being map of G1,G2 st f = LModMorphismStr(#G1,G2,f0#)
+      holds dom f = G1 & cod f = G2 & fun f = f0 by Def6,Def7,Def8;
+
+definition let R,G,H;
+ func ZERO(G,H) -> strict LModMorphismStr over R equals
+ :Def9:  LModMorphismStr(# G,H,ZeroMap(G,H)#);
+  correctness;
+end;
+
+Lm3: dom(ZERO(G,H)) = G & cod(ZERO(G,H)) = H
+      & fun(ZERO(G,H)) = ZeroMap(G,H)
+ proof
+     ZERO(G,H) = LModMorphismStr(# G,H,ZeroMap(G,H)#) by Def9;
+   hence thesis by Def6,Def7,Def8;
+ end;
+
+definition let R;
+ let IT be LModMorphismStr over R;
+ attr IT is LModMorphism-like means
+ :Def10: fun(IT) is linear;
+end;
+
+definition let R;
+ cluster strict LModMorphism-like LModMorphismStr over R;
+ existence
+  proof
+    consider G,H;
+    set z = ZERO(G,H);
+      dom(z) = G & cod(z) = H & fun(z) = ZeroMap(G,H) by Lm3;
+    then fun(z) is linear by Th8;
+    then z is LModMorphism-like by Def10;
+   hence thesis;
+  end;
+end;
+
+definition let R;
+ mode LModMorphism of R is LModMorphism-like LModMorphismStr over R;
+end;
+
+theorem
+Th10: for F being LModMorphism of R holds the Fun of F is linear
+ proof
+   let F be LModMorphism of R;
+   A1: the Fun of F = fun(F) by Def8;
+     the Dom of F = dom(F) & the Cod of F = cod(F) by Def6,Def7;
+   hence thesis by A1,Def10;
+ end;
+
+definition let R,G,H;
+ cluster ZERO(G,H) -> LModMorphism-like;
+ coherence
+  proof
+    set z = ZERO(G,H);
+      dom(z) = G & cod(z) = H & fun(z) = ZeroMap(G,H) by Lm3;
+    then fun(z) is linear by Th8;
+    hence thesis by Def10;
+  end;
+end;
+
+definition let R,G,H;
+ mode Morphism of G,H -> LModMorphism of R means
+ :Def11: dom(it) = G & cod(it) = H;
+  existence
+   proof
+     take ZERO(G,H);
+     thus thesis by Lm3;
+   end;
+end;
+
+definition let R,G,H;
+ cluster strict Morphism of G,H;
+  existence
+   proof
+       dom(ZERO(G,H)) = G & cod(ZERO(G,H)) = H by Lm3;
+     then reconsider z = ZERO(G,H) as Morphism of G,H by Def11;
+    take z;
+    thus thesis;
+   end;
+end;
+
+theorem Th11:
+ for f being LModMorphismStr over R holds
+   dom(f) = G & cod(f) = H & fun(f) is linear implies f is Morphism of G,H
+ proof let f be LModMorphismStr over R;
+   assume A1: dom(f) = G & cod(f) = H & fun(f) is linear;
+   then reconsider f' = f as LModMorphism of R by Def10;
+     f' is Morphism of G,H by A1,Def11;
+   hence thesis;
+ end;
+
+theorem
+Th12: for f being map of G,H st f is linear
+       holds LModMorphismStr (#G,H,f#) is strict Morphism of G,H
+ proof
+   let f be map of G,H such that
+   A1: f is linear;
+   set F = LModMorphismStr (#G,H,f#);
+      dom(F) = G & cod(F) = H & fun(F) = f by Def6,Def7,Def8;
+   hence thesis by A1,Th11;
+ end;
+
+theorem
+Th13: id G is linear
+proof
+  set f = id G;
+  A1: now
+        let x,y be Vector of G;
+           f.(x+y) = x+y & f.x = x & f.y = y by GRCAT_1:11;
+        hence f.(x+y) = f.x+f.y;end;
+    now
+    let a be Scalar of R, x be Vector of G;
+    thus f.(a*x) = a*x by GRCAT_1:11
+                .= a*f.x by GRCAT_1:11;end;
+  hence thesis by A1,Def5;
+end;
+
+definition let R,G;
+ func ID G -> strict Morphism of G,G equals
+ :Def12:  LModMorphismStr(# G,G,id G#);
+  coherence
+   proof
+     set i = LModMorphismStr(# G,G,id G#);
+     A1: dom(i) = G & cod(i) = G & fun(i) = id G by Def6,Def7,Def8;
+       id G is linear by Th13;
+    hence i is strict Morphism of G,G by A1,Th11;
+   end;
+end;
+
+definition let R,G,H;
+ redefine func ZERO(G,H) -> strict Morphism of G,H;
+  coherence
+   proof
+     set i = ZERO(G,H);
+     A1: dom(i) = G & cod(i) = H & fun(i) = ZeroMap(G,H) by Lm3;
+       ZeroMap(G,H) is linear by Th8;
+     hence thesis by A1,Th11;
+   end;
+end;
+
+theorem
+Th14: for F being Morphism of G,H ex f being map of G,H
+       st the LModMorphismStr of F = LModMorphismStr(#G,H,f#) & f is linear
+ proof
+   let F be Morphism of G,H;
+   A1: the Dom of F = dom(F) by Def6
+                   .= G by Def11;
+   A2: the Cod of F = cod(F) by Def7
+                   .= H by Def11;
+   then reconsider f = the Fun of F as map of G,H by A1;
+   take f;
+   thus thesis by A1,A2,Th10;
+ end;
+
+theorem
+Th15: for F being strict Morphism of G,H ex f being map of G,H
+       st F = LModMorphismStr(#G,H,f#)
+ proof
+   let F be strict Morphism of G,H;
+   consider f being map of G,H such that
+   A1: the LModMorphismStr of F = LModMorphismStr(#G,H,f#) &
+       f is linear by Th14;
+   take f;
+   thus thesis by A1;
+ end;
+
+theorem
+Th16: for F being LModMorphism of R ex G,H st F is Morphism of G,H
+ proof
+   let F be LModMorphism of R;
+   take G = the Dom of F,H = the Cod of F;
+     dom(F) = G & cod(F) = H by Def6,Def7;
+   hence thesis by Def11;
+ end;
+
+theorem
+  for F being strict LModMorphism of R
+ ex G,H being LeftMod of R, f being map of G,H
+       st F is strict Morphism of G,H
+        & F = LModMorphismStr(#G,H,f#)
+        & f is linear
+ proof
+   let F be strict LModMorphism of R;
+   consider G,H such that
+   A1: F is Morphism of G,H by Th16;
+   reconsider F' = F as Morphism of G,H by A1;
+   consider f being map of G,H such that
+   A2: the LModMorphismStr of F' = LModMorphismStr(#G,H,f#) &
+       f is linear by Th14;
+   take G,H,f;
+   thus thesis by A2;
+ end;
+
+theorem
+Th18: for g,f being LModMorphism of R st dom(g) = cod(f)
+       ex G1,G2,G3 st g is Morphism of G2,G3 &
+                      f is Morphism of G1,G2
+ proof
+   defpred P[LModMorphism of R,LModMorphism of R] means dom($1) = cod($2);
+   let g,f be LModMorphism of R such that
+   A1: P[g,f];
+   consider G2,G3 such that
+   A2: g is Morphism of G2,G3 by Th16;
+   A3: G2 = dom(g) by A2,Def11;
+   consider G1,G2 being LeftMod of R such that
+   A4: f is Morphism of G1,G2 by Th16;
+      G2 = cod(f) by A4,Def11;
+   hence thesis by A1,A2,A3,A4;
+ end;
+
+definition let R; let G,F be LModMorphism of R;
+ assume A1: dom(G) = cod(F);
+ func G*F -> strict LModMorphism of R means
+ :Def13: for G1,G2,G3 being LeftMod of R,
+           g being map of G2,G3, f being map of G1,G2
+       st the LModMorphismStr of G = LModMorphismStr(#G2,G3,g#) &
+          the LModMorphismStr of F = LModMorphismStr(#G1,G2,f#)
+       holds it = LModMorphismStr(#G1,G3,g*f#);
+ existence
+  proof
+    consider G1',G2,G3' being LeftMod of R such that
+    A2: G is Morphism of G2,G3' and
+    A3: F is Morphism of G1',G2 by A1,Th18;
+    consider g' being map of G2,G3' such that
+    A4: the LModMorphismStr of G = LModMorphismStr(#G2,G3',g'#) and
+    A5: g' is linear by A2,Th14;
+    consider f' being map of G1',G2 such that
+    A6: the LModMorphismStr of F = LModMorphismStr(#G1',G2,f'#) and
+    A7: f' is linear by A3,Th14;
+       g'*f' is linear by A5,A7,Th6;
+    then reconsider T' = (LModMorphismStr(#G1',G3',g'*f'#))
+ as strict LModMorphism of R by Th12;
+    take T';
+    thus thesis by A4,A6;
+  end;
+ uniqueness
+  proof
+    let S1,S2 be strict LModMorphism of R such that
+    A8: for G1,G2,G3 being LeftMod of R,
+           g being map of G2,G3, f being map of G1,G2
+       st the LModMorphismStr of G = LModMorphismStr(#G2,G3,g#) &
+          the LModMorphismStr of F = LModMorphismStr(#G1,G2,f#)
+       holds S1 = LModMorphismStr(#G1,G3,g*f#) and
+    A9: for G1,G2,G3 being LeftMod of R,
+           g being map of G2,G3, f being map of G1,G2
+       st the LModMorphismStr of G = LModMorphismStr(#G2,G3,g#) &
+          the LModMorphismStr of F = LModMorphismStr(#G1,G2,f#)
+       holds S2 = LModMorphismStr(#G1,G3,g*f#);
+    consider G2,G3' being LeftMod of R such that
+    A10: G is Morphism of G2,G3' by Th16;
+    reconsider G' = G as Morphism of G2,G3' by A10;
+    A11: G2 = dom(G) by A10,Def11;
+    consider G1',G2' being LeftMod of R such that
+    A12: F is Morphism of G1',G2' by Th16;
+    reconsider F' = F as Morphism of G1',G2' by A12;
+    reconsider F' as Morphism of G1',G2 by A1,A11,Def11;
+    consider g' being map of G2,G3' such that
+    A13: the LModMorphismStr of G' = LModMorphismStr(#G2,G3',g'#)
+        and g' is linear by Th14;
+    consider f' being map of G1',G2 such that
+    A14: the LModMorphismStr of F' = LModMorphismStr(#G1',G2,f'#)
+        and f' is linear by Th14;
+    thus S1 = (LModMorphismStr(#G1',G3',g'*f'#)) by A8,A13,A14
+           .= S2 by A9,A13,A14;
+  end;
+end;
+
+canceled;
+
+theorem
+Th20: for G being Morphism of G2,G3,
+          F being Morphism of G1,G2
+      holds G*F is strict Morphism of G1,G3
+ proof
+   let G be Morphism of G2,G3, F be Morphism of G1,G2;
+   consider g being map of G2,G3 such that
+   A1: the LModMorphismStr of G = LModMorphismStr(#G2,G3,g#)
+         and g is linear by Th14;
+   consider f being map of G1,G2 such that
+   A2: the LModMorphismStr of F = LModMorphismStr(#G1,G2,f#)
+         and f is linear by Th14;
+     dom(G) = G2 by Def11
+         .= cod(F) by Def11;
+   then G*F = LModMorphismStr(#G1,G3,g*f#) by A1,A2,Def13;
+   then dom(G*F) = G1 & cod(G*F) = G3 by Def6,Def7;
+   hence thesis by Def11;
+ end;
+
+definition let R,G1,G2,G3;
+           let G be Morphism of G2,G3;
+           let F be Morphism of G1,G2;
+ func G*'F -> strict Morphism of G1,G3 equals
+ :Def14:  G*F;
+ coherence by Th20;
+end;
+
+theorem
+Th21: for G being Morphism of G2,G3,
+          F being Morphism of G1,G2,
+          g being map of G2,G3, f being map of G1,G2
+      st G = LModMorphismStr(#G2,G3,g#) & F = LModMorphismStr(#G1,G2,f#)
+      holds G*'F = LModMorphismStr(#G1,G3,g*f#) & G*F = LModMorphismStr(#
+G1,G3,g*f#)
+proof
+  let G be Morphism of G2,G3, F be Morphism of G1,G2,
+      g be map of G2,G3, f be map of G1,G2 such that
+  A1: G = LModMorphismStr(#G2,G3,g#) & F = LModMorphismStr(#G1,G2,f#);
+    dom(G) = G2 by Def11
+        .= cod(F) by Def11;
+  then G*F = LModMorphismStr(#G1,G3,g*f#) by A1,Def13;
+  hence thesis by Def14;
+end;
+
+ theorem
+ Th22: for f,g being strict LModMorphism of R st dom g = cod f holds
+       ex G1,G2,G3 being LeftMod of R,
+          f0 being map of G1,G2, g0 being map of G2,G3
+          st f = LModMorphismStr(#G1,G2,f0#)
+           & g = LModMorphismStr(#G2,G3,g0#)
+           & g*f = LModMorphismStr(#G1,G3,g0*f0#)
+  proof
+    let f,g be strict LModMorphism of R such that
+    A1: dom g = cod f;
+    set G1 = dom f,G2 = cod f, G3 = cod g;
+    reconsider f' = f as strict Morphism of G1,G2 by Def11;
+    reconsider g' = g as strict Morphism of G2,G3 by A1,Def11;
+    consider f0 being map of G1,G2 such that
+    A2: f' = LModMorphismStr(#G1,G2,f0#) by Th15;
+    consider g0 being map of G2,G3 such that
+    A3: g' = LModMorphismStr(#G2,G3,g0#) by Th15;
+    take G1,G2,G3,f0,g0;
+    thus thesis by A2,A3,Th21;
+  end;
+
+ theorem
+  for f,g being strict LModMorphism of R st dom g = cod f holds
+     dom(g*f) = dom f
+   & cod (g*f) = cod g
+ proof
+   let f,g be strict LModMorphism of R; assume
+      dom g = cod f;
+   then consider G1,G2,G3 being LeftMod of R,
+   f0 being map of G1,G2, g0 being map of G2,G3 such that
+   A1: f = LModMorphismStr(#G1,G2,f0#)
+     & g = LModMorphismStr(#G2,G3,g0#)
+     & g*f = LModMorphismStr(#G1,G3,g0*f0#) by Th22;
+   thus dom(g*f) = G1 by A1,Def6
+                .= dom f by A1,Def6;
+   thus cod(g*f) = G3 by A1,Def7
+                .= cod g by A1,Def7;
+ end;
+
+ theorem
+ Th24: for G1,G2,G3,G4 being LeftMod of R,
+             f being strict Morphism of G1,G2,
+             g being strict Morphism of G2,G3,
+             h being strict Morphism of G3,G4
+         holds h*(g*f) = (h*g)*f
+ proof
+   let G1,G2,G3,G4 be LeftMod of R, f be strict Morphism of G1,G2,
+       g be strict Morphism of G2,G3, h be strict Morphism of G3,G4;
+   consider f0 being map of G1,G2 such that
+   A1: f = LModMorphismStr(#G1,G2,f0#) by Th15;
+   consider g0 being map of G2,G3 such that
+   A2: g = LModMorphismStr(#G2,G3,g0#) by Th15;
+   consider h0 being map of G3,G4 such that
+   A3: h = LModMorphismStr(#G3,G4,h0#) by Th15;
+   A4: g*'f = LModMorphismStr(#G1,G3,g0*f0#) by A1,A2,Th21;
+   A5: g*f = LModMorphismStr(#G1,G3,g0*f0#) by A1,A2,Th21;
+   A6: h*'g = LModMorphismStr(#G2,G4,h0*g0#) by A2,A3,Th21;
+   A7: h*g = LModMorphismStr(#G2,G4,h0*g0#) by A2,A3,Th21;
+     h*(g*f) = LModMorphismStr(#G1,G4,h0*(g0*f0)#) by A3,A4,A5,Th21
+          .= LModMorphismStr(#G1,G4,(h0*g0)*f0#) by RELAT_1:55
+          .= (h*g)*f by A1,A6,A7,Th21;
+   hence thesis;
+ end;
+
+ theorem
+  for f,g,h being strict LModMorphism of R st dom h = cod g & dom g = cod f
+        holds h*(g*f) = (h*g)*f
+  proof
+    let f,g,h be strict LModMorphism of R such that
+    A1: dom h = cod g & dom g = cod f;
+    set G2 = cod f, G3 = cod g;
+    reconsider f' = f as strict Morphism of (dom f),G2 by Def11;
+    reconsider g' = g as strict Morphism of G2,G3 by A1,Def11;
+    reconsider h' = h as strict Morphism of G3,(cod h) by A1,Def11;
+      h'*(g'*f') = (h'*g')*f' by Th24;
+    hence thesis;
+  end;
+
+ theorem
+     dom ID(G) = G & cod ID(G) = G
+& (for f being strict LModMorphism of R st cod f = G holds (ID G)*f = f)
+& (for g being strict LModMorphism of R st dom g = G holds g*(ID G) = g)
+ proof
+   set i = ID G;
+   thus dom i = G by Def11;
+   thus cod i = G by Def11;
+   thus for f being strict LModMorphism of R st cod f = G holds i*f = f
+    proof
+      let f be strict LModMorphism of R such that
+      A1: cod f = G;
+      set H = dom(f);
+      reconsider f' = f as Morphism of H,G by A1,Def11;
+      A2: dom(i) = G by Def11;
+      A3: i = LModMorphismStr(# G,G,id G#) by Def12;
+      consider m being map of H,G such that
+      A4: f' = LModMorphismStr(#H,G,m#) by Th15;
+         (id G)*m = m by GRCAT_1:12;
+      hence i*f = f by A1,A2,A3,A4,Def13;
+    end;
+   thus for g being strict LModMorphism of R st dom g = G holds g*(ID G) = g
+    proof
+      let f be strict LModMorphism of R such that
+      A5: dom f = G;
+      set H = cod(f);
+      reconsider f' = f as Morphism of G,H by A5,Def11;
+      A6: cod(i) = G by Def11;
+      A7: i = LModMorphismStr(# G,G,id G#) by Def12;
+      consider m being map of G,H such that
+      A8: f' = LModMorphismStr(#G,H,m#) by Th15;
+         m*(id G) = m by GRCAT_1:12;
+      hence f*i = f by A5,A6,A7,A8,Def13;
+    end;
+ end;
+
+definition let x,y,z;
+ cluster {x,y,z} -> non empty;
+  coherence by ENUMSET1:def 1;
+end;
+
+canceled;
+
+theorem
+Th28: for u,v,w being Element of UN holds {u,v,w} is Element of UN
+ proof
+   let u,v,w be Element of UN;
+      {u,v,w} = {u,v} \/ {w} by ENUMSET1:43;
+   hence thesis;
+ end;
+
+theorem
+Th29: for u being Element of UN holds succ u is Element of UN
+ proof
+   let u be Element of UN;
+      succ u = u \/ {u} by ORDINAL1:def 1;
+   hence thesis;
+ end;
+
+theorem
+Th30: 0 is Element of UN & 1 is Element of UN & 2 is Element of UN
+ proof
+   A1: {} is Element of UN by CLASSES2:62;
+   thus 0 is Element of UN by CLASSES2:62;
+   thus 1 is Element of UN by A1,Th29,CARD_2:20,ORDINAL2:def 4;
+   hence 2 is Element of UN by Th29,CARD_2:20,22;
+ end;
+
+reserve a,b,c for Element of {0,1,2};
+
+Lm4: ex c st c = 0
+ proof
+   reconsider c = 0 as Element of {0,1,2} by ENUMSET1:def 1;
+   take c;
+   thus thesis;
+ end;
+
+Lm5: ex c st c = 1
+ proof
+   reconsider c = 1 as Element of {0,1,2} by ENUMSET1:def 1;
+   take c;
+   thus thesis;
+ end;
+
+Lm6: ex c st c = 2
+ proof
+   reconsider c = 2 as Element of {0,1,2} by ENUMSET1:def 1;
+   take c;
+   thus thesis;
+ end;
+
+definition let a;
+ func -a -> Element of {0,1,2} equals
+  :Def15:  0 if a = 0,
+             2 if a = 1,
+             1 if a = 2;
+  coherence by Lm5,Lm6;
+  consistency;
+           let b;
+ func a+b -> Element of {0,1,2} equals
+  :Def16:  b if a = 0,
+           a if b = 0,
+           2 if a = 1 & b = 1,
+           0 if a = 1 & b = 2,
+           0 if a = 2 & b = 1,
+           1 if a = 2 & b = 2;
+  coherence by Lm4,Lm5,Lm6;
+  consistency;
+ func a*b -> Element of {0,1,2} equals
+  :Def17:  0 if b = 0,
+           0 if a = 0,
+           a if b = 1,
+           b if a = 1,
+           1 if a = 2 & b = 2;
+  coherence by Lm5;
+  consistency;
+end;
+
+definition
+ func add3 -> BinOp of {0,1,2} means
+  :Def18: it.(a,b) = a+b;
+  existence
+   proof
+     deffunc O(Element of {0,1,2},Element of {0,1,2})=$1+$2;
+    ex o being BinOp of {0,1,2} st
+    for a,b being Element of {0,1,2} holds o.(a,b) = O(a,b)
+     from BinOpLambda;
+    hence thesis;
+   end;
+  uniqueness
+   proof
+     let o1,o2 be BinOp of ({0,1,2}) such that
+     A1: for a,b holds o1.(a,b) = a+b and
+     A2: for a,b holds o2.(a,b) = a+b;
+       now
+       let a,b;
+       thus o1.(a,b) = a+b by A1
+                    .= o2.(a,b) by A2;end;
+     hence thesis by BINOP_1:2;
+   end;
+ func mult3 -> BinOp of {0,1,2} means
+  :Def19: it.(a,b) = a*b;
+  existence
+     proof
+     deffunc O(Element of {0,1,2},Element of {0,1,2})=$1*$2;
+    ex o being BinOp of {0,1,2} st
+    for a,b being Element of {0,1,2} holds o.(a,b) = O(a,b)
+     from BinOpLambda;
+    hence thesis;
+   end;
+  uniqueness
+   proof
+     let o1,o2 be BinOp of ({0,1,2}) such that
+     A3: for a,b holds o1.(a,b) = a*b and
+     A4: for a,b holds o2.(a,b) = a*b;
+       now
+       let a,b;
+       thus o1.(a,b) = a*b by A3
+                    .= o2.(a,b) by A4;end;
+     hence thesis by BINOP_1:2;
+   end;
+ func compl3 -> UnOp of {0,1,2} means
+  :Def20: it.a = -a;
+  existence
+   proof
+     deffunc F( Element of {0,1,2})= -$1;
+     ex f being UnOp of {0,1,2} st
+     for x being Element of {0,1,2} holds f.x = F(x) from LambdaD;
+     hence thesis;
+   end;
+  uniqueness
+   proof
+     let o1,o2 be UnOp of ({0,1,2}) such that
+     A5: for a holds o1.a = -a and
+     A6: for a holds o2.a = -a;
+       now
+       let a;
+       thus o1.a = -a by A5
+                .= o2.a by A6;end;
+     hence thesis by FUNCT_2:113;
+   end;
+ func unit3 -> Element of {0,1,2} equals
+  :Def21: 1;
+  coherence by ENUMSET1:def 1;
+ func zero3 -> Element of {0,1,2} equals
+  :Def22:  0;
+  coherence by ENUMSET1:def 1;
+end;
+
+definition
+ func Z3 -> strict doubleLoopStr equals
+ :Def23:  doubleLoopStr (#{0,1,2},add3,mult3,unit3,zero3#);
+  coherence;
+end;
+
+definition
+ cluster Z3 -> non empty;
+ coherence
+  proof
+    thus the carrier of Z3 is non empty by Def23;
+  end;
+end;
+
+canceled;
+
+theorem
+Th32: 0.Z3 = 0
+  & 1_ Z3 = 1
+  & 0.Z3 is Element of {0,1,2}
+  & 1_ Z3 is Element of {0,1,2}
+  & the add of Z3 = add3
+  & the mult of Z3 = mult3
+ by Def21,Def22,Def23,RLVECT_1:def 2,VECTSP_1:def 9;
+
+Lm7:
+  for x,y being Scalar of Z3, X,Y being Element of {0,1,2}
+     st X=x & Y=y holds
+        x+y = X+Y
+      & x*y = X*Y
+ proof
+   let x,y be Scalar of Z3, X,Y be Element of {0,1,2}; assume
+   A1: X=x & Y=y;
+   hence x+y = add3.(X,Y) by Def23,RLVECT_1:5
+           .= X+Y by Def18;
+   thus x*y = mult3.(X,Y) by A1,Def23,VECTSP_1:def 10
+           .= X*Y by Def19;
+ end;
+
+Lm8: for x,y,z being Scalar of Z3, X,Y,Z being Element of {0,1,2}
+     st X=x & Y=y & Z=z holds
+        (x+y)+z = (X+Y)+Z
+      & x+(y+z) = X+(Y+Z)
+      & (x*y)*z = (X*Y)*Z
+      & x*(y*z) = X*(Y*Z)
+ proof
+   let x,y,z be Scalar of Z3, X,Y,Z be Element of {0,1,2}; assume
+   A1: X=x & Y=y & Z=z;
+   then x+y = X+Y & y+z = Y+Z & x*y = X*Y & y*z = Y*Z by Lm7;
+   hence thesis by A1,Lm7;
+ end;
+
+Lm9: for x,y,z,a being Element of {0,1,2} st a = 0 holds
+            x+(-x) = a &
+            x+a = x &
+            (x+y)+z = x+(y+z)
+ proof
+   let x,y,z,a be Element of {0,1,2} such that
+   A1: a = 0;
+   thus x+(-x) = a
+    proof
+        now per cases by ENUMSET1:def 1;
+        suppose A2: x = 0; then -x = 0 by Def15;
+          hence thesis by A1,A2,Def16;
+        suppose A3: x = 1; then -x = 2 by Def15;
+          hence thesis by A1,A3,Def16;
+        suppose A4: x = 2; then -x = 1 by Def15;
+          hence thesis by A1,A4,Def16;end;
+      hence thesis;
+    end;
+   thus x+a = x by A1,Def16;
+   thus (x+y)+z = x+(y+z)
+    proof
+        now per cases by ENUMSET1:def 1;
+        suppose A5: x = 0;
+          hence (x+y)+z = y+z by Def16 .= x+(y+z) by A5,Def16;
+        suppose y = 0;
+          then x+y = x & y+z = z by Def16;
+          hence (x+y)+z = x+(y+z);
+        suppose A6: z = 0;
+          then y+z = y by Def16;
+          hence (x+y)+z = x+(y+z) by A6,Def16;
+        suppose A7: x = 1 & y = 1 & z = 1;
+          then A8: x+y = 2 & y+z = 2 by Def16;
+          hence (x+y)+z = 0 by A7,Def16 .= x+(y+z) by A7,A8,Def16;
+        suppose A9: x = 1 & y = 1 & z = 2;
+          then A10: x+y = 2 & y+z = 0 by Def16;
+          hence (x+y)+z = 1 by A9,Def16 .= x+(y+z) by A9,A10,Def16;
+        suppose A11: x = 1 & y = 2 & z = 1;
+          then A12: x+y = 0 & y+z = 0 by Def16;
+          hence (x+y)+z = 1 by A11,Def16 .= x+(y+z) by A11,A12,Def16;
+        suppose A13: x = 1 & y = 2 & z = 2;
+          then A14: x+y = 0 & y+z = 1 by Def16;
+          hence (x+y)+z = 2 by A13,Def16 .= x+(y+z) by A13,A14,Def16;
+        suppose A15: x = 2 & y = 1 & z = 1;
+          then A16: x+y = 0 & y+z = 2 by Def16;
+          hence (x+y)+z = 1 by A15,Def16 .= x+(y+z) by A15,A16,Def16;
+        suppose A17: x = 2 & y = 1 & z = 2;
+          then A18: x+y = 0 & y+z = 0 by Def16;
+          hence (x+y)+z = 2 by A17,Def16 .= x+(y+z) by A17,A18,Def16;
+        suppose A19: x = 2 & y = 2 & z = 1;
+          then A20: x+y = 1 & y+z = 0 by Def16;
+          hence (x+y)+z = 2 by A19,Def16 .= x+(y+z) by A19,A20,Def16;
+        suppose A21: x = 2 & y = 2 & z = 2;
+          then A22: x+y = 1 & y+z = 1 by Def16;
+          hence (x+y)+z = 0 by A21,Def16 .= x+(y+z) by A21,A22,Def16;end;
+      hence thesis;
+    end;
+  end;
+
+definition
+ cluster Z3 -> add-associative right_zeroed right_complementable;
+ coherence
+  proof
+    thus Z3 is add-associative
+    proof
+      let x,y,z be Element of Z3;
+      reconsider X=x,Y=y,Z=z as Element of {0,1,2} by Def23;
+      thus (x+y)+z = (X+Y)+Z by Lm8
+                  .= X+(Y+Z) by Lm4,Lm9
+                  .= x+(y+z) by Lm8;
+    end;
+    thus Z3 is right_zeroed
+    proof
+      let x be Element of Z3;
+      reconsider X=x,a=0 as Element of {0,1,2} by Def23,ENUMSET1:14;
+      thus x+0.Z3 = X+a by Lm7,Th32
+        .= x by Lm9;
+    end;
+    let x be Element of Z3;
+    reconsider x' = x as Element of {0,1,2} by Def23;
+    reconsider y = compl3.x' as Element of Z3 by Def23;
+    reconsider y' = y as Element of {0,1,2};
+    take y;
+A1:  y' = -x' by Def20;
+    thus x + y = 0.Z3
+    proof
+      per cases by Def23,ENUMSET1:13;
+      suppose A2:x = 0;
+then A3:    y' = 0 by A1,Def15;
+      thus x+y = x'+y' by Lm7
+              .= 0.Z3 by A2,A3,Def16,Th32;
+      suppose A4:x = 1;
+then A5:    y' = 2 by A1,Def15;
+      thus x+y = x'+y' by Lm7
+              .= 0.Z3 by A4,A5,Def16,Th32;
+      suppose A6:x = 2;
+then A7:    y' = 1 by A1,Def15;
+      thus x+y = x'+y' by Lm7
+              .= 0.Z3 by A6,A7,Def16,Th32;
+    end;
+  end;
+end;
+
+theorem
+Th33: for x,y being Scalar of Z3, X,Y being Element of {0,1,2}
+     st X=x & Y=y holds
+        x+y = X+Y
+      & x*y = X*Y
+      & -x = -X
+ proof
+   let x,y be Scalar of Z3, X,Y be Element of {0,1,2}; assume
+   A1: X=x & Y=y;
+   hence x+y = add3.(X,Y) by Def23,RLVECT_1:5
+           .= X+Y by Def18;
+   thus x*y = mult3.(X,Y) by A1,Def23,VECTSP_1:def 10
+           .= X*Y by Def19;
+   reconsider a = -X as Element of Z3 by Def23;
+     x + a = add3.(X,-X) by A1,Def23,RLVECT_1:5
+        .= X + -X by Def18
+
+        .= 0.Z3 by Lm9,Th32;
+   hence -x = -X by RLVECT_1:def 10;
+ end;
+
+theorem
+Th34: for x,y,z being Scalar of Z3, X,Y,Z being Element of {0,1,2}
+     st X=x & Y=y & Z=z holds
+        (x+y)+z = (X+Y)+Z
+      & x+(y+z) = X+(Y+Z)
+      & (x*y)*z = (X*Y)*Z
+      & x*(y*z) = X*(Y*Z)
+ proof
+   let x,y,z be Scalar of Z3, X,Y,Z be Element of {0,1,2}; assume
+   A1: X=x & Y=y & Z=z;
+   then x+y = X+Y & y+z = Y+Z & x*y = X*Y & y*z = Y*Z by Th33;
+   hence thesis by A1,Th33;
+ end;
+
+theorem
+Th35: for x,y,z,a,b being Element of {0,1,2} st a = 0 & b = 1 holds
+            x+y = y+x &
+            (x+y)+z = x+(y+z) &
+            x+a = x &
+            x+(-x) = a &
+            x*y = y*x &
+            (x*y)*z = x*(y*z) &
+            b*x = x &
+            (x<>a implies ex y be Element of {0,1,2} st x*y = b) &
+            a <> b & x*(y+z) = x*y+x*z
+ proof
+   let x,y,z,a,b be Element of {0,1,2} such that
+   A1: a = 0 & b = 1;
+   thus x+y = y+x
+    proof
+        now per cases by ENUMSET1:def 1;
+        suppose A2: x = 0;
+          hence x+y = y by Def16 .= y+x by A2,Def16;
+        suppose A3: y = 0;
+          hence x+y = x by Def16 .= y+x by A3,Def16;
+        suppose x = 1 & y = 1;
+          hence x+y = y+x;
+        suppose A4: x = 1 & y = 2;
+          hence x+y = 0 by Def16 .= y+x by A4,Def16;
+        suppose A5: x = 2 & y = 1;
+          hence x+y = 0 by Def16 .= y+x by A5,Def16;
+        suppose x = 2 & y = 2;
+          hence x+y = y+x;end;
+      hence thesis;
+    end;
+   thus (x+y)+z = x+(y+z) by A1,Lm9;
+   thus x+a = x by A1,Def16;
+   thus x+(-x) = a by A1,Lm9;
+   thus x*y = y*x
+    proof
+        now per cases by ENUMSET1:def 1;
+        suppose A6: y = 0;
+          hence x*y = 0 by Def17 .= y*x by A6,Def17;
+        suppose A7: x = 0;
+          hence x*y = 0 by Def17 .= y*x by A7,Def17;
+        suppose A8: y = 1;
+          hence x*y = x by Def17 .= y*x by A8,Def17;
+        suppose A9: x = 1;
+          hence x*y = y by Def17 .= y*x by A9,Def17;
+        suppose x = 2 & y = 2;
+          hence x*y = y*x;end;
+      hence thesis;
+    end;
+   thus (x*y)*z = x*(y*z)
+    proof
+        now per cases by ENUMSET1:def 1;
+        suppose A10: z = 0;
+          then A11: y*z = 0 by Def17;
+          thus (x*y)*z = 0 by A10,Def17 .= x*(y*z) by A11,Def17;
+        suppose y = 0;
+          then A12: x*y = 0 & y*z = 0 by Def17;
+          hence (x*y)*z = 0 by Def17 .= x*(y*z) by A12,Def17;
+        suppose A13: x = 0;
+          then x*y = 0 by Def17;
+          hence (x*y)*z = 0 by Def17 .= x*(y*z) by A13,Def17;
+        suppose A14: z = 1;
+          then y*z = y by Def17;
+          hence (x*y)*z = x*(y*z) by A14,Def17;
+        suppose y = 1;
+          then x*y = x & y*z = z by Def17;
+          hence (x*y)*z = x*(y*z);
+        suppose A15: x = 1;
+          hence (x*y)*z = y*z by Def17 .= x*(y*z) by A15,Def17;
+        suppose A16: x = 2 & y = 2 & z = 2;
+          then A17: x*y = 1 & y*z = 1 by Def17;
+          hence (x*y)*z = x by A16,Def17 .= x*(y*z) by A17,Def17;end;
+      hence thesis;
+    end;
+   thus b*x = x by A1,Def17;
+   thus x<>a implies ex y be Element of {0,1,2} st x*y = b
+    proof
+        now per cases by ENUMSET1:def 1;
+        case x = 0;
+          hence thesis by A1;
+        case A18: x = 1;
+          reconsider y = 1 as Element of {0,1,2} by ENUMSET1:def 1;
+          take y;
+            x*y = 1 by A18,Def17;
+          hence thesis by A1;
+        case A19: x = 2;
+          reconsider y = 2 as Element of {0,1,2} by ENUMSET1:def 1;
+          take y;
+            x*y = 1 by A19,Def17;
+          hence thesis by A1;end;
+      hence thesis;
+    end;
+   thus a <> b by A1;
+   thus x*(y+z) = x*y+x*z
+    proof
+        now per cases by ENUMSET1:def 1;
+        suppose A20: x = 0;
+          then A21: x*y = 0 & x*z = 0 by Def17;
+          thus x*(y+z) = 0 by A20,Def17 .= x*y+x*z by A21,Def16;
+        suppose y = 0;
+          then y+z = z & x*y = 0 by Def16,Def17;
+          hence x*(y+z) = x*y+x*z by Def16;
+        suppose z = 0;
+          then y+z = y & x*z = 0 by Def16,Def17;
+          hence x*(y+z) = x*y+x*z by Def16;
+        suppose A22: x = 1 & y = 1 & z = 1;
+          then y+z = 2 & x*y = 1 & x*z = 1 by Def16,Def17;
+          hence x*(y+z) = x*y+x*z by A22,Def17;
+        suppose x = 1 & y = 1 & z = 2;
+          then A23: y+z = 0 & x*y = 1 & x*z = 2 by Def16,Def17;
+          hence x*(y+z) = 0 by Def17 .= x*y+x*z by A23,Def16;
+        suppose x = 1 & y = 2 & z = 1;
+          then A24: y+z = 0 & x*y = 2 & x*z = 1 by Def16,Def17;
+          hence x*(y+z) = 0 by Def17 .= x*y+x*z by A24,Def16;
+        suppose A25: x = 1 & y = 2 & z = 2;
+          then y+z = 1 & x*y = 2 & x*z = 2 by Def16,Def17;
+          hence x*(y+z) = x*y+x*z by A25,Def17;
+        suppose A26: x = 2 & y = 1 & z = 1;
+          then A27: y+z = 2 & x*y = 2 & x*z = 2 by Def16,Def17;
+          hence x*(y+z) = 1 by A26,Def17 .= x*y+x*z by A27,Def16;
+        suppose x = 2 & y = 1 & z = 2;
+          then A28: y+z = 0 & x*y = 2 & x*z = 1 by Def16,Def17;
+          hence x*(y+z) = 0 by Def17 .= x*y+x*z by A28,Def16;
+        suppose x = 2 & y = 2 & z = 1;
+          then A29: y+z = 0 & x*y = 1 & x*z = 2 by Def16,Def17;
+          hence x*(y+z) = 0 by Def17 .= x*y+x*z by A29,Def16;
+        suppose A30: x = 2 & y = 2 & z = 2;
+          then A31: y+z = 1 & x*y = 1 & x*z = 1 by Def16,Def17;
+          hence x*(y+z) = 2 by A30,Def17 .= x*y+x*z by A31,Def16;end;
+      hence thesis;
+    end;
+ end;
+
+theorem
+Th36: for F being non empty doubleLoopStr st for x,y,z being Scalar of F holds
+            x+y = y+x &
+            (x+y)+z = x+(y+z) &
+            x+(0.F) = x &
+            x+(-x) = (0.F) &
+            x*y = y*x &
+            (x*y)*z = x*(y*z) &
+            1_ F*x = x &
+            (x<>(0.F) implies ex y be Scalar of F st x*y = 1_ F) &
+            0.F <> 1_ F &
+            x*(y+z) = x*y+x*z holds F is Field
+ proof
+   let F be non empty doubleLoopStr such that
+   A1: for x,y,z being Scalar of F holds
+            x+y = y+x & (x+y)+z = x+(y+z) &
+            x+(0.F) = x & x+(-x) = (0.F) &
+            x*y = y*x & (x*y)*z = x*(y*z) &
+            (1_ F)*x = x &
+            (x<>(0.F) implies ex y be Scalar of F st x*y = 1_ F) &
+            0.F <> 1_ F & x*(y+z) = x*y+x*z;
+A2:now
+     let x,y,z be Scalar of F;
+     thus x+y = y+x & (x+y)+z = x+(y+z) &
+            x+(0.F) = x & x+(-x) = (0.F) &
+            x*y = y*x & (x*y)*z = x*(y*z) &
+            (1_ F)*x = x &
+            (x<>(0.F) implies ex y be Scalar of F st x*y = 1_ F) &
+            0.F <> 1_ F & x*(y+z) = x*y+x*z by A1;
+     thus (y+z)*x = x*(y+z) by A1
+                 .= x*y + x*z by A1
+                 .= y*x + x*z by A1
+                 .= y*x + z*x by A1;
+     end;
+       F is right_complementable
+     proof
+       let v be Element of F;
+       take -v;
+       thus v + -v = 0.F by A2;
+     end;
+   hence F is Field by A2,RLVECT_1:def 5,def 6,def 7,VECTSP_1:def 16,def 17,def
+18,def 19,def 20,def 21;
+ end;
+
+theorem
+Th37: Z3 is Fanoian Field
+ proof
+   set F = doubleLoopStr (#{0,1,2},add3,mult3,unit3,zero3#);
+   reconsider a = 0.F, b = 1_ F as Element of {0,1,2};
+     now
+     let x,y,z be Scalar of Z3;
+     thus x+y = y+x & (x+y)+z = x+(y+z) &
+            x+(0.Z3) = x & x+(-x) = (0.Z3) &
+            x*y = y*x & (x*y)*z = x*(y*z) &
+            (1_ Z3)*x = x &
+            (x<>0.Z3 implies ex y be Scalar of Z3 st x*y = 1_ Z3) &
+            0.Z3 <> 1_ Z3 & x*(y+z) = x*y+x*z
+       proof
+         reconsider X=x, Y=y, Z=z as Element of {0,1,2} by Def23;
+         thus x+y = X+Y by Th33
+                 .= Y+X by Lm4,Lm5,Th35
+                 .= y+x by Th33;
+         thus (x+y)+z = (X+Y)+Z by Th34
+                     .= X+(Y+Z) by Lm4,Lm5,Th35
+                     .= x+(y+z) by Th34;
+         thus x+(0.Z3) = X+a by Def23,Th33
+                      .= x by Def23,Th32,Th35;
+           -x = -X by Th33;
+         hence x+(-x) = X+(-X) by Th33
+                     .= (0.Z3) by Th32,Th35;
+         thus x*y = X*Y by Th33
+                 .= Y*X by Lm4,Lm5,Th35
+                 .= y*x by Th33;
+         thus (x*y)*z = (X*Y)*Z by Th34
+                     .= X*(Y*Z) by Lm4,Lm5,Th35
+                     .= x*(y*z) by Th34;
+         thus (1_ Z3)*x = b*X by Def23,Th33
+                      .= x by Def23,Th32,Th35;
+         thus x <> 0.Z3 implies ex y being Scalar of Z3 st x*y = 1_ Z3
+          proof
+            assume x <> 0.Z3;
+            then consider Y being Element of {0,1,2} such that
+            A1: X*Y = b by Def23,Th32,Th35;
+            reconsider y=Y as Scalar of Z3 by Def23;
+            take y;
+            thus thesis by A1,Def23,Th33;
+          end;
+         thus 0.Z3 <> 1_ Z3 by Th32;
+         A2: y+z = Y+Z & x*y = X*Y & x*z = X*Z by Th33;
+         hence x*(y+z) = X*(Y+Z) by Th33
+                     .= X*Y + X*Z by Def21,Def22,Th35
+                     .= x*y+x*z by A2,Th33;
+       end;end;
+   then reconsider F as Field by Def23,Th36;
+     1_ F + 1_ F = add3.(b,b) by RLVECT_1:5
+            .= b + b by Def18
+            .= 2 by Def16,Def23,Th32;
+   hence thesis by Def23,Th32,VECTSP_1:def 29;
+ end;
+
+definition
+ cluster Z3 -> Fanoian add-associative right_zeroed right_complementable
+    Abelian commutative associative left_unital distributive Field-like;
+ coherence by Th37;
+end;
+
+Lm10: the carrier of Z3 in UN
+ proof
+   reconsider a = 0, b = 1, c = 2 as Element of UN by Th30;
+     {a,b,c} is Element of UN by Th28;
+   hence thesis by Def23;
+ end;
+
+theorem Th38:
+for f being Function of D,D' st D in UN & D' in UN holds f in UN
+ proof
+   let f be Function of D,D'; assume
+      D in UN & D' in UN;
+   then A1: Funcs(D,D') in UN by CLASSES2:67;
+     f in Funcs(D,D') by FUNCT_2:11;
+   hence thesis by A1,GRCAT_1:4;
+ end;
+
+Lm11:
+  (for f being BinOp of D st D in UN holds f in UN)
+& for f being UnOp of D st D in UN holds f in UN
+ proof
+      now
+     let f be BinOp of D; assume
+     A1: D in UN;
+     then [:D,D:] in UN by CLASSES2:67;
+     then A2: Funcs([:D,D:],D) in UN by A1,CLASSES2:67;
+       f in Funcs([:D,D:],D) by FUNCT_2:11;
+     hence f in UN by A2,GRCAT_1:4;end;
+   hence thesis by Th38;
+ end;
+
+canceled;
+
+theorem
+    the carrier of Z3 in UN & the add of Z3 is Element of UN &
+  comp Z3 is Element of UN & the Zero of Z3 is Element of UN &
+  the mult of Z3 is Element of UN & the unity of Z3 is Element of UN
+ proof
+   thus the carrier of Z3 in UN by Lm10;
+   hence thesis by Lm11,GRCAT_1:4;
+ end;

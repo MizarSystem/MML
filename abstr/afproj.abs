@@ -1,0 +1,358 @@
+:: A Projective Closure and Projective Horizon of an Affine Space
+::  by Henryk Oryszczyszyn and Krzysztof Pra\.zmowski
+::
+:: Received December 17, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary DIRAF, AFF_4, INCSP_1, AFF_1, ANALOAF, PARSP_1, BOOLE, SETFAM_1,
+      EQREL_1, RELAT_1, RELAT_2, ANPROJ_1, INCPROJ, MCART_1, ANPROJ_2, AFF_2,
+      VECTSP_1, AFPROJ, PARTFUN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, EQREL_1, RELSET_1, RELAT_1,
+      RELAT_2, PARTFUN1, MCART_1, STRUCT_0, ANALOAF, DIRAF, AFF_1, AFF_4,
+      PAPDESAF, INCSP_1, INCPROJ;
+ constructors DOMAIN_1, AFF_2, TRANSLAC, EQREL_1, RELAT_2, AFF_1, AFF_4,
+      INCPROJ, XBOOLE_0;
+ clusters INCPROJ, RELSET_1, STRUCT_0, SUBSET_1, XBOOLE_0, ZFMISC_1, PARTFUN1;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+reserve AS for AffinSpace;
+reserve A,K,M,X,Y,Z,X',Y' for Subset of AS;
+reserve zz for Element of AS;
+reserve x,y for set;
+
+:: The aim of this article is to formalize the well known construction of
+:: the projective closure of an affine space. We begin with some evident
+:: properties of planes in affine planes.
+
+theorem :: AFPROJ:1
+AS is AffinPlane & X=the carrier of AS implies X is_plane;
+
+theorem :: AFPROJ:2
+  AS is AffinPlane & X is_plane implies X = the carrier of AS;
+
+theorem :: AFPROJ:3
+AS is AffinPlane & X is_plane & Y is_plane implies X=Y;
+
+theorem :: AFPROJ:4
+X=the carrier of AS & X is_plane implies AS is AffinPlane;
+
+theorem :: AFPROJ:5
+ not A // K & A '||' X & A '||' Y & K '||' X & K '||' Y & A is_line &
+ K is_line & X is_plane & Y is_plane implies X '||' Y;
+
+theorem :: AFPROJ:6
+X is_plane & A '||' X & X '||' Y implies A '||' Y;
+
+:: Next we distinguish two sets, one consisting of the lines, the second
+:: consisting of the planes of a given affine space and we consider two
+:: equivalence relations defined on each of these sets; theses relations
+:: are in fact the relation of parallelity restricted to suitable area.
+:: Their equivalence classes are called directions (of lines and planes,
+:: respectively); they are intended to be considered as new objects which
+:: extend the given affine space to a projective space.
+
+definition let AS; func AfLines(AS) -> Subset-Family of AS equals
+:: AFPROJ:def 1
+  {A: A is_line}; end;
+
+definition let AS; func AfPlanes(AS) -> Subset-Family of AS equals
+:: AFPROJ:def 2
+  {A: A is_plane}; end;
+
+theorem :: AFPROJ:7
+for x holds (x in AfLines(AS) iff ex X st x=X & X is_line);
+
+theorem :: AFPROJ:8
+for x holds (x in AfPlanes(AS) iff ex X st x=X & X is_plane);
+
+definition let AS;
+ func LinesParallelity(AS) -> Equivalence_Relation of AfLines(AS)
+equals
+:: AFPROJ:def 3
+{[K,M]: K is_line & M is_line & K '||' M}; end;
+
+definition let AS;
+ func PlanesParallelity(AS) -> Equivalence_Relation of AfPlanes(AS)
+equals
+:: AFPROJ:def 4
+{[X,Y]: X is_plane & Y is_plane & X '||' Y}; end;
+
+definition let AS,X such that X is_line; func LDir(X) -> Subset of AfLines(AS)
+equals
+:: AFPROJ:def 5
+Class(LinesParallelity(AS),X);
+ end;
+
+definition let AS,X such that
+   X is_plane; func PDir(X) -> Subset of AfPlanes(AS)
+equals
+:: AFPROJ:def 6
+Class(PlanesParallelity(AS),X);
+ end;
+
+theorem :: AFPROJ:9
+X is_line implies for x holds x in LDir(X) iff ex Y st x=Y
+ & Y is_line & X '||' Y;
+
+theorem :: AFPROJ:10
+X is_plane implies for x holds x in PDir(X) iff ex Y st x=Y
+ & Y is_plane & X '||' Y;
+
+theorem :: AFPROJ:11
+X is_line & Y is_line implies (LDir(X)=LDir(Y) iff X // Y);
+
+theorem :: AFPROJ:12
+X is_line & Y is_line implies (LDir(X)=LDir(Y) iff X '||' Y);
+
+theorem :: AFPROJ:13
+X is_plane & Y is_plane implies (PDir(X)=PDir(Y) iff X '||' Y);
+
+definition let AS; func Dir_of_Lines(AS) -> non empty set
+equals
+:: AFPROJ:def 7
+Class LinesParallelity(AS); end;
+
+definition let AS; func Dir_of_Planes(AS) -> non empty set
+equals
+:: AFPROJ:def 8
+Class PlanesParallelity(AS); end;
+
+theorem :: AFPROJ:14
+for x holds x in Dir_of_Lines(AS) iff ex X st x=LDir(X)
+   & X is_line;
+
+theorem :: AFPROJ:15
+for x holds x in Dir_of_Planes(AS) iff ex X st x=PDir(X)
+  & X is_plane;
+
+:: The point is to guarantee that the classes of new objects consist of really
+:: new objects. Clearly the set of directions of lines and the set of affine
+:: points do not intersect. However we cannot claim, in general, that the set
+:: of affine lines and the set of directions of planes do not intersect; this
+:: is evidently true only in the case of affine planes. Therefore we have to
+:: modify (slightly) a construction of the set of lines of the projective
+:: closure of affine space, when compared with (naive) intuitions.
+
+theorem :: AFPROJ:16
+the carrier of AS misses Dir_of_Lines(AS);
+
+theorem :: AFPROJ:17
+    AS is AffinPlane implies AfLines(AS) misses Dir_of_Planes(AS);
+
+theorem :: AFPROJ:18
+for x holds (x in [:AfLines(AS),{1}:] iff
+ ex X st x=[X,1] & X is_line);
+
+theorem :: AFPROJ:19
+for x holds (x in [:Dir_of_Planes(AS),{2}:] iff
+ ex X st x=[PDir(X),2] & X is_plane);
+
+definition let AS;
+  func ProjectivePoints(AS) -> non empty set equals
+:: AFPROJ:def 9
+    (the carrier of AS) \/ Dir_of_Lines(AS);
+end;
+
+definition let AS;
+  func ProjectiveLines(AS) -> non empty set equals
+:: AFPROJ:def 10
+ [:AfLines(AS),{1}:] \/ [:Dir_of_Planes(AS),{2}:];
+end;
+
+definition let AS;
+  func Proj_Inc(AS) -> Relation of ProjectivePoints(AS),ProjectiveLines(AS)
+means
+:: AFPROJ:def 11
+for x,y holds [x,y] in it iff
+(ex K st K is_line & y=[K,1] & (x in the carrier of AS & x in K or
+                     x = LDir(K))) or
+(ex K,X st K is_line & X is_plane & x=LDir(K) & y=[PDir(X),2] & K '||' X); end;
+
+definition let AS; func
+ Inc_of_Dir(AS) -> Relation of Dir_of_Lines(AS),Dir_of_Planes(AS) means
+:: AFPROJ:def 12
+  for x,y holds [x,y] in it iff ex A,X st x=LDir(A) & y=PDir(X) &
+    A is_line & X is_plane & A '||' X; end;
+
+definition let AS; func
+ IncProjSp_of(AS) -> strict IncProjStr
+equals
+:: AFPROJ:def 13
+IncProjStr (# ProjectivePoints(AS),
+ ProjectiveLines(AS), Proj_Inc(AS) #);
+ end;
+
+definition let AS; func ProjHorizon(AS) -> strict IncProjStr equals
+:: AFPROJ:def 14
+ IncProjStr (#Dir_of_Lines(AS),
+  Dir_of_Planes(AS), Inc_of_Dir(AS) #);
+ end;
+
+theorem :: AFPROJ:20
+ for x holds (x is POINT of IncProjSp_of(AS)
+ iff (x is Element of AS or ex X st x=LDir(X) & X is_line));
+
+theorem :: AFPROJ:21
+x is Element of the Points of ProjHorizon(AS) iff
+       ex X st x=LDir(X) & X is_line;
+
+theorem :: AFPROJ:22
+x is Element of the Points of ProjHorizon(AS) implies
+  x is POINT of IncProjSp_of(AS);
+
+theorem :: AFPROJ:23
+ for x holds (x is LINE of IncProjSp_of(AS) iff
+ ex X st (x=[X,1] & X is_line or x=[PDir(X),2] & X is_plane));
+
+theorem :: AFPROJ:24
+x is Element of the Lines of ProjHorizon(AS) iff
+       ex X st x=PDir(X) & X is_plane;
+
+theorem :: AFPROJ:25
+x is Element of the Lines of ProjHorizon(AS) implies
+  [x,2] is LINE of IncProjSp_of(AS);
+
+reserve x,y,z,t,u,w for Element of AS;
+reserve K,X,Y,Z,X',Y' for Subset of AS;
+reserve a,b,c,d,p,q,r,p' for POINT of IncProjSp_of(AS);
+reserve A for LINE of IncProjSp_of(AS);
+
+theorem :: AFPROJ:26
+x=a & [X,1]=A implies (a on A iff X is_line & x in X);
+
+theorem :: AFPROJ:27
+x=a & [PDir(X),2]=A & X is_plane implies not a on A;
+
+theorem :: AFPROJ:28
+ a=LDir(Y) & [X,1]=A & Y is_line & X is_line implies (a on A iff Y '||' X);
+
+theorem :: AFPROJ:29
+ a=LDir(Y) & A=[PDir(X),2] & Y is_line & X is_plane implies (a on A iff
+  Y '||' X);
+
+theorem :: AFPROJ:30
+X is_line & a=LDir(X) & A=[X,1] implies a on A;
+
+theorem :: AFPROJ:31
+X is_line & Y is_plane & X c= Y & a=LDir(X) & A=[PDir(Y),2]
+ implies a on A;
+
+theorem :: AFPROJ:32
+Y is_plane & X c= Y & X' // X & a=LDir(X') & A=[PDir(Y),2]
+ implies a on A;
+
+theorem :: AFPROJ:33
+A=[PDir(X),2] & X is_plane & a on A
+   implies a is not Element of AS;
+
+theorem :: AFPROJ:34
+ A=[X,1] & X is_line & p on A & p is not Element of AS
+   implies p=LDir(X);
+
+theorem :: AFPROJ:35
+A=[X,1] & X is_line & p on A & a on A & a<>p &
+not p is Element of
+ the carrier of AS implies a is Element of AS;
+
+theorem :: AFPROJ:36
+ for a being Element of the Points of ProjHorizon(AS),A being Element
+ of the Lines of ProjHorizon(AS) st a=LDir(X) & A=PDir(Y) & X is_line
+ & Y is_plane holds (a on A iff X '||' Y);
+
+theorem :: AFPROJ:37
+ for a being Element of the Points of ProjHorizon(AS),a' being Element of
+ the Points of IncProjSp_of(AS),A being Element of the Lines of
+ ProjHorizon(AS),A' being LINE of IncProjSp_of(AS)
+ st a'=a & A'=[A,2] holds (a on A iff a' on A');
+
+reserve A,K,M,N,P,Q for LINE of IncProjSp_of(AS);
+
+theorem :: AFPROJ:38
+ for a,b being Element of the Points of ProjHorizon(AS),
+          A,K being Element
+ of the Lines of ProjHorizon(AS) st a on A & a on K & b on A & b on K holds
+ a=b or A=K;
+
+theorem :: AFPROJ:39
+for A being Element of the Lines of ProjHorizon(AS) ex a,b,c
+ being Element of the Points of ProjHorizon(AS) st a on A & b on A & c on A &
+ a<>b & b<>c & c <>a;
+
+theorem :: AFPROJ:40
+for a,b being Element of the Points of ProjHorizon(AS)
+ex A being
+ Element of the Lines of ProjHorizon(AS) st a on A & b on A;
+
+theorem :: AFPROJ:41
+ for x,y being Element of the Points of ProjHorizon(AS), X being Element
+ of the Lines of IncProjSp_of(AS) st x<>y & [x,X] in the Inc of
+ IncProjSp_of(AS) & [y,X] in the Inc of IncProjSp_of(AS) ex
+ Y being Element of the Lines of ProjHorizon(AS) st X=[Y,2];
+
+theorem :: AFPROJ:42
+ for x being POINT of IncProjSp_of(AS),X being
+ Element of the Lines of ProjHorizon(AS) st [x,[X,2]] in the Inc of
+ IncProjSp_of(AS) holds x is Element of the Points of ProjHorizon(AS);
+
+theorem :: AFPROJ:43
+Y is_plane & X is_line & X' is_line & X c= Y & X' c= Y &
+ P=[X,1] & Q=[X',1] implies ex q st q on P & q on Q;
+
+theorem :: AFPROJ:44
+ for a,b,c,d,p being Element of the Points of ProjHorizon(AS),M,N,P,Q
+ being Element of the Lines of ProjHorizon(AS) st
+ a on M & b on M & c on N & d on N & p on M &
+ p on N & a on P & c on P & b on Q & d on Q & not p on P & not p on Q & M<>N
+ ex q being Element of
+ the Points of ProjHorizon(AS) st q on P & q on Q;
+
+definition let AS;
+  cluster IncProjSp_of(AS) -> partial linear up-2-dimensional
+    up-3-rank Vebleian;
+end;
+
+definition
+ cluster strict 2-dimensional IncProjSp;
+end;
+
+definition let AS be AffinPlane;
+ cluster IncProjSp_of(AS) -> 2-dimensional; end;
+
+theorem :: AFPROJ:45
+IncProjSp_of(AS) is 2-dimensional implies AS is AffinPlane;
+
+theorem :: AFPROJ:46
+   AS is not AffinPlane implies ProjHorizon(AS) is IncProjSp;
+
+theorem :: AFPROJ:47
+   ProjHorizon(AS) is IncProjSp implies AS is not AffinPlane;
+
+theorem :: AFPROJ:48
+for M,N being Subset of AS, o,a,b,c,a',b',c' being Element of
+ the carrier of AS st M is_line & N is_line & M<>N &
+   o in M & o in N & o<>a & o<>a' & o<>b & o<>b' & o<>c & o<>c' & a in M &
+   b in M & c in M & a' in N & b' in N & c' in N &
+   a,b' // b,a' & b,c' // c,b' & (a=b or b=c or a=c) holds a,c' // c,a';
+
+theorem :: AFPROJ:49
+IncProjSp_of(AS) is Pappian implies AS is Pappian;
+
+theorem :: AFPROJ:50
+for A,P,C being Subset of AS, o,a,b,c,a',b',c' being Element of
+the carrier of AS st o in A & o in P & o in C &
+   o<>a & o<>b & o<>c & a in A & a' in A & b in P & b' in P &
+   c in C & c' in C & A is_line & P is_line & C is_line &
+   A<>P & A<>C & a,b // a',b' & a,c // a',c' & (o=a' or a=a') holds
+   b,c // b',c';
+
+theorem :: AFPROJ:51
+IncProjSp_of(AS) is Desarguesian implies AS is
+ Desarguesian;
+
+theorem :: AFPROJ:52
+IncProjSp_of(AS) is Fanoian implies AS is Fanoian;

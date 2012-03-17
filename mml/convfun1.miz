@@ -1,0 +1,3179 @@
+:: Definition of Convex Function and {J}ensen's Inequality
+::  by Grigory E. Ivanov
+::
+:: Received July 17, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, SUPINF_1, FUNCT_1, FUNCT_2, ARYTM_3, MEASURE6, JORDAN1,
+      BINOP_1, VECTSP_1, ARYTM_1, RELAT_1, PARTFUN1, RFUNCT_3, FINSEQ_1,
+      FINSEQ_4, BOOLE, FINSET_1, CARD_1, SGRAPH1, RFINSEQ, SQUARE_1, CONVFUN1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, NUMBERS, XREAL_0, FUNCT_1,
+      REAL_1, FUNCT_2, FINSEQ_1, RLVECT_1, CONVEX1, SUPINF_1, RELSET_1,
+      ZFMISC_1, MEASURE6, BINOP_1, SEQ_1, DOMAIN_1, VECTSP_1, EXTREAL1,
+      SUPINF_2, PARTFUN1, RFUNCT_3, MESFUNC1, NAT_1, RVSUM_1, FINSEQ_4,
+      TOPREAL1, FINSET_1, CARD_1, RFINSEQ, BINARITH;
+ constructors REAL_1, MEASURE6, CONVEX1, DOMAIN_1, VECTSP_1, EXTREAL1,
+      SUPINF_2, RFUNCT_3, MESFUNC1, TOPREAL1, FINSEQ_4, BINARITH, MEMBERED,
+      INT_1;
+ clusters STRUCT_0, RLVECT_1, FUNCT_2, SUPINF_1, XREAL_0, RELSET_1, SUBSET_1,
+      BINARITH, FINSET_1, FINSEQ_1, INT_1, FUNCT_1, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ theorems ZFMISC_1, BINOP_1, FUNCT_2, CONVEX1, SUPINF_1, SUPINF_2, SQUARE_1,
+      MEASURE6, EXTREAL1, EXTREAL2, RLVECT_1, VECTSP_1, AXIOMS, RFUNCT_3,
+      REAL_1, RVSUM_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FINSEQ_5, NAT_1,
+      TARSKI, TOPREAL1, FUNCT_1, FINSET_1, CARD_2, INT_1, XCMPLX_0, XCMPLX_1,
+      XBOOLE_0, RFINSEQ, BINARITH, RLVECT_2, JORDAN3, REAL_2, RELAT_1,
+      XBOOLE_1, POLYNOM4;
+ schemes BINOP_1, FUNCT_2, COMPLSP1, BINARITH, FINSEQ_2, FRAENKEL, POLYNOM2,
+      NAT_1;
+
+begin :: Product of Two Real Linear Spaces
+
+definition let X,Y be non empty RLSStruct;
+ func Add_in_Prod_of_RLS(X,Y) ->
+  BinOp of [:the carrier of X, the carrier of Y:] means  :Def1:
+ for z1, z2 being Element of [:the carrier of X, the carrier of Y:],
+     x1, x2 being VECTOR of X,
+     y1, y2 being VECTOR of Y
+  st
+   z1 = [x1,y1] & z2 = [x2,y2]
+  holds
+   it.(z1,z2) = [(the add of X).[x1,x2],(the add of Y).[y1,y2]];
+ existence
+  proof
+    set A = [:the carrier of X, the carrier of Y:];
+    defpred P[set,set,set] means
+    for x1, x2 being VECTOR of X, y1, y2 being VECTOR of Y
+  st $1 = [x1,y1] & $2 = [x2,y2]
+  holds $3 = [(the add of X).[x1,x2],(the add of Y).[y1,y2]];
+   A1:  for z1,z2 being Element of A ex z3 being Element of A st P[z1,z2,z3]
+    proof
+     let z1,z2 being Element of A;
+     consider x1' being set,
+              y1' being set such that
+      A2: x1' in the carrier of X &
+          y1' in the carrier of Y &
+       z1 = [x1',y1'] by ZFMISC_1:def 2;
+     consider x2' being set,
+              y2' being set such that
+      A3: x2' in the carrier of X &
+          y2' in the carrier of Y &
+       z2 = [x2',y2'] by ZFMISC_1:def 2;
+     reconsider x1',x2' as VECTOR of X by A2,A3;
+     reconsider y1',y2' as VECTOR of Y by A2,A3;
+     reconsider z3 = [(the add of X).[x1',x2'],(the add of Y).[y1',y2']]
+           as Element of A;
+     take z3;
+     let x1, x2 be VECTOR of X,
+         y1, y2 be VECTOR of Y;
+     assume z1 = [x1,y1] & z2 = [x2,y2];
+     then x1=x1' & x2=x2' & y1=y1' & y2=y2' by A2,A3,ZFMISC_1:33;
+     hence thesis;
+    end;
+    thus ex o being BinOp of A st
+    for a,b being Element of A holds P[a,b,o.(a,b)] from BinOpEx(A1);
+  end;
+ uniqueness
+ proof
+  let A1, A2 be BinOp of [:the carrier of X, the carrier of Y:];
+  assume A4:
+   for z1, z2 being Element of [:the carrier of X, the carrier of Y:],
+       x1, x2 being VECTOR of X,
+       y1, y2 being VECTOR of Y
+    st
+     z1 = [x1,y1] & z2 = [x2,y2]
+    holds
+     A1.(z1,z2) = [(the add of X).[x1,x2],(the add of Y).[y1,y2]];
+  assume A5:
+   for z1, z2 being Element of [:the carrier of X, the carrier of Y:],
+       x1, x2 being VECTOR of X,
+       y1, y2 being VECTOR of Y
+    st
+     z1 = [x1,y1] & z2 = [x2,y2]
+    holds
+     A2.(z1,z2) = [(the add of X).[x1,x2],(the add of Y).[y1,y2]];
+  for z1, z2 being Element of [:the carrier of X, the carrier of Y:]
+   holds A1.(z1,z2) = A2.(z1,z2)
+  proof
+   let z1, z2 be Element of [:the carrier of X, the carrier of Y:];
+   consider x1 being set,
+            y1 being set such that
+    A6: x1 in the carrier of X &
+        y1 in the carrier of Y &
+     z1 = [x1,y1] by ZFMISC_1:def 2;
+   consider x2 being set,
+            y2 being set such that
+    A7: x2 in the carrier of X &
+        y2 in the carrier of Y &
+     z2 = [x2,y2] by ZFMISC_1:def 2;
+   reconsider x1,x2 as VECTOR of X by A6,A7;
+   reconsider y1,y2 as VECTOR of Y by A6,A7;
+   A1.(z1,z2) = [(the add of X).[x1,x2],(the add of Y).[y1,y2]] &
+   A2.(z1,z2) = [(the add of X).[x1,x2],(the add of Y).[y1,y2]]
+    by A4,A5,A6,A7;
+   hence thesis;
+  end;
+ hence thesis by BINOP_1:2;
+ end;
+end;
+
+definition let X,Y be non empty RLSStruct;
+ func Mult_in_Prod_of_RLS(X,Y) ->
+      Function of [:REAL, [:the carrier of X, the carrier of Y:]:],
+       [:the carrier of X, the carrier of Y:] means :Def2:
+ for a being Real,
+     z being Element of [:the carrier of X, the carrier of Y:],
+     x being VECTOR of X, y being VECTOR of Y
+  st
+   z = [x,y]
+  holds
+   it.[a,z] = [(the Mult of X).[a,x],(the Mult of Y).[a,y]];
+ existence
+  proof
+    defpred P[set,set,set] means
+    for x being VECTOR of X, y being VECTOR of Y st $2 = [x,y] holds
+    $3 = [(the Mult of X).[$1,x],(the Mult of Y).[$1,y]];
+   A1: for a1 being Element of REAL,
+       z being Element of [:the carrier of X, the carrier of Y:]
+   ex w being Element of [:the carrier of X, the carrier of Y:] st P[a1,z,w]
+    proof
+     let a1 being (Element of REAL),
+         z be Element of [:the carrier of X, the carrier of Y:];
+     consider x' being set, y' being set such that
+      A2: x' in the carrier of X &
+          y' in the carrier of Y &
+      z = [x',y'] by ZFMISC_1:def 2;
+     reconsider x' as VECTOR of X by A2;
+     reconsider y' as VECTOR of Y by A2;
+     reconsider w = [(the Mult of X).[a1,x'],(the Mult of Y).[a1,y']]
+      as Element of [:the carrier of X, the carrier of Y:];
+     take w;
+     for x being VECTOR of X, y being VECTOR of Y st z = [x,y] holds
+       w = [(the Mult of X).[a1,x],(the Mult of Y).[a1,y]]
+     proof
+      let x be VECTOR of X, y be VECTOR of Y;
+      assume z = [x,y];
+      then x=x' & y=y' by A2,ZFMISC_1:33;
+      hence thesis;
+     end;
+     hence thesis;
+    end;
+   consider g being
+       Function of [:REAL, [:the carrier of X, the carrier of Y:]:],
+       [:the carrier of X, the carrier of Y:] such that
+   A3: for a being Element of REAL,
+       z being Element of [:the carrier of X, the carrier of Y:] holds
+       P[a,z,g.[a,z]] from FuncEx2D(A1);
+   take g;
+   let a being Real,
+       z being Element of [:the carrier of X, the carrier of Y:];
+   for x being VECTOR of X, y being VECTOR of Y st z = [x,y] holds
+    g.[a,z] = [(the Mult of X).[a,x],(the Mult of Y).[a,y]] by A3;
+   hence thesis;
+  end;
+ uniqueness
+  proof
+   let g1,g2 be
+    Function of [:REAL, [:the carrier of X, the carrier of Y:]:],
+    [:the carrier of X, the carrier of Y:];
+   assume A4: for a being Real,
+     z being Element of [:the carrier of X, the carrier of Y:],
+     x being VECTOR of X, y being VECTOR of Y
+    st z = [x,y] holds
+    g1.[a,z] = [(the Mult of X).[a,x],(the Mult of Y).[a,y]];
+   assume A5: for a being Real,
+     z being Element of [:the carrier of X, the carrier of Y:],
+     x being VECTOR of X, y being VECTOR of Y
+    st z = [x,y] holds
+    g2.[a,z] = [(the Mult of X).[a,x],(the Mult of Y).[a,y]];
+   for a being Real,
+     z being Element of [:the carrier of X, the carrier of Y:] holds
+    g1.[a,z] = g2.[a,z]
+    proof
+     let a be Real, z be  Element of [:the carrier of X, the carrier of Y:];
+     consider x being set, y being set such that
+      A6: x in the carrier of X &
+          y in the carrier of Y &
+      z = [x,y] by ZFMISC_1:def 2;
+     reconsider x as VECTOR of X by A6;
+     reconsider y as VECTOR of Y by A6;
+     g1.[a,z] = [(the Mult of X).[a,x],(the Mult of Y).[a,y]] &
+     g2.[a,z] = [(the Mult of X).[a,x],(the Mult of Y).[a,y]]
+      by A4,A5,A6;
+     hence thesis;
+    end;
+  hence thesis by FUNCT_2:120;
+  end;
+end;
+
+definition let X,Y be non empty RLSStruct;
+ func Prod_of_RLS(X,Y) -> RLSStruct equals  :Def3:
+ RLSStruct(# [:the carrier of X, the carrier of Y:],
+             [0.X,0.Y],
+             Add_in_Prod_of_RLS(X,Y),
+             Mult_in_Prod_of_RLS(X,Y) #);
+ correctness;
+end;
+
+definition let X,Y be non empty RLSStruct;
+ cluster Prod_of_RLS(X,Y) -> non empty;
+ coherence
+ proof
+  Prod_of_RLS(X,Y) =  RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3;
+  hence thesis;
+ end;
+end;
+
+theorem Th1:
+ for X,Y being non empty RLSStruct,
+     x being VECTOR of X, y being VECTOR of Y,
+     u being VECTOR of Prod_of_RLS(X,Y),
+     p being Real st
+     u = [x,y] holds
+     p*u = [p*x,p*y]
+ proof
+  let X,Y be non empty RLSStruct,
+     x be VECTOR of X, y be VECTOR of Y,
+     u be VECTOR of Prod_of_RLS(X,Y), p be Real;
+  A1:
+  p*u = (the Mult of Prod_of_RLS(X,Y)).[p,u] by RLVECT_1:def 4
+      .= (the Mult of RLSStruct(#
+          [:the carrier of X, the carrier of Y:],
+          [0.X,0.Y],
+          Add_in_Prod_of_RLS(X,Y),
+          Mult_in_Prod_of_RLS(X,Y) #)).[p,u] by Def3
+      .= Mult_in_Prod_of_RLS(X,Y).[p,u];
+  A2:
+  (the Mult of X).[p,x] = p*x & (the Mult of Y).[p,y] = p*y by RLVECT_1:def 4;
+  assume u = [x,y];
+  hence thesis by A1,A2,Def2;
+ end;
+
+theorem Th2:
+ for X,Y being non empty RLSStruct,
+     x1, x2 being VECTOR of X,
+     y1, y2 being VECTOR of Y,
+     u1, u2 being VECTOR of Prod_of_RLS(X,Y) st
+     u1 = [x1,y1] & u2 = [x2,y2] holds
+     u1+u2 = [x1+x2,y1+y2]
+ proof
+  let X,Y be non empty RLSStruct,
+      x1, x2 be VECTOR of X,
+      y1, y2 be VECTOR of Y,
+      u1, u2 be VECTOR of Prod_of_RLS(X,Y);
+  assume
+  A1: u1 = [x1,y1] & u2 = [x2,y2];
+  A2:
+  u1+u2 = (the add of Prod_of_RLS(X,Y)).[u1,u2] by RLVECT_1:def 3
+        .= (the add of RLSStruct(#
+            [:the carrier of X, the carrier of Y:],
+            [0.X,0.Y],
+            Add_in_Prod_of_RLS(X,Y),
+            Mult_in_Prod_of_RLS(X,Y) #)).[u1,u2] by Def3
+        .= Add_in_Prod_of_RLS(X,Y).[u1,u2];
+  A3: u1+u2 = [(the add of X).[x1,x2],(the add of Y).[y1,y2]]
+  proof
+   reconsider u1 as Element of
+    [:the carrier of X, the carrier of Y:] by A1;
+   reconsider u2 as Element of
+    [:the carrier of X, the carrier of Y:] by A1;
+   Add_in_Prod_of_RLS(X,Y).(u1,u2) =
+    [(the add of X).[x1,x2],(the add of Y).[y1,y2]] by A1,Def1;
+   hence thesis by A2,BINOP_1:def 1;
+  end;
+  (the add of X).[x1,x2] = x1+x2 & (the add of Y).[y1,y2] = y1+y2
+   by RLVECT_1:def 3;
+  hence thesis by A3;
+ end;
+
+Lm1:
+for X,Y being non empty RLSStruct holds
+ 0.Prod_of_RLS(X,Y) = [0.X,0.Y]
+ proof
+  let X,Y be non empty RLSStruct;
+  0.Prod_of_RLS(X,Y) =
+    0.RLSStruct(# [:the carrier of X, the carrier of Y:],
+                  [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                  Mult_in_Prod_of_RLS(X,Y) #) by Def3;
+  hence thesis by RLVECT_1:def 2;
+ end;
+
+definition
+ let X,Y be Abelian (non empty RLSStruct);
+ cluster Prod_of_RLS(X,Y) -> Abelian;
+ coherence
+  proof
+   for u1,u2 being Element of Prod_of_RLS(X,Y) holds
+    u1+u2 = u2+u1
+    proof
+     let u1,u2 be Element of Prod_of_RLS(X,Y);
+     u1 is Element of
+      RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+     consider x1,y1 being set such that
+     A1: x1 in the carrier of X & y1 in the carrier of Y and
+     A2: u1=[x1,y1] by ZFMISC_1:def 2;
+     reconsider x1 as VECTOR of X by A1;
+     reconsider y1 as VECTOR of Y by A1;
+     u2 is Element of
+      RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+     consider x2,y2 being set such that
+     A3: x2 in the carrier of X & y2 in the carrier of Y and
+     A4: u2=[x2,y2] by ZFMISC_1:def 2;
+     reconsider x2 as VECTOR of X by A3;
+     reconsider y2 as VECTOR of Y by A3;
+     u1+u2 = [x2+x1,y2+y1] by A2,A4,Th2;
+     hence thesis by A2,A4,Th2;
+    end;
+   hence thesis by RLVECT_1:def 5;
+  end;
+end;
+
+definition
+ let X,Y be add-associative (non empty RLSStruct);
+ cluster Prod_of_RLS(X,Y) -> add-associative;
+ coherence
+  proof
+   for u1,u2,u3 being Element of Prod_of_RLS(X,Y)
+    holds (u1+u2)+u3 = u1+(u2+u3)
+    proof
+     let u1,u2,u3 be Element of Prod_of_RLS(X,Y);
+     u1 is Element of
+      RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+     consider x1,y1 being set such that
+     A1: x1 in the carrier of X & y1 in the carrier of Y and
+     A2: u1=[x1,y1] by ZFMISC_1:def 2;
+     reconsider x1 as VECTOR of X by A1;
+     reconsider y1 as VECTOR of Y by A1;
+     u2 is Element of
+      RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+     consider x2,y2 being set such that
+     A3: x2 in the carrier of X & y2 in the carrier of Y and
+     A4: u2=[x2,y2] by ZFMISC_1:def 2;
+     reconsider x2 as VECTOR of X by A3;
+     reconsider y2 as VECTOR of Y by A3;
+     u3 is Element of
+      RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+     consider x3,y3 being set such that
+     A5: x3 in the carrier of X & y3 in the carrier of Y and
+     A6: u3=[x3,y3] by ZFMISC_1:def 2;
+     reconsider x3 as VECTOR of X by A5;
+     reconsider y3 as VECTOR of Y by A5;
+     u1+u2 = [x1+x2,y1+y2] & u2+u3 = [x2+x3,y2+y3] by A2,A4,A6,Th2; then
+     A7: (u1+u2)+u3 = [x1+x2+x3,y1+y2+y3] &
+         u1+(u2+u3) = [x1+(x2+x3),y1+(y2+y3)] by A2,A6,Th2;
+     (x1+x2)+x3 = x1+(x2+x3) & (y1+y2)+y3 = y1+(y2+y3) by RLVECT_1:def 6;
+     hence thesis by A7;
+    end;
+   hence thesis by RLVECT_1:def 6;
+  end;
+end;
+
+definition
+ let X,Y be right_zeroed (non empty RLSStruct);
+ cluster Prod_of_RLS(X,Y) -> right_zeroed;
+ coherence
+  proof
+   for u being Element of Prod_of_RLS(X,Y) holds
+    u+0.Prod_of_RLS(X,Y) = u
+    proof
+     let u be Element of Prod_of_RLS(X,Y);
+     u is Element of
+      RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+     consider x,y being set such that
+     A1: x in the carrier of X & y in the carrier of Y and
+     A2: u=[x,y] by ZFMISC_1:def 2;
+     reconsider x as VECTOR of X by A1;
+     reconsider y as VECTOR of Y by A1;
+     A3: x+0.X = x & y+0.Y = y by RLVECT_1:def 7;
+     0.Prod_of_RLS(X,Y) = [0.X,0.Y] by Lm1;
+     hence thesis by A2,A3,Th2;
+    end;
+   hence thesis by RLVECT_1:def 7;
+  end;
+end;
+
+definition
+ let X,Y be right_complementable (non empty RLSStruct);
+ cluster Prod_of_RLS(X,Y) -> right_complementable;
+ coherence
+  proof
+   for u being Element of Prod_of_RLS(X,Y)
+    ex u1 being Element of Prod_of_RLS(X,Y) st
+    u+u1 = 0.Prod_of_RLS(X,Y)
+    proof
+     let u be Element of Prod_of_RLS(X,Y);
+     u is Element of
+      RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+     consider x,y being set such that
+     A1: x in the carrier of X & y in the carrier of Y and
+     A2: u=[x,y] by ZFMISC_1:def 2;
+     reconsider x as VECTOR of X by A1;
+     reconsider y as VECTOR of Y by A1;
+     consider x1 being VECTOR of X such that
+     A3: x+x1=0.X by RLVECT_1:def 8;
+     consider y1 being VECTOR of Y such that
+     A4: y+y1=0.Y by RLVECT_1:def 8;
+     set u1=[x1,y1];
+     u1 is Element of
+      RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #); then
+     reconsider u1 as Element of Prod_of_RLS(X,Y) by Def3;
+     take u1;
+     u+u1 = [x+x1,y+y1] by A2,Th2;
+     hence thesis by A3,A4,Lm1;
+    end;
+   hence thesis by RLVECT_1:def 8;
+  end;
+end;
+
+definition
+ let X,Y be RealLinearSpace-like (non empty RLSStruct);
+ cluster Prod_of_RLS(X,Y) -> RealLinearSpace-like;
+ coherence
+  proof
+  A1: for a being Real for u1,u2 being VECTOR of Prod_of_RLS(X,Y) holds
+   a*(u1+u2)=a*u1+a*u2
+   proof
+    let a be Real;
+    let u1,u2 be VECTOR of Prod_of_RLS(X,Y);
+    u1 is Element of
+     RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+    consider x1,y1 being set such that
+    A2: x1 in the carrier of X & y1 in the carrier of Y and
+    A3: u1=[x1,y1] by ZFMISC_1:def 2;
+    reconsider x1 as VECTOR of X by A2;
+    reconsider y1 as VECTOR of Y by A2;
+    u2 is Element of
+     RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+    consider x2,y2 being set such that
+    A4: x2 in the carrier of X & y2 in the carrier of Y and
+    A5: u2=[x2,y2] by ZFMISC_1:def 2;
+    reconsider x2 as VECTOR of X by A4;
+    reconsider y2 as VECTOR of Y by A4;
+    u1+u2=[x1+x2,y1+y2] by A3,A5,Th2; then
+    A6: a*(u1+u2) = [a*(x1+x2),a*(y1+y2)] by Th1;
+    A7: a*u1 = [a*x1,a*y1] & a*u2 = [a*x2,a*y2] by A3,A5,Th1;
+    a*(x1+x2)=a*x1+a*x2 & a*(y1+y2)=a*y1+a*y2 by RLVECT_1:def 9;
+    hence thesis by A6,A7,Th2;
+   end;
+  A8: for a,b being Real for u being VECTOR of Prod_of_RLS(X,Y) holds
+   (a+b)*u = a*u+b*u
+   proof
+    let a,b be Real;
+    let u be VECTOR of Prod_of_RLS(X,Y);
+    u is Element of
+     RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+    consider x,y being set such that
+    A9: x in the carrier of X & y in the carrier of Y and
+    A10: u=[x,y] by ZFMISC_1:def 2;
+    reconsider x as VECTOR of X by A9;
+    reconsider y as VECTOR of Y by A9;
+    a*u = [a*x,a*y] & b*u = [b*x,b*y] by A10,Th1; then
+    A11: a*u+b*u = [a*x+b*x,a*y+b*y] by Th2;
+    (a+b)*x = a*x+b*x & (a+b)*y = a*y+b*y by RLVECT_1:def 9;
+    hence thesis by A10,A11,Th1;
+   end;
+  A12: for a,b being Real for u being VECTOR of Prod_of_RLS(X,Y) holds
+   (a*b)*u = a*(b*u)
+   proof
+    let a,b be Real;
+    let u be VECTOR of Prod_of_RLS(X,Y);
+    u is Element of
+     RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+    consider x,y being set such that
+    A13: x in the carrier of X & y in the carrier of Y and
+    A14: u=[x,y] by ZFMISC_1:def 2;
+    reconsider x as VECTOR of X by A13;
+    reconsider y as VECTOR of Y by A13;
+    b*u = [b*x,b*y] by A14,Th1; then
+    A15: a*(b*u) = [a*(b*x),a*(b*y)] by Th1;
+    (a*b)*x = a*(b*x) & (a*b)*y = a*(b*y) by RLVECT_1:def 9;
+    hence thesis by A14,A15,Th1;
+   end;
+  for u being VECTOR of Prod_of_RLS(X,Y) holds 1*u = u
+   proof
+    let u be VECTOR of Prod_of_RLS(X,Y);
+    u is Element of
+     RLSStruct(# [:the carrier of X, the carrier of Y:],
+                       [0.X,0.Y], Add_in_Prod_of_RLS(X,Y),
+                       Mult_in_Prod_of_RLS(X,Y) #) by Def3; then
+    consider x,y being set such that
+    A16: x in the carrier of X & y in the carrier of Y and
+    A17: u=[x,y] by ZFMISC_1:def 2;
+    reconsider x as VECTOR of X by A16;
+    reconsider y as VECTOR of Y by A16;
+    1*x = x & 1*y = y by RLVECT_1:def 9;
+    hence thesis by A17,Th1;
+   end;
+  hence thesis by A1,A8,A12,RLVECT_1:def 9;
+  end;
+end;
+
+theorem Th3:
+for X,Y being RealLinearSpace, n being Nat,
+    x being FinSequence of the carrier of X,
+    y being FinSequence of the carrier of Y,
+    z being FinSequence of the carrier of Prod_of_RLS(X,Y) st
+    len x = n & len y = n & len z = n &
+    (for i being Nat st i in Seg n holds z.i = [x.i,y.i]) holds
+    Sum z = [Sum x, Sum y]
+ proof
+  let X, Y be RealLinearSpace;
+  defpred P[Nat] means
+   for x being FinSequence of the carrier of X,
+       y being FinSequence of the carrier of Y,
+       z being FinSequence of the carrier of Prod_of_RLS(X,Y) st
+    len x = $1 & len y = $1 & len z = $1 &
+    (for i being Nat st i in Seg $1 holds z.i = [x.i,y.i]) holds
+    Sum z = [Sum x, Sum y];
+  A1: P[0]
+   proof
+    let x be FinSequence of the carrier of X,
+        y be FinSequence of the carrier of Y,
+        z be FinSequence of the carrier of Prod_of_RLS(X,Y);
+    assume that
+    A2: len x = 0 & len y = 0 & len z = 0 and
+    for i being Nat st i in Seg 0 holds z.i = [x.i,y.i];
+    x = <*>(the carrier of X) & y = <*>(the carrier of Y) &
+    z = <*>(the carrier of Prod_of_RLS(X,Y)) by A2,FINSEQ_1:32; then
+    Sum x = 0.X & Sum y = 0.Y & Sum z = 0.Prod_of_RLS(X,Y) by RLVECT_1:60;
+    hence thesis by Lm1;
+   end;
+  A3: for n being Nat st P[n] holds P[n+1]
+   proof
+    let n be Nat; assume
+    A4: P[n];
+    thus P[n+1]
+     proof
+      let x be FinSequence of the carrier of X,
+          y be FinSequence of the carrier of Y,
+          z be FinSequence of the carrier of Prod_of_RLS(X,Y);
+      assume that
+      A5: len x = n+1 & len y = n+1 & len z = n+1 and
+      A6: for i being Nat st i in Seg(n+1) holds z.i = [x.i,y.i];
+      A7: for i being Nat st i in Seg(n+1) holds
+       x/.i = x.i & y/.i = y.i & z/.i = z.i
+       proof
+        let i be Nat;
+        assume i in Seg(n+1);
+        then 1<=i & i<=n+1 by FINSEQ_1:3;
+        hence thesis by A5,FINSEQ_4:24;
+       end;
+      A8: n+1 in Seg(n+1) by FINSEQ_1:6; then
+      x/.(n+1) = x.(n+1) & y/.(n+1) = y.(n+1) & z/.(n+1) = z.(n+1)
+       by A7; then
+      A9: z/.(n+1) = [x/.(n+1),y/.(n+1)] by A6,A8;
+      A10: 0+n <= 1+n by AXIOMS:24; then
+      A11: len(x|n) = n & len(y|n) = n & len(z|n) = n by A5,TOPREAL1:3;
+      A12: Seg n c= Seg(n+1) by A10,FINSEQ_1:7;
+      for i being Nat st i in Seg n holds (z|n).i = [(x|n).i,(y|n).i]
+       proof
+        let i be Nat; assume
+        A13: i in Seg n; then
+        i <= n by FINSEQ_1:3; then
+        (x|n).i = x.i & (y|n).i = y.i & (z|n).i = z.i by JORDAN3:20;
+        hence thesis by A6,A12,A13;
+       end; then
+      A14: Sum(z|n) = [Sum(x|n), Sum(y|n)] by A4,A11;
+      len x = n+1 & x|n = x | Seg n by A5,TOPREAL1:def 1; then
+      x = (x|n)^<*x.(n+1)*> by FINSEQ_3:61; then
+      x = (x|n)^<*x/.(n+1)*> by A7,A8; then
+      A15: Sum x = Sum(x|n) + Sum<*x/.(n+1)*> by RLVECT_1:58
+                .= Sum(x|n) + x/.(n+1) by RLVECT_1:61;
+      len y = n+1 & y|n = y | Seg n by A5,TOPREAL1:def 1; then
+      y = (y|n)^<*y.(n+1)*> by FINSEQ_3:61; then
+      y = (y|n)^<*y/.(n+1)*> by A7,A8; then
+      A16: Sum y = Sum(y|n) + Sum<*y/.(n+1)*> by RLVECT_1:58
+                .= Sum(y|n) + y/.(n+1) by RLVECT_1:61;
+      len z = n+1 & z|n = z | Seg n by A5,TOPREAL1:def 1; then
+      z = (z|n)^<*z.(n+1)*> by FINSEQ_3:61; then
+      z = (z|n)^<*z/.(n+1)*> by A7,A8; then
+      Sum z = Sum(z|n) + Sum<*z/.(n+1)*> by RLVECT_1:58
+           .= Sum(z|n) + z/.(n+1) by RLVECT_1:61;
+      hence thesis by A9,A14,A15,A16,Th2;
+     end;
+   end;
+  thus for n being Nat holds P[n] from Ind(A1,A3);
+ end;
+
+begin :: Real Linear Space of Real Numbers
+
+definition
+ func RLS_Real -> non empty RLSStruct equals  :Def4:
+ RLSStruct(# REAL,0,addreal,multreal #);
+ correctness;
+end;
+
+Lm2:
+for v being VECTOR of RLS_Real, x,p being Real st v=x holds
+ p*v=p*x
+proof
+ let v be VECTOR of RLS_Real, x,p be Real;
+ assume A1: v=x;
+ thus
+ p*v = (the Mult of RLS_Real).[p,v] by RLVECT_1:def 4
+     .= multreal.(p,v) by Def4,BINOP_1:def 1
+     .= p*x by A1,VECTSP_1:def 14;
+end;
+
+Lm3:
+for v1,v2 being VECTOR of RLS_Real, x1,x2 being Real st v1=x1 & v2=x2 holds
+ v1+v2=x1+x2
+proof
+ let v1,v2 be VECTOR of RLS_Real, x1,x2 be Real;
+ assume A1: v1=x1 & v2=x2;
+ thus v1+v2 = (the add of RLS_Real).(v1,v2) by RLVECT_1:5
+           .= x1+x2 by A1,Def4,VECTSP_1:def 4;
+end;
+
+definition
+ cluster RLS_Real -> Abelian add-associative right_zeroed
+    right_complementable RealLinearSpace-like;
+ coherence
+  proof
+   A1: for v,w being VECTOR of RLS_Real holds v+w = w+v
+   proof
+    let v,w be VECTOR of RLS_Real;
+    reconsider vr=v as Real by Def4;
+    reconsider wr=w as Real by Def4;
+    thus v+w = vr+wr by Lm3
+            .= w+v by Lm3;
+   end;
+   A2: for u,v,w being VECTOR of RLS_Real holds (u+v)+w = u+(v+w)
+   proof
+    let u,v,w be VECTOR of RLS_Real;
+    reconsider ur=u as Real by Def4;
+    reconsider vr=v as Real by Def4;
+    reconsider wr=w as Real by Def4;
+    u+v = ur+vr by Lm3; then
+    A3: (u+v)+w = (ur+vr)+wr by Lm3;
+    v+w = vr+wr by Lm3; then
+    u+(v+w) = ur+(vr+wr) by Lm3;
+    hence thesis by A3,XCMPLX_1:1;
+   end;
+   A4: for v being VECTOR of RLS_Real holds v+0.RLS_Real = v
+   proof
+    let v be VECTOR of RLS_Real;
+    reconsider vr=v as Real by Def4;
+    0.RLS_Real = 0 by Def4,RLVECT_1:def 2;
+    hence v+0.RLS_Real = vr+0 by Lm3
+                      .= v;
+   end;
+   A5: for v being VECTOR of RLS_Real
+    ex w being VECTOR of RLS_Real st v+w = 0.RLS_Real
+   proof
+    let v be VECTOR of RLS_Real;
+    reconsider vr=v as Real by Def4;
+    reconsider w=-vr as VECTOR of RLS_Real by Def4;
+    take w;
+    thus v+w = vr+(-vr) by Lm3
+            .= 0 by XCMPLX_0:def 6
+            .= 0.RLS_Real by Def4,RLVECT_1:def 2;
+   end;
+   A6: for a being Real for v,w being VECTOR of RLS_Real holds
+    a*(v+w) = a*v+a*w
+   proof
+    let a be Real;
+    let v,w be VECTOR of RLS_Real;
+    reconsider vr=v as Real by Def4;
+    reconsider wr=w as Real by Def4;
+    A7: a*v = a*vr & a*w = a*wr by Lm2;
+    v+w = vr+wr by Lm3;
+    hence a*(v+w) = a*(vr+wr) by Lm2
+                 .= a*vr+a*wr by XCMPLX_1:8
+                 .= a*v+a*w by A7,Lm3;
+   end;
+   A8: for a,b being Real for v being VECTOR of RLS_Real holds
+    (a+b)*v = a*v+b*v
+   proof
+    let a,b be Real;
+    let v be VECTOR of RLS_Real;
+    reconsider vr=v as Real by Def4;
+    a*v = a*vr & b*v = b*vr by Lm2;
+    hence a*v+b*v = a*vr+b*vr by Lm3
+                 .= (a+b)*vr by XCMPLX_1:8
+                 .= (a+b)*v by Lm2;
+   end;
+   A9: for a,b being Real for v being VECTOR of RLS_Real holds
+    (a*b)*v = a*(b*v)
+   proof
+    let a,b be Real;
+    let v be VECTOR of RLS_Real;
+    reconsider vr=v as Real by Def4;
+    b*v = b*vr by Lm2;
+    hence a*(b*v) = a*(b*vr) by Lm2
+                 .= (a*b)*vr by XCMPLX_1:4
+                 .= (a*b)*v by Lm2;
+   end;
+   A10: for v being VECTOR of RLS_Real holds 1*v = v
+   proof
+    let v be VECTOR of RLS_Real;
+    reconsider vr=v as Real by Def4;
+    thus 1*v = 1*vr by Lm2
+            .= v;
+   end;
+   thus thesis by A1,A2,A4,A5,A6,A8,A9,A10,RLVECT_1:7;
+  end;
+end;
+
+Lm4:
+ for X being non empty RLSStruct,
+     x being VECTOR of X,
+     u being VECTOR of Prod_of_RLS(X,RLS_Real),
+     p,w being Real st
+     u = [x,w] holds
+     p*u = [p*x,p*w]
+ proof
+  let X be non empty RLSStruct,
+      x be VECTOR of X,
+      u be VECTOR of Prod_of_RLS(X,RLS_Real), p,w be Real;
+  reconsider y=w as VECTOR of RLS_Real by Def4;
+  A1:
+  p*y = (the Mult of RLS_Real).[p,w] by RLVECT_1:def 4
+      .= multreal.(p,w) by Def4,BINOP_1:def 1
+      .= p*w by VECTSP_1:def 14;
+  assume u = [x,w];
+  hence thesis by A1,Th1;
+ end;
+
+Lm5:
+ for X being non empty RLSStruct,
+     x1, x2 being VECTOR of X,
+     w1, w2 being Real,
+     u1, u2 being VECTOR of Prod_of_RLS(X,RLS_Real) st
+     u1 = [x1,w1] & u2 = [x2,w2] holds
+     u1+u2 = [x1+x2,w1+w2]
+ proof
+  let X be non empty RLSStruct,
+      x1, x2 be VECTOR of X,
+      w1, w2 be Real,
+      u1, u2 be VECTOR of Prod_of_RLS(X,RLS_Real);
+  reconsider y1=w1 as VECTOR of RLS_Real by Def4;
+  reconsider y2=w2 as VECTOR of RLS_Real by Def4;
+  A1:
+  y1+y2 = (the add of RLS_Real).(w1,w2) by RLVECT_1:5
+        .= w1+w2 by Def4,VECTSP_1:def 4;
+  assume u1 = [x1,w1] & u2 = [x2,w2];
+  hence thesis by A1,Th2;
+ end;
+
+Lm6:
+ for a being FinSequence of the carrier of RLS_Real,
+     b being FinSequence of REAL st
+     len a = len b &
+     (for i being Nat st i in dom a holds a.i = b.i) holds
+     Sum a = Sum b
+ proof
+  defpred P[Nat] means
+   for a be FinSequence of the carrier of RLS_Real,
+       b be FinSequence of REAL st
+     len a = $1 & len b = $1 &
+     (for i being Nat st i in dom a holds a.i = b.i) holds
+     Sum a = Sum b;
+  A1: P[0]
+   proof
+    let a be FinSequence of the carrier of RLS_Real,
+        b be FinSequence of REAL;
+    assume len a = 0 & len b = 0 &
+     (for i being Nat st i in dom a holds a.i = b.i); then
+    a = <*>(the carrier of RLS_Real) & b = <*> REAL by FINSEQ_1:32;
+    then Sum a = 0.RLS_Real & Sum b = 0 by RLVECT_1:60,RVSUM_1:102;
+    hence thesis by Def4,RLVECT_1:def 2;
+   end;
+  A2: for n being Nat st P[n] holds P[n+1]
+   proof
+    let n be Nat; assume
+    A3: P[n];
+    thus P[n+1]
+     proof
+      let a be FinSequence of the carrier of RLS_Real,
+          b be FinSequence of REAL;
+      assume that
+      A4: len a = n+1 & len b = n+1 and
+      A5: for i being Nat st i in dom a holds a.i = b.i;
+      A6: dom a = Seg(n+1) by A4,FINSEQ_1:def 3;
+      A7: for i being Nat st i in Seg(n+1) holds a.i = a/.i & a/.i = b.i
+       proof
+        let i be Nat; assume
+        A8: i in Seg(n+1);
+        then 1<=i & i<=n+1 by FINSEQ_1:3; then
+        a/.i = a.i by A4,FINSEQ_4:24;
+        hence thesis by A5,A6,A8;
+       end;
+      A9: n+1 in Seg(n+1) by FINSEQ_1:6;
+      A10: 0+n <= 1+n by AXIOMS:24; then
+      A11: len(a|n) = n & len(b|n) = n by A4,TOPREAL1:3;
+      A12: Seg n c= Seg(n+1) by A10,FINSEQ_1:7;
+      for i being Nat st i in dom(a|n) holds (a|n).i = (b|n).i
+       proof
+        let i be Nat;
+        assume i in dom(a|n); then
+        A13: i in Seg n by A11,FINSEQ_1:def 3; then
+        i <= n by FINSEQ_1:3; then
+        (a|n).i = a.i & (b|n).i = b.i by JORDAN3:20;
+        hence thesis by A5,A6,A12,A13;
+       end; then
+      A14: Sum(a|n) = Sum(b|n) by A3,A11;
+      A15: a/.(n+1) = b.(n+1) by A7,A9;
+      len a = n+1 & a|n = a | Seg n by A4,TOPREAL1:def 1; then
+      a = (a|n)^<*a.(n+1)*> by FINSEQ_3:61; then
+      a = (a|n)^<*a/.(n+1)*> by A7,A9; then
+      A16: Sum a = Sum(a|n) + Sum<*a/.(n+1)*> by RLVECT_1:58
+                .= Sum(a|n) + a/.(n+1) by RLVECT_1:61
+                .= Sum(b|n) + b.(n+1) by A14,A15,Lm3;
+      len b = n+1 & b|n = b | Seg n by A4,TOPREAL1:def 1; then
+      b = (b|n)^<*b.(n+1)*> by FINSEQ_3:61;
+      hence thesis by A16,RVSUM_1:104;
+     end;
+   end;
+  let a be FinSequence of the carrier of RLS_Real,
+      b be FinSequence of REAL;
+  for n being Nat holds P[n] from Ind(A1,A2);
+  hence thesis;
+ end;
+
+begin :: Sum of Finite Sequence of Extended Real Numbers
+
+definition
+ let F be FinSequence of ExtREAL;
+ func Sum(F) -> R_eal means  :Def5:
+  ex f being Function of NAT, ExtREAL st
+  it = f.(len F) & f.0 = 0. &
+    for i being Nat st i < len F holds f.(i+1)=f.i+F.(i+1);
+ existence
+  proof
+   defpred P[FinSequence of ExtREAL] means
+    ex f being Function of NAT, ExtREAL st
+    f.0 = 0. &
+    for i being Nat st i < len $1 holds f.(i+1) = f.i+$1.(i+1);
+   A1: P[<*> ExtREAL]
+    proof
+      deffunc f(set) = 0.;
+     consider f being Function of NAT, ExtREAL such that
+     A2: for i being Nat holds f.i = f(i) from LambdaD;
+     take f;
+     thus f.0 = 0. by A2;
+     thus for i being Nat st i < len(<*> ExtREAL) holds
+      f.(i+1) = f.i+(<*> ExtREAL).(i+1)
+     proof
+      let i be Nat;
+      assume i < len(<*> ExtREAL);
+      then i < 0 by FINSEQ_1:32;
+      hence thesis by NAT_1:18;
+     end;
+    end;
+   A3: for F being FinSequence of ExtREAL for x being Element of ExtREAL
+      st P[F] holds P[F^<*x*>]
+    proof
+     let F be FinSequence of ExtREAL;
+     let x be Element of ExtREAL;
+     assume P[F];
+     then consider f being Function of NAT, ExtREAL such that
+     A4: f.0 = 0. and
+     A5: for i being Nat st i < len F holds f.(i+1) = f.i+F.(i+1);
+      defpred R[Nat,set] means
+         ($1 <= len F implies $2 = f.$1) &
+         ($1 = (len F)+1 implies $2 = f.(len F) + x);
+     A6: for i being Nat ex g being Element of ExtREAL st R[i,g]
+      proof
+       let i be Nat;
+       per cases;
+       suppose
+        A7: i <> (len F)+1;
+        take f.i;
+        thus thesis by A7;
+       suppose
+        A8: i = (len F)+1;
+        take f.(len F) + x;
+        thus thesis by A8,NAT_1:38;
+      end;
+     consider f' being Function of NAT, ExtREAL such that
+     A9: for i being Nat holds R[i,f'.i] from FuncExD(A6);
+     thus P[F^<*x*>]
+      proof
+       take f';
+       0 <= len F by NAT_1:18;
+       hence f'.0 = 0. by A4,A9;
+       thus for i being Nat st i < len(F^<*x*>) holds
+        f'.(i+1)=f'.i+(F^<*x*>).(i+1)
+        proof
+         let i be Nat;
+         assume i < len(F^<*x*>); then
+         i < (len F)+(len <*x*>) by FINSEQ_1:35; then
+         i < (len F)+1 by FINSEQ_1:56; then
+         A10: i <= len F by NAT_1:38; then
+         A11: f'.i = f.i by A9;
+         per cases by A10,AXIOMS:21;
+         suppose
+          A12: i < len F; then
+          A13: i+1 <= len F by INT_1:20; then
+          f'.(i+1) = f.(i+1) by A9; then
+          A14: f'.(i+1)=f'.i+F.(i+1) by A5,A11,A12;
+          1<=i+1 by NAT_1:37; then
+          i+1 in Seg len F by A13,FINSEQ_1:3; then
+          i+1 in dom F by FINSEQ_1:def 3;
+          hence thesis by A14,FINSEQ_1:def 7;
+         suppose
+          A15: i = len F; then
+          f'.(i+1) = f'.i + x by A9,A11;
+          hence thesis by A15,FINSEQ_1:59;
+        end;
+      end;
+    end;
+   for F being FinSequence of ExtREAL holds P[F] from IndSeqD(A1,A3);
+   then consider f being Function of NAT, ExtREAL such that
+   A16: f.0 = 0. &
+    for i being Nat st i < len F holds f.(i+1) = f.i+F.(i+1);
+   take f.(len F);
+   thus thesis by A16;
+  end;
+ uniqueness
+  proof
+   let g1, g2 be Element of ExtREAL;
+   given f1 being Function of NAT, ExtREAL such that
+   A17: g1 = f1.(len F) and
+   A18: f1.0 = 0. and
+   A19: for i being Nat st i < len F holds f1.(i+1) = f1.i+F.(i+1);
+   given f2 being Function of NAT, ExtREAL such that
+   A20: g2 = f2.(len F) and
+   A21: f2.0 = 0. and
+   A22: for i being Nat st i < len F holds f2.(i+1) = f2.i+F.(i+1);
+   defpred P[Nat] means $1 <= len F implies f1.$1 = f2.$1;
+   A23: P[0] by A18,A21;
+   A24: for i being Nat st P[i] holds P[i+1]
+    proof
+     let i be Nat; assume
+     A25: P[i];
+     thus P[i+1]
+      proof
+       assume i+1 <= len F; then
+       i < len F by NAT_1:38; then
+       f1.(i+1) = f1.i+F.(i+1) & f2.(i+1) = f2.i+F.(i+1) & f1.i = f2.i
+        by A19,A22,A25;
+       hence thesis;
+      end;
+    end;
+   for i being Nat holds P[i] from Ind(A23,A24);
+   hence g1 = g2 by A17,A20;
+  end;
+end;
+
+theorem Th4:
+ Sum(<*> ExtREAL) = 0.
+ proof
+  set F = <*> ExtREAL;
+  ex f being Function of NAT, ExtREAL st
+  Sum F = f.(len F) & f.0 = 0. &
+    for i being Nat st i < len F holds f.(i+1) = f.i+F.(i+1) by Def5;
+  hence thesis by FINSEQ_1:25;
+ end;
+
+theorem Th5:
+ for a being R_eal holds Sum<*a*> = a
+  proof
+   let a be R_eal;
+   set F = <*a*>;
+   consider f being Function of NAT, ExtREAL such that
+   A1: Sum F = f.(len F) and
+   A2: f.0 = 0. and
+   A3: for i being Nat st i < len F holds f.(i+1) = f.i+F.(i+1) by Def5;
+   len F = 1 by FINSEQ_1:56; then
+   Sum F = f.1 & f.(0+1) = f.0+F.(0+1) by A1,A3; then
+   Sum F = F.1 by A2,SUPINF_2:18
+        .= a by FINSEQ_1:57;
+   hence thesis;
+  end;
+
+Lm7:
+ for F being FinSequence of ExtREAL,
+     x being Element of ExtREAL holds
+ Sum(F^<*x*>) = Sum F + x
+  proof
+   let F be FinSequence of ExtREAL, x be Element of ExtREAL;
+   consider f being Function of NAT, ExtREAL such that
+   A1: Sum(F^<*x*>) = f.(len(F^<*x*>)) and
+   A2: f.0 = 0. and
+   A3: for i being Nat st i < len (F^<*x*>) holds f.(i+1)=f.i+(F^<*x*>).(i+1)
+    by Def5;
+   A4: len(F^<*x*>) = (len F)+(len <*x*>) by FINSEQ_1:35
+                   .= (len F)+1 by FINSEQ_1:56;
+   for i being Nat st i < len F holds f.(i+1)=f.i+F.(i+1)
+    proof
+     let i be Nat; assume
+     A5: i < len F; then
+     i < len(F^<*x*>) by A4,NAT_1:38; then
+     A6: f.(i+1)=f.i+(F^<*x*>).(i+1) by A3;
+     1 <= i+1 & i+1 <= len F by A5,INT_1:20,NAT_1:29; then
+     i+1 in Seg len F by FINSEQ_1:3; then
+     i+1 in dom F by FINSEQ_1:def 3;
+     hence thesis by A6,FINSEQ_1:def 7;
+    end; then
+   A7: Sum F = f.(len F) by A2,Def5;
+   len F < len(F^<*x*>) by A4,NAT_1:38; then
+   f.((len F)+1)=f.(len F)+(F^<*x*>).((len F)+1) by A3;
+   hence thesis by A1,A4,A7,FINSEQ_1:59;
+  end;
+
+theorem Th6:
+ for a,b being R_eal holds Sum<*a,b*> = a+b
+  proof
+   let a,b be R_eal;
+   thus Sum<*a,b*> = Sum(<*a*>^<*b*>) by FINSEQ_1:def 9
+                  .= Sum<*a*> + b by Lm7
+                  .= a + b by Th5;
+  end;
+
+Lm8:
+ for F being FinSequence of ExtREAL st not -infty in rng F holds
+  Sum F <> -infty
+  proof
+   defpred P[FinSequence of ExtREAL] means
+   not -infty in rng $1 implies Sum $1 <> -infty;
+   A1: P[<*> ExtREAL] by Th4,SUPINF_1:6,SUPINF_2:def 1;
+   A2: for F being FinSequence of ExtREAL for x being Element of ExtREAL
+       st P[F] holds P[F^<*x*>]
+    proof
+     let F be FinSequence of ExtREAL;
+     let x be Element of ExtREAL; assume
+     A3: P[F];
+     assume not -infty in rng(F^<*x*>); then
+     A4: not -infty in rng F \/ rng <*x*> by FINSEQ_1:44; then
+     not -infty in rng <*x*> by XBOOLE_0:def 2;
+     then not -infty in {x} by FINSEQ_1:55; then
+     A5: x <> -infty by TARSKI:def 1;
+     Sum(F^<*x*>) = Sum F + x by Lm7;
+     hence thesis by A3,A4,A5,SUPINF_2:9,XBOOLE_0:def 2;
+    end;
+   thus for F being FinSequence of ExtREAL holds P[F] from IndSeqD(A1,A2);
+  end;
+
+Lm9:
+ for F being FinSequence of ExtREAL st
+  +infty in rng F & not -infty in rng F holds
+  Sum F = +infty
+  proof
+   defpred P[FinSequence of ExtREAL] means
+   +infty in rng $1 & not -infty in rng $1 implies Sum $1 = +infty;
+   A1: P[<*> ExtREAL] by FINSEQ_1:27;
+   A2: for F being FinSequence of ExtREAL for x being Element of ExtREAL
+       st P[F] holds P[F^<*x*>]
+    proof
+     let F be FinSequence of ExtREAL;
+     let x be Element of ExtREAL; assume
+     A3: P[F];
+     assume
+     +infty in rng(F^<*x*>) & not -infty in rng(F^<*x*>); then
+     A4: +infty in rng F \/ rng <*x*> &
+      not -infty in rng F \/ rng <*x*> by FINSEQ_1:44; then
+     A5: (+infty in rng F or +infty in rng <*x*>) &
+      not -infty in rng F &
+      not -infty in rng <*x*> by XBOOLE_0:def 2; then
+     A6: +infty in rng F or +infty in {x} by FINSEQ_1:55;
+     not -infty in {x} by A5,FINSEQ_1:55; then
+     A7: x <> -infty by TARSKI:def 1;
+     A8: Sum(F^<*x*>) = Sum F + x by Lm7;
+     A9: Sum F <> -infty by A5,Lm8;
+     per cases by A6,TARSKI:def 1;
+     suppose +infty in rng F;
+      hence thesis by A3,A4,A7,A8,SUPINF_2:def 2,XBOOLE_0:def 2;
+     suppose +infty = x;
+      hence thesis by A8,A9,SUPINF_2:def 2;
+    end;
+   thus for F being FinSequence of ExtREAL holds P[F] from IndSeqD(A1,A2);
+  end;
+
+Lm10:
+ for a being FinSequence of ExtREAL, b being FinSequence of REAL st
+     len a = len b &
+     (for i being Nat st i in dom a holds a.i = b.i) holds
+     Sum a = Sum b
+ proof
+  defpred P[Nat] means
+   for a be FinSequence of ExtREAL, b be FinSequence of REAL st
+     len a = $1 & len b = $1 &
+     (for i being Nat st i in dom a holds a.i = b.i) holds
+     Sum a = Sum b;
+  A1: P[0]
+   proof
+    let a be FinSequence of ExtREAL, b be FinSequence of REAL;
+    assume len a = 0 & len b = 0 &
+     (for i being Nat st i in dom a holds a.i = b.i);
+    then Sum a = 0. & Sum b = 0 by Th4,FINSEQ_1:32,RVSUM_1:102;
+    hence thesis by SUPINF_2:def 1;
+   end;
+  A2: for n being Nat st P[n] holds P[n+1]
+   proof
+    let n be Nat; assume
+    A3: P[n];
+    thus P[n+1]
+     proof
+      let a be FinSequence of ExtREAL, b be FinSequence of REAL;
+      assume that
+      A4: len a = n+1 & len b = n+1 and
+      A5: for i being Nat st i in dom a holds a.i = b.i;
+      A6: dom a = Seg(n+1) by A4,FINSEQ_1:def 3;
+      A7: n+1 in Seg(n+1) by FINSEQ_1:6;
+      A8: 0+n <= 1+n by AXIOMS:24; then
+      A9: len(a|n) = n & len(b|n) = n by A4,TOPREAL1:3;
+      A10: Seg n c= Seg(n+1) by A8,FINSEQ_1:7;
+      for i being Nat st i in dom(a|n) holds (a|n).i = (b|n).i
+       proof
+        let i be Nat;
+        assume i in dom(a|n); then
+        A11: i in Seg n by A9,FINSEQ_1:def 3; then
+        i <= n by FINSEQ_1:3; then
+        (a|n).i = a.i & (b|n).i = b.i by JORDAN3:20;
+        hence thesis by A5,A6,A10,A11;
+       end; then
+      A12: Sum(a|n) = Sum(b|n) by A3,A9;
+      A13: a.(n+1) = b.(n+1) by A5,A6,A7;
+      len a = n+1 & a|n = a | Seg n by A4,TOPREAL1:def 1; then
+      a = (a|n)^<*a.(n+1)*> by FINSEQ_3:61; then
+      A14: Sum a = Sum(a|n) + a.(n+1) by Lm7
+                .= Sum(b|n) + b.(n+1) by A12,A13,SUPINF_2:1;
+      len b = n+1 & b|n = b | Seg n by A4,TOPREAL1:def 1; then
+      b = (b|n)^<*b.(n+1)*> by FINSEQ_3:61;
+      hence thesis by A14,RVSUM_1:104;
+     end;
+   end;
+  let a be FinSequence of ExtREAL, b be FinSequence of REAL;
+  for n being Nat holds P[n] from Ind(A1,A2);
+  hence thesis;
+ end;
+
+Lm11:
+ for n being Nat, a being FinSequence of ExtREAL,
+     b being FinSequence of the carrier of RLS_Real st
+     len a = n & len b = n &
+     (for i being Nat st i in Seg n holds a.i = b.i) holds
+     Sum a = Sum b
+  proof
+   let n be Nat, a be FinSequence of ExtREAL,
+       b be FinSequence of the carrier of RLS_Real;
+   assume that
+   A1: len a = n & len b = n and
+   A2: for i being Nat st i in Seg n holds a.i = b.i;
+   A3: dom a = Seg n & dom b = Seg n by A1,FINSEQ_1:def 3;
+   set c = b;
+   reconsider c as FinSequence of REAL by Def4;
+   A4: Sum a = Sum c by A1,A2,A3,Lm10;
+   len b = len c & (for i being Nat st i in dom b holds b.i = c.i);
+   hence thesis by A4,Lm6;
+  end;
+
+theorem Th7:
+ for F,G being FinSequence of ExtREAL st
+  not -infty in rng F & not -infty in rng G holds Sum(F^G) = Sum(F)+Sum(G)
+  proof
+   let F,G be FinSequence of ExtREAL; assume
+   A1: not -infty in rng F;
+   defpred P[FinSequence of ExtREAL] means
+   not -infty in rng $1 implies Sum(F^$1) = Sum(F)+Sum($1);
+   A2: P[<*> ExtREAL]
+    proof
+     set H = <*> ExtREAL;
+     assume not -infty in rng H;
+     thus Sum(F^H) = Sum F by FINSEQ_1:47
+                   .= Sum F + Sum H by Th4,SUPINF_2:18;
+    end;
+   A3: for H being FinSequence of ExtREAL for x being Element of ExtREAL
+      st P[H] holds P[H^<*x*>]
+    proof
+     let H be FinSequence of ExtREAL;
+     let x be Element of ExtREAL; assume
+     A4: P[H];
+     thus P[H^<*x*>]
+      proof
+       assume not -infty in rng(H^<*x*>); then
+       A5: not -infty in rng H \/ rng <*x*> by FINSEQ_1:44; then
+       A6: not -infty in rng H & not -infty in rng <*x*> by XBOOLE_0:def 2;
+       then not -infty in {x} by FINSEQ_1:55; then
+       A7: x <> -infty by TARSKI:def 1;
+       A8: Sum F <> -infty & Sum H <> -infty by A1,A6,Lm8;
+       F^(H^<*x*>) = F^H^<*x*> by FINSEQ_1:45;
+       hence Sum(F^(H^<*x*>)) = Sum F + Sum H + x
+              by A4,A5,Lm7,XBOOLE_0:def 2
+                             .= Sum F + (Sum H + x) by A7,A8,EXTREAL1:8
+                             .= Sum F + Sum(H^<*x*>) by Lm7;
+      end;
+    end;
+   A9: for H being FinSequence of ExtREAL holds P[H] from IndSeqD(A2,A3);
+   assume not -infty in rng G;
+   hence thesis by A9;
+  end;
+
+Lm12:
+ for n,q being Nat st q in Seg(n+1) ex p being Permutation of Seg(n+1) st
+ for i being Nat st i in Seg(n+1) holds
+  (i<q implies p.i=i) & (i=q implies p.i=n+1) & (i>q implies p.i=i-1)
+  proof
+   let n,q be Nat; assume
+   A1: q in Seg(n+1);
+    defpred R[Nat,set] means
+    ($1<q implies $2=$1) & ($1=q implies $2=n+1) & ($1>q implies $2=$1-1);
+   A2: for i being Nat st i in Seg(n+1)
+    ex p being Element of NAT st R[i,p]
+    proof
+     let i be Nat;
+     assume i in Seg(n+1);
+     per cases by AXIOMS:21;
+     suppose
+      A3: i<q;
+      take i;
+      thus thesis by A3;
+     suppose
+      A4: i=q;
+      take n+1;
+      thus thesis by A4;
+     suppose
+      A5: i>q;
+      1 <= q by A1,FINSEQ_1:3; then
+      1 <= i by A5,AXIOMS:22;
+      then reconsider p=i-1 as Nat by INT_1:18;
+      take p;
+      thus thesis by A5;
+    end;
+   consider p being FinSequence of NAT such that
+    A6: dom p = Seg(n+1) and
+    A7: for i being Nat st i in Seg(n+1) holds R[i,p/.i] from SeqExD(A2);
+    A8: for i being Nat st i in Seg(n+1) holds
+    (i<q implies p.i=i) & (i=q implies p.i=n+1) & (i>q implies p.i=i-1)
+     proof
+      let i be Nat; assume
+      A9: i in Seg(n+1);
+      then p/.i = p.i by A6,FINSEQ_4:def 4;
+      hence thesis by A7,A9;
+     end;
+   for i being set holds i in rng p iff i in Seg(n+1)
+    proof
+     let i being set;
+     thus i in rng p implies i in Seg(n+1)
+      proof
+       assume i in rng p; then
+       consider j being set such that
+       A10: j in Seg(n+1) and
+       A11: p.j = i by A6,FUNCT_1:def 5;
+       reconsider j as Nat by A10;
+       per cases by AXIOMS:21;
+       suppose j<q;
+        hence thesis by A8,A10,A11;
+       suppose j=q; then
+        i = n+1 by A8,A10,A11;
+        hence thesis by FINSEQ_1:6;
+       suppose
+        A12: j>q; then
+        A13: i = j-1 by A8,A10,A11;
+        1 <= q by A1,FINSEQ_1:3; then
+        A14: 1 < j by A12,AXIOMS:22; then
+        reconsider i as Nat by A13,INT_1:18;
+        1 < i+1 by A13,A14,XCMPLX_1:27; then
+        A15: 1 <= i by NAT_1:38;
+        j <= n+1 by A10,FINSEQ_1:3; then
+        i <= n by A13,REAL_1:86; then
+        i <= n+1 by NAT_1:37;
+        hence thesis by A15,FINSEQ_1:3;
+      end;
+     thus i in Seg(n+1) implies i in rng p
+      proof
+       assume
+       A16: i in Seg(n+1); then
+       reconsider i as Nat;
+       1 <= i & i <= n+1 by A16,FINSEQ_1:3; then
+       A17: i = n+1 or i < n+1 by AXIOMS:21;
+       per cases by A17,NAT_1:38; suppose
+        i < q; then
+        p.i = i by A8,A16;
+        hence thesis by A6,A16,FUNCT_1:12;
+       suppose
+        A18: q <= i & i <= n; then
+        A19: i+1 <= n+1 by AXIOMS:24;
+        1 <= i+1 by NAT_1:37; then
+        A20: i+1 in Seg(n+1) by A19,FINSEQ_1:3;
+        q < i+1 by A18,NAT_1:38; then
+        p.(i+1) = i+1-1 by A8,A20
+               .= i by XCMPLX_1:26;
+        hence thesis by A6,A20,FUNCT_1:12;
+       suppose i=n+1; then
+        p.q = i by A1,A8;
+        hence thesis by A1,A6,FUNCT_1:12;
+      end;
+    end; then
+   A21: rng p = Seg(n+1) by TARSKI:2;
+   A22: for i being Nat st i in Seg(n+1) holds i=q iff p/.i=n+1
+    proof
+     let i be Nat; assume
+     A23: i in Seg(n+1);
+     thus i=q implies p/.i=n+1 by A7,A23;
+     thus p/.i=n+1 implies i=q
+      proof
+       assume
+       A24: p/.i=n+1;
+       per cases by AXIOMS:21;
+        suppose i=q; hence thesis;
+        suppose
+         i<q; then
+         n+1<q by A7,A23,A24;
+         hence thesis by A1,FINSEQ_1:3;
+        suppose i>q; then
+         i-1 = n+1 by A7,A23,A24; then
+         i >= n+1+1 by REAL_1:84; then
+         i > n+1 by NAT_1:38;
+         hence thesis by A23,FINSEQ_1:3;
+      end;
+    end;
+   A25: for i being Nat st i in Seg(n+1) & p/.i<>n+1 holds i<q iff p/.i<q
+    proof
+     let i be Nat; assume that
+     A26: i in Seg(n+1) and
+     A27: p/.i<>n+1;
+     thus i<q implies p/.i<q by A7,A26;
+     thus p/.i<q implies i<q
+      proof
+       assume
+       A28: p/.i<q;
+       per cases by AXIOMS:21;
+       suppose i<q;
+        hence thesis;
+       suppose i=q;
+        hence thesis by A7,A26,A27;
+       suppose A29: i>q; then
+        p/.i = i-1 by A7,A26; then
+        i-1+1 < q+1 by A28,REAL_1:67; then
+        i < q+1 by XCMPLX_1:27;
+        hence thesis by A29,NAT_1:38;
+      end;
+   end;
+   for i1,i2 being set st i1 in Seg(n+1) & i2 in Seg(n+1) & p.i1 = p.i2
+    holds i1 = i2
+    proof
+     let i1,i2 be set; assume that
+     A30: i1 in Seg(n+1) and
+     A31: i2 in Seg(n+1) and
+     A32: p.i1 = p.i2;
+     reconsider i1 as Nat by A30;
+     reconsider i2 as Nat by A31;
+     A33: p/.i1 = p.i1 & p/.i2 = p.i2 by A6,A30,A31,FINSEQ_4:def 4;
+     per cases;
+     suppose p/.i1 = n+1; then
+      i1 = q & i2 = q by A22,A30,A31,A32,A33;
+      hence thesis;
+     suppose p/.i1 <> n+1 & p/.i1 < q; then
+      i1<q & i2<q by A25,A30,A31,A32,A33; then
+      p/.i1=i1 & p/.i2=i2 by A7,A30,A31;
+      hence thesis by A32,A33;
+     suppose
+      A34: p/.i1 <> n+1 & p/.i1 >= q; then
+      A35: i1 >= q & i2 >= q by A25,A30,A31,A32,A33;
+      i1 <> q & i2 <> q by A22,A30,A31,A32,A33,A34; then
+      i1 > q & i2 > q by A35,AXIOMS:21; then
+      p/.i1=i1-1 & p/.i2=i2-1 by A7,A30,A31;
+      hence thesis by A32,A33,XCMPLX_1:19;
+    end; then
+   A36: p is one-to-one by A6,FUNCT_1:def 8;
+   reconsider p as Permutation of Seg(n+1)
+    by A6,A21,A36,FUNCT_2:3,83;
+   take p;
+   thus thesis by A8;
+  end;
+
+Lm13:
+ for n,q being Nat, s,p being Permutation of Seg(n+1),
+     s' being FinSequence of Seg(n+1) st
+  s'=s & q=s.(n+1) &
+  for i being Nat st i in Seg(n+1) holds
+   (i<q implies p.i=i) & (i=q implies p.i=n+1) & (i>q implies p.i=i-1)
+  holds p*s'|n is Permutation of Seg n
+  proof
+   let n,q be Nat, s,p be Permutation of Seg(n+1),
+       s' be FinSequence of Seg(n+1);
+   assume that
+   A1: s'=s and
+   A2: q=s.(n+1) and
+   A3: for i being Nat st i in Seg(n+1) holds
+    (i<q implies p.i=i) & (i=q implies p.i=n+1) & (i>q implies p.i=i-1);
+   A4: Seg(n+1) <> {} by FINSEQ_1:6; then
+   A5: dom s = Seg(n+1) & rng s = Seg(n+1)
+    by FUNCT_2:def 1,def 3; then
+   A6: len s' = n+1 by A1,FINSEQ_1:def 3;
+   A7: dom p = Seg(n+1) & rng p = Seg(n+1)
+    by A4,FUNCT_2:def 1,def 3;
+   A8: 0+n <= 1+n by AXIOMS:24;
+   reconsider r=p*s'|n as FinSequence of Seg(n+1) by FINSEQ_2:36;
+   len(s'|n) = n by A6,A8,TOPREAL1:3; then
+   len r = n by A4,FINSEQ_2:37; then
+   A9: dom r = Seg n by FINSEQ_1:def 3;
+   A10: Seg n c= Seg(n+1) by A8,FINSEQ_1:7;
+   n+1 in dom s by A5,FINSEQ_1:6; then
+   q in Seg(n+1) by A2,A5,FUNCT_1:12; then
+   A11: 1 <= q & q <= n+1 by FINSEQ_1:3;
+   for i being set holds i in rng r iff i in Seg n
+    proof
+     let i being set;
+     thus i in rng r implies i in Seg n
+      proof
+       assume i in rng r; then
+       consider j being set such that
+       A12: j in Seg n and
+       A13: r.j = i by A9,FUNCT_1:def 5;
+       reconsider j as Nat by A12;
+       A14: j <= n by A12,FINSEQ_1:3; then
+       (s'|n).j = s.j by A1,JORDAN3:20; then
+       A15: i = p.(s.j) by A9,A12,A13,FUNCT_1:22;
+       A16: j < n+1 by A14,NAT_1:38;
+       A17: j in dom s & n+1 in dom s by A5,A10,A12,FINSEQ_1:6;
+       A18: s.j in Seg(n+1) & s.j in dom p
+        by A5,A7,A10,A12,FUNCT_1:12; then
+       reconsider q1 = s.j as Nat;
+       A19: p.(s.j) in rng p by A18,FUNCT_1:12; then
+       i in Seg(n+1) by A15; then
+       reconsider i as Nat;
+       A20: q1 <> q by A2,A16,A17,FUNCT_1:def 8;
+       per cases by A20,AXIOMS:21;
+       suppose q1 < q; then
+        i < q by A3,A15,A18; then
+        i < n+1 by A11,AXIOMS:22; then
+        1 <= i & i <= n by A15,A19,FINSEQ_1:3,NAT_1:38;
+        hence thesis by FINSEQ_1:3;
+       suppose q1 > q; then
+        A21: i = q1-1 by A3,A15,A18;
+        q1 <= n+1 by A18,FINSEQ_1:3; then
+        1 <= i & i <= n by A15,A19,A21,FINSEQ_1:3,REAL_1:86;
+        hence thesis by FINSEQ_1:3;
+      end;
+     assume
+      A22: i in Seg n; then
+      reconsider i as Nat;
+      per cases; suppose
+       A23: i < q; then
+       A24: p.i = i by A3,A10,A22;
+       consider j being set such that
+       A25: j in dom s and
+       A26: i = s.j by A5,A10,A22,FUNCT_1:def 5;
+       j in Seg(n+1) by A25; then
+       reconsider j as Nat;
+       j <= n+1 by A25,FINSEQ_1:3; then
+       j < n+1 by A2,A23,A26,AXIOMS:21; then
+       A27: 1 <= j & j <= n by A25,FINSEQ_1:3,NAT_1:38; then
+       A28: (s'|n).j = s.j by A1,JORDAN3:20;
+       A29: j in dom r by A9,A27,FINSEQ_1:3; then
+       r.j = i by A24,A26,A28,FUNCT_1:22;
+       hence thesis by A29,FUNCT_1:12;
+      suppose
+       A30: i >= q; then
+       A31: i+1 > q by NAT_1:38;
+       i <= n by A22,FINSEQ_1:3; then
+       1 <= i+1 & i+1 <= n+1 by AXIOMS:24,NAT_1:37; then
+       A32: i+1 in Seg(n+1) by FINSEQ_1:3; then
+       consider j being set such that
+       A33: j in dom s and
+       A34: i+1 = s.j by A5,FUNCT_1:def 5;
+       A35: p.(i+1) = i+1-1 by A3,A31,A32
+                   .= i by XCMPLX_1:26;
+       j in Seg(n+1) by A33; then
+       reconsider j as Nat;
+       A36: j <> n+1 by A2,A30,A34,NAT_1:38;
+       j <= n+1 by A33,FINSEQ_1:3; then
+       j < n+1 by A36,AXIOMS:21; then
+       A37: 1 <= j & j <= n by A33,FINSEQ_1:3,NAT_1:38; then
+       A38: j in Seg n by FINSEQ_1:3;
+       (s'|n).j = s.j by A1,A37,JORDAN3:20; then
+       r.j = p.(s.j) by A9,A38,FUNCT_1:22;
+       hence thesis by A9,A34,A35,A38,FUNCT_1:12;
+     thus thesis;
+    end; then
+   A39: rng r = Seg n by TARSKI:2;
+   s'|n = s' | Seg n by TOPREAL1:def 1; then
+   s'|n is one-to-one by A1,FUNCT_1:84; then
+   r is one-to-one by FUNCT_1:46;
+   hence thesis by A9,A39,FUNCT_2:3,83;
+  end;
+
+Lm14:
+ for n,q being Nat, p being Permutation of Seg(n+1),
+     F,H being FinSequence of ExtREAL st
+     F=H*p & q in Seg(n+1) & len H = n+1 & not -infty in rng H &
+     for i being Nat st i in Seg(n+1) holds
+      (i<q implies p.i=i) & (i=q implies p.i=n+1) & (i>q implies p.i=i-1)
+     holds Sum F = Sum H
+  proof
+   let n,q be Nat, p be Permutation of Seg(n+1),
+       F,H be FinSequence of ExtREAL;
+   assume that
+   A1: F=H*p and
+   A2: q in Seg(n+1) and
+   A3: len H = n+1 and
+   A4: not -infty in rng H and
+   A5: for i being Nat st i in Seg(n+1) holds
+      (i<q implies p.i=i) & (i=q implies p.i=n+1) & (i>q implies p.i=i-1);
+   A6: 1 <= q & q <= n+1 by A2,FINSEQ_1:3; then
+   q-1 >= 1-1 by REAL_1:49; then
+   A7: q-'1 = q-1 by BINARITH:def 3; then
+   q-'1 <= n+1-1 by A6,REAL_1:49; then
+   A8: q-'1 <= n by XCMPLX_1:26;
+   A9: n <= n+1 by NAT_1:29; then
+   A10: q-'1 <= n+1 by A8,AXIOMS:22;
+   A11: Seg(n+1) <> {} by FINSEQ_1:6; then
+   A12: dom p = Seg(n+1) by FUNCT_2:def 1;
+   reconsider p' = p as FinSequence of Seg(n+1) by A11,FINSEQ_2:28;
+   A13: len p' = n+1 by A12,FINSEQ_1:def 3;
+   A14: dom H = Seg(n+1) by A3,FINSEQ_1:def 3; then
+   H is Function of Seg(n+1), ExtREAL by FINSEQ_2:30; then
+   A15: len F = n+1 by A1,A13,FINSEQ_2:37; then
+   A16: dom F = Seg(n+1) by FINSEQ_1:def 3;
+   set H1 = H|n;
+   0+n <= 1+n by AXIOMS:24; then
+   A17: len H1 = n by A3,TOPREAL1:3;
+   A18: len(F|(q-'1)) = q-'1 & len(H1|(q-'1)) = q-'1
+    by A8,A10,A15,A17,TOPREAL1:3;
+   A19: for i being Nat st 1 <= i & i <= q-'1 holds (F|(q-'1)).i=(H1|(q-'1)).i
+    proof
+     let i be Nat; assume
+     A20: 1 <= i & i <= q-'1;
+     A21: (F|(q-'1)).i = F.i & (H1|(q-'1)).i = H1.i by A20,JORDAN3:20;
+     A22: i <= n by A8,A20,AXIOMS:22; then
+     A23: H1.i = H.i by JORDAN3:20;
+     i <= n+1 by A9,A22,AXIOMS:22; then
+     A24: i in Seg(n+1) by A20,FINSEQ_1:3; then
+     A25: F.i = H.(p.i) by A1,A16,FUNCT_1:22;
+     i < q-'1+1 by A20,NAT_1:38; then
+     i < q by A7,XCMPLX_1:27;
+     hence thesis by A5,A21,A23,A24,A25;
+    end;
+   p.q = n+1 by A2,A5; then
+   A26: F.q = H.(n+1) by A1,A2,A16,FUNCT_1:22;
+   A27: len(F/^q) = n+1-q by A6,A15,RFINSEQ:def 2;
+   A28: len(H1/^(q-'1)) = n-(q-1) by A7,A8,A17,RFINSEQ:def 2;
+   A29: n-(q-1) = n-q+1 & n-q+1 = n+1-q by XCMPLX_1:29,37;
+   for i being Nat st 1 <= i & i <= n+1-q holds (F/^q).i=(H1/^(q-'1)).i
+    proof
+     let i be Nat; assume
+     A30: 1 <= i & i <= n+1-q;
+     reconsider n1 = n+1-q as Nat by A6,INT_1:18;
+     A31: i in Seg n1 by A30,FINSEQ_1:3;
+     dom(F/^q) = Seg n1 by A27,FINSEQ_1:def 3; then
+     A32: (F/^q).i = F.(i+q) by A6,A15,A31,RFINSEQ:def 2;
+     i in dom(H1/^(q-'1)) by A28,A29,A31,FINSEQ_1:def 3; then
+     A33: (H1/^(q-'1)).i = H1.(i+(q-'1)) by A8,A17,RFINSEQ:def 2;
+     A34: i+(q-'1) = i+q-1 by A7,XCMPLX_1:29;
+     A35: i+q <= n+1 by A30,REAL_1:84; then
+     i+(q-'1) <= n by A34,REAL_1:86; then
+     A36: (H1/^(q-'1)).i = H.(i+q-1) by A33,A34,JORDAN3:20;
+     1 <= i+q by A30,NAT_1:37; then
+     A37: i+q in Seg(n+1) & i+q in dom F by A16,A35,FINSEQ_1:3; then
+     A38: F.(i+q) = H.(p.(i+q)) by A1,FUNCT_1:22;
+     i+q >= 1+q by A30,AXIOMS:24; then
+     i+q>q by NAT_1:38;
+     hence thesis by A5,A32,A36,A37,A38;
+    end; then
+   A39: F/^q = H1/^(q-'1) by A27,A28,A29,FINSEQ_1:18;
+   A40: not -infty in rng F by A1,A4,FUNCT_1:25;
+   A41: F = (F|(q-'1))^<*F.q*>^(F/^q) by A6,A15,POLYNOM4:3; then
+   rng F = rng((F|(q-'1))^<*F.q*>) \/ rng(F/^q) by FINSEQ_1:44; then
+   A42: not -infty in rng((F|(q-'1))^<*F.q*>) &
+       not -infty in rng(F/^q) by A40,XBOOLE_0:def 2; then
+   not -infty in rng(F|(q-'1)) \/ rng<*F.q*> by FINSEQ_1:44; then
+   A43: not -infty in rng(F|(q-'1)) & not -infty in rng<*F.q*>
+    by XBOOLE_0:def 2; then
+   not -infty in {F.q} by FINSEQ_1:56; then
+   A44: -infty <> F.q by TARSKI:def 1;
+   A45: Sum(F|(q-'1)) <> -infty & Sum(F/^q) <> -infty by A42,A43,Lm8;
+   A46: H1 = H | Seg n by TOPREAL1:def 1; then
+   rng H1 c= rng H by FUNCT_1:76; then
+   A47: not -infty in rng H1 by A4;
+   A48: H1 = (H1|(q-'1))^(H1/^(q-'1)) by RFINSEQ:21; then
+   not -infty in rng(H1|(q-'1)) \/ rng(H1/^(q-'1)) by A47,FINSEQ_1:44; then
+   A49: not -infty in rng(H1|(q-'1)) & not -infty in rng(H1/^(q-'1))
+    by XBOOLE_0:def 2;
+   A50: n+1 in dom H by A14,FINSEQ_1:6;
+   H|(n+1) = H & H|(n+1) = H | Seg(n+1) by A3,TOPREAL1:2,def 1; then
+   A51: H = H1^<*H.(n+1)*> by A46,A50,FINSEQ_5:11;
+   thus Sum F = Sum((F|(q-'1))^<*F.q*>) + Sum(F/^q) by A41,A42,Th7
+             .= Sum(F|(q-'1)) + F.q + Sum(F/^q) by Lm7
+             .= Sum(F|(q-'1)) + Sum(F/^q) + F.q by A44,A45,EXTREAL1:8
+             .= Sum(H1|(q-'1)) + Sum(H1/^(q-'1)) + H.(n+1)
+                 by A18,A19,A26,A39,FINSEQ_1:18
+             .= Sum H1 + H.(n+1) by A48,A49,Th7
+             .= Sum H by A51,Lm7;
+  end;
+
+theorem Th8:
+ for F,G being FinSequence of ExtREAL, s being Permutation of dom F st
+  G = F*s & not -infty in rng F holds Sum(F) = Sum(G)
+  proof
+   defpred P[Nat] means
+    for F,G being FinSequence of ExtREAL, s being Permutation of Seg $1 st
+    len F = $1 & G = F*s & not -infty in rng F holds Sum(F) = Sum(G);
+   A1: P[1]
+    proof
+     let F,G be FinSequence of ExtREAL, s be Permutation of Seg 1;
+     assume that
+     A2: len F = 1 and
+     A3: G = F*s;
+     A4: F = <*F.1*> by A2,FINSEQ_1:57; then
+     A5: rng F = {F.1} by FINSEQ_1:56;
+     A6: Seg 1 <> {} by FINSEQ_1:3; then
+     reconsider s1 = s as FinSequence of Seg 1 by FINSEQ_2:28;
+     A7: dom F = Seg 1 by A2,FINSEQ_1:def 3;
+     dom s = Seg 1 by A6,FUNCT_2:def 1; then
+     A8: len s1 = 1 by FINSEQ_1:def 3;
+     F is Function of Seg 1, ExtREAL by A7,FINSEQ_2:30; then
+     len G = 1 by A3,A8,FINSEQ_2:37; then
+     A9: G = <*G.1*> by FINSEQ_1:57; then
+     rng G = {G.1} by FINSEQ_1:56; then
+     G.1 in rng G by TARSKI:def 1; then
+     G.1 in rng F by A3,FUNCT_1:25;
+     hence thesis by A4,A5,A9,TARSKI:def 1;
+    end;
+   A10: for n being non empty Nat st P[n] holds P[n+1]
+    proof
+     let n be non empty Nat; assume
+     A11: P[n];
+     thus P[n+1]
+      proof
+       let F,G be FinSequence of ExtREAL, s be Permutation of Seg(n+1);
+       assume that
+       A12: len F = n+1 and
+       A13: G = F*s and
+       A14: not -infty in rng F;
+       A15: dom F = Seg(n+1) by A12,FINSEQ_1:def 3;
+       1 <= n+1 by NAT_1:29; then
+       A16: Seg(n+1) <> {} by FINSEQ_1:3; then
+       A17: dom s = Seg(n+1) & rng s = Seg(n+1)
+        by FUNCT_2:def 1,def 3;
+       reconsider s'=s as FinSequence of Seg(n+1) by A16,FINSEQ_2:28;
+       A18: len s' = n+1 by A17,FINSEQ_1:def 3;
+       A19: F is Function of Seg(n+1), ExtREAL by A15,FINSEQ_2:30; then
+       A20: len G = n+1 by A13,A18,FINSEQ_2:37; then
+       A21: dom G = Seg(n+1) by FINSEQ_1:def 3;
+       n+1 in dom s by A17,FINSEQ_1:6; then
+       A22: s.(n+1) in Seg(n+1) by A17,FUNCT_1:def 5; then
+       reconsider q=s.(n+1) as Nat;
+       consider p being Permutation of Seg(n+1) such that
+       A23: for i being Nat st i in Seg(n+1) holds
+        (i<q implies p.i=i) & (i=q implies p.i=n+1) & (i>q implies p.i=i-1)
+        by A22,Lm12;
+       A24: dom p = Seg(n+1) by A16,FUNCT_2:def 1;
+       reconsider p2 = p" as FinSequence of Seg(n+1) by A16,FINSEQ_2:28;
+       reconsider H = F*p2 as FinSequence of ExtREAL by A19,FINSEQ_2:36;
+       dom p2 = rng p by FUNCT_1:55; then
+       dom p2 = Seg(n+1) by FUNCT_2:def 3; then
+       len p2 = n+1 by FINSEQ_1:def 3; then
+       A25: len H = n+1 by A19,FINSEQ_2:37; then
+       A26: dom H = Seg(n+1) by FINSEQ_1:def 3;
+       reconsider p1 = p*s'|n as Permutation of Seg n by A23,Lm13;
+       1 <= n by RLVECT_1:99; then
+       A27: Seg n <> {} by FINSEQ_1:3; then
+       A28: dom p1 = Seg n by FUNCT_2:def 1;
+       reconsider p1' = p1 as FinSequence of Seg n by A27,FINSEQ_2:28;
+       A29: 0+n <= 1+n by AXIOMS:24; then
+       A30: Seg n c= Seg(n+1) by FINSEQ_1:7;
+       A31: len(H|n) = n by A25,A29,TOPREAL1:3;
+       A32: G|n = (H|n)*p1
+        proof
+         A33: len(G|n) = n by A20,A29,TOPREAL1:3;
+         dom(H|n) = Seg n by A31,FINSEQ_1:def 3; then
+         A34: H|n is Function of Seg n, ExtREAL by FINSEQ_2:30; then
+         reconsider H1 = (H|n)*p1' as FinSequence of ExtREAL by FINSEQ_2:36;
+         len p1' = n by A28,FINSEQ_1:def 3; then
+         A35: len H1 = n by A34,FINSEQ_2:37;
+         for i being Nat st 1 <= i & i <= n holds (G|n).i=((H|n)*p1).i
+          proof
+           let i be Nat; assume
+           A36: 1 <= i & i <= n; then
+           A37: (G|n).i = G.i by JORDAN3:20;
+           A38: i in Seg n by A36,FINSEQ_1:3; then
+           i in dom H1 by A35,FINSEQ_1:def 3; then
+           A39: ((H|n)*p1).i = (H|n).(p1.i) by FUNCT_1:22;
+           A40: (s'|n).i = s.i by A36,JORDAN3:20;
+           A41: p1.i = p.(s.i) by A28,A38,A40,FUNCT_1:22;
+           rng p1 = Seg n by FUNCT_2:def 3; then
+           A42: p1.i in Seg n by A28,A38,FUNCT_1:12; then
+           reconsider a = p1.i as Nat;
+           a <= n by A42,FINSEQ_1:3; then
+           A43: ((H|n)*p1).i = H.(p1.i) by A39,JORDAN3:20;
+           A44: H.(p1.i) = F.(p2.(p1.i)) by A26,A30,A42,FUNCT_1:22;
+           s.i in rng s by A17,A30,A38,FUNCT_1:12; then
+           ((H|n)*p1).i = F.(s.i) by A24,A41,A43,A44,FUNCT_1:56;
+           hence thesis by A13,A21,A30,A37,A38,FUNCT_1:22;
+          end;
+         hence thesis by A33,A35,FINSEQ_1:18;
+        end;
+       A45: H|n = H | Seg n by TOPREAL1:def 1; then
+       rng(H|n) c= rng H by FUNCT_1:76; then
+       not -infty in rng (H|n) by A14,FUNCT_1:25; then
+       A46: Sum(G|n) = Sum(H|n) by A11,A31,A32;
+       A47: p.q = n+1 by A22,A23;
+       A48: F.(s.(n+1)) = F.(p2.(n+1)) by A22,A24,A47,FUNCT_1:56;
+       n+1 in dom H & n+1 in dom G by A21,A26,FINSEQ_1:6; then
+       A49: H.(n+1) = F.(p2.(n+1)) & G.(n+1) = F.(s.(n+1)) by A13,FUNCT_1:22;
+       G|n = G | Seg n by TOPREAL1:def 1; then
+       G = (G|n)^<*G.(n+1)*> & H = (H|n)^<*H.(n+1)*>
+        by A20,A25,A45,FINSEQ_3:61; then
+       A50: Sum G = Sum(G|n)+G.(n+1) & Sum H = Sum(H|n)+H.(n+1) by Lm7;
+       A51: not -infty in rng H by A14,FUNCT_1:25;
+       H*p = F*(p2*p) by RELAT_1:55
+          .= F*(id Seg(n+1)) by A24,FUNCT_1:61
+          .= F by A15,FUNCT_1:42;
+       hence thesis by A22,A23,A25,A46,A48,A49,A50,A51,Lm14;
+      end;
+    end;
+   A52: for n being non empty Nat holds P[n] from Ind_from_1(A1,A10);
+   A53: P[0]
+    proof
+     let F,G be FinSequence of ExtREAL, s be Permutation of Seg 0;
+     assume that
+     A54: len F = 0 and
+     A55: G = F*s;
+     A56: dom G c= dom s by A55,RELAT_1:44;
+     dom s = {} by FINSEQ_1:4,FUNCT_2:def 1; then
+     dom G = {} by A56,XBOOLE_1:3; then
+     len G = 0 & len F = 0 by A54,FINSEQ_1:4,def 3; then
+     F = <*> ExtREAL & G = <*> ExtREAL by FINSEQ_1:32;
+     hence thesis;
+    end;
+   let F,G be FinSequence of ExtREAL, s be Permutation of dom F;
+   A57: P[len F]
+    proof
+     per cases;
+     suppose len F = 0;
+      hence thesis by A53;
+     suppose len F <> 0;
+      hence thesis by A52;
+    end;
+   A58: dom F = Seg(len F) by FINSEQ_1:def 3;
+   assume G = F*s & not -infty in rng F;
+   hence thesis by A57,A58;
+  end;
+
+Lm15:
+ for F being FinSequence of ExtREAL st rng F c= {0.} holds Sum F = 0.
+  proof
+   defpred P[FinSequence of ExtREAL] means
+    rng $1 c= {0.} implies Sum $1 = 0.;
+   A1: P[<*> ExtREAL] by Th4;
+   A2: for F being FinSequence of ExtREAL for x being Element of ExtREAL
+       st P[F] holds P[F^<*x*>]
+    proof
+     let F be FinSequence of ExtREAL;
+     let x be Element of ExtREAL; assume
+     A3: P[F];
+     assume rng(F^<*x*>) c= {0.}; then
+     A4: rng F \/ rng <*x*> c= {0.} by FINSEQ_1:44; then
+     rng <*x*> c= {0.} by XBOOLE_1:11; then
+     {x} c= {0.} by FINSEQ_1:55; then
+     x in {0.} by ZFMISC_1:37; then
+     A5: x = 0. by TARSKI:def 1;
+     thus Sum(F^<*x*>) = Sum F + x by Lm7
+                      .= 0. by A3,A4,A5,SUPINF_2:18,XBOOLE_1:11;
+    end;
+   A6: for F being FinSequence of ExtREAL holds P[F] from IndSeqD(A1,A2);
+   let F be FinSequence of ExtREAL;
+   assume rng F c= {0.};
+   hence thesis by A6;
+ end;
+
+Lm16:
+ for F being FinSequence of REAL st rng F c= {0} holds Sum F = 0
+  proof
+   defpred P[FinSequence of REAL] means
+    rng $1 c= {0} implies Sum $1 = 0;
+   A1: P[<*> REAL] by RVSUM_1:102;
+   A2: for F being FinSequence of REAL for x being Element of REAL
+       st P[F] holds P[F^<*x*>]
+    proof
+     let F be FinSequence of REAL;
+     let x be Element of REAL; assume
+     A3: P[F];
+     assume rng(F^<*x*>) c= {0}; then
+     A4: rng F \/ rng <*x*> c= {0} by FINSEQ_1:44; then
+     rng <*x*> c= {0} by XBOOLE_1:11; then
+     {x} c= {0} by FINSEQ_1:55; then
+     A5: x in {0} by ZFMISC_1:37;
+     thus Sum(F^<*x*>) = Sum F + x by RVSUM_1:104
+           .= 0 by A3,A4,A5,TARSKI:def 1,XBOOLE_1:11;
+    end;
+   A6: for F being FinSequence of REAL holds P[F] from IndSeqD(A1,A2);
+   let F be FinSequence of REAL;
+   assume rng F c= {0};
+   hence thesis by A6;
+ end;
+
+Lm17:
+for X being RealLinearSpace,
+    F being FinSequence of the carrier of X st rng F c= {0.X} holds
+    Sum F = 0.X
+  proof
+   let X be RealLinearSpace;
+   defpred P[FinSequence of the carrier of X] means
+    rng $1 c= {0.X} implies Sum $1 = 0.X;
+   A1: P[<*> the carrier of X] by RLVECT_1:60;
+   A2: for F being FinSequence of the carrier of X
+       for x being Element of X
+       st P[F] holds P[F^<*x*>]
+    proof
+     let F be FinSequence of the carrier of X;
+     let x be Element of X; assume
+     A3: P[F];
+     assume rng(F^<*x*>) c= {0.X}; then
+     A4: rng F \/ rng <*x*> c= {0.X} by FINSEQ_1:44; then
+     rng <*x*> c= {0.X} by XBOOLE_1:11; then
+     {x} c= {0.X} by FINSEQ_1:55; then
+     x in {0.X} by ZFMISC_1:37; then
+     A5: x = 0.X by TARSKI:def 1;
+     thus Sum(F^<*x*>) = Sum F + Sum<*x*> by RLVECT_1:58
+                      .= Sum F + x by RLVECT_1:61
+                      .= 0.X by A3,A4,A5,RLVECT_1:def 7,XBOOLE_1:11;
+    end;
+   A6: for F being FinSequence of the carrier of X holds P[F]
+    from IndSeqD(A1,A2);
+   let F be FinSequence of the carrier of X;
+   assume rng F c= {0.X};
+   hence thesis by A6;
+ end;
+
+begin :: Definition of Convex Function
+
+definition
+let X be non empty RLSStruct, f be Function of the carrier of X,ExtREAL;
+ func epigraph f -> Subset of Prod_of_RLS(X,RLS_Real) equals
+ :Def6:
+  {[x,y] where x is Element of X, y is Element of REAL:
+   f.x <=' R_EAL(y)};
+coherence
+proof
+ A1: [:the carrier of X,REAL:] = the carrier of Prod_of_RLS(X,RLS_Real)
+  proof
+   Prod_of_RLS(X,RLS_Real) =
+   RLSStruct(# [:the carrier of X,the carrier of RLS_Real:],
+             [0.X,0.RLS_Real],
+             Add_in_Prod_of_RLS(X,RLS_Real),
+             Mult_in_Prod_of_RLS(X,RLS_Real) #) by Def3;
+   hence thesis by Def4;
+  end;
+  defpred P[Element of X, Element of REAL] means
+   f.$1 <=' R_EAL($2);
+  deffunc f(Element of X, Element of REAL) = [$1,$2];
+ {f(x,y) where x is Element of X, y is Element of REAL:
+  P[x,y]} is Subset of [:the carrier of X,REAL:] from SubsetFD2;
+ hence thesis by A1;
+end;
+end;
+
+definition
+let X be non empty RLSStruct, f be Function of the carrier of X,ExtREAL;
+ attr f is convex means  :Def7:
+ epigraph f is convex;
+end;
+
+Lm18:
+for w being R_eal, wr,p being Real st w=wr holds p*wr = R_EAL(p)*w
+proof
+ let w be R_eal, wr,p be Real;
+ assume A1: w=wr;
+ p = R_EAL(p) by MEASURE6:def 1;
+ hence thesis by A1,EXTREAL1:13;
+end;
+
+Lm19:
+for w1,w2 being R_eal, wr1,wr2,p1,p2 being Real st w1=wr1 & w2=wr2 holds
+ p1*wr1+p2*wr2 = R_EAL(p1)*w1+R_EAL(p2)*w2
+proof
+ let w1,w2 be R_eal, wr1,wr2,p1,p2 be Real;
+ assume w1=wr1 & w2=wr2;
+ then p1*wr1 = R_EAL(p1)*w1 & p2*wr2 = R_EAL(p2)*w2 by Lm18;
+ hence thesis by SUPINF_2:1;
+end;
+
+theorem Th9:
+for X being non empty RLSStruct,
+    f being Function of the carrier of X,ExtREAL st
+    (for x being VECTOR of X holds f.x <> -infty) holds
+    f is convex iff
+    for x1, x2 being VECTOR of X,
+        p being Real st 0<p & p<1 holds
+        f.(p*x1+(1-p)*x2) <=' R_EAL(p)*f.x1+R_EAL(1-p)*f.x2
+ proof
+  let X be non empty RLSStruct,
+      f be Function of the carrier of X,ExtREAL;
+  assume A1: for x being VECTOR of X holds f.x <> -infty;
+  thus f is convex implies
+  for x1, x2 being VECTOR of X,
+      p being Real st 0<p & p<1 holds
+      f.(p*x1+(1-p)*x2) <=' R_EAL(p)*f.x1+R_EAL(1-p)*f.x2
+  proof
+   assume f is convex;
+   then A2: epigraph f is convex by Def7;
+   let x1, x2 be VECTOR of X, p be Real;
+   assume A3: 0<p & p<1;
+   set p1 = R_EAL(p);
+   A4: p1 = p by MEASURE6:def 1; then
+   A5: 0. <' p1 by A3,EXTREAL1:18;
+   A6: 1-p > 0 by A3,SQUARE_1:11;
+   set p2 = R_EAL(1-p);
+   A7: p2 = 1-p by MEASURE6:def 1; then
+   A8: 0. <' p2 by A6,EXTREAL1:18;
+   A9: f.x1 <> -infty & f.x2 <> -infty by A1;
+   per cases by A9,SUPINF_2:2;
+    suppose A10: f.x1 in REAL & f.x2 in REAL;
+     reconsider w1=f.x1 as Real by A10;
+     reconsider w2=f.x2 as Real by A10;
+     A11: [x1,w1] in epigraph f
+     proof
+      f.x1 <=' R_EAL(w1) by MEASURE6:def 1;
+      then [x1,w1] in
+       {[x,y] where x is Element of X, y is Element of REAL:
+       f.x <=' R_EAL(y)};
+      hence thesis by Def6;
+     end;
+     then reconsider u1=[x1,w1] as VECTOR of Prod_of_RLS(X,RLS_Real);
+     A12: [x2,w2] in epigraph f
+     proof
+      f.x2 <=' R_EAL(w2) by MEASURE6:def 1;
+      then [x2,w2] in
+       {[x,y] where x is Element of X, y is Element of REAL:
+       f.x <=' R_EAL(y)};
+      hence thesis by Def6;
+     end;
+     then reconsider u2=[x2,w2] as VECTOR of Prod_of_RLS(X,RLS_Real);
+     A13: p*u1 + (1-p)*u2 in epigraph f by A2,A3,A11,A12,CONVEX1:def 2;
+     A14: p*u1 = [p*x1,p*w1] by Lm4;
+     (1-p)*u2 = [(1-p)*x2,(1-p)*w2] by Lm4; then
+     [p*x1+(1-p)*x2,p*w1+(1-p)*w2] in epigraph f by A13,A14,Lm5;
+     then [p*x1+(1-p)*x2,p*w1+(1-p)*w2] in
+      {[x,y] where x is Element of X, y is Element of REAL:
+      f.x <=' R_EAL(y)} by Def6;
+     then consider x0 being Element of X,
+             y0 being Element of REAL such that
+     A15: [p*x1+(1-p)*x2,p*w1+(1-p)*w2] = [x0,y0] & f.x0 <=' R_EAL(y0);
+     A16: x0 = p*x1+(1-p)*x2 & y0 = p*w1+(1-p)*w2 by A15,ZFMISC_1:33;
+     p*w1+(1-p)*w2 = R_EAL(p)*f.x1+R_EAL(1-p)*f.x2 by Lm19;
+     hence thesis by A15,A16,MEASURE6:def 1;
+    suppose A17: f.x1 = +infty & f.x2 in REAL;
+     A18: p1*f.x1 = +infty by A5,A17,EXTREAL1:def 1;
+     p2*f.x2 in REAL
+     proof
+      reconsider w2 = f.x2 as Real by A17;
+      p2*f.x2 = (1-p)*w2 by A7,EXTREAL1:13;
+      hence thesis;
+     end;
+     then p1*f.x1+p2*f.x2 = +infty by A18,SUPINF_1:6,SUPINF_2:def 2;
+     hence thesis by SUPINF_1:20;
+    suppose A19: f.x1 in REAL & f.x2 = +infty;
+     A20: p2*f.x2 = +infty by A8,A19,EXTREAL1:def 1;
+     p1*f.x1 in REAL
+     proof
+      reconsider w1 = f.x1 as Real by A19;
+      p1*f.x1 = p*w1 by A4,EXTREAL1:13;
+      hence thesis;
+     end;
+     then p1*f.x1+p2*f.x2 = +infty by A20,SUPINF_1:6,SUPINF_2:def 2;
+     hence thesis by SUPINF_1:20;
+    suppose A21: f.x1 = +infty & f.x2 = +infty;
+     p1*f.x1 = +infty & p2*f.x2 = +infty by A5,A8,A21,EXTREAL1:def 1;
+     then p1*f.x1+p2*f.x2 = +infty by EXTREAL1:2,SUPINF_2:def 2;
+     hence thesis by SUPINF_1:20;
+   end;
+  thus (for x1, x2 being VECTOR of X,
+        p being Real st 0<p & p<1 holds
+        f.(p*x1+(1-p)*x2) <=' R_EAL(p)*f.x1+R_EAL(1-p)*f.x2)
+  implies f is convex
+  proof
+   assume
+   A22:
+    for x1, x2 being VECTOR of X,
+        p being Real st 0<p & p<1 holds
+        f.(p*x1+(1-p)*x2) <=' R_EAL(p)*f.x1+R_EAL(1-p)*f.x2;
+    for u1,u2 being VECTOR of Prod_of_RLS(X,RLS_Real),
+        p being Real st 0 < p & p < 1 &
+        u1 in epigraph f & u2 in epigraph f holds
+        p*u1+(1-p)*u2 in epigraph f
+    proof
+     let u1,u2 be VECTOR of Prod_of_RLS(X,RLS_Real), p being Real;
+     assume
+     A23: 0 < p & p < 1 & u1 in epigraph f & u2 in epigraph f;
+     thus p*u1 + (1-p)*u2 in epigraph f
+     proof
+      u1 in {[x,y] where x is Element of X,
+                         y is Element of REAL:
+             f.x <=' R_EAL(y)} by A23,Def6;
+      then
+      consider x1 being Element of X,
+               y1 being Element of REAL such that
+      A24: u1=[x1,y1] & f.x1 <=' R_EAL(y1);
+      u2 in {[x,y] where x is Element of X,
+                         y is Element of REAL:
+             f.x <=' R_EAL(y)} by A23,Def6;
+      then
+      consider x2 being Element of X,
+               y2 being Element of REAL such that
+      A25: u2=[x2,y2] &  f.x2 <=' R_EAL(y2);
+      A26: f.x1 <> -infty by A1;
+      R_EAL(y1) = y1 by MEASURE6:def 1;
+      then f.x1 <> +infty by A24,SUPINF_1:18;
+      then reconsider w1 = f.x1 as Real by A26,EXTREAL1:1;
+      A27: f.x2 <> -infty by A1;
+      R_EAL(y2) = y2 by MEASURE6:def 1;
+      then f.x2 <> +infty by A25,SUPINF_1:18;
+      then reconsider w2 = f.x2 as Real by A27,EXTREAL1:1;
+      p*w1+(1-p)*w2 = R_EAL(p)*f.x1+R_EAL(1-p)*f.x2 by Lm19;
+      then R_EAL(p*w1+(1-p)*w2) = R_EAL(p)*f.x1+R_EAL(1-p)*f.x2
+       by MEASURE6:def 1;
+      then
+      A28: f.(p*x1+(1-p)*x2) <=' R_EAL(p*w1+(1-p)*w2) by A22,A23;
+      A29: f.(p*x1+(1-p)*x2) <> -infty by A1;
+      R_EAL(p*w1+(1-p)*w2) = p*w1+(1-p)*w2 by MEASURE6:def 1;
+      then f.(p*x1+(1-p)*x2) <> +infty by A28,SUPINF_1:18;
+      then reconsider w = f.(p*x1+(1-p)*x2) as Real by A29,EXTREAL1:1;
+      A30: f.(p*x1+(1-p)*x2)=R_EAL(w) by MEASURE6:def 1;
+      then
+      A31: w<=p*w1+(1-p)*w2 by A28,MEASURE6:13;
+      f.x1=R_EAL(w1) by MEASURE6:def 1;
+      then w1<=y1 by A24,MEASURE6:13;
+      then
+      A32: p*w1<=p*y1 by A23,AXIOMS:25;
+      f.x2=R_EAL(w2) by MEASURE6:def 1;
+      then
+      A33: w2<=y2 by A25,MEASURE6:13;
+      1-p>0 by A23,SQUARE_1:11;
+      then (1-p)*w2<=(1-p)*y2 by A33,AXIOMS:25;
+      then
+      A34: p*w1+(1-p)*w2<=p*w1+(1-p)*y2 by AXIOMS:24;
+      p*w1+(1-p)*y2<=p*y1+(1-p)*y2 by A32,AXIOMS:24;
+      then p*w1+(1-p)*w2<=p*y1+(1-p)*y2 by A34,AXIOMS:22;
+      then w<=p*y1+(1-p)*y2 by A31,AXIOMS:22;
+      then f.(p*x1+(1-p)*x2) <=' R_EAL(p*y1+(1-p)*y2) by A30,MEASURE6:13;
+      then [p*x1+(1-p)*x2,p*y1+(1-p)*y2] in
+       {[x,y] where x is Element of X, y is Element of REAL:
+         f.x <=' R_EAL(y)};
+      then
+      A35: [p*x1+(1-p)*x2,p*y1+(1-p)*y2] in epigraph f by Def6;
+      A36: p*u1 = [p*x1,p*y1] by A24,Lm4;
+      (1-p)*u2 = [(1-p)*x2,(1-p)*y2] by A25,Lm4;
+      hence thesis by A35,A36,Lm5;
+     end;
+    end;
+   then epigraph f is convex by CONVEX1:def 2;
+   hence thesis by Def7;
+  end;
+ end;
+
+theorem
+for X being RealLinearSpace,
+    f being Function of the carrier of X,ExtREAL st
+    (for x being VECTOR of X holds f.x <> -infty) holds
+    f is convex iff
+    for x1, x2 being VECTOR of X,
+        p being Real st 0<=p & p<=1 holds
+        f.(p*x1+(1-p)*x2) <=' R_EAL(p)*f.x1+R_EAL(1-p)*f.x2
+ proof
+  let X be RealLinearSpace,
+      f be Function of the carrier of X,ExtREAL;
+  assume
+  A1: for x being VECTOR of X holds f.x <> -infty;
+  thus f is convex implies
+   for x1, x2 being VECTOR of X,
+       p being Real st 0<=p & p<=1 holds
+       f.(p*x1+(1-p)*x2) <=' R_EAL(p)*f.x1+R_EAL(1-p)*f.x2
+  proof
+   assume
+   A2: f is convex;
+   let x1, x2 be VECTOR of X, p be Real;
+   assume
+   A3: 0<=p & p<=1;
+   per cases;
+    suppose
+     A4: p=0; then
+     p*x1 = 0.X & (1-p)*x2=x2 by RLVECT_1:23,def 9;
+     then
+     A5: p*x1+(1-p)*x2=x2 by RLVECT_1:10;
+     R_EAL(p)=0. by A4,MEASURE6:def 1,SUPINF_2:def 1;
+     then
+     A6: R_EAL(p)*f.x1=0. by EXTREAL1:def 1;
+     R_EAL(1-p)*f.x2=f.x2 by A4,EXTREAL2:4;
+     hence thesis by A5,A6,SUPINF_2:18;
+    suppose
+     A7: p=1; then
+     p*x1 = x1 & (1-p)*x2=0.X by RLVECT_1:23,def 9;
+     then
+     A8: p*x1+(1-p)*x2=x1 by RLVECT_1:10;
+     R_EAL(1-p)=0. by A7,MEASURE6:def 1,SUPINF_2:def 1;
+     then
+     A9: R_EAL(1-p)*f.x2=0. by EXTREAL1:def 1;
+     R_EAL(p)*f.x1=f.x1 by A7,EXTREAL2:4;
+     hence thesis by A8,A9,SUPINF_2:18;
+    suppose p<>0 & p<>1; then
+     0<p & p<1 by A3,REAL_1:def 5;
+     hence thesis by A1,A2,Th9;
+  end;
+  thus (for x1, x2 being VECTOR of X,
+        p being Real st 0<=p & p<=1 holds
+        f.(p*x1+(1-p)*x2) <=' R_EAL(p)*f.x1+R_EAL(1-p)*f.x2) implies
+  f is convex
+  proof
+   assume
+    for x1, x2 being VECTOR of X,
+        p being Real st 0<=p & p<=1 holds
+        f.(p*x1+(1-p)*x2) <=' R_EAL(p)*f.x1+R_EAL(1-p)*f.x2;
+   then
+    for x1, x2 being VECTOR of X,
+        p being Real st 0<p & p<1 holds
+        f.(p*x1+(1-p)*x2) <=' R_EAL(p)*f.x1+R_EAL(1-p)*f.x2;
+   hence thesis by A1,Th9;
+  end;
+ end;
+
+begin :: Relation between notions "function is convex" and "function is convex on set"
+
+theorem
+for f being PartFunc of REAL,REAL,
+    g being Function of the carrier of RLS_Real,ExtREAL,
+    X being Subset of RLS_Real st
+    X c= dom f &
+    for x being Real holds
+    (x in X implies g.x=f.x) & (not x in X implies g.x=+infty)
+    holds g is convex iff f is_convex_on X & X is convex
+ proof
+  let f be PartFunc of REAL,REAL,
+      g be Function of the carrier of RLS_Real,ExtREAL,
+      X be Subset of RLS_Real;
+  assume
+  A1: X c= dom f &
+      for x being Real holds
+       (x in X implies g.x=f.x) & (not x in X implies g.x=+infty);
+  A2: for v being VECTOR of RLS_Real holds g.v <> -infty
+  proof
+   let v be VECTOR of RLS_Real;
+   reconsider x=v as Real by Def4;
+   per cases;
+    suppose A3: x in X;
+     f.x in REAL;
+     hence thesis by A1,A3,SUPINF_1:6;
+    suppose not x in X;
+     hence thesis by A1,SUPINF_1:14;
+  end;
+  A4: for v being VECTOR of RLS_Real st v in X holds g.v in REAL
+  proof
+   let v be VECTOR of RLS_Real;
+   reconsider x=v as Real by Def4;
+   assume v in X;
+   then v in dom f & g.x=f.x by A1;
+   hence thesis;
+  end;
+  thus g is convex implies f is_convex_on X & X is convex
+  proof
+   assume
+   A5: g is convex;
+   thus f is_convex_on X
+   proof
+    for p be Real st 0<=p & p<=1 holds
+     for x1,x2 be Real st x1 in X & x2 in X & p*x1 + (1-p)*x2 in X holds
+      f.(p*x1 + (1-p)*x2) <= p*f.x1 + (1-p)*f.x2
+    proof
+     let p be Real;
+     assume
+     A6: 0<=p & p<=1;
+     let x1,x2 be Real;
+     assume
+     x1 in X & x2 in X & p*x1 + (1-p)*x2 in X;
+     then
+     A7: f.x1=g.x1 & f.x2=g.x2 & f.(p*x1+(1-p)*x2)=g.(p*x1+(1-p)*x2) by A1;
+     per cases;
+      suppose p=0;
+      hence thesis;
+      suppose p=1;
+      hence thesis;
+      suppose p<>0 & p<>1;
+       then
+       A8: 0<p & p<1 by A6,REAL_1:def 5;
+       reconsider v1=x1 as VECTOR of RLS_Real by Def4;
+       reconsider v2=x2 as VECTOR of RLS_Real by Def4;
+       A9: g.(p*v1+(1-p)*v2) <=' R_EAL(p)*g.v1+R_EAL(1-p)*g.v2
+        by A2,A5,A8,Th9;
+       p*f.v1+(1-p)*f.v2 = R_EAL(p)*g.v1+R_EAL(1-p)*g.v2
+        by A7,Lm19;
+       then
+       A10: g.(p*v1+(1-p)*v2) <=' R_EAL(p*f.x1+(1-p)*f.x2)
+        by A9,MEASURE6:def 1;
+       p*v1 = p*x1 & (1-p)*v2 = (1-p)*x2 by Lm2;
+       then g.(p*v1+(1-p)*v2) = f.(p*x1+(1-p)*x2) by A7,Lm3;
+       then g.(p*v1+(1-p)*v2) = R_EAL(f.(p*x1+(1-p)*x2)) by MEASURE6:def 1;
+       hence thesis by A10,MEASURE6:13;
+    end;
+    hence thesis by A1,RFUNCT_3:def 13;
+   end;
+   thus X is convex
+   proof
+    for v1,v2 being VECTOR of RLS_Real,
+        p being Real st 0 < p & p < 1 &
+        v1 in X & v2 in X holds p*v1+(1-p)*v2 in X
+    proof
+     let v1,v2 be VECTOR of RLS_Real, p be Real;
+     assume
+     A11: 0 < p & p < 1 & v1 in X & v2 in X;
+     then
+     A12: g.(p*v1+(1-p)*v2) <=' R_EAL(p)*g.v1+R_EAL(1-p)*g.v2
+        by A2,A5,Th9;
+     reconsider w1=g.v1 as Real by A4,A11;
+     reconsider w2=g.v2 as Real by A4,A11;
+     p*w1+(1-p)*w2 = R_EAL(p)*g.v1+R_EAL(1-p)*g.v2 by Lm19;
+     then
+     A13: g.(p*v1+(1-p)*v2) <> +infty by A12,SUPINF_1:18;
+     reconsider x=p*v1+(1-p)*v2 as Real by Def4;
+     x in X by A1,A13;
+     hence thesis;
+    end;
+    hence thesis by CONVEX1:def 2;
+   end;
+  end;
+  thus f is_convex_on X & X is convex implies g is convex
+  proof
+   assume
+   A14: f is_convex_on X & X is convex;
+   for v1, v2 being VECTOR of RLS_Real,
+       p being Real st 0<p & p<1 holds
+       g.(p*v1+(1-p)*v2) <=' R_EAL(p)*g.v1+R_EAL(1-p)*g.v2
+   proof
+    let v1, v2 be VECTOR of RLS_Real, p be Real;
+    assume
+    A15: 0<p & p<1;
+    p = R_EAL(p) by MEASURE6:def 1; then
+    A16: 0. <' R_EAL(p) by A15,EXTREAL1:18;
+    A17: 1-p > 0 by A15,SQUARE_1:11;
+    1-p = R_EAL(1-p) by MEASURE6:def 1; then
+    A18: 0. <' R_EAL(1-p) by A17,EXTREAL1:18;
+    reconsider x1=v1 as Real by Def4;
+    reconsider x2=v2 as Real by Def4;
+    per cases;
+    suppose A19: v1 in X & v2 in X;
+     then A20: p*v1+(1-p)*v2 in X by A14,A15,CONVEX1:def 2;
+     p*v1 = p*x1 & (1-p)*v2 = (1-p)*x2 by Lm2;
+     then A21: p*v1+(1-p)*v2 = p*x1+(1-p)*x2 by Lm3;
+     then f.(p*x1+(1-p)*x2) <= p*f.x1 + (1-p)*f.x2
+      by A14,A15,A19,A20,RFUNCT_3:def 13;
+     then A22: R_EAL(f.(p*x1+(1-p)*x2)) <=' R_EAL(p*f.x1 + (1-p)*f.x2)
+      by MEASURE6:13;
+     A23: f.x1 = g.v1 & f.x2 = g.v2 &
+          f.(p*x1+(1-p)*x2) = g.(p*v1+(1-p)*v2) by A1,A19,A20,A21;
+     p*f.x1+(1-p)*f.x2 = R_EAL(p)*g.v1+R_EAL(1-p)*g.v2 by A23,Lm19;
+     then R_EAL(p*f.x1+(1-p)*f.x2) = R_EAL(p)*g.v1+R_EAL(1-p)*g.v2
+      by MEASURE6:def 1;
+     hence thesis by A22,A23,MEASURE6:def 1;
+    suppose A24: v1 in X & not v2 in X;
+     then g.x2=+infty by A1;
+     then A25: R_EAL(1-p)*g.v2 = +infty by A18,EXTREAL1:def 1;
+     reconsider w1=g.x1 as Real by A4,A24;
+     p = R_EAL(p) by MEASURE6:def 1;
+     then p*w1 = R_EAL(p)*g.v1 by EXTREAL1:13;
+     then R_EAL(p)*g.v1 in REAL;
+     then R_EAL(p)*g.v1+R_EAL(1-p)*g.v2 = +infty
+       by A25,SUPINF_1:6,SUPINF_2:def 2;
+     hence thesis by SUPINF_1:20;
+    suppose A26: not v1 in X & v2 in X;
+     then g.x1=+infty by A1;
+     then A27: R_EAL(p)*g.v1 = +infty by A16,EXTREAL1:def 1;
+     reconsider w2=g.x2 as Real by A4,A26;
+     1-p = R_EAL(1-p) by MEASURE6:def 1;
+     then (1-p)*w2 = R_EAL(1-p)*g.v2 by EXTREAL1:13;
+     then R_EAL(1-p)*g.v2 in REAL;
+     then R_EAL(p)*g.v1+R_EAL(1-p)*g.v2 = +infty
+       by A27,SUPINF_1:6,SUPINF_2:def 2;
+     hence thesis by SUPINF_1:20;
+    suppose not v1 in X & not v2 in X;
+     then g.x1=+infty & g.x2=+infty by A1;
+     then  R_EAL(p)*g.v1 = +infty &
+           R_EAL(1-p)*g.v2 = +infty by A16,A18,EXTREAL1:def 1;
+     then R_EAL(p)*g.v1+R_EAL(1-p)*g.v2 = +infty
+       by SUPINF_1:14,SUPINF_2:def 2;
+     hence thesis by SUPINF_1:20;
+   end;
+   hence thesis by A2,Th9;
+  end;
+ end;
+
+begin :: CONVEX2:6 in other words
+
+theorem Th12:
+for X being RealLinearSpace,
+    M being Subset of X holds
+    M is convex iff
+    (for n being non empty Nat, p being FinSequence of REAL,
+     y,z being FinSequence of the carrier of X st
+     len p = n & len y = n & len z = n & Sum p = 1 &
+     (for i being Nat st i in Seg n holds p.i>0 & z.i=p.i*y/.i & y/.i in M)
+     holds Sum(z) in M)
+ proof
+  let X be RealLinearSpace, M be Subset of X;
+  thus M is convex implies
+  (for n being non empty Nat, p being FinSequence of REAL,
+     y,z being FinSequence of the carrier of X st
+     len p = n & len y = n & len z = n & Sum p = 1 &
+     (for i being Nat st i in Seg n holds p.i>0 & z.i=p.i*y/.i & y/.i in M)
+     holds Sum(z) in M)
+   proof assume
+    A1: M is convex;
+    defpred P[Nat] means
+    for p being FinSequence of REAL,
+     y,z being FinSequence of the carrier of X st
+     len p = $1 & len y = $1 & len z = $1 & Sum p = 1 &
+     (for i being Nat st i in Seg $1 holds p.i>0 & z.i=p.i*y/.i & y/.i in M)
+     holds Sum(z) in M;
+    A2: P[1]
+     proof
+      let p be FinSequence of REAL,
+      y,z be FinSequence of the carrier of X;
+      assume that
+      A3: len p = 1 & len y = 1 & len z = 1 and
+      A4: Sum p = 1 and
+      A5: for i being Nat st i in Seg 1 holds
+       p.i>0 & z.i=p.i*y/.i & y/.i in M;
+      A6: p = <*p.1*> & z = <*z.1*> by A3,FINSEQ_1:57;
+      1 in Seg 1 by FINSEQ_1:4,TARSKI:def 1; then
+      A7: z.1=p.1*y/.1 & y/.1 in M by A5;
+      p.1 = 1 by A4,A6,RVSUM_1:103; then
+      z.1 = y/.1 by A7,RLVECT_1:def 9;
+      hence thesis by A6,A7,RLVECT_1:61;
+     end;
+    A8: for n being non empty Nat st P[n] holds P[n+1]
+     proof
+      let n be non empty Nat; assume
+      A9: P[n];
+      thus for p being FinSequence of REAL,
+       y,z being FinSequence of the carrier of X st
+       len p = n+1 & len y = n+1 & len z = n+1 & Sum p = 1 &
+       (for i being Nat st i in Seg(n+1) holds
+        p.i>0 & z.i=p.i*y/.i & y/.i in M)
+       holds Sum(z) in M
+       proof
+        let p be FinSequence of REAL,
+         y,z being FinSequence of the carrier of X;
+        assume that
+        A10: len p = n+1 & len y = n+1 & len z = n+1 and
+        A11: Sum p = 1 and
+        A12: for i being Nat st i in Seg(n+1) holds
+              p.i>0 & z.i=p.i*y/.i & y/.i in M;
+        set q = 1-p.(n+1);
+        n+1 in Seg(n+1) by FINSEQ_1:6; then
+        A13: p.(n+1)>0 & z.(n+1)=p.(n+1)*y/.(n+1) & y/.(n+1) in M by A12;
+        then
+        A14: q<1 by SQUARE_1:29;
+        len p = n+1 & p|n = p | Seg n by A10,TOPREAL1:def 1; then
+        p = (p|n)^<*p.(n+1)*> by FINSEQ_3:61; then
+        1 = Sum(p|n)+p.(n+1) by A11,RVSUM_1:104; then
+        A15: q = Sum(p|n) by XCMPLX_1:26;
+        A16: 0+n <= 1+n by AXIOMS:24; then
+        A17: len(p|n) = n by A10,TOPREAL1:3; then
+        A18: dom(p|n) = Seg n by FINSEQ_1:def 3;
+        A19: Seg n c= Seg(n+1) by A16,FINSEQ_1:7;
+        A20: for i being Nat st i in dom (p|n) holds 0 <= (p|n).i
+         proof
+          let i be Nat; assume
+          A21: i in dom (p|n); then
+          A22: i <= n by A18,FINSEQ_1:3;
+          p.i > 0 by A12,A18,A19,A21;
+          hence thesis by A22,JORDAN3:20;
+         end;
+        0<=n by NAT_1:18; then
+        0+1<=n+1 by AXIOMS:24; then
+        A23: 1<=n & 1<=n+1 by RLVECT_1:99; then
+        A24: 1 in Seg n & 1 in Seg(n+1) by FINSEQ_1:3; then
+        p.1 > 0 by A12; then
+        (p|n).1 > 0 by A23,JORDAN3:20; then
+        A25: q>0 by A15,A18,A20,A24,RVSUM_1:115;
+        set p' = (1/q)*(p|n);
+        set y' = y|n;
+        deffunc f(Nat) = p'.$1*y'/.$1;
+        consider z' being FinSequence of the carrier of X such that
+        A26: len z' = n and
+        A27: for i being Nat st i in Seg n holds z'.i = f(i)
+         from SeqLambdaD;
+        dom p' = Seg len p' & dom(p|n) = Seg len(p|n) by FINSEQ_1:def 3;
+        then Seg len p' = Seg len(p|n) by RVSUM_1:65; then
+        A28: len p' = n by A17,FINSEQ_1:8;
+        A29: len y' = n by A10,A16,TOPREAL1:3;
+        A30: dom y' = Seg n by A29,FINSEQ_1:def 3;
+        A31: Sum p' = (1/q)*q by A15,RVSUM_1:117
+                   .= 1 by A25,XCMPLX_1:107;
+        for i being Nat st i in Seg n holds
+         p'.i>0 & z'.i=p'.i*y'/.i & y'/.i in M
+         proof
+          let i be Nat;
+          assume
+          A32: i in Seg n; then
+          A33: i <= n by FINSEQ_1:3;
+          Seg n c= Seg(n+1) by A16,FINSEQ_1:7; then
+          A34: p.i>0 & z.i=p.i*y/.i & y/.i in M by A12,A32;
+          q" > 0 by A25,REAL_1:72; then
+          A35: 1/q > 0 by XCMPLX_1:217;
+          p'.i = (1/q)*(p|n).i by RVSUM_1:66
+              .= (1/q)*p.i by A33,JORDAN3:20;
+          hence p'.i>0 by A34,A35,REAL_2:122;
+          thus z'.i = p'.i*y'/.i by A27,A32;
+          thus thesis by A30,A32,A34,TOPREAL1:1;
+         end; then
+        A36: Sum(z') in M by A9,A26,A28,A29,A31;
+        len z = n+1 & z|n = z | Seg n by A10,TOPREAL1:def 1; then
+        z = (z|n)^<*z.(n+1)*> by FINSEQ_3:61; then
+        A37: Sum z = Sum(z|n)+Sum<*p.(n+1)*y/.(n+1)*> by A13,RLVECT_1:58
+                  .= Sum(z|n)+p.(n+1)*y/.(n+1) by RLVECT_1:61
+                  .= Sum(z|n)+(1-q)*y/.(n+1) by XCMPLX_1:18;
+        A38: len(z|n) = n by A10,A16,TOPREAL1:3;
+        for i being Nat, v being VECTOR of X st
+         i in dom z' & v = (z|n).i holds z'.i = (1/q)*v
+         proof
+          let i be Nat, v be VECTOR of X;
+          assume that
+          A39: i in dom z' and
+          A40: v = (z|n).i;
+          A41: i in Seg n by A26,A39,FINSEQ_1:def 3; then
+          A42: i <= n by FINSEQ_1:3; then
+          A43: (z|n).i = z.i by JORDAN3:20;
+          A44: y'/.i = y/.i by A30,A41,TOPREAL1:1;
+          z'.i = p'.i*y'/.i by A27,A41
+              .= ((1/q)*(p|n).i)*y'/.i by RVSUM_1:66
+              .= ((1/q)*p.i)*y'/.i by A42,JORDAN3:20
+              .= (1/q)*(p.i*y'/.i) by RLVECT_1:def 9
+              .= (1/q)*v by A12,A19,A40,A41,A43,A44;
+          hence thesis;
+         end; then
+        q*Sum(z') = q*((1/q)*Sum(z|n)) by A26,A38,RLVECT_1:56
+                 .= (q*(1/q))*Sum(z|n) by RLVECT_1:def 9
+                 .= 1*Sum(z|n) by A25,XCMPLX_1:107
+                 .= Sum(z|n) by RLVECT_1:def 9;
+        hence thesis by A1,A13,A14,A25,A36,A37,CONVEX1:def 2;
+       end;
+     end;
+    thus for n being non empty Nat holds P[n] from Ind_from_1(A2,A8);
+   end;
+  thus (for n being non empty Nat, p being FinSequence of REAL,
+     y,z being FinSequence of the carrier of X st
+     len p = n & len y = n & len z = n & Sum p = 1 &
+     (for i being Nat st i in Seg n holds p.i>0 & z.i=p.i*y/.i & y/.i in M)
+     holds Sum(z) in M) implies
+   M is convex
+   proof
+    assume
+     A45: for n being non empty Nat, p being FinSequence of REAL,
+      y,z being FinSequence of the carrier of X st
+      len p = n & len y = n & len z = n & Sum p = 1 &
+      (for i being Nat st i in Seg n holds p.i>0 & z.i=p.i*y/.i & y/.i in M)
+      holds Sum(z) in M;
+     for x1,x2 being VECTOR of X, r be Real st
+      0 < r & r < 1 & x1 in M & x2 in M holds  r*x1+(1-r)*x2 in M
+      proof
+       let x1, x2 be VECTOR of X, r be Real;
+       assume that
+       A46: 0 < r & r < 1 and
+       A47: x1 in M & x2 in M;
+       set p = <*r,1-r*>;
+       set y = <*x1,x2*>;
+       set z = <*r*x1,(1-r)*x2*>;
+       A48: len p = 2 & len y = 2 & len z = 2 by FINSEQ_1:61;
+       A49: Sum p = r+(1-r) by RVSUM_1:107
+                .= 1 by XCMPLX_1:27;
+       for i being Nat st i in Seg 2 holds
+        p.i>0 & z.i=p.i*y/.i & y/.i in M
+        proof
+         let i be Nat; assume
+         A50: i in Seg 2;
+         per cases by A50,FINSEQ_1:4,TARSKI:def 2;
+         suppose i=1; then
+          p.i = r & y/.i = x1 & z.i = r*x1 by FINSEQ_1:61,FINSEQ_4:26;
+          hence thesis by A46,A47;
+         suppose i=2; then
+          p.i = 1-r & y/.i = x2 & z.i = (1-r)*x2 by FINSEQ_1:61,FINSEQ_4:26;
+          hence thesis by A46,A47,SQUARE_1:11;
+        end; then
+       Sum(z) in M by A45,A48,A49;
+       hence thesis by RLVECT_1:62;
+      end;
+     hence thesis by CONVEX1:def 2;
+   end;
+ end;
+
+begin :: Jensen's Inequality
+
+Lm20:
+for X being RealLinearSpace,
+    f being Function of the carrier of X,ExtREAL,
+    n being non empty Nat, p being FinSequence of REAL,
+    F being FinSequence of ExtREAL,
+    y being FinSequence of the carrier of X st
+    len p = n & len F = n & len y = n &
+     (for x being VECTOR of X holds f.x <> -infty) &
+     (for i being Nat st i in Seg n holds
+       p.i>=0 & F.i = R_EAL(p.i)*f.(y/.i)) holds
+    not -infty in rng F
+ proof
+  let X be RealLinearSpace,
+    f be Function of the carrier of X,ExtREAL,
+    n be non empty Nat, p being FinSequence of REAL,
+    F be FinSequence of ExtREAL,
+    y be FinSequence of the carrier of X;
+  assume that
+  A1: len p = n & len F = n & len y = n and
+  A2: for x being VECTOR of X holds f.x <> -infty and
+  A3: for i being Nat st i in Seg n holds
+       p.i>=0 & F.i = R_EAL(p.i)*f.(y/.i);
+  for i being set st i in dom F holds F.i <> -infty
+   proof
+    let i be set; assume
+    A4: i in dom F;
+    then reconsider i as Nat;
+    i in Seg n by A1,A4,FINSEQ_1:def 3; then
+    A5: p.i>=0 & F.i = R_EAL(p.i)*f.(y/.i) by A3;
+    A6: f.(y/.i) <> -infty by A2;
+    0. = R_EAL 0 by MEASURE6:def 1,SUPINF_2:def 1; then
+    A7: 0. <=' R_EAL(p.i) by A5,MEASURE6:13;
+    per cases;
+     suppose R_EAL(p.i) = 0.;
+      then F.i = 0 by A5,EXTREAL1:def 1,SUPINF_2:def 1;
+      hence thesis by SUPINF_1:6;
+     suppose f.(y/.i) <> +infty;
+      then reconsider w = f.(y/.i) as Real by A6,SUPINF_2:2;
+      F.i = p.i*w by A5,Lm18;
+      hence thesis by SUPINF_1:6;
+     suppose
+      A8: R_EAL(p.i) <> 0. & f.(y/.i) = +infty; then
+      0. <' R_EAL(p.i) by A7,SUPINF_1:22;
+      hence thesis by A5,A8,EXTREAL1:def 1,SUPINF_1:14;
+   end;
+  hence thesis by FUNCT_1:def 5;
+ end;
+
+theorem Th13:
+for X being RealLinearSpace,
+    f being Function of the carrier of X,ExtREAL st
+    (for x being VECTOR of X holds f.x <> -infty) holds
+    f is convex iff
+    (for n being non empty Nat, p being FinSequence of REAL,
+         F being FinSequence of ExtREAL,
+         y,z being FinSequence of the carrier of X st
+     len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
+     (for i being Nat st i in Seg n holds
+       p.i>0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
+     f.Sum(z) <=' Sum F)
+ proof
+ let X be RealLinearSpace,
+     f being Function of the carrier of X,ExtREAL;
+ assume
+ A1: for x being VECTOR of X holds f.x <> -infty;
+ thus f is convex implies
+    (for n being non empty Nat, p being FinSequence of REAL,
+         F being FinSequence of ExtREAL,
+         y,z being FinSequence of the carrier of X st
+     len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
+     (for i being Nat st i in Seg n holds
+       p.i>0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
+     f.Sum(z) <=' Sum F)
+  proof
+   assume
+   A2: f is convex;
+   let n be non empty Nat, p be FinSequence of REAL,
+       F be FinSequence of ExtREAL,
+       y,z be FinSequence of the carrier of X;
+   assume that
+   A3: len p = n & len F = n & len y = n & len z = n and
+   A4: Sum p = 1 and
+   A5: for i being Nat st i in Seg n holds
+        p.i>0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i);
+   A6: for i being Nat st i in Seg n holds 0. <' R_EAL(p.i)
+   proof
+    let i being Nat;
+    assume i in Seg n; then
+    A7: p.i>0 by A5;
+    p.i = R_EAL(p.i) by MEASURE6:def 1;
+    hence thesis by A7,EXTREAL1:18;
+   end;
+   for i being Nat st i in Seg n holds
+    p.i>=0 & F.i = R_EAL(p.i)*f.(y/.i) by A5; then
+   A8: not -infty in rng F by A1,A3,Lm20;
+   per cases;
+   suppose
+    A9: for i being Nat st i in Seg n holds f.(y/.i) <> +infty;
+    A10: for i being Nat st i in Seg n holds f.(y/.i) in REAL
+     proof
+      let i be Nat;
+      assume i in Seg n; then
+      A11: f.(y/.i) <> +infty by A9;
+      f.(y/.i) <> -infty by A1;
+      hence thesis by A11,SUPINF_2:2;
+     end;
+    reconsider V = Prod_of_RLS(X,RLS_Real) as RealLinearSpace;
+     defpred P[set,set] means $2 = [y/.$1, f.(y/.$1)];
+    A12: for i being Nat st i in Seg n
+     ex v being Element of V st P[i,v]
+     proof
+      let i be Nat;
+      assume i in Seg n; then
+      reconsider w = f.(y/.i) as Real by A10;
+      set v = [y/.i, w];
+      v in the carrier of
+         RLSStruct(# [:the carrier of X, the carrier of RLS_Real:],
+                     [0.X,0.RLS_Real], Add_in_Prod_of_RLS(X,RLS_Real),
+                     Mult_in_Prod_of_RLS(X,RLS_Real) #) by Def4; then
+      reconsider v as Element of V by Def3;
+      take v;
+      thus thesis;
+     end;
+    consider g being FinSequence of the carrier of V such that
+    A13: dom g = Seg n and
+    A14: for i being Nat st i in Seg n holds P[i,g/.i] from SeqExD(A12);
+    A15: len g = n by A13,FINSEQ_1:def 3;
+    deffunc f(Nat) = p.$1*g/.$1;
+    consider G being FinSequence of the carrier of V such that
+    A16: len G = n and
+    A17: for i being Nat st i in Seg n holds G.i = f(i) from SeqLambdaD;
+    reconsider M = epigraph f as Subset of V;
+    A18: for i being Nat st i in Seg n holds p.i>0 & G.i=p.i*g/.i & g/.i in M
+     proof
+      let i be Nat; assume
+      A19: i in Seg n;
+      thus p.i>0 by A5,A19;
+      thus G.i=p.i*g/.i by A17,A19;
+      reconsider w = f.(y/.i) as Real by A10,A19;
+      f.(y/.i) = R_EAL(w) by MEASURE6:def 1; then
+      [y/.i, w] in
+       {[x,a] where x is Element of X, a is Element of REAL:
+         f.x <=' R_EAL(a)}; then
+      [y/.i, w] in M by Def6;
+      hence thesis by A14,A19;
+     end;
+    M is convex by A2,Def7; then
+    A20: Sum(G) in M by A3,A4,A15,A16,A18,Th12;
+    defpred P[set,set] means $2 = F.$1;
+    A21: for i being Nat st i in Seg n
+     ex w being Element of RLS_Real st P[i,w]
+    proof
+     let i be Nat; assume
+     A22: i in Seg n; then
+     A23: F.i = R_EAL(p.i)*f.(y/.i) by A5;
+     reconsider a = f.(y/.i) as Real by A10,A22;
+     F.i = p.i*a by A23,Lm18; then
+     reconsider w = F.i as Element of RLS_Real by Def4;
+     take w;
+     thus thesis;
+    end;
+    consider F1 being FinSequence of the carrier of RLS_Real such that
+    A24: dom F1 = Seg n and
+    A25: for i being Nat st i in Seg n holds P[i,F1/.i] from SeqExD(A21);
+    A26: for i being Nat st i in Seg n holds F1.i = F.i
+     proof
+      let i be Nat;
+      assume
+      A27: i in Seg n; then
+      F1/.i = F1.i by A24,FINSEQ_4:def 4;
+      hence thesis by A25,A27;
+     end;
+    A28: len F1 = n by A24,FINSEQ_1:def 3;
+    for i being Nat st i in Seg n holds G.i = [z.i, F1.i]
+    proof
+     let i be Nat; assume
+     A29: i in Seg n;
+     reconsider a = f.(y/.i) as Real by A10,A29;
+     g/.i = [y/.i, a] by A14,A29; then
+     p.i*g/.i = [p.i*y/.i,p.i*a] by Lm4; then
+     G.i = [p.i*y/.i,p.i*a] by A17,A29; then
+     A30: G.i = [z.i,p.i*a] by A5,A29;
+     A31: F.i = R_EAL(p.i)*f.(y/.i) by A5,A29;
+     F.i = p.i*a by A31,Lm18;
+     hence thesis by A26,A29,A30;
+    end; then
+    A32: Sum G = [Sum z, Sum F1] by A3,A16,A28,Th3;
+    [Sum z, Sum F] in M by A3,A20,A26,A28,A32,Lm11; then
+    [Sum z, Sum F] in {[x,w] where x is Element of X,
+      w is Element of REAL: f.x <=' R_EAL(w)} by Def6; then
+    consider x being Element of X,
+             w being Element of REAL such that
+    A33: [Sum z, Sum F] = [x,w] and
+    A34: f.x <=' R_EAL(w);
+    x = Sum z & w = Sum F by A33,ZFMISC_1:33;
+    hence thesis by A34,MEASURE6:def 1;
+   suppose ex i being Nat st i in Seg n & f.(y/.i) = +infty;
+    then consider i being Nat such that
+    A35: i in Seg n and
+    A36: f.(y/.i) = +infty;
+    A37: p.i>0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i) by A5,A35;
+    A38: i in dom F by A3,A35,FINSEQ_1:def 3;
+    0. <' R_EAL(p.i) by A6,A35; then
+    F.i = +infty by A36,A37,EXTREAL1:def 1; then
+    +infty in rng F by A38,FUNCT_1:12; then
+    Sum F = +infty by A8,Lm9;
+    hence thesis by SUPINF_1:20;
+  end;
+ thus
+    (for n being non empty Nat, p being FinSequence of REAL,
+         F being FinSequence of ExtREAL,
+         y,z being FinSequence of the carrier of X st
+     len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
+     (for i being Nat st i in Seg n holds
+       p.i>0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
+     f.Sum(z) <=' Sum F) implies
+ f is convex
+  proof
+   assume
+   A39: for n being non empty Nat, p being FinSequence of REAL,
+         F being FinSequence of ExtREAL,
+         y,z being FinSequence of the carrier of X st
+     len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
+     (for i being Nat st i in Seg n holds
+       p.i>0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
+     f.Sum(z) <=' Sum F;
+   for x1, x2 being VECTOR of X,
+       q being Real st 0<q & q<1 holds
+       f.(q*x1+(1-q)*x2) <=' R_EAL(q)*f.x1+R_EAL(1-q)*f.x2
+    proof
+     let x1, x2 be VECTOR of X, q be Real;
+     assume
+     A40: 0<q & q<1;
+     reconsider p=<*q,1-q*> as FinSequence of REAL;
+     reconsider y=<*x1,x2*> as FinSequence of the carrier of X;
+     reconsider z=<*q*x1,(1-q)*x2*> as FinSequence of the carrier of X;
+     reconsider F=<*R_EAL(q)*f.x1,R_EAL(1-q)*f.x2*> as FinSequence of ExtREAL;
+     set n=2;
+     A41: len p = n & len F = n & len y = n & len z = n by FINSEQ_1:61;
+     A42: Sum p = q+(1-q) by RVSUM_1:107
+               .= q+1-q by XCMPLX_1:29
+               .= 1+(q-q) by XCMPLX_1:29
+               .= 1+0 by XCMPLX_1:14
+               .= 1;
+     A43: for i being Nat st i in Seg n holds
+       p.i>0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)
+     proof
+      let i be Nat; assume
+      A44: i in Seg n;
+      per cases by A44,FINSEQ_1:4,TARSKI:def 2;
+       suppose i=1;
+        then p.i=q & y/.i=x1 & z.i=q*x1 & F.i=R_EAL(q)*f.x1
+         by FINSEQ_1:61,FINSEQ_4:26;
+        hence thesis by A40;
+       suppose i=2;
+        then p.i=1-q & y/.i=x2 & z.i=(1-q)*x2 & F.i=R_EAL(1-q)*f.x2
+         by FINSEQ_1:61,FINSEQ_4:26;
+        hence thesis by A40,SQUARE_1:11;
+     end;
+     Sum z = q*x1+(1-q)*x2 & Sum F = R_EAL(q)*f.x1+R_EAL(1-q)*f.x2
+      by Th6,RLVECT_1:62;
+     hence thesis by A39,A41,A42,A43;
+    end;
+   hence thesis by A1,Th9;
+  end;
+ end;
+
+Lm21:
+ for F being FinSequence of REAL
+ ex s being Permutation of dom F,n being Nat st
+ (for i being Nat st i in dom F holds i in Seg n iff F.(s.i) <> 0)
+ proof
+  let F be FinSequence of REAL;
+  defpred P[Nat] means F.$1 <> 0;
+  defpred R[Nat] means F.$1 = 0;
+  deffunc f(Nat) = $1;
+  set A = {f(i) where i is Element of NAT : f(i) in dom F & P[i]};
+  set B = {f(i) where i is Element of NAT : f(i) in dom F & R[i]};
+  set N = len F;
+  A1: A c= dom F from FrSet_1; then
+  A2: A c= Seg N by FINSEQ_1:def 3;
+  then reconsider A as finite set by FINSET_1:13;
+  A3: B c= dom F from FrSet_1; then
+  A4: B c= Seg N by FINSEQ_1:def 3;
+  then reconsider B as finite set by FINSET_1:13;
+  A5: rng(Sgm A)=A & rng(Sgm B)=B by A2,A4,FINSEQ_1:def 13;
+  for x being set holds not x in A /\ B
+   proof
+    let x be set;
+    assume x in A /\ B; then
+    A6: x in A & x in B by XBOOLE_0:def 3;
+    consider i1 being Element of NAT such that
+    A7: x=i1 & i1 in dom F & F.i1<>0 by A6;
+    consider i2 being Element of NAT such that
+    A8: x=i2 & i2 in dom F & F.i2=0 by A6;
+    thus contradiction by A7,A8;
+   end;
+  then A /\ B = {} by XBOOLE_0:def 1; then
+  A9: A misses B by XBOOLE_0:def 7;
+  A10: A \/ B = dom F
+  proof
+   for x being set holds x in dom F iff (x in A or x in B)
+    proof
+     let x be set;
+     thus x in dom F implies (x in A or x in B)
+      proof
+       assume
+       A11: x in dom F;
+       then reconsider x as Element of NAT;
+       per cases;
+        suppose F.x <> 0;
+         hence thesis by A11;
+        suppose F.x = 0;
+         hence thesis by A11;
+      end;
+     thus (x in A or x in B) implies x in dom F by A1,A3;
+    end;
+   hence thesis by XBOOLE_0:def 2;
+  end;
+  set s = (Sgm A)^(Sgm B);
+  A12: len s = N
+   proof
+    len(Sgm A) = card A & len(Sgm B) = card B by A2,A4,FINSEQ_3:44;
+    then
+    len s = card A + card B by FINSEQ_1:35
+         .= card (A \/ B) by A9,CARD_2:53
+         .= card (Seg N) by A10,FINSEQ_1:def 3;
+    hence thesis by FINSEQ_1:78;
+   end;
+  set n = len(Sgm A);
+  A13: for x being Element of NAT st x in dom F & not x in Seg n
+   ex k being Nat st x=k+n & k in dom(Sgm B) & s.x=(Sgm B).k
+  proof
+   let x be Element of NAT;
+   assume x in dom F & not x in Seg n; then
+   x in Seg N & not x in Seg n by FINSEQ_1:def 3; then
+   A14: 1 <= x & x <= N & not(1 <= x & x <= n) by FINSEQ_1:3; then
+   n+1 <= x by INT_1:20;
+   then n+1-n <= x-n by REAL_1:49;
+   then
+   A15: 1 <= x-n by XCMPLX_1:26;
+   then 0 <= x-n by AXIOMS:22;
+   then reconsider k=x-n as Nat by INT_1:16;
+   take k;
+   x=n+x-n by XCMPLX_1:26; then
+   A16: x=k+n by XCMPLX_1:29;
+   len s = n + len(Sgm B) by FINSEQ_1:35; then
+   N-n = len(Sgm B) by A12,XCMPLX_1:26; then
+   k <= len(Sgm B) by A14,REAL_1:49; then
+   k in Seg(len(Sgm B)) by A15,FINSEQ_1:3; then
+   k in Seg(card B) by A4,FINSEQ_3:44;
+   then k in dom(Sgm B) by A4,FINSEQ_3:45;
+   hence thesis by A16,FINSEQ_1:def 7;
+  end;
+  Sgm A is one-to-one & Sgm B is one-to-one by A2,A4,FINSEQ_3:99; then
+  A17: s is one-to-one by A5,A9,FINSEQ_3:98;
+  A18: rng s = dom F by A5,A10,FINSEQ_1:44;
+  dom F = Seg N & dom s = Seg N by A12,FINSEQ_1:def 3;
+  then reconsider s as Function of dom F, dom F by A18,FUNCT_2:3;
+  s is onto by A18,FUNCT_2:def 3;
+  then reconsider s as Permutation of dom F by A17,FUNCT_2:def 4;
+  take s,n;
+  let i be Nat;
+  assume
+  A19: i in dom F;
+  thus i in Seg n implies F.(s.i) <> 0
+  proof
+   assume i in Seg n; then
+   A20: i in dom Sgm A by FINSEQ_1:def 3;
+   then s.i = (Sgm A).i by FINSEQ_1:def 7; then
+   s.i in A by A5,A20,FUNCT_1:12;
+   then consider j being Element of NAT such that
+   A21: s.i=j & j in dom F & F.j <> 0;
+   thus thesis by A21;
+  end;
+  thus F.(s.i) <> 0 implies i in Seg n
+  proof
+   assume
+   A22: F.(s.i) <> 0;
+   assume not i in Seg n;
+   then consider k being Nat such that
+   A23: i=k+n & k in dom(Sgm B) & s.i=(Sgm B).k by A13,A19;
+   s.i in rng(Sgm B) by A23,FUNCT_1:12;
+   then consider j being Element of NAT such that
+   A24: s.i=j & j in dom F & F.j = 0 by A5;
+   thus thesis by A22,A24;
+  end;
+ end;
+
+theorem
+for X being RealLinearSpace,
+    f being Function of the carrier of X,ExtREAL st
+    (for x being VECTOR of X holds f.x <> -infty) holds
+    f is convex iff
+    (for n being non empty Nat, p being FinSequence of REAL,
+         F being FinSequence of ExtREAL,
+         y,z being FinSequence of the carrier of X st
+     len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
+     (for i being Nat st i in Seg n holds
+       p.i>=0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
+     f.Sum(z) <=' Sum F)
+ proof
+  let X be RealLinearSpace,
+      f being Function of the carrier of X,ExtREAL;
+  assume
+  A1: for x being VECTOR of X holds f.x <> -infty;
+  thus f is convex implies
+    (for n being non empty Nat, p being FinSequence of REAL,
+         F being FinSequence of ExtREAL,
+         y,z being FinSequence of the carrier of X st
+     len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
+     (for i being Nat st i in Seg n holds
+       p.i>=0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
+     f.Sum(z) <=' Sum F)
+  proof
+   assume
+   A2: f is convex;
+   let n be non empty Nat, p be FinSequence of REAL,
+       F be FinSequence of ExtREAL,
+       y,z be FinSequence of the carrier of X;
+   assume that
+   A3: len p = n & len F = n & len y = n & len z = n and
+   A4: Sum p = 1 and
+   A5: for i being Nat st i in Seg n holds
+        p.i>=0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i);
+   consider s being Permutation of dom p,k being Nat such that
+   A6: for i being Nat st i in dom p holds i in Seg k iff p.(s.i) <> 0 by Lm21;
+   1 <= n by RLVECT_1:99; then
+   A7: Seg n <> {} by FINSEQ_1:3;
+   A8: dom p = Seg n by A3,FINSEQ_1:def 3; then
+   A9: dom s = Seg n by A7,FUNCT_2:def 1;
+   reconsider s1 = s as FinSequence of Seg n
+    by A7,A8,FINSEQ_2:28;
+   A10: len s1 = n by A9,FINSEQ_1:def 3;
+   A11: p is Function of Seg n, REAL by A8,FINSEQ_2:30; then
+   reconsider p'=p*s1 as FinSequence of REAL by FINSEQ_2:36;
+   A12: len p' = n by A10,A11,FINSEQ_2:37;
+   A13: dom z = Seg n by A3,FINSEQ_1:def 3; then
+   A14: z is Function of Seg n, the carrier of X by FINSEQ_2:30; then
+   reconsider z'=z*s1 as FinSequence of the carrier of X by FINSEQ_2:36;
+   A15: len z' = n by A10,A14,FINSEQ_2:37;
+   A16: Sum(z') = Sum(z) by A8,A13,RLVECT_2:9;
+   A17: dom y = Seg n by A3,FINSEQ_1:def 3; then
+   A18: y is Function of Seg n, the carrier of X by FINSEQ_2:30; then
+   reconsider y'=y*s1 as FinSequence of the carrier of X by FINSEQ_2:36;
+   A19: len y' = n by A10,A18,FINSEQ_2:37;
+   A20: dom F = Seg n by A3,FINSEQ_1:def 3; then
+   A21: F is Function of Seg n, ExtREAL by FINSEQ_2:30; then
+   reconsider F'=F*s1 as FinSequence of ExtREAL by FINSEQ_2:36;
+   A22: len F' = n by A10,A21,FINSEQ_2:37;
+   for i being Nat st i in Seg n holds
+    p.i>=0 & F.i = R_EAL(p.i)*f.(y/.i) by A5; then
+   A23: not -infty in rng F by A1,A3,Lm20; then
+   A24: Sum(F') = Sum(F) by A8,A20,Th8;
+   p' = (p'|k)^(p'/^k) by RFINSEQ:21; then
+   A25: Sum(p') = Sum(p'|k) + Sum(p'/^k) by RVSUM_1:105;
+   A26: for i being Nat st 1<=i & i<=n-k holds i+k in Seg n & p.(s.(i+k))=0
+   proof
+    let i be Nat;
+    assume that
+    A27: 1<=i and
+    A28: i<=n-k;
+    i+k<=n-k+k by A28,AXIOMS:24; then
+    A29: i+k<=n by XCMPLX_1:27;
+    i <= i+k by INT_1:19; then
+    A30: 1 <= i+k by A27,AXIOMS:22; then
+    A31: i+k in dom p by A8,A29,FINSEQ_1:3;
+    0 < i by A27,AXIOMS:22; then
+    0+k < i+k by REAL_1:53; then
+    not i+k in Seg k by FINSEQ_1:3;
+    hence thesis by A6,A29,A30,A31,FINSEQ_1:3;
+   end;
+   A32: Sum(p'/^k) = 0
+    proof
+     per cases;
+     suppose k >= n;
+      hence thesis by A12,FINSEQ_5:35,RVSUM_1:102;
+     suppose
+      A33: k < n;
+      for w being set st w in rng(p'/^k) holds w in {0}
+       proof
+        let w be set;
+        assume w in rng(p'/^k);
+        then consider i being set such that
+        A34: i in dom(p'/^k) and
+        A35: (p'/^k).i = w by FUNCT_1:def 5;
+        reconsider i as Nat by A34;
+        reconsider k1=n-k as Nat by A33,INT_1:18;
+        len(p'/^k)=k1 by A12,A33,RFINSEQ:def 2; then
+        i in Seg k1 by A34,FINSEQ_1:def 3; then
+        1 <= i & i <= n-k by FINSEQ_1:3; then
+        A36: i+k in Seg n & p.(s.(i+k))=0 by A26;
+        then
+        i+k in dom p' by A12,FINSEQ_1:def 3; then
+        p'.(i+k) = 0 by A36,FUNCT_1:22; then
+        w=0 by A12,A33,A34,A35,RFINSEQ:def 2;
+        hence thesis by TARSKI:def 1;
+       end; then
+      rng(p'/^k) c= {0} by TARSKI:def 3;
+      hence thesis by Lm16;
+    end;
+   p',p are_fiberwise_equipotent by RFINSEQ:17; then
+   A37: Sum(p'|k)=1 by A4,A25,A32,RFINSEQ:22;
+   z' = (z'|k)^(z'/^k) by RFINSEQ:21; then
+   A38: Sum(z') = Sum(z'|k) + Sum(z'/^k) by RLVECT_1:58;
+   Sum(z'/^k) = 0.X
+    proof
+     per cases;
+     suppose k >= n;
+      then z'/^k = <*>(the carrier of X) by A15,FINSEQ_5:35;
+      hence thesis by RLVECT_1:60;
+     suppose
+      A39: k < n;
+      for w being set st w in rng(z'/^k) holds w in {0.X}
+       proof
+        let w be set;
+        assume w in rng(z'/^k);
+        then consider i being set such that
+        A40: i in dom(z'/^k) and
+        A41: (z'/^k).i = w by FUNCT_1:def 5;
+        reconsider i as Nat by A40;
+        reconsider k1=n-k as Nat by A39,INT_1:18;
+        len(z'/^k)=k1 by A15,A39,RFINSEQ:def 2; then
+        i in Seg k1 by A40,FINSEQ_1:def 3; then
+        1 <= i & i <= n-k by FINSEQ_1:3; then
+        A42: i+k in Seg n & p.(s.(i+k))=0 by A26; then
+        s.(i+k) in Seg n by A8,FUNCT_2:7; then
+        z.(s.(i+k))=p.(s.(i+k))*y/.(s.(i+k)) by A5; then
+        A43: z.(s.(i+k))=0.X by A42,RLVECT_1:23;
+        i+k in dom z' by A15,A42,FINSEQ_1:def 3; then
+        A44: z'.(i+k) = 0.X by A43,FUNCT_1:22;
+        w=0.X by A15,A39,A40,A41,A44,RFINSEQ:def 2;
+        hence thesis by TARSKI:def 1;
+       end; then
+      rng(z'/^k) c= {0.X} by TARSKI:def 3;
+      hence thesis by Lm17;
+    end; then
+   A45: Sum(z'|k)=Sum(z) by A16,A38,RLVECT_1:def 7;
+   A46: F' = (F'|k)^(F'/^k) by RFINSEQ:21;
+   not -infty in rng F' by A23,FUNCT_1:25; then
+   not -infty in rng (F'|k) \/ rng (F'/^k) by A46,FINSEQ_1:44; then
+   not -infty in rng (F'|k) & not -infty in rng (F'/^k) by XBOOLE_0:def 2;
+   then
+   A47: Sum(F') = Sum(F'|k) + Sum(F'/^k) by A46,Th7;
+   Sum(F'/^k)=0.
+    proof
+     per cases;
+     suppose k >= n;
+      hence thesis by A22,Th4,FINSEQ_5:35;
+     suppose
+      A48: k < n;
+      for w being set st w in rng(F'/^k) holds w in {0.}
+       proof
+        let w be set;
+        assume w in rng(F'/^k);
+        then consider i being set such that
+        A49: i in dom(F'/^k) and
+        A50: (F'/^k).i = w by FUNCT_1:def 5;
+        reconsider i as Nat by A49;
+        reconsider k1=n-k as Nat by A48,INT_1:18;
+        len(F'/^k)=k1 by A22,A48,RFINSEQ:def 2; then
+        i in Seg k1 by A49,FINSEQ_1:def 3; then
+        1 <= i & i <= n-k by FINSEQ_1:3; then
+        A51: i+k in Seg n & p.(s.(i+k))=0 by A26; then
+        s.(i+k) in Seg n by A8,FUNCT_2:7; then
+        F.(s.(i+k)) = R_EAL(0)*f.(y/.(s.(i+k))) by A5,A51; then
+        F.(s.(i+k)) = 0. * f.(y/.(s.(i+k)))
+         by MEASURE6:def 1,SUPINF_2:def 1; then
+        A52: F.(s.(i+k)) = 0. by EXTREAL1:def 1;
+        i+k in dom F' by A22,A51,FINSEQ_1:def 3; then
+        F'.(i+k) = 0. by A52,FUNCT_1:22;
+        then w=0. by A22,A48,A49,A50,RFINSEQ:def 2;
+        hence thesis by TARSKI:def 1;
+       end; then
+      rng(F'/^k) c= {0.} by TARSKI:def 3;
+      hence thesis by Lm15;
+    end; then
+   A53: Sum(F'|k) = Sum(F) by A24,A47,SUPINF_2:18;
+   set k' = min(k,n);
+   reconsider k' as Nat;
+   A54: p'|k = p'|(Seg k) & y'|k = y'|(Seg k) &
+   z'|k = z'|(Seg k) & F'|k = F'|(Seg k)
+    by TOPREAL1:def 1; then
+   A55: len(p'|k) = k' & len(y'|k) = k' & len(z'|k) = k' & len(F'|k) = k'
+    by A12,A15,A19,A22,FINSEQ_2:24;  then
+   reconsider k' as non empty Nat by A37,FINSEQ_1:25,RVSUM_1:102;
+   for i being Nat st i in Seg k' holds
+         (p'|k).i>0 & (z'|k).i=(p'|k).i*(y'|k)/.i &
+         (F'|k).i = R_EAL((p'|k).i)*f.((y'|k)/.i)
+    proof
+     let i be Nat;
+     assume
+     A56: i in Seg k'; then
+     A57: i in dom(p'|k) & i in dom(y'|k) &
+          i in dom(z'|k) & i in dom(F'|k) by A55,FINSEQ_1:def 3;
+     dom(p'|k) = dom p' /\ Seg k & dom(y'|k) = dom y' /\ Seg k &
+      dom(z'|k) = dom z' /\ Seg k & dom(F'|k) = dom F' /\ Seg k
+      by A54,FUNCT_1:68; then
+     A58: i in dom(p') & i in dom(y') & i in dom(z') & i in dom(F')
+      by A57,XBOOLE_0:def 3;
+     A59: p'/.i = p'.i & y'/.i = y'.i & z'/.i = z'.i & F'/.i = F'.i
+      by A58,FINSEQ_4:def 4;
+     A60: (p'|k)/.i = p'/.i & (y'|k)/.i = y'/.i &
+      (z'|k)/.i = z'/.i & (F'|k)/.i = F'/.i by A57,TOPREAL1:1;
+     A61: p'.i = p.(s.i) & y'.i = y.(s.i) &
+      z'.i = z.(s.i) & F'.i = F.(s.i) by A58,FUNCT_1:22;
+     A62: i in Seg n by A12,A58,FINSEQ_1:def 3; then
+     A63: s.i in Seg n by A8,FUNCT_2:7; then
+     A64: (p'|k).i = p.(s.i) & (y'|k)/.i = y/.(s.i) &
+      (z'|k).i = z.(s.i) & (F'|k).i = F.(s.i)
+      by A17,A57,A59,A60,A61,FINSEQ_4:def 4;
+     k' <= k by SQUARE_1:35; then
+     Seg k' c= Seg k by FINSEQ_1:7; then
+     p.(s.i) <> 0 by A6,A8,A56,A62;
+     hence thesis by A5,A63,A64;
+    end;
+   hence thesis by A1,A2,A37,A45,A53,A55,Th13;
+  end;
+  thus
+    (for n being non empty Nat, p being FinSequence of REAL,
+         F being FinSequence of ExtREAL,
+         y,z being FinSequence of the carrier of X st
+     len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
+     (for i being Nat st i in Seg n holds
+       p.i>=0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
+     f.Sum(z) <=' Sum F) implies
+  f is convex
+  proof
+   assume
+   A65: for n being non empty Nat, p being FinSequence of REAL,
+         F being FinSequence of ExtREAL,
+         y,z being FinSequence of the carrier of X st
+     len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
+     (for i being Nat st i in Seg n holds
+       p.i>=0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
+     f.Sum(z) <=' Sum F;
+   for n being non empty Nat, p being FinSequence of REAL,
+       F being FinSequence of ExtREAL,
+       y,z being FinSequence of the carrier of X st
+     len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
+     (for i being Nat st i in Seg n holds
+       p.i>0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
+     f.Sum(z) <=' Sum F
+    proof
+     let n be non empty Nat, p be FinSequence of REAL,
+         F be FinSequence of ExtREAL,
+         y,z be FinSequence of the carrier of X;
+     assume that
+     A66: len p = n & len F = n & len y = n & len z = n & Sum p = 1 and
+     A67: for i being Nat st i in Seg n holds
+          p.i>0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i);
+     for i being Nat st i in Seg n holds
+          p.i>=0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i) by A67;
+     hence thesis by A65,A66;
+    end;
+  hence thesis by A1,Th13;
+  end;
+ end;

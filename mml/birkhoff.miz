@@ -1,0 +1,1324 @@
+:: Birkhoff Theorem for Many Sorted Algebras
+::  by Artur Korni{\l}owicz
+::
+:: Received June 19, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_1, MSUALG_1, ZF_REFLE, PBOOLE, PRALG_1, MSAFREE, ALG_1,
+      REALSET1, MSUALG_3, FUNCT_6, FUNCT_1, RELAT_1, GROUP_6, WELLORD1,
+      MSUALG_2, PRALG_2, CARD_3, MSUALG_5, MSUALG_4, FUNCOP_1, BOOLE, RLVECT_2,
+      EQREL_1, CLOSURE2, SETFAM_1, FUNCT_4, BORSUK_1, CANTOR_1, EQUATION,
+      ZF_MODEL, MCART_1, FREEALG, NATTRA_1, MSAFREE2, PRE_CIRC, BIRKHOFF;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, SETFAM_1, RELAT_1,
+      MCART_1, STRUCT_0, FUNCT_1, RELSET_1, FUNCT_2, EQREL_1, CARD_3, CANTOR_1,
+      PBOOLE, PRALG_1, MSUALG_1, MSUALG_2, PRALG_3, MSUALG_3, AUTALG_1,
+      MSAFREE, MSAFREE2, PRALG_2, PRE_CIRC, MSUALG_4, PZFMISC1, EXTENS_1,
+      MSSUBFAM, CLOSURE2, MSUALG_5, EQUATION;
+ constructors CANTOR_1, PRALG_3, PRE_CIRC, MSAFREE2, AUTALG_1, EXTENS_1,
+      PZFMISC1, CLOSURE2, MSUALG_5, BINOP_1, EQUATION, MSUALG_6, MSSUBFAM;
+ clusters CANTOR_1, CLOSURE2, FUNCT_1, MSAFREE2, MSUALG_1, MSUALG_2, MSUALG_4,
+      MSUALG_5, MSUALG_9, PBOOLE, PRALG_1, PRALG_3, RELSET_1, STRUCT_0,
+      EQUATION, EXTENS_1, MEMBERED, ORDINAL2;
+ requirements SUBSET, BOOLE;
+ definitions AUTALG_1, FUNCT_1, RELAT_1, TARSKI, PBOOLE, MSUALG_2, MSUALG_3,
+      PRALG_1, PRALG_2, MSUALG_4, EQUATION;
+ theorems AUTALG_1, CANTOR_1, CARD_3, CLOSURE2, EXTENS_1, FUNCOP_1, FUNCT_1,
+      FUNCT_2, MCART_1, MSAFREE, MSAFREE2, MSSCYC_1, MSSUBFAM, MSUALG_1,
+      MSUALG_2, MSUALG_3, MSUALG_4, MSUALG_5, MSUALG_7, MSUALG_9, PBOOLE,
+      PRALG_2, PRALG_3, EQUATION, RELAT_1, ZFMISC_1;
+ schemes DOMAIN_1, MSUALG_1, MSUALG_9;
+
+begin  :: Birkhoff Variety Theorem
+
+::-------------------------------------------------------------------
+:: Acknowledgements:
+:: =================
+::
+:: I would like to thank Professor Andrzej Trybulec
+:: for his help in the preparation of the article.
+::-------------------------------------------------------------------
+
+definition let S be non empty non void ManySortedSign,
+               X be non-empty ManySortedSet of the carrier of S,
+               A be non-empty MSAlgebra over S,
+               F be ManySortedFunction of X, the Sorts of A;
+ func F-hash -> ManySortedFunction of FreeMSA X, A means : Def1:
+  it is_homomorphism FreeMSA X, A &
+  it || FreeGen X = F ** Reverse X;
+existence by MSAFREE:def 5;
+uniqueness by EXTENS_1:18;
+end;
+
+theorem Th1:
+for S being non empty non void ManySortedSign
+ for A being non-empty MSAlgebra over S
+  for X being non-empty ManySortedSet of the carrier of S
+   for F being ManySortedFunction of X, the Sorts of A
+ holds rngs F c= rngs (F-hash)
+  proof
+    let S be non empty non void ManySortedSign,
+        A be non-empty MSAlgebra over S,
+        X be non-empty ManySortedSet of the carrier of S,
+        F be ManySortedFunction of X, the Sorts of A;
+    set R = Reverse X;
+    let i be set;
+    assume i in the carrier of S;
+    then reconsider s = i as SortSymbol of S;
+    let y be set;
+    assume y in (rngs F).i;
+    then y in rng (F.s) by MSSUBFAM:13;
+    then consider x being set such that
+A1:   x in dom (F.s) & y = F.s.x by FUNCT_1:def 5;
+      rngs R = X by EXTENS_1:14;
+    then R is "onto" by EXTENS_1:13;
+    then rng (R.s) = X.s by MSUALG_3:def 3;
+    then consider a being set such that
+A2:   a in dom (R.s) & x = R.s.a by A1,FUNCT_1:def 5;
+A3: dom (R.s) = (FreeGen X).s by FUNCT_2:def 1;
+A4: dom ((F-hash).s) = (the Sorts of FreeMSA X).s by FUNCT_2:def 1;
+      FreeGen X c= the Sorts of FreeMSA X by MSUALG_2:def 1;
+then A5: (FreeGen X).s c= (the Sorts of FreeMSA X).s by PBOOLE:def 5;
+      y = (F.s*R.s).a by A1,A2,FUNCT_1:23
+     .= (F**R).s.a by MSUALG_3:2
+     .= (F-hash || FreeGen X).s.a by Def1
+     .= (((F-hash).s) | ((FreeGen X).s)).a by MSAFREE:def 1
+     .= (F-hash).s.a by A2,FUNCT_1:72;
+    then y in rng ((F-hash).s) by A2,A3,A4,A5,FUNCT_1:def 5;
+    hence y in (rngs (F-hash)).i by MSSUBFAM:13;
+  end;
+
+
+:: Let P[] be a non empty abstract class of algebras. If P[] is closed under
+:: subalgebras and products, the free algebras exist in P[].
+
+scheme ExFreeAlg_1 { S() -> non empty non void ManySortedSign,
+                     X() -> non-empty MSAlgebra over S(),
+                     P[set] } :
+ ex A being strict non-empty MSAlgebra over S(),
+    F being ManySortedFunction of X(), A st P[A] & F is_epimorphism X(), A &
+ for B being non-empty MSAlgebra over S()
+  for G being ManySortedFunction of X(), B st G is_homomorphism X(), B & P[B]
+   ex H being ManySortedFunction of A, B st H is_homomorphism A, B &
+    H ** F = G &
+   for K being ManySortedFunction of A, B st K ** F = G holds H = K
+ provided
+A1: for A, B being non-empty MSAlgebra over S() st A, B are_isomorphic &
+      P[A] holds P[B] and
+A2: for A being non-empty MSAlgebra over S()
+     for B being strict non-empty MSSubAlgebra of A st P[A] holds P[B] and
+A3: for I being set, F being MSAlgebra-Family of I, S() st
+     (for i being set st i in I ex A being MSAlgebra over S() st A = F.i
+      & P[A]) holds P[product F]
+  proof
+set SF = the Sorts of X(),
+    I = the carrier of S();
+
+set CC = { C where C is Element of CongrLatt X() :
+  ex R being MSCongruence of X() st R = C & P[QuotMSAlg (X(),R)] };
+:: ************************************************************************
+
+    defpred _P[set] means
+    ex R being MSCongruence of X() st R = $1 & P[QuotMSAlg(X(),R)];
+A4: { C where C is Element of CongrLatt X() : _P[C] }
+       is Subset of CongrLatt X() from SubsetD;
+
+A5: now
+      let q be set;
+      assume q in CC;
+      then consider C be Element of CongrLatt X() such that
+A6:     q = C and
+          ex R being MSCongruence of X() st R = C & P[QuotMSAlg (X(),R)];
+      thus q is MSCongruence of X() by A6,MSUALG_5:def 6;
+    end;
+
+     :::::::: 1 step
+    consider EM being empty set, EMF being MSAlgebra-Family of EM, S();
+      for i being set st i in EM ex A being MSAlgebra over S() st
+      A = EMF.i & P[A];
+then A7: P[product EMF] by A3;
+    consider Xi being ManySortedSet of I such that
+A8:   {Xi} = I --> {{}} by MSUALG_9:6;
+      now
+      let i be set;
+      assume i in I;
+      then reconsider s = i as SortSymbol of S();
+      thus (the Sorts of product EMF).i
+         = (SORTS EMF).s by PRALG_2:20
+        .= product Carrier(EMF,s) by PRALG_2:def 17
+        .= {{}} by CARD_3:19,PRALG_2:def 16
+        .= (I --> {{}}).s by FUNCOP_1:13
+        .= {Xi}.i by A8;
+    end;
+    then the Sorts of product EMF = {Xi} by PBOOLE:3;
+    then product EMF, Trivial_Algebra S() are_isomorphic by MSUALG_9:27;
+then A9: P[Trivial_Algebra S()] by A1,A7;
+
+     :::::::: 2 step
+      [|SF,SF|] is MSCongruence of X() by MSUALG_5:20;
+then A10: [|SF,SF|] is Element of CongrLatt X()
+       by MSUALG_5:def 6;
+    reconsider R = [|SF,SF|] as MSCongruence of X() by MSUALG_5:20;
+      the Sorts of QuotMSAlg (X(),R) = {SF} by MSUALG_9:30;
+    then consider X be non-empty ManySortedSet of I such that
+A11:   the Sorts of QuotMSAlg (X(),R) = {X};
+      QuotMSAlg (X(),R), Trivial_Algebra S() are_isomorphic by A11,MSUALG_9:27;
+    then Trivial_Algebra S(), QuotMSAlg (X(),R) are_isomorphic by MSUALG_3:17;
+    then P[QuotMSAlg (X(),R)] by A1,A9;
+then A12: [|SF,SF|] in CC by A10;
+
+     :::::::: 3 step
+A13: CC c= the carrier of EqRelLatt SF
+    proof
+      let q be set;
+      assume q in CC;
+      then q is Equivalence_Relation of SF by A5;
+      hence q in the carrier of EqRelLatt SF by MSUALG_5:def 5;
+    end;
+    then reconsider CC as non empty SubsetFamily of [|SF,SF|] by A12,MSUALG_7:6
+;
+
+     :::::::: 4 step
+set R0 = meet |:CC:|;   ::*******************************************
+A14: R0 is MSEquivalence_Relation-like ManySortedRelation of SF
+       by A13,MSUALG_7:9;
+    then reconsider R0 as ManySortedRelation of X();
+      R0 is MSEquivalence-like
+    proof
+      let i be set,
+          R be Relation of SF.i;
+      assume i in I & R0.i = R;
+      hence R is Equivalence_Relation of SF.i by A14,MSUALG_4:def 3;
+    end;
+    then reconsider R0 as MSEquivalence-like ManySortedRelation of X();
+    reconsider R0 as MSCongruence of X() by A4,MSUALG_9:29;
+
+     :::::::: 5 step
+take A = QuotMSAlg (X(),R0); ::********************************************
+    defpred _P[set,set] means
+      ex R being MSCongruence of X() st R = $1 & $2 = QuotMSAlg (X(),R);
+
+A15: now
+      let c be set;
+      assume c in CC;
+      then reconsider cc = c as MSCongruence of X() by A5;
+      consider w being set such that
+A16:     w = QuotMSAlg (X(),cc);
+      take w;
+      thus _P[c,w]  by A16;
+    end;
+
+    consider FF being ManySortedSet of CC such that ::*******************
+A17:  for c being set st c in CC holds _P[c,FF.c] from MSSEx(A15);
+
+      FF is MSAlgebra-Family of CC, S()
+    proof
+      let c be set;
+      assume c in CC;
+      then consider R being MSCongruence of X() such that
+A18:     R = c & FF.c = QuotMSAlg (X(),R) by A17;
+      thus FF.c is non-empty MSAlgebra over S() by A18;
+    end;
+    then reconsider FF as MSAlgebra-Family of CC, S();
+
+     :::::::: 6 step
+      for cc being set st cc in CC ex A being MSAlgebra over S() st
+      A = FF.cc & P[A]
+    proof
+      let cc be set; assume
+A19:     cc in CC;
+      then reconsider c = cc as Element of CC;
+      take V = FF.c;
+      consider C be Element of CongrLatt X() such that
+A20:     cc = C & ex R being MSCongruence of X() st R = C &
+         P[QuotMSAlg (X(),R)] by A19;
+      consider R being MSCongruence of X() such that
+A21:     R = cc & FF.cc = QuotMSAlg (X(),R) by A17,A19;
+      thus V = FF.cc & P[V] by A20,A21;
+    end;
+then A22: P[product FF] by A3;
+
+     :::::::: 7 step
+    reconsider F = MSNat_Hom(X(),R0) as ManySortedFunction of X(), A;
+take F;
+    defpred _P[Element of CC,set] means
+    ex F1 being ManySortedFunction of X(),FF.$1 st
+      F1 = $2 & F1 is_homomorphism X(),FF.$1 &
+       ex R being MSCongruence of X() st $1 = R & F1 = MSNat_Hom(X(),R);
+
+A23: for c being Element of CC ex j being set st _P[c,j]  proof
+      let c be Element of CC;
+      consider R being MSCongruence of X() such that
+A24:     R = c & FF.c = QuotMSAlg (X(),R) by A17;
+      set j = MSNat_Hom(X(),R);
+      take j;
+      reconsider F1 = j as ManySortedFunction of X(),FF.c by A24;
+      take F1;
+      thus F1 = j;
+        MSNat_Hom(X(),R) is_epimorphism X(),QuotMSAlg (X(),R) by MSUALG_4:3;
+      hence F1 is_homomorphism X(),FF.c by A24,MSUALG_3:def 10;
+      take R;
+      thus thesis by A24;
+    end;
+
+    consider FofI1 being ManySortedSet of CC such that
+A25:  for c being Element of CC holds _P[c,FofI1.c] from MSSExD(A23);
+A26: for c being Element of CC ex F1 being ManySortedFunction of X(),FF.c st
+      F1 = FofI1.c & F1 is_homomorphism X(),FF.c
+    proof
+      let c be Element of CC;
+      consider F1 being ManySortedFunction of X(),FF.c such that
+A27:     F1 = FofI1.c & F1 is_homomorphism X(),FF.c and
+       ex R being MSCongruence of X() st c = R & F1 = MSNat_Hom(X(),R) by A25;
+      take F1;
+      thus thesis by A27;
+    end;
+
+      FofI1 is Function-yielding
+    proof
+      let c be set;
+      assume c in dom FofI1;
+      then reconsider cc = c as Element of CC by PBOOLE:def 3;
+      consider F1 being ManySortedFunction of X(),FF.cc such that
+A28:     F1 = FofI1.cc & F1 is_homomorphism X(),FF.cc by A26;
+      thus FofI1.c is Function by A28;
+    end;
+    then reconsider FofI1 as ManySortedFunction of CC;
+
+    consider H being ManySortedFunction of X(),product FF such that
+A29:   H is_homomorphism X(),product FF and
+A30:   for c being Element of CC holds proj(FF,c) ** H = FofI1.c
+          by A26,PRALG_3:30;
+      MSHomQuot H is_monomorphism QuotMSAlg (X(),MSCng H), product FF
+          by A29,MSUALG_4:4;
+then A31: QuotMSAlg (X(),MSCng H), Image MSHomQuot H are_isomorphic by MSUALG_9
+:17;
+      now
+      let i be set;
+      assume i in I;
+      then reconsider s = i as SortSymbol of S();
+      consider Q being Subset-Family of ([|SF,SF|].s) such that
+A32:     Q = |:CC:|.s and
+A33:     (meet |:CC:|).s = Intersect Q by MSSUBFAM:def 2;
+A34:     |:CC:|.s = { t.s where t is Element of Bool [|SF,SF|] : t in CC }
+          by CLOSURE2:15;
+        (MSCng H).s = R0.s
+      proof
+        let a, b be set;
+        hereby
+          assume
+A35:         [a,b] in (MSCng H).s;
+then A36:       a in SF.s & b in SF.s by ZFMISC_1:106;
+            [a,b] in [:SF.s,SF.s:] by A35;
+then A37:       [a,b] in [|SF,SF|].s by PRALG_2:def 9;
+A38:       [a,b] in MSCng (H,s) by A29,A35,MSUALG_4:def 20;
+            for Y being set st Y in Q holds [a,b] in Y
+          proof
+            let Y be set;
+            assume Y in Q;
+            then consider t being Element of Bool [|SF,SF|] such that
+A39:           Y = t.s and
+A40:           t in CC by A32,A34;
+            reconsider t1 = t as Element of CC by A40;
+            consider F1 being ManySortedFunction of X(),FF.t1 such that
+A41:           F1 = FofI1.t1 &
+              F1 is_homomorphism X(),FF.t1 &
+              ex R being MSCongruence of X() st t1 = R & F1 = MSNat_Hom(X(),R)
+                 by A25;
+            consider R being MSCongruence of X() such that
+A42:             t1 = R & F1 = MSNat_Hom(X(),R) by A41;
+              F1.s.a
+               = (proj(FF,t1) ** H).s.a by A30,A41
+              .= ((proj(FF,t1)).s * H.s).a by MSUALG_3:2
+              .= (proj(FF,t1).s).((H.s).a) by A36,FUNCT_2:21
+              .= (proj(FF,t1).s).((H.s).b) by A36,A38,MSUALG_4:def 19
+              .= ((proj(FF,t1)).s * H.s).b by A36,FUNCT_2:21
+              .= (proj(FF,t1) ** H).s.b by MSUALG_3:2
+              .= F1.s.b by A30,A41;
+            hence [a,b] in Y by A36,A39,A42,MSUALG_9:34;
+          end;
+          hence [a,b] in R0.s by A33,A37,CANTOR_1:10;
+        end;
+        assume
+A43:       [a,b] in R0.s;
+then A44:     a in SF.s & b in SF.s by ZFMISC_1:106;
+A45:     product FF = MSAlgebra (# SORTS FF, OPS FF #) by PRALG_2:def 21;
+          H.s.a in (the Sorts of product FF).s by A44,FUNCT_2:7;
+then A46:     H.s.a in product Carrier(FF,s) by A45,PRALG_2:def 17;
+          H.s.b in (the Sorts of product FF).s by A44,FUNCT_2:7;
+then A47:     H.s.b in product Carrier(FF,s) by A45,PRALG_2:def 17;
+          for c being Element of CC holds
+          proj(Carrier(FF,s),c).(H.s.a) = proj(Carrier(FF,s),c).(H.s.b)
+        proof
+          let c be Element of CC;
+          reconsider t1 = c as MSCongruence of X() by A5;
+            t1 is Element of Bool [|SF,SF|] by CLOSURE2:def 1;
+          then t1.s in |:CC:|.s by A34;
+then A48:       [a,b] in t1.s by A32,A33,A43,CANTOR_1:10;
+          consider F1 being ManySortedFunction of X(),FF.c such that
+A49:         F1 = FofI1.c &
+            F1 is_homomorphism X(),FF.c &
+            ex R being MSCongruence of X() st c = R & F1 = MSNat_Hom(X(),R)
+               by A25;
+          consider R being MSCongruence of X() such that
+A50:         t1 = R & F1 = MSNat_Hom(X(),R) by A49;
+          thus proj(Carrier(FF,s),c).(H.s.a)
+             = (proj(FF,c).s).(H.s.a) by PRALG_3:def 3
+            .= ((proj(FF,c)).s * H.s).a by A44,FUNCT_2:21
+            .= (proj(FF,c) ** H).s.a by MSUALG_3:2
+            .= F1.s.a by A30,A49
+            .= F1.s.b by A44,A48,A50,MSUALG_9:34
+            .= (proj(FF,c) ** H).s.b by A30,A49
+            .= ((proj(FF,c)).s * H.s).b by MSUALG_3:2
+            .= (proj(FF,c).s).(H.s.b) by A44,FUNCT_2:21
+            .= proj(Carrier(FF,s),c).(H.s.b) by PRALG_3:def 3;
+        end;
+        then H.s.a = H.s.b by A46,A47,MSUALG_9:15;
+        then [a,b] in MSCng (H,s) by A44,MSUALG_4:def 19;
+        hence [a,b] in (MSCng H).s by A29,MSUALG_4:def 20;
+      end;
+      hence (MSCng H).i = R0.i;
+    end;
+    then MSCng H = R0 by PBOOLE:3;
+    then consider XX being strict non-empty MSSubAlgebra of product FF such
+that
+A51:   A, XX are_isomorphic by A31;
+A52: XX, A are_isomorphic by A51,MSUALG_3:17;
+      P[XX] by A2,A22;
+    hence P[A] by A1,A52;
+    thus
+A53:   F is_epimorphism X(), A by MSUALG_4:3;
+
+     :::::::: 8 step
+    let B be non-empty MSAlgebra over S(),
+        G be ManySortedFunction of X(), B such that
+A54:   G is_homomorphism X(), B and
+A55:   P[B];
+    reconsider C = Image MSHomQuot G as strict non-empty MSSubAlgebra of B;
+      MSHomQuot G is_monomorphism QuotMSAlg (X(),MSCng G), B by A54,MSUALG_4:4;
+    then QuotMSAlg (X(),MSCng G), C are_isomorphic by MSUALG_9:17;
+then A56: C, QuotMSAlg (X(),MSCng G) are_isomorphic by MSUALG_3:17;
+A57: MSCng G is Element of CongrLatt X() by MSUALG_5:def 6;
+      P[C] by A2,A55;
+    then P[QuotMSAlg (X(),MSCng G)] by A1,A56;
+    then MSCng(G) in CC by A57;
+    then MSCng(G) in |:CC:| by CLOSURE2:22;
+    then R0 c= MSCng(G) by MSSUBFAM:43;
+    then consider H being ManySortedFunction of A, B such that
+A58:   H is_homomorphism A, B & G = H ** F by A54,MSUALG_9:37;
+take H;
+    thus H is_homomorphism A, B by A58;
+    thus
+    G = H ** F by A58;
+    let K be ManySortedFunction of A, B such that
+A59:   K ** F = G;
+      F is "onto" by A53,MSUALG_3:def 10;
+    hence H = K by A58,A59,EXTENS_1:16;
+  end;
+
+scheme ExFreeAlg_2 { S() -> non empty non void ManySortedSign,
+                     X() -> non-empty ManySortedSet of the carrier of S(),
+                     P[set] } :
+ ex A being strict non-empty MSAlgebra over S(),
+    F being ManySortedFunction of X(), the Sorts of A st P[A] &
+ for B being non-empty MSAlgebra over S()
+  for G being ManySortedFunction of X(), the Sorts of B st P[B]
+   ex H being ManySortedFunction of A, B st H is_homomorphism A, B &
+    H ** F = G &
+   for K being ManySortedFunction of A, B st
+    K is_homomorphism A, B & K ** F = G holds H = K
+ provided
+A1: for A, B being non-empty MSAlgebra over S() st A, B are_isomorphic &
+      P[A] holds P[B] and
+A2: for A being non-empty MSAlgebra over S()
+     for B being strict non-empty MSSubAlgebra of A st P[A] holds P[B] and
+A3: for I being set, F being MSAlgebra-Family of I, S() st
+     (for i being set st i in I ex A being MSAlgebra over S() st A = F.i
+      & P[A]) holds P[product F]
+  proof
+set FM = FreeMSA X();
+     defpred _P[set] means P[$1];
+A4: for A, B being non-empty MSAlgebra over S() st A, B are_isomorphic &
+      _P[A] holds _P[B] by A1;
+A5: for A being non-empty MSAlgebra over S()
+     for B being strict non-empty MSSubAlgebra of A st _P[A] holds _P[B] by A2;
+A6: for I being set, F being MSAlgebra-Family of I, S() st
+     (for i being set st i in I ex A being MSAlgebra over S() st A = F.i
+      & _P[A]) holds _P[product F] by A3;
+    consider A being strict non-empty MSAlgebra over S(),
+             F being ManySortedFunction of FM, A such that
+A7:   _P[A] and
+A8:   F is_epimorphism FM, A and
+A9:   for B being non-empty MSAlgebra over S()
+       for G being ManySortedFunction of FM, B st G is_homomorphism FM, B &
+        _P[B] ex H being ManySortedFunction of A, B st H is_homomorphism A, B &
+       H ** F = G &
+      for K being ManySortedFunction of A, B st K ** F = G holds H = K
+        from ExFreeAlg_1(A4,A5,A6);
+take A;
+    reconsider R = (F || FreeGen X()) ** ((Reverse X())"")
+     as ManySortedFunction of X(), the Sorts of A;
+take R;
+    thus P[A] by A7;
+    let B be non-empty MSAlgebra over S(),
+        G be ManySortedFunction of X(), the Sorts of B such that
+A10:   P[B];
+    consider GG being ManySortedFunction of FM, B such that
+A11:   GG is_homomorphism FM, B and
+A12:   GG || FreeGen X() = G ** Reverse X() by MSAFREE:def 5;
+    consider H being ManySortedFunction of A, B such that
+A13:   H is_homomorphism A, B and
+A14:   H ** F = GG and
+        for K being ManySortedFunction of A, B st K ** F = GG holds H = K
+        by A9,A10,A11;
+take H;
+    thus H is_homomorphism A, B by A13;
+      rngs Reverse X() = X() by EXTENS_1:14;
+then A15: Reverse X() is "onto" by EXTENS_1:13;
+A16: Reverse X() is "1-1" by MSUALG_9:12;
+A17: R ** Reverse X() =
+ (F || FreeGen X()) ** (((Reverse X())"")**Reverse X()) by AUTALG_1:13
+     .= (F || FreeGen X()) ** (id FreeGen X()) by A15,A16,MSUALG_3:5
+     .= F || FreeGen X() by MSUALG_3:3;
+      H ** (F || FreeGen X()) = GG || FreeGen X() by A14,EXTENS_1:8;
+then A18: H ** R ** Reverse X() = G ** Reverse X() by A12,A17,AUTALG_1:13;
+    hence H ** R = G by A15,EXTENS_1:16;
+A19: F is "onto" by A8,MSUALG_3:def 10;
+A20: F is_homomorphism FM, A by A8,MSUALG_3:def 10;
+    let K be ManySortedFunction of A, B;
+    assume K is_homomorphism A, B;
+then A21: K ** F is_homomorphism FM, B by A20,MSUALG_3:10;
+    assume K ** R = G;
+    then K ** (((F || FreeGen X()) ** ((Reverse X())"")) ** Reverse X())
+       = H** ((F || FreeGen X()) ** ((Reverse X())"")) ** Reverse X()
+        by A18,AUTALG_1:13;
+    then K ** (((F || FreeGen X()) ** ((Reverse X())"")) ** Reverse X())
+       = H** (((F || FreeGen X()) ** ((Reverse X())"")) ** Reverse X())
+        by AUTALG_1:13;
+
+    then K ** ((F || FreeGen X()) ** (((Reverse X()"")) ** Reverse X()))
+       = H** (((F || FreeGen X()) ** ((Reverse X())"")) ** Reverse X())
+        by AUTALG_1:13;
+    then K ** ((F || FreeGen X()) ** (((Reverse X()"")) ** Reverse X()))
+       = H** ((F || FreeGen X()) ** (((Reverse X()"")) ** Reverse X()))
+        by AUTALG_1:13;
+
+    then K ** (F || FreeGen X() ** id FreeGen X())
+       = H** ((F || FreeGen X()) ** (((Reverse X()"")) ** Reverse X()))
+        by A15,A16,MSUALG_3:5;
+    then K ** (F || FreeGen X() ** id FreeGen X())
+       = H** (F || FreeGen X() ** id FreeGen X())
+        by A15,A16,MSUALG_3:5;
+
+    then K ** (F || FreeGen X())
+       = H** (F || FreeGen X() ** id FreeGen X()) by MSUALG_3:3;
+    then K ** (F || FreeGen X())
+       = H** (F || FreeGen X()) by MSUALG_3:3;
+
+    then (K ** F) || FreeGen X()
+       = H** (F || FreeGen X()) by EXTENS_1:8;
+    then (K ** F) || FreeGen X()
+       = (H** F) || FreeGen X() by EXTENS_1:8;
+
+    then K ** F = H ** F by A11,A14,A21,EXTENS_1:18;
+    hence H = K by A19,EXTENS_1:16;
+  end;
+
+scheme Ex_hash { S() -> non empty non void ManySortedSign,
+                 F, A() -> non-empty MSAlgebra over S(),
+                 fi() -> ManySortedFunction of (the carrier of S()) --> NAT,
+                               the Sorts of F(),
+                 a() -> ManySortedFunction of (the carrier of S()) --> NAT,
+                               the Sorts of A(),
+                 P[set] } :
+ ex H being ManySortedFunction of F(), A() st
+  H is_homomorphism F(), A() & a()-hash = H ** (fi()-hash)
+  provided
+A1: P[A()] and
+A2: for C being non-empty MSAlgebra over S()  :: F() is free in P[]
+     for G being ManySortedFunction of (the carrier of S()) --> NAT,
+                                                      the Sorts of C st P[C]
+      ex h being ManySortedFunction of F(), C st
+       h is_homomorphism F(), C & G = h ** fi()
+  proof
+    reconsider SN = (the carrier of S()) --> NAT
+      as non-empty ManySortedSet of the carrier of S();
+    consider H being ManySortedFunction of F(), A() such that
+A3:   H is_homomorphism F(), A() and
+A4:   a() = H ** fi() by A1,A2;
+    reconsider h1 = a() as ManySortedFunction of SN, the Sorts of A();
+A5: h1-hash is_homomorphism FreeMSA SN, A() by Def1;
+      fi()-hash is_homomorphism FreeMSA ((the carrier of S()) --> NAT), F()
+      by Def1;
+then A6: H ** (fi()-hash) is_homomorphism
+        FreeMSA ((the carrier of S()) --> NAT), A() by A3,MSUALG_3:10;
+A7: h1-hash || FreeGen SN
+      = a() ** Reverse SN by Def1
+     .= H ** (fi() ** Reverse SN) by A4,AUTALG_1:13
+     .= H ** (fi()-hash || FreeGen ((the carrier of S()) --> NAT)) by Def1
+     .= (H ** (fi()-hash)) || FreeGen ((the carrier of S()) --> NAT)
+         by EXTENS_1:8;
+    take H;
+    thus H is_homomorphism F(), A() by A3;
+    thus thesis by A5,A6,A7,EXTENS_1:18;
+  end;
+
+
+:: Let P[] be a class of algebras. If a free algebra F() in P[]
+:: relative to fi() exists, then
+:: P[] |= [t1(),t2()]  iff  (F(),fi()) |= [t1(),t2()].
+
+scheme EqTerms { S() -> non empty non void ManySortedSign,
+                 F() -> non-empty MSAlgebra over S(),
+                 fi() -> ManySortedFunction of (the carrier of S()) --> NAT,
+                               the Sorts of F(),
+                 s() -> SortSymbol of S(),
+                 t1, t2() -> Element of (the Sorts of TermAlg S()).s(),
+                 P[set] } :
+ for B being non-empty MSAlgebra over S() st P[B] holds B |= [t1(),t2()]
+  provided
+A1: fi()-hash.s().t1() = fi()-hash.s().t2() and
+A2: for C being non-empty MSAlgebra over S()  :: F() is free in P[]
+     for G being ManySortedFunction of (the carrier of S()) --> NAT,
+                                                     the Sorts of C st P[C]
+      ex h being ManySortedFunction of F(), C st
+       h is_homomorphism F(), C & G = h ** fi()
+  proof
+    reconsider SN = (the carrier of S()) --> NAT
+      as non-empty ManySortedSet of (the carrier of S());
+A3: TermAlg S() = FreeMSA SN by EQUATION:def 3;
+    let B be non-empty MSAlgebra over S() such that
+A4:   P[B];
+    let h be ManySortedFunction of TermAlg S(), B such that
+A5:   h is_homomorphism TermAlg S(), B;
+    reconsider h1 = h as ManySortedFunction of FreeMSA SN, B
+      by EQUATION:def 3;
+set alfa = (h1 || FreeGen SN) ** ((Reverse SN)"");
+    reconsider alfa1 = alfa as
+      ManySortedFunction of (the carrier of S()) --> NAT, the Sorts of B;
+    reconsider fi1 = fi()
+      as ManySortedFunction of (the carrier of S()) --> NAT, the Sorts of F();
+
+    defpred _P[set] means P[$1];
+A6: _P[B] by A4;
+A7: for C being non-empty MSAlgebra over S()
+     for G being ManySortedFunction of (the carrier of S()) --> NAT,
+                                                    the Sorts of C st _P[C]
+      ex h being ManySortedFunction of F(), C st
+       h is_homomorphism F(), C & G = h ** fi1 by A2;
+    consider H being ManySortedFunction of F(), B such that
+        H is_homomorphism F(), B and
+A8:   alfa1-hash = H ** (fi1-hash) from Ex_hash(A6,A7);
+A9: alfa-hash is_homomorphism FreeMSA SN, B by Def1;
+      rngs Reverse SN = SN by EXTENS_1:14;
+then A10: Reverse SN is "1-1" "onto" by EXTENS_1:13,MSUALG_9:12;
+      alfa-hash || FreeGen SN
+       = alfa ** Reverse SN by Def1
+      .= (h1 || FreeGen SN) ** (((Reverse SN)"") ** Reverse SN) by AUTALG_1:13
+      .= (h1 || FreeGen SN) ** id FreeGen SN by A10,MSUALG_3:5
+      .= h1 || FreeGen SN by MSUALG_3:3;
+then A11: alfa-hash = h1 by A3,A5,A9,EXTENS_1:18;
+A12: alfa-hash.s().t1()
+              = (H.s() * (fi()-hash).s()).t1() by A8,MSUALG_3:2
+             .= H.s().(fi()-hash.s().t2()) by A1,A3,FUNCT_2:21
+             .= (H.s() * (fi()-hash).s()).t2() by A3,FUNCT_2:21
+             .= alfa-hash.s().t2() by A8,MSUALG_3:2;
+    thus h.s().([t1(),t2()]`1) = h.s().t1() by MCART_1:7
+                              .= h.s().([t1(),t2()]`2) by A11,A12,MCART_1:7;
+  end;
+
+
+:: Let P[] be an abstract class of algebras such that P[] is closed under
+:: subalgebras. The free algebra in P[] over X(), if it exists,
+:: is generated by X().
+
+scheme FreeIsGen { S() -> non empty non void ManySortedSign,
+                 X() -> non-empty ManySortedSet of the carrier of S(),
+                 A() -> strict non-empty MSAlgebra over S(),
+                 f() -> ManySortedFunction of X(), the Sorts of A(),
+                 P[set] } :
+ f().:.:X() is non-empty GeneratorSet of A()
+  provided
+A1: for C being non-empty MSAlgebra over S()  :: A() is free in P[]
+     for G being ManySortedFunction of X(), the Sorts of C st P[C]
+      ex H being ManySortedFunction of A(), C st
+       H is_homomorphism A(), C & H ** f() = G &
+      for K being ManySortedFunction of A(), C st
+       K is_homomorphism A(), C & K ** f() = G holds H = K and
+A2: P[A()] and
+A3: for A being non-empty MSAlgebra over S()
+     for B being strict non-empty MSSubAlgebra of A st P[A] holds P[B]
+  proof
+set I = the carrier of S ();
+A4: f().:.:X() is non-empty
+    proof
+      let i be set; assume
+A5:     i in I;
+      then reconsider Xi = X().i as non empty set by PBOOLE:def 16;
+      reconsider fi = f().i as Function of X().i, (the Sorts of A()).i
+        by A5,MSUALG_1:def 2;
+        (the Sorts of A()).i <> {} by A5,PBOOLE:def 16;
+then A6:   dom fi = Xi by FUNCT_2:def 1;
+A7:   Xi meets Xi;
+        (f().:.:X()).i = fi.:(X().i) by A5,MSUALG_3:def 6;
+      hence (f().:.:X()).i is non empty by A6,A7,RELAT_1:151;
+    end;
+      f().:.:X() is ManySortedSubset of the Sorts of A()
+    proof
+      let i be set; assume
+A8:     i in I;
+      then reconsider fi = f().i as Function of X().i, (the Sorts of A()).i
+        by MSUALG_1:def 2;
+        (f().:.:X()).i = fi.:(X().i) by A8,MSUALG_3:def 6;
+      hence (f().:.:X()).i c= (the Sorts of A()).i;
+    end;
+    then reconsider Gen = f().:.:X() as non-empty MSSubset of A() by A4;
+set AA = GenMSAlg Gen;
+      the Sorts of AA is ManySortedSubset of the Sorts of A()
+      by MSUALG_2:def 10;
+    then reconsider h = id the Sorts of AA as ManySortedFunction of AA, A()
+      by EXTENS_1:9;
+A9: X() is_transformable_to the Sorts of AA
+    proof
+      let i be set;
+      assume i in I;
+      hence (the Sorts of AA).i = {} implies X().i = {} by PBOOLE:def 16;
+    end;
+      X() is_transformable_to the Sorts of A()
+    proof
+      let i be set;
+      assume i in I;
+      hence (the Sorts of A()).i = {} implies X().i = {} by PBOOLE:def 16;
+    end;
+then A10: doms f() = X() by MSSUBFAM:17;
+    then rngs f() = f().:.:X() by EQUATION:14;
+    then rngs f() is ManySortedSubset of the Sorts of AA by MSUALG_2:def 18;
+    then rngs f() c= the Sorts of AA by MSUALG_2:def 1;
+    then reconsider iN = f() as ManySortedFunction of X(), the Sorts of AA
+      by A9,A10,EQUATION:5;
+      P[AA] by A2,A3;
+    then consider IN being ManySortedFunction of A(), AA such that
+A11:   IN is_homomorphism A(), AA and
+A12:   IN ** f() = iN and
+        for K being ManySortedFunction of A(), AA st
+       K is_homomorphism A(), AA & K ** f() = iN holds IN = K by A1;
+A13: h ** iN = (h ** IN) ** f() by A12,AUTALG_1:13;
+    consider HIN being ManySortedFunction of A(), A() such that
+        HIN is_homomorphism A(), A() & HIN ** f() = h ** iN and
+A14:   for K being ManySortedFunction of A(), A() st
+      K is_homomorphism A(), A() & K ** f() = h ** iN holds HIN = K by A1,A2;
+    reconsider hIN = h ** IN as ManySortedFunction of A(), A();
+      h is_monomorphism AA, A() by MSUALG_3:22;
+    then h is_homomorphism AA, A() by MSUALG_3:def 11;
+    then hIN is_homomorphism A(), A() by A11,MSUALG_3:10;
+then A15: HIN = hIN by A13,A14;
+A16: id the Sorts of A() is_homomorphism A(), A() by MSUALG_3:9;
+      f() = h ** iN by MSUALG_3:4;
+    then (id the Sorts of A()) ** f() = h ** iN by MSUALG_3:4;
+    then HIN = id the Sorts of A() by A14,A16;
+    then HIN is "onto" by AUTALG_1:24;
+then A17: h is "onto" by A15,EQUATION:2;
+A18: A() is MSSubAlgebra of A() by MSUALG_2:6;
+      the Sorts of AA = h.:.:(the Sorts of AA) by EQUATION:16
+                   .= the Sorts of A() by A17,EQUATION:10;
+    then AA = A() by A18,MSUALG_2:10;
+    hence thesis by MSAFREE:3;
+  end;
+
+scheme Hash_is_onto { S() -> non empty non void ManySortedSign,
+                    A() -> strict non-empty MSAlgebra over S(),
+                    F() -> ManySortedFunction of (the carrier of S()) --> NAT,
+                               the Sorts of A(),
+                    P[set] } :
+ F()-hash is_epimorphism FreeMSA ((the carrier of S()) --> NAT), A()
+  provided
+A1: for C being non-empty MSAlgebra over S()  :: A() is free in P[]
+     for G being ManySortedFunction of (the carrier of S()) --> NAT,
+                                                  the Sorts of C st P[C]
+      ex H being ManySortedFunction of A(), C st
+       H is_homomorphism A(), C & H ** F() = G &
+      for K being ManySortedFunction of A(), C st
+       K is_homomorphism A(), C & K ** F() = G holds H = K and
+A2: P[A()] and
+A3: for A being non-empty MSAlgebra over S()
+     for B being strict non-empty MSSubAlgebra of A st P[A] holds P[B]
+  proof
+set V = (the carrier of S()) --> NAT;
+    reconsider Gen = the Sorts of FreeMSA V as GeneratorSet of FreeMSA V
+      by MSAFREE2:9;
+    defpred _P[set] means P[$1];
+A4: for C being non-empty MSAlgebra over S()  :: A() is free in P[]
+     for G being ManySortedFunction of (the carrier of S()) --> NAT,
+                                                  the Sorts of C st _P[C]
+      ex H being ManySortedFunction of A(), C st
+       H is_homomorphism A(), C & H ** F() = G &
+      for K being ManySortedFunction of A(), C st
+       K is_homomorphism A(), C & K ** F() = G holds H = K by A1;
+A5: _P[A()] by A2;
+A6: for A being non-empty MSAlgebra over S()
+     for B being strict non-empty MSSubAlgebra of A st _P[A] holds _P[B] by A3;
+
+A7: F().:.:V is non-empty GeneratorSet of A() from FreeIsGen(A4,A5,A6);
+      the Sorts of FreeMSA V is_transformable_to the Sorts of A()
+    proof
+      let i be set such that
+A8:     i in the carrier of S();
+      assume (the Sorts of A()).i = {};
+      hence (the Sorts of FreeMSA V).i = {} by A8,PBOOLE:def 16;
+    end;
+    then doms (F()-hash) = the Sorts of FreeMSA V by MSSUBFAM:17;
+then A9: F()-hash.:.:(the Sorts of FreeMSA V) = rngs (F()-hash) by EQUATION:14;
+A10: rngs F() c= rngs (F()-hash) by Th1;
+      F().:.:V c= rngs F() by EQUATION:13;
+then A11: F().:.:V c= F()-hash.:.:Gen by A9,A10,PBOOLE:15;
+      F()-hash is_homomorphism FreeMSA V, A() by Def1;
+    hence thesis by A7,A11,EQUATION:25;
+  end;
+
+scheme FinGenAlgInVar { S() -> non empty non void ManySortedSign,
+             A() -> strict finitely-generated (non-empty MSAlgebra over S()),
+             F() -> non-empty MSAlgebra over S(),
+             fi() -> ManySortedFunction of (the carrier of S()) --> NAT,
+                              the Sorts of F(),
+             P, Q[set] } :
+ P[A()]
+  provided
+A1: Q[A()] and
+A2: P[F()] and
+A3: for C being non-empty MSAlgebra over S()  :: F() is free in Q[]
+     for G being ManySortedFunction of (the carrier of S()) --> NAT,
+                                                      the Sorts of C st Q[C]
+      ex h being ManySortedFunction of F(), C st
+       h is_homomorphism F(), C & G = h ** fi() and
+A4: for A, B being non-empty MSAlgebra over S() st A, B are_isomorphic &
+      P[A] holds P[B] and
+A5: for A being non-empty MSAlgebra over S(), R being MSCongruence of A st
+      P[A] holds P[QuotMSAlg (A,R)]
+  proof
+set I = the carrier of S(),
+    sA = the Sorts of A();
+    consider Gen being GeneratorSet of A() such that
+A6:   Gen is locally-finite by MSAFREE2:def 10;
+    reconsider Gen as locally-finite ManySortedSubset of sA by A6;
+    consider GEN being non-empty locally-finite ManySortedSubset of sA
+     such that
+A7:   Gen c= GEN by MSUALG_9:8;
+    consider F being ManySortedFunction of I --> NAT, GEN such that
+A8:   F is "onto" by MSUALG_9:13;
+      I --> NAT is_transformable_to GEN
+    proof
+      let i be set;
+      assume i in I;
+      hence thesis by PBOOLE:def 16;
+    end;
+    then reconsider G = F as ManySortedFunction of I --> NAT, sA by EXTENS_1:9;
+    consider h being ManySortedFunction of F(), A() such that
+A9:   h is_homomorphism F(), A() and
+A10:   G = h ** fi() by A1,A3;
+A11: P[QuotMSAlg (F(),MSCng h)] by A2,A5;
+    reconsider sI = the Sorts of Image h as MSSubset of A()
+      by MSUALG_2:def 10;
+      the Sorts of Image h is ManySortedSubset of the Sorts of Image h
+    proof
+      thus the Sorts of Image h c= the Sorts of Image h;
+    end;
+    then reconsider sI1 = the Sorts of Image h as MSSubset of Image h;
+      GEN is ManySortedSubset of sI
+    proof
+      let i be set; assume
+       i in I;
+      then reconsider s = i as SortSymbol of S();
+A12:   rng (F.s) = GEN.s by A8,MSUALG_3:def 3;
+A13:   (I --> NAT).s = NAT by FUNCOP_1:13;
+      then reconsider fi = fi().s as Function of NAT, (the Sorts of F()).s;
+      let g be set;
+      assume g in GEN.i;
+      then consider x being set such that
+A14:     x in dom (F.s) and
+A15:     g = F.s.x by A12,FUNCT_1:def 5;
+        dom (F.s) = NAT by A13,FUNCT_2:def 1
+               .= dom fi by FUNCT_2:def 1;
+then A16:   fi.x in rng fi by A14,FUNCT_1:def 5;
+        dom ((h.s)*fi)
+          = NAT by FUNCT_2:def 1
+         .= dom fi by FUNCT_2:def 1;
+      then A17: rng fi c= dom (h.s) by FUNCT_1:27;
+        g = ((h.s)*fi).x by A10,A15,MSUALG_3:2
+       .= (h.s).(fi.x) by A14,FUNCT_2:21;
+      then g in (h.s).:((the Sorts of F()).s) by A16,A17,FUNCT_1:def 12;
+      then g in (h.:.:(the Sorts of F())).s by MSUALG_3:def 6;
+      hence g in sI.i by A9,MSUALG_3:def 14;
+    end;
+then A18: GenMSAlg GEN is MSSubAlgebra of GenMSAlg sI by EXTENS_1:21;
+      GenMSAlg sI = GenMSAlg sI1 by EXTENS_1:22;
+then A19: GenMSAlg GEN is MSSubAlgebra of Image h by A18,MSUALG_2:22;
+      GEN is GeneratorSet of A() by A7,MSSCYC_1:21;
+    then A() is MSSubAlgebra of Image h by A19,MSAFREE:3;
+    then A() = Image h by MSUALG_2:8;
+    then h is_epimorphism F(), A() by A9,MSUALG_3:19;
+    then QuotMSAlg (F(),MSCng h), A() are_isomorphic by MSUALG_4:6;
+    hence P[A()] by A4,A11;
+  end;
+
+scheme QuotEpi { S() -> non empty non void ManySortedSign,
+                 X, Y() -> non-empty MSAlgebra over S(),
+                 P[set] } :
+ P[Y()]
+  provided
+A1: ex H being ManySortedFunction of X(), Y() st H is_epimorphism X(), Y() and
+A2: P[X()] and
+A3: for A, B being non-empty MSAlgebra over S() st A, B are_isomorphic &
+      P[A] holds P[B] and
+A4: for A being non-empty MSAlgebra over S(), R being MSCongruence of A st
+      P[A] holds P[QuotMSAlg (A,R)]
+  proof
+    consider H being ManySortedFunction of X(), Y() such that
+A5:   H is_epimorphism X(), Y() by A1;
+A6: P[QuotMSAlg (X(),MSCng H)] by A2,A4;
+      QuotMSAlg (X(),MSCng H), Y() are_isomorphic by A5,MSUALG_4:6;
+    hence P[Y()] by A3,A6;
+  end;
+
+
+:: An algebra X() belongs to a variety P[] whenever all its finitely
+:: generated subalgebras are in P[].
+
+scheme AllFinGen { S() -> non empty non void ManySortedSign,
+                 X() -> non-empty MSAlgebra over S(),
+                 P[set] } :
+ P[X()]
+  provided
+A1: for B being strict non-empty finitely-generated MSSubAlgebra of X()
+      holds P[B] and
+A2: for A, B being non-empty MSAlgebra over S() st A, B are_isomorphic &
+      P[A] holds P[B] and
+A3: for A being non-empty MSAlgebra over S()
+     for B being strict non-empty MSSubAlgebra of A st P[A] holds P[B] and
+A4: for A being non-empty MSAlgebra over S(), R being MSCongruence of A st
+      P[A] holds P[QuotMSAlg (A,R)] and
+A5: for I being set, F being MSAlgebra-Family of I, S() st
+     (for i being set st i in I ex A being MSAlgebra over S() st A = F.i
+      & P[A]) holds P[product F]
+  proof
+set CC = { C where C is Element of MSSub X() :
+            ex R being strict non-empty finitely-generated MSSubAlgebra of X()
+             st R = C };
+
+    consider T being strict non-empty finitely-generated MSSubAlgebra of X();
+      T in MSSub X() by MSUALG_2:def 20;
+    then T in CC;
+    then reconsider CC as non empty set;
+    defpred _P[set,set] means $1 = $2;
+A6: for c being set st c in CC ex j being set st _P[c,j];
+
+    consider FF being ManySortedSet of CC such that
+A7:  for c being set st c in CC holds _P[c,FF.c] from MSSEx(A6);
+
+      FF is MSAlgebra-Family of CC, S()
+    proof
+      let c be set; assume
+A8:    c in CC;
+      then consider Q being Element of MSSub X() such that
+A9:    c = Q & ex R being strict non-empty finitely-generated
+         MSSubAlgebra of X() st R = Q;
+      thus FF.c is non-empty MSAlgebra over S() by A7,A8,A9;
+    end;
+    then reconsider FF as MSAlgebra-Family of CC, S();
+    defpred _P[set] means P[$1];
+    consider prSOR being strict non-empty MSSubAlgebra of product FF such that
+A10: ex BA being ManySortedFunction of prSOR, X() st
+      BA is_epimorphism prSOR, X() by A7,EQUATION:29;
+      for i being set st i in CC ex A being MSAlgebra over S()
+       st A = FF.i & _P[A]
+    proof
+      let i be set; assume
+A11:    i in CC;
+      then consider Q being Element of MSSub X() such that
+A12:    i = Q & ex R being strict non-empty finitely-generated
+         MSSubAlgebra of X() st R = Q;
+      consider R being strict non-empty finitely-generated MSSubAlgebra of X()
+       such that
+A13:    R = Q by A12;
+      take R;
+      thus thesis by A1,A7,A11,A12,A13;
+    end;
+
+    then P[product FF] by A5;
+then A14:_P[prSOR] by A3;
+
+A15: for A, B being non-empty MSAlgebra over S() st A, B are_isomorphic &
+      _P[A] holds _P[B] by A2;
+A16: for A being non-empty MSAlgebra over S(), R being MSCongruence of A st
+      _P[A] holds _P[QuotMSAlg (A,R)] by A4;
+    thus _P[X()] from QuotEpi(A10, A14, A15, A16);
+  end;
+
+scheme FreeInModIsInVar_1 { S() -> non empty non void ManySortedSign,
+                            X() -> non-empty MSAlgebra over S(),
+                            P, Q[set] } :
+ Q[X()]
+  provided
+A1: for A being non-empty MSAlgebra over S() holds Q[A] iff
+    for s being SortSymbol of S(), e being Element of (Equations S()).s st
+     (for B being non-empty MSAlgebra over S() st P[B] holds B |= e)
+      holds A |= e and
+A2: P[X()]
+  proof
+      for s being SortSymbol of S(), e being Element of (Equations S()).s st
+     (for B being non-empty MSAlgebra over S() st P[B] holds B |= e)
+      holds X() |= e by A2;
+    hence Q[X()] by A1;
+  end;
+
+
+:: If P[] is a non empty variety, then the free algebras in Mod Eq P[]
+:: belong to P[].   (Q[] = Mod Eq P[])
+
+scheme FreeInModIsInVar { S() -> non empty non void ManySortedSign,
+                 X() -> strict non-empty MSAlgebra over S(),
+                 psi() -> ManySortedFunction of (the carrier of S()) --> NAT,
+                               the Sorts of X(),
+                 P, Q[set] } :
+ P[X()]
+  provided
+A1: for A being non-empty MSAlgebra over S() holds Q[A] iff
+    for s being SortSymbol of S(), e being Element of (Equations S()).s st
+     (for B being non-empty MSAlgebra over S() st P[B] holds B |= e)
+      holds A |= e and
+A2: for C being non-empty MSAlgebra over S()  :: X() is free in Q[]
+     for G being ManySortedFunction of (the carrier of S()) --> NAT,
+                                                     the Sorts of C st Q[C]
+      ex H being ManySortedFunction of X(), C st
+       H is_homomorphism X(), C & H ** psi() = G &
+      for K being ManySortedFunction of X(), C st
+       K is_homomorphism X(), C & K ** psi() = G holds H = K and
+A3: Q[X()] and
+
+A4: for A, B being non-empty MSAlgebra over S() st A, B are_isomorphic &
+      P[A] holds P[B] and
+A5: for A being non-empty MSAlgebra over S()
+     for B being strict non-empty MSSubAlgebra of A st P[A] holds P[B] and
+A6: for I being set, F being MSAlgebra-Family of I, S() st
+     (for i being set st i in I ex A being MSAlgebra over S() st A = F.i
+      & P[A]) holds P[product F]
+  proof
+set V = (the carrier of S()) --> NAT;
+     defpred _P[set] means P[$1];
+     defpred _Q[set] means Q[$1];
+A7: for A being non-empty MSAlgebra over S() holds _Q[A] iff
+    for s being SortSymbol of S(), e being Element of (Equations S()).s st
+     (for B being non-empty MSAlgebra over S() st _P[B] holds B |= e)
+      holds A |= e by A1;
+A8: for A, B being non-empty MSAlgebra over S() st A, B are_isomorphic &
+      _P[A] holds _P[B] by A4;
+A9: for A being non-empty MSAlgebra over S()
+     for B being strict non-empty MSSubAlgebra of A st _P[A] holds _P[B] by A5;
+A10: for I being set, F being MSAlgebra-Family of I, S() st
+     (for i being set st i in I ex A being MSAlgebra over S() st A = F.i
+      & _P[A]) holds _P[product F] by A6;
+    consider A being strict non-empty MSAlgebra over S(),
+             fi being ManySortedFunction of V, the Sorts of A such that
+A11:   _P[A] and
+A12:   for B being non-empty MSAlgebra over S()
+       for G being ManySortedFunction of V, the Sorts of B st _P[B]
+        ex H being ManySortedFunction of A, B st H is_homomorphism A, B &
+         H ** fi = G &
+        for K being ManySortedFunction of A, B st
+         K is_homomorphism A, B & K ** fi = G holds H = K
+          from ExFreeAlg_2(A8,A9,A10);
+A13: _Q[A] from FreeInModIsInVar_1(A7,A11);
+    reconsider phT = psi()-hash as ManySortedFunction of TermAlg S(), X()
+      by EQUATION:def 3;
+      psi()-hash is_homomorphism FreeMSA V, X() by Def1;
+then A14: phT is_homomorphism TermAlg S(), X() by EQUATION:def 3;
+A15: for C being non-empty MSAlgebra over S()
+     for G being ManySortedFunction of (the carrier of S()) --> NAT,
+                                                      the Sorts of C st _Q[C]
+      ex h being ManySortedFunction of X(), C st
+       h is_homomorphism X(), C & G = h ** psi()
+    proof
+      let C be non-empty MSAlgebra over S(),
+          G be ManySortedFunction of V, the Sorts of C;
+      assume Q[C];
+      then consider h being ManySortedFunction of X(), C such that
+A16:     h is_homomorphism X(), C & G = h ** psi() and
+          for K being ManySortedFunction of X(), C st
+         K is_homomorphism X(), C & K ** psi() = G holds h = K by A2;
+      take h;
+      thus thesis by A16;
+    end;
+A17: for C being non-empty MSAlgebra over S()  :: X() is free in Q[]
+     for G being ManySortedFunction of (the carrier of S()) --> NAT,
+                                                     the Sorts of C st _Q[C]
+      ex H being ManySortedFunction of X(), C st
+       H is_homomorphism X(), C & H ** psi() = G &
+      for K being ManySortedFunction of X(), C st
+       K is_homomorphism X(), C & K ** psi() = G holds H = K by A2;
+A18: _Q[X()] by A3;
+    consider H being ManySortedFunction of X(), A such that
+A19:   H is_homomorphism X(), A and
+A20:   fi-hash = H ** (psi()-hash) from Ex_hash(A13,A15);
+      H is_monomorphism X(), A
+    proof
+      thus H is_homomorphism X(), A by A19;
+        now
+        let i be set;
+        assume i in the carrier of S();
+        then reconsider s = i as SortSymbol of S();
+        thus H.i is one-to-one
+        proof
+          let a, b be set such that
+A21:         a in dom (H.i) and
+A22:         b in dom (H.i) and
+A23:         H.i.a = H.i.b;
+A24:       for D being non-empty MSAlgebra over S()
+           for E being strict non-empty MSSubAlgebra of D holds
+            _Q[D] implies _Q[E]
+          proof
+            let D be non-empty MSAlgebra over S(),
+                E be strict non-empty MSSubAlgebra of D such that
+A25:         Q[D];
+              now
+              let s be SortSymbol of S(),
+                  e be Element of (Equations S()).s;
+              assume
+                (for B being non-empty MSAlgebra over S() st P[B] holds B |= e)
+;
+              then D |= e by A1,A25;
+              hence E |= e by EQUATION:33;
+            end;
+            hence Q[E] by A1;
+          end;
+            psi()-hash is_epimorphism FreeMSA V, X()
+            from Hash_is_onto(A17,A18,A24);
+then A26:       psi()-hash is "onto" by MSUALG_3:def 10;
+A27:       dom (H.s) = (the Sorts of X()).s by FUNCT_2:def 1
+                   .= rng((psi()-hash).s) by A26,MSUALG_3:def 3;
+          then consider t1 being set such that
+A28:         t1 in dom (psi()-hash.s) & psi()-hash.s.t1 = a
+              by A21,FUNCT_1:def 5;
+          consider t2 being set such that
+A29:         t2 in dom (psi()-hash.s) & psi()-hash.s.t2 = b
+              by A22,A27,FUNCT_1:def 5;
+          reconsider t1, t2 as Element of (the Sorts of TermAlg S()).s
+            by A28,A29,EQUATION:def 3;
+A30:       fi-hash.s.t1
+             = ((H.s)*(psi()-hash.s)).t1 by A20,MSUALG_3:2
+            .= H.s.a by A28,FUNCT_2:21
+            .= ((H.s)*(psi()-hash.s)).t2 by A23,A29,FUNCT_2:21
+            .= fi-hash.s.t2 by A20,MSUALG_3:2;
+A31:       for C being non-empty MSAlgebra over S()
+           for G being ManySortedFunction of V, the Sorts of C st _P[C]
+            ex H being ManySortedFunction of A, C st
+             H is_homomorphism A, C & G = H ** fi
+          proof
+            let C be non-empty MSAlgebra over S(),
+                G be ManySortedFunction of V, the Sorts of C;
+            assume P[C];
+            then consider H being ManySortedFunction of A, C such that
+A32:           H is_homomorphism A, C & H ** fi = G and
+                for K being ManySortedFunction of A, C st
+               K is_homomorphism A, C & K ** fi = G holds H = K by A12;
+            take H;
+            thus H is_homomorphism A, C & G = H ** fi by A32;
+          end;
+set e = [t1,t2];
+         for B being non-empty MSAlgebra over S() st _P[B] holds B |= [t1,t2]
+            from EqTerms(A30,A31);
+then A33:       X() |= e by A1,A3;
+          thus a = psi()-hash.s.(e`1) by A28,MCART_1:7
+                .= psi()-hash.s.(e`2) by A14,A33,EQUATION:def 5
+                .= b by A29,MCART_1:7;
+        end;
+      end;
+      hence H is "1-1" by MSUALG_3:1;
+    end;
+    then X(), Image H are_isomorphic by MSUALG_9:17;
+then A34: Image H, X() are_isomorphic by MSUALG_3:17;
+      P[Image H] by A5,A11;
+    hence P[X()] by A4,A34;
+  end;
+
+
+:: Let P[] be an abstract class of algebras. Then P[] is an equational class
+:: if and only if P[] is variety.
+
+scheme Birkhoff { S() -> non empty non void ManySortedSign,
+                  P[set] } :
+ ex E being EqualSet of S() st for A being non-empty MSAlgebra over S() holds
+  P[A] iff A |= E
+  provided
+A1: for A, B being non-empty MSAlgebra over S() st A, B are_isomorphic &
+      P[A] holds P[B] and
+A2: for A being non-empty MSAlgebra over S()
+     for B being strict non-empty MSSubAlgebra of A st P[A] holds P[B] and
+A3: for A being non-empty MSAlgebra over S(), R being MSCongruence of A st
+      P[A] holds P[QuotMSAlg (A,R)] and
+A4: for I being set, F being MSAlgebra-Family of I, S() st
+     (for i being set st i in I ex A being MSAlgebra over S() st A = F.i
+      & P[A]) holds P[product F]
+   proof
+   defpred _P[set] means P[$1];
+A5: for A, B being non-empty MSAlgebra over S() st A, B are_isomorphic &
+      _P[A] holds _P[B] by A1;
+A6: for A being non-empty MSAlgebra over S()
+     for B being strict non-empty MSSubAlgebra of A st _P[A] holds _P[B] by A2;
+A7: for A being non-empty MSAlgebra over S(), R being MSCongruence of A st
+      _P[A] holds _P[QuotMSAlg (A,R)] by A3;
+A8: for I being set, F being MSAlgebra-Family of I, S() st
+     (for i being set st i in I ex A being MSAlgebra over S() st A = F.i
+      & _P[A]) holds _P[product F] by A4;
+defpred R[set,set] means
+ ex s being SortSymbol of S() st $1 = s &
+  $2 = {e where e is Element of (Equations S()).s :
+        for A being non-empty MSAlgebra over S() holds P[A] implies A |= e};
+set I = the carrier of S();
+A9: now
+      let w be set;
+      assume w in I;
+      then consider s being SortSymbol of S() such that
+A10:     s = w;
+      take d = {e where e is Element of (Equations S()).s :
+        for A being non-empty MSAlgebra over S() holds P[A] implies A |= e};
+      thus R[w,d] by A10;
+    end;
+    consider E being ManySortedSet of I such that
+A11:   for i being set st i in I holds R[i,E.i] from MSSEx(A9);
+      E is ManySortedSubset of Equations S()
+    proof
+      let j be set; assume
+       j in I;
+      then consider s being SortSymbol of S() such that
+A12:     j = s and
+A13:     E.j = {e where e is Element of (Equations S()).s :
+                for A being non-empty MSAlgebra over S() holds
+                  P[A] implies A |= e} by A11;
+      let q be set;
+      assume q in E.j;
+      then consider z being Element of (Equations S()).s such that
+A14:     q = z and
+          for A being non-empty MSAlgebra over S() holds P[A] implies A |= z
+          by A13;
+      thus q in (Equations S()).j by A12,A14;
+    end;
+    then reconsider E as EqualSet of S();
+
+    take E;
+    let A be non-empty MSAlgebra over S();
+    hereby assume
+A15:     P[A];
+      thus A |= E
+      proof
+        let s1 be SortSymbol of S();
+        let e be Element of (Equations S()).s1 such that
+A16:       e in E.s1;
+          R[s1,E.s1] by A11;
+        then consider x being Element of (Equations S()).s1 such that
+A17:       e = x and
+A18:       for A being non-empty MSAlgebra over S() holds P[A] implies A |= x
+            by A16;
+        let h be ManySortedFunction of TermAlg S(), A such that
+A19:       h is_homomorphism TermAlg S(), A;
+          A |= x by A15,A18;
+        hence h.s1.(e`1) = h.s1.(e`2) by A17,A19,EQUATION:def 5;
+      end;
+    end;
+
+    assume
+A20:   A |= E;
+
+defpred Q[MSAlgebra over S()] means $1 |= E;
+
+A21: for A, B being non-empty MSAlgebra over S() st A, B are_isomorphic holds
+      Q[A] implies Q[B] by EQUATION:36;
+A22: for A being non-empty MSAlgebra over S()
+     for B being strict non-empty MSSubAlgebra of A holds
+      Q[A] implies Q[B] by EQUATION:34;
+A23: for I being set, F being MSAlgebra-Family of I, S() holds
+     (for i being set st i in I ex A being MSAlgebra over S() st A = F.i
+      & Q[A]) implies Q[product F] by EQUATION:40;
+
+    set XX = (the carrier of S()) --> NAT;
+
+    consider K being strict non-empty MSAlgebra over S(),
+             F being ManySortedFunction of XX, the Sorts of K such that
+A24:   Q[K] and
+A25:   for B being non-empty MSAlgebra over S()
+       for G being ManySortedFunction of XX, the Sorts of B st Q[B]
+        ex H being ManySortedFunction of K, B st H is_homomorphism K, B &
+         H ** F = G &
+       for W being ManySortedFunction of K, B st
+        W is_homomorphism K, B & W ** F = G holds H = W
+         from ExFreeAlg_2(A21,A22,A23);
+
+A26: for D being non-empty MSAlgebra over S() holds Q[D] iff
+    for s being SortSymbol of S(), e being Element of (Equations S()).s st
+     (for M being non-empty MSAlgebra over S() st _P[M] holds M |= e)
+      holds D |= e
+    proof
+      let D be non-empty MSAlgebra over S();
+      thus Q[D] implies for s being SortSymbol of S(),
+       e being Element of (Equations S()).s st
+       (for B being non-empty MSAlgebra over S() st P[B] holds B |= e)
+        holds D |= e
+      proof
+        assume
+A27:       Q[D];
+        let s be SortSymbol of S(),
+            e be Element of (Equations S()).s such that
+A28:       for B being non-empty MSAlgebra over S() st _P[B] holds B |= e;
+          R[s,E.s] by A11;
+        then consider s1 being SortSymbol of S() such that
+A29:       s = s1 &
+          E.s = {f where f is Element of (Equations S()).s :
+          for A being non-empty MSAlgebra over S() holds P[A] implies A |= f};
+          e in E.s by A28,A29;
+        hence D |= e by A27,EQUATION:def 6;
+      end;
+      assume
+A30:    for s being SortSymbol of S(), e being Element of (Equations S()).s st
+       (for B being non-empty MSAlgebra over S() st P[B] holds B |= e)
+        holds D |= e;
+      let s be SortSymbol of S(),
+          e be Element of (Equations S()).s such that
+A31:     e in E.s;
+        R[s,E.s] by A11;
+      then consider s1 being SortSymbol of S() such that
+A32:     s = s1 &
+        E.s = {f where f is Element of (Equations S()).s :
+        for A being non-empty MSAlgebra over S() holds P[A] implies A |= f};
+      consider f being Element of (Equations S()).s such that
+A33:    e = f &
+       for A being non-empty MSAlgebra over S() holds P[A] implies A |= f
+         by A31,A32;
+      thus D |= e by A30,A33;
+    end;
+A34: Q[K] by A24;
+A35: _P[K] from FreeInModIsInVar(A26,A25,A34,A5,A6,A8);
+A36: for M being non-empty MSAlgebra over S()
+     for G being ManySortedFunction of (the carrier of S()) --> NAT,
+                                                     the Sorts of M st Q[M]
+      ex H being ManySortedFunction of K, M st
+       H is_homomorphism K, M & G = H ** F
+    proof
+      let M be non-empty MSAlgebra over S(),
+          G be ManySortedFunction of (the carrier of S()) --> NAT,
+                                     the Sorts of M;
+      assume Q[M];
+      then ex H being ManySortedFunction of K, M st H is_homomorphism K, M &
+         H ** F = G &
+       for W being ManySortedFunction of K, M st
+        W is_homomorphism K, M & W ** F = G holds H = W by A25;
+      hence ex H being ManySortedFunction of K, M st
+       H is_homomorphism K, M & H ** F = G;
+    end;
+A37: for B being strict non-empty finitely-generated MSSubAlgebra of A
+     holds _P[B]
+    proof
+      let B be strict non-empty finitely-generated MSSubAlgebra of A;
+A38:   Q[B] by A20,EQUATION:34;
+      thus _P[B] from FinGenAlgInVar(A38,A35,A36,A5,A7);
+    end;
+    thus _P[A] from AllFinGen(A37,A5,A6,A7,A8);
+  end;

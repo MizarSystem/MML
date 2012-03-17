@@ -1,0 +1,2100 @@
+:: Functions and Their Basic Properties
+::  by Czes{\l}aw Byli\'nski
+::
+:: Received March 3, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, BOOLE, FUNCT_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1;
+ constructors TARSKI, RELAT_1, SUBSET_1, XBOOLE_0;
+ clusters SUBSET_1, RELAT_1, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, XBOOLE_0, RELAT_1;
+ theorems TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1, XBOOLE_1;
+ schemes TARSKI, XBOOLE_0;
+
+begin
+
+ reserve X,X1,X2,Y,Y1,Y2 for set,
+         p,x,x1,x2,y,y1,y2,z,z1,z2 for set;
+
+definition let X be set;
+ attr X is Function-like means
+:Def1: for x,y1,y2 st [x,y1] in X & [x,y2] in X holds y1 = y2;
+end;
+
+definition
+ cluster Relation-like Function-like set;
+ existence
+  proof take {};
+   thus (for p st p in {} ex x,y st [x,y] = p) &
+   (for x,y1,y2 st [x,y1] in {} & [x,y2] in {} holds y1 = y2);
+  end;
+end;
+
+definition
+ mode Function is Function-like Relation-like set;
+end;
+
+definition
+ cluster empty -> Function-like set;
+ coherence
+  proof let f be set;
+   assume f is empty;
+   hence for x,y1,y2 st [x,y1] in f & [x,y2] in f holds y1 = y2;
+  end;
+end;
+
+reserve f,g,g1,g2,h for Function,
+        R,S for Relation;
+
+canceled;
+
+theorem
+     for F being set st
+     (for p st p in F ex x,y st [x,y] = p) &
+     (for x,y1,y2 st [x,y1] in F & [x,y2] in F holds y1 = y2)
+    holds F is Function by Def1,RELAT_1:def 1;
+
+scheme GraphFunc{A()->set,P[set,set]}:
+ ex f st for x,y holds [x,y] in f iff x in A() & P[x,y]
+provided
+A1: for x,y1,y2 st P[x,y1] & P[x,y2] holds y1 = y2
+  proof
+   defpred R[set,set] means P[$1,$2];
+A2: for x,y1,y2 st R[x,y1] & R[x,y2] holds y1 = y2 by A1;
+    consider Y such that
+A3:   for y holds y in Y iff ex x st x in A() & R[x,y] from Fraenkel(A2);
+   defpred R[set] means ex x,y st [x,y] = $1 & P[x,y];
+   consider F being set such that
+A4: p in F iff p in [:A(),Y:] & R[p] from Separation;
+     now
+     thus p in F implies ex x,y st [x,y] = p
+      proof p in F implies ex x,y st [x,y] = p & P[x,y] by A4;
+       hence thesis;
+      end;
+    let x,y1,y2;
+    assume [x,y1] in F;
+    then consider x1,z1 such that
+A5:  [x1,z1] = [x,y1] and
+A6:  P[x1,z1] by A4;
+    assume [x,y2] in F;
+    then consider x2,z2 such that
+A7:  [x2,z2] = [x,y2] and
+A8:  P[x2,z2] by A4;
+       x = x1 & z1 = y1 & x = x2 & z2 = y2 by A5,A7,ZFMISC_1:33;
+     hence y1 = y2 by A1,A6,A8;
+    end;
+   then reconsider f = F as Function by Def1,RELAT_1:def 1;
+   take f; let x,y;
+   thus [x,y] in f implies x in A() & P[x,y]
+     proof assume
+A9:     [x,y] in f;
+      then [x,y] in [:A(),Y:] by A4;
+      hence x in A() by ZFMISC_1:106;
+      consider x1,y1 such that
+A10:     [x1,y1] = [x,y] and
+A11:     P[x1,y1] by A4,A9;
+         x1 = x & y1 = y by A10,ZFMISC_1:33;
+      hence thesis by A11;
+     end;
+   assume that
+A12:  x in A() and
+A13:  P[x,y];
+     y in Y by A3,A12,A13;
+   then [x,y] in [:A(),Y:] by A12,ZFMISC_1:106;
+   hence thesis by A4,A13;
+ end;
+
+definition let f,x;
+ canceled 2;
+
+  func f.x -> set means
+:Def4: [x,it] in f if x in dom f otherwise it = {};
+  existence by RELAT_1:def 4;
+  uniqueness by Def1;
+  consistency;
+end;
+
+canceled 5;
+
+theorem Th8:
+   [x,y] in f iff x in dom f & y = f.x
+ proof
+   thus [x,y] in f implies x in dom f & y = f.x
+    proof assume
+A1:   [x,y] in f;
+     hence x in dom f by RELAT_1:def 4;
+     hence thesis by A1,Def4;
+    end;
+   thus thesis by Def4;
+ end;
+
+theorem Th9:
+   dom f = dom g & (for x st x in dom f holds f.x = g.x) implies f = g
+ proof assume that
+A1:  dom f = dom g and
+A2:  for x st x in dom f holds f.x = g.x;
+A3:   (for p st p in f ex x,y st [x,y] = p) &
+      (for p st p in g ex x,y st [x,y] = p) by RELAT_1:def 1;
+     [x,y] in f iff [x,y] in g
+    proof
+     thus [x,y] in f implies [x,y] in g
+      proof assume
+A4:       [x,y] in f;
+then A5:       x in dom f by RELAT_1:def 4;
+        then f.x = y by A4,Def4;
+        then g.x = y by A2,A5;
+        hence thesis by A1,A5,Def4;
+      end;
+     assume
+A6:     [x,y] in g;
+then A7:     x in dom g by RELAT_1:def 4;
+      then g.x = y by A6,Def4;
+      then f.x = y by A1,A2,A7;
+      hence thesis by A1,A7,Def4;
+    end;
+   hence thesis by A3,ZFMISC_1:112;
+ end;
+
+definition let f;
+ redefine func rng f means
+:Def5: for y holds y in it iff ex x st x in dom f & y = f.x;
+ compatibility
+ proof let Y;
+  hereby assume
+A1:  Y = rng f;
+   let y;
+   hereby assume y in Y;
+    then consider x such that
+A2:   [x,y] in f by A1,RELAT_1:def 5;
+    take x;
+    thus x in dom f & y = f.x by A2,Th8;
+   end;
+   given x such that
+A3:   x in dom f and
+A4:   y = f.x;
+     [x,y] in f by A3,A4,Def4;
+   hence y in Y by A1,RELAT_1:def 5;
+  end;
+  assume
+A5:  for y holds y in Y iff ex x st x in dom f & y = f.x;
+  hereby
+   let y;
+   assume y in Y;
+   then consider x such that
+A6:  x in dom f and
+A7:  y = f.x by A5;
+     [x,y] in f by A6,A7,Def4;
+   hence y in rng f by RELAT_1:def 5;
+  end;
+  let y;
+  assume y in rng f;
+  then consider x such that
+A8:  [x,y] in f by RELAT_1:def 5;
+    x in dom f & y = f.x by A8,Th8;
+  hence y in Y by A5;
+ end;
+end;
+
+canceled 2;
+
+theorem
+     x in dom f implies f.x in rng f by Def5;
+
+canceled;
+
+theorem Th14:
+   dom f = {x} implies rng f = {f.x}
+ proof assume
+ A1: dom f = {x};
+    y in rng f iff y in {f.x}
+   proof
+    thus y in rng f implies y in {f.x}
+     proof assume y in rng f;
+      then consider z such that
+A2:    z in dom f and
+A3:    y = f.z by Def5;
+        z = x by A1,A2,TARSKI:def 1;
+      hence thesis by A3,TARSKI:def 1;
+     end;
+    assume y in {f.x};
+    then y = f.x & x in dom f by A1,TARSKI:def 1;
+    hence y in rng f by Def5;
+   end;
+  hence thesis by TARSKI:2;
+ end;
+
+scheme FuncEx{A()->set,P[set,set]}:
+   ex f st dom f = A() & for x st x in A() holds P[x,f.x]
+provided
+A1: for x,y1,y2 st x in A() & P[x,y1] & P[x,y2] holds y1 = y2 and
+A2: for x st x in A() ex y st P[x,y]
+  proof
+   defpred R[set,set] means $1 in A() & P[$1,$2];
+A3: for x,y1,y2 st R[x,y1] & R[x,y2] holds y1 = y2 by A1;
+   consider f being Function such that
+A4:  for x,y holds [x,y] in f iff x in A() & R[x,y]
+    from GraphFunc(A3);
+   take f;
+     x in dom f iff x in A()
+    proof
+     thus x in dom f implies x in A()
+      proof assume x in dom f;
+       then ex y st [x,y] in f by RELAT_1:def 4;
+       hence x in A() by A4;
+      end;
+     assume
+A5:     x in A();
+     then consider y such that
+A6:     P[x,y] by A2;
+       [x,y] in f by A4,A5,A6;
+     hence x in dom f by RELAT_1:def 4;
+    end;
+   hence
+A7:  dom f = A() by TARSKI:2;
+   let x;
+   assume
+A8:   x in A();
+   then consider y such that
+A9:   P[x,y] by A2;
+     [x,y] in f by A4,A8,A9;
+   hence thesis by A7,A8,A9,Def4;
+ end;
+
+scheme Lambda{A()->set,F(set)->set}:
+ ex f being Function st dom f = A() & for x st x in A() holds f.x = F(x)
+  proof
+   deffunc G(set) = F($1);
+   defpred P[set,set] means $2 = G($1);
+A1:  for x,y1,y2 st x in A() & P[x,y1] & P[x,y2] holds y1 = y2;
+A2:  for x st x in A() ex y st P[x,y];
+   thus ex f being Function st dom f = A() &
+     for x st x in A() holds P[x,f.x] from FuncEx(A1,A2);
+  end;
+
+theorem
+     X <> {} implies for y ex f st dom f = X & rng f = {y}
+ proof assume
+A1:  X <> {};
+  let y;
+  deffunc F(set) = y;
+  consider f such that
+A2:  dom f = X and
+A3:  for x st x in X holds f.x = F(x) from Lambda;
+  take f;
+  thus dom f = X by A2;
+    y1 in rng f iff y1 = y
+  proof
+A4: now assume y1 in rng f;
+     then ex x st x in dom f & y1 = f.x by Def5;
+     hence y1 = y by A2,A3;
+    end;
+      now assume
+A5:    y1 = y;
+     consider x being Element of X;
+       f.x = y by A1,A3;
+     hence y1 in rng f by A1,A2,A5,Def5;
+    end;
+    hence thesis by A4;
+   end;
+  hence rng f = {y} by TARSKI:def 1;
+ end;
+
+theorem
+     (for f,g st dom f = X & dom g = X holds f = g) implies X = {}
+ proof assume
+A1:  for f,g st dom f = X & dom g = X holds f = g;
+   consider x being Element of X;
+  assume
+A2: not thesis;
+     deffunc F(set) = 0;
+     consider f being Function such that
+A3:    dom f = X and
+A4:    for x st x in X holds f.x = F(x) from Lambda;
+     deffunc F(set) = 1;
+     consider g being Function such that
+A5:    dom g = X and
+A6:    for x st x in X holds g.x = F(x) from Lambda;
+       f.x = 0 & g.x = 1 by A2,A4,A6;
+     hence contradiction by A1,A3,A5;
+ end;
+
+theorem
+     dom f = dom g & rng f = {y} & rng g = {y} implies f = g
+ proof assume that
+A1:   dom f = dom g and
+A2:   rng f = {y} & rng g = {y};
+     x in dom f implies f.x = g.x
+    proof assume x in dom f;
+      then f.x in rng f & g.x in rng g by A1,Def5;
+      then f.x = y & g.x = y by A2,TARSKI:def 1;
+      hence thesis;
+    end;
+   hence f = g by A1,Th9;
+ end;
+
+theorem
+     Y <> {} or X = {} implies ex f st X = dom f & rng f c= Y
+ proof assume
+A1:     Y <> {} or X = {};
+A2: now assume
+A3:     X = {};
+     deffunc F(set) = $1;
+      consider f being Function such that
+A4:     dom f = {} and for x st x in {} holds f.x = F(x) from Lambda;
+      take f;
+      thus dom f = X by A3,A4;
+        rng f = {} by A4,RELAT_1:65;
+      hence rng f c= Y by XBOOLE_1:2;
+    end;
+      now assume
+A5:  X <> {};
+      consider y being Element of Y;
+A6:  y in Y by A1,A5;
+     deffunc F(set) = y;
+      consider f such that
+A7:      dom f = X and
+A8:      for x st x in X holds f.x = F(x) from Lambda;
+      take f;
+      thus dom f = X by A7;
+        z in rng f implies z in Y
+      proof assume z in rng f;
+        then ex x st x in dom f & z = f.x by Def5;
+       hence z in Y by A6,A7,A8;
+      end;
+      hence rng f c= Y by TARSKI:def 3;
+    end;
+   hence thesis by A2;
+ end;
+
+theorem
+     (for y st y in Y ex x st x in dom f & y = f.x) implies Y c= rng f
+ proof assume
+A1:  for y st y in Y ex x st x in dom f & y = f.x;
+  let y;
+  assume y in Y;
+  then ex x st x in dom f & y = f.x by A1;
+  hence y in rng f by Def5;
+ end;
+
+definition let f,g;
+ redefine func f*g;
+ synonym g*f;
+end;
+
+definition let f,g;
+ cluster g*f -> Function-like;
+ coherence
+  proof
+   let x,y1,y2;
+   assume [x,y1] in g*f;
+    then consider z1 such that
+A1:  [x,z1] in f & [z1,y1] in g by RELAT_1:def 8;
+   assume [x,y2] in g*f;
+    then consider z2 such that
+A2:  [x,z2] in f & [z2,y2] in g by RELAT_1:def 8;
+      z1 = z2 by A1,A2,Def1;
+   hence y1 = y2 by A1,A2,Def1;
+  end;
+end;
+
+theorem
+   for h st
+  (for x holds x in dom h iff x in dom f & f.x in dom g) &
+  (for x st x in dom h holds h.x = g.(f.x))
+  holds h = g*f
+ proof let h;
+  assume that
+A1: for x holds x in dom h iff x in dom f & f.x in dom g and
+A2: for x st x in dom h holds h.x = g.(f.x);
+     now let x,y;
+    hereby assume
+A3:     [x,y] in h;
+      then A4:     x in dom h by RELAT_1:def 4;
+      then A5:     y = h.x by A3,Def4
+        .= g.(f.x) by A2,A4;
+     take y1 = f.x;
+        x in dom f by A1,A4;
+     hence [x,y1] in f by Def4;
+        f.x in dom g by A1,A4;
+     hence [y1,y] in g by A5,Def4;
+    end;
+    given z such that
+A6:  [x,z] in f and
+A7:  [z,y] in g;
+A8:  x in dom f by A6,RELAT_1:def 4;
+     then A9:   z = f.x by A6,Def4;
+A10:  z in dom g by A7,RELAT_1:def 4;
+     then A11:   y = g.z by A7,Def4;
+A12:  x in dom h by A1,A8,A9,A10;
+     then y = h.x by A2,A9,A11;
+    hence [x,y] in h by A12,Def4;
+   end;
+  hence h = g*f by RELAT_1:def 8;
+ end;
+
+theorem Th21:
+   x in dom(g*f) iff x in dom f & f.x in dom g
+   proof set h = g*f;
+    hereby
+     assume x in dom h;
+      then consider y such that
+A1:     [x,y] in h by RELAT_1:def 4;
+     consider z such that
+A2:   [x,z] in f and
+A3:   [z,y] in g by A1,RELAT_1:def 8;
+     thus x in dom f by A2,RELAT_1:def 4;
+      then z = f.x by A2,Def4;
+     hence f.x in dom g by A3,RELAT_1:def 4;
+    end;
+    assume
+A4:   x in dom f;
+     then consider z such that
+A5:    [x,z] in f by RELAT_1:def 4;
+    assume f.x in dom g;
+     then consider y such that
+A6:    [f.x,y] in g by RELAT_1:def 4;
+       z = f.x by A4,A5,Def4;
+     then [x,y] in h by A5,A6,RELAT_1:def 8;
+    hence x in dom h by RELAT_1:def 4;
+   end;
+
+theorem Th22:
+   x in dom(g*f) implies (g*f).x = g.(f.x)
+   proof set h = g*f;
+   assume
+A1:  x in dom h;
+    then consider y such that
+A2:   [x,y] in h by RELAT_1:def 4;
+    consider z such that
+A3:  [x,z] in f and
+A4:  [z,y] in g by A2,RELAT_1:def 8;
+      x in dom f by A3,RELAT_1:def 4;
+    then A5:   z = f.x by A3,Def4;
+    then f.x in dom g by A4,RELAT_1:def 4;
+    then y = g.(f.x) by A4,A5,Def4;
+   hence h.x = g.(f.x) by A1,A2,Def4;
+   end;
+
+theorem Th23:
+   x in dom f implies (g*f).x = g.(f.x)
+ proof assume
+A1:  x in dom f;
+  per cases;
+  suppose f.x in dom g;
+   then x in dom(g*f) by A1,Th21;
+   hence (g*f).x = g.(f.x) by Th22;
+  suppose
+A2:  not f.x in dom g;
+   then not x in dom(g*f) by Th21;
+   hence (g*f).x = {} by Def4 .= g.(f.x) by A2,Def4;
+ end;
+
+canceled;
+
+theorem
+     z in rng(g*f) implies z in rng g
+  proof assume z in rng(g*f);
+    then consider x such that
+A1:   x in dom(g*f) and
+A2:   z = (g*f).x by Def5;
+      f.x in dom g & (g*f).x = g.(f.x) by A1,Th21,Th22;
+    hence z in rng g by A2,Def5;
+  end;
+
+canceled;
+
+theorem Th27:
+   dom(g*f) = dom f implies rng f c= dom g
+ proof
+  assume
+A1: dom(g*f) = dom f;
+  let y;
+  assume y in rng f;
+  then ex x st x in dom f & y = f.x by Def5;
+  hence y in dom g by A1,Th21;
+ end;
+
+canceled 5;
+
+theorem
+     rng f c= Y & (for g,h st dom g = Y & dom h = Y & g*f = h*f holds g = h)
+    implies Y = rng f
+ proof assume that
+A1:  rng f c= Y and
+A2:  for g,h st dom g = Y & dom h = Y & g*f = h*f holds g = h;
+    Y c= rng f
+   proof let y;
+    assume that
+A3:   y in Y and
+A4:   not y in rng f;
+     deffunc F(set) = 0;
+    consider g being Function such that
+A5:    dom g = Y and
+A6:    x in Y implies g.x = F(x) from Lambda;
+       defpred P[set,set] means
+        ($1 = y implies $2 = 1) & ($1 <> y implies $2 = 0);
+A7:    x in Y implies ex y1 st P[x,y1]
+        proof assume x in Y;
+           (x = y implies thesis) & (x <> y implies thesis);
+         hence thesis;
+        end;
+A8:    for x,y1,y2 st x in Y & P[x,y1] & P[x,y2] holds y1 = y2;
+     consider h being Function such that
+A9:    dom h = Y and
+A10:    for x st x in Y holds P[x,h.x] from FuncEx(A8,A7);
+A11:  dom(g*f) = dom f & dom(h*f) = dom f by A1,A5,A9,RELAT_1:46;
+       x in dom f implies (g*f).x = (h*f).x
+      proof assume
+A12:     x in dom f;
+       then f.x in rng f by Def5;
+       then g.(f.x) = 0 & h.(f.x) = 0 & (g*f).x = g.(f.x) & (h*f).x = h.(f.x)
+         by A1,A4,A6,A10,A11,A12,Th22;
+       hence thesis;
+      end;
+    then g*f = h*f by A11,Th9;
+    then g.y = 0 & h.y = 1 & g = h by A2,A3,A5,A6,A9,A10;
+    hence contradiction;
+   end;
+  hence thesis by A1,XBOOLE_0:def 10;
+ end;
+
+definition let X;
+ cluster id X -> Function-like;
+ coherence
+  proof let x,y1,y2;
+   assume [x,y1] in id X & [x,y2] in id X;
+    then x = y1 & x = y2 by RELAT_1:def 10;
+   hence y1 = y2;
+  end;
+end;
+
+theorem Th34:
+   f = id X iff dom f = X & for x st x in X holds f.x = x
+ proof
+   hereby
+    assume
+A1:   f = id X;
+     hence
+A2:   dom f = X by RELAT_1:71;
+     let x;
+     assume
+A3:   x in X;
+     then [x,x] in f by A1,RELAT_1:def 10;
+     hence f.x = x by A2,A3,Def4;
+   end;
+  assume that
+A4: dom f = X and
+A5: for x st x in X holds f.x = x;
+    now let x,y;
+   hereby assume
+A6:   [x,y] in f;
+     hence x in X by A4,Th8;
+     then y = f.x & x = f.x by A5,A6,Th8;
+    hence x = y;
+   end;
+   assume
+A7:  x in X;
+   then f.x = x by A5;
+   hence x = y implies [x,y] in f by A4,A7,Th8;
+  end;
+  hence f = id X by RELAT_1:def 10;
+ end;
+
+theorem
+     x in X implies (id X).x = x by Th34;
+
+canceled;
+
+theorem Th37:
+   dom(f*(id X)) = dom f /\ X
+ proof
+     x in dom(f*(id X)) iff x in dom f /\ X
+    proof
+       x in dom(f*(id X)) iff x in dom f & x in X
+      proof
+       thus x in dom(f*(id X)) implies x in dom f & x in X
+        proof assume x in dom(f*(id X));
+         then x in dom((id X)) & dom((id X)) = X & (id X).x in dom f
+          by Th21,Th34;
+         hence thesis by Th34;
+        end;
+       assume
+A1:       x in dom f;
+       assume
+A2:       x in X;
+       then (id X).x in dom f & dom((id X)) = X by A1,Th34;
+       hence thesis by A2,Th21;
+      end;
+     hence thesis by XBOOLE_0:def 3;
+    end;
+   hence thesis by TARSKI:2;
+ end;
+
+theorem
+     x in dom f /\ X implies f.x = (f*(id X)).x
+ proof assume x in dom f /\ X;
+  then dom id X = X & x in X & x in dom f by Th34,XBOOLE_0:def 3;
+  then (id X).x = x & x in dom id X & x in dom f by Th34;
+  hence thesis by Th23;
+ end;
+
+canceled;
+
+theorem
+     x in dom((id Y)*f) iff x in dom f & f.x in Y
+  proof dom((id Y)) = Y by Th34;
+   hence thesis by Th21;
+  end;
+
+canceled;
+
+theorem
+      f*(id dom f) = f & (id rng f)*f = f by RELAT_1:77,79;
+
+theorem
+     (id X)*(id Y) = id(X /\ Y)
+ proof
+A1:   dom((id X)*(id Y)) = dom((id X)) /\ Y by Th37
+                        .= X /\ Y by Th34;
+A2:   X /\ Y = dom id(X /\ Y) by Th34;
+     z in X /\ Y implies ((id X)*(id Y)).z = (id(X /\ Y)).z
+    proof assume
+A3:    z in X /\ Y;
+then A4:    z in X & z in Y by XBOOLE_0:def 3;
+      thus ((id X)*(id Y)).z = (id X).((id Y).z) by A1,A3,Th22
+                          .= (id X).z by A4,Th34
+                          .= z by A4,Th34
+                          .= (id(X /\ Y)).z by A3,Th34;
+    end;
+   hence thesis by A1,A2,Th9;
+ end;
+
+theorem Th44:
+   rng f = dom g & g*f = f implies g = id dom g
+ proof
+  assume that
+A1:  rng f = dom g and
+A2:  g*f = f;
+  set X = dom g;
+    x in X implies g.x = x
+   proof assume
+    x in X;
+     then ex y st y in dom f & f.y = x by A1,Def5;
+    hence x = g.x by A2,Th23;
+   end;
+   hence g = id X by Th34;
+ end;
+
+definition let f;
+ canceled 2;
+
+ attr f is one-to-one means
+:Def8: for x1,x2 st x1 in dom f & x2 in dom f & f.x1 = f.x2 holds x1 = x2;
+end;
+
+canceled;
+
+theorem Th46:
+   f is one-to-one & g is one-to-one implies g*f is one-to-one
+ proof assume that
+A1:  f is one-to-one and
+A2:  g is one-to-one;
+    now let x1,x2;
+   assume
+A3:  x1 in dom(g*f) & x2 in dom(g*f);
+   then A4:  f.x1 in dom g & f.x2 in dom g & (g*f).x1 = g.(f.x1) & (g*f).x2 = g
+.(f.x2)
+       by Th21,Th22;
+   assume (g*f).x1 = (g*f).x2;
+   then f.x1 = f.x2 & x1 in dom f & x2 in dom f by A2,A3,A4,Def8,Th21;
+   hence x1 = x2 by A1,Def8;
+  end;
+  hence thesis by Def8;
+ end;
+
+theorem Th47:
+   g*f is one-to-one & rng f c= dom g implies f is one-to-one
+ proof assume that
+A1:  g*f is one-to-one and
+A2:  rng f c= dom g;
+    now let x1,x2;
+   assume that
+A3:   x1 in dom f & x2 in dom f and
+A4:   f.x1 =f.x2;
+     (g*f).x1 = g.(f.x1) & (g*f).x2 = g.(f.x2) &
+        x1 in dom(g*f) & x2 in dom(g*f) by A2,A3,Th23,RELAT_1:46;
+   hence x1 = x2 by A1,A4,Def8;
+  end;
+  hence f is one-to-one by Def8;
+ end;
+
+theorem
+     g*f is one-to-one & rng f = dom g implies f is one-to-one & g is
+one-to-one
+ proof assume that
+A1:  g*f is one-to-one and
+A2:  rng f = dom g;
+   thus f is one-to-one by A1,A2,Th47;
+   assume not g is one-to-one;
+   then consider y1,y2 such that
+A3:  y1 in dom g and
+A4:  y2 in dom g and
+A5:  g.y1 = g.y2 and
+A6:  y1 <> y2 by Def8;
+  consider x1 such that
+A7:  x1 in dom f and
+A8:  f.x1 = y1 by A2,A3,Def5;
+  consider x2 such that
+A9:  x2 in dom f and
+A10: f.x2 = y2 by A2,A4,Def5;
+    dom(g*f) = dom f & (g*f).x1 = g.(f.x1) & (g*f).x2 = g.(f.x2)
+    by A2,A7,A9,Th23,RELAT_1:46;
+  hence contradiction by A1,A5,A6,A7,A8,A9,A10,Def8;
+ end;
+
+theorem
+     f is one-to-one iff
+     (for g,h st rng g c= dom f & rng h c= dom f & dom g = dom h & f*g = f*h
+       holds g = h)
+ proof
+   thus f is one-to-one implies
+     (for g,h st rng g c=dom f & rng h c=dom f & dom g = dom h & f*g = f*h
+       holds g = h)
+    proof assume
+A1:     f is one-to-one;
+     let g,h such that
+A2:     rng g c= dom f and
+A3:     rng h c= dom f and
+A4:     dom g = dom h and
+A5:     f*g = f*h;
+        x in dom g implies g.x = h.x
+       proof assume x in dom g;
+        then (f*g).x = f.(g.x) & (f*h).x = f.(h.x) &
+              g.x in rng g & h.x in rng h &
+             (g.x in rng g implies g.x in dom f) &
+             (h.x in rng h implies h.x in dom f)
+         by A2,A3,A4,Def5,Th23;
+        hence thesis by A1,A5,Def8;
+       end;
+      hence g = h by A4,Th9;
+     end;
+    assume
+A6:    for g,h st rng g c=dom f & rng h c=dom f & dom g = dom h & f*g = f*h
+        holds g = h;
+      x1 in dom f & x2 in dom f & f.x1 = f.x2 implies x1 = x2
+     proof assume that
+A7:     x1 in dom f & x2 in dom f and
+A8:     f.x1 = f.x2;
+     deffunc F(set) = x1;
+      consider g being Function such that
+A9:    dom g = {{}} and
+A10:   for x st x in {{}} holds g.x = F(x) from Lambda;
+     deffunc F(set) = x2;
+      consider h being Function such that
+A11:    dom h = {{}} and
+A12:   for x st x in {{}} holds h.x = F(x) from Lambda;
+        {} in {{}} by TARSKI:def 1;
+then A13:    g.{} = x1 & h.{} = x2 by A10,A12;
+      then rng g = {x1} & rng h = {x2} by A9,A11,Th14;
+then A14:     rng g c= dom f & rng h c= dom f by A7,ZFMISC_1:37;
+then A15:     dom(f*g) = dom g & dom(f*h) = dom h by RELAT_1:46;
+        x in dom(f*g) implies (f*g).x = (f*h).x
+       proof assume
+         x in dom(f*g);
+         then (f*g).x = f.(g.x) & (f*h).x = f.(h.x) & g.x = x1 & h.x = x2
+           by A9,A10,A11,A12,A15,Th22;
+         hence thesis by A8;
+       end;
+      then f*g = f*h by A9,A11,A15,Th9;
+      hence thesis by A6,A13,A14,A15;
+     end;
+    hence f is one-to-one by Def8;
+ end;
+
+theorem
+     dom f = X & dom g = X & rng g c= X & f is one-to-one & f*g = f
+     implies g = id X
+ proof assume that
+A1:  dom f = X and
+A2:  dom g = X and
+A3:  rng g c= X and
+A4:  f is one-to-one and
+A5:  f*g = f;
+    x in X implies g.x = x
+   proof assume
+A6:  x in X;
+    then g.x in rng g by A2,Def5;
+    then f.x = f.(g.x) & g.x in X by A2,A3,A5,A6,Th23;
+    hence x = g.x by A1,A4,A6,Def8;
+   end;
+  hence g = id X by A2,Th34;
+ end;
+
+theorem
+     rng(g*f) = rng g & g is one-to-one implies dom g c= rng f
+ proof assume that
+A1:   rng(g*f) = rng g and
+A2:   g is one-to-one;
+  let y;
+  assume
+A3:   y in dom g;
+  then g.y in rng(g*f) by A1,Def5;
+  then consider x such that
+A4:  x in dom(g*f) and
+A5:  g.y = (g*f).x by Def5;
+    (g*f).x = g.(f.x) & f.x in dom g by A4,Th21,Th22;
+  then y = f.x & x in dom f by A2,A3,A4,A5,Def8,Th21;
+  hence y in rng f by Def5;
+ end;
+
+theorem Th52:
+   id X is one-to-one
+ proof let x1,x2;
+   assume x1 in dom id X & x2 in dom id X;
+   then x1 in X & x2 in X by Th34;
+   then (id X).x1 = x1 & (id X).x2 = x2 by Th34;
+   hence thesis;
+ end;
+
+theorem
+     (ex g st g*f = id dom f) implies f is one-to-one
+ proof given g such that
+A1:   g*f = id dom f;
+     dom(g*f) = dom f by A1,RELAT_1:71;
+   then g*f is one-to-one & rng f c= dom g by A1,Th27,Th52;
+   hence f is one-to-one by Th47;
+ end;
+
+definition
+  cluster empty Function;
+ existence
+  proof
+      {} is Function;
+    hence thesis;
+  end;
+end;
+
+definition
+ cluster empty -> one-to-one Function;
+ coherence
+  proof let f be Function;
+   assume
+A1:  f is empty;
+   let x1,x2;
+   thus thesis by A1,RELAT_1:60;
+  end;
+end;
+
+definition
+ cluster one-to-one Function;
+ existence
+  proof consider f being empty Function;
+   take f;
+   thus thesis;
+  end;
+end;
+
+definition let f be one-to-one Function;
+ cluster f~ -> Function-like;
+ coherence
+  proof let x,y1,y2;
+   assume [x,y1] in f~ & [x,y2] in f~;
+    then A1:      [y1,x] in f & [y2,x] in f by RELAT_1:def 7;
+    then A2:     y1 in dom f & y2 in dom f by RELAT_1:def 4;
+    then x = f.y1 & x = f.y2 by A1,Def4;
+   hence y1 = y2 by A2,Def8;
+  end;
+end;
+
+definition let f;
+ assume
+A1:  f is one-to-one;
+ func f" -> Function equals
+:Def9: f~;
+ coherence
+  proof reconsider g=f as one-to-one Function by A1;
+      g~ is Function;
+   hence f~ is Function;
+  end;
+end;
+
+theorem Th54:
+ f is one-to-one implies
+ for g being Function holds g=f" iff
+  dom g = rng f &
+   for y,x holds y in rng f & x = g.y iff x in dom f & y = f.x
+  proof assume
+A1:  f is one-to-one;
+   let g be Function;
+   thus g = f" implies dom g = rng f &
+    for y,x holds y in rng f & x = g.y iff x in dom f & y = f.x
+    proof assume g = f";
+      then A2:     g = f~ by A1,Def9;
+     hence dom g = rng f by RELAT_1:37;
+     let y,x;
+     thus y in rng f & x = g.y implies x in dom f & y = f.x
+      proof
+       assume that
+A3:     y in rng f and
+A4:     x = g.y;
+          y in dom g by A2,A3,RELAT_1:37;
+        then [y,x] in g by A4,Def4;
+        then A5:       [x,y] in f by A2,RELAT_1:def 7;
+       hence x in dom f by RELAT_1:def 4;
+       hence y = f.x by A5,Def4;
+      end;
+     assume that
+A6:   x in dom f and
+A7:   y = f.x;
+A8:    [x,y] in f by A6,A7,Def4;
+     hence y in rng f by RELAT_1:def 5;
+      then A9:     y in dom g by A2,RELAT_1:37;
+        [y,x] in g by A2,A8,RELAT_1:def 7;
+     hence x = g.y by A9,Def4;
+    end;
+   assume that
+A10: dom g = rng f and
+A11: for y,x holds y in rng f & x = g.y iff x in dom f & y = f.x;
+   let a,b be set;
+   thus [a,b] in g implies [a,b] in f"
+    proof assume
+A12:   [a,b] in g;
+     then a in dom g by RELAT_1:def 4;
+     then a in rng f & b = g.a by A10,A12,Def4;
+     then b in dom f & a = f.b by A11;
+     then [b,a] in f by Def4;
+     then [a,b] in f~ by RELAT_1:def 7;
+     hence [a,b] in f" by A1,Def9;
+    end;
+   assume [a,b] in f";
+    then [a,b] in f~ by A1,Def9;
+    then A13:   [b,a] in f by RELAT_1:def 7;
+    then A14:   b in dom f by RELAT_1:def 4;
+    then a = f.b by A13,Def4;
+    then a in rng f & b = g.a by A11,A14;
+   hence [a,b] in g by A10,Def4;
+  end;
+
+theorem Th55:
+   f is one-to-one implies rng f = dom(f") & dom f = rng(f")
+ proof assume f is one-to-one;
+   then f" = f~ by Def9;
+  hence thesis by RELAT_1:37;
+ end;
+
+theorem Th56:
+   f is one-to-one & x in dom f implies x = (f").(f.x) & x = (f"*f).x
+ proof assume
+A1:  f is one-to-one;
+  assume
+A2:  x in dom f;
+  hence x = (f").(f.x) by A1,Th54;
+  hence thesis by A2,Th23;
+ end;
+
+theorem Th57:
+   f is one-to-one & y in rng f implies y = f.((f").y) & y = (f*f").y
+ proof assume
+A1:  f is one-to-one;
+   assume
+A2:   y in rng f;
+   hence
+A3:   y = f.((f").y) by A1,Th54;
+     rng f = dom(f") & dom f = rng(f") by A1,Th55;
+   hence thesis by A2,A3,Th23;
+ end;
+
+theorem Th58:
+   f is one-to-one implies dom(f"*f) = dom f & rng(f"*f) = dom f
+ proof assume
+A1:   f is one-to-one;
+then A2:   rng f = dom(f") by Th55;
+   then rng(f"*f) = rng(f") by RELAT_1:47;
+   hence thesis by A1,A2,Th55,RELAT_1:46;
+ end;
+
+theorem Th59:
+   f is one-to-one implies dom(f*f") = rng f & rng(f*f") = rng f
+ proof assume
+A1:   f is one-to-one;
+then A2:   rng(f") = dom f by Th55;
+   then dom(f*f") = dom(f") by RELAT_1:46;
+   hence thesis by A1,A2,Th55,RELAT_1:47;
+ end;
+
+theorem
+     f is one-to-one & dom f = rng g & rng f = dom g &
+    (for x,y st x in dom f & y in dom g holds f.x = y iff g.y = x)
+     implies g = f"
+proof assume that
+A1:  f is one-to-one and
+A2:  dom f = rng g and
+A3:  rng f = dom g and
+A4:  for x,y st x in dom f & y in dom g holds f.x = y iff g.y = x;
+A5:  rng f = dom(f") by A1,Th54;
+   y in dom g implies g.y = (f").y
+  proof assume
+A6:  y in dom g;
+then A7:  g.y in dom f by A2,Def5;
+   then f.(g.y) = y by A4,A6;
+   hence thesis by A1,A7,Th54;
+  end;
+ hence g = f" by A3,A5,Th9;
+end;
+
+theorem Th61:
+   f is one-to-one implies f"*f = id dom f & f*f" = id rng f
+ proof assume
+A1:  f is one-to-one;
+A2:  x in dom(f"*f) implies (f"*f).x = x
+   proof assume x in dom(f"*f);
+    then x in dom f by A1,Th58;
+    hence thesis by A1,Th56;
+   end;
+    dom(f"*f) = dom f by A1,Th58;
+  hence f"*f = id dom f by A2,Th34;
+A3:  x in dom(f*f") implies (f*f").x = x
+   proof assume x in dom(f*f");
+    then x in rng f by A1,Th59;
+    hence thesis by A1,Th57;
+   end;
+    dom(f*f") = rng f by A1,Th59;
+  hence thesis by A3,Th34;
+ end;
+
+theorem Th62:
+   f is one-to-one implies f" is one-to-one
+ proof assume
+ A1:  f is one-to-one;
+   let y1,y2;
+   assume
+     y1 in dom(f") & y2 in dom(f");
+   then y1 in rng f & y2 in rng f by A1,Th54;
+   then y1 = f.((f").y1) & y2 = f.((f").y2) by A1,Th57;
+   hence thesis;
+ end;
+
+Lm1:
+  rng(g2) = X & f*g2 = id dom g1 & g1*f = id X implies g1 = g2
+ proof assume that
+A1:    rng(g2) = X and
+A2:    f*g2 = id dom g1 and
+A3:    g1*f = id X;
+      g1*(f*g2) = (g1*f)*g2 & g1*(id dom g1) = g1 & (id X)*g2 = g2
+      by A1,RELAT_1:55,77,79;
+    hence thesis by A2,A3;
+ end;
+
+theorem Th63:
+   f is one-to-one & rng f = dom g & g*f = id dom f implies g = f"
+ proof assume that
+A1:   f is one-to-one and
+A2:   rng f = dom g and
+A3:   g*f = id dom f;
+     f*f" = id rng f & rng(f") = dom f by A1,Th55,Th61;
+   hence thesis by A2,A3,Lm1;
+ end;
+
+theorem
+     f is one-to-one & rng g = dom f & f*g = id rng f implies g = f"
+ proof assume that
+A1:   f is one-to-one and
+A2:   rng g = dom f and
+A3:   f*g = id rng f;
+     f"*f = id dom f & dom(f") = rng f by A1,Th55,Th61;
+   hence g = f" by A2,A3,Lm1;
+ end;
+
+theorem
+     f is one-to-one implies (f")" = f
+ proof assume
+  A1: f is one-to-one;
+then A2:  dom f = rng(f") & rng f = dom(f") by Th55;
+   then f" is one-to-one & f*f" = id dom(f") & f"*f = id rng(f")
+     by A1,Th61,Th62;
+   hence thesis by A2,Th63;
+ end;
+
+theorem
+     f is one-to-one & g is one-to-one implies (g*f)" = f"*g"
+ proof assume that
+A1:   f is one-to-one and
+A2:   g is one-to-one;
+A3:   g*f is one-to-one by A1,A2,Th46;
+       y in rng(g*f) iff y in dom(f"*g")
+      proof
+       thus y in rng(g*f) implies y in dom(f"*g")
+        proof assume y in rng(g*f);
+         then consider x such that
+A4:        x in dom(g*f) and
+A5:        y = (g*f).x by Def5;
+A6:        x in dom f & f.x in dom g & y = g.(f.x) by A4,A5,Th21,Th22;
+         then y in rng g by Def5;
+then A7:        y in dom(g") by A2,Th54;
+           (g").(g.(f.x)) = (g"*g).(f.x) by A6,Th23
+                            .= (id dom g).(f.x) by A2,Th61
+                            .= f.x by A6,Th34;
+         then (g").y in rng f by A6,Def5;
+         then (g").y in dom(f") by A1,Th54;
+         hence thesis by A7,Th21;
+        end;
+       assume y in dom(f"*g");
+then A8:      y in dom(g") & (g").y in dom(f") by Th21;
+       then y in rng g by A2,Th54;
+       then consider z such that
+A9:      z in dom g and
+A10:      y = g.z by Def5;
+         (g").(g.z) in rng f & g.z in dom(g") by A1,A8,A10,Th54;
+       then (g"*g).z in rng f by A9,Th23;
+       then (id dom g).z in rng f by A2,Th61;
+       then z in rng f by A9,Th34;
+       then consider x such that
+A11:      x in dom f and
+A12:      z = f.x by Def5;
+         x in dom(g*f) & y = (g*f).x by A9,A10,A11,A12,Th21,Th23;
+       hence thesis by Def5;
+      end;
+then A13:     rng(g*f) = dom(f"*g") by TARSKI:2;
+       x in dom((f"*g")*(g*f)) iff x in dom(g*f)
+      proof
+       thus x in dom((f"*g")*(g*f)) implies x in dom(g*f) by Th21;
+       assume
+A14:      x in dom(g*f);
+       then (g*f).x in rng(g*f) by Def5;
+       hence thesis by A13,A14,Th21;
+      end;
+    then A15:  dom((f"*g")*(g*f)) = dom(g*f) by TARSKI:2;
+    x in dom(g*f) implies ((f"*g")*(g*f)).x = x
+   proof assume
+A16:    x in dom(g*f);
+then A17:    f.x in dom g by Th21;
+A18:    x in dom f by A16,Th21;
+       (g*f).x in rng(g*f) by A16,Def5;
+then A19:    g.(f.x) in dom(f"*g") by A13,A16,Th22;
+     thus ((f"*g")*(g*f)).x = (f"*g").((g*f).x) by A15,A16,Th22
+                           .= (f"*g").(g.(f.x)) by A16,Th22
+                           .= (f").((g").(g.(f.x))) by A19,Th22
+                           .= (f").((g"*g).(f.x)) by A17,Th23
+                           .= (f").((id dom g).(f.x)) by A2,Th61
+                           .= (f").(f.x) by A17,Th34
+                           .= x by A1,A18,Th56;
+   end;
+  then (f"*g")*(g*f) = id dom(g*f) by A15,Th34;
+  hence thesis by A3,A13,Th63;
+ end;
+
+theorem
+     (id X)" = (id X)
+ proof
+A1:    id X is one-to-one by Th52;
+      dom id X = X by RELAT_1:71;
+  then (id X)"*(id X) = id X & dom((id X)") = rng id X & rng id X = X
+   by A1,Th55,Th61,RELAT_1:71;
+  hence thesis by Th44;
+ end;
+
+definition let f,X;
+ cluster f|X -> Function-like;
+  coherence
+ proof
+  let x,y1,y2;
+  assume [x,y1] in f|X & [x,y2] in f|X;
+   then [x,y1] in f & [x,y2] in f by RELAT_1:def 11;
+  hence y1 = y2 by Def1;
+ end;
+end;
+
+theorem Th68:
+   g = f|X iff dom g = dom f /\ X & for x st x in dom g holds g.x = f.x
+ proof
+  hereby assume
+A1:   g = f|X;
+   hence
+A2:   dom g = dom f /\ X by RELAT_1:90;
+A3:  g c= f by A1,RELAT_1:88;
+   let x;
+   assume
+A4:  x in dom g;
+    then A5:   [x,g.x] in g by Def4;
+      x in dom f by A2,A4,XBOOLE_0:def 3;
+    hence g.x = f.x by A3,A5,Def4;
+  end;
+  assume that
+A6: dom g = dom f /\ X and
+A7: for x st x in dom g holds g.x = f.x;
+     now let x,y;
+    hereby assume
+A8:     [x,y] in g;
+     then A9:   x in dom g by RELAT_1:def 4;
+     hence x in X by A6,XBOOLE_0:def 3;
+A10:   x in dom f by A6,A9,XBOOLE_0:def 3;
+        y = g.x by A8,A9,Def4
+       .= f.x by A7,A9;
+     hence [x,y] in f by A10,Def4;
+    end;
+    assume
+A11:   x in X;
+    assume
+A12:   [x,y] in f;
+     then A13:   x in dom f by RELAT_1:def 4;
+     then A14:   x in dom g by A6,A11,XBOOLE_0:def 3;
+        y = f.x by A12,A13,Def4
+       .= g.x by A7,A14;
+    hence [x,y] in g by A14,Def4;
+   end;
+  hence g = f|X by RELAT_1:def 11;
+ end;
+
+canceled;
+
+theorem
+     x in dom(f|X) implies (f|X).x = f.x by Th68;
+
+theorem
+     x in dom f /\ X implies (f|X).x = f.x
+ proof assume x in dom f /\ X;
+  then x in dom(f|X) by Th68;
+  hence thesis by Th68;
+ end;
+
+Lm2:
+   x in dom(f|X) iff x in dom f & x in X
+ proof dom(f|X) = dom f /\ X by Th68; hence thesis by XBOOLE_0:def 3; end;
+
+theorem Th72:
+  x in X implies (f|X).x = f.x
+ proof assume
+A1: x in X;
+  per cases;
+  suppose x in dom f;
+   then x in dom(f|X) by A1,Lm2;
+  hence thesis by Th68;
+  suppose
+A2:   not x in dom f;
+   then not x in dom(f|X) by Lm2;
+  hence (f|X).x = {} by Def4 .= f.x by A2,Def4;
+ end;
+
+theorem
+     x in dom f & x in X implies f.x in rng(f|X)
+ proof assume
+A1:  x in dom f & x in X;
+  then x in dom f /\ X by XBOOLE_0:def 3;
+  then x in dom(f|X) & (f|X).x = f.x by A1,Th68,Th72;
+  hence thesis by Def5;
+ end;
+
+canceled 2;
+
+theorem
+     dom(f|X) c= dom f & rng(f|X) c= rng f by RELAT_1:89,99;
+
+canceled 5;
+
+theorem
+     X c= Y implies (f|X)|Y = f|X & (f|Y)|X = f|X by RELAT_1:102,103;
+
+canceled;
+
+theorem
+     f is one-to-one implies f|X is one-to-one
+ proof assume
+A1:   f is one-to-one;
+  let x1,x2;
+  assume
+A2:  x1 in dom(f|X) & x2 in dom(f|X);
+  then x1 in dom f /\ X & x2 in dom f /\ X by Th68;
+  then x1 in dom f & x2 in dom f & (f|X).x1 = f.x1 & (f|X).x2 = f.x2
+     by A2,Th68,XBOOLE_0:def 3;
+  hence thesis by A1,Def8;
+end;
+
+definition let Y,f;
+ cluster Y|f -> Function-like;
+  coherence
+ proof
+  let x,y1,y2;
+  assume [x,y1] in Y|f & [x,y2] in Y|f;
+   then [x,y1] in f & [x,y2] in f by RELAT_1:def 12;
+  hence y1 = y2 by Def1;
+ end;
+end;
+
+theorem Th85:
+ g = Y|f iff (for x holds x in dom g iff x in dom f & f.x in Y) &
+   (for x st x in dom g holds g.x = f.x)
+ proof
+  hereby assume
+A1:  g = Y|f;
+   hereby let x;
+    hereby assume x in dom g;
+      then A2:      [x,g.x] in g by Def4;
+      then A3:     [x,g.x] in f by A1,RELAT_1:def 12;
+     hence
+      x in dom f by RELAT_1:def 4;
+      then f.x = g.x by A3,Def4;
+     hence f.x in Y by A1,A2,RELAT_1:def 12;
+    end;
+    assume
+     x in dom f;
+then A4:   [x,f.x] in f by Def4;
+    assume f.x in Y;
+     then [x,f.x] in g by A1,A4,RELAT_1:def 12;
+    hence x in dom g by RELAT_1:def 4;
+   end;
+   let x;
+   assume x in dom g;
+    then [x,g.x] in g by Def4;
+    then A5:     [x,g.x] in f by A1,RELAT_1:def 12;
+    then x in dom f by RELAT_1:def 4;
+   hence f.x = g.x by A5,Def4;
+  end;
+  assume that
+A6: for x holds x in dom g iff x in dom f & f.x in Y and
+A7: for x st x in dom g holds g.x = f.x;
+     now let x,y;
+    hereby assume
+A8:     [x,y] in g;
+      then A9:    x in dom g by RELAT_1:def 4;
+      then A10:    y = g.x by A8,Def4
+        .= f.x by A7,A9;
+     hence y in Y by A6,A9;
+      x in dom f by A6,A9;
+     hence [x,y] in f by A10,Def4;
+    end;
+    assume
+A11:   y in Y;
+    assume
+A12:  [x,y] in f;
+     then A13:  y = f.x by Th8;
+       x in dom f by A12,RELAT_1:def 4;
+     then A14:   x in dom g by A6,A11,A13;
+     then y = g.x by A7,A13;
+    hence [x,y] in g by A14,Def4;
+   end;
+  hence g = Y|f by RELAT_1:def 12;
+ end;
+
+theorem
+     x in dom(Y|f) iff x in dom f & f.x in Y by Th85;
+
+theorem
+     x in dom(Y|f) implies (Y|f).x = f.x by Th85;
+
+canceled;
+
+theorem
+     dom(Y|f) c= dom f & rng(Y|f) c= rng f
+  proof thus dom(Y|f) c= dom f proof let x; thus thesis by Th85; end;
+    thus thesis by RELAT_1:118;
+ end;
+
+canceled 7;
+
+theorem
+     X c= Y implies Y|(X|f) = X|f & X|(Y|f) = X|f by RELAT_1:129,130;
+
+canceled;
+
+theorem
+     f is one-to-one implies Y|f is one-to-one
+ proof assume A1: f is one-to-one;
+  let x1,x2 such that
+A2:  x1 in dom(Y|f) & x2 in dom(Y|f) and
+A3:  (Y|f).x1 = (Y|f).x2;
+    (Y|f).x1 = f.x1 & (Y|f).x2 = f.x2 & x1 in dom f & x2 in dom f
+   by A2,Th85;
+  hence thesis by A1,A3,Def8;
+ end;
+
+definition let f,X;
+ redefine
+ canceled 2;
+
+  func f.:X means
+:Def12: for y holds y in it iff ex x st x in dom f & x in X & y = f.x;
+  compatibility
+ proof let Y;
+  hereby assume
+A1: Y = f.:X;
+   let y;
+   hereby assume y in Y;
+    then consider x such that
+A2: [x,y] in f and
+A3:  x in X by A1,RELAT_1:def 13;
+    take x;
+    thus
+A4:   x in dom f by A2,RELAT_1:def 4;
+    thus x in X by A3;
+    thus y = f.x by A2,A4,Def4;
+   end;
+   given x such that
+A5: x in dom f and
+A6: x in X and
+A7: y = f.x;
+      [x,y] in f by A5,A7,Def4;
+   hence y in Y by A1,A6,RELAT_1:def 13;
+  end;
+  assume
+A8:  for y holds y in Y iff ex x st x in dom f & x in X & y = f.x;
+     now let y;
+    hereby assume y in Y;
+      then consider x such that
+A9:     x in dom f and
+A10:     x in X and
+A11:     y = f.x by A8;
+     take x;
+     thus [x,y] in f by A9,A11,Def4;
+     thus x in X by A10;
+    end;
+    given x such that
+A12:   [x,y] in f and
+A13:   x in X;
+A14:   x in dom f by A12,RELAT_1:def 4;
+       y = f.x by A12,Th8;
+    hence y in Y by A8,A13,A14;
+   end;
+  hence Y = f.:X by RELAT_1:def 13;
+ end;
+end;
+
+canceled 17;
+
+theorem Th117:
+   x in dom f implies f.:{x} = {f.x}
+  proof assume
+A1:   x in dom f;
+     y in f.:{x} iff y in {f.x}
+    proof
+     thus y in f.:{x} implies y in {f.x}
+      proof assume y in f.:{x};
+       then consider z such that
+         z in dom f and
+A2:       z in {x} and
+A3:       y = f.z by Def12;
+          z = x by A2,TARSKI:def 1;
+        hence thesis by A3,TARSKI:def 1;
+      end;
+     assume y in {f.x};
+     then y = f.x & x in {x} by TARSKI:def 1;
+     hence y in f.:{x} by A1,Def12;
+    end;
+   hence thesis by TARSKI:2;
+  end;
+
+theorem
+     x1 in dom f & x2 in dom f implies f.:{x1,x2} = {f.x1,f.x2}
+ proof assume
+A1:    x1 in dom f & x2 in dom f;
+     y in f.:{x1,x2} iff y = f.x1 or y = f.x2
+    proof
+      thus y in f.:{x1,x2} implies y = f.x1 or y = f.x2
+       proof assume y in f.:{x1,x2};
+          then ex x st
+        x in dom f & x in {x1,x2} & y = f.x by Def12;
+         hence y = f.x1 or y = f.x2 by TARSKI:def 2;
+       end;
+      assume
+A2:      y = f.x1 or y = f.x2;
+        x1 in {x1,x2} & x2 in {x1,x2} by TARSKI:def 2;
+      hence thesis by A1,A2,Def12;
+    end;
+   hence thesis by TARSKI:def 2;
+ end;
+
+canceled;
+
+theorem
+     (Y|f).:X c= f.:X
+ proof let y;
+   assume y in (Y|f).:X;
+   then consider x such that
+A1:   x in dom(Y|f) and
+A2:   x in X and
+A3:   y = (Y|f).x by Def12;
+     y = f.x & x in dom f by A1,A3,Th85;
+   hence y in f.:X by A2,Def12;
+ end;
+
+theorem Th121:
+   f is one-to-one implies f.:(X1 /\ X2) = f.:X1 /\ f.:X2
+ proof assume
+ A1:    f is one-to-one;
+ A2: f.:(X1 /\ X2)c=f.:X1 /\ f.:X2 by RELAT_1:154;
+      f.:X1 /\ f.:X2 c= f.:(X1 /\ X2)
+     proof let y;
+      assume y in f.:X1 /\ f.:X2;
+then A3:      y in f.:X1 & y in f.:X2 by XBOOLE_0:def 3;
+       then consider x1 such that
+A4:      x1 in dom f and
+A5:      x1 in X1 and
+A6:      y = f.x1 by Def12;
+       consider x2 such that
+A7:      x2 in dom f and
+A8:      x2 in X2 and
+A9:      y = f.x2 by A3,Def12;
+        x1 = x2 by A1,A4,A6,A7,A9,Def8;
+      then x1 in X1 /\ X2 by A5,A8,XBOOLE_0:def 3;
+      hence thesis by A4,A6,Def12;
+     end;
+    hence thesis by A2,XBOOLE_0:def 10;
+ end;
+
+theorem
+     (for X1,X2 holds f.:(X1 /\ X2) = f.:X1 /\ f.:X2) implies f is one-to-one
+ proof assume
+A1:   for X1,X2 holds f.:(X1 /\ X2) = f.:X1 /\ f.:X2;
+    given x1,x2 such that
+A2:   x1 in dom f & x2 in dom f and
+A3:   f.x1 = f.x2 and
+A4:   x1 <> x2;
+A5:  f.:{x1} = {f.x1} & f.:{x2} = {f.x2} & {x1} misses {x2}
+     by A2,A4,Th117,ZFMISC_1:17;
+  then {x1} /\ {x2} = {} by XBOOLE_0:def 7;
+  then f.:({x1}/\{x2}) = {} & f.x1 in f.:{x1} &
+    f.:({x1}/\{x2}) = f.:{x1}/\f.: {x2} & f.:{x1} /\ f.:{x2} = f.:{x1}
+      by A1,A3,A5,RELAT_1:149,TARSKI:def 1;
+  hence contradiction;
+ end;
+
+theorem
+     f is one-to-one implies f.:(X1 \ X2) = f.:X1 \ f.:X2
+ proof assume
+ A1:    f is one-to-one;
+ A2:    f.:X1 \ f.: X2 c= f.:(X1 \ X2) by RELAT_1:155;
+     f.:(X1 \ X2) c= f.:X1 \ f.:X2
+     proof let y;
+      assume y in f.:(X1\X2);
+      then consider x such that
+A3:     x in dom f and
+A4:     x in X1\X2 and
+A5:     y = f.x by Def12;
+A6:     x in X1 & not x in X2 by A4,XBOOLE_0:def 4;
+then A7:     y in f.:X1 by A3,A5,Def12;
+        now assume y in f.:X2;
+        then ex z st z in dom f & z in X2 & y = f.z by Def12;
+        hence contradiction by A1,A3,A5,A6,Def8;
+      end;
+      hence thesis by A7,XBOOLE_0:def 4;
+     end;
+   hence thesis by A2,XBOOLE_0:def 10;
+ end;
+
+theorem
+     (for X1,X2 holds f.:(X1 \ X2) = f.:X1 \ f.:X2) implies f is one-to-one
+ proof assume
+A1:   for X1,X2 holds f.:(X1 \ X2) = f.:X1 \ f.:X2;
+    given x1,x2 such that
+A2:   x1 in dom f & x2 in dom f and
+A3:   f.x1 = f.x2 and
+A4:   x1 <> x2;
+    f.:{x1} = {f.x1} & f.:{x2} = {f.x2} & {x1} \ {x2} = {x1}
+     by A2,A4,Th117,ZFMISC_1:20;
+  then f.:({x1}\{x2}) = f.:{x1} & f.x1 in
+ f.:{x1} & f.:({x1}\{x2}) = f.:{x1}\f.:{x2} &
+       f.:{x1} \ f.:{x2} = {} by A1,A3,TARSKI:def 1,XBOOLE_1:37;
+  hence contradiction;
+ end;
+
+theorem
+     X misses Y & f is one-to-one implies f.:X misses f.:Y
+ proof assume X /\ Y = {} & f is one-to-one;
+   then f.:(X /\ Y) = {} & f.:(X /\ Y) = f.:X /\ f.:Y by Th121,RELAT_1:149;
+   hence thesis by XBOOLE_0:def 7;
+ end;
+
+theorem
+     (Y|f).:X = Y /\ f.:X
+ proof
+     y in (Y|f).:X iff y in Y /\ f.:X
+    proof
+     thus y in (Y|f).:X implies y in Y /\ f.:X
+      proof assume y in (Y|f).:X;
+       then consider x such that
+A1:      x in dom(Y|f) and
+A2:      x in X and
+A3:      y = (Y|f).x by Def12;
+         y = f.x & x in dom f by A1,A3,Th85;
+       then y in f.:X & y in Y by A1,A2,Def12,Th85;
+       hence thesis by XBOOLE_0:def 3;
+      end;
+     assume
+A4:     y in Y /\ f.:X;
+     then y in f.:X by XBOOLE_0:def 3;
+     then consider x such that
+A5:    x in dom f and
+A6:    x in X and
+A7:    y = f.x by Def12;
+       y in Y by A4,XBOOLE_0:def 3;
+then A8:    x in dom(Y|f) by A5,A7,Th85;
+     then (Y|f).x = f.x by Th85;
+     hence thesis by A6,A7,A8,Def12;
+    end;
+  hence thesis by TARSKI:2;
+ end;
+
+definition let f,Y;
+ redefine func f"Y means
+:Def13: for x holds x in it iff x in dom f & f.x in Y;
+  compatibility
+ proof let X;
+  hereby assume
+A1:  X = f"Y;
+   let x;
+   hereby assume x in X;
+     then consider y such that
+A2:   [x,y] in f and
+A3:   y in Y by A1,RELAT_1:def 14;
+    thus x in dom f by A2,RELAT_1:def 4;
+    thus f.x in Y by A2,A3,Th8;
+   end;
+   assume that
+A4:  x in dom f and
+A5:  f.x in Y;
+      [x,f.x] in f by A4,Th8;
+   hence x in X by A1,A5,RELAT_1:def 14;
+  end;
+  assume
+A6:  for x holds x in X iff x in dom f & f.x in Y;
+     now let x;
+     hereby assume
+A7:    x in X;
+      take y = f.x;
+         x in dom f by A6,A7;
+      hence [x,y] in f by Def4;
+      thus y in Y by A6,A7;
+     end;
+    given y such that
+A8:  [x,y] in f and
+A9:  y in Y;
+A10:   x in dom f by A8,RELAT_1:def 4;
+       y = f.x by A8,Th8;
+    hence x in X by A6,A9,A10;
+   end;
+  hence X = f"Y by RELAT_1:def 14;
+ end;
+end;
+
+canceled 10;
+
+theorem
+     f"(Y1 /\ Y2) = f"Y1 /\ f"Y2
+ proof
+     x in f"(Y1 /\ Y2) iff x in f"Y1 /\ f"Y2
+    proof
+        (x in f"Y1 iff f.x in Y1 & x in dom f) &
+      (x in f"Y2 iff f.x in Y2 & x in dom f) &
+      (x in f"(Y1 /\ Y2) iff f.x in Y1 /\ Y2 & x in dom f) &
+      (x in f"Y1 /\ f"Y2 iff x in f"Y1 & x in f"Y2) &
+      (f.x in Y1 /\ Y2 iff f.x in Y1 & f.x in Y2) by Def13,XBOOLE_0:def 3;
+      hence thesis;
+    end;
+   hence thesis by TARSKI:2;
+ end;
+
+theorem
+     f"(Y1 \ Y2) = f"Y1 \ f"Y2
+ proof
+     x in f"(Y1 \ Y2) iff x in f"Y1 \ f"Y2
+    proof
+        (x in f"Y1 iff f.x in Y1 & x in dom f) &
+      (x in f"Y2 iff f.x in Y2 & x in dom f) &
+      (x in f"(Y1 \ Y2) iff f.x in Y1 \ Y2 & x in dom f) &
+      (x in f"Y1 \ f"Y2 iff x in f"Y1 & not x in f"Y2) &
+      (f.x in Y1 \ Y2 iff f.x in Y1 & not f.x in Y2) by Def13,XBOOLE_0:def 4;
+      hence thesis;
+    end;
+   hence thesis by TARSKI:2;
+ end;
+
+theorem
+     (R|X)"Y = X /\ (R"Y)
+ proof
+  hereby let x;
+   assume x in (R|X)"Y;
+    then consider y such that
+A1:  [x,y] in R|X and
+A2:  y in Y by RELAT_1:def 14;
+      R|X c= R by RELAT_1:88;
+    then A3:   x in R"Y by A1,A2,RELAT_1:def 14;
+      x in X by A1,RELAT_1:def 11;
+   hence x in X /\ (R"Y) by A3,XBOOLE_0:def 3;
+  end;
+  let x;
+  assume
+A4: x in X /\ (R"Y);
+   then A5: x in X by XBOOLE_0:def 3;
+     x in R"Y by A4,XBOOLE_0:def 3;
+   then consider y such that
+A6: [x,y] in R and
+A7: y in Y by RELAT_1:def 14;
+     [x,y] in R|X by A5,A6,RELAT_1:def 11;
+  hence x in (R|X)"Y by A7,RELAT_1:def 14;
+ end;
+
+canceled 2;
+
+theorem Th142:
+   y in rng R iff R"{y} <> {}
+ proof
+   thus y in rng R implies R"{y} <> {}
+     proof assume y in rng R;
+      then consider x such that
+A1:     [x,y] in R by RELAT_1:def 5;
+         y in {y} by TARSKI:def 1;
+       hence R"{y} <> {} by A1,RELAT_1:def 14;
+     end;
+   assume R"{y} <> {};
+    then consider x such that
+A2:  x in R"{y} by XBOOLE_0:def 1;
+    consider z such that
+A3:  [x,z] in R and
+A4:  z in {y} by A2,RELAT_1:def 14;
+      z = y by A4,TARSKI:def 1;
+   hence y in rng R by A3,RELAT_1:def 5;
+ end;
+
+theorem
+     (for y st y in Y holds R"{y} <> {}) implies Y c= rng R
+ proof assume
+A1:  for y st y in Y holds R"{y} <> {};
+  let y;
+  assume y in Y;
+   then R"{y} <> {} by A1;
+  hence y in rng R by Th142;
+ end;
+
+theorem Th144:
+   (for y st y in rng f ex x st f"{y} = {x}) iff f is one-to-one
+ proof
+  thus (for y st y in rng f ex x st f"{y} = {x}) implies f is one-to-one
+   proof assume
+A1:  for y st y in rng f ex x st f"{y} = {x};
+    let x1,x2;
+    assume
+A2:   x1 in dom f & x2 in dom f;
+then A3:   f.x1 in rng f & f.x2 in rng f by Def5;
+    then consider y1 such that
+A4:   f"{f.x1} = {y1} by A1;
+    consider y2 such that
+A5:   f"{f.x2} = {y2} by A1,A3;
+      f.x1 in {f.x1} & f.x2 in {f.x2} by TARSKI:def 1;
+    then x1 in {y1} & x2 in {y2} by A2,A4,A5,Def13;
+    then y1 = x1 & y2 = x2 by TARSKI:def 1;
+    hence thesis by A4,A5,ZFMISC_1:6;
+   end;
+  assume
+A6: f is one-to-one;
+  let y;
+  assume y in rng f;
+  then consider x such that
+A7: x in dom f and
+A8: y = f.x by Def5;
+  take x;
+    z in f"{y} iff z = x
+   proof
+    thus z in f"{y} implies z = x
+     proof assume z in f"{y};
+      then z in dom f & f.z in {y} by Def13;
+      then z in dom f & f.z = y by TARSKI:def 1;
+      hence thesis by A6,A7,A8,Def8;
+     end;
+      y in {y} by TARSKI:def 1;
+    hence thesis by A7,A8,Def13;
+   end;
+  hence thesis by TARSKI:def 1;
+ end;
+
+theorem Th145:
+   f.:(f"Y) c= Y
+ proof let y;
+  assume y in f.:(f"Y);
+  then ex x st x in dom f & x in f"Y & y = f.x by Def12;
+  hence y in Y by Def13;
+ end;
+
+theorem
+    X c= dom R implies X c= R"(R.:X)
+ proof
+  assume A1:X c= dom R;
+  let x;
+  assume
+A2:  x in X;
+   then consider Rx being set such that
+A3:   [x,Rx] in R by A1,RELAT_1:def 4;
+     Rx in R.:X by A2,A3,RELAT_1:def 13;
+  hence x in R"(R.:X) by A3,RELAT_1:def 14;
+ end;
+
+theorem
+     Y c= rng f implies f.:(f"Y) = Y
+ proof assume
+A1: Y c= rng f;
+  thus f.:(f"Y) c= Y by Th145;
+   let y;
+    assume
+A2:    y in Y;
+    then consider x such that
+A3:    x in dom f & y = f.x by A1,Def5;
+      x in f"Y by A2,A3,Def13;
+    hence y in f.:(f"Y) by A3,Def12;
+ end;
+
+theorem
+     f.:(f"Y) = Y /\ f.:(dom f)
+ proof f.:(f"Y) c= Y & f.:(f"(Y)) c= f.:(dom f) by Th145,RELAT_1:147;
+  hence f.:(f"Y) c= Y /\ f.:(dom f) by XBOOLE_1:19;
+    let y;
+     assume
+A1:      y in Y /\ f.:(dom f);
+     then y in f.:(dom f) by XBOOLE_0:def 3;
+     then consider x such that
+A2:    x in dom f and x in dom f and
+A3:    y = f.x by Def12;
+       y in Y by A1,XBOOLE_0:def 3;
+     then x in f"Y by A2,A3,Def13;
+     hence y in f.:(f"Y) by A2,A3,Def12;
+ end;
+
+theorem Th149:
+   f.:(X /\ f"Y) c= (f.:X) /\ Y
+ proof let y;
+   assume y in f.:(X /\ f"Y);
+   then consider x such that
+A1:     x in dom f and
+A2:     x in X /\ f"Y and
+A3:     y = f.x by Def12;
+     x in X & x in f"Y by A2,XBOOLE_0:def 3;
+   then y in f.:X & y in Y by A1,A3,Def12,Def13;
+   hence y in (f.:X) /\ Y by XBOOLE_0:def 3;
+ end;
+
+theorem
+     f.:(X /\ f"Y) = (f.:X) /\ Y
+ proof
+  thus f.:(X /\ f"Y)c=(f.:X) /\ Y by Th149;
+    let y;
+     assume y in (f.:X) /\ Y;
+then A1:     y in f.:X & y in Y by XBOOLE_0:def 3;
+     then consider x such that
+A2:    x in dom f and
+A3:    x in X and
+A4:    y = f.x by Def12;
+       x in f"Y by A1,A2,A4,Def13;
+     then x in X /\ f"Y by A3,XBOOLE_0:def 3;
+     hence y in f.:(X /\ f"Y) by A2,A4,Def12;
+ end;
+
+theorem
+     X /\ R"Y c= R"(R.:X /\ Y)
+ proof let x;
+  assume
+A1: x in X /\ R"Y;
+  then A2:  x in X by XBOOLE_0:def 3;
+    x in R"Y by A1,XBOOLE_0:def 3;
+  then consider Rx being set such that
+A3: [x,Rx] in R and
+A4: Rx in Y by RELAT_1:def 14;
+     Rx in R.:X by A2,A3,RELAT_1:def 13;
+   then Rx in R.:X /\ Y by A4,XBOOLE_0:def 3;
+  hence thesis by A3,RELAT_1:def 14;
+ end;
+
+theorem
+     f is one-to-one implies f"(f.:X) c= X
+ proof assume
+A1:   f is one-to-one;
+   let x;
+   assume x in f"(f.:X);
+then A2:    f.x in f.:X & x in dom f by Def13;
+     then ex z st z in dom f & z in X & f.x = f.z by Def12;
+   hence thesis by A1,A2,Def8;
+ end;
+
+theorem
+     (for X holds f"(f.:X) c= X) implies f is one-to-one
+ proof assume
+A1: for X holds f"(f.:X) c= X;
+  given x1,x2 such that
+A2:   x1 in dom f & x2 in dom f and
+A3:   f.x1 = f.x2 and
+A4:   x1 <> x2;
+A5:   f.:{x1} = {f.x1} & f.:{x2} = {f.x2} by A2,Th117;
+   then f.:{x1} <> {} & f.:{x2} <> {} & f.x1 in rng f & f.x2 in rng f
+     by A2,Def5;
+   then f"(f.:{x1}) <> {} & f"(f.:{x2}) <> {} &
+        f"(f.:{x1}) c= {x1} & f"(f.:{x2}) c= {x2} by A1,A5,Th142;
+   then f"(f.:{x1}) = {x1} & f"(f.:{x2}) = {x2} by ZFMISC_1:39;
+   hence contradiction by A3,A4,A5,ZFMISC_1:6;
+ end;
+
+theorem
+     f is one-to-one implies f.:X = (f")"X
+ proof assume
+ A1: f is one-to-one;
+     y in f.:X iff y in (f")"X
+    proof
+      thus y in f.:X implies y in (f")"X
+       proof assume y in f.:X;
+        then consider x such that
+A2:       x in dom f and
+A3:       x in X and
+A4:       y = f.x by Def12;
+          y in rng f by A2,A4,Def5;
+        then y in dom(f") & (f").(f.x) = x by A1,A2,Th54;
+        hence y in (f")"X by A3,A4,Def13;
+       end;
+      assume y in (f")"X;
+then A5:      y in dom(f") & (f").y in X by Def13;
+      then y in rng(f) by A1,Th54;
+      then consider x such that
+A6:    x in dom(f) and
+A7:    y = f.x by Def5;
+        (f").y = x by A1,A6,A7,Th56;
+      hence y in f.:X by A5,A6,A7,Def12;
+    end;
+   hence thesis by TARSKI:2;
+ end;
+
+theorem
+     f is one-to-one implies f"Y = (f").:Y
+ proof assume
+ A1: f is one-to-one;
+     x in f"Y iff x in (f").:Y
+    proof
+      thus x in f"Y implies x in (f").:Y
+       proof assume x in f"Y;
+        then x in dom f & f.x in Y by Def13;
+        then x in dom f & f.x in rng(f) & f.x in Y by Def5;
+        then (f").(f.x) = x & f.x in dom(f") & f.x in Y by A1,Th54;
+        hence x in (f").:Y by Def12;
+       end;
+      assume x in (f").:Y;
+      then consider y such that
+A2:    y in dom(f") and
+A3:    y in Y and
+A4:    x = (f").y by Def12;
+        dom(f") = rng f by A1,Th54;
+      then y = f.x & x in dom f by A1,A2,A4,Th54;
+      hence x in f"Y by A3,Def13;
+    end;
+   hence thesis by TARSKI:2;
+ end;
+
+
+:: SUPLEMENT
+
+theorem
+     Y = rng f & dom g = Y & dom h = Y & g*f = h*f implies g = h
+ proof assume that
+A1:  Y = rng f and
+A2:  dom g = Y and
+A3:  dom h = Y and
+A4:  g*f = h*f;
+    y in Y implies g.y = h.y
+   proof assume
+     y in Y;
+    then consider x such that
+A5:  x in dom f and
+A6:  y = f.x by A1,Def5;
+      (g*f).x = g.y & (h*f).x = h.y by A5,A6,Th23;
+    hence thesis by A4;
+   end;
+  hence thesis by A2,A3,Th9;
+ end;
+
+theorem
+     f.:X1 c= f.:X2 & X1 c= dom f & f is one-to-one implies X1 c= X2
+ proof assume that
+A1:  f.:X1 c= f.:X2 and
+A2:  X1 c= dom f and
+A3:  f is one-to-one;
+   let x;
+   assume
+A4:  x in X1;
+   then f.x in f.:X1 by A2,Def12;
+   then ex x2 st x2 in dom f & x2 in X2 & f.x = f.x2 by A1,Def12;
+   hence thesis by A2,A3,A4,Def8;
+ end;
+
+theorem
+     f"Y1 c= f"Y2 & Y1 c= rng f implies Y1 c= Y2
+ proof assume that
+A1:   f"Y1 c= f"Y2 and
+A2:   Y1 c= rng f;
+  let y;
+  assume
+A3:  y in Y1;
+  then consider x such that
+A4:   x in dom f and
+A5:   y = f.x by A2,Def5;
+    x in f"Y1 by A3,A4,A5,Def13;
+  hence thesis by A1,A5,Def13;
+ end;
+
+theorem
+     f is one-to-one iff for y ex x st f"{y} c= {x}
+ proof
+     (for y ex x st f"{y} c= {x}) iff
+    (for y st y in rng f ex x st f"{y} = {x})
+     proof
+       thus (for y ex x st f"{y} c= {x}) implies
+          (for y st y in rng f ex x st f"{y} = {x})
+       proof assume
+A1:       for y ex x st f"{y} c= {x};
+        let y;
+        assume
+A2:       y in rng f;
+        consider x such that
+A3:       f"{y} c= {x} by A1;
+        take x;
+        consider x1 such that
+A4:        x1 in dom f and
+A5:        y = f.x1 by A2,Def5;
+          f.x1 in {y} by A5,TARSKI:def 1;
+        then f"{y} <> {} by A4,Def13;
+        hence thesis by A3,ZFMISC_1:39;
+       end;
+      assume
+A6:     for y st y in rng f ex x st f"{y} = {x};
+      let y;
+A7:    now assume y in rng f;
+        then consider x such that
+A8:       f"{y} = {x} by A6;
+        take x;
+        thus f"{y} c= {x} by A8;
+       end;
+         now assume
+A9:       not y in rng f;
+        consider x;
+        take x;
+          rng f misses {y} by A9,ZFMISC_1:56;
+        then f"{y} = {} by RELAT_1:173;
+        hence f"{y} c= {x} by XBOOLE_1:2;
+       end;
+      hence thesis by A7;
+     end;
+   hence thesis by Th144;
+ end;
+
+theorem
+    rng R c= dom S implies R"X c= (R*S)"(S.:X)
+ proof assume
+A1:  rng R c= dom S;
+  let x;
+  assume
+   x in R"X;
+  then consider Rx being set such that
+A2: [x,Rx] in R and
+A3: Rx in X by RELAT_1:def 14;
+    Rx in rng R by A2,RELAT_1:def 5;
+  then consider SRx being set such that
+A4: [Rx,SRx] in S by A1,RELAT_1:def 4;
+A5: SRx in S.:X by A3,A4,RELAT_1:def 13;
+     [x,SRx] in R*S by A2,A4,RELAT_1:def 8;
+  hence thesis by A5,RELAT_1:def 14;
+ end;

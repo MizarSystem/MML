@@ -1,0 +1,176 @@
+:: Compact Spaces
+::  by Agata Darmochwa{\l}
+::
+:: Received September 19, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, RELAT_1, BOOLE, MCART_1, FINSET_1, ORDERS_1, TARSKI,
+      PRE_TOPC, SETFAM_1, SUBSET_1, ORDINAL2, TOPS_2, COMPTS_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, FUNCT_1,
+      FUNCT_2, FUNCT_3, SETFAM_1, FINSET_1, ORDERS_1, DOMAIN_1, STRUCT_0,
+      PRE_TOPC, TOPS_2;
+ constructors FUNCT_3, FINSET_1, ORDERS_1, DOMAIN_1, TOPS_2, MEMBERED;
+ clusters FUNCT_1, PRE_TOPC, STRUCT_0, RELSET_1, SUBSET_1, FINSET_1, MEMBERED,
+      ZFMISC_1;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+reserve x, y, z, X, Y, Z for set;
+reserve f for Function;
+
+scheme NonUniqBoundFuncEx { X() -> set, Y() -> set, P[set,set] }:
+ ex f being Function st dom f = X() & rng f c= Y() &
+   for x st x in X() holds P[x,f.x]
+  provided
+ for x st x in X() ex y st y in Y() & P[x,y];
+
+scheme BiFuncEx{A()->set,B()->set,C()->set,P[set,set,set]}:
+ ex f,g being Function st dom f = A() & dom g = A() &
+  for x st x in A() holds P[x,f.x,g.x]
+provided
+ x in A() implies ex y,z st y in B() & z in C() & P[x,y,z];
+
+theorem :: COMPTS_1:1
+  Z is finite & Z c= rng f implies
+  ex Y st Y c= dom f & Y is finite & f.:Y = Z;
+
+reserve T for TopStruct;
+reserve A for SubSpace of T;
+reserve P, Q for Subset of T;
+
+definition let T be 1-sorted, F be Subset-Family of T,
+   P be Subset of T;
+ pred F is_a_cover_of P means
+:: COMPTS_1:def 1
+     P c= union F;
+end;
+
+definition let F be set;
+  attr F is centered means
+:: COMPTS_1:def 2
+    F <> {} &
+  for G being set st G <> {} & G c= F & G is finite holds meet G <> {};
+end;
+
+definition let T be TopStruct;
+  attr T is compact means
+:: COMPTS_1:def 3
+   for F being Subset-Family of T st
+     F is_a_cover_of T & F is open
+      ex G being Subset-Family of T
+       st G c= F & G is_a_cover_of T & G is finite;
+
+  attr T is being_T2 means
+:: COMPTS_1:def 4
+     for p, q being Point of T st not p = q
+      ex W, V being Subset of T st W is open & V is open &
+       p in W & q in V & W misses V;
+  synonym T is_T2;
+
+  attr T is being_T3 means
+:: COMPTS_1:def 5
+       for p being Point of T, P being Subset of T
+      st P <> {} & P is closed & not p in P
+      ex W, V being Subset of T st W is open & V is open &
+       p in W & P c= V & W misses V;
+  synonym T is_T3;
+
+  attr T is being_T4 means
+:: COMPTS_1:def 6
+      for W, V being Subset of T st W <> {} & V <> {} &
+      W is closed & V is closed & W misses V
+     ex P, Q being Subset of T st P is open & Q is open &
+         W c= P & V c= Q & P misses Q;
+  synonym T is_T4;
+end;
+
+definition let T be TopStruct, P be Subset of T;
+  attr P is compact means
+:: COMPTS_1:def 7
+   for F being Subset-Family of T st
+    F is_a_cover_of P & F is open
+    ex G being Subset-Family of T st G c= F & G is_a_cover_of P & G is finite;
+end;
+
+canceled 7;
+
+theorem :: COMPTS_1:9
+{}T is compact;
+
+theorem :: COMPTS_1:10
+T is compact iff [#]T is compact;
+
+theorem :: COMPTS_1:11
+ Q c= [#] A implies
+  (Q is compact iff
+   (for P being Subset of A st P=Q holds P is compact));
+
+theorem :: COMPTS_1:12
+ ( P = {} implies (P is compact iff T|P is compact) ) &
+ ( T is TopSpace-like & P <> {} implies (P is compact iff T|P is compact) );
+
+theorem :: COMPTS_1:13
+for T being non empty TopSpace holds
+ T is compact iff
+  for F being Subset-Family of T st F is centered & F is closed
+   holds meet F <> {};
+
+theorem :: COMPTS_1:14
+  for T being non empty TopSpace holds
+  T is compact iff for F being Subset-Family of T st F <> {} & F is closed &
+   meet F = {}
+ ex G being Subset-Family of T st G <> {} & G c= F & G is finite & meet G = {};
+
+reserve TS for TopSpace;
+reserve PS, QS for Subset of TS;
+
+theorem :: COMPTS_1:15
+ TS is_T2 implies
+  for A being Subset of TS st A <> {} & A is compact
+   for p being Point of TS st not p in A
+ ex PS,QS st PS is open & QS is open & p in PS & A c= QS & PS misses QS;
+
+theorem :: COMPTS_1:16
+  TS is_T2 & PS is compact implies PS is closed;
+
+theorem :: COMPTS_1:17
+ T is compact & P is closed implies P is compact;
+
+theorem :: COMPTS_1:18
+ PS is compact & QS c= PS & QS is closed implies QS is compact;
+
+theorem :: COMPTS_1:19
+   P is compact & Q is compact implies P \/ Q is compact;
+
+theorem :: COMPTS_1:20
+   TS is_T2 & PS is compact & QS is compact implies PS /\ QS is compact;
+
+theorem :: COMPTS_1:21
+   TS is_T2 & TS is compact implies TS is_T3;
+
+theorem :: COMPTS_1:22
+   TS is_T2 & TS is compact implies TS is_T4;
+
+reserve S for non empty TopStruct;
+reserve f for map of T,S;
+
+theorem :: COMPTS_1:23
+   T is compact & f is continuous & rng f = [#] S implies S is compact;
+
+theorem :: COMPTS_1:24
+ f is continuous & rng f = [#] S & P is compact implies f.:P is compact;
+
+reserve SS for non empty TopSpace;
+reserve f for map of TS,SS;
+
+theorem :: COMPTS_1:25
+ TS is compact & SS is_T2 & rng f = [#] SS & f is continuous implies
+  for PS st PS is closed holds f.:PS is closed;
+
+theorem :: COMPTS_1:26
+   TS is compact & SS is_T2 & dom f = [#]TS & rng f = [#]SS & f is one-to-one &
+  f is continuous implies f is_homeomorphism;

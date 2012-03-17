@@ -1,0 +1,1177 @@
+:: Semigroup operations on finite subsets
+::  by Czes{\l}aw Byli\'nski
+::
+:: Received May 4, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FINSUB_1, BINOP_1, FUNCT_1, FINSEQ_1, FINSEQ_2, SETWISEO, BOOLE,
+      RELAT_1, TARSKI, FINSEQOP, FUNCOP_1, SUBSET_1, FUNCT_4, FINSOP_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XREAL_0, NAT_1, RELAT_1,
+      RELSET_1, FUNCT_1, FINSEQ_1, FINSUB_1, PARTFUN1, FUNCT_2, BINOP_1,
+      FUNCOP_1, SETWISEO, FINSEQ_2, FINSEQOP, FINSOP_1;
+ constructors NAT_1, BINOP_1, WELLORD2, SETWISEO, FINSEQOP, FINSOP_1, XREAL_0,
+      MEMBERED, PARTFUN1, XBOOLE_0;
+ clusters SUBSET_1, FUNCT_1, RELSET_1, FINSEQ_2, FINSUB_1, FINSEQ_1, ARYTM_3,
+      MEMBERED, ZFMISC_1, FUNCT_2, XBOOLE_0, ORDINAL2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions BINOP_1, XBOOLE_0;
+ theorems TARSKI, ENUMSET1, ZFMISC_1, REAL_1, NAT_1, FUNCT_1, FUNCT_2,
+      FUNCOP_1, FINSEQ_1, FINSUB_1, BINOP_1, SETWISEO, FINSEQ_2, RLVECT_1,
+      WELLORD2, CARD_1, FINSEQOP, RELAT_1, FUNCT_4, FINSOP_1, XBOOLE_0,
+      XBOOLE_1, XCMPLX_1;
+ schemes NAT_1, SETWISEO, FINSEQ_2;
+
+begin
+
+ reserve x,y for set;
+ reserve C,C',D,E for non empty set;
+ reserve c,c',c1,c2,c3 for Element of C;
+ reserve B,B',B1,B2 for Element of Fin C;
+ reserve A for Element of Fin C';
+ reserve d,d1,d2,d3,d4,e for Element of D;
+ reserve F,G for BinOp of D;
+ reserve u for UnOp of D;
+ reserve f,f' for Function of C,D;
+ reserve g for Function of C',D;
+ reserve H for BinOp of E;
+ reserve h for Function of D,E;
+ reserve i,j for Nat;
+ reserve s for Function;
+ reserve p,q for FinSequence of D;
+ reserve T1,T2 for Element of i-tuples_on D;
+
+ Lm1:
+   Seg i is Element of Fin NAT by FINSUB_1:def 5;
+
+Lm2:
+  now let i;
+   assume i+1 in Seg i; then i+1 <= i & i < i+1 by FINSEQ_1:3,REAL_1:69;
+   hence contradiction;
+  end;
+canceled 2;
+
+theorem Th3:
+  F is commutative associative & c1 <> c2
+    implies F $$ ({c1,c2},f) = F.(f.c1, f.c2)
+ proof assume that
+A1:  F is commutative associative and
+A2:  c1 <> c2;
+   consider g being Function of Fin C, D such that
+A3: F $$ ({c1,c2},f) = g.{c1,c2} and
+      for e st e is_a_unity_wrt F holds g.{} = e and
+A4: for c holds g.{c} = f.c and
+A5: for B st B c= { c1,c2 } & B <> {}
+      for c st c in { c1,c2 } \ B holds g.(B \/ {c}) = F.(g.B,f.c)
+     by A1,SETWISEO:def 3;
+      c1 in {c1} & not c2 in {c1} by A2,TARSKI:def 1;
+    then {c1,c2} \ {c1} = {c2} by ZFMISC_1:70;
+then A6: {c1} c= {c1,c2} & {c1} <> {} & c2 in {c1,c2} & c2 in {c1,c2} \ {c1}
+      by TARSKI:def 1,def 2,ZFMISC_1:12;
+  thus F $$ ({c1,c2},f) = g.({c1} \/ {c2}) by A3,ENUMSET1:41
+                       .= F.(g.{c1}, f.c2) by A5,A6
+                       .= F.(f.c1, f.c2) by A4;
+ end;
+
+theorem Th4:
+  F is commutative associative & (B <> {} or F has_a_unity) & not c in B
+   implies F $$(B \/ {c}, f) = F.(F $$(B,f),f.c)
+ proof assume that
+A1:  F is commutative associative and
+A2:  B <> {} or F has_a_unity and
+A3:   not c in B;
+  per cases;
+   suppose
+A4:   B = {};
+    then B = {}.C;
+    then F $$(B,f) = the_unity_wrt F by A1,A2,SETWISEO:40;
+    hence F.(F $$(B,f),f.c) = f.c by A2,A4,SETWISEO:23
+                           .= F $$(B \/ {c}, f) by A1,A4,SETWISEO:26;
+   suppose
+A5:   B <> {};
+     consider g being Function of Fin C, D such that
+A6:  F $$ (B \/ {c},f) = g.(B \/ {c}) and
+       for e st e is_a_unity_wrt F holds g.{} = e and
+A7:  for c' holds g.{c'} = f.c' and
+A8:  for B' st B' c= B \/ {c} & B' <> {}
+       for c' st c' in (B \/ {c}) \ B' holds g.(B' \/ {c'}) = F.(g.B',f.c')
+     by A1,SETWISEO:def 3;
+    consider g' being Function of Fin C, D such that
+A9:  F $$ (B,f) = g'.B and
+       for e st e is_a_unity_wrt F holds g'.{} = e and
+A10:  for c' holds g'.{c'} = f.c' and
+A11:  for B' st B' c= B & B' <> {}
+       for c' st c' in B \ B' holds g'.(B' \/ {c'}) = F.(g'.B',f.c')
+      by A1,A2,SETWISEO:def 3;
+      defpred X[set] means $1 <> {} & $1 c= B implies g.($1) = g'.($1);
+A12: X[{}.C];
+A13: for B' being Element of Fin C, b being Element of C
+      holds X[B'] & not b in B' implies X[B' \/ {b}]
+ proof let B', c' such that
+A14:   B' <> {} & B' c= B implies g.B' = g'.B' and
+A15:   not c' in B' and B' \/ {c'} <> {} and
+A16:   B' \/ {c'} c= B;
+A17:   c' in B by A16,SETWISEO:8;
+then A18:   B' c= B & c' in B \ B' by A15,A16,XBOOLE_0:def 4,XBOOLE_1:11;
+        B c= B \/ {c} by XBOOLE_1:7;
+then A19:   B' c= B \/ {c} by A18,XBOOLE_1:1;
+        c' in (B \/ {c}) by A17,XBOOLE_0:def 2;
+then A20:   c' in (B \/ {c}) \ B' by A15,XBOOLE_0:def 4;
+      per cases;
+       suppose B' = {};
+        then g.(B' \/ {c'}) = f.c' & g'.(B' \/ {c'}) = f.c' by A7,A10;
+        hence g.(B' \/ {c'}) = g'.(B' \/ {c'});
+       suppose
+A21:      B' <> {};
+       hence g.(B' \/ {c'}) = F.(g'.B', f.c') by A8,A14,A16,A19,A20,XBOOLE_1:11
+                        .= g'.(B' \/ {c'}) by A11,A18,A21;
+    end;
+A22:  for B' holds X[B'] from FinSubInd1(A12,A13);
+     c in B \/ {c} by SETWISEO:6;
+   then B c= B \/ {c} & c in (B \/ {c}) \ B by A3,XBOOLE_0:def 4,XBOOLE_1:7;
+   hence F $$(B \/ {c}, f) = F.(g.B, f.c) by A5,A6,A8
+                        .= F.(F $$(B,f),f.c) by A5,A9,A22;
+ end;
+
+theorem
+    F is commutative associative & c1 <> c2 & c1 <> c3 & c2 <> c3
+   implies F $$ ({c1,c2,c3},f) = F.(F.(f.c1, f.c2),f.c3)
+ proof assume that
+A1:  F is commutative associative and
+A2:  c1 <> c2;
+  assume c1 <> c3 & c2 <> c3;
+then A3:  not c3 in {c1,c2} & {c1,c2} <> {} by TARSKI:def 2;
+  thus F $$ ({c1,c2,c3},f) = F $$ ({c1,c2} \/ {c3},f) by ENUMSET1:43
+                          .= F.(F $$ ({c1,c2},f),f.c3) by A1,A3,Th4
+                          .= F.(F.(f.c1, f.c2),f.c3) by A1,A2,Th3;
+ end;
+
+theorem
+    F is commutative associative &
+   (B1 <> {} & B2 <> {} or F has_a_unity) & B1 misses B2
+    implies F $$(B1 \/ B2, f) = F.(F $$(B1,f),F $$(B2,f))
+ proof assume that
+A1:  F is commutative associative and
+A2:  B1 <> {} & B2 <> {} or F has_a_unity and
+A3:  B1 /\ B2 = {};
+    now per cases;
+   suppose
+A4:   B1 = {} or B2 = {};
+      now per cases by A4;
+     suppose
+A5:      B1 = {};
+      hence F $$(B1 \/ B2, f)
+           = F.(the_unity_wrt F,F $$(B2,f)) by A2,SETWISEO:23
+          .= F.(F $$({}.C,f),F $$(B2,f)) by A1,A2,A4,SETWISEO:40
+          .= F.(F $$(B1,f),F $$(B2,f)) by A5;
+     suppose
+A6:     B2 = {};
+      hence F $$(B1 \/ B2, f)
+           = F.(F $$(B1,f),the_unity_wrt F) by A2,SETWISEO:23
+          .= F.(F $$(B1,f),F $$({}.C,f)) by A1,A2,A4,SETWISEO:40
+          .= F.(F $$(B1,f),F $$(B2,f)) by A6;
+    end;
+    hence F $$(B1 \/ B2, f) = F.(F $$(B1,f),F $$(B2,f));
+   suppose
+A7:   B1 <> {} & B2 <> {};
+     defpred X[Element of Fin C] means $1 <> {} & B1 /\ $1 = {} implies
+        F $$(B1 \/ $1,f) = F.(F $$(B1,f),F $$($1,f));
+A8:  X[{}.C];
+A9: for B' being Element of Fin C, b being Element of C
+      holds X[B'] & not b in B' implies X[B' \/ {b}]
+   proof let B,c such that
+A10:     B <> {} & B1 /\ B = {} implies
+            F $$(B1 \/ B,f) = F.(F $$ (B1,f),F $$(B,f)) and
+A11:     not c in B and B \/ {c} <> {};
+A12:    B <> {} & B1 misses B implies
+            F $$(B1 \/ B,f) = F.(F $$ (B1,f),F $$(B,f)) by A10,XBOOLE_0:def 7;
+      assume
+A13:  B1 /\ (B \/ {c}) = {};
+then A14:    B1 misses (B \/ {c}) by XBOOLE_0:def 7;
+        c in B \/ {c} & not c in B1 /\ (B \/ {c}) by A13,SETWISEO:6;
+then A15:     not c in B1 by XBOOLE_0:def 3;
+        now per cases;
+       suppose
+A16:      B = {};
+        hence F $$ (B1 \/ (B \/ {c}),f) = F.(F $$ (B1,f), f.c) by A1,A7,A15,Th4
+                .= F.(F $$ (B1,f),F $$(B \/ {c},f)) by A1,A16,SETWISEO:26;
+       suppose
+A17:      B <> {};
+then A18:      B1 \/ B <> {} & not c in B1 \/ B by A11,A15,XBOOLE_0:def 2,
+XBOOLE_1:15;
+A19:       B c= B \/ {c} & (B \/ {c}) /\ B1 = {} & B1 /\ B = B /\ B1
+           by A13,XBOOLE_1:7;
+        thus F $$ (B1 \/ (B \/ {c}),f) = F $$ (B1 \/ B \/ {c},f) by XBOOLE_1:4
+            .= F.(F.(F $$ (B1,f),F $$(B,f)), f.c)
+              by A1,A12,A14,A17,A18,A19,Th4,XBOOLE_1:63
+                   .= F.(F $$ (B1,f),F.(F $$(B,f), f.c)) by A1,BINOP_1:def 3
+                   .= F.(F $$(B1,f),F $$(B \/ {c},f)) by A1,A11,A17,Th4;
+      end;
+     hence F $$ (B1 \/ (B \/ {c}),f) = F.(F $$ (B1,f),F $$ (B \/ {c},f));
+    end;
+      for B2 holds X[B2] from FinSubInd1(A8,A9);
+    hence F $$(B1 \/ B2, f) = F.(F $$(B1,f),F $$(B2,f)) by A3,A7;
+  end;
+  hence thesis;
+ end;
+
+theorem Th7:
+   F is commutative associative & (A <> {} or F has_a_unity) &
+    (ex s st dom s = A & rng s = B & s is one-to-one & g|A = f*s)
+     implies F $$(A,g) = F $$(B,f)
+ proof assume
+A1:   F is commutative associative;
+  defpred X[Element of Fin C'] means $1 <> {} or F has_a_unity implies
+    for B st ex s st dom s = $1 & rng s = B & s is one-to-one & g|$1 = f*s
+     holds F $$($1,g) = F $$(B,f);
+A2: X[{}.C']
+   proof assume
+A3:    {}.C' <> {} or F has_a_unity;
+      let B;
+      given s such that
+A4:    dom s = {}.C' & rng s = B & s is one-to-one and g|({}.C') = f*s;
+        B,{} are_equipotent & {} = {}.C by A4,WELLORD2:def 4;
+      then B = {}.C & F $$({}.C',g) = the_unity_wrt F
+         by A1,A3,CARD_1:46,SETWISEO:40;
+      hence F $$({}.C',g) = F $$(B,f) by A1,A3,SETWISEO:40;
+    end;
+A5: for B' being Element of Fin C', b being Element of C'
+      holds X[B'] & not b in B' implies X[B' \/ {b}]
+   proof let A' be Element of Fin C',a be Element of C' such that
+A6:   A' <> {} or F has_a_unity implies
+       for B st ex s st dom s = A' & rng s = B & s is one-to-one & g|A' = f*s
+        holds F $$(A',g) = F $$(B,f) and
+A7:   not a in A';
+     set A = A' \/ {a};
+     assume A' \/ {a} <> {} or F has_a_unity;
+     let B;
+     given s such that
+A8:     dom s = A & rng s = B & s is one-to-one and
+A9:     g|A = f*s;
+A10:   a in A by SETWISEO:6;
+then A11:    s.a in B by A8,FUNCT_1:def 5;
+       B c= C by FINSUB_1:def 5;
+     then reconsider c = s.a as Element of C by A11;
+       a in C';
+     then a in dom g by FUNCT_2:def 1;
+     then a in dom g /\ A by A10,XBOOLE_0:def 3;
+     then a in dom(f*s) & g.a = (f*s).a by A9,FUNCT_1:71,RELAT_1:90;
+then A12:    g.a = f.c by FUNCT_1:22;
+     set B' = B \ {c};
+     set s' = s|A';
+A13:   now let y;
+       thus y in rng s' implies y in B'
+        proof assume y in rng s';
+         then consider x such that
+A14:       x in dom s' and
+A15:       y = s'.x by FUNCT_1:def 5;
+A16:         x in dom s /\ A' by A14,RELAT_1:90;
+then A17:       x in dom s & x in A' by XBOOLE_0:def 3;
+           x in dom s & x <> a by A7,A16,XBOOLE_0:def 3;
+         then s'.x = s.x & s.x <> c by A8,A10,A14,FUNCT_1:70,def 8;
+         then y in B & not y in {c} by A8,A15,A17,FUNCT_1:def 5,TARSKI:def 1;
+         hence y in B' by XBOOLE_0:def 4;
+        end;
+       assume y in B';
+then A18:       y in B & not y in {c} by XBOOLE_0:def 4;
+       then consider x such that
+A19:       x in dom s and
+A20:       y = s.x by A8,FUNCT_1:def 5;
+         x <> a & (x in A' or x in
+ {a}) by A8,A18,A19,A20,TARSKI:def 1,XBOOLE_0:def 2;
+       then x in dom s /\ A' by A19,TARSKI:def 1,XBOOLE_0:def 3;
+       then x in dom s' & s'.x = s.x by FUNCT_1:71,RELAT_1:90;
+       hence y in rng s' by A20,FUNCT_1:def 5;
+      end;
+       A' c= A by XBOOLE_1:7;
+then A21:     s' is one-to-one & dom s' = A' & rng s' = B'
+      by A8,A13,FUNCT_1:84,RELAT_1:91,TARSKI:2;
+      now let x;
+     thus x in dom(g|A') implies x in dom(f*s')
+      proof assume x in dom(g|A');
+       then x in dom g /\ A' by RELAT_1:90;
+       then A22:      x in dom g & x in A' by XBOOLE_0:def 3;
+       then x in dom g & x in A by SETWISEO:6;
+       then x in dom g /\ A by XBOOLE_0:def 3;
+       then x in dom(f*s) by A9,RELAT_1:90;
+then A23:      x in dom s & s.x in dom f by FUNCT_1:21;
+       then x in dom s /\ A' by A22,XBOOLE_0:def 3;
+then A24:       x in dom s' by RELAT_1:90;
+       then s'.x = s.x by FUNCT_1:70;
+       hence x in dom(f*s') by A23,A24,FUNCT_1:21;
+      end;
+     assume x in dom(f*s');
+     then x in dom s' & s'.x in dom f by FUNCT_1:21;
+     then x in dom s /\ A' & s.x in dom f by FUNCT_1:70,RELAT_1:90;
+     then x in dom s & x in A' & s.x in dom f by XBOOLE_0:def 3;
+     then x in A' & x in dom(g|A) by A9,FUNCT_1:21;
+     then x in A' & x in dom g /\ A by RELAT_1:90;
+     then x in A' & x in dom g by XBOOLE_0:def 3;
+     then x in dom g /\ A' by XBOOLE_0:def 3;
+     hence x in dom(g|A') by RELAT_1:90;
+    end;
+then A25:    dom(g|A') = dom(f*s') by TARSKI:2;
+       for x st x in dom(g|A') holds (g|A').x = (f*s').x
+      proof let x;
+       assume x in dom(g|A');
+       then x in dom g /\ A' by RELAT_1:90;
+then A26:      x in dom g & x in A' by XBOOLE_0:def 3;
+then A27:      x in dom g & x in A by SETWISEO:6;
+       then x in dom g /\ A by XBOOLE_0:def 3;
+       then x in dom(f*s) by A9,RELAT_1:90;
+then A28:      x in dom s & s.x in dom f by FUNCT_1:21;
+       then x in dom s /\ A' by A26,XBOOLE_0:def 3;
+then A29:       x in dom s' by RELAT_1:90;
+then A30:    s'.x = s.x by FUNCT_1:70;
+       thus (g|A').x = g.x by A26,FUNCT_1:72
+                    .= (f*s).x by A9,A27,FUNCT_1:72
+                    .= f.(s.x) by A28,FUNCT_1:23
+                    .= (f*s').x by A29,A30,FUNCT_1:23;
+      end;
+then A31:  g|A' = f*s' by A25,FUNCT_1:9;
+       B' \/ {c} = B \/ {c} by XBOOLE_1:39;
+then A32:   B = B' \/ {c} & not c in B' by A11,ZFMISC_1:46,64;
+       now let y;
+      thus y in g.:A' implies y in f.:B'
+       proof assume y in g.:A';
+        then consider x such that
+A33:      x in dom g and
+A34:      x in A' and
+A35:      y = g.x by FUNCT_1:def 12;
+          x in dom g /\ A' by A33,A34,XBOOLE_0:def 3;
+        then x in dom(g|A') & y = (f*s').x
+           by A31,A34,A35,FUNCT_1:72,RELAT_1:90;
+        then s'.x in dom f & y = f.(s'.x) & x in dom s'
+          by A25,FUNCT_1:21,22;
+        then s'.x in dom f & y = f.(s'.x) & s'.x in B' by A21,FUNCT_1:def 5;
+        hence y in f.:B' by FUNCT_1:def 12;
+       end;
+      assume y in f.:B';
+      then consider x such that
+        x in dom f and
+A36:      x in B' and
+A37:      y = f.x by FUNCT_1:def 12;
+      set x' = s'".x;
+A38:    x' in A' by A21,A36,FUNCT_1:54;
+        A' c= C' by FINSUB_1:def 5;
+      then x' in C' by A38;
+then A39:     x' in dom g by FUNCT_2:def 1;
+        s'.x' = x by A21,A36,FUNCT_1:57;
+      then y = (f*s').x' by A21,A37,A38,FUNCT_1:23
+            .= g.x' by A31,A38,FUNCT_1:72;
+      hence y in g.:A' by A38,A39,FUNCT_1:def 12;
+     end;
+then A40:   f.:B' = g.:A' by TARSKI:2;
+       now per cases;
+      suppose
+A41:      A' = {};
+        B' c= C by FINSUB_1:def 5;
+      then B' c= dom f & g.:A' = {} by A41,FUNCT_2:def 1,RELAT_1:149;
+then A42:      B' = {} by A40,RELAT_1:152;
+       thus F $$(A,g) = f.c by A1,A12,A41,SETWISEO:26
+                     .= F $$(B,f) by A1,A32,A42,SETWISEO:26;
+      suppose
+A43:     A' <> {};
+         A' c= C' by FINSUB_1:def 5;
+       then A' c= dom g by FUNCT_2:def 1;
+       then f.:B' <> {} by A40,A43,RELAT_1:152;
+then A44:     B' <> {} by RELAT_1:149;
+       thus F $$(A,g) = F.(F $$(A',g),g.a) by A1,A7,A43,Th4
+                     .= F.(F $$(B',f),f.c) by A6,A12,A21,A31,A43
+                     .= F $$(B,f) by A1,A32,A44,Th4;
+     end;
+     hence F $$(A,g) = F $$(B,f);
+    end;
+     for A holds X[A] from FinSubInd1(A2,A5);
+   hence thesis;
+ end;
+
+theorem
+     H is commutative associative & (B <> {} or H has_a_unity) &
+    f is one-to-one implies H $$(f.:B,h) = H $$(B,h*f)
+ proof assume that
+A1:  H is commutative associative & (B <> {} or H has_a_unity) and
+A2:  f is one-to-one;
+   set s = f|B;
+     B c= C by FINSUB_1:def 5;
+   then B c= dom f by FUNCT_2:def 1;
+   then dom s = B & rng s = f.:B & s is one-to-one & (h*f)|B = h*s
+     by A2,FUNCT_1:84,RELAT_1:91,112,148;
+   hence thesis by A1,Th7;
+ end;
+
+theorem
+     F is commutative associative & (B <> {} or F has_a_unity) &
+    f|B = f'|B implies F $$(B,f) = F $$(B,f')
+ proof assume
+A1:  F is commutative associative & (B <> {} or F has_a_unity);
+  set s = id B;
+  assume f|B = f'|B;
+  then dom s = B & rng s = B & s is one-to-one & f|B = f'*s
+    by FUNCT_1:52,RELAT_1:71,94;
+  hence thesis by A1,Th7;
+ end;
+
+theorem
+     F is commutative associative & F has_a_unity &
+      e = the_unity_wrt F & f.:B = {e} implies F$$(B,f) = e
+ proof assume that
+A1:  F is commutative associative & F has_a_unity and
+A2:  e = the_unity_wrt F;
+   defpred X[Element of Fin C] means f.:($1) = {e} implies F$$($1,f) = e;
+A3:  X[{}.C] by RELAT_1:149;
+A4: for B' being Element of Fin C, b being Element of C
+      holds X[B'] & not b in B' implies X[B' \/ {b}]
+  proof let B',c such that
+A5:   f.:(B') = {e} implies F$$(B',f) = e and
+A6:   not c in B' and
+A7:   f.:(B' \/ {c}) = {e};
+        {c} c= C by FINSUB_1:def 5;
+      then {c} c= B' \/ {c} & {c} c= dom f & {c} <> {}
+         by FUNCT_2:def 1,XBOOLE_1:7;
+      then f.:{c} c= {e} & f.:{c} <> {} & c in dom f
+         by A7,RELAT_1:152,156,ZFMISC_1:37;
+      then f.:{c} = {e} & c in dom f by ZFMISC_1:39;
+      then {e} = {f.c} by FUNCT_1:117;
+then A8:    f.c = e by ZFMISC_1:6;
+       now per cases;
+      suppose B' = {};
+then A9:     B' = {}.C;
+      thus F$$(B' \/ {c},f) = F.(F $$(B',f),f.c) by A1,A6,Th4
+                          .= F.(e ,f.c) by A1,A2,A9,SETWISEO:40;
+      suppose
+A10:     B' <> {};
+        B' c= C by FINSUB_1:def 5;
+      then B' c= B' \/ {c} & B' c= dom f by FUNCT_2:def 1,XBOOLE_1:7;
+      then f.:B' c= {e} & f.:B' <> {} by A7,A10,RELAT_1:152,156;
+      hence F$$(B' \/ {c},f) = F.(e ,f.c) by A1,A5,A6,Th4,ZFMISC_1:39;
+     end;
+     hence F$$(B' \/ {c},f) = e by A1,A2,A8,SETWISEO:23;
+    end;
+    for B holds X[B] from FinSubInd1(A3,A4);
+  hence thesis;
+ end;
+
+theorem Th11:
+   F is commutative associative &
+   F has_a_unity & e = the_unity_wrt F & G.(e,e) = e &
+   (for d1,d2,d3,d4 holds F.(G.(d1,d2),G.(d3,d4))= G.(F.(d1,d3),F.(d2,d4)))
+     implies G.(F$$(B,f),F$$(B,f')) = F $$(B,G.:(f,f'))
+ proof assume that
+A1:   F is commutative associative and
+A2:   F has_a_unity and
+A3:   e = the_unity_wrt F and
+A4:   G.(e,e) = e and
+A5:   for d1,d2,d3,d4 holds F.(G.(d1,d2),G.(d3,d4))= G.(F.(d1,d3),F.(d2,d4));
+      defpred X[Element of Fin C] means
+          G.(F$$($1,f),F$$($1,f')) = F $$($1,G.:(f,f'));
+      F$$({}.C,f) = e & F$$({}.C,f') = e by A1,A2,A3,SETWISEO:40;
+then A6: X[{}.C] by A1,A2,A3,A4,SETWISEO:40;
+A7: for B' being Element of Fin C, b being Element of C
+      holds X[B'] & not b in B' implies X[B' \/ {b}]
+   proof let B,c such that
+A8:   G.(F$$(B,f),F$$(B,f')) = F $$(B,G.:(f,f')) and
+A9:   not c in B;
+     set s = F$$(B,f);
+     set s' = F$$(B,f');
+       F$$(B \/ {c},f) = F.(s,f.c) & F$$(B \/ {c},f') = F.(s',f'.c)
+      by A1,A2,A9,Th4;
+    hence G.(F$$(B \/ {c},f),F$$(B \/ {c},f'))
+        = F.(G.(s,s'),G.(f.c,f'.c)) by A5
+       .= F.(G.(s,s'),G.:(f,f').c) by FUNCOP_1:48
+       .= F $$(B \/ {c},G.:(f,f')) by A1,A2,A8,A9,Th4;
+    end;
+    for B holds X[B] from FinSubInd1(A6,A7);
+  hence thesis;
+ end;
+
+Lm3: F is commutative associative implies
+     for d1,d2,d3,d4 holds F.(F.(d1,d2),F.(d3,d4))= F.(F.(d1,d3),F.(d2,d4))
+ proof assume that
+A1: F is commutative and
+A2: F is associative;
+  let d1,d2,d3,d4;
+  thus F.(F.(d1,d2),F.(d3,d4)) = F.(d1,F.(d2,F.(d3,d4))) by A2,BINOP_1:def 3
+                               .= F.(d1,F.(F.(d2,d3),d4)) by A2,BINOP_1:def 3
+                               .= F.(d1,F.(F.(d3,d2),d4)) by A1,BINOP_1:def 2
+                               .= F.(d1,F.(d3,F.(d2,d4))) by A2,BINOP_1:def 3
+                               .= F.(F.(d1,d3),F.(d2,d4)) by A2,BINOP_1:def 3;
+ end;
+
+theorem
+     F is commutative associative & F has_a_unity
+     implies F.(F$$(B,f),F$$(B,f')) = F $$(B,F.:(f,f'))
+ proof assume
+A1:  F is commutative & F is associative & F has_a_unity;
+   set e = the_unity_wrt F;
+     F.(e,e) = e &
+    for d1,d2,d3,d4 holds F.(F.(d1,d2),F.(d3,d4))= F.(F.(d1,d3),F.(d2,d4))
+     by A1,Lm3,SETWISEO:23;
+   hence thesis by A1,Th11;
+ end;
+
+theorem
+     F is commutative associative & F has_a_unity &
+    F has_an_inverseOp & G = F*(id D,the_inverseOp_wrt F)
+     implies G.(F$$(B,f),F$$(B,f')) = F $$(B,G.:(f,f'))
+ proof assume
+A1:   F is commutative associative & F has_a_unity &
+      F has_an_inverseOp & G = F*(id D,the_inverseOp_wrt F);
+   set e = the_unity_wrt F;
+     G.(e,e) = e &
+     for d1,d2,d3,d4 holds F.(G.(d1,d2),G.(d3,d4))= G.(F.(d1,d3),F.(d2,d4))
+    by A1,FINSEQOP:91,94;
+   hence thesis by A1,Th11;
+ end;
+
+theorem Th14:
+   F is commutative associative & F has_a_unity & e = the_unity_wrt F &
+   G is_distributive_wrt F & G.(d,e) = e
+    implies G.(d,F$$(B,f)) = F $$(B,G[;](d,f))
+ proof assume that
+A1:   F is commutative associative and
+A2:   F has_a_unity and
+A3:   e = the_unity_wrt F and
+A4:   G is_distributive_wrt F;
+   defpred X[Element of Fin C] means G.(d,F$$($1,f)) = F $$($1,G[;](d,f));
+  assume G.(d,e) = e;
+   then G.(d,F$$({}.C,f)) = e by A1,A2,A3,SETWISEO:40
+                      .= F $$({}.C,G[;](d,f)) by A1,A2,A3,SETWISEO:40;
+   then A5: X[{}.C];
+A6:
+  for B' being Element of Fin C, b being Element of C
+      holds X[B'] & not b in B' implies X[B' \/ {b}]
+  proof let B',c such that
+A7:   G.(d,F$$(B',f)) = F $$(B',G[;](d,f)) and
+A8:   not c in B';
+     thus G.(d,F$$(B' \/ {c},f))
+         = G.(d,F.(F$$(B',f),f.c)) by A1,A2,A8,Th4
+        .= F.(G.(d,F$$(B',f)),G.(d,f.c)) by A4,BINOP_1:23
+        .= F.(F $$(B',G[;](d,f)),(G[;](d,f)).c) by A7,FUNCOP_1:66
+        .= F $$(B' \/ {c},G[;](d,f)) by A1,A2,A8,Th4;
+     end;
+    for B holds X[B] from FinSubInd1(A5,A6);
+  hence thesis;
+ end;
+
+theorem Th15:
+   F is commutative associative & F has_a_unity & e = the_unity_wrt F &
+   G is_distributive_wrt F & G.(e,d) = e
+    implies G.(F$$(B,f),d) = F $$(B,G[:](f,d))
+ proof assume that
+A1:   F is commutative associative and
+A2:   F has_a_unity and
+A3:   e = the_unity_wrt F and
+A4:   G is_distributive_wrt F;
+    defpred X[Element of Fin C] means G.(F$$($1,f),d) = F $$($1,G[:](f,d));
+   assume G.(e,d) = e;
+then    G.(F$$({}.C,f),d) = e by A1,A2,A3,SETWISEO:40
+                      .= F $$({}.C,G[:](f,d)) by A1,A2,A3,SETWISEO:40;
+    then
+A5:   X[{}.C];
+A6: for B' being (Element of Fin C), b being Element of C
+      holds X[B'] & not b in B' implies X[B' \/ {b}]
+  proof let B',c such that
+A7:   G.(F$$(B',f),d) = F $$(B',G[:](f,d)) and
+A8:   not c in B';
+     thus G.(F$$(B' \/ {c},f),d)
+         = G.(F.(F$$(B',f),f.c),d) by A1,A2,A8,Th4
+        .= F.(G.(F$$(B',f),d),G.(f.c,d)) by A4,BINOP_1:23
+        .= F.(F $$(B',G[:](f,d)),(G[:](f,d)).c) by A7,FUNCOP_1:60
+        .= F $$(B' \/ {c},G[:](f,d)) by A1,A2,A8,Th4;
+     end;
+    for B holds X[B] from FinSubInd1(A5,A6);
+  hence thesis;
+ end;
+
+theorem
+     F is commutative associative & F has_a_unity & F has_an_inverseOp &
+    G is_distributive_wrt F
+     implies G.(d,F$$(B,f)) = F $$(B,G[;](d,f))
+ proof assume
+A1:   F is commutative associative & F has_a_unity &
+      F has_an_inverseOp & G is_distributive_wrt F;
+  set e = the_unity_wrt F;
+    G.(d,e) = e by A1,FINSEQOP:70;
+  hence thesis by A1,Th14;
+ end;
+
+theorem
+     F is commutative associative & F has_a_unity & F has_an_inverseOp &
+    G is_distributive_wrt F
+    implies G.(F$$(B,f),d) = F $$(B,G[:](f,d))
+ proof assume
+A1:   F is commutative associative & F has_a_unity &
+      F has_an_inverseOp & G is_distributive_wrt F;
+   set e = the_unity_wrt F;
+    G.(e,d) = e by A1,FINSEQOP:70;
+  hence thesis by A1,Th15;
+ end;
+
+theorem Th18:
+   F is commutative associative & F has_a_unity &
+   H is commutative associative & H has_a_unity &
+   h.the_unity_wrt F = the_unity_wrt H &
+   (for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2))
+     implies h.(F$$(B,f)) = H $$(B,h*f)
+ proof assume that
+A1: F is commutative associative & F has_a_unity and
+A2: H is commutative associative & H has_a_unity and
+A3: h.the_unity_wrt F = the_unity_wrt H and
+A4: for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2);
+   defpred X[Element of Fin C] means h.(F$$($1,f)) = H $$($1,h*f);
+  h.(F$$({}.C,f)) = the_unity_wrt H by A1,A3,SETWISEO:40
+                   .= H $$({}.C,h*f) by A2,SETWISEO:40;
+   then
+A5:    X[{}.C];
+A6: for B' being (Element of Fin C), b being Element of C
+      holds X[B'] & not b in B' implies X[B' \/ {b}]
+  proof let B,c such that
+A7:   h.(F$$(B,f)) = H $$(B,h*f) and
+A8:   not c in B;
+     thus h.(F$$(B \/ {c},f)) = h.(F.(F$$(B,f),f.c)) by A1,A8,Th4
+                            .= H.(H $$(B,h*f),h.(f.c)) by A4,A7
+                            .= H.(H $$(B,h*f),(h*f).c) by FUNCT_2:21
+                            .= H $$(B \/ {c},h*f) by A2,A8,Th4;
+    end;
+     for B holds X[B] from FinSubInd1(A5,A6);
+   hence thesis;
+ end;
+
+theorem
+     F is commutative associative & F has_a_unity &
+   u.the_unity_wrt F = the_unity_wrt F & u is_distributive_wrt F
+     implies u.(F$$(B,f)) = F $$(B,u*f)
+ proof assume
+A1: F is commutative associative & F has_a_unity &
+    u.the_unity_wrt F = the_unity_wrt F;
+  assume for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
+  hence thesis by A1,Th18;
+ end;
+
+theorem
+     F is commutative associative & F has_a_unity & F has_an_inverseOp &
+     G is_distributive_wrt F
+      implies G[;](d,id D).(F$$(B,f)) = F $$(B,G[;](d,id D)*f)
+ proof assume
+A1:  F is commutative associative & F has_a_unity & F has_an_inverseOp &
+     G is_distributive_wrt F;
+  set e = the_unity_wrt F;
+  set u = G[;](d,id D);
+    u is_distributive_wrt F by A1,FINSEQOP:55;
+  then G[;](d,id D).e = e & for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2)
+   by A1,BINOP_1:def 12,FINSEQOP:73;
+  hence thesis by A1,Th18;
+ end;
+
+theorem
+     F is commutative associative & F has_a_unity & F has_an_inverseOp
+    implies (the_inverseOp_wrt F).(F$$(B,f)) = F $$(B,(the_inverseOp_wrt F)*f)
+ proof assume
+A1: F is commutative associative & F has_a_unity & F has_an_inverseOp;
+  set e = the_unity_wrt F, u = the_inverseOp_wrt F;
+    u is_distributive_wrt F by A1,FINSEQOP:67;
+  then u.e = e & for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2)
+   by A1,BINOP_1:def 12,FINSEQOP:65;
+  hence thesis by A1,Th18;
+ end;
+
+definition let D,p,d;
+  func [#](p,d) -> Function of NAT,D equals
+:Def1: (NAT --> d) +* p;
+ coherence;
+end;
+
+theorem Th22:
+   (i in dom p implies [#](p,d).i = p.i) &
+   (not i in dom p implies [#](p,d).i = d)
+proof
+A1: [#](p,d) = (NAT --> d) +* p by Def1;
+ hence i in dom p implies [#](p,d).i = p.i by FUNCT_4:14;
+ assume
+   not i in dom p;
+ hence [#](p,d).i = (NAT --> d).i by A1,FUNCT_4:12 .= d by FUNCOP_1:13;
+end;
+
+theorem
+     [#](p,d)|(dom p) = p
+ proof set k = len p, f = [#](p,d);
+    Seg k c= NAT;
+  then Seg k c= dom f by FUNCT_2:def 1;
+then A1:  dom (f|Seg k) = Seg k & dom p = Seg k by FINSEQ_1:def 3,RELAT_1:91;
+    now let x;
+   assume
+A2:   x in Seg k;
+   then x is Nat & (f|Seg k).x = f.x by A1,FUNCT_1:70;
+   hence (f|Seg k).x = p.x by A1,A2,Th22;
+  end;
+  hence thesis by A1,FUNCT_1:9;
+ end;
+
+theorem
+     [#](p^q,d)|(dom p) = p
+ proof set k = len p, f = [#](p^q,d);
+    Seg k c= NAT;
+  then Seg k c= dom f by FUNCT_2:def 1;
+then A1:  dom (f|Seg k) = Seg k & dom p = Seg k by FINSEQ_1:def 3,RELAT_1:91;
+    now let x;
+   assume
+A2:   x in Seg k;
+A3:   Seg(len(p^q)) = dom (p^q) by FINSEQ_1:def 3;
+     k <= k + len q by NAT_1:37;
+   then k <= len (p^q) by FINSEQ_1:35;
+   then Seg k c= Seg len(p^q) by FINSEQ_1:7;
+   then (f|Seg k).x = f.x & x in Seg(len(p^q)) by A1,A2,FUNCT_1:70;
+   hence (f|Seg k).x = (p^q).x by A3,Th22
+                    .= p.x by A1,A2,FINSEQ_1:def 7;
+  end;
+  hence thesis by A1,FUNCT_1:9;
+ end;
+
+theorem
+     rng [#](p,d) = rng p \/ {d}
+ proof
+    now let y;
+   thus y in rng [#](p,d) implies y in rng p \/ {d}
+    proof assume y in rng [#](p,d);
+     then consider x such that
+A1:   x in dom [#](p,d) and
+A2:   y = [#](p,d).x by FUNCT_1:def 5;
+     reconsider i = x as Nat by A1;
+       now per cases;
+      case
+A3:      i in dom p;
+       then y = p.i by A2,Th22;
+       hence y in rng p by A3,FUNCT_1:def 5;
+      case not i in dom p;
+       then y = d by A2,Th22;
+       hence y in {d} by TARSKI:def 1;
+     end;
+     hence y in rng p \/ {d} by XBOOLE_0:def 2;
+    end;
+   assume
+A4:   y in rng p \/ {d};
+      now per cases by A4,XBOOLE_0:def 2;
+     suppose y in rng p;
+       then consider i such that
+A5:     i in dom p & y = p.i by FINSEQ_2:11;
+        i in NAT & y = [#](p,d).i by A5,Th22;
+      hence y in rng [#](p,d) by FUNCT_2:6;
+     suppose
+A6:     y in {d};
+        dom p = Seg len p by FINSEQ_1:def 3;
+      then y = d & not len p + 1 in dom p & len p + 1 is Element of NAT
+        by A6,Lm2,TARSKI:def 1;
+      then y = [#](p,d).(len p + 1) & len p + 1 in NAT by Th22;
+     hence y in rng [#](p,d) by FUNCT_2:6;
+    end;
+   hence y in rng [#](p,d);
+  end;
+  hence thesis by TARSKI:2;
+ end;
+
+theorem
+     h*[#](p,d) = [#](h*p,h.d)
+ proof
+    now let i be Element of NAT;
+A1:  len(h*p) = len p by FINSEQ_2:37;
+A2:  Seg len p = dom p & dom(h*p)=Seg len(h*p) by FINSEQ_1:def 3;
+     now per cases;
+    suppose
+A3:    i in dom p;
+     hence h.([#](p,d).i) = h.(p.i) by Th22
+                      .= (h*p).i by A3,FUNCT_1:23
+                      .= [#](h*p,h.d).i by A1,A2,A3,Th22;
+    suppose
+A4:    not i in dom p;
+     hence h.([#](p,d).i) = h.d by Th22
+                       .= [#](h*p,h.d).i by A1,A2,A4,Th22;
+   end;
+   hence (h*[#](p,d)).i = [#](h*p,h.d).i by FUNCT_2:21;
+  end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+Lm4:
+   len p = len q & F.(e,e) = e implies F.:([#](p,e),[#](q,e)) = [#](F.:(p,q),e)
+ proof assume that
+A1:  len p = len q and
+A2:  F.(e,e) = e;
+  set r = F.:(p,q);
+A3: len r = len p by A1,FINSEQ_2:86;
+A4:  dom p = Seg len p & dom r = Seg len r & dom q = Seg len q
+         by FINSEQ_1:def 3;
+    now let i be Element of NAT;
+     now per cases;
+    suppose
+A5:    i in dom p;
+     hence F.([#](p,e).i,[#](q,e).i) = F.(p.i,[#](q,e).i) by Th22
+                               .= F.(p.i,q.i) by A1,A4,A5,Th22
+                               .= r.i by A3,A4,A5,FUNCOP_1:28
+                               .= [#](r,e).i by A3,A4,A5,Th22;
+    suppose
+A6:    not i in dom p;
+     hence F.([#](p,e).i,[#](q,e).i) = F.(e,[#](q,e).i) by Th22
+                               .= e by A1,A2,A4,A6,Th22
+                               .= [#](r,e).i by A3,A4,A6,Th22;
+   end;
+   hence F.:([#](p,e),[#](q,e)).i = [#](r,e).i by FUNCOP_1:48;
+  end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+Lm5:
+   F.(e,d) = e implies F[:]([#](p,e),d) = [#](F[:](p,d),e)
+ proof assume
+A1:  F.(e,d) = e;
+    now let i be Element of NAT;
+A2:  len(F[:](p,d)) = len p by FINSEQ_2:98;
+A3:  dom(F[:](p,d)) = Seg len(F[:](p,d)) & dom p = Seg len p by FINSEQ_1:def 3;
+     now per cases;
+    suppose
+A4:    i in dom p;
+     hence F.([#](p,e).i,d) = F.(p.i,d) by Th22
+                        .= (F[:](p,d)).i by A2,A3,A4,FUNCOP_1:35
+                        .= ([#](F[:](p,d),e)).i by A2,A3,A4,Th22;
+    suppose
+A5:    not i in dom p;
+     hence F.([#](p,e).i,d) = F.(e,d) by Th22
+                        .= ([#](F[:](p,d),e)).i by A1,A2,A3,A5,Th22;
+   end;
+   hence (F[:]([#](p,e),d)).i = ([#](F[:](p,d),e)).i by FUNCOP_1:60;
+  end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+Lm6:
+   F.(d,e) = e implies F[;](d,[#](p,e)) = [#](F[;](d,p),e)
+ proof assume
+A1:  F.(d,e) = e;
+    now let i be Element of NAT;
+A2:  len(F[;](d,p)) = len p by FINSEQ_2:92;
+A3:  dom(F[;](d,p)) = Seg len(F[;](d,p)) & dom p = Seg len p by FINSEQ_1:def 3;
+     now per cases;
+    suppose
+A4:    i in dom p;
+     hence F.(d,[#](p,e).i) = F.(d,p.i) by Th22
+                        .= (F[;](d,p)).i by A2,A3,A4,FUNCOP_1:42
+                        .= ([#](F[;](d,p),e)).i by A2,A3,A4,Th22;
+    suppose
+A5:    not i in dom p;
+     hence F.(d,[#](p,e).i) = F.(d,e) by Th22
+                        .= ([#](F[;](d,p),e)).i by A1,A2,A3,A5,Th22;
+   end;
+   hence (F[;](d,[#](p,e))).i = ([#](F[;](d,p),e)).i by FUNCOP_1:66;
+  end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+definition let i;
+ redefine func Seg i -> Element of Fin NAT;
+  coherence by Lm1;
+end;
+
+definition let f be FinSequence;
+ redefine func dom f -> Element of Fin NAT;
+  coherence
+ proof dom f = Seg len f by FINSEQ_1:def 3;
+  hence thesis;
+ end;
+end;
+
+definition let D,p,F;
+ assume
+A1: (F has_a_unity or len p >= 1) & F is associative commutative;
+ redefine func F "**" p equals
+:Def2: F $$(dom p,[#](p,the_unity_wrt F));
+  compatibility
+   proof
+      F "**" p = F $$(dom p,(NAT-->the_unity_wrt F)+*p) by A1,FINSOP_1:4
+          .= F $$(dom p,[#](p,the_unity_wrt F)) by Def1;
+    hence thesis;
+   end;
+ synonym F $$ p;
+end;
+
+canceled 8;
+
+theorem Th35:
+   F has_a_unity implies F"**"(i|->the_unity_wrt F) = the_unity_wrt F
+ proof assume
+A1:  F has_a_unity;
+   set e = the_unity_wrt F;
+    defpred X[Nat] means F"**"($1|->e) = e;
+ F"**"(0|->e) = F"**" <*>D by FINSEQ_2:72
+      .= e by A1,FINSOP_1:11;
+    then
+A2:  X[0];
+A3: for i st X[i] holds X[i+1]
+   proof let i;
+    assume
+A4:   F"**"(i|->e) = e;
+    thus F"**"((i+1)|->e) = F"**"((i|->e)^<*e*>) by FINSEQ_2:74
+          .= F.(F"**"(i|->e),e) by A1,FINSOP_1:5
+          .= e by A1,A4,SETWISEO:23;
+   end;
+     for i holds X[i] from Ind(A2,A3);
+  hence thesis;
+ end;
+
+canceled;
+
+theorem Th37:
+   F is associative & (i>=1 & j>=1 or F has_a_unity)
+    implies F"**"((i+j)|->d) = F.(F"**"(i|->d),F"**"(j|->d))
+ proof assume
+A1:  F is associative;
+  set p1 = (i|->d),p2 = (j|->d);
+  assume i>=1 & j>=1 or F has_a_unity;
+  then len p1 >= 1 & len p2 >= 1 or F has_a_unity by FINSEQ_2:69;
+  then F "**"(p1^p2) = F.(F"**"p1,F"**"p2) by A1,FINSOP_1:6;
+  hence thesis by FINSEQ_2:143;
+ end;
+
+theorem
+     F is commutative associative & (i>=1 & j>=1 or F has_a_unity)
+    implies F"**"((i*j)|->d) = F"**"(j|->(F"**"(i|->d)))
+ proof assume
+A1:  F is commutative associative & (i>=1 & j>=1 or F has_a_unity);
+  per cases by NAT_1:19;
+   suppose
+A2:   i = 0 or j = 0;
+    set e = the_unity_wrt F;
+A3:  now per cases by A2;
+      suppose i = 0;
+       then i|->d = <*>D by FINSEQ_2:72;
+       then F"**"(i|->d) = e by A1,A2,FINSOP_1:11;
+       hence F"**"(j|->(F"**"(i|->d))) = e by A1,A2,Th35;
+      suppose j = 0;
+       then j|->(F"**"(i|->d)) = <*>D by FINSEQ_2:72;
+       hence F"**"(j|->(F"**"(i|->d))) = e by A1,A2,FINSOP_1:11;
+     end;
+      (i*j)|->d = <*>D by A2,FINSEQ_2:72;
+    hence thesis by A1,A2,A3,FINSOP_1:11;
+   suppose
+A4:   i > 0 & j > 0;
+      defpred X[Nat] means $1 <> 0
+        implies F"**"((i*$1)|->d) = F"**"($1|->(F"**"(i|->d)));
+A5:  X[0];
+A6:  for j st X[j] holds X[j+1]
+   proof let j such that
+A7:  j <> 0 implies F"**"((i*j)|->d) = F"**"(j|->(F"**"(i|->d)));
+      now per cases by RLVECT_1:99;
+     suppose j = 0;
+      then j+1 = 1 & 1|->(F"**"(i|->d)) = <*F"**"(i|->d)*> by FINSEQ_2:73;
+      hence thesis by FINSOP_1:12;
+     suppose
+A8:     j >= 1+0;
+       then j > 0 by NAT_1:38;
+       then i*j > i*0 by A4,REAL_1:70;
+then A9:     i*j >= 1+0 by NAT_1:38;
+      F"**"((i*(j+1))|->d)
+         = F"**"((i*j+i*1)|->d) by XCMPLX_1:8
+        .= F.(F"**"((i*j)|->d),F"**"(i|->d)) by A1,A9,Th37
+        .= F.(F"**"((i*j)|->d),F"**"(1|->(F"**"(i|->d)))) by FINSOP_1:17
+        .= F"**"((j+1)|->(F"**"(i|->d))) by A1,A7,A8,Th37;
+     hence thesis;
+    end;
+    hence thesis;
+   end;
+     for j holds X[j] from Ind(A5,A6);
+   hence thesis by A4;
+ end;
+
+theorem Th39:
+   F has_a_unity & H has_a_unity & h.the_unity_wrt F = the_unity_wrt H &
+   (for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2))
+     implies h.(F"**"p) = H "**"(h*p)
+ proof assume that
+A1: F has_a_unity and
+A2: H has_a_unity and
+A3: h.the_unity_wrt F = the_unity_wrt H and
+A4: for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2);
+    defpred X[FinSequence of D] means h.(F"**"$1) = H "**"(h*$1);
+    h.(F"**"<*>D) = h.(the_unity_wrt F) by A1,FINSOP_1:11
+      .= H "**"(<*>E) by A2,A3,FINSOP_1:11
+      .= H "**"(h*<*>D) by RELAT_1:62;
+    then
+A5:  X[<*>D];
+A6: for q,d st X[q] holds X[q^<*d*>]
+  proof let q,d such that
+A7:  h.(F"**"q) = H "**"(h*q);
+   thus h.(F"**"(q^<*d*>)) = h.(F.(F"**"q,d)) by A1,FINSOP_1:5
+         .= H.(H "**"(h*q),h.d) by A4,A7
+         .= H "**" ((h*q)^<*h.d*>) by A2,FINSOP_1:5
+         .= H "**"(h*(q^<*d*>)) by FINSEQOP:9;
+  end;
+     X[q] from IndSeqD(A5,A6);
+  hence thesis;
+ end;
+
+theorem
+     F has_a_unity & u.the_unity_wrt F = the_unity_wrt F &
+   u is_distributive_wrt F
+     implies u.(F"**"p) = F "**"(u*p)
+ proof assume
+A1: F has_a_unity &
+    u.the_unity_wrt F = the_unity_wrt F;
+  assume for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
+  hence thesis by A1,Th39;
+ end;
+
+theorem
+     F is associative & F has_a_unity & F has_an_inverseOp &
+     G is_distributive_wrt F
+      implies G[;](d,id D).(F"**"p) = F "**"(G[;](d,id D)*p)
+ proof assume
+A1:  F is associative & F has_a_unity & F has_an_inverseOp &
+     G is_distributive_wrt F;
+  set e = the_unity_wrt F;
+  set u = G[;](d,id D);
+    u is_distributive_wrt F by A1,FINSEQOP:55;
+  then G[;](d,id D).e = e & for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2)
+   by A1,BINOP_1:def 12,FINSEQOP:73;
+  hence thesis by A1,Th39;
+ end;
+
+theorem
+     F is commutative associative & F has_a_unity & F has_an_inverseOp
+    implies (the_inverseOp_wrt F).(F"**"p) = F "**"((the_inverseOp_wrt F)*p)
+ proof assume
+A1: F is commutative associative & F has_a_unity & F has_an_inverseOp;
+  set e = the_unity_wrt F, u = the_inverseOp_wrt F;
+    u is_distributive_wrt F by A1,FINSEQOP:67;
+  then u.e = e & for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2)
+   by A1,BINOP_1:def 12,FINSEQOP:65;
+  hence thesis by A1,Th39;
+ end;
+
+theorem Th43:
+   F is commutative associative &
+   F has_a_unity & e = the_unity_wrt F & G.(e,e) = e &
+   (for d1,d2,d3,d4 holds F.(G.(d1,d2),G.(d3,d4))= G.(F.(d1,d3),F.(d2,d4))) &
+    len p = len q implies G.(F"**"p,F"**"q) = F "**"(G.:(p,q))
+ proof assume that
+A1:   F is commutative & F is associative and
+A2:   F has_a_unity and
+A3:   e = the_unity_wrt F and
+A4:   G.(e,e) = e and
+A5:   F.(G.(d1,d2),G.(d3,d4))= G.(F.(d1,d3),F.(d2,d4)) and
+A6:   len p = len q;
+A7:   len p = len(G.:(p,q)) by A6,FINSEQ_2:86;
+A8:   dom p = Seg len p & dom q = Seg len q by FINSEQ_1:def 3;
+A9:   dom(G.:(p,q)) = Seg len(G.:(p,q)) by FINSEQ_1:def 3;
+   thus G.(F "**"p,F "**"q)
+      = G.(F $$(dom p,[#](p,e)),F "**"q) by A1,A2,A3,Def2
+     .= G.(F $$(dom p,[#](p,e)),F $$(dom q,[#](q,e))) by A1,A2,A3,Def2
+     .= F $$(dom p,G.:([#](p,e),[#](q,e))) by A1,A2,A3,A4,A5,A6,A8,Th11
+     .= F $$(dom(G.:(p,q)),[#](G.:(p,q),e)) by A4,A6,A7,A8,A9,Lm4
+     .= F "**"(G.:(p,q)) by A1,A2,A3,Def2;
+ end;
+
+theorem Th44:
+   F is commutative associative &
+   F has_a_unity & e = the_unity_wrt F & G.(e,e) = e &
+   (for d1,d2,d3,d4 holds F.(G.(d1,d2),G.(d3,d4))= G.(F.(d1,d3),F.(d2,d4)))
+     implies G.(F"**"T1,F"**"T2) = F "**"(G.:(T1,T2))
+ proof len T1 = i & len T2 = i by FINSEQ_2:109; hence thesis by Th43; end;
+
+theorem Th45:
+   F is commutative associative & F has_a_unity &
+    len p = len q implies F.(F"**"p,F"**"q) = F "**"(F.:(p,q))
+ proof assume
+A1:  F is commutative & F is associative & F has_a_unity;
+   set e = the_unity_wrt F;
+     F.(e,e) = e &
+    for d1,d2,d3,d4 holds F.(F.(d1,d2),F.(d3,d4))= F.(F.(d1,d3),F.(d2,d4))
+     by A1,Lm3,SETWISEO:23;
+   hence thesis by A1,Th43;
+ end;
+
+theorem Th46:
+   F is commutative associative & F has_a_unity
+    implies F.(F"**"T1,F"**"T2) = F "**"(F.:(T1,T2))
+ proof len T1 = i & len T2 = i by FINSEQ_2:109; hence thesis by Th45; end;
+
+theorem
+     F is commutative associative & F has_a_unity
+    implies F"**"(i|->(F.(d1,d2))) = F.(F"**"(i|->d1),F"**"(i|->d2))
+ proof
+   reconsider T1 = i|->d1, T2 = i|->d2 as Element of i-tuples_on D
+      by FINSEQ_2:132;
+     i|->(F.(d1,d2)) = F.:(T1,T2) by FINSEQOP:18;
+  hence thesis by Th46;
+ end;
+
+theorem
+     F is commutative associative & F has_a_unity &
+    F has_an_inverseOp & G = F*(id D,the_inverseOp_wrt F)
+     implies G.(F"**"T1,F"**"T2) = F "**"(G.:(T1,T2))
+ proof assume
+A1:   F is commutative associative & F has_a_unity &
+      F has_an_inverseOp & G = F*(id D,the_inverseOp_wrt F);
+   set e = the_unity_wrt F;
+     G.(e,e) = e &
+     for d1,d2,d3,d4 holds F.(G.(d1,d2),G.(d3,d4))= G.(F.(d1,d3),F.(d2,d4))
+    by A1,FINSEQOP:91,94;
+   hence thesis by A1,Th44;
+ end;
+
+theorem Th49:
+   F is commutative associative & F has_a_unity & e = the_unity_wrt F &
+   G is_distributive_wrt F & G.(d,e) = e
+    implies G.(d,F"**"p) = F "**"(G[;](d,p))
+ proof assume that
+A1:  F is commutative & F is associative & F has_a_unity and
+A2:  e = the_unity_wrt F and
+A3:  G is_distributive_wrt F and
+A4:  G.(d,e) = e;
+A5:  len p = len(G[;](d,p)) by FINSEQ_2:92;
+A6:  Seg len p = dom p & Seg len(G[;](d,p)) = dom(G[;](d,p)) by FINSEQ_1:def 3;
+   thus G.(d,F"**"p) = G.(d,F$$(dom p,[#](p,e))) by A1,A2,Def2
+                  .= F $$(dom p,G[;](d,[#](p,e))) by A1,A2,A3,A4,Th14
+                  .= F $$(dom p,[#](G[;](d,p),e)) by A4,Lm6
+                  .= F "**"(G[;](d,p)) by A1,A2,A5,A6,Def2;
+ end;
+
+theorem Th50:
+   F is commutative associative & F has_a_unity & e = the_unity_wrt F &
+   G is_distributive_wrt F & G.(e,d) = e
+    implies G.(F"**"p,d) = F "**"(G[:](p,d))
+ proof assume that
+A1:  F is commutative associative & F has_a_unity and
+A2:  e = the_unity_wrt F and
+A3:  G is_distributive_wrt F and
+A4:  G.(e,d) = e;
+A5:  len p = len(G[:](p,d)) by FINSEQ_2:98;
+A6:  Seg len p = dom p & Seg len(G[:](p,d)) = dom(G[:](p,d)) by FINSEQ_1:def 3;
+   thus G.(F"**"p,d) = G.(F$$(dom p,[#](p,e)),d) by A1,A2,Def2
+                  .= F $$(dom p,G[:]([#](p,e),d)) by A1,A2,A3,A4,Th15
+                  .= F $$(dom p,[#](G[:](p,d),e)) by A4,Lm5
+                  .= F "**"(G[:](p,d)) by A1,A2,A5,A6,Def2;
+ end;
+
+theorem
+     F is commutative associative & F has_a_unity & F has_an_inverseOp &
+    G is_distributive_wrt F
+     implies G.(d,F"**"p) = F "**"(G[;](d,p))
+ proof assume
+A1:   F is commutative associative & F has_a_unity &
+      F has_an_inverseOp & G is_distributive_wrt F;
+  set e = the_unity_wrt F;
+    G.(d,e) = e by A1,FINSEQOP:70;
+  hence thesis by A1,Th49;
+ end;
+
+theorem
+     F is commutative associative & F has_a_unity & F has_an_inverseOp &
+    G is_distributive_wrt F
+     implies G.(F"**"p,d) = F "**"(G[:](p,d))
+ proof assume
+A1:   F is commutative associative & F has_a_unity &
+      F has_an_inverseOp & G is_distributive_wrt F;
+  set e = the_unity_wrt F;
+    G.(e,d) = e by A1,FINSEQOP:70;
+  hence thesis by A1,Th50;
+ end;

@@ -1,0 +1,192 @@
+:: On a Dividing Function of the Simple Closed Curve into Segments
+::  by Yatsuka Nakamura
+::
+:: Received June 16, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, EUCLID, ARYTM_1, COMPTS_1, TOPREAL2, PSCOMP_1, JORDAN6,
+      TOPREAL1, JORDAN3, BOOLE, BORSUK_1, RELAT_1, TOPS_2, ORDINAL2, FUNCT_1,
+      SUBSET_1, RCOMP_1, FINSEQ_1, TBSP_1, GOBRD10, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XREAL_0, REAL_1, NAT_1, RCOMP_1,
+      RELAT_1, BINARITH, FINSEQ_1, FUNCT_1, FUNCT_2, FINSEQ_4, TOPREAL1,
+      TOPREAL2, TBSP_1, GOBOARD1, GOBRD10, PRE_TOPC, TOPS_2, STRUCT_0,
+      COMPTS_1, EUCLID, JORDAN3, PSCOMP_1, JORDAN5C, JORDAN6, TOPMETR;
+ constructors RCOMP_1, GOBRD10, BINARITH, TOPREAL2, TOPS_2, TBSP_1, REAL_1,
+      PSCOMP_1, JORDAN3, JORDAN4, JORDAN5C, JORDAN6, FINSEQ_4, GOBOARD1,
+      T_0TOPSP, URYSOHN1, YELLOW_8;
+ clusters STRUCT_0, RELSET_1, EUCLID, PSCOMP_1, PRE_TOPC, XREAL_0, ARYTM_3,
+      GOBOARD1, BORSUK_2, MEMBERED;
+ requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: Definition of the Segment and its property
+
+reserve p,p1,p2,p3,q for Point of TOP-REAL 2;
+
+theorem :: JORDAN7:1
+for P being compact non empty Subset of TOP-REAL 2
+ st P is_simple_closed_curve holds
+ W-min(P) in Lower_Arc(P) & E-max(P) in Lower_Arc(P) &
+ W-min(P) in Upper_Arc(P) & E-max(P) in Upper_Arc(P);
+
+theorem :: JORDAN7:2
+for P being compact non empty Subset of TOP-REAL 2,q
+ st P is_simple_closed_curve & LE q,W-min(P),P
+holds q=W-min(P);
+
+theorem :: JORDAN7:3
+for P being compact non empty Subset of TOP-REAL 2,q
+ st P is_simple_closed_curve & q in P holds
+ LE W-min(P),q,P;
+
+definition
+ let P be compact non empty Subset of TOP-REAL 2,
+     q1,q2 be Point of TOP-REAL 2;
+ func Segment(q1,q2,P) -> Subset of TOP-REAL 2 equals
+:: JORDAN7:def 1
+  {p: LE q1,p,P & LE p,q2,P} if q2<>W-min(P)
+           otherwise {p1: LE q1,p1,P or q1 in P & p1=W-min(P)};
+ end;
+
+theorem :: JORDAN7:4
+  for P being compact non empty Subset of TOP-REAL 2
+ st P is_simple_closed_curve holds
+ Segment(W-min(P),E-max(P),P)=Upper_Arc(P) &
+ Segment(E-max(P),W-min(P),P)=Lower_Arc(P);
+
+theorem :: JORDAN7:5
+for P being compact non empty Subset of TOP-REAL 2,
+ q1,q2 being Point of TOP-REAL 2 st P is_simple_closed_curve & LE q1,q2,P holds
+ q1 in P & q2 in P;
+
+theorem :: JORDAN7:6
+for P being compact non empty Subset of TOP-REAL 2,
+ q1,q2 being Point of TOP-REAL 2 st P is_simple_closed_curve & LE q1,q2,P holds
+ q1 in Segment(q1,q2,P) & q2 in Segment(q1,q2,P);
+
+theorem :: JORDAN7:7
+for P being compact non empty Subset of TOP-REAL 2,
+ q1 being Point of TOP-REAL 2 st q1 in P & P is_simple_closed_curve holds
+   q1 in Segment(q1,W-min P,P);
+
+theorem :: JORDAN7:8
+  for P being compact non empty Subset of TOP-REAL 2,
+ q being Point of TOP-REAL 2
+ st P is_simple_closed_curve & q in P
+ & q<>W-min(P) holds Segment(q,q,P)={q};
+
+theorem :: JORDAN7:9
+ for P being compact non empty Subset of TOP-REAL 2,
+ q1,q2 being Point of TOP-REAL 2 st
+  P is_simple_closed_curve & q1<>W-min(P) & q2<>W-min(P)
+ holds not W-min(P) in Segment(q1,q2,P);
+
+theorem :: JORDAN7:10
+for P being compact non empty Subset of TOP-REAL 2,
+ q1,q2,q3 being Point of TOP-REAL 2
+ st P is_simple_closed_curve & LE q1,q2,P & LE q2,q3,P
+ & not(q1=q2 & q1=W-min(P)) & q1<>q3 & not(q2=q3 & q2=W-min(P)) holds
+ Segment(q1,q2,P)/\ Segment(q2,q3,P)={q2};
+
+theorem :: JORDAN7:11
+for P being compact non empty Subset of TOP-REAL 2,
+ q1,q2 being Point of TOP-REAL 2
+ st P is_simple_closed_curve & LE q1,q2,P
+ & q1 <> W-min P & q2 <> W-min P holds
+ Segment(q1,q2,P)/\ Segment(q2,W-min P,P)={q2};
+
+theorem :: JORDAN7:12
+for P being compact non empty Subset of TOP-REAL 2,
+ q1,q2 being Point of TOP-REAL 2
+ st P is_simple_closed_curve & LE q1,q2,P & q1<>q2 & q1<>W-min(P) holds
+ Segment(q2,W-min(P),P)/\ Segment(W-min(P),q1,P)={W-min(P)};
+
+theorem :: JORDAN7:13
+for P being compact non empty Subset of TOP-REAL 2,
+  q1,q2,q3,q4 being Point of TOP-REAL 2
+  st P is_simple_closed_curve & LE q1,q2,P & LE q2,q3,P & LE q3,q4,P
+   & q1<>q2 & q2<>q3 holds
+  Segment(q1,q2,P) misses Segment(q3,q4,P);
+
+theorem :: JORDAN7:14
+for P being compact non empty Subset of TOP-REAL 2,
+  q1,q2,q3 being Point of TOP-REAL 2
+  st P is_simple_closed_curve & LE q1,q2,P & LE q2,q3,P & q1<>W-min P
+   & q1<>q2 & q2<>q3 holds
+  Segment(q1,q2,P) misses Segment(q3,W-min P,P);
+
+begin :: A function to divide the simple closed curve
+
+reserve n for Nat;
+
+theorem :: JORDAN7:15
+  for P being non empty Subset of TOP-REAL n,
+  f being map of I[01], (TOP-REAL n)|P st P<>{} & f is_homeomorphism
+  ex g being map of I[01],TOP-REAL n st f=g &
+  g is continuous & g is one-to-one;
+
+theorem :: JORDAN7:16
+  for P being non empty Subset of TOP-REAL n,
+  g being map of I[01], (TOP-REAL n) st g is continuous one-to-one
+   & rng g = P
+  ex f being map of I[01],(TOP-REAL n)|P st f=g &
+   f is_homeomorphism;
+
+definition
+ cluster increasing -> one-to-one FinSequence of REAL;
+end;
+
+theorem :: JORDAN7:17
+ for f being FinSequence of REAL st
+ f is increasing holds f is one-to-one;
+
+theorem :: JORDAN7:18
+ for A being Subset of TOP-REAL 2,
+     p1,p2 being Point of TOP-REAL 2
+  st A is_an_arc_of p1,p2
+ ex g being map of I[01], TOP-REAL 2 st
+  g is continuous one-to-one & rng g = A & g.0 = p1 & g.1 = p2;
+
+theorem :: JORDAN7:19
+ for P being non empty Subset of TOP-REAL 2,
+     p1, p2, q1, q2 being Point of TOP-REAL 2,
+     g being map of I[01], TOP-REAL 2,
+     s1, s2 being Real st
+  P is_an_arc_of p1,p2 & g is continuous one-to-one & rng g = P
+  & g.0 = p1 & g.1 = p2
+  & g.s1 = q1 & 0 <= s1 & s1 <= 1 & g.s2 = q2 & 0 <= s2 & s2 <= 1 & s1 <= s2
+ holds LE q1,q2,P,p1,p2;
+
+theorem :: JORDAN7:20
+ for P being non empty Subset of TOP-REAL 2,
+     p1, p2, q1, q2 being Point of TOP-REAL 2,
+     g being map of I[01], TOP-REAL 2,
+     s1, s2 being Real st
+  g is continuous one-to-one & rng g = P
+  & g.0 = p1 & g.1 = p2
+  & g.s1 = q1 & 0 <= s1 & s1 <= 1 & g.s2 = q2 & 0 <= s2 & s2 <= 1
+  & LE q1,q2,P,p1,p2
+ holds s1 <= s2;
+
+theorem :: JORDAN7:21 :: Dividing simple closed curve into segments.
+  for P being compact non empty Subset of TOP-REAL 2, e being Real
+   st P is_simple_closed_curve & e > 0
+   ex h being FinSequence of the carrier of TOP-REAL 2
+   st h.1=W-min(P) & h is one-to-one & 8<=len h & rng h c= P
+   &(for i being Nat st 1<=i & i<len h holds LE h/.i,h/.(i+1),P)
+   &(for i being Nat,W being Subset of Euclid 2
+   st 1<=i & i<len h & W=Segment(h/.i,h/.(i+1),P) holds
+   diameter(W)<e)
+   & (for W being Subset of Euclid 2 st
+   W=Segment(h/.len h,h/.1,P)  holds diameter(W)<e)
+   & (for i being Nat st 1<=i & i+1<len h holds
+    Segment(h/.i,h/.(i+1),P)/\ Segment(h/.(i+1),h/.(i+2),P)={h/.(i+1)})
+   & Segment(h/.len h,h/.1,P)/\ Segment(h/.1,h/.2,P)={h/.1}
+   & Segment(h/.(len h-' 1),h/.len h,P)/\ Segment(h/.len h,h/.1,P)={h/.len h}
+   & Segment(h/.(len h-'1),h/.len h,P) misses Segment(h/.1,h/.2,P)
+  &(for i,j being Nat st 1<=i & i < j & j < len h & not(i,j are_adjacent1)
+    holds Segment(h/.i,h/.(i+1),P) misses Segment(h/.j,h/.(j+1),P))
+  & (for i being Nat st 1 < i & i+1 < len h holds
+      Segment(h/.len h,h/.1,P) misses Segment(h/.i,h/.(i+1),P));

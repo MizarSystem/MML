@@ -1,0 +1,738 @@
+:: Subgroup and Cosets of Subgroups. Lagrange theorem
+::  by Wojciech A. Trybulec
+::
+:: Received July 23, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FINSET_1, REALSET1, RELAT_1, BOOLE, SUBSET_1, VECTSP_1, BINOP_1,
+      GROUP_1, FUNCT_1, RLSUB_1, CARD_1, TARSKI, SETFAM_1, FINSUB_1, SETWISEO,
+      ARYTM_3, GROUP_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, SETFAM_1, FINSUB_1,
+      FINSET_1, STRUCT_0, RLVECT_1, VECTSP_1, WELLORD2, GROUP_1, CARD_1,
+      BINOP_1, SETWISEO, DOMAIN_1, RELAT_1, FUNCT_1, RELSET_1, NAT_1, MCART_1;
+ constructors WELLORD2, GROUP_1, BINOP_1, SETWISEO, DOMAIN_1, NAT_1, PARTFUN1,
+      MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, FINSET_1, FINSUB_1, GROUP_1, FUNCT_1, STRUCT_0, RELSET_1,
+      ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+reserve x for set;
+reserve G for non empty 1-sorted;
+reserve A for Subset of G;
+
+canceled 2;
+
+theorem :: GROUP_2:3
+ G is finite implies A is finite;
+
+reserve y,y1,y2,Y,Z for set;
+reserve k for Nat;
+reserve G for Group;
+reserve a,g,h for Element of G;
+reserve A for Subset of G;
+
+definition let G,A;
+ func A" -> Subset of G equals
+:: GROUP_2:def 1
+   {g" : g in A};
+end;
+
+canceled;
+
+theorem :: GROUP_2:5
+ x in A" iff ex g st x = g" & g in A;
+
+theorem :: GROUP_2:6
+   {g}" = {g"};
+
+theorem :: GROUP_2:7
+   {g,h}" = {g",h"};
+
+theorem :: GROUP_2:8
+   ({}(the carrier of G))" = {};
+
+theorem :: GROUP_2:9
+   ([#](the carrier of G))" = the carrier of G;
+
+theorem :: GROUP_2:10
+   A <> {} iff A" <> {};
+
+reserve G for non empty HGrStr,A,B,C for Subset of G;
+reserve a,b,g,g1,g2,h,h1,h2 for Element of G;
+
+definition let G; let A,B;
+ func A * B -> Subset of G equals
+:: GROUP_2:def 2
+    {g * h : g in A & h in B};
+end;
+
+canceled;
+
+theorem :: GROUP_2:12
+ x in A * B iff ex g,h st x = g * h & g in A & h in B;
+
+theorem :: GROUP_2:13
+ A <> {} & B <> {} iff A * B <> {};
+
+theorem :: GROUP_2:14
+ G is associative implies A * B * C = A * (B * C);
+
+theorem :: GROUP_2:15
+   for G being Group, A,B being Subset of G
+   holds (A * B)" = B" * A";
+
+theorem :: GROUP_2:16
+   A * (B \/ C) = A * B \/ A * C;
+
+theorem :: GROUP_2:17
+   (A \/ B) * C = A * C \/ B * C;
+
+theorem :: GROUP_2:18
+   A * (B /\ C) c= (A * B) /\ (A * C);
+
+theorem :: GROUP_2:19
+   (A /\ B) * C c= (A * C) /\ (B * C);
+
+theorem :: GROUP_2:20
+ {}(the carrier of G) * A = {} & A * {}(the carrier of G) = {};
+
+theorem :: GROUP_2:21
+ for G being Group, A being Subset of G holds
+ A <> {} implies [#](the carrier of G) * A = the carrier of G &
+  A * [#](the carrier of G) = the carrier of G;
+
+theorem :: GROUP_2:22
+ {g} * {h} = {g * h};
+
+theorem :: GROUP_2:23
+   {g} * {g1,g2} = {g * g1,g * g2};
+
+theorem :: GROUP_2:24
+   {g1,g2} * {g} = {g1 * g,g2 * g};
+
+theorem :: GROUP_2:25
+   {g,h} * {g1,g2} = {g * g1, g * g2, h * g1, h * g2};
+
+theorem :: GROUP_2:26
+ for G being Group, A being Subset of G holds
+ (for g1,g2 being Element of G st g1 in A & g2 in A
+    holds g1 * g2 in A) &
+ (for g being Element of G st g in A holds g" in A)
+      implies A * A = A;
+
+theorem :: GROUP_2:27
+ for G being Group, A being Subset of G holds
+ (for g being Element of G st g in A holds g" in
+ A) implies A" = A;
+
+theorem :: GROUP_2:28
+   (for a,b st a in A & b in B holds a * b = b * a) implies A * B = B * A;
+
+theorem :: GROUP_2:29
+ G is commutative Group implies A * B = B * A;
+
+theorem :: GROUP_2:30
+   for G being commutative Group, A,B being Subset of G holds
+  (A * B)" = A" * B";
+
+definition let G,g,A;
+ func g * A -> Subset of G equals
+:: GROUP_2:def 3
+    {g} * A;
+ func A * g -> Subset of G equals
+:: GROUP_2:def 4
+    A * {g};
+end;
+
+canceled 2;
+
+theorem :: GROUP_2:33
+ x in g * A iff ex h st x = g * h & h in A;
+
+theorem :: GROUP_2:34
+ x in A * g iff ex h st x = h * g & h in A;
+
+theorem :: GROUP_2:35
+   G is associative implies g * A * B = g * (A * B);
+
+theorem :: GROUP_2:36
+   G is associative implies A * g * B = A * (g * B);
+
+theorem :: GROUP_2:37
+   G is associative implies A * B * g = A * (B * g);
+
+theorem :: GROUP_2:38
+ G is associative implies g * h * A = g * (h * A);
+
+theorem :: GROUP_2:39
+ G is associative implies g * A * h = g * (A * h);
+
+theorem :: GROUP_2:40
+ G is associative implies A * g * h = A * (g * h);
+
+theorem :: GROUP_2:41
+   {}(the carrier of G) * a = {} & a * {}(the carrier of G) = {};
+
+reserve G for Group-like (non empty HGrStr);
+reserve h,g,g1,g2 for Element of G;
+reserve A for Subset of G;
+
+theorem :: GROUP_2:42
+for G being Group, a being Element of G holds
+ [#](the carrier of G) * a = the carrier of G &
+  a * [#](the carrier of G) = the carrier of G;
+
+theorem :: GROUP_2:43
+ 1.G * A = A & A * 1.G = A;
+
+theorem :: GROUP_2:44
+ G is commutative Group implies g * A = A * g;
+
+definition let G be Group-like (non empty HGrStr);
+ mode Subgroup of G -> Group-like (non empty HGrStr) means
+:: GROUP_2:def 5
+   the carrier of it c= the carrier of G &
+        the mult of it =
+         (the mult of G) | [:the carrier of it,the carrier of it:];
+end;
+
+reserve H for Subgroup of G;
+reserve h,h1,h2 for Element of H;
+
+canceled 3;
+
+theorem :: GROUP_2:48
+ G is finite implies H is finite;
+
+theorem :: GROUP_2:49
+ x in H implies x in G;
+
+theorem :: GROUP_2:50
+ h in G;
+
+theorem :: GROUP_2:51
+ h is Element of G;
+
+theorem :: GROUP_2:52
+ h1 = g1 & h2 = g2 implies h1 * h2 = g1 * g2;
+
+definition let G be Group;
+ cluster -> associative Subgroup of G;
+end;
+
+reserve G,G1,G2,G3 for Group;
+reserve a,a1,a2,b,b1,b2,g,g1,g2 for Element of G;
+reserve A,B for Subset of G;
+reserve I,H,H1,H2,H3 for Subgroup of G;
+reserve h,h1,h2 for Element of H;
+
+theorem :: GROUP_2:53
+ 1.H = 1.G;
+
+theorem :: GROUP_2:54
+1.H1 = 1.H2;
+
+theorem :: GROUP_2:55
+ 1.G in H;
+
+theorem :: GROUP_2:56
+   1.H1 in H2;
+
+theorem :: GROUP_2:57
+ h = g implies h" = g";
+
+theorem :: GROUP_2:58
+   inverse_op(H) = inverse_op(G) | the carrier of H;
+
+theorem :: GROUP_2:59
+ g1 in H & g2 in H implies g1 * g2 in H;
+
+theorem :: GROUP_2:60
+ g in H implies g" in H;
+
+definition let G;
+ cluster strict Subgroup of G;
+end;
+
+theorem :: GROUP_2:61
+ A <> {} & (for g1,g2 st g1 in A & g2 in A holds g1 * g2 in A) &
+  (for g st g in A holds g" in A) implies
+   ex H being strict Subgroup of G st the carrier of H = A;
+
+theorem :: GROUP_2:62
+ G is commutative Group implies H is commutative;
+
+definition let G be commutative Group;
+ cluster -> commutative Subgroup of G;
+end;
+
+theorem :: GROUP_2:63
+ G is Subgroup of G;
+
+theorem :: GROUP_2:64
+ G1 is Subgroup of G2 & G2 is Subgroup of G1
+  implies the HGrStr of G1 = the HGrStr of G2;
+
+theorem :: GROUP_2:65
+ G1 is Subgroup of G2 & G2 is Subgroup of G3 implies G1 is Subgroup of G3;
+
+theorem :: GROUP_2:66
+ the carrier of H1 c= the carrier of H2 implies H1 is Subgroup of H2;
+
+theorem :: GROUP_2:67
+ (for g st g in H1 holds g in H2) implies H1 is Subgroup of H2;
+
+theorem :: GROUP_2:68
+ the carrier of H1 = the carrier of H2
+  implies the HGrStr of H1 = the HGrStr of H2;
+
+theorem :: GROUP_2:69
+ (for g holds g in H1 iff g in H2) implies the HGrStr of H1 = the HGrStr of H2;
+
+definition let G; let H1,H2 be strict Subgroup of G;
+ redefine pred H1 = H2 means
+:: GROUP_2:def 6
+     for g holds g in H1 iff g in H2;
+end;
+
+theorem :: GROUP_2:70
+ for G being strict Group, H being strict Subgroup of G holds
+ the carrier of H = the carrier of G implies H = G;
+
+theorem :: GROUP_2:71
+ (for g being Element of G holds g in H) implies
+  the HGrStr of H = the HGrStr of G;
+
+definition let G;
+ func (1).G -> strict Subgroup of G means
+:: GROUP_2:def 7
+   the carrier of it = {1.G};
+end;
+
+definition let G;
+ func (Omega).G -> strict Subgroup of G equals
+:: GROUP_2:def 8
+    the HGrStr of G;
+end;
+
+canceled 3;
+
+theorem :: GROUP_2:75
+ (1).H = (1).G;
+
+theorem :: GROUP_2:76
+   (1).H1 = (1).H2;
+
+theorem :: GROUP_2:77
+ (1).G is Subgroup of H;
+
+theorem :: GROUP_2:78
+ for G being strict Group, H being Subgroup of G holds
+ H is Subgroup of (Omega).G;
+
+theorem :: GROUP_2:79
+   for G being strict Group holds G is Subgroup of (Omega).G;
+
+theorem :: GROUP_2:80
+ (1).G is finite;
+
+definition let X be non empty set;
+ cluster finite non empty Subset of X;
+end;
+
+theorem :: GROUP_2:81
+ ord (1).G = 1;
+
+theorem :: GROUP_2:82
+ for H being strict Subgroup of G holds
+ H is finite & ord H = 1 implies H = (1).G;
+
+theorem :: GROUP_2:83
+   Ord H <=` Ord G;
+
+theorem :: GROUP_2:84
+   G is finite implies ord H <= ord G;
+
+theorem :: GROUP_2:85
+   for G being strict Group, H being strict Subgroup of G holds
+ G is finite & ord G = ord H implies H = G;
+
+definition let G,H;
+ func carr(H) -> Subset of G equals
+:: GROUP_2:def 9
+    the carrier of H;
+end;
+
+canceled;
+
+theorem :: GROUP_2:87
+ carr(H) <> {};
+
+theorem :: GROUP_2:88
+ x in carr(H) iff x in H;
+
+theorem :: GROUP_2:89
+ g1 in carr(H) & g2 in carr(H) implies g1 * g2 in carr(H);
+
+theorem :: GROUP_2:90
+ g in carr(H) implies g" in carr(H);
+
+theorem :: GROUP_2:91
+   carr(H) * carr(H) = carr(H);
+
+theorem :: GROUP_2:92
+   carr(H)" = carr H;
+
+theorem :: GROUP_2:93
+ (carr H1 * carr H2 = carr H2 * carr H1 implies
+  ex H being strict Subgroup of G st the carrier of H = carr H1 * carr H2) &
+ ((ex H st the carrier of H = carr H1 * carr H2)
+  implies carr H1 * carr H2 = carr H2 * carr H1);
+
+theorem :: GROUP_2:94
+   G is commutative Group implies
+  ex H being strict Subgroup of G st the carrier of H = carr(H1) * carr(H2);
+
+definition let G,H1,H2;
+ func H1 /\ H2 -> strict Subgroup of G means
+:: GROUP_2:def 10
+   the carrier of it = carr(H1) /\ carr(H2);
+end;
+
+canceled 2;
+
+theorem :: GROUP_2:97
+ (for H being Subgroup of G st H = H1 /\ H2 holds
+    the carrier of H = (the carrier of H1) /\ (the carrier of H2)) &
+ for H being strict Subgroup of G holds
+  the carrier of H = (the carrier of H1) /\ (the carrier of H2) implies
+    H = H1 /\ H2;
+
+theorem :: GROUP_2:98
+ carr(H1 /\ H2) = carr(H1) /\ carr(H2);
+
+theorem :: GROUP_2:99
+ x in H1 /\ H2 iff x in H1 & x in H2;
+
+theorem :: GROUP_2:100
+   for H being strict Subgroup of G holds H /\ H = H;
+
+theorem :: GROUP_2:101
+ H1 /\ H2 = H2 /\ H1;
+
+definition let G,H1,H2;
+ redefine func H1 /\ H2;
+ commutativity;
+end;
+
+theorem :: GROUP_2:102
+   H1 /\ H2 /\ H3 = H1 /\ (H2 /\ H3);
+
+theorem :: GROUP_2:103
+   (1).G /\ H = (1).G & H /\ (1).G = (1).G;
+
+theorem :: GROUP_2:104
+ for G being strict Group, H being strict Subgroup of G holds
+ H /\ (Omega).G = H & (Omega).G /\ H = H;
+
+theorem :: GROUP_2:105
+   for G being strict Group holds (Omega).G /\ (Omega).G = G;
+
+theorem :: GROUP_2:106
+  H1 /\ H2 is Subgroup of H1 & H1 /\ H2 is Subgroup of H2;
+
+theorem :: GROUP_2:107
+   for H1 being strict Subgroup of G holds
+ H1 is Subgroup of H2 iff H1 /\ H2 = H1;
+
+theorem :: GROUP_2:108
+   H1 is Subgroup of H2 implies H1 /\ H3 is Subgroup of H2;
+
+theorem :: GROUP_2:109
+   H1 is Subgroup of H2 & H1 is Subgroup of H3 implies H1 is Subgroup of H2 /\
+H3;
+
+theorem :: GROUP_2:110
+   H1 is Subgroup of H2 implies H1 /\ H3 is Subgroup of H2 /\ H3;
+
+theorem :: GROUP_2:111
+   H1 is finite or H2 is finite implies H1 /\ H2 is finite;
+
+definition let G,H,A;
+ func A * H -> Subset of G equals
+:: GROUP_2:def 11
+    A * carr H;
+ func H * A -> Subset of G equals
+:: GROUP_2:def 12
+    carr H * A;
+end;
+
+canceled 2;
+
+theorem :: GROUP_2:114
+   x in A * H iff ex g1,g2 st x = g1 * g2 & g1 in A & g2 in H;
+
+theorem :: GROUP_2:115
+   x in H * A iff ex g1,g2 st x = g1 * g2 & g1 in H & g2 in A;
+
+theorem :: GROUP_2:116
+ A * B * H = A * (B * H);
+
+theorem :: GROUP_2:117
+ A * H * B = A * (H * B);
+
+theorem :: GROUP_2:118
+ H * A * B = H * (A * B);
+
+theorem :: GROUP_2:119
+   A * H1 * H2 = A * (H1 * carr H2);
+
+theorem :: GROUP_2:120
+   H1 * A * H2 = H1 * (A * H2);
+
+theorem :: GROUP_2:121
+   H1 * carr(H2) * A = H1 * (H2 * A);
+
+theorem :: GROUP_2:122
+   G is commutative Group implies A * H = H * A;
+
+definition let G,H,a;
+ func a * H -> Subset of G equals
+:: GROUP_2:def 13
+    a * carr(H);
+ func H * a -> Subset of G equals
+:: GROUP_2:def 14
+    carr(H) * a;
+end;
+
+canceled 2;
+
+theorem :: GROUP_2:125
+ x in a * H iff ex g st x = a * g & g in H;
+
+theorem :: GROUP_2:126
+ x in H * a iff ex g st x = g * a & g in H;
+
+theorem :: GROUP_2:127
+ a * b * H = a * (b * H);
+
+theorem :: GROUP_2:128
+ a * H * b = a * (H * b);
+
+theorem :: GROUP_2:129
+ H * a * b = H * (a * b);
+
+theorem :: GROUP_2:130
+ a in a * H & a in H * a;
+
+canceled;
+
+theorem :: GROUP_2:132
+ 1.G * H = carr(H) & H * 1.G = carr(H);
+
+theorem :: GROUP_2:133
+ (1).G * a = {a} & a * (1).G = {a};
+
+theorem :: GROUP_2:134
+ a * (Omega).G = the carrier of G & (Omega).G * a = the carrier of G;
+
+theorem :: GROUP_2:135
+   G is commutative Group implies a * H = H * a;
+
+theorem :: GROUP_2:136
+ a in H iff a * H = carr(H);
+
+theorem :: GROUP_2:137
+ a * H = b * H iff b" * a in H;
+
+theorem :: GROUP_2:138
+ a * H = b * H iff a * H meets b * H;
+
+theorem :: GROUP_2:139
+ a * b * H c= (a * H) * (b * H);
+
+theorem :: GROUP_2:140
+   carr(H) c= (a * H) * (a" * H) & carr(H) c= (a" * H) * (a * H);
+
+theorem :: GROUP_2:141
+   a |^ 2 * H c= (a * H) * (a * H);
+
+theorem :: GROUP_2:142
+ a in H iff H * a = carr(H);
+
+theorem :: GROUP_2:143
+ H * a = H * b iff b * a" in H;
+
+theorem :: GROUP_2:144
+   H * a = H * b iff H * a meets H * b;
+
+theorem :: GROUP_2:145
+ H * a * b c= (H * a) * (H * b);
+
+theorem :: GROUP_2:146
+   carr(H) c= (H * a) * (H * a") & carr(H) c= (H * a") * (H * a);
+
+theorem :: GROUP_2:147
+   H * (a |^ 2) c= (H * a) * (H * a);
+
+theorem :: GROUP_2:148
+   a * (H1 /\ H2) = (a * H1) /\ (a * H2);
+
+theorem :: GROUP_2:149
+   (H1 /\ H2) * a = (H1 * a) /\ (H2 * a);
+
+theorem :: GROUP_2:150
+   ex H1 being strict Subgroup of G st the carrier of H1 = a * H2 * a";
+
+theorem :: GROUP_2:151
+ a * H,b * H are_equipotent;
+
+theorem :: GROUP_2:152
+ a * H,H * b are_equipotent;
+
+theorem :: GROUP_2:153
+ H * a,H * b are_equipotent;
+
+theorem :: GROUP_2:154
+ carr(H),a * H are_equipotent & carr(H),H * a are_equipotent;
+
+theorem :: GROUP_2:155
+   Ord(H) = Card(a * H) & Ord(H) = Card(H * a);
+
+theorem :: GROUP_2:156
+ H is finite implies
+  ex B,C being finite set st B = a * H & C = H * a &
+   ord H = card B & ord H = card C;
+
+scheme SubFamComp{A() -> set, F1() -> Subset-Family of A(),
+                  F2() -> Subset-Family of A(), P[set]}:
+ F1() = F2() provided
+ for X being Subset of A() holds X in F1() iff P[X] and
+ for X being Subset of A() holds X in F2() iff P[X];
+
+definition let G,H;
+ func Left_Cosets H -> Subset-Family of G means
+:: GROUP_2:def 15
+   A in it iff ex a st A = a * H;
+ func Right_Cosets H -> Subset-Family of G means
+:: GROUP_2:def 16
+   A in it iff ex a st A = H * a;
+end;
+
+canceled 7;
+
+theorem :: GROUP_2:164
+ G is finite implies Right_Cosets H is finite & Left_Cosets H is finite;
+
+theorem :: GROUP_2:165
+   carr H in Left_Cosets H & carr H in Right_Cosets H;
+
+theorem :: GROUP_2:166
+ Left_Cosets H, Right_Cosets H are_equipotent;
+
+theorem :: GROUP_2:167
+ union Left_Cosets H = the carrier of G &
+  union Right_Cosets H = the carrier of G;
+
+theorem :: GROUP_2:168
+ Left_Cosets (1).G = {{a} : not contradiction};
+
+theorem :: GROUP_2:169
+   Right_Cosets (1).G = {{a} : not contradiction};
+
+theorem :: GROUP_2:170
+   for H being strict Subgroup of G holds
+ Left_Cosets H = {{a} : not contradiction} implies H = (1).G;
+
+theorem :: GROUP_2:171
+   for H being strict Subgroup of G holds
+ Right_Cosets H = {{a} : not contradiction} implies H = (1).G;
+
+theorem :: GROUP_2:172
+ Left_Cosets (Omega).G = {the carrier of G} &
+  Right_Cosets (Omega).G = {the carrier of G};
+
+theorem :: GROUP_2:173
+ for G being strict Group, H being strict Subgroup of G holds
+ Left_Cosets H = {the carrier of G} implies H = G;
+
+theorem :: GROUP_2:174
+   for G being strict Group, H being strict Subgroup of G holds
+ Right_Cosets H = {the carrier of G} implies H = G;
+
+definition let G,H;
+ func Index H -> Cardinal equals
+:: GROUP_2:def 17
+    Card Left_Cosets H;
+end;
+
+theorem :: GROUP_2:175
+   Index H = Card Left_Cosets H & Index H = Card Right_Cosets H;
+
+definition let G,H;
+ assume
+ Left_Cosets(H) is finite;
+ func index H -> Nat means
+:: GROUP_2:def 18
+   ex B being finite set st B = Left_Cosets H & it = card B;
+end;
+
+theorem :: GROUP_2:176
+   Left_Cosets H is finite implies
+  (ex B being finite set st B = Left_Cosets H & index H = card B) &
+  ex C being finite set st C = Right_Cosets H & index H = card C;
+
+definition let D be non empty set; let d be Element of D;
+ redefine func {d} -> Element of Fin D;
+end;
+
+::  Lagrange Theorem
+
+theorem :: GROUP_2:177
+ G is finite implies ord G = ord H * index H;
+
+theorem :: GROUP_2:178
+   G is finite implies ord H divides ord G;
+
+reserve J for Subgroup of H;
+
+theorem :: GROUP_2:179
+   G is finite & I = J implies index I = index J * index H;
+
+theorem :: GROUP_2:180
+   index (Omega).G = 1;
+
+theorem :: GROUP_2:181
+   for G being strict Group, H being strict Subgroup of G holds
+ Left_Cosets H is finite & index H = 1 implies H = G;
+
+theorem :: GROUP_2:182
+   Index (1).G = Ord G;
+
+theorem :: GROUP_2:183
+   G is finite implies index (1).G = ord G;
+
+theorem :: GROUP_2:184
+ for H being strict Subgroup of G holds
+ G is finite & index H = ord G implies H = (1).G;
+
+theorem :: GROUP_2:185
+   for H being strict Subgroup of G holds
+ Left_Cosets H is finite & Index H = Ord G implies G is finite & H = (1).G;
+
+::
+::  Auxiliary theorems.
+::
+
+theorem :: GROUP_2:186
+   for X being finite set st
+  (for Y st Y in X ex B being finite set st B = Y & card B = k &
+    for Z st Z in X & Y <> Z holds Y,Z are_equipotent & Y misses Z)
+  ex C being finite set st C = union X & card C = k * card X;
+
+

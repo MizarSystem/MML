@@ -1,0 +1,180 @@
+:: Groups, Rings, Left- and Right-Modules
+::  by Micha{\l} Muzalewski and Wojciech Skaba
+::
+:: Received October 22, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, VECTSP_1, ARYTM_1, FUNCSDOM, VECTSP_2, RELAT_1, MOD_1,
+      BINOP_1, LATTICES, ALGSTR_2;
+ notation STRUCT_0, RLVECT_1, VECTSP_1, FUNCSDOM, VECTSP_2;
+ constructors VECTSP_2, XBOOLE_0;
+ clusters VECTSP_1, VECTSP_2, ZFMISC_1, XBOOLE_0;
+ theorems VECTSP_1, VECTSP_2, RLVECT_1;
+
+begin
+
+definition
+  mode AddGroup is add-associative right_zeroed right_complementable
+                        (non empty LoopStr);
+end;
+
+canceled 12;
+
+theorem
+  for K be add-associative right_zeroed right_complementable
+      right-distributive right_unital (non empty doubleLoopStr)
+  for a be Element of K holds a * (- 1_ K) = - a
+ proof
+  let K be add-associative right_zeroed right_complementable
+            right-distributive right_unital (non empty doubleLoopStr);
+  let x be Element of K;
+  thus x * (- 1_ K) = x * (0.K - 1_ K) by RLVECT_1:27
+   .= x * 0.K - x * 1_ K by VECTSP_1:43
+   .= 0.K - x * 1_ K by VECTSP_1:36
+   .= - x * 1_ K by RLVECT_1:27
+   .= - x by VECTSP_1:def 13;
+ end;
+
+theorem
+  for K be add-associative right_zeroed right_complementable
+      left-distributive left_unital (non empty doubleLoopStr)
+  for a be Element of K holds (- 1_ K) * a = - a
+ proof
+  let K be add-associative right_zeroed right_complementable
+            left-distributive left_unital (non empty doubleLoopStr);
+  let x be Element of K;
+  thus (- 1_ K) * x = (0.K - 1_ K) * x by RLVECT_1:27
+   .= 0.K * x - 1_ K * x by VECTSP_1:45
+   .= 0.K - 1_ K * x by VECTSP_1:39
+   .= - 1_ K * x by RLVECT_1:27
+   .= - x by VECTSP_1:def 19;
+ end;
+
+ reserve R for Abelian add-associative right_zeroed right_complementable
+    associative left_unital right_unital distributive
+      (non empty doubleLoopStr),
+         F for non degenerated Field-like Ring,
+         x for Scalar of F,
+         V for add-associative right_zeroed right_complementable
+               VectSp-like (non empty VectSpStr over F),
+         v for Vector of V;
+
+canceled 10;
+
+theorem
+   x*v = 0.V iff x = 0.F or v = 0.V
+proof
+    x*v = 0.V implies x = 0.F or v = 0.V
+    proof
+      assume A1: x*v = 0.V;
+      assume A2: x<> 0.F;
+        (x"*x)*v = x"*(0.V) by A1,VECTSP_1:def 26
+              .= 0.V by VECTSP_1:59;
+      then 0.V = (1_ F)*v by A2,VECTSP_2:43;
+      hence thesis by VECTSP_1:def 26;
+    end;
+  hence thesis by VECTSP_1:59;
+end;
+
+theorem
+   x<>0.F implies x"*(x*v)=v
+  proof
+    assume A1: x<>0.F;
+      x"*(x*v) = (x"*x)*v by VECTSP_1:def 26
+            .= 1_ F *v by A1,VECTSP_2:43
+            .= v by VECTSP_1:def 26;
+    hence thesis;
+  end;
+
+ reserve V for add-associative right_zeroed
+         right_complementable RightMod-like (non empty RightModStr over R);
+ reserve x for Scalar of R;
+ reserve v,w for Vector of V;
+
+canceled 10;
+
+theorem Th37:
+  v*(0.R) = 0.V & v*(-1_ R) = -v & (0.V)*x = 0.V
+proof
+    v + v*(0.R) = v* (1_ R) + v*(0.R) by VECTSP_2:def 23
+             .= v*((1_ R) + (0.R)) by VECTSP_2:def 23
+             .= v*(1_ R) by RLVECT_1:10
+             .= v by VECTSP_2:def 23
+             .= v + 0.V by RLVECT_1:10;
+  hence A1: v*(0.R) = 0.V by RLVECT_1:21;
+    v*(-(1_ R)) + v = v*( -(1_ R)) + v* (1_ R) by VECTSP_2:def 23
+                .= v*((-(1_ R)) + (1_ R)) by VECTSP_2:def 23
+                .= 0.V by A1,RLVECT_1:16;
+  then v*(-(1_ R)) + (v + -v) = 0.V + -v by RLVECT_1:def 6;
+  then 0.V + -v = v*(-(1_ R)) + 0.V by RLVECT_1:16
+                .= v*(-(1_ R)) by RLVECT_1:10;
+  hence v*(-1_ R) = -v by RLVECT_1:10;
+    (0.V)*x = v*((0.R) *x) by A1,VECTSP_2:def 23
+         .= 0.V by A1,VECTSP_1:39;
+  hence thesis;
+end;
+
+theorem Th38:
+  -v*x = v*(-x) & w - v*x = w + v*(-x)
+  proof
+      -v*x = (v*x) * (-1_ R) by Th37
+        .= v*(x* (-1_ R)) by VECTSP_2:def 23
+        .= v*(-(x* 1_ R)) by VECTSP_1:40;
+    hence -v* x = v*(-x) by VECTSP_2:def 2;
+    hence thesis by RLVECT_1:def 11;
+ end;
+
+theorem Th39:
+  (-v)*x = -v*x
+  proof
+      (-v)*x = (v*(-1_ R))*x by Th37
+          .= v*((-1_ R) *x) by VECTSP_2:def 23
+          .= v*(-(1_ R *x)) by VECTSP_1:41
+          .= v*(-x) by VECTSP_2:def 2;
+    hence thesis by Th38;
+  end;
+
+theorem
+  (v - w)*x = v*x - w*x
+  proof
+      (v - w)*x = (v + (-w))*x by RLVECT_1:def 11
+             .= v*x + (-w) *x by VECTSP_2:def 23
+             .= v*x + (-w * x) by Th39;
+    hence thesis by RLVECT_1:def 11;
+  end;
+
+ reserve F for non degenerated Field-like Ring;
+ reserve x for Scalar of F;
+ reserve V for add-associative right_zeroed
+           right_complementable RightMod-like (non empty RightModStr over F);
+ reserve v for Vector of V;
+
+canceled;
+
+theorem
+  v*x = 0.V iff x = 0.F or v = 0.V
+proof
+    v*x = 0.V implies x = 0.F or v = 0.V
+    proof
+      assume A1: v*x = 0.V;
+      assume A2: x<>(0.F);
+      v*(x*x") = (0.V)*x" by A1,VECTSP_2:def 23
+              .= 0.V by Th37;
+      then 0.V = v*(1_ F) by A2,VECTSP_2:43;
+      hence thesis by VECTSP_2:def 23;
+    end;
+  hence thesis by Th37;
+end;
+
+theorem
+  x<>0.F implies (v*x)*x"=v
+  proof
+    assume A1: x<>0.F;
+      (v*x)*x" = v*(x*x") by VECTSP_2:def 23
+            .= v* 1_ F by A1,VECTSP_2:43
+            .= v by VECTSP_2:def 23;
+    hence thesis;
+  end;
+

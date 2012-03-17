@@ -1,0 +1,466 @@
+:: Cartesian Products of Relations and Relational Structures
+::  by Artur Korni{\l}owicz
+::
+:: Received September 25, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, FUNCT_5, ORDERS_1, WAYBEL_0, MCART_1, LATTICE3, RELAT_2,
+      LATTICES, YELLOW_0, BHSP_3, ORDINAL2, PRE_TOPC, FUNCT_1, TARSKI,
+      QUANTAL1, AMI_1, YELLOW_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, RELSET_1,
+      FUNCT_1, MCART_1, DOMAIN_1, FUNCT_2, PRE_TOPC, FUNCT_5, STRUCT_0,
+      ORDERS_1, LATTICE3, YELLOW_0, WAYBEL_0;
+ constructors LATTICE3, DOMAIN_1, ORDERS_3, YELLOW_2, PRE_TOPC;
+ clusters LATTICE3, STRUCT_0, ORDERS_3, RELSET_1, WAYBEL_0, YELLOW_0, SUBSET_1,
+      XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin :: Preliminaries
+
+scheme FraenkelA2 {A() -> non empty set,
+                   F(set, set) -> set,
+                   P[set, set], Q[set, set] } :
+ { F(s,t) where s is Element of A(), t is Element of A() : P[s,t] }
+  is Subset of A()
+provided
+ for s being Element of A(), t being Element of A() holds F(s,t) in A();
+
+scheme ExtensionalityR { A, B() -> Relation,
+                         P[set,set] }:
+ A() = B()
+provided
+ for a, b being set holds [a,b] in A() iff P[a,b] and
+ for a, b being set holds [a,b] in B() iff P[a,b];
+
+definition let X be empty set;
+ cluster proj1 X -> empty;
+ cluster proj2 X -> empty;
+end;
+
+definition let X, Y be non empty set,
+               D be non empty Subset of [:X,Y:];
+ cluster proj1 D -> non empty;
+ cluster proj2 D -> non empty;
+end;
+
+definition let L be RelStr,
+               X be empty Subset of L;
+ cluster downarrow X -> empty;
+
+ cluster uparrow X -> empty;
+end;
+
+theorem :: YELLOW_3:1
+for X, Y being set, D being Subset of [:X,Y:] holds D c= [:proj1 D, proj2 D:];
+
+theorem :: YELLOW_3:2
+  for L being with_infima transitive antisymmetric RelStr
+ for a, b, c, d being Element of L st a <= c & b <= d holds a "/\" b <= c "/\"
+ d;
+
+theorem :: YELLOW_3:3
+  for L being with_suprema transitive antisymmetric RelStr
+ for a, b, c, d being Element of L st a <= c & b <= d holds a "\/" b <= c "\/"
+ d;
+
+theorem :: YELLOW_3:4
+  for L being complete reflexive antisymmetric (non empty RelStr)
+ for D being Subset of L, x being Element of L st x in D
+  holds (sup D) "/\" x = x;
+
+theorem :: YELLOW_3:5
+  for L being complete reflexive antisymmetric (non empty RelStr)
+ for D being Subset of L, x being Element of L st x in D
+  holds (inf D) "\/" x = x;
+
+theorem :: YELLOW_3:6
+  for L being RelStr, X, Y being Subset of L st X c= Y holds
+ downarrow X c= downarrow Y;
+
+theorem :: YELLOW_3:7
+  for L being RelStr, X, Y being Subset of L st X c= Y holds
+ uparrow X c= uparrow Y;
+
+theorem :: YELLOW_3:8
+  for S, T being with_infima Poset, f being map of S, T
+ for x, y being Element of S holds
+  f preserves_inf_of {x,y} iff f.(x "/\" y) = f.x "/\" f.y;
+
+theorem :: YELLOW_3:9
+  for S, T being with_suprema Poset, f being map of S, T
+ for x, y being Element of S holds
+  f preserves_sup_of {x,y} iff f.(x "\/" y) = f.x "\/" f.y;
+
+scheme Inf_Union { L() -> complete antisymmetric (non empty RelStr),
+                   P[set] } :
+ "/\" ({ "/\"(X,L()) where X is Subset of L(): P[X] },L())
+  >= "/\" (union {X where X is Subset of L(): P[X]},L());
+
+scheme Inf_of_Infs { L() -> complete LATTICE,
+                     P[set] } :
+ "/\" ({ "/\"(X,L()) where X is Subset of L(): P[X] },L())
+  = "/\" (union {X where X is Subset of L(): P[X]},L());
+
+scheme Sup_Union { L() -> complete antisymmetric (non empty RelStr),
+                   P[set] } :
+ "\/" ({ "\/"(X,L()) where X is Subset of L(): P[X] },L())
+  <= "\/" (union {X where X is Subset of L(): P[X]},L());
+
+scheme Sup_of_Sups { L() -> complete LATTICE,
+                     P[set] } :
+ "\/" ({ "\/"(X,L()) where X is Subset of L(): P[X] },L())
+  = "\/" (union {X where X is Subset of L(): P[X]},L());
+
+begin :: Properties of Cartesian Products of Relational Structures
+
+definition let P, R be Relation;
+ func ["P,R"] -> Relation means
+:: YELLOW_3:def 1
+  for x, y being set holds [x,y] in it iff
+   ex p,q,s,t being set st x = [p,q] & y = [s,t] & [p,s] in P & [q,t] in R;
+end;
+
+theorem :: YELLOW_3:10
+for P, R being Relation, x being set holds
+ x in ["P,R"] iff
+  [x`1`1,x`2`1] in P & [x`1`2,x`2`2] in R &
+   (ex a, b being set st x = [a,b]) & (ex c, d being set st x`1 = [c,d]) &
+    ex e, f being set st x`2 = [e,f];
+
+definition let A, B, X, Y be set;
+           let P be Relation of A, B;
+           let R be Relation of X, Y;
+ redefine func ["P,R"] -> Relation of [:A,X:],[:B,Y:];
+end;
+
+definition let X, Y be RelStr;
+ func [:X,Y:] -> strict RelStr means
+:: YELLOW_3:def 2
+  the carrier of it = [:the carrier of X, the carrier of Y:] &
+  the InternalRel of it = ["the InternalRel of X, the InternalRel of Y"];
+end;
+
+definition let L1, L2 be RelStr,
+               D be Subset of [:L1,L2:];
+ redefine func proj1 D -> Subset of L1;
+ redefine func proj2 D -> Subset of L2;
+end;
+
+definition let S1, S2 be RelStr,
+               D1 be Subset of S1,
+               D2 be Subset of S2;
+ redefine func [:D1,D2:] -> Subset of [:S1,S2:];
+end;
+
+definition let S1, S2 be non empty RelStr,
+               x be Element of S1,
+               y be Element of S2;
+ redefine func [x,y] -> Element of [:S1,S2:];
+end;
+
+definition let L1, L2 be non empty RelStr,
+               x be Element of [:L1,L2:];
+ redefine func x`1 -> Element of L1;
+ redefine func x`2 -> Element of L2;
+end;
+
+theorem :: YELLOW_3:11
+for S1, S2 being non empty RelStr
+ for a, c being Element of S1, b, d being Element of S2 holds
+  a <= c & b <= d iff [a,b] <= [c,d];
+
+theorem :: YELLOW_3:12
+for S1, S2 being non empty RelStr, x, y being Element of [:S1,S2:] holds
+ x <= y iff x`1 <= y`1 & x`2 <= y`2;
+
+theorem :: YELLOW_3:13
+  for A, B being RelStr, C being non empty RelStr
+ for f, g being map of [:A,B:],C
+  st for x being Element of A, y being Element of B holds f.[x,y] = g.[x,y]
+   holds f = g;
+
+definition let X, Y be non empty RelStr;
+ cluster [:X,Y:] -> non empty;
+end;
+
+definition let X, Y be reflexive RelStr;
+ cluster [:X,Y:] -> reflexive;
+end;
+
+definition let X, Y be antisymmetric RelStr;
+ cluster [:X,Y:] -> antisymmetric;
+end;
+
+definition let X, Y be transitive RelStr;
+ cluster [:X,Y:] -> transitive;
+end;
+
+definition let X, Y be with_suprema RelStr;
+ cluster [:X,Y:] -> with_suprema;
+end;
+
+definition let X, Y be with_infima RelStr;
+ cluster [:X,Y:] -> with_infima;
+end;
+
+theorem :: YELLOW_3:14
+  for X, Y being RelStr st [:X,Y:] is non empty
+ holds X is non empty & Y is non empty;
+
+theorem :: YELLOW_3:15
+  for X, Y being non empty RelStr st [:X,Y:] is reflexive
+ holds X is reflexive & Y is reflexive;
+
+theorem :: YELLOW_3:16
+  for X, Y being non empty reflexive RelStr st [:X,Y:] is antisymmetric
+ holds X is antisymmetric & Y is antisymmetric;
+
+theorem :: YELLOW_3:17
+  for X, Y being non empty reflexive RelStr st [:X,Y:] is transitive
+ holds X is transitive & Y is transitive;
+
+theorem :: YELLOW_3:18
+  for X, Y being non empty reflexive RelStr st [:X,Y:] is with_suprema
+ holds X is with_suprema & Y is with_suprema;
+
+theorem :: YELLOW_3:19
+  for X, Y being non empty reflexive RelStr st [:X,Y:] is with_infima
+ holds X is with_infima & Y is with_infima;
+
+definition let S1, S2 be RelStr,
+               D1 be directed Subset of S1,
+               D2 be directed Subset of S2;
+ redefine func [:D1,D2:] -> directed Subset of [:S1,S2:];
+end;
+
+theorem :: YELLOW_3:20
+  for S1, S2 being non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  st [:D1,D2:] is directed holds D1 is directed & D2 is directed;
+
+theorem :: YELLOW_3:21
+for S1, S2 being non empty RelStr
+ for D being non empty Subset of [:S1,S2:]
+  holds proj1 D is non empty & proj2 D is non empty;
+
+theorem :: YELLOW_3:22
+  for S1, S2 being non empty reflexive RelStr
+ for D being non empty directed Subset of [:S1,S2:]
+  holds proj1 D is directed & proj2 D is directed;
+
+definition let S1, S2 be RelStr,
+               D1 be filtered Subset of S1,
+               D2 be filtered Subset of S2;
+ redefine func [:D1,D2:] -> filtered Subset of [:S1,S2:];
+end;
+
+theorem :: YELLOW_3:23
+  for S1, S2 being non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  st [:D1,D2:] is filtered holds D1 is filtered & D2 is filtered;
+
+theorem :: YELLOW_3:24
+  for S1, S2 being non empty reflexive RelStr
+ for D being non empty filtered Subset of [:S1,S2:]
+  holds proj1 D is filtered & proj2 D is filtered;
+
+definition let S1, S2 be RelStr,
+               D1 be upper Subset of S1,
+               D2 be upper Subset of S2;
+ redefine func [:D1,D2:] -> upper Subset of [:S1,S2:];
+end;
+
+theorem :: YELLOW_3:25
+  for S1, S2 being non empty reflexive RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  st [:D1,D2:] is upper holds D1 is upper & D2 is upper;
+
+theorem :: YELLOW_3:26
+  for S1, S2 being non empty reflexive RelStr
+ for D being non empty upper Subset of [:S1,S2:]
+  holds proj1 D is upper & proj2 D is upper;
+
+definition let S1, S2 be RelStr,
+               D1 be lower Subset of S1,
+               D2 be lower Subset of S2;
+ redefine func [:D1,D2:] -> lower Subset of [:S1,S2:];
+end;
+
+theorem :: YELLOW_3:27
+  for S1, S2 being non empty reflexive RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  st [:D1,D2:] is lower holds D1 is lower & D2 is lower;
+
+theorem :: YELLOW_3:28
+  for S1, S2 being non empty reflexive RelStr
+ for D being non empty lower Subset of [:S1,S2:]
+  holds proj1 D is lower & proj2 D is lower;
+
+definition let R be RelStr;
+ attr R is void means
+:: YELLOW_3:def 3
+  the InternalRel of R is empty;
+end;
+
+definition
+ cluster empty -> void RelStr;
+end;
+
+definition
+ cluster non void non empty strict Poset;
+end;
+
+definition
+ cluster non void -> non empty RelStr;
+end;
+
+definition
+ cluster non empty reflexive -> non void RelStr;
+end;
+
+definition let R be non void RelStr;
+ cluster the InternalRel of R -> non empty;
+end;
+
+theorem :: YELLOW_3:29
+for S1, S2 being non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  for x being Element of S1, y being Element of S2 st
+ [x,y] is_>=_than [:D1,D2:] holds x is_>=_than D1 & y is_>=_than D2;
+
+theorem :: YELLOW_3:30
+for S1, S2 being non empty RelStr
+ for D1 being Subset of S1, D2 being Subset of S2
+  for x being Element of S1, y being Element of S2 st
+ x is_>=_than D1 & y is_>=_than D2 holds [x,y] is_>=_than [:D1,D2:];
+
+theorem :: YELLOW_3:31
+for S1, S2 being non empty RelStr
+ for D being Subset of [:S1,S2:]
+  for x being Element of S1, y being Element of S2 holds
+ [x,y] is_>=_than D iff x is_>=_than proj1 D & y is_>=_than proj2 D;
+
+theorem :: YELLOW_3:32
+for S1, S2 being non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  for x being Element of S1, y being Element of S2 st
+ [x,y] is_<=_than [:D1,D2:] holds x is_<=_than D1 & y is_<=_than D2;
+
+theorem :: YELLOW_3:33
+for S1, S2 being non empty RelStr
+ for D1 being Subset of S1, D2 being Subset of S2
+  for x being Element of S1, y being Element of S2 st
+ x is_<=_than D1 & y is_<=_than D2 holds [x,y] is_<=_than [:D1,D2:];
+
+theorem :: YELLOW_3:34
+for S1, S2 being non empty RelStr
+ for D being Subset of [:S1,S2:]
+  for x being Element of S1, y being Element of S2 holds
+ [x,y] is_<=_than D iff x is_<=_than proj1 D & y is_<=_than proj2 D;
+
+theorem :: YELLOW_3:35
+for S1, S2 being antisymmetric non empty RelStr
+ for D1 being Subset of S1, D2 being Subset of S2
+  for x being Element of S1, y being Element of S2 st
+   ex_sup_of D1,S1 & ex_sup_of D2,S2 &
+  for b being Element of [:S1,S2:] st b is_>=_than [:D1,D2:] holds [x,y] <= b
+ holds
+  (for c being Element of S1 st c is_>=_than D1 holds x <= c) &
+   for d being Element of S2 st d is_>=_than D2 holds y <= d;
+
+theorem :: YELLOW_3:36
+for S1, S2 being antisymmetric non empty RelStr
+ for D1 being Subset of S1, D2 being Subset of S2
+  for x being Element of S1, y being Element of S2 st
+   ex_inf_of D1,S1 & ex_inf_of D2,S2 &
+  for b being Element of [:S1,S2:] st b is_<=_than [:D1,D2:] holds [x,y] >= b
+ holds
+  (for c being Element of S1 st c is_<=_than D1 holds x >= c) &
+   for d being Element of S2 st d is_<=_than D2 holds y >= d;
+
+theorem :: YELLOW_3:37
+  for S1, S2 being antisymmetric non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  for x being Element of S1, y being Element of S2 st
+   (for c being Element of S1 st c is_>=_than D1 holds x <= c) &
+    for d being Element of S2 st d is_>=_than D2 holds y <= d holds
+  for b being Element of [:S1,S2:] st b is_>=_than [:D1,D2:] holds [x,y] <= b;
+
+theorem :: YELLOW_3:38
+  for S1, S2 being antisymmetric non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  for x being Element of S1, y being Element of S2 st
+   (for c being Element of S1 st c is_>=_than D1 holds x >= c) &
+    for d being Element of S2 st d is_>=_than D2 holds y >= d holds
+  for b being Element of [:S1,S2:] st b is_>=_than [:D1,D2:] holds [x,y] >= b;
+
+theorem :: YELLOW_3:39
+for S1, S2 being antisymmetric non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  holds ex_sup_of D1,S1 & ex_sup_of D2,S2 iff ex_sup_of [:D1,D2:],[:S1,S2:];
+
+theorem :: YELLOW_3:40
+for S1, S2 being antisymmetric non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  holds ex_inf_of D1,S1 & ex_inf_of D2,S2 iff ex_inf_of [:D1,D2:],[:S1,S2:];
+
+theorem :: YELLOW_3:41
+for S1, S2 being antisymmetric non empty RelStr
+ for D being Subset of [:S1,S2:] holds
+  ex_sup_of proj1 D,S1 & ex_sup_of proj2 D,S2 iff ex_sup_of D,[:S1,S2:];
+
+theorem :: YELLOW_3:42
+for S1, S2 being antisymmetric non empty RelStr
+ for D being Subset of [:S1,S2:] holds
+  ex_inf_of proj1 D,S1 & ex_inf_of proj2 D,S2 iff ex_inf_of D,[:S1,S2:];
+
+theorem :: YELLOW_3:43
+for S1, S2 being antisymmetric non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  st ex_sup_of D1,S1 & ex_sup_of D2,S2 holds sup [:D1,D2:] = [sup D1,sup D2];
+
+theorem :: YELLOW_3:44
+for S1, S2 being antisymmetric non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  st ex_inf_of D1,S1 & ex_inf_of D2,S2 holds inf [:D1,D2:] = [inf D1,inf D2];
+
+definition let X, Y be complete antisymmetric (non empty RelStr);
+ cluster [:X,Y:] -> complete;
+end;
+
+theorem :: YELLOW_3:45
+  for X, Y being non empty lower-bounded antisymmetric RelStr
+ st [:X,Y:] is complete holds X is complete & Y is complete;
+
+theorem :: YELLOW_3:46
+  for L1,L2 being antisymmetric non empty RelStr
+ for D being non empty Subset of [:L1,L2:]
+  st [:L1,L2:] is complete or ex_sup_of D,[:L1,L2:]
+  holds sup D = [sup proj1 D,sup proj2 D];
+
+theorem :: YELLOW_3:47
+  for L1,L2 being antisymmetric non empty RelStr
+ for D being non empty Subset of [:L1,L2:]
+  st [:L1,L2:] is complete or ex_inf_of D,[:L1,L2:]
+  holds inf D = [inf proj1 D,inf proj2 D];
+
+theorem :: YELLOW_3:48
+  for S1,S2 being non empty reflexive RelStr
+ for D being non empty directed Subset of [:S1,S2:]
+  holds [:proj1 D,proj2 D:] c= downarrow D;
+
+theorem :: YELLOW_3:49
+  for S1,S2 being non empty reflexive RelStr
+ for D being non empty filtered Subset of [:S1,S2:]
+  holds [:proj1 D,proj2 D:] c= uparrow D;
+
+scheme Kappa2DS { X,Y,Z() -> non empty RelStr,
+                   F(set,set) -> set }:
+ ex f being map of [:X(),Y():], Z()
+  st for x being Element of X(), y being Element of Y() holds f.[x,y]=F(x,y)
+provided
+ for x being Element of X(), y being Element of Y() holds
+  F(x,y) is Element of Z();

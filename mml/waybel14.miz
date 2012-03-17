@@ -1,0 +1,1993 @@
+:: The Scott Topology, Part II
+::  by Czes{\l}aw Byli\'nski and Piotr Rudnicki
+::
+:: Received August 27, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary FINSET_1, SETFAM_1, TARSKI, BOOLE, CARD_1, SUBSET_1, RELAT_2,
+      LATTICE3, ORDERS_1, WAYBEL_0, LATTICES, BHSP_3, ORDINAL2, WAYBEL_3,
+      WAYBEL_6, RELAT_1, FILTER_0, WAYBEL_8, QUANTAL1, COMPTS_1, PRE_TOPC,
+      YELLOW_1, WAYBEL_9, CANTOR_1, WAYBEL11, PROB_1, YELLOW_6, WAYBEL_2,
+      FUNCT_1, TMAP_1, CONNSP_2, TOPS_1, YELLOW_8, TSP_1, YELLOW_0, WAYBEL_5,
+      OPPCAT_1, WAYBEL14, RLVECT_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, SETFAM_1, FINSET_1,
+      DOMAIN_1, FUNCT_1, ORDERS_1, LATTICE3, CARD_1, STRUCT_0, PRE_TOPC,
+      TOPS_1, TOPS_2, CONNSP_2, BORSUK_1, TMAP_1, CANTOR_1, TSP_1, COMPTS_1,
+      YELLOW_0, YELLOW_1, YELLOW_3, YELLOW_4, YELLOW_6, YELLOW_7, YELLOW_8,
+      WAYBEL_0, WAYBEL_1, WAYBEL_2, WAYBEL_3, WAYBEL_5, WAYBEL_6, WAYBEL_8,
+      WAYBEL_9, WAYBEL11;
+ constructors NAT_1, DOMAIN_1, TOPS_1, TOPS_2, TMAP_1, CANTOR_1, T_0TOPSP,
+      YELLOW_4, YELLOW_8, WAYBEL_1, WAYBEL_3, WAYBEL_5, WAYBEL_6, WAYBEL_8,
+      WAYBEL11, BORSUK_1, MEMBERED;
+ clusters SUBSET_1, STRUCT_0, FINSET_1, LATTICE3, BORSUK_1, PRE_TOPC, CANTOR_1,
+      YELLOW_1, YELLOW_4, YELLOW_6, YELLOW_8, WAYBEL_0, WAYBEL_3, WAYBEL_6,
+      WAYBEL_7, WAYBEL_8, WAYBEL11, RELSET_1, MEMBERED, ZFMISC_1;
+ requirements NUMERALS, BOOLE, SUBSET;
+ definitions TARSKI, WAYBEL_0, WAYBEL_6, TMAP_1, YELLOW_8, COMPTS_1, WAYBEL_3,
+      WAYBEL_1, WAYBEL_8, TOPS_2, XBOOLE_0;
+ theorems TARSKI, ZFMISC_1, SUBSET_1, RELAT_1, DOMAIN_1, FUNCT_1, FUNCT_2,
+      SETFAM_1, LATTICE3, CARD_2, ORDERS_1, PRE_TOPC, TOPS_1, TOPS_2, BORSUK_1,
+      TMAP_1, CONNSP_2, COMPTS_1, CANTOR_1, YELLOW_0, YELLOW_1, YELLOW_2,
+      YELLOW_3, YELLOW_4, YELLOW_6, YELLOW_7, YELLOW_8, WAYBEL_0, WAYBEL_2,
+      WAYBEL_3, WAYBEL_4, WAYBEL_6, WAYBEL_8, WAYBEL11, WAYBEL12, XBOOLE_0,
+      XBOOLE_1, XCMPLX_1;
+ schemes NAT_1;
+
+begin :: Preliminaries
+
+theorem Th1:
+for X being set, F being finite Subset-Family of X
+ ex G being finite Subset-Family of X st G c= F & union G = union F &
+  for g being Subset of X st g in G holds not g c= union (G\{g})
+proof let X be set;
+ defpred P[Nat] means for F being finite Subset-Family of X st card F = $1
+  ex G being finite Subset-Family of X st G c= F & union G = union F &
+   for g being Subset of X st g in G holds not g c= union (G\{g});
+A1: P[0]
+    proof let F be finite Subset-Family of X; assume
+    A2: card F = 0;
+     take G = F;
+     thus G c= F;
+     thus union G = union F;
+     thus for g being Subset of X st g in G holds not g c= union (G\{g}) by A2,
+CARD_2:59;
+    end;
+A3: now let n be Nat; assume
+   A4: P[n];
+     thus P[n+1]
+     proof
+     let F be finite Subset-Family of X; assume
+   A5: card F = n+1;
+    per cases;
+     suppose ex g being Subset of X st g in F & g c= union (F\{g});
+       then consider g being Subset of X such that
+     A6: g in F & g c= union (F\{g});
+       reconsider FF = F\{g} as finite Subset-Family of X by SETFAM_1:def 7;
+         {g} c= F by A6,ZFMISC_1:37;
+     then A7: F = FF \/ {g} by XBOOLE_1:45;
+         g in {g} by TARSKI:def 1;
+       then not g in FF by XBOOLE_0:def 4;
+       then card (FF \/ {g}) = card FF + 1 by CARD_2:54;
+       then card FF = n by A5,A7,XCMPLX_1:2;
+       then consider G being finite Subset-Family of X such that
+     A8: G c= FF and
+     A9: union G = union FF and
+     A10: for g being Subset of X st g in G holds not g c= union (G\{g})
+              by A4;
+      take G;
+     A11: FF c= F by A7,XBOOLE_1:7;
+       hence G c= F by A8,XBOOLE_1:1;
+     A12: union FF c= union F by A11,ZFMISC_1:95;
+           union F c= union FF proof let x be set; assume x in union F;
+           then consider X being set such that
+         A13: x in X & X in F by TARSKI:def 4;
+          per cases by A7,A13,XBOOLE_0:def 2;
+           suppose X in FF; then X c= union FF by ZFMISC_1:92;
+            hence thesis by A13;
+           suppose X in {g}; then X = g by TARSKI:def 1;
+            hence thesis by A6,A13;
+         end;
+      hence union G = union F by A9,A12,XBOOLE_0:def 10;
+      thus for g being Subset of X st g in G holds not g c= union (G\{g})
+              by A10;
+     suppose
+       A14: not ex g being Subset of X st g in F & g c= union (F\{g});
+     take G = F;
+     thus G c= F;
+     thus union G = union F;
+     thus for g being Subset of X st g in G holds not g c= union (G\{g})
+          by A14;
+     end;
+    end;
+A15: for n being Nat holds P[n] from Ind(A1, A3);
+ let F be finite Subset-Family of X;
+     card F = card F;
+ hence thesis by A15;
+end;
+
+Lm1:
+ for S being 1-sorted, X, Y being Subset of S
+  holds X c= Y` iff Y c= X`
+proof let S be 1-sorted, X, Y be Subset of S;
+    Y = Y``;
+ hence X c= Y` iff Y c= X` by PRE_TOPC:19;
+end;
+
+theorem Th2:
+ for S being 1-sorted, X being Subset of S
+  holds X` = the carrier of S iff X is empty
+proof let S be 1-sorted, X be Subset of S;
+ hereby assume X` = the carrier of S;
+   then X` = [#](the carrier of S) by SUBSET_1:def 4;
+   then X = ([#](the carrier of S))`;
+   then X = [#]S \ [#](the carrier of S) by PRE_TOPC:17
+    .= [#]S \ the carrier of S by SUBSET_1:def 4
+    .= {} by XBOOLE_1:37;
+ hence X is empty;
+ end; assume X is empty; then X = {}S; then X` = [#]S by PRE_TOPC:27;
+ hence X` = the carrier of S by PRE_TOPC:12;
+end;
+
+theorem Th3:
+for R being antisymmetric with_infima transitive non empty RelStr,
+    x, y being Element of R
+ holds downarrow (x"/\"y) = (downarrow x) /\ downarrow y
+proof let R be antisymmetric with_infima transitive non empty RelStr,
+          x,y be Element of R;
+    now let z be set;
+   hereby assume
+   A1: z in downarrow (x"/\"y);
+      then reconsider z' = z as Element of R;
+   A2: z' <= (x"/\"y) by A1,WAYBEL_0:17;
+        (x"/\"y) <= x & (x"/\"y) <= y by YELLOW_0:23;
+      then z' <= x & z' <= y by A2,YELLOW_0:def 2;
+      then z' in downarrow x & z' in downarrow y by WAYBEL_0:17;
+    hence z in (downarrow x) /\ downarrow y by XBOOLE_0:def 3;
+   end; assume A3: z in (downarrow x) /\ downarrow y;
+  then A4: z in (downarrow x) & z in downarrow y by XBOOLE_0:def 3;
+     reconsider z' = z as Element of R by A3;
+       z' <= x & z' <= y by A4,WAYBEL_0:17;
+     then x"/\"y >= z' by YELLOW_0:23;
+   hence z in downarrow (x"/\"y) by WAYBEL_0:17;
+  end;
+ hence downarrow (x"/\"y) = (downarrow x) /\ downarrow y by TARSKI:2;
+end;
+
+theorem
+  for R being antisymmetric with_suprema transitive non empty RelStr,
+    x, y being Element of R
+ holds uparrow (x"\/"y) = (uparrow x) /\ uparrow y
+proof let R be antisymmetric with_suprema transitive non empty RelStr,
+          x,y be Element of R;
+    now let z be set;
+   hereby assume
+   A1: z in uparrow (x"\/"y);
+      then reconsider z' = z as Element of R;
+   A2: z' >= (x"\/"y) by A1,WAYBEL_0:18;
+        (x"\/"y) >= x & (x"\/"y) >= y by YELLOW_0:22;
+      then z' >= x & z' >= y by A2,YELLOW_0:def 2;
+      then z' in uparrow x & z' in uparrow y by WAYBEL_0:18;
+    hence z in (uparrow x) /\ uparrow y by XBOOLE_0:def 3;
+   end; assume A3: z in (uparrow x) /\ uparrow y;
+  then A4: z in (uparrow x) & z in uparrow y by XBOOLE_0:def 3;
+     reconsider z' = z as Element of R by A3;
+       z' >= x & z' >= y by A4,WAYBEL_0:18;
+     then x"\/"y <= z' by YELLOW_0:22;
+   hence z in uparrow (x"\/"y) by WAYBEL_0:18;
+  end;
+ hence uparrow (x"\/"y) = (uparrow x) /\ uparrow y by TARSKI:2;
+end;
+
+theorem Th5:
+for L being complete antisymmetric (non empty RelStr),
+    X being lower Subset of L
+ st sup X in X holds X = downarrow sup X
+proof let L be complete antisymmetric (non empty RelStr),
+          X be lower Subset of L such that
+A1: sup X in X;
+     X is_<=_than sup X by YELLOW_0:32;
+ hence X c= downarrow sup X by YELLOW_2:1;
+ thus downarrow sup X c= X by A1,WAYBEL11:6;
+end;
+
+theorem
+  for L being complete antisymmetric (non empty RelStr),
+    X being upper Subset of L
+ st inf X in X holds X = uparrow inf X
+proof let L be complete antisymmetric (non empty RelStr),
+          X be upper Subset of L such that
+A1: inf X in X;
+     X is_>=_than inf X by YELLOW_0:33;
+ hence X c= uparrow inf X by YELLOW_2:2;
+ thus uparrow inf X c= X by A1,WAYBEL11:42;
+end;
+
+theorem Th7:
+ for R being non empty reflexive transitive RelStr, x, y being Element of R
+  holds x << y iff uparrow y c= wayabove x
+proof let R be non empty reflexive transitive RelStr,
+          x, y be Element of R;
+ hereby assume
+ A1: x << y;
+  thus uparrow y c= wayabove x proof let z be set; assume
+ A2: z in uparrow y;
+    then reconsider z' = z as Element of R;
+      y <= z' by A2,WAYBEL_0:18;
+    then x << z' by A1,WAYBEL_3:2;
+   hence z in wayabove x by WAYBEL_3:8;
+  end;
+ end; assume
+A3: uparrow y c= wayabove x; y <= y;
+   then y in uparrow y by WAYBEL_0:18;
+ hence x << y by A3,WAYBEL_3:8;
+end;
+
+theorem
+   for R being non empty reflexive transitive RelStr, x, y being Element of R
+  holds x << y iff downarrow x c= waybelow y
+proof let R be non empty reflexive transitive RelStr,
+          x, y be Element of R;
+ hereby assume
+ A1: x << y;
+  thus downarrow x c= waybelow y proof let z be set; assume
+ A2: z in downarrow x;
+    then reconsider z' = z as Element of R;
+      z' <= x by A2,WAYBEL_0:17;
+    then z' << y by A1,WAYBEL_3:2;
+   hence z in waybelow y by WAYBEL_3:7;
+  end;
+ end; assume
+A3: downarrow x c= waybelow y; x <= x;
+   then x in downarrow x by WAYBEL_0:17;
+ hence x << y by A3,WAYBEL_3:7;
+end;
+
+theorem Th9:
+for R being complete reflexive antisymmetric (non empty RelStr),
+    x being Element of R
+ holds sup waybelow x <= x & x <= inf wayabove x
+proof let R be complete reflexive antisymmetric (non empty RelStr),
+          x be Element of R;
+    x is_>=_than waybelow x by WAYBEL_3:9;
+ hence sup waybelow x <= x by YELLOW_0:32;
+    x is_<=_than wayabove x by WAYBEL_3:10;
+ hence thesis by YELLOW_0:33;
+end;
+
+theorem Th10:
+for L being lower-bounded antisymmetric non empty RelStr
+ holds uparrow Bottom L = the carrier of L
+proof let L be lower-bounded antisymmetric non empty RelStr;
+  set uL = uparrow Bottom L, cL = the carrier of L;
+    now let x be set;
+   thus x in uL implies x in cL;
+   assume x in cL;
+    then reconsider x' = x as Element of L;
+      Bottom L <= x' by YELLOW_0:44;
+   hence x in uL by WAYBEL_0:18;
+  end;
+ hence uparrow Bottom L = the carrier of L by TARSKI:2;
+end;
+
+theorem
+  for L being upper-bounded antisymmetric non empty RelStr
+ holds downarrow Top L = the carrier of L
+proof let L be upper-bounded antisymmetric non empty RelStr;
+  set uL = downarrow Top L, cL = the carrier of L;
+    now let x be set;
+   thus x in uL implies x in cL;
+   assume x in cL;
+    then reconsider x' = x as Element of L;
+      Top L >= x' by YELLOW_0:45;
+   hence x in uL by WAYBEL_0:17;
+  end;
+ hence thesis by TARSKI:2;
+end;
+
+theorem Th12:
+for P being with_suprema Poset, x, y being Element of P
+ holds (wayabove x)"\/"(wayabove y) c= uparrow (x"\/"y)
+proof let R be with_suprema Poset, x, y be Element of R;
+      wayabove x c= uparrow x & wayabove y c= uparrow y by WAYBEL_3:11;
+then A1: (wayabove x)"\/"(wayabove y) c= (uparrow x)"\/"(uparrow y)
+             by YELLOW_4:21;
+A2: uparrow x = uparrow {x} & uparrow y = uparrow {y} by WAYBEL_0:def 18;
+A3: {x}"\/"{y} = {x"\/"y} by YELLOW_4:19;
+A4: uparrow {x"\/"y} = uparrow (x"\/"y) by WAYBEL_0:def 18;
+      (uparrow x)"\/"(uparrow y) c=
+    uparrow ((uparrow x)"\/"(uparrow y)) by WAYBEL_0:16;
+    then (uparrow x)"\/"(uparrow y) c= uparrow (x"\/"y)
+        by A2,A3,A4,YELLOW_4:35;
+ hence thesis by A1,XBOOLE_1:1;
+end;
+
+theorem
+  for P being with_infima Poset, x, y being Element of P
+ holds (waybelow x)"/\"(waybelow y) c= downarrow (x"/\"y)
+proof let R be with_infima Poset, x, y be Element of R;
+     waybelow x c= downarrow x & waybelow y c= downarrow y by WAYBEL_3:11;
+then A1: (waybelow x)"/\"(waybelow y) c= (downarrow x)"/\"(downarrow y)
+             by YELLOW_4:48;
+A2: downarrow x=downarrow {x} & downarrow y=downarrow {y} by WAYBEL_0:def 17;
+A3: {x}"/\"{y} = {x"/\"y} by YELLOW_4:46;
+A4: downarrow {x"/\"y} = downarrow (x"/\"y) by WAYBEL_0:def 17;
+      (downarrow x)"/\"(downarrow y) c=
+    downarrow ((downarrow x)"/\"(downarrow y)) by WAYBEL_0:16;
+    then (downarrow x)"/\"(downarrow y) c= downarrow (x"/\"y)
+        by A2,A3,A4,YELLOW_4:62;
+ hence thesis by A1,XBOOLE_1:1;
+end;
+
+theorem Th14:
+for R being with_suprema non empty Poset, l being Element of R holds
+ l is co-prime iff
+ for x,y be Element of R st l <= x "\/" y holds l <= x or l <= y
+proof let R be with_suprema non empty Poset, l be Element of R;
+ hereby assume l is co-prime;
+ then A1: l~ is prime by WAYBEL_6:def 8;
+  let x, y be Element of R; assume
+      l <= x "\/" y;
+ then A2: (x "\/" y)~ <= l~ by LATTICE3:9;
+      (x "\/" y)~ = x"\/"y by LATTICE3:def 6
+                   .= (x~)"/\"(y~) by YELLOW_7:23;
+    then x~ <= l~ or y~ <= l~ by A1,A2,WAYBEL_6:def 6;
+  hence l <= x or l <= y by LATTICE3:9;
+ end; assume
+A3: for x,y be Element of R st l <= x "\/" y holds l <= x or l <= y;
+ let x,y be Element of R~; assume
+A4: x "/\" y <= l~;
+     ~(x "/\" y) = x "/\" y by LATTICE3:def 7
+                  .= ~x"\/"~y by YELLOW_7:24;
+   then l <= ~x"\/"~y by A4,YELLOW_7:2;
+   then l <= ~x or l <= ~y by A3;
+ hence x <= l~ or y <= l~ by YELLOW_7:2;
+end;
+
+theorem Th15:
+for P being complete (non empty Poset),
+    V being non empty Subset of P
+ holds downarrow inf V = meet {downarrow u where u is Element of P : u in V}
+proof let P be complete (non empty Poset),
+      V be non empty Subset of P;
+ set F = {downarrow u where u is Element of P : u in V};
+   consider u being set such that
+A1: u in V by XBOOLE_0:def 1;
+   reconsider u as Element of P by A1;
+   A2: downarrow u in F by A1;
+     F c= bool the carrier of P proof let X be set; assume X in F;
+      then consider u being Element of P such that
+   A3: X = downarrow u & u in V;
+    thus X in bool the carrier of P by A3;
+   end;
+  then reconsider F as Subset-Family of P by SETFAM_1:def 7;
+  reconsider F as Subset-Family of P;
+    now let x be set;
+   hereby assume
+  A4: x in downarrow inf V;
+     then reconsider d = x as Element of P;
+  A5:  d <= inf V by A4,WAYBEL_0:17;
+       now let Y be set; assume Y in F;
+      then consider u being Element of P such that
+     A6: Y = downarrow u & u in V;
+          inf V is_<=_than V by YELLOW_0:33;
+        then inf V <= u by A6,LATTICE3:def 8;
+        then d <= u by A5,ORDERS_1:26;
+      hence x in Y by A6,WAYBEL_0:17;
+     end;
+    hence x in meet F by A2,SETFAM_1:def 1;
+   end; assume
+  A7: x in meet F;
+    then reconsider d = x as Element of P;
+       now let b be Element of P; assume b in V;
+        then downarrow b in F;
+        then d in downarrow b by A7,SETFAM_1:def 1;
+      hence d <= b by WAYBEL_0:17;
+     end;
+    then d is_<=_than V by LATTICE3:def 8;
+    then d <= inf V by YELLOW_0:33;
+   hence x in downarrow inf V by WAYBEL_0:17;
+  end;
+ hence thesis by TARSKI:2;
+end;
+
+theorem
+  for P being complete (non empty Poset),
+    V being non empty Subset of P
+ holds uparrow sup V = meet {uparrow u where u is Element of P : u in V}
+proof let P be complete (non empty Poset),
+      V be non empty Subset of P;
+ set F = {uparrow u where u is Element of P : u in V};
+   consider u being set such that
+A1: u in V by XBOOLE_0:def 1;
+   reconsider u as Element of P by A1;
+   A2: uparrow u in F by A1;
+     F c= bool the carrier of P proof let X be set; assume X in F;
+      then consider u being Element of P such that
+   A3: X = uparrow u & u in V;
+    thus X in bool the carrier of P by A3;
+   end;
+  then reconsider F as Subset-Family of P by SETFAM_1:def 7;
+  reconsider F as Subset-Family of P;
+    now let x be set;
+   hereby assume
+  A4: x in uparrow sup V;
+     then reconsider d = x as Element of P;
+  A5:  d >= sup V by A4,WAYBEL_0:18;
+       now let Y be set; assume Y in F;
+      then consider u being Element of P such that
+     A6: Y = uparrow u & u in V;
+          sup V is_>=_than V by YELLOW_0:32;
+        then sup V >= u by A6,LATTICE3:def 9;
+        then d >= u by A5,ORDERS_1:26;
+      hence x in Y by A6,WAYBEL_0:18;
+     end;
+    hence x in meet F by A2,SETFAM_1:def 1;
+   end; assume
+  A7: x in meet F;
+    then reconsider d = x as Element of P;
+       now let b be Element of P; assume b in V;
+        then uparrow b in F;
+        then d in uparrow b by A7,SETFAM_1:def 1;
+      hence d >= b by WAYBEL_0:18;
+     end;
+    then d is_>=_than V by LATTICE3:def 9;
+    then d >= sup V by YELLOW_0:32;
+   hence x in uparrow sup V by WAYBEL_0:18;
+  end;
+ hence thesis by TARSKI:2;
+end;
+
+definition let L be sup-Semilattice,
+               x be Element of L;
+ cluster compactbelow x -> directed;
+ coherence proof set cX = compactbelow x;
+  let xx, yy be Element of L such that
+A1: xx in cX & yy in cX;
+    set z = xx "\/" yy;
+  take z;
+      xx <= x & yy <= x by A1,WAYBEL_8:4;
+then A2: z <= x by YELLOW_0:22;
+A3: xx <= z & yy <= z by YELLOW_0:22;
+      xx is compact & yy is compact by A1,WAYBEL_8:4;
+    then xx << xx & yy << yy by WAYBEL_3:def 2;
+    then xx << z & yy << z by A3,WAYBEL_3:2;
+    then z << z by WAYBEL_3:3;
+    then z is compact by WAYBEL_3:def 2;
+  hence z in cX by A2,WAYBEL_8:4;
+  thus xx <= z & yy <= z by YELLOW_0:22;
+ end;
+end;
+
+theorem Th17:
+        :: See a parenthetical remark in the middle of p. 106.
+        :: This fact is needed in the proof of II-1.11(ii), p. 105.
+ for T being non empty TopSpace, S being irreducible Subset of T,
+     V being Element of InclPoset the topology of T
+   st V = S` holds V is prime
+proof let T be non empty TopSpace, S be irreducible Subset of T,
+          V be Element of InclPoset the topology of T such that
+A1: V =S`;
+A2: the carrier of InclPoset the topology of T = the topology of T
+       by YELLOW_1:1;
+A3: S is closed by YELLOW_8:def 4;
+   set sL = the topology of T;
+   let X, Y be Element of InclPoset sL; assume
+  A4: X "/\" Y <= V;
+        X in sL & Y in sL by A2;
+      then reconsider X' = X, Y' = Y as Subset of T;
+        X' is open & Y' is open by A2,PRE_TOPC:def 5;
+      then X'` is closed & Y'` is closed by TOPS_1:30;
+  then A5: (X'`)/\S is closed & (Y'`)/\S is closed by A3,TOPS_1:35;
+        X' /\ Y' in sL by A2,PRE_TOPC:def 1;
+      then X /\ Y = X "/\" Y by YELLOW_1:9;
+      then X /\ Y c= V by A4,YELLOW_1:3;
+      then S c= (X'/\Y')` by A1,Lm1;
+      then S c= X'` \/ Y'` by WAYBEL12:6;
+      then S = (X'` \/ Y'`)/\S by XBOOLE_1:28;
+      then S = (X'`)/\S \/ (Y'`)/\S by XBOOLE_1:23;
+      then S = (X'`)/\S or S = (Y'`)/\S by A5,YELLOW_8:def 4;
+      then S c= X'` or S c= Y'` by XBOOLE_1:17;
+      then X c= V or Y c= V by A1,Lm1;
+   hence X <= V or Y <= V by YELLOW_1:3;
+end;
+
+theorem Th18:
+for T being non empty TopSpace,
+    x, y be Element of InclPoset the topology of T
+ holds x "\/" y = x \/ y & x "/\" y = x /\ y
+proof let T be non empty TopSpace,
+          x, y be Element of InclPoset the topology of T;
+A1: the carrier of InclPoset the topology of T = the topology of T
+  by YELLOW_1:1;
+then x in the topology of T & y in the topology of T;
+    then reconsider x' = x, y' = y as Subset of T;
+    x' is open & y' is open by A1,PRE_TOPC:def 5;
+  then x' \/ y' is open by TOPS_1:37;
+  then x' \/ y' in the topology of T by PRE_TOPC:def 5;
+ hence x "\/" y = x \/ y by YELLOW_1:8;
+    x' /\ y' in the topology of T by A1,PRE_TOPC:def 1;
+ hence x "/\" y = x /\ y by YELLOW_1:9;
+end;
+
+theorem Th19:
+for T being non empty TopSpace,
+    V being Element of InclPoset the topology of T
+ holds V is prime iff
+       for X, Y being Element of InclPoset the topology of T
+        st X/\Y c= V holds X c= V or Y c= V
+proof let T be non empty TopSpace,
+          V be Element of InclPoset the topology of T;
+ hereby assume
+ A1: V is prime;
+  let X, Y be Element of InclPoset the topology of T; assume
+ A2: X/\Y c= V;
+      X/\Y = X"/\"Y by Th18;
+    then X"/\"Y <= V by A2,YELLOW_1:3;
+    then X <= V or Y <= V by A1,WAYBEL_6:def 6;
+  hence X c= V or Y c= V by YELLOW_1:3;
+ end; assume
+A3: for X, Y being Element of InclPoset the topology of T
+        st X/\Y c= V holds X c= V or Y c= V;
+ let X, Y be Element of InclPoset the topology of T such that
+A4: X "/\" Y <= V;
+      X/\Y = X"/\"Y by Th18;
+    then X/\Y c= V by A4,YELLOW_1:3;
+   then X c= V or Y c= V by A3;
+ hence X <= V or Y <= V by YELLOW_1:3;
+end;
+
+theorem
+  for T being non empty TopSpace,
+    V being Element of InclPoset the topology of T
+ holds V is co-prime iff
+       for X, Y being Element of InclPoset the topology of T
+        st V c= X \/ Y holds V c= X or V c= Y
+proof let T be non empty TopSpace,
+          V be Element of InclPoset the topology of T;
+ hereby assume
+ A1: V is co-prime;
+  let X, Y be Element of InclPoset the topology of T; assume
+ A2: V c= X \/ Y;
+      X \/ Y = X "\/" Y by Th18;
+    then V <= X"\/"Y by A2,YELLOW_1:3;
+    then V <= X or V <= Y by A1,Th14;
+  hence V c= X or V c= Y by YELLOW_1:3;
+ end; assume
+A3: for X, Y being Element of InclPoset the topology of T
+        st V c= X \/ Y holds V c= X or V c= Y;
+     now let X, Y be Element of InclPoset the topology of T such that
+A4:  V <= X"\/"Y;
+      X \/ Y = X"\/"Y by Th18;
+    then V c= X \/ Y by A4,YELLOW_1:3;
+    then V c= X or V c= Y by A3;
+   hence V <= X or V <= Y by YELLOW_1:3;
+   end;
+ hence thesis by Th14;
+end;
+
+definition let T be non empty TopSpace;
+ cluster InclPoset the topology of T -> distributive;
+ coherence proof
+  let x, y, z be Element of InclPoset the topology of T;
+  thus x "/\" (y "\/" z)
+    = x /\ (y "\/" z) by Th18
+   .= x /\ (y \/ z) by Th18
+   .= x /\ y \/ x /\ z by XBOOLE_1:23
+   .= (x "/\" y) \/ x /\ z by Th18
+   .= (x "/\" y) \/ (x "/\" z) by Th18
+   .= (x "/\" y) "\/" (x "/\" z) by Th18;
+ end;
+end;
+
+theorem Th21:
+for T being non empty TopSpace, L being TopLattice,
+    t being Point of T, l being Point of L,
+    X being Subset-Family of L
+ st the TopStruct of T = the TopStruct of L & t = l & X is Basis of l
+  holds X is Basis of t
+proof let T be non empty TopSpace, L be TopLattice,
+          t be Point of T, l be Point of L,
+          X be Subset-Family of L;
+          assume
+A1: the TopStruct of T = the TopStruct of L; assume
+A2: t = l; assume
+A3: X c= the topology of L; assume
+A4: l in Intersect X; assume
+A5: for S being Subset of L st S is open & l in S
+    ex V being Subset of L st V in X & V c= S;
+   reconsider X' = X as Subset-Family of T by A1;
+     now let S be Subset of T such that
+   A6: S is open and
+   A7: t in S;
+       reconsider S' = S as Subset of L by A1;
+      S in the topology of T by A6,PRE_TOPC:def 5;
+    then S' is open by A1,PRE_TOPC:def 5;
+    then consider V being Subset of L such that
+   A8: V in X & V c= S' by A2,A5,A7;
+    reconsider V as Subset of T by A1;
+   take V;
+   thus V in X' & V c= S by A8;
+   end;
+  hence X is Basis of t by A1,A2,A3,A4,YELLOW_8:def 2;
+end;
+
+theorem Th22:
+for L being TopLattice, x being Element of L
+ st for X being Subset of L st X is open holds X is upper
+  holds uparrow x is compact
+proof let L be TopLattice, x be Element of L such that
+A1: for X being Subset of L st X is open holds X is upper;
+ set P = uparrow x;
+ let F be Subset-Family of L such that
+A2: F is_a_cover_of P and
+A3: F is open;
+     x <= x;
+then A4: x in P by WAYBEL_0:18;
+     P c= union F by A2,COMPTS_1:def 1;
+   then consider Y being set such that
+A5: x in Y & Y in F by A4,TARSKI:def 4;
+   reconsider Y as Subset of L by A5;
+     Y is open by A3,A5,TOPS_2:def 1;
+   then Y is upper by A1;
+then A6: P c= Y by A5,WAYBEL11:42;
+   reconsider G = {Y} as Subset-Family of L by SETFAM_1:def 7;
+   reconsider G as Subset-Family of L;
+ take G;
+ thus G c= F by A5,ZFMISC_1:37;
+ thus P c= union G by A6,ZFMISC_1:31;
+ thus G is finite;
+end;
+
+begin :: Scott topology, continuation of WAYBEl11
+
+ reserve L for complete Scott TopLattice,
+         x for Element of L,
+         X, Y for Subset of L,
+         V, W for Element of InclPoset sigma L,
+         VV for Subset of InclPoset sigma L;
+
+definition let L be complete LATTICE;
+ cluster sigma L -> non empty;
+ coherence proof
+    sigma L = the topology of ConvergenceSpace Scott-Convergence L
+   by WAYBEL11:def 12;
+  hence thesis;
+ end;
+end;
+
+theorem Th23:
+ sigma L = the topology of L
+proof
+     the TopStruct of L = ConvergenceSpace Scott-Convergence L by WAYBEL11:32;
+ hence sigma L = the topology of L by WAYBEL11:def 12;
+end;
+
+theorem Th24:
+ X in sigma L iff X is open
+proof sigma L =the topology of L by Th23; hence thesis by PRE_TOPC:def 5;end;
+
+Lm2:
+ for L being complete Scott TopLattice,
+     V being filtered Subset of L,
+     F being Subset-Family of L, CF being Subset of InclPoset sigma L
+  st F = {downarrow u where u is Element of L : u in V} &
+     CF = COMPLEMENT F
+   holds CF is directed
+proof let L be complete Scott TopLattice,
+     V be filtered Subset of L,
+     F be Subset-Family of L, CF be Subset of InclPoset sigma L such that
+A1: F = {downarrow u where u is Element of L : u in V} and
+A2: CF = COMPLEMENT F;
+  set IPs = InclPoset sigma L;
+A3: sigma L = the topology of L by Th23;
+then A4: the carrier of IPs = the topology of L by YELLOW_1:1;
+ let x, y be Element of IPs such that
+   A5: x in CF & y in CF;
+         x in sigma L & y in sigma L by A3,A4;
+       then reconsider x' = x, y' = y as Subset of L;
+         x'` in F by A2,A5,YELLOW_8:13;
+       then consider ux being Element of L such that
+   A6: x'` = downarrow ux & ux in V by A1;
+         y'` in F by A2,A5,YELLOW_8:13;
+       then consider uy being Element of L such that
+   A7: y'` = downarrow uy & uy in V by A1;
+       consider uz being Element of L such that
+   A8: uz in V & uz <= ux & uz <= uy by A6,A7,WAYBEL_0:def 2;
+         (downarrow uz)` is open by WAYBEL11:12;
+       then (downarrow uz)` in the topology of L by PRE_TOPC:def 5;
+       then reconsider z = (downarrow uz)` as Element of IPs by A4
+;
+    take z;
+         downarrow uz in F by A1,A8;
+    hence z in CF by A2,YELLOW_8:14;
+       downarrow uz c= downarrow ux & downarrow uz c= downarrow uy
+        by A8,WAYBEL_0:21;
+     then (downarrow ux)` c= (downarrow uz)`
+         & (downarrow uy)` c= (downarrow uz)`
+        by PRE_TOPC:19;
+     then x c= z & y c= z by A6,A7;
+    hence x <= z & y <= z by YELLOW_1:3;
+end;
+
+theorem Th25:
+for X being filtered Subset of L
+ st VV = {(downarrow x)` : x in X} holds VV is directed
+proof let V be filtered Subset of L; assume
+A1: VV = {(downarrow x)` : x in V};
+   set F = {downarrow u where u is Element of L : u in V};
+     F c= bool the carrier of L proof let x be set; assume x in F;
+     then ex u being Element of L st x = downarrow u & u in V;
+    hence thesis;
+   end;
+   then reconsider F as Subset-Family of L by SETFAM_1:def 7;
+   reconsider F as Subset-Family of L;
+     VV c= bool the carrier of L proof let x be set; assume x in VV;
+     then ex u being Element of L st x = (downarrow u)` & u in V by A1;
+    hence thesis;
+   end;
+   then reconsider VV as Subset-Family of L by SETFAM_1:def 7;
+   reconsider VV as Subset-Family of L;
+     now let x be set;
+    hereby assume x in VV;
+        then consider u being Element of L such that
+    A2: x = (downarrow u)` & u in V by A1;
+          downarrow u in F by A2;
+     hence x in COMPLEMENT F by A2,YELLOW_8:14;
+    end; assume
+    A3: x in COMPLEMENT F;
+        then reconsider X = x as Subset of L;
+          X` in F by A3,YELLOW_8:13;
+        then consider u being Element of L such that
+    A4: X` = downarrow u & u in V;
+          X = (downarrow u)` by A4;
+    hence x in VV by A1,A4;
+   end;
+  then VV = COMPLEMENT F by TARSKI:2;
+ hence thesis by Lm2;
+end;
+
+theorem Th26:
+ X is open & x in X implies inf X << x
+proof assume that
+A1: X is open and
+A2: x in X;
+   A3: X is upper property(S) by A1,WAYBEL11:15;
+       now let D be non empty directed Subset of L; assume
+        x <= sup D;
+         then sup D in X by A2,A3,WAYBEL_0:def 20;
+         then consider y being Element of L such that
+     A4: y in D and
+     A5: for x being Element of L st x in D & x >= y holds x in X
+          by A3,WAYBEL11:def 3;
+       take y;
+       thus y in D by A4;
+     A6: inf X is_<=_than X by YELLOW_0:33;
+           y <= y;
+         then y in X by A4,A5;
+       hence inf X <= y by A6,LATTICE3:def 8;
+     end;
+ hence inf X << x by WAYBEL_3:def 1;
+end;
+
+           :: p. 105
+definition let R be non empty reflexive RelStr, f be map of [:R, R:], R;
+ attr f is jointly_Scott-continuous means
+:Def1: for T being non empty TopSpace
+       st the TopStruct of T = ConvergenceSpace Scott-Convergence R
+        ex ft being map of [:T, T:], T st ft = f & ft is continuous;
+end;
+
+theorem Th27: :: Proposition 1.11 (i) p. 105
+ V = X implies (V is co-prime iff X is filtered upper)
+proof assume
+A1: V = X;
+A2: sigma L = the topology of ConvergenceSpace Scott-Convergence L
+    by WAYBEL11:def 12;
+A3: the carrier of InclPoset sigma L = sigma L by YELLOW_1:1;
+then A4: X is upper by A1,A2,WAYBEL11:31;
+ A5: the TopStruct of L = ConvergenceSpace Scott-Convergence L by WAYBEL11:32;
+A6: InclPoset the topology of L is with_suprema with_infima antisymmetric;
+  hereby assume
+  A7: V is co-prime;
+   thus X is filtered proof let v, w be Element of L such that
+   A8: v in X & w in X;
+        (downarrow w)` is open & (downarrow v)` is open by WAYBEL11:12;
+      then (downarrow w)` in sigma L & (downarrow v)` in sigma L
+              by A2,A5,PRE_TOPC:def 5;
+      then reconsider mdw = (downarrow w)`, mdv = (downarrow v)` as
+             Element of InclPoset sigma L by A3;
+        v <= v & w <= w;
+      then v in downarrow v & w in downarrow w by WAYBEL_0:17;
+      then not V c= (downarrow v)` & not V c= (downarrow w)`
+           by A1,A8,YELLOW_6:10;
+      then not V <= mdv & not V <= mdw by YELLOW_1:3;
+      then not V <= mdv "\/" mdw by A2,A5,A6,A7,Th14;
+   then A9: not V c= mdv "\/" mdw by YELLOW_1:3;
+        mdv \/ mdw c= mdv "\/" mdw by A2,A5,A6,YELLOW_1:6;
+   then A10: not V c= mdv \/ mdw by A9,XBOOLE_1:1;
+        mdv \/ mdw = ((downarrow v) /\ downarrow w)` by WAYBEL12:6
+               .= (downarrow(v"/\"w))` by Th3;
+      then X meets (downarrow(v"/\"w))`` by A1,A10,TOPS_1:20;
+      then X/\(downarrow(v"/\"w))`` <> {} by XBOOLE_0:def 7;
+      then X/\downarrow(v"/\"w) <> {};
+       then consider zz being set such that
+   A11: zz in X/\downarrow(v"/\"w) by XBOOLE_0:def 1;
+   A12: zz in X & zz in downarrow(v"/\"w) by A11,XBOOLE_0:def 3;
+      reconsider zz as Element of L by A11;
+   A13: zz <= v"/\"w by A12,WAYBEL_0:17;
+    take z = v"/\"w;
+    thus z in X by A4,A12,A13,WAYBEL_0:def 20;
+    thus z <= v & z <= w by YELLOW_0:23;
+   end;
+   thus X is upper by A1,A2,A3,WAYBEL11:31;
+  end; assume
+A14: X is filtered upper; assume not V is co-prime;
+   then consider Xx, Y being Element of InclPoset sigma L such that
+A15: V <= Xx "\/" Y & not V <= Xx & not V <= Y by A2,A5,A6,Th14;
+     Xx in sigma L & Y in sigma L by A3;
+   then reconsider Xx' = Xx, Y' = Y as Subset of L;
+A16: Xx' is open & Y' is open by A2,A3,A5,PRE_TOPC:def 5;
+   then Xx' \/ Y' is open by TOPS_1:37;
+   then Xx \/ Y in sigma L by A2,A5,PRE_TOPC:def 5;
+   then Xx \/ Y = Xx "\/" Y by YELLOW_1:8;
+then A17: V c= Xx \/ Y by A15,YELLOW_1:3;
+A18: not V c= Xx & not V c= Y by A15,YELLOW_1:3;
+   then consider v being set such that
+A19: v in V & not v in Xx by TARSKI:def 3;
+   consider w being set such that
+A20: w in V & not w in Y by A18,TARSKI:def 3;
+A21: Xx' is upper & Y' is upper by A16,WAYBEL11:def 4;
+   reconsider v, w as Element of L by A1,A19,A20;
+A22: now assume A23: v"/\"w in Xx' \/ Y';
+    per cases by A23,XBOOLE_0:def 2;
+    suppose A24: v"/\"w in Xx';
+        v"/\"w <= v by YELLOW_0:23;
+     hence contradiction by A19,A21,A24,WAYBEL_0:def 20;
+    suppose A25: v"/\"w in Y';
+        v"/\"w <= w by YELLOW_0:23;
+     hence contradiction by A20,A21,A25,WAYBEL_0:def 20;
+   end;
+     v"/\"w in X by A1,A14,A19,A20,WAYBEL_0:41;
+  hence contradiction by A1,A17,A22;
+end;
+
+theorem :: Proposition 1.11 (ii) p. 105
+   (V = X & ex x st X = (downarrow x)`)
+     implies V is prime & V <> the carrier of
+L
+proof assume
+A1: V = X;
+A2: sigma L = the topology of ConvergenceSpace Scott-Convergence L
+    by WAYBEL11:def 12;
+ A3: the TopStruct of L = ConvergenceSpace Scott-Convergence L by WAYBEL11:32;
+   given u being Element of L such that
+A4: X = (downarrow u)`;
+A5: Cl {u} = downarrow u by WAYBEL11:9;
+     Cl {u} is irreducible by YELLOW_8:26;
+  hence V is prime by A1,A2,A3,A4,A5,Th17;
+  assume V = the carrier of L;
+  hence contradiction by A1,A4,Th2;
+end;
+
+theorem Th29: :: Proposition 1.11 (iii) p. 105
+ V = X & sup_op L is jointly_Scott-continuous & V is prime &
+ V <> the carrier of L
+  implies ex x st X = (downarrow x)`
+proof assume that
+A1: V = X and
+A2: sup_op L is jointly_Scott-continuous and
+A3: V is prime and
+A4: V <> the carrier of L;
+A5: sigma L = the topology of ConvergenceSpace Scott-Convergence L
+    by WAYBEL11:def 12;
+A6: the carrier of InclPoset sigma L = sigma L by YELLOW_1:1;
+A7: the TopStruct of L = ConvergenceSpace Scott-Convergence L by WAYBEL11:32;
+then A8:  X is open by A1,A5,A6,PRE_TOPC:def 5;
+   set A = X`;
+     A is closed by A8,TOPS_1:30;
+then A9: A is directly_closed lower by WAYBEL11:7;
+ take u = sup A;
+A10: A is directed proof given a, b being Element of L such that
+A11: a in A & b in A and
+A12: for z being Element of L holds not (z in A & a <= z & b <= z);
+     a <= a"\/"b & b <= a"\/"b by YELLOW_0:22;
+   then not a"\/"b in A by A12;
+then A13: a"\/"b in X by YELLOW_6:10;
+  set LxL = [:L qua non empty TopSpace, L:];
+   consider Tsup being map of LxL, L such that
+A14: Tsup = sup_op L & Tsup is continuous by A2,A7,Def1;
+A15: Tsup"X is open by A8,A14,TOPS_2:55;
+A16: the carrier of LxL = [:the carrier of L, the carrier of L:]
+        by BORSUK_1:def 5;
+then A17: [a,b] in the carrier of LxL by ZFMISC_1:def 2;
+     Tsup. [a,b] = a"\/"b by A14,WAYBEL_2:def 5;
+then A18: [a,b] in Tsup"X by A13,A17,FUNCT_2:46;
+   consider AA being Subset-Family of LxL such that
+A19:Tsup"X = union AA and
+A20:for e being set st e in AA ex X1 being Subset of L,
+                     Y1 being Subset of L st
+    e = [:X1,Y1:] & X1 is open & Y1 is open by A15,BORSUK_1:45;
+   consider AAe being set such that
+A21: [a,b] in AAe & AAe in AA by A18,A19,TARSKI:def 4;
+   consider Va, Vb being Subset of L such that
+A22: AAe = [:Va, Vb:] & Va is open & Vb is open by A20,A21;
+   reconsider Va' = Va, Vb' = Vb as Subset of L;
+     now let x be set;
+    hereby assume x in Tsup.:AAe;
+       then consider cd being set such that
+   A23: cd in the carrier of LxL and
+   A24: cd in AAe & Tsup.cd = x by FUNCT_2:115;
+       consider c, d being Element of L such that
+   A25: cd = [c,d] by A16,A23,DOMAIN_1:9;
+       reconsider c, d as Element of L;
+   A26: x = c"\/"d by A14,A24,A25,WAYBEL_2:def 5;
+   A27: c <= c"\/"d & d <= c"\/"d by YELLOW_0:22;
+   A28: Va' is upper & Vb' is upper by A22,WAYBEL11:def 4;
+         c in Va & d in Vb by A22,A24,A25,ZFMISC_1:106;
+       then x in Va & x in Vb by A26,A27,A28,WAYBEL_0:def 20;
+     hence x in Va/\Vb by XBOOLE_0:def 3;
+    end; assume A29: x in Va/\Vb;
+    then A30: x in Va & x in Vb by XBOOLE_0:def 3;
+        reconsider c = x as Element of L by A29;
+    A31: [c,c] in AAe by A22,A30,ZFMISC_1:106;
+    A32: [c,c] in the carrier of LxL by A16,ZFMISC_1:106;
+          c <= c;
+        then c = c"\/"c by YELLOW_0:24;
+    then c = Tsup. [c,c] by A14,WAYBEL_2:def 5;
+    hence x in Tsup.:AAe by A31,A32,FUNCT_2:43;
+   end;
+then A33: Tsup.:AAe = Va/\Vb by TARSKI:2;
+     AAe c= union AA by A21,ZFMISC_1:92;
+   then Tsup.:AAe c= Tsup.:(Tsup"X) & Tsup.:(Tsup"X) c= X
+           by A19,FUNCT_1:145,RELAT_1:156;
+then A34: Tsup.:AAe c= X by XBOOLE_1:1;
+     Va in sigma L & Vb in sigma L by A5,A7,A22,PRE_TOPC:def 5;
+   then Va is Element of InclPoset the topology of L &
+   Vb is Element of InclPoset the topology of L by A5,A6,A7;
+then A35: Va c= X or Vb c= X by A1,A3,A5,A7,A33,A34,Th19;
+     a in Va & b in Vb by A21,A22,ZFMISC_1:106;
+   hence contradiction by A11,A35,YELLOW_6:10;
+   end;
+     now assume A = {}; then A` = the carrier of L by Th2;
+    hence contradiction by A1,A4;
+   end;
+  then u in A by A9,A10,WAYBEL11:def 2;
+  then A = downarrow u by A9,Th5;
+ hence X = (downarrow u)`;
+end;
+
+theorem Th30: :: Proposition 1.11 (iv) p. 105
+ L is continuous implies sup_op L is jointly_Scott-continuous
+proof assume
+A1: L is continuous;
+ let T be non empty TopSpace such that
+A2: the TopStruct of T = ConvergenceSpace Scott-Convergence L;
+A3: the TopStruct of L = ConvergenceSpace Scott-Convergence L by WAYBEL11:32;
+A4: the carrier of T = the carrier of L by A2,YELLOW_6:def 27;
+
+ set Tsup = sup_op L;
+A5: the carrier of [:T, T:] = [:the carrier of T, the carrier of T:]
+       by BORSUK_1:def 5;
+then A6: the carrier of [:T,T:] = the carrier of [:L,L:] by A4,YELLOW_3:def 2;
+ then reconsider Tsup as map of [:T, T:], T by A4;
+ take Tsup;
+ thus Tsup = sup_op L;
+   for x being Point of [:T, T:] holds Tsup is_continuous_at x
+ proof let ab be Point of [:T, T:];
+  consider a, b being Point of T such that
+A7: ab = [a,b] by A5,DOMAIN_1:9;
+  let G be a_neighborhood of Tsup.ab;
+     reconsider Tsab = Tsup.ab as Point of T;
+A8: Tsab in Int G by CONNSP_2:def 1;
+A9: Int G is open by TOPS_1:51;
+     reconsider Tsab' = Tsab as Element of L by A4;
+  reconsider basab = { wayabove q where q is Element of L: q << Tsab' }
+    as Basis of Tsab' by A1,WAYBEL11:44;
+    basab is Basis of Tsab by A2,A3,Th21;
+  then consider V being Subset of T such that
+A10: V in basab & V c= Int G by A8,A9,YELLOW_8:def 2;
+  consider u being Element of L such that
+A11: V = wayabove u & u << Tsab' by A10;
+    reconsider a' = a, b' = b as Element of L by A4;
+   reconsider Lc = L as continuous complete Scott TopLattice by A1;
+      Lc = L;
+then A12: a' = sup waybelow a' & b' = sup waybelow b' by WAYBEL_3:def 5;
+A13: Tsab' = a'"\/"b' by A7,WAYBEL_2:def 5
+        .= sup ((waybelow a')"\/"(waybelow b')) by A12,WAYBEL_2:4;
+   set D1 = waybelow a', D2 = waybelow b';
+   set D = D1"\/"D2;
+   consider xy being Element of L such that
+A14: xy in D & u << xy by A1,A11,A13,WAYBEL_4:54;
+     D = { x "\/" y where x, y is Element of L : x in D1 & y in D2 }
+      by YELLOW_4:def 3;
+   then consider x, y being Element of L such that
+A15: xy = x"\/"y & x in D1 & y in D2 by A14;
+A16: x << a' & y << b' by A15,WAYBEL_3:7;
+A17: wayabove x is open & wayabove y is open by A1,WAYBEL11:36;
+A18: a' in wayabove x & b' in wayabove y by A16,WAYBEL_3:8;
+    reconsider wx = wayabove x, wy = wayabove y as Subset of T
+           by A4;
+      wayabove x in the topology of L & wayabove y in the topology of L
+      by A17,PRE_TOPC:def 5;
+then A19: wx is open & wy is open by A2,A3,PRE_TOPC:def 5;
+    reconsider H = [:wayabove x, wayabove y:]
+    as Subset of [:T, T:] by A6;
+      H is open by A19,BORSUK_1:46;
+then A20: H = Int H by TOPS_1:55;
+      [a',b'] in H by A18,ZFMISC_1:106;
+    then reconsider H as a_neighborhood of ab by A7,A20,CONNSP_2:def 1;
+  take H;
+A21: Tsup.:H = (wayabove x)"\/"(wayabove y) by WAYBEL_2:35;
+A22: (wayabove x)"\/"(wayabove y) c= uparrow (x"\/"y) by Th12;
+      uparrow (x"\/"y) c= wayabove u by A14,A15,Th7;
+then A23: Tsup.:H c= V by A11,A21,A22,XBOOLE_1:1;
+      Int G c= G by TOPS_1:44;
+    then V c= G by A10,XBOOLE_1:1;
+  hence Tsup.:H c= G by A23,XBOOLE_1:1;
+ end;
+ hence Tsup is continuous by TMAP_1:49;
+end;
+
+theorem Th31: :: Corollary 1.12 p. 106
+ sup_op L is jointly_Scott-continuous implies L is sober
+proof assume
+A1: sup_op L is jointly_Scott-continuous;
+A2: sigma L = the topology of ConvergenceSpace Scott-Convergence L
+    by WAYBEL11:def 12;
+A3: the carrier of InclPoset sigma L = sigma L by YELLOW_1:1;
+ A4: the TopStruct of L = ConvergenceSpace Scott-Convergence L by WAYBEL11:32;
+ let S be irreducible Subset of L;
+A5: S is non empty closed by YELLOW_8:def 4;
+then A6: S` is open by TOPS_1:29;
+A7: S` <> the carrier of L by Th2;
+     S` in sigma L by A2,A4,A6,PRE_TOPC:def 5;
+ then reconsider V = S` as Element of InclPoset sigma L by A3;
+     V is prime by A2,A4,Th17;
+   then consider p being Element of L such that
+A8: V = (downarrow p)` by A1,A7,Th29;
+A9: S = downarrow p by A8,TOPS_1:21;
+   take p;
+A10: Cl {p} = downarrow p by WAYBEL11:9;
+ hence p is_dense_point_of S by A9,YELLOW_8:27;
+ let q be Point of L; assume
+   q is_dense_point_of S;
+then A11: Cl {q} = S by A5,YELLOW_8:25;
+    L is T_0 by WAYBEL11:10;
+ hence p = q by A9,A10,A11,YELLOW_8:32;
+end;
+
+theorem :: Corollary 1.13 p. 106
+   L is continuous implies L is compact locally-compact sober Baire
+proof assume
+A1: L is continuous;
+A2: uparrow Bottom L = the carrier of L by Th10;
+A3: for X being Subset of L st X is open holds X is upper by WAYBEL11:def 4;
+then A4: uparrow Bottom L is compact by Th22;
+     [#]L = the carrier of L by PRE_TOPC:12;
+ hence L is compact by A2,A4,COMPTS_1:10;
+ thus A5: L is locally-compact
+ proof let x be Point of L, X be Subset of L such that
+A6: x in X and
+A7: X is open;
+   reconsider x' = x as Element of L;
+   set bas = { wayabove q where q is Element of L: q << x' };
+A8: bas is Basis of x by A1,WAYBEL11:44;
+   consider y being Element of L such that
+A9: y << x' & y in X by A1,A6,A7,WAYBEL11:43;
+   A10: X is upper by A7,WAYBEL11:def 4;
+   set Y = uparrow y;
+ take Y;
+     wayabove y in bas by A9;
+then A11: wayabove y is open & x in wayabove y by A8,YELLOW_8:21;
+     wayabove y c= Y by WAYBEL_3:11;
+   then wayabove y c= Int Y by A11,TOPS_1:56;
+ hence x in Int Y by A11;
+ thus Y c= X by A9,A10,WAYBEL11:42;
+ thus Y is compact by A3,Th22;
+ end;
+    sup_op L is jointly_Scott-continuous by A1,Th30;
+ hence L is sober by Th31;
+ hence L is Baire by A5,WAYBEL12:48;
+end;
+
+theorem Th33: :: Theorem 1.14 (1) implies (2) p. 107
+L is continuous & X in sigma L implies X = union {wayabove x : x in X}
+proof assume that
+A1: L is continuous and
+A2: X in sigma L;
+A3: X is open by A2,Th24;
+  set WAV = {wayabove x where x is Element of L : x in X};
+    now let x be set;
+   hereby assume
+   A4: x in X;
+      then reconsider x' = x as Element of L;
+      set bas = { wayabove q where q is Element of L: q << x' };
+   A5: bas is Basis of x' by A1,WAYBEL11:44;
+      consider q being Element of L such that
+   A6: q << x' & q in X by A1,A3,A4,WAYBEL11:43;
+        wayabove q in bas by A6;
+   then A7: x' in wayabove q by A5,YELLOW_8:21;
+        wayabove q in WAV by A6;
+    hence x in union WAV by A7,TARSKI:def 4;
+   end; assume x in union WAV; then consider Y being set such that
+   A8: x in Y & Y in WAV by TARSKI:def 4;
+      consider q being Element of L such that
+   A9: Y = wayabove q & q in X by A8;
+        X is upper by A3,WAYBEL11:def 4;
+   then A10: uparrow q c= X by A9,WAYBEL11:42;
+        wayabove q c= uparrow q by WAYBEL_3:11;
+      then Y c= X by A9,A10,XBOOLE_1:1;
+   hence x in X by A8;
+  end;
+ hence X = union {wayabove x where x is Element of L : x in X} by TARSKI:2;
+end;
+
+theorem :: Theorem 1.14 (2) implies (1) p. 107
+   (for X st X in sigma L holds X = union {wayabove x : x in X})
+   implies L is continuous
+proof assume
+A1: for X being Subset of L st X in sigma L
+     holds X = union {wayabove x where x is Element of L : x in X};
+ thus for x being Element of L holds waybelow x is non empty directed;
+ thus L is up-complete;
+ let x be Element of L;
+  set y = sup waybelow x, X = (downarrow y)`;
+A2: y <= x by Th9;
+ assume
+A3: x <> sup waybelow x;
+     now assume x in downarrow y; then x <= y by WAYBEL_0:17;
+    hence contradiction by A2,A3,ORDERS_1:25;
+   end;
+then A4: x in X by YELLOW_6:10;
+A5: X is open by WAYBEL11:12;
+   set Z = {wayabove z where z is Element of L : z in X};
+     X in sigma L by A5,Th24;
+   then X = union Z by A1; then consider Y being set such that
+A6: x in Y & Y in Z by A4,TARSKI:def 4;
+   consider z being Element of L such that
+A7: Y = wayabove z & z in X by A6;
+     z << x by A6,A7,WAYBEL_3:8;
+then A8: z in waybelow x by WAYBEL_3:7;
+     y is_>=_than waybelow x by YELLOW_0:32;
+   then z <= y by A8,LATTICE3:def 9; then z in downarrow y by WAYBEL_0:17;
+  hence contradiction by A7,YELLOW_6:10;
+end;
+
+theorem :: Theorem 1.14 (1) implies (3 first conjunct) p. 107
+   L is continuous implies
+  ex B being Basis of x st for X st X in B holds X is open filtered
+proof assume
+A1: L is continuous;
+ then reconsider A = { wayabove q where q is Element of L: q << x }
+   as Basis of x by WAYBEL11:44;
+ set B = { V where V is Subset of L :
+            ex q being Element of L st V c= wayabove q & q<<x & x in V &
+                                       V is open filtered };
+   B c= bool the carrier of L proof let X be set; assume X in B;
+    then ex V being Subset of L st
+       X = V & ex q being Element of L st V c= wayabove q & q<<x & x in V &
+                                       V is open filtered;
+  hence thesis;
+ end;
+ then reconsider B as Subset-Family of L by SETFAM_1:def 7;
+ reconsider B as Subset-Family of L;
+A2: B is Basis of x proof
+    thus B c= the topology of L proof let Y be set; assume Y in B;
+    then consider V being Subset of L such that
+   A3: Y = V & ex q being Element of L st V c= wayabove q & q<<x & x in V &
+                                       V is open filtered;
+     thus thesis by A3,PRE_TOPC:def 5;
+    end;
+    thus x in Intersect B proof
+     per cases;
+      suppose B is empty;
+         then Intersect B = the carrier of L by CANTOR_1:def 3;
+       hence thesis;
+      suppose A4: B is non empty;
+     then A5: Intersect B = meet B by CANTOR_1:def 3;
+         now let Y be set; assume Y in B;
+          then consider V being Subset of L such that
+       A6: Y = V & ex q being Element of L st V c= wayabove q & q<<x & x in V&
+                                       V is open filtered;
+        thus x in Y by A6;
+       end;
+      hence thesis by A4,A5,SETFAM_1:def 1;
+    end;
+    let S be Subset of L; assume S is open & x in S;
+      then consider V being Subset of L such that
+    A7: V in A & V c= S by YELLOW_8:def 2;
+      consider q being Element of L such that
+    A8: V = wayabove q & q << x by A7;
+      consider F being Open Filter of L such that
+    A9: x in F & F c= wayabove q by A1,A8,WAYBEL_6:8;
+    take F;
+        F is open by WAYBEL11:41;
+    hence F in B by A8,A9;
+    thus F c= S by A7,A8,A9,XBOOLE_1:1;
+   end;
+     now let Y be Subset of L; assume Y in B;
+    then consider V being Subset of L such that
+   A10: Y = V & ex q being Element of L st V c= wayabove q & q<<x & x in V &
+                                       V is open filtered;
+    thus Y is open filtered by A10;
+   end;
+ hence thesis by A2;
+end;
+
+theorem :: Theorem 1.14 (1) implies (3 second conjunct) p. 107
+  L is continuous implies InclPoset sigma L is continuous
+proof assume
+A1: L is continuous;
+  set IPs = InclPoset the topology of L;
+A2: sigma L = the topology of L by Th23;
+A3: the carrier of IPs = the topology of L by YELLOW_1:1;
+A4: for x being Element of IPs holds waybelow x is non empty directed;
+      IPs is satisfying_axiom_of_approximation proof
+     let V be Element of IPs;
+      set VV = {wayabove x where x is Element of L : x in V};
+          V in sigma L by A2,A3;
+        then V is Subset of L;
+     then A5: V = union VV by A1,A2,A3,Th33;
+       set wV = waybelow V;
+         now let x be set;
+        hereby assume x in V; then consider xU being set such that
+       A6: x in xU & xU in VV by A5,TARSKI:def 4;
+           consider y being Element of L such that
+       A7: xU = wayabove y & y in V by A6;
+             wayabove y is open by A1,WAYBEL11:36;
+           then xU in sigma L by A2,A7,PRE_TOPC:def 5;
+           then reconsider xU as Element of IPs by A2,A3;
+             xU << V proof let D be non empty directed Subset of IPs; assume
+                V <= sup D; then V c= sup D by YELLOW_1:3;
+              then V c= union D by YELLOW_1:22;
+              then consider DD being set such that
+           A8: y in DD & DD in D by A7,TARSKI:def 4;
+             DD in sigma L by A2,A3,A8;
+               then reconsider DD as Subset of L;
+                 DD is open by A3,A8,PRE_TOPC:def 5;
+               then DD is upper by WAYBEL11:def 4;
+           then A9: uparrow y c= DD by A8,WAYBEL11:42;
+                 wayabove y c= uparrow y by WAYBEL_3:11;
+           then A10: wayabove y c= DD by A9,XBOOLE_1:1;
+             reconsider d = DD as Element of IPs by A8;
+            take d;
+            thus d in D by A8;
+            thus xU <= d by A7,A10,YELLOW_1:3;
+           end;
+           then xU in wV by WAYBEL_3:7;
+         hence x in union wV by A6,TARSKI:def 4;
+        end; assume x in union wV;
+          then consider X being set such that
+        A11: x in X & X in wV by TARSKI:def 4;
+          reconsider X as Element of IPs by A11;
+            X << V by A11,WAYBEL_3:7;
+          then X <= V by WAYBEL_3:1;
+          then X c= V by YELLOW_1:3;
+        hence x in V by A11;
+       end;
+       then V = union waybelow V by TARSKI:2;
+     hence V = sup waybelow V by YELLOW_1:22;
+    end;
+  hence thesis by A2,A4,WAYBEL_3:def 6;
+end;
+
+theorem Th37: :: Theorem 1.14 (3) implies (4) p. 107
+ (for x ex B being Basis of x st for Y st Y in B holds Y is open filtered) &
+ InclPoset sigma L is continuous
+  implies x = "\/" ({inf X : x in X & X in sigma L}, L)
+proof assume that
+A1: for x being Element of L ex B being Basis of x st
+         for Y being Subset of L st Y in B holds Y is open filtered and
+A2: InclPoset sigma L is continuous;
+  set IPs = InclPoset the topology of L;
+A3: sigma L = the topology of L by Th23;
+A4: the carrier of IPs = the topology of L by YELLOW_1:1;
+  set IU = {inf V where V is Subset of L : x in V & V in sigma L};
+  set y = "\/"(IU,L);
+     now let b be Element of L; assume b in IU;
+       then consider V being Subset of L such that
+   A5: b = inf V & x in V & V in sigma L;
+         b is_<=_than V by A5,YELLOW_0:33;
+    hence b <= x by A5,LATTICE3:def 8;
+   end;
+  then x is_>=_than IU by LATTICE3:def 9;
+then A6: y <= x by YELLOW_0:32;
+  assume
+A7: x <> y;
+   set VVl = (downarrow y)`;
+     now assume x in downarrow y; then x <= y by WAYBEL_0:17;
+    hence contradiction by A6,A7,ORDERS_1:25;
+   end;
+then A8: x in VVl by YELLOW_6:10;
+   VVl is open by WAYBEL11:12;
+   then VVl in sigma L by Th24;
+   then reconsider VVp = VVl as Element of IPs by A3,A4;
+     IPs is satisfying_axiom_of_approximation by A2,A3,WAYBEL_3:def 6;
+   then VVp = sup waybelow VVp by WAYBEL_3:def 5;
+   then VVp = union waybelow VVp by YELLOW_1:22;
+   then consider Vp being set such that
+A9: x in Vp & Vp in waybelow VVp by A8,TARSKI:def 4;
+   reconsider Vp as Element of IPs by A9;
+A10: Vp << VVp by A9,WAYBEL_3:7;
+     Vp in sigma L by A3,A4;
+   then reconsider Vl = Vp as Subset of L;
+   consider bas being Basis of x such that
+A11: for Y being Subset of L st Y in bas holds Y is open filtered by A1;
+     Vl is open by A4,PRE_TOPC:def 5;
+   then consider Ul being Subset of L such that
+A12: Ul in bas & Ul c= Vl by A9,YELLOW_8:def 2;
+A13: Ul is open & x in Ul by A12,YELLOW_8:21;
+   then Ul in sigma L by A3,PRE_TOPC:def 5;
+then A14: inf Ul in IU by A13;
+     y is_>=_than IU by YELLOW_0:32;
+   then inf Ul <= y by A14,LATTICE3:def 9;
+   then downarrow inf Ul c= downarrow y by WAYBEL_0:21;
+then A15: (downarrow y)` c= (downarrow inf Ul)` by PRE_TOPC:19;
+   set F = {downarrow u where u is Element of L : u in Ul};
+A16: downarrow x in F by A13;
+     F c= bool the carrier of L proof let X be set; assume X in F;
+      then consider u being Element of L such that
+   A17: X = downarrow u & u in Ul;
+    thus X in bool the carrier of L by A17;
+   end;
+   then F is non empty Subset-Family of L by A16,SETFAM_1:def 7
+;
+   then reconsider F as non empty Subset-Family of L;
+     downarrow inf Ul = meet F by A13,Th15;
+then A18: (downarrow inf Ul)` = union COMPLEMENT F by TOPS_2:12;
+A19: Ul is filtered by A11,A12;
+A20: (downarrow x)` in COMPLEMENT F by A16,YELLOW_8:14;
+     COMPLEMENT F c= the topology of L proof let X be set; assume
+   A21: X in COMPLEMENT F;
+      then reconsider X' = X as Subset of L;
+        X'` in F by A21,YELLOW_8:13;
+      then consider u being Element of L such that
+   A22: X'` = downarrow u & u in Ul;
+        X' = (downarrow u)` by A22;
+      then X' is open by WAYBEL11:12;
+    hence X in the topology of L by PRE_TOPC:def 5;
+   end;
+   then reconsider CF = COMPLEMENT F as Subset of IPs by A4;
+A23: CF is directed by A3,A19,Lm2;
+      VVp c= sup CF by A15,A18,YELLOW_1:22;
+    then VVp <= sup CF by YELLOW_1:3;
+    then consider d being Element of IPs such that
+A24: d in CF & Vp << d by A2,A3,A10,A20,A23,WAYBEL_4:54;
+     d in sigma L by A3,A4;
+   then reconsider d' = d as Subset of L;
+     d'` in F by A24,YELLOW_8:13;
+    then consider u being Element of L such that
+A25: d'` = downarrow u & u in Ul;
+     Vp <= d by A24,WAYBEL_3:1;
+then A26: Vp c= d by YELLOW_1:3;
+     u <= u;
+   then u in downarrow u by WAYBEL_0:17;
+   then not u in Vp by A25,A26,YELLOW_6:10;
+  hence contradiction by A12,A25;
+end;
+
+theorem Th38: :: Theorem 1.14 (4) implies (1) p. 107
+ (for x holds x = "\/" ({inf X : x in X & X in sigma L}, L))
+   implies L is continuous
+proof assume
+A1: for x being Element of L
+     holds x = "\/"
+ ({inf V where V is Subset of L : x in V & V in sigma L}, L);
+  thus for x being Element of L holds waybelow x is non empty directed;
+  thus L is up-complete;
+  let x be Element of L;
+  set VV = {inf V where V is Subset of L : x in V & V in sigma L};
+A2: VV c= waybelow x proof let d be set; assume d in VV;
+     then consider V being Subset of L such that
+   A3: inf V = d & x in V & V in sigma L;
+         V is open by A3,Th24;
+     then inf V << x by A3,Th26;
+   hence d in waybelow x by A3,WAYBEL_3:7;
+  end;
+    ex_sup_of VV, L & ex_sup_of waybelow x, L by YELLOW_0:17;
+then A4: "\/" (VV, L) <= sup waybelow x by A2,YELLOW_0:34;
+     x = "\/" (VV, L) & sup waybelow x <= x by A1,Th9;
+  hence x = sup waybelow x by A4,ORDERS_1:25;
+end;
+
+theorem Th39: :: Theorem 1.14 (3) iff (5) p. 107
+  :: The conjunct InclPoset sigma L is continuous is dropped
+
+    (for x ex B being Basis of x st for Y st Y in B holds Y is open filtered)
+iff (for V ex VV st V = sup VV & for W st W in VV holds W is co-prime)
+proof set IPs = InclPoset the topology of L;
+A1: sigma L = the topology of L by Th23;
+then A2: the carrier of IPs = sigma L by YELLOW_1:1;
+ hereby assume
+ A3: for x being Element of L ex X being Basis of x st
+         for Y being Subset of L st Y in X holds Y is open filtered;
+  let V be Element of InclPoset sigma L;
+   V in sigma L by A1,A2;
+    then reconsider Vl = V as Subset of L;
+A4: Vl is open by A1,A2,Th24;
+  set X = {Y where Y is Subset of L : Y c= V &
+      ex x being Element of L, bas being Basis of x
+       st x in V & Y in bas &
+          for Yx being Subset of L st Yx in bas holds Yx is open filtered};
+      now let YY be set; assume YY in X;
+       then consider Y being Subset of L such that
+    A5: Y = YY and Y c= V and
+    A6: ex x being Element of L, bas being Basis of x
+       st x in V & Y in bas &
+          for Yx being Subset of L st Yx in bas holds Yx is open filtered;
+       consider x be Element of L, bas being Basis of x such that
+    A7: x in V & Y in bas by A6;
+         Y is open by A7,YELLOW_8:21;
+       then Y in sigma L by Th24;
+     hence YY in the carrier of InclPoset sigma L by A5,YELLOW_1:1;
+    end;
+    then X c= the carrier of InclPoset sigma L by TARSKI:def 3;
+    then reconsider X as Subset of InclPoset sigma L;
+  take X;
+      now let x be set;
+     hereby assume
+     A8: x in V; Vl = V;
+        then reconsider d = x as Element of L by A8;
+        consider bas being Basis of d such that
+     A9: for Y being Subset of L st Y in bas holds Y is open filtered by A3;
+        consider Y being Subset of L such that
+     A10: Y in bas & Y c= V by A4,A8,YELLOW_8:22;
+           x in Y & Y in X by A8,A9,A10,YELLOW_8:21;
+      hence x in union X by TARSKI:def 4;
+     end; assume x in union X; then consider YY being set such that
+    A11: x in YY & YY in X by TARSKI:def 4;
+      consider Y being Subset of L such that
+    A12: Y = YY and
+    A13: Y c= V and
+           ex x being Element of L, bas being Basis of x
+          st x in V & Y in bas &
+           for Yx being Subset of L st Yx in bas holds Yx is open filtered
+             by A11;
+     thus x in V by A11,A12,A13;
+    end;
+    then V = union X by TARSKI:2;
+  hence V = sup X by A1,YELLOW_1:22;
+  let Yp be Element of InclPoset sigma L; assume Yp in X;
+     then consider Y being Subset of L such that
+  A14: Y = Yp and Y c= V and
+  A15: ex x being Element of L, bas being Basis of x
+       st x in V & Y in bas &
+          for Yx being Subset of L st Yx in bas holds Yx is open filtered;
+      consider x being Element of L, bas being Basis of x such that
+        x in V and
+  A16: Y in bas and
+  A17: for Yx being Subset of L st Yx in bas holds Yx is open filtered by A15;
+  A18: Y is open filtered by A16,A17;
+      then Y is upper by WAYBEL11:def 4;
+  hence Yp is co-prime by A14,A18,Th27;
+ end; assume
+A19: for V being Element of InclPoset sigma L
+         ex X being Subset of InclPoset sigma L st V = sup X &
+          for x being Element of InclPoset sigma L
+           st x in X holds x is co-prime;
+ let x be Element of L;
+ set bas = {V where V is Element of InclPoset sigma L :
+               x in V & V is co-prime};
+    bas c= bool the carrier of L proof let VV be set; assume VV in bas;
+   then ex V being Element of InclPoset sigma L st VV= V &
+        x in V & V is co-prime; then VV in sigma L by A1,A2;
+   hence thesis;
+  end;
+ then reconsider bas as Subset-Family of L by SETFAM_1:def 7;
+ reconsider bas as Subset-Family of L;
+   bas is Basis of x proof
+  thus bas c= the topology of L proof let VV be set; assume VV in bas;
+   then ex V being Element of InclPoset sigma L st VV= V &
+        x in V & V is co-prime;
+   hence thesis by A1,A2;
+  end;
+     now
+    per cases;
+     suppose bas is empty;
+       then Intersect bas = the carrier of L by CANTOR_1:def 3;
+      hence x in Intersect bas;
+     suppose A20: bas is non empty;
+     then A21: Intersect bas = meet bas by CANTOR_1:def 3;
+           now let Y be set; assume Y in bas;
+           then ex V being Element of InclPoset sigma L st Y = V &
+              x in V & V is co-prime;
+          hence x in Y;
+         end;
+      hence x in Intersect bas by A20,A21,SETFAM_1:def 1;
+   end;
+  hence x in Intersect bas;
+  let S be Subset of L; assume
+ A22: S is open & x in S;
+    then S in sigma L by Th24;
+    then reconsider S' = S as Element of IPs by A2;
+    consider X being Subset of IPs such that
+ A23: S' = sup X and
+ A24: for x being Element of IPs st x in X holds x is co-prime by A1,A19;
+      S' = union X by A23,YELLOW_1:22;
+    then consider V being set such that
+ A25: x in V & V in X by A22,TARSKI:def 4;
+   V in sigma L by A2,A25;
+    then reconsider V as Subset of L;
+    reconsider Vp = V as Element of IPs by A25;
+  take V;
+     Vp is co-prime by A24,A25;
+  hence V in bas by A1,A25;
+     sup X is_>=_than X by YELLOW_0:32;
+   then Vp <= sup X by A25,LATTICE3:def 9;
+  hence V c= S by A23,YELLOW_1:3;
+ end;
+ then reconsider bas as Basis of x;
+ take bas;
+ let V be Subset of L; assume V in bas;
+   then consider Vp being Element of InclPoset sigma L such that
+A26: V = Vp and x in Vp and
+A27: Vp is co-prime;
+ thus V is open filtered by A1,A2,A26,A27,Th24,Th27;
+end;
+
+theorem :: Theorem 1.14 (5) iff (6) p. 107
+      (for V ex VV st V = sup VV & for W st W in VV holds W is co-prime)
+  & InclPoset sigma L is continuous
+iff InclPoset sigma L is completely-distributive
+proof InclPoset sigma L = InclPoset the topology of L by Th23;
+  hence thesis by WAYBEL_6:38;
+end;
+
+theorem :: Theorem 1.14 (6) iff (7) p. 107
+      InclPoset sigma L is completely-distributive
+iff InclPoset sigma L is continuous & (InclPoset sigma L) opp is continuous
+proof InclPoset sigma L = InclPoset the topology of L by Th23;
+  hence thesis by WAYBEL_6:39;
+end;
+
+theorem :: Corollary 1.15 (1) implies (2) p. 108
+  L is algebraic implies
+ ex B being Basis of L st B = {uparrow x : x in
+ the carrier of CompactSublatt L}
+proof assume
+  L is algebraic;
+then A1: L is satisfying_axiom_K by WAYBEL_8:def 4;
+  set P = {uparrow k where k is Element of L :
+                                 k in the carrier of CompactSublatt L};
+    P c= bool the carrier of L proof let x be set; assume x in P;
+   then ex k being Element of L st x = uparrow k &
+        k in the carrier of CompactSublatt L;
+   hence thesis;
+  end;
+  then reconsider P as Subset-Family of L by SETFAM_1:def 7;
+  reconsider P as Subset-Family of L;
+A2: P c= the topology of L proof let x be set; assume x in P;
+     then consider k being Element of L such that
+   A3: x = uparrow k & k in the carrier of CompactSublatt L;
+         k is compact by A3,WAYBEL_8:def 1;
+       then uparrow k is Open by WAYBEL_8:2;
+      then uparrow k is open by WAYBEL11:41;
+     hence x in the topology of L by A3,PRE_TOPC:def 5;
+   end;
+     now let x be Point of L;
+     set B = {uparrow k where k is Element of L :
+               uparrow k in P & x in uparrow k};
+       B c= bool the carrier of L proof let y be set; assume y in B;
+      then ex k being Element of L st
+                     y = uparrow k & uparrow k in P & x in uparrow k;
+      hence thesis;
+     end;
+     then reconsider B as Subset-Family of L by SETFAM_1:def 7;
+     reconsider B as Subset-Family of L;
+       B is Basis of x proof
+      thus B c= the topology of L proof let y be set; assume y in B;
+        then ex k being Element of L st
+                     y = uparrow k & uparrow k in P & x in uparrow k;
+       hence thesis by A2;
+      end;
+         now
+       per cases;
+        suppose B is empty;
+          then Intersect B = the carrier of L by CANTOR_1:def 3;
+         hence x in Intersect B;
+        suppose A4: B is non empty;
+       then A5: Intersect B = meet B by CANTOR_1:def 3;
+            now let Y be set; assume Y in B;
+           then ex k being Element of L st
+                     Y = uparrow k & uparrow k in P & x in uparrow k;
+           hence x in Y;
+          end;
+        hence x in Intersect B by A4,A5,SETFAM_1:def 1;
+       end;
+      hence x in Intersect B;
+      let S be Subset of L such that
+     A6: S is open and
+     A7: x in S;
+         reconsider x' = x as Element of L;
+     A8: x = sup compactbelow x' by A1,WAYBEL_8:def 3;
+           S is inaccessible by A6,WAYBEL11:def 4;
+         then (compactbelow x') meets S by A7,A8,WAYBEL11:def 1;
+         then consider k being set such that
+     A9: k in compactbelow x' & k in S by XBOOLE_0:3;
+     A10: compactbelow x' = downarrow x' /\ the carrier of CompactSublatt L
+            by WAYBEL_8:5;
+         reconsider k as Element of L by A9;
+      take V = uparrow k;
+            k in the carrier of CompactSublatt L by A9,A10,XBOOLE_0:def 3;
+     then A11:  uparrow k in P;
+            k in downarrow x' by A9,A10,XBOOLE_0:def 3;
+          then k <= x' by WAYBEL_0:17;
+          then x in uparrow k by WAYBEL_0:18;
+      hence V in B by A11;
+          S is upper by A6,WAYBEL11:def 4;
+      hence V c= S by A9,WAYBEL11:42;
+     end;
+     then reconsider B as Basis of x;
+    take B;
+    thus B c= P proof let y be set; assume y in B;
+      then ex k being Element of L st
+                     y = uparrow k & uparrow k in P & x in uparrow k;
+     hence y in P;
+    end;
+   end;
+  then P is Basis of L by A2,YELLOW_8:23;
+ hence thesis;
+end;
+
+theorem :: Corollary 1.15 (2) implies (3) p. 108
+  (ex B being Basis of L st B = {uparrow x :x in
+ the carrier of CompactSublatt L})
+  implies InclPoset sigma L is algebraic &
+          for V ex VV st V = sup VV & for W st W in VV holds W is co-prime
+proof given B being Basis of L such that
+A1: B = {uparrow k where k is Element of L :
+                                 k in the carrier of CompactSublatt L};
+  set IPt = InclPoset the topology of L;
+  set IPs = InclPoset sigma L;
+A2: sigma L = the topology of L by Th23;
+A3: the carrier of IPs = sigma L by YELLOW_1:1;
+A4: IPs = IPt by Th23;
+ thus InclPoset sigma L is algebraic proof
+  hereby let X be Element of IPs;
+     reconsider X' = X as Element of IPt by Th23;
+       compactbelow X' is non empty;
+   hence compactbelow X is non empty by Th23;
+       compactbelow X' is directed;
+   hence compactbelow X is directed by A2;
+  end;
+  thus IPs is up-complete by A4;
+  let X be Element of IPs;
+  set cX = compactbelow X;
+A5: sup cX = union cX by A2,YELLOW_1:22;
+   set GB = { G where G is Subset of L: G in B & G c= X };
+       X in sigma L by A3;
+     then reconsider X' = X as Subset of L;
+       X' is open by A3,Th24;
+then A6: X = union GB by YELLOW_8:18;
+     now let x be set;
+    hereby assume x in X; then consider GG being set such that
+   A7: x in GG & GG in GB by A6,TARSKI:def 4;
+       consider G being Subset of L such that
+   A8: G = GG & G in B & G c= X by A7;
+       consider k being Element of L such that
+   A9: G = uparrow k & k in the carrier of CompactSublatt L by A1,A8;
+         k is compact by A9,WAYBEL_8:def 1;
+       then uparrow k is Open by WAYBEL_8:2;
+       then uparrow k is open by WAYBEL11:41;
+       then uparrow k in the topology of L by PRE_TOPC:def 5;
+       then reconsider G as Element of IPs by A2,A3,A9;
+   A10: G <= X by A8,YELLOW_1:3;
+       for X being Subset of L st X is open holds X is upper by WAYBEL11:def 4;
+       then uparrow k is compact by Th22;
+       then G is compact by A2,A9,WAYBEL_3:36;
+       then G in cX by A10,WAYBEL_8:4;
+     hence x in union cX by A7,A8,TARSKI:def 4;
+    end; assume x in union cX; then consider G being set such that
+   A11: x in G & G in cX by TARSKI:def 4;
+       reconsider G as Element of IPs by A11;
+         G <= X by A11,WAYBEL_8:4;
+       then G c= X by YELLOW_1:3;
+     hence x in X by A11;
+   end;
+  hence X = sup compactbelow X by A5,TARSKI:2;
+ end;
+ let V be Element of InclPoset sigma L;
+   set GB = { G where G is Subset of L: G in B & G c= V };
+     GB c= the carrier of IPs proof let x be set; assume x in GB;
+      then consider G being Subset of L such that
+   A12: G = x & G in B & G c= V;
+        G is open by A12,YELLOW_8:19;
+    hence x in the carrier of IPs by A3,A12,Th24;
+   end;
+   then reconsider GB as Subset of InclPoset sigma L;
+ take GB;
+       V in sigma L by A3;
+     then reconsider V' = V as Subset of L;
+       V' is open by A3,Th24;
+     then V = union GB by YELLOW_8:18;
+ hence V = sup GB by A2,YELLOW_1:22;
+ let x be Element of InclPoset sigma L; assume
+   x in GB; then consider G being Subset of L such that
+A13: G = x & G in B & G c= V;
+   consider k being Element of L such that
+A14: G = uparrow k & k in the carrier of CompactSublatt L by A1,A13;
+ thus x is co-prime by A13,A14,Th27;
+end;
+
+theorem :: Corollary 1.15 (3) implies (2) p. 108
+        :: The proof of ((3) implies (1)) is split into two parts
+        :: This one proves ((3) implies (2)) and the next is ((2) implies (1)).
+   InclPoset sigma L is algebraic &
+ (for V ex VV st V = sup VV & for W st W in VV holds W is co-prime)
+implies
+ ex B being Basis of L st B = {uparrow x : x in
+ the carrier of CompactSublatt L}
+proof assume that
+A1: InclPoset sigma L is algebraic and
+A2: for V being Element of InclPoset sigma L
+    ex X being Subset of InclPoset sigma L st V = sup X &
+     for x being Element of InclPoset sigma L
+      st x in X holds x is co-prime;
+  set IPt = InclPoset the topology of L;
+  set IPs = InclPoset sigma L;
+A3: sigma L = the topology of L by Th23;
+A4: the carrier of IPs = sigma L by YELLOW_1:1;
+A5: IPs = IPt by Th23;
+A6: InclPoset sigma L is satisfying_axiom_K by A1,WAYBEL_8:def 4;
+    reconsider ips = InclPoset sigma L as algebraic LATTICE by A1,A5;
+     A7: ips is continuous;
+      (for x being Element of L ex X being Basis of x st
+         for Y being Subset of L st Y in X holds Y is open filtered)
+    by A2,Th39;
+    then for x being Element of L holds
+     x = "\/" ({inf V where V is Subset of L : x in V & V in sigma L}, L)
+    by A7,Th37;
+    then A8: L is continuous by Th38;
+   set B = {uparrow k where k is Element of L :
+                                    k in the carrier of CompactSublatt L};
+    B c= bool the carrier of L proof let x be set; assume x in B;
+   then ex k being Element of L st x = uparrow k &
+        k in the carrier of CompactSublatt L;
+   hence thesis;
+  end;
+  then reconsider B as Subset-Family of L by SETFAM_1:def 7;
+  reconsider B as Subset-Family of L;
+A9: B c= the topology of L proof let x be set; assume x in B;
+     then consider k being Element of L such that
+   A10: x = uparrow k & k in the carrier of CompactSublatt L;
+         k is compact by A10,WAYBEL_8:def 1;
+       then uparrow k is Open by WAYBEL_8:2;
+      then uparrow k is open by WAYBEL11:41;
+     hence x in the topology of L by A10,PRE_TOPC:def 5;
+   end;
+     now let x be Point of L;
+     set Bx = {uparrow k where k is Element of L :
+               uparrow k in B & x in uparrow k};
+       Bx c= bool the carrier of L proof let y be set; assume y in Bx;
+      then ex k being Element of L st
+                     y = uparrow k & uparrow k in B & x in uparrow k;
+      hence thesis;
+     end;
+     then reconsider Bx as Subset-Family of L by SETFAM_1:def 7;
+     reconsider Bx as Subset-Family of L;
+       Bx is Basis of x proof
+      thus Bx c= the topology of L proof let y be set; assume y in Bx;
+        then ex k being Element of L st
+                     y = uparrow k & uparrow k in B & x in uparrow k;
+       hence thesis by A9;
+      end;
+         now
+       per cases;
+        suppose Bx is empty;
+          then Intersect Bx = the carrier of L by CANTOR_1:def 3;
+         hence x in Intersect Bx;
+        suppose A11: Bx is non empty;
+       then A12: Intersect Bx = meet Bx by CANTOR_1:def 3;
+            now let Y be set; assume Y in Bx;
+           then ex k being Element of L st
+                     Y = uparrow k & uparrow k in B & x in uparrow k;
+           hence x in Y;
+          end;
+        hence x in Intersect Bx by A11,A12,SETFAM_1:def 1;
+       end;
+      hence x in Intersect Bx;
+      let S be Subset of L such that
+     A13: S is open and
+     A14: x in S;
+           S in the topology of L by A13,PRE_TOPC:def 5;
+         then reconsider S' = S as Element of IPt by A3,A4;
+           S' = sup compactbelow S' by A3,A6,WAYBEL_8:def 3;
+         then S' = union compactbelow S' by YELLOW_1:22;
+         then consider UA being set such that
+     A15: x in UA & UA in compactbelow S' by A14,TARSKI:def 4;
+         reconsider UA as Element of IPt by A15;
+     A16: UA <= S' & UA is compact by A15,WAYBEL_8:4;
+         consider F being Subset of InclPoset sigma L such that
+     A17: UA = sup F and
+     A18: for x being Element of InclPoset sigma L
+           st x in F holds x is co-prime by A2,A3;
+     A19: UA = union F by A3,A17,YELLOW_1:22;
+           UA in the topology of L by A3,A4;
+         then reconsider UA' = UA as Subset of L;
+     A20: UA << UA by A16,WAYBEL_3:def 2;
+           F is Subset of bool the carrier of L by A4,XBOOLE_1:1;
+         then F is Subset-Family of L by SETFAM_1:def 7;
+         then reconsider F' = F as Subset-Family of L;
+           F' is open proof let P be Subset of L;
+          assume P in F';
+          hence P is open by A3,A4,PRE_TOPC:def 5;
+         end;
+         then consider G being finite Subset of F' such that
+     A21: UA c= union G by A19,A20,WAYBEL_3:34;
+           union G c= union F by ZFMISC_1:95;
+     then A22: UA = union G by A19,A21,XBOOLE_0:def 10;
+           G is finite Subset of bool the carrier of L by XBOOLE_1:1;
+         then G is finite Subset-Family of L by SETFAM_1:def 7;
+         then reconsider G as finite Subset-Family of L;
+         consider Gg being finite Subset-Family of L such that
+     A23: Gg c= G and
+     A24: union Gg = union G and
+     A25: for g being Subset of L
+           st g in Gg holds not g c= union (Gg\{g}) by Th1;
+         consider U1 being set such that
+     A26: x in U1 & U1 in Gg by A15,A21,A24,TARSKI:def 4;
+         A27: Gg c= F by A23,XBOOLE_1:1;
+     then U1 in F by A26;
+         then reconsider U1 as Element of IPs;
+       U1 in the topology of L by A3,A4;
+         then reconsider U1' = U1 as Subset of L;
+           U1 is co-prime by A18,A26,A27;
+     then A28: U1' is filtered upper by Th27;
+         set k = inf U1';
+::
+:: We simplify the proof from CCL a bit.
+::
+:: Our proof follows their idea but we use UA (their U) as the compact set
+:: in InclPoset to get a contradiction after assumming that inf U1 is not
+:: in U1.
+::
+            now assume
+          A29: not k in U1';
+            set D = {(downarrow u)` where u is Element of L : u in U1'};
+              consider u being set such that
+              A30: u in U1' by A26;
+                 reconsider u as Element of L by A30;
+          A31: (downarrow u)` in D by A30;
+              D c= the topology of L proof let d be set; assume
+                d in D; then consider u being Element of L such that
+             A32: d = (downarrow u)` & u in U1';
+                   (downarrow u)` is open by WAYBEL11:12;
+              hence thesis by A32,PRE_TOPC:def 5;
+            end;
+            then reconsider D as non empty Subset of IPt
+                    by A3,A4,A31;
+          A33: D is directed by A3,A28,Th25;
+               now assume not UA c= union D;
+                 then consider l being set such that
+             A34: l in UA' & not l in union D by TARSKI:def 3;
+                 reconsider l as Element of L by A34;
+                 consider Uk being set such that
+             A35: l in Uk & Uk in Gg by A21,A24,A34,TARSKI:def 4;
+                 A36: Gg c= F by A23,XBOOLE_1:1;
+             then Uk in F by A35;
+                  then reconsider Uk as Element of IPs;
+                    Uk in the topology of L by A3,A4;
+                 then reconsider Uk' = Uk as Subset of L;
+                   Uk is co-prime by A18,A35,A36;
+             then A37: Uk' is filtered upper by Th27;
+             A38: k is_<=_than U1' by YELLOW_0:33;
+                   now assume not l is_<=_than U1';
+                    then consider m being Element of L such that
+                 A39: m in U1' & not l <= m by LATTICE3:def 8;
+                      (downarrow m)` in D by A39;
+                    then not l in (downarrow m)` by A34,TARSKI:def 4;
+                    then l in downarrow m by YELLOW_6:10;
+                  hence contradiction by A39,WAYBEL_0:17;
+                 end;
+                 then l <= k by YELLOW_0:33;
+             then A40: k in Uk' by A35,A37,WAYBEL_0:def 20;
+             A41: U1' c= Uk proof let u be set; assume
+                 A42: u in U1';
+                     then reconsider d = u as Element of L;
+                       k <= d by A38,A42,LATTICE3:def 8;
+                  hence thesis by A37,A40,WAYBEL_0:def 20;
+                 end;
+                   U1' c= union (Gg\{U1'}) proof let u be set;
+                  assume A43: u in U1';
+                       Uk in Gg\{U1'} by A29,A35,A40,ZFMISC_1:64;
+                  hence u in union (Gg\{U1'}) by A41,A43,TARSKI:def 4;
+                 end;
+              hence contradiction by A25,A26;
+             end;
+             then UA c= sup D by YELLOW_1:22;
+             then UA <= sup D by YELLOW_1:3;
+             then consider d being Element of IPt such that
+          A44: d in D and
+          A45: UA <= d by A20,A33,WAYBEL_3:def 1;
+              consider u being Element of L such that
+          A46: d = (downarrow u)` & u in U1' by A44;
+                U1 c= UA by A19,A26,A27,ZFMISC_1:92;
+          then A47: u in UA by A46;
+                UA c= d by A45,YELLOW_1:3;
+          then A48: not u in downarrow u by A46,A47,YELLOW_6:10;
+                u <= u;
+           hence contradiction by A48,WAYBEL_0:17;
+          end;
+     then A49: uparrow k c= U1' by A28,WAYBEL11:42;
+          A50: U1' c= uparrow k proof let x be set; assume
+          A51: x in U1';
+              then reconsider x' = x as Element of L;
+                k is_<=_than U1' by YELLOW_0:33;
+              then k <= x' by A51,LATTICE3:def 8;
+           hence x in uparrow k by WAYBEL_0:18;
+          end;
+     then A52: U1' = uparrow k by A49,XBOOLE_0:def 10;
+           U1' is open by A3,A4,PRE_TOPC:def 5;
+         then U1' is Open by A8,A28,WAYBEL11:46;
+     then A53:  k is compact by A52,WAYBEL_8:2;
+      take V = uparrow k;
+           k in the carrier of CompactSublatt L by A53,WAYBEL_8:def 1;
+         then uparrow k in B;
+      hence V in Bx by A26,A50;
+     A54: UA c= S by A16,YELLOW_1:3;
+           U1 c= UA by A22,A24,A26,ZFMISC_1:92;
+      hence V c= S by A52,A54,XBOOLE_1:1;
+     end;
+     then reconsider Bx as Basis of x;
+    take Bx;
+    thus Bx c= B proof let y be set; assume y in Bx;
+      then ex k being Element of L st
+                     y = uparrow k & uparrow k in B & x in uparrow k;
+     hence y in B;
+    end;
+   end;
+   then reconsider B as Basis of L by A9,YELLOW_8:23;
+ take B;
+ thus thesis;
+end;
+
+theorem :: Corollary 1.15 (2) implies (1) p. 108
+  (ex B being Basis of L st B = {uparrow x :x in
+ the carrier of CompactSublatt L})
+ implies L is algebraic
+proof given B being Basis of L such that
+A1: B = {uparrow k where k is Element of L :
+                                    k in the carrier of CompactSublatt L};
+ thus for x being Element of L holds compactbelow x is non empty directed;
+ thus L is up-complete;
+ let x be Element of L;
+ set y = sup compactbelow x;
+ set cx = compactbelow x;
+ set dx = downarrow x;
+ set dy = downarrow y;
+    now assume
+A2: y <> x;
+     for z be Element of L st z in dx holds
+    z <= x by WAYBEL_0:17;
+   then x is_>=_than dx by LATTICE3:def 9;
+then A3: sup dx <= x by YELLOW_0:32;
+A4: ex_sup_of cx, L & ex_sup_of dx, L by YELLOW_0:17;
+     cx = dx /\ the carrier of CompactSublatt L by WAYBEL_8:5;
+   then compactbelow x c= dx by XBOOLE_1:17;
+   then sup compactbelow x <= sup dx by A4,YELLOW_0:34;
+then A5: y <= x by A3,ORDERS_1:26;
+     now assume x in dy; then x <= y by WAYBEL_0:17;
+    hence contradiction by A2,A5,ORDERS_1:25;
+   end;
+then A6: x in dy` by YELLOW_6:10;
+   set GB = { G where G is Subset of L: G in B & G c= dy`};
+     dy` is open by WAYBEL11:12;
+   then dy` = union GB by YELLOW_8:18;
+   then consider X being set such that
+A7: x in X & X in GB by A6,TARSKI:def 4;
+   consider G being Subset of L such that
+A8: G = X & G in B & G c= dy` by A7;
+   consider k being Element of L such that
+A9: G = uparrow k & k in the carrier of CompactSublatt L by A1,A8;
+A10: k <= x by A7,A8,A9,WAYBEL_0:18;
+     k is compact by A9,WAYBEL_8:def 1;
+then A11: k in cx by A10,WAYBEL_8:4;
+     y is_>=_than cx by YELLOW_0:32;
+   then k <= y by A11,LATTICE3:def 9; then y in uparrow k by WAYBEL_0:18;
+then y <= y & not y in dy by A8,A9,YELLOW_6:10;
+    hence contradiction by WAYBEL_0:17;
+  end;
+ hence x = sup compactbelow x;
+end;

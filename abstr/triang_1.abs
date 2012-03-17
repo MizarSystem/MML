@@ -1,0 +1,360 @@
+:: On the concept of the triangulation
+::  by Beata Madras
+::
+:: Received October 28, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, ORDERS_1, BOOLE, WELLORD1, FINSUB_1, AMI_1, RELAT_1,
+      RELAT_2, FINSET_1, SETFAM_1, CARD_1, FUNCT_3, FUNCT_1, ORDERS_2,
+      FINSEQ_4, SUBSET_1, ARYTM_1, TARSKI, PROB_1, PBOOLE, FUNCT_2, QC_LANG1,
+      ORDINAL2, FINSEQ_2, PRALG_1, CQC_LANG, TRIANG_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      RELAT_1, RELAT_2, SETFAM_1, STRUCT_0, NAT_1, FUNCT_1, FUNCT_2, FUNCT_3,
+      FRAENKEL, FINSET_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSUB_1, WELLORD1,
+      ORDERS_2, TOLER_1, GOBOARD1, AMI_1, CARD_1, PBOOLE, MSUALG_1, ORDERS_1,
+      FINSEQOP, CQC_LANG;
+ constructors NAT_1, FUNCT_3, FINSUB_1, WELLORD2, ORDERS_2, TOLER_1, GOBOARD1,
+      AMI_1, MSUALG_1, ORDERS_1, FRAENKEL, FINSEQ_4, FINSEQOP, MEMBERED;
+ clusters RELAT_1, FINSET_1, RELSET_1, ORDERS_1, STRUCT_0, XREAL_0, FINSUB_1,
+      FINSEQ_1, NAT_1, MEMBERED, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+ reserve A,x,y,z,u for set;
+ reserve k,l,m,n for Nat;
+
+scheme Regr1 { n() -> Nat, P[set] }:
+ for k st k <= n() holds P[k]
+ provided
+   P[n()] and
+   for k st k < n() & P[k+1] holds P[k];
+
+
+definition
+let n be Nat;
+cluster Seg (n+1) -> non empty;
+end;
+
+
+definition
+let X be non empty set, R be Order of X;
+cluster RelStr (#X,R#) -> non empty;
+end;
+
+
+theorem :: TRIANG_1:1
+  {}|_2 A = {};
+
+
+definition
+let X be set;
+cluster non empty Subset of Fin X;
+end;
+
+
+definition
+let X be non empty set;
+cluster non empty with_non-empty_elements Subset of Fin X;
+end;
+
+
+definition
+let X be non empty set, F be non empty with_non-empty_elements Subset of Fin X;
+cluster non empty Element of F;
+end;
+
+
+definition let IT be set;
+attr IT is with_non-empty_element means
+:: TRIANG_1:def 1
+ex X be non empty set st X in IT;
+end;
+
+
+definition
+cluster with_non-empty_element set;
+end;
+
+definition
+let X be with_non-empty_element set;
+cluster non empty Element of X;
+end;
+
+
+definition
+cluster with_non-empty_element -> non empty set;
+end;
+
+
+definition
+let X be non empty set;
+cluster with_non-empty_element Subset of Fin X;
+end;
+
+
+definition
+let X be non empty set, R be Order of X, A be Subset of X;
+redefine func R|_2 A -> Order of A;
+end;
+
+scheme SubFinite{D()->set, A()->Subset of D(), P[set]}:
+ P[A()]
+  provided
+   A() is finite and
+   P[{}(D())] and
+   for x being Element of D(), B being Subset of D()
+       st x in A() & B c= A() & P[B] holds P[B \/ {x}];
+
+
+theorem :: TRIANG_1:2
+  for F being non empty Poset, A be Subset of F st A is finite & A <> {} &
+for B,C being Element of F st B in A & C in A holds B <= C or C <= B
+ex m being Element of F st m in A & for C being Element of F st C in A
+holds m <= C;
+
+
+definition
+let X be non empty set,
+    F be with_non-empty_element Subset of Fin X;
+cluster finite non empty Element of F;
+end;
+
+definition
+let P be non empty Poset,
+    A be non empty finite Subset of P,
+    x be Element of P;
+cluster InitSegm(A,x) -> finite;
+end;
+
+theorem :: TRIANG_1:3
+for A,B being finite set st A c= B & card A = card B holds A = B;
+
+definition
+let X be set, A be finite Subset of X, R be Order of X;
+ assume  R linearly_orders A;
+func SgmX (R,A) -> FinSequence of X means
+:: TRIANG_1:def 2
+rng it = A & for n,m be Nat
+  st n in dom it & m in dom it & n < m holds
+   it/.n <> it/.m & [it/.n,it/.m] in R;
+end;
+
+theorem :: TRIANG_1:4
+for X be set,
+    A be finite Subset of X,
+    R be Order of X,
+    f be FinSequence of X st rng f = A &
+     for n,m be Nat st n in dom f & m in dom f & n < m
+       holds f/.n <> f/.m & [f/.n, f/.m] in R
+  holds f = SgmX(R,A);
+
+
+:: Abstract Complexes
+begin
+
+definition
+let C be non empty Poset;
+func symplexes(C) -> Subset of Fin the carrier of C equals
+:: TRIANG_1:def 3
+ {A where A is Element of Fin the carrier of C :
+      the InternalRel of C linearly_orders A};
+end;
+
+
+definition
+let C be non empty Poset;
+cluster symplexes(C) -> with_non-empty_element;
+end;
+
+reserve C for non empty Poset;
+
+theorem :: TRIANG_1:5
+for x be Element of C holds {x} in symplexes(C);
+
+
+theorem :: TRIANG_1:6
+  {} in symplexes(C);
+
+
+theorem :: TRIANG_1:7
+for x, s be set st x c= s & s in symplexes(C) holds x in symplexes(C);
+
+definition
+ let X be set, F be non empty Subset of Fin X;
+  cluster -> finite Element of F;
+end;
+
+definition
+ let X be set, F be non empty Subset of Fin X;
+ redefine mode Element of F -> Subset of X;
+end;
+
+theorem :: TRIANG_1:8
+for X being set,
+    A being finite Subset of X,
+    R being Order of X
+ st R linearly_orders A
+holds SgmX(R,A) is one-to-one;
+
+theorem :: TRIANG_1:9
+for X being set,
+    A being finite Subset of X,
+    R being Order of X
+ st R linearly_orders A
+holds len(SgmX(R, A)) = Card A;
+
+theorem :: TRIANG_1:10
+for C be non empty Poset, A being non empty Element of symplexes(C)
+st Card A = n
+holds dom(SgmX(the InternalRel of C, A)) = Seg n;
+
+
+definition
+let C be non empty Poset;
+cluster non empty Element of symplexes(C);
+end;
+
+begin :: Triangulations
+
+definition
+  mode SetSequence is ManySortedSet of NAT;
+end;
+
+definition let IT be SetSequence;
+attr IT is lower_non-empty means
+:: TRIANG_1:def 4
+for n st IT.n is non empty holds
+for m st m < n holds IT.m is non empty;
+end;
+
+definition
+cluster lower_non-empty SetSequence;
+end;
+
+definition
+let X be SetSequence;
+func FuncsSeq X -> SetSequence means
+:: TRIANG_1:def 5
+for n be Nat holds it.n = Funcs(X.(n+1),X.n);
+end;
+
+
+definition
+let X be lower_non-empty SetSequence;
+let n be Nat;
+cluster (FuncsSeq X).n -> non empty;
+end;
+
+
+definition
+let n;
+let f be Element of Funcs(Seg n,Seg(n+1));
+func @ f -> FinSequence of REAL equals
+:: TRIANG_1:def 6
+ f;
+end;
+
+
+definition
+func NatEmbSeq -> SetSequence means
+:: TRIANG_1:def 7
+for n be Nat holds
+  it.n = {f where f is Element of Funcs(Seg n,Seg(n+1)) : @ f is increasing};
+end;
+
+
+definition
+let n;
+cluster NatEmbSeq.n -> non empty;
+end;
+
+
+definition
+let n be Nat;
+cluster -> Function-like Relation-like Element of NatEmbSeq.n;
+end;
+
+definition
+  let X be SetSequence;
+  mode triangulation of X is ManySortedFunction of NatEmbSeq, FuncsSeq(X);
+  canceled;
+end;
+
+definition
+  struct TriangStr (# SkeletonSeq -> SetSequence,
+                      FacesAssign -> ManySortedFunction of
+                        NatEmbSeq, FuncsSeq(the SkeletonSeq) #);
+end;
+
+definition
+let T be TriangStr;
+attr T is lower_non-empty means
+:: TRIANG_1:def 9
+the SkeletonSeq of T is lower_non-empty;
+end;
+
+definition
+cluster lower_non-empty strict TriangStr;
+end;
+
+definition
+let T be lower_non-empty TriangStr;
+cluster the SkeletonSeq of T -> lower_non-empty;
+end;
+
+
+definition
+let S be lower_non-empty SetSequence,
+    F be ManySortedFunction of NatEmbSeq, FuncsSeq S;
+cluster TriangStr (#S,F#) -> lower_non-empty;
+end;
+
+
+:: Relationship between  Abstract Complexes and Triangulations
+begin
+
+definition
+let T be TriangStr; let n be Nat;
+mode Symplex of T,n is Element of (the SkeletonSeq of T).n;
+end;
+
+
+definition
+let n be Nat;
+mode Face of n is Element of NatEmbSeq.n;
+end;
+
+
+definition
+let T be lower_non-empty TriangStr,
+    n be Nat,
+    x be Symplex of T,n+1,
+    f be Face of n;
+assume  (the SkeletonSeq of T).(n+1) <> {};
+func face (x,f) -> Symplex of T,n means
+:: TRIANG_1:def 10
+for F,G be Function st F = (the FacesAssign of T).n & G = F.f holds
+it = G.x;
+end;
+
+
+definition
+let C be non empty Poset;
+func Triang C -> lower_non-empty strict TriangStr means
+:: TRIANG_1:def 11
+  (the SkeletonSeq of it).0 = { {} } &
+(for n be Nat st n > 0 holds (the SkeletonSeq of it).n =
+{ SgmX(the InternalRel of C, A)
+where A is non empty Element of symplexes(C) : Card A = n }) &
+for n be Nat,
+    f be Face of n,
+    s be Element of (the SkeletonSeq of it).(n+1)
+ st s in (the SkeletonSeq of it).(n+1)
+for A be non empty Element of symplexes(C)
+ st SgmX(the InternalRel of C, A) = s
+holds face (s,f) = (SgmX(the InternalRel of C, A)) * f;
+end;

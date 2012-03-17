@@ -1,0 +1,548 @@
+:: Completeness of the Lattices of Domains of a Topological Space
+::  by Zbigniew Karno and Toshihiko Watanabe
+::
+:: Received July 16, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, TOPS_1, BOOLE, SETFAM_1, PCOMPS_1, TARSKI, FINSET_1,
+      FINSEQ_1, RELAT_1, FUNCT_1, TDLAT_1, LATTICES, SUBSET_1, LATTICE3,
+      BHSP_3, TDLAT_2;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XREAL_0, SETFAM_1, STRUCT_0, FUNCT_1,
+      FINSET_1, FINSEQ_1, NAT_1, PRE_TOPC, TOPS_1, TOPS_2, PCOMPS_1, BINOP_1,
+      LATTICES, LATTICE3, TDLAT_1;
+ constructors FINSEQ_1, NAT_1, TOPS_1, TOPS_2, PCOMPS_1, LATTICE3, TDLAT_1,
+      MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, PRE_TOPC, STRUCT_0, TDLAT_1, TOPS_1, ARYTM_3, MEMBERED,
+      ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+:: 1. Preliminary Theorems about Subsets of a Toplogical Space.
+reserve T for non empty TopSpace;
+
+theorem :: TDLAT_2:1
+ for A being Subset of T holds
+  Int Cl Int A c= Int Cl A & Int Cl Int A c= Cl Int A;
+
+theorem :: TDLAT_2:2
+ for A being Subset of T holds
+  Cl Int A c= Cl Int Cl A & Int Cl A c= Cl Int Cl A;
+
+theorem :: TDLAT_2:3
+   for A being Subset of T, B being Subset of T st B is closed
+  holds Cl(Int(A /\ B)) = A implies A c= B;
+
+theorem :: TDLAT_2:4
+ for A being Subset of T, B being Subset of T st A is open holds
+  Int(Cl(A \/ B)) = B implies A c= B;
+
+theorem :: TDLAT_2:5
+ for A being Subset of T holds
+  A c= Cl Int A implies A \/ Int Cl A c= Cl Int(A \/ Int Cl A);
+
+theorem :: TDLAT_2:6
+ for A being Subset of T holds
+  Int Cl A c= A implies Int Cl(A /\ Cl Int A) c= A /\ Cl Int A;
+
+begin
+:: 2. The Closure and the Interior Operations for Families of Subsets of
+::                                                    a Topological Space.
+reserve T for non empty TopSpace;
+
+::(for the definition of clf see PCOMPS_1:def 3)
+definition let T; let F be Subset-Family of T;
+ redefine func clf F;
+  synonym Cl F;
+end;
+
+::Properties of the Closure Operation Cl (see also PCOMPS_1).
+theorem :: TDLAT_2:7
+ for F being Subset-Family of T holds Cl F =
+   {A where A is Subset of T :
+     ex B being Subset of T st A = Cl B & B in F};
+
+theorem :: TDLAT_2:8
+   for F being Subset-Family of T holds Cl F = Cl Cl F;
+
+theorem :: TDLAT_2:9
+ for F being Subset-Family of T holds F = {} iff Cl F = {};
+
+theorem :: TDLAT_2:10
+   for F,G being Subset-Family of T holds Cl(F /\ G) c= (Cl F) /\ (Cl G);
+
+theorem :: TDLAT_2:11
+   for F,G being Subset-Family of T holds (Cl F) \ (Cl G) c= Cl(F \ G);
+
+theorem :: TDLAT_2:12
+   for F being Subset-Family of T, A being Subset of T holds
+  A in F implies meet(Cl F) c= Cl A & Cl A c= union(Cl F);
+
+::for F being Subset-Family of T holds union F c= union(Cl F);
+::(see PCOMPS_1:22)
+theorem :: TDLAT_2:13
+ for F being Subset-Family of T holds meet F c= meet(Cl F);
+
+theorem :: TDLAT_2:14
+ for F being Subset-Family of T holds Cl(meet F) c= meet(Cl F);
+
+theorem :: TDLAT_2:15
+ for F being Subset-Family of T holds union(Cl F) c= Cl(union F);
+
+definition let T; let F be Subset-Family of T;
+ func Int F -> Subset-Family of T means
+:: TDLAT_2:def 1
+ for A being Subset of T holds
+   A in it iff ex B being Subset of T st A = Int B & B in F;
+end;
+
+::Properties of the Interior Operation Int.
+theorem :: TDLAT_2:16
+ for F being Subset-Family of T holds Int F =
+   {A where A is Subset of T :
+    ex B being Subset of T st A = Int B & B in F};
+
+theorem :: TDLAT_2:17
+   for F being Subset-Family of T holds Int F = Int Int F;
+
+theorem :: TDLAT_2:18
+ for F being Subset-Family of T holds Int F is open;
+
+theorem :: TDLAT_2:19
+ for F being Subset-Family of T holds F = {} iff Int F = {};
+
+theorem :: TDLAT_2:20
+ for A being Subset of T, F being Subset-Family of T
+ st F = { A } holds
+  Int F = { Int A };
+
+theorem :: TDLAT_2:21
+   for F,G being Subset-Family of T holds F c= G implies Int F c= Int G;
+
+theorem :: TDLAT_2:22
+ for F,G being Subset-Family of T holds Int(F \/ G) = (Int F) \/ (Int G);
+
+theorem :: TDLAT_2:23
+   for F,G being Subset-Family of T holds Int(F /\ G) c= (Int F) /\ (Int G);
+
+theorem :: TDLAT_2:24
+   for F,G being Subset-Family of T holds (Int F) \ (Int G) c= Int(F \ G);
+
+theorem :: TDLAT_2:25
+   for F being Subset-Family of T, A being Subset of T holds
+  A in F implies Int A c= union(Int F) & meet(Int F) c= Int A;
+
+theorem :: TDLAT_2:26
+ for F being Subset-Family of T holds union(Int F) c= union F;
+
+theorem :: TDLAT_2:27
+   for F being Subset-Family of T holds meet(Int F) c= meet F;
+
+theorem :: TDLAT_2:28
+ for F being Subset-Family of T holds union(Int F) c= Int(union F);
+
+theorem :: TDLAT_2:29
+ for F being Subset-Family of T holds Int(meet F) c= meet(Int F);
+
+theorem :: TDLAT_2:30
+   for F being Subset-Family of T holds
+  F is finite implies Int(meet F) = meet(Int F);
+
+::Connections between the Operations Int and Cl.
+reserve F for Subset-Family of T;
+
+theorem :: TDLAT_2:31
+ Cl Int F =
+  {A where A is Subset of T :
+  ex B being Subset of T st A = Cl Int B & B in F};
+
+theorem :: TDLAT_2:32
+ Int Cl F =
+  {A where A is Subset of T :
+  ex B being Subset of T st A = Int Cl B & B in F};
+
+theorem :: TDLAT_2:33
+ Cl Int Cl F = {A where A is Subset of T :
+     ex B being Subset of T st A = Cl Int Cl B & B in F};
+
+theorem :: TDLAT_2:34
+ Int Cl Int F = {A where A is Subset of T :
+      ex B being Subset of T st A = Int Cl Int B & B in F};
+
+theorem :: TDLAT_2:35
+   Cl Int Cl Int F = Cl Int F;
+
+theorem :: TDLAT_2:36
+   Int Cl Int Cl F = Int Cl F;
+
+theorem :: TDLAT_2:37
+   union(Int Cl F) c= union(Cl Int Cl F);
+
+theorem :: TDLAT_2:38
+   meet(Int Cl F) c= meet(Cl Int Cl F);
+
+theorem :: TDLAT_2:39
+   union(Cl Int F) c= union(Cl Int Cl F);
+
+theorem :: TDLAT_2:40
+   meet(Cl Int F) c= meet(Cl Int Cl F);
+
+theorem :: TDLAT_2:41
+   union(Int Cl Int F) c= union(Int Cl F);
+
+theorem :: TDLAT_2:42
+   meet(Int Cl Int F) c= meet(Int Cl F);
+
+theorem :: TDLAT_2:43
+   union(Int Cl Int F) c= union(Cl Int F);
+
+theorem :: TDLAT_2:44
+   meet(Int Cl Int F) c= meet(Cl Int F);
+
+theorem :: TDLAT_2:45
+   union(Cl Int Cl F) c= union(Cl F);
+
+theorem :: TDLAT_2:46
+   meet(Cl Int Cl F) c= meet(Cl F);
+
+theorem :: TDLAT_2:47
+   union(Int F) c= union(Int Cl Int F);
+
+theorem :: TDLAT_2:48
+   meet(Int F) c= meet(Int Cl Int F);
+
+theorem :: TDLAT_2:49
+ union(Cl Int F) c= Cl Int(union F);
+
+theorem :: TDLAT_2:50
+ Cl Int(meet F) c= meet(Cl Int F);
+
+theorem :: TDLAT_2:51
+ union(Int Cl F) c= Int Cl(union F);
+
+theorem :: TDLAT_2:52
+ Int Cl(meet F) c= meet(Int Cl F);
+
+theorem :: TDLAT_2:53
+   union(Cl Int Cl F) c= Cl Int Cl(union F);
+
+theorem :: TDLAT_2:54
+   Cl Int Cl(meet F) c= meet(Cl Int Cl F);
+
+theorem :: TDLAT_2:55
+   union(Int Cl Int F) c= Int Cl Int(union F);
+
+theorem :: TDLAT_2:56
+   Int Cl Int(meet F) c= meet(Int Cl Int F);
+
+theorem :: TDLAT_2:57
+ for F being Subset-Family of T holds
+  (for A being Subset of T st A in
+ F holds A c= Cl Int A) implies
+    union F c= Cl Int(union F) & Cl(union F) = Cl Int Cl(union F);
+
+theorem :: TDLAT_2:58
+ for F being Subset-Family of T holds
+  (for A being Subset of T st A in
+ F holds Int Cl A c= A) implies
+    Int Cl(meet F) c= meet F & Int Cl Int(meet F) = Int(meet F);
+
+
+begin
+:: 3. Selected Properties of Domains of a Topological Space.
+reserve T for non empty TopSpace;
+
+theorem :: TDLAT_2:59
+ for A, B being Subset of T st B is condensed holds
+  Int(Cl(A \/ B)) \/ (A \/ B) = B iff A c= B;
+
+theorem :: TDLAT_2:60
+   for A, B being Subset of T st A is condensed holds
+  Cl(Int(A /\ B)) /\ (A /\ B) = A iff A c= B;
+
+theorem :: TDLAT_2:61
+   for A, B being Subset of T st A is closed_condensed & B is closed_condensed
+ holds Int A c= Int B iff A c= B;
+
+theorem :: TDLAT_2:62
+   for A, B being Subset of T st A is open_condensed & B is open_condensed
+holds
+  Cl A c= Cl B iff A c= B;
+
+theorem :: TDLAT_2:63
+   for A, B being Subset of T st A is closed_condensed holds
+  A c= B implies Cl(Int(A /\ B)) = A;
+
+theorem :: TDLAT_2:64
+ for A, B being Subset of T st B is open_condensed holds
+  A c= B implies Int(Cl(A \/ B)) = B;
+
+definition let T;
+  let IT be Subset-Family of T;
+ attr IT is domains-family means
+:: TDLAT_2:def 2
+ for A being Subset of T holds A in IT implies A is condensed;
+end;
+
+theorem :: TDLAT_2:65
+ for F being Subset-Family of T holds
+  F c= Domains_of T iff F is domains-family;
+
+theorem :: TDLAT_2:66
+ for F being Subset-Family of T holds F is domains-family implies
+  union F c= Cl Int(union F) & Cl(union F) = Cl Int Cl(union F);
+
+theorem :: TDLAT_2:67
+ for F being Subset-Family of T holds F is domains-family implies
+  Int Cl(meet F) c= meet F & Int Cl Int(meet F) = Int(meet F);
+
+theorem :: TDLAT_2:68
+ for F being Subset-Family of T holds
+  F is domains-family implies (union F) \/ (Int Cl(union F)) is condensed;
+
+theorem :: TDLAT_2:69
+ for F being Subset-Family of T holds
+  (for B being Subset of T st B in F
+   holds B c= (union F) \/ (Int Cl(union F)))
+    & (for A being Subset of T st A is condensed holds
+        (for B being Subset of T st B in F holds B c= A) implies
+          (union F) \/ (Int Cl(union F)) c= A);
+
+theorem :: TDLAT_2:70
+ for F being Subset-Family of T holds
+  F is domains-family implies (meet F) /\ (Cl Int(meet F)) is condensed;
+
+theorem :: TDLAT_2:71
+ for F being Subset-Family of T holds
+  (for B being Subset of T st B in F
+  holds (meet F) /\ (Cl Int(meet F)) c= B)
+  & (F = {} or for A being Subset of T st A is condensed holds
+      (for B being Subset of T st B in F holds A c= B) implies
+         A c= (meet F) /\ (Cl Int(meet F)));
+
+definition let T;
+ let IT be Subset-Family of T;
+ attr IT is closed-domains-family means
+:: TDLAT_2:def 3
+ for A being Subset of T holds A in IT implies A is closed_condensed;
+end;
+
+theorem :: TDLAT_2:72
+ for F being Subset-Family of T holds
+  F c= Closed_Domains_of T iff F is closed-domains-family;
+
+theorem :: TDLAT_2:73
+ for F being Subset-Family of T holds
+  F is closed-domains-family implies F is domains-family;
+
+theorem :: TDLAT_2:74
+ for F being Subset-Family of T holds
+  F is closed-domains-family implies F is closed;
+
+theorem :: TDLAT_2:75
+   for F being Subset-Family of T holds
+  F is domains-family implies Cl F is closed-domains-family;
+
+theorem :: TDLAT_2:76
+ for F being Subset-Family of T holds
+  F is closed-domains-family implies
+   Cl(union F) is closed_condensed & Cl Int(meet F) is closed_condensed;
+
+theorem :: TDLAT_2:77
+ for F being Subset-Family of T holds
+  (for B being Subset of T st B in F holds B c= Cl(union F))
+   & (for A being Subset of T st A is closed_condensed holds
+    (for B being Subset of T st B in F holds B c= A)
+    implies Cl(union F) c= A);
+
+theorem :: TDLAT_2:78
+ for F being Subset-Family of T holds
+  (F is closed implies
+   for B being Subset of T st B in F holds Cl Int(meet F) c= B)
+   & (F = {} or for A being Subset of T st A is closed_condensed
+   holds
+        (for B being Subset of T st B in F holds A c= B) implies
+            A c= Cl Int(meet F));
+
+definition let T;
+  let IT be Subset-Family of T;
+ attr IT is open-domains-family means
+:: TDLAT_2:def 4
+ for A being Subset of T holds A in IT implies A is open_condensed;
+end;
+
+theorem :: TDLAT_2:79
+ for F being Subset-Family of T holds
+  F c= Open_Domains_of T iff F is open-domains-family;
+
+theorem :: TDLAT_2:80
+ for F being Subset-Family of T holds
+  F is open-domains-family implies F is domains-family;
+
+theorem :: TDLAT_2:81
+ for F being Subset-Family of T holds
+  F is open-domains-family implies F is open;
+
+theorem :: TDLAT_2:82
+   for F being Subset-Family of T holds
+  F is domains-family implies Int F is open-domains-family;
+
+theorem :: TDLAT_2:83
+ for F being Subset-Family of T holds
+  F is open-domains-family implies
+   Int(meet F) is open_condensed & Int Cl(union F) is open_condensed;
+
+theorem :: TDLAT_2:84
+ for F being Subset-Family of T holds
+  (F is open implies
+   for B being Subset of T st B in F holds B c= Int Cl(union F))
+   & (for A being Subset of T st A is open_condensed holds
+          (for B being Subset of T st B in F holds B c= A)
+          implies Int Cl(union F) c= A);
+
+theorem :: TDLAT_2:85
+ for F being Subset-Family of T holds
+  (for B being Subset of T st B in F holds Int(meet F) c= B)
+   & (F = {} or for A being Subset of T st A is open_condensed
+   holds
+   (for B being Subset of T st B in F holds A c= B)
+    implies A c= Int(meet F));
+
+begin
+:: 4. Completeness of the Lattice of Domains.
+
+reserve T for non empty TopSpace;
+
+theorem :: TDLAT_2:86
+ the carrier of Domains_Lattice T = Domains_of T;
+
+theorem :: TDLAT_2:87
+ for a, b being Element of Domains_Lattice T
+  for A, B being Element of Domains_of T st a = A & b = B holds
+   a "\/" b = Int(Cl(A \/ B)) \/ (A \/ B) & a "/\" b = Cl(Int(A /\ B)) /\ (A /\
+ B);
+
+theorem :: TDLAT_2:88
+   Bottom (Domains_Lattice T) = {}T & Top (Domains_Lattice T) = [#]T;
+
+theorem :: TDLAT_2:89
+ for a, b being Element of Domains_Lattice T
+  for A, B being Element of Domains_of T st a = A & b = B holds
+   a [= b iff A c= B;
+
+theorem :: TDLAT_2:90
+ for X being Subset of Domains_Lattice T
+  ex a being Element of Domains_Lattice T
+     st X is_less_than a &
+   for b being Element of Domains_Lattice T
+     st X is_less_than b holds a [= b;
+
+theorem :: TDLAT_2:91
+ Domains_Lattice T is complete;
+
+theorem :: TDLAT_2:92
+ for F being Subset-Family of T st F is domains-family
+  for X being Subset of Domains_Lattice T st X = F holds
+   "\/"(X,Domains_Lattice T) = (union F) \/ (Int Cl(union F));
+
+theorem :: TDLAT_2:93
+ for F being Subset-Family of T st F is domains-family
+  for X being Subset of Domains_Lattice T st X = F holds
+   (X <> {} implies "/\"(X,Domains_Lattice T) = (meet F) /\ (Cl Int(meet F))) &
+     (X = {} implies "/\"(X,Domains_Lattice T) = [#]T);
+
+begin
+:: 5. Completeness of the Lattices of Closed Domains and Open Domains.
+reserve T for non empty TopSpace;
+
+::The Lattice of Closed Domains.
+theorem :: TDLAT_2:94
+ the carrier of Closed_Domains_Lattice T = Closed_Domains_of T;
+
+theorem :: TDLAT_2:95
+ for a, b being Element of Closed_Domains_Lattice T
+  for A, B being Element of Closed_Domains_of T st a = A & b = B holds
+   a "\/" b = A \/ B & a "/\" b = Cl(Int(A /\ B));
+
+theorem :: TDLAT_2:96
+   Bottom (Closed_Domains_Lattice T) = {}T & Top (Closed_Domains_Lattice T) =
+[#]
+T;
+
+theorem :: TDLAT_2:97
+ for a, b being Element of Closed_Domains_Lattice T
+  for A, B being Element of Closed_Domains_of T st a = A & b = B holds
+   a [= b iff A c= B;
+
+theorem :: TDLAT_2:98
+ for X being Subset of Closed_Domains_Lattice T
+  ex a being Element of Closed_Domains_Lattice T st
+   X is_less_than a &
+    for b being Element of Closed_Domains_Lattice T st
+     X is_less_than b holds a [= b;
+
+theorem :: TDLAT_2:99
+ Closed_Domains_Lattice T is complete;
+
+theorem :: TDLAT_2:100
+   for F being Subset-Family of T st F is closed-domains-family
+  for X being Subset of Closed_Domains_Lattice T st X = F holds
+   "\/"(X,Closed_Domains_Lattice T) = Cl(union F);
+
+theorem :: TDLAT_2:101
+   for F being Subset-Family of T st F is closed-domains-family
+  for X being Subset of Closed_Domains_Lattice T st X = F holds
+   (X <> {} implies "/\"(X,Closed_Domains_Lattice T) = Cl(Int(meet F))) &
+     (X = {} implies "/\"(X,Closed_Domains_Lattice T) = [#]T);
+
+theorem :: TDLAT_2:102
+   for F being Subset-Family of T st F is closed-domains-family
+  for X being Subset of Domains_Lattice T st X = F holds
+   (X <> {} implies "/\"(X,Domains_Lattice T) = Cl(Int(meet F))) &
+     (X = {} implies "/\"(X,Domains_Lattice T) = [#]T);
+
+::The Lattice of Open Domains.
+theorem :: TDLAT_2:103
+ the carrier of Open_Domains_Lattice T = Open_Domains_of T;
+
+theorem :: TDLAT_2:104
+ for a, b being Element of Open_Domains_Lattice T
+  for A, B being Element of Open_Domains_of T st a = A & b = B holds
+   a "\/" b = Int(Cl(A \/ B)) & a "/\" b = A /\ B;
+
+theorem :: TDLAT_2:105
+   Bottom (Open_Domains_Lattice T) = {}T & Top (Open_Domains_Lattice T) = [#]T;
+
+theorem :: TDLAT_2:106
+ for a, b being Element of Open_Domains_Lattice T
+  for A, B being Element of Open_Domains_of T st a = A & b = B holds
+   a [= b iff A c= B;
+
+theorem :: TDLAT_2:107
+ for X being Subset of Open_Domains_Lattice T
+  ex a being Element of Open_Domains_Lattice T st
+   X is_less_than a &
+    for b being Element of Open_Domains_Lattice T st
+     X is_less_than b holds a [= b;
+
+theorem :: TDLAT_2:108
+ Open_Domains_Lattice T is complete;
+
+theorem :: TDLAT_2:109
+   for F being Subset-Family of T st F is open-domains-family
+  for X being Subset of Open_Domains_Lattice T st X = F holds
+   "\/"(X,Open_Domains_Lattice T) = Int Cl(union F);
+
+theorem :: TDLAT_2:110
+   for F being Subset-Family of T st F is open-domains-family
+  for X being Subset of Open_Domains_Lattice T st X = F holds
+   (X <> {} implies "/\"(X,Open_Domains_Lattice T) = Int(meet F)) &
+     (X = {} implies "/\"(X,Open_Domains_Lattice T) = [#]T);
+
+theorem :: TDLAT_2:111
+   for F being Subset-Family of T st F is open-domains-family
+  for X being Subset of Domains_Lattice T st X = F holds
+   "\/"(X,Domains_Lattice T) = Int Cl(union F);
+

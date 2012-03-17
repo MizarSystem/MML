@@ -1,0 +1,1606 @@
+:: Homomorphisms of Many Sorted Algebras
+::  by Ma{\l}gorzata Korolkiewicz
+::
+:: Received April 25, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_1, MSUALG_1, PBOOLE, PRALG_1, FUNCT_1, RELAT_1, BOOLE,
+      ZF_REFLE, QC_LANG1, TDGROUP, FUNCT_6, FUNCT_5, FINSEQ_4, ALG_1, CARD_3,
+      GROUP_6, WELLORD1, MSUALG_2, UNIALG_2, MSUALG_3;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, FINSEQ_1, CARD_3, FINSEQ_4, FUNCT_5, FUNCT_6, PBOOLE, STRUCT_0,
+      PRALG_1, MSUALG_1, MSUALG_2, PRALG_2;
+ constructors FINSEQ_4, MSUALG_2, PRALG_2, MEMBERED, PARTFUN1, RELAT_2,
+      XBOOLE_0;
+ clusters FUNCT_1, PBOOLE, MSUALG_1, MSUALG_2, PRALG_1, RELSET_1, STRUCT_0,
+      MEMBERED, ZFMISC_1, PARTFUN1, FUNCT_2, XBOOLE_0;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, MSUALG_2, XBOOLE_0;
+ theorems FUNCT_1, FUNCT_2, FINSEQ_1, PBOOLE, CARD_3, MSUALG_1, PRALG_1,
+      FINSEQ_4, MSUALG_2, TARSKI, RELAT_1, PRALG_2, FUNCT_6, FUNCT_5, FINSEQ_2,
+      RELSET_1, XBOOLE_0;
+ schemes FUNCT_1, ZFREFLE1;
+
+begin
+
+reserve S for non void non empty ManySortedSign,
+        U1,U2 for MSAlgebra over S,
+        o for OperSymbol of S,
+        n for Nat;
+
+      :::::::::::::::::::::::::::::::::::::::::::::::::
+      ::                                             ::
+      ::    PRELIMINARIES - MANY SORTED FUNCTIONS    ::
+      ::                                             ::
+      :::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition let I be non empty set,
+               A,B be ManySortedSet of I,
+               F be ManySortedFunction of A,B,
+               i be Element of I;
+ redefine func F.i -> Function of A.i,B.i;
+coherence by MSUALG_1:def 2;
+end;
+
+definition let S; let U1,U2 be MSAlgebra over S;
+mode ManySortedFunction of U1,U2 is
+     ManySortedFunction of the Sorts of U1, the Sorts of U2;
+end;
+
+definition let I be set,A be ManySortedSet of I;
+func id A -> ManySortedFunction of A,A means :Def1:
+for i be set st i in I holds it.i = id (A.i);
+existence
+ proof
+  deffunc F(set)=id (A.$1);
+  consider f being Function such that
+      A1: dom f = I & for i be set st i in I holds f.i = F(i) from Lambda;
+  reconsider f as ManySortedSet of I by A1,PBOOLE:def 3;
+    for x be set st x in dom f holds f.x is Function
+   proof
+    let x be set;
+    assume x in dom f;
+    then f.x = id (A.x) by A1;
+    hence thesis;
+   end;
+  then reconsider f as ManySortedFunction of I by PRALG_1:def 15;
+    for i be set st i in I holds f.i is Function of A.i,A.i
+   proof
+    let i be set;
+    assume i in I;
+    then f.i = id (A.i) by A1;
+    hence thesis;
+   end;
+  then reconsider f as ManySortedFunction of A,A by MSUALG_1:def 2;
+  take f;
+  thus thesis by A1;
+ end;
+uniqueness
+ proof
+  let F,G be ManySortedFunction of A,A;
+  assume that
+       A2: for i be set st i in I holds F.i = id (A.i) and
+       A3: for i be set st i in I holds G.i = id (A.i);
+  A4: dom F = I & dom G = I by PBOOLE:def 3;
+    now
+   let i be set;
+   assume i in I;
+   then F.i = id (A.i) & G.i = id (A.i) by A2,A3;
+   hence F.i = G.i;
+  end;
+  hence thesis by A4,FUNCT_1:9;
+ end;
+end;
+
+definition let IT be Function;
+attr IT is "1-1" means :Def2:
+for i be set, f be Function st i in dom IT & IT.i = f holds f is one-to-one;
+end;
+
+definition let I be set;
+cluster "1-1" ManySortedFunction of I;
+existence
+ proof
+  consider A be ManySortedSet of I;
+  take F = id A;
+  let i be set, f be Function;
+  assume A1: i in dom F & F.i = f;
+    dom (id A) = I by PBOOLE:def 3;
+  then f = id (A.i) by A1,Def1;
+  hence thesis;
+ end;
+end;
+
+theorem Th1:
+for I be set,F be ManySortedFunction of I holds
+F is "1-1" iff
+for i be set st i in I holds F.i is one-to-one
+ proof
+  let I be set;
+  let F be ManySortedFunction of I;
+A1: dom F = I by PBOOLE:def 3;
+  hence F is "1-1" implies for i be set st i in I holds F.i is one-to-one
+     by Def2;
+  assume for i be set st i in I holds F.i is one-to-one;
+   then for i be set, f being Function st i in dom F & f = F.i
+     holds f is one-to-one by A1;
+  hence F is "1-1" by Def2;
+ end;
+
+definition let I be set, A,B be ManySortedSet of I;
+let IT be ManySortedFunction of A,B;
+attr IT is "onto" means :Def3:
+for i be set st i in I holds rng(IT.i) = B.i;
+end;
+
+definition
+ let F,G be Function-yielding Function;
+ func G**F -> Function-yielding Function means :Def4:
+ dom it = (dom F) /\ (dom G) &
+ for i be set st i in dom it holds it.i = (G.i)*(F.i);
+ existence
+  proof
+   defpred P[set,set] means $2 = (G.$1)*(F.$1);
+   A1: for i be set st i in dom F /\ dom G ex u be set st P[i,u];
+   consider H being Function such that
+   A2: dom H = dom F /\ dom G & for i be set st i in dom F /\ dom G holds
+       P[i,H.i] from NonUniqFuncEx(A1);
+     for x be set st x in dom H holds H.x is Function
+    proof
+     let x be set;
+     assume A3: x in dom H;
+     reconsider f = F.x as Function;
+     reconsider g = G.x as Function;
+       H.x = g*f by A2,A3;
+     hence thesis;
+    end;
+   then reconsider H as Function-yielding Function by PRALG_1:def 15;
+   take H;
+   thus thesis by A2;
+  end;
+ uniqueness
+  proof
+   let H1,H2 be Function-yielding Function;
+   assume that
+   A4: dom H1 = dom F /\ dom G & for i be set st i in dom H1
+         holds H1.i = (G.i)*(F.i) and
+   A5: dom H2 = dom F /\ dom G & for i be set st i in dom H2
+         holds H2.i = (G.i)*(F.i);
+     now
+    let i be set;
+    assume A6: i in dom F /\ dom G;
+    reconsider f = F.i as Function;
+    reconsider g = G.i as Function;
+      H1.i = g*f & H2.i = g*f by A4,A5,A6;
+    hence H1.i = H2.i;
+   end;
+   hence thesis by A4,A5,FUNCT_1:9;
+  end;
+end;
+
+theorem Th2:
+ for I be set, A,B,C be ManySortedSet of I,
+  F be ManySortedFunction of A,B, G be ManySortedFunction of B,C holds
+  dom (G ** F) = I &
+ for i be set st i in I holds (G**F).i = (G.i)*(F.i)
+ proof
+  let I be set,
+      A,B,C be ManySortedSet of I,
+      F be ManySortedFunction of A,B,
+      G be ManySortedFunction of B,C;
+     dom F = I & dom G = I by PBOOLE:def 3;
+  then (dom F) /\ (dom G) = I;
+  hence A1: dom (G ** F) = I by Def4;
+  let i be set;
+  thus thesis by A1,Def4;
+ end;
+
+definition let I be set,
+               A be ManySortedSet of I,
+               B,C be non-empty ManySortedSet of I,
+               F be ManySortedFunction of A,B,
+               G be ManySortedFunction of B,C;
+ redefine func G**F -> ManySortedFunction of A,C;
+ coherence
+  proof
+     dom (G ** F) = I by Th2;
+   then reconsider fg = G ** F as ManySortedSet of I by PBOOLE:def 3;
+   reconsider fg as ManySortedFunction of I;
+     for i be set st i in I holds fg.i is Function of A.i,C.i
+    proof
+     let i be set;
+     assume A1: i in I;
+     then reconsider f = F.i as Function of A.i,B.i by MSUALG_1:def 2;
+     reconsider g = G.i as Function of B.i,C.i by A1,MSUALG_1:def 2;
+     A2: (G**F).i = g*f by A1,Th2;
+       B.i = {} implies A.i = {} by A1,PBOOLE:def 16;
+     then A3: dom f = A.i & rng f c= B.i by FUNCT_2:def 1,RELSET_1:12;
+       C.i = {} implies B.i = {} by A1,PBOOLE:def 16;
+     then A4: dom g = B.i & rng g c= C.i by FUNCT_2:def 1,RELSET_1:12;
+     A5: dom (g*f) = A.i by A3,A4,RELAT_1:46;
+       C.i = {} implies A.i = {} by A1,PBOOLE:def 16;
+     hence thesis by A2,A5,FUNCT_2:def 1;
+    end; hence thesis by MSUALG_1:def 2;
+  end;
+end;
+
+theorem
+  for I be set,A,B be ManySortedSet of I,
+  F be ManySortedFunction of A,B holds F**(id A) = F
+ proof
+  let I be set,
+      A,B be ManySortedSet of I,
+      F be ManySortedFunction of A,B;
+     dom (F**(id A)) = (dom F) /\ dom id A by Def4 .= I /\
+ dom id A by PBOOLE:def 3
+     .= I /\ I by PBOOLE:def 3 .= I;
+  then reconsider G = F**(id A) as ManySortedFunction of I by PBOOLE:def 3;
+    now
+   let i be set; assume A1: i in I;
+   then reconsider f = F.i as Function of A.i,B.i by MSUALG_1:def 2;
+   reconsider g = (id A).i as Function of A.i,A.i by A1,MSUALG_1:def 2;
+   A2: G.i = f*g by A1,Th2 .= f*(id (A.i)) by A1,Def1;
+   per cases; suppose
+      B.i = {} implies A.i = {};
+    then dom f = A.i by FUNCT_2:def 1;
+   hence G.i = F.i by A2,FUNCT_1:42;
+   suppose B.i = {} & A.i <> {}; then f = {} by FUNCT_2:def 1;
+   hence G.i = F.i by A2,RELAT_1:62;
+  end;
+  hence thesis by PBOOLE:3;
+ end;
+
+theorem Th4:
+for I be set, A,B be ManySortedSet of I
+  for F be ManySortedFunction of A, B holds (id B)**F = F
+  proof
+     let I be set;
+     let A,B be ManySortedSet of I;
+     let F be ManySortedFunction of A, B;
+       dom ((id B)**F) = (dom id B) /\ dom F by Def4 .= I /\
+ dom F by PBOOLE:def 3
+     .= I /\ I by PBOOLE:def 3 .= I;
+     then reconsider G = (id B)**F as ManySortedFunction of I by PBOOLE:def 3;
+       now let i be set; assume
+A1:      i in I;
+       then reconsider f = F.i as Function of A.i, B.i by MSUALG_1:def 2;
+       reconsider g = (id B).i as Function of B.i, B.i by A1,MSUALG_1:def 2;
+A2:    g = id (B.i) by A1,Def1;
+A3:    G.i = g * f by A1,Th2;
+      per cases; suppose
+         B.i = {} implies A.i = {};
+      hence G.i = F.i by A2,A3,FUNCT_2:23;
+      suppose B.i = {} & A.i <> {}; then f = {} by FUNCT_2:def 1;
+      hence G.i = F.i by A3,RELAT_1:62;
+     end;
+     hence (id B)**F = F by PBOOLE:3;
+  end;
+
+definition let I be set,
+               A,B be ManySortedSet of I,
+               F be ManySortedFunction of A,B;
+assume A1: F is "1-1" & F is "onto";
+func F"" -> ManySortedFunction of B,A means :Def5:
+ for i be set st i in I holds it.i = (F.i)";
+existence
+ proof
+  defpred P[set,set] means $2 = (F.$1)";
+  A2: for i be set st i in I ex u be set st P[i,u];
+  consider H being Function such that
+  A3: dom H = I & for i be set st i in I holds P[i,H.i] from NonUniqFuncEx(A2);
+  reconsider H as ManySortedSet of I by A3,PBOOLE:def 3;
+    for x be set st x in dom H holds H.x is Function
+   proof
+    let x be set;
+    assume A4: x in dom H;
+    then x in I by PBOOLE:def 3;
+     then reconsider f = F.x as Function of A.x,B.x by MSUALG_1:def 2;
+       H.x = f" by A3,A4;
+    hence thesis;
+   end;
+  then reconsider H as ManySortedFunction of I by PRALG_1:def 15;
+    for i be set st i in I holds H.i is Function of B.i,A.i
+   proof
+    let i be set;
+    assume A5: i in I;
+    then A6: i in dom F by PBOOLE:def 3;
+    reconsider f = F.i as Function of A.i,B.i by A5,MSUALG_1:def 2;
+    A7: f is one-to-one by A1,A6,Def2;
+       rng f = B.i by A1,A5,Def3;
+    then f" is Function of B.i,A.i by A7,FUNCT_2:31;
+    hence thesis by A3,A5;
+   end;
+  then reconsider H as ManySortedFunction of B,A by MSUALG_1:def 2;
+  take H;
+  thus thesis by A3;
+ end;
+uniqueness
+ proof
+  let H1,H2 be ManySortedFunction of B,A;
+  assume that
+  A8: for i be set st i in I holds H1.i = (F.i)" and
+  A9: for i be set st i in I holds H2.i = (F.i)";
+     now
+    let i be set;
+    assume A10: i in I;
+    then reconsider f = F.i as Function of A.i,B.i by MSUALG_1:def 2;
+      H1.i = f" & H2.i = f" by A8,A9,A10;
+    hence H1.i = H2.i;
+   end;
+  hence thesis by PBOOLE:3;
+ end;
+end;
+
+theorem Th5:
+for I be set,A,B be non-empty ManySortedSet of I,
+ H be ManySortedFunction of A,B, H1 be ManySortedFunction of B,A st
+  H is "1-1" "onto" & H1 = H"" holds H**H1 = id B & H1**H = id A
+  proof
+   let I be set,
+       A,B be non-empty ManySortedSet of I,
+       H be ManySortedFunction of A,B,
+       H1 be ManySortedFunction of B,A;
+   assume A1: H is "1-1" "onto" & H1 = H"";
+    A2: for i be set st i in I holds (H1**H).i = id (A.i)
+    proof
+     let i be set; assume A3: i in I;
+     then A4:i in dom H by PBOOLE:def 3;
+     reconsider h = H.i as Function of A.i,B.i by A3,MSUALG_1:def 2;
+     reconsider h1 = H1.i as Function of B.i,A.i by A3,MSUALG_1:def 2;
+     A5: h1 = h" by A1,A3,Def5;
+     A6: h is one-to-one by A1,A4,Def2;
+       B.i = {} implies A.i = {} by A3,PBOOLE:def 16;
+     then dom h = A.i & rng h c= B.i by FUNCT_2:def 1,RELSET_1:12;
+     then h1*h = id (A.i) by A5,A6,FUNCT_1:61;
+     hence thesis by A3,Th2;
+    end;
+     now
+     let i be set; assume A7: i in I;
+     then A8:i in dom H by PBOOLE:def 3;
+     reconsider h = H.i as Function of A.i,B.i by A7,MSUALG_1:def 2;
+     reconsider h1 = H1.i as Function of B.i,A.i by A7,MSUALG_1:def 2;
+     A9: h1 = h" by A1,A7,Def5;
+       h is one-to-one by A1,A8,Def2;
+      then h*h1 = id rng h by A9,FUNCT_1:61;
+     then h*h1 = id (B.i) by A1,A7,Def3;
+     hence (H**H1).i = id (B.i) by A7,Th2;
+    end;
+   hence thesis by A2,Def1;
+  end;
+
+definition let I be set,
+               A be ManySortedSet of I,
+               F be ManySortedFunction of I;
+func F.:.:A -> ManySortedSet of I means :Def6:
+   for i be set st i in I holds it.i = (F.i).:(A.i);
+existence
+ proof
+  defpred P[set,set] means $2 = (F.$1).:(A.$1);
+  A1: for i be set st i in I ex u be set st P[i,u];
+  consider g being Function such that A2: dom g = I & for i be set st i in I
+    holds P[i,g.i] from NonUniqFuncEx(A1);
+  reconsider g as ManySortedSet of I by A2,PBOOLE:def 3;
+  take g;
+  thus thesis by A2;
+ end;
+uniqueness
+ proof
+  let B,B1 be ManySortedSet of I;
+  assume that
+   A3: for i be set st i in I holds B.i = (F.i).:(A.i) and
+   A4: for i be set st i in I holds B1.i = (F.i).:(A.i);
+     now
+    let i be set;
+    assume A5: i in I;
+    reconsider f = F.i as Function;
+      B.i = f.:(A.i) & B1.i = f.:(A.i) by A3,A4,A5;
+    hence B.i = B1.i;
+   end;
+  hence thesis by PBOOLE:3;
+ end;
+end;
+
+Lm1:
+now let S; let U1 be MSAlgebra over S; let o;
+ let x be set; assume x in Args(o,U1);
+  then x in product((the Sorts of U1) * (the_arity_of o)) by PRALG_2:10;
+  then ex f being Function st x = f &
+  dom f = dom ((the Sorts of U1) * (the_arity_of o)) & for y be set st
+  y in dom ((the Sorts of U1) * (the_arity_of o)) holds
+      f.y in ((the Sorts of U1) * (the_arity_of o)).y by CARD_3:def 5;
+ hence x is Function;
+end;
+
+
+definition let S; let U1 be non-empty MSAlgebra over S; let o;
+cluster -> Function-like Relation-like Element of Args(o,U1);
+coherence by Lm1;
+end;
+
+begin
+
+        :::::::::::::::::::::::::::::::::::::::::::::::
+        ::                                           ::
+        ::   HOMOMORPHISMS OF MANY SORTED ALGEBRAS   ::
+        ::                                           ::
+        :::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem Th6:
+for U1 being MSAlgebra over S
+for x be Function st x in Args(o,U1) holds dom x = dom (the_arity_of o) &
+  for y be set st y in dom ((the Sorts of U1) * (the_arity_of o)) holds
+    x.y in ((the Sorts of U1) * (the_arity_of o)).y
+ proof let U1 be MSAlgebra over S;
+  let x be Function; assume A1: x in Args(o,U1);
+  A2: Args(o,U1) = product((the Sorts of U1) * (the_arity_of o)) by PRALG_2:10;
+  then A3: dom x = dom ((the Sorts of U1) * (the_arity_of o)) by A1,CARD_3:18;
+    dom (the Sorts of U1) = (the carrier of S) by PBOOLE:def 3;
+  then rng (the_arity_of o) c= dom (the Sorts of U1) by FINSEQ_1:def 4;
+hence thesis by A1,A2,A3,CARD_3:18,RELAT_1:46;
+ end;
+
+definition let S; let U1,U2 be MSAlgebra over S; let o;
+           let F be ManySortedFunction of U1,U2;
+           let x be Element of Args(o,U1);
+assume that
+A1: Args(o,U1) <> {} and
+A2: Args(o,U2) <> {};
+func F # x -> Element of Args(o,U2) equals :Def7:
+  (Frege(F*the_arity_of o)).x;
+ coherence
+  proof
+A3:  rng the_arity_of o c= the carrier of S by FINSEQ_1:def 4;
+then A4: rng the_arity_of o c= dom the Sorts of U2 by PBOOLE:def 3;
+A5:  rng the_arity_of o c= dom F by A3,PBOOLE:def 3;
+     x in Args(o,U1) by A1;
+   then A6:  x in product((the Sorts of U1) * (the_arity_of o)) by PRALG_2:10;
+A7:  dom((the Sorts of U1)*(the_arity_of o))
+         = (F*the_arity_of o)"SubFuncs rng(F*the_arity_of o)
+      proof
+       hereby
+        let e be set;
+        assume
+A8:       e in dom((the Sorts of U1)*(the_arity_of o));
+then A9:       e in dom the_arity_of o by FUNCT_1:21;
+           (the_arity_of o).e in dom the Sorts of U1 by A8,FUNCT_1:21;
+         then (the_arity_of o).e in the carrier of S by PBOOLE:def 3;
+         then (the_arity_of o).e in dom F by PBOOLE:def 3;
+then A10:       e in dom(F*the_arity_of o) by A9,FUNCT_1:21;
+           (F*the_arity_of o).e is Function;
+        hence e in (F*the_arity_of o)"SubFuncs rng(F*the_arity_of o)
+                               by A10,FUNCT_6:28;
+       end;
+       let e be set;
+       assume e in (F*the_arity_of o)"SubFuncs rng(F*the_arity_of o);
+        then e in dom(F*the_arity_of o) by FUNCT_6:28;
+        then A11:     e in dom the_arity_of o by FUNCT_1:21;
+        then (the_arity_of o).e in the carrier of S by FINSEQ_2:13;
+        then (the_arity_of o).e in dom the Sorts of U1 by PBOOLE:def 3;
+       hence e in dom((the Sorts of U1)*(the_arity_of o)) by A11,FUNCT_1:21;
+      end;
+       now let e be set;
+      assume e in (F*the_arity_of o)"SubFuncs rng(F*the_arity_of o);
+       then e in dom(F*the_arity_of o) by FUNCT_6:28;
+       then A12:    e in dom the_arity_of o by FUNCT_1:21;
+       then A13:     (the_arity_of o).e in the carrier of S by FINSEQ_2:13;
+        then (the_arity_of o).e in dom the Sorts of U2 by PBOOLE:def 3;
+then A14:     e in dom((the Sorts of U2)*(the_arity_of o)) by A12,FUNCT_1:21;
+       reconsider Foe = F.((the_arity_of o).e) as
+        Function of (the Sorts of U1).((the_arity_of o).e),
+                 (the Sorts of U2).((the_arity_of o).e) by A13,MSUALG_1:def 2;
+A15:    ((the Sorts of U2)*(the_arity_of o)).e
+               = (the Sorts of U2).((the_arity_of o).e) by A12,FUNCT_1:23;
+A16:    product((the Sorts of U2)*(the_arity_of o)) <> {} by A2,PRALG_2:10;
+A17:   now assume (the Sorts of U2).((the_arity_of o).e) = {};
+        then {}
+ in rng((the Sorts of U2)*(the_arity_of o)) by A14,A15,FUNCT_1:def 5;
+       hence contradiction by A16,CARD_3:37;
+      end;
+      thus ((the Sorts of U1)*(the_arity_of o)).e
+               = (the Sorts of U1).((the_arity_of o).e) by A12,FUNCT_1:23
+              .= dom Foe by A17,FUNCT_2:def 1
+              .= proj1 Foe by FUNCT_5:21
+              .= proj1 ((F*the_arity_of o).e) by A12,FUNCT_1:23;
+     end;
+     then A18:   (the Sorts of U1) * (the_arity_of o) = doms(F*the_arity_of o)
+                                                 by A7,FUNCT_6:def 2;
+    then consider f being Function such that
+A19:   x = f and dom f = dom doms(F*the_arity_of o) and
+A20:   for e being set st e in dom doms(F*the_arity_of o)
+        holds f.e in ( doms(F*the_arity_of o)).e by A6,CARD_3:def 5;
+A21:  (Frege(F*the_arity_of o)).x = (F*the_arity_of o)..f by A6,A18,A19,PRALG_2
+:def 8;
+A22:   dom((F*the_arity_of o)..f) = dom(F*the_arity_of o) by PRALG_1:def 18;
+A23:  dom(F*the_arity_of o) = dom the_arity_of o by A5,RELAT_1:46
+         .= dom((the Sorts of U2)*(the_arity_of o)) by A4,RELAT_1:46;
+      now let e be set;
+     assume
+A24:   e in dom((the Sorts of U2)*(the_arity_of o));
+      then A25:   e in dom the_arity_of o by FUNCT_1:21;
+      then A26:    (the_arity_of o).e in the carrier of S by FINSEQ_2:13;
+      then reconsider g = F.((the_arity_of o).e) as
+       Function of (the Sorts of U1).((the_arity_of o).e),
+                (the Sorts of U2).((the_arity_of o).e) by MSUALG_1:def 2;
+
+        g = (F*the_arity_of o).e by A23,A24,FUNCT_1:22;
+      then A27:     ((F*the_arity_of o)..f).e = g.(f.e) by A23,A24,PRALG_1:def
+18;
+A28:    ((the Sorts of U2)*(the_arity_of o)).e
+               = (the Sorts of U2).((the_arity_of o).e) by A25,FUNCT_1:23;
+A29:    product((the Sorts of U2)*(the_arity_of o)) <> {} by A2,PRALG_2:10;
+A30:   now assume (the Sorts of U2).((the_arity_of o).e) = {};
+        then {}
+ in rng((the Sorts of U2)*(the_arity_of o)) by A24,A28,FUNCT_1:def 5;
+       hence contradiction by A29,CARD_3:37;
+      end;
+        (the_arity_of o).e in dom the Sorts of U1 by A26,PBOOLE:def 3;
+      then e in dom((the Sorts of U1)*(the_arity_of o)) by A25,FUNCT_1:21;
+      then f.e in (doms(F*the_arity_of o)).e by A18,A20;
+      then f.e in (the Sorts of U1).((the_arity_of o).e) by A18,A25,FUNCT_1:23
+;
+      then g.(f.e) in (the Sorts of U2).((the_arity_of o).e) by A30,FUNCT_2:7;
+     hence ((F*the_arity_of o)..f).e in ((the Sorts of U2)*(the_arity_of o)).e
+                     by A24,A27,FUNCT_1:22;
+    end;
+    then (Frege(F*the_arity_of o)).x in product((the Sorts of U2)*(
+the_arity_of o))
+      by A21,A22,A23,CARD_3:18;
+   hence thesis by PRALG_2:10;
+  end;
+ correctness;
+end;
+
+Lm2:
+now let S; let U1,U2 be MSAlgebra over S; let o;
+    let F be ManySortedFunction of U1,U2;
+    let x be Element of Args(o,U1), f,u be Function;
+    assume A1: x = f & x in Args(o,U1) & u in Args(o,U2);
+A2:  rng the_arity_of o c= the carrier of S by FINSEQ_1:def 4;
+then A3: rng the_arity_of o c= dom the Sorts of U1 by PBOOLE:def 3;
+A4: Args(o,U1) = product((the Sorts of U1) * (the_arity_of o)) &
+    Args(o,U2) = product((the Sorts of U2) * (the_arity_of o))
+     by PRALG_2:10;
+then A5: dom f = dom((the Sorts of U1) * (the_arity_of o)) by A1,CARD_3:18
+        .= dom the_arity_of o by A3,RELAT_1:46;
+A6: rng the_arity_of o c= dom the Sorts of U2 by A2,PBOOLE:def 3;
+A7: dom u = dom((the Sorts of U2) * (the_arity_of o)) by A1,A4,CARD_3:18;
+then A8: dom u = dom the_arity_of o by A6,RELAT_1:46;
+A9:  dom((the Sorts of U1)*(the_arity_of o))
+         = (F*the_arity_of o)"SubFuncs rng(F*the_arity_of o)
+      proof
+       hereby
+        let e be set;
+        assume
+A10:       e in dom((the Sorts of U1)*(the_arity_of o));
+then A11:       e in dom the_arity_of o by FUNCT_1:21;
+           (the_arity_of o).e in dom the Sorts of U1 by A10,FUNCT_1:21;
+         then (the_arity_of o).e in the carrier of S by PBOOLE:def 3;
+         then (the_arity_of o).e in dom F by PBOOLE:def 3;
+then A12:       e in dom(F*the_arity_of o) by A11,FUNCT_1:21;
+           (F*the_arity_of o).e is Function;
+        hence e in (F*the_arity_of o)"SubFuncs rng(F*the_arity_of o)
+                               by A12,FUNCT_6:28;
+       end;
+       let e be set;
+       assume e in (F*the_arity_of o)"SubFuncs rng(F*the_arity_of o);
+        then e in dom(F*the_arity_of o) by FUNCT_6:28;
+        then A13:     e in dom the_arity_of o by FUNCT_1:21;
+        then (the_arity_of o).e in the carrier of S by FINSEQ_2:13;
+        then (the_arity_of o).e in dom the Sorts of U1 by PBOOLE:def 3;
+       hence e in dom((the Sorts of U1)*(the_arity_of o)) by A13,FUNCT_1:21;
+      end;
+       now let e be set;
+      assume e in (F*the_arity_of o)"SubFuncs rng(F*the_arity_of o);
+       then e in dom(F*the_arity_of o) by FUNCT_6:28;
+       then A14:    e in dom the_arity_of o by FUNCT_1:21;
+       then (the_arity_of o).e in the carrier of S by FINSEQ_2:13;
+       then reconsider Foe = F.((the_arity_of o).e) as
+        Function of (the Sorts of U1).((the_arity_of o).e),
+                    (the Sorts of U2).((the_arity_of o).e) by MSUALG_1:def 2;
+
+A15:    ((the Sorts of U1)*(the_arity_of o)).e
+               = (the Sorts of U1).((the_arity_of o).e) &
+       ((the Sorts of U2)*(the_arity_of o)).e
+               = (the Sorts of U2).((the_arity_of o).e) by A14,FUNCT_1:23;
+         ((the Sorts of U2)*the_arity_of o).e in
+         rng ((the Sorts of U2)*the_arity_of o) by A7,A8,A14,FUNCT_1:def 5
+;
+       then ((the Sorts of U2)*the_arity_of o).e <> {} by A1,A4,CARD_3:37;
+      hence ((the Sorts of U1)*(the_arity_of o)).e
+               = dom Foe by A15,FUNCT_2:def 1
+              .= proj1 Foe by FUNCT_5:21
+              .= proj1 ((F*the_arity_of o).e) by A14,FUNCT_1:23;
+     end;
+     then A16: (the Sorts of U1) * (the_arity_of o) = doms(F*the_arity_of o)
+                                                 by A9,FUNCT_6:def 2;
+   hereby assume u = F#x;
+then A17:  u = (Frege(F*the_arity_of o)).x by A1,Def7;
+    let n;
+    assume
+  A18: n in dom f;
+     then (the_arity_of o).n in the carrier of S by A5,FINSEQ_2:13;
+     then (the_arity_of o).n in dom F by PBOOLE:def 3;
+then A19:   n in dom(F*the_arity_of o) by A5,A18,FUNCT_1:21;
+then A20:   (F*the_arity_of o).n = F.((the_arity_of o).n) by FUNCT_1:22
+           .= F.((the_arity_of o)/.n) by A5,A18,FINSEQ_4:def 4;
+    thus u.n = ((F*the_arity_of o)..f).n by A1,A4,A16,A17,PRALG_2:def 8
+             .= (F.((the_arity_of o)/.n)).(f.n) by A19,A20,PRALG_1:def 18;
+   end;
+   assume
+A21:  for n st n in dom f holds u.n = (F.((the_arity_of o)/.n)).(f.n);
+A22:  rng the_arity_of o c= dom F by A2,PBOOLE:def 3;
+   reconsider g = F#x as Function by A1,Lm1;
+A23:  F#x = (Frege(F*the_arity_of o)).x by A1,Def7;
+    then F#x = (F*the_arity_of o)..f by A1,A4,A16,PRALG_2:def 8;
+then A24:  dom g = dom(F*the_arity_of o) by PRALG_1:def 18
+         .= dom f by A5,A22,RELAT_1:46;
+      now let e be set;
+     assume
+A25:   e in dom f;
+      then reconsider n = e as Nat by A5;
+       (the_arity_of o).n in the carrier of S by A5,A25,FINSEQ_2:13;
+     then (the_arity_of o).n in dom F by PBOOLE:def 3;
+then A26:   n in dom(F*the_arity_of o) by A5,A25,FUNCT_1:21;
+then A27:   (F*the_arity_of o).n = F.((the_arity_of o).n) by FUNCT_1:22
+           .= (F.((the_arity_of o)/.n)) by A5,A25,FINSEQ_4:def 4;
+     thus u.e = (F.((the_arity_of o)/.n)).(f.n) by A21,A25
+      .= ((F*the_arity_of o)..f).n by A26,A27,PRALG_1:def 18
+      .= g.e by A1,A4,A16,A23,PRALG_2:def 8;
+    end;
+   hence u = F#x by A5,A8,A24,FUNCT_1:9;
+end;
+
+definition let S; let U1 be non-empty MSAlgebra over S; let o;
+ cluster Function-like Relation-like Element of Args(o,U1);
+ existence
+  proof consider x being Element of Args(o,U1);
+      x is Function-like Relation-like;
+   hence thesis;
+  end;
+end;
+
+definition let S; let U1,U2 be non-empty MSAlgebra over S; let o;
+           let F be ManySortedFunction of U1,U2;
+           let x be Element of Args(o,U1);
+redefine func F # x -> Function-like Relation-like Element of Args(o,U2 )
+  means :Def8:
+ for n st n in dom x holds it.n = (F.((the_arity_of o)/.n)).(x.n);
+ coherence;
+ compatibility by Lm2;
+end;
+
+theorem Th7:
+for S,o for U1 being MSAlgebra over S st Args(o,U1) <> {}
+ for x be Element of Args(o,U1) holds
+   x = ((id (the Sorts of U1))#x)
+  proof
+   let S,o; let U1 be MSAlgebra over S; assume
+   A1: Args(o,U1) <> {};
+   then reconsider AA = Args(o,U1) as non empty set;
+   let x be Element of Args(o,U1);
+   A2: Args(o,U1) = product((the Sorts of U1) * (the_arity_of o))
+    by PRALG_2:10;
+   then consider f being Function such that
+   A3: x = f and dom f = dom ((the Sorts of U1) * (the_arity_of o)) and
+        for x being set st x in dom ((the Sorts of U1)*the_arity_of o)
+         holds f.x in ((the Sorts of U1)*the_arity_of o).x by A1,CARD_3:def 5;
+   set F = id (the Sorts of U1);
+   reconsider Fx = F#x as Element of AA;
+   consider g being Function such that
+   A4: Fx = g and dom g = dom ((the Sorts of U1) * (the_arity_of o)) and
+        for x being set st x in dom ((the Sorts of U1)*the_arity_of o)
+         holds g.x in ((the Sorts of U1)*the_arity_of o).x by A2,CARD_3:def 5;
+   A5: dom f = dom (the_arity_of o) & dom g = dom (the_arity_of o)
+       by A3,A4,Th6;
+     for y be set st y in dom f holds f.y = g.y
+    proof
+     let y be set;
+     assume A6: y in dom f;
+     then reconsider n = y as Nat by A5;
+     A7: g.n = (F.((the_arity_of o)/.n)).(f.n) by A3,A4,A6,Lm2;
+     set p = ((the_arity_of o)/.n);
+       dom (the Sorts of U1) = (the carrier of S) by PBOOLE:def 3;
+     then rng (the_arity_of o) c= dom (the Sorts of U1) by FINSEQ_1:def 4;
+     then A8: dom ((the Sorts of U1)*(the_arity_of o)) = dom (the_arity_of o)
+         by RELAT_1:46;
+     A9: F.p = id ((the Sorts of U1).p) by Def1;
+       f.n in ((the Sorts of U1) * (the_arity_of o)).n by A1,A3,A5,A6,A8,Th6;
+     then f.n in (the Sorts of U1).((the_arity_of o).n) by A5,A6,A8,FUNCT_1:22
+;
+     then f.n in (the Sorts of U1).p by A5,A6,FINSEQ_4:def 4;
+     hence thesis by A7,A9,FUNCT_1:35;
+    end;
+    hence thesis by A3,A4,A5,FUNCT_1:9;
+  end;
+
+theorem Th8:
+for U1,U2,U3 being non-empty MSAlgebra over S
+for H1 be ManySortedFunction of U1,U2, H2 be ManySortedFunction of U2,U3,
+  x be Element of Args(o,U1) holds (H2**H1)#x = H2#(H1#x)
+  proof let U1,U2,U3 be non-empty MSAlgebra over S;
+   let H1 be ManySortedFunction of U1,U2,H2 be ManySortedFunction of U2,U3;
+   let x be Element of Args(o,U1);
+   A1: dom ((H2**H1)#x) = dom (the_arity_of o) &
+      dom x = dom (the_arity_of o) &
+      dom (H2#(H1#x)) = dom (the_arity_of o) &
+      dom (H1#x) = dom (the_arity_of o) by Th6;
+     for y be set st y in dom (the_arity_of o) holds
+     ((H2**H1)#x).y = ((H2#(H1#x))).y
+     proof
+      let y be set;
+      assume A2: y in dom (the_arity_of o);
+      then reconsider n = y as Nat;
+      set F = H2**H1,
+          p = ((the_arity_of o)/.n);
+      A3: (F#x).n = (F.p).(x.n) by A1,A2,Def8;
+         rng (the_arity_of o) c= (the carrier of S) by FINSEQ_1:def 4;
+      then rng (the_arity_of o) c= dom (the Sorts of U1) by PBOOLE:def 3;
+      then A4: dom ((the Sorts of U1)*(the_arity_of o)) = dom (the_arity_of o)
+          by RELAT_1:46;
+      A5: p = (the_arity_of o).n by A2,FINSEQ_4:def 4;
+      A6: dom (H1.p) = (the Sorts of U1).p & rng (H1.p) c= (the Sorts of U2).p
+         by FUNCT_2:def 1,RELSET_1:12;
+      then A7: dom ((H2.p)*(H1.p)) = dom (H1.p) by FUNCT_2:def 1;
+         ((the Sorts of U1) * (the_arity_of o)).n =(the Sorts of U1).p by A2,A4
+,A5,FUNCT_1:22;
+      then A8: x.n in dom ((H2.p)*(H1.p)) by A2,A4,A6,A7,Th6;
+        F.p = (H2.p)*(H1.p) by Th2;
+      hence (F#x).y = (H2.p).((H1.p).(x.n)) by A3,A8,FUNCT_1:22
+
+                  .= (H2.p).((H1#x).n) by A1,A2,Def8
+                  .= (H2#(H1#x)).y by A1,A2,Def8;
+     end;
+   hence (H2**H1)#x = H2#(H1#x) by A1,FUNCT_1:9;
+  end;
+
+definition let S; let U1,U2 be MSAlgebra over S;
+           let F be ManySortedFunction of U1,U2;
+pred F is_homomorphism U1,U2 means :Def9:
+for o be OperSymbol of S st Args(o,U1) <> {}
+for x be Element of Args(o,U1) holds
+    (F.(the_result_sort_of o)).(Den(o,U1).x) = Den(o,U2).(F#x);
+end;
+
+theorem Th9:
+for U1 being MSAlgebra over S holds
+id (the Sorts of U1) is_homomorphism U1,U1
+ proof let U1 be MSAlgebra over S;
+  set F = id (the Sorts of U1);
+  let o be OperSymbol of S;
+  assume A1: Args(o,U1) <> {};
+  let x be Element of Args(o,U1);
+  set r = the_result_sort_of o;
+  A2: F#x = x by A1,Th7;
+  A3: F.r = id ((the Sorts of U1).r) by Def1;
+  A4: Result(o,U1) = ((the Sorts of U1)*(the ResultSort of S)).o
+     by MSUALG_1:def 10;
+     rng (the ResultSort of S) c= the carrier of S by RELSET_1:12;
+  then rng (the ResultSort of S) c= dom (the Sorts of U1) by PBOOLE:def 3;
+  then A5: dom ((the Sorts of U1)*(the ResultSort of S)) = dom (the ResultSort
+of S)
+      by RELAT_1:46;
+    the OperSymbols of S <> {} by MSUALG_1:def 5;
+   then o in the OperSymbols of S;
+  then o in dom (the ResultSort of S) by FUNCT_2:def 1;
+  then A6: Result(o,U1) = (the Sorts of U1).((the ResultSort of S).o)
+       by A4,A5,FUNCT_1:22
+       .= (the Sorts of U1).r by MSUALG_1:def 7;
+  per cases; suppose Result(o,U1) <> {};
+  then A7: dom Den(o,U1) = Args(o,U1) & rng Den(o,U1) c= Result(o,U1)
+      by FUNCT_2:def 1,RELSET_1:12;
+  then Den(o,U1).x in rng Den(o,U1) by A1,FUNCT_1:def 5;
+hence (F.(the_result_sort_of o)).(Den(o,U1).x) = Den(o,U1).(F#x)
+         by A2,A3,A6,A7,FUNCT_1:35;
+  suppose Result(o,U1) = {};
+   then dom Den(o,U1) = {} & dom (F.r) = {} by A1,A6,FUNCT_2:def 1,RELAT_1:60;
+   then Den(o,U1).x = {} & (F.r).{} = {} by FUNCT_1:def 4;
+  hence thesis by A1,Th7;
+ end;
+
+theorem Th10:
+for U1,U2,U3 being non-empty MSAlgebra over S
+for H1 be ManySortedFunction of U1,U2, H2 be ManySortedFunction of U2,U3 st
+ H1 is_homomorphism U1,U2 & H2 is_homomorphism U2,U3 holds
+ H2 ** H1 is_homomorphism U1,U3
+  proof let U1,U2,U3 be non-empty MSAlgebra over S;
+   let H1 be ManySortedFunction of U1,U2,H2 be ManySortedFunction of U2,U3;
+   assume A1: H1 is_homomorphism U1,U2 & H2 is_homomorphism U2,U3;
+   let o be OperSymbol of S such that Args(o,U1) <> {};
+   let x be Element of Args(o,U1);
+   set F = H2**H1,
+       r = the_result_sort_of o;
+      (H1.r).(Den(o,U1).x) = Den(o,U2).(H1#x) by A1,Def9;
+   then A2: (H2.r).((H1.r).(Den(o,U1).x)) = Den(o,U3).(H2#(H1#x)) by A1,Def9;
+   A3: F.r = (H2.r)*(H1.r) by Th2;
+   A4: dom (F.r) = (the Sorts of U1).r by FUNCT_2:def 1;
+   A5: Result(o,U1) = ((the Sorts of U1)*(the ResultSort of S)).o
+      by MSUALG_1:def 10;
+      rng (the ResultSort of S) c= the carrier of S by RELSET_1:12;
+   then rng (the ResultSort of S) c= dom (the Sorts of U1) by PBOOLE:def 3;
+   then A6: dom ((the Sorts of U1)*(the ResultSort of S)) =
+       dom (the ResultSort of S) by RELAT_1:46;
+     the OperSymbols of S <> {} by MSUALG_1:def 5;
+    then o in the OperSymbols of S;
+   then o in dom (the ResultSort of S) by FUNCT_2:def 1;
+   then Result(o,U1) = (the Sorts of U1).((the ResultSort of S).o)
+        by A5,A6,FUNCT_1:22
+        .= (the Sorts of U1).r by MSUALG_1:def 7;
+   then (F.r).(Den(o,U1).x) = Den(o,U3).(H2#(H1#x)) by A2,A3,A4,FUNCT_1:22;
+   hence (F.r).(Den(o,U1).x) = Den(o,U3).(F#x) by Th8;
+  end;
+
+definition let S; let U1,U2 be MSAlgebra over S;
+           let F be ManySortedFunction of U1,U2;
+pred F is_epimorphism U1,U2 means :Def10:
+     F is_homomorphism U1,U2 & F is "onto";
+end;
+
+theorem Th11:
+for U1,U2,U3 being non-empty MSAlgebra over S
+for F be ManySortedFunction of U1,U2, G be ManySortedFunction of U2,U3 st
+ F is_epimorphism U1,U2 & G is_epimorphism U2,U3 holds
+  G**F is_epimorphism U1,U3
+  proof let U1,U2,U3 be non-empty MSAlgebra over S;
+   let F be ManySortedFunction of U1,U2,
+       G be ManySortedFunction of U2,U3;
+   assume F is_epimorphism U1,U2 & G is_epimorphism U2,U3;
+   then A1: F is_homomorphism U1,U2 & F is "onto" &
+       G is_homomorphism U2,U3 & G is "onto" by Def10;
+   then A2: G**F is_homomorphism U1,U3 by Th10;
+     for i be set st i in (the carrier of S)
+    holds rng((G**F).i) = (the Sorts of U3).i
+    proof
+     let i be set;
+     assume A3: i in the carrier of S;
+     then reconsider f = F.i as Function of (the Sorts of U1).i,(the Sorts of
+U2).i
+         by MSUALG_1:def 2;
+     reconsider g = G.i as Function of (the Sorts of U2).i,(the Sorts of U3).i
+         by A3,MSUALG_1:def 2;
+     A4: rng f = (the Sorts of U2).i by A1,A3,Def3;
+     A5: rng g = (the Sorts of U3).i by A1,A3,Def3;
+       (the Sorts of U3).i = {} implies (the Sorts of U2).i = {}
+          by A3,PBOOLE:def 16;
+     then dom g = rng f by A4,FUNCT_2:def 1;
+      then rng (g*f) = (the Sorts of U3).i by A5,RELAT_1:47;
+     hence thesis by A3,Th2;
+    end;
+   then G**F is "onto" by Def3;
+   hence thesis by A2,Def10;
+  end;
+
+definition let S; let U1,U2 be MSAlgebra over S;
+           let F be ManySortedFunction of U1,U2;
+pred F is_monomorphism U1,U2 means :Def11:
+     F is_homomorphism U1,U2 & F is "1-1";
+end;
+
+theorem Th12:
+for U1,U2,U3 being non-empty MSAlgebra over S
+for F be ManySortedFunction of U1,U2, G be ManySortedFunction of U2,U3 st
+ F is_monomorphism U1,U2 & G is_monomorphism U2,U3 holds
+  G**F is_monomorphism U1,U3
+  proof let U1,U2,U3 be non-empty MSAlgebra over S;
+   let F be ManySortedFunction of U1,U2,
+       G be ManySortedFunction of U2,U3;
+   assume F is_monomorphism U1,U2 & G is_monomorphism U2,U3;
+   then A1: F is_homomorphism U1,U2 & F is "1-1" &
+       G is_homomorphism U2,U3 & G is "1-1" by Def11;
+   then A2: G**F is_homomorphism U1,U3 by Th10;
+     for i be set, h be Function st i in dom (G**F) & (G**F).i = h holds
+        h is one-to-one
+   proof
+    let i be set,h be Function;
+    assume A3: i in dom (G**F) & (G**F).i = h;
+    then A4: i in the carrier of S by PBOOLE:def 3;
+    then A5: i in dom F by PBOOLE:def 3;
+    A6: i in dom G by A4,PBOOLE:def 3;
+    reconsider f = F.i as Function of (the Sorts of U1).i,(the Sorts of U2).i
+        by A4,MSUALG_1:def 2;
+    reconsider g = G.i as Function of (the Sorts of U2).i,(the Sorts of U3).i
+        by A4,MSUALG_1:def 2;
+    A7: f is one-to-one by A1,A5,Def2;
+      g is one-to-one by A1,A6,Def2;
+    then g*f is one-to-one by A7,FUNCT_1:46;
+    hence thesis by A3,A4,Th2;
+   end;
+   then G**F is "1-1" by Def2;
+   hence thesis by A2,Def11;
+  end;
+
+definition let S; let U1,U2 be MSAlgebra over S;
+           let F be ManySortedFunction of U1,U2;
+pred F is_isomorphism U1,U2 means :Def12:
+     F is_epimorphism U1,U2 & F is_monomorphism U1,U2;
+end;
+
+theorem Th13:
+for F be ManySortedFunction of U1,U2 holds
+F is_isomorphism U1,U2 iff
+F is_homomorphism U1,U2 & F is "onto" & F is "1-1"
+ proof
+  let F be ManySortedFunction of U1,U2;
+  thus F is_isomorphism U1,U2 implies F is_homomorphism U1,U2 &
+       F is "onto" & F is "1-1"
+   proof
+    assume F is_isomorphism U1,U2;
+     then F is_epimorphism U1,U2 & F is_monomorphism U1,U2 by Def12;
+hence thesis by Def10,Def11;
+   end;
+  assume A1: F is_homomorphism U1,U2 & F is "onto" & F is "1-1";
+  then A2: F is_epimorphism U1,U2 by Def10;
+    F is_monomorphism U1,U2 by A1,Def11;
+  hence thesis by A2,Def12;
+ end;
+
+Lm3:
+ for U1,U2 being non-empty MSAlgebra over S
+ for H be ManySortedFunction of U1,U2 st
+ H is_isomorphism U1,U2 holds H"" is_homomorphism U2,U1
+  proof let U1,U2 be non-empty MSAlgebra over S;
+   let H be ManySortedFunction of U1,U2;
+   assume A1: H is_isomorphism U1,U2;
+   set F = H"";
+   A2: H is_homomorphism U1,U2 & H is "onto" & H is "1-1" by A1,Th13;
+     for o be OperSymbol of S st Args(o,U2) <> {}
+   for x be Element of Args(o,U2) holds
+     (F.(the_result_sort_of o)).(Den(o,U2).x) = Den(o,U1).(F#x)
+    proof
+      let o be OperSymbol of S such that Args(o,U2) <> {};
+      let x be Element of Args(o,U2);
+      set r = the_result_sort_of o;
+      deffunc G(set)=(F#x).$1;
+      consider f being Function such that A3: dom f = dom (the_arity_of o) &
+      for n be set st n in dom (the_arity_of o) holds f.n = G(n)
+      from Lambda;
+      A4: dom (F#x) = dom (the_arity_of o) by Th6;
+      then A5: f = (F#x) by A3,FUNCT_1:9;
+      reconsider f as Element of Args(o,U1) by A3,A4,FUNCT_1:9;
+        r in the carrier of S;
+      then A6: r in dom H by PBOOLE:def 3;
+      A7: dom (H.r) = (the Sorts of U1).r & rng (H.r) c= (the Sorts of U2).r
+          by FUNCT_2:def 1,RELSET_1:12;
+      A8: dom ((F.r)*(H.r)) = (the Sorts of U1).r by FUNCT_2:def 1;
+      A9: the OperSymbols of S <> {} by MSUALG_1:def 5;
+      A10: dom (the ResultSort of S) = the OperSymbols of S &
+      rng (the ResultSort of S) c= the carrier of S
+          by FUNCT_2:def 1,RELSET_1:12;
+      then A11: dom ((the Sorts of U1)*(the ResultSort of S)) =
+          dom (the ResultSort of S) by PBOOLE:def 3;
+      A12: Result(o,U1) = ((the Sorts of U1)*(the ResultSort of S)).o
+           by MSUALG_1:def 10
+           .= (the Sorts of U1).((the ResultSort of S).o) by A9,A10,A11,FUNCT_1
+:22
+           .= (the Sorts of U1).r by MSUALG_1:def 7;
+      A13: F.r = (H.r)" by A2,Def5;
+        H.r is one-to-one by A2,A6,Def2;
+      then A14: (F.r)*(H.r) = id ((the Sorts of U1).r) by A7,A13,FUNCT_1:61;
+        (H.r).(Den(o,U1).f) = Den(o,U2).(H#(F#x)) by A2,A5,Def9
+                         .= Den(o,U2).((H**F)#x) by Th8
+                         .= Den(o,U2).((id (the Sorts of U2))#x) by A2,Th5
+                         .= Den(o,U2).x by Th7;
+      then (F.r).(Den(o,U2).x) = ((F.r)*(H.r)).(Den(o,U1).(F#x)) by A5,A8,A12,
+FUNCT_1:22
+                         .= Den(o,U1).(F#x) by A12,A14,FUNCT_1:35;
+      hence thesis;
+     end;
+   hence thesis by Def9;
+  end;
+
+theorem Th14:
+ for U1,U2 being non-empty MSAlgebra over S
+for H be ManySortedFunction of U1,U2, H1 be ManySortedFunction of U2,U1 st
+H is_isomorphism U1,U2 & H1 = H"" holds H1 is_isomorphism U2,U1
+ proof let U1,U2 be non-empty MSAlgebra over S;
+  let H be ManySortedFunction of U1,U2,H1 be ManySortedFunction of U2,U1;
+  assume A1: H is_isomorphism U1,U2 & H1 = H"";
+  then A2: H is_monomorphism U1,U2 & H is_epimorphism U1,U2 by Def12;
+  then A3: H is_homomorphism U1,U2 & H is "1-1" by Def11;
+  A4: H is "onto" by A2,Def10;
+  A5: for i be set, g be Function st i in dom H1 &
+         g = H1.i holds g is one-to-one
+   proof
+    let i be set;
+    let g be Function;
+    assume A6: i in dom H1 & g = H1.i;
+    then A7: i in the carrier of S by PBOOLE:def 3;
+    then A8: i in dom H by PBOOLE:def 3;
+    reconsider f = H.i as Function of (the Sorts of U1).i,(the Sorts of U2).i
+        by A7,MSUALG_1:def 2;
+      f is one-to-one by A3,A8,Def2;
+    then f" is one-to-one by FUNCT_1:62;
+    hence thesis by A1,A3,A4,A6,A7,Def5;
+   end;
+     for i be set st i in
+ (the carrier of S) holds rng(H1.i) = (the Sorts of U1).i
+   proof
+    let i be set;
+    assume A9: i in (the carrier of S);
+    then A10: i in dom H by PBOOLE:def 3;
+    reconsider f = H.i as Function of (the Sorts of U1).i,(the Sorts of U2).i
+        by A9,MSUALG_1:def 2;
+      f is one-to-one by A3,A10,Def2;
+    then A11: rng (f") = dom f by FUNCT_1:55;
+      (the Sorts of U2).i = {} implies (the Sorts of U1).i = {}
+         by A9,PBOOLE:def 16;
+     then rng (f") = (the Sorts of U1).i by A11,FUNCT_2:def 1;
+    hence thesis by A1,A3,A4,A9,Def5;
+   end;
+  then A12: H1 is "onto" by Def3;
+  A13: H1 is "1-1" by A5,Def2;
+  A14: H1 is_homomorphism U2,U1 by A1,Lm3;
+  then A15: H1 is_epimorphism U2,U1 by A12,Def10;
+    H1 is_monomorphism U2,U1 by A13,A14,Def11;
+  hence thesis by A15,Def12;
+ end;
+
+theorem Th15:
+for U1,U2,U3 being non-empty MSAlgebra over S
+for H be ManySortedFunction of U1,U2, H1 be ManySortedFunction of U2,U3 st
+H is_isomorphism U1,U2 & H1 is_isomorphism U2,U3
+holds H1 ** H is_isomorphism U1,U3
+ proof let U1,U2,U3 be non-empty MSAlgebra over S;
+  let H be ManySortedFunction of U1,U2,H1 be ManySortedFunction of U2,U3;
+  assume A1: H is_isomorphism U1,U2 & H1 is_isomorphism U2,U3;
+  then A2: H is_epimorphism U1,U2 & H is_monomorphism U1,U2 by Def12;
+  A3: H1 is_monomorphism U2,U3 & H1 is_epimorphism U2,U3 by A1,Def12;
+  then A4: H1**H is_epimorphism U1,U3 by A2,Th11;
+    H1**H is_monomorphism U1,U3 by A2,A3,Th12;
+  hence thesis by A4,Def12;
+ end;
+
+definition let S; let U1,U2 be MSAlgebra over S;
+pred U1,U2 are_isomorphic means :Def13:
+ ex F be ManySortedFunction of U1,U2 st F is_isomorphism U1,U2;
+end;
+
+theorem Th16:
+for U1 being MSAlgebra over S holds
+  id the Sorts of U1 is_isomorphism U1,U1 & U1,U1 are_isomorphic
+ proof let U1 be MSAlgebra over S;
+  A1: id (the Sorts of U1) is_homomorphism U1,U1 by Th9;
+  A2: for i be set,f be Function st i in dom id (the Sorts of U1) &
+    (id (the Sorts of U1)).i = f holds f is one-to-one
+    proof
+     let i be set,f be Function;
+     assume A3: i in dom id (the Sorts of U1) & (id (the Sorts of U1)).i = f;
+     then i in the carrier of S by PBOOLE:def 3;
+     then f = id ((the Sorts of U1).i) by A3,Def1;
+     hence f is one-to-one;
+    end;
+    for i be set st i in (the carrier of S)
+     holds rng((id (the Sorts of U1)).i) = (the Sorts of U1).i
+    proof
+     let i be set;
+     assume i in (the carrier of S);
+     then (id (the Sorts of U1)).i = id ((the Sorts of U1).i) by Def1;
+     hence thesis by RELAT_1:71;
+    end;
+  then A4: id (the Sorts of U1) is "onto" by Def3;
+    id (the Sorts of U1) is "1-1" by A2,Def2;
+  then A5: id (the Sorts of U1) is_monomorphism U1,U1 by A1,Def11;
+  A6: id (the Sorts of U1) is_epimorphism U1,U1 by A1,A4,Def10;
+  hence id (the Sorts of U1) is_isomorphism U1,U1 by A5,Def12;
+  take id (the Sorts of U1);
+  thus thesis by A5,A6,Def12;
+ end;
+
+definition let S; let U1, U2 be MSAlgebra over S;
+ redefine pred U1, U2 are_isomorphic;
+ reflexivity by Th16;
+end;
+
+theorem
+   for U1,U2 being non-empty MSAlgebra over S holds
+ U1,U2 are_isomorphic implies U2,U1 are_isomorphic
+  proof let U1,U2 be non-empty MSAlgebra over S;
+   assume U1,U2 are_isomorphic;
+   then consider F be ManySortedFunction of U1,U2 such that
+            A1: F is_isomorphism U1,U2 by Def13;
+   reconsider G = F"" as ManySortedFunction of U2,U1;
+     G is_isomorphism U2,U1 by A1,Th14;
+   hence thesis by Def13;
+  end;
+
+theorem
+  for U1,U2,U3 being non-empty MSAlgebra over S holds
+ U1,U2 are_isomorphic & U2,U3 are_isomorphic implies U1,U3 are_isomorphic
+  proof let U1,U2,U3 be non-empty MSAlgebra over S;
+   assume A1: U1,U2 are_isomorphic & U2,U3 are_isomorphic;
+   then consider F be ManySortedFunction of U1,U2 such that
+          A2: F is_isomorphism U1,U2 by Def13;
+   consider G be ManySortedFunction of U2,U3 such that
+          A3: G is_isomorphism U2,U3 by A1,Def13;
+   reconsider H = G**F as ManySortedFunction of U1,U3;
+     H is_isomorphism U1,U3 by A2,A3,Th15;
+   hence thesis by Def13;
+  end;
+
+definition let S; let U1,U2 be non-empty MSAlgebra over S;
+           let F be ManySortedFunction of U1,U2;
+assume A1: F is_homomorphism U1,U2;
+func Image F -> strict non-empty MSSubAlgebra of U2 means :Def14:
+  the Sorts of it = F.:.:(the Sorts of U1);
+existence
+ proof
+  set u2 = F.:.:(the Sorts of U1);
+    u2 is non-empty MSSubset of U2
+   proof
+      now
+     let i be set; assume A2: i in the carrier of S;
+     reconsider f = F.i as Function;
+     A3: u2.i = f.:((the Sorts of U1).i) by A2,Def6;
+     reconsider f as Function of (the Sorts of U1).i,(the Sorts of U2).i
+         by A2,MSUALG_1:def 2;
+       (the Sorts of U2).i = {} implies (the Sorts of U1).i = {}
+        by A2,PBOOLE:def 16;
+      then dom f = (the Sorts of U1).i & rng f c= (the Sorts of U2).i
+     by FUNCT_2:def 1,RELSET_1:12;
+      hence u2.i c= (the Sorts of U2).i by A3,RELAT_1:146;
+    end;
+    then A4: u2 c= the Sorts of U2 by PBOOLE:def 5;
+      now
+     let i be set; assume A5: i in the carrier of S;
+     reconsider f = F.i as Function;
+     A6: u2.i = f.:((the Sorts of U1).i) by A5,Def6;
+     reconsider f as Function of (the Sorts of U1).i,(the Sorts of U2).i
+         by A5,MSUALG_1:def 2;
+     A7: (the Sorts of U1).i <> {} by A5,PBOOLE:def 16;
+       (the Sorts of U2).i = {} implies (the Sorts of U1).i = {}
+         by A5,PBOOLE:def 16;
+     then dom f = (the Sorts of U1).i by FUNCT_2:def 1;
+hence u2.i is non empty by A6,A7,RELAT_1:152;
+    end;
+    hence u2 is non-empty MSSubset of U2 by A4,MSUALG_2:def 1,PBOOLE:def 16;
+   end;
+  then reconsider u2 as non-empty MSSubset of U2;
+  set M = GenMSAlg(u2);
+  reconsider M' = MSAlgebra (#u2 , Opers(U2,u2) qua ManySortedFunction of
+           (u2# * the Arity of S),(u2 * the ResultSort of S)#)
+    as non-empty MSAlgebra over S by MSUALG_1:def 8;
+  take M;
+    u2 is opers_closed
+   proof
+    let o be OperSymbol of S;
+    thus rng ((Den(o,U2))|((u2# * the Arity of S).o)) c=
+              (u2 * the ResultSort of S).o
+     proof
+      set D = Den(o,U2),
+          X = (u2# * the Arity of S).o,
+          ao = the_arity_of o,
+          ro = the_result_sort_of o,
+          ut = u2 * ao,
+          S1 = the Sorts of U1;
+      let x be set;
+      assume x in rng (D|X);
+      then consider a be set such that A8: a in
+ dom(D|X) & x = (D|X).a by FUNCT_1:def 5;
+      A9: dom (D|X) c= X by RELAT_1:87;
+      A10: dom (D|X) c= dom D by FUNCT_1:76;
+      A11: x = D.a by A8,FUNCT_1:70;
+      reconsider a as Element of Args(o,U2) by A8,A10,FUNCT_2:def 1;
+      A12: dom (the Arity of S) = the OperSymbols of S &
+          rng (the Arity of S) c= (the carrier of S)*
+             by FUNCT_2:def 1,RELSET_1:12;
+      then A13: dom (u2# * (the Arity of S)) = dom (the Arity of S) by PBOOLE:
+def 3;
+      A14: the OperSymbols of S <> {} by MSUALG_1:def 5;
+       then X = u2#.((the Arity of S).o) by A12,A13,FUNCT_1:22
+           .= u2#.(ao) by MSUALG_1:def 6
+           .= product(u2 * ao) by MSUALG_1:def 3;
+      then A15: dom a = dom ut &
+          for y be set st y in dom ut holds (a).y in ut.y by A8,A9,CARD_3:18;
+      A16: dom u2 = the carrier of S by PBOOLE:def 3;
+      A17: rng ao c= the carrier of S by FINSEQ_1:def 4;
+      defpred P[set,set] means
+      for s be SortSymbol of S st s = ao.$1 holds $2 in S1.s & (a).$1=(F.s).$2;
+      A18: for y be set st y in dom (a) ex i be set st P[y,i]
+       proof
+        let y be set; assume A19: y in dom (a);
+          dom (u2 * ao) = dom ao by A16,A17,RELAT_1:46;
+        then ao.y in rng ao by A15,A19,FUNCT_1:def 5;
+        then reconsider s = ao.y as SortSymbol of S by A17;
+        A20: dom (F.s) = S1.s & rng (F.s) c= (the Sorts of U2).s
+            by FUNCT_2:def 1,RELSET_1:12;
+        A21: a.y in ut.y by A15,A19;
+          ut.y = u2.(ao.y) by A15,A19,FUNCT_1:22
+            .= (F.s).:(S1.s) by Def6
+            .= rng (F.s) by A20,RELAT_1:146;
+        then consider i be set such that A22: i in S1.s & (a).y = (F.s).i
+              by A20,A21,FUNCT_1:def 5;
+        take i;
+        thus thesis by A22;
+       end;
+      consider f be Function such that
+      A23: dom f = dom a &
+      for y be set st y in dom a holds P[y,f.y] from NonUniqFuncEx(A18);
+      A24: Args(o,U1) = product (S1 * ao) by PRALG_2:10;
+      A25: dom f = dom ao by A15,A16,A17,A23,RELAT_1:46;
+        dom S1 = the carrier of S by PBOOLE:def 3;
+      then A26: dom (S1 * ao) = dom ao by A17,RELAT_1:46;
+        for y be set st y in dom(S1 * ao) holds f.y in (S1 * ao).y
+       proof
+        let y be set; assume A27: y in dom (S1 * ao);
+        then ao.y in rng ao by A26,FUNCT_1:def 5;
+        then reconsider s = ao.y as SortSymbol of S by A17;
+          f.y in S1.s by A23,A25,A26,A27; hence thesis by A27,FUNCT_1:22;
+       end;
+      then reconsider a1 = f as Element of Args(o,U1) by A24,A25,A26,CARD_3:18;
+      A28: dom (F#a1) = dom ao & dom a1 = dom ao &
+          dom a = dom ao by Th6;
+        now
+       let y be set;
+       assume A29: y in dom ao;
+       then reconsider n = y as Nat;
+         ao.y in rng ao by A29,FUNCT_1:def 5;
+       then reconsider s = ao.y as SortSymbol of S by A17;
+         (F#a1).n = (F.(ao/.n)).(a1.n) by A28,A29,Def8
+                       .= (F.s).(a1.n) by A29,FINSEQ_4:def 4;
+       hence (F#a1).y = a.y by A23,A28,A29;
+      end;
+      then F#a1 = a by A28,FUNCT_1:9;
+      then A30: (F.ro).(Den(o,U1).a1) = x by A1,A11,Def9;
+      A31: dom (the ResultSort of S) = the OperSymbols of S &
+      rng (the ResultSort of S) c= the carrier of S
+          by FUNCT_2:def 1,RELSET_1:12;
+      then A32: dom (S1 * (the ResultSort of S)) = dom (the ResultSort of S)
+          by PBOOLE:def 3;
+        Result(o,U1) = (S1 * (the ResultSort of S)).o by MSUALG_1:def 10
+                  .= S1.((the ResultSort of S).o) by A14,A31,A32,FUNCT_1:22
+                  .= S1.ro by MSUALG_1:def 7;
+      then A33: Den(o,U1).a1 in S1.ro;
+      A34: dom (F.ro) = S1.ro by FUNCT_2:def 1;
+      A35: Den(o,U1).a1 in dom (F.ro) by A33,FUNCT_2:def 1;
+      reconsider g = F.ro as Function;
+        dom (u2 * the ResultSort of S) = dom (the ResultSort of S)
+          by A31,PBOOLE:def 3;
+      then (u2 * the ResultSort of S).o = u2.((the ResultSort of S).o)
+          by A14,A31,FUNCT_1:22
+          .= u2.ro by MSUALG_1:def 7
+          .= g.:(S1.ro) by Def6
+          .= rng g by A34,RELAT_1:146;
+      hence thesis by A30,A35,FUNCT_1:def 5;
+     end;
+   end;
+   then for B be MSSubset of U2 st B = the Sorts of M' holds
+   B is opers_closed & the Charact of M' = Opers(U2,B);
+   then M' is MSSubAlgebra of U2 & u2 is MSSubset of M'
+      by MSUALG_2:def 1,def 10;
+   then M is MSSubAlgebra of M' by MSUALG_2:def 18;
+   then the Sorts of M is MSSubset of M' & u2 is MSSubset of M
+    by MSUALG_2:def 10,def 18;
+   then the Sorts of M c= u2 & u2 c= the Sorts of M by MSUALG_2:def 1;
+  hence thesis by PBOOLE:def 13;
+ end;
+uniqueness by MSUALG_2:10;
+end;
+
+
+theorem
+  for U1 being non-empty MSAlgebra over S,
+    U2 being strict non-empty MSAlgebra over S,
+    F be ManySortedFunction of U1,U2
+st F is_homomorphism U1,U2 holds F is_epimorphism U1,U2 iff Image F = U2
+ proof let U1 be non-empty MSAlgebra over S;
+  let U2 be strict non-empty MSAlgebra over S,
+      F be ManySortedFunction of U1,U2;
+  assume A1: F is_homomorphism U1,U2;
+  set FF = F.:.:(the Sorts of U1);
+  thus F is_epimorphism U1,U2 implies Image F = U2
+   proof
+    assume F is_epimorphism U1,U2;
+    then A2: F is "onto" by Def10;
+      now
+     let i be set; assume A3: i in the carrier of S;
+     then reconsider f = F.i as
+     Function of (the Sorts of U1).i,(the Sorts of U2).i by MSUALG_1:def 2;
+     A4: rng f = (the Sorts of U2).i by A2,A3,Def3;
+     reconsider f as Function;
+     A5: FF.i = f.:((the Sorts of U1).i) by A3,Def6;
+       (the Sorts of U2).i = {} implies (the Sorts of U1).i = {}
+        by A3,PBOOLE:def 16;
+     then dom f = (the Sorts of U1).i by FUNCT_2:def 1;
+hence FF.i = (the Sorts of U2).i by A4,A5,RELAT_1:146;
+    end;
+     then A6: FF = the Sorts of U2 by PBOOLE:3;
+       U2 is strict MSSubAlgebra of U2 by MSUALG_2:6;
+    hence thesis by A1,A6,Def14;
+   end;
+  assume Image F = U2;
+  then A7: FF = the Sorts of U2 by A1,Def14;
+    for i be set st i in the carrier of S holds rng(F.i) = (the Sorts of U2).i
+   proof
+    let i be set;
+    assume i in the carrier of S;
+    then reconsider i as Element of S;
+    reconsider f = F.i as
+    Function of (the Sorts of U1).i,(the Sorts of U2).i;
+    A8: f.:((the Sorts of U1).i) = (the Sorts of U2).i by A7,Def6;
+      dom f = (the Sorts of U1).i by FUNCT_2:def 1;
+    hence thesis by A8,RELAT_1:146;
+   end;
+  then F is "onto" by Def3;
+  hence thesis by A1,Def10;
+ end;
+
+Lm4:
+for U1,U2 being non-empty MSAlgebra over S
+for F be ManySortedFunction of U1,U2 st F is_homomorphism U1,U2
+  holds F is ManySortedFunction of U1,Image F
+ proof let U1,U2 be non-empty MSAlgebra over S;
+  let F be ManySortedFunction of U1,U2;
+  assume A1: F is_homomorphism U1,U2;
+    for i be set st i in the carrier of S holds
+   F.i is Function of (the Sorts of U1).i,(the Sorts of Image F).i
+   proof
+    let i be set;
+    assume A2: i in the carrier of S;
+    then reconsider f = F.i as
+    Function of (the Sorts of U1).i,(the Sorts of U2).i by MSUALG_1:def 2;
+      (the Sorts of U2).i = {} implies (the Sorts of U1).i = {}
+       by A2,PBOOLE:def 16;
+    then A3: dom f = (the Sorts of U1).i & rng f c= (the Sorts of U2).i
+       by FUNCT_2:def 1,RELSET_1:12;
+      the Sorts of Image F = F.:.:(the Sorts of U1) by A1,Def14;
+     then (the Sorts of Image F).i = f.:((the Sorts of U1).i) by A2,Def6
+                                .= rng f by A3,RELAT_1:146; hence thesis by A3,
+FUNCT_2:3;
+   end;
+  hence thesis by MSUALG_1:def 2;
+ end;
+
+
+theorem Th20:
+for U1,U2 being non-empty MSAlgebra over S
+for F be ManySortedFunction of U1,U2, G be ManySortedFunction of U1,Image F
+ st F = G & F is_homomorphism U1,U2 holds G is_epimorphism U1,Image F
+  proof let U1,U2 be non-empty MSAlgebra over S;
+   let F be ManySortedFunction of U1,U2,
+       G be ManySortedFunction of U1,Image F;
+   assume A1: F = G & F is_homomorphism U1,U2;
+     for o be OperSymbol of S st Args(o,U1) <> {}
+   for x be Element of Args(o,U1) holds
+     (G.(the_result_sort_of o)).(Den(o,U1).x) = Den(o,Image F).(G#x)
+     proof
+      let o be OperSymbol of S such that Args(o,U1) <> {};
+      let x be Element of Args(o,U1);
+      reconsider G1 = G as ManySortedFunction of U1,U2 by A1;
+      A2: dom (G#x) = dom (the_arity_of o) &
+          dom (G1#x) = dom (the_arity_of o) by Th6;
+      A3: dom x = dom (the_arity_of o) by Th6;
+        now
+       let a be set;
+       assume A4: a in dom (the_arity_of o);
+       then reconsider n = a as Nat;
+         (G#x).n = (G.((the_arity_of o)/.n)).(x.n) &
+       (G1#x).n = (G1.((the_arity_of o)/.n)).(x.n) by A3,A4,Def8;
+       hence (G#x).a = (G1#x).a;
+      end;
+      then G#x = G1#x by A2,FUNCT_1:9;
+      then A5: (G.(the_result_sort_of o)).(Den(o,U1).x)= Den(o,U2).(G#x) by A1,
+Def9;
+      set IF = Image F;
+      reconsider SIF = the Sorts of IF as non-empty MSSubset of U2
+                                            by MSUALG_2:def 10;
+      A6: the Charact of IF = Opers(U2,SIF) & SIF is opers_closed
+           by MSUALG_2:def 10;
+      then A7: SIF is_closed_on o by MSUALG_2:def 7;
+      A8: Den(o,IF) = (Opers(U2,SIF)).o by A6,MSUALG_1:def 11
+                  .= o/.(SIF) by MSUALG_2:def 9
+                  .= (Den(o,U2))|((SIF# * the Arity of S).o)
+                       by A7,MSUALG_2:def 8;
+      A9:(SIF# * the Arity of S).o = Args(o,IF) by MSUALG_1:def 9;
+      set SIF_o = SIF * (the_arity_of o),
+          Uo = (the Sorts of U2) * (the_arity_of o),
+          ao = the_arity_of o;
+      A10: Args(o,IF) = product(SIF_o) by PRALG_2:10;
+      A11: Args(o,U2) = product(Uo) by PRALG_2:10;
+      A12: rng ao c= the carrier of S by FINSEQ_1:def 4;
+      then rng ao c= dom SIF by PBOOLE:def 3;
+      then A13: dom SIF_o = dom ao by RELAT_1:46;
+        rng ao c= dom (the Sorts of U2) by A12,PBOOLE:def 3;
+      then A14: dom SIF_o = dom Uo by A13,RELAT_1:46;
+        for x be set st x in dom SIF_o holds SIF_o.x c= Uo.x
+       proof
+        let x be set;
+        assume A15: x in dom SIF_o;
+        then ao.x in rng ao by A13,FUNCT_1:def 5;
+        then reconsider k = ao.x as Element of S by A12;
+        set f = F.k;
+        A16: dom f = (the Sorts of U1).k & rng f c= (the Sorts of U2).k
+            by FUNCT_2:def 1,RELSET_1:12;
+          SIF = F.:.:(the Sorts of U1) by A1,Def14;
+        then SIF_o.x = (F.:.:(the Sorts of U1)).k by A15,FUNCT_1:22
+               .= f.:((the Sorts of U1).k) by Def6
+               .= rng f by A16,RELAT_1:146; hence thesis by A14,A15,A16,FUNCT_1
+:22;
+       end;
+      then A17: Args(o,IF) c= Args(o,U2) by A10,A11,A14,CARD_3:38;
+        dom Den(o,U2) = Args(o,U2) by FUNCT_2:def 1;
+      then G#x in (SIF# * the Arity of S).o & G#x in dom Den(o,U2)
+          by A9,A17,TARSKI:def 3;
+      then G#x in (dom Den(o,U2)) /\ Args(o,IF) by XBOOLE_0:def 3
+; hence thesis by A5,A8,A9,FUNCT_1:71;
+     end;
+   then A18: G is_homomorphism U1,Image F by Def9;
+     for i be set st i in the carrier of S
+    holds rng(G.i) = (the Sorts of Image F).i
+    proof
+     let i be set;
+     assume i in the carrier of S;
+      then reconsider i as Element of S;
+      set g = G.i;
+       the Sorts of (Image F) = G.:.:(the Sorts of U1) by A1,Def14;
+     then A19: (the Sorts of Image F).i = g.:((the Sorts of U1).i) by Def6;
+       dom g = (the Sorts of U1).i by FUNCT_2:def 1; hence thesis by A19,
+RELAT_1:146;
+    end;
+   then G is "onto" by Def3;
+   hence thesis by A18,Def10;
+  end;
+
+theorem
+  for U1,U2 being non-empty MSAlgebra over S
+for F be ManySortedFunction of U1,U2 st F is_homomorphism U1,U2
+ ex G be ManySortedFunction of U1,Image F
+  st F = G & G is_epimorphism U1,Image F
+  proof let U1,U2 be non-empty MSAlgebra over S;
+   let F be ManySortedFunction of U1,U2;
+   assume A1: F is_homomorphism U1,U2;
+   then reconsider G = F as ManySortedFunction of U1,Image F by Lm4;
+   take G;
+   thus thesis by A1,Th20;
+  end;
+
+
+Lm5:
+for U1,U2 being non-empty MSAlgebra over S
+for U3 be non-empty MSSubAlgebra of U2, F be ManySortedFunction of U1,U2,
+  G be ManySortedFunction of U1,U3 st F = G & G is_homomorphism U1,U3 holds
+   F is_homomorphism U1,U2
+  proof let U1,U2 be non-empty MSAlgebra over S;
+   let U3 be non-empty MSSubAlgebra of U2,
+       F be ManySortedFunction of U1,U2,
+       G be ManySortedFunction of U1,U3;
+   assume A1: F = G & G is_homomorphism U1,U3;
+     for o be OperSymbol of S st Args(o,U1) <> {}
+   for x be Element of Args(o,U1) holds
+    (F.(the_result_sort_of o)).(Den(o,U1).x) = Den(o,U2).(F#x)
+    proof
+     let o be OperSymbol of S such that Args(o,U1) <> {};
+     let x be Element of Args(o,U1);
+       for i be set st i in the carrier of S holds
+     G.i is Function of (the Sorts of U1).i, (the Sorts of U2).i
+     proof
+      let i be set;
+      assume A2: i in the carrier of S;
+      then reconsider g = G.i as
+      Function of (the Sorts of U1).i,(the Sorts of U3).i
+          by MSUALG_1:def 2;
+      A3: (the Sorts of U3).i = {} implies (the Sorts of U1).i = {}
+           by A2,PBOOLE:def 16;
+      reconsider S3 = the Sorts of U3 as non-empty MSSubset of U2
+          by MSUALG_2:def 10;
+        the Sorts of U3 is MSSubset of U2 by MSUALG_2:def 10;
+      then the Sorts of U3 c= the Sorts of U2 by MSUALG_2:def 1;
+      then S3.i c= (the Sorts of U2).i by A2,PBOOLE:def 5;
+      then g is Function of (the Sorts of U1).i,(the Sorts of U2).i
+        by A3,FUNCT_2:9;
+      hence thesis;
+     end;
+    then reconsider G1 = G as ManySortedFunction of U1,U2 by MSUALG_1:def 2;
+    A4: dom (G#x) = dom (the_arity_of o) &
+        dom (G1#x) = dom (the_arity_of o) &
+        dom (F#x) = dom (the_arity_of o) by Th6;
+    A5: dom x = dom (the_arity_of o) by Th6;
+      now
+     let a be set;
+     assume A6: a in dom (the_arity_of o);
+     then reconsider n = a as Nat;
+       (G#x).n = (G.((the_arity_of o)/.n)).(x.n) &
+     (G1#x).n = (G1.((the_arity_of o)/.n)).(x.n) by A5,A6,Def8;
+     hence (G#x).a = (G1#x).a;
+    end;
+    then A7: G#x = G1#x by A4,FUNCT_1:9;
+    then A8: (F.(the_result_sort_of o)).(Den(o,U1).x)= Den(o,U3).(F#x) by A1,
+Def9;
+    reconsider S3 = the Sorts of U3 as non-empty MSSubset of U2
+                                          by MSUALG_2:def 10;
+    A9: the Charact of U3 = Opers(U2,S3) & S3 is opers_closed
+         by MSUALG_2:def 10;
+    then A10: S3 is_closed_on o by MSUALG_2:def 7;
+    A11: Den(o,U3) = (Opers(U2,S3)).o by A9,MSUALG_1:def 11
+                .= o/.(S3) by MSUALG_2:def 9
+                .= (Den(o,U2))|((S3# * the Arity of S).o)
+                     by A10,MSUALG_2:def 8;
+    A12:(S3# * the Arity of S).o = Args(o,U3) by MSUALG_1:def 9;
+      dom Den(o,U2) = Args(o,U2) by FUNCT_2:def 1;
+    then F#x in (dom Den(o,U2)) /\ Args(o,U3) by A1,A7,XBOOLE_0:def 3;
+hence thesis by A8,A11,A12,FUNCT_1:71;
+   end;
+  hence thesis by Def9;
+ end;
+
+theorem Th22:
+for U1 being non-empty MSAlgebra over S
+for U2 be non-empty MSSubAlgebra of U1,
+    G be ManySortedFunction of U2,U1 st
+ G = id (the Sorts of U2) holds G is_monomorphism U2,U1
+ proof let U1 be non-empty MSAlgebra over S;
+  let U2 be non-empty MSSubAlgebra of U1,
+      G be ManySortedFunction of U2,U1;
+  assume A1: G =id (the Sorts of U2);
+  set F = id (the Sorts of U2);
+    F is_homomorphism U2,U2 by Th9;
+  then A2: G is_homomorphism U2,U1 by A1,Lm5;
+    for i be set st i in the carrier of S holds G.i is one-to-one
+   proof
+    let i be set;
+    assume A3: i in the carrier of S;
+    then reconsider f = F.i as Function of (the Sorts of U2).i,(the Sorts of U2
+).i
+       by MSUALG_1:def 2;
+      f = id ((the Sorts of U2).i) by A3,Def1; hence thesis by A1;
+   end;
+  then G is "1-1" by Th1;
+  hence thesis by A2,Def11;
+ end;
+
+theorem
+  for U1,U2 being non-empty MSAlgebra over S
+for F be ManySortedFunction of U1,U2 st F is_homomorphism U1,U2
+ ex F1 be ManySortedFunction of U1,Image F,
+    F2 be ManySortedFunction of Image F,U2 st
+     F1 is_epimorphism U1,Image F & F2 is_monomorphism Image F,U2 &
+     F = F2**F1
+ proof let U1,U2 be non-empty MSAlgebra over S;
+  let F be ManySortedFunction of U1,U2;
+  assume A1: F is_homomorphism U1,U2;
+  then reconsider F1 = F as ManySortedFunction of U1,Image F by Lm4;
+    for H be ManySortedFunction of Image F,Image F
+  holds H is ManySortedFunction of Image F,U2
+   proof
+    let H be ManySortedFunction of Image F,Image F;
+      for i be set st i in the carrier of S holds
+     H.i is Function of (the Sorts of Image F).i,(the Sorts of U2).i
+     proof
+      let i be set;
+      assume A2: i in the carrier of S;
+      then reconsider h = H.i as
+      Function of (the Sorts of Image F).i,(the Sorts of Image F).i
+        by MSUALG_1:def 2;
+      reconsider f = F.i as
+      Function of (the Sorts of U1).i,(the Sorts of U2).i
+        by A2,MSUALG_1:def 2;
+        (the Sorts of U2).i = {} implies (the Sorts of U1).i = {}
+          by A2,PBOOLE:def 16;
+      then A3: dom f = (the Sorts of U1).i & rng f c= (the Sorts of U2).i
+          by FUNCT_2:def 1,RELSET_1:12;
+      A4: (the Sorts of Image F).i = {} implies (the Sorts of Image F).i = {};
+        the Sorts of Image F = F.:.:(the Sorts of U1) by A1,Def14;
+       then (the Sorts of Image F).i = f.:((the Sorts of U1).i) by A2,Def6
+                                  .= rng f by A3,RELAT_1:146;
+      then h is Function of (the Sorts of Image F).i,(the Sorts of U2).i
+          by A3,A4,FUNCT_2:9;
+      hence thesis;
+     end;
+    hence thesis by MSUALG_1:def 2;
+   end;
+  then reconsider F2 = id (the Sorts of Image F) as
+  ManySortedFunction of Image F,U2;
+  take F1,F2;
+  thus F1 is_epimorphism U1,Image F by A1,Th20;
+  thus F2 is_monomorphism Image F,U2 by Th22;
+  thus F = F2**F1 by Th4;
+ end;
+
+theorem
+   for S for U1,U2 being MSAlgebra over S for o
+ for F being ManySortedFunction of U1,U2
+ for x being Element of Args(o,U1), f,u being Function
+  st x = f & x in Args(o,U1) & u in Args(o,U2)
+  holds u = F#x iff
+     for n st n in dom f holds u.n = (F.((the_arity_of o)/.n)).(f.n) by Lm2;
+

@@ -1,0 +1,3933 @@
+:: Continuous, Stable, and Linear Maps of Coherence Spaces
+::  by Grzegorz Bancerek
+::
+:: Received August 30, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, TARSKI, FINSET_1, COH_SP, BOOLE, RELAT_1, CLASSES1,
+      TOLER_1, FINSUB_1, CARD_1, ARYTM_1, FUNCOP_1, PBOOLE, MCART_1, PROB_1,
+      ZF_LANG, CARD_3, FINSEQ_1, FUNCT_5, LATTICES, MONOID_0, COHSP_1;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, REAL_1, NAT_1,
+      MCART_1, RELAT_1, FUNCT_1, FINSEQ_1, FINSET_1, FINSUB_1, TOLER_1,
+      CLASSES1, COH_SP, PBOOLE, CARD_1, FUNCT_5, PROB_1, CARD_3, PARTFUN1,
+      FUNCT_2, BORSUK_1;
+ constructors ENUMSET1, REAL_1, NAT_1, FINSUB_1, COH_SP, BORSUK_1, INDEX_1,
+      PROB_1, MEMBERED;
+ clusters SUBSET_1, RELSET_1, FINSET_1, FINSUB_1, FINSEQ_1, NAT_1, PARTFUN1;
+ requirements NUMERALS, BOOLE, SUBSET;
+ definitions XBOOLE_0, TARSKI, RELAT_1, COH_SP, CLASSES1, FINSUB_1;
+ theorems TARSKI, ENUMSET1, ZFMISC_1, RELAT_1, COH_SP, FUNCT_1, FUNCT_2,
+      PBOOLE, FINSEQ_1, FINSET_1, FINSUB_1, FUNCOP_1, MCART_1, CARD_1,
+      CLASSES1, CARD_2, CARD_3, FUNCT_5, CARD_5, RELSET_1, XBOOLE_0, XBOOLE_1,
+      XCMPLX_1;
+ schemes NAT_1, SUBSET_1, FUNCT_1, FINSET_1, CARD_3, XBOOLE_0;
+
+begin :: Directed Sets
+
+Lm1:
+ for X,Y be non empty set
+  for f be Function of X,Y
+  for x be Element of X holds
+  for y being set st y in f.x holds y in union Y by TARSKI:def 4;
+
+definition
+ cluster finite Coherence_Space;
+ existence by COH_SP:3;
+ let X be set;
+ redefine attr X is binary_complete means:Def1:
+  for A being set st for a,b being set st a in A & b in A holds a \/ b in X
+    holds union A in X;
+  compatibility
+   proof
+    thus X is binary_complete implies
+      for A being set st for a,b being set st a in A & b in A holds a \/ b in X
+       holds union A in X
+      proof assume
+A1:      for A being set st A c= X &
+          for a,b being set st a in A & b in A holds a \/ b in X
+         holds union A in X;
+       let A be set; assume
+A2:      for a,b being set st a in A & b in A holds a \/ b in X;
+          A c= X
+         proof let x be set; assume x in A;
+           then x \/ x in X by A2;
+          hence thesis;
+         end;
+       hence union A in X by A1,A2;
+      end;
+    assume
+       for A being set st for a,b being set st a in A & b in A holds a \/ b in
+X
+      holds union A in X;
+    hence for A being set st A c= X &
+        for a,b being set st a in A & b in A holds a \/ b in X
+       holds union A in X;
+   end;
+end;
+
+definition
+ let X be set;
+ func FlatCoh X -> set equals:
+Def2:
+   CohSp id X;
+ correctness;
+ func Sub_of_Fin X -> Subset of X means:
+Def3:
+  for x being set holds x in it iff x in X & x is finite;
+ existence
+ proof
+   defpred P[set] means $1 is finite;
+   thus ex W being Subset of X st
+    for x be set holds x in W iff x in X & P[x] from Subset_Ex;
+ end;
+ correctness
+  proof let X1,X2 be Subset of X; assume
+A1:  not thesis;
+    then consider x being set such that
+A2:   not (x in X1 iff x in X2) by TARSKI:2;
+       x in X2 iff not (x in X & x is finite) by A1,A2;
+    hence thesis by A1;
+  end;
+end;
+
+theorem Th1:
+ for X,x being set holds
+  x in FlatCoh X iff x = {} or ex y being set st x = {y} & y in X
+  proof let X,x be set;
+A1:  FlatCoh X = CohSp id X by Def2;
+   hereby assume A2: x in FlatCoh X;
+    assume x <> {}; then reconsider y = x as non empty set;
+    consider z being Element of y; reconsider z as set;
+    take z;
+    thus x = {z}
+      proof
+       hereby let c be set; assume c in x;
+         then [z,c] in id X by A1,A2,COH_SP:def 4;
+         then c = z by RELAT_1:def 10;
+        hence c in {z} by TARSKI:def 1;
+       end;
+       thus {z} c= x by ZFMISC_1:37;
+      end;
+       [z,z] in id X by A1,A2,COH_SP:def 4;
+    hence z in X by RELAT_1:def 10;
+   end;
+   assume
+A3:  x = {} or ex y being set st x = {y} & y in X;
+      now given a being set such that
+A4:    x = {a} & a in X;
+     let y,z be set; assume y in x & z in x;
+      then y = a & z = a by A4,TARSKI:def 1;
+     hence [y,z] in id X by A4,RELAT_1:def 10;
+    end;
+   hence thesis by A1,A3,COH_SP:1,def 4;
+  end;
+
+theorem Th2:
+ for X being set holds union FlatCoh X = X
+  proof let X be set;
+   hereby let x be set; assume x in union FlatCoh X;
+    then consider y being set such that
+A1:   x in y & y in FlatCoh X by TARSKI:def 4;
+    consider z being set such that
+A2:   y = {z} & z in X by A1,Th1;
+    thus x in X by A1,A2,TARSKI:def 1;
+   end;
+   let x be set; assume x in X;
+    then x in {x} & {x} in FlatCoh X by Th1,TARSKI:def 1;
+   hence thesis by TARSKI:def 4;
+  end;
+
+theorem
+   for X being finite subset-closed set holds Sub_of_Fin X = X
+  proof let X be finite subset-closed set;
+   thus Sub_of_Fin X c= X;
+   let x be set; assume
+A1:  x in X;
+      bool x c= X
+     proof let y be set; assume y in bool x;
+      hence y in X by A1,CLASSES1:def 1;
+     end;
+    then bool x is finite by FINSET_1:13;
+    then x is finite by FINSET_1:24;
+   hence thesis by A1,Def3;
+  end;
+
+definition
+ cluster {{}} -> subset-closed binary_complete;
+ coherence by COH_SP:3;
+ let X be set;
+ cluster bool X -> subset-closed binary_complete;
+ coherence by COH_SP:2;
+ cluster FlatCoh X -> non empty subset-closed binary_complete;
+ coherence
+  proof
+      FlatCoh X = CohSp id X by Def2;
+   hence thesis;
+  end;
+end;
+
+definition let C be non empty subset-closed set;
+ cluster Sub_of_Fin C -> non empty subset-closed;
+ coherence
+  proof consider c being Element of C;
+      {} c= c by XBOOLE_1:2;
+    then {} in C by CLASSES1:def 1;
+   hence Sub_of_Fin C is non empty by Def3;
+   let a,b be set; assume a in Sub_of_Fin C;
+then A1:  a in C & a is finite by Def3;
+   assume b c= a; then b is finite & b in C by A1,CLASSES1:def 1,FINSET_1:13;
+   hence thesis by Def3;
+  end;
+end;
+
+theorem
+   Web {{}} = {}
+  proof Total {} c= [:{},{}:] & [:{},{}:] = {} by ZFMISC_1:113;
+    then union {{}} = {} & Total {} = {} by XBOOLE_1:3,ZFMISC_1:31;
+   hence thesis by COH_SP:11,ZFMISC_1:1;
+  end;
+
+scheme MinimalElement_wrt_Incl { a, A() -> set, P[set] }:
+ ex a being set st a in A() & P[a] &
+  for b being set st b in A() & P[b] & b c= a holds b = a
+ provided
+A1:   a() in A()
+ and
+A2:   P[a()]
+ and
+A3:   a() is finite
+  proof
+    defpred p[set] means $1 c= a() & P[$1];
+    consider X being set such that
+A4:  for x being set holds x in X iff x in A() & p[x] from Separation;
+   reconsider a = a() as finite set by A3;
+      bool a is finite & X c= bool a
+     proof thus bool a is finite by FINSET_1:24;
+      let x be set; assume x in X; then x c= a by A4;
+      hence thesis;
+     end;
+   then reconsider X as finite set by FINSET_1:13;
+  defpred P[set,set] means $1 c= $2;
+A5:  X <> {} by A1,A2,A4;
+A6: for x,y being set st P[x,y] & P[y,x] holds x = y by XBOOLE_0:def 10;
+A7: for x,y,z being set st P[x,y] & P[y,z] holds P[x,z] by XBOOLE_1:1;
+   consider x being set such that
+A8:  x in X & for y being set st y in X & y <> x holds not P[y,x]
+     from FinRegularity(A5,A6,A7);
+   take x; thus x in A() & P[x] by A4,A8;
+   let b be set; assume
+A9:  b in
+ A() & P[b] & b c= x; x c= a by A4,A8; then b c= a by A9,XBOOLE_1:1;
+    then b in X by A4,A9;
+   hence b = x by A8,A9;
+  end;
+
+definition let C be Coherence_Space;
+ cluster finite Element of C;
+  existence
+   proof reconsider E = {} as Element of C by COH_SP:1;
+    take E; thus thesis;
+   end;
+end;
+
+definition let X be set;
+ attr X is c=directed means
+    for Y being finite Subset of X ex a being set st union Y c= a & a in X;
+ attr X is c=filtered means
+    for Y being finite Subset of X
+   ex a being set st (for y being set st y in Y holds a c= y) & a in X;
+end;
+
+definition
+ cluster c=directed -> non empty set;
+  coherence
+   proof let X be set; consider Y being finite Subset of X; assume
+       for Y being finite Subset of X
+      ex a being set st union Y c= a & a in X;
+     then ex a being set st union Y c= a & a in X;
+    hence thesis;
+   end;
+ cluster c=filtered -> non empty set;
+  coherence
+   proof let X be set; consider Y being finite Subset of X; assume
+       for Y being finite Subset of X
+      ex a being set st (for y being set st y in Y holds a c= y) & a in X;
+     then ex a being set st (for y being set st y in Y holds a c= y) & a in X;
+    hence thesis;
+   end;
+end;
+
+theorem Th5:
+ for X being set st X is c=directed
+  for a,b being set st a in X & b in X ex c being set st a \/ b c= c & c in X
+  proof let X be set; assume
+A1:  for Y being finite Subset of X ex a being set st union Y c= a & a in X;
+   let a,b be set; assume a in X & b in X;
+    then {a,b} is finite Subset of X & union {a,b} = a \/ b by ZFMISC_1:38,93;
+   hence thesis by A1;
+  end;
+
+theorem Th6:
+ for X being non empty set st
+  for a,b being set st a in X & b in X ex c being set st a \/ b c= c & c in X
+ holds X is c=directed
+  proof let X be non empty set such that
+A1:  for a,b being set st a in X & b in X ex c being set st a \/ b c= c & c in
+ X;
+   let Y be finite Subset of X;
+   defpred P[set] means ex a being set st union $1 c= a & a in X;
+A2:  Y is finite;
+   consider a being Element of X; union {} c= a by XBOOLE_1:2,ZFMISC_1:2;
+then A3:  P[ {}];
+A4:  now let x,B be set; assume
+A5:    x in Y & B c= Y;
+     assume P[B];
+     then consider a being set such that
+A6:    union B c= a & a in X;
+     consider c being set such that
+A7:    a \/ x c= c & c in X by A1,A5,A6;
+     thus P[B \/ {x}]
+      proof take c;
+          union (B \/ {x}) = (union B) \/ union {x} by ZFMISC_1:96
+         .= union B \/ x by ZFMISC_1:31;
+        then union (B \/ {x}) c= a \/ x by A6,XBOOLE_1:9;
+       hence thesis by A7,XBOOLE_1:1;
+      end;
+    end;
+   thus P[Y] from Finite(A2,A3,A4);
+  end;
+
+theorem
+   for X being set st X is c=filtered
+  for a,b being set st a in X & b in X ex c being set st c c= a /\ b & c in X
+  proof let X be set; assume
+A1:  for Y being finite Subset of X ex a being set st
+     (for y being set st y in Y holds a c= y) & a in X;
+   let a,b be set; assume a in X & b in X;
+    then {a,b} c= X by ZFMISC_1:38;
+   then consider c being set such that
+A2:  (for y being set st y in {a,b} holds c c= y) & c in X by A1;
+   take c; a in {a,b} & b in {a,b} by TARSKI:def 2;
+    then c c= a & c c= b by A2;
+   hence thesis by A2,XBOOLE_1:19;
+  end;
+
+theorem Th8:
+ for X being non empty set st
+  for a,b being set st a in X & b in X ex c being set st c c= a /\ b & c in X
+ holds X is c=filtered
+  proof let X be non empty set such that
+A1:  for a,b being set st a in X & b in X ex c being set st c c= a /\ b & c in
+ X;
+   let Y be finite Subset of X;
+   defpred P[set] means
+    ex a being set st (for y being set st y in $1 holds a c= y) & a in X;
+A2:  Y is finite;
+   consider a being Element of X; for y being set st y in {} holds a c= y;
+then A3:  P[ {}];
+A4:  now let x,B be set; assume
+A5:    x in Y & B c= Y;
+      assume P[B];
+      then consider a being set such that
+A6:    (for y being set st y in B holds a c= y) & a in X;
+     consider c being set such that
+A7:    c c= a /\ x & c in X by A1,A5,A6;
+A8:    a /\ x c= a & a /\ x c= x by XBOOLE_1:17;
+     thus P[B \/ {x}]
+      proof take c;
+       hereby let y be set; assume y in B \/ {x};
+         then y in B or y in {x} by XBOOLE_0:def 2;
+         then a c= y & c c= a or y = x & c c= x
+          by A6,A7,A8,TARSKI:def 1,XBOOLE_1:1;
+        hence c c= y by XBOOLE_1:1;
+       end;
+       thus thesis by A7;
+      end;
+    end;
+   thus P[Y] from Finite(A2,A3,A4);
+  end;
+
+theorem Th9:
+ for x being set holds {x} is c=directed c=filtered
+  proof let x be set; set X = {x};
+   hereby let Y be finite Subset of X;
+    take x;
+       union Y c= union X by ZFMISC_1:95;
+    hence union Y c= x & x in X by TARSKI:def 1,ZFMISC_1:31;
+   end;
+   let Y be finite Subset of X;
+   take x;
+   thus for y be set st y in Y holds x c= y by TARSKI:def 1;
+   thus x in {x} by TARSKI:def 1;
+  end;
+
+Lm2:
+ now let x, y be set;
+  thus union {x,y,x \/ y} = union ({x,y} \/ {x \/ y}) by ENUMSET1:43
+           .= union {x,y} \/ union {x \/ y} by ZFMISC_1:96
+           .= x \/ y \/ union {x \/ y} by ZFMISC_1:93
+           .= x \/ y \/ (x \/ y) by ZFMISC_1:31
+           .= x \/ y;
+ end;
+
+theorem
+   for x,y being set holds {x,y,x \/ y} is c=directed
+  proof let x,y be set; set X = {x,y,x \/ y};
+   let A be finite Subset of X; take a = x \/ y;
+      union X = a by Lm2;
+   hence union A c= a by ZFMISC_1:95;
+   thus thesis by ENUMSET1:14;
+  end;
+
+theorem
+   for x,y being set holds {x,y,x /\ y} is c=filtered
+  proof let x,y be set;
+   let A be finite Subset of {x,y,x /\ y}; take a = x /\ y;
+   hereby let b be set; assume b in A;
+     then b = x or b = y or b = x /\ y by ENUMSET1:13;
+    hence a c= b by XBOOLE_1:17;
+   end;
+   thus thesis by ENUMSET1:14;
+  end;
+
+definition
+ cluster c=directed c=filtered finite set;
+  existence
+   proof consider x being set; take {x}; thus thesis by Th9;
+   end;
+end;
+
+definition let C be non empty set;
+ cluster c=directed c=filtered finite Subset of C;
+  existence
+   proof consider x being Element of C;
+       {x} is Subset of C & {x} is c=directed c=filtered finite by Th9,ZFMISC_1
+:37;
+    hence thesis;
+   end;
+end;
+
+theorem Th12:
+ for X being set holds Fin X is c=directed c=filtered
+  proof let X be set;
+      now let a,b be set; assume a in Fin X & b in Fin X;
+      then a c= X & a is finite & b c= X & b is finite by FINSUB_1:def 5;
+then A1:    a \/ b c= X & a \/ b is finite by FINSET_1:14,XBOOLE_1:8;
+     take c = a \/ b; thus a \/ b c= c;
+     thus c in Fin X by A1,FINSUB_1:def 5;
+    end;
+   hence Fin X is c=directed by Th6;
+      now let a,b be set; assume
+        a in Fin X & b in Fin X;
+     reconsider c = {} as set;
+     take c; thus c c= a /\ b by XBOOLE_1:2;
+     thus c in Fin X by FINSUB_1:18;
+    end;
+   hence Fin X is c=filtered by Th8;
+  end;
+
+definition let X be set;
+ cluster Fin X -> c=directed c=filtered;
+ coherence by Th12;
+end;
+
+Lm3:
+now
+ let C be subset-closed non empty set;
+ let a be Element of C;
+ thus Fin a c= C
+     proof let x be set; assume x in Fin a;
+       then x c= a by FINSUB_1:def 5;
+      hence thesis by CLASSES1:def 1;
+     end;
+end;
+
+definition
+ let C be subset-closed non empty set;
+ cluster preBoolean non empty Subset of C;
+ existence
+  proof consider a being Element of C;
+   reconsider b = Fin a as Subset of C by Lm3;
+   take b; thus thesis;
+  end;
+end;
+
+definition
+ let C be subset-closed non empty set;
+ let a be Element of C;
+ redefine func Fin a -> preBoolean non empty Subset of C;
+ coherence
+  proof
+      Fin a c= C
+     proof let x be set; assume x in Fin a;
+       then x c= a by FINSUB_1:def 5;
+      hence thesis by CLASSES1:def 1;
+     end;
+   hence thesis;
+  end;
+end;
+
+theorem Th13:
+ for X being non empty set, Y being set st
+  X is c=directed & Y c= union X & Y is finite
+   ex Z being set st Z in X & Y c= Z
+  proof let X be non empty set, Y be set; assume A1: X is c=directed;
+   consider x being Element of X;
+defpred P[Nat] means
+ for Y being set st Y c= union X & Y is finite & Card Y = $1
+    ex Z being set st Z in X & Y c= Z;
+A2: P[0] proof let Y be set; assume Y c= union X & Y is finite & Card Y = 0;
+      then Y = {} by CARD_2:59; then Y c= x by XBOOLE_1:2;
+     hence ex Z being set st Z in X & Y c= Z;
+    end;
+A3:  now let n be Nat; assume
+A4:   P[n];
+      thus P[n+1]
+      proof
+     let Y be set; assume
+A5:   Y c= union X & Y is finite & Card Y = n+1;
+     then reconsider Y' = Y as non empty set by CARD_1:47;
+     consider y being Element of Y';
+        {y} c= Y & card {y} = 1 & n+1-1 = n & Y\{y} c= Y
+       by CARD_1:79,XBOOLE_1:36,XCMPLX_1:26,ZFMISC_1:37;
+      then Card (Y\{y}) = n & Y\{y} c= union X & Y\{y} is finite
+       by A5,CARD_2:63,FINSET_1:16,XBOOLE_1:1;
+     then consider Z being set such that
+A6:   Z in X & Y\{y} c= Z by A4; y in Y;
+     then consider Z' being set such that
+A7:   y in Z' & Z' in X by A5,TARSKI:def 4;
+     consider V being set such that
+A8:   Z \/ Z' c= V & V in X by A1,A6,A7,Th5;
+     take V; thus V in X by A8;
+     thus Y c= V
+      proof let x be set; assume
+A9:     x in Y; x in {y} or not x in {y};
+        then x = y or x in Y\{y} by A9,TARSKI:def 1,XBOOLE_0:def 4;
+        then x in Z \/ Z' by A6,A7,XBOOLE_0:def 2;
+       hence thesis by A8;
+      end;
+      end;
+    end;
+A10: for n being Nat holds P[n] from Ind(A2,A3);
+   assume
+A11:  Y c= union X & Y is finite;
+   then reconsider Y' = Y as finite set;
+      Card Y = Card Y';
+   hence thesis by A10,A11;
+  end;
+
+definition let X be set;
+ redefine attr X is cap-closed;
+ synonym X is multiplicative;
+end;
+
+definition let X be set;
+ canceled;
+
+ attr X is d.union-closed means :Def7:
+  for A being Subset of X st A is c=directed holds union A in X;
+end;
+
+definition
+ cluster subset-closed -> multiplicative set;
+ coherence
+  proof let C be set such that
+A1:  C is subset-closed;
+   let x,y be set;
+      x /\ y c= x by XBOOLE_1:17;
+   hence thesis by A1,CLASSES1:def 1;
+  end;
+end;
+
+canceled;
+
+theorem Th15:
+ for C being Coherence_Space, A being c=directed Subset of C holds union A in C
+  proof let C be Coherence_Space, A be c=directed Subset of C;
+      now let a,b be set; assume a in A & b in A;
+     then consider c being set such that
+A1:    a \/ b c= c & c in A by Th5;
+     thus a \/ b in C by A1,CLASSES1:def 1;
+    end;
+   hence union A in C by Def1;
+  end;
+
+definition
+ cluster -> d.union-closed Coherence_Space;
+  coherence
+   proof let C be Coherence_Space;
+    let A be Subset of C;
+    thus thesis by Th15;
+   end;
+end;
+
+definition
+ cluster multiplicative d.union-closed Coherence_Space;
+  existence
+   proof consider C being Coherence_Space; take C; thus thesis;
+   end;
+end;
+
+definition
+ let C be d.union-closed non empty set, A be c=directed Subset of C;
+ redefine func union A -> Element of C;
+  coherence by Def7;
+end;
+
+definition
+ let X, Y be set;
+ pred X includes_lattice_of Y means
+    for a,b being set st a in Y & b in Y holds a /\ b in X & a \/ b in X;
+end;
+
+theorem
+   for X being non empty set st X includes_lattice_of X holds
+   X is c=directed c=filtered
+  proof let X be non empty set such that
+A1:  for a,b being set st a in X & b in X holds a /\ b in X & a \/ b in X;
+      now let a,b be set; assume a in X & b in X;
+      then a \/ b in X by A1;
+     hence ex c being set st a \/ b c= c & c in X;
+    end;
+   hence X is c=directed by Th6;
+      now let a,b be set; assume a in X & b in X;
+      then a /\ b in X by A1;
+     hence ex c being set st c c= a /\ b & c in X;
+    end;
+   hence X is c=filtered by Th8;
+  end;
+
+definition
+ let X, x, y be set;
+ pred X includes_lattice_of x, y means
+    X includes_lattice_of {x, y};
+end;
+
+theorem Th17:
+ for X,x,y being set holds X includes_lattice_of x, y iff
+  x in X & y in X & x /\ y in X & x \/ y in X
+  proof let X,x,y be set;
+   thus X includes_lattice_of x, y implies
+    x in X & y in X & x /\ y in X & x \/ y in X
+     proof assume
+A1:     for a,b being set st a in {x,y} & b in {x,y} holds a /\ b in X & a \/
+ b
+in X;
+         x in {x,y} & y in {x,y} & x \/ x = x & y \/ y = y by TARSKI:def 2;
+      hence thesis by A1;
+     end;
+   assume
+A2:  x in X & y in X & x /\ y in X & x \/ y in X;
+   let a,b be set; assume a in {x,y} & b in {x,y};
+    then (a = x or a = y) & (b = x or b = y) &
+    x \/ x = x & y \/ y = y & x /\ x = x & y /\ y = y by TARSKI:def 2;
+   hence thesis by A2;
+  end;
+
+
+begin :: Continuous, Stable, and Linear Functions
+
+
+definition let f be Function;
+ attr f is union-distributive means:
+Def10:
+  for A being Subset of dom f st union A in dom f holds
+   f.union A = union (f.:A);
+ attr f is d.union-distributive means:
+Def11:
+  for A being Subset of dom f st A is c=directed & union A in dom f holds
+   f.union A = union (f.:A);
+end;
+
+definition let f be Function;
+ attr f is c=-monotone means:
+Def12:
+  for a, b being set st a in dom f & b in dom f & a c= b holds f.a c= f.b;
+ attr f is cap-distributive means:
+Def13:
+  for a,b being set st dom f includes_lattice_of a, b holds
+   f.(a/\b) = f.a /\ f.b;
+end;
+
+definition
+ cluster d.union-distributive -> c=-monotone Function;
+  coherence
+   proof let f be Function; assume
+A1:   for A being Subset of dom f st A is c=directed & union A in dom f holds
+      f.union A = union (f.:A);
+    let a, b be set; assume
+A2:   a in dom f & b in dom f & a c= b;
+    then reconsider A = {a,b} as Subset of dom f by ZFMISC_1:38;
+A3:   union A = a \/ b by ZFMISC_1:93 .= b by A2,XBOOLE_1:12;
+       A is c=directed
+      proof let Y be finite Subset of A;
+       take b;
+          union Y c= union A by ZFMISC_1:95;
+        then union Y c= a \/ b by ZFMISC_1:93;
+       hence thesis by A2,TARSKI:def 2,XBOOLE_1:12;
+      end;
+then A4:   union (f.:A) = f.b by A1,A2,A3;
+       a in A by TARSKI:def 2;
+     then f.a in f.:A by FUNCT_1:def 12;
+    hence thesis by A4,ZFMISC_1:92;
+   end;
+ cluster union-distributive -> d.union-distributive Function;
+  coherence
+   proof let f be Function; assume
+A5:   for A being Subset of dom f st union A in dom f holds
+      f.union A = union (f.:A);
+    let A be Subset of dom f;
+    thus thesis by A5;
+   end;
+end;
+
+theorem
+   for f being Function st f is union-distributive
+ for x,y being set st x in dom f & y in dom f & x \/ y in dom f
+  holds f.(x \/ y) = (f.x) \/ (f.y)
+  proof let f be Function such that
+A1:  f is union-distributive;
+   let x,y be set; set X = {x,y};
+   assume
+A2:  x in dom f & y in dom f & x \/ y in dom f;
+    then X c= dom f & union X = x \/ y by ZFMISC_1:38,93;
+   hence f.(x \/ y) = union (f.:X) by A1,A2,Def10
+       .= union {f.x,f.y} by A2,FUNCT_1:118
+       .= (f.x) \/ (f.y) by ZFMISC_1:93;
+  end;
+
+theorem Th19:
+ for f being Function st f is union-distributive holds f.{} = {}
+  proof let f be Function such that
+A1:  for A being Subset of dom f st union A in dom f holds
+     f.union A = union (f.:A);
+      (not {} in dom f implies f.{} = {}) & {} c= dom f &
+    ({} in dom f or not {} in dom f) & f.:{} = {}
+     by FUNCT_1:def 4,RELAT_1:149,XBOOLE_1:2;
+   hence f.{} = {} by A1,ZFMISC_1:2;
+  end;
+
+definition let C1,C2 be Coherence_Space;
+ cluster union-distributive cap-distributive Function of C1, C2;
+ existence
+  proof reconsider a = {} as Element of C2 by COH_SP:1;
+   take f = C1 --> a;
+A1:  dom f = C1 by FUNCOP_1:19;
+   thus f is union-distributive
+    proof let A be Subset of dom f; assume union A in dom f;
+then A2:    f.union A = {} by A1,FUNCOP_1:13;
+        f.:A c= {{}}
+       proof let x be set; assume x in f.:A;
+         then ex y being set st y in dom f & y in A & x = f.y by FUNCT_1:def 12
+;
+         then x = {} by A1,FUNCOP_1:13;
+        hence thesis by TARSKI:def 1;
+       end;
+      then union (f.:A) c= union {{}} & union {{}} = {} by ZFMISC_1:31,95;
+     hence f.union A = union (f.:A) by A2,XBOOLE_1:3;
+    end;
+   let a,b be set; assume dom f includes_lattice_of a, b;
+    then a in dom f & b in dom f & a /\ b in dom f by Th17;
+    then f.a = {} & f.b = {} & f.(a/\b) = {} by A1,FUNCOP_1:13;
+   hence f.(a/\b) = f.a /\ f.b;
+  end;
+end;
+
+definition let C be Coherence_Space;
+ cluster union-distributive cap-distributive ManySortedSet of C;
+  existence
+   proof consider f being union-distributive cap-distributive Function of C, C;
+       dom f = C by FUNCT_2:67;
+     then reconsider f as ManySortedSet of C by PBOOLE:def 3;
+    take f; thus thesis;
+   end;
+end;
+
+::definition
+:: cluster union-distributive cap-distributive Function;
+::end;
+
+definition let f be Function;
+ attr f is U-continuous means:
+Def14:
+  dom f is d.union-closed & f is d.union-distributive;
+end;
+
+definition let f be Function;
+ attr f is U-stable means:
+Def15:
+  dom f is multiplicative & f is U-continuous cap-distributive;
+end;
+
+definition let f be Function;
+ attr f is U-linear means:
+Def16:
+   f is U-stable union-distributive;
+end;
+
+definition
+ cluster U-continuous -> d.union-distributive Function;
+  coherence by Def14;
+ cluster U-stable -> cap-distributive U-continuous Function;
+  coherence by Def15;
+ cluster U-linear -> union-distributive U-stable Function;
+  coherence by Def16;
+end;
+
+definition let X be d.union-closed set;
+ cluster d.union-distributive -> U-continuous ManySortedSet of X;
+ coherence
+  proof let f be ManySortedSet of X; dom f = X by PBOOLE:def 3;
+   hence thesis by Def14;
+  end;
+end;
+
+definition let X be multiplicative set;
+ cluster U-continuous cap-distributive -> U-stable ManySortedSet of X;
+ coherence
+  proof let f be ManySortedSet of X; dom f = X by PBOOLE:def 3;
+   hence thesis by Def15;
+  end;
+end;
+
+definition
+ cluster U-stable union-distributive -> U-linear Function;
+ coherence by Def16;
+end;
+
+
+definition
+ cluster U-linear Function;
+  existence
+   proof consider C being Coherence_Space;
+    consider f being union-distributive cap-distributive ManySortedSet of C;
+    take f; thus thesis;
+   end;
+ let C be Coherence_Space;
+ cluster U-linear ManySortedSet of C;
+  existence
+   proof
+    consider f being union-distributive cap-distributive ManySortedSet of C;
+    take f; thus thesis;
+   end;
+ let B be Coherence_Space;
+ cluster U-linear Function of B,C;
+  existence
+   proof
+     consider f being union-distributive cap-distributive Function of B,C;
+    take f;
+       dom f = B by FUNCT_2:def 1;
+     then reconsider f as
+      union-distributive cap-distributive ManySortedSet of B by PBOOLE:def 3;
+       f is U-linear;
+    hence thesis;
+   end;
+end;
+
+definition let f be U-continuous Function;
+ cluster dom f -> d.union-closed;
+ coherence by Def14;
+end;
+
+definition let f be U-stable Function;
+ cluster dom f -> multiplicative;
+ coherence by Def15;
+end;
+
+theorem Th20:
+ for X being set holds union Fin X = X
+  proof let X be set;
+      Fin X c= bool X by FINSUB_1:26;
+    then union Fin X c= union bool X by ZFMISC_1:95;
+   hence union Fin X c= X by ZFMISC_1:99;
+   let x be set; assume x in X;
+    then {x} c= X by ZFMISC_1:37;
+    then {x} in Fin X & x in {x} by FINSUB_1:def 5,TARSKI:def 1;
+   hence thesis by TARSKI:def 4;
+  end;
+
+theorem Th21:
+ for f being U-continuous Function st dom f is subset-closed
+  for a being set st a in dom f holds f.a = union (f.:Fin a)
+  proof let f be U-continuous Function such that
+A1:  dom f is subset-closed;
+   let a be set; assume
+A2:  a in dom f;
+   then reconsider C = dom f as d.union-closed subset-closed non empty set by
+A1;
+   reconsider a as Element of C by A2;
+      f.a = f.union Fin a by Th20;
+   hence thesis by Def11;
+  end;
+
+theorem Th22:
+ for f being Function st dom f is subset-closed holds
+  f is U-continuous iff dom f is d.union-closed & f is c=-monotone &
+   for a, y being set st a in dom f & y in f.a
+    ex b being set st b is finite & b c= a & y in f.b
+  proof let f be Function such that
+A1: dom f is subset-closed;
+   hereby assume A2: f is U-continuous;
+then A3:   dom f is d.union-closed & f is d.union-distributive Function by
+Def14;
+    hence dom f is d.union-closed & f is c=-monotone;
+    reconsider C = dom f as d.union-closed subset-closed set by A1,A2,Def14;
+    let a, y be set; assume
+A4:   a in dom f & y in f.a;
+    reconsider A = {b where b is Subset of a: b is finite} as set;
+A5:   A is c=directed
+      proof let Y be finite Subset of A;
+       take union Y;
+          now let b be set; assume b in Y;
+          then b in A;
+          then ex c being Subset of a st b = c & c is finite;
+         hence b is finite;
+        end;
+then A6:     union Y is finite by FINSET_1:25;
+          now let x be set; assume x in Y;
+          then x in A;
+          then ex c being Subset of a st x = c & c is finite;
+         hence x c= a;
+        end;
+        then union Y c= a by ZFMISC_1:94;
+       hence union Y c= union Y & union Y in A by A6;
+      end;
+       A c= C
+      proof let x be set; assume x in A;
+        then ex b being Subset of a st x = b & b is finite;
+       hence thesis by A4,CLASSES1:def 1;
+      end;
+     then A is Subset of C & union A in C by A5,Def7;
+then A7:   f.union A = union (f.:A) by A3,A5,Def11;
+       union A = a
+      proof
+       thus union A c= a
+        proof let x be set; assume x in union A;
+         then consider b being set such that
+A8:       x in b & b in A by TARSKI:def 4;
+            ex c being Subset of a st b = c & c is finite by A8;
+         hence thesis by A8;
+        end;
+       let x be set; assume x in a;
+        then {x} c= a by ZFMISC_1:37;
+        then x in {x} & {x} in A by TARSKI:def 1;
+       hence thesis by TARSKI:def 4;
+      end;
+    then consider B being set such that
+A9:   y in B & B in f.:A by A4,A7,TARSKI:def 4;
+    consider b being set such that
+A10:   b in dom f & b in A & B = f.b by A9,FUNCT_1:def 12;
+    take b; ex c being Subset of a st b = c & c is finite by A10;
+    hence b is finite & b c= a & y in f.b by A9,A10;
+   end;
+   assume dom f is d.union-closed;
+   then reconsider C = dom f as d.union-closed set;
+   assume that
+A11:  for a,b being set st a in dom f & b in
+ dom f & a c= b holds f.a c= f.b and
+A12:  for a, y being set st a in dom f & y in f.a
+    ex b being set st b is finite & b c= a & y in f.b;
+      C is d.union-closed;
+   hence dom f is d.union-closed;
+   thus f is d.union-distributive
+     proof let A be Subset of dom f; assume
+A13:    A is c=directed & union A in dom f;
+      reconsider A' = A as Subset of C;
+      thus f.union A c= union (f.:A)
+       proof let x be set; assume x in f.union A;
+        then consider b being set such that
+A14:      b is finite & b c= union A' & x in f.b by A12,A13;
+           A' is c=directed set by A13;
+        then consider c being set such that
+A15:      c in A & b c= c by A14,Th13;
+           b in C & c in C by A1,A15,CLASSES1:def 1;
+         then f.b c= f.c by A11,A15;
+         then x in f.c & f.c in f.:A by A14,A15,FUNCT_1:def 12;
+        hence thesis by TARSKI:def 4;
+       end;
+      let x be set; assume x in union (f.:A);
+      then consider B be set such that
+A16:     x in B & B in f.:A by TARSKI:def 4;
+      consider b being set such that
+A17:     b in dom f & b in A & B = f.b by A16,FUNCT_1:def 12;
+         b c= union A' by A17,ZFMISC_1:92;
+       then B c= f.union A' by A11,A13,A17;
+      hence thesis by A16;
+     end;
+  end;
+
+theorem Th23:
+ for f being Function st dom f is subset-closed d.union-closed holds
+  f is U-stable iff f is c=-monotone &
+   for a, y being set st a in dom f & y in f.a
+    ex b being set st b is finite & b c= a & y in f.b &
+     for c being set st c c= a & y in f.c holds b c= c
+  proof let f be Function such that
+A1: dom f is subset-closed d.union-closed;
+   hereby assume f is U-stable; then reconsider f' = f as U-stable Function;
+A2:   dom f' is multiplicative & f' is U-continuous cap-distributive;
+    set C = dom f';
+    thus f is c=-monotone by A2;
+    let a, y be set; assume
+A3:   a in dom f & y in f.a;
+    then consider b being set such that
+A4:   b is finite & b c= a & y in f'.b by A1,Th22;
+       b c= b;
+     then b in {c where c is Subset of b: y in f.c} by A4;
+    then reconsider A = {c where c is Subset of b: y in f.c} as non empty set;
+       bool b is finite & A c= bool b
+      proof thus bool b is finite by A4,FINSET_1:24;
+       let x be set; assume x in A;
+        then ex c being Subset of b st x = c & y in f.c;
+       hence thesis;
+      end;
+    then reconsider A as finite non empty set by FINSET_1:13;
+  defpred P[set,set] means $1 c= $2;
+A5:   A <> {};
+A6: for x,y being set st P[x,y] & P[y,x] holds x = y by XBOOLE_0:def 10;
+A7: for x,y,z being set st P[x,y] & P[y,z] holds P[x,z] by XBOOLE_1:1;
+    consider c being set such that
+A8:   c in A & for y being set st y in A & y <> c holds not P[y,c]
+      from FinRegularity(A5,A6,A7);
+    take c;
+       ex d being Subset of b st c = d & y in f.d by A8;
+    then reconsider c' = c as Subset of b;
+     A9: ex d being Subset of b st c = d & y in f.d by A8;
+    reconsider c' as finite Subset of b by A4,FINSET_1:13;
+    b in C & c' = c by A1,A3,A4,CLASSES1:def 1;
+    hence
+A10:   c is finite & c c= a & y in f.c by A4,A9,XBOOLE_1:1;
+    let d be set; assume
+A11:   d c= a & y in f.d;
+then A12:   c /\ d c= c'& c /\ d c= d & c \/ d c= a & c' in C
+      by A1,A3,A10,CLASSES1:def 1,XBOOLE_1:8,17;
+     then d in C & c /\ d in dom f & c \/ d in dom f
+      by A1,A3,A11,CLASSES1:def 1;
+     then dom f includes_lattice_of c, d by A12,Th17;
+     then f.(c /\ d) = f.c /\ f.d & c /\ d c= b by A12,Def13,XBOOLE_1:1;
+     then y in f.(c /\ d) & c /\ d is finite Subset of b
+      by A4,A9,A11,FINSET_1:13,XBOOLE_0:def 3;
+     then c /\ d in A;
+    hence c c= d by A8,A12;
+   end;
+   assume that
+A13:  f is c=-monotone and
+A14:  for a, y being set st a in dom f & y in f.a
+     ex b being set st b is finite & b c= a & y in f.b &
+      for c being set st c c= a & y in f.c holds b c= c;
+   reconsider C = dom f as subset-closed d.union-closed set by A1;
+      C is subset-closed set;
+   hence dom f is multiplicative;
+      now let a, y be set;
+     assume a in dom f & y in f.a;
+      then ex b being set st b is finite & b c= a & y in f.b &
+       for c being set st c c= a & y in f.c holds b c= c by A14;
+     hence ex b being set st b is finite & b c= a & y in f.b;
+    end;
+   hence f is U-continuous by A1,A13,Th22;
+   thus f is cap-distributive
+     proof let a,b be set; assume dom f includes_lattice_of a, b;
+then A15:     a in dom f & b in dom f & a/\b in dom f & a \/ b in dom f by Th17
+;
+         a /\ b c= a & a /\ b c= b by XBOOLE_1:17;
+       then f.(a /\ b) c= f.a & f.(a /\ b) c= f.b by A13,A15,Def12;
+      hence f.(a /\ b) c= f.a /\ f.b by XBOOLE_1:19;
+      let x be set; assume x in f.a /\ f.b;
+then A16:     x in f.a & x in f.b by XBOOLE_0:def 3;
+A17:     a c= a \/ b & b c= a \/ b by XBOOLE_1:7;
+       then f.a c= f.(a \/ b) by A13,A15,Def12;
+      then consider c being set such that
+A18:     c is finite & c c= a \/ b & x in f.c &
+        for d being set st d c= a \/ b & x in f.d holds c c= d by A14,A15,A16;
+         c c= a & c c= b & C = dom f by A16,A17,A18;
+       then c c= a/\b & c in dom f by A15,CLASSES1:def 1,XBOOLE_1:19;
+       then f.c c= f.(a/\b) by A13,A15,Def12;
+      hence x in f.(a /\ b) by A18;
+     end;
+  end;
+
+theorem Th24:
+ for f being Function st dom f is subset-closed d.union-closed holds
+  f is U-linear iff f is c=-monotone &
+   for a, y being set st a in dom f & y in f.a
+    ex x being set st x in a & y in f.{x} &
+     for b being set st b c= a & y in f.b holds x in b
+ proof let f be Function; assume
+A1: dom f is subset-closed d.union-closed;
+  then reconsider C = dom f as subset-closed d.union-closed set;
+  hereby assume f is U-linear;
+then A2:  f is U-linear Function;
+   hence f is c=-monotone;
+   let a, y be set; assume
+A3:  a in dom f & y in f.a;
+   then consider b being set such that
+A4:  b is finite & b c= a & y in f.b &
+     for c being set st c c= a & y in f.c holds b c= c by A1,A2,Th23;
+A5:  dom f = C;
+      {} c= dom f & {} c= a by XBOOLE_1:2;
+    then {} in dom f & {} is Subset of dom f by A3,A5,CLASSES1:def 1;
+    then f.{} = union (f.:{}) by A2,Def10,ZFMISC_1:2
+       .= {} by RELAT_1:149,ZFMISC_1:2;
+   then reconsider b as non empty set by A4;
+   reconsider A = {{x} where x is Element of b: not contradiction} as set;
+      now let X be set; assume X in A;
+      then ex x being Element of b st X = {x};
+     hence X c= b by ZFMISC_1:37;
+    end;
+then A6:  union A c= b & b in dom f by A3,A4,A5,CLASSES1:def 1,ZFMISC_1:94;
+then A7:  union A in dom f by A5,CLASSES1:def 1;
+      A c= dom f
+     proof let X be set; assume X in A;
+       then ex x being Element of b st X = {x};
+       then X c= b by ZFMISC_1:37;
+      hence thesis by A5,A6,CLASSES1:def 1;
+     end;
+   then reconsider A as Subset of dom f;
+      b c= union A
+     proof let x be set; assume x in b;
+       then {x} in A;
+       then {x} c= union A by ZFMISC_1:92;
+      hence thesis by ZFMISC_1:37;
+     end;
+    then f.b c= f.union A by A2,A6,A7,Def12;
+    then y in f.union A & f.union A = union (f.:A) by A2,A4,A7,Def10;
+   then consider Y being set such that
+A8:  y in Y & Y in f.:A by TARSKI:def 4;
+   consider X being set such that
+A9:  X in dom f & X in A & Y = f.X by A8,FUNCT_1:def 12;
+   consider x being Element of b such that
+A10:  X = {x} by A9;
+   reconsider x as set;
+   take x; x in b; hence x in a & y in f.{x} by A4,A8,A9,A10;
+   let c be set; assume c c= a & y in f.c;
+    then x in b & b c= c by A4;
+   hence x in c;
+  end;
+  assume that
+A11: f is c=-monotone and
+A12: for a, y being set st a in dom f & y in f.a
+    ex x being set st x in a & y in f.{x} &
+     for b being set st b c= a & y in f.b holds x in b;
+     now let a, y be set; assume
+       a in dom f & y in f.a;
+    then consider x being set such that
+A13:  x in a & y in f.{x} &
+      for b being set st b c= a & y in f.b holds x in b by A12;
+    reconsider b = {x} as set;
+    take b;
+    thus b is finite & b c= a & y in f.b by A13,ZFMISC_1:37;
+    let c be set; assume c c= a & y in f.c;
+     then x in c by A13;
+    hence b c= c by ZFMISC_1:37;
+   end;
+  hence f is U-stable by A1,A11,Th23;
+  thus f is union-distributive
+    proof let A be Subset of dom f such that
+A14:    union A in dom f;
+     thus f.union A c= union (f.:A)
+      proof let y be set; assume y in f.union A;
+       then consider x being set such that
+A15:     x in union A & y in f.{x} &
+         for b being set st b c= union A & y in f.b holds x in b by A12,A14;
+       consider a being set such that
+A16:     x in a & a in A by A15,TARSKI:def 4;
+A17:     {x} c= a & a in C by A16,ZFMISC_1:37;
+        then {x} in C by CLASSES1:def 1;
+        then f.{x} c= f.a by A11,A17,Def12;
+        then y in f.a & f.a in f.:A by A15,A16,FUNCT_1:def 12;
+       hence y in union (f.:A) by TARSKI:def 4;
+      end;
+        now let X be set; assume X in f.:A;
+       then consider a being set such that
+A18:      a in dom f & a in A & X = f.a by FUNCT_1:def 12;
+          a c= union A by A18,ZFMISC_1:92;
+       hence X c= f.union A by A11,A14,A18,Def12;
+      end;
+     hence thesis by ZFMISC_1:94;
+    end;
+ end;
+
+
+begin :: Graph of Continuous Function
+
+
+definition let f be Function;
+ func graph f -> set means:
+Def17:
+  for x being set holds x in it iff
+   ex y being finite set, z being set st x = [y,z] & y in dom f & z in f.y;
+  existence
+   proof
+     defpred P[set] means
+      ex y being finite set, z being set st $1 = [y,z] & y in dom f & z in f.y;
+     consider X being set such that
+A1:   for x being set holds x in X iff x in [:dom f, union rng f:] & P[x]
+       from Separation;
+    take X; let x be set;
+       now given y being finite set, z being set such that
+A2:     x = [y,z] & y in dom f & z in f.y;
+         f.y in rng f by A2,FUNCT_1:def 5;
+       then z in union rng f by A2,TARSKI:def 4;
+      hence x in [:dom f, union rng f:] by A2,ZFMISC_1:106;
+     end;
+    hence thesis by A1;
+   end;
+  uniqueness
+   proof let X1, X2 be set; assume
+A3:   not thesis;
+    then consider x being set such that
+A4:   not (x in X1 iff x in X2) by TARSKI:2;
+       x in X2 iff not ex y being finite set, z being set st
+        x = [y,z] & y in dom f & z in f.y by A3,A4;
+    hence thesis by A3;
+   end;
+end;
+
+definition
+ let C1,C2 be non empty set;
+ let f be Function of C1,C2;
+ redefine func graph f -> Subset of [:C1, union C2:];
+ coherence
+  proof
+      graph f c= [:C1, union C2:]
+     proof let x be set; assume x in graph f;
+      then consider y being finite set, z being set such that
+A1:     x = [y,z] & y in dom f & z in f.y by Def17;
+A2:     dom f = C1 & rng f c= C2 by FUNCT_2:def 1,RELSET_1:12;
+         f.y in rng f by A1,FUNCT_1:def 5;
+       then z in union C2 by A1,A2,TARSKI:def 4;
+      hence thesis by A1,A2,ZFMISC_1:106;
+     end;
+   hence thesis;
+  end;
+end;
+
+definition let f be Function;
+ cluster graph f -> Relation-like;
+ coherence
+  proof let x be set; assume x in graph f;
+    then ex y being finite set, z being set st x = [y,z] & y in dom f & z in f
+.y
+     by Def17;
+   hence thesis;
+  end;
+end;
+
+theorem Th25:
+ for f being Function, x,y being set holds
+  [x,y] in graph f iff x is finite & x in dom f & y in f.x
+  proof let f be Function, x,y be set;
+      now given y' being finite set, z being set such that
+A1:    [x,y] = [y',z] & y' in dom f & z in f.y';
+        x = y' & y = z by A1,ZFMISC_1:33;
+     hence x is finite & x in dom f & y in f.x by A1;
+    end;
+   hence thesis by Def17;
+  end;
+
+theorem Th26:
+ for f being c=-monotone Function
+ for a,b being set st b in dom f & a c= b & b is finite
+ for y being set st [a,y] in graph f holds [b,y] in graph f
+  proof let f be c=-monotone Function;
+   let a,b be set such that
+A1:  b in dom f & a c= b & b is finite;
+   let y be set; assume
+A2:  [a,y] in graph f;
+    then a in dom f by Th25;
+    then y in f.a & f.a c= f.b by A1,A2,Def12,Th25;
+   hence [b,y] in graph f by A1,Th25;
+  end;
+
+theorem Th27:
+ for C1, C2 being Coherence_Space
+ for f being Function of C1,C2
+ for a being Element of C1 for y1,y2 being set
+  st [a,y1] in graph f & [a,y2] in graph f holds {y1,y2} in C2
+  proof let C1, C2 be Coherence_Space;
+   let f be Function of C1,C2;
+   let a be Element of C1, y1,y2 be set;
+   assume [a,y1] in graph f & [a,y2] in graph f;
+    then y1 in f.a & y2 in f.a by Th25;
+    then {y1,y2} c= f.a by ZFMISC_1:38;
+   hence {y1,y2} in C2 by CLASSES1:def 1;
+  end;
+
+theorem
+   for C1, C2 being Coherence_Space
+ for f being c=-monotone Function of C1,C2
+ for a,b being Element of C1 st a \/ b in C1
+ for y1,y2 being set st [a,y1] in graph f & [b,y2] in graph f holds {y1,y2} in
+ C2
+  proof let C1, C2 be Coherence_Space;
+   let f be c=-monotone Function of C1,C2;
+   let a,b be Element of C1 such that
+A1:  a \/ b in C1;
+   let y1,y2 be set; assume
+A2:  [a,y1] in graph f & [b,y2] in graph f;
+    then a is finite & b is finite by Th25;
+   then reconsider c = a \/ b as finite Element of C1 by A1,FINSET_1:14;
+      a c= c & b c= c & dom f = C1 by FUNCT_2:def 1,XBOOLE_1:7;
+    then [c,y1] in graph f & [c,y2] in graph f by A2,Th26;
+   hence {y1,y2} in C2 by Th27;
+  end;
+
+theorem Th29:
+ for C1, C2 being Coherence_Space
+ for f,g being U-continuous Function of C1,C2
+  st graph f = graph g holds f = g
+  proof let C1, C2 be Coherence_Space;
+   let f,g be U-continuous Function of C1,C2; assume
+A1:  graph f = graph g;
+A2:  dom f = C1 & dom g = C1 by FUNCT_2:def 1;
+A3:  now let x be finite Element of C1;
+     let f,g be U-continuous Function of C1,C2; assume
+A4:    graph f = graph g;
+A5:    dom f = C1 by FUNCT_2:def 1;
+     thus f.x c= g.x
+      proof let z be set; assume z in f.x;
+        then [x,z] in graph f by A5,Th25;
+       hence z in g.x by A4,Th25;
+      end;
+    end;
+A6:  now let a be Element of C1;
+     let f,g be U-continuous Function of C1,C2; assume
+A7:    graph f = graph g;
+A8:    dom f = C1 & dom g = C1 by FUNCT_2:def 1;
+     thus f.:Fin a c= g.:Fin a
+      proof let y be set; assume y in f.:Fin a;
+       then consider x being set such that
+A9:      x in dom f & x in Fin a & y = f.x by FUNCT_1:def 12;
+          x is finite by A9,FINSUB_1:def 5;
+        then f.x c= g.x & g.x c= f.x by A3,A7,A9;
+        then f.x = g.x by XBOOLE_0:def 10;
+       hence thesis by A8,A9,FUNCT_1:def 12;
+      end;
+    end;
+      now let a be Element of C1;
+        f.:Fin a c= g.:Fin a & g.:Fin a c= f.:Fin a by A1,A6;
+then A10:    f.:Fin a = g.:Fin a by XBOOLE_0:def 10;
+     thus f.a = union (f.:Fin a) by A2,Th21 .= g.a by A2,A10,Th21;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+
+Lm4:
+ for C1, C2 being Coherence_Space
+ for X being Subset of [:C1, union C2:] st
+  (for x being set st x in X holds x`1 is finite) &
+  (for a,b being finite Element of C1 st a c= b
+    for y being set st [a,y] in X holds [b,y] in X) &
+  (for a being finite Element of C1 for y1,y2 being set
+    st [a,y1] in X & [a,y2] in X holds {y1,y2} in C2)
+ ex f being U-continuous Function of C1,C2 st X = graph f &
+  for a being Element of C1 holds f.a = X.:Fin a
+  proof let C1, C2 be Coherence_Space;
+   let X be Subset of [:C1, union C2:] such that
+A1:  for x being set st x in X holds x`1 is finite
+   and
+A2:  for a,b being finite Element of C1 st a c= b
+     for y being set st [a,y] in X holds [b,y] in X
+   and
+A3:  for a being finite Element of C1 for y1,y2 being set
+     st [a,y1] in X & [a,y2] in X holds {y1,y2} in C2;
+   deffunc f(set) = X.:Fin $1;
+   consider f being Function such that
+A4:  dom f = C1 & for a being set st a in C1 holds f.a = f(a) from Lambda;
+A5: rng f c= C2
+     proof let x be set; assume x in rng f;
+      then consider a being set such that
+A6:     a in dom f & x = f.a by FUNCT_1:def 5;
+      reconsider a as Element of C1 by A4,A6;
+A7:     x = X.:Fin a by A4,A6;
+         now let z,y be set; assume z in x;
+        then consider z1 being set such that
+A8:      [z1,z] in X & z1 in Fin a by A7,RELAT_1:def 13;
+        assume y in x;
+        then consider y1 being set such that
+A9:      [y1,y] in X & y1 in Fin a by A7,RELAT_1:def 13;
+        reconsider z1, y1 as finite Element of C1 by A8,A9,FINSUB_1:def 5;
+           z1 \/ y1 in Fin a by A8,A9,FINSUB_1:10;
+        then reconsider b = z1 \/ y1 as finite Element of C1;
+           z1 c= b & y1 c= b by XBOOLE_1:7;
+         then [b,z] in X & [b,y] in X by A2,A8,A9;
+        hence {z,y} in C2 by A3;
+       end;
+      hence x in C2 by COH_SP:6;
+     end;
+A10:  f is c=-monotone
+     proof let a,b be set; assume
+A11:    a in dom f & b in dom f & a c= b;
+      then reconsider a, b as Element of C1 by A4;
+         Fin a c= Fin b by A11,FINSUB_1:23;
+       then X.:Fin a c= X.:Fin b & f.a = X.:Fin a by A4,RELAT_1:156;
+      hence thesis by A4;
+     end;
+      now let a, y be set; assume
+A12:   a in dom f & y in f.a;
+      then y in X.:Fin a by A4;
+     then consider x being set such that
+A13:   [x,y] in X & x in Fin a by RELAT_1:def 13;
+     take x; x c= a by A13,FINSUB_1:def 5;
+      then x in C1 & x is finite by A4,A12,A13,CLASSES1:def 1,FINSUB_1:def 5;
+      then f.x = X.:Fin x & x in Fin x by A4,FINSUB_1:def 5;
+     hence x is finite & x c= a & y in f.x by A13,FINSUB_1:def 5,RELAT_1:def 13
+;
+    end;
+   then reconsider f as U-continuous Function of C1, C2 by A4,A5,A10,Th22,
+FUNCT_2:def 1,RELSET_1:11;
+   take f;
+   thus X = graph f
+    proof let a,b be set;
+     hereby assume
+A14:     [a,b] in X; then [a,b] in [:C1, union C2:] & [a,b]`1 = a
+        by MCART_1:7;
+      then reconsider a' = a as finite Element of C1 by A1,A14,ZFMISC_1:106;
+         a' in Fin a by FINSUB_1:def 5;
+       then b in X.:Fin a & f.a' = X.:Fin a by A4,A14,RELAT_1:def 13;
+      hence [a,b] in graph f by A4,Th25;
+     end;
+     assume
+A15:    [a,b] in graph f;
+     then reconsider a as finite Element of C1 by A4,Th25;
+        b in f.a & f.a = X.:Fin a by A4,A15,Th25;
+     then consider x being set such that
+A16:    [x,b] in X & x in Fin a by RELAT_1:def 13;
+        x c= a & x is finite Element of C1 by A16,FINSUB_1:def 5;
+     hence thesis by A2,A16;
+    end;
+   thus thesis by A4;
+  end;
+
+theorem
+   for C1, C2 being Coherence_Space
+ for X being Subset of [:C1, union C2:] st
+  (for x being set st x in X holds x`1 is finite) &
+  (for a,b being finite Element of C1 st a c= b
+    for y being set st [a,y] in X holds [b,y] in X) &
+  (for a being finite Element of C1 for y1,y2 being set
+    st [a,y1] in X & [a,y2] in X holds {y1,y2} in C2)
+ ex f being U-continuous Function of C1,C2 st X = graph f
+  proof let C1, C2 be Coherence_Space;
+   let X be Subset of [:C1, union C2:]; assume
+A1:  not thesis;
+    then ex f being U-continuous Function of C1,C2 st X = graph f &
+     for a being Element of C1 holds f.a = X.:Fin a by Lm4;
+   hence thesis by A1;
+  end;
+
+theorem
+   for C1, C2 being Coherence_Space
+ for f being U-continuous Function of C1,C2
+ for a being Element of C1 holds f.a = (graph f).:Fin a
+  proof let C1, C2 be Coherence_Space;
+   let f be U-continuous Function of C1,C2;
+   let a be Element of C1; set X = graph f;
+A1:  dom f = C1 by FUNCT_2:def 1;
+A2:  now let x be set; assume x in X;
+      then ex y being finite set, z being set st x = [y,z] & y in dom f & z in
+f.y
+       by Def17;
+     hence x`1 is finite by MCART_1:7;
+    end;
+A3:  for a,b being finite Element of C1 st a c= b
+     for y being set st [a,y] in X holds [b,y] in X by A1,Th26;
+    for a being finite Element of C1 for y1,y2 being set
+     st [a,y1] in X & [a,y2] in X holds {y1,y2} in C2 by Th27;
+   then consider g being U-continuous Function of C1,C2 such that
+A4:  X = graph g & for a being Element of C1 holds g.a = X.:Fin a by A2,A3,Lm4;
+      g.a = X.:Fin a by A4;
+   hence f.a = (graph f).:Fin a by A4,Th29;
+  end;
+
+
+begin :: Trace of Stable Function
+
+
+definition let f be Function;
+ func Trace f -> set means:
+Def18:
+  for x being set holds x in it iff
+   ex a, y being set st x = [a,y] & a in dom f & y in f.a &
+    for b being set st b in dom f & b c= a & y in f.b holds a = b;
+ existence
+  proof
+    defpred P[set] means
+     ex a, y being set st $1 = [a,y] & a in dom f & y in f.a &
+      for b being set st b in dom f & b c= a & y in f.b holds a = b;
+    consider T being set such that
+A1:  for x being set holds x in T iff x in [:dom f, Union f:] & P[x]
+     from Separation;
+   take T; let x be set;
+      now given a, y being set such that
+A2:    x = [a,y] & a in dom f & y in f.a and
+        for b being set st b in dom f & b c= a & y in f.b holds a = b;
+        y in Union f by A2,CARD_5:10;
+     hence x in [:dom f, Union f:] by A2,ZFMISC_1:106;
+    end;
+   hence thesis by A1;
+  end;
+ uniqueness
+  proof let T1, T2 be set; assume
+A3:  not thesis;
+   then consider x being set such that
+A4:  not (x in T1 iff x in T2) by TARSKI:2;
+      x in T2 iff
+     not ex a, y being set st x = [a,y] & a in dom f & y in f.a &
+       for b being set st b in dom f & b c= a & y in f.b holds a = b by A3,A4;
+   hence contradiction by A3;
+  end;
+end;
+
+theorem Th32:
+ for f being Function for a, y being set holds
+  [a,y] in Trace f iff a in dom f & y in f.a &
+   for b being set st b in dom f & b c= a & y in f.b holds a = b
+  proof let f be Function, a', y' be set;
+      now given a, y being set such that
+A1:    [a',y'] = [a,y] & a in dom f & y in f.a &
+       for b being set st b in dom f & b c= a & y in f.b holds a = b;
+        a' = a & y' = y by A1,ZFMISC_1:33;
+     hence a' in dom f & y' in f.a' &
+      for b being set st b in dom f & b c= a' & y' in f.b holds a' = b by A1;
+    end;
+   hence thesis by Def18;
+  end;
+
+definition
+ let C1, C2 be non empty set;
+ let f be Function of C1, C2;
+ redefine func Trace f -> Subset of [:C1, union C2:];
+ coherence
+  proof
+     Trace f c= [:C1, union C2:]
+    proof let x be set; assume x in Trace f;
+     then consider a, y being set such that
+A1:    x = [a,y] & a in dom f & y in f.a &
+       for b being set st b in dom f & b c= a & y in f.b holds a = b by Def18;
+A2:    dom f = C1 & rng f c= C2 by FUNCT_2:def 1,RELSET_1:12;
+        f.a in rng f by A1,FUNCT_1:def 5;
+      then y in union C2 by A1,A2,TARSKI:def 4;
+     hence thesis by A1,A2,ZFMISC_1:106;
+    end;
+   hence thesis;
+  end;
+end;
+
+definition let f be Function;
+ cluster Trace f -> Relation-like;
+  coherence
+   proof let x be set; assume x in Trace f;
+     then ex a, y being set st x = [a,y] & a in dom f & y in f.a &
+      for b being set st b in dom f & b c= a & y in f.b holds a = b by Def18;
+    hence thesis;
+   end;
+end;
+
+theorem
+   for f being U-continuous Function st dom f is subset-closed holds
+   Trace f c= graph f
+  proof let f be U-continuous Function such that
+A1:  dom f is subset-closed;
+   let x,z be set; assume [x,z] in Trace f;
+   then consider a, y being set such that
+A2:  [x,z] = [a,y] & a in dom f & y in f.a &
+    for b being set st b in dom f & b c= a & y in f.b holds a = b by Def18;
+   consider b being set such that
+A3:  b is finite & b c= a & y in f.b by A1,A2,Th22;
+      b in dom f by A1,A2,A3,CLASSES1:def 1;
+    then a = b & x = a & z = y by A2,A3,ZFMISC_1:33;
+   hence [x,z] in graph f by A2,A3,Th25;
+  end;
+
+theorem Th34:
+ for f being U-continuous Function st dom f is subset-closed
+ for a, y being set st [a,y] in Trace f holds a is finite
+  proof let f be U-continuous Function such that
+A1:  dom f is subset-closed;
+   let a, y be set;
+   assume A2: [a,y] in Trace f;
+then A3:  a in dom f & y in f.a &
+    for b being set st b in dom f & b c= a & y in f.b holds a = b by Th32;
+   then consider b be set such that
+A4:  b is finite & b c= a & y in f.b by A1,Th22;
+      b in dom f by A1,A3,A4,CLASSES1:def 1;
+   hence a is finite by A2,A4,Th32;
+  end;
+
+theorem Th35:
+ for C1, C2 being Coherence_Space
+ for f being c=-monotone Function of C1,C2
+ for a1,a2 being set st a1 \/ a2 in C1
+ for y1,y2 being set st [a1,y1] in Trace f & [a2,y2] in Trace f
+   holds {y1,y2} in C2
+  proof let C1, C2 be Coherence_Space;
+   let f be c=-monotone Function of C1,C2;
+A1:  dom f = C1 by FUNCT_2:def 1;
+   let a1,a2 be set; set a = a1 \/ a2; assume a in C1;
+   then reconsider a as Element of C1;
+A2:  a1 c= a & a2 c= a by XBOOLE_1:7;
+    then a1 in C1 & a2 in C1 by CLASSES1:def 1;
+then A3:  f.a1 c= f.a & f.a2 c= f.a by A1,A2,Def12;
+   let y1,y2 be set; assume [a1,y1] in Trace f & [a2,y2] in Trace f;
+    then y1 in f.a1 & y2 in f.a2 by Th32;
+    then {y1,y2} c= f.a by A3,ZFMISC_1:38;
+   hence {y1,y2} in C2 by CLASSES1:def 1;
+  end;
+
+theorem Th36:
+ for C1, C2 being Coherence_Space
+ for f being cap-distributive Function of C1,C2
+ for a1,a2 being set st a1 \/ a2 in C1
+ for y being set st [a1,y] in Trace f & [a2,y] in Trace f holds a1 = a2
+  proof let C1, C2 be Coherence_Space;
+   let f be cap-distributive Function of C1,C2;
+A1:  dom f = C1 by FUNCT_2:def 1;
+   let a1,a2 be set; set a = a1 \/ a2; assume
+A2:  a in C1; a1 c= a & a2 c= a by XBOOLE_1:7;
+then A3:  a1 in C1 & a2 in C1 by A2,CLASSES1:def 1;
+   then reconsider b = a1 /\ a2 as Element of C1 by FINSUB_1:def 2;
+      b in C1;
+then A4:  C1 includes_lattice_of a1,a2 by A2,A3,Th17;
+   let y be set; assume
+A5:  [a1,y] in Trace f & [a2,y] in Trace f;
+    then y in f.a1 & y in f.a2 by Th32;
+    then y in (f.a1) /\ (f.a2) by XBOOLE_0:def 3;
+    then y in f.b & b c= a1 & b c= a2 by A1,A4,Def13,XBOOLE_1:17;
+    then b = a1 & b = a2 by A1,A5,Th32;
+   hence thesis;
+  end;
+
+theorem Th37:
+ for C1, C2 being Coherence_Space
+ for f,g being U-stable Function of C1,C2 st Trace f c= Trace g
+ for a being Element of C1 holds f.a c= g.a
+  proof let C1, C2 be Coherence_Space;
+   let f,g be U-stable Function of C1,C2; assume
+A1:  Trace f c= Trace g;
+   let x be Element of C1;
+A2:  dom f = C1 & dom g = C1 by FUNCT_2:def 1;
+   let z be set; assume z in f.x;
+   then consider b being set such that
+A3:  b is finite & b c= x & z in f.b &
+     for c being set st c c= x & z in f.c holds b c= c by A2,Th23;
+   reconsider b as Element of C1 by A3,CLASSES1:def 1;
+      now let c be set; assume
+A4:    c in dom f & c c= b & z in f.c;
+      then c c= x by A3,XBOOLE_1:1;
+      then b c= c by A3,A4;
+     hence b = c by A4,XBOOLE_0:def 10;
+    end;
+    then [b,z] in Trace f by A2,A3,Th32;
+    then z in g.b & g.b c= g.x by A1,A2,A3,Def12,Th32;
+   hence z in g.x;
+  end;
+
+theorem Th38:
+ for C1, C2 being Coherence_Space
+ for f,g being U-stable Function of C1,C2
+  st Trace f = Trace g holds f = g
+  proof let C1, C2 be Coherence_Space;
+   let f,g be U-stable Function of C1,C2; assume
+A1:  Trace f = Trace g;
+A2:  dom f = C1 & dom g = C1 by FUNCT_2:def 1;
+A3:  now let a be Element of C1;
+     let f,g be U-stable Function of C1,C2; assume
+A4:    Trace f = Trace g;
+A5:    dom f = C1 & dom g = C1 by FUNCT_2:def 1;
+     thus f.:Fin a c= g.:Fin a
+      proof let y be set; assume y in f.:Fin a;
+       then consider x being set such that
+A6:      x in dom f & x in Fin a & y = f.x by FUNCT_1:def 12;
+          f.x c= g.x & g.x c= f.x by A4,A6,Th37;
+        then f.x = g.x by XBOOLE_0:def 10;
+       hence thesis by A5,A6,FUNCT_1:def 12;
+      end;
+    end;
+      now let a be Element of C1;
+        f.:Fin a c= g.:Fin a & g.:Fin a c= f.:Fin a by A1,A3;
+then A7:    f.:Fin a = g.:Fin a by XBOOLE_0:def 10;
+     thus f.a = union (f.:Fin a) by A2,Th21 .= g.a by A2,A7,Th21;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+
+Lm5:
+ for C1, C2 being Coherence_Space
+ for X being Subset of [:C1, union C2:] st
+  (for x being set st x in X holds x`1 is finite) &
+  (for a,b being Element of C1 st a \/ b in C1
+    for y1,y2 being set st [a,y1] in X & [b,y2] in X holds {y1,y2} in C2) &
+  (for a,b being Element of C1 st a \/ b in C1
+    for y being set st [a,y] in X & [b,y] in X holds a = b)
+ ex f being U-stable Function of C1,C2 st X = Trace f &
+  for a being Element of C1 holds f.a = X.:Fin a
+  proof let C1, C2 be Coherence_Space;
+   let X be Subset of [:C1, union C2:] such that
+A1:  for x being set st x in X holds x`1 is finite
+   and
+A2:  for a,b being Element of C1 st a \/ b in C1
+     for y1,y2 being set st [a,y1] in X & [b,y2] in X holds {y1,y2} in C2
+   and
+A3:  for a,b being Element of C1 st a \/ b in C1
+     for y being set st [a,y] in X & [b,y] in X holds a = b;
+    deffunc f(set) = X.:Fin $1;
+   consider f being Function such that
+A4:  dom f = C1 & for a being set st a in C1 holds f.a = f(a) from Lambda;
+A5: rng f c= C2
+     proof let x be set; assume x in rng f;
+      then consider a being set such that
+A6:     a in dom f & x = f.a by FUNCT_1:def 5;
+      reconsider a as Element of C1 by A4,A6;
+A7:     x = X.:Fin a by A4,A6;
+         now let z,y be set; assume z in x;
+        then consider z1 being set such that
+A8:      [z1,z] in X & z1 in Fin a by A7,RELAT_1:def 13;
+        assume y in x;
+        then consider y1 being set such that
+A9:      [y1,y] in X & y1 in Fin a by A7,RELAT_1:def 13;
+           z1 is finite Element of C1 & z1 \/ y1 in Fin a &
+         y1 is finite Element of C1 by A8,A9,FINSUB_1:10,def 5;
+        hence {z,y} in C2 by A2,A8,A9;
+       end;
+      hence x in C2 by COH_SP:6;
+     end;
+A10:  f is c=-monotone
+     proof let a,b be set; assume
+A11:    a in dom f & b in dom f & a c= b;
+      then reconsider a, b as Element of C1 by A4;
+         Fin a c= Fin b by A11,FINSUB_1:23;
+       then X.:Fin a c= X.:Fin b & f.a = X.:Fin a by A4,RELAT_1:156;
+      hence thesis by A4;
+     end;
+      now let a, y be set; assume
+A12:   a in dom f & y in f.a;
+      then y in X.:Fin a by A4;
+     then consider x being set such that
+A13:   [x,y] in X & x in Fin a by RELAT_1:def 13;
+     reconsider a' = a as Element of C1 by A4,A12;
+     take x; x c= a by A13,FINSUB_1:def 5;
+      then x in C1 & x is finite by A4,A12,A13,CLASSES1:def 1,FINSUB_1:def 5;
+      then f.x = X.:Fin x & x in Fin x by A4,FINSUB_1:def 5;
+    hence x is finite & x c= a & y in f.x by A13,FINSUB_1:def 5,RELAT_1:def 13;
+     let c be set; assume
+A14:   c c= a & y in f.c; then c c= a';
+      then c in dom f by A4,CLASSES1:def 1;
+      then y in X.:Fin c by A4,A14;
+     then consider z being set such that
+A15:   [z,y] in X & z in Fin c by RELAT_1:def 13;
+        Fin c c= Fin a by A14,FINSUB_1:23;
+      then z in Fin a' & x in Fin a' by A13,A15;
+      then x \/ z in Fin a' & z in C1 & x in C1 by FINSUB_1:10;
+      then x = z by A3,A13,A15;
+     hence x c= c by A15,FINSUB_1:def 5;
+    end;
+   then reconsider f as U-stable Function of C1, C2
+     by A4,A5,A10,Th23,FUNCT_2:def 1,RELSET_1:11;
+   take f;
+   thus X = Trace f
+    proof let a,b be set;
+     hereby assume
+A16:    [a,b] in X; then [a,b] in [:C1, union C2:] & [a,b]`1 = a
+        by MCART_1:7;
+      then reconsider a' = a as finite Element of C1 by A1,A16,ZFMISC_1:106;
+         a' in Fin a by FINSUB_1:def 5;
+then A17:    b in X.:Fin a & f.a' = X.:Fin a by A4,A16,RELAT_1:def 13;
+         now let c be set; assume
+A18:      c in dom f & c c= a' & b in f.c;
+        then reconsider c' = c as Element of C1 by A4;
+           b in X.:Fin c' by A4,A18;
+        then consider x being set such that
+A19:      [x,b] in X & x in Fin c' by RELAT_1:def 13;
+A20:      x c= c by A19,FINSUB_1:def 5;
+         then x c= a' by A18,XBOOLE_1:1;
+         then x \/ a' = a' by XBOOLE_1:12;
+         then x = a by A3,A16,A19;
+        hence a' = c by A18,A20,XBOOLE_0:def 10;
+       end;
+      hence [a,b] in Trace f by A4,A17,Th32;
+     end;
+     assume
+A21:    [a,b] in Trace f;
+then a in dom f & b in f.a by Th32;
+      then b in X.:Fin a by A4;
+     then consider x being set such that
+A22:    [x,b] in X & x in Fin a by RELAT_1:def 13;
+     reconsider a as Element of C1 by A4,A21,Th32;
+        x in Fin a by A22;
+     then reconsider x as finite Element of C1 by FINSUB_1:def 5;
+        x in Fin x by FINSUB_1:def 5;
+      then b in X.:Fin x by A22,RELAT_1:def 13;
+      then b in f.x & x c= a by A4,A22,FINSUB_1:def 5;
+     hence thesis by A4,A21,A22,Th32;
+    end;
+   thus thesis by A4;
+  end;
+
+theorem Th39:
+ for C1, C2 being Coherence_Space
+ for X being Subset of [:C1, union C2:] st
+  (for x being set st x in X holds x`1 is finite) &
+  (for a,b being Element of C1 st a \/ b in C1
+    for y1,y2 being set st [a,y1] in X & [b,y2] in X holds {y1,y2} in C2) &
+  (for a,b being Element of C1 st a \/ b in C1
+    for y being set st [a,y] in X & [b,y] in X holds a = b)
+ ex f being U-stable Function of C1,C2 st X = Trace f
+  proof let C1, C2 be Coherence_Space;
+   let X be Subset of [:C1, union C2:]; assume
+A1:  not thesis;
+    then ex f being U-stable Function of C1,C2 st X = Trace f &
+     for a being Element of C1 holds f.a = X.:Fin a by Lm5;
+   hence thesis by A1;
+  end;
+
+theorem
+   for C1, C2 being Coherence_Space
+ for f being U-stable Function of C1,C2
+ for a being Element of C1 holds f.a = (Trace f).:Fin a
+  proof let C1, C2 be Coherence_Space;
+   let f be U-stable Function of C1,C2;
+   let a be Element of C1; set X = Trace f;
+A1:  dom f = C1 by FUNCT_2:def 1;
+A2:  now let x be set; assume
+A3:   x in X;
+     then consider a, y being set such that
+A4:   x = [a,y] & a in dom f & y in f.a &
+       for b being set st b in dom f & b c= a & y in f.b holds a = b
+        by Def18;
+        a is finite by A1,A3,A4,Th34;
+     hence x`1 is finite by A4,MCART_1:7;
+    end;
+A5:  for a,b being Element of C1 st a \/ b in C1
+     for y1,y2 being set st [a,y1] in X & [b,y2] in X holds {y1,y2} in C2
+      by Th35;
+     for a,b being Element of C1 st a \/ b in C1
+      for y being set st [a,y] in X & [b,y] in X holds a = b by Th36;
+   then consider g being U-stable Function of C1,C2 such that
+A6:  X = Trace g & for a being Element of C1 holds g.a = X.:Fin a by A2,A5,Lm5;
+      g.a = X.:Fin a by A6;
+   hence f.a = X.:Fin a by A6,Th38;
+  end;
+
+theorem Th41:
+ for C1,C2 being Coherence_Space, f being U-stable Function of C1,C2
+ for a being Element of C1, y being set holds
+  y in f.a iff ex b being Element of C1 st [b,y] in Trace f & b c= a
+  proof let C1,C2 be Coherence_Space, f be U-stable Function of C1,C2;
+A1:  dom f = C1 by FUNCT_2:def 1;
+   let a be Element of C1, y be set;
+   hereby assume y in f.a;
+    then consider b being set such that
+A2:   b is finite & b c= a & y in f.b &
+      for c being set st c c= a & y in f.c holds b c= c by A1,Th23;
+    reconsider b as Element of C1 by A2,CLASSES1:def 1;
+    take b;
+       now let c be set; assume
+A3:     c in dom f & c c= b & y in f.c;
+       then c c= a by A2,XBOOLE_1:1;
+       then b c= c by A2,A3;
+      hence b = c by A3,XBOOLE_0:def 10;
+     end;
+    hence [b,y] in Trace f by A1,A2,Th32;
+    thus b c= a by A2;
+   end;
+   given b being Element of C1 such that
+A4:  [b,y] in Trace f & b c= a;
+      f.b c= f.a & y in f.b by A1,A4,Def12,Th32;
+   hence y in f.a;
+  end;
+
+theorem
+   for C1, C2 being Coherence_Space
+ ex f being U-stable Function of C1, C2 st Trace f = {}
+  proof let C1, C2 be Coherence_Space;
+   reconsider X = {} as Subset of [:C1, union C2:] by XBOOLE_1:2;
+      (for x being set st x in X holds x`1 is finite) &
+    (for a,b being Element of C1 st a \/ b in C1
+      for y1,y2 being set st [a,y1] in X & [b,y2] in X holds {y1,y2} in C2) &
+    (for a,b being Element of C1 st a \/ b in C1
+      for y being set st [a,y] in X & [b,y] in X holds a = b);
+   hence thesis by Th39;
+  end;
+
+theorem Th43:
+ for C1, C2 being Coherence_Space
+ for a being finite Element of C1, y being set st y in union C2
+ ex f being U-stable Function of C1, C2 st Trace f = {[a,y]}
+  proof let C1, C2 be Coherence_Space;
+   let a be finite Element of C1, y be set; assume
+A1:  y in union C2;
+    then [a,y] in [:C1, union C2:] by ZFMISC_1:106;
+   then reconsider X = {[a,y]} as Subset of [:C1, union C2:] by ZFMISC_1:37;
+A2:  now let x be set; assume x in X; then x = [a,y] by TARSKI:def 1;
+     hence x`1 is finite by MCART_1:7;
+    end;
+A3:  now let a1,b be Element of C1; assume a1 \/ b in C1;
+     let y1,y2 be set; assume [a1,y1] in X & [b,y2] in X;
+      then [a1,y1] = [a,y] & [b,y2] = [a,y] by TARSKI:def 1;
+      then y1 = y & y2 = y by ZFMISC_1:33;
+      then {y1,y2} = {y} by ENUMSET1:69;
+     hence {y1,y2} in C2 by A1,COH_SP:4;
+    end;
+      now let a1,b be Element of C1; assume a1 \/ b in C1;
+     let y1 be set; assume [a1,y1] in X & [b,y1] in X;
+      then [a1,y1] = [a,y] & [b,y1] = [a,y] by TARSKI:def 1;
+     hence a1 = b by ZFMISC_1:33;
+    end;
+   hence thesis by A2,A3,Th39;
+  end;
+
+theorem
+   for C1, C2 being Coherence_Space
+ for a being Element of C1, y being set
+ for f being U-stable Function of C1, C2 st Trace f = {[a,y]}
+ for b being Element of C1 holds
+   (a c= b implies f.b = {y}) & (not a c= b implies f.b = {})
+  proof let C1, C2 be Coherence_Space;
+   let a be Element of C1, y be set;
+   let f be U-stable Function of C1, C2; assume
+A1:  Trace f = {[a,y]};
+   let b be Element of C1;
+A2:  [a,y] in Trace f by A1,TARSKI:def 1;
+   hereby assume
+     a c= b;
+     then y in f.b by A2,Th41;
+then A3:   {y} c= f.b by ZFMISC_1:37;
+       f.b c= {y}
+      proof let x be set; assume x in f.b;
+       then consider c being Element of C1 such that
+A4:      [c,x] in Trace f & c c= b by Th41;
+          [c,x] = [a,y] by A1,A4,TARSKI:def 1;
+        then x = y by ZFMISC_1:33;
+       hence thesis by TARSKI:def 1;
+      end;
+    hence f.b = {y} by A3,XBOOLE_0:def 10;
+   end;
+   assume
+A5:  not a c= b & f.b <> {};
+   then reconsider B = f.b as non empty set;
+   consider z being Element of B;
+   consider c being Element of C1 such that
+A6:  [c,z] in Trace f & c c= b by Th41;
+      [c,z] = [a,y] by A1,A6,TARSKI:def 1;
+   hence thesis by A5,A6,ZFMISC_1:33;
+  end;
+
+theorem Th45:
+ for C1, C2 being Coherence_Space
+ for f being U-stable Function of C1,C2
+ for X being Subset of Trace f
+ ex g being U-stable Function of C1, C2 st Trace g = X
+  proof let C1, C2 be Coherence_Space;
+   let f be U-stable Function of C1,C2;
+   let X be Subset of Trace f;
+A1:  X is Subset of [:C1, union C2:] by XBOOLE_1:1;
+A2:  now let x be set; assume A3: x in X;
+     then consider a, y being set such that
+A4:   x = [a,y] & a in dom f & y in f.a &
+       for b being set st b in dom f & b c= a & y in f.b holds a = b by Def18;
+        dom f = C1 by FUNCT_2:def 1;
+      then a is finite by A3,A4,Th34;
+     hence x`1 is finite by A4,MCART_1:7;
+    end;
+A5:  for a,b be Element of C1 st a \/ b in C1
+     for y1,y2 be set st [a,y1] in X & [b,y2] in X holds {y1,y2} in C2
+       by Th35;
+      for a,b be Element of C1 st a \/ b in C1
+     for y be set st [a,y] in X & [b,y] in X holds a = b by Th36;
+   hence thesis by A1,A2,A5,Th39;
+  end;
+
+theorem Th46:
+ for C1, C2 being Coherence_Space
+ for A being set st
+   for x,y being set st x in A & y in A
+     ex f being U-stable Function of C1,C2 st x \/ y = Trace f
+ ex f being U-stable Function of C1,C2 st union A = Trace f
+  proof let C1, C2 be Coherence_Space;
+   let A be set such that
+A1:  for x,y being set st x in A & y in A
+     ex f being U-stable Function of C1,C2 st x \/ y = Trace f;
+   set X = union A;
+A2:  X c= [:C1, union C2:]
+     proof let x be set; assume x in X;
+      then consider y being set such that
+A3:    x in y & y in A by TARSKI:def 4;
+         y \/ y = y;
+      then consider f being U-stable Function of C1,C2 such that
+A4:    y = Trace f by A1,A3;
+      thus thesis by A3,A4;
+     end;
+A5:  now let x be set; assume x in X;
+     then consider y being set such that
+A6:   x in y & y in A by TARSKI:def 4;
+        y \/ y = y;
+     then consider f being U-stable Function of C1,C2 such that
+A7:   y = Trace f by A1,A6;
+     consider a, y being set such that
+A8:   x = [a,y] & a in dom f & y in f.a &
+       for b being set st b in dom f & b c= a & y in f.b holds a = b
+        by A6,A7,Def18;
+        dom f = C1 by FUNCT_2:def 1;
+      then a is finite by A6,A7,A8,Th34;
+     hence x`1 is finite by A8,MCART_1:7;
+    end;
+A9:  now let a,b be Element of C1 such that
+A10:   a \/ b in C1;
+     let y1,y2 be set; assume [a,y1] in X;
+     then consider x1 being set such that
+A11:   [a,y1] in x1 & x1 in A by TARSKI:def 4;
+     assume [b,y2] in X;
+     then consider x2 being set such that
+A12:   [b,y2] in x2 & x2 in A by TARSKI:def 4;
+     consider f being U-stable Function of C1,C2 such that
+A13:   x1 \/ x2 = Trace f by A1,A11,A12;
+        x1 c= x1 \/ x2 & x2 c= x1 \/ x2 by XBOOLE_1:7;
+     hence {y1,y2} in C2 by A10,A11,A12,A13,Th35;
+    end;
+      now let a,b be Element of C1 such that
+A14:    a \/ b in C1;
+     let y be set; assume [a,y] in X;
+     then consider x1 being set such that
+A15:   [a,y] in x1 & x1 in A by TARSKI:def 4;
+     assume [b,y] in X;
+     then consider x2 being set such that
+A16:   [b,y] in x2 & x2 in A by TARSKI:def 4;
+     consider f being U-stable Function of C1,C2 such that
+A17:   x1 \/ x2 = Trace f by A1,A15,A16;
+        x1 c= x1 \/ x2 & x2 c= x1 \/ x2 by XBOOLE_1:7;
+     hence a = b by A14,A15,A16,A17,Th36;
+    end;
+   hence thesis by A2,A5,A9,Th39;
+  end;
+
+definition let C1, C2 be Coherence_Space;
+ func StabCoh(C1,C2) -> set means:
+Def19:
+  for x being set holds x in it iff
+   ex f being U-stable Function of C1,C2 st x = Trace f;
+ uniqueness
+   proof let X1, X2 be set; assume
+A1:   not thesis;
+    then consider x being set such that
+A2:   not (x in X1 iff x in X2) by TARSKI:2;
+       x in X2 iff not ex f being U-stable Function of C1,C2 st x = Trace f
+      by A1,A2;
+    hence thesis by A1;
+   end;
+ existence
+  proof
+    defpred P[set] means
+     ex f being U-stable Function of C1,C2 st $1 = Trace f;
+    consider X being set such that
+A3:  for x being set holds x in X iff x in bool [:C1, union C2:] & P[x]
+       from Separation;
+   take X; let x be set;
+   thus thesis by A3;
+  end;
+end;
+
+definition let C1, C2 be Coherence_Space;
+ cluster StabCoh(C1,C2) -> non empty subset-closed binary_complete;
+ coherence
+  proof consider f being U-stable Function of C1,C2;
+   set C = StabCoh(C1,C2);
+      Trace f in C by Def19;
+   hence C is non empty;
+   thus C is subset-closed
+    proof let a,b be set; assume a in C;
+     then consider f being U-stable Function of C1,C2 such that
+A1:    a = Trace f by Def19;
+     assume b c= a;
+      then ex g being U-stable Function of C1, C2 st Trace g = b by A1,Th45;
+     hence thesis by Def19;
+    end;
+   let A be set; assume
+A2:  for a,b being set st a in A & b in A holds a \/ b in C;
+      now let x,y be set; assume x in A & y in A;
+      then x \/ y in C by A2;
+     hence ex f being U-stable Function of C1,C2 st x \/ y = Trace f by Def19;
+    end;
+    then ex f being U-stable Function of C1,C2 st union A = Trace f by Th46;
+   hence union A in C by Def19;
+  end;
+end;
+
+theorem Th47:
+ for C1,C2 being Coherence_Space, f being U-stable Function of C1,C2 holds
+  Trace f c= [:Sub_of_Fin C1, union C2:]
+  proof let C1,C2 be Coherence_Space, f be U-stable Function of C1,C2;
+   let x be set; assume
+A1:  x in Trace f;
+   then consider a, y being set such that
+A2:  x = [a,y] & a in dom f & y in f.a &
+    for b being set st b in dom f & b c= a & y in f.b holds a = b by Def18;
+A3:  dom f = C1 by FUNCT_2:def 1;
+    then a is finite by A1,A2,Th34;
+    then a in Sub_of_Fin C1 & y in union C2 by A2,A3,Def3,Lm1;
+   hence thesis by A2,ZFMISC_1:106;
+  end;
+
+theorem
+  for C1,C2 being Coherence_Space holds
+  union StabCoh(C1,C2) = [:Sub_of_Fin C1, union C2:]
+  proof let C1,C2 be Coherence_Space;
+   thus union StabCoh(C1,C2) c= [:Sub_of_Fin C1, union C2:]
+    proof let x be set; assume x in union StabCoh(C1,C2);
+     then consider a being set such that
+A1:    x in a & a in StabCoh(C1,C2) by TARSKI:def 4;
+        ex f being U-stable Function of C1,C2 st a = Trace f by A1,Def19;
+      then a c= [:Sub_of_Fin C1, union C2:] by Th47;
+     hence thesis by A1;
+    end;
+   let x be set; assume x in [:Sub_of_Fin C1, union C2:];
+then A2:  x = [x`1,x`2] & x`1 in Sub_of_Fin C1 & x`2 in
+ union C2 by MCART_1:10,23;
+    then x`1 is finite & x`1 in C1 by Def3;
+    then ex f being U-stable Function of C1,C2 st Trace f = {x} by A2,Th43;
+    then x in {x} & {x} in StabCoh(C1,C2) by Def19,TARSKI:def 1;
+   hence thesis by TARSKI:def 4;
+  end;
+
+theorem Th49:
+ for C1,C2 being Coherence_Space
+ for a,b being finite Element of C1, y1,y2 being set holds
+  [[a,y1],[b,y2]] in Web StabCoh(C1,C2) iff
+   not a \/ b in C1 & y1 in union C2 & y2 in union C2 or
+   [y1,y2] in Web C2 & (y1 = y2 implies a = b)
+  proof let C1,C2 be Coherence_Space;
+   let a,b be finite Element of C1, y1,y2 be set;
+   hereby assume [[a,y1],[b,y2]] in Web StabCoh(C1,C2);
+then {[a,y1],[b,y2]} in StabCoh(C1,C2) by COH_SP:5;
+    then consider f being U-stable Function of C1,C2 such that
+A1:   {[a,y1],[b,y2]} = Trace f by Def19;
+A2:   [a,y1] in {[a,y1],[b,y2]} & [b,y2] in
+ {[a,y1],[b,y2]} by TARSKI:def 2;
+    assume A3: a \/ b in C1 or not y1 in union C2 or not y2 in union C2;
+     then {y1,y2} in C2 by A1,A2,Th35,ZFMISC_1:106;
+    hence [y1,y2] in Web C2 by COH_SP:5;
+    thus y1 = y2 implies a = b by A1,A2,A3,Th36,ZFMISC_1:106;
+   end;
+   assume
+  A4: not a \/ b in C1 & y1 in union C2 & y2 in union C2 or
+    [y1,y2] in Web C2 & (y1 = y2 implies a = b);
+then A5:  y1 in union C2 & y2 in union C2 & (not a \/ b in C1 or
+    {y1,y2} in C2 & (y1 = y2 implies a = b)) by COH_SP:5,ZFMISC_1:106;
+    then [a,y1] in [:C1, union C2:] & [b,y2] in
+ [:C1, union C2:] by ZFMISC_1:106;
+   then reconsider X = {[a,y1],[b,y2]} as Subset of [:C1, union C2:] by
+ZFMISC_1:38;
+A6:  now let x be set; assume x in X;
+      then x = [a,y1] or x = [b,y2] by TARSKI:def 2;
+     hence x`1 is finite by MCART_1:7;
+    end;
+A7:  now let a1,b1 be Element of C1; assume
+A8:   a1 \/ b1 in C1;
+     let z1,z2 be set; assume [a1,z1] in X & [b1,z2] in X;
+      then ([a1,z1] = [a,y1] or [a1,z1] = [b,y2]) &
+      ([b1,z2] = [a,y1] or [b1,z2] = [b,y2]) by TARSKI:def 2;
+      then (z1 = y1 & a1 = a or a1 = b & z1 = y2) & {z1,z2} = {z2,z1} &
+      (z2 = y1 & b1 = a or b1 = b & z2 = y2) by ZFMISC_1:33;
+      then {z1,z2} = {y1} or {z1,z2} in C2 or {z1,z2} = {y2} by A4,A8,COH_SP:5,
+ENUMSET1:69;
+     hence {z1,z2} in C2 by A5,COH_SP:4;
+    end;
+      now let a1,b1 be Element of C1; assume
+A9:   a1 \/ b1 in C1;
+     let y be set; assume [a1,y] in X & [b1,y] in X;
+      then ([a1,y] = [a,y1] or [a1,y] = [b,y2]) &
+      ([b1,y] = [a,y1] or [b1,y] = [b,y2]) by TARSKI:def 2;
+      then (a1 = a & y = y1 or a1 = b & y = y2) &
+      (b1 = a & y = y1 or b1 = b & y = y2) by ZFMISC_1:33;
+     hence a1 = b1 by A4,A9;
+    end;
+    then ex f being U-stable Function of C1,C2 st X = Trace f by A6,A7,Th39;
+    then X in StabCoh(C1,C2) by Def19;
+   hence thesis by COH_SP:5;
+  end;
+
+begin :: Trace of Linear Functions
+
+
+theorem Th50:
+ for C1, C2 being Coherence_Space
+ for f being U-stable Function of C1,C2 holds
+  f is U-linear iff
+   for a,y being set st [a,y] in Trace f ex x being set st a = {x}
+  proof let C1, C2 be Coherence_Space;
+   let f be U-stable Function of C1,C2;
+A1:  dom f = C1 by FUNCT_2:def 1;
+   hereby assume
+A2:   f is U-linear;
+    let a,y be set; assume A3: [a,y] in Trace f;
+then A4:   a in dom f & y in f.a &
+     for b being set st b in dom f & b c= a & y in
+ f.b holds a = b by Th32;
+    then consider x being set such that
+A5:   x in a & y in f.{x} &
+     for b being set st b c= a & y in f.b holds x in b by A1,A2,Th24;
+    take x;
+       {x} c= a & {x,x} in C1 & {x,x} = {x}
+      by A1,A4,A5,COH_SP:6,ENUMSET1:69,ZFMISC_1:37;
+    hence a = {x} by A1,A3,A5,Th32;
+   end;
+   assume
+A6:  for a,y being set st [a,y] in Trace f ex x being set st a = {x};
+      now let a, y be set; assume
+A7:    a in dom f & y in f.a;
+     then consider b being set such that
+A8:    b is finite & b c= a & y in f.b &
+       for c being set st c c= a & y in f.c holds b c= c by A1,Th23;
+        now thus b in dom f by A1,A7,A8,CLASSES1:def 1;
+       let c be set; assume
+A9:      c in dom f & c c= b & y in f.c;
+        then c c= a by A8,XBOOLE_1:1;
+        then b c= c by A8,A9;
+       hence b = c by A9,XBOOLE_0:def 10;
+      end;
+      then [b,y] in Trace f by A8,Th32;
+     then consider x being set such that
+A10:    b = {x} by A6;
+     take x; x in b by A10,TARSKI:def 1;
+     hence x in a & y in f.{x} by A8,A10;
+     let c be set; assume c c= a & y in f.c;
+      then b c= c by A8;
+     hence x in c by A10,ZFMISC_1:37;
+    end;
+   hence thesis by A1,Th24;
+  end;
+
+definition let f be Function;
+ func LinTrace f -> set means:
+Def20:
+  for x being set holds x in it iff
+   ex y,z being set st x = [y,z] & [{y},z] in Trace f;
+ uniqueness
+   proof let X1, X2 be set; assume
+A1:   not thesis;
+    then consider x being set such that
+A2:   not (x in X1 iff x in X2) by TARSKI:2;
+       x in X2 iff not ex y,z being set st x = [y,z] & [{y},z] in
+ Trace f by A1,A2;
+    hence thesis by A1;
+   end;
+ existence
+  proof set C1 = dom f, C2 = rng f;
+   defpred P[set] means ex y,z being set st $1 = [y,z] & [{y},z] in Trace f;
+   consider X being set such that
+A3:  for x being set holds x in X iff x in [:union C1, union C2:] & P[x]
+      from Separation;
+   take X; let x be set;
+      now given y,z being set such that
+A4:    x = [y,z] & [{y},z] in Trace f;
+A5:    {y} in C1 & z in f.{y} by A4,Th32;
+      then f.{y} in C2 & y in {y} by FUNCT_1:def 5,TARSKI:def 1;
+      then y in union C1 & z in union C2 by A5,TARSKI:def 4;
+     hence x in [:union C1, union C2:] by A4,ZFMISC_1:106;
+    end;
+   hence thesis by A3;
+  end;
+end;
+
+theorem Th51:
+ for f being Function, x,y being set holds
+  [x,y] in LinTrace f iff [{x},y] in Trace f
+  proof let f be Function, x,y be set;
+      now given v,z being set such that
+A1:    [x,y] = [v,z] & [{v},z] in Trace f;
+        x = v & y = z by A1,ZFMISC_1:33;
+     hence [{x},y] in Trace f by A1;
+    end;
+   hence thesis by Def20;
+  end;
+
+theorem Th52:
+ for f being Function st f.{} = {}
+  for x,y being set st {x} in dom f & y in f.{x} holds [x,y] in LinTrace f
+  proof let f be Function; assume
+A1:  f.{} = {};
+   let x,y be set; set a = {x};
+      [x,y] in LinTrace f iff [{x},y] in Trace f by Th51;
+then [x,y] in LinTrace f iff {x} in dom f & y in f.{x} &
+     for b being set st b in dom f & b c= a & y in f.b holds a = b by Th32;
+   hence thesis by A1,ZFMISC_1:39;
+  end;
+
+theorem Th53:
+ for f being Function, x,y being set st [x,y] in LinTrace f
+  holds {x} in dom f & y in f.{x}
+  proof let f be Function, x,y be set; assume
+      [x,y] in LinTrace f;
+    then [{x},y] in Trace f by Th51;
+   hence thesis by Th32;
+  end;
+
+definition
+ let C1, C2 be non empty set;
+ let f be Function of C1, C2;
+ redefine func LinTrace f -> Subset of [:union C1, union C2:];
+ coherence
+  proof
+     LinTrace f c= [:union C1, union C2:]
+    proof let x be set; assume x in LinTrace f;
+     then consider y,z being set such that
+A1:    x = [y,z] & [{y},z] in Trace f by Def20;
+      dom f = C1 & rng f c= C2 by FUNCT_2:def 1,RELSET_1:12;
+      then {y} in C1 & y in {y} by A1,Th32,TARSKI:def 1;
+      then y in union C1 & z in union C2 by A1,TARSKI:def 4,ZFMISC_1:106;
+     hence thesis by A1,ZFMISC_1:106;
+    end;
+   hence thesis;
+  end;
+end;
+
+definition let f be Function;
+ cluster LinTrace f -> Relation-like;
+  coherence
+   proof let x be set; assume x in LinTrace f;
+     then ex y,z being set st x = [y,z] & [{y},z] in Trace f by Def20;
+    hence thesis;
+   end;
+end;
+
+definition let C1, C2 be Coherence_Space;
+ func LinCoh(C1,C2) -> set means:
+Def21:
+  for x being set holds x in it iff
+   ex f being U-linear Function of C1,C2 st x = LinTrace f;
+ uniqueness
+   proof let X1, X2 be set; assume
+A1:   not thesis;
+    then consider x being set such that
+A2:   not (x in X1 iff x in X2) by TARSKI:2;
+       x in X2 iff not ex f being U-linear Function of C1,C2 st x = LinTrace f
+      by A1,A2;
+    hence thesis by A1;
+   end;
+ existence
+  proof
+    defpred P[set] means
+     ex f being U-linear Function of C1,C2 st $1 = LinTrace f;
+    consider X being set such that
+A3:  for x being set holds x in X iff x in bool [:union C1, union C2:] & P[x]
+      from Separation;
+   take X; let x be set;
+   thus thesis by A3;
+  end;
+end;
+
+theorem Th54:
+ for C1, C2 being Coherence_Space
+ for f being c=-monotone Function of C1,C2
+ for x1,x2 being set st {x1,x2} in C1
+ for y1,y2 being set st [x1,y1] in LinTrace f & [x2,y2] in LinTrace f
+   holds {y1,y2} in C2
+  proof let C1, C2 be Coherence_Space;
+   let f be c=-monotone Function of C1,C2;
+A1:  dom f = C1 by FUNCT_2:def 1;
+   let a1,a2 be set; assume {a1,a2} in C1;
+   then reconsider a = {a1,a2} as Element of C1;
+A2:  {a1} c= a & {a2} c= a by ZFMISC_1:12;
+    then {a1} in C1 & {a2} in C1 by CLASSES1:def 1;
+then A3:  f.{a1} c= f.a & f.{a2} c= f.a by A1,A2,Def12;
+   let y1,y2 be set; assume [a1,y1] in LinTrace f & [a2,y2] in LinTrace f;
+    then y1 in f.{a1} & y2 in f.{a2} by Th53;
+    then {y1,y2} c= f.a by A3,ZFMISC_1:38;
+   hence {y1,y2} in C2 by CLASSES1:def 1;
+  end;
+
+theorem Th55:
+ for C1, C2 being Coherence_Space
+ for f being cap-distributive Function of C1,C2
+ for x1,x2 being set st {x1,x2} in C1
+ for y being set st [x1,y] in LinTrace f & [x2,y] in LinTrace f holds x1 = x2
+  proof let C1, C2 be Coherence_Space;
+   let f be cap-distributive Function of C1,C2;
+A1:  dom f = C1 by FUNCT_2:def 1;
+   let a1,a2 be set; set a = {a1,a2}; assume
+A2:  a in C1;
+A3:  a = {a1} \/ {a2} by ENUMSET1:41;
+   let y be set; assume
+      [a1,y] in LinTrace f & [a2,y] in LinTrace f;
+    then [{a1},y] in Trace f & [{a2},y] in Trace f & {a1} in C1 & {a2} in C1
+     by A1,Th51,Th53;
+    then {a1} = {a2} by A2,A3,Th36;
+   hence thesis by ZFMISC_1:6;
+  end;
+
+theorem Th56:
+ for C1, C2 being Coherence_Space
+ for f,g being U-linear Function of C1,C2
+  st LinTrace f = LinTrace g holds f = g
+  proof let C1, C2 be Coherence_Space;
+   let f,g be U-linear Function of C1,C2; assume
+A1:  LinTrace f = LinTrace g;
+      Trace f = Trace g
+     proof let a,y be set;
+      hereby assume
+A2:      [a,y] in Trace f;
+       then consider x being set such that
+A3:      a = {x} by Th50;
+          [x,y] in LinTrace f by A2,A3,Th51;
+       hence [a,y] in Trace g by A1,A3,Th51;
+      end;
+      assume
+A4:     [a,y] in Trace g;
+      then consider x being set such that
+A5:     a = {x} by Th50;
+         [x,y] in LinTrace g by A4,A5,Th51;
+      hence [a,y] in Trace f by A1,A5,Th51;
+     end;
+   hence thesis by Th38;
+  end;
+
+Lm6:
+ for C1, C2 being Coherence_Space
+ for X being Subset of [:union C1, union C2:] st
+  (for a,b being set st {a,b} in C1
+    for y1,y2 being set st [a,y1] in X & [b,y2] in X holds {y1,y2} in C2) &
+  (for a,b being set st {a,b} in C1
+    for y being set st [a,y] in X & [b,y] in X holds a = b)
+ ex f being U-linear Function of C1,C2 st X = LinTrace f &
+  for a being Element of C1 holds f.a = X.:a
+  proof let C1, C2 be Coherence_Space;
+   let X be Subset of [:union C1, union C2:] such that
+A1:  for a,b being set st {a,b} in C1
+     for y1,y2 being set st [a,y1] in X & [b,y2] in X holds {y1,y2} in C2
+   and
+A2:  for a,b being set st {a,b} in C1
+     for y being set st [a,y] in X & [b,y] in X holds a = b;
+    deffunc f(set) = X.:$1;
+   consider f being Function such that
+A3:  dom f = C1 & for a being set st a in C1 holds f.a = f(a) from Lambda;
+A4: rng f c= C2
+     proof let x be set; assume x in rng f;
+      then consider a being set such that
+A5:     a in dom f & x = f.a by FUNCT_1:def 5;
+      reconsider a as Element of C1 by A3,A5;
+A6:     x = X.:a by A3,A5;
+         now let z,y be set; assume z in x;
+        then consider z1 being set such that
+A7:      [z1,z] in X & z1 in a by A6,RELAT_1:def 13;
+        assume y in x;
+        then consider y1 being set such that
+A8:      [y1,y] in X & y1 in a by A6,RELAT_1:def 13;
+           {z1,y1} in C1 by A7,A8,COH_SP:6;
+        hence {z,y} in C2 by A1,A7,A8;
+       end;
+      hence x in C2 by COH_SP:6;
+     end;
+A9:  f is c=-monotone
+     proof let a,b be set; assume
+A10:    a in dom f & b in dom f & a c= b;
+      then reconsider a, b as Element of C1 by A3;
+         X.:a c= X.:b & f.a = X.:a by A3,A10,RELAT_1:156;
+      hence thesis by A3;
+     end;
+      now let a, y be set; assume
+A11:   a in dom f & y in f.a;
+      then y in X.:a by A3;
+     then consider x being set such that
+A12:   [x,y] in X & x in a by RELAT_1:def 13;
+     reconsider a' = a as Element of C1 by A3,A11;
+     take x; {x} c= a by A12,ZFMISC_1:37;
+      then {x} in C1 by A3,A11,CLASSES1:def 1;
+      then x in {x} & f.{x} = X.:{x} by A3,TARSKI:def 1;
+     hence x in a & y in f.{x} by A12,RELAT_1:def 13;
+     let c be set; assume
+A13:   c c= a & y in f.c; then c c= a';
+      then c in dom f by A3,CLASSES1:def 1;
+      then y in X.:c by A3,A13;
+     then consider z being set such that
+A14:   [z,y] in X & z in c by RELAT_1:def 13;
+        {x,z} c= a' by A12,A13,A14,ZFMISC_1:38;
+      then {x,z} in C1 by CLASSES1:def 1;
+     hence x in c by A2,A12,A14;
+    end;
+   then reconsider f as U-linear Function of C1, C2
+   by A3,A4,A9,Th24,FUNCT_2:def 1,RELSET_1:11;
+   take f;
+   thus X = LinTrace f
+    proof let a,b be set;
+     hereby assume
+A15:    [a,b] in X;
+    then a in union C1 & b in union C2 by ZFMISC_1:106;
+      then consider a' being set such that
+A16:    a in a' & a' in C1 by TARSKI:def 4;
+         {a} c= a' by A16,ZFMISC_1:37;
+      then reconsider aa = {a} as Element of C1 by A16,CLASSES1:def 1;
+         a in {a} by TARSKI:def 1;
+then A17:    f.aa = X.:aa & b in X.:aa by A3,A15,RELAT_1:def 13;
+         f.{} = {} by Th19;
+      hence [a,b] in LinTrace f by A3,A17,Th52;
+     end;
+     assume
+      [a,b] in LinTrace f;
+    then {a} in dom f & b in f.{a} by Th53;
+      then b in X.:{a} by A3;
+     then consider x being set such that
+A18:    [x,b] in X & x in {a} by RELAT_1:def 13;
+     thus thesis by A18,TARSKI:def 1;
+    end;
+   thus thesis by A3;
+  end;
+
+theorem Th57:
+ for C1, C2 being Coherence_Space
+ for X being Subset of [:union C1, union C2:] st
+  (for a,b being set st {a,b} in C1
+    for y1,y2 being set st [a,y1] in X & [b,y2] in X holds {y1,y2} in C2) &
+  (for a,b being set st {a,b} in C1
+    for y being set st [a,y] in X & [b,y] in X holds a = b)
+ ex f being U-linear Function of C1,C2 st X = LinTrace f
+  proof let C1, C2 be Coherence_Space;
+   let X be Subset of [:union C1, union C2:]; assume
+A1:  not thesis;
+    then ex f being U-linear Function of C1,C2 st X = LinTrace f &
+     for a being Element of C1 holds f.a = X.:a by Lm6;
+   hence thesis by A1;
+  end;
+
+theorem
+   for C1, C2 being Coherence_Space
+ for f being U-linear Function of C1,C2
+ for a being Element of C1 holds f.a = (LinTrace f).:a
+  proof let C1, C2 be Coherence_Space;
+   let f be U-linear Function of C1,C2;
+   let a be Element of C1; set X = LinTrace f;
+A1:  for a,b being set st {a,b} in C1
+     for y1,y2 being set st [a,y1] in X & [b,y2] in X holds {y1,y2} in C2
+      by Th54;
+     for a,b being set st {a,b} in C1
+      for y being set st [a,y] in X & [b,y] in X holds a = b by Th55;
+   then consider g being U-linear Function of C1,C2 such that
+A2:  X = LinTrace g & for a being Element of C1 holds g.a = X.:a by A1,Lm6;
+      g.a = X.:a by A2;
+   hence f.a = X.:a by A2,Th56;
+  end;
+
+theorem
+   for C1, C2 being Coherence_Space
+ ex f being U-linear Function of C1, C2 st LinTrace f = {}
+  proof let C1, C2 be Coherence_Space;
+   reconsider X = {} as Subset of [:union C1, union C2:] by XBOOLE_1:2;
+      (for a,b being set st {a,b} in C1
+      for y1,y2 being set st [a,y1] in X & [b,y2] in X holds {y1,y2} in C2) &
+    (for a,b being set st {a,b} in C1
+      for y being set st [a,y] in X & [b,y] in X holds a = b);
+   hence thesis by Th57;
+  end;
+
+theorem Th60:
+ for C1, C2 being Coherence_Space
+ for x being set, y being set st x in union C1 & y in union C2
+ ex f being U-linear Function of C1, C2 st LinTrace f = {[x,y]}
+  proof let C1, C2 be Coherence_Space;
+   let a, y be set; assume
+A1:  a in union C1 & y in union C2;
+    then [a,y] in [:union C1, union C2:] by ZFMISC_1:106;
+   then reconsider X = {[a,y]} as Subset of [:union C1, union C2:] by ZFMISC_1:
+37;
+A2:  now let a1,b be set; assume {a1,b} in C1;
+     let y1,y2 be set; assume [a1,y1] in X & [b,y2] in X;
+      then [a1,y1] = [a,y] & [b,y2] = [a,y] by TARSKI:def 1;
+      then y1 = y & y2 = y by ZFMISC_1:33;
+      then {y1,y2} = {y} by ENUMSET1:69;
+     hence {y1,y2} in C2 by A1,COH_SP:4;
+    end;
+      now let a1,b be set; assume {a1,b} in C1;
+     let y1 be set; assume [a1,y1] in X & [b,y1] in X;
+      then [a1,y1] = [a,y] & [b,y1] = [a,y] by TARSKI:def 1;
+     hence a1 = b by ZFMISC_1:33;
+    end;
+   hence thesis by A2,Th57;
+  end;
+
+theorem
+   for C1, C2 being Coherence_Space
+ for x being set, y being set st x in union C1 & y in union C2
+ for f being U-linear Function of C1, C2 st LinTrace f = {[x,y]}
+ for a being Element of C1 holds
+   (x in a implies f.a = {y}) & (not x in a implies f.a = {})
+  proof let C1, C2 be Coherence_Space;
+   let a, y be set; assume
+    a in union C1 & y in union C2;
+   then reconsider a' = {a} as Element of C1 by COH_SP:4;
+   let f be U-linear Function of C1, C2; assume
+A1:  LinTrace f = {[a,y]};
+   let b be Element of C1;
+    [a,y] in LinTrace f & f.{} = {} by A1,Th19,TARSKI:def 1;
+then A2:  {a} in dom f & y in f.{a} by Th53;
+   hereby assume
+     a in b; then a' c= b & dom f = C1 by FUNCT_2:def 1,ZFMISC_1:37;
+   then f.a' c= f.b by Def12;
+then A3:   {y} c= f.b by A2,ZFMISC_1:37;
+       f.b c= {y}
+      proof let x be set; assume x in f.b;
+       then consider c being Element of C1 such that
+A4:      [c,x] in Trace f & c c= b by Th41;
+       consider d being set such that
+A5:      c = {d} by A4,Th50;
+          [d,x] in LinTrace f by A4,A5,Th51;
+        then [d,x] = [a,y] by A1,TARSKI:def 1;
+        then x = y by ZFMISC_1:33;
+       hence thesis by TARSKI:def 1;
+      end;
+    hence f.b = {y} by A3,XBOOLE_0:def 10;
+   end;
+   assume
+A6:  not a in b & f.b <> {};
+   then reconsider B = f.b as non empty set;
+   consider z being Element of B;
+   consider c being Element of C1 such that
+A7:  [c,z] in Trace f & c c= b by Th41;
+   consider d being set such that
+A8:  c = {d} by A7,Th50;
+      [d,z] in LinTrace f & d in c by A7,A8,Th51,TARSKI:def 1;
+    then [d,z] = [a,y] & d in b by A1,A7,TARSKI:def 1;
+   hence thesis by A6,ZFMISC_1:33;
+  end;
+
+theorem Th62:
+ for C1, C2 being Coherence_Space
+ for f being U-linear Function of C1,C2
+ for X being Subset of LinTrace f
+ ex g being U-linear Function of C1, C2 st LinTrace g = X
+  proof let C1, C2 be Coherence_Space;
+   let f be U-linear Function of C1,C2;
+   let X be Subset of LinTrace f;
+A1:  X is Subset of [:union C1, union C2:] by XBOOLE_1:1;
+A2:  for a,b be set st {a,b} in C1
+     for y1,y2 be set st [a,y1] in X & [b,y2] in X holds
+     {y1,y2} in C2 by Th54;
+      for a,b be set st {a,b} in C1
+     for y be set st [a,y] in X & [b,y] in X holds a = b by Th55;
+   hence thesis by A1,A2,Th57;
+  end;
+
+theorem Th63:
+ for C1, C2 being Coherence_Space
+ for A being set st
+   for x,y being set st x in A & y in A
+     ex f being U-linear Function of C1,C2 st x \/ y = LinTrace f
+ ex f being U-linear Function of C1,C2 st union A = LinTrace f
+  proof let C1, C2 be Coherence_Space;
+   let A be set such that
+A1:  for x,y being set st x in A & y in A
+     ex f being U-linear Function of C1,C2 st x \/ y = LinTrace f;
+   set X = union A;
+A2:  X c= [:union C1, union C2:]
+     proof let x be set; assume x in X;
+      then consider y being set such that
+A3:    x in y & y in A by TARSKI:def 4;
+         y \/ y = y;
+      then consider f being U-linear Function of C1,C2 such that
+A4:    y = LinTrace f by A1,A3;
+      thus thesis by A3,A4;
+     end;
+A5:  now let a,b be set such that
+A6:   {a,b} in C1;
+     let y1,y2 be set; assume [a,y1] in X;
+     then consider x1 being set such that
+A7:   [a,y1] in x1 & x1 in A by TARSKI:def 4;
+     assume [b,y2] in X;
+     then consider x2 being set such that
+A8:   [b,y2] in x2 & x2 in A by TARSKI:def 4;
+     consider f being U-linear Function of C1,C2 such that
+A9:   x1 \/ x2 = LinTrace f by A1,A7,A8;
+        x1 c= x1 \/ x2 & x2 c= x1 \/ x2 by XBOOLE_1:7;
+     hence {y1,y2} in C2 by A6,A7,A8,A9,Th54;
+    end;
+      now let a,b be set such that
+A10:    {a,b} in C1;
+     let y be set; assume [a,y] in X;
+     then consider x1 being set such that
+A11:   [a,y] in x1 & x1 in A by TARSKI:def 4;
+     assume [b,y] in X;
+     then consider x2 being set such that
+A12:   [b,y] in x2 & x2 in A by TARSKI:def 4;
+     consider f being U-linear Function of C1,C2 such that
+A13:   x1 \/ x2 = LinTrace f by A1,A11,A12;
+        x1 c= x1 \/ x2 & x2 c= x1 \/ x2 by XBOOLE_1:7;
+     hence a = b by A10,A11,A12,A13,Th55;
+    end;
+   hence thesis by A2,A5,Th57;
+  end;
+
+definition let C1, C2 be Coherence_Space;
+ cluster LinCoh(C1,C2) -> non empty subset-closed binary_complete;
+ coherence
+  proof consider f being U-linear Function of C1,C2;
+   set C = LinCoh(C1,C2);
+      LinTrace f in C by Def21;
+   hence C is non empty;
+   thus C is subset-closed
+    proof let a,b be set; assume a in C;
+     then consider f being U-linear Function of C1,C2 such that
+A1:    a = LinTrace f by Def21;
+     assume b c= a;
+      then ex g being U-linear Function of C1, C2 st LinTrace g = b by A1,Th62
+;
+     hence thesis by Def21;
+    end;
+   let A be set; assume
+A2:  for a,b being set st a in A & b in A holds a \/ b in C;
+      now let x,y be set; assume x in A & y in A;
+      then x \/ y in C by A2;
+     hence ex f being U-linear Function of C1,C2 st x \/
+ y = LinTrace f by Def21
+;
+    end;
+    then ex f being U-linear Function of C1,C2 st union A = LinTrace f by Th63
+;
+   hence union A in C by Def21;
+  end;
+end;
+
+theorem
+   for C1,C2 being Coherence_Space holds
+  union LinCoh(C1,C2) = [:union C1, union C2:]
+  proof let C1,C2 be Coherence_Space;
+   thus union LinCoh(C1,C2) c= [:union C1, union C2:]
+    proof let x be set; assume x in union LinCoh(C1,C2);
+     then consider a being set such that
+A1:    x in a & a in LinCoh(C1,C2) by TARSKI:def 4;
+        ex f being U-linear Function of C1,C2 st a = LinTrace f by A1,Def21;
+     hence thesis by A1;
+    end;
+   let x be set; assume x in [:union C1, union C2:];
+  then x = [x`1,x`2] & x`1 in union C1 & x`2 in union C2 by MCART_1:10,23;
+    then ex f being U-linear Function of C1,C2 st LinTrace f = {x} by Th60;
+    then x in {x} & {x} in LinCoh(C1,C2) by Def21,TARSKI:def 1;
+   hence thesis by TARSKI:def 4;
+  end;
+
+theorem
+   for C1,C2 being Coherence_Space
+ for x1,x2 being set, y1,y2 being set holds
+  [[x1,y1],[x2,y2]] in Web LinCoh(C1,C2) iff x1 in union C1 & x2 in union C1 &
+   (not [x1,x2] in Web C1 & y1 in union C2 & y2 in union C2 or
+    [y1,y2] in Web C2 & (y1 = y2 implies x1 = x2))
+  proof let C1,C2 be Coherence_Space;
+   let x1,x2,y1,y2 be set;
+   hereby assume [[x1,y1],[x2,y2]] in Web LinCoh(C1,C2);
+     then {[x1,y1],[x2,y2]} in LinCoh(C1,C2) by COH_SP:5;
+    then consider f being U-linear Function of C1,C2 such that
+A1:   {[x1,y1],[x2,y2]} = LinTrace f by Def21;
+       [x1,y1] in LinTrace f & [x2,y2] in LinTrace f by A1,TARSKI:def 2;
+     then [{x1},y1] in Trace f & [{x2},y2] in Trace f by Th51;
+then A2:   {x1} in dom f & {x2} in dom f & dom f = C1 & x1 in {x1} & x2 in {x2}
+&
+     {[{x1},y1],[{x2},y2]} c= Trace f & Trace f in StabCoh(C1,C2)
+      by Def19,Th32,FUNCT_2:def 1,TARSKI:def 1,ZFMISC_1:38;
+then x1 in union C1 & x2 in union C1 &
+     {[{x1},y1],[{x2},y2]} in StabCoh(C1,C2) by CLASSES1:def 1,TARSKI:def 4;
+     then [[{x1},y1],[{x2},y2]] in Web StabCoh(C1,C2) by COH_SP:5;
+     then not {x1}\/{x2} in C1 & y1 in union C2 & y2 in union C2 or
+     [y1,y2] in Web C2 & (y1 = y2 implies {x1} = {x2}) by A2,Th49;
+     then not {x1,x2} in C1 & y1 in union C2 & y2 in union C2 or
+     [y1,y2] in Web C2 & (y1 = y2 implies x1 = x2) by ENUMSET1:41,ZFMISC_1:6;
+    hence x1 in union C1 & x2 in union C1 &
+     (not [x1,x2] in Web C1 & y1 in union C2 & y2 in union C2 or
+      [y1,y2] in Web C2 & (y1 = y2 implies x1 = x2)) by A2,COH_SP:5,TARSKI:def
+4;
+   end;
+   assume x1 in union C1 & x2 in union C1;
+   then reconsider a = {x1}, b = {x2} as Element of C1 by COH_SP:4;
+   assume
+      not [x1,x2] in Web C1 & y1 in union C2 & y2 in union C2 or
+    [y1,y2] in Web C2 & (y1 = y2 implies x1 = x2);
+    then not {x1,x2} in C1 & y1 in union C2 & y2 in union C2 or
+    [y1,y2] in Web C2 & (y1 = y2 implies a = b) by COH_SP:5;
+    then not a \/ b in C1 & y1 in union C2 & y2 in union C2 or
+    [y1,y2] in Web C2 & (y1 = y2 implies a = b) by ENUMSET1:41;
+    then [[a,y1],[b,y2]] in Web StabCoh(C1,C2) by Th49;
+    then {[a,y1],[b,y2]} in StabCoh(C1,C2) by COH_SP:5;
+   then consider f being U-stable Function of C1,C2 such that
+A3:  {[a,y1],[b,y2]} = Trace f by Def19;
+      now let a1,y be set; assume [a1,y] in Trace f;
+      then [a1,y] = [a,y1] or [a1,y] = [b,y2] by A3,TARSKI:def 2;
+      then a1 = {x1} or a1 = {x2} by ZFMISC_1:33;
+     hence ex x being set st a1 = {x};
+    end;
+    then f is U-linear by Th50;
+then A4:  LinTrace f in LinCoh(C1,C2) by Def21;
+      {[x1,y1],[x2,y2]} c= LinTrace f
+     proof let x be set; assume x in {[x1,y1],[x2,y2]};
+       then x = [x1,y1] & [a,y1] in Trace f or
+       x = [x2,y2] & [b,y2] in Trace f by A3,TARSKI:def 2;
+      hence thesis by Th51;
+     end;
+    then {[x1,y1],[x2,y2]} in LinCoh(C1,C2) by A4,CLASSES1:def 1;
+   hence thesis by COH_SP:5;
+  end;
+
+
+begin :: Negation of Coherence Spaces
+
+
+definition
+ let C be Coherence_Space;
+ func 'not' C -> set equals:
+Def22:
+   {a where a is Subset of union C:
+        for b being Element of C ex x being set st a /\ b c= {x}};
+ correctness;
+end;
+
+theorem Th66:
+ for C being Coherence_Space, x being set holds
+  x in 'not' C iff x c= union C &
+   for a being Element of C ex z being set st x /\ a c= {z}
+  proof let C be Coherence_Space, x be set;
+      'not' C = {a where a is Subset of union C:
+        for b being Element of C ex z being set st a /\
+ b c= {z}} by Def22;
+    then x in 'not' C iff ex X being Subset of union C st x = X &
+     for a being Element of C ex z being set st X /\ a c= {z};
+   hence thesis;
+  end;
+
+definition
+ let C be Coherence_Space;
+ cluster 'not' C -> non empty subset-closed binary_complete;
+  coherence
+   proof
+A1:   'not' C = {a where a is Subset of union C:
+           for b being Element of C ex x being set st a /\ b c= {x}} by Def22;
+    reconsider a = {} as Subset of union C by XBOOLE_1:2;
+       now let b be Element of C; consider x being set; take x;
+      thus a /\ b c= {x} by XBOOLE_1:2;
+     end;
+     then a in 'not' C by A1;
+    hence 'not' C is non empty;
+    hereby let a, b be set; assume a in 'not' C;
+     then consider aa being Subset of union C such that
+A2:    a = aa & for b being Element of C ex x being set st aa /\
+ b c= {x} by A1;
+     assume
+A3:    b c= a;
+     then reconsider bb = b as Subset of union C by A2,XBOOLE_1:1;
+        now let c be Element of C;
+       consider x being set such that
+A4:      aa /\ c c= {x} by A2;
+       take x;
+          b /\ c c= a /\ c by A3,XBOOLE_1:26;
+       hence bb /\ c c= {x} by A2,A4,XBOOLE_1:1;
+      end;
+     hence b in 'not' C by A1;
+    end;
+    let A be set such that
+A5:   for a,b being set st a in A & b in A holds a \/ b in 'not' C;
+       A c= bool union C
+      proof let x be set; assume x in A;
+        then x \/ x in 'not' C by A5;
+        then ex a being Subset of union C st x = a &
+         for b being Element of C ex x being set st a /\ b c= {x} by A1;
+       hence thesis;
+      end;
+     then union A c= union bool union C by ZFMISC_1:95;
+    then reconsider a = union A as Subset of union C by ZFMISC_1:99;
+       now let c be Element of C;
+      consider x being set;
+      per cases;
+       suppose
+A6:       a /\ c = {};
+        take x;
+        thus a /\ c c= {x} by A6,XBOOLE_1:2;
+       suppose
+           a /\ c <> {}; then reconsider X = a /\ c as non empty set;
+        consider x being Element of X; reconsider y = x as set;
+        take y;
+        thus a /\ c c= {y}
+         proof let z be set; assume z in a /\ c;
+then A7:        z in a & z in c by XBOOLE_0:def 3;
+          then consider v being set such that
+A8:         z in v & v in A by TARSKI:def 4;
+A9:        x in a & x in c by XBOOLE_0:def 3;
+          then consider w being set such that
+A10:         x in w & w in A by TARSKI:def 4;
+             w \/ v in 'not' C by A5,A8,A10;
+          then consider aa being Subset of union C such that
+A11:         w \/ v = aa &
+           for b being Element of C ex x being set st aa /\ b c= {x} by A1;
+          consider t being set such that
+A12:         aa /\ c c= {t} by A11;
+             z in aa & x in aa by A8,A10,A11,XBOOLE_0:def 2;
+           then z in aa /\ c & x in aa /\ c by A7,A9,XBOOLE_0:def 3;
+then z in {t} & x in {t} by A12;
+          hence thesis by TARSKI:def 1;
+         end;
+     end;
+    hence union A in 'not' C by A1;
+   end;
+end;
+
+theorem Th67:
+ for C being Coherence_Space holds union 'not' C = union C
+  proof let C be Coherence_Space;
+   hereby let x be set; assume x in union 'not' C;
+    then consider a being set such that
+A1:   x in a & a in 'not' C by TARSKI:def 4;
+       a c= union C by A1,Th66;
+    hence x in union C by A1;
+   end;
+   let x be set; assume x in union C;
+then A2:  {x} c= union C & x in {x} by ZFMISC_1:37;
+      now let a be Element of C;
+     take z = x; thus {x} /\ a c= {z} by XBOOLE_1:17;
+    end;
+    then {x} in 'not' C by A2,Th66;
+   hence x in union 'not' C by A2,TARSKI:def 4;
+  end;
+
+theorem Th68:
+ for C being Coherence_Space, x,y being set st x <> y & {x,y} in C
+  holds not {x,y} in 'not' C
+  proof let C be Coherence_Space, x,y be set; assume
+A1:  x <> y & {x,y} in C & {x,y} in 'not' C;
+   then consider z being set such that
+A2:  {x,y} /\ {x,y} c= {z} by Th66;
+      x = z & y = z by A2,ZFMISC_1:26;
+   hence contradiction by A1;
+  end;
+
+theorem Th69:
+ for C being Coherence_Space, x,y being set
+  st {x,y} c= union C & not {x,y} in C holds {x,y} in 'not' C
+  proof let C be Coherence_Space, x,y be set; assume
+A1:  {x,y} c= union C & not {x,y} in C;
+      now let a be Element of C;
+        x in a or not x in a;
+     then consider z being set such that
+A2:    x in a & z = x or not x in a & z = y;
+     take z;
+     thus {x,y} /\ a c= {z}
+      proof let v be set; assume A3: v in {x,y} /\ a;
+then A4:      v in {x,y} & v in a by XBOOLE_0:def 3;
+       per cases by A4,TARSKI:def 2;
+        suppose v = x; hence thesis by A2,A3,TARSKI:def 1,XBOOLE_0:def 3;
+        suppose
+A5:        v = y; then x in a implies {x,y} c= a by A4,ZFMISC_1:38;
+         hence thesis by A1,A2,A5,CLASSES1:def 1,TARSKI:def 1;
+      end;
+    end;
+   hence {x,y} in 'not' C by A1,Th66;
+  end;
+
+theorem
+   for C being Coherence_Space for x,y being set holds
+  [x,y] in Web 'not' C iff
+   x in union C & y in union C & (x = y or not [x,y] in Web C)
+  proof let C be Coherence_Space, x,y be set;
+A1:  x <> y & {x,y} in C implies not {x,y} in 'not' C by Th68;
+A2:  {x,y} c= union C & not {x,y} in C implies {x,y} in 'not' C by Th69;
+A3:  union 'not' C = union C by Th67;
+   hence [x,y] in Web 'not' C implies
+    x in union C & y in union C &
+    (x = y or not [x,y] in Web C) by A1,COH_SP:5,ZFMISC_1:106;
+   assume x in union C & y in union C & (x = y or not [x,y] in Web C);
+    then {x,y} c= union C & (x = y & {x} in 'not' C & {x} = {x,y} or not {x,y}
+in C)
+     by A3,COH_SP:4,5,ENUMSET1:69,ZFMISC_1:38;
+   hence thesis by A2,COH_SP:5;
+  end;
+
+Lm7:
+ for C being Coherence_Space holds 'not' 'not' C c= C
+  proof let C be Coherence_Space;
+A1:  'not' 'not' C = {a where a is Subset of union 'not' C:
+        for b being Element of 'not'
+ C ex x being set st a /\ b c= {x}} by Def22;
+   let x be set; assume x in 'not' 'not' C;
+   then consider a being Subset of union 'not' C such that
+A2:  x = a & for b being Element of 'not'
+ C ex x being set st a /\ b c= {x} by A1;
+A3:  union 'not' C = union C by Th67;
+      now let x,y be set; assume
+A4:    x in a & y in a & not {x,y} in C;
+      then {x,y} c= union C by A3,ZFMISC_1:38;
+      then {x,y} in 'not' C by A4,Th69;
+     then consider z being set such that
+A5:    a /\ {x,y} c= {z} by A2;
+        x in {x,y} & y in {x,y} by TARSKI:def 2;
+      then x in a/\{x,y} & y in a/\{x,y} by A4,XBOOLE_0:def 3;
+      then x = z & y = z by A5,TARSKI:def 1;
+      then {x,y} = {x} by ENUMSET1:69;
+     hence contradiction by A3,A4,COH_SP:4;
+    end;
+   hence thesis by A2,COH_SP:6;
+  end;
+
+theorem Th71:
+ for C being Coherence_Space holds 'not' 'not' C = C
+  proof let C be Coherence_Space;
+   thus 'not' 'not' C c= C by Lm7;
+   let a be set; assume
+A1:  a in C;
+A2:  union C = union 'not' C & union 'not' C = union 'not' 'not' C by Th67;
+      now let x,y be set; assume
+      x in a & y in a;
+then A3:    {x,y} c= a & x in union C & y in union C
+       by A1,TARSKI:def 4,ZFMISC_1:38;
+then A4:    {x,y} in C & {x,y} c= union C by A1,CLASSES1:def 1,ZFMISC_1:38;
+      then x <> y implies not {x,y} in 'not' C by Th68;
+      then (x <> y implies {x,y} in 'not' 'not' C) & {x,x} = {x} & (x <> y or
+x = y)
+       by A2,A4,Th69,ENUMSET1:69;
+     hence {x,y} in 'not' 'not' C by A2,A3,COH_SP:4;
+    end;
+   hence thesis by COH_SP:6;
+  end;
+
+theorem
+   'not' {{}} = {{}}
+  proof
+      union 'not' {{}} = union {{}} by Th67 .= {} by ZFMISC_1:31;
+   hence 'not' {{}} c= {{}} by ZFMISC_1:1,100;
+      {} in 'not' {{}} by COH_SP:1;
+   hence thesis by ZFMISC_1:37;
+  end;
+
+theorem
+   for X being set holds 'not' FlatCoh X = bool X & 'not' bool X = FlatCoh X
+  proof let X be set;
+   thus 'not' FlatCoh X = bool X
+    proof
+     hereby let x be set; assume x in 'not' FlatCoh X;
+       then x c= union FlatCoh X by Th66;
+       then x c= X by Th2;
+      hence x in bool X;
+     end;
+     let x be set; assume x in bool X;
+      then x c= X;
+then A1:    x c= union FlatCoh X by Th2;
+        now let a be Element of FlatCoh X;
+       per cases by Th1;
+        suppose a = {};
+          then x /\ a c= {0} by XBOOLE_1:2;
+         hence ex z being set st x /\ a c= {z};
+        suppose ex z being set st a = {z} & z in X;
+         then consider z being set such that
+A2:        a = {z} & z in X;
+         take z; thus x /\ a c= {z} by A2,XBOOLE_1:17;
+      end;
+     hence x in 'not' FlatCoh X by A1,Th66;
+    end;
+   hence 'not' bool X = FlatCoh X by Th71;
+  end;
+
+
+begin :: Product and Coproduct on Coherence Spaces
+
+
+definition
+ let x,y be set;
+ func x U+ y -> set equals:
+Def23:
+   Union disjoin <*x,y*>;
+  correctness;
+end;
+
+theorem Th74:
+ for x,y being set holds
+  x U+ y = [:x,{1}:] \/ [:y,{2}:]
+  proof let x,y be set;
+A1:  x U+ y = Union disjoin <*x,y*> by Def23;
+      len <*x,y*> = 2 by FINSEQ_1:61;
+then A2:  dom <*x,y*> = {1,2} by FINSEQ_1:4,def 3;
+      now let z be set;
+A3:    z in x U+ y iff z`2 in {1,2} & z`1 in <*x,y*>.(z`2) & z = [z`1,z`2]
+       by A1,A2,CARD_3:33;
+A4:    z`2 in {1,2} iff z`2 = 1 or z`2 = 2 by TARSKI:def 2;
+A5:    z in [:x,{1}:] iff z`1 in x & z`2 = 1 & z = [z`1,z`2]
+       by MCART_1:13,23,ZFMISC_1:129;
+     z in [:y,{2}:] iff z`1 in y & z`2 = 2 & z = [z`1,z`2]
+       by MCART_1:13,23,ZFMISC_1:129;
+     hence z in x U+ y iff z in [:x,{1}:] \/ [:y,{2}:] by A3,A4,A5,FINSEQ_1:61,
+XBOOLE_0:def 2;
+    end;
+   hence x U+ y = [:x,{1}:] \/ [:y,{2}:] by TARSKI:2;
+  end;
+
+theorem Th75:
+ for x being set holds
+  x U+ {} = [:x,{1}:] & {} U+ x = [:x,{2}:]
+  proof let x be set;
+   thus x U+ {} = [:x,{1}:] \/ [:{},{2}:] by Th74
+              .= [:x,{1}:] \/ {} by ZFMISC_1:113
+              .= [:x,{1}:];
+   thus {} U+ x = [:{},{1}:] \/ [:x,{2}:] by Th74
+              .= {} \/ [:x,{2}:] by ZFMISC_1:113
+              .= [:x,{2}:];
+  end;
+
+theorem Th76:
+ for x,y,z being set st z in x U+ y
+  holds z = [z`1,z`2] & (z`2 = 1 & z`1 in x or z`2 = 2 & z`1 in y)
+  proof let x,y,z be set; assume z in x U+ y;
+    then z in [:x,{1}:] \/ [:y,{2}:] by Th74;
+    then z in [:x,{1}:] or z in [:y,{2}:] by XBOOLE_0:def 2;
+   hence thesis by MCART_1:13,23;
+  end;
+
+theorem Th77:
+ for x,y,z being set holds [z,1] in x U+ y iff z in x
+  proof let x,y,z be set;
+      x U+ y = [:x,{1}:] \/ [:y,{2}:] by Th74;
+    then [z,1] in x U+ y iff [z,1] in [:x,{1}:] or [z,1] in [:y,{2}:] & 1 <> 2
+     by XBOOLE_0:def 2;
+   hence thesis by ZFMISC_1:129;
+  end;
+
+theorem Th78:
+ for x,y,z being set holds [z,2] in x U+ y iff z in y
+  proof let x,y,z be set;
+      x U+ y = [:x,{1}:] \/ [:y,{2}:] by Th74;
+    then [z,2] in x U+ y iff [z,2] in [:x,{1}:] & 1 <> 2 or [z,2] in [:y,{2}:]
+     by XBOOLE_0:def 2;
+   hence thesis by ZFMISC_1:129;
+  end;
+
+
+theorem Th79:
+ for x1,y1, x2,y2 being set holds
+  x1 U+ y1 c= x2 U+ y2 iff x1 c= x2 & y1 c= y2
+   proof let x1,y1, x2,y2 be set;
+    hereby assume
+A1:   x1 U+ y1 c= x2 U+ y2;
+     thus x1 c= x2
+      proof let a be set; assume a in x1;
+        then [a,1] in x1 U+ y1 by Th77;
+       hence a in x2 by A1,Th77;
+      end;
+     thus y1 c= y2
+      proof let a be set; assume a in y1;
+        then [a,2] in x1 U+ y1 by Th78;
+       hence a in y2 by A1,Th78;
+      end;
+    end;
+    assume
+A2:   x1 c= x2 & y1 c= y2;
+    let a be set; assume
+       a in x1 U+ y1;
+then a = [a`1,a`2] & (a`2 = 1 & a`1 in x1 or a`2 = 2 & a`1 in
+ y1) by Th76;
+    hence thesis by A2,Th77,Th78;
+   end;
+
+theorem Th80:
+ for x,y, z being set st z c= x U+ y
+  ex x1,y1 being set st z = x1 U+ y1 & x1 c= x & y1 c= y
+  proof let x,y,z be set; assume
+A1:  z c= x U+ y;
+A2:  x U+ y = [:x,{1}:] \/ [:y,{2}:] by Th74;
+   take x1 = proj1 (z /\ [:x,{1}:]), y1 = proj1 (z /\ [:y,{2}:]);
+   thus z = x1 U+ y1
+    proof
+     hereby let a be set; assume
+A3:     a in z;
+then A4:     a = [a`1,a`2] by A1,Th76;
+         a in [:x,{1}:] or a in [:y,{2}:] by A1,A2,A3,XBOOLE_0:def 2;
+       then a in z /\ [:x,{1}:] & a`2 = 1 or a in z /\ [:y,{2}:] & a`2 = 2
+        by A3,A4,XBOOLE_0:def 3,ZFMISC_1:129;
+       then a`1 in x1 & a`2 = 1 or a`1 in y1 & a`2 = 2 by A4,FUNCT_5:4;
+      hence a in x1 U+ y1 by A4,Th77,Th78;
+     end;
+     let a be set; assume A5: a in x1 U+ y1;
+then A6:    a = [a`1,a`2] & (a`2 = 1 & a`1 in x1 or a`2 = 2 & a`1 in y1) by
+Th76;
+     per cases by A5,Th76;
+      suppose
+A7:     a`2 = 1 & a`1 in x1;
+       then consider b being set such that
+A8:      [a`1,b] in z /\ [:x,{1}:] by FUNCT_5:def 1;
+       [a`1,b] in z & [a`1,b] in [:x,{1}:] by A8,XBOOLE_0:def 3;
+       hence a in z by A6,A7,ZFMISC_1:129;
+      suppose
+A9:     a`2 = 2 & a`1 in y1;
+       then consider b being set such that
+A10:      [a`1,b] in z /\ [:y,{2}:] by FUNCT_5:def 1;
+       [a`1,b] in z & [a`1,b] in [:y,{2}:] by A10,XBOOLE_0:def 3;
+       hence a in z by A6,A9,ZFMISC_1:129;
+    end;
+      z /\ [:x,{1}:] c= [:x,{1}:] & z /\ [:y,{2}:] c= [:y,{2}:] by XBOOLE_1:17
+;
+    then x1 c= proj1 [:x,{1}:] & y1 c= proj1 [:y,{2}:] by FUNCT_5:5;
+   hence thesis by FUNCT_5:11;
+  end;
+
+theorem Th81:
+ for x1,y1, x2,y2 being set holds
+  x1 U+ y1 = x2 U+ y2 iff x1 = x2 & y1 = y2
+  proof let x1,y1, x2,y2 be set;
+A1:  x2 U+ y2 c= x1 U+ y1 iff x2 c= x1 & y2 c= y1 by Th79;
+      x1 U+ y1 c= x2 U+ y2 iff x1 c= x2 & y1 c= y2 by Th79;
+   hence thesis by A1,XBOOLE_0:def 10;
+  end;
+
+theorem Th82:
+ for x1,y1, x2,y2 being set holds
+  x1 U+ y1 \/ x2 U+ y2 = (x1 \/ x2) U+ (y1 \/ y2)
+  proof let x1,y1, x2,y2 be set;
+   set X1 = [:x1,{1}:], X2 = [:x2,{1}:];
+   set Y1 = [:y1,{2}:], Y2 = [:y2,{2}:];
+   set X = [:x1 \/ x2, {1}:], Y = [:y1 \/ y2, {2}:];
+A1:  x1 U+ y1 = X1 \/ Y1 & x2 U+ y2 = X2 \/ Y2 by Th74;
+A2:  (x1 \/ x2) U+ (y1 \/ y2) = X \/ Y by Th74;
+A3:  X = X1 \/ X2 & Y = Y1 \/ Y2 by ZFMISC_1:120;
+   thus x1 U+ y1 \/ x2 U+ y2 = X1 \/ Y1 \/ X2 \/ Y2 by A1,XBOOLE_1:4
+     .= X \/ Y1 \/ Y2 by A3,XBOOLE_1:4
+     .= (x1 \/ x2) U+ (y1 \/ y2) by A2,A3,XBOOLE_1:4;
+  end;
+
+theorem Th83:
+ for x1,y1, x2,y2 being set holds
+  (x1 U+ y1) /\ (x2 U+ y2) = (x1 /\ x2) U+ (y1 /\ y2)
+  proof let x1,y1, x2,y2 be set;
+   set X1 = [:x1,{1}:], X2 = [:x2,{1}:];
+   set Y1 = [:y1,{2}:], Y2 = [:y2,{2}:];
+   set X = [:x1 /\ x2, {1}:], Y = [:y1 /\ y2, {2}:];
+A1:  x1 U+ y1 = X1 \/ Y1 & x2 U+ y2 = X2 \/ Y2 by Th74;
+A2:  X = X1 /\ X2 & Y = Y1 /\ Y2 by ZFMISC_1:122;
+      {1} misses {2} by ZFMISC_1:17;
+     then Y1 misses X2 & X1 misses Y2 by ZFMISC_1:127;
+then A3:  Y1 /\ X2 = {} & X1 /\ Y2 = {} by XBOOLE_0:def 7;
+   thus (x1 U+ y1) /\ (x2 U+ y2)
+      = ((X1 \/ Y1) /\ X2) \/ ((X1 \/ Y1) /\ Y2) by A1,XBOOLE_1:23
+     .= (X \/ Y1 /\ X2) \/ ((X1 \/ Y1) /\ Y2) by A2,XBOOLE_1:23
+     .= X \/ (X1 /\ Y2 \/ Y) by A2,A3,XBOOLE_1:23
+     .= (x1 /\ x2) U+ (y1 /\ y2) by A3,Th74;
+  end;
+
+definition
+ let C1, C2 be Coherence_Space;
+ func C1 "/\" C2 -> set equals :Def24:
+  {a U+ b where a is Element of C1, b is Element of C2: not contradiction};
+  correctness;
+ func C1 "\/" C2 -> set equals :Def25:
+   {a U+ {} where a is Element of C1: not contradiction} \/
+       {{} U+ b where b is Element of C2: not contradiction};
+  correctness;
+end;
+
+theorem Th84:
+ for C1,C2 being Coherence_Space for x being set holds
+  x in C1 "/\" C2 iff
+   ex a being Element of C1, b being Element of C2 st x = a U+ b
+  proof let C1,C2 be Coherence_Space, x be set;
+      C1 "/\" C2 = {a U+ b where a is Element of C1, b is Element of C2:
+                not contradiction} by Def24;
+   hence thesis;
+  end;
+
+theorem Th85:
+ for C1,C2 being Coherence_Space for x,y being set holds
+  x U+ y in C1 "/\" C2 iff x in C1 & y in C2
+  proof let C1,C2 be Coherence_Space, x,y be set;
+A1:  now given a being Element of C1, b being Element of C2 such that
+A2:    x U+ y = a U+ b;
+     take a,b;
+     thus x = a & y = b by A2,Th81;
+    end;
+      C1 "/\" C2 = {a U+ b where a is Element of C1, b is Element of C2:
+                not contradiction} by Def24;
+   hence x U+ y in C1 "/\" C2 iff x in C1 & y in C2 by A1;
+  end;
+
+theorem Th86:
+ for C1,C2 being Coherence_Space holds
+  union (C1 "/\" C2) = (union C1) U+ (union C2)
+  proof let C1,C2 be Coherence_Space;
+   thus union (C1 "/\" C2) c= (union C1) U+ (union C2)
+    proof let x be set; assume x in union (C1 "/\" C2);
+     then consider a being set such that
+A1:    x in a & a in C1 "/\" C2 by TARSKI:def 4;
+     consider a1 being Element of C1, a2 being Element of C2 such that
+A2:    a = a1 U+ a2 by A1,Th84;
+        a1 c= union C1 & a2 c= union C2 by ZFMISC_1:92;
+      then a c= (union C1) U+ (union C2) by A2,Th79;
+     hence thesis by A1;
+    end;
+   let z be set; assume A3: z in (union C1) U+ (union C2);
+then A4:  z = [z`1,z`2] & (z`2 = 1 & z`1 in union C1 or z`2 = 2 & z`1 in union
+C2)
+     by Th76;
+   per cases by A3,Th76;
+   suppose
+A5:   z`2 = 1 & z`1 in union C1;
+    then consider a being set such that
+A6:   z`1 in a & a in C1 by TARSKI:def 4;
+    reconsider a as Element of C1 by A6;
+    consider b being Element of C2;
+       z in a U+ b & a U+ b in C1 "/\" C2 by A4,A5,A6,Th77,Th85;
+    hence thesis by TARSKI:def 4;
+   suppose
+A7:   z`2 = 2 & z`1 in union C2;
+    then consider a being set such that
+A8:   z`1 in a & a in C2 by TARSKI:def 4;
+    reconsider a as Element of C2 by A8;
+    consider b being Element of C1;
+       z in b U+ a & b U+ a in C1 "/\" C2 by A4,A7,A8,Th78,Th85;
+    hence thesis by TARSKI:def 4;
+  end;
+
+theorem Th87:
+ for C1,C2 being Coherence_Space for x,y being set holds
+  x U+ y in C1 "\/" C2 iff x in C1 & y = {} or x = {} & y in C2
+  proof let C1,C2 be Coherence_Space, x,y be set;
+A1:  now given a being Element of C1 such that
+A2:    x U+ y = a U+ {};
+        x = a & y = {} by A2,Th81;
+     hence x in C1 & y = {};
+    end;
+A3:  now given a being Element of C2 such that
+A4:    x U+ y = {} U+ a;
+        x = {} & y = a by A4,Th81;
+     hence y in C2 & x = {};
+    end;
+      C1 "\/" C2 = {a U+ {} where a is Element of C1: not contradiction} \/
+         {{} U+ b where b is Element of C2: not contradiction} by Def25;
+    then x U+ y in C1 "\/" C2 iff
+     x U+ y in {a U+ {} where a is Element of C1: not contradiction} or
+     x U+ y in {{} U+ b where b is Element of C2: not contradiction}
+       by XBOOLE_0:def 2;
+   hence thesis by A1,A3;
+  end;
+
+theorem Th88:
+ for C1,C2 being Coherence_Space for x being set st x in C1 "\/" C2
+  ex a being Element of C1, b being Element of C2 st
+   x = a U+ b & (a = {} or b = {})
+  proof let C1,C2 be Coherence_Space, x be set; assume
+      x in C1 "\/" C2;
+    then x in {a U+ {} where a is Element of C1: not contradiction} \/
+        {{} U+ b where b is Element of C2: not contradiction} by Def25;
+    then x in {a U+ {} where a is Element of C1: not contradiction} or
+    x in {{} U+ b where b is Element of C2: not contradiction} by XBOOLE_0:def
+2
+;
+    then {} in C2 & (ex a being Element of C1 st x = a U+ {}) or
+    {} in C1 & (ex b being Element of C2 st x = {} U+ b) by COH_SP:1;
+   hence thesis;
+  end;
+
+theorem
+   for C1,C2 being Coherence_Space holds
+  union (C1 "\/" C2) = (union C1) U+ (union C2)
+  proof let C1,C2 be Coherence_Space;
+   thus union (C1 "\/" C2) c= (union C1) U+ (union C2)
+    proof let x be set; assume x in union (C1 "\/" C2);
+     then consider a being set such that
+A1:    x in a & a in C1 "\/" C2 by TARSKI:def 4;
+     consider a1 being Element of C1, a2 being Element of C2 such that
+A2:    a = a1 U+ a2 & (a1 = {} or a2 = {}) by A1,Th88;
+        a1 c= union C1 & a2 c= union C2 by ZFMISC_1:92;
+      then a c= (union C1) U+ (union C2) by A2,Th79;
+     hence thesis by A1;
+    end;
+   let z be set; assume A3: z in (union C1) U+ (union C2);
+then A4:  z = [z`1,z`2] & (z`2 = 1 & z`1 in union C1 or z`2 = 2 & z`1 in union
+C2)
+     by Th76;
+   per cases by A3,Th76;
+   suppose
+A5:   z`2 = 1 & z`1 in union C1;
+    then consider a being set such that
+A6:   z`1 in a & a in C1 by TARSKI:def 4;
+    reconsider a as Element of C1 by A6;
+    reconsider b = {} as Element of C2 by COH_SP:1;
+       z in a U+ b & a U+ b in C1 "\/" C2 by A4,A5,A6,Th77,Th87;
+    hence thesis by TARSKI:def 4;
+   suppose
+A7:   z`2 = 2 & z`1 in union C2;
+    then consider a being set such that
+A8:   z`1 in a & a in C2 by TARSKI:def 4;
+    reconsider a as Element of C2 by A8;
+    reconsider b = {} as Element of C1 by COH_SP:1;
+       z in b U+ a & b U+ a in C1 "\/" C2 by A4,A7,A8,Th78,Th87;
+    hence thesis by TARSKI:def 4;
+  end;
+
+definition
+ let C1, C2 be Coherence_Space;
+ cluster C1 "/\" C2 -> non empty subset-closed binary_complete;
+  coherence
+   proof
+A1:   C1 "/\" C2 =
+     {a U+ b where a is Element of C1, b is Element of C2: not contradiction}
+      by Def24;
+    consider a' being Element of C1, b' being Element of C2;
+       a' U+ b' in C1 "/\" C2 by A1;
+    hence C1 "/\" C2 is non empty;
+    hereby let a, b be set; assume a in C1 "/\" C2;
+     then consider aa being Element of C1, bb being Element of C2 such that
+A2:    a = aa U+ bb by A1;
+     assume b c= a;
+     then consider x1,y1 being set such that
+A3:    b = x1 U+ y1 & x1 c= aa & y1 c= bb by A2,Th80;
+        x1 in C1 & y1 in C2 by A3,CLASSES1:def 1;
+     hence b in C1 "/\" C2 by A1,A3;
+    end;
+    let A be set such that
+A4:   for a,b being set st a in A & b in A holds a \/ b in C1 "/\" C2;
+    set A1 = {a where a is Element of C1:
+              ex b being Element of C2 st a U+ b in A};
+    set A2 = {b where b is Element of C2:
+              ex a being Element of C1 st a U+ b in A};
+       now let x,y be set; assume x in A1;
+      then consider ax being Element of C1 such that
+A5:    x = ax & ex b being Element of C2 st ax U+ b in A;
+      consider bx being Element of C2 such that
+A6:    ax U+ bx in A by A5;
+      assume y in A1;
+      then consider ay being Element of C1 such that
+A7:    y = ay & ex b being Element of C2 st ay U+ b in A;
+      consider b_y being Element of C2 such that
+A8:    ay U+ b_y in A by A7;
+         (ax U+ bx) \/ (ay U+ b_y) in C1 "/\" C2 by A4,A6,A8;
+       then (ax \/ ay) U+ (bx \/ b_y) in C1 "/\" C2 by Th82;
+      hence x \/ y in C1 by A5,A7,Th85;
+     end;
+then A9:   union A1 in C1 by Def1;
+       now let x,y be set; assume x in A2;
+      then consider ax being Element of C2 such that
+A10:    x = ax & ex b being Element of C1 st b U+ ax in A;
+      consider bx being Element of C1 such that
+A11:    bx U+ ax in A by A10;
+      assume y in A2;
+      then consider ay being Element of C2 such that
+A12:    y = ay & ex b being Element of C1 st b U+ ay in A;
+      consider b_y being Element of C1 such that
+A13:    b_y U+ ay in A by A12;
+         (bx U+ ax) \/ (b_y U+ ay) in C1 "/\" C2 by A4,A11,A13;
+       then (bx \/ b_y) U+ (ax \/ ay) in C1 "/\" C2 by Th82;
+      hence x \/ y in C2 by A10,A12,Th85;
+     end;
+then A14:   union A2 in C2 by Def1;
+       (union A1) U+ union A2 = union A
+      proof
+       hereby let x be set; assume A15: x in (union A1) U+ union A2;
+then A16:      x = [x`1,x`2] &
+         (x`2 = 1 & x`1 in union A1 or x`2 = 2 & x`1 in union A2) by Th76;
+        per cases by A15,Th76;
+         suppose
+A17:        x`2 = 1 & x`1 in union A1;
+          then consider a being set such that
+A18:        x`1 in a & a in A1 by TARSKI:def 4;
+          consider ax being Element of C1 such that
+A19:        a = ax & ex b being Element of C2 st ax U+ b in A by A18;
+          consider bx being Element of C2 such that
+A20:        ax U+ bx in A by A19;
+             x in ax U+ bx by A16,A17,A18,A19,Th77;
+          hence x in union A by A20,TARSKI:def 4;
+         suppose
+A21:        x`2 = 2 & x`1 in union A2;
+          then consider a being set such that
+A22:        x`1 in a & a in A2 by TARSKI:def 4;
+          consider bx being Element of C2 such that
+A23:        a = bx & ex a being Element of C1 st a U+ bx in A by A22;
+          consider ax being Element of C1 such that
+A24:        ax U+ bx in A by A23;
+             x in ax U+ bx by A16,A21,A22,A23,Th78;
+          hence x in union A by A24,TARSKI:def 4;
+       end;
+       let x be set; assume x in union A;
+       then consider a being set such that
+A25:     x in a & a in A by TARSKI:def 4;
+          a \/ a in C1 "/\" C2 by A4,A25;
+       then consider aa being Element of C1, bb being Element of C2 such that
+A26:     a = aa U+ bb by A1;
+          aa in A1 & bb in A2 by A25,A26;
+        then aa c= union A1 & bb c= union A2 by ZFMISC_1:92;
+        then aa U+ bb c= (union A1) U+ union A2 by Th79;
+       hence x in (union A1) U+ union A2 by A25,A26;
+      end;
+    hence union A in C1 "/\" C2 by A9,A14,Th85;
+   end;
+ cluster C1 "\/" C2 -> non empty subset-closed binary_complete;
+  coherence
+   proof
+    consider a' being Element of C1;
+       a' U+ {} in C1 "\/" C2 by Th87;
+    hence C1 "\/" C2 is non empty;
+    hereby let a, b be set; assume a in C1 "\/" C2;
+     then consider aa being Element of C1, bb being Element of C2 such that
+A27:    a = aa U+ bb & (aa = {} or bb = {}) by Th88;
+     assume b c= a;
+     then consider x1,y1 being set such that
+A28:    b = x1 U+ y1 & x1 c= aa & y1 c= bb by A27,Th80;
+        x1 in C1 & y1 in C2 & (x1 = {} or y1 = {}) by A27,A28,CLASSES1:def 1,
+XBOOLE_1:3;
+     hence b in C1 "\/" C2 by A28,Th87;
+    end;
+    let A be set; assume that
+A29:   for a,b being set st a in A & b in A holds a \/ b in C1 "\/" C2;
+    set A1 = {a where a is Element of C1:
+              ex b being Element of C2 st a U+ b in A};
+    set A2 = {b where b is Element of C2:
+              ex a being Element of C1 st a U+ b in A};
+       now let x,y be set; assume x in A1;
+      then consider ax being Element of C1 such that
+A30:    x = ax & ex b being Element of C2 st ax U+ b in A;
+      consider bx being Element of C2 such that
+A31:    ax U+ bx in A by A30;
+      assume y in A1;
+      then consider ay being Element of C1 such that
+A32:    y = ay & ex b being Element of C2 st ay U+ b in A;
+      consider b_y being Element of C2 such that
+A33:    ay U+ b_y in A by A32;
+         (ax U+ bx) \/ (ay U+ b_y) in C1 "\/" C2 by A29,A31,A33;
+       then (ax \/ ay) U+ (bx \/ b_y) in C1 "\/" C2 by Th82;
+       then x \/ y in C1 or x \/ y = {} by A30,A32,Th87;
+      hence x \/ y in C1 by COH_SP:1;
+     end;
+then A34:   union A1 in C1 by Def1;
+       now let x,y be set; assume x in A2;
+      then consider ax being Element of C2 such that
+A35:    x = ax & ex b being Element of C1 st b U+ ax in A;
+      consider bx being Element of C1 such that
+A36:    bx U+ ax in A by A35;
+      assume y in A2;
+      then consider ay being Element of C2 such that
+A37:    y = ay & ex b being Element of C1 st b U+ ay in A;
+      consider b_y being Element of C1 such that
+A38:    b_y U+ ay in A by A37;
+         (bx U+ ax) \/ (b_y U+ ay) in C1 "\/" C2 by A29,A36,A38;
+       then (bx \/ b_y) U+ (ax \/ ay) in C1 "\/" C2 by Th82;
+       then x \/ y in C2 or x \/ y = {} by A35,A37,Th87;
+      hence x \/ y in C2 by COH_SP:1;
+     end;
+then A39:   union A2 in C2 by Def1;
+A40:   now assume union A1 <> {};
+      then reconsider AA = union A1 as non empty set;
+      consider aa being Element of AA;
+      consider x being set such that
+A41:    aa in x & x in A1 by TARSKI:def 4;
+      consider ax being Element of C1 such that
+A42:    x = ax & ex b being Element of C2 st ax U+ b in A by A41;
+      consider bx being Element of C2 such that
+A43:    ax U+ bx in A by A42;
+      assume union A2 <> {};
+      then reconsider AA = union A2 as non empty set;
+      consider bb being Element of AA;
+      consider y being set such that
+A44:    bb in y & y in A2 by TARSKI:def 4;
+      consider b_y being Element of C2 such that
+A45:    y = b_y & ex a being Element of C1 st a U+ b_y in A by A44;
+      consider ay being Element of C1 such that
+A46:    ay U+ b_y in A by A45;
+         (ax U+ bx) \/ (ay U+ b_y) in C1 "\/" C2 by A29,A43,A46;
+       then (ax \/ ay) U+ (bx \/ b_y) in C1 "\/" C2 by Th82;
+       then x \/ ay = {} & aa in x \/ ay or
+       bx \/ y = {} & bb in bx \/ y by A41,A42,A44,A45,Th87,XBOOLE_0:def 2;
+      hence contradiction;
+     end;
+       (union A1) U+ union A2 = union A
+      proof
+       hereby let x be set; assume A47: x in (union A1) U+ union A2;
+then A48:      x = [x`1,x`2] &
+         (x`2 = 1 & x`1 in union A1 or x`2 = 2 & x`1 in union A2) by Th76;
+        per cases by A47,Th76;
+         suppose
+A49:        x`2 = 1 & x`1 in union A1;
+          then consider a being set such that
+A50:        x`1 in a & a in A1 by TARSKI:def 4;
+          consider ax being Element of C1 such that
+A51:        a = ax & ex b being Element of C2 st ax U+ b in A by A50;
+          consider bx being Element of C2 such that
+A52:        ax U+ bx in A by A51;
+             x in ax U+ bx by A48,A49,A50,A51,Th77;
+          hence x in union A by A52,TARSKI:def 4;
+         suppose
+A53:        x`2 = 2 & x`1 in union A2;
+          then consider a being set such that
+A54:        x`1 in a & a in A2 by TARSKI:def 4;
+          consider bx being Element of C2 such that
+A55:        a = bx & ex a being Element of C1 st a U+ bx in A by A54;
+          consider ax being Element of C1 such that
+A56:        ax U+ bx in A by A55;
+             x in ax U+ bx by A48,A53,A54,A55,Th78;
+          hence x in union A by A56,TARSKI:def 4;
+       end;
+       let x be set; assume x in union A;
+       then consider a being set such that
+A57:     x in a & a in A by TARSKI:def 4;
+          a \/ a in C1 "\/" C2 by A29,A57;
+       then consider aa being Element of C1, bb being Element of C2 such that
+A58:     a = aa U+ bb & (aa = {} or bb = {}) by Th88;
+          aa in A1 & bb in A2 by A57,A58;
+        then aa c= union A1 & bb c= union A2 by ZFMISC_1:92;
+        then aa U+ bb c= (union A1) U+ union A2 by Th79;
+       hence x in (union A1) U+ union A2 by A57,A58;
+      end;
+    hence union A in C1 "\/" C2 by A34,A39,A40,Th87;
+   end;
+end;
+
+reserve C1, C2 for Coherence_Space;
+
+theorem
+   for x,y being set holds
+  [[x,1],[y,1]] in Web (C1 "/\" C2) iff [x,y] in Web C1
+  proof let x,y be set;
+A1:  [[x,1],[y,1]] in Web (C1 "/\" C2) iff {[x,1],[y,1]} in C1 "/\"
+ C2 by COH_SP:5;
+A2:  [x,y] in Web C1 iff {x,y} in C1 by COH_SP:5;
+A3:  {x,y} U+ {} = [:{x,y},{1}:] & {} in C2 by Th75,COH_SP:1;
+    [:{x,y},{1}:] = {[x,1],[y,1]} by ZFMISC_1:36;
+   hence thesis by A1,A2,A3,Th85;
+  end;
+
+theorem
+   for x,y being set holds
+  [[x,2],[y,2]] in Web (C1 "/\" C2) iff [x,y] in Web C2
+  proof let x,y be set;
+A1:  [[x,2],[y,2]] in Web (C1 "/\" C2) iff {[x,2],[y,2]} in C1 "/\"
+ C2 by COH_SP:5;
+A2:  [x,y] in Web C2 iff {x,y} in C2 by COH_SP:5;
+A3:  {} U+ {x,y} = [:{x,y},{2}:] & {} in C1 by Th75,COH_SP:1;
+    [:{x,y},{2}:] = {[x,2],[y,2]} by ZFMISC_1:36;
+   hence thesis by A1,A2,A3,Th85;
+  end;
+
+theorem
+   for x,y being set st x in union C1 & y in union C2 holds
+  [[x,1],[y,2]] in Web (C1 "/\" C2) & [[y,2],[x,1]] in Web (C1 "/\" C2)
+  proof let x,y be set; assume x in union C1 & y in union C2;
+    then {x} in C1 & {y} in C2 by COH_SP:4;
+    then {x} U+ {y} in C1 "/\" C2 by Th85;
+    then [:{x},{1}:] \/ [:{y},{2}:] in C1 "/\" C2 by Th74;
+    then {[x,1]} \/ [:{y},{2}:] in C1 "/\" C2 by ZFMISC_1:35;
+    then {[x,1]} \/ {[y,2]} in C1 "/\" C2 by ZFMISC_1:35;
+then A1:  {[x,1],[y,2]} in C1 "/\" C2 by ENUMSET1:41;
+   hence [[x,1],[y,2]] in Web (C1 "/\" C2) by COH_SP:5;
+   thus thesis by A1,COH_SP:5;
+  end;
+
+theorem
+   for x,y being set holds
+  [[x,1],[y,1]] in Web (C1 "\/" C2) iff [x,y] in Web C1
+  proof let x,y be set;
+A1:  [[x,1],[y,1]] in Web (C1 "\/" C2) iff {[x,1],[y,1]} in C1 "\/"
+ C2 by COH_SP:5;
+A2:  [x,y] in Web C1 iff {x,y} in C1 by COH_SP:5;
+A3:  {x,y} U+ {} = [:{x,y},{1}:] & {} in C2 by Th75,COH_SP:1;
+    [:{x,y},{1}:] = {[x,1],[y,1]} by ZFMISC_1:36;
+   hence thesis by A1,A2,A3,Th87;
+  end;
+
+
+theorem
+   for x,y being set holds
+  [[x,2],[y,2]] in Web (C1 "\/" C2) iff [x,y] in Web C2
+  proof let x,y be set;
+A1:  [[x,2],[y,2]] in Web (C1 "\/" C2) iff {[x,2],[y,2]} in C1 "\/"
+ C2 by COH_SP:5;
+A2:  [x,y] in Web C2 iff {x,y} in C2 by COH_SP:5;
+A3:  {} U+ {x,y} = [:{x,y},{2}:] & {} in C1 by Th75,COH_SP:1;
+    [:{x,y},{2}:] = {[x,2],[y,2]} by ZFMISC_1:36;
+   hence thesis by A1,A2,A3,Th87;
+  end;
+
+theorem
+   for x,y being set holds
+  not [[x,1],[y,2]] in Web (C1 "\/" C2) & not [[y,2],[x,1]] in Web (C1 "\/" C2)
+  proof let x,y be set;
+A1:  not {x} U+ {y} in C1 "\/" C2 by Th87;
+A2:  {x} U+ {y} = [:{x},{1}:] \/ [:{y},{2}:] by Th74
+      .= {[x,1]} \/ [:{y},{2}:] by ZFMISC_1:35
+      .= {[x,1]} \/ {[y,2]} by ZFMISC_1:35
+      .= {[x,1],[y,2]} by ENUMSET1:41;
+   hence not [[x,1],[y,2]] in Web (C1 "\/" C2) by A1,COH_SP:5;
+   thus thesis by A1,A2,COH_SP:5;
+  end;
+
+theorem
+   'not' (C1 "/\" C2) = 'not' C1 "\/" 'not' C2
+  proof set C = C1 "/\" C2;
+   thus 'not' (C1 "/\" C2) c= 'not' C1 "\/" 'not' C2
+   proof let x be set; assume A1: x in 'not' (C1 "/\" C2);
+then A2:   x c= union C &
+     for a being Element of C ex z being set st x /\ a c= {z} by Th66;
+       union C = (union C1) U+ union C2 by Th86;
+    then consider x1,x2 being set such that
+A3:   x = x1 U+ x2 & x1 c= union C1 & x2 c= union C2 by A2,Th80;
+       now let a be Element of C1;
+      reconsider b = {} as Element of C2 by COH_SP:1;
+         a U+ b in C by Th85;
+      then consider z being set such that
+A4:     x /\ (a U+ b) c= {z} by A1,Th66;
+         (x1 /\ a)U+(x2 /\ b) c= {z} by A3,A4,Th83;
+       then [:x1 /\ a,{1}:] c= [:x1 /\ a,{1}:] \/ [:x2 /\ b,{2}:] &
+       [:x1 /\ a,{1}:] \/ [:x2 /\ b,{2}:] c= {z} by Th74,XBOOLE_1:7;
+then A5:     [:x1 /\ a,{1}:] c= {z} by XBOOLE_1:1;
+         now thus x1 /\ a = {} implies x1 /\ a c= {0} by XBOOLE_1:2;
+        assume x1 /\ a <> {}; then reconsider A = x1 /\ a as non empty set;
+        consider z1 being Element of A;
+        reconsider zz = z1 as set;
+        take zz;
+        thus x1 /\ a c= {zz}
+         proof let y be set; assume
+A6:         y in x1 /\ a;
+             1 in {1} by TARSKI:def 1;
+           then [y,1] in [:x1 /\ a,{1}:] & [z1,1] in [:x1 /\ a,{1}:]
+            by A6,ZFMISC_1:106;
+           then [y,1] = z & [z1,1] = z by A5,TARSKI:def 1;
+           then y = z1 by ZFMISC_1:33;
+          hence thesis by TARSKI:def 1;
+         end;
+       end;
+      hence ex z being set st x1 /\ a c= {z};
+     end;
+    then reconsider x1 as Element of 'not' C1 by A3,Th66;
+       now let b be Element of C2;
+      reconsider a = {} as Element of C1 by COH_SP:1;
+         a U+ b in C by Th85;
+      then consider z being set such that
+A7:     x /\ (a U+ b) c= {z} by A1,Th66;
+         (x1 /\ a)U+(x2 /\ b) c= {z} by A3,A7,Th83;
+       then [:x2 /\ b,{2}:] c= [:x1 /\ a,{1}:] \/ [:x2 /\ b,{2}:] &
+       [:x1 /\ a,{1}:] \/ [:x2 /\ b,{2}:] c= {z} by Th74,XBOOLE_1:7;
+then A8:     [:x2 /\ b,{2}:] c= {z} by XBOOLE_1:1;
+         now thus x2 /\ b = {} implies x2 /\ b c= {0} by XBOOLE_1:2;
+        assume x2 /\ b <> {}; then reconsider A = x2 /\ b as non empty set;
+        consider z1 being Element of A;
+        reconsider zz = z1 as set;
+        take zz;
+        thus x2 /\ b c= {zz}
+         proof let y be set; assume
+A9:         y in x2 /\ b;
+             2 in {2} by TARSKI:def 1;
+           then [y,2] in [:x2 /\ b,{2}:] & [z1,2] in [:x2 /\ b,{2}:]
+            by A9,ZFMISC_1:106;
+           then [y,2] = z & [z1,2] = z by A8,TARSKI:def 1;
+           then y = z1 by ZFMISC_1:33;
+          hence thesis by TARSKI:def 1;
+         end;
+       end;
+      hence ex z being set st x2 /\ b c= {z};
+     end;
+    then reconsider x2 as Element of 'not' C2 by A3,Th66;
+       now thus x1 in 'not' C1 & x2 in 'not' C2;
+:::::  ????? PO CO POWYZSZE thus?
+      assume x1 <> {} & x2 <> {};
+      then reconsider x1, x2 as non empty set;
+      consider y1 being Element of x1, y2 being Element of x2;
+         union 'not' C1 = union C1 & union 'not' C2 = union C2 by Th67;
+       then y1 in union C1 & y2 in union C2 by TARSKI:def 4;
+       then {y1} in C1 & {y2} in C2 by COH_SP:4;
+       then {y1} U+ {y2} in C by Th85;
+      then consider z being set such that
+A10:     x /\ ({y1} U+ {y2}) c= {z} by A1,Th66;
+         y1 in {y1} & y2 in {y2} by TARSKI:def 1;
+       then y1 in x1 /\ {y1} & y2 in x2 /\ {y2} by XBOOLE_0:def 3;
+       then (x1 /\ {y1})U+(x2 /\ {y2}) c= {z} & [y1,1] in (x1 /\ {y1})U+(x2 /\
+ {y2}) &
+       [y2,2] in (x1 /\ {y1})U+(x2 /\ {y2}) by A3,A10,Th77,Th78,Th83;
+       then [y1,1] = z & [y2,2] = z & 1 <> 2 by TARSKI:def 1;
+      hence contradiction by ZFMISC_1:33;
+     end;
+    hence x in 'not' C1 "\/" 'not' C2 by A3,Th87;
+   end;
+   let x be set; assume x in 'not' C1 "\/" 'not' C2;
+   then consider x1 being Element of 'not' C1, x2 being Element of 'not'
+ C2 such that
+A11:  x = x1 U+ x2 & (x1 = {} or x2 = {}) by Th88;
+      x1 c= union 'not' C1 & x2 c= union 'not' C2 by ZFMISC_1:92;
+    then x1 c= union C1 & x2 c= union C2 by Th67;
+    then x c= (union C1)U+union C2 by A11,Th79;
+then A12:  x c= union C by Th86;
+      for a being Element of C ex z being set st x /\ a c= {z}
+     proof let a be Element of C;
+      consider a1 being Element of C1, a2 being Element of C2 such that
+A13:     a = a1 U+ a2 by Th84;
+A14:     x /\ a = (x1/\a1)U+(x2/\a2) by A11,A13,Th83;
+      consider z1 being set such that
+A15:     x1/\a1 c= {z1} by Th66;
+      consider z2 being set such that
+A16:     x2/\a2 c= {z2} by Th66;
+         x1 = {} or x1 <> {};
+      then consider z being set such that
+A17:     z = [z2,2] & x1 = {} or z = [z1,1] & x1 <> {};
+      take z; let y be set; assume
+         y in x/\a;
+then A18:     y = [y`1,y`2] & (y`2 = 1 & y`1 in x1/\a1 or y`2 = 2 & y`1 in x2/\
+a2)
+        by A14,Th76;
+      per cases by A17;
+      suppose
+A19:      z = [z2,2] & x1 = {};
+        then y`1 = z2 by A16,A18,TARSKI:def 1;
+       hence thesis by A18,A19,TARSKI:def 1;
+      suppose
+A20:      z = [z1,1] & x1 <> {};
+        then y`1 = z1 by A11,A15,A18,TARSKI:def 1;
+       hence thesis by A11,A18,A20,TARSKI:def 1;
+     end;
+   hence x in 'not' (C1 "/\" C2) by A12,Th66;
+  end;
+
+definition let C1,C2 be Coherence_Space;
+ func C1 [*] C2 -> set equals:
+Def26:
+   union {bool [:a,b:] where a is Element of C1, b is Element of C2:
+       not contradiction};
+ correctness;
+end;
+
+theorem Th97:
+ for C1,C2 being Coherence_Space, x being set holds
+  x in C1 [*] C2 iff
+   ex a being Element of C1, b being Element of C2 st x c= [:a,b:]
+  proof let C1,C2 be Coherence_Space, x be set;
+A1:  C1[*]
+C2 = union {bool [:a,b:] where a is Element of C1, b is Element of C2:
+       not contradiction} by Def26;
+   hereby assume x in C1[*]C2;
+    then consider y being set such that
+A2:   x in y & y in {bool [:a,b:] where a is Element of C1, b is Element of C2:
+       not contradiction} by A1,TARSKI:def 4;
+    consider a being Element of C1, b being Element of C2 such that
+A3:   y = bool [:a,b:] by A2;
+    take a,b; thus x c= [:a,b:] by A2,A3;
+   end;
+   given a' being Element of C1, b' being Element of C2 such that
+A4:  x c= [:a',b':];
+      x in bool [:a',b':] & bool [:a',b':] in
+    {bool [:a,b:] where a is Element of C1, b is Element of C2:
+     not contradiction}
+      by A4;
+   hence thesis by A1,TARSKI:def 4;
+  end;
+
+definition let C1,C2 be Coherence_Space;
+ cluster C1 [*] C2 -> non empty;
+ coherence
+  proof consider a1 being Element of C1, a2 being Element of C2;
+      [:a1,a2:] in C1[*]C2 by Th97;
+   hence C1[*]C2 is non empty;
+  end;
+end;
+
+theorem Th98:
+ for C1,C2 being Coherence_Space, a being Element of C1 [*] C2 holds
+  proj1 a in C1 & proj2 a in C2 & a c= [:proj1 a, proj2 a:]
+  proof let C1,C2 be Coherence_Space, a be Element of C1 [*] C2;
+   consider a1 being Element of C1, a2 being Element of C2 such that
+A1:  a c= [:a1,a2:] by Th97;
+      proj1 a c= a1 & proj2 a c= a2 by A1,FUNCT_5:13;
+   hence proj1 a in C1 & proj2 a in C2 by CLASSES1:def 1;
+   let x be set; assume
+A2:  x in a;
+then A3:  x = [x`1,x`2] by A1,MCART_1:23;
+    then x`1 in proj1 a & x`2 in proj2 a by A2,FUNCT_5:4;
+   hence thesis by A3,ZFMISC_1:106;
+  end;
+
+definition let C1,C2 be Coherence_Space;
+ cluster C1 [*] C2 -> subset-closed binary_complete;
+ coherence
+  proof
+   thus C1[*]C2 is subset-closed
+    proof let a,b be set; assume a in C1[*]C2;
+     then consider a1 being Element of C1, a2 being Element of C2 such that
+A1:    a c= [:a1,a2:] by Th97;
+     assume b c= a; then b c= [:a1,a2:] by A1,XBOOLE_1:1;
+     hence thesis by Th97;
+    end;
+   let A be set; assume
+A2:  for a,b being set st a in A & b in A holds a \/ b in C1 [*] C2;
+   set A1 = {proj1 a where a is Element of C1[*]C2: a in A};
+   set A2 = {proj2 a where a is Element of C1[*]C2: a in A};
+      now let a1,b1 be set; assume a1 in A1;
+     then consider a being Element of C1[*]C2 such that
+A3:   a1 = proj1 a & a in A;
+     assume b1 in A1;
+     then consider b being Element of C1[*]C2 such that
+A4:   b1 = proj1 b & b in A;
+        a \/ b in C1[*]C2 by A2,A3,A4;
+      then proj1 (a \/ b) in C1 by Th98;
+     hence a1 \/ b1 in C1 by A3,A4,FUNCT_5:6;
+    end;
+then A5:  union A1 in C1 by Def1;
+      now let a1,b1 be set; assume a1 in A2;
+     then consider a being Element of C1[*]C2 such that
+A6:   a1 = proj2 a & a in A;
+     assume b1 in A2;
+     then consider b being Element of C1[*]C2 such that
+A7:   b1 = proj2 b & b in A;
+        a \/ b in C1[*]C2 by A2,A6,A7;
+      then proj2 (a \/ b) in C2 by Th98;
+     hence a1 \/ b1 in C2 by A6,A7,FUNCT_5:6;
+    end;
+then A8:  union A2 in C2 by Def1;
+      union A c= [:union A1, union A2:]
+     proof let x be set; assume x in union A;
+      then consider a being set such that
+A9:     x in a & a in A by TARSKI:def 4;
+         a \/ a in C1[*]C2 by A2,A9;
+       then a c= [:proj1 a, proj2 a:] & proj1 a in A1 & proj2 a in
+ A2 by A9,Th98;
+then A10:     x in [:proj1 a, proj2 a:] & proj1 a c= union A1 & proj2 a c=
+union A2
+        by A9,ZFMISC_1:92;
+       then [:proj1 a, proj2 a:] c= [:union A1, union A2:] by ZFMISC_1:119;
+      hence thesis by A10;
+     end;
+   hence thesis by A5,A8,Th97;
+  end;
+end;
+
+theorem
+   for C1,C2 being Coherence_Space holds
+  union (C1 [*] C2) = [:union C1, union C2:]
+  proof let C1,C2 be Coherence_Space;
+   thus union (C1 [*] C2) c= [:union C1, union C2:]
+    proof let x be set; assume x in union (C1 [*] C2);
+     then consider a being set such that
+A1:    x in a & a in C1 [*] C2 by TARSKI:def 4;
+     consider a1 being Element of C1, a2 being Element of C2 such that
+A2:    a c= [:a1,a2:] by A1,Th97;
+        a1 c= union C1 & a2 c= union C2 by ZFMISC_1:92;
+      then [:a1,a2:] c= [:union C1, union C2:] by ZFMISC_1:119;
+      then a c= [:union C1, union C2:] by A2,XBOOLE_1:1;
+     hence thesis by A1;
+    end;
+   let x be set; assume x in [:union C1, union C2:];
+then A3:  x = [x`1,x`2] & x`1 in union C1 & x`2 in union C2 by MCART_1:10,23;
+   then consider a1 being set such that
+A4:  x`1 in a1 & a1 in C1 by TARSKI:def 4;
+   consider a2 being set such that
+A5:  x`2 in a2 & a2 in C2 by A3,TARSKI:def 4;
+      x in [:a1,a2:] & [:a1,a2:] in C1 [*] C2 by A3,A4,A5,Th97,ZFMISC_1:106;
+   hence thesis by TARSKI:def 4;
+  end;
+
+theorem
+   for x1,y1, x2,y2 being set holds
+  [[x1,x2],[y1,y2]] in Web (C1 [*] C2) iff [x1,y1] in Web C1 & [x2,y2] in
+ Web C2
+  proof let x1,y1, x2,y2 be set;
+A1:  proj1 {[x1,x2],[y1,y2]} = {x1,y1} & proj2 {[x1,x2],[y1,y2]} = {x2,y2}
+     by FUNCT_5:16;
+   hereby assume [[x1,x2],[y1,y2]] in Web (C1 [*] C2);
+     then {[x1,x2],[y1,y2]} in C1 [*] C2 by COH_SP:5;
+     then {x1,y1} in C1 & {x2,y2} in C2 by A1,Th98;
+    hence [x1,y1] in Web C1 & [x2,y2] in Web C2 by COH_SP:5;
+   end;
+   assume [x1,y1] in Web C1 & [x2,y2] in Web C2;
+    then A2: {x1,y1} in C1 & {x2,y2} in C2 by COH_SP:5;
+      {[x1,x2],[y1,y2]} c= [:{x1,y1}, {x2,y2}:]
+     proof let x be set; assume x in {[x1,x2],[y1,y2]};
+       then x = [x1,x2] & x1 in {x1,y1} & x2 in {x2,y2} or
+       x = [y1,y2] & y1 in {x1,y1} & y2 in {x2,y2} by TARSKI:def 2;
+      hence thesis by ZFMISC_1:106;
+     end;
+    then {[x1,x2],[y1,y2]} in C1 [*] C2 by A2,Th97;
+   hence thesis by COH_SP:5;
+  end;
+
+

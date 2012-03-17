@@ -1,0 +1,2606 @@
+:: The Limit of a Real Function at a Point
+::  by Jaros{\l}aw Kotowicz
+::
+:: Received September 5, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary SEQ_1, PARTFUN1, BOOLE, ARYTM, ARYTM_1, RELAT_1, ARYTM_3, LIMFUNC1,
+      FUNCT_1, ABSVALUE, SEQ_2, ORDINAL2, RCOMP_1, SQUARE_1, LIMFUNC2, SEQM_3,
+      RFUNCT_1, RFUNCT_2, FINSEQ_1, LATTICES, LIMFUNC3;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, NAT_1, RELAT_1, FUNCT_2, ABSVALUE, SEQ_1, PARTFUN1, SEQ_2,
+      SEQM_3, RCOMP_1, RFUNCT_1, RFUNCT_2, LIMFUNC1, LIMFUNC2;
+ constructors REAL_1, NAT_1, ABSVALUE, SEQ_2, SEQM_3, PROB_1, RCOMP_1,
+      RFUNCT_1, RFUNCT_2, LIMFUNC1, LIMFUNC2, PARTFUN1, MEMBERED, XBOOLE_0;
+ clusters RELSET_1, XREAL_0, SEQ_1, SEQM_3, NAT_1, MEMBERED, ZFMISC_1,
+      XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, XBOOLE_0;
+ theorems AXIOMS, TARSKI, REAL_1, NAT_1, FUNCT_1, FUNCT_2, ABSVALUE, SEQ_1,
+      SEQ_2, SEQM_3, SEQ_4, PROB_1, SQUARE_1, RFUNCT_1, RCOMP_1, RFUNCT_2,
+      LIMFUNC1, LIMFUNC2, RELSET_1, XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0,
+      XCMPLX_1;
+ schemes NAT_1, RECDEF_1, RCOMP_1;
+
+begin
+
+reserve r,r1,r2,g,g1,g2,x0 for Real;
+reserve n,k,m for Nat;
+reserve seq for Real_Sequence;
+reserve f,f1,f2 for PartFunc of REAL,REAL;
+
+Lm1: for X,Y,Z be set st X c=Y\Z holds X c=Y
+proof let X,Y,Z be set such that A1: X c=Y\Z;
+   Y\Z c=Y by XBOOLE_1:36; hence thesis by A1,XBOOLE_1:1;
+end;
+
+Lm2: for g,r,r1 be real number holds 0<g & r<=r1 implies r-g<r1 & r<r1+g
+proof
+ let g,r,r1 be real number;
+ assume A1: 0<g & r<=r1; then r-g<r1-0 by REAL_1:92;
+ hence r-g<r1; r+0<r1+g by A1,REAL_1:67; hence thesis;
+end;
+
+Lm3: for X be set st rng seq c=dom(f1(#)f2)\X holds
+rng seq c=dom(f1(#)f2) & dom(f1(#)f2)=dom f1/\dom f2 &
+rng seq c=dom f1 & rng seq c=dom f2 & rng seq c=dom f1\X & rng seq c=dom f2\X
+proof let X be set; assume A1: rng seq c=dom(f1(#)f2)\X;
+ hence A2: rng seq c=dom(f1(#)f2) by Lm1;
+ thus dom(f1(#)f2)=dom f1/\dom f2 by SEQ_1:def 5;
+ then A3: dom(f1(#)f2)c=dom f1 & dom(f1(#)f2)c=dom f2 by XBOOLE_1:17;
+ hence rng seq c=dom f1 & rng seq c=dom f2 by A2,XBOOLE_1:1;
+   dom(f1(#)f2)\X c=dom f1\X & dom(f1(#)f2)\X c=dom f2\X by A3,XBOOLE_1:33;
+ hence thesis by A1,XBOOLE_1:1;
+end;
+
+Lm4: r-1/(n+1)<r & r<r+1/(n+1)
+proof
+  0<n+1 by NAT_1:19;
+ then 0<1/(n+1) by SEQ_2:6; hence thesis by Lm2;
+end;
+
+Lm5: 0<1/(n+1) proof
+  0<n+1 by NAT_1:19;
+ hence thesis by SEQ_2:6;
+end;
+
+Lm6: for X be set st rng seq c=dom(f1+f2)\X holds
+rng seq c=dom(f1+f2) & dom(f1+f2)=dom f1/\dom f2 & rng seq c=dom f1 &
+rng seq c=dom f2 & rng seq c=dom f1\X & rng seq c=dom f2\X
+proof let X be set; assume A1: rng seq c=dom(f1+f2)\X;
+ hence A2: rng seq c=dom(f1+f2) by Lm1;
+ thus dom(f1+f2)=dom f1/\dom f2 by SEQ_1:def 3;
+ then A3: dom(f1+f2)c=dom f1 & dom(f1+f2)c=dom f2 by XBOOLE_1:17;
+ hence rng seq c=dom f1 & rng seq c=dom f2 by A2,XBOOLE_1:1;
+   dom(f1+f2)\X c=dom f1\X & dom(f1+f2)\X c=dom f2\X by A3,XBOOLE_1:33;
+ hence thesis by A1,XBOOLE_1:1;
+end;
+
+theorem Th1:
+(rng seq c= dom f /\ left_open_halfline(x0) or
+rng seq c= dom f /\ right_open_halfline(x0)) implies rng seq c= dom f \ {x0}
+proof assume A1: rng seq c=dom f/\left_open_halfline(x0) or
+ rng seq c=dom f/\right_open_halfline(x0);
+ let x be set; assume A2: x in rng seq; then consider n such that
+ A3: seq.n=x by RFUNCT_2:9;
+   now per cases by A1;
+ suppose rng seq c=dom f/\left_open_halfline(x0);
+  then A4: seq.n in dom f & seq.n in left_open_halfline(x0) by A2,A3,XBOOLE_0:
+def 3;
+  then seq.n in {g1: g1<x0} by PROB_1:def 15; then ex g1 st g1=seq.n & g1<x0;
+then not x in {x0} by A3,TARSKI:def 1;
+  hence x in dom f\{x0} by A3,A4,XBOOLE_0:def 4;
+ suppose rng seq c=dom f/\right_open_halfline(x0);
+  then A5: seq.n in dom f & seq.n in right_open_halfline(x0) by A2,A3,XBOOLE_0:
+def 3
+;
+  then seq.n in {g1: x0<g1} by LIMFUNC1:def 3; then ex g1 st g1=seq.n & x0<g1
+;
+then not x in {x0} by A3,TARSKI:def 1;
+  hence x in dom f\{x0} by A3,A5,XBOOLE_0:def 4;
+ end; hence thesis;
+end;
+
+theorem Th2:
+(for n holds 0<abs(x0-seq.n) & abs(x0-seq.n)<1/(n+1) & seq.n in dom f) implies
+seq is convergent & lim seq=x0 & rng seq c=dom f & rng seq c= dom f \ {x0}
+proof assume
+ A1: for n holds 0<abs(x0-seq.n) & abs(x0-seq.n)<1/(n+1) & seq.n in dom f;
+ A2: now let r be real number such that A3: 0<r;
+ consider n such that A4: r"<n by SEQ_4:10;
+  take n; let k; assume n<=k; then A5: n+1<=k+1 by AXIOMS:24;
+    0<n+1 by NAT_1:19;
+  then A6: 1/(k+1)<=1/(n+1) by A5,SEQ_4:1; n<=n+1 by NAT_1:37;
+  then A7: r"<n+1 by A4,AXIOMS:22; 0<r" by A3,REAL_1:72;
+  then 1/(n+1)<1/r" by A7,SEQ_2:10;
+   then 1/(k+1)<1/r" by A6,AXIOMS:22; then A8: 1/(k+1)<r by XCMPLX_1:218
+; abs(x0-seq.k)<1/(k+1) by A1;
+  then abs(x0-seq.k)<r by A8,AXIOMS:22; then abs(-(seq.k-x0))<r by XCMPLX_1:143
+;
+  hence abs(seq.k-x0)<r by ABSVALUE:17;
+ end; hence seq is convergent by SEQ_2:def 6; hence lim seq=x0 by A2,SEQ_2:def
+7;
+ thus A9: rng seq c=dom f
+ proof let x be set; assume x in rng seq; then ex n st
+ seq.n=x by RFUNCT_2:9; hence thesis by A1;
+ end;
+ let x be set; assume A10: x in rng seq;
+ then consider n such that A11: seq.n=x by RFUNCT_2:9;
+   0<>abs(x0-seq.n) by A1; then x0-seq.n<>0 by ABSVALUE:7;
+ then x0-seq.n+seq.n<>0+seq.n by XCMPLX_1:2;
+ then seq.n<>x0 by XCMPLX_1:27; then not x in {x0} by A11,TARSKI:def 1;
+ hence thesis by A9,A10,XBOOLE_0:def 4;
+end;
+
+theorem Th3:
+seq is convergent & lim seq=x0 & rng seq c= dom f \ {x0} implies
+for r st 0<r ex n st
+  for k st n<=k holds 0<abs(x0-seq.k) & abs(x0-seq.k)<r & seq.k in dom f
+proof assume A1: seq is convergent & lim seq=x0 & rng seq c=dom f\{x0};
+ let r; assume 0<r; then consider n such that
+ A2: for k st n<=k holds abs(seq.k-x0)<r by A1,SEQ_2:def 7; take n;
+ A3: now let n; seq.n in rng seq by RFUNCT_2:10; then not seq.n in {x0}
+ by A1,XBOOLE_0:def 4;
+  then seq.n<>x0 by TARSKI:def 1; then seq.n+-x0<>x0+-x0 by XCMPLX_1:2;
+  then seq.n+-x0<>0 by XCMPLX_0:def 6; hence seq.n-x0<>0 by XCMPLX_0:def 8;
+ end;
+ let k such that
+ A4: n<=k; seq.k-x0<>0 by A3; then 0<abs(seq.k-x0) by ABSVALUE:6;
+ then 0<abs(-(x0-seq.k)) by XCMPLX_1:143; hence 0<abs(x0-seq.k) by ABSVALUE:17;
+   abs(seq.k-x0)<r by A2,A4; then abs(-(x0-seq.k))<r by XCMPLX_1:143;
+ hence abs(x0-seq.k)<r by ABSVALUE:17; seq.k in rng seq by RFUNCT_2:10;
+hence thesis by A1,XBOOLE_0:def 4;
+end;
+
+theorem Th4:
+0<r implies ].x0-r,x0+r.[ \ {x0} = ].x0-r,x0.[ \/ ].x0,x0+r.[
+proof assume A1: 0<r;
+ thus ].x0-r,x0+r.[\{x0}c=].x0-r,x0.[ \/ ].x0,x0+r.[
+ proof let x be set; assume x in ].x0-r,x0+r.[\{x0};
+  then A2: x in ].x0-r,x0+r.[ & not x in {x0} by XBOOLE_0:def 4;
+  then consider r1 such that A3: r1=x; A4: r1<>x0 by A2,A3,TARSKI:def 1;
+   x in {g2: x0-r<g2 & g2<x0+r} by A2,RCOMP_1:def 2;
+  then A5: ex g2 st g2=x & x0-r<g2 & g2<x0+r;
+    now per cases by A4,REAL_1:def 5;
+  suppose r1<x0; then r1 in {g1: x0-r<g1 & g1<x0} by A3,A5;
+   then x in ].x0-r,x0.[ by A3,RCOMP_1:def 2; hence thesis by XBOOLE_0:def 2;
+  suppose x0<r1; then r1 in {g1: x0<g1 & g1<x0+r} by A3,A5;
+   then x in ].x0,x0+r.[ by A3,RCOMP_1:def 2; hence thesis by XBOOLE_0:def 2;
+  end; hence thesis;
+ end;
+ let x be set such that A6: x in ].x0-r,x0.[\/].x0,x0+r.[;
+   now per cases by A6,XBOOLE_0:def 2;
+ suppose x in ].x0-r,x0.[; then x in {g1: x0-r<g1 & g1<x0} by RCOMP_1:def 2;
+then consider g1 such that
+  A7: g1=x & x0-r<g1 & g1<x0; A8: not x in {x0} by A7,TARSKI:def 1;
+    g1<x0+r by A1,A7,Lm2;
+  then x in {g2: x0-r<g2 & g2<x0+r} by A7; then x in ].x0-r,x0+r.[ by RCOMP_1:
+def 2;
+  hence thesis by A8,XBOOLE_0:def 4;
+ suppose x in ].x0,x0+r.[; then x in {g1: x0<g1 & g1<x0+r} by RCOMP_1:def 2;
+then consider g1 such that
+  A9: g1=x & x0<g1 & g1<x0+r; A10: not x in {x0} by A9,TARSKI:def 1;
+    x0-r<g1 by A1,A9,Lm2;
+  then x in {g2: x0-r<g2 & g2<x0+r} by A9; then x in ].x0-r,x0+r.[ by RCOMP_1:
+def 2;
+  hence thesis by A10,XBOOLE_0:def 4;
+ end; hence thesis;
+end;
+
+theorem Th5:
+0<r2 & ].x0-r2,x0.[ \/ ].x0,x0+r2.[ c= dom f implies
+for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f
+proof assume A1: 0<r2 & ].x0-r2,x0.[\/].x0,x0+r2.[c=dom f;
+   ].x0-r2,x0.[c=].x0-r2,x0.[\/].x0,x0+r2.[ &
+ ].x0,x0+r2.[c=].x0-r2,x0.[\/].x0,x0+r2.[ by XBOOLE_1:7;
+ then A2: ].x0-r2,x0.[c=dom f & ].x0,x0+r2.[c=dom f by A1,XBOOLE_1:1;
+ let r1,r2; assume A3: r1<x0 & x0<r2; then consider g1 such that
+ A4: r1<g1 & g1<x0 & g1 in dom f by A1,A2,LIMFUNC2:3; take g1;
+ consider g2 such that A5: g2<r2 & x0<g2 & g2 in dom f by A1,A2,A3,LIMFUNC2:4;
+ take g2; thus thesis by A4,A5;
+end;
+
+theorem Th6:
+(for n holds x0-1/(n+1)<seq.n & seq.n<x0 & seq.n in dom f) implies
+seq is convergent & lim seq=x0 & rng seq c= dom f \ {x0}
+proof assume A1: for n holds x0-1/(n+1)<seq.n & seq.n<x0 & seq.n in dom f;
+ hence seq is convergent & lim seq=x0 by LIMFUNC2:5;
+   rng seq c=dom f/\left_open_halfline(x0) by A1,LIMFUNC2:5;
+ hence rng seq c=dom f\{x0} by Th1;
+end;
+
+theorem Th7:
+seq is convergent & lim seq=x0 & 0<g implies
+ex k st for n st k<=n holds x0-g<seq.n & seq.n<x0+g
+proof assume A1: seq is convergent & lim seq=x0 & 0<g;
+ then x0-g<lim seq by Lm2; then consider k1 be Nat such that
+ A2: for n st k1<=n holds x0-g<seq.n by A1,LIMFUNC2:1;
+   lim seq<x0+g by A1,Lm2; then consider k2 be Nat such that
+ A3: for n st k2<=
+n holds seq.n<x0+g by A1,LIMFUNC2:2; take k=max(k1,k2); let n;
+ assume A4: k<=n; k1<=k by SQUARE_1:46; then k1<=n by A4,AXIOMS:22;
+ hence x0-g<seq.n by A2; k2<=k by SQUARE_1:46; then k2<=n by A4,AXIOMS:22;
+ hence seq.n<x0+g by A3;
+end;
+
+theorem Th8:
+(for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) iff
+(for r st r<x0 ex g st r<g & g<x0 & g in dom f) &
+(for r st x0<r ex g st g<r & x0<g & g in dom f)
+proof thus (for r1,r2 st r1<x0 & x0<r2
+ ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) implies
+ (for r st r<x0 ex g st r<g & g<x0 & g in dom f) &
+ (for r st x0<r ex g st g<r & x0<g & g in dom f)
+ proof assume A1: for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f;
+  thus for r st r<x0 ex g st r<g & g<x0 & g in dom f
+  proof let r such that A2: r<x0;
+     x0<x0+1 by Lm2; then consider g1,g2 such that
+   A3: r<g1 & g1<x0 & g1 in dom f & g2<x0+1 & x0<g2 & g2 in dom f by A1,A2;
+   take g1; thus r<g1 & g1<x0 & g1 in dom f by A3;
+  end;
+  let r such that A4: x0<r; x0-1<x0 by Lm2;
+  then consider g1,g2 such that
+  A5: x0-1<g1 & g1<x0 & g1 in dom f & g2<r & x0<g2 & g2 in dom f by A1,A4;
+  take g2; thus g2<r & x0<g2 & g2 in dom f by A5;
+ end;
+ assume A6: (for r st r<x0 ex g st r<g & g<x0 & g in dom f) &
+ for r st x0<r ex g st g<r & x0<g & g in dom f;
+ let r1,r2; assume A7: r1<x0 & x0<r2; then consider g1 such that
+ A8: r1<g1 & g1<x0 & g1 in dom f by A6; consider g2 such that
+ A9: g2<r2 & x0<g2 & g2 in dom f by A6,A7; take g1; take g2;
+ thus thesis by A8,A9;
+end;
+
+definition let f,x0;
+pred f is_convergent_in x0 means :Def1:
+(for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) &
+ex g st for seq st seq is convergent & lim seq=x0 &
+  rng seq c= dom f \ {x0} holds f*seq is convergent & lim(f*seq)=g;
+pred f is_divergent_to+infty_in x0 means :Def2:
+(for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) &
+for seq st seq is convergent & lim seq=x0 & rng seq c= dom f \ {x0} holds
+  f*seq is divergent_to+infty;
+pred f is_divergent_to-infty_in x0 means :Def3:
+(for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) &
+for seq st seq is convergent & lim seq=x0 & rng seq c= dom f \ {x0} holds
+  f*seq is divergent_to-infty;
+end;
+
+canceled 3;
+
+theorem
+  f is_convergent_in x0 iff
+(for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) &
+ex g st for g1 st 0<g1 ex g2 st 0<g2 &
+  for r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f holds abs(f.r1-g)<g1
+proof thus f is_convergent_in x0 implies
+(for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) &
+ex g st for g1 st 0<g1 ex g2 st 0<g2 &
+ for r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f holds abs(f.r1-g)<g1
+ proof assume that A1: f is_convergent_in x0 and
+  A2: (not for r1,r2 st r1<x0 & x0<r2
+   ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) or
+  for g ex g1 st 0<g1 & for g2 st 0<g2
+  ex r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f & abs(f.r1-g)>=g1;
+  consider g such that
+  A3: for seq st seq is convergent & lim seq=x0 & rng seq c=dom f\{x0} holds
+   f*seq is convergent & lim(f*seq)=g by A1,Def1;
+  consider g1 such that A4: 0<g1 & for g2 st 0<g2
+   ex r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f & abs(f.r1-g)>=
+g1 by A1,A2,Def1;
+   defpred X[Nat,real number] means
+    0<abs(x0-$2) & abs(x0-$2)<1/($1+1) & $2 in dom f &
+   abs(f.($2)-g)>=g1;
+  A5: now let n; 0<1/(n+1) by Lm5; then consider r1 such that
+   A6: 0<abs(x0-r1) & abs(x0-r1)<1/(n+1) & r1 in dom f & abs(f.r1-g)>=g1 by A4;
+   reconsider r1 as real number;
+   take r1;
+   thus X[n,r1] by A6;
+  end; consider s be Real_Sequence such that
+  A7: for n holds X[n,s.n] from RealSeqChoice(A5);
+  A8: s is convergent & lim s=x0 & rng s c=dom f & rng s c=dom f\{x0} by A7,Th2
+;
+  then f*s is convergent & lim(f*s)=g by A3; then consider n such that
+  A9: for k st n<=k holds abs((f*s).k-g)<g1 by A4,SEQ_2:def 7;
+   abs((f*s).n-g)<g1 by A9;
+  then abs(f.(s.n)-g)<g1 by A8,RFUNCT_2:21; hence contradiction by A7;
+ end;
+ assume A10: for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f;
+ given g such that A11: for g1 st 0<g1 ex g2 st 0<g2 &
+  for r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f holds abs(f.r1-g)<g1;
+   now let s be Real_Sequence; assume
+  A12: s is convergent & lim s=x0 & rng s c=dom f\{x0};
+  then A13: rng s c=dom f by Lm1;
+  A14: now let g1 be real number;
+A15: g1 is Real by XREAL_0:def 1;
+  assume 0<g1; then consider g2 such that
+   A16: 0<g2 & for r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f holds
+    abs(f.r1-g)<g1 by A11,A15; consider n such that A17: for k st n<=k holds
+   0<abs(x0-s.k) & abs(x0-s.k)<g2 & s.k in dom f by A12,A16,Th3;
+   take n; let k; assume n<=k;
+   then 0<abs(x0-s.k) & abs(x0-s.k)<g2 & s.k in dom f by A17;
+   then abs(f.(s.k)-g)<g1 by A16;
+   hence abs((f*s).k-g)<g1 by A13,RFUNCT_2:21;
+  end; hence f*s is convergent by SEQ_2:def 6; hence lim(f*s)=g by A14,SEQ_2:
+def 7;
+ end; hence thesis by A10,Def1;
+end;
+
+theorem
+  f is_divergent_to+infty_in x0 iff
+(for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) &
+for g1 ex g2 st 0<g2 &
+  for r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f holds g1<f.r1
+proof thus f is_divergent_to+infty_in x0 implies
+(for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) &
+for g1 ex g2 st 0<g2 &
+ for r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f holds g1<f.r1
+ proof assume that A1: f is_divergent_to+infty_in x0 and
+  A2: (not for r1,r2 st r1<x0 & x0<r2
+       ex g1,g2 st r1<g1 & g1<x0 &
+       g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) or
+  ex g1 st for g2 st 0<g2
+  ex r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f & f.r1<=g1;
+  consider g1 such that A3: for g2 st 0<g2
+  ex r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f & f.r1<=g1 by A1,A2,Def2;
+   defpred X[Nat,real number] means
+      0<abs(x0-$2) & abs(x0-$2)<1/($1+1) &
+  $2 in dom f & f.($2)<=g1;
+  A4: now let n; 0<1/(n+1) by Lm5; then consider r1 such that
+   A5: 0<abs(x0-r1) & abs(x0-r1)<1/(n+1) & r1 in dom f & f.r1<=g1 by A3;
+   reconsider r1 as real number;
+   take r1;
+   thus X[n,r1] by A5;
+  end; consider s be Real_Sequence such that
+  A6: for n holds X[n,s.n]
+  from RealSeqChoice(A4);
+  A7: s is convergent & lim s=x0 & rng s c=dom f & rng s c=dom f\{x0}
+  by A6,Th2;
+  then f*s is divergent_to+infty by A1,Def2; then consider n such that
+  A8: for k st n<=k holds g1<(f*s).k by LIMFUNC1:def 4; g1<(f*s).n by A8;
+  then g1<f.(s.n) by A7,RFUNCT_2:21; hence contradiction by A6;
+ end;
+ assume that A9: for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f and
+ A10: for g1 ex g2 st 0<g2 &
+ for r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f holds g1<f.r1;
+   now let s be Real_Sequence; assume
+  A11: s is convergent & lim s=x0 & rng s c=dom f\{x0};
+  then A12: rng s c=dom f by Lm1;
+    now let g1; consider g2 such that A13: 0<g2 &
+   for r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f holds g1<f.r1 by A10;
+   consider n such that A14: for k st n<=k holds
+   0<abs(x0-s.k) & abs(x0-s.k)<g2 & s.k in dom f by A11,A13,Th3;
+   take n; let k; assume n<=k;
+   then 0<abs(x0-s.k) & abs(x0-s.k)<g2 & s.k in dom f by A14;
+   then g1<f.(s.k) by A13;
+   hence g1<(f*s).k by A12,RFUNCT_2:21;
+  end; hence f*s is divergent_to+infty by LIMFUNC1:def 4;
+ end; hence thesis by A9,Def2;
+end;
+
+theorem
+  f is_divergent_to-infty_in x0 iff
+(for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) &
+for g1 ex g2 st 0<g2 &
+  for r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f holds f.r1<g1
+proof thus f is_divergent_to-infty_in x0 implies
+(for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) &
+for g1 ex g2 st 0<g2 &
+ for r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f holds f.r1<g1
+ proof assume that A1: f is_divergent_to-infty_in x0 and
+  A2: (not for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) or
+  ex g1 st for g2 st 0<g2
+   ex r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f & g1<=f.r1;
+  consider g1 such that A3: for g2 st 0<g2
+   ex r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f & g1<=f.r1
+     by A1,A2,Def3;
+   defpred X[Nat,real number] means
+      0<abs(x0-$2) & abs(x0-$2)<1/($1+1) &
+  $2 in dom f & g1<=f.($2);
+  A4: now let n; 0<1/(n+1) by Lm5; then consider r1 such that
+   A5: 0<abs(x0-r1) & abs(x0-r1)<1/(n+1) & r1 in dom f & g1<=f.r1 by A3;
+   reconsider r1 as real number;
+   take r1;
+   thus X[n,r1] by A5;
+  end; consider s be Real_Sequence such that
+A6: for n holds X[n,s.n]
+  from RealSeqChoice(A4);
+  A7: s is convergent & lim s=x0 & rng s c=dom f & rng s c=dom f\{x0} by A6,Th2
+;
+  then f*s is divergent_to-infty by A1,Def3; then consider n such that
+  A8: for k st n<=k holds (f*s).k<g1 by LIMFUNC1:def 5;
+    (f*s).n<g1 by A8; then f.(s.n)<g1 by A7,RFUNCT_2:21;
+  hence contradiction by A6;
+ end;
+ assume that A9: for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f and
+ A10: for g1 ex g2 st 0<g2 &
+ for r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f holds f.r1<g1;
+   now let s be Real_Sequence; assume
+  A11: s is convergent & lim s=x0 & rng s c=dom f\{x0};
+  then A12: rng s c=dom f by Lm1;
+    now let g1; consider g2 such that A13: 0<g2 &
+   for r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f holds f.r1<g1 by A10;
+   consider n such that A14: for k st n<=k holds
+   0<abs(x0-s.k) & abs(x0-s.k)<g2 & s.k in dom f by A11,A13,Th3;
+   take n; let k; assume n<=k;
+   then 0<abs(x0-s.k) & abs(x0-s.k)<g2 & s.k in dom f by A14;
+   then f.(s.k)<g1 by A13;
+   hence (f*s).k<g1 by A12,RFUNCT_2:21;
+  end; hence f*s is divergent_to-infty by LIMFUNC1:def 5;
+ end; hence thesis by A9,Def3;
+end;
+
+theorem Th15:
+f is_divergent_to+infty_in x0 iff f is_left_divergent_to+infty_in x0 &
+f is_right_divergent_to+infty_in x0
+proof
+ thus f is_divergent_to+infty_in x0 implies
+  f is_left_divergent_to+infty_in x0 &
+ f is_right_divergent_to+infty_in x0
+ proof assume A1: f is_divergent_to+infty_in x0;
+  then A2: for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f by Def2;
+  then A3: for r st r<x0 ex g st r<g & g<x0 & g in dom f by Th8;
+    now let s be Real_Sequence; assume
+   A4: s is convergent & lim s=x0 & rng s c=dom f/\left_open_halfline(x0);
+   then rng s c=dom f\{x0} by Th1; hence f*s is divergent_to+infty by A1,A4,
+Def2;
+  end; hence f is_left_divergent_to+infty_in x0 by A3,LIMFUNC2:def 2;
+  A5: for r st x0<r ex g st g<r & x0<g & g in dom f by A2,Th8;
+    now let s be Real_Sequence; assume
+   A6: s is convergent & lim s=x0 & rng s c=dom f/\
+right_open_halfline(x0);
+   then rng s c=dom f\{x0} by Th1; hence f*s is divergent_to+infty by A1,A6,
+Def2;
+  end; hence f is_right_divergent_to+infty_in x0 by A5,LIMFUNC2:def 5;
+ end;
+ assume A7: f is_left_divergent_to+infty_in x0 &
+  f is_right_divergent_to+infty_in x0;
+ then A8: for r st r<x0 ex g st r<g & g<x0 & g in dom f by LIMFUNC2:def 2;
+   for r st x0<r ex g st g<r & x0<g & g in dom f by A7,LIMFUNC2:def 5;
+ then A9: for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+ r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f by A8,Th8;
+   now let s be Real_Sequence such that
+  A10: s is convergent & lim s=x0 & rng s c=dom f\{x0};
+    now per cases;
+  suppose ex k st for n st k<=n holds s.n<x0; then consider k such that
+   A11: for n st k<=n holds s.n<x0;
+   A12: s^\k is convergent & lim(s^\k)=x0 by A10,SEQ_4:33;
+   A13: rng s c=dom f by A10,Lm1;
+     rng(s^\k)c=dom f/\left_open_halfline(x0)
+   proof let x be set; assume x in rng(s^\k); then consider n such that
+    A14: (s^\k).n=x by RFUNCT_2:9; s.(n+k) in rng s by RFUNCT_2:10;
+    then A15: x in rng s by A14,SEQM_3:def 9
+; k<=n+k by NAT_1:37;
+    then s.(n+k)<x0 by A11; then s.(n+k) in {g1: g1<x0};
+    then s.(n+k) in left_open_halfline(x0) by PROB_1:def 15;
+    then x in left_open_halfline(x0) by A14,SEQM_3:def 9; hence thesis by A13,
+A15,XBOOLE_0:def 3;
+   end; then A16: f*(s^\k) is divergent_to+infty by A7,A12,LIMFUNC2:def 2;
+     f*(s^\k) =(f*s)^\k by A13,RFUNCT_2:22;
+   hence f*s is divergent_to+infty by A16,LIMFUNC1:34;
+  suppose A17: for k ex n st k<=n & s.n>=x0;
+     now per cases;
+   suppose ex k st for n st k<=n holds x0<s.n; then consider k such that
+    A18: for n st k<=n holds s.n>x0;
+    A19: s^\k is convergent & lim(s^\k)=x0 by A10,SEQ_4:33;
+    A20: rng s c=dom f by A10,Lm1;
+      rng(s^\k)c=dom f/\right_open_halfline(x0)
+    proof let x be set; assume x in rng(s^\k); then consider n such that
+     A21: (s^\k).n=x by RFUNCT_2:9; s.(n+k) in rng s by RFUNCT_2:10;
+     then A22: x in rng s by A21,SEQM_3:def 9
+; k<=n+k by NAT_1:37;
+     then x0<s.(n+k) by A18; then s.(n+k) in {g1: x0<g1};
+     then s.(n+k) in right_open_halfline(x0) by LIMFUNC1:def 3;
+     then x in right_open_halfline(x0) by A21,SEQM_3:def 9;
+     hence thesis by A20,A22,XBOOLE_0:def 3;
+    end; then A23: f*(s^\k) is divergent_to+infty by A7,A19,LIMFUNC2:def 5;
+      f*(s^\k) =(f*s)^\k by A20,RFUNCT_2:22;
+    hence f*s is divergent_to+infty by A23,LIMFUNC1:34;
+   suppose A24: for k ex n st k<=n & x0>=s.n;
+    A25: now let k; consider n such that A26: k<=n & s.n<=x0 by A24;
+     take n; thus k<=n by A26; s.n in rng s by RFUNCT_2:10;
+then not s.n in {x0} by A10,XBOOLE_0:def 4;
+     then s.n<>x0 by TARSKI:def 1; hence s.n<x0 by A26,REAL_1:def 5;
+    end; then consider m1 be Nat such that A27: 0<=m1 & s.m1<x0;
+    defpred X[Nat] means s.$1<x0;
+    A28: ex m st X[m] by A27;
+    consider M be Element of NAT such that
+    A29: X[M] & for n st X[n] holds M <= n from Min(A28);
+    A30: now let n; consider m such that A31: n+1<=m & s.m<x0 by A25;
+     take m; thus n<m & s.m<x0 by A31,NAT_1:38;
+    end;
+    defpred P[set,set] means for n,m st $1=n & $2=m holds
+    n<m & s.m<x0 & for k st n<k & s.k<x0 holds m<=k;
+    defpred X[Nat,Nat,Nat] means P[$2,$3];
+    A32: for n for x be Element of NAT ex y be Element of NAT st X[n,x,y]
+    proof let n; let x be Element of NAT;
+    defpred X[Nat] means x<$1 & s.$1<x0;
+    A33: ex m st X[m] by A30;
+     consider l be Nat such that A34: X[l] &
+     for k st X[k] holds l <= k from Min(A33);
+     take l; thus thesis by A34;
+    end; reconsider M'=M as Element of NAT qua non empty set;
+    consider F be Function of NAT,NAT such that
+    A35: F.0=M' & for n holds X[n,F.n,F.(n+1)] from RecExD(A32);
+    A36: dom F=NAT & rng F c=NAT by FUNCT_2:def 1,RELSET_1:12;
+ then rng F c=REAL by XBOOLE_1:1;
+    then reconsider F as Real_Sequence by A36,FUNCT_2:def 1,RELSET_1:11;
+    A37: now let n; F.n in rng F by A36,FUNCT_1:def 5;hence F.n is Nat by A36
+;
+    end;
+      now let n; F.n is Nat & F.(n+1) is Nat by A37;
+     hence F.n<F.(n+1) by A35;
+    end;
+    then reconsider F as increasing Seq_of_Nat by A36,SEQM_3:def 8,def 11;
+    A38: for n st s.n<x0 ex m st F.m=n
+    proof
+    defpred X[Nat] means s.$1<x0 & for m holds F.m<>$1;
+     assume A39: ex n st X[n];
+     consider M1 be Nat such that A40: X[M1] &
+     for n st X[n] holds M1<=n from Min(A39);
+     defpred X[Nat] means $1<M1 & s.$1<x0 & ex m st F.m=$1;
+     A41: ex n st X[n]
+     proof take M; A42: M<=M1 by A29,A40;
+         M <> M1 by A35,A40;
+      hence M<M1 by A42,REAL_1:def 5;
+      thus s.M<x0 by A29; take 0; thus thesis by A35;
+     end;
+     A43: for n st X[n] holds n<=M1;
+     consider MX be Nat such that A44: X[MX] &
+     for n st X[n] holds n<=MX from Max(A43,A41);
+     A45: for k st MX<k & k<M1 holds s.k>=x0
+     proof given k such that A46: MX<k & k<M1 & s.k<x0;
+        now per cases;
+       suppose ex m st F.m=k; hence contradiction by A44,A46;
+       suppose for m holds F.m<>k; hence contradiction by A40,A46;
+      end; hence contradiction;
+     end;
+     consider m such that A47: F.m=MX by A44;
+     A48: MX<F.(m+1) & s.(F.(m+1))<x0 &
+      for k st MX<k & s.k<x0 holds F.(m+1)<=k by A35,A47;
+     A49: F.(m+1)<=M1 by A35,A40,A44,A47;
+       now assume F.(m+1)<>M1; then F.(m+1)<M1 by A49,REAL_1:def 5;
+hence contradiction by A45,A48;
+     end; hence contradiction by A40;
+    end;
+    A50: for n holds (s*F).n<x0
+    proof
+      defpred X[Nat] means (s*F).$1<x0;
+     A51: X[0] by A29,A35,SEQM_3:31;
+     A52: for k st X[k] holds X[k+1]
+     proof let k such that
+   (s*F).k<x0; P[F.k,F.(k+1)] by A35; then s.(F.(k+1))<x0;
+      hence (s*F).(k+1)<x0 by SEQM_3:31;
+     end; thus for k holds X[k] from Ind(A51,A52);
+    end; A53: s*F is_subsequence_of s by SEQM_3:def 10;
+    then A54: s*F is convergent by A10,SEQ_4:29;
+    A55: lim(s*F)=x0 by A10,A53,SEQ_4:30; rng(s*F)c=rng s by A53,RFUNCT_2:11
+;
+    then A56: rng(s*F)c=dom f\{x0} by A10,XBOOLE_1:1;
+      rng(s*F)c=dom f/\left_open_halfline(x0)
+    proof let x be set; assume A57: x in rng(s*F); then consider n such that
+     A58: (s*F).n=x by RFUNCT_2:9;
+       (s*F).n<x0 by A50; then x in {g1: g1<x0} by A58;
+     then A59: x in left_open_halfline(x0) by PROB_1:def 15;
+       x in dom f by A56,A57,XBOOLE_0:def 4;
+     hence thesis by A59,XBOOLE_0:def 3;
+    end; then A60: f*(s*F) is divergent_to+infty by A7,A54,A55,LIMFUNC2:def 2;
+    defpred X[Nat] means s.$1>x0;
+    A61: now let k; consider n such that A62: k<=n & s.n>=x0 by A17;
+     take n; thus k<=n by A62; s.n in rng s by RFUNCT_2:10;
+then not s.n in {x0} by A10,XBOOLE_0:def 4;
+     then s.n<>x0 by TARSKI:def 1; hence s.n>x0 by A62,REAL_1:def 5;
+    end; then ex mn be Nat st 0<=mn & s.mn>x0;
+    then A63: ex m st X[m]; consider N be Element of NAT such that
+    A64: X[N] & for n st X[n] holds N<=n from Min(A63);
+    A65: now let n; consider m such that A66: n+1<=m & s.m>x0 by A61;
+     take m; thus n<m & s.m>x0 by A66,NAT_1:38;
+    end;
+    defpred P[set,set] means for n,m st $1=n & $2=m holds
+    n<m & s.m>x0 & for k st n<k & s.k>x0 holds m<=k;
+    defpred X[Nat,Nat,Nat] means P[$2,$3];
+    A67: for n for x be Element of NAT ex y be Element of NAT st X[n,x,y]
+    proof let n; let x be Element of NAT;
+    defpred X[Nat] means x<$1 & s.$1>x0;
+    A68: ex m st X[m] by A65;
+     consider l be Nat such that A69: X[l] &
+     for k st X[k] holds l<= k from Min(A68);
+     take l; thus P[x,l] by A69;
+    end;
+    reconsider N'=N as Element of NAT qua non empty set;
+    consider G be Function of NAT,NAT such that
+    A70: G.0=N' & for n holds X[n,G.n,G.(n+1)] from RecExD(A67);
+    A71: dom G=NAT & rng G c=NAT by FUNCT_2:def 1,RELSET_1:12;
+    then rng G c=REAL by XBOOLE_1:1;
+    then reconsider G as Real_Sequence by A71,FUNCT_2:def 1,RELSET_1:11;
+    A72: now let n; G.n in rng G by A71,FUNCT_1:def 5;hence G.n is Nat by A71
+;
+    end;
+      now let n; G.n is Nat & G.(n+1) is Nat by A72;
+     hence G.n<G.(n+1) by A70;
+    end;
+    then reconsider G as increasing Seq_of_Nat by A71,SEQM_3:def 8,def 11;
+    defpred X[Nat] means s.$1>x0 & for m holds G.m<>$1;
+    A73: for n st s.n>x0 ex m st G.m=n
+    proof assume A74: ex n st X[n];
+     consider N1 be Nat such that A75: X[N1] &
+     for n st X[n] holds N1<=n from Min(A74);
+     defpred X[Nat] means $1<N1 & s.$1>x0 & ex m st G.m=$1;
+     A76: ex n st X[n]
+     proof take N; A77: N<=N1 by A64,A75;
+         N <> N1 by A70,A75;
+      hence N<N1 by A77,REAL_1:def 5; thus s.N>x0 by A64; take 0;
+      thus thesis by A70;
+     end;
+     A78: for n st X[n] holds n<=N1;
+     consider NX be Nat such that A79: X[NX] &
+     for n st X[n] holds n<=NX from Max(A78,A76);
+     A80: for k st NX<k & k<N1 holds s.k<=x0
+     proof given k such that A81: NX<k & k<N1 & s.k>x0;
+        now per cases;
+       suppose ex m st G.m=k; hence contradiction by A79,A81;
+       suppose for m holds G.m<>k; hence contradiction by A75,A81;
+      end; hence contradiction;
+     end;
+     consider m such that A82: G.m=NX by A79;
+     A83: NX<G.(m+1) & s.(G.(m+1))>x0 &
+      for k st NX<k & s.k>x0 holds G.(m+1)<=k by A70,A82;
+     A84: G.(m+1)<=N1 by A70,A75,A79,A82;
+       now assume G.(m+1)<>N1; then G.(m+1)<N1 by A84,REAL_1:def 5;
+hence contradiction by A80,A83;
+     end; hence contradiction by A75;
+    end;
+    A85: for n holds (s*G).n>x0
+    proof
+      defpred X[Nat] means (s*G).$1>x0;
+     A86: X[0] by A64,A70,SEQM_3:31;
+     A87: for k st X[k] holds X[k+1]
+     proof let k such that
+   (s*G).k>x0; P[G.k,G.(k+1)] by A70; then s.(G.(k+1))>x0;
+      hence (s*G).(k+1)>x0 by SEQM_3:31;
+     end; thus for k holds X[k] from Ind(A86,A87);
+    end; A88: s*G is_subsequence_of s by SEQM_3:def 10;
+    then A89: s*G is convergent by A10,SEQ_4:29; A90: lim(s*G)=x0 by A10,A88,
+SEQ_4:30;
+      rng(s*G)c=rng s by A88,RFUNCT_2:11;
+    then A91: rng(s*G)c=dom f\{x0} by A10,XBOOLE_1:1;
+      rng(s*G)c=dom f/\right_open_halfline(x0)
+    proof let x be set; assume A92: x in rng(s*G); then consider n such that
+     A93: (s*G).n=x by RFUNCT_2:9; (s*G).n>x0 by A85;
+     then x in {g1: x0<g1} by A93; then A94: x in right_open_halfline(x0) by
+LIMFUNC1:def 3;
+
+       x in dom f by A91,A92,XBOOLE_0:def 4;
+     hence thesis by A94,XBOOLE_0:def 3;
+    end; then A95: f*(s*G) is divergent_to+infty by A7,A89,A90,LIMFUNC2:def 5
+;
+      now let r;consider n1 be Nat such that
+     A96: for k st n1<=k holds r<(f*(s*F)).k by A60,LIMFUNC1:def 4;
+     consider n2 be Nat such that
+     A97: for k st n2<=k holds r<(f*(s*G)).k by A95,LIMFUNC1:def 4;
+     take n=max(F.n1,G.n2); let k; s.k in rng s by RFUNCT_2:9;
+then not s.k in {x0} by A10,XBOOLE_0:def 4;
+then A98:     s.k<>x0 by TARSKI:def 1;
+     assume A99: n<=k;
+       now per cases by A98,REAL_1:def 5;
+      suppose s.k<x0; then consider l be Nat such that A100: k=F.l by A38;
+         F.n1<=n by SQUARE_1:46; then A101: F.n1<=k by A99,AXIOMS:22;
+         dom f\{x0}c=dom f by XBOOLE_1:36;
+       then A102: rng(s*F)c=dom f by A56,XBOOLE_1:1; A103: rng s c=dom f by A10
+,Lm1;
+         l >= n1 by A100,A101,SEQM_3:7;
+       then r<(f*(s*F)).l by A96; then r<f.((s*F).l) by A102,RFUNCT_2:21
+;
+       then r<f.(s.k) by A100,SEQM_3:31; hence r<(f*s).k by A103,RFUNCT_2:21;
+      suppose s.k>x0; then consider l be Nat such that A104: k=G.l by A73;
+         G.n2<=n by SQUARE_1:46; then A105: G.n2<=k by A99,AXIOMS:22;
+         dom f\{x0}c=dom f by XBOOLE_1:36; then A106: rng(s*G)c=dom f by A91,
+XBOOLE_1:1;
+       A107: rng s c=dom f by A10,Lm1;
+         l >= n2 by A104,A105,SEQM_3:7;
+       then r<(f*(s*G)).l by A97; then r<f.((s*G).l) by A106,RFUNCT_2:21
+;
+       then r<f.(s.k) by A104,SEQM_3:31; hence r<(f*s).k by A107,RFUNCT_2:21;
+     end; hence r<(f*s).k;
+    end; hence f*s is divergent_to+infty by LIMFUNC1:def 4;
+   end; hence f*s is divergent_to+infty;
+  end; hence f*s is divergent_to+infty;
+ end; hence thesis by A9,Def2;
+end;
+
+theorem Th16:
+f is_divergent_to-infty_in x0 iff f is_left_divergent_to-infty_in x0 &
+f is_right_divergent_to-infty_in x0
+proof thus f is_divergent_to-infty_in x0 implies
+ f is_left_divergent_to-infty_in x0 & f is_right_divergent_to-infty_in x0
+ proof assume A1: f is_divergent_to-infty_in x0;
+  then A2: for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f by Def3;
+  then A3: for r st r<x0 ex g st r<g & g<x0 & g in dom f by Th8;
+    now let s be Real_Sequence; assume
+   A4: s is convergent & lim s=x0 & rng s c=dom f/\left_open_halfline(x0);
+   then rng s c=dom f\{x0} by Th1; hence f*s is divergent_to-infty by A1,A4,
+Def3;
+  end; hence f is_left_divergent_to-infty_in x0 by A3,LIMFUNC2:def 3;
+  A5: for r st x0<r ex g st g<r & x0<g & g in dom f by A2,Th8;
+    now let s be Real_Sequence; assume
+   A6: s is convergent & lim s=x0 & rng s c=dom f/\
+right_open_halfline(x0);
+   then rng s c=dom f\{x0} by Th1; hence f*s is divergent_to-infty by A1,A6,
+Def3;
+  end; hence f is_right_divergent_to-infty_in x0 by A5,LIMFUNC2:def 6;
+ end;
+ assume A7: f is_left_divergent_to-infty_in x0 &
+  f is_right_divergent_to-infty_in x0;
+ A8: now let r1,r2; assume A9: r1<x0 & x0<r2; then consider g1 such that
+  A10: r1<g1 & g1<x0 & g1 in dom f by A7,LIMFUNC2:def 3; consider g2 such that
+  A11: g2<r2 & x0<g2 & g2 in dom f by A7,A9,LIMFUNC2:def 6; take g1; take g2;
+  thus r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f by A10,A11;
+ end;
+   now let s be Real_Sequence such that
+  A12: s is convergent & lim s=x0 & rng s c=dom f\{x0};
+    now per cases;
+  suppose ex k st for n st k<=n holds s.n<x0; then consider k such that
+   A13: for n st k<=n holds s.n<x0;
+   A14: s^\k is convergent & lim(s^\k)=x0 by A12,SEQ_4:33;
+   A15: rng s c=dom f by A12,Lm1;
+     rng(s^\k)c=dom f/\left_open_halfline(x0)
+   proof let x be set; assume x in rng(s^\k); then consider n such that
+    A16: (s^\k).n=x by RFUNCT_2:9; s.(n+k) in rng s by RFUNCT_2:10;
+    then A17: x in rng s by A16,SEQM_3:def 9
+; k<=n+k by NAT_1:37;
+    then s.(n+k)<x0 by A13; then s.(n+k) in {g1: g1<x0};
+    then s.(n+k) in left_open_halfline(x0) by PROB_1:def 15;
+    then x in left_open_halfline(x0) by A16,SEQM_3:def 9; hence thesis by A15,
+A17,XBOOLE_0:def 3;
+   end; then A18: f*(s^\k) is divergent_to-infty by A7,A14,LIMFUNC2:def 3;
+     f*(s^\k) =(f*s)^\k by A15,RFUNCT_2:22;
+   hence f*s is divergent_to-infty by A18,LIMFUNC1:34;
+  suppose A19: for k ex n st k<=n & s.n>=x0;
+     now per cases;
+   suppose ex k st for n st k<=n holds x0<s.n; then consider k such that
+    A20: for n st k<=n holds s.n>x0;
+    A21: s^\k is convergent & lim(s^\k)=x0 by A12,SEQ_4:33;
+    A22: rng s c=dom f by A12,Lm1;
+      rng(s^\k)c=dom f/\right_open_halfline(x0)
+    proof let x be set; assume x in rng(s^\k); then consider n such that
+     A23: (s^\k).n=x by RFUNCT_2:9; s.(n+k) in rng s by RFUNCT_2:10;
+     then A24: x in rng s by A23,SEQM_3:def 9
+; k<=n+k by NAT_1:37;
+     then x0<s.(n+k) by A20; then s.(n+k) in {g1: x0<g1};
+     then s.(n+k) in right_open_halfline(x0) by LIMFUNC1:def 3;
+     then x in right_open_halfline(x0) by A23,SEQM_3:def 9;
+     hence thesis by A22,A24,XBOOLE_0:def 3;
+    end; then A25: f*(s^\k) is divergent_to-infty by A7,A21,LIMFUNC2:def 6;
+      f*(s^\k) =(f*s)^\k by A22,RFUNCT_2:22;
+    hence f*s is divergent_to-infty by A25,LIMFUNC1:34;
+   suppose A26: for k ex n st k<=n & x0>=s.n;
+    A27: now let k; consider n such that A28: k<=n & s.n<=x0 by A26;
+     take n; thus k<=n by A28; s.n in rng s by RFUNCT_2:10;
+then not s.n in {x0} by A12,XBOOLE_0:def 4;
+     then s.n<>x0 by TARSKI:def 1; hence s.n<x0 by A28,REAL_1:def 5;
+    end; then consider m1 be Nat such that A29: 0<=m1 & s.m1<x0;
+    defpred X[Nat] means s.$1<x0;
+    A30: ex m st X[m]by A29; consider M be Element of NAT such that
+    A31: X[M] & for n st X[n] holds M<=n from Min(A30);
+    A32: now let n; consider m such that A33: n+1<=m & s.m<x0 by A27;
+     take m; thus n<m & s.m<x0 by A33,NAT_1:38;
+    end;
+    defpred P[set,set] means for n,m st $1=n & $2=m holds
+    n<m & s.m<x0 & for k st n<k & s.k<x0 holds m<=k;
+    defpred X[Nat,Nat,Nat] means P[$2,$3];
+    A34: for n for x be Element of NAT ex y be Element of NAT st X[n,x,y]
+    proof let n; let x be Element of NAT;
+    defpred X[Nat] means x<$1 & s.$1<x0;
+    A35: ex m st X[m] by A32;
+     consider l be Nat such that A36: X[l] &
+     for k st X[k] holds l<=k from Min(A35); take l; thus thesis by A36;
+    end; reconsider M'=M as Element of NAT qua non empty set;
+    consider F be Function of NAT,NAT such that
+    A37: F.0=M' & for n holds X[n,F.n,F.(n+1)] from RecExD(A34);
+    A38: dom F=NAT & rng F c=NAT by FUNCT_2:def 1,RELSET_1:12;
+ then rng F c=REAL by XBOOLE_1:1;
+    then reconsider F as Real_Sequence by A38,FUNCT_2:def 1,RELSET_1:11;
+    A39: now let n; F.n in rng F by A38,FUNCT_1:def 5;hence F.n is Nat by A38
+;
+    end;
+      now let n; F.n is Nat & F.(n+1) is Nat by A39;
+     hence F.n<F.(n+1) by A37;
+    end;
+    then reconsider F as increasing Seq_of_Nat by A38,SEQM_3:def 8,def 11;
+    defpred X[Nat] means s.$1<x0 & for m holds F.m<>$1;
+    A40: for n st s.n<x0 ex m st F.m=n
+    proof assume A41: ex n st X[n];
+     consider M1 be Nat such that A42: X[M1] &
+     for n st X[n] holds M1<=n from Min(A41);
+     defpred X[Nat] means $1<M1 & s.$1<x0 & ex m st F.m=$1;
+     A43: ex n st X[n]
+     proof take M; A44: M<=M1 by A31,A42;
+         M <> M1 by A37,A42;
+      hence M<M1 by A44,REAL_1:def 5;
+      thus s.M<x0 by A31; take 0; thus thesis by A37;
+     end;
+     A45: for n st X[n] holds n<=M1;
+     consider MX be Nat such that A46: X[MX] &
+     for n st X[n] holds n<=MX from Max(A45,A43);
+     A47: for k st MX<k & k<M1 holds s.k>=x0
+     proof given k such that A48: MX<k & k<M1 & s.k<x0;
+        now per cases;
+       suppose ex m st F.m=k; hence contradiction by A46,A48;
+       suppose for m holds F.m<>k; hence contradiction by A42,A48;
+      end; hence contradiction;
+     end;
+     consider m such that A49: F.m=MX by A46;
+     A50: MX<F.(m+1) & s.(F.(m+1))<x0 &
+      for k st MX<k & s.k<x0 holds F.(m+1)<=k by A37,A49;
+     A51: F.(m+1)<=M1 by A37,A42,A46,A49;
+       now assume F.(m+1)<>M1; then F.(m+1)<M1 by A51,REAL_1:def 5;
+hence contradiction by A47,A50;
+     end; hence contradiction by A42;
+    end;
+    A52: for n holds (s*F).n<x0
+    proof
+      defpred X[Nat] means (s*F).$1<x0;
+     A53: X[0] by A31,A37,SEQM_3:31;
+     A54: for k st X[k] holds X[k+1]
+     proof let k such that
+   (s*F).k<x0; P[F.k,F.(k+1)] by A37; then s.(F.(k+1))<x0;
+      hence (s*F).(k+1)<x0 by SEQM_3:31;
+     end; thus for k holds X[k] from Ind(A53,A54);
+    end; A55: s*F is_subsequence_of s by SEQM_3:def 10;
+    then A56: s*F is convergent by A12,SEQ_4:29;
+    A57: lim(s*F)=x0 by A12,A55,SEQ_4:30; rng(s*F)c=rng s by A55,RFUNCT_2:11
+;
+    then A58: rng(s*F)c=dom f\{x0} by A12,XBOOLE_1:1;
+      rng(s*F)c=dom f/\left_open_halfline(x0)
+    proof let x be set; assume A59: x in rng(s*F); then consider n such that
+     A60: (s*F).n=x by RFUNCT_2:9; (s*F).n<x0 by A52;
+     then x in {g1: g1<x0} by A60;
+     then A61: x in left_open_halfline(x0) by PROB_1:def 15;
+       x in dom f by A58,A59,XBOOLE_0:def 4;
+     hence thesis by A61,XBOOLE_0:def 3;
+    end; then A62: f*(s*F) is divergent_to-infty by A7,A56,A57,LIMFUNC2:def 3;
+    defpred X[Nat] means s.$1>x0;
+    A63: now let k; consider n such that A64: k<=n & s.n>=x0 by A19;
+     take n; thus k<=n by A64; s.n in rng s by RFUNCT_2:10;
+then not s.n in {x0} by A12,XBOOLE_0:def 4;
+     then s.n<>x0 by TARSKI:def 1; hence s.n>x0 by A64,REAL_1:def 5;
+    end; then ex mn be Nat st 0<=mn & s.mn>x0;
+    then A65: ex m st X[m]; consider N be Element of NAT such that
+    A66: X[N] & for n st X[n] holds N<=n from Min(A65);
+    A67: now let n; consider m such that A68: n+1<=m & s.m>x0 by A63;
+     take m; thus n<m & s.m>x0 by A68,NAT_1:38;
+    end;
+    defpred P[set,set] means for n,m st $1=n & $2=m holds
+    n<m & s.m>x0 & for k st n<k & s.k>x0 holds m<=k;
+    defpred X[Nat,Nat,Nat] means P[$2,$3];
+    A69: for n for x be Element of NAT ex y be Element of NAT st X[n,x,y]
+    proof let n; let x be Element of NAT;
+    defpred X[Nat] means x<$1 & s.$1>x0;
+    A70: ex m st X[m] by A67;
+     consider l be Nat such that A71: X[l] &
+     for k st X[k] holds l<=k from Min(A70); take l; thus thesis by A71;
+    end;
+    reconsider N'=N as Element of NAT qua non empty set;
+    consider G be Function of NAT,NAT such that
+    A72: G.0=N' & for n holds X[n,G.n,G.(n+1)] from RecExD(A69);
+    A73: dom G=NAT & rng G c=NAT by FUNCT_2:def 1,RELSET_1:12;
+    then rng G c=REAL by XBOOLE_1:1;
+    then reconsider G as Real_Sequence by A73,FUNCT_2:def 1,RELSET_1:11;
+    A74: now let n; G.n in rng G by A73,FUNCT_1:def 5;hence G.n is Nat by A73
+;
+    end;
+      now let n; G.n is Nat & G.(n+1) is Nat by A74;
+     hence G.n<G.(n+1) by A72;
+    end;
+    then reconsider G as increasing Seq_of_Nat by A73,SEQM_3:def 8,def 11;
+    defpred X[Nat] means s.$1>x0 & for m holds G.m<>$1;
+    A75: for n st s.n>x0 ex m st G.m=n
+    proof assume A76: ex n st X[n];
+     consider N1 be Nat such that A77: X[N1] &
+     for n st X[n] holds N1<=n from Min(A76);
+     defpred X[Nat] means $1<N1 & s.$1>x0 & ex m st G.m=$1;
+     A78: ex n st X[n]
+     proof take N; A79: N<=N1 by A66,A77;
+         N <> N1 by A72,A77;
+      hence N<N1 by A79,REAL_1:def 5; thus s.N>x0 by A66; take 0;
+      thus thesis by A72;
+     end;
+     A80: for n st X[n] holds n<=N1;
+     consider NX be Nat such that A81: X[NX] &
+     for n st X[n] holds n<=NX from Max(A80,A78);
+     A82: for k st NX<k & k<N1 holds s.k<=x0
+     proof given k such that A83: NX<k & k<N1 & s.k>x0;
+        now per cases;
+       suppose ex m st G.m=k; hence contradiction by A81,A83;
+       suppose for m holds G.m<>k; hence contradiction by A77,A83;
+      end; hence contradiction;
+     end;
+     consider m such that A84: G.m=NX by A81;
+     A85: NX<G.(m+1) & s.(G.(m+1))>x0 &
+      for k st NX<k & s.k>x0 holds G.(m+1)<=k by A72,A84;
+     A86: G.(m+1)<=N1 by A72,A77,A81,A84;
+       now assume G.(m+1)<>N1; then G.(m+1)<N1 by A86,REAL_1:def 5;
+hence contradiction by A82,A85;
+     end; hence contradiction by A77;
+    end;
+    A87: for n holds (s*G).n>x0
+    proof
+      defpred X[Nat] means (s*G).$1>x0;
+     A88: X[0] by A66,A72,SEQM_3:31;
+     A89: for k st X[k] holds X[k+1]
+     proof let k such that
+   (s*G).k>x0; P[G.k,G.(k+1)] by A72; then s.(G.(k+1))>x0;
+      hence (s*G).(k+1)>x0 by SEQM_3:31;
+     end; thus for k holds X[k] from Ind(A88,A89);
+    end; A90: s*G is_subsequence_of s by SEQM_3:def 10;
+    then A91: s*G is convergent by A12,SEQ_4:29; A92: lim(s*G)=x0 by A12,A90,
+SEQ_4:30;
+      rng(s*G)c=rng s by A90,RFUNCT_2:11;
+    then A93: rng(s*G)c=dom f\{x0} by A12,XBOOLE_1:1;
+      rng(s*G)c=dom f/\right_open_halfline(x0)
+    proof let x be set; assume A94: x in rng(s*G); then consider n such that
+     A95: (s*G).n=x by RFUNCT_2:9; (s*G).n>x0 by A87;
+     then x in {g1: x0<g1} by A95;
+     then A96: x in right_open_halfline(x0) by LIMFUNC1:def 3;
+       x in dom f by A93,A94,XBOOLE_0:def 4;
+     hence thesis by A96,XBOOLE_0:def 3;
+    end; then A97: f*(s*G) is divergent_to-infty by A7,A91,A92,LIMFUNC2:def 6;
+      now let r; consider n1 be Nat such that
+     A98: for k st n1<=k holds (f*(s*F)).k<r by A62,LIMFUNC1:def 5;
+     consider n2 be Nat such that
+     A99: for k st n2<=k holds (f*(s*G)).k<r by A97,LIMFUNC1:def 5;
+     take n=max(F.n1,G.n2);
+     let k; s.k in rng s by RFUNCT_2:9;
+     then not s.k in {x0} by A12,XBOOLE_0:def 4; then A100: s.k<>x0 by TARSKI:
+def 1
+; assume A101: n<=k;
+       now per cases by A100,REAL_1:def 5;
+      suppose s.k<x0; then consider l be Nat such that A102: k=F.l by A40;
+         F.n1<=n by SQUARE_1:46; then A103: F.n1<=k by A101,AXIOMS:22;
+         dom f\{x0}c=dom f by XBOOLE_1:36;
+       then A104: rng(s*F)c=dom f by A58,XBOOLE_1:1; A105: rng s c=dom f by A12
+,Lm1;
+         l >= n1 by A102,A103,SEQM_3:7;
+       then (f*(s*F)).l<r by A98; then f.((s*F).l)<r by A104,RFUNCT_2:21;
+       then f.(s.k)<r by A102,SEQM_3:31; hence (f*s).k<r by A105,RFUNCT_2:21;
+      suppose s.k>x0; then consider l be Nat such that A106: k=G.l by A75;
+         G.n2<=n by SQUARE_1:46; then A107: G.n2<=k by A101,AXIOMS:22;
+         dom f\{x0}c=dom f by XBOOLE_1:36;
+       then A108: rng(s*G)c=dom f by A93,XBOOLE_1:1; A109: rng s c=dom f by A12
+,Lm1;
+         l >= n2 by A106,A107,SEQM_3:7;
+       then (f*(s*G)).l<r by A99; then f.((s*G).l)<r by A108,RFUNCT_2:21;
+       then f.(s.k)<r by A106,SEQM_3:31; hence (f*s).k<r by A109,RFUNCT_2:21;
+     end; hence (f*s).k<r;
+    end; hence f*s is divergent_to-infty by LIMFUNC1:def 5;
+   end; hence f*s is divergent_to-infty;
+  end; hence f*s is divergent_to-infty;
+ end; hence thesis by A8,Def3;
+end;
+
+theorem
+  f1 is_divergent_to+infty_in x0 & f2 is_divergent_to+infty_in x0 &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f1 /\ dom f2 &
+  g2<r2 & x0<g2 & g2 in dom f1 /\ dom f2)
+implies f1+f2 is_divergent_to+infty_in x0 & f1(#)f2 is_divergent_to+infty_in x0
+proof assume A1: f1 is_divergent_to+infty_in x0 &
+ f2 is_divergent_to+infty_in x0 &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f1/\dom f2 & g2<r2 & x0<g2 & g2 in dom f1/\dom f2;
+ A2: now let r1,r2; assume r1<x0 & x0<r2; then consider g1,g2 such that
+  A3: r1<g1 & g1<x0 & g1 in dom f1/\dom f2 &
+   g2<r2 & x0<g2 & g2 in dom f1/\dom f2 by A1;
+  take g1; take g2; thus r1<g1 & g1<x0 & g1 in dom(f1+f2) &
+  g2<r2 & x0<g2 & g2 in dom(f1+f2) by A3,SEQ_1:def 3;
+ end;
+   now let s be Real_Sequence; assume A4: s is convergent & lim s=x0 &
+  rng s c=dom(f1+f2)\{x0};
+  then A5: rng s c=dom(f1+f2) & dom(f1+f2)=dom f1/\dom f2 & rng s c=dom f1\{x0}
+&
+  rng s c=dom f2\{x0} by Lm6; then A6: f1*s is divergent_to+infty by A1,A4,Def2
+;
+    f2*s is divergent_to+infty by A1,A4,A5,Def2;
+  then f1*s+f2*s is divergent_to+infty by A6,LIMFUNC1:35;
+  hence (f1+f2)*s is divergent_to+infty by A5,RFUNCT_2:23;
+ end; hence f1+f2 is_divergent_to+infty_in x0 by A2,Def2;
+ A7: now let r1,r2; assume r1<x0 & x0<r2; then consider g1,g2 such that
+  A8: r1<g1 & g1<x0 & g1 in dom f1/\dom f2 &
+  g2<r2 & x0<g2 & g2 in dom f1/\dom f2 by A1
+;
+  take g1; take g2; thus r1<g1 & g1<x0 & g1 in dom(f1(#)f2) &
+  g2<r2 & x0<g2 & g2 in dom(f1(#)f2) by A8,SEQ_1:def 5;
+ end;
+   now let s be Real_Sequence; assume A9: s is convergent & lim s=x0 &
+  rng s c=dom(f1(#)f2)\{x0};
+  then A10: rng s c=dom(f1(#)f2) & dom(f1(#)
+f2)=dom f1/\dom f2 & rng s c=dom f1\{x0} &
+  rng s c=dom f2\{x0} by Lm3; then A11: f1*s is divergent_to+infty by A1,A9,
+Def2;
+    f2*s is divergent_to+infty by A1,A9,A10,Def2;
+  then (f1*s)(#)(f2*s) is divergent_to+infty by A11,LIMFUNC1:37;
+  hence (f1(#)f2)*s is divergent_to+infty by A10,RFUNCT_2:23;
+ end; hence thesis by A7,Def2;
+end;
+
+theorem
+  f1 is_divergent_to-infty_in x0 & f2 is_divergent_to-infty_in x0 &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f1 /\ dom f2 &
+  g2<r2 & x0<g2 & g2 in dom f1 /\ dom f2)
+implies f1+f2 is_divergent_to-infty_in x0 & f1(#)
+f2 is_divergent_to+infty_in x0
+proof assume A1: f1 is_divergent_to-infty_in x0 &
+ f2 is_divergent_to-infty_in x0 & for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f1/\dom f2 & g2<r2 & x0<g2 & g2 in dom f1/\dom f2;
+ A2: now let r1,r2; assume r1<x0 & x0<r2; then consider g1,g2 such that
+  A3: r1<g1 & g1<x0 & g1 in dom f1/\dom f2 &
+  g2<r2 & x0<g2 & g2 in dom f1/\dom f2 by A1
+;
+  take g1; take g2; thus r1<g1 & g1<x0 & g1 in dom(f1+f2) &
+  g2<r2 & x0<g2 & g2 in dom(f1+f2) by A3,SEQ_1:def 3;
+ end;
+   now let s be Real_Sequence; assume A4: s is convergent & lim s=x0 &
+  rng s c=dom(f1+f2)\{x0};
+  then A5: rng s c=dom(f1+f2) & dom(f1+f2)=dom f1/\dom f2 & rng s c=dom f1\{x0}
+  & rng s c=dom f2\{x0} by Lm6; then A6: f1*s is divergent_to-infty
+   by A1,A4,Def3;
+    f2*s is divergent_to-infty by A1,A4,A5,Def3;
+  then f1*s+f2*s is divergent_to-infty by A6,LIMFUNC1:38;
+  hence (f1+f2)*s is divergent_to-infty by A5,RFUNCT_2:23;
+ end; hence f1+f2 is_divergent_to-infty_in x0 by A2,Def3;
+ A7: now let r1,r2; assume r1<x0 & x0<r2; then consider g1,g2 such that
+  A8: r1<g1 & g1<x0 & g1 in dom f1/\dom f2 &
+  g2<r2 & x0<g2 & g2 in dom f1/\dom f2 by A1
+;
+  take g1; take g2; thus r1<g1 & g1<x0 & g1 in dom(f1(#)f2) &
+  g2<r2 & x0<g2 & g2 in dom(f1(#)f2) by A8,SEQ_1:def 5;
+ end;
+   now let s be Real_Sequence; assume A9: s is convergent & lim s=x0 &
+  rng s c=dom(f1(#)f2)\{x0};
+  then A10: rng s c=dom(f1(#)f2) & dom(f1(#)
+f2)=dom f1/\dom f2 & rng s c=dom f1\{x0} &
+  rng s c=dom f2\{x0} by Lm3; then A11: f1*s is divergent_to-infty by A1,A9,
+Def3;
+    f2*s is divergent_to-infty by A1,A9,A10,Def3;
+  then (f1*s)(#)(f2*s) is divergent_to+infty by A11,LIMFUNC1:51;
+  hence (f1(#)f2)*s is divergent_to+infty by A10,RFUNCT_2:23;
+ end; hence thesis by A7,Def2;
+end;
+
+theorem
+  f1 is_divergent_to+infty_in x0 &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom(f1+f2) & g2<r2 & x0<g2 & g2 in dom(f1+f2)) &
+(ex r st 0<r & f2 is_bounded_below_on ].x0-r,x0.[ \/ ].x0,x0+r.[) implies
+f1+f2 is_divergent_to+infty_in x0
+proof assume A1: f1 is_divergent_to+infty_in x0 &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom(f1+f2) & g2<r2 & x0<g2 & g2 in dom(f1+f2);
+ given r such that
+ A2: 0<r & f2 is_bounded_below_on ].x0-r,x0.[ \/ ].x0,x0+r.[;
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f1+f2)\{x0}; then consider k such that
+  A4: for n st k<=n holds x0-r<s.n & s.n<x0+r by A2,Th7;
+  A5: s^\k is convergent & lim(s^\k)=x0 by A3,SEQ_4:33;
+    rng(s^\k)c=rng s by RFUNCT_2:7; then A6: rng(s^\k)c=dom(f1+f2)\{x0}
+     by A3,XBOOLE_1:1;
+  then A7: rng(s^\k)c=dom(f1+f2) & rng(s^\k)c=dom f1 & rng(s^\k)c=dom f2 &
+  rng(s^\k)c=dom f1\{x0} by Lm6;
+  then A8: f1*(s^\k) is divergent_to+infty by A1,A5,Def2;
+  A9: rng(s^\k)c=dom f1/\dom f2 by A7,SEQ_1:def 3;
+  A10: rng s c=dom(f1+f2) by A3,Lm6;
+    now consider r1 be real number such that A11: for g st
+  g in (].x0-r,x0.[\/].x0,x0+r.[)/\dom f2 holds r1<=f2.g by A2,RFUNCT_1:def 10;
+   take r2=r1-1; let n; k<=n+k by NAT_1:37;
+ then x0-r<s.(n+k) & s.(n+k)<x0+r by A4;
+   then x0-r<(s^\k).n & (s^\k).n<x0+r by SEQM_3:def 9;
+   then (s^\k).n in {g2: x0-r<g2 & g2<x0+r};
+   then A12: (s^\k).n in ].x0-r,x0+r.[ by RCOMP_1:def 2; A13: (s^\k).n in rng(s
+^\k)
+      by RFUNCT_2:10;
+   then not (s^\k).n in {x0}
+      by A6,XBOOLE_0:def 4;
+   then (s^\k).n in ].x0-r,x0+r.[\{x0} by A12,XBOOLE_0:def 4;
+    then (s^\k).n in ].x0-r,x0.[\/].x0,x0+r.[ by A2,Th4;
+   then (s^\k).n in (].x0-r,x0.[\/].x0,x0+r.[)/\dom f2
+   by A7,A13,XBOOLE_0:def 3;
+   then r1<=f2.((s^\k).n) by A11; then r1-1<f2.((s^\k).n)-0 by REAL_1:92;
+   hence r2<(f2*(s^\k)).n
+      by A7,RFUNCT_2:21;
+  end; then f2*(s^\k) is bounded_below by SEQ_2:def 4;
+  then A14: f1*(s^\k)+f2*(s^\k) is divergent_to+infty by A8,LIMFUNC1:36;
+    f1*(s^\k)+f2*(s^\k)=(f1+f2)*(s^\k) by A9,RFUNCT_2:23
+  .=((f1+f2)*s)^\k by A10,RFUNCT_2:22;
+  hence (f1+f2)*s is divergent_to+infty by A14,LIMFUNC1:34;
+ end; hence thesis by A1,Def2;
+end;
+
+theorem
+  f1 is_divergent_to+infty_in x0 &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom(f1(#)f2) & g2<r2 & x0<g2 & g2 in dom(f1(#)f2)) &
+(ex r,r1 st 0<r & 0<r1 &
+  for g st g in dom f2 /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) holds r1<=f2.g) implies
+f1(#)f2 is_divergent_to+infty_in x0
+proof assume A1: f1 is_divergent_to+infty_in x0 &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom(f1(#)f2) & g2<r2 & x0<g2 & g2 in dom(f1(#)f2);
+  given r,t be Real such that
+ A2: 0<r & 0<t & for g st g in dom f2/\(].x0-r,x0.[\/
+].x0,x0+r.[) holds t<=f2.g;
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f1(#)f2)\{x0}; then consider k such that
+  A4: for n st k<=n holds x0-r<s.n & s.n<x0+r by A2,Th7;
+  A5: s^\k is convergent & lim(s^\k)=x0 by A3,SEQ_4:33;
+    rng(s^\k)c=rng s by RFUNCT_2:7; then A6: rng(s^\k)c=dom(f1(#)f2)\{x0}
+     by A3,XBOOLE_1:1;
+  then A7: rng(s^\k)c=dom(f1(#)f2) & dom(f1(#)f2)=dom f1/\dom f2 &
+  rng(s^\k)c=dom f1 &
+  rng(s^\k)c=dom f2 & rng(s^\k)c=dom f1\{x0} by Lm3;
+  then A8: f1*(s^\k) is divergent_to+infty by A1,A5,Def2;
+  A9: rng s c=dom(f1(#)f2) by A3,Lm3;
+    now thus 0<t by A2; let n; k<=n+k by NAT_1:37;
+   then x0-r<s.(n+k) & s.(n+k)<x0+r by A4;
+   then x0-r<(s^\k).n & (s^\k).n<x0+r by SEQM_3:def 9;
+   then (s^\k).n in {g2: x0-r<g2 & g2<x0+r};
+   then A10: (s^\k).n in ].x0-r,x0+r.[ by RCOMP_1:def 2; A11: (s^\k).n in rng(s
+^\k)
+      by RFUNCT_2:10;
+   then not (s^\k).n in {x0}
+      by A6,XBOOLE_0:def 4;
+   then (s^\k).n in ].x0-r,x0+r.[\{x0} by A10,XBOOLE_0:def 4;
+    then (s^\k).n in ].x0-r,x0.[\/].x0,x0+r.[ by A2,Th4;
+   then (s^\k).n in dom f2/\(].x0-r,x0.[\/].x0,x0+r.[)
+   by A7,A11,XBOOLE_0:def 3;
+   then t<=f2.((s^\k).n) by A2; hence t<=(f2*(s^\k)).n by A7,RFUNCT_2:21;
+  end; then A12: (f1*(s^\k))(#)(f2*(s^\k)) is divergent_to+infty
+   by A8,LIMFUNC1:49;
+    (f1*(s^\k))(#)(f2*(s^\k))=(f1(#)f2)*(s^\k) by A7,RFUNCT_2:23
+  .=((f1(#)f2)*s)^\k by A9,RFUNCT_2:22;
+  hence (f1(#)f2)*s is divergent_to+infty by A12,LIMFUNC1:34;
+ end; hence thesis by A1,Def2;
+end;
+
+theorem
+  (f is_divergent_to+infty_in x0 & r>0 implies r(#)
+f is_divergent_to+infty_in x0)&
+(f is_divergent_to+infty_in x0 & r<0 implies r(#)
+f is_divergent_to-infty_in x0)&
+(f is_divergent_to-infty_in x0 & r>0 implies r(#)
+f is_divergent_to-infty_in x0)&
+(f is_divergent_to-infty_in x0 & r<0 implies r(#)f is_divergent_to+infty_in x0)
+proof thus f is_divergent_to+infty_in x0 & r>0 implies
+ r(#)f is_divergent_to+infty_in x0
+ proof assume A1: f is_divergent_to+infty_in x0 & r>0;
+  thus for r1,r2 st r1<x0 & x0<r2
+   ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(r(#)f) & g2<r2 & x0<g2 & g2 in dom(r
+(#)f)
+  proof let r1,r2; assume r1<x0 & x0<r2; then consider g1,g2 such that
+   A2: r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f by A1,Def2;
+   take g1; take g2; thus thesis by A2,SEQ_1:def 6;
+  end;
+  let seq; assume A3: seq is convergent & lim seq=x0 &
+  rng seq c=dom(r(#)f)\{x0}; then A4: rng seq c=dom f\{x0} by SEQ_1:def 6
+;
+  then f*seq is divergent_to+infty by A1,A3,Def2;
+  then A5: r(#)(f*seq) is divergent_to+infty by A1,LIMFUNC1:40;
+    rng seq c=dom f by A4,Lm1; hence thesis by A5,RFUNCT_2:24;
+ end;
+ thus f is_divergent_to+infty_in x0 & r<0 implies
+ r(#)f is_divergent_to-infty_in x0
+ proof assume A6: f is_divergent_to+infty_in x0 & r<0;
+  thus for r1,r2 st r1<x0 & x0<r2
+   ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(r(#)f) & g2<r2 & x0<g2 & g2 in dom(r
+(#)f)
+  proof let r1,r2; assume r1<x0 & x0<r2; then consider g1,g2 such that
+   A7: r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f by A6,Def2;
+   take g1; take g2; thus thesis by A7,SEQ_1:def 6;
+  end;
+  let seq; assume A8: seq is convergent & lim seq=x0 &
+  rng seq c=dom(r(#)f)\{x0}; then A9: rng seq c=dom f\{x0} by SEQ_1:def 6
+;
+  then f*seq is divergent_to+infty by A6,A8,Def2;
+  then A10: r(#)(f*seq) is divergent_to-infty by A6,LIMFUNC1:40;
+    rng seq c=dom f by A9,Lm1; hence thesis by A10,RFUNCT_2:24;
+ end;
+ thus f is_divergent_to-infty_in x0 & r>0 implies
+ r(#)f is_divergent_to-infty_in x0
+ proof assume A11: f is_divergent_to-infty_in x0 & r>0;
+  thus for r1,r2 st r1<x0 & x0<r2
+   ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(r(#)f) & g2<r2 & x0<g2 & g2 in dom(r
+(#)f)
+  proof let r1,r2; assume r1<x0 & x0<r2; then consider g1,g2 such that
+   A12: r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f by A11,Def3;
+   take g1; take g2; thus thesis by A12,SEQ_1:def 6;
+  end;
+  let seq; assume A13: seq is convergent & lim seq=x0 &
+  rng seq c=dom(r(#)f)\{x0}; then A14: rng seq c=dom f\{x0} by SEQ_1:def 6
+;
+  then f*seq is divergent_to-infty by A11,A13,Def3;
+  then A15: r(#)(f*seq) is divergent_to-infty by A11,LIMFUNC1:41;
+    rng seq c=dom f by A14,Lm1; hence thesis by A15,RFUNCT_2:24;
+ end;
+ assume A16: f is_divergent_to-infty_in x0 & r<0;
+ thus for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(r(#)f) & g2<r2 & x0<g2 & g2 in dom(r
+(#)f)
+ proof let r1,r2; assume r1<x0 & x0<r2; then consider g1,g2 such that
+  A17: r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f by A16,Def3;
+  take g1; take g2; thus thesis by A17,SEQ_1:def 6;
+ end;
+ let seq; assume A18: seq is convergent & lim seq=x0 &
+ rng seq c=dom(r(#)f)\{x0}; then A19: rng seq c=dom f\{x0} by SEQ_1:def 6;
+ then f*seq is divergent_to-infty by A16,A18,Def3;
+ then A20: r(#)(f*seq) is divergent_to+infty by A16,LIMFUNC1:41;
+   rng seq c=dom f by A19,Lm1; hence thesis by A20,RFUNCT_2:24;
+end;
+
+theorem
+  (f is_divergent_to+infty_in x0 or f is_divergent_to-infty_in x0) implies
+abs(f) is_divergent_to+infty_in x0
+proof assume A1: f is_divergent_to+infty_in x0 or f is_divergent_to-infty_in x0
+;
+   now per cases by A1;
+ suppose A2: f is_divergent_to+infty_in x0;
+  A3: now let r1,r2; assume r1<x0 & x0<r2; then consider g1,g2 such that
+   A4: r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f by A2,Def2;
+   take g1; take g2; thus r1<g1 & g1<x0 & g1 in dom abs(f) &
+   g2<r2 & x0<g2 & g2 in dom abs(f) by A4,SEQ_1:def 10;
+  end;
+    now let seq; assume A5: seq is convergent & lim seq=x0 &
+   rng seq c=dom abs(f)\{x0}; then A6: rng seq c=dom f\{x0} by SEQ_1:def 10
+;
+   then f*seq is divergent_to+infty by A2,A5,Def2;
+   then A7: abs(f*seq) is divergent_to+infty by LIMFUNC1:52;
+     rng seq c=dom f by A6,Lm1;
+   hence abs(f)*seq is divergent_to+infty by A7,RFUNCT_2:25;
+  end; hence thesis by A3,Def2;
+ suppose A8: f is_divergent_to-infty_in x0;
+  A9: now let r1,r2; assume r1<x0 & x0<r2; then consider g1,g2 such that
+   A10: r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f by A8,Def3;
+   take g1; take g2; thus r1<g1 & g1<x0 & g1 in dom abs(f) &
+   g2<r2 & x0<g2 & g2 in dom abs(f) by A10,SEQ_1:def 10;
+  end;
+    now let seq; assume A11: seq is convergent & lim seq=x0 &
+   rng seq c=dom abs(f)\{x0}; then A12: rng seq c=dom f\{x0} by SEQ_1:def 10
+;
+   then f*seq is divergent_to-infty by A8,A11,Def3;
+   then A13: abs(f*seq) is divergent_to+infty by LIMFUNC1:52;
+     rng seq c=dom f by A12,Lm1;
+   hence abs(f)*seq is divergent_to+infty by A13,RFUNCT_2:25;
+  end; hence thesis by A9,Def2;
+ end; hence thesis;
+end;
+
+theorem Th23:
+(ex r st 0<r & f is_non_decreasing_on ].x0-r,x0.[ &
+  f is_non_increasing_on ].x0,x0+r.[ &
+  not f is_bounded_above_on ].x0-r,x0.[ &
+  not f is_bounded_above_on ].x0,x0+r.[) &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) implies
+f is_divergent_to+infty_in x0
+proof given r such that A1: 0<r & f is_non_decreasing_on ].x0-r,x0.[ &
+ f is_non_increasing_on ].x0,x0+r.[ & not f is_bounded_above_on ].x0-r,x0.[ &
+ not f is_bounded_above_on ].x0,x0+r.[;
+ assume for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+ r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f;
+ then A2: (for r st r<x0 ex g st r<g & g<x0 & g in dom f) &
+ for r st x0<r ex g st g<r & x0<g & g in dom f by Th8;
+ then A3: f is_left_divergent_to+infty_in x0 by A1,LIMFUNC2:31;
+   f is_right_divergent_to+infty_in x0 by A1,A2,LIMFUNC2:35;
+ hence thesis by A3,Th15;
+end;
+
+theorem
+  (ex r st 0<r & f is_increasing_on ].x0-r,x0.[ &
+  f is_decreasing_on ].x0,x0+r.[ &
+  not f is_bounded_above_on ].x0-r,x0.[ &
+  not f is_bounded_above_on ].x0,x0+r.[) &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) implies
+f is_divergent_to+infty_in x0
+proof given r such that
+ A1: 0<r & f is_increasing_on ].x0-r,x0.[ & f is_decreasing_on ].x0,x0+r.[ &
+ not f is_bounded_above_on ].x0-r,x0.[ & not f is_bounded_above_on ].x0,x0+r.[;
+ assume A2: for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f;
+ A3: f is_non_decreasing_on ].x0-r,x0.[ by A1,RFUNCT_2:55;
+   f is_non_increasing_on ].x0,x0+r.[ by A1,RFUNCT_2:56;
+ hence thesis by A1,A2,A3,Th23;
+end;
+
+theorem Th25:
+(ex r st 0<r & f is_non_increasing_on ].x0-r,x0.[ &
+  f is_non_decreasing_on ].x0,x0+r.[ &
+  not f is_bounded_below_on ].x0-r,x0.[ &
+  not f is_bounded_below_on ].x0,x0+r.[) &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) implies
+f is_divergent_to-infty_in x0
+proof given r such that A1: 0<r & f is_non_increasing_on ].x0-r,x0.[ &
+ f is_non_decreasing_on ].x0,x0+r.[ & not f is_bounded_below_on ].x0-r,x0.[ &
+ not f is_bounded_below_on ].x0,x0+r.[;
+ assume for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+ r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f;
+ then A2: (for r st r<x0 ex g st r<g & g<x0 & g in dom f) &
+ for r st x0<r ex g st g<r & x0<g & g in dom f by Th8;
+ then A3: f is_left_divergent_to-infty_in x0 by A1,LIMFUNC2:33;
+   f is_right_divergent_to-infty_in x0 by A1,A2,LIMFUNC2:37;
+ hence thesis by A3,Th16;
+end;
+
+theorem
+  (ex r st 0<r & f is_decreasing_on ].x0-r,x0.[ &
+  f is_increasing_on ].x0,x0+r.[ &
+  not f is_bounded_below_on ].x0-r,x0.[ &
+  not f is_bounded_below_on ].x0,x0+r.[) &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) implies
+f is_divergent_to-infty_in x0
+proof given r such that
+ A1: 0<r & f is_decreasing_on ].x0-r,x0.[ & f is_increasing_on ].x0,x0+r.[ &
+ not f is_bounded_below_on ].x0-r,x0.[ & not f is_bounded_below_on ].x0,x0+r.[;
+ assume A2: for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f;
+ A3: f is_non_increasing_on ].x0-r,x0.[ by A1,RFUNCT_2:56;
+   f is_non_decreasing_on ].x0,x0+r.[ by A1,RFUNCT_2:55;
+ hence thesis by A1,A2,A3,Th25;
+end;
+
+theorem Th27:
+f1 is_divergent_to+infty_in x0 &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) &
+(ex r st 0<r & dom f /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) c=
+  dom f1 /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) &
+  for g st g in dom f /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) holds f1.g<=f.g) implies
+f is_divergent_to+infty_in x0
+proof assume A1: f1 is_divergent_to+infty_in x0 &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f; given r such that
+ A2: 0<r & dom f/\(].x0-r,x0.[\/].x0,x0+r.[)c=dom f1/\(].x0-r,x0.[\/
+].x0,x0+r.[) &
+ for g st g in dom f/\(].x0-r,x0.[\/].x0,x0+r.[) holds f1.g<=f.g;
+ thus for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f by A1;
+ let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+ rng s c=dom f\{x0}; then consider k such that
+ A4: for n st k<=n holds x0-r<s.n & s.n<x0+r by A2,Th7;
+ A5: s^\k is convergent & lim(s^\k)=x0 by A3,SEQ_4:33;
+ A6: rng s c=dom f by A3,Lm1; rng(s^\k)c= rng s by RFUNCT_2:7;
+ then A7: rng(s^\k)c=dom f & rng(s^\k)c=dom f\{x0} by A3,A6,XBOOLE_1:1;
+   now let x be set; assume x in rng(s^\k); then consider n such that
+  A8: (s^\k).n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+  then x0-r<s.(n+k) & s.(n+k)<x0+r by A4;
+  then x0-r<(s^\k).n & (s^\k).n<x0+r by SEQM_3:def 9;
+  then (s^\k).n in {g1: x0-r<g1 & g1<x0+r}; then A9: (s^\k).n in ].x0-r,x0+r.[
+     by RCOMP_1:def 2;
+    (s^\k).n in rng(s^\k) by RFUNCT_2:10;
+  then not (s^\k).n in {x0} by A7,XBOOLE_0:def 4
+; then (s^\k).n in ].x0-r,x0+r.[\{x0}
+     by A9,XBOOLE_0:def 4;
+  hence x in ].x0-r,x0.[\/].x0,x0+r.[ by A2,A8,Th4;
+ end; then rng(s^\k)c=].x0-r,x0.[\/].x0,x0+r.[ by TARSKI:def 3;
+ then A10: rng(s^\k)c=dom f/\(].x0-r,x0.[\/].x0,x0+r.[) by A7,XBOOLE_1:19;
+ then rng(s^\k)c=dom f1/\(].x0-r,x0.[\/].x0,x0+r.[) by A2,XBOOLE_1:1;
+ then A11: rng(s^\k)c=dom f1 by XBOOLE_1:18;
+   now let x be set; assume A12: x in rng(s^\k);
+then not x in {x0} by A7,XBOOLE_0:def 4; hence x in dom f1\{x0} by A11,A12,
+XBOOLE_0:def 4;
+ end; then rng(s^\k)c=dom f1\{x0} by TARSKI:def 3;
+ then A13: f1*(s^\k) is divergent_to+infty by A1,A5,Def2;
+   now let n; (s^\k).n in rng(s^\k) by RFUNCT_2:10;
+  then f1.((s^\k).n)<=f.((s^\k).n) by A2,A10;
+  then (f1*(s^\k)).n<=f.((s^\k).n) by A11,RFUNCT_2:21;
+  hence (f1*(s^\k)).n<=(f*(s^\k)).n by A7,RFUNCT_2:21;
+ end; then f*(s^\k) is divergent_to+infty by A13,LIMFUNC1:69;
+ then (f*s)^\k is divergent_to+infty by A6,RFUNCT_2:22; hence thesis by
+LIMFUNC1:34;
+end;
+
+theorem Th28:
+f1 is_divergent_to-infty_in x0 &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) &
+(ex r st 0<r & dom f /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) c=
+  dom f1 /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) &
+  for g st g in dom f /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) holds f.g<=f1.g) implies
+f is_divergent_to-infty_in x0
+proof assume A1: f1 is_divergent_to-infty_in x0 &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f; given r such that
+  A2: 0<r & dom f/\(].x0-r,x0.[\/].x0,x0+r.[)c=dom f1/\(].x0-r,x0.[\/
+].x0,x0+r.[) &
+  for g st g in dom f/\(].x0-r,x0.[\/].x0,x0+r.[) holds f.g<=f1.g;
+ thus for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f by A1;
+ let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+ rng s c=dom f\{x0}; then consider k such that
+ A4: for n st k<=n holds x0-r<s.n & s.n<x0+r by A2,Th7;
+ A5: s^\k is convergent & lim(s^\k)=x0 by A3,SEQ_4:33;
+ A6: rng s c=dom f by A3,Lm1; rng(s^\k)c= rng s by RFUNCT_2:7;
+ then A7: rng(s^\k)c=dom f & rng(s^\k)c=dom f\{x0} by A3,A6,XBOOLE_1:1;
+   now let x be set; assume x in rng(s^\k); then consider n such that
+  A8: (s^\k).n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+  then x0-r<s.(n+k) & s.(n+k)<x0+r by A4;
+  then x0-r<(s^\k).n & (s^\k).n<x0+r by SEQM_3:def 9;
+  then (s^\k).n in {g1: x0-r<g1 & g1<x0+r}; then A9: (s^\k).n in ].x0-r,x0+r.[
+     by RCOMP_1:def 2;
+    (s^\k).n in rng(s^\k) by RFUNCT_2:10;
+  then not (s^\k).n in {x0} by A7,XBOOLE_0:def 4
+; then (s^\k).n in ].x0-r,x0+r.[\{x0}
+     by A9,XBOOLE_0:def 4;
+  hence x in ].x0-r,x0.[\/].x0,x0+r.[ by A2,A8,Th4;
+ end; then rng(s^\k)c=].x0-r,x0.[\/].x0,x0+r.[ by TARSKI:def 3;
+ then A10: rng(s^\k)c=dom f/\(].x0-r,x0.[\/].x0,x0+r.[) by A7,XBOOLE_1:19;
+ then rng(s^\k)c=dom f1/\(].x0-r,x0.[\/].x0,x0+r.[) by A2,XBOOLE_1:1;
+ then A11: rng(s^\k)c=dom f1 by XBOOLE_1:18;
+   now let x be set; assume A12: x in rng(s^\k);
+then not x in {x0} by A7,XBOOLE_0:def 4; hence x in dom f1\{x0} by A11,A12,
+XBOOLE_0:def 4;
+ end; then rng(s^\k)c=dom f1\{x0} by TARSKI:def 3;
+ then A13: f1*(s^\k) is divergent_to-infty by A1,A5,Def3;
+   now let n; (s^\k).n in rng(s^\k) by RFUNCT_2:10;
+  then f.((s^\k).n)<=f1.((s^\k).n) by A2,A10;
+  then (f*(s^\k)).n<=f1.((s^\k).n) by A7,RFUNCT_2:21;
+  hence (f*(s^\k)).n<=(f1*(s^\k)).n by A11,RFUNCT_2:21;
+ end; then f*(s^\k) is divergent_to-infty by A13,LIMFUNC1:70;
+ then (f*s)^\k is divergent_to-infty by A6,RFUNCT_2:22; hence thesis by
+LIMFUNC1:34;
+end;
+
+theorem
+  f1 is_divergent_to+infty_in x0 &
+(ex r st 0<r & ].x0-r,x0.[ \/ ].x0,x0+r.[ c= dom f /\ dom f1 &
+  for g st g in ].x0-r,x0.[ \/ ].x0,x0+r.[ holds f1.g<=f.g) implies
+f is_divergent_to+infty_in x0
+proof assume A1: f1 is_divergent_to+infty_in x0;
+ given r such that A2: 0<r & ].x0-r,x0.[\/].x0,x0+r.[c=dom f/\dom f1 &
+ for g st g in ].x0-r,x0.[\/].x0,x0+r.[ holds f1.g<=f.g;
+ A3: ].x0-r,x0.[\/].x0,x0+r.[c=dom f & ].x0-r,x0.[\/].x0,x0+r.[c=dom f1
+  by A2,XBOOLE_1:18;
+ then A4: ].x0-r,x0.[\/].x0,x0+r.[=dom f/\(].x0-r,x0.[\/].x0,x0+r.[) &
+ ].x0-r,x0.[\/].x0,x0+r.[=dom f1/\(].x0-r,x0.[\/].x0,x0+r.[) by XBOOLE_1:28;
+    for r1,r2 st r1<x0 & x0<r2
+ ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f &
+ g2<r2 & x0<g2 & g2 in dom f by A2,A3,Th5;
+ hence thesis by A1,A2,A4,Th27;
+end;
+
+theorem
+  f1 is_divergent_to-infty_in x0 &
+(ex r st 0<r & ].x0-r,x0.[ \/ ].x0,x0+r.[ c= dom f /\ dom f1 &
+  for g st g in ].x0-r,x0.[ \/ ].x0,x0+r.[ holds f.g<=f1.g) implies
+f is_divergent_to-infty_in x0
+proof assume A1: f1 is_divergent_to-infty_in x0;
+ given r such that A2: 0<r & ].x0-r,x0.[ \/ ].x0,x0+r.[c=dom f/\dom f1 &
+ for g st g in ].x0-r,x0.[ \/ ].x0,x0+r.[ holds f.g<=f1.g;
+ A3: ].x0-r,x0.[\/].x0,x0+r.[c=dom f & ].x0-r,x0.[\/].x0,x0+r.[c=dom f1
+  by A2,XBOOLE_1:18;
+ then A4: ].x0-r,x0.[\/].x0,x0+r.[=dom f/\(].x0-r,x0.[\/].x0,x0+r.[) &
+ ].x0-r,x0.[\/].x0,x0+r.[=dom f1/\(].x0-r,x0.[\/].x0,x0+r.[) by XBOOLE_1:28;
+    for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f by A2,A3,Th5;
+ hence thesis by A1,A2,A4,Th28;
+end;
+
+definition let f,x0;
+assume A1: f is_convergent_in x0;
+func lim(f,x0)->Real means :Def4:
+for seq st seq is convergent & lim seq=x0 &
+ rng seq c= dom f \ {x0} holds f*seq is convergent & lim(f*seq)=it;
+existence by A1,Def1;
+uniqueness
+proof
+   defpred X[Nat,real number] means
+      x0-1/($1+1)<$2 & $2<x0 & $2 in dom f;
+ A2: now let n; A3: x0-1/(n+1)<x0 by Lm4; x0+0<x0+1 by REAL_1:67;
+then consider g1,g2 such that
+A4: x0-1/(n+1)<g1 & g1<x0 & g1 in dom f & g2<x0+1 & x0<g2 & g2 in dom f
+    by A1,A3,Def1;
+   reconsider g1 as real number;
+  take g1; thus X[n,g1] by A4;
+ end; consider s be Real_Sequence such that
+ A5: for n holds  X[n,s.n] from RealSeqChoice(A2);
+ A6: s is convergent & lim s=x0 & rng s c=dom f\{x0} by A5,Th6;
+ let g1,g2 such that
+ A7: for seq st seq is convergent & lim seq=x0 & rng seq c=dom f\{x0} holds
+ f*seq is convergent & lim(f*seq)=g1 and
+ A8: for seq st seq is convergent & lim seq=x0 & rng seq c=dom f\{x0} holds
+ f*seq is convergent & lim(f*seq)=g2;
+   lim(f*s)=g1 by A6,A7; hence thesis by A6,A8;
+end;
+end;
+
+canceled;
+
+theorem
+  f is_convergent_in x0 implies
+(lim(f,x0)=g iff for g1 st 0<g1 ex g2 st 0<g2 &
+  for r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f holds abs(f.r1-g)<g1)
+proof assume A1: f is_convergent_in x0;
+thus lim(f,x0)=g implies for g1 st 0<g1 ex g2 st 0<g2 &
+ for r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f holds abs(f.r1-g)<g1
+ proof assume that A2: lim(f,x0)=g and A3: ex g1 st 0<g1 & for g2 st 0<g2
+  ex r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f & g1<=abs(f.r1-g);
+  consider g1 such that A4: 0<g1 & for g2 st 0<g2
+  ex r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f & g1<=abs(f.r1-g) by A3;
+   defpred X[Nat,real number] means
+    0<abs(x0-$2) & abs(x0-$2)<1/($1+1) & $2 in dom f &
+   abs(f.($2)-g)>=g1;
+  A5: now let n; 0<1/(n+1) by Lm5; then consider r1 such that
+   A6: 0<abs(x0-r1) & abs(x0-r1)<1/(n+1) & r1 in dom f & abs(f.r1-g)>=g1 by A4;
+   reconsider r1 as real number;
+  take r1;
+   thus X[n,r1]   by A6;
+  end; consider s be Real_Sequence such that
+  A7: for n holds X[n,s.n]  from RealSeqChoice(A5);
+  A8: s is convergent & lim s=x0 & rng s c=dom f & rng s c=dom f\{x0} by A7,Th2
+;
+  then f*s is convergent & lim(f*s)=g by A1,A2,Def4; then consider n such that
+  A9: for k st n<=k holds abs((f*s).k-g)<g1 by A4,SEQ_2:def 7;
+   abs((f*s).n-g)<g1 by A9;
+  then abs(f.(s.n)-g)<g1 by A8,RFUNCT_2:21; hence contradiction by A7;
+ end;
+ assume A10: for g1 st 0<g1 ex g2 st 0<g2 &
+ for r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f holds abs(f.r1-g)<g1;
+   now let s be Real_Sequence; assume A11: s is convergent & lim s=x0 &
+  rng s c=dom f\{x0}; then A12: rng s c=dom f by Lm1;
+  A13: now let g1 be real number;
+A14: g1 is Real by XREAL_0:def 1;
+  assume 0<g1; then consider g2 such that
+   A15: 0<g2 & for r1 st 0<abs(x0-r1) & abs(x0-r1)<g2 & r1 in dom f holds
+    abs(f.r1-g)<g1 by A10,A14; consider n such that A16: for k st n<=k holds
+   0<abs(x0-s.k) & abs(x0-s.k)<g2 & s.k in dom f by A11,A15,Th3;
+   take n; let k; assume n<=k;
+   then 0<abs(x0-s.k) & abs(x0-s.k)<g2 & s.k in dom f by A16;
+   then abs(f.(s.k)-g)<g1 by A15;
+   hence abs((f*s).k-g)<g1 by A12,RFUNCT_2:21;
+  end; hence f*s is convergent by SEQ_2:def 6; hence lim(f*s)=g by A13,SEQ_2:
+def 7;
+ end; hence thesis by A1,Def4;
+end;
+
+theorem Th33:
+f is_convergent_in x0 implies f is_left_convergent_in x0 &
+f is_right_convergent_in x0 & lim_left(f,x0)=lim_right(f,x0) &
+lim(f,x0)=lim_left(f,x0) & lim(f,x0)=lim_right(f,x0)
+proof assume A1: f is_convergent_in x0; A2: lim(f,x0)=lim(f,x0);
+ A3: for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+ r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f by A1,Def1;
+ then A4: for r st r<x0 ex g st r<g & g<x0 & g in dom f by Th8;
+ A5: now let s be Real_Sequence; assume
+  A6: s is convergent & lim s=x0 & rng s c=dom f/\left_open_halfline(x0);
+  then rng s c=dom f\{x0} by Th1;
+  hence f*s is convergent & lim(f*s)=lim(f,x0) by A1,A2,A6,Def4;
+ end; hence f is_left_convergent_in x0 by A4,LIMFUNC2:def 1;
+ then A7: lim_left(f,x0)=lim(f,x0) by A5,LIMFUNC2:def 7;
+ A8: for r st x0<r ex g st g<r & x0<g & g in dom f by A3,Th8;
+ A9: now let s be Real_Sequence; assume
+  A10: s is convergent & lim s=x0 & rng s c=dom f/\
+right_open_halfline(x0);
+  then rng s c=dom f\{x0} by Th1;
+  hence f*s is convergent & lim(f*s)=lim(f,x0) by A1,A2,A10,Def4;
+ end; hence f is_right_convergent_in x0 by A8,LIMFUNC2:def 4;hence thesis by A7
+,A9,LIMFUNC2:def 8;
+end;
+
+theorem
+  f is_left_convergent_in x0 & f is_right_convergent_in x0 &
+lim_left(f,x0)=lim_right(f,x0) implies
+f is_convergent_in x0 & lim(f,x0)=lim_left(f,x0) & lim(f,x0)=lim_right(f,x0)
+proof assume A1: f is_left_convergent_in x0 & f is_right_convergent_in x0 &
+ lim_left(f,x0)=lim_right(f,x0);
+ A2: now let r1,r2; assume A3: r1<x0 & x0<r2; then consider g1 such that
+  A4: r1<g1 & g1<x0 & g1 in dom f by A1,LIMFUNC2:def 1; consider g2 such that
+  A5: g2<r2 & x0<g2 & g2 in dom f by A1,A3,LIMFUNC2:def 4; take g1; take g2;
+  thus r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f by A4,A5;
+ end;
+ A6: now let s be Real_Sequence such that
+  A7: s is convergent & lim s=x0 & rng s c=dom f\{x0};
+    now per cases;
+  suppose ex k st for n st k<=n holds s.n<x0; then consider k such that
+   A8: for n st k<=n holds s.n<x0;
+   A9: s^\k is convergent & lim(s^\k)=x0 by A7,SEQ_4:33;
+   A10: rng s c=dom f by A7,Lm1;
+     rng(s^\k)c=dom f/\left_open_halfline(x0)
+   proof let x be set; assume x in rng(s^\k); then consider n such that
+    A11: (s^\k).n=x by RFUNCT_2:9; s.(n+k) in rng s by RFUNCT_2:10;
+    then A12: x in rng s by A11,SEQM_3:def 9
+; k<=n+k by NAT_1:37;
+    then s.(n+k)<x0 by A8; then s.(n+k) in {g1: g1<x0};
+    then s.(n+k) in left_open_halfline(x0) by PROB_1:def 15;
+    then x in left_open_halfline(x0) by A11,SEQM_3:def 9; hence thesis by A10,
+A12,XBOOLE_0:def 3;
+   end; then A13: f*(s^\k) is convergent &
+   lim(f*(s^\k))=lim_left(f,x0) by A1,A9,LIMFUNC2:def 7;
+   A14: f*(s^\k) =(f*s)^\k by A10,RFUNCT_2:22;
+   hence f*s is convergent by A13,SEQ_4:35;
+   thus lim(f*s)=lim_left(f,x0) by A13,A14,SEQ_4:36;
+  suppose A15: for k ex n st k<=n & s.n>=x0;
+     now per cases;
+   suppose ex k st for n st k<=n holds x0<s.n; then consider k such that
+    A16: for n st k<=n holds s.n>x0;
+    A17: s^\k is convergent & lim(s^\k)=x0 by A7,SEQ_4:33;
+    A18: rng s c=dom f by A7,Lm1;
+      rng(s^\k)c=dom f/\right_open_halfline(x0)
+    proof let x be set; assume x in rng(s^\k); then consider n such that
+     A19: (s^\k).n=x by RFUNCT_2:9; s.(n+k) in rng s by RFUNCT_2:10;
+     then A20: x in rng s by A19,SEQM_3:def 9
+; k<=n+k by NAT_1:37;
+     then x0<s.(n+k) by A16; then s.(n+k) in {g1: x0<g1};
+     then s.(n+k) in right_open_halfline(x0) by LIMFUNC1:def 3;
+     then x in right_open_halfline(x0) by A19,SEQM_3:def 9;
+     hence thesis by A18,A20,XBOOLE_0:def 3;
+    end; then A21: f*(s^\k) is convergent &
+    lim(f*(s^\k))=lim_left(f,x0) by A1,A17,LIMFUNC2:def 8;
+    A22: f*(s^\k) =(f*s)^\k by A18,RFUNCT_2:22;
+    hence f*s is convergent by A21,SEQ_4:35;
+    thus lim(f*s)=lim_left(f,x0) by A21,A22,SEQ_4:36;
+   suppose A23: for k ex n st k<=n & x0>=s.n;
+    A24: now let k; consider n such that A25: k<=n & s.n<=x0 by A23;
+     take n; thus k<=n by A25; s.n in rng s by RFUNCT_2:10;
+then not s.n in {x0} by A7,XBOOLE_0:def 4;
+     then s.n<>x0 by TARSKI:def 1; hence s.n<x0 by A25,REAL_1:def 5;
+    end; then consider m1 be Nat such that A26: 0<=m1 & s.m1<x0;
+    defpred X[Nat] means s.$1<x0;
+    A27: ex m st X[m] by A26; consider M be Element of NAT such that
+    A28: X[M] & for n st X[n] holds M<=n from Min(A27);
+    A29: now let n; consider m such that A30: n+1<=m & s.m<x0 by A24;
+     take m; thus n<m & s.m<x0 by A30,NAT_1:38;
+    end;
+    defpred P[set,set] means for n,m st $1=n & $2=m holds
+    n<m & s.m<x0 & for k st n<k & s.k<x0 holds m<=k;
+    defpred X[Nat,Nat,Nat] means P[$2,$3];
+    A31: for n for x be Element of NAT ex y be Element of NAT st X[n,x,y]
+    proof let n; let x be Element of NAT;
+    defpred X[Nat] means x<$1 & s.$1<x0;
+    A32: ex m st X[m] by A29;
+     consider l be Nat such that A33: X[l] &
+     for k st X[k] holds l<=k from Min(A32); take l; thus thesis by A33;
+    end; reconsider M'=M as Element of NAT qua non empty set;
+    consider F be Function of NAT,NAT such that
+    A34: F.0=M' & for n holds X[n,F.n,F.(n+1)] from RecExD(A31);
+    A35: dom F=NAT & rng F c=NAT by FUNCT_2:def 1,RELSET_1:12;
+ then rng F c=REAL by XBOOLE_1:1;
+    then reconsider F as Real_Sequence by A35,FUNCT_2:def 1,RELSET_1:11;
+    A36: now let n; F.n in rng F by A35,FUNCT_1:def 5;hence F.n is Nat by A35
+;
+    end;
+      now let n; F.n is Nat & F.(n+1) is Nat by A36;
+     hence F.n<F.(n+1) by A34;
+    end;
+    then reconsider F as increasing Seq_of_Nat by A35,SEQM_3:def 8,def 11;
+    defpred X[Nat] means s.$1<x0 & for m holds F.m<>$1;
+    A37: for n st s.n<x0 ex m st F.m=n
+    proof assume A38: ex n st X[n];
+     consider M1 be Nat such that A39: X[M1] &
+     for n st X[n] holds M1<=n from Min(A38);
+     defpred X[Nat] means $1<M1 & s.$1<x0 & ex m st F.m=$1;
+     A40: ex n st X[n]
+     proof take M; A41: M<=M1 by A28,A39;
+         M <> M1 by A34,A39;
+      hence M<M1 by A41,REAL_1:def 5;
+      thus s.M<x0 by A28; take 0; thus thesis by A34;
+     end;
+     A42: for n st X[n] holds n<=M1;
+     consider MX be Nat such that A43: X[MX] &
+     for n st X[n] holds n<=MX from Max(A42,A40);
+     A44: for k st MX<k & k<M1 holds s.k>=x0
+     proof given k such that A45: MX<k & k<M1 & s.k<x0;
+        now per cases;
+       suppose ex m st F.m=k; hence contradiction by A43,A45;
+       suppose for m holds F.m<>k; hence contradiction by A39,A45;
+      end; hence contradiction;
+     end; consider m such that A46: F.m=MX by A43;
+     A47: MX<F.(m+1) & s.(F.(m+1))<x0 &
+      for k st MX<k & s.k<x0 holds F.(m+1)<=k by A34,A46;
+     A48: F.(m+1)<=M1 by A34,A39,A43,A46;
+       now assume F.(m+1)<>M1; then F.(m+1)<M1 by A48,REAL_1:def 5;
+hence contradiction by A44,A47;
+     end; hence contradiction by A39;
+    end;
+    A49: for n holds (s*F).n<x0
+    proof
+      defpred X[Nat] means (s*F).$1<x0;
+     A50: X[0] by A28,A34,SEQM_3:31;
+     A51: for k st X[k] holds X[k+1]
+     proof let k such that
+   (s*F).k<x0; P[F.k,F.(k+1)] by A34; then s.(F.(k+1))<x0;
+      hence (s*F).(k+1)<x0 by SEQM_3:31;
+     end; thus for k holds X[k] from Ind(A50,A51);
+    end; A52: s*F is_subsequence_of s by SEQM_3:def 10;
+    then A53: s*F is convergent by A7,SEQ_4:29;
+    A54: lim(s*F)=x0 by A7,A52,SEQ_4:30; rng(s*F)c=rng s by A52,RFUNCT_2:11
+;
+    then A55: rng(s*F)c=dom f\{x0} by A7,XBOOLE_1:1;
+      rng(s*F)c=dom f/\left_open_halfline(x0)
+    proof let x be set; assume A56: x in rng(s*F); then consider n such that
+     A57: (s*F).n=x by RFUNCT_2:9;
+       (s*F).n<x0 by A49; then x in {g1: g1<x0} by A57
+;
+     then A58: x in left_open_halfline(x0) by PROB_1:def 15;
+       x in dom f by A55,A56,XBOOLE_0:def 4;
+     hence thesis by A58,XBOOLE_0:def 3;
+    end; then A59: f*(s*F) is convergent & lim(f*(s*F))=lim_left(f,x0)
+     by A1,A53,A54,LIMFUNC2:def 7;
+    defpred X[Nat] means s.$1>x0;
+    A60: now let k; consider n such that A61: k<=n & s.n>=x0 by A15;
+     take n; thus k<=n by A61; s.n in rng s by RFUNCT_2:10;
+then not s.n in {x0} by A7,XBOOLE_0:def 4;
+     then s.n<>x0 by TARSKI:def 1; hence s.n>x0 by A61,REAL_1:def 5;
+    end; then ex mn be Nat st 0<=mn & s.mn>x0;
+    then A62: ex m st X[m]; consider N be Element of NAT such that
+    A63: X[N] & for n st X[n] holds N<=n from Min(A62);
+    A64: now let n; consider m such that A65: n+1<=m & s.m>x0 by A60;
+     take m; thus n<m & s.m>x0 by A65,NAT_1:38;
+    end;
+    defpred P[set,set] means for n,m st $1=n & $2=m holds
+    n<m & s.m>x0 & for k st n<k & s.k>x0 holds m<=k;
+    defpred X[Nat,Nat,Nat] means P[$2,$3];
+    A66: for n for x be Element of NAT ex y be Element of NAT st X[n,x,y]
+    proof let n; let x be Element of NAT;
+    defpred X[Nat] means x<$1 & s.$1>x0;
+    A67: ex m st X[m] by A64;
+     consider l be Nat such that A68: X[l] &
+     for k st X[k] holds l<=k from Min(A67); take l; thus thesis by A68;
+    end;
+    reconsider N'=N as Element of NAT qua non empty set;
+    consider G be Function of NAT,NAT such that
+    A69: G.0=N' & for n holds X[n,G.n,G.(n+1)] from RecExD(A66);
+    A70: dom G=NAT & rng G c=NAT by FUNCT_2:def 1,RELSET_1:12;
+    then rng G c=REAL by XBOOLE_1:1;
+    then reconsider G as Real_Sequence by A70,FUNCT_2:def 1,RELSET_1:11;
+    A71: now let n; G.n in rng G by A70,FUNCT_1:def 5;hence G.n is Nat by A70
+;
+    end;
+      now let n; G.n is Nat & G.(n+1) is Nat by A71;
+     hence G.n<G.(n+1) by A69;
+    end;
+    then reconsider G as increasing Seq_of_Nat by A70,SEQM_3:def 8,def 11;
+    defpred X[Nat] means s.$1>x0 & for m holds G.m<>$1;
+    A72: for n st s.n>x0 ex m st G.m=n
+    proof assume A73: ex n st X[n];
+     consider N1 be Nat such that A74: X[N1] &
+     for n st X[n] holds N1<=n from Min(A73);
+     defpred X[Nat] means $1<N1 & s.$1>x0 & ex m st G.m=$1;
+     A75: ex n st X[n]
+     proof take N; A76: N<=N1 by A63,A74;
+         N <> N1 by A69,A74;
+      hence N<N1 by A76,REAL_1:def 5; thus s.N>x0 by A63; take 0;
+      thus thesis by A69;
+     end;
+     A77: for n st X[n] holds n<=N1;
+     consider NX be Nat such that A78: X[NX] &
+     for n st X[n] holds n<=NX from Max(A77,A75);
+     A79: for k st NX<k & k<N1 holds s.k<=x0
+     proof given k such that A80: NX<k & k<N1 & s.k>x0;
+        now per cases;
+       suppose ex m st G.m=k; hence contradiction by A78,A80;
+       suppose for m holds G.m<>k; hence contradiction by A74,A80;
+      end; hence contradiction;
+     end;
+     consider m such that A81: G.m=NX by A78;
+     A82: NX<G.(m+1) & s.(G.(m+1))>x0 &
+      for k st NX<k & s.k>x0 holds G.(m+1)<=k by A69,A81;
+     A83: G.(m+1)<=N1 by A69,A74,A78,A81;
+       now assume G.(m+1)<>N1; then G.(m+1)<N1 by A83,REAL_1:def 5;
+     hence contradiction by A79,A82;
+     end; hence contradiction by A74;
+    end;
+    A84: for n holds (s*G).n>x0
+    proof
+      defpred X[Nat] means (s*G).$1>x0;
+    A85: X[0]by A63,A69,SEQM_3:31;
+     A86: for k st X[k] holds X[k+1]
+     proof let k such that
+   (s*G).k>x0; P[G.k,G.(k+1)] by A69; then s.(G.(k+1))>x0;
+      hence (s*G).(k+1)>x0 by SEQM_3:31;
+     end; thus for k holds X[k] from Ind(A85,A86);
+    end; A87: s*G is_subsequence_of s by SEQM_3:def 10;
+    then A88: s*G is convergent by A7,SEQ_4:29; A89: lim(s*G)=x0 by A7,A87,
+SEQ_4:30;
+      rng(s*G)c=rng s by A87,RFUNCT_2:11;
+    then A90: rng(s*G)c=dom f\{x0} by A7,XBOOLE_1:1;
+      rng(s*G)c=dom f/\right_open_halfline(x0)
+    proof let x be set; assume A91: x in rng(s*G); then consider n such that
+     A92: (s*G).n=x by RFUNCT_2:9; (s*G).n>x0 by A84;
+     then x in {g1: x0<g1} by A92; then A93: x in right_open_halfline(x0) by
+LIMFUNC1:def 3;
+
+       x in dom f by A90,A91,XBOOLE_0:def 4;
+     hence thesis by A93,XBOOLE_0:def 3;
+    end; then A94: f*(s*G) is convergent & lim(f*(s*G))=lim_left(f,x0)
+     by A1,A88,A89,LIMFUNC2:def 8; set GR=lim_left(f,x0);
+    A95: now let r be real number;
+    assume A96: 0<r; then consider n1 be Nat such that
+     A97: for k st n1<=k holds abs((f*(s*F)).k-GR)<r by A59,SEQ_2:def 7;
+     consider n2 be Nat such that
+     A98: for k st n2<=k holds abs((f*(s*G)).k-GR)<r by A94,A96,SEQ_2:def 7;
+     take n=max(F.n1,G.n2); let k; s.k in rng s by RFUNCT_2:9;
+then not s.k in {x0} by A7,XBOOLE_0:def 4;
+then A99:     s.k<>x0 by TARSKI:def 1;
+     assume A100: n<=k;
+       now per cases by A99,REAL_1:def 5;
+      suppose s.k<x0; then consider l be Nat such that A101: k=F.l by A37;
+         F.n1<=n by SQUARE_1:46; then A102: F.n1<=k by A100,AXIOMS:22;
+         dom f\{x0}c=dom f by XBOOLE_1:36;
+       then A103: rng(s*F)c=dom f by A55,XBOOLE_1:1; A104: rng s c=dom f by A7,
+Lm1;
+         l >= n1 by A101,A102,SEQM_3:7;
+       then abs((f*(s*F)).l-GR)<r by A97;
+       then abs(f.((s*F).l)-GR)<r by A103,RFUNCT_2:21;
+       then abs(f.(s.k)-GR)<r by A101,SEQM_3:31;
+       hence abs((f*s).k-GR)<r by A104,RFUNCT_2:21;
+      suppose s.k>x0; then consider l be Nat such that A105: k=G.l by A72;
+         G.n2<=n by SQUARE_1:46; then A106: G.n2<=k by A100,AXIOMS:22;
+         dom f\{x0}c=dom f by XBOOLE_1:36;
+       then A107: rng(s*G)c=dom f by A90,XBOOLE_1:1; A108: rng s c=dom f by A7,
+Lm1;
+         l >= n2 by A105,A106,SEQM_3:7;
+       then abs((f*(s*G)).l-GR)<r by A98;
+       then abs(f.((s*G).l)-GR)<r by A107,RFUNCT_2:21;
+       then abs(f.(s.k)-GR)<r by A105,SEQM_3:31;
+       hence abs((f*s).k-GR)<r by A108,RFUNCT_2:21;
+     end; hence abs((f*s).k-GR)<r;
+    end; hence f*s is convergent by SEQ_2:def 6;
+    hence lim(f*s)=lim_left(f,x0) by A95,SEQ_2:def 7;
+   end; hence f*s is convergent & lim(f*s)=lim_left(f,x0);
+  end; hence f*s is convergent & lim(f*s)=lim_left(f,x0);
+ end; hence f is_convergent_in x0 by A2,Def1; hence thesis by A1,A6,Def4;
+end;
+
+theorem Th35:
+f is_convergent_in x0 implies r(#)f is_convergent_in x0 &
+lim(r(#)f,x0)=r*(lim(f,x0))
+proof assume A1: f is_convergent_in x0;
+ A2: now let r1,r2; assume r1<x0 & x0<r2; then consider g1,g2 such that
+  A3: r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f by A1,Def1;
+  take g1; take g2; thus r1<g1 & g1<x0 & g1 in dom(r(#)f) &
+  g2<r2 & x0<g2 & g2 in dom(r(#)f) by A3,SEQ_1:def 6;
+ end;
+ A4: now let seq; A5: lim(f,x0)=lim(f,x0);
+  assume A6: seq is convergent & lim seq=x0 & rng seq c=dom(r(#)f)\{x0};
+  then A7: rng seq c=dom f\{x0} by SEQ_1:def 6;
+  then A8: f*seq is convergent & lim(f*seq)=lim(f,x0) by A1,A5,A6,Def4;
+  then A9: r(#)
+(f*seq) is convergent by SEQ_2:21; A10:rng seq c=dom f by A7,Lm1;
+  then A11: r(#)(f*seq)=(r(#)f)*seq by RFUNCT_2:24; thus (r(#)
+f)*seq is convergent by A9,A10,RFUNCT_2:24;
+  thus lim((r(#)f)*seq)=r*(lim(f,x0)) by A8,A11,SEQ_2:22;
+ end; hence r(#)f is_convergent_in x0 by A2,Def1; hence thesis by A4,Def4;
+end;
+
+theorem Th36:
+f is_convergent_in x0 implies -f is_convergent_in x0 & lim(-f,x0)=-(lim(f,x0))
+proof assume A1: f is_convergent_in x0; A2: (-1)(#)f=-f by RFUNCT_1:38;
+ hence -f is_convergent_in x0 by A1,Th35;
+ thus lim(-f,x0)=(-1)*(lim(f,x0)) by A1,A2,Th35
+ .=-(1*(lim(f,x0))) by XCMPLX_1:175
+ .=-(lim(f,x0));
+end;
+
+theorem Th37:
+f1 is_convergent_in x0 & f2 is_convergent_in x0 &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom(f1+f2) & g2<r2 & x0<g2 & g2 in dom(f1+f2)) implies
+f1+f2 is_convergent_in x0 & lim(f1+f2,x0)=lim(f1,x0)+lim(f2,x0)
+proof assume A1: f1 is_convergent_in x0 & f2 is_convergent_in x0 &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom(f1+f2) & g2<r2 & x0<g2 & g2 in dom(f1+f2);
+ A2: now A3: lim(f1,x0)=lim(f1,x0) & lim(f2,x0)=lim(f2,x0);
+  let seq; assume A4: seq is convergent & lim seq=x0 &
+  rng seq c=dom(f1+f2)\{x0};
+  then A5: rng seq c=dom(f1+f2) & dom(f1+f2)=dom f1/\dom f2 & rng seq c=dom f1\
+{x0}
+  & rng seq c=dom f2\{x0} by Lm6;
+  then A6: f1*seq is convergent & lim(f1*seq)=lim(f1,x0) by A1,A3,A4,Def4;
+  A7: f2*seq is convergent & lim(f2*seq)=lim(f2,x0) by A1,A3,A4,A5,Def4;
+  A8: f1*seq+f2*seq=(f1+f2)*seq by A5,RFUNCT_2:23;
+  hence (f1+f2)*seq is convergent by A6,A7,SEQ_2:19;
+  thus lim((f1+f2)*seq)=lim(f1,x0)+lim(f2,x0) by A6,A7,A8,SEQ_2:20;
+ end; hence f1+f2 is_convergent_in x0 by A1,Def1; hence thesis by A2,Def4;
+end;
+
+theorem
+  f1 is_convergent_in x0 & f2 is_convergent_in x0 &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom(f1-f2) & g2<r2 & x0<g2 & g2 in dom(f1-f2)) implies
+f1-f2 is_convergent_in x0 & lim(f1-f2,x0)=(lim(f1,x0))-(lim(f2,x0))
+proof assume A1: f1 is_convergent_in x0 & f2 is_convergent_in x0 &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+ r1<g1 & g1<x0 & g1 in dom(f1-f2) & g2<r2 & x0<g2 & g2 in dom(f1-f2);
+ A2: f1-f2=f1+-f2 by RFUNCT_1:40; A3: -f2 is_convergent_in x0 by A1,Th36;
+ hence f1-f2 is_convergent_in x0 by A1,A2,Th37;
+ thus lim(f1-f2,x0)=lim(f1,x0)+lim(-f2,x0) by A1,A2,A3,Th37
+ .=(lim(f1,x0))+-lim(f2,x0) by A1,Th36
+ .=(lim(f1,x0))-lim(f2,x0) by XCMPLX_0:def 8;
+end;
+
+theorem
+  f is_convergent_in x0 & f"{0}={} & lim(f,x0)<>0 implies
+f^ is_convergent_in x0 & lim(f^,x0)=(lim(f,x0))"
+proof assume A1: f is_convergent_in x0 & f"{0}={} & lim(f,x0)<>0;
+ then A2: dom f=dom f\f"{0}
+ .=dom(f^) by RFUNCT_1:def 8;
+ then A3: for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+   r1<g1 & g1<x0 & g1 in dom(f^) &
+   g2<r2 & x0<g2 & g2 in dom(f^) by A1,Def1;
+ A4: now let seq; assume A5: seq is convergent & lim seq=x0 &
+  rng seq c=dom(f^)\{x0};
+  then A6: f*seq is convergent & lim(f*seq)=lim(f,x0) by A1,A2,Def4;
+  A7: rng seq c=dom f by A2,A5,Lm1; then A8: f*seq is_not_0 by A2,RFUNCT_2:26;
+  A9: (f*seq)"=(f^)*seq by A2,A7,RFUNCT_2:27;
+  hence (f^)*seq is convergent by A1,A6,A8,SEQ_2:35;
+  thus lim((f^)*seq)=(lim(f,x0))" by A1,A6,A8,A9,SEQ_2:36;
+ end; hence f^ is_convergent_in x0 by A3,Def1; hence thesis by A4,Def4;
+end;
+
+theorem
+  f is_convergent_in x0 implies abs(f) is_convergent_in x0 &
+lim(abs(f),x0)=abs(lim(f,x0))
+proof assume A1: f is_convergent_in x0;
+ A2: now let r1,r2; assume r1<x0 & x0<r2; then consider g1,g2 such that
+  A3: r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f by A1,Def1;
+  take g1; take g2; thus r1<g1 & g1<x0 & g1 in dom abs(f) &
+  g2<r2 & x0<g2 & g2 in dom abs(f) by A3,SEQ_1:def 10;
+ end;
+ A4: now A5: lim(f,x0)=lim(f,x0); let seq; assume
+  A6: seq is convergent & lim seq=x0 & rng seq c=dom abs(f)\{x0};
+  then A7: rng seq c=dom f\{x0} by SEQ_1:def 10;
+  then A8: f*seq is convergent & lim(f*seq)=lim(f,x0) by A1,A5,A6,Def4;
+    rng seq c=dom f by A7,Lm1; then A9: abs(f*seq)=abs(f)*seq by RFUNCT_2:25;
+  hence abs(f)*seq is convergent by A8,SEQ_4:26;
+  thus lim(abs(f)*seq)=abs(lim(f,x0)) by A8,A9,SEQ_4:27;
+ end; hence abs(f) is_convergent_in x0 by A2,Def1; hence thesis by A4,Def4;
+end;
+
+theorem Th41:
+f is_convergent_in x0 & lim(f,x0)<>0 &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f & g2<r2 &
+  x0<g2 & g2 in dom f & f.g1<>0 & f.g2<>0)
+implies f^ is_convergent_in x0 & lim(f^,x0)=(lim(f,x0))"
+proof assume A1: f is_convergent_in x0 & lim(f,x0)<>0 &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+ r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f & f.g1<>0 & f.g2<>0;
+ A2: dom f\f"{0}=dom(f^) by RFUNCT_1:def 8;
+ A3: now let r1,r2; assume r1<x0 & x0<r2; then consider g1,g2 such that
+  A4: r1<g1 & g1<x0 & g1 in dom f &
+  g2<r2 & x0<g2 & g2 in dom f & f.g1<>0 & f.g2<>0
+   by A1; take g1,g2; not f.g1 in {0} & not f.g2 in {0} by A4,TARSKI:def 1
+;
+  then not g1 in f"{0} & not g2 in f"{0} by FUNCT_1:def 13;
+  hence r1<g1 & g1<x0 & g1 in dom(f^) &
+  g2<r2 & x0<g2 & g2 in dom(f^) by A2,A4,XBOOLE_0:def 4;
+ end;
+ A5: now let seq; assume A6: seq is convergent & lim seq=x0 &
+  rng seq c=dom(f^)\{x0}; then A7: rng seq c=dom(f^) by Lm1;
+    dom(f^)c=dom f by A2,XBOOLE_1:36; then A8: rng seq c=dom f by A7,XBOOLE_1:1
+;
+    now let x be set; assume A9: x in rng seq;
+   then not x in {x0} by A6,XBOOLE_0:def 4;
+   hence x in dom f\{x0} by A8,A9,XBOOLE_0:def 4;
+  end; then rng seq c=dom f\{x0} by TARSKI:def 3;
+  then A10: f*seq is convergent & lim(f*seq)=lim(f,x0) by A1,A6,Def4;
+  A11: f*seq is_not_0 by A7,RFUNCT_2:26;
+  A12: (f*seq)"=(f^)*seq by A7,RFUNCT_2:27;
+  hence (f^)*seq is convergent by A1,A10,A11,SEQ_2:35;
+  thus lim((f^)*seq)=(lim(f,x0))" by A1,A10,A11,A12,SEQ_2:36;
+ end; hence f^ is_convergent_in x0 by A3,Def1; hence thesis by A5,Def4;
+end;
+
+theorem Th42:
+f1 is_convergent_in x0 & f2 is_convergent_in x0 &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom(f1(#)f2) & g2<r2 & x0<g2 & g2 in dom(f1(#)
+f2)) implies
+f1(#)f2 is_convergent_in x0 & lim(f1(#)f2,x0)=(lim(f1,x0))*(lim(f2,x0))
+proof assume A1: f1 is_convergent_in x0 & f2 is_convergent_in x0 &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+ r1<g1 & g1<x0 & g1 in dom(f1(#)f2) & g2<r2 & x0<g2 & g2 in dom(f1(#)f2);
+ A2: now A3: lim(f1,x0)=lim(f1,x0) & lim(f2,x0)=lim(f2,x0);
+  let seq; assume A4: seq is convergent & lim seq=x0 &
+  rng seq c=dom(f1(#)f2)\{x0};
+  then A5: rng seq c=dom(f1(#)f2) & dom(f1(#)
+f2)=dom f1/\dom f2 & rng seq c=dom f1\{x0}
+  & rng seq c=dom f2\{x0} by Lm3;
+  then A6: f1*seq is convergent & lim(f1*seq)=lim(f1,x0) by A1,A3,A4,Def4;
+  A7: f2*seq is convergent & lim(f2*seq)=lim(f2,x0) by A1,A3,A4,A5,Def4;
+  A8: (f1*seq)(#)(f2*seq)=(f1(#)f2)*seq by A5,RFUNCT_2:23;
+  hence (f1(#)f2)*seq is convergent by A6,A7,SEQ_2:28;
+  thus lim((f1(#)f2)*seq)=lim(f1,x0)*lim(f2,x0) by A6,A7,A8,SEQ_2:29;
+ end; hence f1(#)f2 is_convergent_in x0 by A1,Def1; hence thesis by A2,Def4;
+end;
+
+theorem
+  f1 is_convergent_in x0 & f2 is_convergent_in x0 & lim(f2,x0)<>0 &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom(f1/f2) & g2<r2 & x0<g2 & g2 in dom(f1/f2)) implies
+f1/f2 is_convergent_in x0 & lim(f1/f2,x0)=(lim(f1,x0))/(lim(f2,x0))
+proof assume A1: f1 is_convergent_in x0 & f2 is_convergent_in x0 &
+ lim(f2,x0)<>0 & for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+ r1<g1 & g1<x0 & g1 in dom(f1/f2) & g2<r2 & x0<g2 & g2 in dom(f1/f2);
+ A2: f1/f2=f1(#)(f2^) by RFUNCT_1:47;
+   now let r1,r2; assume r1<x0 & x0<r2; then consider g1,g2 such that
+  A3: r1<g1 & g1<x0 & g1 in dom(f1/f2) &
+  g2<r2 & x0<g2 & g2 in dom(f1/f2) by A1;
+  take g1; take g2; thus r1<g1 & g1<x0 by A3;
+    dom(f1/f2)=dom f1/\(dom f2\f2"{0}) by RFUNCT_1:def 4;
+then A4:  g1 in dom f2\f2"{0} & g2 in dom f2\f2"{0} by A3,XBOOLE_0:def 3;
+   then g1 in dom f2 & not g1 in f2"{0} &
+   g2 in dom f2 & not g2 in f2"{0} by XBOOLE_0:def 4;
+  then not f2.g1 in {0} & not f2.g2 in {0} by FUNCT_1:def 13;
+  hence g1 in dom f2 & g2<r2 & x0<g2 & g2 in dom f2 & f2.g1<>0 & f2.g2<>0
+   by A3,A4,TARSKI:def 1,XBOOLE_0:def 4;
+ end; then A5: f2^ is_convergent_in x0 & lim(f2^,x0)=(lim(f2,x0))" by A1,Th41;
+ hence f1/f2 is_convergent_in x0 by A1,A2,Th42;
+ thus lim(f1/f2,x0)=lim(f1,x0)*((lim(f2,x0))") by A1,A2,A5,Th42
+ .=lim(f1,x0)/(lim(f2,x0)) by XCMPLX_0:def 9;
+end;
+
+theorem
+  f1 is_convergent_in x0 & lim(f1,x0)=0 &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom(f1(#)f2) & g2<r2 & x0<g2 & g2 in dom(f1(#)f2)) &
+(ex r st 0<r & f2 is_bounded_on ].x0-r,x0.[ \/ ].x0,x0+r.[) implies
+f1(#)f2 is_convergent_in x0 & lim(f1(#)f2,x0)=0
+proof assume A1: f1 is_convergent_in x0 & lim(f1,x0)=0 &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+ r1<g1 & g1<x0 & g1 in dom(f1(#)f2) & g2<r2 & x0<g2 & g2 in dom(f1(#)f2);
+ given r such that A2: 0<r & f2 is_bounded_on ].x0-r,x0.[\/].x0,x0+r.[;
+ consider g be real number such that
+ A3: for r1 st r1 in (].x0-r,x0.[\/].x0,x0+r.[)/\dom f2 holds
+ abs(f2.r1)<=g by A2,RFUNCT_1:90;
+ A4: now let s be Real_Sequence; assume A5: s is convergent &
+  lim s=x0 & rng s c=dom(f1(#)f2)\{x0};
+  then A6: rng s c=dom(f1(#)f2) & dom(f1(#)f2)=dom f1/\dom f2 & rng s c=dom f1
+&
+  rng s c=dom f2 & rng s c=dom f1\{x0} & rng s c=dom f2\{x0} by Lm3;
+  consider k such that A7: for n st k<=
+n holds x0-r<s.n & s.n<x0+r by A2,A5,Th7;
+  A8: s^\k is convergent & lim(s^\k)=x0 by A5,SEQ_4:33;
+    rng(s^\k)c=rng s by RFUNCT_2:7;
+  then A9: rng(s^\k)c=dom f1/\dom f2 & rng(s^\k)c=dom f1 & rng(s^\k)c=dom f2 &
+  rng(s^\k)c=dom f1\{x0} & rng(s^\k)c=dom f2\{x0} by A6,XBOOLE_1:1;
+  then A10: f1*(s^\k) is convergent & lim(f1*(s^\k))=0 by A1,A8,Def4;
+    now set t=abs(g)+1; 0<=abs(g) by ABSVALUE:5; hence 0<t by Lm2;
+   let n; A11: (s^\k).n in rng(s^\k) by RFUNCT_2:10; k<=n+k by NAT_1:37;
+   then x0-r<s.(n+k) & s.(n+k)<x0+r by A7;
+   then x0-r<(s^\k).n & (s^\k).n<x0+r by SEQM_3:def 9;
+   then (s^\k).n in {g1: x0-r<g1 & g1<x0+r}; then A12: (s^\k).n in ].x0-r,x0+r
+.[
+      by RCOMP_1:def 2;
+     not (s^\k).n in {x0} by A9,A11,XBOOLE_0:def 4;
+   then (s^\k).n in ].x0-r,x0+r.[\{x0} by A12,XBOOLE_0:def 4;
+   then (s^\k).n in ].x0-r,x0.[\/].x0,x0+r.[ by A2,Th4;
+   then (s^\k).n in (].x0-r,x0.[\/].x0,x0+r.[)/\dom f2 by A9,A11,XBOOLE_0:def 3
+;
+   then abs(f2.((s^\k).n))<=g by A3; then A13: abs((f2*(s^\k)).n)<=
+g by A9,RFUNCT_2:21;
+     g<=abs(g) by ABSVALUE:11; then g<t by Lm2;
+   hence abs((f2*(s^\k)).n)<t by A13,AXIOMS:22;
+  end; then A14: f2*(s^\k) is bounded by SEQ_2:15;
+  then A15: (f1*(s^\k))(#)(f2*(s^\k)) is convergent by A10,SEQ_2:39;
+  A16: lim((f1*(s^\k))(#)(f2*(s^\k)))=0 by A10,A14,SEQ_2:40;
+  A17: (f1*(s^\k))(#)(f2*(s^\k))=(f1(#)f2)*(s^\k) by A9,RFUNCT_2:23
+  .=((f1(#)f2)*s)^\k by A6,RFUNCT_2:22;
+  hence (f1(#)f2)*s is convergent by A15,SEQ_4:35;
+  thus lim((f1(#)f2)*s)=0 by A15,A16,A17,SEQ_4:36;
+ end; hence f1(#)f2 is_convergent_in x0 by A1,Def1; hence thesis by A4,Def4;
+end;
+
+theorem Th45:
+f1 is_convergent_in x0 & f2 is_convergent_in x0 & lim(f1,x0)=lim(f2,x0) &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f) &
+(ex r st 0<r &
+ (for g st g in dom f /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) holds
+  f1.g<=f.g & f.g<=f2.g) &
+  ((dom f1 /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) c=
+     dom f2 /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) &
+    dom f /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) c=
+     dom f1 /\ (].x0-r,x0.[ \/ ].x0,x0+r.[)) or
+   (dom f2 /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) c=
+     dom f1 /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) &
+    dom f /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) c=
+     dom f2 /\ (].x0-r,x0.[ \/ ].x0,x0+r.[)))) implies
+f is_convergent_in x0 & lim(f,x0)=lim(f1,x0)
+proof assume A1: f1 is_convergent_in x0 & f2 is_convergent_in x0 &
+ lim(f1,x0)=lim(f2,x0) & for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+ r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f;
+ given r1 such that A2: 0<r1 &
+ for g st g in dom f/\(].x0-r1,x0.[\/].x0,x0+r1.[) holds
+ f1.g<=f.g & f.g<=f2.g and
+ A3: (dom f1/\(].x0-r1,x0.[\/].x0,x0+r1.[)c=dom f2/\(].x0-r1,x0.[\/
+].x0,x0+r1.[) &
+  dom f/\(].x0-r1,x0.[\/].x0,x0+r1.[)c=dom f1/\(].x0-r1,x0.[\/].x0,x0+r1.[)) or
+ (dom f2/\(].x0-r1,x0.[\/].x0,x0+r1.[)c=dom f1/\(].x0-r1,x0.[\/].x0,x0+r1.[) &
+  dom f/\(].x0-r1,x0.[\/].x0,x0+r1.[)c=dom f2/\(].x0-r1,x0.[\/].x0,x0+r1.[));
+   now per cases by A3;
+ suppose
+ A4:dom f1/\(].x0-r1,x0.[\/].x0,x0+r1.[)c=dom f2/\(].x0-r1,x0.[\/].x0,x0+r1.[)
+  & dom f/\(].x0-r1,x0.[\/].x0,x0+r1.[)c=dom f1/\(].x0-r1,x0.[\/].x0,x0+r1.[);
+  A5: now let s be Real_Sequence; assume A6: s is convergent & lim s=x0 &
+   rng s c=dom f\{x0}; then consider k such that
+   A7: for n st k<=n holds x0-r1<s.n & s.n<x0+r1 by A2,Th7;
+   A8: s^\k is convergent & lim(s^\k)= x0 by A6,SEQ_4:33;
+   A9: rng(s^\k)c=rng s by RFUNCT_2:7; A10: rng s c=dom f by A6,Lm1;
+   then A11: rng(s^\k)c=dom f & rng(s^\k)c=dom f\{x0} by A6,A9,XBOOLE_1:1;
+   A12: dom f1/\(].x0-r1,x0.[\/].x0,x0+r1.[)c=dom f1 by XBOOLE_1:17;
+   A13: dom f2/\(].x0-r1,x0.[\/].x0,x0+r1.[)c=dom f2 by XBOOLE_1:17;
+     now let x be set; assume A14: x in rng(s^\k); then consider n such that
+    A15: x=(s^\k).n by RFUNCT_2:9; k<=n+k by NAT_1:37;
+    then x0-r1<s.(n+k) & s.(n+k)<x0+r1 by A7;
+    then x0-r1<(s^\k).n & (s^\k).n<x0+r1 by SEQM_3:def 9;
+    then (s^\k).n in {g1: x0-r1<g1 & g1<x0+r1};
+    then A16: (s^\k).n in ].x0-r1,x0+r1.[ by RCOMP_1:def 2;
+      not (s^\k).n in {x0} by A11,A14,A15,XBOOLE_0:def 4;
+    then x in ].x0-r1,x0+r1.[\{x0} by A15,A16,XBOOLE_0:def 4;
+    hence x in ].x0-r1,x0.[\/].x0,x0+r1.[ by A2,Th4;
+   end; then rng(s^\k)c=].x0-r1,x0.[\/].x0,x0+r1.[ by TARSKI:def 3;
+   then A17: rng(s^\k)c=dom f/\(].x0-r1,x0.[\/].x0,x0+r1.[) by A11,XBOOLE_1:19;
+   then A18: rng(s^\k)c=dom f1/\(].x0-r1,x0.[\/].x0,x0+r1.[) by A4,XBOOLE_1:1;
+   then A19: rng(s^\k)c=dom f1 by A12,XBOOLE_1:1;
+     rng(s^\k)c=dom f2/\(].x0-r1,x0.[\/].x0,x0+r1.[) by A4,A18,XBOOLE_1:1;
+   then A20: rng(s^\k)c=dom f2 by A13,XBOOLE_1:1;
+     rng(s^\k)c=dom f1\{x0}
+   proof let x be set; assume A21: x in rng(s^\k);
+    then not x in {x0} by A11,XBOOLE_0:def 4;
+    hence thesis by A19,A21,XBOOLE_0:def 4;
+   end;
+   then A22: f1*(s^\k) is convergent & lim(f1*(s^\k))=lim(f1,x0) by A1,A8,Def4;
+     rng(s^\k) c=dom f2\{x0}
+   proof let x be set; assume A23: x in rng(s^\k);
+    then not x in {x0} by A11,XBOOLE_0:def 4;
+    hence thesis by A20,A23,XBOOLE_0:def 4;
+   end; then A24: f2*(s^\k) is convergent & lim(f2*(s^\k))=lim(f2,x0)
+      by A1,A8,Def4;
+   A25: now let n; (s^\k).n in rng(s^\k) by RFUNCT_2:10;
+    then f1.((s^\k).n)<=f.((s^\k).n) & f.((s^\k).n)<=f2.((s^\k).n) by A2,A17;
+    then f1.((s^\k).n)<=(f*(s^\k)).n & (f*(s^\k)).n<=
+f2.((s^\k).n) by A11,RFUNCT_2:21;
+    hence (f1*(s^\k)).n<=(f*(s^\k)).n & (f*(s^\k)).n<=(f2*(s^\k)).n
+     by A19,A20,RFUNCT_2:21;
+   end; then A26: f*(s^\k) is convergent by A1,A22,A24,SEQ_2:33;
+     lim(f*(s^\k))=lim(f1,x0) by A1,A22,A24,A25,SEQ_2:34;
+   then A27: (f*s)^\k is convergent & lim((f*s)^\k)=lim(f1,x0) by A10,A26,
+RFUNCT_2:22;
+   hence f*s is convergent by SEQ_4:35;thus lim(f*s)=lim(f1,x0) by A27,SEQ_4:36
+;
+  end; hence f is_convergent_in x0 by A1,Def1; hence thesis by A5,Def4;
+ suppose
+ A28:dom f2/\(].x0-r1,x0.[\/].x0,x0+r1.[)c=dom f1/\(].x0-r1,x0.[\/].x0,x0+r1.[)
+  & dom f/\(].x0-r1,x0.[\/].x0,x0+r1.[)c=dom f2/\(].x0-r1,x0.[\/].x0,x0+r1.[);
+  A29: now let s be Real_Sequence; assume A30: s is convergent & lim s=x0 &
+   rng s c=dom f\{x0}; then consider k such that
+   A31: for n st k<=n holds x0-r1<s.n & s.n<x0+r1 by A2,Th7;
+   A32: s^\k is convergent & lim(s^\k)= x0 by A30,SEQ_4:33;
+   A33: rng(s^\k)c=rng s by RFUNCT_2:7; A34: rng s c=dom f by A30,Lm1;
+   then A35: rng(s^\k)c=dom f & rng(s^\k)c=dom f\{x0} by A30,A33,XBOOLE_1:1;
+   A36: dom f1/\(].x0-r1,x0.[\/].x0,x0+r1.[)c=dom f1 by XBOOLE_1:17;
+   A37: dom f2/\(].x0-r1,x0.[\/].x0,x0+r1.[)c=dom f2 by XBOOLE_1:17;
+     now let x be set; assume A38: x in rng(s^\k); then consider n such that
+    A39: x=(s^\k).n by RFUNCT_2:9; k<=n+k by NAT_1:37;
+    then x0-r1<s.(n+k) & s.(n+k)<x0+r1 by A31;
+    then x0-r1<(s^\k).n & (s^\k).n<x0+r1 by SEQM_3:def 9;
+    then (s^\k).n in {g1: x0-r1<g1 & g1<x0+r1};
+    then A40: (s^\k).n in ].x0-r1,x0+r1.[ by RCOMP_1:def 2;
+      not (s^\k).n in {x0} by A35,A38,A39,XBOOLE_0:def 4;
+    then x in ].x0-r1,x0+r1.[\{x0} by A39,A40,XBOOLE_0:def 4;
+    hence x in ].x0-r1,x0.[\/].x0,x0+r1.[ by A2,Th4;
+   end; then rng(s^\k)c=].x0-r1,x0.[\/].x0,x0+r1.[ by TARSKI:def 3;
+   then A41: rng(s^\k)c=dom f/\(].x0-r1,x0.[\/].x0,x0+r1.[) by A35,XBOOLE_1:19;
+   then A42: rng(s^\k)c=dom f2/\(].x0-r1,x0.[\/].x0,x0+r1.[) by A28,XBOOLE_1:1;
+   then A43: rng(s^\k)c=dom f2 by A37,XBOOLE_1:1;
+     rng(s^\k)c=dom f1/\(].x0-r1,x0.[\/].x0,x0+r1.[) by A28,A42,XBOOLE_1:1;
+   then A44: rng(s^\k)c=dom f1 by A36,XBOOLE_1:1;
+     rng(s^\k)c=dom f1\{x0}
+   proof let x be set; assume A45: x in rng(s^\k);
+    then not x in {x0} by A35,XBOOLE_0:def 4;
+    hence thesis by A44,A45,XBOOLE_0:def 4;
+   end; then A46: f1*(s^\k) is convergent & lim(f1*(s^\k))=lim(f1,x0)
+      by A1,A32,Def4;
+     rng(s^\k) c=dom f2\{x0}
+   proof let x be set; assume A47: x in rng(s^\k);
+    then not x in {x0} by A35,XBOOLE_0:def 4;
+    hence thesis by A43,A47,XBOOLE_0:def 4;
+   end; then A48: f2*(s^\k) is convergent & lim(f2*(s^\k))=lim(f2,x0)
+      by A1,A32,Def4;
+   A49: now let n; (s^\k).n in rng(s^\k) by RFUNCT_2:10;
+    then f1.((s^\k).n)<=f.((s^\k).n) & f.((s^\k).n)<=f2.((s^\k).n) by A2,A41;
+    then f1.((s^\k).n)<=(f*(s^\k)).n & (f*(s^\k)).n<=
+f2.((s^\k).n) by A35,RFUNCT_2:21;
+    hence (f1*(s^\k)).n<=(f*(s^\k)).n & (f*(s^\k)).n<=(f2*(s^\k)).n
+     by A43,A44,RFUNCT_2:21;
+   end; then A50: f*(s^\k) is convergent by A1,A46,A48,SEQ_2:33;
+     lim(f*(s^\k))=lim(f1,x0) by A1,A46,A48,A49,SEQ_2:34;
+   then A51: (f*s)^\k is convergent & lim((f*s)^\k)=lim(f1,x0)by A34,A50,
+RFUNCT_2:22
+;
+   hence f*s is convergent by SEQ_4:35;thus lim(f*s)=lim(f1,x0) by A51,SEQ_4:36
+;
+  end; hence f is_convergent_in x0 by A1,Def1; hence thesis by A29,Def4;
+ end; hence thesis;
+end;
+
+theorem
+  f1 is_convergent_in x0 & f2 is_convergent_in x0 & lim(f1,x0)=lim(f2,x0) &
+(ex r st 0<r &
+  ].x0-r,x0.[ \/ ].x0,x0+r.[ c= dom f1 /\ dom f2 /\ dom f &
+  for g st g in ].x0-r,x0.[ \/ ].x0,x0+r.[ holds f1.g<=f.g & f.g<=f2.g) implies
+f is_convergent_in x0 & lim(f,x0)=lim(f1,x0)
+proof assume A1: f1 is_convergent_in x0 & f2 is_convergent_in x0 &
+ lim(f1,x0)=lim(f2,x0);
+ given r such that A2: 0<r & ].x0-r,x0.[\/].x0,x0+r.[c=dom f1/\dom f2/\dom f &
+ for g st g in ].x0-r,x0.[\/].x0,x0+r.[ holds f1.g<=f.g & f.g<=f2.g;
+ A3: ].x0-r,x0.[\/].x0,x0+r.[c=dom f &
+ ].x0-r,x0.[\/].x0,x0+r.[c=dom f1/\dom f2 by A2,XBOOLE_1:18;
+ then A4: dom f/\(].x0-r,x0.[\/].x0,x0+r.[)=].x0-r,x0.[\/].x0,x0+r.[ by
+XBOOLE_1:28;
+   ].x0-r,x0.[\/].x0,x0+r.[c=dom f1 & ].x0-r,x0.[\/].x0,x0+r.[c=dom f2 by A3,
+XBOOLE_1:18;
+ then A5: dom f1/\(].x0-r,x0.[\/].x0,x0+r.[)=].x0-r,x0.[\/].x0,x0+r.[ &
+  dom f2/\(].x0-r,x0.[\/].x0,x0+r.[)=].x0-r,x0.[\/].x0,x0+r.[ by XBOOLE_1:28;
+
+   for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+ r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f by A2,A3,Th5;
+ hence thesis by A1,A2,A4,A5,Th45;
+end;
+
+theorem
+  f1 is_convergent_in x0 & f2 is_convergent_in x0 &
+(ex r st 0<r &
+ ((dom f1 /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) c= dom f2 /\ (].x0-r,x0.[ \/
+ ].x0,x0+r.[)
+   & for g st g in dom f1 /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) holds f1.g<=f2.g) or
+  (dom f2 /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) c= dom f1 /\ (].x0-r,x0.[ \/
+ ].x0,x0+r.[)
+   & for g st g in dom f2 /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) holds f1.g<=
+f2.g))) implies
+lim(f1,x0)<=lim(f2,x0)
+proof assume A1: f1 is_convergent_in x0 & f2 is_convergent_in x0;
+ given r such that A2: 0<r and
+ A3: (dom f1/\(].x0-r,x0.[\/].x0,x0+r.[)c=dom f2/\(].x0-r,x0.[\/].x0,x0+r.[) &
+  for g st g in dom f1/\(].x0-r,x0.[\/].x0,x0+r.[) holds f1.g<=f2.g) or
+ (dom f2/\(].x0-r,x0.[\/].x0,x0+r.[)c=dom f1/\(].x0-r,x0.[\/].x0,x0+r.[) &
+  for g st g in dom f2/\(].x0-r,x0.[\/].x0,x0+r.[) holds f1.g<=f2.g);
+ A4: lim(f1,x0)=lim(f1,x0) & lim(f2,x0)=lim(f2,x0);
+   now per cases by A3;
+ suppose
+ A5: dom f1/\(].x0-r,x0.[\/].x0,x0+r.[)c=dom f2/\(].x0-r,x0.[\/].x0,x0+r.[) &
+  for g st g in dom f1/\(].x0-r,x0.[\/].x0,x0+r.[) holds f1.g<=f2.g;
+   defpred X[Nat,real number] means
+     x0-1/($1+1)<$2 & $2<x0 &
+   $2 in dom f1;
+  A6: now let n; A7: x0-1/(n+1)<x0 by Lm4; x0<x0+1 by Lm2;
+   then consider g1,g2 such that A8: x0-1/(n+1)<g1 & g1<x0 & g1 in dom f1 &
+    g2<x0+1 & x0<g2 & g2 in dom f1 by A1,A7,Def1;
+   reconsider g1 as real number;
+    take g1;
+   thus X[n,g1] by A8;
+  end; consider s be Real_Sequence such that
+  A9: for n holds X[n,s.n]  from RealSeqChoice(A6);
+  A10: s is convergent & lim s=x0 & rng s c=dom f1\{x0} by A9,Th6;
+    x0-r<x0 by A2,Lm2; then consider k such that
+  A11: for n st k<=n holds x0-r<s.n by A10,LIMFUNC2:1;
+  A12: s^\k is convergent & lim(s^\k)=x0 by A10,SEQ_4:33;
+    rng(s^\k)c=rng s by RFUNCT_2:7;
+  then A13: rng(s^\k)c=dom f1\{x0} by A10,XBOOLE_1:1;
+  then A14: f1*(s^\k) is convergent & lim(f1*(s^\k))=lim(f1,x0) by A1,A4,A12,
+Def4;
+    now let x be set; assume x in rng(s^\k); then consider n such that
+   A15: (s^\k).n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then x0-r<s.(n+k) by A11; then A16: x0-r<(s^\k).n by SEQM_3:def 9;
+     s.(n+k)<x0 & s.(n+k) in dom f1 by A9;
+   then A17: (s^\k).n<x0 & (s^\k).n in dom f1 by SEQM_3:def 9;
+   then (s^\k).n in {g2: x0-r<g2 & g2<x0} by A16; then (s^\k).n in ].x0-r,x0
+.[
+      by RCOMP_1:def 2;
+   then (s^\k).n in ].x0-r,x0.[\/].x0,x0+r.[ by XBOOLE_0:def 2;
+   hence x in dom f1/\(].x0-r,x0.[\/].x0,x0+r.[) by A15,A17,XBOOLE_0:def 3;
+  end; then A18: rng(s^\k)c=dom f1/\(].x0-r,x0.[\/].x0,x0+r.[) by TARSKI:def 3
+;
+  then rng(s^\k)c=dom f2/\(].x0-r,x0.[\/].x0,x0+r.[) by A5,XBOOLE_1:1;
+  then A19: rng(s^\k)c=dom f2 by XBOOLE_1:18;
+    rng(s^\k)c=dom f2\{x0}
+  proof let x be set; assume A20: x in rng(s^\k);
+    then not x in {x0} by A13,XBOOLE_0:def 4;
+    hence thesis by A19,A20,XBOOLE_0:def 4;
+  end;
+  then A21: f2*(s^\k) is convergent & lim(f2*(s^\k))=lim(f2,x0) by A1,A4,A12,
+Def4;
+  A22: rng(s^\k)c=dom f1 by A18,XBOOLE_1:18;
+    now let n; (s^\k).n in rng(s^\k) by RFUNCT_2:10;
+   then f1.((s^\k).n)<=f2.((s^\k).n) by A5,A18;
+   then f1.((s^\k).n)<=(f2*(s^\k)).n by A19,RFUNCT_2:21;
+   hence (f1*(s^\k)).n<=(f2*(s^\k)).n by A22,RFUNCT_2:21;
+  end; hence thesis by A14,A21,SEQ_2:32;
+ suppose
+ A23: dom f2/\(].x0-r,x0.[\/].x0,x0+r.[)c=dom f1/\(].x0-r,x0.[\/].x0,x0+r.[) &
+  for g st g in dom f2/\(].x0-r,x0.[\/].x0,x0+r.[) holds f1.g<=f2.g;
+   defpred X[Nat,real number] means
+     x0-1/($1+1)<$2 &
+  $2<x0 & $2 in dom f2;
+  A24: now let n; A25: x0-1/(n+1)<x0 by Lm4; x0<x0+1 by Lm2;
+   then consider g1,g2 such that
+   A26: x0-1/(n+1)<g1 & g1<x0 & g1 in dom f2 & g2<x0+1 & x0<g2 & g2 in dom f2
+    by A1,A25,Def1;
+   reconsider g1 as real number;
+    take g1; thus X[n,g1] by A26;
+  end; consider s be Real_Sequence such that
+  A27: for n holds X[n,s.n]  from RealSeqChoice(A24
+);
+  A28: s is convergent & lim s=x0 & rng s c=dom f2\{x0} by A27,Th6;
+    x0-r<x0 by A2,Lm2; then consider k such that
+  A29: for n st k<=n holds x0-r<s.n by A28,LIMFUNC2:1;
+  A30: s^\k is convergent & lim(s^\k)=x0 by A28,SEQ_4:33;
+    rng(s^\k)c=rng s by RFUNCT_2:7;
+  then A31: rng(s^\k)c=dom f2\{x0} by A28,XBOOLE_1:1;
+  then A32: f2*(s^\k) is convergent & lim(f2*(s^\k))=lim(f2,x0) by A1,A4,A30,
+Def4;
+A33:  now let x be set; assume x in rng(s^\k); then consider n such that
+   A34: (s^\k).n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then x0-r<s.(n+k) by A29; then A35: x0-r<(s^\k).n by SEQM_3:def 9;
+     s.(n+k)<x0 & s.(n+k) in dom f2 by A27;
+   then A36: (s^\k).n<x0 & (s^\k).n in dom f2 by SEQM_3:def 9;
+   then (s^\k).n in {g2: x0-r<g2 & g2<x0} by A35; then (s^\k).n in ].x0-r,x0
+.[
+      by RCOMP_1:def 2;
+   then (s^\k).n in ].x0-r,x0.[\/].x0,x0+r.[ by XBOOLE_0:def 2;
+   hence x in dom f2/\(].x0-r,x0.[\/].x0,x0+r.[) by A34,A36,XBOOLE_0:def 3;
+  end; then A37: rng(s^\k)c=dom f2/\(].x0-r,x0.[\/].x0,x0+r.[) by TARSKI:def 3
+;
+  then rng(s^\k)c=dom f1/\(].x0-r,x0.[\/].x0,x0+r.[) by A23,XBOOLE_1:1;
+  then A38: rng(s^\k)c=dom f1 by XBOOLE_1:18;
+    rng(s^\k)c=dom f1\{x0}
+  proof let x be set; assume A39: x in rng(s^\k);
+   then not x in {x0} by A31,XBOOLE_0:def 4;
+   hence thesis by A38,A39,XBOOLE_0:def 4;
+  end;
+  then A40: f1*(s^\k) is convergent & lim(f1*(s^\k))=lim(f1,x0) by A1,A4,A30,
+Def4;
+  A41: rng(s^\k)c=dom f2 by A37,XBOOLE_1:18;
+    now let n; (s^\k).n in rng(s^\k) by RFUNCT_2:10;
+   then (s^\k).n in dom f2/\(].x0-r,x0.[\/].x0,x0+r.[) by A33;
+   then f1.((s^\k).n)<=f2.((s^\k).n) by A23;
+   then f1.((s^\k).n)<=(f2*(s^\k)).n by A41,RFUNCT_2:21;
+   hence (f1*(s^\k)).n<=(f2*(s^\k)).n by A38,RFUNCT_2:21;
+  end; hence thesis by A32,A40,SEQ_2:32;
+ end; hence thesis;
+end;
+
+theorem
+  (f is_divergent_to+infty_in x0 or f is_divergent_to-infty_in x0) &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f &
+  g2<r2 & x0<g2 & g2 in dom f & f.g1<>0 & f.g2<>0)
+implies f^ is_convergent_in x0 & lim(f^,x0)=0
+proof assume A1:
+f is_divergent_to+infty_in x0 or f is_divergent_to-infty_in x0;
+ assume A2: for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f & g2<r2 &
+  x0<g2 & g2 in dom f & f.g1<>0 & f.g2<>0;
+ A3: dom f\f"{0}=dom(f^) by RFUNCT_1:def 8;
+ A4: now let r1,r2; assume r1<x0 & x0<r2; then consider g1,g2 such that
+  A5: r1<g1 & g1<x0 & g1 in dom f &
+  g2<r2 & x0<g2 & g2 in dom f & f.g1<>0 & f.g2<>0
+   by A2; take g1,g2; not f.g1 in {0} & not f.g2 in {0} by A5,TARSKI:def 1
+;
+  then not g1 in f"{0} & not g2 in f"{0} by FUNCT_1:def 13;
+  hence r1<g1 & g1<x0 & g1 in dom(f^) & g2<r2 & x0<g2 & g2 in dom(f^)
+  by A3,A5,XBOOLE_0:def 4;
+ end;
+ A6: now let seq; assume A7: seq is convergent & lim seq=x0 &
+  rng seq c=dom(f^)\{x0}; then A8: rng seq c=dom(f^) by Lm1;
+   dom(f^)c=dom f by A3,XBOOLE_1:36;
+  then A9: rng seq c=dom f by A8,XBOOLE_1:1;
+  A10: rng seq c=dom f\{x0}
+  proof let x be set; assume A11: x in rng seq;
+   then not x in {x0} by A7,XBOOLE_0:def 4;
+   hence thesis by A9,A11,XBOOLE_0:def 4;
+  end;
+    now per cases by A1;
+  suppose
+   f is_divergent_to+infty_in x0; then f*seq is divergent_to+infty by A7,A10,
+Def2
+;
+   then (f*seq)" is convergent & lim((f*seq)")=0 by LIMFUNC1:61;
+   hence (f^)*seq is convergent & lim((f^)*seq)=0 by A8,RFUNCT_2:27;
+  suppose
+   f is_divergent_to-infty_in x0; then f*seq is divergent_to-infty by A7,A10,
+Def3
+;
+   then (f*seq)" is convergent & lim((f*seq)")=0 by LIMFUNC1:61;
+   hence (f^)*seq is convergent & lim((f^)*seq)=0 by A8,RFUNCT_2:27;
+  end; hence (f^)*seq is convergent & lim((f^)*seq)=0;
+ end; hence f^ is_convergent_in x0 by A4,Def1; hence thesis by A6,Def4;
+end;
+
+theorem
+  f is_convergent_in x0 & lim(f,x0)=0 &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f & g2<r2 &
+  x0<g2 & g2 in dom f & f.g1<>0 & f.g2<>0) &
+(ex r st 0<r & for g st g in dom f /\ (].x0-r,x0.[ \/
+ ].x0,x0+r.[) holds 0<=f.g)
+implies f^ is_divergent_to+infty_in x0
+proof assume A1: f is_convergent_in x0 & lim(f,x0)=0 &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f &
+ g2<r2 & x0<g2 & g2 in dom f & f.g1<>0 & f.g2<>0; given r such that
+ A2: 0<r & for g st g in dom f/\(].x0-r,x0.[\/].x0,x0+r.[) holds 0<=f.g;
+ thus for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f^) &
+  g2<r2 & x0<g2 & g2 in dom(f^)
+ proof let r1,r2; assume r1<x0 & x0<r2; then consider g1,g2 such that
+  A3: r1<g1 & g1<x0 & g1 in dom f &
+  g2<r2 & x0<g2 & g2 in dom f & f.g1<>0 & f.g2<>0
+   by A1; take g1, g2; not f.g1 in {0} & not f.g2 in {0} by A3,TARSKI:def 1
+;
+  then not g1 in f"{0} & not g2 in f"{0} by FUNCT_1:def 13;
+  then g1 in dom f\f"{0} & g2 in dom f\f"{0} by A3,XBOOLE_0:def 4; hence
+    r1<g1 & g1<x0 & g1 in dom(f^) &
+  g2<r2 & x0<g2 & g2 in dom(f^) by A3,RFUNCT_1:def 8;
+ end;
+ let s be Real_Sequence; assume A4: s is convergent & lim s=x0 &
+ rng s c=dom(f^)\{x0}; then consider k such that
+ A5: for n st k<=n holds x0-r<s.n & s.n<x0+r by A2,Th7;
+ A6: s^\k is convergent & lim(s^\k)=x0 by A4,SEQ_4:33;
+ A7: rng s c=dom(f^) by A4,Lm1;
+   dom(f^)=dom f\f"{0} by RFUNCT_1:def 8; then dom(f^)c=dom f by XBOOLE_1:36
+;
+ then A8: rng s c=dom f by A7,XBOOLE_1:1; rng(s^\k)c=rng s by RFUNCT_2:7;
+ then A9: rng(s^\k)c=dom (f^)\{x0} & rng(s^\k)c=dom(f^) & rng(s^\k)c=dom f
+  by A4,A7,A8,XBOOLE_1:1;
+   rng(s^\k)c=dom f\{x0}
+ proof let x be set; assume A10: x in rng(s^\k);
+   then not x in {x0} by A9,XBOOLE_0:def 4;
+   hence thesis by A9,A10,XBOOLE_0:def 4;
+ end; then A11: f*(s^\k) is convergent & lim(f*(s^\k))=0 by A1,A6,Def4;
+ A12: f*(s^\k) is_not_0 by A9,RFUNCT_2:26;
+    now let n; A13: (s^\k).n in rng(s^\k) by RFUNCT_2:10; k<=n+k by NAT_1:37;
+  then x0-r<s.(n+k) & s.(n+k)<x0+r by A5;
+  then x0-r<(s^\k).n & (s^\k).n<x0+r by SEQM_3:def 9;
+  then (s^\k).n in {g1: x0-r<g1 & g1<x0+r}; then A14: (s^\k).n in ].x0-r,x0+r
+.[
+     by RCOMP_1:def 2;
+    not (s^\k).n in {x0} by A9,A13,XBOOLE_0:def 4;
+     then (s^\k).n in ].x0-r,x0+r.[\{x0} by A14,XBOOLE_0:def 4;
+  then (s^\k).n in ].x0-r,x0.[\/].x0,x0+r.[ by A2,Th4;
+  then (s^\k).n in dom f/\(].x0-r,x0.[\/].x0,x0+r.[) by A9,A13,XBOOLE_0:def 3;
+  then A15: 0<=f.((s^\k).n) by A2;
+    (f*(s^\k)).n<>0 by A12,SEQ_1:7; hence 0<(f*(s^\k)).n by A9,A15,RFUNCT_2:21
+;
+ end; then for n holds 0<=n implies 0<(f*(s^\k)).n;
+ then A16: (f*(s^\k))" is divergent_to+infty by A11,A12,LIMFUNC1:62;
+   (f*(s^\k))"=((f*s)^\k)" by A8,RFUNCT_2:22
+ .=((f*s)")^\k by SEQM_3:41
+ .=((f^)*s)^\k by A7,RFUNCT_2:27; hence thesis by A16,LIMFUNC1:34;
+end;
+
+theorem
+  f is_convergent_in x0 & lim(f,x0)=0 &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st
+  r1<g1 & g1<x0 & g1 in dom f &
+  g2<r2 & x0<g2 & g2 in dom f & f.g1<>0 & f.g2<>0) &
+(ex r st 0<r & for g st g in dom f /\ (].x0-r,x0.[ \/
+ ].x0,x0+r.[) holds f.g<=0)
+implies f^ is_divergent_to-infty_in x0
+proof assume A1: f is_convergent_in x0 & lim(f,x0)=0 &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f &
+ g2<r2 & x0<g2 & g2 in dom f & f.g1<>0 & f.g2<>0; given r such that
+ A2: 0<r & for g st g in dom f/\(].x0-r,x0.[\/].x0,x0+r.[) holds f.g<=0;
+ thus for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f^) &
+  g2<r2 & x0<g2 & g2 in dom(f^)
+ proof let r1,r2; assume r1<x0 & x0<r2; then consider g1,g2 such that
+  A3: r1<g1 & g1<x0 & g1 in dom f &
+  g2<r2 & x0<g2 & g2 in dom f & f.g1<>0 & f.g2<>0
+   by A1; take g1,g2; not f.g1 in {0} & not f.g2 in {0} by A3,TARSKI:def 1
+;
+  then not g1 in f"{0} & not g2 in f"{0} by FUNCT_1:def 13;
+  then g1 in dom f\f"{0} & g2 in dom f\f"{0} by A3,XBOOLE_0:def 4; hence
+    r1<g1 & g1<x0 & g1 in dom(f^) &
+  g2<r2 & x0<g2 & g2 in dom(f^) by A3,RFUNCT_1:def 8;
+ end;
+ let s be Real_Sequence; assume A4: s is convergent & lim s=x0 &
+ rng s c=dom(f^)\{x0}; then consider k such that
+ A5: for n st k<=n holds x0-r<s.n & s.n<x0+r by A2,Th7;
+ A6: s^\k is convergent & lim(s^\k)=x0 by A4,SEQ_4:33;
+ A7: rng s c=dom(f^) by A4,Lm1;
+   dom(f^)=dom f\f"{0} by RFUNCT_1:def 8; then dom(f^)c=dom f by XBOOLE_1:36
+;
+ then A8: rng s c=dom f by A7,XBOOLE_1:1; rng(s^\k)c=rng s by RFUNCT_2:7;
+ then A9: rng(s^\k)c=dom (f^)\{x0} & rng(s^\k)c=dom(f^) & rng(s^\k)c=dom f
+  by A4,A7,A8,XBOOLE_1:1;
+   rng(s^\k)c=dom f\{x0}
+ proof let x be set; assume A10: x in rng(s^\k);
+   then not x in {x0} by A9,XBOOLE_0:def 4;
+   hence thesis by A9,A10,XBOOLE_0:def 4;
+ end; then A11: f*(s^\k) is convergent & lim(f*(s^\k))=0 by A1,A6,Def4;
+ A12: f*(s^\k) is_not_0 by A9,RFUNCT_2:26;
+    now let n; A13: (s^\k).n in rng(s^\k) by RFUNCT_2:10; k<=n+k by NAT_1:37;
+  then x0-r<s.(n+k) & s.(n+k)<x0+r by A5;
+  then x0-r<(s^\k).n & (s^\k).n<x0+r by SEQM_3:def 9;
+  then (s^\k).n in {g1: x0-r<g1 & g1<x0+r}; then A14: (s^\k).n in ].x0-r,x0+r
+.[
+     by RCOMP_1:def 2;
+    not (s^\k).n in {x0} by A9,A13,XBOOLE_0:def 4;
+     then (s^\k).n in ].x0-r,x0+r.[\{x0} by A14,XBOOLE_0:def 4;
+  then (s^\k).n in ].x0-r,x0.[\/].x0,x0+r.[ by A2,Th4;
+  then (s^\k).n in dom f/\(].x0-r,x0.[\/].x0,x0+r.[) by A9,A13,XBOOLE_0:def 3;
+  then A15: f.((s^\k).n)<=0 by A2;
+    (f*(s^\k)).n<>0 by A12,SEQ_1:7; hence (f*(s^\k)).n<0 by A9,A15,RFUNCT_2:21
+;
+ end; then for n holds 0<=n implies (f*(s^\k)).n<0;
+ then A16: (f*(s^\k))" is divergent_to-infty by A11,A12,LIMFUNC1:63;
+   (f*(s^\k))"=((f*s)^\k)" by A8,RFUNCT_2:22
+ .=((f*s)")^\k by SEQM_3:41
+ .=((f^)*s)^\k by A7,RFUNCT_2:27; hence thesis by A16,LIMFUNC1:34;
+end;
+
+theorem
+  f is_convergent_in x0 & lim(f,x0)=0 &
+(ex r st 0<r & for g st g in dom f /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) holds 0<f.g)
+implies f^ is_divergent_to+infty_in x0
+proof assume f is_convergent_in x0 & lim(f,x0)=0;
+ then A1: f is_left_convergent_in x0 & f is_right_convergent_in x0 &
+ lim_left(f,x0)=0 & lim_right(f,x0)=0 by Th33; given r such that
+ A2: 0<r & for g st g in dom f/\(].x0-r,x0.[\/].x0,x0+r.[) holds 0<f.g;
+   now let g; assume g in dom f/\].x0-r,x0.[;
+  then A3: g in dom f & g in ].x0-r,x0.[ by XBOOLE_0:def 3;
+  then g in ].x0-r,x0.[\/].x0,x0+r.[ by XBOOLE_0:def 2;
+  then g in dom f/\(].x0-r,x0.[\/].x0,x0+r.[) by A3,XBOOLE_0:def 3
+; hence 0<f.g by A2;
+ end; then A4: f^ is_left_divergent_to+infty_in x0 by A1,A2,LIMFUNC2:79;
+   now let g; assume g in dom f/\].x0,x0+r.[;
+  then A5: g in dom f & g in ].x0,x0+r.[ by XBOOLE_0:def 3;
+  then g in ].x0-r,x0.[\/].x0,x0+r.[ by XBOOLE_0:def 2;
+  then g in dom f/\(].x0-r,x0.[\/].x0,x0+r.[) by A5,XBOOLE_0:def 3
+; hence 0<f.g by A2;
+ end; then f^ is_right_divergent_to+infty_in x0 by A1,A2,LIMFUNC2:81;
+ hence thesis by A4,Th15;
+end;
+
+theorem
+  f is_convergent_in x0 & lim(f,x0)=0 &
+(ex r st 0<r & for g st g in dom f /\ (].x0-r,x0.[ \/ ].x0,x0+r.[) holds f.g<0)
+implies f^ is_divergent_to-infty_in x0
+proof assume f is_convergent_in x0 & lim(f,x0)=0;
+ then A1: f is_left_convergent_in x0 & f is_right_convergent_in x0 &
+ lim_left(f,x0)=0 & lim_right(f,x0)=0 by Th33; given r such that
+ A2: 0<r & for g st g in dom f/\(].x0-r,x0.[\/].x0,x0+r.[) holds f.g<0;
+   now let g; assume g in dom f/\].x0-r,x0.[;
+  then A3: g in dom f & g in ].x0-r,x0.[ by XBOOLE_0:def 3;
+  then g in ].x0-r,x0.[\/].x0,x0+r.[ by XBOOLE_0:def 2;
+  then g in dom f/\(].x0-r,x0.[\/].x0,x0+r.[) by A3,XBOOLE_0:def 3
+; hence f.g<0 by A2;
+ end; then A4: f^ is_left_divergent_to-infty_in x0 by A1,A2,LIMFUNC2:80;
+   now let g; assume g in dom f/\].x0,x0+r.[;
+  then A5: g in dom f & g in ].x0,x0+r.[ by XBOOLE_0:def 3;
+  then g in ].x0-r,x0.[\/].x0,x0+r.[ by XBOOLE_0:def 2;
+  then g in dom f/\(].x0-r,x0.[\/].x0,x0+r.[) by A5,XBOOLE_0:def 3
+; hence f.g<0 by A2;
+ end; then f^ is_right_divergent_to-infty_in x0 by A1,A2,LIMFUNC2:82;
+ hence thesis by A4,Th16;
+end;

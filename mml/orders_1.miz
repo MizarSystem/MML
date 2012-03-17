@@ -1,0 +1,1784 @@
+:: Partially Ordered Sets
+::  by Wojciech A. Trybulec
+::
+:: Received August 30, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, BOOLE, TARSKI, RELAT_1, MCART_1, RELAT_2, WELLORD1,
+      SUBSET_1, ORDERS_1, PARTFUN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1,
+      RELSET_1, PARTFUN1, FUNCT_2, MCART_1, WELLORD1, STRUCT_0, PRE_TOPC;
+ constructors RELAT_2, MCART_1, WELLORD1, PRE_TOPC, PARTFUN1, MEMBERED,
+      XBOOLE_0;
+ clusters RELSET_1, STRUCT_0, PRE_TOPC, SUBSET_1, MEMBERED, ZFMISC_1, PARTFUN1,
+      XBOOLE_0;
+ requirements BOOLE, SUBSET;
+ definitions RELAT_2, TARSKI, WELLORD1, STRUCT_0, XBOOLE_0;
+ theorems FUNCT_1, FUNCT_2, MCART_1, RELAT_1, RELAT_2, RELSET_1, TARSKI,
+      WELLORD1, WELLORD2, ZFMISC_1, STRUCT_0, PRE_TOPC, XBOOLE_0, XBOOLE_1,
+      PARTFUN1;
+ schemes FUNCT_1, XBOOLE_0;
+
+begin
+
+reserve X,Y for set,
+        x,x1,x2,y,y1,y2,z for set,
+        f,g,h for Function;
+
+Lm1: (ex X st X <> {} & X in Y) iff union Y <> {}
+ proof
+  thus (ex X st X <> {} & X in Y) implies union Y <> {}
+   proof given X such that A1: X <> {} and A2: X in Y;
+     consider x being Element of X;
+       x in X by A1;
+    hence thesis by A2,TARSKI:def 4;
+   end;
+    consider x being Element of union Y;
+   assume union Y <> {};
+    then consider X such that A3: x in X & X in Y by TARSKI:def 4;
+  take X;
+  thus thesis by A3;
+ end;
+
+::
+::  Choice function.
+::
+
+reserve M for non empty set;
+
+
+definition let M;
+ assume A1: not {} in M;
+ mode Choice_Function of M -> Function of M, union M means
+  :Def1: for X st X in M holds it.X in X;
+ existence
+  proof
+    deffunc F(set)=[:{$1},$1:];
+    consider f such that A2: dom f = M and
+     A3: for X st X in M holds f.X = F(X) from Lambda;
+    consider x being Element of M;
+A4:     f.x in rng f by A2,FUNCT_1:def 5;
+A5:  x in M;
+    then reconsider N = rng f as non empty set by A2,FUNCT_1:12;
+     A6: now let X;
+       assume X in N;
+        then consider y such that A7: y in dom f & f.y = X by FUNCT_1:def 5;
+           X = [:{y},y:] & y <> {} & {y} <> {} by A1,A2,A3,A7;
+     hence X <> {} by ZFMISC_1:113;
+     end;
+       now let X,Y;
+       assume that A8: X in N and A9: Y in N and A10: X <> Y;
+        consider x such that A11: x in dom f and A12: f.x = X by A8,FUNCT_1:def
+5;
+        consider y such that A13: y in dom f and A14: f.y = Y by A9,FUNCT_1:def
+5;
+         A15: X = [:{x},x:] & Y = [:{y},y:] by A2,A3,A11,A12,A13,A14;
+        consider z being Element of X /\ Y;
+       assume X meets Y;
+        then X /\ Y <> {} by XBOOLE_0:def 7;
+        then consider x1,x2 such that z = [x1,x2] and A16: x1 in {x} /\ {y}
+and
+                                   x2 in x /\ y by A15,ZFMISC_1:104;
+           x1 in {x} & x1 in{y} by A16,XBOOLE_0:def 3;
+         then x1 = x & x1 = y by TARSKI:def 1;
+      hence contradiction by A10,A12,A14;
+     end;
+    then consider Choice being set such that
+    A17: for X st X in N ex x st Choice /\ X = {x} by A6,WELLORD2:27;
+    defpred P[set,set] means $2 in $1 /\ Choice;
+    A18: for X,y1,y2 st X in N & P[X,y1] & P[X,y2] holds y1 = y2
+    proof let X,y1,y2;
+      assume that A19: X in N and A20: y1 in X /\ Choice & y2 in X /\ Choice;
+       consider x such that A21: {x} = Choice /\ X by A17,A19;
+          x = y1 & x = y2 by A20,A21,TARSKI:def 1;
+     hence y1 = y2;
+    end;
+    A22: for X st X in N ex y st P[X,y]
+     proof let X;
+       assume X in N;
+        then consider x such that A23: Choice /\ X = {x} by A17;
+      take x;
+      thus thesis by A23,TARSKI:def 1;
+     end;
+    consider g such that A24: dom g = N and
+                         A25: for X st X in N holds P[X,g.X]
+                                                        from FuncEx(A18,A22);
+    deffunc FF(set)=$1`2;
+    consider h such that A26: dom h = union N and
+                         A27: for x st x in
+ union N holds h.x = FF(x) from Lambda;
+     A28: union M <> {} by A1,A5,Lm1;
+    consider x1 such that A29: x1 in N by A4;
+    consider x2 such that A30: x2 in dom f & f.x2 = x1 by A29,FUNCT_1:def 5;
+       x1 = [:{x2},x2:] & x2 <> {} & {x2} <> {} by A1,A2,A3,A30;
+     then x1 <> {} by ZFMISC_1:113;
+     then A31: union N <> {} by A29,Lm1;
+    reconsider f as Function of M,N by A2,FUNCT_2:def 1,RELSET_1:11;
+        rng g c= union N
+      proof let x;
+        assume x in rng g;
+         then consider y such that A32: y in dom g and A33: g.y = x by FUNCT_1:
+def 5;
+            x in y /\ Choice by A24,A25,A32,A33;
+          then x in y by XBOOLE_0:def 3;
+       hence thesis by A24,A32,TARSKI:def 4;
+      end;
+    then reconsider g as Function of N, union N by A24,A31,FUNCT_2:def 1,
+RELSET_1:11;
+       rng h c= union M
+      proof let x;
+        assume x in rng h;
+         then consider y such that A34: y in dom h and A35: h.y = x by FUNCT_1:
+def 5;
+         consider Y such that A36: y in Y and A37: Y in N by A26,A34,TARSKI:def
+4;
+         consider z such that A38: z in dom f & f.z = Y by A37,FUNCT_1:def 5;
+          A39: Y = [:{z},z:] by A3,A38;
+         then consider x1,x2 such that A40: y = [x1,x2] by A36,ZFMISC_1:102;
+            x2 in z & x = [x1,x2]`2 by A26,A27,A34,A35,A36,A39,A40,ZFMISC_1:106
+;
+          then x in z by MCART_1:7;
+       hence thesis by A38,TARSKI:def 4;
+      end;
+    then reconsider h as Function of union N, union M by A26,A28,FUNCT_2:def 1,
+RELSET_1:11;
+    reconsider F = h * (g * f) as Function of M, union M by A31,FUNCT_2:19;
+    A41: dom(g * f) = M by A31,FUNCT_2:def 1;
+   take F;
+   let X;
+     set fX = f.X;
+    assume A42: X in M;
+      then A43: f.X in N by A2,FUNCT_1:def 5;
+      then g.(fX) in fX /\ Choice by A25;
+      then A44: g.(fX) in fX & f.X = [:{X},X:] by A3,A42,XBOOLE_0:def 3;
+     then consider x1,x2 such that A45: [x1,x2] = g.(fX) by ZFMISC_1:102;
+      A46: x2 in X by A44,A45,ZFMISC_1:106;
+        g.(fX) in rng g by A24,A43,FUNCT_1:def 5;
+      then h.(g.fX) = (g.fX)`2 by A27;
+      then A47: h.(g.fX) in X by A45,A46,MCART_1:7;
+         (g * f).X = g.fX by A2,A42,FUNCT_1:23;
+   hence F.X in X by A41,A42,A47,FUNCT_1:23;
+  end;
+end;
+
+
+
+reserve D,D1 for non empty set;
+
+definition let D be set;
+ func BOOL D -> set equals
+  :Def2:  bool D \ {{}};
+ coherence;
+end;
+
+definition let D;
+ cluster BOOL D -> non empty;
+ coherence
+  proof
+       D in bool D & not D in {{}} by TARSKI:def 1,ZFMISC_1:def 1;
+     then bool D \ {{}} is non empty by XBOOLE_0:def 4;
+     hence thesis by Def2;
+  end;
+end;
+
+canceled 3;
+
+theorem Th4:
+ not {} in BOOL D
+  proof assume not thesis;
+    then {} in bool D \ {{}} by Def2;
+    then not {} in {{}} by XBOOLE_0:def 4;
+   hence thesis by TARSKI:def 1;
+  end;
+
+theorem Th5:
+ D1 c= D iff D1 in BOOL D
+  proof
+   thus D1 c= D implies D1 in BOOL D
+    proof assume D1 c= D;
+      then D1 in bool D & not D1 in {{}} by TARSKI:def 1;
+      then D1 in bool D \ {{}} by XBOOLE_0:def 4;
+     hence thesis by Def2;
+    end;
+    assume D1 in BOOL D;
+     then D1 in bool D \ {{}} by Def2;
+     then D1 in bool D by XBOOLE_0:def 4;
+   hence thesis;
+  end;
+
+theorem
+   D1 is Subset of D iff D1 in BOOL D by Th5;
+
+theorem
+  D in BOOL D by Th5;
+
+reserve P for Relation;
+
+Lm2: P is_strongly_connected_in X iff
+         P is_reflexive_in X & P is_connected_in X
+ proof
+  thus P is_strongly_connected_in X implies
+        P is_reflexive_in X & P is_connected_in X
+   proof assume A1: P is_strongly_connected_in X;
+    thus P is_reflexive_in X
+     proof let x;
+       assume x in X;
+      hence thesis by A1,RELAT_2:def 7;
+     end;
+    let x,y;
+     assume x in X & y in X;
+    hence thesis by A1,RELAT_2:def 7;
+   end;
+   assume that A2: P is_reflexive_in X and A3: P is_connected_in X;
+  let x,y;
+   assume A4: x in X & y in X;
+    then x = y implies thesis by A2,RELAT_2:def 1;
+  hence thesis by A3,A4,RELAT_2:def 6;
+ end;
+
+::
+::  Orders.
+::
+
+definition let X;
+ mode Order of X is total reflexive antisymmetric transitive Relation of X;
+end;
+
+reserve O for Order of X;
+
+canceled 4;
+
+Lm3: for R being total reflexive Relation of X holds field R = X
+ proof let R be total reflexive Relation of X;
+   dom R = X by PARTFUN1:def 4;
+  hence field R = X \/ rng R by RELAT_1:def 6
+             .= X by XBOOLE_1:12;
+ end;
+
+theorem
+   x in X implies [x,x] in O
+  proof field O = X by Lm3;
+    then O is_reflexive_in X by RELAT_2:def 9;
+   hence thesis by RELAT_2:def 1;
+  end;
+
+theorem
+   x in X & y in X & [x,y] in O & [y,x] in O implies x = y
+  proof field O = X by Lm3;
+    then O is_antisymmetric_in X by RELAT_2:def 12;
+   hence thesis by RELAT_2:def 4;
+  end;
+
+theorem
+   x in X & y in X & z in X & [x,y] in O & [y,z] in O implies
+  [x,z] in O
+   proof field O = X by Lm3;
+     then O is_transitive_in X by RELAT_2:def 16;
+    hence thesis by RELAT_2:def 8;
+   end;
+
+::
+::  Partially ordered sets.
+::
+
+definition
+ canceled;
+  struct(1-sorted) RelStr (#
+    carrier -> set,
+    InternalRel -> Relation of the carrier
+  #);
+end;
+
+definition
+ let X be non empty set;
+ let R be Relation of X;
+ cluster RelStr(#X,R#) -> non empty;
+ coherence proof thus the carrier of RelStr(#X,R#) is non empty; end;
+end;
+
+definition let A be RelStr;
+ attr A is reflexive means
+:Def4:
+  the InternalRel of A is_reflexive_in the carrier of A;
+ attr A is transitive means
+:Def5:
+  the InternalRel of A is_transitive_in the carrier of A;
+ attr A is antisymmetric means
+:Def6:
+  the InternalRel of A is_antisymmetric_in the carrier of A;
+end;
+
+definition
+ cluster non empty reflexive transitive antisymmetric strict RelStr;
+ existence
+  proof consider A being non empty set;
+    consider R being Order of A;
+   take L = RelStr(#A,R#);
+   thus the carrier of L is non empty;
+A1:  field R = the carrier of L by Lm3;
+   hence the InternalRel of L is_reflexive_in the carrier of L
+                     by RELAT_2:def 9;
+   thus the InternalRel of L is_transitive_in the carrier of L
+                                by A1,RELAT_2:def 16;
+   thus the InternalRel of L is_antisymmetric_in the carrier of L
+                                                by A1,RELAT_2:def 12;
+   thus thesis;
+  end;
+end;
+
+definition
+ mode Poset is reflexive transitive antisymmetric RelStr;
+end;
+
+Lm4:
+ for A being set, R being Relation of A st R is_reflexive_in A
+  holds dom R = A & field R = A
+proof let A be set, R be Relation of A such that
+A1: R is_reflexive_in A;
+    A c= dom R
+     proof let x;
+      assume x in A;
+       then [x,x] in R by A1,RELAT_2:def 1;
+      hence x in dom R by RELAT_1:def 4;
+     end;
+  hence dom R = A by XBOOLE_0:def 10;
+  hence field R = A \/ rng R by RELAT_1:def 6
+             .= A by XBOOLE_1:12;
+end;
+
+definition let A be Poset;
+ cluster the InternalRel of A -> total reflexive antisymmetric transitive;
+ coherence
+  proof set R = the InternalRel of A;
+A1:  R is_reflexive_in the carrier of A by Def4;
+A2:  field R = the carrier of A by A1,Lm4;
+    dom R = the carrier of A by A1,Lm4;
+   hence the InternalRel of A is total by PARTFUN1:def 4;
+    the InternalRel of A is_reflexive_in the carrier of A by Def4;
+   hence the InternalRel of A is reflexive by A2,RELAT_2:def 9;
+    the InternalRel of A is_antisymmetric_in the carrier of A by Def6;
+   hence the InternalRel of A is antisymmetric by A2,RELAT_2:def 12;
+    the InternalRel of A is_transitive_in the carrier of A by Def5;
+   hence the InternalRel of A is transitive by A2,RELAT_2:def 16;
+  end;
+end;
+
+definition
+ let X be set;
+ let O be Order of X;
+ cluster RelStr(#X,O#) -> reflexive transitive antisymmetric;
+ coherence
+  proof set A = RelStr(#X,O#);
+    field O = X by Lm3;
+   hence the InternalRel of A is_reflexive_in the carrier of A &
+    the InternalRel of A is_transitive_in the carrier of A &
+    the InternalRel of A is_antisymmetric_in the carrier of A
+          by RELAT_2:def 9,def 12,def 16;
+  end;
+end;
+
+reserve A for non empty Poset;
+
+reserve a,a1,a2,a3,b,c for Element of A;
+reserve S,T for Subset of A;
+
+ Lm5:
+ x in S implies x is Element of A;
+
+definition let A be RelStr; let a1,a2 be Element of A;
+ canceled 2;
+
+ pred a1 <= a2 means
+  :Def9: [a1,a2] in the InternalRel of A;
+ synonym a2 >= a1;
+end;
+
+definition let A be RelStr; let a1,a2 be Element of A;
+ pred a1 < a2 means
+  :Def10: a1 <= a2 & a1 <> a2;
+ irreflexivity;
+ synonym a2 > a1;
+end;
+
+canceled 9;
+
+theorem Th24:
+ for A being reflexive non empty RelStr, a being Element of A
+  holds a <= a
+  proof let A be reflexive non empty RelStr, a be Element of A;
+      the InternalRel of A is_reflexive_in the carrier of A by Def4;
+    then [a,a] in the InternalRel of A by RELAT_2:def 1;
+   hence thesis by Def9;
+  end;
+
+definition let A be reflexive non empty RelStr;
+           let a1,a2 be Element of A;
+ redefine pred a1 <= a2;
+ reflexivity by Th24;
+end;
+
+theorem Th25:
+ for A being antisymmetric RelStr,
+ a1,a2 being Element of A
+  st a1 <= a2 & a2 <= a1 holds a1 = a2
+  proof let A be antisymmetric RelStr,
+   a1,a2 be Element of A; assume
+A1:  [a1,a2] in the InternalRel of A & [a2,a1] in the InternalRel of A;
+    then a1 in the carrier of A & a2 in the carrier of A &
+    the InternalRel of A is_antisymmetric_in the carrier of A
+     by Def6,ZFMISC_1:106;
+   hence thesis by A1,RELAT_2:def 4;
+  end;
+
+theorem Th26:
+ for A being transitive RelStr,
+   a1,a2,a3 being Element of A holds
+ a1 <= a2 & a2 <= a3 implies a1 <= a3
+  proof let A be transitive RelStr,
+  a1,a2,a3 be Element of A; assume
+A1:  [a1,a2] in the InternalRel of A & [a2,a3] in the InternalRel of A;
+    then a1 in the carrier of A & a2 in the carrier of A & a3 in the carrier
+of A &
+    the InternalRel of A is_transitive_in the carrier of A
+     by Def5,ZFMISC_1:106;
+   hence [a1,a3] in the InternalRel of A by A1,RELAT_2:def 8;
+  end;
+
+canceled;
+
+theorem Th28:
+ for A being antisymmetric RelStr,
+  a1,a2 being Element of A holds
+ not(a1 < a2 & a2 < a1)
+  proof let A be antisymmetric RelStr, a1,a2 be Element of A;
+   assume a1 < a2 & a2 < a1;
+    then a1 <= a2 & a1 <> a2 & a2 <= a1 by Def10;
+   hence thesis by Th25;
+  end;
+
+theorem Th29:
+ for A being transitive antisymmetric RelStr
+ for a1,a2,a3 being Element of A holds
+ a1 < a2 & a2 < a3 implies a1 < a3
+  proof let A be transitive antisymmetric RelStr;
+   let a1,a2,a3 be Element of A; assume
+A1:  a1 < a2 & a2 < a3;
+    then a1 <= a2 & a2 <= a3 by Def10;
+   hence a1 <= a3 by Th26;
+   thus thesis by A1,Th28;
+  end;
+
+theorem Th30:
+ for A being antisymmetric RelStr,
+  a1,a2 being Element of A holds
+ a1 <= a2 implies not a2 < a1
+  proof let A be antisymmetric RelStr, a1,a2 be Element of A;
+    assume that A1: a1 <= a2 and A2: a2 < a1;
+       a2 <= a1 by A2,Def10;
+     hence thesis by A1,A2,Th25;
+  end;
+
+canceled;
+
+theorem
+   for A being transitive antisymmetric RelStr
+ for a1,a2,a3 being Element of A holds
+ (a1 < a2 & a2 <= a3) or (a1 <= a2 & a2 < a3) implies a1 < a3
+  proof let A be transitive antisymmetric RelStr;
+   let a1,a2,a3 be Element of A; assume
+    A1: (a1 < a2 & a2 <= a3) or (a1 <= a2 & a2 < a3);
+    A2: now assume A3: a1 < a2 & a2 <= a3;
+      then A4: a1 <= a2 & a2 <= a3 by Def10;
+      then A5: a1 <= a3 by Th26;
+        a1 <> a3 by A3,A4,Th25;
+     hence thesis by A5,Def10;
+    end;
+      now assume A6: a1 <= a2 & a2 < a3;
+      then A7: a1 <= a2 & a2 <= a3 by Def10;
+      then A8: a1 <= a3 by Th26;
+        a1 <> a3 by A6,A7,Th25;
+     hence thesis by A8,Def10;
+    end;
+   hence thesis by A1,A2;
+  end;
+
+::
+::  Chains.
+::
+
+definition let A be RelStr;
+ let IT be Subset of A;
+ attr IT is strongly_connected means
+  :Def11: the InternalRel of A is_strongly_connected_in IT;
+end;
+
+definition let A be RelStr;
+ cluster {}A -> strongly_connected;
+ coherence proof let x1,x2; thus thesis; end;
+end;
+
+definition let A be RelStr;
+ cluster strongly_connected Subset of A;
+ existence proof take {}A; thus thesis; end;
+end;
+
+definition let A be RelStr;
+ mode Chain of A is strongly_connected Subset of A;
+end;
+
+
+
+canceled 2;
+
+theorem Th35:
+ for A being non empty reflexive RelStr
+ for a being Element of A holds {a} is Chain of A
+  proof let A be non empty reflexive RelStr, a be Element of A;
+   A1: a in the carrier of A &
+        the InternalRel of A is_reflexive_in the carrier of A by Def4;
+     {a} is strongly_connected
+    proof let x1,x2;
+     assume x1 in {a} & x2 in {a};
+      then x1 = a & x2 = a by TARSKI:def 1;
+     hence thesis by A1,RELAT_2:def 1;
+    end;
+   hence thesis;
+  end;
+
+theorem Th36:
+ for A being non empty reflexive RelStr, a1,a2 being Element of A holds
+ {a1,a2} is Chain of A iff a1 <= a2 or a2 <= a1
+  proof let A be non empty reflexive RelStr, a1,a2 be Element of A;
+   thus {a1,a2} is Chain of A implies a1 <= a2 or a2 <= a1
+    proof A1: a1 in {a1,a2} & a2 in {a1,a2} by TARSKI:def 2;
+      assume {a1,a2} is Chain of A;
+       then the InternalRel of A is_strongly_connected_in {a1,a2} by Def11;
+       then [a1,a2] in the InternalRel of A or
+            [a2,a1] in the InternalRel of A by A1,RELAT_2:def 7;
+     hence thesis by Def9;
+    end;
+    assume A2: a1 <= a2 or a2 <= a1;
+A3:     a1 <= a1 & a2 <= a2;
+     {a1,a2} is strongly_connected
+    proof let x,y;
+    assume A4: x in {a1,a2} & y in {a1,a2};
+       now per cases by A4,TARSKI:def 2;
+      suppose x = a1 & y = a1;
+       hence thesis by A3,Def9;
+      suppose x = a1 & y = a2;
+       hence thesis by A2,Def9;
+      suppose x = a2 & y = a1;
+       hence thesis by A2,Def9;
+      suppose x = a2 & y = a2;
+       hence thesis by A3,Def9;
+     end;
+    hence thesis;
+    end;
+   hence thesis;
+  end;
+
+Lm6: P is_strongly_connected_in X & Y c= X implies
+         P is_strongly_connected_in Y
+ proof assume that A1: P is_strongly_connected_in X and A2: Y c= X;
+  let x,y;
+   assume x in Y & y in Y;
+    hence thesis by A1,A2,RELAT_2:def 7;
+ end;
+
+theorem
+   for A being RelStr, C being Chain of A, S being Subset of A holds
+ S c= C implies S is Chain of A
+  proof let A be RelStr, C be Chain of A, S be Subset of A;
+  assume A1: S c= C;
+      the InternalRel of A is_strongly_connected_in C by Def11;
+    then the InternalRel of A is_strongly_connected_in S by A1,Lm6;
+   hence thesis by Def11;
+  end;
+
+theorem Th38:
+ for A being reflexive RelStr, a1,a2 being Element of A holds
+ (ex C being Chain of A st a1 in C & a2 in C) iff a1 <= a2 or a2 <= a1
+  proof let A be reflexive RelStr;
+   let a1,a2 be Element of A;
+   thus (ex C being Chain of A st a1 in C & a2 in
+ C) implies a1 <= a2 or a2 <= a1
+    proof given C being Chain of A such that A1: a1 in C & a2 in C;
+        the InternalRel of A is_strongly_connected_in C by Def11;
+      then [a1,a2] in the InternalRel of A or
+           [a2,a1] in the InternalRel of A by A1,RELAT_2:def 7;
+     hence thesis by Def9;
+    end;
+    assume A2: a1 <= a2 or a2 <= a1;
+     then [a1,a2] in the InternalRel of A or [a2,a1] in the InternalRel of A
+      by Def9;
+     then a1 in the carrier of A by ZFMISC_1:106;
+     then reconsider B = A as non empty reflexive RelStr by STRUCT_0:def 1;
+     reconsider b1 = a1, b2 = a2 as Element of B;
+     reconsider Y = {b1,b2} as Chain of A by A2,Th36;
+   take Y;
+   thus thesis by TARSKI:def 2;
+  end;
+
+theorem Th39:
+ for A being reflexive antisymmetric RelStr, a1,a2 being Element of A holds
+ (ex C being Chain of A st a1 in C & a2 in C) iff (a1 < a2 iff not a2 <= a1)
+  proof let A be reflexive antisymmetric RelStr;
+   let a1,a2 be Element of A;
+   thus (ex C being Chain of A st a1 in C & a2 in C) implies
+     (a1 < a2 iff not a2 <= a1)
+    proof given C being Chain of A such that A1: a1 in C & a2 in C;
+     thus a1 < a2 implies not a2 <= a1 by Th30;
+      assume that A2: not a2 <= a1 and A3: not a1 < a2;
+          not a1 <= a2 or a1 = a2 by A3,Def10;
+     hence thesis by A1,A2,Th38;
+    end;
+    assume a1 < a2 iff not a2 <= a1;
+      then a1 <= a2 or a2 <= a1 by Def10;
+    hence thesis by Th38;
+  end;
+
+theorem Th40:
+ for A being RelStr, T being Subset of A holds
+ the InternalRel of A well_orders T implies
+  T is Chain of A
+   proof let A be RelStr, T be Subset of A;
+    assume the InternalRel of A well_orders T;
+     then the InternalRel of A is_connected_in T &
+          the InternalRel of A is_reflexive_in T by WELLORD1:def 5;
+     then the InternalRel of A is_strongly_connected_in T by Lm2;
+    hence thesis by Def11;
+   end;
+
+::
+::  Upper and lower cones.
+::
+
+definition let A; let S;
+ func UpperCone(S) -> Subset of A equals
+  :Def12:  {a1 : for a2 st a2 in S holds a2 < a1};
+ coherence
+  proof set T = {a1 : for a2 st a2 in S holds a2 < a1};
+      T c= the carrier of A
+     proof let x;
+       assume x in T;
+        then ex a1 st x = a1 & for a2 st a2 in S holds a2 < a1;
+      hence thesis;
+     end;
+    hence T is Subset of A;
+   thus thesis;
+  end;
+end;
+
+definition let A; let S;
+ func LowerCone(S) -> Subset of A equals
+  :Def13:  {a1 : for a2 st a2 in S holds a1 < a2};
+ coherence
+  proof set T = {a1 : for a2 st a2 in S holds a1 < a2};
+      T c= the carrier of A
+     proof let x;
+       assume x in T;
+        then ex a1 st x = a1 & for a2 st a2 in S holds a1 < a2;
+      hence thesis;
+     end;
+    hence T is Subset of A;
+   thus thesis;
+  end;
+end;
+
+canceled 2;
+
+theorem Th43:
+ UpperCone({}(A)) = the carrier of A
+  proof
+   thus UpperCone({}(A)) c= the carrier of A;
+   let x;
+    assume x in the carrier of A;
+     then reconsider a = x as Element of A;
+        for a2 st a2 in {}(A) holds a2 < a;
+      then a in {a1 : for a2 st a2 in {}(A) holds a2 < a1};
+   hence thesis by Def12;
+  end;
+
+theorem
+   UpperCone([#](A)) = {}
+  proof
+   thus UpperCone([#](A)) c= {}
+    proof let x;
+      assume x in UpperCone([#](A));
+        then x in {a1 : for a2 st a2 in [#](A) holds a2 < a1} by Def12;
+       then consider a such that x = a and
+                                 A1: for a2 st a2 in [#](A) holds a2 < a;
+          a in the carrier of A;
+        then a in [#](A) by PRE_TOPC:12;
+        hence thesis by A1;
+    end;
+   thus thesis by XBOOLE_1:2;
+  end;
+
+theorem
+   LowerCone({}(A)) = the carrier of A
+  proof
+   thus LowerCone({}(A)) c= the carrier of A;
+   let x;
+    assume x in the carrier of A;
+     then reconsider a = x as Element of A;
+        for a2 st a2 in {}(A) holds a < a2;
+      then a in {a1 : for a2 st a2 in {}(A) holds a1 < a2};
+   hence thesis by Def13;
+  end;
+
+theorem
+   LowerCone([#](A)) = {}
+  proof
+   thus LowerCone([#](A)) c= {}
+    proof let x;
+      assume x in LowerCone([#](A));
+        then x in {a1 : for a2 st a2 in [#](A) holds a1 < a2} by Def13;
+       then consider a such that x = a and
+                                 A1: for a2 st a2 in [#](A) holds a < a2;
+          a in the carrier of A;
+        then a in [#](A) by PRE_TOPC:12;
+        hence thesis by A1;
+    end;
+   thus thesis by XBOOLE_1:2;
+  end;
+
+theorem Th47:
+ a in S implies not a in UpperCone(S)
+  proof assume that A1: a in S and A2: a in UpperCone(S);
+       a in {a1 : for a2 st a2 in S holds a2 < a1} by A2,Def12;
+    then ex a1 st a1 = a & for a2 st a2 in S holds a2 < a1;
+     hence thesis by A1;
+  end;
+
+theorem
+   not a in UpperCone{a}
+  proof a in {a} by TARSKI:def 1;
+   hence thesis by Th47;
+  end;
+
+theorem Th49:
+ a in S implies not a in LowerCone(S)
+  proof assume that A1: a in S and A2: a in LowerCone(S);
+       a in {a1 : for a2 st a2 in S holds a1 < a2} by A2,Def13;
+    then ex a1 st a1 = a & for a2 st a2 in S holds a1 < a2;
+     hence thesis by A1;
+  end;
+
+theorem Th50:
+ not a in LowerCone{a}
+  proof a in {a} by TARSKI:def 1;
+   hence thesis by Th49;
+  end;
+
+theorem
+   c < a iff a in UpperCone{c}
+  proof
+   thus c < a implies a in UpperCone{c}
+    proof assume c < a;
+      then for b holds b in {c} implies b < a by TARSKI:def 1;
+      then a in {a1 : for a2 st a2 in {c} holds a2 < a1};
+     hence thesis by Def12;
+    end;
+    assume a in UpperCone{c};
+      then a in {a1 : for a2 st a2 in {c} holds a2 < a1} by Def12;
+     then A1: ex a1 st a1 = a & for a2 st a2 in {c} holds a2 < a1;
+        c in {c} by TARSKI:def 1;
+   hence thesis by A1;
+  end;
+
+theorem Th52:
+ a < c iff a in LowerCone{c}
+  proof
+   thus a < c implies a in LowerCone{c}
+    proof assume a < c;
+      then for b holds b in {c} implies a < b by TARSKI:def 1;
+      then a in {a1 : for a2 st a2 in {c} holds a1 < a2};
+     hence thesis by Def13;
+    end;
+    assume a in LowerCone{c};
+      then a in {a1 : for a2 st a2 in {c} holds a1 < a2} by Def13;
+     then A1: ex a1 st a1 = a & for a2 st a2 in {c} holds a1 < a2;
+        c in {c} by TARSKI:def 1;
+   hence thesis by A1;
+  end;
+
+::
+::  Initial segments.
+::
+
+definition let A; let S; let a;
+ func InitSegm(S,a) -> Subset of A equals
+  :Def14:  LowerCone{a} /\ S;
+ correctness;
+end;
+
+definition let A; let S;
+ mode Initial_Segm of S -> Subset of A means
+  :Def15: ex a st a in S & it = InitSegm(S,a) if S <> {}
+        otherwise it = {};
+ existence
+  proof
+      now consider x being Element of S;
+     assume A1: S <> {};
+      then reconsider x as Element of A by Lm5;
+     take T = InitSegm(S,x);
+     thus S <> {} implies ex a st a in S & T = InitSegm(S,a);
+     thus S = {} implies T = {} by A1;
+    end;
+   hence thesis;
+  end;
+ consistency;
+end;
+
+reserve I for Initial_Segm of S;
+
+
+canceled 3;
+
+theorem Th56:
+ x in InitSegm(S,a) iff x in LowerCone{a} & x in S
+  proof
+      x in InitSegm(S,a) iff x in LowerCone{a} /\ S by Def14;
+   hence thesis by XBOOLE_0:def 3;
+  end;
+
+theorem Th57:
+ a in InitSegm(S,b) iff a < b & a in S
+  proof
+      a in InitSegm(S,b) iff a in LowerCone{b} & a in S by Th56;
+   hence thesis by Th52;
+  end;
+
+canceled 2;
+
+theorem
+   InitSegm({}(A),a) = {}
+  proof
+   thus InitSegm({}(A),a) = LowerCone{a} /\ {} by Def14
+                        .= {};
+  end;
+
+theorem Th61:
+ InitSegm(S,a) c= S
+  proof InitSegm(S,a) = LowerCone{a} /\ S by Def14;
+   hence thesis by XBOOLE_1:17;
+  end;
+
+theorem Th62:
+ not a in InitSegm(S,a)
+  proof assume not thesis;
+     then a in LowerCone{a} /\ S by Def14;
+     then a in LowerCone{a} by XBOOLE_0:def 3;
+     then a in {a1 : for a2 st a2 in {a} holds a1 < a2} by Def13;
+    then A1: ex a1 st a = a1 & for a2 st a2 in {a} holds a1 < a2;
+       a in {a} by TARSKI:def 1;
+     hence thesis by A1;
+  end;
+
+canceled;
+
+theorem
+   a1 < a2 implies InitSegm(S,a1) c= InitSegm(S,a2)
+  proof assume A1: a1 < a2;
+   let x;
+    assume x in InitSegm(S,a1);
+      then A2: x in LowerCone{a1} /\ S by Def14;
+      then A3: x in S by XBOOLE_0:def 3;
+        x in LowerCone{a1} by A2,XBOOLE_0:def 3;
+      then x in {a : for b st b in {a1} holds a < b} by Def13;
+     then consider a such that A4: a = x and
+                               A5: for b st b in {a1} holds a < b;
+        a1 in {a1} by TARSKI:def 1;
+      then a < a1 by A5;
+      then a < a2 by A1,Th29;
+      then for b holds b in {a2} implies a < b by TARSKI:def 1;
+      then a in {c : for b st b in {a2} holds c < b};
+      then x in LowerCone{a2} by A4,Def13;
+      then x in LowerCone{a2} /\ S by A3,XBOOLE_0:def 3;
+   hence thesis by Def14;
+  end;
+
+theorem
+   S c= T implies InitSegm(S,a) c= InitSegm(T,a)
+  proof assume A1: S c= T;
+   let x;
+    assume x in InitSegm(S,a);
+     then A2: x in LowerCone{a} /\ S by Def14;
+     then x in S by XBOOLE_0:def 3;
+     then x in T & x in LowerCone{a} by A1,A2,XBOOLE_0:def 3;
+     then x in LowerCone{a} /\ T by XBOOLE_0:def 3;
+   hence thesis by Def14;
+  end;
+
+canceled;
+
+theorem Th67:
+ I c= S
+  proof
+      now per cases;
+     suppose S = {};
+      hence thesis by Def15;
+     suppose S <> {};
+       then consider a such that a in S and A1: I = InitSegm(S,a) by Def15;
+          I = LowerCone{a} /\ S by A1,Def14;
+      hence thesis by XBOOLE_1:17;
+    end;
+   hence thesis;
+  end;
+
+theorem Th68:
+ S <> {} iff not S is Initial_Segm of S
+  proof
+   thus S <> {} implies not S is Initial_Segm of S
+    proof assume S <> {} & S is Initial_Segm of S;
+      then consider a such that A1: a in S and A2: S = InitSegm(S,a) by Def15;
+         S = LowerCone{a} /\ S by A2,Def14;
+       then a in LowerCone{a} by A1,XBOOLE_0:def 3;
+     hence thesis by Th50;
+    end;
+   thus thesis by Def15;
+  end;
+
+theorem Th69:
+ (S <> {} or T <> {}) & (S is Initial_Segm of T) implies
+   not T is Initial_Segm of S
+    proof assume that A1: S <> {} or T <> {} and A2: S is Initial_Segm of T and
+                      A3: T is Initial_Segm of S;
+        now per cases;
+       suppose S = {};
+        hence thesis by A1,A3,Def15;
+       suppose T = {};
+        hence thesis by A1,A2,Def15;
+       suppose A4: S <> {} & T <> {};
+         then consider a1 such that A5: a1 in
+ S & T = InitSegm(S,a1) by A3,Def15
+;
+         consider a2 such that A6: a2 in T & S = InitSegm(T,a2) by A2,A4,Def15;
+            a1 in LowerCone{a2} /\ T & a2 in LowerCone{a1} /\ S by A5,A6,Def14;
+          then a1 in LowerCone{a2} & a2 in LowerCone{a1} by XBOOLE_0:def 3;
+          then A7: a1 in {a : for b st b in {a2} holds a < b} &
+                  a2 in {a3 : for b st b in {a1} holds a3 < b} by Def13;
+         then A8: ex a st a = a1 & for b st b in {a2} holds a < b;
+ A9:         ex a3 st a3 = a2 & for b st b in {a1} holds a3 < b by A7;
+            a1 in {a1} & a2 in {a2} by TARSKI:def 1;
+          then a1 < a2 & a2 < a1 by A8,A9;
+        hence thesis by Th28;
+      end;
+     hence thesis;
+    end;
+
+theorem Th70:
+ a1 < a2 & a1 in S & a2 in T & T is Initial_Segm of S implies
+  a1 in T
+   proof assume that A1: a1 < a2 and A2: a1 in S and A3: a2 in T and
+                     A4: T is Initial_Segm of S;
+     consider a such that a in S and A5: T = InitSegm(S,a) by A2,A4,Def15;
+        now let b;
+        assume b in {a};
+          then A6: b = a by TARSKI:def 1;
+            a2 in LowerCone{a} /\ S by A3,A5,Def14;
+          then a2 in LowerCone{a} by XBOOLE_0:def 3;
+          then a2 in {a3 : for c st c in {a} holds a3 < c} by Def13;
+         then A7: ex a3 st a3 = a2 & for c st c in {a} holds a3 < c;
+            a in {a} by TARSKI:def 1;
+          then a2 < a by A7;
+       hence a1 < b by A1,A6,Th29;
+      end;
+      then a1 in {b: for c st c in {a} holds b < c};
+      then a1 in LowerCone{a} by Def13;
+      then a1 in LowerCone{a} /\ S by A2,XBOOLE_0:def 3;
+    hence thesis by A5,Def14;
+   end;
+
+theorem Th71:
+ a in S & S is Initial_Segm of T implies
+  InitSegm(S,a) = InitSegm(T,a)
+   proof assume that A1: a in S and A2: S is Initial_Segm of T;
+     A3: S c= T by A2,Th67;
+    thus InitSegm(S,a) c= InitSegm(T,a)
+     proof let x;
+       assume x in InitSegm(S,a);
+        then x in LowerCone{a} /\ S by Def14;
+        then x in LowerCone{a} & x in S by XBOOLE_0:def 3;
+        then x in LowerCone{a} /\ T by A3,XBOOLE_0:def 3;
+      hence thesis by Def14;
+     end;
+    let x;
+     assume x in InitSegm(T,a);
+       then A4: x in LowerCone{a} /\ T by Def14;
+       then A5: x in LowerCone{a} by XBOOLE_0:def 3;
+       then x in {a1 : for a2 st a2 in {a} holds a1 < a2} by Def13;
+      then consider a1 such that A6: x = a1 and
+                                 A7: for a2 st a2 in {a} holds a1 < a2;
+         a in {a} by TARSKI:def 1;
+       then a1 < a & a1 in T by A4,A6,A7,XBOOLE_0:def 3;
+       then x in S by A1,A2,A6,Th70;
+       then x in LowerCone{a} /\ S by A5,XBOOLE_0:def 3;
+    hence thesis by Def14;
+   end;
+
+Lm7: P is_reflexive_in X & Y c= X implies P is_reflexive_in Y
+ proof assume that A1: P is_reflexive_in X and A2: Y c= X;
+  let x;
+   assume x in Y;
+    hence thesis by A1,A2,RELAT_2:def 1;
+ end;
+
+Lm8: P is_antisymmetric_in X & Y c= X implies P is_antisymmetric_in Y
+ proof assume that A1: P is_antisymmetric_in X and A2: Y c= X;
+  let x,y;
+   assume x in Y & y in Y;
+    hence thesis by A1,A2,RELAT_2:def 4;
+ end;
+
+Lm9: P is_transitive_in X & Y c= X implies P is_transitive_in Y
+ proof assume that A1: P is_transitive_in X and A2: Y c= X;
+  let x,y,z;
+   assume x in Y & y in Y & z in Y;
+    hence thesis by A1,A2,RELAT_2:def 8;
+ end;
+
+theorem
+   S c= T & the InternalRel of A well_orders T &
+  (for a1,a2 st a2 in S & a1 < a2 holds a1 in S) implies
+    S = T or S is Initial_Segm of T
+     proof assume that A1: S c= T and A2: the InternalRel of A well_orders T
+and
+                       A3: for a1,a2 st a2 in S & a1 < a2 holds a1 in S and
+                       A4: S <> T;
+      per cases;
+       case T <> {};
+        set Y = T \ S;
+           not T c= S by A1,A4,XBOOLE_0:def 10;
+         then Y c= T & Y <> {} by XBOOLE_1:36,37;
+        then consider x such that A5: x in Y and
+         A6: for y st y in Y holds [x,y] in the InternalRel of A by A2,WELLORD1
+:9;
+        reconsider x as Element of A by A5;
+      take x;
+      thus A7: x in T by A5,XBOOLE_0:def 4;
+          S = LowerCone{x} /\ T
+         proof
+          thus S c= LowerCone{x} /\ T
+           proof let y;
+             assume A8: y in S;
+              then reconsider a = y as Element of A;
+                 now let a1;
+                 assume that A9: a1 in {x} and A10: not a < a1;
+                  A11: T is Chain of A & a1 = x by A2,A9,Th40,TARSKI:def 1;
+                  then a1 <= a & a1 <> a by A1,A5,A7,A8,A10,Th39,XBOOLE_0:def 4
+;
+                  then a1 < a by Def10;
+                  then a1 in S by A3,A8;
+                hence contradiction by A5,A11,XBOOLE_0:def 4;
+               end;
+               then y in {a1 : for a2 st a2 in {x} holds a1 < a2};
+               then y in LowerCone{x} by Def13;
+            hence thesis by A1,A8,XBOOLE_0:def 3;
+           end;
+          let y;
+           assume A12: y in LowerCone{x} /\ T;
+             then y in LowerCone{x} by XBOOLE_0:def 3;
+             then y in {a1 : for a2 st a2 in {x} holds a1 < a2} by Def13;
+            then consider a such that A13: a = y and
+                                      A14: for a2 st a2 in {x} holds a < a2;
+             A15: now assume y in Y;
+               then [x,y] in the InternalRel of A by A6;
+               then A16: x <= a by A13,Def9;
+                 x in {x} by TARSKI:def 1;
+               then a < x by A14;
+              hence contradiction by A16,Th30;
+             end;
+               y in T by A12,XBOOLE_0:def 3;
+          hence thesis by A15,XBOOLE_0:def 4;
+         end;
+      hence thesis by Def14;
+       case T = {};
+      hence thesis by A1,XBOOLE_1:3;
+     end;
+
+theorem Th73:
+ S c= T & the InternalRel of A well_orders T &
+  (for a1,a2 st a2 in S & a1 in T & a1 < a2 holds a1 in S) implies
+    S = T or S is Initial_Segm of T
+     proof assume that A1: S c= T and A2: the InternalRel of A well_orders T
+and
+        A3: for a1,a2 st a2 in S & a1 in T & a1 < a2 holds a1 in
+ S and A4: S <> T;
+      per cases;
+       case T <> {};
+        set Y = T \ S;
+           not T c= S by A1,A4,XBOOLE_0:def 10;
+         then Y c= T & Y <> {} by XBOOLE_1:36,37;
+        then consider x such that A5: x in Y and
+         A6: for y st y in Y holds [x,y] in the InternalRel of A by A2,WELLORD1
+:9;
+        reconsider x as Element of A by A5;
+      take x;
+      thus A7: x in T by A5,XBOOLE_0:def 4;
+          S = LowerCone{x} /\ T
+         proof
+          thus S c= LowerCone{x} /\ T
+           proof let y;
+             assume A8: y in S;
+              then reconsider a = y as Element of A;
+                 now let a1;
+                 assume that A9: a1 in {x} and A10: not a < a1;
+                  A11: T is Chain of A & a1 = x by A2,A9,Th40,TARSKI:def 1;
+                  then a1 <= a & a1 <> a by A1,A5,A7,A8,A10,Th39,XBOOLE_0:def 4
+;
+                  then a1 < a by Def10;
+                  then a1 in S by A3,A7,A8,A11;
+                hence contradiction by A5,A11,XBOOLE_0:def 4;
+               end;
+               then y in {a1 : for a2 st a2 in {x} holds a1 < a2};
+               then y in LowerCone{x} by Def13;
+            hence thesis by A1,A8,XBOOLE_0:def 3;
+           end;
+          let y;
+           assume A12: y in LowerCone{x} /\ T;
+             then y in LowerCone{x} by XBOOLE_0:def 3;
+             then y in {a1 : for a2 st a2 in {x} holds a1 < a2} by Def13;
+            then consider a such that A13: a = y and
+                                      A14: for a2 st a2 in {x} holds a < a2;
+             A15: now assume y in Y;
+               then [x,y] in the InternalRel of A by A6;
+               then A16: x <= a by A13,Def9;
+                 x in {x} by TARSKI:def 1;
+               then a < x by A14;
+              hence contradiction by A16,Th30;
+             end;
+               y in T by A12,XBOOLE_0:def 3;
+          hence thesis by A15,XBOOLE_0:def 4;
+         end;
+      hence thesis by Def14;
+       case T = {};
+      hence thesis by A1,XBOOLE_1:3;
+     end;
+
+::
+::  Chains of choice function of BOOL of partially ordered sets.
+::
+
+reserve f for Choice_Function of BOOL(the carrier of A);
+
+definition let A; let f;
+ mode Chain of f -> Chain of A means
+  :Def16: it <> {} &
+        the InternalRel of A well_orders it &
+        for a st a in it holds f.UpperCone(InitSegm(it,a)) = a;
+ existence
+  proof set AC = the carrier of A;
+       AC in BOOL AC & not {} in BOOL AC by Th4,Th5;
+    then f.AC is Element of A by Def1;
+    then reconsider aa = f.AC as Element of A;
+    reconsider X = {aa} as Chain of A by Th35;
+   take X;
+   thus X <> {};
+       X c= the carrier of A &
+      the InternalRel of A is_reflexive_in the carrier of A &
+      the InternalRel of A is_transitive_in the carrier of A &
+      the InternalRel of A is_antisymmetric_in the carrier of A
+          by Def4,Def5,Def6;
+   hence the InternalRel of A is_reflexive_in X &
+         the InternalRel of A is_transitive_in X &
+         the InternalRel of A is_antisymmetric_in X by Lm7,Lm8,Lm9;
+     the InternalRel of A is_strongly_connected_in X by Def11;
+   hence the InternalRel of A is_connected_in X by Lm2;
+   thus the InternalRel of A is_well_founded_in X
+    proof let Y;
+      assume that A1: Y c= X and A2: Y <> {};
+       reconsider x = aa as set;
+     take x;
+          Y = X by A1,A2,ZFMISC_1:39;
+     hence x in Y by TARSKI:def 1;
+     thus (the InternalRel of A)-Seg(x) /\ Y c= {}
+      proof let y;
+        assume A3: y in (the InternalRel of A)-Seg(x) /\ Y;
+         then y in Y by XBOOLE_0:def 3;
+         then A4: y = aa by A1,TARSKI:def 1;
+           y in (the InternalRel of A)-Seg(x) by A3,XBOOLE_0:def 3;
+       hence thesis by A4,WELLORD1:def 1;
+      end;
+     thus {} c= (the InternalRel of A)-Seg(x) /\ Y by XBOOLE_1:2;
+    end;
+   let a;
+    assume a in X;
+     then A5: a = aa by TARSKI:def 1;
+       LowerCone{a} /\ X = {}(A)
+      proof
+       thus LowerCone{a} /\ X c= {}(A)
+        proof let x;
+          assume A6: x in LowerCone{a} /\ X;
+            then A7: x in X by XBOOLE_0:def 3;
+              x in LowerCone{a} by A6,XBOOLE_0:def 3;
+            then x in {a1 : for a2 st a2 in {a} holds a1 < a2} by Def13;
+           then consider a1 such that A8: x = a1 and
+                                      A9: for a2 st a2 in {a} holds a1 < a2;
+            thus thesis by A5,A7,A8,A9;
+        end;
+       thus thesis by XBOOLE_1:2;
+      end;
+     then UpperCone(LowerCone{a} /\ X) = the carrier of A by Th43;
+   hence thesis by A5,Def14;
+  end;
+end;
+
+reserve fC,fC1,fC2 for Chain of f;
+
+canceled 4;
+
+theorem Th78:
+ {f.(the carrier of A)} is Chain of f
+  proof set AC = the carrier of A;
+       AC in BOOL AC & not {} in BOOL AC by Th4,Th5;
+    then f.AC is Element of A by Def1;
+    then reconsider aa = f.AC as Element of A;
+    reconsider X = {aa} as Chain of A by Th35;
+       X c= the carrier of A &
+      the InternalRel of A is_reflexive_in the carrier of A &
+      the InternalRel of A is_transitive_in the carrier of A &
+      the InternalRel of A is_antisymmetric_in the carrier of A
+          by Def4,Def5,Def6;
+     then A1: the InternalRel of A is_reflexive_in X &
+              the InternalRel of A is_transitive_in X &
+              the InternalRel of A is_antisymmetric_in X
+                                              by Lm7,Lm8,Lm9;
+       the InternalRel of A is_strongly_connected_in X by Def11;
+     then A2: the InternalRel of A is_connected_in X by Lm2;
+       the InternalRel of A is_well_founded_in X
+      proof let Y;
+        assume that A3: Y c= X and A4: Y <> {};
+         reconsider x = aa as set;
+       take x;
+            Y = X by A3,A4,ZFMISC_1:39;
+       hence x in Y by TARSKI:def 1;
+       thus (the InternalRel of A)-Seg(x) /\ Y c= {}
+        proof let y;
+          assume A5: y in (the InternalRel of A)-Seg(x) /\ Y;
+           then y in Y by XBOOLE_0:def 3;
+           then A6: y = aa by A3,TARSKI:def 1;
+             y in (the InternalRel of A)-Seg(x) by A5,XBOOLE_0:def 3;
+         hence thesis by A6,WELLORD1:def 1;
+        end;
+       thus {} c= (the InternalRel of A)-Seg(x) /\ Y by XBOOLE_1:2;
+      end;
+     then A7: the InternalRel of A well_orders X by A1,A2,WELLORD1:def 5;
+       for a st a in X holds f.UpperCone(InitSegm(X,a)) = a
+      proof
+       let a;
+        assume a in X;
+         then A8: a = aa by TARSKI:def 1;
+           LowerCone{a} /\ X = {}(A)
+          proof
+           thus LowerCone{a} /\ X c= {}(A)
+            proof let x;
+              assume A9: x in LowerCone{a} /\ X;
+                then A10: x in X by XBOOLE_0:def 3;
+                  x in LowerCone{a} by A9,XBOOLE_0:def 3;
+                then x in {a1 : for a2 st a2 in {a} holds a1 < a2} by Def13;
+               then consider a1 such that A11: x = a1 and
+                                          A12: for a2 st a2 in {a} holds a1 <
+a2;
+                thus thesis by A8,A10,A11,A12;
+            end;
+           thus thesis by XBOOLE_1:2;
+          end;
+         then UpperCone(LowerCone{a} /\ X) = the carrier of A by Th43;
+       hence thesis by A8,Def14;
+      end;
+  hence thesis by A7,Def16;
+ end;
+
+theorem Th79:
+ f.(the carrier of A) in fC
+  proof the InternalRel of A well_orders fC & fC <> {} & fC c= fC
+                                                         by Def16;
+    then consider x such that A1: x in fC and
+     A2: for y st y in fC holds [x,y] in the InternalRel of A by WELLORD1:9;
+    reconsider x as Element of A by A1;
+A3:   now consider y being Element of LowerCone{x} /\ fC;
+      assume
+A4:     LowerCone{x} /\ fC <> {}(A);
+         then A5: y in fC by XBOOLE_0:def 3;
+        reconsider a = y as Element of A by A4,Lm5;
+           [x,y] in the InternalRel of A by A2,A5;
+         then A6: x <= a by Def9;
+           a in LowerCone{x} by A4,XBOOLE_0:def 3;
+         then a in {a1 : for a2 st a2 in {x} holds a1 < a2} by Def13;
+        then A7: ex a1 st a = a1 & for a2 st a2 in {x} holds a1 < a2;
+           x in {x} by TARSKI:def 1;
+         then a < x by A7;
+      hence contradiction by A6,Th30;
+     end;
+       LowerCone{x} /\ fC = InitSegm(fC,x) by Def14;
+     then f.UpperCone(LowerCone{x} /\ fC) = x by A1,Def16;
+   hence thesis by A1,A3,Th43;
+  end;
+
+theorem Th80:
+ a in fC & b = f.(the carrier of A) implies b <= a
+  proof assume that A1: a in fC and A2: b = f.(the carrier of A);
+       the InternalRel of A well_orders fC & fC <> {} & fC c= fC
+                                                         by Def16;
+    then consider x such that A3: x in fC and
+     A4: for y st y in fC holds [x,y] in the InternalRel of A by WELLORD1:9;
+    reconsider x as Element of A by A3;
+A5:   now consider y being Element of LowerCone{x} /\ fC;
+      assume
+A6:     LowerCone{x} /\ fC <> {}(A);
+         then A7: y in fC by XBOOLE_0:def 3;
+        reconsider a = y as Element of A by A6,Lm5;
+           [x,y] in the InternalRel of A by A4,A7;
+         then A8: x <= a by Def9;
+           a in LowerCone{x} by A6,XBOOLE_0:def 3;
+         then a in {a1 : for a2 st a2 in {x} holds a1 < a2} by Def13;
+        then A9: ex a1 st a = a1 & for a2 st a2 in {x} holds a1 < a2;
+           x in {x} by TARSKI:def 1;
+         then a < x by A9;
+      hence contradiction by A8,Th30;
+     end;
+       LowerCone{x} /\ fC = InitSegm(fC,x) by Def14;
+     then f.UpperCone(LowerCone{x} /\ fC) = x by A3,Def16;
+     then A10: f.(the carrier of A) = x by A5,Th43;
+       [x,a] in the InternalRel of A by A1,A4;
+   hence thesis by A2,A10,Def9;
+  end;
+
+theorem
+   a = f.(the carrier of A) implies InitSegm(fC,a) = {}
+  proof assume A1: a = f.(the carrier of A);
+    then A2: a in fC by Th79;
+    consider x being Element of LowerCone{a} /\ fC;
+     assume InitSegm(fC,a) <> {};
+then A3:    LowerCone {a} /\ fC <> {} by Def14;
+        then A4: x in fC & fC c= the carrier of A by XBOOLE_0:def 3;
+       reconsider b = x as Element of A by A3,Lm5;
+           x in LowerCone{a} by A3,XBOOLE_0:def 3;
+        then b in {a1 : for a2 st a2 in {a} holds a1 < a2} by Def13;
+       then A5: ex a1 st a1 = b & for a2 st a2 in {a} holds a1 < a2;
+          a in {a} by TARSKI:def 1;
+        then a <= b & b < a by A1,A4,A5,Th80;
+     hence contradiction by A2,A4,Th39;
+  end;
+
+theorem
+   fC1 meets fC2
+  proof f.(the carrier of A) in fC1 & f.(the carrier of A) in fC2 by Th79;
+   hence thesis by XBOOLE_0:3;
+  end;
+
+theorem Th83:
+ fC1 <> fC2 implies
+  (fC1 is Initial_Segm of fC2 iff not fC2 is Initial_Segm of fC1)
+   proof assume A1: fC1 <> fC2;
+     set N = {a : a in fC1 /\ fC2 & InitSegm(fC1,a) = InitSegm(fC2,a)};
+      A2: N c= fC1
+       proof let x;
+         assume x in N;
+          then ex a st a = x & a in fC1 /\ fC2 &
+                                    InitSegm(fC1,a) = InitSegm(fC2,a);
+        hence thesis by XBOOLE_0:def 3;
+       end;
+     then N is Subset of A by XBOOLE_1:1;
+     then reconsider N as Subset of A;
+      A3: the InternalRel of A well_orders fC1 by Def16;
+A4:      now let a1,a2;
+        assume that A5: a2 in N and A6: a1 in fC1 and A7: a1 < a2;
+ A8:         ex a st a = a2 & a in fC1 /\ fC2 &
+ InitSegm(fC1,a) = InitSegm(fC2,a) by A5;
+          then a1 in InitSegm(fC2,a2) by A6,A7,Th57;
+          then a1 in LowerCone{a2} /\ fC2 by Def14;
+          then a1 in fC2 by XBOOLE_0:def 3;
+          then A9: a1 in fC1 /\ fC2 by A6,XBOOLE_0:def 3;
+            InitSegm(fC1,a1) = InitSegm(fC2,a1)
+           proof
+            thus InitSegm(fC1,a1) c= InitSegm(fC2,a1)
+             proof let x;
+               assume A10: x in InitSegm(fC1,a1);
+                then reconsider b = x as Element of A;
+                 A11: b < a1 by A10,Th57;
+                 then b < a2 & b in fC1 by A7,A10,Th29,Th57;
+                 then b in InitSegm(fC1,a2) by Th57;
+                 then b in fC2 by A8,Th57;
+              hence thesis by A11,Th57;
+             end;
+            let x;
+             assume A12: x in InitSegm(fC2,a1);
+              then reconsider b = x as Element of A;
+               A13: b < a1 by A12,Th57;
+               then b < a2 & b in fC2 by A7,A12,Th29,Th57;
+               then b in InitSegm(fC2,a2) by Th57;
+               then b in fC1 by A8,Th57;
+            hence thesis by A13,Th57;
+           end;
+       hence a1 in N by A9;
+      end;
+
+      A14: the InternalRel of A well_orders fC2 by Def16;
+      A15: N c= fC2
+       proof let x;
+         assume x in N;
+          then ex a st a = x & a in fC1 /\ fC2 &
+                                    InitSegm(fC1,a) = InitSegm(fC2,a);
+        hence thesis by XBOOLE_0:def 3;
+       end;
+A16:      now let a1,a2;
+        assume that A17: a2 in N and A18: a1 in fC2 and A19: a1 < a2;
+ A20:         ex a st a = a2 & a in fC1 /\ fC2 &
+ InitSegm(fC1,a) = InitSegm(fC2,a) by A17;
+          then a1 in InitSegm(fC1,a2) by A18,A19,Th57;
+          then a1 in LowerCone{a2} /\ fC1 by Def14;
+          then a1 in fC1 by XBOOLE_0:def 3;
+          then A21: a1 in fC1 /\ fC2 by A18,XBOOLE_0:def 3;
+            InitSegm(fC1,a1) = InitSegm(fC2,a1)
+           proof
+            thus InitSegm(fC1,a1) c= InitSegm(fC2,a1)
+             proof let x;
+               assume A22: x in InitSegm(fC1,a1);
+                then reconsider b = x as Element of A;
+                 A23: b < a1 by A22,Th57;
+                 then b < a2 & b in fC1 by A19,A22,Th29,Th57;
+                 then b in InitSegm(fC1,a2) by Th57;
+                 then b in fC2 by A20,Th57;
+              hence thesis by A23,Th57;
+             end;
+            let x;
+             assume A24: x in InitSegm(fC2,a1);
+              then reconsider b = x as Element of A;
+               A25: b < a1 by A24,Th57;
+               then b < a2 & b in fC2 by A19,A24,Th29,Th57;
+               then b in InitSegm(fC2,a2) by Th57;
+               then b in fC1 by A20,Th57;
+            hence thesis by A25,Th57;
+           end;
+       hence a1 in N by A21;
+      end;
+
+        now per cases by A2,A3,A4,A14,A15,A16,Th73;
+       suppose N is Initial_Segm of fC1 & N = fC2;
+         then fC2 is Initial_Segm of fC1 & fC1 <> {} by Def16;
+        hence thesis by Th69;
+       suppose N is Initial_Segm of fC2 & N = fC1;
+         then fC1 is Initial_Segm of fC2 & fC2 <> {} by Def16;
+        hence thesis by Th69;
+       suppose N = fC1 & N = fC2;
+        hence thesis by A1;
+       suppose A26: N is Initial_Segm of fC1 & N is Initial_Segm of fC2;
+            fC1 <> {} by Def16;
+         then consider a such that A27: a in fC1 and A28: N = InitSegm(fC1,a)
+                                                                   by A26,Def15
+;
+            fC2 <> {} by Def16;
+         then consider b such that A29: b in fC2 and A30: N = InitSegm(fC2,b)
+                                                                   by A26,Def15
+;
+          A31: a = f.UpperCone(InitSegm(fC2,b)) by A27,A28,A30,Def16
+               .= b by A29,Def16;
+          then a in fC1 /\ fC2 by A27,A29,XBOOLE_0:def 3;
+          then a in N by A28,A30,A31;
+        hence thesis by A28,Th62;
+      end;
+    hence thesis;
+   end;
+
+theorem Th84:
+ fC1 c< fC2 iff fC1 is Initial_Segm of fC2
+  proof
+   thus fC1 c< fC2 implies fC1 is Initial_Segm of fC2
+    proof assume
+A1:    fC1 c< fC2;
+     then A2: fC1 c= fC2 by XBOOLE_0:def 8;
+        now assume A3: fC2 is Initial_Segm of fC1;
+          fC1 <> {} by Def16;
+        then ex a st a in fC1 & fC2 = InitSegm(fC1,a) by A3,Def15;
+        then fC2 c= fC1 by Th61;
+       hence contradiction by A1,A2,XBOOLE_0:def 10;
+      end;
+     hence thesis by A1,Th83;
+    end;
+    assume A4: fC1 is Initial_Segm of fC2;
+         fC2 <> {} by Def16;
+     then ex a st a in fC2 & fC1 = InitSegm(fC2,a) by A4,Def15;
+    then fC1 <> fC2 & fC1 c= fC2 by A4,Th61,Th68;
+   hence thesis by XBOOLE_0:def 8;
+  end;
+
+definition let A; let f;
+ func Chains f -> set means
+  :Def17: x in it iff x is Chain of f;
+ existence
+  proof
+    defpred P[set] means $1 is Chain of f;
+    consider X such that
+     A1: for x holds x in X iff x in bool(the carrier of A) & P[x]
+                                                            from Separation;
+   take X;
+   let x;
+   thus x in X implies x is Chain of f by A1;
+    assume x is Chain of f;
+   hence thesis by A1;
+  end;
+ uniqueness
+  proof let D1,D2 be set;
+    assume A2: for x holds x in D1 iff x is Chain of f;
+    assume A3: for x holds x in D2 iff x is Chain of f;
+   thus D1 c= D2
+    proof let x;
+     assume x in D1;
+      then x is Chain of f by A2;
+     hence thesis by A3;
+    end;
+   let x;
+    assume x in D2;
+     then x is Chain of f by A3;
+   hence thesis by A2;
+  end;
+end;
+
+definition let A; let f;
+ cluster Chains f -> non empty;
+ coherence
+  proof
+    consider x being Chain of f;
+      x in Chains f by Def17;
+    hence thesis;
+  end;
+end;
+
+Lm10: union(Chains(f)) is Subset of A
+ proof
+     now let X;
+     assume X in Chains(f);
+      then X is Chain of f by Def17;
+    hence X c= the carrier of A;
+   end;
+  then union(Chains(f)) is Subset of A by ZFMISC_1:94;
+  hence thesis;
+ end;
+
+Lm11: union(Chains(f)) is Chain of A
+ proof
+   reconsider C = union(Chains(f)) as Subset of A by Lm10;
+      the InternalRel of A is_strongly_connected_in C
+     proof let x,y;
+       assume that A1: x in C and A2: y in C;
+        consider X such that A3: x in X and A4: X in Chains(f) by A1,TARSKI:def
+4;
+        consider Y such that A5: y in Y and A6: Y in Chains(f) by A2,TARSKI:def
+4;
+         reconsider X,Y as Chain of f by A4,A6,Def17;
+         A7: the InternalRel of A is_strongly_connected_in X by Def11;
+         A8: the InternalRel of A is_strongly_connected_in Y by Def11;
+           now per cases;
+          suppose X = Y;
+           hence thesis by A3,A5,A7,RELAT_2:def 7;
+          suppose A9: X <> Y;
+              now per cases by A9,Th83;
+             suppose X is Initial_Segm of Y;
+               then X c< Y by Th84;
+               then X c= Y by XBOOLE_0:def 8;
+               hence thesis by A3,A5,A8,RELAT_2:def 7;
+             suppose Y is Initial_Segm of X;
+               then Y c< X by Th84;
+               then Y c= X by XBOOLE_0:def 8;
+               hence thesis by A3,A5,A7,RELAT_2:def 7;
+            end;
+           hence thesis;
+         end;
+      hence thesis;
+     end;
+  hence thesis by Def11;
+ end;
+
+canceled 2;
+
+theorem Th87:
+ union(Chains(f)) <> {}
+  proof
+      {f.(the carrier of A)} is Chain of f by Th78;
+    then {f.(the carrier of A)} in Chains(f) & {f.(the carrier of A)} <> {}
+                                                            by Def17;
+   hence thesis by Lm1;
+  end;
+
+theorem Th88:
+ fC <> union(Chains(f)) & S = union(Chains(f)) implies
+  fC is Initial_Segm of S
+   proof assume that A1: fC <> union(Chains(f)) and A2: S = union(Chains(f));
+     consider x being Element of S \ fC;
+        fC in Chains(f) by Def17;
+      then fC c= union(Chains(f)) by ZFMISC_1:92;
+      then not union(Chains(f)) c= fC by A1,XBOOLE_0:def 10;
+      then A3:     S \ fC <> {} by A2,XBOOLE_1:37;
+      then x in S by XBOOLE_0:def 4;
+     then consider X such that A4: x in X and A5: X in Chains(f) by A2,TARSKI:
+def 4;
+     reconsider X as Chain of f by A5,Def17;
+A6:      not x in fC by A3,XBOOLE_0:def 4;
+        fC <> X & not X c= fC by A3,A4,XBOOLE_0:def 4;
+      then not X c< fC by XBOOLE_0:def 8;
+      then not X is Initial_Segm of fC by Th84;
+      then fC is Initial_Segm of X & X <> {} by A4,A6,Th83;
+     then consider a such that A7: a in X and A8: fC = InitSegm(X,a) by Def15;
+      A9: X c= S by A2,A5,ZFMISC_1:92;
+        InitSegm(S,a) = InitSegm(X,a)
+       proof
+        thus InitSegm(S,a) c= InitSegm(X,a)
+         proof let x;
+           assume x in InitSegm(S,a);
+             then A10: x in LowerCone{a} /\ S by Def14;
+             then A11: x in LowerCone{a} by XBOOLE_0:def 3;
+             then x in {a1 : for a2 st a2 in {a} holds a1 < a2} by Def13;
+            then consider b such that A12: b = x and
+                                      A13: for a2 st a2 in {a} holds b < a2;
+               a in {a} by TARSKI:def 1;
+             then A14: b < a by A13;
+               b in S by A10,A12,XBOOLE_0:def 3;
+            then consider Y such that A15: b in Y and A16: Y in Chains(f)
+                                                           by A2,TARSKI:def 4;
+            reconsider Y as Chain of f by A16,Def17;
+               now per cases;
+              suppose X = Y;
+                then x in LowerCone{a} /\ X by A11,A12,A15,XBOOLE_0:def 3;
+               hence thesis by Def14;
+              suppose A17: X <> Y;
+                  now per cases by A17,Th83;
+                 suppose X is Initial_Segm of Y;
+                   then x in X by A7,A12,A14,A15,Th70;
+                   then x in LowerCone{a} /\ X by A11,XBOOLE_0:def 3;
+                  hence thesis by Def14;
+                 suppose Y is Initial_Segm of X;
+                   then Y c< X by Th84;
+                   then Y c= X by XBOOLE_0:def 8;
+                   then x in LowerCone{a} /\ X by A11,A12,A15,XBOOLE_0:def 3;
+                  hence thesis by Def14;
+                end;
+               hence thesis;
+             end;
+          hence thesis;
+         end;
+        let x;
+         assume x in InitSegm(X,a);
+          then x in LowerCone{a} /\ X by Def14;
+          then x in LowerCone{a} & x in X by XBOOLE_0:def 3;
+          then x in LowerCone{a} /\ S by A9,XBOOLE_0:def 3;
+        hence thesis by Def14;
+       end;
+    hence thesis by A7,A8,A9,Def15;
+   end;
+
+theorem
+   union(Chains(f)) is Chain of f
+  proof
+    reconsider C = union(Chains(f)) as Chain of A by Lm11;
+     A1: C <> {} by Th87;
+     A2: the InternalRel of A well_orders C
+      proof
+          the InternalRel of A is_reflexive_in the carrier of A &
+         the InternalRel of A is_transitive_in the carrier of A &
+         the InternalRel of A is_antisymmetric_in the carrier of A
+          by Def4,Def5,Def6;
+       hence the InternalRel of A is_reflexive_in C &
+             the InternalRel of A is_transitive_in C &
+             the InternalRel of A is_antisymmetric_in C
+                                               by Lm7,Lm8,Lm9;
+          the InternalRel of A is_strongly_connected_in C by Def11;
+       hence the InternalRel of A is_connected_in C by Lm2;
+       let Y;
+         consider x being Element of Y;
+        assume that A3: Y c= C and A4: Y <> {};
+            x in C by A3,A4,TARSKI:def 3;
+         then consider X such that A5: x in X and A6: X in Chains(f) by TARSKI:
+def 4;
+         reconsider X as Chain of f by A6,Def17;
+            X /\ Y <> {} & X /\ Y c= X & the InternalRel of A well_orders X
+                                                       by A4,A5,Def16,XBOOLE_0:
+def 3,XBOOLE_1:17;
+         then consider a being set such that A7: a in X /\ Y and
+          A8: for x st x in X /\ Y holds [a,x] in the InternalRel of A
+                                                             by WELLORD1:9;
+            a in X by A7,XBOOLE_0:def 3;
+         then reconsider aa = a as Element of A;
+       take a;
+       thus a in Y by A7,XBOOLE_0:def 3;
+       thus (the InternalRel of A)-Seg(a) /\ Y c= {}
+        proof let y;
+          assume y in (the InternalRel of A)-Seg(a) /\ Y;
+            then A9: y in Y & y in
+ (the InternalRel of A)-Seg(a) by XBOOLE_0:def 3;
+            then y in C & C c= the carrier of A by A3;
+           then reconsider b = y as Element of A;
+            A10: y <> a & [y,a] in the InternalRel of A by A9,WELLORD1:def 1;
+            then A11: b <= aa by Def9;
+              now per cases;
+             suppose X <> C;
+              then a in X & b < aa & X is Initial_Segm of C & y in C
+                                    by A3,A7,A9,A10,A11,Def10,Th88,XBOOLE_0:def
+3
+;
+              hence y in X by Th70;
+             suppose X = C;
+              hence y in X by A3,A9;
+            end;
+            then y in X /\ Y by A9,XBOOLE_0:def 3;
+            then [a,y] in the InternalRel of A by A8;
+            then aa <= b by Def9;
+         hence thesis by A10,A11,Th25;
+        end;
+       thus {} c= (the InternalRel of A)-Seg(a) /\ Y by XBOOLE_1:2;
+      end;
+       now let a;
+       assume A12: a in C;
+        then consider X such that A13: a in X and A14: X in
+ Chains(f) by TARSKI:def 4;
+        reconsider X as Chain of f by A14,Def17;
+           now per cases;
+          suppose X = C;
+           hence f.UpperCone(InitSegm(C,a)) = a by A12,Def16;
+          suppose X <> C;
+           then X is Initial_Segm of C by Th88;
+            then InitSegm(C,a) = InitSegm(X,a) &
+                 f.UpperCone(InitSegm(X,a)) = a by A13,Def16,Th71;
+          hence f.UpperCone(InitSegm(C,a)) = a;
+         end;
+      hence f.UpperCone(InitSegm(C,a)) = a;
+     end;
+   hence thesis by A1,A2,Def16;
+  end;
+
+::
+::  Auxiliary theorems.
+::
+
+canceled;
+
+theorem
+   (ex X st X <> {} & X in Y) iff union Y <> {} by Lm1;
+
+theorem
+   P is_strongly_connected_in X iff
+  P is_reflexive_in X & P is_connected_in X by Lm2;
+
+theorem
+   P is_reflexive_in X & Y c= X implies P is_reflexive_in Y by Lm7;
+
+theorem
+   P is_antisymmetric_in X & Y c= X implies P is_antisymmetric_in Y by Lm8;
+
+theorem
+   P is_transitive_in X & Y c= X implies P is_transitive_in Y by Lm9;
+
+theorem
+   P is_strongly_connected_in X & Y c= X implies
+  P is_strongly_connected_in Y by Lm6;
+
+theorem
+ for R being total reflexive Relation of X holds field R = X by Lm3;
+
+theorem
+ for A being set, R being Relation of A st R is_reflexive_in A
+  holds dom R = A & field R = A by Lm4;

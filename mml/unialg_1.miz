@@ -1,0 +1,451 @@
+:: Basic Notation of Universal Algebra
+::  by Jaros{\l}aw Kotowicz, Beata Madras and Ma{\l}gorzata Korolkiewicz
+::
+:: Received December 29, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, PARTFUN1, RELAT_1, FUNCT_2, FUNCOP_1, BOOLE, FUNCT_1,
+      ZF_REFLE, INCPROJ, UNIALG_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XREAL_0, NAT_1, RELAT_1,
+      FUNCT_1, FINSEQ_1, FUNCOP_1, STRUCT_0, PARTFUN1;
+ constructors FINSEQ_4, STRUCT_0, FUNCOP_1, PARTFUN1, XREAL_0, XCMPLX_0,
+      MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, RELSET_1, STRUCT_0, PARTFUN1, FUNCOP_1, ARYTM_3, MEMBERED,
+      ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET;
+ definitions TARSKI, STRUCT_0, RELAT_1;
+ theorems TARSKI, FUNCT_1, PARTFUN1, FINSEQ_1, FUNCOP_1, RELAT_1, RELSET_1;
+ schemes MATRIX_2;
+
+begin
+
+reserve A,z for set,
+        x,y for FinSequence of A,
+        h for PartFunc of A*,A,
+        n,m for Nat;
+
+definition let A;
+  let IT be PartFunc of A*,A;
+attr IT is homogeneous means :Def1:
+ for x,y st x in dom IT & y in dom IT holds len x = len y;
+end;
+
+definition let A;
+ let IT be PartFunc of A*,A;
+attr IT is quasi_total means
+   for x,y st len x = len y & x in dom IT holds y in dom IT;
+end;
+
+definition let A be non empty set;
+cluster homogeneous quasi_total non empty PartFunc of A*,A;
+ existence
+  proof
+   consider a be Element of A;
+   set f = {<*>A} -->a;
+   A1: dom f = {<*>A} & rng f = {a} by FUNCOP_1:14,19;
+   A2: dom f c= A*
+    proof
+     let z; assume z in dom f;
+     then z = <*>A by A1,TARSKI:def 1;
+     hence thesis by FINSEQ_1:def 11;
+    end;
+    rng f c= A
+   proof
+    let z; assume z in rng f;
+    then z = a by A1,TARSKI:def 1;
+    hence thesis;
+   end;
+  then reconsider f as PartFunc of A*,A by A2,RELSET_1:11;
+  A3: f is homogeneous
+   proof
+    let x,y be FinSequence of A; assume
+      x in dom f & y in dom f;
+    then x = <*>A & y = <*>A by A1,TARSKI:def 1;
+    hence thesis;
+   end;
+  A4: f is quasi_total
+   proof
+    let x,y be FinSequence of A; assume
+    A5: len x = len y & x in dom f;
+    then x = <*>A by A1,TARSKI:def 1;
+    then len x = 0 by FINSEQ_1:32;
+    then y = <*>A by A5,FINSEQ_1:32;
+    hence thesis by A1,TARSKI:def 1;
+   end;
+    f is non empty by FUNCOP_1:19,RELAT_1:60;
+  hence thesis by A3,A4;
+ end;
+end;
+
+theorem
+ h is non empty iff dom h <> {} by RELAT_1:60,64;
+
+theorem Th2:
+for A being non empty set, a being Element of A
+holds {<*>A} -->a is homogeneous quasi_total non empty PartFunc of A*,A
+ proof let A be non empty set, a be Element of A;
+   set f = {<*>A} -->a;
+   A1: dom f = {<*>A} & rng f = {a} by FUNCOP_1:14,19;
+   A2: dom f c= A*
+    proof
+     let z; assume z in dom f;
+     then z = <*>A by A1,TARSKI:def 1;
+     hence thesis by FINSEQ_1:def 11;
+    end;
+    rng f c= A
+   proof
+    let z; assume z in rng f;
+    then z = a by A1,TARSKI:def 1;
+    hence thesis;
+   end;
+  then reconsider f as PartFunc of A*,A by A2,RELSET_1:11;
+  A3: f is homogeneous
+   proof
+    let x,y be FinSequence of A; assume
+      x in dom f & y in dom f;
+    then x = <*>A & y = <*>A by A1,TARSKI:def 1;
+    hence thesis;
+   end;
+    f is quasi_total
+   proof
+    let x,y be FinSequence of A; assume
+    A4: len x = len y & x in dom f;
+    then x = <*>A by A1,TARSKI:def 1;
+    then len x = 0 by FINSEQ_1:32;
+    then y = <*>A by A4,FINSEQ_1:32;
+    hence thesis by A1,TARSKI:def 1;
+   end;
+  hence thesis by A3,FUNCOP_1:19,RELAT_1:60;
+ end;
+
+theorem Th3:
+for A being non empty set, a being Element of A
+ holds {<*>A} -->a is Element of PFuncs(A*,A)
+ proof let A be non empty set, a be Element of A;
+   set f = {<*>A} -->a;
+   A1: dom f = {<*>A} & rng f = {a} by FUNCOP_1:14,19;
+   A2: dom f c= A*
+    proof
+     let z; assume z in dom f;
+     then z = <*>A by A1,TARSKI:def 1;
+     hence thesis by FINSEQ_1:def 11;
+    end;
+    rng f c= A
+   proof
+    let z; assume z in rng f;
+    then z = a by A1,TARSKI:def 1;
+    hence thesis;
+   end;
+  then reconsider f as PartFunc of A*,A by A2,RELSET_1:11;
+    f in PFuncs(A*,A) by PARTFUN1:119;
+  hence {<*>A} -->a is Element of PFuncs(A*,A);
+ end;
+
+definition let A;
+ mode PFuncFinSequence of A is FinSequence of PFuncs(A*,A);
+ canceled;
+end;
+
+definition
+  struct (1-sorted) UAStr (# carrier -> set,
+                             charact -> PFuncFinSequence of the carrier #);
+end;
+
+definition
+ cluster non empty strict UAStr;
+ existence
+ proof consider D being non empty set, c being PFuncFinSequence of D;
+  take UAStr (#D,c #);
+  thus the carrier of UAStr (#D,c #) is non empty;
+  thus thesis;
+ end;
+end;
+
+definition let D be non empty set, c be PFuncFinSequence of D;
+ cluster UAStr (#D,c #) -> non empty;
+ coherence
+ proof
+  thus the carrier of UAStr (#D,c #) is non empty;
+ end;
+end;
+
+definition let A;
+ let IT be PFuncFinSequence of A;
+attr IT is homogeneous means :Def4:
+   for n,h st n in dom IT & h = IT.n holds h is homogeneous;
+end;
+
+definition let A;
+ let IT be PFuncFinSequence of A;
+ attr IT is quasi_total means :Def5:
+   for n,h st n in dom IT & h = IT.n holds h is quasi_total;
+end;
+
+definition let F be Function;
+ redefine attr F is non-empty means :Def6:
+ for n being set st n in dom F holds F.n is non empty;
+ compatibility
+   proof
+    hereby assume F is non-empty;
+then A1:    not {} in rng F by RELAT_1:def 9;
+     let i be set;
+     assume i in dom F;
+     hence F.i is non empty by A1,FUNCT_1:def 5;
+    end;
+    assume
+A2:    for n being set st n in dom F holds F.n is non empty;
+     assume {} in rng F;
+      then ex i being set st i in dom F & F.i = {} by FUNCT_1:def 5;
+     hence contradiction by A2;
+   end;
+end;
+
+definition let A be non empty set; let x be Element of PFuncs(A*,A);
+ redefine func <*x*> -> PFuncFinSequence of A;
+ coherence
+  proof
+      <*x*> is FinSequence of PFuncs(A*,A);
+   hence thesis;
+  end;
+end;
+
+definition let A be non empty set;
+cluster homogeneous quasi_total non-empty PFuncFinSequence of A;
+ existence
+  proof
+   consider a being Element of A;
+   reconsider f = {<*>A} -->a as PartFunc of A*,A by Th2;
+   reconsider f as Element of PFuncs(A*,A) by PARTFUN1:119;
+   take <*f*>;
+   thus <*f*> is homogeneous
+    proof
+     let n; let h be PartFunc of A*,A; assume
+     A1: n in dom <*f*> & h =<*f*>.n;
+     then n in {1} by FINSEQ_1:4,def 8;
+      then h = <*f*>.1 by A1,TARSKI:def 1;
+     then h = f & f is homogeneous PartFunc of A*,A by Th2,FINSEQ_1:def 8;
+     hence thesis;
+    end;
+   thus <*f*> is quasi_total
+    proof
+     let n; let h be PartFunc of A*,A; assume
+     A2: n in dom <*f*> & h =<*f*>.n;
+     then n in {1} by FINSEQ_1:4,def 8;
+      then h = <*f*>.1 by A2,TARSKI:def 1;
+     then h = f & f is quasi_total PartFunc of A*,A by Th2,FINSEQ_1:def 8;
+     hence thesis;
+    end;
+   thus <*f*> is non-empty
+    proof
+     let n be set; assume
+     A3: n in dom <*f*>;
+     then reconsider n as Nat;
+       n in {1} by A3,FINSEQ_1:4,def 8;
+     then n = 1 by TARSKI:def 1;
+   then <*f*>.n=f by FINSEQ_1:def 8;
+      hence thesis by Th2;
+    end;
+  end;
+end;
+
+definition let IT be UAStr;
+attr IT is partial means :Def7:
+ the charact of IT is homogeneous;
+attr IT is quasi_total means :Def8:
+ the charact of IT is quasi_total;
+attr IT is non-empty means :Def9:
+ the charact of IT <> {} & the charact of IT is non-empty;
+end;
+
+reserve A for non empty set,
+        h for PartFunc of A*,A ,
+        x,y for FinSequence of A,
+        a for Element of A;
+
+theorem Th4:
+for x be Element of PFuncs(A*,A) st x = {<*>A} --> a holds
+  <*x*> is homogeneous quasi_total non-empty
+ proof let x be Element of PFuncs(A*,A) such that
+  A1: x = {<*>A} --> a;
+  reconsider f=x as PartFunc of A*,A by PARTFUN1:121;
+  A2: for n,h st n in dom <*x*> & h = <*x*>.n holds h is homogeneous
+   proof let n,h; assume
+    A3: n in dom <*x*> & h =<*x*>.n;
+    then n in {1} by FINSEQ_1:4,def 8;
+     then h = <*x*>.1 by A3,TARSKI:def 1;
+    then h = x & f is homogeneous PartFunc of A*,A by A1,Th2,FINSEQ_1:def 8;
+    hence thesis;
+   end;
+  A4: for n,h st n in dom <*x*> & h = <*x*>.n holds h is quasi_total
+   proof let n,h; assume
+    A5: n in dom <*x*> & h =<*x*>.n;
+    then n in {1} by FINSEQ_1:4,def 8;
+     then h = <*x*>.1 by A5,TARSKI:def 1;
+    then h = x & f is quasi_total PartFunc of A*,A by A1,Th2,FINSEQ_1:def 8;
+    hence thesis;
+   end;
+    for n being set st n in dom <*x*> holds <*x*>.n is non empty
+   proof let n be set; assume
+       n in dom <*x*>;
+    then n in {1} by FINSEQ_1:4,def 8;
+     then <*x*>.n = <*x*>.1 by TARSKI:def 1;
+    then <*x*>.n = x & f is non empty PartFunc of A*,A by A1,Th2,FINSEQ_1:def 8
+;
+    hence thesis;
+   end;
+  hence thesis by A2,A4,Def4,Def5,Def6;
+ end;
+
+definition
+ cluster quasi_total partial non-empty strict non empty UAStr;
+ existence
+  proof
+   consider A be non empty set;
+   consider a be Element of A;
+   reconsider w = {<*>A} --> a as Element of PFuncs(A*,A) by Th3;
+   set U1 = UAStr (# A, <*w*> #);
+   take U1;
+   A1: the charact of U1 is quasi_total &
+      the charact of U1 is homogeneous & the charact of U1 is non-empty
+    by Th4;
+     the charact of U1 <> {}
+    proof assume A2: the charact of U1 = {};
+       len(the charact of U1) = 1 by FINSEQ_1:56;
+     hence contradiction by A2,FINSEQ_1:25;
+    end;
+   hence thesis by A1,Def7,Def8,Def9;
+  end;
+end;
+
+definition let U1 be partial UAStr;
+ cluster the charact of U1 -> homogeneous;
+ coherence by Def7;
+end;
+
+definition let U1 be quasi_total UAStr;
+ cluster the charact of U1 -> quasi_total;
+ coherence by Def8;
+end;
+
+definition let U1 be non-empty UAStr;
+ cluster the charact of U1 -> non-empty non empty;
+ coherence by Def9;
+end;
+
+definition
+mode Universal_Algebra is quasi_total partial non-empty non empty UAStr;
+end;
+
+reserve U1 for partial non-empty non empty UAStr;
+
+definition
+  let A;
+  let f be homogeneous non empty PartFunc of A*,A;
+func arity(f) -> Nat means
+   x in dom f implies it = len x;
+ existence
+  proof
+     ex n st for x st x in dom f holds n = len x
+    proof
+A1:   dom f <> {} by RELAT_1:64;
+     consider x being Element of dom f;
+       dom f c= A* by RELSET_1:12;
+     then x in A* by A1,TARSKI:def 3;
+     then reconsider x as FinSequence of A by FINSEQ_1:def 11;
+     take n = len x;
+     let y; assume y in dom f;
+     hence n = len y by Def1;
+    end;
+   hence thesis;
+  end;
+ uniqueness
+  proof
+     let n,m such that A2: (for x st x in dom f holds n = len x) &
+                     for x st x in dom f holds m = len x;
+A3:   dom f <> {} by RELAT_1:64;
+     consider x being Element of dom f;
+       dom f c= A* by RELSET_1:12;
+     then x in A* by A3,TARSKI:def 3;
+     then reconsider x as FinSequence of A by FINSEQ_1:def 11;
+       n = len x & m = len x by A2,A3;
+     hence thesis;
+  end;
+end;
+
+theorem Th5:
+for U1 holds for n st n in dom the charact of(U1) holds
+  (the charact of(U1)).n is
+   PartFunc of (the carrier of U1)*,the carrier of U1
+ proof let U1,n;
+  set o = the charact of(U1); assume
+     n in dom o;
+  then o.n in rng o & rng o c= PFuncs((the carrier of U1)*, the carrier of U1)
+   by FINSEQ_1:def 4,FUNCT_1:def 5;
+hence thesis by PARTFUN1:121;
+ end;
+
+definition let U1;
+func signature U1 ->FinSequence of NAT means
+   len it = len the charact of(U1) &
+ for n st n in dom it holds
+   for h be homogeneous non empty
+   PartFunc of (the carrier of U1 )*,the carrier of U1
+     st h = (the charact of(U1)).n
+    holds it.n = arity(h);
+ existence
+  proof
+   defpred P[Nat,set] means
+   for h be homogeneous non empty
+      PartFunc of (the carrier of U1 )*,the carrier of U1
+       st h = (the charact of(U1)).$1
+        holds $2 = arity(h);
+   A1: now let m; assume
+          m in Seg len the charact of(U1);
+        then m in dom the charact of(U1) by FINSEQ_1:def 3;
+        then reconsider H=(the charact of(U1)).m as homogeneous non empty
+         PartFunc of (the carrier of U1 )*,the carrier of U1 by Def4,Def6,Th5;
+        take n=arity(H);
+        thus P[m,n];
+       end;
+   consider p be FinSequence of NAT such that
+   A2: dom p = Seg(len the charact of(U1)) and
+   A3: for m st m in
+ Seg(len the charact of(U1)) holds P[m,p.m] from SeqDEx(A1);
+   take p;
+thus len p = len the charact of(U1) by A2,FINSEQ_1:def 3;
+   let n; assume
+   A4: n in dom p;
+   let h be homogeneous non empty
+          PartFunc of (the carrier of U1 )*,the carrier of U1; assume
+     h = (the charact of U1).n;
+   hence p.n = arity(h) by A2,A3,A4;
+  end;
+ uniqueness
+  proof
+   let x,y be FinSequence of NAT; assume that
+   A5: len x = len the charact of(U1) and
+   A6: for n st n in dom x holds for h be homogeneous non empty
+        PartFunc of (the carrier of U1 )*,the carrier of U1
+         st h = (the charact of(U1)).n
+         holds x.n = arity(h) and
+   A7: len y = len the charact of(U1) and
+   A8: for n st n in dom y holds for h be homogeneous non empty
+         PartFunc of (the carrier of U1 )*,the carrier of U1
+          st h = (the charact of(U1)).n
+          holds y.n = arity(h);
+      now let m; assume
+       1<=m & m<=len x;
+     then m in Seg len x by FINSEQ_1:3;
+then A9: m in dom the charact of(U1) & m in dom x & m in dom y by A5,A7,
+FINSEQ_1:def 3;
+     then reconsider h=(the charact of(U1)).m
+       as homogeneous non empty
+        PartFunc of (the carrier of U1 )*,the carrier of U1 by Def4,Def6,Th5;
+       x.m=arity(h) & y.m=arity(h) by A6,A8,A9;
+     hence x.m=y.m;
+    end;
+   hence thesis by A5,A7,FINSEQ_1:18;
+  end;
+end;

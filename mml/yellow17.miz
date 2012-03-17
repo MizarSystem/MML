@@ -1,0 +1,919 @@
+:: The Tichonov Theorem
+::  by Bart{\l}omiej Skorulski
+::
+:: Received May 23, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, BORSUK_1, RELAT_1, BOOLE, CARD_3, FUNCT_4, WAYBEL18,
+      WAYBEL_3, PBOOLE, RLVECT_2, SUBSET_1, PRE_TOPC, SETFAM_1, TARSKI,
+      COMPTS_1, FINSET_1, CANTOR_1, YELLOW_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, RELAT_1, FUNCT_1,
+      FUNCT_7, FINSET_1, PBOOLE, PRALG_1, PRALG_3, CARD_3, PRE_TOPC, TOPS_2,
+      COMPTS_1, CANTOR_1, YELLOW_1, WAYBEL_3, WAYBEL18;
+ constructors FUNCT_7, PRALG_3, TOPS_2, COMPTS_1, CANTOR_1, WAYBEL18;
+ clusters SUBSET_1, STRUCT_0, RELSET_1, WAYBEL_7, YELLOW_6, FINSET_1, PRALG_1,
+      PRE_TOPC, CANTOR_1, YELLOW_1, WAYBEL18, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, COMPTS_1, XBOOLE_0;
+ theorems TARSKI, ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_7, PRALG_3, CARD_3, PBOOLE,
+      PRE_TOPC, TOPS_2, COMPTS_1, YELLOW_1, WAYBEL_3, WAYBEL_7, YELLOW_6,
+      WAYBEL18, SETFAM_1, XBOOLE_0, XBOOLE_1, TOPMETR;
+ schemes ZFREFLE1, PRE_CIRC, COMPTS_1;
+
+begin ::Some Properties of Products
+
+theorem Th1:
+for F being Function,
+    i, xi being set,
+    Ai being Subset of F.i holds
+proj(F,i)"({xi}) meets proj(F,i)"Ai implies xi in Ai
+proof
+  let F be Function,
+      i be set,
+      xi be set,
+      Ai be Subset of F.i;
+  assume
+A1:  proj(F,i)"({xi}) /\ proj(F,i)"Ai <> {};
+  consider f being Element of proj(F,i)"({xi}) /\ proj(F,i)"Ai;
+A2:  f in proj(F,i)"({xi}) & f in proj(F,i)"Ai by A1,XBOOLE_0:def 3;
+  then proj(F,i).f in {xi} by FUNCT_1:def 13;
+  then proj(F,i).f = xi by TARSKI:def 1;
+  hence xi in Ai by A2,FUNCT_1:def 13;
+end;
+
+theorem Th2:
+for F,f being Function,
+    i,xi being set
+st xi in F.i & f in product F holds
+f+*(i,xi) in product F
+proof
+  let F,f be Function,
+      i,xi be set;
+  assume
+A1: xi in F.i;
+  assume
+A2: f in product F;
+  then dom f = dom F & for x being set st x in dom F holds f.x in
+ F.x by CARD_3:18;
+then A3:
+  dom(f+*(i,xi)) = dom F by FUNCT_7:32;
+    for x being set st x in dom F holds (f+*(i,xi)).x in F.x
+  proof
+    let x be set;
+    assume
+A4:    x in dom F;
+    per cases;
+    suppose
+A5:   i=x;
+    thus (f+*(i,xi)).x in F.x
+    proof
+      per cases;
+      suppose i in dom f;
+      hence thesis by A1,A5,FUNCT_7:33;
+      suppose not i in dom f;
+      then (f+*(i,xi)) =f by FUNCT_7:def 3;
+      hence thesis by A2,A4,CARD_3:18;
+    end;
+    suppose i<>x;
+    then (f+*(i,xi)).x = f.x by FUNCT_7:34;
+    hence (f+*(i,xi)).x in F.x by A2,A4,CARD_3:18;
+  end;
+  hence thesis by A3,CARD_3:18;
+end;
+
+theorem Th3:
+for F being Function,
+    i being set st i in dom F & product F <> {} holds
+rng proj(F,i) = F.i
+proof
+  let F be Function,
+      i be set;
+assume that
+A1: i in dom F and
+A2: product F <> {};
+  thus rng proj(F,i) c= F.i
+  proof
+    let x be set;
+    assume x in rng proj(F,i);
+    then consider f' being set such that
+A3:   f' in dom proj(F,i) and
+A4:   x = proj(F,i).f' by FUNCT_1:def 5;
+      f' in product F by A3,PRALG_3:def 2;
+    then consider f being Function such that
+A5:   f' = f and
+        dom f = dom F and
+A6:   for x being set st x in dom F holds f.x in F.x by CARD_3:def 5;
+      proj(F,i).f = f.i by A3,A5,PRALG_3:def 2;
+    hence x in F.i by A1,A4,A5,A6;
+  end;
+  let x be set;
+  consider f' being Element of product F;
+  consider f being Function such that
+A7: f' = f and
+A8: dom f = dom F and
+      for x being set st x in dom F holds f.x in F.x by A2,CARD_3:def 5;
+  assume x in F.i;
+  then f+*(i,x)in product F by A2,A7,Th2;
+  then A9: f+*(i,x) in dom proj(F,i) by PRALG_3:def 2;
+    (f+*(i,x)).i = x by A1,A8,FUNCT_7:33;
+  then proj(F,i).(f+*(i,x)) = x by A9,PRALG_3:def 2;
+  hence x in rng proj(F,i) by A9,FUNCT_1:def 5;
+end;
+
+theorem Th4:
+for F being Function,
+    i being set st i in dom F holds
+proj(F,i)"(F.i) = product F
+proof
+  let F be Function,
+      i be set;
+  assume
+A1: i in dom F;
+    dom proj(F,i)=product F by PRALG_3:def 2;
+  hence proj(F,i)"(F.i) c= product F by RELAT_1:167;
+  let f' be set;
+  assume
+A2: f' in product F;
+  then consider f being Function such that
+A3: f' = f and
+      dom f = dom F and
+A4: for x being set st x in dom F holds f.x in F.x by CARD_3:def 5;
+A5:
+  f in dom proj(F,i) by A2,A3,PRALG_3:def 2;
+    f.i in F.i by A1,A4;
+  then proj(F,i).f in F.i by A5,PRALG_3:def 2;
+  hence f' in proj(F,i)"(F.i) by A3,A5,FUNCT_1:def 13;
+end;
+
+theorem Th5:
+for F,f being Function,
+    i,xi being set
+st xi in F.i & i in dom F & f in product F holds
+f+*(i,xi) in proj(F,i)"({xi})
+proof
+  let F,f be Function,
+      i,xi be set;
+   assume that
+A1:  xi in F.i and
+A2:  i in dom F and
+A3:  f in product F;
+     (f+*(i,xi))in product F by A1,A3,Th2;
+   then A4: (f+*(i,xi))in dom proj(F,i) by PRALG_3:def 2;
+     i in dom f by A2,A3,CARD_3:18;
+   then (f+*(i,xi)).i = xi by FUNCT_7:33;
+   then (f+*(i,xi)).i in {xi} by TARSKI:def 1;
+   then proj(F,i).(f+*(i,xi)) in {xi} by A4,PRALG_3:def 2;
+   hence f+*(i,xi) in proj(F,i)"({xi}) by A4,FUNCT_1:def 13;
+end;
+
+Lm1:
+for F,g being Function,
+    i1,i2,xi1 being set,
+    Ai2 being Subset of F.i2
+st i1<>i2 & g in product F holds
+g+*(i1,xi1) in proj(F,i2)"Ai2 implies g in proj(F,i2)"Ai2
+proof
+  let F,g be Function,
+      i1,i2,xi1 be set,
+      Ai2 be Subset of F.i2;
+  assume that
+A1: i1<>i2 and
+A2: g in product F;
+A3: g in dom proj(F,i2) by A2,PRALG_3:def 2;
+  assume g+*(i1,xi1) in proj(F,i2)"Ai2;
+  then g+*(i1,xi1)in dom proj(F,i2) &
+  proj(F,i2).(g+*(i1,xi1)) in Ai2 by FUNCT_1:def 13;
+  then (g+*(i1,xi1)).i2 in Ai2 by PRALG_3:def 2;
+  then g.i2 in Ai2 by A1,FUNCT_7:34;
+  then proj(F,i2).g in Ai2 by A3,PRALG_3:def 2;
+  hence g in proj(F,i2)"Ai2 by A3,FUNCT_1:def 13;
+end;
+
+theorem Th6:
+for F,f being Function,
+    i1,i2,xi1 being set,
+    Ai2 being Subset of F.i2
+    st xi1 in F.i1 & i1 in dom F & f in product F
+holds i1 <> i2 implies
+(f in proj(F,i2)"Ai2 iff f+*(i1,xi1) in proj(F,i2)"Ai2)
+proof
+  let F,f be Function,
+      i1,i2,xi1 be set,
+      Ai2 be Subset of F.i2;
+  assume that
+A1: xi1 in F.i1 and
+   i1 in dom F and
+A2: f in product F;
+  assume
+A3: i1 <> i2;
+  thus f in proj(F,i2)"Ai2 implies f+*(i1,xi1) in proj(F,i2)"Ai2
+  proof
+    assume
+A4:    f in proj(F,i2)"Ai2;
+A5: (f+*(i1,xi1))+*(i1,f.i1) = f +*(i1,f.i1) by FUNCT_7:36
+                            .= f by FUNCT_7:37;
+      f+*(i1,xi1) in product F by A1,A2,Th2;
+    hence f+*(i1,xi1) in proj(F,i2)"Ai2 by A3,A4,A5,Lm1;
+  end;
+  assume f+*(i1,xi1) in proj(F,i2)"Ai2;
+  hence f in proj(F,i2)"Ai2 by A2,A3,Lm1;
+end;
+
+theorem Th7:
+for F being Function,
+    i1,i2,xi1 being set,
+    Ai2 being Subset of F.i2
+st product F <> {} & xi1 in F.i1 & i1 in dom F & i2 in dom F & Ai2<>F.i2
+holds proj(F,i1)"({xi1}) c= proj(F,i2)"Ai2 iff (i1 = i2 & xi1 in Ai2)
+proof
+  let F be Function,
+      i1,i2,xi1 be set,
+      Ai2 be Subset of F.i2;
+  assume that
+A1: product F <> {} & xi1 in F.i1 and
+A2: i1 in dom F and
+A3: i2 in dom F and
+A4:  Ai2<>F.i2;
+    not F.i2 c= Ai2 by A4,XBOOLE_0:def 10;
+  then consider xi2 being set such that
+A5: xi2 in F.i2 and
+A6: not xi2 in Ai2 by TARSKI:def 3;
+  reconsider xi2 as Element of F.i2 by A5;
+  consider f' being Element of product F;
+  consider f being Function such that
+A7:  f' = f and
+A8:  dom f = dom F and
+       for x being set st x in dom F holds f.x in F.x by A1,CARD_3:def 5;
+A9: (f+*(i2,xi2)).i2 = xi2 by A3,A8,FUNCT_7:33;
+  thus proj(F,i1)"({xi1}) c= proj(F,i2)"Ai2 implies (i1 = i2 & xi1 in Ai2)
+  proof
+    assume
+A10:   proj(F,i1)"({xi1}) c= proj(F,i2)"Ai2;
+    thus
+A11:  i1 = i2
+    proof
+      assume
+A12:     i1<>i2;
+A13:   f+*(i2,xi2) in product F by A1,A5,A7,Th2;
+      then (f+*(i2,xi2))+*(i1,xi1) in proj(F,i1)"({xi1}) by A1,A2,Th5;
+      then f+*(i2,xi2) in proj(F,i2)"Ai2 by A1,A2,A10,A12,A13,Th6;
+      then f+*(i2,xi2) in dom proj(F,i2) & proj(F,i2).(f+*(i2,xi2)) in Ai2
+          by FUNCT_1:def 13;
+      hence contradiction by A6,A9,PRALG_3:def 2;
+    end;
+      xi1 in rng proj(F,i1) by A1,A2,Th3;
+    then {xi1} c= rng proj(F,i1) by ZFMISC_1:37;
+    then {xi1} c= Ai2 by A10,A11,FUNCT_1:158;
+    hence xi1 in Ai2 by ZFMISC_1:37;
+  end;
+  assume that
+A14: i1 = i2 and
+A15: xi1 in Ai2;
+    {xi1} c= Ai2 by A15,ZFMISC_1:37;
+  hence proj(F,i1)"({xi1}) c= proj(F,i2)"Ai2 by A14,RELAT_1:178;
+end;
+
+scheme ElProductEx { I()->non empty set,
+                      J()->TopSpace-yielding non-Empty ManySortedSet of I(),
+                      P[set,set] }:
+  ex f being Element of product J() st for i being Element of I() holds
+    P[f.i,i]
+  provided A1:
+  for i being Element of I() ex x being Element of J().i st P[x,i]
+proof
+  defpred Q[set,set] means P[$2,$1] &
+      for i' being Element of I() st $1=i' holds $2 in the carrier of J().i';
+A2:
+  for i being set st i in I() ex x being set st Q[i, x]
+  proof
+    let i be set;
+    assume i in I();
+    then reconsider i1=i as Element of I();
+    consider x being Element of J().i1 such that
+A3:   P[x,i1] by A1;
+    take x;
+    thus P[x,i] by A3;
+    let i' be Element of I();
+    assume i=i';
+    hence x in the carrier of J().i';
+  end;
+  consider f being Function such that
+A4: dom f = I() and
+A5: for i being set st i in I() holds Q[i, f.i] from NonUniqFuncEx(A2);
+A6: dom f = dom Carrier J() by A4,PBOOLE:def 3;
+    for x being set st x in dom Carrier J() holds f.x in (Carrier J()).x
+  proof
+    let x be set;
+    assume x in dom Carrier J();
+    then reconsider x'=x as Element of I() by PBOOLE:def 3;
+      f.x' in the carrier of J().x' by A5;
+    hence f.x in (Carrier J()).x by YELLOW_6:9;
+  end;
+  then f in product(Carrier J()) by A6,CARD_3:18;
+  then f in the carrier of product J() by WAYBEL18:def 3;
+  then reconsider f as Element of product J();
+  take f;
+  let i be Element of I();
+  thus P[f.i,i] by A5;
+end;
+
+theorem Th8:
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I,
+    f being Element of product J holds
+proj(J,i).f=f.i
+proof
+  let I be non empty set,
+      J be TopSpace-yielding non-Empty ManySortedSet of I,
+      i be Element of I,
+      f be Element of product J;
+    f in the carrier of product J;
+  then f in product (Carrier J) by WAYBEL18:def 3;
+  then f in dom proj(Carrier J,i) by PRALG_3:def 2;
+  then proj(Carrier J,i).f=f.i by PRALG_3:def 2;
+  hence proj(J,i).f=f.i by WAYBEL18:def 4;
+end;
+
+theorem Th9:
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I,
+    xi being Element of J.i,
+    Ai being Subset of J.i holds
+proj(J,i)"({xi}) meets proj(J,i)"Ai implies xi in Ai
+proof
+  let I be non empty set,
+      J be TopSpace-yielding non-Empty ManySortedSet of I,
+      i be Element of I,
+      xi be Element of J.i,
+      Ai be Subset of J.i;
+    Ai c= the carrier of J.i;
+  then A1: Ai c= (Carrier J).i by YELLOW_6:9;
+  assume proj(J,i)"({xi}) /\ proj(J,i)"Ai <> {};
+  then proj(Carrier J,i)"({xi}) /\ proj(J,i)"Ai <> {} by WAYBEL18:def 4;
+  then proj(Carrier J,i)"({xi}) /\
+ proj(Carrier J,i)"Ai <> {} by WAYBEL18:def 4;
+  then proj(Carrier J,i)"({xi}) meets
+ proj(Carrier J,i)"Ai by XBOOLE_0:def 7;
+  hence xi in Ai by A1,Th1;
+end;
+
+theorem Th10:
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I holds
+proj(J,i)"[#](J.i) = [#] product J
+proof
+  let I be non empty set,
+      J be TopSpace-yielding non-Empty ManySortedSet of I,
+      i be Element of I;
+    i in I;
+  then i in dom Carrier J by PBOOLE:def 3;
+  then proj(Carrier J,i)"((Carrier J).i) = product Carrier J by Th4;
+  then proj(Carrier J,i)"((Carrier J).i) = the carrier of product J
+    by WAYBEL18:def 3;
+  then proj(Carrier J,i)"((Carrier J).i) = [#] product J by PRE_TOPC:12;
+  then proj(Carrier J,i)"(the carrier of J.i) = [#] product J by YELLOW_6:9;
+  then proj(Carrier J,i)"[#](J.i) = [#] product J by PRE_TOPC:12;
+  hence proj(J,i)"[#](J.i) = [#] product J by WAYBEL18:def 4;
+end;
+
+theorem Th11:
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I,
+    xi being Element of J.i,
+    f being Element of product J holds
+f+*(i,xi) in proj(J,i)"({xi})
+proof
+  let I be non empty set,
+      J be TopSpace-yielding non-Empty ManySortedSet of I,
+      i be Element of I,
+      xi be Element of J.i,
+      f be Element of product J;
+    i in I;
+  then A1:  i in dom Carrier J by PBOOLE:def 3;
+  reconsider xi'=xi as Element of (Carrier J).i by YELLOW_6:9;
+    f in the carrier of product J;
+  then f in product (Carrier J) by WAYBEL18:def 3;
+  then f+*(i,xi') in proj(Carrier J,i)"({xi'}) by A1,Th5;
+  hence f+*(i,xi) in proj(J,i)"({xi}) by WAYBEL18:def 4;
+end;
+
+theorem Th12:
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i1,i2 being Element of I,
+    xi1 being Element of J.i1,
+    Ai2 being Subset of J.i2
+st Ai2<>[#](J.i2)
+holds proj(J,i1)"({xi1}) c= proj(J,i2)"Ai2 iff (i1 = i2 & xi1 in Ai2)
+proof
+  let I be non empty set,
+      J be TopSpace-yielding non-Empty ManySortedSet of I,
+      i1,i2 be Element of I,
+      xi1 be Element of J.i1,
+      Ai2 be Subset of J.i2;
+A1:
+  product Carrier J <> {};
+    i1 in I;
+  then A2: i1 in dom Carrier J by PBOOLE:def 3;
+    i2 in I;
+  then A3: i2 in dom Carrier J by PBOOLE:def 3;
+  assume
+A4:  Ai2<>[#](J.i2);
+  reconsider xi1'=xi1 as Element of (Carrier J).i1 by YELLOW_6:9;
+  reconsider Ai2'=Ai2 as Subset of (Carrier J).i2 by YELLOW_6:9;
+    Ai2<>the carrier of (J.i2) by A4,PRE_TOPC:12;
+  then Ai2' <> (Carrier J).i2 by YELLOW_6:9;
+  then proj(Carrier J,i1)"({xi1'}) c= proj(Carrier J,i2)"Ai2' iff
+    (i1 = i2 & xi1' in Ai2') by A1,A2,A3,Th7;
+  then proj(J,i1)"({xi1}) c= proj(Carrier J,i2)"Ai2 iff
+    (i1 = i2 & xi1' in Ai2') by WAYBEL18:def 4;
+  hence proj(J,i1)"({xi1}) c= proj(J,i2)"Ai2 iff (i1 = i2 & xi1 in Ai2)
+    by WAYBEL18:def 4;
+end;
+
+theorem Th13:
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i1,i2 being Element of I,
+    xi1 being Element of J.i1,
+    Ai2 being Subset of J.i2,
+    f being Element of product J
+st i1<> i2 holds
+f in proj(J,i2)"Ai2 iff f+*(i1,xi1) in proj(J,i2)"Ai2
+proof
+  let I be non empty set,
+      J be TopSpace-yielding non-Empty ManySortedSet of I,
+      i1,i2 be Element of I,
+      xi1 be Element of J.i1,
+      Ai2 be Subset of J.i2,
+      f be Element of product J;
+    i1 in I;
+  then A1: i1 in dom Carrier J by PBOOLE:def 3;
+  assume
+A2:  i1<> i2;
+  reconsider xi1'=xi1 as Element of (Carrier J).i1 by YELLOW_6:9;
+  reconsider Ai2'=Ai2 as Subset of (Carrier J).i2 by YELLOW_6:9;
+    f in the carrier of product J;
+  then f in product (Carrier J) by WAYBEL18:def 3;
+  then f in proj(Carrier J,i2)"Ai2' iff f+*(i1,xi1') in proj(Carrier J,i2)"
+Ai2'
+    by A1,A2,Th6;
+  hence f in proj(J,i2)"Ai2 iff f+*(i1,xi1) in
+ proj(J,i2)"Ai2 by WAYBEL18:def 4;
+end;
+
+begin
+
+canceled;
+
+theorem Th15:
+for T being non empty TopStruct holds
+T is compact iff
+    for F being Subset-Family of T st
+     F is open & [#](T) c= union(F)
+    ex G being Subset-Family of T
+      st G c= F & [#]T c= union G & G is finite
+proof
+  let T be non empty TopStruct;
+  thus T is compact implies
+    for F being Subset-Family of T st
+     F is open & [#](T) c= union(F)
+    ex G being Subset-Family of T
+      st G c= F & [#]T c= union G & G is finite
+  proof
+    assume
+A1:   T is compact;
+    let F be Subset-Family of T;
+    assume that
+A2:   F is open and
+A3:   [#](T) c= union(F);
+      the carrier of T c= union(F) by A3,PRE_TOPC:12;
+    then F is_a_cover_of T by TOPMETR:1;
+    then consider G being Subset-Family of T such that
+A4:   G c= F and
+A5:   G is_a_cover_of T and
+A6:   G is finite by A1,A2,COMPTS_1:def 3;
+    take G;
+      the carrier of T c= union G by A5,TOPMETR:1;
+    hence G c= F & [#]T c= union G & G is finite by A4,A6,PRE_TOPC:12;
+  end;
+  assume
+A7:  (for F being Subset-Family of T st
+    F is open & [#](T) c= union(F)
+    ex G being Subset-Family of T
+      st G c= F & [#]T c= union G & G is finite);
+  let F be Subset-Family of T;
+  assume that
+A8: F is_a_cover_of T and
+A9: F is open;
+    the carrier of T c= union F by A8,TOPMETR:1;
+  then [#](T) c= union(F) by PRE_TOPC:12;
+  then consider G being Subset-Family of T such that
+A10: G c= F and
+A11: [#]T c= union G and
+A12: G is finite by A7,A9;
+  take G;
+    the carrier of T c= union G by A11,PRE_TOPC:12;
+  hence G c= F & G is_a_cover_of T & G is finite by A10,A12,TOPMETR:1;
+end;
+
+theorem ::Alexander's Lemma
+Th16:
+for T being non empty TopSpace, B being prebasis of T holds
+  T is compact iff
+    for F being Subset of B st [#](T) c= union(F)
+    ex G being finite Subset of F st [#]T c= union G
+proof
+  let T be non empty TopSpace,
+      B be prebasis of T;
+  set x = the carrier of T;
+    the carrier of T in the topology of T by PRE_TOPC:def 1;
+  then x in the carrier of InclPoset the topology of T by YELLOW_1:1;
+  then reconsider x as Element of InclPoset the topology of T
+   ;
+A1:
+  x = [#]T by PRE_TOPC:12;
+
+   x is compact iff x << x by WAYBEL_3:def 2;
+  hence T is compact iff
+    for F being Subset of B st [#](T) c= union(F)
+    ex G being finite Subset of F st [#]T c= union G
+       by A1,WAYBEL_3:37,WAYBEL_7:35;
+end;
+
+begin ::The Tichonov Theorem
+
+theorem Th17:
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    A being set st A in product_prebasis J
+ex i being Element of I, Ai being Subset of J.i st
+   Ai is open & proj(J,i)"Ai = A
+proof
+  let I be non empty set,
+      J be TopSpace-yielding non-Empty ManySortedSet of I,
+      A be set;
+  assume
+  A in product_prebasis J;
+  then consider i being set, T being TopStruct, Ai being Subset of T
+  such that
+A1:    i in I and
+A2:    Ai is open and
+A3:    T = J.i and
+A4:    A = product ((Carrier J) +* (i,Ai)) by WAYBEL18:def 2;
+  reconsider i as Element of I by A1;
+  take i;
+  reconsider Ai as Subset of J.i by A3;
+  take Ai;
+  thus Ai is open by A2,A3;
+  thus proj(J,i)"Ai = A by A4,WAYBEL18:5;
+end;
+
+theorem Th18:
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I,
+    xi being Element of J.i,
+    A being set
+st A in product_prebasis J & proj(J,i)"({xi}) c= A holds
+A = [#](product J) or
+ex Ai being Subset of J.i
+  st Ai <> [#](J.i) & xi in Ai & Ai is open & A=proj(J,i)"Ai
+proof
+  let I be non empty set,
+      J be TopSpace-yielding non-Empty ManySortedSet of I,
+      i be Element of I,
+      xi be Element of J.i,
+      A be set;
+  assume
+A1: A in product_prebasis J;
+  assume
+A2: proj(J,i)"({xi}) c= A;
+  assume
+A3: not A = [#](product J);
+  consider i1 being Element of I, Ai1 being Subset of J.i1 such that
+A4: Ai1 is open and
+A5: proj(J,i1)"Ai1 = A by A1,Th17;
+A6:
+  Ai1 <> [#](J.i1) by A3,A5,Th10;
+then A7:  J.i = J.i1 by A2,A5,Th12;
+  reconsider Ai=Ai1 as Subset of J.i by A2,A5,A6,Th12;
+  take Ai;
+  thus Ai <> [#](J.i) by A2,A5,A6,Th12;
+  thus xi in Ai by A2,A5,A6,Th12;
+  thus Ai is open by A4,A7;
+  thus A=proj(J,i)"Ai by A2,A5,A6,Th12;
+end;
+
+theorem Th19:
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I,
+    Fi being non empty Subset-Family of J.i st [#](J.i) c= union(Fi) holds
+ [#](product J) c=
+   union {proj(J,i)"Ai where Ai is Element of Fi:not contradiction}
+proof
+ let I be non empty set,
+     J be TopSpace-yielding non-Empty ManySortedSet of I,
+     i be Element of I,
+     Fi be non empty Subset-Family of J.i;
+ assume
+A1: [#](J.i) c= union(Fi);
+ let f be set;
+ assume
+A2: f in [#](product J);
+ then A3: f in the carrier of product J;
+  reconsider f'=f as Element of product J by A2;
+   f'.i in the carrier of J.i;
+ then f'.i in [#](J.i) by PRE_TOPC:12;
+ then consider Ai0 being set such that
+A4: f'.i in Ai0 and
+A5: Ai0 in Fi by A1,TARSKI:def 4;
+ reconsider Ai0 as Element of Fi by A5;
+A6:
+ proj(J,i)"Ai0 in {proj(J,i)"Ai where Ai is Element of Fi:not contradiction};
+   f' in product Carrier J by A3,WAYBEL18:def 3;
+ then f' in dom proj(Carrier J,i) by PRALG_3:def 2;
+ then A7:
+   f' in dom proj(J,i) by WAYBEL18:def 4;
+   proj(J,i).f' in Ai0 by A4,Th8;
+ then f' in proj(J,i)"Ai0 by A7,FUNCT_1:def 13;
+ hence f in union {proj(J,i)"Ai where Ai is Element of Fi:not contradiction}
+   by A6,TARSKI:def 4;
+end;
+
+theorem Th20:
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I,
+    xi being Element of J.i,
+    G being Subset of product_prebasis J
+st proj(J,i)"({xi}) c= union G &
+(for A being set st
+   A in product_prebasis J & A in G holds
+   not proj(J,i)"({xi}) c= A)
+holds [#](product J) c= union G
+proof
+  let I be non empty set,
+      J be TopSpace-yielding non-Empty ManySortedSet of I,
+      i be Element of I,
+      xi be Element of J.i,
+      G be Subset of product_prebasis J;
+  assume that
+A1: proj(J,i)"({xi}) c= union G and
+A2: for A being set st A in product_prebasis J & A in G holds
+     not proj(J,i)"({xi}) c= A;
+  let f be set;
+  assume f in [#](product J);
+  then reconsider f'=f as Element of product J;
+  set g = f'+*(i,xi);
+A3:
+  g in proj(J,i)"({xi}) by Th11;
+  then consider Ag being set such that
+A4: g in Ag and
+A5: Ag in G by A1,TARSKI:def 4;
+  consider i2 being Element of I, Ai2 being Subset of J.i2 such that
+      Ai2 is open and
+A6: proj(J,i2)"Ai2 = Ag by A5,Th17;
+A7: not proj(J,i)"({xi}) c= proj(J,i2)"Ai2 by A2,A5,A6;
+A8:
+  Ai2 <> [#](J.i2)
+  proof
+    assume Ai2 = [#](J.i2);
+    then proj(J,i2)"Ai2 = [#] product J by Th10
+                       .= the carrier of product J by PRE_TOPC:12;
+    hence contradiction by A2,A5,A6;
+  end;
+
+   i<>i2
+  proof
+    assume
+A9:  i = i2;
+    then A10:  not xi in Ai2 by A7,A8,Th12;
+    reconsider Ai2'=Ai2 as Subset of J.i by A9;
+      proj(J,i)"({xi}) /\ proj(J,i)"Ai2' <> {} by A3,A4,A6,A9,XBOOLE_0:def 3
+;
+    then proj(J,i)"({xi}) meets proj(J,i)"Ai2' by XBOOLE_0:def 7;
+    hence contradiction by A10,Th9;
+  end;
+  then f in proj(J,i2)"Ai2 by A4,A6,Th13;
+  hence f in union G by A5,A6,TARSKI:def 4;
+end;
+
+theorem Th21:
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I,
+    F being Subset of product_prebasis J holds
+(for G being finite Subset of F holds not [#](product J) c= union G) implies
+ for xi being Element of J.i,
+      G being finite Subset of F st proj(J,i)"({xi}) c= union G
+ ex A being set st A in product_prebasis J & A in G & proj(J,i)"({xi}) c= A
+proof
+  let I be non empty set,
+    J be TopSpace-yielding non-Empty ManySortedSet of I,
+    i be Element of I,
+    F be Subset of product_prebasis J;
+  assume
+A1: for G being finite Subset of F holds not [#](product J) c= union G;
+  let xi be Element of J.i,
+      G be finite Subset of F;
+  reconsider G'=G as Subset of product_prebasis J by XBOOLE_1:1;
+  assume
+A2: proj(J,i)"({xi}) c= union G;
+  assume for A being set st A in product_prebasis J & A in G holds
+    not proj(J,i)"({xi}) c= A;
+  then [#](product J) c= union G' by A2,Th20;
+  hence contradiction by A1;
+end;
+
+theorem Th22:
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I,
+    F being Subset of product_prebasis J
+holds
+(for G being finite Subset of F holds not [#](product J) c= union G) implies
+ for xi being Element of J.i,
+     G being finite Subset of F st proj(J,i)"({xi}) c= union G holds
+ ex Ai being Subset of J.i
+    st Ai <> [#](J.i) & xi in Ai & proj(J,i)"Ai in G & Ai is open
+proof
+  let I be non empty set,
+      J be TopSpace-yielding non-Empty ManySortedSet of I,
+      i be Element of I,
+      F be Subset of product_prebasis J;
+  assume
+A1: for G being finite Subset of F holds not [#](product J) c= union G;
+  let xi be Element of J.i,
+      G be finite Subset of F;
+  assume proj(J,i)"({xi}) c= union G;
+  then consider A being set such that
+A2: A in product_prebasis J and
+A3: A in G and
+A4: proj(J,i)"({xi}) c= A by A1,Th21;
+    A <> [#](product J)
+  proof
+    assume
+A5:   A = [#](product J);
+    reconsider G1 = {A} as finite Subset of F by A3,ZFMISC_1:37;
+      union G1 = [#](product J) by A5,ZFMISC_1:31;
+    hence contradiction by A1;
+  end;
+  then consider Ai being Subset of J.i such that
+A6: Ai <> [#](J.i) and
+A7: xi in Ai and
+A8: Ai is open and
+A9: A=proj(J,i)"Ai by A2,A4,Th18;
+  take Ai;
+  thus Ai <> [#](J.i) by A6;
+  thus xi in Ai by A7;
+  thus proj(J,i)"Ai in G by A3,A9;
+  thus Ai is open by A8;
+end;
+
+theorem Th23:
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I,
+    F being Subset of product_prebasis J
+ st ((for i being Element of I holds J.i is compact) &
+    (for G being finite Subset of F holds not [#](product J) c= union G))
+ ex xi being Element of J.i
+   st for G being finite Subset of F holds not proj(J,i)"({xi}) c= union G
+proof
+  let I be non empty set,
+      J be TopSpace-yielding non-Empty ManySortedSet of I,
+      i be Element of I,
+      F be Subset of product_prebasis J;
+  assume that
+A1: for i being Element of I holds J.i is compact and
+A2: for G being finite Subset of F holds not [#](product J) c= union G;
+   assume
+A3:  for xi being Element of J.i
+       ex G being finite Subset of F st proj(J,i)"({xi}) c= union G;
+   defpred P[set,set] means
+    $1 in $2 & proj(J,i)"$2 in F &
+         for V being Subset of J.i st V = $2 holds V is open;
+A4:
+  for xi being set st xi in the carrier of J.i ex Ai being set
+     st Ai in bool the carrier of J.i & P[xi, Ai]
+  proof
+    let xi be set;
+    assume xi in the carrier of J.i;
+    then reconsider xi'=xi as Element of J.i;
+    consider G being finite Subset of F such that
+A5:   proj(J,i)"({xi'}) c= union G by A3;
+    consider Ai being Subset of J.i such that
+        Ai <> [#](J.i) and
+A6:  xi in Ai and
+A7:  proj(J,i)"Ai in G and
+A8:  Ai is open by A2,A5,Th22;
+    take Ai;
+    thus Ai in bool the carrier of J.i;
+    thus xi in Ai by A6;
+    thus proj(J,i)"Ai in F by A7;
+    let V be Subset of J.i;
+    assume V = Ai;
+    hence V is open by A8;
+  end;
+  consider h being Function such that
+A9:  dom h = the carrier of J.i and
+A10:  rng h c= bool the carrier of J.i and
+A11:  for xi being set st xi in the carrier of J.i holds P[xi, h.xi]
+         from NonUniqBoundFuncEx(A4);
+  reconsider bGip = rng h as Subset-Family of (J.i)
+    by A10,SETFAM_1:def 7;
+  reconsider bGip as Subset-Family of J.i;
+A12:
+  [#](J.i) c= union bGip
+  proof
+    let x be set;
+    assume
+A13:  x in [#](J.i);
+then A14:   x in h.x by A11;
+      h.x in bGip by A9,A13,FUNCT_1:def 5;
+    hence x in union bGip by A14,TARSKI:def 4;
+  end;
+    for P being Subset of J.i holds P in bGip implies P is open
+  proof
+    let P be Subset of J.i;
+    assume P in bGip;
+    then consider x being set such that
+A15:   x in dom h and
+A16:   P = h.x by FUNCT_1:def 5;
+    thus P is open by A9,A11,A15,A16;
+  end;
+  then A17: bGip is open by TOPS_2:def 1;
+    J.i is compact by A1;
+  then consider Gip being Subset-Family of J.i such that
+A18: Gip c= bGip and
+A19: [#](J.i) c= union Gip and
+A20: Gip is finite by A12,A17,Th15;
+  reconsider Gip as non empty finite
+    Subset-Family of J.i by A19,A20,XBOOLE_1:3,ZFMISC_1:2;
+  deffunc F(set) = proj(J,i)"$1;
+  defpred P[set] means not contradiction;
+  set Gp={F(Ai) where Ai is Element of Gip: P[Ai]};
+A21: Gp is finite from FraenkelFinIm;
+    Gp c= F
+  proof
+    let A be set;
+    assume A in Gp;
+    then consider Ai being Element of Gip such that
+A22:   A= proj(J,i)"Ai;
+      Ai in Gip;
+    then consider x being set such that
+A23:   x in dom h and
+A24:   h.x = Ai by A18,FUNCT_1:def 5;
+    thus A in F by A9,A11,A22,A23,A24;
+  end;
+  then reconsider Gp as finite Subset of F by A21;
+   [#](product J) c= union Gp by A19,Th19;
+  hence contradiction by A2;
+end;
+
+theorem::The Tichonov Theorem
+  for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I
+st for i being Element of I holds J.i is compact holds product J is compact
+proof
+  let I be non empty set,
+      J be TopSpace-yielding non-Empty ManySortedSet of I;
+  assume
+A1: for i being Element of I holds J.i is compact;
+  reconsider B=product_prebasis J as prebasis of product J by WAYBEL18:def 3;
+  assume not product J is compact;
+  then consider F being Subset of B such that
+A2: [#](product J) c= union(F) and
+A3: for G being finite Subset of F holds not [#](product J) c= union G by Th16;
+  defpred P[set,Element of I] means
+    for G being finite Subset of F holds not proj(J,$2)"({$1}) c= union G;
+A4: for i being Element of I ex xi being Element of J.i st P[xi, i]
+     by A1,A3,Th23;
+  consider f being Element of product J such that
+A5: for i being Element of I holds P[f.i, i]
+      from ElProductEx(A4);
+    f in the carrier of (product J);
+  then f in [#](product J) by PRE_TOPC:12;
+  then consider A being set such that
+A6: f in A and
+A7: A in F by A2,TARSKI:def 4;
+  consider i being Element of I, Ai being Subset of J.i such that
+      Ai is open and
+A8:  proj(J,i)"Ai = A by A7,Th17;
+  reconsider G = {A} as finite Subset of F by A7,ZFMISC_1:37;
+    proj(J,i).f in Ai by A6,A8,FUNCT_1:def 13;
+  then f.i in Ai by Th8;
+  then {f.i} c= Ai by ZFMISC_1:37;
+  then proj(J,i)"({f.i}) c= A by A8,RELAT_1:178;
+  then proj(J,i)"({f.i}) c= union G by ZFMISC_1:31;
+  hence contradiction by A5;
+end;
+

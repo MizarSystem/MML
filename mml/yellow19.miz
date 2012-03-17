@@ -1,0 +1,1614 @@
+:: On the characterizations of compactness
+::  by Grzegorz Bancerek , Noboru Endou and Yuji Sakai
+::
+:: Received July 29, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary YELLOW_1, ORDERS_1, WELLORD2, COLLSP, FILTER_0, LATTICES, BOOLE,
+      PRE_TOPC, SUBSET_1, CONNSP_2, WAYBEL_0, TOPS_1, WAYBEL_7, RELAT_1,
+      RELAT_2, FUNCT_1, FINSET_1, SETFAM_1, QUANTAL1, LATTICE3, ORDINAL2,
+      MCART_1, YELLOW_6, SEQ_2, SUB_METR, CANTOR_1, COMPTS_1, OPPCAT_1,
+      ARYTM_3, CLASSES1, YELLOW_0, CAT_1, BHSP_3, YELLOW19;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, MCART_1, SETFAM_1,
+      FINSET_1, FUNCT_1, RELAT_2, RELSET_1, FUNCT_2, CLASSES1, STRUCT_0,
+      PRE_TOPC, TOPS_1, TOPS_2, TEX_2, COMPTS_1, CONNSP_2, CANTOR_1, ORDERS_1,
+      LATTICE3, YELLOW_0, WAYBEL_0, YELLOW_1, WAYBEL_7, YELLOW_6, WAYBEL_9,
+      YELLOW_7, WAYBEL32;
+ constructors TOLER_1, RELAT_2, WAYBEL_1, CLASSES1, TOPS_1, TOPS_2, CONNSP_2,
+      CANTOR_1, WAYBEL_7, WAYBEL32, TEX_2, REALSET1, MEMBERED;
+ clusters SUBSET_1, FINSET_1, STRUCT_0, PRE_TOPC, TOPS_1, PUA2MSS1, RELSET_1,
+      RLVECT_2, LATTICE3, YELLOW_0, WAYBEL_0, YELLOW_1, WAYBEL_7, WAYBEL_9,
+      YELLOW_6, WAYBEL32, MEMBERED, RELAT_1, ZFMISC_1;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, TOPS_2, COMPTS_1, WAYBEL_0, WAYBEL_7, WAYBEL_9, XBOOLE_0;
+ theorems TARSKI, SETFAM_1, FUNCT_2, FINSET_1, FUNCT_1, CLASSES1, RELAT_1,
+      ZFMISC_1, MCART_1, RELAT_2, SUBSET_1, PRE_TOPC, TOPS_1, TOPS_2, TEX_2,
+      COMPTS_1, CONNSP_2, CANTOR_1, ORDERS_1, LATTICE3, YELLOW_0, WAYBEL_0,
+      YELLOW_1, WAYBEL_7, WAYBEL_8, WAYBEL_9, YELLOW_5, YELLOW_6, YELLOW_7,
+      WAYBEL12, WAYBEL21, WAYBEL32, XBOOLE_0, XBOOLE_1;
+ schemes RELSET_1, FUNCT_2, COMPTS_1;
+
+begin
+
+reserve x,y,X for set;
+
+canceled;
+
+theorem Th2:
+ for X being non empty set
+ for F being proper Filter of BoolePoset X
+ for A being set st A in F
+  holds A is not empty
+  proof let X be non empty set;
+      Bottom BoolePoset X = {} by YELLOW_1:18;
+   hence thesis by WAYBEL_7:8;
+  end;
+
+definition
+ let T be non empty TopSpace;
+ let x be Point of T;
+ func NeighborhoodSystem x -> Subset of BoolePoset [#]T equals:
+Def1:
+  {A where A is a_neighborhood of x: not contradiction};
+ coherence
+  proof set X = the carrier of T;
+   set Y = {A where A is a_neighborhood of x: not contradiction};
+A1: the carrier of BoolePoset X = bool X by WAYBEL_7:4;
+A2: X = [#]T by PRE_TOPC:12;
+      Y c= bool X
+     proof let y being set; assume y in Y;
+       then ex A being a_neighborhood of x st y = A;
+      hence thesis;
+     end;
+   hence thesis by A1,A2;
+  end;
+end;
+
+theorem Th3:
+ for T being non empty TopSpace, x being Point of T, A being set
+  holds A in NeighborhoodSystem x iff A is a_neighborhood of x
+   proof let T be non empty TopSpace, x be Point of T, B be set;
+    defpred P[] means not contradiction;
+       NeighborhoodSystem x = {A where A is a_neighborhood of x: P[]} by Def1
+;
+     then B in NeighborhoodSystem x iff ex A being a_neighborhood of x st B =
+A;
+    hence thesis;
+   end;
+
+definition
+ let T be non empty TopSpace;
+ let x be Point of T;
+ cluster NeighborhoodSystem x -> non empty proper upper filtered;
+ coherence
+  proof consider A0 being a_neighborhood of x;
+      A0 in NeighborhoodSystem x by Th3;
+   hence NeighborhoodSystem x is non empty;
+   set X = the carrier of T, L = BoolePoset [#]T;
+   set Y = NeighborhoodSystem x;
+A1: the carrier of BoolePoset X = bool X by WAYBEL_7:4;
+A2: X = [#]T by PRE_TOPC:12;
+A3:  {} is not a_neighborhood of x by CONNSP_2:6;
+      {} c= X by XBOOLE_1:2;
+    then {} in bool X & not {} in NeighborhoodSystem x by A3,Th3;
+   hence NeighborhoodSystem x is proper by A1,A2,TEX_2:5;
+   thus NeighborhoodSystem x is upper
+     proof let a,b be Element of L; assume a in Y;
+      then reconsider A = a as a_neighborhood of x by Th3;
+      reconsider B = b as Subset of T by A1,A2;
+      assume a <= b; then A c= B by YELLOW_1:2;
+       then Int A c= Int B & x in Int A by CONNSP_2:def 1,TOPS_1:48;
+       then b is a_neighborhood of x by CONNSP_2:def 1;
+      hence thesis by Th3;
+     end;
+   let a,b be Element of L; assume a in Y & b in Y;
+   then reconsider A = a, B = b as a_neighborhood of x by Th3;
+    A4: A /\ B is a_neighborhood of x by CONNSP_2:4;
+then A /\ B in NeighborhoodSystem x by Th3;
+   then reconsider z = A /\ B as Element of L;
+   take z; z c= A & z c= B by XBOOLE_1:17;
+   hence thesis by A4,Th3,YELLOW_1:2;
+  end;
+end;
+
+theorem Th4:
+ for T being non empty TopSpace, x being Point of T
+ for F being upper Subset of BoolePoset [#]T holds
+   x is_a_convergence_point_of F, T iff NeighborhoodSystem x c= F
+  proof let T be non empty TopSpace, x be Point of T;
+A1: the carrier of T = [#]T by PRE_TOPC:12;
+   let F be upper Subset of BoolePoset [#]T;
+   hereby assume
+A2:   x is_a_convergence_point_of F, T;
+     thus NeighborhoodSystem x c= F
+       proof let y; assume y in NeighborhoodSystem x;
+        then reconsider y as a_neighborhood of x by Th3;
+           x in Int y by CONNSP_2:def 1;
+         then Int y in F & Int y c= y by A2,TOPS_1:44,WAYBEL_7:def 5;
+        hence thesis by A1,WAYBEL_7:11;
+       end;
+    end;
+   assume
+A3: NeighborhoodSystem x c= F;
+   let A be Subset of T; assume A is open & x in A;
+    then A is a_neighborhood of x by CONNSP_2:5;
+    then A in NeighborhoodSystem x by Th3;
+   hence thesis by A3;
+  end;
+
+theorem
+   for T being non empty TopSpace, x being Point of T
+  holds x is_a_convergence_point_of NeighborhoodSystem x, T by Th4;
+
+theorem
+   for T being non empty TopSpace
+ for A being Subset of T holds
+  A is open iff
+    for x being Point of T st x in A
+    for F being Filter of BoolePoset [#]T
+     st x is_a_convergence_point_of F, T
+     holds A in F
+  proof let T be non empty TopSpace, A be Subset of T;
+   thus A is open implies
+    for x being Point of T st x in A
+    for F being Filter of BoolePoset [#]T
+     st x is_a_convergence_point_of F, T
+     holds A in F by WAYBEL_7:def 5;
+   assume
+A1: for x being Point of T st x in A
+    for F being Filter of BoolePoset [#]T
+     st x is_a_convergence_point_of F, T
+     holds A in F;
+   consider x being Element of A \ Int A;
+   assume A is not open;
+    then A <> Int A & Int A c= A by TOPS_1:44;
+    then not A c= Int A by XBOOLE_0:def 10;
+then A2: A \ Int A <> {} by XBOOLE_1:37;
+    then x in A \ Int A;
+   then reconsider x as Point of T;
+      x is_a_convergence_point_of NeighborhoodSystem x, T &
+    x in A by A2,Th4,XBOOLE_0:def 4;
+    then A in NeighborhoodSystem x by A1;
+    then A is a_neighborhood of x by Th3;
+    then x in Int A by CONNSP_2:def 1;
+   hence thesis by A2,XBOOLE_0:def 4;
+  end;
+
+definition
+ let S be non empty 1-sorted;
+ let N be non empty NetStr over S;
+ mode Subset of S,N -> Subset of S means:
+Def2:
+  ex i being Element of N st it = rng the mapping of N|i;
+ existence
+  proof consider i being Element of N;
+   reconsider A = rng the mapping of N|i as Subset of S;
+   take A, i; thus thesis;
+  end;
+end;
+
+theorem Th7:
+ for S being non empty 1-sorted
+ for N being non empty NetStr over S
+ for i being Element of N
+  holds rng the mapping of N|i is Subset of S, N by Def2;
+
+definition
+ let S be non empty 1-sorted;
+ let N be reflexive non empty NetStr over S;
+ cluster -> non empty Subset of S,N;
+ coherence
+  proof let A be Subset of S,N;
+   consider i being Element of N such that
+A1: A = rng the mapping of N|i by Def2;
+   thus thesis by A1;
+  end;
+end;
+
+theorem Th8:
+ for S being non empty 1-sorted, N being net of S
+ for i being Element of N, x being set holds
+  x in rng the mapping of N|i iff
+     ex j being Element of N st i <= j & x = N.j
+  proof let S be non empty 1-sorted, N be net of S;
+   let i be Element of N, x be set;
+A1: dom the mapping of N|i = the carrier of N|i by FUNCT_2:def 1;
+   hereby assume x in rng the mapping of N|i;
+     then consider y being set such that
+A2:   y in the carrier of N|i & x = (the mapping of N|i).y by A1,FUNCT_1:def 5;
+     reconsider y as Element of N|i by A2;
+     consider j being Element of N such that
+A3:   j = y & i <= j by WAYBEL_9:def 7;
+     take j; thus i <= j by A3;
+     thus x = (N|i).y by A2,WAYBEL_0:def 8 .= N.j by A3,WAYBEL_9:16;
+    end;
+   given j being Element of N such that
+A4: i <= j & x = N.j;
+A5: j in the carrier of N|i by A4,WAYBEL_9:def 7;
+   then reconsider k = j as Element of N|i;
+      x = (N|i).k by A4,WAYBEL_9:16 .= (the mapping of N|i).j by WAYBEL_0:def 8
+;
+   hence thesis by A1,A5,FUNCT_1:def 5;
+  end;
+
+theorem Th9:
+ for S being non empty 1-sorted, N being net of S
+ for A being Subset of S,N holds N is_eventually_in A
+  proof let S be non empty 1-sorted, N be net of S;
+   let A be Subset of S,N;
+   consider i being Element of N such that
+A1: A = rng the mapping of N|i by Def2;
+   take i; let j be Element of N; assume i <= j;
+    then j in the carrier of N|i by WAYBEL_9:def 7;
+   then reconsider j' = j as Element of N|i;
+      N.j = (N|i).j' by WAYBEL_9:16 .= (the mapping of N|i).j' by WAYBEL_0:def
+8
+;
+   hence thesis by A1,FUNCT_2:6;
+  end;
+
+theorem
+   for S being non empty 1-sorted, N being net of S
+ for F being finite non empty set st
+    for A being Element of F holds A is Subset of S,N
+ ex B being Subset of S,N st B c= meet F
+  proof let S be non empty 1-sorted, N be net of S;
+   let F be finite non empty set such that
+A1: for A being Element of F holds A is Subset of S,N;
+   defpred P[set,set] means
+    ex i being Element of N st $2 = i & $1 = rng the mapping of N|i;
+A2: now let x; assume x in F;
+     then reconsider A = x as Subset of S, N by A1;
+     consider i being Element of N such that
+A3:   A = rng the mapping of N|i by Def2;
+     reconsider y = i as set;
+     take y; thus y in the carrier of N;
+     thus P[x, y] by A3;
+    end;
+   consider f being Function such that
+A4: dom f = F & rng f c= the carrier of N and
+A5: for x st x in F holds P[x, f.x] from NonUniqBoundFuncEx(A2);
+   reconsider B = rng f as finite Subset of N
+     by A4,FINSET_1:26;
+      [#]N is directed & [#]N = the carrier of N
+     by PRE_TOPC:12,WAYBEL_0:def 6;
+   then consider j being Element of N such that j in [#]N and
+A6: j is_>=_than B by WAYBEL_0:1;
+   reconsider C = rng the mapping of N|j as Subset of S, N by Th7;
+   take C; let x; assume x in C;
+   then consider y such that
+A7: y in dom the mapping of N|j & x = (the mapping of N|j).y by FUNCT_1:def 5;
+A8: y in the carrier of N|j by A7;
+   reconsider y as Element of N|j by A7;
+      the carrier of N|j = {k where k is Element of N: j <= k}
+     by WAYBEL_9:12;
+   then consider k being Element of N such that
+A9: y = k & j <= k by A8;
+      now let X; assume
+A10:   X in F;
+     then consider i being Element of N such that
+A11:   f.X = i & X = rng the mapping of N|i by A5;
+        i in B by A4,A10,A11,FUNCT_1:def 5;
+      then i <= j by A6,LATTICE3:def 9;
+      then i <= k by A9,ORDERS_1:26;
+      then y in {l where l is Element of N: i <= l} by A9;
+      then y in the carrier of N|i by WAYBEL_9:12;
+     then reconsider z = y as Element of N|i;
+        x = (N|j).y by A7,WAYBEL_0:def 8 .= N.k by A9,WAYBEL_9:16
+       .= (N|i).z by A9,WAYBEL_9:16
+       .= (the mapping of N|i).z by WAYBEL_0:def 8;
+     hence x in X by A11,FUNCT_2:6;
+    end;
+   hence thesis by SETFAM_1:def 1;
+ end;
+
+definition
+ let T be non empty 1-sorted;
+ let N be non empty NetStr over T;
+ func a_filter N -> Subset of BoolePoset [#]T equals:
+Def3:
+  {A where A is Subset of T: N is_eventually_in A};
+ coherence
+  proof
+   set F = {A where A is Subset of T: N is_eventually_in A};
+   set X = the carrier of T;
+A1: BoolePoset X = InclPoset bool X by YELLOW_1:4
+       .= RelStr(#bool X, RelIncl bool X#) by YELLOW_1:def 1;
+A2: [#]T = X by PRE_TOPC:12;
+      F c= bool X
+     proof let x; assume x in F;
+       then ex A being Subset of T st x = A & N is_eventually_in A;
+      hence thesis;
+     end;
+   hence thesis by A1,A2;
+  end;
+end;
+
+theorem Th11:
+ for T being non empty 1-sorted
+ for N being non empty NetStr over T
+ for A being set
+  holds A in a_filter N iff N is_eventually_in A & A is Subset of T
+  proof let T be non empty 1-sorted;
+   let N be non empty NetStr over T;
+   let B be set;
+      a_filter N = {A where A is Subset of T: N is_eventually_in A}
+     by Def3;
+    then B in a_filter N iff ex A being Subset of T st B = A & N
+is_eventually_in A;
+   hence thesis;
+  end;
+
+definition
+ let T be non empty 1-sorted;
+ let N be non empty NetStr over T;
+ cluster a_filter N -> non empty upper;
+ coherence
+  proof set F = a_filter N;
+   set X = the carrier of T, L = BoolePoset [#]T;
+A1: BoolePoset X = InclPoset bool X by YELLOW_1:4
+       .= RelStr(#bool X, RelIncl bool X#) by YELLOW_1:def 1;
+A2: [#]T = X by PRE_TOPC:12;
+      N is_eventually_in [#]T
+     proof consider i being Element of N;
+      take i; thus thesis by A2;
+     end;
+   hence F is non empty by Th11;
+   let a,b be Element of L; assume a in F;
+then A3: N is_eventually_in a by Th11;
+   assume a <= b; then a c= b by YELLOW_1:2;
+    then b is Subset of T & N is_eventually_in b
+     by A1,A2,A3,WAYBEL_0:8;
+   hence thesis by Th11;
+  end;
+end;
+
+definition
+ let T be non empty 1-sorted;
+ let N be net of T;
+ cluster a_filter N -> proper filtered;
+ coherence
+  proof set F = a_filter N;
+   set X = the carrier of T, L = BoolePoset [#]T;
+A1: BoolePoset X = InclPoset bool X by YELLOW_1:4
+       .= RelStr(#bool X, RelIncl bool X#) by YELLOW_1:def 1;
+A2: [#]T = X by PRE_TOPC:12;
+      now thus {} c= X by XBOOLE_1:2;
+     assume {} in F;
+      then N is_eventually_in {} by Th11;
+     then consider i being Element of N such that
+A3:   for j being Element of N st i <= j holds N.j in {} by WAYBEL_0:def 11;
+     consider j being Element of N such that
+A4:   i <= j & i <= j by YELLOW_6:def 5;
+     thus contradiction by A3,A4;
+    end;
+    then F <> bool X;
+   hence F is proper by A1,A2,TEX_2:5;
+   let a,b be Element of L; assume a in F & b in F;
+then A5: N is_eventually_in a & N is_eventually_in b by Th11;
+   then consider i1 being Element of N such that
+A6: for j being Element of N st i1 <= j holds N.j in a by WAYBEL_0:def 11;
+   consider i2 being Element of N such that
+A7: for j being Element of N st i2 <= j holds N.j in b
+     by A5,WAYBEL_0:def 11;
+   consider i being Element of N such that
+A8: i1 <= i & i2 <= i by YELLOW_6:def 5;
+   take z = a"/\"b;
+A9: z = a/\b & z is Subset of T by A1,A2,YELLOW_1:17;
+      now let j be Element of N; assume i <= j;
+      then i1 <= j & i2 <= j by A8,ORDERS_1:26;
+      then N.j in a & N.j in b by A6,A7;
+     hence N.j in a/\b by XBOOLE_0:def 3;
+    end;
+    then N is_eventually_in z by A9,WAYBEL_0:def 11;
+   hence z in F by A9,Th11;
+      z c= a & z c= b by A9,XBOOLE_1:17;
+   hence thesis by YELLOW_1:2;
+  end;
+end;
+
+theorem Th12:
+ for T being non empty TopSpace
+ for N being net of T
+ for x being Point of T holds
+    x is_a_cluster_point_of N iff x is_a_cluster_point_of a_filter N, T
+  proof let T be non empty TopSpace;
+   let N be net of T; set F = a_filter N;
+   let x be Point of T;
+   thus x is_a_cluster_point_of N implies x is_a_cluster_point_of F, T
+     proof assume
+A1:    for O being a_neighborhood of x holds N is_often_in O;
+      let A be Subset of T; assume A is open & x in A;
+       then A is a_neighborhood of x by CONNSP_2:5;
+then A2:    N is_often_in A by A1;
+      let B be set; assume B in F;
+       then N is_eventually_in B by Th11;
+      then consider i being Element of N such that
+A3:    for j being Element of N st i <= j holds N.j in B by WAYBEL_0:def 11;
+      consider j being Element of N such that
+A4:    i <= j & N.j in A by A2,WAYBEL_0:def 12;
+        now take a = N.j; thus a in B & a in A by A3,A4; end;
+      hence thesis by XBOOLE_0:3;
+     end;
+   assume
+A5: for A being Subset of T st A is open & x in A
+     for B being set st B in F holds A meets B;
+   let O be a_neighborhood of x;
+   let i be Element of N;
+   reconsider B = rng the mapping of N|i as Subset of T,N by Th7;
+      N is_eventually_in B by Th9;
+    then B in F & x in Int O by Th11,CONNSP_2:def 1;
+    then Int O meets B by A5;
+   then consider x being set such that
+A6: x in Int O & x in B by XBOOLE_0:3;
+   consider j being Element of N such that
+A7: i <= j & x = N.j by A6,Th8;
+   take j; Int O c= O by TOPS_1:44;
+   hence thesis by A6,A7;
+  end;
+
+theorem Th13:
+ for T being non empty TopSpace
+ for N being net of T
+ for x being Point of T holds
+    x in Lim N iff x is_a_convergence_point_of a_filter N, T
+  proof let T be non empty TopSpace;
+   let N be net of T; set F = a_filter N;
+   let x be Point of T;
+   thus x in Lim N implies x is_a_convergence_point_of F, T
+     proof assume
+A1:    x in Lim N;
+      let A be Subset of T; assume A is open & x in A;
+       then A is a_neighborhood of x by CONNSP_2:5;
+       then N is_eventually_in A by A1,YELLOW_6:def 18;
+      hence thesis by Th11;
+     end;
+   assume
+A2: for A being Subset of T st A is open & x in A holds A in F;
+      now let O be a_neighborhood of x;
+        x in Int O by CONNSP_2:def 1;
+      then Int O in F by A2;
+      then Int O c= O & N is_eventually_in Int O by Th11,TOPS_1:44;
+     hence N is_eventually_in O by WAYBEL_0:8;
+    end;
+   hence thesis by YELLOW_6:def 18;
+  end;
+
+definition
+ let L be non empty 1-sorted;
+ let O be non empty Subset of L;
+ let F be Filter of BoolePoset O;
+ func a_net F -> strict non empty NetStr over L means:
+Def4:
+  the carrier of it
+     = {[a, f] where a is Element of L, f is Element of F: a in f} &
+  (for i,j being Element of it holds i <= j iff j`2 c= i`2) &
+  for i being Element of it holds it.i = i`1;
+ existence
+ proof
+   set S = {[a, f] where a is Element of L, f is Element of F: a in f};
+     Top BoolePoset O = O by YELLOW_1:19;
+   then reconsider f = O as Element of F by WAYBEL12:12;
+   reconsider f as Subset of L;
+   consider a being Element of L such that
+A1:a in f by SUBSET_1:10;
+   reconsider a as Element of L;
+     [a, f] in S by A1;
+   then reconsider S as non empty set;
+   defpred P[set,set] means $2`2 c= $1`2;
+   consider R being Relation of S,S such that
+A2:for x,y being Element of S holds
+   [x,y] in R iff P[x,y] from Rel_On_Dom_Ex;
+   deffunc F(set) = $1`1;
+A3:for x being set st x in S holds F(x) in the carrier of L
+   proof
+    let x be set;
+    assume x in S;
+    then consider a being Element of L, f being Element of F such that
+A4: x = [a, f] & a in f;
+      x`1 = a by A4,MCART_1:def 1;
+    hence thesis;
+   end;
+   consider h being Function of S, the carrier of L such that
+A5:for x being set st x in S holds h.x = F(x) from Lambda1(A3);
+   take N=NetStr(#S,R,h#);
+A6:for i,j being Element of N holds i <= j iff j`2 c= i`2
+   proof
+    let i,j be Element of N;
+    reconsider x = i, y = j as Element of S;
+      [x,y] in the InternalRel of N iff y`2 c= x`2 by A2;
+    hence thesis by ORDERS_1:def 9;
+   end;
+     for i being Element of N holds N.i = i`1
+   proof
+    let i being Element of N;
+    reconsider x = i as Element of S;
+      h.x = N.i by WAYBEL_0:def 8;
+    hence thesis by A5;
+   end;
+   hence thesis by A6;
+ end;
+ uniqueness
+ proof
+   let it1,it2 be strict non empty NetStr over L such that
+A7:the carrier of it1
+     = {[a, f] where a is Element of L, f is Element of F: a in f} and
+A8:(for i,j being Element of it1 holds i <= j iff j`2 c= i`2) and
+A9:for i being Element of it1 holds it1.i = i`1 and
+A10:the carrier of it2
+     = {[a, f] where a is Element of L, f is Element of F: a in f} and
+A11:(for i,j being Element of it2 holds i <= j iff j`2 c= i`2) and
+A12:for i being Element of it2 holds it2.i = i`1;
+   set S = {[a, f] where a is Element of L, f is Element of F: a in f};
+A13:the InternalRel of it1 = the InternalRel of it2
+   proof
+      for x,y being set holds [x,y] in the InternalRel of it1 iff
+    [x,y] in the InternalRel of it2
+    proof
+     let x,y be set;
+     hereby assume
+A14:   [x,y] in the InternalRel of it1;
+then A15:   x in S & y in S by A7,ZFMISC_1:106;
+      then reconsider i=x, j=y as Element of it1 by A7;
+      reconsider i'=x, j'=y as Element of it2 by A10,A15;
+        i <= j by A14,ORDERS_1:def 9;
+      then (j')`2 c= (i')`2 by A8;
+      then i' <= j' by A11;
+      hence [x,y] in the InternalRel of it2 by ORDERS_1:def 9;
+     end;
+     assume A16:[x,y] in the InternalRel of it2;
+then A17: x in S & y in S by A10,ZFMISC_1:106;
+     then reconsider i=x, j=y as Element of it2 by A10;
+     reconsider i'=x, j'=y as Element of it1 by A7,A17;
+       i <= j by A16,ORDERS_1:def 9;
+     then (j')`2 c= (i')`2 by A11;
+     then i' <= j' by A8;
+     hence [x,y] in the InternalRel of it1 by ORDERS_1:def 9;
+     end;
+    hence thesis by RELAT_1:def 2;
+   end;
+     the mapping of it1 = the mapping of it2
+   proof
+    reconsider f1 =the mapping of it1 as Function of S, the carrier of L by A7;
+    reconsider f2 =the mapping of it2 as Function of S, the carrier of L by A10
+;
+
+      for x being set st x in S holds f1.x = f2.x
+    proof
+     let x be set;
+     assume A18:x in S;
+     then reconsider x1 = x as Element of it1 by A7;
+     reconsider x2 = x as Element of it2 by A10,A18;
+     reconsider x as Element of S by A18;
+       f1.x = it1.x1 by WAYBEL_0:def 8 .=x1`1 by A9 .= it2.x2 by A12;
+     hence thesis by WAYBEL_0:def 8;
+    end;
+    hence thesis by FUNCT_2:18;
+   end;
+   hence thesis by A7,A10,A13;
+ end;
+end;
+
+definition
+ let L be non empty 1-sorted;
+ let O be non empty Subset of L;
+ let F be Filter of BoolePoset O;
+ cluster a_net F -> reflexive transitive;
+ coherence
+ proof
+     for x,y,z being set st x in the carrier of a_net F &
+   y in the carrier of a_net F & z in the carrier of a_net F &
+   [x,y] in the InternalRel of a_net F & [y,z] in the InternalRel of a_net F
+   holds [x,z] in the InternalRel of a_net F
+   proof
+    let x,y,z be set;
+    assume that A1:x in the carrier of a_net F and
+A2: y in the carrier of a_net F and
+A3: z in the carrier of a_net F and
+A4: [x,y] in the InternalRel of a_net F and
+A5: [y,z] in the InternalRel of a_net F;
+    reconsider i=x as Element of a_net F by A1;
+    reconsider j=y as Element of a_net F by A2;
+    reconsider k=z as Element of a_net F by A3;
+      i <= j & j <= k by A4,A5,ORDERS_1:def 9;
+    then j`2 c= i`2 & k`2 c= j`2 by Def4;
+    then k`2 c= i`2 by XBOOLE_1:1;
+    then i <= k by Def4;
+    hence thesis by ORDERS_1:def 9;
+   end;
+then A6:the InternalRel of (a_net F) is_transitive_in the carrier of (a_net F)
+   by RELAT_2:def 8;
+     for x being set st x in the carrier of a_net F holds
+   [x,x] in the InternalRel of a_net F
+   proof
+    let x being set;
+    assume x in the carrier of a_net F;
+    then reconsider i=x as Element of a_net F;
+      i`2 c= i`2;
+    then i <= i by Def4;
+    hence thesis by ORDERS_1:def 9;
+   end;
+   then the InternalRel of (a_net F) is_reflexive_in the carrier of (a_net F)
+   by RELAT_2:def 1;
+   hence thesis by A6,ORDERS_1:def 4,def 5;
+ end;
+end;
+
+definition
+ let L be non empty 1-sorted;
+ let O be non empty Subset of L;
+ let F be proper Filter of BoolePoset O;
+ cluster a_net F -> directed;
+ coherence
+ proof
+   set S = {[a, f] where a is Element of L, f is Element of F: a in f};
+     for x,y being Element of a_net F st x in [#](a_net F) & y in [#](a_net F)
+    ex z being Element of a_net F st z in [#](a_net F) & x <= z & y <= z
+   proof
+    let x,y being Element of a_net F;
+    assume x in [#](a_net F) & y in [#](a_net F);
+      x in the carrier of a_net F & y in the carrier of a_net F;
+then A1: x in S & y in S by Def4;
+    then consider a being Element of L, f being Element of F such that
+A2: x = [a, f] & a in f;
+    consider b being Element of L, g being Element of F such that
+A3: y = [b, g] & b in g by A1;
+    reconsider f as Element of BoolePoset O;
+    reconsider g as Element of BoolePoset O;
+    reconsider h = f "/\" g as Element of F by WAYBEL_0:41;
+    consider s being Element of h;
+      not Bottom (BoolePoset O) in F by WAYBEL_7:8;
+    then not {} in F by YELLOW_1:18;
+then A4:  h <> {};
+then A5: s in h;
+      h c= O by WAYBEL_8:28;
+    then s in O by A5;
+    then reconsider s as Element of L;
+      [s,h] in S by A4;
+then A6: [s,h] in the carrier of a_net F by Def4;
+    then reconsider z = [s,h] as Element of a_net F;
+    reconsider i = x, j = y, k = z as Element of a_net F;
+A7: i`2 = f & j`2 = g & k`2 = h by A2,A3,MCART_1:def 2;
+      h c= f /\ g & f /\ g c= f & f /\ g c= g by XBOOLE_1:17,YELLOW_1:17;
+    then A8: h c= f & h c= g by XBOOLE_1:1;
+    take z;
+    thus thesis by A6,A7,A8,Def4,PRE_TOPC:12;
+   end;
+   then [#](a_net F) is directed by WAYBEL_0:def 1;
+  hence a_net F is directed by WAYBEL_0:def 6;
+ end;
+end;
+
+theorem Th14:
+ for T being non empty 1-sorted
+ for F being Filter of BoolePoset [#]T
+  holds F \ {{}} = a_filter a_net F
+  proof let T be non empty 1-sorted;
+   let F be Filter of BoolePoset [#]T;
+      BoolePoset [#]T = InclPoset bool [#]T by YELLOW_1:4;
+then A1: the carrier of BoolePoset [#]T = bool [#]T by YELLOW_1:1;
+A2: [#]T = the carrier of T by PRE_TOPC:12;
+   set X = a_filter a_net F;
+A3: the carrier of a_net F
+     = {[a, f] where a is Element of T, f is Element of F: a in f} by Def4;
+   thus F \ {{}} c= X
+     proof let x; assume
+         x in F \ {{}};
+then A4:    x in F & not x in {{}} by XBOOLE_0:def 4;
+      then reconsider A = x as Subset of T by A1,A2;
+      consider a being Element of A;
+A5:    A <> {} by A4,TARSKI:def 1; then a in A;
+      then reconsider a as Element of T;
+         [a, A] in the carrier of a_net F by A3,A4,A5;
+      then reconsider i = [a, A] as Element of a_net F;
+         a_net F is_eventually_in A
+        proof take i; let j be Element of a_net F;
+            j in the carrier of a_net F;
+         then consider a being Element of T, f being Element of F such that
+A6:       j = [a,f] & a in f by A3;
+         assume i <= j;
+then A7:       j`2 c= i`2 & (a_net F).j = j`1 by Def4;
+            j`2 = f & i`2 = A & j`1 = a by A6,MCART_1:7;
+         hence thesis by A6,A7;
+        end;
+      hence thesis by Th11;
+     end;
+   let x; assume x in X;
+then A8: a_net F is_eventually_in x & x is Subset of T by Th11;
+   then consider i being Element of a_net F such that
+A9: for j being Element of a_net F st i <= j holds (a_net F).j in x
+     by WAYBEL_0:def 11;
+      i in the carrier of a_net F;
+   then consider a being Element of T, f being Element of F such that
+A10: i = [a,f] & a in f by A3;
+    A11: f c= x
+     proof let x; assume
+A12:    x in f;
+      then reconsider b = x as Element of T by A1,A2;
+         [b,f] in the carrier of a_net F by A3,A12;
+      then reconsider j = [b,f] as Element of a_net F;
+         j`2 = f & i`2 = f & j`1 = b by A10,MCART_1:7;
+       then i <= j & (a_net F).j = b by Def4;
+      hence thesis by A9;
+     end;
+then A13: x in F & a in x by A2,A8,A10,WAYBEL_7:11;
+      not x in {{}} by A10,A11,TARSKI:def 1;
+   hence thesis by A13,XBOOLE_0:def 4;
+  end;
+
+theorem Th15:
+ for T being non empty 1-sorted
+ for F being proper Filter of BoolePoset [#]T
+  holds F = a_filter a_net F
+  proof let T be non empty 1-sorted;
+   let F be proper Filter of BoolePoset [#]T;
+      not {} in F by Th2;
+    then F \ {{}} = F by ZFMISC_1:65;
+   hence thesis by Th14;
+  end;
+
+theorem Th16:
+ for T being non empty 1-sorted
+ for F being Filter of BoolePoset [#]T
+ for A being non empty Subset of T holds
+   A in F iff a_net F is_eventually_in A
+  proof let T be non empty 1-sorted;
+   let F be Filter of BoolePoset [#]T;
+A1: F\{{}} = a_filter a_net F by Th14;
+   let B be non empty Subset of T;
+      B in F iff B in F\{{}} by ZFMISC_1:64;
+   hence thesis by A1,Th11;
+  end;
+
+theorem Th17:
+ for T being non empty TopSpace
+ for F being proper Filter of BoolePoset [#]T
+ for x being Point of T holds
+    x is_a_cluster_point_of a_net F iff x is_a_cluster_point_of F, T
+  proof let T be non empty TopSpace;
+   let F be proper Filter of BoolePoset [#]T;
+      F = a_filter a_net F by Th15;
+   hence thesis by Th12;
+  end;
+
+theorem Th18:
+ for T being non empty TopSpace
+ for F being proper Filter of BoolePoset [#]T
+ for x being Point of T holds
+    x in Lim a_net F iff x is_a_convergence_point_of F, T
+  proof let T be non empty TopSpace;
+   let F be proper Filter of BoolePoset [#]T;
+      F = a_filter a_net F by Th15;
+   hence thesis by Th13;
+  end;
+
+canceled;
+
+theorem Th20:
+ for T being non empty TopSpace, x being Point of T, A being Subset of T
+  st x in Cl A
+ for F being proper Filter of BoolePoset [#]T st F = NeighborhoodSystem x
+  holds a_net F is_often_in A
+  proof let T be non empty TopSpace, x be Point of T, A be Subset of T; assume
+A1: x in Cl A;
+   let F be proper Filter of BoolePoset [#]T such that
+A2: F = NeighborhoodSystem x;
+   set N = a_net F;
+A3: the carrier of N
+     = {[a, f] where a is Element of T, f is Element of F: a in f} by Def4;
+   let i be Element of N; i in the carrier of N;
+   then consider a being Element of T, f being Element of F such that
+A4: i = [a, f] & a in f by A3;
+   reconsider f as a_neighborhood of x by A2,Th3;
+      f meets A by A1,YELLOW_6:6;
+   then consider b being set such that
+A5: b in f & b in A by XBOOLE_0:3;
+   reconsider b as Element of T by A5;
+      [b, f] in the carrier of N by A3,A5;
+   then reconsider j = [b, f] as Element of N;
+   take j;
+      i`2 = f & j`2 = f & j`1 = b by A4,MCART_1:7;
+   hence i <= j & N.j in A by A5,Def4;
+  end;
+
+theorem Th21:
+ for T being non empty 1-sorted, A being set
+ for N being net of T st N is_eventually_in A
+ for S being subnet of N
+  holds S is_eventually_in A
+  proof let T be non empty 1-sorted, A be set;
+   let N be net of T; given i being Element of N such that
+A1: for j being Element of N st i <= j holds N.j in A;
+   let S be subnet of N;
+   consider f being map of S, N such that
+A2: the mapping of S = (the mapping of N)*f and
+A3: for m being Element of N ex n being Element of S st
+    for p being Element of S st n <= p holds m <= f.p by YELLOW_6:def 12;
+   consider n being Element of S such that
+A4: for p being Element of S st n <= p holds i <= f.p by A3;
+   take n; let p be Element of S; assume n <= p;
+    then i <= f.p by A4;
+then A5: N.(f.p) in A by A1;
+      S.p = (the mapping of S).p by WAYBEL_0:def 8
+       .= (the mapping of N).(f.p) by A2,FUNCT_2:21;
+   hence thesis by A5,WAYBEL_0:def 8;
+  end;
+
+theorem Th22:
+ for T being non empty TopSpace, F,G,x being set
+  st F c= G & x is_a_convergence_point_of F, T
+  holds x is_a_convergence_point_of G, T
+  proof let T be non empty TopSpace, F,G,x be set such that
+A1: F c= G and
+A2: for A being Subset of T st A is open & x in A holds A in F;
+   let A be Subset of T; assume A is open & x in A;
+    then A in F by A2;
+   hence thesis by A1;
+  end;
+
+theorem Th23:
+ for T being non empty TopSpace, A being Subset of T
+ for x being Point of T holds
+   x in Cl A
+  iff
+   ex N being net of T st N is_eventually_in A & x is_a_cluster_point_of N
+  proof let T be non empty TopSpace, A be Subset of T;
+   let x be Point of T;
+   reconsider F = NeighborhoodSystem x as proper Filter of BoolePoset [#]T;
+   hereby assume x in Cl A;
+      then a_net F is_often_in A by Th20;
+     then reconsider N = (a_net F)"A as subnet of a_net F by YELLOW_6:31;
+     reconsider N' = N as net of T;
+     take N'; thus N' is_eventually_in A by YELLOW_6:32;
+        x is_a_convergence_point_of F, T by Th4;
+      then x in Lim a_net F & Lim a_net F c= Lim N by Th18,YELLOW_6:41;
+     hence x is_a_cluster_point_of N' by WAYBEL_9:29;
+    end;
+   given N being net of T such that
+A1: N is_eventually_in A & x is_a_cluster_point_of N;
+   consider i being Element of N such that
+A2: for j being Element of N st i <= j holds N.j in A by A1,WAYBEL_0:def 11;
+      now let G be Subset of T; assume
+A3:   G is open & x in G;
+      then Int G = G by TOPS_1:55;
+      then G is a_neighborhood of x by A3,CONNSP_2:def 1;
+      then N is_often_in G by A1,WAYBEL_9:def 9;
+     then consider j being Element of N such that
+A4:   i <= j & N.j in G by WAYBEL_0:def 12;
+        N.j in A by A2,A4;
+     hence A meets G by A4,XBOOLE_0:3;
+    end;
+   hence thesis by PRE_TOPC:def 13;
+  end;
+
+theorem Th24:
+ for T being non empty TopSpace, A being Subset of T
+ for x being Point of T holds
+   x in Cl A
+  iff
+   ex N being convergent net of T st N is_eventually_in A & x in Lim N
+  proof let T be non empty TopSpace, A be Subset of T;
+   let x be Point of T;
+   hereby assume x in Cl A;
+     then consider N being net of T such that
+A1:   N is_eventually_in A & x is_a_cluster_point_of N by Th23;
+     consider S being subnet of N such that
+A2:   x in Lim S by A1,WAYBEL_9:32;
+     reconsider S as convergent net of T by A2,YELLOW_6:def 19;
+     take S; thus S is_eventually_in A by A1,Th21;
+     thus x in Lim S by A2;
+    end;
+   given N being convergent net of T such that
+A3: N is_eventually_in A & x in Lim N;
+      x is_a_cluster_point_of N by A3,WAYBEL_9:29;
+   hence thesis by A3,Th23;
+  end;
+
+theorem
+   for T being non empty TopSpace, A being Subset of T holds
+   A is closed
+  iff
+   for N being net of T st N is_eventually_in A
+   for x being Point of T st x is_a_cluster_point_of N
+    holds x in A
+  proof let T be non empty TopSpace, A be Subset of T;
+     A is closed iff Cl A = A by PRE_TOPC:52;
+   hence A is closed implies
+     for N being net of T st N is_eventually_in A
+      for x being Point of T st x is_a_cluster_point_of N
+       holds x in A by Th23;
+   assume
+A1: for N being net of T st N is_eventually_in A
+    for x being Point of T st x is_a_cluster_point_of N
+     holds x in A;
+      A = Cl A
+     proof thus A c= Cl A by PRE_TOPC:48;
+      let x; assume
+A2:    x in Cl A; then reconsider y = x as Element of T;
+         ex N being net of T st N is_eventually_in A & y is_a_cluster_point_of
+N
+        by A2,Th23;
+      hence thesis by A1;
+     end;
+   hence thesis;
+  end;
+
+theorem
+   for T being non empty TopSpace, A being Subset of T holds
+   A is closed
+  iff
+   for N being convergent net of T st N is_eventually_in A
+   for x being Point of T st x in Lim N
+    holds x in A
+  proof let T be non empty TopSpace, A be Subset of T;
+     A is closed iff Cl A = A by PRE_TOPC:52;
+   hence A is closed implies
+     for N being convergent net of T st N is_eventually_in A
+      for x being Point of T st x in Lim N
+       holds x in A by Th24;
+   assume
+A1: for N being convergent net of T st N is_eventually_in A
+    for x being Point of T st x in Lim N holds x in A;
+      A = Cl A
+     proof thus A c= Cl A by PRE_TOPC:48;
+      let x; assume
+A2:    x in Cl A; then reconsider y = x as Element of T;
+         ex N being convergent net of T
+        st N is_eventually_in A & y in Lim N by A2,Th24;
+      hence thesis by A1;
+     end;
+   hence thesis;
+  end;
+
+theorem Th27:
+ for T being non empty TopSpace, A being Subset of T
+ for x being Point of T holds
+   x in Cl A
+  iff
+   ex F being proper Filter of BoolePoset [#]T
+    st A in F & x is_a_cluster_point_of F, T
+  proof let T be non empty TopSpace, A be Subset of T;
+   let x be Point of T;
+   hereby assume x in Cl A;
+     then consider N being net of T such that
+A1:   N is_eventually_in A & x is_a_cluster_point_of N by Th23;
+     set F = a_filter N;
+     take F; thus A in F by A1,Th11;
+     thus x is_a_cluster_point_of F, T by A1,Th12;
+    end;
+   given F being proper Filter of BoolePoset [#]T such that
+A2: A in F & x is_a_cluster_point_of F, T;
+   reconsider F' = F as proper Filter of BoolePoset [#]T;
+      a_filter a_net F' = F by Th15;
+    then a_net F' is_eventually_in A & x is_a_cluster_point_of a_net F'
+     by A2,Th11,Th12;
+   hence thesis by Th23;
+  end;
+
+theorem Th28:
+ for T being non empty TopSpace, A being Subset of T
+ for x being Point of T holds
+   x in Cl A
+  iff
+   ex F being ultra Filter of BoolePoset [#]T
+    st A in F & x is_a_convergence_point_of F, T
+  proof let T be non empty TopSpace, A be Subset of T;
+   let x be Point of T;
+   set X = the carrier of T;
+A1: [#]T = X by PRE_TOPC:12;
+   hereby assume x in Cl A;
+     then consider N being net of T such that
+A2:   N is_eventually_in A & x is_a_cluster_point_of N by Th23;
+     consider S being subnet of N such that
+A3:   x in Lim S by A2,WAYBEL_9:32;
+     set F = a_filter S;
+     consider G being Filter of BoolePoset [#]T such that
+A4:   F c= G & G is ultra by WAYBEL_7:30;
+     reconsider G as ultra Filter of BoolePoset [#]T by A4;
+     take G;
+        S is_eventually_in A by A2,Th21;
+      then A in F by Th11;
+     hence A in G by A4;
+        x is_a_convergence_point_of F, T by A3,Th13;
+     hence x is_a_convergence_point_of G, T by A4,Th22;
+    end;
+   given F being ultra Filter of BoolePoset [#]T such that
+A5: A in F & x is_a_convergence_point_of F, T;
+      x is_a_cluster_point_of F, T by A1,A5,WAYBEL_7:31;
+   hence thesis by A5,Th27;
+  end;
+
+theorem
+   for T being non empty TopSpace, A being Subset of T holds
+   A is closed
+  iff
+   for F being proper Filter of BoolePoset [#]T st A in F
+   for x being Point of T st x is_a_cluster_point_of F,T
+    holds x in A
+  proof let T be non empty TopSpace, A be Subset of T;
+     A is closed iff Cl A = A by PRE_TOPC:52;
+   hence A is closed implies
+     for F being proper Filter of BoolePoset [#]T st A in F
+      for x being Point of T st x is_a_cluster_point_of F,T
+       holds x in A by Th27;
+   assume
+A1: for F being proper Filter of BoolePoset [#]T st A in F
+    for x being Point of T st x is_a_cluster_point_of F,T
+     holds x in A;
+      A = Cl A
+     proof thus A c= Cl A by PRE_TOPC:48;
+      let x; assume
+A2:    x in Cl A; then reconsider y = x as Element of T;
+         ex F being proper Filter of BoolePoset [#]T
+        st A in F & y is_a_cluster_point_of F, T by A2,Th27;
+      hence thesis by A1;
+     end;
+   hence thesis;
+  end;
+
+theorem
+   for T being non empty TopSpace, A being Subset of T holds
+   A is closed
+  iff
+   for F being ultra Filter of BoolePoset [#]T st A in F
+   for x being Point of T st x is_a_convergence_point_of F,T
+    holds x in A
+  proof let T be non empty TopSpace, A be Subset of T;
+     A is closed iff Cl A = A by PRE_TOPC:52;
+   hence A is closed implies
+     for F being ultra Filter of BoolePoset [#]T st A in F
+      for x being Point of T st x is_a_convergence_point_of F,T
+       holds x in A by Th28;
+   assume
+A1: for F being ultra Filter of BoolePoset [#]T st A in F
+    for x being Point of T st x is_a_convergence_point_of F,T
+     holds x in A;
+      A = Cl A
+     proof thus A c= Cl A by PRE_TOPC:48;
+      let x; assume
+A2:    x in Cl A; then reconsider y = x as Element of T;
+         ex F being ultra Filter of BoolePoset [#]T
+        st A in F & y is_a_convergence_point_of F, T by A2,Th28;
+      hence thesis by A1;
+     end;
+   hence thesis;
+  end;
+
+theorem Th31:
+ for T being non empty TopSpace, N being net of T
+ for s being Point of T holds
+   s is_a_cluster_point_of N iff
+    for A being Subset of T,N holds s in Cl A
+  proof let T be non empty TopSpace, N be net of T;
+   let s be Point of T;
+   hereby assume
+A1:   s is_a_cluster_point_of N;
+     let A be Subset of T,N;
+        N is_eventually_in A by Th9;
+     hence s in Cl A by A1,Th23;
+    end;
+   assume
+A2: for A being Subset of T,N holds s in Cl A;
+   let V be a_neighborhood of s;
+   let i be Element of N;
+   reconsider A = rng the mapping of N|i as Subset of T,N by Th7;
+   consider x being Element of A /\ Int V;
+      s in Int V & Int V is open & s in Cl A by A2,CONNSP_2:def 1;
+    then A meets Int V by PRE_TOPC:def 13;
+    then A /\ Int V <> {}T by XBOOLE_0:def 7;
+then A3: x in A & x in Int V by XBOOLE_0:def 3;
+   then consider j being set such that
+A4: j in dom the mapping of N|i & x = (the mapping of N|i).j
+     by FUNCT_1:def 5;
+A5: dom the mapping of N|i = the carrier of N|i by FUNCT_2:def 1;
+   reconsider j as Element of N|i by A4;
+      the carrier of N|i = {l where l is Element of N: i <= l}
+     by WAYBEL_9:12;
+   then consider l being Element of N such that
+A6: j = l & i <= l by A4,A5;
+   take l; thus i <= l by A6;
+A7: x = (N|i).j by A4,WAYBEL_0:def 8 .= N.l by A6,WAYBEL_9:16;
+      Int V c= V by TOPS_1:44;
+   hence N.l in V by A3,A7;
+  end;
+
+theorem
+  for T being non empty TopSpace
+ for F being Subset-Family of T st F is closed
+  holds FinMeetCl F is closed
+  proof let T be non empty TopSpace;
+   let F be Subset-Family of T such that
+A1: F is closed;
+      now let P be Subset of T; assume P in FinMeetCl F;
+     then consider Y being Subset-Family of T such that
+A2:   Y c= F & Y is finite & P = Intersect Y by CANTOR_1:def 4;
+A3:   for A being Subset of T st A in Y holds A is closed
+       by A1,A2,TOPS_2:def 2;
+        Y = {} or Y <> {};
+      then P = the carrier of T & the carrier of T = [#]T or
+      P = meet Y by A2,CANTOR_1:def 3,PRE_TOPC:12;
+     hence P is closed by A3,PRE_TOPC:44;
+    end;
+   hence thesis by TOPS_2:def 2;
+  end;
+
+Lm1:
+ for T being non empty TopSpace st T is compact
+  for N being net of T ex x being Point of T st
+    x is_a_cluster_point_of N
+  proof let T be non empty TopSpace such that
+A1: T is compact;
+   let N be net of T;
+   set F = {Cl A where A is Subset of T, N: not contradiction};
+      F c= bool the carrier of T
+     proof let x; assume x in F;
+       then ex A being Subset of T, N st x = Cl A;
+      hence thesis;
+     end;
+    then F is Subset-Family of T by SETFAM_1:def 7;
+   then reconsider F as Subset-Family of T;
+   consider x being Element of meet F;
+A2: F is closed
+     proof let S be Subset of T; assume S in F;
+       then ex A being Subset of T,N st S = Cl A;
+      hence S is closed;
+     end;
+      F is centered
+     proof consider A0 being Subset of T, N;
+         Cl A0 in F;
+      hence F <> {};
+      let G be set such that
+A3:    G <> {} & G c= F & G is finite;
+      defpred P[set,set] means
+       ex A being Subset of T,N, i being Element of N st
+        $1 = Cl A & $2 = i & A = rng the mapping of N|i;
+A4:    now let x; assume x in G;
+         then x in F by A3;
+        then consider A being Subset of T, N such that
+A5:      x = Cl A;
+        consider i being Element of N such that
+A6:      A = rng the mapping of N|i by Def2;
+        reconsider y = i as set;
+        take y; thus y in the carrier of N;
+        thus P[x, y] by A5,A6;
+       end;
+      consider f being Function such that
+A7:    dom f = G & rng f c= the carrier of N and
+A8:    for x st x in G holds P[x, f.x]  from NonUniqBoundFuncEx(A4);
+      reconsider B = rng f as finite Subset of N
+        by A3,A7,FINSET_1:26;
+         [#]N is directed & [#]N = the carrier of N
+        by PRE_TOPC:12,WAYBEL_0:def 6;
+      then consider j being Element of N such that j in [#]N and
+A9:    j is_>=_than B by WAYBEL_0:1;
+         now let X; assume
+A10:      X in G;
+        then consider A being Subset of T,N, i being Element of N such that
+A11:      X = Cl A & f.X = i & A = rng the mapping of N|i by A8;
+           i in B by A7,A10,A11,FUNCT_1:def 5;
+         then i <= j by A9,LATTICE3:def 9;
+         then j in the carrier of N|i by WAYBEL_9:def 7;
+         then j in dom the mapping of N|i &
+         the mapping of N|i = (the mapping of N)|the carrier of (N|i)
+          by FUNCT_2:def 1,WAYBEL_9:def 7;
+         then (the mapping of N|i).j in A &
+         (the mapping of N|i).j = (the mapping of N).j
+          by A11,FUNCT_1:70,def 5;
+         then N.j in A & A c= X by A11,PRE_TOPC:48,WAYBEL_0:def 8;
+        hence N.j in X;
+       end;
+      hence meet G <> {} by A3,SETFAM_1:def 1;
+     end;
+then A12: meet F <> {} by A1,A2,COMPTS_1:13;
+   then x in meet F;
+   then reconsider x as Point of T;
+   take x;
+      now let A be Subset of T,N;
+        Cl A in F;
+     hence x in Cl A by A12,SETFAM_1:def 1;
+    end;
+   hence x is_a_cluster_point_of N by Th31;
+  end;
+
+Lm2:
+ for T being non empty TopSpace st
+    for N being net of T st N in NetUniv T
+     ex x being Point of T st x is_a_cluster_point_of N
+  holds T is compact
+  proof let T be non empty TopSpace; assume
+A1: for N being net of T st N in NetUniv T
+     ex x being Point of T st x is_a_cluster_point_of N;
+      now let F be Subset-Family of T such that
+A2:   F is centered & F is closed;
+     set G = FinMeetCl F;
+     defpred P[set,set] means $2 in $1;
+A3:   now let x; assume x in G;
+       then consider Y being Subset-Family of T such that
+A4:     Y c= F & Y is finite & x = Intersect Y by CANTOR_1:def 4;
+       consider y being Element of x;
+          Y = {} or Y <> {};
+        then x = the carrier of T or x = meet Y & meet Y <> {}
+         by A2,A4,CANTOR_1:def 3,COMPTS_1:def 2;
+        then y in x;
+       hence ex y st y in the carrier of T & P[x, y] by A4;
+      end;
+     consider f being Function such that
+A5:   dom f = G & rng f c= the carrier of T and
+A6:   for a being set st a in G holds P[a, f.a] from NonUniqBoundFuncEx(A3);
+A7:   F <> {} & F c= G by A2,CANTOR_1:4,COMPTS_1:def 2;
+     then reconsider G as non empty Subset-Family of T by XBOOLE_1:3;
+     set R = (InclPoset G) opp;
+      A8: InclPoset G = RelStr(#G, RelIncl G#) by YELLOW_1:def 1;
+then A9:   the carrier of R = G by YELLOW_6:12;
+        R is directed
+       proof let x,y be Element of R such that x in [#]R & y in [#]R;
+           x in G by A9;
+        then consider X being Subset-Family of T such that
+A10:      X c= F & X is finite & x = Intersect X by CANTOR_1:def 4;
+           y in G by A9;
+        then consider Y being Subset-Family of T such that
+A11:      Y c= F & Y is finite & y = Intersect Y by CANTOR_1:def 4;
+        set z = Intersect (X \/ Y);
+           X \/ Y c= F & X \/ Y is finite by A10,A11,FINSET_1:14,XBOOLE_1:8;
+         then z in G by CANTOR_1:def 4;
+        then reconsider z as Element of R by A9;
+        take z; z in the carrier of R;
+        hence z in [#]R by PRE_TOPC:12;
+           X c= X \/ Y & Y c= X \/ Y by XBOOLE_1:7;
+         then z c= x & z c= y & ~x = x & ~y = y & ~z = z
+          by A10,A11,CANTOR_1:11,LATTICE3:def 7;
+         then ~z <= ~x & ~z <= ~y by YELLOW_1:3;
+        hence x <= z & y <= z by YELLOW_7:1;
+       end;
+     then reconsider R as directed non empty transitive RelStr;
+     reconsider f as Function of the carrier of R, the carrier of T
+       by A5,A9,FUNCT_2:4;
+     set N = R *' f;
+A12:   the RelStr of N = the RelStr of R & the mapping of N = f
+       by WAYBEL32:def 3;
+     set X = the carrier of T;
+A13:   the_universe_of X = Tarski-Class the_transitive-closure_of X
+       by YELLOW_6:def 3;
+        X c= the_transitive-closure_of X &
+      the_transitive-closure_of X in Tarski-Class the_transitive-closure_of X
+       by CLASSES1:5,59;
+      then X in Tarski-Class the_transitive-closure_of X by CLASSES1:6;
+      then bool X in Tarski-Class the_transitive-closure_of X by CLASSES1:7;
+      then G in Tarski-Class the_transitive-closure_of X by CLASSES1:6;
+      then N in NetUniv T by A9,A12,A13,YELLOW_6:def 14;
+     then consider x being Point of T such that
+A14:   x is_a_cluster_point_of N by A1;
+        now let X; assume A15: X in F;
+       then reconsider a = X as Element of N by A7,A9,A12;
+       reconsider A = X as Subset of T by A15;
+          A is closed by A2,A15,TOPS_2:def 2;
+then A16:     Cl A = A by PRE_TOPC:52;
+          now let V be Subset of T; assume
+A17:       V is open & x in V;
+          then Int V = V by TOPS_1:55;
+          then V is a_neighborhood of x by A17,CONNSP_2:def 1;
+          then N is_often_in V by A14,WAYBEL_9:def 9;
+         then consider b being Element of N such that
+A18:       a <= b & N.b in V by WAYBEL_0:def 12;
+         reconsider a' = a, b' = b as Element of (InclPoset G) opp
+           by A12;
+A19:       N.b = f.b by A12,WAYBEL_0:def 8;
+            a' <= b' by A12,A18,YELLOW_0:1;
+          then ~a' >= ~b' & ~a' = A & ~b' = b by LATTICE3:def 7,YELLOW_7:1;
+          then b c= A & N.b in b by A6,A8,A19,YELLOW_1:3;
+         hence A meets V by A18,XBOOLE_0:3;
+        end;
+       hence x in X by A16,PRE_TOPC:def 13;
+      end;
+     hence meet F <> {} by A7,SETFAM_1:def 1;
+    end;
+   hence thesis by COMPTS_1:13;
+  end;
+
+theorem Th33:
+ for T being non empty TopSpace holds
+    T is compact
+  iff
+    for F being ultra Filter of BoolePoset [#]T
+     ex x being Point of T st x is_a_convergence_point_of F, T
+  proof let T be non empty TopSpace;
+   set X = the carrier of T;
+A1: the carrier of BoolePoset X = bool X by WAYBEL_7:4;
+A2: [#]T = X by PRE_TOPC:12;
+   hereby assume
+A3:   T is compact;
+     let F be ultra Filter of BoolePoset [#]T;
+     set G = {Cl A where A is Subset of T: A in F};
+        G c= bool the carrier of T
+       proof let x; assume x in G;
+         then ex A being Subset of T st x = Cl A & A in F;
+        hence thesis;
+       end;
+      then G is Subset-Family of T by SETFAM_1:def 7;
+     then reconsider G as Subset-Family of T;
+A4:   G is centered
+       proof consider A0 being Element of F;
+        reconsider A0 as Subset of T by A1,A2; Cl A0 in G;
+        hence G <> {};
+        let H be set; assume
+A5:      H <> {} & H c= G & H is finite;
+         then H c= bool X by XBOOLE_1:1;
+        then reconsider H1 = H as finite Subset-Family of X by A5,SETFAM_1:def
+7;
+           H1 c= F
+          proof let x; assume x in H1;
+            then x in G by A5;
+           then consider A being Subset of T such that
+A6:         x = Cl A & A in F;
+              A c= Cl A by PRE_TOPC:48;
+           hence thesis by A2,A6,WAYBEL_7:11;
+          end;
+         then Intersect H1 in F by A2,WAYBEL_7:15;
+         then Intersect H1 <> {} by Th2;
+        hence meet H <> {} by A5,CANTOR_1:def 3;
+       end;
+     consider x being Element of meet G;
+        G is closed
+       proof let A be Subset of T; assume A in G;
+         then ex B being Subset of T st A = Cl B & B in F;
+        hence thesis;
+       end;
+      then A7: meet G <> {} by A3,A4,COMPTS_1:13;
+then x in meet G;
+     then reconsider x as Point of T;
+     take x;
+     thus x is_a_convergence_point_of F, T
+       proof let A be Subset of T such that
+A8:      A is open & x in A;
+         A9: F is prime by WAYBEL_7:26;
+        set B = A`;
+           [#]T = X by PRE_TOPC:12;
+then A10:      B = X\A by PRE_TOPC:17;
+           now assume B in F;
+           then Cl B in G & B is closed by A8,TOPS_1:30;
+           then B in G & not x in B by A8,A10,PRE_TOPC:52,XBOOLE_0:def 4;
+          hence contradiction by A7,SETFAM_1:def 1;
+         end;
+        hence A in F by A2,A9,A10,WAYBEL_7:25;
+       end;
+    end;
+   assume
+A11: for F being ultra Filter of BoolePoset [#]T
+     ex x being Point of T st x is_a_convergence_point_of F, T;
+      now let F be Subset-Family of T such that
+A12:   F is centered closed;
+     reconsider Y = F as Subset of BoolePoset X by A1;
+     set L = BoolePoset X;
+     set G = uparrow fininfs Y;
+        now assume Bottom L in G;
+       then consider x being Element of BoolePoset X such that
+A13:     x <= Bottom L & x in fininfs Y by WAYBEL_0:def 16;
+A14:     Bottom L = {} by YELLOW_1:18;
+          fininfs Y = {"/\"(Z,L) where Z is finite Subset of Y: ex_inf_of Z,L}
+         by WAYBEL_0:def 28;
+       then consider Z being finite Subset of Y such that
+A15:     x = "/\"(Z,L) & ex_inf_of Z,L by A13;
+          Z c= the carrier of L by XBOOLE_1:1;
+       then reconsider Z as Subset of L;
+A16:     x = Bottom L by A13,YELLOW_5:22;
+        then x <> Top L by WAYBEL_7:5;
+then A17:     Z <> {} by A15,YELLOW_0:def 12;
+        then meet Z <> {} by A12,COMPTS_1:def 2;
+       hence contradiction by A14,A15,A16,A17,YELLOW_1:20;
+      end;
+      then G is proper by WAYBEL_7:8;
+     then consider UF being Filter of L such that
+A18:   G c= UF & UF is ultra by WAYBEL_7:30;
+     consider x being Point of T such that
+A19:   x is_a_convergence_point_of UF, T by A2,A11,A18;
+A20:   F <> {} by A12,COMPTS_1:def 2;
+        F c= G by WAYBEL_0:62;
+then A21:   F c= UF by A18,XBOOLE_1:1;
+        now let A be set; assume
+A22:     A in F;
+       then reconsider B = A as Subset of T;
+A23:     now let C be Subset of T; assume C is open & x in C;
+then A24:       C in UF & A in UF by A19,A21,A22,WAYBEL_7:def 5;
+         then reconsider c = C, a = A as Element of L;
+            a"/\"c in UF & UF is ultra Filter of L by A18,A24,WAYBEL_0:41;
+          then a"/\"c <> {} by Th2;
+         then A /\ C <> {} by YELLOW_1:17;
+         hence A meets C by XBOOLE_0:def 7;
+        end;
+          B is closed by A12,A22,TOPS_2:def 2;
+        then Cl B = B by PRE_TOPC:52;
+       hence x in A by A23,PRE_TOPC:54;
+      end;
+     hence meet F <> {} by A20,SETFAM_1:def 1;
+    end;
+   hence thesis by COMPTS_1:13;
+  end;
+
+theorem
+   for T being non empty TopSpace holds
+    T is compact
+  iff
+    for F being proper Filter of BoolePoset [#]T
+     ex x being Point of T st x is_a_cluster_point_of F, T
+  proof let T be non empty TopSpace;
+A1: the carrier of T = [#]T by PRE_TOPC:12;
+   hereby assume
+A2:   T is compact;
+     let F be proper Filter of BoolePoset [#]T;
+     reconsider G = F as proper Filter of BoolePoset [#]T;
+     consider x being Point of T such that
+A3:   x is_a_cluster_point_of a_net G by A2,Lm1;
+     take x; thus x is_a_cluster_point_of F, T by A3,Th17;
+    end;
+   assume
+A4: for F being proper Filter of BoolePoset [#]T
+     ex x being Point of T st x is_a_cluster_point_of F, T;
+      now let N be net of T such that N in NetUniv T;
+     reconsider F = a_filter N as proper Filter of BoolePoset the carrier of T
+       by A1;
+     consider x being Point of T such that
+A5:   x is_a_cluster_point_of F, T by A4;
+     take x; thus x is_a_cluster_point_of N by A5,Th12;
+    end;
+   hence thesis by Lm2;
+  end;
+
+theorem Th35:
+ for T being non empty TopSpace holds
+    T is compact
+  iff
+    for N being net of T ex x being Point of T st
+      x is_a_cluster_point_of N
+  proof let T be non empty TopSpace;
+   thus T is compact implies
+    for N being net of T ex x being Point of T st
+      x is_a_cluster_point_of N by Lm1;
+   assume
+      for N being net of T ex x being Point of T st
+     x is_a_cluster_point_of N;
+    then for N being net of T st N in NetUniv T
+     ex x being Point of T st x is_a_cluster_point_of N;
+   hence thesis by Lm2;
+  end;
+
+theorem
+   for T being non empty TopSpace holds
+    T is compact
+  iff
+    for N being net of T st N in NetUniv T
+     ex x being Point of T st x is_a_cluster_point_of N by Lm1,Lm2;
+
+definition
+ let L be non empty 1-sorted;
+ let N be transitive NetStr over L;
+ cluster -> transitive (full SubNetStr of N);
+ coherence
+  proof let S be full SubNetStr of N;
+      S is full SubRelStr of N by YELLOW_6:def 9;
+   hence thesis;
+  end;
+end;
+
+definition
+ let L be non empty 1-sorted;
+ let N be non empty directed NetStr over L;
+ cluster strict non empty directed full SubNetStr of N;
+ existence
+  proof set S = the NetStr of N;
+A1: N is SubNetStr of N & the RelStr of N = the RelStr of N &
+    the RelStr of S = the RelStr of S & N is full SubRelStr of N
+     by YELLOW_6:15,17;
+    then the mapping of S = (the mapping of N)|the carrier of S &
+    S is full SubRelStr of N by WAYBEL21:12,YELLOW_6:def 8;
+   then reconsider S as strict non empty full SubNetStr of N
+    by YELLOW_6:def 8,def 9;
+      S is directed
+     proof
+         [#]N = the carrier of N & [#]S = the carrier of S &
+       [#]N is directed by PRE_TOPC:12,WAYBEL_0:def 6;
+      hence [#]S is directed by A1,WAYBEL_0:3;
+     end;
+   hence thesis;
+  end;
+end;
+
+theorem
+   for T being non empty TopSpace holds
+    T is compact
+  iff
+    for N being net of T ex S being subnet of N st S is convergent
+  proof let T be non empty TopSpace;
+   hereby assume
+A1:   T is compact;
+     let N be net of T;
+     consider x being Point of T such that
+A2:   x is_a_cluster_point_of N by A1,Th35;
+     consider S being subnet of N such that
+A3:   x in Lim S by A2,WAYBEL_9:32;
+     take S; thus S is convergent by A3,YELLOW_6:def 19;
+    end;
+   assume
+A4: for N being net of T ex S being subnet of N st S is convergent;
+      now let N be net of T;
+     consider S being subnet of N such that
+A5:   S is convergent by A4;
+     consider x being Element of Lim S;
+A6:   Lim S <> {} by A5,YELLOW_6:def 19;
+     then x in Lim S;
+     then reconsider x as Point of T;
+     take x;
+        x is_a_cluster_point_of S by A6,WAYBEL_9:29;
+     hence x is_a_cluster_point_of N by WAYBEL_9:31;
+    end;
+   hence thesis by Th35;
+  end;
+
+definition
+ let S be non empty 1-sorted;
+ let N be non empty NetStr over S;
+ attr N is Cauchy means
+    for A being Subset of S holds N is_eventually_in A or N is_eventually_in A`
+;
+end;
+
+definition
+ let S be non empty 1-sorted;
+ let F be ultra Filter of BoolePoset [#]S;
+ cluster a_net F -> Cauchy;
+ coherence
+  proof let A be Subset of S;
+A1: [#]S = the carrier of S by PRE_TOPC:12;
+A2: ({}S)` = [#]S by PRE_TOPC:27;
+then A3: A` = {}S implies A = [#]S;
+      F is prime by WAYBEL_7:26;
+    then A in F or (the carrier of S)\A in F by A1,WAYBEL_7:25;
+    then (A is empty or A is non empty) & (A` is empty or A` is non empty) &
+    A in F or A` in F by A1,PRE_TOPC:17;
+   hence thesis by A1,A2,A3,Th16,YELLOW_6:29;
+  end;
+end;
+
+theorem
+   for T being non empty TopSpace holds
+   T is compact
+  iff
+   for N being net of T st N is Cauchy holds N is convergent
+  proof let T be non empty TopSpace;
+   thus T is compact implies
+    for N being net of T st N is Cauchy holds N is convergent
+     proof assume
+A1:    T is compact;
+      let N be net of T such that
+A2:    for A being Subset of T
+        holds N is_eventually_in A or N is_eventually_in A`;
+      consider x being Point of T such that
+A3:    x is_a_cluster_point_of N by A1,Lm1;
+         now let V be a_neighborhood of x;
+        assume not N is_eventually_in V;
+         then N is_eventually_in V` by A2;
+        then consider i being Element of N such that
+A4:      for j being Element of N st i <= j holds N.j in V` by WAYBEL_0:def 11;
+           N is_often_in V by A3,WAYBEL_9:def 9;
+        then consider j being Element of N such that
+A5:      i <= j & N.j in V by WAYBEL_0:def 12;
+           N.j in V` by A4,A5;
+        hence contradiction by A5,YELLOW_6:10;
+       end;
+       then x in Lim N by YELLOW_6:def 18;
+      hence N is convergent by YELLOW_6:def 19;
+     end;
+   assume
+A6: for N being net of T st N is Cauchy holds N is convergent;
+      now let F be ultra Filter of BoolePoset [#]T;
+     consider x being Element of Lim a_net F;
+        a_net F is convergent by A6;
+then A7:   Lim a_net F <> {} by YELLOW_6:def 19;
+      then x in Lim a_net F;
+     then reconsider x as Point of T;
+     take x; thus x is_a_convergence_point_of F, T by A7,Th18;
+    end;
+   hence T is compact by Th33;
+  end;
+

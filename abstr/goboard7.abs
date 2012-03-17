@@ -1,0 +1,434 @@
+:: On the Go Board of a Standard Special Circular Sequence
+::  by Andrzej Trybulec
+::
+:: Received October 15, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, EUCLID, PRE_TOPC, GOBOARD1, ABSVALUE, ARYTM_1, TOPREAL1,
+      MCART_1, ARYTM_3, MATRIX_1, TREES_1, RELAT_1, SPPOL_1, GOBOARD2, BOOLE,
+      TOPS_1, GOBOARD5, TARSKI, SEQM_3, FUNCT_1, FINSET_1, CARD_1, FINSEQ_6,
+      FINSEQ_4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, REAL_1, NAT_1,
+      ABSVALUE, BINARITH, CARD_1, FUNCT_1, FINSEQ_1, FINSET_1, FINSEQ_4,
+      MATRIX_1, PRE_TOPC, TOPS_1, EUCLID, TOPREAL1, GOBOARD1, GOBOARD2,
+      SPPOL_1, FINSEQ_6, GOBOARD5, GROUP_1;
+ constructors REAL_1, TOPS_1, SPPOL_1, GOBOARD2, GOBOARD5, SEQM_3, BINARITH,
+      FINSEQ_4, GROUP_1, MEMBERED, XBOOLE_0;
+ clusters STRUCT_0, GOBOARD5, RELSET_1, GOBOARD2, INT_1, EUCLID, FINSEQ_1,
+      MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+reserve f for non empty FinSequence of TOP-REAL 2,
+        i,j,k,k1,k2,n,i1,i2,j1,j2 for Nat,
+        r,s,r1,r2 for Real,
+        p,q,p1,q1 for Point of TOP-REAL 2,
+        G for Go-board,
+        x for set;
+
+theorem :: GOBOARD7:1
+ abs(r1-r2) > s implies r1+s < r2 or r2+s < r1;
+
+theorem :: GOBOARD7:2
+abs(r - s) = 0 iff r = s;
+
+theorem :: GOBOARD7:3
+ for p,p1,q being Point of TOP-REAL n st p + p1 = q + p1
+  holds p = q;
+
+theorem :: GOBOARD7:4
+  for p,p1,q being Point of TOP-REAL n st p1 + p = p1 + q
+  holds p = q;
+
+theorem :: GOBOARD7:5
+ p1 in LSeg(p,q) & p`1 = q`1 implies p1`1 = q`1;
+
+theorem :: GOBOARD7:6
+ p1 in LSeg(p,q) & p`2 = q`2 implies p1`2 = q`2;
+
+theorem :: GOBOARD7:7
+ 1/2*(p+q) in LSeg(p,q);
+
+theorem :: GOBOARD7:8
+ p`1 = q`1 & q`1 = p1`1 & p`2 <= q`2 & q`2 <= p1`2 implies q in LSeg(p,p1);
+
+theorem :: GOBOARD7:9
+ p`1 <= q`1 & q`1 <= p1`1 & p`2 = q`2 & q`2 = p1`2 implies q in LSeg(p,p1);
+
+theorem :: GOBOARD7:10
+ for D being non empty set
+ for i,j for M being Matrix of D st 1 <= i & i <= len M & 1 <= j & j <= width M
+  holds [i,j] in Indices M;
+
+theorem :: GOBOARD7:11
+   1 <= i & i+1 <= len G & 1 <= j & j+1 <= width G implies
+  1/2*(G*(i,j)+G*(i+1,j+1)) = 1/2*(G*(i,j+1)+G*(i+1,j));
+
+theorem :: GOBOARD7:12
+ LSeg(f,k) is horizontal implies
+  ex j st 1 <= j & j <= width GoB f &
+   for p st p in LSeg(f,k) holds p`2 = (GoB f)*(1,j)`2;
+
+theorem :: GOBOARD7:13
+ LSeg(f,k) is vertical implies
+  ex i st 1 <= i & i <= len GoB f &
+   for p st p in LSeg(f,k) holds p`1 = (GoB f)*(i,1)`1;
+
+theorem :: GOBOARD7:14
+   f is special & i <= len GoB f & j <= width GoB f implies
+  Int cell(GoB f,i,j) misses L~f;
+
+begin :: Segments on a Go Board
+
+theorem :: GOBOARD7:15
+ 1 <= i & i <= len G & 1 <= j & j+2 <= width G implies
+  LSeg(G*(i,j),G*(i,j+1)) /\ LSeg(G*(i,j+1),G*(i,j+2)) = { G*(i,j+1) };
+
+theorem :: GOBOARD7:16
+ 1 <= i & i+2 <= len G & 1 <= j & j <= width G implies
+  LSeg(G*(i,j),G*(i+1,j)) /\ LSeg(G*(i+1,j),G*(i+2,j)) = { G*(i+1,j) };
+
+theorem :: GOBOARD7:17
+ 1 <= i & i+1 <= len G & 1 <= j & j+1 <= width G implies
+  LSeg(G*(i,j),G*(i,j+1)) /\ LSeg(G*(i,j+1),G*(i+1,j+1)) = { G*(i,j+1) };
+
+theorem :: GOBOARD7:18
+ 1 <= i & i+1 <= len G & 1 <= j & j+1 <= width G implies
+  LSeg(G*(i,j+1),G*(i+1,j+1)) /\ LSeg(G*(i+1,j),G*(i+1,j+1)) = { G*
+(i+1,j+1) };
+
+theorem :: GOBOARD7:19
+ 1 <= i & i+1 <= len G & 1 <= j & j+1 <= width G implies
+  LSeg(G*(i,j),G*(i+1,j)) /\ LSeg(G*(i,j),G*(i,j+1)) = { G*(i,j) };
+
+theorem :: GOBOARD7:20
+ 1 <= i & i+1 <= len G & 1 <= j & j+1 <= width G implies
+  LSeg(G*(i,j),G*(i+1,j)) /\ LSeg(G*(i+1,j),G*(i+1,j+1)) = { G*(i+1,j) };
+
+theorem :: GOBOARD7:21
+ for i1,j1,i2,j2 being Nat st
+  1 <= i1 & i1 <= len G & 1 <= j1 & j1+1 <= width G &
+  1 <= i2 & i2 <= len G & 1 <= j2 & j2+1 <= width G &
+  LSeg(G*(i1,j1),G*(i1,j1+1)) meets LSeg(G*(i2,j2),G*(i2,j2+1))
+ holds i1 = i2 & abs(j1-j2) <= 1;
+
+theorem :: GOBOARD7:22
+ for i1,j1,i2,j2 being Nat st
+  1 <= i1 & i1+1 <= len G & 1 <= j1 & j1 <= width G &
+  1 <= i2 & i2+1 <= len G & 1 <= j2 & j2 <= width G &
+  LSeg(G*(i1,j1),G*(i1+1,j1)) meets LSeg(G*(i2,j2),G*(i2+1,j2))
+ holds j1 = j2 & abs(i1-i2) <= 1;
+
+theorem :: GOBOARD7:23
+ for i1,j1,i2,j2 being Nat st
+  1 <= i1 & i1 <= len G & 1 <= j1 & j1+1 <= width G &
+  1 <= i2 & i2+1 <= len G & 1 <= j2 & j2 <= width G &
+  LSeg(G*(i1,j1),G*(i1,j1+1)) meets LSeg(G*(i2,j2),G*(i2+1,j2))
+ holds (i1 = i2 or i1 = i2+1) & (j1 = j2 or j1+1 = j2);
+
+theorem :: GOBOARD7:24
+   for i1,j1,i2,j2 being Nat st
+  1 <= i1 & i1 <= len G & 1 <= j1 & j1+1 <= width G &
+  1 <= i2 & i2 <= len G & 1 <= j2 & j2+1 <= width G &
+  LSeg(G*(i1,j1),G*(i1,j1+1)) meets LSeg(G*(i2,j2),G*(i2,j2+1))
+ holds
+  j1 = j2 &
+  LSeg(G*(i1,j1),G*(i1,j1+1)) = LSeg(G*(i2,j2),G*(i2,j2+1)) or
+  j1 = j2+1 &
+  LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i2,j2),G*(i2,j2+1)) = { G*
+(i1,j1) }
+  or j1+1 = j2 &
+  LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i2,j2),G*(i2,j2+1)) = { G*
+(i2,j2) };
+
+theorem :: GOBOARD7:25
+   for i1,j1,i2,j2 being Nat st
+  1 <= i1 & i1+1 <= len G & 1 <= j1 & j1 <= width G &
+  1 <= i2 & i2+1 <= len G & 1 <= j2 & j2 <= width G &
+  LSeg(G*(i1,j1),G*(i1+1,j1)) meets LSeg(G*(i2,j2),G*(i2+1,j2))
+ holds
+  i1 = i2 &
+  LSeg(G*(i1,j1),G*(i1+1,j1)) = LSeg(G*(i2,j2),G*(i2+1,j2)) or
+  i1 = i2+1 &
+  LSeg(G*(i1,j1),G*(i1+1,j1)) /\ LSeg(G*(i2,j2),G*(i2+1,j2)) = { G*
+(i1,j1) }
+  or i1+1 = i2 &
+  LSeg(G*(i1,j1),G*(i1+1,j1)) /\ LSeg(G*(i2,j2),G*(i2+1,j2)) = { G*
+(i2,j2) };
+
+theorem :: GOBOARD7:26
+   for i1,j1,i2,j2 being Nat st
+  1 <= i1 & i1 <= len G & 1 <= j1 & j1+1 <= width G &
+  1 <= i2 & i2+1 <= len G & 1 <= j2 & j2 <= width G &
+  LSeg(G*(i1,j1),G*(i1,j1+1)) meets LSeg(G*(i2,j2),G*(i2+1,j2))
+ holds
+  j1 = j2 &
+  LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i2,j2),G*(i2+1,j2)) = { G*
+(i1,j1) }
+  or j1+1 = j2 &
+  LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i2,j2),G*(i2+1,j2)) = { G*
+(i1,j1+1) };
+
+theorem :: GOBOARD7:27
+ 1 <= i1 & i1 <= len G & 1 <= j1 & j1+1 <= width G &
+ 1 <= i2 & i2 <= len G & 1 <= j2 & j2+1 <= width G &
+  1/2*(G*(i1,j1)+G*(i1,j1+1)) in LSeg(G*(i2,j2),G*(i2,j2+1)) implies
+    i1 = i2 & j1 = j2;
+
+
+theorem :: GOBOARD7:28
+ 1 <= i1 & i1+1 <= len G & 1 <= j1 & j1 <= width G &
+ 1 <= i2 & i2+1 <= len G & 1 <= j2 & j2 <= width G &
+  1/2*(G*(i1,j1)+G*(i1+1,j1)) in LSeg(G*(i2,j2),G*(i2+1,j2)) implies
+    i1 = i2 & j1 = j2;
+
+theorem :: GOBOARD7:29
+ 1 <= i1 & i1+1 <= len G & 1 <= j1 & j1 <= width G implies
+ not ex i2,j2 st
+  1 <= i2 & i2 <= len G & 1 <= j2 & j2+1 <= width G &
+   1/2*(G*(i1,j1)+G*(i1+1,j1)) in LSeg(G*(i2,j2),G*(i2,j2+1));
+
+theorem :: GOBOARD7:30
+ 1 <= i1 & i1 <= len G & 1 <= j1 & j1+1 <= width G implies
+ not ex i2,j2 st
+  1 <= i2 & i2+1 <= len G & 1 <= j2 & j2 <= width G &
+   1/2*(G*(i1,j1)+G*(i1,j1+1)) in LSeg(G*(i2,j2),G*(i2+1,j2));
+
+begin :: Standard special circular sequences
+
+reserve f for non constant standard special_circular_sequence;
+
+theorem :: GOBOARD7:31
+ for f being standard (non empty FinSequence of TOP-REAL 2)
+  st i in dom f & i+1 in dom f holds f/.i <> f/.(i+1);
+
+theorem :: GOBOARD7:32
+ ex i st i in dom f & (f/.i)`1 <> (f/.1)`1;
+
+theorem :: GOBOARD7:33
+ ex i st i in dom f & (f/.i)`2 <> (f/.1)`2;
+
+theorem :: GOBOARD7:34
+   len GoB f > 1;
+
+theorem :: GOBOARD7:35
+   width GoB f > 1;
+
+theorem :: GOBOARD7:36
+ len f > 4;
+
+theorem :: GOBOARD7:37
+ for f being circular s.c.c. FinSequence of TOP-REAL 2 st len f > 4
+  for i,j being Nat st 1 <= i & i < j & j < len f holds f/.i <> f/.j;
+
+theorem :: GOBOARD7:38
+  for i,j being Nat st 1 <= i & i < j & j < len f holds f/.i <> f/.j;
+
+theorem :: GOBOARD7:39
+  for i,j being Nat st 1 < i & i < j & j <= len f holds f/.i <> f/.j;
+
+theorem :: GOBOARD7:40
+  for i being Nat st 1 < i & i <= len f & f/.i = f/.1 holds i = len f;
+
+theorem :: GOBOARD7:41
+ 1 <= i & i <= len GoB f & 1 <= j & j+1 <= width GoB f &
+  1/2*((GoB f)*(i,j)+(GoB f)*(i,j+1)) in L~f implies
+ ex k st 1 <= k & k+1 <= len f &
+  LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k);
+
+theorem :: GOBOARD7:42
+   1 <= i & i+1 <= len GoB f & 1 <= j & j <= width GoB f &
+    1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j)) in L~f implies
+   ex k st 1 <= k & k+1 <= len f &
+    LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k);
+
+theorem :: GOBOARD7:43
+   1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f & 1 <=
+ k & k+1 < len f &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k) &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i,j+1) & f/.(k+1) = (GoB f)*(i+1,j+1) &
+  f/.(k+2) = (GoB f)*(i+1,j);
+
+theorem :: GOBOARD7:44
+   1 <= i & i <= len GoB f & 1 <= j & j+1 < width GoB f & 1 <= k & k+1 < len f
+&
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i,j+2)) = LSeg(f,k) &
+ LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i,j+2) & f/.(k+1) = (GoB f)*(i,j+1) &
+  f/.(k+2) = (GoB f)*(i,j);
+
+theorem :: GOBOARD7:45
+   1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f & 1 <=
+ k & k+1 < len f &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k) &
+ LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i+1,j+1) & f/.(k+1) = (GoB f)*(i,j+1) &
+  f/.(k+2) = (GoB f)*(i,j);
+
+theorem :: GOBOARD7:46
+   1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f & 1 <=
+ k & k+1 < len f &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k) &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i+1,j) & f/.(k+1) = (GoB f)*(i+1,j+1) &
+  f/.(k+2) = (GoB f)*(i,j+1);
+
+theorem :: GOBOARD7:47
+   1 <= i & i+1 < len GoB f & 1 <= j & j <= width GoB f & 1 <= k & k+1 < len f
+&
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+2,j)) = LSeg(f,k) &
+ LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i+2,j) & f/.(k+1) = (GoB f)*(i+1,j) &
+  f/.(k+2) = (GoB f)*(i,j);
+
+theorem :: GOBOARD7:48
+   1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f & 1 <=
+ k & k+1 < len f &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k) &
+ LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i+1,j+1) & f/.(k+1) = (GoB f)*(i+1,j) &
+  f/.(k+2) = (GoB f)*(i,j);
+
+theorem :: GOBOARD7:49
+   1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f & 1 <=
+ k & k+1 < len f &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k) &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i+1,j) & f/.(k+1) = (GoB f)*(i+1,j+1) &
+  f/.(k+2) = (GoB f)*(i,j+1);
+
+theorem :: GOBOARD7:50
+   1 <= i & i <= len GoB f & 1 <= j & j+1 < width GoB f & 1 <= k & k+1 < len f
+&
+ LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k) &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i,j+2)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i,j) & f/.(k+1) = (GoB f)*(i,j+1) &
+  f/.(k+2) = (GoB f)*(i,j+2);
+
+theorem :: GOBOARD7:51
+   1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f & 1 <=
+ k & k+1 < len f &
+ LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k) &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i,j) & f/.(k+1) = (GoB f)*(i,j+1) &
+  f/.(k+2) = (GoB f)*(i+1,j+1);
+
+theorem :: GOBOARD7:52
+   1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f & 1 <=
+ k & k+1 < len f &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k) &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i,j+1) & f/.(k+1) = (GoB f)*(i+1,j+1) &
+  f/.(k+2) = (GoB f)*(i+1,j);
+
+theorem :: GOBOARD7:53
+   1 <= i & i+1 < len GoB f & 1 <= j & j <= width GoB f & 1 <= k & k+1 < len f
+&
+ LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k) &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+2,j)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i,j) & f/.(k+1) = (GoB f)*(i+1,j) &
+  f/.(k+2) = (GoB f)*(i+2,j);
+
+theorem :: GOBOARD7:54
+   1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f & 1 <=
+ k & k+1 < len f &
+ LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k) &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i,j) & f/.(k+1) = (GoB f)*(i+1,j) &
+  f/.(k+2) = (GoB f)*(i+1,j+1);
+
+theorem :: GOBOARD7:55
+ 1 <= i & i <= len GoB f & 1 <= j & j+1 < width GoB f &
+ LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) c= L~f &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i,j+2)) c= L~f implies
+  f/.1 = (GoB f)*(i,j+1) &
+  (f/.2 = (GoB f)*(i,j) & f/.(len f-'1) = (GoB f)*(i,j+2) or
+   f/.2 = (GoB f)*(i,j+2) & f/.(len f-'1) = (GoB f)*(i,j))
+  or ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i,j+1) &
+   (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i,j+2) or
+    f/.k = (GoB f)*(i,j+2) & f/.(k+2) = (GoB f)*(i,j));
+
+theorem :: GOBOARD7:56
+ 1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f &
+ LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) c= L~f &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) c= L~f implies
+  f/.1 = (GoB f)*(i,j+1) &
+  (f/.2 = (GoB f)*(i,j) & f/.(len f-'1) = (GoB f)*(i+1,j+1) or
+   f/.2 = (GoB f)*(i+1,j+1) & f/.(len f-'1) = (GoB f)*(i,j))
+  or ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i,j+1) &
+   (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i+1,j+1) or
+    f/.k = (GoB f)*(i+1,j+1) & f/.(k+2) = (GoB f)*(i,j));
+
+theorem :: GOBOARD7:57
+ 1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) c= L~f &
+ LSeg((GoB f)*(i+1,j+1),(GoB f)*(i+1,j)) c= L~f implies
+  f/.1 = (GoB f)*(i+1,j+1) &
+  (f/.2 = (GoB f)*(i,j+1) & f/.(len f-'1) = (GoB f)*(i+1,j) or
+   f/.2 = (GoB f)*(i+1,j) & f/.(len f-'1) = (GoB f)*(i,j+1))
+  or ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j+1) &
+   (f/.k = (GoB f)*(i,j+1) & f/.(k+2) = (GoB f)*(i+1,j) or
+    f/.k = (GoB f)*(i+1,j) & f/.(k+2) = (GoB f)*(i,j+1));
+
+theorem :: GOBOARD7:58
+ 1 <= i & i+1 < len GoB f & 1 <= j & j <= width GoB f &
+ LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) c= L~f &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+2,j)) c= L~f implies
+  f/.1 = (GoB f)*(i+1,j) &
+  (f/.2 = (GoB f)*(i,j) & f/.(len f-'1) = (GoB f)*(i+2,j) or
+   f/.2 = (GoB f)*(i+2,j) & f/.(len f-'1) = (GoB f)*(i,j))
+  or ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j) &
+   (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i+2,j) or
+    f/.k = (GoB f)*(i+2,j) & f/.(k+2) = (GoB f)*(i,j));
+
+theorem :: GOBOARD7:59
+ 1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f &
+ LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) c= L~f &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) c= L~f implies
+  f/.1 = (GoB f)*(i+1,j) &
+  (f/.2 = (GoB f)*(i,j) & f/.(len f-'1) = (GoB f)*(i+1,j+1) or
+   f/.2 = (GoB f)*(i+1,j+1) & f/.(len f-'1) = (GoB f)*(i,j))
+  or ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j) &
+   (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i+1,j+1) or
+    f/.k = (GoB f)*(i+1,j+1) & f/.(k+2) = (GoB f)*(i,j));
+
+theorem :: GOBOARD7:60
+ 1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) c= L~f &
+ LSeg((GoB f)*(i+1,j+1),(GoB f)*(i,j+1)) c= L~f implies
+  f/.1 = (GoB f)*(i+1,j+1) &
+  (f/.2 = (GoB f)*(i+1,j) & f/.(len f-'1) = (GoB f)*(i,j+1) or
+   f/.2 = (GoB f)*(i,j+1) & f/.(len f-'1) = (GoB f)*(i+1,j))
+  or ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j+1) &
+   (f/.k = (GoB f)*(i+1,j) & f/.(k+2) = (GoB f)*(i,j+1) or
+    f/.k = (GoB f)*(i,j+1) & f/.(k+2) = (GoB f)*(i+1,j));
+
+theorem :: GOBOARD7:61
+   1 <= i & i < len GoB f & 1 <= j & j+1 < width GoB f implies
+  not ( LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) c= L~f &
+        LSeg((GoB f)*(i,j+1),(GoB f)*(i,j+2)) c= L~f &
+        LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) c= L~f);
+
+theorem :: GOBOARD7:62
+   1 <= i & i < len GoB f & 1 <= j & j+1 < width GoB f implies
+  not ( LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) c= L~f &
+        LSeg((GoB f)*(i+1,j+1),(GoB f)*(i+1,j+2)) c= L~f &
+        LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) c= L~f);
+
+theorem :: GOBOARD7:63
+   1 <= j & j < width GoB f & 1 <= i & i+1 < len GoB f implies
+  not ( LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) c= L~f &
+        LSeg((GoB f)*(i+1,j),(GoB f)*(i+2,j)) c= L~f &
+        LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) c= L~f);
+
+theorem :: GOBOARD7:64
+   1 <= j & j < width GoB f & 1 <= i & i+1 < len GoB f implies
+  not ( LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) c= L~f &
+        LSeg((GoB f)*(i+1,j+1),(GoB f)*(i+2,j+1)) c= L~f &
+        LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) c= L~f);
+

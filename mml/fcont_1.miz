@@ -1,0 +1,2032 @@
+:: Real Function Continuity
+::  by Konrad Raczkowski and Pawe{\l} Sadowski
+::
+:: Received June 18, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, SEQ_1, PARTFUN1, RELAT_1, SEQ_2, ORDINAL2, FUNCT_1, SEQM_3,
+      ABSVALUE, ARYTM_1, ARYTM_3, RCOMP_1, BOOLE, FINSEQ_1, COMPTS_1, SEQ_4,
+      RFUNCT_1, PARTFUN2, SQUARE_1, RFUNCT_2, FCONT_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, NAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, ABSVALUE, SEQ_1,
+      SEQ_2, SEQM_3, SEQ_4, SQUARE_1, PARTFUN2, RFUNCT_1, RFUNCT_2, RCOMP_1;
+ constructors REAL_1, NAT_1, ABSVALUE, SEQ_2, SEQM_3, SEQ_4, SQUARE_1,
+      PARTFUN1, PARTFUN2, RFUNCT_1, RFUNCT_2, RCOMP_1, MEMBERED, XBOOLE_0;
+ clusters RCOMP_1, RELSET_1, RFUNCT_2, PARTFUN2, XREAL_0, SEQ_1, SEQM_3, NAT_1,
+      MEMBERED, ZFMISC_1, XBOOLE_0, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI;
+ theorems AXIOMS, TARSKI, ZFMISC_1, SUBSET_1, REAL_1, NAT_1, FUNCT_1, FUNCT_2,
+      ABSVALUE, SEQ_1, SEQ_2, SEQM_3, SEQ_4, SQUARE_1, PARTFUN1, XREAL_0,
+      PARTFUN2, RFUNCT_1, RFUNCT_2, RCOMP_1, FUNCT_3, RELAT_1, RELSET_1,
+      XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1;
+ schemes NAT_1, RECDEF_1, RCOMP_1, SEQ_1;
+
+begin
+
+ reserve n,m,k for Nat;
+ reserve x, X,X1,Z,Z1 for set;
+ reserve s,g,r,p,x0,x1,x2 for real number;
+ reserve s1,s2,q1 for Real_Sequence;
+ reserve Y for Subset of REAL;
+ reserve f,f1,f2 for PartFunc of REAL,REAL;
+
+definition let f,x0;
+ pred f is_continuous_in x0 means :Def1:
+ x0 in dom f & for s1 st rng s1 c= dom f & s1 is convergent & lim s1 = x0 holds
+ f*s1 is convergent & f.x0 = lim (f*s1);
+end;
+
+canceled;
+
+theorem
+  f is_continuous_in x0 iff x0 in dom f & for s1 st rng s1 c= dom f &
+s1 is convergent & lim s1=x0 & (for n holds s1.n<>x0) holds
+f*s1 is convergent & f.x0=lim(f*s1)
+proof
+thus f is_continuous_in x0 implies x0 in dom f & for s1 st rng s1 c= dom f &
+ s1 is convergent & lim s1=x0 & (for n holds s1.n<>x0) holds
+ f*s1 is convergent & f.x0=lim(f*s1) by Def1;
+assume A1: x0 in dom f & for s1 st rng s1 c=dom f &
+s1 is convergent & lim s1=x0
+ & (for n holds s1.n<>x0) holds f*s1 is convergent & f.x0=lim(f*s1);
+hence x0 in dom f;
+let s2 such that A2: rng s2 c=dom f & s2 is convergent & lim s2=x0;
+  now per cases;
+suppose ex n st for m st n<=m holds s2.m=x0;
+ then consider N be Nat such that A3: for m st N<=m holds s2.m=x0;
+ A4: for n holds (s2^\N).n=x0
+ proof let n;
+    N<=n+N by NAT_1:37; then s2.(n+N)=x0 by A3;
+  hence (s2^\N).n=x0 by SEQM_3:def 9;
+ end;
+   s2^\N is_subsequence_of s2 by SEQM_3:47;
+ then rng (s2^\N) c= rng s2 by RFUNCT_2:11;
+ then A5: rng (s2^\N) c= dom f by A2,XBOOLE_1:1;
+ A6: now let p be real number such that A7: p>0;
+  take n=0; let m such that n<=m;
+    abs((f*(s2^\N)).m-f.x0)=abs(f.((s2^\N).m)-f.x0) by A5,RFUNCT_2:21
+  .=abs(f.x0-f.x0) by A4
+  .=abs(0) by XCMPLX_1:14
+  .=0 by ABSVALUE:7;
+  hence abs((f*(s2^\N)).m-f.x0)<p by A7;
+ end;
+ then A8: f*(s2^\N) is convergent by SEQ_2:def 6;
+   f*(s2^\N)=(f*s2)^\N by A2,RFUNCT_2:22;
+ then f*s2 is convergent & f.x0=lim((f*s2)^\N) by A6,A8,SEQ_2:def 7,SEQ_4:35;
+ hence thesis by SEQ_4:33;
+suppose A9: for n ex m st n<=m & s2.m<>x0;
+ then consider m1 be Nat such that A10: 0<=m1 & s2.m1<>x0;
+ defpred P[Nat] means s2.$1<>x0;
+ A11: ex m st P[m] by A10;
+ consider M be Element of NAT such that
+ A12: P[M] & for n st P[n] holds M<=n from Min(A11);
+ A13: now let n; consider m such that A14: n+1<=m & s2.m<>x0 by A9;
+  take m; thus n<m & s2.m<>x0 by A14,NAT_1:38;
+ end;
+ defpred P[Nat,set,set] means for n,m st $2=n & $3=m holds
+ n<m & s2.m<>x0 & for k st n<k & s2.k<>x0 holds m<=k;
+ A15: for n for x be Element of NAT ex y be Element of NAT st P[n,x,y]
+ proof let n; let x be Element of NAT;
+  defpred P[Nat] means x<$1 & s2.$1<>x0;
+  A16: ex m st P[m] by A13;
+  consider l be Nat such that A17: P[l] &
+   for k st P[k] holds l<=k from Min(A16);
+  take l; thus thesis by A17;
+ end;
+ reconsider M' = M as Element of NAT;
+ consider F be Function of NAT,NAT such that
+ A18: F.0=M' & for n be Element of NAT holds P[n,F.n,F.(n+1)]
+   from RecExD(A15);
+ A19: dom F=NAT & rng F c= NAT by FUNCT_2:def 1;
+   rng F c= REAL by XBOOLE_1:1;
+ then reconsider F as Real_Sequence by A19,FUNCT_2:def 1,RELSET_1:11;
+ A20: now let n; F.n in rng F by A19,FUNCT_1:def 5;hence F.n is Nat by A19;
+ end;
+   now let n; F.n is Nat & F.(n+1) is Nat by A20;
+  hence F.n<F.(n+1) by A18;
+ end;
+ then reconsider F as increasing Seq_of_Nat by A19,SEQM_3:def 8,def 11;
+A21: for n st s2.n<>x0 ex m st F.m=n
+ proof
+  defpred P[Nat] means s2.$1<>x0 & for m holds F.m<>$1;
+  assume
+A22: ex n st P[n];
+  consider M1 be Nat such that A23: P[M1] &
+  for n st P[n] holds M1<=n from Min(A22);
+  defpred P[Nat] means $1<M1 & s2.$1<>x0 & ex m st F.m=$1;
+  A24: ex n st P[n]
+  proof take M;
+   A25: M<=M1 by A12,A23;
+      M <> M1 by A18,A23;
+   hence M<M1 by A25,REAL_1:def 5;
+   thus s2.M<>x0 by A12;
+   take 0; thus thesis by A18;
+  end;
+  A26: for n st P[n] holds n<=M1;
+  consider MX be Nat such that A27: P[MX] &
+  for n st P[n] holds n<=MX from Max(A26,A24);
+  A28: for k st MX<k & k<M1 holds s2.k=x0
+  proof given k such that A29: MX<k & k<M1 & s2.k<>x0;
+     now per cases;
+   suppose ex m st F.m=k; hence contradiction by A27,A29;
+   suppose for m holds F.m<>k; hence contradiction by A23,A29;
+   end; hence contradiction;
+  end;
+  consider m such that A30: F.m=MX by A27;
+  A31: MX<F.(m+1) & s2.(F.(m+1))<>x0 &
+      for k st MX<k & s2.k<>x0 holds F.(m+1)<=k by A18,A30;
+  A32: F.(m+1)<=M1 by A18,A23,A27,A30;
+    now assume F.(m+1)<>M1; then F.(m+1)<M1 by A32,REAL_1:def 5;
+hence contradiction by A28,A31;
+  end;hence contradiction by A23;
+ end;
+A33: for n holds (s2*F).n<>x0
+ proof
+  defpred P[Nat] means (s2*F).$1<>x0;
+  A34: P[0] by A12,A18,SEQM_3:31;
+  A35: for k st P[k] holds P[k+1]
+  proof let k such that (s2*F).k<>x0;
+     P[k,F.k,F.(k+1)] by A18; then s2.(F.(k+1))<>x0;
+   hence (s2*F).(k+1)<>x0 by SEQM_3:31;
+  end;
+  thus for n holds P[n] from Ind(A34,A35);
+ end;
+ A36: s2*F is_subsequence_of s2 by SEQM_3:def 10;
+then A37: s2*F is convergent by A2,SEQ_4:29;
+   rng (s2*F) c= rng s2 by A36,RFUNCT_2:11;
+then A38: rng (s2*F) c= dom f by A2,XBOOLE_1:1;
+   lim (s2*F)=x0 by A2,A36,SEQ_4:30;
+ then A39: f*(s2*F) is convergent & f.x0=lim(f*(s2*F)) by A1,A33,A37,A38;
+A40: now let p be real number; assume A41: 0<p;
+  then consider n such that
+  A42: for m st n<=m holds abs((f*(s2*F)).m-f.x0)<p by A39,SEQ_2:def 7;
+  take k=F.n; let m such that A43: k<=m;
+    now per cases;
+  suppose A44: s2.m=x0;
+     abs((f*s2).m-f.x0)=abs(f.(s2.m)-f.x0) by A2,RFUNCT_2:21
+   .=abs(0) by A44,XCMPLX_1:14
+   .=0 by ABSVALUE:7;
+   hence abs((f*s2).m-f.x0)<p by A41;
+  suppose s2.m<>x0; then consider l be Nat such that A45: m=F.l by A21;
+     n<=l by A43,A45,SEQM_3:7;
+   then abs((f*(s2*F)).l-f.x0)<p by A42;
+   then abs(f.((s2*F).l)-f.x0)<p by A38,RFUNCT_2:21;
+   then abs(f.(s2.m)-f.x0)<p by A45,SEQM_3:31;
+   hence abs((f*s2).m-f.x0)<p by A2,RFUNCT_2:21;
+  end; hence abs((f*s2).m-f.x0)<p;
+ end;
+ hence f*s2 is convergent by SEQ_2:def 6;
+ hence f.x0=lim(f*s2) by A40,SEQ_2:def 7;
+ end; hence thesis;
+end;
+
+theorem Th3:
+f is_continuous_in x0 iff x0 in dom f &
+for r st 0<r ex s st 0<s & for x1 st x1 in dom f & abs(x1-x0)<s holds
+abs(f.x1-f.x0)<r
+proof
+ thus f is_continuous_in x0 implies x0 in dom f &
+ for r st 0<r ex s st 0<s & for x1 st x1 in dom f & abs(x1-x0)<s holds
+ abs(f.x1-f.x0)<r
+ proof assume A1: f is_continuous_in x0;
+  hence x0 in dom f by Def1;
+  given r such that A2: 0<r & for s holds not 0<s or ex x1 st x1 in dom f &
+  abs(x1-x0)<s & not abs(f.x1-f.x0)<r;
+  defpred P[Nat,real number] means
+    $2 in dom f & abs($2-x0) < 1/($1+1) & not abs(f.$2-f.x0)<r;
+  A3: for n ex p st P[n,p]
+   proof let n;
+      0<n+1 by NAT_1:19;
+    then 0<(n+1)" by REAL_1:72;
+     then 0<1/(n+1) by XCMPLX_1:217;
+    then consider p such that A4: p in dom f &
+    abs(p-x0) < 1/(n+1) & not abs(f.p-f.x0)<r by A2;
+    take p; thus thesis by A4;
+   end;
+  consider s1 such that A5:
+  for n holds P[n,s1.n] from RealSeqChoice(A3);
+  A6: rng s1 c= dom f
+  proof let x; assume x in rng s1;
+    then ex n st x=s1.n by RFUNCT_2:9; hence thesis by A5;
+  end;
+  A7: now let n; not abs(f.(s1.n)-f.x0)<r by A5;
+   hence not abs((f*s1).n-f.x0)<r by A6,RFUNCT_2:21;
+  end;
+  A8: now let s be real number; assume 0<s;
+   then A9: 0<s" by REAL_1:72;
+   consider n such that A10: s"<n by SEQ_4:10;
+   take k=n; let m such that A11: k<=m;
+     s"+0 <n+1 by A10,REAL_1:67;
+   then 1/(n+1)<1/s" by A9,SEQ_2:10;
+   then A12: 1/(n+1)<s by XCMPLX_1:218;
+   A13: 0<n+1 by NAT_1:19; k+1<=m+1 by A11,AXIOMS:24;
+   then 1/(m+1)<=1/(k+1) by A13,SEQ_4:1;
+   then A14: 1/(m+1)<s by A12,AXIOMS:22; abs(s1.m-x0)<1/(m+1) by A5;
+   hence abs(s1.m-x0)<s by A14,AXIOMS:22;
+  end;
+  then A15:s1 is convergent by SEQ_2:def 6;
+  then lim s1=x0 by A8,SEQ_2:def 7;
+  then f*s1 is convergent & f.x0=lim(f*s1) by A1,A6,A15,Def1;
+  then consider n such that
+A16: for m st n<=m holds abs((f*s1).m-f.x0)<r by A2,SEQ_2:def 7;
+     abs((f*s1).n-f.x0)<r by A16;
+  hence contradiction by A7;
+ end;
+ assume A17: x0 in dom f & for r st 0<r ex s st 0<s & for x1 st
+ x1 in dom f & abs(x1-x0)<s holds abs(f.x1-f.x0)<r;
+   now let s1 such that A18: rng s1 c= dom f & s1 is convergent & lim s1 = x0;
+
+  A19: now let p be real number;
+  assume 0<p;
+   then consider s such that
+   A20: 0<s & for x1 st x1 in dom f & abs(x1-x0)<s holds
+   abs(f.x1-f.x0)<p by A17;
+   consider n such that A21: for m st n<=m holds abs(s1.m-x0)<s by A18,A20,
+SEQ_2:def 7;
+   take k=n;
+   let m such that A22: k<=m;
+   A23: s1.m in rng s1 by RFUNCT_2:9; abs(s1.m-x0)<s by A21,A22;
+    then abs(f.(s1.m)-f.x0)<p by A18,A20,A23;
+   hence abs((f*s1).m - f.x0)<p by A18,RFUNCT_2:21;
+  end;
+  then f*s1 is convergent by SEQ_2:def 6;
+  hence f*s1 is convergent & f.x0 = lim (f*s1) by A19,SEQ_2:def 7;
+ end; hence thesis by A17,Def1;
+end;
+
+theorem Th4:
+for f,x0 holds f is_continuous_in x0 iff x0 in dom f &
+for N1 being Neighbourhood of f.x0
+ex N being Neighbourhood of x0 st
+for x1 st x1 in dom f & x1 in N holds f.x1 in N1
+proof let f,x0;
+ thus f is_continuous_in x0 implies x0 in dom f &
+ for N1 being Neighbourhood of f.x0
+ ex N being Neighbourhood of x0 st
+ for x1 st x1 in dom f & x1 in N holds f.x1 in N1
+ proof assume A1: f is_continuous_in x0;
+  hence x0 in dom f by Def1;
+  let N1 be Neighbourhood of f.x0;
+  consider r such that A2: 0<r & N1 = ].f.x0-r,f.x0+r.[ by RCOMP_1:def 7;
+  consider s such that A3: 0<s & for x1 st x1 in dom f & abs(x1-x0)<s holds
+  abs(f.x1-f.x0)<r by A1,A2,Th3;
+  reconsider N=].x0-s,x0+s.[ as Neighbourhood of x0 by A3,RCOMP_1:def 7;
+  take N;
+  let x1; assume A4: x1 in dom f & x1 in N;
+  then abs(x1-x0)<s by RCOMP_1:8; then abs(f.x1-f.x0)<r by A3,A4;
+  hence thesis by A2,RCOMP_1:8;
+ end;
+ assume A5: x0 in dom f & for N1 being Neighbourhood of f.x0
+ ex N being Neighbourhood of x0 st
+ for x1 st x1 in dom f & x1 in N holds f.x1 in N1;
+   now let r; assume 0<r;
+  then reconsider N1 = ].f.x0-r,f.x0+r.[ as Neighbourhood of f.x0
+  by RCOMP_1:def 7;
+  consider N2 being Neighbourhood of x0 such that A6:
+  for x1 st x1 in dom f & x1 in N2 holds f.x1 in N1 by A5;
+  consider s such that A7: 0<s & N2 = ].x0-s,x0+s.[ by RCOMP_1:def 7;
+  take s;
+    for x1 st x1 in dom f & abs(x1-x0)<s holds abs(f.x1-f.x0)<r
+  proof let x1; assume A8: x1 in dom f & abs(x1-x0)<s;
+   then x1 in N2 by A7,RCOMP_1:8; then f.x1 in N1 by A6,A8;
+   hence thesis by RCOMP_1:8;
+  end; hence
+    0<s & for x1 st x1 in dom f & abs(x1-x0)<s holds abs(f.x1-f.x0)<r by A7;
+ end; hence thesis by A5,Th3;
+end;
+
+theorem Th5:
+for f,x0 holds f is_continuous_in x0 iff x0 in dom f &
+for N1 being Neighbourhood of f.x0
+ex N being Neighbourhood of x0 st f.:N c= N1
+proof let f,x0;
+ thus f is_continuous_in x0 implies x0 in dom f &
+ for N1 being Neighbourhood of f.x0
+ ex N being Neighbourhood of x0 st f.:N c= N1
+ proof assume A1: f is_continuous_in x0;
+  hence x0 in dom f by Def1;
+  let N1 be Neighbourhood of f.x0;
+  consider N being Neighbourhood of x0 such that A2:
+  for x1 st x1 in dom f & x1 in N holds f.x1 in N1 by A1,Th4;
+  take N;
+    now let r; assume r in f.:N;
+   then ex x be Element of REAL st
+   x in dom f & x in N & r=f.x by PARTFUN2:78;
+   hence r in N1 by A2;
+  end; hence thesis by RCOMP_1:1;
+ end;
+ assume A3: x0 in dom f & for N1 being Neighbourhood of f.x0
+ ex N being Neighbourhood of x0 st f.:N c= N1;
+   now let N1 be Neighbourhood of f.x0;
+  consider N being Neighbourhood of x0 such that A4: f.:N c= N1 by A3;
+  take N;let x1; assume x1 in dom f & x1 in N;
+  then f.x1 in f.:N by FUNCT_1:def 12; hence f.x1 in N1 by A4;
+ end; hence thesis by A3,Th4;
+end;
+
+theorem
+  x0 in dom f & (ex N be Neighbourhood of x0 st dom f /\ N = {x0}) implies
+f is_continuous_in x0
+proof assume A1: x0 in dom f;
+ given N be Neighbourhood of x0 such that A2: dom f /\ N = {x0};
+   now let N1 be Neighbourhood of f.x0;
+  take N;
+  A3: f.:N = f.:{x0} by A2,RELAT_1:145
+         .= {f.x0} by A1,FUNCT_1:117;
+    f.x0 in N1 by RCOMP_1:37;
+  hence f.:N c= N1 by A3,ZFMISC_1:37;
+ end; hence thesis by A1,Th5;
+end;
+
+theorem Th7:
+f1 is_continuous_in x0 & f2 is_continuous_in x0 implies
+f1+f2 is_continuous_in x0 &
+f1-f2 is_continuous_in x0 &
+f1(#)f2 is_continuous_in x0
+proof assume A1: f1 is_continuous_in x0 & f2 is_continuous_in x0;
+  then A2: x0 in dom f1 &
+      for s1 st rng s1 c= dom f1 & s1 is convergent & lim s1 = x0 holds
+      f1*s1 is convergent & f1.x0 = lim (f1*s1) by Def1;
+  A3: x0 in dom f2 &
+      for s1 st rng s1 c= dom f2 & s1 is convergent & lim s1 = x0 holds
+      f2*s1 is convergent & f2.x0 = lim (f2*s1) by A1,Def1;
+   now
+    x0 in dom f1 /\ dom f2 by A2,A3,XBOOLE_0:def 3;
+  hence A4: x0 in dom (f1+f2) by SEQ_1:def 3;
+  let s1; assume A5: rng s1 c= dom(f1+f2) & s1 is convergent & lim s1=x0;
+  then A6: rng s1 c= dom f1 /\ dom f2 by SEQ_1:def 3;
+    dom (f1+f2) = dom f1 /\ dom f2 by SEQ_1:def 3;
+  then dom (f1+f2) c= dom f1 by XBOOLE_1:17;
+   then rng s1 c= dom f1 by A5,XBOOLE_1:1;
+  then A7: f1*s1 is convergent & f1.x0 = lim (f1*s1) by A1,A5,Def1;
+    dom (f1+f2) = dom f1 /\ dom f2 by SEQ_1:def 3;
+  then dom (f1+f2) c= dom f2 by XBOOLE_1:17;
+   then rng s1 c= dom f2 by A5,XBOOLE_1:1;
+  then A8: f2*s1 is convergent & f2.x0 = lim (f2*s1) by A1,A5,Def1;
+  then f1*s1+f2*s1 is convergent by A7,SEQ_2:19;
+  hence (f1+f2)*s1 is convergent by A6,RFUNCT_2:23;
+  thus (f1+f2).x0 = f1.x0 + f2.x0 by A4,SEQ_1:def 3
+   .= lim (f1*s1 + f2*s1) by A7,A8,SEQ_2:20
+   .= lim ((f1+f2)*s1) by A6,RFUNCT_2:23;
+ end;
+ hence f1+f2 is_continuous_in x0 by Def1;
+   now x0 in dom f1 /\ dom f2 by A2,A3,XBOOLE_0:def 3;
+  hence A9: x0 in dom (f1-f2) by SEQ_1:def 4;
+  let s1; assume A10: rng s1 c= dom(f1-f2) & s1 is convergent & lim s1=x0;
+  then A11: rng s1 c= dom f1 /\ dom f2 by SEQ_1:def 4;
+    dom (f1-f2) = dom f1 /\ dom f2 by SEQ_1:def 4;
+  then dom (f1-f2) c= dom f1 by XBOOLE_1:17;
+   then rng s1 c= dom f1 by A10,XBOOLE_1:1;
+  then A12: f1*s1 is convergent & f1.x0 = lim (f1*s1) by A1,A10,Def1;
+    dom (f1-f2) = dom f1 /\ dom f2 by SEQ_1:def 4;
+  then dom (f1-f2) c= dom f2 by XBOOLE_1:17;
+   then rng s1 c= dom f2 by A10,XBOOLE_1:1;
+  then A13: f2*s1 is convergent & f2.x0 = lim (f2*s1) by A1,A10,Def1;
+  then f1*s1-f2*s1 is convergent by A12,SEQ_2:25;
+  hence (f1-f2)*s1 is convergent by A11,RFUNCT_2:23;
+  thus (f1-f2).x0 = f1.x0 - f2.x0 by A9,SEQ_1:def 4
+   .= lim (f1*s1 - f2*s1) by A12,A13,SEQ_2:26
+   .= lim ((f1-f2)*s1) by A11,RFUNCT_2:23;
+ end;
+ hence f1-f2 is_continuous_in x0 by Def1;
+   x0 in dom f1 /\ dom f2 by A2,A3,XBOOLE_0:def 3;
+ hence A14: x0 in dom (f1(#)f2) by SEQ_1:def 5;
+ let s1; assume A15: rng s1 c= dom(f1(#)
+f2) & s1 is convergent & lim s1=x0;
+ then A16: rng s1 c= dom f1 /\ dom f2 by SEQ_1:def 5;
+   dom (f1(#)f2) = dom f1 /\ dom f2 by SEQ_1:def 5;
+ then dom (f1(#)f2) c= dom f1 by XBOOLE_1:17;
+  then rng s1 c= dom f1 by A15,XBOOLE_1:1;
+ then A17: f1*s1 is convergent & f1.x0 = lim (f1*s1) by A1,A15,Def1;
+   dom (f1(#)f2) = dom f1 /\ dom f2 by SEQ_1:def 5;
+ then dom (f1(#)f2) c= dom f2 by XBOOLE_1:17;
+  then rng s1 c= dom f2 by A15,XBOOLE_1:1;
+ then A18: f2*s1 is convergent & f2.x0 = lim (f2*s1) by A1,A15,Def1;
+ then (f1*s1)(#)(f2*s1) is convergent by A17,SEQ_2:28;
+ hence (f1(#)f2)*s1 is convergent by A16,RFUNCT_2:23;
+ thus (f1(#)f2).x0 = f1.x0 * f2.x0 by A14,SEQ_1:def 5
+ .= lim ((f1*s1)(#)(f2*s1)) by A17,A18,SEQ_2:29
+ .= lim ((f1(#)f2)*s1) by A16,RFUNCT_2:23;
+end;
+
+theorem Th8:
+f is_continuous_in x0 implies r(#)f is_continuous_in x0
+proof assume A1: f is_continuous_in x0;
+  then x0 in dom f &
+ for s1 st rng s1 c= dom f & s1 is convergent & lim s1 = x0 holds
+  f*s1 is convergent & f.x0 = lim (f*s1) by Def1;
+ hence A2: x0 in dom (r(#)f) by SEQ_1:def 6;
+ let s1; assume A3: rng s1 c= dom(r(#)f) & s1 is convergent & lim s1=x0;
+ then A4: rng s1 c= dom f by SEQ_1:def 6;
+ then A5: f*s1 is convergent & f.x0 = lim (f*s1) by A1,A3,Def1;
+ then r(#)(f*s1) is convergent by SEQ_2:21;
+ hence (r(#)f)*s1 is convergent by A4,RFUNCT_2:24;
+ thus (r(#)f).x0 = r*f.x0 by A2,SEQ_1:def 6
+  .= lim (r(#)(f*s1)) by A5,SEQ_2:22
+  .= lim ((r(#)f)*s1) by A4,RFUNCT_2:24;
+end;
+
+theorem
+  f is_continuous_in x0 implies abs(f) is_continuous_in x0 &
+-f is_continuous_in x0
+proof assume A1: f is_continuous_in x0;
+ then A2: x0 in dom f &
+ for s1 st rng s1 c= dom f & s1 is convergent & lim s1 = x0 holds
+  f*s1 is convergent & f.x0 = lim (f*s1) by Def1;
+   now thus A3: x0 in dom (abs(f)) by A2,SEQ_1:def 10;
+  let s1; assume A4: rng s1 c= dom(abs(f)) & s1 is convergent & lim s1=x0;
+  then A5: rng s1 c= dom f by SEQ_1:def 10;
+  then A6: f*s1 is convergent & f.x0 = lim (f*s1) by A1,A4,Def1;
+  then abs(f*s1) is convergent by SEQ_4:26;
+  hence (abs(f))*s1 is convergent by A5,RFUNCT_2:25;
+  thus (abs(f)).x0 = abs(f.x0) by A3,SEQ_1:def 10
+  .= lim (abs(f*s1)) by A6,SEQ_4:27
+  .= lim ((abs(f))*s1) by A5,RFUNCT_2:25;
+ end; hence abs(f) is_continuous_in x0 by Def1;
+   -f=(-1)(#)f by RFUNCT_1:38; hence thesis by A1,Th8;
+end;
+
+theorem Th10:
+f is_continuous_in x0 & f.x0<>0 implies f^ is_continuous_in x0
+proof assume A1: f is_continuous_in x0 & f.x0<>0;
+ then A2: x0 in dom f &
+ for s1 st rng s1 c= dom f & s1 is convergent & lim s1 = x0 holds
+  f*s1 is convergent & f.x0 = lim (f*s1) by Def1;
+   not f.x0 in {0} by A1,TARSKI:def 1;
+ then not x0 in f"{0} by FUNCT_1:def 13;
+ then x0 in dom f \ f"{0} by A2,XBOOLE_0:def 4;
+ hence A3: x0 in dom (f^) by RFUNCT_1:def 8;
+ A4: dom f \ f"{0} c= dom f by XBOOLE_1:36;
+ let s1; assume A5: rng s1 c= dom (f^) & s1 is convergent & lim s1=x0;
+ then rng s1 c= dom f \ f"{0} by RFUNCT_1:def 8;
+  then rng s1 c= dom f by A4,XBOOLE_1:1;
+ then A6: f*s1 is convergent & f.x0 = lim (f*s1) by A1,A5,Def1;
+ A7: f*s1 is_not_0 by A5,RFUNCT_2:26;
+ then (f*s1)" is convergent by A1,A6,SEQ_2:35;
+ hence (f^)*s1 is convergent by A5,RFUNCT_2:27;
+ thus (f^).x0 = (f.x0)" by A3,RFUNCT_1:def 8
+  .= lim ((f*s1)") by A1,A6,A7,SEQ_2:36
+  .= lim ((f^)*s1) by A5,RFUNCT_2:27;
+end;
+
+theorem
+  f1 is_continuous_in x0 & f1.x0<>0 & f2 is_continuous_in x0 implies
+f2/f1 is_continuous_in x0
+proof assume f1 is_continuous_in x0 & f1.x0<>0 & f2 is_continuous_in x0;
+ then f1^ is_continuous_in x0 & f2 is_continuous_in x0 by Th10;
+ then f2(#)(f1^) is_continuous_in x0 by Th7; hence thesis by RFUNCT_1:47;
+end;
+
+theorem Th12:
+f1 is_continuous_in x0 & f2 is_continuous_in f1.x0 implies
+f2*f1 is_continuous_in x0
+proof assume A1: f1 is_continuous_in x0 & f2 is_continuous_in f1.x0;
+ then A2: x0 in dom f1 & for s1 st rng s1 c= dom f1 & s1 is convergent & lim s1
+= x0
+     holds f1*s1 is convergent & f1.x0 = lim (f1*s1) by Def1;
+    f1.x0 in dom f2 & for s1 st rng s1 c= dom f2 & s1 is convergent &
+  lim s1 = f1.x0 holds f2*s1 is convergent &
+  f2.(f1.x0) = lim (f2*s1) by A1,Def1;
+  hence A3: x0 in dom (f2*f1) by A2,FUNCT_1:21;
+  let s1 such that
+ A4: rng s1 c= dom (f2*f1) & s1 is convergent & lim s1 = x0;
+    dom (f2*f1) c= dom f1 by RELAT_1:44;
+ then A5: rng s1 c= dom f1 by A4,XBOOLE_1:1;
+ then A6: f1*s1 is convergent & f1.x0 = lim (f1*s1) by A1,A4,Def1;
+     now let x; assume x in rng (f1*s1); then consider n such that
+ A7: x=(f1*s1).n by RFUNCT_2:9; s1.n in rng s1 by RFUNCT_2:10;
+    then f1.(s1.n) in dom f2 by A4,FUNCT_1:21;
+    hence x in dom f2 by A5,A7,RFUNCT_2:21;
+   end;
+ then A8: rng (f1*s1) c= dom f2 by TARSKI:def 3;
+ then A9: f2*(f1*s1) is convergent & f2.(f1.x0) = lim (f2*(f1*s1)) by A1,A6,
+Def1;
+    f2*(f1*s1) = f2*f1*s1
+   proof
+      now let n;
+       s1.n in rng s1 by RFUNCT_2:9;
+ then A10: s1.n in dom f1 & f1.(s1.n) in dom f2 by A4,FUNCT_1:21;
+     thus (f2*f1*s1).n = (f2*f1).(s1.n) by A4,RFUNCT_2:21
+     .= f2.(f1.(s1.n)) by A10,FUNCT_1:23
+     .= f2.((f1*s1).n) by A5,RFUNCT_2:21
+     .= (f2*(f1*s1)).n by A8,RFUNCT_2:21;
+    end; hence thesis by FUNCT_2:113;
+   end;
+ hence f2*f1*s1 is convergent & (f2*f1).x0 = lim (f2*f1*s1) by A3,A9,FUNCT_1:22
+;
+end;
+
+definition let f,X;
+ pred f is_continuous_on X means :Def2:
+ X c= dom f & for x0 st x0 in X holds f|X is_continuous_in x0;
+end;
+
+canceled;
+
+theorem Th14:
+for X,f holds f is_continuous_on X iff X c= dom f &
+for s1 st rng s1 c= X & s1 is convergent & lim s1 in X holds
+f*s1 is convergent & f.(lim s1) = lim (f*s1)
+proof let X,f;
+ thus f is_continuous_on X implies X c= dom f &
+ for s1 st rng s1 c= X & s1 is convergent & lim s1 in X holds
+ f*s1 is convergent & f.(lim s1) = lim (f*s1)
+ proof assume A1: f is_continuous_on X;
+  then A2: X c= dom f & for x1 st x1 in X holds f|X is_continuous_in x1
+  by Def2;
+    now let s1 such that A3: rng s1 c= X & s1 is convergent & lim s1 in X;
+   A4: dom (f|X) = dom f /\ X by FUNCT_1:68
+                 .= X by A2,XBOOLE_1:28;
+A5:   f|X is_continuous_in (lim s1) by A1,A3,Def2;
+     now let n; A6: s1.n in rng s1 by RFUNCT_2:9;
+    A7: rng s1 c= dom f by A2,A3,XBOOLE_1:1; thus
+      ((f|X)*s1).n = (f|X).(s1.n) by A3,A4,RFUNCT_2:21
+     .= f.(s1.n) by A3,A4,A6,FUNCT_1:68
+     .= (f*s1).n by A7,RFUNCT_2:21;
+   end;
+   then A8: (f|X)*s1 = f*s1 by FUNCT_2:113;
+     f.(lim s1) = (f|X).(lim s1) by A3,A4,FUNCT_1:68
+    .= lim (f*s1) by A3,A4,A5,A8,Def1;
+   hence f*s1 is convergent & f.(lim s1) = lim (f*s1) by A3,A4,A5,A8,Def1;
+  end; hence thesis by A1,Def2;
+ end;
+ assume A9: X c= dom f &
+for s1 st rng s1 c= X & s1 is convergent & lim s1 in X holds
+f*s1 is convergent & f.(lim s1) = lim (f*s1);
+   now let x1 such that A10: x1 in X;
+  A11: dom (f|X) = dom f /\ X by FUNCT_1:68
+                .= X by A9,XBOOLE_1:28;
+    now let s1 such that A12: rng s1 c= dom (f|X) & s1 is convergent & lim s1=
+x1
+;
+
+     now let n; A13: s1.n in rng s1 by RFUNCT_2:9;
+    A14: rng s1 c= dom f by A9,A11,A12,XBOOLE_1:1; thus
+      ((f|X)*s1).n = (f|X).(s1.n) by A12,RFUNCT_2:21
+      .= f.(s1.n) by A12,A13,FUNCT_1:68
+      .= (f*s1).n by A14,RFUNCT_2:21;
+   end;
+   then A15: (f|X)*s1 = f*s1 by FUNCT_2:113;
+     (f|X).(lim s1) = f.(lim s1) by A10,A11,A12,FUNCT_1:68
+    .= lim ((f|X)*s1) by A9,A10,A11,A12,A15;
+   hence (f|X)*s1 is convergent & (f|X).x1 = lim ((f|X)*s1) by A9,A10,A11,A12,
+A15;
+  end; hence f|X is_continuous_in x1 by A10,A11,Def1;
+ end; hence thesis by A9,Def2;
+end;
+
+theorem Th15:
+f is_continuous_on X iff X c= dom f &
+for x0,r st x0 in X & 0<r ex s st 0<s & for x1 st x1 in X &
+abs(x1-x0) < s holds abs(f.x1 - f.x0) < r
+proof
+ thus f is_continuous_on X implies X c= dom f &
+ for x0,r st x0 in X & 0<r ex s st 0<s & for x1 st x1 in X &
+ abs(x1-x0) < s holds abs(f.x1 - f.x0) < r
+ proof assume A1: f is_continuous_on X;
+  then A2: X c= dom f & for x1 st x1 in X holds f|X is_continuous_in x1
+  by Def2; thus X c= dom f by A1,Def2;
+  let x0,r; assume A3: x0 in X & 0<r;
+  then f|X is_continuous_in x0 by A1,Def2;
+  then consider s such that A4: 0<s & for x1 st x1 in dom(f|X) & abs(x1-x0)<s
+holds
+  abs((f|X).x1-(f|X).x0)<r by A3,Th3;
+  A5: dom (f|X) = dom f /\ X by FUNCT_1:68
+               .= X by A2,XBOOLE_1:28;
+  take s;
+  thus 0<s by A4;
+  let x1; assume A6: x1 in X & abs(x1-x0)<s;
+  then abs(f.x1 - f.x0) = abs((f|X).x1 - f.x0) by A5,FUNCT_1:68
+                 .= abs((f|X).x1 - (f|X).x0) by A3,A5,FUNCT_1:68;
+  hence thesis by A4,A5,A6;
+ end;
+ assume that A7: X c= dom f and
+ A8: for x0,r st x0 in X & 0<r ex s st 0<s & for x1 st x1 in X &
+     abs(x1-x0) < s holds abs(f.x1 - f.x0) < r;
+ A9: dom (f|X) = dom f /\ X by FUNCT_1:68
+              .= X by A7,XBOOLE_1:28;
+   now let x0 such that A10: x0 in X;
+    for r st 0<r ex s st 0<s & for x1 st x1 in dom(f|X) & abs(x1-x0)<s holds
+  abs((f|X).x1-(f|X).x0)<r
+  proof let r; assume 0<r;
+   then consider s such that A11: 0<s & for x1 st x1 in X &
+   abs(x1-x0) < s holds abs(f.x1 - f.x0) < r by A8,A10;
+   take s;
+   thus 0<s by A11;
+   let x1 such that A12: x1 in dom(f|X) & abs(x1-x0)<s;
+     abs((f|X).x1-(f|X).x0) = abs((f|X).x1 - f.x0) by A9,A10,FUNCT_1:68
+                 .= abs(f.x1 - f.x0) by A12,FUNCT_1:68;
+   hence thesis by A9,A11,A12;
+  end;
+  hence f|X is_continuous_in x0 by A9,A10,Th3;
+ end;
+ hence thesis by A7,Def2;
+end;
+
+theorem Th16:
+f is_continuous_on X iff f|X is_continuous_on X
+proof
+ thus f is_continuous_on X implies f|X is_continuous_on X
+ proof assume A1: f is_continuous_on X;
+ then X c= dom f & for r st r in X holds f|X is_continuous_in r by Def2;
+  then X c= dom f /\ X by XBOOLE_1:28;
+  hence X c= dom (f|X) by RELAT_1:90;
+  let r; assume r in X; then f|X is_continuous_in r by A1,Def2;
+  hence (f|X)|X is_continuous_in r by RELAT_1:101;
+ end;
+ assume A2: f|X is_continuous_on X; then A3: X c= dom(f|X) &
+  for r st r in X holds (f|X)|X is_continuous_in r by Def2;
+ A4: dom f /\ X c= dom f by XBOOLE_1:17;
+   X c= dom f /\ X by A3,RELAT_1:90;
+ hence X c= dom f by A4,XBOOLE_1:1;
+ let r; assume r in X; then (f|X)|X is_continuous_in r by A2,Def2;
+ hence f|X is_continuous_in r by RELAT_1:101;
+end;
+
+theorem Th17:
+f is_continuous_on X & X1 c= X implies f is_continuous_on X1
+proof assume A1: f is_continuous_on X & X1 c= X;
+ then X c= dom f by Def2; hence A2: X1 c= dom f by A1,XBOOLE_1:1;
+ let r; assume A3: r in X1;
+then A4: f|X is_continuous_in r by A1,Def2;
+ thus f|X1 is_continuous_in r
+ proof r in dom f /\ X1 by A2,A3,XBOOLE_0:def 3;
+  hence A5: r in dom (f|X1) by RELAT_1:90;
+  let s1 such that A6: rng s1 c= dom (f|X1) & s1 is convergent & lim s1 = r;
+     dom f /\ X1 c= dom f /\ X by A1,XBOOLE_1:26;
+   then dom (f|X1) c= dom f /\ X by RELAT_1:90;
+then A7: dom (f|X1) c= dom (f|X) by RELAT_1:90;
+then A8: rng s1 c= dom (f|X) by A6,XBOOLE_1:1;
+then A9: (f|X)*s1 is convergent & (f|X).r = lim ((f|X)*s1) by A4,A6,Def1;
+A10: (f|X).r = f.r by A5,A7,FUNCT_1:68
+     .= (f|X1).r by A5,FUNCT_1:68;
+      now let n;
+ A11: s1.n in rng s1 by RFUNCT_2:9;
+     thus ((f|X)*s1).n = (f|X).(s1.n) by A8,RFUNCT_2:21
+      .= f.(s1.n) by A8,A11,FUNCT_1:68
+      .= (f|X1).(s1.n) by A6,A11,FUNCT_1:68
+      .= ((f|X1)*s1).n by A6,RFUNCT_2:21;
+    end;
+  hence (f|X1)*s1 is convergent & (f|X1).r = lim ((f|X1)*s1) by A9,A10,FUNCT_2:
+113;
+ end;
+end;
+
+theorem
+  x0 in dom f implies f is_continuous_on {x0}
+proof assume A1: x0 in dom f;
+ thus {x0} c= dom f
+  proof let x; assume x in {x0}; hence x in dom f by A1,TARSKI:def 1; end;
+ let p such that A2: p in {x0};
+ thus f|{x0} is_continuous_in p
+ proof A3: p=x0 by A2,TARSKI:def 1; p in dom f by A1,A2,TARSKI:def 1;
+  then p in dom f /\ {x0} by A2,XBOOLE_0:def 3;
+  hence p in dom (f|{x0}) by RELAT_1:90;
+  let s1; assume A4: rng s1 c= dom(f|{x0}) & s1 is convergent & lim s1=p;
+then A5: rng s1 c= dom f /\ {x0} by RELAT_1:90;
+    dom f /\ {x0} c= {x0} by XBOOLE_1:17;
+then A6: rng s1 c= {x0} by A5,XBOOLE_1:1;
+A7: now let n; s1.n in rng s1 by RFUNCT_2:9;
+hence s1.n = x0 by A6,TARSKI:def 1;
+    end;
+A8: now let g  be real number such that
+A9: 0<g; take n=0; let m such that n<=m;
+    abs(((f|{x0})*s1).m - (f|{x0}).p) = abs((f|{x0}).(s1.m) - (f|{x0}).x0)
+     by A3,A4,RFUNCT_2:21
+   .= abs((f|{x0}).x0 - (f|{x0}).x0) by A7
+   .= abs(0) by XCMPLX_1:14
+   .= 0 by ABSVALUE:7;
+  hence abs(((f|{x0})*s1).m - (f|{x0}).p) < g by A9;
+  end;
+  hence (f|{x0})*s1 is convergent by SEQ_2:def 6;
+  hence (f|{x0}).p = lim ((f|{x0})*s1) by A8,SEQ_2:def 7;
+ end;
+end;
+
+theorem Th19:
+for X,f1,f2 st f1 is_continuous_on X & f2 is_continuous_on X holds
+f1+f2 is_continuous_on X & f1-f2 is_continuous_on X & f1(#)
+f2 is_continuous_on X
+proof let X,f1,f2;
+ assume that A1: f1 is_continuous_on X and
+             A2: f2 is_continuous_on X;
+ A3: X c= dom f1 by A1,Th14;
+   X c= dom f2 by A2,Th14;
+ then A4: X c= dom f1 /\ dom f2 by A3,XBOOLE_1:19;
+ then A5: X c= dom (f1+f2) by SEQ_1:def 3;
+ A6: X c= dom (f1-f2) by A4,SEQ_1:def 4;
+ A7: X c= dom (f1(#)f2) by A4,SEQ_1:def 5;
+   now let s1; assume A8: rng s1 c= X & s1 is convergent & lim s1 in X;
+  then A9: rng s1 c= dom f1 /\ dom f2 by A4,XBOOLE_1:1;
+  A10: f1*s1 is convergent & f1.(lim s1) = lim (f1*s1) by A1,A8,Th14;
+  A11: f2*s1 is convergent & f2.(lim s1) = lim (f2*s1) by A2,A8,Th14;
+then A12:  (f1*s1)+(f2*s1) is convergent by A10,SEQ_2:19;
+    (f1+f2).(lim s1) = lim (f1*s1) + lim (f2*s1) by A5,A8,A10,A11,SEQ_1:def 3
+           .= lim (f1*s1 + f2*s1) by A10,A11,SEQ_2:20
+           .= lim ((f1+f2)*s1) by A9,RFUNCT_2:23;
+  hence (f1+f2)*s1 is convergent & (f1+f2).(lim s1)=lim((f1+f2)*s1) by A9,A12,
+RFUNCT_2:23;
+ end;
+ hence f1+f2 is_continuous_on X by A5,Th14;
+   now let s1; assume A13: rng s1 c= X & s1 is convergent & lim s1 in X;
+  then A14: rng s1 c= dom f1 /\ dom f2 by A4,XBOOLE_1:1;
+  A15: f1*s1 is convergent & f1.(lim s1) = lim (f1*s1) by A1,A13,Th14;
+  A16: f2*s1 is convergent & f2.(lim s1) = lim (f2*s1) by A2,A13,Th14;
+then A17:  (f1*s1)-(f2*s1) is convergent by A15,SEQ_2:25;
+    (f1-f2).(lim s1) = lim (f1*s1) - lim (f2*s1) by A6,A13,A15,A16,SEQ_1:def 4
+           .= lim (f1*s1 - f2*s1) by A15,A16,SEQ_2:26
+           .= lim ((f1-f2)*s1) by A14,RFUNCT_2:23;
+  hence (f1-f2)*s1 is convergent & (f1-f2).(lim s1)=lim((f1-f2)*s1) by A14,A17,
+RFUNCT_2:23;
+ end;
+ hence f1-f2 is_continuous_on X by A6,Th14;
+   now let s1; assume A18: rng s1 c= X & s1 is convergent & lim s1 in X;
+  then A19: rng s1 c= dom f1 /\ dom f2 by A4,XBOOLE_1:1;
+  A20: f1*s1 is convergent & f1.(lim s1) = lim (f1*s1) by A1,A18,Th14;
+  A21: f2*s1 is convergent & f2.(lim s1) = lim (f2*s1) by A2,A18,Th14;
+then A22:  (f1*s1)(#)(f2*s1) is convergent by A20,SEQ_2:28;
+    (f1(#)f2).(lim s1) = lim (f1*s1) * lim (f2*s1) by A7,A18,A20,A21,SEQ_1:def
+5
+           .= lim ((f1*s1) (#) (f2*s1)) by A20,A21,SEQ_2:29
+           .= lim ((f1(#)f2)*s1) by A19,RFUNCT_2:23;
+  hence (f1(#)f2)*s1 is convergent & (f1(#)f2).(lim s1)=lim((f1(#)
+f2)*s1) by A19,A22,RFUNCT_2:23;
+ end;
+ hence f1(#)f2 is_continuous_on X by A7,Th14;
+end;
+
+theorem
+  for X,X1,f1,f2 st f1 is_continuous_on X & f2 is_continuous_on X1 holds
+f1+f2 is_continuous_on X /\ X1 & f1-f2 is_continuous_on X /\ X1 &
+f1(#)f2 is_continuous_on X /\ X1
+proof let X,X1,f1,f2;
+ assume A1: f1 is_continuous_on X & f2 is_continuous_on X1;
+   X /\ X1 c= X & X /\ X1 c= X1 by XBOOLE_1:17;
+ then f1 is_continuous_on X /\ X1 & f2 is_continuous_on X /\ X1 by A1,Th17;
+ hence thesis by Th19;
+end;
+
+theorem Th21:
+for r,X,f st f is_continuous_on X holds r(#)f is_continuous_on X
+proof let r,X,f; assume A1: f is_continuous_on X;
+ then A2: X c= dom f by Th14;
+ then A3: X c= dom(r(#)f) by SEQ_1:def 6;
+   now let s1; assume A4: rng s1 c= X & s1 is convergent & lim s1 in X;
+  then A5: rng s1 c= dom f by A2,XBOOLE_1:1;
+  A6: f*s1 is convergent & f.(lim s1) = lim (f*s1) by A1,A4,Th14;
+then A7:  r(#)(f*s1) is convergent by SEQ_2:21;
+    (r(#)f).(lim s1) = r * lim (f*s1) by A3,A4,A6,SEQ_1:def 6
+           .= lim (r(#)(f*s1)) by A6,SEQ_2:22
+           .= lim ((r(#)f)*s1) by A5,RFUNCT_2:24;
+  hence (r(#)f)*s1 is convergent & (r(#)f).(lim s1)=lim((r(#)f)*s1) by A5,A7,
+RFUNCT_2:24;
+ end; hence thesis by A3,Th14;
+end;
+
+theorem
+  f is_continuous_on X implies abs(f) is_continuous_on X & -f is_continuous_on
+X
+proof assume A1: f is_continuous_on X;
+ thus abs(f) is_continuous_on X
+ proof X c= dom f by A1,Def2;
+  hence A2: X c= dom (abs(f)) by SEQ_1:def 10;
+  let r; assume A3: r in X; then A4: f|X is_continuous_in r by A1,Def2;
+  thus (abs(f))|X is_continuous_in r
+   proof A5: r in dom (abs(f)) by A2,A3;
+      r in dom (abs(f)) /\ X by A2,A3,XBOOLE_0:def 3;
+    hence A6: r in dom ((abs(f))|X) by RELAT_1:90;
+    let s1; assume
+A7: rng s1 c= dom ((abs(f))|X) & s1 is convergent & lim s1 = r;
+    then rng s1 c= dom (abs(f)) /\ X by RELAT_1:90;
+ then rng s1 c= dom f /\ X by SEQ_1:def 10;
+then A8: rng s1 c= dom (f|X) by RELAT_1:90;
+then A9: (f|X)*s1 is convergent & (f|X).r = lim ((f|X)*s1) by A4,A7,Def1;
+       now let n;
+      A10: s1.n in rng s1 by RFUNCT_2:9;
+ then s1.n in dom (f|X) by A8;
+      then s1.n in dom f /\ X by RELAT_1:90;
+      then A11: s1.n in dom f & s1.n in X by XBOOLE_0:def 3;
+ then A12:  s1.n in dom (abs(f)) & s1.n in X by SEQ_1:def 10;
+      thus (abs((f|X)*s1)).n = abs( ((f|X)*s1).n ) by SEQ_1:16
+       .=abs((f|X).(s1.n)) by A8,RFUNCT_2:21
+       .=abs(f.(s1.n)) by A8,A10,FUNCT_1:68
+       .=(abs(f)).(s1.n) by A12,SEQ_1:def 10
+       .=((abs(f))|X).(s1.n) by A11,FUNCT_1:72
+       .=(((abs(f))|X)*s1).n by A7,RFUNCT_2:21;
+     end;
+then A13: abs((f|X)*s1) = ((abs(f))|X)*s1 by FUNCT_2:113;
+    hence ((abs(f))|X)*s1 is convergent by A9,SEQ_4:26;
+      abs((f|X).r) = abs(f.r) by A3,FUNCT_1:72
+     .= (abs(f)).r by A5,SEQ_1:def 10
+     .= ((abs(f))|X).r by A6,FUNCT_1:68;
+    hence ((abs(f))|X).r = lim (((abs(f))|X)*s1) by A9,A13,SEQ_4:27;
+   end;
+ end; (-1)(#)f is_continuous_on X by A1,Th21; hence thesis by RFUNCT_1:38;
+end;
+
+theorem Th23:
+f is_continuous_on X & f"{0} = {} implies f^ is_continuous_on X
+proof assume that A1: f is_continuous_on X and A2: f"{0} = {};
+ A3: dom(f^) = dom f \ {} by A2,RFUNCT_1:def 8
+             .= dom f;
+ hence A4: X c= dom (f^) by A1,Def2;
+ let r; assume A5: r in X; then A6: f|X is_continuous_in r by A1,Def2;
+ A7: r in dom(f^) by A4,A5;
+   r in dom(f^) /\ X by A4,A5,XBOOLE_0:def 3;
+ then A8: r in dom((f^)|X) by RELAT_1:90;
+   now let s1; assume A9: rng s1 c= dom((f^)|X) & s1 is convergent & lim s1=r;
+  then rng s1 c= dom(f^) /\ X by RELAT_1:90;
+  then A10: rng s1 c= dom(f|X) by A3,RELAT_1:90;
+  then A11: (f|X)*s1 is convergent & (f|X).r = lim ((f|X)*s1) by A6,A9,Def1;
+    r in dom f /\ X by A3,A4,A5,XBOOLE_0:def 3;
+  then A12: r in dom(f|X) by RELAT_1:90;
+  then A13: (f|X).r = f.r by FUNCT_1:68;
+A14:now let n;
+A15: rng s1 c= dom f /\ X by A3,A9,RELAT_1:90;
+      dom f /\ X c= dom f by XBOOLE_1:17;
+then A16: rng s1 c= dom f by A15,XBOOLE_1:1;
+A17: s1.n in rng s1 by RFUNCT_2:9;
+A18:  now assume f.(s1.n)=0; then f.(s1.n) in {0} by TARSKI:def 1;
+hence contradiction by A2,A16,A17,FUNCT_1:def 13;
+     end;
+      ((f|X)*s1).n = (f|X).(s1.n) by A10,RFUNCT_2:21
+     .= f.(s1.n) by A10,A17,FUNCT_1:68;
+    hence ((f|X)*s1).n <>0 by A18;
+   end;
+     now assume f.r = 0; then f.r in {0} by TARSKI:def 1
+;hence contradiction by A2,A3,A4,A5,FUNCT_1:def 13;
+   end;
+  then A19: lim ((f|X)*s1) <> 0 & (f|X)*s1 is_not_0 by A6,A9,A10,A13,A14,Def1,
+SEQ_1:7;
+    now let n;
+  A20: s1.n in rng s1 by RFUNCT_2:9;
+  then s1.n in dom((f^)|X) by A9;
+   then s1.n in dom (f^) /\ X by RELAT_1:90;
+  then A21: s1.n in dom (f^) by XBOOLE_0:def 3;
+  thus (((f^)|X)*s1).n = ((f^)|X).(s1.n) by A9,RFUNCT_2:21
+   .= (f^).(s1.n) by A9,A20,FUNCT_1:68
+   .= (f.(s1.n))" by A21,RFUNCT_1:def 8
+   .= ((f|X).(s1.n))" by A10,A20,FUNCT_1:68
+   .= (((f|X)*s1).n)" by A10,RFUNCT_2:21
+   .= (((f|X)*s1)").n by SEQ_1:def 8;
+  end;
+  then A22: ((f^)|X)*s1 = ((f|X)*s1)" by FUNCT_2:113;
+  hence ((f^)|X)*s1 is convergent by A11,A19,SEQ_2:35;
+  thus lim (((f^)|X)*s1) = ((f|X).r)" by A11,A19,A22,SEQ_2:36
+   .= (f.r)" by A12,FUNCT_1:68
+   .= (f^).r by A7,RFUNCT_1:def 8
+   .= ((f^)|X).r by A8,FUNCT_1:68;
+ end; hence thesis by A8,Def1;
+end;
+
+theorem
+  f is_continuous_on X & (f|X)"{0} = {} implies f^ is_continuous_on X
+proof assume f is_continuous_on X & (f|X)"{0} = {};
+ then f|X is_continuous_on X & (f|X)"{0} = {} by Th16;
+ then (f|X)^ is_continuous_on X by Th23;
+ then (f^)|X is_continuous_on X by RFUNCT_1:62; hence thesis by Th16;
+end;
+
+theorem
+  f1 is_continuous_on X & f1"{0} = {} & f2 is_continuous_on X implies
+f2/f1 is_continuous_on X
+proof assume f1 is_continuous_on X & f1"{0} = {} & f2 is_continuous_on X;
+ then f1^ is_continuous_on X & f2 is_continuous_on X by Th23;
+ then f2(#)(f1^) is_continuous_on X by Th19; hence thesis by RFUNCT_1:47;
+end;
+
+theorem
+  f1 is_continuous_on X & f2 is_continuous_on (f1.:X) implies
+f2*f1 is_continuous_on X
+proof assume A1: f1 is_continuous_on X & f2 is_continuous_on (f1.:X);
+ then A2: X c= dom f1 & f1.:X c= dom f2 by Def2;
+ hence X c= dom (f2*f1) by FUNCT_3:3;
+ let r; assume A3: r in X; then A4: f1|X is_continuous_in r by A1,Def2;
+    f1.r in f1.:X by A2,A3,FUNCT_1:def 12;
+ then f2|(f1.:X) is_continuous_in f1.r by A1,Def2;
+ then f2|(f1.:X) is_continuous_in (f1|X).r by A3,FUNCT_1:72;
+ then (f2|(f1.:X))*(f1|X) is_continuous_in r by A4,Th12;
+ hence (f2*f1)|X is_continuous_in r by RFUNCT_2:2;
+end;
+
+theorem
+  f1 is_continuous_on X & f2 is_continuous_on X1 implies
+f2*f1 is_continuous_on X /\ (f1"X1)
+proof assume A1: f1 is_continuous_on X & f2 is_continuous_on X1;
+ then A2: X c= dom f1 & X1 c= dom f2 by Def2;
+   now let x;
+ assume x in X /\ (f1"X1); then A3: x in X & x in (f1"X1) by XBOOLE_0:def 3;
+  then reconsider y=x as Real;
+    x in dom f1 & f1.y in X1 by A3,FUNCT_1:def 13; hence x in dom(f2*f1)
+  by A2,FUNCT_1:21;
+ end;
+ hence X /\ (f1"X1) c= dom (f2*f1) by TARSKI:def 3;
+ let r; assume A4: r in X /\ (f1"X1); then A5: r in X by XBOOLE_0:def 3;
+ then A6: f1|X is_continuous_in r by A1,Def2;
+   r in (f1"X1) by A4,XBOOLE_0:def 3;
+ then f1.r in X1 by FUNCT_1:def 13;
+ then f2|X1 is_continuous_in f1.r by A1,Def2;
+ then f2|X1 is_continuous_in (f1|X).r by A5,FUNCT_1:72;
+ then (f2|X1)*(f1|X) is_continuous_in r by A6,Th12;
+ hence (f2*f1)|(X /\ (f1"X1)) is_continuous_in r by RFUNCT_2:3;
+end;
+
+theorem
+  f is total & (for x1,x2 holds f.(x1+x2) = f.x1 + f.x2) &
+(ex x0 st f is_continuous_in x0) implies f is_continuous_on REAL
+proof assume that A1: f is total and
+ A2: for x1,x2 holds f.(x1+x2) = f.x1 + f.x2;
+ given x0 such that A3: f is_continuous_in x0;
+ A4: dom f = REAL by A1,PARTFUN1:def 4;
+   f.x0 + 0 = f.(x0+0)
+  .= f.x0+f.0 by A2;
+ then A5: f.0 = 0 by XCMPLX_1:2;
+ A6: now let x1;
+     0 = f.(x1+-x1) by A5,XCMPLX_0:def 6
+   .= f.x1+f.(-x1) by A2;
+   hence -(f.x1)=f.(-x1) by XCMPLX_0:def 6;
+  end;
+  A7: now let x1,x2;
+   thus f.(x1-x2)=f.(x1+-x2) by XCMPLX_0:def 8
+   .= f.x1 + f.(-x2) by A2
+   .= f.x1 +- f.x2 by A6
+   .= f.x1 - f.x2 by XCMPLX_0:def 8;
+  end;
+   now let x1,r; assume x1 in REAL & r>0;
+  then consider s such that A8: 0<s & for x1 st x1 in dom f & abs(x1-x0)<s
+holds
+     abs(f.x1-f.x0)<r by A3,Th3;
+  take s; thus s>0 by A8;
+  let x2 such that A9: x2 in REAL & abs(x2-x1)<s;
+  set y=x1-x0; A10: y+x0=x1 by XCMPLX_1:27;
+  then A11: abs(f.x2-f.x1) = abs(f.x2-(f.y+f.x0)) by A2
+   .= abs(f.x2-f.y-f.x0) by XCMPLX_1:36
+   .= abs(f.(x2-y)-f.x0) by A7;
+A12: x2-y is Real by XREAL_0:def 1;
+     abs(x2-y-x0)=abs(x2-x1) by A10,XCMPLX_1:36;
+  hence abs(f.x2-f.x1)<r by A4,A8,A9,A11,A12;
+ end; hence thesis by A4,Th15;
+end;
+
+theorem Th29:
+for f st dom f is compact & f is_continuous_on (dom f) holds (rng f) is compact
+proof let f;
+ assume that A1: dom f is compact and
+             A2: f is_continuous_on (dom f);
+   now let s1 such that A3: rng s1 c= rng f;
+   defpred P[set,set] means $2 in dom f & f.$2=s1.$1;
+  A4: for n ex p st P[n,p]
+      proof let n;
+         s1.n in rng s1 by RFUNCT_2:9;
+       then consider p being Element of REAL such that A5:
+       p in dom f & s1.n=f.p by A3,PARTFUN1:26; take p; thus thesis by A5;
+      end;
+  consider q1 such that A6: for n holds P[n,q1.n] from RealSeqChoice(A4);
+    now let x; assume x in rng q1;
+   then ex n st x = q1.n by RFUNCT_2:9;
+   hence x in dom f by A6;
+  end;
+  then A7: rng q1 c= dom f by TARSKI:def 3;
+    now let n;
+     q1.n in dom f & f.(q1.n)=s1.n by A6; hence (f*q1).n= s1.n by A7,RFUNCT_2:
+21;
+  end;
+  then A8: f*q1=s1 by FUNCT_2:113;
+  consider s2 such that A9: s2 is_subsequence_of q1 &
+  s2 is convergent & (lim s2) in dom f by A1,A7,RCOMP_1:def 3;
+    f|(dom f) is_continuous_in (lim s2) by A2,A9,Def2;
+  then A10: f is_continuous_in (lim s2) by RELAT_1:97;
+    rng s2 c= rng q1 by A9,RFUNCT_2:11;
+  then rng s2 c= dom f by A7,XBOOLE_1:1;
+then A11:   f*s2 is convergent & f.(lim s2) = lim (f*s2) by A9,A10,Def1;
+  take q2 = f*s2; thus q2 is_subsequence_of s1 & q2 is convergent &
+  (lim q2) in rng f by A7,A8,A9,A11,FUNCT_1:def 5,RFUNCT_2:29;
+ end;
+ hence thesis by RCOMP_1:def 3;
+end;
+
+theorem
+  Y c= dom f & Y is compact & f is_continuous_on Y implies
+(f.:Y) is compact
+proof assume that A1: Y c= dom f and
+                  A2: Y is compact and
+                  A3: f is_continuous_on Y;
+ A4: dom (f|Y) = dom f /\ Y by RELAT_1:90
+   .= Y by A1,XBOOLE_1:28;
+   f|Y is_continuous_on Y
+ proof thus Y c= dom (f|Y) by A4;
+  let r; assume r in Y; then f|Y is_continuous_in r by A3,Def2;
+  hence (f|Y)|Y is_continuous_in r by RELAT_1:101;
+ end; then rng (f|Y) is compact by A2,A4,Th29;
+ hence thesis by RELAT_1:148;
+end;
+
+theorem Th31:
+for f st dom f<>{} & (dom f) is compact & f is_continuous_on (dom f)
+ex x1,x2 st x1 in dom f & x2 in dom f & f.x1 = upper_bound (rng f) &
+  f.x2 = lower_bound (rng f)
+proof let f such that
+      A1: dom f <> {} and
+      A2: dom f is compact and
+      A3: f is_continuous_on (dom f);
+  A4: rng f <> {} by A1,RELAT_1:65;
+    rng f is compact by A2,A3,Th29;
+  then A5: upper_bound (rng f) in rng f &
+      lower_bound (rng f) in rng f by A4,RCOMP_1:32;
+  then consider x being Element of REAL such that A6: x in dom f &
+  upper_bound (rng f) = f.x by PARTFUN1:26;
+  consider y being Element of REAL such that A7: y in dom f &
+  lower_bound (rng f) = f.y by A5,PARTFUN1:26;
+  take x; take y; thus thesis by A6,A7;
+end;
+
+theorem
+  for f,Y st Y<>{} & Y c= dom f & Y is compact & f is_continuous_on Y
+ex x1,x2 st x1 in Y & x2 in Y &
+f.x1 = upper_bound (f.:Y) & f.x2 = lower_bound (f.:Y)
+proof let f,Y such that
+      A1: Y <> {} and
+      A2: Y c= dom f and
+      A3: Y is compact and
+      A4: f is_continuous_on Y;
+A5: dom (f|Y) = dom f /\ Y by RELAT_1:90
+      .= Y by A2,XBOOLE_1:28;
+   f|Y is_continuous_on Y
+ proof thus Y c= dom (f|Y) by A5;
+  let r; assume r in Y; then f|Y is_continuous_in r by A4,Def2;
+  hence (f|Y)|Y is_continuous_in r by RELAT_1:101;
+ end;
+then consider x1,x2 such that A6: x1 in dom (f|Y) & x2 in dom (f|Y) &
+ (f|Y).x1 = upper_bound (rng (f|Y)) & (f|Y).x2 = lower_bound (rng (f|Y))
+ by A1,A3,A5,Th31;
+ take x1,x2; thus x1 in Y & x2 in Y by A5,A6;
+   f.x1=upper_bound(rng (f|Y)) & f.x2=lower_bound(rng (f|Y))
+ by A6,FUNCT_1:68; hence thesis by RELAT_1:148;
+end;
+
+definition let f,X;
+pred f is_Lipschitzian_on X means :Def3:
+X c= dom f & ex r st 0<r & for x1,x2 st x1 in X & x2 in X holds
+abs(f.x1-f.x2)<=r*abs(x1-x2);
+end;
+
+canceled;
+
+theorem Th34:
+f is_Lipschitzian_on X & X1 c= X implies f is_Lipschitzian_on X1
+proof assume A1: f is_Lipschitzian_on X & X1 c= X;
+  then X c= dom f by Def3; hence X1 c= dom f by A1,XBOOLE_1:1;
+ consider s such that A2: 0<s &
+ for x1,x2 st x1 in X & x2 in X holds abs(f.x1-f.x2)<=s*abs(x1-x2) by A1,Def3;
+ take s; thus 0<s by A2;
+ let x1,x2; assume x1 in X1 & x2 in X1; hence thesis by A1,A2;
+end;
+
+theorem
+  f1 is_Lipschitzian_on X & f2 is_Lipschitzian_on X1 implies
+f1+f2 is_Lipschitzian_on X /\ X1
+proof assume A1: f1 is_Lipschitzian_on X & f2 is_Lipschitzian_on X1;
+ A2: X /\ X1 c= X & X /\ X1 c= X1 by XBOOLE_1:17;
+ then A3: f1 is_Lipschitzian_on X /\ X1 by A1,Th34;
+ then A4: X /\ X1 c= dom f1 by Def3;
+ A5: f2 is_Lipschitzian_on X /\ X1 by A1,A2,Th34;
+ then X /\ X1 c= dom f2 by Def3;
+ then X /\ X1 c= dom f1 /\ dom f2 by A4,XBOOLE_1:19;
+ hence A6: X /\ X1 c= dom (f1+f2) by SEQ_1:def 3;
+ consider s such that
+ A7: 0<s & for x1,x2 st x1 in X /\ X1 & x2 in X /\ X1 holds
+ abs(f1.x1-f1.x2)<=s*abs(x1-x2) by A3,Def3;
+ consider g such that
+ A8: 0<g & for x1,x2 st x1 in X /\ X1 & x2 in X /\ X1 holds
+ abs(f2.x1-f2.x2)<=g*abs(x1-x2) by A5,Def3;
+ take p=s+g; 0+0<s+g by A7,A8,REAL_1:67;
+ hence 0<p;
+ let x1,x2; assume A9: x1 in X/\X1 & x2 in X/\X1;
+ then A10: x1 in dom (f1+f2) & x2 in dom (f1+f2) by A6;
+ then abs((f1+f2).x1-(f1+f2).x2) = abs(f1.x1 + f2.x1-(f1+f2).x2) by SEQ_1:def 3
+  .= abs(f1.x1 + f2.x1 - (f1.x2+f2.x2)) by A10,SEQ_1:def 3
+  .= abs(f1.x1 + (f2.x1 - (f1.x2+f2.x2))) by XCMPLX_1:29
+  .= abs(f1.x1 + (f2.x1 - f1.x2-f2.x2)) by XCMPLX_1:36
+  .= abs(f1.x1 + (-f1.x2 + f2.x1-f2.x2)) by XCMPLX_0:def 8
+  .= abs(f1.x1 + (-f1.x2 + (f2.x1-f2.x2))) by XCMPLX_1:29
+  .= abs(f1.x1 +- f1.x2 + (f2.x1-f2.x2)) by XCMPLX_1:1
+  .= abs(f1.x1 - f1.x2 + (f2.x1-f2.x2)) by XCMPLX_0:def 8;
+ then A11: abs((f1+f2).x1-(f1+f2).x2)<=abs(f1.x1-f1.x2)+abs(f2.x1-f2.x2)
+  by ABSVALUE:13;
+ A12: abs(f1.x1-f1.x2)<=s*abs(x1-x2) by A7,A9;
+   abs(f2.x1-f2.x2)<=g*abs(x1-x2) by A8,A9;
+ then abs(f1.x1-f1.x2)+abs(f2.x1-f2.x2)<=
+s*abs(x1-x2)+g*abs(x1-x2) by A12,REAL_1:55;
+ then abs(f1.x1-f1.x2)+abs(f2.x1-f2.x2)<=(s+g)*abs(x1-x2) by XCMPLX_1:8;
+ hence thesis by A11,AXIOMS:22;
+end;
+
+theorem
+  f1 is_Lipschitzian_on X & f2 is_Lipschitzian_on X1 implies
+f1-f2 is_Lipschitzian_on X /\ X1
+proof assume A1: f1 is_Lipschitzian_on X & f2 is_Lipschitzian_on X1;
+ A2: X /\ X1 c= X & X /\ X1 c= X1 by XBOOLE_1:17;
+ then A3: f1 is_Lipschitzian_on X /\ X1 by A1,Th34;
+ then A4: X /\ X1 c= dom f1 by Def3;
+ A5: f2 is_Lipschitzian_on X /\ X1 by A1,A2,Th34;
+ then X /\ X1 c= dom f2 by Def3;
+ then X /\ X1 c= dom f1 /\ dom f2 by A4,XBOOLE_1:19;
+ hence A6: X /\ X1 c= dom (f1-f2) by SEQ_1:def 4;
+ consider s such that
+ A7: 0<s & for x1,x2 st x1 in X /\ X1 & x2 in X /\ X1 holds
+ abs(f1.x1-f1.x2)<=s*abs(x1-x2) by A3,Def3;
+ consider g such that
+ A8: 0<g & for x1,x2 st x1 in X /\ X1 & x2 in X /\ X1 holds
+ abs(f2.x1-f2.x2)<=g*abs(x1-x2) by A5,Def3;
+ take p=s+g; 0+0<s+g by A7,A8,REAL_1:67;
+ hence 0<p;
+ let x1,x2; assume A9: x1 in X/\X1 & x2 in X/\X1;
+ then A10: x1 in dom (f1-f2) & x2 in dom (f1-f2) by A6;
+ then abs((f1-f2).x1-(f1-f2).x2) = abs(f1.x1 - f2.x1-(f1-f2).x2) by SEQ_1:def 4
+  .= abs(f1.x1 - f2.x1 - (f1.x2-f2.x2)) by A10,SEQ_1:def 4
+  .= abs(f1.x1 - (f2.x1 + (f1.x2-f2.x2))) by XCMPLX_1:36
+  .= abs(f1.x1 - (f1.x2 + f2.x1-f2.x2)) by XCMPLX_1:29
+  .= abs(f1.x1 - (f1.x2 + (f2.x1-f2.x2))) by XCMPLX_1:29
+  .= abs(f1.x1 - f1.x2 - (f2.x1-f2.x2)) by XCMPLX_1:36;
+ then A11: abs((f1-f2).x1-(f1-f2).x2)<=abs(f1.x1-f1.x2)+abs(f2.x1-f2.x2)
+ by ABSVALUE:19;
+ A12: abs(f1.x1-f1.x2)<=s*abs(x1-x2) by A7,A9;
+   abs(f2.x1-f2.x2)<=g*abs(x1-x2) by A8,A9;
+ then abs(f1.x1-f1.x2)+abs(f2.x1-f2.x2)<=
+s*abs(x1-x2)+g*abs(x1-x2) by A12,REAL_1:55;
+ then abs(f1.x1-f1.x2)+abs(f2.x1-f2.x2)<=(s+g)*abs(x1-x2) by XCMPLX_1:8;
+ hence thesis by A11,AXIOMS:22;
+end;
+
+theorem
+  f1 is_Lipschitzian_on X & f2 is_Lipschitzian_on X1 &
+f1 is_bounded_on Z & f2 is_bounded_on Z1 implies
+f1(#)f2 is_Lipschitzian_on (X /\ Z /\ X1 /\ Z1)
+proof assume that A1: f1 is_Lipschitzian_on X and
+ A2: f2 is_Lipschitzian_on X1 and
+ A3: f1 is_bounded_on Z and A4: f2 is_bounded_on Z1;
+ A5: X c= dom f1 by A1,Def3;
+ A6: X1 c= dom f2 by A2,Def3;
+ then A7: X /\ X1 c= dom f1 /\ dom f2 by A5,XBOOLE_1:27;
+   X /\ X1 /\ (Z /\ Z1) c= X /\ X1 by XBOOLE_1:17;
+then A8: X /\ X1 /\ (Z /\ Z1) c= dom f1 /\ dom f2 by A7,XBOOLE_1:1;
+   X /\ X1 /\ (Z /\ Z1) = X /\ (X1 /\ (Z /\ Z1)) by XBOOLE_1:16
+  .= X /\ (Z /\ X1 /\ Z1) by XBOOLE_1:16
+  .= X /\ (Z /\ X1) /\ Z1 by XBOOLE_1:16
+  .= X /\ Z /\ X1 /\ Z1 by XBOOLE_1:16;
+ hence A9: X /\ Z /\ X1 /\ Z1 c= dom (f1(#)f2) by A8,SEQ_1:def 5;
+ consider s such that A10: 0<s & for x1,x2 st x1 in X & x2 in X holds
+ abs(f1.x1-f1.x2)<=s*abs(x1-x2) by A1,Def3;
+ consider g such that A11: 0<g & for x1,x2 st x1 in X1 & x2 in X1 holds
+ abs(f2.x1-f2.x2)<=g*abs(x1-x2) by A2,Def3;
+ consider x1 such that
+ A12: for r be Real st r in Z /\ dom f1 holds abs(f1.r)<=x1 by A3,RFUNCT_1:90;
+ consider x2 such that
+ A13: for r be Real st r in Z1 /\ dom f2 holds abs(f2.r)<=x2 by A4,RFUNCT_1:90;
+ A14: now let r;
+A15: r is Real by XREAL_0:def 1;
+ assume r in X /\ Z /\ X1 /\ Z1;
+  then A16: r in X /\ Z /\ (X1 /\ Z1) by XBOOLE_1:16; then r in X /\
+ Z by XBOOLE_0:def 3;
+  then r in X & r in Z by XBOOLE_0:def 3;
+  then r in Z /\ dom f1 by A5,XBOOLE_0:def 3; then A17: abs(f1.r)<=x1 by A12,
+A15;
+    x1 <= abs(x1) by ABSVALUE:11;
+  hence abs(f1.r) <= abs(x1) by A17,AXIOMS:22;
+    r in X1 /\ Z1 by A16,XBOOLE_0:def 3;
+  then r in X1 & r in Z1 by XBOOLE_0:def 3;
+  then r in Z1 /\ dom f2 by A6,XBOOLE_0:def 3; then A18: abs(f2.r)<=x2 by A13,
+A15;
+    x2 <= abs(x2) by ABSVALUE:11;
+  hence abs(f2.r) <= abs(x2) by A18,AXIOMS:22;
+ end;
+ take p = abs(x1)*g+abs(x2)*s+1;
+ A19: 0<=abs(x1) & 0<=abs(x2) by ABSVALUE:5;
+ then A20: 0*g<=abs(x1)*g by A11,AXIOMS:25;
+   0*s<=abs(x2)*s by A10,A19,AXIOMS:25;
+  then 0+0<=abs(x1)*g + abs(x2)*s by A20,REAL_1:55;
+ hence 0<p by REAL_1:67;
+ let y1,y2 be real number; assume A21: y1 in X/\Z/\X1/\Z1 & y2 in X/\Z/\X1/\
+Z1;
+ then y1 in X /\ Z /\ (X1 /\ Z1) & y2 in X /\ Z /\ (X1 /\ Z1) by XBOOLE_1:16;
+ then y1 in X /\ Z & y1 in X1 /\ Z1 & y2 in X /\ Z & y2 in X1 /\
+ Z1 by XBOOLE_0:def 3;
+ then A22: y1 in X & y1 in X1 & y2 in X & y2 in X1 by XBOOLE_0:def 3;
+ A23: y1 in dom (f1(#)f2) & y2 in dom (f1(#)f2) by A9,A21;
+ then abs((f1(#)f2).y1-(f1(#)f2).y2) = abs((f1.y1)*(f2.y1) - (f1(#)
+f2).y2) by SEQ_1:def 5
+ .= abs((f1.y1)*(f2.y1)+0 - (f1.y2)*(f2.y2)) by A23,SEQ_1:def 5
+ .= abs((f1.y1)*(f2.y1)+((f1.y1)*(f2.y2)-(f1.y1)*(f2.y2))-(f1.y2)*(f2.y2))
+   by XCMPLX_1:14
+ .= abs((f1.y1)*(f2.y1)+(-(f1.y1)*(f2.y2)+(f1.y1)*(f2.y2))-(f1.y2)*(f2.y2)) by
+XCMPLX_0:def 8
+ .= abs((f1.y1)*(f2.y1)+(-(f1.y1)*(f2.y2)+(f1.y1)*(f2.y2)-(f1.y2)*(f2.y2)))
+   by XCMPLX_1:29
+ .= abs((f1.y1)*(f2.y1)+(-(f1.y1)*(f2.y2)+((f1.y1)*(f2.y2)-(f1.y2)*(f2.y2))))
+   by XCMPLX_1:29
+ .= abs((f1.y1)*(f2.y1)+-(f1.y1)*(f2.y2)+((f1.y1)*(f2.y2)-(f1.y2)*(f2.y2)))
+   by XCMPLX_1:1
+ .= abs((f1.y1)*(f2.y1)-(f1.y1)*(f2.y2)+((f1.y1)*(f2.y2)-(f1.y2)*(f2.y2)))
+   by XCMPLX_0:def 8
+ .= abs((f1.y1)*((f2.y1)-(f2.y2))+((f1.y1)*(f2.y2)-(f1.y2)*(f2.y2)))
+   by XCMPLX_1:40
+ .= abs((f1.y1)*((f2.y1)-(f2.y2))+((f1.y1)-(f1.y2))*(f2.y2)) by XCMPLX_1:40;
+ then A24: abs((f1(#)f2).y1-(f1(#)f2).y2)<=abs((f1.y1)*((f2.y1)-(f2.y2))) +
+ abs(((f1.y1)-(f1.y2))*(f2.y2)) by ABSVALUE:13;
+ A25: abs((f1.y1)*(f2.y1-f2.y2))=abs(f1.y1)*abs(f2.y1-f2.y2) by ABSVALUE:10;
+ A26: abs(f1.y1) <= abs(x1) by A14,A21;
+   0 <= abs(f2.y1-f2.y2) by ABSVALUE:5;
+ then A27: abs((f1.y1)*(f2.y1-f2.y2))<=abs(x1)*abs(f2.y1-f2.y2)
+   by A25,A26,AXIOMS:25;
+ A28: abs(f2.y1-f2.y2)<=g*abs(y1-y2) by A11,A22;
+   0<=abs(x1) by ABSVALUE:5;
+ then abs(x1)*abs(f2.y1-f2.y2)<=abs(x1)*(g*abs(y1-y2)) by A28,AXIOMS:25;
+ then abs((f1.y1)*(f2.y1-f2.y2))<=abs(x1)*(g*abs(y1-y2)) by A27,AXIOMS:22;
+ then A29: abs((f1.y1)*(f2.y1-f2.y2))<=abs(x1)*g*abs(y1-y2) by XCMPLX_1:4;
+ A30: abs(((f1.y1)-(f1.y2))*(f2.y2))=abs(f2.y2)*abs((f1.y1)-(f1.y2))
+ by ABSVALUE:10;
+ A31: abs(f2.y2) <= abs(x2) by A14,A21;
+   0 <= abs(f1.y1-f1.y2) by ABSVALUE:5;
+ then A32: abs(((f1.y1)-(f1.y2))*(f2.y2))<=abs(x2)*abs(f1.y1-f1.y2)
+ by A30,A31,AXIOMS:25;
+ A33: abs(f1.y1-f1.y2)<=s*abs(y1-y2) by A10,A22;
+   0<=abs(x2) by ABSVALUE:5;
+ then abs(x2)*abs(f1.y1-f1.y2)<=abs(x2)*(s*abs(y1-y2)) by A33,AXIOMS:25;
+ then abs(((f1.y1)-(f1.y2))*(f2.y2))<=abs(x2)*(s*abs(y1-y2)) by A32,AXIOMS:22;
+ then abs(((f1.y1)-(f1.y2))*(f2.y2))<=abs(x2)*s*abs(y1-y2) by XCMPLX_1:4;
+ then abs((f1.y1)*(f2.y1-f2.y2))+abs(((f1.y1)-(f1.y2))*(f2.y2)) <=
+ abs(x1)*g*abs(y1-y2)+abs(x2)*s*abs(y1-y2) by A29,REAL_1:55;
+ then abs((f1.y1)*(f2.y1-f2.y2))+abs(((f1.y1)-(f1.y2))*(f2.y2)) <=
+ (abs(x1)*g+abs(x2)*s)*abs(y1-y2) by XCMPLX_1:8;
+ then A34: abs((f1(#)f2).y1-(f1(#)f2).y2)<=
+(abs(x1)*g+abs(x2)*s)*abs(y1-y2) by A24,AXIOMS:22;
+   0<=abs(y1-y2) by ABSVALUE:5;
+ then (abs(x1)*g+abs(x2)*s)*abs(y1-y2)+0 <=
+   (abs(x1)*g+abs(x2)*s)*abs(y1-y2)+1*abs(y1-y2) by REAL_1:55;
+ then (abs(x1)*g+abs(x2)*s)*abs(y1-y2) <= (abs(x1)*g+abs(x2)*s+1)*abs(y1-y2)
+   by XCMPLX_1:8; hence thesis by A34,AXIOMS:22;
+end;
+
+theorem Th38:
+f is_Lipschitzian_on X implies p(#)f is_Lipschitzian_on X
+proof assume A1: f is_Lipschitzian_on X;
+ then X c= dom f by Def3;
+ hence A2: X c= dom (p(#)f) by SEQ_1:def 6;
+ consider s such that A3: 0<s & for x1,x2 st x1 in X & x2 in X holds
+ abs(f.x1-f.x2)<=s*abs(x1-x2) by A1,Def3;
+   now per cases;
+ suppose A4: p=0;
+  take s; thus 0<s by A3;
+  let x1,x2; assume x1 in X & x2 in X;
+  then A5: x1 in dom (p(#)f) & x2 in dom (p(#)f) by A2;
+  then A6: abs((p(#)f).x1-(p(#)f).x2) = abs(p*(f.x1)-(p(#)f).x2) by SEQ_1:def 6
+   .= abs(0 - p*(f.x2)) by A4,A5,SEQ_1:def 6
+   .= 0 by A4,ABSVALUE:7;
+    0<=abs(x1-x2) by ABSVALUE:5;
+  then s*0<=s*abs(x1-x2) by A3,AXIOMS:25;
+  hence abs((p(#)f).x1-(p(#)f).x2) <=s*abs(x1-x2) by A6;
+ suppose p<>0; then 0<abs(p) by ABSVALUE:6;
+then A7:  0*s<abs(p)*s by A3,REAL_1:70;
+  take g = abs(p)*s; thus 0<g by A7;
+  let x1,x2; assume A8: x1 in X & x2 in X;
+  then A9: x1 in dom (p(#)f) & x2 in dom (p(#)f) by A2;
+  then A10: abs((p(#)f).x1-(p(#)f).x2) = abs(p*(f.x1)-(p(#)f).x2) by SEQ_1:def
+6
+   .= abs(p*(f.x1) - p*(f.x2)) by A9,SEQ_1:def 6
+   .= abs(p*(f.x1 - f.x2)) by XCMPLX_1:40
+   .= abs(p)*abs(f.x1 - f.x2) by ABSVALUE:10;
+  A11: 0<=abs(p) by ABSVALUE:5;
+    abs(f.x1-f.x2)<=s*abs(x1-x2) by A3,A8;
+  then abs(p)*abs(f.x1-f.x2)<=abs(p)*(s*abs(x1-x2)) by A11,AXIOMS:25;
+  hence abs((p(#)f).x1-(p(#)f).x2) <= g*abs(x1-x2) by A10,XCMPLX_1:4;
+ end; hence thesis;
+end;
+
+theorem
+  f is_Lipschitzian_on X implies -f is_Lipschitzian_on X &
+abs(f) is_Lipschitzian_on X
+proof assume A1: f is_Lipschitzian_on X;
+  -f=(-1)(#)f by RFUNCT_1:38; hence -f is_Lipschitzian_on X by A1,Th38;
+   X c= dom f by A1,Def3;
+ hence A2: X c= dom (abs(f)) by SEQ_1:def 10;
+ consider s such that A3: 0<s & for x1,x2 st x1 in X & x2 in X holds
+ abs(f.x1-f.x2)<=s*abs(x1-x2) by A1,Def3;
+ take s; thus 0<s by A3;
+ let x1,x2; assume A4: x1 in X & x2 in X;
+ then A5: x1 in dom (abs(f)) & x2 in dom (abs(f)) by A2;
+ then abs((abs(f)).x1-(abs(f)).x2) = abs(abs(f.x1)-(abs(f)).x2) by SEQ_1:def 10
+  .= abs(abs(f.x1)-abs(f.x2)) by A5,SEQ_1:def 10;
+ then A6: abs((abs(f)).x1-(abs(f)).x2) <= abs(f.x1-f.x2) by ABSVALUE:22;
+   abs(f.x1-f.x2)<=s*abs(x1-x2) by A3,A4;
+ hence thesis by A6,AXIOMS:22;
+end;
+
+theorem Th40:
+X c= dom f & f is_constant_on X implies f is_Lipschitzian_on X
+proof assume A1: X c= dom f & f is_constant_on X;
+   now let x1,x2;
+A2: x1 is Real & x2 is Real by XREAL_0:def 1;
+   assume x1 in X & x2 in X;
+  then x1 in X /\ dom f & x2 in X /\ dom f by A1,XBOOLE_0:def 3;
+  then f.x1 = f.x2 by A1,A2,PARTFUN2:77;
+  then abs(f.x1-f.x2) = abs(0) by XCMPLX_1:14
+   .= 0 by ABSVALUE:7;
+  hence abs(f.x1-f.x2) <= 1*abs(x1-x2) by ABSVALUE:5;
+ end; hence thesis by A1,Def3;
+end;
+
+theorem
+  id Y is_Lipschitzian_on Y
+proof
+ thus Y c= dom(id Y) by RELAT_1:71; reconsider r=1 as Real; take r;
+ thus r>0;
+ let x1,x2; assume A1: x1 in Y & x2 in Y;
+ then abs((id Y).x1-(id Y).x2) = abs(x1-(id Y).x2) by FUNCT_1:35
+ .= r*abs(x1-x2) by A1,FUNCT_1:35; hence thesis;
+end;
+
+theorem Th42:
+f is_Lipschitzian_on X implies f is_continuous_on X
+proof assume A1: f is_Lipschitzian_on X;
+ then consider r such that A2: 0<r & for x1,x2 st x1 in X & x2 in X holds
+                         abs(f.x1-f.x2)<=r*abs(x1-x2) by Def3;
+ A3: X c= dom f by A1,Def3;
+ then A4: dom (f|X) = X by RELAT_1:91;
+   now let x0 such that A5: x0 in X;
+    now let g such that A6: 0<g;
+   set s=g/r;
+   take s'=s;
+   A7: 0<r" by A2,REAL_1:72; A8: s'=g*r" by XCMPLX_0:def 9;
+     now let x1;
+    assume A9: x1 in dom (f|X) & abs(x1-x0)<s;
+    then r*abs(x1-x0)<(g/r)*r by A2,REAL_1:70;
+    then A10: r*abs(x1-x0)<g by A2,XCMPLX_1:88;
+      abs(f.x1-f.x0)<=r*abs(x1-x0) by A2,A4,A5,A9;
+    then abs(f.x1-f.x0)<g by A10,AXIOMS:22;
+    then abs((f|X).x1-f.x0)<g by A9,FUNCT_1:68;
+    hence abs((f|X).x1-(f|X).x0)<g by A4,A5,FUNCT_1:68;
+   end; hence 0<s' & for x1 st x1 in dom (f|X) & abs(x1-x0)<s' holds
+   abs((f|X).x1-(f|X).x0)<g by A6,A7,A8,SQUARE_1:21;
+  end; hence f|X is_continuous_in x0 by A4,A5,Th3;
+ end; hence thesis by A3,Def2;
+end;
+
+theorem
+  for f st (ex r st rng f = {r}) holds f is_continuous_on (dom f)
+proof let f; given r such that A1: rng f = {r};
+   now let x1,x2; assume x1 in dom f & x2 in dom f;
+  then f.x1 in rng f & f.x2 in rng f by FUNCT_1:def 5;
+  then f.x1=r & f.x2=r by A1,TARSKI:def 1;
+  then abs(f.x1-f.x2) = abs(0) by XCMPLX_1:14
+   .= 0 by ABSVALUE:7;
+  hence abs(f.x1-f.x2) <= 1*abs(x1-x2) by ABSVALUE:5;
+ end;
+ then f is_Lipschitzian_on dom f by Def3; hence thesis by Th42;
+end;
+
+theorem Th44:
+X c= dom f & f is_constant_on X implies f is_continuous_on X
+proof assume X c= dom f & f is_constant_on X;
+ then f is_Lipschitzian_on X by Th40;
+ hence thesis by Th42;
+end;
+
+theorem Th45:
+for f st (for x0 st x0 in dom f holds f.x0 = x0) holds f is_continuous_on dom f
+proof let f such that A1: for x0 st x0 in dom f holds f.x0 = x0;
+   now let x1,x2; assume x1 in dom f & x2 in dom f;
+  then f.x1 = x1 & f.x2 = x2 by A1;
+  hence abs(f.x1-f.x2) <= 1*abs(x1-x2);
+ end;
+ then f is_Lipschitzian_on dom f by Def3; hence thesis by Th42;
+end;
+
+theorem
+  f = id dom f implies f is_continuous_on dom f
+proof assume f = id dom f;
+ then for x0 st x0 in dom f holds f.x0 = x0 by FUNCT_1:34; hence thesis by Th45
+;
+end;
+
+theorem
+  Y c= dom f & f|Y = id Y implies f is_continuous_on Y
+proof assume A1: Y c= dom f & f|Y = id Y;
+   now let x1,x2; assume A2: x1 in Y & x2 in Y;
+  then x1 in dom f /\ Y & x2 in dom f /\ Y by A1,XBOOLE_0:def 3;
+then A3: x1 in dom (f|Y) & x2 in dom (f|Y) by RELAT_1:90;
+    (f|Y).x1 = x1 & (f|Y).x2 = x2 by A1,A2,FUNCT_1:34;
+  then f.x1 = x1 & f.x2 = x2 by A3,FUNCT_1:68;
+  hence abs(f.x1-f.x2) <= 1*abs(x1-x2);
+ end;
+ then f is_Lipschitzian_on Y by A1,Def3; hence thesis by Th42;
+end;
+
+theorem
+  X c= dom f & (for x0 st x0 in X holds f.x0 = r*x0+p) implies
+f is_continuous_on X
+proof assume that A1: X c= dom f and
+ A2: for x0 st x0 in X holds f.x0 = r*x0+p;
+   now 0<=abs(r) by ABSVALUE:5; then 0+0<abs(r)+1 by REAL_1:67;
+  hence 0<abs(r)+1;
+  let x1,x2; assume x1 in X & x2 in X;
+  then f.x1 = r*x1+p & f.x2 = r*x2+p by A2;
+  then A3: abs(f.x1-f.x2) = abs(r*x1+(p-(p+r*x2))) by XCMPLX_1:29
+   .= abs(r*x1+(p-p-r*x2)) by XCMPLX_1:36
+   .= abs(r*x1+(0-r*x2)) by XCMPLX_1:14
+   .= abs(r*x1+-r*x2) by XCMPLX_1:150
+   .= abs(r*x1-r*x2) by XCMPLX_0:def 8
+   .= abs(r*(x1-x2)) by XCMPLX_1:40
+   .= abs(r)*abs(x1-x2) by ABSVALUE:10;
+    0<=abs(x1-x2) by ABSVALUE:5;
+  then abs(f.x1-f.x2) + 0 <= abs(r)*abs(x1-x2) + 1*abs(x1-x2) by A3,REAL_1:55;
+  hence abs(f.x1-f.x2) <= (abs(r)+1)*abs(x1-x2) by XCMPLX_1:8;
+ end;
+ then f is_Lipschitzian_on X by A1,Def3; hence thesis by Th42;
+end;
+
+theorem Th49:
+(for x0 st x0 in dom f holds f.x0 = x0^2) implies f is_continuous_on (dom f)
+proof assume A1: for x0 st x0 in dom f holds f.x0 = x0^2;
+ defpred P[set] means $1 in dom f;
+ deffunc F(Real) = $1;
+ consider f1 such that A2:
+ (for x be Element of REAL holds x in dom f1 iff P[x]) &
+ (for x be Element of REAL st x in dom f1 holds f1.x=F(x)) from LambdaPFD';
+   for x st x in dom f holds x in dom f1 by A2;
+ then A3: dom f c= dom f1 by TARSKI:def 3;
+   for x st x in dom f1 holds x in dom f by A2;
+ then A4: dom f1 c= dom f by TARSKI:def 3;
+ then A5: dom f = dom f1 by A3,XBOOLE_0:def 10;
+   for x be real number st x in dom f1 holds f1.x=x by A2;
+ then A6: f1 is_continuous_on dom f by A5,Th45;
+ A7: dom f1 /\ dom f1 = dom f by A3,A4,XBOOLE_0:def 10;
+   now let x0 be Real; assume A8: x0 in dom f;
+  hence f.x0 = x0^2 by A1
+   .= x0*x0 by SQUARE_1:def 3
+   .= f1.x0*x0 by A2,A3,A8
+   .= f1.x0*f1.x0 by A2,A3,A8;
+ end; then f = f1(#)f1 by A7,SEQ_1:def 5; hence thesis by A6,Th19;
+end;
+
+theorem
+  X c= dom f & (for x0 st x0 in X holds f.x0 = x0^2) implies
+f is_continuous_on X
+proof assume A1:X c= dom f & (for x0 st x0 in X holds f.x0=x0^2);
+ then X=dom f /\ X by XBOOLE_1:28;
+ then A2: X=dom(f|X) by RELAT_1:90;
+   now let x0; assume A3: x0 in dom(f|X);
+  then f.x0=x0^2 by A1,A2; hence (f|X).x0=x0^2 by A3,FUNCT_1:68;
+ end; then f|X is_continuous_on X by A2,Th49; hence thesis by Th16;
+end;
+
+theorem Th51:
+(for x0 st x0 in dom f holds f.x0 = abs(x0)) implies
+f is_continuous_on (dom f)
+proof assume A1: for x0 st x0 in dom f holds f.x0 = abs(x0);
+   now let x1,x2; assume x1 in dom f & x2 in dom f;
+  then f.x1 = abs(x1) & f.x2 = abs(x2) by A1;
+  hence abs(f.x1-f.x2) <= 1*abs(x1-x2) by ABSVALUE:22;
+ end;
+ then f is_Lipschitzian_on dom f by Def3; hence thesis by Th42;
+end;
+
+theorem
+  X c= dom f & (for x0 st x0 in X holds f.x0 = abs(x0)) implies
+f is_continuous_on X
+proof assume A1:X c= dom f & (for x0 st x0 in X holds f.x0 = abs(x0));
+ then X=dom f /\ X by XBOOLE_1:28;
+ then A2: X=dom(f|X) by RELAT_1:90;
+   now let x0; assume A3: x0 in dom(f|X);
+  then f.x0=abs(x0) by A1,A2; hence (f|X).x0=abs(x0) by A3,FUNCT_1:68;
+ end; then f|X is_continuous_on X by A2,Th51; hence thesis by Th16;
+end;
+
+theorem Th53:
+X c= dom f & f is_monotone_on X & (ex p,g st p<=g & f.:X=[.p,g.]) implies
+f is_continuous_on X
+proof assume that A1: X c= dom f and
+ A2: f is_monotone_on X;
+ given p,g such that A3: p<=g & f.:X=[.p,g.];
+ reconsider p, g as Real by XREAL_0:def 1;
+   now per cases by A3,REAL_1:def 5;
+ suppose p=g;
+  then A4: f.:X = {p} by A3,RCOMP_1:14;
+  then A5: rng (f|X)= {p} by RELAT_1:148;
+    p in f.:X by A4,TARSKI:def 1;
+  then consider x1 be Real such that
+  A6: x1 in dom f & x1 in X & p=f.x1 by PARTFUN2:78;
+    X/\dom f <> {} by A6,XBOOLE_0:def 3;
+  then X meets dom f by XBOOLE_0:def 7;
+  then f is_constant_on X by A5,PARTFUN2:56;
+  hence f is_continuous_on X by A1,Th44;
+ suppose A7: p<g;
+   now per cases by A2,RFUNCT_2:def 6;
+ suppose f is_non_decreasing_on X;
+  then A8: f|X is_non_decreasing_on X by RFUNCT_2:52;
+    for x0 st x0 in X holds f|X is_continuous_in x0
+  proof let x0; assume A9: x0 in X;
+   then x0 in dom f /\ X by A1,XBOOLE_0:def 3;
+   then A10: x0 in dom(f|X) by RELAT_1:90;
+   then A11: (f|X).x0 in (f|X).:X by A9,FUNCT_1:def 12;
+   reconsider x0 as Real by XREAL_0:def 1;
+   A12: (f|X).:X = f.:X by RFUNCT_2:5;
+   A13: (f|X).x0 in [.p,g.] by A3,A11,RFUNCT_2:5;
+     [.p,g.] = ].p,g.[ \/ {p,g} by A3,RCOMP_1:11;
+then A14:   (f|X).x0 in ].p,g.[ or (f|X).x0 in {p,g} by A13,XBOOLE_0:def 2;
+     now let N1 be Neighbourhood of (f|X).x0;
+      now per cases by A14,TARSKI:def 2;
+    suppose (f|X).x0 in ].p,g.[;
+     then consider N2 being Neighbourhood of (f|X).x0 such that
+     A15: N2 c= ].p,g.[ by RCOMP_1:39;
+     consider N3 being Neighbourhood of (f|X).x0 such that
+     A16: N3 c= N1 & N3 c= N2 by RCOMP_1:38;
+     consider r such that
+     A17: r>0 & N3 = ].(f|X).x0-r,(f|X).x0+r.[ by RCOMP_1:def 7;
+     reconsider r as Real by XREAL_0:def 1;
+     set M1 = (f|X).x0-r/2;
+     set M2 = (f|X).x0+r/2;
+     A18: r/2>0 by A17,SEQ_2:3;
+     then (f|X).x0-r < (f|X).x0-r + r/2 by REAL_1:69;
+     then (f|X).x0-r < (f|X).x0-(r/2+r/2) + r/2 by XCMPLX_1:66;
+     then (f|X).x0-r < (f|X).x0-(r/2+r/2-r/2) by XCMPLX_1:37;
+     then A19: (f|X).x0-r < (f|X).x0-r/2 by XCMPLX_1:26;
+     A20: (f|X).x0 < (f|X).x0+r/2 by A18,REAL_1:69;
+     then A21: (f|X).x0-r/2 < (f|X).x0 by REAL_1:84;
+     A22: (f|X).x0 < (f|X).x0+r by A17,REAL_1:69;
+     then (f|X).x0-r/2 < (f|X).x0+r by A21,AXIOMS:22;
+     then (f|X).x0-r/2 in {s where s is Real: (f|X).x0-r<s & s<(f|X).x0+r} by
+A19;
+     then A23: M1 in ].(f|X).x0-r,(f|X).x0+r.[ by RCOMP_1:def 2;
+       (f|X).x0+r/2 < (f|X).x0+r/2+r/2 by A18,REAL_1:69;
+     then (f|X).x0+r/2 < (f|X).x0+(r/2+r/2) by XCMPLX_1:1;
+     then A24: (f|X).x0+r/2 < (f|X).x0+r by XCMPLX_1:66;
+       (f|X).x0-r < (f|X).x0+r-r by A22,REAL_1:54
+;
+     then (f|X).x0-r < (f|X).x0 by XCMPLX_1:26;
+     then (f|X).x0-r < (f|X).x0+r/2 by A20,AXIOMS:22;
+     then (f|X).x0+r/2 in {s where s is Real: (f|X).x0-r<s & s<(f|X).x0+r} by
+A24;
+     then A25: M2 in ].(f|X).x0-r,(f|X).x0+r.[ by RCOMP_1:def 2;
+     then A26: [.M1,M2.] c= ].(f|X).x0-r,(f|X).x0+r.[ by A23,RCOMP_1:17;
+       M1 in N2 by A16,A17,A23;
+     then A27: M1 in ].p,g.[ by A15;
+       ].p,g.[ c= [.p,g.] by RCOMP_1:15;
+     then consider x1 be Real such that
+     A28: x1 in dom (f|X) & x1 in X & M1=(f|X).x1 by A3,A12,A27,PARTFUN2:78;
+       M2 in N2 by A16,A17,A25;
+     then A29: M2 in ].p,g.[ by A15;
+       ].p,g.[ c= [.p,g.] by RCOMP_1:15;
+     then consider x2 be Real such that
+     A30: x2 in dom (f|X) & x2 in X & M2=(f|X).x2 by A3,A12,A29,PARTFUN2:78;
+     set R = min(x0-x1,x2-x0);
+A31:     (f|X).x0 < (f|X).x0 + r/2 by A18,REAL_1:69;
+     then A32: M1<(f|X).x0 by REAL_1:84;
+     A33: x1<>x0 by A28,A31,REAL_1:84;
+       now assume A34: x0<x1; A35: x0 in X /\ dom(f|X) by A9,A10,XBOOLE_0:def 3
+;
+        x1 in X /\ dom(f|X) by A28,XBOOLE_0:def 3;
+      hence contradiction by A8,A28,A32,A34,A35,RFUNCT_2:def 4;
+     end; then x1<x0 by A33,REAL_1:def 5;
+     then A36: x0-x1>0 by SQUARE_1:11;
+     A37: M2>(f|X).x0 by A18,REAL_1:69;
+     A38: x0<>x2 by A18,A30,REAL_1:69;
+       now assume A39: x2<x0; A40: x0 in X /\ dom(f|X) by A9,A10,XBOOLE_0:def 3
+;
+        x2 in X /\ dom(f|X) by A30,XBOOLE_0:def 3;
+      hence contradiction by A8,A30,A37,A39,A40,RFUNCT_2:def 4;
+     end;
+     then x0<x2 by A38,REAL_1:def 5;
+     then x2-x0>0 by SQUARE_1:11;
+     then R>0 by A36,SQUARE_1:38;
+     then reconsider N=].x0-R,x0+R.[ as Neighbourhood of x0 by RCOMP_1:def 7;
+     take N;
+     let x be Real; assume A41: x in dom(f|X) & x in N;
+     then x in {s where s is Real:x0-R<s & s<x0+R} by RCOMP_1:def 2;
+then A42:     ex s be Real st s=x & x0-R<s & s<x0+R;
+     then x0<R+x by REAL_1:84; then x0-x<R+x-x by REAL_1:54;
+     then x0-x<R+(x-x) by XCMPLX_1:29; then A43: x0-x<R+0 by XCMPLX_1:14
+; R<=x0-
+x1 by SQUARE_1:35;
+     then x0-x<x0-x1 by A43,AXIOMS:22; then -(x0-x)>-(x0-x1) by REAL_1:50;
+     then x-x0>-(x0-x1) by XCMPLX_1:143; then x-x0>x1-x0 by XCMPLX_1:143;
+     then x-x0+x0>x1-x0+x0 by REAL_1:53; then x>x1-x0+x0 by XCMPLX_1:27;
+     then A44: x>x1 by XCMPLX_1:27;
+     A45: x-x0<R by A42,REAL_1:84; R<=x2-x0 by SQUARE_1:35;
+     then x-x0<x2-x0 by A45,AXIOMS:22; then x-x0+x0<x2-x0+x0 by REAL_1:53;
+     then x<x2-x0+x0 by XCMPLX_1:27;
+     then A46: x<x2 by XCMPLX_1:27;
+       dom(f|X) c= X by RELAT_1:87;
+     then A47: x in X /\ dom(f|X) by A41,XBOOLE_1:28;
+       x2 in X /\ dom(f|X) by A30,XBOOLE_0:def 3;
+     then A48: (f|X).x <= (f|X).x2 by A8,A46,A47,RFUNCT_2:def 4;
+       x1 in X /\ dom(f|X) by A28,XBOOLE_0:def 3;
+     then (f|X).x1 <= (f|X).x by A8,A44,A47,RFUNCT_2:def 4;
+     then (f|X).x in {s where s is Real: M1<=s & s<=M2} by A28,A30,A48;
+     then (f|X).x in [.M1,M2.] by RCOMP_1:def 1;
+     then (f|X).x in N3 by A17,A26;
+     hence (f|X).x in N1 by A16;
+    suppose A49: (f|X).x0 = p;
+     then consider r such that
+     A50: r>0 & N1 = ].p-r,p+r.[ by RCOMP_1:def 7;
+     reconsider r as Real by XREAL_0:def 1;
+     set R=min(r,g-p)/2; g-p>0 by A7,SQUARE_1:11;
+     then A51: min(r,g-p)>0 by A50,SQUARE_1:38;
+     then A52: R>0 by SEQ_2:3;
+     A53: R<min(r,g-p) by A51,SEQ_2:4; min(r,g-p) <= r by SQUARE_1:35;
+     then A54: R<r by A53,AXIOMS:22;
+     then A55: p+R<p+r by REAL_1:53;
+     A56: p-r<p by A50,SQUARE_1:29;
+     A57: p<p+R by A52,REAL_1:69; then p-r<p+R by A56,AXIOMS:22;
+     then p+R in {s where s is Real: p-r<s & s<p+r} by A55;
+     then A58: p+R in ].p-r,p+r.[ by RCOMP_1:def 2;
+     A59: p-R<p by A52,SQUARE_1:29; p<p+r by A50,REAL_1:69;
+     then A60: p-R<p+r by A59,AXIOMS:22;
+       -r<-R by A54,REAL_1:50; then p+-r<p+-R by REAL_1:53;
+     then p-r<p+-R by XCMPLX_0:def 8; then p-r<p-R by XCMPLX_0:def 8;
+     then p-R in {s where s is Real: p-r<s & s<p+r} by A60; then p-R in ].p-r
+,p+r.[
+     by RCOMP_1:def 2;
+     then A61: [.p-R,p+R.] c= N1 by A50,A58,RCOMP_1:17;
+       min(r,g-p) <= g-p by SQUARE_1:35; then R<g-p by A53,AXIOMS:22;
+     then p+R<g by REAL_1:86;
+     then p+R in {s where s is Real: p<s & s<g} by A57;
+     then A62: p+R in ].p,g.[ by RCOMP_1:def 2
+; ].p,g.[ c= [.p,g.] by RCOMP_1:15;
+     then consider x1 be Real such that
+     A63: x1 in dom (f|X) & x1 in X & p+R=(f|X).x1 by A3,A12,A62,PARTFUN2:78;
+       now assume A64: x1<x0; A65: x0 in X /\ dom(f|X) by A9,A10,XBOOLE_0:def 3
+;
+        x1 in X /\ dom(f|X) by A63,XBOOLE_0:def 3;
+      hence contradiction by A8,A49,A57,A63,A64,A65,RFUNCT_2:def 4;
+     end; then x0<x1 by A49,A57,A63,REAL_1:def 5; then x1-x0>0 by SQUARE_1:11
+;
+     then reconsider N=].x0-(x1-x0),x0+(x1-x0).[ as Neighbourhood of x0
+     by RCOMP_1:def 7;
+     take N;
+     let x be Real such that A66: x in dom(f|X) & x in N;
+     A67: dom(f|X) c= X by RELAT_1:87;
+     then (f|X).x in [.p,g.] by A3,A12,A66,FUNCT_1:def 12;
+     then (f|X).x in {s where s is Real: p<=s & s<=g} by RCOMP_1:def 1;
+     then ex s be Real st s=(f|X).x & p<=s & s<=g;
+     then A68: p-R<=(f|X).x by A59,AXIOMS:22;
+     A69: x in X /\ dom(f|X) by A66,A67,XBOOLE_0:def 3;
+     A70: x1 in X /\ dom(f|X) by A63,XBOOLE_0:def 3;
+       x in {s where s is Real: x0-(x1-x0)<s & s<x0+(x1-x0)} by A66,RCOMP_1:def
+2
+;
+     then ex s be Real st s=x & x0-(x1-x0)<s & s<x0+(x1-x0); then x<x1 by
+XCMPLX_1:27;
+then (f|X).x<=p+R by A8,A63,A69,A70,RFUNCT_2:def 4;
+     then (f|X).x in {s where s is Real: p-R<=s & s<= p+R} by A68;
+     then (f|X).x in [.p-R,p+R.] by RCOMP_1:def 1;
+     hence (f|X).x in N1 by A61;
+    suppose A71: (f|X).x0 = g;
+     then consider r such that
+     A72: r>0 & N1 = ].g-r,g+r.[ by RCOMP_1:def 7;
+     reconsider r as Real by XREAL_0:def 1;
+     set R=min(r,g-p)/2; g-p>0 by A7,SQUARE_1:11;
+     then A73: min(r,g-p)>0 by A72,SQUARE_1:38;
+     then A74: R>0 by SEQ_2:3;
+     A75: R<min(r,g-p) by A73,SEQ_2:4; min(r,g-p) <= r by SQUARE_1:35;
+     then A76: R<r by A75,AXIOMS:22;
+     then A77: g+R<g+r by REAL_1:53;
+     A78: g-r<g by A72,SQUARE_1:29;
+     A79: g<g+R by A74,REAL_1:69; then g-r<g+R by A78,AXIOMS:22;
+     then g+R in {s where s is Real: g-r<s & s<g+r} by A77;
+     then A80: g+R in ].g-r,g+r.[ by RCOMP_1:def 2;
+     A81: g-R<g by A74,SQUARE_1:29; g<g+r by A72,REAL_1:69;
+     then A82: g-R<g+r by A81,AXIOMS:22;
+       -r<-R by A76,REAL_1:50; then g+-r<g+-R by REAL_1:53;
+     then g-r<g+-R by XCMPLX_0:def 8; then g-r<g-R by XCMPLX_0:def 8;
+     then g-R in {s where s is Real: g-r<s & s<g+r} by A82; then g-R in ].g-r
+,g+r.[
+     by RCOMP_1:def 2;
+     then A83: [.g-R,g+R.] c= N1 by A72,A80,RCOMP_1:17;
+       min(r,g-p) <= g-p by SQUARE_1:35; then R<g-p by A75,AXIOMS:22;
+     then R+p<g by REAL_1:86;
+     then g-R>p by REAL_1:86;
+     then g-R in {s where s is Real: p<s & s<g} by A81;
+     then A84: g-R in ].p,g.[ by RCOMP_1:def 2
+; ].p,g.[ c= [.p,g.] by RCOMP_1:15;
+     then consider x1 be Real such that
+     A85: x1 in dom (f|X) & x1 in X & g-R=(f|X).x1 by A3,A12,A84,PARTFUN2:78;
+     A86: x1<>x0 by A71,A74,A85,SQUARE_1:29;
+       now assume A87: x0<x1; A88: x0 in X /\ dom(f|X) by A9,A10,XBOOLE_0:def 3
+;
+        x1 in X /\ dom(f|X) by A85,XBOOLE_0:def 3;
+      hence contradiction by A8,A71,A81,A85,A87,A88,RFUNCT_2:def 4;
+     end; then x1<x0 by A86,REAL_1:def 5; then x0-x1>0 by SQUARE_1:11;
+     then reconsider N=].x0-(x0-x1),x0+(x0-x1).[ as Neighbourhood of x0
+     by RCOMP_1:def 7;
+     take N;
+     let x be Real such that A89: x in dom(f|X) & x in N;
+     A90: dom(f|X) c= X by RELAT_1:87;
+     then (f|X).x in [.p,g.] by A3,A12,A89,FUNCT_1:def 12;
+     then (f|X).x in {s where s is Real: p<=s & s<=g} by RCOMP_1:def 1;
+     then ex s be Real st s=(f|X).x & p<=s & s<=g;
+     then A91: (f|X).x<=g+R by A79,AXIOMS:22;
+     A92: x in X /\ dom(f|X) by A89,A90,XBOOLE_0:def 3;
+     A93: x1 in X /\ dom(f|X) by A85,XBOOLE_0:def 3;
+       x in {s where s is Real: x0-(x0-x1)<s & s<x0+(x0-x1)} by A89,RCOMP_1:def
+2
+;
+     then ex s be Real st s=x & x0-(x0-x1)<s & s<x0+(x0-x1);
+     then x1<x by XCMPLX_1:18;
+then g-R<=(f|X).x by A8,A85,A92,A93,RFUNCT_2:def 4;
+     then (f|X).x in {s where s is Real: g-R<=s & s<= g+R} by A91; then (
+     f|X).x in [.g-R,g+R.] by RCOMP_1:def 1;
+     hence (f|X).x in N1 by A83;
+    end;
+    then consider N being Neighbourhood of x0 such that
+A94:    for x1 be Real st x1 in dom(f|X) & x1 in N holds (f|X).x1 in N1;
+    take N;
+    thus for x1 be real number st
+    x1 in dom(f|X) & x1 in N holds (f|X).x1 in N1 by A94;
+   end; hence thesis by A10,Th4;
+  end;
+  hence f is_continuous_on X by A1,Def2;
+ suppose f is_non_increasing_on X;
+  then A95: f|X is_non_increasing_on X by RFUNCT_2:53;
+    for x0 st x0 in X holds f|X is_continuous_in x0
+  proof let x0; assume A96: x0 in X;
+   then x0 in dom f /\ X by A1,XBOOLE_0:def 3;
+   then A97: x0 in dom(f|X) by RELAT_1:90;
+   then A98: (f|X).x0 in (f|X).:X by A96,FUNCT_1:def 12;
+   reconsider x0 as Real by XREAL_0:def 1;
+   A99: (f|X).:X = f.:X by RFUNCT_2:5;
+   A100: (f|X).x0 in [.p,g.] by A3,A98,RFUNCT_2:5;
+     [.p,g.] = ].p,g.[ \/ {p,g} by A3,RCOMP_1:11;
+then A101:   (f|X).x0 in ].p,g.[ or (f|X).x0 in {p,g} by A100,XBOOLE_0:def 2;
+     now let N1 be Neighbourhood of (f|X).x0;
+      now per cases by A101,TARSKI:def 2;
+    suppose (f|X).x0 in ].p,g.[;
+     then consider N2 being Neighbourhood of (f|X).x0 such that
+     A102: N2 c= ].p,g.[ by RCOMP_1:39;
+     consider N3 being Neighbourhood of (f|X).x0 such that
+     A103: N3 c= N1 & N3 c= N2 by RCOMP_1:38;
+     consider r such that
+     A104: r>0 & N3 = ].(f|X).x0-r,(f|X).x0+r.[ by RCOMP_1:def 7;
+     reconsider r as Real by XREAL_0:def 1;
+     set M1 = (f|X).x0-r/2;
+     set M2 = (f|X).x0+r/2;
+     A105: r/2>0 by A104,SEQ_2:3;
+     then (f|X).x0-r < (f|X).x0-r + r/2 by REAL_1:69;
+     then (f|X).x0-r < (f|X).x0-(r/2+r/2) + r/2 by XCMPLX_1:66;
+     then (f|X).x0-r < (f|X).x0-(r/2+r/2-r/2) by XCMPLX_1:37;
+     then A106: (f|X).x0-r < (f|X).x0-r/2 by XCMPLX_1:26;
+     A107: (f|X).x0 < (f|X).x0+r/2 by A105,REAL_1:69;
+     then A108: (f|X).x0-r/2 < (f|X).x0 by REAL_1:84;
+     A109: (f|X).x0 < (f|X).x0+r by A104,REAL_1:69;
+     then (f|X).x0-r/2 < (f|X).x0+r by A108,AXIOMS:22;
+     then (f|X).x0-r/2 in {s where s is Real: (f|X).x0-r<s & s<(f|X).x0+r} by
+A106;
+     then A110: M1 in ].(f|X).x0-r,(f|X).x0+r.[ by RCOMP_1:def 2;
+       (f|X).x0+r/2 < (f|X).x0+r/2+r/2 by A105,REAL_1:69;
+     then (f|X).x0+r/2 < (f|X).x0+(r/2+r/2) by XCMPLX_1:1;
+     then A111: (f|X).x0+r/2 < (f|X).x0+r by XCMPLX_1:66;
+       (f|X).x0-r < (f|X).x0+r-r by A109,REAL_1:54
+;
+     then (f|X).x0-r < (f|X).x0 by XCMPLX_1:26;
+     then (f|X).x0-r < (f|X).x0+r/2 by A107,AXIOMS:22;
+     then (f|X).x0+r/2 in {s where s is Real: (f|X).x0-r<s & s<(f|X).x0+r} by
+A111;
+     then A112: M2 in ].(f|X).x0-r,(f|X).x0+r.[ by RCOMP_1:def 2;
+     then A113: [.M1,M2.] c= ].(f|X).x0-r,(f|X).x0+r.[ by A110,RCOMP_1:17;
+       M1 in N2 by A103,A104,A110;
+     then A114: M1 in ].p,g.[ by A102;
+       ].p,g.[ c= [.p,g.] by RCOMP_1:15;
+     then consider x1 be Real such that
+     A115: x1 in dom (f|X) & x1 in X & M1=(f|X).x1
+     by A3,A99,A114,PARTFUN2:78;
+       M2 in N2 by A103,A104,A112;
+     then A116: M2 in ].p,g.[ by A102;
+       ].p,g.[ c= [.p,g.] by RCOMP_1:15;
+     then consider x2 be Real such that
+     A117: x2 in dom (f|X) & x2 in X & M2=(f|X).x2
+     by A3,A99,A116,PARTFUN2:78;
+     set R = min(x1-x0,x0-x2);
+A118:     (f|X).x0 < (f|X).x0 + r/2 by A105,REAL_1:69;
+     then A119: M1<(f|X).x0 by REAL_1:84;
+     A120: x1<>x0 by A115,A118,REAL_1:84;
+       now assume A121: x0>x1; A122: x0 in X /\ dom(f|X) by A96,A97,XBOOLE_0:
+def 3;
+        x1 in X /\ dom(f|X) by A115,XBOOLE_0:def 3;
+      hence contradiction by A95,A115,A119,A121,A122,RFUNCT_2:def 5;
+     end; then x1>x0 by A120,REAL_1:def 5;
+     then A123: x1-x0>0 by SQUARE_1:11;
+     A124: M2>(f|X).x0 by A105,REAL_1:69;
+     A125: x0<>x2 by A105,A117,REAL_1:69;
+       now assume A126: x2>x0; A127: x0 in X /\ dom(f|X) by A96,A97,XBOOLE_0:
+def 3;
+        x2 in X /\ dom(f|X) by A117,XBOOLE_0:def 3;
+      hence contradiction by A95,A117,A124,A126,A127,RFUNCT_2:def 5;
+     end;
+     then x0>x2 by A125,REAL_1:def 5;
+     then x0-x2>0 by SQUARE_1:11;
+     then R>0 by A123,SQUARE_1:38;
+     then reconsider N=].x0-R,x0+R.[ as Neighbourhood of x0 by RCOMP_1:def 7;
+     take N;
+     let x be Real; assume A128: x in dom(f|X) & x in N;
+     then x in {s where s is Real:x0-R<s & s<x0+R} by RCOMP_1:def 2;
+then A129:     ex s be Real st s=x & x0-R<s & s<x0+R;
+     then x0<R+x by REAL_1:84; then x0-x<R+x-x by REAL_1:54;
+     then x0-x<R+(x-x) by XCMPLX_1:29; then A130: x0-x<R+0 by XCMPLX_1:14
+; R<=x0-
+x2 by SQUARE_1:35;
+     then x0-x<x0-x2 by A130,AXIOMS:22; then -(x0-x)>-(x0-x2) by REAL_1:50;
+     then x-x0>-(x0-x2) by XCMPLX_1:143; then x-x0>x2-x0 by XCMPLX_1:143;
+     then x-x0+x0>x2-x0+x0 by REAL_1:53; then x>x2-x0+x0 by XCMPLX_1:27;
+     then A131: x>x2 by XCMPLX_1:27;
+     A132: x-x0<R by A129,REAL_1:84; R<=x1-x0 by SQUARE_1:35;
+     then x-x0<x1-x0 by A132,AXIOMS:22; then x-x0+x0<x1-x0+x0 by REAL_1:53;
+     then x<x1-x0+x0 by XCMPLX_1:27;
+     then A133: x<x1 by XCMPLX_1:27;
+       dom(f|X) c= X by RELAT_1:87;
+     then A134: x in X /\ dom(f|X) by A128,XBOOLE_1:28;
+       x2 in X /\ dom(f|X) by A117,XBOOLE_0:def 3;
+     then A135: (f|X).x <= (f|X).x2 by A95,A131,A134,RFUNCT_2:def 5;
+       x1 in X /\ dom(f|X) by A115,XBOOLE_0:def 3;
+     then (f|X).x1 <= (f|X).x by A95,A133,A134,RFUNCT_2:def 5;
+     then (f|X).x in {s where s is Real: M1<=s & s<=M2} by A115,A117,A135;
+     then (f|X).x in [.M1,M2.] by RCOMP_1:def 1;
+     then (f|X).x in N3 by A104,A113;
+     hence (f|X).x in N1 by A103;
+    suppose A136: (f|X).x0 = p;
+     then consider r such that
+     A137: r>0 & N1 = ].p-r,p+r.[ by RCOMP_1:def 7;
+     reconsider r as Real by XREAL_0:def 1;
+     set R=min(r,g-p)/2; g-p>0 by A7,SQUARE_1:11;
+     then A138: min(r,g-p)>0 by A137,SQUARE_1:38;
+     then A139: R>0 by SEQ_2:3;
+     A140: R<min(r,g-p) by A138,SEQ_2:4; min(r,g-p) <= r by SQUARE_1:35;
+     then A141: R<r by A140,AXIOMS:22;
+     then A142: p+R<p+r by REAL_1:53;
+     A143: p-r<p by A137,SQUARE_1:29;
+     A144: p<p+R by A139,REAL_1:69; then p-r<p+R by A143,AXIOMS:22;
+     then p+R in {s where s is Real: p-r<s & s<p+r} by A142;
+     then A145: p+R in ].p-r,p+r.[ by RCOMP_1:def 2;
+     A146: p-R<p by A139,SQUARE_1:29; p<p+r by A137,REAL_1:69;
+     then A147: p-R<p+r by A146,AXIOMS:22;
+       -r<-R by A141,REAL_1:50; then p+-r<p+-R by REAL_1:53;
+     then p-r<p+-R by XCMPLX_0:def 8; then p-r<p-R by XCMPLX_0:def 8;
+     then p-R in {s where s is Real: p-r<s & s<p+r} by A147;
+     then p-R in ].p-r,p+r.[ by RCOMP_1:def 2;
+     then A148: [.p-R,p+R.] c= N1 by A137,A145,RCOMP_1:17;
+       min(r,g-p) <= g-p by SQUARE_1:35; then R<g-p by A140,AXIOMS:22;
+     then p+R<g by REAL_1:86;
+     then p+R in {s where s is Real: p<s & s<g} by A144;
+     then A149: p+R in ].p,g.[ by RCOMP_1:def 2
+; ].p,g.[ c= [.p,g.] by RCOMP_1:15;
+     then consider x1 be Real such that
+     A150: x1 in dom (f|X) & x1 in X & p+R=(f|X).x1
+     by A3,A99,A149,PARTFUN2:78;
+       now assume A151: x1>x0; A152: x0 in X /\ dom(f|X) by A96,A97,XBOOLE_0:
+def 3;
+        x1 in X /\ dom(f|X) by A150,XBOOLE_0:def 3;
+      hence contradiction by A95,A136,A144,A150,A151,A152,RFUNCT_2:def 5;
+     end; then x0>x1 by A136,A144,A150,REAL_1:def 5; then x0-x1>0 by SQUARE_1:
+11;
+     then reconsider N=].x0-(x0-x1),x0+(x0-x1).[ as Neighbourhood of x0
+     by RCOMP_1:def 7;
+     take N;
+     let x be Real such that A153: x in dom(f|X) & x in N;
+     A154: dom(f|X) c= X by RELAT_1:87;
+     then (f|X).x in [.p,g.] by A3,A99,A153,FUNCT_1:def 12;
+     then (f|X).x in {s where s is Real: p<=s & s<=g} by RCOMP_1:def 1;
+     then ex s be Real st s=(f|X).x & p<=s & s<=g;
+     then A155: p-R<=(f|X).x by A146,AXIOMS:22;
+     A156: x in X /\ dom(f|X) by A153,A154,XBOOLE_0:def 3;
+     A157: x1 in X /\ dom(f|X) by A150,XBOOLE_0:def 3;
+       x in {s where s is Real: x0-(x0-x1)<s & s<x0+(x0-x1)}
+     by A153,RCOMP_1:def 2;
+     then ex s be Real st s=x & x0-(x0-x1)<s & s<x0+(x0-x1);
+then x>x1 by XCMPLX_1:18
+; then (f|X).x<=p+R by A95,A150,A156,A157,RFUNCT_2:def 5;
+then (f|X).x in {s where s is Real: p-R<=s & s<=p+R} by A155;
+ then (f|X).x in [.p-R,p+R.] by RCOMP_1:def 1;
+     hence (f|X).x in N1 by A148;
+    suppose A158: (f|X).x0 = g;
+     then consider r such that
+     A159: r>0 & N1 = ].g-r,g+r.[ by RCOMP_1:def 7;
+     reconsider r as Real by XREAL_0:def 1;
+     set R=min(r,g-p)/2; g-p>0 by A7,SQUARE_1:11;
+     then A160: min(r,g-p)>0 by A159,SQUARE_1:38;
+     then A161: R>0 by SEQ_2:3;
+     A162: R<min(r,g-p) by A160,SEQ_2:4; min(r,g-p) <= r by SQUARE_1:35;
+     then A163: R<r by A162,AXIOMS:22;
+     then A164: g+R<g+r by REAL_1:53;
+     A165: g-r<g by A159,SQUARE_1:29;
+     A166: g<g+R by A161,REAL_1:69; then g-r<g+R by A165,AXIOMS:22;
+     then g+R in {s where s is Real: g-r<s & s<g+r} by A164;
+     then A167: g+R in ].g-r,g+r.[ by RCOMP_1:def 2;
+     A168: g-R<g by A161,SQUARE_1:29; g<g+r by A159,REAL_1:69;
+     then A169: g-R<g+r by A168,AXIOMS:22;
+       -r<-R by A163,REAL_1:50; then g+-r<g+-R by REAL_1:53;
+     then g-r<g+-R by XCMPLX_0:def 8; then g-r<g-R by XCMPLX_0:def 8;
+     then g-R in {s where s is Real: g-r<s & s<g+r} by A169;
+     then g-R in ].g-r,g+r.[ by RCOMP_1:def 2;
+     then A170: [.g-R,g+R.] c= N1 by A159,A167,RCOMP_1:17;
+       min(r,g-p) <= g-p by SQUARE_1:35; then R<g-p by A162,AXIOMS:22;
+     then R+p<g by REAL_1:86;
+     then g-R>p by REAL_1:86;
+     then g-R in {s where s is Real: p<s & s<g} by A168;
+     then A171: g-R in ].p,g.[ by RCOMP_1:def 2
+; ].p,g.[ c= [.p,g.] by RCOMP_1:15;
+     then consider x1 be Real such that
+     A172: x1 in dom (f|X) & x1 in X & g-R=(f|X).x1
+     by A3,A99,A171,PARTFUN2:78;
+     A173: x1<>x0 by A158,A161,A172,SQUARE_1:29;
+       now assume A174: x0>x1; A175: x0 in X /\ dom(f|X) by A96,A97,XBOOLE_0:
+def 3;
+        x1 in X /\ dom(f|X) by A172,XBOOLE_0:def 3;
+      hence contradiction by A95,A158,A168,A172,A174,A175,RFUNCT_2:def 5;
+     end; then x1>x0 by A173,REAL_1:def 5; then x1-x0>0 by SQUARE_1:11;
+     then reconsider N=].x0-(x1-x0),x0+(x1-x0).[ as Neighbourhood of x0
+     by RCOMP_1:def 7;
+     take N;
+     let x be Real such that A176: x in dom(f|X) & x in N;
+     A177: dom(f|X) c= X by RELAT_1:87;
+     then (f|X).x in [.p,g.] by A3,A99,A176,FUNCT_1:def 12;
+     then (f|X).x in {s where s is Real: p<=s & s<=g} by RCOMP_1:def 1;
+     then ex s be Real st s=(f|X).x & p<=s & s<=g;
+     then A178: (f|X).x<=g+R by A166,AXIOMS:22;
+     A179: x in X /\ dom(f|X) by A176,A177,XBOOLE_0:def 3;
+     A180: x1 in X /\ dom(f|X) by A172,XBOOLE_0:def 3;
+       x in {s where s is Real: x0-(x1-x0)<s & s<x0+(x1-x0)}
+     by A176,RCOMP_1:def 2;
+     then ex s be Real st s=x & x0-(x1-x0)<s & s<x0+(x1-x0);
+then x1>x by XCMPLX_1:27; then g-R<=(f|X).x by A95,A172,A179,A180,RFUNCT_2:def
+5;
+then (f|X).x in {s where s is Real: g-R<=s & s<=g+R} by A178;
+ then (f|X).x in [.g-R,g+R.] by RCOMP_1:def 1;
+     hence (f|X).x in N1 by A170;
+    end;
+    then consider N being Neighbourhood of x0 such that
+A181:    for x1 be Real st x1 in dom(f|X) & x1 in N holds (f|X).x1 in N1;
+    take N;
+    thus for x1 st x1 in dom(f|X) & x1 in N holds (f|X).x1 in N1 by A181;
+   end; hence thesis by A97,Th4;
+  end;
+  hence f is_continuous_on X by A1,Def2;
+ end; hence f is_continuous_on X; end;
+ hence thesis;
+end;
+
+theorem
+  for f being one-to-one PartFunc of REAL,REAL st
+p<=g & [.p,g.] c= dom f & (f is_increasing_on [.p,g.] or
+f is_decreasing_on [.p,g.]) holds (f|[.p,g.])" is_continuous_on f.:[.p,g.]
+proof let f be one-to-one PartFunc of REAL,REAL;
+assume that A1: p<=g & [.p,g.] c= dom f and
+ A2: f is_increasing_on [.p,g.] or f is_decreasing_on [.p,g.];
+ reconsider p, g as Real by XREAL_0:def 1;
+   now per cases by A2;
+  suppose f is_increasing_on [.p,g.];
+   then (f|[.p,g.])" is_increasing_on f.:[.p,g.] by RFUNCT_2:83;
+   then (f|[.p,g.])" is_non_decreasing_on f.:[.p,g.] by RFUNCT_2:55;
+   then A3: (f|[.p,g.])" is_monotone_on f.:[.p,g.] by RFUNCT_2:def 6;
+     now let r be Real; assume r in f.:[.p,g.];
+   then consider s be Real such that
+   A4: s in dom f & s in [.p,g.] & r=f.s by PARTFUN2:78;
+      s in dom f/\[.p,g.] & r=f.s by A4,XBOOLE_0:def 3;
+    then s in dom (f|[.p,g.]) & r=f.s by RELAT_1:90;
+    then s in dom (f|[.p,g.]) & r=(f|[.p,g.]).s by FUNCT_1:68;
+    then r in rng (f|[.p,g.]) by FUNCT_1:def 5;
+    hence r in dom ((f|[.p,g.])") by FUNCT_1:55;
+   end;
+   then A5: f.:[.p,g.] c= dom ((f|[.p,g.])") by SUBSET_1:7;
+     ((f|[.p,g.])").:(f.:[.p,g.]) = ((f|[.p,g.])").:
+(rng (f|[.p,g.])) by RELAT_1:148
+   .= ((f|[.p,g.])").:(dom ((f|[.p,g.])")) by FUNCT_1:55
+   .= rng ((f|[.p,g.])") by RELAT_1:146
+   .= dom (f|[.p,g.]) by FUNCT_1:55
+   .= dom f /\ [.p,g.] by RELAT_1:90
+   .= [.p,g.] by A1,XBOOLE_1:28;
+   hence thesis by A1,A3,A5,Th53;
+  suppose f is_decreasing_on [.p,g.];
+   then (f|[.p,g.])" is_decreasing_on f.:[.p,g.] by RFUNCT_2:84;
+   then (f|[.p,g.])" is_non_increasing_on f.:[.p,g.] by RFUNCT_2:56;
+   then A6: (f|[.p,g.])" is_monotone_on f.:[.p,g.] by RFUNCT_2:def 6;
+     now let r be Real; assume r in f.:[.p,g.];
+    then consider s be Real such that A7: s in dom f & s in [.p,g.] & r=f.s
+    by PARTFUN2:78;
+      s in dom f/\[.p,g.] & r=f.s by A7,XBOOLE_0:def 3;
+    then s in dom (f|[.p,g.]) & r=f.s by RELAT_1:90;
+    then s in dom (f|[.p,g.]) & r=(f|[.p,g.]).s by FUNCT_1:68;
+    then r in rng (f|[.p,g.]) by FUNCT_1:def 5;
+    hence r in dom ((f|[.p,g.])") by FUNCT_1:55;
+   end;
+   then A8: f.:[.p,g.] c= dom ((f|[.p,g.])") by SUBSET_1:7;
+     ((f|[.p,g.])").:(f.:[.p,g.]) = ((f|[.p,g.])").:
+(rng (f|[.p,g.])) by RELAT_1:148
+   .= ((f|[.p,g.])").:(dom ((f|[.p,g.])")) by FUNCT_1:55
+   .= rng ((f|[.p,g.])") by RELAT_1:146
+   .= dom (f|[.p,g.]) by FUNCT_1:55
+   .= dom f /\ [.p,g.] by RELAT_1:90
+   .= [.p,g.] by A1,XBOOLE_1:28;
+   hence thesis by A1,A6,A8,Th53;
+ end; hence thesis;
+end;

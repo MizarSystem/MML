@@ -1,0 +1,2079 @@
+:: On the Many Sorted Closure Operator and the Many Sorted Closure
+:: System
+::  by Artur Korni{\l}owicz
+::
+:: Received February 7, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary PBOOLE, FUNCT_1, PRALG_1, ZF_REFLE, RELAT_1, FUNCT_4, CAT_1,
+      FINSEQ_4, BOOLE, FUNCT_6, MSUALG_3, MATRIX_1, PRE_CIRC, CAT_4, RELAT_2,
+      MSAFREE2, BINOP_1, FUNCOP_1, FINSET_1, MSUALG_1, MSSUBFAM, GRCAT_1,
+      COHSP_1, MSUALG_2, SETFAM_1, CANTOR_1, CLOSURE1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, SETFAM_1, RELAT_1,
+      FUNCT_1, FUNCT_2, CQC_LANG, FINSET_1, FUNCT_4, PBOOLE, MSUALG_1,
+      MSUALG_2, MSUALG_3, PRALG_1, PRE_CIRC, EXTENS_1, CANTOR_1, MSSUBFAM;
+ constructors AUTALG_1, CQC_LANG, EXTENS_1, MSUALG_3, PRE_CIRC, CANTOR_1,
+      MSSUBFAM;
+ clusters FINSET_1, FUNCT_1, MSSUBFAM, MSUALG_1, PBOOLE, PRALG_1, CQC_LANG,
+      RELSET_1, SUBSET_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions XBOOLE_0, FUNCT_1, MSSUBFAM, MSUALG_1, MSUALG_2, MSUALG_3, PBOOLE,
+      PRE_CIRC, TARSKI;
+ theorems CQC_LANG, FUNCOP_1, FUNCT_1, FUNCT_2, FUNCT_4, MBOOLEAN, MSSUBFAM,
+      MSUALG_1, MSUALG_2, MSUALG_3, PBOOLE, PZFMISC1, TARSKI, ZFMISC_1,
+      PRALG_1, XBOOLE_0, XBOOLE_1, PARTFUN1;
+ schemes FUNCT_2, MSSUBFAM, MSUALG_1, PBOOLE, XBOOLE_0;
+
+begin  :: Preliminaries
+
+reserve i, x, I for set,
+        A, M for ManySortedSet of I,
+        f for Function,
+        F for ManySortedFunction of I;
+
+scheme MSSUBSET { I() -> set,
+             A() -> non-empty ManySortedSet of I(),
+             B() -> ManySortedSet of I(),
+             P[set] } :
+ (for X being ManySortedSet of I() holds X in A() iff X in B() & P[X])
+  implies A() c= B()
+  proof
+    assume
+A1:   for X being ManySortedSet of I() holds X in A() iff X in B() & P[X];
+    consider K being ManySortedSet of I() such that
+A2:   K in A() by PBOOLE:146;
+    let i such that
+A3:   i in I();
+    let x such that
+A4:   x in A().i;
+   dom (K +* (i .--> x)) = I() by A3,PZFMISC1:1;
+    then reconsider X = K +* (i .--> x) as ManySortedSet of I() by PBOOLE:def 3
+;
+A5: dom (i .--> x) = {i} by CQC_LANG:5;
+      i in {i} by TARSKI:def 1;
+then A6: X.i = (i .--> x).i by A5,FUNCT_4:14
+       .= x by CQC_LANG:6;
+      X in A()
+    proof
+      let s be set such that
+A7:     s in I();
+      per cases;
+      suppose s = i;
+        hence X.s in A().s by A4,A6;
+      suppose s <> i;
+        then not s in dom (i .--> x) by A5,TARSKI:def 1;
+        then X.s = K.s by FUNCT_4:12;
+        hence X.s in A().s by A2,A7,PBOOLE:def 4;
+    end;
+    then X in B() by A1;
+    hence x in B().i by A3,A6,PBOOLE:def 4;
+  end;
+
+theorem Th1:
+for X being non empty set
+ for x, y being set st x c= y holds
+  { t where t is Element of X : y c= t } c=
+   { z where z is Element of X : x c= z }
+  proof
+    let X be non empty set,
+        x, y be set such that
+A1:   x c= y;
+    let a be set;
+    assume a in { t where t is Element of X : y c= t };
+    then consider b be Element of X such that
+A2:   b = a & y c= b;
+      x c= a by A1,A2,XBOOLE_1:1;
+    hence a in { z where z is Element of X : x c= z } by A2;
+  end;
+
+theorem
+  (ex A st A in M) implies M is non-empty
+  proof
+    given A such that
+A1:   A in M;
+    let i;
+    assume i in I;
+    hence thesis by A1,PBOOLE:def 4;
+  end;
+
+definition let I, F, A;
+ redefine func F..A -> ManySortedSet of I;
+coherence
+  proof
+     dom (F..A) = I by PBOOLE:def 3;
+   hence thesis;
+  end;
+end;
+
+Lm1:
+  now
+    let I;
+    let A, B be non-empty ManySortedSet of I;
+    let F be ManySortedFunction of A, B;
+    let X be Element of A;
+    thus F..X is Element of B
+    proof
+      let i such that
+A1:     i in I;
+A2:   dom F = I by PBOOLE:def 3;
+      reconsider g = F.i as Function;
+A3:   g is Function of A.i, B.i by A1,MSUALG_1:def 2;
+A4:   A.i <> {} by A1,PBOOLE:def 16;
+A5:   B.i <> {} by A1,PBOOLE:def 16;
+        X.i is Element of A.i by A1,MSUALG_1:def 1;
+      then g.(X.i) in B.i by A3,A4,A5,FUNCT_2:7;
+      hence (F..X).i is Element of B.i by A1,A2,PRALG_1:def 18;
+    end;
+  end;
+
+definition let I;
+           let A, B be non-empty ManySortedSet of I;
+           let F be ManySortedFunction of A, B;
+           let X be Element of A;
+ redefine func F..X -> Element of B;
+coherence by Lm1;
+end;
+
+theorem
+  for A, X being ManySortedSet of I
+ for B being non-empty ManySortedSet of I
+  for F being ManySortedFunction of A, B st X in A holds F..X in B
+  proof
+    let A, X be ManySortedSet of I;
+    let B be non-empty ManySortedSet of I;
+    let F be ManySortedFunction of A, B such that
+A1:   X in A;
+    let i be set such that
+A2:   i in I;
+A3: dom F = I by PBOOLE:def 3;
+    reconsider g = F.i as Function;
+A4: g is Function of A.i, B.i by A2,MSUALG_1:def 2;
+A5: B.i <> {} by A2,PBOOLE:def 16;
+      X.i in A.i by A1,A2,PBOOLE:def 4;
+    then g.(X.i) in B.i by A4,A5,FUNCT_2:7;
+    hence (F..X).i in B.i by A2,A3,PRALG_1:def 18;
+  end;
+
+theorem Th4:
+for F, G being ManySortedFunction of I
+ for A being ManySortedSet of I st A in doms G
+  holds F..(G..A) = (F ** G)..A
+  proof
+    let F, G be ManySortedFunction of I;
+    let A be ManySortedSet of I such that
+A1:   A in doms G;
+A2: dom F = I by PBOOLE:def 3;
+A3: dom G = I by PBOOLE:def 3;
+    reconsider FG = F ** G as ManySortedFunction of I by MSSUBFAM:15;
+A4: dom FG = I by PBOOLE:def 3;
+A5: FG..A is ManySortedSet of I;
+      now
+      let i; assume
+A6:     i in I;
+      reconsider f = F.i as Function;
+      reconsider g = G.i as Function;
+      reconsider fg = (F**G).i as Function;
+        dom g = (doms G).i by A6,MSSUBFAM:14;
+then A7:   A.i in dom g by A1,A6,PBOOLE:def 4;
+        (G..A).i = g.(A.i) by A3,A6,PRALG_1:def 18;
+      hence (F..(G..A)).i = f.(g.(A.i)) by A2,A6,PRALG_1:def 18
+                         .= (f*g).(A.i) by A7,FUNCT_1:23
+                         .= fg.(A.i) by A4,A6,MSUALG_3:def 4
+                         .= ((F ** G)..A).i by A4,A6,PRALG_1:def 18;
+    end;
+    hence thesis by A5,PBOOLE:3;
+  end;
+
+theorem
+  F is "1-1" implies
+ for A, B being ManySortedSet of I st A in doms F & B in doms F &
+  F..A = F..B holds A = B
+  proof
+    assume
+A1:   F is "1-1";
+    let A, B be ManySortedSet of I such that
+A2:   A in doms F & B in doms F and
+A3:   F..A = F..B;
+      now
+      let i such that
+A4:     i in I;
+A5:   dom F = I by PBOOLE:def 3;
+      reconsider f = F.i as Function;
+A6:   f is one-to-one by A1,A4,MSUALG_3:1;
+        dom f = (doms F).i by A4,MSSUBFAM:14;
+then A7:   A.i in dom f & B.i in dom f by A2,A4,PBOOLE:def 4;
+        f.(A.i) = (F..A).i by A4,A5,PRALG_1:def 18
+             .= f.(B.i) by A3,A4,A5,PRALG_1:def 18;
+      hence A.i = B.i by A6,A7,FUNCT_1:def 8;
+    end;
+    hence thesis by PBOOLE:3;
+  end;
+
+theorem
+  doms F is non-empty &
+ (for A, B being ManySortedSet of I st A in doms F & B in doms F &
+  F..A = F..B holds A = B) implies F is "1-1"
+  proof
+    assume that
+A1:   doms F is non-empty and
+A2:   for A, B being ManySortedSet of I st A in doms F & B in doms F &
+       F..A = F..B holds A = B;
+    consider K being ManySortedSet of I such that
+A3:   K in doms F by A1,PBOOLE:146;
+    let i be set,
+        f be Function such that
+A4:   i in dom F and
+A5:   F.i = f;
+    let x1, x2 be set such that
+A6:   x1 in dom f & x2 in dom f and
+A7:   f.x1 = f.x2;
+A8: dom F = I by PBOOLE:def 3;
+ then dom (K +* (i .--> x1)) = I by A4,PZFMISC1:1;
+    then reconsider X1 = K +* (i .--> x1) as ManySortedSet of I by PBOOLE:def 3
+;
+A9: dom (i .--> x1) = {i} by CQC_LANG:5;
+      i in {i} by TARSKI:def 1;
+then A10: X1.i = (i .--> x1).i by A9,FUNCT_4:14
+        .= x1 by CQC_LANG:6;
+   dom (K +* (i .--> x2)) = I by A4,A8,PZFMISC1:1;
+    then reconsider X2 = K +* (i .--> x2) as ManySortedSet of I by PBOOLE:def 3
+;
+A11: dom (i .--> x2) = {i} by CQC_LANG:5;
+      i in {i} by TARSKI:def 1;
+then A12: X2.i = (i .--> x2).i by A11,FUNCT_4:14
+        .= x2 by CQC_LANG:6;
+A13: X1 in doms F
+    proof
+      let s be set such that
+A14:     s in I;
+      per cases;
+      suppose s = i;
+        hence X1.s in (doms F).s by A5,A6,A10,A14,MSSUBFAM:14;
+      suppose s <> i;
+        then not s in dom (i .--> x1) by A9,TARSKI:def 1;
+        then X1.s = K.s by FUNCT_4:12;
+        hence X1.s in (doms F).s by A3,A14,PBOOLE:def 4;
+    end;
+A15: X2 in doms F
+    proof
+      let s be set such that
+A16:     s in I;
+      per cases;
+      suppose s = i;
+        hence X2.s in (doms F).s by A5,A6,A12,A16,MSSUBFAM:14;
+      suppose
+             s <> i;
+        then not s in dom (i .--> x2) by A11,TARSKI:def 1;
+        then X2.s = K.s by FUNCT_4:12;
+        hence X2.s in (doms F).s by A3,A16,PBOOLE:def 4;
+    end;
+      now
+      let s be set such that
+A17:     s in I;
+      per cases;
+      suppose
+A18:       s = i;
+        hence (F..X1).s = f.(X2.s) by A4,A5,A7,A10,A12,PRALG_1:def 18
+                       .= (F..X2).s by A4,A5,A18,PRALG_1:def 18;
+      suppose
+A19:       s <> i;
+then A20:     not s in dom (i .--> x1) by A9,TARSKI:def 1;
+          not s in dom (i .--> x2) by A11,A19,TARSKI:def 1;
+then A21:     X2.s = K.s by FUNCT_4:12;
+        reconsider f1 = F.s as Function;
+        thus (F..X1).s = f1.(X1.s) by A8,A17,PRALG_1:def 18
+                      .= f1.(X2.s) by A20,A21,FUNCT_4:12
+                      .= (F..X2).s by A8,A17,PRALG_1:def 18;
+    end;
+    then F..X1 = F..X2 by PBOOLE:3;
+    hence x1 = x2 by A2,A10,A12,A13,A15;
+  end;
+
+theorem Th7:     :: FUNCT_2:18
+for A, B being non-empty ManySortedSet of I
+ for F, G being ManySortedFunction of A, B st for M st M in A holds F..M = G..M
+  holds F = G
+  proof
+    let A, B be non-empty ManySortedSet of I,
+        F, G be ManySortedFunction of A, B such that
+A1:   for M st M in A holds F..M = G..M;
+      now
+      let i; assume
+A2:     i in I;
+      then reconsider f = F.i as Function of A.i, B.i by MSUALG_1:def 2;
+      reconsider g = G.i as Function of A.i, B.i by A2,MSUALG_1:def 2;
+        now
+        let x such that
+A3:       x in A.i;
+        consider K being ManySortedSet of I such that
+A4:       K in A by PBOOLE:146;
+       dom (K +* (i .--> x)) = I by A2,PZFMISC1:1;
+        then reconsider X = K +* (i .--> x) as ManySortedSet of I by PBOOLE:def
+3;
+A5:     dom (i .--> x) = {i} by CQC_LANG:5;
+          i in {i} by TARSKI:def 1;
+then A6:     X.i = (i .--> x).i by A5,FUNCT_4:14
+           .= x by CQC_LANG:6;
+          X in A
+        proof
+          let s be set such that
+A7:         s in I;
+          per cases;
+          suppose s = i;
+            hence X.s in A.s by A3,A6;
+          suppose s <> i;
+            then not s in dom (i .--> x) by A5,TARSKI:def 1;
+            then X.s = K.s by FUNCT_4:12;
+            hence X.s in A.s by A4,A7,PBOOLE:def 4;
+        end;
+then A8:     F..X = G..X by A1;
+A9:     dom F = I by PBOOLE:def 3;
+A10:     dom G = I by PBOOLE:def 3;
+        thus f.x = (F..X).i by A2,A6,A9,PRALG_1:def 18
+                .= g.x by A2,A6,A8,A10,PRALG_1:def 18;
+      end;
+      hence F.i = G.i by FUNCT_2:18;
+    end;
+    hence thesis by PBOOLE:3;
+  end;
+
+definition let I, M;
+ cluster empty-yielding locally-finite Element of bool M;
+existence
+  proof
+      [0]I c= M by MBOOLEAN:5;
+    then [0]I in bool M by MBOOLEAN:1;
+    then reconsider a = [0]I as Element of bool M by MSSUBFAM:11;
+    take a;
+    thus thesis;
+  end;
+end;
+
+begin  :: Properties of Many Sorted Closure Operators
+
+definition let I, M;
+ mode MSSetOp of M is ManySortedFunction of bool M, bool M;
+ canceled;
+end;
+
+definition let I, M;
+           let O be MSSetOp of M;
+           let X be Element of bool M;
+ redefine func O..X -> Element of bool M;
+coherence by Lm1;
+end;
+
+definition let I, M;
+ let IT be MSSetOp of M;
+ attr IT is reflexive means :Def2:
+  for X being Element of bool M holds X c= IT..X;
+
+ attr IT is monotonic means :Def3:
+  for X, Y being Element of bool M st X c= Y holds IT..X c= IT..Y;
+
+ attr IT is idempotent means :Def4:
+  for X being Element of bool M holds IT..X = IT..(IT..X);
+
+ attr IT is topological means :Def5:
+  for X, Y being Element of bool M holds IT..(X \/ Y) = (IT..X) \/ (IT..Y);
+end;
+
+theorem Th8:
+for M being non-empty ManySortedSet of I
+ for X being Element of M holds X = (id M)..X
+  proof
+    let M be non-empty ManySortedSet of I;
+    let X be Element of M;
+    set F = id M;
+A1: dom F = I by PBOOLE:def 3;
+      now
+      let i; assume
+A2:     i in I;
+then A3:   M.i <> {} by PBOOLE:def 16;
+A4:   X.i is Element of M.i by A2,MSUALG_1:def 1;
+      reconsider g = F.i as Function;
+        F.i = id (M.i) by A2,MSUALG_3:def 1;
+      then g.(X.i) = X.i by A3,A4,FUNCT_1:35;
+      hence X.i = (F..X).i by A1,A2,PRALG_1:def 18;
+    end;
+    hence thesis by PBOOLE:3;
+  end;
+
+theorem Th9:
+for M being non-empty ManySortedSet of I
+ for X, Y being Element of M st X c= Y
+  holds (id M)..X c= (id M)..Y
+  proof
+    let M be non-empty ManySortedSet of I;
+    let X, Y be Element of M such that
+A1:   X c= Y;
+      (id M)..X = X & (id M)..Y = Y by Th8;
+    hence thesis by A1;
+  end;
+
+theorem Th10:
+for M being non-empty ManySortedSet of I
+ for X, Y being Element of M st X \/ Y is Element of M
+  holds (id M)..(X \/ Y) = ((id M)..X) \/ ((id M)..Y)
+  proof
+    let M be non-empty ManySortedSet of I;
+    let X, Y be Element of M;
+    set F = id M;
+    assume X \/ Y is Element of M;
+    hence F..(X \/ Y) = X \/ Y by Th8
+                    .= (F..X) \/ Y by Th8
+                    .= (F..X) \/ (F..Y) by Th8;
+  end;
+
+theorem
+  for X being Element of bool M
+ for i, x being set st i in I & x in ((id (bool M))..X).i
+  ex Y being locally-finite Element of bool M st
+   Y c= X & x in ((id (bool M))..Y).i
+  proof
+    let X be Element of bool M,
+        i, x be set such that
+A1:   i in I and
+A2:   x in ((id (bool M))..X).i;
+A3: x in X.i by A2,Th8;
+      X in bool M by MSSUBFAM:12;
+    then X c= M by MBOOLEAN:19;
+then A4: X.i c= M.i by A1,PBOOLE:def 5;
+A5: dom (i .--> {x}) = {i} by CQC_LANG:5;
+    set Y = (I --> {}) +* (i.-->{x});
+   dom Y = I by A1,PZFMISC1:1;
+    then reconsider Y as ManySortedSet of I by PBOOLE:def 3;
+      i in {i} by TARSKI:def 1;
+then A6: Y.i = (i .--> {x}).i by A5,FUNCT_4:14
+       .= {x} by CQC_LANG:6;
+      Y is Element of bool M
+    proof
+      let j be set such that
+A7:     j in I;
+        now per cases;
+        case
+A8:       j = i;
+        then {x} c= M.j by A3,A4,ZFMISC_1:37;
+        hence Y.j is Element of (bool M).j
+               by A6,A7,A8,MBOOLEAN:def 1;
+        case j <> i;
+        then not j in dom (i .--> {x}) by A5,TARSKI:def 1;
+        then Y.j = (I --> {}).j by FUNCT_4:12;
+        then Y.j = {} by A7,FUNCOP_1:13;
+        then Y.j c= M.j by XBOOLE_1:2;
+        hence Y.j is Element of (bool M).j by A7,MBOOLEAN:def 1;
+      end;
+      hence Y.j is Element of (bool M).j;
+    end;
+    then reconsider Y as Element of bool M;
+      Y is locally-finite
+    proof
+      let j be set such that
+A9:     j in I;
+        now per cases;
+        case j = i;
+        hence Y.j is finite by A6;
+        case j <> i;
+        then not j in dom (i .--> {x}) by A5,TARSKI:def 1;
+        then Y.j = (I --> {}).j by FUNCT_4:12;
+        hence Y.j is finite by A9,FUNCOP_1:13;
+      end;
+      hence Y.j is finite;
+    end;
+    then reconsider Y as locally-finite Element of bool M;
+    take Y;
+    thus Y c= X
+    proof
+      let j be set such that
+A10:     j in I;
+        now per cases;
+        case j = i;
+        hence Y.j c= X.j by A3,A6,ZFMISC_1:37;
+        case j <> i;
+        then not j in dom (i .--> {x}) by A5,TARSKI:def 1;
+        then Y.j = (I --> {}).j by FUNCT_4:12;
+        then Y.j = {} by A10,FUNCOP_1:13;
+        hence Y.j c= X.j by XBOOLE_1:2;
+      end;
+      hence Y.j c= X.j;
+    end;
+      x in Y.i by A6,TARSKI:def 1;
+    hence x in ((id (bool M))..Y).i by Th8;
+  end;
+
+definition let I, M;
+ cluster reflexive monotonic idempotent topological MSSetOp of M;
+existence
+  proof
+    reconsider F = id (bool M) as MSSetOp of M;
+    take F;
+    thus F is reflexive
+    proof
+      let X be Element of bool M;
+      thus thesis by Th8;
+    end;
+    thus F is monotonic
+    proof
+      let X, Y be Element of bool M;
+      assume X c= Y;
+      hence thesis by Th9;
+    end;
+    thus F is idempotent
+    proof
+      let X be Element of bool M;
+      thus thesis by Th8;
+    end;
+    thus F is topological
+    proof
+      let X, Y be Element of bool M;
+        X in bool M & Y in bool M by MSSUBFAM:12;
+      then X c= M & Y c= M by MBOOLEAN:1;
+      then X \/ Y c= M by PBOOLE:18;
+      then X \/ Y in bool M by MBOOLEAN:1;
+      then X \/ Y is Element of bool M by MSSUBFAM:11;
+      hence thesis by Th10;
+    end;
+  end;
+end;
+
+theorem
+  id (bool A) is reflexive MSSetOp of A
+  proof
+    reconsider a = id (bool A) as MSSetOp of A;
+      a is reflexive
+    proof
+      let b be Element of bool A;
+      thus thesis by Th8;
+    end;
+    hence thesis;
+  end;
+
+theorem
+  id (bool A) is monotonic MSSetOp of A
+  proof
+    reconsider a = id (bool A) as MSSetOp of A;
+      a is monotonic
+    proof
+      let X, Y be Element of bool A;
+      assume X c= Y;
+      hence thesis by Th9;
+    end;
+    hence thesis;
+  end;
+
+theorem
+  id (bool A) is idempotent MSSetOp of A
+  proof
+    reconsider a = id (bool A) as MSSetOp of A;
+      a is idempotent
+    proof
+      let X be Element of bool A;
+      thus thesis by Th8;
+    end;
+    hence thesis;
+  end;
+
+theorem
+  id (bool A) is topological MSSetOp of A
+  proof
+    reconsider a = id (bool A) as MSSetOp of A;
+      a is topological
+    proof
+      let X, Y be Element of bool A;
+        X in bool A & Y in bool A by MSSUBFAM:12;
+      then X c= A & Y c= A by MBOOLEAN:1;
+      then X \/ Y c= A by PBOOLE:18;
+      then X \/ Y in bool A by MBOOLEAN:1;
+      then X \/ Y is Element of bool A by MSSUBFAM:11;
+      hence thesis by Th10;
+    end;
+    hence thesis;
+  end;
+
+reserve P, R for MSSetOp of M,
+        E, T for Element of bool M;
+
+theorem
+  E = M & P is reflexive implies E = P..E
+  proof
+    assume
+A1:   E = M;
+    assume P is reflexive;
+    hence E c= P..E by Def2;
+      P..E in bool E by A1,MSSUBFAM:12;
+    hence P..E c= E by MBOOLEAN:19;
+  end;
+
+theorem
+  (P is reflexive & for X being Element of bool M holds P..X c= X)
+ implies P is idempotent
+  proof
+    assume that
+A1:   P is reflexive and
+A2:   for X being Element of bool M holds P..X c= X;
+    let X be Element of bool M;
+    thus P..X c= P..(P..X) by A1,Def2;
+    thus P..(P..X) c= P..X by A2;
+  end;
+
+theorem
+  P is monotonic implies P..(E /\ T) c= P..E /\ P..T
+  proof
+    assume
+A1:   P is monotonic;
+      E in bool M by MSSUBFAM:12;
+    then E c= M by MBOOLEAN:1;
+    then E /\ T c= M by MBOOLEAN:15;
+    then E /\ T in bool M by MBOOLEAN:1;
+then A2: E /\ T is Element of bool M by MSSUBFAM:11;
+      E /\ T c= E by PBOOLE:17;
+then A3: P..(E /\ T) c= P..E by A1,A2,Def3;
+      E /\ T c= T by PBOOLE:17;
+    then P..(E /\ T) c= P..T by A1,A2,Def3;
+    hence P..(E /\ T) c= P..E /\ P..T by A3,PBOOLE:19;
+  end;
+
+definition let I, M;
+ cluster topological -> monotonic MSSetOp of M;
+coherence
+  proof
+    let P be MSSetOp of M such that
+A1:   P is topological;
+    let X, Y be Element of bool M such that
+A2:   X c= Y;
+      P..X \/ P..Y = P..(X \/ Y) by A1,Def5
+               .= P..Y by A2,PBOOLE:24;
+    hence P..X c= P..Y by PBOOLE:28;
+  end;
+end;
+
+theorem
+  P is topological implies P..E \ P..T c= P..(E \ T)
+  proof
+      E in bool M by MSSUBFAM:12;
+    then E c= M by MBOOLEAN:1;
+    then E\T c= M by MBOOLEAN:16;
+    then E\T in bool M by MBOOLEAN:1;
+then A1: E\T is Element of bool M by MSSUBFAM:11;
+    assume
+A2:   P is topological;
+    then P..E \/ P..T = P..(E \/ T) by Def5
+               .= P..((E\T) \/ T) by PBOOLE:73
+               .= (P..(E\T)) \/ (P..T) by A1,A2,Def5;
+    then P..E c= P..(E\T) \/ P..T by PBOOLE:16;
+    then P..E \ P..T c= (P..(E\T) \/ P..T) \ P..T by PBOOLE:59;
+then A3: P..E \ P..T c= P..(E\T) \ P..T by PBOOLE:81;
+      P..(E\T) \ P..T c= P..(E\T) by PBOOLE:62;
+    hence thesis by A3,PBOOLE:15;
+  end;
+
+definition let I, M, R, P;
+ redefine func P ** R -> MSSetOp of M;
+coherence
+  proof
+      P ** R is ManySortedFunction of bool M, bool M;
+    hence thesis;
+  end;
+end;
+
+theorem
+  P is reflexive & R is reflexive implies P ** R is reflexive
+  proof
+    assume that
+A1:   P is reflexive and
+A2:   R is reflexive;
+    let X be Element of bool M;
+      doms R = bool M by MSSUBFAM:17;
+then A3: X in doms R by MSSUBFAM:12;
+A4: X c= R..X by A2,Def2;
+      R..X c= P..(R..X) by A1,Def2;
+    then X c= P..(R..X) by A4,PBOOLE:15;
+    hence X c= (P**R)..X by A3,Th4;
+  end;
+
+theorem
+  P is monotonic & R is monotonic implies P ** R is monotonic
+  proof
+    assume that
+A1:   P is monotonic and
+A2:   R is monotonic;
+    let X, Y be Element of bool M such that
+A3:   X c= Y;
+A4: doms R = bool M by MSSUBFAM:17;
+then A5: X in doms R by MSSUBFAM:12;
+A6: Y in doms R by A4,MSSUBFAM:12;
+      R..X c= R..Y by A2,A3,Def3;
+    then P..(R..X) c= P..(R..Y) by A1,Def3;
+    then P..(R..X) c= (P**R)..Y by A6,Th4;
+    hence (P**R)..X c= (P**R)..Y by A5,Th4;
+  end;
+
+theorem
+  P is idempotent & R is idempotent & P**R = R**P implies P ** R is idempotent
+  proof
+    assume that
+A1:   P is idempotent and
+A2:   R is idempotent and
+A3:   P**R = R**P;
+    let X be Element of bool M;
+A4: doms R = bool M by MSSUBFAM:17;
+then A5: X in doms R by MSSUBFAM:12;
+A6: R..X in doms R by A4,MSSUBFAM:12;
+A7: (P**R)..X in doms R by A4,MSSUBFAM:12;
+      doms P = bool M by MSSUBFAM:17;
+then A8: R..X in doms P by MSSUBFAM:12;
+    thus (P**R)..X = P..(R..X) by A5,Th4
+                  .= P..(R..(R..X)) by A2,Def4
+                  .= P..(P..(R..(R..X))) by A1,Def4
+                  .= P..((R**P)..(R..X)) by A3,A6,Th4
+                  .= P..(R..(P..(R..X))) by A8,Th4
+                  .= P..(R..((P**R)..X)) by A5,Th4
+                  .= (P**R)..((P**R)..X) by A7,Th4;
+  end;
+
+theorem
+  P is topological & R is topological implies P ** R is topological
+  proof
+    assume that
+A1:   P is topological and
+A2:   R is topological;
+    let X, Y be Element of bool M;
+A3: doms R = bool M by MSSUBFAM:17;
+then A4: X in doms R by MSSUBFAM:12;
+A5: Y in doms R by A3,MSSUBFAM:12;
+      X in bool M & Y in bool M by MSSUBFAM:12;
+    then X c= M & Y c= M by MBOOLEAN:1;
+    then X \/ Y c= M by PBOOLE:18;
+    then X \/ Y in doms R by A3,MBOOLEAN:1;
+    hence (P**R)..(X \/ Y) = P..(R..(X \/ Y)) by Th4
+                         .= P..(R..X \/ R..Y) by A2,Def5
+                         .= P..(R..X) \/ P..(R..Y) by A1,Def5
+                         .= (P**R)..X \/ P..(R..Y) by A4,Th4
+                         .= (P**R)..X \/ (P**R)..Y by A5,Th4;
+  end;
+
+Lm2:
+    now
+      let I, M, i;
+      let a be ManySortedSet of I,
+          b be Element of bool (M.i) such that
+        i in I and
+A1:   a = [0]I +* (i .--> b);
+        [0]I c= M by MBOOLEAN:5;
+then A2:   [0]I in bool M by MBOOLEAN:1;
+A3:   dom (i .--> b) = {i} by CQC_LANG:5;
+      thus a in bool M
+      proof
+        let j be set such that
+A4:         j in I;
+          i in {i} by TARSKI:def 1;
+then A5:     a.i = (i .--> b).i by A1,A3,FUNCT_4:14
+           .= b by CQC_LANG:6;
+          now per cases;
+          case
+A6:           j = i;
+            then b in bool (M.j);
+            hence a.j in (bool M).j by A4,A5,A6,MBOOLEAN:def 1;
+          case j <> i;
+            then not j in dom (i .--> b) by A3,TARSKI:def 1;
+            then a.j = [0]I.j by A1,FUNCT_4:12;
+            hence a.j in (bool M).j by A2,A4,PBOOLE:def 4;
+        end;
+        hence a.j in (bool M).j;
+      end;
+    end;
+
+theorem Th24:
+P is reflexive & i in I & f = P.i implies
+  for x being Element of bool (M.i) holds x c= f.x
+  proof
+    assume that
+A1:   P is reflexive and
+A2:   i in I and
+A3:   f = P.i;
+    let x be Element of bool (M.i);
+      dom ([0]I +* (i .--> x)) = I by A2,PZFMISC1:1;
+    then reconsider X = [0]I +* (i .--> x) as ManySortedSet of I by PBOOLE:def
+3;
+A4: dom (i .--> x) = {i} by CQC_LANG:5;
+      i in {i} by TARSKI:def 1;
+then A5: X.i = (i .--> x).i by A4,FUNCT_4:14
+       .= x by CQC_LANG:6;
+      X in bool M by A2,Lm2;
+then A6: X is Element of bool M by MSSUBFAM:11;
+A7: i in dom P by A2,PBOOLE:def 3;
+      X c= P..X by A1,A6,Def2;
+    then X.i c= (P..X).i by A2,PBOOLE:def 5;
+    hence x c= f.x by A3,A5,A7,PRALG_1:def 18;
+  end;
+
+theorem Th25:
+P is monotonic & i in I & f = P.i implies
+  for x, y being Element of bool (M.i) st x c= y holds f.x c= f.y
+   proof
+     assume that
+A1:    P is monotonic and
+A2:    i in I and
+A3:    f = P.i;
+     let x, y be Element of bool (M.i) such that
+A4:    x c= y;
+    dom ([0]I +* (i .--> x)) = I by A2,PZFMISC1:1;
+     then reconsider X = [0]I +* (i .--> x) as ManySortedSet of I by PBOOLE:def
+3;
+    dom ([0]I +* (i .--> y)) = I by A2,PZFMISC1:1;
+     then reconsider Y = [0]I +* (i .--> y) as ManySortedSet of I by PBOOLE:def
+3;
+A5:  dom (i .--> x) = {i} by CQC_LANG:5;
+A6:  i in {i} by TARSKI:def 1;
+then A7:  X.i = (i .--> x).i by A5,FUNCT_4:14
+        .= x by CQC_LANG:6;
+A8:  dom (i .--> y) = {i} by CQC_LANG:5;
+then A9:  Y.i = (i .--> y).i by A6,FUNCT_4:14
+        .= y by CQC_LANG:6;
+       X in bool M & Y in bool M by A2,Lm2;
+then A10:  X is Element of bool M & Y is Element of bool M by MSSUBFAM:11;
+A11:  i in dom P by A2,PBOOLE:def 3;
+       X c= Y
+     proof
+       let s be set such that
+        s in I;
+       per cases;
+       suppose s = i;
+         hence X.s c= Y.s by A4,A7,A9;
+       suppose
+A12:         s <> i;
+         then not s in dom (i .--> x) by A5,TARSKI:def 1;
+then A13:      X.s = [0]I.s by FUNCT_4:12;
+           not s in dom (i .--> y) by A8,A12,TARSKI:def 1;
+         hence X.s c= Y.s by A13,FUNCT_4:12;
+     end;
+     then P..X c= P..Y by A1,A10,Def3;
+     then (P..X).i c= (P..Y).i by A2,PBOOLE:def 5;
+     then f.(X.i) c= (P..Y).i by A3,A11,PRALG_1:def 18;
+     hence f.x c= f.y by A3,A7,A9,A11,PRALG_1:def 18;
+   end;
+
+theorem Th26:
+P is idempotent & i in I & f = P.i implies
+  for x being Element of bool (M.i) holds f.x = f.(f.x)
+  proof
+    assume that
+A1:   P is idempotent and
+A2:   i in I and
+A3:   f = P.i;
+    let x be Element of bool (M.i);
+      dom ([0]I +* (i .--> x)) = I by A2,PZFMISC1:1;
+    then reconsider X = [0]I +* (i .--> x) as ManySortedSet of I by PBOOLE:def
+3;
+A4: dom (i .--> x) = {i} by CQC_LANG:5;
+      i in {i} by TARSKI:def 1;
+then A5: X.i = (i .--> x).i by A4,FUNCT_4:14
+       .= x by CQC_LANG:6;
+      X in bool M by A2,Lm2;
+then A6: X is Element of bool M by MSSUBFAM:11;
+A7: i in dom P by A2,PBOOLE:def 3;
+    hence f.x = (P..X).i by A3,A5,PRALG_1:def 18
+             .= (P..(P..X)).i by A1,A6,Def4
+             .= f.((P..X).i) by A3,A7,PRALG_1:def 18
+             .= f.(f.x) by A3,A5,A7,PRALG_1:def 18;
+  end;
+
+theorem
+  P is topological & i in I & f = P.i implies
+  for x, y being Element of bool (M.i) holds f.(x \/ y) = (f.x) \/ (f.y)
+  proof
+    assume that
+A1:   P is topological and
+A2:   i in I and
+A3:   f = P.i;
+    let x, y be Element of bool (M.i);
+      dom ([0]I +* (i .--> x)) = I by A2,PZFMISC1:1;
+    then reconsider X = [0]I +* (i .--> x) as ManySortedSet of I by PBOOLE:def
+3;
+      dom ([0]I +* (i .--> y)) = I by A2,PZFMISC1:1;
+    then reconsider Y = [0]I +* (i .--> y) as ManySortedSet of I by PBOOLE:def
+3;
+A4: dom (i .--> x) = {i} by CQC_LANG:5;
+A5: i in {i} by TARSKI:def 1;
+then A6: X.i = (i .--> x).i by A4,FUNCT_4:14
+       .= x by CQC_LANG:6;
+      dom (i .--> y) = {i} by CQC_LANG:5;
+then A7: Y.i = (i .--> y).i by A5,FUNCT_4:14
+       .= y by CQC_LANG:6;
+      X in bool M & Y in bool M by A2,Lm2;
+then A8: X is Element of bool M & Y is Element of bool M by MSSUBFAM:11;
+A9: i in dom P by A2,PBOOLE:def 3;
+    thus f.(x \/ y) = f.((X \/ Y).i) by A2,A6,A7,PBOOLE:def 7
+                  .= (P..(X \/ Y)).i by A3,A9,PRALG_1:def 18
+                  .= ((P..X) \/ (P..Y)).i by A1,A8,Def5
+                  .= (P..X).i \/ (P..Y).i by A2,PBOOLE:def 7
+                  .= f.(X.i) \/ (P..Y).i by A3,A9,PRALG_1:def 18
+                  .= (f.x) \/ (f.y) by A3,A6,A7,A9,PRALG_1:def 18;
+  end;
+
+begin  :: On the Many Sorted Closure Operator
+       ::  and the Many Sorted Closure System
+
+reserve S for 1-sorted;
+
+definition let S;
+ struct(many-sorted over S) MSClosureStr over S (#
+       Sorts -> ManySortedSet of the carrier of S,
+       Family -> MSSubsetFamily of the Sorts #);
+end;
+
+reserve
+        MS for many-sorted over S;
+
+definition let S;
+ let IT be MSClosureStr over S;
+ attr IT is additive means :Def6:
+  the Family of IT is additive;
+
+ attr IT is absolutely-additive means :Def7:
+  the Family of IT is absolutely-additive;
+
+ attr IT is multiplicative means :Def8:
+  the Family of IT is multiplicative;
+
+ attr IT is absolutely-multiplicative means :Def9:
+  the Family of IT is absolutely-multiplicative;
+
+ attr IT is properly-upper-bound means :Def10:
+  the Family of IT is properly-upper-bound;
+
+ attr IT is properly-lower-bound means :Def11:
+  the Family of IT is properly-lower-bound;
+end;
+
+definition let S, MS;
+ func MSFull MS -> MSClosureStr over S equals :Def12:
+   MSClosureStr (#the Sorts of MS, bool the Sorts of MS#);
+correctness;
+end;
+
+definition let S, MS;
+ cluster MSFull MS -> strict additive absolutely-additive
+                      multiplicative absolutely-multiplicative
+                      properly-upper-bound properly-lower-bound;
+coherence
+  proof
+A1: MSFull MS = MSClosureStr (#the Sorts of MS, bool the Sorts of MS#)
+ by Def12;
+    hence MSFull MS is strict;
+    thus the Family of MSFull MS is additive absolutely-additive
+     multiplicative absolutely-multiplicative properly-upper-bound
+      properly-lower-bound by A1;
+  end;
+end;
+
+definition let S;
+           let MS be non-empty many-sorted over S;
+ cluster MSFull MS -> non-empty;
+coherence
+  proof
+      MSFull MS = MSClosureStr (#the Sorts of MS, bool the Sorts of MS#)
+ by Def12;
+    hence MSFull MS is non-empty by MSUALG_1:def 8;
+  end;
+end;
+
+definition let S;
+ cluster strict non-empty additive absolutely-additive
+         multiplicative absolutely-multiplicative
+         properly-upper-bound properly-lower-bound MSClosureStr over S;
+existence
+  proof
+    consider a being non-empty many-sorted over S;
+    take MSFull a;
+    thus thesis;
+  end;
+end;
+
+definition let S;
+           let CS be additive MSClosureStr over S;
+ cluster the Family of CS -> additive;
+coherence by Def6;
+end;
+
+definition let S;
+           let CS be absolutely-additive MSClosureStr over S;
+ cluster the Family of CS -> absolutely-additive;
+coherence by Def7;
+end;
+
+definition let S;
+           let CS be multiplicative MSClosureStr over S;
+ cluster the Family of CS -> multiplicative;
+coherence by Def8;
+end;
+
+definition let S;
+           let CS be absolutely-multiplicative MSClosureStr over S;
+ cluster the Family of CS -> absolutely-multiplicative;
+coherence by Def9;
+end;
+
+definition let S;
+           let CS be properly-upper-bound MSClosureStr over S;
+ cluster the Family of CS -> properly-upper-bound;
+coherence by Def10;
+end;
+
+definition let S;
+           let CS be properly-lower-bound MSClosureStr over S;
+ cluster the Family of CS -> properly-lower-bound;
+coherence by Def11;
+end;
+
+definition let S;
+           let M be non-empty ManySortedSet of the carrier of S;
+           let F be MSSubsetFamily of M;
+ cluster MSClosureStr (#M, F#) -> non-empty;
+coherence
+  proof
+    thus the Sorts of MSClosureStr (#M, F#) is non-empty;
+  end;
+end;
+
+definition let S, MS;
+           let F be additive MSSubsetFamily of the Sorts of MS;
+ cluster MSClosureStr (#the Sorts of MS, F#) -> additive;
+coherence by Def6;
+end;
+
+definition let S, MS;
+           let F be absolutely-additive MSSubsetFamily of the Sorts of MS;
+ cluster MSClosureStr (#the Sorts of MS, F#) -> absolutely-additive;
+coherence by Def7;
+end;
+
+definition let S, MS;
+           let F be multiplicative MSSubsetFamily of the Sorts of MS;
+ cluster MSClosureStr (#the Sorts of MS, F#) -> multiplicative;
+coherence by Def8;
+end;
+
+definition let S, MS;
+         let F be absolutely-multiplicative MSSubsetFamily of the Sorts of MS;
+ cluster MSClosureStr (#the Sorts of MS, F#) -> absolutely-multiplicative;
+coherence by Def9;
+end;
+
+definition let S, MS;
+           let F be properly-upper-bound MSSubsetFamily of the Sorts of MS;
+ cluster MSClosureStr (#the Sorts of MS, F#) -> properly-upper-bound;
+coherence by Def10;
+end;
+
+definition let S, MS;
+           let F be properly-lower-bound MSSubsetFamily of the Sorts of MS;
+ cluster MSClosureStr (#the Sorts of MS, F#) -> properly-lower-bound;
+coherence by Def11;
+end;
+
+definition let S;
+ cluster absolutely-additive -> additive MSClosureStr over S;
+coherence
+  proof
+    let CS be MSClosureStr over S;
+    assume CS is absolutely-additive;
+then A1: the Family of CS is absolutely-additive by Def7;
+      for a being absolutely-additive MSSubsetFamily of M
+      holds a is additive;
+    hence the Family of CS is additive by A1;
+  end;
+end;
+
+definition let S;
+ cluster absolutely-multiplicative -> multiplicative MSClosureStr over S;
+coherence
+  proof
+    let CS be MSClosureStr over S;
+    assume CS is absolutely-multiplicative;
+then A1: the Family of CS is absolutely-multiplicative by Def9;
+      for a being absolutely-multiplicative MSSubsetFamily of M
+      holds a is multiplicative;
+    hence the Family of CS is multiplicative by A1;
+  end;
+end;
+
+definition let S;
+ cluster absolutely-multiplicative -> properly-upper-bound MSClosureStr over S;
+coherence
+  proof
+    let CS be MSClosureStr over S;
+    assume CS is absolutely-multiplicative;
+then A1: the Family of CS is absolutely-multiplicative by Def9;
+      for a being absolutely-multiplicative MSSubsetFamily of M
+      holds a is properly-upper-bound;
+    hence the Family of CS is properly-upper-bound by A1;
+  end;
+end;
+
+definition let S;
+ cluster absolutely-additive -> properly-lower-bound MSClosureStr over S;
+coherence
+  proof
+    let CS be MSClosureStr over S;
+    assume CS is absolutely-additive;
+then A1: the Family of CS is absolutely-additive by Def7;
+      for a being absolutely-additive MSSubsetFamily of M
+      holds a is properly-lower-bound;
+    hence the Family of CS is properly-lower-bound by A1;
+  end;
+end;
+
+definition let S;
+ mode MSClosureSystem of S is absolutely-multiplicative MSClosureStr over S;
+end;
+
+definition let I, M;
+ mode MSClosureOperator of M is reflexive monotonic idempotent MSSetOp of M;
+end;
+
+definition let I, M;
+           let F be ManySortedFunction of M, M;
+ func MSFixPoints F -> ManySortedSubset of M means :Def13:
+  for i st i in I holds
+   x in it.i iff ex f being Function st f = F.i & x in dom f & f.x = x;
+existence
+  proof
+    defpred P[set,set] means for x holds x in $2 iff x in M.$1 &
+          ex f being Function st f = F.$1 & x in dom f & f.x = x;
+A1: now
+      let i such that i in I;
+      defpred R[set] means ex f being Function st f = F.i &
+       $1 in dom f & f.$1 = $1;
+      consider j being set such that
+A2:     for x holds x in j iff x in M.i & R[ x ] from Separation;
+      take j;
+      thus P[i,j] by A2;
+    end;
+    consider A being ManySortedSet of I such that
+A3:   for i st i in I holds P[i,A.i] from MSSEx(A1);
+      A is ManySortedSubset of M
+    proof
+      let i such that
+A4:     i in I;
+      let x;
+      assume x in A.i;
+      hence x in M.i by A3,A4;
+    end;
+    then reconsider A as ManySortedSubset of M;
+    take A;
+    thus for i st i in I holds
+          x in A.i iff ex f being Function st f = F.i & x in dom f & f.x = x
+    proof
+      let i; assume
+A5:     i in I;
+      hence
+   x in A.i implies ex f being Function st f = F.i & x in dom f & f.x = x
+        by A3;
+      given f being Function such that
+A6:     f = F.i & x in dom f & f.x = x;
+        doms F = M by MSSUBFAM:17;
+      then dom f = M.i by A5,A6,MSSUBFAM:14;
+      hence x in A.i by A3,A5,A6;
+    end;
+  end;
+uniqueness
+  proof
+    let A, B be ManySortedSubset of M such that
+A7:   for i st i in I holds
+        x in A.i iff ex f being Function st f = F.i & x in dom f & f.x = x and
+A8:   for i st i in I holds
+        x in B.i iff ex f being Function st f = F.i & x in dom f & f.x = x;
+      now
+      let i such that
+A9:     i in I;
+      thus A.i = B.i
+      proof
+        thus A.i c= B.i
+        proof
+          let x;
+          assume x in A.i;
+          then ex f being Function st f = F.i & x in dom f & f.x = x by A7,A9;
+          hence x in B.i by A8,A9;
+        end;
+        let x;
+        assume x in B.i;
+        then ex f being Function st f = F.i & x in dom f & f.x = x by A8,A9;
+        hence x in A.i by A7,A9;
+      end;
+    end;
+    hence A = B by PBOOLE:3;
+  end;
+end;
+
+definition let I;
+           let M be empty-yielding ManySortedSet of I;
+           let F be ManySortedFunction of M, M;
+ cluster MSFixPoints F -> empty-yielding;
+coherence
+  proof
+    let i such that
+A1:   i in I;
+    assume (MSFixPoints F).i is non empty;
+    then consider x being set such that
+A2:   x in (MSFixPoints F).i by XBOOLE_0:def 1;
+    consider f being Function such that
+A3:   f = F.i & x in dom f & f.x = x by A1,A2,Def13;
+      M.i = {} by A1,PBOOLE:def 15;
+    then f is Function of {}, {} by A1,A3,MSUALG_1:def 2;
+    hence contradiction by A3,PARTFUN1:54;
+  end;
+end;
+
+theorem Th28:
+for F being ManySortedFunction of M, M holds
+ A in M & F..A = A iff A in MSFixPoints F
+  proof
+    let F be ManySortedFunction of M, M;
+    thus A in M & F..A = A implies A in MSFixPoints F
+    proof
+      assume that
+A1:     A in M and
+A2:     F..A = A;
+      let i; assume
+A3:     i in I;
+      then reconsider f = F.i as Function of M.i, M.i by MSUALG_1:def 2;
+        M = doms F by MSSUBFAM:17;
+      then M.i = dom f by A3,MSSUBFAM:14;
+then A4:   A.i in dom f by A1,A3,PBOOLE:def 4;
+        i in dom F by A3,PBOOLE:def 3;
+      then f.(A.i) = A.i by A2,PRALG_1:def 18;
+      hence A.i in (MSFixPoints F).i by A3,A4,Def13;
+    end;
+    assume
+A5:   A in MSFixPoints F;
+    thus A in M
+    proof
+      let i; assume
+A6:     i in I;
+      then A.i in (MSFixPoints F).i by A5,PBOOLE:def 4;
+      then consider f being Function such that
+A7:     f = F.i & A.i in dom f & f.(A.i) = A.i by A6,Def13;
+        M = doms F by MSSUBFAM:17;
+      hence A.i in M.i by A6,A7,MSSUBFAM:14;
+    end;
+      now
+      let i; assume
+A8:     i in I;
+      then A.i in (MSFixPoints F).i by A5,PBOOLE:def 4;
+      then consider f being Function such that
+A9:     f = F.i & A.i in dom f & f.(A.i) = A.i by A8,Def13;
+        i in dom F by A8,PBOOLE:def 3;
+      hence (F..A).i = A.i by A9,PRALG_1:def 18;
+    end;
+    hence thesis by PBOOLE:3;
+  end;
+
+theorem
+  MSFixPoints id A = A
+  proof
+      now
+      let i such that
+A1:     i in I;
+      thus (MSFixPoints id A).i = A.i
+      proof
+        thus (MSFixPoints id A).i c= A.i
+        proof
+          let x be set;
+          assume x in (MSFixPoints id A).i;
+          then consider f being Function such that
+A2:         f = (id A).i & x in dom f & f.x = x by A1,Def13;
+            f is Function of A.i, A.i by A1,A2,MSUALG_1:def 2;
+          hence x in A.i by A2,FUNCT_2:67;
+        end;
+        let x be set such that
+A3:       x in A.i;
+        reconsider f = (id A).i as Function of A.i, A.i by A1,MSUALG_1:def 2;
+A4:     f = id (A.i) by A1,MSUALG_3:def 1;
+A5:     x in dom f by A3,FUNCT_2:67;
+          f.x = x by A3,A4,FUNCT_1:35;
+        hence thesis by A1,A5,Def13;
+      end;
+    end;
+    hence thesis by PBOOLE:3;
+  end;
+
+theorem Th30:
+for A being ManySortedSet of the carrier of S
+ for J being reflexive monotonic MSSetOp of A
+  for D being MSSubsetFamily of A st D = MSFixPoints J holds
+   MSClosureStr (#A, D#) is MSClosureSystem of S
+  proof
+    let A be ManySortedSet of the carrier of S,
+        J be reflexive monotonic MSSetOp of A,
+        D be MSSubsetFamily of A such that
+A1:   D = MSFixPoints J;
+    reconsider CS = MSClosureStr (#A, D#) as MSClosureStr over S;
+      CS is absolutely-multiplicative
+    proof
+        D is absolutely-multiplicative
+      proof
+        let F be MSSubsetFamily of A such that
+A2:       F c= D;
+          meet F c= A by MSUALG_2:def 1;
+then A3:     meet F in bool A by MBOOLEAN:19;
+          J..(meet F) = meet F
+        proof
+          thus J..(meet F) c= meet F
+          proof
+            let i; assume
+A4:           i in the carrier of S;
+            then reconsider j = J.i as Function of (bool A).i, (bool A).i
+                by MSUALG_1:def 2;
+            consider Q being Subset-Family of A.i such that
+A5:           Q = F.i & (meet F).i = Intersect Q by A4,MSSUBFAM:def 2;
+A6:         i in dom J by A4,PBOOLE:def 3;
+              (bool A).i = bool (A.i) by A4,MBOOLEAN:def 1;
+then A7:         j.(Intersect Q) in bool (A.i) by FUNCT_2:7;
+              now
+              let x such that
+A8:             x in Q;
+                Q c= D.i by A2,A4,A5,PBOOLE:def 5;
+              then consider jj being Function such that
+A9:             jj = J.i & x in dom jj & jj.x = x by A1,A4,A8,Def13;
+                Intersect Q c= x by A8,MSSUBFAM:2;
+              hence j.(Intersect Q) c= x by A4,A8,A9,Th25;
+            end;
+            then j.(Intersect Q) c= Intersect Q by A7,MSSUBFAM:4;
+            hence (J..(meet F)).i c= (meet F).i by A5,A6,PRALG_1:def 18;
+          end;
+            meet F is Element of bool A by A3,MSSUBFAM:11;
+          hence meet F c= J..(meet F) by Def2;
+        end;
+        hence meet F in D by A1,A3,Th28;
+      end;
+      hence the Family of CS is absolutely-multiplicative;
+    end;
+    hence thesis;
+  end;
+
+theorem Th31:
+for D being properly-upper-bound MSSubsetFamily of M
+  for X being Element of bool M
+ ex SF being non-empty MSSubsetFamily of M st
+  for Y being ManySortedSet of I holds
+   Y in SF iff Y in D & X c= Y
+  proof
+    let D be properly-upper-bound MSSubsetFamily of M,
+        X be Element of bool M;
+A1: D c= bool M by MSUALG_2:def 1;
+    defpred P[set,set] means X.$1 c= $2;
+    consider SF being ManySortedSet of I such that
+A2:  for i being set st i in I
+      for e being set holds e in SF.i iff e in D.i & P[i,e]
+       from PSeparation;
+      SF is ManySortedSubset of bool M
+    proof
+      let i; assume
+A3:     i in I;
+      then D.i c= (bool M).i by A1,PBOOLE:def 5;
+then A4:   D.i c= bool (M.i) by A3,MBOOLEAN:def 1;
+      thus SF.i c= (bool M).i
+      proof
+          SF.i c= bool (M.i)
+        proof
+          let x;
+          assume x in SF.i;
+          then x in D.i by A2,A3;
+          hence x in bool (M.i) by A4;
+        end;
+        hence thesis by A3,MBOOLEAN:def 1;
+      end;
+    end;
+    then reconsider SF as ManySortedSubset of bool M;
+    reconsider SF as MSSubsetFamily of M;
+      SF is non-empty
+    proof
+      let i such that
+A5:     i in I;
+        X in bool M by MSSUBFAM:12;
+      then X c= M by MBOOLEAN:19;
+then A6:   X.i c= M.i by A5,PBOOLE:def 5;
+        M in D by MSSUBFAM:def 7;
+      then M.i in D.i by A5,PBOOLE:def 4;
+      hence SF.i is non empty by A2,A5,A6;
+    end;
+    then reconsider SF as non-empty MSSubsetFamily of M;
+    take SF;
+    let Y be ManySortedSet of I;
+    thus Y in SF implies Y in D & X c= Y
+    proof
+      assume
+A7:     Y in SF;
+      thus Y in D
+      proof
+        let i; assume
+A8:       i in I;
+        then Y.i in SF.i by A7,PBOOLE:def 4;
+        hence thesis by A2,A8;
+      end;
+      thus X c= Y
+      proof
+        let i; assume
+A9:       i in I;
+        then Y.i in SF.i by A7,PBOOLE:def 4;
+        hence thesis by A2,A9;
+      end;
+    end;
+    assume
+A10:   Y in D & X c= Y;
+    let i; assume
+A11:  i in I;
+    then Y.i in D.i & X.i c= Y.i by A10,PBOOLE:def 4,def 5;
+    hence thesis by A2,A11;
+  end;
+
+theorem Th32:
+for D being properly-upper-bound MSSubsetFamily of M
+ for X being Element of bool M
+  for SF being non-empty MSSubsetFamily of M st
+   (for Y being ManySortedSet of I holds
+    Y in SF iff Y in D & X c= Y) holds
+ for i being set, Di being non empty set st i in I & Di = D.i
+  holds SF.i = { z where z is Element of Di : X.i c= z }
+  proof
+    let D be properly-upper-bound MSSubsetFamily of M,
+        X be Element of bool M,
+        SF be non-empty MSSubsetFamily of M such that
+A1:  (for Y being ManySortedSet of I holds
+      Y in SF iff Y in D & X c= Y);
+    let i be set,
+        Di be non empty set such that
+A2:   i in I and
+A3:   Di = D.i;
+    thus SF.i c= { z where z is Element of Di : X.i c= z }
+    proof
+      let x such that
+A4:     x in SF.i;
+      consider K be ManySortedSet of I such that
+A5:     K in SF by PBOOLE:146;
+     dom (K +* (i .--> x)) = I by A2,PZFMISC1:1;
+      then reconsider L = K +* (i .--> x) as ManySortedSet of I by PBOOLE:def 3
+;
+A6:   dom (i .--> x) = {i} by CQC_LANG:5;
+        i in {i} by TARSKI:def 1;
+then A7:   L.i = (i .--> x).i by A6,FUNCT_4:14
+         .= x by CQC_LANG:6;
+        L in SF
+      proof
+        let s be set such that
+A8:       s in I;
+        per cases;
+        suppose s = i;
+          hence L.s in SF.s by A4,A7;
+        suppose s <> i;
+          then not s in dom (i .--> x) by A6,TARSKI:def 1;
+          then L.s = K.s by FUNCT_4:12;
+          hence L.s in SF.s by A5,A8,PBOOLE:def 4;
+      end;
+      then L in D & X c= L by A1;
+      then L.i in D.i & X.i c= L.i by A2,PBOOLE:def 4,def 5;
+      hence thesis by A3,A7;
+    end;
+    let x;
+    assume x in { z where z is Element of Di : X.i c= z };
+    then consider g be Element of Di such that
+A9:   g = x & X.i c= g;
+A10: M in D by MSSUBFAM:def 7;
+   dom (M +* (i .--> g)) = I by A2,PZFMISC1:1;
+    then reconsider L1 = M +* (i .--> g) as ManySortedSet of I by PBOOLE:def 3;
+A11: dom (i .--> g) = {i} by CQC_LANG:5;
+      i in {i} by TARSKI:def 1;
+then A12: L1.i = (i .--> g).i by A11,FUNCT_4:14
+        .= g by CQC_LANG:6;
+A13: L1 in D
+    proof
+      let s be set such that
+A14:     s in I;
+      per cases;
+      suppose s = i;
+        hence L1.s in D.s by A3,A12;
+      suppose s <> i;
+        then not s in dom (i .--> g) by A11,TARSKI:def 1;
+        then L1.s = M.s by FUNCT_4:12;
+        hence L1.s in D.s by A10,A14,PBOOLE:def 4;
+    end;
+      X c= L1
+    proof
+      let s be set such that
+A15:     s in I;
+      per cases;
+      suppose s = i;
+        hence X.s c= L1.s by A9,A12;
+      suppose s <> i;
+        then not s in dom (i .--> g) by A11,TARSKI:def 1;
+then A16:     L1.s = M.s by FUNCT_4:12;
+          X in bool M by MSSUBFAM:12;
+        then X c= M by MBOOLEAN:19;
+        hence X.s c= L1.s by A15,A16,PBOOLE:def 5;
+    end;
+    then L1 in SF by A1,A13;
+    hence x in SF.i by A2,A9,A12,PBOOLE:def 4;
+  end;
+
+theorem Th33:
+for D being properly-upper-bound MSSubsetFamily of M
+ ex J being MSSetOp of M st
+  for X being Element of bool M
+   for SF being non-empty MSSubsetFamily of M st
+    (for Y being ManySortedSet of I holds
+     Y in SF iff Y in D & X c= Y) holds J..X = meet SF
+  proof
+    let D be properly-upper-bound MSSubsetFamily of M;
+    set G = bool M;
+defpred P[set,set,set] means
+ for sf being Subset-Family of M.$3
+  for Fi being non empty set st Fi = D.$3 &
+   sf = { z where z is Element of Fi : $2 c= z } holds $1 = Intersect sf;
+A1: now
+      let i be set such that
+A2:     i in I;
+      let x be set such that
+A3:     x in G.i;
+      consider K being ManySortedSet of I such that
+A4:     K in G by PBOOLE:146;
+     dom (K +* (i .--> x)) = I by A2,PZFMISC1:1;
+      then reconsider X = K +* (i .--> x) as ManySortedSet of I by PBOOLE:def 3
+;
+A5:   dom (i .--> x) = {i} by CQC_LANG:5;
+        i in {i} by TARSKI:def 1;
+then A6:   X.i = (i .--> x).i by A5,FUNCT_4:14
+         .= x by CQC_LANG:6;
+A7:   X is Element of bool M
+      proof
+        let s be set such that
+A8:       s in I;
+        per cases;
+        suppose s = i;
+          hence X.s is Element of (bool M).s by A3,A6;
+        suppose s <> i;
+          then not s in dom (i .--> x) by A5,TARSKI:def 1;
+          then X.s = K.s by FUNCT_4:12;
+          hence X.s is Element of (bool M).s by A4,A8,PBOOLE:def 4;
+      end;
+      then consider SF being non-empty MSSubsetFamily of M such that
+A9:    for Y being ManySortedSet of I holds
+        Y in SF iff Y in D & X c= Y by Th31;
+      reconsider sf = SF.i as Subset-Family of M.i by A2,MSSUBFAM:32;
+      reconsider b = (bool M).i as non empty set by A2,PBOOLE:def 16;
+      reconsider q = Intersect sf as Element of b by A2,MBOOLEAN:def 1;
+      deffunc F(set) = q;
+      consider s being Function of b, b such that
+A10:    for a being Element of b holds s.a = F(a) from LambdaD;
+      take y = s.x;
+      Intersect sf in bool (M.i);
+      then Intersect sf in b by A2,MBOOLEAN:def 1;
+      hence y in G.i by A3,A10;
+      thus P[y,x,i]
+      proof
+       let sf1 be Subset-Family of M.i,
+          Fi be non empty set such that
+A11:     Fi = D.i & sf1 = { z where z is Element of Fi : x c= z };
+       reconsider Di = D.i as non empty set by A2,PBOOLE:def 16;
+        SF.i = { z where z is Element of Di : X.i c= z }
+          by A2,A7,A9,Th32;
+       hence y = Intersect sf1 by A3,A6,A10,A11;
+      end;
+    end;
+    consider J being ManySortedFunction of G, G such that
+A12:  for i be set st i in I holds
+      ex f be Function of G.i, G.i st f = J.i &
+       for x be set st x in G.i holds P[f.x,x,i] from MSFExFunc(A1);
+    reconsider J as MSSetOp of M;
+    take J;
+    let X be Element of bool M,
+        SF be non-empty MSSubsetFamily of M such that
+A13:   (for Y being ManySortedSet of I holds
+       Y in SF iff Y in D & X c= Y);
+      now
+      let i; assume
+A14:     i in I;
+      then consider f being Function of G.i, G.i such that
+A15:     f = J.i and
+A16:     for x st x in G.i holds P[f.x,x,i] by A12;
+      consider Q being Subset-Family of (M.i) such that
+A17:     Q = SF.i and
+A18:     (meet SF).i = Intersect Q by A14,MSSUBFAM:def 2;
+      reconsider Fi = D.i as non empty set by A14,PBOOLE:def 16;
+A19:   Q = { z where z is Element of Fi : X.i c= z }
+        by A13,A14,A17,Th32;
+        X in G by MSSUBFAM:12;
+then A20:   X.i in G.i by A14,PBOOLE:def 4;
+        dom J = I by PBOOLE:def 3;
+      hence (J..X).i = f.(X.i) by A14,A15,PRALG_1:def 18
+                    .= (meet SF).i by A16,A18,A19,A20;
+    end;
+    hence J..X = meet SF by PBOOLE:3;
+  end;
+
+theorem Th34:
+for D being properly-upper-bound MSSubsetFamily of M
+ for A being Element of bool M
+  for J being MSSetOp of M st
+
+  A in D &
+   for X being Element of bool M
+    for SF being non-empty MSSubsetFamily of M st
+     (for Y being ManySortedSet of I holds
+      Y in SF iff Y in D & X c= Y) holds J..X = meet SF
+
+  holds J..A = A
+  proof
+     let D be properly-upper-bound MSSubsetFamily of M,
+         A be Element of bool M,
+         J be MSSetOp of M such that
+
+A1:   A in D and
+A2:   for X being Element of bool M
+       for SF being non-empty MSSubsetFamily of M st
+        (for Y being ManySortedSet of I holds
+         Y in SF iff Y in D & X c= Y) holds J..X = meet SF;
+
+    consider SF being non-empty MSSubsetFamily of M such that
+A3:  for Y being ManySortedSet of I holds
+      Y in SF iff Y in D & A c= Y by Th31;
+    thus J..A = A
+    proof
+        A in SF by A1,A3;
+      then meet SF c= A by MSSUBFAM:43;
+      hence J..A c= A by A2,A3;
+A4:   J..A = meet SF by A2,A3;
+        for Z1 being ManySortedSet of I st Z1 in SF holds A c= Z1
+         by A3;
+      hence A c= J..A by A4,MSSUBFAM:45;
+    end;
+  end;
+
+theorem
+  for D being absolutely-multiplicative MSSubsetFamily of M
+ for A being Element of bool M
+  for J being MSSetOp of M st
+
+  J..A = A &
+   for X being Element of bool M
+    for SF being non-empty MSSubsetFamily of M st
+     (for Y being ManySortedSet of I holds
+      Y in SF iff Y in D & X c= Y) holds J..X = meet SF
+
+  holds A in D
+  proof
+    let D be absolutely-multiplicative MSSubsetFamily of M,
+        A be Element of bool M,
+        J be MSSetOp of M such that
+
+A1:   J..A = A and
+A2:   for X being Element of bool M
+       for SF being non-empty MSSubsetFamily of M st
+        (for Y being ManySortedSet of I holds
+         Y in SF iff Y in D & X c= Y) holds J..X = meet SF;
+     consider SF being non-empty MSSubsetFamily of M such that
+A3:   (for Y being ManySortedSet of I holds
+       Y in SF iff Y in D & A c= Y) by Th31;
+A4:  J..A = meet SF by A2,A3;
+     defpred P[ManySortedSet of I] means A c= $1;
+       (for Y being ManySortedSet of I holds Y in SF iff Y in D & P[Y])
+        implies SF c= D from MSSUBSET;
+     hence thesis by A1,A3,A4,MSSUBFAM:def 6;
+  end;
+
+theorem Th36:
+for D being properly-upper-bound MSSubsetFamily of M
+  for J being MSSetOp of M st
+
+   for X being Element of bool M
+    for SF being non-empty MSSubsetFamily of M st
+     (for Y being ManySortedSet of I holds
+      Y in SF iff Y in D & X c= Y) holds J..X = meet SF
+
+  holds J is reflexive monotonic
+  proof
+    let D be properly-upper-bound MSSubsetFamily of M,
+        J be MSSetOp of M such that
+
+A1:    for X being Element of bool M
+        for SF being non-empty MSSubsetFamily of M st
+         (for Y being ManySortedSet of I holds
+          Y in SF iff Y in D & X c= Y) holds J..X = meet SF;
+
+    thus J is reflexive
+    proof
+      let X be Element of bool M;
+      consider SF being non-empty MSSubsetFamily of M such that
+A2:    for Y being ManySortedSet of I holds
+        Y in SF iff Y in D & X c= Y by Th31;
+A3:   J..X = meet SF by A1,A2;
+        for Z1 being ManySortedSet of I st Z1 in SF holds X c= Z1 by A2;
+      hence X c= J..X by A3,MSSUBFAM:45;
+    end;
+
+    thus J is monotonic
+    proof
+      let x, y be Element of bool M such that
+A4:     x c= y;
+      consider SFx being non-empty MSSubsetFamily of M such that
+A5:    for Y being ManySortedSet of I holds
+        Y in SFx iff Y in D & x c= Y by Th31;
+A6:   J..x = meet SFx by A1,A5;
+      consider SFy being non-empty MSSubsetFamily of M such that
+A7:    for Y being ManySortedSet of I holds
+        Y in SFy iff Y in D & y c= Y by Th31;
+        SFy c= SFx
+      proof
+        let i; assume
+A8:       i in I;
+then A9:     x.i c= y.i by A4,PBOOLE:def 5;
+          D.i is non empty by A8,PBOOLE:def 16;
+        then consider Fi be non empty set such that
+A10:       Fi = D.i;
+A11:     SFx.i = { t where t is Element of Fi : x.i c= t }
+           by A5,A8,A10,Th32;
+          SFy.i = { z where z is Element of Fi : y.i c= z }
+           by A7,A8,A10,Th32;
+        hence SFy.i c= SFx.i by A9,A11,Th1;
+      end;
+      then meet SFx c= meet SFy by MSSUBFAM:46;
+      hence J..x c= J..y by A1,A6,A7;
+    end;
+  end;
+
+theorem Th37:
+for D being absolutely-multiplicative MSSubsetFamily of M
+  for J being MSSetOp of M st
+
+   for X being Element of bool M
+    for SF being non-empty MSSubsetFamily of M st
+     (for Y being ManySortedSet of I holds
+      Y in SF iff Y in D & X c= Y) holds J..X = meet SF
+
+  holds J is idempotent
+  proof
+    let D be absolutely-multiplicative MSSubsetFamily of M,
+        J be MSSetOp of M such that
+
+A1:    for X being Element of bool M
+        for SF being non-empty MSSubsetFamily of M st
+         (for Y being ManySortedSet of I holds
+          Y in SF iff Y in D & X c= Y) holds J..X = meet SF;
+    let X be Element of bool M;
+    consider SF being non-empty MSSubsetFamily of M such that
+A2:  for Y being ManySortedSet of I holds
+      Y in SF iff Y in D & X c= Y by Th31;
+A3: D c= bool M by MSUALG_2:def 1;
+     defpred P[ManySortedSet of I] means X c= $1;
+      (for Y being ManySortedSet of I holds Y in SF iff Y in D & P[Y])
+     implies SF c= D from MSSUBSET;
+then A4: meet SF in D by A2,MSSUBFAM:def 6;
+    then meet SF in bool M by A3,PBOOLE:9;
+then A5: meet SF is Element of bool M by MSSUBFAM:11;
+    thus J..X = meet SF by A1,A2
+             .= J..(meet SF) by A1,A4,A5,Th34
+             .= J..(J..X) by A1,A2;
+  end;
+
+theorem Th38:
+for D being MSClosureSystem of S
+ for J being MSSetOp of the Sorts of D st
+
+  for X being Element of bool the Sorts of D
+   for SF being non-empty MSSubsetFamily of the Sorts of D st
+    (for Y being ManySortedSet of the carrier of S holds
+     Y in SF iff Y in the Family of D & X c= Y) holds J..X = meet SF
+
+  holds J is MSClosureOperator of the Sorts of D
+  proof
+    let D be MSClosureSystem of S,
+        J be MSSetOp of the Sorts of D; assume
+
+      for X being Element of bool the Sorts of D
+        for SF being non-empty MSSubsetFamily of the Sorts of D st
+         (for Y being ManySortedSet of the carrier of S holds
+          Y in SF iff Y in the Family of D & X c= Y) holds J..X = meet SF;
+
+    hence thesis by Th36,Th37;
+  end;
+
+definition let S;
+           let A be ManySortedSet of the carrier of S;
+           let C be MSClosureOperator of A;
+ func ClOp->ClSys C -> MSClosureSystem of S means :Def14:
+  ex D being MSSubsetFamily of A st D = MSFixPoints C &
+   it = MSClosureStr (#A, D#);
+existence
+  proof
+    reconsider D = MSFixPoints C as MSSubsetFamily of A;
+    reconsider a = MSClosureStr (#A, D#) as MSClosureSystem of S by Th30;
+    take a;
+    thus thesis;
+  end;
+uniqueness;
+end;
+
+definition let S;
+           let A be ManySortedSet of the carrier of S;
+           let C be MSClosureOperator of A;
+ cluster ClOp->ClSys C -> strict;
+coherence
+  proof
+    consider D being MSSubsetFamily of A such that
+A1:   D = MSFixPoints C & ClOp->ClSys C = MSClosureStr (#A, D#) by Def14;
+    thus thesis by A1;
+  end;
+end;
+
+definition let S;
+           let A be non-empty ManySortedSet of the carrier of S;
+           let C be MSClosureOperator of A;
+ cluster ClOp->ClSys C -> non-empty;
+coherence
+  proof
+    consider D being MSSubsetFamily of A such that
+A1:   D = MSFixPoints C & ClOp->ClSys C = MSClosureStr (#A, D#) by Def14;
+    thus thesis by A1;
+  end;
+end;
+
+definition let S;
+           let D be MSClosureSystem of S;
+ func ClSys->ClOp D -> MSClosureOperator of the Sorts of D means :Def15:
+  for X being Element of bool the Sorts of D
+   for SF being non-empty MSSubsetFamily of the Sorts of D st
+    (for Y being ManySortedSet of the carrier of S holds
+     Y in SF iff Y in the Family of D & X c= Y) holds it..X = meet SF;
+existence
+  proof
+    consider J being MSSetOp of the Sorts of D such that
+A1:  for X being Element of bool the Sorts of D
+      for SF being non-empty MSSubsetFamily of the Sorts of D st
+       (for Y being ManySortedSet of the carrier of S holds
+        Y in SF iff Y in
+ the Family of D & X c= Y) holds J..X = meet SF by Th33;
+    reconsider J as MSClosureOperator of the Sorts of D by A1,Th38;
+    take J;
+    thus thesis by A1;
+  end;
+uniqueness
+  proof
+    let Q1, Q2 be MSClosureOperator of the Sorts of D such that
+A2:    for X being Element of bool the Sorts of D
+        for SF being non-empty MSSubsetFamily of the Sorts of D st
+         (for Y being ManySortedSet of the carrier of S holds
+           Y in SF iff Y in the Family of D & X c= Y) holds Q1..X = meet SF and
+A3:    for X being Element of bool the Sorts of D
+        for SF being non-empty MSSubsetFamily of the Sorts of D st
+         (for Y being ManySortedSet of the carrier of S holds
+           Y in SF iff Y in the Family of D & X c= Y) holds Q2..X = meet SF;
+    set M = the Sorts of D;
+      now
+      let x be ManySortedSet of the carrier of S;
+      assume x in bool M;
+then A4:   x is Element of bool M by MSSUBFAM:11;
+      then consider SF being non-empty MSSubsetFamily of the Sorts of D such
+that
+A5:    (for Y being ManySortedSet of the carrier of S holds
+        Y in SF iff Y in the Family of D & x c= Y) by Th31;
+      thus Q1..x = meet SF by A2,A4,A5
+                .= Q2..x by A3,A4,A5;
+    end;
+    hence Q1 = Q2 by Th7;
+  end;
+end;
+
+theorem
+  for A being ManySortedSet of the carrier of S
+ for J being MSClosureOperator of A holds
+  ClSys->ClOp (ClOp->ClSys J) = J
+  proof
+    let A be ManySortedSet of the carrier of S,
+        J be MSClosureOperator of A;
+    set I = the carrier of S,
+        M = the Sorts of ClOp->ClSys J,
+        j = ClSys->ClOp (ClOp->ClSys J);
+    consider D being MSSubsetFamily of A such that
+A1:   D = MSFixPoints J and
+A2:   ClOp->ClSys J = MSClosureStr (#A, D#) by Def14;
+A3: the Family of ClOp->ClSys J = D by A2;
+      for X being ManySortedSet of I st X in bool A
+      holds j..X = J..X
+    proof
+      let X be ManySortedSet of I; assume
+       X in bool A;
+then A4:   X is Element of bool M by A2,MSSUBFAM:11;
+      then consider SF being non-empty MSSubsetFamily of M such that
+A5:    for Y being ManySortedSet of I holds
+        Y in SF iff Y in MSFixPoints J & X c= Y by A1,A3,Th31;
+        now
+        let i such that
+A6:       i in I;
+A7:     dom J = I by PBOOLE:def 3;
+        reconsider f = J.i as Function of (bool A).i, (bool A).i
+           by A6,MSUALG_1:def 2;
+          (bool A).i = bool (A.i) by A6,MBOOLEAN:def 1;
+        then reconsider f as Function of bool (A.i), bool (A.i);
+        consider Q being Subset-Family of (M.i) such that
+A8:       Q = SF.i and
+A9:       (meet SF).i = Intersect Q by A6,MSSUBFAM:def 2;
+        reconsider Di = (MSFixPoints J).i as non empty set
+           by A1,A3,A6,PBOOLE:def 16;
+      Intersect Q = f.(X.i)
+        proof
+A10:       SF.i = { z where z is Element of Di : X.i c= z }
+             by A1,A3,A4,A5,A6,Th32;
+            X.i is Element of (bool A).i by A2,A4,A6,MSUALG_1:def 1;
+then A11:       X.i is Element of bool (A.i) by A6,MBOOLEAN:def 1;
+A12:       dom f = bool (A.i) by FUNCT_2:def 1;
+A13:       f.(X.i) in bool (A.i) by A11,FUNCT_2:7;
+            f.(f.(X.i)) = f.(X.i) by A6,A11,Th26;
+then A14:       f.(X.i) is Element of Di by A6,A12,A13,Def13;
+            X.i c= f.(X.i) by A6,A11,Th24;
+          then f.(X.i) in { z where z is Element of Di : X.i c= z } by A14;
+          hence Intersect Q c= f.(X.i) by A8,A10,MSSUBFAM:2;
+A15:       Q <> {} by A6,A8,PBOOLE:def 16;
+            now
+            let x;
+            assume x in Q;
+            then consider x1 being Element of Di such that
+A16:           x1 = x & X.i c= x1 by A8,A10;
+              MSFixPoints J c= bool A by MSUALG_2:def 1;
+            then Di c= (bool A).i by A6,PBOOLE:def 5;
+            then Di c= bool (A.i) by A6,MBOOLEAN:def 1;
+then A17:         x1 is Element of bool (A.i) by TARSKI:def 3;
+            consider g being Function such that
+A18:           g = J.i & x1 in dom g & g.x1 = x1 by A6,Def13;
+            thus f.(X.i) c= x by A6,A11,A16,A17,A18,Th25;
+          end;
+          hence f.(X.i) c= Intersect Q by A15,MSSUBFAM:5;
+        end;
+        hence (j..X).i = f.(X.i) by A1,A2,A4,A5,A9,Def15
+                     .= (J..X).i by A6,A7,PRALG_1:def 18;
+      end;
+      hence thesis by PBOOLE:3;
+    end;
+    hence ClSys->ClOp (ClOp->ClSys J) = J by A2,Th7;
+  end;
+
+theorem
+  for D being MSClosureSystem of S holds
+ ClOp->ClSys (ClSys->ClOp D) = the MSClosureStr of D
+  proof
+    let D be MSClosureSystem of S;
+    set M = the Sorts of D,
+        F = the Family of D,
+        I = the carrier of S;
+    consider MS being MSSubsetFamily of M such that
+A1:   MS = MSFixPoints (ClSys->ClOp D) and
+A2:   ClOp->ClSys (ClSys->ClOp D) = MSClosureStr (#M, MS#) by Def14;
+      consider X1 being ManySortedSet of I such that
+A3:       X1 in bool M by PBOOLE:146;
+      F = MSFixPoints (ClSys->ClOp D)
+    proof
+      thus F c= MSFixPoints (ClSys->ClOp D)
+      proof
+        let i such that
+A4:       i in I;
+        let x such that
+A5:       x in F.i;
+       dom (X1 +* (i .--> x)) = I by A4,PZFMISC1:1;
+        then reconsider X = X1 +* (i .--> x) as ManySortedSet of I by PBOOLE:
+def 3;
+A6:     dom (i .--> x) = {i} by CQC_LANG:5;
+          i in {i} by TARSKI:def 1;
+then A7:     X.i = (i .--> x).i by A6,FUNCT_4:14
+           .= x by CQC_LANG:6;
+          F c= bool M by MSUALG_2:def 1;
+then A8:     F.i c= (bool M).i by A4,PBOOLE:def 5;
+then A9:     x in (bool M).i by A5;
+          X is Element of bool M
+        proof
+          let s be set such that
+A10:         s in I;
+          per cases;
+          suppose s = i;
+            hence X.s is Element of (bool M).s by A5,A7,A8;
+          suppose s <> i;
+            then not s in dom (i .--> x) by A6,TARSKI:def 1;
+            then X.s = X1.s by FUNCT_4:12;
+            hence X.s is Element of (bool M).s by A3,A10,PBOOLE:def 4;
+        end;
+        then reconsider X as Element of bool M;
+        reconsider Fi = F.i as non empty set by A4,PBOOLE:def 16;
+        reconsider f = (ClSys->ClOp D).i as Function of (bool M).i, (bool M).i
+           by A4,MSUALG_1:def 2;
+        consider SF being non-empty MSSubsetFamily of M such that
+A11:      for Y being ManySortedSet of I holds
+          Y in SF iff Y in F & X c= Y by Th31;
+        consider Q being Subset-Family of (M.i) such that
+A12:       Q = SF.i and
+A13:       (meet SF).i = Intersect Q by A4,MSSUBFAM:def 2;
+A14:     x in dom f by A9,FUNCT_2:def 1;
+A15:     SF.i = { z where z is Element of Fi : X.i c= z } by A4,A11,Th32;
+A16:     Intersect Q = x
+        proof
+            x in { B where B is Element of Fi : x c= B } by A5;
+          hence Intersect Q c= x by A7,A12,A15,MSSUBFAM:2;
+A17:       Q <> {} by A4,A12,PBOOLE:def 16;
+            now
+            let Z1 be set;
+            assume Z1 in Q;
+            then consider q being Element of Fi such that
+A18:           q = Z1 & X.i c= q by A12,A15;
+            thus x c= Z1 by A7,A18;
+          end;
+          hence thesis by A17,MSSUBFAM:5;
+        end;
+A19:     (ClSys->ClOp D)..X = meet SF by A11,Def15;
+          dom ClSys->ClOp D = I by PBOOLE:def 3;
+        then f.x = x by A4,A7,A13,A16,A19,PRALG_1:def 18;
+        hence x in (MSFixPoints (ClSys->ClOp D)).i by A4,A14,Def13;
+      end;
+
+
+      let i such that
+A20:     i in I;
+      let x; assume
+A21:     x in (MSFixPoints (ClSys->ClOp D)).i;
+      then consider f being Function such that
+A22:     f = (ClSys->ClOp D).i & x in dom f & f.x = x
+            by A20,Def13;
+     dom (X1 +* (i .--> x)) = I by A20,PZFMISC1:1;
+      then reconsider X = X1 +* (i .--> x) as ManySortedSet of I by PBOOLE:def
+3;
+A23:   dom (i .--> x) = {i} by CQC_LANG:5;
+        i in {i} by TARSKI:def 1;
+then A24:   X.i = (i .--> x).i by A23,FUNCT_4:14
+         .= x by CQC_LANG:6;
+        MSFixPoints (ClSys->ClOp D) c= bool M by MSUALG_2:def 1;
+then A25:   (MSFixPoints (ClSys->ClOp D)).i c= (bool M).i by A20,PBOOLE:def 5;
+        X is Element of bool M
+      proof
+        let s be set such that
+A26:       s in I;
+        per cases;
+        suppose s = i;
+          hence X.s is Element of (bool M).s by A21,A24,A25;
+        suppose s <> i;
+          then not s in dom (i .--> x) by A23,TARSKI:def 1;
+          then X.s = X1.s by FUNCT_4:12;
+          hence X.s is Element of (bool M).s by A3,A26,PBOOLE:def 4;
+      end;
+      then reconsider X as Element of bool M;
+      consider SF being non-empty MSSubsetFamily of M such that
+A27:    for Y being ManySortedSet of I holds
+        Y in SF iff Y in F & X c= Y by Th31;
+A28:   dom ClSys->ClOp D = I by PBOOLE:def 3;
+A29:   (meet SF).i = ((ClSys->ClOp D)..X).i by A27,Def15
+                 .= x by A20,A22,A24,A28,PRALG_1:def 18;
+       defpred P[ManySortedSet of I] means X c= $1;
+        (for Y being ManySortedSet of I holds Y in SF iff Y in F & P[Y])
+         implies SF c= F from MSSUBSET;
+      then meet SF in F by A27,MSSUBFAM:def 6;
+      hence x in F.i by A20,A29,PBOOLE:def 4;
+    end;
+    hence thesis by A1,A2;
+  end;

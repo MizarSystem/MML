@@ -1,0 +1,2214 @@
+:: Natural Transformations. Discrete Categories
+::  by Andrzej Trybulec
+::
+:: Received May 15, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, RELAT_1, PARTFUN1, FUNCT_4, BOOLE, CAT_1, CAT_2, MCART_1,
+      FUNCT_2, FINSET_1, CARD_1, NATTRA_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, FINSET_1, PARTFUN1,
+      RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, CARD_1, CAT_1, CAT_2;
+ constructors MCART_1, CARD_1, CAT_2, PARTFUN1, MEMBERED, XBOOLE_0;
+ clusters FUNCT_1, FINSET_1, CAT_1, CAT_2, RELSET_1, SUBSET_1, MEMBERED,
+      ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions CAT_2, TARSKI, CAT_1, XBOOLE_0;
+ theorems SUBSET_1, FUNCT_2, CAT_1, TARSKI, MCART_1, ZFMISC_1, PARTFUN1,
+      FUNCT_1, DOMAIN_1, CAT_2, CARD_2, FUNCT_3, CARD_1, FUNCT_4, GRFUNC_1,
+      RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1;
+ schemes FUNCT_2, PARTFUN1, FRAENKEL, SUPINF_2, COMPTS_1, XBOOLE_0;
+
+begin
+
+:: Preliminaries
+
+reserve A1,A2,B1,B2 for non empty set,
+        f for Function of A1,B1,
+        g for Function of A2,B2,
+        Y1 for non empty Subset of A1,
+        Y2 for non empty Subset of A2;
+
+definition let A1 be set, B1 be non empty set,
+               f be Function of A1, B1,
+               Y1 be Subset of A1;
+ redefine func f|Y1 -> Function of Y1,B1;
+  coherence by FUNCT_2:38;
+end;
+
+theorem Th1:
+ [:f,g:]|[:Y1,Y2:] = [:f|Y1,g|Y2:]
+  proof
+      now let a be Element of [:Y1,Y2:];
+      consider a1 being Element of Y1, a2 being Element of Y2 such that
+A1:     a = [a1,a2] by DOMAIN_1:9;
+        (f|Y1).a1 = f.a1 & (g|Y2).a2 = g.a2 by FUNCT_1:72;
+     hence [:f|Y1,g|Y2:].a = [f.a1,g.a2] by A1,FUNCT_3:96
+       .= [:f,g:].a by A1,FUNCT_3:96
+       .= ([:f,g:]|[:Y1,Y2:]).a by FUNCT_1:72;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+
+definition let A,B be non empty set;
+  let A1 be non empty Subset of A, B1 be non empty Subset of B;
+  let f be PartFunc of [:A1,A1:],A1; let g be PartFunc of [:B1,B1:],B1;
+ redefine func |:f,g:| -> PartFunc of [:[:A1,B1:],[:A1,B1:]:],[:A1,B1:];
+ coherence by FUNCT_4:62;
+end;
+
+theorem Th2:
+ for f being PartFunc of [:A1,A1:],A1, g being PartFunc of [:A2,A2:],A2
+ for F being PartFunc of [:Y1,Y1:],Y1 st F = f|([:Y1,Y1:] qua set)
+ for G being PartFunc of [:Y2,Y2:],Y2 st G = g|([:Y2,Y2:] qua set)
+ holds |:F,G:| = |:f,g:| |([:[:Y1,Y2:],[:Y1,Y2:]:] qua set)
+ proof let f be PartFunc of [:A1,A1:],A1, g be PartFunc of [:A2,A2:],A2;
+  let F be PartFunc of [:Y1,Y1:],Y1 such that
+A1: F = f|([:Y1,Y1:] qua set);
+  let G be PartFunc of [:Y2,Y2:],Y2 such that
+A2: G = g|([:Y2,Y2:] qua set);
+   set X = dom|:F,G:|;
+A3: dom F c= dom f & dom G c= dom g by A1,A2,FUNCT_1:76;
+A4: X c= [:[:Y1,Y2:],[:Y1,Y2:]:] by RELSET_1:12;
+A5: X = dom(|:f,g:| |([:[:Y1,Y2:],[:Y1,Y2:]:] qua set))
+    proof
+     thus X c= dom(|:f,g:| |([:[:Y1,Y2:],[:Y1,Y2:]:] qua set))
+      proof let x be set;
+       assume x in X; then consider x11,x21,x12,x22 being set such that
+A6:     x = [[x11,x12],[x21,x22]] and
+A7:     [x11,x21] in dom F and
+A8:     [x12,x22] in dom G by FUNCT_4:def 3;
+        A9:      x in dom|:f,g:| by A3,A6,A7,A8,FUNCT_4:def 3;
+          dom F c= [:Y1,Y1:] & dom G c= [:Y2,Y2:] by A1,A2,RELAT_1:87;
+        then x11 in Y1 & x21 in Y1 & x12 in Y2 & x22 in
+ Y2 by A7,A8,ZFMISC_1:106;
+        then [x11,x12] in [:Y1,Y2:] & [x21,x22] in [:Y1,Y2:] by ZFMISC_1:106;
+        then x in [:[:Y1,Y2:],[:Y1,Y2:]:] by A6,ZFMISC_1:106;
+        then x in dom|:f,g:|/\[:[:Y1,Y2:],[:Y1,Y2:]:] by A9,XBOOLE_0:def 3;
+       hence x in
+ dom(|:f,g:| |([:[:Y1,Y2:],[:Y1,Y2:]:] qua set)) by RELAT_1:90;
+      end;
+     let x be set;
+     assume x in dom(|:f,g:| |([:[:Y1,Y2:],[:Y1,Y2:]:] qua set));
+then A10:    x in dom|:f,g:|/\[:[:Y1,Y2:],[:Y1,Y2:]:] by RELAT_1:90;
+      then x in dom|:f,g:| by XBOOLE_0:def 3;
+      then consider x11,x21,x12,x22 being set such that
+A11:    x = [[x11,x12],[x21,x22]] and
+A12:    [x11,x21] in dom f and
+A13:    [x12,x22] in dom g by FUNCT_4:def 3;
+        x in [:[:Y1,Y2:],[:Y1,Y2:]:] by A10,XBOOLE_0:def 3;
+      then [x11,x12] in [:Y1,Y2:] & [x21,x22] in [:Y1,Y2:] by A11,ZFMISC_1:106
+;
+      then x11 in Y1 & x12 in Y2 & x21 in Y1 & x22 in Y2 by ZFMISC_1:106;
+then A14:    [x11,x21] in [:Y1,Y1:] & [x12,x22] in [:Y2,Y2:] by ZFMISC_1:106;
+        dom F = (dom f)/\[:Y1,Y1:] & dom G = (dom g)/\[:Y2,Y2:]
+       by A1,A2,RELAT_1:90;
+      then [x11,x21] in dom F & [x12,x22] in dom G by A12,A13,A14,XBOOLE_0:def
+3;
+     hence x in X by A11,FUNCT_4:def 3;
+    end;
+A15:now let x be set;
+    assume
+A16:   x in X; then consider x11,x21,x12,x22 being set such that
+A17:   x = [[x11,x12],[x21,x22]] and
+A18:   [x11,x21] in dom F and
+A19:   [x12,x22] in dom G by FUNCT_4:def 3;
+    thus |:F,G:|.x = [F.[x11,x21],G.[x12,x22]]
+        by A17,A18,A19,FUNCT_4:def 3
+       .= [f.[x11,x21],G.[x12,x22]] by A1,A18,FUNCT_1:70
+       .= [f.[x11,x21],g.[x12,x22]] by A2,A19,FUNCT_1:70
+       .= |:f,g:|.x by A3,A17,A18,A19,FUNCT_4:def 3
+       .= (|:f,g:| |([:[:Y1,Y2:],[:Y1,Y2:]:] qua set)).x by A5,A16,FUNCT_1:70;
+   end;
+A20: rng(|:f,g:| |([:[:Y1,Y2:],[:Y1,Y2:]:] qua set)) c= rng|:F,G:|
+    proof let x be set;
+     assume x in rng(|:f,g:| |([:[:Y1,Y2:],[:Y1,Y2:]:]qua set));
+      then consider y being set such that
+A21:    y in dom(|:f,g:| |([:[:Y1,Y2:],[:Y1,Y2:]:]qua set)) and
+A22:    x = (|:f,g:| |([:[:Y1,Y2:],[:Y1,Y2:]:] qua set)).y by FUNCT_1:def 5;
+        x = |:F,G:|.y by A5,A15,A21,A22;
+     hence x in rng|:F,G:| by A5,A21,FUNCT_1:def 5;
+    end;
+A23: for x being Element of [:[:Y1,Y2:],[:Y1,Y2:]:] st x in X holds
+     |:F,G:|.x = (|:f,g:| |([:[:Y1,Y2:],[:Y1,Y2:]:] qua set)).x by A15;
+     rng|:F,G:| c= [:Y1,Y2:] by RELSET_1:12;
+   then rng(|:f,g:| |([:[:Y1,Y2:],[:Y1,Y2:]:] qua set)) c= [:Y1,Y2:]
+                    by A20,XBOOLE_1:1;
+   then |:f,g:| |([:[:Y1,Y2:],[:Y1,Y2:]:] qua set)
+    is PartFunc of [:[:Y1,Y2:],[:Y1,Y2:]:],[:Y1,Y2:] by A4,A5,RELSET_1:11;
+  hence |:F,G:| = |:f,g:| |([:[:Y1,Y2:],[:Y1,Y2:]:] qua set)
+                           by A5,A23,PARTFUN1:34;
+ end;
+
+ reserve A,B,C for Category,
+         F,F1,F2,F3 for Functor of A,B,
+         G for Functor of B,C;
+
+scheme M_Choice{A()-> non empty set, B()-> non empty set,
+                  F(set) -> set}:
+ex t being Function of A(),B() st
+  for a being Element of A() holds t.a in F(a)
+provided
+A1: for a being Element of A() holds B() meets F(a)
+proof
+   defpred _P[set,set] means $2 in F($1);
+A2: for e being set st e in A() ex u being set st u in B() & _P[e,u]
+ proof let e be set; assume e in A(); then B() meets F(e) by A1;
+  hence thesis by XBOOLE_0:3;
+ end;
+ consider t being Function such that
+A3:  dom t = A() & rng t c= B() and
+A4:  for e being set st e in A() holds _P[e,t.e] from NonUniqBoundFuncEx(A2);
+ reconsider t as Function of A(),B() by A3,FUNCT_2:def 1,RELSET_1:11;
+ take t; let a be Element of A();
+ thus t.a in F(a) by A4;
+end;
+
+theorem Th3:
+ for a being Object of A, m being Morphism of a,a holds m in Hom(a,a)
+  proof let a be Object of A, m be Morphism of a,a;
+      Hom(a,a) <> {} by CAT_1:56;
+   hence m in Hom(a,a) by CAT_1:def 7;
+  end;
+
+reserve m,o for set;
+
+theorem Th4:
+ for f,g being Morphism of 1Cat(o,m) holds f = g
+proof let f,g be Morphism of 1Cat(o,m);
+    f = m & g = m by CAT_1:35;
+ hence f = g;
+end;
+
+theorem Th5:
+ for a being Object of A holds [[id a,id a],id a] in the Comp of A
+ proof let a be Object of A;
+A1:dom id a = a & cod id a = a by CAT_1:44;
+   then (id a)*(id a qua Morphism of A) = id a by CAT_1:47;
+then A2: (the Comp of A).[id a,id a] = id a by A1,CAT_1:41;
+     [id a,id a] in dom the Comp of A by A1,CAT_1:40;
+  hence [[id a,id a],id a] in the Comp of A by A2,FUNCT_1:def 4;
+ end;
+
+theorem Th6:
+ the Comp of 1Cat(o,m) = {[[m,m],m]}
+ proof
+   set A = 1Cat(o,m);
+  thus the Comp of A c= {[[m,m],m]}
+   proof let x be set;
+    consider o' being Object of A;
+A1:dom id o' = o' & cod id o' = o' by CAT_1:44;
+    assume A2: x in the Comp of A;
+     then consider x1,x2 being set such that
+A3:    x = [x1,x2] by RELAT_1:def 1;
+A4:  x1 in dom the Comp of A by A2,A3,RELAT_1:def 4;
+       dom the Comp of A c= [:the Morphisms of A, the Morphisms of A:]
+                                                     by RELSET_1:12;
+     then consider x11,x12 being set such that
+A5:    x11 in the Morphisms of A & x12 in the Morphisms of A and
+A6:    x1 = [x11,x12] by A4,ZFMISC_1:def 2;
+      x11 = id o' & x12 = id o' by A5,Th4;
+     then x2 = (the Comp of A).[id o',id o'] by A2,A3,A4,A6,FUNCT_1:def 4;
+     then x2 = id o'*(id o' qua Morphism of A) by A1,CAT_1:41;
+     then x11 = m & x12 = m & x2 = m by A5,CAT_1:35;
+    hence x in {[[m,m],m]} by A3,A6,TARSKI:def 1;
+   end;
+   reconsider f = m as Morphism of A by CAT_1:33;
+   consider a being Object of A;
+A7: f = id a by CAT_1:35;
+  let x be set;
+  assume x in {[[m,m],m]};
+   then x = [[m,m],m] by TARSKI:def 1;
+  hence x in the Comp of 1Cat(o,m) by A7,Th5;
+ end;
+
+theorem Th7:
+ for a being Object of A holds 1Cat(a,id a) is Subcategory of A
+  proof let d be Object of A;
+   thus the Objects of 1Cat(d,id d) c= the Objects of A
+    proof let b be set;
+     assume b in the Objects of 1Cat(d,id d);
+      then b = d by CAT_1:34;
+     hence thesis;
+    end;
+   thus for a,b being Object of 1Cat(d,id d), a',b' being Object of A
+      st a = a' & b = b' holds Hom(a,b) c= Hom(a',b')
+    proof let a,b be Object of 1Cat(d,id d), a',b' be Object of A;
+     assume a = a' & b = b';
+then A1:   a' = d & b' = d by CAT_1:34;
+     let x be set;
+     assume x in Hom(a,b);
+      then x = id d by CAT_1:35;
+     hence x in Hom(a',b') by A1,CAT_1:55;
+    end;
+   thus the Comp of 1Cat(d,id d) c= the Comp of A
+    proof let x be set;
+     assume x in the Comp of 1Cat(d,id d);
+      then x in {[[id d,id d],id d]} by Th6;
+      then x = [[id d,id d],id d] by TARSKI:def 1;
+     hence x in the Comp of A by Th5;
+    end;
+   let a be Object of 1Cat(d,id d), a' be Object of A;
+   assume a = a';
+    then a' = d by CAT_1:34;
+   hence id a = id a' by CAT_1:35;
+  end;
+
+theorem Th8:
+ for C being Subcategory of A holds
+   the Dom of C = (the Dom of A)|the Morphisms of C &
+   the Cod of C = (the Cod of A)|the Morphisms of C &
+   the Comp of C = (the Comp of A)|[:the Morphisms of C, the Morphisms of C:] &
+   the Id of C = (the Id of A)|the Objects of C
+  proof let C be Subcategory of A;
+A1:  dom the Dom of C = the Morphisms of C by FUNCT_2:def 1;
+A2:  the Morphisms of C c= the Morphisms of A by CAT_2:13;
+      dom the Dom of A = the Morphisms of A by FUNCT_2:def 1;
+then A3:  dom the Dom of C = (dom the Dom of A) /\
+ the Morphisms of C by A1,A2,XBOOLE_1:28;
+      now let x be set;
+     assume x in dom the Dom of C;
+      then reconsider m = x as Morphism of C by FUNCT_2:def 1;
+      reconsider m'=m as Morphism of A by CAT_2:14;
+     thus (the Dom of C).x = dom m by CAT_1:def 2 .= dom m' by CAT_2:15
+      .= (the Dom of A).x by CAT_1:def 2;
+    end;
+   hence the Dom of C = (the Dom of A)|the Morphisms of C by A3,FUNCT_1:68;
+A4:  dom the Cod of C = the Morphisms of C by FUNCT_2:def 1;
+      dom the Cod of A = the Morphisms of A by FUNCT_2:def 1;
+then A5:  dom the Cod of C = (dom the Cod of A) /\
+ the Morphisms of C by A2,A4,XBOOLE_1:28;
+      now let x be set;
+     assume x in dom the Cod of C;
+      then reconsider m = x as Morphism of C by FUNCT_2:def 1;
+      reconsider m'=m as Morphism of A by CAT_2:14;
+     thus (the Cod of C).x = cod m by CAT_1:def 3 .= cod m' by CAT_2:15
+      .= (the Cod of A).x by CAT_1:def 3;
+    end;
+   hence the Cod of C = (the Cod of A)|the Morphisms of C by A5,FUNCT_1:68;
+A6: dom the Comp of C =
+      (dom the Comp of A) /\ [:the Morphisms of C, the Morphisms of C:]
+    proof
+        the Comp of C <= the Comp of A by CAT_2:def 4;
+      then dom the Comp of C c= [:the Morphisms of C, the Morphisms of C:]
+      & dom the Comp of C c= dom the Comp of A by RELAT_1:25,RELSET_1:12;
+      hence dom the Comp of C c=
+      (dom the Comp of A) /\ [:the Morphisms of C, the Morphisms of C:]
+        by XBOOLE_1:19;
+      let x be set;
+      assume
+    A7:  x in(dom the Comp of A) /\ [:the Morphisms of C, the Morphisms of C:];
+       then A8:  x in [:the Morphisms of C, the Morphisms of C:] by XBOOLE_0:
+def 3;
+      then reconsider f=x`1, g=x`2 as Morphism of C by MCART_1:10;
+      reconsider f'=f, g'=g as Morphism of A by CAT_2:14;
+        x in dom the Comp of A by A7,XBOOLE_0:def 3;
+    then A9:  [f',g'] in dom the Comp of A by A8,MCART_1:23;
+        dom f = dom f' by CAT_2:15 .= cod g' by A9,CAT_1:40 .= cod g by CAT_2:
+15
+;
+      then [f,g] in dom the Comp of C by CAT_1:40;
+      hence x in dom the Comp of C by A8,MCART_1:23;
+    end;
+      the Comp of C <= the Comp of A by CAT_2:def 4;
+   hence the Comp of C = (the Comp of A)|
+        ((dom the Comp of A) /\ [:the Morphisms of C, the Morphisms of C:])
+          by A6,GRFUNC_1:64
+     .= ((the Comp of A)| dom the Comp of A)|
+            [:the Morphisms of C, the Morphisms of C:] by RELAT_1:100
+     .= (the Comp of A)|[:the Morphisms of C, the Morphisms of C:]
+           by RELAT_1:97;
+A10:  dom the Id of C = the Objects of C by FUNCT_2:def 1;
+      dom the Id of A = the Objects of A &
+    the Objects of C c= the Objects of A by CAT_2:def 4,FUNCT_2:def 1;
+then A11:  dom the Id of C = (dom the Id of A) /\ the Objects of C by A10,
+XBOOLE_1:28;
+      now let x be set;
+     assume x in dom the Id of C;
+      then reconsider o = x as Object of C by FUNCT_2:def 1;
+      reconsider o'=o as Object of A by CAT_2:12;
+     thus (the Id of C).x = id o by CAT_1:def 5 .= id o' by CAT_2:def 4
+      .= (the Id of A).x by CAT_1:def 5;
+    end;
+   hence the Id of C = (the Id of A)|the Objects of C by A11,FUNCT_1:68;
+  end;
+
+theorem Th9:
+ for O being non empty Subset of the Objects of A,
+     M being non empty Subset of the Morphisms of A
+ for DOM,COD being Function of M,O st
+   DOM = (the Dom of A) |M & COD = (the Cod of A)|M
+ for COMP being PartFunc of [:M,M qua non empty set:], M st
+   COMP = (the Comp of A)|([:M,M:] qua set)
+ for ID being Function of O,M st ID = (the Id of A)|O
+  holds CatStr(#O,M,DOM,COD,COMP,ID#) is Subcategory of A
+ proof let O be non empty Subset of the Objects of A,
+     M be non empty Subset of the Morphisms of A;
+  let DOM,COD be Function of M,O such that
+A1: DOM = (the Dom of A) |M & COD = (the Cod of A)|M;
+  let COMP be PartFunc of [:M,M qua non empty set:], M such that
+A2: COMP = (the Comp of A)|([:M,M:] qua set);
+  let ID be Function of O,M such that
+A3: ID = (the Id of A)|O;
+   set C = CatStr(#O,M,DOM,COD,COMP,ID#);
+A4: dom the Comp of C c= dom the Comp of A by A2,FUNCT_1:76;
+A5: now let f be (Morphism of A), g be Morphism of C such that
+A6:   f = g;
+        dom the Dom of C = the Morphisms of C by FUNCT_2:def 1;
+     hence (the Dom of A).f = (the Dom of C).g by A1,A6,FUNCT_1:70;
+        dom the Cod of C = the Morphisms of C by FUNCT_2:def 1;
+     hence (the Cod of A).f = (the Cod of C).g by A1,A6,FUNCT_1:70;
+    end;
+A7: dom the Comp of C = (dom the Comp of A)
+       /\ [:the Morphisms of C, the Morphisms of C:] by A2,RELAT_1:90;
+A8: now let f,g be Morphism of C;
+      reconsider g'=g, f'=f as Morphism of A by TARSKI:def 3;
+     assume
+     (the Dom of C).g = (the Cod of C).f;
+      then (the Dom of A).g' = (the Cod of C).f by A5
+       .= (the Cod of A).f' by A5;
+      then A9:     [g',f'] in dom the Comp of A by CAT_1:def 8;
+        [g,f] in [:the Morphisms of C, the Morphisms of C:] by ZFMISC_1:106;
+     hence [g,f] in dom the Comp of C by A7,A9,XBOOLE_0:def 3;
+    end;
+     C is Category-like
+    proof
+     thus for f,g being Morphism of C holds
+         [g,f] in dom(the Comp of C) iff (the Dom of C).g=(the Cod of C).f
+      proof let f,g be Morphism of C;
+        reconsider g'=g, f'=f as Morphism of A by TARSKI:def 3;
+       thus [g,f] in dom(the Comp of C) implies
+          (the Dom of C).g=(the Cod of C).f
+        proof assume A10: [g,f] in dom the Comp of C;
+         thus (the Dom of C).g = (the Dom of A).g' by A5
+          .= (the Cod of A).f' by A4,A10,CAT_1:def 8
+          .= (the Cod of C).f by A5;
+        end;
+       thus thesis by A8;
+      end;
+     thus for f,g being Morphism of C
+         st (the Dom of C).g=(the Cod of C).f holds
+         (the Dom of C).((the Comp of C).[g,f]) = (the Dom of C).f &
+         (the Cod of C).((the Comp of C).[g,f]) = (the Cod of C).g
+      proof let f,g be Morphism of C;
+        reconsider g'=g, f'=f as Morphism of A by TARSKI:def 3;
+       assume
+A11:        (the Dom of C).g=(the Cod of C).f;
+then A12:     (the Dom of A).g' = (the Cod of C).f by A5 .= (the Cod of A).f'
+by A5;
+A13:     [g,f] in dom the Comp of C by A8,A11;
+then A14:     (the Comp of C).[g,f] = (the Comp of A).[g',f'] by A2,FUNCT_1:70;
+A15:     (the Comp of C).[g,f] is Morphism of C by A13,PARTFUN1:27;
+then A16:     (the Comp of A).[g',f'] is Morphism of A by A14,TARSKI:def 3;
+       hence (the Dom of C).((the Comp of C).[g,f])
+          = (the Dom of A).((the Comp of A).[g',f']) by A5,A14,A15
+         .= (the Dom of A).f' by A12,CAT_1:def 8
+         .= (the Dom of C).f by A5;
+       thus (the Cod of C).((the Comp of C).[g,f])
+          = (the Cod of A).((the Comp of A).[g',f']) by A5,A14,A15,A16
+         .= (the Cod of A).g' by A12,CAT_1:def 8
+         .= (the Cod of C).g by A5;
+      end;
+     thus for f,g,h being Morphism of C
+         st (the Dom of C).h = (the Cod of C).g &
+            (the Dom of C).g = (the Cod of C).f
+        holds (the Comp of C).[h,(the Comp of C).[g,f]]
+            = (the Comp of C).[(the Comp of C).[h,g],f]
+      proof let f,g,h be Morphism of C;
+        reconsider g'=g, f'=f, h'=h as Morphism of A by TARSKI:def 3;
+       assume that
+A17:     (the Dom of C).h = (the Cod of C).g and
+A18:     (the Dom of C).g = (the Cod of C).f;
+A19:     (the Dom of A).h' = (the Cod of C).g by A5,A17
+           .= (the Cod of A).g' by A5;
+A20:     (the Dom of A).g' = (the Cod of C).f by A5,A18
+           .= (the Cod of A).f' by A5;
+A21:     [h,g] in dom the Comp of C by A8,A17;
+then A22:     (the Comp of C).[h,g] = (the Comp of A).[h',g'] by A2,FUNCT_1:70;
+A23:     [g,f] in dom the Comp of C by A8,A18;
+then A24:     (the Comp of C).[g,f] = (the Comp of A).[g',f'] by A2,FUNCT_1:70;
+        reconsider gf = (the Comp of C).[g,f], hg = (the Comp of C).[h,g]
+           as Morphism of C by A21,A23,PARTFUN1:27;
+          [g',f'] in dom the Comp of A & [h',g'] in dom the Comp of A
+          by A19,A20,CAT_1:def 8;
+        then reconsider gf' = (the Comp of A).[g',f'], hg' = (the Comp of A).[
+h',g']
+           as Morphism of A by PARTFUN1:27;
+          (the Dom of C).h = (the Cod of A).g' by A5,A17
+          .= (the Cod of A).gf' by A20,CAT_1:def 8
+          .= (the Cod of C).gf by A5,A24;
+then A25:     [h,(the Comp of C).[g,f]] in dom the Comp of C by A8;
+          (the Dom of C).hg = (the Dom of A).hg' by A5,A22
+           .= (the Dom of A).g' by A19,CAT_1:def 8
+           .= (the Cod of C).f by A5,A18;
+then A26:     [hg,f] in dom the Comp of C by A8;
+       thus (the Comp of C).[h,(the Comp of C).[g,f]]
+            = (the Comp of A).[h',(the Comp of A).[g',f']]
+              by A2,A24,A25,FUNCT_1:70
+           .= (the Comp of A).[(the Comp of A).[h',g'],f'] by A19,A20,CAT_1:def
+8
+           .= (the Comp of C).[(the Comp of C).[h,g],f]
+              by A2,A22,A26,FUNCT_1:70;
+      end;
+     let b be Object of C;
+      reconsider b' = b as Object of A by TARSKI:def 3;
+        dom the Id of C = the Objects of C by FUNCT_2:def 1;
+then A27:   (the Id of C).b = (the Id of A).b' by A3,FUNCT_1:70;
+     hence (the Dom of C).((the Id of C).b)
+            = (the Dom of A).((the Id of A).b') by A5
+           .= b by CAT_1:def 8;
+     thus (the Cod of C).((the Id of C).b)
+            = (the Cod of A).((the Id of A).b') by A5,A27
+           .= b by CAT_1:def 8;
+     thus for f being Morphism of C st (the Cod of C).f = b
+           holds (the Comp of C).[(the Id of C).b,f] = f
+      proof let f be Morphism of C such that
+A28:      (the Cod of C).f = b;
+        reconsider f' = f as Morphism of A by TARSKI:def 3;
+A29:     (the Cod of A).f' = b' by A5,A28;
+           (the Cod of C).f = (the Cod of A).f' by A5
+          .= (the Dom of A).((the Id of A).b') by A29,CAT_1:def 8
+          .= (the Dom of C).((the Id of C).b) by A5,A27;
+        then [(the Id of C).b,f] in dom the Comp of C by A8;
+       hence (the Comp of C).[(the Id of C).b,f]
+          = (the Comp of A).[(the Id of A).b',f'] by A2,A27,FUNCT_1:70
+         .= f by A29,CAT_1:def 8;
+      end;
+     let g be Morphism of C such that
+A30:    (the Dom of C).g = b;
+      reconsider g' = g as Morphism of A by TARSKI:def 3;
+A31:   (the Dom of A).g' = b' by A5,A30;
+          (the Dom of C).g = (the Dom of A).g' by A5
+        .= (the Cod of A).((the Id of A).b') by A31,CAT_1:def 8
+        .= (the Cod of C).((the Id of C).b) by A5,A27;
+      then [g,(the Id of C).b] in dom the Comp of C by A8;
+     hence (the Comp of C).[g,(the Id of C).b]
+       = (the Comp of A).[g',(the Id of A).b'] by A2,A27,FUNCT_1:70
+      .= g by A31,CAT_1:def 8;
+    end;
+   then reconsider C as Category;
+     C is Subcategory of A
+    proof
+     thus the Objects of C c= the Objects of A;
+     thus for a,b being Object of C, a',b' being Object of A
+      st a = a' & b = b' holds Hom(a,b) c= Hom(a',b')
+      proof let a,b be Object of C, a',b' be Object of A such that
+A32:      a = a' & b = b';
+       let x be set;
+       assume x in Hom(a,b);
+        then x in {f where f is Morphism of C: dom f = a & cod f = b}
+         by CAT_1:def 6; then consider f being Morphism of C such that
+A33:     x = f and
+A34:     dom f = a & cod f = b;
+        reconsider f' = f as Morphism of A by TARSKI:def 3;
+A35:      dom f' = (the Dom of A).f' by CAT_1:def 2 .= (the Dom of C).f by A5
+          .= a' by A32,A34,CAT_1:def 2;
+          cod f' = (the Cod of A).f' by CAT_1:def 3 .= (the Cod of C).f by A5
+          .= b' by A32,A34,CAT_1:def 3;
+        then x in {g where g is Morphism of A: dom g = a' & cod g = b'} by A33,
+A35;
+       hence x in Hom(a',b') by CAT_1:def 6;
+      end;
+     thus the Comp of C <= the Comp of A by A2,RELAT_1:88;
+     let a be Object of C, a' be Object of A such that
+A36:    a = a';
+A37:      dom the Id of C = the Objects of C by FUNCT_2:def 1;
+     thus id a = (the Id of C).a by CAT_1:def 5
+       .= (the Id of A).a' by A3,A36,A37,FUNCT_1:70
+       .= id a' by CAT_1:def 5;
+    end;
+  hence thesis;
+ end;
+
+theorem Th10:
+ for C being strict Category, A being strict Subcategory of C st
+  the Objects of A = the Objects of C & the Morphisms of A = the Morphisms of C
+ holds A = C
+ proof let C be strict Category, A be strict Subcategory of C such that
+A1: the Objects of A = the Objects of C &
+   the Morphisms of A = the Morphisms of C;
+A2: dom the Dom of C = the Morphisms of C &
+   dom the Cod of C = the Morphisms of C &
+   dom the Id of C = the Objects of C by FUNCT_2:def 1;
+     now
+    thus the Dom of A = (the Dom of C)|the Morphisms of A by Th8
+     .= the Dom of C by A1,A2,RELAT_1:97;
+    thus the Cod of A = (the Cod of C)|the Morphisms of A by Th8
+     .= the Cod of C by A1,A2,RELAT_1:97;
+A3:   dom the Comp of C c= [:the Morphisms of C, the Morphisms of C:]
+     by RELSET_1:12;
+    thus the Comp of A
+      = (the Comp of C)|[:the Morphisms of A, the Morphisms of A:] by Th8
+     .= the Comp of C by A1,A3,RELAT_1:97;
+    thus the Id of A = (the Id of C)|the Objects of A by Th8
+     .= the Id of C by A1,A2,RELAT_1:97;
+   end;
+  hence A =C by A1;
+ end;
+
+begin :: Application of a functor to a morphism
+
+definition let A,B,F; let a,b be Object of A such that
+A1: Hom(a,b) <> {};
+ let f be Morphism of a,b;
+  func F.f -> Morphism of F.a, F.b equals
+:Def1:  F.f;
+ coherence by A1,CAT_1:125;
+end;
+
+theorem
+   for a,b being Object of A st Hom(a,b) <> {}
+  for f being Morphism of a,b holds (G*F).f = G.(F.f)
+ proof let a,b be Object of A;
+  assume
+A1: Hom(a,b) <> {};
+then A2: Hom(F.a,F.b) <> {} by CAT_1:126;
+  let f be Morphism of a,b;
+  thus (G*F).f = (G*F).(f qua Morphism of A) by A1,Def1
+    .= G.(F.(f qua Morphism of A)) by FUNCT_2:21
+    .= G.(F.f qua Morphism of B) by A1,Def1
+    .= G.(F.f) by A2,Def1;
+ end;
+
+:: The following theorems are analogues of theorems from CAT_1.MIZ, with
+:: the new concept of the application of a functor to a morphism
+
+theorem :: CAT_1:95
+     for F1,F2 being Functor of A,B
+     st for a,b being Object of A st Hom(a,b) <> {}
+      for f being Morphism of a,b holds F1.f = F2.f
+    holds F1 = F2
+ proof let F1,F2 be Functor of A,B;
+  assume
+A1: for a,b being Object of A st Hom(a,b) <> {}
+    for f being Morphism of a,b holds F1.f = F2.f;
+     now let f be Morphism of A;
+    reconsider f' = f as Morphism of dom f, cod f by CAT_1:22;
+A2:   Hom(dom f, cod f) <> {} by CAT_1:19;
+    hence F1.f = F1.f' by Def1 .= F2.f' by A1,A2 .= F2.f by A2,Def1;
+   end;
+  hence F1 = F2 by FUNCT_2:113;
+ end;
+
+theorem Th13: :: CAT_1:99
+ for a,b,c being Object of A st Hom(a,b) <> {} & Hom(b,c) <> {}
+  for f being Morphism of a,b, g being Morphism of b,c
+  holds F.(g*f) = F.g*F.f
+proof let a,b,c be Object of A; assume
+A1: Hom(a,b) <> {} & Hom(b,c) <> {};
+then A2: Hom(a,c) <> {} by CAT_1:52;
+A3: Hom(F.a,F.b) <> {} & Hom(F.b,F.c) <> {} by A1,CAT_1:126;
+ let f be Morphism of a,b, g be Morphism of b,c;
+A4: dom g = b & cod f = b by A1,CAT_1:23;
+A5: F.g = F.(g qua Morphism of A) & F.f = F.(f qua Morphism of A) by A1,Def1;
+ thus
+    F.(g*f) = F.(g*f qua Morphism of A) by A2,Def1
+    .= F.((g qua Morphism of A)*(f qua Morphism of A)) by A1,CAT_1:def 13
+    .= (F.(g qua Morphism of A))*(F.(f qua Morphism of A)) by A4,CAT_1:99
+    .= (F.g)*(F.f) by A3,A5,CAT_1:def 13;
+end;
+
+theorem :: CAT_1:107
+    for c being Object of A, d being Object of B st F.(id c) = id d
+   holds F.c = d
+ proof let c be Object of A, d be Object of B;
+  assume
+A1: F.(id c) = id d;
+     Hom(c,c) <> {} by CAT_1:56;
+   then F.(id c qua Morphism of A) = id d by A1,Def1;
+  hence F.c = d by CAT_1:107;
+ end;
+
+theorem Th15: :: CAT_1:108
+ for a being Object of A holds F.id a = id (F.a)
+ proof let a be Object of A;
+     Hom(a,a) <> {} by CAT_1:56;
+  hence F.id a = F.((id a) qua Morphism of A) by Def1 .= id (F.a) by CAT_1:108
+;
+ end;
+
+theorem :: CAT_1:115
+   for a,b being Object of A st Hom(a,b) <> {}
+   for f being Morphism of a,b holds (id A).f = f
+ proof let a,b be Object of A such that
+A1: Hom(a,b) <> {};
+  let f be Morphism of a,b;
+  thus (id A).f = (id A).(f qua Morphism of A) by A1,Def1 .= f by CAT_1:115;
+ end;
+
+theorem
+ Th17: for a,b,c,d being Object of A st Hom(a,b) meets Hom(c,d)
+  holds a = c & b = d
+ proof let a,b,c,d be Object of A;
+  assume Hom(a,b) meets Hom(c,d);
+   then consider x being set such that
+A1:  x in Hom(a,b) & x in Hom(c,d) by XBOOLE_0:3;
+   reconsider x as Morphism of A by A1;
+     dom x = a & cod x = b & dom x = c & cod x = d by A1,CAT_1:18;
+  hence a = c & b = d;
+ end;
+
+begin :: Transformations
+
+definition let A,B,F1,F2;
+ pred F1 is_transformable_to F2 means
+:Def2: for a being Object of A holds Hom(F1.a,F2.a) <> {};
+ reflexivity by CAT_1:56;
+end;
+
+canceled;
+
+theorem Th19:
+ F is_transformable_to F1 & F1 is_transformable_to F2 implies
+   F is_transformable_to F2
+proof assume
+A1: F is_transformable_to F1 & F1 is_transformable_to F2;
+ let a be Object of A;
+    Hom(F.a,F1.a) <> {} & Hom(F1.a,F2.a) <> {} by A1,Def2;
+ hence thesis by CAT_1:52;
+end;
+
+definition let A,B,F1,F2;
+ assume A1: F1 is_transformable_to F2;
+ mode transformation of F1,F2 ->
+         Function of the Objects of A, the Morphisms of B means
+:Def3: for a being Object of A holds it.a is Morphism of F1.a,F2.a;
+ existence
+  proof
+     deffunc F(Object of A) = Hom(F1.$1,F2.$1);
+A2: for a being Object of A holds the Morphisms of B meets F(a)
+   proof let a be Object of A;
+A3:   Hom(F1.a,F2.a) <> {} by A1,Def2;
+     consider x being Element of Hom(F1.a,F2.a);
+      now take x;
+     thus x in the Morphisms of B & x in Hom(F1.a,F2.a) by A3,TARSKI:def 3;
+    end;
+    hence thesis by XBOOLE_0:3;
+   end;
+    consider t being Function of the Objects of A, the Morphisms of B such
+    that
+A4:   for a being Object of A holds t.a in F(a) from M_Choice(A2);
+   take t; let a be Object of A;
+      t.a in Hom(F1.a,F2.a) & Hom(F1.a,F2.a) <> {} by A4;
+   hence thesis by CAT_1:def 7;
+  end;
+end;
+
+definition let A,B; let F be Functor of A,B;
+ func id F ->transformation of F,F means
+:Def4: for a being Object of A holds it.a = id (F.a);
+ existence
+  proof
+   deffunc _F(Object of A) = id (F.$1);
+   consider t being Function of the Objects of A, the Morphisms of B such that
+A1:  for a being Object of A holds t.a = _F(a) from LambdaD;
+      for a being Object of A holds t.a is Morphism of F.a,F.a
+    proof let a be Object of A;
+        t.a = id (F.a) by A1;
+     hence t.a is Morphism of F.a,F.a;
+    end;
+   then reconsider t as transformation of F,F by Def3;
+   take t; let a be Object of A;
+   thus t.a = id (F.a) by A1;
+  end;
+ uniqueness
+  proof let it1,it2 be transformation of F,F such that
+A2:  for a being Object of A holds it1.a = id (F.a) and
+A3:  for a being Object of A holds it2.a = id (F.a);
+      now let a be Object of A;
+     thus it1.a = id (F.a) by A2 .= it2.a by A3;
+    end;
+   hence it1 = it2 by FUNCT_2:113;
+  end;
+end;
+
+definition let A,B,F1,F2;
+ assume A1: F1 is_transformable_to F2;
+ let t be transformation of F1,F2; let a be Object of A;
+ func t.a -> Morphism of F1.a, F2.a equals
+:Def5:  t.a;
+ coherence by A1,Def3;
+end;
+
+definition let A,B,F,F1,F2;
+ assume that
+A1: F is_transformable_to F1 and
+A2: F1 is_transformable_to F2;
+ let t1 be transformation of F,F1;
+ let t2 be transformation of F1,F2;
+ func t2`*`t1 -> transformation of F,F2 means
+:Def6: for a being Object of A holds it.a = (t2.a)*(t1.a);
+ existence
+  proof
+    deffunc _F(Object of A) = (t2.$1)*(t1.$1);
+    consider t being Function of the Objects of A, the Morphisms of B such that
+A3:   for a being Object of A holds t.a = _F(a) from LambdaD;
+A4: F is_transformable_to F2 by A1,A2,Th19;
+       for a being Object of A holds t.a is Morphism of F.a,F2.a
+      proof let a be Object of A;
+          t.a = (t2.a)*(t1.a) by A3;
+       hence thesis;
+      end;
+    then reconsider t' = t as transformation of F,F2 by A4,Def3;
+   take t'; let a be Object of A;
+   thus t'.a = t.a by A4,Def5 .= (t2.a)*(t1.a) by A3;
+  end;
+ uniqueness
+  proof let it1,it2 be transformation of F,F2 such that
+A5: for a being Object of A holds it1.a = (t2.a)*(t1.a) and
+A6: for a being Object of A holds it2.a = (t2.a)*(t1.a);
+A7: F is_transformable_to F2 by A1,A2,Th19;
+      now let a be Object of A;
+     thus (it1 qua Function of the Objects of A, the Morphisms of B).a
+        = it1.a by A7,Def5 .= (t2.a)*(t1.a) by A5 .= it2.a by A6
+       .= (it2 qua Function of the Objects of A, the Morphisms of B).a
+                                                                by A7,Def5;
+    end;
+   hence it1 = it2 by FUNCT_2:113;
+  end;
+end;
+
+theorem Th20:
+ F1 is_transformable_to F2 implies
+ for t1,t2 being transformation of F1,F2 st
+   for a being Object of A holds t1.a = t2.a
+  holds t1 = t2
+ proof assume
+A1: F1 is_transformable_to F2;
+  let t1,t2 be transformation of F1,F2;
+  assume A2:for a being Object of A holds t1.a = t2.a;
+     now let a be Object of A;
+    thus (t1 qua Function of the Objects of A, the Morphisms of B).a
+      = t1.a by A1,Def5 .= t2.a by A2
+    .= (t2 qua Function of the Objects of A, the Morphisms of B).a by A1,Def5;
+   end;
+  hence t1 = t2 by FUNCT_2:113;
+ end;
+
+theorem Th21:
+ for a being Object of A holds id F.a = id(F.a)
+  proof let a be Object of A;
+   thus id F.a = (id F qua Function of the Objects of A, the Morphisms of B).a
+        by Def5 .= id (F.a) by Def4;
+  end;
+
+theorem Th22:
+ F1 is_transformable_to F2 implies
+ for t being transformation of F1,F2 holds (id F2)`*`t = t & t`*`(id F1) = t
+proof assume
+A1: F1 is_transformable_to F2;
+ let t be transformation of F1,F2;
+    now let a be Object of A;
+A2: Hom(F1.a,F2.a) <> {} & Hom(F2.a,F2.a) <> {} by A1,Def2;
+   thus ((id F2)`*`t).a = ((id F2).a)*(t.a) by A1,Def6
+    .= (id(F2.a))*(t.a) by Th21 .= t.a by A2,CAT_1:57;
+  end;
+ hence (id F2)`*`t = t by A1,Th20;
+    now let a be Object of A;
+A3: Hom(F1.a,F1.a) <> {} & Hom(F1.a,F2.a) <> {} by A1,Def2;
+   thus (t`*`(id F1)).a = (t.a)*((id F1).a) by A1,Def6
+    .= (t.a)*(id(F1.a)) by Th21 .= t.a by A3,CAT_1:58;
+  end;
+ hence t`*`(id F1) = t by A1,Th20;
+end;
+
+theorem Th23:
+ F is_transformable_to F1 & F1 is_transformable_to F2 &
+ F2 is_transformable_to F3 implies
+ for t1 being transformation of F,F1, t2 being transformation of F1,F2,
+     t3 being transformation of F2,F3
+  holds t3`*`t2`*`t1 = t3`*`(t2`*`t1)
+proof assume
+A1: F is_transformable_to F1 & F1 is_transformable_to F2 &
+   F2 is_transformable_to F3;
+ let t1 be transformation of F,F1, t2 be transformation of F1,F2,
+     t3 be transformation of F2,F3;
+A2: F is_transformable_to F2 & F1 is_transformable_to F3 by A1,Th19;
+then A3: F is_transformable_to F3 by A1,Th19;
+    now let a be Object of A;
+A4: Hom(F.a,F1.a) <> {} & Hom(F1.a,F2.a) <> {} & Hom(F2.a,F3.a) <> {}
+ by A1,Def2;
+   thus (t3`*`t2`*`t1).a = ((t3`*`t2).a)*(t1.a) by A1,A2,Def6
+      .= (t3.a)*(t2.a)*(t1.a) by A1,Def6
+      .= (t3.a)*((t2.a)*(t1.a)) by A4,CAT_1:54
+      .= (t3.a)*((t2`*`t1).a) by A1,Def6
+      .= (t3`*`(t2`*`t1)).a by A1,A2,Def6;
+  end;
+ hence t3`*`t2`*`t1 = t3`*`(t2`*`t1) by A3,Th20;
+end;
+
+begin :: Natural transformations
+
+Lm1: for a,b being Object of A st Hom(a,b) <> {}
+       for f being Morphism of a,b holds
+   id F.b*F.f = F.f*id F.a
+ proof
+  let a,b be Object of A such that
+A1: Hom(a,b) <> {};
+A2: Hom(a,a) <> {} & Hom(b,b) <> {} by CAT_1:56;
+  let f be Morphism of a,b;
+  thus id F.b*F.f = id(F.b)*F.f by Th21 .= F.id b*F.f by Th15
+          .= F.(id b*f) by A1,A2,Th13 .= F.f by A1,CAT_1:57
+          .= F.(f*id a) by A1,CAT_1:58 .= F.f*F.id a by A1,A2,Th13
+          .= F.f*id(F.a) by Th15 .= F.f*id F.a by Th21;
+ end;
+
+definition let A,B,F1,F2;
+ pred F1 is_naturally_transformable_to F2 means
+:Def7: F1 is_transformable_to F2 &
+ ex t being transformation of F1,F2 st
+  for a,b being Object of A st Hom(a,b) <> {}
+   for f being Morphism of a,b holds t.b*F1.f = F2.f*t.a;
+ reflexivity
+ proof
+ let F;
+   ex t being transformation of F,F st
+  for a,b being Object of A st Hom(a,b) <> {}
+   for f being Morphism of a,b holds t.b*F.f = F.f*t.a
+ proof
+  take id F; thus thesis by Lm1;
+ end;
+  hence thesis;
+ end;
+end;
+
+Lm2: F is_transformable_to F1 & F1 is_transformable_to F2 implies
+  for t1 being transformation of F,F1 st
+   for a,b being Object of A st Hom(a,b) <> {}
+   for f being Morphism of a,b holds t1.b*F.f = F1.f*t1.a
+  for t2 being transformation of F1,F2 st
+   for a,b being Object of A st Hom(a,b) <> {}
+   for f being Morphism of a,b holds t2.b*F1.f = F2.f*t2.a
+  for a,b being Object of A st Hom(a,b)<>{}
+  for f being Morphism of a,b holds (t2`*`t1).b*F.f = F2.f*(t2`*`t1).a
+ proof
+  assume that A1:F is_transformable_to F1 and
+              A2:F1 is_transformable_to F2;
+  let t1 be transformation of F,F1 such that
+A3: for a,b being Object of A st Hom(a,b) <> {}
+     for f being Morphism of a,b holds t1.b*F.f = F1.f*t1.a;
+  let t2 be transformation of F1,F2 such that
+A4: for a,b being Object of A st Hom(a,b) <> {}
+     for f being Morphism of a,b holds t2.b*F1.f = F2.f*t2.a;
+  let a,b be Object of A; assume
+A5: Hom(a,b)<>{};
+then A6: Hom(F.a,F.b) <> {} & Hom(F.b,F1.b) <> {} by A1,Def2,CAT_1:126;
+A7: Hom(F.a,F1.a) <> {} & Hom(F1.a,F2.a) <> {} by A1,A2,Def2;
+A8: Hom(F1.b,F2.b) <> {} by A2,Def2;
+A9: Hom(F2.a,F2.b) <> {} by A5,CAT_1:126;
+A10: Hom(F1.a,F1.b) <> {} by A5,CAT_1:126;
+  let f be Morphism of a,b;
+  thus (t2`*`t1).b*F.f = t2.b*t1.b*F.f by A1,A2,Def6
+          .= t2.b*(t1.b*F.f) by A6,A8,CAT_1:54
+          .= t2.b*(F1.f*t1.a) by A3,A5
+          .= t2.b*F1.f*t1.a by A7,A8,A10,CAT_1:54
+          .= F2.f*t2.a*t1.a by A4,A5
+          .= F2.f*(t2.a*t1.a) by A7,A9,CAT_1:54
+          .= F2.f*(t2`*`t1).a by A1,A2,Def6;
+ end;
+
+canceled;
+
+theorem Th25:
+ F is_naturally_transformable_to F1 & F1 is_naturally_transformable_to F2
+  implies F is_naturally_transformable_to F2
+ proof
+  assume A1:F is_transformable_to F1;
+  given t1 being transformation of F,F1 such that
+A2: for a,b being Object of A st Hom(a,b) <> {}
+     for f being Morphism of a,b holds t1.b*F.f = F1.f*t1.a;
+  assume A3:F1 is_transformable_to F2;
+  given t2 being transformation of F1,F2 such that
+A4: for a,b being Object of A st Hom(a,b) <> {}
+     for f being Morphism of a,b holds t2.b*F1.f = F2.f*t2.a;
+  thus F is_transformable_to F2 by A1,A3,Th19;
+  take t2`*`t1;
+  thus thesis by A1,A2,A3,A4,Lm2;
+ end;
+
+definition let A,B,F1,F2;
+ assume A1:F1 is_naturally_transformable_to F2;
+ mode natural_transformation of F1,F2 -> transformation of F1,F2 means
+:Def8:
+  for a,b being Object of A st Hom(a,b) <> {}
+   for f being Morphism of a,b holds it.b*F1.f = F2.f*it.a;
+ existence by A1,Def7;
+end;
+
+definition let A,B,F;
+ redefine func id F -> natural_transformation of F,F;
+ coherence
+  proof thus F is_naturally_transformable_to F;
+   thus thesis by Lm1;
+  end;
+end;
+
+definition let A,B,F,F1,F2 such that
+A1: F is_naturally_transformable_to F1 and
+A2: F1 is_naturally_transformable_to F2;
+ let t1 be natural_transformation of F,F1;
+ let t2 be natural_transformation of F1,F2;
+ func t2`*`t1 -> natural_transformation of F,F2 equals
+:Def9:  t2`*`t1;
+ coherence
+ proof
+A3: F is_transformable_to F1 & F1 is_transformable_to F2 by A1,A2,Def7;
+A4: for a,b being Object of A st Hom(a,b) <> {}
+     for f being Morphism of a,b holds t1.b*F.f = F1.f*t1.a by A1,Def8;
+A5: for a,b being Object of A st Hom(a,b) <> {}
+     for f being Morphism of a,b holds t2.b*F1.f = F2.f*t2.a by A2,Def8;
+    t2`*`t1 is natural_transformation of F,F2
+   proof thus F is_naturally_transformable_to F2 by A1,A2,Th25;
+    thus thesis by A3,A4,A5,Lm2;
+   end;
+  hence thesis;
+ end;
+end;
+
+theorem Th26:
+ F1 is_naturally_transformable_to F2 implies
+ for t being natural_transformation of F1,F2 holds
+   (id F2)`*`t = t & t`*`(id F1) = t
+ proof assume
+A1: F1 is_naturally_transformable_to F2;
+then A2: F1 is_transformable_to F2 by Def7;
+  let t be natural_transformation of F1,F2;
+  thus (id F2)`*`t = (id F2)`*`(t qua transformation of F1,F2) by A1,Def9
+   .= t by A2,Th22;
+  thus t`*`(id F1) = (t qua transformation of F1,F2)`*`(id F1) by A1,Def9
+   .= t by A2,Th22;
+ end;
+
+reserve t for natural_transformation of F,F1,
+        t1 for natural_transformation of F1,F2;
+
+theorem Th27:
+ F is_naturally_transformable_to F1 &
+ F1 is_naturally_transformable_to F2 implies
+ for t1 being natural_transformation of F,F1
+ for t2 being natural_transformation of F1,F2
+  for a being Object of A
+ holds (t2`*`t1).a = (t2.a)*(t1.a)
+proof assume that
+A1: F is_naturally_transformable_to F1 and
+A2: F1 is_naturally_transformable_to F2;
+ let t1 be natural_transformation of F,F1;
+ let t2 be natural_transformation of F1,F2;
+ let a be Object of A;
+  reconsider t1' = t1 as transformation of F,F1;
+  reconsider t2' = t2 as transformation of F1,F2;
+A3: F is_transformable_to F1 & F1 is_transformable_to F2 by A1,A2,Def7;
+ thus (t2`*`t1).a = (t2'`*`t1').a by A1,A2,Def9 .= (t2.a)*(t1.a) by A3,Def6;
+end;
+
+theorem Th28:
+ F is_naturally_transformable_to F1 &
+ F1 is_naturally_transformable_to F2 &
+ F2 is_naturally_transformable_to F3 implies
+ for t3 being natural_transformation of F2,F3 holds t3`*`t1`*`t = t3`*`(t1`*`t)
+  proof assume that
+A1: F is_naturally_transformable_to F1 and
+A2: F1 is_naturally_transformable_to F2 and
+A3: F2 is_naturally_transformable_to F3;
+A4: F1 is_naturally_transformable_to F3 by A2,A3,Th25;
+A5: F is_naturally_transformable_to F2 by A1,A2,Th25;
+A6: F is_transformable_to F1 & F1 is_transformable_to F2 &
+    F2 is_transformable_to F3 by A1,A2,A3,Def7;
+   let t3 be natural_transformation of F2,F3;
+   thus t3`*`t1`*`t = t3`*`t1`*`(t qua transformation of F,F1) by A1,A4,Def9
+     .= (t3 qua transformation of F2,F3)`*`t1`*`t by A2,A3,Def9
+     .= t3`*`(t1`*`(t qua transformation of F,F1)) by A6,Th23
+     .= (t3 qua transformation of F2,F3)`*`(t1`*`t) by A1,A2,Def9
+     .= t3 `*`(t1`*`t) by A3,A5,Def9;
+  end;
+
+:: Natural equivalences
+
+definition let A,B,F1,F2;
+ let IT be transformation of F1,F2;
+ attr IT is invertible means
+:Def10: for a being Object of A holds IT.a is invertible;
+end;
+
+definition let A,B,F1,F2;
+ pred F1,F2 are_naturally_equivalent means
+:Def11: F1 is_naturally_transformable_to F2 &
+  ex t being natural_transformation of F1,F2 st t is invertible;
+ reflexivity
+ proof
+ let F;
+  thus F is_naturally_transformable_to F;
+  take id F; let a be Object of A;
+     (id F).a = id(F.a) by Th21;
+  hence (id F).a is invertible by CAT_1:74;
+ end;
+ synonym F1 ~= F2;
+end;
+
+Lm3:
+ for t being transformation of F1,F2 st
+  F1 is_transformable_to F2 & t is invertible
+ holds F2 is_transformable_to F1
+proof let t be transformation of F1,F2 such that
+A1: F1 is_transformable_to F2 and
+A2: for a being Object of A holds t.a is invertible;
+ let a be Object of A;
+A3:t.a is invertible by A2;
+    Hom(F1.a,F2.a) <> {} by A1,Def2;
+ hence Hom(F2.a,F1.a) <> {} by A3,CAT_1:70;
+end;
+
+definition let A,B,F1,F2 such that
+A1: F1 is_transformable_to F2;
+ let t1 be transformation of F1,F2 such that
+A2: t1 is invertible;
+ func t1" -> transformation of F2,F1 means
+:Def12: for a being Object of A holds it.a = (t1.a)";
+ existence
+  proof
+   deffunc _F(Object of A) = (t1.$1)";
+   consider t being Function of the Objects of A, the Morphisms of B such that
+A3:  for a being Object of A holds t.a = _F(a) from LambdaD;
+A4: F2 is_transformable_to F1 by A1,A2,Lm3;
+     now let a be Object of A; t.a = (t1.a)" by A3;
+    hence t.a is Morphism of F2.a,F1.a;
+   end;
+   then reconsider t as transformation of F2,F1 by A4,Def3;
+   take t; let a be Object of A;
+   thus t.a = (t qua Function of the Objects of A, the Morphisms of B).a
+     by A4,Def5 .= (t1.a)" by A3;
+  end;
+ uniqueness
+  proof let t,t' be transformation of F2,F1 such that
+A5: for a being Object of A holds t.a = (t1.a)" and
+A6: for a being Object of A holds t'.a = (t1.a)";
+A7: F2 is_transformable_to F1 by A1,A2,Lm3;
+      now let a be Object of A;
+     thus t.a = (t1.a)" by A5 .= t'.a by A6;
+    end;
+   hence thesis by A7,Th20;
+  end;
+end;
+
+Lm4: now let A,B,F1,F2,t1 such that
+A1: F1 is_naturally_transformable_to F2 and
+A2: t1 is invertible;
+A3: F1 is_transformable_to F2 by A1,Def7;
+    let a,b be Object of A such that
+A4:    Hom(a,b) <> {};
+A5:    t1.b is invertible by A2,Def10;
+A6:    t1.a is invertible by A2,Def10;
+A7:    Hom(F1.a,F1.b) <> {} by A4,CAT_1:126;
+A8:    Hom(F1.a,F2.a) <> {} by A3,Def2;
+A9:    Hom(F1.b,F2.b) <> {} by A3,Def2;
+then A10:    Hom(F2.b,F1.b) <> {} by A5,CAT_1:70;
+A11:    Hom(F2.a,F2.b) <> {} by A4,CAT_1:126;
+A12:    Hom(F2.a,F1.a) <> {} by A6,A8,CAT_1:70;
+then A13:    Hom(F2.a,F1.b) <> {} by A7,CAT_1:52;
+    let f be Morphism of a,b;
+        F2.f*t1.a = t1.b*F1.f by A1,A4,Def8;
+then A14:     (t1.b)"*F2.f*t1.a = (t1.b)"*(t1.b*F1.f) by A8,A10,A11,CAT_1:54
+        .= (t1.b)"*t1.b*F1.f by A7,A9,A10,CAT_1:54
+        .= id(F1.b)*F1.f by A5,A9,CAT_1:def 14
+        .= F1.f by A7,CAT_1:57;
+        (t1.b)"*F2.f = (t1.b)"*F2.f*id(F2.a) by A13,CAT_1:58
+        .= (t1.b)"*F2.f*(t1.a*(t1.a)") by A6,A8,CAT_1:def 14
+        .= F1.f*(t1.a)" by A8,A12,A13,A14,CAT_1:54;
+    hence t1".b*F2.f = F1.f*(t1.a)" by A2,A3,Def12
+        .= F1.f*t1".a by A2,A3,Def12;
+end;
+
+Lm5:
+ F1 is_naturally_transformable_to F2 & t1 is invertible
+ implies F2 is_naturally_transformable_to F1
+proof assume
+A1: F1 is_naturally_transformable_to F2;
+then A2: F1 is_transformable_to F2 by Def7;
+ assume
+A3: t1 is invertible;
+ hence F2 is_transformable_to F1 by A2,Lm3;
+ take t1";
+ thus thesis by A1,A3,Lm4;
+end;
+
+definition let A,B,F1,F2,t1 such that
+A1: F1 is_naturally_transformable_to F2 and
+A2: t1 is invertible;
+ func t1" -> natural_transformation of F2,F1 equals
+:Def13:  (t1 qua transformation of F1,F2)";
+ coherence
+  proof
+      t1" is natural_transformation of F2,F1
+     proof thus F2 is_naturally_transformable_to F1 by A1,A2,Lm5;
+      thus thesis by A1,A2,Lm4;
+     end;
+   hence thesis;
+  end;
+end;
+
+canceled;
+
+theorem Th30:
+ for A,B,F1,F2,t1 st F1 is_naturally_transformable_to F2 & t1 is invertible
+ for a being Object of A holds t1".a = (t1.a)"
+ proof let A,B,F1,F2,t1 such that
+A1: F1 is_naturally_transformable_to F2 and
+A2: t1 is invertible;
+A3: F1 is_transformable_to F2 by A1,Def7;
+  let a be Object of A;
+  thus t1".a = (t1 qua transformation of F1,F2)".a by A1,A2,Def13
+    .= ((t1 qua transformation of F1,F2).a)" by A2,A3,Def12;
+ end;
+
+theorem
+   F1 ~= F2 implies F2 ~= F1
+ proof
+  assume
+A1: F1 is_naturally_transformable_to F2;
+  given t being natural_transformation of F1,F2 such that
+A2: t is invertible;
+  thus F2 is_naturally_transformable_to F1 by A1,A2,Lm5;
+  take t"; let a be Object of A;
+     F1 is_transformable_to F2 by A1,Def7;
+then A3: Hom(F1.a,F2.a) <> {} by Def2;
+     t.a is invertible & t".a = (t.a)" by A1,A2,Def10,Th30;
+  hence t".a is invertible by A3,CAT_1:76;
+ end;
+
+theorem Th32:
+ F1 ~= F2 & F2 ~= F3 implies F1 ~= F3
+ proof
+  assume
+A1: F1 is_naturally_transformable_to F2;
+  given t being natural_transformation of F1,F2 such that
+A2: t is invertible;
+  assume
+A3: F2 is_naturally_transformable_to F3;
+  given t' being natural_transformation of F2,F3 such that
+A4: t' is invertible;
+  thus F1 is_naturally_transformable_to F3 by A1,A3,Th25;
+  take t'`*`t; let a be Object of A;
+A5: (t'`*`t).a = (t'.a)*(t.a) by A1,A3,Th27;
+     F1 is_transformable_to F2 & F2 is_transformable_to F3 by A1,A3,Def7;
+then A6: Hom(F1.a,F2.a) <> {} & Hom(F2.a,F3.a) <> {} by Def2;
+     t'.a is invertible & t.a is invertible by A2,A4,Def10;
+  hence (t'`*`t).a is invertible by A5,A6,CAT_1:75;
+ end;
+
+definition let A,B,F1,F2;
+ assume
+A1:F1,F2 are_naturally_equivalent;
+ mode natural_equivalence of F1,F2 -> natural_transformation of F1,F2 means
+:Def14: it is invertible;
+ existence by A1,Def11;
+end;
+
+theorem
+   id F is natural_equivalence of F,F
+  proof thus F ~= F;
+   let a be Object of A;
+      (id F).a = id(F.a) by Th21;
+   hence (id F).a is invertible by CAT_1:74;
+  end;
+
+theorem
+   F1 ~= F2 & F2 ~= F3 implies
+  for t being natural_equivalence of F1,F2,
+      t' being natural_equivalence of F2,F3 holds
+   t'`*`t is natural_equivalence of F1,F3
+ proof assume that
+A1: F1,F2 are_naturally_equivalent and
+A2: F2,F3 are_naturally_equivalent;
+  let t be natural_equivalence of F1,F2,
+     t' be natural_equivalence of F2,F3;
+  thus F1,F3 are_naturally_equivalent by A1,A2,Th32;
+  let a be Object of A;
+A3:F1 is_naturally_transformable_to F2 &
+   F2 is_naturally_transformable_to F3 by A1,A2,Def11;
+then A4: (t'`*`t).a = (t'.a)*(t.a) by Th27;
+     F1 is_transformable_to F2 & F2 is_transformable_to F3 by A3,Def7;
+then A5: Hom(F1.a,F2.a) <> {} & Hom(F2.a,F3.a) <> {} by Def2;
+     t' is invertible & t is invertible by A1,A2,Def14;
+   then t'.a is invertible & t.a is invertible by Def10;
+  hence (t'`*`t).a is invertible by A4,A5,CAT_1:75;
+ end;
+
+begin :: Functor category
+
+definition let A,B;
+ mode NatTrans-DOMAIN of A,B -> non empty set means
+:Def15: for x being set holds x in it implies
+  ex F1,F2 being Functor of A,B, t being natural_transformation of F1,F2
+   st x = [[F1,F2],t] & F1 is_naturally_transformable_to F2;
+ existence
+  proof consider F being Functor of A,B;
+   take {[[F,F],id F]};
+   let x be set such that
+A1:  x in {[[F,F],id F]};
+   take F,F, id F;
+   thus thesis by A1,TARSKI:def 1;
+  end;
+end;
+
+definition let A,B;
+ func NatTrans(A,B) -> NatTrans-DOMAIN of A,B means
+:Def16: for x being set holds x in it iff
+  ex F1,F2 being Functor of A,B, t being natural_transformation of F1,F2
+   st x = [[F1,F2],t] & F1 is_naturally_transformable_to F2;
+ existence
+  proof
+   defpred _P[set] means
+   ex F1,F2 being Functor of A,B, t being natural_transformation of F1,F2
+       st $1 = [[F1,F2],t] & F1 is_naturally_transformable_to F2;
+   consider T being set such that
+A1:  for x being set holds x in T iff
+       x in [:[:Funct(A,B),Funct(A,B):],
+         Funcs(the Objects of A, the Morphisms of B):] & _P[x] from Separation;
+    consider F being Functor of A,B;
+      F in Funct(A,B) by CAT_2:def 2;
+then A2:  [F,F] in [:Funct(A,B),Funct(A,B):] by ZFMISC_1:106;
+      id F in Funcs(the Objects of A, the Morphisms of B) by FUNCT_2:11;
+    then [[F,F],id F] in [:[:Funct(A,B),Funct(A,B):],
+         Funcs(the Objects of A, the Morphisms of B):] by A2,ZFMISC_1:106;
+    then reconsider T as non empty set by A1;
+      for x being set st x in T holds
+     ex F1,F2 being Functor of A,B, t being natural_transformation of F1,F2
+     st x = [[F1,F2],t] & F1 is_naturally_transformable_to F2 by A1;
+    then reconsider T as NatTrans-DOMAIN of A,B by Def15;
+   take T;
+   let x be set;
+   thus x in T implies
+    ex F1,F2 being Functor of A,B, t being natural_transformation of F1,F2
+     st x = [[F1,F2],t] & F1 is_naturally_transformable_to F2 by A1;
+   given F1,F2 being Functor of A,B, t being natural_transformation of F1,F2
+   such that
+A3: x = [[F1,F2],t] & F1 is_naturally_transformable_to F2;
+      F1 in Funct(A,B) & F2 in Funct(A,B) by CAT_2:def 2;
+    then [F1,F2] in [:Funct(A,B),Funct(A,B):] &
+    t in
+ Funcs(the Objects of A, the Morphisms of B) by FUNCT_2:11,ZFMISC_1:106;
+    then x in [:[:Funct(A,B),Funct(A,B):],
+            Funcs(the Objects of A, the Morphisms of B):] by A3,ZFMISC_1:106;
+   hence x in T by A1,A3;
+  end;
+ uniqueness
+  proof let S,T be NatTrans-DOMAIN of A,B such that
+A4: for x being set holds x in S iff
+  ex F1,F2 being Functor of A,B, t being natural_transformation of F1,F2
+   st x = [[F1,F2],t] & F1 is_naturally_transformable_to F2
+    and
+A5: for x being set holds x in T iff
+  ex F1,F2 being Functor of A,B, t being natural_transformation of F1,F2
+   st x = [[F1,F2],t] & F1 is_naturally_transformable_to F2;
+      now let x be set;
+       x in S iff
+       ex F1,F2 being Functor of A,B, t being natural_transformation of F1,F2
+           st x = [[F1,F2],t] & F1 is_naturally_transformable_to F2 by A4;
+     hence x in S iff x in T by A5;
+    end;
+   hence thesis by TARSKI:2;
+  end;
+end;
+
+definition let A1,B1,A2,B2 be non empty set,
+     f1 be Function of A1,B1,
+     f2 be Function of A2,B2;
+ redefine pred f1 = f2 means
+     A1 = A2 & for a being Element of A1 holds f1.a = f2.a;
+ compatibility
+  proof
+A1:  dom f1 = A1 & dom f2 = A2 by FUNCT_2:def 1;
+   hence f1 = f2 implies
+    A1 = A2 & for a being Element of A1 holds f1.a = f2.a;
+   assume that
+A2: A1 = A2 and
+A3: for a being Element of A1 holds f1.a = f2.a;
+      for a being set st a in A1 holds f1.a = f2.a by A3;
+   hence f1 = f2 by A1,A2,FUNCT_1:9;
+  end;
+end;
+
+theorem Th35:
+ F1 is_naturally_transformable_to F2 iff [[F1,F2],t1] in NatTrans(A,B)
+ proof
+  thus F1 is_naturally_transformable_to F2 implies [[F1,F2],t1] in
+ NatTrans(A,B)
+   by Def16;
+  assume [[F1,F2],t1] in NatTrans(A,B);
+   then consider F1',F2' being Functor of A,B,
+         t being natural_transformation of F1',F2' such that
+A1: [[F1,F2],t1] = [[F1',F2'],t] & F1' is_naturally_transformable_to F2' by
+Def16;
+     [F1,F2] = [F1',F2'] by A1,ZFMISC_1:33;
+   then F1 = F1' & F2 = F2' by ZFMISC_1:33;
+  hence F1 is_naturally_transformable_to F2 by A1;
+ end;
+
+definition let A,B;
+ func Functors(A,B) -> strict Category means
+:Def18: the Objects of it = Funct(A,B) &
+   the Morphisms of it = NatTrans(A,B) &
+   (for f being Morphism of it holds dom f = f`1`1 & cod f = f`1`2) &
+   (for f,g being Morphism of it st dom g = cod f
+     holds [g,f] in dom the Comp of it) &
+   (for f,g being Morphism of it st [g,f] in dom (the Comp of it)
+     ex F,F1,F2,t,t1 st f = [[F,F1],t] & g = [[F1,F2],t1] &
+      (the Comp of it).[g,f] = [[F,F2],t1`*`t]) &
+   for a being Object of it, F st F = a holds id a = [[F,F],id F];
+ existence
+  proof
+    deffunc _F(set) = $1`1`1;
+A1: now let t be Element of NatTrans(A,B);
+     consider F1,F2 being Functor of A,B,
+              s being natural_transformation of F1,F2 such that
+A2:    t = [[F1,F2],s] and F1 is_naturally_transformable_to F2 by Def16;
+       t`1`1 = [F1,F2]`1 by A2,MCART_1:7 .= F1 by MCART_1:7;
+    hence _F(t) in Funct(A,B) by CAT_2:def 2;
+   end;
+   consider d being Function of NatTrans(A,B), Funct(A,B) such that
+A3: for t being Element of NatTrans(A,B) holds d.t = _F(t)
+     from FunctR_ealEx(A1);
+    deffunc _F(set) = $1`1`2;
+A4: now let t be Element of NatTrans(A,B);
+     consider F1,F2 being Functor of A,B,
+              s being natural_transformation of F1,F2 such that
+A5:    t = [[F1,F2],s] and F1 is_naturally_transformable_to F2 by Def16;
+       t`1`2 = [F1,F2]`2 by A5,MCART_1:7 .= F2 by MCART_1:7;
+    hence _F(t) in Funct(A,B) by CAT_2:def 2;
+   end;
+   consider c being Function of NatTrans(A,B), Funct(A,B) such that
+A6: for t being Element of NatTrans(A,B) holds c.t = _F(t)
+     from FunctR_ealEx(A4);
+   defpred P[set,set,set] means
+    ex F,F1,F2,t,t1 st $2 = [[F,F1],t] & $1 = [[F1,F2],t1] &
+       $3 = [[F,F2],t1`*`t];
+A7: now let x,y,z be set;
+    assume
+A8:   x in NatTrans(A,B) & y in NatTrans(A,B);
+    assume  P[x,y,z];
+    then consider F,F1,F2,t,t1 such that
+A9:   y = [[F,F1],t] & x = [[F1,F2],t1] & z = [[F,F2],t1`*`t];
+       F is_naturally_transformable_to F1 &
+     F1 is_naturally_transformable_to F2 by A8,A9,Th35;
+     then F is_naturally_transformable_to F2 by Th25;
+    hence z in NatTrans(A,B) by A9,Th35;
+   end;
+A10: now let x,y,z1,z2 be set;
+    assume x in NatTrans(A,B) & y in NatTrans(A,B);
+    assume  P[x,y,z1];
+    then consider F,F1,F2,t,t1 such that
+A11:  y = [[F,F1],t] & x = [[F1,F2],t1] & z1 = [[F,F2],t1`*`t];
+    assume  P[x,y,z2];
+    then consider F',F1',F2' being Functor of A,B,
+        t' being natural_transformation of F',F1',
+        t1' being natural_transformation of F1',F2' such that
+A12:    y = [[F',F1'],t'] & x = [[F1',F2'],t1'] & z2 = [[F',F2'],t1'`*`t'];
+A13:  [F,F1]=[F',F1'] & t=t' & [F1,F2]=[F1',F2'] & t1=t1' by A11,A12,ZFMISC_1:
+33;
+     then F = F' & F1 = F1' & F2 = F2' by ZFMISC_1:33;
+    hence z1 = z2 by A11,A12,A13;
+   end;
+   consider m being PartFunc of [:NatTrans(A,B),NatTrans(A,B):],NatTrans(A,B)
+   such that
+A14: for x,y being set holds [x,y] in dom m iff x in NatTrans(A,B) &
+      y in NatTrans(A,B) & ex z being set st P[x,y,z]
+   and
+A15: for x,y being set st [x,y] in dom m holds P[x,y,m.[x,y]]
+                                                  from PartFuncEx2(A7,A10);
+   deffunc _F(Element of Funct(A,B)) = [[$1,$1],id $1];
+A16: for F be Element of Funct(A,B) holds _F(F) in NatTrans(A,B) by Def16;
+   consider i being Function of Funct(A,B), NatTrans(A,B) such that
+A17: for F being Element of Funct(A,B) holds i.F = _F(F)
+                                           from FunctR_ealEx(A16);
+   set C = CatStr(#Funct(A,B),NatTrans(A,B),d,c,m,i#);
+A18: now let F,F1,F2,t,t1;
+    assume F1 is_naturally_transformable_to F2
+         & F is_naturally_transformable_to F1;
+then A19:  [[F1,F2],t1] in NatTrans(A,B) & [[F,F1],t] in NatTrans(A,B) by Th35;
+       P[[[F1,F2],t1],[[F,F1],t],[[F,F2],t1`*`t]];
+     then [[[F1,F2],t1],[[F,F1],t]] in dom m by A14,A19;
+     then consider F',F1',F2' being Functor of A,B,
+         t' being natural_transformation of F',F1',
+         t1' being natural_transformation of F1',F2' such that
+A20:   [[F,F1],t] = [[F',F1'],t'] & [[F1,F2],t1] = [[F1',F2'],t1'] and
+A21:   m.[[[F1,F2],t1],[[F,F1],t]] = [[F',F2'],t1'`*`t'] by A15;
+A22:   [F,F1] = [F',F1'] & t = t' & [F1,F2] = [F1',F2'] & t1 = t1'
+     by A20,ZFMISC_1:33;
+     then F = F' & F1 = F1' & F2 = F2' by ZFMISC_1:33;
+    hence m.[[[F1,F2],t1],[[F,F1],t]] = [[F,F2],t1`*`t] by A21,A22;
+   end;
+     now
+    thus
+A23:  for f,g being Element of the Morphisms of C holds
+      [g,f] in dom(the Comp of C) iff (the Dom of C).g=(the Cod of C).f
+     proof let f,g be Element of the Morphisms of C;
+      thus [g,f] in
+ dom(the Comp of C) implies (the Dom of C).g=(the Cod of C).f
+       proof assume [g,f] in dom(the Comp of C);
+         then consider F,F1,F2,t,t1 such that
+A24:        f = [[F,F1],t] & g = [[F1,F2],t1] and m.[g,f] = [[F,F2],t1`*`t]
+by A15;
+        thus (the Dom of C).g= g`1`1 by A3 .= [F1,F2]`1 by A24,MCART_1:7
+          .= F1 by MCART_1:7 .= [F,F1]`2 by MCART_1:7 .= f`1`2 by A24,MCART_1:7
+          .= (the Cod of C).f by A6;
+       end;
+       consider F1,F2 being Functor of A,B,
+                     t being natural_transformation of F1,F2 such that
+A25:     g = [[F1,F2],t] & F1 is_naturally_transformable_to F2 by Def16;
+       consider F1',F2' being Functor of A,B,
+                     t' being natural_transformation of F1',F2' such that
+A26:     f = [[F1',F2'],t'] & F1' is_naturally_transformable_to F2' by Def16;
+      assume
+A27:     (the Dom of C).g=(the Cod of C).f;
+A28:    F1 = [F1,F2]`1 by MCART_1:7 .= g`1`1 by A25,MCART_1:7 .= c.f by A3,A27
+.= f`1`2 by A6 .= [F1',F2']`2 by A26,MCART_1:7
+         .= F2' by MCART_1:7;
+       then reconsider t as natural_transformation of F2',F2;
+         m.[g,f] = [[F1',F2],t`*`t'] by A18,A25,A26,A28;
+      hence [g,f] in dom(the Comp of C) by A14,A25,A26,A28;
+     end;
+    thus for f,g being Element of the Morphisms of C
+       st (the Dom of C).g=(the Cod of C).f holds
+         (the Dom of C).((the Comp of C).[g,f]) = (the Dom of C).f &
+         (the Cod of C).((the Comp of C).[g,f]) = (the Cod of C).g
+     proof let f,g be Element of the Morphisms of C;
+      assume (the Dom of C).g=(the Cod of C).f;
+       then [g,f] in dom m by A23;
+       then consider F,F1,F2,t,t1 such that
+A29:     f = [[F,F1],t] & g = [[F1,F2],t1] & m.[g,f] = [[F,F2],t1`*`t] by A15;
+       consider F1',F2' being Functor of A,B,
+           t' being natural_transformation of F1',F2' such that
+A30:    f = [[F1',F2'],t'] & F1' is_naturally_transformable_to F2' by Def16;
+         [F,F1] = [F1',F2'] by A29,A30,ZFMISC_1:33;
+       then A31: F = F1' & F1 = F2' by ZFMISC_1:33;
+       consider F1',F2' being Functor of A,B,
+           t' being natural_transformation of F1',F2' such that
+A32:    g = [[F1',F2'],t'] & F1' is_naturally_transformable_to F2' by Def16;
+         [F1,F2] = [F1',F2'] by A29,A32,ZFMISC_1:33;
+       then F1 = F1' & F2 = F2' by ZFMISC_1:33;
+       then F is_naturally_transformable_to F2 by A30,A31,A32,Th25;
+       then reconsider x = [[F,F2],t1`*`t] as Element of NatTrans(A,B) by Th35;
+      thus (the Dom of C).((the Comp of C).[g,f]) = x`1`1 by A3,A29
+         .= [F,F2]`1 by MCART_1:7
+         .= F by MCART_1:7
+         .= [F,F1]`1 by MCART_1:7
+         .= [[F,F1],t]`1`1 by MCART_1:7
+         .= (the Dom of C).f by A3,A29;
+      thus (the Cod of C).((the Comp of C).[g,f]) = x`1`2 by A6,A29
+         .= [F,F2]`2 by MCART_1:7
+         .= F2 by MCART_1:7
+         .= [F1,F2]`2 by MCART_1:7
+         .= [[F1,F2],t1]`1`2 by MCART_1:7
+         .= (the Cod of C).g by A6,A29;
+     end;
+    thus for f,g,h being Element of the Morphisms of C
+         st (the Dom of C).h = (the Cod of C).g &
+            (the Dom of C).g = (the Cod of C).f
+        holds (the Comp of C).[h,(the Comp of C).[g,f]]
+            = (the Comp of C).[(the Comp of C).[h,g],f]
+     proof let f,g,h be Element of the Morphisms of C;
+      reconsider f'=f, g'=g, h'=h as Element of NatTrans(A,B);
+      assume
+A33:     (the Dom of C).h = (the Cod of C).g &
+       (the Dom of C).g = (the Cod of C).f;
+      then [g',f'] in dom m by A23;
+      then consider F1,F1',F2 being Functor of A,B,
+            t1 being natural_transformation of F1,F1',
+            t2 being natural_transformation of F1',F2 such that
+A34:    f' = [[F1,F1'],t1] & g' = [[F1',F2],t2] &
+       m.[g',f'] = [[F1,F2],t2`*`t1] by A15;
+        [h',g'] in dom m by A23,A33;
+      then consider F2',F3,F3' being Functor of A,B,
+            t2' being natural_transformation of F2',F3,
+            t3 being natural_transformation of F3,F3' such that
+A35:    g' = [[F2',F3],t2'] & h' = [[F3,F3'],t3] &
+       m.[h',g'] = [[F2',F3'],t3`*`t2'] by A15;
+A36:       [F2',F3] = [F1',F2] by A34,A35,ZFMISC_1:33;
+then A37:    F2 = F3 by ZFMISC_1:33;
+A38:    g' = [[F1',F3],t2] by A34,A36,ZFMISC_1:33;
+A39:    F1 is_naturally_transformable_to F1' by A34,Th35;
+A40:    F1' is_naturally_transformable_to F3 by A34,A37,Th35;
+A41:    F3 is_naturally_transformable_to F3' by A35,Th35;
+A42:    F1 is_naturally_transformable_to F3 by A39,A40,Th25;
+A43:    F1' is_naturally_transformable_to F3' by A40,A41,Th25;
+       reconsider t2 as natural_transformation of F1',F3 by A36,ZFMISC_1:33;
+      thus (the Comp of C).[h,(the Comp of C).[g,f]]
+         = [[F1,F3'],t3`*`(t2`*`t1)] by A18,A34,A35,A37,A41,A42
+        .= [[F1,F3'],t3`*`t2`*`t1] by A39,A40,A41,Th28
+        .= m.[[[F1',F3'],t3`*`t2],f'] by A18,A34,A39,A43
+        .= (the Comp of C).[(the Comp of C).[h,g],f] by A18,A35,A38,A40,A41;
+     end;
+    let b be Element of the Objects of C;
+     reconsider F = b as Functor of A,B by CAT_2:def 2;
+     reconsider s = [[F,F], id F] as Element of NatTrans(A,B) by Def16;
+A44:   (the Id of C).b = [[F,F],id F] by A17;
+    hence (the Dom of C).((the Id of C).b) =s`1`1 by A3 .= [F,F]`1 by MCART_1:7
+ .= b by MCART_1:7;
+    thus (the Cod of C).((the Id of C).b) =s`1`2 by A6,A44 .= [F,F]`2 by
+MCART_1:7 .= b by MCART_1:7;
+    thus for f being Element of the Morphisms of C st (the Cod of C).f = b
+           holds (the Comp of C).[(the Id of C).b,f] = f
+     proof let f be Element of the Morphisms of C;
+      reconsider f' = f as Element of NatTrans(A,B);
+      consider F1,F2 being Functor of A,B,
+                t being natural_transformation of F1,F2
+      such that
+  A45:   f' = [[F1,F2],t] and F1 is_naturally_transformable_to F2 by Def16;
+      assume
+  A46:   (the Cod of C).f = b;
+  A47:  F2 = [F1,F2]`2 by MCART_1:7 .= f'`1`2 by A45,MCART_1:7 .= F by A6,A46;
+      then reconsider t as natural_transformation of F1,F;
+        P[s,f',[[F1,F],(id F)`*`t]] by A45,A47;
+      then [s,f'] in dom m by A14;
+      then [i.F,f'] in dom m by A17;
+      then consider F',F1',F2' being Functor of A,B,
+                t' being natural_transformation of F',F1',
+                t1' being natural_transformation of F1',F2' such that
+  A48:   f' = [[F',F1'],t'] & i.F = [[F1',F2'],t1'] and
+  A49:   m.[i.F,f'] = [[F',F2'],t1'`*`t'] by A15;
+  A50:   F' is_naturally_transformable_to F1' by A48,Th35;
+         i.F = [[F,F], id F] by A17;
+  then A51:  [F1',F2'] = [F,F] & t1' = id F by A48,ZFMISC_1:33;
+    then F1' = F & F2' = F by ZFMISC_1:33;
+
+      hence (the Comp of C).[(the Id of C).b,f] = f by A48,A49,A50,A51,Th26;
+     end;
+    let g be Element of the Morphisms of C;
+     reconsider g' = g as Element of NatTrans(A,B);
+     consider F1,F2 being Functor of A,B,
+              t being natural_transformation of F1,F2
+     such that
+A52:   g' = [[F1,F2],t] and F1 is_naturally_transformable_to F2 by Def16;
+    assume
+A53:   (the Dom of C).g = b;
+A54:  F1 = [F1,F2]`1 by MCART_1:7 .= g'`1`1 by A52,MCART_1:7 .= F by A3,A53;
+     then reconsider t as natural_transformation of F,F2;
+       P[g',s,[[F,F2],t`*`(id F)]] by A52,A54;
+     then [g',s] in dom m by A14;
+     then [g',i.F] in dom m by A17;
+     then consider F',F1',F2' being Functor of A,B,
+              t' being natural_transformation of F',F1',
+              t1' being natural_transformation of F1',F2' such that
+A55:   i.F = [[F',F1'],t'] & g' = [[F1',F2'],t1'] and
+A56:   m.[g',i.F] = [[F',F2'],t1'`*`t'] by A15;
+A57:   F1' is_naturally_transformable_to F2' by A55,Th35;
+       i.F = [[F,F], id F] by A17;
+then A58:  [F',F1'] = [F,F] & t' = id F by A55,ZFMISC_1:33;
+  then F1' = F & F' = F by ZFMISC_1:33;
+
+    hence (the Comp of C).[g,(the Id of C).b] = g by A55,A56,A57,A58,Th26;
+   end;
+   then reconsider C as strict Category by CAT_1:def 8;
+   take C;
+   thus the Objects of C = Funct(A,B) &
+        the Morphisms of C = NatTrans(A,B);
+   thus
+A59: for f being Morphism of C holds dom f = f`1`1 & cod f = f`1`2
+     proof let f be Morphism of C;
+       reconsider t = f as Element of NatTrans(A,B);
+      thus dom f = d.t by CAT_1:def 2 .= f`1`1 by A3;
+      thus cod f = c.t by CAT_1:def 3 .= f`1`2 by A6;
+     end;
+   thus for f,g being Morphism of C st dom g = cod f
+     holds [g,f] in dom the Comp of C
+    proof let f,g be Morphism of C;
+      consider F1,F2 being Functor of A,B,
+               t being natural_transformation of F1,F2
+      such that
+A60:     f = [[F1,F2],t] & F1 is_naturally_transformable_to F2 by Def16;
+      consider F1',F2' being Functor of A,B,
+               t' being natural_transformation of F1',F2'
+      such that
+A61:    g = [[F1',F2'],t'] & F1' is_naturally_transformable_to F2' by Def16;
+     assume
+A62:    dom g = cod f;
+A63:    F2 = [F1,F2]`2 by MCART_1:7 .= [[F1,F2],t]`1`2 by MCART_1:7
+         .= cod f by A59,A60 .= [[F1',F2'],t']`1`1 by A59,A61,A62
+         .= [F1',F2']`1 by MCART_1:7 .= F1' by MCART_1:7;
+      then reconsider t' as natural_transformation of F2,F2';
+        P[g,f,[[F1,F2'],t'`*`t]] by A60,A61,A63;
+     hence [g,f] in dom the Comp of C by A14;
+    end;
+   thus for f,g being Morphism of C st [g,f] in dom (the Comp of C)
+     ex F,F1,F2,t,t1 st f = [[F,F1],t] & g = [[F1,F2],t1] &
+      (the Comp of C).[g,f] = [[F,F2],t1`*`t] by A15;
+   let a be Object of C, F such that A64: F = a;
+    reconsider F' = F as Element of Funct(A,B) by CAT_2:def 2;
+   thus id a = i.F' by A64,CAT_1:def 5
+     .= [[F,F],id F] by A17;
+  end;
+ uniqueness
+  proof let C1,C2 be strict Category such that
+A65: the Objects of C1 = Funct(A,B) and
+A66: the Morphisms of C1 = NatTrans(A,B) and
+A67: for f being Morphism of C1 holds dom f = f`1`1 & cod f = f`1`2 and
+A68: for f,g being Morphism of C1 st dom g = cod f
+     holds [g,f] in dom the Comp of C1 and
+A69: for f,g being Morphism of C1 st [g,f] in dom (the Comp of C1)
+     ex F,F1,F2,t,t1 st f = [[F,F1],t] & g = [[F1,F2],t1] &
+      (the Comp of C1).[g,f] = [[F,F2],t1`*`t] and
+A70: for a being Object of C1, F st F = a holds id a = [[F,F],id F] and
+A71: the Objects of C2 = Funct(A,B) and
+A72: the Morphisms of C2 = NatTrans(A,B) and
+A73: for f being Morphism of C2 holds dom f = f`1`1 & cod f = f`1`2 and
+A74: for f,g being Morphism of C2 st dom g = cod f
+     holds [g,f] in dom the Comp of C2 and
+A75: for f,g being Morphism of C2 st [g,f] in dom (the Comp of C2)
+     ex F,F1,F2,t,t1 st f = [[F,F1],t] & g = [[F1,F2],t1] &
+      (the Comp of C2).[g,f] = [[F,F2],t1`*`t] and
+A76:  for a being Object of C2, F st F = a holds id a = [[F,F],id F];
+      now
+     thus
+     the Morphisms of C1 = the Morphisms of C2 by A66,A72;
+     thus the Dom of C1 = the Dom of C2
+      proof thus the Morphisms of C1 = the Morphisms of C2 by A66,A72;
+       let a be Morphism of C1;
+        reconsider b = a as Morphism of C2 by A66,A72;
+       thus (the Dom of C1).a = dom a by CAT_1:def 2 .= a`1`1 by A67
+               .= dom b by A73 .= (the Dom of C2).a by CAT_1:def 2;
+      end;
+     thus the Cod of C1 = the Cod of C2
+      proof thus the Morphisms of C1 = the Morphisms of C2 by A66,A72;
+       let a be Morphism of C1;
+        reconsider b = a as Morphism of C2 by A66,A72;
+       thus (the Cod of C1).a = cod a by CAT_1:def 3 .= a`1`2 by A67
+               .= cod b by A73 .= (the Cod of C2).a by CAT_1:def 3;
+      end;
+        now
+A77:    dom the Comp of C1 c= [:the Morphisms of C1, the Morphisms of C1:]
+                                                    by RELSET_1:12;
+       reconsider S1 = dom the Comp of C1, S2 = dom the Comp of C2
+        as Subset of [:the Morphisms of C1, the Morphisms of C1:]
+         by A66,A72,RELSET_1:12;
+         now let x be Element of [:the Morphisms of C1, the Morphisms of C1:];
+A78:     x = [x`1,x`2] by MCART_1:23;
+         then reconsider f1 = x`2, g1 = x`1 as Morphism of C1 by ZFMISC_1:106;
+         reconsider f2 = x`2, g2 = x`1 as Morphism of C2 by A66,A72,A78,
+ZFMISC_1:106;
+A79:      now assume [g1,f1] in S1;
+           then consider F,F1,F2,t,t1 such that
+A80:          f1 = [[F,F1],t] & g1 = [[F1,F2],t1] and
+               (the Comp of C1).[g1,f1] = [[F,F2],t1`*`t] by A69;
+             dom g2 = g2`1`1 by A73 .= [F1,F2]`1 by A80,MCART_1:7 .= F1 by
+MCART_1:7
+           .= [F,F1]`2 by MCART_1:7 .= f1`1`2 by A80,MCART_1:7 .= cod f2 by A73
+;
+          hence [g2,f2] in S2 by A74;
+         end;
+           now assume [g2,f2] in S2;
+           then consider F,F1,F2,t,t1 such that
+A81:          f2 = [[F,F1],t] & g2 = [[F1,F2],t1] and
+               (the Comp of C2).[g2,f2] = [[F,F2],t1`*`t] by A75;
+             dom g1 = g1`1`1 by A67 .= [F1,F2]`1 by A81,MCART_1:7 .= F1 by
+MCART_1:7
+           .= [F,F1]`2 by MCART_1:7 .= f2`1`2 by A81,MCART_1:7 .= cod f1 by A67
+;
+          hence [g1,f1] in S1 by A68;
+         end;
+        hence x in S1 iff x in S2 by A79,MCART_1:23;
+       end;
+       hence
+A82:      dom the Comp of C1 = dom the Comp of C2 by SUBSET_1:8;
+       let x be set;
+       assume
+A83:      x in dom the Comp of C1;
+        then reconsider f=x`2, g=x`1 as Morphism of C1 by A77,MCART_1:10;
+A84:      [g,f] = x by A77,A83,MCART_1:23;
+        then consider F,F1,F2,t,t1 such that
+A85:      f = [[F,F1],t] & g = [[F1,F2],t1] &
+        (the Comp of C1).[g,f] = [[F,F2],t1`*`t] by A69,A83;
+        consider F',F1',F2' being Functor of A,B,
+           t' being natural_transformation of F',F1',
+           t1' being natural_transformation of F1',F2' such that
+A86:      f = [[F',F1'],t'] & g = [[F1',F2'],t1'] &
+        (the Comp of C2).[g,f] = [[F',F2'],t1'`*`t'] by A66,A72,A75,A82,A83,A84
+;
+          [F,F1] = [F',F1'] & [F1,F2] = [F1',F2'] by A85,A86,ZFMISC_1:33;
+      then F = F' & F1 = F1' & F2 = F2' & t = t' & t1 = t1'
+                                                     by A85,A86,ZFMISC_1:33;
+       hence (the Comp of C1).x = (the Comp of C2).x by A84,A85,A86;
+      end;
+     hence the Comp of C1 = the Comp of C2 by FUNCT_1:9;
+     thus the Id of C1 = the Id of C2
+      proof thus the Objects of C1 = the Objects of C2 by A65,A71;
+       let a be Object of C1;
+        reconsider F=a as Functor of A,B by A65,CAT_2:def 3;
+        reconsider b=a as Object of C2 by A65,A71;
+       thus (the Id of C1).a = id a by CAT_1:def 5 .= [[F,F],id F] by A70
+              .= id b by A76 .= (the Id of C2).a by CAT_1:def 5;
+      end;
+    end;
+   hence thesis by A65,A71;
+  end;
+end;
+
+:: As immediate consequences of the definition we get
+
+canceled 3;
+
+theorem Th39:
+ for f being Morphism of Functors(A,B) st f = [[F,F1],t] holds
+   dom f = F & cod f = F1
+ proof let f be Morphism of Functors(A,B) such that
+A1: f = [[F,F1],t];
+  thus dom f = f`1`1 by Def18 .= [F,F1]`1 by A1,MCART_1:7 .= F by MCART_1:7;
+  thus cod f = f`1`2 by Def18 .= [F,F1]`2 by A1,MCART_1:7 .= F1 by MCART_1:7;
+ end;
+
+theorem
+   for a,b being Object of Functors(A,B), f being Morphism of a,b
+   st Hom(a,b) <> {}
+  ex F,F1,t st a = F & b = F1 & f = [[F,F1],t]
+ proof let a,b be Object of Functors(A,B), f be Morphism of a,b such that
+A1: Hom(a,b) <> {};
+     the Morphisms of Functors(A,B) = NatTrans(A,B) by Def18;
+   then consider F1,F2 being Functor of A,B,
+       t being natural_transformation of F1,F2 such that
+A2:    f = [[F1,F2],t] & F1 is_naturally_transformable_to F2 by Def15;
+  take F1,F2,t;
+  thus a = dom f by A1,CAT_1:23 .= F1 by A2,Th39;
+  thus b = cod f by A1,CAT_1:23 .= F2 by A2,Th39;
+  thus f = [[F1,F2],t] by A2;
+ end;
+
+theorem Th41:
+ for t' being natural_transformation of F2,F3
+ for f,g being Morphism of Functors(A,B) st
+  f = [[F,F1],t] & g = [[F2,F3],t'] holds
+  [g,f] in dom the Comp of Functors(A,B) iff F1 = F2
+ proof let t' be natural_transformation of F2,F3;
+  let f,g be Morphism of Functors(A,B);
+  assume that
+A1: f = [[F,F1],t] and
+A2: g = [[F2,F3],t'];
+  thus [g,f] in dom the Comp of Functors(A,B) implies F1 = F2
+   proof assume [g,f] in dom the Comp of Functors(A,B);
+     then consider F',F1',F2' being Functor of A,B,
+       t' being natural_transformation of F',F1',
+       t1' being natural_transformation of F1',F2' such that
+A3:    f = [[F',F1'],t'] & g = [[F1',F2'],t1'] and
+        (the Comp of Functors(A,B)).[g,f] = [[F',F2'],t1'`*`t'] by Def18;
+    thus F1 = [F,F1]`2 by MCART_1:7 .= [[F,F1],t]`1`2 by MCART_1:7
+     .= [F',F1']`2 by A1,A3,MCART_1:7 .= F1' by MCART_1:7 .= [F1',F2']`1
+     by MCART_1:7 .= [[F1',F2'],t1']`1`1 by MCART_1:7 .= [F2,F3]`1
+     by A2,A3,MCART_1:7 .= F2 by MCART_1:7;
+   end;
+     dom g = F2 & cod f = F1 by A1,A2,Th39;
+  hence thesis by Def18;
+ end;
+
+theorem
+   for f,g being Morphism of Functors(A,B) st
+  f = [[F,F1],t] & g = [[F1,F2],t1]
+  holds g*f = [[F,F2],t1`*`t]
+ proof let f,g be Morphism of Functors(A,B);
+  assume that
+A1: f = [[F,F1],t] and
+A2: g = [[F1,F2],t1];
+A3: [g,f] in dom the Comp of Functors(A,B) by A1,A2,Th41;
+   then consider F',F1',F2' being Functor of A,B,
+     t' being natural_transformation of F',F1',
+     t1' being natural_transformation of F1',F2' such that
+A4:    f = [[F',F1'],t'] & g = [[F1',F2'],t1'] and
+A5:    (the Comp of Functors(A,B)).[g,f] = [[F',F2'],t1'`*`t'] by Def18;
+A6: [F',F1'] = [F,F1] & [F1',F2'] = [F1,F2] & t = t' & t1 = t1'
+                          by A1,A2,A4,ZFMISC_1:33;
+   then F = F' & F1 = F1' & F2 = F2' by ZFMISC_1:33;
+  hence g*f = [[F,F2],t1`*`t] by A3,A5,A6,CAT_1:def 4;
+ end;
+
+begin ::  Discrete categories
+
+definition let C be Category;
+ attr C is discrete means
+:Def19: for f being Morphism of C ex a being Object of C st f = id a;
+end;
+
+definition
+ cluster discrete Category;
+existence
+  proof consider o,m;
+   take 1Cat(o,m);
+   let f be Morphism of 1Cat(o,m);
+    consider a being Object of 1Cat(o,m);
+   take a;
+   thus f = m by CAT_1:35 .= id a by CAT_1:35;
+  end;
+end;
+
+canceled;
+
+theorem Th44:
+ for A being discrete Category, a being Object of A holds Hom(a,a) = { id a}
+  proof let A be discrete Category, a be Object of A;
+A1: Hom(a,a) <> {} by CAT_1:56;
+      now let g be Morphism of a,a;
+      consider a2 being Object of A such that
+A2:   g = id a2 by Def19;
+        a = dom g by A1,CAT_1:23 .= a2 by A2,CAT_1:44;
+     hence id a = g by A2;
+    end;
+   hence Hom(a,a) = { id a} by A1,CAT_1:26;
+  end;
+
+theorem Th45:
+ A is discrete iff
+  (for a being Object of A
+   ex B being finite set st B = Hom(a,a) & card B = 1) &
+  for a,b being Object of A st a <> b holds Hom(a,b) = {}
+ proof
+  thus A is discrete implies
+   (for a being Object of A
+    ex B being finite set st B = Hom(a,a) & card B = 1) &
+   for a,b being Object of A st a <> b holds Hom(a,b) = {}
+   proof assume
+A1:   A is discrete;
+    hereby let a be Object of A;
+A2:   Hom(a,a) = { id a } by A1,Th44;
+    then reconsider B = Hom(a,a) as finite set;
+    take B;
+    thus B = Hom(a,a);
+    thus card B = 1 by A2,CARD_1:79;
+    end;
+    let a,b be Object of A;
+    assume
+A3:  a <> b;
+    assume
+A4:   Hom(a,b) <> {};
+     consider m being Element of Hom(a,b);
+     reconsider m as Morphism of A by A4,TARSKI:def 3;
+     consider c being Object of A such that
+A5:   m = id c by A1,Def19;
+       id c in Hom(c,c) by CAT_1:55;
+     then Hom(c,c) meets Hom(a,b) by A4,A5,XBOOLE_0:3;
+     then c = a & c = b by Th17;
+    hence contradiction by A3;
+   end;
+  assume
+A6: (for a being Object of A
+    ex B being finite set st B = Hom(a,a) & card B = 1) &
+   for a,b being Object of A st a <> b holds Hom(a,b) = {};
+  let f be Morphism of A;
+  take dom f;
+  consider B being finite set such that
+A7:  B = Hom(dom f,dom f) & card B = 1 by A6;
+     Hom(dom f, cod f) <> {} by CAT_1:19;
+then A8: dom f = cod f by A6;
+   consider x being set such that
+A9: Hom(dom f,dom f) = {x} by A7,CARD_2:60;
+     f in Hom(dom f, dom f) & id dom f in Hom(dom f, dom f) by A8,CAT_1:18,55;
+   then f = x & id dom f = x by A9,TARSKI:def 1;
+  hence f = id dom f;
+ end;
+
+theorem Th46:
+ 1Cat(o,m) is discrete
+  proof let f be Morphism of 1Cat(o,m);
+    consider a being Object of 1Cat(o,m);
+      f = m by CAT_1:35 .= id a by CAT_1:35;
+   hence thesis;
+  end;
+
+theorem
+   for A being discrete Category, C being Subcategory of A holds C is discrete
+  proof let A be discrete Category, C be Subcategory of A;
+   let f be Morphism of C;
+    reconsider f'=f as Morphism of A by CAT_2:14;
+    consider a' being Object of A such that
+A1:   f' = id a' by Def19;
+   take dom f;
+      dom f' = a' by A1,CAT_1:44; then dom f = a' by CAT_2:15;
+   hence thesis by A1,CAT_2:def 4;
+  end;
+
+theorem
+   A is discrete & B is discrete implies [:A,B:] is discrete
+  proof assume that
+A1: A is discrete and
+A2: B is discrete;
+   let f be Morphism of [:A,B:];
+    consider f1 being (Morphism of A), f2 being Morphism of B such that
+A3:   f = [f1,f2] by CAT_2:37;
+    consider a being Object of A such that
+A4:  f1 = id a by A1,Def19;
+    consider b being Object of B such that
+A5:  f2 = id b by A2,Def19;
+   take [a,b];
+   thus f = id [a,b] by A3,A4,A5,CAT_2:41;
+  end;
+
+theorem Th49:
+for A being discrete Category, B being Category, F1,F2 being Functor of B,A
+  st F1 is_transformable_to F2 holds F1 = F2
+  proof let A be discrete Category, B be Category, F1,F2 be Functor of B,A;
+   assume
+A1:  F1 is_transformable_to F2;
+      now let m be Morphism of B;
+A2:   m in Hom(dom m,cod m) by CAT_1:18;
+        Hom(F1.dom m,F2.dom m) <> {} by A1,Def2;
+then A3:     F1.dom m = F2.dom m by Th45;
+A4:   F1.m in Hom(F1.dom m, F1.cod m) by A2,CAT_1:123;
+        Hom(F1.dom m, F1.cod m) <> {} by A2,CAT_1:123;
+      then F1.dom m = F1.cod m by Th45;
+      then Hom(F1.dom m, F1.cod m) = { id(F1.dom m) } by Th44;
+then A5:    F1.m = id(F1.dom m) by A4,TARSKI:def 1;
+A6:   F2.m in Hom(F2.dom m,F2.cod m) by A2,CAT_1:123;
+        Hom(F2.dom m, F2.cod m) <> {} by A2,CAT_1:123;
+      then F2.dom m = F2.cod m by Th45;
+      then Hom(F2.dom m, F2.cod m) = { id(F2.dom m) } by Th44;
+     hence F1.m = F2.m by A3,A5,A6,TARSKI:def 1;
+    end;
+   hence F1 = F2 by FUNCT_2:113;
+  end;
+
+theorem Th50:
+for A being discrete Category, B being Category, F being Functor of B,A,
+   t being transformation of F,F holds t = id F
+  proof let A be discrete Category, B be Category, F be Functor of B,A,
+    t be transformation of F,F;
+      now let a be Object of B;
+        t.a in Hom(F.a, F.a) & Hom(F.a,F.a) = { id(F.a) } by Th3,Th44;
+     hence t.a = id(F.a) by TARSKI:def 1 .= (id F).a by Th21;
+    end;
+   hence t = id F by Th20;
+  end;
+
+theorem
+   A is discrete implies Functors(B,A) is discrete
+  proof assume
+A1:  A is discrete;
+   let f be Morphism of Functors(B,A);
+      f in the Morphisms of Functors(B,A);
+    then f in NatTrans(B,A) by Def18; then consider F1,F2 being Functor of B,A
+,
+      t being natural_transformation of F1,F2 such that
+A2:  f = [[F1,F2],t] & F1 is_naturally_transformable_to F2 by Def16;
+      F1 in Funct(B,A) by CAT_2:def 2;
+    then reconsider a = F1 as Object of Functors(B,A) by Def18;
+   take a;
+      F1 is_transformable_to F2 by A2,Def7;
+then A3: F1 = F2 by A1,Th49;
+    then t = id F1 by A1,Th50;
+   hence f = id a by A2,A3,Def18;
+  end;
+
+definition let C be Category;
+ cluster strict discrete Subcategory of C;
+ existence
+  proof consider c being Object of C;
+    reconsider A =1Cat(c,id c) as Subcategory of C by Th7;
+   take A; thus thesis by Th46;
+  end;
+end;
+
+definition let C;
+ func IdCat(C) -> strict discrete Subcategory of C means
+:Def20: the Objects of it = the Objects of C &
+  the Morphisms of it = { id a where a is Object of C: not contradiction};
+ existence
+  proof
+    deffunc F(Object of C) = id $1;
+    defpred P[Object of C] means not contradiction;
+    defpred Q[Object of C] means F($1) in the Morphisms of C;
+    set M = { F(a) where a is Object of C: P[a]};
+    set N = { F(a) where a is Object of C: Q[a]};
+A1:  for a being Object of C holds Q[a] iff P[a];
+A2:  N = M from Fraenkel6'(A1);
+    set N' = { F(a) where a is Object of C: F(a) in the Morphisms of C & P[a]};
+A3: N' c= the Morphisms of C from FrSet_1;
+    defpred R[Object of C] means F($1) in the Morphisms of C & P[$1];
+    set N'' = { F(a) where a is Object of C: R[a]};
+A4: for a being Object of C holds Q[a] iff R[a];
+    N = N'' from Fraenkel6'(A4);  then
+A5:    N c= the Morphisms of C by A3;
+     consider a being Object of C;
+       id a in M;
+    then reconsider M as non empty Subset of the Morphisms of C by A2,A5;
+A6:  (the Comp of C)|([:M,M:] qua set) is
+     PartFunc of [:M,M qua non empty set:], the Morphisms of C by PARTFUN1:43;
+      rng ((the Comp of C)|([:M,M:] qua set)) c= M
+     proof let x be set;
+      assume x in rng ((the Comp of C)|([:M,M:] qua set));
+       then consider y being set such that
+A7:     y in dom ((the Comp of C)|([:M,M:] qua set)) and
+A8:     x = ((the Comp of C)|([:M,M:] qua set)).y by FUNCT_1:def 5;
+A9:     y in dom (the Comp of C) /\ [:M,M:] by A7,RELAT_1:90;
+       then y in [:M,M:] by XBOOLE_0:def 3;
+       then consider y1,y2 being set such that
+A10:     y1 in M & y2 in M and
+A11:     y = [y1,y2] by ZFMISC_1:103;
+       consider a1 being Object of C such that
+A12:     y1 = id a1 by A10;
+       consider a2 being Object of C such that
+A13:     y2 = id a2 by A10;
+A14:    y in dom (the Comp of C) by A9,XBOOLE_0:def 3;
+A15:    Hom(a1,a1) <> {} by CAT_1:56;
+A16:    a1 = dom id a1 by CAT_1:44 .= cod id a2 by A11,A12,A13,A14,CAT_1:40
+        .= a2 by CAT_1:44;
+         id a1 = (id a1)*(id a1) by CAT_1:59
+         .= (id a1)*(id a2) by A15,A16,CAT_1:def 13
+         .= (the Comp of C).[id a1, id a2] by A11,A12,A13,A14,CAT_1:def 4
+         .= x by A8,A9,A11,A12,A13,FUNCT_1:71;
+      hence x in M;
+     end;
+    then reconsider COMP = (the Comp of C)|([:M,M:] qua set) as
+      PartFunc of [:M,M qua non empty set:],M by A6,PARTFUN1:29;
+A17:  dom the Id of C = the Objects of C by FUNCT_2:def 1;
+      rng the Id of C c= M
+     proof let x be set;
+      assume x in rng the Id of C;
+       then consider y being set such that
+A18:     y in dom the Id of C and
+A19:     x = (the Id of C).y by FUNCT_1:def 5;
+       reconsider y as Object of C by A18,FUNCT_2:def 1;
+         x = id y by A19,CAT_1:def 5;
+      hence thesis;
+     end;
+    then reconsider ID = the Id of C as Function of the Objects of C, M
+     by A17,FUNCT_2:4;
+      dom the Id of C = the Objects of C by FUNCT_2:def 1;
+then A20:  (the Id of C)|the Objects of C = the Id of C by RELAT_1:97;
+      the Objects of C c= the Objects of C;
+then reconsider A = CatStr(#the Objects of C,M,((the Dom of C)|M),
+((the Cod of C)|M),COMP,ID#)
+      as Subcategory of C by A20,Th9;
+       now let f be Morphism of A;
+         f in M; then consider a being Object of C such that
+A21:     f = id a;
+       reconsider a as Object of A;
+      take a;
+      thus f = (the Id of C).a by A21,CAT_1:def 5 .= id a by CAT_1:def 5;
+     end;
+    then reconsider A as strict discrete Subcategory of C by Def19;
+   take A;
+   thus thesis;
+  end;
+ uniqueness
+  proof let It1,It2 be strict discrete Subcategory of C such that
+A22: the Objects of It1 = the Objects of C &
+    the Morphisms of It1 = { id a where a is Object of C: not contradiction}
+   and
+A23: the Objects of It2 = the Objects of C &
+  the Morphisms of It2 = { id a where a is Object of C: not contradiction};
+  set M = the Morphisms of It1;
+A24: the Dom of It1 = (the Dom of C)|M & the Dom of It2 = (the Dom of C)|M
+    by A22,A23,Th8;
+A25: the Cod of It1 = (the Cod of C)|M & the Cod of It2 = (the Cod of C)|M
+    by A22,A23,Th8;
+A26: the Comp of It1 = (the Comp of C)|[:M,M:]
+  & the Comp of It2 = (the Comp of C)|[:M,M:] by A22,A23,Th8;
+    the Id of It1 = (the Id of C)| the Objects of It1 &
+  the Id of It2 = (the Id of C)| the Objects of It2 by Th8;
+   hence thesis by A22,A23,A24,A25,A26;
+  end;
+end;
+
+theorem Th52:
+ for C being strict Category holds C is discrete implies IdCat(C) = C
+  proof let C be strict Category;
+   assume
+A1:  C is discrete;
+     the Morphisms of C c= { id a where a is Object of C: not contradiction}
+    proof let x be set;
+     assume x in the Morphisms of C;
+      then ex a being Object of C st x = id a by A1,Def19;
+     hence thesis;
+    end;
+then A2:  the Morphisms of C c= the Morphisms of IdCat(C) by Def20;
+      the Morphisms of IdCat(C) c= the Morphisms of C by CAT_2:13;
+then A3:  the Morphisms of IdCat(C) = the Morphisms of C by A2,XBOOLE_0:def 10;
+      the Objects of IdCat(C) = the Objects of C by Def20;
+   hence IdCat(C) = C by A3,Th10;
+  end;
+
+theorem
+   IdCat(IdCat(C)) = IdCat(C) by Th52;
+
+theorem
+   IdCat(1Cat(o,m)) = 1Cat(o,m)
+  proof 1Cat(o,m) is discrete by Th46; hence thesis by Th52; end;
+
+theorem
+   IdCat([:A,B:]) = [:IdCat(A), IdCat(B):]
+ proof
+     now
+       the Objects of IdCat A = the Objects of A &
+     the Objects of IdCat B = the Objects of B by Def20;
+    hence
+A1:  [:the Objects of IdCat A,the Objects of IdCat B:]
+          = the Objects of [:A,B:] by CAT_2:33
+         .= the Objects of IdCat [:A,B:] by Def20;
+     set AB = { id c where c is Object of [:A,B:]: not contradiction},
+         MA = { id a where a is Object of A: not contradiction},
+         MB = { id b where b is Object of B: not contradiction};
+A2:   AB = [:MA,MB:]
+      proof
+       thus AB c= [:MA,MB:]
+        proof let x be set;
+         assume x in AB;
+          then consider c being Object of [:A,B:] such that
+A3:        x = id c;
+          consider c1 being Object of A, c2 being Object of B such that
+A4:        c = [c1,c2] by CAT_2:35;
+A5:        id c = [id c1, id c2] by A4,CAT_2:41;
+            id c1 in MA & id c2 in MB;
+         hence x in [:MA,MB:] by A3,A5,ZFMISC_1:106;
+        end;
+       let x be set;
+       assume x in [:MA,MB:];
+        then consider x1,x2 being set such that
+A6:      x1 in MA & x2 in MB and
+A7:      x = [x1,x2] by ZFMISC_1:103;
+        consider a being Object of A such that
+A8:      x1 = id a by A6;
+        consider b being Object of B such that
+A9:      x2 = id b by A6;
+          id [a,b] = [id a, id b] by CAT_2:41;
+       hence x in AB by A7,A8,A9;
+      end;
+       the Morphisms of IdCat A =
+       { id a where a is Object of A: not contradiction} &
+     the Morphisms of IdCat B =
+       { id b where b is Object of B: not contradiction} by Def20;
+    hence
+A10:  the Morphisms of IdCat [:A,B:]
+          = [:the Morphisms of IdCat A,the Morphisms of IdCat B:] by A2,Def20;
+     reconsider MA = the Morphisms of IdCat A as
+      non empty Subset of the Morphisms of A by CAT_2:13;
+     reconsider MB = the Morphisms of IdCat B as
+      non empty Subset of the Morphisms of B by CAT_2:13;
+       the Dom of IdCat A = (the Dom of A)|the Morphisms of IdCat A &
+     the Dom of IdCat B = (the Dom of B)|the Morphisms of IdCat B by Th8;
+    hence [:the Dom of IdCat A,the Dom of IdCat B:]
+          = [:the Dom of A,the Dom of B:]|[:MA,MB:] by Th1
+         .= (the Dom of [:A,B:])|the Morphisms of IdCat [:A,B:] by A10,CAT_2:33
+         .= the Dom of IdCat [:A,B:] by Th8;
+       the Cod of IdCat A = (the Cod of A)|the Morphisms of IdCat A &
+     the Cod of IdCat B = (the Cod of B)|the Morphisms of IdCat B by Th8;
+    hence [:the Cod of IdCat A,the Cod of IdCat B:]
+          = [:the Cod of A,the Cod of B:]|[:MA,MB:] by Th1
+         .= (the Cod of [:A,B:])|the Morphisms of IdCat [:A,B:] by A10,CAT_2:33
+         .= the Cod of IdCat [:A,B:] by Th8;
+A11:  |:the Comp of A,the Comp of B:| |([:[:MA,MB:],[:MA,MB:]:] qua set)
+          = (the Comp of [:A,B:])|
+            ([:the Morphisms of IdCat [:A,B:] ,the Morphisms of IdCat [:A,B:]:]
+                qua set) by A10,CAT_2:33
+         .= the Comp of IdCat [:A,B:] by Th8;
+    the Comp of IdCat A = (the Comp of A)|([:MA,MA:] qua set) &
+     the Comp of IdCat B = (the Comp of B)|([:MB,MB:] qua set) by Th8;
+    hence |:the Comp of IdCat A,the Comp of IdCat B:|
+          = the Comp of IdCat [:A,B:] by A11,Th2;
+     reconsider OA = the Objects of IdCat A as
+      non empty Subset of the Objects of A by CAT_2:def 4;
+     reconsider OB = the Objects of IdCat B as
+      non empty Subset of the Objects of B by CAT_2:def 4;
+       the Id of IdCat A = (the Id of A)|the Objects of IdCat A &
+     the Id of IdCat B = (the Id of B)|the Objects of IdCat B by Th8;
+    hence [:the Id of IdCat A,the Id of IdCat B:]
+          = [:the Id of A,the Id of B:]|[:OA,OB:] by Th1
+         .= (the Id of [:A,B:])|the Objects of IdCat [:A,B:] by A1,CAT_2:33
+         .= the Id of IdCat [:A,B:] by Th8;
+   end;
+  hence IdCat [:A,B:] =[:IdCat A, IdCat B:] by CAT_2:def 7;
+ end;

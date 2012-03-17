@@ -1,0 +1,95 @@
+:: Adjacency Concept for Pairs of Natural Numbers
+::  by Yatsuka Nakamura and Andrzej Trybulec
+::
+:: Received June 10, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM_1, FINSEQ_2, FINSEQ_1, FUNCT_1, RELAT_1, FUNCOP_1, MATRIX_1,
+      GOBRD10, FINSEQ_4;
+ notation TARSKI, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, NAT_1,
+      BINARITH, RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, MATRIX_1,
+      FUNCOP_1;
+ constructors BINARITH, MATRIX_1, FINSEQ_4, XREAL_0, MEMBERED;
+ clusters SUBSET_1, RELSET_1, XREAL_0, NAT_1, MEMBERED, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+reserve i,j,k,k1,k2,n,m,i1,i2,j1,j2 for Nat,
+        x for set;
+
+definition let i1,i2;
+ pred i1,i2 are_adjacent1 means
+:: GOBRD10:def 1
+  i2=i1+1 or i1=i2+1;
+ symmetry;
+ irreflexivity;
+end;
+
+theorem :: GOBRD10:1
+for i1,i2 st i1,i2 are_adjacent1 holds i1+1,i2+1 are_adjacent1;
+
+theorem :: GOBRD10:2
+for i1,i2 st i1,i2 are_adjacent1 & 1<=i1 & 1<=i2
+   holds i1-'1,i2-'1 are_adjacent1;
+
+definition let i1,j1,i2,j2;
+ pred i1,j1,i2,j2 are_adjacent2 means
+:: GOBRD10:def 2
+ i1,i2 are_adjacent1 & j1=j2 or i1=i2 & j1,j2 are_adjacent1;
+end;
+
+theorem :: GOBRD10:3
+  for i1,i2,j1,j2 st i1,j1,i2,j2 are_adjacent2
+    holds i1+1,j1+1,i2+1,j2+1 are_adjacent2;
+
+theorem :: GOBRD10:4
+    for i1,i2,j1,j2 st i1,j1,i2,j2 are_adjacent2 &
+   1<=i1 & 1<=i2 & 1<=j1 & 1<=j2 holds i1-'1,j1-'1,i2-'1,j2-'1 are_adjacent2;
+
+definition let n, i;
+  redefine func n |-> i -> FinSequence of NAT means
+:: GOBRD10:def 3
+    len it = n & for j st 1 <= j & j <= n holds it.j = i;
+end;
+
+canceled;
+
+theorem :: GOBRD10:6
+  for n,i,j st i<=n & j<=n
+  holds ex fs1 being FinSequence of NAT st fs1.1=i & fs1.(len fs1)=j &
+  len fs1=(i-'j)+(j-'i)+1 &
+  (for k,k1 st 1<=k & k<=len fs1 & k1=fs1.k holds k1<=n) &
+  for i1 st 1<=i1 & i1<len fs1 holds
+    fs1.(i1+1)= (fs1/.i1)+1 or fs1.i1= (fs1/.(i1+1)) +1;
+
+theorem :: GOBRD10:7
+  for n,i,j st i<=n & j<=n
+  holds ex fs1 being FinSequence of NAT st fs1.1=i & fs1.(len fs1)=j &
+   len fs1=(i-'j)+(j-'i)+1 &
+  (for k,k1 st 1<=k & k<=len fs1 & k1=fs1.k holds k1<=n) &
+  for i1 st 1<=i1 & i1<len fs1 holds fs1/.i1,fs1/.(i1+1) are_adjacent1;
+
+theorem :: GOBRD10:8
+  for n,m,i1,j1,i2,j2 st i1<=n & j1<=m & i2<=n & j2<=m
+  ex fs1,fs2 being FinSequence of NAT st
+   (for i,k1,k2 st i in dom fs1 & k1=fs1.i & k2=fs2.i
+            holds k1 <= n & k2 <= m) &
+   fs1.1=i1 & fs1.(len fs1)=i2 &
+   fs2.1=j1 & fs2.(len fs2)=j2 & len fs1=len fs2 &
+   len fs1=(i1-'i2)+(i2-'i1)+(j1-'j2)+(j2-'j1)+1 &
+  for i st 1<=i & i<len fs1 holds
+     fs1/.i,fs2/.i,fs1/.(i+1),fs2/.(i+1) are_adjacent2;
+
+reserve S for set;
+
+theorem :: GOBRD10:9
+     for Y being Subset of S,F being Matrix of n,m, bool S st
+   (ex i,j st i in Seg n & j in Seg m & F*(i,j) c= Y) &
+   (for i1,j1,i2,j2 st i1 in Seg n & i2 in Seg n & j1 in Seg m & j2 in Seg m
+   & i1,j1,i2,j2 are_adjacent2 holds
+           F*(i1,j1)c=Y iff F*(i2,j2)c=Y)
+   holds (for i,j st i in Seg n & j in Seg m holds F*(i,j)c=Y);

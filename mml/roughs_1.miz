@@ -1,0 +1,1747 @@
+:: Basic Properties of Rough Sets and Rough Membership Function
+::  by Adam Grabowski
+:: 
+:: Received November 23, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary ROUGHS_1, ARYTM_3, RCOMP_1, SQUARE_1, ARYTM_1, FUNCT_1, BOOLE,
+      TARSKI, RELAT_1, RELAT_2, SUBSET_1, ORDERS_1, PARTFUN1, EQREL_1, CARD_1,
+      FINSET_1, TOLER_1, NATTRA_1, REALSET1, FUNCT_3, PROB_2, FINSEQ_1, PROB_1,
+      RLVECT_1, FINSEQ_2, FUNCOP_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, CARD_1, XREAL_0,
+      REAL_1, NAT_1, SQUARE_1, FINSET_1, FUNCOP_1, RELAT_1, RELAT_2, FUNCT_1,
+      FINSEQ_1, RVSUM_1, FINSEQ_2, RELSET_1, PARTFUN1, REALSET1, PROB_1,
+      PROB_2, FUNCT_2, FUNCT_3, STRUCT_0, PRE_TOPC, GROUP_1, ORDERS_1, EQREL_1,
+      RCOMP_1, TOLER_1, ORDERS_3;
+ constructors RELAT_2, MCART_1, WELLORD1, PRE_TOPC, PARTFUN1, MEMBERED,
+      XBOOLE_0, ORDERS_1, EQREL_1, SUBSET_1, CARD_1, CARD_2, XCMPLX_0, NUMBERS,
+      XREAL_0, FINSET_1, SQUARE_1, RCOMP_1, TOLER_1, NAT_1, GROUP_1, ORDINAL2,
+      ORDINAL1, REAL_1, FSM_1, REALSET1, ORDERS_3, PROB_1, FUNCT_3, PROB_2,
+      FINSEQ_1, RVSUM_1, FUNCOP_1, FINSEQ_2, TAXONOM2;
+ clusters RELSET_1, STRUCT_0, PRE_TOPC, SUBSET_1, MEMBERED, ZFMISC_1, PARTFUN1,
+      XBOOLE_0, XREAL_0, FINSET_1, ORDINAL2, ARYTM_3, FSM_1, ORDERS_1, EQREL_1,
+      TAXONOM2, REALSET1, FINSEQ_1, FUNCOP_1;
+ requirements BOOLE, SUBSET, ARITHM, NUMERALS, REAL;
+ definitions TARSKI, XBOOLE_0, PROB_2;
+ theorems EQREL_1, XBOOLE_0, XBOOLE_1, PRE_TOPC, SUBSET_1, XCMPLX_1, TRIANG_1,
+      CARD_2, CARD_1, KURATO_2, REAL_1, TOPREAL5, TOLER_1, REAL_2, NAT_1,
+      SQUARE_1, GROUP_1, TARSKI, ZFMISC_1, RELAT_1, RELAT_2, ORDERS_3, SPPOL_1,
+      CHAIN_1, FUNCT_2, FUNCT_3, RVSUM_1, CARD_3, FUNCT_6, FINSEQ_1, PROB_1,
+      FINSEQ_3, PROB_2, FUNCT_1, GRFUNC_1, FINSEQ_6, FINSEQ_2, REALSET1,
+      ORDERS_1, RELSET_1, SYSREL, FUNCOP_1;
+ schemes FUNCT_2, COMPLSP1, FINSEQ_2;
+
+begin :: Preliminaries
+
+definition let A be set;
+  cluster RelStr (# A, id A #) -> discrete;
+  coherence by ORDERS_3:def 1;
+end;
+
+theorem Th1:
+  for X being set st Total X c= id X holds X is trivial
+  proof
+    let X be set;
+    assume
+A1: Total X c= id X;
+    assume X is non trivial; then
+    consider x, y being set such that
+A2: x in X & y in X & x <> y by SPPOL_1:3;
+    [x,y] in Total X by A2, TOLER_1:15;
+    hence thesis by A1, A2, RELAT_1:def 10;
+  end;
+
+definition let A be RelStr;
+  attr A is diagonal means :Def1:
+    the InternalRel of A c= id the carrier of A;
+end;
+
+definition let A be non trivial set;
+  cluster RelStr (# A, Total A #) -> non diagonal;
+  coherence
+  proof
+    not Total A c= id A by Th1;
+    hence thesis by Def1;
+  end;
+end;
+
+theorem
+  for L being reflexive RelStr holds
+    id the carrier of L c= the InternalRel of L
+  proof
+    let L be reflexive RelStr;
+    for a,b being set st [a,b] in id the carrier of L holds
+      [a,b] in the InternalRel of L
+    proof
+      let a,b be set;
+      assume [a,b] in id the carrier of L; then
+A1:   a = b & a in the carrier of L by RELAT_1:def 10;
+      the InternalRel of L is_reflexive_in the carrier of L
+        by ORDERS_1:def 4;
+      hence thesis by A1, RELAT_2:def 1;
+    end;
+    hence thesis by RELAT_1:def 3;
+  end;
+
+Lm1:
+  for A being RelStr st A is reflexive trivial holds A is discrete
+  proof
+    let A be RelStr;
+    assume
+A1: A is reflexive trivial;
+A2: the carrier of A is trivial by A1, REALSET1:def 13;
+    per cases by A2, REALSET1:def 12;
+    suppose
+A3: the carrier of A is empty; then
+    the InternalRel of A = {} by RELSET_1:26;
+    hence thesis by A3, ORDERS_3:def 1, RELAT_1:81;
+    suppose ex x being set st the carrier of A = {x}; then
+    consider x being set such that
+A4: the carrier of A = {x};
+    the InternalRel of A c= [:{x}, {x}:] by A4; then
+    the InternalRel of A c= { [x, x] } by ZFMISC_1:35; then
+A5: the InternalRel of A = { [x, x] } or the InternalRel of A = {}
+      by ZFMISC_1:39;
+A6: the InternalRel of A is_reflexive_in the carrier of A
+      by A1, ORDERS_1:def 4;
+    x in the carrier of A by A4, TARSKI:def 1; then
+    the InternalRel of A = id {x} by A5, SYSREL:30, A6, RELAT_2:def 1;
+    hence thesis by A4, ORDERS_3:def 1;
+  end;
+
+definition
+  cluster non discrete -> non trivial (reflexive RelStr);
+  coherence by Lm1;
+  cluster reflexive trivial -> discrete RelStr;
+  coherence by Lm1;
+end;
+
+theorem
+  for X being set,
+      R being total reflexive Relation of X holds
+    id X c= R
+  proof
+    let X be set,
+        R be total reflexive Relation of X;
+    field R = X by EQREL_1:15;
+    hence thesis by RELAT_2:17;
+  end;
+
+Lm2:
+  for A being RelStr st A is discrete holds A is diagonal
+  proof
+    let A be RelStr;
+    assume A is discrete; then
+    the InternalRel of A = id the carrier of A by ORDERS_3:def 1;
+    hence thesis by Def1;
+  end;
+
+definition
+  cluster discrete -> diagonal RelStr;
+  coherence by Lm2;
+  cluster non diagonal -> non discrete RelStr;
+  coherence by Lm2;
+end;
+
+definition
+  cluster non diagonal non empty RelStr;
+  existence
+  proof
+    consider A being non trivial set;
+    take RelStr (# A, Total A #);
+    thus thesis;
+  end;
+end;
+
+theorem Th4:
+  for A being non diagonal non empty RelStr
+   ex x, y being Element of A st
+    x <> y & [x,y] in the InternalRel of A
+  proof
+    let A be non diagonal non empty RelStr;
+    now assume
+A1:   for x,y being Element of A st [x,y] in the InternalRel of A holds
+        x = y;
+      the InternalRel of A c= id the carrier of A
+      proof
+        for a,b being set st
+          [a,b] in the InternalRel of A holds [a,b] in id the carrier of A
+        proof
+          let a,b be set;
+          assume
+A2:       [a,b] in the InternalRel of A; then
+A3:       a is Element of A & b is Element of A by ZFMISC_1:106; then
+          a = b by A1, A2;
+          hence [a,b] in id the carrier of A by A3, RELAT_1:def 10;
+        end;
+        hence thesis by RELAT_1:def 3;
+      end;
+      hence thesis by Def1;
+    end;
+    hence thesis;
+  end;
+
+theorem Th5:
+  for D being set,
+      p, q being FinSequence of D holds
+    Union (p^q) = Union p \/ Union q
+  proof
+    let D be set,
+        p, q be FinSequence of D;
+    union rng(p^q) = union (rng p \/ rng q) by FINSEQ_1:44
+                  .= union rng p \/ union rng q by ZFMISC_1:96
+                  .= Union p \/ union rng q by PROB_1:def 3
+                  .= Union p \/ Union q by PROB_1:def 3;
+    hence thesis by PROB_1:def 3;
+  end;
+
+theorem Th6:
+  for p, q being Function st q is disjoint_valued & p c= q holds
+    p is disjoint_valued
+  proof
+    let p, q be Function;
+    assume
+A1: q is disjoint_valued & p c= q;
+    for x, y being set st x <> y holds p.x misses p.y
+    proof
+      let x, y be set;
+      assume
+A2:   x <> y;
+      assume
+A3:   p.x meets p.y;
+      x in dom p & y in dom p
+      proof
+        assume not x in dom p or not y in dom p; then
+        p.x = {} or p.y = {} by FUNCT_1:def 4;
+        hence thesis by A3, XBOOLE_1:65;
+      end; then
+      p.x = q.x & p.y = q.y by A1, GRFUNC_1:8;
+      hence thesis by A2, A3, A1, PROB_2:def 3;
+    end;
+    hence thesis by PROB_2:def 3;
+  end;
+
+definition
+  cluster empty -> disjoint_valued Function;
+  coherence
+  proof
+    let X be Function;
+    assume
+A1: X is empty;
+    X is disjoint_valued
+    proof
+      let x, y be set;
+      assume x <> y;
+      X.x = {} by FUNCT_1:def 4, A1, RELAT_1:60;
+      hence thesis by XBOOLE_1:65;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition let A be set;
+  cluster disjoint_valued FinSequence of A;
+  existence
+  proof
+    per cases;
+    suppose A is empty;
+    reconsider X = {} as empty FinSequence of A by FINSEQ_1:29;
+    X is disjoint_valued;
+    hence thesis;
+    suppose
+A1: A is non empty;
+    consider a being Element of A;
+    reconsider X = 1 |-> a as FinSequence of A by A1, FINSEQ_2:77;
+    X is disjoint_valued
+    proof
+      let x, y be set;
+      assume
+A2:   x <> y;
+      per cases;
+      suppose x in dom X & y in dom X; then
+      x in Seg 1 & y in Seg 1 by FINSEQ_2:68; then
+      x = 1 & y = 1 by TARSKI:def 1, FINSEQ_1:4;
+      hence thesis by A2;
+      suppose not x in dom X or not y in dom X; then
+      X.x = {} or X.y = {} by FUNCT_1:def 4;
+      hence thesis by XBOOLE_1:65;
+    end;
+    hence thesis;
+  end;
+end;
+
+Lm3: :: move to FINSEQ_2
+  for a being set, k being Nat holds dom (k |-> a) = Seg k
+  proof
+    let a be set,
+        k be Nat;
+    dom (k |-> a) = dom (Seg k --> a) by FINSEQ_2:def 2;
+    hence thesis by FUNCOP_1:19;
+  end;
+
+definition let A be non empty set;
+  cluster non empty disjoint_valued FinSequence of A;
+  existence
+  proof
+    consider a being Element of A;
+    reconsider X = 1 |-> a as FinSequence of A by FINSEQ_2:77;
+A1: X is non empty by Lm3, RELAT_1:60, FINSEQ_1:4;
+    X is disjoint_valued
+    proof
+      let x, y be set;
+      assume
+A2:   x <> y;
+      per cases;
+      suppose x in dom X & y in dom X; then
+      x in Seg 1 & y in Seg 1 by FINSEQ_2:68; then
+      x = 1 & y = 1 by TARSKI:def 1, FINSEQ_1:4;
+      hence thesis by A2;
+      suppose not x in dom X or not y in dom X; then
+      X.x = {} or X.y = {} by FUNCT_1:def 4;
+      hence thesis by XBOOLE_1:65;
+    end;
+    hence thesis by A1;
+  end;
+end;
+
+definition let A be set;
+           let X be FinSequence of bool A;
+           let n be Nat;
+  redefine func X.n -> Subset of A;
+  coherence
+  proof
+    per cases;
+    suppose not n in dom X; then
+    X.n = {} by FUNCT_1:def 4;
+    hence thesis by XBOOLE_1:2;
+    suppose n in dom X;
+    hence thesis by FINSEQ_2:13;
+  end;
+end;
+
+definition let A be set;
+           let X be FinSequence of bool A;
+  redefine func Union X -> Subset of A;
+  coherence
+  proof
+    union rng X c= A
+    proof
+      let x be set;
+      assume x in union rng X; then
+      consider Y being set such that
+A1:   x in Y & Y in rng X by TARSKI:def 4;
+      thus thesis by A1;
+    end;
+    hence thesis by PROB_1:def 3;
+  end;
+end;
+
+definition let A be finite set; let R be Relation of A;
+  cluster RelStr (# A, R #) -> finite;
+  coherence by GROUP_1:def 13;
+end;
+
+theorem Th7:
+  for X, x, y being set,
+      T being Tolerance of X st
+    x in Class (T, y) holds y in Class (T, x)
+  proof
+    let X, x, y be set,
+        T be Tolerance of X;
+    assume x in Class (T, y); then
+    [x,y] in T by EQREL_1:27; then
+    [y,x] in T by EQREL_1:12;
+    hence thesis by EQREL_1:27;
+  end;
+
+begin :: Tolerance and Approximation Spaces
+
+definition let P be RelStr;
+  attr P is with_equivalence means :Def2:
+    the InternalRel of P is Equivalence_Relation of the carrier of P;
+  attr P is with_tolerance means :Def3:
+    the InternalRel of P is Tolerance of the carrier of P;
+end;
+
+definition
+  cluster with_equivalence -> with_tolerance RelStr;
+  coherence
+  proof
+    let L be RelStr;
+    assume L is with_equivalence; then
+    the InternalRel of L is Equivalence_Relation of the carrier of L by Def2;
+    hence thesis by Def3;
+  end;
+end;
+
+definition let A be set;
+  cluster RelStr (# A, id A #) -> with_equivalence;
+  coherence by Def2;
+end;
+
+definition
+  cluster discrete finite with_equivalence non empty RelStr;
+  existence
+  proof
+    set E = RelStr (# {{}}, id {{}} #);
+    E is discrete;
+    hence thesis;
+  end;
+  cluster non diagonal finite with_equivalence non empty RelStr;
+  existence
+  proof
+    set C = {0,1};
+    set R = Total C;
+    set E = RelStr (# C, R #);
+    reconsider E as non empty RelStr;
+A1: E is with_equivalence by Def2;
+    E is non diagonal
+    proof
+      C is non trivial by CHAIN_1:4; then
+      not the InternalRel of E c= id the carrier of E by Th1;
+      hence thesis by Def1;
+    end;
+    hence thesis by A1;
+  end;
+end;
+
+definition
+  mode Approximation_Space is with_equivalence non empty RelStr;
+  mode Tolerance_Space is with_tolerance non empty RelStr;
+end;
+
+definition let A be Tolerance_Space;
+  cluster the InternalRel of A -> total reflexive symmetric;
+  coherence by Def3;
+end;
+
+definition let A be Approximation_Space;
+  cluster the InternalRel of A -> transitive;
+  coherence by Def2;
+end;
+
+definition let A be Tolerance_Space;
+           let X be Subset of A;
+  func LAp X -> Subset of A equals :Def4:
+    { x where x is Element of A : Class (the InternalRel of A, x) c= X };
+  coherence
+  proof
+    { x where x is Element of A : Class (the InternalRel of A, x) c= X }
+      c= the carrier of A
+    proof
+      let y be set;
+      assume y in
+        { x where x is Element of A : Class (the InternalRel of A, x) c= X };
+      then consider x being Element of A such that
+A1:   y = x & Class (the InternalRel of A, x) c= X;
+      thus thesis by A1;
+    end;
+    hence thesis;
+  end;
+  func UAp X -> Subset of A equals :Def5:
+    { x where x is Element of A : Class (the InternalRel of A, x) meets X };
+  coherence
+  proof
+    { x where x is Element of A : Class (the InternalRel of A, x) meets X }
+      c= the carrier of A
+    proof
+      let y be set;
+      assume y in
+      { x where x is Element of A : Class (the InternalRel of A, x) meets X };
+      then consider x being Element of A such that
+A2:   y = x & Class (the InternalRel of A, x) meets X;
+      thus thesis by A2;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition let A be Tolerance_Space;
+           let X be Subset of A;
+  func BndAp X -> Subset of A equals :Def6:
+    UAp X \ LAp X;
+  coherence;
+end;
+
+definition let A be Tolerance_Space;
+           let X be Subset of A;
+  attr X is rough means :Def7:
+    BndAp X <> {};
+  antonym X is exact;
+end;
+
+ reserve A for Tolerance_Space,
+         X, Y for Subset of A;
+
+theorem Th8:
+  for x being set st x in LAp X holds
+    Class (the InternalRel of A, x) c= X
+  proof
+    let x be set;
+    assume x in LAp X; then
+    x in { x1 where x1 is Element of A :
+      Class (the InternalRel of A, x1) c= X } by Def4; then
+    consider x1 being Element of A such that
+A1: x = x1 & Class (the InternalRel of A, x1) c= X;
+    thus thesis by A1;
+  end;
+
+theorem Th9:
+  for x being Element of A st Class (the InternalRel of A, x) c= X holds
+    x in LAp X
+  proof
+    let x be Element of A;
+    assume Class (the InternalRel of A, x) c= X; then
+    x in { x1 where x1 is Element of A :
+      Class (the InternalRel of A, x1) c= X };
+    hence thesis by Def4;
+  end;
+
+theorem Th10:
+  for x being set st x in UAp X holds
+    Class (the InternalRel of A, x) meets X
+  proof
+    let x be set;
+    assume x in UAp X; then
+    x in { x1 where x1 is Element of A :
+      Class (the InternalRel of A, x1) meets X } by Def5; then
+    consider x1 being Element of A such that
+A1: x = x1 & Class (the InternalRel of A, x1) meets X;
+    thus thesis by A1;
+  end;
+
+theorem Th11:
+  for x being Element of A st Class (the InternalRel of A, x) meets X holds
+    x in UAp X
+  proof
+    let x be Element of A;
+    assume Class (the InternalRel of A, x) meets X; then
+    x in { x1 where x1 is Element of A :
+      Class (the InternalRel of A, x1) meets X };
+    hence thesis by Def5;
+  end;
+
+theorem Th12:
+  LAp X c= X
+  proof
+    let x be set;
+    assume x in LAp X; then
+    x in { y where y is Element of A : Class (the InternalRel of A, y) c= X }
+      by Def4; then
+    consider y being Element of A such that
+A1: y = x & Class (the InternalRel of A, y) c= X;
+    y in Class (the InternalRel of A, y) by EQREL_1:28;
+    hence thesis by A1;
+  end;
+
+theorem Th13:
+  X c= UAp X
+  proof
+    let x be set;
+    assume
+A1: x in X; then
+    reconsider x' = x as Element of A;
+    x' in Class (the InternalRel of A, x') by EQREL_1:28; then
+    Class (the InternalRel of A, x') meets X by A1, XBOOLE_0:3; then
+    x in { y where y is Element of A :
+      Class (the InternalRel of A, y) meets X };
+    hence thesis by Def5;
+  end;
+
+theorem Th14:
+  LAp X c= UAp X
+  proof
+A1: LAp X c= X by Th12;
+    X c= UAp X by Th13;
+    hence thesis by A1, XBOOLE_1:1;
+  end;
+
+theorem Th15:
+  X is exact iff LAp X = X
+  proof
+A1: LAp X c= UAp X by Th14;
+    hereby assume X is exact; then
+      BndAp X = {} by Def7; then
+      UAp X \ LAp X = {} by Def6; then
+      UAp X c= LAp X by XBOOLE_1:37; then
+      UAp X = LAp X by A1, XBOOLE_0:def 10; then
+A2:   X c= LAp X by Th13;
+      LAp X c= X by Th12;
+      hence LAp X = X by A2, XBOOLE_0:def 10;
+    end;
+    assume
+A3: LAp X = X;
+    UAp X c= X
+    proof
+      let y be set;
+      assume y in UAp X; then
+      Class (the InternalRel of A, y) meets X by Th10; then
+      consider z being set such that
+A4:   z in Class (the InternalRel of A, y) & z in LAp X by A3, XBOOLE_0:3;
+A5:   Class (the InternalRel of A, z) c= X by A4, Th8;
+      y in Class (the InternalRel of A, z) by A4, Th7;
+      hence thesis by A5;
+    end; then
+    UAp X \ LAp X = {} by XBOOLE_1:37, A3; then
+    BndAp X = {} by Def6;
+    hence thesis by Def7;
+  end;
+
+theorem Th16:
+  X is exact iff UAp X = X
+  proof
+    hereby assume X is exact; then
+      BndAp X = {} by Def7; then
+      UAp X \ LAp X = {} by Def6; then
+A1:   UAp X c= LAp X by XBOOLE_1:37;
+      LAp X c= X by Th12; then
+A2:   UAp X c= X by A1, XBOOLE_1:1;
+      X c= UAp X by Th13;
+      hence UAp X = X by A2, XBOOLE_0:def 10;
+    end;
+    assume
+A3: UAp X = X;
+    X c= LAp X
+    proof
+      let x be set;
+      assume
+A4:   x in X;
+      Class (the InternalRel of A, x) c= X
+      proof
+        let y be set;
+        assume
+A5:     y in Class (the InternalRel of A, x); then
+        [y,x] in the InternalRel of A by EQREL_1:27; then
+        [x,y] in the InternalRel of A by EQREL_1:12; then
+        x in Class (the InternalRel of A, y) by EQREL_1:27; then
+        Class (the InternalRel of A, y) meets X by A4, XBOOLE_0:3;
+        hence thesis by A3, A5, Th11;
+      end;
+      hence thesis by A4, Th9;
+    end; then
+    UAp X \ LAp X = {} by A3, XBOOLE_1:37; then
+    BndAp X = {} by Def6;
+    hence thesis by Def7;
+  end;
+
+theorem
+  X = LAp X iff X = UAp X
+  proof
+    X = LAp X iff X is exact by Th15;
+    hence thesis by Th16;
+  end;
+
+theorem Th18:
+  LAp {}A = {}
+  proof
+    assume LAp {}A <> {}; then
+    consider x being set such that
+A1: x in LAp {}A by XBOOLE_0:def 1;
+    x in { y where y is Element of A :
+      Class (the InternalRel of A, y) c= {}A } by A1, Def4; then
+    consider y being Element of A such that
+A2: y = x & Class (the InternalRel of A, y) c= {}A;
+    Class (the InternalRel of A, y) = {} by A2, XBOOLE_1:3;
+    hence thesis by EQREL_1:28;
+  end;
+
+theorem Th19:
+  UAp {}A = {}
+  proof
+    assume UAp {}A <> {}; then
+    consider x being set such that
+A1: x in UAp {}A by XBOOLE_0:def 1;
+    x in { y where y is Element of A :
+      Class (the InternalRel of A, y) meets {}A } by A1, Def5; then
+    consider y being Element of A such that
+A2: y = x & Class (the InternalRel of A, y) meets {}A;
+    thus thesis by A2, XBOOLE_1:65;
+  end;
+
+theorem Th20:
+  LAp [#]A = [#]A
+  proof
+    thus LAp [#]A c= [#]A by PRE_TOPC:14;
+    let x be set;
+    assume
+A1: x in [#]A;
+    Class (the InternalRel of A, x) c= [#]A by PRE_TOPC:14;
+    hence thesis by A1, Th9;
+  end;
+
+theorem
+  UAp [#]A = [#]A
+  proof
+    LAp [#]A c= UAp [#]A by Th14; then
+A1: [#]A c= UAp [#]A by Th20;
+    UAp [#]A c= [#]A by PRE_TOPC:14;
+    hence thesis by A1, XBOOLE_0:def 10;
+  end;
+
+theorem
+  LAp (X /\ Y) = LAp X /\ LAp Y
+  proof
+    thus LAp (X /\ Y) c= LAp X /\ LAp Y
+    proof
+      let x be set;
+      assume
+A1:   x in LAp (X /\ Y);
+      Class (the InternalRel of A, x) c= X /\ Y by A1, Th8; then
+      Class (the InternalRel of A, x) c= X &
+        Class (the InternalRel of A, x) c= Y by XBOOLE_1:18; then
+      x in LAp X & x in LAp Y by A1, Th9;
+      hence thesis by XBOOLE_0:def 3;
+    end;
+    let x be set;
+    assume
+A2: x in LAp X /\ LAp Y;
+    x in LAp X & x in LAp Y by A2, XBOOLE_0:def 3; then
+    Class (the InternalRel of A, x) c= X &
+      Class (the InternalRel of A, x) c= Y by Th8; then
+    Class (the InternalRel of A, x) c= X /\ Y by XBOOLE_1:19;
+    hence thesis by A2, Th9;
+  end;
+
+theorem
+  UAp (X \/ Y) = UAp X \/ UAp Y
+  proof
+    thus UAp (X \/ Y) c= UAp X \/ UAp Y
+    proof
+      let x be set;
+      assume
+A1:   x in UAp (X \/ Y);
+      Class (the InternalRel of A, x) meets (X \/ Y) by A1, Th10; then
+      Class (the InternalRel of A, x) meets X or
+        Class (the InternalRel of A, x) meets Y by XBOOLE_1:70; then
+      x in UAp X or x in UAp Y by A1, Th11;
+      hence thesis by XBOOLE_0:def 2;
+    end;
+    let x be set;
+    assume
+A2: x in UAp X \/ UAp Y;
+    x in UAp X or x in UAp Y by A2, XBOOLE_0:def 2; then
+    Class (the InternalRel of A, x) meets X or
+      Class (the InternalRel of A, x) meets Y by Th10; then
+    Class (the InternalRel of A, x) meets (X \/ Y) by XBOOLE_1:70;
+    hence thesis by A2, Th11;
+  end;
+
+theorem Th24:
+  X c= Y implies LAp X c= LAp Y
+  proof
+    assume
+A1: X c= Y;
+    let x be set;
+    assume
+A2: x in LAp X;
+    Class (the InternalRel of A, x) c= X by A2, Th8; then
+    Class (the InternalRel of A, x) c= Y by A1, XBOOLE_1:1;
+    hence thesis by A2, Th9;
+  end;
+
+theorem Th25:
+  X c= Y implies UAp X c= UAp Y
+  proof
+    assume
+A1: X c= Y;
+    let x be set;
+    assume
+A2: x in UAp X;
+    Class (the InternalRel of A, x) meets X by A2, Th10; then
+    Class (the InternalRel of A, x) meets Y by A1, XBOOLE_1:63;
+    hence thesis by A2, Th11;
+  end;
+
+theorem
+  LAp X \/ LAp Y c= LAp (X \/ Y)
+  proof
+    let x be set;
+    assume
+A1: x in LAp X \/ LAp Y;
+    per cases by A1, XBOOLE_0:def 2;
+    suppose x in LAp X; then
+    Class (the InternalRel of A, x) c= X by Th8; then
+    Class (the InternalRel of A, x) c= X \/ Y by XBOOLE_1:10;
+    hence thesis by A1, Th9;
+    suppose x in LAp Y; then
+    Class (the InternalRel of A, x) c= Y by Th8; then
+    Class (the InternalRel of A, x) c= X \/ Y by XBOOLE_1:10;
+    hence thesis by A1, Th9;
+  end;
+
+theorem
+  UAp (X /\ Y) c= UAp X /\ UAp Y
+  proof
+    let x be set;
+    assume
+A1: x in UAp (X /\ Y);
+    Class (the InternalRel of A, x) meets X /\ Y by A1, Th10; then
+    Class (the InternalRel of A, x) meets X &
+      Class (the InternalRel of A, x) meets Y by XBOOLE_1:74; then
+    x in UAp X & x in UAp Y by A1, Th11;
+    hence thesis by XBOOLE_0:def 3;
+  end;
+
+theorem Th28:
+  LAp X` = (UAp X)`
+  proof
+    LAp X` misses UAp X
+    proof
+      assume LAp X` meets UAp X; then
+      consider x being set such that
+A1:   x in LAp X` & x in UAp X by XBOOLE_0:3;
+A2:   Class (the InternalRel of A, x) meets X by A1, Th10;
+      Class (the InternalRel of A, x) c= X` by A1, Th8; then
+      X meets X` by A2, XBOOLE_1:63;
+      hence thesis by PRE_TOPC:26;
+    end;
+    hence LAp X` c= (UAp X)` by PRE_TOPC:21;
+    let x be set;
+    assume
+A3: x in (UAp X)`;
+    not x in UAp X by A3, SUBSET_1:54; then
+    Class (the InternalRel of A, x) misses X by Th11, A3; then
+    Class (the InternalRel of A, x) c= X` by PRE_TOPC:21;
+    hence thesis by A3, Th9;
+  end;
+
+theorem Th29:
+  UAp X` = (LAp X)`
+  proof
+    (UAp X`)`` = (LAp X``)` by Th28;
+    hence thesis;
+  end;
+
+theorem
+  UAp LAp UAp X = UAp X
+  proof
+    thus UAp LAp UAp X c= UAp X
+    proof
+      let x be set;
+      assume x in UAp LAp UAp X; then
+      Class (the InternalRel of A, x) meets LAp UAp X by Th10; then
+      consider y being set such that
+A1:   y in Class (the InternalRel of A, x) & y in LAp UAp X by XBOOLE_0:3;
+      [y, x] in the InternalRel of A by A1, EQREL_1:27; then
+A2:   [x, y] in the InternalRel of A by EQREL_1:12;
+A3:   Class (the InternalRel of A, y) c= UAp X by A1, Th8;
+      x in Class (the InternalRel of A, y) by A2, EQREL_1:27;
+      hence thesis by A3;
+    end;
+    thus UAp X c= UAp LAp UAp X
+    proof
+      X c= LAp UAp X
+      proof
+        let x be set;
+        assume
+A4:     x in X;
+        Class (the InternalRel of A, x) c= UAp X
+        proof
+          let y be set;
+          assume
+A5:       y in Class (the InternalRel of A, x); then
+          [y,x] in the InternalRel of A by EQREL_1:27; then
+          [x,y] in the InternalRel of A by EQREL_1:12; then
+A6:       x in Class (the InternalRel of A, y) by EQREL_1:27;
+          Class (the InternalRel of A, y) meets X by A4, A6, XBOOLE_0:3;
+          hence thesis by A5, Th11;
+        end;
+        hence thesis by A4, Th9;
+      end;
+      hence thesis by Th25;
+    end;
+  end;
+
+theorem
+  LAp UAp LAp X = LAp X
+  proof
+    UAp LAp X c= X
+    proof
+      let y be set;
+      assume y in UAp LAp X; then
+      Class (the InternalRel of A, y) meets LAp X by Th10; then
+      consider z being set such that
+A1:   z in Class (the InternalRel of A, y) & z in LAp X by XBOOLE_0:3;
+      [z,y] in the InternalRel of A by A1, EQREL_1:27; then
+      [y,z] in the InternalRel of A by EQREL_1:12; then
+A2:   y in Class (the InternalRel of A, z) by EQREL_1:27;
+      Class (the InternalRel of A, z) c= X by A1, Th8;
+      hence thesis by A2;
+    end;
+    hence LAp UAp LAp X c= LAp X by Th24;
+    thus LAp X c= LAp UAp LAp X
+    proof
+      let x be set;
+      assume
+A3:   x in LAp X;
+      Class (the InternalRel of A, x) c= UAp LAp X
+      proof
+        let y be set;
+        assume
+A4:     y in Class (the InternalRel of A, x); then
+        [y,x] in the InternalRel of A by EQREL_1:27; then
+        [x,y] in the InternalRel of A by EQREL_1:12; then
+        x in Class (the InternalRel of A, y) by EQREL_1:27; then
+        Class (the InternalRel of A, y) meets LAp X by A3, XBOOLE_0:3;
+        hence thesis by A4, Th11;
+      end;
+      hence thesis by A3, Th9;
+    end;
+  end;
+
+theorem
+  BndAp X = BndAp X`
+  proof
+    thus BndAp X c= BndAp X`
+    proof
+      let x be set;
+      assume x in BndAp X; then
+      x in UAp X \ LAp X by Def6; then
+A1:   x in UAp X & not x in LAp X by XBOOLE_0:def 4; then
+      x in (LAp X)` by SUBSET_1:50; then
+A2:   x in UAp X` by Th29;
+      not x in (UAp X)` by A1, SUBSET_1:54; then
+A3:   not x in LAp X` by Th28;
+      x in UAp X` \ LAp X` by A2, A3, XBOOLE_0:def 4;
+      hence thesis by Def6;
+    end;
+    thus BndAp X` c= BndAp X
+    proof
+      let x be set;
+      assume
+A4:   x in BndAp X`; then
+      x in UAp X` \ LAp X` by Def6; then
+A5:   x in UAp X` & not x in LAp X` by XBOOLE_0:def 4; then
+      x in (LAp X)` by Th29; then
+A6:   not x in LAp X by SUBSET_1:54;
+      not x in (UAp X)` by A5, Th28; then
+      x in (UAp X)`` by A4, SUBSET_1:50; then
+      x in UAp X \ LAp X by A6, XBOOLE_0:def 4;
+      hence thesis by Def6;
+    end;
+  end;
+
+ reserve A for Approximation_Space,
+         X, Y for Subset of A;
+
+theorem
+  LAp LAp X = LAp X
+  proof
+    thus LAp LAp X c= LAp X by Th12;
+    let x be set;
+    assume
+A1: x in LAp X;
+A2: Class (the InternalRel of A, x) c= X by A1, Th8;
+    Class (the InternalRel of A, x) c= LAp X
+    proof
+      let y be set;
+      assume
+A3:   y in Class (the InternalRel of A, x); then
+      Class (the InternalRel of A, x) = Class (the InternalRel of A, y)
+        by A1, EQREL_1:31;
+      hence thesis by A2, A3, Th9;
+    end;
+    hence thesis by A1, Th9;
+  end;
+
+theorem Th34:
+  LAp LAp X = UAp LAp X
+  proof
+    thus LAp LAp X c= UAp LAp X by Th14;
+    let x be set;
+    assume
+A1: x in UAp LAp X;
+    Class (the InternalRel of A, x) meets LAp X by A1, Th10; then
+    consider z being set such that
+A2: z in Class (the InternalRel of A, x) & z in LAp X by XBOOLE_0:3;
+    Class (the InternalRel of A, z) c= X by A2, Th8; then
+A3: Class (the InternalRel of A, x) c= X by A2, A1, EQREL_1:31;
+    Class (the InternalRel of A, x) c= LAp X
+    proof
+      let y be set;
+      assume A4: y in Class (the InternalRel of A, x); then
+      Class (the InternalRel of A, x) = Class (the InternalRel of A, y)
+        by A1, EQREL_1:31;
+      hence thesis by A4, Th9, A3;
+    end;
+    hence thesis by A1, Th9;
+  end;
+
+theorem
+  UAp UAp X = UAp X
+  proof
+    hereby let x be set;
+      assume
+A1:   x in UAp UAp X;
+      Class (the InternalRel of A, x) meets UAp X by A1, Th10; then
+      consider y being set such that
+A2:   y in Class (the InternalRel of A, x) & y in UAp X by XBOOLE_0:3;
+A3:   Class (the InternalRel of A, y) meets X by A2, Th10;
+      Class (the InternalRel of A, y) = Class (the InternalRel of A, x)
+        by A2, A1, EQREL_1:31;
+      hence x in UAp X by A1, A3, Th11;
+    end;
+    thus UAp X c= UAp UAp X by Th13;
+  end;
+
+theorem Th36:
+  UAp UAp X = LAp UAp X
+  proof
+    thus UAp UAp X c= LAp UAp X
+    proof
+      let x be set;
+      assume
+A1:   x in UAp UAp X;
+      Class (the InternalRel of A, x) meets UAp X by A1, Th10; then
+      consider z being set such that
+A2:   z in Class (the InternalRel of A, x) & z in UAp X by XBOOLE_0:3;
+A3:   Class (the InternalRel of A, z) meets X by A2, Th10;
+A4:   Class (the InternalRel of A, z) = Class (the InternalRel of A, x)
+        by A2, A1, EQREL_1:31;
+      Class (the InternalRel of A, x) c= UAp X
+      proof
+        let y be set;
+        assume
+A5:     y in Class (the InternalRel of A, x); then
+        Class (the InternalRel of A, x) = Class (the InternalRel of A, y)
+          by A1, EQREL_1:31;
+        hence thesis by A5, Th11, A4, A3;
+      end;
+      hence thesis by Th9, A1;
+    end;
+    thus LAp UAp X c= UAp UAp X by Th14;
+  end;
+
+definition let A be Approximation_Space;
+  cluster exact Subset of A;
+  existence
+  proof
+    take {}A;
+    LAp {}A = {} by Th18;
+    hence thesis by Th15;
+  end;
+end;
+
+definition let A be Approximation_Space; let X be Subset of A;
+  cluster LAp X -> exact;
+  coherence
+  proof
+    set Y = LAp X;
+    UAp Y = LAp Y by Th34; then
+    UAp Y \ LAp Y = {} by XBOOLE_1:37; then
+    BndAp Y = {} by Def6;
+    hence thesis by Def7;
+  end;
+  cluster UAp X -> exact;
+  coherence
+  proof
+    set Y = UAp X;
+    UAp Y = LAp Y by Th36; then
+    UAp Y \ LAp Y = {} by XBOOLE_1:37; then
+    BndAp Y = {} by Def6;
+    hence thesis by Def7;
+  end;
+end;
+
+theorem Th37:
+  for A being Approximation_Space,
+      X being Subset of A,
+      x, y being set st
+    x in UAp X & [x,y] in the InternalRel of A holds y in UAp X
+  proof
+    let A be Approximation_Space,
+        X be Subset of A;
+    let x, y be set;
+    assume
+A1: x in UAp X & [x,y] in the InternalRel of A; then
+A2: Class (the InternalRel of A, x) meets X by Th10;
+A3: x is Element of A & y is Element of A by A1, ZFMISC_1:106;
+    [y,x] in the InternalRel of A by A1, EQREL_1:12; then
+    y in Class (the InternalRel of A, x) by EQREL_1:27; then
+    Class (the InternalRel of A, x) = Class (the InternalRel of A, y)
+      by A1, EQREL_1:31;
+    hence thesis by A3, Th11, A2;
+  end;
+
+definition let A be non diagonal Approximation_Space;
+  cluster rough Subset of A;
+  existence
+  proof
+    consider x, y being Element of A such that
+A1: x <> y & [x,y] in the InternalRel of A by Th4;
+    set X = {x};
+A2: x in X by TARSKI:def 1;
+    X c= UAp X by Th13; then
+    y in UAp X by A1, A2, Th37; then
+    UAp X <> X by TARSKI:def 1, A1; then
+    X is not exact by Th16;
+    hence thesis;
+  end;
+end;
+
+definition let A be Approximation_Space; let X be Subset of A;
+  mode RoughSet of X means
+    it = [LAp X, UAp X];
+  existence;
+end;
+
+begin :: Membership Function
+
+definition let A be finite Tolerance_Space, x be Element of A;
+  cluster card Class (the InternalRel of A, x) -> non empty;
+  coherence
+  proof
+    x in Class (the InternalRel of A, x) by EQREL_1:28;
+    hence thesis by CARD_2:59;
+  end;
+end;
+
+definition let A be finite Tolerance_Space;
+           let X be Subset of A;
+  func MemberFunc (X, A) -> Function of the carrier of A, REAL means :Def9:
+    for x being Element of A holds
+      it.x = card (X /\ Class (the InternalRel of A, x)) /
+             (card Class (the InternalRel of A, x));
+  existence
+  proof
+    deffunc F(Element of A) = card (X /\ Class (the InternalRel of A, $1)) /
+             (card Class (the InternalRel of A, $1));
+A1: for x being set st x in the carrier of A holds F(x) in REAL;
+    ex f being Function of the carrier of A, REAL st
+      for x being set st x in the carrier of A holds f.x = F(x)
+        from Lambda1(A1); then
+    consider f being Function of the carrier of A, REAL such that
+A2: for x being set st x in the carrier of A holds f.x = F(x);
+    take f;
+    let x be Element of A;
+    thus thesis by A2;
+  end;
+  uniqueness
+  proof
+    deffunc F(Element of A) = card (X /\ Class (the InternalRel of A, $1)) /
+             (card Class (the InternalRel of A, $1));
+    let A1, A2 be Function of the carrier of A, REAL such that
+A3: for x being Element of A holds A1.x = F(x) and
+A4: for x being Element of A holds A2.x = F(x);
+    for A1,A2 being Function of the carrier of A, REAL st
+     (for x being Element of the carrier of A holds A1.x = F(x)) &
+     (for x being Element of the carrier of A holds A2.x = F(x))
+    holds A1 = A2 from FuncDefUniq;
+    hence A1 = A2 by A3, A4;
+  end;
+end;
+
+ reserve A for finite Tolerance_Space,
+         X, Y for Subset of A,
+         x for Element of A;
+
+theorem Th38:
+  0 <= MemberFunc (X, A).x & MemberFunc (X, A).x <= 1
+  proof
+A1: card Class (the InternalRel of A, x) > 0 by NAT_1:19;
+    card (X /\ Class (the InternalRel of A, x)) >= 0 by NAT_1:18; then
+    card (X /\ Class (the InternalRel of A, x)) /
+      (card Class (the InternalRel of A, x)) >= 0 by A1, REAL_2:125;
+    hence 0 <= MemberFunc (X, A).x by Def9;
+    X /\ Class (the InternalRel of A, x) c= Class (the InternalRel of A, x)
+      by XBOOLE_1:17; then
+    card (X /\ Class (the InternalRel of A, x)) <=
+      (card Class (the InternalRel of A, x)) by CARD_1:80; then
+    card (X /\ Class (the InternalRel of A, x)) /
+      (card Class (the InternalRel of A, x)) <= 1 by A1, REAL_2:117;
+    hence thesis by Def9;
+  end;
+
+theorem
+  MemberFunc (X, A).x in [. 0, 1 .]
+  proof
+    0 <= MemberFunc (X, A).x & MemberFunc (X, A).x <= 1 by Th38;
+    hence thesis by TOPREAL5:1;
+  end;
+
+ reserve A for finite Approximation_Space,
+         X, Y for Subset of A,
+         x for Element of A;
+
+theorem Th40:
+  MemberFunc (X, A).x = 1 iff x in LAp X
+  proof
+    hereby assume
+A1:   MemberFunc (X, A).x = 1;
+A2:   X /\ Class (the InternalRel of A, x) c= Class (the InternalRel of A, x)
+        by XBOOLE_1:17;
+      MemberFunc (X, A).x = card (X /\ Class (the InternalRel of A, x)) /
+        (card Class (the InternalRel of A, x)) by Def9; then
+      card (X /\ Class (the InternalRel of A, x)) =
+        card Class (the InternalRel of A, x) by A1, XCMPLX_1:58; then
+      X /\ Class (the InternalRel of A, x) = Class (the InternalRel of A, x)
+        by A2, TRIANG_1:3; then
+      Class (the InternalRel of A, x) c= X by XBOOLE_1:18;
+      hence x in LAp X by Th9;
+    end;
+    assume x in LAp X; then
+    Class (the InternalRel of A, x) c= X by Th8; then
+A5: card (X /\ Class (the InternalRel of A, x)) =
+      card Class (the InternalRel of A, x) by XBOOLE_1:28;
+    MemberFunc (X, A).x = card (X /\ Class (the InternalRel of A, x)) /
+      (card Class (the InternalRel of A, x)) by Def9;
+    hence thesis by A5, XCMPLX_1:60;
+  end;
+
+theorem Th41:
+  MemberFunc (X, A).x = 0 iff x in (UAp X)`
+  proof
+    hereby assume
+A1:   MemberFunc (X, A).x = 0;
+      MemberFunc (X, A).x = card (X /\ Class (the InternalRel of A, x)) /
+        (card Class (the InternalRel of A, x)) by Def9; then
+      card (X /\ Class (the InternalRel of A, x)) = 0
+        by A1, XCMPLX_1:50; then
+      X /\ Class (the InternalRel of A, x) = {} by CARD_2:59; then
+      X misses Class (the InternalRel of A, x) by XBOOLE_0:def 7; then
+      not x in UAp X by Th10;
+      hence x in (UAp X)` by KURATO_2:1;
+    end;
+    assume x in (UAp X)`; then
+A3: not x in UAp X by SUBSET_1:54;
+    X misses Class (the InternalRel of A, x) by Th11, A3; then
+A4: card (X /\ Class (the InternalRel of A, x)) = 0
+      by CARD_1:78, XBOOLE_0:def 7;
+    MemberFunc (X, A).x = card (X /\ Class (the InternalRel of A, x)) /
+      (card Class (the InternalRel of A, x)) by Def9;
+    hence thesis by A4;
+  end;
+
+theorem Th42:
+  0 < MemberFunc (X, A).x & MemberFunc (X, A).x < 1 iff
+    x in BndAp X
+  proof
+    hereby assume
+A1:   0 < MemberFunc (X, A).x & MemberFunc (X, A).x < 1; then
+      not x in (UAp X)` by Th41; then
+      x in UAp X & not x in LAp X by KURATO_2:1, A1, Th40; then
+      x in UAp X \ LAp X by XBOOLE_0:def 4;
+      hence x in BndAp X by Def6;
+    end;
+A2: 0 <= MemberFunc (X, A).x & MemberFunc (X, A).x <= 1 by Th38;
+    assume x in BndAp X; then
+    x in UAp X \ LAp X by Def6; then
+A3: x in UAp X & not x in LAp X by XBOOLE_0:def 4; then
+    not x in (UAp X)` & not x in LAp X by SUBSET_1:54; then
+A4: 0 <> MemberFunc (X, A).x by Th41;
+    MemberFunc (X, A).x <> 1 by A3, Th40;
+    hence thesis by A4, A2, REAL_1:def 5;
+  end;
+
+theorem Th43:
+  for A being discrete Approximation_Space,
+      X being Subset of A holds X is exact
+  proof
+    let A be discrete Approximation_Space,
+        X be Subset of A;
+A1: the InternalRel of A = id the carrier of A by ORDERS_3:def 1;
+    X = UAp X
+    proof
+      thus X c= UAp X by Th13;
+      let x be set;
+      assume
+A2:   x in UAp X; then
+      Class (the InternalRel of A, x) meets X by Th10; then
+      consider y being set such that
+A3:   y in Class (the InternalRel of A, x) & y in X by XBOOLE_0:3;
+      Class (the InternalRel of A, x) = {x} by A2, A1, EQREL_1:33;
+      hence thesis by A3, TARSKI:def 1;
+    end;
+    hence thesis;
+  end;
+
+definition let A be discrete Approximation_Space;
+  cluster -> exact Subset of A;
+  coherence by Th43;
+end;
+
+theorem
+  for A being discrete finite Approximation_Space,
+      X being Subset of A holds
+    MemberFunc (X, A) = chi (X, the carrier of A)
+  proof
+    let A be discrete finite Approximation_Space,
+        X be Subset of A;
+    reconsider F = MemberFunc (X, A) as Function of
+      the carrier of A, REAL;
+    set G = chi (X, the carrier of A);
+    {0,1} c= REAL by ZFMISC_1:38; then
+    reconsider G as Function of the carrier of A, REAL by FUNCT_2:9;
+    for x being set st x in the carrier of A holds F.x = G.x
+    proof
+      let x be set;
+      assume
+A1:   x in the carrier of A;
+      per cases;
+      suppose
+A2:   x in X; then
+      x in LAp X by Th15; then
+      F.x = 1 by Th40;
+      hence thesis by A2, FUNCT_3:def 3;
+      suppose
+A3:   not x in X; then
+      not x in UAp X by Th16; then
+      x in (UAp X)` by A1, KURATO_2:1; then
+      F.x = 0 by Th41;
+      hence thesis by A3, A1, FUNCT_3:def 3;
+    end;
+    hence thesis by FUNCT_2:18;
+  end;
+
+theorem
+  for A being finite Approximation_Space,
+      X being Subset of A,
+      x, y being set st [x,y] in the InternalRel of A holds
+    MemberFunc (X, A).x = MemberFunc (X, A).y
+  proof
+    let A be finite Approximation_Space,
+        X be Subset of A,
+        x, y be set;
+    assume
+A1: [x,y] in the InternalRel of A; then
+A2: x is Element of A & y is Element of A by ZFMISC_1:106;
+A3: MemberFunc (X, A).x = card (X /\ Class (the InternalRel of A, x)) /
+      (card Class (the InternalRel of A, x)) by A2, Def9;
+    x in Class (the InternalRel of A, y) by A1, EQREL_1:27; then
+    Class (the InternalRel of A, x) = Class (the InternalRel of A, y)
+      by A2, EQREL_1:31;
+    hence thesis by A3, A2, Def9;
+  end;
+
+theorem
+  MemberFunc (X`,A).x = 1 - (MemberFunc (X,A).x)
+  proof
+    [#]A /\ Class (the InternalRel of A, x) =
+      Class (the InternalRel of A, x) by PRE_TOPC:15; then
+A1: X /\ Class (the InternalRel of A, x) c=
+      [#]A /\ Class (the InternalRel of A, x) by XBOOLE_1:17;
+    MemberFunc (X`,A).x = card (X` /\ Class (the InternalRel of A, x)) /
+             (card Class (the InternalRel of A, x)) by Def9
+      .= card (([#]A \ X) /\ Class (the InternalRel of A, x)) /
+             (card Class (the InternalRel of A, x)) by PRE_TOPC:17
+      .= (card (([#]A /\ Class (the InternalRel of A, x)) \
+          (X /\ Class (the InternalRel of A, x)))) /
+             (card Class (the InternalRel of A, x)) by XBOOLE_1:50
+      .= (card ([#]A /\ Class (the InternalRel of A, x)) -
+         card (X /\ Class (the InternalRel of A, x))) /
+             (card Class (the InternalRel of A, x)) by A1, CARD_2:63
+      .= card ([#]A /\ Class (the InternalRel of A, x))/
+             (card Class (the InternalRel of A, x)) -
+         (card (X /\ Class (the InternalRel of A, x)) /
+             (card Class (the InternalRel of A, x))) by XCMPLX_1:121
+      .= card (Class (the InternalRel of A, x))/
+             (card Class (the InternalRel of A, x)) -
+         (card (X /\ Class (the InternalRel of A, x)) /
+             (card Class (the InternalRel of A, x))) by PRE_TOPC:15
+      .= 1 - card (X /\ Class (the InternalRel of A, x)) /
+             (card Class (the InternalRel of A, x)) by XCMPLX_1:60
+      .= 1 - (MemberFunc (X,A).x) by Def9;
+    hence thesis;
+  end;
+
+theorem Th47:
+  X c= Y implies MemberFunc (X, A).x <= MemberFunc (Y, A).x
+  proof
+    set CI = Class (the InternalRel of A, x);
+    assume
+A1: X c= Y;
+A2: card CI > 0 by NAT_1:19;
+A3: MemberFunc (X, A).x = card (X /\ CI) / (card CI) by Def9;
+    X /\ CI c= Y /\ CI by A1, XBOOLE_1:26; then
+    card (Y /\ CI) >= card (X /\ CI) by CARD_1:80; then
+    card (Y /\ CI) / (card CI) >= card (X /\ CI) / (card CI)
+      by A2, REAL_1:73;
+    hence thesis by A3, Def9;
+  end;
+
+theorem Th48:
+  MemberFunc (X \/ Y, A).x >= MemberFunc (X, A).x
+  proof
+    X c= X \/ Y by XBOOLE_1:7;
+    hence thesis by Th47;
+  end;
+
+theorem Th49:
+  MemberFunc (X /\ Y, A).x <= MemberFunc (X, A).x
+  proof
+    X /\ Y c= X by XBOOLE_1:17;
+    hence thesis by Th47;
+  end;
+
+theorem
+  MemberFunc (X \/ Y, A).x >=
+    max (MemberFunc (X, A).x, MemberFunc (Y, A).x)
+  proof
+A1: MemberFunc (X \/ Y, A).x >= MemberFunc (X, A).x by Th48;
+    MemberFunc (X \/ Y, A).x >= MemberFunc (Y, A).x by Th48;
+    hence thesis by A1, SQUARE_1:50;
+  end;
+
+theorem Th51:
+  X misses Y implies MemberFunc (X \/ Y, A).x =
+    MemberFunc (X, A).x + MemberFunc (Y, A).x
+  proof
+    assume
+A1: X misses Y;
+A2: X /\ Class (the InternalRel of A, x) misses
+      Y /\ Class (the InternalRel of A, x) by A1, XBOOLE_1:76;
+A3: card ((X \/ Y) /\ Class (the InternalRel of A, x)) =
+      card ((X /\ Class (the InternalRel of A, x)) \/
+           (Y /\ Class (the InternalRel of A, x))) by XBOOLE_1:23
+      .= card (X /\ Class (the InternalRel of A, x)) +
+        card (Y /\ Class (the InternalRel of A, x)) by A2, CARD_2:53;
+    MemberFunc (X \/ Y, A).x
+       = (card (X /\ Class (the InternalRel of A, x)) +
+          card (Y /\ Class (the InternalRel of A, x))) /
+             (card Class (the InternalRel of A, x)) by A3, Def9
+      .= card (X /\ Class (the InternalRel of A, x)) /
+             (card Class (the InternalRel of A, x)) +
+          card (Y /\ Class (the InternalRel of A, x)) /
+             (card Class (the InternalRel of A, x)) by XCMPLX_1:63
+      .= MemberFunc (X, A).x + card (Y /\ Class (the InternalRel of A, x)) /
+             (card Class (the InternalRel of A, x)) by Def9
+      .= MemberFunc (X, A).x + MemberFunc (Y, A).x by Def9;
+    hence thesis;
+  end;
+
+theorem
+  MemberFunc (X /\ Y, A).x <=
+    min (MemberFunc (X, A).x, MemberFunc (Y, A).x)
+  proof
+A1: MemberFunc (X /\ Y, A).x <= MemberFunc (X, A).x by Th49;
+    MemberFunc (X /\ Y, A).x <= MemberFunc (Y, A).x by Th49;
+    hence thesis by A1, SQUARE_1:39;
+  end;
+
+definition let A be finite Tolerance_Space;
+           let X be FinSequence of bool the carrier of A;
+           let x be Element of A;
+  func FinSeqM (x,X) -> FinSequence of REAL means :Def10:
+    dom it = dom X &
+     for n being Nat st n in dom X holds it.n = MemberFunc (X.n, A).x;
+  existence
+  proof
+    deffunc F(Nat) = MemberFunc (X.$1, A).x;
+    ex z being FinSequence of REAL st len z = len X &
+    for j being Nat st j in Seg len X holds z.j = F(j) from SeqLambdaD; then
+    consider z being FinSequence of REAL such that
+A1: len z = len X & for j being Nat st j in Seg len X holds z.j = F(j);
+    take z;
+    thus dom z = Seg len z by FINSEQ_1:def 3
+              .= dom X by A1, FINSEQ_1:def 3;
+    let n be Nat;
+    assume n in dom X; then
+    n in Seg len X by FINSEQ_1:def 3;
+    hence thesis by A1;
+  end;
+  uniqueness
+  proof
+    let A1, A2 be FinSequence of REAL such that
+A2: dom A1 = dom X &
+    for n being Nat st n in dom X holds A1.n = MemberFunc (X.n, A).x and
+A3: dom A2 = dom X &
+    for n being Nat st n in dom X holds A2.n = MemberFunc (X.n, A).x;
+    for n being Nat st n in dom A1 holds A1.n = A2.n
+    proof
+      let n be Nat;
+      assume
+A4:   n in dom A1; then
+      A1.n = MemberFunc (X.n, A).x by A2
+          .= A2.n by A2, A3, A4;
+      hence thesis;
+    end;
+    hence thesis by A2, A3, FINSEQ_1:17;
+  end;
+end;
+
+theorem Th53:
+  for X being FinSequence of bool the carrier of A,
+      x being Element of A,
+      y being Element of bool the carrier of A holds
+    FinSeqM (x, X^<*y*>) = FinSeqM (x, X) ^ <* MemberFunc (y, A).x *>
+  proof
+    let X be FinSequence of bool the carrier of A,
+        x be Element of A,
+        y be Element of bool the carrier of A;
+    set p = FinSeqM (x, X^<*y*>);
+    set q = FinSeqM (x, X) ^ <* MemberFunc (y, A).x *>;
+    dom X = dom FinSeqM (x, X) by Def10; then
+    Seg len X = dom FinSeqM (x, X) by FINSEQ_1:def 3
+             .= Seg len FinSeqM (x, X) by FINSEQ_1:def 3; then
+A1: len X = len FinSeqM (x, X) by FINSEQ_1:8;
+A2: dom p = dom (X^<*y*>) by Def10
+         .= Seg (len X + len <* y *>) by FINSEQ_1:def 7
+         .= Seg (len X + 1) by FINSEQ_1:56;
+A3: dom q = Seg (len FinSeqM (x, X) + len <* MemberFunc (y, A).x *>)
+            by FINSEQ_1:def 7
+      .= Seg (len X + 1) by A1, FINSEQ_1:56;
+    for k being Nat st k in dom p holds p.k = q.k
+    proof
+      let k be Nat;
+      assume
+A4:   k in dom p; then
+      k in dom (X^<*y*>) by Def10; then
+A5:   p.k = MemberFunc ((X^<*y*>).k, A).x by Def10;
+A6:   k <= len X + 1 by A4, A2, FINSEQ_1:3;
+A7:   1 <= k by A4, FINSEQ_3:27;
+      per cases by A6, NAT_1:26;
+      suppose
+A8:   k <= len X; then
+A9:   k in dom X by A7, FINSEQ_3:27;
+      k in dom FinSeqM (x, X) by A7, A8, A1, FINSEQ_3:27; then
+      q.k = FinSeqM (x, X).k by FINSEQ_1:def 7
+         .= MemberFunc (X.k, A).x by A9, Def10;
+      hence thesis by A9, A5, FINSEQ_1:def 7;
+      suppose
+A10:   k = len X + 1; then
+      q.k = MemberFunc (y, A).x by A1, FINSEQ_1:59;
+      hence thesis by A5, FINSEQ_1:59, A10;
+    end;
+    hence thesis by A3, A2, FINSEQ_1:17;
+  end;
+
+theorem Th54:
+  MemberFunc ({}A, A).x = 0
+  proof
+    UAp {}A = {} by Th19; then
+A1: (UAp {}A)` = [#] A by PRE_TOPC:27;
+    x in the carrier of A; then
+    x in (UAp {}A)` by A1, PRE_TOPC:12;
+    hence thesis by Th41;
+  end;
+
+theorem
+  for X being disjoint_valued FinSequence of bool the carrier of A holds
+    MemberFunc (Union X, A).x = Sum FinSeqM (x, X)
+  proof
+    let X be disjoint_valued FinSequence of bool the carrier of A;
+    defpred P[FinSequence of bool the carrier of A] means
+      $1 is disjoint_valued implies
+        MemberFunc (Union $1, A).x = Sum FinSeqM (x, $1);
+A1: P[<*> bool the carrier of A]
+    proof
+      assume <*> bool the carrier of A is disjoint_valued;
+      set F = FinSeqM (x, <*> bool the carrier of A);
+      dom F = dom <*> bool the carrier of A by Def10; then
+A2:   Sum F = 0 by RVSUM_1:102, RELAT_1:64, RELAT_1:60;
+      Union <*> bool the carrier of A = {}A by CARD_3:14;
+      hence thesis by A2, Th54;
+    end;
+A3: for p being FinSequence of bool the carrier of A
+      for y being Element of bool the carrier of A st P[p] holds P[p^<*y*>]
+    proof
+      let p be FinSequence of bool the carrier of A;
+      let y be Element of bool the carrier of A;
+      assume
+A4:   P[p];
+      P[p^<*y*>]
+      proof
+        assume
+A5:     p^<*y*> is disjoint_valued;
+A6:     p c= p^<*y*> by FINSEQ_6:12;
+A7:     Union (p^<*y*>) = Union p \/ Union <*y*> by Th5
+                       .= Union p \/ y by FUNCT_6:39;
+A8:     Union p misses y
+        proof
+          assume Union p meets y; then
+          consider x being set such that
+A9:       x in Union p & x in y by XBOOLE_0:3;
+          x in union rng p by A9, PROB_1:def 3; then
+          consider X being set such that
+A10:      x in X & X in rng p by TARSKI:def 4;
+          consider m being set such that
+A11:      m in dom p & X = p.m by A10, FUNCT_1:def 5;
+          reconsider m as Nat by A11;
+A12:      p.m meets y by A9, A10, A11, XBOOLE_0:3;
+A13:      (p^<*y*>).m = p.m by A11, FINSEQ_1:def 7;
+A14:      (p^<*y*>).(len p + 1) = y by FINSEQ_1:59;
+A15:      len p < len p + 1 by NAT_1:38;
+          m <= len p by A11, FINSEQ_3:27;
+          hence thesis by A12, A13, A14, A5, PROB_2:def 3, A15;
+        end;
+        MemberFunc (Union (p^<*y*>), A).x =
+           MemberFunc (Union p, A).x + MemberFunc (y, A).x by A7, A8, Th51
+           .= Sum (FinSeqM (x, p) ^ <* MemberFunc (y, A).x *>)
+                by RVSUM_1:104, A4, A6, A5, Th6
+           .= Sum FinSeqM (x, p ^ <*y*>) by Th53;
+        hence thesis;
+      end;
+      hence thesis;
+    end;
+    for p being FinSequence of bool the carrier of A holds P[p]
+      from IndSeqD (A1,A3);
+    hence thesis;
+  end;
+
+theorem
+  LAp X = { x where x is Element of A : MemberFunc (X, A).x = 1 }
+  proof
+    thus LAp X c= { x where x is Element of A : MemberFunc (X, A).x = 1 }
+    proof
+      let y be set;
+      assume
+A1:   y in LAp X; then
+      reconsider y' = y as Element of A;
+      MemberFunc (X, A).y' = 1 by A1, Th40;
+      hence thesis;
+    end;
+    let y be set;
+    assume y in { x where x is Element of A : MemberFunc (X, A).x = 1 };
+    then consider y' being Element of A such that
+A2: y' = y & MemberFunc (X, A).y' = 1;
+    thus thesis by A2, Th40;
+  end;
+
+theorem
+  UAp X = { x where x is Element of A : MemberFunc (X, A).x > 0 }
+  proof
+    thus UAp X c= { x where x is Element of A : MemberFunc (X, A).x > 0 }
+    proof
+      let y be set;
+      assume
+A1:   y in UAp X; then
+      reconsider y' = y as Element of A;
+      not y in (UAp X)` by A1, SUBSET_1:54; then
+      MemberFunc (X, A).y' <> 0 by Th41; then
+      MemberFunc (X, A).y' > 0 by Th38;
+      hence thesis;
+    end;
+    let y be set;
+    assume y in { x where x is Element of A : MemberFunc (X, A).x > 0 };
+    then consider y' being Element of A such that
+A2: y' = y & MemberFunc (X, A).y' > 0;
+    not y in (UAp X)` by A2, Th41;
+    hence thesis by A2, KURATO_2:1;
+  end;
+
+theorem
+  BndAp X = { x where x is Element of A :
+        0 < MemberFunc (X, A).x & MemberFunc (X, A).x < 1 }
+  proof
+    thus BndAp X c= { x where x is Element of A :
+      0 < MemberFunc (X, A).x & MemberFunc (X, A).x < 1 }
+    proof
+      let y be set;
+      assume
+A1:   y in BndAp X; then
+      reconsider y' = y as Element of A;
+A2:   0 < MemberFunc (X, A).y' by A1, Th42;
+      MemberFunc (X, A).y' < 1 by A1, Th42;
+      hence thesis by A2;
+    end;
+    let y be set;
+    assume y in { x where x is Element of A :
+      0 < MemberFunc (X, A).x & MemberFunc (X, A).x < 1 }; then
+    consider y' being Element of A such that
+A3: y' = y & 0 < MemberFunc (X, A).y' & MemberFunc (X, A).y' < 1;
+    thus thesis by A3, Th42;
+  end;
+
+begin :: Rough Inclusion
+
+ reserve A for Tolerance_Space,
+         X, Y, Z for Subset of A;
+
+definition let A be Tolerance_Space, X, Y be Subset of A;
+  pred X _c= Y means :Def11:
+    LAp X c= LAp Y;
+  pred X c=^ Y means :Def12:
+    UAp X c= UAp Y;
+end;
+
+definition let A be Tolerance_Space, X, Y be Subset of A;
+  pred X _c=^ Y means :Def13:
+    X _c= Y & X c=^ Y;
+end;
+
+theorem Th59:
+  X _c= Y & Y _c= Z implies X _c= Z
+  proof
+    assume X _c= Y & Y _c= Z; then
+    LAp X c= LAp Y & LAp Y c= LAp Z by Def11; then
+    LAp X c= LAp Z by XBOOLE_1:1;
+    hence thesis by Def11;
+  end;
+
+theorem Th60:
+  X c=^ Y & Y c=^ Z implies X c=^ Z
+  proof
+    assume X c=^ Y & Y c=^ Z; then
+    UAp X c= UAp Y & UAp Y c= UAp Z by Def12; then
+    UAp X c= UAp Z by XBOOLE_1:1;
+    hence thesis by Def12;
+  end;
+
+theorem
+  X _c=^ Y & Y _c=^ Z implies X _c=^ Z
+  proof
+    assume X _c=^ Y & Y _c=^ Z; then
+    X _c= Y & Y _c= Z & X c=^ Y & Y c=^ Z by Def13; then
+    X _c= Z & X c=^ Z by Th59, Th60;
+    hence thesis by Def13;
+  end;
+
+begin :: Rough Equality of Sets
+
+definition let A be Tolerance_Space, X, Y be Subset of A;
+  pred X _= Y means :Def14:
+    LAp X = LAp Y;
+  reflexivity;
+  symmetry;
+  pred X =^ Y means :Def15:
+    UAp X = UAp Y;
+  reflexivity;
+  symmetry;
+  pred X _=^ Y means :Def16:
+    LAp X = LAp Y & UAp X = UAp Y;
+  reflexivity;
+  symmetry;
+end;
+
+definition let A be Tolerance_Space, X, Y be Subset of A;
+  redefine pred X _= Y means
+    X _c= Y & Y _c= X;
+  compatibility
+  proof
+    hereby assume X _= Y; then
+      LAp X = LAp Y by Def14;
+      hence X _c= Y & Y _c= X by Def11;
+    end;
+    assume X _c= Y & Y _c= X; then
+    LAp X c= LAp Y & LAp Y c= LAp X by Def11; then
+    LAp X = LAp Y by XBOOLE_0:def 10;
+    hence thesis by Def14;
+  end;
+  redefine pred X =^ Y means
+    X c=^ Y & Y c=^ X;
+  compatibility
+  proof
+    hereby assume X =^ Y; then
+      UAp X = UAp Y by Def15;
+      hence X c=^ Y & Y c=^ X by Def12;
+    end;
+    assume X c=^ Y & Y c=^ X; then
+    UAp X c= UAp Y & UAp Y c= UAp X by Def12; then
+    UAp X = UAp Y by XBOOLE_0:def 10;
+    hence thesis by Def15;
+  end;
+  redefine pred X _=^ Y means
+    X _= Y & X =^ Y;
+  compatibility
+  proof
+    hereby assume X _=^ Y; then
+      LAp X = LAp Y & UAp X = UAp Y by Def16;
+      hence X _= Y & X =^ Y by Def15, Def14;
+    end;
+    assume X _= Y & X =^ Y; then
+    LAp X = LAp Y & UAp X = UAp Y by Def15, Def14;
+    hence thesis by Def16;
+  end;
+end;

@@ -1,0 +1,675 @@
+:: On the {K}uratowski Limit Operators
+::  by Adam Grabowski
+::
+:: Received August 12, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary KURATO_2, WELLFND1, FRECHET2, REARRAN1, YELLOW_6, BOOLE, EUCLID,
+      PRE_TOPC, COMPTS_1, SETFAM_1, METRIC_1, SUBSET_1, PCOMPS_1, RELAT_1,
+      ORDINAL2, LATTICES, SEQ_2, PROB_1, SEQ_1, FUNCT_1, SEQM_3, FRECHET,
+      ARYTM_3, CONNSP_2, ARYTM, TOPS_1, ARYTM_1, NEWTON, NORMSP_1, COMPLEX1,
+      INT_1, FINSEQ_1, TOPREAL1, TOPREAL2, JORDAN9, JORDAN2C, SQUARE_1,
+      GOBOARD9, ZF_REFLE, FUNCOP_1, MCART_1, WAYBEL_7;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, ZFMISC_1,
+      XREAL_0, REAL_1, NAT_1, SETFAM_1, MCART_1, STRUCT_0, PRE_TOPC, TOPS_1,
+      COMPTS_1, RELAT_1, FUNCT_1, INT_1, FINSEQ_1, SEQ_1, TBSP_1, PARTFUN1,
+      FUNCT_2, METRIC_1, PCOMPS_1, EUCLID, NORMSP_1, BORSUK_1, PROB_1,
+      PSCOMP_1, LIMFUNC1, CONNSP_2, TOPREAL1, TOPREAL2, JORDAN2C, SEQM_3,
+      GOBOARD9, FRECHET, FRECHET2, TOPRNS_1, JORDAN9, FUNCT_6, YELLOW_6;
+ constructors REAL_1, JORDAN2C, GROUP_1, TOPREAL2, CONNSP_1, PSCOMP_1, TOPS_1,
+      WEIERSTR, PROB_1, TOPRNS_1, FRECHET, NAT_1, JORDAN9, TBSP_1, CQC_SIM1,
+      LIMFUNC1, GOBOARD9, YELLOW_6, FUNCT_6, FRECHET2;
+ clusters XREAL_0, RELSET_1, NAT_1, INT_1, JORDAN1B, SUBSET_1, STRUCT_0,
+      TOPS_1, BORSUK_1, EUCLID, FINSET_1, METRIC_1, TOPREAL6, GOBRD14,
+      HAUSDORF, SEQ_1, SEQM_3, MEMBERED, FUNCT_2, PARTFUN1, ORDINAL2;
+ requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: Preliminaries
+
+theorem :: KURATO_2:1
+  for X, x being set,
+      A being Subset of X st not x in A & x in X holds x in A`;
+
+theorem :: KURATO_2:2
+  for F being Function,
+      i being set st i in dom F holds meet F c= F.i;
+
+theorem :: KURATO_2:3
+  for T being non empty 1-sorted,
+      S1, S2 being SetSequence of the carrier of T holds
+    S1 = S2 iff for n being Nat holds S1.n = S2.n;
+
+theorem :: KURATO_2:4
+  for A, B, C, D being set st A meets B & C meets D holds
+    [: A, C :] meets [: B, D :];
+
+definition let X be 1-sorted;
+  cluster -> non empty SetSequence of the carrier of X;
+end;
+
+definition let T be non empty 1-sorted;
+  cluster non-empty SetSequence of the carrier of T;
+end;
+
+definition let T be non empty 1-sorted;
+  mode SetSequence of T is SetSequence of the carrier of T;
+  canceled;
+end;
+
+scheme LambdaSSeq { X() -> non empty 1-sorted,
+                    F(set) -> Subset of X() } :
+  ex f being SetSequence of X() st
+    for n being Nat holds f.n = F(n);
+
+scheme ExTopStrSeq { R() -> non empty TopSpace,
+                     F(set) -> Subset of R() } :
+   ex S be SetSequence of the carrier of R() st
+     for n be Nat holds S.n = F(n);
+
+theorem :: KURATO_2:5
+  for X being non empty 1-sorted,
+      F being SetSequence of the carrier of X holds
+    rng F is Subset-Family of X;
+
+definition let X be non empty 1-sorted,
+               F be SetSequence of the carrier of X;
+  redefine func Union F -> Subset of X;
+  redefine func meet F -> Subset of X;
+end;
+
+begin :: Lower and Upper Limit of Sequences of Subsets
+
+definition let X be non empty set;
+           let S be Function of NAT, X;
+           let k be Nat;
+  func S ^\ k -> Function of NAT, X means
+:: KURATO_2:def 2
+  for n being Nat holds it.n = S.(n + k);
+end;
+
+definition let X be non empty 1-sorted,
+               F be SetSequence of the carrier of X;
+  func lim_inf F -> Subset of X means
+:: KURATO_2:def 3
+    ex f being SetSequence of X st it = Union f &
+      for n being Nat holds f.n = meet (F ^\ n);
+  func lim_sup F -> Subset of X means
+:: KURATO_2:def 4
+    ex f being SetSequence of X st it = meet f &
+      for n being Nat holds f.n = Union (F ^\ n);
+end;
+
+theorem :: KURATO_2:6
+  for X being non empty 1-sorted,
+      F being SetSequence of the carrier of X,
+      x being set holds
+   x in meet F iff for z being Nat holds x in F.z;
+
+theorem :: KURATO_2:7
+  for X being non empty 1-sorted,
+      F being SetSequence of the carrier of X,
+      x being set holds
+   x in lim_inf F iff ex n being Nat st for k being Nat holds x in F.(n+k);
+
+theorem :: KURATO_2:8
+  for X being non empty 1-sorted,
+      F being SetSequence of the carrier of X,
+      x being set holds
+   x in lim_sup F iff for n being Nat ex k being Nat st x in F.(n+k);
+
+theorem :: KURATO_2:9
+  for X being non empty 1-sorted,
+      F being SetSequence of the carrier of X holds
+   lim_inf F c= lim_sup F;
+
+theorem :: KURATO_2:10
+  for X being non empty 1-sorted,
+      F being SetSequence of the carrier of X holds
+   meet F c= lim_inf F;
+
+theorem :: KURATO_2:11
+  for X being non empty 1-sorted,
+      F being SetSequence of the carrier of X holds
+   lim_sup F c= Union F;
+
+theorem :: KURATO_2:12
+  for X being non empty 1-sorted,
+      F being SetSequence of the carrier of X holds
+    lim_inf F = (lim_sup Complement F)`;
+
+theorem :: KURATO_2:13
+  for X being non empty 1-sorted,
+      A, B, C being SetSequence of the carrier of X st
+   (for n being Nat holds C.n = A.n /\ B.n) holds
+     lim_inf C = lim_inf A /\ lim_inf B;
+
+theorem :: KURATO_2:14
+  for X being non empty 1-sorted,
+      A, B, C being SetSequence of the carrier of X st
+   (for n being Nat holds C.n = A.n \/ B.n) holds
+     lim_sup C = lim_sup A \/ lim_sup B;
+
+theorem :: KURATO_2:15
+  for X being non empty 1-sorted,
+      A, B, C being SetSequence of the carrier of X st
+   (for n being Nat holds C.n = A.n \/ B.n) holds
+     lim_inf A \/ lim_inf B c= lim_inf C;
+
+theorem :: KURATO_2:16
+  for X being non empty 1-sorted,
+      A, B, C being SetSequence of the carrier of X st
+   (for n being Nat holds C.n = A.n /\ B.n) holds
+     lim_sup C c= lim_sup A /\ lim_sup B;
+
+theorem :: KURATO_2:17
+  for X being non empty 1-sorted,
+      A being SetSequence of the carrier of X,
+      B being Subset of X st
+   (for n being Nat holds A.n = B) holds
+     lim_sup A = B;
+
+theorem :: KURATO_2:18
+  for X being non empty 1-sorted,
+      A being SetSequence of the carrier of X,
+      B being Subset of X st
+   (for n being Nat holds A.n = B) holds
+     lim_inf A = B;
+
+theorem :: KURATO_2:19
+  for X being non empty 1-sorted,
+      A, B being SetSequence of the carrier of X,
+      C being Subset of X st
+   (for n being Nat holds B.n = C \+\ A.n) holds
+     C \+\ lim_inf A c= lim_sup B;
+
+theorem :: KURATO_2:20
+  for X being non empty 1-sorted,
+      A, B being SetSequence of the carrier of X,
+      C being Subset of X st
+   (for n being Nat holds B.n = C \+\ A.n) holds
+     C \+\ lim_sup A c= lim_sup B;
+
+begin :: Ascending and Descending Families of Subsets
+
+definition let T be non empty 1-sorted,
+               S be SetSequence of T;
+  attr S is descending means
+:: KURATO_2:def 5
+    for i being Nat holds S.(i+1) c= S.i;
+  attr S is ascending means
+:: KURATO_2:def 6
+    for i being Nat holds S.i c= S.(i+1);
+end;
+
+theorem :: KURATO_2:21
+  for f being Function st (for i being Nat holds f.(i+1) c= f.i)
+    for i, j being Nat st
+      i <= j holds f.j c= f.i;
+
+theorem :: KURATO_2:22
+  for T being non empty 1-sorted,
+      C being SetSequence of T st
+      C is descending holds
+    for i, m being Nat st i >= m holds
+      C.i c= C.m;
+
+theorem :: KURATO_2:23
+  for T being non empty 1-sorted,
+      C being SetSequence of T st
+      C is ascending holds
+    for i, m being Nat st i >= m holds
+      C.m c= C.i;
+
+theorem :: KURATO_2:24
+  for T being non empty 1-sorted,
+      F being SetSequence of T,
+      x being set st
+    F is descending &
+    ex k being Nat st for n being Nat st n > k holds x in F.n holds
+      x in meet F;
+
+theorem :: KURATO_2:25
+  for T being non empty 1-sorted,
+      F being SetSequence of T st
+    F is descending holds
+      lim_inf F = meet F;
+
+theorem :: KURATO_2:26
+  for T being non empty 1-sorted,
+      F being SetSequence of T st
+    F is ascending holds
+      lim_sup F = Union F;
+
+begin :: Constant and Convergent Sequences
+
+definition let T be non empty 1-sorted,
+               S be SetSequence of T;
+  attr S is convergent means
+:: KURATO_2:def 7
+  lim_sup S = lim_inf S;
+end;
+
+theorem :: KURATO_2:27
+  for T being non empty 1-sorted,
+      S being SetSequence of T st S is constant holds
+    the_value_of S is Subset of T;
+
+definition let T be non empty 1-sorted,
+               S be SetSequence of T;
+  redefine attr S is constant means
+:: KURATO_2:def 8
+  ex A being Subset of T st for n being Nat holds S.n = A;
+end;
+
+definition let T be non empty 1-sorted;
+  cluster constant -> convergent ascending descending SetSequence of T;
+end;
+
+definition let T be non empty 1-sorted;
+  cluster constant non empty SetSequence of T;
+end;
+
+definition let T be non empty 1-sorted,
+               S be convergent SetSequence of T;
+  func Lim_K S -> Subset of T means
+:: KURATO_2:def 9
+  it = lim_sup S & it = lim_inf S;
+end;
+
+theorem :: KURATO_2:28
+  for X being non empty 1-sorted,
+      F being convergent SetSequence of X,
+      x being set holds
+   x in Lim_K F iff ex n being Nat st for k being Nat holds x in F.(n+k);
+
+begin :: Topological Lemmas
+
+ reserve n for Nat;
+
+definition let f be FinSequence of the carrier of TOP-REAL 2;
+  cluster L~f -> closed;
+end;
+
+theorem :: KURATO_2:29
+  for r being real number,
+      M being non empty Reflexive MetrStruct,
+      x being Element of M st 0 < r holds
+   x in Ball (x,r);
+
+theorem :: KURATO_2:30
+  for x being Point of Euclid n,
+      r being real number holds
+   Ball (x, r) is open Subset of TOP-REAL n;
+
+theorem :: KURATO_2:31
+  for p, q being Point of TOP-REAL n,
+      p', q' being Point of Euclid n st
+   p = p' & q = q' holds
+     dist (p', q') = |. p - q .|;
+
+theorem :: KURATO_2:32
+  for p being Point of Euclid n,
+      x, p' being Point of TOP-REAL n,
+      r being real number st
+    p = p' & x in Ball (p, r) holds
+      |. x - p' .| < r;
+
+theorem :: KURATO_2:33
+  for p being Point of Euclid n,
+      x, p' being Point of TOP-REAL n,
+      r being real number st
+    p = p' & |. x - p' .| < r holds
+      x in Ball (p, r);
+
+theorem :: KURATO_2:34
+  for n being Nat,
+      r being Point of TOP-REAL n,
+      X being Subset of TOP-REAL n st r in Cl X holds
+   ex seq being Real_Sequence of n st
+      rng seq c= X & seq is convergent & lim seq = r;
+
+definition let M be non empty MetrSpace;
+  cluster TopSpaceMetr M -> first-countable;
+end;
+
+definition let n be Nat;
+  cluster TOP-REAL n -> first-countable;
+end;
+
+theorem :: KURATO_2:35
+  for p being Point of Euclid n,
+      q being Point of TOP-REAL n,
+      r being real number st
+    p = q & r > 0 holds
+  Ball (p, r) is a_neighborhood of q;
+
+theorem :: KURATO_2:36
+  for A being Subset of TOP-REAL n,
+      p being Point of TOP-REAL n,
+      p' being Point of Euclid n st p = p' holds
+  p in Cl A iff
+    for r being real number st r > 0 holds Ball (p', r) meets A;
+
+theorem :: KURATO_2:37
+  for x, y being Point of TOP-REAL n,
+      x' being Point of Euclid n st x' = x & x <> y
+    ex r being Real st not y in Ball (x', r);
+
+theorem :: KURATO_2:38
+  for S being Subset of TOP-REAL n holds
+    S is non Bounded iff
+    for r being Real st r > 0 holds
+     ex x, y being Point of Euclid n st
+        x in S & y in S & dist (x, y) > r;
+
+theorem :: KURATO_2:39
+  for a, b being real number,
+      x, y being Point of Euclid n st
+    Ball (x, a) meets Ball (y, b) holds
+  dist (x, y) < a + b;
+
+theorem :: KURATO_2:40
+  for a, b, c being real number,
+      x, y, z being Point of Euclid n st
+    Ball (x, a) meets Ball (z, c) & Ball (z, c) meets Ball (y, b) holds
+  dist (x, y) < a + b + 2*c;
+
+theorem :: KURATO_2:41
+  for X, Y being non empty TopSpace,
+      x being Point of X,
+      y being Point of Y,
+      V being Subset of [: X, Y :] holds
+    V is a_neighborhood of [: {x}, {y} :] iff
+      V is a_neighborhood of [ x, y ];
+
+scheme TSubsetEx { S() -> non empty TopStruct, P[set] } :
+  ex X being Subset of S() st
+   for x being Point of S() holds x in X iff P[x];
+
+scheme TSubsetUniq { S() -> TopStruct, P[set] } :
+  for A1, A2 being Subset of S() st
+  (for x being Point of S() holds x in A1 iff P[x]) &
+  (for x being Point of S() holds x in A2 iff P[x]) holds
+    A1 = A2;
+
+definition let T be non empty TopStruct;
+           let S be SetSequence of the carrier of T;
+           let i be Nat;
+ redefine func S.i -> Subset of T;
+end;
+
+theorem :: KURATO_2:42
+  for T be non empty 1-sorted,
+      S being SetSequence of the carrier of T,
+      R being Seq_of_Nat holds
+    S * R is SetSequence of T;
+
+theorem :: KURATO_2:43
+  id NAT is increasing Seq_of_Nat;
+
+definition
+  cluster id NAT -> real-yielding;
+end;
+
+begin :: Subsequences
+
+definition
+  let T be non empty 1-sorted, S be SetSequence of the carrier of T;
+  mode subsequence of S -> SetSequence of T means
+:: KURATO_2:def 10
+    ex NS being increasing Seq_of_Nat st it = S * NS;
+end;
+
+theorem :: KURATO_2:44
+  for T being non empty 1-sorted,
+      S being SetSequence of the carrier of T holds
+    S is subsequence of S;
+
+theorem :: KURATO_2:45
+  for T being non empty 1-sorted,
+      S being SetSequence of T,
+      S1 being subsequence of S holds
+    rng S1 c= rng S;
+
+theorem :: KURATO_2:46
+  for T being non empty 1-sorted,
+      S1 being SetSequence of the carrier of T,
+      S2 being subsequence of S1,
+      S3 being subsequence of S2 holds
+    S3 is subsequence of S1;
+
+theorem :: KURATO_2:47
+  for T being non empty 1-sorted,
+      F, G being SetSequence of the carrier of T,
+      A being Subset of T st
+    G is subsequence of F &
+    for i being Nat holds F.i = A holds G = F;
+
+theorem :: KURATO_2:48
+  for T being non empty 1-sorted,
+      A being constant SetSequence of T,
+      B being subsequence of A holds
+   A = B;
+
+theorem :: KURATO_2:49
+  for T being non empty 1-sorted,
+      S being SetSequence of the carrier of T,
+      R being subsequence of S,
+      n being Nat holds
+    ex m being Nat st m >= n & R.n = S.m;
+
+definition let T be non empty 1-sorted,
+               X be constant SetSequence of T;
+  cluster -> constant subsequence of X;
+end;
+
+scheme SubSeqChoice
+  { T() -> non empty TopSpace,
+    S() -> SetSequence of the carrier of T(),
+    P[set]} :
+  ex S1 being subsequence of S() st for n being Nat holds P[S1.n]
+provided
+ for n being Nat ex m being Nat st n <= m & P[S().m];
+
+begin :: Lower Topological Limit
+
+definition let T be non empty TopSpace;
+           let S be SetSequence of the carrier of T;
+  func Lim_inf S -> Subset of T means
+:: KURATO_2:def 11
+    for p being Point of T holds
+        p in it iff
+     for G being a_neighborhood of p
+      ex k being Nat st
+     for m being Nat st m > k holds S.m meets G;
+end;
+
+theorem :: KURATO_2:50
+   for S being SetSequence of the carrier of TOP-REAL n,
+       p being Point of TOP-REAL n,
+       p' being Point of Euclid n st p = p' holds
+    p in Lim_inf S iff
+     for r being real number st r > 0
+      ex k being Nat st
+     for m being Nat st m > k holds S.m meets Ball (p', r);
+
+theorem :: KURATO_2:51
+  for T being non empty TopSpace,
+      S being SetSequence of the carrier of T holds
+    Cl Lim_inf S = Lim_inf S;
+
+theorem :: KURATO_2:52
+  for T being non empty TopSpace,
+      S being SetSequence of the carrier of T holds
+    Lim_inf S is closed;
+
+theorem :: KURATO_2:53
+  for T being non empty TopSpace,
+      R, S being SetSequence of the carrier of T st
+    R is subsequence of S holds Lim_inf S c= Lim_inf R;
+
+theorem :: KURATO_2:54
+  for T being non empty TopSpace,
+      A, B being SetSequence of the carrier of T st
+    for i being Nat holds A.i c= B.i holds
+      Lim_inf A c= Lim_inf B;
+
+theorem :: KURATO_2:55
+  for T being non empty TopSpace,
+      A, B, C being SetSequence of the carrier of T st
+    for i being Nat holds C.i = A.i \/ B.i holds
+      Lim_inf A \/ Lim_inf B c= Lim_inf C;
+
+theorem :: KURATO_2:56
+  for T being non empty TopSpace,
+      A, B, C being SetSequence of the carrier of T st
+    for i being Nat holds C.i = A.i /\ B.i holds
+      Lim_inf C c= Lim_inf A /\ Lim_inf B;
+
+theorem :: KURATO_2:57
+  for T being non empty TopSpace,
+      F, G being SetSequence of the carrier of T st
+    for i being Nat holds G.i = Cl (F.i) holds
+      Lim_inf G = Lim_inf F;
+
+theorem :: KURATO_2:58
+  for S being SetSequence of the carrier of TOP-REAL n,
+      p being Point of TOP-REAL n holds
+     (ex s being Real_Sequence of n st s is convergent &
+      (for x being Nat holds s.x in S.x) & p = lim s) implies
+    p in Lim_inf S;
+
+theorem :: KURATO_2:59
+   for T being non empty TopSpace,
+       P being Subset of T,
+       s being SetSequence of the carrier of T st
+   (for i being Nat holds s.i c= P) holds
+   Lim_inf s c= Cl P;
+
+theorem :: KURATO_2:60
+  for T being non empty TopSpace,
+      F being SetSequence of the carrier of T,
+      A being Subset of T st
+    for i being Nat holds F.i = A holds Lim_inf F = Cl A;
+
+theorem :: KURATO_2:61
+  for T being non empty TopSpace,
+      F being SetSequence of the carrier of T,
+      A being closed Subset of T st
+    for i being Nat holds F.i = A holds Lim_inf F = A;
+
+theorem :: KURATO_2:62
+  for S being SetSequence of the carrier of TOP-REAL n,
+      P being Subset of TOP-REAL n st P is Bounded &
+   (for i being Nat holds S.i c= P) holds
+  Lim_inf S is Bounded;
+
+theorem :: KURATO_2:63
+  for S being SetSequence of the carrier of TOP-REAL 2,
+      P being Subset of TOP-REAL 2 st
+     P is Bounded &
+    (for i being Nat holds S.i c= P) &
+   for i being Nat holds S.i is compact holds
+    Lim_inf S is compact;
+
+theorem :: KURATO_2:64
+  for A, B being SetSequence of the carrier of TOP-REAL n,
+      C being SetSequence of the carrier of [: TOP-REAL n, TOP-REAL n :] st
+    for i being Nat holds C.i = [:A.i, B.i:] holds
+      [: Lim_inf A, Lim_inf B :] = Lim_inf C;
+
+theorem :: KURATO_2:65
+  for S being SetSequence of TOP-REAL 2 holds
+    lim_inf S c= Lim_inf S;
+
+theorem :: KURATO_2:66
+  for C being Simple_closed_curve,
+      i being Nat holds
+    Fr (UBD L~Cage (C,i))` = L~Cage (C,i);
+
+begin :: Upper Topological Limit
+
+definition let T be non empty TopSpace;
+           let S be SetSequence of the carrier of T;
+  func Lim_sup S -> Subset of T means
+:: KURATO_2:def 12
+    for x being set holds
+      x in it iff ex A being subsequence of S st x in Lim_inf A;
+end;
+
+theorem :: KURATO_2:67
+  for N being Nat,
+      F being sequence of TOP-REAL N,
+      x being Point of TOP-REAL N,
+      x' being Point of Euclid N st x = x' holds
+    x is_a_cluster_point_of F iff
+  for r being real number,
+      n being Nat st r > 0 holds
+    ex m being Nat st n <= m & F.m in Ball (x', r);
+
+theorem :: KURATO_2:68
+  for T being non empty TopSpace,
+      A being SetSequence of the carrier of T holds
+    Lim_inf A c= Lim_sup A;
+
+theorem :: KURATO_2:69
+  for A, B, C being SetSequence of the carrier of TOP-REAL 2 st
+    (for i being Nat holds A.i c= B.i) &
+     C is subsequence of A holds
+     ex D being subsequence of B st for i being Nat holds C.i c= D.i;
+
+theorem :: KURATO_2:70
+  for A, B, C being SetSequence of the carrier of TOP-REAL 2 st
+    (for i being Nat holds A.i c= B.i) &
+     C is subsequence of B holds
+     ex D being subsequence of A st for i being Nat holds D.i c= C.i;
+
+theorem :: KURATO_2:71  :: (2)
+  for A, B being SetSequence of the carrier of TOP-REAL 2 st
+    for i being Nat holds A.i c= B.i holds
+      Lim_sup A c= Lim_sup B;
+
+theorem :: KURATO_2:72 :: (3)
+  for A, B, C being SetSequence of the carrier of TOP-REAL 2 st
+    for i being Nat holds C.i = A.i \/ B.i holds
+      Lim_sup A \/ Lim_sup B c= Lim_sup C;
+
+theorem :: KURATO_2:73 :: (4)
+  for A, B, C being SetSequence of the carrier of TOP-REAL 2 st
+    for i being Nat holds C.i = A.i /\ B.i holds
+      Lim_sup C c= Lim_sup A /\ Lim_sup B;
+
+theorem :: KURATO_2:74
+  for A, B being SetSequence of the carrier of TOP-REAL 2,
+      C, C1 being SetSequence of the carrier of [: TOP-REAL 2, TOP-REAL 2 :] st
+    (for i being Nat holds C.i = [: A.i, B.i :]) &
+    C1 is subsequence of C holds
+      ex A1, B1 being SetSequence of the carrier of TOP-REAL 2 st
+    A1 is subsequence of A & B1 is subsequence of B &
+      for i being Nat holds C1.i = [: A1.i, B1.i :];
+
+theorem :: KURATO_2:75
+  for A, B being SetSequence of the carrier of TOP-REAL 2,
+      C being SetSequence of the carrier of [: TOP-REAL 2, TOP-REAL 2 :] st
+    for i being Nat holds C.i = [: A.i, B.i :] holds
+      Lim_sup C c= [: Lim_sup A, Lim_sup B :];
+
+theorem :: KURATO_2:76
+  for T being non empty TopSpace,
+      F being SetSequence of the carrier of T,
+      A being Subset of T st
+    for i being Nat holds F.i = A holds Lim_inf F = Lim_sup F;
+
+theorem :: KURATO_2:77
+  for F being SetSequence of the carrier of TOP-REAL 2,
+      A being Subset of TOP-REAL 2 st
+    for i being Nat holds F.i = A holds Lim_sup F = Cl A;
+
+theorem :: KURATO_2:78
+  for F, G being SetSequence of the carrier of TOP-REAL 2 st
+    for i being Nat holds G.i = Cl (F.i) holds
+      Lim_sup G = Lim_sup F;
+

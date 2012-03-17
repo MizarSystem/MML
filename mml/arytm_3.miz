@@ -1,0 +1,1952 @@
+:: Arithmetic of Non Negative Rational Numbers
+::  by Grzegorz Bancerek
+::
+:: Received March 7, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL1, ORDINAL2, BOOLE, ORDINAL3, ARYTM_3, QUOFIELD;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, ORDINAL3;
+ constructors ORDINAL3, SUBSET_1, XBOOLE_0;
+ clusters ORDINAL1, ORDINAL2, SUBSET_1, ZFMISC_1, XBOOLE_0;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, ORDINAL2;
+ theorems TARSKI, XBOOLE_0, ZFMISC_1, ORDINAL1, ORDINAL2, ORDINAL3, SUBSET_1,
+      XBOOLE_1;
+ schemes ORDINAL1, ORDINAL2;
+
+begin :: Natural ordinals
+
+reserve A,B,C for Ordinal;
+
+Lm1: one in omega by ORDINAL1:41,ORDINAL2:19,def 4;
+
+definition
+ let A be Ordinal;
+ cluster -> ordinal Element of A;
+ coherence
+   proof
+    let x be Element of A;
+      A is empty or A is non empty;
+    hence thesis by ORDINAL1:23,SUBSET_1:def 2;
+   end;
+end;
+
+definition
+ cluster empty -> natural Ordinal;
+ coherence by ORDINAL2:19,def 21;
+ cluster one -> natural non empty;
+ coherence by Lm1,ORDINAL2:def 21;
+ cluster -> natural Element of omega;
+ coherence by ORDINAL2:def 21;
+end;
+
+definition
+ cluster non empty natural Ordinal;
+ existence proof take one; thus thesis; end;
+end;
+
+definition let a be natural Ordinal;
+ cluster succ a -> natural;
+ coherence
+  proof
+      a in omega by ORDINAL2:def 21;
+   hence succ a in omega by ORDINAL1:41,ORDINAL2:19;
+  end;
+end;
+
+scheme Omega_Ind {P[set]}:
+ for a being natural Ordinal holds P[a]
+provided
+A1:   P[{}]
+and
+A2:   for a being natural Ordinal st P[a] holds P[succ a]
+  proof
+     defpred _P[Ordinal] means $1 is natural implies P[$1];
+A3:  _P[{}] by A1;
+A4:  now let A; assume
+A5:   _P[A];
+      now assume succ A is natural;
+       then succ A in omega & A in succ A by ORDINAL1:10,ORDINAL2:def 21;
+       then A is Element of omega by ORDINAL1:19;
+       hence P[succ A] by A2,A5;
+      end; hence _P[succ A];
+    end;
+A6:  now let A;
+A7:   {} c= A by XBOOLE_1:2;
+     assume A <> {};
+     then {} c< A by A7,XBOOLE_0:def 8;
+then A8:   {} in A by ORDINAL1:21;
+     assume A is_limit_ordinal;
+      then omega c= A & not A in A by A8,ORDINAL2:def 5;
+      then not A in omega;
+     hence (for B st B in A holds _P[B]) implies _P[A] by ORDINAL2:def 21;
+    end;
+      for A holds _P[A] from Ordinal_Ind(A3,A4,A6);
+   hence thesis;
+  end;
+
+definition
+ let a, b be natural Ordinal;
+ cluster a +^ b -> natural;
+ coherence
+  proof defpred _P[natural Ordinal] means a+^$1 is natural;
+A1:  _P[{}] by ORDINAL2:44;
+A2:  now let b be natural Ordinal; assume _P[b]; then
+     reconsider c = a+^b as natural Ordinal; a+^succ b = succ c by ORDINAL2:45;
+     hence _P[succ b];
+    end;
+      for b being natural Ordinal holds _P[b] from Omega_Ind(A1,A2);
+   hence thesis;
+  end;
+end;
+
+theorem Th1:
+ for a,b being Ordinal st a+^b is natural holds a in omega & b in omega
+  proof let x,y be Ordinal such that
+A1:  x+^y in omega;
+      x c= x+^y & y c= x+^y by ORDINAL3:27;
+   hence x in omega & y in omega by A1,ORDINAL1:22;
+  end;
+
+definition
+ let a, b be natural Ordinal;
+ cluster a -^ b -> natural;
+ coherence
+  proof not b c= a or b c= a;
+    then a -^ b = {} or a = b+^(a-^b) by ORDINAL3:def 6;
+   hence a-^b in omega by Th1,ORDINAL2:def 5;
+  end;
+ cluster a *^ b -> natural;
+ coherence
+  proof defpred _P[natural Ordinal] means $1*^b is natural;
+A1:  _P[{}] by ORDINAL2:52;
+A2:  now let a be natural Ordinal; assume _P[a]; then
+     reconsider c = a*^b as natural Ordinal; (succ a)*^b = c+^b by ORDINAL2:53;
+     hence _P[succ a];
+    end;
+      for a being natural Ordinal holds _P[a] from Omega_Ind(A1,A2);
+   hence thesis;
+  end;
+end;
+
+theorem Th2:
+ for a,b being Ordinal st a*^b is natural non empty
+  holds a in omega & b in omega
+  proof let x,y be Ordinal such that
+A1:  x*^y in omega;
+   assume x*^y is non empty;
+    then x <> {} & y <> {} by ORDINAL2:52,55;
+    then x c= x*^y & y c= x*^y by ORDINAL3:39;
+   hence x in omega & y in omega by A1,ORDINAL1:22;
+  end;
+
+theorem Th3:
+ for a,b being natural Ordinal holds a+^b = b+^a
+  proof let a be natural Ordinal;
+     defpred _R[natural Ordinal] means a+^$1 = $1+^a;
+    a+^{} = a by ORDINAL2:44 .= {}+^a by ORDINAL2:47; then
+A1: _R[{}];
+A2:  now let b be natural Ordinal; assume
+A3:    _R[b];
+      defpred _P[natural Ordinal] means (succ b)+^$1 = succ (b+^$1);
+   (succ b)+^{} = succ b by ORDINAL2:44 .= succ (b+^{}) by ORDINAL2:44;then
+A4:  _P[{}];
+A5:   now let a be natural Ordinal; assume
+A6:    _P[a];
+        (succ b)+^succ a
+          = succ ((succ b)+^a) by ORDINAL2:45
+         .= succ (b+^succ a) by A6,ORDINAL2:45;
+       hence _P[succ a];
+      end;
+A7:  for a being natural Ordinal holds _P[a] from Omega_Ind(A4,A5);
+      a+^succ b = succ (b+^a) by A3,ORDINAL2:45 .= (succ b)+^a by A7;
+     hence _R[succ b];
+    end;
+    for b being natural Ordinal holds _R[b] from Omega_Ind(A1,A2);
+   hence thesis;
+  end;
+
+theorem Th4:
+ for a,b being natural Ordinal holds a*^b = b*^a
+  proof let a be natural Ordinal;
+     defpred _R[natural Ordinal] means a*^$1 = $1*^a;
+     a*^{} = {} by ORDINAL2:55 .= {}*^a by ORDINAL2:52; then
+A1: _R[{}];
+A2:  now let b be natural Ordinal;
+      defpred _P[natural Ordinal] means $1*^succ b = $1*^b+^$1;
+     assume
+A3:   _R[b];
+     {}*^succ b = {} by ORDINAL2:52 .= {}+^{} by ORDINAL2:44
+               .= {}*^b+^{} by ORDINAL2:52; then
+A4:  _P[{}];
+A5:   now let a be natural Ordinal; assume
+A6:    _P[a];
+        (succ a)*^succ b
+          = a*^(succ b)+^succ b by ORDINAL2:53
+         .= a*^b+^(a+^succ b) by A6,ORDINAL3:33
+         .= a*^b+^succ (a+^b) by ORDINAL2:45
+         .= succ (a*^b+^(a+^b)) by ORDINAL2:45
+         .= succ (a*^b+^(b+^a)) by Th3
+         .= succ (a*^b+^b+^a) by ORDINAL3:33
+         .= succ ((succ a)*^b+^a) by ORDINAL2:53
+         .= (succ a)*^b+^succ a by ORDINAL2:45;
+       hence _P[succ a];
+      end;
+        for a being natural Ordinal holds _P[a] from Omega_Ind(A4,A5);
+     then a*^succ b = b*^a+^a by A3 .= (succ b)*^a by ORDINAL2:53;
+     hence _R[succ b];
+    end;
+    for b being natural Ordinal holds _R[b] from Omega_Ind(A1,A2);
+   hence thesis;
+  end;
+
+definition redefine
+ let a,b be natural Ordinal;
+ func a+^b; commutativity by Th3;
+ func a*^b; commutativity by Th4;
+end;
+
+begin :: Relative prime numbers and divisibility
+
+definition
+ let a,b be Ordinal;
+ pred a,b are_relative_prime means:
+Def1:
+  for c,d1,d2 being Ordinal st a = c *^ d1 & b = c *^ d2
+   holds c = one;
+ symmetry;
+end;
+
+theorem Th5:
+ not {},{} are_relative_prime
+  proof take {}, {}, {};
+   thus thesis by ORDINAL2:52;
+  end;
+
+theorem Th6:
+ one,A are_relative_prime
+  proof let c,d1,d2 be Ordinal;
+   thus thesis by ORDINAL3:41;
+  end;
+
+theorem Th7:
+ {},A are_relative_prime implies A = one
+  proof assume
+A1:  {},A are_relative_prime & A <> one;
+    then A in one or one in A by ORDINAL1:24;
+    then one in A & {} = A*^{} & A = A*^one by A1,Th5,ORDINAL2:55,56,ORDINAL3:
+17;
+   hence contradiction by A1,Def1;
+  end;
+
+reserve a,b,c,d for natural Ordinal;
+
+defpred PP[set] means
+ ex B st B c= $1 & $1 in omega & $1 <> {} &
+   not ex c,d1,d2 being natural Ordinal st
+    d1,d2 are_relative_prime & $1 = c *^ d1 & B = c *^ d2;
+
+theorem
+   a <> {} or b <> {} implies
+  ex c,d1,d2 being natural Ordinal st
+   d1,d2 are_relative_prime & a = c *^ d1 & b = c *^ d2
+  proof assume that
+A1:  a <> {} or b <> {} and
+A2:  not ex c,d1,d2 being natural Ordinal st
+     d1,d2 are_relative_prime & a = c *^ d1 & b = c *^ d2;
+A3:  ex A st PP[A]
+     proof per cases;
+      suppose
+A4:    a c= b;
+      take A = b, B = a;
+      thus B c= A & A in omega & A <> {} by A1,A4,ORDINAL2:def 21,XBOOLE_1:3;
+      thus not ex c,d1,d2 being natural Ordinal st
+        d1,d2 are_relative_prime & A = c *^ d1 & B = c *^ d2 by A2;
+      suppose
+A5:    b c= a;
+      take A = a, B = b;
+      thus B c= A & A in omega & A <> {} by A1,A5,ORDINAL2:def 21,XBOOLE_1:3;
+      thus not ex c,d1,d2 being natural Ordinal st
+        d1,d2 are_relative_prime & A = c *^ d1 & B = c *^ d2 by A2;
+    end;
+   consider A such that
+A6:  PP[A] and
+A7:  for C st PP[C] holds A c= C from Ordinal_Min(A3);
+   consider B such that
+A8:  B c= A & A in omega & A <> {} &
+    not ex c,d1,d2 being natural Ordinal st
+     d1,d2 are_relative_prime & A = c *^ d1 & B = c *^ d2 by A6;
+   reconsider A,B as Element of omega by A8,ORDINAL1:22;
+      A = one *^ A & B = one *^ B by ORDINAL2:56;
+    then not A,B are_relative_prime by A8;
+   then consider c,d1,d2 being Ordinal such that
+A9:  A = c *^ d1 & B = c *^ d2 & c <> one by Def1;
+A10:  d1 <> {} & c <> {} by A8,A9,ORDINAL2:52,55;
+    then c c= A & d1 c= A & d2 c= B by A9,ORDINAL3:39;
+   then reconsider c,d1,d2 as Element of omega by ORDINAL1:22;
+      A = d1*^c & B = d2*^c by A9;
+then A11:  d2 c= d1 by A8,A10,ORDINAL3:38;
+      now let c',d1',d2' be natural Ordinal;
+     assume
+A12:   d1',d2' are_relative_prime & d1 = c' *^ d1' & d2 = c' *^ d2';
+      then A = c*^c'*^d1' & B = c*^c'*^d2' by A9,ORDINAL3:58;
+     hence contradiction by A8,A12;
+    end;
+then A13:  A c= d1 by A7,A10,A11;
+      one in c or c in one by A9,ORDINAL1:24;
+    then one*^d1 in A by A9,A10,ORDINAL3:17,22;
+    then d1 in A by ORDINAL2:56;
+   hence contradiction by A13,ORDINAL1:7;
+  end;
+
+reserve l,m,n for natural Ordinal;
+
+definition let m,n;
+ cluster m div^ n -> natural;
+ coherence
+  proof A1: n in one or one c= n by ORDINAL1:26;
+      n = {} implies m div^ n = {} & {}*^one = {}
+ by ORDINAL2:52,ORDINAL3:def 7;
+    then (m div^ n)*^one c= (m div^ n)*^n by A1,ORDINAL3:17,23,XBOOLE_1:2;
+    then m div^ n c= (m div^ n)*^n & (m div^ n)*^n c= m
+     by ORDINAL2:56,ORDINAL3:77;
+    then m div^ n c= m & m in omega by ORDINAL2:def 21,XBOOLE_1:1;
+   hence m div^ n in omega by ORDINAL1:22;
+  end;
+ cluster m mod^ n -> natural;
+ coherence
+  proof
+      (m div^ n)*^n+^(m mod^ n) = m by ORDINAL3:78;
+    then m mod^ n c= m & m in omega by ORDINAL2:def 21,ORDINAL3:27;
+   hence m mod^ n in omega by ORDINAL1:22;
+  end;
+end;
+
+definition
+ let k,n be Ordinal;
+ pred k divides n means: Def2: ex a being Ordinal st n = k*^a;
+ reflexivity
+  proof let n be Ordinal; take one;
+   thus thesis by ORDINAL2:56;
+  end;
+end;
+
+theorem Th9:
+ a divides b iff ex c st b = a*^c
+  proof
+   thus a divides b implies ex c st b = a*^c
+    proof given c being Ordinal such that
+A1:    b = a*^c;
+     per cases;
+     suppose b = {}; then b = a*^{} by ORDINAL2:55;
+      hence ex c st b = a*^c;
+     suppose b <> {};
+       then c is Element of omega by A1,Th2;
+      hence ex c st b = a*^c by A1;
+    end;
+   thus thesis by Def2;
+  end;
+
+theorem Th10:
+ for m,n st {} in m holds n mod^ m in m
+   proof let m,n; assume {} in m;
+    then consider C such that
+A1:   n = (n div^ m)*^m+^C & C in m by ORDINAL3:def 7;
+       n mod^ m = n-^(n div^ m)*^m by ORDINAL3:def 8;
+    hence n mod^ m in m by A1,ORDINAL3:65;
+   end;
+
+theorem Th11:
+ for n,m holds m divides n iff n = m *^ (n div^ m)
+  proof let n,m; assume A1: not thesis;
+   then consider a such that
+A2:  n = m*^a by Th9;
+      {}*^a = {} & {}*^(n div^ m) = {} by ORDINAL2:52;
+    then {} <> m by A1,A2;
+    then {} in m & n = a*^m+^{} by A2,ORDINAL2:44,ORDINAL3:10;
+   hence thesis by A1,A2,Def2,ORDINAL3:def 7;
+  end;
+
+canceled;
+
+theorem Th13:
+ for n,m st n divides m & m divides n holds n = m
+   proof let n,m;
+    assume n divides m & m divides n;
+then A1:   m = n *^ (m div^ n) & n = m *^ (n div^ m) by Th11;
+then A2:   n *^ one = n & n = n *^ ((m div^ n) *^ (n div^ m))
+      by ORDINAL2:56,ORDINAL3:58;
+A3:   n = {} implies n = m by A1,ORDINAL2:52;
+       (m div^ n) *^ (n div^ m) = one implies n = m
+      proof assume (m div^ n) *^ (n div^ m) = one;
+        then m div^ n = one by ORDINAL3:41;
+       hence n = m by A1,ORDINAL2:56;
+      end;
+    hence n = m by A2,A3,ORDINAL3:36;
+   end;
+
+theorem Th14:
+ n divides {} & one divides n
+  proof
+      {} = n *^ {} by ORDINAL2:52;
+   hence n divides {} by Def2;
+      n = one *^ n by ORDINAL2:56;
+   hence thesis by Def2;
+  end;
+
+theorem Th15:
+ for n,m st {} in m & n divides m holds n c= m
+  proof let n,m such that
+A1:  {} in m;
+   given a being Ordinal such that
+A2:  m = n*^a;
+      a <> {} by A1,A2,ORDINAL2:55;
+   hence thesis by A2,ORDINAL3:39;
+  end;
+
+theorem Th16:
+ for n,m,l st n divides m & n divides m +^ l holds n divides l
+  proof let n,m,l; assume n divides m;
+   then consider a such that
+A1:  m = n*^a by Th9;
+   assume n divides m +^ l;
+   then consider b such that
+A2:  m +^ l = n*^b by Th9;
+   assume
+A3:  not n divides l;
+    l = n*^b -^ n*^a by A1,A2,ORDINAL3:65 .= (b-^a)*^n by ORDINAL3:76;
+   hence thesis by A3,Def2;
+  end;
+
+definition let k,n be natural Ordinal;
+ func k lcm n -> Element of omega means:
+Def3:  k divides it & n divides it & for m st k divides m & n divides
+ m holds it divides m;
+  existence
+   proof per cases;
+    suppose
+A1:      k = {} or n = {};
+     reconsider w = {} as Element of omega by ORDINAL2:def 21;
+     take w;
+     thus k divides w & n divides w by Th14;
+     let m; assume
+        k divides m & n divides m;
+     hence w divides m by A1;
+    suppose
+A2:    k <> {} & n <> {};
+A3:    k divides k *^ n & n divides k *^ n by Def2;
+      defpred _P[Ordinal] means
+        ex m st $1 = m & k divides m & n divides m & k c= m;
+        {} c= n by XBOOLE_1:2;
+      then {} c< n by A2,XBOOLE_0:def 8;
+      then {} in n by ORDINAL1:21;
+      then one c= n by ORDINAL1:33,ORDINAL2:def 4;
+      then k*^one = k & k *^ one c= k *^ n by ORDINAL2:56,58;
+then A4:      ex A st _P[A] by A3;
+     consider A such that
+A5:     _P[A] and
+A6:     for B st _P[B] holds A c= B from Ordinal_Min(A4);
+     consider l such that
+A7:     A = l & k divides l & n divides l & k c= l by A5;
+     reconsider l as Element of omega by ORDINAL2:def 21;
+     take l;
+     thus k divides l & n divides l by A7;
+     let m such that
+A8:      k divides m & n divides m;
+        now {} c= k by XBOOLE_1:2;
+        then {} c< k by A2,XBOOLE_0:def 8;
+        then A9: {} in k by ORDINAL1:21;
+A10:        m = l*^(m div^ l)+^(m mod^ l) by ORDINAL3:78;
+          l = k*^(l div^ k) & l = n*^(l div^ n) by A7,Th11;
+        then l*^(m div^ l) = k*^((l div^ k)*^(m div^ l)) &
+         l*^(m div^ l) = n*^((l div^ n)*^(m div^ l)) by ORDINAL3:58;
+        then k divides l*^(m div^ l) & n divides l*^(m div^ l) by Def2;
+then A11:        k divides m mod^ l & n divides m mod^ l by A8,A10,Th16;
+          now assume
+A12:          m mod^ l <> {};
+            {} c= m mod^ l by XBOOLE_1:2;
+          then {} c< m mod^ l by A12,XBOOLE_0:def 8;
+          then {} in m mod^ l by ORDINAL1:21;
+          then k c= m mod^ l by A11,Th15;
+          then l c= m mod^ l by A6,A7,A11;
+          then not m mod^ l in l by ORDINAL1:7;
+         hence contradiction by A7,A9,Th10;
+        end;
+        then m = l*^(m div^ l) by A10,ORDINAL2:44;
+       hence l divides m by Th11;
+      end;
+     hence l divides m;
+   end;
+  uniqueness
+   proof let m1,m2 be Element of omega such that
+A13:   k divides m1 & n divides m1 & for m st k divides m & n divides
+ m holds m1 divides m and
+A14:   k divides m2 & n divides m2 & for m st k divides m & n divides
+ m holds m2 divides m;
+       m1 divides m2 & m2 divides m1 by A13,A14;
+    hence m1 = m2 by Th13;
+   end;
+  commutativity;
+end;
+
+theorem Th17:
+ m lcm n divides m*^n
+  proof m divides m*^n & n divides m*^n by Def2;
+   hence thesis by Def3;
+  end;
+
+theorem Th18:
+ n <> {} implies (m*^n) div^ (m lcm n) divides m
+  proof assume
+A1:  n <> {};
+   take ((m lcm n) div^ n);
+      m lcm n divides m*^n & n divides m lcm n by Def3,Th17;
+    then m*^n = (m lcm n)*^ ((m*^n) div^ (m lcm n)) &
+    m lcm n = n*^((m lcm n) div^ n)by Th11;
+    then n*^m = n*^(((m lcm n) div^ n)*^ ((m*^n) div^ (m lcm n))) by ORDINAL3:
+58;
+   hence m = ((m*^n) div^ (m lcm n))*^((m lcm n) div^ n) by A1,ORDINAL3:36;
+  end;
+
+definition let k,n be natural Ordinal;
+ func k hcf n -> Element of omega means:
+Def4:  it divides k & it divides n & for m st m divides k & m divides
+ n holds m divides it;
+  existence
+   proof
+    per cases;
+    suppose
+      A1: k = {} or n = {};
+     then reconsider m = k \/ n as Element of omega by ORDINAL2:def 21;
+     take m;
+     thus m divides k & m divides n by A1,Th14;
+     thus thesis by A1;
+    suppose
+A2:    k <> {} & n <> {};
+     reconsider l = (k*^n) div^ (k lcm n) as Element of omega
+       by ORDINAL2:def 21;
+     take l;
+     thus l divides k & l divides n by A2,Th18;
+     let m; set mm = m*^((k div^ m)*^(n div^ m));
+     assume m divides k & m divides n;
+then A3:    k = m*^(k div^ m) & n = m*^(n div^ m) by Th11;
+      then m*^(k div^ m)*^(n div^ m) = n*^(k div^ m) by ORDINAL3:58;
+      then k divides m*^(k div^ m)*^(n div^ m) & n divides
+ m*^(k div^ m)*^(n div^ m)
+       by A3,Def2;
+then A4:    k lcm n divides
+ m*^(k div^ m)*^(n div^ m) & mm = m*^(k div^ m)*^(n div^ m)
+       by Def3,ORDINAL3:58;
+then A5:    mm = (k lcm n)*^(mm div^ (k lcm n)) by Th11;
+then A6:    mm*^m = (k lcm n)*^(m*^(mm div^ (k lcm n))) by ORDINAL3:58;
+A7:    m <> {} & k div^ m <> {} & n div^ m <> {} by A2,A3,ORDINAL2:52;
+      then (k div^ m)*^(n div^ m) <> {} by ORDINAL3:34;
+      then mm <> {} by A7,ORDINAL3:34;
+      then k lcm n <> {} by A5,ORDINAL2:52;
+      then k*^n = (k lcm n)*^(m*^(mm div^ (k lcm n))) & k*^n = k*^n+^{} &
+      {} in k lcm n by A3,A4,A6,ORDINAL2:44,ORDINAL3:10,58;
+      then l = m*^(mm div^ (k lcm n)) by ORDINAL3:79;
+     hence m divides l by Def2;
+   end;
+  uniqueness
+   proof let m1,m2 be Element of omega such that
+A8:   m1 divides k & m1 divides n & for m st m divides k & m divides
+ n holds m divides m1 and
+A9:   m2 divides k & m2 divides n & for m st m divides k & m divides
+ n holds m divides m2;
+       m1 divides m2 & m2 divides m1 by A8,A9;
+    hence m1 = m2 by Th13;
+   end;
+  commutativity;
+end;
+
+theorem Th19:
+ a hcf {} = a & a lcm {} = {}
+  proof
+   reconsider e = a, c = {} as Element of omega by ORDINAL2:def 21;
+A1:  e divides a & e divides {} & for n st n divides a & n divides
+ {} holds n divides e by Th14;
+      a divides c & {} divides c & for b st a divides b & {} divides
+ b holds c divides b by Th14;
+   hence thesis by A1,Def3,Def4;
+  end;
+
+theorem Th20:
+ a hcf b = {} implies a = {}
+  proof a hcf b divides a by Def4;
+    then a = (a hcf b)*^(a div^ (a hcf b)) by Th11;
+   hence thesis by ORDINAL2:52;
+  end;
+
+theorem Th21:
+ a hcf a = a & a lcm a = a
+  proof reconsider c = a as Element of omega by ORDINAL2:def 21;
+      c divides a & for b st b divides a & b divides a holds b divides c;
+   hence a hcf a = a by Def4;
+      a divides c & for b st a divides b & a divides b holds c divides b;
+   hence thesis by Def3;
+  end;
+
+theorem Th22:
+ (a*^c) hcf (b*^c) = (a hcf b)*^c
+  proof per cases;
+   suppose c = {};
+    then a*^c = {} & b*^c = {} & (a hcf b)*^c = {} by ORDINAL2:52;
+   hence thesis by Th21;
+   suppose
+A1:  c <> {} & a <> {};
+   reconsider d = (a hcf b)*^c as Element of omega by ORDINAL2:def 21;
+   set e = ((a*^c) hcf (b*^c)) div^ d;
+      a hcf b divides a & a hcf b divides b by Def4;
+    then a = (a hcf b)*^(a div^ (a hcf b)) & b = (a hcf b)*^(b div^ (a hcf b))
+     by Th11;
+    then a*^c = d*^(a div^ (a hcf b)) & b*^c = d*^(b div^ (a hcf b))
+     by ORDINAL3:58;
+    then d divides a*^c & d divides b*^c by Def2;
+    then d divides (a*^c) hcf (b*^c) by Def4;
+then A2:  (a*^c) hcf (b*^c) = d*^e by Th11 .= (a hcf b)*^e*^c by ORDINAL3:58;
+    then (a hcf b)*^e*^c divides a*^c & (a hcf b)*^e*^c divides
+ b*^c by Def4;
+    then (a hcf b)*^e*^c*^((a*^c)div^((a hcf b)*^e*^c)) = a*^c &
+    (a hcf b)*^e*^c*^((b*^c)div^((a hcf b)*^e*^c)) = b*^c by Th11;
+    then (a hcf b)*^e*^((a*^c)div^((a hcf b)*^e*^c))*^c = a*^c &
+    (a hcf b)*^e*^((b*^c)div^((a hcf b)*^e*^c))*^c = b*^c by ORDINAL3:58;
+    then (a hcf b)*^e*^((a*^c)div^((a hcf b)*^e*^c)) = a &
+    (a hcf b)*^e*^((b*^c)div^((a hcf b)*^e*^c)) = b by A1,ORDINAL3:36;
+    then (a hcf b)*^e divides a & (a hcf b)*^e divides b by Def2;
+    then (a hcf b)*^e divides a hcf b by Def4;
+    then (a hcf b)*^e*^((a hcf b) div^ ((a hcf b)*^e)) = a hcf b by Th11;
+    then (a hcf b)*^(e*^((a hcf b) div^ ((a hcf b)*^e))) = a hcf b by ORDINAL3:
+58
+       .= (a hcf b)*^one by ORDINAL2:56;
+    then a hcf b = {} or e*^((a hcf b) div^ ((a hcf b)*^e)) = one
+     by ORDINAL3:36;
+    then e = one by A1,Th20,ORDINAL3:41;
+   hence thesis by A2,ORDINAL2:56;
+   suppose a = {};
+    then a hcf b = b & a*^c = {} by Th19,ORDINAL2:52;
+   hence thesis by Th19;
+  end;
+
+theorem Th23:
+ b <> {} implies a hcf b <> {} & b div^ (a hcf b) <> {}
+  proof
+      a hcf b divides b by Def4;
+    then b = (a hcf b)*^(b div^ (a hcf b)) by Th11;
+   hence thesis by ORDINAL2:52;
+  end;
+
+theorem Th24:
+ a <> {} or b <> {} implies
+  a div^ (a hcf b), b div^ (a hcf b) are_relative_prime
+  proof assume
+A1:  a <> {} or b <> {};
+A2:  one*^a = a & one*^b = b by ORDINAL2:56;
+   set ab = a hcf b;
+   per cases;
+   suppose a = {} or b = {};
+    then ab = b & b div^ b = one or
+    ab = a & a div^ a = one by A1,A2,Th19,ORDINAL3:81;
+   hence thesis by Th6;
+   suppose
+A3:  a <> {} & b <> {};
+      ab divides a & ab divides b by Def4;
+then A4:  a = ab*^(a div^ ab) & b = ab*^(b div^ ab) by Th11;
+   let c,d1,d2 be Ordinal such that
+A5:  a div^ (a hcf b) = c *^ d1 & b div^ (a hcf b) = c *^ d2;
+      a div^ ab <> {} & b div^ ab <> {} by A3,A4,ORDINAL2:52;
+   then reconsider c,d1,d2 as Element of omega by A5,Th2;
+      a = ab*^c*^d1 & b = ab*^c*^d2 by A4,A5,ORDINAL3:58;
+    then ab*^c divides a & ab*^c divides b by Def2;
+    then ab*^c divides ab by Def4;
+    then ab = (ab*^c)*^(ab div^ (ab*^c)) by Th11;
+    then ab = ab*^(c*^(ab div^ (ab*^c))) by ORDINAL3:58;
+    then ab*^one = ab*^(c*^(ab div^ (ab*^c))) & ab <> {} by A3,A4,ORDINAL2:52,
+56;
+    then one = c*^(ab div^ (ab*^c)) by ORDINAL3:36;
+   hence thesis by ORDINAL3:41;
+  end;
+
+theorem Th25:
+ a,b are_relative_prime iff a hcf b = one
+  proof
+      a hcf b divides a & a hcf b divides b by Def4;
+    then a = (a hcf b)*^(a div^ (a hcf b)) & b = (a hcf b)*^(b div^ (a hcf b))
+     by Th11;
+   hence a,b are_relative_prime implies a hcf b = one by Def1;
+   assume
+A1:  a hcf b = one;
+   let c,d1,d2 be Ordinal such that
+A2:  a = c*^d1 & b = c*^d2;
+      a <> {} or b <> {} by A1,Th19;
+   then reconsider c as Element of omega by A2,Th2;
+      c divides a & c divides b by A2,Def2;
+    then c divides one by A1,Def4;
+    then ex d st one = c*^d by Th9;
+   hence thesis by ORDINAL3:41;
+  end;
+
+definition let a,b be natural Ordinal;
+ func RED(a,b) -> Element of omega equals:
+Def5:
+  a div^ (a hcf b);
+ coherence by ORDINAL2:def 21;
+end;
+
+theorem Th26:
+ RED(a,b)*^(a hcf b) = a
+  proof
+      RED(a,b) = a div^ (a hcf b) & a hcf b divides a by Def4,Def5;
+   hence thesis by Th11;
+  end;
+
+theorem Th27:
+ a <> {} or b <> {} implies RED(a,b), RED(b,a) are_relative_prime
+  proof assume a <> {} or b <> {};
+then A1:  a div^ (a hcf b), b div^ (a hcf b) are_relative_prime by Th24;
+      RED(a,b) = a div^ (a hcf b) by Def5;
+   hence thesis by A1,Def5;
+  end;
+
+theorem Th28:
+ a,b are_relative_prime implies RED(a,b) = a
+  proof assume a,b are_relative_prime;
+    then a hcf b = one by Th25;
+    then a div^ (a hcf b) = a by ORDINAL3:84;
+   hence thesis by Def5;
+  end;
+
+theorem Th29:
+ RED(a,one) = a & RED(one,a) = one
+  proof a,one are_relative_prime by Th6;
+    then a hcf one = one by Th25;
+    then a div^ (a hcf one) = a & one div^ (one hcf a) = one by ORDINAL3:84;
+   hence thesis by Def5;
+  end;
+
+theorem Th30:
+ b <> {} implies RED(b,a) <> {}
+  proof RED(b,a) = b div^ (b hcf a) by Def5;
+   hence thesis by Th23;
+  end;
+
+theorem Th31:
+ RED({},a) = {} & (a <> {} implies RED(a,{}) = one)
+  proof thus RED({},a) = {} div^ ({} hcf a) by Def5 .= {} by ORDINAL3:83;
+   assume
+A1: a <> {};
+   thus RED(a,{}) = a div^ (a hcf {}) by Def5 .= a div^ a by Th19
+     .= a*^one div^ a by ORDINAL2:56
+     .= one by A1,ORDINAL3:81;
+  end;
+
+theorem Th32:
+ a <> {} implies RED(a,a) = one
+  proof assume
+A1:  a <> {};
+   thus RED(a,a) = a div^ (a hcf a) by Def5 .= a div^ a by Th21
+     .= a*^one div^ a by ORDINAL2:56
+     .= one by A1,ORDINAL3:81;
+  end;
+
+theorem Th33:
+ c <> {} implies RED(a*^c, b*^c) = RED(a, b)
+  proof
+A1:  a hcf b divides a by Def4;
+A2:  a <> {} implies a hcf b <> {} by Th23;
+   assume c <> {};
+then A3:  a <> {} implies (a hcf b)*^c <> {} by A2,ORDINAL3:34;
+A4:  RED({},b) = {} & {}*^((a hcf b)*^c) = {} & {} div^ ((a hcf b)*^c) = {}
+     by Th31,ORDINAL2:52,ORDINAL3:83;
+A5:  a div^ (a hcf b) = RED(a,b) by Def5;
+   thus RED(a*^c, b*^c)
+      = (a*^c)div^((a*^c) hcf (b*^c)) by Def5
+     .= (a*^c)div^((a hcf b)*^c) by Th22
+     .= (((a div^(a hcf b))*^(a hcf b))*^c)div^((a hcf b)*^c) by A1,Th11
+     .= (RED(a,b)*^((a hcf b)*^c))div^((a hcf b)*^c) by A5,ORDINAL3:58
+     .= RED(a, b) by A3,A4,ORDINAL3:81;
+  end;
+
+set RATplus = {[a,b] where a,b is Element of omega:
+   a,b are_relative_prime & b <> {}};
+
+reconsider 01 = one as Element of omega by ORDINAL2:def 21;
+  01 <> {} & 01,01 are_relative_prime by Th6;
+then [01,01] in RATplus;
+then reconsider RATplus as non empty set;
+
+Lm2: [a,b] in RATplus implies a,b are_relative_prime & b <> {}
+ proof assume [a,b] in RATplus;
+  then consider c,d being Element of omega such that
+A1: [a,b] = [c,d] & c,d are_relative_prime & d <> {};
+     a = c & b = d by A1,ZFMISC_1:33;
+  hence thesis by A1;
+ end;
+
+begin :: Non negative rationals
+
+reserve i,j,k for Element of omega;
+
+definition
+ func RAT+ equals:
+Def6:
+  ({[i,j]: i,j are_relative_prime & j <> {}} \ {[k,one]: not contradiction})
+  \/ omega;
+ correctness;
+end;
+
+theorem Th34:
+ omega c= RAT+ by Def6,XBOOLE_1:7;
+
+reserve x,y,z for Element of RAT+;
+
+definition
+ cluster RAT+ -> non empty;
+ coherence by Th34,ORDINAL2:19;
+end;
+
+definition
+ cluster non empty ordinal Element of RAT+;
+ existence by Lm1,Th34;
+end;
+
+theorem Th35:
+ x in
+ omega or ex i,j st x = [i,j] & i,j are_relative_prime & j <> {} & j <> one
+  proof assume not x in omega;
+    then x in RATplus \ {[k,one]: not contradiction} by Def6,XBOOLE_0:def 2;
+then A1:  x in RATplus & not x in {[k,one]: not contradiction} by XBOOLE_0:def
+4;
+   then consider a,b being Element of omega such that
+A2:  x = [a,b] & a,b are_relative_prime & b <> {};
+      [a,one] in {[k,one]: not contradiction};
+   hence thesis by A1,A2;
+  end;
+
+theorem Th36:
+ not ex i,j being set st [i,j] is Ordinal
+  proof given i,j being set such that
+A1:  [i,j] is Ordinal;
+A2:  [i,j] = {{i},{i,j}} by TARSKI:def 5;
+    {} in [i,j] by A1,ORDINAL3:10;
+   hence thesis by A2,TARSKI:def 2;
+  end;
+
+theorem Th37:
+ A in RAT+ implies A in omega
+  proof assume A in RAT+ & not A in omega;
+    then ex i,j st A = [i,j] & i,j are_relative_prime & j <> {} & j <> one by
+Th35;
+   hence thesis by Th36;
+  end;
+
+definition
+ cluster -> natural (ordinal Element of RAT+);
+ coherence
+  proof let x be ordinal Element of RAT+;
+   assume not x in omega;
+   then consider i,j such that
+A1:  x = [i,j] & i,j are_relative_prime & j <> {} & j <> one by Th35;
+A2:  x = {{i},{i,j}} by A1,TARSKI:def 5;
+    then {} in x by ORDINAL3:10;
+   hence thesis by A2,TARSKI:def 2;
+  end;
+end;
+
+theorem Th38:
+ not ex i,j being set st [i,j] in omega
+  proof given i,j being set such that
+A1:  [i,j] in omega;
+A2:  [i,j] = {{i},{i,j}} by TARSKI:def 5;
+   reconsider a = [i,j] as Element of omega by A1;
+   {} in a by ORDINAL3:10;
+   hence thesis by A2,TARSKI:def 2;
+  end;
+
+theorem Th39:
+ [i,j] in RAT+ iff i,j are_relative_prime & j <> {} & j <> one
+  proof
+A1:  not [i,j] in omega by Th38;
+   hereby assume [i,j] in RAT+;
+     then [i,j] in RATplus \ {[k,one]: not contradiction} by A1,Def6,XBOOLE_0:
+def 2;
+then A2:   [i,j] in RATplus & not [i,j] in {[k,one]: not contradiction}
+      by XBOOLE_0:def 4;
+    hence i,j are_relative_prime & j <> {} by Lm2;
+    thus j <> one by A2;
+   end;
+   assume i,j are_relative_prime & j <> {};
+then A3:  [i,j] in RATplus;
+   assume j <> one;
+    then not ex k st [i,j] = [k,one] by ZFMISC_1:33;
+    then not [i,j] in {[k,one]: not contradiction};
+    then [i,j] in RATplus \ {[k,one]: not contradiction} by A3,XBOOLE_0:def 4;
+   hence thesis by Def6,XBOOLE_0:def 2;
+  end;
+
+definition
+ let x be Element of RAT+;
+ func numerator x -> Element of omega means:
+Def7:
+  it = x if x in omega otherwise ex a st x = [it,a];
+ existence
+  proof
+   thus x in omega implies ex a being Element of omega st a = x;
+   assume not x in omega;
+     then x in RATplus \ {[k,one]: not contradiction} by Def6,XBOOLE_0:def 2;
+     then x in RATplus by XBOOLE_0:def 4;
+    then consider a,b being Element of omega such that
+A1:   x = [a,b] & a,b are_relative_prime & b <> {};
+    take a,b; thus thesis by A1;
+  end;
+ correctness by ZFMISC_1:33;
+ func denominator x -> Element of omega means:
+Def8:
+  it = one if x in omega otherwise ex a st x = [a,it];
+ existence
+  proof
+   thus x in omega implies ex a being Element of omega st a = one by Lm1;
+   assume not x in omega;
+     then x in RATplus \ {[k,one]: not contradiction} by Def6,XBOOLE_0:def 2;
+     then x in RATplus by XBOOLE_0:def 4;
+    then consider a,b being Element of omega such that
+A2:   x = [a,b] & a,b are_relative_prime & b <> {};
+    take b,a; thus thesis by A2;
+  end;
+ correctness by ZFMISC_1:33;
+end;
+
+theorem Th40:
+ numerator x, denominator x are_relative_prime
+  proof per cases;
+   suppose x in omega;
+    then denominator x = one by Def8;
+   hence thesis by Th6;
+   suppose
+A1:  not x in omega;
+   then consider i,j such that
+A2:  x = [i,j] & i,j are_relative_prime & j <> {} & j <> one by Th35;
+      i = numerator x by A1,A2,Def7;
+   hence thesis by A1,A2,Def8;
+  end;
+
+theorem Th41:
+ denominator x <> {}
+  proof per cases;
+   suppose x in omega;
+    hence thesis by Def8;
+   suppose
+A1:   not x in omega;
+    then consider i,j such that
+A2:   x = [i,j] & i,j are_relative_prime & j <> {} & j <> one by Th35;
+    thus thesis by A1,A2,Def8;
+  end;
+
+theorem Th42:
+ not x in omega implies x = [numerator x, denominator x] & denominator x <> one
+  proof assume
+A1:  not x in omega;
+   then consider i,j such that
+A2:  x = [i,j] & i,j are_relative_prime & j <> {} & j <> one by Th35;
+      i = numerator x & j = denominator x by A1,A2,Def7,Def8;
+   hence thesis by A2;
+  end;
+
+theorem Th43:
+ x <> {} iff numerator x <> {}
+  proof
+   hereby assume
+A1:   x <> {} & numerator x = {};
+then A2:   not x in omega by Def7;
+    then consider i,j such that
+A3:   x = [i,j] & i,j are_relative_prime & j <> {} & j <> one by Th35;
+       i = {} by A1,A2,A3,Def7;
+    hence contradiction by A3,Th7;
+   end;
+      {} in omega by ORDINAL2:def 5;
+   hence thesis by Def7;
+  end;
+
+theorem
+  x in omega iff denominator x = one by Def8,Th42;
+
+definition
+ let i,j be natural Ordinal;
+ func i/j -> Element of RAT+ equals:
+Def9:
+  {} if j = {},
+  RED(i,j) if RED(j,i) = one otherwise
+  [RED(i,j), RED(j,i)];
+ coherence
+  proof
+    A1: RED(i,j) in omega;
+      now assume j <> {};
+      then RED(i,j), RED(j,i) are_relative_prime & RED(j,i) <> {} by Th27,Th30
+;
+     hence RED(j,i) <> one implies [RED(i,j), RED(j,i)] in RAT+ by Th39;
+    end;
+   hence thesis by A1,Th34,ORDINAL2:19;
+  end;
+ consistency by Th31;
+ synonym quotient(i,j);
+end;
+
+theorem Th45:
+ (numerator x)/(denominator x) = x
+  proof
+A1:  denominator x <> {} by Th41;
+      numerator x, denominator x are_relative_prime by Th40;
+then A2:  RED(numerator x, denominator x) = numerator x &
+    RED(denominator x, numerator x) = denominator x by Th28;
+   per cases;
+   suppose
+A3:  denominator x = one;
+    then x in omega by Th42;
+    then numerator x = x by Def7;
+   hence thesis by A2,A3,Def9;
+   suppose
+A4:  denominator x <> one;
+    then not x in omega by Def8;
+    then x = [numerator x, denominator x] by Th42;
+   hence thesis by A1,A2,A4,Def9;
+  end;
+
+theorem Th46:
+ {}/b = {} & a/one = a
+  proof RED({},b) = {} & (b <> {} implies RED(b,{}) = one) by Th31;
+   hence {}/b = {} by Def9;
+      RED(one,a) = one & RED(a,one) = a by Th29;
+   hence thesis by Def9;
+  end;
+
+theorem Th47:
+ a <> {} implies a/a = one
+  proof assume a <> {};
+    then RED(a,a) = one by Th32;
+   hence thesis by Def9;
+  end;
+
+theorem Th48:
+ b <> {} implies numerator (a/b) = RED(a,b) & denominator (a/b) = RED(b,a)
+  proof assume
+A1:  b <> {};
+   per cases;
+   suppose
+A2:  RED(b,a) = one;
+    then a/b = RED(a,b) by Def9;
+   hence thesis by A2,Def7,Def8;
+   suppose
+    RED(b,a) <> one;
+    then a/b = [RED(a,b), RED(b,a)] & not [RED(a,b), RED(b,a)] in omega
+     by A1,Def9,Th38;
+   hence thesis by Def7,Def8;
+  end;
+
+theorem Th49:
+ i,j are_relative_prime & j <> {} implies
+   numerator (i/j) = i & denominator (i/j) = j
+  proof assume i,j are_relative_prime;
+    then RED(i,j) = i & RED(j,i) = j by Th28;
+   hence thesis by Th48;
+  end;
+
+theorem Th50:
+ c <> {} implies (a*^c)/(b*^c) = a/b
+  proof assume
+A1:  c <> {};
+   per cases;
+   suppose b = {};
+    then a/b = {} & b*^c = {} by Def9,ORDINAL2:52;
+   hence thesis by Def9;
+   suppose
+A2:  b <> {};
+then A3:  b*^c <> {} by A1,ORDINAL3:34;
+then A4:  numerator ((a*^c)/(b*^c)) = RED(a*^c,b*^c) by Th48
+     .= RED(a,b) by A1,Th33
+     .= numerator (a/b) by A2,Th48;
+      denominator ((a*^c)/(b*^c)) = RED(b*^c,a*^c) by A3,Th48
+     .= RED(b,a) by A1,Th33
+     .= denominator (a/b) by A2,Th48;
+   hence (a*^c)/(b*^c) = (numerator (a/b))/denominator (a/b) by A4,Th45
+     .= a/b by Th45;
+  end;
+
+reserve i,j,k for natural Ordinal;
+
+theorem Th51:
+ j <> {} & l <> {} implies (i/j = k/l iff i*^l = j*^k)
+  proof assume
+A1:  j <> {} & l <> {};
+   set x = i/j, y = k/l;
+   set nx = numerator x, dx = denominator x;
+   set ny = numerator y, dy = denominator y;
+A2:  nx = RED(i,j) & dx = RED(j,i) by A1,Th48;
+A3:  ny = RED(k,l) & dy = RED(l,k) by A1,Th48;
+    hereby assume i/j = k/l;
+      then i = ny*^(i hcf j) & l = dx*^(l hcf k) by A2,A3,Th26;
+     hence i*^l = ny*^(i hcf j)*^dx*^(l hcf k) by ORDINAL3:58
+       .= ny*^((i hcf j)*^dx)*^(l hcf k) by ORDINAL3:58
+       .= ny*^j*^(l hcf k) by A2,Th26
+       .= j*^(ny*^(l hcf k)) by ORDINAL3:58
+       .= j*^k by A3,Th26;
+    end;
+   assume i*^l = j*^k;
+    then nx = RED(j*^k,j*^l) & dx = RED(j*^l,j*^k) by A1,A2,Th33;
+    then nx = ny & dx = dy by A1,A3,Th33;
+    then x = ny/dy by Th45;
+   hence i/j = k/l by Th45;
+  end;
+
+definition
+ let x,y be Element of RAT+;
+ func x+y -> Element of RAT+ equals:
+Def10:
+  ((numerator x)*^(denominator y)+^(numerator y)*^(denominator x))
+   / ((denominator x)*^(denominator y));
+ coherence;
+ commutativity;
+ func x*'y -> Element of RAT+ equals:
+Def11:
+  ((numerator x)*^(numerator y)) / ((denominator x)*^(denominator y));
+ coherence;
+ commutativity;
+end;
+
+theorem Th52:
+ j <> {} & l <> {} implies (i/j)+(k/l) = (i*^l+^j*^k)/(j*^l)
+  proof assume
+A1:  j <> {} & l <> {};
+then A2:  i hcf j <> {} & k hcf l <> {} by Th20;
+      numerator (k/l) = RED(k,l) & numerator (i/j) = RED(i,j) &
+    denominator (k/l) = RED(l,k) & denominator (i/j) = RED(j,i) by A1,Th48;
+   hence (i/j)+(k/l)
+       = (RED(i,j)*^RED(l,k)+^RED(j,i)*^RED(k,l))/(RED(j,i)*^RED(l,k))
+         by Def10
+      .= (RED(i,j)*^RED(l,k)+^RED(j,i)*^RED(k,l))*^(i hcf j)
+          /(RED(j,i)*^RED(l,k)*^(i hcf j)) by A2,Th50
+      .= (RED(i,j)*^RED(l,k)+^RED(j,i)*^RED(k,l))*^(i hcf j)
+          /(RED(l,k)*^(RED(j,i)*^(i hcf j))) by ORDINAL3:58
+      .= (RED(i,j)*^RED(l,k)+^RED(j,i)*^RED(k,l))*^(i hcf j)/(RED(l,k)*^j)
+         by Th26
+      .= (RED(i,j)*^RED(l,k)*^(i hcf j)+^RED(j,i)*^RED(k,l)*^(i hcf j))
+         /(RED(l,k)*^j) by ORDINAL3:54
+      .= (RED(l,k)*^(RED(i,j)*^(i hcf j))+^RED(j,i)*^RED(k,l)*^(i hcf j))
+         /(RED(l,k)*^j) by ORDINAL3:58
+      .= (RED(l,k)*^i+^RED(j,i)*^RED(k,l)*^(i hcf j))/(RED(l,k)*^j) by Th26
+      .= (RED(l,k)*^i+^RED(k,l)*^(RED(j,i)*^(i hcf j)))/(RED(l,k)*^j)
+         by ORDINAL3:58
+      .= (RED(l,k)*^i+^RED(k,l)*^j)/(RED(l,k)*^j) by Th26
+      .= ((RED(l,k)*^i+^RED(k,l)*^j)*^(k hcf l))/(RED(l,k)*^j*^(k hcf l))
+         by A2,Th50
+      .= ((RED(l,k)*^i+^RED(k,l)*^j)*^(k hcf l))/(j*^(RED(l,k)*^(k hcf l)))
+         by ORDINAL3:58
+      .= ((RED(l,k)*^i+^RED(k,l)*^j)*^(k hcf l))/(j*^l) by Th26
+      .= (RED(l,k)*^i*^(k hcf l)+^RED(k,l)*^j*^(k hcf l))/(j*^l) by ORDINAL3:54
+      .= (i*^(RED(l,k)*^(k hcf l))+^RED(k,l)*^j*^(k hcf l))/(j*^l)
+         by ORDINAL3:58
+      .= (i*^l+^RED(k,l)*^j*^(k hcf l))/(j*^l) by Th26
+      .= (i*^l+^j*^(RED(k,l)*^(k hcf l)))/(j*^l) by ORDINAL3:58
+      .= (i*^l+^j*^k)/(j*^l) by Th26;
+  end;
+
+theorem Th53:
+ k <> {} implies (i/k)+(j/k) = (i+^j)/k
+  proof assume
+A1:  k <> {};
+   hence (i/k)+(j/k) = (i*^k+^j*^k)/(k*^k) by Th52
+       .= ((i+^j)*^k)/(k*^k) by ORDINAL3:54
+       .= (i+^j)/k by A1,Th50;
+  end;
+
+definition
+ cluster empty Element of RAT+;
+ existence by Th34,ORDINAL2:19;
+end;
+
+definition
+ redefine
+ func {} -> empty Element of RAT+;
+ coherence by Th34,ORDINAL2:19;
+ func one -> non empty ordinal Element of RAT+;
+ coherence by Lm1,Th34;
+end;
+
+theorem Th54:
+ x*'{} = {}
+  proof
+      denominator {} = one & numerator {} = {} & (numerator x)*^{} = {} &
+    (denominator x)*^one = denominator x by Def7,Def8,ORDINAL2:19,52,56;
+   hence x*'{} = {}/denominator x by Def11 .= {} by Th46;
+  end;
+
+theorem Th55:
+ (i/j)*'(k/l) = (i*^k)/(j*^l)
+  proof per cases;
+   suppose
+A1:  j <> {} & l <> {};
+then A2:  i hcf j <> {} & k hcf l <> {} by Th20;
+      numerator (k/l) = RED(k,l) & numerator (i/j) = RED(i,j) &
+    denominator (k/l) = RED(l,k) & denominator (i/j) = RED(j,i) by A1,Th48;
+   hence (i/j)*'(k/l) = (RED(i,j)*^RED(k,l))/(RED(j,i)*^RED(l,k)) by Def11
+      .= (RED(i,j)*^RED(k,l)*^(i hcf j))/(RED(j,i)*^RED(l,k)*^(i hcf j))
+         by A2,Th50
+      .= (RED(k,l)*^(RED(i,j)*^(i hcf j)))/(RED(j,i)*^RED(l,k)*^(i hcf j))
+         by ORDINAL3:58
+      .= (RED(k,l)*^i)/(RED(j,i)*^RED(l,k)*^(i hcf j)) by Th26
+      .= (RED(k,l)*^i)/(RED(l,k)*^(RED(j,i)*^(i hcf j))) by ORDINAL3:58
+      .= (RED(k,l)*^i)/(RED(l,k)*^j) by Th26
+      .= (RED(k,l)*^i*^(l hcf k))/(RED(l,k)*^j*^(l hcf k)) by A2,Th50
+      .= (i*^(RED(k,l)*^(l hcf k)))/(RED(l,k)*^j*^(l hcf k)) by ORDINAL3:58
+      .= (i*^k)/(RED(l,k)*^j*^(l hcf k)) by Th26
+      .= (i*^k)/(j*^(RED(l,k)*^(l hcf k))) by ORDINAL3:58
+      .= (i*^k)/(j*^l) by Th26;
+   suppose j = {} or l = {};
+    then (i/j = {} or k/l = {}) & j*^l = {} by Def9,ORDINAL2:52;
+    then (i/j)*'(k/l) = {} & (i*^k)/(j*^l) = {} by Def9,Th54;
+   hence thesis;
+  end;
+
+theorem Th56:
+ x+{} = x
+  proof
+      denominator {} = one & numerator {} = {}
+ & (numerator x)*^one = numerator x &
+    {}*^(denominator x) = {} & (denominator x)*^one = denominator x &
+    (numerator x)+^{} = numerator x
+     by Def7,Def8,ORDINAL2:19,44,52,56;
+   hence
+      x+{} = (numerator x) / denominator x by Def10 .= x by Th45;
+  end;
+
+theorem Th57:
+ (x+y)+z = x+(y+z)
+  proof
+   set nx = numerator x, ny = numerator y, nz = numerator z;
+   set dx = denominator x, dy = denominator y, dz = denominator z;
+A1:  dx <> {} & dy <> {} & dz <> {} by Th41;
+then A2:  dx*^dy <> {} & dy*^dz <> {} by ORDINAL3:34;
+   thus x+y+z = (nx*^dy+^dx*^ny)/(dx*^dy)+z by Def10
+     .= (nx*^dy+^dx*^ny)/(dx*^dy)+nz/dz by Th45
+     .= ((nx*^dy+^dx*^ny)*^dz+^(dx*^dy)*^nz)/(dx*^dy*^dz) by A1,A2,Th52
+     .= (nx*^dy*^dz+^dx*^ny*^dz+^dx*^dy*^nz)/(dx*^dy*^dz) by ORDINAL3:54
+     .= (nx*^(dy*^dz)+^dx*^ny*^dz+^dx*^dy*^nz)/(dx*^dy*^dz) by ORDINAL3:58
+     .= (nx*^(dy*^dz)+^dx*^(ny*^dz)+^dx*^dy*^nz)/(dx*^dy*^dz) by ORDINAL3:58
+     .= (nx*^(dy*^dz)+^dx*^(ny*^dz)+^dx*^(dy*^nz))/(dx*^dy*^dz) by ORDINAL3:58
+     .= (nx*^(dy*^dz)+^(dx*^(ny*^dz)+^dx*^(dy*^nz)))/(dx*^dy*^dz)
+        by ORDINAL3:33
+     .= (nx*^(dy*^dz)+^dx*^(ny*^dz+^dy*^nz))/(dx*^dy*^dz) by ORDINAL3:54
+     .= (nx*^(dy*^dz)+^dx*^(ny*^dz+^dy*^nz))/(dx*^(dy*^dz)) by ORDINAL3:58
+     .= (ny*^dz+^dy*^nz)/(dy*^dz)+nx/dx by A1,A2,Th52
+     .= (ny*^dz+^dy*^nz)/(dy*^dz)+x by Th45
+     .= x+(y+z) by Def10;
+  end;
+
+theorem Th58:
+ (x*'y)*'z = x*'(y*'z)
+  proof
+   set nx = numerator x, ny = numerator y, nz = numerator z;
+   set dx = denominator x, dy = denominator y, dz = denominator z;
+A1:  z = nz/dz & x = nx/dx by Th45;
+      x*'y = (nx*^ny)/(dx*^dy) by Def11;
+   hence (x*'y)*'z = (nx*^ny*^nz)/(dx*^dy*^dz) by A1,Th55
+     .= (nx*^(ny*^nz))/(dx*^dy*^dz) by ORDINAL3:58
+     .= (nx*^(ny*^nz))/(dx*^(dy*^dz)) by ORDINAL3:58
+     .= x*'(((ny*^nz))/(dy*^dz)) by A1,Th55
+     .= x*'(y*'z) by Def11;
+  end;
+
+theorem Th59:
+ x*'one = x
+  proof
+   set y = one;
+      (numerator x)*^one = numerator x & (denominator x)*^one = denominator x &
+    numerator y = one & denominator y = one by Def7,Def8,Lm1,ORDINAL2:56;
+   hence x*'y = (numerator x)/denominator x by Def11 .= x by Th45;
+  end;
+
+theorem Th60:
+ x <> {} implies ex y st x*'y = one
+  proof set nx = numerator x, dx = denominator x;
+   assume x <> {};
+then A1:  nx <> {} & dx <> {} by Th41,Th43;
+   take y = dx/nx;
+      nx, dx are_relative_prime by Th40;
+then A2:  denominator y = nx & numerator y = dx by A1,Th49;
+A3:  nx*^dx <> {} by A1,ORDINAL3:34;
+   thus x*'y = (nx*^dx)/(dx*^nx) by A2,Def11 .= one by A3,Th47;
+  end;
+
+theorem Th61:
+ x <> {} implies ex z st y = x*'z
+  proof assume x <> {};
+   then consider z such that
+A1:  x*'z = one by Th60;
+   reconsider o = one as Element of RAT+;
+   take z*'y; thus y = y*'o by Th59 .= x*'(z*'y) by A1,Th58;
+  end;
+
+theorem Th62:
+ x <> {} & x*'y = x*'z implies y = z
+  proof assume x <> {};
+   then consider r being Element of RAT+ such that
+A1:  x*'r = one by Th60;
+      r*'(x*'y) = one*'y & r*'(x*'z) = one*'z by A1,Th58;
+    then r*'(x*'y) = y & r*'(x*'z) = z by Th59;
+   hence thesis;
+  end;
+
+theorem Th63:
+ x*'(y+z) = x*'y+x*'z
+  proof
+   set nx = numerator x, ny = numerator y, nz = numerator z;
+   set dx = denominator x, dy = denominator y, dz = denominator z;
+A1:  x = nx/dx by Th45;
+A2:  dx <> {} & dy <> {} & dz <> {} by Th41;
+then A3:  dx*^dz <> {} & dx*^dy <> {} by ORDINAL3:34;
+   thus x*'(y+z) = x*'((ny*^dz+^dy*^nz)/(dy*^dz)) by Def10
+     .= (nx*^(ny*^dz+^dy*^nz))/(dx*^(dy*^dz)) by A1,Th55
+     .= (nx*^(ny*^dz)+^nx*^(dy*^nz))/(dx*^(dy*^dz)) by ORDINAL3:54
+     .= (nx*^ny*^dz+^nx*^(dy*^nz))/(dx*^(dy*^dz)) by ORDINAL3:58
+     .= (nx*^ny*^dz+^dy*^(nx*^nz))/(dx*^(dy*^dz)) by ORDINAL3:58
+     .= (nx*^ny*^dz+^dy*^(nx*^nz))/(dy*^(dx*^dz)) by ORDINAL3:58
+     .= (dx*^((nx*^ny)*^dz+^(dy*^(nx*^nz))))/(dx*^(dy*^(dx*^dz))) by A2,Th50
+     .= (dx*^((nx*^ny)*^dz)+^dx*^(dy*^(nx*^nz)))/(dx*^(dy*^(dx*^dz)))
+        by ORDINAL3:54
+     .= (dx*^((nx*^ny)*^dz)+^(dx*^dy)*^(nx*^nz))/(dx*^(dy*^(dx*^dz)))
+        by ORDINAL3:58
+     .= ((nx*^ny)*^(dx*^dz)+^(dx*^dy)*^(nx*^nz))/(dx*^(dy*^(dx*^dz)))
+        by ORDINAL3:58
+     .= ((nx*^ny)*^(dx*^dz)+^(dx*^dy)*^(nx*^nz))/((dx*^dy)*^(dx*^dz))
+        by ORDINAL3:58
+     .= ((nx*^ny)/(dx*^dy))+((nx*^nz)/(dx*^dz)) by A3,Th52
+     .= ((nx*^ny)/(dx*^dy))+x*'z by Def11
+     .= x*'y+x*'z by Def11;
+  end;
+
+theorem Th64:
+ for i,j being ordinal Element of RAT+ holds i+j = i+^j
+  proof let i,j be ordinal Element of RAT+;
+   set ni = numerator i, nj = numerator j;
+A1:  i in omega & j in omega by ORDINAL2:def 21;
+    then denominator i = one & denominator j = one by Def8;
+   hence i+j = (ni*^one+^one*^nj)/(one*^one) by Def10
+      .= (ni*^one+^one*^nj)/one by ORDINAL2:56
+      .= (ni+^one*^nj)/one by ORDINAL2:56
+      .= (ni+^nj)/one by ORDINAL2:56
+      .= ni+^nj by Th46
+      .= i+^nj by A1,Def7
+      .= i+^j by A1,Def7;
+  end;
+
+theorem
+   for i,j being ordinal Element of RAT+ holds i*'j = i*^j
+  proof let i,j be ordinal Element of RAT+;
+   set ni = numerator i, nj = numerator j;
+A1:  i in omega & j in omega by ORDINAL2:def 21;
+    then denominator i = one & denominator j = one by Def8;
+   hence i*'j = (ni*^nj)/(one*^one) by Def11
+      .= (ni*^nj)/one by ORDINAL2:56
+      .= ni*^nj by Th46
+      .= i*^nj by A1,Def7
+      .= i*^j by A1,Def7;
+  end;
+
+theorem Th66:
+ ex y st x = y+y
+  proof set 02 = one+one;
+      02 = one+^one by Th64;
+    then 02 <> {} by ORDINAL3:29;
+   then consider z such that
+A1:  02*'z = one by Th60;
+   take y = z*'x;
+   thus x = one*'x by Th59 .= 02*'y by A1,Th58 .= one*'y+one*'y by Th63
+         .= y+one*'y by Th59 .= y+y by Th59;
+  end;
+
+definition
+ let x,y be Element of RAT+;
+ pred x <=' y means:
+Def12:
+  ex z being Element of RAT+ st y = x+z;
+ connectedness
+  proof let x,y be Element of RAT+;
+   set nx = numerator x, ny = numerator y;
+   set dx = denominator x, dy = denominator y;
+      dx <> {} & dy <> {} by Th41;
+then A1:  nx*^dy/(dx*^dy) = nx/dx & ny*^dx/(dx*^dy) = ny/dy & dx*^dy <> {}
+     by Th50,ORDINAL3:34;
+A2:  nx/dx = x & ny/dy = y by Th45;
+      nx*^dy c= ny*^dx or ny*^dx c= nx*^dy;
+    then ny*^dx = nx*^dy+^(ny*^dx -^ nx*^dy) or nx*^dy = ny*^dx+^(nx*^dy -^ ny
+*^dx)
+     by ORDINAL3:def 6;
+    then x = y+((nx*^dy -^ ny*^dx)/(dx*^dy)) or y = x+((ny*^dx -^ nx*^dy)/(dx
+*^dy))
+     by A1,A2,Th53;
+   hence thesis;
+  end;
+ antonym y < x;
+end;
+
+reserve r,s,t for Element of RAT+;
+
+canceled;
+
+theorem
+   not ex y being set st [{},y] in RAT+
+  proof given y being set such that
+A1:  [{},y] in RAT+;
+      not [{},y] in omega by Th38;
+   then consider i,j being Element of omega such that
+A2:  [{},y] = [i,j] & i,j are_relative_prime & j <> {} & j <> one by A1,Th35;
+      i = {} by A2,ZFMISC_1:33;
+   hence thesis by A2,Th7;
+  end;
+
+theorem Th69:
+ s + t = r + t implies s = r
+  proof assume
+A1:  s + t = r + t;
+   set s1 = numerator s, s2 = denominator s;
+   set t1 = numerator t, t2 = denominator t;
+   set r1 = numerator r, r2 = denominator r;
+A2:  t2 <> {} & s2 <> {} & r2 <> {} by Th41;
+then A3:  r2*^t2 <> {} & s2*^t2 <> {} by ORDINAL3:34;
+      s+t = (s1*^t2+^s2*^t1)/(s2*^t2) & r+t = (r1*^t2+^r2*^t1)/(r2*^t2)
+     by Def10;
+    then (s1*^t2+^s2*^t1)*^(r2*^t2) = (r1*^t2+^r2*^t1)*^(s2*^t2) by A1,A3,Th51
+       .= (r1*^t2+^r2*^t1)*^s2*^t2 by ORDINAL3:58;
+    then (s1*^t2+^s2*^t1)*^r2*^t2 = (r1*^t2+^r2*^t1)*^s2*^t2 by ORDINAL3:58;
+    then (s1*^t2+^s2*^t1)*^r2 = (r1*^t2+^r2*^t1)*^s2 by A2,ORDINAL3:36
+       .= r1*^t2*^s2+^r2*^t1*^s2 by ORDINAL3:54;
+    then s1*^t2*^r2+^s2*^t1*^r2 = r1*^t2*^s2+^r2*^t1*^s2 by ORDINAL3:54
+       .= r1*^t2*^s2+^s2*^t1*^r2 by ORDINAL3:58;
+    then s1*^t2*^r2 = r1*^t2*^s2 by ORDINAL3:24 .= r1*^s2*^t2 by ORDINAL3:58;
+    then s1*^r2*^t2 = r1*^s2*^t2 by ORDINAL3:58;
+    then s1*^r2 = r1*^s2 by A2,ORDINAL3:36;
+    then s1/s2 = r1/r2 by A2,Th51 .= r by Th45;
+   hence thesis by Th45;
+  end;
+
+theorem Th70:
+ r+s = {} implies r = {}
+  proof set nr = numerator r, dr = denominator r;
+   set ns = numerator s, ds = denominator s;
+A1:  dr <> {} & ds <> {} & denominator (r+s) <> {} by Th41;
+then A2:  dr*^ds <> {} by ORDINAL3:34;
+A3:  denominator {} = one & numerator {} = {} by Def7,Def8,ORDINAL2:19;
+   assume r+s = {};
+    then (nr*^ds+^ns*^dr)/(dr*^ds) = {} by Def10 .= {}/one by A3,Th45;
+    then (nr*^ds+^ns*^dr)*^one = (dr*^ds)*^{} by A2,Th51 .= {} by ORDINAL2:52;
+    then nr*^ds+^ns*^dr = {} by ORDINAL3:34;
+    then nr*^ds = {} by ORDINAL3:29;
+    then nr = {} by A1,ORDINAL3:34;
+   hence thesis by Th43;
+  end;
+
+theorem Th71:
+ {} <=' s proof take s; thus thesis by Th56; end;
+
+theorem
+   s <=' {} implies s = {}
+  proof assume
+      ex r st {} = s+r;
+   hence thesis by Th70;
+  end;
+
+theorem Th73:
+ r <=' s & s <=' r implies r = s
+  proof given x such that
+A1:  s = r+x;
+   given y such that
+A2:  r = s+y;
+      r+{} = r by Th56 .= r+(x+y) by A1,A2,Th57;
+    then {} = x+y by Th69;
+    then x = {} by Th70;
+   hence thesis by A1,Th56;
+  end;
+
+theorem Th74:
+ r <=' s & s <=' t implies r <=' t
+  proof given x such that
+A1:  s = r+x;
+   given y such that
+A2:  t = s+y;
+   take x+y; thus thesis by A1,A2,Th57;
+  end;
+
+theorem
+   r < s iff r <=' s & r <> s by Th73;
+
+theorem
+  r < s & s <=' t or r <=' s & s < t implies r < t by Th74;
+
+theorem
+   r < s & s < t implies r < t by Th74;
+
+theorem Th78:
+ x in omega & x+y in omega implies y in omega
+  proof assume
+A1:  x in omega & x+y in omega;
+   set nx = numerator x, dx = denominator x;
+   set ny = numerator y, dy = denominator y;
+A2:  x = nx/dx & y = ny/dy & x+y = numerator (x+y)/denominator (x+y) by Th45;
+A3:  x+y = (nx*^dy+^ny*^dx)/(dx*^dy) by Def10;
+A4:  dx = one & dy <> {} & denominator (x+y) = one by A1,Def8,Th41;
+then A5:  dx*^dy <> {} by ORDINAL3:34;
+      (nx*^dy+^ny*^dx)*^one = nx*^dy+^ny*^dx by ORDINAL2:56;
+    then nx*^dy+^ny*^dx = dx*^dy*^numerator (x+y) by A2,A3,A4,A5,Th51
+                  .= dy*^numerator (x+y) by A4,ORDINAL2:56;
+    then nx*^dy+^ny = dy*^numerator (x+y) by A4,ORDINAL2:56;
+    then ny = (dy*^numerator (x+y))-^nx*^dy by ORDINAL3:65;
+    then ny = dy*^((numerator (x+y))-^nx) by ORDINAL3:76;
+    then dy divides ny & dy divides dy &
+    for m being natural Ordinal st m divides dy & m divides ny holds m
+ divides dy by Def2;
+    then dy hcf ny = dy & ny,dy are_relative_prime by Def4,Th40;
+    then dy = one by Th25;
+    then y = ny by A2,Th46;
+   hence thesis;
+  end;
+
+theorem Th79:
+ for i being ordinal Element of RAT+
+  st i < x & x < i+one
+  holds not x in omega
+  proof let i be ordinal Element of RAT+;
+   assume
+A1:  i < x & x < i+one & x in omega;
+A2:  i in omega by Th37;
+   consider y such that
+A3:  x = i+y by A1,Def12;
+   consider z such that
+A4:  i+one = x+z by A1,Def12;
+      i+one = i+^one by Th64;
+    then i+one in omega by Th37;
+   then reconsider y' = y, z' = z as Element of omega by A1,A2,A3,A4,Th78;
+      i+one = i+(y+z) by A3,A4,Th57;
+then one = y+z by Th69 .= y'+^z' by Th64;
+    then y' c= one & z' c= one by ORDINAL3:27;
+    then (y = {} or y = one) & (z = {} or z = one) by ORDINAL3:19;
+    then i = x or i+one = x by A3,Th56;
+   hence contradiction by A1;
+  end;
+
+theorem Th80:
+ t <> {} implies ex r st r < t & not r in omega
+  proof assume
+A1:  t <> {};
+    A2: one+^one = succ one by ORDINAL2:48;
+then A3:  one+^one <> one by ORDINAL1:14;
+   per cases;
+   suppose
+A4:   one <=' t;
+    consider r such that
+A5:   one = r+r by Th66;
+    take r;
+A6:   r <=' one by A5,Def12;
+       r <> one by A3,A5,Th64;
+     then r < one by A6,Th73;
+    hence r < t by A4,Th74;
+    assume r in omega;
+then A7:   denominator r = one & denominator one = one by Def8,Lm1;
+     then (numerator r)*^denominator r = numerator r & one*^one = one
+      by ORDINAL2:56;
+then A8:   one = ((numerator r)+^numerator r)/one by A5,A7,Def10
+        .= (numerator r)+^numerator r by Th46;
+     then numerator r c= one by ORDINAL3:27;
+     then numerator r = {} or numerator r = one by ORDINAL3:19;
+    hence contradiction by A2,A8,ORDINAL1:14,ORDINAL2:44;
+   suppose
+A9:   t < one;
+    consider r such that
+A10:   t = r+r by Th66;
+    take r;
+A11:   r <=' t by A10,Def12;
+       now assume r = t;
+       then t+{} = t+t by A10,Th56;
+      hence contradiction by A1,Th69;
+     end;
+    hence r < t by A11,Th73;
+A12:   r < one by A9,A11,Th74;
+       r <> {} & {} <=' r by A1,A10,Th56,Th71;
+     then {} < r & one = {}+one by Th56,Th73;
+    hence thesis by A12,Th79;
+  end;
+
+theorem
+   {s: s < t} in RAT+ iff t = {}
+  proof
+   hereby assume
+A1:   {s: s < t} in RAT+ & t <> {};
+    then consider r such that
+A2:   r < t & not r in omega by Th80;
+A3:   r in {s: s < t} by A2;
+       now assume {s: s < t} in omega;
+       then {s: s < t} is Ordinal by ORDINAL1:23;
+      hence r is Ordinal by A3,ORDINAL1:23;
+     end;
+    then consider i,j being Element of omega such that
+A4:   {s: s < t} = [i,j] & i,j are_relative_prime & j <> {} & j <> one
+      by A1,A2,Th35,Th37;
+       {} <=' t by Th71;
+     then {} < t by A1,Th73;
+     then {} in {s: s < t};
+     then {} in {{i},{i,j}} by A4,TARSKI:def 5;
+    hence contradiction by TARSKI:def 2;
+   end;
+   assume
+A5:  t = {};
+      {s: s < t} c= {}
+     proof let a be set; assume a in {s: s < t};
+       then ex s st a = s & s < t;
+      hence a in {} by A5,Th71;
+     end;
+    then {s: s < t} = {} by XBOOLE_1:3;
+   hence thesis;
+  end;
+
+theorem
+   for A being Subset of RAT+ st
+  (ex t st t in A & t <> {}) &   ::  dodany warunek ?!
+  for r,s st r in A & s <=' r holds s in A
+ ex r1,r2,r3 being Element of RAT+ st
+  r1 in A & r2 in A & r3 in A &
+  r1 <> r2 & r2 <> r3 & r3 <> r1
+  proof let A be Subset of RAT+;
+   given t such that
+A1:  t in A & t <> {};
+   assume
+A2:  for r,s st r in A & s <=' r holds s in A;
+   consider x such that
+A3:  t = x+x by Th66;
+   take {}, x, t;
+      {} <=' t & x <=' t by A3,Def12,Th71;
+   hence {} in A & x in A & t in A by A1,A2;
+   thus {} <> x by A1,A3,Th56;
+   hereby assume x = t;
+     then t+{} = t+t by A3,Th56;
+    hence contradiction by A1,Th69;
+   end;
+   thus thesis by A1;
+  end;
+
+theorem Th83:
+ s + t <=' r + t iff s <=' r
+  proof
+   thus s + t <=' r + t implies s <=' r
+     proof given z such that
+A1:     r+t = s+t+z;
+      take z;
+         r+t = s+z+t by A1,Th57;
+      hence r = s+z by Th69;
+     end;
+   given z such that
+A2:  r = s+z;
+   take z; thus thesis by A2,Th57;
+  end;
+
+canceled;
+
+theorem
+   s <=' s + t proof take t; thus thesis; end;
+
+theorem Th86:
+ r*'s = {} implies r = {} or s = {}
+  proof set nr = numerator r, dr = denominator r;
+   set ns = numerator s, ds = denominator s;
+    dr <> {} & ds <> {} & denominator (r*'s) <> {} by Th41;
+then A1:  dr*^ds <> {} by ORDINAL3:34;
+A2:  denominator {} = one & numerator {} = {} by Def7,Def8,ORDINAL2:19;
+   assume r*'s = {};
+    then (nr*^ns)/(dr*^ds) = {} by Def11 .= {}/one by A2,Th45;
+    then (nr*^ns)*^one = (dr*^ds)*^{} by A1,Th51 .= {} by ORDINAL2:52;
+    then nr*^ns = {} by ORDINAL3:34;
+    then nr = {} or ns = {} by ORDINAL3:34;
+   hence thesis by Th43;
+  end;
+
+theorem Th87:
+ r <=' s *' t implies
+  ex t0 being Element of RAT+ st r = s *' t0 & t0 <=' t
+  proof given x such that
+A1:  s*'t = r+x;
+   per cases;
+   suppose s = {};
+then A2:  s*'t = {} by Th54;
+   take t; thus thesis by A1,A2,Th70;
+   suppose
+A3:  s <> {};
+   then consider t0 being Element of RAT+ such that
+A4:  r = s*'t0 by Th61;
+   consider t1 being Element of RAT+ such that
+A5:  x = s*'t1 by A3,Th61;
+   take t0; thus r = s*'t0 by A4; take t1;
+      s*'t = s*'(t0+t1) by A1,A4,A5,Th63;
+   hence t = t0+t1 by A3,Th62;
+  end;
+
+theorem
+   t <> {} & s *' t <=' r *' t implies s <=' r
+  proof assume
+A1:  t <> {} & s *' t <=' r *' t;
+   then consider x such that
+A2:  s*'t = t*'x & x <=' r by Th87;
+   thus s <=' r by A1,A2,Th62;
+  end;
+
+theorem
+   for r1,r2,s1,s2 being Element of RAT+ st r1+r2 = s1+s2
+  holds r1 <=' s1 or r2 <=' s2
+  proof let r1,r2,s1,s2 be Element of RAT+ such that
+A1:  r1+r2 = s1+s2;
+   assume
+    s1 < r1 & s2 < r2;
+    then s1+s2 < r1+s2 & r1+s2 <=' r1+r2 by Th83;
+   hence thesis by A1;
+  end;
+
+theorem Th90:
+ s <=' r implies s *' t <=' r *' t
+  proof given x such that
+A1:  r = s+x;
+   take y = x*'t;
+   thus r*'t = s*'t+y by A1,Th63;
+  end;
+
+theorem
+   for r1,r2,s1,s2 being Element of RAT+ st r1*'r2 = s1*'s2
+  holds r1 <=' s1 or r2 <=' s2
+  proof let r1,r2,s1,s2 be Element of RAT+ such that
+A1:  r1*'r2 = s1*'s2;
+   assume
+A2:  s1 < r1 & s2 < r2;
+then A3: s1 <=' r1 & s1 <> r1 & s2 <=' r2 & s2 <> r2;
+      {} <=' s1 & {} <=' s2 by Th71;
+    then r1*'r2 <> {} by A2,Th86;
+    then s1 <> {} & s2 <> {} by A1,Th54;
+    then s1*'s2 <=' r1*'s2 & s1*'s2 <> r1*'s2 by A3,Th62,Th90;
+    then s1*'s2 < r1*'s2 & r1*'s2 <=' r1*'r2 by A2,Th73,Th90;
+   hence thesis by A1;
+  end;
+
+theorem
+   r = {} iff r + s = s
+  proof s+{} = s by Th56;
+   hence thesis by Th69;
+  end;
+
+theorem
+   for s1,t1,s2,t2 being Element of RAT+ st s1 + t1 = s2 + t2 & s1 <=' s2
+  holds t2 <=' t1
+  proof let s1,t1,s2,t2 be Element of RAT+ such that
+A1:  s1 + t1 = s2 + t2;
+   given x such that
+A2:  s2 = s1+x;
+   take x;
+      s1+t1 = s1+(x+t2) by A1,A2,Th57;
+   hence thesis by Th69;
+  end;
+
+theorem Th94:
+ r <=' s & s <=' r + t implies
+  ex t0 being Element of RAT+ st s = r + t0 & t0 <=' t
+  proof given t0 being Element of RAT+ such that
+A1:  s = r+t0;
+   assume s <=' r+t;
+    then t0 <=' t by A1,Th83;
+   hence thesis by A1;
+  end;
+
+theorem
+   r <=' s + t implies
+  ex s0,t0 being Element of RAT+ st r = s0 + t0 & s0 <=' s & t0 <=' t
+  proof assume
+A1:  r <=' s + t;
+   per cases;
+   suppose s <=' r;
+     then s <=' s & ex t0 being Element of RAT+ st r = s + t0 & t0 <=' t by A1,
+Th94;
+    hence thesis;
+   suppose r <=' s;
+     then r = r+{} & r <=' s & {} <=' t by Th56,Th71;
+    hence thesis;
+  end;
+
+theorem
+   r < s & r < t implies
+  ex t0 being Element of RAT+ st t0 <=' s & t0 <=' t & r < t0
+  proof s <=' t & s <=' s or t <=' s & t <=' t;
+   hence thesis;
+  end;
+
+theorem
+   r <=' s & s <=' t & s <> t implies r <> t by Th73;
+
+theorem
+   s < r + t & t <> {} implies
+  ex r0,t0 being Element of RAT+ st s = r0 + t0 &
+    r0 <=' r & t0 <=' t & t0 <> t
+  proof assume
+A1:  s < r + t & t <> {};
+   per cases;
+   suppose r <=' s;
+    then consider t0 being Element of RAT+ such that
+A2:   s = r + t0 & t0 <=' t by A1,Th94;
+    take r,t0; thus thesis by A1,A2;
+   suppose
+A3:   s <=' r;
+       s = s+{} & {} <=' t by Th56,Th71;
+    hence thesis by A1,A3;
+  end;
+
+theorem
+   for A being non empty Subset of RAT+ st A in RAT+
+  ex s st s in A & for r st r in A holds r <=' s
+  proof let A be non empty Subset of RAT+; assume
+A1:  A in RAT+;
+      now given i,j being Element of omega such that
+A2:    A = [i,j] & i,j are_relative_prime & j <> {} & j <> one;
+        A = {{i},{i,j}} by A2,TARSKI:def 5;
+      then A3: {i} in A by TARSKI:def 2;
+        now assume {i} in omega;
+        then {i} is Ordinal by ORDINAL1:23;
+        then {} in {i} by ORDINAL3:10;
+        then {} = i by TARSKI:def 1;
+       hence contradiction by A2,Th7;
+      end;
+     then consider i1,j1 being Element of omega such that
+A4:    {i} = [i1,j1] & i1,j1 are_relative_prime & j1 <> {} & j1 <> one by A3,
+Th35;
+        {i} = {{i1},{i1,j1}} by A4,TARSKI:def 5;
+      then {i1} in {i} & {i1,j1} in {i} by TARSKI:def 2;
+      then i = {i1} & i = {i1,j1} by TARSKI:def 1;
+      then j1 in {i1} by TARSKI:def 2;
+      then j1 = i1 & j1 = j1*^one by ORDINAL2:56,TARSKI:def 1;
+     hence contradiction by A4,Def1;
+    end;
+   then reconsider B = A as Element of omega by A1,Th35;
+A5:  {} in B by ORDINAL3:10;
+      now assume B is_limit_ordinal;
+      then omega c= B by A5,ORDINAL2:def 5;
+     hence contradiction by ORDINAL1:7;
+    end;
+   then consider C such that
+A6:  B = succ C by ORDINAL1:42;
+   C in B by A6,ORDINAL1:10;
+   then reconsider C as ordinal Element of RAT+;
+   take C; thus C in A by A6,ORDINAL1:10;
+   let r; assume
+A7:  r in A; then r in B;
+   then reconsider r as ordinal Element of RAT+ by ORDINAL1:23;
+      C-^r in omega by ORDINAL2:def 21;
+   then reconsider x = C-^r as ordinal Element of RAT+ by Th34;
+      r c= C by A6,A7,ORDINAL1:34;
+    then C = r+^x by ORDINAL3:def 6 .= r+x by Th64;
+   hence thesis by Def12;
+  end;
+
+theorem
+   ex t st r + t = s or s + t = r
+  proof r <=' s or s <=' r;
+   hence thesis by Def12;
+  end;
+
+theorem
+   r < s implies ex t st r < t & t < s
+  proof assume
+A1:  r < s;
+   then consider x such that
+A2:  s = r+x by Def12;
+   consider y such that
+A3:  x = y+y by Th66;
+   take t = r+y;
+A4:  s = t+y by A2,A3,Th57;
+A5:  r <> s & t+{} = t & r+{} = r & {}+{} = {} by A1,Th56;
+      r <=' t & r <> t by A1,A4,Def12;
+   hence r < t by Th73;
+      t <=' s & s <> t by A4,A5,Def12,Th69;
+   hence t < s by Th73;
+  end;
+
+theorem
+   ex s st r < s
+  proof take s = r+one;
+      s+{} = s by Th56;
+    then r <=' s & r <> s by Def12,Th69;
+   hence thesis by Th73;
+  end;
+
+theorem
+   t <> {} implies ex s st s in omega & r <=' s *' t
+  proof assume t <> {};
+then A1:  numerator t <> {} by Th43;
+   (denominator t)*^(numerator r) in omega by ORDINAL2:def 21;
+   then reconsider s = (denominator t)*^(numerator r)
+    as ordinal Element of RAT+ by Th34;
+   take s; thus s in omega by ORDINAL2:def 21;
+   set y=((numerator r)*^(((numerator t)*^denominator r)-^one))/denominator r;
+   take y;
+A2:  denominator r <> {} & denominator t <> {} by Th41;
+    then (numerator t)*^denominator r <> {} by A1,ORDINAL3:34;
+    then {} in (numerator t)*^denominator r by ORDINAL3:10;
+    then one c= (numerator t)*^denominator r by ORDINAL1:33,ORDINAL2:def 4;
+    then (numerator t)*^denominator r = one+^(((numerator t)*^denominator r)-^
+one)
+      by ORDINAL3:def 6;
+    then s*^((numerator t)*^denominator r) = (denominator t)*^
+        ((numerator r)*^(one+^(((numerator t)*^denominator r)-^one)))
+      by ORDINAL3:58
+      .= (denominator t)*^((numerator r)*^one+^
+         (numerator r)*^(((numerator t)*^denominator r)-^one))
+      by ORDINAL3:54;
+    then s*^(numerator t)*^denominator r
+      = (denominator t)*^((numerator r)*^one+^
+         (numerator r)*^(((numerator t)*^denominator r)-^one))
+      by ORDINAL3:58;
+    then (s*^(numerator t))/denominator t
+      = ((numerator r)*^one+^
+         (numerator r)*^(((numerator t)*^denominator r)-^one))/denominator r
+      by A2,Th51
+      .= (((numerator r)*^one)/denominator r)+y by A2,Th53
+      .= ((numerator r)/denominator r)+y by ORDINAL2:56
+      .= r+y by Th45;
+    then r+y = (s*^(numerator t))/(one*^denominator t) by ORDINAL2:56
+       .= (s/one)*'((numerator t)/denominator t) by Th55
+       .= s*'((numerator t)/denominator t) by Th46;
+   hence thesis by Th45;
+  end;
+
+scheme DisNat { n0,n1,n2() -> Element of RAT+, P[set] }:
+ ex s st s in omega & P[s] & not P[s + n1()]
+provided
+A1: n1() = one and
+A2: n0() = {} and
+A3: n2() in omega and
+A4: P[n0()] and
+A5: not P[n2()]
+  proof
+      defpred _P[Ordinal] means not P[$1] & $1 in omega;
+      n2() is Ordinal by A3,ORDINAL1:23;
+then A6:  ex A st _P[A] by A3,A5;
+   consider A such that
+A7:  _P[A] and
+A8:  for B st _P[B] holds A c= B from Ordinal_Min(A6);
+A9:  {} in A by A2,A4,A7,ORDINAL3:10;
+      now assume A is_limit_ordinal;
+      then omega c= A by A9,ORDINAL2:def 5;
+      then A in A by A7;
+     hence contradiction;
+    end;
+   then consider B being Ordinal such that
+A10:  A = succ B by ORDINAL1:42;
+      B in A by A10,ORDINAL1:13;
+then A11:  B in omega & not A c= B by A7,ORDINAL1:7,19;
+   then reconsider s = B as ordinal Element of RAT+ by Th34;
+   take s; thus s in omega & P[s] by A8,A11;
+      A = B+^one by A10,ORDINAL2:48;
+   hence thesis by A1,A7,Th64;
+  end;
+

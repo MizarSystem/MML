@@ -1,0 +1,619 @@
+:: Predicate Calculus for Boolean Valued Functions, V
+::  by Shunichi Kobayashi and Yatsuka Nakamura
+::
+:: Received August 17, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_2, MARGREL1, PARTIT1, EQREL_1, ZF_LANG, BVFUNC_2, BVFUNC_1,
+      T_1TOPSP;
+ notation XBOOLE_0, SUBSET_1, MARGREL1, VALUAT_1, FRAENKEL, EQREL_1, BVFUNC_1,
+      BVFUNC_2;
+ constructors BVFUNC_2, BVFUNC_1;
+ clusters MARGREL1, VALUAT_1, FRAENKEL;
+ definitions BVFUNC_1;
+ theorems T_1TOPSP, MARGREL1, BVFUNC_1, BVFUNC_2, BVFUNC11, BVFUNC12, VALUAT_1,
+      PARTIT_2, BVFUNC_4;
+
+begin :: Chap. 1  Predicate Calculus
+
+reserve Y for non empty set,
+        a,b for Element of Funcs(Y,BOOLEAN),
+        G for Subset of PARTITIONS(Y),
+        A, B for a_partition of Y;
+
+Lm1:
+ a '<' b implies All(a,A,G) '<' Ex(b,A,G)
+ proof
+  assume a '<' b;
+then A1:All(a,A,G) '<' All(b,A,G) by PARTIT_2:13;
+    All(b,A,G) '<' Ex(b,A,G) by BVFUNC_4:18;
+  hence thesis by A1,BVFUNC_1:18;
+ end;
+
+theorem Th1: G is independent implies
+All('not' All(a,A,G),B,G) '<' 'not' All(All(a,B,G),A,G)
+proof
+  assume G is independent;
+then A1:All(All(a,B,G),A,G) = All(All(a,A,G),B,G) by PARTIT_2:17;
+A2:All('not' All(a,A,G),B,G) = 'not' Ex(All(a,A,G),B,G) by BVFUNC_2:21;
+    All(All(a,B,G),A,G) '<' Ex(All(a,A,G),B,G) by A1,Lm1;
+  hence thesis by A2,PARTIT_2:11;
+end;
+
+theorem Th2:
+All(All('not' a,A,G),B,G) '<' 'not' All(All(a,B,G),A,G)
+ proof
+A1:All('not' a,A,G) = B_INF('not' a,CompF(A,G)) by BVFUNC_2:def 9;
+    let z be Element of Y;
+    assume A2:Pj(All(All('not' a,A,G),B,G),z)=TRUE;
+A3:z in EqClass(z,CompF(A,G)) & EqClass(z,CompF(A,G)) in CompF(A,G)
+      by T_1TOPSP:def 1;
+A4:z in EqClass(z,CompF(B,G)) &
+      EqClass(z,CompF(B,G)) in CompF(B,G)
+      by T_1TOPSP:def 1;
+ now assume
+        not (for x being Element of Y st x in EqClass(z,CompF(B,G)) holds
+       Pj(All('not' a,A,G),x)=TRUE);
+      then Pj(B_INF(All('not' a,A,G),CompF(B,G)),z) = FALSE by BVFUNC_1:def 19
+;
+      then Pj(All(All('not' a,A,G),B,G),z)=FALSE by BVFUNC_2:def 9;
+      hence contradiction by A2,MARGREL1:43;
+    end;
+    then A5:Pj(All('not' a,A,G),z)=TRUE by A4;
+      now assume
+        not (for x being Element of Y st x in EqClass(z,CompF(A,G)) holds
+         Pj('not' a,x)=TRUE);
+      then Pj(B_INF('not' a,CompF(A,G)),z) = FALSE by BVFUNC_1:def 19;
+      hence contradiction by A1,A5,MARGREL1:43;
+    end;
+    then Pj('not' a,z)=TRUE by A3;
+    then 'not' Pj(a,z)=TRUE by VALUAT_1:def 5;
+    then Pj(a,z)=FALSE by MARGREL1:41;
+    then Pj(a,z)<>TRUE by MARGREL1:43;
+    then Pj(B_INF(a,CompF(B,G)),z) = FALSE by A4,BVFUNC_1:def 19;
+    then Pj(All(a,B,G),z)=FALSE by BVFUNC_2:def 9;
+    then Pj(All(a,B,G),z)<>TRUE by MARGREL1:43;
+    then Pj(B_INF(All(a,B,G),CompF(A,G)),z) = FALSE by A3,BVFUNC_1:def 19;
+    then Pj(All(All(a,B,G),A,G),z)=FALSE by BVFUNC_2:def 9;
+    then 'not' Pj(All(All(a,B,G),A,G),z)=TRUE by MARGREL1:41;
+    hence thesis by VALUAT_1:def 5;
+ end;
+
+theorem Th3:
+All('not' Ex(a,A,G),B,G) '<' 'not' All(All(a,B,G),A,G)
+proof
+    All('not' Ex(a,A,G),B,G) = All(All('not' a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by Th2;
+end;
+
+theorem Th4: G is independent implies
+All(Ex('not' a,A,G),B,G) '<' 'not' All(All(a,B,G),A,G)
+proof
+  assume A1:G is independent;
+    Ex('not' a,A,G) = 'not' All(a,A,G) by BVFUNC_2:20;
+then A2:All(Ex('not' a,A,G),B,G) = 'not' Ex(All(a,A,G),B,G) by BVFUNC_2:21;
+    All(All(a,B,G),A,G) '<' Ex(All(a,A,G),B,G) by A1,BVFUNC11:11;
+  hence thesis by A2,PARTIT_2:11;
+end;
+
+canceled;
+
+theorem G is independent implies
+Ex(All('not' a,A,G),B,G) '<' 'not' All(All(a,B,G),A,G)
+proof
+  assume A1:G is independent;
+then A2:Ex(All('not' a,A,G),B,G) '<' All(Ex('not' a,B,G),A,G) by PARTIT_2:19;
+    All(Ex('not' a,B,G),A,G) '<' 'not' All(All(a,A,G),B,G) by A1,Th4;
+  then Ex(All('not' a,A,G),B,G) '<' 'not' All(All(a,A,G),B,G) by A2,BVFUNC_1:18
+;
+  hence thesis by A1,PARTIT_2:17;
+end;
+
+theorem Th7: G is independent implies
+Ex('not' Ex(a,A,G),B,G) '<' 'not' All(All(a,B,G),A,G)
+proof
+  assume A1:G is independent;
+A2:Ex('not' Ex(a,A,G),B,G) = 'not' All(Ex(a,A,G),B,G) by BVFUNC_2:20;
+A3:All(All(a,B,G),A,G) = All(All(a,A,G),B,G) by A1,PARTIT_2:17;
+    All(a,A,G) '<' Ex(a,A,G) by Lm1;
+  then All(All(a,A,G),B,G) '<' All(Ex(a,A,G),B,G) by PARTIT_2:13;
+  hence thesis by A2,A3,PARTIT_2:11;
+end;
+
+canceled;
+
+theorem Th9: G is independent implies
+'not' All(Ex(a,A,G),B,G) '<' 'not' Ex(All(a,B,G),A,G)
+proof
+  assume G is independent;
+  then Ex(All(a,B,G),A,G) '<' All(Ex(a,A,G),B,G) by PARTIT_2:19;
+  hence thesis by PARTIT_2:11;
+end;
+
+theorem Th10: G is independent implies
+'not' Ex(Ex(a,A,G),B,G) '<' 'not' Ex(All(a,B,G),A,G)
+proof
+  assume G is independent;
+then A1:Ex(Ex(a,A,G),B,G) = Ex(Ex(a,B,G),A,G) by PARTIT_2:18;
+    All(a,B,G) '<' Ex(a,B,G) by Lm1;
+  then Ex(All(a,B,G),A,G) '<' Ex(Ex(a,A,G),B,G) by A1,PARTIT_2:15;
+  hence thesis by PARTIT_2:11;
+end;
+
+theorem Th11:
+'not' Ex(Ex(a,A,G),B,G) '<' 'not' All(Ex(a,B,G),A,G)
+ proof
+A1:Ex(a,A,G) = B_SUP(a,CompF(A,G)) by BVFUNC_2:def 10;
+    let z be Element of Y;
+    assume Pj('not' Ex(Ex(a,A,G),B,G),z)=TRUE;
+    then 'not' Pj(Ex(Ex(a,A,G),B,G),z)=TRUE by VALUAT_1:def 5;
+    then A2:Pj(Ex(Ex(a,A,G),B,G),z)=FALSE by MARGREL1:41;
+A3:now assume
+        ex x being Element of Y st
+            x in EqClass(z,CompF(B,G)) & Pj(Ex(a,A,G),x)=TRUE;
+      then Pj(B_SUP(Ex(a,A,G),CompF(B,G)),z) = TRUE by BVFUNC_1:def 20;
+      then Pj(Ex(Ex(a,A,G),B,G),z)=TRUE by BVFUNC_2:def 10;
+      hence contradiction by A2,MARGREL1:43;
+    end;
+A4:for x being Element of Y st x in EqClass(z,CompF(B,G)) holds
+   (for y being Element of Y st y in EqClass(x,CompF(A,G)) holds Pj(a,y)<>TRUE)
+    proof
+      let x be Element of Y;
+      assume x in EqClass(z,CompF(B,G));
+      then Pj(Ex(a,A,G),x)<>TRUE by A3;
+      hence thesis by A1,BVFUNC_1:def 20;
+    end;
+    A5:z in EqClass(z,CompF(A,G)) by T_1TOPSP:def 1;
+      for x being Element of Y st x in EqClass(z,CompF(B,G)) holds Pj(a,x)<>
+TRUE
+    proof
+      let x be Element of Y;
+      assume A6:x in EqClass(z,CompF(B,G));
+        x in EqClass(x,CompF(A,G)) by T_1TOPSP:def 1;
+      hence thesis by A4,A6;
+    end;
+    then Pj(B_SUP(a,CompF(B,G)),z) = FALSE by BVFUNC_1:def 20;
+    then Pj(Ex(a,B,G),z)=FALSE by BVFUNC_2:def 10;
+    then Pj(Ex(a,B,G),z)<>TRUE by MARGREL1:43;
+    then Pj(B_INF(Ex(a,B,G),CompF(A,G)),z) = FALSE by A5,BVFUNC_1:def 19;
+    then Pj(All(Ex(a,B,G),A,G),z)=FALSE by BVFUNC_2:def 9;
+    then 'not' Pj(All(Ex(a,B,G),A,G),z)=TRUE by MARGREL1:41;
+    hence thesis by VALUAT_1:def 5;
+ end;
+
+canceled 2;
+
+theorem G is independent implies
+'not' Ex(All(a,A,G),B,G) '<' 'not' All(All(a,B,G),A,G)
+proof
+  assume G is independent;
+  then All('not' All(a,A,G),B,G) '<' 'not' All(All(a,B,G),A,G) by Th1;
+  hence thesis by BVFUNC_2:21;
+end;
+
+theorem G is independent implies
+'not' All(Ex(a,A,G),B,G) '<' 'not' All(All(a,B,G),A,G)
+proof
+  assume G is independent;
+  then A1:Ex('not' Ex(a,A,G),B,G) '<' 'not' All(All(a,B,G),A,G) by Th7;
+    Ex('not' Ex(a,A,G),B,G) = Ex(All('not' a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by A1,BVFUNC12:5;
+end;
+
+theorem
+  'not' Ex(Ex(a,A,G),B,G) '<' 'not' All(All(a,B,G),A,G)
+proof
+    All('not' Ex(a,A,G),B,G) '<' 'not' All(All(a,B,G),A,G) by Th3;
+  hence thesis by BVFUNC_2:21;
+end;
+
+theorem Th17: G is independent implies
+'not' Ex(All(a,A,G),B,G) '<' Ex('not' All(a,B,G),A,G)
+proof
+  assume G is independent;
+  then A1:All('not' All(a,A,G),B,G) '<' 'not' All(All(a,B,G),A,G) by Th1;
+    'not' Ex(All(a,A,G),B,G) = All('not' All(a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by A1,BVFUNC_2:20;
+end;
+
+theorem Th18: G is independent implies
+'not' All(Ex(a,A,G),B,G) '<' Ex('not' All(a,B,G),A,G)
+proof
+  assume G is independent;
+  then A1:Ex('not' Ex(a,A,G),B,G) '<' 'not' All(All(a,B,G),A,G) by Th7;
+  A2:'not' All(Ex(a,A,G),B,G) = Ex(All('not' a,A,G),B,G) by BVFUNC12:5;
+    Ex('not' Ex(a,A,G),B,G) = Ex(All('not' a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by A1,A2,BVFUNC_2:20;
+end;
+
+theorem Th19:
+'not' Ex(Ex(a,A,G),B,G) '<' Ex('not' All(a,B,G),A,G)
+proof
+  A1:All('not' Ex(a,A,G),B,G) '<' 'not' All(All(a,B,G),A,G) by Th3;
+    'not' Ex(Ex(a,A,G),B,G) = All('not' Ex(a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by A1,BVFUNC_2:20;
+end;
+
+theorem Th20: G is independent implies
+'not' All(Ex(a,A,G),B,G) '<' All('not' All(a,B,G),A,G)
+proof
+  assume G is independent;
+  then 'not' All(Ex(a,A,G),B,G) '<' 'not' Ex(All(a,B,G),A,G) by Th9;
+  hence thesis by BVFUNC_2:21;
+end;
+
+theorem Th21: G is independent implies
+'not' Ex(Ex(a,A,G),B,G) '<' All('not' All(a,B,G),A,G)
+proof
+  assume G is independent;
+  then 'not' Ex(Ex(a,A,G),B,G) '<' 'not' Ex(All(a,B,G),A,G) by Th10;
+  hence thesis by BVFUNC_2:21;
+end;
+
+theorem Th22:
+'not' Ex(Ex(a,A,G),B,G) '<' Ex('not' Ex(a,B,G),A,G)
+proof
+  A1:'not' Ex(Ex(a,A,G),B,G) '<' 'not' All(Ex(a,B,G),A,G) by Th11;
+    Ex('not' Ex(a,B,G),A,G) = Ex(All('not' a,B,G),A,G) by BVFUNC_2:21;
+  hence thesis by A1,BVFUNC12:5;
+end;
+
+theorem Th23: G is independent implies
+'not' Ex(Ex(a,A,G),B,G) = All('not' Ex(a,B,G),A,G)
+proof
+  assume G is independent;
+  then 'not' Ex(Ex(a,A,G),B,G) = 'not' Ex(Ex(a,B,G),A,G) by PARTIT_2:18;
+  hence thesis by BVFUNC_2:21;
+end;
+
+theorem Th24: G is independent implies
+'not' All(Ex(a,A,G),B,G) '<' Ex(Ex('not' a,B,G),A,G)
+proof
+  assume G is independent;
+  then 'not' All(Ex(a,A,G),B,G) '<' Ex('not' All(a,B,G),A,G) by Th18;
+  hence thesis by BVFUNC_2:20;
+end;
+
+theorem Th25:
+'not' Ex(Ex(a,A,G),B,G) '<' Ex(Ex('not' a,B,G),A,G)
+proof
+    'not' Ex(Ex(a,A,G),B,G) '<' Ex('not' All(a,B,G),A,G) by Th19;
+  hence thesis by BVFUNC_2:20;
+end;
+
+theorem Th26:
+G is independent implies
+'not' All(Ex(a,A,G),B,G) '<' All(Ex('not' a,B,G),A,G)
+proof
+  assume G is independent;
+  then 'not' All(Ex(a,A,G),B,G) '<' All('not' All(a,B,G),A,G) by Th20;
+  hence thesis by BVFUNC_2:20;
+end;
+
+theorem Th27:
+G is independent implies
+'not' Ex(Ex(a,A,G),B,G) '<' All(Ex('not' a,B,G),A,G)
+proof
+  assume G is independent;
+  then 'not' Ex(Ex(a,A,G),B,G) '<' All('not' All(a,B,G),A,G) by Th21;
+  hence thesis by BVFUNC_2:20;
+end;
+
+theorem Th28:
+'not' Ex(Ex(a,A,G),B,G) '<' Ex(All('not' a,B,G),A,G)
+proof
+    'not' Ex(Ex(a,A,G),B,G) '<' Ex('not' Ex(a,B,G),A,G) by Th22;
+  hence thesis by BVFUNC_2:21;
+end;
+
+theorem Th29: G is independent implies
+'not' Ex(Ex(a,A,G),B,G) = All(All('not' a,B,G),A,G)
+proof
+  assume G is independent;
+  then 'not' Ex(Ex(a,A,G),B,G) = All('not' Ex(a,B,G),A,G) by Th23;
+  hence thesis by BVFUNC_2:21;
+end;
+
+theorem G is independent implies
+Ex('not' Ex(a,A,G),B,G) '<' 'not' Ex(All(a,B,G),A,G)
+proof
+  assume G is independent;
+  then A1:'not' All(Ex(a,A,G),B,G) '<' 'not' Ex(All(a,B,G),A,G) by Th9;
+    'not' All(Ex(a,A,G),B,G) = Ex(All('not' a,A,G),B,G) by BVFUNC12:5;
+  hence thesis by A1,BVFUNC_2:21;
+end;
+
+theorem
+  All('not' Ex(a,A,G),B,G) '<' 'not' Ex(All(a,B,G),A,G)
+proof
+A1:Ex(a,A,G) = B_SUP(a,CompF(A,G)) by BVFUNC_2:def 10;
+A2:All('not' Ex(a,A,G),B,G) = B_INF('not' Ex(a,A,G),CompF(B,G))
+     by BVFUNC_2:def 9;
+A3:All(a,B,G) = B_INF(a,CompF(B,G)) by BVFUNC_2:def 9;
+A4:Ex(All(a,B,G),A,G) = B_SUP(All(a,B,G),CompF(A,G))
+    by BVFUNC_2:def 10;
+    let z be Element of Y;
+    assume A5:Pj(All('not' Ex(a,A,G),B,G),z)=TRUE;
+A6:z in EqClass(z,CompF(B,G)) &
+      EqClass(z,CompF(B,G)) in CompF(B,G)
+      by T_1TOPSP:def 1;
+      now assume
+        not (for x being Element of Y st x in EqClass(z,CompF(B,G)) holds
+       Pj('not' Ex(a,A,G),x)=TRUE);
+      then Pj(All('not' Ex(a,A,G),B,G),z)=FALSE by A2,BVFUNC_1:def 19;
+      hence contradiction by A5,MARGREL1:43;
+    end;
+    then Pj('not' Ex(a,A,G),z)=TRUE by A6;
+    then 'not' Pj(Ex(a,A,G),z)=TRUE by VALUAT_1:def 5;
+    then A7:Pj(Ex(a,A,G),z)=FALSE by MARGREL1:41;
+    A8: now assume
+        ex x being Element of Y st
+            x in EqClass(z,CompF(A,G)) & Pj(a,x)=TRUE;
+      then Pj(B_SUP(a,CompF(A,G)),z) = TRUE by BVFUNC_1:def 20;
+      hence contradiction by A1,A7,MARGREL1:43;
+    end;
+      for x being Element of Y st
+            x in EqClass(z,CompF(A,G)) holds Pj(All(a,B,G),x)<>TRUE
+    proof
+      let x be Element of Y;
+      assume x in EqClass(z,CompF(A,G));
+      then A9:Pj(a,x)<>TRUE by A8;
+        x in EqClass(x,CompF(B,G)) & EqClass(x,CompF(B,G)) in CompF(B,G)
+        by T_1TOPSP:def 1;
+      then Pj(All(a,B,G),x)=FALSE by A3,A9,BVFUNC_1:def 19;
+      hence thesis by MARGREL1:43;
+    end;
+    then Pj(B_SUP(All(a,B,G),CompF(A,G)),z) = FALSE by BVFUNC_1:def 20;
+    then 'not' Pj(Ex(All(a,B,G),A,G),z)=TRUE by A4,MARGREL1:41;
+    hence thesis by VALUAT_1:def 5;
+end;
+
+theorem
+  All('not' Ex(a,A,G),B,G) '<' 'not' All(Ex(a,B,G),A,G)
+proof
+    'not' Ex(Ex(a,A,G),B,G) = All('not' Ex(a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by Th11;
+end;
+
+theorem G is independent implies
+All('not' Ex(a,A,G),B,G) = 'not' Ex(Ex(a,B,G),A,G)
+proof
+  assume A1:G is independent;
+    'not' Ex(Ex(a,A,G),B,G) = All('not' Ex(a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by A1,PARTIT_2:18;
+end;
+
+theorem G is independent implies
+Ex('not' All(a,A,G),B,G) = Ex('not' All(a,B,G),A,G)
+proof
+  assume A1:G is independent;
+    'not' All(All(a,A,G),B,G) = Ex('not' All(a,A,G),B,G) by BVFUNC_2:20;
+  hence thesis by A1,BVFUNC11:17;
+end;
+
+theorem G is independent implies
+All('not' All(a,A,G),B,G) '<' Ex('not' All(a,B,G),A,G)
+proof
+  assume A1:G is independent;
+    'not' Ex(All(a,A,G),B,G) = All('not' All(a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by A1,Th17;
+end;
+
+theorem G is independent implies
+Ex('not' Ex(a,A,G),B,G) '<' Ex('not' All(a,B,G),A,G)
+proof
+  assume A1:G is independent;
+  A2:'not' All(Ex(a,A,G),B,G) = Ex(All('not' a,A,G),B,G) by BVFUNC12:5;
+    Ex('not' Ex(a,A,G),B,G) = Ex(All('not' a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by A1,A2,Th18;
+end;
+
+theorem
+  All('not' Ex(a,A,G),B,G) '<' Ex('not' All(a,B,G),A,G)
+proof
+    'not' Ex(Ex(a,A,G),B,G) = All('not' Ex(a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by Th19;
+end;
+
+theorem G is independent implies
+Ex('not' Ex(a,A,G),B,G) '<' All('not' All(a,B,G),A,G)
+proof
+  assume A1:G is independent;
+  A2:'not' All(Ex(a,A,G),B,G) = Ex(All('not' a,A,G),B,G) by BVFUNC12:5;
+    Ex('not' Ex(a,A,G),B,G) = Ex(All('not' a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by A1,A2,Th20;
+end;
+
+theorem
+  G is independent implies
+All('not' Ex(a,A,G),B,G) '<' All('not' All(a,B,G),A,G)
+proof
+  assume G is independent;
+  then 'not' Ex(Ex(a,A,G),B,G) '<' All('not' All(a,B,G),A,G) by Th21;
+  hence thesis by BVFUNC_2:21;
+end;
+
+theorem
+  All('not' Ex(a,A,G),B,G) '<' Ex('not' Ex(a,B,G),A,G)
+proof
+    'not' Ex(Ex(a,A,G),B,G) = All('not' Ex(a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by Th22;
+end;
+
+theorem
+  G is independent implies
+All('not' Ex(a,A,G),B,G) = All('not' Ex(a,B,G),A,G)
+proof
+  assume A1:G is independent;
+    'not' Ex(Ex(a,A,G),B,G) = All('not' Ex(a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by A1,Th23;
+end;
+
+theorem
+  G is independent implies
+Ex('not' Ex(a,A,G),B,G) '<' Ex(Ex('not' a,B,G),A,G)
+proof
+  assume A1:G is independent;
+  A2:'not' All(Ex(a,A,G),B,G) = Ex(All('not' a,A,G),B,G) by BVFUNC12:5;
+    Ex('not' Ex(a,A,G),B,G) = Ex(All('not' a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by A1,A2,Th24;
+end;
+
+theorem
+  All('not' Ex(a,A,G),B,G) '<' Ex(Ex('not' a,B,G),A,G)
+proof
+    'not' Ex(Ex(a,A,G),B,G) = All('not' Ex(a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by Th25;
+end;
+
+theorem
+  G is independent implies
+Ex('not' Ex(a,A,G),B,G) '<' All(Ex('not' a,B,G),A,G)
+proof
+  assume A1:G is independent;
+  A2:'not' All(Ex(a,A,G),B,G) = Ex(All('not' a,A,G),B,G) by BVFUNC12:5;
+    Ex('not' Ex(a,A,G),B,G) = Ex(All('not' a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by A1,A2,Th26;
+end;
+
+theorem G is independent implies
+All('not' Ex(a,A,G),B,G) '<' All(Ex('not' a,B,G),A,G)
+proof
+  assume A1:G is independent;
+    'not' Ex(Ex(a,A,G),B,G) = All('not' Ex(a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by A1,Th27;
+end;
+
+theorem
+  All('not' Ex(a,A,G),B,G) '<' Ex(All('not' a,B,G),A,G)
+proof
+    'not' Ex(Ex(a,A,G),B,G) = All('not' Ex(a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by Th28;
+end;
+
+theorem G is independent implies
+All('not' Ex(a,A,G),B,G) = All(All('not' a,B,G),A,G)
+proof
+  assume A1:G is independent;
+    'not' Ex(Ex(a,A,G),B,G) = All('not' Ex(a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by A1,Th29;
+end;
+
+theorem G is independent implies
+Ex(All('not' a,A,G),B,G) '<' 'not' Ex(All(a,B,G),A,G)
+proof
+  assume A1:G is independent;
+    'not' All(Ex(a,A,G),B,G) = Ex(All('not' a,A,G),B,G) by BVFUNC12:5;
+  hence thesis by A1,Th9;
+end;
+
+theorem G is independent implies
+All(All('not' a,A,G),B,G) '<' 'not' Ex(All(a,B,G),A,G)
+proof
+  assume A1:G is independent;
+  A2:'not' Ex(Ex(a,A,G),B,G) = All('not' Ex(a,A,G),B,G) by BVFUNC_2:21;
+    All('not' Ex(a,A,G),B,G) = All(All('not' a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by A1,A2,Th10;
+end;
+
+theorem
+  All(All('not' a,A,G),B,G) '<' 'not' All(Ex(a,B,G),A,G)
+proof
+  A1:'not' Ex(Ex(a,A,G),B,G) = All('not' Ex(a,A,G),B,G) by BVFUNC_2:21;
+    All('not' Ex(a,A,G),B,G) = All(All('not' a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by A1,Th11;
+end;
+
+theorem G is independent implies
+All(All('not' a,A,G),B,G) '<' 'not' Ex(Ex(a,B,G),A,G)
+proof
+  assume A1:G is independent;
+  A2:'not' Ex(Ex(a,A,G),B,G) = All('not' Ex(a,A,G),B,G) by BVFUNC_2:21;
+    All('not' Ex(a,A,G),B,G) = All(All('not' a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by A1,A2,PARTIT_2:18;
+end;
+
+theorem G is independent implies
+Ex(Ex('not' a,A,G),B,G) '<' Ex('not' All(a,B,G),A,G)
+proof
+  assume A1:G is independent;
+    'not' All(All(a,A,G),B,G) = Ex(Ex('not' a,A,G),B,G) by BVFUNC12:7;
+  hence thesis by A1,BVFUNC11:17;
+end;
+
+theorem G is independent implies
+All(Ex('not' a,A,G),B,G) '<' Ex('not' All(a,B,G),A,G)
+proof
+  assume A1:G is independent;
+    'not' Ex(All(a,A,G),B,G) = All(Ex('not' a,A,G),B,G) by BVFUNC12:6;
+  hence thesis by A1,Th17;
+end;
+
+theorem G is independent implies
+Ex(All('not' a,A,G),B,G) '<' Ex('not' All(a,B,G),A,G)
+proof
+  assume A1:G is independent;
+    'not' All(Ex(a,A,G),B,G) = Ex(All('not' a,A,G),B,G) by BVFUNC12:5;
+  hence thesis by A1,Th18;
+end;
+
+theorem
+  All(All('not' a,A,G),B,G) '<' Ex('not' All(a,B,G),A,G)
+proof
+  A1:'not' Ex(Ex(a,A,G),B,G) = All('not' Ex(a,A,G),B,G) by BVFUNC_2:21;
+    All('not' Ex(a,A,G),B,G) = All(All('not' a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by A1,Th19;
+end;
+
+theorem G is independent implies
+Ex(All('not' a,A,G),B,G) '<' All('not' All(a,B,G),A,G)
+proof
+  assume A1:G is independent;
+    'not' All(Ex(a,A,G),B,G) = Ex(All('not' a,A,G),B,G) by BVFUNC12:5;
+  hence thesis by A1,Th20;
+end;
+
+theorem G is independent implies
+All(All('not' a,A,G),B,G) '<' All('not' All(a,B,G),A,G)
+proof
+  assume A1:G is independent;
+  A2:'not' Ex(Ex(a,A,G),B,G) = All('not' Ex(a,A,G),B,G) by BVFUNC_2:21;
+    All('not' Ex(a,A,G),B,G) = All(All('not' a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by A1,A2,Th21;
+end;
+
+theorem
+  All(All('not' a,A,G),B,G) '<' Ex('not' Ex(a,B,G),A,G)
+proof
+  A1:'not' Ex(Ex(a,A,G),B,G) = All('not' Ex(a,A,G),B,G) by BVFUNC_2:21;
+    All('not' Ex(a,A,G),B,G) = All(All('not' a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by A1,Th22;
+end;
+
+theorem G is independent implies
+All(All('not' a,A,G),B,G) = All('not' Ex(a,B,G),A,G)
+proof
+  assume G is independent;
+  then All(All('not' a,A,G),B,G) = All(All('not' a,B,G),A,G) by PARTIT_2:17;
+  hence thesis by BVFUNC_2:21;
+end;
+
+canceled;
+
+theorem
+  All(Ex('not' a,A,G),B,G) '<' Ex(Ex('not' a,B,G),A,G)
+proof
+    'not' Ex(All(a,A,G),B,G) = All(Ex('not' a,A,G),B,G) by BVFUNC12:6;
+  hence thesis by BVFUNC11:15;
+end;
+
+theorem G is independent implies
+Ex(All('not' a,A,G),B,G) '<' Ex(Ex('not' a,B,G),A,G)
+proof
+  assume A1:G is independent;
+    'not' All(Ex(a,A,G),B,G) = Ex(All('not' a,A,G),B,G) by BVFUNC12:5;
+  hence thesis by A1,Th24;
+end;
+

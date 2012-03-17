@@ -1,0 +1,372 @@
+:: Non-contiguous Substrings and One-to-one Finite Sequences
+::  by Wojciech A. Trybulec
+::
+:: Received April 8, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, BOOLE, ARYTM_1, ZFMISC_1, RELAT_1, INT_1, FUNCT_1,
+      FINSET_1, CARD_1, TARSKI, FINSEQ_2;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      FINSEQ_1, RELAT_1, FUNCT_1, FINSEQ_2, FINSET_1, CARD_1, NAT_1, INT_1;
+ constructors FUNCT_2, DOMAIN_1, FINSEQ_2, REAL_1, WELLORD2, NAT_1, INT_1,
+      MEMBERED, PARTFUN1, XBOOLE_0;
+ clusters FINSEQ_1, FUNCT_1, INT_1, FINSET_1, RELSET_1, XREAL_0, MEMBERED,
+      ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+reserve p,q,r for FinSequence;
+reserve u,v,x,y,y1,y2,z,A,D,X,Y for set;
+reserve i,j,k,l,m,n for Nat;
+
+theorem :: FINSEQ_3:1
+ Seg 3 = {1,2,3};
+
+theorem :: FINSEQ_3:2
+ Seg 4 = {1,2,3,4};
+
+theorem :: FINSEQ_3:3
+ Seg 5 = {1,2,3,4,5};
+
+theorem :: FINSEQ_3:4
+ Seg 6 = {1,2,3,4,5,6};
+
+theorem :: FINSEQ_3:5
+ Seg 7 = {1,2,3,4,5,6,7};
+
+theorem :: FINSEQ_3:6
+   Seg 8 = {1,2,3,4,5,6,7,8};
+
+theorem :: FINSEQ_3:7
+  Seg k = {} iff not k in Seg k;
+
+canceled;
+
+theorem :: FINSEQ_3:9
+ not k + 1 in Seg k;
+
+theorem :: FINSEQ_3:10
+   k <> 0 implies k in Seg(k + n);
+
+theorem :: FINSEQ_3:11
+ k + n in Seg k implies n = 0;
+
+theorem :: FINSEQ_3:12
+    k < n implies k + 1 in Seg n;
+
+theorem :: FINSEQ_3:13
+ k in Seg n & m < k implies k - m in Seg n;
+
+theorem :: FINSEQ_3:14
+   k - n in Seg k iff n < k;
+
+theorem :: FINSEQ_3:15
+ Seg k misses {k + 1};
+
+theorem :: FINSEQ_3:16
+   Seg(k + 1) \ Seg k = {k + 1};
+
+:: Theorem Seg(k + 1) \ {k + 1} = Seg k is
+:: proved in RLVECT_1 and has a number 104.
+
+theorem :: FINSEQ_3:17
+   Seg k <> Seg(k + 1);
+
+theorem :: FINSEQ_3:18
+   Seg k = Seg(k + n) implies n = 0;
+
+theorem :: FINSEQ_3:19
+ Seg k c= Seg(k + n);
+
+theorem :: FINSEQ_3:20
+ Seg k, Seg n are_c=-comparable;
+
+canceled;
+
+theorem :: FINSEQ_3:22
+ Seg k = {y} implies k = 1 & y = 1;
+
+theorem :: FINSEQ_3:23
+   Seg k = {x,y} & x <> y implies k = 2 & {x,y} = {1,2};
+
+theorem :: FINSEQ_3:24
+ x in dom p implies x in dom(p ^ q);
+
+theorem :: FINSEQ_3:25
+ x in dom p implies x is Nat;
+
+theorem :: FINSEQ_3:26
+ x in dom p implies x <> 0;
+
+theorem :: FINSEQ_3:27
+ n in dom p iff 1 <= n & n <= len p;
+
+theorem :: FINSEQ_3:28
+   n in dom p iff n - 1 is Nat & len p - n is Nat;
+
+theorem :: FINSEQ_3:29
+ dom<* x,y *> = Seg(2);
+
+theorem :: FINSEQ_3:30
+ dom<* x,y,z *> = Seg(3);
+
+theorem :: FINSEQ_3:31
+   len p = len q iff dom p = dom q;
+
+theorem :: FINSEQ_3:32
+   len p <= len q iff dom p c= dom q;
+
+theorem :: FINSEQ_3:33
+ x in rng p implies 1 in dom p;
+
+theorem :: FINSEQ_3:34
+   rng p <> {} implies 1 in dom p;
+
+canceled 3;
+
+theorem :: FINSEQ_3:38
+ {} <> <* x,y *>;
+
+theorem :: FINSEQ_3:39
+   {} <> <* x,y,z *>;
+
+theorem :: FINSEQ_3:40
+ <* x *> <> <* y,z *>;
+
+theorem :: FINSEQ_3:41
+   <* u *> <> <* x,y,z *>;
+
+theorem :: FINSEQ_3:42
+   <* u,v *> <> <* x,y,z *>;
+
+theorem :: FINSEQ_3:43
+ len r = len p + len q &
+  (for k st k in dom p holds r.k = p.k) &
+  (for k st k in dom q holds r.(len p + k) = q.k) implies r = p ^ q;
+
+theorem :: FINSEQ_3:44
+ for A being finite set st A c= Seg k
+  holds len(Sgm A) = card A;
+
+theorem :: FINSEQ_3:45
+   for A being finite set st A c= Seg k
+  holds dom(Sgm A) = Seg(card A);
+
+theorem :: FINSEQ_3:46
+ X c= Seg i & k < l & 1 <= n & m <= len(Sgm X) &
+  Sgm(X).m = k & Sgm(X).n = l implies m < n;
+
+canceled;
+
+theorem :: FINSEQ_3:48
+ X c= Seg i & Y c= Seg j implies
+  ((for m,n st m in X & n in Y holds m < n) iff Sgm(X \/ Y) = Sgm(X) ^ Sgm(Y));
+
+theorem :: FINSEQ_3:49
+ Sgm {} = {};
+
+:: The other way of the one above - FINSEQ_1:72.
+
+theorem :: FINSEQ_3:50
+   0 <> n implies Sgm{n} = <* n *>;
+
+theorem :: FINSEQ_3:51
+   0 < n & n < m implies Sgm{n,m} = <* n,m *>;
+
+theorem :: FINSEQ_3:52
+ len(Sgm(Seg k)) = k;
+
+theorem :: FINSEQ_3:53
+  Sgm(Seg(k + n)) | Seg k = Sgm(Seg k);
+
+theorem :: FINSEQ_3:54
+ Sgm(Seg k) = idseq k;
+
+theorem :: FINSEQ_3:55
+ p | Seg n = p iff len p <= n;
+
+theorem :: FINSEQ_3:56
+ idseq(n + k) | Seg n = idseq n;
+
+theorem :: FINSEQ_3:57
+   idseq n | Seg m = idseq m iff m <= n;
+
+theorem :: FINSEQ_3:58
+   idseq n | Seg m = idseq n iff n <= m;
+
+theorem :: FINSEQ_3:59
+ len p = k + l & q = p | Seg k implies len q = k;
+
+theorem :: FINSEQ_3:60
+   len p = k + l & q = p | Seg k implies dom q = Seg k;
+
+theorem :: FINSEQ_3:61
+ len p = k + 1 & q = p | Seg k implies p = q ^ <* p.(k + 1) *>;
+
+theorem :: FINSEQ_3:62
+   p | X is FinSequence iff ex k st X /\ dom p = Seg k;
+
+definition let p be FinSequence, A be set;
+ cluster p"A -> finite;
+end;
+
+theorem :: FINSEQ_3:63
+ card((p ^ q) " A) = card(p " A) + card(q " A);
+
+theorem :: FINSEQ_3:64
+ p " A c= (p ^ q) " A;
+
+definition let p,A;
+ func p - A -> FinSequence equals
+:: FINSEQ_3:def 1
+    p * Sgm ((dom p) \ p " A);
+end;
+
+canceled;
+
+theorem :: FINSEQ_3:66
+ len(p - A) = len p - card(p " A);
+
+theorem :: FINSEQ_3:67
+ len(p - A) <= len p;
+
+theorem :: FINSEQ_3:68
+ len(p - A) = len p implies A misses rng p;
+
+theorem :: FINSEQ_3:69
+   n = len p - card(p " A) implies dom(p - A) = Seg n;
+
+theorem :: FINSEQ_3:70
+   dom(p - A) c= dom p;
+
+theorem :: FINSEQ_3:71
+   dom(p - A) = dom p implies A misses rng p;
+
+theorem :: FINSEQ_3:72
+ rng(p - A) = rng p \ A;
+
+theorem :: FINSEQ_3:73
+   rng(p - A) c= rng p;
+
+theorem :: FINSEQ_3:74
+   rng(p - A) = rng p implies A misses rng p;
+
+theorem :: FINSEQ_3:75
+ p - A = {} iff rng p c= A;
+
+theorem :: FINSEQ_3:76
+ p - A = p iff A misses rng p;
+
+theorem :: FINSEQ_3:77
+   p - {x} = p iff not x in rng p;
+
+theorem :: FINSEQ_3:78
+   p - {} = p;
+
+theorem :: FINSEQ_3:79
+   p - rng p = {};
+
+theorem :: FINSEQ_3:80
+  (p ^ q) - A = (p - A) ^ (q - A);
+
+theorem :: FINSEQ_3:81
+   {} - A = {};
+
+theorem :: FINSEQ_3:82
+   <* x *> - A = <* x *> iff not x in A;
+
+theorem :: FINSEQ_3:83
+   <* x *> - A = {} iff x in A;
+
+theorem :: FINSEQ_3:84
+ <* x,y *> - A = {} iff x in A & y in A;
+
+theorem :: FINSEQ_3:85
+ x in A & not y in A implies <* x,y *> - A = <* y *>;
+
+theorem :: FINSEQ_3:86
+   <* x,y *> - A = <* y *> & x <> y implies x in A & not y in A;
+
+theorem :: FINSEQ_3:87
+ not x in A & y in A implies <* x,y *> - A = <* x *>;
+
+theorem :: FINSEQ_3:88
+   <* x,y *> - A = <* x *> & x <> y implies not x in A & y in A;
+
+theorem :: FINSEQ_3:89
+   <* x,y *> - A = <* x,y *> iff not x in A & not y in A;
+
+theorem :: FINSEQ_3:90
+ len p = k + 1 & q = p | Seg k implies
+  (p.(k + 1) in A iff p - A = q - A);
+
+theorem :: FINSEQ_3:91
+ len p = k + 1 & q = p | Seg k implies
+  (not p.(k + 1) in A iff p - A = (q - A) ^ <* p.(k + 1) *>);
+theorem :: FINSEQ_3:92
+   n in dom p implies
+ for B being finite set st B = {k : k in dom p & k <= n & p.k in A}
+  holds p.n in A or (p - A).(n - card B) = p.n;
+
+theorem :: FINSEQ_3:93
+   p is FinSequence of D implies p - A is FinSequence of D;
+
+theorem :: FINSEQ_3:94
+   p is one-to-one implies p - A is one-to-one;
+
+theorem :: FINSEQ_3:95
+ p is one-to-one implies len(p - A) = len p - card(A /\ rng p);
+
+theorem :: FINSEQ_3:96
+ for A being finite set st p is one-to-one & A c= rng p
+  holds len(p - A) = len p - card A;
+
+theorem :: FINSEQ_3:97
+   p is one-to-one & x in rng p implies len(p - {x}) = len p - 1;
+
+theorem :: FINSEQ_3:98
+ rng p misses rng q & p is one-to-one & q is one-to-one iff
+  p ^ q is one-to-one;
+
+theorem :: FINSEQ_3:99
+   A c= Seg k implies Sgm A is one-to-one;
+
+theorem :: FINSEQ_3:100
+   idseq n is one-to-one;
+
+theorem :: FINSEQ_3:101
+   {} is one-to-one;
+
+theorem :: FINSEQ_3:102
+ <* x *> is one-to-one;
+
+theorem :: FINSEQ_3:103
+ x <> y iff <* x,y *> is one-to-one;
+
+theorem :: FINSEQ_3:104
+ x <> y & y <> z & z <> x iff <* x,y,z *> is one-to-one;
+
+theorem :: FINSEQ_3:105
+ p is one-to-one & rng p = {x} implies len p = 1;
+
+theorem :: FINSEQ_3:106
+   p is one-to-one & rng p = {x} implies p = <* x *>;
+
+theorem :: FINSEQ_3:107
+ p is one-to-one & rng p = {x,y} & x <> y implies len p = 2;
+
+theorem :: FINSEQ_3:108
+   p is one-to-one & rng p = {x,y} & x <> y implies
+  p = <* x,y *> or p = <* y,x *>;
+
+theorem :: FINSEQ_3:109
+ p is one-to-one & rng p = {x,y,z} & <* x,y,z *> is one-to-one implies
+  len p = 3;
+
+theorem :: FINSEQ_3:110
+   p is one-to-one & rng p = {x,y,z} & x <> y & y <> z & x <> z implies
+  len p = 3;

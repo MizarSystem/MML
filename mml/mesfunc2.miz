@@ -1,0 +1,1753 @@
+:: Measurability of Extended Real Valued Functions
+::  by Noboru Endou , Katsumi Wasaki and Yasunari Shidama
+::
+:: Received October 6, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary PARTFUN1, SUPINF_1, MEASURE1, FUNCT_1, RAT_1, RELAT_1, COMPLEX1,
+      SEQ_1, MEASURE6, BOOLE, ARYTM_1, MESFUNC1, TARSKI, ARYTM_3, FUNCT_2,
+      RFUNCT_3, SQUARE_1, RLVECT_1, FUNCT_3, GROUP_1, PROB_2, FINSEQ_1,
+      MESFUNC2, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, RELAT_1, FUNCT_1, NAT_1, WELLORD2, RAT_1, FINSEQ_1, SUPINF_1,
+      SUPINF_2, FUNCT_3, PROB_2, MEASURE1, MEASURE2, MEASURE3, MEASURE6,
+      FUNCT_2, PARTFUN1, EXTREAL1, MESFUNC1, EXTREAL2;
+ constructors REAL_1, NAT_1, MEASURE3, WELLORD2, EXTREAL1, MESFUNC1, PARTFUN1,
+      MEASURE6, SUPINF_2, EXTREAL2, PROB_2, FUNCT_3, MEMBERED, RAT_1;
+ clusters SUPINF_1, XREAL_0, RELSET_1, RAT_1, FINSEQ_1, MEMBERED, NUMBERS,
+      ORDINAL2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET;
+ definitions TARSKI, XBOOLE_0;
+ theorems MEASURE1, TARSKI, SUBSET_1, SUPINF_1, PARTFUN1, FUNCT_1, FUNCT_2,
+      MEASURE6, NAT_1, REAL_1, REAL_2, SUPINF_2, AXIOMS, WELLORD2, RAT_1,
+      RELSET_1, PRALG_3, EXTREAL1, EXTREAL2, MESFUNC1, ZFMISC_1, FINSEQ_1,
+      FINSEQ_3, FINSEQ_5, XREAL_0, PROB_2, FUNCT_3, HAHNBAN, XBOOLE_0,
+      XBOOLE_1, RELAT_1;
+ schemes FUNCT_2, SEQ_1, FINSEQ_2, NAT_1;
+
+begin  :: Finite Valued Function ::
+
+reserve X for non empty set;
+reserve Y for set;
+reserve x for Element of X;
+reserve f,g for PartFunc of X,ExtREAL;
+reserve S for sigma_Field_Subset of X;
+reserve F for Function of RAT,S;
+reserve p,q for Rational;
+reserve r for Real;
+reserve n,m for Nat;
+reserve A,B for Element of S;
+
+definition let X; let f;
+pred f is_finite means :Def1:
+  for x st x in dom f holds |. f.x .| <' +infty;
+end;
+
+theorem
+  f = 1(#)f
+proof
+A1:dom f = dom (1(#)f) by MESFUNC1:def 6;
+     for x st x in dom (1(#)f) holds f.x = (1(#)f).x
+   proof
+    let x;
+    assume x in dom(1(#)f);
+    then (1(#)f).x = (R_EAL 1) * f.x by MESFUNC1:def 6;
+    hence thesis by EXTREAL2:4;
+   end;
+   hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem Th2:
+for f,g,A st f is_finite or g is_finite
+holds dom (f+g) = dom f /\ dom g & dom (f-g) = dom f /\ dom g
+proof
+   let f,g,A;
+   assume A1:f is_finite or g is_finite;
+     now per cases by A1;
+    suppose A2:f is_finite;
+      not +infty in rng f
+    proof
+     assume +infty in rng f;
+     then consider x such that
+A3:  x in dom f & +infty = f.x by PARTFUN1:26;
+       |. f.x .| <' +infty by A2,A3,Def1;
+     hence contradiction by A3,EXTREAL2:58;
+    end;
+then A4: f"{+infty} = {} by FUNCT_1:142;
+      not -infty in rng f
+    proof
+     assume -infty in rng f;
+     then consider x such that
+A5:  x in dom f & -infty = f.x by PARTFUN1:26;
+       |. f.x .| <' +infty by A2,A5,Def1;
+     then -(+infty) <' f.x by EXTREAL2:58;
+     hence contradiction by A5,EXTREAL1:4;
+    end;
+    then f"{-infty} = {} by FUNCT_1:142;
+    then (f"{+infty} /\ g"{-infty}) \/ (f"{-infty} /\ g"{+infty}) = {} &
+    (f"{+infty} /\ g"{+infty}) \/ (f"{-infty} /\ g"{-infty}) = {}
+    by A4;
+    then dom (f+g) = (dom f /\ dom g)\{} & dom (f-g) = (dom f /\ dom g)\{}
+    by MESFUNC1:def 3,def 4;
+    hence thesis;
+    suppose A6:g is_finite;
+      not +infty in rng g
+    proof
+     assume +infty in rng g;
+     then consider x such that
+A7:  x in dom g & +infty = g.x by PARTFUN1:26;
+       |. g.x .| <' +infty by A6,A7,Def1;
+     hence contradiction by A7,EXTREAL2:58;
+    end;
+then A8: g"{+infty} = {} by FUNCT_1:142;
+      not -infty in rng g
+    proof
+     assume -infty in rng g;
+     then consider x such that
+A9:  x in dom g & -infty = g.x by PARTFUN1:26;
+       |. g.x .| <' +infty by A6,A9,Def1;
+     then -(+infty) <' g.x by EXTREAL2:58;
+     hence contradiction by A9,EXTREAL1:4;
+    end;
+    then g"{-infty} = {} by FUNCT_1:142;
+    then (f"{+infty} /\ g"{-infty}) \/ (f"{-infty} /\ g"{+infty}) = {} &
+    (f"{+infty} /\ g"{+infty}) \/ (f"{-infty} /\ g"{-infty}) = {}
+    by A8;
+    then dom (f+g) = (dom f /\ dom g)\{} & dom (f-g) = (dom f /\ dom g)\{}
+    by MESFUNC1:def 3,def 4;
+    hence thesis;
+  end;
+  hence thesis;
+end;
+
+theorem Th3:
+for f,g,F,r,A st f is_finite & g is_finite &
+(for p holds F.p = (A /\ less_dom(f,R_EAL p)) /\ (A /\
+ less_dom(g,R_EAL (r-p))))
+holds A /\ less_dom(f+g,R_EAL r) = union (rng F)
+proof
+   let f,g,F,r,A;
+   assume that A1:f is_finite and A2:g is_finite and
+A3:for p holds F.p = (A /\ less_dom(f,R_EAL p)) /\ (A /\
+ less_dom(g,R_EAL (r-p)));
+A4:dom(f+g) = dom f /\ dom g by A1,Th2;
+A5:A /\ less_dom(f+g,R_EAL r) c= union (rng F)
+   proof
+    let x be set;
+    assume x in A /\ less_dom(f+g,R_EAL r);
+then A6: x in A & x in less_dom(f+g,R_EAL r) by XBOOLE_0:def 3;
+then A7: x in dom(f+g) & ex y being R_eal st y = (f+g).x & y <' R_EAL r
+    by MESFUNC1:def 12;
+    reconsider x as Element of X by A6;
+A8: f.x + g.x <' R_EAL r by A7,MESFUNC1:def 3;
+A9:x in dom f & x in dom g by A4,A7,XBOOLE_0:def 3;
+    then |. f.x .| <' +infty & |. g.x .| <' +infty by A1,A2,Def1;
+then A10:-(+infty) <' f.x & f.x <' +infty &
+    -(+infty) <' g.x & g.x <' +infty by EXTREAL2:58;
+then A11:f.x <' R_EAL r - g.x by A8,EXTREAL2:27;
+A12: -infty <' f.x & -infty <' g.x by A10,EXTREAL1:4;
+    then reconsider f1 = f.x as Real by A10,EXTREAL1:1;
+    reconsider g1 = g.x as Real by A10,A12,EXTREAL1:1;
+      R_EAL r = r by MEASURE6:def 1;
+then R_EAL r - g.x = r - g1 by SUPINF_2:5;
+    then f1 < r - g1 by A11,HAHNBAN:12;
+    then consider p such that
+A13:f1 < p & p < r - g1 by RAT_1:22;
+A14:R_EAL p = p & R_EAL (r - p) = r - p by MEASURE6:def 1;
+      not p <= f1 & not r - p <= g1 by A13,REAL_2:165;
+    then not R_EAL p <=' f.x & not R_EAL (r - p) <=' g.x by A14,HAHNBAN:12;
+    then x in less_dom(f,R_EAL p) & x in less_dom(g,R_EAL(r-p))
+    by A9,MESFUNC1:def 12;
+    then x in A /\ less_dom(f,R_EAL p) & x in A /\ less_dom(g,R_EAL(r-p))
+    by A6,XBOOLE_0:def 3;
+then A15:x in (A /\ less_dom(f,R_EAL p))/\(A /\
+ less_dom(g,R_EAL(r-p))) by XBOOLE_0:def 3;
+      p in RAT by RAT_1:def 2;
+then p in dom F by FUNCT_2:def 1;
+    then x in F.p & F.p in rng F by A3,A15,FUNCT_1:def 5;
+    then consider Y such that
+A16:x in Y & Y in rng F;
+    thus thesis by A16,TARSKI:def 4;
+   end;
+     union (rng F) c= A /\ less_dom(f+g,R_EAL r)
+   proof
+    let x be set;
+    assume x in union (rng F);
+    then consider Y being set such that
+A17:x in Y & Y in rng F by TARSKI:def 4;
+    consider p being set such that
+A18:p in dom F & Y = F.p by A17,FUNCT_1:def 5;
+      dom F = RAT by FUNCT_2:def 1;
+    then reconsider p as Rational by A18,RAT_1:def 2;
+      x in (A /\ less_dom(f,R_EAL p))/\(A /\ less_dom(g,R_EAL (r-p)))
+    by A3,A17,A18;
+    then x in A /\ less_dom(f,R_EAL p) & x in A /\ less_dom(g,R_EAL (r-p))
+    by XBOOLE_0:def 3;
+then A19:x in A & x in less_dom(f,R_EAL p) & x in less_dom(g,R_EAL (r-p))
+    by XBOOLE_0:def 3;
+then A20:(x in dom f & ex y being R_eal st y=f.x & y <' R_EAL p) &
+    (x in dom g & ex y being R_eal st y=g.x & y <' R_EAL (r-p))
+    by MESFUNC1:def 12;
+    reconsider x as Element of X by A19;
+    consider y1 being R_eal such that
+A21:y1 = f.x & y1 <' R_EAL p by A19,MESFUNC1:def 12;
+    consider y2 being R_eal such that
+A22:y2 = g.x & y2 <' R_EAL (r-p) by A19,MESFUNC1:def 12;
+      |.y1.| <' +infty & |.y2.| <' +infty by A1,A2,A20,A21,A22,Def1;
+    then -(+infty) <' y1 & y1 <' +infty & -(+infty) <' y2 & y2 <' +infty
+    by EXTREAL2:58;
+then A23:-infty<' y1 & y1<' +infty & -infty<' y2 & y2<' +infty by EXTREAL1:4;
+    then reconsider f1 = y1 as Real by EXTREAL1:1;
+    reconsider g1 = y2 as Real by A23,EXTREAL1:1;
+A24:R_EAL p = p & R_EAL (r-p) = r-p & R_EAL r = r by MEASURE6:def 1;
+    then f1 < p & g1 < r-p by A21,A22,HAHNBAN:12;
+    then f1 < p & p < r- g1 by REAL_2:165;
+    then f1 < r - g1 by AXIOMS:22;
+then A25:f1 + g1 < r by REAL_1:86;
+A26:x in dom (f+g) by A4,A20,XBOOLE_0:def 3;
+    then (f+g).x = f.x + g.x by MESFUNC1:def 3
+           .= f1+g1 by A21,A22,SUPINF_2:1;
+    then not R_EAL r <=' (f+g).x by A24,A25,HAHNBAN:12;
+    then x in less_dom(f+g,R_EAL r) by A26,MESFUNC1:def 12;
+    hence thesis by A19,XBOOLE_0:def 3;
+   end;
+   hence thesis by A5,XBOOLE_0:def 10;
+end;
+
+begin  :: Measurability of f+g and f-g ::
+
+theorem
+  ex F being Function of NAT,RAT st F is one-to-one & dom F = NAT & rng F = RAT
+proof
+   consider F being Function such that
+A1:F is one-to-one & dom F = NAT & rng F = RAT by MESFUNC1:5,WELLORD2:def 4;
+ F is Function of NAT,RAT by A1,FUNCT_2:4;
+   hence thesis by A1;
+end;
+
+theorem Th5:
+for X,Y,Z be non empty set, F be Function of X,Z st X,Y are_equipotent holds
+(ex G be Function of Y,Z st rng F = rng G)
+proof
+   let X,Y,Z be non empty set;
+   let F be Function of X,Z;
+   assume X,Y are_equipotent;
+   then consider H being Function such that
+A1:H is one-to-one & dom H = Y & rng H = X by WELLORD2:def 4;
+   reconsider H as Function of Y,X by A1,FUNCT_2:4;
+   reconsider G = F*H as Function of Y,Z by FUNCT_2:19;
+     F in Funcs(X,Z) & G in Funcs(Y,Z) by FUNCT_2:11;
+then A2:rng F c= Z & rng G c= Z by PRALG_3:4;
+A3:dom F = X & dom G = Y by FUNCT_2:def 1;
+     for z being Element of Z holds z in rng F implies z in rng G
+   proof
+    let z be Element of Z;
+    assume z in rng F;
+    then consider x be set such that
+A4: x in dom F & z = F.x by FUNCT_1:def 5;
+A5: x in rng H by A1,A4,FUNCT_2:def 1;
+    then x in dom (H") by A1,FUNCT_1:54;
+    then (H").x in rng (H") by FUNCT_1:def 5;
+then A6: (H").x in dom G by A1,A3,FUNCT_1:55;
+    then G.((H").x) in rng G by FUNCT_1:def 5;
+    then F.(H.((H").x)) in rng G by A6,FUNCT_1:22;
+    hence thesis by A1,A4,A5,FUNCT_1:57;
+   end;
+then A7:rng F c= rng G by A2,SUBSET_1:7;
+     for z being Element of Z holds z in rng G implies z in rng F
+   proof
+    let z be Element of Z;
+    assume z in rng G;
+    then consider y be set such that
+A8:y in dom G & z = G.y by FUNCT_1:def 5;
+      y in rng (H") by A1,A3,A8,FUNCT_1:55;
+    then consider x be set such that
+A9:x in dom (H") & y = (H").x by FUNCT_1:def 5;
+A10:x in rng H by A1,A9,FUNCT_1:55;
+then A11:F.x in rng F by A1,A3,FUNCT_1:def 5;
+      x = H.y by A1,A9,A10,FUNCT_1:54;
+    hence thesis by A8,A11,FUNCT_1:22;
+   end;
+   then rng G c= rng F by A2,SUBSET_1:7;
+   then rng F = rng G by A7,XBOOLE_0:def 10;
+   hence thesis;
+end;
+
+theorem Th6:
+for S,f,g,A st f is_measurable_on A & g is_measurable_on A holds
+ex F being Function of RAT,S st
+(for p being Rational holds
+F.p = (A /\ less_dom(f,R_EAL p)) /\ (A /\ less_dom(g,R_EAL (r-p))))
+proof
+   let S,f,g,A;
+   assume A1:f is_measurable_on A & g is_measurable_on A;
+   defpred P[set,set] means ex p st p = $1 &
+   $2 = (A /\ less_dom(f,R_EAL p)) /\ (A /\ less_dom(g,R_EAL (r-p)));
+A2:for x1 being set st x1 in RAT
+   ex y1 being set st y1 in S & P[x1,y1]
+   proof
+    let x1 be set;
+    assume x1 in RAT;
+    then x1 is Rational by RAT_1:def 2;
+    then consider p such that
+A3: p = x1;
+
+A4: A /\ less_dom(f,R_EAL p) is_measurable_on S by A1,MESFUNC1:def 17;
+      A /\ less_dom(g,R_EAL (r-p)) is_measurable_on S by A1,MESFUNC1:def 17;
+then A5: A /\ less_dom(f,R_EAL p) in S & A /\ less_dom(g,R_EAL (r-p)) in S
+    by A4,MESFUNC1:def 11;
+    take (A /\ less_dom(f,R_EAL p)) /\ (A /\ less_dom(g,R_EAL (r-p)));
+    thus thesis by A3,A5,MEASURE1:46;
+   end;
+   consider G being Function of RAT,S such that
+A6:for x1 being set st x1 in RAT holds P[x1,G.x1] from FuncEx1(A2);
+A7:for p being Rational holds
+   G.p = (A /\ less_dom(f,R_EAL p)) /\ (A /\ less_dom(g,R_EAL (r-p)))
+   proof
+    let p be Rational;
+      p in RAT by RAT_1:def 2;
+    then consider q such that
+A8: q = p & G.p = (A /\ less_dom(f,R_EAL q)) /\ (A /\ less_dom(g,R_EAL (r-q)))
+    by A6;
+    thus thesis by A8;
+   end;
+   take G;
+   thus thesis by A7;
+end;
+
+theorem Th7:
+for f,g,A st f is_finite & g is_finite & f is_measurable_on A &
+g is_measurable_on A holds f+g is_measurable_on A
+proof
+   let f,g,A;
+   assume that A1:f is_finite and A2:g is_finite and
+   A3:f is_measurable_on A and A4:g is_measurable_on A;
+     for r be real number holds A /\ less_dom(f+g,R_EAL r) is_measurable_on S
+   proof
+    let r be real number;
+    reconsider r as Real by XREAL_0:def 1;
+    consider F being Function of RAT,S such that
+A5: (for p being Rational holds
+    F.p = (A /\ less_dom(f,R_EAL p)) /\ (A /\ less_dom(g,R_EAL (r-p))))
+    by A3,A4,Th6;
+    consider G being Function of NAT,S such that
+A6: rng F = rng G by Th5,MESFUNC1:5;
+      A /\ less_dom(f+g,R_EAL r) = union (rng G) by A1,A2,A5,A6,Th3;
+    hence thesis by MESFUNC1:def 11;
+   end;
+   hence thesis by MESFUNC1:def 17;
+end;
+
+canceled;
+
+theorem Th9:
+for C being non empty set, f1,f2 being PartFunc of C,ExtREAL holds
+f1 - f2 = f1 + (-f2)
+proof
+   let C be non empty set;
+   let f1,f2 be PartFunc of C,ExtREAL;
+A1:dom (f1-f2)
+   =(dom f1 /\ dom f2)\((f1"{+infty}/\f2"{+infty}) \/ (f1"{-infty}/\
+f2"{-infty}))
+   by MESFUNC1:def 4;
+A2:f2"{+infty} = (-f2)"{-infty}
+   proof
+      for x being Element of C st x in f2"{+infty} holds x in (-f2)"{-infty}
+    proof
+     let x be Element of C;
+     assume x in f2"{+infty};
+     then x in dom f2 & f2.x in {+infty} by FUNCT_1:def 13;
+then A3:  x in dom(-f2) & f2.x = +infty by MESFUNC1:def 7,TARSKI:def 1;
+     then (-f2).x = -(+infty) by MESFUNC1:def 7 .= -infty by SUPINF_2:def 3;
+     then (-f2).x in {-infty} by TARSKI:def 1;
+     hence thesis by A3,FUNCT_1:def 13;
+    end;
+then A4: f2"{+infty} c= (-f2)"{-infty} by SUBSET_1:7;
+      for x being Element of C st x in (-f2)"{-infty} holds x in f2"{+infty}
+    proof
+     let x be Element of C;
+     assume x in (-f2)"{-infty};
+then A5:  x in dom(-f2) & (-f2).x in {-infty} by FUNCT_1:def 13;
+then A6:  x in dom f2 & (-f2).x = -infty by MESFUNC1:def 7,TARSKI:def 1;
+     then -infty = -(f2.x) by A5,MESFUNC1:def 7;
+     then f2.x in {+infty} by SUPINF_2:4,TARSKI:def 1;
+     hence thesis by A6,FUNCT_1:def 13;
+    end;
+    then (-f2)"{-infty} c= f2"{+infty} by SUBSET_1:7;
+    hence thesis by A4,XBOOLE_0:def 10;
+   end;
+A7:f2"{-infty} = (-f2)"{+infty}
+   proof
+      for x being Element of C st x in f2"{-infty} holds x in (-f2)"{+infty}
+    proof
+     let x be Element of C;
+     assume x in f2"{-infty};
+     then x in dom f2 & f2.x in {-infty} by FUNCT_1:def 13;
+then A8:  x in dom(-f2) & f2.x = -infty by MESFUNC1:def 7,TARSKI:def 1;
+     then (-f2).x = +infty by MESFUNC1:def 7,SUPINF_2:4;
+     then (-f2).x in {+infty} by TARSKI:def 1;
+     hence thesis by A8,FUNCT_1:def 13;
+    end;
+then A9: f2"{-infty} c= (-f2)"{+infty} by SUBSET_1:7;
+      for x being Element of C st x in (-f2)"{+infty} holds x in f2"{-infty}
+    proof
+     let x be Element of C;
+     assume x in (-f2)"{+infty};
+then A10:  x in dom(-f2) & (-f2).x in {+infty} by FUNCT_1:def 13;
+then A11:  x in dom f2 & (-f2).x = +infty by MESFUNC1:def 7,TARSKI:def 1;
+     then +infty = -(f2.x) by A10,MESFUNC1:def 7;
+     then f2.x = -(+infty) .= -infty by SUPINF_2:def 3;
+     then f2.x in {-infty} by TARSKI:def 1;
+     hence thesis by A11,FUNCT_1:def 13;
+    end;
+    then (-f2)"{+infty} c= f2"{-infty} by SUBSET_1:7;
+    hence thesis by A9,XBOOLE_0:def 10;
+   end;
+     dom (f1+(-f2))
+   =(dom f1 /\ dom(-f2))\
+   ((f1"{-infty}/\(-f2)"{+infty}) \/ (f1"{+infty}/\(-f2)"{-infty}))
+   by MESFUNC1:def 3
+  .=(dom f1 /\ dom f2)\
+   ((f1"{-infty}/\f2"{-infty}) \/ (f1"{+infty}/\f2"{+infty}))
+   by A2,A7,MESFUNC1:def 7;
+then A12:dom(f1-f2)=dom(f1+(-f2)) by MESFUNC1:def 4;
+     for x being Element of C st x in dom(f1-f2) holds (f1-f2).x = (f1+(-f2)).x
+   proof
+    let x be Element of C;
+    assume A13:x in dom(f1-f2);
+then A14: (f1-f2).x = f1.x - f2.x by MESFUNC1:def 4;
+      dom(f1-f2) c= dom f1 /\ dom f2 by A1,XBOOLE_1:36;
+then x in dom f1 & x in dom f2 by A13,XBOOLE_0:def 3;
+then A15: x in dom (-f2) by MESFUNC1:def 7;
+A16: (f1+(-f2)).x = f1.x + (-f2).x by A12,A13,MESFUNC1:def 3;
+ (-f2).x = -(f2.x) by A15,MESFUNC1:def 7;
+    hence thesis by A14,A16,SUPINF_2:def 4;
+   end;
+   hence thesis by A12,PARTFUN1:34;
+end;
+
+theorem Th10:
+for r being Real holds R_EAL -r = -(R_EAL r)
+proof
+   let r be Real;
+A1:R_EAL -r = -r by MEASURE6:def 1;
+     R_EAL r = r by MEASURE6:def 1;
+   hence thesis by A1,SUPINF_2:3;
+end;
+
+theorem Th11:
+for C being non empty set, f being PartFunc of C,ExtREAL holds
+-f = (-1)(#)f
+proof
+   let C be non empty set;
+   let f be PartFunc of C,ExtREAL;
+A1:dom (-f) = dom f & dom ((-1)(#)f) = dom f by MESFUNC1:def 6,def 7;
+     for x being Element of C st x in dom f holds (-f).x = ((-1)(#)f).x
+   proof
+    let x be Element of C;
+    assume A2:x in dom f;
+    then (-f).x=-(f.x) & ((-1)(#)
+f).x=(R_EAL -1)*(f.x) by A1,MESFUNC1:def 6,def 7;
+    then ((-1)(#)f).x =(-(R_EAL 1))*(f.x) by Th10 .= -(R_EAL 1)*(f.x) by
+EXTREAL1:26
+   .= -(f.x) by EXTREAL2:4;
+    hence thesis by A1,A2,MESFUNC1:def 7;
+   end;
+   hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem Th12:
+for C being non empty set, f being PartFunc of C,ExtREAL, r be Real
+st f is_finite holds r(#)f is_finite
+proof
+   let C be non empty set;
+   let f be PartFunc of C,ExtREAL;
+   let r be Real;
+   assume A1:f is_finite;
+     for x being Element of C st x in dom(r(#)f) holds |.(r(#)f).x .| <' +infty
+   proof
+    let x be Element of C;
+    assume A2:x in dom(r(#)f);
+    then x in dom f by MESFUNC1:def 6;
+    then |. f.x .| <' +infty by A1,Def1;
+    then -(+infty) <' f.x & f.x <' +infty by EXTREAL2:58;
+    then -infty <' f.x & f.x <' +infty by SUPINF_2:def 3;
+    then reconsider y = f.x as Real by EXTREAL1:1;
+      r*y in REAL;
+    then R_EAL(r*y) in REAL by MEASURE6:def 1;
+    then -infty <' R_EAL(r*y) & R_EAL(r*y) <' +infty by SUPINF_1:31;
+then A3: -infty <' R_EAL r * R_EAL y & R_EAL r * R_EAL y <' +infty by EXTREAL1:
+38;
+      R_EAL y = f.x by MEASURE6:def 1;
+    then R_EAL r * R_EAL y = (r(#)f).x by A2,MESFUNC1:def 6;
+    then -(+infty) <' (r(#)f).x & (r(#)f).x <' +infty by A3,SUPINF_2:def 3;
+    hence thesis by EXTREAL2:59;
+   end;
+   hence thesis by Def1;
+end;
+
+theorem
+  for f,g,A st f is_finite & g is_finite & f is_measurable_on A &
+g is_measurable_on A & A c= dom g holds f-g is_measurable_on A
+proof
+   let f,g,A;
+   assume that A1:f is_finite and A2:g is_finite and
+A3:f is_measurable_on A and A4:g is_measurable_on A and A5:A c= dom g;
+     (-1)(#)g is_finite & (-1)(#)g is_measurable_on A
+   by A2,A4,A5,Th12,MESFUNC1:41;
+   then -g is_finite & -g is_measurable_on A by Th11;
+   then f+(-g) is_measurable_on A by A1,A3,Th7;
+   hence thesis by Th9;
+end;
+
+begin  ::definitions of extended real valued functions max+(f) and max-(f) ::
+       :: and their basic properties                                        ::
+
+definition let C be non empty set, f be PartFunc of C,ExtREAL;
+   deffunc F(Element of C) = max(f.$1,0.);
+func max+(f) -> PartFunc of C,ExtREAL means :Def2:
+dom it = dom f &
+for x be Element of C st x in dom it holds it.x = max(f.x,0.);
+existence
+proof
+  defpred P[Element of C] means $1 in dom f;
+  consider F be PartFunc of C,ExtREAL such that
+A1:for c being Element of C holds c in dom F iff P[c] and
+A2:for c being Element of C st c in dom F holds F.c = F(c) from LambdaPFD';
+   take F;
+   thus dom F=dom f
+   proof
+    thus dom F c= dom f
+    proof
+     let x be set;
+     assume A3:x in dom F;
+       dom F c= C by RELSET_1:12;
+     then reconsider x as Element of C by A3;
+       x in dom F by A3;
+     hence thesis by A1;
+    end;
+    let x be set;
+     assume A4:x in dom f;
+       dom f c= C by RELSET_1:12;
+     then reconsider x as Element of C by A4;
+       x in dom f by A4;
+     hence thesis by A1;
+   end;
+   let c be Element of C;
+   assume c in dom F;
+   hence thesis by A2;
+end;
+uniqueness
+  proof
+    set X = dom f;
+   thus for F,G being PartFunc of C,ExtREAL st
+      (dom F=X & for c be Element of C st c in dom F holds F.c = F(c)) &
+      (dom G=X & for c be Element of C st c in dom G holds G.c = F(c))
+     holds F = G from UnPartFuncD';
+  end;
+
+deffunc F(Element of C) = max(-(f.$1),0.);
+
+func max-(f) -> PartFunc of C,ExtREAL means :Def3:
+dom it = dom f &
+for x be Element of C st x in dom it holds it.x = max(-(f.x),0.);
+existence
+proof
+   defpred P[Element of C] means $1 in dom f;
+   consider F be PartFunc of C,ExtREAL such that
+A5:for c being Element of C holds c in dom F iff P[c] and
+A6:for c being Element of C st c in dom F holds F.c = F(c) from LambdaPFD';
+   take F;
+   thus dom F=dom f
+   proof
+    thus dom F c= dom f
+    proof
+     let x be set;
+     assume A7:x in dom F;
+       dom F c= C by RELSET_1:12;
+     then reconsider x as Element of C by A7;
+       x in dom F by A7;
+     hence thesis by A5;
+    end;
+     let x be set;
+     assume A8:x in dom f;
+       dom f c= C by RELSET_1:12;
+     then reconsider x as Element of C by A8;
+       x in dom f by A8;
+     hence thesis by A5;
+   end;
+   let c be Element of C;
+   assume c in dom F;
+   hence thesis by A6;
+end;
+uniqueness
+  proof
+    set X = dom f;
+   thus for F,G being PartFunc of C,ExtREAL st
+      (dom F=X & for c be Element of C st c in dom F holds F.c = F(c)) &
+      (dom G=X & for c be Element of C st c in dom G holds G.c = F(c))
+     holds F = G from UnPartFuncD';
+  end;
+end;
+
+theorem Th14:
+for C being non empty set, f being PartFunc of C,ExtREAL,
+x being Element of C st x in dom f holds 0. <=' (max+(f)).x
+proof
+   let C be non empty set;
+   let f be PartFunc of C,ExtREAL;
+   let x be Element of C;
+   assume x in dom f;
+   then x in dom (max+(f)) by Def2;
+   then (max+(f).x) = max(f.x,0.) by Def2;
+   hence thesis by EXTREAL2:92;
+end;
+
+theorem Th15:
+for C being non empty set, f being PartFunc of C,ExtREAL,
+x being Element of C st x in dom f holds 0. <=' (max-(f)).x
+proof
+   let C be non empty set;
+   let f be PartFunc of C,ExtREAL;
+   let x be Element of C;
+   assume x in dom f;
+   then x in dom (max-(f)) by Def3;
+   then (max-(f).x) = max(-(f.x),0.) by Def3;
+   hence thesis by EXTREAL2:92;
+end;
+
+theorem
+  for C being non empty set, f being PartFunc of C,ExtREAL holds
+max-(f) = max+(-f)
+proof
+   let C be non empty set;
+   let f be PartFunc of C,ExtREAL;
+A1:dom(max-(f)) = dom f by Def3 .= dom (-f) by MESFUNC1:def 7;
+then A2:dom(max-(f)) = dom(max+(-f)) by Def2;
+     for x being Element of C st x in dom(max-(f)) holds
+   max-(f).x = max+(-f).x
+   proof
+    let x being Element of C;
+    assume A3:x in dom (max-(f));
+then A4: max-(f).x = max(-(f.x),0.) by Def3;
+      -(f.x) = (-f).x by A1,A3,MESFUNC1:def 7;
+    hence thesis by A2,A3,A4,Def2;
+   end;
+   hence thesis by A2,PARTFUN1:34;
+end;
+
+theorem Th17:
+for C being non empty set, f being PartFunc of C,ExtREAL, x being Element of C
+st x in dom f & 0. <' max+(f).x holds max-(f).x = 0.
+proof
+   let C be non empty set;
+   let f be PartFunc of C,ExtREAL;
+   let x be Element of C;
+   assume that A1:x in dom f and A2:0. <' max+(f).x;
+A3:x in dom(max+(f)) & x in dom(max-(f)) by A1,Def2,Def3;
+   then max+(f).x = max(f.x,0.) by Def2;
+   then not (f.x <=' 0. & 0. <=' 0.) by A2,EXTREAL2:96;
+   then -(f.x) <' -0. by SUPINF_2:17;
+   then max(-(f.x),0.) = 0. by EXTREAL1:24,EXTREAL2:def 2;
+   hence thesis by A3,Def3;
+end;
+
+theorem
+  for C being non empty set, f being PartFunc of C,ExtREAL, x being Element of
+C
+st x in dom f & 0. <' max-(f).x holds max+(f).x = 0.
+proof
+   let C be non empty set;
+   let f be PartFunc of C,ExtREAL;
+   let x be Element of C;
+   assume that A1:x in dom f and A2:0. <' max-(f).x;
+A3:x in dom(max-(f)) & x in dom(max+(f)) by A1,Def2,Def3;
+   then max-(f).x = max(-(f.x),0.) by Def3;
+   then not (-(f.x) <=' 0. & 0. <=' 0.) by A2,EXTREAL2:96;
+   then -(-(f.x)) <' -0. by SUPINF_2:17;
+   then max(f.x,0.) = 0. by EXTREAL1:24,EXTREAL2:def 2;
+   hence thesis by A3,Def2;
+end;
+
+theorem Th19:
+for C being non empty set, f being PartFunc of C,ExtREAL holds
+dom f = dom (max+(f)-max-(f)) & dom f = dom (max+(f)+max-(f))
+proof
+   let C be non empty set;
+   let f be PartFunc of C,ExtREAL;
+A1:dom (max+(f)) = dom f & dom (max-(f)) = dom f by Def2,Def3;
+     (max+(f))"{+infty} misses (max-(f))"{+infty}
+   proof
+    assume not (max+(f))"{+infty} misses (max-(f))"{+infty};
+    then consider x1 being set such that
+A2: x1 in (max+(f))"{+infty} & x1 in (max-(f))"{+infty} by XBOOLE_0:3;
+    reconsider x1 as Element of C by A2;
+      x1 in dom(max+(f)) & max+(f).x1 in {+infty} &
+    x1 in dom(max-(f)) & max-(f).x1 in {+infty} by A2,FUNCT_1:def 13;
+    then x1 in dom f & max+(f).x1 = +infty & max-(f).x1 = +infty
+    by Def2,TARSKI:def 1;
+    hence contradiction by Th17,SUPINF_2:19;
+   end;
+then A3:(max+(f))"{+infty} /\ (max-(f))"{+infty} = {} by XBOOLE_0:def 7;
+     (max+(f))"{-infty} misses (max-(f))"{-infty}
+   proof
+    assume not (max+(f))"{-infty} misses (max-(f))"{-infty};
+    then consider x1 being set such that
+A4: x1 in (max+(f))"{-infty} & x1 in (max-(f))"{-infty} by XBOOLE_0:3;
+    reconsider x1 as Element of C by A4;
+      x1 in dom(max+(f)) & max+(f).x1 in {-infty} &
+    x1 in dom(max-(f)) & max-(f).x1 in {-infty} by A4,FUNCT_1:def 13;
+then x1 in dom f & max+(f).x1 = -infty & max-(f).x1 = -infty
+    by Def2,TARSKI:def 1;
+    hence contradiction by Th14,SUPINF_2:19;
+   end;
+then A5:(max+(f))"{-infty} /\ (max-(f))"{-infty} = {} by XBOOLE_0:def 7;
+     (max+(f))"{+infty} misses (max-(f))"{-infty}
+   proof
+    assume not (max+(f))"{+infty} misses (max-(f))"{-infty};
+    then consider x1 being set such that
+A6: x1 in (max+(f))"{+infty} & x1 in (max-(f))"{-infty} by XBOOLE_0:3;
+    reconsider x1 as Element of C by A6;
+      x1 in dom(max-(f)) & max-(f).x1 in {-infty} by A6,FUNCT_1:def 13;
+then x1 in dom f & max-(f).x1 = -infty
+    by Def3,TARSKI:def 1;
+    hence contradiction by Th15,SUPINF_2:19;
+   end;
+then A7:(max+(f))"{+infty} /\ (max-(f))"{-infty} = {} by XBOOLE_0:def 7;
+     (max+(f))"{-infty} misses (max-(f))"{+infty}
+   proof
+    assume not (max+(f))"{-infty} misses (max-(f))"{+infty};
+    then consider x1 being set such that
+A8: x1 in (max+(f))"{-infty} & x1 in (max-(f))"{+infty} by XBOOLE_0:3;
+    reconsider x1 as Element of C by A8;
+      x1 in dom(max+(f)) & max+(f).x1 in {-infty} by A8,FUNCT_1:def 13;
+then x1 in dom f & max+(f).x1 = -infty by Def2,TARSKI:def 1;
+    hence contradiction by Th14,SUPINF_2:19;
+   end;
+   then (max+(f))"{-infty} /\ (max-(f))"{+infty} = {} by XBOOLE_0:def 7;
+   then dom (max+(f)-max-(f)) = (dom f /\ dom f)\({}\/{}) &
+   dom (max+(f)+max-(f)) = (dom f /\ dom f)\({}\/{})
+   by A1,A3,A5,A7,MESFUNC1:def 3,def 4;
+   hence thesis;
+end;
+
+theorem Th20:
+for C being non empty set, f being PartFunc of C,ExtREAL, x being Element of C
+st x in dom f holds
+(max+(f).x = f.x or max+(f).x = 0.) & (max-(f).x = -(f.x) or max-(f).x = 0.)
+proof
+   let C be non empty set;
+   let f be PartFunc of C,ExtREAL;
+   let x be Element of C;
+   assume x in dom f;
+   then x in dom(max+(f)) & x in dom(max-(f)) by Def2,Def3;
+   then max+(f).x = max(f.x,0.) & max-(f).x = max(-(f.x),0.) by Def2,Def3;
+   hence thesis by EXTREAL2:95;
+end;
+
+theorem Th21:
+for C being non empty set, f being PartFunc of C,ExtREAL, x being Element of C
+st x in dom f & max+(f).x = f.x holds max-(f).x = 0.
+proof
+   let C be non empty set;
+   let f be PartFunc of C,ExtREAL;
+   let x be Element of C;
+   assume that A1:x in dom f and A2:max+(f).x = f.x;
+     x in dom(max+(f)) & x in dom(max-(f)) by A1,Def2,Def3;
+then A3:max+(f).x = max(f.x,0.) & max-(f).x = max(-(f.x),0.) by Def2,Def3;
+   then 0. <=' f.x by A2,EXTREAL2:def 2;
+   then -(f.x) <=' -0. by SUPINF_2:16;
+   hence thesis by A3,EXTREAL1:24,EXTREAL2:89;
+end;
+
+theorem Th22:
+for C being non empty set, f being PartFunc of C,ExtREAL, x being Element of C
+st x in dom f & max+(f).x = 0. holds max-(f).x = -(f.x)
+proof
+   let C be non empty set;
+   let f be PartFunc of C,ExtREAL;
+   let x be Element of C;
+   assume that A1:x in dom f and A2:max+(f).x = 0.;
+     x in dom(max+(f)) & x in dom(max-(f)) by A1,Def2,Def3;
+then A3:max+(f).x = max(f.x,0.) & max-(f).x = max(-(f.x),0.) by Def2,Def3;
+   then f.x <=' 0. by A2,EXTREAL2:98;
+   then -0. <=' -(f.x) by SUPINF_2:16;
+   hence thesis by A3,EXTREAL1:24,EXTREAL2:def 2;
+end;
+
+theorem
+  for C being non empty set, f being PartFunc of C,ExtREAL, x being Element of
+C
+st x in dom f & max-(f).x = -(f.x) holds max+(f).x = 0.
+proof
+   let C be non empty set;
+   let f be PartFunc of C,ExtREAL;
+   let x be Element of C;
+   assume that A1:x in dom f and A2:max-(f).x = -(f.x);
+     x in dom(max+(f)) & x in dom(max-(f)) by A1,Def2,Def3;
+then A3:max+(f).x = max(f.x,0.) & max-(f).x = max(-(f.x),0.) by Def2,Def3;
+   then 0. <=' -(f.x) by A2,EXTREAL2:def 2;
+   then -(-(f.x)) <=' -0. by SUPINF_2:16;
+   hence thesis by A3,EXTREAL1:24,EXTREAL2:89;
+end;
+
+theorem
+  for C being non empty set, f being PartFunc of C,ExtREAL, x being Element of
+C
+st x in dom f & max-(f).x = 0. holds max+(f).x = f.x
+proof
+   let C be non empty set;
+   let f be PartFunc of C,ExtREAL;
+   let x be Element of C;
+   assume that A1:x in dom f and A2:max-(f).x = 0.;
+     x in dom(max+(f)) & x in dom(max-(f)) by A1,Def2,Def3;
+then A3:max+(f).x = max(f.x,0.) & max-(f).x = max(-(f.x),0.) by Def2,Def3;
+   then -(f.x) <=' 0. by A2,EXTREAL2:98;
+   then -0. <=' -(-(f.x)) by SUPINF_2:16;
+   hence thesis by A3,EXTREAL1:24,EXTREAL2:def 2;
+end;
+
+theorem
+  for C being non empty set, f being PartFunc of C,ExtREAL holds
+f = max+(f) - max-(f)
+proof
+   let C be non empty set;
+   let f be PartFunc of C,ExtREAL;
+A1:dom f = dom(max+(f)-max-(f)) by Th19;
+     for x being Element of C st x in dom f holds
+   f.x = (max+(f) - max-(f)).x
+   proof
+    let x be Element of C;
+    assume A2:x in dom f;
+then A3: (max+(f) - max-(f)).x = max+(f).x - max-(f).x by A1,MESFUNC1:def 4;
+      now per cases by A2,Th20;
+     suppose A4:max+(f).x = f.x;
+     then max-(f).x = 0. by A2,Th21;
+     then max+(f).x - max-(f).x = f.x + 0.
+        by A4,EXTREAL1:24,SUPINF_2:def 4;
+     hence thesis by A3,SUPINF_2:18;
+     suppose A5:max+(f).x = 0.;
+     then max-(f).x = -(f.x) by A2,Th22;
+     then max+(f).x - max-(f).x = 0. + f.x by A5,EXTREAL1:5;
+     hence thesis by A3,SUPINF_2:18;
+    end;
+    hence thesis;
+   end;
+   hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem
+  for C being non empty set, f being PartFunc of C,ExtREAL holds
+|.f.| = max+(f) + max-(f)
+proof
+   let C be non empty set;
+   let f be PartFunc of C,ExtREAL;
+A1:dom f = dom(max+(f)+max-(f)) by Th19;
+A2:dom f = dom |.f.| by MESFUNC1:def 10;
+     for x being Element of C st x in dom f holds
+   |.f.| .x = (max+(f) + max-(f)).x
+   proof
+    let x be Element of C;
+    assume A3:x in dom f;
+      now per cases by A3,Th20;
+     suppose A4:max+(f).x = f.x;
+then A5:  max+(f).x + max-(f).x = f.x + 0. by A3,Th21 .= f.x by SUPINF_2:18;
+       x in dom(max+(f)) by A3,Def2;
+     then max+(f).x = max(f.x,0.) by Def2;
+     then 0. <=' f.x by A4,EXTREAL2:def 2;
+     then f.x = |. f.x .| by EXTREAL1:def 3 .= |.f.| .x by A2,A3,MESFUNC1:def
+10;
+     hence thesis by A1,A3,A5,MESFUNC1:def 3;
+     suppose A6:max+(f).x = 0.;
+then A7:  max+(f).x + max-(f).x = 0. + -(f.x) by A3,Th22 .= -(f.x) by SUPINF_2:
+18;
+       x in dom(max+(f)) by A3,Def2;
+     then max+(f).x = max(f.x,0.) by Def2;
+     then f.x <=' 0. by A6,EXTREAL2:98;
+     then -(f.x) = |. f.x .| by EXTREAL2:55 .= |.f.| .x by A2,A3,MESFUNC1:def
+10;
+     hence thesis by A1,A3,A7,MESFUNC1:def 3;
+    end;
+    hence thesis;
+   end;
+   hence thesis by A1,A2,PARTFUN1:34;
+end;
+
+begin  :: Measurability of max+(f), max-(f) and |.f.|
+
+theorem
+  f is_measurable_on A implies max+(f) is_measurable_on A
+proof
+   assume A1:f is_measurable_on A;
+     for r be real number holds A /\ less_dom(max+(f),R_EAL r) is_measurable_on
+S
+   proof
+    let r be real number;
+    reconsider r as Real by XREAL_0:def 1;
+      now per cases;
+     suppose A2:0 < r;
+       less_dom(max+(f),R_EAL r) = less_dom(f,R_EAL r)
+     proof
+        for x being set st x in less_dom(max+(f),R_EAL r) holds
+      x in less_dom(f,R_EAL r)
+      proof
+       let x be set;
+       assume A3:x in less_dom(max+(f),R_EAL r);
+then A4:    x in dom max+(f) & ex y being R_eal st y=max+(f).x & y <' R_EAL r
+       by MESFUNC1:def 12;
+       reconsider x as Element of X by A3;
+A5:   max(f.x,0.) <' R_EAL r by A4,Def2;
+then A6:   f.x <=' R_EAL r & 0. <=' R_EAL r by EXTREAL2:96;
+         f.x <> R_EAL r
+       proof
+        assume A7:f.x = R_EAL r;
+then max(f.x,0.) = 0. by A5,EXTREAL2:95;
+        hence contradiction by A5,A7,EXTREAL2:98;
+       end;
+then A8:   f.x <' R_EAL r by A6,SUPINF_1:22;
+          x in dom f by A4,Def2;
+        hence thesis by A8,MESFUNC1:def 12;
+      end;
+then A9:   less_dom(max+(f),R_EAL r) c= less_dom(f,R_EAL r) by TARSKI:def 3;
+        for x being set st x in less_dom(f,R_EAL r) holds
+      x in less_dom(max+(f),R_EAL r)
+      proof
+       let x be set;
+       assume A10:x in less_dom(f,R_EAL r);
+then A11:   x in dom f & ex y being R_eal st y = f.x & y <' R_EAL r
+       by MESFUNC1:def 12;
+       consider y being R_eal such that
+A12:   y = f.x & y <' R_EAL r by A10,MESFUNC1:def 12;
+       reconsider x as Element of X by A10;
+         R_EAL r = r by MEASURE6:def 1;
+then A13:   0. <' R_EAL r by A2,EXTREAL1:18;
+A14:   x in dom (max+(f)) by A11,Def2;
+         now per cases;
+        suppose 0. <=' f.x;
+        then max(f.x,0.) = f.x by EXTREAL2:def 2;
+        then max+(f).x = f.x by A14,Def2;
+        hence thesis by A12,A14,MESFUNC1:def 12;
+        suppose not 0. <=' f.x;
+        then max(f.x,0.) = 0. by EXTREAL2:def 2;
+        then max+(f).x = 0. by A14,Def2;
+        hence thesis by A13,A14,MESFUNC1:def 12;
+       end;
+       hence thesis;
+      end;
+      then less_dom(f,R_EAL r) c= less_dom(max+(f),R_EAL r) by TARSKI:def 3;
+      hence thesis by A9,XBOOLE_0:def 10;
+     end;
+     hence thesis by A1,MESFUNC1:def 17;
+     suppose A15:r <= 0;
+       for x being Element of X holds not x in less_dom(max+(f),R_EAL r)
+     proof
+      let x be Element of X;
+      assume x in less_dom(max+(f),R_EAL r);
+then A16:  x in dom(max+(f)) & ex y being R_eal st y = max+(f).x & y <' R_EAL r
+      by MESFUNC1:def 12;
+        R_EAL r = r by MEASURE6:def 1;
+      then not (0. <' R_EAL r) by A15,EXTREAL1:18;
+then A17:  max+(f).x <' 0. by A16,SUPINF_1:29;
+        max+(f).x = max(f.x,0.) by A16,Def2;
+      hence contradiction by A17,EXTREAL2:92;
+     end;
+     then less_dom(max+(f),R_EAL r) = {} by SUBSET_1:10;
+     then A /\ less_dom(max+(f),R_EAL r) in S by MEASURE1:45;
+     hence thesis by MESFUNC1:def 11;
+    end;
+    hence thesis;
+   end;
+   hence thesis by MESFUNC1:def 17;
+end;
+
+theorem
+  f is_measurable_on A & A c= dom f implies max-(f) is_measurable_on A
+proof
+   assume that A1:f is_measurable_on A and A2:A c= dom f;
+     for r be real number holds A /\ less_dom(max-(f),R_EAL r) is_measurable_on
+S
+   proof
+    let r be real number;
+    reconsider r as Real by XREAL_0:def 1;
+      now per cases;
+     suppose A3:0 < r;
+       (-1)(#)f is_measurable_on A by A1,A2,MESFUNC1:41;
+then A4:  -f is_measurable_on A by Th11;
+       less_dom(max-(f),R_EAL r) = less_dom(-f,R_EAL r)
+     proof
+        for x being set st x in less_dom(max-(f),R_EAL r) holds
+      x in less_dom(-f,R_EAL r)
+      proof
+       let x be set;
+       assume A5:x in less_dom(max-(f),R_EAL r);
+then A6:    x in dom max-(f) & ex y being R_eal st y=max-(f).x & y <' R_EAL r
+       by MESFUNC1:def 12;
+       reconsider x as Element of X by A5;
+A7:   max(-(f.x),0.) <' R_EAL r by A6,Def3;
+then A8:   -(f.x) <=' R_EAL r & 0. <=' R_EAL r by EXTREAL2:96;
+         -(f.x) <> R_EAL r
+       proof
+        assume A9:-(f.x) = R_EAL r;
+then max(-(f.x),0.) = 0. by A7,EXTREAL2:95;
+        hence contradiction by A7,A9,EXTREAL2:98;
+       end;
+then A10:   -(f.x) <' R_EAL r by A8,SUPINF_1:22;
+         x in dom f by A6,Def3;
+then A11:   x in dom -f by MESFUNC1:def 7;
+then (-f).x = -(f.x) by MESFUNC1:def 7;
+        hence thesis by A10,A11,MESFUNC1:def 12;
+      end;
+then A12:   less_dom(max-(f),R_EAL r) c= less_dom(-f,R_EAL r) by TARSKI:def 3;
+        for x being set st x in less_dom(-f,R_EAL r) holds
+      x in less_dom(max-(f),R_EAL r)
+      proof
+       let x be set;
+       assume A13:x in less_dom(-f,R_EAL r);
+then A14:   x in dom -f & ex y being R_eal st y = (-f).x & y <' R_EAL r
+       by MESFUNC1:def 12;
+       consider y being R_eal such that
+A15:   y = (-f).x & y <' R_EAL r by A13,MESFUNC1:def 12;
+       reconsider x as Element of X by A13;
+         R_EAL r = r by MEASURE6:def 1;
+then A16:   0. <' R_EAL r by A3,EXTREAL1:18;
+         x in dom f by A14,MESFUNC1:def 7;
+then A17:   x in dom (max-(f)) by Def3;
+         now per cases;
+        suppose 0. <=' -(f.x);
+        then max(-(f.x),0.) = -(f.x) by EXTREAL2:def 2;
+        then max-(f).x = -(f.x) by A17,Def3 .= (-f).x by A14,MESFUNC1:def 7;
+        hence thesis by A15,A17,MESFUNC1:def 12;
+        suppose not 0. <=' -(f.x);
+        then max(-(f.x),0.) = 0. by EXTREAL2:def 2;
+        then max-(f).x = 0. by A17,Def3;
+        hence thesis by A16,A17,MESFUNC1:def 12;
+       end;
+       hence thesis;
+      end;
+      then less_dom(-f,R_EAL r) c= less_dom(max-(f),R_EAL r) by TARSKI:def 3;
+      hence thesis by A12,XBOOLE_0:def 10;
+     end;
+     hence thesis by A4,MESFUNC1:def 17;
+     suppose A18:r <= 0;
+       for x being Element of X holds not x in less_dom(max-(f),R_EAL r)
+     proof
+      let x be Element of X;
+      assume x in less_dom(max-(f),R_EAL r);
+then A19:  x in dom(max-(f)) & ex y being R_eal st y = max-(f).x & y <' R_EAL r
+      by MESFUNC1:def 12;
+        R_EAL r = r by MEASURE6:def 1;
+      then not (0. <' R_EAL r) by A18,EXTREAL1:18;
+then A20:  max-(f).x <' 0. by A19,SUPINF_1:29;
+        max-(f).x = max(-(f.x),0.) by A19,Def3;
+      hence contradiction by A20,EXTREAL2:92;
+     end;
+     then less_dom(max-(f),R_EAL r) = {} by SUBSET_1:10;
+     then A /\ less_dom(max-(f),R_EAL r) in S by MEASURE1:45;
+     hence thesis by MESFUNC1:def 11;
+    end;
+    hence thesis;
+   end;
+   hence thesis by MESFUNC1:def 17;
+end;
+
+theorem
+  for f,A st f is_measurable_on A & A c= dom f holds |.f.| is_measurable_on A
+proof
+   let f,A;
+   assume that A1:f is_measurable_on A and A2:A c= dom f;
+     for r be real number holds A /\ less_dom(|.f.|,R_EAL r) is_measurable_on S
+   proof
+    let r be real number;
+    reconsider r as Real by XREAL_0:def 1;
+      now
+A3:  less_dom(|.f.|,R_EAL r) = less_dom(f,R_EAL r) /\ great_dom(f,R_EAL -r)
+     proof
+        for x being set st x in less_dom(|.f.|,R_EAL r) holds
+      x in less_dom(f,R_EAL r) /\ great_dom(f,R_EAL -r)
+      proof
+       let x be set;
+       assume A4:x in less_dom(|.f.|,R_EAL r);
+then A5:    x in dom |.f.| & ex y being R_eal st y=|.f.| .x & y <' R_EAL r
+       by MESFUNC1:def 12;
+       reconsider x as Element of X by A4;
+A6:    x in dom f by A5,MESFUNC1:def 10;
+         |. f.x .| <' R_EAL r by A5,MESFUNC1:def 10;
+then A7:    -(R_EAL r) <' f.x & f.x <' R_EAL r by EXTREAL2:58;
+         R_EAL r = r by MEASURE6:def 1;
+       then -(R_EAL r) = -r by SUPINF_2:3;
+       then R_EAL -r <' f.x & f.x <' R_EAL r by A7,MEASURE6:def 1;
+       then x in less_dom(f,R_EAL r) & x in great_dom(f,R_EAL -r)
+       by A6,MESFUNC1:def 12,def 14;
+       hence thesis by XBOOLE_0:def 3;
+      end;
+then A8:   less_dom(|.f.|,R_EAL r) c= less_dom(f,R_EAL r) /\ great_dom(f,R_EAL
+-r)
+      by TARSKI:def 3;
+        for x being set st x in less_dom(f,R_EAL r) /\
+ great_dom(f,R_EAL -r) holds
+      x in less_dom(|.f.|,R_EAL r)
+      proof
+       let x be set;
+       assume A9: x in less_dom(f,R_EAL r) /\ great_dom(f,R_EAL -r);
+then A10:    x in less_dom(f,R_EAL r) & x in great_dom(f,R_EAL -r) by XBOOLE_0:
+def 3;
+then A11:   x in dom f & ex y being R_eal st y = f.x & y <' R_EAL r
+       by MESFUNC1:def 12;
+       consider y being R_eal such that
+A12:   y = f.x & y <' R_EAL r by A10,MESFUNC1:def 12;
+       consider y1 being R_eal such that
+A13:    y1 = f.x & R_EAL -r <' y1 by A10,MESFUNC1:def 14;
+       reconsider x as Element of X by A9;
+A14:    x in dom |.f.| by A11,MESFUNC1:def 10;
+         R_EAL r = r by MEASURE6:def 1;
+       then -(R_EAL r) = -r by SUPINF_2:3;
+       then -(R_EAL r) = R_EAL -r by MEASURE6:def 1;
+       then |. f.x .| <' R_EAL r by A12,A13,EXTREAL2:59;
+       then |.f.| .x <' R_EAL r by A14,MESFUNC1:def 10;
+       hence thesis by A14,MESFUNC1:def 12;
+      end;
+      then less_dom(f,R_EAL r) /\ great_dom(f,R_EAL -r) c= less_dom(|.f.|,
+R_EAL r)
+      by TARSKI:def 3;
+      hence thesis by A8,XBOOLE_0:def 10;
+     end;
+       A /\ great_dom(f,R_EAL -r) /\ less_dom(f,R_EAL r) is_measurable_on S
+     by A1,A2,MESFUNC1:36;
+     hence thesis by A3,XBOOLE_1:16;
+    end;
+    hence thesis;
+   end;
+   hence thesis by MESFUNC1:def 17;
+end;
+
+begin  :: Definition and measurability of characteristic function ::
+
+theorem Th30: for A,X being set holds rng chi(A,X) c= {0.,1.}
+proof
+   let A,X be set;
+   let y be set;
+    assume y in rng chi(A,X);
+    then consider x being set such that
+A1:   x in dom chi(A,X) and
+A2:   y = chi(A,X).x by FUNCT_1:def 5;
+      x in X & (x in A or not x in A) by A1,FUNCT_3:def 3;
+    then y = 0. or y = 1. by A2,FUNCT_3:def 3,MESFUNC1:def 8,SUPINF_2:def 1;
+    hence thesis by TARSKI:def 2;
+ end;
+
+definition let A,X be set;
+redefine func chi(A,X) -> PartFunc of X,ExtREAL;
+coherence
+proof A1: dom chi(A,X) =X by FUNCT_3:def 3;
+    now let x be set; assume A2:x in rng chi(A,X);
+A3:rng chi(A,X) c= {0.,1.} by Th30;
+      now per cases by A2,A3,TARSKI:def 2;
+     suppose x=0.; hence x in ExtREAL;
+     suppose x=1.; hence x in ExtREAL;
+    end;
+   hence x in ExtREAL;
+  end;
+ then rng chi(A,X) c= ExtREAL by TARSKI:def 3;
+ hence chi(A,X) is PartFunc of X,ExtREAL by A1,RELSET_1:11;
+ end;
+end;
+
+theorem
+  chi(A,X) is_finite
+proof
+     for x st x in dom chi(A,X) holds |.chi(A,X).x.| <' +infty
+   proof
+    let x;
+    assume x in dom chi(A,X);
+      now per cases;
+     suppose x in A;
+then A1:  chi(A,X).x = 1. by FUNCT_3:def 3,MESFUNC1:def 8;
+       0. <' 1. by EXTREAL1:18,MESFUNC1:def 8;
+     then |.chi(A,X).x.| = 1. by A1,EXTREAL1:def 3;
+     hence thesis by MESFUNC1:def 8,SUPINF_1:31;
+     suppose not x in A;
+     then chi(A,X).x = 0. by FUNCT_3:def 3,SUPINF_2:def 1;
+     hence thesis by EXTREAL1:def 3,SUPINF_2:19;
+    end;
+    hence thesis;
+   end;
+   hence thesis by Def1;
+end;
+
+theorem
+  chi(A,X) is_measurable_on B
+proof
+     for r be real number holds B /\ less_eq_dom(chi(A,X),R_EAL r)
+    is_measurable_on S
+   proof
+    let r be real number;
+    reconsider r as Real by XREAL_0:def 1;
+      now per cases;
+     suppose A1:r >= 1;
+       less_eq_dom(chi(A,X),R_EAL r) = X
+     proof
+        for x being set st x in X holds x in less_eq_dom(chi(A,X),R_EAL r)
+      proof
+       let x being set;
+       assume A2:x in X;
+then A3:    x in dom chi(A,X) by FUNCT_3:def 3;
+       reconsider x as Element of X by A2;
+         R_EAL r = r & 1. = 1 by MEASURE6:def 1,MESFUNC1:def 8;
+then A4:    1. <=' R_EAL r by A1,EXTREAL2:74;
+         chi(A,X).x <=' 1.
+       proof
+          now per cases;
+         suppose x in A;
+         hence thesis by FUNCT_3:def 3,MESFUNC1:def 8;
+         suppose not x in A;
+         then chi(A,X).x = 0. by FUNCT_3:def 3,SUPINF_2:def 1;
+         hence thesis by EXTREAL2:74,MESFUNC1:def 8,SUPINF_2:def 1;
+        end;
+        hence thesis;
+       end;
+       then chi(A,X).x <=' R_EAL r by A4,SUPINF_1:29;
+       hence thesis by A3,MESFUNC1:def 13;
+      end;
+      then X c= less_eq_dom(chi(A,X),R_EAL r) by TARSKI:def 3;
+      hence thesis by XBOOLE_0:def 10;
+     end;
+     then less_eq_dom(chi(A,X),R_EAL r) in S by MEASURE1:45;
+     then B /\ less_eq_dom(chi(A,X),R_EAL r) in S by MEASURE1:46;
+     hence thesis by MESFUNC1:def 11;
+     suppose A5:0 <= r & r < 1;
+A6:  less_eq_dom(chi(A,X),R_EAL r) = X\A
+     proof
+        for x being set st x in less_eq_dom(chi(A,X),R_EAL r) holds x in X\A
+      proof
+       let x being set;
+       assume A7:x in less_eq_dom(chi(A,X),R_EAL r);
+       then reconsider x as Element of X;
+A8:   0.=0 & R_EAL r = r & 1.=1
+       by MEASURE6:def 1,MESFUNC1:def 8,SUPINF_2:def 1;
+       consider y being R_eal such that
+A9:   y = chi(A,X).x & y <=' R_EAL r by A7,MESFUNC1:def 13;
+         not x in A
+       proof
+        assume x in A;
+        then chi(A,X).x = 1. by FUNCT_3:def 3,MESFUNC1:def 8;
+        hence contradiction by A5,A8,A9,EXTREAL2:74;
+       end;
+       hence thesis by XBOOLE_0:def 4;
+      end;
+then A10:   less_eq_dom(chi(A,X),R_EAL r) c= X\A by TARSKI:def 3;
+        for x being set st x in X\A holds x in less_eq_dom(chi(A,X),R_EAL r)
+      proof
+       let x being set;
+       assume A11:x in X\A;
+then A12:   x in X & not x in A by XBOOLE_0:def 4;
+       reconsider x as Element of X by A11,XBOOLE_0:def 4;
+A13:   chi(A,X).x = 0. by A12,FUNCT_3:def 3,SUPINF_2:def 1;
+         0.=0 & R_EAL r = r & 1.=1
+       by MEASURE6:def 1,MESFUNC1:def 8,SUPINF_2:def 1;
+then A14:   chi(A,X).x <=' R_EAL r by A5,A13,EXTREAL2:74;
+         x in dom chi(A,X) by A12,FUNCT_3:def 3;
+       hence thesis by A14,MESFUNC1:def 13;
+      end;
+      then X\A c= less_eq_dom(chi(A,X),R_EAL r) by TARSKI:def 3;
+      hence thesis by A10,XBOOLE_0:def 10;
+     end;
+       X in S by MEASURE1:45;
+     then less_eq_dom(chi(A,X),R_EAL r) in S by A6,MEASURE1:47;
+     then B /\ less_eq_dom(chi(A,X),R_EAL r) in S by MEASURE1:46;
+     hence thesis by MESFUNC1:def 11;
+     suppose A15:r < 0;
+       less_eq_dom(chi(A,X),R_EAL r) = {}
+     proof
+        for x holds not x in less_eq_dom(chi(A,X),R_EAL r)
+      proof
+       assume ex x st x in less_eq_dom(chi(A,X),R_EAL r);
+       then consider x such that
+A16:   x in less_eq_dom(chi(A,X),R_EAL r);
+       consider y being R_eal such that
+A17:   y = chi(A,X).x & y <=' R_EAL r by A16,MESFUNC1:def 13;
+         R_EAL r = r by MEASURE6:def 1;
+then A18:   R_EAL r <' 0. by A15,EXTREAL1:19;
+         0. <=' chi(A,X).x
+       proof
+          now per cases;
+         suppose x in A;
+then chi(A,X).x = 1. by FUNCT_3:def 3,MESFUNC1:def 8;
+         hence thesis by EXTREAL1:18,MESFUNC1:def 8;
+         suppose not x in A;
+         hence thesis by FUNCT_3:def 3,SUPINF_2:def 1;
+        end;
+        hence thesis;
+       end;
+       hence contradiction by A17,A18,SUPINF_1:29;
+      end;
+      hence thesis by SUBSET_1:10;
+     end;
+     then B /\ less_eq_dom(chi(A,X),R_EAL r) in S by MEASURE1:45;
+     hence thesis by MESFUNC1:def 11;
+    end;
+    hence thesis;
+   end;
+   hence thesis by MESFUNC1:32;
+end;
+
+begin  :: Definition and measurability of simple function
+
+definition
+  let X be set;
+  let S be sigma_Field_Subset of X;
+  cluster disjoint_valued FinSequence of S;
+existence
+proof
+   reconsider A = {} as Element of S by MEASURE1:45;
+   deffunc F(Nat) = A;
+   consider p being FinSequence of S such that
+A1:len p = 1 and
+A2:for n being Nat st n in Seg 1 holds p.n = F(n) from SeqLambdaD;
+A3:for n,m being set st n <> m holds p.n misses p.m
+   proof
+    let n,m being set;
+    assume that n <> m;
+A4:  dom p = Seg 1 by A1,FINSEQ_1:def 3;
+      p.n = {}
+    proof
+      per cases;
+      suppose n in dom p; hence thesis by A2,A4;
+      suppose not n in dom p; hence thesis by FUNCT_1:def 4;
+    end;
+    hence thesis by XBOOLE_1:65;
+   end;
+   take p;
+   thus thesis by A3,PROB_2:def 3;
+end;
+end;
+
+definition
+  let X be set;
+  let S be sigma_Field_Subset of X;
+  mode Finite_Sep_Sequence of S is disjoint_valued FinSequence of S;
+end;
+
+theorem Th33:
+F is Finite_Sep_Sequence of S implies
+ex G being Sep_Sequence of S st (union rng F = union rng G &
+(for n st n in dom F holds F.n = G.n) &
+(for m st not m in dom F holds G.m = {}))
+proof
+   defpred P[set,set] means
+    ($1 in dom F implies F.$1 = $2) & (not $1 in dom F implies $2 = {});
+   assume A1:F is Finite_Sep_Sequence of S;
+A2:for x1 being set st x1 in NAT ex y1 being set st y1 in S & P[x1,y1]
+   proof
+    let x1 being set;
+    assume x1 in NAT;
+    then reconsider x1 as Nat;
+    per cases;
+     suppose A3:x1 in dom F;
+then A4:  F.x1 in rng F by FUNCT_1:def 5;
+A5:  rng F c= S by A1,FINSEQ_1:def 4;
+     take F.x1;
+     thus thesis by A3,A4,A5;
+     suppose A6:not x1 in dom F;
+     take {};
+     thus thesis by A6,MEASURE1:45;
+   end;
+   consider G being Function of NAT,S such that
+A7:for x1 being set st x1 in NAT holds P[x1,G.x1] from FuncEx1(A2);
+     for n,m being set st n <> m holds G.n misses G.m
+   proof
+    let n,m be set;
+    assume A8:n <> m;
+    per cases;
+    suppose A9:n in NAT & m in NAT;
+      now per cases;
+     suppose n in dom F & m in dom F;
+     then G.n = F.n & G.m = F.m by A7,A9;
+     hence thesis by A1,A8,PROB_2:def 3;
+     suppose A10:not n in dom F or not m in dom F;
+       now per cases by A10;
+      suppose not n in dom F;
+      then G.n = {} by A7,A9;
+      hence thesis by XBOOLE_1:65;
+      suppose not m in dom F;
+      then G.m = {} by A7,A9;
+      hence thesis by XBOOLE_1:65;
+     end;
+     hence thesis;
+    end;
+    hence thesis;
+    suppose not (n in NAT & m in NAT);
+    then not n in dom G or not m in dom G by FUNCT_2:def 1;
+    then G.n = {} or G.m = {} by FUNCT_1:def 4;
+    hence thesis by XBOOLE_1:65;
+   end;
+   then reconsider G as Sep_Sequence of S by PROB_2:def 3;
+A11:union rng F = union rng G
+   proof
+      for x1 being set st x1 in union rng F holds x1 in union rng G
+    proof
+     let x1 be set;
+     assume x1 in union rng F;
+     then consider Y being set such that
+A12:  x1 in Y & Y in rng F by TARSKI:def 4;
+     consider k being set such that
+A13:  k in dom F & Y = F.k by A12,FUNCT_1:def 5;
+       dom F c= NAT by A1,RELSET_1:12;
+     then reconsider k as Element of NAT by A13;
+A14:  F.k = G.k by A7,A13;
+       G.k in rng G by FUNCT_2:6;
+     hence thesis by A12,A13,A14,TARSKI:def 4;
+    end;
+then A15: union rng F c= union rng G by TARSKI:def 3;
+      for x1 being set st x1 in union rng G holds x1 in union rng F
+    proof
+     let x1 be set;
+     assume x1 in union rng G;
+     then consider Y being set such that
+A16:  x1 in Y & Y in rng G by TARSKI:def 4;
+     consider k being set such that
+A17:  k in dom G & Y = G.k by A16,FUNCT_1:def 5;
+       dom G c= NAT by RELSET_1:12;
+     then reconsider k as Element of NAT by A17;
+A18:  k in dom F by A7,A16,A17;
+then A19:  F.k = G.k by A7;
+       F.k in rng F by A18,FUNCT_1:def 5;
+     hence thesis by A16,A17,A19,TARSKI:def 4;
+    end;
+    then union rng G c= union rng F by TARSKI:def 3;
+    hence thesis by A15,XBOOLE_0:def 10;
+   end;
+   take G;
+   thus thesis by A7,A11;
+end;
+
+theorem
+  F is Finite_Sep_Sequence of S implies union rng F in S
+proof
+   assume F is Finite_Sep_Sequence of S;
+   then consider G being Sep_Sequence of S such that
+A1:(union rng F = union rng G &
+   (for n st n in dom F holds F.n = G.n) &
+   (for m st not (m in dom F) holds G.m = {})) by Th33;
+   thus thesis by A1;
+end;
+
+definition
+let X be non empty set;
+let S be sigma_Field_Subset of X;
+let f be PartFunc of X,ExtREAL;
+ canceled;
+
+pred f is_simple_func_in S means :Def5:
+f is_finite &
+ex F being Finite_Sep_Sequence of S st (dom f = union rng F &
+for n being Nat,x,y being Element of X st
+n in dom F & x in F.n & y in F.n holds f.x = f.y);
+end;
+
+theorem
+  f is_finite implies rng f is Subset of REAL
+proof
+   assume A1:f is_finite;
+      rng f c= REAL
+    proof
+    let y be set;
+    assume A2:y in rng f;
+      rng f c= ExtREAL by RELSET_1:12;
+    then reconsider y as R_eal by A2;
+    consider x being set such that
+A3: x in dom f & y = f.x by A2,FUNCT_1:def 5;
+      dom f c= X by RELSET_1:12;
+    then reconsider x as Element of X by A3;
+      |. f.x .| <' +infty by A1,A3,Def1;
+    then -(+infty) <' y & y <' +infty by A3,EXTREAL2:58;
+    then -infty <' y & y <' +infty by SUPINF_2:def 3;
+    then y is Real by EXTREAL1:1;
+    hence thesis;
+    end;
+    hence thesis;
+end;
+
+theorem
+  F is Finite_Sep_Sequence of S implies
+for n holds F|(Seg n) is Finite_Sep_Sequence of S
+proof
+   assume A1:F is Finite_Sep_Sequence of S;
+   let n;
+   reconsider G = F|(Seg n) as FinSequence of S by A1,FINSEQ_1:23;
+   reconsider F as FinSequence of S by A1;
+     for k,m being set st k <> m holds G.k misses G.m
+     proof
+      let k,m be set;
+      assume A2:k <> m;
+      per cases;
+      suppose k in dom G & m in dom G;
+      then G.k = F.k & G.m = F.m by FUNCT_1:70;
+      hence thesis by A1,A2,PROB_2:def 3;
+      suppose not (k in dom G & m in dom G);
+      then G.k = {} or G.m = {} by FUNCT_1:def 4;
+      hence thesis by XBOOLE_1:65;
+     end;
+     hence thesis by PROB_2:def 3;
+end;
+
+theorem
+  f is_simple_func_in S implies f is_measurable_on A
+proof
+   assume A1:f is_simple_func_in S;
+   then consider F being Finite_Sep_Sequence of S such that
+A2:dom f = union rng F and
+A3:for n being Nat,x,y being Element of X st
+   n in dom F & x in F.n & y in F.n holds f.x = f.y by Def5;
+   reconsider F as FinSequence of S;
+   defpred P[Nat] means
+    $1 <= len F implies f|(union rng(F|(Seg($1)))) is_measurable_on A;
+A4: P[0]
+   proof
+    assume A5:0 <= len F;
+    reconsider G = F|(Seg 0) as FinSequence of S by FINSEQ_1:23;
+      len G = 0 by A5,FINSEQ_1:21;
+    then G = {} by FINSEQ_1:25;
+    then rng G = {} by FINSEQ_1:27;
+then A6: dom(f|union rng G) = dom f /\ {} by FUNCT_1:68,ZFMISC_1:2 .= {};
+      for r be real number holds A /\ less_dom(f|union rng G,R_EAL r)
+     is_measurable_on S
+    proof
+     let r be real number;
+       for x1 being set st x1 in less_dom(f|union rng G,R_EAL r) holds
+     x1 in dom(f|union rng G) by MESFUNC1:def 12;
+     then less_dom(f|union rng G,R_EAL r)c=dom(f|union rng G) by TARSKI:def 3;
+     then less_dom(f|union rng G,R_EAL r) = {} by A6,XBOOLE_1:3;
+     then A /\ less_dom(f|union rng G,R_EAL r) in S by MEASURE1:45;
+     hence thesis by MESFUNC1:def 11;
+    end;
+    hence thesis by MESFUNC1:def 17;
+   end;
+
+A7:for m st P[m] holds P[m+1]
+   proof
+    let m;
+    assume A8:m <= len F implies f|(union rng(F|(Seg m))) is_measurable_on A;
+      m+1 <= len F implies f|(union rng(F|(Seg(m+1)))) is_measurable_on A
+    proof
+     assume A9:m+1 <= len F;
+A10:  m <= m+1 by NAT_1:29;
+       for r be real number holds
+     A /\ less_dom(f|union rng(F|(Seg(m+1))),R_EAL r) is_measurable_on S
+     proof
+      let r be real number;
+        now per cases;
+       suppose A11:F.(m+1) = {};
+         less_dom(f|union rng(F|(Seg m)),R_EAL r)
+       = less_dom(f|union rng(F|(Seg(m+1))),R_EAL r)
+       proof
+        reconsider G1 = F|(Seg m) as FinSequence of S by FINSEQ_1:23;
+          1 <= m+1 by NAT_1:29;
+        then m+1 in Seg len F by A9,FINSEQ_1:3;
+        then m+1 in dom F by FINSEQ_1:def 3;
+        then F|(Seg(m+1)) = G1^<*{}*> by A11,FINSEQ_5:11;
+        then rng (F|(Seg(m+1))) = rng G1 \/ rng <*{}*> by FINSEQ_1:44
+        .= rng G1 \/ {{}} by FINSEQ_1:56;
+        then union rng (F|(Seg(m+1))) = union rng G1 \/ union {{}} by ZFMISC_1:
+96
+        .= union rng G1 \/ {} by ZFMISC_1:31 .= union rng G1;
+        hence thesis;
+       end;
+       hence thesis by A8,A9,A10,AXIOMS:22,MESFUNC1:def 17;
+
+       suppose A12:F.(m+1) <> {};
+       reconsider G1 = F|(Seg m) as FinSequence of S by FINSEQ_1:23;
+         1 <= m+1 by NAT_1:29;
+       then m+1 in Seg len F by A9,FINSEQ_1:3;
+then A13:    m+1 in dom F by FINSEQ_1:def 3;
+then A14:    F.(m+1) in rng F by FUNCT_1:def 5;
+A15:   rng F c= S by FINSEQ_1:def 4;
+       then F.(m+1) in S by A14;
+       then reconsider F1=F.(m+1) as Subset of X;
+       consider x such that
+A16:    x in F1 by A12,SUBSET_1:10;
+         F|(Seg(m+1)) = G1^<*(F.(m+1))*> by A13,FINSEQ_5:11;
+       then rng (F|(Seg(m+1))) = rng G1 \/ rng <*(F.(m+1))*> by FINSEQ_1:44
+       .= rng G1 \/ {F.(m+1)} by FINSEQ_1:56;
+then A17:   union rng (F|(Seg(m+1))) = union rng G1 \/
+ union {F.(m+1)} by ZFMISC_1:96
+       .= union rng G1 \/ F.(m+1) by ZFMISC_1:31;
+A18:   x in dom f by A2,A14,A16,TARSKI:def 4;
+         f is_finite by A1,Def5;
+       then |. f.x .| <' +infty by A18,Def1;
+       then -(+infty) <' f.x & f.x <' +infty by EXTREAL2:58;
+       then -infty <' f.x & f.x <' +infty by SUPINF_2:def 3;
+       then reconsider r1 = f.x as Real by EXTREAL1:1;
+         now per cases;
+        suppose A19:r <= r1;
+          less_dom(f|union rng(F|(Seg(m+1))),R_EAL r)
+        = less_dom(f|union rng(F|(Seg m)),R_EAL r)
+        proof
+           for x1 being set st x1 in less_dom(f|union rng(F|(Seg(m+1))),R_EAL r
+)
+         holds x1 in less_dom(f|union rng(F|(Seg m)),R_EAL r)
+         proof
+          let x1 being set;
+          assume A20:x1 in less_dom(f|union rng(F|(Seg(m+1))),R_EAL r);
+then A21:      x1 in dom(f|union rng(F|(Seg(m+1)))) by MESFUNC1:def 12;
+          then x1 in dom f /\ union rng(F|(Seg(m+1))) by FUNCT_1:68;
+          then x1 in (dom f /\ union rng G1) \/ (dom f /\
+ F.(m+1)) by A17,XBOOLE_1:23;
+then A22:      x1 in dom f /\ union rng G1 or x1 in dom f /\ F.(m+1) by
+XBOOLE_0:def 2;
+            dom(f|union rng(F|(Seg(m+1)))) c= dom f by FUNCT_1:76;
+then A23:      x1 in dom f by A21;
+            dom f c= X by RELSET_1:12;
+          then reconsider x1 as Element of X by A23;
+          consider y being R_eal such that
+A24:      y = (f|union rng(F|(Seg(m+1)))).x1 & y <' R_EAL r
+          by A20,MESFUNC1:def 12;
+A25:      y = f.x1 by A21,A24,FUNCT_1:68;
+          reconsider m1 = m+1 as Nat;
+            not x1 in dom(f|F1)
+          proof
+           assume x1 in dom(f|F1);
+           then x1 in dom f /\ F1 by FUNCT_1:68;
+           then x1 in F.m1 by XBOOLE_0:def 3;
+           then y = r1 by A3,A13,A16,A25;
+then y = R_EAL r1 by MEASURE6:def 1;
+           hence contradiction by A19,A24,MEASURE6:13;
+          end;
+then A26:      x1 in dom(f|union rng G1) by A22,FUNCT_1:68;
+          then y = (f|union rng G1).x1 by A25,FUNCT_1:68;
+          hence thesis by A24,A26,MESFUNC1:def 12;
+         end;
+then A27:     less_dom(f|union rng(F|(Seg(m+1))),R_EAL r)
+         c= less_dom(f|union rng(F|(Seg m)),R_EAL r) by TARSKI:def 3;
+           for x1 being set st x1 in less_dom(f|union rng(F|(Seg m)),R_EAL r)
+         holds x1 in less_dom(f|union rng(F|(Seg(m+1))),R_EAL r)
+         proof
+          let x1 being set;
+          assume A28:x1 in less_dom(f|union rng(F|(Seg m)),R_EAL r);
+then A29:      x1 in dom(f|union rng(F|(Seg m))) by MESFUNC1:def 12;
+          then x1 in dom f /\ union rng G1 by FUNCT_1:68;
+then A30:      x1 in dom f & x1 in union rng G1 by XBOOLE_0:def 3;
+          then x1 in dom f & x1 in union rng (F|(Seg(m+1))) by A17,XBOOLE_0:def
+2
+;
+          then x1 in dom f /\ union rng (F|(Seg(m+1))) by XBOOLE_0:def 3;
+then A31:      x1 in dom(f|union rng(F|(Seg(m+1)))) by FUNCT_1:68;
+            dom f c= X by RELSET_1:12;
+          then reconsider x1 as Element of X by A30;
+          consider y being R_eal such that
+A32:      y=(f|union rng(F|(Seg m))).x1 & y <' R_EAL r by A28,MESFUNC1:def 12;
+            y = f.x1 by A29,A32,FUNCT_1:68;
+          then y = (f|union rng(F|(Seg(m+1)))).x1 by A31,FUNCT_1:68;
+          hence thesis by A31,A32,MESFUNC1:def 12;
+         end;
+         then less_dom(f|union rng(F|(Seg m)),R_EAL r)
+         c= less_dom(f|union rng(F|(Seg(m+1))),R_EAL r) by TARSKI:def 3;
+         hence thesis by A27,XBOOLE_0:def 10;
+        end;
+        hence thesis by A8,A9,A10,AXIOMS:22,MESFUNC1:def 17;
+
+        suppose A33:r1 < r;
+          less_dom(f|union rng(F|(Seg(m+1))),R_EAL r)
+        = less_dom(f|union rng(F|(Seg m)),R_EAL r) \/ F.(m+1)
+        proof
+           for x1 being set st x1 in less_dom(f|union rng(F|(Seg(m+1))),R_EAL r
+)
+         holds x1 in less_dom(f|union rng(F|(Seg m)),R_EAL r) \/ F.(m+1)
+         proof
+          let x1 being set;
+          assume A34:x1 in less_dom(f|union rng(F|(Seg(m+1))),R_EAL r);
+then A35:      x1 in dom(f|union rng(F|(Seg(m+1)))) by MESFUNC1:def 12;
+          then x1 in dom f /\ union rng(F|(Seg(m+1))) by FUNCT_1:68;
+then A36:      x1 in (dom f /\ union rng G1) \/ (dom f /\ F.(m+1)) by A17,
+XBOOLE_1:23;
+            now per cases by A36,XBOOLE_0:def 2;
+           suppose A37:x1 in dom f /\ union rng G1;
+           then x1 in dom f & dom f c= X by RELSET_1:12,XBOOLE_0:def 3;
+           then reconsider x1 as Element of X;
+A38:       x1 in dom(f|union rng G1) by A37,FUNCT_1:68;
+then A39:       (f|union rng G1).x1 = f.x1 by FUNCT_1:68;
+           consider y being R_eal such that
+A40:       y = (f|union rng(F|(Seg(m+1)))).x1 & y <' R_EAL r
+           by A34,MESFUNC1:def 12;
+             y = (f|union rng G1).x1 by A35,A39,A40,FUNCT_1:68;
+           then x1 in less_dom(f|union rng(F|(Seg m)),R_EAL r)
+           by A38,A40,MESFUNC1:def 12;
+           hence thesis by XBOOLE_0:def 2;
+           suppose x1 in dom f /\ F.(m+1);
+           then x1 in F.(m+1) by XBOOLE_0:def 3;
+           hence thesis by XBOOLE_0:def 2;
+          end;
+          hence thesis;
+         end;
+then A41:     less_dom(f|union rng(F|(Seg(m+1))),R_EAL r)
+         c= less_dom(f|union rng(F|(Seg m)),R_EAL r) \/
+ F.(m+1) by TARSKI:def 3;
+           for x1 being set st
+         x1 in less_dom(f|union rng(F|(Seg m)),R_EAL r) \/ F.(m+1) holds
+         x1 in less_dom(f|union rng(F|(Seg(m+1))),R_EAL r)
+         proof
+          let x1 be set;
+          assume A42:x1 in less_dom(f|union rng(F|(Seg m)),R_EAL r)\/ F.(m+1);
+            now per cases by A42,XBOOLE_0:def 2;
+           suppose A43:x1 in less_dom(f|union rng(F|(Seg m)),R_EAL r);
+then A44:       x1 in dom(f|union rng(F|(Seg m))) by MESFUNC1:def 12;
+           then x1 in dom f /\ union rng G1 by FUNCT_1:68;
+then A45:       x1 in dom f & x1 in union rng G1 by XBOOLE_0:def 3;
+           then x1 in dom f & x1 in union rng (F|(Seg(m+1))) by A17,XBOOLE_0:
+def 2;
+           then x1 in dom f /\ union rng (F|(Seg(m+1))) by XBOOLE_0:def 3;
+then A46:       x1 in dom(f|union rng(F|(Seg(m+1)))) by FUNCT_1:68;
+             dom f c= X by RELSET_1:12;
+           then reconsider x1 as Element of X by A45;
+           consider y being R_eal such that
+A47:       y=(f|union rng(F|(Seg m))).x1 & y <' R_EAL r by A43,MESFUNC1:def 12;
+             y = f.x1 by A44,A47,FUNCT_1:68;
+           then y = (f|union rng(F|(Seg(m+1)))).x1 by A46,FUNCT_1:68;
+           hence thesis by A46,A47,MESFUNC1:def 12;
+           suppose A48:x1 in F.(m+1);
+then A49:       x1 in union rng (F|(Seg(m+1))) by A17,XBOOLE_0:def 2;
+A50:       x1 in dom f by A2,A14,A48,TARSKI:def 4;
+           then x1 in dom f /\ union rng (F|(Seg(m+1))) by A49,XBOOLE_0:def 3;
+then A51:       x1 in dom(f|union rng (F|(Seg(m+1)))) by FUNCT_1:68;
+             dom f c= X by RELSET_1:12;
+           then reconsider x1 as Element of X by A50;
+             f.x1 = f.x by A3,A13,A16,A48;
+then A52:       f.x1 = R_EAL r1 by MEASURE6:def 1;
+           reconsider y = f.x1 as R_eal;
+A53:       y = (f|union rng (F|(Seg(m+1)))).x1 by A51,FUNCT_1:68;
+             R_EAL r1 <' R_EAL r by A33,MEASURE6:14;
+           hence thesis by A51,A52,A53,MESFUNC1:def 12;
+          end;
+          hence thesis;
+         end;
+         then less_dom(f|union rng(F|(Seg m)),R_EAL r) \/ F.(m+1)
+         c= less_dom(f|union rng(F|(Seg(m+1))),R_EAL r) by TARSKI:def 3;
+         hence thesis by A41,XBOOLE_0:def 10;
+        end;
+then A54:    A /\ less_dom(f|union rng(F|(Seg(m+1))),R_EAL r)
+        = (A /\ less_dom(f|union rng(F|(Seg m)),R_EAL r)) \/ (A /\ F.(m+1))
+        by XBOOLE_1:23;
+          A /\ less_dom(f|union rng(F|(Seg m)),R_EAL r) is_measurable_on S
+        by A8,A9,A10,AXIOMS:22,MESFUNC1:def 17;
+then A55:    A /\ less_dom(f|union rng(F|(Seg m)),R_EAL r) in S by MESFUNC1:def
+11;
+          A /\ F.(m+1) in S by A14,A15,MEASURE1:46;
+        then A /\ less_dom(f|union rng(F|(Seg(m+1))),R_EAL r) in S
+        by A54,A55,MEASURE1:46;
+        hence thesis by MESFUNC1:def 11;
+       end;
+       hence thesis;
+      end;
+      hence thesis;
+     end;
+     hence thesis by MESFUNC1:def 17;
+    end;
+    hence thesis;
+   end;
+
+A56:for n being Nat holds P[n] from Ind(A4,A7);
+     F|(Seg len F) = F by FINSEQ_3:55;
+   then f|(dom f) is_measurable_on A by A2,A56;
+   hence thesis by RELAT_1:97;
+end;

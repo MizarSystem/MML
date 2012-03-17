@@ -1,0 +1,2154 @@
+:: Reduction Relations
+::  by Grzegorz Bancerek
+::
+:: Received November 14, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, BOOLE, RELAT_1, FUNCT_1, FINSEQ_5, ARYTM_1, WELLORD1,
+      PBOOLE, RELAT_2, FUNCOP_1, BHSP_3, ISOCAT_1, EQREL_1, REWRITE1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, NAT_1,
+      FUNCT_1, RELAT_1, RELAT_2, WELLORD1, EQREL_1, FUNCOP_1, FINSEQ_1, PBOOLE,
+      FINSEQ_5, LANG1;
+ constructors NAT_1, WELLORD1, EQREL_1, FUNCOP_1, PBOOLE, FINSEQ_5, LANG1,
+      XREAL_0, MEMBERED, PARTFUN1, TOLER_1, RELAT_1, RELAT_2, RELSET_1;
+ clusters SUBSET_1, RELAT_1, FINSEQ_1, XREAL_0, FUNCOP_1, ARYTM_3, MEMBERED,
+      NUMBERS, ORDINAL2, EQREL_1, TOLER_1, PARTFUN1, RELSET_1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, RELAT_1, RELAT_2, WELLORD1;
+ theorems TARSKI, AXIOMS, ZFMISC_1, REAL_1, NAT_1, WELLORD1, RELAT_1, RELAT_2,
+      FUNCT_1, FUNCOP_1, PBOOLE, FINSEQ_1, TOLER_1, TREES_1, FINSEQ_5, LANG1,
+      EQREL_1, WELLORD2, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+ schemes NAT_1, RELAT_1, EQREL_1, TREES_2;
+
+begin :: Forgetting concatenation and reduction sequence
+
+definition
+ let p,q be FinSequence;
+ func p$^q -> FinSequence means:
+Def1:
+  it = p^q if p = {} or q = {} otherwise
+  ex i being Nat, r being FinSequence st len p = i+1 & r = p|Seg i & it = r^q;
+  existence
+   proof
+    thus p = {} or q = {} implies ex r being FinSequence st r = p^q;
+    assume p <> {} & q <> {};
+     then len p <> 0 & len p >= 0 by FINSEQ_1:25,NAT_1:18;
+     then len p >= 0+1 by NAT_1:38;
+    then consider i being Nat such that
+A1:   len p = 1+i by NAT_1:28;
+    reconsider r = p|Seg i as FinSequence by FINSEQ_1:19;
+    take r^q, i, r;
+    thus thesis by A1;
+   end;
+  uniqueness by XCMPLX_1:2;
+  consistency;
+end;
+
+Lm1:
+ now let p be FinSequence, x be Nat;
+  assume x in dom p;
+   then x in Seg len p by FINSEQ_1:def 3;
+  hence x <= len p & x >= 0+1 by FINSEQ_1:3;
+  hence x > 0 by NAT_1:38;
+ end;
+
+Lm2:
+ now let p be FinSequence, x be Nat;
+  assume x+1 in dom p;
+   then x+1 <= len p by Lm1;
+  hence x < len p by NAT_1:38;
+ end;
+
+Lm3:
+ now let p be FinSequence, x be Nat;
+  assume (x <= len p or x < len p) & (x >= 1 or x > 0);
+   then x <= len p & x >= 0+1 by NAT_1:38;
+   then x in Seg len p by FINSEQ_1:3;
+  hence x in dom p by FINSEQ_1:def 3;
+ end;
+
+Lm4:
+ now let p be FinSequence, x be Nat;
+  assume x < len p;
+   then x+1 <= len p & x+1 >= 1 by NAT_1:29,38;
+  hence x+1 in dom p by Lm3;
+ end;
+
+reserve p,q,r for FinSequence, x,y for set;
+
+theorem
+   {}$^p = p & p$^{} = p
+  proof {}^p = p & p^{} = p by FINSEQ_1:47;
+   hence thesis by Def1;
+  end;
+
+theorem Th2:
+ q <> {} implies (p^<*x*>)$^q = p^q
+  proof assume
+A1:  q <> {};
+      <*x*> <> {} by TREES_1:4;
+    then p^<*x*> <> {} by FINSEQ_1:48;
+   then consider i being Nat, r being FinSequence such that
+A2:  len (p^<*x*>) = i+1 & r = (p^<*x*>)|Seg i & (p^<*x*>)$^q = r^q by A1,Def1;
+   consider s being FinSequence such that
+A3:  p^<*x*> = r^s by A2,TREES_1:3;
+      len <*x*> = 1 by FINSEQ_1:57;
+    then len (p^<*x*>) = len p + 1 by FINSEQ_1:35;
+then A4:  len p = i & i <= i+1 by A2,NAT_1:29,XCMPLX_1:2;
+then A5:  len r = i by A2,FINSEQ_1:21;
+   then consider t being FinSequence such that
+A6:  p^t = r by A3,A4,FINSEQ_1:64;
+      len r + 0 = len p + len t by A6,FINSEQ_1:35;
+    then len t = 0 by A4,A5,XCMPLX_1:2;
+    then t = {} by FINSEQ_1:25;
+   hence thesis by A2,A6,FINSEQ_1:47;
+  end;
+
+theorem
+   (p^<*x*>)$^(<*y*>^q) = p^<*y*>^q
+  proof <*y*> <> {} by TREES_1:4;
+    then <*y*>^q <> {} & p^<*y*>^q = p^(<*y*>^q) by FINSEQ_1:45,48;
+   hence thesis by Th2;
+  end;
+
+theorem
+   q <> {} implies <*x*>$^q = q
+  proof {}^<*x*> = <*x*> & {}^q = q by FINSEQ_1:47;
+   hence thesis by Th2;
+  end;
+
+theorem
+   p <> {} implies ex x,q st p = <*x*>^q & len p = len q+1
+  proof assume
+A1:  p <> {};
+    defpred P[Nat] means
+     for p st p <> {} & len p = $1 ex x,q st p = <*x*>^q & len p = len q+1;
+A2: P[0] by FINSEQ_1:25;
+A3: for i be Nat st P[i] holds P[i+1]
+ proof
+  now let i be Nat; assume
+A4:   for p st p <> {} & len p = i ex x,q st p = <*x*>^q & len p = len q+1;
+     let p; assume
+A5:   p <> {} & len p = i+1;
+     then consider q,y such that
+A6:   p = q^<*y*> by FINSEQ_1:63;
+A7:   len <*y*> = 1 & len p = len q+len <*y*> by A6,FINSEQ_1:35,56;
+then A8:   len q = i by A5,XCMPLX_1:2;
+     per cases; suppose
+A9:    q = {};
+       then p = <*y*> by A6,FINSEQ_1:47 .= <*y*>^{} by FINSEQ_1:47;
+      hence ex x,q st p = <*x*>^q & len p = len q+1 by A7,A9;
+     suppose q <> {}; then consider x,r such that
+A10:    q = <*x*>^r & len q = len r+1 by A4,A8;
+     p = <*x*>^(r^<*y*>) & len (r^<*y*>) = len r+1 & len <*x*> = 1
+        by A6,A7,A10,FINSEQ_1:35,45,56;
+      hence ex x,q st p = <*x*>^q & len p = len q+1 by A7,A10;
+    end;
+   hence thesis;
+  end;
+    for i being Nat holds P[i] from Ind(A2,A3);
+   hence thesis by A1;
+  end;
+
+scheme PathCatenation {P[set,set], p,q() -> FinSequence}:
+ for i being Nat st i in dom (p()$^q()) & i+1 in dom (p()$^q())
+ for x,y being set st x = (p()$^q()).i & y = (p()$^q()).(i+1) holds P[x,y]
+  provided
+A1:  for i being Nat st i in dom p() & i+1 in dom p() holds P[p().i, p().(i+1)]
+  and
+A2:  for i being Nat st i in dom q() & i+1 in dom q() holds P[q().i, q().(i+1)]
+  and
+A3:  len p() > 0 & len q() > 0 & p().len p() = q().1
+  proof let i be Nat; assume
+A4:  i in dom (p()$^q()) & i+1 in dom (p()$^q());
+then A5: i >= 0+1 by Lm1;
+A6: i+1 >= 1 by NAT_1:29;
+      0+1 <= len q() by A3,NAT_1:38;
+then A7: 1 in Seg len q() & Seg len q() = dom q() by FINSEQ_1:3,def 3;
+   let x,y be set; assume
+A8:  x = (p()$^q()).i & y = (p()$^q()).(i+1);
+A9:  p() <> {} & q() <> {} by A3,FINSEQ_1:25;
+   then consider r being FinSequence, a being set such that
+A10:  p() = r^<*a*> by FINSEQ_1:63;
+A11:  p()$^q() = r^q() by A9,A10,Th2;
+A12:  len p() = len r + len <*a*> by A10,FINSEQ_1:35 .= len r + 1 by FINSEQ_1:
+57;
+   per cases;
+    suppose
+A13:   i < len p();
+     then i in dom p() & i+1 in dom p() by A5,Lm3,Lm4;
+then A14:   P[p().i, p().(i+1)] by A1;
+A15:   i <= len r by A12,A13,NAT_1:38;
+     then i in Seg len r by A5,FINSEQ_1:3;
+     then i in dom r by FINSEQ_1:def 3;
+then A16:   x = r.i & r.i = p().i by A8,A10,A11,FINSEQ_1:def 7;
+A17:   now assume i+1 <= len r;
+       then i+1 in Seg len r by A6,FINSEQ_1:3;
+       then i+1 in dom r by FINSEQ_1:def 3;
+      hence y = r.(i+1) & r.(i+1) = p().(i+1) by A8,A10,A11,FINSEQ_1:def 7;
+     end;
+       i = len r or i < len r by A15,REAL_1:def 5;
+    hence thesis by A3,A7,A8,A11,A12,A14,A16,A17,FINSEQ_1:def 7,NAT_1:38;
+    suppose i >= len p();
+    then consider k being Nat such that
+A18:   i = len p()+k by NAT_1:28;
+A19:   len (p()$^q()) = len r + len q() & i = len r+(1+k) &
+     i < len (p()$^q()) & len r+(1+k)+1 = len r+(k+1+1)
+      by A4,A11,A12,A18,Lm2,FINSEQ_1:35,XCMPLX_1:1;
+   then k+1 < len q() & k+1 >= 1 by NAT_1:29,REAL_1:55;
+then A20:   k+1 in dom q() & k+1+1 in dom q() & k+1<>0 by Lm3,Lm4;
+     then x = q().(k+1) & y = q().(k+1+1) & k+1 > 0
+      by A8,A11,A19,FINSEQ_1:def 7,NAT_1:19;
+    hence thesis by A2,A20;
+  end;
+
+definition
+ let R be Relation;
+ mode RedSequence of R -> FinSequence means:
+Def2:
+  len it > 0 &
+  for i being Nat st i in dom it & i+1 in dom it holds [it.i, it.(i+1)] in R;
+  existence
+   proof consider x being set;
+    take p = <*x*>;
+A1:   dom p = {1} & len p = 1 by FINSEQ_1:4,55,57;
+    hence len p > 0;
+    let i be Nat; assume i in dom p & i+1 in dom p;
+     then i = 1 & i+1 = 1 by A1,TARSKI:def 1;
+    hence thesis;
+   end;
+end;
+
+definition
+ let R be Relation;
+ cluster -> non empty RedSequence of R;
+ coherence
+  proof let p be RedSequence of R; len p > 0 by Def2;
+   hence thesis by FINSEQ_1:25;
+  end;
+end;
+
+canceled;
+
+theorem Th7:
+ for R being Relation, a being set holds <*a*> is RedSequence of R
+  proof let R be Relation, a be set; set p = <*a*>;
+A1:  dom p = {1} & len p = 1 by FINSEQ_1:4,55,57;
+   hence len p > 0;
+   let i be Nat; assume i in dom p & i+1 in dom p;
+    then i = 1 & i+1 = 1 by A1,TARSKI:def 1;
+   hence thesis;
+  end;
+
+theorem Th8:
+ for R being Relation, a,b being set st [a,b] in R holds
+   <*a,b*> is RedSequence of R
+  proof let R be Relation, a,b be set; assume
+A1:  [a,b] in R; set p = <*a,b*>;
+A2:  len p = 1+1 & dom p = Seg len p by FINSEQ_1:61,def 3;
+   hence len p > 0;
+A3:  p.1 = a & p.len p = b by A2,FINSEQ_1:61;
+   let i be Nat; assume i in dom p & i+1 in dom p;
+    then i >= 1 & i+1 <= 1+1 by A2,Lm1;
+    then i <= 1 & i >= 1 by REAL_1:53;
+    then i = 1 by AXIOMS:21;
+   hence thesis by A1,A3,FINSEQ_1:61;
+  end;
+
+theorem Th9:
+ for R being Relation, p,q being RedSequence of R st p.len p = q.1 holds
+   p$^q is RedSequence of R
+  proof let R be Relation, p,q be RedSequence of R;
+    defpred P[set,set] means [$1,$2] in R;
+A1:  for i being Nat st i in dom p & i+1 in dom p holds P[p.i, p.(i+1)]
+     by Def2;
+A2:  for i being Nat st i in dom q & i+1 in dom q holds P[q.i, q.(i+1)]
+     by Def2;
+   assume p.len p = q.1;
+then A3:  len p > 0 & len q > 0 & p.len p = q.1 by Def2;
+   set r = p$^q;
+   consider p1 being FinSequence, x being set such that
+A4:  p = p1^<*x*> by FINSEQ_1:63;
+    r = p1^q by A4,Th2;
+  then len r = len p1+len q by FINSEQ_1:35;
+    then len r > len p1+0 & len p1+0 >= 0 by A3,NAT_1:18,REAL_1:67;
+   hence len r > 0;
+   for i being Nat st i in dom (p$^q) & i+1 in dom (p$^q)
+    for x,y being set st x = (p$^q).i & y = (p$^q).(i+1) holds P[x,y]
+     from PathCatenation(A1,A2,A3);
+   hence thesis;
+  end;
+
+theorem Th10:
+ for R being Relation, p being RedSequence of R holds
+   Rev p is RedSequence of R~
+  proof let R be Relation, p be RedSequence of R;
+A1:  len p > 0 &
+    for i being Nat st i in dom p & i+1 in dom p holds [p.i, p.(i+1)] in R
+     by Def2;
+A2:  len Rev p = len p by FINSEQ_5:def 3;
+   thus len Rev p > 0 by A1,FINSEQ_5:def 3;
+A3:  dom Rev p = Seg len p & dom p = Seg len p by A2,FINSEQ_1:def 3;
+   let i be Nat; assume
+A4:  i in dom Rev p & i+1 in dom Rev p;
+then A5:  (Rev p).i = p.(len p-i+1) & (Rev p).(i+1) = p.(len p-(i+1)+1)
+     by FINSEQ_5:def 3;
+      i <= len p & i+1 <= len p by A2,A4,Lm1;
+   then reconsider k = len p-(i+1)+1 as Nat by FINSEQ_5:1;
+A6:  k = len p-i-1+1 by XCMPLX_1:36 .= len p-i by XCMPLX_1:27;
+    then k+1 in dom p & k in dom p by A3,A4,FINSEQ_5:2;
+    then [p.k, p.(k+1)] in R by Def2;
+   hence thesis by A5,A6,RELAT_1:def 7;
+  end;
+
+theorem Th11:
+ for R,Q being Relation st R c= Q for p being RedSequence of R
+  holds p is RedSequence of Q
+  proof let R,Q be Relation such that
+A1:  R c= Q;
+   let p be RedSequence of R;
+   thus len p > 0 by Def2;
+   let i be Nat; assume i in dom p & i+1 in dom p;
+    then [p.i, p.(i+1)] in R by Def2;
+   hence [p.i, p.(i+1)] in Q by A1;
+  end;
+
+begin :: Reducibility, convertibility, and normal forms
+
+definition
+ let R be Relation;
+ let a,b be set;
+ pred R reduces a,b means:
+Def3:
+  ex p being RedSequence of R st p.1 = a & p.len p = b;
+end;
+
+definition
+ let R be Relation;
+ let a,b be set;
+ pred a,b are_convertible_wrt R means:
+Def4:
+  R \/ R~ reduces a,b;
+end;
+
+theorem Th12:
+ for R being Relation, a,b being set holds
+  R reduces a,b iff
+  ex p being FinSequence st len p > 0 & p.1 = a & p.len p = b &
+   for i being Nat st i in dom p & i+1 in dom p holds [p.i, p.(i+1)] in R
+  proof let R be Relation, a,b be set;
+   thus R reduces a,b implies
+    ex p being FinSequence st len p > 0 & p.1 = a & p.len p = b &
+     for i being Nat st i in dom p & i+1 in dom p holds [p.i, p.(i+1)] in R
+    proof given p being RedSequence of R such that
+A1:    p.1 = a & p.len p = b;
+     take p; thus thesis by A1,Def2;
+    end;
+   given p being FinSequence such that
+A2:  len p > 0 & p.1 = a & p.len p = b &
+    for i being Nat st i in dom p & i+1 in dom p holds [p.i, p.(i+1)] in R;
+   reconsider p as RedSequence of R by A2,Def2;
+   take p; thus thesis by A2;
+  end;
+
+theorem Th13:
+ for R being Relation, a being set holds R reduces a,a
+  proof let R be Relation; let a be set;
+   reconsider p = <*a*> as RedSequence of R by Th7;
+   take p;
+      len p = 1 by FINSEQ_1:57;
+   hence p.1 = a & p.len p = a by FINSEQ_1:57;
+  end;
+
+theorem Th14:
+ for a,b being set st {} reduces a,b holds a = b
+  proof let a,b be set; given p being RedSequence of {} such that
+A1:  p.1 = a & p.len p = b;
+A2:  len p > 0 &
+    for i being Nat st i in dom p & i+1 in dom p holds [p.i, p.(i+1)] in {}
+     by Def2;
+      now assume len p > 1;
+      then 1 in dom p & 1+1 in dom p by Lm3,Lm4;
+     hence contradiction by Def2;
+    end;
+    then len p <= 1 & len p >= 0+1 by A2,NAT_1:38;
+   hence thesis by A1,AXIOMS:21;
+  end;
+
+theorem Th15:
+ for R being Relation, a,b being set st R reduces a,b & not a in field R
+   holds a = b
+  proof let R be Relation, a,b be set;
+   given p being RedSequence of R such that
+A1:  p.1 = a & p.len p = b;
+A2:  len p > 0 &
+    for i being Nat st i in dom p & i+1 in dom p holds [p.i, p.(i+1)] in R
+     by Def2;
+   assume
+A3:  not a in field R;
+      now assume len p > 1;
+      then 1 in dom p & 1+1 in dom p by Lm3,Lm4;
+      then [p.1, p.(1+1)] in R by Def2;
+     hence contradiction by A1,A3,RELAT_1:30;
+    end;
+    then len p <= 1 & len p >= 0+1 by A2,NAT_1:38;
+   hence thesis by A1,AXIOMS:21;
+  end;
+
+theorem Th16:
+ for R being Relation, a,b being set st [a,b] in R holds R reduces a,b
+  proof let R be Relation, a,b be set; assume
+      [a,b] in R;
+   then reconsider p = <*a,b*> as RedSequence of R by Th8;
+   take p; len p = 2 by FINSEQ_1:61;
+   hence p.1 = a & p.len p = b by FINSEQ_1:61;
+  end;
+
+theorem Th17:
+ for R being Relation, a,b,c being set st R reduces a,b & R reduces b,c
+   holds R reduces a,c
+  proof let R be Relation, a,b,c be set;
+   given p being RedSequence of R such that
+A1:  p.1 = a & p.len p = b;
+   given q being RedSequence of R such that
+A2:  q.1 = b & q.len q = c;
+A3:  len p > 0 & len q > 0 by Def2;
+   reconsider r = p$^q as RedSequence of R by A1,A2,Th9;
+   take r;
+   consider p1 being FinSequence, x being set such that
+A4:  p = p1^<*x*> by FINSEQ_1:63;
+A5:  r = p1^q by A4,Th2;
+then A6:  len r = len p1+len q by FINSEQ_1:35;
+      len p1 = 0 or len p1 > 0 by NAT_1:19;
+    then p1 = {} or len p1 >= 0+1 by FINSEQ_1:25,NAT_1:38;
+    then r = q & p = <*x*> or 1 in Seg len p1 by A4,A5,FINSEQ_1:3,47;
+    then 1 in dom p1 or len p = 1 & r = q by FINSEQ_1:57,def 3;
+    then r.1 = p1.1 & p1.1 = a or r.1 = b & b = a by A1,A2,A4,A5,FINSEQ_1:def 7
+;
+   hence r.1 = a;
+      0+1 <= len q by A3,NAT_1:38;
+    then len q in Seg len q by FINSEQ_1:3;
+    then len q in dom q by FINSEQ_1:def 3;
+   hence r.len r = c by A2,A5,A6,FINSEQ_1:def 7;
+  end;
+
+theorem Th18:
+ for R being Relation, p being RedSequence of R, i,j being Nat st
+  i in dom p & j in dom p & i <= j holds R reduces p.i,p.j
+  proof let R be Relation, p be RedSequence of R, i,j be Nat;
+    defpred Q[Nat] means i+$1 in dom p implies R reduces p.i,p.(i+$1);
+    assume
+A1:  i in dom p & j in dom p & i <= j;
+A2: Q[0] by Th13;
+A3: for k being Nat st Q[k] holds Q[k+1]
+proof
+ now let j be Nat such that
+A4:   i+j in dom p implies R reduces p.i,p.(i+j) and
+A5:   i+(j+1) in dom p;
+A6:    i+(j+1) = i+j+1 by XCMPLX_1:1;
+        i <= i+j & i >= 1 by A1,Lm1,NAT_1:29;
+      then A7: i+j >= 1 & i+j < len p by A5,A6,Lm2,AXIOMS:22;
+then i+j in dom p by Lm3;
+      then [p.(i+j),p.(i+(j+1))] in R by A5,A6,Def2;
+      then R reduces p.i,p.(i+j) & R reduces p.(i+j), p.(i+(j+1)) by A4,A7,Lm3,
+Th16;
+     hence R reduces p.i,p.(i+(j+1)) by Th17;
+    end;
+   hence thesis;
+  end;
+A8:  for j being Nat holds Q[j] from Ind(A2,A3);
+      ex k being Nat st j = i+k by A1,NAT_1:28;
+   hence R reduces p.i,p.j by A1,A8;
+  end;
+
+theorem Th19:
+ for R being Relation, a,b being set st R reduces a,b & a <> b
+  holds a in field R & b in field R
+  proof let R be Relation, a,b be set;
+   given p being RedSequence of R such that
+A1:  a = p.1 & b = p.len p;
+   assume
+A2:  a <> b;
+    len p > 0 by Def2;
+    then len p <> 1 & len p >= 0+1 by A1,A2,NAT_1:38;
+    then len p > 1 by REAL_1:def 5;
+    then 1 in dom p & 1+1 in dom p by Lm3,Lm4;
+    then A3: [a,p.2] in R by A1,Def2;
+   hence
+   a in field R by RELAT_1:30;
+   defpred P[Nat] means $1 in dom p implies p.$1 in field R;
+A4: P[0]  by Lm1;
+A5: for k being Nat st P[k] holds P[k+1]
+proof
+  now let i be Nat such that
+     i in dom p implies p.i in field R and
+A6:   i+1 in dom p;
+A7:   i < len p by A6,Lm2;
+     per cases by NAT_1:19; suppose i = 0; hence p.(i+1) in field R by A1,A3,
+RELAT_1:30;
+     suppose i > 0;
+      then i in dom p by A7,Lm3;
+      then [p.i,p.(i+1)] in R by A6,Def2;
+     hence p.(i+1) in field R by RELAT_1:30;
+    end;
+ hence thesis;
+end;
+A8:  for i being Nat holds P[i] from Ind(A4,A5);
+      len p in dom p by FINSEQ_5:6;
+   hence thesis by A1,A8;
+  end;
+
+theorem Th20:
+ for R being Relation, a,b being set st R reduces a,b holds
+   a in field R iff b in field R
+  proof let R be Relation, a,b be set; assume
+A1:  R reduces a,b;
+   per cases; suppose a = b; hence thesis;
+   suppose a <> b;
+   thus thesis by A1,Th19;
+  end;
+
+theorem Th21:
+ for R being Relation, a,b being set holds
+   R reduces a,b iff a = b or [a,b] in R*
+  proof let R be Relation, a,b be set;
+   hereby assume
+A1:   R reduces a,b;
+    then consider p being RedSequence of R such that
+A2:   a = p.1 & b = p.len p by Def3;
+    assume a <> b;
+then A3:   a in field R & b in field R by A1,Th19;
+       len p > 0 by Def2;
+then A4:   len p >= 0+1 by NAT_1:38;
+       now let i be Nat; assume
+         i >= 1 & i < len p;
+       then i in dom p & i+1 in dom p by Lm3,Lm4;
+      hence [p.i,p.(i+1)] in R by Def2;
+     end;
+    hence [a,b] in R* by A2,A3,A4,LANG1:def 13;
+   end;
+   assume
+A5:  (a = b or [a,b] in R*) & not R reduces a,b;
+   then consider p being FinSequence such that
+A6:  len p >= 1 & p.1 = a & p.(len p) = b and
+A7:  for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R
+     by Th13,LANG1:def 13;
+      p is RedSequence of R
+     proof 0+1 = 1; hence len p > 0 by A6,NAT_1:38;
+      let i be Nat; assume i in dom p & i+1 in dom p;
+       then i >= 1 & i < len p by Lm1,Lm2;
+      hence thesis by A7;
+     end;
+   hence contradiction by A5,A6,Def3;
+  end;
+
+theorem Th22:
+ for R being Relation, a,b being set holds
+   R reduces a,b iff R* reduces a,b
+  proof let R be Relation, a,b be set;
+      R reduces a,b iff a = b or [a,b] in R* by Th21;
+   hence R reduces a,b implies R* reduces a,b by Th13,Th16;
+   given p being RedSequence of R* such that
+A1:  a = p.1 & b = p.len p;
+   defpred P[Nat] means $1 in dom p implies R reduces a,p.$1;
+A2:  P[0] by Lm1;
+A3: for k being Nat st P[k] holds P[k+1]
+proof
+  now let i be Nat such that
+A4:   i in dom p implies R reduces a,p.i and
+A5:   i+1 in dom p;
+A6:   i < len p by A5,Lm2;
+     per cases by NAT_1:19;
+     suppose i = 0; hence R reduces a,p.(i+1) by A1,Th13;
+     suppose A7: i > 0;
+then i in dom p by A6,Lm3;
+      then [p.i,p.(i+1)] in R* by A5,Def2;
+      then R reduces a,p.i & R reduces p.i, p.(i+1) by A4,A6,A7,Lm3,Th21;
+     hence R reduces a,p.(i+1) by Th17;
+    end;
+  hence thesis;
+end;
+A8:  for i being Nat holds P[i] from Ind(A2,A3);
+      len p in dom p by FINSEQ_5:6;
+   hence thesis by A1,A8;
+  end;
+
+theorem Th23:
+ for R,Q being Relation st R c= Q for a,b being set st R reduces a,b
+  holds Q reduces a,b
+  proof let R,Q be Relation such that
+A1:  R c= Q;
+   let a,b be set; given p being RedSequence of R such that
+A2:  p.1 = a & p.len p = b;
+      p is RedSequence of Q by A1,Th11;
+   hence ex p being RedSequence of Q st p.1 = a & p.len p = b by A2;
+  end;
+
+theorem
+   for R being Relation, X being set, a,b being set holds
+  R reduces a,b iff R \/ id X reduces a,b
+  proof let R be Relation, X be set, a,b be set;
+      R c= R \/ id X by XBOOLE_1:7;
+   hence R reduces a,b implies R \/ id X reduces a,b by Th23;
+   given p being RedSequence of R \/ id X such that
+A1:  p.1 = a & p.len p = b;
+      len p > 0 by Def2;
+then A2: len p in dom p by Lm3;
+   defpred P[Nat] means $1 in dom p implies R reduces a,p.$1;
+A3:  P[0] by Lm1;
+A4: for k be Nat st P[k] holds P[k+1]
+proof
+  now let i be Nat; assume
+A5:   i in dom p implies R reduces a,p.i; assume
+A6:   i+1 in dom p;
+     per cases;
+     suppose A7: i in dom p;
+then [p.i, p.(i+1)] in R \/ id X & R reduces a,p.i by A5,A6,Def2;
+      then [p.i, p.(i+1)] in R or [p.i, p.(i+1)] in id X by XBOOLE_0:def 2;
+      then R reduces p.i, p.(i+1) or p.i = p.(i+1) by Th16,RELAT_1:def 10;
+     hence R reduces a, p.(i+1) by A5,A7,Th17;
+     suppose not i in dom p;
+      then i < 0+1 or i > len p & i+1 <= len p by A6,Lm1,Lm3;
+      then i <= 0 & i >= 0 by NAT_1:18,38;
+      then i = 0;
+     hence R reduces a, p.(i+1) by A1,Th13;
+    end;
+  hence thesis;
+end;
+      for i being Nat holds P[i] from Ind(A3,A4);
+   hence R reduces a,b by A1,A2;
+  end;
+
+theorem Th25:
+ for R being Relation, a,b being set st R reduces a,b
+   holds R~ reduces b,a
+  proof let R be Relation, a,b be set; given p being RedSequence of R such that
+A1:  p.1 = a & p.len p = b;
+   reconsider q = Rev p as RedSequence of R~ by Th10;
+   take q;
+A2:  1 in dom q & len q in dom q & len q = len p by FINSEQ_5:6,def 3;
+   hence q.1 = p.(len p-1+1) by FINSEQ_5:def 3 .= b by A1,XCMPLX_1:27;
+   thus q.(len q) = p.(len p-len p+1) by A2,FINSEQ_5:def 3
+       .= p.(0+1) by XCMPLX_1:14 .= a by A1;
+  end;
+
+Lm5:for R being Relation, a,b being set st a,b are_convertible_wrt R
+  holds b,a are_convertible_wrt R
+  proof let R be Relation; let a,b be set; assume
+      R \/ R~ reduces a,b;
+    then (R \/ R~)~ reduces b,a by Th25;
+    then R~ \/ R~~ reduces b,a by RELAT_1:40;
+   hence R \/ R~ reduces b,a;
+  end;
+
+theorem Th26:
+ for R being Relation, a,b being set st R reduces a,b
+   holds a,b are_convertible_wrt R & b,a are_convertible_wrt R
+  proof let R be Relation, a,b be set;
+   given p being RedSequence of R such that
+A1:  p.1 = a & p.len p = b;
+      p is RedSequence of R \/ R~
+     proof thus len p > 0 by Def2;
+      let i be Nat; assume i in dom p & i+1 in dom p;
+       then [p.i, p.(i+1)] in R by Def2;
+      hence thesis by XBOOLE_0:def 2;
+     end;
+    then R \/ R~ reduces a,b by A1,Def3;
+   hence a,b are_convertible_wrt R by Def4;
+   hence thesis by Lm5;
+  end;
+
+theorem Th27:
+ for R being Relation, a being set holds a,a are_convertible_wrt R
+  proof let R be Relation, a be set;
+      R reduces a,a by Th13;
+   hence thesis by Th26;
+  end;
+
+theorem Th28:
+ for a,b being set st a,b are_convertible_wrt {} holds a = b
+  proof let a,b be set; assume
+      a,b are_convertible_wrt {};
+    then {} \/ ({} qua Relation)~ reduces a,b &
+    {} = ({} qua Relation)~ by Def4;
+   hence a = b by Th14;
+  end;
+
+theorem
+   for R being Relation, a,b being set st a,b are_convertible_wrt R &
+   not a in field R holds a = b
+  proof let R be Relation; let a,b be set; assume
+A1:  R \/ R~ reduces a,b;
+      field R = field (R~) & (field R) \/ field R = field R &
+    field (R \/ R~) = (field R) \/ field (R~) by RELAT_1:33,38;
+   hence thesis by A1,Th15;
+  end;
+
+theorem Th30:
+ for R being Relation, a,b being set st [a,b] in R
+   holds a,b are_convertible_wrt R
+  proof let R be Relation, a,b be set; assume [a,b] in R;
+    then R reduces a,b by Th16;
+   hence thesis by Th26;
+  end;
+
+theorem Th31:
+ for R being Relation, a,b,c being set st
+  a,b are_convertible_wrt R & b,c are_convertible_wrt R
+   holds a,c are_convertible_wrt R
+  proof let R be Relation, a,b,c be set; assume
+      R \/ R~ reduces a,b & R \/ R~ reduces b,c;
+   hence R \/ R~ reduces a,c by Th17;
+  end;
+
+theorem
+   for R being Relation, a,b being set st a,b are_convertible_wrt R
+  holds b,a are_convertible_wrt R by Lm5;
+
+theorem Th33:
+ for R being Relation, a,b being set st a,b are_convertible_wrt R & a <> b
+   holds a in field R & b in field R
+  proof let R be Relation, a,b be set; assume
+A1:  R \/ R~ reduces a,b;
+      field (R \/ R~) = (field R) \/ field (R~) by RELAT_1:33
+      .= (field R) \/ field R by RELAT_1:38
+      .= field R;
+   hence thesis by A1,Th19;
+  end;
+
+definition
+ let R be Relation;
+ let a be set;
+ pred a is_a_normal_form_wrt R means
+    not ex b being set st [a,b] in R;
+end;
+
+theorem Th34:
+ for R being Relation, a,b being set st
+  a is_a_normal_form_wrt R & R reduces a,b holds a = b
+  proof let R be Relation; let a,b be set; assume
+A1:  not ex b being set st [a,b] in R; assume R reduces a,b;
+   then consider p being FinSequence such that
+A2:  len p > 0 & p.1 = a & p.len p = b &
+    for i being Nat st i in dom p & i+1 in dom p holds [p.i, p.(i+1)] in
+ R by Th12
+;
+      now assume len p > 1;
+      then 1 in dom p & 1+1 in dom p by Lm3,Lm4;
+      then [a, p.(1+1)] in R by A2;
+     hence contradiction by A1;
+    end;
+    then len p <= 1 & len p >= 0+1 by A2,NAT_1:38;
+   hence thesis by A2,AXIOMS:21;
+  end;
+
+theorem Th35:
+ for R being Relation, a being set st not a in field R
+   holds a is_a_normal_form_wrt R
+  proof let R be Relation, a be set such that
+A1:  not a in field R;
+   assume
+      ex b being set st [a,b] in R;
+   hence contradiction by A1,RELAT_1:30;
+  end;
+
+definition
+ let R be Relation;
+ let a,b be set;
+ pred b is_a_normal_form_of a,R means:
+Def6:
+  b is_a_normal_form_wrt R & R reduces a,b;
+
+ pred a,b are_convergent_wrt R means:
+Def7:
+  ex c being set st R reduces a,c & R reduces b,c;
+
+ pred a,b are_divergent_wrt R means:
+Def8:
+  ex c being set st R reduces c,a & R reduces c,b;
+
+ pred a,b are_convergent<=1_wrt R means:
+Def9:
+  ex c being set st ([a,c] in R or a = c) & ([b,c] in R or b = c);
+
+ pred a,b are_divergent<=1_wrt R means:
+Def10:
+  ex c being set st ([c,a] in R or a = c) & ([c,b] in R or b = c);
+end;
+
+theorem Th36:
+ for R being Relation, a being set st not a in field R
+   holds a is_a_normal_form_of a,R
+  proof let R be Relation, a be set; assume
+      not a in field R;
+   hence a is_a_normal_form_wrt R & R reduces a,a by Th13,Th35;
+  end;
+
+theorem Th37:
+ for R being Relation, a,b being set st R reduces a,b
+  holds a,b are_convergent_wrt R & a,b are_divergent_wrt R &
+        b,a are_convergent_wrt R & b,a are_divergent_wrt R
+  proof let R be Relation, a,b be set;
+      R reduces a,a & R reduces b,b by Th13;
+   hence thesis by Def7,Def8;
+  end;
+
+theorem Th38:
+ for R being Relation, a,b being set st
+   a,b are_convergent_wrt R or a,b are_divergent_wrt R
+  holds a,b are_convertible_wrt R
+  proof let R be Relation, a,b be set; assume
+A1:  a,b are_convergent_wrt R or a,b are_divergent_wrt R;
+   per cases by A1;
+    suppose a,b are_convergent_wrt R;
+     then consider c being set such that
+A2:    R reduces a,c & R reduces b,c by Def7;
+A3:    a,c are_convertible_wrt R & b,c are_convertible_wrt R by A2,Th26;
+        c,b are_convertible_wrt R by A2,Th26;
+     hence thesis by A3,Th31;
+    suppose a,b are_divergent_wrt R;
+     then consider c being set such that
+A4:    R reduces c,a & R reduces c,b by Def8;
+A5:    c,a are_convertible_wrt R & c,b are_convertible_wrt R by A4,Th26;
+        a,c are_convertible_wrt R by A4,Th26;
+     hence thesis by A5,Th31;
+  end;
+
+theorem Th39:
+ for R being Relation, a being set holds
+  a,a are_convergent_wrt R & a,a are_divergent_wrt R
+  proof let R be Relation, a be set;
+      R reduces a,a by Th13;
+   hence (ex b being set st R reduces a,b & R reduces a,b) &
+    ex b being set st R reduces b,a & R reduces b,a;
+  end;
+
+theorem Th40:
+ for a,b being set st a,b are_convergent_wrt {} or a,b are_divergent_wrt {}
+   holds a = b
+  proof let a,b be set; assume
+A1:  a,b are_convergent_wrt {} or a,b are_divergent_wrt {};
+A2:  now assume a,b are_convergent_wrt {};
+     then consider c being set such that
+A3:   {} reduces a,c & {} reduces b,c by Def7;
+        a = c & b = c by A3,Th14;
+     hence thesis;
+    end;
+      now assume a,b are_divergent_wrt {};
+     then consider c being set such that
+A4:   {} reduces c,a & {} reduces c,b by Def8;
+        a = c & b = c by A4,Th14;
+     hence thesis;
+    end;
+   hence thesis by A1,A2;
+  end;
+
+theorem
+   for R being Relation, a,b being set st a,b are_convergent_wrt R
+  holds b,a are_convergent_wrt R
+  proof let R be Relation, a,b be set;
+   assume ex c being set st R reduces a,c & R reduces b,c;
+   hence ex c being set st R reduces b,c & R reduces a,c;
+  end;
+
+theorem
+   for R being Relation, a,b being set st a,b are_divergent_wrt R
+  holds b,a are_divergent_wrt R
+  proof let R be Relation, a,b be set;
+   assume ex c being set st R reduces c,a & R reduces c,b;
+   hence ex c being set st R reduces c,b & R reduces c,a;
+  end;
+
+theorem Th43:
+ for R being Relation, a,b,c being set st
+  R reduces a,b & b,c are_convergent_wrt R or
+  a,b are_convergent_wrt R & R reduces c,b
+ holds a,c are_convergent_wrt R
+ proof let R be Relation, a,b,c be set; assume
+A1: R reduces a,b & b,c are_convergent_wrt R or
+   a,b are_convergent_wrt R & R reduces c,b;
+  per cases by A1;
+   suppose
+A2:  R reduces a,b & b,c are_convergent_wrt R;
+   then consider d being set such that
+A3:  R reduces b,d & R reduces c,d by Def7;
+      R reduces a,d by A2,A3,Th17;
+   hence thesis by A3,Def7;
+   suppose
+A4:  a,b are_convergent_wrt R & R reduces c,b;
+   then consider d being set such that
+A5:  R reduces a,d & R reduces b,d by Def7;
+      R reduces c,d by A4,A5,Th17;
+   hence thesis by A5,Def7;
+ end;
+
+theorem
+   for R being Relation, a,b,c being set st
+  R reduces b,a & b,c are_divergent_wrt R or
+  a,b are_divergent_wrt R & R reduces b,c
+ holds a,c are_divergent_wrt R
+ proof let R be Relation, a,b,c be set; assume
+A1: R reduces b,a & b,c are_divergent_wrt R or
+   a,b are_divergent_wrt R & R reduces b,c;
+  per cases by A1;
+   suppose
+A2: R reduces b,a & b,c are_divergent_wrt R;
+   then consider d being set such that
+A3:  R reduces d,b & R reduces d,c by Def8;
+      R reduces d,a by A2,A3,Th17;
+   hence thesis by A3,Def8;
+   suppose
+A4:  a,b are_divergent_wrt R & R reduces b,c;
+   then consider d being set such that
+A5:  R reduces d,a & R reduces d,b by Def8;
+      R reduces d,c by A4,A5,Th17;
+   hence thesis by A5,Def8;
+ end;
+
+theorem Th45:
+ for R being Relation, a,b being set st a,b are_convergent<=1_wrt R
+  holds a,b are_convergent_wrt R
+  proof let R be Relation, a,b be set;
+   given c being set such that
+A1:  ([a,c] in R or a = c) & ([b,c] in R or b = c);
+   take c; thus R reduces a,c & R reduces b,c by A1,Th13,Th16;
+  end;
+
+theorem Th46:
+ for R being Relation, a,b being set st a,b are_divergent<=1_wrt R
+  holds a,b are_divergent_wrt R
+  proof let R be Relation, a,b be set;
+   given c being set such that
+A1:  ([c,a] in R or a = c) & ([c,b] in R or b = c);
+   take c; thus R reduces c,a & R reduces c,b by A1,Th13,Th16;
+  end;
+
+definition
+ let R be Relation;
+ let a be set;
+ pred a has_a_normal_form_wrt R means:
+Def11:
+  ex b being set st b is_a_normal_form_of a,R;
+end;
+
+theorem Th47:
+ for R being Relation, a being set st not a in field R
+   holds a has_a_normal_form_wrt R
+  proof let R be Relation, a be set; assume
+      not a in field R;
+    then a is_a_normal_form_of a,R by Th36;
+   hence ex b being set st b is_a_normal_form_of a,R;
+  end;
+
+definition
+ let R be Relation, a be set;
+ assume that
+A1:      a has_a_normal_form_wrt R and
+A2:      for b,c being set st b is_a_normal_form_of a,R &
+     c is_a_normal_form_of a,R holds b = c;
+ func nf(a,R) means:
+Def12:
+  it is_a_normal_form_of a,R;
+ existence by A1,Def11;
+ uniqueness by A2;
+end;
+
+begin :: Terminating reductions
+
+definition
+ let R be Relation;
+ attr R is co-well_founded means:
+Def13:
+  R~ is well_founded;
+
+ attr R is weakly-normalizing means:
+Def14:
+  for a being set st a in field R holds a has_a_normal_form_wrt R;
+
+ attr R is strongly-normalizing means :: terminating, Noetherian
+    for f being ManySortedSet of NAT ex i being Nat st not [f.i,f.(i+1)] in R;
+end;
+
+definition let R be Relation;
+ redefine attr R is co-well_founded means:
+Def16:
+  for Y being set st Y c= field R & Y <> {}
+   ex a being set st a in Y &
+    for b being set st b in Y & a <> b holds not [a,b] in R;
+ compatibility
+  proof
+A1:  field R = field (R~) by RELAT_1:38;
+   hereby assume R is co-well_founded;
+     then A2: R~ is well_founded by Def13;
+    let Y be set; assume Y c= field R & Y <> {};
+    then consider a being set such that
+A3:   a in Y & (R~)-Seg(a) misses Y by A1,A2,WELLORD1:def 2;
+    take a; thus a in Y by A3;
+    let b be set; assume b in Y;
+     then not b in (R~)-Seg(a) by A3,XBOOLE_0:3;
+     then a = b or not [b,a] in R~ by WELLORD1:def 1;
+    hence a <> b implies not [a,b] in R by RELAT_1:def 7;
+   end;
+   hereby assume
+A4:   for Y being set st Y c= field R & Y <> {}
+      ex a being set st a in Y &
+       for b being set st b in Y & a <> b holds not [a,b] in R;
+       R~ is well_founded
+      proof let Y be set; assume Y c= field (R~) & Y <> {};
+       then consider a being set such that
+A5:      a in Y & for b being set st b in Y & a <> b holds not [a,b] in
+ R by A1,A4;
+       take a; thus a in Y by A5;
+          now assume (R~)-Seg(a) /\ Y is non empty;
+         then reconsider A = (R~)-Seg(a) /\ Y as non empty set;
+         consider x being Element of A;
+A6:        x in (R~)-Seg(a) & x in Y by XBOOLE_0:def 3;
+          then x <> a & [x,a] in R~ by WELLORD1:def 1;
+          then not [a,x] in R & [a,x] in R by A5,A6,RELAT_1:def 7;
+         hence contradiction;
+        end;
+       hence (R~)-Seg(a) misses Y by XBOOLE_0:def 7;
+      end;
+    hence R is co-well_founded by Def13;
+   end;
+  end;
+end;
+
+scheme coNoetherianInduction{R() -> Relation, P[set]}:
+ for a being set st a in field R() holds P[a]
+  provided
+A1:   R() is co-well_founded
+  and
+A2:   for a being set st for b being set st [a,b] in R() & a <> b holds P[b]
+      holds P[a]
+  proof given a being set such that
+A3:  a in field R() & not P[a];
+   reconsider X = field R() as non empty set by A3;
+   reconsider a as Element of X by A3;
+   set Y = {x where x is Element of X: not P[x]};
+A4:  a in Y by A3;
+      Y c= field R()
+     proof let y be set; assume y in Y;
+       then ex x being Element of X st y = x & not P[x];
+      hence thesis;
+     end;
+   then consider a being set such that
+A5:  a in Y and
+A6:  for b being set st b in Y & a <> b holds not [a,b] in R() by A1,A4,Def16;
+   consider x being Element of X such that
+A7:  a = x & not P[x] by A5;
+      now let b be set; assume
+A8:    [a,b] in R() & a <> b & not P[b];
+      then not b in Y & b in X by A6,RELAT_1:30;
+     hence contradiction by A8;
+    end;
+   hence thesis by A2,A7;
+  end;
+
+definition
+ cluster strongly-normalizing -> irreflexive co-well_founded Relation;
+ coherence
+  proof let R be Relation such that
+A1:  for f being ManySortedSet of NAT ex i being Nat st not [f.i,f.(i+1)] in R;
+   thus R is irreflexive
+     proof given x being set such that
+A2:    x in field R & [x,x] in R;
+         dom (NAT --> x) = NAT by FUNCOP_1:19;
+      then reconsider f = NAT --> x as ManySortedSet of NAT by PBOOLE:def 3;
+      consider i being Nat such that
+A3:    not [f.i, f.(i+1)] in R by A1;
+         f.i = x & f.(i+1) = x by FUNCOP_1:13;
+      hence contradiction by A2,A3;
+     end;
+   let Y be set; assume that
+A4:  Y c= field R & Y <> {} and
+A5:  for a being set st a in Y
+     ex b being set st b in Y & a <> b & [a,b] in R;
+   reconsider Y as non empty set by A4;
+   consider y being Element of Y;
+   defpred P[set,set] means [$1,$2] in R;
+   defpred Q[set] means not contradiction;
+A6: y in Y & Q[y];
+ now let x be set; assume x in Y;
+      then ex b being set st b in Y & x <> b & [x,b] in R by A5;
+     hence ex y being set st y in Y & [x,y] in R;
+    end; then
+A7: for x be set st x in Y & Q[x] ex y be set st y in Y & P[x,y] & Q[y];
+   consider f being Function such that
+A8:  dom f = NAT & rng f c= Y & f.0 = y and
+A9:  for k being Nat holds P[f.k,f.(k+1)] & Q[f.k] from InfiniteChain(A6,A7);
+      f is ManySortedSet of NAT by A8,PBOOLE:def 3;
+   hence thesis by A1,A9;
+  end;
+ cluster co-well_founded irreflexive -> strongly-normalizing Relation;
+ coherence
+  proof let R be Relation such that
+A10:  for Y being set st Y c= field R & Y <> {}
+     ex a being set st a in Y &
+      for b being set st b in Y & a <> b holds not [a,b] in R;
+   assume
+A11: for x being set st x in field R holds not [x,x] in R;
+   let f be ManySortedSet of NAT; assume
+A12:  for i being Nat holds [f.i, f.(i+1)] in R;
+A13:  dom f = NAT by PBOOLE:def 3;
+A14:  rng f c= field R
+     proof let y be set; assume y in rng f;
+      then consider x being set such that
+A15:     x in dom f & y = f.x by FUNCT_1:def 5;
+      reconsider x as Nat by A15,PBOOLE:def 3;
+         [y, f.(x+1)] in R by A12,A15;
+      hence thesis by RELAT_1:30;
+     end;
+      f.0 in rng f by A13,FUNCT_1:def 5;
+   then consider a being set such that
+A16:  a in rng f & for b being set st b in rng f & a <> b holds not [a,b] in R
+     by A10,A14;
+   consider x being set such that
+A17:  x in dom f & a = f.x by A16,FUNCT_1:def 5;
+   reconsider x as Nat by A17,PBOOLE:def 3;
+A18:  [a,f.(x+1)] in R & not [a,a] in R by A11,A12,A14,A16,A17;
+    then a <> f.(x+1) & f.(x+1) in rng f by A13,FUNCT_1:def 5;
+   hence contradiction by A16,A18;
+  end;
+end;
+
+definition
+ cluster empty -> weakly-normalizing strongly-normalizing Relation;
+  coherence
+   proof let R be Relation; assume
+A1:   R is empty;
+    thus R is weakly-normalizing
+     proof let x be set; thus thesis by A1,TOLER_1:1; end;
+    thus R is strongly-normalizing
+     proof let f be ManySortedSet of NAT; take 0; thus thesis by A1; end;
+   end;
+end;
+
+definition
+ cluster empty Relation; existence proof take {}; thus thesis; end;
+end;
+
+theorem
+   for Q being co-well_founded Relation, R being Relation st R c= Q
+  holds R is co-well_founded
+  proof let Q be co-well_founded Relation, R be Relation; assume
+A1:  R c= Q;
+then A2:  field R c= field Q by RELAT_1:31;
+   let Y be set; assume
+A3:  Y c= field R & Y <> {};
+    then Y c= field Q by A2,XBOOLE_1:1;
+   then consider a being set such that
+A4:  a in Y and
+A5:  for b being set st b in Y & a <> b holds not [a,b] in Q by A3,Def16;
+   take a; thus a in Y by A4;
+   let b be set; assume b in Y & a <> b;
+   hence thesis by A1,A5;
+  end;
+
+definition
+ cluster strongly-normalizing -> weakly-normalizing Relation;
+ coherence
+  proof let R be Relation such that
+A1:  R is strongly-normalizing;
+   let a be set; assume
+A2:  a in field R;
+   then reconsider X = field R as non empty set;
+   set Y = {x where x is Element of X: R reduces a,x};
+A3:  Y c= field R
+     proof let y be set; assume y in Y;
+       then ex x being Element of X st y = x & R reduces a,x;
+      hence thesis;
+     end;
+      R reduces a,a & a in X by A2,Th13;
+then A4:  a in Y & R is strongly-normalizing Relation by A1;
+   then consider x being set such that
+A5:  x in Y &
+    for b being set st b in Y & x <> b holds not [x,b] in R by A3,Def16;
+   take x;
+    A6: ex y being Element of X st x = y & R reduces a,y by A5;
+   hereby given b being set such that
+A7:   [x,b] in R;
+       x in field R & R is_irreflexive_in field R & R reduces x,b
+      by A3,A4,A5,A7,Th16,RELAT_2:def 10;
+     then not [x,x] in R & R reduces a,b & b in X
+      by A6,A7,Th17,RELAT_1:30,RELAT_2:def 2;
+     then x <> b & b in Y by A7;
+    hence contradiction by A5,A7;
+   end;
+   thus thesis by A6;
+  end;
+end;
+
+begin :: Church-Rosser property
+
+definition
+ let R,Q be Relation;
+ pred R commutes-weakly_with Q means
+    for a,b,c being set st [a,b] in R & [a,c] in Q
+   ex d being set st Q reduces b,d & R reduces c,d;
+ symmetry
+  proof let R,Q be Relation such that
+A1:  for a,b,c being set st [a,b] in R & [a,c] in Q
+     ex d being set st Q reduces b,d & R reduces c,d;
+   let a,b,c be set; assume [a,b] in Q & [a,c] in R;
+    then ex d being set st Q reduces c,d & R reduces b,d by A1;
+   hence ex d being set st R reduces b,d & Q reduces c,d;
+  end;
+ pred R commutes_with Q means:
+Def18:
+  for a,b,c being set st R reduces a,b & Q reduces a,c
+   ex d being set st Q reduces b,d & R reduces c,d;
+ symmetry
+  proof let R,Q be Relation such that
+A2:  for a,b,c being set st R reduces a,b & Q reduces a,c
+     ex d being set st Q reduces b,d & R reduces c,d;
+   let a,b,c be set; assume Q reduces a,b & R reduces a,c;
+    then ex d being set st Q reduces c,d & R reduces b,d by A2;
+   hence ex d being set st R reduces b,d & Q reduces c,d;
+  end;
+end;
+
+theorem
+   for R,Q being Relation st R commutes_with Q holds R commutes-weakly_with Q
+  proof let R,Q be Relation; assume
+A1:  for a,b,c being set st R reduces a,b & Q reduces a,c
+     ex d being set st Q reduces b,d & R reduces c,d;
+   let a,b,c be set; assume [a,b] in R & [a,c] in Q;
+    then R reduces a,b & Q reduces a,c by Th16;
+   hence thesis by A1;
+  end;
+
+definition
+ let R be Relation;
+ attr R is with_UN_property means:
+Def19:
+  for a,b being set st a is_a_normal_form_wrt R & b is_a_normal_form_wrt R &
+   a,b are_convertible_wrt R holds a = b;
+
+ attr R is with_NF_property means
+    for a,b being set st a is_a_normal_form_wrt R & a,b are_convertible_wrt R
+   holds R reduces b,a;
+
+ attr R is subcommutative means:
+Def21:
+  for a,b,c being set st [a,b] in R & [a,c] in R
+   holds b,c are_convergent<=1_wrt R;
+ synonym R has_diamond_property;
+
+ attr R is confluent means:
+Def22:
+  for a,b being set st a,b are_divergent_wrt R holds a,b are_convergent_wrt R;
+
+ attr R is with_Church-Rosser_property means:
+Def23:
+  for a,b being set st a,b are_convertible_wrt R
+   holds a,b are_convergent_wrt R;
+ synonym R has_Church-Rosser_property;
+
+ attr R is locally-confluent means:
+Def24:
+  for a,b,c being set st [a,b] in R & [a,c] in R
+   holds b,c are_convergent_wrt R;
+ synonym R has_weak-Church-Rosser_property;
+end;
+
+theorem Th50:
+ for R being Relation st R is subcommutative for a,b,c being set st
+   R reduces a,b & [a,c] in R holds b,c are_convergent_wrt R
+  proof let R be Relation; assume
+A1:  R is subcommutative;
+   let a,b,c be set; given p being RedSequence of R such that
+A2:  p.1 = a & p.len p = b;
+A3: len p in dom p by FINSEQ_5:6;
+   assume
+A4:  [a,c] in R;
+   defpred P[Nat] means $1 in dom p implies
+    ex d being set st ([p.$1,d] in R or p.$1 = d) & R reduces c,d;
+A5:  P[0] by Lm1;
+  now let i be Nat such that
+A6:    i in dom p implies P[i] and
+A7:    i+1 in dom p;
+     per cases by NAT_1:19; suppose i = 0;
+       then p.(i+1) = a & R reduces c,c by A2,Th13;
+      hence P[i+1] by A4;
+     suppose i > 0;
+       then A8: i >= 0+1 & i < len p by A7,Lm2,NAT_1:38;
+then A9:     i in dom p by Lm3;
+      consider d being set such that
+A10:     ([p.i,d] in R or p.i = d) & R reduces c,d by A6,A8,Lm3;
+A11:     [p.i,p.(i+1)] in R by A7,A9,Def2;
+A12:     now assume [p.i,d] in R;
+         then p.(i+1),d are_convergent<=1_wrt R by A1,A11,Def21;
+        then consider e being set such that
+A13:       ([p.(i+1),e] in R or p.(i+1) = e) & ([d,e] in R or d = e) by Def9;
+        take e; thus [p.(i+1),e] in R or p.(i+1) = e by A13;
+           R reduces d,e by A13,Th13,Th16;
+        hence R reduces c,e by A10,Th17;
+       end;
+         now assume p.i = d;
+         then R reduces d, p.(i+1) by A11,Th16;
+        hence R reduces c, p.(i+1) by A10,Th17;
+       end;
+      hence P[i+1] by A10,A12;
+    end; then
+A14: for k be Nat st P[k] holds P[k+1];
+      for i being Nat holds P[i] from Ind(A5,A14);
+   then consider d being set such that
+A15: ([b,d] in R or b = d) & R reduces c,d by A2,A3;
+   take d; thus thesis by A15,Th13,Th16;
+  end;
+
+theorem
+   for R being Relation holds
+   R is confluent iff R commutes_with R
+  proof let R be Relation;
+   hereby assume
+A1:   R is confluent;
+    thus R commutes_with R
+     proof let a,b,c be set; assume R reduces a,b & R reduces a,c;
+       then b,c are_divergent_wrt R by Def8;
+       then b,c are_convergent_wrt R by A1,Def22;
+      hence ex d being set st R reduces b,d & R reduces c,d by Def7;
+     end;
+   end;
+   assume
+A2:  for a,b,c being set st R reduces a,b & R reduces a,c
+     ex d being set st R reduces b,d & R reduces c,d;
+   let a,b be set; assume
+      ex c being set st R reduces c,a & R reduces c,b;
+   hence ex d being set st R reduces a,d & R reduces b,d by A2;
+  end;
+
+theorem Th52:
+ for R being Relation holds
+  R is confluent iff for a,b,c being set st
+   R reduces a,b & [a,c] in R holds b,c are_convergent_wrt R
+  proof let R be Relation;
+   hereby assume
+A1:   R is confluent;
+    let a,b,c be set; assume
+A2:   R reduces a,b & [a,c] in R; then R reduces a,c by Th16;
+     then b,c are_divergent_wrt R by A2,Def8;
+    hence b,c are_convergent_wrt R by A1,Def22;
+   end;
+   assume
+A3:  for a,b,c being set st R reduces a,b & [a,c] in R
+     holds b,c are_convergent_wrt R;
+   let b,c be set; given a being set such that
+A4:  R reduces a,b & R reduces a,c;
+   consider p being RedSequence of R such that
+A5:  p.1 = a & p.len p = b by A4,Def3;
+A6: len p in dom p by FINSEQ_5:6;
+   consider q being RedSequence of R such that
+A7:  q.1 = a & q.len q = c by A4,Def3;
+A8: len q in dom q & len q > 0 by Def2,FINSEQ_5:6;
+   defpred P[Nat,Nat] means p.$1, q.$2 are_convergent_wrt R;
+   defpred Q[Nat] means
+    $1 in dom p implies for j being Nat st j in dom q holds P[$1,j];
+A9:  Q[0] by Lm1;
+A10: for i being Nat st Q[i] holds Q[i+1]
+     proof let i be Nat such that
+      i in dom p implies for j being Nat st j in dom q holds P[i,j] and
+A11:    i+1 in dom p;
+      defpred R[Nat] means $1 in dom q implies P[i+1,$1];
+A12:    R[0] by Lm1;
+A13:    for j being Nat st R[j] holds R[j+1]
+        proof let j be Nat such that
+A14:     j in dom q implies P[i+1,j] and
+A15:     j+1 in dom q;
+          1 in dom p & i+1 >= 1 by FINSEQ_5:6,NAT_1:29;
+        then A16: R reduces a,p.(i+1) by A5,A11,Th18;
+       per cases by NAT_1:19; suppose j = 0;
+        hence P[i+1,j+1] by A7,A16,Th37;
+       suppose j > 0;
+        then A17: j >= 0+1 & j < len q by A15,Lm2,NAT_1:38;
+then A18:     j in dom q by Lm3;
+       consider d being set such that
+A19:     R reduces p.(i+1),d & R reduces q.j,d by A14,A17,Def7,Lm3;
+          [q.j, q.(j+1)] in R by A15,A18,Def2;
+        then d,q.(j+1) are_convergent_wrt R by A3,A19;
+       hence P[i+1,j+1] by A19,Th43;
+      end;
+     thus for j being Nat holds R[j] from Ind(A12,A13);
+    end;
+    for i being Nat holds Q[i] from Ind(A9,A10);
+   hence thesis by A5,A6,A7,A8;
+  end;
+
+theorem
+   for R being Relation holds
+   R is locally-confluent iff R commutes-weakly_with R
+  proof let R be Relation;
+   hereby assume
+A1:   R is locally-confluent;
+    thus R commutes-weakly_with R
+     proof let a,b,c be set; assume [a,b] in R & [a,c] in R;
+       then b,c are_convergent_wrt R by A1,Def24;
+      hence ex d being set st R reduces b,d & R reduces c,d by Def7;
+     end;
+   end;
+   assume
+A2:  for a,b,c being set st [a,b] in R & [a,c] in R
+     ex d being set st R reduces b,d & R reduces c,d;
+   let a,b,c be set; assume
+      [a,b] in R & [a,c] in R;
+   hence ex d being set st R reduces b,d & R reduces c,d by A2;
+  end;
+
+definition
+ cluster with_Church-Rosser_property -> confluent Relation;
+ coherence
+  proof let R be Relation; assume
+A1:  for a,b being set st a,b are_convertible_wrt R
+     holds a,b are_convergent_wrt R;
+   let a,b be set; assume a,b are_divergent_wrt R;
+    then a,b are_convertible_wrt R by Th38;
+   hence a,b are_convergent_wrt R by A1;
+  end;
+ cluster confluent -> locally-confluent with_Church-Rosser_property Relation;
+ coherence
+  proof let R be Relation; assume
+A2:  for a,b being set st a,b are_divergent_wrt R
+     holds a,b are_convergent_wrt R;
+   hereby let a,b,c be set; assume
+       [a,b] in R & [a,c] in R;
+     then R reduces a,b & R reduces a,c by Th16;
+     then b,c are_divergent_wrt R by Def8;
+    hence b,c are_convergent_wrt R by A2;
+   end;
+   let a,b be set; given p being RedSequence of R \/ R~ such that
+A3:  p.1 = a & p.len p = b;
+A4:  len p in dom p by FINSEQ_5:6;
+    defpred P[Nat] means $1 in dom p implies a,p.$1 are_convergent_wrt R;
+A5:  P[0] by Lm1;
+  now let i be Nat; assume that
+A6:   i in dom p implies a,p.i are_convergent_wrt R and
+A7:   i+1 in dom p;
+     per cases;
+     suppose A8: i in dom p;
+then a,p.i are_convergent_wrt R & [p.i, p.(i+1)] in R \/
+ R~ by A6,A7,Def2;
+      then [p.i, p.(i+1)] in R or [p.i, p.(i+1)] in R~ by XBOOLE_0:def 2;
+      then [p.i, p.(i+1)] in R or [p.(i+1), p.i] in R by RELAT_1:def 7;
+then A9:   R reduces p.i, p.(i+1) or R reduces p.(i+1), p.i by Th16;
+     consider c being set such that
+A10:   R reduces a,c & R reduces p.i,c by A6,A8,Def7;
+        c,p.(i+1) are_divergent_wrt R or R reduces p.(i+1),c
+       by A9,A10,Def8,Th17;
+      then c,p.(i+1) are_convergent_wrt R or a,p.(i+1) are_convergent_wrt R
+       by A2,A10,Def7;
+     hence a, p.(i+1) are_convergent_wrt R by A10,Th43;
+     suppose not i in dom p;
+      then i < 0+1 or i > len p & i+1 <= len p by A7,Lm1,Lm3;
+      then i <= 0 & i >= 0 by NAT_1:18,38;
+      then i = 0;
+     hence a, p.(i+1) are_convergent_wrt R by A3,Th39;
+    end;
+then A11: for k being Nat st P[k] holds P[k+1];
+      for i being Nat holds P[i] from Ind(A5,A11);
+   hence thesis by A3,A4;
+  end;
+ cluster subcommutative -> confluent Relation;
+ coherence
+  proof let R be Relation; assume
+      R is subcommutative;
+    then for a,b,c being set st R reduces a,b & [a,c] in R
+     holds b,c are_convergent_wrt R by Th50;
+   hence thesis by Th52;
+  end;
+ cluster with_Church-Rosser_property -> with_NF_property Relation;
+ coherence
+  proof let R be Relation; assume
+A12:  R is with_Church-Rosser_property;
+   let b,a be set; assume
+A13:  b is_a_normal_form_wrt R;
+   assume b,a are_convertible_wrt R;
+    then b,a are_convergent_wrt R by A12,Def23;
+   then consider c being set such that
+A14:  R reduces b,c & R reduces a,c by Def7;
+   thus thesis by A13,A14,Th34;
+  end;
+ cluster with_NF_property -> with_UN_property Relation;
+ coherence
+  proof let R be Relation such that
+A15:  for a,b being set st a is_a_normal_form_wrt R & a,b are_convertible_wrt R
+     holds R reduces b,a;
+   let a,b be set such that
+A16:  a is_a_normal_form_wrt R & b is_a_normal_form_wrt R and
+A17:  a,b are_convertible_wrt R;
+      R reduces b,a by A15,A16,A17;
+   hence a = b by A16,Th34;
+  end;
+ cluster with_UN_property weakly-normalizing -> with_Church-Rosser_property
+   Relation;
+ coherence
+  proof let R be Relation such that
+A18:  for a,b being set st a is_a_normal_form_wrt R & b is_a_normal_form_wrt R
+&
+     a,b are_convertible_wrt R holds a = b and
+A19:  for a being set st a in field R holds a has_a_normal_form_wrt R;
+   let a,b be set; assume
+A20:  R \/ R~ reduces a,b;
+A21:  field (R \/ R~) = (field R) \/ field (R~) by RELAT_1:33
+      .= (field R) \/ field R by RELAT_1:38
+      .= field R;
+   per cases; suppose a = b; hence thesis by Th39;
+   suppose
+    a <> b;
+    then a in field R & b in field R by A20,A21,Th19;
+then A22:  a has_a_normal_form_wrt R & b has_a_normal_form_wrt R by A19;
+   then consider a' being set such that
+A23:  a' is_a_normal_form_of a,R by Def11;
+   consider b' being set such that
+A24:  b' is_a_normal_form_of b,R by A22,Def11;
+A25:  a' is_a_normal_form_wrt R & b' is_a_normal_form_wrt R by A23,A24,Def6;
+A26:  R reduces a,a' & R reduces b,b' by A23,A24,Def6;
+    then a',a are_convertible_wrt R & a,b are_convertible_wrt R
+     by A20,Def4,Th26;
+    then b,b' are_convertible_wrt R & a',b are_convertible_wrt R
+     by A26,Th26,Th31;
+    then a',b' are_convertible_wrt R by Th31;
+    then a' = b' by A18,A25;
+   hence thesis by A26,Def7;
+  end;
+end;
+
+definition
+ cluster empty -> subcommutative Relation;
+  coherence
+   proof let R be Relation; assume
+A1:   R is empty;
+    let x be set; thus thesis by A1;
+   end;
+end;
+
+definition
+ cluster empty Relation; existence proof take {}; thus thesis; end;
+end;
+
+
+theorem Th54:
+ for R being with_UN_property Relation
+ for a,b,c being set st b is_a_normal_form_of a,R & c is_a_normal_form_of a,R
+  holds b = c
+  proof let R be with_UN_property Relation;
+   let a,b,c be set such that
+A1:  b is_a_normal_form_wrt R & R reduces a,b and
+A2:  c is_a_normal_form_wrt R & R reduces a,c;
+      b,c are_divergent_wrt R by A1,A2,Def8;
+    then b,c are_convertible_wrt R by Th38;
+   hence thesis by A1,A2,Def19;
+  end;
+
+theorem Th55:
+ for R being with_UN_property weakly-normalizing Relation
+ for a being set holds nf(a,R) is_a_normal_form_of a,R
+  proof let R be with_UN_property weakly-normalizing Relation;
+   let a be set;
+      a in field R or not a in field R;
+    then a has_a_normal_form_wrt R &
+    for b,c being set st b is_a_normal_form_of a,R &
+     c is_a_normal_form_of a,R holds b = c by Def14,Th47,Th54;
+   hence thesis by Def12;
+  end;
+
+theorem Th56:
+ for R being with_UN_property weakly-normalizing Relation
+ for a,b being set st a,b are_convertible_wrt R holds nf(a,R) = nf(b,R)
+  proof let R be with_UN_property weakly-normalizing Relation;
+   let a,b be set;
+A1:  nf(a,R) is_a_normal_form_of a,R & nf(b,R) is_a_normal_form_of b,R
+     by Th55;
+then A2:  nf(a,R) is_a_normal_form_wrt R & nf(b,R) is_a_normal_form_wrt R by
+Def6;
+      R reduces a,nf(a,R) & R reduces b,nf(b,R) by A1,Def6;
+then A3:  nf(a,R),a are_convertible_wrt R & b,nf(b,R) are_convertible_wrt R
+     by Th26;
+   assume a,b are_convertible_wrt R;
+    then nf(a,R),b are_convertible_wrt R by A3,Th31;
+    then nf(a,R),nf(b,R) are_convertible_wrt R by A3,Th31;
+   hence thesis by A2,Def19;
+  end;
+
+definition
+ cluster strongly-normalizing locally-confluent -> confluent Relation;
+  coherence
+   proof let R be Relation; assume
+       R is strongly-normalizing;
+then A1:  R is strongly-normalizing Relation;
+then A2:   R is co-well_founded;
+    assume
+A3:   for a,b,c being set st [a,b] in R & [a,c] in R
+      holds b,c are_convergent_wrt R;
+    given a0,b0 being set such that
+A4:   a0,b0 are_divergent_wrt R & not a0,b0 are_convergent_wrt R;
+    consider c0 being set such that
+A5:   R reduces c0,a0 & R reduces c0,b0 by A4,Def8;
+       a0 <> c0 or b0 <> c0 by A4,Th39;
+then A6:   c0 in field R by A5,Th19;
+    defpred P[set] means
+     for b,c being set st R reduces $1,b & R reduces $1,c
+      holds b,c are_convergent_wrt R;
+A7:   for a being set st for b being set st [a,b] in R & a <> b holds P[b]
+      holds P[a]
+      proof let a be set; assume
+A8:      for b being set st [a,b] in R & a <> b holds P[b];
+       let b,c be set; assume
+A9:      R reduces a,b & R reduces a,c;
+       then consider p being RedSequence of R such that
+A10:      a = p.1 & b = p.len p by Def3;
+       consider q being RedSequence of R such that
+A11:      a = q.1 & c = q.len q by A9,Def3;
+          len p > 0 & len q > 0 by Def2;
+then A12:      len p >= 0+1 & len q >= 0+1 by NAT_1:38;
+       per cases;
+       suppose len p = 1; hence b,c are_convergent_wrt R by A9,A10,Th37;
+       suppose len q = 1; hence b,c are_convergent_wrt R by A9,A11,Th37;
+       suppose len p <> 1 & len q <> 1;
+         then len p > 1 & len q > 1 by A12,REAL_1:def 5;
+then A13:       1 <= 2 & 1+1 <= len p & 1+1 <= len q by NAT_1:38;
+then A14:       1 in dom p & 1+1 in dom p & 1 in dom q & 1+1 in
+ dom q by A12,Lm3;
+then A15:       [a,p.2] in R & [a,q.2] in R by A10,A11,Def2;
+         then a in field R & R is_irreflexive_in field R
+          by A1,RELAT_1:30,RELAT_2:def 10;
+         then A16: a <> p.2 & a <> q.2 by A15,RELAT_2:def 2;
+           p.2,q.2 are_convergent_wrt R by A3,A15;
+        then consider d being set such that
+A17:       R reduces p.2,d & R reduces q.2,d by Def7;
+           len p in dom p by FINSEQ_5:6;
+         then R reduces p.2,b by A10,A13,A14,Th18;
+         then b,d are_convergent_wrt R by A8,A15,A16,A17;
+        then consider e being set such that
+A18:       R reduces b,e & R reduces d,e by Def7;
+           len q in dom q by FINSEQ_5:6;
+         then R reduces q.2,e & R reduces q.2,c by A11,A13,A14,A17,A18,Th17,
+Th18
+;
+         then e,c are_convergent_wrt R by A8,A15,A16;
+        hence b,c are_convergent_wrt R by A18,Th43;
+      end;
+       for a being set st a in field R holds P[a]
+      from coNoetherianInduction(A2,A7);
+    hence thesis by A4,A5,A6;
+   end;
+end;
+
+definition let R be Relation;
+ attr R is complete means R is confluent strongly-normalizing;
+end;
+
+definition
+ cluster complete -> confluent strongly-normalizing Relation;
+ coherence
+  proof let R be Relation; assume
+      R is confluent strongly-normalizing;
+   hence thesis;
+  end;
+ cluster confluent strongly-normalizing -> complete Relation;
+ coherence
+  proof let R be Relation; assume
+      R is confluent strongly-normalizing;
+   hence R is confluent strongly-normalizing;
+  end;
+end;
+
+definition
+ cluster empty Relation; existence proof take {}; thus thesis; end;
+end;
+
+definition
+ cluster complete (non empty Relation);
+ existence
+  proof reconsider R = {[0,1]} as non empty Relation by RELAT_1:4;
+   take R;
+A1:  field R = {0,1} by RELAT_1:32;
+   thus R is confluent
+    proof let a,b be set; given c being set such that
+A2:    R reduces c,a & R reduces c,b;
+     per cases; suppose a = b; hence thesis by Th39;
+     suppose a <> b;
+      then a <> c or b <> c;
+      then c in field R by A2,Th19;
+      then a in {0,1} & b in {0,1} & [0,1] in R by A1,A2,Th20,TARSKI:def 1;
+      then (a = 0 or a = 1) & (b = 0 or b = 1) & R reduces 0,1 & R reduces 1,1
+       by Th13,Th16,TARSKI:def 2;
+     hence a,b are_convergent_wrt R by Def7;
+    end;
+A3:  R is irreflexive
+     proof let x be set; assume x in field R & [x,x] in R;
+       then [x,x] = [0,1] by TARSKI:def 1;
+       then x = 0 & x = 1 by ZFMISC_1:33;
+      hence contradiction;
+     end;
+      R is co-well_founded
+     proof let Y be set; assume
+A4:     Y c= field R & Y <> {}; then reconsider Y' = Y as non empty set;
+      consider y being Element of Y';
+      per cases; suppose
+A5:      1 in Y;
+       take 1; thus 1 in Y by A5;
+       let b be set; assume b in Y & 1 <> b;
+          [0,1] <> [1,b] by ZFMISC_1:33;
+       hence not [1,b] in R by TARSKI:def 1;
+      suppose
+A6:      not 1 in Y & y in Y;
+       take 0; thus 0 in Y by A1,A4,A6,TARSKI:def 2;
+       let b be set; assume b in Y;
+       hence thesis by A1,A4,A6,TARSKI:def 2;
+     end;
+    then R is irreflexive co-well_founded Relation by A3;
+   hence R is strongly-normalizing;
+  end;
+end;
+
+theorem
+   for R,Q being with_Church-Rosser_property Relation st
+   R commutes_with Q holds R \/ Q has_Church-Rosser_property
+  proof let R,Q be with_Church-Rosser_property Relation; assume
+A1:  R commutes_with Q;
+      R \/ Q is confluent
+     proof let a,b be set; given c being set such that
+A2:     R \/ Q reduces c,a & R \/ Q reduces c,b;
+A3:    R c= R \/ Q & Q c= R \/ Q by XBOOLE_1:7;
+      consider p being RedSequence of R \/ Q such that
+A4:     c = p.1 & a = p.len p by A2,Def3;
+     defpred Z[Nat] means $1 in dom p implies p.$1,b are_convergent_wrt R \/ Q;
+A5:     Z[0] by Lm1;
+     now let i be Nat such that
+A6:      i in dom p implies p.i,b are_convergent_wrt R \/ Q and
+A7:      i+1 in dom p;
+        per cases by NAT_1:19;
+        suppose i = 0; hence p.(i+1),b are_convergent_wrt R \/ Q by A2,A4,Th37;
+        suppose i > 0; then A8: i >= 0+1 & i < len p by A7,Lm2,NAT_1:38;
+then A9:      i in dom p by Lm3;
+        consider d being set such that
+A10:      R \/ Q reduces p.i,d & R \/ Q reduces b,d by A6,A8,Def7,Lm3;
+        consider q being RedSequence of R \/ Q such that
+A11:       p.i = q.1 & d = q.len q by A10,Def3;
+        [p.i,p.(i+1)] in R \/ Q by A7,A9,Def2;
+         then A12: [p.i,p.(i+1)] in R or [p.i,p.(i+1)] in Q by XBOOLE_0:def 2;
+       defpred P[Nat] means $1 in dom q implies
+          ex e being set st R \/ Q reduces p.(i+1),e &
+           (R reduces q.$1,e or Q reduces q.$1,e);
+A13:    P[0] by Lm1;
+      now let j be Nat such that
+A14:        j in dom q implies
+            ex e being set st R \/ Q reduces p.(i+1),e &
+             (R reduces q.j,e or Q reduces q.j,e) and
+A15:        j+1 in dom q;
+A16:        j < len q by A15,Lm2;
+          per cases by NAT_1:19;
+          suppose j = 0;
+            then R \/ Q reduces p.(i+1),p.(i+1) &
+            (R reduces q.(j+1),p.(i+1) or
+             Q reduces q.(j+1),p.(i+1)) by A11,A12,Th13,Th16;
+           hence ex e being set st R \/ Q reduces p.(i+1),e &
+             (R reduces q.(j+1),e or Q reduces q.(j+1),e);
+          suppose A17: j > 0;
+then j in dom q by A16,Lm3;
+           then [q.j,q.(j+1)] in R \/ Q by A15,Def2;
+           then A18: [q.j,q.(j+1)] in R or [q.j,q.(j+1)] in Q by XBOOLE_0:def 2
+;
+          consider e being set such that
+A19:        R \/ Q reduces p.(i+1),e &
+             (R reduces q.j,e or Q reduces q.j,e) by A14,A16,A17,Lm3;
+A20:        now assume R reduces q.j,q.(j+1) & R reduces q.j,e;
+             then e,q.(j+1) are_divergent_wrt R by Def8;
+             then e,q.(j+1) are_convergent_wrt R by Def22;
+            then consider x being set such that
+A21:          R reduces e,x & R reduces q.(j+1),x by Def7;
+            take x; R \/ Q reduces e,x by A3,A21,Th23;
+            hence R \/ Q reduces p.(i+1),x &
+             (R reduces q.(j+1),x or Q reduces q.(j+1),x) by A19,A21,Th17;
+           end;
+A22:        now assume Q reduces q.j,q.(j+1) & Q reduces q.j,e;
+             then e,q.(j+1) are_divergent_wrt Q by Def8;
+             then e,q.(j+1) are_convergent_wrt Q by Def22;
+            then consider x being set such that
+A23:          Q reduces e,x & Q reduces q.(j+1),x by Def7;
+            take x; R \/ Q reduces e,x by A3,A23,Th23;
+            hence R \/ Q reduces p.(i+1),x &
+             (R reduces q.(j+1),x or Q reduces q.(j+1),x) by A19,A23,Th17;
+           end;
+A24:        now assume R reduces q.j,q.(j+1) & Q reduces q.j,e;
+            then consider x being set such that
+A25:          Q reduces q.(j+1),x & R reduces e,x by A1,Def18;
+            take x; R \/ Q reduces e,x by A3,A25,Th23;
+            hence R \/ Q reduces p.(i+1),x &
+             (R reduces q.(j+1),x or Q reduces q.(j+1),x) by A19,A25,Th17;
+           end;
+         now assume Q reduces q.j,q.(j+1) & R reduces q.j,e;
+            then consider x being set such that
+A26:          R reduces q.(j+1),x & Q reduces e,x by A1,Def18;
+            take x; R \/ Q reduces e,x by A3,A26,Th23;
+            hence R \/ Q reduces p.(i+1),x &
+             (R reduces q.(j+1),x or Q reduces q.(j+1),x) by A19,A26,Th17;
+           end;
+          hence ex e being set st R \/ Q reduces p.(i+1),e &
+             (R reduces q.(j+1),e or Q reduces q.(j+1),e)
+              by A18,A19,A20,A22,A24,Th16;
+         end; then
+A27:  for k being Nat st P[k] holds P[k+1];
+A28:      for j being Nat holds P[j] from Ind(A13,A27);
+        thus p.(i+1),b are_convergent_wrt R \/ Q
+         proof len q in dom q by FINSEQ_5:6;
+          then consider e being set such that
+A29:        R \/ Q reduces p.(i+1),e & (R reduces d,e or Q reduces d,e)
+            by A11,A28;
+          take e;
+             R \/ Q reduces d,e by A3,A29,Th23;
+          hence thesis by A10,A29,Th17;
+         end;
+       end; then
+A30: for k being Nat st Z[k] holds Z[k+1];
+A31:     for i being Nat holds Z[i] from Ind(A5,A30);
+         len p in dom p by FINSEQ_5:6;
+      hence a,b are_convergent_wrt R \/ Q by A4,A31;
+     end;
+    then R \/ Q is confluent Relation;
+   hence R \/ Q has_Church-Rosser_property;
+  end;
+
+theorem
+   for R being Relation holds
+   R is confluent iff R* has_weak-Church-Rosser_property
+  proof let R be Relation;
+   hereby assume A1: R is confluent;
+    thus R* has_weak-Church-Rosser_property
+     proof let a,b,c be set; assume [a,b] in R* & [a,c] in R*;
+       then R reduces a,b & R reduces a,c by Th21;
+       then b,c are_divergent_wrt R by Def8;
+       then b,c are_convergent_wrt R by A1,Def22;
+      then consider d being set such that
+A2:     R reduces b,d & R reduces c,d by Def7;
+      take d; thus R* reduces b,d & R* reduces c,d by A2,Th22;
+     end;
+   end;
+   assume
+A3:  for a,b,c being set st [a,b] in R* & [a,c] in R*
+     holds b,c are_convergent_wrt R*;
+   let a,b be set; given c being set such that
+A4:  R reduces c,a & R reduces c,b;
+      ([c,a] in R* or c = a) & ([c,b] in R* or c = b) by A4,Th21;
+    then a,b are_convergent_wrt R* or R* reduces a,b or R* reduces b,a
+     by A3,Th16,Th39;
+    then a,b are_convergent_wrt R* by Th37;
+   then consider d being set such that
+A5:  R* reduces a,d & R* reduces b,d by Def7;
+   take d; thus thesis by A5,Th22;
+  end;
+
+theorem
+   for R being Relation holds
+   R is confluent iff R* is subcommutative
+  proof let R be Relation;
+   hereby assume A1: R is confluent;
+    thus R* is subcommutative
+     proof let a,b,c be set; assume [a,b] in R* & [a,c] in R*;
+       then R reduces a,b & R reduces a,c by Th21;
+       then b,c are_divergent_wrt R by Def8;
+       then b,c are_convergent_wrt R by A1,Def22;
+      then consider d being set such that
+A2:     R reduces b,d & R reduces c,d by Def7;
+      take d; thus thesis by A2,Th21;
+     end;
+   end;
+   assume
+A3:  for a,b,c being set st [a,b] in R* & [a,c] in R*
+     holds b,c are_convergent<=1_wrt R*;
+   let a,b be set; given c being set such that
+A4:  R reduces c,a & R reduces c,b;
+      ([c,a] in R* or c = a) & ([c,b] in R* or c = b) by A4,Th21;
+    then a,b are_convergent<=1_wrt R* by A3,Def9;
+    then a,b are_convergent_wrt R* by Th45;
+   then consider d being set such that
+A5:  R* reduces a,d & R* reduces b,d by Def7;
+   take d; thus thesis by A5,Th22;
+  end;
+
+begin :: Completion method
+
+definition
+ let R,Q be Relation;
+ pred R,Q are_equivalent means
+    for a,b being set holds
+   a,b are_convertible_wrt R iff a,b are_convertible_wrt Q;
+ symmetry;
+end;
+
+definition
+ let R be Relation;
+ let a,b be set;
+ pred a,b are_critical_wrt R means:
+Def27:
+  a,b are_divergent<=1_wrt R & not a,b are_convergent_wrt R;
+end;
+
+theorem Th60:
+ for R being Relation, a,b being set st a,b are_critical_wrt R
+  holds a,b are_convertible_wrt R
+  proof let R be Relation, a,b be set; assume
+      a,b are_divergent<=1_wrt R & not a,b are_convergent_wrt R;
+    then a,b are_divergent_wrt R by Th46;
+   hence thesis by Th38;
+  end;
+
+theorem
+   for R being Relation st not ex a,b being set st a,b are_critical_wrt R
+  holds R is locally-confluent
+  proof let R be Relation such that
+A1:  not ex a,b being set st a,b are_critical_wrt R;
+   let a,b,c be set; assume
+      [a,b] in R & [a,c] in R;
+    then b,c are_divergent<=1_wrt R & not b,c are_critical_wrt R by A1,Def10;
+   hence thesis by Def27;
+  end;
+
+theorem
+   for R,Q being Relation st
+   for a,b being set st [a,b] in Q holds a,b are_critical_wrt R
+  holds R, R \/ Q are_equivalent
+  proof let R,Q be Relation; assume
+A1:  for a,b being set st [a,b] in Q holds a,b are_critical_wrt R;
+A2:  R c= R \/ Q by XBOOLE_1:7;
+      R~ c= (R \/ Q)~
+     proof let x,y be set; assume [x,y] in R~;
+       then [y,x] in R by RELAT_1:def 7;
+      hence thesis by A2,RELAT_1:def 7;
+     end;
+then A3:  R \/ R~ c= (R \/ Q) \/ (R \/ Q)~ by A2,XBOOLE_1:13;
+   let a,b be set;
+   hereby assume a,b are_convertible_wrt R;
+     then R \/ R~ reduces a,b by Def4;
+     then (R \/ Q) \/ (R \/ Q)~ reduces a,b by A3,Th23;
+    hence a,b are_convertible_wrt R \/ Q by Def4;
+   end;
+   given p being RedSequence of (R \/ Q) \/ (R \/ Q)~ such that
+A4:  a = p.1 & b = p.len p;
+   defpred Z[Nat] means  $1 in dom p implies a,p.$1 are_convertible_wrt R;
+A5: Z[0] by Lm1;
+  now let i be Nat such that
+A6:   i in dom p implies a,p.i are_convertible_wrt R and
+A7:   i+1 in dom p;
+A8:   i < len p by A7,Lm2;
+     per cases by NAT_1:19; suppose i = 0;
+     hence a,p.(i+1) are_convertible_wrt R by A4,Th27;
+     suppose A9: i > 0;
+then i in dom p by A8,Lm3;
+      then [p.i,p.(i+1)] in (R \/ Q) \/ (R \/ Q)~ by A7,Def2;
+      then [p.i,p.(i+1)] in R \/ Q or [p.i,p.(i+1)] in (R \/
+ Q)~ by XBOOLE_0:def 2;
+      then [p.i,p.(i+1)] in R \/ Q or [p.(i+1),p.i] in R \/ Q by RELAT_1:def 7
+;
+      then [p.i,p.(i+1)] in R or [p.i,p.(i+1)] in Q or
+      [p.(i+1),p.i] in R or [p.(i+1),p.i] in Q by XBOOLE_0:def 2;
+      then [p.i,p.(i+1)] in R or p.i,p.(i+1) are_critical_wrt R or
+      [p.(i+1),p.i] in R or p.(i+1),p.i are_critical_wrt R by A1;
+      then p.i,p.(i+1) are_convertible_wrt R or p.(i+1),p.i
+are_convertible_wrt R
+       by Th30,Th60;
+      then a,p.i are_convertible_wrt R & p.i,p.(i+1) are_convertible_wrt R
+       by A6,A8,A9,Lm3,Lm5;
+     hence a,p.(i+1) are_convertible_wrt R by Th31;
+    end; then
+A10: for k being Nat st Z[k] holds Z[k+1];
+A11:  for i being Nat holds Z[i] from Ind(A5,A10);
+      len p in dom p by FINSEQ_5:6;
+   hence a,b are_convertible_wrt R by A4,A11;
+  end;
+
+theorem Th63:
+ for R being Relation ex Q being complete Relation st
+  field Q c= field R &
+  for a,b being set holds
+   a,b are_convertible_wrt R iff a,b are_convergent_wrt Q
+  proof let R be Relation;
+   per cases; suppose
+A1:   R = {}; consider E being empty Relation;
+    take E; thus field E c= field R by TOLER_1:1,XBOOLE_1:2;
+    let a,b be set;
+       a,b are_convertible_wrt R iff a = b by A1,Th27,Th28;
+    hence thesis by Th39,Th40;
+   suppose
+     R <> {}; then reconsider R' = R as non empty Relation;
+    consider xx being Element of R';
+    consider x1,x2 being set such that
+A2:  xx = [x1,x2] by RELAT_1:def 1;
+    defpred P[set,set] means $1,$2 are_convertible_wrt R;
+A3:  for x st x in field R holds P[x,x] by Th27;
+A4:  for x,y being set st P[x,y] holds P[y,x] by Lm5;
+A5:  for x,y,z being set st P[x,y] & P[y,z] holds P[x,z] by Th31;
+    consider Q being Equivalence_Relation of field R such that
+A6:   for x,y holds [x,y] in Q iff x in field R & y in field R &
+      P[x,y] from Ex_Eq_Rel(A3,A4,A5);
+A7:  x1 in field R by A2,RELAT_1:30;
+A8:   Class Q is a_partition of field R by EQREL_1:42;
+then A9:   for X being set st X in Class Q holds X <> {} by A7,EQREL_1:def 6;
+A10:   for X,Y being set st X in Class Q & Y in
+ Class Q & X <> Y holds X misses Y by A7,A8,EQREL_1:def 6;
+       Class(Q,x1) in Class Q by A7,EQREL_1:def 5;
+    then consider X being set such that
+A11:   for A being set st A in
+ Class Q ex x st X /\ A = {x} by A9,A10,WELLORD2:27;
+    defpred Z[set,set] means  $1 <> $2 &
+      $1,$2 are_convertible_wrt R & $2 in X;
+    consider P being Relation such that
+A12:   for x,y holds [x,y] in P iff x in field R & y in field R & Z[x,y]
+from Rel_Existence;
+A13:   for x,y st P reduces x,y holds x,y are_convertible_wrt R
+      proof let x,y; given p being RedSequence of P such that
+A14:     x = p.1 & y = p.len p;
+      defpred Z[Nat] means $1 in dom p implies x,p.$1 are_convertible_wrt R;
+A15:     Z[0] by Lm1;
+     now let i be Nat such that
+A16:       i in dom p implies x,p.i are_convertible_wrt R and
+A17:       i+1 in dom p;
+A18:       i < len p by A17,Lm2;
+         per cases by NAT_1:19; suppose i = 0;
+          hence x,p.(i+1) are_convertible_wrt R by A14,Th27;
+         suppose A19: i > 0;
+then i in dom p by A18,Lm3;
+          then [p.i,p.(i+1)] in P by A17,Def2;
+          then p.i,p.(i+1) are_convertible_wrt R & x,p.i are_convertible_wrt R
+           by A12,A16,A18,A19,Lm3;
+         hence x,p.(i+1) are_convertible_wrt R by Th31;
+        end; then
+A20: for k being Nat st Z[k] holds Z[k+1];
+A21:     for i being Nat holds Z[i] from Ind(A15,A20);
+          len p in dom p by FINSEQ_5:6;
+       hence thesis by A14,A21;
+      end;
+A22:  P is strongly-normalizing
+      proof let f be ManySortedSet of NAT;
+       consider i being Nat;
+       per cases; suppose not [f.i,f.(i+1)] in P; hence thesis;
+       suppose
+A23:     [f.i,f.(i+1)] in P;
+       take j = i+1; assume A24: [f.j,f.(j+1)] in P;
+then A25:     f.j in field R & f.(j+1) in field R & f.(j+1) <> f.j &
+        f.j,f.(j+1) are_convertible_wrt R & f.j in X & f.(j+1) in X by A12,A23
+;
+        then [f.j,f.(j+1)] in Q by A6;
+        then [f.(j+1),f.j] in Q by EQREL_1:12;
+        then f.j in Class(Q,f.j) & f.(j+1) in
+ Class(Q,f.j) by A25,EQREL_1:27,28;
+then A26:     f.j in X /\ Class(Q,f.j) & f.(j+1) in X /\ Class(Q,f.j) &
+        Class(Q,f.j) in Class Q by A25,EQREL_1:def 5,XBOOLE_0:def 3;
+       then consider x such that
+A27:     X /\ Class(Q,f.j) = {x} by A11;
+          f.j = x & f.(j+1) = x by A26,A27,TARSKI:def 1;
+       hence contradiction by A12,A24;
+      end;
+       P is locally-confluent
+      proof let a,b,c be set; assume
+A28:     [a,b] in P & [a,c] in P;
+       take b;
+A29:     a in field R & b in field R & c in field R &
+        a,b are_convertible_wrt R & a,c are_convertible_wrt R &
+        b in X & c in X by A12,A28;
+        then [a,b] in Q & [a,c] in Q by A6;
+        then [b,a] in Q & [c,a] in Q by EQREL_1:12;
+then A30:     b in Class(Q,a) & c in Class(Q,a) by EQREL_1:27;
+          Class(Q,a) in Class Q by A29,EQREL_1:def 5;
+       then consider x such that
+A31:     X /\ Class(Q,a) = {x} by A11;
+          b in {x} & c in {x} by A29,A30,A31,XBOOLE_0:def 3;
+        then b = x & c = x by TARSKI:def 1;
+       hence thesis by Th13;
+      end;
+    then reconsider P as strongly-normalizing locally-confluent Relation by A22
+;
+    take P;
+    thus field P c= field R
+     proof let x; assume x in field P;
+       then x in dom P \/ rng P by RELAT_1:def 6;
+       then x in dom P or x in rng P by XBOOLE_0:def 2;
+       then (ex y st [x,y] in P) or (ex y st [y,x] in
+ P) by RELAT_1:def 4,def 5;
+      hence thesis by A12;
+     end;
+    let a,b be set;
+    thus thesis
+     proof per cases; suppose a = b;
+      hence a,b are_convertible_wrt R iff a,b are_convergent_wrt P by Th27,Th39
+;
+      suppose
+A32:     a <> b;
+       hereby assume
+A33:       a,b are_convertible_wrt R;
+then A34:       a in field R & b in field R by A32,Th33;
+then A35:       [a,b] in Q & Class(Q,b) in Class Q & b in Class(Q,b)
+          by A6,A33,EQREL_1:28,def 5;
+        then consider x such that
+A36:       X /\ Class(Q,b) = {x} by A11;
+        thus a,b are_convergent_wrt P
+         proof take x;
+             x in {x} by TARSKI:def 1;
+then A37:         x in X & x in Class(Q,b) by A36,XBOOLE_0:def 3;
+           then [x,b] in Q & a in Class(Q,b) by A35,EQREL_1:27;
+           then [b,x] in Q & [a,x] in Q by A37,EQREL_1:12,30;
+           then x in field R & b,x are_convertible_wrt R & a,x
+are_convertible_wrt R
+            by A6;
+           then (a = x or [a,x] in P) & (b = x or [b,x] in P) by A12,A34,A37;
+          hence P reduces a,x & P reduces b,x by Th13,Th16;
+         end;
+       end;
+       given c being set such that
+A38:      P reduces a,c & P reduces b,c;
+          b,c are_convertible_wrt R by A13,A38;
+        then a,c are_convertible_wrt R & c,b are_convertible_wrt R by A13,A38,
+Lm5;
+       hence a,b are_convertible_wrt R by Th31;
+      end;
+  end;
+
+definition
+ let R be Relation;
+ mode Completion of R -> complete Relation means:
+Def28:
+  for a,b being set holds
+   a,b are_convertible_wrt R iff a,b are_convergent_wrt it;
+  existence
+   proof
+       ex Q being complete Relation st field Q c= field R &
+     for a,b being set holds
+      a,b are_convertible_wrt R iff a,b are_convergent_wrt Q by Th63;
+    hence thesis;
+   end;
+end;
+
+theorem
+   for R being Relation, C being Completion of R holds R,C are_equivalent
+  proof let R be Relation, C be Completion of R, a,b be set;
+      a,b are_convertible_wrt R iff a,b are_convergent_wrt C by Def28;
+   hence a,b are_convertible_wrt R iff a,b are_convertible_wrt C
+    by Def23,Th38;
+  end;
+
+theorem
+   for R being Relation, Q being complete Relation st R,Q are_equivalent
+   holds Q is Completion of R
+  proof let R be Relation, Q be complete Relation such that
+A1:  for a,b being set holds
+      a,b are_convertible_wrt R iff a,b are_convertible_wrt Q;
+   let a,b be set;
+      a,b are_convertible_wrt R iff a,b are_convertible_wrt Q by A1;
+   hence a,b are_convertible_wrt R iff a,b are_convergent_wrt Q by Def23,Th38;
+  end;
+
+theorem
+   for R being Relation, C being Completion of R, a,b being set holds
+   a,b are_convertible_wrt R iff nf(a,C) = nf(b,C)
+  proof let R be Relation, C be Completion of R, a,b be set;
+A1:  a,b are_convertible_wrt R iff a,b are_convergent_wrt C by Def28;
+      a,b are_convergent_wrt C implies a,b are_convertible_wrt C by Th38;
+   hence a,b are_convertible_wrt R implies nf(a,C) = nf(b,C) by Def28,Th56;
+      nf(a,C) is_a_normal_form_of a,C & nf(b,C) is_a_normal_form_of b,C
+     by Th55;
+    then C reduces a,nf(a,C) & C reduces b,nf(b,C) by Def6;
+   hence thesis by A1,Def7;
+  end;

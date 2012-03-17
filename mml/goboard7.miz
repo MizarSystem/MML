@@ -1,0 +1,4157 @@
+:: On the Go Board of a Standard Special Circular Sequence
+::  by Andrzej Trybulec
+::
+:: Received October 15, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, EUCLID, PRE_TOPC, GOBOARD1, ABSVALUE, ARYTM_1, TOPREAL1,
+      MCART_1, ARYTM_3, MATRIX_1, TREES_1, RELAT_1, SPPOL_1, GOBOARD2, BOOLE,
+      TOPS_1, GOBOARD5, TARSKI, SEQM_3, FUNCT_1, FINSET_1, CARD_1, FINSEQ_6,
+      FINSEQ_4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, REAL_1, NAT_1,
+      ABSVALUE, BINARITH, CARD_1, FUNCT_1, FINSEQ_1, FINSET_1, FINSEQ_4,
+      MATRIX_1, PRE_TOPC, TOPS_1, EUCLID, TOPREAL1, GOBOARD1, GOBOARD2,
+      SPPOL_1, FINSEQ_6, GOBOARD5, GROUP_1;
+ constructors REAL_1, TOPS_1, SPPOL_1, GOBOARD2, GOBOARD5, SEQM_3, BINARITH,
+      FINSEQ_4, GROUP_1, MEMBERED, XBOOLE_0;
+ clusters STRUCT_0, GOBOARD5, RELSET_1, GOBOARD2, INT_1, EUCLID, FINSEQ_1,
+      MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ theorems GOBOARD5, TOPS_1, EUCLID, GOBOARD1, RLVECT_1, REAL_1, AXIOMS,
+      TOPREAL3, REAL_2, ABSVALUE, TARSKI, SPPOL_1, TOPREAL1, GOBOARD2,
+      FINSEQ_3, NAT_1, AMI_5, FINSEQ_6, CQC_THE1, GOBOARD6, MATRIX_1, FINSEQ_1,
+      ZFMISC_1, SEQM_3, CARD_2, FINSEQ_5, SQUARE_1, XBOOLE_0, XCMPLX_1;
+ schemes NAT_1;
+
+begin
+
+reserve f for non empty FinSequence of TOP-REAL 2,
+        i,j,k,k1,k2,n,i1,i2,j1,j2 for Nat,
+        r,s,r1,r2 for Real,
+        p,q,p1,q1 for Point of TOP-REAL 2,
+        G for Go-board,
+        x for set;
+
+theorem Th1:
+ abs(r1-r2) > s implies r1+s < r2 or r2+s < r1
+proof assume
+A1: abs(r1-r2) > s;
+    now per cases;
+   case r1 < r2;
+     then r1 - r2 < 0 by REAL_2:105;
+     then abs(r1-r2) = -(r1-r2) by ABSVALUE:def 1
+       .= r2 - r1 by XCMPLX_1:143;
+    hence r1+s < r2 by A1,REAL_1:86;
+   case r2 <= r1;
+     then r1 - r2 >= 0 by SQUARE_1:12;
+     then abs(r1-r2) = r1 - r2 by ABSVALUE:def 1;
+    hence r2+s < r1 by A1,REAL_1:86;
+  end;
+ hence r1+s < r2 or r2+s < r1;
+end;
+
+theorem Th2:
+abs(r - s) = 0 iff r = s
+proof
+ hereby assume abs(r - s) = 0;
+   then r - s = 0 by ABSVALUE:7;
+   then r = s + 0 by XCMPLX_1:27;
+  hence r = s;
+ end;
+ assume r = s;
+  then r - s = 0 by XCMPLX_1:14;
+ hence abs(r - s) = 0 by ABSVALUE:7;
+end;
+
+theorem Th3:
+ for p,p1,q being Point of TOP-REAL n st p + p1 = q + p1
+  holds p = q
+ proof let p,p1,q be Point of TOP-REAL n such that
+A1: p + p1 = q + p1;
+  thus p = p + 0.REAL n by EUCLID:31
+        .= p + (p1 - p1) by EUCLID:46
+        .= p + p1 - p1 by EUCLID:49
+        .= q + (p1 - p1) by A1,EUCLID:49
+        .= q + 0.REAL n by EUCLID:46
+        .= q by EUCLID:31;
+ end;
+
+theorem
+  for p,p1,q being Point of TOP-REAL n st p1 + p = p1 + q
+  holds p = q by Th3;
+
+theorem Th5:
+ p1 in LSeg(p,q) & p`1 = q`1 implies p1`1 = q`1
+proof assume p1 in LSeg(p,q);
+ then consider r such that
+      0<=r & r<=1 and
+A1: p1 = (1-r)*p+r*q by SPPOL_1:21;
+A2:  p1`1 = ((1-r)*p)`1+(r*q)`1 by A1,TOPREAL3:7
+      .= ((1-r)*p)`1+r*q`1 by TOPREAL3:9
+      .= (1-r)*p`1+r*q`1 by TOPREAL3:9;
+ assume p`1 = q`1;
+ hence p1`1 = ((1-r)+r)*q`1 by A2,XCMPLX_1:8
+           .= 1*q`1 by XCMPLX_1:27
+           .= q`1;
+end;
+
+theorem Th6:
+ p1 in LSeg(p,q) & p`2 = q`2 implies p1`2 = q`2
+proof assume p1 in LSeg(p,q);
+ then consider r such that
+      0<=r & r<=1 and
+A1: p1 = (1-r)*p+r*q by SPPOL_1:21;
+A2:  p1`2 = ((1-r)*p)`2+(r*q)`2 by A1,TOPREAL3:7
+      .= ((1-r)*p)`2+r*q`2 by TOPREAL3:9
+      .= (1-r)*p`2+r*q`2 by TOPREAL3:9;
+ assume p`2 = q`2;
+ hence p1`2 = ((1-r)+r)*q`2 by A2,XCMPLX_1:8
+           .= 1*q`2 by XCMPLX_1:27
+           .= q`2;
+end;
+
+theorem Th7:
+ 1/2*(p+q) in LSeg(p,q)
+proof
+    1/2*(p+q) = (1-1/2)*(p)+1/2*(q) by EUCLID:36;
+ hence 1/2*(p+q) in LSeg(p,q) by SPPOL_1:22;
+end;
+
+theorem Th8:
+ p`1 = q`1 & q`1 = p1`1 & p`2 <= q`2 & q`2 <= p1`2 implies q in LSeg(p,p1)
+ proof assume that
+A1: p`1 = q`1 and
+A2: q`1 = p1`1 and
+A3: p`2 <= q`2 and
+A4: q`2 <= p1`2;
+A5: p`2 <= p1`2 by A3,A4,AXIOMS:22;
+   per cases by A5,AXIOMS:21;
+   suppose
+A6:    p`2 = p1`2;
+     then p = |[p1`1,p1`2]| by A1,A2,EUCLID:57 .= p1 by EUCLID:57;
+     then A7:   LSeg(p,p1) = {p} by TOPREAL1:7;
+       p`2 = q`2 by A3,A4,A6,AXIOMS:21;
+     then q = |[p`1,p`2]| by A1,EUCLID:57 .= p by EUCLID:57;
+    hence thesis by A7,TARSKI:def 1;
+   suppose
+A8:  p`2 < p1`2;
+   A9: q in {q1: q1`1 = q`1 & p`2 <= q1`2 & q1`2 <= p1`2} by A3,A4;
+     p = |[q`1,p`2]| & p1 = |[q`1,p1`2]| by A1,A2,EUCLID:57;
+  hence q in LSeg(p,p1) by A8,A9,TOPREAL3:15;
+ end;
+
+theorem Th9:
+ p`1 <= q`1 & q`1 <= p1`1 & p`2 = q`2 & q`2 = p1`2 implies q in LSeg(p,p1)
+ proof assume that
+A1: p`1 <= q`1 and
+A2: q`1 <= p1`1 and
+A3: p`2 = q`2 and
+A4: q`2 = p1`2;
+A5: p`1 <= p1`1 by A1,A2,AXIOMS:22;
+   per cases by A5,AXIOMS:21;
+   suppose
+A6:    p`1 = p1`1;
+     then p = |[p1`1,p1`2]| by A3,A4,EUCLID:57 .= p1 by EUCLID:57;
+     then A7:   LSeg(p,p1) = {p} by TOPREAL1:7;
+       p`1 = q`1 by A1,A2,A6,AXIOMS:21;
+     then q = |[p`1,p`2]| by A3,EUCLID:57 .= p by EUCLID:57;
+    hence thesis by A7,TARSKI:def 1;
+   suppose
+A8:  p`1 < p1`1;
+   A9: q in {q1: q1`2 = q`2 & p`1 <= q1`1 & q1`1 <= p1`1} by A1,A2;
+     p = |[p`1,q`2]| & p1 = |[p1`1,q`2]| by A3,A4,EUCLID:57;
+  hence q in LSeg(p,p1) by A8,A9,TOPREAL3:16;
+ end;
+
+theorem Th10:
+ for D being non empty set
+ for i,j for M being Matrix of D st 1 <= i & i <= len M & 1 <= j & j <= width M
+  holds [i,j] in Indices M
+proof let D be non empty set;
+ let i,j; let M be Matrix of D;
+A1: Indices M = [:dom M,Seg width M:] by MATRIX_1:def 5;
+ assume 1 <= i & i <= len M & 1 <= j & j <= width M;
+  then i in dom M & j in Seg width M by FINSEQ_1:3,FINSEQ_3:27;
+ hence [i,j] in Indices M by A1,ZFMISC_1:106;
+end;
+
+theorem
+   1 <= i & i+1 <= len G & 1 <= j & j+1 <= width G implies
+  1/2*(G*(i,j)+G*(i+1,j+1)) = 1/2*(G*(i,j+1)+G*(i+1,j))
+proof assume that
+A1: 1 <= i & i+1 <= len G and
+A2: 1 <= j & j+1 <= width G;
+A3: i < len G by A1,NAT_1:38;
+A4: 1 <= i+1 by NAT_1:29;
+A5: j < width G by A2,NAT_1:38;
+A6: 1 <= j+1 by NAT_1:29;
+A7: G*(i,j)`1 = G*(i,1)`1 by A1,A2,A3,A5,GOBOARD5:3
+       .= G*(i,j+1)`1 by A1,A2,A3,A6,GOBOARD5:3;
+A8: G*(i+1,j)`1 = G*(i+1,1)`1 by A1,A2,A4,A5,GOBOARD5:3
+       .= G*(i+1,j+1)`1 by A1,A2,A4,A6,GOBOARD5:3;
+A9: (1/2*(G*(i,j)+G*(i+1,j+1)))`1
+         = 1/2*(G*(i,j)+G*(i+1,j+1))`1 by TOPREAL3:9
+        .= 1/2*(G*(i,j)`1+G*(i+1,j+1)`1) by TOPREAL3:7
+        .= 1/2*(G*(i,j+1)+G*(i+1,j))`1 by A7,A8,TOPREAL3:7
+        .= (1/2*(G*(i,j+1)+G*(i+1,j)))`1 by TOPREAL3:9;
+A10: G*(i,j)`2 = G*(1,j)`2 by A1,A2,A3,A5,GOBOARD5:2
+        .= G*(i+1,j)`2 by A1,A2,A4,A5,GOBOARD5:2;
+A11: G*(i+1,j+1)`2 = G*(1,j+1)`2 by A1,A2,A4,A6,GOBOARD5:2
+        .= G*(i,j+1)`2 by A1,A2,A3,A6,GOBOARD5:2;
+     (1/2*(G*(i,j)+G*(i+1,j+1)))`2
+         = 1/2*(G*(i,j)+G*(i+1,j+1))`2 by TOPREAL3:9
+        .= 1/2*(G*(i,j)`2+G*(i+1,j+1)`2) by TOPREAL3:7
+        .= 1/2*(G*(i,j+1)+G*(i+1,j))`2 by A10,A11,TOPREAL3:7
+        .= (1/2*(G*(i,j+1)+G*(i+1,j)))`2 by TOPREAL3:9;
+ hence 1/2*(G*(i,j)+G*(i+1,j+1))
+      = |[(1/2*(G*(i,j+1)+G*(i+1,j)))`1,(1/2*(G*(i,j+1)+G*(i+1,j)))`2]|
+           by A9,EUCLID:57
+     .= 1/2*(G*(i,j+1)+G*(i+1,j)) by EUCLID:57;
+end;
+
+theorem Th12:
+ LSeg(f,k) is horizontal implies
+  ex j st 1 <= j & j <= width GoB f &
+   for p st p in LSeg(f,k) holds p`2 = (GoB f)*(1,j)`2
+proof assume
+A1: LSeg(f,k) is horizontal;
+ per cases;
+ suppose
+A2: 1 <= k & k+1 <= len f;
+    k <= k+1 by NAT_1:29;
+  then k <= len f by A2,AXIOMS:22;
+  then k in dom f by A2,FINSEQ_3:27;
+  then consider i,j such that
+A3: [i,j] in Indices GoB f and
+A4: f/.k = (GoB f)*(i,j) by GOBOARD2:25;
+ take j;
+ thus
+A5: 1 <= j & j <= width GoB f by A3,GOBOARD5:1;
+ let p;
+A6: 1 <= i & i <= len GoB f by A3,GOBOARD5:1;
+A7: f/.k in LSeg(f,k) by A2,TOPREAL1:27;
+ assume p in LSeg(f,k);
+ hence p`2 = (f/.k)`2 by A1,A7,SPPOL_1:def 2
+          .= (GoB f)*(1,j)`2 by A4,A5,A6,GOBOARD5:2;
+ suppose A8: not(1 <= k & k+1 <= len f);
+ take 1;
+    width GoB f <> 0 by GOBOARD1:def 5;
+ hence 1 <= 1 & 1 <= width GoB f by RLVECT_1:99;
+ thus thesis by A8,TOPREAL1:def 5;
+end;
+
+theorem Th13:
+ LSeg(f,k) is vertical implies
+  ex i st 1 <= i & i <= len GoB f &
+   for p st p in LSeg(f,k) holds p`1 = (GoB f)*(i,1)`1
+proof assume
+A1: LSeg(f,k) is vertical;
+ per cases;
+ suppose
+A2: 1 <= k & k+1 <= len f;
+    k <= k+1 by NAT_1:29;
+  then k <= len f by A2,AXIOMS:22;
+  then k in dom f by A2,FINSEQ_3:27;
+  then consider i,j such that
+A3: [i,j] in Indices GoB f and
+A4: f/.k = (GoB f)*(i,j) by GOBOARD2:25;
+ take i;
+ thus
+A5: 1 <= i & i <= len GoB f by A3,GOBOARD5:1;
+ let p;
+A6: 1 <= j & j <= width GoB f by A3,GOBOARD5:1;
+A7: f/.k in LSeg(f,k) by A2,TOPREAL1:27;
+ assume p in LSeg(f,k);
+ hence p`1 = (f/.k)`1 by A1,A7,SPPOL_1:def 3
+          .= (GoB f)*(i,1)`1 by A4,A5,A6,GOBOARD5:3;
+ suppose A8: not(1 <= k & k+1 <= len f);
+ take 1;
+    0 <> len GoB f by GOBOARD1:def 5;
+ hence 1 <= 1 & 1 <= len GoB f by RLVECT_1:99;
+ thus thesis by A8,TOPREAL1:def 5;
+end;
+
+theorem
+   f is special & i <= len GoB f & j <= width GoB f implies
+  Int cell(GoB f,i,j) misses L~f
+proof assume that
+A1: f is special and
+A2: i <= len GoB f and
+A3: j <= width GoB f;
+ assume Int cell(GoB f,i,j) meets L~f;
+  then consider x such that
+A4: x in Int cell(GoB f,i,j) and
+A5: x in L~f by XBOOLE_0:3;
+    L~f = union { LSeg(f,k) : 1 <= k & k+1 <= len f } by TOPREAL1:def 6;
+  then consider X being set such that
+A6: x in X and
+A7: X in { LSeg(f,k) : 1 <= k & k+1 <= len f } by A5,TARSKI:def 4;
+  consider k such that
+A8: X = LSeg(f,k) and
+      1 <= k & k+1 <= len f by A7;
+  reconsider p = x as Point of TOP-REAL 2 by A6,A8;
+A9: Int cell(GoB f,i,j)
+           = Int(v_strip(GoB f,i) /\ h_strip(GoB f,j)) by GOBOARD5:def 3
+          .= Int v_strip(GoB f,i) /\ Int h_strip(GoB f,j) by TOPS_1:46;
+ per cases by A1,SPPOL_1:41;
+ suppose LSeg(f,k) is horizontal;
+  then consider j0 being Nat such that
+A10: 1 <= j0 & j0 <= width GoB f and
+A11: for p st p in LSeg(f,k) holds p`2 = (GoB f)*(1,j0)`2 by Th12;
+     now assume
+A12: p in Int h_strip(GoB f,j);
+A13: j0 > j implies j0 >= j+1 by NAT_1:38;
+    per cases by A13,REAL_1:def 5;
+    suppose
+A14:    j0 < j;
+      then j >= 1 by A10,AXIOMS:22;
+      then A15:    p`2 > (GoB f)*(1,j)`2 by A3,A12,GOBOARD6:30;
+        0 <> len GoB f by GOBOARD1:def 5;
+      then 1 <= len GoB f by RLVECT_1:99;
+      then (GoB f)*(1,j)`2 > (GoB f)*(1,j0)`2 by A3,A10,A14,GOBOARD5:5;
+     hence contradiction by A6,A8,A11,A15;
+    suppose
+    j0 = j;
+      then p`2 > (GoB f)*(1,j0)`2 by A10,A12,GOBOARD6:30;
+     hence contradiction by A6,A8,A11;
+    suppose
+A16:    j0 > j+1;
+      then j + 1 <= width GoB f by A10,AXIOMS:22;
+      then j < width GoB f by NAT_1:38;
+      then A17:    p`2 < (GoB f)*(1,j+1)`2 by A12,GOBOARD6:31;
+        0 <> len GoB f by GOBOARD1:def 5;
+      then 1 <= len GoB f & j+1 >= 1 by NAT_1:29,RLVECT_1:99;
+      then (GoB f)*(1,j+1)`2 < (GoB f)*(1,j0)`2 by A10,A16,GOBOARD5:5;
+     hence contradiction by A6,A8,A11,A17;
+    suppose
+A18:   j0 = j+1;
+      then j < width GoB f by A10,NAT_1:38;
+      then p`2 < (GoB f)*(1,j0)`2 by A12,A18,GOBOARD6:31;
+     hence contradiction by A6,A8,A11;
+   end;
+ hence contradiction by A4,A9,XBOOLE_0:def 3;
+ suppose LSeg(f,k) is vertical;
+  then consider i0 being Nat such that
+A19: 1 <= i0 & i0 <= len GoB f and
+A20: for p st p in LSeg(f,k) holds p`1 = (GoB f)*(i0,1)`1 by Th13;
+     now assume
+A21: p in Int v_strip(GoB f,i);
+A22: i0 > i implies i0 >= i+1 by NAT_1:38;
+    per cases by A22,REAL_1:def 5;
+    suppose
+A23:    i0 < i;
+      then i >= 1 by A19,AXIOMS:22;
+      then A24:    p`1 > (GoB f)*(i,1)`1 by A2,A21,GOBOARD6:32;
+        0 <> width GoB f by GOBOARD1:def 5;
+      then 1 <= width GoB f by RLVECT_1:99;
+      then (GoB f)*(i,1)`1 > (GoB f)*(i0,1)`1 by A2,A19,A23,GOBOARD5:4;
+     hence contradiction by A6,A8,A20,A24;
+    suppose
+    i0 = i;
+      then p`1 > (GoB f)*(i0,1)`1 by A19,A21,GOBOARD6:32;
+     hence contradiction by A6,A8,A20;
+    suppose
+A25:    i0 > i+1;
+      then i + 1 <= len GoB f by A19,AXIOMS:22;
+      then i < len GoB f by NAT_1:38;
+      then A26:    p`1 < (GoB f)*(i+1,1)`1 by A21,GOBOARD6:33;
+        0 <> width GoB f by GOBOARD1:def 5;
+      then 1 <= width GoB f & i+1 >= 1 by NAT_1:29,RLVECT_1:99;
+      then (GoB f)*(i+1,1)`1 < (GoB f)*(i0,1)`1 by A19,A25,GOBOARD5:4;
+     hence contradiction by A6,A8,A20,A26;
+    suppose
+A27:   i0 = i+1;
+      then i < len GoB f by A19,NAT_1:38;
+      then p`1 < (GoB f)*(i0,1)`1 by A21,A27,GOBOARD6:33;
+     hence contradiction by A6,A8,A20;
+   end;
+ hence contradiction by A4,A9,XBOOLE_0:def 3;
+end;
+
+begin :: Segments on a Go Board
+
+theorem Th15:
+ 1 <= i & i <= len G & 1 <= j & j+2 <= width G implies
+  LSeg(G*(i,j),G*(i,j+1)) /\ LSeg(G*(i,j+1),G*(i,j+2)) = { G*(i,j+1) }
+proof
+ assume that
+A1: 1 <= i & i <= len G and
+A2: 1 <= j & j+2 <= width G;
+    now let x be set;
+   hereby assume
+A3:    x in LSeg(G*(i,j),G*(i,j+1)) /\ LSeg(G*(i,j+1),G*(i,j+2));
+     then A4:    x in LSeg(G*(i,j),G*(i,j+1)) by XBOOLE_0:def 3;
+     reconsider p = x as Point of TOP-REAL 2 by A3;
+       j <= j+2 by NAT_1:29;
+     then A5:   j <= width G by A2,AXIOMS:22;
+A6:  j+1 < j+2 by REAL_1:53;
+     then A7:   1 <= j+1 & j+1 <= width G by A2,AXIOMS:22,NAT_1:29;
+     then G*(i,j+1)`1 = G*(i,1)`1 by A1,GOBOARD5:3
+           .= G*(i,j)`1 by A1,A2,A5,GOBOARD5:3;
+then A8:   p`1 = G*(i,j+1)`1 by A4,Th5;
+       j < j+1 by REAL_1:69;
+     then G*(i,j)`2 < G*(i,j+1)`2 by A1,A2,A7,GOBOARD5:5;
+then A9:   p`2 <= G*(i,j+1)`2 by A4,TOPREAL1:10;
+A10:   G*(i,j+1)`2 < G*(i,j+2)`2 by A1,A2,A6,A7,GOBOARD5:5;
+       p in LSeg(G*(i,j+1),G*(i,j+2)) by A3,XBOOLE_0:def 3;
+     then p`2 >= G*(i,j+1)`2 by A10,TOPREAL1:10;
+     then p`2 = G*(i,j+1)`2 by A9,AXIOMS:21;
+    hence x = G*(i,j+1) by A8,TOPREAL3:11;
+   end;
+   assume
+A11:  x = G*(i,j+1);
+then A12:  x in LSeg(G*(i,j),G*(i,j+1)) by TOPREAL1:6;
+      x in LSeg(G*(i,j+1),G*(i,j+2)) by A11,TOPREAL1:6;
+   hence x in LSeg(G*(i,j),G*(i,j+1)) /\
+ LSeg(G*(i,j+1),G*(i,j+2)) by A12,XBOOLE_0:def 3;
+  end;
+ hence LSeg(G*(i,j),G*(i,j+1)) /\ LSeg(G*(i,j+1),G*(i,j+2)) = { G*
+(i,j+1) }
+                  by TARSKI:def 1;
+end;
+
+theorem Th16:
+ 1 <= i & i+2 <= len G & 1 <= j & j <= width G implies
+  LSeg(G*(i,j),G*(i+1,j)) /\ LSeg(G*(i+1,j),G*(i+2,j)) = { G*(i+1,j) }
+proof
+ assume that
+A1: 1 <= i & i+2 <= len G and
+A2: 1 <= j & j <= width G;
+    now let x be set;
+   hereby assume
+A3:    x in LSeg(G*(i,j),G*(i+1,j)) /\ LSeg(G*(i+1,j),G*(i+2,j));
+     then A4:    x in LSeg(G*(i,j),G*(i+1,j)) by XBOOLE_0:def 3;
+     reconsider p = x as Point of TOP-REAL 2 by A3;
+       i <= i+2 by NAT_1:29;
+     then A5:   i <= len G by A1,AXIOMS:22;
+A6:  i+1 < i+2 by REAL_1:53;
+     then A7:   1 <= i+1 & i+1 <= len G by A1,AXIOMS:22,NAT_1:29;
+     then G*(i+1,j)`2 = G*(1,j)`2 by A2,GOBOARD5:2
+           .= G*(i,j)`2 by A1,A2,A5,GOBOARD5:2;
+then A8:   p`2 = G*(i+1,j)`2 by A4,Th6;
+       i < i+1 by REAL_1:69;
+     then G*(i,j)`1 < G*(i+1,j)`1 by A1,A2,A7,GOBOARD5:4;
+then A9:   p`1 <= G*(i+1,j)`1 by A4,TOPREAL1:9;
+A10:   G*(i+1,j)`1 < G*(i+2,j)`1 by A1,A2,A6,A7,GOBOARD5:4;
+       p in LSeg(G*(i+1,j),G*(i+2,j)) by A3,XBOOLE_0:def 3;
+     then p`1 >= G*(i+1,j)`1 by A10,TOPREAL1:9;
+     then p`1 = G*(i+1,j)`1 by A9,AXIOMS:21;
+    hence x = G*(i+1,j) by A8,TOPREAL3:11;
+   end;
+   assume
+A11:  x = G*(i+1,j);
+then A12:  x in LSeg(G*(i,j),G*(i+1,j)) by TOPREAL1:6;
+      x in LSeg(G*(i+1,j),G*(i+2,j)) by A11,TOPREAL1:6;
+   hence x in LSeg(G*(i,j),G*(i+1,j)) /\
+ LSeg(G*(i+1,j),G*(i+2,j)) by A12,XBOOLE_0:def 3;
+  end;
+ hence LSeg(G*(i,j),G*(i+1,j)) /\ LSeg(G*(i+1,j),G*(i+2,j)) = { G*
+(i+1,j) }
+                  by TARSKI:def 1;
+end;
+
+theorem Th17:
+ 1 <= i & i+1 <= len G & 1 <= j & j+1 <= width G implies
+  LSeg(G*(i,j),G*(i,j+1)) /\ LSeg(G*(i,j+1),G*(i+1,j+1)) = { G*(i,j+1) }
+proof
+ assume that
+A1: 1 <= i & i+1 <= len G and
+A2: 1 <= j & j+1 <= width G;
+    now let x be set;
+   hereby assume
+A3:    x in LSeg(G*(i,j),G*(i,j+1)) /\ LSeg(G*(i,j+1),G*(i+1,j+1));
+     then A4:    x in LSeg(G*(i,j),G*(i,j+1)) by XBOOLE_0:def 3;
+     reconsider p = x as Point of TOP-REAL 2 by A3;
+       i <= i+1 by NAT_1:29;
+     then A5:   i <= len G by A1,AXIOMS:22;
+A6:   1 <= j+1 & j+1 <= width G by A2,NAT_1:29;
+       j < j+1 by REAL_1:69;
+     then j <= width G by A2,AXIOMS:22;
+     then G*(i,j)`1 = G*(i,1)`1 by A1,A2,A5,GOBOARD5:3
+           .= G*(i,j+1)`1 by A1,A5,A6,GOBOARD5:3;
+then A7:   p`1 = G*(i,j+1)`1 by A4,Th5;
+A8:   p in LSeg(G*(i,j+1),G*(i+1,j+1)) by A3,XBOOLE_0:def 3;
+A9:   1 <= i+1 by NAT_1:29;
+       G*(i,j+1)`2 = G*(1,j+1)`2 by A1,A5,A6,GOBOARD5:2
+           .= G*(i+1,j+1)`2 by A1,A6,A9,GOBOARD5:2;
+     then p`2 = G*(i,j+1)`2 by A8,Th6;
+    hence x = G*(i,j+1) by A7,TOPREAL3:11;
+   end;
+   assume
+A10:  x = G*(i,j+1);
+then A11:  x in LSeg(G*(i,j),G*(i,j+1)) by TOPREAL1:6;
+      x in LSeg(G*(i,j+1),G*(i+1,j+1)) by A10,TOPREAL1:6;
+   hence x in LSeg(G*(i,j),G*(i,j+1)) /\ LSeg(G*(i,j+1),G*(i+1,j+1))
+                                by A11,XBOOLE_0:def 3;
+  end;
+ hence LSeg(G*(i,j),G*(i,j+1)) /\ LSeg(G*(i,j+1),G*(i+1,j+1)) = { G*
+(i,j+1) }
+                  by TARSKI:def 1;
+end;
+
+theorem Th18:
+ 1 <= i & i+1 <= len G & 1 <= j & j+1 <= width G implies
+  LSeg(G*(i,j+1),G*(i+1,j+1)) /\ LSeg(G*(i+1,j),G*(i+1,j+1)) = { G*
+(i+1,j+1) }
+proof
+ assume that
+A1: 1 <= i & i+1 <= len G and
+A2: 1 <= j & j+1 <= width G;
+    now let x be set;
+   hereby assume
+A3:    x in LSeg(G*(i,j+1),G*(i+1,j+1)) /\ LSeg(G*(i+1,j),G*(i+1,j+1));
+     then A4:    x in LSeg(G*(i,j+1),G*(i+1,j+1)) by XBOOLE_0:def 3;
+     reconsider p = x as Point of TOP-REAL 2 by A3;
+       i <= i+1 by NAT_1:29;
+     then A5:   i <= len G by A1,AXIOMS:22;
+A6:   1 <= j+1 & j+1 <= width G by A2,NAT_1:29;
+A7:   1 <= i+1 & i+1 <= len G by A1,NAT_1:29;
+       j < j+1 by REAL_1:69;
+     then A8:    j <= width G by A2,AXIOMS:22;
+       G*(i,j+1)`2 = G*(1,j+1)`2 by A1,A5,A6,GOBOARD5:2
+           .= G*(i+1,j+1)`2 by A6,A7,GOBOARD5:2;
+then A9:   p`2 = G*(i+1,j+1)`2 by A4,Th6;
+A10:   p in LSeg(G*(i+1,j),G*(i+1,j+1)) by A3,XBOOLE_0:def 3;
+A11:   1 <= i+1 by NAT_1:29;
+       G*(i+1,j)`1 = G*(i+1,1)`1 by A2,A7,A8,GOBOARD5:3
+           .= G*(i+1,j+1)`1 by A1,A6,A11,GOBOARD5:3;
+     then p`1 = G*(i+1,j+1)`1 by A10,Th5;
+    hence x = G*(i+1,j+1) by A9,TOPREAL3:11;
+   end;
+   assume
+A12:  x = G*(i+1,j+1);
+then A13:  x in LSeg(G*(i,j+1),G*(i+1,j+1)) by TOPREAL1:6;
+      x in LSeg(G*(i+1,j),G*(i+1,j+1)) by A12,TOPREAL1:6;
+   hence x in LSeg(G*(i,j+1),G*(i+1,j+1)) /\ LSeg(G*(i+1,j),G*(i+1,j+1))
+                                by A13,XBOOLE_0:def 3;
+  end;
+ hence
+    LSeg(G*(i,j+1),G*(i+1,j+1)) /\ LSeg(G*(i+1,j),G*(i+1,j+1)) = { G*
+(i+1,j+1) }
+                  by TARSKI:def 1;
+end;
+
+theorem Th19:
+ 1 <= i & i+1 <= len G & 1 <= j & j+1 <= width G implies
+  LSeg(G*(i,j),G*(i+1,j)) /\ LSeg(G*(i,j),G*(i,j+1)) = { G*(i,j) }
+proof
+ assume that
+A1: 1 <= i & i+1 <= len G and
+A2: 1 <= j & j+1 <= width G;
+    now let x be set;
+   hereby assume
+A3:    x in LSeg(G*(i,j),G*(i+1,j)) /\ LSeg(G*(i,j),G*(i,j+1));
+     then A4:    x in LSeg(G*(i,j),G*(i+1,j)) by XBOOLE_0:def 3;
+     reconsider p = x as Point of TOP-REAL 2 by A3;
+       i <= i+1 by NAT_1:29;
+     then A5:   i <= len G by A1,AXIOMS:22;
+A6:   1 <= j+1 & j+1 <= width G by A2,NAT_1:29;
+A7:   1 <= i+1 & i+1 <= len G by A1,NAT_1:29;
+       j < j+1 by REAL_1:69;
+     then A8:    j <= width G by A2,AXIOMS:22;
+     then G*(i,j)`2 = G*(1,j)`2 by A1,A2,A5,GOBOARD5:2
+           .= G*(i+1,j)`2 by A2,A7,A8,GOBOARD5:2;
+then A9:   p`2 = G*(i,j)`2 by A4,Th6;
+A10:   p in LSeg(G*(i,j),G*(i,j+1)) by A3,XBOOLE_0:def 3;
+       G*(i,j)`1 = G*(i,1)`1 by A1,A2,A5,A8,GOBOARD5:3
+           .= G*(i,j+1)`1 by A1,A5,A6,GOBOARD5:3;
+     then p`1 = G*(i,j)`1 by A10,Th5;
+    hence x = G*(i,j) by A9,TOPREAL3:11;
+   end;
+   assume
+A11:  x = G*(i,j);
+then A12:  x in LSeg(G*(i,j),G*(i+1,j)) by TOPREAL1:6;
+      x in LSeg(G*(i,j),G*(i,j+1)) by A11,TOPREAL1:6;
+   hence x in LSeg(G*(i,j),G*(i+1,j)) /\ LSeg(G*(i,j),G*
+(i,j+1)) by A12,XBOOLE_0:def 3
+;
+  end;
+ hence LSeg(G*(i,j),G*(i+1,j)) /\ LSeg(G*(i,j),G*(i,j+1)) = { G*(i,j) }
+   by TARSKI:def 1;
+end;
+
+theorem Th20:
+ 1 <= i & i+1 <= len G & 1 <= j & j+1 <= width G implies
+  LSeg(G*(i,j),G*(i+1,j)) /\ LSeg(G*(i+1,j),G*(i+1,j+1)) = { G*(i+1,j) }
+proof
+ assume that
+A1: 1 <= i & i+1 <= len G and
+A2: 1 <= j & j+1 <= width G;
+    now let x be set;
+   hereby assume
+A3:    x in LSeg(G*(i,j),G*(i+1,j)) /\ LSeg(G*(i+1,j),G*(i+1,j+1));
+     then A4:    x in LSeg(G*(i,j),G*(i+1,j)) by XBOOLE_0:def 3;
+     reconsider p = x as Point of TOP-REAL 2 by A3;
+       i <= i+1 by NAT_1:29;
+     then A5:   i <= len G by A1,AXIOMS:22;
+A6:   1 <= j+1 & j+1 <= width G by A2,NAT_1:29;
+A7:   1 <= i+1 & i+1 <= len G by A1,NAT_1:29;
+       j < j+1 by REAL_1:69;
+     then A8:    j <= width G by A2,AXIOMS:22;
+     then G*(i,j)`2 = G*(1,j)`2 by A1,A2,A5,GOBOARD5:2
+           .= G*(i+1,j)`2 by A2,A7,A8,GOBOARD5:2;
+then A9:   p`2 = G*(i+1,j)`2 by A4,Th6;
+A10:   p in LSeg(G*(i+1,j),G*(i+1,j+1)) by A3,XBOOLE_0:def 3;
+A11:   1 <= i+1 by NAT_1:29;
+       G*(i+1,j)`1 = G*(i+1,1)`1 by A2,A7,A8,GOBOARD5:3
+           .= G*(i+1,j+1)`1 by A1,A6,A11,GOBOARD5:3;
+     then p`1 = G*(i+1,j)`1 by A10,Th5;
+    hence x = G*(i+1,j) by A9,TOPREAL3:11;
+   end;
+   assume
+A12:  x = G*(i+1,j);
+then A13:  x in LSeg(G*(i,j),G*(i+1,j)) by TOPREAL1:6;
+      x in LSeg(G*(i+1,j),G*(i+1,j+1)) by A12,TOPREAL1:6;
+   hence x in LSeg(G*(i,j),G*(i+1,j)) /\ LSeg(G*(i+1,j),G*(i+1,j+1))
+                     by A13,XBOOLE_0:def 3;
+  end;
+ hence
+    LSeg(G*(i,j),G*(i+1,j)) /\ LSeg(G*(i+1,j),G*(i+1,j+1)) = { G*(i+1,j) }
+                    by TARSKI:def 1;
+end;
+
+theorem Th21:
+ for i1,j1,i2,j2 being Nat st
+  1 <= i1 & i1 <= len G & 1 <= j1 & j1+1 <= width G &
+  1 <= i2 & i2 <= len G & 1 <= j2 & j2+1 <= width G &
+  LSeg(G*(i1,j1),G*(i1,j1+1)) meets LSeg(G*(i2,j2),G*(i2,j2+1))
+ holds i1 = i2 & abs(j1-j2) <= 1
+proof let i1,j1,i2,j2 be Nat such that
+A1: 1 <= i1 & i1 <= len G and
+A2: 1 <= j1 & j1+1 <= width G and
+A3: 1 <= i2 & i2 <= len G and
+A4: 1 <= j2 & j2+1 <= width G;
+ assume LSeg(G*(i1,j1),G*(i1,j1+1)) meets LSeg(G*(i2,j2),G*(i2,j2+1));
+  then consider x being set such that
+A5: x in LSeg(G*(i1,j1),G*(i1,j1+1)) and
+A6: x in LSeg(G*(i2,j2),G*(i2,j2+1)) by XBOOLE_0:3;
+   reconsider p = x as Point of TOP-REAL 2 by A5;
+  consider r1 such that
+A7: r1 >= 0 & r1 <= 1 and
+A8: p = (1-r1)*(G*(i1,j1))+r1*(G*(i1,j1+1)) by A5,SPPOL_1:21;
+  consider r2 such that
+A9: r2 >= 0 & r2 <= 1 and
+A10: p = (1-r2)*(G*(i2,j2))+r2*(G*(i2,j2+1)) by A6,SPPOL_1:21;
+  assume
+A11: not thesis;
+A12: 1 <= j1+1 & j1 < width G by A2,NAT_1:38;
+A13: 1 <= j2+1 & j2 < width G by A4,NAT_1:38;
+ per cases by A11;
+ suppose i1 <> i2;
+then A14: i1 < i2 or i2 < i1 by AXIOMS:21;
+A15: G*(i1,j1)`1 = G*(i1,1)`1 by A1,A2,A12,GOBOARD5:3
+          .= G*(i1,j1+1)`1 by A1,A2,A12,GOBOARD5:3;
+A16: G*(i2,j2)`1 = G*(i2,1)`1 by A3,A4,A13,GOBOARD5:3
+         .= G*(i2,j2+1)`1 by A3,A4,A13,GOBOARD5:3;
+     1*(G*(i1,j1))`1 = ((1-r1)+r1)*(G*(i1,j1))`1 by XCMPLX_1:27
+           .= (1-r1)*(G*(i1,j1))`1+r1*(G*(i1,j1+1))`1 by A15,XCMPLX_1:8
+           .= ((1-r1)*(G*(i1,j1)))`1+r1*(G*(i1,j1+1))`1 by TOPREAL3:9
+           .= ((1-r1)*(G*(i1,j1)))`1+(r1*(G*(i1,j1+1)))`1 by TOPREAL3:9
+           .= p`1 by A8,TOPREAL3:7
+           .= ((1-r2)*(G*(i2,j2)))`1+(r2*(G*(i2,j2+1)))`1 by A10,TOPREAL3:7
+           .= (1-r2)*(G*(i2,j2))`1+(r2*(G*(i2,j2+1)))`1 by TOPREAL3:9
+           .= (1-r2)*(G*(i2,j2))`1+r2*(G*(i2,j2+1))`1 by TOPREAL3:9
+           .= ((1-r2)+r2)*(G*(i2,j2))`1 by A16,XCMPLX_1:8
+           .= 1*(G*(i2,j2))`1 by XCMPLX_1:27
+           .= G*(i2,1)`1 by A3,A4,A13,GOBOARD5:3
+           .= G*(i2,j1)`1 by A2,A3,A12,GOBOARD5:3;
+  hence contradiction by A1,A2,A3,A12,A14,GOBOARD5:4;
+ suppose A17: abs(j1-j2) > 1;
+A18: G*(i2,j2+1)`2 = G*(1,j2+1)`2 by A3,A4,A13,GOBOARD5:2
+             .= G*(i1,j2+1)`2 by A1,A4,A13,GOBOARD5:2;
+A19: G*(i2,j2)`2 = G*(1,j2)`2 by A3,A4,A13,GOBOARD5:2
+             .= G*(i1,j2)`2 by A1,A4,A13,GOBOARD5:2;
+A20: (1-r1)*(G*(i1,j1))`2+r1*(G*(i1,j1+1))`2
+            = ((1-r1)*(G*(i1,j1)))`2+r1*(G*(i1,j1+1))`2 by TOPREAL3:9
+           .= ((1-r1)*(G*(i1,j1)))`2+(r1*(G*(i1,j1+1)))`2 by TOPREAL3:9
+           .= p`2 by A8,TOPREAL3:7
+           .= ((1-r2)*(G*(i2,j2)))`2+(r2*(G*(i2,j2+1)))`2 by A10,TOPREAL3:7
+           .= (1-r2)*(G*(i2,j2))`2+(r2*(G*(i2,j2+1)))`2 by TOPREAL3:9
+           .= (1-r2)*(G*(i1,j2))`2+r2*(G*(i1,j2+1))`2 by A18,A19,TOPREAL3:9;
+     now per cases by A17,Th1;
+    suppose j1+1 < j2;
+     then A21:   G*(i1,j1+1)`2 < G*(i1,j2)`2 by A1,A12,A13,GOBOARD5:5;
+A22:   (1-r1)*(G*(i1,j1+1))`2+r1*(G*(i1,j1+1))`2
+            = ((1-r1)+r1)*(G*(i1,j1+1))`2 by XCMPLX_1:8
+           .= 1*(G*(i1,j1+1))`2 by XCMPLX_1:27;
+A23:   (1-r2)*(G*(i1,j2))`2+r2*(G*(i1,j2))`2
+            = ((1-r2)+r2)*(G*(i1,j2))`2 by XCMPLX_1:8
+           .= 1*(G*(i1,j2))`2 by XCMPLX_1:27;
+A24:  1-r1 >= 0 by A7,SQUARE_1:12;
+       j1 < j1 + 1 by REAL_1:69;
+     then G*(i1,j1)`2 <= G*(i1,j1+1)`2 by A1,A2,GOBOARD5:5;
+     then (1-r1)*(G*(i1,j1))`2 <= (1-r1)*(G*(i1,j1+1))`2 by A24,AXIOMS:25;
+     then A25: (1-r1)*(G*(i1,j1))`2+r1*(G*(i1,j1+1))`2 <=
+ G*(i1,j1+1)`2 by A22,AXIOMS:24;
+       j2 < j2+1 by REAL_1:69;
+     then G*(i1,j2)`2 < G*(i1,j2+1)`2 by A1,A4,GOBOARD5:5;
+     then r2*(G*(i1,j2))`2 <= r2*(G*(i1,j2+1))`2 by A9,AXIOMS:25;
+     then G*(i1,j2)`2 <= (1-r2)*(G*(i1,j2))`2+r2*(G*(i1,j2+1))`2
+      by A23,AXIOMS:24;
+    hence contradiction by A20,A21,A25,AXIOMS:22;
+    suppose j2+1 < j1;
+     then A26:   G*(i1,j2+1)`2 < G*(i1,j1)`2 by A1,A12,A13,GOBOARD5:5;
+A27:   (1-r1)*(G*(i1,j1))`2+r1*(G*(i1,j1))`2
+            = ((1-r1)+r1)*(G*(i1,j1))`2 by XCMPLX_1:8
+           .= 1*(G*(i1,j1))`2 by XCMPLX_1:27;
+A28:   (1-r2)*(G*(i1,j2+1))`2+r2*(G*(i1,j2+1))`2
+            = ((1-r2)+r2)*(G*(i1,j2+1))`2 by XCMPLX_1:8
+           .= 1*(G*(i1,j2+1))`2 by XCMPLX_1:27;
+A29:  1-r2 >= 0 by A9,SQUARE_1:12;
+       j2 < j2 + 1 by REAL_1:69;
+     then G*(i1,j2)`2 <= G*(i1,j2+1)`2 by A1,A4,GOBOARD5:5;
+     then (1-r2)*(G*(i1,j2))`2 <= (1-r2)*(G*(i1,j2+1))`2 by A29,AXIOMS:25;
+     then A30: (1-r2)*(G*(i1,j2))`2+r2*(G*(i1,j2+1))`2 <=
+ G*(i1,j2+1)`2 by A28,AXIOMS:24;
+       j1 < j1+1 by REAL_1:69;
+     then G*(i1,j1)`2 < G*(i1,j1+1)`2 by A1,A2,GOBOARD5:5;
+     then r1*(G*(i1,j1))`2 <= r1*(G*(i1,j1+1))`2 by A7,AXIOMS:25;
+     then G*(i1,j1)`2 <= (1-r1)*(G*(i1,j1))`2+r1*(G*
+(i1,j1+1))`2 by A27,AXIOMS:24;
+    hence contradiction by A20,A26,A30,AXIOMS:22;
+   end;
+  hence contradiction;
+end;
+
+theorem Th22:
+ for i1,j1,i2,j2 being Nat st
+  1 <= i1 & i1+1 <= len G & 1 <= j1 & j1 <= width G &
+  1 <= i2 & i2+1 <= len G & 1 <= j2 & j2 <= width G &
+  LSeg(G*(i1,j1),G*(i1+1,j1)) meets LSeg(G*(i2,j2),G*(i2+1,j2))
+ holds j1 = j2 & abs(i1-i2) <= 1
+proof let i1,j1,i2,j2 be Nat such that
+A1: 1 <= i1 & i1+1 <= len G and
+A2: 1 <= j1 & j1 <= width G and
+A3: 1 <= i2 & i2+1 <= len G and
+A4: 1 <= j2 & j2 <= width G;
+ assume LSeg(G*(i1,j1),G*(i1+1,j1)) meets LSeg(G*(i2,j2),G*(i2+1,j2));
+  then consider x being set such that
+A5: x in LSeg(G*(i1,j1),G*(i1+1,j1)) and
+A6: x in LSeg(G*(i2,j2),G*(i2+1,j2)) by XBOOLE_0:3;
+   reconsider p = x as Point of TOP-REAL 2 by A5;
+  consider r1 such that
+A7: r1 >= 0 & r1 <= 1 and
+A8: p = (1-r1)*(G*(i1,j1))+r1*(G*(i1+1,j1)) by A5,SPPOL_1:21;
+  consider r2 such that
+A9: r2 >= 0 & r2 <= 1 and
+A10: p = (1-r2)*(G*(i2,j2))+r2*(G*(i2+1,j2)) by A6,SPPOL_1:21;
+  assume
+A11: not thesis;
+A12: 1 <= i1+1 & i1 < len G by A1,NAT_1:38;
+A13: 1 <= i2+1 & i2 < len G by A3,NAT_1:38;
+ per cases by A11;
+ suppose j1 <> j2;
+then A14: j1 < j2 or j2 < j1 by AXIOMS:21;
+A15: G*(i1,j1)`2 = G*(1,j1)`2 by A1,A2,A12,GOBOARD5:2
+          .= G*(i1+1,j1)`2 by A1,A2,A12,GOBOARD5:2;
+A16: G*(i2,j2)`2 = G*(1,j2)`2 by A3,A4,A13,GOBOARD5:2
+         .= G*(i2+1,j2)`2 by A3,A4,A13,GOBOARD5:2;
+     1*(G*(i1,j1))`2 = ((1-r1)+r1)*(G*(i1,j1))`2 by XCMPLX_1:27
+           .= (1-r1)*(G*(i1,j1))`2+r1*(G*(i1+1,j1))`2 by A15,XCMPLX_1:8
+           .= ((1-r1)*(G*(i1,j1)))`2+r1*(G*(i1+1,j1))`2 by TOPREAL3:9
+           .= ((1-r1)*(G*(i1,j1)))`2+(r1*(G*(i1+1,j1)))`2 by TOPREAL3:9
+           .= p`2 by A8,TOPREAL3:7
+           .= ((1-r2)*(G*(i2,j2)))`2+(r2*(G*(i2+1,j2)))`2 by A10,TOPREAL3:7
+           .= (1-r2)*(G*(i2,j2))`2+(r2*(G*(i2+1,j2)))`2 by TOPREAL3:9
+           .= (1-r2)*(G*(i2,j2))`2+r2*(G*(i2+1,j2))`2 by TOPREAL3:9
+           .= ((1-r2)+r2)*(G*(i2,j2))`2 by A16,XCMPLX_1:8
+           .= 1*(G*(i2,j2))`2 by XCMPLX_1:27
+           .= G*(1,j2)`2 by A3,A4,A13,GOBOARD5:2
+           .= G*(i1,j2)`2 by A1,A4,A12,GOBOARD5:2;
+  hence contradiction by A1,A2,A4,A12,A14,GOBOARD5:5;
+ suppose A17: abs(i1-i2) > 1;
+A18: G*(i2+1,j2)`1 = G*(i2+1,1)`1 by A3,A4,A13,GOBOARD5:3
+             .= G*(i2+1,j1)`1 by A2,A3,A13,GOBOARD5:3;
+A19: G*(i2,j2)`1 = G*(i2,1)`1 by A3,A4,A13,GOBOARD5:3
+             .= G*(i2,j1)`1 by A2,A3,A13,GOBOARD5:3;
+A20: (1-r1)*(G*(i1,j1))`1+r1*(G*(i1+1,j1))`1
+            = ((1-r1)*(G*(i1,j1)))`1+r1*(G*(i1+1,j1))`1 by TOPREAL3:9
+           .= ((1-r1)*(G*(i1,j1)))`1+(r1*(G*(i1+1,j1)))`1 by TOPREAL3:9
+           .= p`1 by A8,TOPREAL3:7
+           .= ((1-r2)*(G*(i2,j2)))`1+(r2*(G*(i2+1,j2)))`1 by A10,TOPREAL3:7
+           .= (1-r2)*(G*(i2,j2))`1+(r2*(G*(i2+1,j2)))`1 by TOPREAL3:9
+           .= (1-r2)*(G*(i2,j1))`1+r2*(G*(i2+1,j1))`1 by A18,A19,TOPREAL3:9;
+     now per cases by A17,Th1;
+    suppose i1+1 < i2;
+     then A21:   G*(i1+1,j1)`1 < G*(i2,j1)`1 by A2,A12,A13,GOBOARD5:4;
+A22:   (1-r1)*(G*(i1+1,j1))`1+r1*(G*(i1+1,j1))`1
+            = ((1-r1)+r1)*(G*(i1+1,j1))`1 by XCMPLX_1:8
+           .= 1*(G*(i1+1,j1))`1 by XCMPLX_1:27;
+A23:   (1-r2)*(G*(i2,j1))`1+r2*(G*(i2,j1))`1
+            = ((1-r2)+r2)*(G*(i2,j1))`1 by XCMPLX_1:8
+           .= 1*(G*(i2,j1))`1 by XCMPLX_1:27;
+A24:  1-r1 >= 0 by A7,SQUARE_1:12;
+       i1 < i1 + 1 by REAL_1:69;
+     then G*(i1,j1)`1 <= G*(i1+1,j1)`1 by A1,A2,GOBOARD5:4;
+     then (1-r1)*(G*(i1,j1))`1 <= (1-r1)*(G*(i1+1,j1))`1 by A24,AXIOMS:25;
+     then A25: (1-r1)*(G*(i1,j1))`1+r1*(G*(i1+1,j1))`1 <=
+ G*(i1+1,j1)`1 by A22,AXIOMS:24;
+       i2 < i2+1 by REAL_1:69;
+     then G*(i2,j1)`1 < G*(i2+1,j1)`1 by A2,A3,GOBOARD5:4;
+     then r2*(G*(i2,j1))`1 <= r2*(G*(i2+1,j1))`1 by A9,AXIOMS:25;
+     then G*(i2,j1)`1 <= (1-r2)*(G*(i2,j1))`1+r2*(G*
+(i2+1,j1))`1 by A23,AXIOMS:24;
+    hence contradiction by A20,A21,A25,AXIOMS:22;
+    suppose i2+1 < i1;
+     then A26:   G*(i2+1,j1)`1 < G*(i1,j1)`1 by A2,A12,A13,GOBOARD5:4;
+A27:   (1-r1)*(G*(i1,j1))`1+r1*(G*(i1,j1))`1
+            = ((1-r1)+r1)*(G*(i1,j1))`1 by XCMPLX_1:8
+           .= 1*(G*(i1,j1))`1 by XCMPLX_1:27;
+A28:   (1-r2)*(G*(i2+1,j1))`1+r2*(G*(i2+1,j1))`1
+            = ((1-r2)+r2)*(G*(i2+1,j1))`1 by XCMPLX_1:8
+           .= 1*(G*(i2+1,j1))`1 by XCMPLX_1:27;
+A29:  1-r2 >= 0 by A9,SQUARE_1:12;
+       i2 < i2 + 1 by REAL_1:69;
+     then G*(i2,j1)`1 <= G*(i2+1,j1)`1 by A2,A3,GOBOARD5:4;
+     then (1-r2)*(G*(i2,j1))`1 <= (1-r2)*(G*(i2+1,j1))`1 by A29,AXIOMS:25;
+     then A30: (1-r2)*(G*(i2,j1))`1+r2*(G*(i2+1,j1))`1 <=
+ G*(i2+1,j1)`1 by A28,AXIOMS:24;
+       i1 < i1+1 by REAL_1:69;
+     then G*(i1,j1)`1 < G*(i1+1,j1)`1 by A1,A2,GOBOARD5:4;
+     then r1*(G*(i1,j1))`1 <= r1*(G*(i1+1,j1))`1 by A7,AXIOMS:25;
+     then G*(i1,j1)`1 <= (1-r1)*(G*(i1,j1))`1+r1*(G*
+(i1+1,j1))`1 by A27,AXIOMS:24;
+    hence contradiction by A20,A26,A30,AXIOMS:22;
+   end;
+  hence contradiction;
+end;
+
+theorem Th23:
+ for i1,j1,i2,j2 being Nat st
+  1 <= i1 & i1 <= len G & 1 <= j1 & j1+1 <= width G &
+  1 <= i2 & i2+1 <= len G & 1 <= j2 & j2 <= width G &
+  LSeg(G*(i1,j1),G*(i1,j1+1)) meets LSeg(G*(i2,j2),G*(i2+1,j2))
+ holds (i1 = i2 or i1 = i2+1) & (j1 = j2 or j1+1 = j2)
+proof let i1,j1,i2,j2 be Nat such that
+A1:  1 <= i1 & i1 <= len G and
+A2:  1 <= j1 & j1+1 <= width G and
+A3:  1 <= i2 & i2+1 <= len G and
+A4: 1 <= j2 & j2 <= width G;
+ assume LSeg(G*(i1,j1),G*(i1,j1+1)) meets LSeg(G*(i2,j2),G*(i2+1,j2));
+  then consider x being set such that
+A5: x in LSeg(G*(i1,j1),G*(i1,j1+1)) and
+A6: x in LSeg(G*(i2,j2),G*(i2+1,j2)) by XBOOLE_0:3;
+   reconsider p = x as Point of TOP-REAL 2 by A5;
+  consider r1 such that
+A7: r1 >= 0 & r1 <= 1 and
+A8: p = (1-r1)*(G*(i1,j1))+r1*(G*(i1,j1+1)) by A5,SPPOL_1:21;
+  consider r2 such that
+A9: r2 >= 0 & r2 <= 1 and
+A10: p = (1-r2)*(G*(i2,j2))+r2*(G*(i2+1,j2)) by A6,SPPOL_1:21;
+A11: 1 <= j1+1 & j1 < width G by A2,NAT_1:38;
+A12: 1 <= i2+1 & i2 < len G by A3,NAT_1:38;
+ thus i1 = i2 or i1 = i2+1
+  proof assume A13: not thesis;
+A14: G*(i2+1,j2)`1 = G*(i2+1,1)`1 by A3,A4,A12,GOBOARD5:3
+             .= G*(i2+1,j1)`1 by A2,A3,A11,A12,GOBOARD5:3;
+A15: G*(i2,j2)`1 = G*(i2,1)`1 by A3,A4,A12,GOBOARD5:3
+             .= G*(i2,j1)`1 by A2,A3,A11,A12,GOBOARD5:3;
+A16: (1-r1)*(G*(i1,j1))`1+r1*(G*(i1,j1+1))`1
+            = ((1-r1)*(G*(i1,j1)))`1+r1*(G*(i1,j1+1))`1 by TOPREAL3:9
+           .= ((1-r1)*(G*(i1,j1)))`1+(r1*(G*(i1,j1+1)))`1 by TOPREAL3:9
+           .= p`1 by A8,TOPREAL3:7
+           .= ((1-r2)*(G*(i2,j2)))`1+(r2*(G*(i2+1,j2)))`1 by A10,TOPREAL3:7
+           .= (1-r2)*(G*(i2,j2))`1+(r2*(G*(i2+1,j2)))`1 by TOPREAL3:9
+           .= (1-r2)*(G*(i2,j1))`1+r2*(G*(i2+1,j1))`1 by A14,A15,TOPREAL3:9;
+A17: G*(i1,j1)`1 = G*(i1,1)`1 by A1,A2,A11,GOBOARD5:3
+           .= G*(i1,j1+1)`1 by A1,A2,A11,GOBOARD5:3;
+   per cases by A13,AXIOMS:21;
+   suppose
+A18: i1 < i2 & i1 < i2+1;
+A19:  (1-r1)*(G*(i1,j1))`1+r1*(G*(i1,j1+1))`1
+            = ((1-r1)+r1)*(G*(i1,j1))`1 by A17,XCMPLX_1:8
+           .= 1*(G*(i1,j1))`1 by XCMPLX_1:27;
+A20:  (1-r2)*(G*(i2,j1))`1+r2*(G*(i2,j1))`1
+            = ((1-r2)+r2)*(G*(i2,j1))`1 by XCMPLX_1:8
+           .= 1*(G*(i2,j1))`1 by XCMPLX_1:27;
+       i2 < i2+1 by REAL_1:69;
+     then G*(i2,j1)`1 < G*(i2+1,j1)`1 by A2,A3,A11,GOBOARD5:4;
+     then A21: r2*(G*(i2,j1))`1 <= r2*(G*(i2+1,j1))`1 by A9,AXIOMS:25;
+       G*(i1,j1)`1 < G*(i2,j1)`1 by A1,A2,A11,A12,A18,GOBOARD5:4;
+    hence contradiction by A16,A19,A20,A21,AXIOMS:24;
+   suppose i1 < i2 & i2+1 < i1;
+    hence thesis by NAT_1:38;
+   suppose i2 < i1 & i1 < i2+1;
+    hence thesis by NAT_1:38;
+   suppose A22: i2+1 < i1;
+A23:   (1-r1)*(G*(i1,j1))`1+r1*(G*(i1,j1))`1
+            = ((1-r1)+r1)*(G*(i1,j1))`1 by XCMPLX_1:8
+           .= 1*(G*(i1,j1))`1 by XCMPLX_1:27;
+A24:   (1-r2)*(G*(i2+1,j1))`1+r2*(G*(i2+1,j1))`1
+            = ((1-r2)+r2)*(G*(i2+1,j1))`1 by XCMPLX_1:8
+           .= 1*(G*(i2+1,j1))`1 by XCMPLX_1:27;
+A25:  1-r2 >= 0 by A9,SQUARE_1:12;
+       i2 < i2 + 1 by REAL_1:69;
+     then G*(i2,j1)`1 <= G*(i2+1,j1)`1 by A2,A3,A11,GOBOARD5:4;
+     then (1-r2)*(G*(i2,j1))`1 <= (1-r2)*(G*(i2+1,j1))`1 by A25,AXIOMS:25;
+     then (1-r2)*(G*(i2,j1))`1+r2*(G*(i2+1,j1))`1 <=
+ G*(i2+1,j1)`1 by A24,AXIOMS:24;
+    hence contradiction by A1,A2,A11,A12,A16,A17,A22,A23,GOBOARD5:4;
+  end;
+ assume A26: not thesis;
+A27: G*(i1,j1+1)`2 = G*(1,j1+1)`2 by A1,A2,A11,GOBOARD5:2
+            .= G*(i2,j1+1)`2 by A2,A3,A11,A12,GOBOARD5:2;
+A28: G*(i1,j1)`2 = G*(1,j1)`2 by A1,A2,A11,GOBOARD5:2
+            .= G*(i2,j1)`2 by A2,A3,A11,A12,GOBOARD5:2;
+A29: (1-r2)*(G*(i2,j2))`2+r2*(G*(i2+1,j2))`2
+           = ((1-r2)*(G*(i2,j2)))`2+r2*(G*(i2+1,j2))`2 by TOPREAL3:9
+          .= ((1-r2)*(G*(i2,j2)))`2+(r2*(G*(i2+1,j2)))`2 by TOPREAL3:9
+          .= p`2 by A10,TOPREAL3:7
+          .= ((1-r1)*(G*(i1,j1)))`2+(r1*(G*(i1,j1+1)))`2 by A8,TOPREAL3:7
+          .= (1-r1)*(G*(i1,j1))`2+(r1*(G*(i1,j1+1)))`2 by TOPREAL3:9
+          .= (1-r1)*(G*(i2,j1))`2+r1*(G*(i2,j1+1))`2 by A27,A28,TOPREAL3:9;
+A30: G*(i2,j2)`2 = G*(1,j2)`2 by A3,A4,A12,GOBOARD5:2
+          .= G*(i2+1,j2)`2 by A3,A4,A12,GOBOARD5:2;
+  per cases by A26,AXIOMS:21;
+  suppose
+A31: j2 < j1 & j2 < j1+1;
+A32:  (1-r2)*(G*(i2,j2))`2+r2*(G*(i2+1,j2))`2
+           = ((1-r2)+r2)*(G*(i2,j2))`2 by A30,XCMPLX_1:8
+          .= 1*(G*(i2,j2))`2 by XCMPLX_1:27;
+A33:  (1-r1)*(G*(i2,j1))`2+r1*(G*(i2,j1))`2
+           = ((1-r1)+r1)*(G*(i2,j1))`2 by XCMPLX_1:8
+          .= 1*(G*(i2,j1))`2 by XCMPLX_1:27;
+      j1 < j1+1 by REAL_1:69;
+    then G*(i2,j1)`2 < G*(i2,j1+1)`2 by A2,A3,A12,GOBOARD5:5;
+    then A34: r1*(G*(i2,j1))`2 <= r1*(G*(i2,j1+1))`2 by A7,AXIOMS:25;
+      G*(i2,j2)`2 < G*(i2,j1)`2 by A3,A4,A11,A12,A31,GOBOARD5:5;
+   hence contradiction by A29,A32,A33,A34,AXIOMS:24;
+  suppose j2 < j1 & j1+1 < j2;
+   hence thesis by NAT_1:38;
+  suppose j1 < j2 & j2 < j1+1;
+   hence thesis by NAT_1:38;
+  suppose A35: j1+1 < j2;
+A36:   (1-r2)*(G*(i2,j2))`2+r2*(G*(i2,j2))`2
+           = ((1-r2)+r2)*(G*(i2,j2))`2 by XCMPLX_1:8
+          .= 1*(G*(i2,j2))`2 by XCMPLX_1:27;
+A37:   (1-r1)*(G*(i2,j1+1))`2+r1*(G*(i2,j1+1))`2
+           = ((1-r1)+r1)*(G*(i2,j1+1))`2 by XCMPLX_1:8
+          .= 1*(G*(i2,j1+1))`2 by XCMPLX_1:27;
+A38:  1-r1 >= 0 by A7,SQUARE_1:12;
+      j1 < j1 + 1 by REAL_1:69;
+    then G*(i2,j1)`2 <= G*(i2,j1+1)`2 by A2,A3,A12,GOBOARD5:5;
+    then (1-r1)*(G*(i2,j1))`2 <= (1-r1)*(G*(i2,j1+1))`2 by A38,AXIOMS:25;
+    then (1-r1)*(G*(i2,j1))`2+r1*(G*(i2,j1+1))`2 <= G*
+(i2,j1+1)`2 by A37,AXIOMS:24;
+   hence contradiction by A3,A4,A11,A12,A29,A30,A35,A36,GOBOARD5:5;
+end;
+
+theorem
+   for i1,j1,i2,j2 being Nat st
+  1 <= i1 & i1 <= len G & 1 <= j1 & j1+1 <= width G &
+  1 <= i2 & i2 <= len G & 1 <= j2 & j2+1 <= width G &
+  LSeg(G*(i1,j1),G*(i1,j1+1)) meets LSeg(G*(i2,j2),G*(i2,j2+1))
+ holds
+  j1 = j2 &
+  LSeg(G*(i1,j1),G*(i1,j1+1)) = LSeg(G*(i2,j2),G*(i2,j2+1)) or
+  j1 = j2+1 &
+  LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i2,j2),G*(i2,j2+1)) = { G*
+(i1,j1) }
+  or j1+1 = j2 &
+  LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i2,j2),G*(i2,j2+1)) = { G*
+(i2,j2) }
+proof let i1,j1,i2,j2 be Nat such that
+A1: 1 <= i1 & i1 <= len G and
+A2: 1 <= j1 & j1+1 <= width G and
+A3: 1 <= i2 & i2 <= len G and
+A4: 1 <= j2 & j2+1 <= width G and
+A5: LSeg(G*(i1,j1),G*(i1,j1+1)) meets LSeg(G*(i2,j2),G*(i2,j2+1));
+A6: i1 = i2 by A1,A2,A3,A4,A5,Th21;
+  reconsider m = abs(j1-j2) as Nat;
+    m <= 1 by A1,A2,A3,A4,A5,Th21;
+  then A7: abs(j1-j2) = 0 or abs(j1-j2) = 1 by CQC_THE1:2;
+A8: j1+1+1 = j1+(1+1) by XCMPLX_1:1;
+A9: j2+1+1 = j2+(1+1) by XCMPLX_1:1;
+ per cases by A7,Th2,GOBOARD1:1;
+ case j1 = j2;
+  hence LSeg(G*(i1,j1),G*(i1,j1+1)) = LSeg(G*(i2,j2),G*(i2,j2+1)) by A6;
+ case j1 = j2+1;
+  hence LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i2,j2),G*(i2,j2+1))
+              = { G*(i1,j1) } by A1,A2,A4,A6,A9,Th15;
+ case j1+1 = j2;
+  hence LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i2,j2),G*(i2,j2+1))
+              = { G*(i2,j2) } by A1,A2,A4,A6,A8,Th15;
+end;
+
+theorem
+   for i1,j1,i2,j2 being Nat st
+  1 <= i1 & i1+1 <= len G & 1 <= j1 & j1 <= width G &
+  1 <= i2 & i2+1 <= len G & 1 <= j2 & j2 <= width G &
+  LSeg(G*(i1,j1),G*(i1+1,j1)) meets LSeg(G*(i2,j2),G*(i2+1,j2))
+ holds
+  i1 = i2 &
+  LSeg(G*(i1,j1),G*(i1+1,j1)) = LSeg(G*(i2,j2),G*(i2+1,j2)) or
+  i1 = i2+1 &
+  LSeg(G*(i1,j1),G*(i1+1,j1)) /\ LSeg(G*(i2,j2),G*(i2+1,j2)) = { G*
+(i1,j1) }
+  or i1+1 = i2 &
+  LSeg(G*(i1,j1),G*(i1+1,j1)) /\ LSeg(G*(i2,j2),G*(i2+1,j2)) = { G*
+(i2,j2) }
+proof let i1,j1,i2,j2 be Nat such that
+A1: 1 <= i1 & i1+1 <= len G and
+A2: 1 <= j1 & j1 <= width G and
+A3: 1 <= i2 & i2+1 <= len G and
+A4: 1 <= j2 & j2 <= width G and
+A5: LSeg(G*(i1,j1),G*(i1+1,j1)) meets LSeg(G*(i2,j2),G*(i2+1,j2));
+A6: j1 = j2 by A1,A2,A3,A4,A5,Th22;
+  reconsider m = abs(i1-i2) as Nat;
+    m <= 1 by A1,A2,A3,A4,A5,Th22;
+  then A7: abs(i1-i2) = 0 or abs(i1-i2) = 1 by CQC_THE1:2;
+A8: i1+1+1 = i1+(1+1) by XCMPLX_1:1;
+A9: i2+1+1 = i2+(1+1) by XCMPLX_1:1;
+ per cases by A7,Th2,GOBOARD1:1;
+ case i1 = i2;
+  hence LSeg(G*(i1,j1),G*(i1+1,j1)) = LSeg(G*(i2,j2),G*(i2+1,j2)) by A6;
+ case i1 = i2+1;
+  hence LSeg(G*(i1,j1),G*(i1+1,j1)) /\ LSeg(G*(i2,j2),G*(i2+1,j2))
+              = { G*(i1,j1) } by A1,A2,A3,A6,A9,Th16;
+ case i1+1 = i2;
+  hence LSeg(G*(i1,j1),G*(i1+1,j1)) /\ LSeg(G*(i2,j2),G*(i2+1,j2))
+              = { G*(i2,j2) } by A1,A2,A3,A6,A8,Th16;
+end;
+
+theorem
+   for i1,j1,i2,j2 being Nat st
+  1 <= i1 & i1 <= len G & 1 <= j1 & j1+1 <= width G &
+  1 <= i2 & i2+1 <= len G & 1 <= j2 & j2 <= width G &
+  LSeg(G*(i1,j1),G*(i1,j1+1)) meets LSeg(G*(i2,j2),G*(i2+1,j2))
+ holds
+  j1 = j2 &
+  LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i2,j2),G*(i2+1,j2)) = { G*
+(i1,j1) }
+  or j1+1 = j2 &
+  LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i2,j2),G*(i2+1,j2)) = { G*
+(i1,j1+1) }
+proof let i1,j1,i2,j2 be Nat such that
+A1: 1 <= i1 & i1 <= len G and
+A2: 1 <= j1 & j1+1 <= width G and
+A3: 1 <= i2 & i2+1 <= len G and
+A4: 1 <= j2 & j2 <= width G and
+A5: LSeg(G*(i1,j1),G*(i1,j1+1)) meets LSeg(G*(i2,j2),G*(i2+1,j2));
+ per cases by A1,A2,A3,A4,A5,Th23;
+ case
+A6: j1 = j2;
+     now per cases by A1,A2,A3,A4,A5,Th23;
+    suppose i1 = i2;
+     hence thesis by A2,A3,A6,Th19;
+    suppose i1 = i2+1;
+     hence thesis by A2,A3,A6,Th20;
+   end;
+  hence LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i2,j2),G*(i2+1,j2))
+                             = { G*(i1,j1) };
+ case
+A7: j1+1 = j2;
+     now per cases by A1,A2,A3,A4,A5,Th23;
+    suppose i1 = i2;
+     hence thesis by A2,A3,A7,Th17;
+    suppose i1 = i2+1;
+     hence thesis by A2,A3,A7,Th18;
+   end;
+  hence LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i2,j2),G*(i2+1,j2))
+                             = { G*(i1,j1+1) };
+end;
+Lm1: 1 - 1/2 = 1/2;
+
+theorem Th27:
+ 1 <= i1 & i1 <= len G & 1 <= j1 & j1+1 <= width G &
+ 1 <= i2 & i2 <= len G & 1 <= j2 & j2+1 <= width G &
+  1/2*(G*(i1,j1)+G*(i1,j1+1)) in LSeg(G*(i2,j2),G*(i2,j2+1)) implies
+    i1 = i2 & j1 = j2
+proof assume that
+A1: 1 <= i1 & i1 <= len G and
+A2: 1 <= j1 & j1+1 <= width G and
+A3: 1 <= i2 & i2 <= len G and
+A4: 1 <= j2 & j2+1 <= width G;
+ set mi = 1/2*(G*(i1,j1)+G*(i1,j1+1));
+assume
+A5: mi in LSeg(G*(i2,j2),G*(i2,j2+1));
+A6:  1/2*(G*(i1,j1))+1/2*(G*(i1,j1+1))
+           = 1/2*(G*(i1,j1)+G*(i1,j1+1)) by EUCLID:36;
+then A7:  mi in LSeg(G*(i1,j1),G*(i1,j1+1)) by Lm1,SPPOL_1:22;
+   then A8:  LSeg(G*(i1,j1),G*(i1,j1+1))
+      meets LSeg(G*(i2,j2),G*(i2,j2+1)) by A5,XBOOLE_0:3;
+   hence
+A9:  i1 = i2 by A1,A2,A3,A4,Th21;
+A10: now assume
+A11:    abs(j1-j2) = 1;
+       j1 < j1+1 by REAL_1:69;
+then A12:   G*(i1,j1+1)`2 > G*(i1,j1)`2 by A1,A2,GOBOARD5:5;
+     per cases by A11,GOBOARD1:1;
+     suppose
+A13:    j1 = j2+1;
+then A14:   j2+(1+1) = j1+1 by XCMPLX_1:1;
+      then LSeg(G*(i2,j2),G*(i2,j2+1)) /\ LSeg(G*(i2,j2+1),G*(i2,j2+2))
+           = { G*(i2,j2+1) } by A2,A3,A4,Th15;
+      then mi in { G*(i1,j1) } by A5,A7,A9,A13,A14,XBOOLE_0:def 3;
+      then 1/2*(G*(i1,j1))+1/2*(G*(i1,j1+1))
+             = G*(i1,j1) by A6,TARSKI:def 1
+            .= (1/2+1/2)*(G*(i1,j1)) by EUCLID:33
+            .= 1/2*(G*(i1,j1))+1/2*(G*(i1,j1)) by EUCLID:37;
+      then 1/2*(G*(i1,j1)) = 1/2*(G*(i1,j1+1)) by Th3;
+     hence contradiction by A12,EUCLID:38;
+     suppose
+A15:    j1+1 = j2;
+then A16:   j1+(1+1) = j2+1 by XCMPLX_1:1;
+      then LSeg(G*(i2,j1),G*(i2,j1+1)) /\ LSeg(G*(i2,j1+1),G*(i2,j1+2))
+           = { G*(i2,j1+1) } by A2,A3,A4,Th15;
+      then mi in { G*(i1,j2) } by A5,A7,A9,A15,A16,XBOOLE_0:def 3;
+      then 1/2*(G*(i1,j1))+1/2*(G*(i1,j1+1))
+             = G*(i1,j2) by A6,TARSKI:def 1
+            .= (1/2+1/2)*(G*(i1,j2)) by EUCLID:33
+            .= 1/2*(G*(i1,j2))+1/2*(G*(i1,j2)) by EUCLID:37;
+      then 1/2*(G*(i1,j1)) = 1/2*(G*(i1,j1+1)) by A15,Th3;
+     hence contradiction by A12,EUCLID:38;
+    end;
+    abs(j1-j2) <= 1 by A1,A2,A3,A4,A8,Th21;
+  then abs(j1-j2) = 0 by A10,CQC_THE1:2;
+ hence j1 = j2 by Th2;
+end;
+
+
+theorem Th28:
+ 1 <= i1 & i1+1 <= len G & 1 <= j1 & j1 <= width G &
+ 1 <= i2 & i2+1 <= len G & 1 <= j2 & j2 <= width G &
+  1/2*(G*(i1,j1)+G*(i1+1,j1)) in LSeg(G*(i2,j2),G*(i2+1,j2)) implies
+    i1 = i2 & j1 = j2
+proof assume that
+A1: 1 <= i1 & i1+1 <= len G and
+A2: 1 <= j1 & j1 <= width G and
+A3: 1 <= i2 & i2+1 <= len G and
+A4: 1 <= j2 & j2 <= width G;
+ set mi = 1/2*(G*(i1,j1)+G*(i1+1,j1));
+assume
+A5: mi in LSeg(G*(i2,j2),G*(i2+1,j2));
+A6:  1/2*(G*(i1,j1))+1/2*(G*(i1+1,j1))
+           = 1/2*(G*(i1,j1)+G*(i1+1,j1)) by EUCLID:36;
+then A7:  mi in LSeg(G*(i1,j1),G*(i1+1,j1)) by Lm1,SPPOL_1:22;
+   then A8:  LSeg(G*(i1,j1),G*(i1+1,j1))
+      meets LSeg(G*(i2,j2),G*(i2+1,j2)) by A5,XBOOLE_0:3;
+then A9:  j1 = j2 by A1,A2,A3,A4,Th22;
+A10: now assume
+A11:    abs(i1-i2) = 1;
+       i1 < i1+1 by REAL_1:69;
+then A12:   G*(i1+1,j1)`1 > G*(i1,j1)`1 by A1,A2,GOBOARD5:4;
+     per cases by A11,GOBOARD1:1;
+     suppose
+A13:    i1 = i2+1;
+then A14:   i2+(1+1) = i1+1 by XCMPLX_1:1;
+      then LSeg(G*(i2,j2),G*(i2+1,j2)) /\ LSeg(G*(i2+1,j2),G*(i2+2,j2))
+           = { G*(i2+1,j2) } by A1,A3,A4,Th16;
+      then mi in { G*(i1,j1) } by A5,A7,A9,A13,A14,XBOOLE_0:def 3;
+      then 1/2*(G*(i1,j1))+1/2*(G*(i1+1,j1))
+             = G*(i1,j1) by A6,TARSKI:def 1
+            .= (1/2+1/2)*(G*(i1,j1)) by EUCLID:33
+            .= 1/2*(G*(i1,j1))+1/2*(G*(i1,j1)) by EUCLID:37;
+      then 1/2*(G*(i1,j1)) = 1/2*(G*(i1+1,j1)) by Th3;
+     hence contradiction by A12,EUCLID:38;
+     suppose
+A15:    i1+1 = i2;
+then A16:   i1+(1+1) = i2+1 by XCMPLX_1:1;
+      then LSeg(G*(i1,j2),G*(i1+1,j2)) /\ LSeg(G*(i1+1,j2),G*(i1+2,j2))
+           = { G*(i1+1,j2) } by A1,A3,A4,Th16;
+      then mi in { G*(i2,j1) } by A5,A7,A9,A15,A16,XBOOLE_0:def 3;
+      then 1/2*(G*(i1,j1))+1/2*(G*(i1+1,j1))
+             = G*(i2,j1) by A6,TARSKI:def 1
+            .= (1/2+1/2)*(G*(i2,j1)) by EUCLID:33
+            .= 1/2*(G*(i2,j1))+1/2*(G*(i2,j1)) by EUCLID:37;
+      then 1/2*(G*(i1,j1)) = 1/2*(G*(i1+1,j1)) by A15,Th3;
+     hence contradiction by A12,EUCLID:38;
+    end;
+    abs(i1-i2) <= 1 by A1,A2,A3,A4,A8,Th22;
+  then abs(i1-i2) = 0 by A10,CQC_THE1:2;
+ hence i1 = i2 by Th2;
+ thus j1 = j2 by A1,A2,A3,A4,A8,Th22;
+end;
+
+theorem Th29:
+ 1 <= i1 & i1+1 <= len G & 1 <= j1 & j1 <= width G implies
+ not ex i2,j2 st
+  1 <= i2 & i2 <= len G & 1 <= j2 & j2+1 <= width G &
+   1/2*(G*(i1,j1)+G*(i1+1,j1)) in LSeg(G*(i2,j2),G*(i2,j2+1))
+proof assume that
+A1: 1 <= i1 & i1+1 <= len G and
+A2: 1 <= j1 & j1 <= width G;
+ set mi = 1/2*(G*(i1,j1)+G*(i1+1,j1));
+ given i2,j2 such that
+A3: 1 <= i2 & i2 <= len G and
+A4: 1 <= j2 & j2+1 <= width G and
+A5: mi in LSeg(G*(i2,j2),G*(i2,j2+1));
+A6: i1 < i1+1 by REAL_1:69;
+A7:  1/2*(G*(i1,j1))+1/2*(G*(i1+1,j1))
+           = 1/2*(G*(i1,j1)+G*(i1+1,j1)) by EUCLID:36;
+then A8:  mi in LSeg(G*(i1,j1),G*(i1+1,j1)) by Lm1,SPPOL_1:22;
+   then A9: LSeg(G*(i1,j1),G*(i1+1,j1))
+      meets LSeg(G*(i2,j2),G*(i2,j2+1)) by A5,XBOOLE_0:3;
+  per cases by A1,A2,A3,A4,A9,Th23;
+   suppose
+A10:  j1 = j2 & i1 = i2;
+    then LSeg(G*(i1,j1),G*(i1+1,j1)) /\ LSeg(G*(i1,j1+1),G*(i1,j1)) = { G*(i1,
+j1) }
+                           by A1,A4,Th19;
+    then mi in { G*(i1,j1) } by A5,A8,A10,XBOOLE_0:def 3;
+    then 1/2*(G*(i1,j1))+1/2*(G*(i1+1,j1))
+           = G*(i1,j1) by A7,TARSKI:def 1
+          .= (1/2+1/2)*(G*(i1,j1)) by EUCLID:33
+          .= 1/2*(G*(i1,j1))+1/2*(G*(i1,j1)) by EUCLID:37;
+    then A11: 1/2*(G*(i1+1,j1)) = 1/2*(G*(i1,j1)) by Th3;
+      G*(i1+1,j1)`1 > G*(i1,j1)`1 by A1,A2,A6,GOBOARD5:4;
+   hence contradiction by A11,EUCLID:38;
+   suppose
+A12:  j1 = j2 & i1+1 = i2;
+    then LSeg(G*(i1,j1),G*(i1+1,j1)) /\ LSeg(G*(i1+1,j1+1),G*(i1+1,j1))
+          = { G*(i1+1,j1) } by A1,A4,Th20;
+    then mi in { G*(i1+1,j1) } by A5,A8,A12,XBOOLE_0:def 3;
+    then 1/2*(G*(i1,j1))+1/2*(G*(i1+1,j1))
+           = G*(i1+1,j1) by A7,TARSKI:def 1
+          .= (1/2+1/2)*(G*(i1+1,j1)) by EUCLID:33
+          .= 1/2*(G*(i1+1,j1))+1/2*(G*(i1+1,j1)) by EUCLID:37;
+    then A13: 1/2*(G*(i1+1,j1)) = 1/2*(G*(i1,j1)) by Th3;
+      G*(i1+1,j1)`1 > G*(i1,j1)`1 by A1,A2,A6,GOBOARD5:4;
+   hence contradiction by A13,EUCLID:38;
+   suppose
+A14: j1 = j2+1 & i1 = i2;
+    then LSeg(G*(i1,j1),G*(i1+1,j1)) /\ LSeg(G*(i1,j1),G*(i1,j2)) = { G*(i1,j1
+) }
+                   by A1,A4,Th17;
+    then mi in { G*(i1,j1) } by A5,A8,A14,XBOOLE_0:def 3;
+    then 1/2*(G*(i1,j1))+1/2*(G*(i1+1,j1))
+           = G*(i1,j1) by A7,TARSKI:def 1
+          .= (1/2+1/2)*(G*(i1,j1)) by EUCLID:33
+          .= 1/2*(G*(i1,j1))+1/2*(G*(i1,j1)) by EUCLID:37;
+    then A15: 1/2*(G*(i1+1,j1)) = 1/2*(G*(i1,j1)) by Th3;
+      G*(i1+1,j1)`1 > G*(i1,j1)`1 by A1,A2,A6,GOBOARD5:4;
+   hence contradiction by A15,EUCLID:38;
+   suppose
+A16: j1 = j2+1 & i1+1 = i2;
+    then LSeg(G*(i1,j1),G*(i1+1,j1)) /\ LSeg(G*(i1+1,j1),G*(i1+1,j2))
+         = { G*(i1+1,j1) } by A1,A4,Th18;
+    then mi in { G*(i1+1,j1) } by A5,A8,A16,XBOOLE_0:def 3;
+    then 1/2*(G*(i1,j1))+1/2*(G*(i1+1,j1))
+           = G*(i1+1,j1) by A7,TARSKI:def 1
+          .= (1/2+1/2)*(G*(i1+1,j1)) by EUCLID:33
+          .= 1/2*(G*(i1+1,j1))+1/2*(G*(i1+1,j1)) by EUCLID:37;
+    then A17: 1/2*(G*(i1+1,j1)) = 1/2*(G*(i1,j1)) by Th3;
+      G*(i1+1,j1)`1 > G*(i1,j1)`1 by A1,A2,A6,GOBOARD5:4;
+   hence contradiction by A17,EUCLID:38;
+end;
+
+theorem Th30:
+ 1 <= i1 & i1 <= len G & 1 <= j1 & j1+1 <= width G implies
+ not ex i2,j2 st
+  1 <= i2 & i2+1 <= len G & 1 <= j2 & j2 <= width G &
+   1/2*(G*(i1,j1)+G*(i1,j1+1)) in LSeg(G*(i2,j2),G*(i2+1,j2))
+proof assume that
+A1: 1 <= i1 & i1 <= len G and
+A2: 1 <= j1 & j1+1 <= width G;
+ set mi = 1/2*(G*(i1,j1)+G*(i1,j1+1));
+ given i2,j2 such that
+A3: 1 <= i2 & i2+1 <= len G and
+A4: 1 <= j2 & j2 <= width G and
+A5: mi in LSeg(G*(i2,j2),G*(i2+1,j2));
+A6: j1 < j1+1 by REAL_1:69;
+A7:  1/2*(G*(i1,j1))+1/2*(G*(i1,j1+1))
+           = 1/2*(G*(i1,j1)+G*(i1,j1+1)) by EUCLID:36;
+then A8:  mi in LSeg(G*(i1,j1),G*(i1,j1+1)) by Lm1,SPPOL_1:22;
+   then A9: LSeg(G*(i1,j1),G*(i1,j1+1))
+      meets LSeg(G*(i2,j2),G*(i2+1,j2)) by A5,XBOOLE_0:3;
+  per cases by A1,A2,A3,A4,A9,Th23;
+   suppose
+A10:  i1 = i2 & j1 = j2;
+    then LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i1+1,j1),G*(i1,j1)) = { G*(i1,
+j1) }
+                           by A2,A3,Th19;
+    then mi in { G*(i1,j1) } by A5,A8,A10,XBOOLE_0:def 3;
+    then 1/2*(G*(i1,j1))+1/2*(G*(i1,j1+1))
+           = G*(i1,j1) by A7,TARSKI:def 1
+          .= (1/2+1/2)*(G*(i1,j1)) by EUCLID:33
+          .= 1/2*(G*(i1,j1))+1/2*(G*(i1,j1)) by EUCLID:37;
+    then A11: 1/2*(G*(i1,j1+1)) = 1/2*(G*(i1,j1)) by Th3;
+      G*(i1,j1+1)`2 > G*(i1,j1)`2 by A1,A2,A6,GOBOARD5:5;
+   hence contradiction by A11,EUCLID:38;
+   suppose
+A12:  i1 = i2 & j1+1 = j2;
+    then LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i1+1,j1+1),G*(i1,j1+1))
+          = { G*(i1,j1+1) } by A2,A3,Th17;
+    then mi in { G*(i1,j1+1) } by A5,A8,A12,XBOOLE_0:def 3;
+    then 1/2*(G*(i1,j1))+1/2*(G*(i1,j1+1))
+           = G*(i1,j1+1) by A7,TARSKI:def 1
+          .= (1/2+1/2)*(G*(i1,j1+1)) by EUCLID:33
+          .= 1/2*(G*(i1,j1+1))+1/2*(G*(i1,j1+1)) by EUCLID:37;
+    then A13: 1/2*(G*(i1,j1+1)) = 1/2*(G*(i1,j1)) by Th3;
+      G*(i1,j1+1)`2 > G*(i1,j1)`2 by A1,A2,A6,GOBOARD5:5;
+   hence contradiction by A13,EUCLID:38;
+   suppose
+A14: i1 = i2+1 & j1 = j2;
+    then LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i1,j1),G*(i2,j1)) = { G*(i1,j1
+) }
+                   by A2,A3,Th20;
+    then mi in { G*(i1,j1) } by A5,A8,A14,XBOOLE_0:def 3;
+    then 1/2*(G*(i1,j1))+1/2*(G*(i1,j1+1))
+           = G*(i1,j1) by A7,TARSKI:def 1
+          .= (1/2+1/2)*(G*(i1,j1)) by EUCLID:33
+          .= 1/2*(G*(i1,j1))+1/2*(G*(i1,j1)) by EUCLID:37;
+    then A15: 1/2*(G*(i1,j1+1)) = 1/2*(G*(i1,j1)) by Th3;
+      G*(i1,j1+1)`2 > G*(i1,j1)`2 by A1,A2,A6,GOBOARD5:5;
+   hence contradiction by A15,EUCLID:38;
+   suppose
+A16: i1 = i2+1 & j1+1 = j2;
+    then LSeg(G*(i1,j1),G*(i1,j1+1)) /\ LSeg(G*(i1,j1+1),G*(i2,j1+1))
+         = { G*(i1,j1+1) } by A2,A3,Th18;
+    then mi in { G*(i1,j1+1) } by A5,A8,A16,XBOOLE_0:def 3;
+    then 1/2*(G*(i1,j1))+1/2*(G*(i1,j1+1))
+           = G*(i1,j1+1) by A7,TARSKI:def 1
+          .= (1/2+1/2)*(G*(i1,j1+1)) by EUCLID:33
+          .= 1/2*(G*(i1,j1+1))+1/2*(G*(i1,j1+1)) by EUCLID:37;
+    then A17: 1/2*(G*(i1,j1+1)) = 1/2*(G*(i1,j1)) by Th3;
+      G*(i1,j1+1)`2 > G*(i1,j1)`2 by A1,A2,A6,GOBOARD5:5;
+   hence contradiction by A17,EUCLID:38;
+end;
+
+begin :: Standard special circular sequences
+
+reserve f for non constant standard special_circular_sequence;
+
+Lm2:
+ len f > 1
+proof
+ consider n1,n2 being set such that
+A1: n1 in dom f & n2 in dom f and
+A2: f.n1 <> f.n2 by SEQM_3:def 5;
+A3: dom f = Seg len f by FINSEQ_1:def 3;
+ then reconsider df = dom f as finite set;
+
+  now assume
+A4: card df <= 1;
+  per cases by A4,CQC_THE1:2;
+  suppose card df = 0;
+  hence contradiction by A1,CARD_2:59;
+  suppose card df = 1;
+   then consider x being set such that
+A5:  dom f = {x} by CARD_2:60;
+     n1 = x & n2 = x by A1,A5,TARSKI:def 1;
+  hence contradiction by A2;
+ end;
+ hence thesis by A3,FINSEQ_1:78;
+end;
+
+theorem Th31:
+ for f being standard (non empty FinSequence of TOP-REAL 2)
+  st i in dom f & i+1 in dom f holds f/.i <> f/.(i+1)
+ proof let f be standard (non empty FinSequence of TOP-REAL 2) such that
+A1: i in dom f and
+A2: i+1 in dom f;
+A3: f is_sequence_on GoB f by GOBOARD5:def 5;
+   then consider i1,j1 such that
+A4: [i1,j1] in Indices GoB f and
+A5: f/.i = (GoB f)*(i1,j1) by A1,GOBOARD1:def 11;
+   consider i2,j2 such that
+A6: [i2,j2] in Indices GoB f and
+A7: f/.(i+1) = (GoB f)*(i2,j2) by A2,A3,GOBOARD1:def 11;
+  assume f/.i = f/.(i+1);
+   then i1 = i2 & j1 = j2 by A4,A5,A6,A7,GOBOARD1:21;
+   then i1-i2 = 0 & j1-j2 = 0 by XCMPLX_1:14;
+   then A8: abs(0)+abs(0) = 1 by A1,A2,A3,A4,A5,A6,A7,GOBOARD1:def 11;
+     abs(0) = 0 by ABSVALUE:7;
+  hence contradiction by A8;
+ end;
+
+theorem Th32:
+ ex i st i in dom f & (f/.i)`1 <> (f/.1)`1
+proof assume
+A1: for i st i in dom f holds (f/.i)`1 = (f/.1)`1;
+A2: len f > 1 by Lm2;
+then A3: len f >= 1+1 by NAT_1:38;
+then A4: 1+1 in dom f by FINSEQ_3:27;
+A5: 1 in dom f by FINSEQ_5:6;
+A6: now assume
+A7:    (f/.2)`2 = (f/.1)`2;
+        (f/.2)`1 = (f/.1)`1 by A1,A4;
+     then f/.2 = |[(f/.1)`1,(f/.1)`2]| by A7,EUCLID:57
+        .= f/.1 by EUCLID:57;
+     hence contradiction by A4,A5,Th31;
+    end;
+     len f = 2 implies f/.2 = f/.1 by FINSEQ_6:def 1;
+then A8: 2 < len f by A3,A6,AXIOMS:21;
+ per cases by A6,AXIOMS:21;
+ suppose
+A9: (f/.2)`2 < (f/.1)`2;
+     defpred P[Nat] means 2 <= $1 & $1 < len f implies
+       (f/.$1)`2 <= (f/.2)`2 & (f/.($1+1))`2 < (f/.$1)`2;
+A10: P[0];
+A11: for j st P[j] holds P[j+1]
+     proof let j such that
+A12: 2 <= j & j < len f implies (f/.j)`2 <=
+ (f/.2)`2 & (f/.(j+1))`2 < (f/.j)`2 and
+A13: 2 <= j+1 and
+A14: j+1 < len f;
+A15: j < len f by A14,NAT_1:38;
+A16: j+1+1 <= len f by A14,NAT_1:38;
+A17: now
+      per cases by A13,AXIOMS:21;
+      suppose 1+1 = j+1;
+       hence (f/.(j+1))`2 < (f/.j)`2 by A9,XCMPLX_1:2;
+      suppose 2 < j+1;
+       hence (f/.(j+1))`2 < (f/.j)`2 by A12,A14,NAT_1:38;
+     end;
+    thus (f/.(j+1))`2 <= (f/.2)`2
+     proof per cases by A13,AXIOMS:21;
+      suppose 2 = j+1;
+       hence thesis;
+      suppose 2 < j+1;
+      hence thesis by A12,A14,AXIOMS:22,NAT_1:38;
+     end;
+    assume
+A18:  (f/.(j+1+1))`2 >= (f/.(j+1))`2;
+       1+1 <= j+1 by A13;
+then A19:  1 <= j by REAL_1:53;
+then A20:  j in dom f by A15,FINSEQ_3:27;
+A21:  1 <= j+1 by NAT_1:29;
+then A22:  j+1 in dom f by A14,FINSEQ_3:27;
+       1 <= j+1+1 by NAT_1:29;
+then A23:  j+1+1 in dom f by A16,FINSEQ_3:27;
+A24: (f/.j)`1 = (f/.1)`1 by A1,A20;
+A25: (f/.(j+1))`1 = (f/.1)`1 by A1,A22;
+A26: (f/.(j+1+1))`1 = (f/.1)`1 by A1,A23;
+    per cases by A18,AXIOMS:21;
+     suppose
+A27:   (f/.(j+1+1))`2 > (f/.(j+1))`2;
+         now per cases;
+        suppose (f/.j)`2 <= (f/.(j+1+1))`2;
+         then f/.j in LSeg(f/.(j+1),f/.(j+1+1)) by A17,A24,A25,A26,Th8;
+         then A28:       f/.j in LSeg(f,j+1) by A16,A21,TOPREAL1:def 5;
+           f/.j in LSeg(f,j) by A14,A19,TOPREAL1:27;
+         then A29:       f/.j in LSeg(f,j) /\ LSeg(f,j+1) by A28,XBOOLE_0:def 3
+;
+           j+1+1 = j+(1+1) by XCMPLX_1:1;
+         then LSeg(f,j) /\ LSeg(f,j+1) = {f/.(j+1)} by A16,A19,TOPREAL1:def 8;
+         then f/.j = f/.(j+1) by A29,TARSKI:def 1;
+        hence contradiction by A20,A22,Th31;
+        suppose (f/.j)`2 >= (f/.(j+1+1))`2;
+         then f/.(j+1+1) in LSeg(f/.j,f/.(j+1)) by A24,A25,A26,A27,Th8;
+         then A30:       f/.(j+1+1) in LSeg(f,j) by A14,A19,TOPREAL1:def 5;
+           f/.(j+1+1) in LSeg(f,j+1) by A16,A21,TOPREAL1:27;
+         then A31:       f/.(j+1+1) in LSeg(f,j) /\ LSeg(f,j+1) by A30,XBOOLE_0
+:def 3;
+           j+1+1 = j+(1+1) by XCMPLX_1:1;
+         then LSeg(f,j) /\ LSeg(f,j+1) = {f/.(j+1)} by A16,A19,TOPREAL1:def 8;
+         then f/.(j+1+1) = f/.(j+1) by A31,TARSKI:def 1;
+        hence contradiction by A22,A23,Th31;
+       end;
+      hence contradiction;
+     suppose
+A32:   (f/.(j+1+1))`2 = (f/.(j+1))`2;
+        (f/.(j+1+1))`1 = (f/.1)`1 by A1,A23
+           .= (f/.(j+1))`1 by A1,A22;
+      then f/.(j+1+1) = |[(f/.(j+1))`1,(f/.(j+1))`2]| by A32,EUCLID:57
+           .= f/.(j+1) by EUCLID:57;
+     hence contradiction by A22,A23,Th31;
+   end;
+A33: for j holds P[j] from Ind(A10,A11);
+A34: len f -'1+1 = len f by A2,AMI_5:4;
+  then A35: 2 <= len f -'1 & len f-'1 < len f by A8,NAT_1:38;
+  then A36: (f/.(len f-'1))`2 <= (f/.2)`2 by A33;
+     (f/.len f)`2 < (f/.(len f -'1))`2 by A33,A34,A35;
+  then (f/.len f)`2 < (f/.2)`2 by A36,AXIOMS:22;
+ hence contradiction by A9,FINSEQ_6:def 1;
+ suppose
+A37: (f/.2)`2 > (f/.1)`2;
+     defpred P[Nat] means 2 <= $1 & $1 < len f implies
+     (f/.$1)`2 >= (f/.2)`2 & (f/.($1+1))`2 > (f/.$1)`2;
+A38: P[0];
+A39: for j st P[j] holds P[j+1]
+     proof let j such that
+A40: 2 <= j & j < len f implies (f/.j)`2 >=
+ (f/.2)`2 & (f/.(j+1))`2 > (f/.j)`2 and
+A41: 2 <= j+1 and
+A42: j+1 < len f;
+A43: j < len f by A42,NAT_1:38;
+A44: j+1+1 <= len f by A42,NAT_1:38;
+A45: now
+      per cases by A41,AXIOMS:21;
+      suppose 1+1 = j+1;
+       hence (f/.(j+1))`2 > (f/.j)`2 by A37,XCMPLX_1:2;
+      suppose 2 < j+1;
+       hence (f/.(j+1))`2 > (f/.j)`2 by A40,A42,NAT_1:38;
+     end;
+    thus (f/.(j+1))`2 >= (f/.2)`2
+     proof per cases by A41,AXIOMS:21;
+      suppose 2 = j+1;
+       hence thesis;
+      suppose 2 < j+1;
+      hence thesis by A40,A42,AXIOMS:22,NAT_1:38;
+     end;
+    assume
+A46:  (f/.(j+1+1))`2 <= (f/.(j+1))`2;
+       1+1 <= j+1 by A41;
+then A47:  1 <= j by REAL_1:53;
+then A48:  j in dom f by A43,FINSEQ_3:27;
+A49:  1 <= j+1 by NAT_1:29;
+then A50:  j+1 in dom f by A42,FINSEQ_3:27;
+       1 <= j+1+1 by NAT_1:29;
+then A51:  j+1+1 in dom f by A44,FINSEQ_3:27;
+A52: (f/.j)`1 = (f/.1)`1 by A1,A48;
+A53: (f/.(j+1))`1 = (f/.1)`1 by A1,A50;
+A54: (f/.(j+1+1))`1 = (f/.1)`1 by A1,A51;
+    per cases by A46,AXIOMS:21;
+     suppose
+A55:   (f/.(j+1+1))`2 < (f/.(j+1))`2;
+         now per cases;
+        suppose (f/.j)`2 >= (f/.(j+1+1))`2;
+         then f/.j in LSeg(f/.(j+1),f/.(j+1+1)) by A45,A52,A53,A54,Th8;
+         then A56:       f/.j in LSeg(f,j+1) by A44,A49,TOPREAL1:def 5;
+           f/.j in LSeg(f,j) by A42,A47,TOPREAL1:27;
+         then A57:       f/.j in LSeg(f,j) /\ LSeg(f,j+1) by A56,XBOOLE_0:def 3
+;
+           j+1+1 = j+(1+1) by XCMPLX_1:1;
+         then LSeg(f,j) /\ LSeg(f,j+1) = {f/.(j+1)} by A44,A47,TOPREAL1:def 8;
+         then f/.j = f/.(j+1) by A57,TARSKI:def 1;
+        hence contradiction by A48,A50,Th31;
+        suppose (f/.j)`2 <= (f/.(j+1+1))`2;
+         then f/.(j+1+1) in LSeg(f/.j,f/.(j+1)) by A52,A53,A54,A55,Th8;
+         then A58:       f/.(j+1+1) in LSeg(f,j) by A42,A47,TOPREAL1:def 5;
+           f/.(j+1+1) in LSeg(f,j+1) by A44,A49,TOPREAL1:27;
+         then A59:       f/.(j+1+1) in LSeg(f,j) /\ LSeg(f,j+1) by A58,XBOOLE_0
+:def 3;
+           j+1+1 = j+(1+1) by XCMPLX_1:1;
+         then LSeg(f,j) /\ LSeg(f,j+1) = {f/.(j+1)} by A44,A47,TOPREAL1:def 8;
+         then f/.(j+1+1) = f/.(j+1) by A59,TARSKI:def 1;
+        hence contradiction by A50,A51,Th31;
+       end;
+      hence contradiction;
+     suppose
+A60:   (f/.(j+1+1))`2 = (f/.(j+1))`2;
+        (f/.(j+1+1))`1 = (f/.1)`1 by A1,A51
+           .= (f/.(j+1))`1 by A1,A50;
+      then f/.(j+1+1) = |[(f/.(j+1))`1,(f/.(j+1))`2]| by A60,EUCLID:57
+           .= f/.(j+1) by EUCLID:57;
+     hence contradiction by A50,A51,Th31;
+   end;
+A61: for j holds P[j] from Ind(A38,A39);
+A62: len f -'1+1 = len f by A2,AMI_5:4;
+  then A63: 2 <= len f -'1 & len f-'1 < len f by A8,NAT_1:38;
+  then A64: (f/.(len f-'1))`2 >= (f/.2)`2 by A61;
+     (f/.len f)`2 > (f/.(len f -'1))`2 by A61,A62,A63;
+  then (f/.len f)`2 > (f/.2)`2 by A64,AXIOMS:22;
+ hence contradiction by A37,FINSEQ_6:def 1;
+end;
+
+theorem Th33:
+ ex i st i in dom f & (f/.i)`2 <> (f/.1)`2
+proof assume
+A1: for i st i in dom f holds (f/.i)`2 = (f/.1)`2;
+A2: len f > 1 by Lm2;
+then A3: len f >= 1+1 by NAT_1:38;
+then A4: 1+1 in dom f by FINSEQ_3:27;
+A5: 1 in dom f by FINSEQ_5:6;
+A6: now assume
+A7:    (f/.2)`1 = (f/.1)`1;
+        (f/.2)`2 = (f/.1)`2 by A1,A4;
+     then f/.2 = |[(f/.1)`1,(f/.1)`2]| by A7,EUCLID:57
+        .= f/.1 by EUCLID:57;
+     hence contradiction by A4,A5,Th31;
+    end;
+     len f = 2 implies f/.2 = f/.1 by FINSEQ_6:def 1;
+then A8: 2 < len f by A3,A6,AXIOMS:21;
+ per cases by A6,AXIOMS:21;
+ suppose
+A9: (f/.2)`1 < (f/.1)`1;
+     defpred P[Nat] means 2 <= $1 & $1 < len f implies
+     (f/.$1)`1 <= (f/.2)`1 & (f/.($1+1))`1 < (f/.$1)`1;
+A10: P[0];
+A11: for j st P[j] holds P[j+1]
+     proof let j such that
+A12: 2 <= j & j < len f implies (f/.j)`1 <=
+ (f/.2)`1 & (f/.(j+1))`1 < (f/.j)`1 and
+A13: 2 <= j+1 and
+A14: j+1 < len f;
+A15: j < len f by A14,NAT_1:38;
+A16: j+1+1 <= len f by A14,NAT_1:38;
+A17: now
+      per cases by A13,AXIOMS:21;
+      suppose 1+1 = j+1;
+       hence (f/.(j+1))`1 < (f/.j)`1 by A9,XCMPLX_1:2;
+      suppose 2 < j+1;
+       hence (f/.(j+1))`1 < (f/.j)`1 by A12,A14,NAT_1:38;
+     end;
+    thus (f/.(j+1))`1 <= (f/.2)`1
+     proof per cases by A13,AXIOMS:21;
+      suppose 2 = j+1;
+       hence thesis;
+      suppose 2 < j+1;
+      hence thesis by A12,A14,AXIOMS:22,NAT_1:38;
+     end;
+    assume
+A18:  (f/.(j+1+1))`1 >= (f/.(j+1))`1;
+       1+1 <= j+1 by A13;
+then A19:  1 <= j by REAL_1:53;
+then A20:  j in dom f by A15,FINSEQ_3:27;
+A21:  1 <= j+1 by NAT_1:29;
+then A22:  j+1 in dom f by A14,FINSEQ_3:27;
+       1 <= j+1+1 by NAT_1:29;
+then A23:  j+1+1 in dom f by A16,FINSEQ_3:27;
+A24: (f/.j)`2 = (f/.1)`2 by A1,A20;
+A25: (f/.(j+1))`2 = (f/.1)`2 by A1,A22;
+A26: (f/.(j+1+1))`2 = (f/.1)`2 by A1,A23;
+    per cases by A18,AXIOMS:21;
+     suppose
+A27:   (f/.(j+1+1))`1 > (f/.(j+1))`1;
+         now per cases;
+        suppose (f/.j)`1 <= (f/.(j+1+1))`1;
+         then f/.j in LSeg(f/.(j+1),f/.(j+1+1)) by A17,A24,A25,A26,Th9;
+         then A28:       f/.j in LSeg(f,j+1) by A16,A21,TOPREAL1:def 5;
+           f/.j in LSeg(f,j) by A14,A19,TOPREAL1:27;
+         then A29:       f/.j in LSeg(f,j) /\ LSeg(f,j+1) by A28,XBOOLE_0:def 3
+;
+           j+1+1 = j+(1+1) by XCMPLX_1:1;
+         then LSeg(f,j) /\ LSeg(f,j+1) = {f/.(j+1)} by A16,A19,TOPREAL1:def 8;
+         then f/.j = f/.(j+1) by A29,TARSKI:def 1;
+        hence contradiction by A20,A22,Th31;
+        suppose (f/.j)`1 >= (f/.(j+1+1))`1;
+         then f/.(j+1+1) in LSeg(f/.j,f/.(j+1)) by A24,A25,A26,A27,Th9;
+         then A30:       f/.(j+1+1) in LSeg(f,j) by A14,A19,TOPREAL1:def 5;
+           f/.(j+1+1) in LSeg(f,j+1) by A16,A21,TOPREAL1:27;
+         then A31:       f/.(j+1+1) in LSeg(f,j) /\ LSeg(f,j+1) by A30,XBOOLE_0
+:def 3;
+           j+1+1 = j+(1+1) by XCMPLX_1:1;
+         then LSeg(f,j) /\ LSeg(f,j+1) = {f/.(j+1)} by A16,A19,TOPREAL1:def 8;
+         then f/.(j+1+1) = f/.(j+1) by A31,TARSKI:def 1;
+        hence contradiction by A22,A23,Th31;
+       end;
+      hence contradiction;
+     suppose
+A32:   (f/.(j+1+1))`1 = (f/.(j+1))`1;
+        (f/.(j+1+1))`2 = (f/.1)`2 by A1,A23
+           .= (f/.(j+1))`2 by A1,A22;
+      then f/.(j+1+1) = |[(f/.(j+1))`1,(f/.(j+1))`2]| by A32,EUCLID:57
+           .= f/.(j+1) by EUCLID:57;
+     hence contradiction by A22,A23,Th31;
+   end;
+A33: for j holds P[j] from Ind(A10,A11);
+A34: len f -'1+1 = len f by A2,AMI_5:4;
+  then A35: 2 <= len f -'1 & len f-'1 < len f by A8,NAT_1:38;
+  then A36: (f/.(len f-'1))`1 <= (f/.2)`1 by A33;
+     (f/.len f)`1 < (f/.(len f-'1))`1 by A33,A34,A35;
+  then (f/.len f)`1 < (f/.2)`1 by A36,AXIOMS:22;
+ hence contradiction by A9,FINSEQ_6:def 1;
+ suppose
+A37: (f/.2)`1 > (f/.1)`1;
+  defpred P[Nat] means 2 <= $1 & $1 < len f implies
+     (f/.$1)`1 >= (f/.2)`1 & (f/.($1+1))`1 > (f/.$1)`1;
+A38: P[0];
+A39: for j st P[j] holds P[j+1]
+     proof let j such that
+A40: 2 <= j & j < len f implies (f/.j)`1 >=
+ (f/.2)`1 & (f/.(j+1))`1 > (f/.j)`1 and
+A41: 2 <= j+1 and
+A42: j+1 < len f;
+A43: j < len f by A42,NAT_1:38;
+A44: j+1+1 <= len f by A42,NAT_1:38;
+A45: now
+      per cases by A41,AXIOMS:21;
+      suppose 1+1 = j+1;
+       hence (f/.(j+1))`1 > (f/.j)`1 by A37,XCMPLX_1:2;
+      suppose 2 < j+1;
+       hence (f/.(j+1))`1 > (f/.j)`1 by A40,A42,NAT_1:38;
+     end;
+    thus (f/.(j+1))`1 >= (f/.2)`1
+     proof per cases by A41,AXIOMS:21;
+      suppose 2 = j+1;
+       hence thesis;
+      suppose 2 < j+1;
+      hence thesis by A40,A42,AXIOMS:22,NAT_1:38;
+     end;
+    assume
+A46:  (f/.(j+1+1))`1 <= (f/.(j+1))`1;
+       1+1 <= j+1 by A41;
+then A47:  1 <= j by REAL_1:53;
+then A48:  j in dom f by A43,FINSEQ_3:27;
+A49:  1 <= j+1 by NAT_1:29;
+then A50:  j+1 in dom f by A42,FINSEQ_3:27;
+       1 <= j+1+1 by NAT_1:29;
+then A51:  j+1+1 in dom f by A44,FINSEQ_3:27;
+A52: (f/.j)`2 = (f/.1)`2 by A1,A48;
+A53: (f/.(j+1))`2 = (f/.1)`2 by A1,A50;
+A54: (f/.(j+1+1))`2 = (f/.1)`2 by A1,A51;
+    per cases by A46,AXIOMS:21;
+     suppose
+A55:   (f/.(j+1+1))`1 < (f/.(j+1))`1;
+         now per cases;
+        suppose (f/.j)`1 >= (f/.(j+1+1))`1;
+         then f/.j in LSeg(f/.(j+1),f/.(j+1+1)) by A45,A52,A53,A54,Th9;
+         then A56:       f/.j in LSeg(f,j+1) by A44,A49,TOPREAL1:def 5;
+           f/.j in LSeg(f,j) by A42,A47,TOPREAL1:27;
+         then A57:       f/.j in LSeg(f,j) /\ LSeg(f,j+1) by A56,XBOOLE_0:def 3
+;
+           j+1+1 = j+(1+1) by XCMPLX_1:1;
+         then LSeg(f,j) /\ LSeg(f,j+1) = {f/.(j+1)} by A44,A47,TOPREAL1:def 8;
+         then f/.j = f/.(j+1) by A57,TARSKI:def 1;
+        hence contradiction by A48,A50,Th31;
+        suppose (f/.j)`1 <= (f/.(j+1+1))`1;
+         then f/.(j+1+1) in LSeg(f/.j,f/.(j+1)) by A52,A53,A54,A55,Th9;
+         then A58:       f/.(j+1+1) in LSeg(f,j) by A42,A47,TOPREAL1:def 5;
+           f/.(j+1+1) in LSeg(f,j+1) by A44,A49,TOPREAL1:27;
+         then A59:       f/.(j+1+1) in LSeg(f,j) /\ LSeg(f,j+1) by A58,XBOOLE_0
+:def 3;
+           j+1+1 = j+(1+1) by XCMPLX_1:1;
+         then LSeg(f,j) /\ LSeg(f,j+1) = {f/.(j+1)} by A44,A47,TOPREAL1:def 8;
+         then f/.(j+1+1) = f/.(j+1) by A59,TARSKI:def 1;
+        hence contradiction by A50,A51,Th31;
+       end;
+      hence contradiction;
+     suppose
+A60:   (f/.(j+1+1))`1 = (f/.(j+1))`1;
+        (f/.(j+1+1))`2 = (f/.1)`2 by A1,A51
+           .= (f/.(j+1))`2 by A1,A50;
+      then f/.(j+1+1) = |[(f/.(j+1))`1,(f/.(j+1))`2]| by A60,EUCLID:57
+           .= f/.(j+1) by EUCLID:57;
+     hence contradiction by A50,A51,Th31;
+   end;
+A61: for j holds P[j] from Ind(A38,A39);
+A62: len f -'1+1 = len f by A2,AMI_5:4;
+  then A63: 2 <= len f -'1 & len f-'1 < len f by A8,NAT_1:38;
+  then A64: (f/.(len f-'1))`1 >= (f/.2)`1 by A61;
+     (f/.len f)`1 > (f/.(len f-'1))`1 by A61,A62,A63;
+  then (f/.len f)`1 > (f/.2)`1 by A64,AXIOMS:22;
+ hence contradiction by A37,FINSEQ_6:def 1;
+end;
+
+theorem
+   len GoB f > 1
+ proof assume
+A1: len GoB f <= 1;
+     len GoB f <> 0 by GOBOARD1:def 5;
+   then A2:  len GoB f = 1 by A1,CQC_THE1:2;
+   consider i such that
+A3: i in dom f and
+A4: (f/.i)`1 <> (f/.1)`1 by Th32;
+   consider i1,j1 such that
+A5:  [i1,j1] in Indices GoB f and
+A6:  f/.i = (GoB f)*(i1,j1) by A3,GOBOARD2:25;
+     1 in dom f by FINSEQ_5:6;
+   then consider i2,j2 such that
+A7:  [i2,j2] in Indices GoB f and
+A8:  f/.1 = (GoB f)*(i2,j2) by GOBOARD2:25;
+A9: 1 <= j1 & j1 <= width GoB f by A5,GOBOARD5:1;
+A10: 1 <= j2 & j2 <= width GoB f by A7,GOBOARD5:1;
+     1 <= i1 & i1 <= 1 by A2,A5,GOBOARD5:1;
+   then i1 = 1 by AXIOMS:21;
+then A11: (GoB f)*(i1,j1)`1 = (GoB f)*(1,1)`1 by A2,A9,GOBOARD5:3;
+     1 <= i2 & i2 <= 1 by A2,A7,GOBOARD5:1;
+   then i2 = 1 by AXIOMS:21;
+  hence contradiction by A2,A4,A6,A8,A10,A11,GOBOARD5:3;
+ end;
+
+theorem
+   width GoB f > 1
+ proof assume
+A1: width GoB f <= 1;
+     width GoB f <> 0 by GOBOARD1:def 5;
+   then A2:  width GoB f = 1 by A1,CQC_THE1:2;
+   consider i such that
+A3: i in dom f and
+A4: (f/.i)`2 <> (f/.1)`2 by Th33;
+   consider i1,j1 such that
+A5:  [i1,j1] in Indices GoB f and
+A6:  f/.i = (GoB f)*(i1,j1) by A3,GOBOARD2:25;
+     1 in dom f by FINSEQ_5:6;
+   then consider i2,j2 such that
+A7:  [i2,j2] in Indices GoB f and
+A8:  f/.1 = (GoB f)*(i2,j2) by GOBOARD2:25;
+A9: 1 <= i1 & i1 <= len GoB f by A5,GOBOARD5:1;
+A10: 1 <= i2 & i2 <= len GoB f by A7,GOBOARD5:1;
+     1 <= j1 & j1 <= 1 by A2,A5,GOBOARD5:1;
+   then j1 = 1 by AXIOMS:21;
+then A11: (GoB f)*(i1,j1)`2 = (GoB f)*(1,1)`2 by A2,A9,GOBOARD5:2;
+     1 <= j2 & j2 <= 1 by A2,A7,GOBOARD5:1;
+   then j2 = 1 by AXIOMS:21;
+  hence contradiction by A2,A4,A6,A8,A10,A11,GOBOARD5:2;
+ end;
+
+theorem Th36:
+ len f > 4
+proof
+ assume
+A1: len f <= 4;
+ consider i1 such that
+A2: i1 in dom f and
+A3: (f/.i1)`1 <> (f/.1)`1 by Th32;
+ consider i2 such that
+A4: i2 in dom f and
+A5: (f/.i2)`2 <> (f/.1)`2 by Th33;
+A6: len f > 1 by Lm2;
+then A7: len f >= 1+1 by NAT_1:38;
+then A8: 1 in dom f & 2 in dom f by A6,FINSEQ_3:27;
+ per cases by A7,TOPREAL1:def 7;
+ suppose
+A9: (f/.(1+1))`1 = (f/.1)`1;
+A10: i1 <= len f by A2,FINSEQ_3:27;
+A11: i1 <> 0 by A2,FINSEQ_3:27;
+  A12: i1 <= 4 by A1,A10,AXIOMS:22;
+A13: f/.len f = f/.1 by FINSEQ_6:def 1;
+    now per cases by A3,A9,A11,A12,CQC_THE1:5;
+   suppose
+A14:  i1 = 3;
+then A15:  len f >= 3 by A2,FINSEQ_3:27;
+    then len f > 3 by A3,A13,A14,AXIOMS:21;
+    then A16: len f >= 3+1 by NAT_1:38;
+    then A17:   len f = 4 by A1,AXIOMS:21;
+A18:  now assume (f/.(1+1))`2 = (f/.1)`2;
+      then f/.(1+1) = |[(f/.1)`1,(f/.1)`2]| by A9,EUCLID:57
+        .= f/.1 by EUCLID:57;
+     hence contradiction by A8,Th31;
+    end;
+    A19: (f/.2)`2 = (f/.(2+1))`2 by A3,A9,A14,A15,TOPREAL1:def 7;
+      (f/.3)`1 = (f/.(3+1))`1 or (f/.3)`2 = (f/.(3+1))`2 by A16,TOPREAL1:def 7;
+    hence contradiction by A3,A14,A17,A18,A19,FINSEQ_6:def 1;
+   suppose
+     i1 = 4;
+    hence contradiction by A1,A3,A10,A13,AXIOMS:21;
+  end;
+ hence contradiction;
+ suppose
+A20: (f/.(1+1))`2 = (f/.1)`2;
+A21: i2 <= len f by A4,FINSEQ_3:27;
+A22: i2 <> 0 by A4,FINSEQ_3:27;
+  A23: i2 <= 4 by A1,A21,AXIOMS:22;
+A24: f/.len f = f/.1 by FINSEQ_6:def 1;
+    now per cases by A5,A20,A22,A23,CQC_THE1:5;
+   suppose
+A25:  i2 = 3;
+then A26:  len f >= 3 by A4,FINSEQ_3:27;
+    then len f > 3 by A5,A24,A25,AXIOMS:21;
+    then A27: len f >= 3+1 by NAT_1:38;
+    then A28:   len f = 4 by A1,AXIOMS:21;
+A29:  now assume (f/.(1+1))`1 = (f/.1)`1;
+      then f/.(1+1) = |[(f/.1)`1,(f/.1)`2]| by A20,EUCLID:57
+        .= f/.1 by EUCLID:57;
+     hence contradiction by A8,Th31;
+    end;
+    A30: (f/.2)`1 = (f/.(2+1))`1 by A5,A20,A25,A26,TOPREAL1:def 7;
+      (f/.3)`2 = (f/.(3+1))`2 or (f/.3)`1 = (f/.(3+1))`1 by A27,TOPREAL1:def 7;
+    hence contradiction by A5,A25,A28,A29,A30,FINSEQ_6:def 1;
+   suppose
+     i2 = 4;
+    hence contradiction by A1,A5,A21,A24,AXIOMS:21;
+  end;
+ hence contradiction;
+end;
+
+theorem Th37:
+ for f being circular s.c.c. FinSequence of TOP-REAL 2 st len f > 4
+  for i,j being Nat st 1 <= i & i < j & j < len f holds f/.i <> f/.j
+proof let f be circular s.c.c. FinSequence of TOP-REAL 2 such that
+A1: len f > 4;
+ let i,j be Nat such that
+A2: 1 <= i and
+A3: i < j and
+A4: j < len f and
+A5: f/.i = f/.j;
+A6: j+1 <= len f by A4,NAT_1:38;
+A7: 1 <= j by A2,A3,AXIOMS:22;
+then A8: f/.j in LSeg(f,j) by A6,TOPREAL1:27;
+A9: i < len f by A3,A4,AXIOMS:22;
+    then i+1 <= len f by NAT_1:38;
+then A10: f/.i in LSeg(f,i) by A2,TOPREAL1:27;
+A11: i+1 <= j by A3,NAT_1:38;
+A12: i <> 0 by A2;
+ per cases by A11,A12,AXIOMS:21,CQC_THE1:3;
+ suppose that
+A13: i+1 = j and
+A14: i = 1;
+     1 <= len f by A1,AXIOMS:22;
+then A15: len f -' 1 + 1 = len f by AMI_5:4;
+     1+1 <= len f by A1,AXIOMS:22;
+then A16: 1 <= len f -' 1 by A15,REAL_1:53;
+A17: len f -' 1 < len f by A15,REAL_1:69;
+     j+1+1 < len f by A1,A13,A14;
+   then j+1 < len f -' 1 by A15,AXIOMS:24;
+    then LSeg(f,j) misses LSeg(f,len f -' 1) by A13,A14,A17,GOBOARD5:def 4;
+then A18: LSeg(f,j) /\ LSeg(f,len f -' 1) = {} by XBOOLE_0:def 7;
+     f/.i = f/.len f by A14,FINSEQ_6:def 1;
+   then f/.i in LSeg(f,len f -' 1) by A15,A16,TOPREAL1:27;
+  hence contradiction by A5,A8,A18,XBOOLE_0:def 3;
+ suppose that
+A19: i+1 = j and
+A20: i = 1+1;
+A21: i -' 1 + 1 = i by A2,AMI_5:4;
+then A22: 1 <= i -' 1 by A20,REAL_1:53;
+     j+1 < len f by A1,A19,A20;
+   then LSeg(f,i -' 1) misses LSeg(f,j) by A3,A21,GOBOARD5:def 4;
+then A23: LSeg(f,i -' 1) /\ LSeg(f,j) = {} by XBOOLE_0:def 7;
+     f/.i in LSeg(f,i -' 1) by A9,A21,A22,TOPREAL1:27;
+  hence contradiction by A5,A8,A23,XBOOLE_0:def 3;
+ suppose that
+A24: i > 1+1;
+A25: i -' 1 + 1 = i by A2,AMI_5:4;
+then A26: 1 < i -' 1 by A24,AXIOMS:24;
+     then LSeg(f,i-'1) misses LSeg(f,j) by A3,A4,A25,GOBOARD5:def 4;
+then A27: LSeg(f,i-'1) /\ LSeg(f,j) = {} by XBOOLE_0:def 7;
+     f/.i in LSeg(f,i-' 1) by A9,A25,A26,TOPREAL1:27;
+  hence contradiction by A5,A8,A27,XBOOLE_0:def 3;
+ suppose that
+A28: i+1 < j and
+A29: i <> 1;
+    1 < i by A2,A29,AXIOMS:21;
+   then LSeg(f,i) misses LSeg(f,j) by A4,A28,GOBOARD5:def 4;
+   then LSeg(f,i) /\ LSeg(f,j) = {} by XBOOLE_0:def 7;
+  hence contradiction by A5,A8,A10,XBOOLE_0:def 3;
+ suppose that
+A30: i+1 < j and
+A31: j+1 <> len f;
+   j+1 < len f by A6,A31,AXIOMS:21;
+   then LSeg(f,i) misses LSeg(f,j) by A30,GOBOARD5:def 4;
+   then LSeg(f,i) /\ LSeg(f,j) = {} by XBOOLE_0:def 7;
+  hence contradiction by A5,A8,A10,XBOOLE_0:def 3;
+ suppose that
+A32: i+1 < j and
+A33: i = 1 and
+A34: j+1 = len f;
+A35: j-'1+1 = j by A7,AMI_5:4;
+then A36: i+1 <= j-'1 by A32,NAT_1:38;
+      i+1 <> j-'1 by A1,A33,A34,A35;
+then A37: i+1 < j-'1 by A36,AXIOMS:21;
+      1 <= j-'1 by A33,A36,AXIOMS:22;
+then A38:  f/.j in LSeg(f,j-'1) by A4,A35,TOPREAL1:27;
+     j < len f by A34,NAT_1:38;
+   then LSeg(f,1) misses LSeg(f,j-'1) by A33,A35,A37,GOBOARD5:def 4;
+   then LSeg(f,1) /\ LSeg(f,j-'1) = {} by XBOOLE_0:def 7;
+ hence contradiction by A5,A10,A33,A38,XBOOLE_0:def 3;
+end;
+
+theorem Th38:
+  for i,j being Nat st 1 <= i & i < j & j < len f holds f/.i <> f/.j
+ proof len f > 4 by Th36; hence thesis by Th37; end;
+
+theorem Th39:
+  for i,j being Nat st 1 < i & i < j & j <= len f holds f/.i <> f/.j
+ proof let i,j be Nat such that
+A1: 1 < i and
+A2: i < j and
+A3: j <= len f;
+  per cases by A3,AXIOMS:21;
+  suppose j < len f;
+  hence f/.i <> f/.j by A1,A2,Th38;
+  suppose j = len f;
+   then A4:  f/.j = f/.1 by FINSEQ_6:def 1;
+     i < len f by A2,A3,AXIOMS:22;
+  hence f/.i <> f/.j by A1,A4,Th38;
+ end;
+
+theorem Th40:
+  for i being Nat st 1 < i & i <= len f & f/.i = f/.1 holds i = len f
+ proof let i be Nat such that
+A1: 1 < i & i <= len f and
+A2: f/.i = f/.1;
+  assume i <> len f;
+   then i < len f by A1,AXIOMS:21;
+  hence contradiction by A1,A2,Th38;
+ end;
+
+theorem Th41:
+ 1 <= i & i <= len GoB f & 1 <= j & j+1 <= width GoB f &
+  1/2*((GoB f)*(i,j)+(GoB f)*(i,j+1)) in L~f implies
+ ex k st 1 <= k & k+1 <= len f &
+  LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k)
+proof
+ set mi = 1/2*((GoB f)*(i,j)+(GoB f)*(i,j+1));
+ assume that
+A1: 1 <= i & i <= len GoB f and
+A2: 1 <= j & j+1 <= width GoB f and
+A3: 1/2*((GoB f)*(i,j)+(GoB f)*(i,j+1)) in L~f;
+    L~f = union { LSeg(f,k) : 1 <= k & k+1 <= len f } by TOPREAL1:def 6;
+  then consider x such that
+A4: 1/2*((GoB f)*(i,j)+(GoB f)*(i,j+1)) in x and
+A5: x in { LSeg(f,k) : 1 <= k & k+1 <= len f } by A3,TARSKI:def 4;
+  consider k such that
+A6: x = LSeg(f,k) and
+A7: 1 <= k & k+1 <= len f by A5;
+ take k;
+ thus 1 <= k & k+1 <= len f by A7;
+A8: f is_sequence_on GoB f by GOBOARD5:def 5;
+    k <= k+1 by NAT_1:29;
+  then k <= len f by A7,AXIOMS:22;
+  then A9: k in dom f by A7,FINSEQ_3:27;
+  then consider i1,j1 being Nat such that
+A10: [i1,j1] in Indices GoB f and
+A11: f/.k = (GoB f)*(i1,j1) by A8,GOBOARD1:def 11;
+    1 <= k+1 by NAT_1:29;
+then A12: k+1 in dom f by A7,FINSEQ_3:27;
+  then consider i2,j2 being Nat such that
+A13: [i2,j2] in Indices GoB f and
+A14: f/.(k+1) = (GoB f)*(i2,j2) by A8,GOBOARD1:def 11;
+    abs(i1-i2)+abs(j1-j2) = 1 by A8,A9,A10,A11,A12,A13,A14,GOBOARD1:def 11;
+  then A15: abs(i1-i2) = 1 & j1 = j2 or abs(j1-j2) = 1 & i1 = i2 by GOBOARD1:2;
+A16: 1 <= i1 & i1 <= len GoB f by A10,GOBOARD5:1;
+A17: 1 <= j1 & j1 <= width GoB f by A10,GOBOARD5:1;
+A18: 1 <= i2 & i2 <= len GoB f by A13,GOBOARD5:1;
+A19: 1 <= j2 & j2 <= width GoB f by A13,GOBOARD5:1;
+A20: mi in LSeg(f/.k,f/.(k+1)) by A4,A6,A7,TOPREAL1:def 5;
+ per cases by A15,GOBOARD1:1;
+ suppose
+A21: j1 = j2 & i1 = i2+1;
+  then mi in LSeg((GoB f)*(i2,j2),(GoB f)*(i2+1,j2))
+                            by A4,A6,A7,A11,A14,TOPREAL1:def 5;
+ hence thesis by A1,A2,A16,A18,A19,A21,Th30;
+ suppose
+A22: j1 = j2 & i1+1 = i2;
+  then mi in LSeg((GoB f)*(i1,j1),(GoB f)*(i1+1,j1))
+                            by A4,A6,A7,A11,A14,TOPREAL1:def 5;
+ hence thesis by A1,A2,A16,A17,A18,A22,Th30;
+ suppose
+A23: j1 = j2+1 & i1 = i2;
+  then i = i2 & j = j2 by A1,A2,A11,A14,A16,A17,A19,A20,Th27;
+ hence LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k) by A7,A11,A14,A23,
+TOPREAL1:def 5;
+ suppose
+A24: j1+1 = j2 & i1 = i2;
+  then i = i1 & j = j1 by A1,A2,A11,A14,A16,A17,A19,A20,Th27;
+ hence LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k) by A7,A11,A14,A24,
+TOPREAL1:def 5;
+end;
+
+theorem Th42:
+   1 <= i & i+1 <= len GoB f & 1 <= j & j <= width GoB f &
+    1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j)) in L~f implies
+   ex k st 1 <= k & k+1 <= len f &
+    LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k)
+proof
+ set mi = 1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j));
+ assume that
+A1: 1 <= i & i+1 <= len GoB f and
+A2: 1 <= j & j <= width GoB f and
+A3: 1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j)) in L~f;
+    L~f = union { LSeg(f,k) : 1 <= k & k+1 <= len f } by TOPREAL1:def 6;
+  then consider x such that
+A4: 1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j)) in x and
+A5: x in { LSeg(f,k) : 1 <= k & k+1 <= len f } by A3,TARSKI:def 4;
+  consider k such that
+A6: x = LSeg(f,k) and
+A7: 1 <= k & k+1 <= len f by A5;
+ take k;
+ thus 1 <= k & k+1 <= len f by A7;
+A8: f is_sequence_on GoB f by GOBOARD5:def 5;
+    k <= k+1 by NAT_1:29;
+  then k <= len f by A7,AXIOMS:22;
+  then A9: k in dom f by A7,FINSEQ_3:27;
+  then consider i1,j1 being Nat such that
+A10: [i1,j1] in Indices GoB f and
+A11: f/.k = (GoB f)*(i1,j1) by A8,GOBOARD1:def 11;
+    1 <= k+1 by NAT_1:29;
+  then A12: k+1 in dom f by A7,FINSEQ_3:27;
+  then consider i2,j2 being Nat such that
+A13: [i2,j2] in Indices GoB f and
+A14: f/.(k+1) = (GoB f)*(i2,j2) by A8,GOBOARD1:def 11;
+    abs(j1-j2)+abs(i1-i2) = 1 by A8,A9,A10,A11,A12,A13,A14,GOBOARD1:def 11;
+  then A15: abs(j1-j2) = 1 & i1 = i2 or abs(i1-i2) = 1 & j1 = j2 by GOBOARD1:2;
+A16: 1 <= j1 & j1 <= width GoB f by A10,GOBOARD5:1;
+A17: 1 <= i1 & i1 <= len GoB f by A10,GOBOARD5:1;
+A18: 1 <= j2 & j2 <= width GoB f by A13,GOBOARD5:1;
+A19: 1 <= i2 & i2 <= len GoB f by A13,GOBOARD5:1;
+A20: mi in LSeg(f/.k,f/.(k+1)) by A4,A6,A7,TOPREAL1:def 5;
+ per cases by A15,GOBOARD1:1;
+ suppose
+A21: i1 = i2 & j1 = j2+1;
+  then mi in LSeg((GoB f)*(i2,j2),(GoB f)*(i2,j2+1))
+                            by A4,A6,A7,A11,A14,TOPREAL1:def 5;
+ hence thesis by A1,A2,A16,A18,A19,A21,Th29;
+ suppose
+A22: i1 = i2 & j1+1 = j2;
+  then mi in LSeg((GoB f)*(i1,j1),(GoB f)*(i1,j1+1))
+                            by A4,A6,A7,A11,A14,TOPREAL1:def 5;
+ hence thesis by A1,A2,A16,A17,A18,A22,Th29;
+ suppose
+A23: i1 = i2+1 & j1 = j2;
+  then j = j2 & i = i2 by A1,A2,A11,A14,A16,A17,A19,A20,Th28;
+ hence LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k) by A7,A11,A14,A23,
+TOPREAL1:def 5;
+ suppose
+A24: i1+1 = i2 & j1 = j2;
+  then j = j1 & i = i1 by A1,A2,A11,A14,A16,A17,A19,A20,Th28;
+ hence LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k) by A7,A11,A14,A24,
+TOPREAL1:def 5;
+end;
+
+theorem
+   1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f & 1 <=
+ k & k+1 < len f &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k) &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i,j+1) & f/.(k+1) = (GoB f)*(i+1,j+1) &
+  f/.(k+2) = (GoB f)*(i+1,j)
+proof assume that
+A1: 1 <= i & i+1 <= len GoB f and
+A2: 1 <= j & j+1 <= width GoB f and
+A3: 1 <= k & k+1 < len f and
+A4: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k) and
+A5: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k+1);
+  A6: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f/.k,f/.(k+1))
+                        by A3,A4,TOPREAL1:def 5;
+  then A7: (GoB f)*(i+1,j+1) = f/.(k+1) & (GoB f)*(i,j+1) = f/.k
+    or (GoB f)*(i+1,j+1) = f/.k & (GoB f)*
+(i,j+1) = f/.(k+1) by SPPOL_1:25;
+A8: k+(1+1) = k+1+1 by XCMPLX_1:1;
+then A9: k+2 <= len f by A3,NAT_1:38;
+    1 <= k+1 by NAT_1:29;
+  then A10: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f/.(k+1),f/.(k+2))
+                             by A5,A8,A9,TOPREAL1:def 5;
+  then A11: (GoB f)*(i+1,j) = f/.(k+2) & (GoB f)*(i+1,j+1) = f/.(k+1)
+    or (GoB f)*(i+1,j) = f/.(k+1) & (GoB f)*(i+1,j+1) = f/.(k+2)
+    by SPPOL_1:25;
+A12: 1 <= j+1 by NAT_1:29;
+A13: 1 <= i+1 by NAT_1:29;
+A14: j < width GoB f by A2,NAT_1:38;
+ A15: i < i+1 by NAT_1:38;
+     (GoB f)*(i+1,j)`1 = (GoB f)*(i+1,1)`1 by A1,A2,A13,A14,GOBOARD5:3
+          .= (GoB f)*(i+1,j+1)`1 by A1,A2,A12,A13,GOBOARD5:3;
+  then A16: (GoB f)*(i,j+1) <> (GoB f)*(i+1,j) by A1,A2,A12,A15,GOBOARD5:4;
+ hence f/.k = (GoB f)*(i,j+1) by A7,A10,SPPOL_1:25;
+ thus f/.(k+1) = (GoB f)*(i+1,j+1) by A6,A11,A16,SPPOL_1:25;
+ thus f/.(k+2) = (GoB f)*(i+1,j) by A6,A11,A16,SPPOL_1:25;
+end;
+
+theorem
+   1 <= i & i <= len GoB f & 1 <= j & j+1 < width GoB f & 1 <= k & k+1 < len f
+&
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i,j+2)) = LSeg(f,k) &
+ LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i,j+2) & f/.(k+1) = (GoB f)*(i,j+1) &
+  f/.(k+2) = (GoB f)*(i,j)
+proof assume that
+A1: 1 <= i & i <= len GoB f and
+A2: 1 <= j & j+1 < width GoB f and
+A3: 1 <= k & k+1 < len f and
+A4: LSeg((GoB f)*(i,j+1),(GoB f)*(i,j+2)) = LSeg(f,k) and
+A5: LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k+1);
+  A6: LSeg((GoB f)*(i,j+1),(GoB f)*(i,j+2)) = LSeg(f/.k,f/.(k+1))
+                        by A3,A4,TOPREAL1:def 5;
+  then A7: (GoB f)*(i,j+1) = f/.(k+1) & (GoB f)*(i,j+2) = f/.k
+    or (GoB f)*(i,j+1) = f/.k & (GoB f)*(i,j+2) = f/.(k+1) by SPPOL_1:25;
+A8: k+(1+1) = k+1+1 by XCMPLX_1:1;
+then A9: k+2 <= len f by A3,NAT_1:38;
+    1 <= k+1 by NAT_1:29;
+  then A10: LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f/.(k+1),f/.(k+2))
+                             by A5,A8,A9,TOPREAL1:def 5;
+  then A11: (GoB f)*(i,j) = f/.(k+2) & (GoB f)*(i,j+1) = f/.(k+1)
+    or (GoB f)*(i,j) = f/.(k+1) & (GoB f)*(i,j+1) = f/.(k+2) by SPPOL_1:25;
+   j+(1+1) = j+1+1 by XCMPLX_1:1;
+then A12: j+2 <= width GoB f by A2,NAT_1:38;
+    j < j+2 by REAL_1:69;
+  then A13: (GoB f)*(i,j)`2 < (GoB f)*(i,j+2)`2 by A1,A2,A12,GOBOARD5:5;
+ hence f/.k = (GoB f)*(i,j+2) by A7,A10,SPPOL_1:25;
+ thus f/.(k+1) = (GoB f)*(i,j+1) by A6,A11,A13,SPPOL_1:25;
+ thus f/.(k+2) = (GoB f)*(i,j) by A6,A11,A13,SPPOL_1:25;
+end;
+
+theorem
+   1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f & 1 <=
+ k & k+1 < len f &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k) &
+ LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i+1,j+1) & f/.(k+1) = (GoB f)*(i,j+1) &
+  f/.(k+2) = (GoB f)*(i,j)
+proof assume that
+A1: 1 <= i & i+1 <= len GoB f and
+A2: 1 <= j & j+1 <= width GoB f and
+A3: 1 <= k & k+1 < len f and
+A4: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k) and
+A5: LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k+1);
+ A6: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f/.k,f/.(k+1))
+                        by A3,A4,TOPREAL1:def 5;
+  then A7: (GoB f)*(i+1,j+1) = f/.(k+1) & (GoB f)*(i,j+1) = f/.k
+    or (GoB f)*(i+1,j+1) = f/.k & (GoB f)*
+(i,j+1) = f/.(k+1) by SPPOL_1:25;
+A8: k+(1+1) = k+1+1 by XCMPLX_1:1;
+then A9: k+2 <= len f by A3,NAT_1:38;
+    1 <= k+1 by NAT_1:29;
+  then A10: LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f/.(k+1),f/.(k+2))
+                             by A5,A8,A9,TOPREAL1:def 5;
+  then A11: (GoB f)*(i,j) = f/.(k+2) & (GoB f)*(i,j+1) = f/.(k+1)
+    or (GoB f)*(i,j) = f/.(k+1) & (GoB f)*(i,j+1) = f/.(k+2) by SPPOL_1:25;
+A12: 1 <= i+1 by NAT_1:29;
+A13: j < width GoB f by A2,NAT_1:38;
+A14: i < len GoB f by A1,NAT_1:38;
+    A15: j < j+1 by NAT_1:38;
+     (GoB f)*(i,j)`2 = (GoB f)*(1,j)`2 by A1,A2,A13,A14,GOBOARD5:2
+          .= (GoB f)*(i+1,j)`2 by A1,A2,A12,A13,GOBOARD5:2;
+  then A16: (GoB f)*(i,j) <> (GoB f)*(i+1,j+1) by A1,A2,A12,A15,GOBOARD5:5;
+ hence f/.k = (GoB f)*(i+1,j+1) by A7,A10,SPPOL_1:25;
+ thus f/.(k+1) = (GoB f)*(i,j+1) by A6,A11,A16,SPPOL_1:25;
+ thus f/.(k+2) = (GoB f)*(i,j) by A6,A11,A16,SPPOL_1:25;
+end;
+
+theorem
+   1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f & 1 <=
+ k & k+1 < len f &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k) &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i+1,j) & f/.(k+1) = (GoB f)*(i+1,j+1) &
+  f/.(k+2) = (GoB f)*(i,j+1)
+proof assume that
+A1: 1 <= i & i+1 <= len GoB f and
+A2: 1 <= j & j+1 <= width GoB f and
+A3: 1 <= k & k+1 < len f and
+A4: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k) and
+A5: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k+1);
+  A6: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f/.k,f/.(k+1))
+                        by A3,A4,TOPREAL1:def 5;
+  then A7: (GoB f)*(i+1,j+1) = f/.(k+1) & (GoB f)*(i+1,j) = f/.k
+    or (GoB f)*(i+1,j+1) = f/.k & (GoB f)*
+(i+1,j) = f/.(k+1) by SPPOL_1:25;
+A8: k+(1+1) = k+1+1 by XCMPLX_1:1;
+then A9: k+2 <= len f by A3,NAT_1:38;
+    1 <= k+1 by NAT_1:29;
+  then A10: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f/.(k+1),f/.(k+2))
+                             by A5,A8,A9,TOPREAL1:def 5;
+  then A11: (GoB f)*(i,j+1) = f/.(k+2) & (GoB f)*(i+1,j+1) = f/.(k+1)
+    or (GoB f)*(i,j+1) = f/.(k+1) & (GoB f)*(i+1,j+1) = f/.(k+2)
+    by SPPOL_1:25;
+A12: 1 <= i+1 by NAT_1:29;
+A13: 1 <= j+1 by NAT_1:29;
+A14: i < len GoB f by A1,NAT_1:38;
+ A15: j < j+1 by NAT_1:38;
+     (GoB f)*(i,j+1)`2 = (GoB f)*(1,j+1)`2 by A1,A2,A13,A14,GOBOARD5:2
+          .= (GoB f)*(i+1,j+1)`2 by A1,A2,A12,A13,GOBOARD5:2;
+  then A16: (GoB f)*(i+1,j) <> (GoB f)*(i,j+1) by A1,A2,A12,A15,GOBOARD5:5;
+ hence f/.k = (GoB f)*(i+1,j) by A7,A10,SPPOL_1:25;
+ thus f/.(k+1) = (GoB f)*(i+1,j+1) by A6,A11,A16,SPPOL_1:25;
+ thus f/.(k+2) = (GoB f)*(i,j+1) by A6,A11,A16,SPPOL_1:25;
+end;
+
+theorem
+   1 <= i & i+1 < len GoB f & 1 <= j & j <= width GoB f & 1 <= k & k+1 < len f
+&
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+2,j)) = LSeg(f,k) &
+ LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i+2,j) & f/.(k+1) = (GoB f)*(i+1,j) &
+  f/.(k+2) = (GoB f)*(i,j)
+proof assume that
+A1: 1 <= i & i+1 < len GoB f and
+A2: 1 <= j & j <= width GoB f and
+A3: 1 <= k & k+1 < len f and
+A4: LSeg((GoB f)*(i+1,j),(GoB f)*(i+2,j)) = LSeg(f,k) and
+A5: LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k+1);
+  A6: LSeg((GoB f)*(i+1,j),(GoB f)*(i+2,j)) = LSeg(f/.k,f/.(k+1))
+                        by A3,A4,TOPREAL1:def 5;
+  then A7: (GoB f)*(i+1,j) = f/.(k+1) & (GoB f)*(i+2,j) = f/.k
+    or (GoB f)*(i+1,j) = f/.k & (GoB f)*(i+2,j) = f/.(k+1) by SPPOL_1:25;
+A8: k+(1+1) = k+1+1 by XCMPLX_1:1;
+then A9: k+2 <= len f by A3,NAT_1:38;
+    1 <= k+1 by NAT_1:29;
+  then A10: LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f/.(k+1),f/.(k+2))
+                             by A5,A8,A9,TOPREAL1:def 5;
+  then A11: (GoB f)*(i,j) = f/.(k+2) & (GoB f)*(i+1,j) = f/.(k+1)
+    or (GoB f)*(i,j) = f/.(k+1) & (GoB f)*(i+1,j) = f/.(k+2) by SPPOL_1:25;
+   i+(1+1) = i+1+1 by XCMPLX_1:1;
+then A12: i+2 <= len GoB f by A1,NAT_1:38;
+    i < i+2 by REAL_1:69;
+  then A13: (GoB f)*(i,j)`1 < (GoB f)*(i+2,j)`1 by A1,A2,A12,GOBOARD5:4;
+ hence f/.k = (GoB f)*(i+2,j) by A7,A10,SPPOL_1:25;
+ thus f/.(k+1) = (GoB f)*(i+1,j) by A6,A11,A13,SPPOL_1:25;
+ thus f/.(k+2) = (GoB f)*(i,j) by A6,A11,A13,SPPOL_1:25;
+end;
+
+theorem
+   1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f & 1 <=
+ k & k+1 < len f &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k) &
+ LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i+1,j+1) & f/.(k+1) = (GoB f)*(i+1,j) &
+  f/.(k+2) = (GoB f)*(i,j)
+proof assume that
+A1: 1 <= i & i+1 <= len GoB f and
+A2: 1 <= j & j+1 <= width GoB f and
+A3: 1 <= k & k+1 < len f and
+A4: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k) and
+A5: LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k+1);
+ A6: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f/.k,f/.(k+1))
+                        by A3,A4,TOPREAL1:def 5;
+  then A7: (GoB f)*(i+1,j+1) = f/.(k+1) & (GoB f)*(i+1,j) = f/.k
+    or (GoB f)*(i+1,j+1) = f/.k & (GoB f)*
+(i+1,j) = f/.(k+1) by SPPOL_1:25;
+A8: k+(1+1) = k+1+1 by XCMPLX_1:1;
+then A9: k+2 <= len f by A3,NAT_1:38;
+    1 <= k+1 by NAT_1:29;
+  then A10: LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f/.(k+1),f/.(k+2))
+                             by A5,A8,A9,TOPREAL1:def 5;
+  then A11: (GoB f)*(i,j) = f/.(k+2) & (GoB f)*(i+1,j) = f/.(k+1)
+    or (GoB f)*(i,j) = f/.(k+1) & (GoB f)*(i+1,j) = f/.(k+2) by SPPOL_1:25;
+A12: 1 <= j+1 by NAT_1:29;
+A13: i < len GoB f by A1,NAT_1:38;
+A14: j < width GoB f by A2,NAT_1:38;
+    A15: i < i+1 by NAT_1:38;
+     (GoB f)*(i,j)`1 = (GoB f)*(i,1)`1 by A1,A2,A13,A14,GOBOARD5:3
+          .= (GoB f)*(i,j+1)`1 by A1,A2,A12,A13,GOBOARD5:3;
+  then A16: (GoB f)*(i,j) <> (GoB f)*(i+1,j+1) by A1,A2,A12,A15,GOBOARD5:4;
+ hence f/.k = (GoB f)*(i+1,j+1) by A7,A10,SPPOL_1:25;
+ thus f/.(k+1) = (GoB f)*(i+1,j) by A6,A11,A16,SPPOL_1:25;
+ thus f/.(k+2) = (GoB f)*(i,j) by A6,A11,A16,SPPOL_1:25;
+end;
+
+theorem
+   1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f & 1 <=
+ k & k+1 < len f &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k) &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i+1,j) & f/.(k+1) = (GoB f)*(i+1,j+1) &
+  f/.(k+2) = (GoB f)*(i,j+1)
+proof assume that
+A1: 1 <= i & i+1 <= len GoB f and
+A2: 1 <= j & j+1 <= width GoB f and
+A3: 1 <= k & k+1 < len f and
+A4: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k) and
+A5: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k+1);
+  A6: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f/.k,f/.(k+1))
+                        by A3,A4,TOPREAL1:def 5;
+  then A7: (GoB f)*(i+1,j) = f/.k & (GoB f)*(i+1,j+1) = f/.(k+1)
+    or (GoB f)*(i+1,j) = f/.(k+1) & (GoB f)*
+(i+1,j+1) = f/.k by SPPOL_1:25;
+A8: k+(1+1) = k+1+1 by XCMPLX_1:1;
+then A9: k+2 <= len f by A3,NAT_1:38;
+    1 <= k+1 by NAT_1:29;
+  then A10: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f/.(k+1),f/.(k+2))
+                             by A5,A8,A9,TOPREAL1:def 5;
+  then A11: (GoB f)*(i+1,j+1) = f/.(k+1) & (GoB f)*(i,j+1) = f/.(k+2)
+    or (GoB f)*(i+1,j+1) = f/.(k+2) & (GoB f)*(i,j+1) = f/.(k+1)
+    by SPPOL_1:25;
+A12: 1 <= j+1 by NAT_1:29;
+A13: 1 <= i+1 by NAT_1:29;
+A14: j < width GoB f by A2,NAT_1:38;
+ A15: i < i+1 by NAT_1:38;
+     (GoB f)*(i+1,j)`1 = (GoB f)*(i+1,1)`1 by A1,A2,A13,A14,GOBOARD5:3
+          .= (GoB f)*(i+1,j+1)`1 by A1,A2,A12,A13,GOBOARD5:3;
+  then A16: (GoB f)*(i,j+1) <> (GoB f)*(i+1,j) by A1,A2,A12,A15,GOBOARD5:4;
+ hence f/.k = (GoB f)*(i+1,j) by A7,A10,SPPOL_1:25;
+ thus f/.(k+1) = (GoB f)*(i+1,j+1) by A6,A11,A16,SPPOL_1:25;
+ thus f/.(k+2) = (GoB f)*(i,j+1) by A6,A11,A16,SPPOL_1:25;
+end;
+
+theorem
+   1 <= i & i <= len GoB f & 1 <= j & j+1 < width GoB f & 1 <= k & k+1 < len f
+&
+ LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k) &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i,j+2)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i,j) & f/.(k+1) = (GoB f)*(i,j+1) &
+  f/.(k+2) = (GoB f)*(i,j+2)
+proof assume that
+A1: 1 <= i & i <= len GoB f and
+A2: 1 <= j & j+1 < width GoB f and
+A3: 1 <= k & k+1 < len f and
+A4: LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k) and
+A5: LSeg((GoB f)*(i,j+1),(GoB f)*(i,j+2)) = LSeg(f,k+1);
+  A6: LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f/.k,f/.(k+1))
+                        by A3,A4,TOPREAL1:def 5;
+  then A7: (GoB f)*(i,j) = f/.k & (GoB f)*(i,j+1) = f/.(k+1)
+    or (GoB f)*(i,j) = f/.(k+1) & (GoB f)*(i,j+1) = f/.k by SPPOL_1:25;
+A8: k+(1+1) = k+1+1 by XCMPLX_1:1;
+then A9: k+2 <= len f by A3,NAT_1:38;
+    1 <= k+1 by NAT_1:29;
+  then A10: LSeg((GoB f)*(i,j+1),(GoB f)*(i,j+2)) = LSeg(f/.(k+1),f/.(k+2))
+                             by A5,A8,A9,TOPREAL1:def 5;
+  then A11: (GoB f)*(i,j+1) = f/.(k+1) & (GoB f)*(i,j+2) = f/.(k+2)
+    or (GoB f)*(i,j+1) = f/.(k+2) & (GoB f)*
+(i,j+2) = f/.(k+1) by SPPOL_1:25;
+   j+(1+1) = j+1+1 by XCMPLX_1:1;
+then A12: j+2 <= width GoB f by A2,NAT_1:38;
+    j < j+2 by REAL_1:69;
+  then A13: (GoB f)*(i,j)`2 < (GoB f)*(i,j+2)`2 by A1,A2,A12,GOBOARD5:5;
+ hence f/.k = (GoB f)*(i,j) by A7,A10,SPPOL_1:25;
+ thus f/.(k+1) = (GoB f)*(i,j+1) by A6,A11,A13,SPPOL_1:25;
+ thus f/.(k+2) = (GoB f)*(i,j+2) by A6,A11,A13,SPPOL_1:25;
+end;
+
+theorem
+   1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f & 1 <=
+ k & k+1 < len f &
+ LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k) &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i,j) & f/.(k+1) = (GoB f)*(i,j+1) &
+  f/.(k+2) = (GoB f)*(i+1,j+1)
+proof assume that
+A1: 1 <= i & i+1 <= len GoB f and
+A2: 1 <= j & j+1 <= width GoB f and
+A3: 1 <= k & k+1 < len f and
+A4: LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k) and
+A5: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k+1);
+  A6: LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f/.k,f/.(k+1))
+                        by A3,A4,TOPREAL1:def 5;
+  then A7: (GoB f)*(i,j) = f/.k & (GoB f)*(i,j+1) = f/.(k+1)
+    or (GoB f)*(i,j) = f/.(k+1) & (GoB f)*(i,j+1) = f/.k by SPPOL_1:25;
+A8: k+(1+1) = k+1+1 by XCMPLX_1:1;
+then A9: k+2 <= len f by A3,NAT_1:38;
+    1 <= k+1 by NAT_1:29;
+  then A10: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f/.(k+1),f/.(k+2))
+                             by A5,A8,A9,TOPREAL1:def 5;
+  then A11: (GoB f)*(i+1,j+1) = f/.(k+1) & (GoB f)*(i,j+1) = f/.(k+2)
+    or (GoB f)*(i+1,j+1) = f/.(k+2) & (GoB f)*(i,j+1) = f/.(k+1)
+    by SPPOL_1:25;
+A12: 1 <= i+1 by NAT_1:29;
+A13: j < width GoB f by A2,NAT_1:38;
+A14: i < len GoB f by A1,NAT_1:38;
+    A15: j < j+1 by NAT_1:38;
+     (GoB f)*(i,j)`2 = (GoB f)*(1,j)`2 by A1,A2,A13,A14,GOBOARD5:2
+          .= (GoB f)*(i+1,j)`2 by A1,A2,A12,A13,GOBOARD5:2;
+  then A16: (GoB f)*(i,j) <> (GoB f)*(i+1,j+1) by A1,A2,A12,A15,GOBOARD5:5;
+ hence f/.k = (GoB f)*(i,j) by A7,A10,SPPOL_1:25;
+ thus f/.(k+1) = (GoB f)*(i,j+1) by A6,A11,A16,SPPOL_1:25;
+ thus f/.(k+2) = (GoB f)*(i+1,j+1) by A6,A11,A16,SPPOL_1:25;
+end;
+
+theorem
+   1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f & 1 <=
+ k & k+1 < len f &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k) &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i,j+1) & f/.(k+1) = (GoB f)*(i+1,j+1) &
+  f/.(k+2) = (GoB f)*(i+1,j)
+proof assume that
+A1: 1 <= i & i+1 <= len GoB f and
+A2: 1 <= j & j+1 <= width GoB f and
+A3: 1 <= k & k+1 < len f and
+A4: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k) and
+A5: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k+1);
+  A6: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f/.k,f/.(k+1))
+                        by A3,A4,TOPREAL1:def 5;
+  then A7: (GoB f)*(i,j+1) = f/.k & (GoB f)*(i+1,j+1) = f/.(k+1)
+    or (GoB f)*(i,j+1) = f/.(k+1) & (GoB f)*
+(i+1,j+1) = f/.k by SPPOL_1:25;
+A8: k+(1+1) = k+1+1 by XCMPLX_1:1;
+then A9: k+2 <= len f by A3,NAT_1:38;
+    1 <= k+1 by NAT_1:29;
+  then A10: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f/.(k+1),f/.(k+2))
+                             by A5,A8,A9,TOPREAL1:def 5;
+  then A11: (GoB f)*(i+1,j+1) = f/.(k+1) & (GoB f)*(i+1,j) = f/.(k+2)
+    or (GoB f)*(i+1,j+1) = f/.(k+2) & (GoB f)*(i+1,j) = f/.(k+1)
+    by SPPOL_1:25;
+A12: 1 <= i+1 by NAT_1:29;
+A13: 1 <= j+1 by NAT_1:29;
+A14: i < len GoB f by A1,NAT_1:38;
+ A15: j < j+1 by NAT_1:38;
+     (GoB f)*(i,j+1)`2 = (GoB f)*(1,j+1)`2 by A1,A2,A13,A14,GOBOARD5:2
+          .= (GoB f)*(i+1,j+1)`2 by A1,A2,A12,A13,GOBOARD5:2;
+  then A16: (GoB f)*(i+1,j) <> (GoB f)*(i,j+1) by A1,A2,A12,A15,GOBOARD5:5;
+ hence f/.k = (GoB f)*(i,j+1) by A7,A10,SPPOL_1:25;
+ thus f/.(k+1) = (GoB f)*(i+1,j+1) by A6,A11,A16,SPPOL_1:25;
+ thus f/.(k+2) = (GoB f)*(i+1,j) by A6,A11,A16,SPPOL_1:25;
+end;
+
+theorem
+   1 <= i & i+1 < len GoB f & 1 <= j & j <= width GoB f & 1 <= k & k+1 < len f
+&
+ LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k) &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+2,j)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i,j) & f/.(k+1) = (GoB f)*(i+1,j) &
+  f/.(k+2) = (GoB f)*(i+2,j)
+proof assume that
+A1: 1 <= i & i+1 < len GoB f and
+A2: 1 <= j & j <= width GoB f and
+A3: 1 <= k & k+1 < len f and
+A4: LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k) and
+A5: LSeg((GoB f)*(i+1,j),(GoB f)*(i+2,j)) = LSeg(f,k+1);
+  A6: LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f/.k,f/.(k+1))
+                        by A3,A4,TOPREAL1:def 5;
+  then A7: (GoB f)*(i,j) = f/.k & (GoB f)*(i+1,j) = f/.(k+1)
+    or (GoB f)*(i,j) = f/.(k+1) & (GoB f)*(i+1,j) = f/.k by SPPOL_1:25;
+A8: k+(1+1) = k+1+1 by XCMPLX_1:1;
+then A9: k+2 <= len f by A3,NAT_1:38;
+    1 <= k+1 by NAT_1:29;
+  then A10: LSeg((GoB f)*(i+1,j),(GoB f)*(i+2,j)) = LSeg(f/.(k+1),f/.(k+2))
+                             by A5,A8,A9,TOPREAL1:def 5;
+  then A11: (GoB f)*(i+1,j) = f/.(k+1) & (GoB f)*(i+2,j) = f/.(k+2)
+    or (GoB f)*(i+1,j) = f/.(k+2) & (GoB f)*
+(i+2,j) = f/.(k+1) by SPPOL_1:25;
+   i+(1+1) = i+1+1 by XCMPLX_1:1;
+then A12: i+2 <= len GoB f by A1,NAT_1:38;
+    i < i+2 by REAL_1:69;
+  then A13: (GoB f)*(i,j)`1 < (GoB f)*(i+2,j)`1 by A1,A2,A12,GOBOARD5:4;
+ hence f/.k = (GoB f)*(i,j) by A7,A10,SPPOL_1:25;
+ thus f/.(k+1) = (GoB f)*(i+1,j) by A6,A11,A13,SPPOL_1:25;
+ thus f/.(k+2) = (GoB f)*(i+2,j) by A6,A11,A13,SPPOL_1:25;
+end;
+
+theorem
+   1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f & 1 <=
+ k & k+1 < len f &
+ LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k) &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k+1) implies
+  f/.k = (GoB f)*(i,j) & f/.(k+1) = (GoB f)*(i+1,j) &
+  f/.(k+2) = (GoB f)*(i+1,j+1)
+proof assume that
+A1: 1 <= i & i+1 <= len GoB f and
+A2: 1 <= j & j+1 <= width GoB f and
+A3: 1 <= k & k+1 < len f and
+A4: LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k) and
+A5: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k+1);
+  A6: LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f/.k,f/.(k+1))
+                        by A3,A4,TOPREAL1:def 5;
+  then A7: (GoB f)*(i,j) = f/.k & (GoB f)*(i+1,j) = f/.(k+1)
+    or (GoB f)*(i,j) = f/.(k+1) & (GoB f)*(i+1,j) = f/.k by SPPOL_1:25;
+A8: k+(1+1) = k+1+1 by XCMPLX_1:1;
+then A9: k+2 <= len f by A3,NAT_1:38;
+    1 <= k+1 by NAT_1:29;
+  then A10: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f/.(k+1),f/.(k+2))
+                             by A5,A8,A9,TOPREAL1:def 5;
+  then A11: (GoB f)*(i+1,j+1) = f/.(k+1) & (GoB f)*(i+1,j) = f/.(k+2)
+    or (GoB f)*(i+1,j+1) = f/.(k+2) & (GoB f)*(i+1,j) = f/.(k+1)
+    by SPPOL_1:25;
+A12: 1 <= j+1 by NAT_1:29;
+A13: i < len GoB f by A1,NAT_1:38;
+A14: j < width GoB f by A2,NAT_1:38;
+    A15: i < i+1 by NAT_1:38;
+     (GoB f)*(i,j)`1 = (GoB f)*(i,1)`1 by A1,A2,A13,A14,GOBOARD5:3
+          .= (GoB f)*(i,j+1)`1 by A1,A2,A12,A13,GOBOARD5:3;
+  then A16: (GoB f)*(i,j) <> (GoB f)*(i+1,j+1) by A1,A2,A12,A15,GOBOARD5:4;
+ hence f/.k = (GoB f)*(i,j) by A7,A10,SPPOL_1:25;
+ thus f/.(k+1) = (GoB f)*(i+1,j) by A6,A11,A16,SPPOL_1:25;
+ thus f/.(k+2) = (GoB f)*(i+1,j+1) by A6,A11,A16,SPPOL_1:25;
+end;
+
+theorem Th55:
+ 1 <= i & i <= len GoB f & 1 <= j & j+1 < width GoB f &
+ LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) c= L~f &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i,j+2)) c= L~f implies
+  f/.1 = (GoB f)*(i,j+1) &
+  (f/.2 = (GoB f)*(i,j) & f/.(len f-'1) = (GoB f)*(i,j+2) or
+   f/.2 = (GoB f)*(i,j+2) & f/.(len f-'1) = (GoB f)*(i,j))
+  or ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i,j+1) &
+   (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i,j+2) or
+    f/.k = (GoB f)*(i,j+2) & f/.(k+2) = (GoB f)*(i,j))
+proof
+A1: len f > 4 by Th36;
+ assume that
+A2: 1 <= i & i <= len GoB f and
+A3: 1 <= j & j+1 < width GoB f and
+A4: LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) c= L~f and
+A5: LSeg((GoB f)*(i,j+1),(GoB f)*(i,j+2)) c= L~f;
+A6: 1 <= j+1 by NAT_1:29;
+A7: j+(1+1) = j+1+1 by XCMPLX_1:1;
+then A8: j+2 <= width GoB f by A3,NAT_1:38;
+A9: 1 <= j+2 by A7,NAT_1:29;
+A10: j < width GoB f by A3,NAT_1:38;
+    1/2*((GoB f)*(i,j)+(GoB f)*(i,j+1)) in LSeg((GoB f)*(i,j),(GoB f)*
+(i,j+1))
+                                                                by Th7;
+  then consider k1 such that
+A11: 1 <= k1 & k1+1 <= len f and
+A12: LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k1) by A2,A3,A4,Th41;
+A13: k1 < len f by A11,NAT_1:38;
+    1/2*((GoB f)*(i,j+1)+(GoB f)*(i,j+2)) in
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i,j+2))
+                                                                by Th7;
+  then consider k2 such that
+A14: 1 <= k2 & k2+1 <= len f and
+A15: LSeg((GoB f)*(i,j+1),(GoB f)*(i,j+2)) = LSeg(f,k2) by A2,A5,A6,A7,A8,Th41;
+A16: k2 < len f by A14,NAT_1:38;
+A17: now assume k1 > 1;
+       then k1 >= 1+1 by NAT_1:38;
+      hence k1 = 2 or k1 > 2 by AXIOMS:21;
+     end;
+A18: now assume k2 > 1;
+       then k2 >= 1+1 by NAT_1:38;
+      hence k2 = 2 or k2 > 2 by AXIOMS:21;
+     end;
+A19: (k1 = 1 or k1 > 1) & (k2 = 1 or k2 > 1) by A11,A14,AXIOMS:21;
+    now per cases by A17,A18,A19,AXIOMS:21;
+   case that
+A20: k1 = 1 and
+A21: k2 = 2;
+     A22: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A11,A20,TOPREAL1:def 5;
+     then A23:   (GoB f)*(i,j) = f/.1 & (GoB f)*(i,j+1) = (f/.2) or
+      (GoB f)*(i,j) = f/.2 & (GoB f)*(i,j+1) = f/.1 by A12,A20,SPPOL_1:25;
+     A24: LSeg(f,2) = LSeg((f/.2),f/.(2+1)) by A14,A21,TOPREAL1:def 5;
+     then A25:   (GoB f)*(i,j+1) = f/.2 & (GoB f)*(i,j+2) = f/.(2+1) or
+      (GoB f)*(i,j+1) = f/.(2+1) & (GoB f)*(i,j+2) = (f/.2)
+                    by A15,A21,SPPOL_1:25;
+     thus 1 <= 1 & 1+1 < len f by A14,A21,NAT_1:38;
+      A26: 3 < len f by A1,AXIOMS:22;
+      then A27: f/.1 <> f/.3 by Th38;
+     thus
+     f/.(1+1) = (GoB f)*(i,j+1) by A23,A25,A26,Th38;
+     thus f/.1 = (GoB f)*(i,j) by A15,A21,A23,A24,A27,SPPOL_1:25;
+     thus f/.(1+2) = (GoB f)*(i,j+2) by A12,A20,A22,A25,A27,SPPOL_1:25;
+   case that
+A28: k1 = 1 and
+A29: k2 > 2;
+     A30: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A11,A28,TOPREAL1:def 5;
+     then A31:   (GoB f)*(i,j) = f/.1 & (GoB f)*(i,j+1) = f/.2 or
+      (GoB f)*(i,j) = f/.2 & (GoB f)*(i,j+1) = f/.1 by A12,A28,SPPOL_1:25;
+       LSeg(f,k2) = LSeg(f/.k2,f/.(k2+1)) by A14,TOPREAL1:def 5;
+     then A32:   (GoB f)*(i,j+1) = f/.k2 & (GoB f)*(i,j+2) = f/.(k2+1) or
+      (GoB f)*(i,j+1) = f/.(k2+1) & (GoB f)*(i,j+2) = f/.k2
+        by A15,SPPOL_1:25;
+A33:   f/.k2 <> f/.2 by A16,A29,Th38;
+A34:  k2 > 1 by A29,AXIOMS:22;
+     A35: 2 < k2+1 by A29,NAT_1:38;
+then A36:   f/.(k2+1) <> f/.2 by A14,Th39;
+    hence
+     f/.1 = (GoB f)*(i,j+1) by A12,A28,A30,A32,A33,SPPOL_1:25;
+    thus f/.2 = (GoB f)*(i,j) by A12,A28,A30,A32,A33,A36,SPPOL_1:25;
+A37:  k2+1 > 1 by A34,NAT_1:38;
+     then k2+1 = len f by A14,A16,A29,A31,A32,A34,A35,Th39,Th40;
+     then k2 + 1 = len f -'1 + 1 by A37,AMI_5:4;
+    hence f/.(len f-'1) = (GoB f)*(i,j+2) by A16,A29,A31,A32,A34,Th38,XCMPLX_1:
+2;
+   case that
+A38: k2 = 1 and
+A39: k1 = 2;
+     A40: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A14,A38,TOPREAL1:def 5;
+     then A41:   (GoB f)*(i,j+2) = f/.1 & (GoB f)*(i,j+1) = f/.2 or
+      (GoB f)*(i,j+2) = f/.2 & (GoB f)*(i,j+1) = f/.1
+        by A15,A38,SPPOL_1:25;
+     A42: LSeg(f,2) = LSeg((f/.2),f/.(2+1)) by A11,A39,TOPREAL1:def 5;
+     then A43:   (GoB f)*(i,j+1) = f/.2 & (GoB f)*(i,j) = f/.(2+1) or
+      (GoB f)*(i,j+1) = f/.(2+1) & (GoB f)*(i,j) = (f/.2)
+                    by A12,A39,SPPOL_1:25;
+     thus 1 <= 1 & 1+1 < len f by A11,A39,NAT_1:38;
+      A44: 3 < len f by A1,AXIOMS:22;
+      then A45: f/.1 <> f/.3 by Th38;
+     thus
+     f/.(1+1) = (GoB f)*(i,j+1) by A41,A43,A44,Th38;
+     thus f/.1 = (GoB f)*(i,j+2) by A12,A39,A41,A42,A45,SPPOL_1:25;
+     thus f/.(1+2) = (GoB f)*(i,j) by A15,A38,A40,A43,A45,SPPOL_1:25;
+   case that
+A46: k2 = 1 and
+A47: k1 > 2;
+     A48: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A14,A46,TOPREAL1:def 5;
+     then A49:   (GoB f)*(i,j+2) = f/.1 & (GoB f)*(i,j+1) = f/.2 or
+      (GoB f)*(i,j+2) = f/.2 & (GoB f)*(i,j+1) = f/.1
+      by A15,A46,SPPOL_1:25;
+       LSeg(f,k1) = LSeg(f/.k1,f/.(k1+1)) by A11,TOPREAL1:def 5;
+     then A50:   (GoB f)*(i,j+1) = f/.k1 & (GoB f)*(i,j) = f/.(k1+1) or
+      (GoB f)*(i,j+1) = f/.(k1+1) & (GoB f)*(i,j) = f/.k1
+      by A12,SPPOL_1:25;
+A51:   f/.k1 <> f/.2 by A13,A47,Th38;
+A52:  k1 > 1 by A47,AXIOMS:22;
+     A53: 2 < k1+1 by A47,NAT_1:38;
+then A54:   f/.(k1+1) <> f/.2 by A11,Th39;
+    hence
+     f/.1 = (GoB f)*(i,j+1) by A15,A46,A48,A50,A51,SPPOL_1:25;
+    thus f/.2 = (GoB f)*(i,j+2) by A15,A46,A48,A50,A51,A54,SPPOL_1:25;
+A55:  k1+1 > 1 by A52,NAT_1:38;
+     then k1+1 = len f by A11,A13,A47,A49,A50,A52,A53,Th39,Th40;
+     then k1 + 1 = len f -'1 + 1 by A55,AMI_5:4;
+    hence f/.(len f-'1) = (GoB f)*(i,j) by A13,A47,A49,A50,A52,Th38,XCMPLX_1:2
+;
+   case k1 = k2;
+     then A56:   (GoB f)*(i,j) = (GoB f)*(i,j+2) or (GoB f)*(i,j) = (GoB f)*(i,
+j+1)
+           by A12,A15,SPPOL_1:25;
+       [i,j] in Indices GoB f & [i,j+1] in Indices GoB f &
+     [i,j+2] in Indices GoB f by A2,A3,A6,A8,A9,A10,Th10;
+     then j = j+1 or j = j+2 by A56,GOBOARD1:21;
+    hence contradiction by REAL_1:69;
+   case that
+A57: k1 > 1 and
+A58: k2 > k1;
+     A59: LSeg(f,k1) = LSeg(f/.k1,f/.(k1+1)) by A11,TOPREAL1:def 5;
+     then A60:   (GoB f)*(i,j) = f/.k1 & (GoB f)*(i,j+1) = f/.(k1+1) or
+      (GoB f)*(i,j) = f/.(k1+1) & (GoB f)*(i,j+1) = f/.k1
+      by A12,SPPOL_1:25;
+       LSeg(f,k2) = LSeg(f/.k2,f/.(k2+1)) by A14,TOPREAL1:def 5;
+     then A61:   (GoB f)*(i,j+1) = f/.k2 & (GoB f)*(i,j+2) = f/.(k2+1) or
+      (GoB f)*(i,j+1) = f/.(k2+1) & (GoB f)*(i,j+2) = f/.k2
+                    by A15,SPPOL_1:25;
+     A62: k1 < k2 + 1 by A58,NAT_1:38;
+then A63:   f/.k1 <> f/.(k2+1) by A14,A57,Th39;
+A64:    k2 < len f by A14,NAT_1:38;
+      then A65:     f/.k1 <> f/.k2 by A57,A58,Th39;
+A66:    1 < k1+1 by A57,NAT_1:38;
+      A67: k1+1 < k2+1 by A58,REAL_1:53;
+      then A68: f/.(k1+1) <> f/.(k2+1) by A14,A66,Th39;
+A69:    k1+1 >= k2 by A14,A57,A58,A60,A61,A62,A64,A66,A67,Th39;
+        k1+1 <= k2 by A58,NAT_1:38;
+then A70:    k1+1 = k2 by A69,AXIOMS:21;
+     hence 1 <= k1 & k1+1 < len f by A14,A57,NAT_1:38;
+     thus
+     f/.(k1+1) = (GoB f)*(i,j+1) by A12,A59,A61,A63,A65,SPPOL_1:25;
+     thus f/.k1 = (GoB f)*(i,j) by A12,A59,A61,A63,A65,SPPOL_1:25;
+        k1+(1+1) = k2+1 by A70,XCMPLX_1:1;
+     hence f/.(k1+2) = (GoB f)*(i,j+2) by A12,A59,A61,A63,A68,SPPOL_1:25;
+   case that
+A71: k2 > 1 and
+A72: k1 > k2;
+     A73: LSeg(f,k2) = LSeg(f/.k2,f/.(k2+1)) by A14,TOPREAL1:def 5;
+     then A74:   (GoB f)*(i,j+2) = f/.k2 & (GoB f)*(i,j+1) = f/.(k2+1) or
+      (GoB f)*(i,j+2) = f/.(k2+1) & (GoB f)*(i,j+1) = f/.k2
+      by A15,SPPOL_1:25;
+       LSeg(f,k1) = LSeg(f/.k1,f/.(k1+1)) by A11,TOPREAL1:def 5;
+     then A75:   (GoB f)*(i,j+1) = f/.k1 & (GoB f)*(i,j) = f/.(k1+1) or
+      (GoB f)*(i,j+1) = f/.(k1+1) & (GoB f)*(i,j) = f/.k1
+                    by A12,SPPOL_1:25;
+     A76: k2 < k1 + 1 by A72,NAT_1:38;
+then A77:   f/.k2 <> f/.(k1+1) by A11,A71,Th39;
+A78:    k1 < len f by A11,NAT_1:38;
+      then A79:     f/.k2 <> f/.k1 by A71,A72,Th39;
+A80:    1 < k2+1 by A71,NAT_1:38;
+      A81: k2+1 < k1+1 by A72,REAL_1:53;
+      then A82: f/.(k2+1) <> f/.(k1+1) by A11,A80,Th39;
+A83:    k2+1 >= k1 by A11,A71,A72,A74,A75,A76,A78,A80,A81,Th39;
+        k2+1 <= k1 by A72,NAT_1:38;
+then A84:    k2+1 = k1 by A83,AXIOMS:21;
+     hence 1 <= k2 & k2+1 < len f by A11,A71,NAT_1:38;
+     thus
+     f/.(k2+1) = (GoB f)*(i,j+1) by A15,A73,A75,A77,A79,SPPOL_1:25;
+     thus f/.k2 = (GoB f)*(i,j+2) by A15,A73,A75,A77,A79,SPPOL_1:25;
+        k2+(1+1) = k1+1 by A84,XCMPLX_1:1;
+     hence f/.(k2+2) = (GoB f)*(i,j) by A15,A73,A75,A77,A82,SPPOL_1:25;
+  end;
+ hence thesis;
+end;
+
+theorem Th56:
+ 1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f &
+ LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) c= L~f &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) c= L~f implies
+  f/.1 = (GoB f)*(i,j+1) &
+  (f/.2 = (GoB f)*(i,j) & f/.(len f-'1) = (GoB f)*(i+1,j+1) or
+   f/.2 = (GoB f)*(i+1,j+1) & f/.(len f-'1) = (GoB f)*(i,j))
+  or ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i,j+1) &
+   (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i+1,j+1) or
+    f/.k = (GoB f)*(i+1,j+1) & f/.(k+2) = (GoB f)*(i,j))
+proof
+A1: len f > 4 by Th36;
+ assume that
+A2: 1 <= i & i+1 <= len GoB f and
+A3: 1 <= j & j+1 <= width GoB f and
+A4: LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) c= L~f and
+A5: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) c= L~f;
+A6: 1 <= j+1 by NAT_1:29;
+A7: j < width GoB f by A3,NAT_1:38;
+A8: 1 <= i+1 by NAT_1:29;
+A9: i < len GoB f by A2,NAT_1:38;
+    1/2*((GoB f)*(i,j)+(GoB f)*(i,j+1)) in LSeg((GoB f)*(i,j),(GoB f)*
+(i,j+1))
+                                                                by Th7;
+  then consider k1 such that
+A10: 1 <= k1 & k1+1 <= len f and
+A11: LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) = LSeg(f,k1) by A2,A3,A4,A9,Th41;
+A12: k1 < len f by A10,NAT_1:38;
+    1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1))
+       in LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) by Th7;
+  then consider k2 such that
+A13: 1 <= k2 & k2+1 <= len f and
+A14: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k2) by A2,A3,A5,A6,Th42;
+A15: k2 < len f by A13,NAT_1:38;
+A16: now assume k1 > 1;
+       then k1 >= 1+1 by NAT_1:38;
+      hence k1 = 2 or k1 > 2 by AXIOMS:21;
+     end;
+A17: now assume k2 > 1;
+       then k2 >= 1+1 by NAT_1:38;
+      hence k2 = 2 or k2 > 2 by AXIOMS:21;
+     end;
+A18: (k1 = 1 or k1 > 1) & (k2 = 1 or k2 > 1) by A10,A13,AXIOMS:21;
+    now per cases by A16,A17,A18,AXIOMS:21;
+   case that
+A19: k1 = 1 and
+A20: k2 = 2;
+     A21: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A10,A19,TOPREAL1:def 5;
+     then A22:   (GoB f)*(i,j) = f/.1 & (GoB f)*(i,j+1) = f/.2 or
+      (GoB f)*(i,j) = f/.2 & (GoB f)*(i,j+1) = f/.1 by A11,A19,SPPOL_1:25;
+     A23: LSeg(f,2) = LSeg((f/.2),f/.(2+1)) by A13,A20,TOPREAL1:def 5;
+     then A24:   (GoB f)*(i,j+1) = f/.2 & (GoB f)*(i+1,j+1) = f/.(2+1) or
+      (GoB f)*(i,j+1) = f/.(2+1) & (GoB f)*(i+1,j+1) = (f/.2)
+                    by A14,A20,SPPOL_1:25;
+     thus 1 <= 1 & 1+1 < len f by A13,A20,NAT_1:38;
+      A25: 3 < len f by A1,AXIOMS:22;
+      then A26: f/.1 <> f/.3 by Th38;
+     thus
+     f/.(1+1) = (GoB f)*(i,j+1) by A22,A24,A25,Th38;
+     thus f/.1 = (GoB f)*(i,j) by A14,A20,A22,A23,A26,SPPOL_1:25;
+     thus f/.(1+2) = (GoB f)*(i+1,j+1) by A11,A19,A21,A24,A26,SPPOL_1:25;
+   case that
+A27: k1 = 1 and
+A28: k2 > 2;
+     A29: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A10,A27,TOPREAL1:def 5;
+     then A30:   (GoB f)*(i,j) = f/.1 & (GoB f)*(i,j+1) = f/.2 or
+      (GoB f)*(i,j) = f/.2 & (GoB f)*(i,j+1) = f/.1 by A11,A27,SPPOL_1:25;
+       LSeg(f,k2) = LSeg(f/.k2,f/.(k2+1)) by A13,TOPREAL1:def 5;
+     then A31:   (GoB f)*(i,j+1) = f/.k2 & (GoB f)*(i+1,j+1) = f/.(k2+1) or
+      (GoB f)*(i,j+1) = f/.(k2+1) & (GoB f)*(i+1,j+1) = f/.k2
+                        by A14,SPPOL_1:25;
+A32:   f/.k2 <> f/.2 by A15,A28,Th38;
+A33:  k2 > 1 by A28,AXIOMS:22;
+     A34: 2 < k2+1 by A28,NAT_1:38;
+then A35:   f/.(k2+1) <> f/.2 by A13,Th39;
+    hence
+     f/.1 = (GoB f)*(i,j+1) by A11,A27,A29,A31,A32,SPPOL_1:25;
+    thus f/.2 = (GoB f)*(i,j) by A11,A27,A29,A31,A32,A35,SPPOL_1:25;
+A36:  k2+1 > 1 by A33,NAT_1:38;
+     then k2+1 = len f by A13,A15,A28,A30,A31,A33,A34,Th39,Th40;
+     then k2 + 1 = len f -'1 + 1 by A36,AMI_5:4;
+    hence f/.(len f-'1) = (GoB f)*(i+1,j+1) by A15,A28,A30,A31,A33,Th38,
+XCMPLX_1:2;
+   case that
+A37: k2 = 1 and
+A38: k1 = 2;
+     A39: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A13,A37,TOPREAL1:def 5;
+     then A40:   (GoB f)*(i+1,j+1) = f/.1 & (GoB f)*(i,j+1) = f/.2 or
+      (GoB f)*(i+1,j+1) = f/.2 & (GoB f)*(i,j+1) = f/.1
+                       by A14,A37,SPPOL_1:25;
+     A41: LSeg(f,2) = LSeg((f/.2),f/.(2+1)) by A10,A38,TOPREAL1:def 5;
+     then A42:   (GoB f)*(i,j+1) = f/.2 & (GoB f)*(i,j) = f/.(2+1) or
+      (GoB f)*(i,j+1) = f/.(2+1) & (GoB f)*(i,j) = (f/.2)
+                    by A11,A38,SPPOL_1:25;
+     thus 1 <= 1 & 1+1 < len f by A10,A38,NAT_1:38;
+      A43: 3 < len f by A1,AXIOMS:22;
+      then A44: f/.1 <> f/.3 by Th38;
+     thus
+     f/.(1+1) = (GoB f)*(i,j+1) by A40,A42,A43,Th38;
+     thus f/.1 = (GoB f)*(i+1,j+1) by A11,A38,A40,A41,A44,SPPOL_1:25;
+     thus f/.(1+2) = (GoB f)*(i,j) by A14,A37,A39,A42,A44,SPPOL_1:25;
+   case that
+A45: k2 = 1 and
+A46: k1 > 2;
+     A47: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A13,A45,TOPREAL1:def 5;
+     then A48:   (GoB f)*(i+1,j+1) = f/.1 & (GoB f)*(i,j+1) = f/.2 or
+      (GoB f)*(i+1,j+1) = f/.2 & (GoB f)*(i,j+1) = f/.1
+                           by A14,A45,SPPOL_1:25;
+       LSeg(f,k1) = LSeg(f/.k1,f/.(k1+1)) by A10,TOPREAL1:def 5;
+     then A49:   (GoB f)*(i,j+1) = f/.k1 & (GoB f)*(i,j) = f/.(k1+1) or
+      (GoB f)*(i,j+1) = f/.(k1+1) & (GoB f)*(i,j) = f/.k1
+      by A11,SPPOL_1:25;
+A50:   f/.k1 <> f/.2 by A12,A46,Th38;
+A51:  k1 > 1 by A46,AXIOMS:22;
+     A52: 2 < k1+1 by A46,NAT_1:38;
+then A53:   f/.(k1+1) <> f/.2 by A10,Th39;
+    hence
+     f/.1 = (GoB f)*(i,j+1) by A14,A45,A47,A49,A50,SPPOL_1:25;
+    thus f/.2 = (GoB f)*(i+1,j+1) by A14,A45,A47,A49,A50,A53,SPPOL_1:25;
+A54:  k1+1 > 1 by A51,NAT_1:38;
+     then k1+1 = len f by A10,A12,A46,A48,A49,A51,A52,Th39,Th40;
+     then k1 + 1 = len f -'1 + 1 by A54,AMI_5:4;
+    hence f/.(len f-'1) = (GoB f)*(i,j) by A12,A46,A48,A49,A51,Th38,XCMPLX_1:2
+;
+   case k1 = k2;
+     then A55:   (GoB f)*(i,j) = (GoB f)*(i+1,j+1) or (GoB f)*(i,j) = (GoB f)*(
+i,j+1)
+           by A11,A14,SPPOL_1:25;
+       [i,j] in Indices GoB f & [i,j+1] in Indices GoB f &
+     [i+1,j+1] in Indices GoB f by A2,A3,A6,A7,A8,A9,Th10;
+     then j = j+1 by A55,GOBOARD1:21;
+    hence contradiction by REAL_1:69;
+   case that
+A56: k1 > 1 and
+A57: k2 > k1;
+     A58: LSeg(f,k1) = LSeg(f/.k1,f/.(k1+1)) by A10,TOPREAL1:def 5;
+     then A59:   (GoB f)*(i,j) = f/.k1 & (GoB f)*(i,j+1) = f/.(k1+1) or
+      (GoB f)*(i,j) = f/.(k1+1) & (GoB f)*(i,j+1) = f/.k1
+      by A11,SPPOL_1:25;
+       LSeg(f,k2) = LSeg(f/.k2,f/.(k2+1)) by A13,TOPREAL1:def 5;
+     then A60:   (GoB f)*(i,j+1) = f/.k2 & (GoB f)*(i+1,j+1) = f/.(k2+1) or
+      (GoB f)*(i,j+1) = f/.(k2+1) & (GoB f)*(i+1,j+1) = f/.k2
+                    by A14,SPPOL_1:25;
+     A61: k1 < k2 + 1 by A57,NAT_1:38;
+then A62:   f/.k1 <> f/.(k2+1) by A13,A56,Th39;
+A63:    k2 < len f by A13,NAT_1:38;
+      then A64:     f/.k1 <> f/.k2 by A56,A57,Th39;
+A65:    1 < k1+1 by A56,NAT_1:38;
+      A66: k1+1 < k2+1 by A57,REAL_1:53;
+      then A67: f/.(k1+1) <> f/.(k2+1) by A13,A65,Th39;
+A68:    k1+1 >= k2 by A13,A56,A57,A59,A60,A61,A63,A65,A66,Th39;
+        k1+1 <= k2 by A57,NAT_1:38;
+then A69:    k1+1 = k2 by A68,AXIOMS:21;
+     hence 1 <= k1 & k1+1 < len f by A13,A56,NAT_1:38;
+     thus
+     f/.(k1+1) = (GoB f)*(i,j+1) by A11,A58,A60,A62,A64,SPPOL_1:25;
+     thus f/.k1 = (GoB f)*(i,j) by A11,A58,A60,A62,A64,SPPOL_1:25;
+        k1+(1+1) = k2+1 by A69,XCMPLX_1:1;
+     hence f/.(k1+2) = (GoB f)*(i+1,j+1) by A11,A58,A60,A62,A67,SPPOL_1:25;
+   case that
+A70: k2 > 1 and
+A71: k1 > k2;
+     A72: LSeg(f,k2) = LSeg(f/.k2,f/.(k2+1)) by A13,TOPREAL1:def 5;
+     then A73:   (GoB f)*(i+1,j+1) = f/.k2 & (GoB f)*(i,j+1) = f/.(k2+1) or
+      (GoB f)*(i+1,j+1) = f/.(k2+1) & (GoB f)*(i,j+1) = f/.k2
+                         by A14,SPPOL_1:25;
+       LSeg(f,k1) = LSeg(f/.k1,f/.(k1+1)) by A10,TOPREAL1:def 5;
+     then A74:   (GoB f)*(i,j+1) = f/.k1 & (GoB f)*(i,j) = f/.(k1+1) or
+      (GoB f)*(i,j+1) = f/.(k1+1) & (GoB f)*(i,j) = f/.k1
+                    by A11,SPPOL_1:25;
+     A75: k2 < k1 + 1 by A71,NAT_1:38;
+then A76:   f/.k2 <> f/.(k1+1) by A10,A70,Th39;
+A77:    k1 < len f by A10,NAT_1:38;
+      then A78:     f/.k2 <> f/.k1 by A70,A71,Th39;
+A79:    1 < k2+1 by A70,NAT_1:38;
+      A80: k2+1 < k1+1 by A71,REAL_1:53;
+      then A81: f/.(k2+1) <> f/.(k1+1) by A10,A79,Th39;
+A82:    k2+1 >= k1 by A10,A70,A71,A73,A74,A75,A77,A79,A80,Th39;
+        k2+1 <= k1 by A71,NAT_1:38;
+then A83:    k2+1 = k1 by A82,AXIOMS:21;
+     hence 1 <= k2 & k2+1 < len f by A10,A70,NAT_1:38;
+     thus
+     f/.(k2+1) = (GoB f)*(i,j+1) by A14,A72,A74,A76,A78,SPPOL_1:25;
+     thus f/.k2 = (GoB f)*(i+1,j+1) by A14,A72,A74,A76,A78,SPPOL_1:25;
+        k2+(1+1) = k1+1 by A83,XCMPLX_1:1;
+     hence f/.(k2+2) = (GoB f)*(i,j) by A14,A72,A74,A76,A81,SPPOL_1:25;
+  end;
+ hence thesis;
+end;
+
+theorem Th57:
+ 1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f &
+ LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) c= L~f &
+ LSeg((GoB f)*(i+1,j+1),(GoB f)*(i+1,j)) c= L~f implies
+  f/.1 = (GoB f)*(i+1,j+1) &
+  (f/.2 = (GoB f)*(i,j+1) & f/.(len f-'1) = (GoB f)*(i+1,j) or
+   f/.2 = (GoB f)*(i+1,j) & f/.(len f-'1) = (GoB f)*(i,j+1))
+  or ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j+1) &
+   (f/.k = (GoB f)*(i,j+1) & f/.(k+2) = (GoB f)*(i+1,j) or
+    f/.k = (GoB f)*(i+1,j) & f/.(k+2) = (GoB f)*(i,j+1))
+proof
+A1: len f > 4 by Th36;
+ assume that
+A2: 1 <= i & i+1 <= len GoB f and
+A3: 1 <= j & j+1 <= width GoB f and
+A4: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) c= L~f and
+A5: LSeg((GoB f)*(i+1,j+1),(GoB f)*(i+1,j)) c= L~f;
+A6: 1 <= j+1 by NAT_1:29;
+A7: j < width GoB f by A3,NAT_1:38;
+A8: 1 <= i+1 by NAT_1:29;
+A9: i < len GoB f by A2,NAT_1:38;
+    1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1))
+         in LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) by Th7;
+  then consider k1 such that
+A10: 1 <= k1 & k1+1 <= len f and
+A11: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k1) by A2,A3,A4,A6,Th42;
+A12: k1 < len f by A10,NAT_1:38;
+    1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1))
+       in LSeg((GoB f)*(i+1,j+1),(GoB f)*(i+1,j)) by Th7;
+  then consider k2 such that
+A13: 1 <= k2 & k2+1 <= len f and
+A14: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k2) by A2,A3,A5,A8,Th41;
+A15: k2 < len f by A13,NAT_1:38;
+A16: now assume k1 > 1;
+       then k1 >= 1+1 by NAT_1:38;
+      hence k1 = 2 or k1 > 2 by AXIOMS:21;
+     end;
+A17: now assume k2 > 1;
+       then k2 >= 1+1 by NAT_1:38;
+      hence k2 = 2 or k2 > 2 by AXIOMS:21;
+     end;
+A18: (k1 = 1 or k1 > 1) & (k2 = 1 or k2 > 1) by A10,A13,AXIOMS:21;
+    now per cases by A16,A17,A18,AXIOMS:21;
+   case that
+A19: k1 = 1 and
+A20: k2 = 2;
+     A21: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A10,A19,TOPREAL1:def 5;
+     then A22:   (GoB f)*(i,j+1) = f/.1 & (GoB f)*(i+1,j+1) = f/.2 or
+      (GoB f)*(i,j+1) = f/.2 & (GoB f)*(i+1,j+1) = f/.1
+         by A11,A19,SPPOL_1:25;
+     A23: LSeg(f,2) = LSeg((f/.2),f/.(2+1)) by A13,A20,TOPREAL1:def 5;
+     then A24:   (GoB f)*(i+1,j+1) = f/.2 & (GoB f)*(i+1,j) = f/.(2+1) or
+      (GoB f)*(i+1,j+1) = f/.(2+1) & (GoB f)*(i+1,j) = (f/.2)
+                    by A14,A20,SPPOL_1:25;
+     thus 1 <= 1 & 1+1 < len f by A13,A20,NAT_1:38;
+      A25: 3 < len f by A1,AXIOMS:22;
+      then A26: f/.1 <> f/.3 by Th38;
+     thus
+     f/.(1+1) = (GoB f)*(i+1,j+1) by A22,A24,A25,Th38;
+     thus f/.1 = (GoB f)*(i,j+1) by A14,A20,A22,A23,A26,SPPOL_1:25;
+     thus f/.(1+2) = (GoB f)*(i+1,j) by A11,A19,A21,A24,A26,SPPOL_1:25;
+   case that
+A27: k1 = 1 and
+A28: k2 > 2;
+     A29: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A10,A27,TOPREAL1:def 5;
+     then A30:   (GoB f)*(i,j+1) = f/.1 & (GoB f)*(i+1,j+1) = f/.2 or
+      (GoB f)*(i,j+1) = f/.2 & (GoB f)*(i+1,j+1) = f/.1
+          by A11,A27,SPPOL_1:25;
+       LSeg(f,k2) = LSeg(f/.k2,f/.(k2+1)) by A13,TOPREAL1:def 5;
+     then A31:   (GoB f)*(i+1,j+1) = f/.k2 & (GoB f)*(i+1,j) = f/.(k2+1) or
+      (GoB f)*(i+1,j+1) = f/.(k2+1) & (GoB f)*(i+1,j) = f/.k2
+                        by A14,SPPOL_1:25;
+A32:   f/.k2 <> f/.2 by A15,A28,Th38;
+A33:  k2 > 1 by A28,AXIOMS:22;
+     A34: 2 < k2+1 by A28,NAT_1:38;
+then A35:   f/.(k2+1) <> f/.2 by A13,Th39;
+    hence
+     f/.1 = (GoB f)*(i+1,j+1) by A11,A27,A29,A31,A32,SPPOL_1:25;
+    thus f/.2 = (GoB f)*(i,j+1) by A11,A27,A29,A31,A32,A35,SPPOL_1:25;
+A36:  k2+1 > 1 by A33,NAT_1:38;
+     then k2+1 = len f by A13,A15,A28,A30,A31,A33,A34,Th39,Th40;
+     then k2 + 1 = len f -'1 + 1 by A36,AMI_5:4;
+    hence f/.(len f-'1) = (GoB f)*(i+1,j) by A15,A28,A30,A31,A33,Th38,XCMPLX_1:
+2;
+   case that
+A37: k2 = 1 and
+A38: k1 = 2;
+     A39: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A13,A37,TOPREAL1:def 5;
+     then A40:   (GoB f)*(i+1,j) = f/.1 & (GoB f)*(i+1,j+1) = f/.2 or
+      (GoB f)*(i+1,j) = f/.2 & (GoB f)*(i+1,j+1) = f/.1
+                       by A14,A37,SPPOL_1:25;
+     A41: LSeg(f,2) = LSeg((f/.2),f/.(2+1)) by A10,A38,TOPREAL1:def 5;
+     then A42:   (GoB f)*(i+1,j+1) = f/.2 & (GoB f)*(i,j+1) = f/.(2+1) or
+      (GoB f)*(i+1,j+1) = f/.(2+1) & (GoB f)*(i,j+1) = (f/.2)
+                    by A11,A38,SPPOL_1:25;
+     thus 1 <= 1 & 1+1 < len f by A10,A38,NAT_1:38;
+      A43: 3 < len f by A1,AXIOMS:22;
+      then A44: f/.1 <> f/.3 by Th38;
+     thus
+     f/.(1+1) = (GoB f)*(i+1,j+1) by A40,A42,A43,Th38;
+     thus f/.1 = (GoB f)*(i+1,j) by A11,A38,A40,A41,A44,SPPOL_1:25;
+     thus f/.(1+2) = (GoB f)*(i,j+1) by A14,A37,A39,A42,A44,SPPOL_1:25;
+   case that
+A45: k2 = 1 and
+A46: k1 > 2;
+     A47: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A13,A45,TOPREAL1:def 5;
+     then A48:   (GoB f)*(i+1,j) = f/.1 & (GoB f)*(i+1,j+1) = f/.2 or
+      (GoB f)*(i+1,j) = f/.2 & (GoB f)*(i+1,j+1) = f/.1
+                           by A14,A45,SPPOL_1:25;
+       LSeg(f,k1) = LSeg(f/.k1,f/.(k1+1)) by A10,TOPREAL1:def 5;
+     then A49:   (GoB f)*(i+1,j+1) = f/.k1 & (GoB f)*(i,j+1) = f/.(k1+1) or
+      (GoB f)*(i+1,j+1) = f/.(k1+1) & (GoB f)*(i,j+1) = f/.k1
+                  by A11,SPPOL_1:25;
+A50:   f/.k1 <> f/.2 by A12,A46,Th38;
+A51:  k1 > 1 by A46,AXIOMS:22;
+     A52: 2 < k1+1 by A46,NAT_1:38;
+then A53:   f/.(k1+1) <> f/.2 by A10,Th39;
+    hence
+     f/.1 = (GoB f)*(i+1,j+1) by A14,A45,A47,A49,A50,SPPOL_1:25;
+    thus f/.2 = (GoB f)*(i+1,j) by A14,A45,A47,A49,A50,A53,SPPOL_1:25;
+A54:  k1+1 > 1 by A51,NAT_1:38;
+     then k1+1 = len f by A10,A12,A46,A48,A49,A51,A52,Th39,Th40;
+     then k1 + 1 = len f -'1 + 1 by A54,AMI_5:4;
+    hence f/.(len f-'1) = (GoB f)*(i,j+1) by A12,A46,A48,A49,A51,Th38,XCMPLX_1:
+2;
+   case k1 = k2;
+     then A55:   (GoB f)*(i,j+1) = (GoB f)*(i+1,j) or (GoB f)*(i,j+1) = (GoB f)
+*
+(i+1,j+1)
+           by A11,A14,SPPOL_1:25;
+       [i+1,j] in Indices GoB f & [i,j+1] in Indices GoB f &
+     [i+1,j+1] in Indices GoB f by A2,A3,A6,A7,A8,A9,Th10;
+     then i = i+1 or j = j+1 by A55,GOBOARD1:21;
+    hence contradiction by REAL_1:69;
+   case that
+A56: k1 > 1 and
+A57: k2 > k1;
+     A58: LSeg(f,k1) = LSeg(f/.k1,f/.(k1+1)) by A10,TOPREAL1:def 5;
+     then A59:   (GoB f)*(i,j+1) = f/.k1 & (GoB f)*(i+1,j+1) = f/.(k1+1) or
+      (GoB f)*(i,j+1) = f/.(k1+1) & (GoB f)*(i+1,j+1) = f/.k1
+                   by A11,SPPOL_1:25;
+       LSeg(f,k2) = LSeg(f/.k2,f/.(k2+1)) by A13,TOPREAL1:def 5;
+     then A60:   (GoB f)*(i+1,j+1) = f/.k2 & (GoB f)*(i+1,j) = f/.(k2+1) or
+      (GoB f)*(i+1,j+1) = f/.(k2+1) & (GoB f)*(i+1,j) = f/.k2
+                    by A14,SPPOL_1:25;
+     A61: k1 < k2 + 1 by A57,NAT_1:38;
+then A62:   f/.k1 <> f/.(k2+1) by A13,A56,Th39;
+A63:    k2 < len f by A13,NAT_1:38;
+      then A64:     f/.k1 <> f/.k2 by A56,A57,Th39;
+A65:    1 < k1+1 by A56,NAT_1:38;
+      A66: k1+1 < k2+1 by A57,REAL_1:53;
+      then A67: f/.(k1+1) <> f/.(k2+1) by A13,A65,Th39;
+A68:    k1+1 >= k2 by A13,A56,A57,A59,A60,A61,A63,A65,A66,Th39;
+        k1+1 <= k2 by A57,NAT_1:38;
+then A69:    k1+1 = k2 by A68,AXIOMS:21;
+     hence 1 <= k1 & k1+1 < len f by A13,A56,NAT_1:38;
+     thus
+     f/.(k1+1) = (GoB f)*(i+1,j+1) by A11,A58,A60,A62,A64,SPPOL_1:25;
+     thus f/.k1 = (GoB f)*(i,j+1) by A11,A58,A60,A62,A64,SPPOL_1:25;
+        k1+(1+1) = k2+1 by A69,XCMPLX_1:1;
+     hence f/.(k1+2) = (GoB f)*(i+1,j) by A11,A58,A60,A62,A67,SPPOL_1:25;
+   case that
+A70: k2 > 1 and
+A71: k1 > k2;
+     A72: LSeg(f,k2) = LSeg(f/.k2,f/.(k2+1)) by A13,TOPREAL1:def 5;
+     then A73:   (GoB f)*(i+1,j) = f/.k2 & (GoB f)*(i+1,j+1) = f/.(k2+1) or
+      (GoB f)*(i+1,j) = f/.(k2+1) & (GoB f)*(i+1,j+1) = f/.k2
+                         by A14,SPPOL_1:25;
+       LSeg(f,k1) = LSeg(f/.k1,f/.(k1+1)) by A10,TOPREAL1:def 5;
+     then A74:   (GoB f)*(i+1,j+1) = f/.k1 & (GoB f)*(i,j+1) = f/.(k1+1) or
+      (GoB f)*(i+1,j+1) = f/.(k1+1) & (GoB f)*(i,j+1) = f/.k1
+                    by A11,SPPOL_1:25;
+     A75: k2 < k1 + 1 by A71,NAT_1:38;
+then A76:   f/.k2 <> f/.(k1+1) by A10,A70,Th39;
+A77:    k1 < len f by A10,NAT_1:38;
+      then A78:     f/.k2 <> f/.k1 by A70,A71,Th39;
+A79:    1 < k2+1 by A70,NAT_1:38;
+      A80: k2+1 < k1+1 by A71,REAL_1:53;
+      then A81: f/.(k2+1) <> f/.(k1+1) by A10,A79,Th39;
+A82:    k2+1 >= k1 by A10,A70,A71,A73,A74,A75,A77,A79,A80,Th39;
+        k2+1 <= k1 by A71,NAT_1:38;
+then A83:    k2+1 = k1 by A82,AXIOMS:21;
+     hence 1 <= k2 & k2+1 < len f by A10,A70,NAT_1:38;
+     thus
+     f/.(k2+1) = (GoB f)*(i+1,j+1) by A14,A72,A74,A76,A78,SPPOL_1:25;
+     thus f/.k2 = (GoB f)*(i+1,j) by A14,A72,A74,A76,A78,SPPOL_1:25;
+        k2+(1+1) = k1+1 by A83,XCMPLX_1:1;
+     hence f/.(k2+2) = (GoB f)*(i,j+1) by A14,A72,A74,A76,A81,SPPOL_1:25;
+  end;
+ hence thesis;
+end;
+
+theorem Th58:
+ 1 <= i & i+1 < len GoB f & 1 <= j & j <= width GoB f &
+ LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) c= L~f &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+2,j)) c= L~f implies
+  f/.1 = (GoB f)*(i+1,j) &
+  (f/.2 = (GoB f)*(i,j) & f/.(len f-'1) = (GoB f)*(i+2,j) or
+   f/.2 = (GoB f)*(i+2,j) & f/.(len f-'1) = (GoB f)*(i,j))
+  or ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j) &
+   (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i+2,j) or
+    f/.k = (GoB f)*(i+2,j) & f/.(k+2) = (GoB f)*(i,j))
+proof
+A1: len f > 4 by Th36;
+ assume that
+A2: 1 <= i & i+1 < len GoB f and
+A3: 1 <= j & j <= width GoB f and
+A4: LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) c= L~f and
+A5: LSeg((GoB f)*(i+1,j),(GoB f)*(i+2,j)) c= L~f;
+A6: 1 <= i+1 by NAT_1:29;
+A7: i+(1+1) = i+1+1 by XCMPLX_1:1;
+then A8: i+2 <= len GoB f by A2,NAT_1:38;
+A9: 1 <= i+2 by A7,NAT_1:29;
+A10: i < len GoB f by A2,NAT_1:38;
+    1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j)) in LSeg((GoB f)*(i,j),(GoB f)*
+(i+1,j))
+                                                                by Th7;
+  then consider k1 such that
+A11: 1 <= k1 & k1+1 <= len f and
+A12: LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k1) by A2,A3,A4,Th42;
+A13: k1 < len f by A11,NAT_1:38;
+    1/2*((GoB f)*(i+1,j)+(GoB f)*(i+2,j)) in
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+2,j))
+                                                                by Th7;
+  then consider k2 such that
+A14: 1 <= k2 & k2+1 <= len f and
+A15: LSeg((GoB f)*(i+1,j),(GoB f)*(i+2,j)) = LSeg(f,k2) by A3,A5,A6,A7,A8,Th42;
+A16: k2 < len f by A14,NAT_1:38;
+A17: now assume k1 > 1;
+       then k1 >= 1+1 by NAT_1:38;
+      hence k1 = 2 or k1 > 2 by AXIOMS:21;
+     end;
+A18: now assume k2 > 1;
+       then k2 >= 1+1 by NAT_1:38;
+      hence k2 = 2 or k2 > 2 by AXIOMS:21;
+     end;
+A19: (k1 = 1 or k1 > 1) & (k2 = 1 or k2 > 1) by A11,A14,AXIOMS:21;
+    now per cases by A17,A18,A19,AXIOMS:21;
+   case that
+A20: k1 = 1 and
+A21: k2 = 2;
+     A22: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A11,A20,TOPREAL1:def 5;
+     then A23:   (GoB f)*(i,j) = f/.1 & (GoB f)*(i+1,j) = f/.2 or
+      (GoB f)*(i,j) = f/.2 & (GoB f)*(i+1,j) = f/.1 by A12,A20,SPPOL_1:25;
+     A24: LSeg(f,2) = LSeg((f/.2),f/.(2+1)) by A14,A21,TOPREAL1:def 5;
+     then A25:   (GoB f)*(i+1,j) = f/.2 & (GoB f)*(i+2,j) = f/.(2+1) or
+      (GoB f)*(i+1,j) = f/.(2+1) & (GoB f)*(i+2,j) = (f/.2)
+                    by A15,A21,SPPOL_1:25;
+     thus 1 <= 1 & 1+1 < len f by A14,A21,NAT_1:38;
+      A26: 3 < len f by A1,AXIOMS:22;
+      then A27: f/.1 <> f/.3 by Th38;
+     thus
+     f/.(1+1) = (GoB f)*(i+1,j) by A23,A25,A26,Th38;
+     thus f/.1 = (GoB f)*(i,j) by A15,A21,A23,A24,A27,SPPOL_1:25;
+     thus f/.(1+2) = (GoB f)*(i+2,j) by A12,A20,A22,A25,A27,SPPOL_1:25;
+   case that
+A28: k1 = 1 and
+A29: k2 > 2;
+     A30: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A11,A28,TOPREAL1:def 5;
+     then A31:   (GoB f)*(i,j) = f/.1 & (GoB f)*(i+1,j) = f/.2 or
+      (GoB f)*(i,j) = f/.2 & (GoB f)*(i+1,j) = f/.1 by A12,A28,SPPOL_1:25;
+       LSeg(f,k2) = LSeg(f/.k2,f/.(k2+1)) by A14,TOPREAL1:def 5;
+     then A32:   (GoB f)*(i+1,j) = f/.k2 & (GoB f)*(i+2,j) = f/.(k2+1) or
+      (GoB f)*(i+1,j) = f/.(k2+1) & (GoB f)*(i+2,j) = f/.k2
+      by A15,SPPOL_1:25;
+A33:   f/.k2 <> f/.2 by A16,A29,Th38;
+A34:  k2 > 1 by A29,AXIOMS:22;
+     A35: 2 < k2+1 by A29,NAT_1:38;
+then A36:   f/.(k2+1) <> f/.2 by A14,Th39;
+    hence
+     f/.1 = (GoB f)*(i+1,j) by A12,A28,A30,A32,A33,SPPOL_1:25;
+    thus f/.2 = (GoB f)*(i,j) by A12,A28,A30,A32,A33,A36,SPPOL_1:25;
+A37:  k2+1 > 1 by A34,NAT_1:38;
+     then k2+1 = len f by A14,A16,A29,A31,A32,A34,A35,Th39,Th40;
+     then k2 + 1 = len f -'1 + 1 by A37,AMI_5:4;
+    hence f/.(len f-'1) = (GoB f)*(i+2,j) by A16,A29,A31,A32,A34,Th38,XCMPLX_1:
+2;
+   case that
+A38: k2 = 1 and
+A39: k1 = 2;
+     A40: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A14,A38,TOPREAL1:def 5;
+     then A41:   (GoB f)*(i+2,j) = f/.1 & (GoB f)*(i+1,j) = f/.2 or
+      (GoB f)*(i+2,j) = f/.2 & (GoB f)*(i+1,j) = f/.1
+      by A15,A38,SPPOL_1:25;
+     A42: LSeg(f,2) = LSeg((f/.2),f/.(2+1)) by A11,A39,TOPREAL1:def 5;
+     then A43:   (GoB f)*(i+1,j) = f/.2 & (GoB f)*(i,j) = f/.(2+1) or
+      (GoB f)*(i+1,j) = f/.(2+1) & (GoB f)*(i,j) = (f/.2)
+                    by A12,A39,SPPOL_1:25;
+     thus 1 <= 1 & 1+1 < len f by A11,A39,NAT_1:38;
+      A44: 3 < len f by A1,AXIOMS:22;
+      then A45: f/.1 <> f/.3 by Th38;
+     thus
+     f/.(1+1) = (GoB f)*(i+1,j) by A41,A43,A44,Th38;
+     thus f/.1 = (GoB f)*(i+2,j) by A12,A39,A41,A42,A45,SPPOL_1:25;
+     thus f/.(1+2) = (GoB f)*(i,j) by A15,A38,A40,A43,A45,SPPOL_1:25;
+   case that
+A46: k2 = 1 and
+A47: k1 > 2;
+     A48: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A14,A46,TOPREAL1:def 5;
+     then A49:   (GoB f)*(i+2,j) = f/.1 & (GoB f)*(i+1,j) = f/.2 or
+      (GoB f)*(i+2,j) = f/.2 & (GoB f)*(i+1,j) = f/.1
+      by A15,A46,SPPOL_1:25;
+       LSeg(f,k1) = LSeg(f/.k1,f/.(k1+1)) by A11,TOPREAL1:def 5;
+     then A50:   (GoB f)*(i+1,j) = f/.k1 & (GoB f)*(i,j) = f/.(k1+1) or
+      (GoB f)*(i+1,j) = f/.(k1+1) & (GoB f)*(i,j) = f/.k1
+      by A12,SPPOL_1:25;
+A51:   f/.k1 <> f/.2 by A13,A47,Th38;
+A52:  k1 > 1 by A47,AXIOMS:22;
+     A53: 2 < k1+1 by A47,NAT_1:38;
+then A54:   f/.(k1+1) <> f/.2 by A11,Th39;
+    hence
+     f/.1 = (GoB f)*(i+1,j) by A15,A46,A48,A50,A51,SPPOL_1:25;
+    thus f/.2 = (GoB f)*(i+2,j) by A15,A46,A48,A50,A51,A54,SPPOL_1:25;
+A55:  k1+1 > 1 by A52,NAT_1:38;
+     then k1+1 = len f by A11,A13,A47,A49,A50,A52,A53,Th39,Th40;
+     then k1 + 1 = len f -'1 + 1 by A55,AMI_5:4;
+    hence f/.(len f-'1) = (GoB f)*(i,j) by A13,A47,A49,A50,A52,Th38,XCMPLX_1:2
+;
+   case k1 = k2;
+     then A56:   (GoB f)*(i,j) = (GoB f)*(i+2,j) or (GoB f)*(i,j) = (GoB f)*(i+
+1,j)
+           by A12,A15,SPPOL_1:25;
+       [i,j] in Indices GoB f & [i+1,j] in Indices GoB f &
+     [i+2,j] in Indices GoB f by A2,A3,A6,A8,A9,A10,Th10;
+     then i = i+1 or i = i+2 by A56,GOBOARD1:21;
+    hence contradiction by REAL_1:69;
+   case that
+A57: k1 > 1 and
+A58: k2 > k1;
+     A59: LSeg(f,k1) = LSeg(f/.k1,f/.(k1+1)) by A11,TOPREAL1:def 5;
+     then A60:   (GoB f)*(i,j) = f/.k1 & (GoB f)*(i+1,j) = f/.(k1+1) or
+      (GoB f)*(i,j) = f/.(k1+1) & (GoB f)*(i+1,j) = f/.k1
+      by A12,SPPOL_1:25;
+       LSeg(f,k2) = LSeg(f/.k2,f/.(k2+1)) by A14,TOPREAL1:def 5;
+     then A61:   (GoB f)*(i+1,j) = f/.k2 & (GoB f)*(i+2,j) = f/.(k2+1) or
+      (GoB f)*(i+1,j) = f/.(k2+1) & (GoB f)*(i+2,j) = f/.k2
+                    by A15,SPPOL_1:25;
+     A62: k1 < k2 + 1 by A58,NAT_1:38;
+then A63:   f/.k1 <> f/.(k2+1) by A14,A57,Th39;
+A64:    k2 < len f by A14,NAT_1:38;
+      then A65:     f/.k1 <> f/.k2 by A57,A58,Th39;
+A66:    1 < k1+1 by A57,NAT_1:38;
+      A67: k1+1 < k2+1 by A58,REAL_1:53;
+      then A68: f/.(k1+1) <> f/.(k2+1) by A14,A66,Th39;
+A69:    k1+1 >= k2 by A14,A57,A58,A60,A61,A62,A64,A66,A67,Th39;
+        k1+1 <= k2 by A58,NAT_1:38;
+then A70:    k1+1 = k2 by A69,AXIOMS:21;
+     hence 1 <= k1 & k1+1 < len f by A14,A57,NAT_1:38;
+     thus
+     f/.(k1+1) = (GoB f)*(i+1,j) by A12,A59,A61,A63,A65,SPPOL_1:25;
+     thus f/.k1 = (GoB f)*(i,j) by A12,A59,A61,A63,A65,SPPOL_1:25;
+        k1+(1+1) = k2+1 by A70,XCMPLX_1:1;
+     hence f/.(k1+2) = (GoB f)*(i+2,j) by A12,A59,A61,A63,A68,SPPOL_1:25;
+   case that
+A71: k2 > 1 and
+A72: k1 > k2;
+     A73: LSeg(f,k2) = LSeg(f/.k2,f/.(k2+1)) by A14,TOPREAL1:def 5;
+     then A74:   (GoB f)*(i+2,j) = f/.k2 & (GoB f)*(i+1,j) = f/.(k2+1) or
+      (GoB f)*(i+2,j) = f/.(k2+1) & (GoB f)*(i+1,j) = f/.k2
+      by A15,SPPOL_1:25;
+       LSeg(f,k1) = LSeg(f/.k1,f/.(k1+1)) by A11,TOPREAL1:def 5;
+     then A75:   (GoB f)*(i+1,j) = f/.k1 & (GoB f)*(i,j) = f/.(k1+1) or
+      (GoB f)*(i+1,j) = f/.(k1+1) & (GoB f)*(i,j) = f/.k1
+                    by A12,SPPOL_1:25;
+     A76: k2 < k1 + 1 by A72,NAT_1:38;
+then A77:   f/.k2 <> f/.(k1+1) by A11,A71,Th39;
+A78:    k1 < len f by A11,NAT_1:38;
+      then A79:     f/.k2 <> f/.k1 by A71,A72,Th39;
+A80:    1 < k2+1 by A71,NAT_1:38;
+      A81: k2+1 < k1+1 by A72,REAL_1:53;
+      then A82: f/.(k2+1) <> f/.(k1+1) by A11,A80,Th39;
+A83:    k2+1 >= k1 by A11,A71,A72,A74,A75,A76,A78,A80,A81,Th39;
+        k2+1 <= k1 by A72,NAT_1:38;
+then A84:    k2+1 = k1 by A83,AXIOMS:21;
+     hence 1 <= k2 & k2+1 < len f by A11,A71,NAT_1:38;
+     thus
+     f/.(k2+1) = (GoB f)*(i+1,j) by A15,A73,A75,A77,A79,SPPOL_1:25;
+     thus f/.k2 = (GoB f)*(i+2,j) by A15,A73,A75,A77,A79,SPPOL_1:25;
+        k2+(1+1) = k1+1 by A84,XCMPLX_1:1;
+     hence f/.(k2+2) = (GoB f)*(i,j) by A15,A73,A75,A77,A82,SPPOL_1:25;
+  end;
+ hence thesis;
+end;
+
+theorem Th59:
+ 1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f &
+ LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) c= L~f &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) c= L~f implies
+  f/.1 = (GoB f)*(i+1,j) &
+  (f/.2 = (GoB f)*(i,j) & f/.(len f-'1) = (GoB f)*(i+1,j+1) or
+   f/.2 = (GoB f)*(i+1,j+1) & f/.(len f-'1) = (GoB f)*(i,j))
+  or ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j) &
+   (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i+1,j+1) or
+    f/.k = (GoB f)*(i+1,j+1) & f/.(k+2) = (GoB f)*(i,j))
+proof
+A1: len f > 4 by Th36;
+ assume that
+A2: 1 <= i & i+1 <= len GoB f and
+A3: 1 <= j & j+1 <= width GoB f and
+A4: LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) c= L~f and
+A5: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) c= L~f;
+A6: 1 <= i+1 by NAT_1:29;
+A7: i < len GoB f by A2,NAT_1:38;
+A8: 1 <= j+1 by NAT_1:29;
+A9: j < width GoB f by A3,NAT_1:38;
+    1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j)) in LSeg((GoB f)*(i,j),(GoB f)*
+(i+1,j))
+                                                                by Th7;
+  then consider k1 such that
+A10: 1 <= k1 & k1+1 <= len f and
+A11: LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) = LSeg(f,k1) by A2,A3,A4,A9,Th42;
+A12: k1 < len f by A10,NAT_1:38;
+    1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1))
+       in LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) by Th7;
+  then consider k2 such that
+A13: 1 <= k2 & k2+1 <= len f and
+A14: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k2) by A2,A3,A5,A6,Th41;
+A15: k2 < len f by A13,NAT_1:38;
+A16: now assume k1 > 1;
+       then k1 >= 1+1 by NAT_1:38;
+      hence k1 = 2 or k1 > 2 by AXIOMS:21;
+     end;
+A17: now assume k2 > 1;
+       then k2 >= 1+1 by NAT_1:38;
+      hence k2 = 2 or k2 > 2 by AXIOMS:21;
+     end;
+A18: (k1 = 1 or k1 > 1) & (k2 = 1 or k2 > 1) by A10,A13,AXIOMS:21;
+    now per cases by A16,A17,A18,AXIOMS:21;
+   case that
+A19: k1 = 1 and
+A20: k2 = 2;
+     A21: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A10,A19,TOPREAL1:def 5;
+     then A22:   (GoB f)*(i,j) = f/.1 & (GoB f)*(i+1,j) = f/.2 or
+      (GoB f)*(i,j) = f/.2 & (GoB f)*(i+1,j) = f/.1
+      by A11,A19,SPPOL_1:25;
+     A23: LSeg(f,2) = LSeg((f/.2),f/.(2+1)) by A13,A20,TOPREAL1:def 5;
+     then A24:   (GoB f)*(i+1,j) = f/.2 & (GoB f)*(i+1,j+1) = f/.(2+1) or
+      (GoB f)*(i+1,j) = f/.(2+1) & (GoB f)*(i+1,j+1) = (f/.2)
+                    by A14,A20,SPPOL_1:25;
+     thus 1 <= 1 & 1+1 < len f by A13,A20,NAT_1:38;
+      A25: 3 < len f by A1,AXIOMS:22;
+      then A26: f/.1 <> f/.3 by Th38;
+     thus
+     f/.(1+1) = (GoB f)*(i+1,j) by A22,A24,A25,Th38;
+     thus f/.1 = (GoB f)*(i,j) by A14,A20,A22,A23,A26,SPPOL_1:25;
+     thus f/.(1+2) = (GoB f)*(i+1,j+1) by A11,A19,A21,A24,A26,SPPOL_1:25;
+   case that
+A27: k1 = 1 and
+A28: k2 > 2;
+     A29: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A10,A27,TOPREAL1:def 5;
+     then A30:   (GoB f)*(i,j) = f/.1 & (GoB f)*(i+1,j) = f/.2 or
+      (GoB f)*(i,j) = f/.2 & (GoB f)*(i+1,j) = f/.1
+      by A11,A27,SPPOL_1:25;
+       LSeg(f,k2) = LSeg(f/.k2,f/.(k2+1)) by A13,TOPREAL1:def 5;
+     then A31:   (GoB f)*(i+1,j) = f/.k2 & (GoB f)*(i+1,j+1) = f/.(k2+1) or
+      (GoB f)*(i+1,j) = f/.(k2+1) & (GoB f)*(i+1,j+1) = f/.k2
+                        by A14,SPPOL_1:25;
+A32:   f/.k2 <> f/.2 by A15,A28,Th38;
+A33:  k2 > 1 by A28,AXIOMS:22;
+     A34: 2 < k2+1 by A28,NAT_1:38;
+then A35:   f/.(k2+1) <> f/.2 by A13,Th39;
+    hence
+     f/.1 = (GoB f)*(i+1,j) by A11,A27,A29,A31,A32,SPPOL_1:25;
+    thus f/.2 = (GoB f)*(i,j) by A11,A27,A29,A31,A32,A35,SPPOL_1:25;
+A36:  k2+1 > 1 by A33,NAT_1:38;
+     then k2+1 = len f by A13,A15,A28,A30,A31,A33,A34,Th39,Th40;
+     then k2 + 1 = len f -'1 + 1 by A36,AMI_5:4;
+    hence f/.(len f-'1) = (GoB f)*(i+1,j+1) by A15,A28,A30,A31,A33,Th38,
+XCMPLX_1:2;
+   case that
+A37: k2 = 1 and
+A38: k1 = 2;
+     A39: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A13,A37,TOPREAL1:def 5;
+     then A40:   (GoB f)*(i+1,j+1) = f/.1 & (GoB f)*(i+1,j) = f/.2 or
+      (GoB f)*(i+1,j+1) = f/.2 & (GoB f)*(i+1,j) = f/.1
+                       by A14,A37,SPPOL_1:25;
+     A41: LSeg(f,2) = LSeg((f/.2),f/.(2+1)) by A10,A38,TOPREAL1:def 5;
+     then A42:   (GoB f)*(i+1,j) = f/.2 & (GoB f)*(i,j) = f/.(2+1) or
+      (GoB f)*(i+1,j) = f/.(2+1) & (GoB f)*(i,j) = (f/.2)
+                    by A11,A38,SPPOL_1:25;
+     thus 1 <= 1 & 1+1 < len f by A10,A38,NAT_1:38;
+      A43: 3 < len f by A1,AXIOMS:22;
+      then A44: f/.1 <> f/.3 by Th38;
+     thus
+     f/.(1+1) = (GoB f)*(i+1,j) by A40,A42,A43,Th38;
+     thus f/.1 = (GoB f)*(i+1,j+1) by A11,A38,A40,A41,A44,SPPOL_1:25;
+     thus f/.(1+2) = (GoB f)*(i,j) by A14,A37,A39,A42,A44,SPPOL_1:25;
+   case that
+A45: k2 = 1 and
+A46: k1 > 2;
+     A47: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A13,A45,TOPREAL1:def 5;
+     then A48:   (GoB f)*(i+1,j+1) = f/.1 & (GoB f)*(i+1,j) = f/.2 or
+      (GoB f)*(i+1,j+1) = f/.2 & (GoB f)*(i+1,j) = f/.1
+                           by A14,A45,SPPOL_1:25;
+       LSeg(f,k1) = LSeg(f/.k1,f/.(k1+1)) by A10,TOPREAL1:def 5;
+     then A49:   (GoB f)*(i+1,j) = f/.k1 & (GoB f)*(i,j) = f/.(k1+1) or
+      (GoB f)*(i+1,j) = f/.(k1+1) & (GoB f)*(i,j) = f/.k1
+      by A11,SPPOL_1:25;
+A50:   f/.k1 <> f/.2 by A12,A46,Th38;
+A51:  k1 > 1 by A46,AXIOMS:22;
+     A52: 2 < k1+1 by A46,NAT_1:38;
+then A53:   f/.(k1+1) <> f/.2 by A10,Th39;
+    hence
+     f/.1 = (GoB f)*(i+1,j) by A14,A45,A47,A49,A50,SPPOL_1:25;
+    thus f/.2 = (GoB f)*(i+1,j+1) by A14,A45,A47,A49,A50,A53,SPPOL_1:25;
+A54:  k1+1 > 1 by A51,NAT_1:38;
+     then k1+1 = len f by A10,A12,A46,A48,A49,A51,A52,Th39,Th40;
+     then k1 + 1 = len f -'1 + 1 by A54,AMI_5:4;
+    hence f/.(len f-'1) = (GoB f)*(i,j) by A12,A46,A48,A49,A51,Th38,XCMPLX_1:2
+;
+   case k1 = k2;
+     then A55:   (GoB f)*(i,j) = (GoB f)*(i+1,j+1) or (GoB f)*(i,j) = (GoB f)*(
+i+1,j)
+           by A11,A14,SPPOL_1:25;
+       [i,j] in Indices GoB f & [i+1,j] in Indices GoB f &
+     [i+1,j+1] in Indices GoB f by A2,A3,A6,A7,A8,A9,Th10;
+     then i = i+1 by A55,GOBOARD1:21;
+    hence contradiction by REAL_1:69;
+   case that
+A56: k1 > 1 and
+A57: k2 > k1;
+     A58: LSeg(f,k1) = LSeg(f/.k1,f/.(k1+1)) by A10,TOPREAL1:def 5;
+     then A59:   (GoB f)*(i,j) = f/.k1 & (GoB f)*(i+1,j) = f/.(k1+1) or
+      (GoB f)*(i,j) = f/.(k1+1) & (GoB f)*(i+1,j) = f/.k1
+      by A11,SPPOL_1:25;
+       LSeg(f,k2) = LSeg(f/.k2,f/.(k2+1)) by A13,TOPREAL1:def 5;
+     then A60:   (GoB f)*(i+1,j) = f/.k2 & (GoB f)*(i+1,j+1) = f/.(k2+1) or
+      (GoB f)*(i+1,j) = f/.(k2+1) & (GoB f)*(i+1,j+1) = f/.k2
+                    by A14,SPPOL_1:25;
+     A61: k1 < k2 + 1 by A57,NAT_1:38;
+then A62:   f/.k1 <> f/.(k2+1) by A13,A56,Th39;
+A63:    k2 < len f by A13,NAT_1:38;
+      then A64:     f/.k1 <> f/.k2 by A56,A57,Th39;
+A65:    1 < k1+1 by A56,NAT_1:38;
+      A66: k1+1 < k2+1 by A57,REAL_1:53;
+      then A67: f/.(k1+1) <> f/.(k2+1) by A13,A65,Th39;
+A68:    k1+1 >= k2 by A13,A56,A57,A59,A60,A61,A63,A65,A66,Th39;
+        k1+1 <= k2 by A57,NAT_1:38;
+then A69:    k1+1 = k2 by A68,AXIOMS:21;
+     hence 1 <= k1 & k1+1 < len f by A13,A56,NAT_1:38;
+     thus
+     f/.(k1+1) = (GoB f)*(i+1,j) by A11,A58,A60,A62,A64,SPPOL_1:25;
+     thus f/.k1 = (GoB f)*(i,j) by A11,A58,A60,A62,A64,SPPOL_1:25;
+        k1+(1+1) = k2+1 by A69,XCMPLX_1:1;
+     hence f/.(k1+2) = (GoB f)*(i+1,j+1) by A11,A58,A60,A62,A67,SPPOL_1:25;
+   case that
+A70: k2 > 1 and
+A71: k1 > k2;
+     A72: LSeg(f,k2) = LSeg(f/.k2,f/.(k2+1)) by A13,TOPREAL1:def 5;
+     then A73:   (GoB f)*(i+1,j+1) = f/.k2 & (GoB f)*(i+1,j) = f/.(k2+1) or
+      (GoB f)*(i+1,j+1) = f/.(k2+1) & (GoB f)*(i+1,j) = f/.k2
+                         by A14,SPPOL_1:25;
+       LSeg(f,k1) = LSeg(f/.k1,f/.(k1+1)) by A10,TOPREAL1:def 5;
+     then A74:   (GoB f)*(i+1,j) = f/.k1 & (GoB f)*(i,j) = f/.(k1+1) or
+      (GoB f)*(i+1,j) = f/.(k1+1) & (GoB f)*(i,j) = f/.k1
+                    by A11,SPPOL_1:25;
+     A75: k2 < k1 + 1 by A71,NAT_1:38;
+then A76:   f/.k2 <> f/.(k1+1) by A10,A70,Th39;
+A77:    k1 < len f by A10,NAT_1:38;
+      then A78:     f/.k2 <> f/.k1 by A70,A71,Th39;
+A79:    1 < k2+1 by A70,NAT_1:38;
+      A80: k2+1 < k1+1 by A71,REAL_1:53;
+      then A81: f/.(k2+1) <> f/.(k1+1) by A10,A79,Th39;
+A82:    k2+1 >= k1 by A10,A70,A71,A73,A74,A75,A77,A79,A80,Th39;
+        k2+1 <= k1 by A71,NAT_1:38;
+then A83:    k2+1 = k1 by A82,AXIOMS:21;
+     hence 1 <= k2 & k2+1 < len f by A10,A70,NAT_1:38;
+     thus
+     f/.(k2+1) = (GoB f)*(i+1,j) by A14,A72,A74,A76,A78,SPPOL_1:25;
+     thus f/.k2 = (GoB f)*(i+1,j+1) by A14,A72,A74,A76,A78,SPPOL_1:25;
+        k2+(1+1) = k1+1 by A83,XCMPLX_1:1;
+     hence f/.(k2+2) = (GoB f)*(i,j) by A14,A72,A74,A76,A81,SPPOL_1:25;
+  end;
+ hence thesis;
+end;
+
+theorem Th60:
+ 1 <= i & i+1 <= len GoB f & 1 <= j & j+1 <= width GoB f &
+ LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) c= L~f &
+ LSeg((GoB f)*(i+1,j+1),(GoB f)*(i,j+1)) c= L~f implies
+  f/.1 = (GoB f)*(i+1,j+1) &
+  (f/.2 = (GoB f)*(i+1,j) & f/.(len f-'1) = (GoB f)*(i,j+1) or
+   f/.2 = (GoB f)*(i,j+1) & f/.(len f-'1) = (GoB f)*(i+1,j))
+  or ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j+1) &
+   (f/.k = (GoB f)*(i+1,j) & f/.(k+2) = (GoB f)*(i,j+1) or
+    f/.k = (GoB f)*(i,j+1) & f/.(k+2) = (GoB f)*(i+1,j))
+proof
+A1: len f > 4 by Th36;
+ assume that
+A2: 1 <= i & i+1 <= len GoB f and
+A3: 1 <= j & j+1 <= width GoB f and
+A4: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) c= L~f and
+A5: LSeg((GoB f)*(i+1,j+1),(GoB f)*(i,j+1)) c= L~f;
+A6: 1 <= i+1 by NAT_1:29;
+A7: i < len GoB f by A2,NAT_1:38;
+A8: 1 <= j+1 by NAT_1:29;
+A9: j < width GoB f by A3,NAT_1:38;
+    1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1))
+         in LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) by Th7;
+  then consider k1 such that
+A10: 1 <= k1 & k1+1 <= len f and
+A11: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) = LSeg(f,k1) by A2,A3,A4,A6,Th41;
+A12: k1 < len f by A10,NAT_1:38;
+    1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1))
+       in LSeg((GoB f)*(i+1,j+1),(GoB f)*(i,j+1)) by Th7;
+  then consider k2 such that
+A13: 1 <= k2 & k2+1 <= len f and
+A14: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) = LSeg(f,k2) by A2,A3,A5,A8,Th42;
+A15: k2 < len f by A13,NAT_1:38;
+A16: now assume k1 > 1;
+       then k1 >= 1+1 by NAT_1:38;
+      hence k1 = 2 or k1 > 2 by AXIOMS:21;
+     end;
+A17: now assume k2 > 1;
+       then k2 >= 1+1 by NAT_1:38;
+      hence k2 = 2 or k2 > 2 by AXIOMS:21;
+     end;
+A18: (k1 = 1 or k1 > 1) & (k2 = 1 or k2 > 1) by A10,A13,AXIOMS:21;
+    now per cases by A16,A17,A18,AXIOMS:21;
+   case that
+A19: k1 = 1 and
+A20: k2 = 2;
+     A21: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A10,A19,TOPREAL1:def 5;
+     then A22:   (GoB f)*(i+1,j) = f/.1 & (GoB f)*(i+1,j+1) = f/.2 or
+      (GoB f)*(i+1,j) = f/.2 & (GoB f)*(i+1,j+1) = f/.1
+         by A11,A19,SPPOL_1:25;
+     A23: LSeg(f,2) = LSeg((f/.2),f/.(2+1)) by A13,A20,TOPREAL1:def 5;
+     then A24:   (GoB f)*(i+1,j+1) = f/.2 & (GoB f)*(i,j+1) = f/.(2+1) or
+      (GoB f)*(i+1,j+1) = f/.(2+1) & (GoB f)*(i,j+1) = (f/.2)
+                    by A14,A20,SPPOL_1:25;
+     thus 1 <= 1 & 1+1 < len f by A13,A20,NAT_1:38;
+      A25: 3 < len f by A1,AXIOMS:22;
+      then A26: f/.1 <> f/.3 by Th38;
+     thus
+     f/.(1+1) = (GoB f)*(i+1,j+1) by A22,A24,A25,Th38;
+     thus f/.1 = (GoB f)*(i+1,j) by A14,A20,A22,A23,A26,SPPOL_1:25;
+     thus f/.(1+2) = (GoB f)*(i,j+1) by A11,A19,A21,A24,A26,SPPOL_1:25;
+   case that
+A27: k1 = 1 and
+A28: k2 > 2;
+     A29: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A10,A27,TOPREAL1:def 5;
+     then A30:   (GoB f)*(i+1,j) = f/.1 & (GoB f)*(i+1,j+1) = f/.2 or
+      (GoB f)*(i+1,j) = f/.2 & (GoB f)*(i+1,j+1) = f/.1
+          by A11,A27,SPPOL_1:25;
+       LSeg(f,k2) = LSeg(f/.k2,f/.(k2+1)) by A13,TOPREAL1:def 5;
+     then A31:   (GoB f)*(i+1,j+1) = f/.k2 & (GoB f)*(i,j+1) = f/.(k2+1) or
+      (GoB f)*(i+1,j+1) = f/.(k2+1) & (GoB f)*(i,j+1) = f/.k2
+                        by A14,SPPOL_1:25;
+A32:   f/.k2 <> f/.2 by A15,A28,Th38;
+A33:  k2 > 1 by A28,AXIOMS:22;
+     A34: 2 < k2+1 by A28,NAT_1:38;
+then A35:   f/.(k2+1) <> f/.2 by A13,Th39;
+    hence
+     f/.1 = (GoB f)*(i+1,j+1) by A11,A27,A29,A31,A32,SPPOL_1:25;
+    thus f/.2 = (GoB f)*(i+1,j) by A11,A27,A29,A31,A32,A35,SPPOL_1:25;
+A36:  k2+1 > 1 by A33,NAT_1:38;
+     then k2+1 = len f by A13,A15,A28,A30,A31,A33,A34,Th39,Th40;
+     then k2 + 1 = len f -'1 + 1 by A36,AMI_5:4;
+    hence f/.(len f-'1) = (GoB f)*(i,j+1) by A15,A28,A30,A31,A33,Th38,XCMPLX_1:
+2;
+   case that
+A37: k2 = 1 and
+A38: k1 = 2;
+     A39: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A13,A37,TOPREAL1:def 5;
+     then A40:   (GoB f)*(i,j+1) = f/.1 & (GoB f)*(i+1,j+1) = f/.2 or
+      (GoB f)*(i,j+1) = f/.2 & (GoB f)*(i+1,j+1) = f/.1
+                       by A14,A37,SPPOL_1:25;
+     A41: LSeg(f,2) = LSeg((f/.2),f/.(2+1)) by A10,A38,TOPREAL1:def 5;
+     then A42:   (GoB f)*(i+1,j+1) = f/.2 & (GoB f)*(i+1,j) = f/.(2+1) or
+      (GoB f)*(i+1,j+1) = f/.(2+1) & (GoB f)*(i+1,j) = (f/.2)
+                    by A11,A38,SPPOL_1:25;
+     thus 1 <= 1 & 1+1 < len f by A10,A38,NAT_1:38;
+      A43: 3 < len f by A1,AXIOMS:22;
+      then A44: f/.1 <> f/.3 by Th38;
+     thus
+     f/.(1+1) = (GoB f)*(i+1,j+1) by A40,A42,A43,Th38;
+     thus f/.1 = (GoB f)*(i,j+1) by A11,A38,A40,A41,A44,SPPOL_1:25;
+     thus f/.(1+2) = (GoB f)*(i+1,j) by A14,A37,A39,A42,A44,SPPOL_1:25;
+   case that
+A45: k2 = 1 and
+A46: k1 > 2;
+     A47: LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A13,A45,TOPREAL1:def 5;
+     then A48:   (GoB f)*(i,j+1) = f/.1 & (GoB f)*(i+1,j+1) = f/.2 or
+      (GoB f)*(i,j+1) = f/.2 & (GoB f)*(i+1,j+1) = f/.1
+                           by A14,A45,SPPOL_1:25;
+       LSeg(f,k1) = LSeg(f/.k1,f/.(k1+1)) by A10,TOPREAL1:def 5;
+     then A49:   (GoB f)*(i+1,j+1) = f/.k1 & (GoB f)*(i+1,j) = f/.(k1+1) or
+      (GoB f)*(i+1,j+1) = f/.(k1+1) & (GoB f)*(i+1,j) = f/.k1
+                  by A11,SPPOL_1:25;
+A50:   f/.k1 <> f/.2 by A12,A46,Th38;
+A51:  k1 > 1 by A46,AXIOMS:22;
+     A52: 2 < k1+1 by A46,NAT_1:38;
+then A53:   f/.(k1+1) <> f/.2 by A10,Th39;
+    hence
+     f/.1 = (GoB f)*(i+1,j+1) by A14,A45,A47,A49,A50,SPPOL_1:25;
+    thus f/.2 = (GoB f)*(i,j+1) by A14,A45,A47,A49,A50,A53,SPPOL_1:25;
+A54:  k1+1 > 1 by A51,NAT_1:38;
+     then k1+1 = len f by A10,A12,A46,A48,A49,A51,A52,Th39,Th40;
+     then k1 + 1 = len f -'1 + 1 by A54,AMI_5:4;
+    hence f/.(len f-'1) = (GoB f)*(i+1,j) by A12,A46,A48,A49,A51,Th38,XCMPLX_1:
+2;
+   case k1 = k2;
+     then A55:   (GoB f)*(i+1,j) = (GoB f)*(i,j+1) or (GoB f)*(i+1,j) = (GoB f)
+*
+(i+1,j+1)
+           by A11,A14,SPPOL_1:25;
+       [i,j+1] in Indices GoB f & [i+1,j] in Indices GoB f &
+     [i+1,j+1] in Indices GoB f by A2,A3,A6,A7,A8,A9,Th10;
+     then j = j+1 or i = i+1 by A55,GOBOARD1:21;
+    hence contradiction by REAL_1:69;
+   case that
+A56: k1 > 1 and
+A57: k2 > k1;
+     A58: LSeg(f,k1) = LSeg(f/.k1,f/.(k1+1)) by A10,TOPREAL1:def 5;
+     then A59:   (GoB f)*(i+1,j) = f/.k1 & (GoB f)*(i+1,j+1) = f/.(k1+1) or
+      (GoB f)*(i+1,j) = f/.(k1+1) & (GoB f)*(i+1,j+1) = f/.k1
+                   by A11,SPPOL_1:25;
+       LSeg(f,k2) = LSeg(f/.k2,f/.(k2+1)) by A13,TOPREAL1:def 5;
+     then A60:   (GoB f)*(i+1,j+1) = f/.k2 & (GoB f)*(i,j+1) = f/.(k2+1) or
+      (GoB f)*(i+1,j+1) = f/.(k2+1) & (GoB f)*(i,j+1) = f/.k2
+                    by A14,SPPOL_1:25;
+     A61: k1 < k2 + 1 by A57,NAT_1:38;
+then A62:   f/.k1 <> f/.(k2+1) by A13,A56,Th39;
+A63:    k2 < len f by A13,NAT_1:38;
+      then A64:     f/.k1 <> f/.k2 by A56,A57,Th39;
+A65:    1 < k1+1 by A56,NAT_1:38;
+      A66: k1+1 < k2+1 by A57,REAL_1:53;
+      then A67: f/.(k1+1) <> f/.(k2+1) by A13,A65,Th39;
+A68:    k1+1 >= k2 by A13,A56,A57,A59,A60,A61,A63,A65,A66,Th39;
+        k1+1 <= k2 by A57,NAT_1:38;
+then A69:    k1+1 = k2 by A68,AXIOMS:21;
+     hence 1 <= k1 & k1+1 < len f by A13,A56,NAT_1:38;
+     thus
+     f/.(k1+1) = (GoB f)*(i+1,j+1) by A11,A58,A60,A62,A64,SPPOL_1:25;
+     thus f/.k1 = (GoB f)*(i+1,j) by A11,A58,A60,A62,A64,SPPOL_1:25;
+        k1+(1+1) = k2+1 by A69,XCMPLX_1:1;
+     hence f/.(k1+2) = (GoB f)*(i,j+1) by A11,A58,A60,A62,A67,SPPOL_1:25;
+   case that
+A70: k2 > 1 and
+A71: k1 > k2;
+     A72: LSeg(f,k2) = LSeg(f/.k2,f/.(k2+1)) by A13,TOPREAL1:def 5;
+     then A73:   (GoB f)*(i,j+1) = f/.k2 & (GoB f)*(i+1,j+1) = f/.(k2+1) or
+      (GoB f)*(i,j+1) = f/.(k2+1) & (GoB f)*(i+1,j+1) = f/.k2
+                         by A14,SPPOL_1:25;
+       LSeg(f,k1) = LSeg(f/.k1,f/.(k1+1)) by A10,TOPREAL1:def 5;
+     then A74:   (GoB f)*(i+1,j+1) = f/.k1 & (GoB f)*(i+1,j) = f/.(k1+1) or
+      (GoB f)*(i+1,j+1) = f/.(k1+1) & (GoB f)*(i+1,j) = f/.k1
+                    by A11,SPPOL_1:25;
+     A75: k2 < k1 + 1 by A71,NAT_1:38;
+then A76:   f/.k2 <> f/.(k1+1) by A10,A70,Th39;
+A77:    k1 < len f by A10,NAT_1:38;
+      then A78:     f/.k2 <> f/.k1 by A70,A71,Th39;
+A79:    1 < k2+1 by A70,NAT_1:38;
+      A80: k2+1 < k1+1 by A71,REAL_1:53;
+      then A81: f/.(k2+1) <> f/.(k1+1) by A10,A79,Th39;
+A82:    k2+1 >= k1 by A10,A70,A71,A73,A74,A75,A77,A79,A80,Th39;
+        k2+1 <= k1 by A71,NAT_1:38;
+then A83:    k2+1 = k1 by A82,AXIOMS:21;
+     hence 1 <= k2 & k2+1 < len f by A10,A70,NAT_1:38;
+     thus
+     f/.(k2+1) = (GoB f)*(i+1,j+1) by A14,A72,A74,A76,A78,SPPOL_1:25;
+     thus f/.k2 = (GoB f)*(i,j+1) by A14,A72,A74,A76,A78,SPPOL_1:25;
+        k2+(1+1) = k1+1 by A83,XCMPLX_1:1;
+     hence f/.(k2+2) = (GoB f)*(i+1,j) by A14,A72,A74,A76,A81,SPPOL_1:25;
+  end;
+ hence thesis;
+end;
+
+theorem
+   1 <= i & i < len GoB f & 1 <= j & j+1 < width GoB f implies
+  not ( LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) c= L~f &
+        LSeg((GoB f)*(i,j+1),(GoB f)*(i,j+2)) c= L~f &
+        LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) c= L~f)
+proof assume that
+A1: 1 <= i & i < len GoB f and
+A2: 1 <= j & j+1 < width GoB f and
+A3: LSeg((GoB f)*(i,j),(GoB f)*(i,j+1)) c= L~f and
+A4: LSeg((GoB f)*(i,j+1),(GoB f)*(i,j+2)) c= L~f and
+A5: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) c= L~f;
+A6: i+1 <= len GoB f by A1,NAT_1:38;
+A7: 1 <= i+1 by NAT_1:29;
+A8: j < width GoB f by A2,NAT_1:38;
+A9: 1 <= j+1 by NAT_1:29;
+      j+(1+1) = j+1+1 by XCMPLX_1:1;
+then A10: j+2 <= width GoB f by A2,NAT_1:38;
+      j+1 <= j+2 by AXIOMS:24;
+then A11: 1 <= j+2 by A9,AXIOMS:22;
+ per cases by A1,A2,A3,A4,A5,A6,Th55,Th56;
+ suppose
+A12: f/.(len f-'1) = (GoB f)*(i,j+2) & f/.(len f-'1) = (GoB f)*
+(i+1,j+1);
+    [i,j+2] in Indices GoB f & [i+1,j+1] in Indices GoB f
+                              by A1,A2,A6,A7,A9,A10,A11,Th10;
+  then i = i+1 by A12,GOBOARD1:21;
+ hence contradiction by REAL_1:69;
+ suppose
+A13: f/.2 = (GoB f)*(i,j) & f/.2 = (GoB f)*(i+1,j+1);
+    [i,j] in Indices GoB f & [i+1,j+1] in
+ Indices GoB f by A1,A2,A6,A7,A8,A9,Th10;
+  then i = i+1 by A13,GOBOARD1:21;
+ hence contradiction by REAL_1:69;
+ suppose
+A14: f/.2 = (GoB f)*(i,j+2) & f/.2 = (GoB f)*(i,j);
+   [i,j+2] in Indices GoB f & [i,j] in Indices GoB f by A1,A2,A8,A10,A11,Th10;
+  then j = j+2 by A14,GOBOARD1:21;
+ hence contradiction by REAL_1:69;
+ suppose
+A15: f/.2 = (GoB f)*(i,j+2) & f/.2 = (GoB f)*(i+1,j+1);
+   [i,j+2] in Indices GoB f & [i+1,j+1] in Indices GoB f
+        by A1,A2,A6,A7,A9,A10,A11,Th10;
+  then i = i+1 by A15,GOBOARD1:21;
+ hence contradiction by REAL_1:69;
+suppose that
+A16:  f/.1 = (GoB f)*(i,j+1) and
+A17:  ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i,j+1) &
+     (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i+1,j+1) or
+      f/.k = (GoB f)*(i+1,j+1) & f/.(k+2) = (GoB f)*(i,j));
+  consider k such that
+A18: 1 <= k & k+1 < len f and
+A19: f/.(k+1) = (GoB f)*(i,j+1) and
+      f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i+1,j+1) or
+    f/.k = (GoB f)*(i+1,j+1) & f/.(k+2) = (GoB f)*(i,j) by A17;
+  1 < k+1 by A18,NAT_1:38;
+ hence contradiction by A16,A18,A19,Th38;
+ suppose that
+A20: ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i,j+1) &
+     (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i,j+2) or
+      f/.k = (GoB f)*(i,j+2) & f/.(k+2) = (GoB f)*(i,j)) and
+A21: f/.1 = (GoB f)*(i,j+1);
+  consider k such that
+A22: 1 <= k & k+1 < len f and
+A23: f/.(k+1) = (GoB f)*(i,j+1) and
+      f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i,j+2) or
+    f/.k = (GoB f)*(i,j+2) & f/.(k+2) = (GoB f)*(i,j) by A20;
+  1 < k+1 by A22,NAT_1:38;
+ hence contradiction by A21,A22,A23,Th38;
+ suppose that
+A24: ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i,j+1) &
+     (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i,j+2) or
+     f/.k = (GoB f)*(i,j+2) & f/.(k+2) = (GoB f)*(i,j)) and
+A25: ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i,j+1) &
+     (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i+1,j+1) or
+      f/.k = (GoB f)*(i+1,j+1) & f/.(k+2) = (GoB f)*(i,j));
+  consider k1 such that
+A26: 1 <= k1 & k1+1 < len f and
+A27: f/.(k1+1) = (GoB f)*(i,j+1) and
+A28: f/.k1 = (GoB f)*(i,j) & f/.(k1+2) = (GoB f)*(i,j+2) or
+    f/.k1 = (GoB f)*(i,j+2) & f/.(k1+2) = (GoB f)*(i,j) by A24;
+  consider k2 such that
+A29: 1 <= k2 & k2+1 < len f and
+A30: f/.(k2+1) = (GoB f)*(i,j+1) and
+A31: f/.k2 = (GoB f)*(i,j) & f/.(k2+2) = (GoB f)*(i+1,j+1) or
+    f/.k2 = (GoB f)*(i+1,j+1) & f/.(k2+2) = (GoB f)*(i,j) by A25;
+A32: now assume
+A33:  k1 <> k2;
+    per cases by A33,AXIOMS:21;
+    suppose k1 < k2;
+     then k1+1 < k2+1 & 1 <= k1+1 by NAT_1:29,REAL_1:53;
+     hence contradiction by A27,A29,A30,Th38;
+    suppose k2 < k1;
+     then k2+1 < k1+1 & 1 <= k2+1 by NAT_1:29,REAL_1:53;
+     hence contradiction by A26,A27,A30,Th38;
+   end;
+    now per cases by A28,A31;
+   suppose
+A34:  f/.(k1+2) = (GoB f)*(i,j+2) & f/.(k2+2) = (GoB f)*(i+1,j+1);
+      [i,j+2] in Indices GoB f & [i+1,j+1] in Indices GoB f
+                              by A1,A2,A6,A7,A9,A10,A11,Th10;
+    then i = i+1 by A32,A34,GOBOARD1:21;
+   hence contradiction by REAL_1:69;
+   suppose
+A35:  f/.k1 = (GoB f)*(i,j) & f/.k2 = (GoB f)*(i+1,j+1);
+       [i,j] in Indices GoB f & [i+1,j+1] in Indices GoB f
+                                      by A1,A2,A6,A7,A8,A9,Th10;
+     then i = i+1 by A32,A35,GOBOARD1:21;
+    hence contradiction by REAL_1:69;
+   suppose
+A36:  f/.k1 = (GoB f)*(i,j+2) & f/.k2 = (GoB f)*(i,j);
+      [i,j+2] in Indices GoB f & [i,j] in Indices GoB f by A1,A2,A8,A10,A11,
+Th10
+;
+     then j = j+2 by A32,A36,GOBOARD1:21;
+    hence contradiction by REAL_1:69;
+   suppose
+A37:  f/.k1 = (GoB f)*(i,j+2) & f/.k2 = (GoB f)*(i+1,j+1);
+      [i,j+2] in Indices GoB f & [i+1,j+1] in Indices GoB f
+           by A1,A2,A6,A7,A9,A10,A11,Th10;
+     then i = i+1 by A32,A37,GOBOARD1:21;
+    hence contradiction by REAL_1:69;
+  end;
+ hence contradiction;
+end;
+
+theorem
+   1 <= i & i < len GoB f & 1 <= j & j+1 < width GoB f implies
+  not ( LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) c= L~f &
+        LSeg((GoB f)*(i+1,j+1),(GoB f)*(i+1,j+2)) c= L~f &
+        LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) c= L~f)
+proof assume that
+A1: 1 <= i & i < len GoB f and
+A2: 1 <= j & j+1 < width GoB f and
+A3: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) c= L~f and
+A4: LSeg((GoB f)*(i+1,j+1),(GoB f)*(i+1,j+2)) c= L~f and
+A5: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) c= L~f;
+A6: i+1 <= len GoB f by A1,NAT_1:38;
+A7: 1 <= i+1 by NAT_1:29;
+A8: j < width GoB f by A2,NAT_1:38;
+A9: 1 <= j+1 by NAT_1:29;
+      j+(1+1) = j+1+1 by XCMPLX_1:1;
+then A10: j+2 <= width GoB f by A2,NAT_1:38;
+      j+1 <= j+2 by AXIOMS:24;
+then A11: 1 <= j+2 by A9,AXIOMS:22;
+ per cases by A1,A2,A3,A4,A5,A6,A7,Th55,Th57;
+ suppose
+A12: f/.2 = (GoB f)*(i+1,j) & f/.2 = (GoB f)*(i,j+1);
+    [i+1,j] in Indices GoB f & [i,j+1] in Indices GoB f
+                              by A1,A2,A6,A7,A8,A9,Th10;
+  then i = i+1 by A12,GOBOARD1:21;
+ hence contradiction by REAL_1:69;
+ suppose
+A13: f/.(len f-'1) = (GoB f)*(i+1,j+2) & f/.(len f-'1) = (GoB f)*
+(i,j+1);
+    [i+1,j+2] in Indices GoB f & [i,j+1] in Indices GoB f
+                              by A1,A2,A6,A7,A9,A10,A11,Th10;
+  then i = i+1 by A13,GOBOARD1:21;
+ hence contradiction by REAL_1:69;
+ suppose
+A14: f/.2 = (GoB f)*(i+1,j+2) & f/.2 = (GoB f)*(i,j+1);
+    [i+1,j+2] in Indices GoB f & [i,j+1] in Indices GoB f
+                              by A1,A2,A6,A7,A9,A10,A11,Th10;
+  then i = i+1 by A14,GOBOARD1:21;
+ hence contradiction by REAL_1:69;
+ suppose
+A15: f/.2 = (GoB f)*(i+1,j+2) & f/.2 = (GoB f)*(i+1,j);
+    [i+1,j+2] in Indices GoB f & [i+1,j] in Indices GoB f
+                              by A2,A6,A7,A8,A10,A11,Th10;
+  then j = j+2 by A15,GOBOARD1:21;
+ hence contradiction by REAL_1:69;
+ suppose that
+A16:  f/.1 = (GoB f)*(i+1,j+1) and
+A17: ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j+1) &
+   (f/.k = (GoB f)*(i,j+1) & f/.(k+2) = (GoB f)*(i+1,j) or
+    f/.k = (GoB f)*(i+1,j) & f/.(k+2) = (GoB f)*(i,j+1));
+  consider k such that
+A18: 1 <= k & k+1 < len f and
+A19: f/.(k+1) = (GoB f)*(i+1,j+1) and
+      f/.k = (GoB f)*(i,j+1) & f/.(k+2) = (GoB f)*(i+1,j) or
+    f/.k = (GoB f)*(i+1,j) & f/.(k+2) = (GoB f)*(i,j+1) by A17;
+  1 < k+1 by A18,NAT_1:38;
+ hence contradiction by A16,A18,A19,Th38;
+ suppose that
+A20: ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j+1) &
+    (f/.k = (GoB f)*(i+1,j) & f/.(k+2) = (GoB f)*(i+1,j+2) or
+     f/.k = (GoB f)*(i+1,j+2) & f/.(k+2) = (GoB f)*(i+1,j)) and
+A21:  f/.1 = (GoB f)*(i+1,j+1);
+  consider k such that
+A22: 1 <= k & k+1 < len f and
+A23: f/.(k+1) = (GoB f)*(i+1,j+1) and
+      f/.k = (GoB f)*(i+1,j) & f/.(k+2) = (GoB f)*(i+1,j+2) or
+    f/.k = (GoB f)*(i+1,j+2) & f/.(k+2) = (GoB f)*(i+1,j) by A20;
+  1 < k+1 by A22,NAT_1:38;
+ hence contradiction by A21,A22,A23,Th38;
+ suppose that
+A24: ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j+1) &
+    (f/.k = (GoB f)*(i+1,j) & f/.(k+2) = (GoB f)*(i+1,j+2) or
+     f/.k = (GoB f)*(i+1,j+2) & f/.(k+2) = (GoB f)*(i+1,j)) and
+A25: ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j+1) &
+    (f/.k = (GoB f)*(i,j+1) & f/.(k+2) = (GoB f)*(i+1,j) or
+     f/.k = (GoB f)*(i+1,j) & f/.(k+2) = (GoB f)*(i,j+1));
+  consider k1 such that
+A26: 1 <= k1 & k1+1 < len f and
+A27: f/.(k1+1) = (GoB f)*(i+1,j+1) and
+A28: f/.k1 = (GoB f)*(i+1,j) & f/.(k1+2) = (GoB f)*(i+1,j+2) or
+    f/.k1 = (GoB f)*(i+1,j+2) & f/.(k1+2) = (GoB f)*(i+1,j) by A24;
+  consider k2 such that
+A29: 1 <= k2 & k2+1 < len f and
+A30: f/.(k2+1) = (GoB f)*(i+1,j+1) and
+A31: f/.k2 = (GoB f)*(i,j+1) & f/.(k2+2) = (GoB f)*(i+1,j) or
+    f/.k2 = (GoB f)*(i+1,j) & f/.(k2+2) = (GoB f)*(i,j+1) by A25;
+A32: now assume
+A33:  k1 <> k2;
+    per cases by A33,AXIOMS:21;
+    suppose k1 < k2;
+     then k1+1 < k2+1 & 1 <= k1+1 by NAT_1:29,REAL_1:53;
+     hence contradiction by A27,A29,A30,Th38;
+    suppose k2 < k1;
+     then k2+1 < k1+1 & 1 <= k2+1 by NAT_1:29,REAL_1:53;
+     hence contradiction by A26,A27,A30,Th38;
+   end;
+    now per cases by A28,A31;
+   suppose
+  A34: f/.k1 = (GoB f)*(i+1,j) & f/.k2 = (GoB f)*(i,j+1);
+      [i+1,j] in Indices GoB f & [i,j+1] in Indices GoB f
+                                by A1,A2,A6,A7,A8,A9,Th10;
+    then i = i+1 by A32,A34,GOBOARD1:21;
+   hence contradiction by REAL_1:69;
+   suppose
+  A35: f/.(k1+2) = (GoB f)*(i+1,j+2) & f/.(k2+2) = (GoB f)*(i,j+1);
+      [i+1,j+2] in Indices GoB f & [i,j+1] in Indices GoB f
+                                by A1,A2,A6,A7,A9,A10,A11,Th10;
+    then i = i+1 by A32,A35,GOBOARD1:21;
+   hence contradiction by REAL_1:69;
+   suppose
+  A36: f/.k1 = (GoB f)*(i+1,j+2) & f/.k2 = (GoB f)*(i,j+1);
+      [i+1,j+2] in Indices GoB f & [i,j+1] in Indices GoB f
+                                by A1,A2,A6,A7,A9,A10,A11,Th10;
+    then i = i+1 by A32,A36,GOBOARD1:21;
+   hence contradiction by REAL_1:69;
+   suppose
+  A37: f/.k1 = (GoB f)*(i+1,j+2) & f/.k2 = (GoB f)*(i+1,j);
+      [i+1,j+2] in Indices GoB f & [i+1,j] in Indices GoB f
+                                by A2,A6,A7,A8,A10,A11,Th10;
+    then j = j+2 by A32,A37,GOBOARD1:21;
+   hence contradiction by REAL_1:69;
+  end;
+ hence contradiction;
+end;
+
+theorem
+   1 <= j & j < width GoB f & 1 <= i & i+1 < len GoB f implies
+  not ( LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) c= L~f &
+        LSeg((GoB f)*(i+1,j),(GoB f)*(i+2,j)) c= L~f &
+        LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) c= L~f)
+proof assume that
+A1: 1 <= j & j < width GoB f and
+A2: 1 <= i & i+1 < len GoB f and
+A3: LSeg((GoB f)*(i,j),(GoB f)*(i+1,j)) c= L~f and
+A4: LSeg((GoB f)*(i+1,j),(GoB f)*(i+2,j)) c= L~f and
+A5: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) c= L~f;
+A6: j+1 <= width GoB f by A1,NAT_1:38;
+A7: 1 <= j+1 by NAT_1:29;
+A8: i < len GoB f by A2,NAT_1:38;
+A9: 1 <= i+1 by NAT_1:29;
+      i+(1+1) = i+1+1 by XCMPLX_1:1;
+then A10: i+2 <= len GoB f by A2,NAT_1:38;
+      i+1 <= i+2 by AXIOMS:24;
+then A11: 1 <= i+2 by A9,AXIOMS:22;
+ per cases by A1,A2,A3,A4,A5,A6,Th58,Th59;
+ suppose
+A12: f/.(len f-'1) = (GoB f)*(i+2,j) & f/.(len f-'1) = (GoB f)*(i+1,j+1);
+    [i+2,j] in Indices GoB f & [i+1,j+1] in Indices GoB f
+                              by A1,A2,A6,A7,A9,A10,A11,Th10;
+  then j = j+1 by A12,GOBOARD1:21;
+ hence contradiction by REAL_1:69;
+ suppose
+A13: f/.2 = (GoB f)*(i,j) & f/.2 = (GoB f)*(i+1,j+1);
+    [i,j] in Indices GoB f & [i+1,j+1] in
+ Indices GoB f by A1,A2,A6,A7,A8,A9,Th10;
+  then j = j+1 by A13,GOBOARD1:21;
+ hence contradiction by REAL_1:69;
+ suppose
+A14: f/.2 = (GoB f)*(i+2,j) & f/.2 = (GoB f)*(i,j);
+   [i+2,j] in Indices GoB f & [i,j] in Indices GoB f by A1,A2,A8,A10,A11,Th10;
+  then i = i+2 by A14,GOBOARD1:21;
+ hence contradiction by REAL_1:69;
+ suppose
+A15: f/.2 = (GoB f)*(i+2,j) & f/.2 = (GoB f)*(i+1,j+1);
+   [i+2,j] in Indices GoB f & [i+1,j+1] in Indices GoB f
+        by A1,A2,A6,A7,A9,A10,A11,Th10;
+  then j = j+1 by A15,GOBOARD1:21;
+ hence contradiction by REAL_1:69;
+suppose that
+A16:  f/.1 = (GoB f)*(i+1,j) and
+A17:  ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j) &
+     (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i+1,j+1) or
+      f/.k = (GoB f)*(i+1,j+1) & f/.(k+2) = (GoB f)*(i,j));
+  consider k such that
+A18: 1 <= k & k+1 < len f and
+A19: f/.(k+1) = (GoB f)*(i+1,j) and
+      f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i+1,j+1) or
+    f/.k = (GoB f)*(i+1,j+1) & f/.(k+2) = (GoB f)*(i,j) by A17;
+  1 < k+1 by A18,NAT_1:38;
+ hence contradiction by A16,A18,A19,Th38;
+ suppose that
+A20: ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j) &
+     (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i+2,j) or
+      f/.k = (GoB f)*(i+2,j) & f/.(k+2) = (GoB f)*(i,j)) and
+A21: f/.1 = (GoB f)*(i+1,j);
+  consider k such that
+A22: 1 <= k & k+1 < len f and
+A23: f/.(k+1) = (GoB f)*(i+1,j) and
+      f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i+2,j) or
+    f/.k = (GoB f)*(i+2,j) & f/.(k+2) = (GoB f)*(i,j) by A20;
+  1 < k+1 by A22,NAT_1:38;
+ hence contradiction by A21,A22,A23,Th38;
+ suppose that
+A24: ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j) &
+     (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i+2,j) or
+     f/.k = (GoB f)*(i+2,j) & f/.(k+2) = (GoB f)*(i,j)) and
+A25: ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j) &
+     (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i+1,j+1) or
+      f/.k = (GoB f)*(i+1,j+1) & f/.(k+2) = (GoB f)*(i,j));
+  consider k1 such that
+A26: 1 <= k1 & k1+1 < len f and
+A27: f/.(k1+1) = (GoB f)*(i+1,j) and
+A28: f/.k1 = (GoB f)*(i,j) & f/.(k1+2) = (GoB f)*(i+2,j) or
+    f/.k1 = (GoB f)*(i+2,j) & f/.(k1+2) = (GoB f)*(i,j) by A24;
+  consider k2 such that
+A29: 1 <= k2 & k2+1 < len f and
+A30: f/.(k2+1) = (GoB f)*(i+1,j) and
+A31: f/.k2 = (GoB f)*(i,j) & f/.(k2+2) = (GoB f)*(i+1,j+1) or
+    f/.k2 = (GoB f)*(i+1,j+1) & f/.(k2+2) = (GoB f)*(i,j) by A25;
+A32: now assume
+A33:  k1 <> k2;
+    per cases by A33,AXIOMS:21;
+    suppose k1 < k2;
+     then k1+1 < k2+1 & 1 <= k1+1 by NAT_1:29,REAL_1:53;
+     hence contradiction by A27,A29,A30,Th38;
+    suppose k2 < k1;
+     then k2+1 < k1+1 & 1 <= k2+1 by NAT_1:29,REAL_1:53;
+     hence contradiction by A26,A27,A30,Th38;
+   end;
+    now per cases by A28,A31;
+   suppose
+A34:  f/.(k1+2) = (GoB f)*(i+2,j) & f/.(k2+2) = (GoB f)*(i+1,j+1);
+      [i+2,j] in Indices GoB f & [i+1,j+1] in Indices GoB f
+                              by A1,A2,A6,A7,A9,A10,A11,Th10;
+    then j = j+1 by A32,A34,GOBOARD1:21;
+   hence contradiction by REAL_1:69;
+   suppose
+A35:  f/.k1 = (GoB f)*(i,j) & f/.k2 = (GoB f)*(i+1,j+1);
+       [i,j] in Indices GoB f & [i+1,j+1] in Indices GoB f
+                                      by A1,A2,A6,A7,A8,A9,Th10;
+     then j = j+1 by A32,A35,GOBOARD1:21;
+    hence contradiction by REAL_1:69;
+   suppose
+A36:  f/.k1 = (GoB f)*(i+2,j) & f/.k2 = (GoB f)*(i,j);
+      [i+2,j] in Indices GoB f & [i,j] in Indices GoB f by A1,A2,A8,A10,A11,
+Th10
+;
+     then i = i+2 by A32,A36,GOBOARD1:21;
+    hence contradiction by REAL_1:69;
+   suppose
+A37:  f/.k1 = (GoB f)*(i+2,j) & f/.k2 = (GoB f)*(i+1,j+1);
+      [i+2,j] in Indices GoB f & [i+1,j+1] in Indices GoB f
+           by A1,A2,A6,A7,A9,A10,A11,Th10;
+     then j = j+1 by A32,A37,GOBOARD1:21;
+    hence contradiction by REAL_1:69;
+  end;
+ hence contradiction;
+end;
+
+theorem
+   1 <= j & j < width GoB f & 1 <= i & i+1 < len GoB f implies
+  not ( LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) c= L~f &
+        LSeg((GoB f)*(i+1,j+1),(GoB f)*(i+2,j+1)) c= L~f &
+        LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) c= L~f)
+proof assume that
+A1: 1 <= j & j < width GoB f and
+A2: 1 <= i & i+1 < len GoB f and
+A3: LSeg((GoB f)*(i,j+1),(GoB f)*(i+1,j+1)) c= L~f and
+A4: LSeg((GoB f)*(i+1,j+1),(GoB f)*(i+2,j+1)) c= L~f and
+A5: LSeg((GoB f)*(i+1,j),(GoB f)*(i+1,j+1)) c= L~f;
+A6: j+1 <= width GoB f by A1,NAT_1:38;
+A7: 1 <= j+1 by NAT_1:29;
+A8: i < len GoB f by A2,NAT_1:38;
+A9: 1 <= i+1 by NAT_1:29;
+      i+(1+1) = i+1+1 by XCMPLX_1:1;
+then A10: i+2 <= len GoB f by A2,NAT_1:38;
+      i+1 <= i+2 by AXIOMS:24;
+then A11: 1 <= i+2 by A9,AXIOMS:22;
+ per cases by A1,A2,A3,A4,A5,A6,A7,Th58,Th60;
+ suppose
+A12: f/.2 = (GoB f)*(i,j+1) & f/.2 = (GoB f)*(i+1,j);
+    [i,j+1] in Indices GoB f & [i+1,j] in Indices GoB f
+                              by A1,A2,A6,A7,A8,A9,Th10;
+  then j = j+1 by A12,GOBOARD1:21;
+ hence contradiction by REAL_1:69;
+ suppose
+A13: f/.(len f -' 1) = (GoB f)*(i+2,j+1) & f/.(len f -' 1) = (GoB f)*(i+1,j);
+    [i+2,j+1] in Indices GoB f & [i+1,j] in Indices GoB f
+                              by A1,A2,A6,A7,A9,A10,A11,Th10;
+  then j = j+1 by A13,GOBOARD1:21;
+ hence contradiction by REAL_1:69;
+ suppose
+A14: f/.2 = (GoB f)*(i+2,j+1) & f/.2 = (GoB f)*(i+1,j);
+    [i+2,j+1] in Indices GoB f & [i+1,j] in Indices GoB f
+                              by A1,A2,A6,A7,A9,A10,A11,Th10;
+  then j = j+1 by A14,GOBOARD1:21;
+ hence contradiction by REAL_1:69;
+ suppose
+A15: f/.2 = (GoB f)*(i+2,j+1) & f/.2 = (GoB f)*(i,j+1);
+    [i+2,j+1] in Indices GoB f & [i,j+1] in Indices GoB f
+                              by A2,A6,A7,A8,A10,A11,Th10;
+  then i = i+2 by A15,GOBOARD1:21;
+ hence contradiction by REAL_1:69;
+ suppose that
+A16:  f/.1 = (GoB f)*(i+1,j+1) and
+A17: ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j+1) &
+   (f/.k = (GoB f)*(i+1,j) & f/.(k+2) = (GoB f)*(i,j+1) or
+    f/.k = (GoB f)*(i,j+1) & f/.(k+2) = (GoB f)*(i+1,j));
+  consider k such that
+A18: 1 <= k & k+1 < len f and
+A19: f/.(k+1) = (GoB f)*(i+1,j+1) and
+      f/.k = (GoB f)*(i+1,j) & f/.(k+2) = (GoB f)*(i,j+1) or
+    f/.k = (GoB f)*(i,j+1) & f/.(k+2) = (GoB f)*(i+1,j) by A17;
+  1 < k+1 by A18,NAT_1:38;
+ hence contradiction by A16,A18,A19,Th38;
+ suppose that
+A20: ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j+1) &
+    (f/.k = (GoB f)*(i,j+1) & f/.(k+2) = (GoB f)*(i+2,j+1) or
+     f/.k = (GoB f)*(i+2,j+1) & f/.(k+2) = (GoB f)*(i,j+1)) and
+A21:  f/.1 = (GoB f)*(i+1,j+1);
+  consider k such that
+A22: 1 <= k & k+1 < len f and
+A23: f/.(k+1) = (GoB f)*(i+1,j+1) and
+      f/.k = (GoB f)*(i,j+1) & f/.(k+2) = (GoB f)*(i+2,j+1) or
+    f/.k = (GoB f)*(i+2,j+1) & f/.(k+2) = (GoB f)*(i,j+1) by A20;
+  1 < k+1 by A22,NAT_1:38;
+ hence contradiction by A21,A22,A23,Th38;
+ suppose that
+A24: ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j+1) &
+    (f/.k = (GoB f)*(i,j+1) & f/.(k+2) = (GoB f)*(i+2,j+1) or
+     f/.k = (GoB f)*(i+2,j+1) & f/.(k+2) = (GoB f)*(i,j+1)) and
+A25: ex k st 1 <= k & k+1 < len f & f/.(k+1) = (GoB f)*(i+1,j+1) &
+    (f/.k = (GoB f)*(i+1,j) & f/.(k+2) = (GoB f)*(i,j+1) or
+     f/.k = (GoB f)*(i,j+1) & f/.(k+2) = (GoB f)*(i+1,j));
+  consider k1 such that
+A26: 1 <= k1 & k1+1 < len f and
+A27: f/.(k1+1) = (GoB f)*(i+1,j+1) and
+A28: f/.k1 = (GoB f)*(i,j+1) & f/.(k1+2) = (GoB f)*(i+2,j+1) or
+    f/.k1 = (GoB f)*(i+2,j+1) & f/.(k1+2) = (GoB f)*(i,j+1) by A24;
+  consider k2 such that
+A29: 1 <= k2 & k2+1 < len f and
+A30: f/.(k2+1) = (GoB f)*(i+1,j+1) and
+A31: f/.k2 = (GoB f)*(i+1,j) & f/.(k2+2) = (GoB f)*(i,j+1) or
+    f/.k2 = (GoB f)*(i,j+1) & f/.(k2+2) = (GoB f)*(i+1,j) by A25;
+A32: now assume
+A33:  k1 <> k2;
+    per cases by A33,AXIOMS:21;
+    suppose k1 < k2;
+     then k1+1 < k2+1 & 1 <= k1+1 by NAT_1:29,REAL_1:53;
+     hence contradiction by A27,A29,A30,Th38;
+    suppose k2 < k1;
+     then k2+1 < k1+1 & 1 <= k2+1 by NAT_1:29,REAL_1:53;
+     hence contradiction by A26,A27,A30,Th38;
+   end;
+    now per cases by A28,A31;
+   suppose
+  A34: f/.k1 = (GoB f)*(i,j+1) & f/.k2 = (GoB f)*(i+1,j);
+      [i,j+1] in Indices GoB f & [i+1,j] in Indices GoB f
+                                by A1,A2,A6,A7,A8,A9,Th10;
+    then j = j+1 by A32,A34,GOBOARD1:21;
+   hence contradiction by REAL_1:69;
+   suppose
+  A35: f/.(k1+2) = (GoB f)*(i+2,j+1) & f/.(k2+2) = (GoB f)*(i+1,j);
+      [i+2,j+1] in Indices GoB f & [i+1,j] in Indices GoB f
+                                by A1,A2,A6,A7,A9,A10,A11,Th10;
+    then j = j+1 by A32,A35,GOBOARD1:21;
+   hence contradiction by REAL_1:69;
+   suppose
+  A36: f/.k1 = (GoB f)*(i+2,j+1) & f/.k2 = (GoB f)*(i+1,j);
+      [i+2,j+1] in Indices GoB f & [i+1,j] in Indices GoB f
+                                by A1,A2,A6,A7,A9,A10,A11,Th10;
+    then j = j+1 by A32,A36,GOBOARD1:21;
+   hence contradiction by REAL_1:69;
+   suppose
+  A37: f/.k1 = (GoB f)*(i+2,j+1) & f/.k2 = (GoB f)*(i,j+1);
+      [i+2,j+1] in Indices GoB f & [i,j+1] in Indices GoB f
+                                by A2,A6,A7,A8,A10,A11,Th10;
+    then i = i+2 by A32,A37,GOBOARD1:21;
+   hence contradiction by REAL_1:69;
+  end;
+ hence contradiction;
+end;
+

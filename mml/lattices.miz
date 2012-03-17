@@ -1,0 +1,784 @@
+:: Introduction to Lattice Theory
+::  by Stanis{\l}aw \.Zukowski
+::
+:: Received April 14, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary BINOP_1, BOOLE, FINSUB_1, FUNCT_1, SUBSET_1, LATTICES;
+ notation XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, BINOP_1, FINSUB_1;
+ constructors STRUCT_0, BINOP_1, FINSUB_1, XBOOLE_0;
+ clusters FINSUB_1, STRUCT_0, SUBSET_1, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ theorems TARSKI, ZFMISC_1, STRUCT_0, FINSUB_1;
+
+begin
+
+definition
+  struct(1-sorted) /\-SemiLattStr
+    (# carrier -> set, L_meet -> BinOp of the carrier #);
+end;
+
+definition
+  struct(1-sorted) \/-SemiLattStr
+    (# carrier -> set, L_join -> BinOp of the carrier #);
+end;
+
+definition
+  struct(/\-SemiLattStr,\/-SemiLattStr) LattStr
+    (# carrier -> set, L_join, L_meet -> BinOp of the carrier #);
+end;
+
+set DD=bool {};
+
+  DD is preBoolean
+  proof
+      now let X,Y be set;
+    assume X in DD & Y in DD;
+    then reconsider X'=X,Y'=Y as Element of DD;
+      X' \/ Y' in DD & X' \ Y' in DD;
+    hence X \/ Y in DD & X \ Y in DD;
+    end;
+    hence thesis by FINSUB_1:10;
+  end;
+
+then reconsider DD as non empty preBoolean set;
+
+consider uu,nn being BinOp of DD;
+set GG=LattStr(#DD,uu,nn#);
+set GGj=\/-SemiLattStr(#DD,uu#);
+set GGm=/\-SemiLattStr(#DD,uu#);
+
+Lm1: GG is strict non empty by STRUCT_0:def 1;
+Lm2: GGj is strict non empty by STRUCT_0:def 1;
+Lm3: GGm is strict non empty by STRUCT_0:def 1;
+
+definition
+  cluster strict non empty \/-SemiLattStr;
+existence by Lm2;
+  cluster strict non empty /\-SemiLattStr;
+existence by Lm3;
+  cluster strict non empty LattStr;
+existence by Lm1;
+end;
+
+reconsider GG as strict non empty LattStr by STRUCT_0:def 1;
+reconsider GGj as strict non empty \/-SemiLattStr by STRUCT_0:def 1;
+reconsider GGm as strict non empty /\-SemiLattStr by STRUCT_0:def 1;
+
+definition let G be non empty \/-SemiLattStr,
+               p, q be Element of G;
+ func p"\/"q -> Element of G equals
+    (the L_join of G).(p,q);
+   coherence;
+end;
+
+definition let G be non empty /\-SemiLattStr,
+               p, q be Element of G;
+ func p"/\"q -> Element of G equals
+    (the L_meet of G).(p,q);
+   coherence;
+end;
+
+definition let G be non empty \/-SemiLattStr,
+               p, q be Element of G;
+  pred p [= q means :Def3:
+   p"\/"q = q;
+end;
+
+Lm4: for x,y being Element of GG holds x = y
+ proof let x,y be Element of GG;
+     x = {} & y = {} by TARSKI:def 1,ZFMISC_1:1;
+  hence thesis;
+ end;
+
+Lm5: for x,y being Element of GGj holds x = y
+ proof let x,y be Element of GGj;
+     x = {} & y = {} by TARSKI:def 1,ZFMISC_1:1;
+  hence thesis;
+ end;
+
+Lm6: for x,y being Element of GGm holds x = y
+ proof let x,y be Element of GGm;
+     x = {} & y = {} by TARSKI:def 1,ZFMISC_1:1;
+  hence thesis;
+ end;
+
+Lm7: for x,y being Element of GG holds x"\/"y = y"\/"x by Lm4;
+
+Lm8: for x,y being Element of GGj holds x"\/"y = y"\/"x by Lm5;
+
+Lm9: for x,y being Element of GGm holds x"/\"y = y"/\"x by Lm6;
+
+Lm10: for x,y,z being Element of GG holds
+                      x"\/"(y"\/"z) = (x"\/"y)"\/"z by Lm4;
+
+Lm11: for x,y,z being Element of GGj holds
+                      x"\/"(y"\/"z) = (x"\/"y)"\/"z by Lm5;
+
+Lm12: for x,y,z being Element of GGm holds
+                      x"/\"(y"/\"z) = (x"/\"y)"/\"z by Lm6;
+
+Lm13: for x,y being Element of GG holds
+                    (x"/\"y)"\/"y = y by Lm4;
+
+Lm14: for x,y being Element of GG holds
+                    x"/\"y = y"/\"x by Lm4;
+
+Lm15: for x,y,z being Element of GG holds
+                      x"/\"(y"/\"z) = (x"/\"y)"/\"z by Lm4;
+
+Lm16: for x,y being Element of GG holds
+                    x"/\"(x"\/"y) = x by Lm4;
+
+Lm17: for x,y,z being Element of GG holds
+                      x"/\"(y"\/"z) = (x"/\"y)"\/"(x"/\"z) by Lm4;
+
+Lm18: for x,y,z being Element of GG holds
+              x [= z implies x"\/"(y"/\"z) = (x"\/"y)"/\"z by Lm4;
+reconsider 0_GG={} as Element of GG by ZFMISC_1:def 1;
+reconsider D={} as Element of GG by ZFMISC_1:def 1;
+
+Lm19: for x being Element of GG holds
+  0_GG"/\"x = 0_GG & x"/\"0_GG = 0_GG by Lm4;
+Lm20: for x being Element of GG holds
+  D"\/"x = D & x"\/"D = D by Lm4;
+
+definition let IT be non empty \/-SemiLattStr;
+  attr IT is join-commutative means :Def4:
+   for a,b being Element of IT holds a"\/"b = b"\/"a;
+  attr IT is join-associative means :Def5:
+   for a,b,c being Element of IT holds a"\/"(b"\/"c) = (a"\/"b)
+"\/"c;
+end;
+
+definition let IT be non empty /\-SemiLattStr;
+  attr IT is meet-commutative means :Def6:
+   for a,b being Element of IT holds a"/\"b = b"/\"a;
+  attr IT is meet-associative means :Def7:
+   for a,b,c being Element of IT holds a"/\"(b"/\"c) = (a"/\"b)
+"/\"c;
+end;
+
+definition let IT be non empty LattStr;
+  attr IT is meet-absorbing means :Def8:
+   for a,b being Element of IT holds (a"/\"b)"\/"b = b;
+  attr IT is join-absorbing means :Def9:
+   for a,b being Element of IT holds a"/\"(a"\/"b)=a;
+ end;
+
+definition let IT be non empty LattStr;
+  attr IT is Lattice-like means :Def10:
+   IT is join-commutative join-associative meet-absorbing
+         meet-commutative meet-associative join-absorbing;
+end;
+
+definition
+  cluster Lattice-like ->
+          join-commutative join-associative meet-absorbing
+          meet-commutative meet-associative join-absorbing
+          (non empty LattStr);
+ coherence by Def10;
+  cluster join-commutative join-associative meet-absorbing
+          meet-commutative meet-associative join-absorbing
+          -> Lattice-like (non empty LattStr);
+ coherence by Def10;
+end;
+
+definition
+  cluster strict join-commutative join-associative (non empty \/-SemiLattStr);
+  existence
+   proof GGj is join-commutative join-associative by Def4,Def5,Lm8,Lm11;
+    hence thesis;
+   end;
+  cluster strict meet-commutative meet-associative (non empty /\-SemiLattStr);
+  existence
+   proof GGm is meet-commutative meet-associative by Def6,Def7,Lm9,Lm12;
+    hence thesis;
+   end;
+  cluster strict Lattice-like (non empty LattStr);
+  existence
+   proof GG is join-commutative join-associative meet-absorbing
+         meet-commutative meet-associative join-absorbing
+    by Def4,Def5,Def6,Def7,Def8,Def9,Lm7,Lm10,Lm13,Lm14,Lm15,Lm16;
+    then GG is Lattice-like by Def10;
+    hence thesis;
+   end;
+end;
+
+definition
+  mode Lattice is Lattice-like (non empty LattStr);
+end;
+
+  GG is join-commutative join-associative meet-absorbing
+      meet-commutative meet-associative join-absorbing
+by Def4,Def5,Def6,Def7,Def8,Def9,Lm7,Lm10,Lm13,Lm14,Lm15,Lm16;
+then reconsider GG as Lattice by Def10;
+
+definition let L be join-commutative (non empty \/-SemiLattStr),
+               a, b be Element of L;
+  redefine func a"\/"b;
+commutativity by Def4;
+end;
+
+definition let L be meet-commutative (non empty /\-SemiLattStr),
+               a, b be Element of L;
+  redefine func a"/\"b;
+commutativity by Def6;
+end;
+
+definition let IT be non empty LattStr;
+  attr IT is distributive means :Def11:
+   for a,b,c being Element of IT
+    holds a"/\"(b"\/"c) = (a"/\"b)"\/"(a"/\"c);
+end;
+
+Lm21: GG is distributive by Def11,Lm17;
+
+definition let IT be non empty LattStr;
+  attr IT is modular means :Def12:
+   for a,b,c being Element of IT st a [= c
+    holds a"\/"(b"/\"c) = (a"\/"b)"/\"c;
+end;
+
+definition let IT be non empty /\-SemiLattStr;
+  attr IT is lower-bounded means :Def13:
+   ex c being Element of IT st
+    for a being Element of IT holds c"/\"a = c & a"/\"c = c;
+end;
+
+definition let IT be non empty \/-SemiLattStr;
+  attr IT is upper-bounded means :Def14:
+   ex c being Element of IT st
+    for a being Element of IT holds c"\/"a = c & a"\/"c = c;
+end;
+
+definition
+  cluster strict distributive lower-bounded upper-bounded modular Lattice;
+  existence
+   proof A1: GG is modular by Def12,Lm18;
+    A2: GG is lower-bounded by Def13,Lm19;
+      GG is upper-bounded by Def14,Lm20;
+    hence thesis by A1,A2,Lm21;
+   end;
+end;
+
+definition
+  mode D_Lattice is distributive Lattice;
+  mode M_Lattice is modular Lattice;
+  mode 0_Lattice is lower-bounded Lattice;
+  mode 1_Lattice is upper-bounded Lattice;
+end;
+
+Lm22: GG is 0_Lattice by Def13,Lm19;
+Lm23: GG is 1_Lattice by Def14,Lm20;
+
+definition let IT be non empty LattStr;
+  attr IT is bounded means :Def15:
+   IT is lower-bounded upper-bounded;
+end;
+
+definition
+  cluster lower-bounded upper-bounded -> bounded (non empty LattStr);
+coherence by Def15;
+  cluster bounded -> lower-bounded upper-bounded (non empty LattStr);
+coherence by Def15;
+end;
+
+definition
+  cluster bounded strict Lattice;
+  existence
+   proof
+      GG is 0_Lattice & GG is 1_Lattice by Def13,Def14,Lm19,Lm20;
+    then GG is bounded by Def15;
+    hence thesis;
+   end;
+end;
+
+definition
+  mode 01_Lattice is bounded Lattice;
+end;
+
+definition let L be non empty /\-SemiLattStr;
+ assume A1: L is lower-bounded;
+  func Bottom L -> Element of L means :Def16:
+   for a being Element of L holds it "/\" a = it & a "/\"
+ it = it;
+  existence by A1,Def13;
+  uniqueness
+    proof
+     let c1,c2 be Element of L such that
+A2:  for a being Element of L holds c1"/\"a = c1 & a"/\"c1 = c1
+      and
+A3:  for a being Element of L holds c2"/\"a = c2 & a"/\"c2 = c2;
+     thus c1 = c2"/\"c1 by A2
+            .= c2 by A3;
+    end;
+end;
+
+definition let L be non empty \/-SemiLattStr;
+ assume A1: L is upper-bounded;
+  func Top L -> Element of L means :Def17:
+   for a being Element of L holds it "\/" a = it & a "\/"
+ it = it;
+  existence by A1,Def14;
+  uniqueness
+    proof
+     let c1,c2 be Element of L such that
+A2:  for a being Element of L holds c1"\/"a = c1 & a"\/"
+c1 = c1 and
+A3:  for a being Element of L holds c2"\/"a = c2 & a"\/"c2 = c2;
+     thus c1 = c2"\/"c1 by A2
+            .= c2 by A3;
+    end;
+end;
+
+definition let L be non empty LattStr,
+               a, b be Element of L;
+  pred a is_a_complement_of b means :Def18:
+   a"\/"b = Top L & b"\/"a = Top L & a"/\"b = Bottom L & b"/\"a = Bottom L;
+end;
+
+definition let IT be non empty LattStr;
+  attr IT is complemented means :Def19:
+   for b being Element of IT
+    ex a being Element of IT st a is_a_complement_of b;
+end;
+
+definition
+  cluster bounded complemented strict Lattice;
+  existence
+   proof
+    take GG;
+    thus GG is bounded by Def15,Lm22,Lm23;
+    thus GG is complemented
+     proof let b be Element of GG;
+       consider a being Element of GG;
+      take a;
+      thus a"\/"b = Top GG & b"\/"a = Top GG by Lm4;
+      thus a"/\"b = Bottom GG & b"/\"a = Bottom GG by Lm4;
+     end;
+    thus thesis;
+   end;
+end;
+
+definition
+  mode C_Lattice is complemented 01_Lattice;
+end;
+
+reconsider GG as 01_Lattice by Def15,Lm22,Lm23;
+
+Lm24: GG is complemented
+    proof
+     let b be Element of GG;
+     take b;
+     thus b"\/"b = Top GG & b"\/"b = Top GG by Lm4;
+     thus b"/\"b = Bottom GG & b"/\"b = Bottom GG by Lm4;
+    end;
+
+definition let IT be non empty LattStr;
+  attr IT is Boolean means :Def20:
+   IT is bounded complemented distributive;
+end;
+
+definition
+  cluster Boolean -> bounded complemented distributive (non empty LattStr);
+coherence by Def20;
+  cluster bounded complemented distributive -> Boolean (non empty LattStr);
+coherence by Def20;
+end;
+
+definition
+  cluster Boolean strict Lattice;
+  existence
+   proof reconsider GG as C_Lattice by Lm24;
+      GG is Boolean by Def20,Lm21;
+    hence thesis;
+   end;
+end;
+
+definition
+  mode B_Lattice is Boolean Lattice;
+end;
+
+reserve L for meet-absorbing join-absorbing meet-commutative
+        (non empty LattStr);
+reserve a for Element of L;
+
+canceled 16;
+
+theorem Th17:
+  a"\/"a = a
+  proof
+   thus a"\/"a = ( a "/\" ( a"\/"a ) ) "\/" a by Def9
+             .= a by Def8;
+  end;
+
+theorem
+    a"/\"a = a
+   proof
+      a"/\"( a"\/"a ) = a by Def9;
+    hence thesis by Th17;
+   end;
+
+reserve L for Lattice;
+reserve a, b, c for Element of L;
+
+theorem Th19:
+  (for a,b,c holds a"/\"(b"\/"c) = (a"/\"b)"\/"(a"/\"c))
+                         iff
+  (for a,b,c holds a"\/"(b"/\"c) = (a"\/"b)"/\"(a"\/"c))
+    proof
+       hereby
+          assume A1:for a,b,c holds a"/\"(b"\/"c)=(a"/\"b)"\/"(a"/\"c);
+          let a,b,c;
+          thus a"\/"(b"/\"c)=(a"\/"(c"/\"a))"\/"(c"/\"b) by Def8
+            .=a"\/"((c"/\"a)"\/"(c"/\"b)) by Def5
+            .=a"\/"((a"\/"b)"/\"c) by A1
+            .=((a"\/"b)"/\"a)"\/"((a"\/"b)"/\"c) by Def9
+            .=(a"\/"b)"/\"(a"\/"c) by A1;
+        end;
+        assume A2:for a,b,c holds a"\/"(b"/\"c)=(a"\/"b)"/\"(a"\/"c);
+        let a,b,c;
+        thus a"/\"(b"\/"c)=(a"/\"(c"\/"a))"/\"(c"\/"b) by Def9
+              .=a"/\"((c"\/"a)"/\"(c"\/"b)) by Def7
+              .=a"/\"((a"/\"b)"\/"c) by A2
+              .=((a"/\"b)"\/"a)"/\"((a"/\"b)"\/"c) by Def8
+              .=(a"/\"b)"\/"(a"/\"c) by A2;
+    end;
+
+canceled;
+
+theorem Th21:
+for L being meet-absorbing join-absorbing (non empty LattStr),
+    a, b being Element of L holds
+  a [= b iff a"/\"b = a
+   proof
+let L be meet-absorbing join-absorbing (non empty LattStr),
+    a, b be Element of L;
+       a [= b iff a"\/"b = b by Def3;
+     hence thesis by Def8,Def9;
+   end;
+
+theorem Th22:
+for L being meet-absorbing join-absorbing join-associative meet-commutative
+            (non empty LattStr),
+    a, b being Element of L holds
+  a [= a"\/"b
+   proof
+let L be meet-absorbing join-absorbing join-associative meet-commutative
+            (non empty LattStr),
+    a, b be Element of L;
+     thus a"\/"( a"\/"b) = (a"\/"a)"\/"b by Def5
+                    .= a"\/"b by Th17;
+   end;
+
+theorem Th23:
+for L being meet-absorbing meet-commutative (non empty LattStr),
+    a, b being Element of L holds
+  a"/\"b [= a
+   proof
+let L be meet-absorbing meet-commutative (non empty LattStr),
+    a, b be Element of L;
+     thus ( a"/\"b )"\/"a = a by Def8;
+   end;
+
+definition
+  let L be meet-absorbing join-absorbing meet-commutative (non empty LattStr),
+      a, b be Element of L;
+  redefine pred a [= b;
+  reflexivity
+  proof let a be Element of L;
+   thus a"\/"a = a by Th17;
+  end;
+end;
+
+canceled;
+
+theorem
+  for L being join-associative (non empty \/-SemiLattStr),
+    a, b, c being Element of L holds
+  a [= b & b [= c implies a [= c
+   proof
+let L be join-associative (non empty \/-SemiLattStr),
+    a, b, c be Element of L;
+    assume a"\/"b = b & b"\/"c = c;
+    hence a"\/"c = c by Def5;
+   end;
+
+theorem Th26:
+for L being join-commutative (non empty \/-SemiLattStr),
+    a, b being Element of L holds
+  a [= b & b [= a implies a=b
+   proof
+    let L be join-commutative (non empty \/-SemiLattStr),
+    a, b be Element of L;
+    assume a"\/"b = b & b"\/"a =a;
+    hence thesis;
+   end;
+
+theorem Th27:
+for L being meet-absorbing join-absorbing meet-associative (non empty LattStr),
+    a, b, c being Element of L holds
+  a [= b implies a"/\"c [= b"/\"c
+   proof
+let L be meet-absorbing join-absorbing meet-associative (non empty LattStr),
+    a, b, c be Element of L;
+     assume a [= b;
+     hence (a"/\"c)"\/"(b"/\"c) = ((a"/\"b)"/\"c)"\/"(b"/\"c) by Th21
+       .= (a"/\"(b"/\"c))"\/"(b"/\"c) by Def7
+       .= b"/\"c by Def8;
+   end;
+
+canceled;
+
+theorem
+  for L being Lattice holds
+  (for a,b,c being Element of L holds
+       (a"/\"b)"\/"(b"/\"c)"\/"(c"/\"a) = (a"\/"b)"/\"(b"\/"c)"/\"(c"\/"a))
+   implies L is distributive
+   proof
+     let L be Lattice;
+     assume
+A1:   for a,b,c being Element of L holds
+          (a"/\"b)"\/"(b"/\"c)"\/"(c"/\"a) = (a"\/"b)"/\"(b"\/"c)"/\"(c"\/"a);
+A2:    now let a,b,c be Element of L;
+        assume A3: c [= a;
+        thus a"/\"(b"\/"c) = (b"\/"c)"/\"(a"/\"(a"\/"b)) by Def9
+       .= (a"\/"b)"/\"((b"\/"c)"/\"a) by Def7
+       .= (a"\/"b)"/\"((b"\/"c)"/\"(c"\/"a)) by A3,Def3
+       .= (a"\/"b)"/\"(b"\/"c)"/\"(c"\/"a) by Def7
+       .= (a"/\"b)"\/"(b"/\"c)"\/"(c"/\"a) by A1
+       .= (a"/\"b)"\/"((b"/\"c)"\/"(c"/\"a)) by Def5
+       .= (a"/\"b)"\/"((b"/\"c)"\/"c) by A3,Th21
+       .= (a"/\"b)"\/"c by Def8;
+      end;
+     let a,b,c be Element of L;
+A4:   (a"/\"b)"\/"(c"/\"a) [= a
+       proof
+         thus ((a"/\"b)"\/"(c"/\"a))"\/"a = (a"/\"b)"\/"((c"/\"a)"\/"a) by Def5
+            .= (a"/\"b)"\/"a by Def8
+            .= a by Def8;
+       end;
+     thus a"/\"(b"\/"c)
+       = (a"/\"(c"\/"a))"/\"(b"\/"c) by Def9
+      .= a"/\"((c"\/"a)"/\"(b"\/"c)) by Def7
+      .= (a"/\"(a"\/"b))"/\"((c"\/"a)"/\"(b"\/"c)) by Def9
+      .= a"/\"((a"\/"b)"/\"((b"\/"c)"/\"(c"\/"a))) by Def7
+      .= a"/\"((a"\/"b)"/\"(b"\/"c)"/\"(c"\/"a)) by Def7
+      .= a"/\"((b"/\"c)"\/"(a"/\"b)"\/"(c"/\"a)) by A1
+      .= a"/\"((b"/\"c)"\/"((a"/\"b)"\/"(c"/\"a))) by Def5
+      .= (a"/\"(b"/\"c))"\/"((a"/\"b)"\/"(c"/\"a)) by A2,A4
+      .= (a"/\"b"/\"c)"\/"((a"/\"b)"\/"(c"/\"a)) by Def7
+      .= ((a"/\"b"/\"c)"\/"(a"/\"b))"\/"(c"/\"a) by Def5
+      .= (a"/\"b)"\/"(a"/\"c) by Def8;
+   end;
+
+reserve L for D_Lattice;
+reserve a, b, c for Element of L;
+
+canceled;
+
+theorem Th31:
+  a"\/"(b"/\"c) = (a"\/"b)"/\"(a"\/"c)
+   proof
+       for a,b,c holds a"/\"(b"\/"c) = (a"/\"b)"\/"(a"/\"c) by Def11;
+     hence thesis by Th19;
+   end;
+
+theorem Th32:
+  c"/\"a = c"/\"b & c"\/"a = c"\/"b implies a=b
+    proof
+      assume that
+A1:           c"/\"a = c"/\"b and
+A2:           c"\/"a = c"\/"b;
+      thus a = a"/\"( c"\/"a ) by Def9
+            .= ( b"/\"c )"\/"( b"/\"a ) by A1,A2,Def11
+            .= b"/\"( c"\/"a ) by Def11
+            .= b by A2,Def9;
+    end;
+
+canceled;
+
+theorem
+    (a"\/"b)"/\"(b"\/"c)"/\"(c"\/"a) = (a"/\"b)"\/"(b"/\"c)"\/"(c"/\"a)
+   proof
+     thus (a"\/"b)"/\"(b"\/"c)"/\"(c"\/"a)
+      = (((a"\/"b)"/\"(b"\/"c))"/\"c)"\/"(((a"\/"b)"/\"(b"\/"c))"/\"a) by Def11
+     .= ((a"\/"b)"/\"((b"\/"c)"/\"c))"\/"(((a"\/"b)"/\"(b"\/"c))"/\"a) by Def7
+     .= ((a"\/"b)"/\"c)"\/"(a"/\"((a"\/"b)"/\"(b"\/"c))) by Def9
+     .= ((a"\/"b)"/\"c)"\/"((a"/\"(a"\/"b))"/\"(b"\/"c)) by Def7
+     .= (c"/\"(a"\/"b))"\/"(a"/\"(b"\/"c)) by Def9
+     .= ((c"/\"a)"\/"(c"/\"b))"\/"(a"/\"(b"\/"c)) by Def11
+     .= ((a"/\"b)"\/"(c"/\"a))"\/"((c"/\"a)"\/"(b"/\"c)) by Def11
+     .= (a"/\"b)"\/"((c"/\"a)"\/"((c"/\"a)"\/"(b"/\"c))) by Def5
+     .= (a"/\"b)"\/"(((c"/\"a)"\/"(c"/\"a))"\/"(b"/\"c)) by Def5
+     .= (a"/\"b)"\/"((b"/\"c)"\/"(c"/\"a)) by Th17
+     .= (a"/\"b)"\/"(b"/\"c)"\/"(c"/\"a) by Def5;
+   end;
+
+definition
+  cluster distributive -> modular Lattice;
+ coherence
+  proof let L be Lattice;
+   assume A1: L is distributive;
+    let a,b,c be Element of L;
+   assume a"\/"c = c;
+   hence a"\/"(b"/\"c) = (a"\/"b)"/\"c by A1,Th31;
+  end;
+end;
+
+reserve L for 0_Lattice;
+reserve a for Element of L;
+
+canceled 4;
+
+theorem Th39:
+  Bottom L"\/"a = a
+   proof
+     thus Bottom L"\/"a = ( Bottom L"/\"a )"\/"a by Def16
+                .= a by Def8;
+   end;
+
+theorem
+   Bottom L"/\"a = Bottom L by Def16;
+
+theorem Th41:
+  Bottom L [= a
+   proof
+       Bottom L [= Bottom L"\/"a by Th22;
+     hence thesis by Th39;
+   end;
+
+reserve L for 1_Lattice;
+reserve a for Element of L;
+
+canceled;
+
+theorem Th43:
+  Top L"/\"a = a
+   proof
+     thus Top L"/\"a = ( Top L"\/"a )"/\"a by Def17
+                .= a by Def9;
+   end;
+
+theorem
+   Top L"\/"a = Top L by Def17;
+
+theorem
+    a [= Top L
+   proof
+       Top L"/\"a [= Top L by Th23;
+     hence thesis by Th43;
+   end;
+
+definition let L be non empty LattStr,
+               x be Element of L;
+ assume A1: L is complemented D_Lattice;
+  func x` -> Element of L means :Def21:
+   it is_a_complement_of x;
+  existence by A1,Def19;
+  uniqueness
+    proof
+     let a,b be Element of L such that
+A2:           a is_a_complement_of x and
+A3:           b is_a_complement_of x;
+A4:  a"\/"x = Top L & x"\/"a = Top L & a"/\"x = Bottom L & x"/\"a = Bottom
+L by A2,Def18;
+       b"\/"x = Top L & b"/\"x = Bottom L & x"\/"b = Top L & x"/\"b = Bottom
+L by A3,Def18;
+     hence thesis by A1,A4,Th32;
+    end;
+end;
+
+reserve L for B_Lattice;
+reserve a, b for Element of L;
+
+canceled;
+
+theorem Th47:
+  a`"/\"a = Bottom L
+   proof a` is_a_complement_of a by Def21;
+    hence thesis by Def18;
+   end;
+
+theorem Th48:
+  a`"\/"a = Top L
+   proof a` is_a_complement_of a by Def21;
+    hence thesis by Def18;
+   end;
+
+theorem Th49:
+  a`` = a
+   proof
+       a`` is_a_complement_of a` by Def21;
+then A1:   a``"\/"a` = Top L & a``"/\"a` = Bottom L by Def18;
+       a` is_a_complement_of a by Def21;
+     then a"\/"a` =Top L & a "/\"a`= Bottom L by Def18;
+     hence a``= a by A1,Th32;
+   end;
+
+theorem Th50:
+  ( a"/\"b )` = a`"\/" b`
+    proof
+A1:    (a`"\/"b`)"\/"(a"/\"b) = a`"\/"(b`"\/"(a"/\"b)) by Def5
+       .= a`"\/"((b`"\/"a)"/\"(b`"\/"b)) by Th31
+       .= a`"\/"((b`"\/"a)"/\"Top L) by Th48
+       .= (b`"\/"a)"\/"a` by Th43
+       .= b`"\/"(a"\/"a`) by Def5
+       .= b`"\/"Top L by Th48
+       .= Top L by Def17;
+        (a`"\/"b`)"/\"(a"/\"b) = ((a`"\/"b`)"/\"a)"/\"b by Def7
+       .= ((a`"/\"a)"\/"(b`"/\"a))"/\"b by Def11
+       .= (Bottom L"\/"(b`"/\"a))"/\"b by Th47
+       .= b"/\"(b`"/\"a) by Th39
+       .= (b"/\"b`)"/\"a by Def7
+       .= Bottom L"/\"a by Th47
+       .= Bottom L by Def16;
+      then a`"\/"b` is_a_complement_of a"/\"b by A1,Def18;
+      hence thesis by Def21;
+    end;
+
+theorem
+    ( a"\/"b )` = a`"/\" b`
+    proof
+      thus (a"\/"b)` = (a``"\/"b)` by Th49
+                   .= (a``"\/"b``)` by Th49
+                   .= (a`"/\"b`)`` by Th50
+                   .= a`"/\"b` by Th49;
+    end;
+
+theorem Th52:
+  b"/\"a = Bottom L iff b [= a`
+    proof
+      thus b"/\"a = Bottom L implies b [= a`
+        proof
+          assume A1: b"/\"a = Bottom L;
+            b = b"/\"Top L by Th43
+           .= b"/\"(a"\/"a`) by Th48
+           .= Bottom L"\/"(b"/\"a`) by A1,Def11
+           .= b"/\"a` by Th39;
+          then b"\/"a` = a` by Def8;
+          hence b [= a` by Def3;
+        end;
+      thus thesis
+        proof
+          assume b [= a`;
+          then b"/\"a [= a`"/\"a by Th27;
+then A2:        b"/\"a [= Bottom L by Th47;
+            Bottom L [= b"/\"a by Th41;
+          hence b"/\"a = Bottom L by A2,Th26;
+        end;
+    end;
+
+theorem
+    a [= b implies b` [= a`
+    proof
+      assume a [= b;
+      then b`"/\"a [= b`"/\"b by Th27;
+then A1:    b`"/\"a [= Bottom L by Th47;
+        Bottom L [= b`"/\"a by Th41;
+      then b `"/\"a = Bottom L by A1,Th26;
+      hence b` [= a` by Th52;
+    end;

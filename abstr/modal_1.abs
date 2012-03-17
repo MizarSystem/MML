@@ -1,0 +1,397 @@
+:: Introduction to Modal Propositional Logic
+::  by Alicia de la Cruz
+::
+:: Received September 30, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary TREES_2, FINSEQ_1, BOOLE, TREES_1, FUNCT_1, RELAT_1, ZFMISC_1,
+      PARTFUN1, ORDINAL1, TARSKI, FINSET_1, PRELAMB, CARD_1, FUNCOP_1,
+      QC_LANG1, MCART_1, ZF_LANG, SEQ_1, MODAL_1;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0,
+      NAT_1, DOMAIN_1, MCART_1, RELAT_1, FUNCT_1, RELSET_1, FINSEQ_1, FINSEQ_2,
+      FUNCT_2, FINSET_1, CARD_1, PARTFUN1, TREES_1, TREES_2, PRELAMB;
+ constructors WELLORD2, NAT_1, DOMAIN_1, PARTFUN1, PRELAMB, XREAL_0, MEMBERED,
+      XBOOLE_0;
+ clusters SUBSET_1, FINSEQ_1, TREES_1, TREES_2, PRELAMB, FINSET_1, RELSET_1,
+      XREAL_0, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0, ORDINAL2, NUMBERS;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+reserve x,y,x1,x2,y1,y2,z for set,
+        n,m,k for Nat,
+        t1 for DecoratedTree of [: NAT,NAT :],
+        w,s,t,u for FinSequence of NAT,
+        D for non empty set;
+
+definition let Z be Tree;
+func Root Z -> Element of Z equals
+:: MODAL_1:def 1
+ {};
+end;
+
+definition let D; let T be DecoratedTree of D;
+func Root T -> Element of D equals
+:: MODAL_1:def 2
+  T.(Root dom T);
+end;
+
+canceled 2;
+
+theorem :: MODAL_1:3
+n <> m implies not <*n*>,<*m*>^s are_c=-comparable;
+
+theorem :: MODAL_1:4
+for s st s <> {} ex w,n st s = <*n*>^w;
+
+theorem :: MODAL_1:5
+n <> m implies not <*n*> is_a_proper_prefix_of <*m*>^s;
+
+theorem :: MODAL_1:6
+n <> m implies not <*n*> is_a_prefix_of <*m*>^s;
+
+theorem :: MODAL_1:7
+not <*n*> is_a_proper_prefix_of <*m*>;
+
+canceled;
+
+theorem :: MODAL_1:9
+elementary_tree 1 = {{},<*0*>};
+
+theorem :: MODAL_1:10
+elementary_tree 2 = {{},<*0*>,<*1*>};
+
+theorem :: MODAL_1:11
+for Z being Tree,n,m st n <= m & <*m*> in Z holds <*n*> in Z;
+
+theorem :: MODAL_1:12
+w^t is_a_proper_prefix_of w^s implies t is_a_proper_prefix_of s;
+
+theorem :: MODAL_1:13
+t1 in PFuncs(NAT*,[: NAT,NAT :]);
+
+canceled;
+
+theorem :: MODAL_1:15
+for Z,Z1,Z2 being Tree,z being Element of Z st
+  Z with-replacement (z,Z1) = Z with-replacement (z,Z2) holds Z1 = Z2;
+
+theorem :: MODAL_1:16
+for Z,Z1,Z2 being DecoratedTree of D,z being Element of dom Z
+  st Z with-replacement (z,Z1) = Z with-replacement (z,Z2) holds Z1 = Z2;
+
+theorem :: MODAL_1:17
+for Z1,Z2 being Tree,p being FinSequence of NAT st p in Z1 holds
+for v being Element of Z1 with-replacement (p,Z2), w being Element of Z1
+st v = w & w is_a_proper_prefix_of p holds succ v = succ w;
+
+theorem :: MODAL_1:18
+for Z1,Z2 being Tree,p being FinSequence of NAT st p in Z1 holds
+for v being Element of Z1 with-replacement (p,Z2),w being Element of Z1
+st v = w & not p,w are_c=-comparable holds succ v = succ w;
+
+theorem :: MODAL_1:19
+for Z1,Z2 being Tree,p being FinSequence of NAT st p in Z1 holds
+  for v being Element of Z1 with-replacement (p,Z2),w being Element of Z2
+     st v = p^w holds succ v,succ w are_equipotent;
+
+theorem :: MODAL_1:20
+for Z1 being Tree,p being FinSequence of NAT st p in Z1 holds
+  for v being Element of Z1,w being Element of Z1|p
+     st v = p^w holds succ v,succ w are_equipotent;
+
+canceled;
+
+theorem :: MODAL_1:22
+for Z being finite Tree st branchdeg (Root Z) = 0 holds
+   card Z = 1 & Z = {{}};
+
+theorem :: MODAL_1:23
+for Z being finite Tree st branchdeg (Root Z) = 1 holds
+     succ (Root Z) = { <*0*> };
+
+theorem :: MODAL_1:24
+for Z being finite Tree st branchdeg (Root Z) = 2 holds
+      succ (Root Z) = { <*0*>,<*1*> };
+
+reserve s',w',v' for Element of NAT*;
+
+theorem :: MODAL_1:25
+for Z being Tree,o being Element of Z st o <> Root Z holds
+  Z|o,{ o^s': o^s' in Z } are_equipotent &
+  not Root Z in { o^w' : o^w' in Z };
+
+theorem :: MODAL_1:26
+for Z being finite Tree,o being Element of Z st o <> Root Z holds
+ card (Z|o) < card Z;
+
+theorem :: MODAL_1:27
+for Z being finite Tree,z being Element of Z st succ (Root Z) = {z}
+ holds Z = elementary_tree 1 with-replacement (<*0*>,Z|z);
+
+theorem :: MODAL_1:28
+for Z being finite DecoratedTree of D,z be Element of dom Z st
+   succ (Root dom Z) = {z} & dom Z is finite holds
+   Z = ((elementary_tree 1) --> Root Z) with-replacement (<*0*>,Z|z);
+
+theorem :: MODAL_1:29
+for Z being Tree,x1,x2 be Element of Z st Z is finite & x1 = <*0*> & x2 = <*1*>
+ & succ (Root Z) = {x1,x2} holds
+ Z = (elementary_tree 2 with-replacement (<*0*>,Z|x1))
+   with-replacement (<*1*>,Z|x2);
+
+theorem :: MODAL_1:30
+for Z being DecoratedTree of D,x1,x2 being Element of dom Z st
+  dom Z is finite & x1 = <*0*> & x2 = <*1*> & succ (Root dom Z) = {x1,x2} holds
+   Z = (((elementary_tree 2) --> Root Z) with-replacement (<*0*>,
+     Z|x1)) with-replacement (<*1*>,Z|x2);
+
+definition
+func MP-variables -> set equals
+:: MODAL_1:def 3
+ [: {3},NAT :];
+end;
+
+definition
+cluster MP-variables -> non empty;
+end;
+
+definition
+mode MP-variable is Element of MP-variables;
+end;
+
+definition
+func MP-conectives -> set equals
+:: MODAL_1:def 4
+ [: {0,1,2},NAT :];
+end;
+
+definition
+cluster MP-conectives -> non empty;
+end;
+
+definition
+mode MP-conective is Element of MP-conectives;
+end;
+
+theorem :: MODAL_1:31
+MP-conectives misses MP-variables;
+
+reserve p,q for MP-variable;
+
+definition let T be finite Tree,v be Element of T;
+redefine func branchdeg v -> Nat;
+end;
+
+definition let D be non empty set;
+mode DOMAIN_DecoratedTree of D -> non empty set means
+:: MODAL_1:def 5
+for x st x in it holds x is DecoratedTree of D;
+end;
+
+definition let D0 be non empty set,D be DOMAIN_DecoratedTree of D0;
+redefine
+mode Element of D -> DecoratedTree of D0;
+end;
+
+definition
+func MP-WFF -> DOMAIN_DecoratedTree of [: NAT,NAT :] means
+:: MODAL_1:def 6
+
+(for x being DecoratedTree of [: NAT,NAT :] st x in it holds x is finite) &
+for x being finite DecoratedTree of [: NAT,NAT :] holds
+   x in it iff
+    for v being Element of dom x holds branchdeg v <= 2 &
+   (branchdeg v = 0 implies x .v = [0,0] or ex k st x .v = [3,k]) &
+   (branchdeg v = 1 implies x .v = [1,0] or x .v = [1,1]) &
+   (branchdeg v = 2 implies x .v = [2,0]);
+ end;
+
+ :: [0,0] = VERUM
+ :: [1,0] = negation
+ :: [1,1] = modal operator of necessity
+ :: [2,0] = &
+
+definition
+  mode MP-wff is Element of MP-WFF;
+end;
+
+definition
+ cluster -> finite MP-wff;
+end;
+
+reserve A,A1,B,B1,C,C1 for MP-wff;
+
+definition let A; let a be Element of dom A;
+redefine func A|a -> MP-wff;
+end;
+
+definition let a be Element of MP-conectives;
+func the_arity_of a -> Nat equals
+:: MODAL_1:def 7
+   a`1;
+end;
+
+definition let D be non empty set, T,T1 be DecoratedTree of D,
+  p be FinSequence of NAT;
+assume  p in dom T;
+func @(T,p,T1) -> DecoratedTree of D equals
+:: MODAL_1:def 8
+ T with-replacement (p,T1);
+end;
+
+theorem :: MODAL_1:32
+((elementary_tree 1) --> [1,0]) with-replacement (<*0*>,A) is MP-wff;
+
+theorem :: MODAL_1:33
+((elementary_tree 1)-->[1,1]) with-replacement (<*0*>,A) is MP-wff;
+
+theorem :: MODAL_1:34
+((((elementary_tree 2)-->[2,0]) with-replacement (<*0*>,A)))
+  with-replacement (<*1*>,B)
+  is MP-wff;
+
+definition let A;
+func 'not' A -> MP-wff equals
+:: MODAL_1:def 9
+ ((elementary_tree 1)-->[1,0]) with-replacement (<*0*>,A);
+func (#) A -> MP-wff equals
+:: MODAL_1:def 10
+ ((elementary_tree 1)-->[1,1]) with-replacement (<*0*>,A);
+let B;
+func A '&' B -> MP-wff equals
+:: MODAL_1:def 11
+ ((((elementary_tree 2)-->[2,0]) with-replacement (<*0*>,A)))
+   with-replacement (<*1*>,B);
+end;
+
+definition let A;
+func ? A -> MP-wff equals
+:: MODAL_1:def 12
+   'not' (#) 'not' A;
+let B;
+func A 'or' B -> MP-wff equals
+:: MODAL_1:def 13
+   'not'('not' A '&' 'not' B);
+func A => B -> MP-wff equals
+:: MODAL_1:def 14
+   'not'(A '&' 'not' B);
+end;
+
+theorem :: MODAL_1:35
+(elementary_tree 0) --> [3,n] is MP-wff;
+
+theorem :: MODAL_1:36
+(elementary_tree 0) --> [0,0] is MP-wff;
+
+definition let p;
+func @p -> MP-wff equals
+:: MODAL_1:def 15
+ (elementary_tree 0) --> p;
+end;
+
+theorem :: MODAL_1:37
+@p = @q implies p = q;
+
+theorem :: MODAL_1:38
+'not' A = 'not' B implies A = B;
+
+theorem :: MODAL_1:39
+(#)A = (#)B implies A = B;
+
+theorem :: MODAL_1:40
+(A '&' B) = (A1 '&' B1) implies A = A1 & B = B1;
+
+definition
+func VERUM -> MP-wff equals
+:: MODAL_1:def 16
+ (elementary_tree 0) --> [0,0];
+end;
+
+canceled;
+
+theorem :: MODAL_1:42
+card dom A = 1 implies A = VERUM or ex p st A = @p;
+
+theorem :: MODAL_1:43
+card dom A >= 2 implies (ex B st A = 'not' B or A = (#)B) or
+ex B,C st A = B '&' C;
+
+theorem :: MODAL_1:44
+card dom A < card dom 'not' A;
+
+theorem :: MODAL_1:45
+card dom A < card dom (#)A;
+
+theorem :: MODAL_1:46
+card dom A < card dom A '&' B & card dom B < card dom A '&' B;
+
+definition let IT be MP-wff;
+attr IT is atomic means
+:: MODAL_1:def 17
+ex p st IT = @p;
+attr IT is negative means
+:: MODAL_1:def 18
+ex A st IT = 'not' A;
+attr IT is necessitive means
+:: MODAL_1:def 19
+ex A st IT = (#) A;
+attr IT is conjunctive means
+:: MODAL_1:def 20
+ex A,B st IT = A '&' B;
+end;
+
+definition
+cluster atomic MP-wff;
+cluster negative MP-wff;
+cluster necessitive MP-wff;
+cluster conjunctive MP-wff;
+end;
+
+scheme MP_Ind { Prop[Element of MP-WFF] }:
+        for A being Element of MP-WFF holds Prop[A]
+  provided
+  Prop[VERUM] and
+  for p being MP-variable holds Prop[@p] and
+  for A being Element of MP-WFF st Prop[A] holds Prop['not' A] and
+  for A being Element of MP-WFF st Prop[A] holds Prop[(#) A] and
+  for A, B being Element of MP-WFF st Prop[A] & Prop[B] holds Prop[A '&' B];
+
+theorem :: MODAL_1:47
+  for A being Element of MP-WFF holds
+                A = VERUM or A is atomic MP-wff or
+                A is negative MP-wff or A is necessitive MP-wff or
+                A is conjunctive MP-wff;
+
+
+theorem :: MODAL_1:48
+ A = VERUM or (ex p st A = @p) or (ex B st A = 'not' B) or (ex B st A = (#)
+B) or
+ (ex B,C st A = B '&' C);
+
+theorem :: MODAL_1:49
+@p <> 'not' A & @p <> (#)A & @p <> A '&' B;
+
+theorem :: MODAL_1:50
+'not' A <> (#)B & 'not' A <> B '&' C;
+
+theorem :: MODAL_1:51
+(#)A <> B '&' C;
+
+theorem :: MODAL_1:52
+  VERUM <> @p & VERUM <> 'not' A & VERUM <> (#)A & VERUM <> A '&' B;
+
+scheme MP_Func_Ex{ D() -> non empty set,
+                   d() -> Element of D(),
+                   F(Element of MP-variables) -> Element of D(),
+                   N,H(Element of D()) -> Element of D(),
+                   C((Element of D()),Element of D()) -> Element of D() }:
+ ex f being Function of MP-WFF, D() st
+    f.VERUM = d() &
+    (for p being MP-variable holds f.@p = F(p)) &
+    (for A being Element of MP-WFF holds f.('not' A) = N(f.A)) &
+    (for A being Element of MP-WFF holds f.((#)A) = H(f.A)) &
+    (for A,B being Element of MP-WFF holds f.(A '&' B) = C(f.A,f.B));

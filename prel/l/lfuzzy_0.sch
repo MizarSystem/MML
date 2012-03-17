@@ -1,0 +1,44 @@
+HIDDEN
+TARSKI
+XBOOLE_0
+RELAT_1
+FUNCT_1
+ZFMISC_1
+SUBSET_1
+RELSET_1
+FUNCT_2
+SETFAM_1
+STRUCT_0
+ORDERS_1
+YELLOW_0
+RELAT_2
+PARTFUN1
+LATTICES
+FUNCT_4
+FILTER_0
+EQREL_1
+FILTER_1
+LATTICE3
+#
+SupDistributivity
+SupDistributivity'
+FraenkelF'R'
+FraenkelF6''R
+SupCommutativity
+#
+G3 V13 ;V14 ;V15 ;V54 ;V55 ;V56 ;;M1 W1 ;;M1 W1 ;;M2 U1 F1 ;;;;
+R1 K74 F1 ;ËM2 F2 ;;;K74 F1 ;ËM2 F3 ;;;F4 B1 B2 ;P2 B2 ;;P1 B1 ;;K74 F1 ;ËM2 F2 ;;M2 F3 ;;;F4 B1 B2 ;&P1 B1 ;P2 B2 ;;;;;
+#
+G3 V13 ;V14 ;V15 ;V54 ;V55 ;V56 ;;M1 W1 ;;M1 W1 ;;M2 U1 F1 ;;;;
+R1 K74 F1 ;ËM2 F3 ;;;K74 F1 ;ËM2 F2 ;;;F4 B2 B1 ;P1 B2 ;;P2 B1 ;;K74 F1 ;ËM2 F2 ;;M2 F3 ;;;F4 B1 B2 ;&P1 B1 ;P2 B2 ;;;;;
+#
+M1 W1 ;;M1 W1 ;;M1 ;M1 ;;
+R1 ËM2 F1 ;;M2 F2 ;;;F3 B1 B2 ;P1 B1 B2 ;ËM2 F1 ;;M2 F2 ;;;F4 B1 B2 ;P1 B1 B2 ;;ùM2 F1 ;;ùM2 F2 ;;™&P1 B1 B2 ;™R1 F3 B1 B2 ;F4 B1 B2 ;;;;
+#
+M1 W1 ;;M1 W1 ;;M1 ;M1 ;;
+R1 ËM2 F1 ;;M2 F2 ;;;F3 B1 B2 ;P1 B1 B2 ;ËM2 F1 ;;M2 F2 ;;;F4 B1 B2 ;P2 B1 B2 ;;ùM2 F1 ;;ùM2 F2 ;;&™&P1 B1 B2 ;™P2 B1 B2 ;;™&P2 B1 B2 ;™P1 B1 B2 ;;;ùM2 F1 ;;ùM2 F2 ;;™&P1 B1 B2 ;™R1 F3 B1 B2 ;F4 B1 B2 ;;;;
+#
+G3 V13 ;V14 ;V15 ;V54 ;V55 ;V56 ;;M1 W1 ;;M1 W1 ;;M2 U1 F1 ;;;M2 U1 F1 ;;;;
+R1 K74 F1 ;ËM2 F2 ;;;K74 F1 ;ËM2 F3 ;;;F4 B1 B2 ;P2 B2 ;;P1 B1 ;;K74 F1 ;ËM2 F3 ;;;K74 F1 ;ËM2 F2 ;;;F5 B2 B1 ;P1 B2 ;;P2 B1 ;;;ùM2 F2 ;;ùM2 F3 ;;™&P1 B1 ;P2 B2 ;™R1 F4 B1 B2 ;F5 B1 B2 ;;;;
+#
+!

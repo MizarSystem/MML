@@ -1,0 +1,138 @@
+:: Basis of Vector Space
+::  by Wojciech A. Trybulec
+::
+:: Received July 27, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary VECTSP_1, FINSET_1, RLVECT_2, FUNCT_1, RLVECT_3, RLVECT_1, BOOLE,
+      FUNCT_2, ARYTM_1, RELAT_1, RLSUB_1, ZFMISC_1, TARSKI, ORDERS_1, HAHNBAN;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
+      FRAENKEL, FINSET_1, STRUCT_0, ORDINAL1, ORDERS_1, RLVECT_1, VECTSP_1,
+      RLVECT_2, VECTSP_4, VECTSP_5, VECTSP_6;
+ constructors ORDERS_1, RLVECT_2, VECTSP_5, VECTSP_6, MEMBERED, XBOOLE_0;
+ clusters VECTSP_1, VECTSP_4, RLVECT_2, STRUCT_0, RELSET_1, SUBSET_1, MEMBERED,
+      ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+reserve x,y,X,Y,Z for set;
+reserve GF for Field;
+reserve a,b for Element of GF;
+reserve V for VectSp of GF;
+reserve v,v1,v2,u for Vector of V;
+reserve A,B,C for Subset of V;
+reserve T for finite Subset of V;
+reserve l for Linear_Combination of A;
+reserve f,g for Function of the carrier of V, the carrier of GF;
+
+definition let GF; let V;
+  let IT be Subset of V;
+ attr IT is linearly-independent means
+:: VECTSP_7:def 1
+   for l being Linear_Combination of IT
+         st Sum(l) = 0.V holds Carrier(l) = {};
+ antonym IT is linearly-dependent;
+end;
+
+canceled;
+
+theorem :: VECTSP_7:2
+   A c= B & B is linearly-independent implies A is linearly-independent;
+
+theorem :: VECTSP_7:3
+ A is linearly-independent implies not 0.V in A;
+
+theorem :: VECTSP_7:4
+ {}(the carrier of V) is linearly-independent;
+
+theorem :: VECTSP_7:5
+   {v} is linearly-independent iff v <> 0.V;
+
+theorem :: VECTSP_7:6
+ {v1,v2} is linearly-independent implies v1 <> 0.V & v2 <> 0.V;
+
+theorem :: VECTSP_7:7
+   {v,0.V} is linearly-dependent & {0.V,v} is linearly-dependent;
+
+theorem :: VECTSP_7:8
+ v1 <> v2 & {v1,v2} is linearly-independent iff
+  v2 <> 0.V & for a holds v1 <> a * v2;
+
+theorem :: VECTSP_7:9
+   v1 <> v2 & {v1,v2} is linearly-independent iff
+  for a,b st a * v1 + b * v2 = 0.V holds a = 0.GF & b = 0.GF;
+
+definition let GF; let V; let A;
+ func Lin(A) -> strict Subspace of V means
+:: VECTSP_7:def 2
+
+    the carrier of it = {Sum(l) : not contradiction};
+end;
+
+canceled 2;
+
+theorem :: VECTSP_7:12
+ x in Lin(A) iff ex l st x = Sum(l);
+
+theorem :: VECTSP_7:13
+ x in A implies x in Lin(A);
+
+reserve l0 for Linear_Combination of {}(the carrier of V);
+
+theorem :: VECTSP_7:14
+   Lin({}(the carrier of V)) = (0).V;
+
+theorem :: VECTSP_7:15
+   Lin(A) = (0).V implies A = {} or A = {0.V};
+
+theorem :: VECTSP_7:16
+for W being strict Subspace of V st A = the carrier of W
+ holds Lin(A) = W;
+
+theorem :: VECTSP_7:17
+   for V being strict VectSp of GF, A being Subset of V st
+  A = the carrier of V holds Lin(A) = V;
+
+theorem :: VECTSP_7:18
+ A c= B implies Lin(A) is Subspace of Lin(B);
+
+theorem :: VECTSP_7:19
+  for V being strict VectSp of GF, A,B being Subset of V
+ st Lin(A) = V & A c= B holds Lin(B) = V;
+
+theorem :: VECTSP_7:20
+   Lin(A \/ B) = Lin(A) + Lin(B);
+
+theorem :: VECTSP_7:21
+   Lin(A /\ B) is Subspace of Lin(A) /\ Lin(B);
+
+theorem :: VECTSP_7:22
+ for V being VectSp of GF, A being Subset of V
+  st A is linearly-independent holds
+   ex B being Subset of V st A c= B &
+       B is linearly-independent & Lin(B) = the VectSpStr of V;
+
+theorem :: VECTSP_7:23
+ Lin(A) = V implies
+  ex B st B c= A & B is linearly-independent & Lin(B) = V;
+
+definition let GF; let V be VectSp of GF;
+ mode Basis of V -> Subset of V means
+:: VECTSP_7:def 3
+   it is linearly-independent & Lin(it) = the VectSpStr of V;
+end;
+
+canceled 3;
+
+theorem :: VECTSP_7:27
+  for V being VectSp of GF, A being Subset of V st
+  A is linearly-independent
+  holds ex I being Basis of V st A c= I;
+
+theorem :: VECTSP_7:28
+  for V being VectSp of GF, A being Subset of V st Lin(A) = V
+   holds ex I being Basis of V st I c= A;

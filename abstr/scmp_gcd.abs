@@ -1,0 +1,169 @@
+:: Recursive Euclide Algorithm
+::  by JingChao Chen
+::
+:: Received June 15, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_3, SCMPDS_2, AMI_1, SCMPDS_4, ARYTM_3, NAT_1, INT_1, INT_2,
+      ABSVALUE, SCMPDS_3, AMI_2, ARYTM_1, CARD_1, SCMFSA6A, SCMFSA_7, FUNCT_1,
+      RELAT_1, SCMPDS_1, FUNCOP_1, FUNCT_4, BOOLE, SCMP_GCD;
+ notation XBOOLE_0, ENUMSET1, XCMPLX_0, XREAL_0, RELAT_1, FUNCT_1, INT_1,
+      NAT_1, STRUCT_0, FUNCT_4, AMI_1, AMI_2, AMI_3, SCMPDS_1, SCMPDS_2,
+      SCMPDS_3, CARD_1, SCMPDS_4, GROUP_1, INT_2;
+ constructors DOMAIN_1, NAT_1, SCMPDS_1, SCMPDS_4, INT_2;
+ clusters AMI_1, INT_1, SCMPDS_2, SCMFSA_4, FRAENKEL, ORDINAL2, NUMBERS;
+ requirements NUMERALS, REAL, SUBSET, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve m,n for Nat,
+        a,b for Int_position,
+        i,j for Instruction of SCMPDS,
+        s,s1,s2 for State of SCMPDS,
+        I,J for Program-block;
+
+theorem :: SCMP_GCD:1
+  m>0 implies n hcf m= m hcf (n mod m);
+
+theorem :: SCMP_GCD:2
+  for i,j being Integer st i>=0 & j>0 holds
+      i gcd j= j gcd (i mod j);
+
+theorem :: SCMP_GCD:3
+  for m being Nat,j being Integer st inspos m=j holds
+     inspos(m+2) = 2*(abs(j) div 2)+4;
+
+definition let k be Nat;
+ func intpos k -> Int_position equals
+:: SCMP_GCD:def 1
+  dl.k;
+end;
+
+theorem :: SCMP_GCD:4
+ for n1,n2 be Nat st n1 <> n2 holds intpos n1 <> intpos n2;
+
+theorem :: SCMP_GCD:5
+ for n1,n2 be Nat holds DataLoc(n1,n2) = intpos(n1+n2);
+
+theorem :: SCMP_GCD:6
+ for s being State of SCMPDS,m1,m2 being Nat st IC s=inspos (m1+m2)
+ holds ICplusConst(s,-m2)=inspos m1;
+
+:: GBP:Global Base Pointer
+definition
+ func GBP -> Int_position equals
+:: SCMP_GCD:def 2
+  intpos 0;
+
+:: SBP:Stack Base(bottom) Pointer
+ func SBP -> Int_position equals
+:: SCMP_GCD:def 3
+  intpos 1;
+end;
+
+theorem :: SCMP_GCD:7
+  GBP <> SBP;
+
+theorem :: SCMP_GCD:8
+   card (I ';' i)= card I + 1;
+
+theorem :: SCMP_GCD:9
+   card (i ';' j)= 2;
+
+theorem :: SCMP_GCD:10
+   (I ';' i).inspos card I =i & inspos card I in dom (I ';' i);
+
+theorem :: SCMP_GCD:11
+   (I ';' i ';' J).inspos card I =i;
+
+begin :: The Construction of Recursive Euclide Algorithm
+:: Greatest Common Divisor
+:: gcd(x,y)     < x=(SBP,2) y=(SBP,3) >
+:: BEGIN
+:: if y=0 then gcd:=x else
+:: gcd:=gcd(y, x mod y)
+:: END
+definition
+ func GCD-Algorithm -> Program-block equals
+:: SCMP_GCD:def 4
+  ::Def04
+     (((GBP:=0) ';' (SBP := 7) ';' saveIC(SBP,RetIC) ';'
+     goto 2 ';' halt SCMPDS ) ';' (SBP,3)<=0_goto 9 ';'
+     ((SBP,6):=(SBP,3)) ';' Divide(SBP,2,SBP,3) ';'
+     ((SBP,7):=(SBP,3)) ';' ((SBP,4+RetSP):=(GBP,1))) ';'
+     AddTo(GBP,1,4) ';' saveIC(SBP,RetIC) ';'
+     (goto -7) ';' ((SBP,2):=(SBP,6)) ';' return SBP;
+end;
+
+begin :: The Computation of Recursive Euclide Algorithm
+
+theorem :: SCMP_GCD:12
+  card GCD-Algorithm = 15;
+
+theorem :: SCMP_GCD:13
+    n < 15 iff inspos n in dom GCD-Algorithm;
+
+theorem :: SCMP_GCD:14
+    GCD-Algorithm.inspos 0=GBP:=0 &
+    GCD-Algorithm.inspos 1=SBP:= 7 &
+    GCD-Algorithm.inspos 2=saveIC(SBP,RetIC) &
+    GCD-Algorithm.inspos 3=goto 2 &
+    GCD-Algorithm.inspos 4=halt SCMPDS &
+    GCD-Algorithm.inspos 5=(SBP,3)<=0_goto 9 &
+    GCD-Algorithm.inspos 6=(SBP,6):=(SBP,3) &
+    GCD-Algorithm.inspos 7=Divide(SBP,2,SBP,3) &
+    GCD-Algorithm.inspos 8=(SBP,7):=(SBP,3) &
+    GCD-Algorithm.inspos 9=(SBP,4+RetSP):=(GBP,1) &
+    GCD-Algorithm.inspos 10=AddTo(GBP,1,4) &
+    GCD-Algorithm.inspos 11=saveIC(SBP,RetIC) &
+    GCD-Algorithm.inspos 12=goto -7 &
+    GCD-Algorithm.inspos 13=(SBP,2):=(SBP,6) &
+    GCD-Algorithm.inspos 14=return SBP;
+
+theorem :: SCMP_GCD:15
+  for s being State of SCMPDS st Initialized GCD-Algorithm c= s
+  holds IC (Computation s).4 = inspos 5 &
+   (Computation s).4.GBP = 0 &
+   (Computation s).4.SBP = 7 &
+   (Computation s).4.intpos(7+RetIC) = inspos 2 &
+   (Computation s).4.intpos 9 = s.intpos 9 &
+   (Computation s).4.intpos 10 = s.intpos 10;
+
+theorem :: SCMP_GCD:16
+  for s being State of SCMPDS st GCD-Algorithm c= s
+  & IC s = inspos 5 & s.SBP >0 & s.GBP=0 &
+  s.DataLoc(s.SBP,3) >= 0 & s.DataLoc(s.SBP,2) >= s.DataLoc(s.SBP,3)
+  holds
+  ex n st CurInstr (Computation s).n = return SBP &
+   s.SBP=(Computation s).n.SBP & (Computation s).n.DataLoc(s.SBP,2)
+   =s.DataLoc(s.SBP,2) gcd s.DataLoc(s.SBP,3) &
+   (for j be Nat st 1<j & j <= s.SBP+1 holds
+       s.intpos j=(Computation s).n.intpos j);
+
+theorem :: SCMP_GCD:17
+  for s being State of SCMPDS st GCD-Algorithm c= s
+  & IC s = inspos 5 & s.SBP >0 & s.GBP=0 &
+   s.DataLoc(s.SBP,3) >= 0 & s.DataLoc(s.SBP,2) >= 0
+ holds
+  ex n st CurInstr (Computation s).n = return SBP &
+   s.SBP=(Computation s).n.SBP & (Computation s).n.DataLoc(s.SBP,2)
+   =s.DataLoc(s.SBP,2) gcd s.DataLoc(s.SBP,3) &
+    (for j be Nat st 1<j & j <= s.SBP+1 holds
+        s.intpos j=(Computation s).n.intpos j);
+
+begin :: The Correctness of Recursive Euclide Algorithm
+
+theorem :: SCMP_GCD:18
+    for s being State of SCMPDS st Initialized GCD-Algorithm c= s
+  for x, y being Integer st s.intpos 9 = x & s.intpos 10 = y
+  & x >= 0 & y >= 0 holds (Result s).intpos 9 = x gcd y;
+
+begin :: The Autonomy of Recursive Euclide Algorithm
+
+theorem :: SCMP_GCD:19
+    for p being FinPartState of SCMPDS,x,y being Integer st y >= 0 & x >= y
+  & p=(intpos 9,intpos 10) --> (x,y)
+  holds Initialized GCD-Algorithm +* p is autonomic;

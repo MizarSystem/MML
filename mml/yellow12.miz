@@ -1,0 +1,1586 @@
+:: On the Characterization of { H } ausdorff Spaces
+::  by Artur Korni{\l}owicz
+::
+:: Received April 18, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary TARSKI, RELAT_1, PARTFUN1, FUNCT_3, BOOLE, FUNCT_1, WAYBEL_0,
+      ORDERS_1, LATTICES, YELLOW_0, LATTICE3, ORDINAL2, RELAT_2, WAYBEL_3,
+      WAYBEL_2, QUANTAL1, WELLORD1, WAYBEL11, BHSP_3, SETFAM_1, PRE_TOPC,
+      CANTOR_1, SUBSET_1, CONNSP_2, TOPS_1, TOPS_2, T_0TOPSP, YELLOW_6,
+      YELLOW_9, RLVECT_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, STRUCT_0, RELAT_1,
+      FUNCT_1, RELSET_1, PARTFUN1, MCART_1, FUNCT_3, PRE_TOPC, TOPS_1, TOPS_2,
+      CANTOR_1, CONNSP_2, BORSUK_1, T_0TOPSP, WELLORD1, ORDERS_1, LATTICE3,
+      YELLOW_0, WAYBEL_0, YELLOW_3, YELLOW_4, WAYBEL_2, WAYBEL_3, YELLOW_6,
+      YELLOW_8, WAYBEL11, YELLOW_9;
+ constructors TOPS_1, TOPS_2, T_0TOPSP, BORSUK_2, CANTOR_1, YELLOW_4, WAYBEL_1,
+      WAYBEL_3, WAYBEL11, TOLER_1, ORDERS_3, YELLOW_8, YELLOW_9, XCMPLX_0,
+      MEMBERED;
+ clusters STRUCT_0, PRE_TOPC, BORSUK_1, RELSET_1, LATTICE3, YELLOW_0, WAYBEL_0,
+      YELLOW_3, YELLOW_4, WAYBEL_2, WAYBEL_3, YELLOW_9, SUBSET_1, XREAL_0,
+      MEMBERED, ZFMISC_1;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, FUNCT_1, PRE_TOPC, COMPTS_1, TOPS_2, CONNSP_2, BORSUK_1,
+      T_0TOPSP, LATTICE3, YELLOW_0, WAYBEL_0, WAYBEL_2, WAYBEL_3, WAYBEL11,
+      YELLOW_9, XBOOLE_0;
+ theorems FUNCT_1, FUNCT_2, FUNCT_3, RELAT_1, TOPS_1, TOPS_2, TOPS_3, PRE_TOPC,
+      STRUCT_0, SUBSET_1, COMPTS_1, CONNSP_2, BORSUK_1, ZFMISC_1, TARSKI,
+      ORDERS_1, LATTICE3, YELLOW_0, YELLOW_2, YELLOW_3, YELLOW_4, WAYBEL_0,
+      WAYBEL_1, WAYBEL_2, YELLOW_7, YELLOW_8, YELLOW_9, WAYBEL_8, WAYBEL_3,
+      TEX_2, SETFAM_1, CANTOR_1, BORSUK_2, XBOOLE_0, XBOOLE_1;
+
+begin  :: The properties of some functions
+
+ reserve A, B, X, Y for set;
+
+definition let X be empty set;
+ cluster union X -> empty;
+coherence by ZFMISC_1:2;
+end;
+
+Lm1:
+now
+  let S, T, x1, x2 be set such that
+A1:  x1 in S & x2 in T;
+A2:dom <:pr2(S,T),pr1(S,T):>
+        = dom pr2(S,T) /\ dom pr1(S,T) by FUNCT_3:def 8
+       .= dom pr2(S,T) /\ [:S,T:] by FUNCT_3:def 5
+       .= [:S,T:] /\ [:S,T:] by FUNCT_3:def 6
+       .= [:S,T:];
+    [x1,x2] in [:S,T:] by A1,ZFMISC_1:106;
+  hence <:pr2(S,T),pr1(S,T):>. [x1,x2]
+     = [pr2(S,T). [x1,x2],pr1(S,T). [x1,x2]] by A2,FUNCT_3:def 8
+    .= [x2,pr1(S,T). [x1,x2]] by A1,FUNCT_3:def 6
+    .= [x2,x1] by A1,FUNCT_3:def 5;
+end;
+
+theorem
+  (delta X).:A c= [:A,A:]
+  proof
+    set f = delta X;
+    let y be set;
+    assume y in f.:A;
+    then consider x being set such that
+A1:   x in dom f & x in A & y = f.x by FUNCT_1:def 12;
+      y = [x,x] by A1,FUNCT_3:def 7;
+    hence y in [:A,A:] by A1,ZFMISC_1:def 2;
+  end;
+
+theorem Th2:
+(delta X)"[:A,A:] c= A
+  proof
+    set f = delta X;
+    let x be set; assume
+A1:   x in f"[:A,A:];
+then A2: x in dom f & f.x in [:A,A:] by FUNCT_1:def 13;
+      f.x = [x,x] by A1,FUNCT_3:def 7;
+    hence x in A by A2,ZFMISC_1:106;
+  end;
+
+theorem
+  for A being Subset of X holds (delta X)"[:A,A:] = A
+  proof
+    let A be Subset of X;
+    set f = delta X;
+A1: dom f = X by FUNCT_3:def 7;
+    thus f"[:A,A:] c= A by Th2;
+    let x be set; assume
+A2:   x in A;
+    then f.x = [x,x] by FUNCT_3:def 7;
+    then f.x in [:A,A:] by A2,ZFMISC_1:106;
+    hence x in f"[:A,A:] by A1,A2,FUNCT_1:def 13;
+  end;
+
+theorem Th4:
+dom <:pr2(X,Y),pr1(X,Y):> = [:X,Y:] & rng <:pr2(X,Y),pr1(X,Y):> = [:Y,X:]
+  proof
+    set f = <:pr2(X,Y),pr1(X,Y):>;
+    thus
+A1: dom f = dom pr2(X,Y) /\ dom pr1(X,Y) by FUNCT_3:def 8
+         .= dom pr2(X,Y) /\ [:X,Y:] by FUNCT_3:def 5
+         .= [:X,Y:] /\ [:X,Y:] by FUNCT_3:def 6
+         .= [:X,Y:];
+   rng f c= [:rng pr2(X,Y),rng pr1(X,Y):] by FUNCT_3:71;
+    hence rng f c= [:Y,X:] by XBOOLE_1:1;
+    let y be set;
+    assume y in [:Y,X:];
+    then consider y1, y2 being set such that
+A2:   y1 in Y & y2 in X & y = [y1,y2] by ZFMISC_1:def 2;
+A3: [y2,y1] in dom f by A1,A2,ZFMISC_1:106;
+      f. [y2,y1] = y by A2,Lm1;
+    hence thesis by A3,FUNCT_1:def 5;
+  end;
+
+theorem Th5:
+<:pr2(X,Y),pr1(X,Y):>.:[:A,B:] c= [:B,A:]
+  proof
+    set f = <:pr2(X,Y),pr1(X,Y):>;
+A1: dom f = [:X,Y:] by Th4;
+    let y be set;
+    assume y in f.:[:A,B:];
+    then consider x being set such that
+A2:   x in dom f & x in [:A,B:] & y = f.x by FUNCT_1:def 12;
+    consider x1, x2 being set such that
+A3:   x1 in A & x2 in B & x = [x1,x2] by A2,ZFMISC_1:def 2;
+   x1 in X & x2 in Y by A1,A2,A3,ZFMISC_1:106;
+    then f.x = [x2,x1] by A3,Lm1;
+    hence y in [:B,A:] by A2,A3,ZFMISC_1:106;
+  end;
+
+theorem
+  for A being Subset of X, B being Subset of Y holds
+ <:pr2(X,Y),pr1(X,Y):>.:[:A,B:] = [:B,A:]
+  proof
+    let A be Subset of X,
+        B be Subset of Y;
+    set f = <:pr2(X,Y),pr1(X,Y):>;
+A1: dom f = [:X,Y:] by Th4;
+    thus f.:[:A,B:] c= [:B,A:] by Th5;
+    let y be set;
+    assume y in [:B,A:];
+    then consider y1, y2 being set such that
+A2:   y1 in B & y2 in A & y = [y1,y2] by ZFMISC_1:def 2;
+A3: [y2,y1] in [:A,B:] by A2,ZFMISC_1:106;
+      f. [y2,y1] = [y1,y2] by A2,Lm1;
+    hence thesis by A1,A2,A3,FUNCT_1:def 12;
+  end;
+
+theorem Th7:
+<:pr2(X,Y),pr1(X,Y):> is one-to-one
+  proof
+    set f = <:pr2(X,Y),pr1(X,Y):>;
+A1: dom f = [:X,Y:] by Th4;
+    let x, y be set such that
+A2:   x in dom f & y in dom f and
+A3:   f.x = f.y;
+    consider x1, x2 being set such that
+A4:   x1 in X & x2 in Y & x = [x1,x2] by A1,A2,ZFMISC_1:def 2;
+    consider y1, y2 being set such that
+A5:   y1 in X & y2 in Y & y = [y1,y2] by A1,A2,ZFMISC_1:def 2;
+      f.x = [x2,x1] & f.y = [y2,y1] by A4,A5,Lm1;
+    then x1 = y1 & x2 = y2 by A3,ZFMISC_1:33;
+    hence x = y by A4,A5;
+  end;
+
+definition let X, Y be set;
+ cluster <:pr2(X,Y),pr1(X,Y):> -> one-to-one;
+coherence by Th7;
+end;
+
+theorem Th8:
+<:pr2(X,Y),pr1(X,Y):>" = <:pr2(Y,X),pr1(Y,X):>
+  proof
+    set f = <:pr2(X,Y),pr1(X,Y):>,
+        g = <:pr2(Y,X),pr1(Y,X):>;
+A1: dom g = [:Y,X:] by Th4;
+A2: dom (f") = rng f by FUNCT_1:54
+            .= [:Y,X:] by Th4;
+      now
+      let x be set;
+      assume x in [:Y,X:];
+      then consider x1, x2 being set such that
+A3:     x1 in Y & x2 in X & x = [x1,x2] by ZFMISC_1:def 2;
+A4:   g.x = [x2,x1] by A3,Lm1;
+        dom f = [:X,Y:] by Th4;
+then A5:   [x2,x1] in dom f by A3,ZFMISC_1:106;
+        f. [x2,x1] = [x1,x2] by A3,Lm1;
+      hence f".x = g.x by A3,A4,A5,FUNCT_1:54;
+    end;
+    hence thesis by A1,A2,FUNCT_1:9;
+  end;
+
+
+begin  :: The properties of the relational structures
+
+theorem Th9:
+for L1 being Semilattice, L2 being non empty RelStr
+ for x, y being Element of L1, x1, y1 being Element of L2
+  st the RelStr of L1 = the RelStr of L2 & x = x1 & y = y1
+ holds x "/\" y = x1 "/\" y1
+  proof
+    let L1 be Semilattice,
+        L2 be non empty RelStr,
+        x, y be Element of L1,
+        x1, y1 be Element of L2 such that
+A1:   the RelStr of L1 = the RelStr of L2 & x = x1 & y = y1;
+A2: ex_inf_of {x,y}, L1 by YELLOW_0:21;
+A3: L2 is with_infima Poset by A1,WAYBEL_8:12,13,14,YELLOW_7:14;
+    thus x "/\" y = inf{x,y} by YELLOW_0:40
+               .= inf{x1,y1} by A1,A2,YELLOW_0:27
+               .= x1 "/\" y1 by A3,YELLOW_0:40;
+  end;
+
+theorem Th10:
+for L1 being sup-Semilattice, L2 being non empty RelStr
+ for x, y being Element of L1, x1, y1 being Element of L2
+  st the RelStr of L1 = the RelStr of L2 & x = x1 & y = y1
+ holds x "\/" y = x1 "\/" y1
+  proof
+    let L1 be sup-Semilattice,
+        L2 be non empty RelStr,
+        x, y be Element of L1,
+        x1, y1 be Element of L2 such that
+A1:   the RelStr of L1 = the RelStr of L2 & x = x1 & y = y1;
+A2: ex_sup_of {x,y}, L1 by YELLOW_0:20;
+A3: L2 is with_suprema Poset by A1,WAYBEL_8:12,13,14,YELLOW_7:15;
+    thus x "\/" y = sup{x,y} by YELLOW_0:41
+               .= sup{x1,y1} by A1,A2,YELLOW_0:26
+               .= x1 "\/" y1 by A3,YELLOW_0:41;
+  end;
+
+theorem Th11:
+for L1 being Semilattice, L2 being non empty RelStr
+ for X, Y being Subset of L1, X1, Y1 being Subset of L2
+  st the RelStr of L1 = the RelStr of L2 & X = X1 & Y = Y1
+ holds X "/\" Y = X1 "/\" Y1
+  proof
+    let L1 be Semilattice,
+        L2 be non empty RelStr,
+        X, Y be Subset of L1,
+        X1, Y1 be Subset of L2 such that
+A1:   the RelStr of L1 = the RelStr of L2 & X = X1 & Y = Y1;
+    set XY = { x "/\" y where x, y is Element of L1 : x in X & y in Y },
+        XY1 = { x "/\" y where x, y is Element of L2 : x in X1 & y in Y1 };
+A2: XY = XY1
+    proof
+      hereby
+        let a be set;
+        assume a in XY;
+        then consider x, y being Element of L1 such that
+A3:       a = x "/\" y & x in X & y in Y;
+        reconsider x1 = x, y1 = y as Element of L2 by A1;
+          a = x1 "/\" y1 by A1,A3,Th9;
+        hence a in XY1 by A1,A3;
+      end;
+      let a be set;
+      assume a in XY1;
+      then consider x, y being Element of L2 such that
+A4:     a = x "/\" y & x in X1 & y in Y1;
+      reconsider x1 = x, y1 = y as Element of L1 by A1;
+        a = x1 "/\" y1 by A1,A4,Th9;
+      hence a in XY by A1,A4;
+    end;
+    thus X "/\" Y = XY by YELLOW_4:def 4
+               .= X1 "/\" Y1 by A2,YELLOW_4:def 4;
+  end;
+
+theorem
+  for L1 being sup-Semilattice, L2 being non empty RelStr
+ for X, Y being Subset of L1, X1, Y1 being Subset of L2
+  st the RelStr of L1 = the RelStr of L2 & X = X1 & Y = Y1
+ holds X "\/" Y = X1 "\/" Y1
+  proof
+    let L1 be sup-Semilattice,
+        L2 be non empty RelStr,
+        X, Y be Subset of L1,
+        X1, Y1 be Subset of L2 such that
+A1:   the RelStr of L1 = the RelStr of L2 & X = X1 & Y = Y1;
+    set XY = { x "\/" y where x, y is Element of L1 : x in X & y in Y },
+        XY1 = { x "\/" y where x, y is Element of L2 : x in X1 & y in Y1 };
+A2: XY = XY1
+    proof
+      hereby
+        let a be set;
+        assume a in XY;
+        then consider x, y being Element of L1 such that
+A3:       a = x "\/" y & x in X & y in Y;
+        reconsider x1 = x, y1 = y as Element of L2 by A1;
+          a = x1 "\/" y1 by A1,A3,Th10;
+        hence a in XY1 by A1,A3;
+      end;
+      let a be set;
+      assume a in XY1;
+      then consider x, y being Element of L2 such that
+A4:     a = x "\/" y & x in X1 & y in Y1;
+      reconsider x1 = x, y1 = y as Element of L1 by A1;
+        a = x1 "\/" y1 by A1,A4,Th10;
+      hence a in XY by A1,A4;
+    end;
+    thus X "\/" Y = XY by YELLOW_4:def 3
+               .= X1 "\/" Y1 by A2,YELLOW_4:def 3;
+  end;
+
+theorem Th13:
+for L1 being antisymmetric up-complete (non empty reflexive RelStr),
+    L2 being non empty reflexive RelStr,
+    x being Element of L1, y being Element of L2
+  st the RelStr of L1 = the RelStr of L2 & x = y
+ holds waybelow x = waybelow y & wayabove x = wayabove y
+  proof
+    let L1 be antisymmetric up-complete (non empty reflexive RelStr),
+        L2 be non empty reflexive RelStr,
+        x be Element of L1,
+        y be Element of L2 such that
+A1:   the RelStr of L1 = the RelStr of L2 & x = y;
+A2: waybelow x = {z where z is Element of L1: z << x} by WAYBEL_3:def 3;
+A3: waybelow y = {z where z is Element of L2: z << y} by WAYBEL_3:def 3;
+    hereby
+      hereby
+        let a be set;
+        assume a in waybelow x;
+        then consider z being Element of L1 such that
+A4:       a = z & z << x by A2;
+        reconsider w = z as Element of L2 by A1;
+          L2 is antisymmetric by A1,WAYBEL_8:14;
+        then w << y by A1,A4,WAYBEL_8:8;
+        hence a in waybelow y by A3,A4;
+      end;
+      let a be set;
+      assume a in waybelow y;
+      then consider z being Element of L2 such that
+A5:     a = z & z << y by A3;
+      reconsider w = z as Element of L1 by A1;
+        L2 is up-complete antisymmetric by A1,WAYBEL_8:14,15;
+      then w << x by A1,A5,WAYBEL_8:8;
+      hence a in waybelow x by A2,A5;
+    end;
+A6: wayabove x = {z where z is Element of L1: z >> x} by WAYBEL_3:def 4;
+A7: wayabove y = {z where z is Element of L2: z >> y} by WAYBEL_3:def 4;
+    hereby
+      let a be set;
+      assume a in wayabove x;
+      then consider z being Element of L1 such that
+A8:     a = z & z >> x by A6;
+      reconsider w = z as Element of L2 by A1;
+        L2 is antisymmetric by A1,WAYBEL_8:14;
+      then w >> y by A1,A8,WAYBEL_8:8;
+      hence a in wayabove y by A7,A8;
+    end;
+    let a be set;
+    assume a in wayabove y;
+    then consider z being Element of L2 such that
+A9:   a = z & z >> y by A7;
+    reconsider w = z as Element of L1 by A1;
+      L2 is up-complete antisymmetric by A1,WAYBEL_8:14,15;
+    then w >> x by A1,A9,WAYBEL_8:8;
+    hence a in wayabove x by A6,A9;
+  end;
+
+theorem
+  for L1 being meet-continuous Semilattice, L2 being non empty reflexive RelStr
+ st the RelStr of L1 = the RelStr of L2 holds L2 is meet-continuous
+  proof
+    let L1 be meet-continuous Semilattice,
+        L2 be non empty reflexive RelStr; assume
+A1:   the RelStr of L1 = the RelStr of L2;
+    hence L2 is up-complete by WAYBEL_8:15;
+    let x be Element of L2,
+       D be non empty directed Subset of L2;
+    reconsider y = x as Element of L1 by A1;
+    reconsider E = D as non empty directed Subset of L1
+      by A1,WAYBEL_0:3;
+    reconsider yy = {y} as non empty directed Subset of L1 by WAYBEL_0:5;
+A2: {x} "/\" D = {y} "/\" E by A1,Th11;
+A3: ex_sup_of yy "/\" E, L1 by WAYBEL_0:75;
+      ex_sup_of E, L1 by WAYBEL_0:75;
+    then sup D = sup E by A1,YELLOW_0:26;
+    hence x "/\" sup D = y "/\" sup E by A1,Th9
+         .= sup ({y} "/\" E) by WAYBEL_2:def 6
+         .= sup ({x} "/\" D) by A1,A2,A3,YELLOW_0:26;
+  end;
+
+theorem
+  for L1 being continuous antisymmetric (non empty reflexive RelStr),
+    L2 being non empty reflexive RelStr st the RelStr of L1 = the RelStr of L2
+  holds L2 is continuous
+  proof
+    let L1 be continuous antisymmetric (non empty reflexive RelStr),
+        L2 be non empty reflexive RelStr such that
+A1:  the RelStr of L1 = the RelStr of L2;
+    hereby
+      let y be Element of L2;
+      reconsider x = y as Element of L1 by A1;
+        waybelow x = waybelow y by A1,Th13;
+      hence waybelow y is non empty directed by A1,WAYBEL_0:3;
+    end;
+    thus L2 is up-complete by A1,WAYBEL_8:15;
+    let y be Element of L2;
+    reconsider x = y as Element of L1 by A1;
+A2: ex_sup_of waybelow x, L1 by WAYBEL_0:75;
+A3: waybelow x = waybelow y by A1,Th13;
+      x = sup waybelow x by WAYBEL_3:def 5;
+    hence y = sup waybelow y by A1,A2,A3,YELLOW_0:26;
+  end;
+
+theorem
+  for L1, L2 being RelStr, A being Subset of L1, J being Subset of L2
+  st the RelStr of L1 = the RelStr of L2 & A = J holds
+ subrelstr A = subrelstr J
+  proof
+    let L1, L2 be RelStr,
+        A be Subset of L1,
+        J be Subset of L2 such that
+A1:   the RelStr of L1 = the RelStr of L2 & A = J;
+A2: the carrier of subrelstr A = A by YELLOW_0:def 15
+      .= the carrier of subrelstr J by A1,YELLOW_0:def 15;
+    then the InternalRel of subrelstr A
+       = (the InternalRel of L2)|_2(the carrier of subrelstr J)
+          by A1,YELLOW_0:def 14
+      .= the InternalRel of subrelstr J by YELLOW_0:def 14;
+    hence subrelstr A = subrelstr J by A2;
+  end;
+
+theorem
+  for L1, L2 being non empty RelStr,
+    A being SubRelStr of L1, J being SubRelStr of L2
+ st the RelStr of L1 = the RelStr of L2 & the RelStr of A = the RelStr of J &
+    A is meet-inheriting holds
+ J is meet-inheriting
+  proof
+    let L1, L2 be non empty RelStr,
+        A be SubRelStr of L1,
+        J be SubRelStr of L2 such that
+A1: the RelStr of L1 = the RelStr of L2 & the RelStr of A = the RelStr of J and
+A2: for x, y being Element of L1 st
+     x in the carrier of A & y in the carrier of A &
+     ex_inf_of {x,y},L1 holds inf {x,y} in the carrier of A;
+    let x, y be Element of L2 such that
+A3:   x in the carrier of J & y in the carrier of J and
+A4:   ex_inf_of {x,y},L2;
+    reconsider x1 = x, y1 = y as Element of L1 by A1;
+      ex_inf_of {x1,y1},L1 by A1,A4,YELLOW_0:14;
+    then inf {x1,y1} in the carrier of A by A1,A2,A3;
+    hence inf {x,y} in the carrier of J by A1,A4,YELLOW_0:27;
+  end;
+
+theorem
+  for L1, L2 being non empty RelStr,
+    A being SubRelStr of L1, J being SubRelStr of L2
+ st the RelStr of L1 = the RelStr of L2 & the RelStr of A = the RelStr of J &
+    A is join-inheriting holds
+ J is join-inheriting
+  proof
+    let L1, L2 be non empty RelStr,
+        A be SubRelStr of L1,
+        J be SubRelStr of L2 such that
+A1: the RelStr of L1 = the RelStr of L2 & the RelStr of A = the RelStr of J and
+A2: for x, y being Element of L1 st
+     x in the carrier of A & y in the carrier of A &
+     ex_sup_of {x,y},L1 holds sup {x,y} in the carrier of A;
+    let x, y be Element of L2 such that
+A3:   x in the carrier of J & y in the carrier of J and
+A4:   ex_sup_of {x,y},L2;
+    reconsider x1 = x, y1 = y as Element of L1 by A1;
+      ex_sup_of {x1,y1},L1 by A1,A4,YELLOW_0:14;
+    then sup {x1,y1} in the carrier of A by A1,A2,A3;
+    hence sup {x,y} in the carrier of J by A1,A4,YELLOW_0:26;
+  end;
+
+theorem
+  for L1 being up-complete antisymmetric (non empty reflexive RelStr),
+    L2 being non empty reflexive RelStr,
+    X being Subset of L1, Y being Subset of L2
+  st the RelStr of L1 = the RelStr of L2 & X = Y & X has_the_property_(S)
+ holds Y has_the_property_(S)
+  proof
+    let L1 be up-complete antisymmetric (non empty reflexive RelStr),
+        L2 be non empty reflexive RelStr,
+        X be Subset of L1,
+        Y be Subset of L2 such that
+A1:  the RelStr of L1 = the RelStr of L2 & X = Y and
+A2:  for D being non empty directed Subset of L1 st sup D in X
+      ex y being Element of L1 st y in D &
+       for x being Element of L1 st x in D & x >= y holds x in X;
+    let E be non empty directed Subset of L2 such that
+A3:   sup E in Y;
+    reconsider D = E as non empty directed Subset of L1
+      by A1,WAYBEL_0:3;
+      ex_sup_of D, L1 by WAYBEL_0:75;
+    then sup D in X by A1,A3,YELLOW_0:26;
+    then consider y being Element of L1 such that
+A4:   y in D and
+A5:   for x being Element of L1 st x in D & x >= y holds x in X by A2;
+    reconsider y2 = y as Element of L2 by A1;
+    take y2;
+    thus y2 in E by A4;
+    let x2 be Element of L2;
+    reconsider x1 = x2 as Element of L1 by A1;
+    assume x2 in E & x2 >= y2;
+    then x1 in D & x1 >= y by A1,YELLOW_0:1;
+    hence x2 in Y by A1,A5;
+  end;
+
+theorem
+  for L1 being up-complete antisymmetric (non empty reflexive RelStr),
+    L2 being non empty reflexive RelStr,
+    X being Subset of L1, Y being Subset of L2
+  st the RelStr of L1 = the RelStr of L2 & X = Y & X is directly_closed
+ holds Y is directly_closed
+  proof
+    let L1 be up-complete antisymmetric (non empty reflexive RelStr),
+        L2 be non empty reflexive RelStr,
+        X be Subset of L1,
+        Y be Subset of L2 such that
+A1:  the RelStr of L1 = the RelStr of L2 & X = Y and
+A2:  for D being non empty directed Subset of L1 st D c= X holds sup D in X;
+    let E be non empty directed Subset of L2 such that
+A3:   E c= Y;
+    reconsider D = E as non empty directed Subset of L1
+      by A1,WAYBEL_0:3;
+A4: ex_sup_of D, L1 by WAYBEL_0:75;
+      sup D in X by A1,A2,A3;
+    hence sup E in Y by A1,A4,YELLOW_0:26;
+  end;
+
+theorem
+  for N being antisymmetric with_infima RelStr, D, E being Subset of N
+ for X being upper Subset of N st D misses X holds D "/\" E misses X
+  proof
+    let N be antisymmetric with_infima RelStr,
+        D, E be Subset of N,
+        X be upper Subset of N such that
+A1:  D /\ X = {};
+    assume (D "/\" E) /\ X <> {};
+    then consider k being set such that
+A2:   k in (D "/\" E) /\ X by XBOOLE_0:def 1;
+    reconsider k as Element of N by A2;
+A3: D "/\" E = { d "/\" e where d, e is Element of N : d in D & e in E }
+     by YELLOW_4:def 4;
+A4: k in D "/\" E & k in X by A2,XBOOLE_0:def 3;
+    then consider d, e being Element of N such that
+A5:   k = d "/\" e & d in D & e in E by A3;
+      d "/\" e <= d by YELLOW_0:23;
+    then d in X by A4,A5,WAYBEL_0:def 20;
+    hence thesis by A1,A5,XBOOLE_0:def 3;
+  end;
+
+theorem
+  for R being reflexive non empty RelStr holds
+ id the carrier of R c= (the InternalRel of R) /\ the InternalRel of (R~)
+  proof
+    let R be reflexive non empty RelStr;
+A1: R~ = RelStr(#the carrier of R, (the InternalRel of R)~#)
+      by LATTICE3:def 5;
+    let a be set; assume
+A2:   a in id the carrier of R;
+    then consider y, z being set such that
+A3:   a = [y,z] by RELAT_1:def 1;
+      y in the carrier of R & z in the carrier of R by A2,A3,ZFMISC_1:106;
+    then reconsider y, z as Element of R;
+A4: y = z by A2,A3,RELAT_1:def 10;
+      y <= z by A2,A3,RELAT_1:def 10;
+then A5: a in the InternalRel of R by A3,ORDERS_1:def 9;
+    then a in the InternalRel of R~ by A1,A3,A4,RELAT_1:def 7;
+    hence a in (the InternalRel of R) /\ the InternalRel of R~
+      by A5,XBOOLE_0:def 3;
+  end;
+
+theorem
+  for R being antisymmetric RelStr holds
+ (the InternalRel of R) /\ the InternalRel of (R~) c= id the carrier of R
+  proof
+    let R be antisymmetric RelStr;
+A1: R~ = RelStr(#the carrier of R, (the InternalRel of R)~#)
+      by LATTICE3:def 5;
+    let a be set; assume
+A2:   a in (the InternalRel of R) /\ the InternalRel of R~;
+then A3: a in the InternalRel of R by XBOOLE_0:def 3;
+    then consider y, z being set such that
+A4:   a = [y,z] by RELAT_1:def 1;
+A5: y in the carrier of R & z in
+ the carrier of R by A3,A4,ZFMISC_1:106;
+    then reconsider y, z as Element of R;
+A6: y <= z by A3,A4,ORDERS_1:def 9;
+      a in the InternalRel of R~ by A2,XBOOLE_0:def 3;
+    then [z,y] in the InternalRel of R by A1,A4,RELAT_1:def 7;
+    then z <= y by ORDERS_1:def 9;
+    then y = z by A6,ORDERS_1:25;
+    hence a in id the carrier of R by A4,A5,RELAT_1:def 10;
+  end;
+
+theorem Th24:
+for R being upper-bounded Semilattice, X being Subset of [:R,R:] st
+ ex_inf_of (inf_op R).:X,R holds inf_op R preserves_inf_of X
+  proof
+    let R be upper-bounded Semilattice;
+    set f = inf_op R;
+A1: dom f = the carrier of [:R,R:] by FUNCT_2:def 1;
+then A2: dom f = [:the carrier of R,the carrier of R:] by YELLOW_3:def 2;
+    let X be Subset of [:R,R:] such that
+A3:   ex_inf_of f.:X,R and
+A4:   ex_inf_of X,[:R,R:];
+    thus ex_inf_of f.:X,R by A3;
+      inf X is_<=_than X by A4,YELLOW_0:def 10;
+then A5: f.inf X is_<=_than f.:X by YELLOW_2:15;
+      for b being Element of R st b is_<=_than f.:X holds f.inf X >= b
+    proof
+      let b be Element of R such that
+A6:     b is_<=_than f.:X;
+        X is_>=_than [b,b]
+      proof
+        let c be Element of [:R,R:] such that
+A7:       c in X;
+        consider s, t being set such that
+A8:      s in the carrier of R & t in the carrier of R & c = [s,t]
+          by A1,A2,ZFMISC_1:def 2;
+        reconsider s, t as Element of R by A8;
+          f.c in f.:X by A1,A7,FUNCT_1:def 12;
+then A9:     b <= f.c by A6,LATTICE3:def 8;
+A10:     f.c = s "/\" t by A8,WAYBEL_2:def 4;
+          s "/\" t <= s & s "/\" t <= t by YELLOW_0:23;
+        then b <= s & b <= t by A9,A10,ORDERS_1:26;
+        hence [b,b] <= c by A8,YELLOW_3:11;
+      end;
+      then [b,b] <= inf X by A4,YELLOW_0:def 10;
+      then f. [b,b] <= f.inf X by WAYBEL_1:def 2;
+      then b "/\" b <= f.inf X by WAYBEL_2:def 4;
+      hence b <= f.inf X by YELLOW_0:25;
+    end;
+    hence inf (f.:X) = f.inf X by A3,A5,YELLOW_0:def 10;
+  end;
+
+definition let R be complete Semilattice;
+ cluster inf_op R -> infs-preserving;
+coherence
+  proof
+    let X be Subset of [:R,R:] such that
+A1:   ex_inf_of X,[:R,R:];
+    thus
+     ex_inf_of (inf_op R).:X,R by YELLOW_0:17;
+    then inf_op R preserves_inf_of X by Th24;
+    hence thesis by A1,WAYBEL_0:def 30;
+  end;
+end;
+
+theorem Th25:
+for R being lower-bounded sup-Semilattice, X being Subset of [:R,R:] st
+ ex_sup_of (sup_op R).:X,R holds sup_op R preserves_sup_of X
+  proof
+    let R be lower-bounded sup-Semilattice;
+    set f = sup_op R;
+A1: dom f = the carrier of [:R,R:] by FUNCT_2:def 1;
+then A2: dom f = [:the carrier of R,the carrier of R:] by YELLOW_3:def 2;
+    let X be Subset of [:R,R:] such that
+A3:   ex_sup_of f.:X,R and
+A4:   ex_sup_of X,[:R,R:];
+    thus ex_sup_of f.:X,R by A3;
+      X is_<=_than sup X by A4,YELLOW_0:def 9;
+then A5: f.:X is_<=_than f.sup X by YELLOW_2:16;
+      for b being Element of R st b is_>=_than f.:X holds f.sup X <= b
+    proof
+      let b be Element of R such that
+A6:     b is_>=_than f.:X;
+A7:   b <= b;
+        X is_<=_than [b,b]
+      proof
+        let c be Element of [:R,R:] such that
+A8:       c in X;
+        consider s, t being set such that
+A9:      s in the carrier of R & t in the carrier of R & c = [s,t]
+          by A1,A2,ZFMISC_1:def 2;
+        reconsider s, t as Element of R by A9;
+          f.c in f.:X by A1,A8,FUNCT_1:def 12;
+then A10:     f.c <= b by A6,LATTICE3:def 9;
+A11:     f.c = s "\/" t by A9,WAYBEL_2:def 5;
+          s <= s "\/" t & t <= s "\/" t by YELLOW_0:22;
+        then s <= b & t <= b by A10,A11,ORDERS_1:26;
+        hence c <= [b,b] by A9,YELLOW_3:11;
+      end;
+      then sup X <= [b,b] by A4,YELLOW_0:def 9;
+      then f.sup X <= f. [b,b] by WAYBEL_1:def 2;
+      then f.sup X <= b "\/" b by WAYBEL_2:def 5;
+      hence f.sup X <= b by A7,YELLOW_0:24;
+    end;
+    hence sup (f.:X) = f.sup X by A3,A5,YELLOW_0:def 9;
+  end;
+
+definition let R be complete sup-Semilattice;
+ cluster sup_op R -> sups-preserving;
+coherence
+  proof
+    let X be Subset of [:R,R:] such that
+A1:   ex_sup_of X,[:R,R:];
+    thus
+     ex_sup_of (sup_op R).:X,R by YELLOW_0:17;
+    then sup_op R preserves_sup_of X by Th25;
+    hence thesis by A1,WAYBEL_0:def 31;
+  end;
+end;
+
+theorem
+  for N being Semilattice, A being Subset of N st
+ subrelstr A is meet-inheriting holds A is filtered
+  proof
+    let N be Semilattice,
+        A be Subset of N such that
+A1: subrelstr A is meet-inheriting;
+    let x, y be Element of N such that
+A2:   x in A & y in A;
+A3: the carrier of subrelstr A = A by YELLOW_0:def 15;
+    take x"/\"y;
+      ex_inf_of {x,y},N by YELLOW_0:21;
+    then inf {x,y} in the carrier of subrelstr A by A1,A2,A3,YELLOW_0:def 16;
+    hence x"/\"y in A by A3,YELLOW_0:40;
+    thus x"/\"y <= x & x"/\"y <= y by YELLOW_0:23;
+  end;
+
+theorem
+  for N being sup-Semilattice, A being Subset of N st
+ subrelstr A is join-inheriting holds A is directed
+  proof
+    let N be sup-Semilattice,
+        A be Subset of N such that
+A1: subrelstr A is join-inheriting;
+    let x, y be Element of N such that
+A2:   x in A & y in A;
+A3: the carrier of subrelstr A = A by YELLOW_0:def 15;
+    take x"\/"y;
+      ex_sup_of {x,y},N by YELLOW_0:20;
+    then sup {x,y} in the carrier of subrelstr A by A1,A2,A3,YELLOW_0:def 17;
+    hence x"\/"y in A by A3,YELLOW_0:41;
+    thus x <= x"\/"y & y <= x"\/"y by YELLOW_0:22;
+  end;
+
+theorem
+  for N being transitive RelStr, A, J being Subset of N
+ st A is_coarser_than uparrow J holds uparrow A c= uparrow J
+  proof
+    let N be transitive RelStr,
+        A, J be Subset of N such that
+A1:   A is_coarser_than uparrow J;
+    let w be set; assume
+A2:   w in uparrow A;
+    then reconsider w1 = w as Element of N;
+    consider t being Element of N such that
+A3:   t <= w1 & t in A by A2,WAYBEL_0:def 16;
+    consider t1 being Element of N such that
+A4:   t1 in uparrow J & t1 <= t by A1,A3,YELLOW_4:def 2;
+    consider t2 being Element of N such that
+A5:   t2 <= t1 & t2 in J by A4,WAYBEL_0:def 16;
+      t2 <= t by A4,A5,ORDERS_1:26;
+    then t2 <= w1 by A3,ORDERS_1:26;
+    hence w in uparrow J by A5,WAYBEL_0:def 16;
+  end;
+
+theorem
+  for N being transitive RelStr, A, J being Subset of N
+ st A is_finer_than downarrow J holds downarrow A c= downarrow J
+  proof
+    let N be transitive RelStr,
+        A, J be Subset of N such that
+A1:   A is_finer_than downarrow J;
+    let w be set; assume
+A2:   w in downarrow A;
+    then reconsider w1 = w as Element of N;
+    consider t being Element of N such that
+A3:   w1 <= t & t in A by A2,WAYBEL_0:def 15;
+    consider t1 being Element of N such that
+A4:   t1 in downarrow J & t <= t1 by A1,A3,YELLOW_4:def 1;
+    consider t2 being Element of N such that
+A5:   t1 <= t2 & t2 in J by A4,WAYBEL_0:def 15;
+      w1 <= t1 by A3,A4,ORDERS_1:26;
+    then w1 <= t2 by A5,ORDERS_1:26;
+    hence w in downarrow J by A5,WAYBEL_0:def 15;
+  end;
+
+theorem
+  for N being non empty reflexive RelStr
+ for x being Element of N, X being Subset of N st x in X holds
+  uparrow x c= uparrow X
+  proof
+    let N be non empty reflexive RelStr,
+        x be Element of N,
+        X be Subset of N such that
+A1:   x in X;
+    let a be set; assume
+A2:   a in uparrow x;
+    then reconsider b = a as Element of N;
+      x <= b by A2,WAYBEL_0:18;
+    hence a in uparrow X by A1,WAYBEL_0:def 16;
+  end;
+
+theorem
+  for N being non empty reflexive RelStr
+ for x being Element of N, X being Subset of N st x in X holds
+  downarrow x c= downarrow X
+  proof
+    let N be non empty reflexive RelStr,
+        x be Element of N,
+        X be Subset of N such that
+A1:   x in X;
+    let a be set; assume
+A2:   a in downarrow x;
+    then reconsider b = a as Element of N;
+      b <= x by A2,WAYBEL_0:17;
+    hence a in downarrow X by A1,WAYBEL_0:def 15;
+  end;
+
+
+begin  :: On the Hausdorff Spaces
+
+ reserve R, S, T for non empty TopSpace;
+
+definition let T be non empty TopStruct;
+ cluster the TopStruct of T -> non empty;
+coherence by STRUCT_0:def 1;
+end;
+
+definition let T be TopSpace;
+ cluster the TopStruct of T -> TopSpace-like;
+coherence
+  proof
+    set IT = the TopStruct of T;
+    thus the carrier of IT in the topology of IT by PRE_TOPC:def 1;
+    thus for a being Subset-Family of IT
+      st a c= the topology of IT
+       holds union a in the topology of IT by PRE_TOPC:def 1;
+    thus thesis by PRE_TOPC:def 1;
+  end;
+end;
+
+theorem Th32:
+for S, T being TopStruct, B being Basis of S st
+ the TopStruct of S = the TopStruct of T holds B is Basis of T
+  proof
+    let S, T be TopStruct,
+        B be Basis of S; assume
+A1:   the TopStruct of S = the TopStruct of T;
+then A2: the topology of T c= UniCl B by CANTOR_1:def 2;
+      B c= the topology of S by CANTOR_1:def 2;
+    hence B is Basis of T by A1,A2,CANTOR_1:def 2;
+  end;
+
+theorem Th33:
+for S, T being TopStruct, B being prebasis of S st
+ the TopStruct of S = the TopStruct of T holds B is prebasis of T
+  proof
+    let S, T be TopStruct,
+        B be prebasis of S; assume
+A1:  the TopStruct of S = the TopStruct of T;
+then A2: B c= the topology of T by CANTOR_1:def 5;
+    consider F being Basis of S such that
+A3:   F c= FinMeetCl B by CANTOR_1:def 5;
+      F is Basis of T by A1,Th32;
+    hence B is prebasis of T by A1,A2,A3,CANTOR_1:def 5;
+  end;
+
+theorem Th34:
+for J being Basis of T holds J is non empty
+  proof
+    let J be Basis of T;
+    assume J is empty;
+then A1: UniCl J = {{}} by YELLOW_9:16;
+A2: the topology of T c= UniCl J by CANTOR_1:def 2;
+      the carrier of T in the topology of T by PRE_TOPC:def 1;
+    hence contradiction by A1,A2,TARSKI:def 1;
+  end;
+
+definition let T be non empty TopSpace;
+ cluster -> non empty Basis of T;
+coherence by Th34;
+end;
+
+theorem Th35:
+for x being Point of T, J being Basis of x holds J is non empty
+  proof
+    let x be Point of T,
+        J be Basis of x;
+A1: x in [#]T by PRE_TOPC:13;
+      [#]T is open by TOPS_1:53;
+    then consider W being Subset of T such that
+A2:   W in J & W c= [#]T by A1,YELLOW_8:22;
+    thus thesis by A2;
+  end;
+
+definition let T be non empty TopSpace,
+               x be Point of T;
+ cluster -> non empty Basis of x;
+coherence by Th35;
+end;
+
+theorem
+  for S1, T1, S2, T2 being non empty TopSpace,
+    f being map of S1, S2, g being map of T1, T2 st
+  the TopStruct of S1 = the TopStruct of T1 &
+  the TopStruct of S2 = the TopStruct of T2 & f = g & f is continuous holds
+ g is continuous
+  proof
+    let S1, T1, S2, T2 be non empty TopSpace,
+        f be map of S1, S2,
+        g be map of T1, T2 such that
+A1:   the TopStruct of S1 = the TopStruct of T1 and
+A2:   the TopStruct of S2 = the TopStruct of T2 and
+A3:   f = g & f is continuous;
+      now
+      let P2 be Subset of T2 such that
+A4:     P2 is closed;
+      reconsider P1 = P2 as Subset of S2 by A2;
+        P1 is closed by A2,A4,TOPS_3:79;
+      then f"P1 is closed by A3,PRE_TOPC:def 12;
+      hence g"P2 is closed by A1,A3,TOPS_3:79;
+    end;
+    hence thesis by PRE_TOPC:def 12;
+  end;
+
+theorem Th37:
+id the carrier of T =
+  {p where p is Point of [:T,T:]: pr1(the carrier of T,the carrier of T).p
+                                = pr2(the carrier of T,the carrier of T).p}
+  proof
+    set f = pr1(the carrier of T,the carrier of T),
+        g = pr2(the carrier of T,the carrier of T);
+A1: the carrier of [:T,T:] = [:the carrier of T,the carrier of T:]
+      by BORSUK_1:def 5;
+    hereby
+      let a be set; assume
+A2:     a in id the carrier of T;
+      then consider x, y being set such that
+A3:     x in the carrier of T & y in the carrier of T & a = [x,y]
+          by ZFMISC_1:def 2;
+A4:   x = y by A2,A3,RELAT_1:def 10;
+        f.a = x by A3,FUNCT_3:def 5
+         .= g.a by A3,A4,FUNCT_3:def 6;
+      hence a in {p where p is Point of [:T,T:]: f.p = g.p} by A1,A2;
+    end;
+    let a be set; assume
+     a in {p where p is Point of [:T,T:]: f.p = g.p};
+    then consider p being Point of [:T,T:] such that
+A5:   a = p & f.p = g.p;
+    consider x, y being set such that
+A6:   x in the carrier of T & y in the carrier of T & p = [x,y]
+        by A1,ZFMISC_1:def 2;
+      x = f.p by A6,FUNCT_3:def 5
+     .= y by A5,A6,FUNCT_3:def 6;
+    hence a in id the carrier of T by A5,A6,RELAT_1:def 10;
+  end;
+
+theorem Th38:
+delta the carrier of T is continuous map of T, [:T,T:]
+  proof
+      the carrier of [:T,T:] = [: the carrier of T, the carrier of T:]
+      by BORSUK_1:def 5;
+    then reconsider f = delta the carrier of T as map of T, [:T,T:];
+      f is continuous
+    proof
+      let W be Point of T,
+          G be a_neighborhood of f.W;
+        Int G is open by TOPS_1:51;
+      then consider A being Subset-Family of [:T,T:] such that
+A1:     Int G = union A and
+A2:     for e being set st e in A ex X1, Y1 being Subset of T st
+          e = [:X1,Y1:] & X1 is open & Y1 is open by BORSUK_1:45;
+        f.W in Int G by CONNSP_2:def 1;
+      then consider Z being set such that
+A3:     f.W in Z & Z in A by A1,TARSKI:def 4;
+      consider X1, Y1 being Subset of T such that
+A4:      Z = [:X1,Y1:] & X1 is open & Y1 is open by A2,A3;
+        X1 /\ Y1 is a_neighborhood of W
+      proof
+          f.W = [W,W] by FUNCT_3:def 7;
+        then W in X1 & W in Y1 by A3,A4,ZFMISC_1:106;
+then A5:     W in X1 /\ Y1 by XBOOLE_0:def 3;
+          X1 /\ Y1 is open by A4,TOPS_1:38;
+        hence W in Int (X1 /\ Y1) by A5,TOPS_1:55;
+      end;
+      then reconsider H = X1 /\ Y1 as a_neighborhood of W;
+      take H;
+A6:   f.:H c= Int G
+      proof
+        let y be set;
+        assume y in f.:H;
+        then consider x being set such that
+A7:      x in dom f & x in H & y = f.x by FUNCT_1:def 12;
+A8:     x in X1 & x in Y1 by A7,XBOOLE_0:def 3;
+          y = [x,x] by A7,FUNCT_3:def 7;
+        then y in Z by A4,A8,ZFMISC_1:106;
+        hence y in Int G by A1,A3,TARSKI:def 4;
+      end;
+        Int G c= G by TOPS_1:44;
+      hence f.:H c= G by A6,XBOOLE_1:1;
+    end;
+    hence thesis;
+  end;
+
+theorem Th39:
+pr1(the carrier of S,the carrier of T) is continuous map of [:S,T:], S
+  proof
+    set I = the carrier of S,
+        J = the carrier of T;
+A1: I = [#]S & J = [#]T by PRE_TOPC:12;
+A2: the carrier of [:S,T:] = [:I,J:] by BORSUK_1:def 5;
+    then reconsider f = pr1(I,J) as map of [:S,T:], S;
+      f is continuous
+    proof
+      let w be Point of [:S,T:],
+          G be a_neighborhood of f.w;
+      consider x, y being set such that
+A3:     x in I & y in J & w = [x,y] by A2,ZFMISC_1:def 2;
+      set H = [:Int G, [#]T:];
+A4:   Int H = [:Int Int G, Int [#]T:] by BORSUK_1:47
+           .= [:Int G, Int [#]T:] by TOPS_1:45
+           .= [:Int G, [#]T:] by TOPS_1:43;
+A5:   f.w in Int G by CONNSP_2:def 1;
+        H is a_neighborhood of w
+      proof
+          f.w = x by A3,FUNCT_3:def 5;
+        hence w in Int H by A1,A3,A4,A5,ZFMISC_1:def 2;
+      end;
+      then reconsider H as a_neighborhood of w;
+      take H;
+      reconsider X = Int G as non empty Subset of S
+        by CONNSP_2:def 1;
+        [:X,[#]T:] <> {};
+      then f.:H = Int G by BORSUK_1:12;
+      hence f.:H c= G by TOPS_1:44;
+    end;
+    hence thesis;
+  end;
+
+theorem Th40:
+pr2(the carrier of S,the carrier of T) is continuous map of [:S,T:], T
+  proof
+    set I = the carrier of S,
+        J = the carrier of T;
+A1: I = [#]S & J = [#]T by PRE_TOPC:12;
+A2: the carrier of [:S,T:] = [:I,J:] by BORSUK_1:def 5;
+    then reconsider f = pr2(I,J) as map of [:S,T:], T;
+      f is continuous
+    proof
+      let w be Point of [:S,T:],
+          G be a_neighborhood of f.w;
+      consider x, y being set such that
+A3:     x in I & y in J & w = [x,y] by A2,ZFMISC_1:def 2;
+      set H = [:[#]S,Int G:];
+A4:   Int H = [:Int [#]S,Int Int G:] by BORSUK_1:47
+           .= [:Int [#]S,Int G:] by TOPS_1:45
+           .= [:[#]S,Int G:] by TOPS_1:43;
+A5:   f.w in Int G by CONNSP_2:def 1;
+        H is a_neighborhood of w
+      proof
+          f.w = y by A3,FUNCT_3:def 6;
+        hence w in Int H by A1,A3,A4,A5,ZFMISC_1:def 2;
+      end;
+      then reconsider H as a_neighborhood of w;
+      take H;
+      reconsider X = Int G as non empty Subset of T
+        by CONNSP_2:def 1;
+        [:[#]S,X:] <> {};
+      then f.:H = Int G by BORSUK_1:12;
+      hence f.:H c= G by TOPS_1:44;
+    end;
+    hence thesis;
+  end;
+
+theorem Th41:
+for f being continuous map of T, S,
+    g being continuous map of T, R holds
+ <:f,g:> is continuous map of T, [:S,R:]
+  proof
+    let f be continuous map of T, S,
+        g be continuous map of T, R;
+      the carrier of [:S,R:] = [: the carrier of S, the carrier of R:]
+      by BORSUK_1:def 5;
+    then reconsider h = <:f,g:> as map of T, [:S,R:];
+A1: h = [:f,g:]*(delta the carrier of T) by FUNCT_3:100;
+A2: [:f,g:] is continuous map of [:T,T:], [:S,R:] by BORSUK_2:12;
+      delta the carrier of T is continuous map of T,[:T,T:] by Th38;
+    hence thesis by A1,A2,TOPS_2:58;
+  end;
+
+theorem Th42:
+<:pr2(the carrier of S,the carrier of T),
+ pr1(the carrier of S,the carrier of T):> is continuous map of [:S,T:],[:T,S:]
+  proof
+A1: pr1(the carrier of S,the carrier of T) is continuous map of [:S,T:],S
+      by Th39;
+      pr2(the carrier of S,the carrier of T) is continuous map of [:S,T:],T
+      by Th40;
+    hence thesis by A1,Th41;
+  end;
+
+theorem Th43:
+for f being map of [:S,T:], [:T,S:]
+ st f = <:pr2(the carrier of S,the carrier of T),
+          pr1(the carrier of S,the carrier of T):> holds
+ f is_homeomorphism
+  proof
+    let f be map of [:S,T:], [:T,S:] such that
+A1:   f = <:pr2(the carrier of S,the carrier of T),
+            pr1(the carrier of S,the carrier of T):>;
+    thus dom f = the carrier of [:S,T:] by FUNCT_2:def 1
+               .= [#][:S,T:] by PRE_TOPC:12;
+    thus
+A2:   rng f = [:the carrier of T,the carrier of S:] by A1,Th4
+           .= the carrier of [:T,S:] by BORSUK_1:def 5
+           .= [#][:T,S:] by PRE_TOPC:12;
+    thus f is one-to-one by A1;
+    thus f is continuous by A1,Th42;
+      f" = (f qua Function)" by A1,A2,TOPS_2:def 4
+      .= <:pr2(the carrier of T,the carrier of S),
+           pr1(the carrier of T,the carrier of S):> by A1,Th8;
+    hence f" is continuous by Th42;
+  end;
+
+theorem
+  [:S,T:], [:T,S:] are_homeomorphic
+  proof
+    reconsider f = <:pr2(the carrier of S,the carrier of T),
+                     pr1(the carrier of S,the carrier of T):>
+      as map of [:S,T:], [:T,S:] by Th42;
+    take f;
+    thus thesis by Th43;
+  end;
+
+theorem Th45:
+for T being Hausdorff (non empty TopSpace)
+ for f, g being continuous map of S, T holds
+  (for X being Subset of S st X = {p where p is Point of S: f.p <> g.p}
+       holds X is open) &
+  for X being Subset of S st X = {p where p is Point of S: f.p = g.p}
+       holds X is closed
+  proof
+    let T be Hausdorff (non empty TopSpace),
+        f, g be continuous map of S, T;
+    thus
+A1:   for X being Subset of S st X = {p where p is Point of S: f.p <> g.p}
+       holds X is open
+    proof
+      let X be Subset of S such that
+A2:     X = {p where p is Point of S: f.p <> g.p};
+        for x being set holds x in X iff
+       ex Q being Subset of S st Q is open & Q c= X & x in Q
+      proof
+        let x be set;
+        hereby
+          assume x in X;
+          then consider p being Point of S such that
+A3:         x = p & f.p <> g.p by A2;
+          consider W, V being Subset of T such that
+A4:         W is open & V is open and
+A5:         f.p in W & g.p in V and
+A6:         W misses V by A3,COMPTS_1:def 4;
+          take Q = (f"W) /\ (g"V);
+            f"W is open & g"V is open by A4,TOPS_2:55;
+          hence Q is open by TOPS_1:38;
+          thus Q c= X
+          proof
+            let q be set; assume
+A7:           q in Q;
+            then q in f"W by XBOOLE_0:def 3;
+            then consider yf being set such that
+A8:           [q,yf] in f & yf in W by RELAT_1:def 14;
+              q in g"V by A7,XBOOLE_0:def 3;
+            then consider yg being set such that
+A9:           [q,yg] in g & yg in V by RELAT_1:def 14;
+A10:         yf = f.q & yg = g.q by A8,A9,FUNCT_1:8;
+              not yg in W by A6,A9,XBOOLE_0:3;
+            hence q in X by A2,A7,A8,A10;
+          end;
+            dom f = the carrier of S by FUNCT_2:def 1;
+          then [x,f.p] in f by A3,FUNCT_1:def 4;
+then A11:       x in f"W by A5,RELAT_1:def 14;
+            dom g = the carrier of S by FUNCT_2:def 1;
+          then [x,g.p] in g by A3,FUNCT_1:def 4;
+          then x in g"V by A5,RELAT_1:def 14;
+          hence x in Q by A11,XBOOLE_0:def 3;
+        end;
+        given Q being Subset of S such that
+A12:       Q is open & Q c= X & x in Q;
+        thus thesis by A12;
+      end;
+      hence X is open by TOPS_1:57;
+    end;
+    let X be Subset of S such that
+A13:   X = {p where p is Point of S: f.p = g.p};
+      {p where p is Point of S: f.p <> g.p} c= the carrier of S
+    proof
+      let x be set;
+      assume x in {p where p is Point of S: f.p <> g.p};
+      then consider a being Point of S such that
+A14:    x = a & f.a <> g.a;
+      thus thesis by A14;
+    end;
+    then reconsider A = {p where p is Point of S: f.p <> g.p} as Subset of S
+     ;
+A15: X` = A
+    proof
+      hereby
+        let x be set; assume
+A16:       x in X`;
+        then x in X`;
+        then not x in X by SUBSET_1:54;
+        then f.x <> g.x by A13,A16;
+        hence x in A by A16;
+      end;
+      let x be set;
+      assume x in A;
+      then consider p being Point of S such that
+A17:     x = p & f.p <> g.p;
+        now
+        assume p in {t where t is Point of S: f.t = g.t};
+        then consider t being Point of S such that
+A18:       p = t & f.t = g.t;
+        thus contradiction by A17,A18;
+      end;
+      then x in (the carrier of S) \ X by A13,A17,XBOOLE_0:def 4;
+      then x in X` by SUBSET_1:def 5;
+      hence x in X`;
+    end;
+      A is open by A1;
+    hence X is closed by A15,TOPS_1:29;
+  end;
+
+theorem
+  T is Hausdorff iff
+ for A being Subset of [:T,T:] st A = id the carrier of T
+  holds A is closed
+  proof
+A1: [#]T = the carrier of T by PRE_TOPC:12;
+A2: the carrier of [:T,T:] = [:the carrier of T,the carrier of T:]
+      by BORSUK_1:def 5;
+    reconsider f = pr1(the carrier of T,the carrier of T),
+               g = pr2(the carrier of T,the carrier of T)
+      as continuous map of [:T,T:],T by Th39,Th40;
+    hereby
+      assume
+A3:     T is Hausdorff;
+      let A be Subset of [:T,T:];
+      assume A = id the carrier of T;
+      then A = {p where p is Point of [:T,T:]: f.p = g.p} by Th37;
+      hence A is closed by A3,Th45;
+    end;
+    assume
+A4:   for A being Subset of [:T,T:] st A = id the carrier of T
+        holds A is closed;
+A5: [#][:T,T:] = [:[#]T,[#]T:] by A1,A2,PRE_TOPC:12;
+    reconsider A = id the carrier of T as Subset of [:T,T:]
+      by A2;
+    let p, q be Point of T such that
+A6:   not p = q;
+      A is closed by A4;
+    then [:[#]T,[#]T:] \ A is open by A5,PRE_TOPC:def 6;
+    then consider SF being Subset-Family of [:T,T:] such that
+A7:   [:[#]T,[#]T:] \ A = union SF and
+A8:   for e being set st e in SF ex X1, Y1 being Subset of T st
+        e = [:X1,Y1:] & X1 is open & Y1 is open by BORSUK_1:45;
+      not [p,q] in id [#]T by A6,RELAT_1:def 10;
+    then [p,q] in [:[#]T,[#]T:] \ A by A1,A2,XBOOLE_0:def 4;
+    then consider XY being set such that
+A9:   [p,q] in XY & XY in SF by A7,TARSKI:def 4;
+    consider X1, Y1 being Subset of T such that
+A10:   XY = [:X1,Y1:] & X1 is open & Y1 is open by A8,A9;
+    take X1, Y1;
+    thus X1 is open & Y1 is open by A10;
+    thus p in X1 & q in Y1 by A9,A10,ZFMISC_1:106;
+    assume X1 /\ Y1 <> {};
+    then consider w being set such that
+A11:   w in X1 /\ Y1 by XBOOLE_0:def 1;
+      w in X1 & w in Y1 by A11,XBOOLE_0:def 3;
+    then [w,w] in XY by A10,ZFMISC_1:106;
+    then [w,w] in union SF by A9,TARSKI:def 4;
+    then not [w,w] in A by A7,XBOOLE_0:def 4;
+    hence contradiction by A11,RELAT_1:def 10;
+  end;
+
+definition let S, T be TopStruct;
+ cluster strict Refinement of S, T;
+existence
+  proof
+    consider R being Refinement of S, T;
+    set R1 = the TopStruct of R;
+      R1 is Refinement of S, T
+    proof
+      thus the carrier of R1 = (the carrier of S) \/ (the carrier of T)
+        by YELLOW_9:def 6;
+        (the topology of S) \/ (the topology of T) is prebasis of R
+        by YELLOW_9:def 6;
+      hence (the topology of S) \/ (the topology of T) is prebasis of R1
+        by Th33;
+    end;
+    then reconsider R1 as Refinement of S, T;
+    take R1;
+    thus thesis;
+  end;
+end;
+
+definition let S be non empty TopStruct, T be TopStruct;
+ cluster strict non empty Refinement of S, T;
+existence
+  proof
+    consider R being strict Refinement of S, T;
+    take R;
+    thus thesis;
+  end;
+ cluster strict non empty Refinement of T, S;
+existence
+  proof
+    consider R being strict Refinement of T, S;
+    take R;
+    thus thesis;
+  end;
+end;
+
+theorem
+  for R, S, T being TopStruct holds
+ R is Refinement of S, T iff the TopStruct of R is Refinement of S, T
+  proof
+    let R, S, T be TopStruct;
+    hereby assume
+A1:     R is Refinement of S, T;
+      then reconsider R1 = R as TopSpace;
+        the TopStruct of R1 is Refinement of S, T
+      proof
+        thus the carrier of the TopStruct of R1 =
+          (the carrier of S) \/ (the carrier of T) by A1,YELLOW_9:def 6;
+          (the topology of S) \/ (the topology of T)
+          is prebasis of R by A1,YELLOW_9:def 6;
+        hence (the topology of S) \/ (the topology of T)
+          is prebasis of the TopStruct of R1 by Th33;
+      end;
+      hence the TopStruct of R is Refinement of S, T;
+    end;
+    assume
+A2:   the TopStruct of R is Refinement of S, T;
+    then reconsider R1 = R as TopSpace by TEX_2:12;
+      R1 is Refinement of S, T
+    proof
+      thus the carrier of R1 =
+        (the carrier of S) \/ (the carrier of T) by A2,YELLOW_9:def 6;
+        (the topology of S) \/ (the topology of T)
+        is prebasis of the TopStruct of R by A2,YELLOW_9:def 6;
+      hence (the topology of S) \/ (the topology of T)
+        is prebasis of R1 by Th33;
+    end;
+    hence R is Refinement of S, T;
+  end;
+
+reserve S1, S2, T1, T2 for non empty TopSpace,
+        R for Refinement of [:S1,T1:], [:S2,T2:],
+        R1 for Refinement of S1, S2,
+        R2 for Refinement of T1, T2;
+
+theorem Th48:
+the carrier of S1 = the carrier of S2 & the carrier of T1 = the carrier of T2
+ implies
+ { [:U1,V1:] /\ [:U2,V2:] where U1 is Subset of S1,
+                               U2 is Subset of S2,
+                               V1 is Subset of T1,
+                               V2 is Subset of T2 :
+       U1 is open & U2 is open & V1 is open & V2 is open } is Basis of R
+  proof
+    assume that
+A1:   the carrier of S1 = the carrier of S2 and
+A2:   the carrier of T1 = the carrier of T2;
+    set Y = { [:U1,V1:] /\ [:U2,V2:] where U1 is Subset of S1,
+                                          U2 is Subset of S2,
+                                          V1 is Subset of T1,
+                                          V2 is Subset of T2 :
+           U1 is open & U2 is open & V1 is open & V2 is open };
+A3: the carrier of [:S1,T1:] = [:the carrier of S1, the carrier of T1:]
+     by BORSUK_1:def 5;
+A4: the carrier of [:S2,T2:] = [:the carrier of S2, the carrier of T2:]
+     by BORSUK_1:def 5;
+    then reconsider BST =
+     INTERSECTION(the topology of [:S1,T1:], the topology of [:S2,T2:])
+      as Basis of R by A1,A2,A3,YELLOW_9:60;
+A5: the topology of [:S1,T1:] =
+     { union A where A is Subset-Family of [:S1,T1:]:
+       A c= { [:X1,Y1:] where X1 is Subset of S1,
+                              Y1 is Subset of T1 :
+                X1 in the topology of S1 & Y1 in the topology of T1}}
+         by BORSUK_1:def 5;
+A6: the topology of [:S2,T2:] =
+      { union A where A is Subset-Family of [:S2,T2:]:
+        A c= { [:X1,Y1:] where X1 is Subset of S2,
+                               Y1 is Subset of T2 :
+                 X1 in the topology of S2 & Y1 in the topology of T2}}
+         by BORSUK_1:def 5;
+A7: the carrier of R = (the carrier of [:S1,T1:]) \/ the carrier of [:S2,T2:]
+      by YELLOW_9:def 6
+      .= [:the carrier of S1,the carrier of T1:] \/
+         [:the carrier of S2,the carrier of T2:] by A3,BORSUK_1:def 5
+      .= [:the carrier of S1,the carrier of T1:] by A1,A2;
+A8:Y c= the topology of R
+    proof
+      let c be set;
+      assume c in Y;
+      then consider U1 being Subset of S1,
+               U2 being Subset of S2,
+               V1 being Subset of T1,
+               V2 being Subset of T2 such that
+A9:     c = [:U1,V1:] /\ [:U2,V2:] and
+A10:    U1 is open & U2 is open & V1 is open & V2 is open;
+        [:U1,V1:] is open & [:U2,V2:] is open by A10,BORSUK_1:46;
+      then [:U1,V1:] in the topology of [:S1,T1:] &
+        [:U2,V2:] in the topology of [:S2,T2:] by PRE_TOPC:def 5;
+then A11:  c in BST by A9,SETFAM_1:def 5;
+        BST c= the topology of R by CANTOR_1:def 2;
+      hence thesis by A11;
+    end;
+      Y c= bool the carrier of R
+    proof
+      let c be set;
+      assume c in Y;
+      then consider U1 being Subset of S1,
+               U2 being Subset of S2,
+               V1 being Subset of T1,
+               V2 being Subset of T2 such that
+A12:     c = [:U1,V1:] /\ [:U2,V2:] and
+           U1 is open & U2 is open & V1 is open & V2 is open;
+        [:U1,V1:] /\ [:U2,V2:] c= [:the carrier of S1,the carrier of T1:] /\
+        [:the carrier of S2,the carrier of T2:] by A3,A4,XBOOLE_1:27;
+      hence thesis by A1,A2,A7,A12;
+    end;
+    then reconsider C1 = Y as Subset-Family of R by SETFAM_1:def
+7;
+    reconsider C1 as Subset-Family of R;
+      for A being Subset of R st A is open
+     for p being Point of R st p in A
+      ex a being Subset of R st a in C1 & p in a & a c= A
+    proof
+      let A be Subset of R such that
+A13:    A is open;
+      let p be Point of R;
+      assume p in A;
+      then consider X being Subset of R such that
+A14:    X in BST & p in X & X c= A by A13,YELLOW_9:31;
+      consider X1, X2 be set such that
+A15:    X1 in the topology of [:S1,T1:] and
+A16:    X2 in the topology of [:S2,T2:] and
+A17:    X = X1 /\ X2 by A14,SETFAM_1:def 5;
+      consider F1 being Subset-Family of [:S1,T1:] such that
+A18:    X1 = union F1 and
+A19:    F1 c= { [:K1,L1:] where K1 is Subset of S1,
+                                L1 is Subset of T1 :
+           K1 in the topology of S1 & L1 in the topology of T1 } by A5,A15;
+      consider F2 being Subset-Family of [:S2,T2:] such that
+A20:    X2 = union F2 and
+A21:    F2 c= { [:K2,L2:] where K2 is Subset of S2,
+                                L2 is Subset of T2 :
+           K2 in the topology of S2 & L2 in the topology of T2 } by A6,A16;
+A22:  p in X1 & p in X2 by A14,A17,XBOOLE_0:def 3;
+      then consider G1 being set such that
+A23:    p in G1 & G1 in F1 by A18,TARSKI:def 4;
+      consider G2 being set such that
+A24:    p in G2 & G2 in F2 by A20,A22,TARSKI:def 4;
+        G1 in { [:K1,L1:] where K1 is Subset of S1,
+                             L1 is Subset of T1 :
+           K1 in the topology of S1 & L1 in the topology of T1 } by A19,A23;
+      then consider K1 being Subset of S1,
+               L1 being Subset of T1 such that
+A25:    G1 = [:K1,L1:] and
+A26:    K1 in the topology of S1 & L1 in the topology of T1;
+        G2 in { [:K2,L2:] where K2 is Subset of S2,
+                             L2 is Subset of T2 :
+           K2 in the topology of S2 & L2 in the topology of T2 } by A21,A24;
+      then consider K2 being Subset of S2,
+               L2 being Subset of T2 such that
+A27:    G2 = [:K2,L2:] and
+A28:    K2 in the topology of S2 & L2 in the topology of T2;
+      reconsider K1 as Subset of S1;
+      reconsider L1 as Subset of T1;
+      reconsider K2 as Subset of S2;
+      reconsider L2 as Subset of T2;
+        [:K1,L1:] /\ [:K2,L2:] c= [:the carrier of S1,the carrier of T1:] /\
+        [:the carrier of S2,the carrier of T2:] by A3,A4,XBOOLE_1:27;
+      then reconsider a = [:K1,L1:] /\ [:K2,L2:] as Subset of R
+        by A1,A2,A7;
+      take a;
+        K1 is open & K2 is open & L1 is open & L2 is open
+        by A26,A28,PRE_TOPC:def 5;
+      hence a in C1;
+      thus p in a by A23,A24,A25,A27,XBOOLE_0:def 3;
+        [:K1,L1:] c= X1 & [:K2,L2:] c= X2
+        by A18,A20,A23,A24,A25,A27,ZFMISC_1:92;
+      then a c= X by A17,XBOOLE_1:27;
+      hence a c= A by A14,XBOOLE_1:1;
+    end;
+    hence Y is Basis of R by A8,YELLOW_9:32;
+  end;
+
+theorem Th49:
+the carrier of S1 = the carrier of S2 & the carrier of T1 = the carrier of T2
+  implies
+ the carrier of [:R1,R2:] = the carrier of R &
+ the topology of [:R1,R2:] = the topology of R
+  proof
+    assume that
+A1:   the carrier of S1 = the carrier of S2 and
+A2:   the carrier of T1 = the carrier of T2;
+A3: the carrier of [:S1,T1:] = [:the carrier of S1, the carrier of T1:]
+     by BORSUK_1:def 5;
+    reconsider BS = INTERSECTION(the topology of S1, the topology of S2)
+      as Basis of R1 by A1,YELLOW_9:60;
+    reconsider BT = INTERSECTION(the topology of T1, the topology of T2)
+      as Basis of R2 by A2,YELLOW_9:60;
+    reconsider Bpr =
+     {[:a,b:] where a is Subset of R1, b is Subset of R2:
+       a in BS & b in BT} as Basis of [:R1,R2:] by YELLOW_9:40;
+A4: the carrier of R = (the carrier of [:S1,T1:]) \/ the carrier of [:S2,T2:]
+      by YELLOW_9:def 6
+      .= [:the carrier of S1,the carrier of T1:] \/
+         [:the carrier of S2,the carrier of T2:] by A3,BORSUK_1:def 5
+      .= [:the carrier of S1,the carrier of T1:] by A1,A2;
+A5: the carrier of R1 = (the carrier of S1) \/ the carrier of S2
+      by YELLOW_9:def 6
+      .= the carrier of S1 by A1;
+  the carrier of R2 = (the carrier of T1) \/ the carrier of T2
+      by YELLOW_9:def 6
+      .= the carrier of T1 by A2;
+    hence
+A6:  the carrier of [:R1,R2:] = the carrier of R by A4,A5,BORSUK_1:def 5;
+    set C = { [:U1,V1:] /\ [:U2,V2:] where U1 is Subset of S1,
+                                          U2 is Subset of S2,
+                                          V1 is Subset of T1,
+                                          V2 is Subset of T2 :
+          U1 is open & U2 is open & V1 is open & V2 is open };
+A7:C is Basis of R by A1,A2,Th48;
+      C = Bpr
+    proof
+      hereby
+        let c be set;
+        assume c in C;
+        then consider U1 being Subset of S1,
+                 U2 being Subset of S2,
+                 V1 being Subset of T1,
+                 V2 being Subset of T2 such that
+A8:      c = [:U1,V1:] /\ [:U2,V2:] and
+A9:      U1 is open & U2 is open & V1 is open & V2 is open;
+A10:    c = [:U1 /\ U2, V1 /\ V2:] by A8,ZFMISC_1:123;
+          U1 in the topology of S1 & U2 in the topology of S2 &
+         V1 in the topology of T1 & V2 in the topology of T2
+          by A9,PRE_TOPC:def 5;
+        then U1 /\ U2 in BS & V1 /\ V2 in BT by SETFAM_1:def 5;
+        hence c in Bpr by A10;
+      end;
+      let c be set;
+      assume c in Bpr;
+      then consider a being Subset of R1, b being Subset of R2 such that
+A11:    c = [:a,b:] & a in BS & b in BT;
+      consider a1, a2 being set such that
+A12:    a1 in the topology of S1 & a2 in the topology of S2 & a = a1 /\ a2
+          by A11,SETFAM_1:def 5;
+      consider b1, b2 being set such that
+A13:    b1 in the topology of T1 & b2 in the topology of T2 & b = b1 /\ b2
+          by A11,SETFAM_1:def 5;
+      reconsider a1 as Subset of S1 by A12;
+      reconsider a2 as Subset of S2 by A12;
+      reconsider b1 as Subset of T1 by A13;
+      reconsider b2 as Subset of T2 by A13;
+A14:  a1 is open & a2 is open & b1 is open & b2 is open
+        by A12,A13,PRE_TOPC:def 5;
+        c = [:a1,b1:] /\ [:a2,b2:] by A11,A12,A13,ZFMISC_1:123;
+      hence thesis by A14;
+    end;
+    hence thesis by A6,A7,YELLOW_9:25;
+  end;
+
+theorem
+  the carrier of S1 = the carrier of S2 & the carrier of T1 = the carrier of T2
+ implies [:R1,R2:] is Refinement of [:S1,T1:], [:S2,T2:]
+  proof
+    assume
+A1:   the carrier of S1 = the carrier of S2 &
+      the carrier of T1 = the carrier of T2;
+    consider R being strict Refinement of [:S1,T1:], [:S2,T2:];
+      [:R1,R2:] = R
+    proof
+        the carrier of [:R1,R2:] = the carrier of R &
+       the topology of [:R1,R2:] = the topology of R by A1,Th49;
+      hence thesis;
+    end;
+    hence [:R1,R2:] is Refinement of [:S1,T1:], [:S2,T2:];
+  end;

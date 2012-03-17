@@ -1,0 +1,224 @@
+:: SCMPDS Is Not Standard
+::  by Artur Korni{\l}owicz and Yasunari Shidama
+::
+:: Received September 27, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, SETFAM_1, FUNCT_1, ARYTM, ORDINAL2, FUNCT_4, FINSEQ_1,
+      FINSEQ_4, RELAT_1, CAT_1, AMISTD_2, REALSET1, FINSET_1, ARYTM_3, ARYTM_1,
+      ABSVALUE, INT_1, NAT_1, FUNCOP_1, TARSKI, AMI_1, AMI_2, AMI_3, AMISTD_1,
+      SCMPDS_2, SCMPDS_3, GOBOARD5, SQUARE_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL2, ORDINAL1, NUMBERS,
+      XCMPLX_0, XREAL_0, FUNCT_1, ABSVALUE, INT_1, NAT_1, CQC_LANG, FINSET_1,
+      REALSET1, STRUCT_0, GROUP_1, RELAT_1, FUNCT_4, FINSEQ_1, FINSEQ_4,
+      PRE_CIRC, AMI_1, AMI_2, AMI_3, AMI_5, SCMPDS_2, SCMPDS_3, AMISTD_1,
+      AMISTD_2;
+ constructors NAT_1, SCMPDS_1, SCMPDS_3, AMISTD_2, AMI_5, FINSEQ_4, REALSET1,
+      PRE_CIRC;
+ clusters ARYTM_3, FRAENKEL, INT_1, RELSET_1, AMI_1, SCMPDS_2, XREAL_0,
+      GOBOARD1, FUNCT_4, AMISTD_2, CQC_LANG, SCMRING1, FINSET_1, MEMBERED,
+      ORDINAL2;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+
+
+begin :: Preliminaries
+
+reserve r, s for real number;
+
+theorem :: SCMPDS_9:1
+  0 <= r + abs(r);
+
+theorem :: SCMPDS_9:2
+  0 <= -r + abs(r);
+
+theorem :: SCMPDS_9:3
+  abs(r) = abs(s) implies r = s or r = -s;
+
+theorem :: SCMPDS_9:4
+  for i, j being natural number st i < j & i <> 0 holds
+    i/j is not integer;
+
+theorem :: SCMPDS_9:5
+  {2*k where k is Nat: k > 1} is infinite;
+
+theorem :: SCMPDS_9:6
+  for f being Function, a,b,c being set st a <> c holds
+    (f +* (a.-->b)).c = f.c;
+
+theorem :: SCMPDS_9:7
+  for f being Function, a,b,c,d being set st a <> b holds
+   (f +* ((a,b)-->(c,d))) .a = c &
+   (f +* ((a,b)-->(c,d))) .b = d;
+
+begin :: SCMPDS
+
+reserve a, b for Int_position,
+        i for Instruction of SCMPDS,
+        l for Instruction-Location of SCMPDS,
+        k, k1, k2 for Integer,
+        n for Nat;
+
+definition
+  let la, lb be Int_position,
+      a, b be Integer;
+  redefine func (la,lb) --> (a,b) -> FinPartState of SCMPDS;
+end;
+
+definition
+  cluster SCMPDS -> with-non-trivial-Instruction-Locations;
+end;
+
+definition
+  let l be Instruction-Location of SCMPDS;
+  func locnum l -> natural number means
+:: SCMPDS_9:def 1
+   il.it = l;
+end;
+
+definition
+  let l be Instruction-Location of SCMPDS;
+  redefine func locnum l -> Nat;
+end;
+
+theorem :: SCMPDS_9:8
+  l = 2*locnum l + 2;
+
+theorem :: SCMPDS_9:9
+  for l1, l2 being Instruction-Location of SCMPDS st l1 <> l2 holds
+    locnum l1 <> locnum l2;
+
+theorem :: SCMPDS_9:10
+  for l1, l2 being Instruction-Location of SCMPDS st l1 <> l2 holds
+    Next l1 <> Next l2;
+
+theorem :: SCMPDS_9:11
+  for N being with_non-empty_elements set,
+      S being IC-Ins-separated definite (non empty non void AMI-Struct over N),
+      i being Instruction of S,
+      l being Instruction-Location of S holds
+  JUMP(i) c= NIC(i,l);
+
+theorem :: SCMPDS_9:12
+  (for s being State of SCMPDS st IC s = l & s.l = i
+   holds Exec(i,s).IC SCMPDS = Next IC s)
+  implies
+  NIC(i, l) = {Next l};
+
+theorem :: SCMPDS_9:13
+  (for l being Instruction-Location of SCMPDS holds NIC(i,l)={Next l})
+  implies JUMP i is empty;
+
+theorem :: SCMPDS_9:14
+  NIC(goto k,l) = { 2*abs(k+locnum l) + 2 };
+
+theorem :: SCMPDS_9:15
+  NIC(return a,l) = {2*k where k is Nat: k > 1};
+
+theorem :: SCMPDS_9:16
+  NIC(saveIC(a,k1), l) = {Next l};
+
+theorem :: SCMPDS_9:17
+  NIC(a:=k1, l) = {Next l};
+
+theorem :: SCMPDS_9:18
+  NIC((a,k1):=k2, l) = {Next l};
+
+theorem :: SCMPDS_9:19
+  NIC((a,k1):=(b,k2), l) = {Next l};
+
+theorem :: SCMPDS_9:20
+  NIC(AddTo(a,k1,k2), l) = {Next l};
+
+theorem :: SCMPDS_9:21
+  NIC(AddTo(a,k1,b,k2), l) = {Next l};
+
+theorem :: SCMPDS_9:22
+  NIC(SubFrom(a,k1,b,k2), l) = {Next l};
+
+theorem :: SCMPDS_9:23
+  NIC(MultBy(a,k1,b,k2), l) = {Next l};
+
+theorem :: SCMPDS_9:24
+  NIC(Divide(a,k1,b,k2), l) = {Next l};
+
+theorem :: SCMPDS_9:25
+  NIC((a,k1)<>0_goto k2,l) = { Next l, abs( 2*(k2+locnum l) ) + 2 };
+
+theorem :: SCMPDS_9:26
+  NIC((a,k1)<=0_goto k2,l) = { Next l, abs( 2*(k2+locnum l) ) + 2 };
+
+theorem :: SCMPDS_9:27
+  NIC((a,k1)>=0_goto k2,l) = { Next l, abs( 2*(k2+locnum l) ) + 2 };
+
+definition
+  let k;
+  cluster JUMP (goto k) -> empty;
+end;
+
+theorem :: SCMPDS_9:28
+  JUMP (return a) = {2*k where k is Nat: k > 1};
+
+definition
+  let a;
+  cluster JUMP (return a) -> infinite;
+end;
+
+definition
+  let a,k1;
+  cluster JUMP (saveIC(a,k1)) -> empty;
+end;
+
+definition
+  let a,k1;
+  cluster JUMP (a:=k1) -> empty;
+end;
+
+definition
+  let a,k1,k2;
+  cluster JUMP ((a,k1):=k2) -> empty;
+end;
+
+definition
+  let a,b,k1,k2;
+  cluster JUMP ((a,k1):=(b,k2)) -> empty;
+end;
+
+definition
+  let a,k1,k2;
+  cluster JUMP (AddTo(a,k1,k2)) -> empty;
+end;
+
+definition
+  let a,b,k1,k2;
+  cluster JUMP (AddTo(a,k1,b,k2)) -> empty;
+  cluster JUMP (SubFrom(a,k1,b,k2)) -> empty;
+  cluster JUMP (MultBy(a,k1,b,k2)) -> empty;
+  cluster JUMP (Divide(a,k1,b,k2)) -> empty;
+end;
+
+definition
+  let a,k1,k2;
+  cluster JUMP ((a,k1)<>0_goto k2) -> empty;
+  cluster JUMP ((a,k1)<=0_goto k2) -> empty;
+  cluster JUMP ((a,k1)>=0_goto k2) -> empty;
+end;
+
+theorem :: SCMPDS_9:29
+  SUCC(l) = the Instruction-Locations of SCMPDS;
+
+theorem :: SCMPDS_9:30
+  for N being with_non-empty_elements set,
+      S being IC-Ins-separated definite (non empty non void AMI-Struct over N),
+      l1, l2 being Instruction-Location of S
+    st SUCC(l1) = the Instruction-Locations of S
+   holds l1 <= l2;
+
+definition
+  cluster SCMPDS -> non InsLoc-antisymmetric;
+end;
+
+definition
+  cluster SCMPDS -> non standard;
+end;

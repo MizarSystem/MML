@@ -1,0 +1,1305 @@
+:: The Ordering of Points on a Curve, Part {IV}
+::  by Artur Korni{\l}owicz
+::
+:: Received September 16, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL2, ARYTM, PRE_TOPC, EUCLID, TOPREAL1, BOOLE, TOPREAL2,
+      INCPROJ, ARYTM_1, MCART_1, FUNCT_5, RELAT_1, JORDAN1A, JORDAN2C, JORDAN3,
+      TOPS_2, RELAT_2, SUBSET_1, SEQ_2, FUNCT_1, JORDAN6, COMPTS_1, LATTICES,
+      METRIC_1, PCOMPS_1, ABSVALUE, SQUARE_1, JORDAN18, SPPOL_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, ORDINAL1,
+      NUMBERS, XCMPLX_0, XREAL_0, REAL_1, SQUARE_1, ABSVALUE, SEQ_4, STRUCT_0,
+      INCPROJ, PRE_TOPC, TOPS_2, CONNSP_1, RCOMP_1, COMPTS_1, METRIC_1,
+      SPPOL_1, PCOMPS_1, EUCLID, TOPREAL1, PSCOMP_1, TOPREAL2, JORDAN5C,
+      JORDAN2C, GOBRD14, JORDAN1A, JORDAN6;
+ constructors REAL_1, TOPREAL1, TOPREAL2, INCPROJ, SPPOL_1, JORDAN1A, PSCOMP_1,
+      JORDAN5C, TOPS_2, JORDAN2C, JORDAN6, CONNSP_1, JORDAN1, BORSUK_2,
+      RCOMP_1, ABSVALUE, GOBRD14, SQUARE_1, MEMBERED;
+ clusters XREAL_0, EUCLID, STRUCT_0, JORDAN1A, SUBSET_1, RELSET_1, BORSUK_2,
+      SPRECT_4, MEMBERED, ZFMISC_1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, XBOOLE_0, INCPROJ, SEQ_4;
+ theorems JORDAN5B, TARSKI, TOPREAL1, XBOOLE_0, EUCLID, JORDAN6, TOPS_2,
+      XBOOLE_1, SEQ_4, RELAT_1, PSCOMP_1, FUNCT_2, REAL_1, TOPREAL3, JORDAN1A,
+      COMPTS_1, JORDAN1C, ZFMISC_1, AXIOMS, JORDAN5C, TOPREAL2, JORDAN2C,
+      TOPS_1, TOPREAL5, SQUARE_1, RCOMP_1, TOPMETR, ABSVALUE, METRIC_1,
+      GOBRD14, YELLOW_6, JORDAN16, SPPOL_1, JORDAN1I, XCMPLX_1;
+
+begin  :: Preliminaries
+
+reserve n for Element of NAT,
+        V for Subset of TOP-REAL n,
+        s,s1,s2,t,t1,t2 for Point of TOP-REAL n,
+        C for Simple_closed_curve,
+        P for Subset of TOP-REAL 2,
+        a,p,p1,p2,q,q1,q2 for Point of TOP-REAL 2;
+
+Lm1: TOP-REAL 2 = TopSpaceMetr Euclid 2 by EUCLID:def 8;
+Lm2: the carrier of Euclid 2 = the carrier of TopSpaceMetr Euclid 2
+      by TOPMETR:16;
+Lm3: dom proj1 = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
+Lm4: dom proj2 = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
+
+theorem Th1:
+  for a,b being real number holds (a-b)^2 = (b-a)^2
+  proof
+    let a,b be real number;
+    thus (a-b)^2
+       = (-(b-a))^2 by XCMPLX_1:143
+      .= (b-a)^2 by SQUARE_1:61;
+  end;
+
+theorem
+    for S,T being non empty TopSpace,
+      f being map of S,T,
+      A being Subset of T st f is_homeomorphism & A is connected
+   holds f"A is connected
+  proof
+    let S,T be non empty TopSpace,
+        f be map of S,T,
+        A be Subset of T such that
+A1:   f is_homeomorphism and
+A2:   A is connected;
+      f" is_homeomorphism by A1,TOPS_2:70;
+    then f" is continuous & rng (f") = [#]S by TOPS_2:def 5;
+    then A3: f".:A is connected by A2,TOPREAL5:5;
+      rng f = [#]T & f is one-to-one by A1,TOPS_2:def 5;
+    hence f"A is connected by A3,TOPS_2:68;
+  end;
+
+theorem
+    for S,T being non empty TopStruct,
+      f being map of S,T,
+      A being Subset of T st f is_homeomorphism & A is compact
+   holds f"A is compact
+  proof
+    let S,T be non empty TopStruct,
+        f be map of S,T,
+        A be Subset of T such that
+A1:   f is_homeomorphism and
+A2:   A is compact;
+      f" is_homeomorphism by A1,TOPS_2:70;
+    then f" is continuous & rng (f") = [#]S by TOPS_2:def 5;
+    then A3: f".:A is compact by A2,COMPTS_1:24;
+      rng f = [#]T & f is one-to-one by A1,TOPS_2:def 5;
+    hence f"A is compact by A3,TOPS_2:68;
+  end;
+
+theorem Th4:
+  proj2.:(north_halfline a) is bounded_below
+  proof
+    take a`2;
+    let r be real number;
+    assume r in proj2.:(north_halfline a);
+    then consider x being set such that
+A1:   x in the carrier of TOP-REAL 2 and
+A2:   x in north_halfline a and
+A3:   r = proj2.x by FUNCT_2:115;
+    reconsider x as Point of TOP-REAL 2 by A1;
+      r = x`2 by A3,PSCOMP_1:def 29;
+    hence a`2 <= r by A2,JORDAN1A:def 2;
+  end;
+
+theorem Th5:
+  proj2.:(south_halfline a) is bounded_above
+  proof
+    take a`2;
+    let r be real number;
+    assume r in proj2.:(south_halfline a);
+    then consider x being set such that
+A1:   x in the carrier of TOP-REAL 2 and
+A2:   x in south_halfline a and
+A3:   r = proj2.x by FUNCT_2:115;
+    reconsider x as Point of TOP-REAL 2 by A1;
+      r = x`2 by A3,PSCOMP_1:def 29;
+    hence r <= a`2 by A2,JORDAN1A:def 4;
+  end;
+
+theorem Th6:
+  proj1.:(west_halfline a) is bounded_above
+  proof
+    take a`1;
+    let r be real number;
+    assume r in proj1.:(west_halfline a);
+    then consider x being set such that
+A1:   x in the carrier of TOP-REAL 2 and
+A2:   x in west_halfline a and
+A3:   r = proj1.x by FUNCT_2:115;
+    reconsider x as Point of TOP-REAL 2 by A1;
+      r = x`1 by A3,PSCOMP_1:def 28;
+    hence r <= a`1 by A2,JORDAN1A:def 5;
+  end;
+
+theorem Th7:
+  proj1.:(east_halfline a) is bounded_below
+  proof
+    take a`1;
+    let r be real number;
+    assume r in proj1.:(east_halfline a);
+    then consider x being set such that
+A1:   x in the carrier of TOP-REAL 2 and
+A2:   x in east_halfline a and
+A3:   r = proj1.x by FUNCT_2:115;
+    reconsider x as Point of TOP-REAL 2 by A1;
+      r = x`1 by A3,PSCOMP_1:def 28;
+    hence a`1 <= r by A2,JORDAN1A:def 3;
+  end;
+
+definition
+  let a;
+  cluster proj2.:(north_halfline a) -> non empty;
+  coherence by Lm4,RELAT_1:152;
+  cluster proj2.:(south_halfline a) -> non empty;
+  coherence by Lm4,RELAT_1:152;
+  cluster proj1.:(west_halfline a) -> non empty;
+  coherence by Lm3,RELAT_1:152;
+  cluster proj1.:(east_halfline a) -> non empty;
+  coherence by Lm3,RELAT_1:152;
+end;
+
+theorem Th8:
+  inf(proj2.:(north_halfline a)) = a`2
+  proof
+    set X = proj2.:(north_halfline a);
+A1: X is bounded_below by Th4;
+A2: now
+      let r be real number;
+      assume r in X;
+      then consider x being set such that
+A3:     x in the carrier of TOP-REAL 2 and
+A4:     x in north_halfline a and
+A5:     r = proj2.x by FUNCT_2:115;
+      reconsider x as Point of TOP-REAL 2 by A3;
+        r = x`2 by A5,PSCOMP_1:def 29;
+      hence a`2 <= r by A4,JORDAN1A:def 2;
+    end;
+      now
+      let s be real number such that
+A6:     0 < s;
+      reconsider r = a`2 as real number;
+      take r;
+        a in north_halfline a & r = proj2.a by JORDAN1C:7,PSCOMP_1:def 29;
+      hence r in X by FUNCT_2:43;
+        r + 0 < a`2 + s by A6,REAL_1:67;
+      hence r < a`2 + s;
+    end;
+    hence thesis by A1,A2,SEQ_4:def 5;
+  end;
+
+theorem Th9:
+  sup(proj2.:(south_halfline a)) = a`2
+  proof
+    set X = proj2.:(south_halfline a);
+A1: X is bounded_above by Th5;
+A2: now
+      let r be real number;
+      assume r in X;
+      then consider x being set such that
+A3:     x in the carrier of TOP-REAL 2 and
+A4:     x in south_halfline a and
+A5:     r = proj2.x by FUNCT_2:115;
+      reconsider x as Point of TOP-REAL 2 by A3;
+        r = x`2 by A5,PSCOMP_1:def 29;
+      hence r <= a`2 by A4,JORDAN1A:def 4;
+    end;
+      now
+      let s be real number such that
+A6:     0 < s;
+      reconsider r = a`2 as real number;
+      take r;
+        a in south_halfline a & r = proj2.a by JORDAN1C:7,PSCOMP_1:def 29;
+      hence r in X by FUNCT_2:43;
+        a`2 - s < r - 0 by A6,REAL_1:92;
+      hence a`2 - s < r;
+    end;
+    hence thesis by A1,A2,SEQ_4:def 4;
+  end;
+
+theorem
+    sup(proj1.:(west_halfline a)) = a`1
+  proof
+    set X = proj1.:(west_halfline a);
+A1: X is bounded_above by Th6;
+A2: now
+      let r be real number;
+      assume r in X;
+      then consider x being set such that
+A3:     x in the carrier of TOP-REAL 2 and
+A4:     x in west_halfline a and
+A5:     r = proj1.x by FUNCT_2:115;
+      reconsider x as Point of TOP-REAL 2 by A3;
+        r = x`1 by A5,PSCOMP_1:def 28;
+      hence r <= a`1 by A4,JORDAN1A:def 5;
+    end;
+      now
+      let s be real number such that
+A6:     0 < s;
+      reconsider r = a`1 as real number;
+      take r;
+        a in west_halfline a & r = proj1.a by JORDAN1C:7,PSCOMP_1:def 28;
+      hence r in X by FUNCT_2:43;
+        a`1 - s < r - 0 by A6,REAL_1:92;
+      hence a`1 - s < r;
+    end;
+    hence thesis by A1,A2,SEQ_4:def 4;
+  end;
+
+theorem
+    inf(proj1.:(east_halfline a)) = a`1
+  proof
+    set X = proj1.:(east_halfline a);
+A1: X is bounded_below by Th7;
+A2: now
+      let r be real number;
+      assume r in X;
+      then consider x being set such that
+A3:     x in the carrier of TOP-REAL 2 and
+A4:     x in east_halfline a and
+A5:     r = proj1.x by FUNCT_2:115;
+      reconsider x as Point of TOP-REAL 2 by A3;
+        r = x`1 by A5,PSCOMP_1:def 28;
+      hence a`1 <= r by A4,JORDAN1A:def 3;
+    end;
+      now
+      let s be real number such that
+A6:     0 < s;
+      reconsider r = a`1 as real number;
+      take r;
+        a in east_halfline a & r = proj1.a by JORDAN1C:7,PSCOMP_1:def 28;
+      hence r in X by FUNCT_2:43;
+        r + 0 < a`1 + s by A6,REAL_1:67;
+      hence r < a`1 + s;
+    end;
+    hence thesis by A1,A2,SEQ_4:def 5;
+  end;
+
+definition
+  let a;
+  cluster north_halfline a -> closed;
+  coherence
+  proof
+    set X = north_halfline a;
+      for p being Point of Euclid 2 st p in X`
+      ex r being real number st r>0 & Ball(p,r) c= X`
+    proof
+      let p be Point of Euclid 2;
+      assume
+A1:     p in X`;
+      then reconsider x = p as Point of TOP-REAL 2;
+A2:   not p in X by A1,YELLOW_6:10;
+      per cases by A2,JORDAN1A:def 2;
+      suppose
+A3:     x`1 <> a`1;
+      take r = abs(x`1-a`1);
+        x`1 - a`1 <> 0 by A3,XCMPLX_1:15;
+      hence r > 0 by ABSVALUE:6;
+      let b be set;
+      assume
+A4:     b in Ball(p,r);
+      then reconsider b as Point of Euclid 2;
+      reconsider c = b as Point of TOP-REAL 2 by Lm2,EUCLID:def 8;
+        dist(p,b) < r by A4,METRIC_1:12;
+      then A5:   dist(x,c) < r by GOBRD14:def 1;
+        now
+        assume
+A6:       c`1 = a`1;
+A7:     0 <= (x`2-c`2)^2 by SQUARE_1:72;
+         A8: 0 <= (x`1-c`1)^2 by SQUARE_1:72;
+        then 0+0 <= (x`1-c`1)^2 + (x`2-c`2)^2 by A7,REAL_1:55;
+        then A9:     0 <= sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) by SQUARE_1:def 4;
+          sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) < abs(x`1-c`1) by A5,A6,GOBRD14:9;
+        then (sqrt ((x`1-c`1)^2 + (x`2-c`2)^2))^2 < (abs(x`1-c`1))^2
+          by A9,SQUARE_1:78;
+        then (sqrt ((x`1-c`1)^2 + (x`2-c`2)^2))^2 < (x`1-c`1)^2
+          by SQUARE_1:62;
+        then (x`1-c`1)^2 + (x`2-c`2)^2 < (x`1-c`1)^2 + 0 by A8,SQUARE_1:def 4;
+        hence contradiction by A7,REAL_1:55;
+      end;
+      then not c in X by JORDAN1A:def 2;
+      hence thesis by YELLOW_6:10;
+
+      suppose
+A10:     x`2 < a`2;
+      take r = a`2-x`2;
+      thus r > 0 by A10,SQUARE_1:11;
+      let b be set;
+      assume
+A11:     b in Ball(p,r);
+      then reconsider b as Point of Euclid 2;
+      reconsider c = b as Point of TOP-REAL 2 by Lm2,EUCLID:def 8;
+        dist(p,b) < r by A11,METRIC_1:12;
+      then A12:   dist(x,c) < r by GOBRD14:def 1;
+        now
+        assume
+A13:       c`2 >= a`2;
+A14:     0 <= (x`1-c`1)^2 by SQUARE_1:72;
+          0 <= (x`2-c`2)^2 by SQUARE_1:72;
+        then A15:     0+0 <= (x`1-c`1)^2 + (x`2-c`2)^2 by A14,REAL_1:55;
+        then A16:     0 <= sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) by SQUARE_1:def 4;
+          sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) < a`2-x`2 by A12,GOBRD14:9;
+        then (sqrt ((x`1-c`1)^2 + (x`2-c`2)^2))^2 < (a`2-x`2)^2
+          by A16,SQUARE_1:78;
+        then (x`1-c`1)^2 + (x`2-c`2)^2 < (a`2-x`2)^2 by A15,SQUARE_1:def 4;
+        then A17:     (x`1-c`1)^2 + (x`2-c`2)^2 < (x`2-a`2)^2 by Th1;
+A18:     0 <= a`2-x`2 by A10,SQUARE_1:11;
+          a`2-x`2 <= c`2-x`2 by A13,REAL_1:92;
+        then (a`2-x`2)^2 <= (c`2-x`2)^2 by A18,SQUARE_1:77;
+        then (x`2-a`2)^2 <= (c`2-x`2)^2 by Th1;
+        then A19:     (x`2-a`2)^2 <= (x`2-c`2)^2 by Th1;
+          0 + (x`2-c`2)^2 <= (x`1-c`1)^2 + (x`2-c`2)^2 by A14,REAL_1:55;
+        hence contradiction by A17,A19,AXIOMS:22;
+      end;
+      then not c in X by JORDAN1A:def 2;
+      hence thesis by YELLOW_6:10;
+    end;
+    then X` is open by Lm1,TOPMETR:22;
+    hence thesis by TOPS_1:29;
+  end;
+
+  cluster south_halfline a -> closed;
+  coherence
+  proof
+    set X = south_halfline a;
+      for p being Point of Euclid 2 st p in X`
+      ex r being real number st r>0 & Ball(p,r) c= X`
+    proof
+      let p be Point of Euclid 2;
+      assume
+A20:     p in X`;
+      then reconsider x = p as Point of TOP-REAL 2;
+A21:   not p in X by A20,YELLOW_6:10;
+      per cases by A21,JORDAN1A:def 4;
+      suppose
+A22:     x`1 <> a`1;
+      take r = abs(x`1-a`1);
+        x`1 - a`1 <> 0 by A22,XCMPLX_1:15;
+      hence r > 0 by ABSVALUE:6;
+      let b be set;
+      assume
+A23:     b in Ball(p,r);
+      then reconsider b as Point of Euclid 2;
+      reconsider c = b as Point of TOP-REAL 2 by Lm2,EUCLID:def 8;
+        dist(p,b) < r by A23,METRIC_1:12;
+      then A24:   dist(x,c) < r by GOBRD14:def 1;
+        now
+        assume
+A25:       c`1 = a`1;
+A26:     0 <= (x`2-c`2)^2 by SQUARE_1:72;
+         A27: 0 <= (x`1-c`1)^2 by SQUARE_1:72;
+        then 0+0 <= (x`1-c`1)^2 + (x`2-c`2)^2 by A26,REAL_1:55;
+        then A28:     0 <= sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) by SQUARE_1:def 4;
+          sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) < abs(x`1-c`1) by A24,A25,GOBRD14:9;
+        then (sqrt ((x`1-c`1)^2 + (x`2-c`2)^2))^2 < (abs(x`1-c`1))^2
+          by A28,SQUARE_1:78;
+        then (sqrt ((x`1-c`1)^2 + (x`2-c`2)^2))^2 < (x`1-c`1)^2
+          by SQUARE_1:62;
+        then (x`1-c`1)^2 + (x`2-c`2)^2 < (x`1-c`1)^2 + 0 by A27,SQUARE_1:def 4
+;
+        hence contradiction by A26,REAL_1:55;
+      end;
+      then not c in X by JORDAN1A:def 4;
+      hence thesis by YELLOW_6:10;
+
+      suppose
+A29:     x`2 > a`2;
+      take r = x`2-a`2;
+      thus r > 0 by A29,SQUARE_1:11;
+      let b be set;
+      assume
+A30:     b in Ball(p,r);
+      then reconsider b as Point of Euclid 2;
+      reconsider c = b as Point of TOP-REAL 2 by Lm2,EUCLID:def 8;
+        dist(p,b) < r by A30,METRIC_1:12;
+      then A31:   dist(x,c) < r by GOBRD14:def 1;
+        now
+        assume
+A32:       c`2 <= a`2;
+A33:     0 <= (x`1-c`1)^2 by SQUARE_1:72;
+          0 <= (x`2-c`2)^2 by SQUARE_1:72;
+        then A34:     0+0 <= (x`1-c`1)^2 + (x`2-c`2)^2 by A33,REAL_1:55;
+        then A35:     0 <= sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) by SQUARE_1:def 4;
+          sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) < x`2-a`2 by A31,GOBRD14:9;
+        then (sqrt ((x`1-c`1)^2 + (x`2-c`2)^2))^2 < (x`2-a`2)^2
+          by A35,SQUARE_1:78;
+        then A36:     (x`1-c`1)^2 + (x`2-c`2)^2 < (x`2-a`2)^2 by A34,SQUARE_1:
+def 4;
+A37:     0 <= x`2-a`2 by A29,SQUARE_1:11;
+          x`2-c`2 >= x`2-a`2 by A32,REAL_1:92;
+        then A38:     (x`2-a`2)^2 <= (x`2-c`2)^2 by A37,SQUARE_1:77;
+          0 + (x`2-c`2)^2 <= (x`1-c`1)^2 + (x`2-c`2)^2 by A33,REAL_1:55;
+        hence contradiction by A36,A38,AXIOMS:22;
+      end;
+      then not c in X by JORDAN1A:def 4;
+      hence thesis by YELLOW_6:10;
+    end;
+    then X` is open by Lm1,TOPMETR:22;
+    hence thesis by TOPS_1:29;
+  end;
+
+  cluster east_halfline a -> closed;
+  coherence
+  proof
+    set X = east_halfline a;
+      for p being Point of Euclid 2 st p in X`
+      ex r being real number st r>0 & Ball(p,r) c= X`
+    proof
+      let p be Point of Euclid 2;
+      assume
+A39:     p in X`;
+      then reconsider x = p as Point of TOP-REAL 2;
+A40:   not p in X by A39,YELLOW_6:10;
+      per cases by A40,JORDAN1A:def 3;
+      suppose
+A41:     x`2 <> a`2;
+      take r = abs(x`2-a`2);
+        x`2 - a`2 <> 0 by A41,XCMPLX_1:15;
+      hence r > 0 by ABSVALUE:6;
+      let b be set;
+      assume
+A42:     b in Ball(p,r);
+      then reconsider b as Point of Euclid 2;
+      reconsider c = b as Point of TOP-REAL 2 by Lm2,EUCLID:def 8;
+        dist(p,b) < r by A42,METRIC_1:12;
+      then A43:   dist(x,c) < r by GOBRD14:def 1;
+        now
+        assume
+A44:       c`2 = a`2;
+A45:     0 <= (x`1-c`1)^2 by SQUARE_1:72;
+         A46: 0 <= (x`2-c`2)^2 by SQUARE_1:72;
+        then 0+0 <= (x`1-c`1)^2 + (x`2-c`2)^2 by A45,REAL_1:55;
+        then A47:     0 <= sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) by SQUARE_1:def 4;
+          sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) < abs(x`2-c`2) by A43,A44,GOBRD14:9;
+        then (sqrt ((x`1-c`1)^2 + (x`2-c`2)^2))^2 < (abs(x`2-c`2))^2
+          by A47,SQUARE_1:78;
+        then (sqrt ((x`1-c`1)^2 + (x`2-c`2)^2))^2 < (x`2-c`2)^2
+          by SQUARE_1:62;
+        then (x`1-c`1)^2 + (x`2-c`2)^2 < (x`2-c`2)^2 + 0 by A46,SQUARE_1:def 4
+;
+        hence contradiction by A45,REAL_1:55;
+      end;
+      then not c in X by JORDAN1A:def 3;
+      hence thesis by YELLOW_6:10;
+
+      suppose
+A48:     x`1 < a`1;
+      take r = a`1-x`1;
+      thus r > 0 by A48,SQUARE_1:11;
+      let b be set;
+      assume
+A49:     b in Ball(p,r);
+      then reconsider b as Point of Euclid 2;
+      reconsider c = b as Point of TOP-REAL 2 by Lm2,EUCLID:def 8;
+        dist(p,b) < r by A49,METRIC_1:12;
+      then A50:   dist(x,c) < r by GOBRD14:def 1;
+        now
+        assume
+A51:       c`1 >= a`1;
+A52:     0 <= (x`2-c`2)^2 by SQUARE_1:72;
+          0 <= (x`1-c`1)^2 by SQUARE_1:72;
+        then A53:     0+0 <= (x`1-c`1)^2 + (x`2-c`2)^2 by A52,REAL_1:55;
+        then A54:     0 <= sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) by SQUARE_1:def 4;
+          sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) < a`1-x`1 by A50,GOBRD14:9;
+        then (sqrt ((x`1-c`1)^2 + (x`2-c`2)^2))^2 < (a`1-x`1)^2
+          by A54,SQUARE_1:78;
+        then (x`1-c`1)^2 + (x`2-c`2)^2 < (a`1-x`1)^2 by A53,SQUARE_1:def 4;
+        then A55:     (x`1-c`1)^2 + (x`2-c`2)^2 < (x`1-a`1)^2 by Th1;
+A56:     0 <= a`1-x`1 by A48,SQUARE_1:11;
+          a`1-x`1 <= c`1-x`1 by A51,REAL_1:92;
+        then (a`1-x`1)^2 <= (c`1-x`1)^2 by A56,SQUARE_1:77;
+        then (x`1-a`1)^2 <= (c`1-x`1)^2 by Th1;
+        then A57:     (x`1-a`1)^2 <= (x`1-c`1)^2 by Th1;
+          (x`1-c`1)^2 + 0 <= (x`1-c`1)^2 + (x`2-c`2)^2 by A52,REAL_1:55;
+        hence contradiction by A55,A57,AXIOMS:22;
+      end;
+      then not c in X by JORDAN1A:def 3;
+      hence thesis by YELLOW_6:10;
+    end;
+    then X` is open by Lm1,TOPMETR:22;
+    hence thesis by TOPS_1:29;
+  end;
+
+  cluster west_halfline a -> closed;
+  coherence
+  proof
+    set X = west_halfline a;
+      for p being Point of Euclid 2 st p in X`
+      ex r being real number st r>0 & Ball(p,r) c= X`
+    proof
+      let p be Point of Euclid 2;
+      assume
+A58:     p in X`;
+      then reconsider x = p as Point of TOP-REAL 2;
+A59:   not p in X by A58,YELLOW_6:10;
+      per cases by A59,JORDAN1A:def 5;
+      suppose
+A60:     x`2 <> a`2;
+      take r = abs(x`2-a`2);
+        x`2 - a`2 <> 0 by A60,XCMPLX_1:15;
+      hence r > 0 by ABSVALUE:6;
+      let b be set;
+      assume
+A61:     b in Ball(p,r);
+      then reconsider b as Point of Euclid 2;
+      reconsider c = b as Point of TOP-REAL 2 by Lm2,EUCLID:def 8;
+        dist(p,b) < r by A61,METRIC_1:12;
+      then A62:   dist(x,c) < r by GOBRD14:def 1;
+        now
+        assume
+A63:       c`2 = a`2;
+A64:     0 <= (x`1-c`1)^2 by SQUARE_1:72;
+         A65: 0 <= (x`2-c`2)^2 by SQUARE_1:72;
+        then 0+0 <= (x`1-c`1)^2 + (x`2-c`2)^2 by A64,REAL_1:55;
+        then A66:     0 <= sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) by SQUARE_1:def 4;
+          sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) < abs(x`2-c`2) by A62,A63,GOBRD14:9;
+        then (sqrt ((x`1-c`1)^2 + (x`2-c`2)^2))^2 < (abs(x`2-c`2))^2
+          by A66,SQUARE_1:78;
+        then (sqrt ((x`1-c`1)^2 + (x`2-c`2)^2))^2 < (x`2-c`2)^2
+          by SQUARE_1:62;
+        then (x`1-c`1)^2 + (x`2-c`2)^2 < (x`2-c`2)^2 + 0 by A65,SQUARE_1:def 4
+;
+        hence contradiction by A64,REAL_1:55;
+      end;
+      then not c in X by JORDAN1A:def 5;
+      hence thesis by YELLOW_6:10;
+
+      suppose
+A67:     x`1 > a`1;
+      take r = x`1-a`1;
+      thus r > 0 by A67,SQUARE_1:11;
+      let b be set;
+      assume
+A68:     b in Ball(p,r);
+      then reconsider b as Point of Euclid 2;
+      reconsider c = b as Point of TOP-REAL 2 by Lm2,EUCLID:def 8;
+        dist(p,b) < r by A68,METRIC_1:12;
+      then A69:   dist(x,c) < r by GOBRD14:def 1;
+        now
+        assume
+A70:       c`1 <= a`1;
+A71:     0 <= (x`2-c`2)^2 by SQUARE_1:72;
+          0 <= (x`1-c`1)^2 by SQUARE_1:72;
+        then A72:     0+0 <= (x`1-c`1)^2 + (x`2-c`2)^2 by A71,REAL_1:55;
+        then A73:     0 <= sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) by SQUARE_1:def 4;
+          sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) < x`1-a`1 by A69,GOBRD14:9;
+        then (sqrt ((x`1-c`1)^2 + (x`2-c`2)^2))^2 < (x`1-a`1)^2
+          by A73,SQUARE_1:78;
+        then A74:     (x`1-c`1)^2 + (x`2-c`2)^2 < (x`1-a`1)^2 by A72,SQUARE_1:
+def 4;
+A75:     0 <= x`1-a`1 by A67,SQUARE_1:11;
+          x`1-c`1 >= x`1-a`1 by A70,REAL_1:92;
+        then A76:     (x`1-a`1)^2 <= (x`1-c`1)^2 by A75,SQUARE_1:77;
+          0 + (x`1-c`1)^2 <= (x`1-c`1)^2 + (x`2-c`2)^2 by A71,REAL_1:55;
+        hence contradiction by A74,A76,AXIOMS:22;
+      end;
+      then not c in X by JORDAN1A:def 5;
+      hence thesis by YELLOW_6:10;
+    end;
+    then X` is open by Lm1,TOPMETR:22;
+    hence thesis by TOPS_1:29;
+  end;
+end;
+
+theorem Th12:
+  a in BDD P implies not north_halfline a c= UBD P
+  proof
+    assume
+A1:   a in BDD P;
+A2: BDD P misses UBD P by JORDAN2C:28;
+      a in north_halfline a by JORDAN1C:7;
+    hence not north_halfline a c= UBD P by A1,A2,XBOOLE_0:3;
+  end;
+
+theorem Th13:
+  a in BDD P implies not south_halfline a c= UBD P
+  proof
+    assume
+A1:   a in BDD P;
+A2: BDD P misses UBD P by JORDAN2C:28;
+      a in south_halfline a by JORDAN1C:7;
+    hence not south_halfline a c= UBD P by A1,A2,XBOOLE_0:3;
+  end;
+
+theorem
+    a in BDD P implies not east_halfline a c= UBD P
+  proof
+    assume
+A1:   a in BDD P;
+A2: BDD P misses UBD P by JORDAN2C:28;
+      a in east_halfline a by JORDAN1C:7;
+    hence not east_halfline a c= UBD P by A1,A2,XBOOLE_0:3;
+  end;
+
+theorem
+    a in BDD P implies not west_halfline a c= UBD P
+  proof
+    assume
+A1:   a in BDD P;
+A2: BDD P misses UBD P by JORDAN2C:28;
+      a in west_halfline a by JORDAN1C:7;
+    hence not west_halfline a c= UBD P by A1,A2,XBOOLE_0:3;
+  end;
+
+theorem
+    for P being Subset of TOP-REAL 2,
+      p1,p2,q being Point of TOP-REAL 2
+   st P is_an_arc_of p1,p2 & q <> p2
+   holds not p2 in L_Segment(P,p1,p2,q)
+   proof
+     let P be Subset of TOP-REAL 2,
+         p1,p2,q be Point of TOP-REAL 2 such that
+A1:    P is_an_arc_of p1,p2 & q <> p2;
+     assume p2 in L_Segment(P,p1,p2,q);
+     then p2 in {w where w is Point of TOP-REAL 2: LE w,q,P,p1,p2}
+       by JORDAN6:def 3;
+     then ex w being Point of TOP-REAL 2 st p2 = w & LE w,q,P,p1,p2;
+     hence contradiction by A1,JORDAN6:70;
+   end;
+
+theorem
+    for P being Subset of TOP-REAL 2,
+      p1,p2,q being Point of TOP-REAL 2
+   st P is_an_arc_of p1,p2 & q <> p1
+   holds not p1 in R_Segment(P,p1,p2,q)
+   proof
+     let P be Subset of TOP-REAL 2,
+         p1,p2,q be Point of TOP-REAL 2 such that
+A1:    P is_an_arc_of p1,p2 & q <> p1;
+     assume p1 in R_Segment(P,p1,p2,q);
+     then p1 in {w where w is Point of TOP-REAL 2: LE q,w,P,p1,p2}
+       by JORDAN6:def 4;
+     then ex w being Point of TOP-REAL 2 st p1 = w & LE q,w,P,p1,p2;
+     hence contradiction by A1,JORDAN6:69;
+   end;
+
+theorem Th18:
+  for C being Simple_closed_curve,
+      P being Subset of TOP-REAL 2,
+      p1,p2 being Point of TOP-REAL 2
+   st P is_an_arc_of p1,p2 & P c= C
+  ex R being non empty Subset of TOP-REAL 2 st
+     R is_an_arc_of p1,p2 & P \/ R = C & P /\ R = {p1,p2}
+  proof
+    let C be Simple_closed_curve,
+        P be Subset of TOP-REAL 2,
+        p1,p2 be Point of TOP-REAL 2 such that
+A1:   P is_an_arc_of p1,p2 and
+A2:   P c= C;
+   p1 in P & p2 in P by A1,TOPREAL1:4;
+    then p1 <> p2 & p1 in C & p2 in C by A1,A2,JORDAN6:49;
+    then consider P1,P2 being non empty Subset of TOP-REAL 2
+     such that
+A3:   P1 is_an_arc_of p1,p2 and
+A4:   P2 is_an_arc_of p1,p2 and
+A5:   C = P1 \/ P2 and
+A6:   P1 /\ P2 = {p1,p2} by TOPREAL2:5;
+    reconsider P1,P2 as non empty Subset of TOP-REAL 2;
+A7: P1 c= C & P2 c= C by A5,XBOOLE_1:7;
+A8: now
+      assume
+A9:     P1 = P2;
+        ex p3 being Point of TOP-REAL 2 st p3 in P1 & p3 <> p1 & p3 <> p2
+        by A3,JORDAN6:55;
+      hence contradiction by A6,A9,TARSKI:def 2;
+    end;
+    per cases by A1,A2,A3,A4,A7,A8,JORDAN16:18;
+    suppose
+A10:   P = P1;
+    take P2;
+    thus P2 is_an_arc_of p1,p2 & P \/ P2 = C & P /\ P2 = {p1,p2}
+      by A4,A5,A6,A10;
+    suppose
+A11:   P = P2;
+    take P1;
+    thus P1 is_an_arc_of p1,p2 & P \/ P1 = C & P /\ P1 = {p1,p2}
+      by A3,A5,A6,A11;
+  end;
+
+theorem Th19:
+  for P being Subset of TOP-REAL 2,
+      p1,p2,q1,q2 being Point of TOP-REAL 2
+    st P is_an_arc_of p1,p2 & q1 in P & q2 in P &
+       q1 <> p1 & q1 <> p2 & q2 <> p1 & q2 <> p2 & q1 <> q2
+   ex Q being non empty Subset of TOP-REAL 2 st
+      Q is_an_arc_of q1,q2 & Q c= P & Q misses {p1,p2}
+   proof
+     let P be Subset of TOP-REAL 2,
+         p1,p2,q1,q2 be Point of TOP-REAL 2 such that
+A1:    P is_an_arc_of p1,p2 and
+A2:    q1 in P and
+A3:    q2 in P and
+A4:    q1 <> p1 and
+A5:    q1 <> p2 and
+A6:    q2 <> p1 and
+A7:    q2 <> p2 and
+A8:    q1 <> q2;
+     per cases by A1,A2,A3,A8,JORDAN5C:14;
+     suppose
+A9:    LE q1,q2,P,p1,p2;
+     set S = Segment(P,p1,p2,q1,q2);
+       S is_an_arc_of q1,q2 by A1,A8,A9,JORDAN16:36;
+     then reconsider S as non empty Subset of TOP-REAL 2 by TOPREAL1:4;
+     take S;
+     thus S is_an_arc_of q1,q2 by A1,A8,A9,JORDAN16:36;
+     thus S c= P by JORDAN16:5;
+       now
+     assume
+A10:    S meets {p1,p2};
+A11:  S = {q where q is Point of TOP-REAL 2 :
+            LE q1,q,P,p1,p2 & LE q,q2,P,p1,p2} by JORDAN6:29;
+     per cases by A10,ZFMISC_1:57;
+     suppose p1 in S;
+     then ex q being Point of TOP-REAL 2 st
+       q = p1 & LE q1,q,P,p1,p2 & LE q,q2,P,p1,p2 by A11;
+     hence contradiction by A1,A4,JORDAN6:69;
+     suppose p2 in S;
+     then ex q being Point of TOP-REAL 2 st
+       q = p2 & LE q1,q,P,p1,p2 & LE q,q2,P,p1,p2 by A11;
+     hence contradiction by A1,A7,JORDAN6:70;
+     end;
+     hence thesis;
+
+     suppose
+A12:    LE q2,q1,P,p1,p2;
+     set S = Segment(P,p1,p2,q2,q1);
+       S is_an_arc_of q2,q1 by A1,A8,A12,JORDAN16:36;
+     then reconsider S as non empty Subset of TOP-REAL 2 by TOPREAL1:4;
+     take S;
+       S is_an_arc_of q2,q1 by A1,A8,A12,JORDAN16:36;
+     hence S is_an_arc_of q1,q2 by JORDAN5B:14;
+     thus S c= P by JORDAN16:5;
+       now
+     assume
+A13:    S meets {p1,p2};
+A14:  S = {q where q is Point of TOP-REAL 2 :
+            LE q2,q,P,p1,p2 & LE q,q1,P,p1,p2} by JORDAN6:29;
+     per cases by A13,ZFMISC_1:57;
+     suppose p1 in S;
+     then ex q being Point of TOP-REAL 2 st
+       q = p1 & LE q2,q,P,p1,p2 & LE q,q1,P,p1,p2 by A14;
+     hence contradiction by A1,A6,JORDAN6:69;
+     suppose p2 in S;
+     then ex q being Point of TOP-REAL 2 st
+       q = p2 & LE q2,q,P,p1,p2 & LE q,q1,P,p1,p2 by A14;
+     hence contradiction by A1,A5,JORDAN6:70;
+     end;
+     hence thesis;
+  end;
+
+begin  :: Two Special Points on a Simple Closed Curve
+
+definition let p,P;
+ func North-Bound(p,P) -> Point of TOP-REAL 2 equals
+:Def1: |[p`1,inf(proj2.:(P /\ north_halfline p))]|;
+ correctness;
+ func South-Bound(p,P) -> Point of TOP-REAL 2 equals
+:Def2: |[p`1,sup(proj2.:(P /\ south_halfline p))]|;
+ correctness;
+end;
+
+theorem Th20:
+  North-Bound(p,P)`1 = p`1 & South-Bound(p,P)`1 = p`1
+  proof
+    thus North-Bound(p,P)`1
+       = |[p`1,inf(proj2.:(P /\ north_halfline p))]|`1 by Def1
+      .= p`1 by EUCLID:56;
+    thus South-Bound(p,P)`1
+       = |[p`1,sup(proj2.:(P /\ south_halfline p))]|`1 by Def2
+      .= p`1 by EUCLID:56;
+  end;
+
+theorem Th21:
+  North-Bound(p,P)`2 = inf(proj2.:(P /\ north_halfline p)) &
+  South-Bound(p,P)`2 = sup(proj2.:(P /\ south_halfline p))
+  proof
+    thus North-Bound(p,P)`2
+       = |[p`1,inf(proj2.:(P /\ north_halfline p))]|`2 by Def1
+      .= inf(proj2.:(P /\ north_halfline p)) by EUCLID:56;
+    thus South-Bound(p,P)`2
+       = |[p`1,sup(proj2.:(P /\ south_halfline p))]|`2 by Def2
+      .= sup(proj2.:(P /\ south_halfline p)) by EUCLID:56;
+  end;
+
+theorem Th22:
+  for C being compact Subset of TOP-REAL 2 holds
+  p in BDD C implies
+  North-Bound(p,C) in C & North-Bound(p,C) in north_halfline p &
+  South-Bound(p,C) in C & South-Bound(p,C) in south_halfline p
+  proof
+    let C be compact Subset of TOP-REAL 2;
+    assume
+A1:   p in BDD C;
+A2: C is Bounded by JORDAN2C:73;
+    set X = C /\ north_halfline p;
+      not north_halfline p c= UBD C by A1,Th12;
+    then north_halfline p meets C by JORDAN1C:17;
+    then X is non empty by XBOOLE_0:def 7;
+    then A3: proj2.:X <> {} by Lm4,RELAT_1:152;
+      X c= C by XBOOLE_1:17;
+    then A4: X is Bounded by A2,JORDAN2C:16;
+      X is closed by TOPS_1:35;
+    then A5: proj2.:X is closed by A4,JORDAN1A:26;
+      proj2.:X is bounded by A4,JORDAN1A:27;
+    then proj2.:X is bounded_below by SEQ_4:def 3;
+    then inf (proj2.:X) in proj2.:X by A3,A5,RCOMP_1:31;
+    then consider x being set such that
+A6:   x in the carrier of TOP-REAL 2 and
+A7:   x in X and
+A8:   inf (proj2.:X) = proj2.x by FUNCT_2:115;
+    reconsider x as Point of TOP-REAL 2 by A6;
+      x in north_halfline p by A7,XBOOLE_0:def 3;
+    then A9: x`1 = p`1 by JORDAN1A:def 2
+       .= North-Bound(p,C)`1 by Th20;
+      x`2 = inf (proj2.:X) by A8,PSCOMP_1:def 29
+       .= North-Bound(p,C)`2 by Th21;
+    then x = North-Bound(p,C) by A9,TOPREAL3:11;
+    hence North-Bound(p,C) in C &
+          North-Bound(p,C) in north_halfline p by A7,XBOOLE_0:def 3;
+
+    set X = C /\ south_halfline p;
+      not south_halfline p c= UBD C by A1,Th13;
+    then south_halfline p meets C by JORDAN1C:16;
+    then X is non empty by XBOOLE_0:def 7;
+    then A10: proj2.:X <> {} by Lm4,RELAT_1:152;
+      X c= C by XBOOLE_1:17;
+    then A11: X is Bounded by A2,JORDAN2C:16;
+      X is closed by TOPS_1:35;
+    then A12: proj2.:X is closed by A11,JORDAN1A:26;
+      proj2.:X is bounded by A11,JORDAN1A:27;
+    then proj2.:X is bounded_above by SEQ_4:def 3;
+    then sup (proj2.:X) in proj2.:X by A10,A12,RCOMP_1:30;
+    then consider x being set such that
+A13:   x in the carrier of TOP-REAL 2 and
+A14:   x in X and
+A15:   sup (proj2.:X) = proj2.x by FUNCT_2:115;
+    reconsider x as Point of TOP-REAL 2 by A13;
+      x in south_halfline p by A14,XBOOLE_0:def 3;
+    then A16: x`1 = p`1 by JORDAN1A:def 4
+       .= South-Bound(p,C)`1 by Th20;
+      x`2 = sup (proj2.:X) by A15,PSCOMP_1:def 29
+       .= South-Bound(p,C)`2 by Th21;
+    then x = South-Bound(p,C) by A16,TOPREAL3:11;
+    hence South-Bound(p,C) in C &
+          South-Bound(p,C) in south_halfline p by A14,XBOOLE_0:def 3;
+  end;
+
+theorem Th23:
+  for C being compact Subset of TOP-REAL 2 holds
+  p in BDD C implies South-Bound(p,C)`2 < p`2 & p`2 < North-Bound(p,C)`2
+  proof
+    let C be compact Subset of TOP-REAL 2;
+    assume
+A1:   p in BDD C;
+A2: South-Bound(p,C)`2 = sup(proj2.:(C /\ south_halfline p)) by Th21;
+A3: South-Bound(p,C) in C by A1,Th22;
+      South-Bound(p,C) in south_halfline p by A1,Th22;
+    then South-Bound(p,C) in C /\ south_halfline p by A3,XBOOLE_0:def 3;
+then A4: proj2.:(C /\ south_halfline p) is non empty by Lm4,RELAT_1:152;
+A5: proj2.:(south_halfline p) is bounded_above by Th5;
+      C /\ south_halfline p c= south_halfline p by XBOOLE_1:17;
+    then proj2.:(C /\ south_halfline p) c= proj2.:(south_halfline p)
+      by RELAT_1:156;
+    then A6: sup(proj2.:(C /\ south_halfline p)) <= sup(proj2.:(south_halfline
+p))
+      by A4,A5,PSCOMP_1:13;
+A7: sup(proj2.:(south_halfline p)) = p`2 by Th9;
+A8: BDD C misses C by JORDAN1A:15;
+      now
+      assume
+A9:     South-Bound(p,C)`2 = p`2;
+        South-Bound(p,C)`1 = p`1 by Th20;
+      then South-Bound(p,C) = p by A9,TOPREAL3:11;
+      then p in C by A1,Th22;
+      hence contradiction by A1,A8,XBOOLE_0:3;
+    end;
+    hence South-Bound(p,C)`2 < p`2 by A2,A6,A7,REAL_1:def 5;
+      North-Bound(p,C) in C & North-Bound(p,C) in north_halfline p by A1,Th22;
+    then C /\ north_halfline p is non empty by XBOOLE_0:def 3;
+    then A10: proj2.:(C /\ north_halfline p) is non empty by Lm4,RELAT_1:152;
+A11: proj2.:(north_halfline p) is bounded_below by Th4;
+      C /\ north_halfline p c= north_halfline p by XBOOLE_1:17;
+    then proj2.:(C /\ north_halfline p) c= proj2.:(north_halfline p)
+      by RELAT_1:156;
+    then A12: inf(proj2.:(C /\ north_halfline p)) >= inf(proj2.:(north_halfline
+p))
+      by A10,A11,PSCOMP_1:12;
+A13: inf(proj2.:(north_halfline p)) = p`2 by Th8;
+A14: North-Bound(p,C)`2 = inf(proj2.:(C /\ north_halfline p)) by Th21;
+      now
+      assume
+A15:     North-Bound(p,C)`2 = p`2;
+        North-Bound(p,C)`1 = p`1 by Th20;
+      then North-Bound(p,C) = p by A15,TOPREAL3:11;
+      then p in C by A1,Th22;
+      hence contradiction by A1,A8,XBOOLE_0:3;
+    end;
+    hence p`2 < North-Bound(p,C)`2 by A12,A13,A14,REAL_1:def 5;
+  end;
+
+theorem Th24:
+  for C being compact Subset of TOP-REAL 2 holds
+  p in BDD C implies
+  inf(proj2.:(C /\ north_halfline p)) > sup(proj2.:(C /\ south_halfline p))
+  proof
+    let C be compact Subset of TOP-REAL 2;
+    assume p in BDD C;
+    then A1: South-Bound(p,C)`2 < p`2 & p`2 < North-Bound(p,C)`2 by Th23;
+      North-Bound(p,C)`2 = inf(proj2.:(C /\ north_halfline p)) &
+    South-Bound(p,C)`2 = sup(proj2.:(C /\ south_halfline p)) by Th21;
+    hence thesis by A1,AXIOMS:22;
+  end;
+
+theorem
+    for C being compact Subset of TOP-REAL 2 holds
+  p in BDD C implies South-Bound(p,C) <> North-Bound(p,C)
+  proof
+    let C be compact Subset of TOP-REAL 2;
+    assume that
+A1:   p in BDD C;
+    assume
+A2:   not thesis;
+      North-Bound(p,C)`2 = inf(proj2.:(C /\ north_halfline p)) &
+    South-Bound(p,C)`2 = sup(proj2.:(C /\ south_halfline p)) by Th21;
+    hence thesis by A1,A2,Th24;
+  end;
+
+theorem Th26:
+  for C being Subset of TOP-REAL 2 holds
+   LSeg(North-Bound(p,C),South-Bound(p,C)) is vertical
+  proof
+    let C be Subset of TOP-REAL 2;
+      North-Bound(p,C)`1 = p`1 & South-Bound(p,C)`1 = p`1 by Th20;
+    hence thesis by SPPOL_1:37;
+  end;
+
+theorem
+    for C being compact Subset of TOP-REAL 2 holds
+   p in BDD C implies
+   LSeg(North-Bound(p,C),South-Bound(p,C)) /\ C
+      = { North-Bound(p,C), South-Bound(p,C) }
+   proof
+     let C be compact Subset of TOP-REAL 2;
+     assume
+A1:    p in BDD C;
+     set L = LSeg(North-Bound(p,C),South-Bound(p,C));
+     hereby
+       let x be set;
+       assume
+A2:      x in L /\ C;
+       then reconsider y = x as Point of TOP-REAL 2;
+A3:    South-Bound(p,C)`1 = p`1 by Th20;
+A4:    North-Bound(p,C)`1 = p`1 by Th20;
+A5:    South-Bound(p,C)`2 = sup(proj2.:(C /\ south_halfline p)) by Th21;
+A6:    North-Bound(p,C)`2 = inf(proj2.:(C /\ north_halfline p)) by Th21;
+A7:    L is vertical by Th26;
+A8:    South-Bound(p,C) in L by TOPREAL1:6;
+A9:    x in C by A2,XBOOLE_0:def 3;
+A10:    x in L by A2,XBOOLE_0:def 3;
+       then A11:    y`1 = p`1 by A3,A7,A8,SPPOL_1:def 3;
+         now
+         assume y <> North-Bound(p,C);
+         then A12:      y`2 <> North-Bound(p,C)`2 by A4,A11,TOPREAL3:11;
+           South-Bound(p,C)`2 < p`2 & p`2 < North-Bound(p,C)`2 by A1,Th23;
+         then South-Bound(p,C)`2 < North-Bound(p,C)`2 by AXIOMS:22;
+         then A13:      South-Bound(p,C)`2 <= y`2 & y`2 <= North-Bound(p,C)`2
+           by A10,TOPREAL1:10;
+         then A14:      y`2 < North-Bound(p,C)`2 by A12,REAL_1:def 5;
+A15:      C is Bounded by JORDAN2C:73;
+         then C /\ south_halfline p is Bounded by JORDAN1I:1;
+         then proj2.:(C /\ south_halfline p) is bounded by JORDAN1A:27;
+         then A16:      proj2.:(C /\ south_halfline p) is bounded_above by
+SEQ_4:def 3;
+           C /\ north_halfline p is Bounded by A15,JORDAN1I:1;
+         then proj2.:(C /\ north_halfline p) is bounded by JORDAN1A:27;
+         then A17:      proj2.:(C /\ north_halfline p) is bounded_below by
+SEQ_4:def 3;
+A18:      y`2 = proj2.y by PSCOMP_1:def 29;
+           now
+           assume y`2 > p`2;
+           then y in north_halfline p by A11,JORDAN1A:def 2;
+           then y in C /\ north_halfline p by A9,XBOOLE_0:def 3;
+           then y`2 in proj2.:(C /\ north_halfline p) by A18,FUNCT_2:43;
+           hence contradiction by A6,A14,A17,SEQ_4:def 5;
+         end;
+         then y in south_halfline p by A11,JORDAN1A:def 4;
+         then y in C /\ south_halfline p by A9,XBOOLE_0:def 3;
+         then y`2 in proj2.:(C /\ south_halfline p) by A18,FUNCT_2:43;
+         then y`2 <= South-Bound(p,C)`2 by A5,A16,SEQ_4:def 4;
+         then y`2 = South-Bound(p,C)`2 by A13,AXIOMS:21;
+         hence y = South-Bound(p,C) by A3,A11,TOPREAL3:11;
+       end;
+       hence x in {North-Bound(p,C),South-Bound(p,C)} by TARSKI:def 2;
+     end;
+     let x be set;
+     assume x in {North-Bound(p,C),South-Bound(p,C)};
+     then A19:  x = North-Bound(p,C) or x = South-Bound(p,C) by TARSKI:def 2;
+A20:  North-Bound(p,C) in C & South-Bound(p,C) in C by A1,Th22;
+       x in L by A19,TOPREAL1:6;
+     hence thesis by A19,A20,XBOOLE_0:def 3;
+   end;
+
+theorem
+    for C being compact Subset of TOP-REAL 2 holds
+  p in BDD C & q in BDD C & p`1 <> q`1 implies
+   North-Bound(p,C), South-Bound(q,C), North-Bound(q,C), South-Bound(p,C)
+       are_mutually_different
+  proof
+    let C be compact Subset of TOP-REAL 2;
+    assume that
+A1:   p in BDD C and
+A2:   q in BDD C and
+A3:   p`1 <> q`1;
+    set np = North-Bound(p,C),
+        sq = South-Bound(q,C),
+        nq = North-Bound(q,C),
+        sp = South-Bound(p,C);
+A4: np`1 = p`1 & nq`1 = q`1 & sp`1 = p`1 & sq`1 = q`1 by Th20;
+      North-Bound(q,C)`2 = inf(proj2.:(C /\ north_halfline q)) &
+    South-Bound(q,C)`2 = sup(proj2.:(C /\ south_halfline q)) &
+    North-Bound(p,C)`2 = inf(proj2.:(C /\ north_halfline p)) &
+    South-Bound(p,C)`2 = sup(proj2.:(C /\ south_halfline p)) by Th21;
+    hence np <> sq & sq <> nq & nq <> np & sp <> np & sp <> sq & sp <> nq
+      by A1,A2,A3,A4,Th24;
+  end;
+
+begin  :: An Order of Points on a Simple Closed Curve
+
+definition let n,V,s1,s2,t1,t2;
+ pred s1,s2, V-separate t1,t2 means
+:Def3: for A being Subset of TOP-REAL n st
+    A is_an_arc_of s1,s2 & A c= V
+  holds A meets {t1,t2};
+ antonym s1,s2 are_neighbours_wrt t1,t2, V;
+end;
+
+theorem
+    t,t, V-separate s1,s2
+  proof
+    assume not thesis;
+    then ex A being Subset of TOP-REAL n st
+    A is_an_arc_of t,t & A c= V & A misses {s1,s2} by Def3;
+    hence thesis by JORDAN6:49;
+  end;
+
+theorem
+    s1,s2, V-separate t1,t2 implies s2,s1, V-separate t1,t2
+  proof
+    assume
+A1:   for A being Subset of TOP-REAL n st
+        A is_an_arc_of s1,s2 & A c= V holds A meets {t1,t2};
+    let A be Subset of TOP-REAL n such that
+A2:   A is_an_arc_of s2,s1 and
+A3:   A c= V;
+      A is_an_arc_of s1,s2 by A2,JORDAN5B:14;
+    hence A meets {t1,t2} by A1,A3;
+  end;
+
+theorem
+    s1,s2, V-separate t1,t2 implies s1,s2, V-separate t2,t1
+  proof
+    assume
+A1:   for A being Subset of TOP-REAL n st
+        A is_an_arc_of s1,s2 & A c= V holds A meets {t1,t2};
+    let A be Subset of TOP-REAL n;
+    thus thesis by A1;
+  end;
+
+theorem Th32:
+  s,t1, V-separate s,t2
+  proof
+    let A be Subset of TOP-REAL n such that
+A1:   A is_an_arc_of s,t1 and A c= V;
+      s in A & s in {s,t2} by A1,TARSKI:def 2,TOPREAL1:4;
+    hence A meets {s,t2} by XBOOLE_0:3;
+  end;
+
+theorem Th33:
+  t1,s, V-separate t2,s
+  proof
+    let A be Subset of TOP-REAL n such that
+A1:   A is_an_arc_of t1,s and A c= V;
+      s in A & s in {s,t2} by A1,TARSKI:def 2,TOPREAL1:4;
+    hence A meets {t2,s} by XBOOLE_0:3;
+  end;
+
+theorem Th34:
+  t1,s, V-separate s,t2
+  proof
+    let A be Subset of TOP-REAL n such that
+A1:   A is_an_arc_of t1,s and A c= V;
+      s in A & s in {s,t2} by A1,TARSKI:def 2,TOPREAL1:4;
+    hence A meets {s,t2} by XBOOLE_0:3;
+  end;
+
+theorem Th35:
+  s,t1, V-separate t2,s
+  proof
+    let A be Subset of TOP-REAL n such that
+A1:   A is_an_arc_of s,t1 and A c= V;
+      s in A & s in {s,t2} by A1,TARSKI:def 2,TOPREAL1:4;
+    hence A meets {t2,s} by XBOOLE_0:3;
+  end;
+
+theorem
+    for p1,p2,q being Point of TOP-REAL 2 st
+    q in C & p1 in C & p2 in C & p1 <> p2 & p1 <> q & p2 <> q holds
+  p1,p2 are_neighbours_wrt q,q, C
+  proof
+    let p1,p2,q be Point of TOP-REAL 2 such that
+A1:   q in C and
+A2:   p1 in C & p2 in C & p1 <> p2 and
+A3:   p1 <> q & p2 <> q;
+    consider P1,P2 being non empty Subset of TOP-REAL 2
+      such that
+A4:   P1 is_an_arc_of p1,p2 and
+A5:   P2 is_an_arc_of p1,p2 and
+A6:   C = P1 \/ P2 and
+A7:   P1 /\ P2 = {p1,p2} by A2,TOPREAL2:5;
+    per cases by A1,A6,XBOOLE_0:def 2;
+    suppose
+A8:   q in P1 & not q in P2;
+    take P2;
+    thus P2 is_an_arc_of p1,p2 by A5;
+    thus P2 c= C by A6,XBOOLE_1:7;
+    thus P2 misses {q,q} by A8,ZFMISC_1:57;
+    suppose
+A9:   q in P2 & not q in P1;
+    take P1;
+    thus P1 is_an_arc_of p1,p2 by A4;
+    thus P1 c= C by A6,XBOOLE_1:7;
+    thus P1 misses {q,q} by A9,ZFMISC_1:57;
+    suppose q in P1 & q in P2;
+    then q in P1 /\ P2 by XBOOLE_0:def 3;
+    hence thesis by A3,A7,TARSKI:def 2;
+  end;
+
+theorem
+    p1 <> p2 & p1 in C & p2 in C implies
+  (p1,p2, C-separate q1,q2 implies q1,q2, C-separate p1,p2)
+  proof
+    assume that
+A1:   p1 <> p2 and
+A2:   p1 in C and
+A3:   p2 in C and
+A4:   p1,p2, C-separate q1,q2;
+    per cases;
+    suppose q1 = p1;
+    hence q1,q2, C-separate p1,p2 by Th32;
+    suppose q2 = p2;
+    hence q1,q2, C-separate p1,p2 by Th33;
+    suppose q1 = p2;
+    hence q1,q2, C-separate p1,p2 by Th35;
+    suppose p1 = q2;
+    hence q1,q2, C-separate p1,p2 by Th34;
+    suppose that
+A5:   q1 <> p1 and
+A6:   q2 <> p2 and
+A7:   q1 <> p2 and
+A8:   q2 <> p1;
+    let A be Subset of TOP-REAL 2 such that
+A9:   A is_an_arc_of q1,q2 and
+A10:   A c= C;
+    consider B being non empty Subset of TOP-REAL 2 such that
+A11:   B is_an_arc_of q1,q2 and
+A12:   A \/ B = C and
+        A /\ B = {q1,q2} by A9,A10,Th18;
+    assume A misses {p1,p2};
+    then not p1 in A & not p2 in A by ZFMISC_1:55;
+    then p1 in B & p2 in B by A2,A3,A12,XBOOLE_0:def 2;
+    then consider P being non empty Subset of TOP-REAL 2 such that
+A13:   P is_an_arc_of p1,p2 and
+A14:   P c= B and
+A15:   P misses {q1,q2} by A1,A5,A6,A7,A8,A11,Th19;
+      B c= C by A12,XBOOLE_1:7;
+    then P c= C by A14,XBOOLE_1:1;
+    hence thesis by A4,A13,A15,Def3;
+  end;
+
+theorem
+    p1 in C & p2 in C & q1 in C &
+  p1 <> p2 & q1 <> p1 & q1 <> p2 & q2 <> p1 & q2 <> p2
+    implies p1,p2 are_neighbours_wrt q1,q2, C
+         or p1,q1 are_neighbours_wrt p2,q2, C
+  proof
+    assume that
+A1:   p1 in C and
+A2:   p2 in C and
+A3:   q1 in C and
+A4:   p1 <> p2 and
+A5:   q1 <> p1 and
+A6:   q1 <> p2 and
+A7:   q2 <> p1 and
+A8:   q2 <> p2;
+    assume
+A9:   for A being Subset of TOP-REAL 2 st
+        A is_an_arc_of p1,p2 & A c= C holds A meets {q1,q2};
+    consider P,P1 being non empty Subset of TOP-REAL 2 such that
+A10:   P is_an_arc_of p1,p2 and
+A11:   P1 is_an_arc_of p1,p2 and
+A12:   C = P \/ P1 and
+A13:   P /\ P1 = {p1,p2} by A1,A2,A4,TOPREAL2:5;
+A14: P c= C by A12,XBOOLE_1:7;
+A15: P1 c= C by A12,XBOOLE_1:7;
+A16: P meets {q1,q2} by A9,A10,A14;
+    per cases by A16,ZFMISC_1:57;
+    suppose that
+A17:   q1 in P and
+A18:   not q2 in P;
+      now
+      take A = Segment(P,p1,p2,p1,q1);
+        LE p1, q1, P, p1, p2 by A10,A17,JORDAN5C:10;
+      hence A is_an_arc_of p1,q1 by A5,A10,JORDAN16:36;
+A19:   A c= P by JORDAN16:5;
+      hence A c= C by A14,XBOOLE_1:1;
+A20:   now
+        assume
+A21:       p2 in A;
+          A = {q where q is Point of TOP-REAL 2:
+          LE p1,q,P,p1,p2 & LE q,q1,P,p1,p2} by JORDAN6:29;
+        then ex q being Point of TOP-REAL 2 st p2 = q &
+          LE p1,q,P,p1,p2 & LE q,q1,P,p1,p2 by A21;
+        hence contradiction by A6,A10,JORDAN6:70;
+      end;
+        not q2 in A by A18,A19;
+      hence A misses {p2,q2} by A20,ZFMISC_1:57;
+    end;
+    hence p1,q1 are_neighbours_wrt p2,q2, C by Def3;
+
+    suppose that
+A22:   q2 in P and
+A23:   not q1 in P;
+      now
+      take A = Segment(P1,p1,p2,p1,q1);
+        q1 in P1 by A3,A12,A23,XBOOLE_0:def 2;
+      then LE p1, q1, P1, p1, p2 by A11,JORDAN5C:10;
+      hence A is_an_arc_of p1,q1 by A5,A11,JORDAN16:36;
+A24:   A c= P1 by JORDAN16:5;
+      hence A c= C by A15,XBOOLE_1:1;
+A25:   now
+        assume
+A26:       p2 in A;
+          A = {q where q is Point of TOP-REAL 2:
+          LE p1,q,P1,p1,p2 & LE q,q1,P1,p1,p2} by JORDAN6:29;
+        then ex q being Point of TOP-REAL 2 st p2 = q &
+          LE p1,q,P1,p1,p2 & LE q,q1,P1,p1,p2 by A26;
+        hence contradiction by A6,A11,JORDAN6:70;
+      end;
+        now
+        assume q2 in A;
+        then q2 in {p1,p2} by A13,A22,A24,XBOOLE_0:def 3;
+        hence contradiction by A7,A8,TARSKI:def 2;
+      end;
+      hence A misses {p2,q2} by A25,ZFMISC_1:57;
+    end;
+    hence p1,q1 are_neighbours_wrt p2,q2, C by Def3;
+
+    suppose that
+A27:   q1 in P and
+A28:   q2 in P;
+      P1 meets {q1,q2} by A9,A11,A15;
+    then q1 in P1 or q2 in P1 by ZFMISC_1:57;
+    then q1 in {p1,p2} or q2 in {p1,p2} by A13,A27,A28,XBOOLE_0:def 3;
+    hence thesis by A5,A6,A7,A8,TARSKI:def 2;
+  end;

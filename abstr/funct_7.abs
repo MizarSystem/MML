@@ -1,0 +1,558 @@
+:: Miscellaneous Facts about Functions
+::  by Grzegorz Bancerek and Andrzej Trybulec
+::
+:: Received January 12, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, RELAT_1, BOOLE, CAT_1, FUNCOP_1, FINSET_1, PBOOLE, CAT_4,
+      FUNCT_4, GR_CY_1, INT_1, FINSEQ_1, CARD_1, SETFAM_1, SUBSET_1, PRALG_1,
+      ZF_REFLE, FINSEQ_2, MCART_1, TARSKI, FINSEQ_4, REWRITE1, FUNCT_5,
+      FUNCT_2, FUNCT_7, PARTFUN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
+      SETFAM_1, PBOOLE, DOMAIN_1, CARD_1, PRALG_1, RELAT_1, FUNCT_1, RELSET_1,
+      BINOP_1, FINSEQ_1, FINSET_1, CQC_LANG, CAT_4, PARTFUN1, FUNCOP_1,
+      FUNCT_2, FINSEQ_2, FUNCT_4, FUNCT_5, FINSEQ_4, GR_CY_1, REWRITE1;
+ constructors GR_CY_1, CQC_LANG, WELLORD2, NAT_1, CAT_4, BINOP_1, DOMAIN_1,
+      PRALG_1, REWRITE1, FINSEQ_4, FINSUB_1, PROB_1, MEMBERED;
+ clusters NUMBERS, SUBSET_1, RELAT_1, FUNCT_1, FINSEQ_1, RELSET_1, CARD_1,
+      FINSEQ_5, FUNCOP_1, FUNCT_4, CQC_LANG, SETFAM_1, NAT_1, PARTFUN1,
+      XREAL_0, INT_1, ZFMISC_1, FUNCT_2, ORDINAL2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Preliminaries
+
+ reserve a,x,y,A,B for set,
+         l,m,n for Nat;
+
+theorem :: FUNCT_7:1
+   for f being Function, X being set st rng f c= X holds (id X)*f = f;
+
+theorem :: FUNCT_7:2
+   for X being set, Y being non empty set,
+  f being Function of X,Y st f is one-to-one
+ for B being Subset of X, C being Subset of Y st C c= f.:B
+ holds f"C c= B;
+
+theorem :: FUNCT_7:3
+ for X,Y be non empty set, f being Function of X,Y st f is one-to-one
+  for x being Element of X, A being Subset of X st f.x in f.:A
+ holds x in A;
+
+theorem :: FUNCT_7:4
+ for X,Y be non empty set, f being Function of X,Y st f is one-to-one
+ for x being Element of X,
+  A being Subset of X, B being Subset of Y st f.x in f.:A \ B
+  holds x in A \ f"B;
+
+theorem :: FUNCT_7:5
+   for X,Y be non empty set, f being Function of X,Y st f is one-to-one
+ for y being Element of Y,
+  A being Subset of X, B being Subset of Y st y in f.:A \ B
+  holds f".y in A \ f"B;
+
+theorem :: FUNCT_7:6
+ for f being Function, a being set st a in dom f
+  holds f|{a} = a .--> f.a;
+
+definition let x,y be set;
+ cluster x .--> y -> non empty;
+end;
+
+definition let x,y,a,b be set;
+ cluster (x,y) --> (a,b) -> non empty;
+end;
+
+theorem :: FUNCT_7:7
+ for I being set, M being ManySortedSet of I
+  for i being set st i in I holds i.--> (M.i) = M|{i};
+
+theorem :: FUNCT_7:8
+   for I,J being set, M being ManySortedSet of [:I,J:]
+  for i,j being set st i in I & j in J holds (i,j):-> (M.(i,j)) = M|[:{i},{j}:]
+;
+
+canceled;
+
+theorem :: FUNCT_7:10
+   for f,g,h being Function st rng g c= dom f & rng h c= dom f
+  holds f*(g +* h) = (f*g) +* (f*h);
+
+theorem :: FUNCT_7:11
+ for f,g,h being Function holds
+  (g +* h)*f = (g*f) +* (h*f);
+
+theorem :: FUNCT_7:12
+   for f,g,h being Function st rng f misses dom g
+  holds (h +* g)*f = h*f;
+
+theorem :: FUNCT_7:13
+for A,B be set, y be set st A meets rng(id B +* (A --> y))
+  holds y in A;
+
+theorem :: FUNCT_7:14
+  for x,y be set, A be set st x <> y
+ holds not x in rng(id A +* (x .--> y));
+
+theorem :: FUNCT_7:15
+   for X being set, a being set, f being Function st dom f = X \/ {a}
+  holds f = f|X +* (a .--> f.a);
+
+theorem :: FUNCT_7:16
+   for f being Function, X,y,z being set
+  holds (f+*(X-->y))+*(X-->z) = f+*(X-->z);
+
+theorem :: FUNCT_7:17
+   0 < m & m <= n implies Segm m c= Segm n;
+
+theorem :: FUNCT_7:18
+   INT <> INT*;
+
+theorem :: FUNCT_7:19
+   {}* = {{}};
+
+theorem :: FUNCT_7:20
+ <*x*> in A* iff x in A;
+
+theorem :: FUNCT_7:21
+   A c= B iff A* c= B*;
+
+theorem :: FUNCT_7:22
+   for A being Subset of NAT st
+  for n,m st n in A & m < n holds m in A
+ holds A is Cardinal;
+
+theorem :: FUNCT_7:23
+    for A being finite set, X being non empty Subset-Family of A
+   ex C being Element of X st
+    for B being Element of X holds B c= C implies B = C;
+
+theorem :: FUNCT_7:24
+ for p,q being FinSequence st len p = len q+1
+ for i being Nat holds i in dom q iff i in dom p & i+1 in dom p;
+
+definition
+ cluster Function-yielding non empty non-empty FinSequence;
+end;
+
+definition
+ cluster {} -> Function-yielding;
+ let f be Function;
+ cluster <*f*> -> Function-yielding;
+ let g be Function;
+ cluster <*f,g*> -> Function-yielding;
+ let h be Function;
+ cluster <*f,g,h*> -> Function-yielding;
+end;
+
+definition let n be Nat, f be Function;
+ cluster n|->f -> Function-yielding;
+end;
+
+definition
+ let p be FinSequence, q be non empty FinSequence;
+ cluster p^q -> non empty;
+ cluster q^p -> non empty;
+end;
+
+definition
+ let p,q be Function-yielding FinSequence;
+ cluster p^q -> Function-yielding;
+end;
+
+theorem :: FUNCT_7:25
+ for p,q being FinSequence st p^q is Function-yielding
+  holds p is Function-yielding & q is Function-yielding;
+
+begin :: Some useful schemes
+
+scheme Kappa2D{ X,Y,Z()->non empty set,F(Element of X(),Element of Y())->set}:
+ ex f being Function of [:X(),Y():], Z()
+  st for x being Element of X(), y being Element of Y() holds f.[x,y]=F(x,y)
+provided
+ for x being Element of X(), y being Element of Y() holds F(x,y) in Z();
+
+scheme FinMono{ A() -> set, D() -> non empty set, F,G(set) -> set }:
+  { F(d) where d is Element of D() : G(d) in A() } is finite
+provided
+  A() is finite and
+  for d1,d2 being Element of D() st G(d1) = G(d2) holds d1 = d2;
+
+scheme CardMono{ A() -> set, D() -> non empty set, G(set) -> set }:
+ A(),{ d where d is Element of D() : G(d) in A() } are_equipotent
+provided
+  for x being set st x in A() ex d being Element of D() st x = G(d) and
+  for d1,d2 being Element of D() st G(d1) = G(d2) holds d1 = d2;
+
+scheme CardMono'{ A() -> set, D() -> non empty set, G(set) -> set }:
+ A(),{ G(d) where d is Element of D() : d in A() } are_equipotent
+provided
+  A() c= D() and
+  for d1,d2 being Element of D() st G(d1) = G(d2) holds d1 = d2;
+
+scheme FuncSeqInd {P[set]}:
+ for p being Function-yielding FinSequence holds P[p]
+  provided
+   P[ {} ] and
+   for p being Function-yielding FinSequence st P[p]
+     for f being Function holds P[p^<*f*>];
+
+begin :: Some auxiliary concepts
+
+definition let x, y be set;
+ assume
+ x in y;
+ func In (x, y) -> Element of y equals
+:: FUNCT_7:def 1
+ x;
+end;
+
+theorem :: FUNCT_7:26
+   x in A /\ B implies In (x,A) = In (x,B);
+
+definition let f,g be Function; let A be set;
+ pred f,g equal_outside A means
+:: FUNCT_7:def 2
+    f|(dom f \ A) = g|(dom g \ A);
+end;
+
+theorem :: FUNCT_7:27
+   for f be Function, A be set
+  holds f,f equal_outside A;
+
+theorem :: FUNCT_7:28
+   for f,g be Function, A be set st f,g equal_outside A
+   holds g,f equal_outside A;
+
+theorem :: FUNCT_7:29
+   for f,g,h be Function, A be set
+   st f,g equal_outside A & g,h equal_outside A
+    holds f,h equal_outside A;
+
+theorem :: FUNCT_7:30
+   for f,g be Function, A be set st f,g equal_outside A
+   holds dom f \ A = dom g \ A;
+
+theorem :: FUNCT_7:31
+   for f,g being Function, A be set st dom g c= A
+   holds f, f +* g equal_outside A;
+
+definition let f be Function, i, x be set;
+ func f+*(i,x) -> Function equals
+:: FUNCT_7:def 3
+  f+*(i.-->x) if i in dom f
+        otherwise f;
+end;
+
+theorem :: FUNCT_7:32
+ for f be Function, d,i be set holds dom(f+*(i,d)) = dom f;
+
+theorem :: FUNCT_7:33
+ for f be Function, d,i be set st i in dom f holds (f+*(i,d)).i = d;
+
+theorem :: FUNCT_7:34
+ for f be Function, d,i,j be set st i <> j
+  holds (f+*(i,d)).j = f.j;
+
+theorem :: FUNCT_7:35
+   for f be Function, d,e,i,j be set st i <> j
+  holds f+*(i,d)+*(j,e) = f+*(j,e)+*(i,d);
+
+theorem :: FUNCT_7:36
+   for f be Function, d,e,i be set
+  holds f+*(i,d)+*(i,e) = f+*(i,e);
+
+theorem :: FUNCT_7:37
+ for f be Function, i be set holds f+*(i,f.i) = f;
+
+definition let f be FinSequence, i be Nat, x be set;
+ cluster f+*(i,x) -> FinSequence-like;
+end;
+
+definition let D be set, f be FinSequence of D, i be Nat, d be Element of D;
+ redefine func f+*(i,d) -> FinSequence of D;
+end;
+
+theorem :: FUNCT_7:38
+   for D be non empty set, f be FinSequence of D, d be Element of D, i be Nat
+   st i in dom f
+  holds (f+*(i,d))/.i = d;
+
+theorem :: FUNCT_7:39
+   for D be non empty set, f be FinSequence of D, d be Element of D, i,j be Nat
+   st i <> j & j in dom f
+  holds (f+*(i,d))/.j = f/.j;
+
+theorem :: FUNCT_7:40
+   for D be non empty set, f be FinSequence of D, d,e be Element of D, i be Nat
+ holds f+*(i,f/.i) = f;
+
+begin :: On the composition of a finite sequence of functions
+
+definition
+ let X be set;
+ let p be Function-yielding FinSequence;
+ func compose(p,X) -> Function means
+:: FUNCT_7:def 4
+
+  ex f being ManySortedFunction of NAT st it = f.len p & f.0 = id X &
+   for i being Nat st i+1 in dom p
+    for g,h being Function st g = f.i & h = p.(i+1) holds f.(i+1) = h*g;
+end;
+
+definition
+ let p be Function-yielding FinSequence;
+ let x be set;
+ func apply(p,x) -> FinSequence means
+:: FUNCT_7:def 5
+
+  len it = len p+1 & it.1 = x &
+  for i being Nat, f being Function st i in dom p & f = p.i
+   holds it.(i+1) = f.(it.i);
+end;
+
+reserve X,Y,x for set, p,q for Function-yielding FinSequence,
+        f,g,h for Function;
+
+theorem :: FUNCT_7:41
+ compose({},X) = id X;
+
+theorem :: FUNCT_7:42
+ apply({},x) = <*x*>;
+
+theorem :: FUNCT_7:43
+ compose(p^<*f*>,X) = f*compose(p,X);
+
+theorem :: FUNCT_7:44
+ apply(p^<*f*>,x) = apply(p,x)^<*f.(apply(p,x).(len p+1))*>;
+
+theorem :: FUNCT_7:45
+   compose(<*f*>^p,X) = compose(p,f.:X)*(f|X);
+
+theorem :: FUNCT_7:46
+   apply(<*f*>^p,x) = <*x*>^apply(p,f.x);
+
+theorem :: FUNCT_7:47
+ compose(<*f*>,X) = f*id X;
+
+theorem :: FUNCT_7:48
+   dom f c= X implies compose(<*f*>,X) = f;
+
+theorem :: FUNCT_7:49
+ apply(<*f*>,x) = <*x,f.x*>;
+
+theorem :: FUNCT_7:50
+   rng compose(p,X) c= Y implies compose(p^q,X) = compose(q,Y)*compose(p,X);
+
+theorem :: FUNCT_7:51
+ apply(p^q,x).(len (p^q)+1) = apply(q,apply(p,x).(len p+1)).(len q+1);
+
+theorem :: FUNCT_7:52
+   apply(p^q,x) = apply(p,x)$^apply(q,apply(p,x).(len p+1));
+
+theorem :: FUNCT_7:53
+ compose(<*f,g*>,X) = g*f*id X;
+
+theorem :: FUNCT_7:54
+   dom f c= X or dom(g*f) c= X implies compose(<*f,g*>,X) = g*f;
+
+theorem :: FUNCT_7:55
+ apply(<*f,g*>,x) = <*x,f.x,g.(f.x)*>;
+
+theorem :: FUNCT_7:56
+ compose(<*f,g,h*>,X) = h*g*f*id X;
+
+theorem :: FUNCT_7:57
+   dom f c= X or dom(g*f) c= X or dom(h*g*f) c= X implies
+  compose(<*f,g,h*>,X) = h*g*f;
+
+theorem :: FUNCT_7:58
+   apply(<*f,g,h*>,x) = <*x*>^<*f.x,g.(f.x),h.(g.(f.x))*>;
+
+definition
+ let F be FinSequence;
+ func firstdom F means
+:: FUNCT_7:def 6
+
+  it is empty if F is empty otherwise it = proj1 (F.1);
+ func lastrng F means
+:: FUNCT_7:def 7
+
+  it is empty if F is empty otherwise it = proj2 (F.len F);
+end;
+
+theorem :: FUNCT_7:59
+ firstdom {} = {} & lastrng {} = {};
+
+theorem :: FUNCT_7:60
+ for p being FinSequence holds
+  firstdom (<*f*>^p) = dom f & lastrng (p^<*f*>) = rng f;
+
+theorem :: FUNCT_7:61
+ for p being Function-yielding FinSequence st p <> {}
+  holds rng compose(p,X) c= lastrng p;
+
+definition let IT be FinSequence;
+ attr IT is FuncSeq-like means
+:: FUNCT_7:def 8
+
+  ex p being FinSequence st len p = len IT+1 &
+   for i being Nat st i in dom IT holds IT.i in Funcs(p.i, p.(i+1));
+end;
+
+theorem :: FUNCT_7:62
+ for p,q being FinSequence st p^q is FuncSeq-like
+  holds p is FuncSeq-like & q is FuncSeq-like;
+
+definition
+ cluster FuncSeq-like -> Function-yielding FinSequence;
+end;
+
+definition
+ cluster empty -> FuncSeq-like FinSequence;
+end;
+
+definition let f be Function;
+ cluster <*f*> -> FuncSeq-like;
+end;
+
+definition
+ cluster FuncSeq-like non empty non-empty FinSequence;
+end;
+
+definition
+ mode FuncSequence is FuncSeq-like FinSequence;
+end;
+
+theorem :: FUNCT_7:63
+ for p being FuncSequence st p <> {}
+  holds dom compose(p,X) = (firstdom p) /\ X;
+
+theorem :: FUNCT_7:64
+ for p being FuncSequence holds
+  dom compose(p,firstdom p) = firstdom p;
+
+theorem :: FUNCT_7:65
+   for p being FuncSequence, f being Function st rng f c= firstdom p
+  holds <*f*>^p is FuncSequence;
+
+theorem :: FUNCT_7:66
+   for p being FuncSequence, f being Function st lastrng p c= dom f
+  holds p^<*f*> is FuncSequence;
+
+theorem :: FUNCT_7:67
+   for p being FuncSequence st x in firstdom p & x in X
+  holds apply(p,x).(len p+1) = compose(p,X).x;
+
+definition
+ let X,Y be set such that
+  Y is empty implies X is empty;
+ mode FuncSequence of X,Y -> FuncSequence means
+:: FUNCT_7:def 9
+
+  firstdom it = X & lastrng it c= Y;
+end;
+
+definition
+ let Y be non empty set, X be set;
+ let F be FuncSequence of X,Y;
+ redefine func compose(F,X) -> Function of X,Y;
+end;
+
+definition
+ let q be non-empty non empty FinSequence;
+ mode FuncSequence of q -> FinSequence means
+:: FUNCT_7:def 10
+
+  len it+1 = len q &
+  for i being Nat st i in dom it holds it.i in Funcs(q.i,q.(i+1));
+end;
+
+definition
+ let q be non-empty non empty FinSequence;
+ cluster -> FuncSeq-like non-empty FuncSequence of q;
+end;
+
+theorem :: FUNCT_7:68
+ for q being non-empty non empty FinSequence, p being FuncSequence of q
+  st p <> {} holds firstdom p = q.1 & lastrng p c= q.len q;
+
+theorem :: FUNCT_7:69
+   for q being non-empty non empty FinSequence, p being FuncSequence of q
+  holds dom compose(p,q.1) = q.1 & rng compose(p,q.1) c= q.len q;
+
+definition let f be Function; let n be Element of NAT;
+  func iter (f,n) -> Function means
+:: FUNCT_7:def 11
+  ex p being Function of NAT,PFuncs(dom f \/ rng f,dom f \/ rng f) st
+   it = p.n & p.0 = id(dom f \/ rng f) &
+   for k being Element of NAT ex g being Function st g = p.k & p.(k+1) = g*f;
+end;
+
+reserve m,n,k for Nat;
+
+theorem :: FUNCT_7:70
+   iter (f,0) = id(dom f \/ rng f);
+
+theorem :: FUNCT_7:71
+   iter(f,n+1) = iter(f,n)*f;
+
+theorem :: FUNCT_7:72
+   iter(f,1) = f;
+
+theorem :: FUNCT_7:73
+   iter(f,n+1) = f*iter(f,n);
+
+theorem :: FUNCT_7:74
+   dom iter(f,n) c= dom f \/ rng f & rng iter(f,n) c= dom f \/ rng f;
+
+theorem :: FUNCT_7:75
+     n <> 0 implies dom iter(f,n) c= dom f & rng iter(f,n) c= rng f;
+
+theorem :: FUNCT_7:76
+   rng f c= dom f implies dom iter(f,n) = dom f & rng iter(f,n) c= dom f;
+
+theorem :: FUNCT_7:77
+   iter(f,n)*id(dom f \/ rng f) = iter(f,n);
+
+theorem :: FUNCT_7:78
+      id(dom f \/ rng f)*iter(f,n) = iter(f,n);
+
+theorem :: FUNCT_7:79
+   iter(f,n)*iter(f,m) = iter(f,n+m);
+
+theorem :: FUNCT_7:80
+     n <> 0 implies iter(iter(f,m),n) = iter(f,m*n);
+
+theorem :: FUNCT_7:81
+   rng f c= dom f implies iter(iter(f,m),n) = iter(f,m*n);
+
+theorem :: FUNCT_7:82
+     iter({},n) = {};
+
+theorem :: FUNCT_7:83
+     iter(id(X),n) = id(X);
+
+theorem :: FUNCT_7:84
+     rng f misses dom f implies iter(f,2) = {};
+
+theorem :: FUNCT_7:85
+     for f being Function of X,X holds iter(f,n) is Function of X,X;
+
+theorem :: FUNCT_7:86
+     for f being Function of X,X holds iter(f,0) = id X;
+
+theorem :: FUNCT_7:87
+     for f being Function of X,X holds iter(iter(f,m),n) = iter(f,m*n);
+
+theorem :: FUNCT_7:88
+     for f being PartFunc of X,X holds iter(f,n) is PartFunc of X,X;
+
+theorem :: FUNCT_7:89
+     n <> 0 & a in X & f = X --> a implies iter(f,n) = f;
+
+theorem :: FUNCT_7:90
+   for f being Function, n being Nat
+  holds iter(f,n) = compose(n|->f,dom f \/ rng f);

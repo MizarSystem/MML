@@ -1,0 +1,2161 @@
+:: Some Remarks on Clockwise Oriented Sequences on Go-boards
+::  by Adam Naumowicz and Robert Milewski
+::
+:: Received March 1, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary JORDAN8, PSCOMP_1, BOOLE, JORDAN1A, JORDAN9, GOBOARD1, GOBOARD5,
+      JORDAN6, SPRECT_2, JORDAN2C, ABSVALUE, REALSET1, JORDAN1E, FINSEQ_4,
+      TOPS_1, TOPREAL2, CONNSP_1, COMPTS_1, TOPREAL1, SPPOL_1, FINSEQ_1,
+      TREES_1, EUCLID, RELAT_1, MCART_1, MATRIX_1, GOBOARD9, PRE_TOPC, RELAT_2,
+      SEQM_3, SUBSET_1, FUNCT_1, ARYTM_1, FINSEQ_6, GOBOARD2, ARYTM_3,
+      ORDINAL2, FUNCT_5, JORDAN5D;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XREAL_0, REAL_1, NAT_1, ABSVALUE,
+      FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_4, MATRIX_1, FINSEQ_6, REALSET1,
+      STRUCT_0, PRE_TOPC, TOPS_1, TOPREAL2, BINARITH, CONNSP_1, COMPTS_1,
+      EUCLID, PSCOMP_1, SPRECT_2, GOBOARD1, TOPREAL1, GOBOARD2, GOBOARD5,
+      GOBOARD9, GOBRD13, SPPOL_1, JORDAN8, JORDAN2C, JORDAN6, JORDAN9,
+      JORDAN5D, JORDAN1A, JORDAN1E;
+ constructors JORDAN8, REALSET1, GOBOARD9, JORDAN6, REAL_1, CARD_4, PSCOMP_1,
+      BINARITH, JORDAN2C, CONNSP_1, JORDAN9, JORDAN1A, ABSVALUE, FINSEQ_4,
+      GOBRD13, TOPREAL2, SPRECT_1, GOBOARD2, INT_1, TOPS_1, JORDAN1E, JORDAN5D;
+ clusters SPRECT_1, TOPREAL6, JORDAN8, REVROT_1, INT_1, RELSET_1, SPRECT_3,
+      GOBOARD2, JORDAN1A, MEMBERED;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+ definitions TARSKI;
+ theorems AXIOMS, BINARITH, EUCLID, JORDAN8, PSCOMP_1, JORDAN1A, NAT_1,
+      TOPREAL6, REAL_1, GOBOARD5, JORDAN4, SPRECT_2, FINSEQ_4, FINSEQ_5,
+      FINSEQ_6, GOBOARD7, GOBOARD9, SPPOL_2, REVROT_1, TOPREAL1, AMI_5,
+      JORDAN3, GOBRD13, INT_1, JORDAN9, JORDAN2C, ABSVALUE, GOBOARD1, TARSKI,
+      TOPREAL3, FINSEQ_3, UNIFORM1, FUNCT_1, JORDAN1B, SPRECT_5, SCMFSA_7,
+      JORDAN5D, JORDAN1E, JORDAN1F, JORDAN1G, JORDAN1C, JORDAN1H, TOPREAL8,
+      GOBRD14, JORDAN1D, GOBOARD6, SPRECT_1, XBOOLE_0, XBOOLE_1, SQUARE_1,
+      XCMPLX_1;
+
+begin :: Preliminaries
+
+  reserve i,j,k,n for Nat;
+
+  theorem Th1:
+   for A,B being Subset of TOP-REAL n holds
+    A is Bounded or B is Bounded implies A /\ B is Bounded
+   proof
+    let A,B be Subset of TOP-REAL n;
+    assume A1: A is Bounded or B is Bounded;
+    per cases by A1;
+     suppose A2: A is Bounded;
+        A /\ B c= A by XBOOLE_1:17;
+      hence A /\ B is Bounded by A2,JORDAN2C:16;
+     suppose A3: B is Bounded;
+        A /\ B c= B by XBOOLE_1:17;
+      hence A /\ B is Bounded by A3,JORDAN2C:16;
+   end;
+
+  theorem Th2:
+   for A,B being Subset of TOP-REAL n holds
+    A is not Bounded & B is Bounded implies A \ B is not Bounded
+   proof
+    let A,B be Subset of TOP-REAL n;
+    assume that
+     A1: A is not Bounded and
+     A2: B is Bounded;
+    A3: A /\ B is Bounded by A2,Th1;
+      (A \ B) \/ A /\ B = A \ (B \ B) by XBOOLE_1:52
+       .= A \ {} by XBOOLE_1:37
+       .= A;
+    hence A \ B is not Bounded by A1,A3,TOPREAL6:76;
+   end;
+
+theorem Th3:
+ for C being compact connected non vertical non horizontal Subset of TOP-REAL 2
+ holds (W-min L~Cage(C,n))..Cage(C,n) > 1
+ proof
+  let C be compact connected non vertical non horizontal Subset of TOP-REAL 2;
+A1: Cage(C,n)/.1 = N-min L~Cage(C,n) by JORDAN9:34;
+then A2: 1 < (N-max L~Cage(C,n))..Cage(C,n) by SPRECT_2:73;
+    (N-max L~Cage(C,n))..Cage(C,n) <= (E-max L~Cage(C,n))..Cage(C,n)
+  by A1,SPRECT_2:74;
+then A3: 1 < (E-max L~Cage(C,n))..Cage(C,n) by A2,AXIOMS:22;
+    (E-max L~Cage(C,n))..Cage(C,n) < (E-min L~Cage(C,n))..Cage(C,n)
+  by A1,SPRECT_2:75;
+then A4: 1 < (E-min L~Cage(C,n))..Cage(C,n) by A3,AXIOMS:22;
+    (E-min L~Cage(C,n))..Cage(C,n) <= (S-max L~Cage(C,n))..Cage(C,n)
+  by A1,SPRECT_2:76;
+then A5: 1 < (S-max L~Cage(C,n))..Cage(C,n) by A4,AXIOMS:22;
+    (S-max L~Cage(C,n))..Cage(C,n) < (S-min L~Cage(C,n))..Cage(C,n)
+  by A1,SPRECT_2:77;
+then A6: 1 < (S-min L~Cage(C,n))..Cage(C,n) by A5,AXIOMS:22;
+    (S-min L~Cage(C,n))..Cage(C,n) <= (W-min L~Cage(C,n))..Cage(C,n)
+  by A1,SPRECT_2:78;
+  hence (W-min L~Cage(C,n))..Cage(C,n) > 1 by A6,AXIOMS:22;
+end;
+
+theorem Th4:
+ for C being compact connected non vertical non horizontal Subset of TOP-REAL 2
+ holds (E-max L~Cage(C,n))..Cage(C,n) > 1
+ proof
+  let C be compact connected non vertical non horizontal Subset of TOP-REAL 2;
+A1: Cage(C,n)/.1 = N-min L~Cage(C,n) by JORDAN9:34;
+then A2: 1 < (N-max L~Cage(C,n))..Cage(C,n) by SPRECT_2:73;
+    (N-max L~Cage(C,n))..Cage(C,n) <= (E-max L~Cage(C,n))..Cage(C,n)
+  by A1,SPRECT_2:74;
+  hence 1 < (E-max L~Cage(C,n))..Cage(C,n) by A2,AXIOMS:22;
+end;
+
+theorem Th5:
+ for C being compact connected non vertical non horizontal Subset of TOP-REAL 2
+ holds (S-max L~Cage(C,n))..Cage(C,n) > 1
+ proof
+  let C be compact connected non vertical non horizontal Subset of TOP-REAL 2;
+A1: Cage(C,n)/.1 = N-min L~Cage(C,n) by JORDAN9:34;
+then A2: 1 < (N-max L~Cage(C,n))..Cage(C,n) by SPRECT_2:73;
+    (N-max L~Cage(C,n))..Cage(C,n) <= (E-max L~Cage(C,n))..Cage(C,n)
+  by A1,SPRECT_2:74;
+then A3: 1 < (E-max L~Cage(C,n))..Cage(C,n) by A2,AXIOMS:22;
+    (E-max L~Cage(C,n))..Cage(C,n) < (E-min L~Cage(C,n))..Cage(C,n)
+  by A1,SPRECT_2:75;
+then A4: 1 < (E-min L~Cage(C,n))..Cage(C,n) by A3,AXIOMS:22;
+    (E-min L~Cage(C,n))..Cage(C,n) <= (S-max L~Cage(C,n))..Cage(C,n)
+  by A1,SPRECT_2:76;
+  hence 1 < (S-max L~Cage(C,n))..Cage(C,n) by A4,AXIOMS:22;
+end;
+
+begin :: On bounding points of circular sequences
+
+theorem
+   for f being non constant standard special_circular_sequence,
+ p being Point of TOP-REAL 2 st p in rng f holds
+ left_cell(f,p..f) = left_cell(Rotate(f,p),1)
+proof let f be non constant standard special_circular_sequence,
+          p be Point of TOP-REAL 2 such that
+A1: p in rng f;
+set k = p..f;
+A2: 1 <= k by A1,FINSEQ_4:31;
+A3: 4 < len f by GOBOARD7:36;
+    then len f > 1 by AXIOMS:22;
+    then k < len f by A1,SPRECT_5:7;
+then A4: k+1 <= len f by NAT_1:38;
+  set n = 1;
+     n+1 <= len f by A3,AXIOMS:22;
+then A5: n+1 <= len Rotate(f,p) by REVROT_1:14;
+    for i1,j1,i2,j2 being Nat st
+      [i1,j1] in Indices GoB Rotate(f,p) & [i2,j2] in Indices GoB Rotate(f,p) &
+      Rotate(f,p)/.n = (GoB Rotate(f,p))*(i1,j1) &
+      Rotate(f,p)/.(n+1) = (GoB Rotate(f,p))*(i2,j2) holds
+    i1 = i2 & j1+1 = j2 & left_cell(f,k) = cell(GoB Rotate(f,p),i1-'1,j1) or
+    i1+1 = i2 & j1 = j2 & left_cell(f,k) = cell(GoB Rotate(f,p),i1,j1) or
+    i1 = i2+1 & j1 = j2 & left_cell(f,k) = cell(GoB Rotate(f,p),i2,j2-'1) or
+    i1 = i2 & j1 = j2+1 & left_cell(f,k) = cell(GoB Rotate(f,p),i1,j2)
+  proof let i1,j1,i2,j2 be Nat such that
+A6: [i1,j1] in Indices GoB Rotate(f,p) and
+A7: [i2,j2] in Indices GoB Rotate(f,p) and
+A8: Rotate(f,p)/.n = (GoB Rotate(f,p))*(i1,j1) and
+A9: Rotate(f,p)/.(n+1) = (GoB Rotate(f,p))*(i2,j2);
+A10: GoB Rotate(f,p) = GoB f by REVROT_1:28;
+       len Rotate(f,p) = len f by REVROT_1:14;
+     then Rotate(f,p)/.(len f) = Rotate(f,p)/.1 by FINSEQ_6:def 1;
+     then Rotate(f,p)/.(k + len f -' p..f) = Rotate(f,p)/.1 by BINARITH:39;
+then A11: f/.k = (GoB f)*(i1,j1) by A1,A2,A8,A10,REVROT_1:18;
+       Rotate(f,p)/.(1 + 1 + k -' p..f) = Rotate(f,p)/.(n+1) by BINARITH:39;
+then A12:   Rotate(f,p)/.(k+1 + 1 -' p..f) = Rotate(f,p)/.(n+1) by XCMPLX_1:1;
+       k < k+1 by NAT_1:38;
+then A13: f/.(k+1) = (GoB f)*(i2,j2) by A1,A4,A9,A10,A12,REVROT_1:10;
+    A14
+: left_cell(f,k) = left_cell(f,k); :: potrzebne, bo kolekcjonowanie w dyzjunktach
+    then A15: i1 = i2 & j1+1 = j2 & left_cell(f,k) = cell(GoB f,i1-'1,j1) or
+    i1+1 = i2 & j1 = j2 & left_cell(f,k) = cell(GoB f,i1,j1) or
+    i1 = i2+1 & j1 = j2 & left_cell(f,k) = cell(GoB f,i2,j2-'1) or
+    i1 = i2 & j1 = j2+1 & left_cell(f,k) = cell(GoB f,i1,j2)
+     by A2,A4,A6,A7,A10,A11,A13,GOBOARD5:def 7;
+A16: j1+1+1 = j1+(1+1) by XCMPLX_1:1;
+A17: i1+1+1 = i1+(1+1) by XCMPLX_1:1;
+   per cases by A2,A4,A6,A7,A10,A11,A13,A14,GOBOARD5:def 7;
+   case i1 = i2 & j1+1 = j2;
+   hence left_cell(f,k) = cell(GoB Rotate(f,p),i1-'1,j1)
+     by A15,A16,REAL_1:69,REVROT_1:28;
+   case i1+1 = i2 & j1 = j2;
+   hence left_cell(f,k) = cell(GoB Rotate(f,p),i1,j1)
+     by A15,A17,REAL_1:69,REVROT_1:28;
+   case i1 = i2+1 & j1 = j2;
+   hence left_cell(f,k) = cell(GoB Rotate(f,p),i2,j2-'1)
+     by A15,A17,REAL_1:69,REVROT_1:28;
+   case i1 = i2 & j1 = j2+1;
+   hence left_cell(f,k) = cell(GoB Rotate(f,p),i1,j2)
+     by A15,A16,REAL_1:69,REVROT_1:28;
+  end;
+ hence left_cell(f,k) = left_cell(Rotate(f,p),1) by A5,GOBOARD5:def 7;
+end;
+
+theorem Th7:
+ for f being non constant standard special_circular_sequence,
+ p being Point of TOP-REAL 2 st p in rng f holds
+ right_cell(f,p..f) = right_cell(Rotate(f,p),1)
+proof let f be non constant standard special_circular_sequence,
+          p be Point of TOP-REAL 2 such that
+A1: p in rng f;
+set k = p..f;
+A2: 1 <= k & k <= len f by A1,FINSEQ_4:31;
+A3: 4 < len f by GOBOARD7:36;
+    then len f > 1 by AXIOMS:22;
+    then k < len f by A1,SPRECT_5:7;
+then A4: k+1 <= len f by NAT_1:38;
+  set n = 1;
+     n+1 <= len f by A3,AXIOMS:22;
+then A5: n+1 <= len Rotate(f,p) by REVROT_1:14;
+
+    for i1,j1,i2,j2 being Nat st
+      [i1,j1] in Indices GoB Rotate(f,p) & [i2,j2] in Indices GoB Rotate(f,p) &
+      Rotate(f,p)/.n = (GoB Rotate(f,p))*(i1,j1) &
+      Rotate(f,p)/.(n+1) = (GoB Rotate(f,p))*(i2,j2) holds
+    i1 = i2 & j1+1 = j2 & right_cell(f,k) = cell(GoB Rotate(f,p),i1,j1) or
+    i1+1 = i2 & j1 = j2 & right_cell(f,k) = cell(GoB Rotate(f,p),i1,j1-'1) or
+    i1 = i2+1 & j1 = j2 & right_cell(f,k) = cell(GoB Rotate(f,p),i2,j2) or
+    i1 = i2 & j1 = j2+1 & right_cell(f,k) = cell(GoB Rotate(f,p),i1-'1,j2)
+  proof let i1,j1,i2,j2 be Nat such that
+A6: [i1,j1] in Indices GoB Rotate(f,p) and
+A7: [i2,j2] in Indices GoB Rotate(f,p) and
+A8: Rotate(f,p)/.n = (GoB Rotate(f,p))*(i1,j1) and
+A9: Rotate(f,p)/.(n+1) = (GoB Rotate(f,p))*(i2,j2);
+A10: GoB Rotate(f,p) = GoB f by REVROT_1:28;
+       len Rotate(f,p) = len f by REVROT_1:14;
+     then Rotate(f,p)/.(len f) = Rotate(f,p)/.1 by FINSEQ_6:def 1;
+     then Rotate(f,p)/.(k + len f -' p..f) = Rotate(f,p)/.1 by BINARITH:39;
+then A11: f/.k = (GoB f)*(i1,j1) by A1,A2,A8,A10,REVROT_1:18;
+       Rotate(f,p)/.(1 + 1 + k -' p..f) = Rotate(f,p)/.(n+1) by BINARITH:39;
+then A12:   Rotate(f,p)/.(k+1 + 1 -' p..f) = Rotate(f,p)/.(n+1) by XCMPLX_1:1;
+       k < k+1 by NAT_1:38;
+then A13: f/.(k+1) = (GoB f)*(i2,j2) by A1,A4,A9,A10,A12,REVROT_1:10;
+    A14
+: right_cell(f,k) = right_cell(f,k); :: potrzebne, bo kolekcjonowanie w dyzjunktach
+    then A15: i1 = i2 & j1+1 = j2 & right_cell(f,k) = cell(GoB f,i1,j1) or
+    i1+1 = i2 & j1 = j2 & right_cell(f,k) = cell(GoB f,i1,j1-'1) or
+    i1 = i2+1 & j1 = j2 & right_cell(f,k) = cell(GoB f,i2,j2) or
+    i1 = i2 & j1 = j2+1 & right_cell(f,k) = cell(GoB f,i1-'1,j2)
+     by A2,A4,A6,A7,A10,A11,A13,GOBOARD5:def 6;
+    A16: j1+1+1 = j1+(1+1) by XCMPLX_1:1;
+    A17: i1+1+1 = i1+(1+1) by XCMPLX_1:1;
+   per cases by A2,A4,A6,A7,A10,A11,A13,A14,GOBOARD5:def 6;
+   case i1 = i2 & j1+1 = j2;
+   hence right_cell(f,k) = cell(GoB Rotate(f,p),i1,j1) by A15,A16,REAL_1:69,
+REVROT_1:28;
+   case i1+1 = i2 & j1 = j2;
+   hence right_cell(f,k) = cell(GoB Rotate(f,p),i1,j1-'1) by A15,A17,REAL_1:69,
+REVROT_1:28;
+   case i1 = i2+1 & j1 = j2;
+   hence right_cell(f,k) = cell(GoB Rotate(f,p),i2,j2) by A15,A17,REAL_1:69,
+REVROT_1:28;
+   case i1 = i2 & j1 = j2+1;
+   hence right_cell(f,k) = cell(GoB Rotate(f,p),i1-'1,j2) by A15,A16,REAL_1:69,
+REVROT_1:28;
+  end;
+ hence right_cell(f,k) = right_cell(Rotate(f,p),n) by A5,GOBOARD5:def 6;
+end;
+
+theorem
+   for C being compact connected non vertical non horizontal non empty
+ Subset of TOP-REAL 2 holds
+ W-min C in right_cell(Rotate(Cage(C,n),W-min L~Cage(C,n)),1)
+ proof
+  let C be compact connected non vertical non horizontal non empty
+  Subset of TOP-REAL 2;
+  set f = Cage(C,n);
+  set G = Gauge(C,n);
+  consider j being Nat such that
+A1: 1 <= j & j <= width G &
+  W-min L~f = G*(1,j) by JORDAN1D:34;
+
+  set k = (W-min L~f)..f;
+  set p = W-min C;
+
+A2: f is_sequence_on G by JORDAN9:def 1;
+A3: len f > 4 by GOBOARD7:36;
+A4: len G >= 4 by JORDAN8:13;
+then A5: 1 <= len G by AXIOMS:22;
+A6: 1 <= k by Th3;
+A7:  W-min L~f in rng f by SPRECT_2:47;
+then A8: k <= len f by FINSEQ_4:31;
+A9: k in dom f by A7,FINSEQ_4:30;
+   A10: f.k = W-min L~f by A7,FINSEQ_4:29;
+then A11: f/.k = W-min L~f by A9,FINSEQ_4:def 4;
+A12: f/.k = G*(1,j) by A1,A9,A10,FINSEQ_4:def 4;
+    now assume k = len f;
+then A13: f/.1 = W-min L~f by A11,FINSEQ_6:def 1;
+A14: 1 in dom f by A7,FINSEQ_3:33;
+A15: 1 < (W-min L~f)..f by Th3;
+     f.1 = W-min L~f by A13,A14,FINSEQ_4:def 4;
+   hence contradiction by A14,A15,FINSEQ_4:34;
+  end;
+  then k < len f by A8,AXIOMS:21;
+then A16: k+1 <= len f by NAT_1:38;
+   then A17: (f/.(k+1))`1 = W-bound L~Cage(C,n) by A6,A11,JORDAN1E:26;
+   A18: 1 <= k+1 by NAT_1:29;
+then A19: k+1 in dom f by A16,FINSEQ_3:27;
+   then consider ki,kj being Nat such that
+A20: [ki,kj] in Indices G & f/.(k+1) = G*(ki,kj) by A2,GOBOARD1:def 11;
+
+A21: [1,j] in Indices G by A1,A5,GOBOARD7:10;
+     G*(1,j)`1 = G*(ki,kj)`1 by A1,A17,A20,PSCOMP_1:84;
+then A22: ki = 1 by A20,A21,JORDAN1G:7;
+
+     2 <= len f by A3,AXIOMS:22;
+   then f/.(k+1) in L~f by A19,GOBOARD1:16;
+   then f/.(k+1) in W-most L~f by A17,SPRECT_2:16;
+then A23: G*(1,j)`2 <= G*(ki,kj)`2 by A1,A20,PSCOMP_1:88;
+     1 <= kj & j <= width G & 1 <= ki & ki <= len G by A1,A20,GOBOARD5:1;
+then A24: j <= kj by A22,A23,GOBOARD5:5;
+     k in dom f & k+1 in dom f &
+   [1,j] in Indices GoB f & [ki,kj] in Indices GoB f &
+   f/.k = (GoB f)*(1,j) & f/.(k+1) = (GoB f)*(ki,kj)
+        by A7,A12,A16,A18,A20,A21,FINSEQ_3:27,FINSEQ_4:30,JORDAN1H:52;
+   then abs(1-ki)+abs(j-kj) = 1 by GOBOARD5:13;
+   then A25: 0+abs(j-kj) = 1 by A22,ABSVALUE:7;
+then A26: kj = j+1 by A24,GOBOARD1:1;
+A27: f/.(k+1) = G*(1,j+1) by A20,A22,A24,A25,GOBOARD1:1;
+    1 <= len G & 1 <= j+1 & j+1 <= width G by A4,A20,A26,AXIOMS:22,GOBOARD5:1;
+then [1,j+1] in Indices G by GOBOARD7:10;
+then A28: right_cell(f,k,G) = cell(G,1,j) by A1,A2,A6,A11,A16,A21,A27,GOBRD13:
+23;
+A29: GoB f = G by JORDAN1H:52;
+    now
+   assume
+A30: not p in right_cell(f,k,G);
+A31:  1 < len G by A4,AXIOMS:22;
+     j+1 <= width G by A20,A26,GOBOARD5:1;
+   then j < width G by NAT_1:38;
+   then LSeg(G*(1+1,j),G*(1+1,j+1)) c= cell(G,1,j) by A1,A31,GOBOARD5:19;
+then A32: not p in LSeg(G*(2,j),G*(2,j+1)) by A28,A30;
+     1 <= j & j <= len G by A1,JORDAN8:def 1;
+then A33: G*(2,j)`1 = W-bound C by JORDAN8:14;
+     len G = width G by JORDAN8:def 1;
+   then 1 <= j+1 & j+1 <= len G by A20,A26,GOBOARD5:1;
+then A34: G*(2,j+1)`1 = W-bound C by JORDAN8:14;
+     p`1 = W-bound C by PSCOMP_1:84;
+   then A35: p`2 > G*(2,j+1)`2 or p`2 < G*(2,j)`2 by A32,A33,A34,GOBOARD7:8;
+
+  A36: 1 <= j+1 & j+1 <= width G & 2 <= len G by A4,A20,A26,AXIOMS:22,GOBOARD5:
+1;
+   per cases by A1,A35,A36,GOBOARD5:2;
+   suppose
+A37: p`2 > G*(1,j+1)`2;
+     cell(G,1,j) meets C by A6,A16,A28,JORDAN9:33;
+   then cell(G,1,j) /\ C <> {} by XBOOLE_0:def 7;
+   then consider c being set such that
+A38: c in cell(G,1,j) /\ C by XBOOLE_0:def 1;
+   reconsider c as Element of TOP-REAL 2 by A38;
+A39: c in cell(G,1,j) & c in C by A38,XBOOLE_0:def 3;
+then A40: c`1 >= W-bound C by PSCOMP_1:71;
+
+     1+1 <= len G & 1 <= j & j+1 <= width G by A1,A4,A20,A26,AXIOMS:22,GOBOARD5
+:1;
+   then A41: G*(1,j)`1 <= c`1 & c`1 <= G*(1+1,j)`1 & G*(1,j)`2 <= c`2 & c`2 <=
+   G*(1,j+1)`2 by A39,JORDAN9:19;
+   then c`1 = W-bound C by A33,A40,AXIOMS:21;
+   then c in W-most C by A39,SPRECT_2:16;
+   then c`2 >= p`2 by PSCOMP_1:88;
+   hence contradiction by A37,A41,AXIOMS:22;
+   suppose
+A42: p`2 < G*(1,j)`2;
+     p in C by SPRECT_1:15;
+   then west_halfline p meets L~f by JORDAN1A:75;
+   then consider r being set such that
+A43: r in west_halfline p & r in L~f by XBOOLE_0:3;
+   reconsider r as Element of TOP-REAL 2 by A43;
+A44: p in W-most C by PSCOMP_1:91;
+     r in west_halfline p /\ L~f by A43,XBOOLE_0:def 3;
+   then r`1 = W-bound L~f by A44,JORDAN1A:106;
+   then r in W-most L~f by A43,SPRECT_2:16;
+   then (W-min L~f)`2 <= r`2 by PSCOMP_1:88;
+   hence contradiction by A1,A42,A43,JORDAN1A:def 5;
+  end;
+  then p in right_cell(f,k) by A6,A16,A29,JORDAN1H:29;
+  hence thesis by A7,Th7;
+ end;
+
+theorem
+   for C being compact connected non vertical non horizontal non empty
+ Subset of TOP-REAL 2 holds
+ E-max C in right_cell(Rotate(Cage(C,n),E-max L~Cage(C,n)),1)
+ proof
+  let C be compact connected non vertical non horizontal non empty
+  Subset of TOP-REAL 2;
+  set f = Cage(C,n);
+  set G = Gauge(C,n);
+  consider j being Nat such that
+A1: 1 <= j & j <= width G &
+  E-max L~f = G*(len G,j) by JORDAN1D:29;
+
+  set k = (E-max L~f)..f;
+  set p = E-max C;
+
+A2: f is_sequence_on G by JORDAN9:def 1;
+A3: len f > 4 by GOBOARD7:36;
+A4: len G >= 4 by JORDAN8:13;
+then A5: 1 <= len G by AXIOMS:22;
+A6: 1 <= k by Th4;
+A7:  E-max L~f in rng f by SPRECT_2:50;
+then A8: k <= len f by FINSEQ_4:31;
+A9: k in dom f by A7,FINSEQ_4:30;
+   A10: f.k = E-max L~f by A7,FINSEQ_4:29;
+then A11: f/.k = E-max L~f by A9,FINSEQ_4:def 4;
+A12: f/.k = G*(len G,j) by A1,A9,A10,FINSEQ_4:def 4;
+A13: f/.k = G*(len G,(j-'1)+1) by A1,A11,AMI_5:4;
+
+    now assume k = len f;
+then A14: f/.1 = E-max L~f by A11,FINSEQ_6:def 1;
+A15: 1 in dom f by A7,FINSEQ_3:33;
+A16: 1 < (E-max L~f)..f by Th4;
+     f.1 = E-max L~f by A14,A15,FINSEQ_4:def 4;
+   hence contradiction by A15,A16,FINSEQ_4:34;
+  end;
+  then k < len f by A8,AXIOMS:21;
+then A17: k+1 <= len f by NAT_1:38;
+   then A18: (f/.(k+1))`1 = E-bound L~Cage(C,n) by A6,A11,JORDAN1E:24;
+   A19: 1 <= k+1 by NAT_1:29;
+then A20: k+1 in dom f by A17,FINSEQ_3:27;
+   then consider ki,kj being Nat such that
+A21: [ki,kj] in Indices G & f/.(k+1) = G*(ki,kj) by A2,GOBOARD1:def 11;
+A22: [len G,j] in Indices G by A1,A5,GOBOARD7:10;
+     G*(len G,j)`1 = G*(ki,kj)`1 by A1,A18,A21,PSCOMP_1:104;
+then A23: ki = len G by A21,A22,JORDAN1G:7;
+     2 <= len f by A3,AXIOMS:22;
+   then f/.(k+1) in L~f by A20,GOBOARD1:16;
+   then f/.(k+1) in E-most L~f by A18,SPRECT_2:17;
+then A24: G*(len G,j)`2 >= G*(ki,kj)`2 by A1,A21,PSCOMP_1:108;
+     1 <= j & kj <= width G & 1 <= ki & ki <= len G
+   by A1,A21,GOBOARD5:1;
+then A25: j >= kj by A23,A24,GOBOARD5:5;
+     k in dom f & k+1 in dom f &
+   [len G,j] in Indices GoB f & [ki,kj] in Indices GoB f &
+   f/.k = (GoB f)*(len G,j) & f/.(k+1) = (GoB f)*(ki,kj)
+        by A7,A12,A17,A19,A21,A22,FINSEQ_3:27,FINSEQ_4:30,JORDAN1H:52;
+   then abs(len G-ki)+abs(j-kj) = 1 by GOBOARD5:13;
+   then abs(0)+abs(j-kj) = 1 by A23,XCMPLX_1:14;
+   then 0+abs(j-kj) = 1 by ABSVALUE:7;
+   then j=kj+1 by A25,GOBOARD1:1;
+   then kj = j-1 by XCMPLX_1:26;
+then A26: kj = j-'1 by A1,SCMFSA_7:3;
+then A27: 1 <= len G & 1 <= j-'1 & j-'1 <= width G by A4,A21,AXIOMS:22,GOBOARD5
+:1;
+    1 <= (j-'1)+1 & (j-'1)+1 <= width G by A1,AMI_5:4;
+  then [len G,(j-'1)+1] in Indices G by A5,GOBOARD7:10;
+then A28: right_cell(f,k,G) = cell(G,len G-'1,j-'1) by A2,A6,A13,A17,A21,A23,
+A26,GOBRD13:29;
+A29: GoB f = G by JORDAN1H:52;
+    now
+   assume
+A30: not p in right_cell(f,k,G);
+A31:  1 < len G by A4,AXIOMS:22;
+then A32: 1<=len G-'1 by JORDAN3:12;
+A33: len G-'1 <= len G by JORDAN3:13;
+     j-'1<j by A27,JORDAN3:14;
+   then j-'1 < width G by A1,AXIOMS:22;
+   then LSeg(G*(len G-'1,j-'1),G*(len G-'1,j-'1+1)) c= cell(G,len G-'1,j-'1)
+   by A27,A32,A33,GOBOARD5:20;
+   then not p in LSeg(G*(len G-'1,j-'1),G*(len G-'1,j-'1+1)) by A28,A30;
+then A34: not p in LSeg(G*(len G-'1,j-'1),G*(len G-'1,j)) by A1,AMI_5:4;
+     1 <= j-'1 & j-'1 <= len G by A27,JORDAN8:def 1;
+then A35: G*(len G-'1,j-'1)`1 = E-bound C by JORDAN8:15;
+     1 <= j & j <= len G by A1,JORDAN8:def 1;
+then A36: G*(len G-'1,j)`1 = E-bound C by JORDAN8:15;
+     p`1 = E-bound C by PSCOMP_1:104;
+   then A37: p`2 > G*(len G-'1,j)`2 or p`2 < G*(len G-'1,j-'1)`2 by A34,A35,A36
+,GOBOARD7:8;
+
+  A38: G*(1,j)`2 = G*(len G-'1,j)`2 by A1,A32,A33,GOBOARD5:2;
+   A39: G*(1,j-'1)`2 = G*(len G-'1,j-'1)`2 by A27,A32,A33,GOBOARD5:2;
+   per cases by A1,A27,A37,A38,A39,GOBOARD5:2;
+   suppose
+A40: p`2 < G*(len G,j-'1)`2;
+     cell(G,len G-'1,j-'1) meets C by A6,A17,A28,JORDAN9:33;
+   then cell(G,len G-'1,j-'1) /\ C <> {} by XBOOLE_0:def 7;
+   then consider c being set such that
+A41: c in cell(G,len G-'1,j-'1) /\ C by XBOOLE_0:def 1;
+   reconsider c as Element of TOP-REAL 2 by A41;
+A42: c in cell(G,len G-'1,j-'1) & c in C by A41,XBOOLE_0:def 3;
+then A43: c`1 <= E-bound C by PSCOMP_1:71;
+     1<=len G-'1 & (len G-'1)+1 <= len G &
+   1 <= j-'1 & (j-'1)+1 <= width G by A1,A21,A26,A31,AMI_5:4,GOBOARD5:1,JORDAN3
+:12;
+   then A44: G*(len G-'1,j-'1)`1 <= c`1 & c`1 <= G*(len G-'1+1,j-'1)`1 &
+   G*(len G-'1,j-'1)`2 <= c`2 & c`2 <= G*(len G-'1,j-'1+1)`2 by A42,JORDAN9:19;
+   then G*(1,j-'1)`2 <= c`2 by A27,A32,A33,GOBOARD5:2;
+then A45: G*(len G,j-'1)`2 <= c`2 by A27,GOBOARD5:2;
+     c`1 = E-bound C by A35,A43,A44,AXIOMS:21;
+   then c in E-most C by A42,SPRECT_2:17;
+   then c`2 <= p`2 by PSCOMP_1:108;
+   hence contradiction by A40,A45,AXIOMS:22;
+   suppose
+A46: p`2 > G*(len G,j)`2;
+     p in C by SPRECT_1:16;
+   then east_halfline p meets L~f by JORDAN1A:73;
+   then consider r being set such that
+A47: r in east_halfline p & r in L~f by XBOOLE_0:3;
+   reconsider r as Element of TOP-REAL 2 by A47;
+A48: p in E-most C by PSCOMP_1:111;
+     r in east_halfline p /\ L~f by A47,XBOOLE_0:def 3;
+   then r`1 = E-bound L~f by A48,JORDAN1A:104;
+   then r in E-most L~f by A47,SPRECT_2:17;
+   then (E-max L~f)`2 >= r`2 by PSCOMP_1:108;
+   hence contradiction by A1,A46,A47,JORDAN1A:def 3;
+  end;
+  then p in right_cell(f,k) by A6,A17,A29,JORDAN1H:29;
+  hence thesis by A7,Th7;
+ end;
+
+theorem
+   for C being compact connected non vertical non horizontal non empty
+ Subset of TOP-REAL 2 holds
+ S-max C in right_cell(Rotate(Cage(C,n),S-max L~Cage(C,n)),1)
+ proof
+  let C be compact connected non vertical non horizontal non empty
+  Subset of TOP-REAL 2;
+  set f = Cage(C,n);
+  set G = Gauge(C,n);
+  consider j being Nat such that
+A1: 1 <= j & j <= len G &
+  S-max L~f = G*(j,1) by JORDAN1D:32;
+
+  set k = (S-max L~f)..f;
+  set p = S-max C;
+
+A2: f is_sequence_on G by JORDAN9:def 1;
+A3: len f > 4 by GOBOARD7:36;
+A4: len G >= 4 by JORDAN8:13;
+then A5: 1 <= len G by AXIOMS:22;
+A6: 1 <= k by Th5;
+A7:  S-max L~f in rng f by SPRECT_2:46;
+then A8: k <= len f by FINSEQ_4:31;
+A9: k in dom f by A7,FINSEQ_4:30;
+   A10: f.k = S-max L~f by A7,FINSEQ_4:29;
+then A11: f/.k = S-max L~f by A9,FINSEQ_4:def 4;
+A12: f/.k = G*(j,1) by A1,A9,A10,FINSEQ_4:def 4;
+
+    now assume k = len f;
+then A13: f/.1 = S-max L~f by A11,FINSEQ_6:def 1;
+A14: 1 in dom f by A7,FINSEQ_3:33;
+A15: 1 < (S-max L~f)..f by Th5;
+     f.1 = S-max L~f by A13,A14,FINSEQ_4:def 4;
+   hence contradiction by A14,A15,FINSEQ_4:34;
+  end;
+  then k < len f by A8,AXIOMS:21;
+then A16: k+1 <= len f by NAT_1:38;
+   then A17: (f/.(k+1))`2 = S-bound L~Cage(C,n) by A6,A11,JORDAN1E:25;
+   A18: 1 <= k+1 by NAT_1:29;
+then A19: k+1 in dom f by A16,FINSEQ_3:27;
+   then consider kj,ki being Nat such that
+A20: [kj,ki] in Indices G & f/.(k+1) = G*(kj,ki) by A2,GOBOARD1:def 11;
+
+  len G = width G by JORDAN8:def 1;
+then A21: [j,1] in Indices G by A1,A5,GOBOARD7:10;
+     G*(j,1)`2 = G*(kj,ki)`2 by A1,A17,A20,PSCOMP_1:114;
+then A22: ki = 1 by A20,A21,JORDAN1G:6;
+
+     2 <= len f by A3,AXIOMS:22;
+   then f/.(k+1) in L~f by A19,GOBOARD1:16;
+   then f/.(k+1) in S-most L~f by A17,SPRECT_2:15;
+then A23: G*(j,1)`1 >= G*(kj,ki)`1 by A1,A20,PSCOMP_1:118;
+A24: 1 <= ki & ki <= width G & 1 <= j &
+   1 <= kj & kj <= len G by A1,A20,GOBOARD5:1;
+then A25: kj <= j by A22,A23,GOBOARD5:4;
+
+     k in dom f & k+1 in dom f &
+   [j,1] in Indices GoB f & [kj,ki] in Indices GoB f &
+   f/.k = (GoB f)*(j,1) & f/.(k+1) = (GoB f)*(kj,ki)
+        by A7,A12,A16,A18,A20,A21,FINSEQ_3:27,FINSEQ_4:30,JORDAN1H:52;
+   then abs(1-ki)+abs(j-kj) = 1 by GOBOARD5:13;
+   then 0+abs(j-kj) = 1 by A22,ABSVALUE:7;
+   then kj+1 = j by A25,GOBOARD1:1;
+   then A26: kj = j-1 by XCMPLX_1:26;
+then A27: kj = j-'1 by A24,JORDAN3:1;
+    len G = width G by JORDAN8:def 1;
+then A28: [j-'1,1] in Indices G by A5,A24,A27,GOBOARD7:10;
+    [j-'1+1,1] in Indices G &
+  f/.k = G*(j-'1+1,1) & f/.(k+1) = G*(j-'1,1) by A1,A11,A20,A21,A22,A24,A26,
+AMI_5:4,JORDAN3:1;
+then A29: right_cell(f,k,G) = cell(G,j-'1,1) by A2,A6,A16,A28,GOBRD13:27;
+
+A30: GoB f = G by JORDAN1H:52;
+    now
+   assume
+A31: not p in right_cell(f,k,G);
+
+     1 < len G by A4,AXIOMS:22;
+then A32: 1 < width G by JORDAN8:def 1;
+A33: 1 <= j-'1 & j-'1 <= len G by A24,A26,JORDAN3:1;
+   then j-'1 < j by JORDAN3:14;
+   then j-'1 < len G by A1,AXIOMS:22;
+   then LSeg(G*(j-'1,1+1),G*(j-'1+1,1+1)) c= cell(G,j-'1,1) by A32,A33,GOBOARD5
+:22;
+   then LSeg(G*(j-'1,2),G*(j,2)) c= cell(G,j-'1,1) by A1,AMI_5:4;
+   then A34: not p in LSeg(G*(j-'1,2),G*(j,2)) by A29,A31;
+A35: G*(j-'1,2)`2 = S-bound C by A33,JORDAN8:16;
+A36: G*(j,2)`2 = S-bound C by A1,JORDAN8:16;
+     p`2 = S-bound C by PSCOMP_1:114;
+   then A37: p`1 > G*(j,2)`1 or p`1 < G*(j-'1,2)`1 by A34,A35,A36,GOBOARD7:9;
+     len G = width G by JORDAN8:def 1;
+   then A38: 2 <= width G by A4,AXIOMS:22;
+   A39: len G = width G by JORDAN8:def 1;
+   per cases by A1,A33,A37,A38,GOBOARD5:3;
+   suppose
+A40: p`1 < G*(j-'1,1)`1;
+     cell(G,j-'1,1) meets C by A6,A16,A29,JORDAN9:33;
+   then cell(G,j-'1,1) /\ C <> {} by XBOOLE_0:def 7;
+   then consider c being set such that
+A41: c in cell(G,j-'1,1) /\ C by XBOOLE_0:def 1;
+   reconsider c as Element of TOP-REAL 2 by A41;
+A42: c in cell(G,j-'1,1) & c in C by A41,XBOOLE_0:def 3;
+then A43: c`2 >= S-bound C by PSCOMP_1:71;
+     j-'1+1 <= len G & 1+1 <= width G by A1,A4,A39,AMI_5:4,AXIOMS:22;
+   then A44: G*(j-'1,1)`1 <= c`1 & c`1 <= G*(j-'1+1,1)`1 &
+   G*(j-'1,1)`2 <= c`2 & c`2 <= G*(j-'1,1+1)`2 by A33,A42,JORDAN9:19;
+   then c`2 = S-bound C by A35,A43,AXIOMS:21;
+   then c in S-most C by A42,SPRECT_2:15;
+   then c`1 <= p`1 by PSCOMP_1:118;
+   hence contradiction by A40,A44,AXIOMS:22;
+   suppose
+A45: p`1 > G*(j,1)`1;
+     p in C by SPRECT_1:14;
+   then south_halfline p meets L~f by JORDAN1A:74;
+   then consider r being set such that
+A46: r in south_halfline p & r in L~f by XBOOLE_0:3;
+   reconsider r as Element of TOP-REAL 2 by A46;
+A47: p in S-most C by PSCOMP_1:121;
+     r in south_halfline p /\ L~f by A46,XBOOLE_0:def 3;
+   then r`2 = S-bound L~f by A47,JORDAN1A:105;
+   then r in S-most L~f by A46,SPRECT_2:15;
+   then (S-max L~f)`1 >= r`1 by PSCOMP_1:118;
+   hence contradiction by A1,A45,A46,JORDAN1A:def 4;
+  end;
+  then p in right_cell(f,k) by A6,A16,A30,JORDAN1H:29;
+  hence thesis by A7,Th7;
+ end;
+
+begin :: On clockwise oriented sequences
+
+  theorem Th11:
+   for f being clockwise_oriented non constant
+   standard special_circular_sequence
+   for p being Point of TOP-REAL 2 st p`1 < W-bound (L~f) holds
+   p in LeftComp f
+   proof
+    let f be clockwise_oriented non constant standard
+     special_circular_sequence;
+    let p be Point of TOP-REAL 2;
+    set g = Rotate(f,N-min L~f);
+    A1: L~f = L~g by REVROT_1:33;
+      N-min L~f in rng f by SPRECT_2:43;
+    then A2: g/.1 = N-min L~g by A1,FINSEQ_6:98;
+    assume p`1 < W-bound (L~f);
+    then p in LeftComp g by A1,A2,JORDAN2C:118;
+    hence p in LeftComp f by REVROT_1:36;
+   end;
+
+  theorem Th12:
+   for f being clockwise_oriented non constant
+   standard special_circular_sequence
+   for p being Point of TOP-REAL 2 st p`1 > E-bound (L~f) holds
+    p in LeftComp f
+   proof
+    let f be clockwise_oriented non constant standard
+     special_circular_sequence;
+    let p be Point of TOP-REAL 2;
+    set g = Rotate(f,N-min L~f);
+    A1: L~f = L~g by REVROT_1:33;
+      N-min L~f in rng f by SPRECT_2:43;
+    then A2: g/.1 = N-min L~g by A1,FINSEQ_6:98;
+    assume p`1 > E-bound (L~f);
+    then p in LeftComp g by A1,A2,JORDAN2C:119;
+    hence p in LeftComp f by REVROT_1:36;
+   end;
+
+  theorem Th13:
+   for f being clockwise_oriented non constant
+   standard special_circular_sequence
+   for p being Point of TOP-REAL 2 st p`2 < S-bound (L~f) holds
+    p in LeftComp f
+   proof
+    let f be clockwise_oriented non constant standard
+     special_circular_sequence;
+    let p be Point of TOP-REAL 2;
+    set g = Rotate(f,N-min L~f);
+    A1: L~f = L~g by REVROT_1:33;
+      N-min L~f in rng f by SPRECT_2:43;
+    then A2: g/.1 = N-min L~g by A1,FINSEQ_6:98;
+    assume p`2 < S-bound (L~f);
+    then p in LeftComp g by A1,A2,JORDAN2C:120;
+    hence p in LeftComp f by REVROT_1:36;
+   end;
+
+  theorem Th14:
+   for f being clockwise_oriented non constant
+   standard special_circular_sequence
+   for p being Point of TOP-REAL 2 st p`2 > N-bound (L~f) holds
+    p in LeftComp f
+   proof
+    let f be clockwise_oriented non constant standard
+     special_circular_sequence;
+    let p be Point of TOP-REAL 2;
+    set g = Rotate(f,N-min L~f);
+    A1: L~f = L~g by REVROT_1:33;
+      N-min L~f in rng f by SPRECT_2:43;
+    then A2: g/.1 = N-min L~g by A1,FINSEQ_6:98;
+    assume p`2 > N-bound (L~f);
+    then p in LeftComp g by A1,A2,JORDAN2C:121;
+    hence p in LeftComp f by REVROT_1:36;
+   end;
+
+  theorem Th15:
+   for f being clockwise_oriented non constant
+   standard special_circular_sequence
+   for G being Go-board st f is_sequence_on G
+   for i,j,k being Nat st
+    1 <= k & k+1 <= len f & [i,j] in Indices G & [i+1,j] in Indices G &
+    f/.k = G*(i+1,j) & f/.(k+1) = G*(i,j) holds j < width G
+   proof
+    let f be clockwise_oriented non constant standard
+     special_circular_sequence;
+    let G be Go-board;
+    assume A1: f is_sequence_on G;
+    let i,j,k be Nat;
+    assume that
+     A2: 1 <= k & k+1 <= len f and
+     A3: [i,j] in Indices G and
+     A4: [i+1,j] in Indices G and
+     A5: f/.k = G*(i+1,j) and
+     A6: f/.(k+1) = G*(i,j);
+    A7: 1 <= i & i <= len G & 1 <= j & j <= width G by A3,GOBOARD5:1;
+    assume j >= width G;
+    then A8: j = width G by A7,REAL_1:def 5;
+      right_cell(f,k,G) = cell(G,i,j) by A1,A2,A3,A4,A5,A6,GOBRD13:27;
+    then A9: right_cell(f,k,G) is not Bounded by A7,A8,JORDAN1A:48;
+A10: L~f is Bounded by JORDAN2C:73;
+    then A11: right_cell(f,k,G)\L~f is not Bounded by A9,Th2;
+      right_cell(f,k,G)\L~f c= RightComp f by A1,A2,JORDAN9:29;
+    then RightComp f is not Bounded by A11,JORDAN2C:16;
+    then BDD L~f is not Bounded by GOBRD14:47;
+    hence contradiction by A10,JORDAN2C:114;
+   end;
+
+  theorem Th16:
+   for f being clockwise_oriented non constant
+   standard special_circular_sequence
+   for G being Go-board st f is_sequence_on G
+   for i,j,k being Nat st
+    1 <= k & k+1 <= len f & [i,j] in Indices G & [i,j+1] in Indices G &
+    f/.k = G*(i,j) & f/.(k+1) = G*(i,j+1) holds i < len G
+   proof
+    let f be clockwise_oriented non constant standard
+     special_circular_sequence;
+    let G be Go-board;
+    assume A1: f is_sequence_on G;
+    let i,j,k be Nat;
+    assume that
+     A2: 1 <= k & k+1 <= len f and
+     A3: [i,j] in Indices G and
+     A4: [i,j+1] in Indices G and
+     A5: f/.k = G*(i,j) and
+     A6: f/.(k+1) = G*(i,j+1);
+    A7: 1 <= i & i <= len G & 1 <= j & j <= width G by A3,GOBOARD5:1;
+    assume i >= len G;
+    then A8: i = len G by A7,REAL_1:def 5;
+      right_cell(f,k,G) = cell(G,i,j) by A1,A2,A3,A4,A5,A6,GOBRD13:23;
+    then A9: right_cell(f,k,G) is not Bounded by A7,A8,JORDAN1B:37;
+A10: L~f is Bounded by JORDAN2C:73;
+    then A11: right_cell(f,k,G)\L~f is not Bounded by A9,Th2;
+      right_cell(f,k,G)\L~f c= RightComp f by A1,A2,JORDAN9:29;
+    then RightComp f is not Bounded by A11,JORDAN2C:16;
+    then BDD L~f is not Bounded by GOBRD14:47;
+    hence contradiction by A10,JORDAN2C:114;
+   end;
+
+  theorem Th17:
+   for f being clockwise_oriented non constant
+   standard special_circular_sequence
+   for G being Go-board st f is_sequence_on G
+   for i,j,k being Nat st
+    1 <= k & k+1 <= len f & [i,j] in Indices G & [i+1,j] in Indices G &
+    f/.k = G*(i,j) & f/.(k+1) = G*(i+1,j) holds j > 1
+   proof
+    let f be clockwise_oriented non constant standard
+     special_circular_sequence;
+    let G be Go-board;
+    assume A1: f is_sequence_on G;
+    let i,j,k be Nat;
+    assume that
+     A2: 1 <= k & k+1 <= len f and
+     A3: [i,j] in Indices G and
+     A4: [i+1,j] in Indices G and
+     A5: f/.k = G*(i,j) and
+     A6: f/.(k+1) = G*(i+1,j);
+    A7: 1 <= i & i <= len G & 1 <= j & j <= width G by A3,GOBOARD5:1;
+    assume j <= 1;
+    then j = 1 by A7,REAL_1:def 5;
+    then A8: j-'1 = 0 by GOBOARD9:1;
+      right_cell(f,k,G) = cell(G,i,j-'1) by A1,A2,A3,A4,A5,A6,GOBRD13:25;
+    then A9: right_cell(f,k,G) is not Bounded by A7,A8,JORDAN1A:47;
+A10: L~f is Bounded by JORDAN2C:73;
+    then A11: right_cell(f,k,G)\L~f is not Bounded by A9,Th2;
+      right_cell(f,k,G)\L~f c= RightComp f by A1,A2,JORDAN9:29;
+    then RightComp f is not Bounded by A11,JORDAN2C:16;
+    then BDD L~f is not Bounded by GOBRD14:47;
+    hence contradiction by A10,JORDAN2C:114;
+   end;
+
+  theorem Th18:
+   for f being clockwise_oriented non constant
+   standard special_circular_sequence
+   for G being Go-board st f is_sequence_on G
+   for i,j,k being Nat st
+    1 <= k & k+1 <= len f & [i,j] in Indices G & [i,j+1] in Indices G &
+    f/.k = G*(i,j+1) & f/.(k+1) = G*(i,j) holds i > 1
+   proof
+    let f be clockwise_oriented non constant standard
+     special_circular_sequence;
+    let G be Go-board;
+    assume A1: f is_sequence_on G;
+    let i,j,k be Nat;
+    assume that
+     A2: 1 <= k & k+1 <= len f and
+     A3: [i,j] in Indices G and
+     A4: [i,j+1] in Indices G and
+     A5: f/.k = G*(i,j+1) and
+     A6: f/.(k+1) = G*(i,j);
+    A7: 1 <= i & i <= len G & 1 <= j & j <= width G by A3,GOBOARD5:1;
+    assume i <= 1;
+    then i = 1 by A7,REAL_1:def 5;
+    then A8: i-'1 = 0 by GOBOARD9:1;
+      right_cell(f,k,G) = cell(G,i-'1,j) by A1,A2,A3,A4,A5,A6,GOBRD13:29;
+    then A9: right_cell(f,k,G) is not Bounded by A7,A8,JORDAN1B:36;
+A10: L~f is Bounded by JORDAN2C:73;
+    then A11: right_cell(f,k,G)\L~f is not Bounded by A9,Th2;
+      right_cell(f,k,G)\L~f c= RightComp f by A1,A2,JORDAN9:29;
+    then RightComp f is not Bounded by A11,JORDAN2C:16;
+    then BDD L~f is not Bounded by GOBRD14:47;
+    hence contradiction by A10,JORDAN2C:114;
+   end;
+
+  theorem Th19:
+   for f being clockwise_oriented non constant
+   standard special_circular_sequence
+   for G being Go-board st f is_sequence_on G
+   for i,j,k being Nat st
+    1 <= k & k+1 <= len f & [i,j] in Indices G & [i+1,j] in Indices G &
+    f/.k = G*(i+1,j) & f/.(k+1) = G*(i,j) holds (f/.k)`2 <> N-bound L~f
+   proof
+    let f be clockwise_oriented non constant standard
+     special_circular_sequence;
+    let G be Go-board;
+    assume A1: f is_sequence_on G;
+    let i,j,k be Nat;
+    assume that
+     A2: 1 <= k & k+1 <= len f and
+     A3: [i,j] in Indices G and
+     A4: [i+1,j] in Indices G and
+     A5: f/.k = G*(i+1,j) and
+     A6: f/.(k+1) = G*(i,j) and
+     A7: (f/.k)`2 = N-bound L~f;
+    A8: 0+1 <= i & i <= len G & 1 <= j & j <= width G by A3,GOBOARD5:1;
+    A9: 1 <= i+1 & i+1 <= len G & 1 <= j & j <= width G by A4,GOBOARD5:1;
+    A10: right_cell(f,k,G) = cell(G,i,j) by A1,A2,A3,A4,A5,A6,GOBRD13:27;
+    set p = 1/2*(G*(i,j)+G*(i+1,j+1));
+    per cases by A8,REAL_1:def 5;
+     suppose j = width G;
+      hence contradiction by A1,A2,A3,A4,A5,A6,Th15;
+     suppose A11: j < width G;
+      then j+1 <= width G by NAT_1:38;
+      then A12: p in Int right_cell(f,k,G) by A8,A9,A10,GOBOARD6:34;
+        i < len G by A9,NAT_1:38;
+      then Int cell(G,i,j) =
+       {|[r,s]| where r,s is Real : G*(i,1)`1 < r & r < G*(i+1,1)`1 &
+        G*(1,j)`2 < s & s < G*(1,j+1)`2 } by A8,A11,GOBOARD6:29;
+      then consider r,s be Real such that
+       A13: p = |[r,s]| and
+         G*(i,1)`1 < r and
+         r < G*(i+1,1)`1 and
+       A14: G*(1,j)`2 < s and
+         s < G*(1,j+1)`2 by A10,A12;
+        p`2 = s by A13,EUCLID:56;
+      then p`2 > N-bound L~f by A5,A7,A9,A14,GOBOARD5:2;
+      then A15: p in LeftComp f by Th14;
+        Int right_cell(f,k,G) c= RightComp f by A1,A2,JORDAN1H:31;
+      then p in LeftComp f /\ RightComp f by A12,A15,XBOOLE_0:def 3;
+      then LeftComp f meets RightComp f by XBOOLE_0:def 7;
+      hence contradiction by GOBRD14:24;
+   end;
+
+  theorem Th20:
+   for f being clockwise_oriented non constant
+   standard special_circular_sequence
+   for G being Go-board st f is_sequence_on G
+   for i,j,k being Nat st
+    1 <= k & k+1 <= len f & [i,j] in Indices G & [i,j+1] in Indices G &
+    f/.k = G*(i,j) & f/.(k+1) = G*(i,j+1) holds (f/.k)`1 <> E-bound L~f
+   proof
+    let f be clockwise_oriented non constant standard
+     special_circular_sequence;
+    let G be Go-board;
+    assume A1: f is_sequence_on G;
+    let i,j,k be Nat;
+    assume that
+     A2: 1 <= k & k+1 <= len f and
+     A3: [i,j] in Indices G and
+     A4: [i,j+1] in Indices G and
+     A5: f/.k = G*(i,j) and
+     A6: f/.(k+1) = G*(i,j+1) and
+     A7: (f/.k)`1 = E-bound L~f;
+    A8: 0+1 <= i & i <= len G & 1 <= j & j <= width G by A3,GOBOARD5:1;
+    A9: 1 <= i & i <= len G & 1 <= j+1 & j+1 <= width G by A4,GOBOARD5:1;
+    A10: right_cell(f,k,G) = cell(G,i,j) by A1,A2,A3,A4,A5,A6,GOBRD13:23;
+    set p = 1/2*(G*(i,j)+G*(i+1,j+1));
+    per cases by A8,REAL_1:def 5;
+     suppose i = len G;
+      hence contradiction by A1,A2,A3,A4,A5,A6,Th16;
+     suppose A11: i < len G;
+      then i+1 <= len G by NAT_1:38;
+      then A12: p in Int right_cell(f,k,G) by A8,A9,A10,GOBOARD6:34;
+        j < width G by A9,NAT_1:38;
+      then Int cell(G,i,j) =
+       {|[r,s]| where r,s is Real : G*(i,1)`1 < r & r < G*(i+1,1)`1 &
+        G*(1,j)`2 < s & s < G*(1,j+1)`2 } by A8,A11,GOBOARD6:29;
+      then consider r,s be Real such that
+       A13: p = |[r,s]| and
+       A14: G*(i,1)`1 < r and
+         r < G*(i+1,1)`1 and
+         G*(1,j)`2 < s and
+         s < G*(1,j+1)`2 by A10,A12;
+        p`1 = r by A13,EUCLID:56;
+      then p`1 > E-bound L~f by A5,A7,A8,A14,GOBOARD5:3;
+      then A15: p in LeftComp f by Th12;
+        Int right_cell(f,k,G) c= RightComp f by A1,A2,JORDAN1H:31;
+      then p in LeftComp f /\ RightComp f by A12,A15,XBOOLE_0:def 3;
+      then LeftComp f meets RightComp f by XBOOLE_0:def 7;
+      hence contradiction by GOBRD14:24;
+   end;
+
+  theorem Th21:
+   for f being clockwise_oriented non constant
+   standard special_circular_sequence
+   for G being Go-board st f is_sequence_on G
+   for i,j,k being Nat st
+    1 <= k & k+1 <= len f & [i,j] in Indices G & [i+1,j] in Indices G &
+    f/.k = G*(i,j) & f/.(k+1) = G*(i+1,j) holds (f/.k)`2 <> S-bound L~f
+   proof
+    let f be clockwise_oriented non constant standard
+     special_circular_sequence;
+    let G be Go-board;
+    assume A1: f is_sequence_on G;
+    let i,j,k be Nat;
+    assume that
+     A2: 1 <= k & k+1 <= len f and
+     A3: [i,j] in Indices G and
+     A4: [i+1,j] in Indices G and
+     A5: f/.k = G*(i,j) and
+     A6: f/.(k+1) = G*(i+1,j) and
+     A7: (f/.k)`2 = S-bound L~f;
+    A8: 0+1 <= i & i <= len G & 1 <= j & j <= width G by A3,GOBOARD5:1;
+    A9: 1 <= i+1 & i+1 <= len G & 1 <= j & j <= width G by A4,GOBOARD5:1;
+    A10: right_cell(f,k,G) = cell(G,i,j-'1) by A1,A2,A3,A4,A5,A6,GOBRD13:25;
+    A11: j-'1+1 = j by A8,AMI_5:4;
+    set p = 1/2*(G*(i,j-'1)+G*(i+1,j));
+    A12: j-1 >= 0 by A8,REAL_1:84;
+    per cases by A8,REAL_1:def 5;
+     suppose j = 1;
+      hence contradiction by A1,A2,A3,A4,A5,A6,Th17;
+     suppose j > 1;
+      then j >= 1+1 by NAT_1:38;
+      then j-1 >= 1+1-1 by REAL_1:49;
+      then A13: j-'1 >= 1 by A12,BINARITH:def 3;
+      then A14: p in Int right_cell(f,k,G) by A8,A9,A10,A11,GOBOARD6:34;
+        j < width G + 1 by A8,NAT_1:38;
+      then j-1 < width G+1-1 by REAL_1:54;
+      then j-1 < width G by XCMPLX_1:26;
+      then A15: j-'1 < width G by A12,BINARITH:def 3;
+        i < len G by A9,NAT_1:38;
+      then Int cell(G,i,j-'1) =
+       {|[r,s]| where r,s is Real : G*(i,1)`1 < r & r < G*(i+1,1)`1 &
+        G*(1,j-'1)`2 < s & s < G*(1,j)`2 } by A8,A11,A13,A15,GOBOARD6:29;
+      then consider r,s be Real such that
+       A16: p = |[r,s]| and
+         G*(i,1)`1 < r and
+         r < G*(i+1,1)`1 and
+         G*(1,j-'1)`2 < s and
+       A17: s < G*(1,j)`2 by A10,A14;
+        p`2 = s by A16,EUCLID:56;
+      then p`2 < S-bound L~f by A5,A7,A8,A17,GOBOARD5:2;
+      then A18: p in LeftComp f by Th13;
+        Int right_cell(f,k,G) c= RightComp f by A1,A2,JORDAN1H:31;
+      then p in LeftComp f /\ RightComp f by A14,A18,XBOOLE_0:def 3;
+      then LeftComp f meets RightComp f by XBOOLE_0:def 7;
+      hence contradiction by GOBRD14:24;
+   end;
+
+  theorem Th22:
+   for f being clockwise_oriented non constant
+   standard special_circular_sequence
+   for G being Go-board st f is_sequence_on G
+   for i,j,k being Nat st
+    1 <= k & k+1 <= len f & [i,j] in Indices G & [i,j+1] in Indices G &
+    f/.k = G*(i,j+1) & f/.(k+1) = G*(i,j) holds (f/.k)`1 <> W-bound L~f
+   proof
+    let f be clockwise_oriented non constant standard
+     special_circular_sequence;
+    let G be Go-board;
+    assume A1: f is_sequence_on G;
+    let i,j,k be Nat;
+    assume that
+     A2: 1 <= k & k+1 <= len f and
+     A3: [i,j] in Indices G and
+     A4: [i,j+1] in Indices G and
+     A5: f/.k = G*(i,j+1) and
+     A6: f/.(k+1) = G*(i,j) and
+     A7: (f/.k)`1 = W-bound L~f;
+    A8: 0+1 <= i & i <= len G & 1 <= j & j <= width G by A3,GOBOARD5:1;
+    A9: 1 <= i & i <= len G & 1 <= j+1 & j+1 <= width G by A4,GOBOARD5:1;
+    A10: right_cell(f,k,G) = cell(G,i-'1,j) by A1,A2,A3,A4,A5,A6,GOBRD13:29;
+    set p = 1/2*(G*(i-'1,j)+G*(i,j+1));
+    A11: i-'1+1 = i by A8,AMI_5:4;
+    A12: i-1 >= 0 by A8,REAL_1:84;
+    per cases by A8,REAL_1:def 5;
+     suppose i = 1;
+      hence contradiction by A1,A2,A3,A4,A5,A6,Th18;
+     suppose i > 1;
+      then i >= 1+1 by NAT_1:38;
+      then i-1 >= 1+1-1 by REAL_1:49;
+      then A13: i-'1 >= 1 by A12,BINARITH:def 3;
+      then A14: p in Int right_cell(f,k,G) by A8,A9,A10,A11,GOBOARD6:34;
+        i < len G + 1 by A8,NAT_1:38;
+      then i-1 < len G+1-1 by REAL_1:54;
+      then i-1 < len G by XCMPLX_1:26;
+      then A15: i-'1 < len G by A12,BINARITH:def 3;
+        j < width G by A9,NAT_1:38;
+      then Int cell(G,i-'1,j) =
+       {|[r,s]| where r,s is Real : G*(i-'1,1)`1 < r & r < G*(i,1)`1 &
+        G*(1,j)`2 < s & s < G*(1,j+1)`2 } by A8,A11,A13,A15,GOBOARD6:29;
+      then consider r,s be Real such that
+       A16: p = |[r,s]| and
+         G*(i-'1,1)`1 < r and
+       A17: r < G*(i,1)`1 and
+         G*(1,j)`2 < s and
+         s < G*(1,j+1)`2 by A10,A14;
+        p`1 = r by A16,EUCLID:56;
+      then p`1 < W-bound L~f by A5,A7,A9,A17,GOBOARD5:3;
+      then A18: p in LeftComp f by Th11;
+        Int right_cell(f,k,G) c= RightComp f by A1,A2,JORDAN1H:31;
+      then p in LeftComp f /\ RightComp f by A14,A18,XBOOLE_0:def 3;
+      then LeftComp f meets RightComp f by XBOOLE_0:def 7;
+      hence contradiction by GOBRD14:24;
+   end;
+
+  theorem Th23:
+   for f being clockwise_oriented non constant
+   standard special_circular_sequence
+   for G being Go-board for k being Nat st
+   f is_sequence_on G & 1 <= k & k+1 <= len f & f/.k = W-min L~f
+   ex i,j be Nat st [i,j] in Indices G & [i,j+1] in Indices G &
+   f/.k = G*(i,j) & f/.(k+1) = G*(i,j+1)
+   proof
+    let f be clockwise_oriented non constant standard
+     special_circular_sequence;
+    let G be Go-board;
+    let k be Nat;
+    assume that
+     A1: f is_sequence_on G and
+     A2: 1 <= k & k+1 <= len f and
+     A3: f/.k = W-min L~f;
+    consider i1,j1,i2,j2 be Nat such that
+     A4: [i1,j1] in Indices G and
+     A5: f/.k = G*(i1,j1) and
+     A6: [i2,j2] in Indices G and
+     A7: f/.(k+1) = G*(i2,j2) and
+     A8: i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+         i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1 by A1,A2,JORDAN8:6;
+    A9: 1 <= i1 & i1 <= len G & 1 <= j1 & j1 <= width G by A4,GOBOARD5:1;
+    A10: 1 <= i2 & i2 <= len G & 1 <= j2 & j2 <= width G by A6,GOBOARD5:1;
+    A11: G*(i1,j1)`1 = W-bound L~f by A3,A5,PSCOMP_1:84;
+      k+1 >= 1+1 by A2,REAL_1:55;
+    then A12: len f >= 2 by A2,AXIOMS:22;
+      k+1 >= 1 by NAT_1:29;
+    then k+1 in dom f by A2,FINSEQ_3:27;
+    then A13: f/.(k+1) in L~f by A12,GOBOARD1:16;
+    then A14: G*(i1,j1)`1 <= G*(i2,j2)`1 by A7,A11,PSCOMP_1:71;
+    reconsider f1 = f as non trivial FinSequence of TOP-REAL 2;
+    take i1,j1;
+    A15: k < len f by A2,NAT_1:38;
+    then A16: k in dom f by A2,FINSEQ_3:27;
+    per cases by A8;
+     suppose A17: i1 = i2 & j1+1 = j2;
+     thus [i1,j1] in Indices G by A4;
+     thus [i1,j1+1] in Indices G by A6,A17;
+     thus f/.k = G*(i1,j1) by A5;
+      thus f/.(k+1) = G*(i1,j1+1) by A7,A17;
+     suppose A18: i1+1 = i2 & j1 = j2 & k <> 1;
+      reconsider k'=k-1 as Nat by A16,FINSEQ_3:28;
+        k > 1 by A2,A18,REAL_1:def 5;
+      then k >= 1+1 by NAT_1:38;
+      then A19: k' >= 1+1-1 by REAL_1:49;
+      A20: k'+1 < len f by A15,XCMPLX_1:27;
+      then consider i3,j3,i4,j4 be Nat such that
+       A21: [i3,j3] in Indices G and
+       A22: f/.k' = G*(i3,j3) and
+       A23: [i4,j4] in Indices G and
+       A24: f/.(k'+1) = G*(i4,j4) and
+       A25: i3 = i4 & j3+1 = j4 or i3+1 = i4 & j3 = j4 or
+           i3 = i4+1 & j3 = j4 or i3 = i4 & j3 = j4+1 by A1,A19,JORDAN8:6;
+      A26: k'+1 = k by XCMPLX_1:27;
+      then A27: i1 = i4 & j1 = j4 by A4,A5,A23,A24,GOBOARD1:21;
+      A28: 1 <= i3 & i3 <= len G & 1 <= j3 & j3 <= width G by A21,GOBOARD5:1;
+        k' < len f by A20,NAT_1:38;
+      then k' in dom f by A19,FINSEQ_3:27;
+      then A29: f/.k' in L~f by A12,GOBOARD1:16;
+      then A30: G*(i1,j1)`1 <= G*(i3,j3)`1 by A11,A22,PSCOMP_1:71;
+      A31: j3 = j4
+      proof
+       assume A32: j3 <> j4;
+       per cases by A25,A32;
+        suppose A33: i3 = i4 & j3 = j4+1;
+         then G*(i3,j3)`1 <> W-bound L~f by A1,A19,A20,A21,A22,A23,A24,Th22;
+         then G*(i3,1)`1 <> W-bound L~f by A28,GOBOARD5:3;
+         then (W-min L~f)`1 <> W-bound L~f by A3,A5,A9,A27,A33,GOBOARD5:3;
+         hence contradiction by PSCOMP_1:84;
+        suppose A34: i3 = i4 & j3+1 = j4;
+           G*(i3,j3)`1 = G*(i3,1)`1 by A28,GOBOARD5:3
+            .= (W-min L~f)`1 by A3,A5,A9,A27,A34,GOBOARD5:3
+            .= W-bound L~f by PSCOMP_1:84;
+         then G*(i3,j3) in W-most L~f & L~f = L~f1 by A22,A29,SPRECT_2:16;
+         then G*(i4,j4)`2 <= G*(i3,j3)`2 by A3,A24,A26,PSCOMP_1:88;
+         then j3 >= j3+1 by A9,A27,A28,A34,GOBOARD5:5;
+         hence contradiction by NAT_1:38;
+      end;
+        now per cases by A25,A31,NAT_1:38;
+       suppose i3+1 = i4;
+        then i3 >= i3+1 by A9,A27,A28,A30,A31,GOBOARD5:4;
+        hence contradiction by NAT_1:38;
+       suppose A35: i3 = i4+1;
+          k'+(1+1) <= len f by A2,A26,XCMPLX_1:1;
+        then A36: LSeg(f,k') /\ LSeg(f,k) = {f/.k} by A19,A26,TOPREAL1:def 8;
+        A37: i1 <> i2 by A18,NAT_1:38;
+          f/.k' in LSeg(f,k') & f/.(k+1) in LSeg(f,k)
+                                                 by A2,A15,A19,A26,TOPREAL1:27;
+        then f/.(k+1) in {f/.k} by A7,A18,A22,A27,A31,A35,A36,XBOOLE_0:def 3;
+        then f/.(k+1) = f/.k by TARSKI:def 1;
+        hence contradiction by A4,A5,A6,A7,A37,GOBOARD1:21;
+      end;
+      hence thesis;
+     suppose A38: i1+1 = i2 & j1 = j2 & k = 1;
+      set k1 = len f;
+      A39: f/.k1 = f/.1 by FINSEQ_6:def 1;
+        k < len f by A2,NAT_1:38;
+      then A40: len f > 1+0 by A2,AXIOMS:22;
+      then len f in dom f by FINSEQ_3:27;
+      then reconsider k'=len f-1 as Nat by FINSEQ_3:28;
+        k+1 >= 1+1 by A2,REAL_1:55;
+      then len f >= 1+1 by A2,AXIOMS:22;
+      then A41: k' >= 1+1-1 by REAL_1:49;
+      A42: k'+1 <= len f by XCMPLX_1:27;
+      then consider i3,j3,i4,j4 be Nat such that
+       A43: [i3,j3] in Indices G and
+       A44: f/.k' = G*(i3,j3) and
+       A45: [i4,j4] in Indices G and
+       A46: f/.(k'+1) = G*(i4,j4) and
+       A47: i3 = i4 & j3+1 = j4 or i3+1 = i4 & j3 = j4 or
+           i3 = i4+1 & j3 = j4 or i3 = i4 & j3 = j4+1 by A1,A41,JORDAN8:6;
+      A48: k'+1 = k1 by XCMPLX_1:27;
+      then A49: i1 = i4 & j1 = j4 by A4,A5,A38,A39,A45,A46,GOBOARD1:21;
+      A50: 1 <= i3 & i3 <= len G & 1 <= j3 & j3 <= width G by A43,GOBOARD5:1;
+        k' < len f by A42,NAT_1:38;
+      then k' in dom f by A41,FINSEQ_3:27;
+      then A51: f/.k' in L~f by A12,GOBOARD1:16;
+      then A52: G*(i1,j1)`1 <= G*(i3,j3)`1 by A11,A44,PSCOMP_1:71;
+      A53: j3 = j4
+      proof
+       assume A54: j3 <> j4;
+       per cases by A47,A54;
+        suppose A55: i3 = i4 & j3 = j4+1;
+         then G*(i3,j3)`1 <> W-bound L~f by A1,A41,A42,A43,A44,A45,A46,Th22;
+         then G*(i3,1)`1 <> W-bound L~f by A50,GOBOARD5:3;
+         then (W-min L~f)`1 <> W-bound L~f by A3,A5,A9,A49,A55,GOBOARD5:3;
+         hence contradiction by PSCOMP_1:84;
+        suppose A56: i3 = i4 & j3+1 = j4;
+           G*(i3,j3)`1 = G*(i3,1)`1 by A50,GOBOARD5:3
+            .= (W-min L~f)`1 by A3,A5,A9,A49,A56,GOBOARD5:3
+            .= W-bound L~f by PSCOMP_1:84;
+         then G*(i3,j3) in W-most L~f & L~f = L~f1 by A44,A51,SPRECT_2:16;
+         then G*(i4,j4)`2 <= G*(i3,j3)`2 by A3,A38,A39,A46,A48,PSCOMP_1:88;
+         then j3 >= j3+1 by A9,A49,A50,A56,GOBOARD5:5;
+         hence contradiction by NAT_1:38;
+      end;
+        now per cases by A47,A53,NAT_1:38;
+       suppose i3+1 = i4;
+        then i3 >= i3+1 by A9,A49,A50,A52,A53,GOBOARD5:4;
+        hence contradiction by NAT_1:38;
+       suppose A57: i3 = i4+1;
+          len f-1 >= 0 by A40,REAL_1:84;
+        then len f-'1 = len f-1 by BINARITH:def 3;
+        then A58: LSeg(f,k) /\ LSeg(f,k') = {f.k} by A38,JORDAN4:54
+           .= {f/.k} by A16,FINSEQ_4:def 4;
+        A59: i1 <> i2 by A38,NAT_1:38;
+          f/.k' in LSeg(f,k') & f/.(k+1) in LSeg(f,k)
+                                                 by A2,A41,A48,TOPREAL1:27;
+        then f/.(k+1) in {f/.k} by A7,A38,A44,A49,A53,A57,A58,XBOOLE_0:def 3;
+        then f/.(k+1) = f/.k by TARSKI:def 1;
+        hence contradiction by A4,A5,A6,A7,A59,GOBOARD1:21;
+      end;
+      hence thesis;
+     suppose i1 = i2+1 & j1 = j2;
+      then i2 >= i2+1 by A9,A10,A14,GOBOARD5:4;
+      hence thesis by NAT_1:38;
+     suppose A60: i1 = i2 & j1 = j2+1;
+        G*(i2,j2)`1 = G*(i2,1)`1 by A10,GOBOARD5:3
+         .= W-bound L~f by A9,A11,A60,GOBOARD5:3;
+      then G*(i2,j2) in W-most L~f & L~f = L~f1 by A7,A13,SPRECT_2:16;
+      then G*(i1,j1)`2 <= G*(i2,j2)`2 by A3,A5,PSCOMP_1:88;
+      then j2 >= j2+1 by A9,A10,A60,GOBOARD5:5;
+      hence thesis by NAT_1:38;
+   end;
+
+  theorem
+     for f being clockwise_oriented non constant
+   standard special_circular_sequence
+   for G being Go-board for k being Nat st
+    f is_sequence_on G & 1 <= k & k+1 <= len f & f/.k = N-min L~f
+   ex i,j be Nat st [i,j] in Indices G & [i+1,j] in Indices G &
+   f/.k = G*(i,j) & f/.(k+1) = G*(i+1,j)
+   proof
+    let f be clockwise_oriented non constant standard
+     special_circular_sequence;
+    let G be Go-board;
+    let k be Nat;
+    assume that
+     A1: f is_sequence_on G and
+     A2: 1 <= k & k+1 <= len f and
+     A3: f/.k = N-min L~f;
+    consider i1,j1,i2,j2 be Nat such that
+     A4: [i1,j1] in Indices G and
+     A5: f/.k = G*(i1,j1) and
+     A6: [i2,j2] in Indices G and
+     A7: f/.(k+1) = G*(i2,j2) and
+     A8: i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+         i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1 by A1,A2,JORDAN8:6;
+    A9: 1 <= i1 & i1 <= len G & 1 <= j1 & j1 <= width G by A4,GOBOARD5:1;
+    A10: 1 <= i2 & i2 <= len G & 1 <= j2 & j2 <= width G by A6,GOBOARD5:1;
+    A11: G*(i1,j1)`2 = N-bound L~f by A3,A5,PSCOMP_1:94;
+      k+1 >= 1+1 by A2,REAL_1:55;
+    then A12: len f >= 2 by A2,AXIOMS:22;
+      k+1 >= 1 by NAT_1:29;
+    then k+1 in dom f by A2,FINSEQ_3:27;
+    then A13: f/.(k+1) in L~f by A12,GOBOARD1:16;
+    then A14: G*(i1,j1)`2 >= G*(i2,j2)`2 by A7,A11,PSCOMP_1:71;
+    reconsider f1 = f as non trivial FinSequence of TOP-REAL 2;
+    take i1,j1;
+    A15: k < len f by A2,NAT_1:38;
+    then A16:k in dom f by A2,FINSEQ_3:27;
+    per cases by A8;
+     suppose A17: i1+1 = i2 & j1 = j2;
+    thus [i1,j1] in Indices G by A4;
+    thus [i1+1,j1] in Indices G by A6,A17;
+    thus f/.k = G*(i1,j1) by A5;
+      thus f/.(k+1) = G*(i1+1,j1) by A7,A17;
+     suppose A18: i1 = i2 & j2+1 = j1 & k <> 1;
+      reconsider k'=k-1 as Nat by A16,FINSEQ_3:28;
+        k > 1 by A2,A18,REAL_1:def 5;
+      then k >= 1+1 by NAT_1:38;
+      then A19: k' >= 1+1-1 by REAL_1:49;
+      A20: k'+1 < len f by A15,XCMPLX_1:27;
+      then consider i3,j3,i4,j4 be Nat such that
+       A21: [i3,j3] in Indices G and
+       A22: f/.k' = G*(i3,j3) and
+       A23: [i4,j4] in Indices G and
+       A24: f/.(k'+1) = G*(i4,j4) and
+       A25: i3 = i4 & j3+1 = j4 or i3+1 = i4 & j3 = j4 or
+           i3 = i4+1 & j3 = j4 or i3 = i4 & j3 = j4+1 by A1,A19,JORDAN8:6;
+      A26: k'+1 = k by XCMPLX_1:27;
+      then A27: i1 = i4 & j1 = j4 by A4,A5,A23,A24,GOBOARD1:21;
+      A28: 1 <= i3 & i3 <= len G & 1 <= j3 & j3 <= width G by A21,GOBOARD5:1;
+        k' < len f by A20,NAT_1:38;
+      then k' in dom f by A19,FINSEQ_3:27;
+      then A29: f/.k' in L~f by A12,GOBOARD1:16;
+      then A30: G*(i1,j1)`2 >= G*(i3,j3)`2 by A11,A22,PSCOMP_1:71;
+      A31: i3 = i4
+      proof
+       assume A32: i3 <> i4;
+       per cases by A25,A32;
+        suppose A33: j3 = j4 & i3 = i4+1;
+         then G*(i3,j3)`2 <> N-bound L~f by A1,A19,A20,A21,A22,A23,A24,Th19;
+         then G*(1,j3)`2 <> N-bound L~f by A28,GOBOARD5:2;
+         then (N-min L~f)`2 <> N-bound L~f by A3,A5,A9,A27,A33,GOBOARD5:2;
+         hence contradiction by PSCOMP_1:94;
+        suppose A34: j3 = j4 & i3+1 = i4;
+           G*(i3,j3)`2 = G*(1,j3)`2 by A28,GOBOARD5:2
+            .= (N-min L~f)`2 by A3,A5,A9,A27,A34,GOBOARD5:2
+            .= N-bound L~f by PSCOMP_1:94;
+         then G*(i3,j3) in N-most L~f & L~f = L~f1 by A22,A29,SPRECT_2:14;
+         then G*(i4,j4)`1 <= G*(i3,j3)`1 by A3,A24,A26,PSCOMP_1:98;
+         then i3 >= i3+1 by A9,A27,A28,A34,GOBOARD5:4;
+         hence contradiction by NAT_1:38;
+      end;
+        now per cases by A25,A31,NAT_1:38;
+       suppose j4+1 = j3;
+        then j4 >= j4+1 by A9,A27,A28,A30,A31,GOBOARD5:5;
+        hence contradiction by NAT_1:38;
+       suppose A35: j4 = j3+1;
+          k'+(1+1) <= len f by A2,A26,XCMPLX_1:1;
+        then A36: LSeg(f,k') /\ LSeg(f,k) = {f/.k} by A19,A26,TOPREAL1:def 8;
+        A37: j1 <> j2 by A18,NAT_1:38;
+        A38: i2 = i3 & j2 = j3 by A18,A27,A31,A35,XCMPLX_1:2;
+          f/.k' in LSeg(f,k') & f/.(k+1) in LSeg(f,k)
+                                                 by A2,A15,A19,A26,TOPREAL1:27;
+        then f/.(k+1) in {f/.k} by A7,A22,A36,A38,XBOOLE_0:def 3;
+        then f/.(k+1) = f/.k by TARSKI:def 1;
+        hence contradiction by A4,A5,A6,A7,A37,GOBOARD1:21;
+      end;
+      hence thesis;
+     suppose A39: i1 = i2 & j2+1 = j1 & k = 1;
+      set k1 = len f;
+      A40: f/.k1 = f/.1 by FINSEQ_6:def 1;
+        k < len f by A2,NAT_1:38;
+      then A41: len f > 1+0 by A2,AXIOMS:22;
+      then len f in dom f by FINSEQ_3:27;
+      then reconsider k'=len f-1 as Nat by FINSEQ_3:28;
+        k+1 >= 1+1 by A2,REAL_1:55;
+      then len f >= 1+1 by A2,AXIOMS:22;
+      then A42: k' >= 1+1-1 by REAL_1:49;
+      A43: k'+1 <= len f by XCMPLX_1:27;
+      then consider i3,j3,i4,j4 be Nat such that
+       A44: [i3,j3] in Indices G and
+       A45: f/.k' = G*(i3,j3) and
+       A46: [i4,j4] in Indices G and
+       A47: f/.(k'+1) = G*(i4,j4) and
+       A48: i3 = i4 & j3+1 = j4 or i3+1 = i4 & j3 = j4 or
+           i3 = i4+1 & j3 = j4 or i3 = i4 & j3 = j4+1 by A1,A42,JORDAN8:6;
+      A49: k'+1 = k1 by XCMPLX_1:27;
+      then A50: i1 = i4 & j1 = j4 by A4,A5,A39,A40,A46,A47,GOBOARD1:21;
+      A51: 1 <= i3 & i3 <= len G & 1 <= j3 & j3 <= width G by A44,GOBOARD5:1;
+        k' < len f by A43,NAT_1:38;
+      then k' in dom f by A42,FINSEQ_3:27;
+      then A52: f/.k' in L~f by A12,GOBOARD1:16;
+      then A53: G*(i1,j1)`2 >= G*(i3,j3)`2 by A11,A45,PSCOMP_1:71;
+      A54: i3 = i4
+      proof
+       assume A55: i3 <> i4;
+       per cases by A48,A55;
+        suppose A56: j3 = j4 & i3 = i4+1;
+         then G*(i3,j3)`2 <> N-bound L~f by A1,A42,A43,A44,A45,A46,A47,Th19;
+         then G*(1,j3)`2 <> N-bound L~f by A51,GOBOARD5:2;
+         then (N-min L~f)`2 <> N-bound L~f by A3,A5,A9,A50,A56,GOBOARD5:2;
+         hence contradiction by PSCOMP_1:94;
+        suppose A57: j3 = j4 & i3+1 = i4;
+           G*(i3,j3)`2 = G*(1,j3)`2 by A51,GOBOARD5:2
+            .= (N-min L~f)`2 by A3,A5,A9,A50,A57,GOBOARD5:2
+            .= N-bound L~f by PSCOMP_1:94;
+         then G*(i3,j3) in N-most L~f & L~f = L~f1 by A45,A52,SPRECT_2:14;
+         then G*(i4,j4)`1 <= G*(i3,j3)`1 by A3,A39,A40,A47,A49,PSCOMP_1:98;
+         then i3 >= i3+1 by A9,A50,A51,A57,GOBOARD5:4;
+         hence contradiction by NAT_1:38;
+      end;
+        now per cases by A48,A54,NAT_1:38;
+       suppose j4+1 = j3;
+        then j4 >= j4+1 by A9,A50,A51,A53,A54,GOBOARD5:5;
+        hence contradiction by NAT_1:38;
+       suppose A58: j4 = j3+1;
+          len f-1 >= 0 by A41,REAL_1:84;
+        then len f-'1 = len f-1 by BINARITH:def 3;
+        then A59: LSeg(f,k) /\ LSeg(f,k') = {f.k} by A39,JORDAN4:54
+           .= {f/.k} by A16,FINSEQ_4:def 4;
+        A60: j1 <> j2 by A39,NAT_1:38;
+        A61: i2 = i3 & j2 = j3 by A39,A50,A54,A58,XCMPLX_1:2;
+          f/.k' in LSeg(f,k') & f/.(k+1) in LSeg(f,k)
+                                                 by A2,A42,A49,TOPREAL1:27;
+        then f/.(k+1) in {f/.k} by A7,A45,A59,A61,XBOOLE_0:def 3;
+        then f/.(k+1) = f/.k by TARSKI:def 1;
+        hence contradiction by A4,A5,A6,A7,A60,GOBOARD1:21;
+      end;
+      hence thesis;
+     suppose i1 = i2 & j2 = j1+1;
+      then j1 >= j1+1 by A9,A10,A14,GOBOARD5:5;
+      hence thesis by NAT_1:38;
+     suppose A62: i1 = i2+1 & j1 = j2;
+        G*(i2,j2)`2 = G*(1,j2)`2 by A10,GOBOARD5:2
+         .= N-bound L~f by A9,A11,A62,GOBOARD5:2;
+      then G*(i2,j2) in N-most L~f & L~f = L~f1 by A7,A13,SPRECT_2:14;
+      then G*(i1,j1)`1 <= G*(i2,j2)`1 by A3,A5,PSCOMP_1:98;
+      then i2 >= i2+1 by A9,A10,A62,GOBOARD5:4;
+      hence thesis by NAT_1:38;
+   end;
+
+  theorem Th25:
+   for f being clockwise_oriented non constant
+   standard special_circular_sequence
+   for G being Go-board for k being Nat st
+    f is_sequence_on G & 1 <= k & k+1 <= len f & f/.k = E-max L~f
+   ex i,j be Nat st [i,j+1] in Indices G & [i,j] in Indices G &
+   f/.k = G*(i,j+1) & f/.(k+1) = G*(i,j)
+   proof
+    let f be clockwise_oriented non constant standard
+     special_circular_sequence;
+    let G be Go-board;
+    let k be Nat;
+    assume that
+     A1: f is_sequence_on G and
+     A2: 1 <= k & k+1 <= len f and
+     A3: f/.k = E-max L~f;
+    consider i1,j1,i2,j2 be Nat such that
+     A4: [i1,j1] in Indices G and
+     A5: f/.k = G*(i1,j1) and
+     A6: [i2,j2] in Indices G and
+     A7: f/.(k+1) = G*(i2,j2) and
+     A8: i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+         i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1 by A1,A2,JORDAN8:6;
+    A9: 1 <= i1 & i1 <= len G & 1 <= j1 & j1 <= width G by A4,GOBOARD5:1;
+    A10: 1 <= i2 & i2 <= len G & 1 <= j2 & j2 <= width G by A6,GOBOARD5:1;
+    A11: G*(i1,j1)`1 = E-bound L~f by A3,A5,PSCOMP_1:104;
+      k+1 >= 1+1 by A2,REAL_1:55;
+    then A12: len f >= 2 by A2,AXIOMS:22;
+      k+1 >= 1 by NAT_1:29;
+    then k+1 in dom f by A2,FINSEQ_3:27;
+    then A13: f/.(k+1) in L~f by A12,GOBOARD1:16;
+    then A14: G*(i1,j1)`1 >= G*(i2,j2)`1 by A7,A11,PSCOMP_1:71;
+    reconsider f1 = f as non trivial FinSequence of TOP-REAL 2;
+    take i2,j2;
+    A15: k < len f by A2,NAT_1:38;
+    then A16: k in dom f by A2,FINSEQ_3:27;
+      now per cases by A8;
+     suppose i1 = i2 & j2+1 = j1;
+      hence [i2,j2] in Indices G & [i2,j2+1] in Indices G
+      & f/.k = G*(i2,j2+1) by A4,A5,A6;
+     suppose A17: i2+1 = i1 & j2 = j1 & k <> 1;
+      reconsider k'=k-1 as Nat by A16,FINSEQ_3:28;
+        k > 1 by A2,A17,REAL_1:def 5;
+      then k >= 1+1 by NAT_1:38;
+      then A18: k' >= 1+1-1 by REAL_1:49;
+      A19: k'+1 < len f by A15,XCMPLX_1:27;
+      then consider i3,j3,i4,j4 be Nat such that
+       A20: [i3,j3] in Indices G and
+       A21: f/.k' = G*(i3,j3) and
+       A22: [i4,j4] in Indices G and
+       A23: f/.(k'+1) = G*(i4,j4) and
+       A24: i3 = i4 & j3+1 = j4 or i3+1 = i4 & j3 = j4 or
+           i3 = i4+1 & j3 = j4 or i3 = i4 & j3 = j4+1 by A1,A18,JORDAN8:6;
+      A25: k'+1 = k by XCMPLX_1:27;
+      then A26: i1 = i4 & j1 = j4 by A4,A5,A22,A23,GOBOARD1:21;
+      A27: 1 <= i3 & i3 <= len G & 1 <= j3 & j3 <= width G by A20,GOBOARD5:1;
+        k' < len f by A19,NAT_1:38;
+      then k' in dom f by A18,FINSEQ_3:27;
+      then A28: f/.k' in L~f by A12,GOBOARD1:16;
+      then A29: G*(i1,j1)`1 >= G*(i3,j3)`1 by A11,A21,PSCOMP_1:71;
+      A30: j3 = j4
+      proof
+       assume A31: j3 <> j4;
+       per cases by A24,A31;
+        suppose A32: i3 = i4 & j4 = j3+1;
+         then G*(i3,j3)`1 <> E-bound L~f by A1,A18,A19,A20,A21,A22,A23,Th20;
+         then G*(i3,1)`1 <> E-bound L~f by A27,GOBOARD5:3;
+         then (E-max L~f)`1 <> E-bound L~f by A3,A5,A9,A26,A32,GOBOARD5:3;
+         hence contradiction by PSCOMP_1:104;
+        suppose A33: i3 = i4 & j4+1 = j3;
+           G*(i3,j3)`1 = G*(i3,1)`1 by A27,GOBOARD5:3
+            .= (E-max L~f)`1 by A3,A5,A9,A26,A33,GOBOARD5:3
+            .= E-bound L~f by PSCOMP_1:104;
+         then G*(i3,j3) in E-most L~f & L~f = L~f1 by A21,A28,SPRECT_2:17;
+         then G*(i4,j4)`2 >= G*(i3,j3)`2 by A3,A23,A25,PSCOMP_1:108;
+         then j4 >= j4+1 by A9,A26,A27,A33,GOBOARD5:5;
+         hence contradiction by NAT_1:38;
+      end;
+        now per cases by A24,A30,NAT_1:38;
+       suppose i4+1 = i3;
+        then i4 >= i4+1 by A9,A26,A27,A29,A30,GOBOARD5:4;
+        hence contradiction by NAT_1:38;
+       suppose A34: i4 = i3+1;
+          k'+(1+1) <= len f by A2,A25,XCMPLX_1:1;
+        then A35: LSeg(f,k') /\ LSeg(f,k) = {f/.k} by A18,A25,TOPREAL1:def 8;
+        A36: i1 <> i2 by A17,NAT_1:38;
+        A37: i2 = i3 & j2 = j3 by A17,A26,A30,A34,XCMPLX_1:2;
+          f/.k' in LSeg(f,k') & f/.(k+1) in LSeg(f,k)
+                                                 by A2,A15,A18,A25,TOPREAL1:27;
+        then f/.(k+1) in {f/.k} by A7,A21,A35,A37,XBOOLE_0:def 3;
+        then f/.(k+1) = f/.k by TARSKI:def 1;
+        hence contradiction by A4,A5,A6,A7,A36,GOBOARD1:21;
+      end;
+      hence [i2,j2] in Indices G & [i2,j2+1] in Indices G
+      & f/.k = G*(i2,j2+1);
+     suppose A38: i2+1 = i1 & j2 = j1 & k = 1;
+      set k1 = len f;
+      A39: f/.k1 = f/.1 by FINSEQ_6:def 1;
+        k < len f by A2,NAT_1:38;
+      then A40: len f > 1+0 by A2,AXIOMS:22;
+      then len f in dom f by FINSEQ_3:27;
+      then reconsider k'=len f-1 as Nat by FINSEQ_3:28;
+        k+1 >= 1+1 by A2,REAL_1:55;
+      then len f >= 1+1 by A2,AXIOMS:22;
+      then A41: k' >= 1+1-1 by REAL_1:49;
+      A42: k'+1 <= len f by XCMPLX_1:27;
+      then consider i3,j3,i4,j4 be Nat such that
+       A43: [i3,j3] in Indices G and
+       A44: f/.k' = G*(i3,j3) and
+       A45: [i4,j4] in Indices G and
+       A46: f/.(k'+1) = G*(i4,j4) and
+       A47: i3 = i4 & j3+1 = j4 or i3+1 = i4 & j3 = j4 or
+           i3 = i4+1 & j3 = j4 or i3 = i4 & j3 = j4+1 by A1,A41,JORDAN8:6;
+      A48: k'+1 = k1 by XCMPLX_1:27;
+      then A49: i1 = i4 & j1 = j4 by A4,A5,A38,A39,A45,A46,GOBOARD1:21;
+      A50: 1 <= i3 & i3 <= len G & 1 <= j3 & j3 <= width G by A43,GOBOARD5:1;
+        k' < len f by A42,NAT_1:38;
+      then k' in dom f by A41,FINSEQ_3:27;
+      then A51: f/.k' in L~f by A12,GOBOARD1:16;
+      then A52: G*(i1,j1)`1 >= G*(i3,j3)`1 by A11,A44,PSCOMP_1:71;
+      A53: j3 = j4
+      proof
+       assume A54: j3 <> j4;
+       per cases by A47,A54;
+        suppose A55: i3 = i4 & j4 = j3+1;
+         then G*(i3,j3)`1 <> E-bound L~f by A1,A41,A42,A43,A44,A45,A46,Th20;
+         then G*(i3,1)`1 <> E-bound L~f by A50,GOBOARD5:3;
+         then (E-max L~f)`1 <> E-bound L~f by A3,A5,A9,A49,A55,GOBOARD5:3;
+         hence contradiction by PSCOMP_1:104;
+        suppose A56: i3 = i4 & j4+1 = j3;
+           G*(i3,j3)`1 = G*(i3,1)`1 by A50,GOBOARD5:3
+            .= (E-max L~f)`1 by A3,A5,A9,A49,A56,GOBOARD5:3
+            .= E-bound L~f by PSCOMP_1:104;
+         then G*(i3,j3) in E-most L~f & L~f = L~f1 by A44,A51,SPRECT_2:17;
+         then G*(i4,j4)`2 >= G*(i3,j3)`2 by A3,A38,A39,A46,A48,PSCOMP_1:108;
+         then j4 >= j4+1 by A9,A49,A50,A56,GOBOARD5:5;
+         hence contradiction by NAT_1:38;
+      end;
+        now per cases by A47,A53,NAT_1:38;
+       suppose i4+1 = i3;
+        then i4 >= i4+1 by A9,A49,A50,A52,A53,GOBOARD5:4;
+        hence contradiction by NAT_1:38;
+       suppose A57: i4 = i3+1;
+          len f-1 >= 0 by A40,REAL_1:84;
+        then len f-'1 = len f-1 by BINARITH:def 3;
+        then A58: LSeg(f,k) /\ LSeg(f,k') = {f.k} by A38,JORDAN4:54
+           .= {f/.k} by A16,FINSEQ_4:def 4;
+        A59: i1 <> i2 by A38,NAT_1:38;
+        A60: i2 = i3 & j2 = j3 by A38,A49,A53,A57,XCMPLX_1:2;
+          f/.k' in LSeg(f,k') & f/.(k+1) in LSeg(f,k)
+                                                 by A2,A41,A48,TOPREAL1:27;
+        then f/.(k+1) in {f/.k} by A7,A44,A58,A60,XBOOLE_0:def 3;
+        then f/.(k+1) = f/.k by TARSKI:def 1;
+        hence contradiction by A4,A5,A6,A7,A59,GOBOARD1:21;
+      end;
+      hence [i2,j2] in Indices G & [i2,j2+1] in Indices G
+      & f/.k = G*(i2,j2+1);
+     suppose i2 = i1+1 & j1 = j2;
+      then i1 >= i1+1 by A9,A10,A14,GOBOARD5:4;
+      hence [i2,j2] in Indices G & [i2,j2+1] in Indices G
+      & f/.k = G*(i2,j2+1) by NAT_1:38;
+     suppose A61: i1 = i2 & j2 = j1+1;
+        G*(i2,j2)`1 = G*(i2,1)`1 by A10,GOBOARD5:3
+         .= E-bound L~f by A9,A11,A61,GOBOARD5:3;
+      then G*(i2,j2) in E-most L~f & L~f = L~f1 by A7,A13,SPRECT_2:17;
+      then G*(i1,j1)`2 >= G*(i2,j2)`2 by A3,A5,PSCOMP_1:108;
+      then j1 >= j1+1 by A9,A10,A61,GOBOARD5:5;
+    hence [i2,j2] in Indices G & [i2,j2+1] in Indices G
+      & f/.k = G*(i2,j2+1) by NAT_1:38;
+    end;
+    hence [i2,j2+1] in Indices G & [i2,j2] in Indices G
+    & f/.k = G*(i2,j2+1);
+    thus f/.(k+1) = G*(i2,j2) by A7;
+   end;
+
+  theorem Th26:
+   for f being clockwise_oriented non constant
+   standard special_circular_sequence
+   for G being Go-board for k being Nat st
+    f is_sequence_on G & 1 <= k & k+1 <= len f & f/.k = S-max L~f
+   ex i,j be Nat st [i+1,j] in Indices G & [i,j] in Indices G &
+   f/.k = G*(i+1,j) & f/.(k+1) = G*(i,j)
+   proof
+    let f be clockwise_oriented non constant standard
+     special_circular_sequence;
+    let G be Go-board;
+    let k be Nat;
+    assume that
+     A1: f is_sequence_on G and
+     A2: 1 <= k & k+1 <= len f and
+     A3: f/.k = S-max L~f;
+    consider i1,j1,i2,j2 be Nat such that
+     A4: [i1,j1] in Indices G and
+     A5: f/.k = G*(i1,j1) and
+     A6: [i2,j2] in Indices G and
+     A7: f/.(k+1) = G*(i2,j2) and
+     A8: i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+         i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1 by A1,A2,JORDAN8:6;
+    A9: 1 <= i1 & i1 <= len G & 1 <= j1 & j1 <= width G by A4,GOBOARD5:1;
+    A10: 1 <= i2 & i2 <= len G & 1 <= j2 & j2 <= width G by A6,GOBOARD5:1;
+    A11: G*(i1,j1)`2 = S-bound L~f by A3,A5,PSCOMP_1:114;
+      k+1 >= 1+1 by A2,REAL_1:55;
+    then A12: len f >= 2 by A2,AXIOMS:22;
+      k+1 >= 1 by NAT_1:29;
+    then k+1 in dom f by A2,FINSEQ_3:27;
+    then A13: f/.(k+1) in L~f by A12,GOBOARD1:16;
+    then A14: G*(i1,j1)`2 <= G*(i2,j2)`2 by A7,A11,PSCOMP_1:71;
+    reconsider f1 = f as non trivial FinSequence of TOP-REAL 2;
+    take i2,j2;
+    A15: k < len f by A2,NAT_1:38;
+    then A16:k in dom f by A2,FINSEQ_3:27;
+      now per cases by A8;
+     suppose i2+1 = i1 & j1 = j2;
+      hence [i2+1,j2] in Indices G & [i2,j2] in Indices G &
+      f/.k = G*(i2+1,j2) by A4,A5,A6;
+     suppose A17: i1 = i2 & j1+1 = j2 & k <> 1;
+      reconsider k'=k-1 as Nat by A16,FINSEQ_3:28;
+        k > 1 by A2,A17,REAL_1:def 5;
+      then k >= 1+1 by NAT_1:38;
+      then A18: k' >= 1+1-1 by REAL_1:49;
+      A19: k'+1 < len f by A15,XCMPLX_1:27;
+      then consider i3,j3,i4,j4 be Nat such that
+       A20: [i3,j3] in Indices G and
+       A21: f/.k' = G*(i3,j3) and
+       A22: [i4,j4] in Indices G and
+       A23: f/.(k'+1) = G*(i4,j4) and
+       A24: i3 = i4 & j3+1 = j4 or i3+1 = i4 & j3 = j4 or
+           i3 = i4+1 & j3 = j4 or i3 = i4 & j3 = j4+1 by A1,A18,JORDAN8:6;
+      A25: k'+1 = k by XCMPLX_1:27;
+      then A26: i1 = i4 & j1 = j4 by A4,A5,A22,A23,GOBOARD1:21;
+      A27: 1 <= i3 & i3 <= len G & 1 <= j3 & j3 <= width G by A20,GOBOARD5:1;
+        k' < len f by A19,NAT_1:38;
+      then k' in dom f by A18,FINSEQ_3:27;
+      then A28: f/.k' in L~f by A12,GOBOARD1:16;
+      then A29: G*(i1,j1)`2 <= G*(i3,j3)`2 by A11,A21,PSCOMP_1:71;
+      A30: i3 = i4
+      proof
+       assume A31: i3 <> i4;
+       per cases by A24,A31;
+        suppose A32: j3 = j4 & i4 = i3+1;
+         then G*(i3,j3)`2 <> S-bound L~f by A1,A18,A19,A20,A21,A22,A23,Th21;
+         then G*(1,j3)`2 <> S-bound L~f by A27,GOBOARD5:2;
+         then (S-max L~f)`2 <> S-bound L~f by A3,A5,A9,A26,A32,GOBOARD5:2;
+         hence contradiction by PSCOMP_1:114;
+        suppose A33: j3 = j4 & i4+1 = i3;
+           G*(i3,j3)`2 = G*(1,j3)`2 by A27,GOBOARD5:2
+            .= (S-max L~f)`2 by A3,A5,A9,A26,A33,GOBOARD5:2
+            .= S-bound L~f by PSCOMP_1:114;
+         then G*(i3,j3) in S-most L~f & L~f = L~f1 by A21,A28,SPRECT_2:15;
+         then G*(i4,j4)`1 >= G*(i3,j3)`1 by A3,A23,A25,PSCOMP_1:118;
+         then i4 >= i4+1 by A9,A26,A27,A33,GOBOARD5:4;
+         hence contradiction by NAT_1:38;
+      end;
+        now per cases by A24,A30,NAT_1:38;
+       suppose j3+1 = j4;
+        then j3 >= j3+1 by A9,A26,A27,A29,A30,GOBOARD5:5;
+        hence contradiction by NAT_1:38;
+       suppose A34: j3 = j4+1;
+          k'+(1+1) <= len f by A2,A25,XCMPLX_1:1;
+        then A35: LSeg(f,k') /\ LSeg(f,k) = {f/.k} by A18,A25,TOPREAL1:def 8;
+        A36: j1 <> j2 by A17,NAT_1:38;
+          f/.k' in LSeg(f,k') & f/.(k+1) in LSeg(f,k)
+                                                 by A2,A15,A18,A25,TOPREAL1:27;
+        then f/.(k+1) in {f/.k} by A7,A17,A21,A26,A30,A34,A35,XBOOLE_0:def 3;
+        then f/.(k+1) = f/.k by TARSKI:def 1;
+        hence contradiction by A4,A5,A6,A7,A36,GOBOARD1:21;
+      end;
+      hence [i2+1,j2] in Indices G & [i2,j2] in Indices G
+      & f/.k = G*(i2+1,j2);
+     suppose A37: i1 = i2 & j1+1 = j2 & k = 1;
+      set k1 = len f;
+      A38: f/.k1 = f/.1 by FINSEQ_6:def 1;
+        k < len f by A2,NAT_1:38;
+      then A39: len f > 1+0 by A2,AXIOMS:22;
+      then len f in dom f by FINSEQ_3:27;
+      then reconsider k'=len f-1 as Nat by FINSEQ_3:28;
+        k+1 >= 1+1 by A2,REAL_1:55;
+      then len f >= 1+1 by A2,AXIOMS:22;
+      then A40: k' >= 1+1-1 by REAL_1:49;
+      A41: k'+1 <= len f by XCMPLX_1:27;
+      then consider i3,j3,i4,j4 be Nat such that
+       A42: [i3,j3] in Indices G and
+       A43: f/.k' = G*(i3,j3) and
+       A44: [i4,j4] in Indices G and
+       A45: f/.(k'+1) = G*(i4,j4) and
+       A46: i3 = i4 & j3+1 = j4 or i3+1 = i4 & j3 = j4 or
+           i3 = i4+1 & j3 = j4 or i3 = i4 & j3 = j4+1 by A1,A40,JORDAN8:6;
+      A47: k'+1 = k1 by XCMPLX_1:27;
+      then A48: i1 = i4 & j1 = j4 by A4,A5,A37,A38,A44,A45,GOBOARD1:21;
+      A49: 1 <= i3 & i3 <= len G & 1 <= j3 & j3 <= width G by A42,GOBOARD5:1;
+        k' < len f by A41,NAT_1:38;
+      then k' in dom f by A40,FINSEQ_3:27;
+      then A50: f/.k' in L~f by A12,GOBOARD1:16;
+      then A51: G*(i1,j1)`2 <= G*(i3,j3)`2 by A11,A43,PSCOMP_1:71;
+      A52: i3 = i4
+      proof
+       assume A53: i3 <> i4;
+       per cases by A46,A53;
+        suppose A54: j3 = j4 & i4 = i3+1;
+         then G*(i3,j3)`2 <> S-bound L~f by A1,A40,A41,A42,A43,A44,A45,Th21;
+         then G*(1,j3)`2 <> S-bound L~f by A49,GOBOARD5:2;
+         then (S-max L~f)`2 <> S-bound L~f by A3,A5,A9,A48,A54,GOBOARD5:2;
+         hence contradiction by PSCOMP_1:114;
+        suppose A55: j3 = j4 & i4+1 = i3;
+           G*(i3,j3)`2 = G*(1,j3)`2 by A49,GOBOARD5:2
+            .= (S-max L~f)`2 by A3,A5,A9,A48,A55,GOBOARD5:2
+            .= S-bound L~f by PSCOMP_1:114;
+         then G*(i3,j3) in S-most L~f & L~f = L~f1 by A43,A50,SPRECT_2:15;
+         then G*(i4,j4)`1 >= G*(i3,j3)`1 by A3,A37,A38,A45,A47,PSCOMP_1:118;
+         then i4 >= i4+1 by A9,A48,A49,A55,GOBOARD5:4;
+         hence contradiction by NAT_1:38;
+      end;
+        now per cases by A46,A52,NAT_1:38;
+       suppose j3+1 = j4;
+        then j3 >= j3+1 by A9,A48,A49,A51,A52,GOBOARD5:5;
+        hence contradiction by NAT_1:38;
+       suppose A56: j3 = j4+1;
+          len f-1 >= 0 by A39,REAL_1:84;
+        then len f-'1 = len f-1 by BINARITH:def 3;
+        then A57: LSeg(f,k) /\ LSeg(f,k') = {f.k} by A37,JORDAN4:54
+           .= {f/.k} by A16,FINSEQ_4:def 4;
+        A58: j1 <> j2 by A37,NAT_1:38;
+          f/.k' in LSeg(f,k') & f/.(k+1) in LSeg(f,k)
+                                                 by A2,A40,A47,TOPREAL1:27;
+        then f/.(k+1) in {f/.k} by A7,A37,A43,A48,A52,A56,A57,XBOOLE_0:def 3;
+        then f/.(k+1) = f/.k by TARSKI:def 1;
+        hence contradiction by A4,A5,A6,A7,A58,GOBOARD1:21;
+      end;
+      hence [i2+1,j2] in Indices G & [i2,j2] in Indices G
+      & f/.k = G*(i2+1,j2);
+     suppose i1 = i2 & j1 = j2+1;
+      then j2 >= j2+1 by A9,A10,A14,GOBOARD5:5;
+      hence [i2+1,j2] in Indices G & [i2,j2] in Indices G
+      & f/.k = G*(i2+1,j2) by NAT_1:38;
+     suppose A59: i2 = i1+1 & j1 = j2;
+        G*(i2,j2)`2 = G*(1,j2)`2 by A10,GOBOARD5:2
+         .= S-bound L~f by A9,A11,A59,GOBOARD5:2;
+      then G*(i2,j2) in S-most L~f & L~f = L~f1 by A7,A13,SPRECT_2:15;
+      then G*(i1,j1)`1 >= G*(i2,j2)`1 by A3,A5,PSCOMP_1:118;
+      then i1 >= i1+1 by A9,A10,A59,GOBOARD5:4;
+      hence [i2+1,j2] in Indices G & [i2,j2] in Indices G
+      & f/.k = G*(i2+1,j2) by NAT_1:38;
+    end;
+    hence [i2+1,j2] in Indices G & [i2,j2] in Indices G
+      & f/.k = G*(i2+1,j2);
+    thus f/.(k+1) = G*(i2,j2) by A7;
+   end;
+
+theorem
+   for f being non constant standard special_circular_sequence holds
+ f is clockwise_oriented iff Rotate(f,W-min L~f)/.2 in W-most L~f
+  proof
+   let f be non constant standard special_circular_sequence;
+   set r = Rotate(f,W-min L~f);
+A1: L~r = L~f by REVROT_1:33;
+A2: W-min L~f in rng f by SPRECT_2:47;
+then A3: r/.1 = W-min L~f by FINSEQ_6:98;
+A4: 1+1 <= len r by TOPREAL8:3;
+A5: 2 <= len f by TOPREAL8:3;
+     rng r = rng f by A2,FINSEQ_6:96;
+then A6: 1 in dom r by A2,FINSEQ_3:33;
+A7: r is_sequence_on GoB r by GOBOARD5:def 5;
+   set j = i_s_w r;
+   set i = 1;
+A8: [i,j] in Indices GoB r &
+   (GoB r)*(i,j) = r/.1 by A1,A3,JORDAN5D:def 1;
+then A9: 1 <= i & i <= len GoB r & 1 <= j & j <= width GoB r by GOBOARD5:1;
+A10: i-'1 = 1-1 by SCMFSA_7:3;
+   thus f is clockwise_oriented implies r/.2 in W-most L~f
+    proof
+     assume A11: f is clockwise_oriented;
+     set k = (W-min L~f)..f;
+       k < len f by SPRECT_5:21;
+then A12:   1 <= k & k+1 <= len f by A2,FINSEQ_4:31,NAT_1:38;
+A13:  f/.k = W-min L~f by A2,FINSEQ_5:41;
+       f is_sequence_on GoB f by GOBOARD5:def 5;
+then f is_sequence_on GoB r by REVROT_1:28;
+     then consider i,j being Nat such that
+A14:  [i,j] in Indices GoB r & [i,j+1] in Indices GoB r &
+     f/.k = (GoB r)*(i,j) & f/.(k+1) = (GoB r)*(i,j+1) by A11,A12,A13,Th23;
+A15: 1 <= i & i <= len GoB r & 1 <= j & j <= width GoB r by A14,GOBOARD5:1;
+A16: 1 <= i & i <= len GoB r & 1 <= j+1 & j+1 <= width GoB r by A14,GOBOARD5:1;
+       k <= k+1 by NAT_1:38;
+then A17:  f/.(k+1) = r/.(k+1+1 -' k) by A2,A12,REVROT_1:10
+             .= r/.(k+(1+1) -' k) by XCMPLX_1:1
+             .= r/.2 by BINARITH:39;
+       1 <= k+1 by NAT_1:29;
+     then k+1 in dom f by A12,FINSEQ_3:27;
+     then k+1 in dom f & f/.(k+1) = f.(k+1) by FINSEQ_4:def 4;
+then A18:  f/.(k+1) in rng f by FUNCT_1:12;
+     A19: rng f c= L~f by A5,SPPOL_2:18;
+       (f/.(k+1))`1 = (GoB r)*(i,1)`1 by A14,A16,GOBOARD5:3
+                 .= (f/.k)`1 by A14,A15,GOBOARD5:3
+                 .= W-bound L~f by A13,PSCOMP_1:84;
+     hence r/.2 in W-most L~f by A17,A18,A19,SPRECT_2:16;
+    end;
+   assume
+A20: r/.2 in W-most L~f;
+     len r > 2 by TOPREAL8:3;
+then A21: 1+1 in dom r by FINSEQ_3:27;
+   then consider i2,j2 being Nat such that
+A22: [i2,j2] in Indices GoB r &
+   r/.(1+1) = (GoB r)*(i2,j2) by A7,GOBOARD1:def 11;
+A23: (GoB r)*(i2,j2)`1 = (GoB r)*(1,j)`1 &
+   (GoB r)*(1,j)`2 <= (GoB r)*(i2,j2)`2 by A3,A8,A20,A22,PSCOMP_1:88;
+then A24: i2 = 1 by A8,A22,JORDAN1G:7;
+   then abs(1-1)+abs(j-j2) = 1 by A6,A7,A8,A21,A22,GOBOARD1:def 11;
+   then 0+abs(j-j2) = 1 by ABSVALUE:7;
+then A25:   abs(j2-j)=1 by UNIFORM1:13;
+     1 <= j2 by A22,GOBOARD5:1;
+   then j <= j2 by A9,A23,A24,GOBOARD5:5;
+   then j2 - j >= 0 by SQUARE_1:12;
+   then j2 - j = 1 by A25,ABSVALUE:def 1;
+then A26: j2 = j+1 by XCMPLX_1:27;
+then j+1 <= width GoB r by A22,GOBOARD5:1;
+then A27: j < width GoB r by NAT_1:38;
+     left_cell(r,1,GoB r) = cell(GoB r,i-'1,j) by A4,A7,A8,A22,A24,A26,GOBRD13:
+22;
+   then left_cell(r,1) = cell(GoB r,0,j) by A4,A10,JORDAN1H:27;
+then A28: Int left_cell(r,1) =
+   { |[t,s]| where t,s is Real :
+   t < (GoB r)*(1,1)`1 & (GoB r)*(1,j)`2 < s & s < (GoB r)*(1,j+1)`2 }
+   by A9,A27,GOBOARD6:23;
+
+A29: Int left_cell(r,1) c= LeftComp r by A4,GOBOARD9:24;
+     Int left_cell(r,1) <> {} by A4,GOBOARD9:18;
+   then consider p being set such that
+A30: p in Int left_cell(r,1) by XBOOLE_0:def 1;
+   reconsider p as Point of TOP-REAL2 by A30;
+   consider t,s being Real such that
+A31: p = |[t,s]| & t < (GoB r)*(1,1)`1 &
+   (GoB r)*(1,j)`2 < s & s < (GoB r)*(1,j+1)`2 by A28,A30;
+     now assume west_halfline p meets L~r;
+    then (west_halfline p) /\ L~r <> {} by XBOOLE_0:def 7;
+    then consider a being set such that
+A32:  a in (west_halfline p) /\ L~r by XBOOLE_0:def 1;
+A33:  a in (west_halfline p) & a in L~r by A32,XBOOLE_0:def 3;
+    reconsider a as Point of TOP-REAL2 by A32;
+A34:  (GoB r)*(1,j)`1 = (GoB r)*(1,1)`1 by A9,GOBOARD5:3;
+      a`1 <= p`1 by A33,JORDAN1A:def 5;
+    then a`1 <= t by A31,EUCLID:56;
+    then a`1 < (GoB r)*(i,j)`1 by A31,A34,AXIOMS:22;
+    then a`1 < W-bound L~r by A1,A3,A8,PSCOMP_1:84;
+    hence contradiction by A33,PSCOMP_1:71;
+   end;
+then A35: west_halfline p c= UBD L~r by JORDAN1C:14;
+     p in west_halfline p by JORDAN1C:7;
+then A36: LeftComp r meets UBD L~r by A29,A30,A35,XBOOLE_0:3;
+A37: LeftComp r is_a_component_of (L~r)` by GOBOARD9:def 1;
+     UBD L~r is_a_component_of (L~r)` by JORDAN1C:12;
+   then UBD L~r = LeftComp r by A36,A37,GOBOARD9:3;
+   then r is clockwise_oriented by JORDAN1H:49;
+   hence f is clockwise_oriented by JORDAN1H:48;
+  end;
+
+theorem
+   for f being non constant standard special_circular_sequence holds
+ f is clockwise_oriented iff Rotate(f,E-max L~f)/.2 in E-most L~f
+  proof
+   let f be non constant standard special_circular_sequence;
+   set r = Rotate(f,E-max L~f);
+A1: L~r = L~f by REVROT_1:33;
+A2: E-max L~f in rng f by SPRECT_2:50;
+then A3: r/.1 = E-max L~f by FINSEQ_6:98;
+A4: 1+1 <= len r by TOPREAL8:3;
+A5: 2 <= len f by TOPREAL8:3;
+     rng r = rng f by A2,FINSEQ_6:96;
+then A6: 1 in dom r by A2,FINSEQ_3:33;
+A7: r is_sequence_on GoB r by GOBOARD5:def 5;
+   set j = i_n_e r;
+   set i = len GoB r;
+A8: [i,j] in Indices GoB r &
+   (GoB r)*(i,j) = r/.1 by A1,A3,JORDAN5D:def 4;
+then A9: 1 <= i & i <= len GoB r & 1 <= j & j <= width GoB r by GOBOARD5:1;
+   thus f is clockwise_oriented implies r/.2 in E-most L~f
+    proof
+     assume A10: f is clockwise_oriented;
+     set k = (E-max L~f)..f;
+       k < len f by SPRECT_5:17;
+then A11:   1 <= k & k+1 <= len f by A2,FINSEQ_4:31,NAT_1:38;
+A12:  f/.k = E-max L~f by A2,FINSEQ_5:41;
+       f is_sequence_on GoB f by GOBOARD5:def 5;
+then f is_sequence_on GoB r by REVROT_1:28;
+     then consider i,j being Nat such that
+A13:  [i,j+1] in Indices GoB r & [i,j] in Indices GoB r &
+     f/.k = (GoB r)*(i,j+1) & f/.(k+1) = (GoB r)*(i,j) by A10,A11,A12,Th25;
+A14: 1 <= i & i <= len GoB r & 1 <= j & j <= width GoB r by A13,GOBOARD5:1;
+A15: 1 <= i & i <= len GoB r & 1 <= j+1 & j+1 <= width GoB r by A13,GOBOARD5:1;
+       k <= k+1 by NAT_1:38;
+then A16:  f/.(k+1) = r/.(k+1+1 -' k) by A2,A11,REVROT_1:10
+             .= r/.(k+(1+1) -' k) by XCMPLX_1:1
+             .= r/.2 by BINARITH:39;
+       1 <= k+1 by NAT_1:29;
+     then k+1 in dom f by A11,FINSEQ_3:27;
+     then k+1 in dom f & f/.(k+1) = f.(k+1) by FINSEQ_4:def 4;
+then A17:  f/.(k+1) in rng f by FUNCT_1:12;
+     A18: rng f c= L~f by A5,SPPOL_2:18;
+       (f/.(k+1))`1 = (GoB r)*(i,1)`1 by A13,A14,GOBOARD5:3
+                 .= (f/.k)`1 by A13,A15,GOBOARD5:3
+                 .= E-bound L~f by A12,PSCOMP_1:104;
+     hence r/.2 in E-most L~f by A16,A17,A18,SPRECT_2:17;
+    end;
+   assume
+A19: r/.2 in E-most L~f;
+     len r > 2 by TOPREAL8:3;
+then A20: 1+1 in dom r by FINSEQ_3:27;
+   then consider i2,j2 being Nat such that
+A21: [i2,j2] in Indices GoB r &
+   r/.(1+1) = (GoB r)*(i2,j2) by A7,GOBOARD1:def 11;
+     (GoB r)*(i,j) in E-most L~r by A1,A3,A8,PSCOMP_1:111;
+   then (GoB r)*(i,j)`1 = (E-min L~r)`1 by PSCOMP_1:108;
+then A22: (GoB r)*(i2,j2)`1 = (GoB r)*(i,j)`1 &
+   (GoB r)*(i,j)`2 >= (GoB r)*(i2,j2)`2 by A1,A3,A8,A19,A21,PSCOMP_1:108;
+then A23: i2 = i by A8,A21,JORDAN1G:7;
+   then abs(i2-i2)+abs(j-j2) = 1 by A6,A7,A8,A20,A21,GOBOARD1:def 11;
+   then abs(0)+abs(j-j2) = 1 by XCMPLX_1:14;
+   then A24: 0+abs(j-j2) = 1 by ABSVALUE:7;
+A25: 1 <= j2 & j2 <= width GoB r by A21,GOBOARD5:1;
+   then j >= j2 by A9,A22,A23,GOBOARD5:5;
+   then j - j2 >= 0 by SQUARE_1:12;
+   then j - j2 = 1 by A24,ABSVALUE:def 1;
+then A26: j2 = j-1 by XCMPLX_1:18;
+then A27: j2 = j-'1 by A9,SCMFSA_7:3;
+     j-1 < j-0 by REAL_1:92;
+then A28: j-'1 < width GoB r by A9,A26,A27,AXIOMS:22;
+     1+1 <= len r & r is_sequence_on GoB r &
+   [i,j-'1+1] in Indices GoB r & [i,j-'1] in Indices GoB r &
+   r/.1 = (GoB r)*(i,j-'1+1) & r/.(1+1) = (GoB r)*(i,j-'1)
+   by A8,A9,A21,A22,A27,AMI_5:4,GOBOARD5:def 5,JORDAN1G:7,TOPREAL8:3;
+   then left_cell(r,1,GoB r) = cell(GoB r,i,j-'1) by GOBRD13:28;
+   then left_cell(r,1) = cell(GoB r,i,j-'1) by A4,JORDAN1H:27;
+then A29: Int left_cell(r,1) =
+   { |[t,s]| where t,s is Real :
+   (GoB r)*(i,1)`1 < t & (GoB r)*(1,j-'1)`2 < s & s < (GoB r)*(1,j-'1+1)`2 }
+   by A25,A27,A28,GOBOARD6:26;
+
+A30: Int left_cell(r,1) c= LeftComp r by A4,GOBOARD9:24;
+     Int left_cell(r,1) <> {} by A4,GOBOARD9:18;
+   then consider p being set such that
+A31: p in Int left_cell(r,1) by XBOOLE_0:def 1;
+   reconsider p as Point of TOP-REAL2 by A31;
+   consider t,s being Real such that
+A32: p = |[t,s]| & (GoB r)*(i,1)`1 < t &
+   (GoB r)*(1,j-'1)`2 < s & s < (GoB r)*(1,j-'1+1)`2 by A29,A31;
+     now assume east_halfline p meets L~r;
+    then (east_halfline p) /\ L~r <> {} by XBOOLE_0:def 7;
+    then consider a being set such that
+A33:  a in (east_halfline p) /\ L~r by XBOOLE_0:def 1;
+A34:  a in (east_halfline p) & a in L~r by A33,XBOOLE_0:def 3;
+    reconsider a as Point of TOP-REAL2 by A33;
+A35:  (GoB r)*(i,1)`1 = (GoB r)*(i,j)`1 by A9,GOBOARD5:3;
+      a`1 >= p`1 by A34,JORDAN1A:def 3;
+    then a`1 >= t by A32,EUCLID:56;
+    then a`1 > (GoB r)*(i,j)`1 by A32,A35,AXIOMS:22;
+    then a`1 > E-bound L~r by A1,A3,A8,PSCOMP_1:104;
+    hence contradiction by A34,PSCOMP_1:71;
+   end;
+then A36: east_halfline p c= UBD L~r by JORDAN1C:15;
+     p in east_halfline p by JORDAN1C:7;
+then A37: LeftComp r meets UBD L~r by A30,A31,A36,XBOOLE_0:3;
+A38: LeftComp r is_a_component_of (L~r)` by GOBOARD9:def 1;
+     UBD L~r is_a_component_of (L~r)` by JORDAN1C:12;
+   then UBD L~r = LeftComp r by A37,A38,GOBOARD9:3;
+   then r is clockwise_oriented by JORDAN1H:49;
+   hence f is clockwise_oriented by JORDAN1H:48;
+  end;
+
+theorem
+   for f being non constant standard special_circular_sequence holds
+ f is clockwise_oriented iff Rotate(f,S-max L~f)/.2 in S-most L~f
+  proof
+   let f be non constant standard special_circular_sequence;
+   set r = Rotate(f,S-max L~f);
+A1: L~r = L~f by REVROT_1:33;
+A2: S-max L~f in rng f by SPRECT_2:46;
+then A3: r/.1 = S-max L~f by FINSEQ_6:98;
+A4: 1+1 <= len r by TOPREAL8:3;
+A5: 2 <= len f by TOPREAL8:3;
+     rng r = rng f by A2,FINSEQ_6:96;
+then A6: 1 in dom r by A2,FINSEQ_3:33;
+A7: r is_sequence_on GoB r by GOBOARD5:def 5;
+   set i = i_e_s r;
+   set j = 1;
+A8: [i,j] in Indices GoB r &
+   (GoB r)*(i,j) = r/.1 by A1,A3,JORDAN5D:def 6;
+then A9: 1 <= i & i <= len GoB r & 1 <= j & j <= width GoB r by GOBOARD5:1;
+A10: j-'1 = 1-1 by SCMFSA_7:3;
+   thus f is clockwise_oriented implies r/.2 in S-most L~f
+    proof
+     assume A11: f is clockwise_oriented;
+     set k = (S-max L~f)..f;
+       k < len f by SPRECT_5:15;
+then A12:   1 <= k & k+1 <= len f by A2,FINSEQ_4:31,NAT_1:38;
+A13:  f/.k = S-max L~f by A2,FINSEQ_5:41;
+       f is_sequence_on GoB f by GOBOARD5:def 5;
+then f is_sequence_on GoB r by REVROT_1:28;
+     then consider i,j being Nat such that
+A14:  [i+1,j] in Indices GoB r & [i,j] in Indices GoB r &
+     f/.k = (GoB r)*(i+1,j) & f/.(k+1) = (GoB r)*(i,j) by A11,A12,A13,Th26;
+A15: 1 <= i+1 & i+1 <= len GoB r & 1 <= j & j <= width GoB r by A14,GOBOARD5:1;
+A16: 1 <= i & i <= len GoB r & 1 <= j & j <= width GoB r by A14,GOBOARD5:1;
+       k <= k+1 by NAT_1:38;
+then A17:  f/.(k+1) = r/.(k+1+1 -' k) by A2,A12,REVROT_1:10
+             .= r/.(k+(1+1) -' k) by XCMPLX_1:1
+             .= r/.2 by BINARITH:39;
+       1 <= k+1 by NAT_1:29;
+     then k+1 in dom f by A12,FINSEQ_3:27;
+     then k+1 in dom f & f/.(k+1) = f.(k+1) by FINSEQ_4:def 4;
+then A18:  f/.(k+1) in rng f by FUNCT_1:12;
+     A19: rng f c= L~f by A5,SPPOL_2:18;
+       (f/.(k+1))`2 = (GoB r)*(1,j)`2 by A14,A16,GOBOARD5:2
+                 .= (f/.k)`2 by A14,A15,GOBOARD5:2
+                 .= S-bound L~f by A13,PSCOMP_1:114;
+     hence r/.2 in S-most L~f by A17,A18,A19,SPRECT_2:15;
+    end;
+   assume
+A20: r/.2 in S-most L~f;
+     len r > 2 by TOPREAL8:3;
+then A21: 1+1 in dom r by FINSEQ_3:27;
+   then consider i2,j2 being Nat such that
+A22: [i2,j2] in Indices GoB r &
+   r/.(1+1) = (GoB r)*(i2,j2) by A7,GOBOARD1:def 11;
+     (GoB r)*(i,1)`2 = S-bound L~f by A3,A8,PSCOMP_1:114
+                  .= (S-min L~f)`2 by PSCOMP_1:114;
+then A23: (GoB r)*(i2,j2)`2 = (GoB r)*(i,1)`2 &
+    (GoB r)*(i2,j2)`1 <= (GoB r)*(i,1)`1 by A3,A8,A20,A22,PSCOMP_1:118;
+then A24: j2 = 1 by A8,A22,JORDAN1G:6;
+   then abs(1-1)+abs(i-i2) = 1 by A6,A7,A8,A21,A22,GOBOARD1:def 11;
+   then A25: 0+abs(i-i2) = 1 by ABSVALUE:7;
+  1 <= i2 & i2 <= len GoB r by A22,GOBOARD5:1;
+   then i >= i2 by A9,A23,A24,GOBOARD5:4;
+   then i - i2 >= 0 by SQUARE_1:12;
+   then i - i2 = 1 by A25,ABSVALUE:def 1;
+then A26: i2 = i-1 by XCMPLX_1:18;
+then A27: i2 = i-'1 by A9,SCMFSA_7:3;
+     i - 1 < i by INT_1:26;
+then A28: i-'1 < len GoB r & 1 <= i-'1 by A9,A22,A26,A27,AXIOMS:22,GOBOARD5:1;
+     [i-'1+1,j] in Indices GoB r & [i-'1,j] in Indices GoB r & i-'1+1=i
+   by A8,A9,A22,A23,A27,AMI_5:4,JORDAN1G:6;
+   then left_cell(r,1,GoB r) = cell(GoB r,i-'1,j-'1) by A4,A7,A8,A22,A24,A27,
+GOBRD13:26
+;
+   then left_cell(r,1) = cell(GoB r,i-'1,0) by A4,A10,JORDAN1H:27;
+then A29: Int left_cell(r,1) = { |[t,s]| where t,s is Real :
+   (GoB r)*(i-'1,1)`1 < t & t < (GoB r)*(i-'1+1,1)`1 & s < (GoB r)*(1,1)`2}
+   by A28,GOBOARD6:27;
+A30: Int left_cell(r,1) c= LeftComp r by A4,GOBOARD9:24;
+     Int left_cell(r,1) <> {} by A4,GOBOARD9:18;
+   then consider p being set such that
+A31: p in Int left_cell(r,1) by XBOOLE_0:def 1;
+   reconsider p as Point of TOP-REAL2 by A31;
+   consider t,s being Real such that
+A32: p = |[t,s]| & (GoB r)*(i-'1,1)`1 < t &
+   t < (GoB r)*(i-'1+1,1)`1 & s < (GoB r)*(1,1)`2 by A29,A31;
+     now assume south_halfline p meets L~r;
+    then (south_halfline p) /\ L~r <> {} by XBOOLE_0:def 7;
+    then consider a being set such that
+A33:  a in (south_halfline p) /\ L~r by XBOOLE_0:def 1;
+A34:  a in (south_halfline p) & a in L~r by A33,XBOOLE_0:def 3;
+    reconsider a as Point of TOP-REAL2 by A33;
+A35: (GoB r)*(i,1)`2 = (GoB r)*(1,1)`2 by A9,GOBOARD5:2;
+      a`2 <= p`2 by A34,JORDAN1A:def 4;
+    then a`2 <= s by A32,EUCLID:56;
+    then a`2 < (GoB r)*(1,1)`2 by A32,AXIOMS:22;
+    then a`2 < S-bound L~r by A1,A3,A8,A35,PSCOMP_1:114;
+    hence contradiction by A34,PSCOMP_1:71;
+   end;
+then A36: south_halfline p c= UBD L~r by JORDAN1C:16;
+     p in south_halfline p by JORDAN1C:7;
+then A37: LeftComp r meets UBD L~r by A30,A31,A36,XBOOLE_0:3;
+A38: LeftComp r is_a_component_of (L~r)` by GOBOARD9:def 1;
+     UBD L~r is_a_component_of (L~r)` by JORDAN1C:12;
+   then UBD L~r = LeftComp r by A37,A38,GOBOARD9:3;
+   then r is clockwise_oriented by JORDAN1H:49;
+   hence f is clockwise_oriented by JORDAN1H:48;
+  end;
+
+theorem
+   for C being compact non vertical non horizontal non empty
+ being_simple_closed_curve Subset of TOP-REAL 2
+ for p being Point of TOP-REAL 2 holds
+ p`1 = (W-bound C + E-bound C)/2 & i > 0 &
+ 1 <= k & k <= width Gauge(C,i) &
+ Gauge(C,i)*(Center Gauge(C,i),k) in Upper_Arc L~Cage(C,i) &
+ p`2 = sup(proj2.:(LSeg(Gauge(C,1)*(Center Gauge(C,1),1),
+   Gauge(C,i)*(Center Gauge(C,i),k)) /\ Lower_Arc L~Cage(C,i)))
+ implies
+  ex j st 1 <= j & j <= width Gauge(C,i) & p = Gauge(C,i)*(Center Gauge(C,i),j)
+  proof
+   let C be compact non vertical non horizontal non empty
+   being_simple_closed_curve Subset of TOP-REAL 2;
+   let p be Point of TOP-REAL 2;
+   assume that
+A1: p`1 = (W-bound C + E-bound C)/2 and
+A2:  i > 0 and
+A3:  1 <= k & k <= width Gauge(C,i) and
+A4:  Gauge(C,i)*(Center Gauge(C,i),k) in Upper_Arc L~Cage(C,i) and
+A5: p`2 = sup(proj2.:(LSeg(Gauge(C,1)*(Center Gauge(C,1),1),
+     Gauge(C,i)*(Center Gauge(C,i),k)) /\ Lower_Arc L~Cage(C,i)));
+    set G=Gauge(C,i);
+    set f=Lower_Seq(C,i);
+A6:  f is_sequence_on G by JORDAN1F:12;
+A7:  1 <= Center Gauge(C,i) & Center Gauge(C,i) <= len G by JORDAN1B:12,14;
+A8:  1 <= Center Gauge(C,1) & Center Gauge(C,1) <= len Gauge(C,1)
+    by JORDAN1B:12,14;
+      len G >= 4 by JORDAN8:13;
+    then width G >= 4 by JORDAN8:def 1;
+    then 1 <= width G by AXIOMS:22;
+then A9: [Center Gauge(C,i),1] in Indices G by A7,GOBOARD7:10;
+A10: [Center Gauge(C,i),k] in Indices G by A3,A7,GOBOARD7:10;
+      Upper_Arc L~Cage(C,i) c= L~Cage(C,i) by JORDAN1A:16;
+then LSeg(G*(Center Gauge(C,i),1),G*(Center Gauge(C,i),k)) meets L~f
+    by A3,A4,A7,JORDAN1G:54;
+   then consider n such that
+A11: 1 <= n & n <= k &
+   G*(Center Gauge(C,i),n)`2 =
+   sup(proj2.:(LSeg(G*(Center Gauge(C,i),1),G*(Center Gauge(C,i),k)) /\ L~f))
+   by A3,A6,A9,A10,JORDAN1F:2;
+      4 <= len Gauge(C,1) by JORDAN8:13;
+then A12: 1 <= len Gauge(C,1) by AXIOMS:22;
+      4 <= len G by JORDAN8:13;
+then 1 <= len G by AXIOMS:22;
+then A13: Gauge(C,1)*(Center Gauge(C,1),1)`1 = G*(Center G,1)`1
+    by A2,A12,JORDAN1A:57;
+A14: G*(Center G,k)`1 = G*(Center G,1)`1 by A3,A7,GOBOARD5:3;
+      0+1 <= i by A2,NAT_1:38;
+then A15: Gauge(C,1)*(Center Gauge(C,1),1)`2 <= G*(Center G,1)`2 by A7,A8,
+JORDAN1A:64;
+     G*(Center G,1)`2 <= G*(Center G,k)`2 by A3,A7,JORDAN1A:40;
+then A16: G*(Center G,1) in LSeg(Gauge(C,1)*(Center Gauge(C,1),1),G*(Center G,k
+))
+   by A13,A14,A15,GOBOARD7:8;
+     G*(Center G,k) in LSeg(Gauge(C,1)*(Center Gauge(C,1),1),G*(Center G,k))
+   by TOPREAL1:6;
+   then LSeg(G*(Center G,1),G*(Center G,k)) c=
+   LSeg(Gauge(C,1)*(Center Gauge(C,1),1),G*(Center G,k)) by A16,TOPREAL1:12;
+   then A17: LSeg(G*(Center G,1),G*(Center G,k)) /\ L~f c=
+   LSeg(Gauge(C,1)*(Center Gauge(C,1),1),G*(Center G,k)) /\ L~f by XBOOLE_1:27;
+     LSeg(Gauge(C,1)*(Center Gauge(C,1),1),G*(Center G,k)) /\ L~f c=
+   LSeg(G*(Center G,1),G*(Center G,k)) /\ L~f
+    proof
+     let a be set;
+     assume A18: a in LSeg(Gauge(C,1)*(Center Gauge(C,1),1),G*(Center G,k)) /\
+L~f;
+     then A19: a in LSeg(Gauge(C,1)*(Center Gauge(C,1),1),G*(Center G,k)) &
+             a in L~f by XBOOLE_0:def 3;
+     reconsider q=a as Point of TOP-REAL 2 by A18;
+       G*(Center G,1)`2 <= G*(Center G,k)`2 by A3,A7,JORDAN1A:40;
+     then Gauge(C,1)*(Center Gauge(C,1),1)`2 <= G*(Center G,k)`2
+     by A15,AXIOMS:22;
+then A20:   Gauge(C,1)*(Center Gauge(C,1),1)`2 <= q`2 & q`2 <= G*(Center G,k)`2
+     by A19,TOPREAL1:10;
+A21: q`1 = G*(Center G,1)`1 by A13,A14,A19,GOBOARD7:5;
+       q in L~f \/ L~Upper_Seq(C,i) by A19,XBOOLE_0:def 2;
+     then q in L~Cage(C,i) by JORDAN1E:17;
+     then S-bound L~Cage(C,i) <= q`2 by PSCOMP_1:71;
+     then G*(Center G,1)`2 <= q`2 by A7,JORDAN1A:93;
+     then q in LSeg(G*(Center G,1),G*(Center G,k)) by A14,A20,A21,GOBOARD7:8;
+     hence thesis by A19,XBOOLE_0:def 3;
+    end;
+   then LSeg(G*(Center G,1),G*(Center G,k)) /\ L~f =
+   LSeg(Gauge(C,1)*(Center Gauge(C,1),1),G*(Center G,k))/\L~f by A17,XBOOLE_0:
+def 10;
+   then A22: sup(proj2.:(LSeg(G*(Center Gauge(C,i),1),G*(Center Gauge(C,i),k))
+/\ L~f))
+   = sup(proj2.:(LSeg(Gauge(C,1)*(Center Gauge(C,1),1),
+   Gauge(C,i)*(Center Gauge(C,i),k)) /\ Lower_Arc L~Cage(C,i)))
+   by A2,JORDAN1G:64;
+   take n;
+   thus 1 <= n by A11;
+   thus n <= width Gauge(C,i) by A3,A11,AXIOMS:22;
+   then p`1 = (Gauge(C,i)*(Center Gauge(C,i),n))`1 by A1,A2,A11,JORDAN1G:43;
+   hence p = Gauge(C,i)*(Center Gauge(C,i),n) by A5,A11,A22,TOPREAL3:11;
+  end;
+

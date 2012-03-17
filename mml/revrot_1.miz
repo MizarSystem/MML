@@ -1,0 +1,1859 @@
+:: Rotating and reversing.(Finite sequences)
+::  by Andrzej Trybulec
+::
+:: Received January 21, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, REALSET1, SEQM_3, RELAT_1, FINSEQ_4, FUNCT_1, FINSEQ_5,
+      RFINSEQ, BOOLE, ARYTM_1, FINSEQ_6, EUCLID, JORDAN2C, FINSEQ_2, GOBOARD1,
+      MCART_1, PRE_TOPC, TOPREAL1, GOBOARD2, CARD_1, GOBOARD5, TARSKI,
+      MATRIX_1, ABSVALUE, GOBOARD9, CONNSP_1, SUBSET_1, TOPS_1, PSCOMP_1,
+      SPRECT_2, COMPTS_1, JORDAN5D, TREES_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1, ABSVALUE,
+      BINARITH, CARD_1, REALSET1, FUNCT_1, FINSEQ_1, FINSEQ_2, MATRIX_1,
+      FINSEQ_4, RFINSEQ, FINSEQ_5, FINSEQ_6, STRUCT_0, PRE_TOPC, TOPS_1,
+      CONNSP_1, COMPTS_1, EUCLID, TOPREAL1, GOBOARD1, GOBOARD2, GOBOARD5,
+      GOBOARD9, PSCOMP_1, JORDAN5D, SPRECT_2, JORDAN2C;
+ constructors TOPS_1, GOBOARD9, SPRECT_2, PSCOMP_1, RFINSEQ, BINARITH, REAL_1,
+      CONNSP_1, GOBOARD2, FINSEQ_4, INT_1, ABSVALUE, JORDAN5D, JORDAN2C,
+      REALSET1, COMPTS_1, FINSEQOP;
+ clusters RELSET_1, SPRECT_1, SPRECT_2, EUCLID, FINSEQ_6, FINSEQ_5, GOBOARD9,
+      GOBOARD2, PSCOMP_1, INT_1, FINSEQ_1, TEX_1, REALSET1, BINARITH, MEMBERED;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TOPREAL1, GOBOARD5, SPRECT_2, TARSKI, FINSEQ_6, REALSET1,
+      GOBOARD1, XBOOLE_0;
+ theorems FINSEQ_6, GROUP_5, NAT_1, FINSEQ_5, FINSEQ_3, FINSEQ_4, AXIOMS,
+      AMI_5, JORDAN3, NAT_2, REAL_1, REAL_2, FINSEQ_1, SPRECT_3, BINARITH,
+      RFINSEQ, RLVECT_1, SQUARE_1, TOPREAL1, JORDAN4, GOBOARD5, SPPOL_2,
+      TARSKI, SPRECT_2, GOBOARD9, INT_1, SUBSET_1, JGRAPH_1, GOBOARD7,
+      GOBOARD1, GOBOARD2, FUNCT_1, PARTFUN2, RELAT_1, FINSEQ_2, JORDAN5D,
+      PSCOMP_1, REALSET1, JORDAN2C, EUCLID, YELLOW_8, TOPREAL3, SCMFSA_7,
+      XBOOLE_0, XBOOLE_1, XCMPLX_1;
+
+begin ::Preliminaries
+
+reserve i,j,k,m,n for Nat,
+        D for non empty set,
+        p for Element of D,
+        f for FinSequence of D;
+
+definition let S be non trivial 1-sorted;
+ cluster the carrier of S -> non trivial;
+ coherence by REALSET1:def 13;
+end;
+
+definition let D be non empty set; let f be FinSequence of D;
+redefine attr f is constant means :: GOBOARD1:def 2
+:Def1: for n,m st n in dom f & m in dom f holds f/.n=f/.m;
+ compatibility
+  proof
+   hereby assume
+A1:   f is constant;
+    let n,m such that
+A2:  n in dom f and
+A3:  m in dom f;
+    thus f/.n= f.n by A2,FINSEQ_4:def 4
+               .= f.m by A1,A2,A3,GOBOARD1:def 2
+               .= f/.m by A3,FINSEQ_4:def 4;
+   end;
+   assume
+A4:  for n,m st n in dom f & m in dom f holds f/.n=f/.m;
+   let n,m such that
+A5: n in dom f and
+A6: m in dom f;
+   thus f.n = f/.n by A5,FINSEQ_4:def 4
+           .= f/.m by A4,A5,A6
+           .= f.m by A6,FINSEQ_4:def 4;
+  end;
+end;
+
+theorem Th1:
+ for D being non empty set, f being FinSequence of D
+  st f just_once_values f/.len f
+ holds f/.len f..f = len f
+proof let D be non empty set, f be FinSequence of D;
+ assume
+A1: f just_once_values f/.len f;
+  then reconsider f' = f as non empty FinSequence of D
+               by FINSEQ_4:7,RELAT_1:60;
+    f/.len f..f + 1
+      = f/.len f..f + ((Rev f')/.1)..Rev f' by FINSEQ_6:47
+     .= f/.len f..f + f/.len f..Rev f by FINSEQ_5:68
+     .= len f + 1 by A1,FINSEQ_6:41;
+ hence f/.len f..f = len f by XCMPLX_1:2;
+end;
+
+theorem Th2:
+ for D being non empty set, f being FinSequence of D
+ holds f /^ len f = {}
+proof let D be non empty set, f be FinSequence of D;
+   len (f /^ len f) = len f - len f by RFINSEQ:def 2
+       .= 0 by XCMPLX_1:14;
+ hence thesis by FINSEQ_1:25;
+end;
+
+theorem Th3:
+ for D being non empty set, f being non empty FinSequence of D
+  holds f/.len f in rng f
+proof let D be non empty set, f be non empty FinSequence of D;
+    len f in dom f by FINSEQ_5:6;
+ hence thesis by PARTFUN2:4;
+end;
+
+definition let D be non empty set, f be FinSequence of D, y be set;
+ redefine pred f just_once_values y means
+    ex x being set st x in dom f & y = f/.x &
+   for z being set st z in dom f & z <> x holds f/.z <> y;
+ compatibility
+ proof
+  hereby assume f just_once_values y;
+   then consider x being set such that
+A1:  x in dom f and
+A2:  y = f.x and
+A3:  for z being set st z in dom f & z <> x holds f.z <> y by FINSEQ_4:9;
+  take x;
+  thus x in dom f by A1;
+  thus y = f/.x by A1,A2,FINSEQ_4:def 4;
+  let z be set;
+  assume
+A4:  z in dom f & z <> x;
+   then f.z <> y by A3;
+  hence f/.z <> y by A4,FINSEQ_4:def 4;
+ end;
+ given x being set such that
+A5: x in dom f and
+A6: y = f/.x and
+A7: for z being set st z in dom f & z <> x holds f/.z <> y;
+A8: y = f.x by A5,A6,FINSEQ_4:def 4;
+    for z being set st z in dom f & z <> x holds f.z <> y
+   proof let z be set;
+    assume
+A9:     z in dom f & z <> x;
+     then f/.z <> y by A7;
+    hence thesis by A9,FINSEQ_4:def 4;
+   end;
+ hence f just_once_values y by A5,A8,FINSEQ_4:9;
+end;
+end;
+
+theorem Th4:
+ for D being non empty set, f being FinSequence of D
+  st f just_once_values f/.len f
+ holds f-:f/.len f = f
+proof let D be non empty set, f be FinSequence of D;
+ assume
+A1: f just_once_values f/.len f;
+ thus f-:f/.len f = f|(f/.len f..f) by FINSEQ_5:def 1
+      .= f|len f by A1,Th1
+      .= f by TOPREAL1:2;
+end;
+
+theorem Th5:
+ for D being non empty set, f being FinSequence of D
+  st f just_once_values f/.len f
+ holds f:-f/.len f = <*f/.len f*>
+proof let D be non empty set, f be FinSequence of D;
+ assume
+A1: f just_once_values f/.len f;
+ thus f:-f/.len f = <*f/.len f*>^(f/^f/.len f..f) by FINSEQ_5:def 2
+      .= <*f/.len f*>^(f/^len f) by A1,Th1
+      .= <*f/.len f*>^{} by Th2
+      .= <*f/.len f*> by FINSEQ_1:47;
+end;
+
+theorem Th6:
+ 1 <= len (f:-p)
+proof
+   len(f:-p) = len(<*p*>^(f/^p..f)) by FINSEQ_5:def 2
+       .= len<*p*> + len(f/^p..f) by FINSEQ_1:35
+       .= 1 + len(f/^p..f) by FINSEQ_1:56;
+ hence thesis by NAT_1:29;
+end;
+
+theorem
+   for D being non empty set, p being Element of D, f being FinSequence of D
+   st p in rng f
+  holds len(f:-p) <= len f
+proof let D be non empty set, p be Element of D, f be FinSequence of D;
+ assume
+A1: p in rng f;
+  then len (f:-p) = len f - p..f + 1 by FINSEQ_5:53;
+  then A2: len (f:-p) - 1 = len f - p..f by XCMPLX_1:26;
+     1 <= p..f by A1,FINSEQ_4:31;
+   then len f - 1 >= len f - p..f by REAL_2:106;
+  hence len(f:-p) <= len f by A2,REAL_1:54;
+end;
+
+theorem
+   for D being non empty set, f being circular non empty FinSequence of D
+ holds Rev f is circular
+proof let D be non empty set, f be circular non empty FinSequence of D;
+ thus (Rev f)/.1 = f/.len f by FINSEQ_5:68
+       .= f/.1 by FINSEQ_6:def 1
+       .= (Rev f)/.len f by FINSEQ_5:68
+       .= (Rev f)/.len Rev f by FINSEQ_5:def 3;
+end;
+
+begin :: About Rotation
+
+reserve D for non empty set,
+        p for Element of D,
+        f for FinSequence of D;
+
+theorem Th9:
+ p in rng f & 1 <= i & i <= len(f:-p)
+ implies (Rotate(f,p))/.i = f/.(i -' 1 + p..f)
+proof assume that
+A1: p in rng f and
+A2: 1 <= i and
+A3: i <= len(f:-p);
+A4:  i = i -' 1 + 1 by A2,AMI_5:4;
+A5:  i in dom(f:-p) by A2,A3,FINSEQ_3:27;
+    Rotate(f,p) = (f:-p)^((f-:p)/^1) by A1,FINSEQ_6:def 2;
+ hence (Rotate(f,p))/.i = (f:-p)/.i by A5,GROUP_5:95
+           .= f/.(i -' 1 + p..f) by A1,A4,A5,FINSEQ_5:55;
+end;
+
+theorem Th10:
+ p in rng f & p..f <= i & i <= len f
+ implies f/.i = (Rotate(f,p))/.(i+1 -' p..f)
+proof assume that
+A1: p in rng f and
+A2: p..f <= i and
+A3: i <= len f;
+     1 + p..f <= i+1 by A2,AXIOMS:24;
+then A4: 1 <= i+1 -' p..f by SPRECT_3:8;
+     i <= i+1 by NAT_1:29;
+then A5: p..f <= i+1 by A2,AXIOMS:22;
+     i+1 <= len f + 1 by A3,AXIOMS:24;
+   then i+1 - p..f <= len f + 1 - p..f by REAL_1:49;
+   then i+1 - p..f <= len f - p..f + 1 by XCMPLX_1:29;
+   then i+1 -' p..f <= len f - p..f + 1 by A5,SCMFSA_7:3;
+   then A6: i+1 -' p..f <= len(f:-p) by A1,FINSEQ_5:53;
+    i+1 -' p..f -' 1 + p..f = i -' p..f+1 -' 1 + p..f by A2,JORDAN4:3
+       .= i -' p..f + p..f by BINARITH:39
+       .= i by A2,AMI_5:4;
+ hence thesis by A1,A4,A6,Th9;
+end;
+
+theorem Th11:
+ p in rng f implies (Rotate(f,p))/.len(f:-p) = f/.len f
+proof
+A1: 1 <= len (f:-p) by Th6;
+ assume
+A2: p in rng f;
+  then p..f <= len f by FINSEQ_4:31;
+  then reconsider x = len f - p..f as Nat by INT_1:18;
+     len (f:-p) -' 1 + p..f = x + 1 -' 1 + p..f by A2,FINSEQ_5:53
+       .= len f - p..f + p..f by BINARITH:39
+       .= len f by XCMPLX_1:27;
+ hence thesis by A1,A2,Th9;
+end;
+
+theorem Th12:
+ p in rng f & len(f:-p) < i & i <= len f
+ implies (Rotate(f,p))/.i = f/.(i + p..f -' len f)
+proof assume that
+A1: p in rng f and
+A2: len(f:-p) < i and
+A3:  i <= len f;
+A4: i -' len(f:-p) + len(f:-p) = i by A2,AMI_5:4;
+A5: p..f <= len f by A1,FINSEQ_4:31;
+   then len f - p..f = len f -' p..f by SCMFSA_7:3;
+  then A6: len(f:-p) = len f -' p..f + 1 by A1,FINSEQ_5:53;
+   then A7:  len f -' p..f < i by A2,NAT_1:38;
+   then A8: len f < i + p..f by SPRECT_3:8;
+   then len f + 1 <= i + p..f by NAT_1:38;
+   then A9: 1 <= i + p..f -' len f by SPRECT_3:8;
+     i + p..f <= p..f + len f by A3,AXIOMS:24;
+  then i + p..f -' len f <= p..f by SPRECT_3:6;
+  then A10: i + p..f -' len f in Seg(p..f) by A9,FINSEQ_1:3;
+     f-:p is non empty by A1,FINSEQ_5:50;
+   then len(f-:p) <> 0 by FINSEQ_1:25;
+   then len(f-:p) >= 1 by RLVECT_1:99;
+then A11: len((f-:p)/^1) = len(f-:p)-1 by RFINSEQ:def 2;
+A12: len f - p..f = len f -' p..f by A5,SCMFSA_7:3;
+     len f -' p..f + 1 + 1 <= i by A2,A6,NAT_1:38;
+   then A13: 1 <= i -' (len f -' p..f + 1) by SPRECT_3:8;
+   then A14: 1 <= i -' len(f:-p) by A1,A12,FINSEQ_5:53;
+A15:  len(f-:p) = p..f by A1,FINSEQ_5:45;
+     i <= p..f + (len f -' p..f) by A3,A5,AMI_5:4;
+   then i -' (len f -' p..f) <= p..f by SPRECT_3:6;
+   then i -' (len f -' p..f + 1) + 1 <= p..f by A7,NAT_2:9;
+   then A16: i -' len(f:-p) <= len(f-:p)-1 by A6,A15,REAL_1:84;
+   then A17: i -' len(f:-p) in dom((f-:p)/^1) by A11,A14,FINSEQ_3:27;
+A18: i -' (len f -' p..f + 1) in dom((f-:p)/^1) by A6,A11,A13,A16,FINSEQ_3:27;
+    Rotate(f,p) = (f:-p)^((f-:p)/^1) by A1,FINSEQ_6:def 2;
+ hence (Rotate(f,p))/.i
+            = ((f-:p)/^1)/.(i -' (len f -' p..f + 1)) by A4,A6,A17,GROUP_5:96
+           .= (f-:p)/.(i -' (len f -' p..f + 1) + 1) by A18,FINSEQ_5:30
+           .= (f-:p)/.(i -' (len f -' p..f)) by A7,NAT_2:9
+           .= (f-:p)/.(i - (len f -' p..f)) by A7,SCMFSA_7:3
+           .= (f-:p)/.(i - (len f - p..f)) by A5,SCMFSA_7:3
+           .= (f-:p)/.(i - len f + p..f) by XCMPLX_1:37
+           .= (f-:p)/.(i + p..f - len f) by XCMPLX_1:29
+           .= (f-:p)/.(i + p..f -' len f) by A8,SCMFSA_7:3
+           .= f/.(i + p..f -' len f) by A1,A10,FINSEQ_5:46;
+end;
+
+theorem
+   p in rng f & 1 < i & i <= p..f
+ implies f/.i = (Rotate(f,p))/.(i + len f -' p..f)
+proof assume that
+A1: p in rng f and
+A2: 1 < i and
+A3: i <= p..f;
+A4: p..f <= len f by A1,FINSEQ_4:31;
+     len f + 1 < i + len f by A2,REAL_1:53;
+   then len f + 1 - p..f < i + len f - p..f by REAL_1:54;
+   then len f - p..f + 1 < i + len f - p..f by XCMPLX_1:29;
+   then len f - p..f + 1 < i + (len f - p..f) by XCMPLX_1:29;
+   then len f - p..f + 1 < i + (len f -' p..f) by A4,SCMFSA_7:3;
+   then len f - p..f + 1 < i + len f -' p..f by A4,JORDAN4:3;
+   then A5: len(f:-p) < i + len f -' p..f by A1,FINSEQ_5:53;
+A6: i <= len f by A3,A4,AXIOMS:22;
+     len f -' p..f <= len f -' i by A3,JORDAN3:4;
+   then len f -' p..f + i <= len f by A6,SPRECT_3:7;
+   then A7: i + len f -' p..f <= len f by A4,JORDAN4:3;
+    len f <= i + len f by NAT_1:29;
+  then p..f <= i + len f by A4,AXIOMS:22;
+  then i + len f -' p..f + p..f -' len f = i + len f -' len f by AMI_5:4
+      .= i by BINARITH:39;
+ hence thesis by A1,A5,A7,Th12;
+end;
+
+theorem Th14:
+ len Rotate(f,p) = len f
+proof
+ per cases;
+ suppose not p in rng f;
+  hence thesis by FINSEQ_6:def 2;
+ suppose
+A1: p in rng f;
+   then f-:p <> {} by FINSEQ_5:50;
+   then len(f-:p) <> 0 by FINSEQ_1:25;
+   then A2: 1 <= len(f-:p) by RLVECT_1:99;
+  thus len Rotate(f,p) = len((f:-p)^((f-:p)/^1)) by A1,FINSEQ_6:def 2
+        .= len(f:-p) + len((f-:p)/^1) by FINSEQ_1:35
+        .= len(f:-p) + (len(f-:p)-1) by A2,RFINSEQ:def 2
+        .= len(f:-p) + len(f-:p)-1 by XCMPLX_1:29
+        .= len f - p..f + 1 + len(f-:p)-1 by A1,FINSEQ_5:53
+        .= len f - p..f + len(f-:p) + 1-1 by XCMPLX_1:1
+        .= len f - p..f + len(f-:p) by XCMPLX_1:26
+        .= len f - p..f + p..f by A1,FINSEQ_5:45
+        .= len f by XCMPLX_1:27;
+end;
+
+theorem Th15:
+ dom Rotate(f,p) = dom f
+proof
+    len Rotate(f,p) = len f by Th14;
+  hence thesis by FINSEQ_3:31;
+end;
+
+theorem Th16:
+ for D being non empty set, f being circular FinSequence of D,
+     p be Element of D
+  st for i st 1 < i & i < len f holds f/.i <> f/.1
+ holds Rotate(Rotate(f,p),f/.1) = f
+proof
+ let D be non empty set, f be circular FinSequence of D,
+     p be Element of D such that
+A1: for i st 1 < i & i < len f holds f/.i <> f/.1;
+ per cases;
+ suppose not p in rng f;
+ hence Rotate(Rotate(f,p),f/.1) = Rotate(f,f/.1) by FINSEQ_6:def 2
+   .= f by FINSEQ_6:95;
+ suppose p = f/.1;
+ hence Rotate(Rotate(f,p),f/.1) = Rotate(f,f/.1) by FINSEQ_6:99
+   .= f by FINSEQ_6:95;
+ suppose that
+A2: p in rng f and
+A3: p <> f/.1;
+A4: Rotate(f,p) = (f:-p)^((f-:p)/^1) by A2,FINSEQ_6:def 2;
+A5: f/.1 = f/.len f by FINSEQ_6:def 1;
+A6: f-:p <> {} by A2,FINSEQ_5:50;
+A7: f/.1 = (f:-p)/.len(f:-p) by A2,A5,FINSEQ_5:57;
+then A8: f/.1 in rng(f:-p) by Th3;
+A9: f:-p just_once_values f/.1
+     proof take len(f:-p);
+      thus len(f:-p) in dom(f:-p) by FINSEQ_5:6;
+      thus f/.1 = (f:-p)/.len(f:-p) by A2,A5,FINSEQ_5:57;
+      let z be set;
+      assume
+A10:      z in dom(f:-p);
+       then reconsider k = z as Nat;
+         k <> 0 by A10,FINSEQ_3:27;
+       then consider i such that
+A11:     k = i+1 by NAT_1:22;
+A12:     (f:-p)/.(i+1) = f/.(i+p..f) by A2,A10,A11,FINSEQ_5:55;
+A13:     p..f <> 1 by A2,A3,FINSEQ_5:41;
+         p..f >= 1 by A2,FINSEQ_4:31;
+then A14:     p..f > 1 by A13,AXIOMS:21;
+         p..f <= i+p..f by NAT_1:29;
+then A15:     1 < i+p..f by A14,AXIOMS:22;
+      assume
+A16:     z <> len(f:-p);
+         k <= len(f:-p) by A10,FINSEQ_3:27;
+       then k < len(f:-p) by A16,AXIOMS:21;
+       then i + 1 < len f - p..f + 1 by A2,A11,FINSEQ_5:53;
+       then i < len f - p..f by AXIOMS:24;
+       then i + p..f < len f by REAL_1:86;
+      hence (f:-p)/.z <> f/.1 by A1,A11,A12,A15;
+     end;
+A17: f/.1 = (f-:p)/.1 by A2,FINSEQ_5:47;
+    f/.1 in rng f by A2,FINSEQ_6:46,RELAT_1:60;
+  then f/.1 in rng Rotate(f,p) by A2,FINSEQ_6:96;
+ hence Rotate(Rotate(f,p),f/.1) = ((f:-p)^((f-:p)/^1)):-(f/.1)^
+           (((f:-p)^((f-:p)/^1)-:(f/.1))/^1) by A4,FINSEQ_6:def 2
+   .= (f:-p):-(f/.1)^((f-:p)/^1)^
+           (((f:-p)^((f-:p)/^1)-:(f/.1))/^1) by A8,FINSEQ_6:69
+   .= (f:-p):-(f/.1)^((f-:p)/^1)^
+           (((f:-p)-:(f/.1))/^1) by A8,FINSEQ_6:71
+   .= <* f/.1 *>^((f-:p)/^1)^
+           (((f:-p)-:(f/.1))/^1) by A7,A9,Th5
+   .= (f-:p)^(((f:-p)-:(f/.1))/^1) by A6,A17,FINSEQ_5:32
+   .= (f-:p)^((f:-p)/^1) by A7,A9,Th4
+   .= f by A2,FINSEQ_6:81;
+end;
+
+begin :: Rotating circular
+
+reserve f for circular FinSequence of D;
+
+theorem Th17:
+ p in rng f & len(f:-p) <= i & i <= len f
+ implies (Rotate(f,p))/.i = f/.(i + p..f -' len f)
+proof assume that
+A1: p in rng f and
+A2: len(f:-p) <= i and
+A3:  i <= len f;
+A4: p..f <= len f by A1,FINSEQ_4:31;
+then A5: len f - p..f = len f -' p..f by SCMFSA_7:3;
+ per cases by A2,AXIOMS:21;
+ suppose
+A6: i = len(f:-p);
+then A7: i = len f - p..f + 1 by A1,FINSEQ_5:53;
+  then i >= 1 by A5,NAT_1:29;
+ hence (Rotate(f,p))/.i = f/.(i -' 1 + p..f) by A1,A6,Th9
+          .= f/.(len f -' p..f + p..f) by A5,A7,BINARITH:39
+          .= f/.len f by A4,AMI_5:4
+          .= f/.1 by FINSEQ_6:def 1
+          .= f/.(len f + 1 -' len f) by BINARITH:39
+          .= f/.(len f -' p..f + p..f + 1 -' len f) by A4,AMI_5:4
+          .= f/.(i + p..f -' len f) by A5,A7,XCMPLX_1:1;
+ suppose i > len(f:-p);
+ hence thesis by A1,A3,Th12;
+end;
+
+theorem Th18:
+ p in rng f & 1 <= i & i <= p..f
+ implies f/.i = (Rotate(f,p))/.(i + len f -' p..f)
+proof assume that
+A1: p in rng f and
+A2: 1 <= i and
+A3: i <= p..f;
+A4: p..f <= len f by A1,FINSEQ_4:31;
+     len f + 1 <= i + len f by A2,AXIOMS:24;
+   then len f + 1 - p..f <= i + len f - p..f by REAL_1:49;
+   then len f - p..f + 1 <= i + len f - p..f by XCMPLX_1:29;
+   then len f - p..f + 1 <= i + (len f - p..f) by XCMPLX_1:29;
+   then len f - p..f + 1 <= i + (len f -' p..f) by A4,SCMFSA_7:3;
+   then len f - p..f + 1 <= i + len f -' p..f by A4,JORDAN4:3;
+   then A5: len(f:-p) <= i + len f -' p..f by A1,FINSEQ_5:53;
+A6: i <= len f by A3,A4,AXIOMS:22;
+     len f -' p..f <= len f -' i by A3,JORDAN3:4;
+   then len f -' p..f + i <= len f by A6,SPRECT_3:7;
+   then A7: i + len f -' p..f <= len f by A4,JORDAN4:3;
+    len f <= i + len f by NAT_1:29;
+  then p..f <= i + len f by A4,AXIOMS:22;
+  then i + len f -' p..f + p..f -' len f = i + len f -' len f by AMI_5:4
+      .= i by BINARITH:39;
+ hence thesis by A1,A5,A7,Th17;
+end;
+
+definition let D be non trivial set;
+ cluster non constant circular FinSequence of D;
+ existence
+  proof
+    consider d1,d2 being Element of D such that
+A1:   d1 <> d2 by YELLOW_8:def 1;
+   take f = <*d1,d2,d1*>;
+A2:  1 in dom f & 2 in dom f by TOPREAL3:6;
+      f.1 = d1 & f.2 = d2 by FINSEQ_1:62;
+   hence f is not constant by A1,A2,GOBOARD1:def 2;
+A3:  len f = 3 by FINSEQ_1:62;
+   thus f/.1 = d1 by FINSEQ_4:27 .= f/.len f by A3,FINSEQ_4:27;
+
+  end;
+end;
+
+definition let D be non trivial set, p be Element of D;
+ let f be non constant circular FinSequence of D;
+ cluster Rotate(f,p) -> non constant;
+ coherence
+  proof
+   per cases;
+   suppose not p in rng f;
+   hence thesis by FINSEQ_6:def 2;
+   suppose
+A1:  p in rng f;
+    consider n,m such that
+A2: n in dom f and
+A3: m in dom f and
+A4: f/.n <> f/.m by Def1;
+A5: dom Rotate(f,p) = dom f by Th15;
+A6: 1 <= n & n <= len f by A2,FINSEQ_3:27;
+A7: 1 <= m & m <= len f by A3,FINSEQ_3:27;
+   thus Rotate(f,p) is not constant
+    proof
+A8:  p..f <= len f by A1,FINSEQ_4:31;
+A9:  1 <= p..f by A1,FINSEQ_4:31;
+     per cases;
+     suppose that
+A10:   n <= p..f and
+A11:   m <= p..f;
+A12:    f/.n = (Rotate(f,p))/.(n + len f -' p..f) by A1,A6,A10,Th18;
+A13:    f/.m = (Rotate(f,p))/.(m + len f -' p..f) by A1,A7,A11,Th18;
+        n <= n + (len f -' p..f) by NAT_1:29;
+      then 1 <= n + (len f -' p..f) by A6,AXIOMS:22;
+      then A14:    1 <= n + len f -' p..f by A8,JORDAN4:3;
+        n + len f <= len f + p..f by A10,AXIOMS:24;
+      then n + len f -' p..f <= len f by SPRECT_3:6;
+      then A15:    n + len f -' p..f in dom f by A14,FINSEQ_3:27;
+        m <= m + (len f -' p..f) by NAT_1:29;
+      then 1 <= m + (len f -' p..f) by A7,AXIOMS:22;
+      then A16:    1 <= m + len f -' p..f by A8,JORDAN4:3;
+        m + len f <= len f + p..f by A11,AXIOMS:24;
+      then m + len f -' p..f <= len f by SPRECT_3:6;
+      then m + len f -' p..f in dom f by A16,FINSEQ_3:27;
+     hence thesis by A4,A5,A12,A13,A15,Def1;
+     suppose that
+A17:   n <= p..f and
+A18:   m >= p..f;
+A19:    f/.n = (Rotate(f,p))/.(n + len f -' p..f) by A1,A6,A17,Th18;
+A20:    f/.m = (Rotate(f,p))/.(m + 1 -' p..f) by A1,A7,A18,Th10;
+        n <= n + (len f -' p..f) by NAT_1:29;
+      then 1 <= n + (len f -' p..f) by A6,AXIOMS:22;
+      then A21:    1 <= n + len f -' p..f by A8,JORDAN4:3;
+        n + len f <= len f + p..f by A17,AXIOMS:24;
+      then n + len f -' p..f <= len f by SPRECT_3:6;
+      then A22:    n + len f -' p..f in dom f by A21,FINSEQ_3:27;
+        1 + p..f <= m + 1 by A18,AXIOMS:24;
+      then A23:    1 <= m + 1 -' p..f by SPRECT_3:8;
+        m + 1 <= len f + p..f by A7,A9,REAL_1:55;
+      then m + 1 -' p..f <= len f by SPRECT_3:6;
+      then m + 1 -' p..f in dom f by A23,FINSEQ_3:27;
+     hence thesis by A4,A5,A19,A20,A22,Def1;
+     suppose that
+A24:   m <= p..f and
+A25:   n >= p..f;
+A26:    f/.m = (Rotate(f,p))/.(m + len f -' p..f) by A1,A7,A24,Th18;
+A27:    f/.n = (Rotate(f,p))/.(n + 1 -' p..f) by A1,A6,A25,Th10;
+        m <= m + (len f -' p..f) by NAT_1:29;
+      then 1 <= m + (len f -' p..f) by A7,AXIOMS:22;
+      then A28:    1 <= m + len f -' p..f by A8,JORDAN4:3;
+        m + len f <= len f + p..f by A24,AXIOMS:24;
+      then m + len f -' p..f <= len f by SPRECT_3:6;
+      then A29:    m + len f -' p..f in dom f by A28,FINSEQ_3:27;
+        1 + p..f <= n + 1 by A25,AXIOMS:24;
+      then A30:    1 <= n + 1 -' p..f by SPRECT_3:8;
+        n + 1 <= len f + p..f by A6,A9,REAL_1:55;
+      then n + 1 -' p..f <= len f by SPRECT_3:6;
+      then n + 1 -' p..f in dom f by A30,FINSEQ_3:27;
+     hence thesis by A4,A5,A26,A27,A29,Def1;
+     suppose that
+A31:   m >= p..f and
+A32:   n >= p..f;
+A33:    f/.m = (Rotate(f,p))/.(m + 1 -' p..f) by A1,A7,A31,Th10;
+A34:    f/.n = (Rotate(f,p))/.(n + 1 -' p..f) by A1,A6,A32,Th10;
+        1 + p..f <= m + 1 by A31,AXIOMS:24;
+      then A35:    1 <= m + 1 -' p..f by SPRECT_3:8;
+        m + 1 <= len f + p..f by A7,A9,REAL_1:55;
+      then m + 1 -' p..f <= len f by SPRECT_3:6;
+      then A36:    m + 1 -' p..f in dom f by A35,FINSEQ_3:27;
+        1 + p..f <= n + 1 by A32,AXIOMS:24;
+      then A37:    1 <= n + 1 -' p..f by SPRECT_3:8;
+        n + 1 <= len f + p..f by A6,A9,REAL_1:55;
+      then n + 1 -' p..f <= len f by SPRECT_3:6;
+      then n + 1 -' p..f in dom f by A37,FINSEQ_3:27;
+     hence thesis by A4,A5,A33,A34,A36,Def1;
+    end;
+  end;
+end;
+
+begin :: Finite sequences on the plane
+
+theorem Th19:
+ for n being non empty Nat holds
+  0.REAL n <> 1.REAL n
+proof let n be non empty Nat;
+A1:  0.REAL n = 0*n by EUCLID:def 9
+        .= n |-> 0 by EUCLID:def 4;
+A2:  1.REAL n = 1*n by JORDAN2C:def 8
+        .= n |-> 1 by JORDAN2C:def 7;
+      1 <= n by RLVECT_1:99;
+    then 1 in Seg n by FINSEQ_1:3;
+    then (n |-> 0).1 = 0 & (n |-> 1).1 = 1 by FINSEQ_2:71;
+   hence 0.REAL n <> 1.REAL n by A1,A2;
+end;
+
+definition let n be non empty Nat;
+ cluster TOP-REAL n -> non trivial;
+ coherence
+  proof
+   take 0.REAL n, 1.REAL n;
+   thus 0.REAL n <> 1.REAL n by Th19;
+  end;
+end;
+
+reserve f,g for FinSequence of TOP-REAL 2;
+
+theorem Th20:
+ rng f c= rng g implies rng X_axis f c= rng X_axis g
+ proof assume
+A1: rng f c= rng g;
+  let x be set;
+  assume x in rng X_axis f;
+   then consider y being set such that
+A2: y in dom X_axis f and
+A3: (X_axis f).y = x by FUNCT_1:def 5;
+A4: dom X_axis f = dom f by SPRECT_2:19;
+A5: dom X_axis g = dom g by SPRECT_2:19;
+   reconsider y as Nat by A2;
+A6: (X_axis f).y = (f/.y)`1 by A2,GOBOARD1:def 3;
+     f/.y in rng f by A2,A4,PARTFUN2:4;
+   then consider z being set such that
+A7: z in dom g and
+A8: g.z = f/.y by A1,FUNCT_1:def 5;
+   reconsider z as Nat by A7;
+     g/.z = f/.y by A7,A8,FINSEQ_4:def 4;
+   then (X_axis g).z = (f/.y)`1 by A5,A7,GOBOARD1:def 3;
+  hence x in rng X_axis g by A3,A5,A6,A7,FUNCT_1:def 5;
+ end;
+
+theorem Th21:
+ rng f = rng g implies rng X_axis f = rng X_axis g
+ proof
+  assume rng f = rng g;
+  hence rng X_axis f c= rng X_axis g & rng X_axis g c= rng X_axis f by Th20;
+ end;
+
+theorem Th22:
+ rng f c= rng g implies rng Y_axis f c= rng Y_axis g
+ proof assume
+A1: rng f c= rng g;
+  let x be set;
+  assume x in rng Y_axis f;
+   then consider y being set such that
+A2: y in dom Y_axis f and
+A3: (Y_axis f).y = x by FUNCT_1:def 5;
+A4: dom Y_axis f = dom f by SPRECT_2:20;
+A5: dom Y_axis g = dom g by SPRECT_2:20;
+   reconsider y as Nat by A2;
+A6: (Y_axis f).y = (f/.y)`2 by A2,GOBOARD1:def 4;
+     f/.y in rng f by A2,A4,PARTFUN2:4;
+   then consider z being set such that
+A7: z in dom g and
+A8: g.z = f/.y by A1,FUNCT_1:def 5;
+   reconsider z as Nat by A7;
+     g/.z = f/.y by A7,A8,FINSEQ_4:def 4;
+   then (Y_axis g).z = (f/.y)`2 by A5,A7,GOBOARD1:def 4;
+  hence x in rng Y_axis g by A3,A5,A6,A7,FUNCT_1:def 5;
+ end;
+
+theorem Th23:
+ rng f = rng g implies rng Y_axis f = rng Y_axis g
+ proof
+  assume rng f = rng g;
+  hence rng Y_axis f c= rng Y_axis g & rng Y_axis g c= rng Y_axis f by Th22;
+ end;
+
+begin :: Rotating finite sequences on the plane
+
+reserve p for Point of TOP-REAL 2,
+        f for FinSequence of TOP-REAL 2;
+
+definition let p be Point of TOP-REAL 2;
+ let f be special circular FinSequence of TOP-REAL 2;
+ cluster Rotate(f,p) -> special;
+ coherence
+  proof per cases;
+   suppose not p in rng f;
+   hence thesis by FINSEQ_6:def 2;
+   suppose
+A1:  p in rng f;
+   let i such that
+A2: 1 <= i and
+A3: i+1 <= len Rotate(f,p);
+A4: i+1 >= 1 by NAT_1:29;
+A5: i+1 >= i by NAT_1:29;
+A6:  len Rotate(f,p) = len f by Th14;
+   now
+A7: len (f:-p) = len f - p..f + 1 by A1,FINSEQ_5:53;
+  per cases;
+ suppose
+A8: i < len(f:-p);
+then A9: (Rotate(f,p))/.i = f/.(i -' 1 + p..f) by A1,A2,Th9;
+A10: i+1 <= len(f:-p) by A8,NAT_1:38;
+    i + 1 -' 1 + p..f = i + p..f by BINARITH:39
+       .= i -' 1 + 1 + p..f by A2,AMI_5:4
+       .= i -' 1 + p..f + 1 by XCMPLX_1:1;
+then A11: (Rotate(f,p))/.(i+1) = f/.(i -' 1 + p..f + 1) by A1,A4,A10,Th9;
+A12: 0 <= i -' 1 by NAT_1:19;
+     1 <= p..f by A1,FINSEQ_4:31;
+then A13: 1 + 0 <= i -' 1 + p..f by A12,REAL_1:55;
+     i < len f + 1 - p..f by A7,A8,XCMPLX_1:29;
+   then i + p..f < len f + 1 by REAL_1:86;
+   then i + p..f <= len f by NAT_1:38;
+   then i -' 1 + 1 + p..f <= len f by A2,AMI_5:4;
+   then i -' 1 + p..f + 1 <= len f by XCMPLX_1:1;
+  hence thesis by A9,A11,A13,TOPREAL1:def 7;
+ suppose
+A14:  i >= len(f:-p);
+     i <= len f by A3,A5,A6,AXIOMS:22;
+then A15: (Rotate(f,p))/.i = f/.(i + p..f -' len f) by A1,A14,Th17;
+A16:   i+1 >= len(f:-p) by A5,A14,AXIOMS:22;
+   then i >= len f - p..f by A7,REAL_1:53;
+then A17: len f <= i + p..f by REAL_1:86;
+     i+1 + p..f -' len f = i + p..f+1 -' len f by XCMPLX_1:1
+         .= i + p..f -' len f + 1 by A17,JORDAN4:3;
+then A18: (Rotate(f,p))/.(i+1) = f/.(i + p..f -' len f + 1) by A1,A3,A6,A16,
+Th17;
+     i - (len f - p..f) >= 1 by A7,A14,REAL_1:84;
+   then i - len f + p..f >= 1 by XCMPLX_1:37;
+   then i + p..f - len f >= 1 by XCMPLX_1:29;
+then A19: 1 <= i + p..f -' len f by JORDAN3:1;
+     p..f <= len f by A1,FINSEQ_4:31;
+   then i + 1 + p..f <= len f + len f by A3,A6,REAL_1:55;
+   then i + p..f + 1 <= len f + len f by XCMPLX_1:1;
+   then i + p..f + 1 - len f <= len f by REAL_1:86;
+   then i + p..f - len f + 1 <= len f by XCMPLX_1:29;
+   then i + p..f -' len f + 1 <= len f by A17,SCMFSA_7:3;
+  hence thesis by A15,A18,A19,TOPREAL1:def 7;
+  end;
+  hence thesis;
+  end;
+end;
+
+theorem Th24:
+ p in rng f & 1 <= i & i < len(f:-p)
+ implies LSeg(Rotate(f,p),i) = LSeg(f,i -' 1 + p..f)
+proof assume that
+A1: p in rng f and
+A2: 1 <= i and
+A3:  i < len(f:-p);
+A4: len Rotate(f,p) = len f by Th14;
+A5: (Rotate(f,p))/.i = f/.(i -' 1 + p..f) by A1,A2,A3,Th9;
+A6: len(f:-p) = len f - p..f + 1 by A1,FINSEQ_5:53;
+A7: i -' 1 >= 0 by NAT_1:18;
+A8: 1 <= p..f by A1,FINSEQ_4:31;
+then A9: 0+1 <= i -' 1 + p..f by A7,REAL_1:55;
+     i - 1 < len f - p..f by A3,A6,REAL_1:84;
+   then i -' 1 < len f - p..f by A2,SCMFSA_7:3;
+   then i -' 1 + p..f < len f by REAL_1:86;
+   then A10: i -' 1 + p..f + 1 <= len f by NAT_1:38;
+A11: 1 <= i+1 by NAT_1:29;
+A12: i+1 <= len(f:-p) by A3,NAT_1:38;
+     i -' 1 + p..f + 1 = i -' 1 + 1 + p..f by XCMPLX_1:1
+         .= i + p..f by A2,AMI_5:4
+         .= i + 1 -' 1 + p..f by BINARITH:39;
+   then A13: (Rotate(f,p))/.(i+1) = f/.(i -' 1 + p..f + 1)by A1,A11,A12,Th9;
+    p..f - 1 >= 0 by A8,SQUARE_1:12;
+  then len f - (p..f - 1) <= len f by REAL_2:173;
+  then len f - p..f + 1 <= len f by XCMPLX_1:37;
+  then i+1 <= len f by A6,A12,AXIOMS:22;
+ hence LSeg(Rotate(f,p),i) =
+ LSeg(f/.(i -' 1 + p..f),f/.(i -' 1 + p..f + 1))
+   by A2,A4,A5,A13,TOPREAL1:def 5
+       .= LSeg(f,i -' 1 + p..f) by A9,A10,TOPREAL1:def 5;
+end;
+
+theorem Th25:
+ p in rng f & p..f <= i & i < len f
+ implies LSeg(f,i) = LSeg(Rotate(f,p),i -' p..f+1)
+proof assume that
+A1: p in rng f and
+A2: p..f <= i and
+A3: i < len f;
+     1 + p..f <= i + 1 by A2,AXIOMS:24;
+   then 1 <= i + 1 -' p..f by SPRECT_3:8;
+   then A4: 1 <= i -' p..f+1 by A2,JORDAN4:3;
+     i - p..f < len f - p..f by A3,REAL_1:54;
+   then i -' p..f < len f - p..f by A2,SCMFSA_7:3;
+   then i -' p..f+1 < len f - p..f + 1 by REAL_1:53;
+   then A5: i -' p..f+1 < len(f:-p) by A1,FINSEQ_5:53;
+    i -' p..f+1 -' 1 + p..f =i -' p..f + p..f by BINARITH:39
+       .= i by A2,AMI_5:4;
+ hence LSeg(f,i) = LSeg(Rotate(f,p),i -' p..f+1) by A1,A4,A5,Th24;
+end;
+
+theorem Th26:
+ for f being circular FinSequence of TOP-REAL 2
+  holds Incr X_axis f = Incr X_axis Rotate(f,p)
+ proof let f be circular FinSequence of TOP-REAL 2;
+  per cases;
+  suppose not p in rng f;
+  hence thesis by FINSEQ_6:def 2;
+  suppose p in rng f;
+   then rng Rotate(f,p) = rng f by FINSEQ_6:96;
+   then rng X_axis Rotate(f,p) = rng X_axis f by Th21;
+   then rng Incr X_axis Rotate(f,p) = rng X_axis f &
+   len Incr X_axis Rotate(f,p) = card rng X_axis f by GOBOARD2:def 2;
+  hence thesis by GOBOARD2:def 2;
+ end;
+
+theorem Th27:
+ for f being circular FinSequence of TOP-REAL 2
+ holds Incr Y_axis f = Incr Y_axis Rotate(f,p)
+ proof let f be circular FinSequence of TOP-REAL 2;
+  per cases;
+  suppose not p in rng f;
+  hence thesis by FINSEQ_6:def 2;
+  suppose p in rng f;
+   then rng Rotate(f,p) = rng f by FINSEQ_6:96;
+   then rng Y_axis Rotate(f,p) = rng Y_axis f by Th23;
+   then rng Incr Y_axis Rotate(f,p) = rng Y_axis f &
+   len Incr Y_axis Rotate(f,p) = card rng Y_axis f by GOBOARD2:def 2;
+  hence thesis by GOBOARD2:def 2;
+ end;
+
+theorem Th28:
+ for f being non empty circular FinSequence of TOP-REAL 2
+  holds GoB Rotate(f,p) = GoB f
+ proof let f be non empty circular FinSequence of TOP-REAL 2;
+     Incr X_axis f = Incr X_axis Rotate(f,p) &
+   Incr Y_axis f = Incr Y_axis Rotate(f,p) by Th26,Th27;
+  hence GoB Rotate(f,p) = GoB(Incr X_axis f,Incr Y_axis f) by GOBOARD2:def 3
+          .= GoB f by GOBOARD2:def 3;
+ end;
+
+theorem Th29:
+ for f being non constant standard special_circular_sequence
+ holds Rev Rotate(f,p) = Rotate(Rev f,p)
+proof let f be non constant standard special_circular_sequence;
+ per cases;
+ suppose
+A1: not p in rng f;
+  then A2: Rotate(f,p) = f by FINSEQ_6:def 2;
+    not p in rng Rev f by A1,FINSEQ_5:60;
+ hence thesis by A2,FINSEQ_6:def 2;
+ suppose
+A3: p = f/.1;
+then A4: Rotate(f,p) = f by FINSEQ_6:95;
+    p = (Rev f)/.len f by A3,FINSEQ_5:68
+    .= (Rev f)/.len Rev f by FINSEQ_5:def 3
+    .= (Rev f)/.1 by FINSEQ_6:def 1;
+  hence thesis by A4,FINSEQ_6:95;
+ suppose that
+A5: p in rng f and
+A6: p <> f/.1;
+    f just_once_values p
+   proof
+    take p..f;
+    thus
+A7:   p..f in dom f by A5,FINSEQ_4:30;
+    thus
+A8:   p = f.(p..f) by A5,FINSEQ_4:29 .= f/.(p..f) by A7,FINSEQ_4:def 4;
+    let z be set such that
+A9:  z in dom f and
+A10:  z <> p..f;
+     reconsider k = z as Nat by A9;
+    per cases by A10,AXIOMS:21;
+    suppose
+A11:   k < p..f;
+A12:   p..f <= len f by A5,FINSEQ_4:31;
+       p..f <> len f by A6,A8,FINSEQ_6:def 1;
+     then A13:   p..f < len f by A12,AXIOMS:21;
+       1 <= k by A9,FINSEQ_3:27;
+    hence f/.z <> p by A8,A11,A13,GOBOARD7:38;
+    suppose
+A14:   k > p..f;
+     p..f >= 1 by A5,FINSEQ_4:31;
+then A15:   p..f > 1 by A6,A8,AXIOMS:21;
+       k <= len f by A9,FINSEQ_3:27;
+    hence f/.z <> p by A8,A14,A15,GOBOARD7:39;
+   end;
+ hence Rev Rotate(f,p) = Rotate(Rev f,p) by FINSEQ_6:112;
+end;
+
+begin :: Circular finite sequences of points of the plane
+
+reserve f for circular FinSequence of TOP-REAL 2;
+
+theorem Th30:
+ for f being circular s.c.c. FinSequence of TOP-REAL 2
+   st len f > 4
+  holds LSeg(f,len f -' 1) /\ LSeg(f,1) = {f/.1}
+proof let f be circular s.c.c. FinSequence of TOP-REAL 2; assume
+A1: len f > 4;
+then A2: len f >= 1+1+1 by AXIOMS:22;
+A3: len f >= 1+1 by A1,AXIOMS:22;
+   A4:  len f >= 1 by A1,AXIOMS:22;
+   then A5: len f -' 1 + 1 = len f by AMI_5:4;
+A6: 1 <= len f -' 1 by A3,SPRECT_3:8;
+ thus LSeg(f,len f -' 1) /\ LSeg(f,1) c= {f/.1}
+  proof assume not LSeg(f,len f -' 1) /\ LSeg(f,1) c= {f/.1};
+    then consider p being Point of TOP-REAL 2 such that
+A7:  p in LSeg(f,len f -' 1) /\ LSeg(f,1) and
+A8:  not p in {f/.1} by SUBSET_1:7;
+A9:  LSeg(f,len f -' 1) = LSeg(f/.(len f -' 1),f/.len f)
+        by A5,A6,TOPREAL1:def 5;
+A10:  LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A3,TOPREAL1:def 5;
+A11:  p <> f/.1 by A8,TARSKI:def 1;
+A12:  f/.len f = f/.1 by FINSEQ_6:def 1;
+   per cases by A7,A9,A10,A11,A12,JGRAPH_1:20;
+   suppose
+A13:  f/.(1+1) in LSeg(f,len f -' 1);
+A14:   f/.(1+1) in LSeg(f,1+1) by A2,TOPREAL1:27;
+      1+1 = 2 & 2+1 = 3 & 3+1 = 4;
+    then 1+1+1 < len f - 1 by A1,REAL_1:86;
+then A15: 1+1+1 < len f -' 1 by A4,SCMFSA_7:3;
+      len f -' 1 < len f by A6,JORDAN3:14;
+    then LSeg(f,1+1) misses LSeg(f,len f -' 1) by A15,GOBOARD5:def 4;
+   hence contradiction by A13,A14,XBOOLE_0:3;
+   suppose
+A16:  f/.(len f -' 1) in LSeg(f,1);
+A17: len f -' 2+1 = len f -' 1 -' 1+1 by JORDAN3:8
+      .= len f -' 1 by A6,AMI_5:4;
+    then A18:   len f -' 2+1 < len f by A6,JORDAN3:14;
+       1 <= len f - 2 by A2,REAL_1:84;
+     then 1 <= len f -' 2 by JORDAN3:1;
+     then A19:   f/.(len f -' 1) in LSeg(f,len f -' 2) by A17,A18,TOPREAL1:27;
+       2 + 2 < len f by A1;
+     then 1+1 < len f - 2 by REAL_1:86;
+     then 1+1 < len f -' 2 by A3,SCMFSA_7:3;
+    then LSeg(f,1) misses LSeg(f,len f -' 2) by A18,GOBOARD5:def 4;
+   hence contradiction by A16,A19,XBOOLE_0:3;
+  end;
+ let x be set;
+ assume x in {f/.1};
+then A20: x = f/.1 by TARSKI:def 1;
+ then x = f/.len f by FINSEQ_6:def 1;
+then A21: x in LSeg(f,len f -' 1) by A5,A6,TOPREAL1:27;
+    x in LSeg(f,1) by A3,A20,TOPREAL1:27;
+ hence x in LSeg(f,len f -' 1) /\ LSeg(f,1) by A21,XBOOLE_0:def 3;
+end;
+
+theorem Th31:
+ p in rng f & len(f:-p) <= i & i < len f
+ implies LSeg(Rotate(f,p),i) = LSeg(f,i + p..f -' len f)
+proof assume that
+A1: p in rng f and
+A2: len(f:-p) <= i and
+A3:  i < len f;
+A4: i+1 <= len f by A3,NAT_1:38;
+A5: len Rotate(f,p) = len f by Th14;
+A6: len(f:-p) = len f - p..f + 1 by A1,FINSEQ_5:53;
+A7: (Rotate(f,p))/.i = f/.(i + p..f -' len f) by A1,A2,A3,Th17;
+A8: len(f:-p) <= i + 1 by A2,NAT_1:37;
+A9: i + 1 <= len f by A3,NAT_1:38;
+A10: p..f <= len f by A1,FINSEQ_4:31;
+   then len f -' p..f + 1 <= i by A2,A6,SCMFSA_7:3;
+   then len f + 1 -' p..f <= i by A10,JORDAN4:3;
+   then A11:  len f + 1 <= i + p..f by SPRECT_3:5;
+   then A12: 1 <= i + p..f -' len f by SPRECT_3:8;
+     len f <= len f + 1 by NAT_1:29;
+then A13: len f <= i + p..f by A11,AXIOMS:22;
+     i + 1 + p..f <= len f + len f by A9,A10,REAL_1:55;
+   then i + p..f + 1 <= len f + len f by XCMPLX_1:1;
+   then i + p..f + 1 -' len f <= len f by SPRECT_3:6;
+   then A14: i + p..f -' len f + 1 <= len f by A13,JORDAN4:3;
+     i + 1 + p..f -' len f = i + p..f + 1 -' len f by XCMPLX_1:1
+         .= i + p..f -' len f+1 by A13,JORDAN4:3;
+   then A15: (Rotate(f,p))/.(i+1) = f/.(i + p..f -' len f+1) by A1,A8,A9,Th17;
+    len f - p..f >= 0 by A10,SQUARE_1:12;
+  then len f - p..f + 1 >= 0 + 1 by AXIOMS:24;
+  then 0 + 1 <= 0 + i by A2,A6,AXIOMS:22;
+ hence LSeg(Rotate(f,p),i) =
+ LSeg(f/.(i + p..f -' len f),f/.(i + p..f -' len f + 1)) by A4,A5,A7,A15,
+TOPREAL1:def 5
+       .= LSeg(f,i + p..f -' len f) by A12,A14,TOPREAL1:def 5;
+end;
+
+definition let p be Point of TOP-REAL 2;
+ let f be circular s.c.c. FinSequence of TOP-REAL 2;
+ cluster Rotate(f,p) -> s.c.c.;
+ coherence
+  proof set h = Rotate(f,p);
+   per cases;
+   suppose not p in rng f;
+    hence thesis by FINSEQ_6:def 2;
+   suppose p in rng f & p..f = 1;
+    then p = f/.1 by FINSEQ_5:41;
+    hence thesis by FINSEQ_6:95;
+   suppose p in rng f & p..f = len f;
+    then p = f/.len f by FINSEQ_5:41;
+    then p = f/.1 by FINSEQ_6:def 1;
+    hence thesis by FINSEQ_6:95;
+   suppose that
+A1:  p in rng f and
+A2: p..f <> 1 and
+A3: p..f <> len f;
+A4: len(f:-p) = len f - p..f + 1 by A1,FINSEQ_5:53;
+A5: 1 <= p..f & p..f <= len f by A1,FINSEQ_4:31;
+then A6: len f - p..f = len f -' p..f by SCMFSA_7:3;
+A7: len f = len h by Th14;
+A8:  p..f > 1 by A2,A5,AXIOMS:21;
+   let i,j such that
+A9: i+1 < j and
+A10: i > 1 & j < len h or j+1 < len h;
+      j <= j+1 by NAT_1:29;
+then A11: j < len f by A7,A10,AXIOMS:22;
+      i <= i+1 by NAT_1:29;
+    then A12:   i < j by A9,AXIOMS:22;
+then A13: i < len f by A11,AXIOMS:22;
+      i -' 1 >= 0 by NAT_1:18;
+then A14: i -' 1 + p..f > 0+1 by A8,REAL_1:67;
+     now
+   per cases by RLVECT_1:99;
+   suppose i = 0;
+     then LSeg(h,i) = {} by TOPREAL1:def 5;
+    hence thesis by XBOOLE_1:65;
+   suppose that
+A15: i >= 1 and
+A16: j < len(f:-p);
+A17: i < len(f:-p) by A12,A16,AXIOMS:22;
+A18:  1 <= j by A12,A15,AXIOMS:22;
+A19:  LSeg(h,i) = LSeg(f,i -' 1 + p..f) by A1,A15,A17,Th24;
+A20:  LSeg(h,j) = LSeg(f,j -' 1 + p..f) by A1,A16,A18,Th24;
+A21:  i -' 1 + p..f + 1 = i -' 1 + 1 + p..f by XCMPLX_1:1
+         .= i + p..f by A15,AMI_5:4
+         .= i + 1 -' 1 + p..f by BINARITH:39;
+      i < j -' 1 by A9,SPRECT_3:5;
+    then i + 1 -' 1 < j -' 1 by BINARITH:39;
+    then A22:  i -' 1 + p..f + 1 < j -' 1 + p..f by A21,REAL_1:53;
+      j -' 1 < len f -' p..f by A4,A6,A16,A18,SPRECT_3:7;
+    then j -' 1 + p..f < len f by SPRECT_3:6;
+   hence LSeg(h,i) misses LSeg(h,j) by A14,A19,A20,A22,GOBOARD5:def 4;
+   suppose that
+A23: i >= 1 and
+A24: j >= len(f:-p) and
+A25: i < len(f:-p);
+A26:  LSeg(h,i) = LSeg(f,i -' 1 + p..f) by A1,A23,A25,Th24;
+A27:  LSeg(h,j) = LSeg(f,j + p..f -' len f) by A1,A11,A24,Th31;
+      len f -' p..f <= len f -' p..f + 1 by NAT_1:29;
+    then len f - p..f <= j by A4,A6,A24,AXIOMS:22;
+    then A28: len f <= j + p..f by REAL_1:86;
+then A29: len f <= j + p..f + 1 by NAT_1:37;
+     now per cases by A10,Th14;
+    suppose i > 1;
+     then i >= 1+1 by NAT_1:38;
+     then i -' 1 >= 1 by SPRECT_3:8;
+    hence j + 1 < i -' 1 + len f by A11,REAL_1:67;
+    suppose
+A30:   j+1 < len f;
+       i -' 1 >= 0 by NAT_1:18;
+     then 0 + len f <= i -' 1 + len f by AXIOMS:24;
+    hence j + 1 < i -' 1 + len f by A30,AXIOMS:22;
+   end;
+   then j + 1 + p..f < i -' 1 + len f + p..f by REAL_1:53;
+   then j + p..f+1 < i -' 1 + len f + p..f by XCMPLX_1:1;
+   then j + p..f+1 < i -' 1 + p..f + len f by XCMPLX_1:1;
+   then j + p..f+1 -' len f < i -' 1 + p..f by A29,SPRECT_3:7;
+   then A31: j + p..f -' len f+1 < i -' 1 + p..f by A28,JORDAN4:3;
+     now per cases by A9,AXIOMS:22;
+    suppose j > len f - p..f + 1;
+    then 1 < j - (len f - p..f) by REAL_1:86;
+    then 1 < j - len f + p..f by XCMPLX_1:37;
+    then 1 < j + p..f - len f by XCMPLX_1:29;
+    then A32:  1 < j + p..f -' len f by JORDAN3:1;
+      i < len f -' p..f + 1 by A4,A5,A25,SCMFSA_7:3;
+    then i -' 1 < len f -' p..f by A23,SPRECT_3:7;
+    then i -' 1 + p..f < len f by SPRECT_3:6;
+   hence LSeg(h,i) misses LSeg(h,j) by A26,A27,A31,A32,GOBOARD5:def 4;
+   suppose i+1 < len f - p..f + 1;
+    then i < len f - p..f by AXIOMS:24;
+    then i + p..f < len f by REAL_1:86;
+    then i -' 1 + 1 + p..f < len f by A23,AMI_5:4;
+    then i -' 1 + p..f + 1 < len f by XCMPLX_1:1;
+   hence LSeg(h,i) misses LSeg(h,j) by A26,A27,A31,GOBOARD5:def 4;
+   end;
+   hence thesis;
+   suppose
+A33: i >= len(f:-p);
+then A34: j >= len(f:-p) by A12,AXIOMS:22;
+A35:  LSeg(h,i) = LSeg(f,i + p..f -' len f) by A1,A13,A33,Th31;
+A36:  LSeg(h,j) = LSeg(f,j + p..f -' len f) by A1,A11,A34,Th31;
+      len f - p..f <= len f - p..f +1 by REAL_1:69;
+    then len f - p..f <= i by A4,A33,AXIOMS:22;
+    then A37:   len f <= i + p..f by A6,SPRECT_3:5;
+    then A38:  i + p..f -' len f + 1 = i + p..f + 1 -' len f by JORDAN4:3
+           .= i + 1 + p..f -' len f by XCMPLX_1:1;
+      i + p..f < j + p..f by A12,REAL_1:53;
+    then A39:  len f < j + p..f by A37,AXIOMS:22;
+      i + 1 + p..f < j + p..f by A9,REAL_1:53;
+    then A40:  i + p..f -' len f + 1 < j + p..f -' len f by A38,A39,SPRECT_3:10
+;
+     j + 1 <= len f & p..f < len f by A3,A5,A7,A10,AXIOMS:21,NAT_1:38;
+   then j + 1 + p..f < len f + len f by REAL_1:67;
+   then j + 1 + p..f - len f < len f by REAL_1:84;
+   then j + (1 + p..f) - len f < len f by XCMPLX_1:1;
+   then j + (p..f + 1 - len f) < len f by XCMPLX_1:29;
+   then j + (p..f - len f + 1) < len f by XCMPLX_1:29;
+   then j + (p..f - len f) + 1 < len f by XCMPLX_1:1;
+   then j + p..f - len f + 1 < len f by XCMPLX_1:29;
+   then j + p..f -' len f + 1 < len f by A39,SCMFSA_7:3;
+   hence LSeg(h,i) misses LSeg(h,j) by A35,A36,A40,GOBOARD5:def 4;
+   end;
+   hence thesis;
+  end;
+end;
+
+definition let p be Point of TOP-REAL 2;
+ let f be non constant standard special_circular_sequence;
+ cluster Rotate(f,p) -> unfolded;
+ coherence
+  proof
+   per cases;
+   suppose not p in rng f;
+   hence thesis by FINSEQ_6:def 2;
+   suppose
+A1:  p in rng f;
+A2:  len f > 4 by GOBOARD7:36;
+   let i such that
+A3: 1 <= i and
+A4: i + 2 <= len Rotate(f,p);
+   thus LSeg(Rotate(f,p),i) /\ LSeg(Rotate(f,p),i+1) = {(Rotate(f,p))/.(i+1)}
+    proof
+A5:  len f = len Rotate(f,p) by Th14;
+A6:  1 <= i+1 by NAT_1:29;
+       i+1 < i+2 by REAL_1:53;
+then A7:  i+1 < len f by A4,A5,AXIOMS:22;
+A8:  i+1 -' 1 + p..f = i + p..f by BINARITH:39
+         .= i -' 1 + 1 + p..f by A3,AMI_5:4
+         .= i -' 1 + p..f + 1 by XCMPLX_1:1;
+A9:  len (f:-p) = len f - p..f + 1 by A1,FINSEQ_5:53;
+A10: len f <= len f + 1 by NAT_1:29;
+A11: len f >= 1 by A2,AXIOMS:22;
+     per cases by AXIOMS:21;
+     suppose
+A12:    i+1 = len(f:-p);
+A13:    i -' 1 + p..f = i - 1 + p..f by A3,SCMFSA_7:3
+          .= len f - p..f + 1 - 1 - 1 + p..f by A9,A12,XCMPLX_1:26
+          .= len f - p..f - 1 + p..f by XCMPLX_1:26
+          .= len f - p..f + p..f - 1 by XCMPLX_1:29
+          .= len f - 1 by XCMPLX_1:27
+          .= len f -' 1 by A11,SCMFSA_7:3;
+         i < len(f:-p) by A12,REAL_1:69;
+       then A14:     LSeg(Rotate(f,p),i) = LSeg(f,len f -' 1) by A1,A3,A13,Th24
+;
+         len (f:-p) = len f + 1 - p..f by A9,XCMPLX_1:29;
+       then len (f:-p) + p..f = len f + 1 by XCMPLX_1:27;
+       then len(f:-p) + p..f -' len f
+               = len f + 1 - len f by A10,SCMFSA_7:3
+              .= 1 by XCMPLX_1:26;
+       then LSeg(Rotate(f,p),len(f:-p)) = LSeg(f,1) by A1,A7,A12,Th31;
+      hence LSeg(Rotate(f,p),i) /\ LSeg(Rotate(f,p),i+1)
+                  = {f/.1} by A2,A12,A14,Th30
+                 .= {f/.len f} by FINSEQ_6:def 1
+                 .= {(Rotate(f,p))/.(i+1)} by A1,A12,Th11;
+     suppose
+A15:    i+1 < len(f:-p);
+         i+0 < i+1 by REAL_1:53;
+       then i < len(f:-p) by A15,AXIOMS:22;
+       then A16:     LSeg(Rotate(f,p),i) = LSeg(f,i -' 1 + p..f) by A1,A3,Th24;
+         1 <= i+1 by NAT_1:29;
+       then A17:     LSeg(Rotate(f,p),i+1) = LSeg(f,i+1 -' 1 + p..f) by A1,A15,
+Th24;
+         i -' 1 + p..f >= p..f & p..f >= 1 by A1,FINSEQ_4:31,NAT_1:29;
+then A18:     1 <= i -' 1 + p..f by AXIOMS:22;
+         i + 1 < len f - p..f + 1 by A1,A15,FINSEQ_5:53;
+       then i < len f - p..f by AXIOMS:24;
+       then i + p..f < len f by REAL_1:86;
+       then i -' 1 + 1 + p..f < len f by A3,AMI_5:4;
+       then i -' 1 + p..f + 1 < len f by XCMPLX_1:1;
+       then i -' 1 + p..f + 1 + 1 <= len f by NAT_1:38;
+       then i -' 1 + p..f + (1+1) <= len f by XCMPLX_1:1;
+      hence LSeg(Rotate(f,p),i) /\ LSeg(Rotate(f,p),i+1)
+                  = {f/.(i+1 -' 1 + p..f)} by A8,A16,A17,A18,TOPREAL1:def 8
+                 .= {(Rotate(f,p))/.(i+1)} by A1,A6,A15,Th9;
+     suppose
+A19:    len(f:-p) < i+1;
+         i+(1+1) <= len f by A4,Th14;
+       then i+1+1 <= len f by XCMPLX_1:1;
+       then A20:    i+1 < len f by NAT_1:38;
+         i+0 < i+1 by REAL_1:53;
+       then A21:      i < len f by A20,AXIOMS:22;
+         len(f:-p) <= i by A19,NAT_1:38;
+       then A22:     LSeg(Rotate(f,p),i) = LSeg(f,i + p..f -' len f) by A1,A21,
+Th31;
+A23:     LSeg(Rotate(f,p),i+1) = LSeg(f,i+1 + p..f -' len f) by A1,A19,A20,Th31
+;
+         i + 1 > len f - p..f + 1 by A1,A19,FINSEQ_5:53;
+       then len f - p..f < i by AXIOMS:24;
+       then A24:      len f < i + p..f by REAL_1:84;
+       then A25:      i + p..f -' len f = i + p..f - len f by SCMFSA_7:3;
+         0 < i + p..f - len f by A24,SQUARE_1:11;
+       then A26:     0+1 <= i + p..f -' len f by A25,NAT_1:38;
+A27:    i+1 + p..f -' len f = i + p..f + 1 -' len f by XCMPLX_1:1
+           .= i + p..f -' len f + 1 by A24,JORDAN4:3;
+         p..f <= len f by A1,FINSEQ_4:31;
+       then i + 2 + p..f <= len f + len f by A4,A5,REAL_1:55;
+       then i + p..f + 2 <= len f + len f by XCMPLX_1:1;
+       then i + p..f + 2 - len f <= len f by REAL_1:86;
+       then i + p..f - len f + 2 <= len f by XCMPLX_1:29;
+      hence LSeg(Rotate(f,p),i) /\ LSeg(Rotate(f,p),i+1)
+      = {f/.(i+1 + p..f -' len f)} by A22,A23,A25,A26,A27,TOPREAL1:def 8
+                 .= {(Rotate(f,p))/.(i+1)} by A1,A7,A19,Th17;
+    end;
+  end;
+end;
+
+theorem Th32:
+ p in rng f & 1 <= i & i < p..f
+ implies LSeg(f,i) = LSeg(Rotate(f,p),i + len f -' p..f)
+proof assume that
+A1: p in rng f and
+A2: 1 <= i and
+A3: i < p..f;
+A4: p..f <= len f by A1,FINSEQ_4:31;
+    len f <= i + len f by NAT_1:29;
+  then A5: p.. f <= i + len f by A4,AXIOMS:22;
+     len f + 1 <= i + len f by A2,AXIOMS:24;
+   then len f + 1 -' p..f <= i + len f -' p..f by JORDAN3:5;
+   then len f -' p..f + 1 <= i + len f -' p..f by A4,JORDAN4:3;
+   then len f - p..f + 1 <= i + len f -' p..f by A4,SCMFSA_7:3;
+   then A6: len(f:-p) <= i + len f -' p..f by A1,FINSEQ_5:53;
+     i + len f < len f + p..f by A3,REAL_1:53;
+   then A7: i + len f -' p..f < len f by A5,SPRECT_3:7;
+    i + len f -' p..f + p..f -' len f
+      = i + len f -' len f by A5,AMI_5:4 .= i by BINARITH:39;
+ hence LSeg(f,i) = LSeg(Rotate(f,p),i + len f -' p..f) by A1,A6,A7,Th31;
+end;
+
+theorem Th33:
+ L~Rotate(f,p) = L~f
+proof per cases;
+ suppose not p in rng f;
+  hence thesis by FINSEQ_6:def 2;
+ suppose
+A1: p in rng f;
+A2: len Rotate(f,p) = len f by Th14;
+ set A = { LSeg(Rotate(f,p),i) : 1 <= i & i+1 <= len f };
+ set B = { LSeg(f,i) : 1 <= i & i+1 <= len f };
+    A = B
+   proof
+A3:    p..f <= len f by A1,FINSEQ_4:31;
+    thus A c= B
+     proof let x be set;
+      assume x in A;
+       then consider i such that
+A4:     x = LSeg(Rotate(f,p),i) and
+A5:     1 <= i and
+A6:     i+1 <= len f;
+A7:    i < len f by A6,NAT_1:38;
+A8:    1 <= p..f by A1,FINSEQ_4:31;
+      per cases;
+      suppose
+A9:    i < len(f:-p);
+       then A10:      LSeg(Rotate(f,p),i) = LSeg(f,i -' 1 + p..f) by A1,A5,Th24
+;
+         1 + 1 <= i + p..f by A5,A8,REAL_1:55;
+       then 1 <= i + p..f -' 1 by SPRECT_3:8;
+       then A11:     1 <= i -' 1 + p..f by A5,JORDAN4:3;
+         i < len f - p..f + 1 by A1,A9,FINSEQ_5:53;
+       then i < len f -' p..f + 1 by A3,SCMFSA_7:3;
+       then i -' 1 < len f -' p..f by A5,SPRECT_3:7;
+       then i -' 1 + p..f < len f by SPRECT_3:6;
+       then i -' 1 + p..f + 1 <= len f by NAT_1:38;
+      hence x in B by A4,A10,A11;
+      suppose
+A12:     i >= len(f:-p);
+       then A13:      LSeg(Rotate(f,p),i) = LSeg(f,i + p..f -' len f) by A1,A7,
+Th31;
+         len f - p..f + 1 <= i by A1,A12,FINSEQ_5:53;
+       then len f -' p..f + 1 <= i by A3,SCMFSA_7:3;
+       then 1 + len f -' p..f <= i by A3,JORDAN4:3;
+       then A14:     1 + len f <= i + p..f by SPRECT_3:5;
+       then A15:     1 <= i + p..f -' len f by SPRECT_3:8;
+         len f <= len f + 1 by NAT_1:29;
+       then A16:     len f <= i + p..f by A14,AXIOMS:22;
+         i + 1 + p..f <= len f + len f by A3,A6,REAL_1:55;
+       then i + p..f + 1 <= len f + len f by XCMPLX_1:1;
+       then i + p..f + 1 -' len f <= len f by SPRECT_3:6;
+       then i + p..f -' len f + 1 <= len f by A16,JORDAN4:3;
+      hence x in B by A4,A13,A15;
+     end;
+    let x be set;
+    assume x in B;
+     then consider i such that
+A17:   x = LSeg(f,i) and
+A18:   1 <= i and
+A19:   i+1 <= len f;
+A20:  i < len f by A19,NAT_1:38;
+    per cases;
+    suppose
+A21:  p..f <= i;
+then A22:   LSeg(f,i) = LSeg(Rotate(f,p),i -' p..f+1) by A1,A20,Th25;
+       1 + p..f <= i+1 by A21,AXIOMS:24;
+     then 1 <= i+1 -' p..f by SPRECT_3:8;
+     then A23:   1 <= i -' p..f+1 by A21,JORDAN4:3;
+       i <= i+1 by NAT_1:29;
+then A24:  p..f <= i+1 by A21,AXIOMS:22;
+       1 <= p..f by A1,FINSEQ_4:31;
+     then i + 1 < len f + p..f by A20,REAL_1:67;
+     then i + 1 -' p..f < len f by A24,SPRECT_3:7;
+     then i -' p..f+1 < len f by A21,JORDAN4:3;
+     then i -' p..f+1 +1 <= len f by NAT_1:38;
+    hence x in A by A17,A22,A23;
+    suppose
+A25:  i < p..f;
+then A26:   LSeg(f,i) = LSeg(Rotate(f,p),i + len f -' p..f) by A1,A18,Th32;
+       1 + p..f <= i + len f by A3,A18,REAL_1:55;
+     then A27:   1 <= i + len f -' p..f by SPRECT_3:8;
+A28:  p..f <= len f by A1,FINSEQ_4:31;
+       len f <= i + len f by NAT_1:29;
+then A29:  p..f <= i + len f by A28,AXIOMS:22;
+       i + 1 <= p..f by A25,NAT_1:38;
+     then i + 1 + len f <= len f + p..f by AXIOMS:24;
+     then i + len f + 1 <= len f + p..f by XCMPLX_1:1;
+     then i + len f + 1 -' p..f <= len f by SPRECT_3:6;
+     then i + len f -' p..f + 1 <= len f by A29,JORDAN4:3;
+    hence x in A by A17,A26,A27;
+   end;
+ hence L~Rotate(f,p) = union B by A2,TOPREAL1:def 6
+          .= L~f by TOPREAL1:def 6;
+end;
+
+theorem Th34:
+ for G being Go-board holds
+  f is_sequence_on G iff Rotate(f,p) is_sequence_on G
+proof let G be Go-board;
+A1: dom f = dom Rotate(f,p) by Th15;
+A2: len f = len Rotate(f,p) by Th14;
+ per cases;
+ suppose not p in rng f;
+  hence thesis by FINSEQ_6:def 2;
+ suppose
+A3: p in rng f;
+then A4:  p..f <= len f by FINSEQ_4:31;
+A5:  1 <= p..f by A3,FINSEQ_4:31;
+ thus f is_sequence_on G implies Rotate(f,p) is_sequence_on G
+  proof assume
+A6: f is_sequence_on G;
+   thus for n st n in dom Rotate(f,p)
+      ex i,j st [i,j] in Indices G & (Rotate(f,p))/.n = G*(i,j)
+    proof let n;
+     assume n in dom Rotate(f,p);
+then A7: 1 <= n & n <= len Rotate(f,p) by FINSEQ_3:27;
+     per cases;
+     suppose
+A8:   len(f:-p) <= n;
+      then len f - p..f + 1 <= n by A3,FINSEQ_5:53;
+      then len f -' p..f + 1 <= n by A4,SCMFSA_7:3;
+      then len f + 1 -' p..f <= n by A4,JORDAN4:3;
+      then len f + 1 <= n + p..f by SPRECT_3:5;
+      then A9:    1 <= n + p..f -' len f by SPRECT_3:8;
+        n + p..f <= len f + len f by A2,A4,A7,REAL_1:55;
+      then n + p..f -' len f <= len f by SPRECT_3:6;
+      then n + p..f -' len f in dom Rotate(f,p) by A2,A9,FINSEQ_3:27;
+      then consider i,j such that
+A10:  [i,j] in Indices G and
+A11:  f/.(n + p..f -' len f) = G*(i,j) by A1,A6,GOBOARD1:def 11;
+     take i,j;
+     thus [i,j] in Indices G by A10;
+     thus (Rotate(f,p))/.n = G*(i,j) by A2,A3,A7,A8,A11,Th17;
+     suppose
+A12:   len(f:-p) >= n;
+        1 + 1 <= n + p..f by A5,A7,REAL_1:55;
+      then 1 <= n + p..f -' 1 by SPRECT_3:8;
+      then A13:    1 <= n -' 1 + p..f by A7,JORDAN4:3;
+        len f - p..f + 1 >= n by A3,A12,FINSEQ_5:53;
+      then len f -' p..f + 1 >= n by A4,SCMFSA_7:3;
+      then n -' 1 <= len f -' p..f by SPRECT_3:6;
+      then n -' 1 + p..f <= len f by A4,SPRECT_3:7;
+      then n -' 1 + p..f in dom Rotate(f,p) by A2,A13,FINSEQ_3:27;
+      then consider i,j such that
+  A14:  [i,j] in Indices G and
+  A15:  f/.(n -' 1 + p..f) = G*(i,j) by A1,A6,GOBOARD1:def 11;
+     take i,j;
+     thus [i,j] in Indices G by A14;
+     thus (Rotate(f,p))/.n = G*(i,j) by A3,A7,A12,A15,Th9;
+    end;
+   let n such that
+A16: n in dom Rotate(f,p) and
+A17: n+1 in dom Rotate(f,p);
+   let m,k,i,j such that
+A18:  [m,k] in Indices G & [i,j] in Indices G &
+     (Rotate(f,p))/.n = G*(m,k) & (Rotate(f,p))/.(n+1) = G*(i,j);
+A19: 1 <= n & n <= len f by A1,A16,FINSEQ_3:27;
+A20: 1 <= n+1 & n+1 <= len f by A1,A17,FINSEQ_3:27;
+   thus abs(m-i)+abs(k-j) = 1
+    proof per cases;
+     suppose that
+A21:  len(f:-p) <= n;
+       n <= n+1 by NAT_1:29;
+     then A22:  len(f:-p) <= n+1 by A21,AXIOMS:22;
+A23:   (Rotate(f,p))/.n = f/.(n + p..f -' len f) by A3,A19,A21,Th17;
+A24:   (Rotate(f,p))/.(n+1) = f/.(n+1 + p..f -' len f) by A3,A20,A22,Th17;
+A25:  len f - p..f + 1 <= n + 1 by A3,A22,FINSEQ_5:53;
+     then len f - p..f <= n by REAL_1:53;
+     then A26:   len f <= n + p..f by REAL_1:86;
+A27:   n+1 + p..f -' len f = n + p..f + 1 -' len f by XCMPLX_1:1
+          .= n + p..f -' len f + 1 by A26,JORDAN4:3;
+       len f - p..f + 1 <= n by A3,A21,FINSEQ_5:53;
+     then len f -' p..f + 1 <= n by A4,SCMFSA_7:3;
+     then len f + 1 -' p..f <= n by A4,JORDAN4:3;
+     then len f + 1 <= n + p..f by SPRECT_3:5;
+     then A28:   1 <= n + p..f -' len f by SPRECT_3:8;
+       n + p..f <= len f + len f by A4,A19,REAL_1:55;
+     then n + p..f -' len f <= len f by SPRECT_3:6;
+     then A29:   n + p..f -' len f in dom f by A28,FINSEQ_3:27;
+       len f -' p..f + 1 <= n+1 by A4,A25,SCMFSA_7:3;
+     then len f + 1 -' p..f <= n+1 by A4,JORDAN4:3;
+     then len f + 1 <= n+1 + p..f by SPRECT_3:5;
+     then A30:   1 <= n+1 + p..f -' len f by SPRECT_3:8;
+       n+1 + p..f <= len f + len f by A4,A20,REAL_1:55;
+     then n+1 + p..f -' len f <= len f by SPRECT_3:6;
+     then n+1 + p..f -' len f in dom f by A30,FINSEQ_3:27;
+     hence abs(m-i)+abs(k-j) = 1 by A6,A18,A23,A24,A27,A29,GOBOARD1:def 11;
+     suppose
+A31:  len(f:-p) > n;
+     then A32:  len(f:-p) >= n+1 by NAT_1:38;
+A33:   (Rotate(f,p))/.n = f/.(n -' 1 + p..f) by A3,A19,A31,Th9;
+A34:   (Rotate(f,p))/.(n+1) = f/.(n+1 -' 1 + p..f) by A3,A20,A32,Th9;
+A35:   n+1 -' 1 + p..f = n + p..f by BINARITH:39
+                 .= n -' 1 + 1 + p..f by A19,AMI_5:4
+                 .= n -' 1 + p..f + 1 by XCMPLX_1:1;
+       1 + 1 <= n + p..f by A5,A19,REAL_1:55;
+     then 1 <= n + p..f -' 1 by SPRECT_3:8;
+     then A36:   1 <= n -' 1 + p..f by A19,JORDAN4:3;
+       n <= len f - p..f + 1 by A3,A31,FINSEQ_5:53;
+     then n <= len f -' p..f + 1 by A4,SCMFSA_7:3;
+     then n -' 1 <= len f -' p..f by SPRECT_3:6;
+     then n -' 1 + p..f <= len f by A4,SPRECT_3:7;
+     then A37:   n -' 1 + p..f in dom f by A36,FINSEQ_3:27;
+       1 + 1 <= n+1 + p..f by A5,A20,REAL_1:55;
+     then 1 <= n+1 + p..f -' 1 by SPRECT_3:8;
+     then A38:   1 <= n+1 -' 1 + p..f by A20,JORDAN4:3;
+       n+1 <= len f - p..f + 1 by A3,A32,FINSEQ_5:53;
+     then n+1 <= len f -' p..f + 1 by A4,SCMFSA_7:3;
+     then n+1 -' 1 <= len f -' p..f by SPRECT_3:6;
+     then n+1 -' 1 + p..f <= len f by A4,SPRECT_3:7;
+     then n+1 -' 1 + p..f in dom f by A38,FINSEQ_3:27;
+     hence abs(m-i)+abs(k-j) = 1 by A6,A18,A33,A34,A35,A37,GOBOARD1:def 11;
+    end;
+  end;
+ assume
+A39: Rotate(f,p) is_sequence_on G;
+ thus for n st n in dom f ex i,j st [i,j] in Indices G & f/.n = G*(i,j)
+  proof let n;
+   assume n in dom f;
+then A40: 1 <= n & n <= len f by FINSEQ_3:27;
+   per cases;
+   suppose
+A41: n <= p..f;
+        n <= n + (len f -' p..f) by NAT_1:29;
+      then 1 <= n + (len f -' p..f) by A40,AXIOMS:22;
+      then A42:    1 <= n + len f -' p..f by A4,JORDAN4:3;
+        n + len f <= len f + p..f by A41,AXIOMS:24;
+      then n + len f -' p..f <= len f by SPRECT_3:6;
+      then n + len f -' p..f in dom f by A42,FINSEQ_3:27;
+    then consider i,j such that
+A43:  [i,j] in Indices G and
+A44:  (Rotate(f,p))/.(n + len f -' p..f) = G*(i,j) by A1,A39,GOBOARD1:def 11;
+   take i,j;
+   thus [i,j] in Indices G by A43;
+   thus f/.n = G*(i,j) by A3,A40,A41,A44,Th18;
+   suppose
+A45: n >= p..f;
+    then 1 + p..f <= n + 1 by AXIOMS:24;
+      then A46:    1 <= n + 1 -' p..f by SPRECT_3:8;
+        n + 1 <= len f + p..f by A5,A40,REAL_1:55;
+      then n + 1 -' p..f <= len f by SPRECT_3:6;
+      then n + 1 -' p..f in dom f by A46,FINSEQ_3:27;
+    then consider i,j such that
+A47:  [i,j] in Indices G and
+A48:  (Rotate(f,p))/.(n + 1 -' p..f) = G*(i,j) by A1,A39,GOBOARD1:def 11;
+   take i,j;
+   thus [i,j] in Indices G by A47;
+   thus f/.n = G*(i,j) by A3,A40,A45,A48,Th10;
+  end;
+ let n such that
+A49: n in dom f and
+A50: n+1 in dom f;
+A51: 1 <= n & n <= len f by A49,FINSEQ_3:27;
+A52: 1 <= n+1 & n+1 <= len f by A50,FINSEQ_3:27;
+ let m,k,i,j such that
+A53: [m,k] in Indices G and
+A54: [i,j] in Indices G and
+A55: f/.n = G*(m,k) and
+A56: f/.(n+1) = G*(i,j);
+ thus abs(m-i)+abs(k-j) = 1
+ proof per cases;
+ suppose
+A57: n < p..f;
+then A58: n+1 <= p..f by NAT_1:38;
+A59: f/.n = (Rotate(f,p))/.(n + len f -' p..f) by A3,A51,A57,Th18;
+A60: f/.(n+1) = (Rotate(f,p))/.(n+1 + len f -' p..f) by A3,A52,A58,Th18;
+A61: n+1 + len f -' p..f = len f -' p..f + (n+1) by A4,JORDAN4:3
+         .= len f -' p..f + n+1 by XCMPLX_1:1
+         .= n + len f -' p..f + 1 by A4,JORDAN4:3;
+        n <= n + (len f -' p..f) by NAT_1:29;
+      then 1 <= n + (len f -' p..f) by A51,AXIOMS:22;
+      then A62:    1 <= n + len f -' p..f by A4,JORDAN4:3;
+        n + len f <= len f + p..f by A57,AXIOMS:24;
+      then n + len f -' p..f <= len f by SPRECT_3:6;
+      then A63:    n + len f -' p..f in dom f by A62,FINSEQ_3:27;
+        n+1 <= n+1 + (len f -' p..f) by NAT_1:29;
+      then 1 <= n+1 + (len f -' p..f) by A52,AXIOMS:22;
+      then A64:    1 <= n+1 + len f -' p..f by A4,JORDAN4:3;
+        n+1 + len f <= len f + p..f by A58,AXIOMS:24;
+      then n+1 + len f -' p..f <= len f by SPRECT_3:6;
+      then n+1 + len f -' p..f in dom f by A64,FINSEQ_3:27;
+ hence abs(m-i)+abs(k-j) = 1
+   by A1,A39,A53,A54,A55,A56,A59,A60,A61,A63,GOBOARD1:def 11;
+ suppose
+A65: n >= p..f;
+    n <= n+1 by NAT_1:29;
+then A66: n+1 >= p..f by A65,AXIOMS:22;
+then A67:  f/.(n+1) = (Rotate(f,p))/.(n+1 + 1 -' p..f) by A3,A52,Th10;
+A68:  f/.n = (Rotate(f,p))/.(n + 1 -' p..f) by A3,A51,A65,Th10;
+A69:  n+1 + 1 -' p..f = n + 1 -' p..f + 1 by A66,JORDAN4:3;
+        1 + p..f <= n+1 + 1 by A66,AXIOMS:24;
+      then A70:    1 <= n+1 + 1 -' p..f by SPRECT_3:8;
+        n+1 + 1 <= len f + p..f by A5,A52,REAL_1:55;
+      then n+1 + 1 -' p..f <= len f by SPRECT_3:6;
+      then A71:    n+1 + 1 -' p..f in dom f by A70,FINSEQ_3:27;
+        1 + p..f <= n + 1 by A65,AXIOMS:24;
+      then A72:    1 <= n + 1 -' p..f by SPRECT_3:8;
+        n + 1 <= len f + p..f by A5,A51,REAL_1:55;
+      then n + 1 -' p..f <= len f by SPRECT_3:6;
+      then n + 1 -' p..f in dom f by A72,FINSEQ_3:27;
+ hence abs(m-i)+abs(k-j) = 1
+   by A1,A39,A53,A54,A55,A56,A67,A68,A69,A71,GOBOARD1:def 11;
+ end;
+end;
+
+definition let p be Point of TOP-REAL 2;
+ let f be standard (non empty circular FinSequence of TOP-REAL 2);
+ cluster Rotate(f,p) -> standard;
+ coherence
+  proof
+A1:  GoB Rotate(f,p) = GoB f by Th28;
+      f is_sequence_on GoB f by GOBOARD5:def 5;
+   hence Rotate(f,p) is_sequence_on GoB Rotate(f,p) by A1,Th34;
+  end;
+end;
+
+theorem Th35:
+ for f being non constant standard special_circular_sequence,
+     p,k st p in rng f & 1 <= k & k < p..f
+ holds left_cell(f,k) = left_cell(Rotate(f,p),k + len f -' p..f)
+proof let f be non constant standard special_circular_sequence,
+          p,k such that
+A1: p in rng f and
+A2: 1 <= k and
+A3: k < p..f;
+A4:  p..f <= len f by A1,FINSEQ_4:31;
+    then A5: k < len f by A3,AXIOMS:22;
+      0 < k by A2,AXIOMS:22;
+then A6: 0+1 < k+1 by REAL_1:53;
+A7: k+1 <= p..f by A3,NAT_1:38;
+A8: k+1 <= len f by A5,NAT_1:38;
+  set n = k + len f -' p..f;
+      len f <= k + len f by NAT_1:29;
+  then p..f <= k + len f by A4,AXIOMS:22;
+  then A9: n+1 = k + len f + 1 -' p..f by JORDAN4:3;
+    then A10: n+1 = k + 1 + len f -' p..f by XCMPLX_1:1;
+     1 + p..f <= k + len f by A2,A4,REAL_1:55;
+   then A11: 1 <= n by SPRECT_3:8;
+     k + 1 + len f <= len f + p..f by A7,AXIOMS:24;
+   then k + len f + 1 <= len f + p..f by XCMPLX_1:1;
+   then n+1 <= len f by A9,SPRECT_3:6;
+   then A12: n+1 <= len Rotate(f,p) by Th14;
+    for i1,j1,i2,j2 being Nat st
+      [i1,j1] in Indices GoB Rotate(f,p) & [i2,j2] in Indices GoB Rotate(f,p) &
+      (Rotate(f,p))/.n = (GoB Rotate(f,p))*(i1,j1) &
+      (Rotate(f,p))/.(n+1) = (GoB Rotate(f,p))*(i2,j2) holds
+    i1 = i2 & j1+1 = j2 & left_cell(f,k) = cell(GoB Rotate(f,p),i1-'1,j1) or
+    i1+1 = i2 & j1 = j2 & left_cell(f,k) = cell(GoB Rotate(f,p),i1,j1) or
+    i1 = i2+1 & j1 = j2 & left_cell(f,k) = cell(GoB Rotate(f,p),i2,j2-'1) or
+    i1 = i2 & j1 = j2+1 & left_cell(f,k) = cell(GoB Rotate(f,p),i1,j2)
+  proof let i1,j1,i2,j2 be Nat such that
+A13: [i1,j1] in Indices GoB Rotate(f,p) and
+A14: [i2,j2] in Indices GoB Rotate(f,p) and
+A15: (Rotate(f,p))/.n = (GoB Rotate(f,p))*(i1,j1) and
+A16: (Rotate(f,p))/.(n+1) = (GoB Rotate(f,p))*(i2,j2);
+A17: GoB Rotate(f,p) = GoB f by Th28;
+then A18: f/.k = (GoB f)*(i1,j1) by A1,A2,A3,A15,Th18;
+A19: f/.(k+1) = (GoB f)*(i2,j2) by A1,A6,A7,A10,A16,A17,Th18;
+    A20: left_cell(f,k) = left_cell(f,k);
+    then A21:  i1 = i2 & j1+1 = j2 & left_cell(f,k) = cell(GoB f,i1-'1,j1) or
+    i1+1 = i2 & j1 = j2 & left_cell(f,k) = cell(GoB f,i1,j1) or
+    i1 = i2+1 & j1 = j2 & left_cell(f,k) = cell(GoB f,i2,j2-'1) or
+    i1 = i2 & j1 = j2+1 & left_cell(f,k) = cell(GoB f,i1,j2)
+     by A2,A8,A13,A14,A17,A18,A19,GOBOARD5:def 7;
+    A22: j1+1+1 = j1+(1+1) by XCMPLX_1:1;
+    A23: i1+1+1 = i1+(1+1) by XCMPLX_1:1;
+   per cases by A2,A8,A13,A14,A17,A18,A19,A20,GOBOARD5:def 7;
+   case i1 = i2 & j1+1 = j2;
+   hence left_cell(f,k) = cell(GoB Rotate(f,p),i1-'1,j1) by A21,A22,Th28,REAL_1
+:69;
+   case i1+1 = i2 & j1 = j2;
+   hence left_cell(f,k) = cell(GoB Rotate(f,p),i1,j1) by A21,A23,Th28,REAL_1:69
+;
+   case i1 = i2+1 & j1 = j2;
+   hence left_cell(f,k) = cell(GoB Rotate(f,p),i2,j2-'1) by A21,A23,Th28,REAL_1
+:69;
+   case i1 = i2 & j1 = j2+1;
+   hence left_cell(f,k) = cell(GoB Rotate(f,p),i1,j2) by A21,A22,Th28,REAL_1:69
+;
+  end;
+ hence left_cell(f,k) = left_cell(Rotate(f,p),n) by A11,A12,GOBOARD5:def 7;
+end;
+
+theorem Th36:
+ for f being non constant standard special_circular_sequence
+ holds LeftComp Rotate(f,p) = LeftComp f
+proof let f be non constant standard special_circular_sequence;
+     LeftComp Rotate(f,p) is_a_component_of (L~Rotate(f,p))` by GOBOARD9:def 1;
+   then A1: LeftComp Rotate(f,p) is_a_component_of (L~f)` by Th33;
+A2: p in rng f implies p..f >= 1 by FINSEQ_4:31;
+  per cases by A2,AXIOMS:21;
+  suppose not p in rng f;
+ hence LeftComp Rotate(f,p) = LeftComp f by FINSEQ_6:def 2;
+  suppose that
+A3: p in rng f and
+A4:  p..f = 1;
+A5: 1 in dom f by FINSEQ_5:6;
+     f.1 = p by A3,A4,FINSEQ_4:29;
+   then f/.1 = p by A5,FINSEQ_4:def 4;
+ hence LeftComp Rotate(f,p) = LeftComp f by FINSEQ_6:95;
+  suppose that
+A6:  p in rng f and
+A7:  1 < p..f;
+A8: p..f <= len f by A6,FINSEQ_4:31;
+   then 1 + p..f <= 1 + len f by AXIOMS:24;
+   then A9: 1 <= 1 + len f -' p..f by SPRECT_3:8;
+     len f <= len f + 1 by NAT_1:29;
+   then A10: p..f <= len f + 1 by A8,AXIOMS:22;
+     1 + 1 <= p..f by A7,NAT_1:38;
+   then 1 + 1 + len f <= len f + p..f by AXIOMS:24;
+   then 1 + len f + 1 <= len f + p..f by XCMPLX_1:1;
+   then 1 + len f + 1 -' p..f <= len f by SPRECT_3:6;
+   then 1 + len f -' p..f + 1 <= len f by A10,JORDAN4:3;
+   then A11: 1 + len f -' p..f + 1 <= len Rotate(f,p) by Th14;
+    left_cell(f,1) = left_cell(Rotate(f,p),1 + len f -' p..f)
+     by A6,A7,Th35;
+  then Int left_cell(f,1) c= LeftComp Rotate(f,p) by A9,A11,GOBOARD9:24;
+ hence LeftComp Rotate(f,p) = LeftComp f by A1,GOBOARD9:def 1;
+end;
+
+theorem
+   for f being non constant standard special_circular_sequence
+ holds RightComp Rotate(f,p) = RightComp f
+proof let f be non constant standard special_circular_sequence;
+A1: RightComp Rotate(f,p) = LeftComp Rev Rotate(f,p) by GOBOARD9:26
+         .= LeftComp Rotate(Rev f,p) by Th29;
+     RightComp f = LeftComp Rev f by GOBOARD9:26;
+ hence RightComp Rotate(f,p) = RightComp f by A1,Th36;
+end;
+
+begin :: Clockwise oriented
+
+Lm1:
+ for f being non constant standard special_circular_sequence
+  st f/.1 = N-min L~f
+ holds f is clockwise_oriented or Rev f is clockwise_oriented
+proof let f be non constant standard special_circular_sequence such that
+A1: f/.1 = N-min L~f;
+  reconsider A = L~Rev f as non empty compact Subset of TOP-REAL 2;
+A2: (Rev f)/.1 = f/.len f by FINSEQ_5:68
+       .= N-min L~f by A1,FINSEQ_6:def 1
+       .= N-min A by SPPOL_2:22;
+A3:len f > 4 by GOBOARD7:36;
+then A4: len f > 1+1 by AXIOMS:22;
+A5: len f > 1 by A3,AXIOMS:22;
+A6: 1 <= len f -' 1 by A4,SPRECT_3:8;
+A7: len f -' 1 <= len f by JORDAN3:7;
+then A8: len f -' 1 in dom f by A6,FINSEQ_3:27;
+     len f -' 1 + (1+1) = len f -' 1 + 1 + 1 by XCMPLX_1:1
+      .= len f + 1 by A5,AMI_5:4;
+   then A9: (Rev f)/.2 = f/.(len f -' 1) by A8,FINSEQ_5:69;
+A10: [i_w_n f, width GoB f] in Indices GoB f by JORDAN5D:def 7;
+A11: (GoB f)*(i_w_n f,width GoB f) = N-min L~f by JORDAN5D:def 7;
+A12: 1+1 in dom f by A4,FINSEQ_3:27;
+   then consider i1,j1 being Nat such that
+A13:   [i1,j1] in Indices GoB f and
+A14:   f/.2 = (GoB f)*(i1,j1) by GOBOARD5:12;
+   consider i2,j2 being Nat such that
+A15:   [i2,j2] in Indices GoB f and
+A16:   f/.(len f -' 1) = (GoB f)*(i2,j2) by A8,GOBOARD5:12;
+A17: 1 <= width GoB f by A10,GOBOARD5:1;
+A18: 1 <= j1 & j1 <= width GoB f by A13,GOBOARD5:1;
+A19: 1 <= j2 & j2 <= width GoB f by A15,GOBOARD5:1;
+A20: 1 <= i_w_n f & i_w_n f <= len GoB f by A10,GOBOARD5:1;
+A21: 1 <= i1 & i1 <= len GoB f by A13,GOBOARD5:1;
+A22: 1 <= i2 & i2 <= len GoB f by A15,GOBOARD5:1;
+A23: 1 in dom f by A5,FINSEQ_3:27;
+A24: (GoB f)*(i1,j1) in L~f by A4,A12,A14,GOBOARD1:16;
+A25: 1 <= width GoB f by A18,AXIOMS:22;
+    A26: now assume
+A27:  width GoB f = j1;
+     then (GoB f)*(1,j1)`2 = N-bound L~f by JORDAN5D:42;
+     then (GoB f)*(i1,j1)`2 = N-bound L~f by A18,A21,GOBOARD5:2;
+     then (GoB f)*(i1,j1) in N-most L~f by A24,SPRECT_2:14;
+     then (N-min L~f)`1 <= (GoB f)*(i1,j1)`1 by PSCOMP_1:98;
+    hence i_w_n f <= i1 by A11,A18,A20,A21,A27,GOBOARD5:4;
+   end;
+    abs(i_w_n f-i1)+abs(width GoB f-j1) = 1
+    by A1,A10,A11,A12,A13,A14,A23,GOBOARD5:13;
+  then abs(i_w_n f-i1)=1 & width GoB f=j1 or abs(width GoB f-j1)=1 & i_w_n f=
+i1
+          by GOBOARD1:2;
+  then A28: i1 = i_w_n f+1 & width GoB f = j1 or
+     width GoB f = j1+1 & i_w_n f = i1 by A18,A26,GOBOARD1:1;
+A29: len f in dom f by A5,FINSEQ_3:27;
+A30: (GoB f)*(i2,j2) in L~f by A4,A8,A16,GOBOARD1:16;
+    A31: now assume
+A32:  width GoB f = j2;
+     then (GoB f)*(1,j2)`2 = N-bound L~f by JORDAN5D:42;
+     then (GoB f)*(i2,j2)`2 = N-bound L~f by A19,A22,GOBOARD5:2;
+     then (GoB f)*(i2,j2) in N-most L~f by A30,SPRECT_2:14;
+     then (N-min L~f)`1 <= (GoB f)*(i2,j2)`1 by PSCOMP_1:98;
+    hence i_w_n f <= i2 by A11,A20,A22,A25,A32,GOBOARD5:4;
+   end;
+A33: len f -' 1 + 1 = len f by A5,AMI_5:4;
+  then f/.(len f -' 1 + 1) = f/.1 by FINSEQ_6:def 1;
+  then abs(i2-i_w_n f)+abs(j2-width GoB f) = 1
+              by A1,A8,A10,A11,A15,A16,A29,A33,GOBOARD5:13;
+  then abs(i2-i_w_n f)=1 & j2=width GoB f or abs(j2-width GoB f)=1 & i2=i_w_n
+f
+                 by GOBOARD1:2;
+  then A34: i2 = i_w_n f+1 & j2 = width GoB f or
+     j2+1 = width GoB f & i2 = i_w_n f by A19,A31,GOBOARD1:1;
+A35: j2 + 1 -' 1 = j2 by BINARITH:39;
+A36: j1 + 1 -' 1 = j1 by BINARITH:39;
+A37: A = L~f by SPPOL_2:22;
+A38: 1 <= i_w_n f +1 by NAT_1:29;
+A39: i_w_n f < i_e_n f by SPRECT_3:44;
+      i_e_n f <= len GoB f by JORDAN5D:47;
+    then i_w_n f < len GoB f by A39,AXIOMS:22;
+    then A40: i_w_n f +1 <= len GoB f by NAT_1:38;
+      1+1+1 < len f by A3,AXIOMS:22;
+    then 2 < len f -' 1 by SPRECT_3:5;
+then (f/.2)`2 = (GoB f)*(1,width GoB f)`2 or
+  (f/.(len f -' 1))`2 = (GoB f)*(1,width GoB f)`2
+            by A7,A14,A16,A17,A28,A34,A35,A36,A38,A40,GOBOARD5:2,GOBOARD7:39;
+  then (f/.2)`2 = N-bound L~f or (f/.(len f -' 1))`2 = N-bound L~f
+            by JORDAN5D:42;
+  then f/.2 in N-most L~f or f/.(len f -' 1) in N-most L~f
+       by A14,A16,A24,A30,SPRECT_2:14;
+ hence thesis by A1,A2,A9,A37,SPRECT_2:34;
+end;
+
+definition let p be Point of TOP-REAL 2;
+ let f be
+  clockwise_oriented (non constant standard special_circular_sequence);
+ cluster Rotate(f,p) -> clockwise_oriented;
+ coherence
+  proof
+A1: for i st 1 < i & i < len f holds f/.i <> f/.1 by GOBOARD7:38;
+A2:  L~Rotate(f,p) = L~f by Th33;
+   per cases;
+   suppose
+A3:  N-min L~f = f/.1;
+     then Rotate(Rotate(f,p),N-min L~f) = f by A1,Th16;
+    hence (Rotate(Rotate(f,p),N-min L~Rotate(f,p)))/.2 in
+             N-most L~Rotate(f,p) by A2,A3,SPRECT_2:34;
+   suppose
+A4:   N-min L~f <> f/.1;
+A5:  f just_once_values N-min L~f
+     proof
+      take n_w_n f;
+       A6: 1 <= n_w_n f & n_w_n f + 1 <= len f by JORDAN5D:def 15;
+       then A7:      1 <= n_w_n f & n_w_n f < len f by NAT_1:38;
+      hence
+A8:     n_w_n f in dom f by FINSEQ_3:27;
+      thus
+A9:     N-min L~f = f.n_w_n f by JORDAN5D:def 15
+            .= f/.n_w_n f by A8,FINSEQ_4:def 4;
+      let z be set;
+      assume
+A10:     z in dom f;
+       then reconsider k = z as Nat;
+      assume
+A11:    z <> n_w_n f;
+      per cases by A11,AXIOMS:21;
+      suppose
+A12:     k < n_w_n f;
+         1 <= k by A10,FINSEQ_3:27;
+      hence f/.z <> N-min L~f by A7,A9,A12,GOBOARD7:38;
+      suppose
+A13:     k > n_w_n f;
+A14:     1 < n_w_n f by A4,A6,A9,AXIOMS:21;
+         k <= len f by A10,FINSEQ_3:27;
+      hence f/.z <> N-min L~f by A9,A13,A14,GOBOARD7:39;
+     end;
+      (Rotate(f,N-min L~f))/.2 in N-most L~f by SPRECT_2:def 4;
+   hence (Rotate(Rotate(f,p),N-min L~Rotate(f,p)))/.2 in N-most L~Rotate(f,p)
+      by A2,A5,FINSEQ_6:111;
+  end;
+end;
+
+theorem
+   for f being non constant standard special_circular_sequence
+ holds f is clockwise_oriented or Rev f is clockwise_oriented
+proof let f be non constant standard special_circular_sequence;
+ per cases;
+ suppose N-min L~f = f/.1;
+  hence thesis by Lm1;
+ suppose
+A1: N-min L~f <> f/.1;
+  thus thesis
+  proof
+  set g = Rotate(f,N-min L~f);
+A2: N-min L~f in rng f by SPRECT_2:43;
+    L~f = L~g by Th33;
+  then A3: g/.1 = N-min L~g by A2,FINSEQ_6:98;
+A4: for i st 1 < i & i < len f holds f/.i <> f/.1 by GOBOARD7:38;
+ per cases by A3,Lm1;
+ suppose g is clockwise_oriented;
+  then reconsider g as
+   clockwise_oriented (non constant standard special_circular_sequence);
+    f = Rotate(g,f/.1) by A4,Th16;
+ hence f is clockwise_oriented or Rev f is clockwise_oriented;
+ suppose Rev g is clockwise_oriented;
+  then reconsider h = Rev g as
+   clockwise_oriented (non constant standard special_circular_sequence);
+A5: g just_once_values f/.1
+   proof
+    take (f/.1)..g;
+A6: N-min L~f in rng f by SPRECT_2:43;
+      f/.1 in rng f by FINSEQ_6:46;
+then A7: f/.1 in rng g by A6,FINSEQ_6:96;
+A8: f/.1 <> g/.1 by A1,A6,FINSEQ_6:98;
+    thus
+A9:   (f/.1)..g in dom g by A7,FINSEQ_4:30;
+    thus
+A10:   f/.1 = g.((f/.1)..g) by A7,FINSEQ_4:29
+            .= g/.((f/.1)..g) by A9,FINSEQ_4:def 4;
+    let z be set such that
+A11:  z in dom g and
+A12:  z <> (f/.1)..g;
+     reconsider k = z as Nat by A11;
+    per cases by A12,AXIOMS:21;
+    suppose
+A13:   k < (f/.1)..g;
+A14:   (f/.1)..g <= len g by A7,FINSEQ_4:31;
+       (f/.1)..g <> len g by A8,A10,FINSEQ_6:def 1;
+     then A15:   (f/.1)..g < len g by A14,AXIOMS:21;
+       1 <= k by A11,FINSEQ_3:27;
+    hence g/.z <> f/.1 by A10,A13,A15,GOBOARD7:38;
+    suppose
+A16:   k > (f/.1)..g;
+     (f/.1)..g >= 1 by A7,FINSEQ_4:31;
+then A17:   (f/.1)..g > 1 by A8,A10,AXIOMS:21;
+       k <= len g by A11,FINSEQ_3:27;
+    hence g/.z <> f/.1 by A10,A16,A17,GOBOARD7:39;
+   end;
+    Rev f = Rev Rotate(g,f/.1) by A4,Th16
+       .= Rotate(h,f/.1) by A5,FINSEQ_6:112;
+ hence f is clockwise_oriented or Rev f is clockwise_oriented;
+  end;
+end;
+

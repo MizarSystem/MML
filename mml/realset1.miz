@@ -1,0 +1,638 @@
+:: Group and Field Definitions
+::  by J\'ozef Bia{\l}as
+::
+:: Received October 27, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, RELAT_1, BOOLE, BINOP_1, RLVECT_1, VECTSP_1, FUNCT_3,
+      QC_LANG1, REALSET1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
+      BINOP_1, FUNCT_3, STRUCT_0, RLVECT_1, VECTSP_1;
+ constructors BINOP_1, FUNCT_3, VECTSP_1, MEMBERED, XBOOLE_0;
+ clusters FUNCT_1, RLVECT_1, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions RLVECT_1, STRUCT_0, TARSKI, XBOOLE_0;
+ theorems TARSKI, FUNCT_1, FUNCT_2, FUNCT_3, ZFMISC_1, VECTSP_1, RLVECT_1,
+      BINOP_1, RELSET_1, SUBSET_1, XBOOLE_0, XBOOLE_1, RELAT_1;
+
+begin
+
+canceled 9;
+
+theorem Th10:
+   for X,x being set holds
+   for F being Function of [:X,X:],X holds
+   x in [:X,X:] implies F.x in X
+proof
+   let X,x be set;
+   let F be Function of [:X,X:],X;
+A1:dom F = [:X,X:] & rng F c= X
+   proof
+        X={} implies [:X,X:]={} by ZFMISC_1:113;
+      hence thesis by FUNCT_2:def 1,RELSET_1:12;
+   end;
+   assume x in [:X,X:];
+   then F.x in rng F by A1,FUNCT_1:def 5;
+   hence thesis by A1;
+end;
+
+theorem Th11:
+   for X being set,
+       F being BinOp of X
+   ex A being Subset of X st
+   for x being set holds x in [:A,A:] implies F.x in A
+proof
+   let X be set,
+       F be BinOp of X;
+     X c= X;
+   then reconsider Z = X as Subset of X;
+   take Z;
+   thus thesis by Th10;
+end;
+
+definition
+   let X be set;
+   let F be BinOp of X;
+   let A be Subset of X;
+   pred F is_in A means
+     for x being set holds x in [:A,A:] implies F.x in A;
+end;
+
+definition
+   let X be set;
+   let F be BinOp of X;
+   mode Preserv of F -> Subset of X means
+:Def2:for x being set holds x in [:it,it:] implies F.x in it;
+existence by Th11;
+end;
+
+canceled 2;
+
+theorem Th14:
+   for X being set,
+       F being BinOp of X,
+       A being Preserv of F holds F|([:A,A:]) is BinOp of A
+proof
+   let X be set,
+       F be BinOp of X,
+       A be Preserv of F;
+      X={} implies [:X,X:]={} by ZFMISC_1:113;
+   then A1: dom F = [:X,X:] & rng F c= X by FUNCT_2:def 1,RELSET_1:12;
+      [:A,A:] c= [:X,X:] by ZFMISC_1:119;
+   then A2: dom (F|([:A,A:])) = [:A,A:] by A1,RELAT_1:91;
+     for x being set holds x in [:A,A:] implies F|([:A,A:]).x in A
+       proof
+           let x be set;
+           assume
+       A3:x in [:A,A:];
+       then F|([:A,A:]).x=F.x by A2,FUNCT_1:70;
+           hence thesis by A3,Def2;
+       end;
+       hence thesis by A2,FUNCT_2:5;
+end;
+
+definition
+   let X be set;
+   let F be BinOp of X;
+   let A be Preserv of F;
+   func F||A -> BinOp of A equals
+   F | [:A,A:];
+coherence by Th14;
+end;
+
+Lm1:
+now consider x being set;
+     set B = {x};
+A1:  x in B by TARSKI:def 1;
+     consider og being BinOp of B;
+A2:  og.[x,x] = x
+     proof
+     A3:dom og = [:B,B:] & rng og c= B by FUNCT_2:def 1,RELSET_1:12;
+          [x,x] in [:B,B:] by A1,ZFMISC_1:def 2;
+        then og.[x,x] in rng og by A3,FUNCT_1:def 5;
+        hence thesis by A3,TARSKI:def 1;
+     end;
+     reconsider ng = x as Element of B by TARSKI:def 1;
+A4:  for a,b,c being Element of B holds og.[og.[a,b],c] = og.[a,og.[b,c]]
+     proof
+         let a,b,c be Element of B;
+           a = x & b = x & c = x by TARSKI:def 1;
+         hence thesis by A2;
+     end;
+A5:  for a being Element of B holds og.[a,ng] = a & og.[ng,a] = a
+     proof
+         let a be Element of B;
+           a = x by TARSKI:def 1;
+         hence thesis by A2;
+     end;
+A6: for a being Element of B ex b being Element of B st
+     og.[a,b] = ng & og.[b,a] = ng
+     proof
+         let a be Element of B;
+         take ng;
+         thus thesis by A2,TARSKI:def 1;
+     end;
+       for a,b being Element of B holds og.[a,b] = og.[b,a]
+     proof
+         let a,b be Element of B;
+           a = x & b = x by TARSKI:def 1;
+         hence thesis;
+     end;
+     hence ex A being non empty set st
+              ex og being BinOp of A st
+              ex ng being Element of A st
+                 (for a,b,c being Element of A holds
+                      og.[og.[a,b],c] = og.[a,og.[b,c]]) &
+                 (for a being Element of A holds
+                      og.[a,ng] = a & og.[ng,a] = a) &
+                 (for a being Element of A ex b being Element of A st
+                      og.[a,b] = ng & og.[b,a] = ng) &
+                 (for a,b being Element of A holds
+                      og.[a,b] = og.[b,a]) by A4,A5,A6;
+end;
+
+Lm2:
+ for L being non empty LoopStr
+ for a,b being Element of L
+  holds (the add of L).[a,b] = a + b
+proof let L be non empty LoopStr, a,b be Element of L;
+ thus (the add of L).[a,b] = (the add of L).(a,b) by BINOP_1:def 1
+      .= a + b by RLVECT_1:5;
+end;
+
+definition ::group
+  let IT be LoopStr;
+ canceled;
+
+  attr IT is zeroed means :Def5:
+                 for a being Element of IT holds
+                      (the add of IT).[a,the Zero of IT] = a &
+                      (the add of IT).[the Zero of IT,a] = a;
+  attr IT is complementable means :Def6:
+                 for a being Element of IT
+                  ex b being Element of IT st
+                      (the add of IT).[a,b] = the Zero of IT &
+                      (the add of IT).[b,a] = the Zero of IT;
+end;
+
+definition let L be non empty LoopStr;
+ redefine attr L is add-associative means :Def7:
+        for a,b,c being Element of L holds
+                      (the add of L).[(the add of L).[a,b],c] =
+                       (the add of L).[a,(the add of L).[b,c]];
+   compatibility
+    proof
+     hereby assume
+A1:    L is add-associative;
+      let a,b,c be Element of L;
+A2:    a + b = (the add of L).[a,b] by Lm2;
+A3:    b + c = (the add of L).[b,c] by Lm2;
+       thus (the add of L).[(the add of L).[a,b],c]
+          = a + b + c by A2,Lm2
+         .= a + (b + c) by A1,RLVECT_1:def 6
+         .= (the add of L).[a,(the add of L).[b,c]] by A3,Lm2;
+     end;
+     assume that
+A4:   for a,b,c being Element of L holds
+        (the add of L).[(the add of L).[a,b],c] =
+        (the add of L).[a,(the add of L).[b,c]];
+     let u,v,w be Element of L;
+A5:    u + v = (the add of L).[u,v] by Lm2;
+A6:    v + w = (the add of L).[v,w] by Lm2;
+     thus (u + v) + w
+               = (the add of L).[(the add of L).[u,v],w] by A5,Lm2
+              .= (the add of L).[u,(the add of L).[v,w]] by A4
+              .= u + (v + w) by A6,Lm2;
+    end;
+  redefine attr L is Abelian means
+:Def8:
+     for a,b being Element of L holds
+        (the add of L).[a,b] = (the add of L).[b,a];
+   compatibility
+    proof
+     hereby assume
+A7:    L is Abelian;
+      let a,b be Element of L;
+      thus (the add of L).[a,b] = a + b by Lm2
+              .= b + a by A7,RLVECT_1:def 5
+              .= (the add of L).[b,a] by Lm2;
+     end;
+     assume
+A8:    for a,b being Element of L holds
+        (the add of L).[a,b] = (the add of L).[b,a];
+      let a,b be Element of L;
+      thus a + b = (the add of L).[a,b] by Lm2
+                .= (the add of L).[b,a] by A8
+                .= b + a by Lm2;
+    end;
+end;
+
+definition let X be non empty set, a be BinOp of X, Z be Element of X;
+ cluster LoopStr(#X,a,Z#) -> non empty;
+ coherence
+  proof
+   thus the carrier of LoopStr(#X,a,Z#) is non empty;
+  end;
+end;
+
+definition
+ cluster strict Abelian add-associative zeroed
+                        complementable (non empty LoopStr);
+  existence
+   proof
+     consider A being non empty set, og being BinOp of A, ng being Element of A
+      such that
+A1:       (for a,b,c being Element of A holds
+                 og.[og.[a,b],c] = og.[a,og.[b,c]]) &
+            (for a being Element of A holds
+                 og.[a,ng] = a & og.[ng,a] = a) &
+            (for a being Element of A ex b being Element of A st
+                 og.[a,b] = ng & og.[b,a] = ng) &
+            (for a,b being Element of A holds
+                 og.[a,b] = og.[b,a]) by Lm1;
+       LoopStr(#A,og,ng#) is Abelian add-associative zeroed complementable
+      by A1,Def5,Def6,Def7,Def8;
+    hence thesis;
+   end;
+end;
+
+definition ::group
+   mode Group is Abelian add-associative zeroed complementable
+    (non empty LoopStr);
+end;
+
+definition
+ let IT be set;
+ canceled 3;
+
+ attr IT is trivial means :Def12:
+  IT is empty or ex x being set st IT = {x};
+end;
+
+definition
+ cluster trivial non empty set;
+  existence
+ proof take {0};
+  thus thesis by Def12;
+ end;
+ cluster non trivial non empty set;
+  existence
+ proof take {0,1};
+     not ex x being set st {0,1} = {x} by ZFMISC_1:9;
+  hence thesis by Def12;
+ end;
+ cluster non trivial -> non empty set;
+ coherence
+  proof let IT be set;
+   assume not(IT is empty or ex x being set st IT = {x});
+   hence thesis;
+  end;
+end;
+
+canceled 17;
+
+theorem Th32:
+  for X being non empty set holds
+   X is non trivial iff for x being set holds X\{x} is non empty set
+proof let X be non empty set;
+ hereby assume
+A1:  X is non trivial;
+  let x be set;
+    X <> {x} by A1,Def12;
+  then consider y being set such that
+A2:  y in X and
+A3:  x <> y by ZFMISC_1:41;
+    not y in {x} by A3,TARSKI:def 1;
+  hence X\{x} is non empty set by A2,XBOOLE_0:def 4;
+ end;
+ assume
+A4: for x being set holds X\{x} is non empty set;
+ thus X is non empty;
+ given x being set such that
+A5:  X = {x};
+   X\{x} is empty by A5,XBOOLE_1:37;
+ hence contradiction by A4;
+end;
+
+theorem
+  ex A being non empty set st for z being Element of A holds
+A \ {z} is non empty set
+proof
+    consider x,y being set such that
+A1: x<>y by VECTSP_1:78;
+    set B = {x,y};
+A2: for z being Element of B holds B\{z} is non empty set
+    proof
+       let z be Element of B;
+    A3:y in B by TARSKI:def 2;
+         not y in {x} by A1,TARSKI:def 1;
+    then A4:B\{x} is non empty set by A3,XBOOLE_0:def 4;
+    A5:x in B by TARSKI:def 2;
+         not x in {y} by A1,TARSKI:def 1;
+       then B\{y} is non empty set by A5,XBOOLE_0:def 4;
+       hence thesis by A4,TARSKI:def 2;
+    end;
+    take B;
+    thus thesis by A2;
+end;
+
+theorem Th34:
+  for X being non empty set
+   st for x being Element of X holds X\{x} is non empty set
+  holds X is non trivial
+proof let X be non empty set;
+ assume
+A1: for x being Element of X holds X\{x} is non empty set;
+ thus X is non empty;
+ given x being set such that
+A2:  X = {x};
+A3: x in X by A2,TARSKI:def 1;
+   X\{x} is empty by A2,XBOOLE_1:37;
+ hence contradiction by A1,A3;
+end;
+
+definition
+  let IT be 1-sorted;
+  attr IT is trivial means
+    the carrier of IT is trivial;
+end;
+
+Lm3:
+ for S being 1-sorted holds S is trivial iff
+   for x,y being Element of S holds x = y
+ proof
+  let S be 1-sorted;
+  set I = the carrier of S;
+  per cases;
+  suppose A1:I is non empty;
+  thus S is trivial implies
+    for x,y being Element of I holds x = y
+  proof assume
+A2:   I is trivial;
+    per cases by A2,Def12;
+    suppose I is empty;
+    hence thesis by A1;
+    suppose ex a being set st I = {a};
+    then consider a being set such that
+A3:   I = {a};
+    let x, y be Element of I;
+    thus x = a by A3,TARSKI:def 1
+          .= y by A3,TARSKI:def 1;
+  end;
+  assume
+A4: for x,y being Element of I holds x = y;
+  consider a being set such that
+A5:  a in I by A1,XBOOLE_0:def 1;
+    I = {a}
+  proof
+    hereby
+     let i be set;
+     assume i in I;
+     then a = i by A4,A5;
+     hence i in {a} by TARSKI:def 1;
+    end;
+    let i be set;
+    assume i in {a};
+    hence i in I by A5,TARSKI:def 1;
+  end;
+  hence I is empty or ex x being set st I = {x};
+  suppose A6:I is empty;
+  thus S is trivial implies
+    for x,y being Element of I holds x = y
+  proof assume
+     I is trivial;
+    let x, y be Element of I;
+    thus x = {} by A6,SUBSET_1:def 2
+          .= y by A6,SUBSET_1:def 2;
+  end;
+  assume for x,y being Element of I holds x = y;
+  thus I is empty or ex x being set st I = {x} by A6;
+ end;
+
+definition
+ cluster trivial 1-sorted;
+ existence
+  proof
+   take O = 1-sorted(#{0}#);
+     now
+     let x,y be Element of O;
+     thus x = 0 by TARSKI:def 1 .= y by TARSKI:def 1;
+   end;
+   hence thesis by Lm3;
+  end;
+end;
+
+theorem
+      for A being non empty set st
+    (for x being Element of A holds A\{x} is non empty set) holds
+    A is non trivial set by Th34;
+
+Lm4:
+ now
+  let A be non trivial set;
+  let od,om be BinOp of A;
+  let nd be Element of A;
+  let nm be Element of A\{nd};
+  let nm0 be Element of A;
+  assume
+A1: nm0=nm;
+   set F = doubleLoopStr(#A,od,om,nm0,nd#);
+  thus F is non trivial
+   proof
+       now
+      take nd,nm0;
+         A\{nd} is non empty set by Th32;
+       then not nm in {nd} by XBOOLE_0:def 4;
+      hence nd <> nm0 by A1,TARSKI:def 1;
+     end;
+     hence thesis by Lm3;
+   end;
+  thus F is strict;
+ end;
+
+definition
+ cluster non trivial strict doubleLoopStr;
+ existence
+  proof
+   consider A be non trivial set,
+            od,om be BinOp of A,
+            nd be Element of A,
+            nm be Element of A\{nd};
+     A\{nd} is non empty set by Th32;
+   then reconsider nm0=nm as Element of A by XBOOLE_0:def 4;
+   take doubleLoopStr(#A,od,om,nm0,nd#);
+   thus thesis by Lm4;
+  end;
+end;
+
+definition ::field operator
+   let A be non trivial set;
+   let od,om be BinOp of A;
+   let nd be Element of A;
+   let nm be Element of A\{nd};
+   func field(A,od,om,nd,nm) -> non trivial strict doubleLoopStr means
+   A = the carrier of it &
+        od = the add of it &
+        om = the mult of it &
+        nd = the Zero of it &
+        nm = the unity of it;
+existence
+ proof
+     A\{nd} is non empty set by Th32;
+   then reconsider nm0=nm as Element of A by XBOOLE_0:def 4;
+   reconsider F = doubleLoopStr(#A,od,om,nm0,nd#) as
+     non trivial strict doubleLoopStr by Lm4;
+   take F;
+   thus thesis;
+ end;
+uniqueness;
+end;
+
+definition
+   let X be non trivial set;
+   let F be BinOp of X;
+   let x be Element of X;
+   pred F is_Bin_Op_Preserv x means
+       (X\{x} is Preserv of F) &
+          F|[:X\{x},X\{x}:] is BinOp of X\{x};
+correctness;
+end;
+
+canceled 3;
+
+theorem Th39:
+    for X being set holds
+    for A being Subset of X holds
+    ex F being BinOp of X st
+    for x being set holds x in [:A,A:] implies F.x in A
+proof
+    let X be set;
+    let A be Subset of X;
+    set S = pr1(X,X);
+A1: for x being set holds x in [:A,A:] implies S.x in A
+    proof
+        let x be set;
+        assume x in [:A,A:];
+        then consider p,q being set such that
+    A2: p in A & q in A & x = [p,q] by ZFMISC_1:def 2;
+        thus thesis by A2,FUNCT_3:def 5;
+    end;
+    take S;
+    thus thesis by A1;
+end;
+
+definition
+    let X be set;
+    let A be Subset of X;
+    mode Presv of X,A -> BinOp of X means
+:Def16:for x being set holds x in [:A,A:] implies it.x in A;
+existence by Th39;
+end;
+
+canceled;
+
+theorem Th41:
+   for X being set,
+       A being Subset of X,
+       F being Presv of X,A holds
+   F|([:A,A:]) is BinOp of A
+proof
+   let X be set;
+   let A be Subset of X;
+   let F be Presv of X,A;
+      X={} implies [:X,X:]={} by ZFMISC_1:113;
+   then A1: dom F = [:X,X:] & rng F c= X by FUNCT_2:def 1,RELSET_1:12;
+      [:A,A:] c= [:X,X:] by ZFMISC_1:119;
+   then A2: dom (F|([:A,A:])) = [:A,A:] by A1,RELAT_1:91;
+     for x being set holds x in [:A,A:] implies F|([:A,A:]).x in A
+   proof
+       let x be set;
+       assume
+    A3:x in [:A,A:];
+       then F|([:A,A:]).x=F.x by A2,FUNCT_1:70;
+       hence thesis by A3,Def16;
+   end;
+   hence thesis by A2,FUNCT_2:5;
+end;
+
+definition
+   let X be set;
+   let A be Subset of X;
+   let F be Presv of X,A;
+   func F|||A -> BinOp of A equals
+    F | [:A,A:];
+coherence by Th41;
+end;
+
+canceled;
+
+theorem Th43:
+    for A being non trivial set holds
+    for x being Element of A holds
+    ex F being BinOp of A st
+    for y being set holds y in [:A\{x},A\{x}:] implies F.y in A\{x}
+proof
+    let A be non trivial set;
+    let x be Element of A;
+    set B = A\{x};
+      B is Subset of A by XBOOLE_1:36;
+    then consider F1 being BinOp of A such that
+A1: for y being set holds y in [:B,B:] implies F1.y in B by Th39;
+    take F1;
+    thus thesis by A1;
+end;
+
+definition
+    let A be non trivial set;
+    let x be Element of A;
+    mode DnT of x,A -> BinOp of A means
+:Def18: for y being set holds y in [:A\{x},A\{x}:] implies it.y in A\{x};
+existence by Th43;
+end;
+
+canceled;
+
+theorem Th45:
+   for A being non trivial set holds
+   for x being Element of A holds
+   for F being DnT of x,A holds
+   F|[:A\{x},A\{x}:] is BinOp of A\{x}
+proof
+   let A be non trivial set;
+   let x be Element of A;
+   let F be DnT of x,A;
+   A1: dom F = [:A,A:] & rng F c= A by FUNCT_2:def 1,RELSET_1:12;
+     A\{x} is Subset of A by XBOOLE_1:36;
+   then [:A\{x},A\{x}:] c= [:A,A:] by ZFMISC_1:119;
+   then A2: dom(F|[:A\{x},A\{x}:]) = [:A\{x},A\{x}:]
+        by A1,RELAT_1:91;
+     for y being set holds y in [:A\{x},A\{x}:] implies
+       F|[:A\{x},A\{x}:].y in A\{x}
+       proof
+           let y be set;
+           assume
+       A3:y in [:A\{x},A\{x}:];
+       then F|[:A\{x},A\{x}:].y=F.y by A2,FUNCT_1:70;
+           hence thesis by A3,Def18;
+       end;
+       hence thesis by A2,FUNCT_2:5;
+end;
+
+definition
+   let A be non trivial set;
+   let x be Element of A;
+   let F be DnT of x,A;
+func F!(A,x) -> BinOp of A\{x} equals
+   F | [:A\{x},A\{x}:];
+coherence by Th45;
+end;
+
+definition
+ let IT be 1-sorted;
+ redefine attr IT is trivial means
+    for x,y being Element of IT holds x = y;
+compatibility by Lm3;
+end;
+

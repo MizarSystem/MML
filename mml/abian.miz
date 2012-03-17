@@ -1,0 +1,1046 @@
+:: Abian's Fixed Point Theorem
+::  by Piotr Rudnicki and Andrzej Trybulec
+::
+:: Received February 22, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary SETFAM_1, FUNCT_1, ARYTM, MATRIX_2, INT_1, ARYTM_1, FUNCT_4,
+      TRIANG_1, ZF_REFLE, FUNCOP_1, RELAT_1, SQUARE_1, BOOLE, KNASTER, TARSKI,
+      FINSET_1, EQREL_1, MCART_1, NAT_1, ABIAN;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, MCART_1, DOMAIN_1, FINSET_1, SETFAM_1, CQC_SIM1, RELAT_1,
+      FUNCT_1, FUNCT_2, FUNCOP_1, INT_1, NAT_1, EQREL_1, TRIANG_1, FUNCT_7,
+      KNASTER;
+ constructors DOMAIN_1, CQC_SIM1, REAL_1, TRIANG_1, AMI_1, KNASTER, INT_1,
+      FUNCT_7, MEMBERED;
+ clusters SUBSET_1, INT_1, FINSET_1, RELSET_1, PRALG_3, PUA2MSS1, TRIANG_1,
+      MEMBERED, PARTFUN1, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, XBOOLE_0, RELAT_1, UNIALG_1, TRIANG_1;
+ theorems TARSKI, AXIOMS, ZFMISC_1, FUNCT_1, FUNCT_2, EQREL_1, NAT_1, INT_1,
+      SQUARE_1, MCART_1, SCHEME1, REAL_1, TRIANG_1, FUNCOP_1, UNIALG_1,
+      CQC_SIM1, RLVECT_1, AMI_1, KNASTER, RELSET_1, SETFAM_1, XBOOLE_0,
+      XBOOLE_1, FUNCT_7, XCMPLX_0, XCMPLX_1;
+ schemes EQREL_1, FUNCT_2, NAT_1, COMPLSP1, SUPINF_2;
+
+begin
+
+reserve x, y, z, E, E1, E2, E3 for set,
+        sE for Subset-Family of E,
+        f for Function of E, E,
+        k, l, m, n for Nat;
+
+definition
+ let i be number;
+ attr i is even means
+:Def1: ex j being Integer st i = 2*j;
+ antonym i is odd;
+end;
+
+definition
+ let n be Nat;
+ redefine attr n is even means
+   ex k st n = 2*k;
+ compatibility proof
+ hereby assume n is even; then consider k being Integer such that
+A1: n = 2*k by Def1;
+     0<=n by NAT_1:18;
+   then 0<=k by A1,SQUARE_1:25; then reconsider k as Nat by INT_1:16;
+  take k;
+  thus n = 2*k by A1;
+ end;
+ assume ex k st n = 2*k;
+ hence n is even by Def1;
+ end;
+ antonym n is odd;
+end;
+
+definition
+ cluster even Nat;
+ existence proof
+  take 0, 0;
+  thus 0 = 2*0;
+ end;
+ cluster odd Nat;
+ existence proof
+  take 1;
+  let k be Nat; assume 1 = 2*k;
+  hence contradiction by NAT_1:40;
+ end;
+ cluster even Integer;
+ existence proof
+  take 0, 0;
+  thus 0 = 2*0;
+ end;
+ cluster odd Integer;
+ existence proof
+  take 1;
+  assume 1 is even; then consider k being Integer such that
+A1: 1 = 2*k by Def1;
+  thus contradiction by A1,INT_1:22;
+ end;
+end;
+
+theorem Th1:
+ for i being Integer
+   holds i is odd iff ex j being Integer st i = 2*j+1 proof
+ let i be Integer;
+  hereby assume
+A1: i is odd; assume
+A2: for j being Integer holds i <> 2*j+1;
+  consider k such that
+A3: i = k or i = -k by INT_1:8;
+  consider m such that
+A4: k = 2*m or k = 2*m+1 by SCHEME1:1;
+ per cases by A3,A4;
+ suppose i = k & k = 2*m;
+  hence contradiction by A1,Def1;
+ suppose i = -k & k = 2*m; then i = 2*(-m) by XCMPLX_1:175;
+  hence contradiction by A1,Def1;
+ suppose i = k & k = 2*m+1;
+  hence contradiction by A2;
+ suppose i = -k & k = 2*m+1;
+  then i = -(2*(m+1-1) + 1) by XCMPLX_1:26
+   .= -(2*(m+1)-2*1+1) by XCMPLX_1:40
+   .= -(1-2+2*(m+1)) by XCMPLX_1:30
+   .= -(1-2)-2*(m+1) by XCMPLX_1:161
+   .= -2*(m+1)+1 by XCMPLX_0:def 8
+   .= 2*-(m+1)+1 by XCMPLX_1:175;
+  hence contradiction by A2;
+ end;
+ given j being Integer such that
+A5: i = 2*j+1;
+ given k being Integer such that
+A6: i = 2*k;
+   1 = 2*k - 2*j by A5,A6,XCMPLX_1:26;
+ then 1 = 2*(k - j) by XCMPLX_1:40;
+ hence contradiction by INT_1:22;
+end;
+
+
+definition
+ let i be Integer;
+ cluster 2*i -> even;
+ coherence by Def1;
+end;
+
+definition
+ let i be even Integer;
+ cluster i+1 -> odd;
+ coherence proof
+  consider j being Integer such that
+A1: i = 2*j by Def1;
+  thus thesis by A1,Th1;
+ end;
+end;
+
+definition
+ let i be odd Integer;
+ cluster i+1 -> even;
+ coherence proof
+  consider j being Integer such that
+A1: i = 2*j+1 by Th1;
+     i+1 = 2*j+(1+1) by A1,XCMPLX_1:1
+       .= 2*j+2*1 .= 2*(j+1) by XCMPLX_1:8;
+  hence thesis;
+ end;
+end;
+
+definition
+ let i be even Integer;
+ cluster i-1 -> odd;
+ coherence proof
+  consider j being Integer such that
+A1: i = 2*j by Def1;
+     i-1 = 2*(j-1+1)-1 by A1,XCMPLX_1:27
+      .= 2*(j-1)+2*1-1 by XCMPLX_1:8
+      .= 2*(j-1)+(1+1-1) by XCMPLX_1:29
+      .= 2*(j-1)+1;
+  hence thesis;
+ end;
+end;
+
+definition
+ let i be odd Integer;
+ cluster i-1 -> even;
+ coherence proof
+  consider j being Integer such that
+A1: i = 2*j+1 by Th1;
+  thus thesis by A1,XCMPLX_1:26;
+ end;
+end;
+
+definition
+ let i be even Integer, j be Integer;
+ cluster i*j -> even;
+ coherence proof
+  consider k being Integer such that
+A1: i = 2*k by Def1;
+     i*j = 2*(k*j) by A1,XCMPLX_1:4;
+  hence thesis;
+ end;
+ cluster j*i -> even;
+ coherence proof
+  consider k being Integer such that
+A2: i = 2*k by Def1;
+     i*j = 2*(k*j) by A2,XCMPLX_1:4;
+  hence thesis;
+ end;
+end;
+
+definition
+ let i, j be odd Integer;
+ cluster i*j -> odd;
+ coherence proof
+  consider k being Integer such that
+A1: i = 2*k+1 by Th1;
+  consider l being Integer such that
+A2: j = 2*l+1 by Th1;
+    i*j = 2*k*(2*l)+2*k*1+2*l*1+1*1 by A1,A2,XCMPLX_1:10
+        .= 2*(k*(2*l))+2*k*1+2*l*1+1 by XCMPLX_1:4
+        .= 2*(k*(2*l)+(k*1))+2*(l*1)+1 by XCMPLX_1:8
+        .= 2*(k*(2*l)+(k*1)+(l*1))+1 by XCMPLX_1:8;
+  hence thesis;
+ end;
+end;
+
+definition
+ let i, j be even Integer;
+ cluster i+j -> even;
+ coherence proof
+  consider k being Integer such that
+A1: i = 2*k by Def1;
+  consider l being Integer such that
+A2: j = 2*l by Def1;
+    i+j = 2*(k+l) by A1,A2,XCMPLX_1:8;
+ hence thesis;
+ end;
+end;
+
+definition
+ let i be even Integer, j be odd Integer;
+ cluster i+j -> odd;
+ coherence proof
+  consider k being Integer such that
+A1: i = 2*k by Def1;
+  consider l being Integer such that
+A2: j = 2*l+1 by Th1;
+    i+j = 2*k+2*l+1 by A1,A2,XCMPLX_1:1
+     .= 2*(k+l)+1 by XCMPLX_1:8;
+ hence thesis;
+ end;
+ cluster j+i -> odd;
+ coherence proof
+  consider k being Integer such that
+A3: i = 2*k by Def1;
+  consider l being Integer such that
+A4: j = 2*l+1 by Th1;
+    j+i = 2*k+2*l+1 by A3,A4,XCMPLX_1:1
+     .= 2*(k+l)+1 by XCMPLX_1:8;
+ hence thesis;
+ end;
+end;
+
+definition
+ let i, j be odd Integer;
+ cluster i+j -> even;
+ coherence proof
+  consider k being Integer such that
+A1: i = 2*k+1 by Th1;
+  consider l being Integer such that
+A2: j = 2*l+1 by Th1;
+    j+i = 2*k+1+2*l+1 by A1,A2,XCMPLX_1:1
+     .= 2*k+2*l+1+1 by XCMPLX_1:1
+     .= 2*k+2*l+(1+1) by XCMPLX_1:1
+     .= 2*(k+l)+2*1 by XCMPLX_1:8
+     .= 2*(k+l+1) by XCMPLX_1:8;
+ hence thesis;
+ end;
+end;
+
+definition
+ let i be even Integer, j be odd Integer;
+ cluster i-j -> odd;
+ coherence proof
+  consider k being Integer such that
+A1: i = 2*k by Def1;
+  consider l being Integer such that
+A2: j = 2*l+1 by Th1;
+    i-j = 2*k-2*l-1 by A1,A2,XCMPLX_1:36
+     .= 2*(k-l)-1 by XCMPLX_1:40;
+ hence thesis;
+ end;
+ cluster j-i -> odd;
+ coherence proof
+  consider k being Integer such that
+A3: i = 2*k by Def1;
+  consider l being Integer such that
+A4: j = 2*l+1 by Th1;
+    j-i = 2*l-2*k+1 by A3,A4,XCMPLX_1:29
+     .= 2*(l-k)+1 by XCMPLX_1:40;
+ hence thesis;
+ end;
+end;
+
+definition
+ let i, j be odd Integer;
+ cluster i-j -> even;
+ coherence proof
+  consider k being Integer such that
+A1: i = 2*k+1 by Th1;
+  consider l being Integer such that
+A2: j = 2*l+1 by Th1;
+    i-j = 2*k+1-2*l-1 by A1,A2,XCMPLX_1:36
+     .= 2*k-2*l+1-1 by XCMPLX_1:29
+     .= 2*(k-l)+1-1 by XCMPLX_1:40
+     .= 2*(k-l) by XCMPLX_1:26;
+ hence thesis;
+ end;
+end;
+
+definition
+ let E, f, n;
+ redefine func iter(f, n) -> Function of E, E;
+ coherence by FUNCT_7:85;
+end;
+
+definition
+  let A be set, B be with_non-empty_element set;
+ cluster non-empty Function of A, B;
+ existence proof
+  consider X being non empty set such that
+A1: X in B by TRIANG_1:def 1;
+  reconsider f = A --> X as Function of A, B by A1,FUNCOP_1:57;
+  take f;
+  let n be set; assume n in dom f;
+   then n in A by FUNCOP_1:19;
+  hence f.n is non empty by FUNCOP_1:13;
+ end;
+end;
+
+definition
+let A be non empty set, B be with_non-empty_element set,
+    f be non-empty Function of A, B,
+    a be Element of A;
+ cluster f.a -> non empty;
+ coherence proof
+     dom f = A by FUNCT_2:def 1;
+   then f.a in rng f by FUNCT_1:def 5;
+ hence thesis by AMI_1:def 1;
+ end;
+end;
+
+definition
+ let X be non empty set;
+ cluster bool X -> with_non-empty_element;
+ coherence proof
+  take X;
+  thus X in bool X by ZFMISC_1:def 1;
+ end;
+end;
+
+theorem Th2:
+ for S being non empty Subset of NAT st 0 in S
+  holds min S = 0
+proof
+ let S be non empty Subset of NAT; assume 0 in S;
+then A1: min S <= 0 by CQC_SIM1:def 8;
+ assume min S <> 0;
+ hence contradiction by A1,NAT_1:19;
+end;
+
+theorem Th3:
+ for E being non empty set, f being Function of E, E,
+     x being Element of E
+  holds iter(f,0).x = x
+proof let E be non empty set, f be Function of E, E, x be Element of E;
+    dom f = E by FUNCT_2:def 1;
+then A1: x in dom f \/ rng f by XBOOLE_0:def 2;
+  thus iter(f,0).x = id(dom f \/ rng f).x by FUNCT_7:70
+                  .= x by A1,FUNCT_1:34;
+end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+ let f be Function;
+ pred f has_a_fixpoint means
+:Def3: ex x st x is_a_fixpoint_of f;
+ antonym f has_no_fixpoint;
+end;
+
+definition
+ let X be set, x be Element of X;
+ attr x is covering means
+:Def4: union x = union union X;
+end;
+
+theorem Th4:
+ sE is covering iff union sE = E
+proof
+    union union bool bool E = union bool E by ZFMISC_1:99 .= E by ZFMISC_1:99;
+ hence sE is covering iff union sE = E by Def4;
+end;
+
+definition
+ let E;
+ cluster non empty finite covering Subset-Family of E;
+ existence proof
+    {E} c= bool E by ZFMISC_1:80;
+  then reconsider sE = {E} as Subset-Family of E by SETFAM_1:def 7;
+  take sE;
+  thus sE is non empty finite;
+     union sE = E by ZFMISC_1:31;
+  hence sE is covering by Th4;
+ end;
+end;
+
+theorem
+   for E being set, f being Function of E, E,
+    sE being non empty covering Subset-Family of E
+  st for X being Element of sE holds X misses f.:X
+   holds f has_no_fixpoint
+proof let E be set, f be Function of E, E,
+         sE be non empty covering Subset-Family of E; assume
+A1: for X being Element of sE holds X misses f.:X;
+ given x being set such that
+A2: x is_a_fixpoint_of f;
+A3: x in dom f & f.x = x by A2,KNASTER:def 1;
+     dom f = E by FUNCT_2:67;
+   then x in union sE by A3,Th4; then consider X being set such that
+A4: x in X & X in sE by TARSKI:def 4;
+     f.x in f.:X by A3,A4,FUNCT_1:def 12;
+   then X meets f.:X by A3,A4,XBOOLE_0:3;
+ hence contradiction by A1,A4;
+end;
+
+definition
+ let E, f;
+ func =_f -> Equivalence_Relation of E means
+:Def5:
+  for x, y st x in E & y in E
+   holds [x,y] in it iff ex k, l st iter(f,k).x = iter(f,l).y;
+ existence proof
+ defpred P[set,set] means
+               $1 in E & $2 in E & ex k, l st iter(f,k).$1 = iter(f,l).$2;
+A1: now let x; assume
+    A2: x in E; iter(f,0).x = iter(f,0).x;
+     hence P[x,x] by A2;
+    end;
+A3: for x,y st P[x,y] holds P[y,x];
+A4: now let x,y,z; assume
+    A5: P[x,y] & P[y,z];
+       then consider k, l such that
+    A6: iter(f,k).x = iter(f,l).y;
+       consider m, n such that
+    A7: iter(f,m).y =iter(f,n).z by A5;
+    A8: dom iter(f,k) = E by FUNCT_2:67;
+    A9: dom iter(f,l) = E by FUNCT_2:67;
+    A10: dom iter(f,m) = E by FUNCT_2:67;
+    A11: dom iter(f,n) = E by FUNCT_2:67;
+         iter(f,k+m).x = (iter(f,m)*iter(f,k)).x by FUNCT_7:79
+    .= iter(f,m).(iter(f,l).y) by A5,A6,A8,FUNCT_1:23
+    .= (iter(f,m)*(iter(f,l))).y by A5,A9,FUNCT_1:23
+    .= (iter(f,m+l)).y by FUNCT_7:79
+    .= (iter(f,l)*iter(f,m)).y by FUNCT_7:79
+    .= iter(f,l).(iter(f,n).z) by A5,A7,A10,FUNCT_1:23
+    .= (iter(f,l)*iter(f,n)).z by A5,A11,FUNCT_1:23
+    .= iter(f,l+n).z by FUNCT_7:79;
+     hence P[x,z] by A5;
+    end;
+   consider EqR being Equivalence_Relation of E such that
+A12: for x,y holds [x,y] in EqR iff x in E & y in E & P[x,y]
+                  from Ex_Eq_Rel(A1, A3, A4);
+  take EqR;
+  let x, y; assume x in E & y in E;
+  hence [x,y] in EqR iff ex k, l st iter(f,k).x = iter(f,l).y by A12;
+ end;
+ uniqueness proof let IT1, IT2 be Equivalence_Relation of E such that
+A13: for x, y st x in E & y in E
+   holds [x,y] in IT1 iff ex k, l st iter(f,k).x = iter(f,l).y and
+A14: for x, y st x in E & y in E
+   holds [x,y] in IT2 iff ex k, l st iter(f,k).x = iter(f,l).y;
+  let a, b be set;
+  hereby assume
+  A15: [a, b] in IT1;
+  then A16: a in E & b in E by ZFMISC_1:106;
+     then ex k, l st iter(f,k).a = iter(f,l).b by A13,A15;
+   hence [a, b] in IT2 by A14,A16;
+  end;
+  assume
+  A17: [a, b] in IT2;
+  then A18: a in E & b in E by ZFMISC_1:106;
+     then ex k, l st iter(f,k).a = iter(f,l).b by A14,A17;
+  hence [a, b] in IT1 by A13,A18;
+ end;
+end;
+
+theorem Th6:
+ for E being non empty set, f being Function of E, E,
+     c being Element of Class =_f, e being Element of c holds f.e in c
+proof
+ let E be non empty set, f be Function of E, E;
+ let c be Element of Class =_f, e be Element of c;
+   dom f = E & rng f c= E by FUNCT_2:def 1,RELSET_1:12;
+then A1: f.e in dom f \/ rng f by XBOOLE_0:def 2;
+    consider x' being set such that
+A2: x' in E & c = Class(=_f, x') by EQREL_1:def 5;
+A3: c = Class(=_f, e) by A2,EQREL_1:31;
+      iter(f, 1).e = f.e by FUNCT_7:72
+                 .= id(dom f \/ rng f).(f.e) by A1,FUNCT_1:34
+                 .= iter(f, 0).(f.e) by FUNCT_7:70;
+    then [f.e,e] in =_f by Def5;
+ hence f.e in c by A3,EQREL_1:27;
+end;
+
+theorem Th7:
+ for E being non empty set, f being Function of E, E,
+     c being Element of Class =_f, e being Element of c, n
+   holds iter(f, n).e in c
+proof
+ let E be non empty set, f be Function of E, E;
+ let c be Element of Class =_f, e be Element of c, n;
+   dom f = E & rng f c= E by FUNCT_2:def 1,RELSET_1:12;
+then A1: iter(f,n).e in dom f \/ rng f by XBOOLE_0:def 2;
+    consider x' being set such that
+A2: x' in E & c = Class(=_f, x') by EQREL_1:def 5;
+A3: c = Class(=_f, e) by A2,EQREL_1:31;
+      iter(f, n).e = id(dom f \/ rng f).(iter(f,n).e) by A1,FUNCT_1:34
+                 .= iter(f, 0).(iter(f,n).e) by FUNCT_7:70;
+    then [iter(f,n).e,e] in =_f by Def5;
+ hence iter(f,n).e in c by A3,EQREL_1:27;
+end;
+
+theorem
+   for E being non empty set, f being Function of E, E
+  st f has_no_fixpoint
+   ex E1, E2, E3 st E1 \/ E2 \/ E3 = E &
+                    f.:E1 misses E1 & f.:E2 misses E2 & f.:E3 misses E3
+proof
+  let E be non empty set, f be Function of E, E; assume
+A1: f has_no_fixpoint;
+ defpred P[Element of Class =_f, Element of [:bool E, bool E, bool E:]] means
+  $2`1 \/ $2`2 \/ $2`3 = $1 &
+  f.:$2`1 misses $2`1 & f.:$2`2 misses $2`2 & f.:$2`3 misses $2`3;
+  deffunc i(Nat) = iter(f, $1);
+A2: for a being Element of Class =_f
+     ex b being Element of [:bool E, bool E, bool E:] st P[a,b] proof
+    let c be Element of Class =_f;
+      consider x0 being set such that
+A3:  x0 in E & c = Class(=_f, x0) by EQREL_1:def 5;
+     reconsider x0 as Element of c by A3,EQREL_1:28;
+      deffunc _F(Element of c) = $1;
+      defpred _P[set] means
+       ex k, l st i(k).$1 = i(l).x0 & k is even & l is even;
+     set c1 = {_F(x) where x is Element of c : _P[x] };
+     c1 is Subset of c from SubsetFD;
+   then reconsider c1 as Subset of E by XBOOLE_1:1;
+     defpred _P[set] means
+      ex k, l st i(k).$1 = i(l).x0 & k is odd & l is even;
+     set c2 = {_F(x) where x is Element of c : _P[x] };
+      c2 is Subset of c from SubsetFD;
+    then reconsider c2 as Subset of E by XBOOLE_1:1;
+    reconsider c3 = {} as Subset of E by XBOOLE_1:2;
+  per cases;
+  suppose A4: c1 misses c2;
+   take b = [c1,c2,c3];
+A5: b`1 = c1 & b`2 = c2 & b`3 = c3 by MCART_1:47;
+   thus b`1 \/ b`2 \/ b`3 = c proof
+    hereby let x; assume
+       A6: x in b`1 \/ b`2 \/ b`3;
+     per cases by A5,A6,XBOOLE_0:def 2;
+     suppose x in c1; then consider xx being Element of c such that
+      A7: x = xx & ex k, l st i(k).xx = i(l).x0 & k is even & l is even;
+     thus x in c by A7;
+     suppose x in c2; then consider xx being Element of c such that
+      A8: x = xx & ex k, l st i(k).xx = i(l).x0 & k is odd & l is even;
+     thus x in c by A8;
+     suppose x in c3;
+     hence x in c;
+    end;
+    let x; assume x in c; then reconsider xc = x as Element of c;
+        [xc,x0] in =_f by A3,EQREL_1:27;
+      then consider k, l such that
+    A9: i(k).xc = i(l).x0 by Def5;
+    A10: dom i(k) = E & dom i(l) = E by FUNCT_2:def 1;
+    per cases;
+    suppose A11: k is even; then reconsider k as even Nat;
+    thus x in b`1 \/ b`2 \/ b`3 proof
+     per cases;
+     suppose l is even;
+      then xc in c1 by A9,A11;
+     hence thesis by A5,XBOOLE_0:def 2;
+     suppose l is odd; then reconsider l as odd Nat;
+         i(k+1).xc = (f*i(k)).xc by FUNCT_7:73
+                .= f.(i(l).x0) by A9,A10,FUNCT_1:23
+                .= (f*i(l)).x0 by A10,FUNCT_1:23
+                .= i(l+1).x0 by FUNCT_7:73;
+      then xc in c2;
+     hence thesis by A5,XBOOLE_0:def 2;
+    end;
+    suppose A12: k is odd; then reconsider k as odd Nat;
+    thus x in b`1 \/ b`2 \/ b`3 proof
+     per cases;
+     suppose l is even;
+      then xc in c2 by A9,A12;
+     hence thesis by A5,XBOOLE_0:def 2;
+     suppose l is odd; then reconsider l as odd Nat;
+         i(k+1).xc = (f*i(k)).xc by FUNCT_7:73
+                .= f.(i(l).x0) by A9,A10,FUNCT_1:23
+                .= (f*i(l)).x0 by A10,FUNCT_1:23
+                .= i(l+1).x0 by FUNCT_7:73;
+      then xc in c1;
+     hence thesis by A5,XBOOLE_0:def 2;
+    end;
+   end;
+   thus f.:b`1 misses b`1 proof
+      f.:c1 c= c2 proof let y be set; assume y in f.:c1;
+      then consider x such that
+    A13: x in dom f & x in c1 & y = f.x by FUNCT_1:def 12;
+      consider xx being Element of c such that
+    A14: x = xx & ex k, l st i(k).xx = i(l).x0 & k is even & l is even by A13;
+      reconsider yc = y as Element of c by A13,A14,Th6;
+      consider k, l such that
+    A15: i(k).xx = i(l).x0 & k is even & l is even by A14;
+       reconsider k, l as even Nat by A15;
+       reconsider k1 = k+1 as odd Nat;
+       reconsider l1 = l+1 as odd Nat;
+       reconsider l2 = l1+1 as even Nat;
+    A16: dom f = E & dom i(k) = E & dom i(l) = E & dom i(k1) = E & dom i(l1) =
+E
+                                                              by FUNCT_2:def 1;
+    A17: i(k1+1).xx = (i(k1)*f).xx by FUNCT_7:71
+                   .= i(k1).(f.xx) by A16,FUNCT_1:23;
+          i(k1+1).xx = (f*i(k1)).xx by FUNCT_7:73
+                  .= f.(i(k1).xx) by A16,FUNCT_1:23
+                  .= f.((f*i(k)).xx) by FUNCT_7:73
+                  .= f.(f.(i(l).x0)) by A15,A16,FUNCT_1:23
+                  .= f.((f*i(l)).x0) by A16,FUNCT_1:23
+                  .= f.(i(l1).x0) by FUNCT_7:73
+                  .= (f*i(l1)).x0 by A16,FUNCT_1:23
+                  .= i(l2).x0 by FUNCT_7:73;
+       then yc in c2 by A13,A14,A17;
+     hence thesis;
+    end;
+    hence thesis by A4,A5,XBOOLE_1:63;
+   end;
+   thus f.:b`2 misses b`2 proof
+      f.:c2 c= c1 proof let y be set; assume y in f.:c2;
+      then consider x such that
+    A18: x in dom f & x in c2 & y = f.x by FUNCT_1:def 12;
+      consider xx being Element of c such that
+    A19: x = xx & ex k, l st i(k).xx = i(l).x0 & k is odd & l is even by A18;
+      reconsider yc = y as Element of c by A18,A19,Th6;
+      consider k, l such that
+    A20: i(k).xx = i(l).x0 & k is odd & l is even by A19;
+       reconsider k as odd Nat by A20;
+       reconsider l as even Nat by A20;
+       reconsider k1 = k+1 as even Nat;
+       reconsider l1 = l+1 as odd Nat;
+       reconsider l2 = l1+1 as even Nat;
+    A21: dom f = E & dom i(k) = E & dom i(l) = E & dom i(k1) = E & dom i(l1) =
+E
+                                                              by FUNCT_2:def 1;
+    A22: i(k1+1).xx = (i(k1)*f).xx by FUNCT_7:71
+                   .= i(k1).(f.xx) by A21,FUNCT_1:23;
+          i(k1+1).xx = (f*i(k1)).xx by FUNCT_7:73
+                  .= f.(i(k1).xx) by A21,FUNCT_1:23
+                  .= f.((f*i(k)).xx) by FUNCT_7:73
+                  .= f.(f.(i(l).x0)) by A20,A21,FUNCT_1:23
+                  .= f.((f*i(l)).x0) by A21,FUNCT_1:23
+                  .= f.(i(l1).x0) by FUNCT_7:73
+                  .= (f*i(l1)).x0 by A21,FUNCT_1:23
+                  .= i(l2).x0 by FUNCT_7:73;
+       then yc in c1 by A18,A19,A22;
+     hence thesis;
+    end;
+    hence thesis by A4,A5,XBOOLE_1:63;
+   end;
+   thus f.:b`3 misses b`3 by A5,XBOOLE_1:65;
+  suppose c1 meets c2;
+    then consider x1 being set such that
+A23: x1 in c1 & x1 in c2 by XBOOLE_0:3;
+    consider x11 being Element of c such that
+A24: x1 = x11 & ex k, l st i(k).x11 = i(l).x0 & k is even & l is even by A23;
+    consider x12 being Element of c such that
+A25: x1 = x12 & ex k, l st i(k).x12 = i(l).x0 & k is odd & l is even by A23;
+   reconsider x1 as Element of c by A24;
+    consider k1, l1 being Nat such that
+A26: i(k1).x11 = i(l1).x0 & k1 is even & l1 is even by A24;
+    consider k2, l2 being Nat such that
+A27: i(k2).x12 = i(l2).x0 & k2 is odd & l2 is even by A25;
+A28:  dom i(k1) = E & dom i(k2) = E & dom i(l1) = E & dom i(l2) = E
+                                                  by FUNCT_2:def 1;
+A29:    i(l1+k2).x1 = (i(l1)*i(k2)).x1 by FUNCT_7:79
+    .= i(l1).(i(l2).x0) by A25,A27,A28,FUNCT_1:23
+    .= (i(l1)*i(l2)).x0 by A28,FUNCT_1:23
+    .= i(l1+l2).x0 by FUNCT_7:79;
+A30:    i(l2+k1).x1 = (i(l2)*i(k1)).x1 by FUNCT_7:79
+    .= i(l2).(i(l1).x0) by A24,A26,A28,FUNCT_1:23
+    .= (i(l2)*i(l1)).x0 by A28,FUNCT_1:23
+    .= i(l1+l2).x0 by FUNCT_7:79;
+     ex r being Element of E, k being odd Nat st i(k).r = r & r in c proof
+     reconsider k1, l1, l2 as even Nat by A26,A27;
+     reconsider k2 as odd Nat by A27;
+   A31: dom i(k1+l2) = E & dom i(k2+l1) = E by FUNCT_2:def 1;
+   per cases by AXIOMS:21;
+   suppose A32: k1+l2 < k2+l1;
+    take r = i(k1+l2).x1;
+     reconsider k = k2+l1-(k1+l2) as Nat by A32,INT_1:18;
+     reconsider k as odd Nat;
+    take k;
+       i(k).(i(k1+l2).x1) = (i(k)*i(k1+l2)).x1 by A31,FUNCT_1:23
+     .= i(k+(k1+l2)).x1 by FUNCT_7:79
+     .= i(k1+l2).x1 by A29,A30,XCMPLX_1:27;
+   hence i(k).r = r;
+   thus r in c by Th7;
+   suppose A33: k1+l2 > k2+l1;
+    take r = i(k2+l1).x1;
+     reconsider k = k1+l2-(k2+l1) as Nat by A33,INT_1:18;
+     reconsider k as odd Nat;
+    take k;
+       i(k).(i(k2+l1).x1) = (i(k)*i(k2+l1)).x1 by A31,FUNCT_1:23
+     .= i(k+(k2+l1)).x1 by FUNCT_7:79
+     .= i(k2+l1).x1 by A29,A30,XCMPLX_1:27;
+   hence i(k).r = r;
+   thus r in c by Th7;
+   end;
+   then consider r being Element of E, k being odd Nat such that
+A34: i(k).r = r & r in c;
+   reconsider r as Element of c by A34;
+   deffunc _F(set) = {l where l is Nat : i(l).$1 = r};
+A35: for x being Element of c holds _F(x) in bool NAT proof
+     let x be Element of c;
+         deffunc _F1(Nat) = $1;
+         defpred _P1[Nat] means i($1).x = r;
+         {_F1(l) where l is Nat : _P1[l]} is Subset of NAT from SubsetFD;
+       hence thesis;
+    end;
+   consider Odl being Function of c, bool NAT such that
+A36: for x being Element of c holds Odl.x = _F(x) from FunctR_ealEx(A35);
+     now let n be set; assume
+     n in dom Odl;
+       then reconsider nc = n as Element of c by FUNCT_2:def 1;
+   A37: Odl.nc = {l where l is Nat : i(l).nc = r} by A36;
+        consider x' being set such that
+   A38: x' in E & c = Class(=_f, x') by EQREL_1:def 5;
+        [nc, r] in =_f by A38,EQREL_1:30;
+      then consider kn, ln being Nat such that
+   A39:  iter(f,kn).nc = iter(f,ln).r by Def5;
+        defpred _P[Nat] means i(k*$1).r = r;
+   A40: _P[0] by Th3;
+   A41: now let i be Nat; assume
+       A42: _P[i];
+           A43: dom i(k) = E by FUNCT_2:def 1;
+         i(k*(i+1)).r = i(k*i+k*1).r by XCMPLX_1:8
+          .= (i(k*i)*i(k)).r by FUNCT_7:79
+          .= r by A34,A42,A43,FUNCT_1:23;
+        hence _P[i+1];
+       end;
+   A44: for i being Nat holds _P[i] from Ind(A40, A41);
+         2*0 <> k;
+   then A45: 0 < k by NAT_1:19;
+      set dk = ln div k;
+      set mk = ln mod k;
+   A46:  ln = k*dk+mk by A45,NAT_1:47;
+         mk < k by A45,NAT_1:46;
+      then reconsider kmk = k - mk as Nat by INT_1:18;
+   A47: ln+kmk = k*dk+(mk+kmk) by A46,XCMPLX_1:1
+             .= k*dk+k*1 by XCMPLX_1:27
+             .= k*(dk+1) by XCMPLX_1:8;
+      A48: dom i(kn) = E & dom i(ln) = E by FUNCT_2:def 1;
+        i(kmk+kn).nc = (i(kmk)*i(kn)).nc by FUNCT_7:79
+                  .= i(kmk).(i(ln).r) by A39,A48,FUNCT_1:23
+                  .= (i(kmk)*i(ln)).r by A48,FUNCT_1:23
+                  .= i(k*(dk+1)).r by A47,FUNCT_7:79
+                  .= r by A44;
+      then kn+kmk in Odl.n by A37;
+    hence Odl.n is non empty;
+   end;
+   then reconsider Odl as non-empty Function of c, bool NAT by UNIALG_1:def 6;
+   deffunc _F(Element of c) = min (Odl.$1);
+   consider odl being Function of c, NAT such that
+A49: for x being Element of c holds odl.x = _F(x) from LambdaD;
+     deffunc _F1(Element of c) = $1;
+     defpred _P1[set] means odl.$1 is even;
+     defpred _P2[set] means odl.$1 is odd;
+   set c1 = {_F1(x) where x is Element of c : _P1[x]};
+   set d2 = {_F1(x) where x is Element of c : _P2[x]};
+   set d1 = c1 \ {r};
+   A50: c1 is Subset of c from SubsetFD;
+      c1 \ {r} c= c1 by XBOOLE_1:36;
+    then d1 c= c by A50,XBOOLE_1:1;
+   then reconsider d1 as Subset of E by XBOOLE_1:1;
+      d2 is Subset of c from SubsetFD;
+   then reconsider d2 as Subset of E by XBOOLE_1:1;
+   reconsider d3 = {r} as Subset of E by ZFMISC_1:37;
+   take b = [d1,d2,d3];
+A51: b`1 = d1 & b`2 = d2 & b`3 = d3 by MCART_1:47;
+      i(0).r = r by Th3;
+    then 0 in {l where l is Nat : i(l).r = r};
+    then 0 in Odl.r by A36;
+    then min (Odl.r) = 0 by Th2;
+     then A52: odl.r = 2*0 by A49;
+then A53: r in c1;
+A54: d1 \/ d3 = c1 \/ d3 by XBOOLE_1:39 .= c1 by A53,ZFMISC_1:46;
+  c1 \/ d2 = c proof
+     hereby let x be set; assume
+     A55: x in c1 \/ d2;
+      per cases by A55,XBOOLE_0:def 2;
+       suppose x in c1; then consider xc being Element of c such that
+       A56: xc = x & odl.xc is even;
+        thus x in c by A56;
+       suppose x in d2; then consider xc being Element of c such that
+       A57: xc = x & odl.xc is odd;
+        thus x in c by A57;
+     end;
+      let x be set; assume x in c; then reconsider xc = x as Element of c;
+         odl.xc is even or odl.xc is odd;
+       then x in c1 or x in d2;
+      hence x in c1 \/ d2 by XBOOLE_0:def 2;
+     end;
+   hence b`1 \/ b`2 \/ b`3 = c by A51,A54,XBOOLE_1:4;
+A58: c1 misses d2 proof assume c1 meets d2;
+      then consider z being set such that
+     A59: z in c1 & z in d2 by XBOOLE_0:3;
+           (ex x being Element of c st z = x & odl.x is even) &
+         (ex x being Element of c st z = x & odl.x is odd) by A59;
+      hence contradiction;
+     end;
+       d1 c= c1 by A54,XBOOLE_1:7;
+then A60: d1 misses d2 by A58,XBOOLE_1:63;
+A61: for x being Element of c st x <> r holds odl.(f.x) = (odl.x qua Nat)-1
+     proof let x be Element of c; assume
+     A62: x <> r;
+     A63: now assume odl.x = 0; then 0 = min (Odl.x) by A49;
+           then 0 in Odl.x by CQC_SIM1:def 8;
+           then 0 in {l where l is Nat : i(l).x = r} by A36;
+           then ex l being Nat st l = 0 & i(l).x = r;
+          hence contradiction by A62,Th3;
+         end;
+         reconsider fx = f.x as Element of c by Th6;
+         reconsider ofx = odl.(fx), ox = odl.x as Nat;
+           ox >= 1 by A63,RLVECT_1:99;
+         then reconsider ox1 = ox-1 as Nat by INT_1:18;
+     A64:  dom f = E by FUNCT_2:def 1;
+     then A65: i(ox1).fx = (i(ox1)*f).x by FUNCT_1:23
+                  .= i(ox1+1).x by FUNCT_7:71
+                  .= i(ox).x by XCMPLX_1:27;
+           ox = min (Odl.x) by A49;
+         then ox in Odl.x by CQC_SIM1:def 8;
+         then ox in {l where l is Nat : i(l).x = r} by A36;
+         then ex l being Nat st l = ox & i(l).x = r;
+         then ox1 in {l where l is Nat : i(l).fx = r} by A65;
+     then A66: ox1 in Odl.fx by A36;
+           ofx = min (Odl.fx) by A49;
+     then A67: ofx <= ox-1 by A66,CQC_SIM1:def 8;
+
+     A68: i(ofx+1).x = (i(ofx)*f).x by FUNCT_7:71
+                   .= i(ofx).fx by A64,FUNCT_1:23;
+           ofx = min (Odl.fx) by A49;
+         then ofx in Odl.fx by CQC_SIM1:def 8;
+         then ofx in {l where l is Nat : i(l).fx = r} by A36;
+         then ex l being Nat st l = ofx & i(l).fx = r;
+         then ofx+1 in {l where l is Nat : i(l).x = r} by A68;
+     then A69: ofx+1 in Odl.x by A36;
+           ox = min (Odl.x) by A49;
+         then ofx+1 >= ox by A69,CQC_SIM1:def 8;
+         then ofx >= ox-1 by REAL_1:86;
+      hence thesis by A67,AXIOMS:21;
+     end;
+   thus f.:b`1 misses b`1 proof
+       f.:d1 c= d2 proof let y be set; assume y in f.:d1;
+         then consider x such that
+      A70: x in dom f & x in d1 & y = f.x by FUNCT_1:def 12;
+         x in c1 by A70,XBOOLE_0:def 4;
+         then consider xx being Element of c such that
+      A71: x = xx & odl.xx is even;
+         reconsider ox = odl.xx as even Nat by A71;
+         reconsider yc = y as Element of c by A70,A71,Th6;
+            r <> xx by A70,A71,ZFMISC_1:64;
+         then odl.yc = ox-1 by A61,A70,A71;
+       hence thesis;
+      end;
+     hence thesis by A51,A60,XBOOLE_1:63;
+    end;
+   thus f.:b`2 misses b`2 proof
+       f.:d2 c= c1 proof let y be set; assume y in f.:d2;
+         then consider x such that
+      A72: x in dom f & x in d2 & y = f.x by FUNCT_1:def 12;
+         consider xx being Element of c such that
+      A73: x = xx & odl.xx is odd by A72;
+         reconsider ox = odl.xx as odd Nat by A73;
+         reconsider yc = y as Element of c by A72,A73,Th6;
+           odl.yc = ox-1 by A52,A61,A72,A73;
+       hence thesis;
+      end;
+     hence thesis by A51,A58,XBOOLE_1:63;
+    end;
+   thus f.:b`3 misses b`3 proof assume f.:b`3 meets b`3;
+     then consider y being set such that
+    A74: y in f.:b`3 & y in b`3 by XBOOLE_0:3;
+    A75: y = r by A51,A74,TARSKI:def 1;
+        consider x such that
+    A76: x in dom f & x in {r} & y = f.x by A51,A74,FUNCT_1:def 12;
+          x = r by A76,TARSKI:def 1;
+        then r is_a_fixpoint_of f by A75,A76,KNASTER:def 2;
+     hence contradiction by A1,Def3;
+    end;
+  end;
+   consider F being Function of Class =_f, [:bool E, bool E, bool E:] such that
+A77:  for a being Element of Class =_f holds P[a,F.a] from FuncExD(A2);
+  set E1c = {(F.c)`1 where c is Element of Class =_f: not contradiction};
+  set E1 = union E1c;
+  set E2c = {(F.c)`2 where c is Element of Class =_f: not contradiction};
+  set E2 = union E2c;
+  set E3c = {(F.c)`3 where c is Element of Class =_f: not contradiction};
+  set E3 = union E3c;
+ take E1, E2, E3;
+ thus E1 \/ E2 \/ E3 = E proof
+  hereby let x; assume x in E1 \/ E2 \/ E3;
+  then A78: x in E1 \/ E2 or x in E3 by XBOOLE_0:def 2;
+   per cases by A78,XBOOLE_0:def 2;
+   suppose x in E1; then consider Y being set such that
+   A79: x in Y & Y in E1c by TARSKI:def 4;
+      consider c being Element of Class =_f such that
+   A80: Y = (F.c)`1 by A79;
+    thus x in E by A79,A80;
+   suppose x in E2; then consider Y being set such that
+   A81: x in Y & Y in E2c by TARSKI:def 4;
+      consider c being Element of Class =_f such that
+   A82: Y = (F.c)`2 by A81;
+    thus x in E by A81,A82;
+   suppose x in E3; then consider Y being set such that
+   A83: x in Y & Y in E3c by TARSKI:def 4;
+      consider c being Element of Class =_f such that
+   A84: Y = (F.c)`3 by A83;
+    thus x in E by A83,A84;
+  end;
+  let x; assume
+  A85: x in E;
+     set c = Class(=_f,x);
+  A86: x in c by A85,EQREL_1:28;
+     reconsider c as Element of Class =_f by A85,EQREL_1:def 5;
+       x in (F.c)`1 \/ (F.c)`2 \/ (F.c)`3 by A77,A86;
+  then A87: x in (F.c)`1 \/ (F.c)`2 or x in (F.c)`3 by XBOOLE_0:def 2;
+  per cases by A87,XBOOLE_0:def 2;
+   suppose A88: x in (F.c)`1; (F.c)`1 in E1c;
+     then x in E1 by A88,TARSKI:def 4;
+     then x in E1 \/ E2 by XBOOLE_0:def 2;
+    hence x in E1 \/ E2 \/ E3 by XBOOLE_0:def 2;
+   suppose A89: x in (F.c)`2; (F.c)`2 in E2c;
+     then x in E2 by A89,TARSKI:def 4;
+     then x in E1 \/ E2 by XBOOLE_0:def 2;
+    hence x in E1 \/ E2 \/ E3 by XBOOLE_0:def 2;
+   suppose A90: x in (F.c)`3; (F.c)`3 in E3c;
+     then x in E3 by A90,TARSKI:def 4;
+    hence x in E1 \/ E2 \/ E3 by XBOOLE_0:def 2;
+ end;
+ thus f.:E1 misses E1 proof assume not thesis; then consider x such that
+ A91: x in f.:E1 & x in E1 by XBOOLE_0:3;
+    consider Y being set such that
+ A92: x in Y & Y in E1c by A91,TARSKI:def 4;
+    consider c being Element of Class =_f such that
+ A93: Y = (F.c)`1 by A92;
+    consider xx being set such that
+A94: xx in dom f & xx in E1 & x = f.xx by A91,FUNCT_1:def 12;
+    consider YY being set such that
+A95: xx in YY & YY in E1c by A94,TARSKI:def 4;
+    consider cc being Element of Class =_f such that
+A96: YY = (F.cc)`1 by A95;
+      x in (F.c)`1 \/ (F.c)`2 by A92,A93,XBOOLE_0:def 2;
+    then x in (F.c)`1 \/ (F.c)`2 \/ (F.c)`3 by XBOOLE_0:def 2;
+ then A97: x in c by A77;
+    consider x' being set such that
+ A98: x' in E & c = Class(=_f, x') by EQREL_1:def 5;
+ A99: c = Class(=_f, x) by A97,A98,EQREL_1:31;
+      xx in (F.cc)`1 \/ (F.cc)`2 by A95,A96,XBOOLE_0:def 2;
+    then xx in (F.cc)`1 \/ (F.cc)`2 \/ (F.cc)`3 by XBOOLE_0:def 2;
+then A100: xx in cc by A77;
+    consider xx' being set such that
+A101: xx' in E & cc = Class(=_f, xx') by EQREL_1:def 5;
+A102: cc = Class(=_f, xx) by A100,A101,EQREL_1:31;
+      dom f = E by FUNCT_2:def 1;
+then A103: x in dom f \/ rng f by A92,A93,XBOOLE_0:def 2;
+      iter(f, 1).xx = x by A94,FUNCT_7:72
+                 .= id(dom f \/ rng f).x by A103,FUNCT_1:34
+                 .= iter(f, 0).x by FUNCT_7:70;
+    then [x,xx] in =_f by A92,A93,A95,A96,Def5;
+    then A104: Class(=_f, x) = Class(=_f, xx) by A92,A93,EQREL_1:44;
+A105: f.xx in f.:YY by A94,A95,FUNCT_1:def 12;
+      f.:YY misses YY by A77,A96;
+   hence contradiction by A92,A93,A94,A96,A99,A102,A104,A105,XBOOLE_0:3;
+ end;
+ thus f.:E2 misses E2 proof assume not thesis; then consider x such that
+ A106: x in f.:E2 & x in E2 by XBOOLE_0:3;
+    consider Y being set such that
+ A107: x in Y & Y in E2c by A106,TARSKI:def 4;
+    consider c being Element of Class =_f such that
+ A108: Y = (F.c)`2 by A107;
+    consider xx being set such that
+A109: xx in dom f & xx in E2 & x = f.xx by A106,FUNCT_1:def 12;
+    consider YY being set such that
+A110: xx in YY & YY in E2c by A109,TARSKI:def 4;
+    consider cc being Element of Class =_f such that
+A111: YY = (F.cc)`2 by A110;
+      x in (F.c)`1 \/ (F.c)`2 by A107,A108,XBOOLE_0:def 2;
+    then x in (F.c)`1 \/ (F.c)`2 \/ (F.c)`3 by XBOOLE_0:def 2;
+ then A112: x in c by A77;
+    consider x' being set such that
+ A113: x' in E & c = Class(=_f, x') by EQREL_1:def 5;
+ A114: c = Class(=_f, x) by A112,A113,EQREL_1:31;
+      xx in (F.cc)`1 \/ (F.cc)`2 by A110,A111,XBOOLE_0:def 2;
+    then xx in (F.cc)`1 \/ (F.cc)`2 \/ (F.cc)`3 by XBOOLE_0:def 2;
+then A115: xx in cc by A77;
+    consider xx' being set such that
+A116: xx' in E & cc = Class(=_f, xx') by EQREL_1:def 5;
+A117: cc = Class(=_f, xx) by A115,A116,EQREL_1:31;
+      dom f = E by FUNCT_2:def 1;
+then A118: x in dom f \/ rng f by A107,A108,XBOOLE_0:def 2;
+      iter(f, 1).xx = x by A109,FUNCT_7:72
+                 .= id(dom f \/ rng f).x by A118,FUNCT_1:34
+                 .= iter(f, 0).x by FUNCT_7:70;
+    then [x,xx] in =_f by A107,A108,A110,A111,Def5;
+    then A119: Class(=_f, x) = Class(=_f, xx) by A107,A108,EQREL_1:44;
+A120: f.xx in f.:YY by A109,A110,FUNCT_1:def 12;
+      f.:YY misses YY by A77,A111;
+   hence contradiction by A107,A108,A109,A111,A114,A117,A119,A120,XBOOLE_0:3;
+ end;
+ thus f.:E3 misses E3 proof assume not thesis; then consider x such that
+ A121: x in f.:E3 & x in E3 by XBOOLE_0:3;
+    consider Y being set such that
+ A122: x in Y & Y in E3c by A121,TARSKI:def 4;
+    consider c being Element of Class =_f such that
+ A123: Y = (F.c)`3 by A122;
+    consider xx being set such that
+A124: xx in dom f & xx in E3 & x = f.xx by A121,FUNCT_1:def 12;
+    consider YY being set such that
+A125: xx in YY & YY in E3c by A124,TARSKI:def 4;
+    consider cc being Element of Class =_f such that
+A126: YY = (F.cc)`3 by A125;
+      x in (F.c)`1 \/ (F.c)`2 \/ (F.c)`3 by A122,A123,XBOOLE_0:def 2;
+ then A127: x in c by A77;
+    consider x' being set such that
+ A128: x' in E & c = Class(=_f, x') by EQREL_1:def 5;
+ A129: c = Class(=_f, x) by A127,A128,EQREL_1:31;
+      xx in (F.cc)`1 \/ (F.cc)`2 \/ (F.cc)`3 by A125,A126,XBOOLE_0:def 2
+;
+then A130: xx in cc by A77;
+    consider xx' being set such that
+A131: xx' in E & cc = Class(=_f, xx') by EQREL_1:def 5;
+A132: cc = Class(=_f, xx) by A130,A131,EQREL_1:31;
+      dom f = E by FUNCT_2:def 1;
+then A133: x in dom f \/ rng f by A122,A123,XBOOLE_0:def 2;
+      iter(f, 1).xx = x by A124,FUNCT_7:72
+                 .= id(dom f \/ rng f).x by A133,FUNCT_1:34
+                 .= iter(f, 0).x by FUNCT_7:70;
+    then [x,xx] in =_f by A122,A123,A125,A126,Def5;
+    then A134: Class(=_f, x) = Class(=_f, xx) by A122,A123,EQREL_1:44;
+A135: f.xx in f.:YY by A124,A125,FUNCT_1:def 12;
+      f.:YY misses YY by A77,A126;
+   hence contradiction by A122,A123,A124,A126,A129,A132,A134,A135,XBOOLE_0:3;
+ end;
+end;
+

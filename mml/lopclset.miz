@@ -1,0 +1,1695 @@
+:: Representation Theorem for Boolean Algebras
+::  by Jaros{\l}aw Stanis{\l}aw Walijewski
+::
+:: Received July 14, 1993
+:: Copyright (c) 1993 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, SETFAM_1, BOOLE, BINOP_1, FUNCT_1, LATTICES, SUBSET_1,
+      REALSET1, FILTER_0, RELAT_1, TARSKI, FINSUB_1, LATTICE2, SETWISEO,
+      FINSET_1, RFINSEQ, CARD_1, GROUP_6, MOD_4, WELLORD1, LOPCLSET;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
+      PARTFUN1, FUNCT_2, BINOP_1, FINSUB_1, STRUCT_0, PRE_TOPC, LATTICES,
+      LATTICE2, FILTER_0, REALSET1, FINSET_1, SETWISEO, LATTICE4, RFINSEQ,
+      CARD_1, GRCAT_1;
+ constructors BINOP_1, LATTICE2, REALSET1, SETWISEO, LATTICE4, RFINSEQ,
+      FILTER_1, GRCAT_1, MEMBERED, PRE_TOPC;
+ clusters FINSET_1, FINSUB_1, LATTICES, PRE_TOPC, RLSUB_2, STRUCT_0, RELSET_1,
+      SUBSET_1, SETFAM_1, MEMBERED, ZFMISC_1, FUNCT_2, PARTFUN1;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, LATTICES, BINOP_1, REALSET1, STRUCT_0, XBOOLE_0;
+ theorems TARSKI, BINOP_1, SETFAM_1, LATTICES, FINSUB_1, TOPS_1, PRE_TOPC,
+      SUBSET_1, LATTICE2, LATTICE4, FILTER_0, FUNCT_1, FUNCT_2, ZFMISC_1,
+      BORSUK_1, REALSET1, GROUP_6, SETWISEO, RFINSEQ, CARD_4, RELAT_1, GRCAT_1,
+      RELSET_1, XBOOLE_0, XBOOLE_1;
+ schemes BINOP_1, FRAENKEL, FUNCT_1, FUNCT_2, SETWISEO, COMPLSP1;
+
+begin
+
+ reserve T for non empty TopSpace,
+         X,Z for Subset of T;
+
+ definition
+ let T be non empty TopStruct;
+ func OpenClosedSet(T) -> Subset-Family of T equals
+:Def1:  {x where x is Subset of T: x is open closed};
+        coherence
+        proof
+    set A= {x where x is Subset of T: x is open closed};
+            A c= bool the carrier of T
+          proof
+            let y be set;
+             assume y in A;
+             then ex x being Subset of T
+             st y=x & x is open & x is closed;
+             hence thesis;
+          end;
+          then A is Subset-Family of T by SETFAM_1:def 7;
+          hence thesis;
+        end;
+ end;
+
+ definition
+ let T be non empty TopSpace;
+ cluster OpenClosedSet(T) -> non empty;
+ coherence
+ proof
+    set A= {x where x is Subset of T : x is open closed};
+      {} T is open & {} T is closed by TOPS_1:22,52;
+    then {} T in A;
+    hence thesis by Def1;
+  end;
+ end;
+
+canceled;
+
+theorem Th2:  X in OpenClosedSet(T) implies X is open
+      proof
+  A1: OpenClosedSet(T)
+        ={Y where Y is Subset of T : Y is open closed} by Def1;
+        assume X in OpenClosedSet(T);
+        then ex Z st Z=X & Z is open & Z is closed by A1;
+        hence thesis;
+       end;
+
+theorem Th3:  X in OpenClosedSet(T) implies X is closed
+       proof
+      A1: OpenClosedSet(T)
+      ={Y where Y is Subset of T :Y is open closed} by Def1;
+        assume X in OpenClosedSet(T);
+        then ex Z st Z=X & Z is open & Z is closed by A1;
+        hence thesis;
+       end;
+
+theorem Th4:  X is open closed implies X in OpenClosedSet(T)
+       proof
+      A1: OpenClosedSet(T)
+      ={Y where Y is Subset of T :Y is open closed} by Def1;
+        assume X is open & X is closed;
+        hence thesis by A1;
+       end;
+
+reserve x,y for Element of OpenClosedSet(T);
+
+definition let T;let C,D be Element of OpenClosedSet(T);
+ redefine func C \/ D -> Element of OpenClosedSet(T);
+ coherence
+  proof
+   reconsider A = C, B = D as Subset of T;
+   A1: A is open & B is open by Th2;
+              A is closed & B is closed by Th3;
+   then A \/ B is open & A \/ B is closed by A1,TOPS_1:36,37;
+   hence C \/ D is Element of OpenClosedSet(T) by Th4;
+  end;
+
+ redefine func C /\ D -> Element of OpenClosedSet(T);
+ coherence
+  proof
+   reconsider A = C, B = D as Subset of T;
+   A2: A is open & B is open by Th2;
+             A is closed & B is closed by Th3;
+   then A /\ B is open & A /\ B is closed by A2,TOPS_1:35,38;
+   hence C /\ D is Element of OpenClosedSet(T) by Th4;
+  end;
+ end;
+
+definition
+ let T;
+  deffunc U(Element of OpenClosedSet(T),Element of OpenClosedSet(T))
+                  = $1 \/ $2;
+ func T_join T -> BinOp of OpenClosedSet(T) means
+:Def2: for A,B being Element of OpenClosedSet(T) holds
+              it.(A,B) = A \/ B;
+ existence
+  proof
+  consider f being BinOp of OpenClosedSet(T) such that
+  A1: for x,y being Element of OpenClosedSet(T) holds
+  f.(x,y)= U(x,y) from BinOpLambda;
+  take f;
+  let x,y;
+  thus thesis by A1;
+  end;
+ uniqueness
+  proof
+   thus for b1,b2 being BinOp of OpenClosedSet(T) st
+    (for A,B being Element of OpenClosedSet(T) holds b1.(A,B) = U(A,B)) &
+    (for A,B being Element of OpenClosedSet(T) holds b2.(A,B) = U(A,B))
+      holds b1 = b2 from BinOpDefuniq;
+  end;
+
+  deffunc U(Element of OpenClosedSet(T),Element of OpenClosedSet(T))
+                  = $1 /\ $2;
+ func T_meet T -> BinOp of OpenClosedSet(T) means
+:Def3: for A,B being Element of OpenClosedSet(T) holds
+              it.(A,B) = A /\ B;
+ existence
+  proof
+  consider f being BinOp of OpenClosedSet(T) such that
+  A2: for x,y being Element of OpenClosedSet(T) holds
+  f.(x,y)= U(x,y) from BinOpLambda;
+  take f;
+  let x,y;
+  thus thesis by A2;
+  end;
+ uniqueness
+  proof
+   thus for b1,b2 being BinOp of OpenClosedSet(T) st
+    (for A,B being Element of OpenClosedSet(T) holds b1.(A,B) = U(A,B)) &
+    (for A,B being Element of OpenClosedSet(T) holds b2.(A,B) = U(A,B))
+      holds b1 = b2 from BinOpDefuniq;
+  end;
+end;
+
+theorem Th5:  for x,y be Element of
+    LattStr(#OpenClosedSet(T),T_join T,T_meet T#),
+       x',y' be Element of OpenClosedSet(T)
+       st x=x' & y=y' holds x"\/"y = x' \/ y'
+   proof
+     let x,y be Element of
+            LattStr(#OpenClosedSet(T) ,T_join T,T_meet T#);
+     let x',y' be Element of OpenClosedSet(T); assume x=x' & y=y';
+     hence x"\/"y =(T_join T).(x',y') by LATTICES:def 1
+               .= x' \/ y' by Def2;
+     end;
+
+theorem Th6:  for x,y be Element of
+    LattStr(#OpenClosedSet(T),T_join T,T_meet T#),
+       x',y' be Element of OpenClosedSet(T)
+       st x=x' & y=y' holds x"/\"y = x' /\ y'
+proof
+  let x,y be Element of
+  LattStr(#OpenClosedSet(T),T_join T,T_meet T#);
+  let x',y' be Element of OpenClosedSet(T); assume x=x' & y=y';
+  hence x"/\"y =(T_meet T).(x',y') by LATTICES:def 2
+            .= x' /\ y' by Def3;
+end;
+
+theorem Th7:
+  {} T is Element of OpenClosedSet(T)
+  proof
+   consider x being Subset of T such that A1: x = {} T;
+   A2:x is open by A1,TOPS_1:52;
+     x is closed by A1,TOPS_1:22;
+   hence thesis by A1,A2,Th4;
+  end;
+
+theorem Th8: [#] T is Element of OpenClosedSet(T)
+  proof
+   consider x being Subset of T such that A1: x = [#] T;
+     x is open by A1,TOPS_1:53;
+   hence thesis by A1,Th4;
+  end;
+
+theorem Th9:
+   x` is Element of OpenClosedSet(T)
+  proof
+    reconsider y = x as Subset of T;
+   A1: y is open by Th2;
+      y is closed by Th3;
+   then A2: x` is open by TOPS_1:29;
+      x` is closed by A1,TOPS_1:30;
+   hence thesis by A2,Th4;
+  end;
+
+theorem Th10:
+  LattStr(#OpenClosedSet(T),T_join T,T_meet T#) is Lattice
+ proof
+  set L = LattStr(#OpenClosedSet(T),T_join T,T_meet T#);
+  A1: for p,q  be Element of L
+    holds p"\/"q = q"\/"p
+  proof
+  let p,q be Element of L;
+     consider p',q' being Element of OpenClosedSet(T) such that
+              A2: p=p' & q=q';
+     thus p "\/" q = q' \/ p' by A2,Th5
+                  .= q"\/"p by A2,Th5;
+  end;
+
+A3:  for p,q,r  be Element of L
+    holds p"\/"(q"\/"r) = (p"\/"q)"\/"r
+  proof
+     let p,q,r  be Element of L;
+     consider p',q',r',k',l' being Element of OpenClosedSet(T) such that
+            A4: p=p' & q=q' & r=r'& q "\/" r=k' & p "\/" q=l';
+  thus p"\/"(q"\/"r) = p' \/ k' by A4,Th5
+                .= p' \/ (q' \/ r') by A4,Th5
+                .= (p' \/ q') \/ r' by XBOOLE_1:4
+                .= l' \/ r' by A4,Th5
+                .= (p"\/"q)"\/"r by A4,Th5;
+ end;
+
+A5:  for p,q  be Element of L
+    holds (p"/\"q)"\/"q = q
+    proof
+    let p,q be Element of L;
+    consider p',q',k' being Element of OpenClosedSet(T) such that
+          A6:p=p' & q=q' & p"/\"q=k';
+    thus (p"/\"q)"\/"q = k' \/ q' by A6,Th5
+                  .= (p' /\ q') \/ q' by A6,Th6
+                  .= q by A6,XBOOLE_1:22;
+    end;
+
+A7:  for p,q  be Element of L
+  holds p"/\"q = q"/\"p
+  proof
+  let p,q be Element of L;
+     consider p',q' being Element of OpenClosedSet(T) such that
+              A8: p=p' & q=q';
+     thus p "/\" q =q' /\ p' by A8,Th6
+                  .= q"/\"p by A8,Th6;
+  end;
+
+A9:  for p,q,r  be Element of L
+  holds p"/\"(q"/\"r) = (p"/\"q)"/\"r
+  proof
+     let p,q,r  be Element of L;
+     consider p',q',r',k',l' being Element of OpenClosedSet(T) such that
+            A10: p=p' & q=q' & r=r'& q "/\" r=k' & p "/\" q=l';
+  thus p"/\"(q"/\"r) = p' /\ k' by A10,Th6
+                .= p' /\ (q' /\ r') by A10,Th6
+                .= (p' /\ q') /\ r' by XBOOLE_1:16
+                .= l' /\ r' by A10,Th6
+                .= (p"/\"q)"/\"r by A10,Th6;
+ end;
+
+   for p,q  be Element of L holds p"/\"(p"\/"q)=p
+  proof
+  let p,q be Element of L;
+  consider p',q',k' being Element of OpenClosedSet(T) such that
+        A11:p=p' & q=q' & p"\/"q=k';
+  thus p"/\"(p"\/"q) = p' /\ k' by A11,Th6
+                .= p' /\ (p' \/ q') by A11,Th5
+                .= p by A11,XBOOLE_1:21;
+  end;
+  then L is join-commutative join-associative meet-absorbing
+       meet-commutative meet-associative join-absorbing
+   by A1,A3,A5,A7,A9,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+ hence L is Lattice by LATTICES:def 10;
+end;
+
+ definition
+   let T be non empty TopSpace;
+   func OpenClosedSetLatt(T) -> Lattice equals
+   :Def4:   LattStr(#OpenClosedSet(T),T_join T,T_meet T#);
+        coherence by Th10;
+    end;
+
+theorem Th11:
+ for T being non empty TopSpace, x,y being Element of
+    OpenClosedSetLatt(T) holds x"\/"y = x \/ y
+   proof
+   let T be non empty TopSpace;
+   let x,y be Element of OpenClosedSetLatt(T);
+    reconsider x1=x as Element of
+                     LattStr(#OpenClosedSet(T) ,T_join T,T_meet T#) by Def4;
+    reconsider y1=y as Element of
+                     LattStr(#OpenClosedSet(T) ,T_join T,T_meet T#) by Def4;
+    thus x "\/" y = x1 "\/" y1 by Def4
+               .= x \/ y by Th5;
+   end;
+
+theorem Th12:
+ for T being non empty TopSpace , x,y being Element of
+    OpenClosedSetLatt(T) holds x"/\"y = x /\ y
+   proof
+   let T be non empty TopSpace;
+   let x,y be Element of OpenClosedSetLatt(T);
+    reconsider x1=x as Element of
+                     LattStr(#OpenClosedSet(T) ,T_join T,T_meet T#) by Def4;
+    reconsider y1=y as Element of
+                     LattStr(#OpenClosedSet(T) ,T_join T,T_meet T#) by Def4;
+    thus x "/\" y = x1 "/\" y1 by Def4
+               .= x /\ y by Th6;
+   end;
+
+theorem Th13:
+   the carrier of OpenClosedSetLatt(T) = OpenClosedSet(T)
+   proof
+      OpenClosedSetLatt(T)= LattStr(#OpenClosedSet(T),T_join T,T_meet T#)by
+Def4
+;
+    hence thesis;
+   end;
+
+theorem Th14:
+   OpenClosedSetLatt(T) is Boolean
+ proof
+ set OCL=OpenClosedSetLatt(T);
+   A1:  OCL=LattStr(#OpenClosedSet(T),T_join T,T_meet T#) by Def4;
+A2:  for a,b,c being Element of OCL
+           holds a"/\"(b"\/"c) = (a"/\"b)"\/"(a"/\"c)
+     proof
+     let a,b,c be Element of OCL;
+        set m = a"/\"c;
+     consider a',b',c',k',l',m'  being Element of OpenClosedSet(T)
+     such that
+            A3: a=a' & b=b' & c = c' & b "\/" c = k' & a"/\"b=l' & m=m' by A1;
+         A4:  a' /\ c'= m & m= m' by A1,A3,Th6;
+  thus a"/\"(b"\/"c) =a' /\ k' by A1,A3,Th6
+                .= a' /\ (b' \/ c') by A1,A3,Th5
+                .= (a' /\ b') \/ (a' /\ c') by XBOOLE_1:23
+                .= l' \/ m' by A1,A3,A4,Th6
+                .= (a"/\"b)"\/"(a"/\"c) by A1,A3,Th5;
+     end;
+       reconsider bot = {} T as Element of OCL by A1,Th7;
+       reconsider top = [#] T as Element of OCL by A1,Th8;
+        A5: for a being Element of OCL holds top"\/"a =top &
+        a "\/" top =top
+        proof
+         let a be Element of OCL;
+          reconsider a' = a as Element of OpenClosedSet(T) by A1;
+         thus top "\/" a = [#] T \/ a' by A1,Th5
+                     .= top by TOPS_1:2;
+         hence thesis;
+        thus thesis;
+        end;
+    A6:
+     for a being Element of OCL holds
+       bot"/\"a = bot & a"/\"bot = bot
+      proof
+         let a be Element of OCL;
+          reconsider a' = a as Element of OpenClosedSet(T) by A1;
+         thus bot "/\" a = {} /\ a' by A1,Th6
+                     .= bot;
+         hence thesis;
+      end;
+    then A7:OCL is lower-bounded by LATTICES:def 13;
+    A8:OCL is upper-bounded by A5,LATTICES:def 14;
+    A9:{} T= Bottom OCL by A6,A7,LATTICES:def 16;
+    A10:[#](T) = Top OCL by A5,A8,LATTICES:def 17;
+   thus OCL is bounded by A7,A8,LATTICES:def 15;
+    reconsider OCL as 01_Lattice by A7,A8,LATTICES:def 15;
+      (for b being Element of OCL
+       ex a being Element of OCL
+          st a is_a_complement_of b)
+   proof
+   let b be Element of OCL;
+    reconsider c = b as Element of OpenClosedSet(T) by A1;
+    reconsider a =  c` as Element of OCL by A1,Th9;
+    A11: a"\/"b = Top OCL
+    proof
+      thus a"\/"b=c \/  c` by A1,Th5
+       .=Top OCL by A10,PRE_TOPC:18;
+    end;
+A12:  c misses  c` by PRE_TOPC:26;
+A13:a"/\"b = c /\  c` by A1,Th6
+          .= Bottom OCL by A9,A12,XBOOLE_0:def 7;
+    take a;
+    thus thesis by A11,A13,LATTICES:def 18;
+   end;
+   hence thesis by A2,LATTICES:def 11,def 19;
+ end;
+
+theorem Th15:
+   [#] T is Element of OpenClosedSetLatt(T)
+ proof
+     the carrier of OpenClosedSetLatt(T)= OpenClosedSet(T) by Th13;
+   hence thesis by Th8;
+ end;
+
+theorem Th16:
+   {} T is Element of OpenClosedSetLatt(T)
+ proof
+     the carrier of OpenClosedSetLatt(T)= OpenClosedSet(T) by Th13;
+   hence thesis by Th7;
+ end;
+
+reserve x,y,X,Y for set;
+
+definition
+ cluster non trivial B_Lattice;
+ existence
+ proof
+  consider T;
+   reconsider E = OpenClosedSetLatt(T) as B_Lattice by Th14;
+   reconsider a = [#] T, b = {} T as Element of E by Th15,Th16;
+  take E,a,b;
+  thus a <> b;
+ end;
+end;
+
+reserve BL for non trivial B_Lattice,
+        a,b,c,p,q for Element of BL,
+        UF,F,F0,F1,F2 for Filter of BL;
+
+definition let BL;
+  func ultraset BL -> Subset of bool the carrier of BL equals
+:Def5: {F : F is_ultrafilter};
+  coherence
+   proof
+    set US = {F: F is_ultrafilter};
+       US c= bool the carrier of BL
+    proof
+     let x;
+     assume x in US;
+     then consider UF such that A1: UF = x & UF is_ultrafilter;
+     thus thesis by A1;
+    end;
+   hence thesis;
+  end;
+end;
+
+definition let BL;
+cluster ultraset BL -> non empty;
+  coherence
+   proof
+    set US = {F: F is_ultrafilter};
+    consider p1,p2 being Element of BL such that
+     A1:p1<>p2 by REALSET1:def 20;
+      p1 <> Bottom BL or p2 <> Bottom BL by A1;
+    then consider p being Element of BL such that A2:p<>Bottom
+BL;
+   consider H being Filter of BL such that
+    A3: p in H & H is_ultrafilter by A2,FILTER_0:24;
+     H in US by A3;
+   hence thesis by Def5;
+  end;
+end;
+
+canceled;
+
+theorem Th18:
+  x in ultraset BL iff (ex UF st UF = x & UF is_ultrafilter)
+  proof
+  A1:x in ultraset BL implies (ex UF st UF = x & UF is_ultrafilter)
+   proof
+    assume x in ultraset BL;
+    then x in {F: F is_ultrafilter } by Def5;
+    hence thesis;
+   end;
+    (ex UF st UF = x & UF is_ultrafilter) implies x in ultraset BL
+   proof
+    assume ex UF st UF = x & UF is_ultrafilter;
+    then x in {F: F is_ultrafilter};
+    hence thesis by Def5;
+   end;
+  hence thesis by A1;
+  end;
+
+theorem Th19:for a holds { F :F is_ultrafilter & a in F} c= ultraset BL
+  proof
+    let a;
+    let x;
+    assume x in { F :F is_ultrafilter & a in F};
+    then consider UF such that A1:  UF = x & UF is_ultrafilter & a in UF;
+    thus x in ultraset BL by A1,Th18;
+  end;
+
+definition let BL;
+func UFilter BL -> Function means
+:Def6: dom it = the carrier of BL &
+    for a being Element of BL holds
+it.a = {UF:  UF is_ultrafilter & a in UF };
+  existence
+    proof
+      deffunc U(set) = { F :F is_ultrafilter & $1 in F};
+      consider f being Function such that
+       A1: dom f = the carrier of BL and
+       A2:for x st x in the carrier of BL
+        holds f.x = U(x) from Lambda;
+      take f;
+      thus thesis by A1,A2;
+    end;
+  uniqueness
+  proof
+  let f1,f2 be Function;
+    assume that
+    A3:dom f1= the carrier of BL &
+     for a holds f1.a={F:  F is_ultrafilter & a in F } and
+    A4:dom f2= the carrier of BL &
+     for a holds f2.a={F:  F is_ultrafilter & a in F };
+      now let x;
+    assume x in the carrier of BL;
+    then reconsider a = x as Element of BL;
+    thus f1.x = {F: F is_ultrafilter & a in F } by A3
+             .= f2.x by A4;
+   end;
+  hence f1=f2 by A3,A4,FUNCT_1:9;
+  end;
+end;
+
+theorem Th20:
+  x in UFilter BL.a iff (ex F st F=x & F is_ultrafilter & a in F)
+ proof
+    A1:x in UFilter BL.a implies (ex F st F=x & F is_ultrafilter & a in F)
+  proof
+    assume x in UFilter BL.a;
+    then x in {UF: UF is_ultrafilter & a in UF} by Def6;
+     then consider F such that A2:F=x & F is_ultrafilter & a in F;
+    take F;
+    thus thesis by A2;
+  end;
+     (ex F st F=x & F is_ultrafilter & a in F) implies x in UFilter BL.a
+  proof
+    assume ex F st F=x & F is_ultrafilter & a in F;
+     then x in {UF: UF is_ultrafilter & a in UF};
+    hence thesis by Def6;
+  end;
+   hence thesis by A1;
+ end;
+
+theorem Th21:
+   F in UFilter BL.a iff F is_ultrafilter & a in F
+  proof
+    hereby
+     assume F in UFilter BL.a;
+     then consider F0 such that A1:F0=F & F0 is_ultrafilter & a in F0 by Th20;
+     thus F is_ultrafilter & a in F by A1;
+    end;
+   thus F is_ultrafilter & a in F implies F in UFilter BL.a by Th20;
+  end;
+
+ theorem Th22:
+ for F st F is_ultrafilter holds a "\/" b in F iff a in F or b in F
+ proof
+  let F;
+  assume F is_ultrafilter;
+  then F is prime & F <> <.BL.) by FILTER_0:58;
+  hence thesis by FILTER_0:def 6;
+ end;
+
+ theorem Th23: UFilter BL.(a "/\" b) = UFilter BL.a /\ UFilter BL.b
+  proof
+  A1: UFilter BL.(a "/\" b) c= UFilter BL.a /\ UFilter BL.b
+   proof
+     let x;
+     set c = a "/\" b;
+     assume x in UFilter BL.c;
+     then consider F0 such that
+  A2:   x=F0 & F0 is_ultrafilter & c in F0 by Th20;
+       a in F0 & b in F0 by A2,FILTER_0:def 1;
+     then F0 in UFilter BL.(a) & F0 in UFilter BL.(b) by A2,Th20;
+     hence thesis by A2,XBOOLE_0:def 3;
+   end;
+     UFilter BL.a /\ UFilter BL.b c= UFilter BL.(a "/\" b)
+   proof
+     let x;
+     assume x in UFilter BL.a /\ UFilter BL.b;
+     then x in UFilter BL.a & x in UFilter BL.b by XBOOLE_0:def 3;
+     then ( ex F0 st x=F0 & F0 is_ultrafilter & a in F0 ) &
+          ( ex F0 st x=F0 & F0 is_ultrafilter & b in F0 ) by Th20;
+     then consider F0 such that
+  A3:   x=F0 & F0 is_ultrafilter & (a in F0 & b in F0);
+       F0 is_ultrafilter & a "/\" b in F0 by A3,FILTER_0:def 1;
+     hence thesis by A3,Th20;
+   end;
+   hence thesis by A1,XBOOLE_0:def 10;
+  end;
+
+theorem Th24: UFilter BL.(a "\/" b) = UFilter BL.a \/ UFilter BL.b
+ proof
+  A1: UFilter BL.(a "\/" b) c= UFilter BL.a \/ UFilter BL.b
+   proof
+     let x;
+     set c = a "\/" b;
+     assume x in UFilter BL.c;
+     then consider F0 such that
+  A2:   x=F0 & F0 is_ultrafilter & c in F0 by Th20;
+       a in F0 or b in F0 by A2,Th22;
+     then F0 in UFilter BL.(a) or F0 in UFilter BL.(b) by A2,Th20;
+     hence thesis by A2,XBOOLE_0:def 2;
+   end;
+     UFilter BL.a \/ UFilter BL.b c= UFilter BL.(a "\/" b)
+   proof
+     let x;
+     assume x in UFilter BL.a \/ UFilter BL.b;
+     then x in UFilter BL.a or x in UFilter BL.b by XBOOLE_0:def 2;
+     then ( ex F0 st x=F0 & F0 is_ultrafilter & a in F0 ) or
+          ( ex F0 st x=F0 & F0 is_ultrafilter & b in F0 ) by Th20;
+     then consider F0 such that
+  A3:   x=F0 & F0 is_ultrafilter & (a in F0 or b in F0);
+       F0 is_ultrafilter & a "\/" b in F0 by A3,Th22;
+     hence thesis by A3,Th20;
+   end;
+   hence thesis by A1,XBOOLE_0:def 10;
+ end;
+
+definition let BL;
+  redefine func UFilter BL -> Function of the carrier of BL, bool ultraset BL;
+  coherence
+    proof
+      reconsider f=UFilter BL as Function;
+       A1: dom f = the carrier of BL by Def6;
+         rng f c= bool ultraset BL
+       proof
+        let y;
+        assume y in rng f;
+        then consider x such that A2:x in dom f & y = f.x by FUNCT_1:def 5;
+           y ={F: F is_ultrafilter & x in F} by A1,A2,Def6;
+        then y c= ultraset BL by A1,A2,Th19;
+        hence thesis;
+       end;
+      then reconsider f as Function of the carrier of BL , bool ultraset BL
+       by A1,FUNCT_2:def 1,RELSET_1:11;
+         for a holds f.a = { F :F is_ultrafilter & a in F} by Def6;
+      hence thesis;
+    end;
+end;
+
+definition let BL;
+ func StoneR BL -> set equals
+:Def7:     rng UFilter BL;
+coherence;
+end;
+
+definition let BL;
+ cluster StoneR BL -> non empty;
+        coherence
+         proof
+       A1: StoneR BL = rng UFilter BL by Def7;
+            dom UFilter BL = the carrier of BL by Def6;
+          hence thesis by A1,RELAT_1:65;
+        end;
+end;
+
+theorem Th25:StoneR BL c= bool ultraset BL
+      proof
+         rng UFilter BL c= bool ultraset BL by RELSET_1:12;
+       hence thesis by Def7;
+     end;
+
+theorem Th26:
+x in StoneR BL iff ( ex a st (UFilter BL).a =x)
+ proof
+  A1:x in StoneR BL implies ( ex a st (UFilter BL).a =x)
+  proof
+    assume x in StoneR BL;
+    then x in rng UFilter BL by Def7;
+    then consider y such that
+   A2: y in dom UFilter BL & x = UFilter BL.y by FUNCT_1:def 5;
+    reconsider a=y as Element of BL by A2,Def6;
+    take a;
+    thus thesis by A2;
+  end;
+    ( ex a st UFilter BL.a =x ) implies x in StoneR BL
+  proof
+    given a such that A3: x=UFilter BL.a;
+      a in the carrier of BL;
+    then a in dom UFilter BL by Def6;
+    then x in rng UFilter BL by A3,FUNCT_1:def 5;
+    hence thesis by Def7;
+  end;
+   hence thesis by A1;
+ end;
+
+definition let BL;
+func StoneSpace BL -> strict TopSpace means
+:Def8:the carrier of it =ultraset BL &
+the topology of it =
+  {union A where A is Subset-Family of ultraset BL : A c= StoneR BL };
+  existence
+  proof
+     set US = ultraset BL;
+     set STP={union A where A is Subset-Family of ultraset BL :
+                               A c= StoneR BL };
+       STP is Subset-Family of US
+     proof
+        STP c= bool US
+     proof
+       let x;
+       assume x in STP;
+      then consider B being Subset-Family of ultraset BL such that
+          A1:  x=union B & B c= StoneR BL;
+       thus x in bool US by A1;
+     end;
+      hence thesis by SETFAM_1:def 7;
+     end;
+    then reconsider STP ={union A where A is Subset-Family of ultraset BL :
+                           A c= StoneR BL } as Subset-Family of US;
+       TopStruct(# US,STP#) is strict TopSpace
+      proof
+       set TS= TopStruct(# US,STP#);
+        A2:the carrier of TS in the topology of TS
+          proof
+          set B = { F : F is_ultrafilter & Top BL in F };
+               B c= ultraset BL
+                  proof
+                  let x;
+                   assume x in B;
+                   then ex F st F= x & F is_ultrafilter & Top BL in F;
+                   hence thesis by Th18;
+                  end;
+            then A3: bool B c= bool ultraset BL by ZFMISC_1:79;
+               {B} c= bool B by ZFMISC_1:80;
+            then reconsider SB ={B} as
+           Subset of bool ultraset BL by A3,XBOOLE_1:1;
+       reconsider SB as Subset-Family of ultraset BL by SETFAM_1:def 7;
+             A4:ultraset BL = union SB
+                proof
+                  A5:union SB = B by ZFMISC_1:31;
+                    ultraset BL c= B
+                  proof
+                  let x;
+                   assume x in ultraset BL;
+                   then consider F such that A6: F = x & F is_ultrafilter by
+Th18;
+                      Top BL in F by FILTER_0:12;
+                   hence thesis by A6;
+                  end;
+                  hence thesis by A5,XBOOLE_0:def 10;
+                end;
+                 (UFilter BL).Top BL = { F : F is_ultrafilter & Top
+BL in F } by Def6;
+               then B in StoneR BL by Th26;
+              then SB c= StoneR BL by ZFMISC_1:37;
+          hence thesis by A4;
+        end;
+        A7:for a being Subset-Family of TS
+         st a c= the topology of TS holds union a in the topology of TS
+        proof
+        let a be Subset-Family of TS;
+         assume A8: a c= the topology of TS;
+         set B= { A where A is Subset of StoneR BL : union A in a};
+           B c= bool StoneR BL
+         proof
+           let x;
+           assume x in B;
+           then ex C being Subset of StoneR BL st
+           C = x & union C in a;
+           then reconsider C = x as Subset of StoneR BL;
+             C c= StoneR BL;
+           hence thesis;
+         end;
+         then reconsider BS=B as Subset-Family of StoneR BL
+                    by SETFAM_1:def 7;
+         A9: union union BS = union {union A where A
+                      is Subset of StoneR BL :A in BS} by BORSUK_1:17;
+         A10:a = { union A where A is Subset of StoneR BL :A in BS}
+         proof
+           A11:a c= {union A where A is Subset of StoneR BL :A in BS}
+           proof
+             let x;
+             assume A12:x in a;
+             then x in STP by A8;
+             then consider C being Subset-Family of ultraset BL such that
+             A13:  x=union C & C c= StoneR BL;
+               C in BS by A12,A13;
+             hence thesis by A13;
+           end;
+             {union A where A is Subset of StoneR BL :A in BS} c= a
+           proof
+             let x;
+             assume x in {union A where A is Subset of StoneR BL :A in BS};
+             then consider C  being Subset of StoneR BL such that
+             A14:union C= x & C in BS;
+             consider D being Subset of StoneR BL such that
+             A15: D = C & union D in a by A14;
+             thus thesis by A14,A15;
+           end;
+           hence thesis by A11,XBOOLE_0:def 10;
+         end;
+           StoneR BL c= bool ultraset BL by Th25;
+         then union BS is Subset of bool ultraset BL by XBOOLE_1:1;
+         then union BS is Subset-Family of ultraset BL by SETFAM_1:def 7;
+         hence thesis by A9,A10;
+        end;
+          for p,q being Subset of TS st
+           p in the topology of TS & q in the topology of TS
+           holds p /\ q in the topology of TS
+         proof
+        let p,q be Subset of TS;
+         assume A16: p in the topology of TS & q in the topology of TS;
+           then consider P being Subset-Family of ultraset BL such that
+                 A17:  union P = p & P c= StoneR BL;
+           consider Q being Subset-Family of ultraset BL such that
+                 A18:  union Q = q & Q c= StoneR BL by A16;
+        A19:  union P /\ union Q = union INTERSECTION(P,Q) by LATTICE4:2;
+            INTERSECTION(P,Q) c=bool ultraset BL
+          proof
+           let x;
+           assume x in INTERSECTION(P,Q);
+           then consider X,Y being set such that
+           A20:   X in P & Y in Q & x = X /\ Y by SETFAM_1:def 5;
+           A21:X /\ Y c= X \/ Y by XBOOLE_1:29;
+              X \/ Y c= ultraset BL by A20,XBOOLE_1:8;
+            then X /\ Y c= ultraset BL by A21,XBOOLE_1:1;
+           hence x in bool ultraset BL by A20;
+          end;
+         then reconsider C= INTERSECTION(P,Q) as Subset of bool ultraset BL;
+         reconsider C as Subset-Family of ultraset BL by SETFAM_1:def 7;
+          C c= StoneR BL
+          proof
+          let x;
+          assume x in C;
+          then consider X,Y being set such that
+          A22:   X in P & Y in Q & x = X /\ Y by SETFAM_1:def 5;
+          consider a such that
+              A23: X =(UFilter BL).a by A17,A22,Th26;
+               consider b such that
+              A24: Y =(UFilter BL).b by A18,A22,Th26;
+            A25:X={ F: F is_ultrafilter & a in F} by A23,Def6;
+            A26:Y={ F: F is_ultrafilter & b in F} by A24,Def6;
+A27:            X /\ Y = { F: F is_ultrafilter & a "/\" b in F}
+             proof
+            A28:X /\ Y c= { F: F is_ultrafilter & a "/\" b in F}
+            proof
+             let x;
+              assume x in X /\ Y;
+              then A29:x in X & x in Y by XBOOLE_0:def 3;
+               then consider F1 such that A30:x= F1 & F1 is_ultrafilter & a in
+F1 by A25;
+               consider F2 such that A31:x= F2 & F2 is_ultrafilter& b in F2
+                                                by A26,A29;
+                a "/\" b in F1 by A30,A31,FILTER_0:def 1;
+              then consider F such that A32:x= F & F is_ultrafilter &
+                                            a "/\" b in F by A30;
+              thus thesis by A32;
+            end;
+              { F: F is_ultrafilter & a "/\" b in F} c= X /\ Y
+            proof
+             let x;
+             assume x in { F: F is_ultrafilter & a "/\" b in F};
+             then consider F0 such that A33:x= F0 & F0 is_ultrafilter &
+                                                          a "/\" b in F0;
+               a in F0 by A33,FILTER_0:def 1;
+              then consider F such that A34:F=F0 & F is_ultrafilter & a in F
+                                                           by A33;
+               A35: F in X by A25,A34;
+                b in F0 by A33,FILTER_0:def 1;
+              then consider F1 such that A36:F1=F0 & F1 is_ultrafilter & b in
+ F1
+                                                           by A33;
+                F1 in Y by A26,A36;
+              hence thesis by A33,A34,A35,A36,XBOOLE_0:def 3;
+            end;
+            hence thesis by A28,XBOOLE_0:def 10;
+            end;
+             (UFilter BL).(a "/\" b)={ F :F is_ultrafilter & (a "/\" b) in
+ F} by Def6;
+            then consider c being Element of BL such that
+       A37: c = a "/\" b & (UFilter BL).(c)={ F :F is_ultrafilter & c in F};
+           thus thesis by A22,A27,A37,Th26;
+          end;
+         hence thesis by A17,A18,A19;
+        end;
+       hence thesis by A2,A7,PRE_TOPC:def 1;
+      end;
+    then reconsider TS= TopStruct(# US,STP#) as strict TopSpace;
+    take TS;
+    thus thesis;
+  end;
+  uniqueness;
+end;
+
+definition
+  let BL;
+ cluster StoneSpace BL -> non empty;
+ coherence
+  proof
+      the carrier of StoneSpace BL =ultraset BL by Def8;
+   hence the carrier of StoneSpace BL is non empty;
+  end;
+end;
+
+theorem
+  (F is_ultrafilter & not F in UFilter BL.a) implies not a in F by Th21;
+
+theorem Th28: ultraset BL \ UFilter BL.a = UFilter BL.a`
+ proof
+  hereby let x;
+   assume x in ultraset BL \ UFilter BL.a;
+   then A1:x in ultraset BL & not x in UFilter BL.a by XBOOLE_0:def 4;
+   then consider F such that A2:F=x & F is_ultrafilter by Th18;
+      not a in F by A1,A2,Th21;
+    then a` in F by A2,FILTER_0:59;
+    hence x in UFilter BL.a` by A2,Th21;
+  end;
+  hereby let x;
+   assume x in UFilter BL.a`;
+   then consider F such that A3:F=x & F is_ultrafilter & a` in F by Th20;
+   A4: not a in F by A3,FILTER_0:59;
+   A5:F in ultraset BL by A3,Th18;
+     not F in UFilter BL.a by A4,Th21;
+   hence x in ultraset BL \ UFilter BL.a by A3,A5,XBOOLE_0:def 4;
+  end;
+  thus thesis;
+ end;
+
+definition let BL;
+func StoneBLattice BL -> Lattice equals
+:Def9:   OpenClosedSetLatt(StoneSpace BL );
+  coherence;
+end;
+
+Lm1:for p being Subset of StoneSpace BL holds
+  p in StoneR BL implies p is open
+ proof
+  let p be Subset of StoneSpace BL;
+  assume A1: p in StoneR BL;
+      StoneR BL = rng UFilter BL by Def7;
+    then StoneR BL c= bool ultraset BL by RELSET_1:12;
+    then {p} is Subset of bool ultraset BL by A1,SUBSET_1:63;
+    then A2:{p} is Subset-Family of ultraset BL by SETFAM_1:def 7;
+           A3:{p} c= StoneR BL by A1,ZFMISC_1:37;
+             union {p} =p by ZFMISC_1:31;
+     then consider C being Subset-Family of ultraset BL such that
+      A4:C={p} & p= union C & C c= StoneR BL by A2,A3;
+       p in {union A where A is Subset-Family of ultraset BL : A c= StoneR BL }
+      by A4;
+      then p in the topology of StoneSpace BL by Def8;
+      hence thesis by PRE_TOPC:def 5;
+ end;
+
+theorem Th29:UFilter BL is one-to-one
+ proof
+     now
+     let a,b;
+     assume that A1:UFilter BL.a = UFilter BL.b;
+     assume not a=b;
+     then consider UF such that A2:UF is_ultrafilter &
+      (a in UF & not b in UF or not a in UF & b in UF) by FILTER_0:60;
+       now per cases by A2;
+      case A3:a in UF & not b in UF;
+        then UF in UFilter BL.a by A2,Th21;
+        hence UFilter BL.a <> UFilter BL.b by A3,Th21;
+      case not a in UF & b in UF;
+        then not UF in UFilter BL.a by Th21;
+        hence UFilter BL.a <> UFilter BL.b by A2,Th21;
+     end;
+     hence contradiction by A1;
+   end;
+   hence thesis by GROUP_6:1;
+ end;
+
+theorem
+   union StoneR BL = ultraset BL
+ proof
+    consider x being Element of OpenClosedSet(StoneSpace BL);
+    reconsider X=x as Subset of StoneSpace BL;
+    A1:X is open & X is closed by Th2,Th3;
+    then X in the topology of StoneSpace BL by PRE_TOPC:def 5;
+    then X in {union A where A is Subset-Family of ultraset BL : A c= StoneR
+BL}
+                                                             by Def8;
+    then consider B being Subset-Family of ultraset BL such that
+                            A2:union B = X & B c= StoneR BL;
+         X` is open by A1,TOPS_1:29;
+      then  X` in the topology of StoneSpace BL by PRE_TOPC:def 5;
+    then  X` in {union A where A is Subset-Family of ultraset BL :
+      A c= StoneR BL} by Def8;
+    then consider C being Subset-Family of ultraset BL such that
+                            A3:union C =  X` & C c= StoneR BL;
+      B \/ C c= StoneR BL by A2,A3,XBOOLE_1:8;
+    then union (B \/ C) c= union StoneR BL by ZFMISC_1:95;
+    then X \/  X` c= union StoneR BL by A2,A3,ZFMISC_1:96;
+    then [#] StoneSpace BL c= union StoneR BL by PRE_TOPC:18;
+    then the carrier of StoneSpace BL c= union StoneR BL by PRE_TOPC:12;
+    then A4:ultraset BL c= union StoneR BL by Def8;
+       StoneR BL c= bool ultraset BL by Th25;
+     then union StoneR BL c= union bool ultraset BL by ZFMISC_1:95;
+     then union StoneR BL c= ultraset BL by ZFMISC_1:99;
+     hence thesis by A4,XBOOLE_0:def 10;
+ end;
+
+theorem Th31:
+ for A,B,X being set holds (X c= union (A \/ B) &
+    for Y being set st Y in B holds Y misses X )
+        implies X c= union A
+  proof
+    let A,B,X be set;
+     assume A1:X c= union (A \/ B);
+     assume for Y st Y in B holds Y misses X;
+     then union B misses X by ZFMISC_1:98;
+     then A2:union B /\ X = {} by XBOOLE_0:def 7;
+       X c= union (A \/ B) /\ X by A1,XBOOLE_1:19;
+    then X c= (union A \/ union B) /\ X by ZFMISC_1:96;
+    then A3: X c= (union A /\ X) \/ (union B /\ X) by XBOOLE_1:23;
+       union A /\ X c= union A by XBOOLE_1:17;
+    hence thesis by A2,A3,XBOOLE_1:1;
+  end;
+
+theorem Th32:
+  for X being non empty set ex Y being Finite_Subset of X st Y is non empty
+  proof let X be non empty set;
+    consider a being Element of X;
+      { a } is Finite_Subset of X;
+   hence thesis;
+  end;
+
+definition let D be non empty set;
+ cluster non empty Finite_Subset of D;
+ existence by Th32;
+end;
+
+canceled;
+
+theorem Th34:
+ for L being non trivial B_Lattice,
+     D being non empty Subset of L
+    st Bottom L in <.D.)
+  ex B being non empty Finite_Subset of the carrier of L
+   st B c= D & FinMeet(B) = Bottom L
+ proof
+  let L be non trivial B_Lattice, D be non empty Subset of L
+    such that A1: Bottom L in <.D.);
+  set A = { FinMeet(C) where C is Element of Fin the carrier of L:
+              C c= D & C <> {} };
+  set AA = { a where a is Element of L:
+             ex c being Element of L st c in A & c [= a };
+   A2:AA c= the carrier of L
+   proof
+   let x;
+   assume x in AA;
+    then consider a being Element of L such that
+     A3: a= x & ex c being Element of L st c in A & c [= a;
+    thus thesis by A3;
+   end;
+     AA is non empty
+   proof
+     consider C being Finite_Subset of D such that
+    A4:C is non empty by Th32;
+A5: C is Subset of D by FINSUB_1:32;
+    then C c= the carrier of L by XBOOLE_1:1;
+    then C is Element of Fin the carrier of L by FINSUB_1:def 5;
+    then consider C being Element of Fin the carrier of L such that
+     A6:C <> {} & C c= D by A4,A5;
+    reconsider a = FinMeet(C) as Element of L;
+         a in A by A6;
+     then consider c being Element of L such that A7:
+     c = a & c in A & c [= a;
+      a in AA by A7;
+    hence thesis;
+   end;
+  then reconsider AA as non empty Subset of L by A2;
+A8:  AA is Filter of L
+  proof
+  A9: (for p,q being Element of L st
+        p in AA & q in AA holds p "/\" q in AA)
+    proof
+  let p,q be Element of L;
+   assume A10:p in AA & q in AA;
+    then consider a being Element of L such that
+     A11: a= p & ex c being Element of L st c in A & c [= a;
+    consider c being Element of L such that A12:c in A & c [= a
+                                                              by A11;
+     consider b being Element of L such that
+    A13: b= q & ex d being Element of L st d in
+ A & d [= b by A10;
+    consider d being Element of L such that A14:d in A & d [= b
+                                                              by A13;
+   A15:   c "/\" d [= a "/\" b by A12,A14,FILTER_0:5;
+     consider C being Element of Fin the carrier of L such that
+A16:    c = FinMeet(C) & C c= D & C <> {} by A12;
+     consider E being Element of Fin the carrier of L such that
+A17:    d = FinMeet(E) & E c= D & E <> {} by A14;
+A18:   c "/\" d = FinMeet(C \/ E) by A16,A17,LATTICE4:30;
+        C \/ E c= D & C \/ E <> {} by A16,A17,XBOOLE_1:8,15;
+      then c "/\" d in A by A18;
+    hence thesis by A11,A13,A15;
+    end;
+     for p,q being Element of L st p in AA & p [= q holds q in
+AA
+    proof
+    let p,q be Element of L;
+    assume A19: p in AA & p [= q;
+    then consider a being Element of L such that
+     A20: a= p & ex c being Element of L st c in A & c [= a;
+     consider c being Element of L such that A21: c in
+ A & c [= a by A20;
+       c [= q by A19,A20,A21,LATTICES:25;
+    then consider b being Element of L such that
+     A22: b= q & ex c being Element of L st c in A & c [= b by
+A21;
+      thus thesis by A22;
+    end;
+   hence thesis by A9,FILTER_0:9;
+  end;
+     D c= AA
+    proof
+     let x;
+     assume
+A23:    x in D;
+then A24:  { x } c= D & { x } <> {} by ZFMISC_1:37;
+    { x } c= the carrier of L by A23,ZFMISC_1:37;
+then reconsider C = { x } as Element of Fin the carrier of L by FINSUB_1:def 5;
+A25:  the L_meet of L is commutative associative by LATTICE2:31,32;
+A26:    x = (id the carrier of L).x by A23,FUNCT_1:35
+          .= (the L_meet of L)$$(C,id the carrier of L) by A23,A25,SETWISEO:26
+          .= FinMeet(C,id the carrier of L) by LATTICE2:def 4
+          .= FinMeet(C,id L) by GRCAT_1:def 11
+          .= FinMeet(C) by LATTICE4:def 13;
+      reconsider a = FinMeet(C) as Element of L;
+        a in A & a [= a by A24;
+     hence x in AA by A26;
+    end;
+  then <.D.) c= AA by A8,FILTER_0:def 5;
+  then Bottom L in AA by A1;
+   then ex d being Element of L st d = Bottom L &
+   ex c being Element of L st c in A & c [= d;
+  then consider c being Element of L such that
+A27:   c in A & c [= Bottom L;
+     Bottom L [= c by LATTICES:41;
+   then Bottom L in A by A27,LATTICES:26;
+  then ex C being Finite_Subset of the carrier of L
+    st Bottom L = FinMeet(C) & C c= D & C <> {};
+  hence thesis;
+ end;
+
+theorem Th35:
+ for L being 0_Lattice holds
+  not ex F being Filter of L st F is_ultrafilter & Bottom L in F
+  proof
+   let L be 0_Lattice;
+   given F being Filter of L such that
+    A1: F is_ultrafilter & Bottom L in F;
+      F = <.L.) & F = the carrier of L by A1,FILTER_0:32;
+  hence contradiction by A1,FILTER_0:def 4;
+  end;
+
+theorem Th36:
+UFilter BL.Bottom BL = {}
+ proof
+  assume
+A1: UFilter BL.Bottom BL <> {};
+  consider x being Element of UFilter BL.Bottom BL;
+    ex F st F=x & F is_ultrafilter & Bottom BL in F by A1,Th20;
+  hence contradiction by Th35;
+ end;
+
+theorem
+  UFilter BL.Top BL = ultraset BL
+ proof
+ thus UFilter BL.Top BL = UFilter BL.(Bottom BL)` by LATTICE4:37
+                    .= ultraset BL \ UFilter BL.Bottom BL by Th28
+                    .= ultraset BL \ {} by Th36
+                    .= ultraset BL;
+ end;
+
+theorem Th38:
+   ultraset BL = union X & X is Subset of StoneR BL implies
+  ex Y being Finite_Subset of X st ultraset BL = union Y
+  proof
+  assume A1:ultraset BL = union X & X is Subset of StoneR BL;
+  assume A2: not thesis;
+   consider Y being Finite_Subset of X such that A3: Y is non empty
+     by A1,Th32,ZFMISC_1:2;
+   A4:Y c= X by FINSUB_1:def 5;
+   then A5:Y c= StoneR BL by A1,XBOOLE_1:1;
+   consider x being Element of Y;
+    A6:x in X by A3,A4,TARSKI:def 3;
+       x in StoneR BL by A3,A5,TARSKI:def 3;
+   then consider b such that A7:x =UFilter BL.b by Th26;
+   set CY = { a` : UFilter BL.a in X };
+   consider c such that A8: c = b`;
+A9:    c in CY by A6,A7,A8;
+      CY c= the carrier of BL
+    proof
+      let x;
+      assume x in CY;
+      then consider b such that A10: x = b` & UFilter BL.b in X;
+      thus thesis by A10;
+    end;
+   then reconsider CY as non empty Subset of BL by A9;
+   set H = <.CY.);
+     for B being non empty Finite_Subset of the carrier of BL st B c= CY
+    holds FinMeet B <> Bottom BL
+    proof let B be non empty Finite_Subset of the carrier of BL such that
+A11:    B c= CY and
+A12:    FinMeet B = Bottom BL;
+A13:    B is Subset of BL by FINSUB_1:32;
+      A14: dom UFilter BL = the carrier of BL by FUNCT_2:def 1;
+A15:    UFilter BL.:B c= rng UFilter BL by RELAT_1:144;
+        rng UFilter BL c= bool ultraset BL by RELSET_1:12;
+      then UFilter BL.:B c= bool ultraset BL by A15,XBOOLE_1:1;
+      then reconsider D = UFilter BL.:B
+       as non empty Subset-Family of ultraset BL
+         by A13,A14,RELAT_1:152,SETFAM_1:def 7;
+A16:      now
+       consider x being Element of UFilter BL.Bottom BL;
+       assume {}ultraset BL <> UFilter BL.Bottom BL;
+        then ex F st F=x & F is_ultrafilter & Bottom BL in F by Th20;
+       hence contradiction by Th35;
+      end;
+A17:  the L_meet of BL is commutative associative idempotent
+        by LATTICE2:30,31,32;
+    deffunc U(Element of bool ultraset BL,Element of bool ultraset BL)
+                = $1 /\ $2;
+    consider G being BinOp of bool ultraset BL such that
+A18:  for x,y being Element of bool ultraset BL holds
+       G. [x,y]= U(x,y) from Lambda2D;
+A19:  G is commutative
+      proof
+      let x,y be Element of bool ultraset BL;
+        G. (x,y)= G. [x,y] by BINOP_1:def 1
+             .=y /\ x by A18
+             .= G. [y,x] by A18
+             .= G. (y,x) by BINOP_1:def 1;
+        hence thesis;
+      end;
+A20:  G is associative
+      proof
+    let x,y,z  be Element of bool ultraset BL;
+           G. (x,G. (y,z)) = G. (x, G. [y ,z]) by BINOP_1:def 1
+                        .= G. [x, G. [y , z]] by BINOP_1:def 1
+                        .= G. [x, y /\ z] by A18
+                        .= x /\ (y /\ z) by A18
+                        .= (x /\ y) /\ z by XBOOLE_1:16
+                        .= G. [x /\ y, z] by A18
+                        .= G. [G. [x,y],z] by A18
+                        .= G. [G.(x,y),z] by BINOP_1:def 1
+                        .= G. (G.(x,y),z) by BINOP_1:def 1;
+        hence thesis;
+      end;
+A21:  G is idempotent
+      proof
+        let x  be Element of bool ultraset BL;
+          G. (x,x) = G. [x,x] by BINOP_1:def 1
+                .= x /\ x by A18
+                .= x;
+        hence thesis;
+      end;
+A22:  for x,y being Element of BL holds
+     UFilter BL.((the L_meet of BL).(x,y)) = G.(UFilter BL.x,UFilter BL.y)
+      proof
+        let x,y be Element of BL;
+        thus UFilter BL.((the L_meet of BL).(x,y))
+           = UFilter BL.(x "/\" y) by LATTICES:def 2
+          .=UFilter BL.x /\ UFilter BL.y by Th23
+          .=G. [UFilter BL.x,UFilter BL.y] by A18
+          .=G.(UFilter BL.x,UFilter BL.y) by BINOP_1:def 1;
+      end;
+    reconsider DD = D as Element of Fin bool ultraset BL;
+      id BL = id the carrier of BL by GRCAT_1:def 11;
+then A23:  UFilter BL.FinMeet B
+          = UFilter BL.(FinMeet(B,id the carrier of BL)) by LATTICE4:def 13
+         .= UFilter BL.((the L_meet of BL)$$(B,id the carrier of BL))
+                 by LATTICE2:def 4
+         .= G$$(B,(UFilter BL)*(id the carrier of BL))
+                  by A17,A19,A20,A21,A22,SETWISEO:39
+         .= G$$(B,UFilter BL) by FUNCT_2:23
+         .= G$$(B,(id bool ultraset BL)*UFilter BL) by FUNCT_2:23
+         .= G$$(DD,id bool ultraset BL) by A19,A20,A21,SETWISEO:38;
+
+     defpred X[Element of Fin bool ultraset BL] means
+       for D being non empty Subset-Family of ultraset BL st
+        D = $1 holds G$$($1,id bool ultraset BL) = meet D;
+A24: X[{}.bool ultraset BL];
+
+A25: for DD being (Element of Fin bool ultraset BL),
+       b being Element of bool ultraset BL st X[DD]
+         holds X[DD \/ {b}]
+     proof
+      let DD be (Element of Fin bool ultraset BL),
+       b be Element of bool ultraset BL;
+       assume A26:for D being non empty Subset-Family of ultraset BL st D = DD
+        holds G$$(DD,id bool ultraset BL) = meet D;
+      let D be non empty Subset-Family of ultraset BL such that
+ A27:    D = DD \/ {b};
+        now per cases;
+      suppose
+ A28:     DD is empty;
+      hence G$$(DD \/ {b},id bool ultraset BL)=
+ (id bool ultraset BL).b by A19,A20,SETWISEO:26
+      .= b by FUNCT_1:35
+      .= meet D by A27,A28,SETFAM_1:11;
+      suppose
+ A29:     DD is non empty;
+          DD c= D by A27,XBOOLE_1:7;
+        then reconsider D1=DD as non empty Subset of bool ultraset BL
+         by A29,XBOOLE_1:1;
+        reconsider D1 as non empty Subset-Family of ultraset BL
+         by SETFAM_1:def 7;
+      thus G$$(DD \/ {b},id bool ultraset BL) =
+           G.(G$$(DD,id bool ultraset BL),(id bool ultraset BL).b)
+                                        by A19,A20,A21,A29,SETWISEO:29
+      .= G.(G$$(DD,id bool ultraset BL), b) by FUNCT_1:35
+      .= G. [G$$(DD,id bool ultraset BL), b] by BINOP_1:def 1
+      .= G$$(DD,id bool ultraset BL) /\ b by A18
+      .= meet D1 /\ b by A26
+      .= meet D1 /\ meet {b} by SETFAM_1:11
+      .= meet D by A27,SETFAM_1:10;
+     end;
+     hence thesis;
+   end;
+      for DD being Element of Fin bool ultraset BL holds X[DD]
+      from FinSubInd3(A24,A25);
+      then meet D = {}ultraset BL by A12,A16,A23;
+then A30:     union COMPLEMENT D = [#] ultraset BL \ {} by SETFAM_1:48
+        .= ultraset BL by SUBSET_1:def 4;
+        COMPLEMENT D is Finite_Subset of X
+      proof
+      A31: COMPLEMENT D c= X
+      proof
+      let x;
+      assume
+A32:    x in COMPLEMENT D;
+       then reconsider c = x as Subset of ultraset BL;
+         c` in D by A32,SETFAM_1:def 8;
+      then consider a being set such that
+A33:     a in dom UFilter BL & a in B & c` = UFilter BL.a by FUNCT_1:def 12;
+        B is Subset of BL by FINSUB_1:32;
+      then reconsider a as Element of BL by A33;
+         a in CY by A11,A33;
+       then a`` in CY by LATTICES:49;
+       then consider b being Element of BL such that
+A34:      b` = a`` & UFilter BL.b in X;
+          x = (UFilter BL.a)` by A33
+         .= ultraset BL \ UFilter BL.a by SUBSET_1:def 5
+         .= UFilter BL.a` by Th28
+         .= UFilter BL.b`` by A34,LATTICES:49
+         .= UFilter BL.b by LATTICES:49;
+      hence thesis by A34;
+      end;
+        COMPLEMENT D is finite
+      proof
+      A35:     D is finite;
+        deffunc U(Element of bool ultraset BL) = $1`;
+A36:     { U(w) where w is Element of bool ultraset BL : w in D } is finite
+                          from FraenkelFin(A35);
+          { w` where w is Element of bool ultraset BL: w in D }
+         = COMPLEMENT(D)
+         proof
+         hereby
+         let x;
+         assume x in { w` where w is Element of bool ultraset BL : w in D };
+           then consider w being Element of bool ultraset BL such that
+            A37:w` = x & w in D;
+             w`` in D by A37;
+          hence x in COMPLEMENT(D) by A37,SETFAM_1:def 8;
+         end;
+         let x;
+          assume A38:x in COMPLEMENT(D);
+           then reconsider x' = x as Element of bool ultraset BL;
+A39:          x'` in D by A38,SETFAM_1:def 8;
+            x'``= x';
+          hence x in { w` where w is Element of bool ultraset BL : w in D }
+ by A39;
+       end;
+       hence thesis by A36;
+      end;
+    hence thesis by A31,FINSUB_1:def 5;
+      end;
+     hence contradiction by A2,A30;
+    end;
+    then H <> the carrier of BL by Th34;
+    then consider F such that A40:H c= F & F is_ultrafilter by FILTER_0:22;
+    consider F1 such that A41: F=F1 & F1 is_ultrafilter by A40;
+A42:  CY c= H by FILTER_0:def 5;
+      not F in union X
+     proof
+      assume F in union X;
+       then consider Y being set such that
+A43:     F in Y & Y in X by TARSKI:def 4;
+         Y in StoneR BL by A1,A43;
+       then Y in rng UFilter BL by Def7;
+       then consider a being set such that
+A44:     a in dom UFilter BL & Y = UFilter BL.a by FUNCT_1:def 5;
+       reconsider a as Element of BL by A44,FUNCT_2:def 1;
+         a` in CY by A43,A44;
+       then a` in H by A42;
+       then a in F & a` in F by A40,A43,A44,Th21;
+      hence contradiction by A40,FILTER_0:59;
+     end;
+    hence contradiction by A1,A41,Th18;
+  end;
+
+Lm2: StoneR BL c= OpenClosedSet(StoneSpace BL)
+   proof
+    let x;
+    assume A1:x in StoneR BL;
+      StoneR BL = rng UFilter BL by Def7;
+    then StoneR BL c= bool ultraset BL by RELSET_1:12;
+    then x is Subset of StoneSpace BL by A1,Def8;
+    then reconsider p = x as Subset of StoneSpace BL;
+    A2:p is open by A1,Lm1;
+      p is closed
+    proof
+      set ST=StoneSpace BL;
+         [#] ST = the carrier of ST by PRE_TOPC:12;
+       then A3:[#] ST = ultraset BL by Def8;
+       consider a such that A4:UFilter BL.a=p by A1,Th26;
+          p` = ultraset BL \ UFilter BL.a by A3,A4,PRE_TOPC:17
+               .= UFilter BL.a` by Th28;
+       then consider b such that A5:b=a`& UFilter BL.b = p`;
+           p` in StoneR BL by A5,Th26;
+      then  p` is open by Lm1;
+      hence thesis by TOPS_1:29;
+    end;
+    hence thesis by A2,Th4;
+   end;
+
+canceled;
+
+theorem Th40: StoneR BL = OpenClosedSet(StoneSpace BL)
+ proof
+ A1: StoneR BL c= OpenClosedSet(StoneSpace BL) by Lm2;
+    OpenClosedSet(StoneSpace BL) c= StoneR BL
+   proof
+    let x;
+    assume A2:x in OpenClosedSet(StoneSpace BL);
+    then reconsider X=x as Subset of StoneSpace BL;
+A3:  the topology of StoneSpace BL =
+     {union A where A is Subset-Family of ultraset BL : A c= StoneR BL }
+    by Def8;
+A4: X is open closed by A2,Th2,Th3;
+then A5:  X` is open closed by TOPS_1:29,30;
+      X in the topology of StoneSpace BL by A4,PRE_TOPC:def 5;
+    then consider A1 being Subset-Family of ultraset BL such that
+A6: X = union A1 & A1 c= StoneR BL by A3;
+       X` in the topology of StoneSpace BL by A5,PRE_TOPC:def 5;
+    then consider A2 being Subset-Family of ultraset BL such that
+A7:  X` = union A2 & A2 c= StoneR BL by A3;
+  A8: X is Subset of ultraset BL by Def8;
+    set AA = A1 \/ A2;
+A9:  ultraset BL = the carrier of StoneSpace BL by Def8
+         .= [#] StoneSpace BL by PRE_TOPC:def 3
+         .= X \/  X` by PRE_TOPC:18
+         .= union AA by A6,A7,ZFMISC_1:96;
+A10: AA c= StoneR BL by A6,A7,XBOOLE_1:8;
+    then consider Y being Finite_Subset of AA such that
+A11:   ultraset BL = union Y by A9,Th38;
+A12:   Y c= AA by FINSUB_1:def 5;
+then A13:   Y c= StoneR BL by A10,XBOOLE_1:1;
+A14:   Y c= bool ultraset BL by A12,XBOOLE_1:1;
+    set D = A1 /\ Y;
+A15:   Y = AA /\ Y by A12,XBOOLE_1:28
+           .= D \/ A2 /\ Y by XBOOLE_1:23;
+       now let y be set;
+      assume y in A2 /\ Y;
+      then y in A2 & y in Y by XBOOLE_0:def 3;
+      then y c=  X` by A7,ZFMISC_1:92;
+then A16:  y /\ X c= ( X`) /\ X by XBOOLE_1:26;
+        ( X`) misses X by PRE_TOPC:26;
+      then ( X`) /\ X = {} by XBOOLE_0:def 7;
+      then y /\ X = {} by A16,XBOOLE_1:3;
+      hence y misses X by XBOOLE_0:def 7;
+     end;
+then A17:   X c= union D by A8,A11,A15,Th31;
+    per cases;
+    suppose D = {};
+then A18:     X = {} by A17,XBOOLE_1:3,ZFMISC_1:2;
+         {}=UFilter BL.Bottom BL by Th36;
+     then x in rng UFilter BL by A18,FUNCT_2:6;
+     hence x in StoneR BL by Def7;
+    suppose
+A19:   D <> {};
+A20:   D c= Y by XBOOLE_1:17;
+  then reconsider D as non empty Subset of bool ultraset BL by A14,A19,XBOOLE_1
+:1;
+  reconsider D as non empty Subset-Family of ultraset BL by SETFAM_1:def 7;
+       union D c= X
+     proof
+      A21: union D c= union A1 /\ union Y by ZFMISC_1:97;
+         union A1 /\ union Y c= union A1 by XBOOLE_1:17;
+      hence thesis by A6,A21,XBOOLE_1:1;
+     end;
+then A22:  X = union D by A17,XBOOLE_0:def 10;
+A23:  rng UFilter BL = StoneR BL by Def7;
+then A24:  D c= rng UFilter BL by A13,A20,XBOOLE_1:1;
+A25:  rng UFilter BL = dom id StoneR BL by A23,FUNCT_2:def 1;
+       dom UFilter BL = dom UFilter BL & UFilter BL is one-to-one &
+     UFilter BL = id StoneR BL*UFilter BL by A23,Th29,FUNCT_1:42;
+     then UFilter BL, id StoneR BL are_fiberwise_equipotent
+         by A25,RFINSEQ:3;
+     then Card(UFilter BL"D) = Card((id StoneR BL)"D) by RFINSEQ:4
+            .= Card D by A23,A24,BORSUK_1:4;
+     then Card(UFilter BL"D) is finite by CARD_4:1;
+   then UFilter BL"D is finite by CARD_4:1;
+     then reconsider B = UFilter BL"D as
+      Finite_Subset of the carrier of BL by FINSUB_1:def 5;
+A26: D = UFilter BL.:B by A24,FUNCT_1:147;
+     then A27:  B is non empty by RELAT_1:149;
+A28:  the L_join of BL is commutative & the L_join of BL is associative
+    & the L_join of BL is idempotent by LATTICE2:26,27,29;
+    deffunc U(Element of bool ultraset BL,Element of bool ultraset BL)
+                = $1 \/ $2;
+    consider G being BinOp of bool ultraset BL such that
+A29:  for x,y being Element of bool ultraset BL holds
+       G. [x,y]= U(x,y) from Lambda2D;
+A30:  G is commutative
+      proof
+      let x,y be Element of bool ultraset BL;
+        G. (x,y)= G. [x,y] by BINOP_1:def 1
+             .=y \/ x by A29
+             .= G. [y,x] by A29
+             .= G. (y,x) by BINOP_1:def 1;
+        hence thesis;
+      end;
+A31:  G is associative
+      proof
+    let x,y,z  be Element of bool ultraset BL;
+           G. (x,G. (y,z)) = G. (x, G. [y ,z]) by BINOP_1:def 1
+                        .= G. [x, G. [y , z]] by BINOP_1:def 1
+                        .= G. [x, y \/ z] by A29
+                        .= x \/ (y \/ z) by A29
+                        .= (x \/ y) \/ z by XBOOLE_1:4
+                        .= G. [x \/ y, z] by A29
+                        .= G. [G. [x,y],z] by A29
+                        .= G. [G.(x,y),z] by BINOP_1:def 1
+                        .= G. (G.(x,y),z) by BINOP_1:def 1;
+        hence thesis;
+      end;
+A32:  G is idempotent
+      proof
+        let x  be Element of bool ultraset BL;
+          G. (x,x) = G. [x,x] by BINOP_1:def 1
+                .= x \/ x by A29
+                .= x;
+        hence thesis;
+      end;
+A33:  for x,y being Element of BL holds
+     UFilter BL.((the L_join of BL).(x,y)) = G.(UFilter BL.x,UFilter BL.y)
+      proof
+        let x,y be Element of BL;
+        thus UFilter BL.((the L_join of BL).(x,y))
+           = UFilter BL.(x "\/" y) by LATTICES:def 1
+          .=UFilter BL.x \/ UFilter BL.y by Th24
+          .=G. [UFilter BL.x,UFilter BL.y] by A29
+          .=G.(UFilter BL.x,UFilter BL.y) by BINOP_1:def 1;
+      end;
+    reconsider DD = D as Element of Fin bool ultraset BL by FINSUB_1:def 5;
+      id BL = id the carrier of BL by GRCAT_1:def 11;
+    then A34:  UFilter BL.FinJoin B
+          = UFilter BL.(FinJoin(B,id the carrier of BL)) by LATTICE4:def 12
+         .= UFilter BL.((the L_join of BL)$$(B,id the carrier of BL))
+                 by LATTICE2:def 3
+         .= G$$(B,(UFilter BL)*(id the carrier of BL))
+                  by A27,A28,A30,A31,A32,A33,SETWISEO:39
+         .= G$$(B,UFilter BL) by FUNCT_2:23
+         .= G$$(B,(id bool ultraset BL)*UFilter BL) by FUNCT_2:23
+         .= G$$(DD,id bool ultraset BL) by A26,A27,A30,A31,A32,SETWISEO:38;
+     defpred X[Element of Fin bool ultraset BL] means
+       for D being non empty Subset-Family of ultraset BL st
+        D = $1 holds G$$($1,id bool ultraset BL) = union D;
+A35: X[{}.bool ultraset BL];
+A36: for DD being (Element of Fin bool ultraset BL),
+       b being Element of bool ultraset BL st X[DD]
+       holds X[DD \/ {b}]
+     proof
+      let DD be (Element of Fin bool ultraset BL),
+       b be Element of bool ultraset BL;
+       assume A37:for D being non empty Subset-Family of ultraset BL st D = DD
+        holds G$$(DD,id bool ultraset BL) = union D;
+      let D be non empty Subset-Family of ultraset BL such that
+ A38:    D = DD \/ {b};
+        now per cases;
+      suppose
+ A39:     DD is empty;
+      hence G$$(DD \/ {b},id bool ultraset BL)=
+ (id bool ultraset BL).b by A30,A31,SETWISEO:26
+      .= b by FUNCT_1:35
+      .= union D by A38,A39,ZFMISC_1:31;
+      suppose
+ A40:     DD is non empty;
+          DD c= D by A38,XBOOLE_1:7;
+        then reconsider D1=DD as non empty Subset of bool ultraset BL
+         by A40,XBOOLE_1:1;
+        reconsider D1 as non empty Subset-Family of ultraset BL
+         by SETFAM_1:def 7;
+      thus G$$(DD \/ {b},id bool ultraset BL) =
+           G.(G$$(DD,id bool ultraset BL),(id bool ultraset BL).b)
+                                        by A30,A31,A32,A40,SETWISEO:29
+      .= G.(G$$(DD,id bool ultraset BL), b) by FUNCT_1:35
+      .= G. [G$$(DD,id bool ultraset BL), b] by BINOP_1:def 1
+      .= G$$(DD,id bool ultraset BL) \/ b by A29
+      .= union D1 \/ b by A37
+      .= union D1 \/ union {b} by ZFMISC_1:31
+      .= union D by A38,ZFMISC_1:96;
+     end;
+     hence thesis;
+   end;
+      for DD being Element of Fin bool ultraset BL holds X[DD]
+      from FinSubInd3(A35,A36);
+     then UFilter BL.FinJoin B = x by A22,A34;
+     then x in rng UFilter BL by FUNCT_2:6;
+    hence x in StoneR BL by Def7;
+   end;
+   hence thesis by A1,XBOOLE_0:def 10;
+ end;
+
+definition let BL;
+redefine func UFilter BL -> Homomorphism of BL,StoneBLattice BL;
+coherence
+  proof
+  reconsider g=UFilter BL as Function of the carrier of BL,
+    bool ultraset BL;
+    set SL=StoneBLattice BL;
+     rng g = StoneR BL by Def7;
+then A1: rng g c= OpenClosedSet(StoneSpace BL) by Lm2;
+      the carrier of SL = the carrier of OpenClosedSetLatt(StoneSpace BL)
+                              by Def9
+                      .= OpenClosedSet(StoneSpace BL) by Th13;
+    then reconsider f=UFilter BL as Function of the carrier of BL,
+            the carrier of SL by A1,FUNCT_2:8;
+A2: f.a "/\" f.b = f.a /\ f.b
+     proof
+     reconsider fa=f.a,fb=f.b as
+         Element of OpenClosedSetLatt(StoneSpace BL) by Def9;
+      thus f.a "/\" f.b = fa "/\" fb by Def9
+                     .= f.a /\ f.b by Th12;
+     end;
+A3: f.a "\/" f.b = f.a \/ f.b
+     proof
+     reconsider fa=f.a,fb=f.b as
+         Element of OpenClosedSetLatt(StoneSpace BL) by Def9;
+      thus f.a "\/" f.b = fa "\/" fb by Def9
+                     .= f.a \/ f.b by Th11;
+     end;
+      now let p,q;
+       thus f.(p "\/" q) = f.p \/ f.q by Th24
+                       .= f.p "\/" f.q by A3;
+       thus f.(p "/\" q) = f.p /\ f.q by Th23
+                       .= f.p "/\" f.q by A2;
+    end;
+    hence thesis by LATTICE4:def 1;
+  end;
+end;
+
+theorem Th41:rng UFilter BL = the carrier of StoneBLattice BL
+ proof
+    thus rng UFilter BL= StoneR BL by Def7
+                      .= OpenClosedSet(StoneSpace BL) by Th40
+                      .= the carrier of OpenClosedSetLatt(StoneSpace BL)
+                              by Th13
+                      .= the carrier of StoneBLattice BL by Def9;
+ end;
+
+theorem Th42:UFilter BL is isomorphism
+proof
+    UFilter BL is one-to-one by Th29;
+then A1: UFilter BL is monomorphism by LATTICE4:def 2;
+    rng UFilter BL = the carrier of StoneBLattice BL by Th41;
+  then UFilter BL is epimorphism by LATTICE4:def 3;
+  hence thesis by A1,LATTICE4:def 4;
+end;
+
+theorem Th43:
+ BL,StoneBLattice BL are_isomorphic
+  proof
+    UFilter BL is isomorphism by Th42;
+  then consider f being Homomorphism of BL,StoneBLattice BL such that
+A1: f= UFilter BL & f is isomorphism;
+  thus thesis by A1,LATTICE4:def 5;
+  end;
+
+theorem
+  for BL being non trivial B_Lattice ex T being non empty TopSpace st
+  BL, OpenClosedSetLatt(T) are_isomorphic
+  proof
+    let BL be non trivial B_Lattice;
+    reconsider T = StoneSpace BL as non empty TopSpace;
+    take T;
+       OpenClosedSetLatt(T) = StoneBLattice BL by Def9;
+    hence thesis by Th43;
+  end;

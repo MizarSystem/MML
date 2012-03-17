@@ -1,0 +1,446 @@
+:: Coherent Space
+::  by Jaros{\l}aw Kotowicz and Konrad Raczkowski
+::
+:: Received December 29, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, TARSKI, CLASSES1, TOLER_1, FUNCT_2, FRAENKEL, FUNCT_1,
+      MCART_1, RELAT_1, CAT_1, ENS_1, PARTFUN1, COH_SP;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELSET_1, MCART_1,
+      FUNCT_1, PARTFUN1, CLASSES1, FUNCT_2, FRAENKEL, EQREL_1, TOLER_1, CAT_1;
+ constructors EQREL_1, MCART_1, CLASSES1, TOLER_1, FRAENKEL, CAT_1, PARTFUN1,
+      MEMBERED, FUNCT_2, XBOOLE_0, RELSET_1;
+ clusters FUNCT_1, RELSET_1, SUBSET_1, FRAENKEL, MEMBERED, ZFMISC_1, PARTFUN1,
+      FUNCT_2, XBOOLE_0, EQREL_1, TOLER_1;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+ reserve x,y,z,a,b,c,X,A for set;
+
+:: Coherent Space and Web of Coherent Space
+
+definition let IT be set;
+ canceled;
+
+  attr IT is binary_complete means
+:: COH_SP:def 2
+   for A st A c= IT & (for a,b st a in A & b in A holds a \/ b in IT) holds
+    union A in IT;
+end;
+
+definition
+  cluster subset-closed binary_complete non empty set;
+end;
+
+definition
+  mode Coherence_Space is subset-closed binary_complete non empty set;
+end;
+
+ reserve C,D for Coherence_Space;
+
+theorem :: COH_SP:1
+    {} in C;
+
+theorem :: COH_SP:2
+  bool X is Coherence_Space;
+
+theorem :: COH_SP:3
+    {{}} is Coherence_Space;
+
+theorem :: COH_SP:4
+  x in union C implies {x} in C;
+
+definition let C be Coherence_Space;
+  func Web(C) -> Tolerance of union C means
+:: COH_SP:def 3
+   for x,y holds [x,y] in it iff ex X st X in C & x in X & y in X;
+end;
+
+ reserve T for Tolerance of union C;
+
+theorem :: COH_SP:5
+  T = Web(C) iff for x,y holds [x,y] in T iff {x,y} in C;
+
+theorem :: COH_SP:6
+  a in C iff for x,y st x in a & y in a holds {x,y} in C;
+
+theorem :: COH_SP:7
+  a in C iff for x,y st x in a & y in a holds [x,y] in Web(C);
+
+theorem :: COH_SP:8
+    (for x,y st x in a & y in a holds {x,y} in C) implies a c= union C;
+
+theorem :: COH_SP:9
+    Web(C) = Web(D) implies C = D;
+
+theorem :: COH_SP:10
+    union C in C implies C = bool union C;
+
+theorem :: COH_SP:11
+    C = bool union C implies Web(C) = Total union C;
+
+definition let X be set; let E be Tolerance of X;
+  func CohSp(E) -> Coherence_Space means
+:: COH_SP:def 4
+   for a holds a in it iff for x,y st x in a & y in a holds [x,y] in E;
+end;
+
+ reserve E for Tolerance of X;
+
+theorem :: COH_SP:12
+    Web(CohSp(E)) = E;
+
+theorem :: COH_SP:13
+    CohSp(Web(C)) = C;
+
+theorem :: COH_SP:14
+  a in CohSp(E) iff a is TolSet of E;
+
+theorem :: COH_SP:15
+    CohSp(E) = TolSets E;
+
+begin :: Category of Coherence Spaces
+
+definition let X;
+  func CSp(X) -> set equals
+:: COH_SP:def 5
+    { x where x is Subset of bool X : x is Coherence_Space };
+end;
+
+definition let X;
+  cluster CSp(X) -> non empty;
+end;
+
+definition let X be set;
+  cluster -> subset-closed binary_complete non empty Element of CSp(X);
+end;
+
+ reserve C,C1,C2 for Element of CSp(X);
+
+theorem :: COH_SP:16
+  {x,y} in C implies x in union C & y in union C;
+
+definition let X;
+ canceled;
+
+  func FuncsC(X) -> set equals
+:: COH_SP:def 7
+    union { Funcs(union x,union y) where x is Element of CSp(X),
+              y is Element of CSp(X): not contradiction };
+end;
+
+definition let X;
+  cluster FuncsC(X) -> non empty functional;
+end;
+
+ reserve g for Element of FuncsC(X);
+
+theorem :: COH_SP:17
+  x in FuncsC(X) iff
+   ex C1,C2 st (union C2 = {} implies union C1 = {}) &
+             x is Function of union C1,union C2;
+
+definition let X;
+  func MapsC(X) -> set equals
+:: COH_SP:def 8
+    { [[C,CC],f] where C is Element of CSp(X), CC is Element of CSp(X),
+                         f is Element of FuncsC(X) :
+       (union CC = {} implies union C = {}
+) & f is Function of union C,union CC &
+        for x,y st {x,y} in C holds {f.x,f.y} in CC};
+end;
+
+definition let X;
+  cluster MapsC(X) -> non empty;
+end;
+
+ reserve l,l1,l2,l3 for Element of MapsC(X);
+
+theorem :: COH_SP:18
+  ex g,C1,C2 st l = [[C1,C2],g] & (union C2 = {} implies union C1 = {}) &
+   g is Function of union C1,union C2 &
+    for x,y st {x,y} in C1 holds {g.x,g.y} in C2;
+
+theorem :: COH_SP:19
+for f being Function of union C1,union C2 st (union C2={} implies union C1={}
+) &
+   (for x,y st {x,y} in C1 holds {f.x,f.y} in C2) holds [[C1,C2],f] in MapsC(X)
+;
+
+definition let X be set, l be Element of MapsC(X);
+  cluster l`2 -> Function-like Relation-like;
+end;
+
+definition let X,l;
+ canceled;
+
+  func dom l -> Element of CSp(X) equals
+:: COH_SP:def 10
+    l`1`1;
+
+  func cod l -> Element of CSp(X) equals
+:: COH_SP:def 11
+    l`1`2;
+end;
+
+theorem :: COH_SP:20
+  l = [[dom l,cod l],l`2];
+
+definition let X,C;
+  func id$ C -> Element of MapsC(X) equals
+:: COH_SP:def 12
+    [[C,C],id union C];
+end;
+
+theorem :: COH_SP:21
+  (union cod l <> {} or union dom l = {}) &
+   l`2 is Function of union dom l,union cod l &
+    for x,y st {x,y} in dom l holds {l`2.x,l`2.y} in cod l;
+
+definition let X,l1,l2;
+  assume  cod l1 = dom l2;
+  func l2*l1 -> Element of MapsC(X) equals
+:: COH_SP:def 13
+    [[dom l1,cod l2],l2`2*l1`2];
+end;
+
+theorem :: COH_SP:22
+  dom l2 = cod l1 implies
+   (l2*l1)`2 = l2`2*l1`2 & dom(l2*l1) = dom l1 & cod(l2*l1) = cod l2;
+
+theorem :: COH_SP:23
+  dom l2 = cod l1 & dom l3 = cod l2 implies l3*(l2*l1) = (l3*l2)*l1;
+
+theorem :: COH_SP:24
+  (id$ C)`2 = id union C & dom id$ C = C & cod id$ C = C;
+
+theorem :: COH_SP:25
+  l*(id$ dom l) = l & (id$ cod l)*l = l;
+
+definition let X;
+  func CDom X -> Function of MapsC(X),CSp(X) means
+:: COH_SP:def 14
+   for l holds it.l = dom l;
+
+  func CCod X -> Function of MapsC(X),CSp(X) means
+:: COH_SP:def 15
+   for l holds it.l = cod l;
+ func CComp X -> PartFunc of [:MapsC(X),MapsC(X):],MapsC(X) means
+:: COH_SP:def 16
+ (for l2,l1 holds [l2,l1] in dom it iff dom l2 = cod l1) &
+ (for l2,l1 st dom l2 = cod l1 holds it.[l2,l1] = l2*l1);
+func CId X -> Function of CSp(X),MapsC(X) means
+:: COH_SP:def 17
+for C holds it.C = id$ C;
+end;
+
+theorem :: COH_SP:26
+CatStr(# CSp(X),MapsC(X),CDom X,CCod X,CComp X,CId X #) is Category;
+
+definition let X;
+func CohCat(X) -> Category equals
+:: COH_SP:def 18
+   CatStr(# CSp(X),MapsC(X),CDom X,CCod X,CComp X,CId X #);
+end;
+
+begin
+::
+:: Category of Tolerances
+::
+
+definition let X be set;
+func Toler(X) -> set means
+:: COH_SP:def 19
+x in it iff x is Tolerance of X;
+end;
+
+definition let X be set;
+cluster Toler(X) -> non empty;
+end;
+
+definition let X be set;
+func Toler_on_subsets(X) -> set equals
+:: COH_SP:def 20
+ union {Toler(Y) where Y is Subset of X : not contradiction};
+end;
+
+definition let X be set;
+cluster Toler_on_subsets(X) -> non empty;
+end;
+
+
+
+theorem :: COH_SP:27
+  x in Toler_on_subsets(X) iff ex A st A c= X & x is Tolerance of A;
+
+theorem :: COH_SP:28
+  Total a in Toler(a);
+
+canceled;
+
+theorem :: COH_SP:30
+{} in Toler_on_subsets(X);
+
+theorem :: COH_SP:31
+a c= X implies Total a in Toler_on_subsets(X);
+
+theorem :: COH_SP:32
+a c= X implies id a in Toler_on_subsets(X);
+
+theorem :: COH_SP:33
+  Total X in Toler_on_subsets(X);
+
+theorem :: COH_SP:34
+  id X in Toler_on_subsets(X);
+
+definition let X;
+func TOL(X) -> set equals
+:: COH_SP:def 21
+ { [t,Y] where t is Element of Toler_on_subsets(X),
+                   Y is Element of bool X : t is Tolerance of Y};
+end;
+
+definition let X;
+cluster TOL(X) -> non empty;
+end;
+
+reserve T,T1,T2 for Element of TOL(X);
+
+theorem :: COH_SP:35
+  [{},{}] in TOL(X);
+
+theorem :: COH_SP:36
+a c= X implies [id a,a] in TOL(X);
+
+theorem :: COH_SP:37
+a c= X implies [Total a,a] in TOL(X);
+
+theorem :: COH_SP:38
+  [id X,X] in TOL(X);
+
+theorem :: COH_SP:39
+  [Total X,X] in TOL(X);
+
+definition let X,T;
+redefine func T`2 -> Element of bool X;
+func T`1 -> Tolerance of T`2;
+end;
+
+definition let X;
+func FuncsT(X) -> set equals
+:: COH_SP:def 22
+ union { Funcs(T`2,TT`2) where T is Element of TOL(X),
+              TT is Element of TOL(X): not contradiction };
+end;
+
+definition let X;
+cluster FuncsT(X) -> non empty functional;
+end;
+
+reserve f for Element of FuncsT(X);
+
+theorem :: COH_SP:40
+x in FuncsT(X) iff
+ex T1,T2 st (T2`2 = {} implies T1`2 = {}) & x is Function of T1`2,T2`2;
+
+definition let X;
+func MapsT(X) -> set equals
+:: COH_SP:def 23
+ { [[T,TT],f] where T is Element of TOL(X), TT is Element of TOL(X),
+                        f is Element of FuncsT(X) :
+        (TT`2 = {} implies T`2 = {}) & f is Function of T`2,TT`2 &
+        for x,y st [x,y] in T`1 holds [f.x,f.y] in TT`1};
+end;
+
+definition let X;
+cluster MapsT(X) -> non empty;
+end;
+
+reserve m,m1,m2,m3 for Element of MapsT(X);
+
+theorem :: COH_SP:41
+ex f,T1,T2 st m = [[T1,T2],f] & (T2`2 = {} implies T1`2 = {}) &
+  f is Function of T1`2,T2`2 & for x,y st [x,y] in T1`1 holds [f.x,f.y] in T2`1
+;
+
+theorem :: COH_SP:42
+for f being Function of T1`2,T2`2 st (T2`2={} implies T1`2={}) &
+ (for x,y st [x,y] in T1`1 holds [f.x,f.y] in T2`1) holds [[T1,T2],f] in
+ MapsT(X);
+
+definition let X be set,m be Element of MapsT(X);
+  cluster m`2 -> Function-like Relation-like;
+end;
+
+definition let X,m;
+ canceled;
+
+func dom m -> Element of TOL(X) equals
+:: COH_SP:def 25
+ m`1`1;
+func cod m -> Element of TOL(X) equals
+:: COH_SP:def 26
+ m`1`2;
+end;
+
+theorem :: COH_SP:43
+m = [[dom m,cod m],m`2];
+
+definition let X,T;
+func id$ T -> Element of MapsT(X) equals
+:: COH_SP:def 27
+ [[T,T],id T`2];
+end;
+
+theorem :: COH_SP:44
+((cod m)`2 <> {} or (dom m)`2 = {}) & m`2 is Function of (dom m)`2,(cod m)`2 &
+for x,y st [x,y] in (dom m)`1 holds [m`2.x,m`2.y] in (cod m)`1;
+
+definition let X,m1,m2;
+ assume  cod m1 = dom m2;
+func m2*m1 -> Element of MapsT(X) equals
+:: COH_SP:def 28
+ [[dom m1,cod m2],m2`2*m1`2];
+end;
+
+theorem :: COH_SP:45
+dom m2 = cod m1 implies
+(m2*m1)`2 = m2`2*m1`2 & dom(m2*m1) = dom m1 & cod(m2*m1) = cod m2;
+
+theorem :: COH_SP:46
+dom m2 = cod m1 & dom m3 = cod m2 implies m3*(m2*m1) = (m3*m2)*m1;
+
+theorem :: COH_SP:47
+(id$ T)`2 = id T`2 & dom id$ T = T & cod id$ T = T;
+
+theorem :: COH_SP:48
+m*(id$ dom m) = m & (id$ cod m)*m = m;
+
+definition let X;
+func fDom X -> Function of MapsT(X),TOL(X) means
+:: COH_SP:def 29
+for m holds it.m = dom m;
+func fCod X -> Function of MapsT(X),TOL(X) means
+:: COH_SP:def 30
+for m holds it.m = cod m;
+func fComp X -> PartFunc of [:MapsT(X),MapsT(X):],MapsT(X) means
+:: COH_SP:def 31
+(for m2,m1 holds [m2,m1] in dom it iff dom m2 = cod m1) &
+(for m2,m1 st dom m2 = cod m1 holds it.[m2,m1] = m2*m1);
+func fId X -> Function of TOL(X),MapsT(X) means
+:: COH_SP:def 32
+for T holds it.T = id$ T;
+end;
+
+theorem :: COH_SP:49
+CatStr(# TOL(X),MapsT(X),fDom X,fCod X,fComp X,fId X #) is Category;
+
+definition let X;
+func TolCat(X) -> Category equals
+:: COH_SP:def 33
+   CatStr(# TOL(X),MapsT(X),fDom X,fCod X,fComp X,fId X #);
+end;

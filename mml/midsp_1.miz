@@ -1,0 +1,1018 @@
+:: Midpoint algebras
+::  by Micha{\l} Muzalewski
+::
+:: Received November 26, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary BINOP_1, QC_LANG1, FUNCT_1, BOOLE, MCART_1, RELAT_1, VECTSP_1,
+      ARYTM_1, RLVECT_1, MIDSP_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, BINOP_1, STRUCT_0, RLVECT_1,
+      MCART_1, FUNCT_1, FUNCT_2;
+ constructors BINOP_1, VECTSP_1, MCART_1, MEMBERED, XBOOLE_0;
+ clusters STRUCT_0, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions STRUCT_0, RLVECT_1;
+ theorems ZFMISC_1, FUNCT_2, TARSKI, MCART_1, BINOP_1, RLVECT_1;
+ schemes FUNCT_2, BINOP_1;
+
+begin :: PRELIMINARY
+
+definition
+  struct(1-sorted) MidStr (# carrier -> set,
+                          MIDPOINT -> BinOp of the carrier #);
+end;
+
+definition
+ cluster non empty MidStr;
+ existence
+  proof consider A being non empty set, m being BinOp of A;
+   take MidStr(#A,m#);
+   thus the carrier of MidStr(#A,m#) is non empty;
+  end;
+end;
+
+reserve MS for non empty MidStr;
+reserve a, b for Element of MS;
+
+definition let MS,a,b;
+  func a@b -> Element of MS equals
+  :Def1:  (the MIDPOINT of MS).(a,b);
+  coherence;
+end;
+
+definition
+  func op2 -> BinOp of {{}} means not contradiction;
+  existence;
+  uniqueness by FUNCT_2:66;
+end;
+
+definition
+func Example -> MidStr equals
+:Def3:  MidStr (# {{}}, op2 #);
+correctness;
+end;
+
+definition
+ cluster Example -> strict non empty;
+ coherence
+  proof
+    thus Example is strict & the carrier of Example is non empty by Def3;
+  end;
+end;
+
+canceled 4;
+
+theorem
+  the carrier of Example = {{}} by Def3;
+
+theorem
+  the MIDPOINT of Example = op2 by Def3;
+
+theorem
+    for a being Element of Example holds a = {} by Def3,TARSKI:
+def 1;
+
+theorem
+   for a,b being Element of Example holds a@b = op2.(a,b) by
+Def1,Def3;
+
+canceled;
+
+theorem
+Th10: for a,b,c,d being Element of Example holds
+         a@a = a & a@b = b@a & (a@b)@(c@d) = (a@c)@(b@d) &
+         ex x being Element of Example st x@a = b
+proof
+ let a,b,c,d be Element of Example;
+ thus a@a = {} by Def3,TARSKI:def 1 .= a by Def3,TARSKI:def 1;
+ thus a@b = {} by Def3,TARSKI:def 1 .= b@a by Def3,TARSKI:def 1;
+ thus (a@b)@(c@d) = {} by Def3,TARSKI:def 1 .= (a@c)@(b@d) by Def3,TARSKI:def 1
+;
+ take x = a;
+ thus x@a = {} by Def3,TARSKI:def 1 .= b by Def3,TARSKI:def 1;
+end;
+
+:: A. MIDPOINT ALGEBRAS
+
+definition let IT be non empty MidStr;
+ attr IT is MidSp-like means
+ :Def4: for a,b,c,d being Element of IT holds
+         a@a = a & a@b = b@a & (a@b)@(c@d) = (a@c)@(b@d) &
+         ex x being Element of IT st x@a = b;
+end;
+
+definition
+ cluster strict MidSp-like (non empty MidStr);
+  existence
+   proof
+       Example is MidSp-like by Def4,Th10;
+    hence thesis;
+   end;
+end;
+
+definition
+ mode MidSp is MidSp-like (non empty MidStr);
+end;
+
+definition let M be MidSp, a, b be Element of M;
+ redefine func a@b;
+ commutativity by Def4;
+end;
+
+reserve M for MidSp;
+reserve a,b,c,d,a',b',c',d',x,y,x' for Element of M;
+
+canceled 4;
+
+theorem
+Th15: (a@b)@c = (a@c)@(b@c) :: right-self-distributivity
+  proof
+      (a@b)@c = (a@b)@(c@c) by Def4
+           .= (a@c)@(b@c) by Def4;
+    hence thesis;
+  end;
+
+theorem
+Th16: a@(b@c) = (a@b)@(a@c) :: left-self-distributivity
+  proof
+      a@(b@c) = (a@a)@(b@c) by Def4
+           .= (a@b)@(a@c) by Def4;
+    hence thesis;
+  end;
+
+theorem
+Th17: a@b = a implies a = b
+  proof
+    assume A1: a@b = a;
+    consider x such that A2: x@a = b by Def4;
+      b = (x@a)@b by A2,Def4
+     .= (x@b)@a by A1,Th15
+     .= a by A1,A2,Th15;
+    hence thesis;
+  end;
+
+theorem
+Th18: x@a = x'@a implies x = x' :: right-cancellation-law
+  proof
+    assume A1: x@a = x'@a;
+    consider y such that A2: y@a = x by Def4;
+      x = x@(y@a) by A2,Def4
+     .= (x@y)@(x'@a) by A1,Th16
+     .= x@(x@x') by A2,Def4;
+    then x = x@x' by Th17;
+    hence thesis by Th17;
+  end;
+
+theorem
+  a@x = a@x' implies x = x' by Th18;
+:: left-cancellation-law
+
+:: B. CONGRUENCE RELATION
+
+definition
+  let M,a,b,c,d;
+  pred a,b @@ c,d :: bound-vectors ab, cd are equivallent
+  means
+:Def5: a@d = b@c;
+end;
+
+canceled;
+
+theorem
+Th21: a,a @@ b,b
+  proof
+    thus a@b = a@b;
+  end;
+
+theorem
+Th22: a,b @@ c,d implies c,d @@ a,b
+  proof
+    assume a@d = b@c;
+    hence c@b = d@a;
+  end;
+
+theorem
+Th23: a,a @@ b,c implies b = c
+  proof
+    assume a,a @@ b,c;
+    then a@c = a@b by Def5;
+    hence thesis by Th18;
+  end;
+
+theorem
+Th24: a,b @@ c,c implies a = b
+  proof
+    assume a,b @@ c,c;
+    then c,c @@ a,b by Th22;
+    hence thesis by Th23;
+  end;
+
+theorem
+ Th25: a,b @@ a,b
+  proof
+    thus a@b = b@a;
+  end;
+
+theorem
+Th26: ex d st a,b @@ c,d
+  proof
+    consider d such that A1: d@a =b@c by Def4;
+      a,b @@ c,d by A1,Def5;
+    hence thesis;
+  end;
+
+theorem
+Th27: a,b @@ c,d & a,b @@ c,d' implies d = d'
+  proof
+    assume A1: a,b @@ c,d;
+    assume A2: a,b @@ c,d';
+      a@d = b@c by A1,Def5
+             .= a@d' by A2,Def5;
+    hence thesis by Th18;
+  end;
+
+theorem
+Th28: x,y @@ a,b & x,y @@ c,d implies a,b @@ c,d
+  proof
+    assume A1: x,y @@ a,b;
+
+    assume A2: x,y @@ c,d;
+
+      (y@x)@(a@d) = (y@a)@(x@d) by Def4
+               .= (x@b)@(x@d) by A1,Def5
+               .= (x@b)@(y@c) by A2,Def5
+               .= (y@x)@(b@c) by Def4;
+    hence a@d = b@c by Th18;
+  end;
+
+theorem
+Th29: a,b @@ a',b' & b,c @@ b',c' implies a,c @@ a',c'
+  proof
+    assume A1: a,b @@ a',b';
+
+    assume A2: b,c @@ b',c';
+
+      (b'@b)@(a@c') = (a@b')@(b@c') by Def4
+                 .= (b@a')@(b@c') by A1,Def5
+                 .= (c@b')@(b@a') by A2,Def5
+                 .= (b'@b)@(c@a') by Def4;
+   hence a@c' = c@a' by Th18;
+  end;
+
+:: C. BOUND-VECTORS
+
+reserve p,q,r,p',q' for Element of [:the carrier of M,the carrier of M:];
+
+definition
+ let M,p;
+ redefine func p`1 -> Element of M;
+ coherence by MCART_1:10;
+end;
+
+definition
+ let M,p;
+ redefine func p`2 -> Element of M;
+ coherence by MCART_1:10;
+end;
+
+definition let M,p,q;
+  pred p ## q means :Def6: p`1,p`2 @@ q`1,q`2;
+  reflexivity by Th25;
+  symmetry by Th22;
+end;
+
+definition let M,a,b;
+ redefine func [a,b] -> Element of [:the carrier of M,the carrier of M:];
+ coherence by ZFMISC_1:def 2;
+end;
+
+canceled;
+
+theorem
+Th31: a,b @@ c,d implies [a,b] ## [c,d]
+  proof
+    assume A1: a,b @@ c,d;
+    set p = [a,b], q = [c,d];
+      p`1 = a & p`2 = b & q`1 = c & q`2 = d by MCART_1:7;
+    hence thesis by A1,Def6;
+  end;
+
+theorem
+Th32: [a,b] ## [c,d] implies a,b @@ c,d
+  proof
+    assume A1: [a,b] ## [c,d];
+    set p = [a,b], q = [c,d];
+      p`1 = a & p`2 = b & q`1 = c & q`2 = d by MCART_1:7;
+    hence thesis by A1,Def6;
+  end;
+
+canceled 2;
+
+theorem
+Th35: p ## q & p ## r implies q ## r
+  proof
+    assume p ## q & p ## r;
+    then p`1,p`2 @@ q`1,q`2 & p`1,p`2 @@ r`1,r`2 by Def6;
+    hence q`1,q`2 @@ r`1,r`2 by Th28;
+  end;
+
+theorem
+   p ## r & q ## r implies p ## q by Th35;
+
+theorem
+  p ## q & q ## r implies p ## r by Th35;
+
+theorem
+  p ## q implies (r ## p iff r ## q) by Th35;
+
+theorem Th39:
+ for p holds
+ { q : q ## p } is non empty Subset of [:the carrier of M,the carrier of M:]
+   proof
+    let p;
+    set pp = { q : q ## p };
+    A1: p in pp;
+      for x be set holds
+        x in pp implies x in [:the carrier of M,the carrier of M:]
+     proof
+      let x be set;
+      assume x in pp;
+      then ex q st (x = q & q ## p);
+      hence thesis;
+     end;
+    hence thesis by A1,TARSKI:def 3;
+   end;
+
+:: D.  ( FREE ) VECTORS
+
+definition let M,p;
+  func p~ -> Subset of [:the carrier of M,the carrier of M:] equals
+   :Def7:  { q : q ## p};
+   coherence by Th39;
+end;
+
+definition let M,p;
+  cluster p~ -> non empty;
+   coherence
+    proof
+       p~ = { q : q ## p} by Def7;
+     hence thesis by Th39;
+    end;
+end;
+
+canceled;
+
+theorem
+Th41: for p holds r in p~ iff r ## p
+ proof
+  let p;
+  thus r in p~ implies r ## p
+   proof
+    assume r in p~;
+    then r in { q : q ## p} by Def7;
+    then ex q st r = q & q ## p;
+    hence thesis;
+   end;
+  thus r ## p implies r in p~
+   proof
+    assume r ## p;
+    then r in { q : q ## p};
+    hence thesis by Def7;
+   end;
+ end;
+
+theorem
+Th42: p ## q implies p~ = q~
+  proof
+    assume A1: p ## q;
+      for x being set holds x in p~ iff x in q~
+      proof
+        let x be set;
+        thus x in p~ implies x in q~
+         proof
+          assume A2: x in p~;
+          then reconsider r = x as
+               Element of [:the carrier of M,the carrier of M:];
+            r ## p by A2,Th41;
+          then r ## q by A1,Th35;
+          hence thesis by Th41;
+         end;
+         thus x in q~ implies x in p~
+          proof
+           assume A3: x in q~;
+           then reconsider r = x as
+                Element of [:the carrier of M,the carrier of M:];
+             r ## q by A3,Th41;
+           then r ## p by A1,Th35;
+           hence thesis by Th41;
+          end;
+        thus thesis;
+      end;
+    hence thesis by TARSKI:2;
+  end;
+
+theorem
+Th43: p~ = q~ implies p ## q
+  proof
+      p in p~ by Th41;
+    hence thesis by Th41;
+  end;
+
+theorem
+Th44: [a,b]~ = [c,d]~ implies a@d = b@c
+  proof
+    assume [a,b]~ = [c,d]~;
+    then [a,b] ## [c,d] by Th43;
+    then a,b @@ c,d by Th32;
+    hence thesis by Def5;
+  end;
+
+theorem
+   p in p~ by Th41;
+
+definition let M;
+  mode Vector of M -> non empty Subset of [:the carrier of M,the carrier of M:]
+  means :Def8: ex p st it = p~;
+  existence
+   proof
+    consider p;
+    take p~;
+    thus thesis;
+   end;
+end;
+
+reserve u,v,w,u',w' for Vector of M;
+
+definition
+  let M,p;
+  redefine func p~ -> Vector of M;
+  coherence by Def8;
+end;
+
+canceled 2;
+
+theorem
+Th48: ex u st for p holds p in u iff p`1 = p`2
+  proof
+    consider a;
+    take [a,a]~;
+    let p;
+       [a,a]`1 = a & [a,a]`2 = a by MCART_1:7;
+    then p`1,p`2 @@ a,a iff p ## [a,a] by Def6;
+    hence thesis by Th21,Th24,Th41;
+  end;
+
+definition let M;
+  func ID(M) -> Vector of M :: zero vector
+  equals :Def9:  { p : p`1 = p`2 };
+  coherence
+   proof
+    consider u such that A1: for p holds p in u iff p`1 = p`2 by Th48;
+      u = { p : p`1 = p`2 }
+     proof
+        for x being set holds x in u iff x in { p : p`1 = p`2 }
+       proof
+        let x be set;
+        thus x in u implies x in { p : p`1 = p`2 }
+         proof
+          assume A2: x in u;
+          then reconsider r = x
+            as Element of [:the carrier of M,the carrier of M:];
+            r`1 = r`2 by A1,A2;
+          hence thesis;
+         end;
+        thus x in { p : p`1 = p`2 } implies x in u
+         proof
+          assume x in { p : p`1 = p`2 };
+          then ex p st x = p & p`1 = p`2;
+          hence thesis by A1;
+         end;
+       end;
+      hence thesis by TARSKI:2;
+     end;
+    hence thesis;
+   end;
+  end;
+
+canceled;
+
+theorem
+Th50: ID(M) = [b,b]~
+  proof
+     p in ID(M) iff p in [b,b]~
+      proof
+        thus p in ID(M) implies p in [b,b]~
+          proof
+            assume p in ID(M);
+            then p in { q : q`1 = q`2 } by Def9;
+            then ex q st p = q & q`1 = q`2;
+            then A1: p`1,p`2 @@ b,b by Th21;
+              [b,b]`1=b & [b,b]`2=b by MCART_1:7;
+            then p ## [b,b] by A1,Def6;
+            hence thesis by Th41;
+          end;
+        thus p in [b,b]~ implies p in ID(M)
+          proof
+            assume p in [b,b]~;
+            then A2: p ## [b,b] by Th41;
+              [b,b]`1=b & [b,b]`2=b by MCART_1:7;
+            then p`1,p`2 @@ b,b by A2,Def6;
+            then p`1 = p`2 by Th24;
+            then p in { q : q`1 = q`2 };
+            hence thesis by Def9;
+          end;
+        thus thesis;
+      end;
+    then for p being set holds p in ID(M) iff p in [b,b]~;
+   hence thesis by TARSKI:2;
+  end;
+
+theorem
+Th51:  ex w,p,q st u = p~ & v = q~ & p`2 = q`1 & w = [p`1,q`2]~
+  proof
+    consider p such that A1: u = p~ by Def8;
+    consider q such that A2: v = q~ by Def8;
+    consider d such that A3: q`1,q`2 @@ p`2,d by Th26;
+    take [p`1,d]~, p' = p, q'= [p`2,d];
+    thus u = p'~ by A1;
+      q'`1 = p`2 & q'`2 = d by MCART_1:7;
+    then q ## q' by A3,Def6;
+    hence v = q'~ by A2,Th42;
+    thus p'`2 = q'`1 by MCART_1:7;
+    thus thesis by MCART_1:7;
+  end;
+
+theorem
+Th52: (ex p,q st u = p~ & v = q~ & p`2 = q`1 & w = [p`1,q`2]~)&
+      (ex p,q st u = p~ & v = q~ & p`2 = q`1 & w' = [p`1,q`2]~)
+      implies w = w'
+  proof
+    given p,q such that A1: u = p~ and A2: v = q~ and A3: p`2 = q`1
+                    and A4: w = [p`1,q`2]~;
+    given p',q' such that A5: u = p'~ and A6: v = q'~ and A7:p'`2 = q'`1
+                    and A8: w' = [p'`1,q'`2]~;
+      p ## p' by A1,A5,Th43;
+    then A9: p`1,p`2 @@ p'`1,p'`2 by Def6;
+      q ## q' by A2,A6,Th43;
+    then q`1,q`2 @@ q'`1,q'`2 by Def6;
+    then p`1,q`2 @@ p'`1,q'`2 by A3,A7,A9,Th29;
+    then [p`1,q`2] ## [p'`1,q'`2] by Th31;
+    hence thesis by A4,A8,Th42;
+  end;
+
+definition
+  let M,u,v;
+  func u + v -> Vector of M means
+ :Def10: ex p,q st (u = p~ & v = q~ & p`2 = q`1 & it = [p`1,q`2]~);
+  existence by Th51;
+  uniqueness by Th52;
+end;
+
+:: E. ATLAS
+
+theorem
+Th53: ex b st u = [a,b]~
+  proof
+    consider p such that A1: u = p~ by Def8;
+    consider b such that A2: p`1,p`2 @@ a,b by Th26;
+      [p`1,p`2] ## [a,b] by A2,Th31;
+    then p ## [a,b] by MCART_1:23;
+    then p~ = [a,b]~ by Th42;
+    hence thesis by A1;
+  end;
+
+definition
+ let M,a,b;
+ func vect(a,b) -> Vector of M equals
+ :Def11:  [a,b]~;
+ coherence;
+end;
+
+canceled;
+
+theorem
+Th55: ex b st u = vect(a,b)
+ proof
+  consider b such that A1: u = [a,b]~ by Th53;
+    u = vect(a,b) by A1,Def11;
+  hence thesis;
+ end;
+
+theorem
+Th56: [a,b] ## [c,d] implies vect(a,b) = vect(c,d)
+ proof
+  assume [a,b] ## [c,d];
+  then A1: [a,b]~ = [c,d]~ by Th42;
+    vect(a,b) = [a,b]~ by Def11;
+  hence thesis by A1,Def11;
+ end;
+
+theorem
+Th57: vect(a,b) = vect(c,d) implies a@d = b@c
+ proof
+  assume A1: vect(a,b) = vect(c,d);
+    vect(a,b) = [a,b]~ by Def11;
+  then [a,b]~ = [c,d]~ by A1,Def11;
+  hence thesis by Th44;
+ end;
+
+theorem
+Th58: ID(M) = vect(b,b)
+ proof
+    ID(M) = [b,b]~ by Th50
+      .= vect(b,b) by Def11;
+  hence thesis;
+ end;
+
+theorem
+   vect(a,b) = vect(a,c) implies b = c
+  proof
+    assume vect(a,b) = vect(a,c);
+    then [a,b]~ = vect(a,c) by Def11
+               .= [a,c]~ by Def11;
+    then [a,b] ## [a,c] by Th43;
+    then a,b @@ a,b & a,b @@ a,c by Th32;
+    hence thesis by Th27;
+  end;
+
+theorem
+Th60: vect(a,b) + vect(b,c) = vect(a,c)
+  proof
+    set p = [a,b], q = [b,c];
+    A1: p`1 = a by MCART_1:7; A2: q`2 = c by MCART_1:7;
+    set u = p~, v = q~;
+      p`2 = b by MCART_1:7
+        .= q`1 by MCART_1:7;
+    then A3: u + v = [p`1,q`2]~ by Def10;
+    A4: u = vect(a,b) by Def11;
+       v = vect(b,c) by Def11;
+    hence thesis by A1,A2,A3,A4,Def11;
+  end;
+
+:: F. VECTOR GROUPS
+
+theorem
+Th61: [a,a@b] ## [a@b,b]
+  proof
+      a@b = (a@b)@(a@b) by Def4;
+    then a,a@b @@ a@b,b by Def5;
+    hence thesis by Th31;
+  end;
+
+theorem
+   vect(a,a@b) + vect(a,a@b) = vect(a,b)
+  proof
+      [a,a@b] ## [a@b,b] by Th61;
+    then vect(a,a@b) + vect(a,a@b) = vect(a,a@b) + vect(a@b,b) by Th56
+                       .= vect(a,b) by Th60;
+    hence thesis;
+  end;
+
+theorem
+Th63: (u+v)+w = u+(v+w)
+  proof
+    consider a;
+    consider b such that A1: u = vect(a,b) by Th55;
+    consider c such that A2: v = vect(b,c) by Th55;
+    consider d such that A3: w = vect(c,d) by Th55;
+      (u+v)+w = vect(a,c)+w by A1,A2,Th60
+           .= vect(a,d) by A3,Th60
+           .= vect(a,b)+vect(b,d) by Th60
+           .= u+(v+w) by A1,A2,A3,Th60;
+    hence thesis;
+  end;
+
+theorem
+Th64: u+ID(M) = u
+  proof
+    consider a;
+    consider b such that A1: u = vect(a,b) by Th55;
+      u+ID(M) = vect(a,b)+vect(b,b) by A1,Th58
+       .= u by A1,Th60;
+    hence thesis;
+  end;
+
+theorem
+Th65: ex v st u+v = ID(M)
+  proof
+    consider a;
+    consider b such that A1: u = vect(a,b) by Th55;
+      u + vect(b,a) = vect(a,a) by A1,Th60
+              .= ID(M) by Th58;
+    hence thesis;
+  end;
+
+theorem
+Th66: u+v = v+u
+  proof
+    consider a;
+    consider b such that A1: u = vect(a,b) by Th55;
+    consider c such that A2: v = vect(b,c) by Th55;
+    consider d such that A3: v = vect(a,d) by Th55;
+    consider c' such that A4: u = vect(d,c') by Th55;
+A5:    a@c' = b@d by A1,A4,Th57
+        .= a@c by A2,A3,Th57;
+      u + v = vect(a,c) by A1,A2,Th60
+              .= vect(a,c') by A5,Th18
+              .= v + u by A3,A4,Th60;
+    hence thesis;
+  end;
+
+theorem Th67:
+ u + v = u + w implies v = w
+ proof
+    assume A1: u + v = u + w;
+    consider u' such that A2: u + u' = ID(M) by Th65;
+      v = v + ID(M) by Th64 .= (u + u') + v by A2,Th66
+    .= (u' + u) + v by Th66 .= u' + (u + w) by A1,Th63
+    .= (u' + u) + w by Th63 .= ID(M) + w by A2,Th66
+    .= w + ID(M) by Th66;
+    hence thesis by Th64;
+ end;
+
+definition let M,u;
+ func -u -> Vector of M means
+    u + it = ID(M);
+ existence by Th65;
+ uniqueness by Th67;
+end;
+
+reserve X for Element of bool [:the carrier of M,the carrier of M:];
+
+definition let M;
+ func setvect(M) -> set equals :Def13:  { X : X is Vector of M};
+ coherence;
+end;
+
+reserve x for set;
+
+Lm1: x in setvect(M) iff ex X st x = X & X is Vector of M
+ proof
+    x in { X : X is Vector of M } iff ex X st x = X & X is Vector of M;
+  hence thesis by Def13;
+ end;
+
+canceled 3;
+
+theorem Th71:
+        x is Vector of M iff x in setvect(M)
+ proof
+  thus x is Vector of M implies x in setvect(M) by Lm1;
+  thus x in setvect(M) implies x is Vector of M
+   proof
+    assume x in setvect(M);
+    then ex X st x = X & X is Vector of M by Lm1;
+    hence thesis;
+   end;
+ end;
+
+definition let M;
+ cluster setvect(M) -> non empty;
+  coherence
+   proof
+      ID(M) in setvect(M) by Th71;
+    hence thesis;
+   end;
+ end;
+
+reserve u1,v1,w1,W,W1,W2,T for Element of setvect(M);
+
+definition let M,u1,v1;
+ func u1 + v1 -> Element of setvect(M) means
+ :Def14: for u,v holds u1 = u & v1 = v implies it = u + v;
+ existence
+  proof
+    reconsider u2 = u1, v2 = v1 as Vector of M by Th71;
+    reconsider suma = u2 + v2 as Element of setvect(M) by Th71;
+    take suma;
+    thus thesis;
+  end;
+ uniqueness
+  proof
+   let W1,W2 such that
+   A1: for u,v holds u1 = u & v1 = v implies W1 = u + v and
+   A2: for u,v holds u1 = u & v1 = v implies W2 = u + v;
+   reconsider u = u1, v = v1 as Vector of M by Th71;
+     W1 = u + v & W2 = u + v by A1,A2;
+   hence thesis;
+  end;
+end;
+
+canceled 2;
+
+theorem Th74:
+u1 + v1 = v1 + u1
+ proof
+   reconsider u = u1, v = v1 as Vector of M by Th71;
+   thus u1 + v1 = u + v by Def14 .= v + u by Th66 .= v1 + u1 by Def14;
+ end;
+
+theorem Th75:
+(u1 + v1) + w1 = u1 + (v1 + w1)
+ proof
+  reconsider u = u1, v = v1, w = w1 as Vector of M by Th71;
+  A1: u1 + v1 = u + v by Def14;
+  A2: v1 + w1 = v + w by Def14;
+  thus (u1 + v1) + w1 = (u + v) + w by A1,Def14
+                     .= u + (v + w) by Th63
+                     .= u1 + (v1 + w1) by A2,Def14;
+ end;
+
+definition let M;
+ func addvect(M) -> BinOp of setvect(M) means
+ :Def15: for u1,v1 holds it.(u1,v1) = u1 + v1;
+ existence
+  proof
+   defpred P[Element of setvect(M),Element of setvect(M),
+   Element of setvect(M)] means $3 = $1 + $2;
+   A1: for u1,v1 ex W st P[u1,v1,W];
+   consider o being BinOp of setvect(M) such that
+   A2: for u1,v1 holds P[u1,v1,o.(u1,v1)] from BinOpEx (A1);
+   take o;
+   thus thesis by A2;
+  end;
+ uniqueness
+  proof
+   let f,g be BinOp of setvect(M) such that
+   A3: for u1,v1 holds f.(u1,v1) = u1 + v1 and
+   A4: for u1,v1 holds g.(u1,v1) = u1 + v1;
+     for u1,v1 holds f.[u1,v1] = g.[u1,v1]
+    proof
+     let u1,v1;
+A5:      f.(u1,v1) = u1 + v1 by A3;
+       f.[u1,v1] = f.(u1,v1) by BINOP_1:def 1 .= g.(u1,v1) by A4,A5;
+     hence thesis by BINOP_1:def 1;
+    end;
+   hence thesis by FUNCT_2:120;
+  end;
+end;
+
+canceled;
+
+theorem Th77:
+ for W ex T st W + T = ID(M)
+    proof
+     let W;
+     reconsider x = W as Vector of M by Th71;
+     consider y being Vector of M such that A1: x + y = ID(M) by Th65;
+     reconsider T = y as Element of setvect(M) by Th71;
+       x + y = W + T by Def14;
+     hence thesis by A1;
+    end;
+
+theorem Th78:
+ for W,W1,W2 st W + W1 = ID(M) & W + W2 = ID(M) holds W1 = W2
+    proof
+     let W,W1,W2 such that A1: W + W1 = ID(M) and A2: W + W2 = ID(M);
+     reconsider x = W,y1 = W1,y2 = W2 as Vector of M by Th71;
+       x + y1 = W + W2 by A1,A2,Def14
+     .= x + y2 by Def14;
+     hence thesis by Th67;
+    end;
+
+definition let M;
+ func complvect(M) -> UnOp of setvect(M) means
+ :Def16: for W holds W + it.W = ID(M);
+ existence
+  proof
+   defpred Z[Element of setvect(M),Element of setvect(M)] means
+             $1 + $2 = ID(M);
+   A1: for W ex T st Z[W,T] by Th77;
+   consider o being UnOp of setvect(M) such that
+   A2: for W holds Z[W,o.W] from FuncExD(A1);
+   take o;
+   thus thesis by A2;
+  end;
+ uniqueness
+  proof
+   let f,g be UnOp of setvect(M) such that
+   A3: for W holds W + f.W = ID(M) and A4: for W holds W + g.W = ID(M);
+     for W holds f.W = g.W
+    proof
+     let W;
+     A5: W + f.W = ID(M) by A3;
+       W + g.W = ID(M) by A4;
+     hence thesis by A5,Th78;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+end;
+
+definition let M;
+ func zerovect(M) -> Element of setvect(M) equals
+ :Def17: ID(M);
+ coherence by Th71;
+end;
+
+definition let M;
+ func vectgroup(M) -> LoopStr equals
+ :Def18:  LoopStr (# setvect(M), addvect(M), zerovect(M) #);
+ coherence;
+end;
+
+definition let M;
+ cluster vectgroup M -> strict non empty;
+ coherence
+  proof
+      vectgroup M = LoopStr (# setvect(M),addvect(M), zerovect(M) #) by Def18;
+   hence vectgroup M is strict & the carrier of vectgroup M is non empty;
+  end;
+end;
+
+canceled 3;
+
+theorem Th82:
+the carrier of vectgroup(M) = setvect(M)
+ proof
+     the carrier of LoopStr(#setvect(M), addvect(M), zerovect(M)#)
+     = setvect(M);
+  hence thesis by Def18;
+ end;
+
+theorem Th83:
+the add of vectgroup(M) = addvect(M)
+ proof
+    the add of LoopStr(#setvect(M), addvect(M), zerovect(M)#)
+     = addvect(M);
+  hence thesis by Def18;
+ end;
+
+canceled;
+
+theorem Th85:
+the Zero of vectgroup(M) = zerovect(M)
+ proof
+    the Zero of LoopStr(#setvect(M), addvect(M), zerovect(M)#)
+     = zerovect(M);
+  hence thesis by Def18;
+ end;
+
+theorem
+   vectgroup(M) is add-associative right_zeroed right_complementable Abelian
+ proof
+  set GS = vectgroup(M);
+  thus GS is add-associative
+  proof
+    let x,y,z be Element of GS;
+    reconsider xx = x, yy = y, zz = z as Element of setvect(M) by Th82;
+    thus (x+y)+z = (the add of GS).(x+y,z) by RLVECT_1:5
+          .= (the add of GS).((the add of GS).(x,y),z) by RLVECT_1:5
+          .= (the add of GS).((addvect(M)).(xx,yy),z) by Th83
+          .= (addvect(M)).((addvect(M)).(xx,yy),zz) by Th83
+          .= (addvect(M)).(xx+yy,zz) by Def15
+          .= (xx+yy)+zz by Def15
+          .= xx+(yy+zz) by Th75
+          .= (addvect(M)).(xx,yy+zz) by Def15
+          .= (addvect(M)).(xx,(addvect(M)).(yy,zz)) by Def15
+          .= (addvect(M)).(xx,(the add of GS).(yy,zz)) by Th83
+          .= (the add of GS).(xx,(the add of GS).(yy,zz)) by Th83
+          .= (the add of GS).(xx,y+z) by RLVECT_1:5
+          .= x+(y+z) by RLVECT_1:5;
+  end;
+  thus GS is right_zeroed
+  proof
+    let x be Element of GS;
+    reconsider xx = x as Element of setvect(M) by Th82;
+    thus x+0.GS = x
+     proof
+      A1: 0.GS = the Zero of GS by RLVECT_1:def 2
+              .= zerovect(M) by Th85;
+      reconsider xxx = xx as Vector of M by Th71;
+      A2: x+(0.GS) = (the add of GS).(xx,(zerovect(M))) by A1,RLVECT_1:5
+              .= (addvect(M)).(xx,(zerovect(M))) by Th83
+              .= xx+(zerovect(M)) by Def15;
+        xx = xxx & zerovect(M) = ID(M) by Def17;
+      then xx+(zerovect(M)) = xxx+ID(M) by Def14
+              .= x by Th64;
+      hence thesis by A2;
+     end;
+  end;
+  thus GS is right_complementable
+  proof
+    let x be Element of GS;
+    reconsider xx = x as Element of setvect(M) by Th82;
+    reconsider w = (complvect(M)).xx as Element of GS by Th82;
+    take w;
+    thus x + w = (the add of GS).(x,w) by RLVECT_1:5
+       .= (addvect(M)).(xx,(complvect(M)).xx) by Th83
+       .= xx + (complvect(M)).xx by Def15
+       .= ID(M) by Def16
+       .= zerovect(M) by Def17
+       .= the Zero of GS by Th85
+       .= 0.GS by RLVECT_1:def 2;
+  end;
+  thus GS is Abelian
+  proof
+    let x,y be Element of GS;
+    reconsider xx = x, yy = y as Element of setvect(M) by Th82;
+    thus x+y = (the add of GS).(x,y) by RLVECT_1:5
+          .= (addvect(M)).(xx,yy) by Th83
+          .= xx + yy by Def15
+          .= yy + xx by Th74
+          .= (addvect(M)).(yy,xx) by Def15
+          .= (the add of GS).(y,x) by Th83
+          .= y+x by RLVECT_1:5;
+  end;
+ end;

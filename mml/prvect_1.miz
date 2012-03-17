@@ -1,0 +1,1558 @@
+:: Product of Families of Groups and Vector Spaces
+::  by Anna Lango and Grzegorz Bancerek
+::
+:: Received December 29, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, VECTSP_1, BINOP_1, FUNCT_1, FINSEQOP, ARYTM_1, FINSEQ_2,
+      RELAT_1, CARD_3, CAT_1, SETWISEO, FUNCOP_1, PARTFUN1, FINSEQ_1, BOOLE,
+      ZF_REFLE, FRAENKEL, FUNCT_3, FUNCT_6, GROUP_2, PRVECT_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, CARD_3, RELAT_1,
+      FUNCT_1, STRUCT_0, PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1, FUNCOP_1,
+      RLVECT_1, VECTSP_1, FINSEQOP, FINSEQ_1, FRAENKEL, FUNCT_6, SETWISEO,
+      FINSEQ_2;
+ constructors FUNCT_5, CARD_3, FUNCT_3, BINOP_1, VECTSP_1, FINSEQOP, FRAENKEL,
+      FUNCT_6, SETWISEO, MEMBERED, PARTFUN1, XBOOLE_0;
+ clusters FUNCT_1, VECTSP_1, FRAENKEL, STRUCT_0, FINSEQ_2, GROUP_1, RELSET_1,
+      AMI_1, FUNCOP_1, FINSEQ_1, ARYTM_3, MEMBERED, ZFMISC_1, FUNCT_2,
+      PARTFUN1, XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET;
+ definitions TARSKI, BINOP_1, FINSEQOP, VECTSP_1, STRUCT_0, RELAT_1, RLVECT_1;
+ theorems BINOP_1, FUNCT_1, FUNCT_2, FUNCT_3, FINSEQ_1, FINSEQ_2, FINSEQ_3,
+      FINSEQOP, FUNCOP_1, VECTSP_1, ZFMISC_1, SETWISEO, TARSKI, CARD_3,
+      FUNCT_6, RLVECT_1, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, FVSUM_1;
+ schemes FUNCT_1, BINOP_1, FUNCT_2, FINSEQ_1;
+
+begin :: Abelian Groups and Fields
+
+reserve G for Abelian add-associative right_complementable right_zeroed
+    (non empty LoopStr);
+
+ deffunc car(1-sorted) = the carrier of $1;
+ deffunc ad(LoopStr) = the add of $1;
+ deffunc cc(non empty LoopStr) = comp $1;
+ deffunc zr(LoopStr) = the Zero of $1;
+
+canceled 2;
+
+theorem Th3:
+ the Zero of G is_a_unity_wrt the add of G
+  proof
+       now let x be Element of G;
+      thus (the add of G).(the Zero of G,x)=(the Zero of G) + x
+                                        by RLVECT_1:5
+                    .=0.G + x by RLVECT_1:def 2
+                    .= x by RLVECT_1:10;
+      thus (the add of G).(x,the Zero of G)=x + (the Zero of G)
+                                       by RLVECT_1:5
+                    .= x + 0.G by RLVECT_1:def 2
+                    .= x by RLVECT_1:10;
+     end;
+    hence thesis by BINOP_1:11;
+  end;
+
+theorem Th4:
+ for G being AbGroup holds comp G is_an_inverseOp_wrt the add of G
+  proof
+  let G be AbGroup;
+A1:    the Zero of G is_a_unity_wrt the add of G by Th3;
+     now let x be Element of G;
+   thus (the add of G).(x,(comp G).x)=x + ((comp G).x) by RLVECT_1:5
+                 .= x+(-x) by VECTSP_1:def 25
+                 .= 0.G by RLVECT_1:16
+                 .= the Zero of G by RLVECT_1:def 2
+                 .= the_unity_wrt the add of G by A1,BINOP_1:def 8;
+   thus (the add of G).((comp G).x,x)=((comp G).x)+x
+                                          by RLVECT_1:5
+                         .= x+(-x) by VECTSP_1:def 25
+                         .= 0.G by RLVECT_1:16
+                         .= the Zero of G by RLVECT_1:def 2
+                         .= the_unity_wrt the add of G by A1,BINOP_1:def 8;
+   end;
+   hence thesis by FINSEQOP:def 1;
+  end;
+
+Lm1:
+ comp G is_an_inverseOp_wrt the add of G
+  proof
+A1:    the Zero of G is_a_unity_wrt the add of G by Th3;
+     now let x be Element of G;
+   thus (the add of G).(x,(comp G).x)=x + ((comp G).x)
+                                         by RLVECT_1:5
+                 .= x+(-x) by VECTSP_1:def 25
+                 .= 0.G by RLVECT_1:16
+                 .= the Zero of G by RLVECT_1:def 2
+                 .= the_unity_wrt the add of G by A1,BINOP_1:def 8;
+   thus (the add of G).((comp G).x,x)=((comp G).x)+x
+                                          by RLVECT_1:5
+                         .= x+(-x) by VECTSP_1:def 25
+                         .= 0.G by RLVECT_1:16
+                         .= the Zero of G by RLVECT_1:def 2
+                         .= the_unity_wrt the add of G by A1,BINOP_1:def 8;
+   end;
+   hence thesis by FINSEQOP:def 1;
+  end;
+
+reserve GS for non empty LoopStr;
+
+theorem
+    the add of GS is commutative associative &
+  the Zero of GS is_a_unity_wrt the add of GS &
+  comp GS is_an_inverseOp_wrt the add of GS implies
+   GS is AbGroup
+  proof assume that
+A1:  the add of GS is commutative and
+A2:  the add of GS is associative and
+A3:  the Zero of GS is_a_unity_wrt the add of GS and
+A4:  comp GS is_an_inverseOp_wrt the add of GS;
+     now
+   let x,y,z be Element of GS;
+   thus x+y = (the add of GS).(x,y) by RLVECT_1:5
+              .= (the add of GS).(y,x) by A1,BINOP_1:def 2
+              .= y+x by RLVECT_1:5;
+   thus (x+y)+z = (the add of GS).(x+y,z) by RLVECT_1:5
+           .= (the add of GS).((the add of GS).(x,y),z) by RLVECT_1:5
+           .= (the add of GS).(x,(the add of GS).(y,z)) by A2,BINOP_1:def 3
+           .= (the add of GS).(x,y+z) by RLVECT_1:5
+           .= x+(y+z) by RLVECT_1:5;
+   thus x+(0.GS) = (the add of GS).(x,0.GS) by RLVECT_1:5
+           .= (the add of GS).(x,the Zero of GS) by RLVECT_1:def 2
+           .= x by A3,BINOP_1:11;
+   reconsider b = (comp GS).x as Element of GS;
+   take b;
+   thus x+b = (the add of GS).(x,(comp GS).x) by RLVECT_1:5
+           .= the_unity_wrt the add of GS by A4,FINSEQOP:def 1
+           .= the Zero of GS by A3,BINOP_1:def 8
+           .= (0.GS) by RLVECT_1:def 2;
+   end;
+   hence thesis by VECTSP_1:7;
+  end;
+
+Lm2:
+  the add of GS is commutative associative implies
+    GS is Abelian add-associative
+  proof assume that
+A1:  the add of GS is commutative and
+A2:  the add of GS is associative;
+   thus GS is Abelian
+   proof
+     let x,y be Element of GS;
+     thus x+y = (the add of GS).(x,y) by RLVECT_1:5
+              .= (the add of GS).(y,x) by A1,BINOP_1:def 2
+              .= y+x by RLVECT_1:5;
+   end;
+   let x,y,z be Element of GS;
+     thus (x+y)+z = (the add of GS).(x+y,z) by RLVECT_1:5
+           .= (the add of GS).((the add of GS).(x,y),z) by RLVECT_1:5
+           .= (the add of GS).(x,(the add of GS).(y,z)) by A2,BINOP_1:def 3
+           .= (the add of GS).(x,y+z) by RLVECT_1:5
+           .= x+(y+z) by RLVECT_1:5;
+  end;
+
+Lm3:
+  the Zero of GS is_a_unity_wrt the add of GS implies
+    GS is right_zeroed
+  proof assume that
+A1:  the Zero of GS is_a_unity_wrt the add of GS;
+   let x be Element of GS;
+   thus x+(0.GS) = (the add of GS).(x,0.GS) by RLVECT_1:5
+           .= (the add of GS).(x,the Zero of GS) by RLVECT_1:def 2
+           .= x by A1,BINOP_1:11;
+  end;
+
+reserve F for Field;
+
+ Lm4:
+  the mult of F is associative
+  proof
+  let x,y,z be Element of F;
+  thus (the mult of F).(x,(the mult of F).(y,z)) = (the mult of F).(x,y*z)
+                                 by VECTSP_1:def 10
+              .= x*(y*z) by VECTSP_1:def 10
+              .= (x*y)*z by VECTSP_1:def 16
+              .= (the mult of F).(x*y,z) by VECTSP_1:def 10
+              .= (the mult of F).((the mult of F).(x,y),z) by VECTSP_1:def 10;
+  end;
+
+canceled 4;
+
+theorem
+    the Zero of F is_a_unity_wrt the add of F
+  proof
+     now let x be Element of F;
+   thus (the add of F).(the Zero of F,x) = (the Zero of F)+x
+                                        by RLVECT_1:5
+                    .= x+(0.F) by RLVECT_1:def 2
+                    .= x by RLVECT_1:10;
+   thus (the add of F).(x,the Zero of F) = x+(the Zero of F)
+                                       by RLVECT_1:5
+                    .= x+(0.F) by RLVECT_1:def 2
+                    .= x by RLVECT_1:10;
+   end;
+   hence thesis by BINOP_1:11;
+  end;
+
+theorem Th11:
+ the unity of F is_a_unity_wrt the mult of F
+ proof
+    now let x be Element of F;
+  thus (the mult of F).(the unity of F,x) = (the unity of F)*x
+                                         by VECTSP_1:def 10
+                    .= x*(1_ F) by VECTSP_1:def 9
+                    .= x by VECTSP_1:def 19;
+  thus (the mult of F).(x,the unity of F) = x*(the unity of F)
+                                         by VECTSP_1:def 10
+                    .= x*(1_ F) by VECTSP_1:def 9
+                    .= x by VECTSP_1:def 19;
+  end;
+  hence thesis by BINOP_1:11;
+ end;
+
+ Lm5:
+   the mult of F is_distributive_wrt the add of F
+   proof
+      now let x,y,z be Element of F;
+    thus (the mult of F).(x,(the add of F).(y,z)) =
+           x*((the add of F).(y,z)) by VECTSP_1:def 10
+           .= x*(y + z) by RLVECT_1:5
+           .= x*y + x*z by VECTSP_1:def 18
+           .= (the add of F).(x*y,x*z) by RLVECT_1:5
+           .= (the add of F).((the mult of F).(x,y),x*z)
+                                       by VECTSP_1:def 10
+           .= (the add of F).((the mult of F).(x,y),(the mult of F).(x,z))
+                                       by VECTSP_1:def 10;
+    thus (the mult of F).((the add of F).(x,y),z) =
+           ((the add of F).(x,y))*z by VECTSP_1:def 10
+           .= (x + y)*z by RLVECT_1:5
+           .= x*z + y*z by VECTSP_1:def 18
+           .= (the add of F).(x*z,y*z) by RLVECT_1:5
+           .= (the add of F).((the mult of F).(x,z),y*z)
+                                         by VECTSP_1:def 10
+           .= (the add of F).((the mult of F).(x,z),(the mult of F).(y,z))
+                                         by VECTSP_1:def 10;
+    end;
+    hence thesis by BINOP_1:23;
+   end;
+
+begin :: The $n$-Product of a Binary and Unary Operation
+
+ reserve F for Field,
+         n for Nat,
+         D for non empty set,
+         d for Element of D,
+         B for BinOp of D,
+         C for UnOp of D;
+
+definition let D,n;
+  let F be BinOp of D;
+  let x,y be Element of n-tuples_on D;
+  redefine func F.:(x,y) -> Element of n-tuples_on D;
+   coherence by FINSEQ_2:140;
+ end;
+
+definition let D be non empty set;
+           let F be BinOp of D;
+           let n be Nat;
+  func product(F,n) -> BinOp of n-tuples_on D means :Def1:
+   for x,y being Element of n-tuples_on D holds
+              it.(x,y)=F.:(x,y);
+   existence
+    proof
+        defpred P[set,set,set] means ex x',y' be Element of n-tuples_on D st
+         $1=x' & $2=y' & $3=F.:(x',y');
+A1:     for x,y being Element of (n-tuples_on D) qua non empty set
+        ex z being Element of (n-tuples_on D) qua non empty set st P[x,y,z]
+        proof
+         let x,y be Element of (n-tuples_on D) qua non empty set;
+         reconsider x'=x,y'=y as Element of n-tuples_on D;
+         reconsider z = F.:(x',y') as Element of (n-tuples_on D) qua
+non empty set;
+         take z;
+         take x',y';
+          thus x=x' & y=y' & z=F.:(x',y');
+        end;
+       consider G being BinOp of n-tuples_on D such that
+A2:      for x,y being Element of (n-tuples_on D) qua non empty set holds
+        P[x,y,G.(x,y)] from BinOpEx(A1);
+       take G;
+       let p1,p2 be Element of n-tuples_on D;
+       reconsider x=p1,y=p2 as Element of (n-tuples_on D) qua non empty set;
+         ex x',y' being Element of n-tuples_on D st
+       x=x' & y=y' & G.(x,y)=F.:(x',y') by A2;
+       hence thesis;
+    end;
+   uniqueness
+    proof
+     let G,H be BinOp of n-tuples_on D;
+     assume that A3: (for x,y being Element of n-tuples_on D holds
+     G.(x,y)=F.:(x,y)) and A4: (for x,y being Element of n-tuples_on D
+     holds H.(x,y)=F.:(x,y));
+       now let x,y be Element of n-tuples_on D;
+         G.(x,y)=F.:(x,y) by A3;
+      hence G.(x,y)=H.(x,y) by A4;
+     end;
+     hence G=H by BINOP_1:2;
+   end;
+  end;
+
+definition let D;
+           let F be UnOp of D;
+           let n;
+  func product(F,n) -> UnOp of n-tuples_on D means :Def2:
+     for x being Element of n-tuples_on D holds it.x=F*x;
+  existence
+  proof
+     defpred P[set,set] means
+      ex x' being Element of n-tuples_on D st x'=$1 & $2=F*x';
+A1:   for x being Element of (n-tuples_on D) qua non empty set
+     ex y being Element of (n-tuples_on D) qua non empty set st P[x,y]
+      proof
+       let x be Element of (n-tuples_on D) qua non empty set;
+       reconsider x'=x as Element of n-tuples_on D;
+       reconsider y=F*x' as Element of (n-tuples_on D) qua non empty set
+         by FINSEQ_2:133;
+       take y, x'; thus thesis;
+      end;
+     consider G being UnOp of n-tuples_on D such that
+A2:   for x being Element of (n-tuples_on D) qua non empty set holds P[x,G.x]
+       from FuncExD(A1);
+     take G;
+     let p1 be Element of n-tuples_on D;
+     reconsider x=p1 as Element of (n-tuples_on D) qua non empty set;
+       ex x' being Element of n-tuples_on D st
+        x'=x & G.x=F*x' by A2;
+     hence thesis;
+  end;
+  uniqueness
+   proof
+    let G,H be UnOp of n-tuples_on D;
+    assume that A3: for x being Element of n-tuples_on D holds G.x=F*x
+       and A4: for x being Element of n-tuples_on D holds H.x=F*x;
+       now let x be Element of n-tuples_on D;
+         G.x=F*x by A3;
+      hence G.x=H.x by A4;
+     end;
+    hence thesis by FUNCT_2:113;
+   end;
+ end;
+
+definition let D be non empty set;
+ let n; let x be Element of D;
+ redefine func n |-> x -> Element of n-tuples_on D;
+  correctness by FINSEQ_2:132;
+ synonym n .--> x;
+end;
+
+canceled 2;
+
+theorem Th14:
+  B is commutative implies product(B,n) is commutative
+  proof
+   assume A1: B is commutative;
+     now let x,y be Element of n-tuples_on D;
+    thus product(B,n).(x,y) = B.:(x,y) by Def1
+                           .= B.:(y,x) by A1,FINSEQOP:34
+                           .= product(B,n).(y,x) by Def1;
+   end;
+   hence thesis by BINOP_1:def 2;
+  end;
+
+theorem Th15:
+  B is associative implies product(B,n) is associative
+  proof
+   assume A1: B is associative;
+     now let x,y,z be Element of n-tuples_on D;
+    thus product(B,n).(product(B,n).(x,y),z) = product(B,n).(B.:(x,y),z)
+                                                 by Def1
+                     .= B.:(B.:(x,y),z) by Def1
+                     .= B.:(x,B.:(y,z)) by A1,FINSEQOP:29
+                     .= product(B,n).(x,B.:(y,z)) by Def1
+                     .= product(B,n).(x,product(B,n).(y,z)) by Def1;
+   end;
+   hence thesis by BINOP_1:def 3;
+  end;
+
+theorem Th16:
+  d is_a_unity_wrt B implies n .--> d is_a_unity_wrt product(B,n)
+  proof
+   assume d is_a_unity_wrt B;
+   then A1: B has_a_unity & d = the_unity_wrt B by BINOP_1:def 8,SETWISEO:def 2
+;
+     now let b be Element of (n-tuples_on D) qua non empty set;
+    reconsider b' = b as Element of n-tuples_on D;
+    thus product(B,n).(n .--> d,b) = B.:(n .--> d,b') by Def1
+                     .= b by A1,FINSEQOP:57;
+    thus product(B,n).(b,n .--> d) = B.:(b',n .--> d) by Def1
+                     .= b by A1,FINSEQOP:57;
+   end;
+   hence thesis by BINOP_1:11;
+  end;
+
+theorem Th17:
+  B has_a_unity & B is associative & C is_an_inverseOp_wrt B implies
+   product(C,n) is_an_inverseOp_wrt product(B,n)
+   proof assume
+   A1: B has_a_unity & B is associative & C is_an_inverseOp_wrt B;
+   then A2: B has_an_inverseOp by FINSEQOP:def 2;
+   then A3: C = the_inverseOp_wrt B by A1,FINSEQOP:def 3;
+       ex d st d is_a_unity_wrt B by A1,SETWISEO:def 2;
+     then the_unity_wrt B is_a_unity_wrt B by BINOP_1:def 8;
+     then n .-->the_unity_wrt B is_a_unity_wrt product(B,n) by Th16;
+   then A4: n |->the_unity_wrt B = the_unity_wrt product(B,n) by BINOP_1:def 8;
+      now let f be Element of (n-tuples_on D) qua non empty set;
+    reconsider f' = f as Element of n-tuples_on D;
+    reconsider cf = C*f' as Element of n-tuples_on D by FINSEQ_2:133;
+    thus product(B,n).(f,product(C,n).f) = product(B,n).(f',C*f') by Def2
+         .= B.:(f',cf) by Def1
+         .= n |->the_unity_wrt B by A1,A2,A3,FINSEQOP:77;
+    thus product(B,n).(product(C,n).f,f) = product(B,n).(C*f',f') by Def2
+         .= B.:(cf,f') by Def1
+         .= n |->the_unity_wrt B by A1,A2,A3,FINSEQOP:77;
+    end;
+    hence thesis by A4,FINSEQOP:def 1;
+   end;
+
+begin :: The $n$-Power of a Group and of a Field
+
+definition let F be non empty LoopStr, n;
+  assume A1:F is Abelian add-associative right_zeroed right_complementable;
+  func n -Group_over F -> strict AbGroup equals :Def3:
+     LoopStr(# n-tuples_on the carrier of F,
+        product(the add of F,n),
+        (n .--> the Zero of F) qua Element of n-tuples_on the carrier of F#);
+  coherence
+   proof
+     set G = LoopStr(# n-tuples_on the carrier of F,product(the add of F,n),
+       (n .--> the Zero of F) qua Element of n-tuples_on the carrier of F#);
+     reconsider G as non empty LoopStr;
+       the add of F is commutative associative by A1,FVSUM_1:2,3;
+     then A2: product(the add of F,n) is commutative associative by Th14,Th15;
+A3:   the Zero of F is_a_unity_wrt the add of F by A1,Th3;
+     then A4: (n .--> the Zero of F) qua Element of n-tuples_on the carrier of
+F
+       is_a_unity_wrt product(the add of F,n) by Th16;
+       G is right_complementable
+     proof
+       let x be Element of G;
+       set C = comp F; set B = the add of F;
+A5:    B is associative & C is_an_inverseOp_wrt B by A1,Lm1,FVSUM_1:3;
+         B has_a_unity by A3,SETWISEO:def 2;
+then A6:    product(C,n) is_an_inverseOp_wrt product(B,n) by A5,Th17;
+       reconsider y = (product (comp F,n)).x as Element of G by
+FUNCT_2:7;
+         the Zero of F is_a_unity_wrt the add of F by A1,Th3;
+then A7:    the Zero of G is_a_unity_wrt the add of G by Th16;
+         product(B,n).(x,product(C,n).x) = the_unity_wrt product(B,n)
+         by A6,FINSEQOP:def 1;
+       then x + y = the_unity_wrt product(B,n) by RLVECT_1:5;
+       then x + y = the Zero of G by A7,BINOP_1:def 8;
+       then x + y = 0.G by RLVECT_1:def 2;
+       hence thesis;
+     end;
+     hence thesis by A2,A4,Lm2,Lm3;
+  end;
+end;
+
+definition let F be AbGroup, n;
+ cluster n-Group_over F -> non empty;
+ coherence;
+end;
+
+reserve x,y for set;
+
+definition let F,n;
+  func n -Mult_over F -> Function of
+    [:the carrier of F,n-tuples_on the carrier of F:],
+    n-tuples_on the carrier of F means :Def4:
+   for x being Element of F,
+       v being Element of n-tuples_on the carrier of F holds
+    it.(x,v) = (the mult of F)[;](x,v);
+  existence
+  proof
+     defpred P[set,set] means (ex x1 being Element of F,
+      v being Element of n-tuples_on the carrier of F st $1=[x1,v] &
+       $2=(the mult of F)[;](x1,v));
+A1:  for x st x in [:the carrier of F,n-tuples_on the carrier of F:]
+      ex y st y in n-tuples_on the carrier of F & P[x,y]
+     proof
+     let x;
+     assume x in [:the carrier of F,n-tuples_on the carrier of F:];
+     then consider x1,v being set such that
+A2:      x1 in the carrier of F &
+     v in n-tuples_on the carrier of F & [x1,v] = x by ZFMISC_1:103;
+     reconsider x1 as Element of F by A2;
+     reconsider v as Element of n-tuples_on the carrier of F by A2;
+     take y = (the mult of F)[;](x1,v);
+       y is Element of n-tuples_on the carrier of F by FINSEQ_2:141;
+     hence y in n-tuples_on the carrier of F;
+     take x1,v; thus thesis by A2;
+     end;
+   consider f be Function of [:the carrier of F,n-tuples_on the carrier of F:],
+   n-tuples_on the carrier of F such that
+A3: for x st x in [:the carrier of F,n-tuples_on the carrier of F:] holds
+     P[x,f.x] from FuncEx1(A1);
+     take f;let x be Element of F,
+       v be Element of n-tuples_on the carrier of F;
+        [x,v] in [:the carrier of F,n-tuples_on the carrier of F:]
+          by ZFMISC_1:106;
+     then consider x1 being Element of F ,
+     v1 being Element of n-tuples_on the carrier of F such that
+A4:      [x,v]=[x1,v1] & f.[x,v]=(the mult of F)[;](x1,v1) by A3;
+        x1 = x & v1 = v by A4,ZFMISC_1:33;
+   hence f.(x,v) = (the mult of F)[;](x,v) by A4,BINOP_1:def 1;
+  end;
+  uniqueness
+  proof
+   let f,g be Function of [:the carrier of F,n-tuples_on the carrier of F:],
+                          n-tuples_on the carrier of F;
+   assume that
+A5:   for x being Element of F,v being Element of n-tuples_on
+   the carrier of F holds f.(x,v) = (the mult of F)[;](x,v) and
+A6:   for x being Element of F,v being Element of n-tuples_on
+   the carrier of F holds g.(x,v) = (the mult of F)[;](x,v);
+     now let x be Element of F,
+           v be Element of n-tuples_on the carrier of F;
+       f.(x,v) = (the mult of F)[;](x,v) by A5;
+    hence f.(x,v)=g.(x,v) by A6;
+   end;
+   hence thesis by BINOP_1:2;
+  end;
+ end;
+
+definition let F,n;
+  func n -VectSp_over F -> strict VectSpStr over F means :Def5:
+   the LoopStr of it = n -Group_over F &
+   the lmult of it = n -Mult_over F;
+  existence
+   proof
+      the carrier of n-Group_over F = n-tuples_on the carrier of F
+       proof
+           n-Group_over F = LoopStr(# n-tuples_on the carrier of F,
+          product(the add of F,n),
+          (n .--> the Zero of F) qua Element of n-tuples_on the carrier of F#)
+          by Def3;
+        hence thesis;
+       end;
+    then reconsider d = n-Mult_over F as Function of
+     [:the carrier of F, the carrier of n-Group_over F:],
+      the carrier of n-Group_over F;
+    set G = n-Group_over F;
+    take VectSpStr(#car(G), ad(G), zr(G), d#); thus thesis;
+   end;
+  uniqueness;
+ end;
+
+definition let F,n;
+ cluster n -VectSp_over F -> non empty;
+ coherence
+  proof
+A1:  the carrier of n -Group_over F is non empty;
+      the LoopStr of n -VectSp_over F = n -Group_over F by Def5;
+   hence the carrier of n -VectSp_over F is non empty by A1;
+  end;
+end;
+
+ reserve D for non empty set,
+         H,G for BinOp of D,
+         d for Element of D,
+         t1,t2 for Element of n-tuples_on D;
+
+theorem Th18:
+  H is_distributive_wrt G implies H[;](d,G.:(t1,t2)) = G.:
+(H[;](d,t1),H[;](d,t2))
+  proof
+  assume A1: H is_distributive_wrt G;
+A2:    H[;](d,G.:(t1,t2)) = H[;](d,G*<:t1,t2:>) by FUNCOP_1:def 3
+           .= H*<:dom (G*<:t1,t2:>) --> d,G*<:t1,t2:>:> by FUNCOP_1:def 5;
+   set A = H*<:dom (G*<:t1,t2:>) --> d,G*<:t1,t2:>:>;
+A3:    G.:(H[;](d,t1),H[;](d,t2)) = G.:(H*<:dom t1 -->d,t1:>,H[;](d,t2))
+                                         by FUNCOP_1:def 5
+            .= G.:(H*<:dom t1 -->d,t1:>,H*<:dom t2 -->d,t2:>)
+                                         by FUNCOP_1:def 5
+            .= G*<:H*<:dom t1 -->d,t1:>,H*<:dom t2 -->d,t2:>:>
+                                         by FUNCOP_1:def 3;
+A4:    dom A = Seg n
+   proof
+A5:     dom t1 = Seg (len t1) by FINSEQ_1:def 3
+              .= Seg n by FINSEQ_2:109;
+      dom t2 = Seg (len t2) by FINSEQ_1:def 3
+              .= Seg n by FINSEQ_2:109;
+    then A6: dom <:t1,t2:> = Seg n by A5,FUNCT_3:70;
+      rng t1 c= D & rng t2 c= D by FINSEQ_1:def 4;
+    then A7: [:rng t1,rng t2:] c= [:D,D:] by ZFMISC_1:119;
+      rng <:t1,t2:> c= [:rng t1,rng t2:] by FUNCT_3:71;
+    then rng <:t1,t2:> c= [:D,D:] by A7,XBOOLE_1:1;
+    then rng <:t1,t2:> c= dom G by FUNCT_2:def 1;
+    then A8: dom (G*<:t1,t2:>) = Seg n by A6,RELAT_1:46;
+    then dom (dom (G*<:t1,t2:>) -->d) = Seg n by FUNCOP_1:19;
+    then A9: dom <: dom (G*<:t1,t2:>) -->d,G*<:t1,t2:>:>
+               = Seg n by A8,FUNCT_3:70;
+       rng <: dom (G*<:t1,t2:>) -->d,G*<:t1,t2:>:> c= dom H
+        proof
+A10:         rng <: dom (G*<:t1,t2:>) -->d,G*<:t1,t2:>:> c=
+             [:rng (dom (G*<:t1,t2:>) -->d),rng (G*<:t1,t2:>):]
+                    by FUNCT_3:71;
+          rng (dom (G*<:t1,t2:>) -->d) c= {d} & {d} c= D
+                              by FUNCOP_1:19,ZFMISC_1:37;
+        then A11: rng (dom (G*<:t1,t2:>) -->d) c= D by XBOOLE_1:1;
+A12:         rng (G*<:t1,t2:>) c= rng G by RELAT_1:45;
+          rng G c= D by RELSET_1:12;
+        then rng (G*<:t1,t2:>) c= D by A12,XBOOLE_1:1;
+        then [:rng (dom (G*<:t1,t2:>) -->d),rng (G*<:t1,t2:>):] c= [:D,D:]
+                             by A11,ZFMISC_1:119;
+        then rng <: dom (G*<:t1,t2:>) -->d,G*<:t1,t2:>:> c= [:D,D:] &
+             dom H = [:D,D:] by A10,FUNCT_2:def 1,XBOOLE_1:1;
+        hence thesis;
+        end;
+     hence thesis by A9,RELAT_1:46;
+    end;
+A13:     dom (G*<:H*<:dom t1 -->d,t1:>,H*<:dom t2 -->d,t2:>:>) = Seg n
+    proof
+A14:      rng <:H*<:dom t1 -->d,t1:>,H*<:dom t2 -->d,t2:>:> c= dom G
+         proof
+            rng (H*<:dom t1 -->d,t1:>) c= rng H &
+          rng (H*<:dom t2 -->d,t2:>) c= rng H by RELAT_1:45;
+          then A15: rng <:H*<:dom t1 -->d,t1:>,H*<:dom t2 -->d,t2:>:> c=
+          [:rng (H*<:dom t1 -->d,t1:>),rng (H*<:dom t2 -->d,t2:>):]
+          & [:rng (H*<:dom t1 -->d,t1:>),rng (H*<:dom t2 -->d,t2:>):]
+          c= [:rng H,rng H:] by FUNCT_3:71,ZFMISC_1:119;
+            rng H c= D by RELSET_1:12;
+          then rng <:H*<:dom t1 -->d,t1:>,H*<:dom t2 -->d,t2:>:> c=
+           [:rng H,rng H:] & [:rng H,rng H:] c= [:D,D:]
+              by A15,XBOOLE_1:1,ZFMISC_1:119;
+          then rng <:H*<:dom t1 -->d,t1:>,H*<:dom t2 -->d,t2:>:>
+               c= [:D,D:] & dom G = [:D,D:] by FUNCT_2:def 1,XBOOLE_1:1;
+          hence thesis;
+         end;
+        dom (H*<:dom t1 -->d,t1:>) = Seg n
+          & dom (H*<:dom t2 -->d,t2:>) = Seg n
+         proof
+           rng t1 c= D by FINSEQ_1:def 4;
+         then A16: rng <:dom t1 -->d,t1:> c= [:rng (dom t1 -->d),rng t1:]
+           & [:rng (dom t1 -->d),rng t1:] c= [:rng (dom t1 -->d),D:]
+                          by FUNCT_3:71,ZFMISC_1:119;
+           rng (dom t1 -->d) c= {d} by FUNCOP_1:19;
+         then A17: rng <:dom t1 -->d,t1:> c= [:rng (dom t1 -->d),D:]
+           & [:rng (dom t1 -->d),D:] c= [:{d},D:]
+                          by A16,XBOOLE_1:1,ZFMISC_1:119;
+           {d} c= D by ZFMISC_1:37;
+         then A18: rng <:dom t1 -->d,t1:> c= [:{d},D:]
+           & [:{d},D:] c= [:D,D:] by A17,XBOOLE_1:1,ZFMISC_1:119;
+           dom H = [:D,D:] by FUNCT_2:def 1;
+         then A19: rng <:dom t1 -->d,t1:> c= dom H by A18,XBOOLE_1:1;
+A20:          dom (dom t1 -->d) = dom t1 by FUNCOP_1:19
+                   .= Seg (len t1) by FINSEQ_1:def 3
+                   .= Seg n by FINSEQ_2:109;
+A21:          dom t1 = Seg (len t1) by FINSEQ_1:def 3
+                   .= Seg n by FINSEQ_2:109;
+A22:          dom (H*<:dom t1 -->d,t1:>) = dom <:dom t1 -->d,t1:>
+                          by A19,RELAT_1:46
+                   .= Seg n by A20,A21,FUNCT_3:70;
+           rng t2 c= D by FINSEQ_1:def 4;
+         then A23: rng <:dom t2 -->d,t2:> c= [:rng (dom t2 -->d),rng t2:]
+           & [:rng (dom t2 -->d),rng t2:] c= [:rng (dom t2 -->d),D:]
+                          by FUNCT_3:71,ZFMISC_1:119;
+           rng (dom t2 -->d) c= {d} by FUNCOP_1:19;
+         then A24: rng <:dom t2 -->d,t2:> c= [:rng (dom t2 -->d),D:]
+           & [:rng (dom t2 -->d),D:] c= [:{d},D:]
+                          by A23,XBOOLE_1:1,ZFMISC_1:119;
+           {d} c= D by ZFMISC_1:37;
+         then A25: rng <:dom t2 -->d,t2:> c= [:{d},D:]
+           & [:{d},D:] c= [:D,D:] by A24,XBOOLE_1:1,ZFMISC_1:119;
+           dom H = [:D,D:] by FUNCT_2:def 1;
+         then A26: rng <: dom t2 -->d,t2:> c= dom H by A25,XBOOLE_1:1;
+A27:          dom (dom t2 -->d) = dom t2 by FUNCOP_1:19
+                   .= Seg (len t2) by FINSEQ_1:def 3
+                   .= Seg n by FINSEQ_2:109;
+A28:          dom t2 = Seg (len t2) by FINSEQ_1:def 3
+                   .= Seg n by FINSEQ_2:109;
+           dom (H*<:dom t2-->d,t2:>) = dom <:dom t2 -->d,t2:>
+                          by A26,RELAT_1:46
+                   .= Seg n by A27,A28,FUNCT_3:70;
+         hence thesis by A22;
+         end;
+     then dom <:H*<:dom t1 -->d,t1:>,H*<:dom t2 -->d,t2:>:> = Seg n
+                  by FUNCT_3:70;
+     hence thesis by A14,RELAT_1:46;
+    end;
+    for x st x in dom A holds H[;](d,G.:(t1,t2)).x = G.:(H[;](d,t1),H[;](d,t2))
+.
+x
+     proof
+     let x;assume A29: x in dom A;
+     then x in dom (H*<:dom (G.:(t1,t2)) -->d,G.:
+(t1,t2):>) by A2,FUNCOP_1:def 5;
+     then A30: x in dom <:dom (G.:(t1,t2)) -->d,G.:(t1,t2):> by FUNCT_1:21;
+       dom <:dom (G.:(t1,t2)) -->d,G.:(t1,t2):> =
+          dom (dom (G.:(t1,t2)) -->d) /\ dom (G.:(t1,t2)) by FUNCT_3:def 8;
+     then A31: x in dom (G.:(t1,t2)) by A30,XBOOLE_0:def 3;
+A32:      t1.x in D & t2.x in D
+         proof
+A33:       dom t1 = Seg (len t1) by FINSEQ_1:def 3
+               .= Seg n by FINSEQ_2:109;
+A34:       rng t1 c= D by FINSEQ_1:def 4;
+A35:      t1.x in rng t1 by A4,A29,A33,FUNCT_1:def 5;
+A36:       dom t2 = Seg (len t2) by FINSEQ_1:def 3
+               .= Seg n by FINSEQ_2:109;
+A37:       rng t2 c= D by FINSEQ_1:def 4;
+             t2.x in rng t2 by A4,A29,A36,FUNCT_1:def 5;
+          hence thesis by A34,A35,A37;
+         end;
+A38:      x in dom (H[;](d,t1)) & x in dom (H[;](d,t2))
+         proof
+            dom (H*<:dom t1 -->d,t1:>) = Seg n
+          & dom (H*<:dom t2 -->d,t2:>) = Seg n
+         proof
+           rng t1 c= D by FINSEQ_1:def 4;
+         then A39: rng <:dom t1 -->d,t1:> c= [:rng (dom t1 -->d),rng t1:]
+           & [:rng (dom t1 -->d),rng t1:] c= [:rng (dom t1 -->d),D:]
+                          by FUNCT_3:71,ZFMISC_1:119;
+           rng (dom t1 -->d) c= {d} by FUNCOP_1:19;
+         then A40: rng <:dom t1 -->d,t1:> c= [:rng (dom t1 -->d),D:]
+           & [:rng (dom t1 -->d),D:] c= [:{d},D:]
+                          by A39,XBOOLE_1:1,ZFMISC_1:119;
+           {d} c= D by ZFMISC_1:37;
+         then A41: rng <:dom t1 -->d,t1:> c= [:{d},D:]
+           & [:{d},D:] c= [:D,D:] by A40,XBOOLE_1:1,ZFMISC_1:119;
+           dom H = [:D,D:] by FUNCT_2:def 1;
+         then A42: rng <:dom t1 -->d,t1:> c= dom H by A41,XBOOLE_1:1;
+A43:          dom (dom t1 -->d) = dom t1 by FUNCOP_1:19
+                   .= Seg (len t1) by FINSEQ_1:def 3
+                   .= Seg n by FINSEQ_2:109;
+A44:          dom t1 = Seg (len t1) by FINSEQ_1:def 3
+                   .= Seg n by FINSEQ_2:109;
+A45:          dom (H*<:dom t1 -->d,t1:>) = dom <:dom t1 -->d,t1:>
+                          by A42,RELAT_1:46
+                   .= Seg n by A43,A44,FUNCT_3:70;
+           rng t2 c= D by FINSEQ_1:def 4;
+         then A46: rng <:dom t2 -->d,t2:> c= [:rng (dom t2 -->d),rng t2:]
+           & [:rng (dom t2 -->d),rng t2:] c= [:rng (dom t2 -->d),D:]
+                          by FUNCT_3:71,ZFMISC_1:119;
+           rng (dom t2 -->d) c= {d} by FUNCOP_1:19;
+         then A47: rng <:dom t2 -->d,t2:> c= [:rng (dom t2 -->d),D:]
+           & [:rng (dom t2 -->d),D:] c= [:{d},D:]
+                          by A46,XBOOLE_1:1,ZFMISC_1:119;
+           {d} c= D by ZFMISC_1:37;
+         then A48: rng <:dom t2 -->d,t2:> c= [:{d},D:]
+           & [:{d},D:] c= [:D,D:] by A47,XBOOLE_1:1,ZFMISC_1:119;
+           dom H = [:D,D:] by FUNCT_2:def 1;
+         then A49: rng <: dom t2 -->d,t2:> c= dom H by A48,XBOOLE_1:1;
+A50:          dom (dom t2 -->d) = dom t2 by FUNCOP_1:19
+                   .= Seg (len t2) by FINSEQ_1:def 3
+                   .= Seg n by FINSEQ_2:109;
+A51:          dom t2 = Seg (len t2) by FINSEQ_1:def 3
+                   .= Seg n by FINSEQ_2:109;
+           dom (H*<:dom t2-->d,t2:>) = dom <:dom t2 -->d,t2:>
+                          by A49,RELAT_1:46
+                   .= Seg n by A50,A51,FUNCT_3:70;
+         hence thesis by A45;
+         end;
+         hence thesis by A4,A29,FUNCOP_1:def 5;
+         end;
+       H[;](d,G.:(t1,t2)).x = H.(d,G.:(t1,t2).x) by A2,A29,FUNCOP_1:42
+                 .= H.(d,G.(t1.x,t2.x)) by A31,FUNCOP_1:28
+                 .= G.(H.(d,t1.x),H.(d,t2.x)) by A1,A32,BINOP_1:23
+                 .= G.((H[;](d,t1)).x,H.(d,t2.x)) by A38,FUNCOP_1:42
+                 .= G.((H[;](d,t1)).x,(H[;](d,t2)).x) by A38,FUNCOP_1:42
+                 .= (G.:
+(H[;](d,t1),H[;](d,t2))).x by A3,A4,A13,A29,FUNCOP_1:28;
+     hence thesis;
+     end;
+  hence thesis by A2,A3,A4,A13,FUNCT_1:9;
+  end;
+
+definition let D be non empty set,
+             n be Nat,
+             F be BinOp of D,
+             x be Element of D,
+             v be Element of n-tuples_on D;
+  redefine func F[;](x,v) -> Element of n-tuples_on D;
+   coherence by FINSEQ_2:141;
+ end;
+
+definition let F,n;
+  cluster n -VectSp_over F -> VectSp-like;
+   coherence
+   proof
+A1:       the unity of F is_a_unity_wrt the mult of F by Th11;
+then A2:       the mult of F has_a_unity by SETWISEO:def 2;
+A3:       the_unity_wrt the mult of F = the unity of F by A1,BINOP_1:def 8;
+A4:       the mult of F is associative by Lm4;
+A5:       the mult of F is_distributive_wrt the add of F by Lm5;
+A6:       the LoopStr of n -VectSp_over F=n-Group_over F by Def5;
+A7:       n-Group_over F=LoopStr(# n-tuples_on the carrier of F,
+        product(the add of F,n),
+        (n .--> the Zero of F) qua Element of n-tuples_on the carrier of F#)
+        by Def3;
+    n-VectSp_over F is VectSp-like proof
+   let x,y be Element of F;
+   let v,w be Element of n -VectSp_over F;
+   reconsider v'=v,w'=w as Element of n-tuples_on the carrier of F by A6,A7;
+   thus x*(v+w) = (the lmult of n-VectSp_over F).(x,v+w)
+                              by VECTSP_1:def 24
+          .= (the lmult of n-VectSp_over F).(x,
+               (the add of n-Group_over F).(v,w)) by A6,RLVECT_1:5
+          .= (n-Mult_over F).(x,product(the add of F,n).(v,w))
+                by A7,Def5
+          .= (n-Mult_over F).(x,(the add of F).:(v',w')) by Def1
+          .= (the mult of F)[;](x,(the add of F).:(v',w')) by Def4
+          .= (the add of F).:
+((the mult of F)[;](x,v'),(the mult of F)[;](x,w'))
+                by A5,Th18
+          .= product(the add of F,n).((the mult of F)[;](x,v'),
+                (the mult of F)[;](x,w')) by Def1
+          .= product(the add of F,n).((n-Mult_over F).(x,v'),
+                (the mult of F)[;](x,w')) by Def4
+          .= product(the add of F,n).((n-Mult_over F).(x,v'),
+                (n-Mult_over F).(x,w')) by Def4
+          .= product(the add of F,n).((the lmult of n-VectSp_over F).(x,v),
+                (n-Mult_over F).(x,w')) by Def5
+          .= (the add of n-Group_over F).((the lmult of n-VectSp_over F).
+                (x,v),(the lmult of n-VectSp_over F).(x,w)) by A7,Def5
+          .= (the add of n-Group_over F).(x*v,(the lmult of n-VectSp_over F).
+                (x,w)) by VECTSP_1:def 24
+          .= (the add of n-Group_over F).(x*v,x*w) by VECTSP_1:def 24
+          .= x*v + x*w by A6,RLVECT_1:5;
+thus (x+y)*v = (the lmult of n-VectSp_over F).(x+y,v) by VECTSP_1:def 24
+          .= (n-Mult_over F).(x+y,v') by Def5
+          .= (the mult of F)[;](x+y,v') by Def4
+          .= (the mult of F)[;]((the add of F).(x,y),v') by RLVECT_1:5
+          .= (the add of F).:
+((the mult of F)[;](x,v'),(the mult of F)[;](y,v'))
+                by A5,FINSEQOP:47
+          .= product(the add of F,n).((the mult of F)[;](x,v'),
+                (the mult of F)[;](y,v')) by Def1
+          .= product(the add of F,n).((n-Mult_over F).(x,v'),
+                (the mult of F)[;](y,v')) by Def4
+          .= product(the add of F,n).((n-Mult_over F).(x,v'),
+                (n-Mult_over F).(y,v')) by Def4
+          .= product(the add of F,n).((the lmult of n-VectSp_over F).(x,v),
+                (n-Mult_over F).(y,v')) by Def5
+          .= (the add of n-Group_over F).((the lmult of n-VectSp_over F).(x,v),
+                (the lmult of n-VectSp_over F).(y,v)) by A7,Def5
+          .= (the add of n-Group_over F).(x*v,(the lmult of n-VectSp_over F).
+                (y,v)) by VECTSP_1:def 24
+          .= (the add of n-Group_over F).(x*v,y*v) by VECTSP_1:def 24
+          .= x*v + y*v by A6,RLVECT_1:5;
+   thus (x*y)*v = (the lmult of n-VectSp_over F).(x*y,v) by VECTSP_1:def 24
+          .= (n-Mult_over F).(x*y,v') by Def5
+          .= (the mult of F)[;](x*y,v') by Def4
+          .= (the mult of F)[;]((the mult of F).(x,y),v') by VECTSP_1:def 10
+          .= (the mult of F)[;](x,(the mult of F)[;](y,v')) by A4,FINSEQOP:32
+          .= (n-Mult_over F).(x,(the mult of F)[;](y,v')) by Def4
+          .= (n-Mult_over F).(x,(n-Mult_over F).(y,v')) by Def4
+          .= (n-Mult_over F).(x,(the lmult of n-VectSp_over F).(y,v)) by Def5
+          .= (the lmult of n-VectSp_over F).(x,(the lmult of n-VectSp_over F).
+                    (y,v)) by Def5
+          .= (the lmult of n-VectSp_over F).(x,y*v) by VECTSP_1:def 24
+          .= x*(y*v) by VECTSP_1:def 24;
+  thus (1_ F)*v = (the unity of F)*v by VECTSP_1:def 9
+          .= (the lmult of n-VectSp_over F).(the unity of F,v)
+                    by VECTSP_1:def 24
+          .= (n-Mult_over F).(the unity of F,v') by Def5
+          .= (the mult of F)[;](the unity of F,v') by Def4
+          .= v by A2,A3,FINSEQOP:58;
+   thus thesis;
+   end;
+   hence thesis;
+   end;
+ end;
+
+begin :: Sequences of domains
+
+reserve x,y,y1,y2,z for set,
+         i for Nat,
+         A for AbGroup,
+         D for non empty set;
+
+definition
+  cluster non empty non-empty FinSequence;
+   existence
+    proof consider D;
+     take <*D*>;
+A1:      Seg 1 = dom <*D*> by FINSEQ_1:def 8;
+       1 in Seg 1 by FINSEQ_1:4,TARSKI:def 1;
+     then [1,<*D*>.1] in <*D*> by A1,FUNCT_1:def 4;
+     hence <*D*> is non empty;
+     assume {} in rng <*D*>;
+     then {} in {D} by FINSEQ_1:55;
+     hence contradiction by TARSKI:def 1;
+    end;
+ end;
+
+definition
+  let f be non-empty Function;
+  cluster product f -> functional non empty;
+   coherence
+    proof
+       product f is non empty set
+        proof
+          not {} in rng f by RELAT_1:def 9;
+        hence thesis by CARD_3:37;
+        end;
+     hence thesis;
+    end;
+ end;
+
+definition
+  mode Domain-Sequence is non empty non-empty FinSequence;
+ end;
+
+definition
+  let a be non empty Function;
+  cluster dom a -> non empty;
+   coherence
+   proof
+    consider x being Element of a;
+    consider y,z such that A1: x = [y,z] by RELAT_1:def 1;
+    thus thesis by A1,RELAT_1:def 4;
+   end;
+ end;
+
+scheme NEFinSeqLambda {w()-> non empty FinSequence, F(set)->set}:
+ ex p being non empty FinSequence st len p = len w() &
+  for i being Element of dom w() holds p.i = F(i)
+  proof
+   deffunc G(set) = F($1);
+   consider p being FinSequence such that
+A1:    len p = len w() & for i st i in Seg len w() holds p.i = G(i)
+               from SeqLambda;
+     consider x being Element of dom w();
+        dom p = dom w() by A1,FINSEQ_3:31;
+      then [x,p.x] in p & p = p by FUNCT_1:def 4;
+    then reconsider p'=p as non empty FinSequence;
+    take p';
+    thus len p' = len w() by A1;
+    let i be Element of dom w();
+       dom w() = Seg len w() by FINSEQ_1:def 3;
+    hence p'.i = F(i) by A1;
+  end;
+
+definition
+  let a be non-empty non empty Function;
+  let i be Element of dom a;
+  cluster a.i -> non empty;
+   coherence
+    proof
+       a.i in rng a by FUNCT_1:def 5;
+     hence thesis by RELAT_1:def 9;
+    end;
+end;
+
+definition let a be non-empty non empty Function;
+ let f be Element of product a;
+ let i be Element of dom a;
+ redefine func f.i -> Element of a.i;
+  coherence by CARD_3:18;
+end;
+
+begin :: The Product of Families of Operations
+
+reserve a for Domain-Sequence,
+        i for Element of dom a,
+        p for FinSequence;
+
+definition let a be non-empty non empty Function;
+ canceled 2;
+
+  mode BinOps of a -> Function means:Def8:
+   dom it = dom a & for i being Element of dom a holds it.i is BinOp of a.i;
+   existence
+    proof
+     deffunc F(set) = pr1(a.$1,a.$1);
+     consider f being Function such that
+A1:    dom f = dom a & for x st x in dom a holds f.x = F(x) from Lambda;
+     take f; thus dom f = dom a by A1;
+     let i be Element of dom a;
+        f.i = pr1(a.i,a.i) by A1;
+     hence thesis;
+    end;
+  mode UnOps of a -> Function means:
+Def9:
+   dom it = dom a & for i being Element of dom a holds it.i is UnOp of a.i;
+   existence
+    proof
+     deffunc F(set) = id (a.$1);
+     consider f being Function such that
+A2:    dom f = dom a & for x st x in dom a holds f.x = F(x) from Lambda;
+     take f; thus dom f = dom a by A2;
+     let i be Element of dom a;
+        f.i = id (a.i) by A2;
+     hence thesis;
+    end;
+end;
+
+definition let a;
+ cluster -> FinSequence-like BinOps of a;
+  coherence
+   proof let f be BinOps of a;
+       dom a = dom f & dom a = Seg len a by Def8,FINSEQ_1:def 3;
+    hence thesis by FINSEQ_1:def 2;
+   end;
+ cluster -> FinSequence-like UnOps of a;
+  coherence
+   proof let f be UnOps of a;
+       dom a = dom f & dom a = Seg len a by Def9,FINSEQ_1:def 3;
+    hence thesis by FINSEQ_1:def 2;
+   end;
+end;
+
+theorem Th19:
+ p is BinOps of a iff len p = len a &
+  for i holds p.i is BinOp of a.i
+  proof
+      dom p = dom a iff len p = len a by FINSEQ_3:31;
+   hence thesis by Def8;
+  end;
+
+theorem Th20:
+ p is UnOps of a iff len p = len a &
+  for i holds p.i is UnOp of a.i
+  proof
+      dom p = dom a iff len p = len a by FINSEQ_3:31;
+   hence thesis by Def9;
+  end;
+
+definition let a;
+  let b be BinOps of a;
+  let i;
+  redefine func b.i -> BinOp of a.i;
+   coherence by Th19;
+ end;
+
+definition let a;
+ let u be UnOps of a;
+ let i;
+ redefine func u.i -> UnOp of a.i;
+  coherence by Th20;
+end;
+
+definition let F be functional non empty set;
+ let u be UnOp of F, f be Element of F;
+ redefine func u.f -> Element of F;
+  coherence
+   proof
+      u.f is Element of F;
+    hence thesis;
+   end;
+end;
+
+theorem
+   for d,d' being UnOp of product a st
+  for f being Element of product a, i being Element of dom a
+    holds (d.f).i = (d'.f).i holds d = d'
+  proof let d,d' be UnOp of product a such that
+A1:  for f being Element of product a,
+        i being Element of dom a holds (d.f).i = (d'.f).i;
+      now let f be Element of product a;
+        dom (d.f) = dom a & dom (d'.f) = dom a &
+      for x st x in dom a holds (d.f).x = (d'.f).x by A1,CARD_3:18;
+     hence d.f = d'.f by FUNCT_1:9;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+
+theorem Th22:
+ for u being UnOps of a holds
+  doms u = a & product rngs u c= product a
+  proof let u be UnOps of a;
+A1:  dom doms u = u"SubFuncs rng u & dom rngs u = u"SubFuncs rng u &
+    dom a = Seg len a & dom u = Seg len u & len u = len a
+     by Th20,FINSEQ_1:def 3,FUNCT_6:def 2,def 3;
+A2:  dom u c= u"SubFuncs rng u
+     proof let x; assume x in dom u;
+      then reconsider x as Element of dom a by A1;
+         u.x is UnOp of a.x;
+      hence thesis by A1,FUNCT_6:28;
+     end;
+      u"SubFuncs rng u c= dom u by RELAT_1:167;
+then A3:  dom doms u = dom u by A1,A2,XBOOLE_0:def 10;
+      now let x; assume x in dom u;
+     then reconsider i = x as Element of dom a by A1;
+        (doms u).i = dom (u.i) by A1,FUNCT_6:31 .= a.i by FUNCT_2:def 1;
+     hence (doms u).x = a.x;
+    end;
+   hence doms u = a by A1,A3,FUNCT_1:9;
+      now let x; assume x in dom u;
+     then reconsider i = x as Element of dom a by A1;
+        (rngs u).i = rng (u.i) & rng (u.i) c= a.i by A1,FUNCT_6:31,RELSET_1:12;
+     hence (rngs u).x c= a.x;
+    end;
+   hence thesis by A1,A3,CARD_3:38;
+  end;
+
+definition let a;
+ let u be UnOps of a;
+ redefine func Frege u -> UnOp of product a;
+  coherence
+   proof
+       dom Frege u = product doms u & doms u = a & product rngs u c= product a
+&
+     rng Frege u = product rngs u by Th22,FUNCT_6:58,def 7;
+    hence thesis by FUNCT_2:def 1,RELSET_1:11;
+   end;
+end;
+
+theorem Th23:
+ for u being UnOps of a for f being Element of product a,
+     i being Element of dom a holds (Frege u).f.i = (u.i).(f.i)
+  proof let u be UnOps of a, f be Element of product a;
+   let i be Element of dom a;
+      dom a = Seg len a & len a = len u & dom u = Seg len u & doms u = a
+     by Th20,Th22,FINSEQ_1:def 3;
+   hence thesis by FUNCT_6:57;
+  end;
+
+definition let F be functional non empty set;
+ let b be BinOp of F, f,g be Element of F;
+ redefine func b.(f,g) -> Element of F;
+  coherence
+   proof b.(f,g) is Element of F;
+    hence thesis;
+   end;
+end;
+
+theorem Th24:
+ for d,d' being BinOp of product a st
+  for f,g being Element of product a, i being Element of dom a
+      holds (d.(f,g)).i = (d'.(f,g)).i holds d = d'
+  proof let d,d' be BinOp of product a such that
+A1:  for f,g be Element of product a, i be Element of dom a
+             holds (d.(f,g)).i = (d'.(f,g)).i;
+      now let f,g be Element of product a;
+        dom (d.(f,g)) = dom a & dom (d'.(f,g)) = dom a &
+      for x st x in dom a holds (d.(f,g)).x = (d'.(f,g)).x by A1,CARD_3:18;
+     hence d.(f,g) = d'.(f,g) by FUNCT_1:9;
+    end;
+   hence thesis by BINOP_1:2;
+  end;
+
+reserve i for Element of dom a;
+
+definition let a;
+ let b be BinOps of a;
+ func [:b:] -> BinOp of product a means :Def10:
+  for f,g being Element of product a,
+      i being Element of dom a holds (it.(f,g)).i = (b.i).(f.i,g.i);
+  existence
+   proof
+    defpred Q[Element of product a,Element of product a,Element of product a]
+     means for i being Element of dom a holds $3.i = (b.i).($1.i,$2.i);
+A1:  for f,g being Element of product a ex z being Element of product a st
+      Q[f,g,z]
+      proof let f,g be Element of product a;
+        defpred P[set,set] means ex i st $1 =i & $2 = (b.i).(f.i,g.i);
+A2:      for x,z1,z2 being set st x in dom a & P[x,z1] & P[x,z2] holds z1 = z2;
+A3:      for x st x in dom a ex z st P[x,z]
+         proof let x; assume x in dom a;
+          then reconsider i = x as Element of dom a;
+          take (b.i).(f.i,g.i);
+          thus thesis;
+         end;
+       consider z being Function such that
+A4:     dom z = dom a & for x being set st x in dom a holds P[x,z.x]
+        from FuncEx(A2,A3);
+          now let x; assume x in dom a;
+         then ex i st x = i & z.x = (b.i).(f.i,g.i) by A4;
+         hence z.x in a.x;
+        end;
+       then reconsider z' = z as Element of product a by A4,CARD_3:18;
+       take z'; let i;
+          ex j being Element of dom a st j = i & z.i = (b.j).(f.j,g.j) by A4;
+       hence thesis;
+      end;
+     consider d being BinOp of product a such that
+A5:  for f,g being Element of product a holds Q[f,g,d.(f,g)] from BinOpEx(A1);
+     take d; thus thesis by A5;
+   end;
+  uniqueness
+   proof let d,d' be BinOp of product a such that
+A6:   for f,g being Element of product a,i being Element of dom a holds
+      (d.(f,g)).i = (b.i).(f.i,g.i) and
+A7:   for f,g being Element of product a,i being Element of dom a holds
+      (d'.(f,g)).i = (b.i).(f.i,g.i);
+       now let f,g be Element of product a; let i be Element of dom a;
+      thus (d.(f,g)).i = (b.i).(f.i,g.i) by A6 .= (d'.(f,g)).i by A7;
+     end;
+    hence thesis by Th24;
+   end;
+end;
+
+theorem Th25:
+ for b being BinOps of a st for i holds b.i is commutative
+  holds [:b:] is commutative
+  proof let b be BinOps of a such that
+A1:  for i holds b.i is commutative;
+   let x,y be Element of product a;
+A2:  dom ([:b:].(x,y)) = dom a & dom ([:b:].(y,x)) = dom a by CARD_3:18;
+      now let z; assume z in dom a;
+     then reconsider i = z as Element of dom a;
+        b.i is commutative & [:b:].(x,y).i = (b.i).(x.i,y.i) &
+      [:b:].(y,x).i = (b.i).(y.i,x.i) by A1,Def10;
+     hence [:b:].(x,y).z = [:b:].(y,x).z by BINOP_1:def 2;
+    end;
+   hence thesis by A2,FUNCT_1:9;
+  end;
+
+theorem Th26:
+ for b being BinOps of a st for i holds b.i is associative
+  holds [:b:] is associative
+  proof let b be BinOps of a such that
+A1:  for i holds b.i is associative;
+   let x,y,z be Element of product a;
+A2:  dom ([:b:].(x,[:b:].(y,z))) = dom a & dom ([:b:].([:b:].(x,y),z)) = dom a
+     by CARD_3:18;
+      now let v be set; assume v in dom a;
+     then reconsider i = v as Element of dom a;
+     set xy = [:b:].(x,y), yz = [:b:].(y,z);
+        b.i is associative & [:b:].(x,y).i = (b.i).(x.i,y.i) &
+      [:b:].(y,z).i = (b.i).(y.i,z.i) & [:b:].(x,yz).i = (b.i).(x.i,yz.i) &
+      [:b:].(xy,z).i = (b.i).(xy.i,z.i) by A1,Def10;
+     hence [:b:].(x,[:b:].(y,z)).v = [:b:].([:b:].(x,y),z).v by BINOP_1:def 3;
+    end;
+   hence thesis by A2,FUNCT_1:9;
+  end;
+
+theorem Th27:
+ for b being BinOps of a, f being Element of product a st
+  for i holds f.i is_a_unity_wrt b.i holds f is_a_unity_wrt [:b:]
+  proof let b be BinOps of a, f be Element of product a such that
+A1:  for i holds f.i is_a_unity_wrt b.i;
+      now let x be Element of product a;
+A2:    dom ([:b:].(x,f)) = dom a & dom ([:b:].(f,x)) = dom a & dom x = dom a
+       by CARD_3:18;
+        now let y; assume y in dom a;
+       then reconsider i = y as Element of dom a;
+          [:b:].(f,x).i = (b.i).(f.i,x.i) & f.i is_a_unity_wrt b.i by A1,Def10;
+       hence [:b:].(f,x).y = x.y by BINOP_1:11;
+      end;
+     hence [:b:].(f,x) = x by A2,FUNCT_1:9;
+        now let y; assume y in dom a;
+       then reconsider i = y as Element of dom a;
+          [:b:].(x,f).i = (b.i).(x.i,f.i) & f.i is_a_unity_wrt b.i by A1,Def10;
+       hence [:b:].(x,f).y = x.y by BINOP_1:11;
+      end;
+     hence [:b:].(x,f) = x by A2,FUNCT_1:9;
+    end;
+   hence thesis by BINOP_1:11;
+  end;
+
+theorem Th28:
+ for b being BinOps of a, u being UnOps of a st
+  for i holds u.i is_an_inverseOp_wrt b.i & b.i has_a_unity holds
+   Frege u is_an_inverseOp_wrt [:b:]
+  proof let b be BinOps of a, u be UnOps of a such that
+A1:  for i holds u.i is_an_inverseOp_wrt b.i & b.i has_a_unity;
+defpred P[set,set] means ex i st $1 = i & $2 = the_unity_wrt (b.i);
+A2: for x st x in dom a ex y st P[x,y]
+     proof let x; assume x in dom a;
+      then reconsider i = x as Element of dom a;
+      take the_unity_wrt (b.i); thus thesis;
+     end;
+A3: for x,y1,y2 st x in dom a & P[x,y1] & P[x,y2] holds y1 = y2;
+   consider f being Function such that
+A4:  dom f = dom a & for x st x in dom a holds P[x,f.x] from FuncEx(A3,A2);
+      now let x; assume x in dom a;
+      then ex i st x = i & f.x = the_unity_wrt (b.i) by A4;
+     hence f.x in a.x;
+    end;
+   then reconsider f as Element of product a by A4,CARD_3:18;
+      now let i;
+        ex j being Element of dom a st i = j & f.i = the_unity_wrt (b.j)
+       by A4;
+      then f.i = the_unity_wrt (b.i) & b.i has_a_unity by A1;
+     hence f.i is_a_unity_wrt b.i by SETWISEO:22;
+    end;
+    then f is_a_unity_wrt [:b:] by Th27;
+then A5:  f = the_unity_wrt [:b:] by BINOP_1:def 8;
+   let x be Element of product a;
+A6: dom ([:b:].(x,(Frege u).x)) = dom a & dom ([:b:].((Frege u).x,x)) = dom a &
+    dom f = dom a by CARD_3:18;
+      now let y; assume y in dom a;
+     then reconsider i = y as Element of dom a;
+        ex j being Element of dom a st i = j & f.i = the_unity_wrt (b.j)
+       by A4;
+      then [:b:].(x,(Frege u).x).i = (b.i).(x.i,(Frege u).x.i) &
+      (Frege u).x.i = (u.i).(x.i) &
+      f.i = the_unity_wrt (b.i) & u.i is_an_inverseOp_wrt b.i
+       by A1,Def10,Th23;
+     hence [:b:].(x,(Frege u).x).y = f.y by FINSEQOP:def 1;
+    end;
+   hence [:b:].(x,(Frege u).x) = the_unity_wrt [:b:] by A5,A6,FUNCT_1:9;
+      now let y; assume y in dom a;
+     then reconsider i = y as Element of dom a;
+        ex j being Element of dom a st i = j & f.i = the_unity_wrt (b.j)
+       by A4;
+      then [:b:].((Frege u).x,x).i = (b.i).((Frege u).x.i,x.i) &
+      (Frege u).x.i = (u.i).(x.i) &
+      f.i = the_unity_wrt (b.i) & u.i is_an_inverseOp_wrt b.i
+       by A1,Def10,Th23;
+     hence [:b:].((Frege u).x,x).y = f.y by FINSEQOP:def 1;
+    end;
+   hence [:b:].((Frege u).x,x) = the_unity_wrt [:b:] by A5,A6,FUNCT_1:9;
+  end;
+
+begin :: The Product of Groups
+
+definition let F be Function;
+  attr F is AbGroup-yielding means:Def11:
+    x in rng F implies x is AbGroup;
+end;
+
+definition
+  cluster non empty AbGroup-yielding FinSequence;
+   existence
+    proof consider A;
+     take <*A*>;
+A1:      Seg 1 = dom <*A*> by FINSEQ_1:def 8;
+       1 in Seg 1 by FINSEQ_1:4,TARSKI:def 1;
+        then [1,<*A*>.1] in <*A*> & <*A*> = <*A*> by A1,FUNCT_1:def 4;
+     hence <*A*> is non empty; let x;
+     assume A2: x in rng <*A*> & not x is AbGroup;
+      then x in {A} by FINSEQ_1:55;
+     hence contradiction by A2,TARSKI:def 1;
+    end;
+end;
+
+definition
+ mode Group-Sequence is non empty AbGroup-yielding FinSequence;
+end;
+
+definition
+  let g be Group-Sequence;
+  let i be Element of dom g;
+  redefine func g.i -> AbGroup;
+   coherence
+    proof
+       g.i in rng g by FUNCT_1:def 5;
+     hence thesis by Def11;
+    end;
+ end;
+
+definition let g be Group-Sequence;
+ func carr g -> Domain-Sequence means :Def12:
+  len it = len g & for j be Element of dom g holds it.j = the carrier of g.j;
+  existence
+   proof
+        defpred P[set,set] means ex j' being Element of dom g st j' = $1 &
+         $2 = the carrier of g.j';
+A1:     for j be Nat,y1,y2 st j in Seg len g & P[j,y1] & P[j,y2] holds y1=y2;
+A2:     for j being Nat st j in Seg len g ex x st P[j,x]
+        proof let j be Nat;
+          assume j in Seg len g;
+          then reconsider j' = j as Element of dom g by FINSEQ_1:def 3;
+          take the carrier of g.j'; thus thesis;
+        end;
+     consider p being FinSequence such that
+A3:   dom p = Seg (len g) & for j being Nat st j in Seg len g holds P[j,p.j]
+       from SeqEx(A1,A2);
+A4:   dom g = Seg len g by FINSEQ_1:def 3;
+A5:    p is non empty
+      proof consider i being Element of dom g;
+         dom p = dom g by A3,FINSEQ_1:def 3;
+        then [i,p.i] in p & p = p by FUNCT_1:def 4;
+     hence p is non empty;
+      end;
+      p is non-empty
+      proof
+       assume {} in rng p;
+       then consider x such that
+A6:         x in dom p & {} = p.x by FUNCT_1:def 5;
+       reconsider x as Nat by A6;
+       consider x' being Element of dom g such that
+A7:       x' = x & p.x = the carrier of g.x' by A3,A6;
+       thus contradiction by A6,A7;
+      end;
+   then reconsider p' = p as Domain-Sequence by A5;
+   take p';
+   thus len p' = len g by A3,FINSEQ_1:def 3;
+   let j be Element of dom g;
+   reconsider k = j as Nat;
+     ex j' being Element of dom g st j' = k & p'.k = the carrier of g.j'
+                                                               by A3,A4;
+   hence thesis;
+   end;
+  uniqueness
+   proof let f,h be Domain-Sequence such that
+A8:   len f = len g & for j be Element of dom g holds f.j = the carrier of g.j
+   and
+A9:   len h = len g & for j be Element of dom g holds h.j = the carrier of g.j;
+    reconsider f' = f ,h' = h as FinSequence;
+A10:       dom f' = Seg len f' & dom h' = Seg len h' by FINSEQ_1:def 3;
+        now let j be Nat;
+        assume j in dom f';
+        then reconsider j' = j as Element of dom g by A8,FINSEQ_3:31;
+            f'.j = the carrier of g.j' by A8;
+        hence f'.j = h'.j by A9;
+      end;
+     hence f = h by A8,A9,A10,FINSEQ_1:17;
+   end;
+end;
+
+reserve g for Group-Sequence, i for Element of dom carr g;
+
+definition let g,i;
+ redefine func g.i -> AbGroup;
+  coherence
+   proof
+      dom g = Seg len g & Seg len(carr g) = dom carr g by FINSEQ_1:def 3;
+    then reconsider i' = i as Element of dom g by Def12;
+       g.i' is AbGroup;
+    hence thesis;
+   end;
+end;
+
+definition let g;
+ func addop g -> BinOps of carr g means :Def13:
+  len it = len carr g & for i holds it.i = the add of g.i;
+  existence
+   proof
+    deffunc F(Element of dom carr g) = the add of g.$1;
+    consider p being non empty FinSequence such that
+A1:      len p = len carr g & for i holds p.i = F(i) from NEFinSeqLambda;
+       now let i;
+        len g = len (carr g) by Def12;
+      then reconsider j = i as Element of dom g by FINSEQ_3:31;
+        p.i = the add of g.i & the carrier of g.j = (carr g).j by A1,Def12;
+      hence p.i is BinOp of (carr g).i;
+     end;
+     then reconsider p' = p as BinOps of carr g by A1,Th19;
+     take p';
+     thus thesis by A1;
+   end;
+  uniqueness
+   proof
+    let f,h be BinOps of carr g;
+    assume that A2: (len f = len carr g & for i holds f.i = the add of g.i)
+            and A3: (len h = len carr g & for i holds h.i = the add of g.i);
+     reconsider f' = f,h' = h as FinSequence;
+A4:      dom f' = Seg len f' & dom h' = Seg len h' by FINSEQ_1:def 3;
+        now let i be Nat;
+       assume i in dom f';
+      then reconsider i' = i as Element of dom carr g by A2,FINSEQ_3:31;
+          f'.i = the add of g.i' by A2;
+       hence f'.i = h'.i by A3;
+      end;
+     hence f = h by A2,A3,A4,FINSEQ_1:17;
+   end;
+ func complop g -> UnOps of carr g means:Def14:
+  len it = len carr g & for i holds it.i = comp g.i;
+  existence
+   proof
+    deffunc F(Element of dom carr g) = comp g.$1;
+    consider p being non empty FinSequence such that
+A5:     len p = len carr g & for i holds p.i = F(i) from NEFinSeqLambda;
+      now let i;
+        len g = len (carr g) by Def12;
+      then reconsider j = i as Element of dom g by FINSEQ_3:31;
+        p.i = comp g.i & the carrier of g.j = (carr g).j by A5,Def12;
+      hence p.i is UnOp of (carr g).i;
+    end;
+    then reconsider p' = p as UnOps of carr g by A5,Th20;
+    take p';
+    thus thesis by A5;
+   end;
+  uniqueness
+   proof
+    let f,h be UnOps of carr g;
+    assume that A6: len f = len carr g & for i holds f.i = comp g.i
+            and A7: len h = len carr g & for i holds h.i = comp g.i;
+     reconsider f' = f,h' = h as FinSequence;
+A8:      dom f' = Seg len f' & dom h' = Seg len h' by FINSEQ_1:def 3;
+          now let i be Nat;
+         assume i in dom f';
+         then reconsider i' = i as Element of dom carr g by A6,FINSEQ_3:31;
+             f.i = comp g.i' by A6;
+         hence f.i = h.i by A7;
+        end;
+      hence f = h by A6,A7,A8,FINSEQ_1:17;
+   end;
+ func zeros g -> Element of product carr g means :Def15:
+  for i holds it.i = the Zero of g.i;
+  existence
+   proof
+      deffunc F(Element of dom carr g) = the Zero of g.$1;
+      consider p being non empty FinSequence such that
+A9:   len p = len carr g & for i holds p.i = F(i) from NEFinSeqLambda;
+A10:dom g = Seg len g & dom (carr g) = Seg len (carr g) & len g = len carr g &
+      dom p = Seg len p by Def12,FINSEQ_1:def 3;
+       now let i be set; assume i in dom (carr g);
+      then reconsider x = i as Element of dom carr g;
+      reconsider x' = x as Element of dom g by A10;
+         p.x = the Zero of g.x & (carr g).x' = the carrier of g.x' by A9,Def12;
+      hence p.i in (carr g).i;
+     end;
+    then reconsider t = p as Element of product (carr g) by A9,A10,CARD_3:18;
+    take t;
+    thus thesis by A9;
+   end;
+  uniqueness
+   proof
+    let f,h be Element of product carr g;
+    assume that A11: (for i holds f.i = the Zero of g.i) and
+A12:                 (for i holds h.i = the Zero of g.i);
+     reconsider f' = f , h' = h as Function;
+A13:       dom f' = dom carr g & dom h' = dom carr g by CARD_3:18;
+        now let x; assume x in dom carr g;
+       then reconsider i = x as Element of dom carr g;
+       thus f'.x = the Zero of g.i by A11 .= h'.x by A12;
+      end;
+      hence thesis by A13,FUNCT_1:9;
+   end;
+end;
+
+definition
+ let G be Group-Sequence;
+ func product G -> strict AbGroup equals
+     LoopStr(# product carr G, [:addop G:], zeros G #);
+  coherence
+   proof
+     reconsider GS = LoopStr(# product carr G, [:addop G:], zeros G #)
+       as non empty LoopStr;
+A1:  now let i be Element of dom carr G;
+         dom G = Seg len G by FINSEQ_1:def 3
+            .= Seg len carr G by Def12
+            .= dom carr G by FINSEQ_1:def 3;
+       hence (carr G).i = car(G.i) by Def12;
+     end;
+       now let i be Element of dom carr G;
+         (addop G).i = ad(G.i) & (carr G).i = car(G.i) by A1,Def13;
+       hence (addop G).i is commutative by FVSUM_1:2;
+     end;
+then A2:  [:addop G:] is commutative by Th25;
+       now let i be Element of dom carr G;
+         (addop G).i = ad(G.i) & (carr G).i = car(G.i) by A1,Def13;
+      hence (addop G).i is associative by FVSUM_1:3;
+     end;
+     then A3: [:addop G:] is associative by Th26;
+       now let i be Element of dom carr G;
+         (addop G).i = ad(G.i) & (zeros G).i = zr(G.i) & (carr G).i = car(G.i)
+         by A1,Def13,Def15;
+       hence (zeros G).i is_a_unity_wrt (addop G).i by Th3;
+     end;
+then A4:  zeros G is_a_unity_wrt [:addop G:] by Th27;
+       GS is right_complementable
+     proof
+       let x be Element of GS;
+       reconsider y = (Frege complop G).x as Element of GS by
+FUNCT_2:7;
+       take y;
+         now let i be Element of dom carr G;
+           zr(G.i) is_a_unity_wrt ad(G.i) & (carr G).i = car(G.i) &
+         (addop G).i = ad(G.i) & (complop G).i = cc(G.i)
+          by A1,Def13,Def14,Th3;
+         hence (complop G).i is_an_inverseOp_wrt (addop G).i &
+           (addop G).i has_a_unity by Th4,SETWISEO:def 2;
+       end;
+       then Frege complop G is_an_inverseOp_wrt [:addop G:] by Th28;
+       then [:addop G:].(x,y) = the_unity_wrt [:addop G:] by FINSEQOP:def 1;
+       then x + y = the_unity_wrt [:addop G:] by RLVECT_1:5;
+       then x + y = the Zero of GS by A4,BINOP_1:def 8;
+       hence thesis by RLVECT_1:def 2;
+     end;
+     hence thesis by A2,A3,A4,Lm2,Lm3;
+   end;
+end;
+

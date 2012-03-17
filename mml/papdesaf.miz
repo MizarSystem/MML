@@ -1,0 +1,727 @@
+:: Fanoian, Pappian and Desarguesian Affine Spaces
+::  by Krzysztof Pra\.zmowski
+::
+:: Received November 16, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ANALOAF, DIRAF, REALSET1, RLVECT_1, PARSP_1, ARYTM_1, AFF_2,
+      VECTSP_1, PASCH, TRANSGEO, CONAFFM, AFF_1, RELAT_1, INCSP_1, PAPDESAF;
+ notation SUBSET_1, STRUCT_0, RLVECT_1, REAL_1, ANALOAF, DIRAF, AFF_1, AFF_2,
+      GEOMTRAP, TRANSLAC, REALSET1;
+ constructors REAL_1, AFF_1, AFF_2, GEOMTRAP, TRANSLAC, XREAL_0, MEMBERED,
+      XBOOLE_0;
+ clusters DIRAF, STRUCT_0, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, REAL, SUBSET, ARITHM;
+ definitions TRANSLAC;
+ theorems REAL_1, RLVECT_1, FUNCSDOM, ANALOAF, DIRAF, AFF_1, AFF_2, PASCH,
+      ANALMETR, GEOMTRAP, RLSUB_2, VECTSP_1, XCMPLX_0, XCMPLX_1;
+
+begin
+
+definition let OAS be OAffinSpace;
+  cluster Lambda(OAS) -> AffinSpace-like non trivial;
+correctness by DIRAF:48;
+end;
+
+definition let OAS be OAffinPlane;
+  cluster Lambda(OAS) -> 2-dimensional;
+correctness by DIRAF:53;
+end;
+
+canceled;
+
+theorem Th2: for OAS being OAffinSpace, x being set holds
+  (x is Element of OAS iff
+   x is Element of Lambda(OAS)) &
+  (x is Subset of OAS iff
+   x is Subset of Lambda(OAS))
+proof let OAS be OAffinSpace; Lambda(OAS) =
+AffinStruct (#the carrier of OAS, lambda(the CONGR of OAS)#) by DIRAF:def 2;
+hence thesis; end;
+
+theorem
+Th3: for OAS being OAffinSpace holds for a,b,c being (Element of the carrier
+ of OAS), a',b',c' being (Element of Lambda(OAS)) st
+   a=a' & b=b' & c =c' holds LIN a,b,c iff LIN a',b',c'
+proof let OAS be OAffinSpace; let a,b,c be (Element of OAS),
+   a',b',c' be (Element of Lambda(OAS)) such that
+ A1:  a=a' & b=b' & c =c';
+A2: now assume LIN
+ a',b',c'; then a',b' // a',c' by AFF_1:def 1; then a,b '||' a,c
+ by A1,DIRAF:45; hence LIN a,b,c by DIRAF:def 5; end;
+   now assume LIN a,b,c; then a,b '||' a,c by DIRAF:def 5; then a',b' // a',
+c' by A1,DIRAF:45; hence LIN a',b',c' by AFF_1:def 1; end;
+hence thesis by A2; end;
+
+theorem Th4: for V being RealLinearSpace, x being set holds
+ (x is Element of OASpace(V) iff x is VECTOR of V)
+proof let V be RealLinearSpace, x be set;
+  (OASpace(V)) = AffinStruct (#the carrier of V, DirPar(V)#) by ANALOAF:def 4;
+hence thesis; end;
+
+theorem
+Th5: for V being RealLinearSpace, OAS being OAffinSpace st OAS=OASpace(V)
+ holds (for a,b,c,d being Element of OAS,u,v,w,y being VECTOR
+ of V st a=u & b=v & c =w & d=y holds
+ (a,b '||' c,d iff u,v '||' w,y)) proof let V be RealLinearSpace,
+ OAS be OAffinSpace such that A1:OAS=OASpace(V);
+let a,b,c,d be Element of OAS,u,v,w,y be VECTOR of V;
+assume A2: a=u & b=v & c =w & d=y;
+A3: now assume a,b '||' c,d; then a,b // c,d or a,b // d,c by DIRAF:def 4;
+ then u,v // w,y or u,v // y,w by A1,A2,GEOMTRAP:2;
+ hence u,v '||' w,y by GEOMTRAP:def 1; end;
+   now assume u,v '||' w,y; then u,v // w,y or u,v // y,w by GEOMTRAP:def 1;
+ then a,b // c,d or a,b // d,c by A1,A2,GEOMTRAP:2;
+ hence a,b '||' c,d by DIRAF:def 4; end;
+hence thesis by A3; end;
+
+theorem for V being RealLinearSpace, OAS being OAffinSpace st
+ OAS=OASpace(V) holds (ex u,v being VECTOR of V st
+ (for a,b being Real st a*u + b*v = 0.V holds a=0 & b=0))
+proof let V be RealLinearSpace, OAS be OAffinSpace such that
+A1: OAS = OASpace(V); consider a,b,c,d being Element of OAS
+such that A2: not a,b // c,d & not a,b // d,c by ANALOAF:def 5;
+reconsider u=a,v=b,w=c,y=d as VECTOR of V by A1,Th4; take z1=v-u,z2=y-w;
+   now let r1,r2 be Real; assume A3: r1*z1+r2*z2 = 0.V;
+assume r1<>0 or r2<>0; then A4: r1<>0 or -r2<>0 by XCMPLX_1:135;
+  r1*z1 = -(r2*z2) by A3,RLVECT_1:19 .= r2*(-z2) by RLVECT_1:39
+.= (-r2)*z2 by RLVECT_1:38; then u,v // w,y or u,v // y,w by A4,ANALMETR:18;
+hence r1=0 & r2=0 by A1,A2,GEOMTRAP:2; end;
+hence thesis; end;
+
+definition let AS be AffinSpace;
+  redefine attr AS is Pappian;
+ synonym AS satisfies_PAP';
+end;
+
+definition let AS be AffinSpace;
+  redefine attr AS is Desarguesian;
+ synonym AS satisfies_DES';
+end;
+
+definition let AS be AffinSpace;
+  redefine attr AS is Moufangian;
+ synonym AS satisfies_TDES';
+end;
+
+definition let AS be AffinSpace;
+  redefine attr AS is translational;
+ synonym AS satisfies_des';
+end;
+
+definition let AS be AffinSpace;
+  redefine canceled 4;
+
+attr AS is Fanoian means :Def5:
+ for a,b,c,d being Element of AS st a,b // c,d & a,c // b,d &
+  a,d // b,c holds a,b // a,c;
+   compatibility
+  proof
+   thus AS is Fanoian implies
+    for a,b,c,d being Element of AS
+      st a,b // c,d & a,c // b,d & a,d // b,c holds a,b // a,c
+    proof assume
+A1:   for a,b,c,d  being Element of AS
+        st a,b // c,d & a,c // b,d & a,d // b,c holds LIN a,b,c;
+     let a,b,c,d be Element of AS;
+     assume a,b // c,d & a,c // b,d & a,d // b,c;
+     then LIN a,b,c by A1;
+     hence a,b // a,c by AFF_1:def 1;
+    end;
+   assume
+A2:   for a,b,c,d being Element of AS
+       st a,b // c,d & a,c // b,d & a,d // b,c holds a,b // a,c;
+   let a,b,c,d be Element of AS;
+   assume a,b // c,d & a,c // b,d & a,d // b,c;
+   then a,b // a,c by A2;
+   hence LIN a,b,c by AFF_1:def 1;
+  end;
+  synonym AS satisfies_Fano;
+end;
+
+definition let IT be OAffinSpace;
+ canceled 5;
+
+ attr IT is Pappian means :Def11:
+  Lambda(IT) satisfies_PAP';
+
+ attr IT is Desarguesian means :Def12:
+  Lambda(IT) satisfies_DES';
+
+ attr IT is Moufangian means :Def13:
+  Lambda(IT) satisfies_TDES';
+
+ attr IT is translation means :Def14:
+  Lambda(IT) satisfies_des';
+end;
+
+definition let OAS be OAffinSpace;
+  attr OAS is satisfying_DES means :Def15:
+ for o,a,b,c,a1,b1,c1 being Element of OAS st
+ (o,a // o,a1 & o,b // o,b1 & o,c // o,c1 & not LIN o,a,b & not LIN o,a,c
+  & a,b // a1,b1 & a,c // a1,c1) holds b,c // b1,c1;
+  synonym OAS satisfies_DES;
+end;
+
+definition let OAS be OAffinSpace;
+  attr OAS is satisfying_DES_1 means :Def16:
+ for o,a,b,c,a1,b1,c1 being Element of OAS st
+ (a,o // o,a1 & b,o // o,b1 & c,o // o,c1 & not LIN o,a,b & not LIN o,a,c
+  & a,b // b1,a1 & a,c // c1,a1) holds b,c // c1,b1;
+  synonym OAS satisfies_DES_1;
+end;
+
+canceled 4;
+
+theorem Th11: for OAS being OAffinSpace st OAS satisfies_DES_1 holds
+ OAS satisfies_DES
+proof let OAS be OAffinSpace such that A1: OAS satisfies_DES_1;
+   for o,a,b,c,a1,b1,c1 being Element of OAS st
+ (o,a // o,a1 & o,b // o,b1 & o,c // o,c1 & not LIN o,a,b & not LIN o,a,c
+  & a,b // a1,b1 & a,c // a1,c1) holds b,c // b1,c1
+proof let o,a,b,c,a1,b1,c1 be Element of OAS such that
+A2: o,a // o,a1 & o,b // o,b1 & o,c // o,c1 and A3: not LIN o,a,b & not LIN
+ o,a,c
+and A4: a,b // a1,b1 & a,c // a1,c1;
+consider a2 being Element of OAS such that
+A5: Mid a,o,a2 and A6: o<>a2 by DIRAF:17;
+A7: o<>a & o<>b & o<>c & a<>b & a<>c by A3,DIRAF:37;
+A8: a,o // o,a2 by A5,DIRAF:def 3;
+then consider b2 being Element of OAS such that
+A9: b,o // o,b2 and A10: b,a // a2,b2 by A7,ANALOAF:def 5;
+consider c2 being Element of OAS such that
+A11: c,o // o,c2 and A12: c,a // a2,c2 by A7,A8,ANALOAF:def 5;
+   a,b // b2,a2 & a,c // c2,a2 by A10,A12,ANALOAF:def 5;
+then A13: b,c // c2,b2 by A1,A3,A8,A9,A11,Def16;
+A14: a2,o // o,a & b2,o // o,b & c2,o // o,c by A8,A9,A11,DIRAF:5;
+then A15: a2,o // o,a1 & b2,o // o,b1 & c2,o // o,c1 by A2,A7,DIRAF:6;
+   b2,a2 // a,b & c2,a2 // a,c by A10,A12,DIRAF:5;
+ then b2,a2 // a1,b1 & c2,a2 // a1,c1 by A4,A7,DIRAF:6;
+then A16: a2,c2 // c1,a1 & a2,b2 // b1,a1 by DIRAF:5;
+   LIN a,o,a2 by A5,DIRAF:34;
+then A17: LIN o,a2,a by DIRAF:36; Mid b2,o,b & Mid c2,o,c by A14,DIRAF:def 3;
+then A18: LIN b2,o,b & LIN c2,o,c by DIRAF:34;
+A19: o<>b2 proof assume o=b2; then o,a2 // a,b by A10,DIRAF:5
+; then o,a2 '||' a,b by DIRAF:def 4
+;
+ then LIN o,a2,o & LIN o,a2,b by A6,A17,DIRAF:37,39;
+ hence contradiction by A3,A6,A17,DIRAF:38; end;
+A20: not LIN o,a2,b2 proof assume A21: LIN o,a2,b2; LIN
+ o,a2,o by DIRAF:37;
+ then A22: LIN b2,o,a by A6,A17,A21,DIRAF:38; LIN b2,o,o by DIRAF:37;
+hence contradiction by A3,A18,A19,A22,DIRAF:38; end;
+A23: o<>c2 proof assume o=c2; then o,a2 // a,c by A12,DIRAF:5
+; then o,a2 '||' a,c by DIRAF:def 4
+;
+ then LIN o,a2,o & LIN o,a2,c by A6,A17,DIRAF:37,39;
+ hence contradiction by A3,A6,A17,DIRAF:38; end;
+   not LIN o,a2,c2 proof assume A24: LIN o,a2,c2; LIN o,a2,o by DIRAF:37;
+ then A25: LIN c2,o,a by A6,A17,A24,DIRAF:38; LIN c2,o,o by DIRAF:37;
+hence contradiction by A3,A18,A23,A25,DIRAF:38; end;
+then A26: c2,b2 // b1,c1 by A1,A15,A16,A20,Def16;
+
+   now assume A27: c2=b2;
+ A28: not LIN o,b2,a2 by A20,DIRAF:36;
+ A29: LIN o,b2,b & LIN o,b2,c by A18,A27,DIRAF:36
+; b2,a2 // a,b & c2,a2 // a,c by A10,A12,DIRAF:5;
+  then b2,a2 '||' a,b & b2,a2 '||' a,c by A27,DIRAF:def 4;
+ then b=c by A17,A28,A29,PASCH:11; hence b,c // b1,c1 by DIRAF:7; end;
+hence thesis by A13,A26,DIRAF:6; end; hence thesis by Def15; end;
+
+theorem
+Th12: for OAS being OAffinSpace holds for o,a,b,a',b' being Element of the
+ carrier of OAS st not LIN o,a,b & a,o // o,a' & LIN o,b,b' & a,b '||' a',b'
+ holds b,o // o,b' & a,b // b',a'
+proof let OAS be OAffinSpace; let o,a,b,a',b' be Element of OAS
+ such that A1: not LIN o,a,b and A2: a,o // o,a' and A3: LIN o,b,b'
+ and A4: a,b '||' a',b'; A5: Mid a,o,a' by A2,DIRAF:def 3;
+   a,b '||' b',a' by A4,DIRAF:27; then Mid b,o,b' by A1,A3,A5,PASCH:13;
+ hence b,o // o,b' by DIRAF:def 3
+; hence a,b // b',a' by A1,A2,A4,PASCH:19; end;
+
+theorem
+Th13: for OAS being OAffinSpace holds for o,a,b,a',b' being Element of the
+ carrier of OAS st not LIN o,a,b & o,a // o,a' & LIN o,b,b' & a,b '||' a',b'
+ holds o,b // o,b' & a,b // a',b'
+proof let OAS be OAffinSpace; let o,a,b,a',b' be Element of OAS
+ such that A1: not LIN o,a,b and A2: o,a // o,a' and A3: LIN o,b,b'
+ and A4: a,b '||' a',b';
+ consider a2 being Element of OAS such that
+A5: Mid a,o,a2 and A6: o<>a2 by DIRAF:17;
+A7: a,o // o,a2 by A5,DIRAF:def 3;
+A8: o<>a & o<>b & b<>a by A1,DIRAF:37;
+then consider b2 being Element of OAS such that
+A9: b,o // o,b2 and A10: b,a // a2,b2 by A7,ANALOAF:def 5;
+   LIN a,o,a2 by A5,DIRAF:34; then A11: LIN o,a2,a by DIRAF:36;
+   Mid b,o,b2 by A9,DIRAF:def 3; then LIN b,o,b2 by DIRAF:34;
+then A12: LIN b2,o,b by DIRAF:36;
+A13: o<>b2 proof assume o=b2; then o,a2 // a,b by A10,DIRAF:5
+; then o,a2 '||' a,b by DIRAF:def 4
+;
+ then LIN o,a2,o & LIN o,a2,b by A6,A11,DIRAF:37,39;
+ hence contradiction by A1,A6,A11,DIRAF:38; end;
+A14: not LIN o,a2,b2
+ proof assume A15: LIN o,a2,b2; LIN o,a2,o by DIRAF:37;
+ then A16: LIN b2,o,a by A6,A11,A15,DIRAF:38; LIN b2,o,o by DIRAF:37;
+hence contradiction by A1,A12,A13,A16,DIRAF:38; end;
+then A17: a2<>b2 by DIRAF:37;
+A18: a2,o // o,a' proof a,o // o,a2 by A5,DIRAF:def 3; then a2,o // o,a
+ by DIRAF:5; hence thesis by A2,A8,DIRAF:6; end;
+A19: a2,b2 '||' a',b' proof a2,b2 // b,a by A10,DIRAF:5; then a2,b2 '||' a,b
+by DIRAF:def 4; hence thesis by A4,A8,DIRAF:28; end;
+   LIN o,b2,b' proof Mid b,o,b2 by A9,DIRAF:def 3; then LIN
+ b,o,b2 by DIRAF:34;
+ then LIN o,b,b2 & LIN
+ o,b,o by DIRAF:36,37; hence thesis by A3,A8,DIRAF:38;end;
+then A20: a2,b2 // b',a' & b2,o // o,b' by A14,A18,A19,Th12;
+   o,b // b2,o by A9,DIRAF:5; hence o,b // o,b' by A13,A20,DIRAF:6;
+   a,b // b2,a2 & b2,a2 // a',b' by A10,A20,DIRAF:5;
+ hence a,b // a',b' by A17,DIRAF:6; end;
+
+theorem Th14: for OAP being OAffinSpace st OAP satisfies_DES_1 holds
+ Lambda(OAP) satisfies_DES'
+proof let OAP be OAffinSpace; assume A1: OAP satisfies_DES_1;
+then A2:OAP satisfies_DES by Th11;
+set AP = Lambda(OAP);
+   for A,P,C being Subset of AP,
+ o,a,b,c,a',b',c' being Element of AP
+ st o in A & o in P & o in C & o<>a & o<>b & o<>c &
+  a in A & a' in A & b in P & b' in P & c in C & c' in C &
+  A is_line & P is_line & C is_line & A<>P & A<>C &
+  a,b // a',b' & a,c // a',c' holds b,c // b',c' proof
+let A,P,C be Subset of AP;
+let o,a,b,c,a',b',c' be Element of AP;
+assume that A3: o in A & o in P & o in C and A4: o<>a & o<>b & o<>c and
+ A5: a in A & a' in A & b in P & b' in P & c in C & c' in C and
+ A6: A is_line & P is_line & C is_line and A7:  A<>P & A<>C and
+ A8: a,b // a',b' & a,c // a',c';
+reconsider o1=o,a1=a,b1=b,c1=c,a1'=a',b1'=b',c1'=c' as Element of the carrier
+ of OAP by Th2;
+A9: LIN o1,a1,a1' & LIN o1,b1,b1' & LIN o1,c1,c1' proof LIN o,a,a' & LIN
+ o,b,b' &
+ LIN o,c,c' by A3,A5,A6,AFF_1:33; hence thesis by Th3; end;
+A10: not LIN o1,a1,b1 & not LIN o1,a1,c1 proof assume A11: not thesis;
+ A12: now assume LIN o,a,b; then consider X being Subset of
+  Lambda(OAP) such that A13: X is_line & o in X & a in X & b in X by AFF_1:33;
+    X = P & X = A by A3,A4,A5,A6,A13,AFF_1:30; hence contradiction by A7; end;
+    now assume LIN o,a,c; then consider X being Subset of
+  Lambda(OAP) such that A14: X is_line & o in X & a in X & c in X by AFF_1:33;
+    X = C & X = A by A3,A4,A5,A6,A14,AFF_1:30; hence contradiction by A7; end;
+ hence contradiction by A11,A12,Th3; end;
+A15: a1,o1 // o1,a1' or o1,a1 // o1,a1' proof
+    Mid o1,a1,a1' or Mid a1,o1,a1' or Mid o1,a1',a1 by A9,DIRAF:35; hence
+    a1,o1 // o1,a1' or o1,a1 // o1,a1' by DIRAF:11,def 3; end;
+A16: a1,b1 '||' a1',b1' & a1,c1 '||' a1',c1' by A8,DIRAF:45;
+A17: now assume A18: a1,o1 // o1,a1'; then b1,o1 // o1,b1' & c1,o1 // o1,c1' &
+  a1,b1 // b1',a1' & a1,c1 // c1',a1' by A9,A10,A16,Th12;
+  then b1,c1 // c1',b1' by A1,A10,A18,Def16; then b1,c1 '||' b1',c1' by DIRAF:
+def 4;
+  hence b,c // b',c' by DIRAF:45; end;
+   now assume A19: o1,a1 // o1,a1'; then o1,b1 // o1,b1' & o1,c1 // o1,c1' &
+  a1,b1 // a1',b1' & a1,c1 // a1',c1' by A9,A10,A16,Th13;
+  then b1,c1 // b1',c1' by A2,A10,A19,Def15; then b1,c1 '||' b1',c1' by DIRAF:
+def 4;
+  hence b,c // b',c' by DIRAF:45; end;
+hence b,c // b',c' by A15,A17; end; hence thesis by AFF_2:def 4; end;
+
+theorem
+Th15: for V being RealLinearSpace holds for o,u,v,u1,v1 being VECTOR of V,
+r being Real st o-u=r*(u1-o) & r<>0 & o,v '||' o,v1 & not o,u '||' o,v &
+ u,v '||' u1,v1 holds v1 = u1 + (-r)"*(v-u) & v1 = o + (-r)"*(v-o)
+ & v-u = (-r)*(v1-u1)
+proof let V be RealLinearSpace; let o,u,v,u1,v1 be VECTOR of V, r be Real such
+ that A1: o-u=r*(u1-o) & r<>0 and A2: o,v '||' o,v1 and
+ A3: not o,u '||' o,v and
+ A4: u,v '||' u1,v1; set w = u1 + (-r)"*(v-u);
+ A5: -r <> 0 by A1,XCMPLX_1:135;
+A6: 1*(u-o) = (-r)*(u1-o) proof 1*(u-o) = (-1)*(-(u-o)) by RLVECT_1:40
+ .= (-1)*(r*(u1-o)) by A1,VECTSP_1:81
+ .= ((-1)*r)*(u1-o) by RLVECT_1:def 9 .= (- 1*r)*(u1-o) by XCMPLX_1:175
+ .= (-r)*(u1-o); hence thesis; end;
+A7: o,u '||' o,u1 proof o,u // o,u1 or o,u // u1,o by A6,ANALMETR:18;
+ hence thesis by GEOMTRAP:def 1; end;
+A8: 1*(v-u) = (-r)*(w-u1) proof (-r)*(w-u1)
+  = (-r)*((-r)"*(v-u)) by RLSUB_2:78
+ .= ((-r)*(-r)")*(v-u) by RLVECT_1:def 9
+ .= 1*(v-u) by A5,XCMPLX_0:def 7; hence thesis; end;
+then A9: v-u = (-r)*(w-u1) by RLVECT_1:def 9;
+A10: u,v '||' u1,w proof u,v // u1,w or u,v // w,u1 by A8,ANALMETR:18;
+ hence thesis by GEOMTRAP:def 1; end;
+A11: 1*(o-v) = (-r)*(o-w) proof (-r)*(o-w)
+  = (-r)*o - (-r)*w by RLVECT_1:48 .=
+(-r)*o - ((-r)*u1 + (-r)*((-r)"*(v-u))) by RLVECT_1:def 9
+ .= (-r)*o - ((-r)*u1 + ((-r)*(-r)")*(v-u)) by RLVECT_1:def 9
+ .= (-r)*o - ((-r)*u1 + 1*(v-u)) by A5,XCMPLX_0:def 7
+ .= (-r)*o - ((-r)*u1 + (v-u)) by RLVECT_1:def 9
+ .= ((-r)*o - (-r)*u1) - (v-u) by RLVECT_1:41
+ .= (-r)*(o-u1) - (v-u) by RLVECT_1:48 .= r*(-(o-u1)) - (v-u) by RLVECT_1:38
+ .= (o-u) - (v-u) by A1,VECTSP_1:81
+ .= o - ((v-u)+u) by RLVECT_1:41
+ .= o - v by RLSUB_2:78 .= 1*(o-v) by RLVECT_1:def 9; hence thesis; end;
+A12: w = o + (-r)"*(v-o) proof A13: (-r)*(w-o) = r*(-(w-o)) by RLVECT_1:38
+ .= r*(o-w) by VECTSP_1:81 .= -(-(r*(o-w))) by RLVECT_1:30
+ .= -(r*(-(o-w))) by RLVECT_1:39 .= -(1*(o-v)) by A11,RLVECT_1:38 .= -(o-v) by
+RLVECT_1:def 9 .= v-o by VECTSP_1:81;
+
+ thus w = o + (w-o) by RLSUB_2:78
+ .= o + (-r)"*(v-o) by A5,A13,ANALOAF:13; end;
+A14: o,v '||' o,w proof v,o // w,o or v,o // o,w by A11,ANALMETR:18;
+ then o,v // w,o or o,v // o,w by ANALOAF:21;
+ hence thesis by GEOMTRAP:def 1; end;
+   for r1,r2 being Real st r1*(u-o)+r2*(v-o) = 0.V holds r1=0 & r2=0
+ proof let r1,r2 be Real; assume A15: r1*(u-o)+r2*(v-o) = 0.V;
+ assume r1<>0 or r2<>0; then A16: r1<>0 or -r2<>0 by XCMPLX_1:135;
+    r1*(u-o) = -(r2*(v-o)) by A15,RLVECT_1:19
+  .= r2*(-(v-o)) by RLVECT_1:39 .= (-r2)*(v-o) by RLVECT_1:38;
+ then o,u // o,v or o,u // v,o by A16,ANALMETR:18;hence contradiction by A3,
+GEOMTRAP:def 1; end;
+then reconsider X = OASpace(V) as OAffinSpace by ANALOAF:38;
+reconsider p=o,a=u,a1=u1,b=v,b1=v1,q=w as Element of X by Th4;
+A17: p,a '||' p,a1 & a,b '||' a1,b1 &
+a,b '||' a1,q & p,b '||' p,b1 & p,b '||' p,q by A2,A4,A7,A10,A14,Th5;
+A18: not LIN p,b,a proof assume LIN p,b,a;
+then p,b '||' p,a by DIRAF:def 5;
+ then p,a '||' p,b by DIRAF:27;
+ hence contradiction by A3,Th5; end;
+  LIN p,b,b1 & LIN p,b,q & LIN p,a,a1 & b,a '||' a1,q & b,a '||' a1,b1
+ by A17,DIRAF:27,def 5;
+hence thesis by A9,A12,A18,PASCH:11; end;
+
+Lm1: for V being RealLinearSpace holds for u,v,w being VECTOR of V st
+ u<>v & w<>v & u,v // v,w ex r being Real st v-u = r*(w-v) & 0<r
+proof let V be RealLinearSpace; let u,v,w be VECTOR of V; assume
+  u<>v & w<>v & u,v // v,w; then consider a,b being Real such that
+A1: a*(v-u)=b*(w-v) and A2: 0<a & 0<b by ANALOAF:16;
+take r = a"*b;
+A3: 0<r proof 0<a" by A2,REAL_1:72; then 0*b < r by A2,REAL_1:70;
+ hence thesis; end;
+   v-u = 1*(v-u) by RLVECT_1:def 9 .= (a"*a)*(v-u) by A2,XCMPLX_0:def 7
+ .= a"*(b*(w-v)) by A1,RLVECT_1:def 9
+ .= r*(w-v) by RLVECT_1:def 9; hence thesis by A3; end;
+
+canceled;
+
+theorem Th17: for V being RealLinearSpace, OAS being OAffinSpace st
+      OAS = OASpace(V) holds OAS satisfies_DES_1
+proof let V be RealLinearSpace,OAS be OAffinSpace such that
+A1: OAS = OASpace(V);
+   for o,a,b,c,a1,b1,c1 being Element of OAS st
+ (a,o // o,a1 & b,o // o,b1 & c,o // o,c1 & not LIN o,a,b & not LIN o,a,c
+  & a,b // b1,a1 & a,c // c1,a1) holds b,c // c1,b1 proof
+let o,a,b,c,a1,b1,c1 be Element of OAS such that
+A2: a,o // o,a1 & b,o // o,b1 & c,o // o,c1 and A3: not LIN o,a,b & not LIN
+ o,a,c
+and A4: a,b // b1,a1 & a,c // c1,a1;
+reconsider y=o,u=a,v=b,w=c,u1=a1,v1=b1,w1=c1 as VECTOR of V by A1,Th4;
+A5: o<>a & o<>b & o<>c & a<>b & a<>c by A3,DIRAF:37;
+A6: now assume A7: o=a1;
+ A8: o=b1 proof assume A9: o<>b1; a,b '||' b1,o
+  by A4,A7,DIRAF:def 4;
+  then A10: o,b1 '||' b,a by DIRAF:27; b,o '||' o,b1 by A2,DIRAF:def 4;
+  then o,b1 '||' o,b by DIRAF:27; then LIN o,b1,b by DIRAF:def 5; then LIN
+ o,b1,a &
+  LIN o,b1,b & LIN o,b1,o by A9,A10,DIRAF:37,39;
+  hence contradiction by A3,A9,DIRAF:38; end;
+    o=c1 proof assume A11: o<>c1; a,c '||' c1,o
+  by A4,A7,DIRAF:def 4; then A12: o,c1 '||' c,a by DIRAF:27;
+    c,o '||' o,c1 by A2,DIRAF:def 4;
+  then o,c1 '||' o,c by DIRAF:27; then LIN o,c1,c by DIRAF:def 5; then LIN
+ o,c1,a &
+  LIN o,c1,c & LIN o,c1,o by A11,A12,DIRAF:37,39;
+  hence contradiction by A3,A11,DIRAF:38; end;
+ hence b,c // c1,b1 by A8,DIRAF:7; end;
+   now assume A13: o<>a1; u,y // y,u1 by A1,A2,GEOMTRAP:2;
+ then consider r being Real such that
+ A14: y-u = r*(u1-y) and A15: 0<r by A5,A13,Lm1;
+   o,b // b1,o & o,c // c1,o by A2,DIRAF:5;
+ then y,v // v1,y & y,w // w1,y by A1,GEOMTRAP:2;
+ then A16: y,v '||' y,v1 & y,w '||' y,w1 by GEOMTRAP:def 1;
+   u,v // v1,u1 & u,w // w1,u1 by A1,A4,GEOMTRAP:2;
+ then A17: u,v '||' u1,v1 & u,w '||' u1,w1 by GEOMTRAP:def 1;
+    not y,u '||' y,v & not y,u '||' y,w proof assume not thesis;
+  then y,u // y,v or y,u // v,y or y,u // y,w or y,u // w,y by GEOMTRAP:def 1;
+  then o,a // o,b or o,a // b,o or o,a // o,c or o,a // c,o by A1,GEOMTRAP:2;
+  then o,a '||' o,b or o,a '||' o,c by DIRAF:def 4;
+  hence contradiction by A3,DIRAF:def 5; end;
+ then v1 = u1 + (-r)"*(v-u) & w1 = u1 + (-r)"*(w-u) by A14,A15,A16,A17,Th15;
+ then A18: 1*(w1-v1) = (u1+(-r)"*(w-u)) - (u1+(-r)"*(v-u)) by RLVECT_1:def 9
+  .= (((-r)"*(w-u)+u1) - u1)-(-r)"*(v-u) by RLVECT_1:41
+  .= (-r)"*(w-u) - (-r)"*(v-u) by RLSUB_2:78
+  .= (-r)"*((w-u) - (v-u)) by RLVECT_1:48
+  .= (-r)"*(w - ((v-u)+u)) by RLVECT_1:41
+  .= (-r)"*(w - v) by RLSUB_2:78 .= (-(r)")*(w-v) by XCMPLX_1:224
+  .= r"*(-(w-v)) by RLVECT_1:38 .= r"*(v-w) by VECTSP_1:81;
+   0<1 & 0<r" by A15,REAL_1:72; then w,v // v1,w1 by A18,ANALOAF:def 1;
+ then c,b // b1,c1 by A1,GEOMTRAP:2; hence b,c // c1,b1 by DIRAF:5; end;
+hence b,c // c1,b1 by A6; end; hence thesis by Def16; end;
+
+theorem Th18: for V being RealLinearSpace, OAS being OAffinSpace st
+ OAS = OASpace(V) holds OAS satisfies_DES_1 & OAS satisfies_DES
+proof let V be RealLinearSpace,OAS be OAffinSpace; assume
+    OAS=OASpace(V); hence OAS satisfies_DES_1 by Th17;
+hence OAS satisfies_DES by Th11; end;
+
+Lm2: for V being RealLinearSpace holds for y,u,v being VECTOR of V st
+ y,u '||' y,v & y<>u & y<>v ex r being Real st u-y = r*(v-y) & r<>0
+proof let V be RealLinearSpace; let y,u,v be VECTOR of V such that
+A1: y,u '||' y,v and A2: y<>u & y<>v;
+  y,u // y,v or y,u // v,y by A1,GEOMTRAP:def 1; then consider a,b being Real
+such that A3: a*(u-y) = b*(v-y) and A4: a<>0 or b<>0 by ANALMETR:18;
+take r=a"*b;
+A5: now assume a=0; then 0.V = b*(v-y) & b<>0 by A3,A4,RLVECT_1:23
+; then v-y = 0.V
+ by RLVECT_1:24; hence contradiction by A2,RLVECT_1:35; end;
+A6:
+ now assume b=0; then 0.V = a*(u-y) & a<>0 by A3,A4,RLVECT_1:23; then u-y =
+0.V
+ by RLVECT_1:24; hence contradiction by A2,RLVECT_1:35; end;
+ A7: a"<>0 by A5,XCMPLX_1:203;
+    u-y = r*(v-y) proof thus
+   r*(v-y) = a"*(a*(u-y)) by A3,RLVECT_1:def 9 .= (a"*a)*(u-y) by RLVECT_1:def
+9
+ .= 1*(u-y) by A5,XCMPLX_0:def 7 .= u-y by RLVECT_1:def 9; end;
+hence thesis by A6,A7,XCMPLX_1:6; end;
+
+Lm3: for V being RealLinearSpace holds for u,v,y being VECTOR of V holds
+ (u-y)-(v-y) = u-v
+proof let V be RealLinearSpace; let u,v,y be VECTOR of V;
+thus (u-y)-(v-y) = u-((v-y)+y) by RLVECT_1:41
+.= u-v by RLSUB_2:78; end;
+
+theorem Th19: for V being RealLinearSpace, OAS being OAffinSpace st
+      OAS = OASpace(V) holds Lambda(OAS) satisfies_PAP'
+proof let V be RealLinearSpace, OAS be OAffinSpace such that
+A1: OAS = OASpace(V); set AS = Lambda(OAS);
+   for M,N being Subset of AS, o,a,b,c,a',b',c' being Element of
+the carrier of AS st M is_line & N is_line & M<>N &
+   o in M & o in N & o<>a & o<>a' & o<>b & o<>b' & o<>c & o<>c' & a in M &
+   b in M & c in M & a' in N & b' in N & c' in N &
+   a,b' // b,a' & b,c' // c,b' holds a,c' // c,a'
+proof let M,N be Subset of AS, o,a,b,c,a',b',c' be Element of
+the carrier of AS such that A2: M is_line & N is_line and A3: M<>N and
+ A4: o in M & o in N and A5: o<>a & o<>a' & o<>b & o<>b' & o<>c & o<>c' and
+ A6: a in M & b in M & c in M & a' in N & b' in N & c' in N and
+ A7: a,b' // b,a' & b,c' // c,b';
+reconsider o1=o,a1=a,b1=b,c1=c,a1'=a',b1'=b',c1'=c' as Element of the carrier
+ of OAS by Th2;
+reconsider q=o1,u=a1,v=b1,w=c1,u'=a1',v'=b1',w'=c1' as VECTOR of V by A1,Th4;
+  a1,b1' '||' b1,a1' & b1,c1' '||' c1,b1' by A7,DIRAF:45;
+then b1,a1' '||' a1,b1' & b1,c1' '||' c1,b1' by DIRAF:27;
+then A8: v,u' '||' u,v' & v,w' '||' w,v' by A1,Th5;
+A9: q,u '||' q,v & q,w '||' q,v
+proof LIN o,a,b & LIN o,c,b by A2,A4,A6,AFF_1:33;
+ then o,a // o,b & o,c // o,b by AFF_1:def 1;
+ then o1,a1 '||' o1,b1 & o1,c1 '||' o1,b1 by DIRAF:45;
+ hence thesis by A1,Th5;
+end;
+then consider r1 being Real such that A10: u-q = r1*(v-q) & r1<>0 by A5,Lm2;
+consider r2 being Real such that A11: w-q = r2*(v-q) & r2<>0 by A5,A9,Lm2;
+A12: -r1<>0 by A10,XCMPLX_1:135; (-r1)*(q-v) = r1*(-(q-v)) by RLVECT_1:38
+ .= u-q by A10,VECTSP_1:81;
+then A13: q-v = (-r1)"*(u-q) by A12,ANALOAF:13;
+A14: -r1<>0 & -r2<>0 by A10,A11,XCMPLX_1:135; (-r2)*(q-v) = r2*(-(q-v)) by
+RLVECT_1:38 .= w-q by A11,VECTSP_1:81;
+then A15: q-v = (-r2)"*(w-q) by A14,ANALOAF:12;
+A16: (-r1)" <>0 & (-r2)" <>0 by A14,XCMPLX_1:203;
+A17: r1"<>0 & r2"<>0 by A10,A11,XCMPLX_1:203;
+A18: q,u' '||' q,v' & q,w' '||' q,v' proof LIN o,a',b' & LIN
+ o,c',b' by A2,A4,A6,AFF_1:33;
+ then o,a' // o,b' & o,c' // o,b' by AFF_1:def 1;
+ then o1,a1' '||' o1,b1' &
+ o1,c1' '||' o1,b1' by DIRAF:45; hence thesis by A1,Th5; end;
+A19: not q,v '||' q,w' & not q,v '||' q,u' proof assume not thesis;
+ then o1,b1 '||' o1,c1' or o1,b1 '||' o1,a1' by A1,Th5;
+ then o,b // o,c' or o,b // o,a' by DIRAF:45;
+ then LIN o,b,c' or LIN o,b,a' by AFF_1:def 1;
+ then c' in M or a' in M by A2,A4,A5,A6,AFF_1:39;
+ hence contradiction by A2,A3,A4,A5,A6,AFF_1:30; end;
+set s=r1*(r2");
+   v' = q + (-((-r2)"))"*(w'-q) by A8,A15,A16,A18,A19,Th15
+ .= q + (-(-(r2")))"*(w'-q) by XCMPLX_1:224 .= q+ r2*(w'-q);
+then A20: v'-q = r2*(w'-q) by RLSUB_2:78;
+   v' = q + (-((-r1)"))"*(u'-q) by A8,A13,A16,A18,A19,Th15
+ .= q + (-(-(r1")))"*(u'-q) by XCMPLX_1:224 .= q+ r1*(u'-q);
+ then v'-q = r1*(u'-q) by RLSUB_2:78;
+then A21: u'-q = r1"*(r2*(w'-q)) by A10,A20,ANALOAF:13
+ .= (r1"*r2)*(w'-q) by RLVECT_1:def 9; r1"*r2<>0 by A11,A17,XCMPLX_1:6;
+then A22: w'-q = (r1"*r2)"*(u'-q) by A21,ANALOAF:13
+ .= ((r1")"*(r2"))*(u'-q) by XCMPLX_1:205
+ .= s*(u'-q);
+A23: u-q = r1*(r2"*(w-q)) by A10,A11,ANALOAF:13
+ .= s*(w-q) by RLVECT_1:def 9;
+   1*(w'-u) = w'-u by RLVECT_1:def 9 .= s*(u'-q) - s*(w-q) by A22,A23,Lm3
+ .= s*((u'-q)-(w-q)) by RLVECT_1:48
+ .= s*(u'-w) by Lm3; then u,w' // w,u' or u,w' // u',w by ANALMETR:18
+; then u,w' '||' w,u' by GEOMTRAP:def 1; then a1,c1' '||' c1,a1' by A1,Th5
+; hence a,c' // c,a' by DIRAF:45; end; hence thesis by AFF_2:def 2; end;
+
+theorem Th20: for V being RealLinearSpace, OAS being OAffinSpace st
+      OAS = OASpace(V) holds Lambda(OAS) satisfies_DES'
+proof let V be RealLinearSpace, OAS be OAffinSpace; assume
+   OAS = OASpace(V); then OAS satisfies_DES_1 by Th18; hence
+  Lambda(OAS) satisfies_DES' by Th14; end;
+
+theorem
+Th21: for AS being AffinSpace st AS satisfies_DES' holds AS satisfies_TDES'
+proof let AS be AffinSpace such that A1: AS satisfies_DES';
+   now let K be Subset of AS, o,a,b,c,a',b',c' be Element of the
+ carrier of AS such that
+ A2: K is_line & o in K & c in K & c' in K & not a in K & o<>c
+ & a<>b & LIN o,a,a' & LIN o,b,b' & a,b // a',b' & a,c // a',c' & a,b // K;
+  A3: now assume o=b; then b in K & b,a // K by A2,AFF_1:48;
+  hence contradiction by A2,AFF_1:37; end; set A=Line(o,a), P=Line(o,b);
+ A4: A is_line & P is_line & o in A & a in A & o in P & b in
+ P by A2,A3,AFF_1:38;
+ then A5: a' in A & b' in P by A2,A3,AFF_1:39; A<>P proof assume A=P;
+  then b in A & A // A by A4,AFF_1:55; then a,b // A by A4,AFF_1:54; then A
+// K
+  by A2,AFF_1:67; hence contradiction by A2,A4,AFF_1:59;end;
+  hence b,c // b',c' by A1,A2,A3,A4,A5,AFF_2:def 4
+; end; hence thesis by AFF_2:def 7; end;
+
+theorem Th22: for V being RealLinearSpace, OAS being OAffinSpace st
+      OAS = OASpace(V) holds Lambda(OAS) satisfies_TDES'
+proof let V be RealLinearSpace, OAS be OAffinSpace; assume
+   OAS = OASpace(V);
+then (Lambda(OAS)) satisfies_DES' by Th20; hence thesis by Th21; end;
+
+theorem Th23: for V being RealLinearSpace, OAS being OAffinSpace st
+      OAS = OASpace(V) holds Lambda(OAS) satisfies_des'
+proof let V be RealLinearSpace, OAS be OAffinSpace such that
+A1: OAS = OASpace(V); set AS = Lambda(OAS);
+   for A,P,C being Subset of AS, a,b,c,a',b',c' being Element of
+the carrier of AS st A // P & A // C & a in A & a' in A &
+b in P & b' in P & c in C & c' in C & A is_line & P is_line &
+C is_line & A<>P & A<>C & a,b // a',b' & a,c // a',c' holds b,c // b',c' proof
+let A,P,C be Subset of AS, a,b,c,a',b',c' be Element of
+the carrier of AS such that A2: A // P & A // C and A3: a in A & a' in A &
+b in P & b' in P & c in C & c' in C and A4: A is_line & P is_line &
+C is_line and A5: A<>P & A<>C and A6: a,b // a',b' & a,c // a',c';
+reconsider a1=a,b1=b,c1=c,a1'=a',b1'=b',c1'=c' as Element of the carrier
+ of OAS by Th2;
+reconsider u=a1,v=b1,w=c1,u'=a1' as VECTOR of V by A1,Th4;
+A7: now assume A8: a=a';
+ A9: b=b' proof assume A10: b<>b'; LIN a,b,b'
+  by A6,A8,AFF_1:def 1
+; then LIN b,b',a by AFF_1:15; then a in P by A3,A4,A10,AFF_1:39;
+  hence contradiction by A2,A3,A5,AFF_1:59; end;
+    c =c' proof assume A11: c <>c'; LIN a,c,c'
+  by A6,A8,AFF_1:def 1
+; then LIN c,c',a by AFF_1:15; then a in C by A3,A4,A11,AFF_1:39;
+  hence contradiction by A2,A3,A5,AFF_1:59; end;
+ hence b,c // b',c' by A9,AFF_1:11; end;
+   now assume A12: a<>a';
+ A13: not LIN a1,a1',b1 proof assume LIN a1,a1',b1; then LIN
+ a,a',b by Th3;
+  then b in A by A3,A4,A12,AFF_1:39; hence contradiction
+  by A2,A3,A5,AFF_1:59; end;
+ A14: not LIN a1,a1',c1 proof assume LIN a1,a1',c1; then LIN
+ a,a',c by Th3;
+  then c in A by A3,A4,A12,AFF_1:39; hence contradiction
+  by A2,A3,A5,AFF_1:59
+; end; A15: a1,b1 '||' a1',b1' & a1,c1 '||' a1',c1' by A6,DIRAF:45;
+ A16: a1,a1' '||' b1,b1' & a1,a1' '||' c1,c1' proof
+    a,a' // b,b' & a,a' // c,c' by A2,A3,AFF_1:53; hence thesis by DIRAF:45;
+end;
+ set v''= (u'+v)-u,w''=(u'+w)-u; reconsider b1''=v'',c1''=w'' as Element of
+ the carrier of OAS by A1,Th4;
+    u,u' // v,v'' & u,v // u',v'' & u,u' // w,w'' & u,w // u',w'' by ANALOAF:25
+;
+  then u,u' '||' v,v'' & u,v '||' u',v'' & u,u' '||' w,w'' & u,w '||' u',w''
+  by GEOMTRAP:def 1; then a1,a1' '||' b1,b1'' & a1,a1' '||' c1,c1'' &
+  a1,b1 '||' a1',b1'' & a1,c1 '||' a1',c1'' by A1,Th5;
+ then A17: b1''=b1' & c1''=c1' by A13,A14,A15,A16,PASCH:12;
+   w''-v'' = (u'+w) - (((u'+v)-u) + u) by RLVECT_1:41
+ .= (u'+w) - (u'+v) by RLSUB_2:78
+  .= ((w+u')-u') - v by RLVECT_1:41
+  .= w - v by RLSUB_2:78
+; then v,w // v'',w'' by ANALOAF:24; then v,w '||' v'',w''
+  by GEOMTRAP:def 1; then b1,c1 '||' b1',c1'
+  by A1,A17,Th5; hence b,c // b',c' by DIRAF:45; end;
+hence b,c // b',c' by A7; end; hence thesis by AFF_2:def 11; end;
+
+theorem Th24: for OAS being OAffinSpace holds Lambda(OAS) satisfies_Fano
+proof let OAS be OAffinSpace; set AS = Lambda(OAS);
+   for a,b,c,d being Element of AS st a,b // c,d & a,c // b,d &
+  a,d // b,c holds a,b // a,c proof
+let a,b,c,d be Element of AS such that A1: a,b // c,d &
+ a,c // b,d and A2: a,d // b,c; assume A3: not a,b // a,c;
+then A4: not LIN a,b,c by AFF_1:def 1;
+reconsider a1=a,b1=b,c1=c,d1=d as Element of OAS by Th2;
+A5: a1,b1 '||' c1,d1 & a1,c1 '||' b1,d1 by A1,DIRAF:45;
+   not LIN a1,b1,c1 proof assume not thesis; then a1,b1 '||' a1,c1 by DIRAF:def
+5
+;
+ hence contradiction by A3,DIRAF:45; end;
+then consider x1 being Element of OAS such that
+A6: LIN x1,a1,d1 & LIN x1,b1,c1 by A5,PASCH:33;
+reconsider x=x1 as Element of AS by Th2;
+A7: LIN a,d,x & LIN
+ b,c,x proof x1,a1 '||' x1,d1 & x1,b1 '||' x1,c1 by A6,DIRAF:def 5;
+ then x,a // x,d & x,b // x,c by DIRAF:45; then LIN x,a,d & LIN x,b,c
+ by AFF_1:def 1;
+ hence thesis by AFF_1:15; end;
+set P = Line(a,d),Q = Line(b,c); A8: b<>c by A4,AFF_1:16;
+A9: a<>d by A1,A3,AFF_1:13;
+then A10: P is_line & Q is_line by A8,AFF_1:def 3;
+A11: a in P & d in P & x in P by A7,AFF_1:26,def 2;
+A12: b in Q & c in Q & x in Q by A7,AFF_1:26,def 2;
+then P // Q by A2,A8,A9,A10,A11,AFF_1:52; then P = Q by A11,A12,AFF_1:59;
+hence contradiction by A4,A10,A11,A12,AFF_1:33; end;
+hence thesis by Def5; end;
+
+definition cluster Pappian Desarguesian Moufangian translation OAffinSpace;
+existence proof consider V being RealLinearSpace such that A1: ex u,v being
+VECTOR of V st for a,b being Real st a*u + b*v = 0.V holds a=0 & b=0 by
+FUNCSDOM:37;
+reconsider X = OASpace(V) as OAffinSpace by A1,ANALOAF:38; take X;
+set AS = Lambda(X); A2: AS satisfies_PAP' by Th19;
+A3:AS satisfies_DES' by Th20;
+A4:AS satisfies_TDES' by Th22;
+  AS satisfies_des' by Th23;
+hence thesis by A2,A3,A4,Def11,Def12,Def13,Def14; end; end;
+
+definition
+ cluster strict Fanoian Pappian Desarguesian Moufangian translational
+AffinPlane; existence proof consider V being RealLinearSpace such that
+ A1: ex u,v being VECTOR of V st
+ (for a,b being Real st a*u + b*v = 0.V holds a=0 & b=0) &
+ (for w being VECTOR of V ex a,b being Real st w = a*u + b*v) by FUNCSDOM:37;
+reconsider OAS = OASpace(V) as OAffinPlane by A1,ANALOAF:51;
+take X = Lambda(OAS);
+A2: X satisfies_PAP' by Th19;
+then X satisfies_DES by AFF_2:25;
+ then X satisfies_TDES' by AFF_2:26;
+hence thesis by A2,Th24,AFF_2:25,28; end; end;
+
+definition cluster strict Fanoian Pappian Desarguesian Moufangian
+ translational AffinSpace;
+existence proof consider V being RealLinearSpace such that A1: ex u,v being
+VECTOR of V st for a,b being Real st a*u + b*v = 0.V holds a=0 & b=0 by
+FUNCSDOM:37;
+reconsider X = OASpace(V) as OAffinSpace by A1,ANALOAF:38;
+take Lambda(X);
+thus thesis by Th19,Th20,Th22,Th23,Th24; end; end;
+
+definition let OAS be OAffinSpace;
+ cluster Lambda(OAS) -> Fanoian;
+correctness by Th24;
+end;
+
+definition let OAS be Pappian OAffinSpace;
+ cluster Lambda(OAS) -> Pappian;
+correctness by Def11; end;
+
+definition let OAS be Desarguesian OAffinSpace;
+ cluster Lambda(OAS) -> Desarguesian;
+correctness by Def12; end;
+
+definition let OAS be Moufangian OAffinSpace;
+ cluster Lambda(OAS) -> Moufangian;
+correctness by Def13; end;
+
+definition let OAS be translation OAffinSpace;
+ cluster Lambda(OAS) -> translational;
+correctness by Def14; end;

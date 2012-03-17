@@ -1,0 +1,1113 @@
+:: Bessel's Inequality
+::  by Hiroshi Yamazaki , Yasunari Shidama and Yatsuka Nakamura
+::
+:: Received January 30, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, BHSP_1, PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM_1,
+      FINSET_1, RELAT_1, BHSP_5, BINOP_1, VECTSP_1, PROB_2, FUZZY_2, SQUARE_1,
+      FUNCT_2, FINSEQ_1, SETWISEO, CARD_1, FINSOP_1, DECOMP_1;
+ notation TARSKI, SUBSET_1, XBOOLE_0, NUMBERS, XREAL_0, STRUCT_0, REAL_1,
+      NAT_1, FUNCT_2, FINSET_1, RELAT_1, PRE_TOPC, RLVECT_1, BHSP_1, SQUARE_1,
+      BINOP_1, VECTSP_1, CARD_1, SETWISEO, FUNCT_1, FINSEQ_1, FINSOP_1;
+ constructors REAL_1, NAT_1, BHSP_1, PREPOWER, DOMAIN_1, SQUARE_1, SETWISEO,
+      BINOP_1, VECTSP_1, FINSOP_1, MEMBERED, PARTFUN1;
+ clusters RELSET_1, FINSEQ_1, FUNCT_1, FUNCT_2, FINSET_1, STRUCT_0, MEMBERED,
+      NUMBERS, ORDINAL2;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+ definitions TARSKI;
+ theorems XBOOLE_0, SUBSET_1, BHSP_1, SQUARE_1, AXIOMS, TARSKI, REAL_1, INT_1,
+      FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FUNCT_1, NAT_1, RELSET_1,
+      FUNCT_2, RVSUM_1, RLVECT_1, FINSOP_1, VECTSP_1, CARD_2, HILBASIS,
+      XBOOLE_1, XCMPLX_1;
+ schemes NAT_1, FINSEQ_1, FUNCT_2;
+
+begin :: Sum of the result of operation with each element of a set
+
+  reserve X for RealUnitarySpace;
+
+  reserve x, y, y1, y2 for Point of X;
+  reserve xd for set;
+  reserve i, j, n for Nat;
+  reserve DX for non empty set;
+  reserve p1, p2 for FinSequence of DX;
+
+theorem Th1:
+  p1 is one-to-one & p2 is one-to-one & rng p1 = rng p2 implies
+  dom p1 = dom p2 &
+  ex P being Permutation of dom p1 st
+    p2 = p1*P & dom P = dom p1 & rng P = dom p1
+proof
+  assume that
+A1: p1 is one-to-one and
+A2: p2 is one-to-one and
+A3: rng p1 = rng p2;
+  set P = p1"*p2;
+A4: dom p2 = dom p1
+  proof
+  len p1 = card rng p2 by A1,A3,FINSEQ_4:77
+     .= len p2 by A2,FINSEQ_4:77;
+    then dom p1 = Seg len p2 by FINSEQ_1:def 3
+     .= dom p2 by FINSEQ_1:def 3;
+    hence thesis;
+  end;
+A5: dom P = dom p1 & rng P = dom p1
+  proof
+    A6: now let xd;
+        dom (p1") = rng p1 & rng(p1") = dom p1 by A1,FUNCT_1:55;
+      then xd in dom p2 implies p2.xd in dom (p1")
+        by A3,FUNCT_1:12;
+      hence xd in dom P iff xd in dom p2 by FUNCT_1:21;
+    end;
+then A7: dom P = dom p2 by TARSKI:2;
+A8: dom (p1") = rng p1 & rng(p1") = dom p1 by A1,FUNCT_1:55;
+A9: rng P c= dom p1
+    proof let xd; assume xd in rng P;
+      hence thesis by A8,FUNCT_1:25;
+    end;
+      dom p1 c= rng P
+    proof let xd;
+        assume xd in dom p1;
+        then xd in rng(p1") by A1,FUNCT_1:55;
+        then consider yd being set such that
+A10:       yd in dom (p1") and
+A11:       xd = (p1").yd by FUNCT_1:def 5;
+          yd in rng p2 by A1,A3,A10,FUNCT_1:55;
+        then consider z being set such that
+A12:       z in dom p2 and
+A13:       yd = p2.z by FUNCT_1:def 5;
+      xd = P.z by A11,A12,A13,FUNCT_1:23;
+        hence xd in rng P by A7,A12,FUNCT_1:def 5;
+    end;
+    hence thesis by A4,A6,A9,TARSKI:2,XBOOLE_0:def 10;
+  end;
+    p1" is one-to-one by A1,FUNCT_1:62;
+  then P is one-to-one & rng P = dom p1 by A2,A5,FUNCT_1:46;
+then A14: P is Permutation of dom p1 by A5,FUNCT_2:3,83;
+      now let xd;
+        xd in dom P implies P.xd in dom p1 by A5,FUNCT_1:12;
+      hence xd in dom(p1*P) iff xd in dom p1 by A5,FUNCT_1:21;
+    end;
+then A15: dom p2 = dom (p1*P) by A4,TARSKI:2;
+    for xd st xd in dom p2 holds p2.xd = (p1*P).xd
+  proof
+    let xd;
+    assume
+A16:  xd in dom p2;
+then A17:  p2.xd in rng p1 by A3,FUNCT_1:12;
+      (p1*P).xd = p1.((p1"*p2).xd) by A4,A5,A16,FUNCT_1:23
+     .= p1.((p1").(p2.xd)) by A16,FUNCT_1:23
+     .= p2.xd by A1,A17,FUNCT_1:57;
+    hence thesis;
+  end;
+   then p2 = p1*P by A15,FUNCT_1:9;
+   hence thesis by A4,A5,A14;
+end;
+
+definition
+  let DX be non empty set;
+  let f be BinOp of DX such that
+A1: f is commutative associative & f has_a_unity;
+  let Y be finite Subset of DX;
+    func f ++ Y -> Element of DX means
+    ex p being FinSequence of DX st
+     p is one-to-one & rng p = Y & it = f "**" p;
+existence
+proof
+  consider p being FinSequence such that
+A2: rng p = Y and
+A3: p is one-to-one by FINSEQ_4:73;
+  reconsider q = p as FinSequence of DX by A2,FINSEQ_1:def 4;
+    ex p being FinSequence of DX st p is one-to-one &
+    rng p = Y & f "**" q = f "**" p by A2,A3;
+  hence thesis;
+end;
+uniqueness
+proof
+  let X1,X2 be Element of DX such that
+  A4:  ex p1 being FinSequence of DX st p1 is one-to-one &
+        rng p1 = Y & X1 = f "**" p1 and
+  A5:  ex p2 being FinSequence of DX st p2 is one-to-one &
+        rng p2 = Y & X2 = f "**" p2;
+    consider p1 being FinSequence of DX such that
+    A6: p1 is one-to-one and
+    A7: rng p1 = Y and
+    A8: X1 = f "**" p1 by A4;
+    consider p2 being FinSequence of DX such that
+    A9: p2 is one-to-one and
+    A10: rng p2 = Y and
+    A11: X2 = f "**" p2 by A5;
+      dom p1 = dom p2 & ex P being Permutation of dom p1 st
+     p2 = p1*P & dom P = dom p1 & rng P = dom p1 by A6,A7,A9,A10,Th1;
+    then consider P being Permutation of dom p1 such that
+A12:   p2 = p1 * P;
+    thus X1 = X2 by A1,A8,A11,A12,FINSOP_1:8;
+  end;
+end;
+
+definition let X;
+           let Y be finite Subset of X;
+  func setop_SUM(Y,X) equals
+     (the add of X) ++ Y if Y <> {}
+   otherwise 0.X;
+ correctness;
+end;
+
+definition let X, x;
+           let p be FinSequence;
+           let i;
+  func PO(i,p,x) equals :Def3:
+  (the scalar of X).[x,p.i];
+  correctness;
+end;
+
+definition let DK, DX be non empty set;
+           let F be Function of DX, DK;
+           let p be FinSequence of DX;
+  func Func_Seq(F,p) -> FinSequence of DK equals :Def4:
+   F*p;
+correctness by FINSEQ_2:36;
+end;
+
+definition
+  let DK, DX be non empty set;
+  let f be BinOp of DK such that
+A1: f is commutative associative & f has_a_unity;
+  let Y be finite Subset of DX;
+  let F be Function of DX,DK such that
+A2: Y c= dom F;
+  func setopfunc(Y,DX,DK,F,f) -> Element of DK means
+:Def5: ex p being FinSequence of DX st p is one-to-one &
+    rng p = Y & it = f "**" Func_Seq(F,p);
+existence
+proof
+  consider p being FinSequence such that
+A3: rng p = Y and
+A4: p is one-to-one by FINSEQ_4:73;
+  reconsider q = p as FinSequence of DX by A3,FINSEQ_1:def 4;
+    ex p being FinSequence of DX st p is one-to-one &
+    rng p = Y & f "**" Func_Seq(F,q) = f "**" Func_Seq(F,p) by A3,A4;
+  hence thesis;
+end;
+uniqueness
+  proof
+  let X1,X2 be Element of DK such that
+A5: ex p1 being FinSequence of DX st p1 is one-to-one &
+      rng p1 = Y & X1 = f "**" Func_Seq(F,p1) and
+A6: ex p2 being FinSequence of DX st p2 is one-to-one &
+      rng p2 = Y & X2 = f "**" Func_Seq(F,p2);
+  consider p1 being FinSequence of DX such that
+A7: p1 is one-to-one and
+A8: rng p1 = Y and
+A9: X1 = f "**" Func_Seq(F,p1) by A5;
+  consider p2 being FinSequence of DX such that
+A10: p2 is one-to-one and
+A11: rng p2 = Y and
+A12: X2 = f "**" Func_Seq(F,p2) by A6;
+A13: dom p1 = dom p2 &
+  ex P being Permutation of dom p1 st
+    p2 = p1*P & dom P = dom p1 & rng P = dom p1 by A7,A8,A10,A11,Th1;
+  consider P being Permutation of dom p1 such that
+A14: p2 = p1 * P and
+      dom P = dom p1 and rng P = dom p1 by A7,A8,A10,A11,Th1;
+      now
+      let xd;
+A15:   xd in dom(Func_Seq(F,p1)) iff xd in dom(F*p1) by Def4;
+        xd in dom p1 implies p1.xd in rng p1 by FUNCT_1:12;
+      hence xd in dom Func_Seq(F,p1) iff xd in dom p1
+        by A2,A8,A15,FUNCT_1:21;
+    end;
+then A16: dom Func_Seq(F,p1) = dom p1 by TARSKI:2;
+      now
+      let xd;
+A17:   xd in dom Func_Seq(F,p2) iff xd in dom(F*p2) by Def4;
+        xd in dom p2 implies p2.xd in rng p2 by FUNCT_1:12;
+      hence xd in dom(Func_Seq(F,p2)) iff xd in dom p2
+        by A2,A11,A17,FUNCT_1:21;
+    end;
+then A18: dom Func_Seq(F,p2) = dom p2 by TARSKI:2;
+A19: dom P = dom Func_Seq(F,p1) & rng P = dom Func_Seq(F,p1)
+    by A16,FUNCT_2:67,def 3;
+    Func_Seq(F,p2) = Func_Seq(F,p1) * P
+  proof
+        now let xd;
+          xd in dom P implies P.xd in dom Func_Seq(F,p1) by A19,FUNCT_1:12;
+        then xd in dom(Func_Seq(F,p1)*P) iff xd in dom P by FUNCT_1:21;
+        hence xd in dom(Func_Seq(F,p1)*P) iff xd in dom Func_Seq(F,p2)
+           by A13,A18,FUNCT_2:67;
+      end;
+then A20: dom Func_Seq(F,p2) = dom (Func_Seq(F,p1) * P) by TARSKI:2;
+    now
+    let s be set;
+    assume
+A21:  s in dom Func_Seq(F,p2);
+A22: dom(Func_Seq(F,p2)) is Subset of NAT by RELSET_1:12;
+       then reconsider i=s as Nat by A21;
+         i in dom P by A13,A18,A21,FUNCT_2:67;
+then A23:   P.i in rng P by FUNCT_1:12;
+       then P.i in dom(Func_Seq(F,p2)) by A13,A18,FUNCT_2:def 3;
+       then reconsider j=P.i as Nat by A22;
+A24:   j in dom p1 by A23,FUNCT_2:def 3;
+A25:   s in dom P by A13,A18,A21,FUNCT_2:67;
+         Func_Seq(F,p2).s = (F*p2).i by Def4
+        .= F.(p2.i) by A18,A21,FUNCT_1:23
+        .= F.(p1.(P.i)) by A14,A25,FUNCT_1:23
+        .= (F*p1).j by A24,FUNCT_1:23
+        .= Func_Seq(F,p1).j by Def4
+        .= (Func_Seq(F,p1) * P).s by A25,FUNCT_1:23;
+       hence Func_Seq(F,p2).s = (Func_Seq(F,p1) * P).s;
+     end;
+     hence thesis by A20,FUNCT_1:9;
+    end;
+    hence thesis by A1,A9,A12,A16,FINSOP_1:8;
+  end;
+end;
+
+definition let X, x;
+           let Y be finite Subset of X;
+ func setop_xPre_PROD(x,Y,X) -> Real means
+      ex p being FinSequence of the carrier of X st p is one-to-one &
+    rng p = Y
+    & ex q being FinSequence of REAL st dom(q) = dom(p) &
+    (for i st i in dom q holds
+      q.i = PO(i,p,x)) & it = addreal "**" q;
+existence
+proof
+  consider p0 being FinSequence such that
+A1: rng p0 = Y and
+A2: p0 is one-to-one by FINSEQ_4:73;
+  reconsider p = p0 as FinSequence of the carrier of X by A1,FINSEQ_1:def 4;
+  set ll = len p;
+    deffunc _F(Nat) = PO($1,p,x);
+    ex q0 being FinSequence st len q0 = ll &
+    for i st i in Seg ll holds q0.i = _F(i) from SeqLambda;
+  then consider q0 being FinSequence such that
+A3: len q0 = ll & for i st i in Seg ll holds q0.i = PO(i,p,x);
+A4: dom q0 = Seg ll by A3,FINSEQ_1:def 3;
+then A5: dom q0 = dom p by FINSEQ_1:def 3;
+    now
+    let i;
+    assume
+A6: i in dom q0;
+then A7: q0.i = PO(i,p,x) by A3,A4
+     .=(the scalar of X).[x,p.i] by Def3;
+    reconsider y=p.i as Point of X by A5,A6,FINSEQ_2:13;
+      (the scalar of X).[x,p.i]= x .|. y by BHSP_1:def 1;
+    hence q0.i in REAL by A7;
+  end;
+  then reconsider q = q0 as FinSequence of REAL by FINSEQ_2:14;
+  take addreal "**" q;
+  thus thesis by A1,A2,A3,A4,A5;
+end;
+uniqueness
+proof
+  let X1, X2 be Element of REAL such that
+A8: ex p1 being FinSequence of the carrier of X st p1 is one-to-one &
+  rng p1 = Y &
+    ex q1 being FinSequence of REAL st dom q1 = dom p1 &
+    (for i st i in dom q1 holds q1.i = PO(i,p1,x)) &
+    X1 = addreal "**" q1 and
+A9: ex p2 being FinSequence of the carrier of X st p2 is one-to-one &
+     rng p2 = Y &
+     ex q2 being FinSequence of REAL st dom q2 = dom p2 &
+     (for i st i in dom q2 holds q2.i = PO(i,p2,x)) &
+     X2 = addreal "**" q2;
+  consider p1 being FinSequence of the carrier of X such that
+A10: p1 is one-to-one and
+A11: rng p1 = Y and
+A12: ex q1 being FinSequence of REAL st dom(q1) = dom(p1) &
+      (for i st i in dom q1 holds q1.i = PO(i,p1,x)) &
+      X1 = addreal "**" q1 by A8;
+  consider p2 being FinSequence of the carrier of X such that
+A13: p2 is one-to-one and
+A14: rng p2 = Y and
+A15: ex q2 being FinSequence of REAL st dom(q2) = dom(p2) &
+      (for i st i in dom q2 holds q2.i = PO(i,p2,x)) &
+      X2 = addreal "**" q2 by A9;
+  consider q1 being FinSequence of REAL such that
+A16: dom q1 = dom p1 and
+A17: (for i st i in dom q1 holds q1.i = PO(i,p1,x)) and
+A18: X1 = addreal "**" q1 by A12;
+  consider q2 being FinSequence of REAL such that
+A19: dom q2 = dom p2 and
+A20: (for i st i in dom q2 holds q2.i = PO(i,p2,x)) and
+A21: X2 = addreal "**" q2 by A15;
+A22: dom p1 = dom p2 &
+      ex P being Permutation of dom p1 st
+      p2 = p1*P & dom P = dom p1 & rng P = dom p1 by A10,A11,A13,A14,Th1;
+  consider P being Permutation of dom p1 such that
+A23:  p2 = p1 * P and
+        dom P = dom p1 and rng P = dom p1 by A10,A11,A13,A14,Th1;
+A24: dom P = dom q1 & rng P = dom q1 by A16,FUNCT_2:67,def 3;
+A25: dom P = dom q2 & rng P = dom q2 by A19,A22,FUNCT_2:67,def 3;
+A26: dom p1 = dom q2 by A10,A11,A13,A14,A19,Th1;
+        now let xd;
+          xd in dom P implies P.xd in dom q1 by A24,FUNCT_1:12;
+        hence xd in dom(q1*P) iff xd in dom q2 by A25,FUNCT_1:21;
+      end;
+then A27: dom q2 = dom (q1 * P) by TARSKI:2;
+    q2 = q1 * P
+  proof
+A28:dom q2 is Subset of NAT by RELSET_1:12;
+      now
+      let s be set;
+      assume
+A29:  s in dom q2;
+      then reconsider i=s as Nat by A28;
+        P.i in dom q2 by A25,A29,FUNCT_1:12;
+      then reconsider j=P.i as Nat by A28;
+A30:  j in dom q1 by A16,A25,A26,A29,FUNCT_1:12;
+A31:  s in dom P by A19,A22,A29,FUNCT_2:67;
+        q2.s = PO(i,p2,x) by A20,A29
+       .= (the scalar of X).[x,(p1 * P).i] by A23,Def3
+       .= (the scalar of X).[x,p1.j] by A31,FUNCT_1:23
+       .= PO(j,p1,x) by Def3
+       .= q1.(P.i) by A17,A30
+       .= (q1 * P).s by A31,FUNCT_1:23;
+      hence q2.s = (q1 * P).s;
+    end;
+    hence thesis by A27,FUNCT_1:9;
+  end;
+  hence thesis by A16,A18,A21,FINSOP_1:8,RVSUM_1:5,6,7;
+  end;
+end;
+
+definition let X, x;
+           let Y be finite Subset of X;
+  func setop_xPROD(x,Y,X) -> Real equals
+    setop_xPre_PROD(x,Y,X) if Y <> {}
+  otherwise 0;
+correctness;
+end;
+
+begin :: Orthogonal Family & Orthonormal Family
+
+definition let X;
+  mode OrthogonalFamily of X -> Subset of X means :Def8:
+  for x, y st x in it & y in it & x <> y holds x.|.y = 0;
+  existence
+  proof
+    take {};
+    thus thesis by SUBSET_1:4;
+  end;
+end;
+
+theorem Th2:
+  {} is OrthogonalFamily of X
+proof
+A1: {} is Subset of X by SUBSET_1:4;
+    x in {} & y in {} & x <> y implies x.|.y = 0;
+  hence {} is OrthogonalFamily of X by A1,Def8;
+end;
+
+definition let X;
+  cluster finite OrthogonalFamily of X;
+  existence
+  proof
+    take {};
+    thus thesis by Th2;
+  end;
+end;
+
+definition let X;
+  mode OrthonormalFamily of X -> Subset of X means :Def9:
+  it is OrthogonalFamily of X & for x st x in it holds x.|.x = 1;
+  existence
+  proof
+    take {};
+    thus thesis by Th2;
+  end;
+end;
+
+theorem Th3:
+  {} is OrthonormalFamily of X
+proof
+A1: {} is OrthogonalFamily of X by Th2;
+    x in {} implies x.|.x = 1;
+  hence {} is OrthonormalFamily of X by A1,Def9;
+end;
+
+definition let X;
+  cluster finite OrthonormalFamily of X;
+  existence
+  proof
+    take {};
+    thus thesis by Th3;
+  end;
+end;
+
+theorem
+    x = 0.X iff (for y holds x.|.y = 0)
+proof
+    (for y holds x.|.y = 0) implies x = 0.X
+  proof
+      now assume for y holds x.|.y = 0;
+     then x.|.x = 0;
+     hence x = 0.X by BHSP_1:def 2;
+    end;
+   hence thesis;
+   end;
+  hence thesis by BHSP_1:19;
+end;
+
+begin :: Bessel's inequality
+:: parallelogram law
+theorem
+    ||.x+y.||^2 + ||.x-y.||^2 = 2*||.x.||^2 + 2*||.y.||^2
+proof
+A1:  (x+y).|.(x+y) >= 0 by BHSP_1:def 2;
+A2:  (x-y).|.(x-y) >= 0 by BHSP_1:def 2;
+A3:  x.|.x >= 0 by BHSP_1:def 2;
+A4:  y.|.y >= 0 by BHSP_1:def 2;
+    ||.x+y.||^2 + ||.x-y.||^2
+    = (sqrt ((x+y).|.(x+y)))^2 + ||.x-y.||^2 by BHSP_1:def 4
+   .= ((x+y).|.(x+y)) + ||.x-y.||^2 by A1,SQUARE_1:def 4
+   .= ((x+y).|.(x+y)) + (sqrt ((x-y).|.(x-y)))^2 by BHSP_1:def 4
+   .= ((x+y).|.(x+y)) + ((x-y).|.(x-y)) by A2,SQUARE_1:def 4
+   .= x.|.x + 2*x.|.y + y.|.y + ((x-y).|.(x-y)) by BHSP_1:21
+   .= x.|.x + 2*x.|.y + y.|.y + (x.|.x - 2*x.|.y + y.|.y) by BHSP_1:23
+   .= x.|.x + 2*x.|.y + y.|.y + (x.|.x + y.|.y - 2*x.|.y) by XCMPLX_1:29
+   .= x.|.x + y.|.y + 2*x.|.y + (x.|.x + y.|.y - 2*x.|.y) by XCMPLX_1:1
+   .= x.|.x + y.|.y + (x.|.x + y.|.y) by XCMPLX_1:28
+   .= x.|.x + (y.|.y + x.|.x + y.|.y) by XCMPLX_1:1
+   .= x.|.x + (x.|.x + (y.|.y + y.|.y)) by XCMPLX_1:1
+   .= x.|.x + x.|.x + (y.|.y + y.|.y) by XCMPLX_1:1
+   .= 2 * x.|.x + (y.|.y + y.|.y) by XCMPLX_1:11
+   .= 2 * x.|.x + 2 * y.|.y by XCMPLX_1:11
+   .= 2*(sqrt(x.|.x))^2 + 2*(y.|.y) by A3,SQUARE_1:def 4
+   .= 2*(sqrt(x.|.x))^2 + 2*(sqrt(y.|.y))^2 by A4,SQUARE_1:def 4
+   .= 2*||.x.||^2 + 2*(sqrt(y.|.y))^2 by BHSP_1:def 4
+   .= 2*||.x.||^2 + 2*||.y.||^2 by BHSP_1:def 4;
+  hence thesis;
+end;
+
+:: The Pythagorean theorem
+theorem
+    x, y are_orthogonal implies ||.x+y.||^2 = ||.x.||^2 + ||.y.||^2
+proof
+ assume x, y are_orthogonal;
+then A1:  x.|.y = 0 by BHSP_1:def 3;
+A2:  (x+y).|.(x+y) >= 0 by BHSP_1:def 2;
+A3:  x.|.x >= 0 by BHSP_1:def 2;
+A4:  y.|.y >= 0 by BHSP_1:def 2;
+    ||.x+y.||^2 = (sqrt ((x+y).|.(x+y)))^2 by BHSP_1:def 4
+   .= (x+y).|.(x+y) by A2,SQUARE_1:def 4
+   .= x.|.x + 2*x.|.y + y.|.y by BHSP_1:21
+   .= (sqrt(x.|.x))^2 + y.|.y by A1,A3,SQUARE_1:def 4
+   .= (sqrt(x.|.x))^2 + (sqrt(y.|.y))^2 by A4,SQUARE_1:def 4
+   .= ||.x.||^2 + (sqrt(y.|.y))^2 by BHSP_1:def 4
+   .= ||.x.||^2 + ||.y.||^2 by BHSP_1:def 4;
+  hence thesis;
+end;
+
+theorem Th7:
+  for p be FinSequence of the carrier of X
+    st (len p >=1 &
+      for i,j st (i in dom p & j in dom p & i <> j)
+        holds (the scalar of X).[p.i,p.j]=0)
+  for q be FinSequence of REAL
+    st dom p = dom q &
+      (for i st i in dom q holds q.i = (the scalar of X).[(p.i),(p.i)])
+        holds ((the add of X) "**" p).|. ((the add of X) "**" p)
+        = addreal "**" q
+proof
+  let p be FinSequence of the carrier of X; assume
+A1: (len p >=1 &
+       for i, j st (i in dom p & j in dom p & i <> j)
+         holds (the scalar of X).[(p.i),(p.j)]=0);
+then A2: 1 in dom p by FINSEQ_3:27;
+  let q be FinSequence of REAL such that
+A3: dom p = dom q &
+      (for i st i in dom q holds q.i = (the scalar of X).[(p.i),(p.i)]);
+  consider f be Function of NAT, the carrier of X such that
+A4:f.1 = p.1 and
+A5:(for n be Nat st 0 <> n & n < len p
+      holds f.(n+1) = (the add of X).(f.n, p.(n+1))) and
+A6:(the add of X) "**" p = f.(len p) by A1,FINSOP_1:2;
+A7: ((the add of X) "**" p).|. ((the add of X) "**" p)
+     = (the scalar of X).[(f.(len p)), (f.(len p))] by A6,BHSP_1:def 1;
+A8: Seg len q
+    = dom p by A3,FINSEQ_1:def 3
+   .= Seg len p by FINSEQ_1:def 3;
+then A9: len q = len p by FINSEQ_1:8;
+  len q >= 1 by A1,A8,FINSEQ_1:8;
+  then consider g be Function of NAT, REAL such that
+A10: g.1 = q.1 and
+A11: (for n be Nat st 0 <> n & n < len q
+       holds g.(n + 1) = addreal.(g.n, q.(n + 1))) and
+A12: addreal "**" q = g.(len q) by FINSOP_1:2;
+  defpred _P[Nat] means
+   1 <= $1 & $1 <= len q implies g.$1 = (the scalar of X).[(f.$1), (f.$1)];
+  for n holds _P[n]  proof
+A13: _P[0];
+      now let n;
+      assume
+A14:  1 <= n & n <= len q implies g.n = (the scalar of X).[(f.n), (f.n)];
+        now assume
+A15:    1 <= n+1 & n+1 <= len q;
+A16:   n <= n+1 by NAT_1:29;
+        per cases;
+        suppose
+A17:    n = 0;
+          1 in Seg len p by A1,FINSEQ_1:3;
+        then 1 in dom q by A3,FINSEQ_1:def 3;
+        hence g.(n+1) = (the scalar of X).[(f.(n+1)), (f.(n+1))]
+          by A3,A4,A10,A17;
+        suppose
+A18:    n <> 0;
+        then 0 < n by NAT_1:19;
+then A19:   0 + 1 <= n by INT_1:20;
+then A20:    1 <= n & n <= len p by A9,A15,A16,AXIOMS:22;
+          n + 1 - 1 < (len q) - 0 by A15,REAL_1:92;
+then A21:   n + (1 - 1) < (len q) - 0 by XCMPLX_1:29;
+then A22:   n <> 0 & n < len p by A8,A18,FINSEQ_1:8;
+A23:  n + 1 in Seg len q by A15,FINSEQ_1:3;
+then A24:   n + 1 in dom q by FINSEQ_1:def 3;
+A25:   n + 1 in dom p by A3,A23,FINSEQ_1:def 3;
+A26:   dom f = NAT by FUNCT_2:def 1;
+then A27:   f.n in rng f by FUNCT_1:12;
+          rng f c= the carrier of X by RELSET_1:12;
+        then reconsider z = f.n as Element of X by A27;
+A28:   p.(n+1) in rng p by A25,FUNCT_1:12;
+          rng p c= the carrier of X by RELSET_1:12;
+        then reconsider y = p.(n+1) as Element of X by A28;
+A29:   z.|.y = 0
+        proof
+            for i st 1 <= i & i <= n holds (the scalar of X).[f.i, y] = 0
+          proof
+            let i;
+            defpred _P[Nat] means
+            1 <= $1 & $1 <= n implies (the scalar of X).[f.$1, y] = 0;
+A30:        _P[0];
+A31:         for i st _P[i] holds _P[i+1] proof let i;
+              assume
+A32:          _P[i];
+                0 < n by A18,NAT_1:19;
+then A33:          1 <> n+1 by REAL_1:69;
+              assume
+A34:           1 <= i+1 & i+1 <= n;
+              then 1 <= i + 1 & i + 1 <= len p by A20,AXIOMS:22;
+then A35:          i+1 in dom p by FINSEQ_3:27;
+              per cases;
+              suppose i = 0;
+              hence (the scalar of X).[f.(i+1), y] = 0
+                by A1,A2,A4,A25,A33;
+              suppose
+A36:          i <> 0;
+A37:          f.i in rng f by A26,FUNCT_1:12;
+                rng f c= the carrier of X by RELSET_1:12;
+              then reconsider s = f.i as Element of X by A37;
+A38:          1 <= i+1 & i+1 <= len p by A20,A34,AXIOMS:22;
+              then i + 1 in dom p by FINSEQ_3:27;
+then A39:          p.(i+1) in rng p by FUNCT_1:12;
+                rng p c= the carrier of X by RELSET_1:12;
+              then reconsider t = p.(i+1) as Element of X
+                by A39;
+                i + 1 -1 < (len p) - 0 by A38,REAL_1:92;
+then A40:           i + (1-1) < (len p) - 0 by XCMPLX_1:29;
+                0 < i by A36,NAT_1:19;
+then A41:          0 + 1 <= i by INT_1:20;
+                i < i + 1 by REAL_1:69;
+then A42:           s.|.y = 0 by A32,A34,A41,AXIOMS:22,BHSP_1:def 1;
+A43:           i+1 + 0 < n + 1 by A34,REAL_1:67;
+                (the scalar of X).[f.(i+1), y]
+              = (the scalar of X).[(the add of X).(s, t), y] by A5,A36,A40
+             .= (the scalar of X).[s + t, y] by RLVECT_1:5
+             .= (s + t).|.y by BHSP_1:def 1
+             .= 0 + (t.|.y) by A42,BHSP_1:7
+             .= (the scalar of X).[t, y] by BHSP_1:def 1
+             .= 0 by A1,A25,A35,A43;
+              hence thesis;
+            end;
+              for i holds _P[i] from Ind(A30, A31);
+            hence thesis;
+          end;
+          then 0 = (the scalar of X).[z, y] by A19
+                .= z.|.y by BHSP_1:def 1;
+          hence thesis;
+        end;
+        thus g.(n+1) = addreal.((the scalar of X).[f.n,f.n], q.(n+1))
+                by A11,A14,A18,A19,A21
+              .= addreal.((the scalar of X).[f.n, f.n],
+                (the scalar of X).[(p.(n+1)), (p.(n+1))]) by A3,A24
+              .= addreal.((the scalar of X).[f.n,f.n], y.|.y)
+                by BHSP_1:def 1
+              .= addreal.(z.|.z, y.|.y) by BHSP_1:def 1
+              .= (z.|.z) + (z.|.y) + (y.|.z) + (y.|.y) by A29,VECTSP_1:def 4
+              .= (z.|.(z+y)) + (y.|.z) + (y.|.y) by BHSP_1:7
+              .= (z.|.(z+y)) + ((y.|.z) + (y.|.y)) by XCMPLX_1:1
+              .= (z.|.(z+y)) + (y.|.(z+y)) by BHSP_1:7
+              .= (z+y).|.(z+y) by BHSP_1:7
+              .= (the scalar of X).[z+y, z+y] by BHSP_1:def 1
+              .= (the scalar of X).[(the add of X).(f.n, p.(n + 1)), z+y]
+                by RLVECT_1:5
+              .= (the scalar of X).[(the add of X).(f.n, p.(n + 1)),
+                        (the add of X).(f.n, p.(n + 1))] by RLVECT_1:5
+              .= (the scalar of X).[(the add of X).(f.n, p.(n + 1)),
+                                    f.(n+1)] by A5,A22
+              .= (the scalar of X).[f.(n+1), f.(n+1)] by A5,A22;
+      end;
+      hence 1 <= n+1 & n+1 <= len q implies
+          g.(n+1) = (the scalar of X).[f.(n+1),f.(n+1)];
+    end;
+then A44:  _P[n] implies _P[n+1];
+    thus thesis from Ind(A13,A44);
+  end;
+  hence thesis by A1,A7,A9,A12;
+end;
+
+theorem Th8:
+  for p be FinSequence of the carrier of X st len p >= 1
+  for q be FinSequence of REAL st dom p = dom q &
+      (for i st i in dom q holds q.i = (the scalar of X).[x,p.i])
+  holds x.|.((the add of X) "**" p) = addreal "**" q
+proof
+  let p be FinSequence of the carrier of X such that
+A1: len p >= 1;
+  let q be FinSequence of REAL such that
+     A2: dom p = dom q
+     & (for i st i in dom q holds q.i = (the scalar of X).[x,p.i]);
+  consider f be Function of NAT,the carrier of X such that
+A3:  f.1 = p.1 and
+A4: (for n be Nat st 0 <> n & n < len p holds
+     f.(n + 1) = (the add of X).(f.n,p.(n + 1))) and
+A5: (the add of X) "**" p = f.len p by A1,FINSOP_1:2;
+A6: Seg len q = dom p by A2,FINSEQ_1:def 3
+    .= Seg len p by FINSEQ_1:def 3;
+then A7: len q = len p by FINSEQ_1:8;
+  len q >= 1 by A1,A6,FINSEQ_1:8;
+  then consider g be Function of NAT,REAL such that
+A8: g.1 = q.1 and
+A9: for n be Nat st 0 <> n & n < len q holds
+      g.(n + 1) = addreal.(g.n,q.(n + 1)) and
+A10: addreal "**" q = g.len q by FINSOP_1:2;
+     defpred _P[Nat] means
+     1 <= $1 & $1 <= len q implies g.$1 = (the scalar of X).[x,f.$1];
+A11: for n holds _P[n]  proof
+A12: _P[0];
+      now let n;
+      assume
+A13:  _P[n];
+        now assume
+A14:    1 <= n+1 & n+1 <= len q;
+        per cases;
+          suppose
+A15:       n=0;
+            1 in Seg len p by A1,FINSEQ_1:3;
+          then 1 in dom q by A2,FINSEQ_1:def 3;
+          hence g.(n+1) = (the scalar of X).[x,f.(n+1)] by A2,A3,A8,A15;
+          suppose
+A16:       n<>0;
+          then 0 < n by NAT_1:19;
+then A17:       0+1 <= n by INT_1:20;
+            n+1-1 < len q-0 by A14,REAL_1:92;
+then A18:       n+(1-1) < len q - 0 by XCMPLX_1:29;
+A19:      n+1 in Seg len q by A14,FINSEQ_1:3;
+then A20:       n+1 in dom q by FINSEQ_1:def 3;
+A21:       n+1 in dom p by A2,A19,FINSEQ_1:def 3;
+            dom f = NAT by FUNCT_2:def 1;
+then A22:      f.n in rng f by FUNCT_1:12;
+            rng f c= the carrier of X by RELSET_1:12;
+          then reconsider z=f.n as Element of X by A22;
+A23:      p.(n+1) in rng p by A21,FUNCT_1:12;
+            rng p c= the carrier of X by RELSET_1:12;
+          then reconsider y=p.(n+1) as Element of X by A23;
+          thus g.(n+1) = addreal.((the scalar of X).[x,f.n],q.(n + 1))
+               by A9,A13,A16,A17,A18
+             .=addreal.((the scalar of X).[x,f.n],
+                       (the scalar of X).[x,p.(n+1)]) by A2,A20
+             .=addreal.((the scalar of X).[x,f.n],
+                       (x .|. y)) by BHSP_1:def 1
+             .=addreal.( (x.|.z ),(x .|. y)) by BHSP_1:def 1
+             .= (x.|.z ) + (x.|.y) by VECTSP_1:def 4
+             .= x .|. (z+y) by BHSP_1:7
+             .= (the scalar of X).[x,(z+y)] by BHSP_1:def 1
+             .= (the scalar of X). [x,(the add of X).(f.n,p.(n + 1))]
+                by RLVECT_1:5
+             .= (the scalar of X). [x,f.(n + 1)] by A4,A7,A16,A18;
+      end;
+      hence 1 <= n+1 & n+1 <= len q implies
+          g.(n+1) = (the scalar of X).[x,f.(n+1)];
+    end;
+then A24: _P[n] implies _P[n+1];
+    thus thesis from Ind(A12,A24);
+  end;
+    1 <=len q & len q <= len q by A1,A6,FINSEQ_1:8;
+    then g.len q = (the scalar of X).[x,f.len q] by A11
+     .= (the scalar of X).[x,f.len p] by A6,FINSEQ_1:8;
+  hence thesis by A5,A10,BHSP_1:def 1;
+end;
+
+theorem Th9:
+  for S be finite non empty Subset of X
+  for F be Function of the carrier of X, the carrier of X
+      st (S c= dom F & (for y1,y2 st y1 in S & y2 in S & y1 <> y2
+        holds (the scalar of X).[F.y1,F.y2] = 0))
+  for H be Function of the carrier of X, REAL
+     st S c= dom H & (for y st y in S holds
+       H.y= (the scalar of X).[F.y,F.y])
+  for p be FinSequence of the carrier of X
+     st p is one-to-one & rng p = S holds
+  (the scalar of X).[(the add of X) "**" Func_Seq(F,p),
+                     (the add of X) "**" Func_Seq(F,p)]
+  = addreal "**" Func_Seq(H,p)
+proof
+  let S be finite non empty Subset of X;
+  let F be Function of the carrier of X, the carrier of X such that
+A1: S c= dom F & (for y1, y2 st y1 in S & y2 in S & y1 <> y2 holds
+          (the scalar of X).[F.y1, F.y2]=0);
+  let H be Function of the carrier of X, REAL such that
+A2: S c= dom H &
+       (for y st y in S holds H.y = (the scalar of X).[F.y, F.y]);
+  let p be FinSequence of the carrier of X such that
+A3: p is one-to-one & rng p = S;
+  set fp = Func_Seq(F, p);
+  set hp = Func_Seq(H, p);
+      now let z be set;
+A4:  z in dom fp iff z in dom (F*p) by Def4;
+        z in dom p implies p.z in rng p by FUNCT_1:12;
+      hence z in dom fp iff z in dom p by A1,A3,A4,FUNCT_1:21;
+    end;
+then A5: dom fp = dom p by TARSKI:2;
+A6: 1 <= len fp
+  proof
+A7:Seg len p = dom fp by A5,FINSEQ_1:def 3
+     .= Seg len fp by FINSEQ_1:def 3;
+A8:len p = card S by A3,FINSEQ_4:77;
+      card S <> 0 by CARD_2:59;
+    then 0 < card S by NAT_1:19;
+    then 0+1 <= card S by INT_1:20;
+    hence thesis by A7,A8,FINSEQ_1:8;
+  end;
+A9: for i, j st i in dom fp & j in dom fp & i <> j
+      holds (the scalar of X).[fp.i, fp.j] = 0
+  proof
+    let i, j;
+    assume
+A10:  i in dom fp & j in dom fp & i <> j;
+then A11: p.i in S by A3,A5,FUNCT_1:12;
+A12: p.j in S by A3,A5,A10,FUNCT_1:12;
+      fp = F*p by Def4;
+then A13:  fp.i = F.(p.i) & fp.j = F.(p.j) by A10,FUNCT_1:22;
+      p.i <> p.j by A3,A5,A10,FUNCT_1:def 8;
+    hence thesis by A1,A11,A12,A13;
+  end;
+      now let z be set;
+A14:  z in dom hp iff z in dom (H*p) by Def4;
+        z in dom p implies p.z in rng p by FUNCT_1:12;
+      hence z in dom hp iff z in dom p by A2,A3,A14,FUNCT_1:21;
+    end;
+then A15: dom hp = dom p by TARSKI:2;
+A16: for i st i in dom hp holds hp.i = (the scalar of X).[fp.i, fp.i]
+  proof
+    let i such that
+A17: i in dom hp;
+A18: p.i in S by A3,A15,A17,FUNCT_1:12;
+      hp.i = (H*p).i by Def4
+     .= H.(p.i) by A15,A17,FUNCT_1:23
+     .= (the scalar of X).[F.(p.i), F.(p.i)] by A2,A18
+     .= (the scalar of X).[(F*p).i, F.(p.i)] by A15,A17,FUNCT_1:23
+     .= (the scalar of X).[(F*p).i, (F*p).i] by A15,A17,FUNCT_1:23
+     .= (the scalar of X).[fp.i, (F*p).i] by Def4
+     .= (the scalar of X).[fp.i, fp.i] by Def4;
+    hence thesis;
+  end;
+    (the scalar of X).[(the add of X) "**" Func_Seq(F, p),
+                     (the add of X) "**" Func_Seq(F, p)]
+    = ((the add of X) "**" fp).|.((the add of X) "**" fp) by BHSP_1:def 1
+   .= addreal "**" Func_Seq(H,p) by A5,A6,A9,A15,A16,Th7;
+  hence thesis;
+end;
+
+theorem Th10:
+  for S be finite non empty Subset of X
+  for F be Function of the carrier of X, the carrier of X st S c= dom F
+  for H be Function of the carrier of X, REAL
+       st S c= dom H & (for y st y in S holds
+          H.y = (the scalar of X).[x,F.y])
+  for p be FinSequence of the carrier of X
+          st p is one-to-one & rng p = S
+  holds (the scalar of X).[x,(the add of X) "**" Func_Seq(F,p) ]
+          = addreal "**" Func_Seq(H,p)
+  proof
+  let S be finite non empty Subset of X;
+  let F be Function of the carrier of X, the carrier of X such that
+A1:  S c= dom F;
+  let H be Function of the carrier of X, REAL such that
+A2:  S c= dom H & (for y st y in S holds H.y = (the scalar of X).[x,(F.y)]);
+  let p be FinSequence of the carrier of X such that
+A3: p is one-to-one & rng p = S;
+   set p1=Func_Seq(F,p);
+   set q1=Func_Seq(H,p);
+      now
+      let xd;
+A4:  xd in dom(Func_Seq(F,p)) iff xd in dom(F*p) by Def4;
+        xd in dom p implies p.xd in rng p by FUNCT_1:12;
+      hence xd in dom Func_Seq(F,p) iff xd in dom p
+        by A1,A3,A4,FUNCT_1:21;
+    end;
+then A5:dom Func_Seq(F,p)=dom p by TARSKI:2;
+      now
+      let xd;
+A6:  xd in dom(Func_Seq(H,p)) iff xd in dom(H*p) by Def4;
+        xd in dom p implies p.xd in rng p by FUNCT_1:12;
+      hence xd in dom(Func_Seq(H,p)) iff xd in dom p
+        by A2,A3,A6,FUNCT_1:21;
+    end;
+then A7:dom Func_Seq(H,p)=dom p by TARSKI:2;
+A8: for i st i in dom p1 holds q1.i = (the scalar of X).[x,(p1.i)]
+  proof
+    let i such that
+A9: i in dom p1;
+A10: p.i in S by A3,A5,A9,FUNCT_1:12;
+       q1.i = (H*p).i by Def4
+      .= H.(p.i) by A5,A9,FUNCT_1:23
+      .= (the scalar of X).[x,(F.(p.i))] by A2,A10
+      .= (the scalar of X).[x,((F*p).i)] by A5,A9,FUNCT_1:23
+      .= (the scalar of X).[x,(p1.i)] by Def4;
+    hence thesis;
+  end;
+    len Func_Seq(F,p) >= 1
+  proof
+A11: Seg len p = dom(Func_Seq(F,p)) by A5,FINSEQ_1:def 3
+     .= Seg len Func_Seq(F,p) by FINSEQ_1:def 3;
+A12: len p = card S by A3,FINSEQ_4:77;
+      card S <> 0 by CARD_2:59;
+    then 0 < card S by NAT_1:19;
+    then 0+1 <= card S by INT_1:20;
+    hence thesis by A11,A12,FINSEQ_1:8;
+  end;
+  then x.|.((the add of X) "**" p1) = addreal "**" q1 by A5,A7,A8,Th8;
+  hence thesis by BHSP_1:def 1;
+end;
+
+theorem Th11:
+  for X st the add of X is commutative associative &
+    the add of X has_a_unity
+  for x
+  for S be finite OrthonormalFamily of X st S is non empty
+  for H be Function of the carrier of X, REAL st
+    S c= dom H & (for y st y in S holds H.y= (x.|.y)^2)
+  for F be Function of the carrier of X, the carrier of X st
+    S c= dom F & (for y st y in S holds F.y = (x.|.y)*y) holds
+    x.|.setopfunc(S, the carrier of X, the carrier of X, F, the add of X)
+      = setopfunc(S, the carrier of X, REAL, H, addreal)
+proof
+  let X such that
+A1: the add of X is commutative associative & the add of X has_a_unity;
+  let x;
+  let S be finite OrthonormalFamily of X such that
+A2: S is non empty;
+  let H be Function of the carrier of X, REAL such that
+A3: S c= dom H & (for y st y in S holds H.y= (x.|.y)^2);
+  let F be Function of the carrier of X, the carrier of X such that
+A4: S c= dom F & (for y st y in S holds F.y = (x.|.y)*y);
+  consider p be FinSequence of the carrier of X such that
+A5: p is one-to-one and
+A6: rng p = S and
+A7: setopfunc(S, the carrier of X, the carrier of X, F, the add of X)
+      = (the add of X) "**" Func_Seq(F,p) by A1,A4,Def5;
+A8: (for y st y in S holds H.y = (the scalar of X).[x,(F.y)])
+  proof
+    let y such that
+A9:  y in S;
+    set a = x.|.y;
+      H.y = (x.|.y)^2 by A3,A9
+     .= a*(x.|.y) by SQUARE_1:def 3
+     .= x.|.(a*y) by BHSP_1:8
+     .= (the scalar of X).[x,(a*y)] by BHSP_1:def 1
+     .= (the scalar of X).[x,(F.y)] by A4,A9;
+    hence thesis;
+  end;
+A10: setopfunc(S, the carrier of X, REAL, H, addreal)
+     = addreal "**" Func_Seq(H,p)
+       by A3,A5,A6,Def5,RVSUM_1:5,6,7;
+    x.|.setopfunc(S, the carrier of X, the carrier of X, F, the add of X)
+    = (the scalar of X).[x,(the add of X) "**" Func_Seq(F,p)]
+        by A7,BHSP_1:def 1;
+  hence thesis by A2,A3,A4,A5,A6,A8,A10,Th10;
+end;
+
+theorem Th12:
+  for X st the add of X is commutative associative & the add of X has_a_unity
+  for x
+  for S be finite OrthonormalFamily of X st S is non empty
+  for F be Function of the carrier of X, the carrier of X
+    st S c= dom F & (for y st y in S holds F.y = (x.|.y)*y)
+  for H be Function of the carrier of X, REAL
+    st S c= dom H & (for y st y in S holds H.y= (x.|.y)^2) holds
+    setopfunc(S, the carrier of X, the carrier of X, F, the add of X)
+      .|. setopfunc(S, the carrier of X, the carrier of X, F, the add of X)
+    = setopfunc(S, the carrier of X, REAL, H, addreal)
+proof
+  let X such that
+A1: the add of X is commutative associative & the add of X has_a_unity;
+  let x;
+  let S be finite OrthonormalFamily of X such that
+A2: S is non empty;
+  let F be Function of the carrier of X, the carrier of X such that
+A3: S c= dom F & (for y st y in S holds F.y = (x.|.y)*y);
+  let H be Function of the carrier of X, REAL such that
+A4: S c= dom H & (for y st y in S holds H.y= (x.|.y)^2);
+  consider p be FinSequence of the carrier of X such that
+A5: p is one-to-one &
+    rng p = S &
+    setopfunc(S, the carrier of X, the carrier of X, F, the add of X)
+      = (the add of X) "**" Func_Seq(F, p) by A1,A3,Def5;
+A6: for y1, y2 st (y1 in S & y2 in S & y1 <> y2)
+       holds (the scalar of X).[F.y1, F.y2] = 0
+  proof
+    let y1, y2;
+    assume
+A7:   y1 in S & y2 in S & y1 <> y2;
+    set z1 = x.|.y1;
+    set z2 = x.|.y2;
+      S is OrthogonalFamily of X by Def9;
+then A8:  y1.|.y2 = 0 by A7,Def8;
+      (the scalar of X).[F.y1, F.y2]
+      = (the scalar of X).[(x.|.y1)*y1, F.y2] by A3,A7
+     .= (the scalar of X).[(x.|.y1)*y1, (x.|.y2)*y2] by A3,A7
+     .= (z1*y1) .|. (z2*y2) by BHSP_1:def 1
+     .= z2 * (y2 .|. (z1*y1)) by BHSP_1:8
+     .= z2 * (z1 * (y2 .|. y1)) by BHSP_1:8
+     .= 0 by A8;
+    hence thesis;
+  end;
+A9: for y st y in S holds H.y = (the scalar of X).[F.y, F.y]
+   proof
+     let y;
+     assume
+A10:   y in S;
+then A11:  F.y = ((x.|.y) * y) by A3;
+       H.y = (x.|.y)^2 by A4,A10
+      .= (x.|.y) * (x.|.y) * 1 by SQUARE_1:def 3
+      .= (x.|.y) * (x.|.y) * (y.|.y) by A10,Def9
+      .= (x.|.y) * ((x.|.y) * (y.|.y)) by XCMPLX_1:4
+      .= (x.|.y) * (((x.|.y) * y).|.y) by BHSP_1:8
+      .= (((x.|.y) * y).|.((x.|.y) * y)) by BHSP_1:8
+      .= (the scalar of X).[F.y, F.y] by A11,BHSP_1:def 1;
+     hence thesis;
+   end;
+    setopfunc(S, the carrier of X, the carrier of X, F, the add of X)
+      .|. setopfunc(S, the carrier of X, the carrier of X, F, the add of X)
+    = (the scalar of X).[(the add of X) "**" Func_Seq(F, p),
+                         (the add of X) "**" Func_Seq(F, p)]
+      by A5,BHSP_1:def 1
+   .= addreal "**" Func_Seq(H, p) by A2,A3,A4,A5,A6,A9,Th9
+   .= setopfunc(S, the carrier of X, REAL, H, addreal)
+     by A4,A5,Def5,RVSUM_1:5,6,7;
+  hence thesis;
+end;
+
+theorem
+    for X st the add of X is commutative associative &
+    the add of X has_a_unity
+  for x
+  for S be finite OrthonormalFamily of X st S is non empty
+  for H be Function of the carrier of X, REAL
+    st S c= dom H & (for y st y in S holds H.y = (x.|.y)^2) holds
+  setopfunc(S, the carrier of X, REAL, H, addreal) <= ||.x.||^2
+proof
+  let X such that
+A1: the add of X is commutative associative & the add of X has_a_unity;
+  let x;
+  let S be finite OrthonormalFamily of X such that
+A2: S is non empty;
+  let H be Function of the carrier of X, REAL such that
+A3: S c= dom H & (for y st y in S holds H.y= (x.|.y)^2);
+  now
+    deffunc _F(set) = (the Mult of X) .[(the scalar of X).[x,$1],$1];
+A4: for y be set st y in the carrier of X holds _F(y) in the carrier of X
+    proof
+      let y be set such that
+A5:  y in the carrier of X;
+      reconsider y1 = y as Point of X by A5;
+      set x1 = x;
+   (the scalar of X).[x,y] = x1.|.y1 by BHSP_1:def 1;
+      then reconsider a = (the scalar of X).[x,y] as Real;
+      reconsider y2 = y as VECTOR of X by A5;
+        (the Mult of X).[(the scalar of X).[x,y],y] = a * y2 by RLVECT_1:def 4;
+      hence thesis;
+    end;
+      ex F0 being Function of the carrier of X,the carrier of X
+    st for y be set st y in the carrier of X holds F0.y=_F(y) from Lambda1(A4);
+        then consider F0 be Function of the carrier of X, the carrier of X such
+that
+A6:    for y be set st y in the carrier of X holds
+           F0.y = (the Mult of X) .[(the scalar of X).[x,y],y];
+A7: dom F0 = the carrier of X by FUNCT_2:def 1;
+  now
+      let y such that y in S;
+      thus F0.y = (the Mult of X).[(the scalar of X).[x,y],y] by A6
+       .= (the Mult of X).[(x.|.y),y] by BHSP_1:def 1
+       .= (x.|.y)*y by RLVECT_1:def 4;
+    end;
+    then consider F be Function of the carrier of X, the carrier of X
+      such that
+A8:  S c= dom F & (for y st y in S holds F.y = (x.|.y)*y) by A7;
+    set z=setopfunc(S,the carrier of X,the carrier of X,F,the add of X);
+      z.|.x = setopfunc(S, the carrier of X, REAL, H, addreal)
+       by A1,A2,A3,A8,Th11;
+      then x.|.z = z.|.z by A1,A2,A3,A8,Th12;
+     then (x - z).|.(x - z) = ((x.|.x - z.|.z) - z.|.z ) + z.|.z by BHSP_1:18
+      .= (x.|.x - z.|.z) - (z.|.z - z.|.z) by XCMPLX_1:37
+      .= (x.|.x - z.|.z) - 0 by XCMPLX_1:14
+      .= x.|.x - setopfunc(S, the carrier of X, REAL, H, addreal)
+        by A1,A2,A3,A8,Th12;
+    hence 0 <= x.|.x - setopfunc(S, the carrier of X, REAL, H, addreal)
+      by BHSP_1:def 2;
+  end;
+then A9: 0 + setopfunc(S, the carrier of X, REAL, H, addreal) <= x.|.x
+     by REAL_1:84;
+    0 <= x.|.x by BHSP_1:def 2;
+  then setopfunc(S, the carrier of X, REAL, H, addreal) <= (sqrt (x.|.x))^2
+    by A9,SQUARE_1:def 4;
+  hence thesis by BHSP_1:def 4;
+end;
+
+theorem
+    for DK, DX be non empty set
+  for f be BinOp of DK st f is commutative associative & f has_a_unity
+  for Y1, Y2 be finite Subset of DX st Y1 misses Y2
+  for F be Function of DX, DK st Y1 c= dom F & Y2 c= dom F
+  for Z be finite Subset of DX st Z = Y1 \/ Y2
+  holds
+  setopfunc(Z,DX,DK,F,f)
+    = f.(setopfunc(Y1,DX,DK,F,f), setopfunc(Y2,DX,DK,F,f))
+proof
+  let DK, DX be non empty set;
+  let f be BinOp of DK such that
+A1: f is commutative associative & f has_a_unity;
+  let Y1, Y2 be finite Subset of DX such that
+A2: Y1 misses Y2;
+  let F be Function of DX,DK such that
+A3: Y1 c= dom F & Y2 c= dom F;
+  let Z be finite Subset of DX; assume
+A4: Z = Y1 \/ Y2;
+then A5:  Z c= dom F by A3,XBOOLE_1:8;
+  consider p1 be FinSequence of DX such that
+A6: p1 is one-to-one and
+A7: rng p1 = Y1 and
+A8: setopfunc(Y1, DX,DK, F, f) = f "**" Func_Seq(F,p1)
+       by A1,A3,Def5;
+  consider p2 be FinSequence of DX such that
+A9: p2 is one-to-one and
+A10: rng p2 = Y2 and
+A11: setopfunc(Y2, DX,DK, F, f) = f "**" Func_Seq(F,p2) by A1,A3,Def5;
+  set q = p1^p2;
+A12: q is one-to-one by A2,A6,A7,A9,A10,FINSEQ_3:98;
+  rng q = Z by A4,A7,A10,FINSEQ_1:44;
+then A13: setopfunc(Z, DX, DK, F, f) = f "**" Func_Seq(F,q)
+      by A1,A5,A12,Def5;
+A14: ex fp1, fp2 be FinSequence st
+    fp1 = F*p1 & fp2 = F*p2 & F*(p1^p2) = fp1^fp2
+      by A4,A5,A7,A10,HILBASIS:1;
+  then reconsider fp1 = F*p1 as FinSequence;
+  reconsider fp2 = F*p2 as FinSequence by A14;
+    Func_Seq(F,q) = fp1^fp2 by A14,Def4
+   .= (Func_Seq(F,p1))^fp2 by Def4
+   .= (Func_Seq(F,p1))^(Func_Seq(F,p2)) by Def4;
+  hence thesis by A1,A8,A11,A13,FINSOP_1:6;
+end;

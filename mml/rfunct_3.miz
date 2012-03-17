@@ -1,0 +1,3379 @@
+:: Properties of Partial Functions from a Domain to the Set of Real Numbers
+::  by Jaros{\l}aw Kotowicz and Yuji Sakai
+::
+:: Received March 15, 1993
+:: Copyright (c) 1993 Association of Mizar Users
+
+environ
+
+ vocabulary SQUARE_1, ARYTM, ARYTM_1, ABSVALUE, FINSEQ_1, RELAT_1, FUNCT_1,
+      BOOLE, PARTFUN1, ARYTM_3, SEQ_1, RFINSEQ, CARD_1, FUNCOP_1, BINOP_1,
+      SUBSET_1, SETWISEO, RLVECT_1, FUNCT_3, TDGROUP, LIMFUNC1, FINSET_1,
+      RCOMP_1, PROB_1, FINSEQ_2, RVSUM_1, VECTSP_1, RFUNCT_3;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      RELAT_1, FUNCT_1, FINSEQ_1, BINOP_1, CARD_1, REAL_1, NAT_1, ABSVALUE,
+      FUNCOP_1, SETWISEO, FINSEQ_2, SQUARE_1, RELSET_1, PARTFUN1, FINSEQOP,
+      SEQ_1, RFUNCT_1, FINSEQ_4, SETWOP_2, FINSET_1, RVSUM_1, RCOMP_1,
+      PARTFUN2, LIMFUNC1, TOPREAL1, RFINSEQ;
+ constructors MONOID_1, PROB_1, REAL_1, NAT_1, SETWISEO, FINSEQOP, RFUNCT_1,
+      RCOMP_1, PARTFUN2, LIMFUNC1, TOPREAL1, RFINSEQ, FINSOP_1, FINSEQ_4,
+      SEQ_1, SEQ_4, MEMBERED, XBOOLE_0;
+ clusters FINSET_1, RFINSEQ, PRELAMB, RELSET_1, FINSEQ_2, XREAL_0, PARTFUN1,
+      MONOID_1, NAT_1, MEMBERED, ZFMISC_1, XBOOLE_0, ORDINAL2, FINSEQ_1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, BINOP_1, SETWISEO, RFINSEQ, XBOOLE_0;
+ theorems FINSEQ_1, FINSEQ_2, REAL_1, REAL_2, NAT_1, FUNCT_1, AXIOMS, CARD_2,
+      TARSKI, CARD_1, FINSET_1, LIMFUNC1, PARTFUN1, RCOMP_1, SQUARE_1, BINOP_1,
+      FINSEQ_3, FUNCOP_1, RFUNCT_1, TOPREAL1, ZFMISC_1, SUBSET_1, RVSUM_1,
+      ABSVALUE, RFINSEQ, AMI_1, RELAT_1, SEQ_1, FINSOP_1, XREAL_0, XBOOLE_0,
+      XBOOLE_1, XCMPLX_0, XCMPLX_1;
+ schemes NAT_1, FINSEQ_1, SEQ_1, MATRIX_2, BINOP_1;
+
+begin
+
+reserve n,m for Nat,
+        r,s for Real,
+        x,y for set;
+::
+::  Nonnegative and Nonpositive Part of a Real Number
+::
+
+definition let n,m be Nat;
+redefine func min(n,m)->Nat;
+ coherence by FINSEQ_2:1;
+end;
+
+definition let r be real number;
+func max+ (r) -> Real equals :Def1:
+ max(r,0);
+  correctness by XREAL_0:def 1;
+func max- (r) -> Real equals :Def2:
+ max(-r,0);
+  correctness by XREAL_0:def 1;
+end;
+
+theorem Th1:
+for r be real number holds r = max+(r) - max-(r)
+ proof let r be real number;
+     now per cases;
+   case A1: 0<=r;
+    A2: max+(r) =max(0,r) by Def1
+    .= r by A1,SQUARE_1:def 2;
+    A3: -r<=0 by A1,REAL_1:26,50;
+      max-(r) = max(-r,0) by Def2
+    .= 0 by A3,SQUARE_1:def 2;
+    hence thesis by A2;
+   case A4: r<0;
+    A5: max+(r) = max(r,0) by Def1
+    .= 0 by A4,SQUARE_1:def 2;
+    A6: 0<-r by A4,REAL_1:66;
+    A7: max-(r) = max(-r,0) by Def2
+    .= -r by A6,SQUARE_1:def 2;
+    thus r = 0+-(-r)
+    .= max+(r) - max-(r) by A5,A7,XCMPLX_0:def 8;
+   end;
+  hence thesis;
+ end;
+
+theorem Th2:
+for r be real number holds abs(r) = max+(r) + max-(r)
+ proof let r be real number;
+     now per cases;
+   case A1: 0<=r;
+    A2: max+(r) =max(0,r) by Def1
+    .= r by A1,SQUARE_1:def 2;
+    A3: -r<=0 by A1,REAL_1:26,50;
+      max-(r) = max(-r,0) by Def2
+    .= 0 by A3,SQUARE_1:def 2;
+    hence thesis by A1,A2,ABSVALUE:def 1;
+   case A4: r<0;
+    A5: max+(r) = max(r,0) by Def1
+    .= 0 by A4,SQUARE_1:def 2;
+    A6: 0<-r by A4,REAL_1:66;
+       max-(r) = max(-r,0) by Def2
+    .= -r by A6,SQUARE_1:def 2;
+    hence abs(r) = max+(r) + max-(r) by A4,A5,ABSVALUE:def 1;
+   end;
+  hence thesis;
+ end;
+
+theorem Th3:
+for r be real number holds 2*max+(r) = r + abs(r)
+ proof let r be real number;
+  thus r + abs(r) = max+(r) - max-(r) + abs(r) by Th1
+  .= max+(r) - max-(r) + (max+(r) + max-(r)) by Th2
+  .= 1*max+(r) + max+(r) by XCMPLX_1:28
+  .= (1+1)*max+(r) by XCMPLX_1:8
+  .= 2*max+(r);
+ end;
+
+theorem Th4:
+for r,s be real number st 0<=r holds max+(r*s) = r*(max+ s)
+ proof let r,s be real number; assume
+  A1: 0<=r;
+  A2: max+(r*s) = max(r*s,0) & max+ s = max(s,0) by Def1;
+     now per cases;
+   case A3: 0<=s;
+    then 0<=r*s by A1,SQUARE_1:19;
+    then max+(r*s) = r*s & r*(max+ s) = r*s by A2,A3,SQUARE_1:def 2;
+    hence thesis;
+   case A4: s<0;
+    then A5: max+ s= 0 by A2,SQUARE_1:def 2;
+      r*s<=0 by A1,A4,REAL_2:123;
+    hence max+(r*s) = r*(max+ s) by A2,A5,SQUARE_1:def 2;
+   end;
+  hence thesis;
+ end;
+
+theorem Th5:
+for r,s be real number holds max+(r+s) <= max+(r) + max+(s)
+ proof let r,s be real number;
+  A1: max+(r+s) = max(r+s,0) by Def1;
+  A2: r<=max(r,0) & s<=max(s,0) & 0<=max(r,0) & 0<=max(s,0) by SQUARE_1:46;
+     now per cases;
+   case 0<=r+s;
+    then max+(r+s) = r+s by A1,SQUARE_1:def 2;
+    then max+(r+s)<= max(r,0) + max(s,0) by A2,REAL_1:55;
+    then max+(r+s)<= max+(r) + max(s,0) by Def1;
+    hence thesis by Def1;
+   case r+s<0;
+    then max+(r+s) = 0+0 by A1,SQUARE_1:def 2;
+    then max+(r+s)<= max(r,0) + max(s,0) by A2,REAL_1:55;
+    then max+(r+s)<= max+(r) + max(s,0) by Def1;
+    hence thesis by Def1;
+   end;
+  hence thesis;
+ end;
+
+theorem
+  for r be real number holds 0 <= max+(r) & 0 <=max-(r)
+ proof let r be real number;
+    max+(r) = max(r,0) & max-(r) = max(-r,0) by Def1,Def2;
+  hence thesis by SQUARE_1:46;
+ end;
+
+theorem Th7:
+for r1,r2, s1,s2 be real number st r1<=s1 & r2<=s2 holds
+ max(r1,r2) <= max(s1,s2)
+ proof let r1,r2, s1,s2 be real number; assume
+  A1: r1<=s1 & r2<=s2;
+    s1<=max(s1,s2) & s2<=max(s1,s2) by SQUARE_1:46;
+  then r1<=max(s1,s2) & r2<=max(s1,s2) by A1,AXIOMS:22;
+  hence thesis by SQUARE_1:50;
+ end;
+
+Lm1:
+for D be non empty set, f be FinSequence of D st len f<=n holds (f|n) = f
+ proof let D be non empty set,f be FinSequence of D; assume
+  A1: len f<=n;
+  A2: dom f = Seg len f & f|n = f|Seg n by FINSEQ_1:def 3,TOPREAL1:def 1;
+  then dom f c= Seg n by A1,FINSEQ_1:7;
+  hence (f|n) = f by A2,RELAT_1:97;
+ end;
+
+Lm2:
+for f be Function,x be set st not x in rng f holds f"{x}={}
+ proof let f be Function,x be set; assume
+  A1: not x in rng f;
+    rng f misses {x}
+   proof assume
+A2: rng f /\ {x} <> {};
+    consider y being Element of rng f /\ {x};
+      y in rng f & y in {x} by A2,XBOOLE_0:def 3;
+    hence contradiction by A1,TARSKI:def 1;
+   end;
+  hence thesis by RELAT_1:173;
+ end;
+
+begin
+::
+:: Partial Functions from a Domain to the Set of Real Numbers
+::
+
+theorem Th8:
+for D be non empty set, F be PartFunc of D,REAL, r,s be real number st
+ r <> 0 holds F"{s/r} = (r(#)F)"{s}
+ proof let D be non empty set, F be PartFunc of D,REAL, r,s be real number;
+  assume
+  A1: r <> 0;
+  thus F"{s/r} c= (r(#)F)"{s}
+   proof let x; assume A2: x in F"{s/r};
+    then reconsider d=x as Element of D;
+      d in dom F & F.d in {s/r} by A2,FUNCT_1:def 13;
+    then A3: d in dom(r(#)F) & F.d = s/r by SEQ_1:def 6,TARSKI:def 1;
+    then r*F.d = s by A1,XCMPLX_1:88;
+    then (r(#)F).d = s by A3,SEQ_1:def 6;
+    then (r(#)F).d in {s} by TARSKI:def 1;
+    hence thesis by A3,FUNCT_1:def 13;
+   end;
+  let x; assume A4: x in (r(#)F)"{s};
+  then reconsider d=x as Element of D;
+  A5: d in dom(r(#)F) & (r(#)F).d in {s} by A4,FUNCT_1:def 13;
+  then A6: d in dom F & (r(#)F).d = s by SEQ_1:def 6,TARSKI:def 1;
+  then r*F.d = s by A5,SEQ_1:def 6;
+  then F.d = s/r by A1,XCMPLX_1:90;
+  then F.d in {s/r} by TARSKI:def 1;
+  hence thesis by A6,FUNCT_1:def 13;
+ end;
+
+theorem Th9:
+for D be non empty set, F be PartFunc of D,REAL holds (0(#)F)"{0} = dom F
+ proof let D be non empty set, F be PartFunc of D,REAL;
+  thus (0(#)F)"{0} c= dom F
+   proof let x; assume A1: x in (0(#)F)"{0};
+    then reconsider d=x as Element of D;
+      d in dom(0(#)F) & (0(#)F).d in {0} by A1,FUNCT_1:def 13;
+    hence thesis by SEQ_1:def 6;
+   end;
+  let x; assume A2: x in dom F;
+  then reconsider d=x as Element of D;
+  A3: d in dom(0(#)F) by A2,SEQ_1:def 6;
+  then (0(#)F).d = 0*(F.d) by SEQ_1:def 6
+  .= 0;
+  then (0(#)F).d in {0} by TARSKI:def 1;
+  hence thesis by A3,FUNCT_1:def 13;
+ end;
+
+theorem Th10:
+for D be non empty set, F be PartFunc of D,REAL, r be Real st 0<r holds
+ abs(F)"{r} = F"{-r,r}
+ proof let D be non empty set, F be PartFunc of D,REAL, r; assume
+  A1: 0<r;
+  A2: dom abs(F) = dom F by SEQ_1:def 10;
+  thus abs(F)"{r} c= F"{-r,r}
+   proof let x; assume
+    A3: x in abs(F)"{r};
+    then reconsider rr = x as Element of D;
+    A4: rr in dom abs(F) & abs(F).rr in {r} by A3,FUNCT_1:def 13;
+    then abs(F.rr) in {r} by SEQ_1:def 10;
+    then A5: abs(F.rr) = r by TARSKI:def 1;
+       now per cases;
+     case 0<=F.rr;
+      then F.rr = r by A5,ABSVALUE:def 1;
+      then F.rr in {-r,r} by TARSKI:def 2;
+      hence thesis by A2,A4,FUNCT_1:def 13;
+     case F.rr<0;
+      then -F.rr = r by A5,ABSVALUE:def 1;
+      then F.rr in {-r,r} by TARSKI:def 2;
+      hence thesis by A2,A4,FUNCT_1:def 13;
+     end;
+    hence thesis;
+   end;
+  let x; assume
+  A6: x in F"{-r,r};
+  then reconsider rr = x as Element of D;
+  A7: rr in dom F & F.rr in {-r,r} by A6,FUNCT_1:def 13;
+     now per cases by A7,TARSKI:def 2;
+   case F.rr = -r;
+    then r = abs(-F.rr) by A1,ABSVALUE:def 1
+    .= abs(F.rr) by ABSVALUE:17
+    .= abs(F).rr by A2,A7,SEQ_1:def 10;
+    then abs(F).rr in {r} by TARSKI:def 1;
+    hence thesis by A2,A7,FUNCT_1:def 13;
+   case F.rr = r;
+    then r = abs(F.rr) by A1,ABSVALUE:def 1
+    .= abs(F).rr by A2,A7,SEQ_1:def 10;
+    then abs(F).rr in {r} by TARSKI:def 1;
+    hence thesis by A2,A7,FUNCT_1:def 13;
+   end;
+  hence thesis;
+ end;
+
+theorem Th11:
+for D be non empty set, F be PartFunc of D,REAL holds abs(F)"{0} = F"{0}
+ proof let D be non empty set, F be PartFunc of D,REAL;
+  A1: dom abs(F) = dom F by SEQ_1:def 10;
+  thus abs(F)"{0} c= F"{0}
+   proof let x; assume
+    A2: x in abs(F)"{0};
+    then reconsider r=x as Element of D;
+    A3: r in dom abs(F) & abs(F).r in {0} by A2,FUNCT_1:def 13;
+    then abs(F.r) in {0} by SEQ_1:def 10;
+    then abs(F.r) = 0 by TARSKI:def 1;
+    then F.r = 0 by ABSVALUE:7;
+    then F.r in {0} by TARSKI:def 1;
+    hence thesis by A1,A3,FUNCT_1:def 13;
+   end;
+  let x; assume
+  A4: x in F"{0};
+  then reconsider r=x as Element of D;
+  A5: r in dom F & F.r in {0} by A4,FUNCT_1:def 13;
+  then F.r = 0 by TARSKI:def 1;
+  then abs(F.r) = 0 by ABSVALUE:7;
+  then abs(F).r = 0 by A1,A5,SEQ_1:def 10;
+  then abs(F).r in {0} by TARSKI:def 1;
+  hence thesis by A1,A5,FUNCT_1:def 13;
+ end;
+
+theorem Th12:
+for D be non empty set, F be PartFunc of D,REAL, r be Real st r<0 holds
+ abs(F)"{r} = {}
+ proof let D be non empty set, F be PartFunc of D,REAL, r; assume
+  A1: r<0; assume
+A2: abs(F)"{r} <> {};
+  consider x being Element of abs(F)"{r};
+  reconsider x as Element of D by A2,TARSKI:def 3;
+    x in dom abs(F) & abs(F).x in {r} by A2,FUNCT_1:def 13;
+  then abs(F.x) in {r} by SEQ_1:def 10;
+  then abs(F.x) = r by TARSKI:def 1;
+  hence contradiction by A1,ABSVALUE:5;
+ end;
+
+theorem Th13:
+for D,C be non empty set, F be PartFunc of D,REAL, G be PartFunc of C,REAL,
+ r be Real st r <> 0 holds
+      F,G are_fiberwise_equipotent iff r(#)F, r(#)G are_fiberwise_equipotent
+ proof let D,C be non empty set, F be PartFunc of D,REAL,
+           G be PartFunc of C,REAL, r; assume
+  A1: r <> 0;
+  A2: rng F c= REAL & rng G c= REAL &
+      rng(r(#)F) c= REAL & rng(r(#)G) c= REAL;
+  thus F,G are_fiberwise_equipotent implies r(#)F, r(#)
+G are_fiberwise_equipotent
+   proof assume
+    A3: F,G are_fiberwise_equipotent;
+       now let x be Real;
+        F"{x/r} = (r(#)F)"{x} & G"{x/r} = (r(#)G)"{x} by A1,Th8;
+      hence Card((r(#)F)"{x}) = Card((r(#)G)"{x}) by A3,RFINSEQ:def 1;
+     end;
+    hence thesis by A2,RFINSEQ:5;
+   end; assume
+  A4: r(#)F, r(#)G are_fiberwise_equipotent;
+     now let x be Real;
+    A5: r*x/r = x by A1,XCMPLX_1:90;
+      F"{r*x/r} = (r(#)F)"{r*x} & G"{r*x/r} = (r(#)G)"{r*x} by A1,Th8;
+    hence Card(F"{x}) = Card(G"{x}) by A4,A5,RFINSEQ:def 1;
+   end;
+  hence thesis by A2,RFINSEQ:5;
+ end;
+
+theorem
+  for D,C be non empty set, F be PartFunc of D,REAL, G be PartFunc of C,REAL
+  holds F,G are_fiberwise_equipotent iff -F, -G are_fiberwise_equipotent
+ proof let D,C be non empty set, F be PartFunc of D,REAL,
+           G be PartFunc of C,REAL;
+    -F = (-1)(#)F & -G = (-1)(#)G by RFUNCT_1:38;
+  hence thesis by Th13;
+ end;
+
+theorem
+  for D,C be non empty set, F be PartFunc of D,REAL, G be PartFunc of C,REAL
+ st F,G are_fiberwise_equipotent holds abs(F), abs(G) are_fiberwise_equipotent
+ proof let D,C be non empty set, F be PartFunc of D,REAL,
+           G be PartFunc of C,REAL; assume
+  A1: F,G are_fiberwise_equipotent;
+  A2: rng abs(F) c= REAL & rng abs(G) c= REAL;
+     now let r be Real;
+       now per cases;
+     case 0<r;
+      then abs(F)"{r} = F"{-r,r} & abs(G)"{r} = G"{-r,r} by Th10;
+      hence Card(abs(F)"{r}) = Card(abs(G)"{r}) by A1,RFINSEQ:4;
+     case 0=r;
+      then abs(F)"{r} = F"{r} & abs(G)"{r} = G"{r} by Th11;
+      hence Card(abs(F)"{r}) = Card(abs(G)"{r}) by A1,RFINSEQ:4;
+     case r<0;
+      then abs(F)"{r} = {} & abs(G)"{r} = {} by Th12;
+      hence Card(abs(F)"{r}) = Card(abs(G)"{r});
+     end;
+    hence Card(abs(F)"{r}) = Card(abs(G)"{r});
+   end;
+  hence thesis by A2,RFINSEQ:5;
+ end;
+
+definition let X,Y be set;
+mode PartFunc-set of X,Y means :Def3:
+for x being Element of it holds x is PartFunc of X,Y;
+ existence
+  proof
+   reconsider h={} as PartFunc of X,Y by PARTFUN1:56;
+   take {h};
+   thus thesis by TARSKI:def 1;
+  end;
+end;
+
+definition let X,Y be set;
+ cluster non empty PartFunc-set of X,Y;
+ existence
+  proof
+   reconsider h={} as PartFunc of X,Y by PARTFUN1:56;
+      {h} is PartFunc-set of X,Y
+     proof let x be Element of {h};
+      thus thesis by TARSKI:def 1;
+     end;
+   hence thesis;
+  end;
+end;
+
+definition let X,Y be set;
+ mode PFUNC_DOMAIN of X,Y is non empty PartFunc-set of X,Y;
+end;
+
+definition let X,Y be set;
+redefine func PFuncs(X,Y) -> PartFunc-set of X,Y;
+ coherence
+  proof
+     for x be Element of PFuncs(X,Y) holds x is PartFunc of X,Y by PARTFUN1:121
+;
+   hence thesis by Def3;
+  end;
+ let P be non empty PartFunc-set of X,Y;
+  mode Element of P -> PartFunc of X,Y;
+ coherence by Def3;
+end;
+
+definition let D,C be non empty set,
+               X be Subset of D,
+               c be Element of C;
+redefine func X --> c -> Element of PFuncs(D,C);
+ coherence
+  proof
+     X --> c is PartFunc of D,C;
+   hence thesis by PARTFUN1:119;
+  end;
+end;
+
+definition let D be non empty set,
+               F1,F2 be Element of PFuncs(D,REAL);
+redefine func F1+F2 -> Element of PFuncs(D,REAL);
+  coherence by PARTFUN1:119;
+ func F1-F2 -> Element of PFuncs(D,REAL);
+  coherence by PARTFUN1:119;
+ func F1(#)F2 -> Element of PFuncs(D,REAL);
+  coherence by PARTFUN1:119;
+ func F1/F2 -> Element of PFuncs(D,REAL);
+  coherence by PARTFUN1:119;
+end;
+
+definition let D be non empty set,
+               F be Element of PFuncs(D,REAL);
+redefine func abs(F) -> Element of PFuncs(D,REAL);
+  coherence by PARTFUN1:119;
+ func - F -> Element of PFuncs(D,REAL);
+  coherence by PARTFUN1:119;
+ func F^ -> Element of PFuncs(D,REAL);
+  coherence by PARTFUN1:119;
+end;
+
+definition let D be non empty set,
+               F be Element of PFuncs(D,REAL),
+               r be real number;
+redefine func r(#)F -> Element of PFuncs(D,REAL);
+ coherence by PARTFUN1:119;
+end;
+
+definition let D be non empty set;
+func addpfunc(D) -> BinOp of PFuncs(D,REAL) means :Def4:
+for F1,F2 be Element of PFuncs(D,REAL) holds it.(F1,F2) = F1 + F2;
+ existence
+   proof
+     deffunc O(Element of PFuncs(D,REAL),Element of PFuncs(D,REAL))=
+            $1 + $2;
+     ex o being BinOp of PFuncs(D,REAL) st
+       for a,b being Element of PFuncs(D,REAL) holds o.(a,b) = O(a,b)
+              from BinOpLambda;
+     hence thesis;
+   end;
+ uniqueness
+  proof let o1,o2 be BinOp of PFuncs(D,REAL); assume that
+   A1: for f1,f2 be Element of PFuncs(D,REAL) holds o1.(f1,f2) = f1 + f2 and
+   A2: for f1,f2 be Element of PFuncs(D,REAL) holds o2.(f1,f2) = f1 + f2;
+      now let f1,f2 be Element of PFuncs(D,REAL);
+       o1.(f1,f2) = f1 + f2 & o2.(f1,f2) = f1 + f2 by A1,A2;
+     hence o1.(f1,f2)=o2.(f1,f2);
+    end;
+   hence thesis by BINOP_1:2;
+  end;
+end;
+
+theorem Th16:
+for D be non empty set holds addpfunc(D) is commutative
+ proof let D be non empty set;
+  let F1,F2 be Element of PFuncs(D,REAL);
+  set o=addpfunc(D);
+  thus o.(F1,F2) = F2+F1 by Def4
+  .= o.(F2,F1) by Def4;
+ end;
+
+theorem Th17:
+for D be non empty set holds addpfunc(D) is associative
+ proof let D be non empty set;
+  let F1,F2,F3 be Element of PFuncs(D,REAL);
+  set o=addpfunc(D);
+  thus o.(F1,o.(F2,F3)) = o.(F1,F2+F3) by Def4
+  .= F1+(F2+F3) by Def4
+  .= F1+F2+F3 by RFUNCT_1:19
+  .= o.(F1,F2) + F3 by Def4
+  .= o.(o.(F1,F2),F3) by Def4;
+ end;
+
+theorem Th18:
+for D be non empty set holds
+  [#](D) --> (0 qua Real) is_a_unity_wrt addpfunc(D)
+ proof let D be non empty set;
+  set F = [#](D) --> (0 qua Real);
+  A1: [#](D) = D by SUBSET_1:def 4;
+  then A2: dom F = D by FUNCOP_1:19;
+  A3: addpfunc(D) is commutative by Th16;
+     now let G be Element of PFuncs(D,REAL);
+      dom G /\ D = dom G by XBOOLE_1:28;
+    then A4: dom(G+F) = dom G by A2,SEQ_1:def 3;
+       now let d be Element of D; assume d in dom(G+F);
+      hence (G+F).d = G.d+F.d by SEQ_1:def 3
+      .= G.d + 0 by A1,FUNCOP_1:13
+      .= G.d;
+     end;
+    then G+F = G by A4,PARTFUN1:34;
+    hence addpfunc(D).(G,F) = G by Def4;
+   end;
+  hence thesis by A3,BINOP_1:13;
+ end;
+
+theorem Th19:
+for D be non empty set holds
+  the_unity_wrt addpfunc(D) = [#](D) --> (0 qua Real)
+ proof let D be non empty set;
+    [#](D) --> (0 qua Real) is_a_unity_wrt addpfunc(D) by Th18;
+  hence thesis by BINOP_1:def 8;
+ end;
+
+theorem Th20:
+for D be non empty set holds addpfunc(D) has_a_unity
+ proof let D be non empty set;
+  take [#](D) --> (0 qua Real);
+  thus thesis by Th18;
+ end;
+
+definition let D be non empty set,
+               f be FinSequence of PFuncs(D,REAL);
+func Sum(f) -> Element of PFuncs(D,REAL) equals :Def5:
+ (addpfunc(D)) $$ f;
+ correctness;
+end;
+
+theorem Th21:
+for D be non empty set holds Sum(<*> PFuncs(D,REAL) ) = [#](D)-->(0 qua Real)
+ proof let D be non empty set;
+  set f=<*> PFuncs(D,REAL),
+      o = addpfunc(D),
+      o0 = [#](D) --> (0 qua Real);
+  A1:
+  o is commutative & o is associative & the_unity_wrt o = o0 & o has_a_unity
+   by Th16,Th17,Th19,Th20;
+  thus Sum f = addpfunc(D) $$ f by Def5
+  .= o0 by A1,FINSOP_1:11;
+ end;
+
+theorem Th22:
+for D be non empty set, G be Element of PFuncs(D,REAL) holds Sum <*G*> = G
+ proof let D be non empty set, G be Element of PFuncs(D,REAL);
+  thus Sum <*G*> = addpfunc(D) $$ (<*G*>) by Def5
+  .= G by FINSOP_1:12;
+ end;
+
+theorem Th23:
+for D be non empty set, f be FinSequence of PFuncs(D,REAL),
+   G be Element of PFuncs(D,REAL) holds Sum(f^<*G*>) = Sum f + G
+ proof let D be non empty set, f be FinSequence of PFuncs(D,REAL),
+         G be Element of PFuncs(D,REAL);
+  set o = addpfunc(D);
+  A1: o is commutative & o is associative & o has_a_unity by Th16,Th17,Th20;
+  thus Sum(f^<*G*>) = o $$ (f^<*G*>) by Def5
+                 .= o.(o $$ f,G) by A1,FINSOP_1:5
+                 .= o.(Sum f,G) by Def5
+                 .= Sum f + G by Def4;
+ end;
+
+theorem Th24:
+for D be non empty set, f1,f2 be FinSequence of PFuncs(D,REAL) holds
+  Sum(f1^f2) = Sum f1 + Sum f2
+ proof let D be non empty set, f1,f2 be FinSequence of PFuncs(D,REAL);
+  set o = addpfunc(D);
+  A1: o is commutative & o is associative & o has_a_unity by Th16,Th17,Th20;
+  thus Sum(f1^f2)= addpfunc(D) $$ (f1^f2) by Def5
+    .= addpfunc(D).(addpfunc(D) $$ f1,addpfunc(D) $$ f2) by A1,FINSOP_1:6
+    .= addpfunc(D).(Sum f1,addpfunc(D) $$ f2) by Def5
+    .= addpfunc(D).(Sum f1,Sum f2) by Def5
+    .= Sum f1 + Sum f2 by Def4;
+ end;
+
+theorem
+  for D be non empty set, f be FinSequence of PFuncs(D,REAL),
+   G be Element of PFuncs(D,REAL) holds Sum(<*G*>^f) = G + Sum f
+ proof let D be non empty set, f be FinSequence of PFuncs(D,REAL),
+         G be Element of PFuncs(D,REAL);
+  thus Sum(<*G*>^f) = Sum <*G*> + Sum f by Th24
+   .= G + Sum f by Th22;
+ end;
+
+theorem Th26:
+for D be non empty set, G1,G2 be Element of PFuncs(D,REAL) holds
+   Sum<*G1,G2*> = G1 + G2
+ proof let D be non empty set, G1,G2 be Element of PFuncs(D,REAL);
+  thus Sum<*G1,G2*> = Sum(<*G1*>^<*G2*>) by FINSEQ_1:def 9
+                  .= Sum<*G1*> + G2 by Th23
+                  .= G1 + G2 by Th22;
+ end;
+
+theorem
+  for D be non empty set, G1,G2,G3 be Element of PFuncs(D,REAL) holds
+   Sum<*G1,G2,G3*> = G1 + G2 + G3
+ proof let D be non empty set, G1,G2,G3 be Element of PFuncs(D,REAL);
+  thus Sum<*G1,G2,G3*> = Sum(<*G1,G2*>^<*G3*>) by FINSEQ_1:60
+                  .= Sum<*G1,G2*> + G3 by Th23
+                  .= G1 + G2 + G3 by Th26;
+ end;
+
+theorem
+  for D be non empty set, f,g be FinSequence of PFuncs(D,REAL)
+  st f,g are_fiberwise_equipotent holds Sum f = Sum g
+ proof let D be non empty set;
+  defpred P[Nat] means
+   for f,g be FinSequence of PFuncs(D,REAL)
+    st f,g are_fiberwise_equipotent & len f = $1 holds Sum f = Sum g;
+  A1: P[0]
+   proof let f,g be FinSequence of PFuncs(D,REAL); assume
+      f,g are_fiberwise_equipotent & len f = 0;
+    then len g = 0 & f =<*>PFuncs(D,REAL) by FINSEQ_1:32,RFINSEQ:16;
+    hence thesis by FINSEQ_1:32;
+   end;
+  A2: for n st P[n] holds P[n+1]
+   proof let n; assume
+    A3: P[n];
+    let f,g be FinSequence of PFuncs(D,REAL); assume
+    A4: f,g are_fiberwise_equipotent & len f = n+1;
+    then A5: rng f = rng g & len f = len g by RFINSEQ:1,16;
+      0<n+1 by NAT_1:19;
+    then 0+1<=n+1 by NAT_1:38;
+    then A6: n+1 in dom f by A4,FINSEQ_3:27;
+    then reconsider a=f.(n+1) as Element of PFuncs(D,REAL) by FINSEQ_2:13;
+      a in rng g by A5,A6,FUNCT_1:def 5;
+    then consider m such that
+    A7: m in dom g & g.m = a by FINSEQ_2:11;
+    A8: g = (g|m) ^ (g/^m) by RFINSEQ:21;
+    A9: 1<=m & m<=len g by A7,FINSEQ_3:27;
+    then max(0,m-1)=m-1 by FINSEQ_2:4;
+    then reconsider m1=m-1 as Nat by FINSEQ_2:5;
+    set gg = g/^m,
+        gm = g|m;
+    A10: len gm = m by A9,TOPREAL1:3;
+    A11: m=m1+1 by XCMPLX_1:27;
+      m in Seg m by A9,FINSEQ_1:3;
+    then gm.m = a & m in dom g by A7,RFINSEQ:19;
+    then A12: gm = (gm|m1) ^ <*a*> by A10,A11,RFINSEQ:20;
+      m1<=m by A11,NAT_1:29;
+    then A13: Seg m1 c= Seg m by FINSEQ_1:7;
+    A14: gm|m1 = gm|(Seg m1) by TOPREAL1:def 1
+    .= (g|(Seg m))|(Seg m1) by TOPREAL1:def 1
+    .= g|((Seg m)/\(Seg m1)) by RELAT_1:100
+    .= g|(Seg m1) by A13,XBOOLE_1:28
+    .= g|m1 by TOPREAL1:def 1;
+    set fn=f|n;
+      n<=n+1 by NAT_1:29;
+    then A15: len fn = n by A4,TOPREAL1:3;
+    A16: f = fn ^ <*a*> by A4,RFINSEQ:20;
+       now let x;
+        card(f"{x}) = card(g"{x}) by A4,RFINSEQ:def 1;
+      then card(fn"{x}) + card(<*a*>"{x}) = card(((g|m1)^<*a*>^(g/^m))"{x})
+        by A8,A12,A14,A16,FINSEQ_3:63
+      .= card(((g|m1)^<*a*>)"{x}) + card((g/^m)"{x}) by FINSEQ_3:63
+      .= card((g|m1)"{x})+ card(<*a*>"{x}) + card((g/^m)"{x}) by FINSEQ_3:63
+      .= card((g|m1)"{x}) + card((g/^m)"{x})+ card(<*a*>"{x}) by XCMPLX_1:1
+      .= card(((g|m1)^(g/^m))"{x})+ card(<*a*>"{x}) by FINSEQ_3:63;
+      hence card(fn"{x}) = card(((g|m1)^(g/^m))"{x}) by XCMPLX_1:2;
+     end;
+    then fn, (g|m1)^(g/^m) are_fiberwise_equipotent by RFINSEQ:def 1;
+    then Sum fn = Sum((g|m1)^gg) by A3,A15;
+    hence Sum f = Sum((g|m1)^gg) + Sum <*a*> by A16,Th24
+    .= Sum(g|m1) + Sum gg+ Sum <*a*> by Th24
+    .= Sum(g|m1)+ Sum <*a*> + Sum gg by RFUNCT_1:19
+    .= Sum gm + Sum gg by A12,A14,Th24
+    .= Sum g by A8,Th24;
+   end;
+  A17: for n holds P[n] from Ind(A1,A2);
+  let f,g be FinSequence of PFuncs(D,REAL); assume
+  A18: f,g are_fiberwise_equipotent;
+    len f = len f;
+  hence Sum f = Sum g by A17,A18;
+ end;
+
+definition let D be non empty set,
+               f be FinSequence;
+func CHI(f,D) -> FinSequence of PFuncs(D,REAL) means :Def6:
+len it = len f & for n st n in dom it holds it.n = chi(f.n,D);
+ existence
+  proof
+  deffunc F(Nat)= chi(f.$1,D);
+   consider p be FinSequence such that
+   A1: len p = len f and
+   A2: for n st n in Seg len f holds p.n = F(n) from SeqLambda;
+     rng p c= PFuncs(D,REAL)
+    proof let x be set; assume x in rng p;
+     then consider n such that
+     A3: n in dom p & p.n = x by FINSEQ_2:11;
+       n in Seg len f by A1,A3,FINSEQ_1:def 3;
+     then x = chi(f.n,D) by A2,A3;
+     hence x in PFuncs(D,REAL) by PARTFUN1:119;
+    end;
+   then reconsider p as FinSequence of PFuncs(D,REAL) by FINSEQ_1:def 4;
+   take p;
+   thus len p = len f by A1;
+   let n; assume n in dom p;
+   then n in Seg len f by A1,FINSEQ_1:def 3;
+   hence p.n = chi(f.n,D) by A2;
+  end;
+ uniqueness
+  proof let p1,p2 be FinSequence of PFuncs(D,REAL); assume that
+   A4: len p1 = len f & for n st n in dom p1 holds p1.n = chi(f.n,D) and
+   A5: len p2 = len f & for n st n in dom p2 holds p2.n = chi(f.n,D);
+      now let n;
+     A6: dom p1 = Seg len p1 & dom p2 = Seg len p2 by FINSEQ_1:def 3;
+     assume n in Seg len p1;
+     then p1.n = chi(f.n,D) & p2.n = chi(f.n,D) by A4,A5,A6;
+     hence p1.n = p2.n;
+    end;
+   hence thesis by A4,A5,FINSEQ_2:10;
+  end;
+end;
+
+definition let D be non empty set,
+               f be FinSequence of PFuncs(D,REAL),
+               R be FinSequence of REAL;
+func R (#) f -> FinSequence of PFuncs(D,REAL) means :Def7:
+len it = min(len R,len f) &
+for n st n in dom it
+ for F be PartFunc of D,REAL, r st r = R.n & F = f.n holds it.n = r(#)F;
+ existence
+  proof
+   set m = min(len R,len f);
+   defpred P[Nat,set] means
+    for F be PartFunc of D,REAL, r st r=R.$1 & F = f.$1 holds $2 = r(#)F;
+   A1: m<=len R & m<=len f by SQUARE_1:35;
+   A2: for n st n in Seg m ex x being Element of PFuncs(D,REAL) st P[n,x]
+    proof let n; assume n in Seg m;
+     then A3: 1<=n & n<=m by FINSEQ_1:3;
+     then n<=len R & n<=len f by A1,AXIOMS:22;
+      then n in dom R & n in dom f by A3,FINSEQ_3:27;
+     then reconsider F=f.n as Element of PFuncs(D,REAL) by FINSEQ_2:13;
+     reconsider r=R.n as Real;
+     reconsider a= r(#)F as Element of PFuncs(D,REAL);
+     take a;
+     thus P[n,a];
+    end;
+   consider p be FinSequence of PFuncs(D,REAL) such that
+   A4: dom p = Seg m & for n st n in Seg m holds P[n,p.n] from SeqDEx(A2);
+   take p;
+   thus len p = m by A4,FINSEQ_1:def 3;
+   let n; assume n in dom p;
+   hence P[n,p.n] by A4;
+  end;
+ uniqueness
+  proof let p1,p2 be FinSequence of PFuncs(D,REAL);
+   set m = min(len R,len f); assume that
+   A5: len p1 = m and
+   A6: for n st n in dom p1
+    for F be PartFunc of D,REAL, r st r = R.n & F = f.n holds p1.n = r(#)F and
+   A7: len p2 = m and
+   A8: for n st n in dom p2
+    for F be PartFunc of D,REAL, r st r = R.n & F = f.n holds p2.n = r(#)F;
+   A9: m<=len R & m<=len f by SQUARE_1:35;
+   A10: dom p1 = Seg len p1 & dom p2 = Seg len p2 by FINSEQ_1:def 3;
+      now let n; assume A11: n in Seg m;
+     then A12: 1<=n & n<=m by FINSEQ_1:3;
+     then n<=len R & n<=len f by A9,AXIOMS:22;
+      then n in dom R & n in dom f by A12,FINSEQ_3:27;
+     then reconsider F=f.n as Element of PFuncs(D,REAL) by FINSEQ_2:13;
+     reconsider r=R.n as Real;
+       p1.n=r(#)F & p2.n=r(#)F by A5,A6,A7,A8,A10,A11;
+     hence p1.n = p2.n;
+    end;
+   hence thesis by A5,A7,FINSEQ_2:10;
+  end;
+end;
+
+definition let D be non empty set,
+               f be FinSequence of PFuncs(D,REAL),
+               d be Element of D;
+func f#d -> FinSequence of REAL means :Def8:
+len it = len f & for n be Nat, G be Element of PFuncs(D,REAL) st
+                          n in dom it & f.n = G holds it.n = G.d;
+ existence
+  proof
+   defpred P[Nat,set] means
+   for G be Element of PFuncs(D,REAL) st f.$1=G holds $2=G.d;
+   A1: for n st n in Seg len f ex x being Element of REAL st P[n,x]
+    proof let n; assume
+       n in Seg len f;
+     then n in dom f by FINSEQ_1:def 3;
+     then reconsider G=f.n as Element of PFuncs(D,REAL) by FINSEQ_2:13;
+     take x=G.d;
+     thus P[n,x];
+    end;
+   consider p being FinSequence of REAL such that
+   A2: dom p = Seg len f and
+   A3: for n st n in Seg len f holds P[n,p.n] from SeqDEx(A1);
+   take p;
+   thus len p = len f by A2,FINSEQ_1:def 3;
+   let n be Nat, G be Element of PFuncs(D,REAL); assume
+     n in dom p & f.n = G;
+   hence thesis by A2,A3;
+  end;
+ uniqueness
+  proof let p1,p2 be FinSequence of REAL; assume that
+   A4: len p1 = len f & for n be Nat, G be Element of PFuncs(D,REAL) st
+            n in dom p1 & f.n = G holds p1.n = G.d and
+   A5: len p2 = len f & for n be Nat, G be Element of PFuncs(D,REAL) st
+            n in dom p2 & f.n = G holds p2.n = G.d;
+      now let n;
+     A6: dom p1=Seg len p1 & dom p2=Seg len p2 by FINSEQ_1:def 3;
+     assume A7: n in Seg len p1;
+     then n in dom f by A4,FINSEQ_1:def 3;
+     then reconsider G = f.n as Element of PFuncs(D,REAL) by FINSEQ_2:13;
+       p1.n = G.d & p2.n = G.d by A4,A5,A6,A7;
+     hence p1.n = p2.n;
+    end;
+   hence thesis by A4,A5,FINSEQ_2:10;
+  end;
+end;
+
+definition let D,C be non empty set,
+               f be FinSequence of PFuncs(D,C),
+               d be Element of D;
+pred d is_common_for_dom f means :Def9:
+for G be Element of PFuncs(D,C), n be Nat
+  st n in dom f & f.n = G holds d in dom G;
+end;
+
+theorem Th29:
+for D,C be non empty set, f be FinSequence of PFuncs(D,C), d be Element of D,
+ n be Nat st d is_common_for_dom f & n <> 0 holds d is_common_for_dom f|n
+ proof let D1,D2 be non empty set, f be FinSequence of PFuncs(D1,D2),
+           d1 be Element of D1, n; assume
+  A1: d1 is_common_for_dom f & n<> 0;
+  let G be Element of PFuncs(D1,D2), m; assume
+  A2: m in dom (f|n) & (f|n).m = G;
+     now per cases;
+   case n>=len f; then f|n = f by Lm1;
+    hence thesis by A1,A2,Def9;
+   case
+A3: n<len f;
+    then A4: dom f = Seg len f & dom(f|n) = Seg len(f|n) & len(f|n) = n
+       by FINSEQ_1:def 3,TOPREAL1:3;
+      0<n by A1,NAT_1:19;
+    then 0+1<=n by NAT_1:38;
+    then n in dom f by A3,FINSEQ_3:27;
+    then G = f.m & m in dom f by A2,A4,RFINSEQ:19;
+    hence thesis by A1,Def9;
+   end;
+  hence thesis;
+ end;
+
+theorem
+  for D,C be non empty set, f be FinSequence of PFuncs(D,C), d be Element of D,
+  n be Nat st d is_common_for_dom f holds d is_common_for_dom f /^ n
+ proof let D1,D2 be non empty set, f be FinSequence of PFuncs(D1,D2),
+           d1 be Element of D1, n; assume
+  A1: d1 is_common_for_dom f;
+  set fn = f /^ n;
+  let G be Element of PFuncs(D1,D2), m; assume
+  A2: m in dom fn & fn.m = G;
+     now per cases;
+   case len f<n; then fn = <*>PFuncs(D1,D2) by RFINSEQ:def 2;
+    hence thesis by A2,FINSEQ_1:26;
+   case n<=len f;
+    then A3: dom f = Seg len f & dom fn = Seg len fn & len fn = len f - n &
+        G= f.(m+n) by A2,FINSEQ_1:def 3,RFINSEQ:def 2;
+      1<=m & m<=len fn & m<=m+n by A2,FINSEQ_3:27,NAT_1:29;
+    then 1<=m+n & m+n<=len f by A3,AXIOMS:22,REAL_1:84;
+    then m+n in dom f by FINSEQ_3:27;
+    hence thesis by A1,A3,Def9;
+   end;
+  hence thesis;
+ end;
+
+theorem Th31:
+for D be non empty set, d be Element of D, f be FinSequence of PFuncs(D,REAL)
+  st len f <> 0 holds d is_common_for_dom f iff d in dom Sum(f)
+ proof let D be non empty set, d be Element of D;
+  defpred P[Nat] means
+  for f be FinSequence of PFuncs(D,REAL) st len f =$1 & len f <> 0 holds
+     d is_common_for_dom f iff d in dom Sum(f);
+  A1: P[0];
+  A2: for n st P[n] holds P[n+1]
+   proof let n; assume
+    A3: P[n];
+    let f be FinSequence of PFuncs(D,REAL); assume
+    A4: len f = n+1 & len f <> 0;
+    A5: dom f = Seg len f by FINSEQ_1:def 3;
+       now per cases;
+     case A6: n=0;
+      then A7: 1 in dom f by A4,FINSEQ_3:27;
+      then reconsider G = f.1 as Element of PFuncs(D,REAL) by FINSEQ_2:13;
+        f=<*G*> by A4,A6,FINSEQ_1:57;
+      then A8: Sum(f) = G by Th22;
+      hence d is_common_for_dom f implies d in dom Sum(f) by A7,Def9;
+      assume d in dom Sum(f);
+      then for F be Element of PFuncs(D,REAL), m st m in dom f & f.m=F holds d
+in dom F
+        by A4,A5,A6,A8,FINSEQ_1:4,TARSKI:def 1;
+      hence d is_common_for_dom f by Def9;
+     case A9: n <> 0;
+      then 0<n by NAT_1:19;
+      then A10: 0+1<=n by NAT_1:38;
+      set fn = f|n;
+        n<=n+1 by NAT_1:29;
+      then A11: len fn = n & n in dom f by A4,A10,FINSEQ_3:27,TOPREAL1:3;
+        0<n+1 by NAT_1:19;
+      then 0+1<=n+1 by NAT_1:38;
+      then A12: n+1 in dom f by A4,FINSEQ_3:27;
+      then reconsider G=f.(n+1) as Element of PFuncs(D,REAL) by FINSEQ_2:13;
+        f = fn ^ <*G*> by A4,RFINSEQ:20;
+      then A13: Sum(f) = Sum(fn) + G by Th23;
+      thus d is_common_for_dom f implies d in dom Sum(f)
+       proof assume
+        A14: d is_common_for_dom f;
+        then d is_common_for_dom fn by A9,Th29;
+        then A15: d in dom Sum(fn) by A3,A9,A11;
+          d in dom G by A12,A14,Def9;
+        then d in dom(Sum(fn)) /\ dom G by A15,XBOOLE_0:def 3;
+        hence d in dom(Sum(f)) by A13,SEQ_1:def 3;
+       end;
+      assume d in dom Sum(f);
+      then A16: d in dom(Sum(fn)) /\ dom G by A13,SEQ_1:def 3;
+      then d in dom(Sum(fn)) & d in dom G by XBOOLE_0:def 3;
+      then A17: d is_common_for_dom fn by A3,A9,A11;
+         now let F be Element of PFuncs(D,REAL), m; assume
+        A18: m in dom f & f.m=F;
+        then A19: 1<=m & m<=len f by FINSEQ_3:27;
+           now per cases;
+         case m=len f;
+          hence d in dom F by A4,A16,A18,XBOOLE_0:def 3;
+         case m<>len f; then m<len f by A19,REAL_1:def 5;
+          then m<=n by A4,NAT_1:38;
+          then A20: m in Seg n & dom fn = Seg len fn
+          by A19,FINSEQ_1:3,def 3
+;
+          then F = fn.m by A11,A18,RFINSEQ:19;
+          hence d in dom F by A11,A17,A20,Def9;
+         end;
+        hence d in dom F;
+       end;
+      hence d is_common_for_dom f by Def9;
+     end;
+    hence thesis;
+   end;
+  A21: for n holds P[n] from Ind(A1,A2);
+  let f be FinSequence of PFuncs(D,REAL); assume len f <> 0;
+  hence thesis by A21;
+ end;
+
+theorem Th32:
+for D be non empty set, f be FinSequence of PFuncs(D,REAL), d be Element of D,
+    n be Nat holds (f|n)#d = (f#d)|n
+ proof let D1 be non empty set, f be FinSequence of PFuncs(D1,REAL),
+           d1 be Element of D1, n be Nat;
+  A1: len(f#d1) = len f & len((f|n)#d1) = len(f|n) by Def8;
+     now per cases;
+   case A2: len f<=n;
+    then f|n = f by Lm1;
+    hence thesis by A1,A2,Lm1;
+   case
+A3:    n<len f;
+    then A4: len(f|n) = n & len((f#d1)|n) = n by A1,TOPREAL1:3;
+    A5: dom f = Seg len f & dom(f#d1) = Seg len(f#d1) &
+       dom((f|n)#d1) = Seg len((f|n)#d1) by FINSEQ_1:def 3;
+       now per cases;
+     case n=0;
+      then (f#d1)|n = <*>REAL & (f|n)#d1 = <*>REAL by A1,A4,FINSEQ_1:32;
+      hence (f#d1)|n = (f|n)#d1;
+     case n<>0;
+      then 0<n by NAT_1:19;
+      then 0+1<=n by NAT_1:38;
+      then A6: n in dom f by A3,FINSEQ_3:27;
+         now let m; assume
+        A7: m in Seg len(f|n);
+        then A8: ((f#d1)|n).m = (f#d1).m & m in dom (f#d1)
+          by A1,A4,A5,A6,RFINSEQ:19;
+        then reconsider G=f.m as Element of PFuncs(D1,REAL) by A1,A5,FINSEQ_2:
+13;
+        A9: ((f#d1)|n).m = G.d1 by A8,Def8;
+          (f|n).m = G & m in dom f by A4,A6,A7,RFINSEQ:19;
+        hence ((f#d1)|n).m = ((f|n)#d1).m by A1,A5,A7,A9,Def8;
+       end;
+      hence thesis by A1,A4,FINSEQ_2:10;
+     end;
+    hence thesis;
+   end;
+  hence thesis;
+ end;
+
+theorem Th33:
+for D be non empty set, f be FinSequence, d be Element of D
+  holds d is_common_for_dom CHI(f,D)
+ proof let D be non empty set, f be FinSequence, d be Element of D;
+  let G be Element of PFuncs(D,REAL), n; assume
+    n in dom CHI(f,D) & CHI(f,D).n = G;
+  then G = chi(f.n,D) by Def6;
+  then dom G = D by RFUNCT_1:77;
+  hence d in dom G;
+ end;
+
+theorem Th34:
+for D be non empty set, d be Element of D, f be FinSequence of PFuncs(D,REAL),
+ R be FinSequence of REAL
+ st d is_common_for_dom f holds d is_common_for_dom R(#)f
+ proof let D be non empty set, d be Element of D,
+  f be FinSequence of PFuncs(D,REAL), R be FinSequence of REAL; assume
+  A1: d is_common_for_dom f;
+  let G be Element of PFuncs(D,REAL), n; assume
+  A2: n in dom (R(#)f) & (R(#)f).n = G;
+  set m = min(len R,len f);
+  A3: m<=len R & m<=len f by SQUARE_1:35;
+    len(R(#)f) = m by Def7;
+  then A4: 1<=n & n<=m by A2,FINSEQ_3:27;
+  then n<=len R & n<=len f by A3,AXIOMS:22;
+  then A5: n in dom R & n in dom f by A4,FINSEQ_3:27;
+  reconsider r=R.n as Real;
+  reconsider F=f.n as Element of PFuncs(D,REAL) by A5,FINSEQ_2:13;
+  A6: G=r(#)F by A2,Def7;
+    d in dom F by A1,A5,Def9;
+  hence d in dom G by A6,SEQ_1:def 6;
+ end;
+
+theorem
+  for D be non empty set, f be FinSequence, R be FinSequence of REAL,
+  d be Element of D holds d is_common_for_dom R(#)CHI(f,D)
+ proof let D be non empty set, f be FinSequence, R be FinSequence of REAL,
+           d be Element of D;
+    d is_common_for_dom CHI(f,D) by Th33;
+  hence thesis by Th34;
+ end;
+
+theorem
+  for D be non empty set, d be Element of D, f be FinSequence of PFuncs(D,REAL)
+  st d is_common_for_dom f holds (Sum(f)).d = Sum (f#d)
+ proof let D be non empty set, d be Element of D;
+  defpred P[Nat] means
+  for f be FinSequence of PFuncs(D,REAL) st len f = $1 & d is_common_for_dom f
+    holds (Sum(f)).d = Sum(f#d);
+  A1: P[0]
+   proof let f be FinSequence of PFuncs(D,REAL);
+    A2: [#](D) = D by SUBSET_1:def 4; assume
+    A3: len f = 0 & d is_common_for_dom f;
+    then f=<*> PFuncs(D,REAL) by FINSEQ_1:32;
+    then A4: (Sum(f)).d = ([#](D)-->(0 qua Real)).d by Th21
+     .= 0 by A2,FUNCOP_1:13;
+      len(f#d)=0 by A3,Def8;
+    hence (Sum(f)).d = Sum(f#d) by A4,FINSEQ_1:32,RVSUM_1:102;
+   end;
+  A5: for n st P[n] holds P[n+1]
+   proof let n; assume
+    A6: P[n];
+    let f be FinSequence of PFuncs(D,REAL); assume
+    A7: len f = n+1 & d is_common_for_dom f;
+    set fn = f|n;
+      n<=n+1 by NAT_1:29;
+    then A8: len fn = n by A7,TOPREAL1:3;
+    A9: dom f = Seg len f & dom(f#d) = Seg len(f#d) & len (f#d)=len f
+     by Def8,FINSEQ_1:def 3;
+      0<n+1 by NAT_1:19;
+    then 0+1<=n+1 by NAT_1:38;
+    then A10: n+1 in dom f by A7,FINSEQ_3:27;
+    then reconsider G=f.(n+1) as Element of PFuncs(D,REAL) by FINSEQ_2:13;
+      f = fn ^ <*G*> by A7,RFINSEQ:20;
+    then A11: Sum f = Sum fn + G by Th23;
+    A12: d in dom G by A7,A10,Def9;
+       now per cases;
+     case A13: n=0;
+      then A14: f = <*G*> by A7,FINSEQ_1:57;
+      A15: len(f#d) = 1 & len<*G.d*>=1 & dom(f#d)=dom(f#d)
+        by A7,A13,Def8,FINSEQ_1:57;
+      then A16: 1 in dom(f#d) by FINSEQ_3:27;
+         now let m; assume m in Seg 1;
+        then A17: m=1 by FINSEQ_1:4,TARSKI:def 1;
+        hence (f#d).m=G.d by A13,A16,Def8
+        .=<*G.d*>.m by A17,FINSEQ_1:57;
+       end;
+      then A18: f#d = <*G.d*> by A15,FINSEQ_2:10;
+      thus (Sum f).d = G.d by A14,Th22
+      .=Sum (f#d) by A18,RVSUM_1:103;
+     case A19: n<>0;
+      then A20: d is_common_for_dom fn by A7,Th29;
+      then (Sum(fn)).d = Sum(fn#d) & d in dom(Sum(fn)) by A6,A8,A19,Th31;
+      then d in dom(Sum(fn)) /\ dom G by A12,XBOOLE_0:def 3;
+      then A21: d in dom(Sum(fn)+G) by SEQ_1:def 3;
+      A22: (f#d).(n+1) =G.d by A9,A10,Def8;
+      thus (Sum f).d = (Sum fn).d + G.d by A11,A21,SEQ_1:def 3
+      .= Sum(fn#d) + G.d by A6,A8,A20
+      .= Sum((f#d)|n) + G.d by Th32
+      .= Sum(((f#d)|n)^<*G.d*>) by RVSUM_1:104
+      .= Sum(f#d) by A7,A9,A22,RFINSEQ:20;
+     end;
+    hence thesis;
+   end;
+  A23: for n holds P[n] from Ind(A1,A5);
+  let f be FinSequence of PFuncs(D,REAL); assume
+  A24: d is_common_for_dom f;
+    len f = len f;
+  hence (Sum(f)).d = Sum(f#d) by A23,A24;
+ end;
+
+definition let D be non empty set,
+               F be PartFunc of D,REAL;
+func max+(F) -> PartFunc of D,REAL means :Def10:
+dom it = dom F & for d be Element of D st d in dom it holds it.d = max+(F.d);
+ existence
+   proof
+    defpred P[set] means $1 in dom F;
+    deffunc Q(set)=max+(F.$1);
+    consider f be PartFunc of D,REAL such that
+    A1: for d be Element of D holds d in dom f iff P[d] and
+    A2: for d be Element of D st d in dom f holds
+    f.d = Q(d) from LambdaPFD';
+    take f;
+    thus dom f = dom F
+     proof
+      thus dom f c= dom F
+       proof
+        let x; assume x in dom f;
+        hence thesis by A1;
+       end;
+      let x; assume x in dom F;
+      hence thesis by A1;
+     end;
+    thus thesis by A2;
+   end;
+  uniqueness
+   proof
+     deffunc F(set)=max+(F.$1);
+     for f,g being PartFunc of D,REAL st
+       (dom f=dom F & for c be Element of D st c in dom f holds f.c = F(c)) &
+       (dom g=dom F & for c be Element of D st c in dom g holds g.c = F(c))
+       holds f = g from UnPartFuncD';
+     hence thesis;
+   end;
+func max-(F) -> PartFunc of D,REAL means :Def11:
+dom it = dom F & for d be Element of D st d in dom it holds it.d = max-(F.d);
+ existence
+  proof
+    defpred P[set] means $1 in dom F;
+    deffunc F(set)=max-(F.$1);
+    consider f be PartFunc of D,REAL such that
+    A3: for d be Element of D holds d in dom f iff P[d] and
+A4: for d be Element of D st d in dom f holds f.d =F(d) from LambdaPFD';
+    take f;
+    thus dom f = dom F
+     proof
+      thus dom f c= dom F
+       proof
+        let x; assume x in dom f;
+        hence thesis by A3;
+       end;
+      let x; assume x in dom F;
+      hence thesis by A3;
+     end;
+    thus thesis by A4;
+   end;
+  uniqueness
+   proof
+     deffunc F(set)=max-(F.$1);
+     for f,g being PartFunc of D,REAL st
+       (dom f=dom F & for c be Element of D st c in dom f holds f.c = F(c)) &
+       (dom g=dom F & for c be Element of D st c in dom g holds g.c = F(c))
+       holds f = g from UnPartFuncD';
+     hence thesis;
+    end;
+end;
+
+theorem
+  for D be non empty set, F be PartFunc of D,REAL holds
+  F = max+(F) - max-(F) & abs(F) = max+(F) + max-(F) & 2 (#)
+ max+(F) = F + abs(F)
+ proof let D be non empty set, F be PartFunc of D,REAL;
+  A1: dom max+(F) = dom F & dom max-(F) = dom F & dom abs(F) = dom F &
+    dom(2(#)max+(F)) = dom max+(F) by Def10,Def11,SEQ_1:def 6,def 10;
+    dom F = dom F /\ dom F;
+  then A2: dom F = dom(max+(F) - max-(F)) & dom abs(F) = dom(max+(F) + max-(F))
+&
+   dom(2(#)max+(F)) = dom(F + abs(F)) by A1,SEQ_1:def 3,def 4;
+     now let d be Element of D; assume
+    A3: d in dom F;
+    hence (max+(F) - max-(F)).d = max+(F).d - max-(F).d by A2,SEQ_1:def 4
+    .= max+(F.d) - max-(F).d by A1,A3,Def10
+    .= max+(F.d) - max-(F.d) by A1,A3,Def11
+    .= F.d by Th1;
+   end;
+  hence F = max+(F) - max-(F) by A2,PARTFUN1:34;
+     now let d be Element of D; assume
+    A4: d in dom abs(F);
+    hence (max+(F) + max-(F)).d = max+(F).d + max-(F).d by A2,SEQ_1:def 3
+    .= max+(F.d) + max-(F).d by A1,A4,Def10
+    .= max+(F.d) + max-(F.d) by A1,A4,Def11
+    .= abs(F.d) by Th2
+    .= (abs(F)).d by A4,SEQ_1:def 10;
+   end;
+  hence abs(F) = max+(F) + max-(F) by A2,PARTFUN1:34;
+     now let d be Element of D; assume
+    A5: d in dom F;
+    hence (2(#)max+(F)).d = 2*(max+(F).d) by A1,SEQ_1:def 6
+    .=2*max+(F.d) by A1,A5,Def10
+    .= F.d + abs(F.d) by Th3
+    .= F.d + (abs(F)).d by A1,A5,SEQ_1:def 10
+    .=(F+abs(F)).d by A1,A2,A5,SEQ_1:def 3;
+   end;
+  hence thesis by A1,A2,PARTFUN1:34;
+ end;
+
+theorem Th38:
+for D be non empty set, F be PartFunc of D,REAL, r be Real
+         st 0<r holds F"{r} = max+(F)"{r}
+ proof let D be non empty set, F be PartFunc of D,REAL, r; assume
+  A1: 0<r;
+  A2: dom max+(F) = dom F by Def10;
+  thus F"{r} c= max+(F)"{r}
+   proof let x; assume A3: x in F"{r};
+    then reconsider d=x as Element of D;
+    A4: d in dom F & F.d in {r} by A3,FUNCT_1:def 13;
+    then A5: F.d = r by TARSKI:def 1;
+      (max+(F)).d = max+(F.d) by A2,A4,Def10
+    .= max(F.d,0) by Def1
+    .= r by A1,A5,SQUARE_1:def 2;
+    then (max+(F)).d in {r} by TARSKI:def 1;
+    hence thesis by A2,A4,FUNCT_1:def 13;
+   end;
+  let x; assume A6: x in (max+ F)"{r};
+  then reconsider d=x as Element of D;
+  A7: d in dom F & (max+ F).d in {r} by A2,A6,FUNCT_1:def 13;
+  then A8: (max+ F).d = r by TARSKI:def 1;
+     (max+ F).d = max+(F.d) by A2,A7,Def10
+  .= max(F.d,0) by Def1;
+  then F.d = r by A1,A8,SQUARE_1:49;
+  then F.d in {r} by TARSKI:def 1;
+  hence thesis by A7,FUNCT_1:def 13;
+ end;
+
+theorem Th39:
+for D be non empty set, F be PartFunc of D,REAL
+    holds F"(left_closed_halfline(0)) = max+(F)"{0}
+ proof let D be non empty set, F be PartFunc of D,REAL;
+  set li = left_closed_halfline(0);
+  A1: dom max+(F) = dom F by Def10;
+  A2: li = {s : s<=0} by LIMFUNC1:def 1;
+  thus F" li c= max+(F)"{0}
+   proof let x; assume A3: x in F" li;
+    then reconsider d=x as Element of D;
+    A4: d in dom F & F.d in li by A3,FUNCT_1:def 13;
+    then ex s st s=F.d & s<=0 by A2;
+    then A5: max(F.d,0) = 0 by SQUARE_1:def 2;
+      (max+(F)).d = max+(F.d) by A1,A4,Def10
+    .= max(F.d,0) by Def1;
+    then (max+(F)).d in {0} by A5,TARSKI:def 1;
+    hence thesis by A1,A4,FUNCT_1:def 13;
+   end;
+  let x; assume A6: x in (max+ F)"{0};
+  then reconsider d=x as Element of D;
+  A7: d in dom F & (max+ F).d in {0} by A1,A6,FUNCT_1:def 13;
+  then A8: (max+ F).d = 0 by TARSKI:def 1;
+    (max+ F).d = max+(F.d) by A1,A7,Def10
+  .= max(F.d,0) by Def1;
+  then F.d <= 0 by A8,SQUARE_1:def 2;
+  then F.d in li by A2;
+  hence thesis by A7,FUNCT_1:def 13;
+ end;
+
+theorem Th40:
+for D be non empty set, F be PartFunc of D,REAL, d be Element of D
+        st d in dom F holds 0<=(max+ F).d
+ proof let D be non empty set, F be PartFunc of D,REAL, d be Element of D;
+  assume A1: d in dom F;
+    dom F = dom (max+ F) by Def10;
+  then (max+ F).d = max+(F.d) by A1,Def10
+  .= max(F.d,0) by Def1;
+  hence thesis by SQUARE_1:46;
+ end;
+
+theorem Th41:
+for D be non empty set, F be PartFunc of D,REAL, r be Real
+         st 0<r holds F"{-r} = max-(F)"{r}
+ proof let D be non empty set, F be PartFunc of D,REAL, r; assume
+  A1: 0<r;
+  A2: dom max-(F) = dom F by Def11;
+  thus F"{-r} c= max-(F)"{r}
+   proof let x; assume A3: x in F"{-r};
+    then reconsider d=x as Element of D;
+    A4: d in dom F & F.d in {-r} by A3,FUNCT_1:def 13;
+    then A5:  F.d = -r by TARSKI:def 1;
+      (max-(F)).d = max-(F.d) by A2,A4,Def11
+    .= max(-F.d,0) by Def2
+    .= r by A1,A5,SQUARE_1:def 2;
+    then (max-(F)).d in {r} by TARSKI:def 1;
+    hence thesis by A2,A4,FUNCT_1:def 13;
+   end;
+  let x; assume A6: x in (max- F)"{r};
+  then reconsider d=x as Element of D;
+  A7: d in dom F & (max- F).d in {r} by A2,A6,FUNCT_1:def 13;
+  then A8: (max- F).d = r by TARSKI:def 1;
+     (max- F).d = max-(F.d) by A2,A7,Def11
+  .= max(-F.d,0) by Def2;
+  then -F.d = r by A1,A8,SQUARE_1:49;
+  then F.d in {-r} by TARSKI:def 1;
+  hence thesis by A7,FUNCT_1:def 13;
+ end;
+
+theorem Th42:
+for D be non empty set, F be PartFunc of D,REAL
+    holds F"(right_closed_halfline(0)) = max-(F)"{0}
+ proof let D be non empty set, F be PartFunc of D,REAL;
+  set li = right_closed_halfline(0);
+  A1: dom max-(F) = dom F by Def11;
+  A2: li = {s : 0<=s} by LIMFUNC1:def 2;
+  thus F" li c= max-(F)"{0}
+   proof let x; assume A3: x in F" li;
+    then reconsider d=x as Element of D;
+    A4: d in dom F & F.d in li by A3,FUNCT_1:def 13;
+    then ex s st s=F.d & 0<=s by A2;
+    then -F.d<=0 by REAL_1:26,50;
+    then A5: max(-F.d,0) = 0 by SQUARE_1:def 2;
+      (max-(F)).d = max-(F.d) by A1,A4,Def11
+    .= max(-F.d,0) by Def2;
+    then (max-(F)).d in {0} by A5,TARSKI:def 1;
+    hence thesis by A1,A4,FUNCT_1:def 13;
+   end;
+  let x; assume A6: x in (max- F)"{0};
+  then reconsider d=x as Element of D;
+  A7: d in dom F & (max- F).d in {0} by A1,A6,FUNCT_1:def 13;
+  then A8: (max- F).d = 0 by TARSKI:def 1;
+    (max- F).d = max-(F.d) by A1,A7,Def11
+  .= max(-F.d,0) by Def2;
+  then -F.d <= 0 by A8,SQUARE_1:def 2;
+  then 0<=F.d by REAL_1:26,50;
+  then F.d in li by A2;
+  hence thesis by A7,FUNCT_1:def 13;
+ end;
+
+theorem Th43:
+for D be non empty set, F be PartFunc of D,REAL, d be Element of D
+        st d in dom F holds 0<=(max- F).d
+ proof let D be non empty set, F be PartFunc of D,REAL, d be Element of D;
+  assume A1: d in dom F;
+    dom F = dom (max- F) by Def11;
+  then (max- F).d = max-(F.d) by A1,Def11
+  .= max(-F.d,0) by Def2;
+  hence thesis by SQUARE_1:46;
+ end;
+
+theorem
+  for D,C be non empty set, F be PartFunc of D,REAL, G be PartFunc of C,REAL
+  st F,G are_fiberwise_equipotent holds
+     max+(F), max+(G) are_fiberwise_equipotent
+ proof let D,C be non empty set, F be PartFunc of D,REAL,
+           G be PartFunc of C,REAL; assume
+  A1: F,G are_fiberwise_equipotent;
+  A2: rng F c= REAL & rng G c= REAL & rng(max+ F) c= REAL & rng(max+ G) c= REAL
+;
+  A3: dom F = dom (max+ F) & dom G = dom (max+ G) by Def10;
+  set li =left_closed_halfline(0);
+     now let r;
+       now per cases;
+     case 0<r;
+      then F"{r} = (max+ F)"{r} & G"{r} = (max+ G)"{r} by Th38;
+      hence Card((max+ F)"{r}) = Card((max+ G)"{r}) by A1,A2,RFINSEQ:5;
+     case A4: r=0;
+        F" li = (max+ F)"{0} & G" li = (max+ G)"{0} by Th39;
+      hence Card((max+ F)"{r}) = Card((max+ G)"{r}) by A1,A4,RFINSEQ:4;
+     case A5: r<0;
+         now assume r in rng(max+ F);
+        then consider d be Element of D such that
+        A6: d in dom(max+ F) & (max+ F).d = r by PARTFUN1:26;
+        thus contradiction by A3,A5,A6,Th40;
+       end;
+      then A7: (max+ F)"{r} = {} by Lm2;
+         now assume r in rng(max+ G);
+        then consider c be Element of C such that
+        A8: c in dom(max+ G) & (max+ G).c = r by PARTFUN1:26;
+        thus contradiction by A3,A5,A8,Th40;
+       end;
+      hence Card(( max+F)"{r}) = Card(( max+ G)"{r}) by A7,Lm2;
+     end;
+    hence Card(( max+F)"{r}) = Card(( max+ G)"{r});
+   end;
+  hence thesis by A2,RFINSEQ:5;
+ end;
+
+theorem
+  for D,C be non empty set, F be PartFunc of D,REAL, G be PartFunc of C,REAL
+  st F,G are_fiberwise_equipotent holds
+    max-(F), max-(G) are_fiberwise_equipotent
+ proof let D,C be non empty set, F be PartFunc of D,REAL,
+           G be PartFunc of C,REAL; assume
+  A1: F,G are_fiberwise_equipotent;
+  A2: rng F c= REAL & rng G c= REAL & rng(max- F) c= REAL & rng(max- G) c= REAL
+;
+  A3: dom F = dom (max- F) & dom G = dom (max- G) by Def11;
+  set li =right_closed_halfline(0);
+     now let r;
+       now per cases;
+     case 0<r;
+      then F"{-r} = (max- F)"{r} & G"{-r} = (max- G)"{r} by Th41;
+      hence Card((max- F)"{r}) = Card((max- G)"{r}) by A1,A2,RFINSEQ:5;
+     case A4: r=0;
+        F" li = (max- F)"{0} & G" li = (max- G)"{0} by Th42;
+      hence Card((max- F)"{r}) = Card((max- G)"{r}) by A1,A4,RFINSEQ:4;
+     case A5: r<0;
+         now assume r in rng(max- F);
+        then consider d be Element of D such that
+        A6: d in dom(max- F) & (max- F).d = r by PARTFUN1:26;
+        thus contradiction by A3,A5,A6,Th43;
+       end;
+      then A7: (max- F)"{r} = {} by Lm2;
+         now assume r in rng(max- G);
+        then consider c be Element of C such that
+        A8: c in dom(max- G) & (max- G).c = r by PARTFUN1:26;
+        thus contradiction by A3,A5,A8,Th43;
+       end;
+      hence Card(( max-F)"{r}) = Card(( max- G)"{r}) by A7,Lm2;
+     end;
+    hence Card(( max-F)"{r}) = Card(( max- G)"{r});
+   end;
+  hence thesis by A2,RFINSEQ:5;
+ end;
+
+definition let A,B be set;
+ cluster finite PartFunc of A,B;
+ existence
+  proof
+     {} is finite & {} is PartFunc of A,B by PARTFUN1:56;
+   hence thesis;
+  end;
+end;
+
+definition let D be non empty set,
+               F be finite PartFunc of D,REAL;
+ cluster max+(F) -> finite;
+  coherence
+   proof
+       dom F is finite;
+     then dom(max+(F)) is finite by Def10;
+    hence thesis by AMI_1:21;
+   end;
+ cluster max-(F) -> finite;
+  coherence
+   proof
+       dom F is finite;
+     then dom(max-(F)) is finite by Def11;
+    hence thesis by AMI_1:21;
+   end;
+end;
+
+theorem
+  for D,C be non empty set,
+    F be finite PartFunc of D,REAL, G be finite PartFunc of C,REAL
+ st
+ max+ F, max+ G are_fiberwise_equipotent &
+ max- F, max- G are_fiberwise_equipotent holds F, G are_fiberwise_equipotent
+ proof let D,C be non empty set, F be finite PartFunc of D,REAL,
+           G be finite PartFunc of C,REAL;
+  assume A1: max+ F, max+ G are_fiberwise_equipotent &
+      max- F, max- G are_fiberwise_equipotent;
+  A2: rng F c= REAL & rng G c= REAL & rng(max+ F) c= REAL & rng(max- F) c= REAL
+      & rng(max+ G) c= REAL & rng(max- G) c= REAL;
+  A3: dom F = dom(max+ F) & dom F = dom(max- F) & dom G = dom(max+ G) &
+      dom G = dom(max- G) by Def10,Def11;
+  set lh = left_closed_halfline(0),
+      rh = right_closed_halfline(0),
+     fp0 = (max+ F)"{0},
+     fm0 = (max- F)"{0},
+     gp0 = (max+ G)"{0},
+     gm0 = (max- G)"{0};
+  A4: lh /\ rh = [.0,0 .] by LIMFUNC1:19
+      .= {0} by RCOMP_1:14;
+  A5: F"lh = fp0 & F"rh =fm0 & G"lh = gp0 & G"rh =gm0 by Th39,Th42;
+  reconsider fp0,fm0,gp0,gm0 as finite set;
+    card(fp0 \/ fm0) = card fp0 + card fm0 - card(fp0 /\ fm0) &
+  card(gp0 \/ gm0) = card gp0 + card gm0 - card(gp0 /\ gm0) by CARD_2:64;
+  then A6: card(fp0 /\ fm0) = card fp0 + card fm0 - card(fp0 \/ fm0) &
+      card(gp0 /\ gm0) = card gp0 + card gm0 - card(gp0 \/ gm0) by XCMPLX_1:18;
+  A7: lh \/ rh = REAL \ ].0,0 .[ by LIMFUNC1:25
+   .= REAL \ {} by RCOMP_1:12
+   .= REAL;
+  then A8: fp0 \/ fm0 = F"(REAL) by A5,RELAT_1:175;
+    F"(rng F) c= F"REAL by RELAT_1:178;
+  then F"REAL c= dom F & dom F c= F"REAL by RELAT_1:167,169;
+  then A9: fp0 \/ fm0 = dom F by A8,XBOOLE_0:def 10;
+  A10: gp0 \/ gm0 = G"(lh \/ rh) by A5,RELAT_1:175;
+    G"(rng G) c= G"REAL by RELAT_1:178;
+  then G"REAL c= dom G & dom G c= G"REAL by RELAT_1:167,169;
+  then A11: gp0 \/ gm0 = dom G by A7,A10,XBOOLE_0:def 10;
+     now let r;
+    A12: card fp0 = card gp0 & card fm0 = card gm0 by A1,RFINSEQ:9;
+       now per cases;
+     case 0<r;
+      then F"{r} = (max+ F)"{r} & G"{r} = (max+ G)"{r} by Th38;
+      hence card(F"{r}) = card(G"{r}) by A1,A2,RFINSEQ:11;
+     case 0=r;
+      then F"{r} = F"lh /\ F"rh & G"{r} = G"lh /\ G"rh by A4,FUNCT_1:137;
+      hence card(F"{r}) = card(G"{r}) by A1,A3,A5,A6,A9,A11,A12,RFINSEQ:10;
+     case r<0;
+      then 0<-r & --r=r by REAL_1:66;
+      then F"{r} = (max- F)"{-r} & G"{r} = (max- G)"{-r} by Th41;
+      hence card(F"{r}) = card(G"{r}) by A1,A2,RFINSEQ:11;
+     end;
+    hence card(F"{r}) = card(G"{r});
+   end;
+  hence thesis by A2,RFINSEQ:11;
+ end;
+
+theorem Th47:
+for D be non empty set, F be PartFunc of D,REAL, X be set
+  holds (max+ F)|X = max+ (F|X)
+ proof let D be non empty set, F be PartFunc of D,REAL, X be set;
+  A1: dom((max+ F)|X) = dom(max+ F) /\ X by FUNCT_1:68;
+  A2: dom(max+ F) /\ X= dom F /\ X by Def10
+   .= dom(F|X) by FUNCT_1:68;
+  A3: dom(F|X) = dom(max+ (F|X)) by Def10;
+     now let d be Element of D; assume
+    A4: d in dom((max+ F)|X);
+    then A5: d in dom(max+ F) by A1,XBOOLE_0:def 3;
+    thus ((max+ F)|X).d = (max+ F).d by A4,FUNCT_1:68
+    .=max+(F.d) by A5,Def10
+    .=max+((F|X).d) by A1,A2,A4,FUNCT_1:68
+    .=(max+ (F|X)).d by A1,A2,A3,A4,Def10;
+   end;
+  hence thesis by A1,A2,A3,PARTFUN1:34;
+ end;
+
+theorem
+  for D be non empty set, F be PartFunc of D,REAL, X be set
+  holds (max- F)|X = max- (F|X)
+ proof let D be non empty set, F be PartFunc of D,REAL, X be set;
+  A1: dom((max- F)|X) = dom(max- F) /\ X by FUNCT_1:68;
+  A2: dom(max- F) /\ X= dom F /\ X by Def11
+   .= dom(F|X) by FUNCT_1:68;
+  A3: dom(F|X) = dom(max- (F|X)) by Def11;
+     now let d be Element of D; assume
+    A4: d in dom((max- F)|X);
+    then A5: d in dom(max- F) by A1,XBOOLE_0:def 3;
+    thus ((max- F)|X).d = (max- F).d by A4,FUNCT_1:68
+    .=max-(F.d) by A5,Def11
+    .=max-((F|X).d) by A1,A2,A4,FUNCT_1:68
+    .=(max- (F|X)).d by A1,A2,A3,A4,Def11;
+   end;
+  hence thesis by A1,A2,A3,PARTFUN1:34;
+ end;
+
+theorem Th49:
+for D be non empty set, F be PartFunc of D,REAL
+ st (for d be Element of D st d in dom F holds F.d>=0) holds max+ F = F
+ proof let D be non empty set, F be PartFunc of D,REAL; assume
+  A1: for d be Element of D st d in dom F holds F.d>=0;
+  A2: dom(max+ F) = dom F by Def10;
+     now let d be Element of D; assume
+    A3: d in dom F;
+    then A4: F.d>=0 by A1;
+    thus (max+ F).d = max+(F.d) by A2,A3,Def10
+    .= max(0,F.d) by Def1
+    .= F.d by A4,SQUARE_1:def 2;
+   end;
+  hence thesis by A2,PARTFUN1:34;
+ end;
+
+theorem
+  for D be non empty set, F be PartFunc of D,REAL
+ st (for d be Element of D st d in dom F holds F.d<=0) holds max- F = -F
+ proof let D be non empty set, F be PartFunc of D,REAL; assume
+  A1: for d be Element of D st d in dom F holds F.d<=0;
+  A2: dom(max- F) = dom F by Def11;
+  A3: dom F = dom(-F) by SEQ_1:def 7;
+     now let d be Element of D; assume
+    A4: d in dom F;
+    then F.d<=0 by A1;
+    then A5: 0<=-F.d by REAL_1:26,50;
+    thus (max- F).d = max-(F.d) by A2,A4,Def11
+    .= max(0,-F.d) by Def2
+    .= -F.d by A5,SQUARE_1:def 2
+    .= (-F).d by A3,A4,SEQ_1:def 7;
+   end;
+  hence thesis by A2,A3,PARTFUN1:34;
+ end;
+
+definition let D be non empty set,
+               F be PartFunc of D,REAL,
+               r be Real;
+func F - r -> PartFunc of D,REAL means :Def12:
+dom it = dom F &
+for d be Element of D st d in dom it holds it.d = F.d - r;
+ existence
+  proof
+   defpred P[set] means $1 in dom F;
+   deffunc F(set)=F.$1 - r;
+   consider f be PartFunc of D,REAL such that
+   A1: for d be Element of D holds d in dom f iff P[d] and
+   A2: for d be Element of D st d in dom f holds f.d = F(d) from LambdaPFD';
+   take f;
+   thus dom f = dom F
+    proof
+     thus dom f c= dom F
+      proof
+       let x; assume x in dom f;
+       hence thesis by A1;
+      end;
+     let x; assume x in dom F;
+     hence thesis by A1;
+    end;
+   thus thesis by A2;
+  end;
+ uniqueness
+   proof
+     deffunc F(set)=F.$1 - r;
+     for f,g being PartFunc of D,REAL st
+       (dom f=dom F & for c be Element of D st c in dom f holds f.c = F(c)) &
+       (dom g=dom F & for c be Element of D st c in dom g holds g.c = F(c))
+       holds f = g from UnPartFuncD';
+     hence thesis;
+    end;
+end;
+
+theorem Th51:
+for D be non empty set, F be PartFunc of D,REAL holds F - 0 = F
+ proof let D be non empty set, F be PartFunc of D,REAL;
+  A1: dom(F - 0) = dom F by Def12;
+     now let d be Element of D; assume d in dom F;
+    hence (F - 0).d = F.d - 0 by A1,Def12
+    .= F.d;
+   end;
+  hence thesis by A1,PARTFUN1:34;
+ end;
+
+theorem
+  for D be non empty set, F be PartFunc of D,REAL, r be Real, X be set holds
+  (F|X) - r = (F-r)| X
+ proof let D be non empty set, F be PartFunc of D,REAL, r be Real, X be set;
+  A1: dom ((F|X) - r) = dom (F|X) by Def12
+  .= dom F /\ X by FUNCT_1:68;
+  A2: dom F /\ X = dom(F-r) /\ X by Def12
+  .= dom((F-r)|X) by FUNCT_1:68;
+     now let d be Element of D; assume
+    A3: d in dom ((F|X) - r);
+    then d in dom F by A1,XBOOLE_0:def 3;
+    then A4: d in dom(F-r) by Def12;
+    thus ((F|X) - r).d = (F|X).d - r by A3,Def12
+    .= F.d -r by A1,A3,FUNCT_1:71
+    .= (F-r).d by A4,Def12
+    .=((F-r)|X).d by A1,A2,A3,FUNCT_1:68;
+   end;
+  hence thesis by A1,A2,PARTFUN1:34;
+ end;
+
+theorem Th53:
+for D be non empty set, F be PartFunc of D,REAL, r,s be Real holds
+  F"{s+r} = (F-r)"{s}
+ proof let D be non empty set, F be PartFunc of D,REAL, r,s;
+  thus F"{s+r} c= (F-r)"{s}
+   proof let x; assume A1: x in F"{s+r};
+    then reconsider d=x as Element of D;
+      d in dom F & F.d in {s+r} by A1,FUNCT_1:def 13;
+    then A2: d in dom(F-r) & F.d = s+r by Def12,TARSKI:def 1;
+    then F.d - r = s by XCMPLX_1:26;
+    then (F-r).d = s by A2,Def12;
+    then (F-r).d in {s} by TARSKI:def 1;
+    hence thesis by A2,FUNCT_1:def 13;
+   end;
+  let x; assume A3: x in (F-r)"{s};
+  then reconsider d=x as Element of D;
+  A4: d in dom(F-r) & (F-r).d in {s} by A3,FUNCT_1:def 13;
+  then A5: d in dom F & (F-r).d = s by Def12,TARSKI:def 1;
+  then F.d -r= s by A4,Def12;
+  then F.d = s+r by XCMPLX_1:27;
+  then F.d in {s+r} by TARSKI:def 1;
+  hence thesis by A5,FUNCT_1:def 13;
+ end;
+
+theorem
+  for D,C be non empty set, F be PartFunc of D,REAL, G be PartFunc of C,REAL,
+    r be Real holds
+  F, G are_fiberwise_equipotent iff F-r ,G-r are_fiberwise_equipotent
+  proof let D,C be non empty set, F be PartFunc of D,REAL,
+            G be PartFunc of C,REAL, r be Real;
+   A1: rng F c= REAL & rng G c= REAL & rng(F-r) c= REAL & rng(G-r) c= REAL;
+   thus F, G are_fiberwise_equipotent implies
+        F-r, G-r are_fiberwise_equipotent
+    proof assume
+     A2: F, G are_fiberwise_equipotent;
+        now let s;
+       thus Card ((F-r)"{s}) = Card(F"{s+r}) by Th53
+       .= Card(G"{s+r}) by A1,A2,RFINSEQ:5
+       .= Card((G-r)"{s}) by Th53;
+      end;
+     hence thesis by A1,RFINSEQ:5;
+    end;
+   assume A3: F-r, G-r are_fiberwise_equipotent;
+      now let s;
+     A4: s = s-r+r by XCMPLX_1:27;
+     hence Card (F"{s}) = Card((F-r)"{s-r}) by Th53
+     .= Card((G- r)"{s-r}) by A1,A3,RFINSEQ:5
+     .= Card(G"{s}) by A4,Th53;
+    end;
+   hence thesis by A1,RFINSEQ:5;
+  end;
+
+definition let F be PartFunc of REAL,REAL,
+               X be set;
+pred F is_convex_on X means :Def13:
+ X c= dom F &
+ for p be Real st 0<=p & p<=1 holds
+  for r,s be Real st r in X & s in X & p*r + (1-p)*s in X holds
+     F.(p*r + (1-p)*s) <= p*F.r + (1-p)*F.s;
+end;
+
+theorem Th55:
+for a,b be Real, F be PartFunc of REAL,REAL holds
+  F is_convex_on [.a,b.] iff
+ [.a,b.] c= dom F & for p be Real st 0<=p & p<=1 holds
+  for r,s be Real st r in [.a,b.] & s in [.a,b.] holds
+     F.(p*r + (1-p)*s) <= p*F.r + (1-p)*F.s
+ proof
+  let a,b be Real, f be PartFunc of REAL,REAL;
+  set ab = {r where r is Real: a<=r & r<=b};
+  A1: [.a,b.]= ab by RCOMP_1:def 1;
+  thus f is_convex_on [.a,b.] implies
+   [.a,b.] c= dom f & for p be Real st 0<=p & p<=1 holds
+   for x,y be Real st x in [.a,b.] & y in [.a,b.] holds
+       f.(p*x + (1-p)*y) <= p* f.x + (1-p)*f.y
+     proof
+      assume A2: f is_convex_on [.a,b.];
+      hence [.a,b.] c= dom f by Def13;
+      let p be Real;
+      assume A3: 0<=p & p<=1;
+      then A4: 0<=1-p by SQUARE_1:12;
+      let x,y be Real;
+      assume A5: x in [.a,b.] & y in [.a,b.];
+      then A6: (ex r1 be Real st r1=x & a<=r1 & r1<=b) &
+      ex r2 be Real st r2=y & a<=r2 & r2<=b by A1;
+      then A7: p*a<=p*x & p*x<=p*b by A3,AXIOMS:25;
+      A8: (1-p)*a<=(1-p)*y & (1-p)*y<=(1-p)*b by A4,A6,AXIOMS:25;
+        p*a+(1-p)*a=p*a+(1*a-p*a) by XCMPLX_1:40
+       .=a by XCMPLX_1:27;
+      then A9: a<=p*x+(1-p)*y by A7,A8,REAL_1:55;
+        p*b+(1-p)*b=p*b+(1*b-p*b) by XCMPLX_1:40
+       .=b by XCMPLX_1:27;
+      then p*x+(1-p)*y<=b by A7,A8,REAL_1:55;
+      then p*x+(1-p)*y in ab by A9;
+      hence thesis by A1,A2,A3,A5,Def13;
+    end;
+  assume A10: [.a,b.] c= dom f & for p be Real st 0<=p & p<=1 holds
+       for x,y be Real st x in [.a,b.] & y in [.a,b.] holds
+        f.(p*x + (1-p)*y) <= p* f.x + (1-p)*f.y;
+  hence [.a,b.] c= dom f;
+  let p be Real;
+  assume A11: 0<=p & p<=1;
+  let x,y be Real;
+  assume x in [.a,b.] & y in [.a,b.] & p*x + (1-p)*y in [.a,b.];
+  hence thesis by A10,A11;
+ end;
+
+theorem
+  for a,b be Real, F be PartFunc of REAL,REAL holds
+  F is_convex_on [.a,b.] iff
+  [.a,b.] c= dom F &
+  for x1,x2,x3 be Real st x1 in [.a,b.] & x2 in [.a,b.] & x3 in [.a,b.] &
+    x1<x2 & x2<x3 holds (F.x1-F.x2)/(x1-x2)<=(F.x2-F.x3)/(x2-x3)
+ proof
+  let a,b be Real, f be PartFunc of REAL,REAL;
+  thus f is_convex_on [.a,b.] implies [.a,b.] c= dom f &
+  for x1,x2,x3 be Real st x1 in [.a,b.] & x2 in [.a,b.] & x3 in [.a,b.] &
+    x1<x2 & x2<x3 holds (f.x1 - f.x2)/(x1 - x2) <= (f.x2 - f.x3)/(x2 - x3)
+    proof assume
+     A1: f is_convex_on [.a,b.];
+     hence [.a,b.] c= dom f by Def13;
+     let x1,x2,x3 be Real; assume
+     A2: x1 in [.a,b.] & x2 in [.a,b.] & x3 in [.a,b.] & x1<x2 & x2<x3;
+     then A3: 0 < x3 - x2 & x2-x3<0 & 0 < x2 - x1 & x1-x2<0
+       by REAL_2:105,SQUARE_1:11;
+       x1<x3 by A2,AXIOMS:22;
+     then A4: x1-x3<0 & 0<>x1-x3 by REAL_2:105;
+     set r = (x2-x3)/(x1-x3);
+     A5: r + (x1-x2)/(x1-x3) = ((x1-x2) + (x2-x3))/(x1-x3) by XCMPLX_1:63
+     .= (x1-x3)/(x1-x3) by XCMPLX_1:39
+     .= 1 by A4,XCMPLX_1:60;
+     then A6: r*x1 + (1-r)*x3=x1*((x2-x3)/(x1-x3))+x3*((x1-x2)/(x1-x3)) by
+XCMPLX_1:26
+     .= (x1*(x2-x3))/(x1-x3)+x3*((x1-x2)/(x1-x3)) by XCMPLX_1:75
+     .= (x1*(x2-x3))/(x1-x3)+(x3*(x1-x2))/(x1-x3) by XCMPLX_1:75
+     .= ((x2-x3)*x1+(x1-x2)*x3)/(x1-x3) by XCMPLX_1:63
+     .=((x2*x1-x3*x1)+(x1-x2)*x3)/(x1-x3) by XCMPLX_1:40
+     .=((x2*x1-x3*x1)+(x3*x1-x2*x3))/(x1-x3) by XCMPLX_1:40
+     .=(x2*x1-x2*x3)/(x1-x3) by XCMPLX_1:39
+     .=x2*(x1-x3)/(x1-x3) by XCMPLX_1:40
+     .=x2 by A4,XCMPLX_1:90;
+     A7: 0<=r by A3,A4,REAL_2:127;
+     A8: (x1-x2)/(x1-x3)>0 by A3,A4,REAL_2:127;
+     A9: -(1-r)=-((x1-x2)/(x1-x3)) by A5,XCMPLX_1:26;
+     A10: ((x1-x2)/(x1-x3))*(-1)<0 by A8,SQUARE_1:24;
+       (-1)*((x1-x2)/(x1-x3))=-(1*((x1-x2)/(x1-x3))) by XCMPLX_1:175
+     .=-((x1-x2)/(x1-x3));
+     then A11: -1+r<=0 by A9,A10,XCMPLX_1:162;
+       r=(1+-1)+r
+     .=1+(-1+r) by XCMPLX_1:1;
+     then A12: r<=1 by A11,REAL_2:174;
+       r+(1-r)=1 by XCMPLX_1:27;
+     then f.x2=(r+(1-r))*f.x2
+     .=r*f.x2+(1-r)*f.x2 by XCMPLX_1:8;
+     then A13: r*f.x2+(1-r)*f.x2<=r*f.x1+(1-r)*f.x3 by A1,A2,A6,A7,A12,Def13;
+     A14: r*(f.x2-f.x1)=r*f.x2 -r*f.x1 by XCMPLX_1:40;
+       (1-r)*(f.x3-f.x2)=(1-r)*f.x3-(1-r)*f.x2 by XCMPLX_1:40;
+     then r*(f.x2-f.x1)<=(1-r)*(f.x3-f.x2) by A13,A14,REAL_2:167;
+     then A15: -((1-r)*(f.x3-f.x2))<=-(r*(f.x2-f.x1)) by REAL_1:50;
+       (1-r)*(-(f.x3-f.x2))=-((1-r)*(f.x3-f.x2)) by XCMPLX_1:175;
+     then A16: (1-r)*(-(f.x3-f.x2))<=r*(-(f.x2-f.x1)) by A15,XCMPLX_1:175;
+       f.x2-f.x3=-(f.x3-f.x2) & f.x1-f.x2=-(f.x2-f.x1) by XCMPLX_1:143;
+     then A17: (x1-x2)/(x1-x3)*(f.x2-f.x3)<=(x2-x3)/(x1-x3)*(f.x1-f.x2)
+       by A5,A16,XCMPLX_1:26;
+       (x1-x2)/(x1-x3)=(x1-x3)"*(x1-x2) by XCMPLX_0:def 9;
+      then (x1-x3)"*(x1-x2)*(f.x2-f.x3)<=(x1-x3)"*(x2-x3)*(f.x1-f.x2)
+          by A17,XCMPLX_0:def 9;
+     then A18: (x1-x3)*((x1-x3)"*(x2-x3)*(f.x1-f.x2))<=
+          (x1-x3)*((x1-x3)"*(x1-x2)*(f.x2-f.x3)) by A4,REAL_1:52;
+          set u=(x2-x3)*(f.x1-f.x2);
+          set v=(x1-x2)*(f.x2-f.x3);
+     A19:  (x1-x3)*((x1-x3)"*(x2-x3)*(f.x1-f.x2))=(x1-x3)*((x1-x3)"*u)
+             by XCMPLX_1:4
+          .=((x1-x3)*(x1-x3)")*u by XCMPLX_1:4
+          .=1*u by A4,XCMPLX_0:def 7
+          .=u;
+       (x1-x3)*((x1-x3)"*(x1-x2)*(f.x2-f.x3))=(x1-x3)*((x1-x3)"*v) by XCMPLX_1:
+4
+          .=((x1-x3)*(x1-x3)")*v by XCMPLX_1:4
+          .=1*v by A4,XCMPLX_0:def 7
+          .=v;
+     hence (f.x1-f.x2)/(x1-x2)<=(f.x2-f.x3)/(x2-x3)
+      by A3,A18,A19,REAL_2:187;
+   end;
+  assume that
+  A20: [.a,b.] c= dom f and
+  A21: for x1,x2,x3 be Real st x1 in [.a,b.] & x2 in [.a,b.] & x3 in [.a,b.] &
+  x1<x2 & x2<x3 holds (f.x1-f.x2)/(x1-x2)<=(f.x2-f.x3)/(x2-x3);
+    now let p be Real; assume
+   A22: 0<=p & p<=1;
+   then A23: 0<=1-p by SQUARE_1:12;
+   let x,y be Real;
+   set r = p*x+(1-p)*y;
+   A24: {s where s is Real: a<=s & s<=b} = [.a,b.] by RCOMP_1:def 1;
+   A25: p*x+(1-p)*x = (p+(1-p))*x by XCMPLX_1:8
+     .= 1*x by XCMPLX_1:27
+     .= x;
+   A26: p*y+(1-p)*y = (p+(1-p))*y by XCMPLX_1:8
+     .= 1*y by XCMPLX_1:27
+     .= y;
+   A27: p*a+(1-p)*a = (p+(1-p))*a by XCMPLX_1:8
+     .= 1*a by XCMPLX_1:27
+     .= a;
+   A28: p*b+(1-p)*b = (p+(1-p))*b by XCMPLX_1:8
+     .= 1*b by XCMPLX_1:27
+     .= b; assume
+   A29: x in [.a,b.] & y in [.a,b.];
+   then (ex t be Real st t=x & a<=t & t<=b) & (ex t be Real st t=y & a<=t & t
+<=b)
+    by A24;
+   then p*a<=p*x & (1-p)*a<=(1-p)*y & p*x<=p*b & (1-p)*y<=(1-p)*b
+     by A22,A23,AXIOMS:25;
+   then a<=r & r<=b by A27,A28,REAL_1:55;
+   then A30: r in [.a,b.] by A24;
+   A31: r-y = p*x+((1-p)*y - 1*y) by XCMPLX_1:29
+   .= p*x+((1-p -1)*y) by XCMPLX_1:40
+   .= p*x+((1+-p -1)*y) by XCMPLX_0:def 8
+   .= p*x+(-p)*y by XCMPLX_1:26
+   .= p*x+-(p*y) by XCMPLX_1:175
+   .= p*x-p*y by XCMPLX_0:def 8
+   .= p*(x-y) by XCMPLX_1:40;
+   A32: x-r = 1*x -p*x -(1-p)*y by XCMPLX_1:36
+   .= (1-p)*x -(1-p)*y by XCMPLX_1:40
+   .= (1-p)*(x-y) by XCMPLX_1:40;
+      now per cases;
+    case A33: x=y;
+     then A34: p*x + (1-p)*y = (p+(1-p))*x by XCMPLX_1:8
+      .= 1*x by XCMPLX_1:27
+      .= x;
+       p* f.x + (1-p)*f.y = (p + (1-p))*f.x by A33,XCMPLX_1:8
+      .= 1* f.x by XCMPLX_1:27
+      .= f.x;
+     hence f.(p*x + (1-p)*y) <= p* f.x + (1-p)*f.y by A34;
+    case A35: x<>y;
+        now per cases;
+      case p=0;
+       hence f.(p*x + (1-p)*y) <= p* f.x + (1-p)*f.y;
+      case A36: p<>0;
+          now per cases;
+        case p=1;
+         hence f.(p*x + (1-p)*y) <= p* f.x + (1-p)*f.y;
+        case p<>1;
+         then p<1 by A22,REAL_1:def 5;
+         then A37: 0<1-p by SQUARE_1:11;
+         A38: f.r *p + f.r *(1-p) = f.r *(p+(1-p)) by XCMPLX_1:8
+         .= f.r *1 by XCMPLX_1:27
+         .= f.r;
+            now per cases by A35,REAL_1:def 5;
+          case A39: x<y;
+           then p*x < p*y by A22,A36,REAL_1:70;
+           then A40: r<y by A26,REAL_1:67;
+           then A41: r-y<0 by REAL_2:105;
+             (1-p)*x < (1-p)*y by A37,A39,REAL_1:70;
+           then A42: x<r by A25,REAL_1:67;
+           then A43: x-r<0 by REAL_2:105;
+           A44: x-y<0 & x-y<>0 by A39,REAL_2:105;
+             (f.x-f.r)/(x-r)<=(f.r-f.y)/(r-y) by A21,A29,A30,A40,A42;
+           then (f.x-f.r)*(p*(x-y))<=(f.r-f.y)*((1-p)*(x-y))
+               by A31,A32,A41,A43,REAL_2:185;
+           then (f.x-f.r)*p*(x-y)<=(f.r-f.y)*((1-p)*(x-y)) by XCMPLX_1:4;
+           then (f.x-f.r)*p*(x-y)<=(f.r-f.y)*(1-p)*(x-y) by XCMPLX_1:4;
+           then (f.x-f.r)*p*(x-y)/(x-y)>=(f.r-f.y)*(1-p)*(x-y)/(x-y)
+               by A44,REAL_1:74;
+           then (f.r-f.y)*(1-p)*(x-y)/(x-y)<=(f.x-f.r)*p by A44,XCMPLX_1:90;
+           then (f.r-f.y)*(1-p)<=(f.x-f.r)*p by A44,XCMPLX_1:90;
+           then f.r * (1-p) - f.y*(1-p) <= (f.x-f.r)*p by XCMPLX_1:40;
+           then f.r *(1-p) - f.y*(1-p) <= f.x *p - f.r *p by XCMPLX_1:40;
+           then f.r *p + (f.r *(1-p) - f.y*(1-p)) <= f.x *p by REAL_1:84;
+           then f.r *p + f.r *(1-p) - f.y*(1-p) <= f.x *p by XCMPLX_1:29;
+           hence f.r <= p*f.x + (1-p)*f.y by A38,REAL_1:86;
+          case A45: y<x;
+           then p*y < p*x by A22,A36,REAL_1:70;
+           then A46: y<r by A26,REAL_1:67;
+           then A47: y-r<0 by REAL_2:105;
+             (1-p)*y < (1-p)*x by A37,A45,REAL_1:70;
+           then A48: r<x by A25,REAL_1:67;
+           then A49: r-x<0 by REAL_2:105;
+           A50: y-x<0 & y-x <> 0 by A45,REAL_2:105;
+           A51: y-r = 1*y -(1-p)*y -p*x by XCMPLX_1:36
+            .= (1 -(1-p))*y -p*x by XCMPLX_1:40
+            .= p*y -p*x by XCMPLX_1:18
+            .= p*(y -x) by XCMPLX_1:40;
+           A52: r-x = (1-p)*y+(p*x -1*x) by XCMPLX_1:29
+            .= (1-p)*y+(p-1)*x by XCMPLX_1:40
+            .= (1-p)*y+(-(1-p))*x by XCMPLX_1:143
+            .= (1-p)*y+-((1-p)*x) by XCMPLX_1:175
+            .= (1-p)*y-(1-p)*x by XCMPLX_0:def 8
+            .= (1-p)*(y-x) by XCMPLX_1:40;
+             (f.y-f.r)/(y-r)<=(f.r-f.x)/(r-x) by A21,A29,A30,A46,A48;
+           then (f.y-f.r)*((1-p)*(y-x))<=(f.r-f.x)*(p*(y-x))
+               by A47,A49,A51,A52,REAL_2:185;
+           then (f.y-f.r)*(1-p)*(y-x)<=(f.r-f.x)*(p*(y-x)) by XCMPLX_1:4;
+           then (f.y-f.r)*(1-p)*(y-x)<=(f.r-f.x)*p*(y-x) by XCMPLX_1:4;
+           then (f.y-f.r)*(1-p)*(y-x)/(y-x)>=(f.r-f.x)*p*(y-x)/(y-x)
+               by A50,REAL_1:74;
+           then (f.r-f.x)*p*(y-x)/(y-x)<=(f.y-f.r)*(1-p) by A50,XCMPLX_1:90;
+           then (f.r-f.x)*p<=(f.y-f.r)*(1-p) by A50,XCMPLX_1:90;
+           then f.r * p - f.x*p <= (f.y-f.r)*(1-p) by XCMPLX_1:40;
+           then f.r *p - f.x *p <= f.y *(1-p) - f.r *(1-p) by XCMPLX_1:40;
+           then f.r *p - f.x *p + f.r *(1-p) <= f.y *(1-p) by REAL_1:84;
+           then f.r *p + f.r *(1-p) - f.x *p <= f.y *(1-p) by XCMPLX_1:29;
+           hence f.r <= p*f.x + (1-p)*f.y by A38,REAL_1:86;
+          end;
+         hence f.(p*x + (1-p)*y) <= p* f.x + (1-p)*f.y;
+        end;
+       hence f.(p*x + (1-p)*y) <= p* f.x + (1-p)*f.y;
+      end;
+     hence f.(p*x + (1-p)*y) <= p* f.x + (1-p)*f.y;
+    end;
+   hence f.(p*x + (1-p)*y) <= p* f.x + (1-p)*f.y;
+  end;
+ hence thesis by A20,Th55;
+end;
+
+theorem
+  for F be PartFunc of REAL,REAL, X,Y be set st F is_convex_on X & Y c= X holds
+ F is_convex_on Y
+ proof let F be PartFunc of REAL,REAL, X,Y be set; assume
+  A1: F is_convex_on X & Y c= X;
+  then X c= dom F by Def13;
+  hence Y c= dom F by A1,XBOOLE_1:1;
+  let p be Real; assume
+  A2: 0<=p & p<=1;
+  let x,y be Real; assume
+    x in Y & y in Y & p*x+(1-p)*y in Y; hence thesis by A1,A2,Def13;
+ end;
+
+theorem
+  for F be PartFunc of REAL,REAL, X be set, r be Real holds
+    F is_convex_on X iff F-r is_convex_on X
+ proof let F be PartFunc of REAL,REAL, X be set, r;
+   thus F is_convex_on X implies F-r is_convex_on X
+   proof assume
+    A1: F is_convex_on X;
+      dom F = dom(F-r) by Def12;
+    hence A2: X c= dom(F-r) by A1,Def13;
+    let p be Real; assume
+    A3: 0<=p & p<=1;
+    let x,y be Real; assume
+    A4: x in X & y in X & p*x + (1-p)*y in X;
+    then F.(p*x+(1-p)*y) <= p*F.x + (1-p)*F.y by A1,A3,Def13;
+    then A5: F.(p*x+(1-p)*y) - r <= p*F.x + (1-p)*F.y -r by REAL_1:49;
+      p*F.x + (1-p)*F.y - r = p*F.x + (1-p)*F.y - 1*r
+    .= p*F.x + (1-p)*F.y - (p+(1-p))*r by XCMPLX_1:27
+    .= p*F.x + (1-p)*F.y - (p*r+(1-p)*r) by XCMPLX_1:8
+    .= p*F.x + (1-p)*F.y - p*r -(1-p)*r by XCMPLX_1:36
+    .= p*F.x -p*r + (1-p)*F.y -(1-p)*r by XCMPLX_1:29
+    .= p*(F.x -r) + (1-p)*F.y - (1-p)*r by XCMPLX_1:40
+    .= p*(F.x -r) + ((1-p)*F.y - (1-p)*r) by XCMPLX_1:29
+    .= p*(F.x -r) + (1-p)*(F.y - r) by XCMPLX_1:40
+    .= p*(F-r).x + (1-p)*(F.y - r) by A2,A4,Def12
+    .= p*(F-r).x + (1-p)*(F-r).y by A2,A4,Def12;
+    hence thesis by A2,A4,A5,Def12;
+   end; assume
+  A6: F-r is_convex_on X;
+  A7: dom F = dom(F-r) by Def12;
+  hence A8: X c= dom F by A6,Def13;
+  let p be Real; assume
+  A9: 0<=p & p<=1;
+  let x,y be Real; assume
+  A10: x in X & y in X & p*x + (1-p)*y in X;
+  then (F-r).(p*x+(1-p)*y) <= p*(F-r).x + (1-p)*(F-r).y
+        by A6,A9,Def13;
+  then A11: F.(p*x+(1-p)*y) -r <= p*(F-r).x + (1-p)*(F-r).y by A7,A8,A10,Def12;
+    p*(F-r).x + (1-p)*(F-r).y = p*(F-r).x + (1-p)*(F.y - r) by A7,A8,A10,Def12
+  .= p*(F.x -r)+ (1-p)*(F.y - r) by A7,A8,A10,Def12
+  .= p*(F.x - r) + ((1-p)*F.y - (1-p)*r) by XCMPLX_1:40
+  .= p*(F.x - r) + (1-p)*F.y - (1-p)*r by XCMPLX_1:29
+  .= p*F.x - p*r + (1-p)*F.y - (1-p)*r by XCMPLX_1:40
+  .= p* F.x + (1-p)*F.y - p*r - (1-p)*r by XCMPLX_1:29
+  .= p* F.x + (1-p)*F.y - (p*r + (1-p)*r) by XCMPLX_1:36
+  .= p*F.x + (1-p)*F.y - (p+(1-p))*r by XCMPLX_1:8
+  .= p*F.x + (1-p)*F.y - 1*r by XCMPLX_1:27
+  .= p*F.x + (1-p)*F.y - r;
+  hence thesis by A11,REAL_1:54;
+ end;
+
+theorem
+  for F be PartFunc of REAL,REAL, X be set, r be Real st 0<r holds
+        F is_convex_on X iff r(#)F is_convex_on X
+ proof let F be PartFunc of REAL,REAL, X be set, r; assume
+  A1: 0<r;
+  A2: dom F = dom(r(#)F) by SEQ_1:def 6;
+  thus F is_convex_on X implies r(#)F is_convex_on X
+   proof assume
+    A3: F is_convex_on X;
+    then A4: X c= dom F by Def13;
+    thus X c= dom(r(#)F) by A2,A3,Def13;
+    let p be Real; assume
+    A5: 0<=p & p<=1;
+    let x,y be Real; assume
+    A6: x in X & y in X & p*x+(1-p)*y in X;
+    then F.(p*x+(1-p)*y)<=p*F.x + (1-p)*F.y by A3,A5,Def13;
+    then r* F.(p*x+(1-p)*y)<=r*(p*F.x + (1-p)*F.y) by A1,AXIOMS:25;
+    then (r(#)F).(p*x+(1-p)*y)<=r*(p*F.x + (1-p)*F.y) by A2,A4,A6,SEQ_1:def 6;
+    then (r(#)F).(p*x+(1-p)*y)<=r*(p*F.x) + r*((1-p)*F.y) by XCMPLX_1:8;
+    then (r(#)F).(p*x+(1-p)*y)<=r*p*F.x + r*((1-p)*F.y) by XCMPLX_1:4;
+    then (r(#)F).(p*x+(1-p)*y)<=r*p*F.x + (1-p)*r*F.y by XCMPLX_1:4;
+    then (r(#)F).(p*x+(1-p)*y)<=p*(r*F.x) + (1-p)*r*F.y by XCMPLX_1:4;
+    then (r(#)F).(p*x+(1-p)*y)<=p*(r*F.x) + (1-p)*(r*F.y) by XCMPLX_1:4;
+    then (r(#)F).(p*x+(1-p)*y)<=p*(r(#)F).x + (1-p)*(r*F.y) by A2,A4,A6,SEQ_1:
+def 6;
+    hence thesis by A2,A4,A6,SEQ_1:def 6;
+   end;
+  assume A7: r(#)F is_convex_on X;
+  then A8: X c= dom(r(#)F) by Def13;
+  hence X c= dom F by SEQ_1:def 6;
+  let p be Real; assume
+  A9: 0<=p & p<=1;
+  let x,y be Real; assume
+  A10: x in X & y in X & p*x+(1-p)*y in X;
+  then (r(#)F).(p*x+(1-p)*y)<=p*(r(#)F).x + (1-p)*(r(#)F).y
+    by A7,A9,Def13;
+  then r*F.(p*x+(1-p)*y)<=p*(r(#)F).x + (1-p)*(r(#)F).y by A8,A10,SEQ_1:def 6;
+  then r*F.(p*x+(1-p)*y)<=p*(r*F.x) + (1-p)*(r(#)F).y by A8,A10,SEQ_1:def 6;
+  then r*F.(p*x+(1-p)*y)<=p*(r*F.x) + (1-p)*(r*F.y) by A8,A10,SEQ_1:def 6;
+  then r*F.(p*x+(1-p)*y)<=p*r*F.x + (1-p)*(r*F.y) by XCMPLX_1:4;
+  then r*F.(p*x+(1-p)*y)<=r*p*F.x + (1-p)*r*F.y by XCMPLX_1:4;
+  then r*F.(p*x+(1-p)*y)<=r*(p*F.x) + r*(1-p)*F.y by XCMPLX_1:4;
+  then r*F.(p*x+(1-p)*y)<=r*(p*F.x) + r*((1-p)*F.y) by XCMPLX_1:4;
+  then r*F.(p*x+(1-p)*y)<=r*(p*F.x + (1-p)*F.y) by XCMPLX_1:8;
+  then r*F.(p*x+(1-p)*y)/r <= r*(p*F.x + (1-p)*F.y)/r by A1,REAL_1:73;
+  then F.(p*x+(1-p)*y) <= r*(p*F.x + (1-p)*F.y)/r by A1,XCMPLX_1:90;
+  hence thesis by A1,XCMPLX_1:90;
+ end;
+
+theorem
+  for F be PartFunc of REAL,REAL, X be set st X c= dom F holds 0(#)
+F is_convex_on X
+ proof let F be PartFunc of REAL,REAL, X be set; assume
+  A1: X c= dom F;
+  A2: dom F = dom(0(#)F) by SEQ_1:def 6;
+  thus X c= dom(0(#)F) by A1,SEQ_1:def 6;
+  let p be Real; assume
+    0<=p & p<=1;
+  let x,y be Real; assume
+A3: x in X & y in X & p*x + (1-p)*y in X;
+  then A4: (0(#)F).(p*x+(1-p)*y) = 0* F.(p*x+(1-p)*y) by A1,A2,SEQ_1:def 6
+  .= 0;
+    p*(0(#)F).x + (1-p)*(0(#)F).y = p*(0* F.x) + (1-p)*(0(#)F).y
+      by A1,A2,A3,SEQ_1:def 6
+  .= p*0 + (1-p)*(0* F.y) by A1,A2,A3,SEQ_1:def 6
+  .= 0 + 0;
+  hence thesis by A4;
+ end;
+
+theorem
+  for F,G be PartFunc of REAL,REAL, X be set st
+ F is_convex_on X & G is_convex_on X holds F+G is_convex_on X
+ proof let F,G be PartFunc of REAL,REAL, X be set; assume
+  A1: F is_convex_on X & G is_convex_on X;
+  A2: dom(F+G) = dom F /\ dom G by SEQ_1:def 3;
+    X c= dom F & X c= dom G by A1,Def13;
+  hence A3: X c= dom(F+G) by A2,XBOOLE_1:19;
+  let p be Real; assume
+  A4: 0<=p & p<=1;
+  let x,y be Real; assume
+  A5: x in X & y in X & p*x + (1-p)*y in X;
+  then F.(p*x+(1-p)*y) <= p*F.x + (1-p)*F.y & G.(p*x+(1-p)*y) <= p*G.x + (1-p)
+*G.y
+   by A1,A4,Def13;
+  then F.(p*x+(1-p)*y) + G.(p*x+(1-p)*y) <= p*F.x + (1-p)*F.y + (p*G.x + (1-p)
+*G.y)
+        by REAL_1:55;
+  then A6: (F+G).(p*x+(1-p)*y) <= p*F.x + (1-p)*F.y + (p*G.x + (1-p)*G.y)
+        by A3,A5,SEQ_1:def 3;
+    p*F.x+(1-p)*F.y + (p*G.x+(1-p)*G.y) = (p*F.x+(1-p)*F.y) + p*G.x + (1-p)*G.y
+   by XCMPLX_1:1
+  .= (p*F.x+p*G.x) + (1-p)*F.y + (1-p)*G.y by XCMPLX_1:1
+  .= p*(F.x+G.x) + (1-p)*F.y + (1-p)*G.y by XCMPLX_1:8
+  .= p*(F+G).x + (1-p)*F.y + (1-p)*G.y by A3,A5,SEQ_1:def 3
+  .= p*(F+G).x + ((1-p)*F.y + (1-p)*G.y) by XCMPLX_1:1
+  .= p*(F+G).x + (1-p)*(F.y + G.y) by XCMPLX_1:8;
+  hence thesis by A3,A5,A6,SEQ_1:def 3;
+ end;
+
+theorem Th62:
+for F be PartFunc of REAL,REAL, X be set, r be Real st
+ F is_convex_on X holds max+(F-r) is_convex_on X
+ proof let F be PartFunc of REAL,REAL, X be set, r; assume
+  A1: F is_convex_on X;
+  A2: dom F = dom(F-r) by Def12;
+  A3: dom(max+(F-r)) = dom(F-r) by Def10;
+  hence X c= dom(max+(F-r)) by A1,A2,Def13;
+  let p be Real; assume
+  A4: 0<=p & p<=1;
+  let x,y be Real; assume
+  A5: x in X & y in X & p*x+(1-p)*y in X;
+  then F.(p*x+(1-p)*y) <= p*F.x + (1-p)*F.y by A1,A4,Def13;
+  then F.(p*x+(1-p)*y) -r <= p*F.x + (1-p)*F.y -r by REAL_1:49;
+  then max(F.(p*x+(1-p)*y) -r,0) <= max(p*F.x + (1-p)*F.y -r,0) by Th7;
+  then max+(F.(p*x+(1-p)*y) -r) <= max(p*F.x + (1-p)*F.y -r,0) by Def1;
+  then A6: max+(F.(p*x+(1-p)*y) -r) <= max+(p*F.x + (1-p)*F.y -r) by Def1;
+A7: X c= dom F by A1,Def13;
+  A8: p*F.x + (1-p)*F.y - r = p*F.x + (1-p)*F.y - 1*r
+  .= p*F.x + (1-p)*F.y - (p+(1-p))*r by XCMPLX_1:27
+  .= p*F.x + (1-p)*F.y - (p*r+(1-p)*r) by XCMPLX_1:8
+  .= p*F.x + (1-p)*F.y - p*r -(1-p)*r by XCMPLX_1:36
+  .= p*F.x -p*r + (1-p)*F.y -(1-p)*r by XCMPLX_1:29
+  .= p*(F.x -r) + (1-p)*F.y - (1-p)*r by XCMPLX_1:40
+  .= p*(F.x -r) + ((1-p)*F.y - (1-p)*r) by XCMPLX_1:29
+  .= p*(F.x -r) + (1-p)*(F.y - r) by XCMPLX_1:40
+  .= p*(F-r).x + (1-p)*(F.y - r) by A2,A5,A7,Def12
+  .= p*(F-r).x + (1-p)*(F-r).y by A2,A5,A7,Def12;
+  A9: max+(p*(F-r).x + (1-p)*(F-r).y)<= max+(p*(F-r).x) + max+((1-p)*(F-r).y)
+     by Th5;
+    0+p<=1 by A4;
+  then 0<=1-p by REAL_1:84;
+  then max+(p*(F-r).x)= p* (max+ ((F-r).x)) &
+  max+((1-p)*(F-r).y) = (1-p)*(max+ ((F-r).y)) by A4,Th4;
+  then max+(F.(p*x+(1-p)*y) -r) <= p*(max+ ((F-r).x)) + (1-p)*(max+ ((F-r).y))
+   by A6,A8,A9,AXIOMS:22;
+  then max+ ((F-r).(p*x+(1-p)*y)) <= p*(max+ ((F-r).x)) + (1-p)*(max+ ((F-r).y
+))
+   by A2,A5,A7,Def12;
+  then (max+ (F-r)).(p*x+(1-p)*y) <= p*(max+ ((F-r).x)) + (1-p)*(max+ ((F-r).y
+))
+   by A2,A3,A5,A7,Def10;
+  then (max+ (F-r)).(p*x+(1-p)*y) <= p*(max+ (F-r)).x + (1-p)*(max+ ((F-r).y))
+   by A2,A3,A5,A7,Def10;
+  hence thesis by A2,A3,A5,A7,Def10;
+ end;
+
+theorem
+  for F be PartFunc of REAL,REAL, X be set st F is_convex_on X
+  holds max+ F is_convex_on X
+ proof let F be PartFunc of REAL,REAL, X be set; assume
+    F is_convex_on X;
+  then max+(F - 0) is_convex_on X by Th62;
+  hence thesis by Th51;
+ end;
+
+theorem Th64:
+id [#](REAL) is_convex_on REAL
+ proof
+  set i = id [#](REAL);
+  A1: [#](REAL) = REAL by SUBSET_1:def 4;
+  hence REAL c= dom i by FUNCT_1:34;
+  let p be Real; assume
+    0<=p & p<=1;
+  let x,y be Real; assume
+    x in REAL & y in REAL & p*x+(1-p)*y in REAL;
+    i.x = x & i.y = y & i.(p*x+(1-p)*y) = p*x+(1-p)*y by A1,FUNCT_1:34;
+  hence thesis;
+ end;
+
+theorem
+  for r be Real holds max+(id [#](REAL) - r) is_convex_on REAL by Th62,Th64;
+
+definition let D be non empty set,
+               F be PartFunc of D,REAL,
+               X be set;
+assume A1: dom(F|X) is finite;
+func FinS(F,X) -> non-increasing FinSequence of REAL means :Def14:
+  F|X, it are_fiberwise_equipotent;
+ existence
+  proof
+   set x = dom(F|X);
+   consider b be FinSequence such that
+   A2: F|x, b are_fiberwise_equipotent by A1,RFINSEQ:18;
+     x = dom F /\ X by FUNCT_1:68;
+   then A3: F|x = (F|dom F)|X by RELAT_1:100
+   .=F|X by RELAT_1:97;
+     rng(F|x) c= rng F & rng F c= REAL & rng(F|x) = rng b
+    by A2,FUNCT_1:76,RFINSEQ:1;
+   then reconsider b as FinSequence of REAL by FINSEQ_1:def 4;
+   consider a be non-increasing FinSequence of REAL such that
+   A4: b,a are_fiberwise_equipotent by RFINSEQ:35;
+   take a;
+   thus thesis by A2,A3,A4,RFINSEQ:2;
+  end;
+ uniqueness
+  proof let g1,g2 be non-increasing FinSequence of REAL; assume
+     F|X, g1 are_fiberwise_equipotent & F|X,g2 are_fiberwise_equipotent;
+   then g1,g2 are_fiberwise_equipotent by RFINSEQ:2;
+   hence g1=g2 by RFINSEQ:36;
+  end;
+end;
+
+theorem Th66:
+for D be non empty set, F be PartFunc of D,REAL, X be set st
+ dom(F|X) is finite holds FinS(F,dom(F|X)) = FinS(F,X)
+ proof let D be non empty set, F be PartFunc of D,REAL, X be set; assume
+  A1: dom(F|X) is finite;
+  then A2: FinS(F,X), F|X are_fiberwise_equipotent by Def14;
+    F|(dom(F|X)) = F|(dom F /\ X) by FUNCT_1:68
+  .= (F|dom F)|X by RELAT_1:100
+  .= F|X by RELAT_1:97;
+  hence thesis by A1,A2,Def14;
+ end;
+
+theorem Th67:
+for D be non empty set, F be PartFunc of D,REAL, X be set st
+ dom(F|X) is finite holds FinS(F|X,X) = FinS(F,X)
+ proof let D be non empty set, F be PartFunc of D,REAL, X be set; assume
+  A1: dom(F|X) is finite;
+  then A2: FinS(F,X), F|X are_fiberwise_equipotent by Def14;
+    (F|X)|X = F|X by RELAT_1:101;
+  hence thesis by A1,A2,Def14;
+ end;
+
+definition let D be non empty set;
+ let F be PartFunc of D,REAL; let X be finite set;
+ redefine func F|X -> finite PartFunc of D,REAL;
+ coherence
+  proof
+      F|X is finite;
+   hence thesis;
+  end;
+end;
+
+theorem Th68:
+for D be non empty set, d be Element of D, X be set, F be PartFunc of D,REAL
+  st X is finite & d in dom(F|X) holds
+      FinS(F,X\{d})^<*F.d*>, F|X are_fiberwise_equipotent
+proof
+  for D be non empty set, X be finite set, F be PartFunc of D,REAL, x be set
+  st x in dom(F|X) holds
+ FinS(F,X\{x})^<*F.x*>, F|X are_fiberwise_equipotent
+ proof let D be non empty set, X be finite set, F be PartFunc of D,REAL, x;
+  set Y = X \ {x}; assume
+  A1:  x in dom(F|X);
+     dom(F|Y) is finite & Y is finite;
+  then A2: F|Y, FinS(F,Y) are_fiberwise_equipotent by Def14;
+  set A = FinS(F,Y)^<* F.x *>;
+    x in dom F /\ X by A1,FUNCT_1:68;
+  then x in X & x in dom F by XBOOLE_0:def 3;
+  then A3: {x} c= X & {x} c= dom F by ZFMISC_1:37;
+     now let y;
+    A4: card((F|Y)"{y}) = card(FinS(F,Y)"{y}) by A2,RFINSEQ:def 1;
+A5:  Y misses {x} by XBOOLE_1:79;
+    A6: (F|Y)"{y} /\ (F|{x})"{y} = Y /\ (F"{y}) /\ (F|{x})"{y} by FUNCT_1:139
+    .= Y /\ F"{y} /\ ({x} /\ F"{y}) by FUNCT_1:139
+    .= F"{y} /\ Y /\ {x} /\ F"{y} by XBOOLE_1:16
+    .= F"{y} /\ (Y /\ {x}) /\ F"{y} by XBOOLE_1:16
+    .= {} /\ F"{y} by A5,XBOOLE_0:def 7
+    .= {};
+    A7: (F|Y)"{y} \/ (F|{x})"{y} = (Y /\ F"{y}) \/ (F|{x})"{y} by FUNCT_1:139
+    .= (Y /\ F"{y}) \/ ({x} /\ F"{y}) by FUNCT_1:139
+    .= (Y \/ {x}) /\ F"{y} by XBOOLE_1:23
+    .= (X \/ {x}) /\ F"{y} by XBOOLE_1:39
+    .= X /\ F"{y} by A3,XBOOLE_1:12
+    .= (F|X)"{y} by FUNCT_1:139;
+    A8: dom(F|{x}) = {x} by A3,RELAT_1:91;
+    A9: dom<*F.x*> = {1} by FINSEQ_1:4,55;
+       now per cases;
+     case A10: y=F.x;
+      A11: (F|{x})"{y} c= {x} by A8,RELAT_1:167;
+        {x} c= (F|{x})"{y}
+       proof let z be set; assume A12: z in {x};
+        then z=x by TARSKI:def 1;
+        then y=(F|{x}).z & y in {y} by A8,A10,A12,FUNCT_1:68,TARSKI:def 1;
+        hence z in (F|{x})"{y} by A8,A12,FUNCT_1:def 13;
+       end;
+      then (F|{x})"{y} = {x} by A11,XBOOLE_0:def 10;
+      then A13: card((F|{x})"{y}) = 1 by CARD_1:79;
+      A14: <*F.x*>"{y} c= {1} by A9,RELAT_1:167;
+        {1} c= <*F.x*>"{y}
+       proof let z be set; assume A15: z in {1};
+        then z=1 by TARSKI:def 1;
+        then y=<*F.x*>.z & y in {y} by A10,FINSEQ_1:57,TARSKI:def 1;
+        hence z in <*F.x*>"{y} by A9,A15,FUNCT_1:def 13;
+       end;
+      then <*F.x*>"{y} = {1} by A14,XBOOLE_0:def 10;
+      hence card((F|{x})"{y}) = card(<*F.x*>"{y}) by A13,CARD_1:79;
+     case A16: y <> F.x;
+       A17: now assume
+A18:     (F|{x})"{y} <> {};
+        consider z be Element of (F|{x})"{y};
+        A19: z in {x} & (F|{x}).z in {y} by A8,A18,FUNCT_1:def 13;
+        then z=x & (F|{x}).z=y by TARSKI:def 1;
+        hence contradiction by A8,A16,A19,FUNCT_1:68;
+       end;
+         now assume
+A20:     <*F.x*>"{y} <> {};
+        consider z be Element of <*F.x*>"{y};
+          z in {1} & <*F.x*>.z in {y} by A9,A20,FUNCT_1:def 13;
+        then z=1 & <*F.x*>.z=y by TARSKI:def 1;
+        hence contradiction by A16,FINSEQ_1:57;
+       end;
+      hence card((F|{x})"{y}) = card(<*F.x*>"{y}) by A17;
+     end;
+    hence card((F|X)"{y}) = card((F|Y)"{y}) + card(<*F.x*>"{y}) - card {}
+      by A6,A7,CARD_2:64
+    .= card(A"{y}) by A4,CARD_1:78,FINSEQ_3:63;
+   end;
+  hence thesis by RFINSEQ:def 1;
+ end;
+ hence thesis;
+end;
+
+theorem Th69:
+for D be non empty set, d be Element of D, X be set, F be PartFunc of D,REAL st
+ dom(F|X) is finite & d in dom(F|X)
+   holds FinS(F,X\{d})^<*F.d*>, F|X are_fiberwise_equipotent
+ proof let D be non empty set, d be Element of D, X be set,
+           F be PartFunc of D,REAL;
+  set dx = dom(F|X); assume
+  A1: dx is finite & d in dx;
+  A2: F|dx = F|(dom F /\ X) by FUNCT_1:68
+  .=(F|dom F)|X by RELAT_1:100
+  .=F|X by RELAT_1:97;
+  set Y = X \ {d},
+     dy = dom(F|Y);
+  A3: {d} c= dx & dy=dom F /\ Y & dx=dom F /\ X by A1,FUNCT_1:68,ZFMISC_1:37;
+  A4: dy = dx \ {d}
+   proof
+    thus dy c= dx \ {d}
+     proof let y; assume y in dy;
+      then A5: y in dom F & y in X \ {d} by A3,XBOOLE_0:def 3;
+      then A6: y in X & not y in {d} by XBOOLE_0:def 4;
+      then y in dx by A3,A5,XBOOLE_0:def 3;
+      hence thesis by A6,XBOOLE_0:def 4;
+     end;
+    let y; assume y in dx \{d};
+    then A7: y in dx & not y in {d} by XBOOLE_0:def 4;
+    then A8: y in dom F & y in X by A3,XBOOLE_0:def 3;
+    then y in Y by A7,XBOOLE_0:def 4;
+    hence thesis by A3,A8,XBOOLE_0:def 3;
+   end;
+  then A9: dy is finite by A1,FINSET_1:16;
+    FinS(F,dx\{d})^<*F.d*>, F|X are_fiberwise_equipotent by A1,A2,Th68;
+  hence FinS(F,X\{d})^<*F.d*>, F|X are_fiberwise_equipotent by A4,A9,Th66;
+ end;
+
+theorem Th70:
+for D be non empty set, F be PartFunc of D,REAL, X be set,
+    Y being finite set st Y = dom(F|X)
+   holds len FinS(F,X) = card Y
+ proof let D be non empty set, F be PartFunc of D,REAL, X be set;
+  let Y be finite set; assume
+A1: Y = dom(F|X);
+  then reconsider fx = F|X as finite Function by AMI_1:21;
+A2: Y = dom fx by A1;
+  A3: FinS(F,X), F|X are_fiberwise_equipotent by A1,Def14;
+  reconsider fs = dom FinS(F,X) as finite set;
+  A4: dom FinS(F,X) = Seg len FinS(F,X) by FINSEQ_1:def 3;
+  thus card Y = card fs by A2,A3,RFINSEQ:10
+  .= len FinS(F,X) by A4,FINSEQ_1:78;
+ end;
+
+theorem Th71:
+for D be non empty set, F be PartFunc of D,REAL holds FinS(F,{}) = <*>REAL
+ proof let D be non empty set, F be PartFunc of D,REAL;
+    dom(F|{}) = dom F /\ {} by FUNCT_1:68
+  .= {};
+  then len FinS(F,{}) = 0 by Th70,CARD_1:78;
+  hence thesis by FINSEQ_1:32;
+ end;
+
+theorem Th72:
+for D be non empty set, F be PartFunc of D,REAL, d be Element of D
+  st d in dom F holds FinS(F,{d}) = <* F.d *>
+ proof let D be non empty set, F be PartFunc of D,REAL, d be Element of D;
+  assume d in dom F;
+  then {d} c= dom F by ZFMISC_1:37;
+  then A1: {d} = dom F /\ {d} by XBOOLE_1:28
+   .= dom(F|{d}) by FUNCT_1:68;
+  then A2: len FinS(F,{d}) = card {d} by Th70
+   .= 1 by CARD_1:79;
+    FinS(F,{d}), F|{d} are_fiberwise_equipotent by A1,Def14;
+  then A3: rng FinS(F,{d}) = rng(F|{d}) by RFINSEQ:1;
+    rng(F|{d}) = {F.d}
+   proof
+    thus rng(F|{d}) c= {F.d}
+     proof let x; assume x in rng(F|{d});
+      then consider e be Element of D such that
+      A4: e in dom(F|{d}) & (F|{d}).e = x by PARTFUN1:26;
+        e=d by A1,A4,TARSKI:def 1;
+      then x=F.d by A4,FUNCT_1:68;
+      hence thesis by TARSKI:def 1;
+     end;
+    let x; assume x in {F.d};
+    then A5: x=F.d & d in dom(F|{d}) by A1,TARSKI:def 1;
+    then x=(F|{d}).d by FUNCT_1:68;
+    hence thesis by A5,FUNCT_1:def 5;
+   end;
+  hence thesis by A2,A3,FINSEQ_1:56;
+ end;
+
+theorem Th73:
+for D be non empty set, F be PartFunc of D,REAL, X be set, d be Element of D
+ st dom(F|X) is finite & d in dom(F|X) & FinS(F,X).(len FinS(F,X)) = F.d holds
+  FinS(F,X) = FinS(F,X\{d}) ^ <*F.d*>
+ proof let D be non empty set, F be PartFunc of D,REAL, X be set,
+           d be Element of D;
+  set dx = dom(F|X),
+      fx = FinS(F,X),
+      fy = FinS(F,X \{d}); assume
+  A1: dx is finite & d in dx & fx.(len fx) = F.d;
+  then A2: fx, F|X are_fiberwise_equipotent by Def14;
+  then A3: rng fx = rng(F|X) by RFINSEQ:1;
+    fy ^ <*F.d*>, F|X are_fiberwise_equipotent by A1,Th69;
+  then A4: fx, fy^<*F.d*> are_fiberwise_equipotent by A2,RFINSEQ:2;
+    rng fx <> {} by A1,A3,FUNCT_1:12;
+  then fx <> {} by FINSEQ_1:27;
+  then len fx <> 0 & 0<=len fx by FINSEQ_1:25,NAT_1:18;
+  then 0+1<=len fx by NAT_1:38;
+  then max(0,len fx -1) = len fx - 1 by FINSEQ_2:4;
+  then reconsider n=len fx - 1 as Nat by FINSEQ_2:5;
+    len fx = n+1 by XCMPLX_1:27;
+  then A5: fx = fx|n ^ <*F.d*> by A1,RFINSEQ:20;
+  then A6: fy, fx|n are_fiberwise_equipotent by A4,RFINSEQ:14;
+    fx|n is non-increasing by RFINSEQ:33;
+  hence thesis by A5,A6,RFINSEQ:36;
+ end;
+
+  defpred P[Nat] means
+ for D be non empty set, F be PartFunc of D,REAL, X be set
+   for Y be set, Z be finite set st Z = dom(F|Y) &
+    dom(F|X) is finite & Y c= X & $1 = card Z &
+   (for d1,d2 be Element of D st d1 in dom(F|Y) &
+   d2 in dom(F|(X\Y)) holds F.d1>= F.d2)
+    holds FinS(F,X) = FinS(F,Y) ^ FinS(F,X \ Y);
+  Lm3: P[0]
+   proof
+   let D be non empty set, F be PartFunc of D,REAL, X be set;
+   let Y be set;
+   let Z be finite set such that
+A1: Z = dom(F|Y);
+   assume
+    A2: dom(F|X) is finite & Y c= X & 0 = card Z &
+    for d1,d2 be Element of D st
+    d1 in dom(F|Y) & d2 in dom(F|(X\Y)) holds F.d1>=F.d2;
+    A3: dom(F|X) = dom F /\ X & dom(F|Y) = dom F /\ Y &
+    dom(F|(X\Y))=dom F /\(X\Y)
+     by FUNCT_1:68;
+    A4: dom(F|Y) = {} by A1,A2,CARD_2:59;
+    then A5: FinS(F,Y) = FinS(F,{}) by Th66
+    .= {} by Th71;
+      dom(F|(X\Y)) = dom(F|X) \ {} by A3,A4,XBOOLE_1:50
+    .= dom(F|X);
+    then FinS(F,X\Y) = FinS(F,dom(F|X)) by A2,Th66
+    .= FinS(F,X) by A2,Th66;
+    hence thesis by A5,FINSEQ_1:47;
+   end;
+  Lm4: for n st P[n] holds P[n+1]
+   proof let n; assume
+    A1: P[n];
+    let D be non empty set, F be PartFunc of D,REAL, X be set;
+    let Y be set;
+    set dx = dom(F|X),
+       dxy = dom(F|(X\Y)),
+        fy = FinS(F,Y),
+       fxy = FinS(F,X\Y);
+    let dy be finite set such that
+    A2: dy = dom(F|Y) & dom(F|X) is finite & Y c= X & n+1 = card dy &
+        for d1,d2 be Element of D st
+        d1 in dom(F|Y) & d2 in dxy holds F.d1>=F.d2;
+    A3: X\Y c= X by XBOOLE_1:36;
+    A4: dx = dom F /\ X & dy = dom F /\ Y & dxy = dom F /\ (X\Y)
+     by A2,FUNCT_1:68;
+    then dy c= dx & dxy c= dx by A2,A3,XBOOLE_1:26;
+    then A5: dy is finite & dxy is finite by A2,FINSET_1:13;
+    then A6: F|Y, fy are_fiberwise_equipotent & F|(X\Y) ,fxy
+       are_fiberwise_equipotent by A2,Def14;
+    then A7: rng fy = rng(F|Y) & rng fxy = rng(F|(X\Y)) by RFINSEQ:1;
+  1<=n+1
+ proof
+    0<n+1 by NAT_1:19;
+  then 0+1<=n+1 by NAT_1:38;
+  hence thesis;
+ end;
+
+    then A8: len fy = n+1 & 1<=n+1 by A2,Th70;
+    then A9: len fy in dom fy by FINSEQ_3:27;
+    then fy.(len fy) in rng fy by FUNCT_1:def 5;
+    then consider d be Element of D such that
+    A10: d in dy & (F|Y).d = fy.(len fy) by A2,A7,PARTFUN1:26;
+    A11: F.d = fy.(len fy) by A2,A10,FUNCT_1:68;
+    set Yd = Y \ {d},
+        dyd = dom(F|Yd),
+       xyd = dom(F|(X \ Yd));
+    A12: {d} c= dy & dyd = dom F /\ Yd &
+    xyd = dom F /\ (X \ Yd) & d in Y & d in dom F
+    by A4,A10,FUNCT_1:68,XBOOLE_0:def 3,ZFMISC_1:37;
+    A13: dyd = dy \ {d}
+     proof
+      thus dyd c= dy \ {d}
+       proof let y; assume y in dyd;
+        then A14: y in dom F & y in Y \ {d} by A12,XBOOLE_0:def 3;
+        then A15: y in Y & not y in {d} by XBOOLE_0:def 4;
+        then y in dy by A4,A14,XBOOLE_0:def 3;
+        hence thesis by A15,XBOOLE_0:def 4;
+       end;
+      let y; assume y in dy \{d};
+      then A16: y in dy & not y in {d} by XBOOLE_0:def 4;
+      then A17: y in dom F & y in Y by A4,XBOOLE_0:def 3;
+      then y in Yd by A16,XBOOLE_0:def 4;
+      hence thesis by A12,A17,XBOOLE_0:def 3;
+     end;
+     then reconsider dyd as finite set;
+    A18: card dyd = card dy - card {d} by A12,A13,CARD_2:63
+     .= n+1-1 by A2,CARD_1:79
+     .= n by XCMPLX_1:26;
+      Yd c= Y by XBOOLE_1:36;
+    then A19: Yd c= X by A2,XBOOLE_1:1;
+    A20: {d} c= X & {d} c= Y & {d} c= dom F by A2,A12,ZFMISC_1:37;
+    A21: X \ Yd = (X\Y) \/ X /\ {d} by XBOOLE_1:52
+     .= (X\Y) \/ {d} by A20,XBOOLE_1:28;
+    then A22: xyd = dxy \/ dom F /\ {d} by A4,A12,XBOOLE_1:23
+     .= dxy \/ {d} by A20,XBOOLE_1:28;
+       now let d1,d2 be Element of D; assume
+      A23: d1 in dyd & d2 in xyd;
+      then A24: d1 in dy & not d1 in {d} by A13,XBOOLE_0:def 4;
+         now per cases by A22,A23,XBOOLE_0:def 2;
+       case d2 in dxy; hence F.d1>=F.d2 by A2,A24;
+       case d2 in {d};
+        then A25: d2 = d & d1<>d by A24,TARSKI:def 1;
+          (F|Y).d1 in rng(F|Y) by A2,A24,FUNCT_1:def 5;
+        then F.d1 in rng(F|Y) by A2,A24,FUNCT_1:68;
+        then consider m such that
+        A26: m in dom fy & fy.m = F.d1 by A7,FINSEQ_2:11;
+        A27: 1<=m & m<=len fy by A26,FINSEQ_3:27;
+           now per cases;
+         case m = len fy; hence F.d1>=F.d2 by A2,A10,A25,A26,FUNCT_1:68;
+         case m<> len fy;
+          then m<len fy by A27,REAL_1:def 5;
+          hence F.d1>=F.d2 by A9,A11,A25,A26,RFINSEQ:32;
+         end;
+        hence F.d1>=F.d2;
+       end;
+      hence F.d1>=F.d2;
+     end;
+    then A28: FinS(F,X) = FinS(F,Yd) ^ FinS(F,X \ Yd) by A1,A2,A18,A19;
+    A29: (X \ Yd) \ {d} = X \ (Yd \/ {d}) by XBOOLE_1:41
+    .= X \ (Y \/ {d}) by XBOOLE_1:39
+    .= X \ Y by A20,XBOOLE_1:12;
+    A30: xyd is finite by A5,A22,FINSET_1:14;
+      d in {d} by TARSKI:def 1;
+    then d in (X\Yd) by A21,XBOOLE_0:def 2;
+    then d in xyd by A12,XBOOLE_0:def 3;
+    then A31: fxy ^ <*F.d*>, F|(X\Yd) are_fiberwise_equipotent by A29,A30,Th69;
+      fxy ^ <*F.d*>, <*F.d*> ^ fxy are_fiberwise_equipotent by RFINSEQ:15;
+    then A32: <*F.d*>^fxy, F|(X\Yd) are_fiberwise_equipotent by A31,RFINSEQ:2;
+      FinS(F,X\Yd), F|(X\Yd) are_fiberwise_equipotent by A30,Def14;
+    then A33: <*F.d*>^fxy, FinS(F,X\Yd) are_fiberwise_equipotent by A32,RFINSEQ
+:2;
+      <*F.d*>^fxy is non-increasing
+     proof let n; assume
+      A34: n in dom(<*F.d*>^fxy) & n+1 in dom(<*F.d*>^fxy);
+      set xfy = <*F.d*>^fxy;
+      set r = xfy.n, s = xfy.(n+1);
+      A35: len <*F.d*> = 1 & <*F.d*>. 1 = F.d by FINSEQ_1:57;
+      A36: 1<=n & n<=len xfy & 1<=n+1 & n+1<=len xfy by A34,FINSEQ_3:27;
+      then max(0,n-1)=n-1 by FINSEQ_2:4;
+      then reconsider n1=n-1 as Nat by FINSEQ_2:5;
+        len xfy = 1 + len fxy by A35,FINSEQ_1:35;
+      then A37: len fxy = len xfy - 1 by XCMPLX_1:26;
+      then A38: n1<=len fxy by A36,REAL_1:49;
+      A39: n1+1 = n by XCMPLX_1:27;
+      then n1+1<=len fxy & n<n+1 by A36,A37,NAT_1:38,REAL_1:84;
+      then A40: n1+1 in dom fxy & 1<n+1 by A36,A39,AXIOMS:22,FINSEQ_3:27;
+      then A41: xfy.(n+1) = fxy.(n+1-1) by A35,A36,FINSEQ_1:37
+      .= fxy.(n1+1) by A39,XCMPLX_1:26;
+        fxy.(n1+1) in rng fxy by A40,FUNCT_1:def 5;
+      then consider d1 be Element of D such that
+      A42: d1 in dxy & (F|(X\Y)).d1 = fxy.(n1+1) by A7,PARTFUN1:26;
+      A43: F.d1 = fxy.(n1+1) by A42,FUNCT_1:68;
+      A44: F.d>=F.d1 by A2,A10,A42;
+         now per cases;
+       suppose n = 1;
+        hence r>=s by A41,A43,A44,FINSEQ_1:58;
+       suppose n <> 1;
+        then A45: 1<n by A36,REAL_1:def 5;
+        then A46: xfy.n = fxy.n1 by A35,A36,FINSEQ_1:37;
+          1+1<=n by A45,NAT_1:38;
+        then 1<=n1 by REAL_1:84;
+        then n1 in dom fxy by A38,FINSEQ_3:27;
+        hence r>=s by A40,A41,A46,RFINSEQ:def 4;
+       end;
+      hence r>=s;
+     end;
+    then <*F.d*>^fxy = FinS(F,X\Yd) by A33,RFINSEQ:36;
+    then A47: FinS(F,X) = FinS(F,Yd)^<*F.d*> ^ fxy by A28,FINSEQ_1:45;
+      F|Y, FinS(F,Yd)^<*F.d*> are_fiberwise_equipotent by A2,A10,Th69;
+    then A48: FinS(F,Yd)^<*F.d*>, fy are_fiberwise_equipotent by A6,RFINSEQ:2;
+    A49: fy = fy|n ^ <*F.d*> by A8,A11,RFINSEQ:20;
+    then A50: FinS(F,Yd), fy|n are_fiberwise_equipotent by A48,RFINSEQ:14;
+      fy|n is non-increasing by RFINSEQ:33;
+    hence thesis by A47,A49,A50,RFINSEQ:36;
+   end;
+
+theorem
+  for D be non empty set, F be PartFunc of D,REAL, X,Y be set st
+  dom(F|X) is finite & Y c= X &
+  (for d1,d2 be Element of D st
+  d1 in dom(F|Y) & d2 in dom(F|(X\Y)) holds F.d1>=F.d2)
+   holds FinS(F,X) = FinS(F,Y) ^ FinS(F,X \ Y)
+ proof let D be non empty set, F be PartFunc of D,REAL, X be set;
+  A1: for n holds P[n] from Ind(Lm3,Lm4);
+  let Y be set; assume
+  A2: dom(F|X) is finite & Y c= X &
+  for d1,d2 be Element of D st
+  d1 in dom(F|Y) & d2 in dom(F|(X\Y)) holds F.d1>=F.d2;
+  then F|Y c= F|X by RELAT_1:104;
+  then dom(F|Y) c= dom(F|X) by RELAT_1:25;
+  then reconsider dFY = dom(F|Y) as finite set by A2,FINSET_1:13;
+    card dFY = card dFY;
+  hence thesis by A1,A2;
+ end;
+
+theorem Th75:
+for D be non empty set, F be PartFunc of D,REAL, r be Real, X be set,
+ d be Element of D st dom(F|X) is finite & d in dom(F|X) holds
+FinS(F-r,X).(len FinS(F-r,X)) = (F-r).d iff FinS(F,X).(len FinS(F,X)) = F.d
+ proof let D be non empty set, F be PartFunc of D,REAL, r be Real, X be set,
+           d be Element of D;
+  set dx = dom(F|X),
+     drx = dom((F-r)|X),
+     frx = FinS(F-r,X),
+      fx = FinS(F,X); assume
+  A1: dx is finite & d in dx;
+  then reconsider dx as finite set;
+  A2: drx = dom(F-r) /\ X by FUNCT_1:68
+   .= dom F /\ X by Def12
+   .= dx by FUNCT_1:68;
+  then A3: len frx = card dx & len fx = card dx by Th70;
+  A4: dom frx = Seg len frx & dom fx = Seg len fx by FINSEQ_1:def 3;
+    fx, F|X are_fiberwise_equipotent & frx, (F-r)|X are_fiberwise_equipotent
+    by A2,Def14;
+  then A5: rng fx = rng(F|X) & rng frx = rng((F-r)|X) by RFINSEQ:1;
+  A6: drx = dom(F-r) /\ X & dx = dom F /\ X by FUNCT_1:68;
+  then A7: d in dom(F-r) by A1,A2,XBOOLE_0:def 3;
+  then A8: (F-r).d = F.d - r by Def12;
+  A9: (F|X).d in rng(F|X) by A1,FUNCT_1:def 5;
+    rng fx <> {} by A1,A5,FUNCT_1:12;
+  then fx <> {} by FINSEQ_1:27;
+  then len fx <> 0 & 0<=len fx by FINSEQ_1:25,NAT_1:18;
+  then 0+1<=len fx by NAT_1:38;
+  then A10: len fx in dom fx by FINSEQ_3:27;
+    F.d in rng(F|X) by A1,A9,FUNCT_1:68;
+  then consider n such that
+  A11: n in dom fx & fx.n = F.d by A5,FINSEQ_2:11;
+  A12: 1<=n & n<=len fx by A11,FINSEQ_3:27;
+  thus frx.(len frx) = (F-r).d implies fx.(len fx) = F.d
+   proof assume that
+    A13: frx.(len frx) = (F-r).d and
+    A14: fx.(len fx) <> F.d;
+      fx.(len fx) in rng fx by A10,FUNCT_1:def 5;
+    then consider d1 be Element of D such that
+    A15: d1 in dx & (F|X).d1 = fx.(len fx) by A5,PARTFUN1:26;
+    A16: F.d1 = fx.(len fx) by A15,FUNCT_1:68;
+    A17: d1 in dom(F-r) by A2,A6,A15,XBOOLE_0:def 3;
+      ((F-r)|X).d1 = (F-r).d1 by A2,A15,FUNCT_1:68
+    .= F.d1 - r by A17,Def12;
+    then F.d1-r in rng((F-r)|X) by A2,A15,FUNCT_1:def 5;
+    then consider m such that
+    A18: m in dom frx & frx.m = F.d1-r by A5,FINSEQ_2:11;
+    A19: 1<=m & m<=len frx by A18,FINSEQ_3:27;
+      n<len fx by A11,A12,A14,REAL_1:def 5;
+    then A20: F.d>=F.d1 by A10,A11,A16,RFINSEQ:32;
+       now per cases;
+     case len frx = m; then F.d1+-r=F.d-r by A8,A13,A18,XCMPLX_0:def 8;
+      then F.d1+-r=F.d+-r by XCMPLX_0:def 8;
+      hence contradiction by A14,A16,XCMPLX_1:2;
+     case len frx <>m;
+      then m<len frx by A19,REAL_1:def 5;
+      then F.d1-r>=F.d-r by A3,A4,A8,A10,A13,A18,RFINSEQ:32;
+      then F.d1>=F.d by REAL_1:54;
+      hence contradiction by A14,A16,A20,AXIOMS:21;
+     end;
+    hence contradiction;
+   end;
+  assume that
+  A21: fx.(len fx) = F.d and
+  A22: frx.(len frx) <> (F-r).d;
+    frx.(len frx) in rng frx by A3,A4,A10,FUNCT_1:def 5;
+  then consider d1 be Element of D such that
+  A23: d1 in drx & ((F-r)|X).d1 = frx.(len frx) by A5,PARTFUN1:26;
+  A24: d1 in dom(F-r) by A6,A23,XBOOLE_0:def 3;
+  A25: frx.(len frx) = (F-r).d1 by A23,FUNCT_1:68
+  .= F.d1 - r by A24,Def12;
+    (F|X).d1 = F.d1 by A2,A23,FUNCT_1:68;
+  then F.d1 in rng(F|X) by A2,A23,FUNCT_1:def 5;
+  then consider m such that
+  A26: m in dom fx & fx.m = F.d1 by A5,FINSEQ_2:11;
+  A27: 1<=m & m<=len fx by A26,FINSEQ_3:27;
+    ((F-r)|X).d in rng((F-r)|X) by A1,A2,FUNCT_1:def 5;
+  then (F-r).d in rng((F-r)|X) by A1,A2,FUNCT_1:68;
+  then consider n1 be Nat such that
+  A28: n1 in dom frx & frx.n1 = F.d -r by A5,A8,FINSEQ_2:11;
+     1<=n1 & n1<=len frx by A28,FINSEQ_3:27;
+  then n1<len frx by A8,A22,A28,REAL_1:def 5;
+  then F.d-r>=F.d1-r by A3,A4,A10,A25,A28,RFINSEQ:32;
+  then A29: F.d>=F.d1 by REAL_1:54;
+     now per cases;
+   case len fx = m;
+    hence contradiction by A7,A21,A22,A25,A26,Def12;
+   case len fx <> m;
+    then m<len fx by A27,REAL_1:def 5;
+    then F.d1>=F.d by A10,A21,A26,RFINSEQ:32;
+    hence contradiction by A8,A22,A25,A29,AXIOMS:21;
+   end;
+  hence contradiction;
+ end;
+
+theorem Th76:
+for D be non empty set, F be PartFunc of D,REAL, r be Real, X be set,
+    Z being finite set st Z = dom(F|X)
+     holds FinS(F-r, X) = FinS(F,X) - (card Z |->r)
+ proof let D be non empty set, F be PartFunc of D,REAL, r be Real;
+  let X be set;
+  let G be finite set such that
+A1: G = dom(F|X);
+  defpred P[Nat] means
+  for X be set, G being finite set st G = dom(F|X) & $1= card(G) holds
+   FinS(F-r, X) = FinS(F,X) - (card(G)|->r);
+  A2: P[0]
+   proof let X be set, G be finite set; assume
+A3:  G = dom(F|X);
+    assume 0=card(G);
+    then A4: dom(F|X) = {} by A3,CARD_2:59;
+    then FinS(F,X) = FinS(F,{}) by Th66
+    .= <*>REAL by Th71;
+    then A5: FinS(F,X) - (card(G)|->r) = <*>REAL by RVSUM_1:49;
+      dom((F-r)|X) = dom(F-r) /\ X by FUNCT_1:68
+    .=dom F /\ X by Def12
+    .=dom(F|X) by FUNCT_1:68;
+    hence FinS(F-r,X) = FinS(F-r,{}) by A4,Th66
+    .= FinS(F,X) - (card(G)|->r) by A5,Th71;
+   end;
+  A6: for n st P[n] holds P[n+1]
+   proof let n; assume
+    A7: P[n];
+    let X be set, G be finite set; assume
+    A8: G = dom(F|X);
+    assume
+A9: n+1= card(G);
+    A10: dom((F-r)|X) = dom(F-r) /\ X by FUNCT_1:68
+    .=dom F /\ X by Def12
+    .=dom(F|X) by FUNCT_1:68;
+    then A11: FinS(F-r,X), (F-r)|X are_fiberwise_equipotent by A8,Def14;
+    then A12: rng FinS(F-r,X) = rng((F-r)|X) by RFINSEQ:1;
+      0<n+1 by NAT_1:19;
+    then A13: 0+1<=n+1 by NAT_1:38;
+    set frx = FinS(F-r,X),
+         fx = FinS(F,X);
+    A14: len frx = card G & len fx = card G by A8,A10,Th70;
+    then len frx in dom frx by A9,A13,FINSEQ_3:27;
+    then frx.(len frx) in rng frx by FUNCT_1:def 5;
+    then consider d be Element of D such that
+    A15: d in dom((F-r)|X) & ((F-r)|X).d = frx.(len frx) by A12,PARTFUN1:26;
+      (F-r).d = frx.(len frx) by A15,FUNCT_1:68;
+    then A16: fx.(len fx) = F.d by A8,A10,A15,Th75;
+    set Y = X \ {d},
+       dx = dom(F|X),
+       dy = dom(F|Y),
+      fry = FinS(F-r,Y),
+       fy = FinS(F,Y),
+      n1r = (n+1) |-> r,
+       nr = n |-> r;
+      fx = fy ^ <*F.d*> & fx = fx|n ^ <*F.d*>
+      by A8,A9,A10,A14,A15,A16,Th73,RFINSEQ:20;
+    then A17: fy = fx|n by FINSEQ_1:46;
+      (F-r).d = frx.(len frx) by A15,FUNCT_1:68;
+    then A18: frx = frx|n ^ <*(F-r).d*> by A9,A14,RFINSEQ:20;
+    A19: frx|n is non-increasing by RFINSEQ:33;
+      fry^<*(F-r).d*>, (F-r)|X are_fiberwise_equipotent by A8,A10,A15,Th69;
+    then fry^<*(F-r).d*>, frx are_fiberwise_equipotent by A11,RFINSEQ:2;
+    then fry, frx|n are_fiberwise_equipotent by A18,RFINSEQ:14;
+    then A20: fry = frx|n by A19,RFINSEQ:36;
+    A21: {d} c= dx & dy=dom F /\ Y & dx=dom F /\ X & dom((F-r)|X) = dom(F-r) /\
+ X
+       by A10,A15,FUNCT_1:68,ZFMISC_1:37;
+    A22: dy = dx \ {d}
+     proof
+      thus dy c= dx \ {d}
+       proof let y; assume y in dy;
+        then A23: y in dom F & y in X \ {d} by A21,XBOOLE_0:def 3;
+        then A24: y in X & not y in {d} by XBOOLE_0:def 4;
+        then y in dx by A21,A23,XBOOLE_0:def 3;
+        hence thesis by A24,XBOOLE_0:def 4;
+       end;
+      let y; assume y in dx \{d};
+      then A25: y in dx & not y in {d} by XBOOLE_0:def 4;
+      then A26: y in dom F & y in X by A21,XBOOLE_0:def 3;
+      then y in Y by A25,XBOOLE_0:def 4;
+      hence thesis by A21,A26,XBOOLE_0:def 3;
+     end;
+    then reconsider dx,dy as finite set by A8,FINSET_1:16;
+    A27: card dy = card dx - card {d} by A21,A22,CARD_2:63
+     .= n+1-1 by A8,A9,CARD_1:79
+     .= n by XCMPLX_1:26;
+    then A28: fry = fy - nr by A7;
+      d in dom(F-r) by A15,A21,XBOOLE_0:def 3;
+    then (F-r).d = F.d - r by Def12;
+    then A29: <*(F-r).d*> = <*F.d*> - <*r*> by RVSUM_1:50;
+    A30: len n1r = n+1 & len nr = n by FINSEQ_2:69;
+    A31: len fx = n+1 & len fy = n by A8,A9,A27,Th70;
+A32:  fx - n1r = diffreal.:(fx,n1r) &
+    fy - nr = diffreal.:(fy,nr) by RVSUM_1:def 6;
+    then A33: len (fx - n1r) = n+1 by A30,A31,FINSEQ_2:86;
+A34:  len (fy - nr) = n by A30,A31,A32,FINSEQ_2:86;
+    A35: len <*F.d*> =1 & len <*r*> = 1 & <*F.d*>.1=F.d & <*r*>.1=r &
+    <*F.d*> - <*r*>=diffreal.:
+(<*F.d*>,<*r*>) by FINSEQ_1:57,RVSUM_1:def 6;
+    then A36: len (<*F.d*> - <*r*>) = 1 by FINSEQ_2:86;
+    then A37: len ((fy - nr)^(<*F.d*> - <*r*>)) = n+1 by A34,FINSEQ_1:35;
+    A38: dom fx = Seg len fx by FINSEQ_1:def 3;
+A39:      dom(<*F.d*> - <*r*>)=dom(<*F.d*> - <*r*>) &
+      dom(fy - nr)=Seg len(fy - nr) & n+1 in Seg(n+1)
+        by FINSEQ_1:6,def 3;
+    A40: n<n+1 & 1 in Seg 1 by FINSEQ_1:3,NAT_1:38;
+then A41:   1 in dom(<*F.d*> - <*r*>) by A36,FINSEQ_1:def 3;
+       now let m; assume
+      A42: m in Seg(n+1);
+       per cases;
+       suppose A43: m=n+1;
+        then A44: n1r.m = r by A39,FINSEQ_2:70;
+A45:      m in dom (fx - n1r) by A33,A42,FINSEQ_1:def 3;
+          ((fy - nr)^(<*F.d*> - <*r*>)).m = (<*F.d*> - <*r*>).(n+1-n)
+                  by A34,A37,A40,A43,FINSEQ_1:37
+        .= (<*F.d*> - <*r*>).1 by XCMPLX_1:26
+        .= F.d - r by A35,A41,RVSUM_1:47;
+        hence (fx - n1r).m = ((fy - nr)^(<*F.d*> - <*r*>)).m
+         by A16,A31,A43,A44,A45,RVSUM_1:47;
+       suppose
+A46:      m<>n+1;
+      A47: 1<=m & m<=n+1 by A42,FINSEQ_1:3;
+        then m<n+1 by A46,REAL_1:def 5;
+        then A48: m<=n by NAT_1:38;
+        then A49: m in Seg n by A47,FINSEQ_1:3;
+        then A50: ((fy - nr)^(<*F.d*> - <*r*>)).m = (fy - nr).m
+          by A34,A39,FINSEQ_1:def 7;
+        A51: nr.m = r by A49,FINSEQ_2:70;
+          1<=n & n<=n+1 by A47,A48,AXIOMS:22,NAT_1:29;
+        then n in Seg(n+1) by FINSEQ_1:3;
+        then A52: (fx|n).m = fx.m & m in dom fx & n1r.m=r
+          by A31,A38,A42,A49,FINSEQ_2:70,RFINSEQ:19;
+        reconsider s=fx.m as Real;
+A53:      m in dom(fx - n1r) by A33,A42,FINSEQ_1:def 3;
+          m in dom(fy - nr) by A34,A49,FINSEQ_1:def 3;
+        hence ((fy - nr)^(<*F.d*> - <*r*>)).m = s-r
+          by A17,A50,A51,A52,RVSUM_1:47
+        .=(fx - n1r).m by A52,A53,RVSUM_1:47;
+     end;
+    hence thesis by A9,A18,A20,A28,A29,A33,A37,FINSEQ_2:10;
+   end;
+     for n holds P[n] from Ind(A2,A6);
+  hence thesis by A1;
+ end;
+
+theorem
+  for D be non empty set, F be PartFunc of D,REAL, X be set st
+ dom(F|X) is finite &
+ (for d be Element of D st d in dom(F|X) holds F.d>=0) holds
+ FinS(max+ F, X) = FinS(F, X)
+ proof let D be non empty set, F be PartFunc of D,REAL, X be set; assume
+  A1: dom(F|X) is finite &
+      for d be Element of D st d in dom(F|X) holds F.d>=0;
+    now let d be Element of D; assume
+     d in dom(F|X); then F.d>=0 & (F|X).d=F.d by A1,FUNCT_1:68;
+   hence (F|X).d>=0;
+  end;
+  then A2: (F|X) = max+ (F|X) by Th49
+  .= (max+ F)|X by Th47;
+  hence FinS(F,X) = FinS((max+ F)|X,X) by A1,Th67
+  .= FinS(max+ F,X) by A1,A2,Th67;
+ end;
+
+theorem
+  for D be non empty set, F be PartFunc of D,REAL, X be set, r be Real,
+  Z be finite set st Z = dom(F|X)
+   & rng(F|X) = {r} holds FinS(F, X) = card(Z) |-> r
+ proof let D be non empty set, F be PartFunc of D,REAL, X be set, r be Real;
+  let dx be finite set such that
+A1:  dx = dom(F|X);
+  set fx = FinS(F,X);
+   assume
+  A2: rng(F|X) = {r};
+    F|X, fx are_fiberwise_equipotent by A1,Def14;
+  then A3: rng fx = {r} by A2,RFINSEQ:1;
+    len fx = card dx & dom fx = Seg len fx by A1,Th70,FINSEQ_1:def 3;
+  then fx = Seg(card dx) --> r by A3,FUNCOP_1:15;
+  hence thesis by FINSEQ_2:def 2;
+ end;
+
+theorem Th79:
+for D be non empty set, F be PartFunc of D,REAL, X,Y be set st
+ dom(F|(X \/ Y)) is finite & X misses Y holds
+ FinS(F,X \/ Y), FinS(F,X) ^ FinS(F,Y) are_fiberwise_equipotent
+ proof let D be non empty set, F be PartFunc of D,REAL, X,Y be set;
+  assume
+A1: dom(F|(X \/ Y)) is finite;
+      Y c= X \/ Y by XBOOLE_1:7;
+    then F|Y c= F|(X \/ Y) by RELAT_1:104;
+    then dom(F|Y) c= dom(F|(X \/ Y)) by RELAT_1:25;
+  then reconsider dfy = dom(F|Y) as finite set by A1,FINSET_1:13;
+  defpred P[Nat] means
+  for Y be set, Z being finite set st Z = dom(F|Y) &
+      dom(F|(X \/ Y)) is finite & X /\ Y = {} & $1 = card Z
+     holds FinS(F,X \/ Y), FinS(F,X) ^ FinS(F,Y) are_fiberwise_equipotent;
+  A2: P[0]
+   proof let Y be set, Z be finite set; assume
+    A3: Z = dom(F|Y) &
+     dom(F|(X \/ Y)) is finite & X /\ Y = {} & 0 = card Z;
+    A4: dom(F|(X \/ Y)) = dom F /\ (X \/ Y) by FUNCT_1:68
+    .= dom F /\ X \/ dom F /\ Y by XBOOLE_1:23
+    .= dom(F|X) \/ dom F /\ Y by FUNCT_1:68
+    .= dom(F|X) \/ dom(F|Y) by FUNCT_1:68;
+    then dom(F|X) c= dom(F|(X \/ Y)) & dom(F|Y) c= dom(F|(X \/ Y)) by XBOOLE_1:
+7
+;
+    then A5: dom(F|X) is finite & dom(F|Y) is finite by A3,FINSET_1:13;
+    A6: dom(F|Y) = {} by A3,CARD_2:59;
+    then FinS(F,X \/ Y) = FinS(F,dom(F|X)) by A3,A4,Th66
+    .= FinS(F,X) by A5,Th66
+    .= FinS(F,X)^<*>REAL by FINSEQ_1:47
+    .= FinS(F,X)^FinS(F,dom(F|Y)) by A6,Th71
+    .= FinS(F,X)^ FinS(F,Y) by A3,Th66;
+    hence thesis;
+   end;
+  A7: for n st P[n] holds P[n+1]
+   proof let n; assume
+    A8: P[n];
+    let Y be set, Z be finite set; assume
+    A9: Z = dom(F|Y) &
+     dom(F|(X \/ Y)) is finite & X /\ Y = {} & n+1 = card Z;
+    A10: dom(F|(X \/ Y)) = dom F /\ (X \/ Y) by FUNCT_1:68
+    .= dom F /\ X \/ dom F /\ Y by XBOOLE_1:23
+    .= dom(F|X) \/ dom F /\ Y by FUNCT_1:68
+    .= dom(F|X) \/ dom(F|Y) by FUNCT_1:68;
+    consider x being Element of dom(F|Y);
+    reconsider x as Element of D by A9,CARD_1:47,TARSKI:def 3;
+    set y1 = Y\{x};
+    A11: y1 c= Y by XBOOLE_1:36;
+    then X \/ y1 c= X \/ Y by XBOOLE_1:13;
+    then dom F /\(X \/ y1) c= dom F /\ (X \/ Y) by XBOOLE_1:27;
+    then dom(F|(X \/ y1)) c= dom F /\ (X \/ Y) by FUNCT_1:68;
+    then dom(F|(X \/ y1)) c= dom(F|(X \/ Y)) by FUNCT_1:68;
+    then A12: dom(F|(X \/ y1)) is finite by A9,FINSET_1:13;
+      X /\ y1 c= X /\ Y by A11,XBOOLE_1:27;
+    then A13: X /\ y1 = {} by A9,XBOOLE_1:3;
+    A14: {x} c= dom(F|Y) by A9,CARD_1:47,ZFMISC_1:37;
+    A15: dom(F|y1) = dom F /\ y1 & dom(F|Y)= dom F /\ Y by FUNCT_1:68;
+A16: dom(F|y1) = dom(F|Y) \ {x}
+     proof
+      thus dom(F|y1) c= dom(F|Y) \ {x}
+       proof let y; assume y in dom(F|y1);
+        then A17: y in dom F & y in Y \ {x} by A15,XBOOLE_0:def 3;
+        then A18: y in Y & not y in {x} by XBOOLE_0:def 4;
+        then y in dom(F|Y) by A15,A17,XBOOLE_0:def 3;
+        hence thesis by A18,XBOOLE_0:def 4;
+       end;
+      let y; assume y in dom(F|Y) \{x};
+      then A19: y in dom(F|Y) & not y in {x} by XBOOLE_0:def 4;
+      then A20: y in dom F & y in Y by A15,XBOOLE_0:def 3;
+      then y in y1 by A19,XBOOLE_0:def 4;
+      hence thesis by A15,A20,XBOOLE_0:def 3;
+     end;
+    then reconsider dFy = dom(F|y1) as finite set by A9,FINSET_1:16;
+      card dFy = n+1 - card {x} by A9,A14,A16,CARD_2:63
+    .= n+1-1 by CARD_1:79
+    .= n by XCMPLX_1:26;
+    then FinS(F,X \/ y1), FinS(F,X) ^ FinS(F,y1)
+       are_fiberwise_equipotent by A8,A12,A13;
+    then FinS(F,X \/ y1) ^<*F.x*>, FinS(F,X) ^ FinS(F,y1) ^ <*F.x*>
+      are_fiberwise_equipotent by RFINSEQ:14;
+    then A21: FinS(F,X \/ y1) ^<*F.x*>, FinS(F,X) ^ (FinS(F,y1) ^ <*F.x*>)
+      are_fiberwise_equipotent by FINSEQ_1:45;
+    A22: FinS(F,y1)^<*F.x*>, F|Y are_fiberwise_equipotent by A9,Th69,CARD_1:47;
+      FinS(F,Y), F|Y are_fiberwise_equipotent by A9,Def14;
+    then FinS(F,y1)^<*F.x*>,FinS(F,Y) are_fiberwise_equipotent by A22,RFINSEQ:2
+;
+    then A23: FinS(F,y1)^<*F.x*> ^ FinS(F,X), FinS(F,Y) ^ FinS(F,X)
+      are_fiberwise_equipotent by RFINSEQ:14;
+    A24: FinS(F,X)^(FinS(F,y1)^<*F.x*>),FinS(F,y1)^<*F.x*> ^ FinS(F,X)
+          are_fiberwise_equipotent &
+     FinS(F,Y) ^ FinS(F,X), FinS(F,X) ^ FinS(F,Y) are_fiberwise_equipotent
+        by RFINSEQ:15;
+    then FinS(F,X)^(FinS(F,y1)^<*F.x*>), FinS(F,Y)^FinS(F,X)
+       are_fiberwise_equipotent by A23,RFINSEQ:2;
+    then FinS(F,X)^(FinS(F,y1)^<*F.x*>), FinS(F,X)^FinS(F,Y)
+       are_fiberwise_equipotent by A24,RFINSEQ:2;
+    then A25: FinS(F,X \/ y1) ^<*F.x*>, FinS(F,X) ^ FinS(F,Y)
+       are_fiberwise_equipotent by A21,RFINSEQ:2;
+        now assume
+       A26: x in X;
+         x in Y by A9,A15,CARD_1:47,XBOOLE_0:def 3;
+       hence contradiction by A9,A26,XBOOLE_0:def 3;
+      end;
+    then X \ {x} = X by ZFMISC_1:65;
+    then A27: (X \/ Y) \ {x} = X \/ y1 by XBOOLE_1:42;
+      x in dom(F|(X \/ Y)) by A9,A10,CARD_1:47,XBOOLE_0:def 2;
+    then A28: FinS(F,X \/ y1)^<*F.x*>, F|(X \/ Y)
+      are_fiberwise_equipotent by A9,A27,Th69;
+      FinS(F,X \/ Y), F|(X \/ Y) are_fiberwise_equipotent by A9,Def14;
+    then FinS(F,X \/ y1)^<*F.x*>, FinS(F,X \/ Y)
+     are_fiberwise_equipotent by A28,RFINSEQ:2;
+    hence thesis by A25,RFINSEQ:2;
+   end;
+  A29: for n holds P[n] from Ind(A2,A7);
+  assume
+  A30: X /\ Y = {};
+     card dfy = card dfy;
+  hence thesis by A1,A29,A30;
+ end;
+
+definition let D be non empty set,
+               F be PartFunc of D,REAL,
+               X be set;
+func Sum(F,X) -> Real equals :Def15:
+  Sum(FinS(F,X));
+ correctness;
+end;
+
+theorem Th80:
+for D be non empty set, F be PartFunc of D,REAL, X be set, r be Real
+   st dom(F|X) is finite holds Sum(r(#)F,X) = r * Sum(F,X)
+ proof let D be non empty set, F be PartFunc of D,REAL, X be set, r be Real;
+   assume
+   A1: dom(F|X) is finite;
+    then reconsider FX = F|X as finite Function by AMI_1:21;
+   set x = dom(F|X);
+   consider b be FinSequence such that
+   A2: F|x, b are_fiberwise_equipotent by A1,RFINSEQ:18;
+     x = dom F /\ X by FUNCT_1:68;
+   then A3: F|x = (F|dom F)|X by RELAT_1:100
+   .=F|X by RELAT_1:97;
+     rng(F|x) c= rng F & rng F c= REAL & rng(F|x) = rng b
+    by A2,FUNCT_1:76,RFINSEQ:1;
+   then reconsider b as FinSequence of REAL by FINSEQ_1:def 4;
+     F|X, FinS(F,X) are_fiberwise_equipotent by A1,Def14;
+   then b, FinS(F,X) are_fiberwise_equipotent by A2,A3,RFINSEQ:2;
+   then A4: Sum b = Sum FinS(F,X) by RFINSEQ:22
+   .= Sum(F,X) by Def15;
+   A5: dom((r(#)F)|X) = dom(r(#)F) /\ X by FUNCT_1:68
+   .= dom F /\ X by SEQ_1:def 6
+   .= dom(F|X) by FUNCT_1:68;
+   A6: rng(r*b) c=REAL & rng((r(#)F)|X) c= REAL &
+       rng b c=REAL & rng(F|X) c= REAL;
+   A7: rng b = rng(F|X) by A2,A3,RFINSEQ:1;
+      dom((r(#)F)|X) = dom(r(#)(F|X)) by RFUNCT_1:65
+   .= dom(F|X) by SEQ_1:def 6;
+   then reconsider rFX = (r(#)F)|X as finite Function by A1,AMI_1:21;
+      now let x be Real;
+       r*b = (r multreal) * b by RVSUM_1:def 7;
+     then A8: len(r*b) = len b by FINSEQ_2:37;
+        now per cases;
+      case A9: not x in rng(r*b);
+       then A10: (r*b)"{x} = {} by Lm2;
+          now assume x in rng((r(#)F)|X);
+         then x in rng(r(#)(F|X)) by RFUNCT_1:65;
+         then consider d be Element of D such that
+         A11: d in dom(r(#)(F|X)) & (r(#)(F|X)).d = x by PARTFUN1:26;
+         A12: x=r*(F|X).d & d in dom(F|X) by A11,SEQ_1:def 6;
+         then (F|X).d in rng(F|X) by FUNCT_1:def 5;
+         then consider n such that
+         A13: n in dom b & b.n=(F|X).d by A7,FINSEQ_2:11;
+A14:       n in dom (r*b) by A8,A13,FINSEQ_3:31;
+           x=(r*b).n by A12,A13,RVSUM_1:66;
+         hence contradiction by A9,A14,FUNCT_1:def 5;
+        end;
+       hence card((r*b)"{x}) = card(rFX"{x}) by A10,Lm2;
+      case x in rng(r*b);
+       then consider n such that
+       A15: n in dom(r*b) & (r*b).n = x by FINSEQ_2:11;
+       reconsider p=b.n as Real;
+       A16: x = r*p by A15,RVSUM_1:66;
+          now per cases;
+        case A17: r=0;
+         then A18: (r*b)"{x} = dom b by A16,RFINSEQ:38;
+           dom(FX) =(r(#)(F|X))"{x} by A16,A17,Th9
+         .=((r(#)F)|X)"{x} by RFUNCT_1:65;
+         hence card((r*b)"{x}) = card(rFX"{x})
+           by A2,A3,A18,RFINSEQ:10;
+        case A19: r<>0;
+         then A20: (r*b)"{x} = b"{x/r} by RFINSEQ:37;
+           ((r(#)F)|X)"{x} = (r(#)(F|X))"{x} by RFUNCT_1:65
+         .= (FX)"{x/r} by A19,Th8;
+         hence card((r*b)"{x}) = card(rFX"{x})
+           by A2,A3,A6,A20,RFINSEQ:11;
+        end;
+       hence card((r*b)"{x}) = card(rFX"{x});
+      end;
+     hence card((r*b)"{x}) = card(rFX"{x});
+    end;
+   then A21: r*b , (r(#)F)|X are_fiberwise_equipotent by A6,RFINSEQ:11;
+     (r(#)F)|X, FinS(r(#)F,X) are_fiberwise_equipotent by A1,A5,Def14;
+   then A22: r*b, FinS(r(#)F,X) are_fiberwise_equipotent by A21,RFINSEQ:2;
+   thus Sum(r(#)F,X) = Sum FinS(r(#)F,X) by Def15
+   .= Sum(r*b) by A22,RFINSEQ:22
+   .= r* Sum(F,X) by A4,RVSUM_1:117;
+ end;
+
+theorem Th81:
+for D be non empty set, F,G be PartFunc of D,REAL, X be set, Y being finite set
+ st Y = dom(F|X) & dom(F|X) = dom(G|X) holds Sum(F+G,X) = Sum(F,X) + Sum(G,X)
+ proof let D be non empty set;
+  let F,G be PartFunc of D,REAL, X be set, Y be finite set such that
+A1: Y = dom(F|X);
+  defpred P[Nat] means
+   for F,G be PartFunc of D,REAL, X be set, Y being finite set
+    st card(Y) = $1 & Y = dom(F|X) & dom(F|X) = dom(G|X)
+    holds Sum(F+G,X) = Sum(F,X) + Sum(G,X);
+  A2: P[0]
+   proof let F,G be PartFunc of D,REAL, X be set, Y be finite set; assume
+    A3: card(Y) = 0 & Y = dom(F|X) & dom(F|X) = dom(G|X);
+     then dom(F|X) = {} & dom(G|X) = {} by CARD_2:59;
+    then A4: rng(F|X) = {} & rng(G|X) = {} by RELAT_1:65;
+      FinS(F,X), F|X are_fiberwise_equipotent by A3,Def14;
+    then rng FinS(F,X) = {} by A4,RFINSEQ:1;
+    then FinS(F,X) = <*> REAL by FINSEQ_1:27;
+    then A5: Sum(F,X) = 0 by Def15,RVSUM_1:102;
+      FinS(G,X), G|X are_fiberwise_equipotent by A3,Def14;
+    then rng FinS(G,X) = {} by A4,RFINSEQ:1;
+    then FinS(G,X) = <*> REAL by FINSEQ_1:27;
+    then A6: Sum(F,X) + Sum(G,X) = 0+0 by A5,Def15,RVSUM_1:102;
+      (F+G)|X = F|X + G|X by RFUNCT_1:60;
+    then A7: dom((F+G)|X) = dom(F|X) /\ dom(G|X) by SEQ_1:def 3
+    .= {} by A3,CARD_2:59;
+    then A8: rng ((F+G)|X) = {} & dom((F+G)|X) is finite by RELAT_1:65;
+      FinS(F+G,X), (F+G)|X are_fiberwise_equipotent by A7,Def14;
+    then rng FinS(F+G,X) = {} by A8,RFINSEQ:1;
+    then FinS(F+G,X) = <*> REAL by FINSEQ_1:27;
+    hence thesis by A6,Def15,RVSUM_1:102;
+   end;
+  A9: for n st P[n] holds P[n+1]
+   proof let n; assume
+    A10: P[n];
+    let F,G be PartFunc of D,REAL, X be set, dx be finite set;
+    set gx = dom(G|X); assume
+    A11: card(dx) = n+1 & dx = dom(F|X) & dom(F|X) = dom(G|X);
+    consider x being Element of dx;
+    reconsider x as Element of D by A11,CARD_1:47,TARSKI:def 3;
+    set Y = X\{x},
+       dy = dom(F|Y),
+       gy = dom(G|Y);
+    A12: {x} c= dx & dy=dom F /\ Y & dx=dom F /\ X & gy= dom G /\ Y & gx=dom G
+/\ X
+      by A11,CARD_1:47,FUNCT_1:68,ZFMISC_1:37;
+    then A13: x in dom F & x in X & x in dom G by A11,CARD_1:47,XBOOLE_0:def 3;
+    then {x} c= X & x in dom F /\ dom G by XBOOLE_0:def 3,ZFMISC_1:37;
+    then A14: x in dom(F+G) by SEQ_1:def 3;
+    then x in dom(F+G) /\ X by A13,XBOOLE_0:def 3;
+    then A15: x in dom ((F+G)|X) by FUNCT_1:68;
+A16:    dom((F+G)|X) = dom(F|X + G|X) by RFUNCT_1:60
+    .= dx /\ gx by A11,SEQ_1:def 3;
+    A17: dy = dx \ {x}
+     proof
+      thus dy c= dx \ {x}
+       proof let y; assume y in dy;
+        then A18: y in dom F & y in X \ {x} by A12,XBOOLE_0:def 3;
+        then A19: y in X & not y in {x} by XBOOLE_0:def 4;
+        then y in dx by A12,A18,XBOOLE_0:def 3;
+        hence thesis by A19,XBOOLE_0:def 4;
+       end;
+      let y; assume y in dx \{x};
+      then A20: y in dx & not y in {x} by XBOOLE_0:def 4;
+      then A21: y in dom F & y in X by A12,XBOOLE_0:def 3;
+      then y in Y by A20,XBOOLE_0:def 4;
+      hence thesis by A12,A21,XBOOLE_0:def 3;
+     end;
+    then reconsider dy as finite set;
+    A22: card(dy) = card(dx) - card {x} by A12,A17,CARD_2:63
+     .=n+1-1 by A11,CARD_1:79
+     .= n by XCMPLX_1:26;
+      dy = gy
+     proof
+      thus dy c= gy
+       proof let y; assume y in dy;
+        then A23: y in dom F & y in Y by A12,XBOOLE_0:def 3;
+        then y in X & not y in {x} by XBOOLE_0:def 4;
+        then y in gx by A11,A12,A23,XBOOLE_0:def 3;
+        then y in dom G by A12,XBOOLE_0:def 3;
+        hence thesis by A12,A23,XBOOLE_0:def 3;
+       end;
+      let y; assume y in gy;
+      then A24: y in dom G & y in Y by A12,XBOOLE_0:def 3;
+      then y in X & not y in {x} by XBOOLE_0:def 4;
+      then y in dx by A11,A12,A24,XBOOLE_0:def 3;
+      then y in dom F by A12,XBOOLE_0:def 3;
+      hence thesis by A12,A24,XBOOLE_0:def 3;
+     end;
+    then A25:  Sum(F+G,Y) = Sum(F,Y) + Sum(G,Y) by A10,A22;
+    A26: FinS(F,Y)^<*F.x*>, F|X are_fiberwise_equipotent by A11,Th69,CARD_1:47;
+      FinS(F,X), F|X are_fiberwise_equipotent by A11,Def14;
+    then A27: FinS(F,Y)^<*F.x*>, FinS(F,X) are_fiberwise_equipotent
+       by A26,RFINSEQ:2;
+    A28: Sum(F,X) = Sum(FinS(F,X)) by Def15
+    .= Sum (FinS(F,Y) ^ <*F.x*>) by A27,RFINSEQ:22
+    .= Sum FinS(F,Y) + F.x by RVSUM_1:104
+    .= Sum(F,Y) + F.x by Def15;
+    A29: FinS(G,Y)^<*G.x*>, G|X are_fiberwise_equipotent by A11,Th69,CARD_1:47;
+      FinS(G,X), G|X are_fiberwise_equipotent by A11,Def14;
+    then A30: FinS(G,Y)^<*G.x*>, FinS(G,X)
+      are_fiberwise_equipotent by A29,RFINSEQ:2;
+    A31: FinS(F+G,Y)^<*(F+G).x*>, (F+G)|X
+      are_fiberwise_equipotent by A15,A16,Th69;
+      FinS(F+G,X), (F+G)|X are_fiberwise_equipotent by A16,Def14;
+    then A32: FinS(F+G,Y) ^ <*(F+G).x*>, FinS(F+G,X)
+       are_fiberwise_equipotent by A31,RFINSEQ:2;
+      Sum(G,X) = Sum(FinS(G,X)) by Def15
+    .= Sum (FinS(G,Y)^<*G.x*>) by A30,RFINSEQ:22
+    .= Sum FinS(G,Y) + G.x by RVSUM_1:104
+    .= Sum(G,Y) + G.x by Def15;
+    hence Sum(F,X)+ Sum(G,X) = Sum(F,Y) + F.x + Sum(G,Y) + G.x by A28,XCMPLX_1:
+1
+    .= Sum(F+G,Y) + F.x + G.x by A25,XCMPLX_1:1
+    .= Sum FinS(F+G,Y) + F.x + G.x by Def15
+    .= Sum FinS(F+G,Y) + (F.x + G.x) by XCMPLX_1:1
+    .= Sum FinS(F+G,Y) + (F+G).x by A14,SEQ_1:def 3
+    .= Sum(FinS(F+G,Y)^<*(F+G).x*>) by RVSUM_1:104
+    .= Sum(FinS(F+G,X)) by A32,RFINSEQ:22
+    .= Sum(F+G,X) by Def15;
+   end;
+  A33: for n holds P[n] from Ind(A2,A9);
+  assume
+  A34: dom(F|X) = dom(G|X);
+    card(Y)=card(Y);
+  hence thesis by A1,A33,A34;
+ end;
+
+theorem
+  for D be non empty set, F,G be PartFunc of D,REAL, X be set st
+ dom(F|X) is finite & dom(F|X) = dom(G|X) holds Sum(F-G,X) = Sum(F,X) - Sum
+(G,X)
+ proof let D be non empty set, F,G be PartFunc of D,REAL, X be set; assume
+  A1: dom(F|X) is finite & dom(F|X) = dom(G|X);
+  A2: dom(((-1)(#)G)|X) = dom((-1)(#)G) /\ X by FUNCT_1:68
+  .= dom G /\ X by SEQ_1:def 6
+  .= dom(G|X) by FUNCT_1:68;
+    F-G = F + -G by RFUNCT_1:40
+  .= F+(-1)(#)G by RFUNCT_1:38;
+  hence Sum(F-G,X) = Sum(F,X) + Sum((-1)(#)G,X) by A1,A2,Th81
+  .= Sum(F,X) +(-1)* Sum(G,X) by A1,Th80
+  .= Sum(F,X) + - Sum(G,X) by XCMPLX_1:180
+  .= Sum(F,X) - Sum(G,X) by XCMPLX_0:def 8;
+ end;
+
+theorem
+  for D be non empty set, F be PartFunc of D,REAL, X be set, r be Real,
+  Y being finite set st Y = dom(F|X)
+   holds Sum(F-r,X) = Sum(F,X) - r*card(Y)
+ proof let D be non empty set, F be PartFunc of D,REAL, X be set, r be Real;
+  set fx = FinS(F,X);
+  let Y be finite set;
+  assume
+A1: Y = dom(F|X);
+  set dr = card(Y) |-> r;
+  A2: FinS(F-r,X) = fx - dr by A1,Th76;
+    len fx = card(Y) & len dr = card(Y)
+    by A1,Th70,FINSEQ_2:69;
+  then reconsider xf = fx, rd = dr as Element of (card(Y))-tuples_on REAL
+   by FINSEQ_2:110;
+  thus Sum(F-r,X) = Sum (xf - rd) by A2,Def15
+  .= Sum xf - Sum rd by RVSUM_1:120
+  .= Sum fx - card(Y) * r by RVSUM_1:110
+  .= Sum(F,X) - r*card(Y) by Def15;
+ end;
+
+theorem
+  for D be non empty set, F be PartFunc of D,REAL holds Sum(F,{}) = 0
+ proof
+ let D be non empty set, F be PartFunc of D,REAL;
+  thus Sum(F,{}) = Sum FinS(F,{}) by Def15
+  .= 0 by Th71,RVSUM_1:102;
+ end;
+
+theorem
+  for D be non empty set, F be PartFunc of D,REAL, d be Element of D st
+ d in dom F
+  holds Sum(F,{d}) = F.d
+ proof let D be non empty set, F be PartFunc of D,REAL, d be Element of D;
+  assume A1: d in dom F;
+  thus Sum(F,{d}) = Sum FinS(F,{d}) by Def15
+  .= Sum <*F.d*> by A1,Th72
+  .= F.d by RVSUM_1:103;
+ end;
+
+theorem
+  for D be non empty set, F be PartFunc of D,REAL, X,Y be set st
+ dom(F|(X \/ Y)) is finite & X misses Y holds Sum(F, X \/ Y) = Sum(F,X) + Sum
+(F,Y)
+ proof let D be non empty set, F be PartFunc of D,REAL, X,Y be set; assume
+    dom(F|(X \/ Y)) is finite & X misses Y;
+  then A1: FinS(F,X \/ Y), FinS(F,X) ^ FinS(F,Y) are_fiberwise_equipotent by
+Th79;
+  thus Sum(F, X \/ Y) = Sum FinS(F,X \/ Y) by Def15
+  .= Sum (FinS(F,X) ^ FinS(F,Y)) by A1,RFINSEQ:22
+  .= Sum FinS(F,X) + Sum (FinS(F,Y)) by RVSUM_1:105
+  .= Sum(F,X) + Sum (FinS(F,Y)) by Def15
+  .= Sum(F,X) + Sum(F,Y) by Def15;
+ end;
+
+theorem
+  for D be non empty set, F be PartFunc of D,REAL, X,Y be set st
+ dom(F|(X \/ Y)) is finite & dom(F|X) misses dom(F|Y) holds
+   Sum(F, X \/ Y) = Sum(F,X) + Sum(F,Y)
+ proof let D be non empty set, F be PartFunc of D,REAL, X,Y be set; assume
+  A1: dom(F|(X \/ Y)) is finite & dom(F|X) misses dom(F|Y);
+  A2: dom(F|(X \/ Y)) = dom F /\ (X \/ Y) by FUNCT_1:68
+  .= dom F /\ X \/ dom F /\ Y by XBOOLE_1:23
+  .= dom(F|X) \/ dom F /\ Y by FUNCT_1:68
+  .= dom(F|X) \/ dom(F|Y) by FUNCT_1:68;
+  then dom(F|X) c= dom(F|(X \/ Y)) & dom(F|Y) c= dom(F|(X \/ Y)) by XBOOLE_1:7
+;
+  then dom(F|X) is finite & dom(F|Y) is finite by A1,FINSET_1:13;
+  then A3: FinS(F,X \/ Y) = FinS(F,dom(F|(X \/ Y))) & FinS(F,X) = FinS(F,dom(F|
+X)) &
+      FinS(F,Y) = FinS(F,dom(F|Y)) by A1,Th66;
+    dom(F| dom(F|(X \/ Y))) = dom F /\ dom(F|(X \/ Y)) by FUNCT_1:68
+  .= dom F /\ (dom F /\ (X \/ Y)) by FUNCT_1:68
+  .= dom F /\ dom F /\ (X \/ Y) by XBOOLE_1:16
+  .= dom(F|(X \/ Y)) by FUNCT_1:68;
+  then A4: FinS(F,X \/ Y), FinS(F,X) ^ FinS(F,Y) are_fiberwise_equipotent
+     by A1,A2,A3,Th79;
+  thus Sum(F, X \/ Y) = Sum FinS(F,X \/ Y) by Def15
+  .= Sum (FinS(F,X) ^ FinS(F,Y)) by A4,RFINSEQ:22
+  .= Sum FinS(F,X) + Sum (FinS(F,Y)) by RVSUM_1:105
+  .= Sum(F,X) + Sum (FinS(F,Y)) by Def15
+  .= Sum(F,X) + Sum(F,Y) by Def15;
+ end;

@@ -1,0 +1,1403 @@
+:: Examples of Category Structures
+::  by Adam Grabowski
+::
+:: Received June 11, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_1, MSUALG_1, ALTCAT_1, MSALIMIT, FUNCT_1, CAT_1, PBOOLE,
+      MCART_1, PUA2MSS1, PRALG_1, BOOLE, RELAT_1, RELAT_2, BINOP_1, MSUALG_6,
+      TDGROUP, FUNCT_2, PARTFUN1, CARD_3, TARSKI, FUNCOP_1, ZF_REFLE, NATTRA_1,
+      QC_LANG1, MSUALG_3, FUNCT_6, FINSEQ_4, ALG_1, MSINST_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, MCART_1, RELAT_1,
+      FUNCT_1, STRUCT_0, FUNCT_2, MCART_2, RELSET_1, PARTFUN1, FINSEQ_2,
+      CARD_3, BINOP_1, MULTOP_1, FUNCT_6, PBOOLE, PRALG_1, MSUALG_1, MSUALG_3,
+      EXTENS_1, ALTCAT_1, PRALG_2, AUTALG_1, PUA2MSS1, MSUALG_6, MSALIMIT;
+ constructors AUTALG_1, CLOSURE1, EXTENS_1, MCART_2, MSALIMIT, ALTCAT_1,
+      PUA2MSS1, MSUALG_6;
+ clusters ALTCAT_1, FUNCT_1, MSALIMIT, MSUALG_1, MSUALG_6, PRALG_1, RELSET_1,
+      STRUCT_0, SUBSET_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions ALTCAT_1, MSUALG_3, PBOOLE, TARSKI, XBOOLE_0;
+ theorems ALTCAT_1, ALTCAT_2, AUTALG_1, BINOP_1, CARD_3, CLOSURE1, EXTENS_1,
+      FUNCOP_1, FUNCT_1, FUNCT_2, FUNCT_6, FUNCTOR0, MCART_1, MCART_2,
+      MSSUBFAM, MSUALG_1, MSUALG_3, MSUALG_6, MSALIMIT, MULTOP_1, PARTFUN1,
+      PBOOLE, PRALG_2, PUA2MSS1, RELAT_1, TARSKI, ZFMISC_1, PRALG_1, XBOOLE_1;
+ schemes ALTCAT_1, MSSUBFAM, TARSKI;
+
+begin  :: Category of Many Sorted Signatures
+
+ reserve A for non empty set,
+         S for non void non empty ManySortedSign;
+ reserve x for set;
+
+definition let A;
+  func MSSCat A -> strict non empty AltCatStr means :Def1:
+   the carrier of it = MSS_set A &
+   ( for i, j be Element of MSS_set A holds
+   (the Arrows of it).(i,j) = MSS_morph (i,j) ) &
+    for i,j,k be object of it st
+     i in MSS_set A & j in MSS_set A & k in MSS_set A
+     for f1,f2,g1,g2 be Function st
+      [f1,f2] in (the Arrows of it).(i,j) &
+      [g1,g2] in (the Arrows of it).(j,k) holds
+       (the Comp of it).(i,j,k).([g1,g2],[f1,f2]) = [g1*f1,g2*f2];
+  existence
+  proof
+    set c = MSS_set A;
+    deffunc F((Element of c),Element of c) = MSS_morph ($1,$2);
+    consider M be ManySortedSet of [:c,c:] such that
+A1:  for i,j be Element of c holds M.(i,j) = F(i,j) from MSSLambda2D;
+  defpred P[set,set,set] means
+   ex i,j,k be Element of MSS_set A st $3 = [i,j,k] &
+    for f1,f2,g1,g2 be Function st
+       [f1,f2] in M.(i,j) & [g1,g2] in M.(j,k) & $2 = [[g1,g2],[f1,f2]]
+     holds $1 = [g1*f1,g2*f2];
+A2:for ijk be set st ijk in [:c,c,c:] holds
+   for x be set st x in {|M,M|}.ijk ex y be set st y in {|M|}.ijk & P[y,x,ijk]
+   proof let ijk be set; assume ijk in [:c,c,c:];
+    then consider x1,x2,x3 be set such that
+A3:  x1 in c & x2 in c & x3 in c & ijk = [x1,x2,x3] by MCART_1:72;
+    reconsider x1,x2,x3 as Element of c by A3;
+    let x be set; assume A4: x in {|M,M|}.ijk;
+A5: {|M,M|}.(x1,x2,x3) = {|M,M|}.[x1,x2,x3] by MULTOP_1:def 1;
+      {|M,M|}.(x1,x2,x3) = [:M.(x2,x3),M.(x1,x2):] by ALTCAT_1:def 6;
+    then x`1 in M.(x2,x3) & x`2 in M.(x1,x2) by A3,A4,A5,MCART_1:10;
+then A6: x`1 in MSS_morph (x2,x3) & x`2 in MSS_morph (x1,x2) by A1;
+    then consider f1,f2 be Function such that
+A7:   x`2 = [f1,f2] & f1,f2 form_morphism_between x1,x2 by MSALIMIT:def 10;
+    consider g1,g2 be Function such that
+A8:   x`1 = [g1,g2] & g1,g2 form_morphism_between x2,x3
+      by A6,MSALIMIT:def 10;
+    take y = [g1*f1,g2*f2];
+A9: {|M|}.ijk = {|M|}.(x1,x2,x3) by A3,MULTOP_1:def 1;
+A10: {|M|}.(x1,x2,x3) = M.(x1,x3) by ALTCAT_1:def 5;
+      g1*f1, g2*f2 form_morphism_between x1,x3 by A7,A8,PUA2MSS1:30;
+    then y in MSS_morph (x1,x3) by MSALIMIT:def 10; hence
+      y in {|M|}.ijk by A1,A9,A10;
+    take x1,x2,x3;
+    thus ijk = [x1,x2,x3] by A3;
+    let F1,F2,G1,G2 be Function; assume
+    [F1,F2] in M.(x1,x2) & [G1,G2] in M.(x2,x3) & x = [[G1,G2],[F1,F2]];
+    then x`1 = [G1,G2] & x`2 = [F1,F2] by MCART_1:7;
+    then G1 = g1 & G2 = g2 & F1 = f1 & F2 = f2 by A7,A8,ZFMISC_1:33;
+    hence y = [G1*F1,G2*F2];
+  end;
+  consider F be ManySortedFunction of {|M,M|}, {|M|} such that
+A11: for ijk be set st ijk in [:c,c,c:] holds
+    ex f be Function of {|M,M|}.ijk, {|M|}.ijk st f = F.ijk &
+     for x be set st x in {|M,M|}.ijk holds P[f.x,x,ijk] from MSFExFunc(A2);
+   take EX = AltCatStr (#c,M,F#);
+   reconsider EX as non empty AltCatStr;
+     for i,j,k be object of EX st
+    i in MSS_set A & j in MSS_set A & k in MSS_set A
+    for f1,f2,g1,g2 be Function st [f1,f2] in (the Arrows of EX).(i,j) &
+       [g1,g2] in (the Arrows of EX).(j,k) holds
+     (the Comp of EX).(i,j,k).([g1,g2],[f1,f2]) = [g1*f1,g2*f2]
+    proof
+     let i,j,k be object of EX;
+      assume i in MSS_set A & j in MSS_set A & k in MSS_set A;
+     let f1,f2,g1,g2 be Function;
+     assume A12: [f1,f2] in (the Arrows of EX).(i,j) &
+       [g1,g2] in (the Arrows of EX).(j,k);
+       set ijk = [i,j,k];
+         ijk in [:c,c,c:] by MCART_1:73;
+       then consider f be Function of {|M,M|}.ijk, {|M|}.ijk such that
+A13:    f = F.ijk &
+       for x be set st x in {|M,M|}.ijk holds P[f.x,x,ijk] by A11;
+       set x = [[g1,g2],[f1,f2]];
+A14:    {|M,M|}.(i,j,k) = {|M,M|}.[i,j,k] by MULTOP_1:def 1;
+         {|M,M|}.(i,j,k) = [:M.(j,k),M.(i,j):] by ALTCAT_1:def 6;
+       then x in {|M,M|}.ijk by A12,A14,ZFMISC_1:106;
+       then consider I,J,K be Element of MSS_set A such that
+A15:    ijk = [I,J,K] &
+        for f1,f2,g1,g2 be Function st
+        [f1,f2] in M.(I,J) & [g1,g2] in M.(J,K) & x = [[g1,g2],[f1,f2]]
+        holds f.x = [g1*f1,g2*f2] by A13;
+A16:    f.([g1,g2],[f1,f2]) = f.[[g1,g2],[f1,f2]] by BINOP_1:def 1;
+A17:    I = i & J = j & K = k by A15,MCART_1:28;
+         f = (the Comp of EX).(i,j,k) by A13,MULTOP_1:def 1;
+       hence (the Comp of EX).(i,j,k).([g1,g2],[f1,f2]) = [g1*f1,g2*f2]
+        by A12,A15,A16,A17;
+    end;
+    hence thesis by A1;
+  end;
+  uniqueness
+  proof
+    set c = MSS_set A;
+    let A1, A2 be non empty strict AltCatStr such that
+A18:  the carrier of A1 = MSS_set A &
+    ( for i, j be Element of MSS_set A holds
+    (the Arrows of A1).(i,j) = MSS_morph (i,j) ) &
+    for i,j,k be object of A1 st
+     i in MSS_set A & j in MSS_set A & k in MSS_set A
+     for f1,f2,g1,g2 be Function st
+      [f1,f2] in (the Arrows of A1).(i,j) &
+      [g1,g2] in (the Arrows of A1).(j,k) holds
+       (the Comp of A1).(i,j,k).([g1,g2],[f1,f2]) = [g1*f1,g2*f2] and
+A19:  the carrier of A2 = MSS_set A &
+   ( for i, j be Element of MSS_set A holds
+   (the Arrows of A2).(i,j) = MSS_morph (i,j) ) &
+    for i,j,k be object of A2 st
+     i in MSS_set A & j in MSS_set A & k in MSS_set A
+     for f1,f2,g1,g2 be Function st
+        [f1,f2] in (the Arrows of A2).(i,j) &
+        [g1,g2] in (the Arrows of A2).(j,k) holds
+       (the Comp of A2).(i,j,k).([g1,g2],[f1,f2]) = [g1*f1,g2*f2];
+   reconsider AA1 = the Arrows of A1 as ManySortedSet of [:c, c:] by A18;
+   reconsider AA2 = the Arrows of A2 as ManySortedSet of [:c, c:] by A19;
+A20: now let i, j be Element of MSS_set A;
+     thus AA1.(i,j) = MSS_morph (i,j) by A18
+      .= AA2.(i,j) by A19;
+   end;
+then A21: AA1 = AA2 by ALTCAT_1:9;
+   reconsider CC1 = (the Comp of A1), CC2 = the Comp of A2 as
+        ManySortedSet of [:c,c,c:] by A18,A19;
+     now let i,j,k be set;
+    assume A22: i in MSS_set A & j in MSS_set A & k in MSS_set A;
+    then reconsider i'=i,j'=j,k'=k as Element of c;
+    reconsider I = i,J = j,K = k as Element of A1 by A18,A22;
+    reconsider I' = i,J' = j,K' = k as Element of A2 by A19,A22;
+    set ijk = [i,j,k];
+A23: CC1.(i,j,k) = CC1.[i,j,k] & CC2.(i,j,k) = CC2.[i,j,k] by MULTOP_1:def 1;
+A24: ijk in [:c,c,c:] by A22,MCART_1:73;
+    thus CC1.(i,j,k) = CC2.(i,j,k)
+    proof
+     reconsider Ci = CC1.ijk as Function of {|AA1,AA1|}.ijk, {|AA1|}.ijk
+       by A18,A24,MSUALG_1:def 2;
+     reconsider Cj = CC2.ijk as Function of {|AA2,AA2|}.ijk, {|AA2|}.ijk
+       by A19,A24,MSUALG_1:def 2;
+     per cases;
+      suppose
+      A25: {|AA1|}.ijk <> {};
+      then {|AA2|}.ijk <> {} by A20,ALTCAT_1:9;
+then A26:  dom Ci = {|AA1,AA1|}.ijk & dom Cj = {|AA2,AA2|}.ijk
+             by A25,FUNCT_2:def 1;
+       for x be set st x in {|AA1,AA1|}.ijk holds Ci.x = Cj.x
+     proof
+       let x be set; assume x in {|AA1,AA1|}.ijk;
+       then x in {|AA1,AA1|}.(i,j,k) & x in {|AA2,AA2|}.(i,j,k)
+                  by A21,MULTOP_1:def 1;
+then A27:     x in [:AA1.(j,k),AA1.(i,j):] & x in [:AA2.(j,k),AA2.(i,j):]
+             by A22,ALTCAT_1:def 6;
+then A28:    x`1 in AA1.(j,k) & x`2 in AA1.(i,j) & x`1 in AA2.(j,k) & x`2 in
+ AA2.(i,j)
+          by MCART_1:10;
+then A29:    x`1 in MSS_morph (j',k') & x`2 in MSS_morph (i',j') by A18;
+       then consider g1,g2 be Function such that
+A30:     x`1 = [g1,g2] & g1,g2 form_morphism_between j',k' by MSALIMIT:def 10;
+       consider f1,f2 be Function such that
+A31:     x`2 = [f1,f2] & f1,f2 form_morphism_between i',j'
+         by A29,MSALIMIT:def 10;
+A32:     x = [[g1,g2],[f1,f2]] by A27,A30,A31,MCART_1:23;
+         Ci.x = (the Comp of A1).(I,J,K).x by MULTOP_1:def 1
+          .= (the Comp of A1).(I,J,K).([g1,g2],[f1,f2]) by A32,BINOP_1:def 1
+          .= [g1*f1,g2*f2] by A18,A28,A30,A31
+          .= (the Comp of A2).(I',J',K').([g1,g2],[f1,f2])
+                by A19,A28,A30,A31
+          .= (the Comp of A2).(I',J',K').x by A32,BINOP_1:def 1
+          .= Cj.x by MULTOP_1:def 1;
+       hence thesis;
+     end;
+     hence thesis by A21,A23,A26,FUNCT_1:9;
+     suppose {|AA1|}.ijk = {};
+      then rng Ci = {} & rng Cj = {} by A21,XBOOLE_1:3;
+      then Ci = {} & Cj = {} by RELAT_1:64;
+      hence thesis by A23;
+   end;
+  end;
+  hence A1 = A2 by A18,A19,A21,ALTCAT_1:10;
+ end;
+end;
+
+definition let A;
+  cluster MSSCat A -> transitive associative with_units;
+  coherence
+  proof
+   set G = MSSCat A;
+   thus G is transitive
+   proof
+   let o1,o2,o3 be object of G;
+   reconsider o1'=o1, o2'=o2,o3'=o3 as Element of MSS_set A by Def1;
+   assume <^o1,o2^> <> {} & <^o2,o3^> <> {};
+   then (the Arrows of G).(o1,o2) <> {} & (the Arrows of G).(o2,o3) <> {}
+     by ALTCAT_1:def 2;
+then A1: MSS_morph (o1',o2') <> {} & MSS_morph (o2',o3') <> {} by Def1;
+     consider t be Element of MSS_morph (o1',o2');
+     consider s be Element of MSS_morph (o2',o3');
+     consider f,g be Function such that
+A2:    t = [f,g] & f,g form_morphism_between o1',o2' by A1,MSALIMIT:def 10;
+    consider u,w be Function such that
+A3:    s = [u,w] & u,w form_morphism_between o2',o3' by A1,MSALIMIT:def 10;
+      u * f , w * g form_morphism_between o1',o3' by A2,A3,PUA2MSS1:30;
+    then [u * f, w * g] in MSS_morph (o1',o3') by MSALIMIT:def 10;
+    then [u * f, w * g] in (the Arrows of G).(o1,o3) by Def1;
+    hence <^o1,o3^> <> {} by ALTCAT_1:def 2;
+   end;
+   set M = MSSCat A;
+   set G = the Arrows of M, C = the Comp of M;
+   thus C is associative
+   proof
+     let i,j,k,l be Element of M;
+     reconsider i'=i,j'=j,k'=k,l'=l as Element of MSS_set A by Def1;
+     reconsider I=i,J=j,K=k,L=l as object of M;
+  I in the carrier of M & J in the carrier of M & K in the carrier of M &
+       L in the carrier of M;
+then A4:  I in MSS_set A & J in MSS_set A & K in MSS_set A & L in MSS_set A
+       by Def1;
+     let f,g,h be set; assume A5: f in G.(i,j) & g in G.(j,k) & h in G.(k,l);
+then A6:  f in MSS_morph (i',j') &
+     g in MSS_morph (j',k') & h in MSS_morph (k',l') by Def1;
+     then consider f1,f2 be Function such that
+A7:      f = [f1,f2] & f1,f2 form_morphism_between i',j' by MSALIMIT:def 10;
+     consider g1,g2 be Function such that
+A8:      g = [g1,g2] & g1,g2 form_morphism_between j',k'
+         by A6,MSALIMIT:def 10;
+     consider h1,h2 be Function such that
+A9:      h = [h1,h2] & h1,h2 form_morphism_between k',l'
+        by A6,MSALIMIT:def 10;
+A10: C.(i,j,k).(g,f) = [g1*f1,g2*f2] by A5,A7,A8,Def1;
+      g1*f1,g2*f2 form_morphism_between i',k' by A7,A8,PUA2MSS1:30;
+    then [g1*f1,g2*f2] in MSS_morph (i',k') by MSALIMIT:def 10;
+    then [g1*f1,g2*f2] in G.(i,k) by Def1;
+then A11: C.(i,k,l).(h,[g1*f1,g2*f2]) = [h1*(g1*f1),h2*(g2*f2)] by A4,A5,A9,
+Def1;
+A12: C.(j,k,l).(h,g) = [h1*g1,h2*g2] by A5,A8,A9,Def1;
+      h1*g1,h2*g2 form_morphism_between j',l' by A8,A9,PUA2MSS1:30;
+    then [h1*g1,h2*g2] in MSS_morph (j',l') by MSALIMIT:def 10;
+then A13: [h1*g1,h2*g2] in G.(j,l) by Def1;
+      h1*g1*f1 = h1*(g1*f1) & h2*g2*f2 = h2*(g2*f2) by RELAT_1:55;
+    hence thesis by A4,A5,A7,A10,A11,A12,A13,Def1;
+   end;
+   thus C is with_left_units
+   proof
+     let j be Element of M;
+     reconsider j' = j as Element of MSS_set A by Def1;
+     set e1 = id the carrier of j',e2 = id the OperSymbols of j';
+A14:   e1, e2 form_morphism_between j',j' by PUA2MSS1:29;
+     take e = [e1,e2];
+       G.(j,j) = MSS_morph (j',j') by Def1;
+     hence A15: e in G.(j,j) by A14,MSALIMIT:def 10;
+     let i be Element of M; let f be set;
+     reconsider i' = i as Element of MSS_set A by Def1;
+     assume A16: f in G.(i,j);
+     then f in MSS_morph (i',j') by Def1;
+     then consider f1,f2 be Function such that
+A17:    f = [f1,f2] & f1,f2 form_morphism_between i',j' by MSALIMIT:def 10;
+     reconsider I=i,J=j as object of M;
+A18:   C.(I,J,J).([e1,e2],[f1,f2]) = [e1*f1,e2*f2] by A15,A16,A17,Def1;
+A19:   rng f1 c= the carrier of j' & rng f2 c= the OperSymbols of j'
+       by A17,PUA2MSS1:def 13;
+then e1*f1 = f1 by RELAT_1:79;
+     hence C.(i,j,j).(e,f) = f by A17,A18,A19,RELAT_1:79;
+   end;
+   thus C is with_right_units
+   proof
+     let i be Element of M;
+     reconsider i' = i as Element of MSS_set A by Def1;
+     set e1 = id the carrier of i',e2 = id the OperSymbols of i';
+A20:   e1, e2 form_morphism_between i',i' by PUA2MSS1:29;
+     take e = [e1,e2];
+       G.(i,i) = MSS_morph (i',i') by Def1;
+     hence A21: e in G.(i,i) by A20,MSALIMIT:def 10;
+     let j be Element of M; let f be set;
+     reconsider j' = j as Element of MSS_set A by Def1;
+     assume A22: f in G.(i,j);
+     then f in MSS_morph (i',j') by Def1;
+     then consider f1,f2 be Function such that
+A23:    f = [f1,f2] & f1,f2 form_morphism_between i',j' by MSALIMIT:def 10;
+     reconsider I=i,J=j as object of M;
+A24:   C.(I,I,J).([f1,f2],[e1,e2]) = [f1*e1,f2*e2] by A21,A22,A23,Def1;
+A25:   dom f1 = the carrier of i' & dom f2 = the OperSymbols of i'
+       by A23,PUA2MSS1:def 13;
+then f1*e1 = f1 by RELAT_1:78;
+     hence C.(i,i,j).(f,e) = f by A23,A24,A25,RELAT_1:78;
+   end;
+  end;
+end;
+
+theorem
+   for C be category st C = MSSCat A
+  for o be object of C holds o is non empty non void ManySortedSign
+  proof
+   let C be category; assume A1: C = MSSCat A;
+   let o be object of C;
+   reconsider o as Element of MSS_set A by A1,Def1;
+     o is non empty non void ManySortedSign;
+   hence thesis;
+  end;
+
+definition let S;
+  cluster strict feasible MSAlgebra over S;
+  existence
+   proof
+    consider M be feasible MSAlgebra over S;
+    take E = the MSAlgebra of M;
+    thus E is strict;
+      now let o be OperSymbol of S;
+A1:   Result (o,M) = ((the Sorts of E) * the ResultSort of S).o by MSUALG_1:def
+10
+        .= Result (o,E) by MSUALG_1:def 10;
+        Args (o,M) = ((the Sorts of E)# * the Arity of S).o by MSUALG_1:def 9
+        .= Args (o,E) by MSUALG_1:def 9;
+      hence Args(o,E) <> {} implies Result(o,E) <> {} by A1,MSUALG_6:def 1;
+    end;
+    hence E is feasible by MSUALG_6:def 1;
+  end;
+end;
+
+definition let S, A;
+  func MSAlg_set (S,A) means :Def2:
+   x in it iff ex M be strict feasible MSAlgebra over S st x = M &
+     for C be Component of the Sorts of M holds C c= A;
+  existence
+  proof
+   defpred P[set,set] means
+    ex M be strict feasible MSAlgebra over S st M = $2 &
+     $1 = [the Sorts of M, the Charact of M ];
+A1:  for x,y,z be set st P[x,y] & P[x,z] holds y = z
+    proof
+      let x,y,z be set;
+      given M be strict feasible MSAlgebra over S such that A2: M = y &
+       x = [the Sorts of M, the Charact of M ];
+      given N be strict feasible MSAlgebra over S such that A3: N = z &
+        x = [the Sorts of N, the Charact of N ];
+        the Sorts of M = the Sorts of N &
+      the Charact of M = the Charact of N by A2,A3,ZFMISC_1:33;
+      hence thesis by A2,A3;
+    end;
+    consider X be set such that
+A4:   x in X iff ex y be set st y in [:Funcs (the carrier of S, bool A) ,
+      Funcs (the OperSymbols of S,PFuncs(PFuncs (NAT ,A),A)):]
+       & P[y,x] from Fraenkel (A1);
+    take X;
+    thus x in X iff ex M be strict feasible MSAlgebra over S st x = M &
+      for C be Component of the Sorts of M holds C c= A
+    proof
+      hereby assume x in X;
+        then consider y be set such that
+A5:      y in [:Funcs (the carrier of S, bool A) ,
+          Funcs (the OperSymbols of S,PFuncs
+          (PFuncs (NAT,A),A)):] & P[y,x] by A4;
+        consider M be strict feasible MSAlgebra over S such that A6: M = x &
+          y = [the Sorts of M, the Charact of M ] by A5;
+        take M;
+        thus x = M by A6;
+        thus for C be Component of the Sorts of M holds C c= A
+        proof
+          let C be Component of the Sorts of M;
+          per cases;
+          suppose rng the Sorts of M is non empty;
+          then reconsider RS = rng the Sorts of M as non empty set;
+            C in RS;
+          then consider y1 be set such that A7: y1 in dom the Sorts of M &
+            C = (the Sorts of M).y1 by FUNCT_1:def 5;
+            the Sorts of M in Funcs (the carrier of S, bool A)
+            by A5,A6,ZFMISC_1:106;
+          then consider f be Function such that A8: the Sorts of M = f &
+           dom f = the carrier of S & rng f c= bool A by FUNCT_2:def 2;
+            f.y1 in rng f by A7,A8,FUNCT_1:def 5;
+          hence C c= A by A7,A8;
+          suppose rng the Sorts of M is empty;
+          then dom the Sorts of M = {} by RELAT_1:65;
+          hence thesis by PBOOLE:def 3;
+        end;
+      end;
+      given M be strict feasible MSAlgebra over S such that A9: x = M &
+       for C be Component of the Sorts of M holds C c= A;
+      consider y be set such that A10: y = [the Sorts of M, the Charact of M];
+A11:    dom the Sorts of M = the carrier of S by PBOOLE:def 3;
+      then reconsider SM = the Sorts of M as Function of the carrier of S,
+        rng the Sorts of M by FUNCT_2:3;
+A12:    rng SM <> {} by A11,RELAT_1:65;
+A13:    rng the Sorts of M c= bool A
+      proof
+        let x be set; assume x in rng the Sorts of M;
+        then reconsider x' = x as Component of the Sorts of M;
+          x' c= A by A9;
+        hence thesis;
+      end;
+      then reconsider SM' = SM as Function of the carrier of S, bool A
+                             by A12,FUNCT_2:8;
+A14:    SM' in Funcs (the carrier of S, bool A) by FUNCT_2:11;
+A15:    dom the Charact of M = the OperSymbols of S by PBOOLE:def 3;
+    rng the Charact of M c= PFuncs(PFuncs (NAT,A),A)
+      proof
+        let x be set; assume x in rng the Charact of M;
+        then consider x1 be set such that A16: x1 in dom the Charact of M &
+         x = (the Charact of M).x1 by FUNCT_1:def 5;
+        reconsider SA = (the Sorts of M)# * the Arity of S,
+           SR = (the Sorts of M) * the ResultSort of S
+             as ManySortedSet of the OperSymbols of S;
+        reconsider CM = the Charact of M as ManySortedFunction of SA,SR;
+A17:      x1 in the OperSymbols of S by A16,PBOOLE:def 3;
+A18:      x1 in dom SR & x1 in dom SA by A15,A16,PBOOLE:def 3;
+        reconsider Cm = CM.x1 as Function of SA.x1, SR.x1
+          by A15,A16,MSUALG_1:def 2;
+        A19: (the ResultSort of S).x1 in the carrier of S by A15,A16,FUNCT_2:7;
+          SR.x1 = (the Sorts of M).((the ResultSort of S).x1)
+           by A18,FUNCT_1:22;
+        then A20: SR.x1 in rng (the Sorts of M) by A11,A19,FUNCT_1:def 5;
+          SA.x1 c= PFuncs (NAT ,A)
+        proof
+          let a be set; assume a in SA.x1;
+then A21:        a in ((the Sorts of M)# ).((the Arity of S).x1) by A18,FUNCT_1
+:22;
+          reconsider AX = (the Arity of S).x1
+                    as Element of (the carrier of S)* by A17,FUNCT_2:7;
+            ((the Sorts of M)# ).AX =
+            product ( (the Sorts of M) * AX) by MSUALG_1:def 3;
+          then consider g be Function such that
+A22:          a = g & dom g = dom ( (the Sorts of M) * AX) &
+           for x2 be set st x2 in dom ((the Sorts of M) * AX) holds
+            g.x2 in ((the Sorts of M) * AX).x2 by A21,CARD_3:def 5;
+          reconsider a'=a as Function by A22;
+        rng AX c= dom the Sorts of M by A11;
+then A23:        dom a' = dom AX by A22,RELAT_1:46;
+            rng a' c= A
+          proof
+            let r be set; assume r in rng a';
+            then consider r1 be set such that
+A24:            r1 in dom a' & r = a'.r1 by FUNCT_1:def 5;
+              r in ((the Sorts of M) * AX).r1 by A22,A24;
+then A25:         r in (the Sorts of M).(AX.r1) by A23,A24,FUNCT_1:23;
+              rng the Sorts of M c= bool A
+            proof
+              let w be set; assume w in rng the Sorts of M;
+              then reconsider w'=w as Component of the Sorts of M;
+                w' c= A by A9;
+              hence thesis;
+            end;
+then A26:         union rng the Sorts of M c= union bool A by ZFMISC_1:95;
+              AX.r1 in rng AX by A23,A24,FUNCT_1:def 5;
+            then (the Sorts of M).(AX.r1) in rng the Sorts of M by A11,FUNCT_1:
+def 5;
+            then r in union rng the Sorts of M by A25,TARSKI:def 4;
+            then r in union bool A by A26;
+            hence thesis by ZFMISC_1:99;
+          end;
+          hence a in PFuncs (NAT ,A) by A23,PARTFUN1:def 5;
+        end;
+        then dom Cm c= PFuncs(NAT,A) & rng Cm c= A by A13,A20,XBOOLE_1:1;
+        hence thesis by A16,PARTFUN1:def 5;
+      end;
+      then the Charact of M in
+       Funcs (the OperSymbols of S,PFuncs(PFuncs (NAT ,A),A))
+        by A15,FUNCT_2:def 2;
+      then y in [:Funcs (the carrier of S, bool A) ,
+      Funcs (the OperSymbols of S,PFuncs(PFuncs (NAT ,A),A)):]
+       & ex M be strict feasible MSAlgebra over S st M = x &
+       y = [the Sorts of M, the Charact of M ] by A9,A10,A14,ZFMISC_1:106;
+      hence x in X by A4;
+    end;
+  end;
+  uniqueness
+  proof
+    let A1, A2 be set;
+    assume A27: x in A1 iff ex M be strict feasible MSAlgebra over S st x = M &
+     for C be Component of the Sorts of M holds C c= A;
+    assume A28: x in A2 iff ex N be strict feasible MSAlgebra over S st x = N &
+     for C be Component of the Sorts of N holds C c= A;
+    thus A1 = A2
+    proof
+      thus A1 c= A2
+      proof
+        let a be set; assume a in A1;
+        then consider M be strict feasible MSAlgebra over S such that
+A29:      a = M & for C be Component of the Sorts of M holds C c= A by A27;
+        thus a in A2 by A28,A29;
+      end;
+      thus A2 c= A1
+      proof
+        let a be set; assume a in A2;
+        then consider M be strict feasible MSAlgebra over S such that
+A30:      a = M & for C be Component of the Sorts of M holds C c= A by A28;
+        thus a in A1 by A27,A30;
+      end;
+    end;
+  end;
+end;
+
+definition let S, A;
+  cluster MSAlg_set (S,A) -> non empty;
+  coherence
+  proof
+    consider a be Element of A;
+      dom ((the carrier of S) --> {a}) = the carrier of S by FUNCOP_1:19;
+    then reconsider f = (the carrier of S) --> {a} as
+       ManySortedSet of the carrier of S by PBOOLE:def 3;
+    consider Ch being ManySortedFunction of
+      f# * the Arity of S, f * the ResultSort of S;
+    set Ex = MSAlgebra(#f,Ch#);
+   for i be set st i in the carrier of S holds
+      f.i is non empty by FUNCOP_1:13;
+    then the Sorts of Ex is non-empty by PBOOLE:def 16;
+    then reconsider Ex as non-empty MSAlgebra over S
+      by MSUALG_1:def 8;
+    reconsider Ex as strict feasible MSAlgebra over S;
+      for C be Component of the Sorts of Ex holds C c= A
+    proof
+     let C be Component of the Sorts of Ex;
+     consider i be set such that A1: i in the carrier of S &
+      C = (the Sorts of Ex).i by MSUALG_1:2;
+       C = {a} by A1,FUNCOP_1:13;
+     hence thesis by ZFMISC_1:37;
+    end;
+    hence thesis by Def2;
+  end;
+end;
+
+begin :: Category of Many Sorted Algebras
+
+ reserve o for OperSymbol of S;
+
+theorem Th2:
+ for x be MSAlgebra over S st x in MSAlg_set (S,A) holds
+  the Sorts of x in Funcs (the carrier of S, bool A) &
+  the Charact of x in Funcs (the OperSymbols of S,PFuncs(PFuncs (NAT ,A),A))
+  proof
+    let x be MSAlgebra over S;
+    assume x in MSAlg_set (S,A);
+      then consider M be strict feasible MSAlgebra over S such that A1: x = M &
+       for C be Component of the Sorts of M holds C c= A by Def2;
+A2:    dom the Sorts of M = the carrier of S by PBOOLE:def 3;
+      then reconsider SM = the Sorts of M as Function of the carrier of S,
+        rng the Sorts of M by FUNCT_2:3;
+A3:    rng SM <> {} by A2,RELAT_1:65;
+A4:    rng the Sorts of M c= bool A
+      proof
+        let x be set; assume x in rng the Sorts of M;
+        then reconsider x' = x as Component of the Sorts of M;
+          x' c= A by A1;
+        hence thesis;
+      end;
+      then reconsider SM' = SM as Function of the carrier of S, bool A
+                             by A3,FUNCT_2:8;
+A5:    SM' in Funcs (the carrier of S, bool A) by FUNCT_2:11;
+A6:    dom the Charact of M = the OperSymbols of S by PBOOLE:def 3;
+    rng the Charact of M c= PFuncs(PFuncs (NAT,A),A)
+      proof
+        let x be set; assume x in rng the Charact of M;
+        then consider x1 be set such that A7: x1 in dom the Charact of M &
+         x = (the Charact of M).x1 by FUNCT_1:def 5;
+        reconsider SA = (the Sorts of M)# * the Arity of S,
+           SR = (the Sorts of M) * the ResultSort of S
+             as ManySortedSet of the OperSymbols of S;
+        reconsider CM = the Charact of M as ManySortedFunction of SA,SR;
+A8:      x1 in the OperSymbols of S by A7,PBOOLE:def 3;
+A9:      x1 in dom SR & x1 in dom SA by A6,A7,PBOOLE:def 3;
+        reconsider Cm = CM.x1 as Function of SA.x1, SR.x1
+          by A6,A7,MSUALG_1:def 2;
+        A10: (the ResultSort of S).x1 in the carrier of S by A6,A7,FUNCT_2:7;
+          SR.x1 = (the Sorts of M).((the ResultSort of S).x1)
+           by A9,FUNCT_1:22;
+        then A11: SR.x1 in rng (the Sorts of M) by A2,A10,FUNCT_1:def 5;
+          SA.x1 c= PFuncs (NAT ,A)
+        proof
+          let a be set; assume a in SA.x1;
+then A12:        a in ((the Sorts of M)# ).((the Arity of S).x1) by A9,FUNCT_1:
+22;
+          reconsider AX = (the Arity of S).x1
+                    as Element of (the carrier of S)* by A8,FUNCT_2:7;
+            ((the Sorts of M)# ).AX =
+            product ( (the Sorts of M) * AX) by MSUALG_1:def 3;
+          then consider g be Function such that
+A13:          a = g & dom g = dom ( (the Sorts of M) * AX) &
+           for x2 be set st x2 in dom ((the Sorts of M) * AX) holds
+            g.x2 in ((the Sorts of M) * AX).x2 by A12,CARD_3:def 5;
+          reconsider a'=a as Function by A13;
+        rng AX c= dom the Sorts of M by A2;
+then A14:        dom a' = dom AX by A13,RELAT_1:46;
+            rng a' c= A
+          proof
+            let r be set; assume r in rng a';
+            then consider r1 be set such that
+A15:            r1 in dom a' & r = a'.r1 by FUNCT_1:def 5;
+              r in ((the Sorts of M) * AX).r1 by A13,A15;
+then A16:         r in (the Sorts of M).(AX.r1) by A14,A15,FUNCT_1:23;
+              rng the Sorts of M c= bool A
+            proof
+              let w be set; assume w in rng the Sorts of M;
+              then reconsider w'=w as Component of the Sorts of M;
+                w' c= A by A1;
+              hence thesis;
+            end;
+then A17:         union rng the Sorts of M c= union bool A by ZFMISC_1:95;
+              AX.r1 in rng AX by A14,A15,FUNCT_1:def 5;
+            then (the Sorts of M).(AX.r1) in rng the Sorts of M by A2,FUNCT_1:
+def 5;
+            then r in union rng the Sorts of M by A16,TARSKI:def 4;
+            then r in union bool A by A17;
+            hence thesis by ZFMISC_1:99;
+          end;
+          hence a in PFuncs (NAT ,A) by A14,PARTFUN1:def 5;
+        end;
+        then dom Cm c= PFuncs(NAT,A) & rng Cm c= A by A4,A11,XBOOLE_1:1;
+        hence thesis by A7,PARTFUN1:def 5;
+      end;
+     hence thesis by A1,A5,A6,FUNCT_2:def 2;
+  end;
+
+theorem Th3:
+ for U1,U2 be MSAlgebra over S
+   st the Sorts of U1 is_transformable_to the Sorts of U2 &
+      Args (o,U1) <> {} holds Args (o,U2) <> {}
+   proof
+     let U1,U2 be MSAlgebra over S;
+A1:  the OperSymbols of S <> {} by MSUALG_1:def 5;
+     A2: dom (the Arity of S) = the OperSymbols of S by FUNCT_2:def 1;
+then A3:   ((the Sorts of U1)# * the Arity of S).o =
+       (the Sorts of U1)# . ((the Arity of S).o) by A1,FUNCT_1:23
+       .= (the Sorts of U1)# . (the_arity_of o) by MSUALG_1:def 6;
+     assume A4: the Sorts of U1 is_transformable_to the Sorts of U2 &
+       Args (o,U1) <> {};
+      then ((the Sorts of U1)# * the Arity of S).o <> {}
+ by MSUALG_1:def 9;
+      then product ((the Sorts of U1) * (the_arity_of o)) <> {} by A3,MSUALG_1:
+def 3;
+      then A5: not {} in rng ((the Sorts of U1) * (the_arity_of o)) by CARD_3:
+37;
+       dom (the Sorts of U1) = the carrier of S by PBOOLE:def 3;
+     then rng (the_arity_of o) c= dom (the Sorts of U1);
+then A6:  dom ((the Sorts of U1) * (the_arity_of o)) = dom (the_arity_of o)
+            by RELAT_1:46;
+A7:  dom ((the Sorts of U2) * (the_arity_of o)) c= dom (the_arity_of o)
+            by RELAT_1:44;
+     now let x be set; assume A8: x in dom ((the Sorts of U2) * (the_arity_of o
+)
+);
+then A9:  ((the Sorts of U1) * (the_arity_of o)).x =
+        (the Sorts of U1).((the_arity_of o).x) by A7,FUNCT_1:23;
+        (the_arity_of o).x in rng (the_arity_of o) by A7,A8,FUNCT_1:def 5;
+      then (the Sorts of U1).((the_arity_of o).x) <> {} implies
+      (the Sorts of U2).((the_arity_of o).x) <> {} by A4,AUTALG_1:def 4;
+      hence ((the Sorts of U2)*(the_arity_of o)).x <> {} by A5,A6,A7,A8,A9,
+FUNCT_1:23,def 5;
+   end;
+     then not {} in rng ((the Sorts of U2) * (the_arity_of o)) by FUNCT_1:def 5
+;
+     then product ((the Sorts of U2)*(the_arity_of o)) <> {} by CARD_3:37;
+     then (the Sorts of U2)# . (the_arity_of o) <> {} by MSUALG_1:def 3;
+     then (the Sorts of U2)# . ((the Arity of S).o) <> {} by MSUALG_1:def 6;
+     then ((the Sorts of U2)# * the Arity of S).o <> {} by A1,A2,FUNCT_1:23;
+     hence Args (o,U2) <> {} by MSUALG_1:def 9;
+   end;
+
+theorem Th4:
+for U1,U2,U3 be feasible MSAlgebra over S,
+    F be ManySortedFunction of U1,U2,
+    G be ManySortedFunction of U2,U3,
+  x be Element of Args(o,U1) st Args (o,U1) <> {} &
+    the Sorts of U1 is_transformable_to the Sorts of U2
+  & the Sorts of U2 is_transformable_to the Sorts of U3
+  ex GF be ManySortedFunction of U1,U3 st
+   GF = G ** F & GF#x = G#(F#x)
+proof
+  let U1,U2,U3 be feasible MSAlgebra over S,
+    F be ManySortedFunction of U1,U2,
+    G be ManySortedFunction of U2,U3, x be Element of Args(o,U1);
+    assume A1: Args (o,U1) <> {} &
+      the Sorts of U1 is_transformable_to the Sorts of U2
+    & the Sorts of U2 is_transformable_to the Sorts of U3;
+then A2: the Sorts of U1 is_transformable_to the Sorts of U3 by AUTALG_1:11;
+    reconsider GF = G ** F as ManySortedFunction of U1,U3 by A1,ALTCAT_2:4;
+A3:  Args (o,U2) <> {} & Args (o,U3) <> {} by A1,A2,Th3;
+    take GF;
+    thus GF = G ** F;
+      x in Args (o,U1) by A1;
+    then x in product ((the Sorts of U1)*(the_arity_of o)) by PRALG_2:10;
+    then consider g be Function such that A4: x = g &
+    dom g = dom ((the Sorts of U1)*(the_arity_of o)) &
+       for x st x in dom ((the Sorts of U1)*(the_arity_of o)) holds
+        g.x in ((the Sorts of U1)*(the_arity_of o)).x by CARD_3:def 5;
+    reconsider x' = x as Function by A4;
+A5: dom GF = the carrier of S by PBOOLE:def 3;
+   dom G = the carrier of S by PBOOLE:def 3;
+    then rng (the_arity_of o) c= dom G;
+then A6: dom (G*the_arity_of o) = dom (the_arity_of o) by RELAT_1:46;
+      rng (the_arity_of o) c= dom GF by A5;
+then A7: dom (GF*the_arity_of o) = dom (the_arity_of o) by RELAT_1:46;
+      dom (the Sorts of U1) = the carrier of S by PBOOLE:def 3;
+then A8: rng (the_arity_of o) c= dom (the Sorts of U1);
+      dom doms (GF*the_arity_of o) = dom (GF*the_arity_of o) by EXTENS_1:3;
+    then A9: dom x' = dom doms (GF*the_arity_of o) by A1,A7,MSUALG_3:6;
+      now let x be set; assume A10: x in dom doms (GF*the_arity_of o);
+      then x in dom (GF*the_arity_of o) by EXTENS_1:3;
+then A11:  (doms (GF*the_arity_of o)).x = dom ((GF*the_arity_of o).x) by
+FUNCT_6:31;
+A12:   x in dom (the_arity_of o) by A7,A10,EXTENS_1:3;
+      then x in dom ((the Sorts of U1) * (the_arity_of o)) by A8,RELAT_1:46;
+then A13:   x'.x in ((the Sorts of U1) * (the_arity_of o)).x by A1,MSUALG_3:6;
+      set ds = ((the_arity_of o).x);
+A14:   ds in rng (the_arity_of o) by A12,FUNCT_1:def 5;
+      then reconsider Gf = GF.ds as Function of (the Sorts of U1).ds,
+         (the Sorts of U3).ds by MSUALG_1:def 2;
+    (the Sorts of U1).ds = dom Gf
+      proof
+        per cases;
+        suppose (the Sorts of U3).ds <> {};
+        hence thesis by FUNCT_2:def 1;
+        suppose (the Sorts of U3).ds = {};
+        then (the Sorts of U1).ds = {} by A2,A14,AUTALG_1:def 4;
+        hence thesis by FUNCT_2:def 1;
+      end;
+      then x'.x in dom (GF.ds) by A12,A13,FUNCT_1:23;
+      hence x'.x in (doms (GF*the_arity_of o)).x by A11,A12,FUNCT_1:23;
+    end;
+then A15: x' in product doms (GF*the_arity_of o) by A9,CARD_3:18;
+      dom F = the carrier of S by PBOOLE:def 3;
+then A16: rng (the_arity_of o) c= dom F;
+then A17: dom (F*the_arity_of o) = dom (the_arity_of o) by RELAT_1:46;
+A18: dom doms (F*the_arity_of o) = dom (F*the_arity_of o) by EXTENS_1:3;
+then A19: dom x' = dom doms (F*the_arity_of o) by A1,A17,MSUALG_3:6;
+      now let x be set; assume x in dom doms (F*the_arity_of o);
+then A20:   x in dom (F*the_arity_of o) by EXTENS_1:3;
+then A21:   (doms (F*the_arity_of o)).x = dom ((F*the_arity_of o).x) by FUNCT_6
+:31;
+A22:   x in dom (the_arity_of o) by A16,A20,RELAT_1:46;
+      then x in dom ((the Sorts of U1) * (the_arity_of o)) by A8,RELAT_1:46;
+then A23:   x'.x in ((the Sorts of U1) * (the_arity_of o)).x by A1,MSUALG_3:6;
+      set ds = ((the_arity_of o).x);
+A24:   ds in rng (the_arity_of o) by A22,FUNCT_1:def 5;
+      then reconsider Ff = F.ds as
+        Function of (the Sorts of U1).ds, (the Sorts of U2).ds
+          by MSUALG_1:def 2;
+A25:   (the Sorts of U1).ds = dom Ff
+      proof
+        per cases;
+        suppose (the Sorts of U2).ds <> {};
+        hence thesis by FUNCT_2:def 1;
+        suppose (the Sorts of U2).ds = {};
+        then (the Sorts of U1).ds = {} by A1,A24,AUTALG_1:def 4;
+        hence thesis by FUNCT_2:def 1;
+      end;
+        ((F*the_arity_of o).x) = F.((the_arity_of o).x) by A22,FUNCT_1:23;
+      hence x'.x in (doms (F*the_arity_of o)).x by A21,A22,A23,A25,FUNCT_1:23;
+    end;
+then A26: x' in product doms (F*the_arity_of o) by A19,CARD_3:18;
+    reconsider Fr = (Frege (F*the_arity_of o)).x' as Function;
+A27: Fr = (F*the_arity_of o)..x' by A26,PRALG_2:def 8;
+then dom Fr = dom (G*the_arity_of o) by A6,A17,PRALG_1:def 18;
+then A28: dom Fr = dom doms (G*the_arity_of o) by EXTENS_1:3;
+      now let x be set; assume A29: x in dom doms (G*the_arity_of o);
+then A30:   x in dom (G*the_arity_of o) by EXTENS_1:3;
+A31:   x in dom (the_arity_of o) by A6,A29,EXTENS_1:3;
+A32:   dom ((the Sorts of U1) * (the_arity_of o)) = dom (the_arity_of o)
+          by A8,RELAT_1:46;
+A33:   ((the Sorts of U1) * (the_arity_of o)).x =
+      (the Sorts of U1).((the_arity_of o).x) by A31,FUNCT_1:23;
+      set ds = ((the_arity_of o).x);
+A34:   ds in rng (the_arity_of o) by A31,FUNCT_1:def 5;
+      then reconsider Ff = F.ds as Function of (the Sorts of U1).ds,
+          (the Sorts of U2).ds by MSUALG_1:def 2;
+A35:   (the Sorts of U1).ds = dom Ff
+      proof
+        per cases;
+        suppose (the Sorts of U2).ds <> {};
+        hence thesis by FUNCT_2:def 1;
+        suppose (the Sorts of U2).ds = {};
+        then (the Sorts of U1).ds = {} by A1,A34,AUTALG_1:def 4;
+        hence thesis by FUNCT_2:def 1;
+      end;
+A36:   ((G*the_arity_of o).x) = G.((the_arity_of o).x) by A31,FUNCT_1:23;
+      reconsider Gds = G.ds as
+       Function of (the Sorts of U2).ds, (the Sorts of U3).ds
+         by A34,MSUALG_1:def 2;
+A37:   dom Gds = (the Sorts of U2).ds
+      proof
+        per cases;
+        suppose (the Sorts of U3).ds <> {};
+        hence thesis by FUNCT_2:def 1;
+        suppose (the Sorts of U3).ds = {};
+        then (the Sorts of U2).ds = {} by A1,A34,AUTALG_1:def 4;
+        hence thesis by FUNCT_2:def 1;
+      end;
+A38:   x in dom (F*the_arity_of o) by A6,A17,A29,EXTENS_1:3;
+A39:   ((F*the_arity_of o).x) = Ff by A17,A31,FUNCT_1:22;
+        (x'.x) in dom Ff by A1,A31,A32,A33,A35,MSUALG_3:6;
+then A40:   ((F*the_arity_of o).x).(x'.x) in rng Ff by A39,FUNCT_1:def 5;
+     Fr.x = ((F*the_arity_of o).x).(x'.x) by A27,A38,PRALG_1:def 18;
+      then Fr.x in dom ((G*the_arity_of o).x) by A36,A37,A40;
+      hence Fr.x in (doms (G*the_arity_of o)).x by A30,FUNCT_6:31;
+    end;
+then A41: Fr in product doms (G*the_arity_of o) by A28,CARD_3:18;
+    reconsider x'' = x' as ManySortedSet of dom (the_arity_of o)
+      by A17,A18,A19,PBOOLE:def 3;
+    reconsider Ga = (G*the_arity_of o), Fa = (F*the_arity_of o)
+      as ManySortedFunction of dom (the_arity_of o) by A6,A17,PBOOLE:def 3;
+A42: x'' in doms Fa
+    proof
+      let i be set; assume A43: i in dom (the_arity_of o);
+then A44:   Fa.i = F.((the_arity_of o).i) by FUNCT_1:23;
+      set ai = (the_arity_of o).i;
+A45:   ai in rng (the_arity_of o) by A43,FUNCT_1:def 5;
+      then reconsider Ew = Fa.i as Function of
+       (the Sorts of U1).ai,(the Sorts of U2).ai by A44,MSUALG_1:def 2;
+A46:   dom Ew = (the Sorts of U1).ai
+      proof
+        per cases;
+        suppose (the Sorts of U2).ai = {};
+        then (the Sorts of U1).ai = {} by A1,A45,AUTALG_1:def 4;
+        hence thesis by FUNCT_2:def 1;
+        suppose (the Sorts of U2).ai <> {};
+        hence thesis by FUNCT_2:def 1;
+      end;
+        i in dom ((the Sorts of U1)*(the_arity_of o)) by A43,PRALG_2:10;
+      then x''.i in ((the Sorts of U1)*(the_arity_of o)).i by A4;
+      then x''.i in dom (Fa.i) by A43,A46,FUNCT_1:23;
+      hence thesis by A43,MSSUBFAM:14;
+    end;
+A47: (Frege (G*the_arity_of o)).((Frege(F*the_arity_of o)).x) =
+    (G*the_arity_of o)..((Frege(F*the_arity_of o)).x) by A41,PRALG_2:def 8
+    .= Ga..(Fa..x'') by A26,PRALG_2:def 8
+    .= (Ga**Fa)..x'' by A42,CLOSURE1:4;
+A48: (G*the_arity_of o)**(F*the_arity_of o) = GF*the_arity_of o
+      by FUNCTOR0:13;
+      GF#x = (Frege(GF*the_arity_of o)).x by A1,A3,MSUALG_3:def 7
+    .= (Frege (G*the_arity_of o)).((Frege(F*the_arity_of o)).x)
+         by A15,A47,A48,PRALG_2:def 8
+    .= (Frege (G*the_arity_of o)).(F#x) by A1,A3,MSUALG_3:def 7;
+    hence thesis by A3,MSUALG_3:def 7;
+end;
+
+theorem Th5:
+for U1,U2,U3 be feasible MSAlgebra over S,
+ F be ManySortedFunction of U1,U2,
+ G be ManySortedFunction of U2,U3 st
+  the Sorts of U1 is_transformable_to the Sorts of U2
+  & the Sorts of U2 is_transformable_to the Sorts of U3
+  & F is_homomorphism U1,U2 & G is_homomorphism U2,U3
+  ex GF be ManySortedFunction of U1,U3 st
+   GF = G ** F & GF is_homomorphism U1,U3
+proof
+  let U1,U2,U3 be feasible MSAlgebra over S,
+      F be ManySortedFunction of U1,U2,
+      G be ManySortedFunction of U2,U3;
+  assume A1: the Sorts of U1 is_transformable_to the Sorts of U2
+         & the Sorts of U2 is_transformable_to the Sorts of U3
+         & F is_homomorphism U1,U2 & G is_homomorphism U2,U3;
+  then reconsider GF = G ** F as ManySortedFunction of U1,U3 by ALTCAT_2:4;
+  take GF;
+  thus GF = G ** F;
+  thus GF is_homomorphism U1,U3
+  proof
+    let o be OperSymbol of S such that A2: Args(o,U1) <> {};
+    let x be Element of Args(o,U1);
+    set r = the_result_sort_of o;
+A3: the Sorts of U1 is_transformable_to the Sorts of U3 by A1,AUTALG_1:11;
+A4: (F.r).(Den(o,U1).x) = Den(o,U2).(F#x) by A1,A2,MSUALG_3:def 9;
+    Args (o,U2) <> {} by A1,A2,Th3;
+then A5: (G.r).((F.r).(Den(o,U1).x)) = Den(o,U3).(G#(F#x))
+      by A1,A4,MSUALG_3:def 9;
+A6: GF.r = (G.r)*(F.r) by MSUALG_3:2;
+A7: dom (GF.r) = (the Sorts of U1).r
+    proof
+      per cases;
+      suppose (the Sorts of U1).r <> {};
+      then (the Sorts of U3).r <> {} by A3,AUTALG_1:def 4;
+      hence thesis by FUNCT_2:def 1;
+      suppose (the Sorts of U1).r = {};
+      hence thesis by FUNCT_2:def 1;
+    end;
+A8:  Result(o,U1) = ((the Sorts of U1)*(the ResultSort of S)).o
+      by MSUALG_1:def 10;
+      rng (the ResultSort of S) c= the carrier of S;
+    then rng (the ResultSort of S) c= dom (the Sorts of U1) by PBOOLE:def 3;
+then A9: dom ((the Sorts of U1)*(the ResultSort of S)) =
+       dom (the ResultSort of S) by RELAT_1:46;
+     the OperSymbols of S <> {} by MSUALG_1:def 5;
+   then o in the OperSymbols of S;
+   then o in dom (the ResultSort of S) by FUNCT_2:def 1;
+then A10:Result(o,U1) = (the Sorts of U1).((the ResultSort of S).o)
+        by A8,A9,FUNCT_1:22
+        .= (the Sorts of U1).r by MSUALG_1:def 7;
+  then (the Sorts of U1).r <> {} by A2,MSUALG_6:def 1;
+    then A11: (Den(o,U1).x) in dom (GF.r) by A2,A7,A10,FUNCT_2:7;
+    consider gf be ManySortedFunction of U1,U3 such that
+A12:   gf = G ** F & gf#x = G#(F#x) by A1,A2,Th4;
+    thus thesis by A5,A6,A11,A12,FUNCT_1:22;
+  end;
+end;
+
+definition let S, A; let i,j be set;
+  assume A1: i in MSAlg_set (S,A) & j in MSAlg_set (S,A);
+  func MSAlg_morph (S,A,i,j) means :Def3:
+    x in it iff (ex M,N be strict feasible MSAlgebra over S,
+     f be ManySortedFunction of M,N
+     st M = i & N = j & f = x &
+    the Sorts of M is_transformable_to the Sorts of N & f is_homomorphism M,N);
+  existence
+  proof
+    defpred P[set,set] means
+    ex M,N be strict feasible MSAlgebra over S,
+      F be ManySortedFunction of M,N st
+      $2 = F & i = M & j = N &
+      $1 = [the Sorts of M, the Charact of M,
+            the Sorts of N, the Charact of N, F] &
+   the Sorts of M is_transformable_to the Sorts of N & F is_homomorphism M,N;
+A2: for x,y,z be set st P[x,y] & P[x,z] holds y = z by MCART_2:7;
+    consider X be set such that A3: x in X iff ex y be set st
+     y in [:Funcs (the carrier of S, bool A),
+      Funcs (the OperSymbols of S,PFuncs(PFuncs (NAT ,A),A)),
+           Funcs (the carrier of S, bool A),
+      Funcs (the OperSymbols of S,PFuncs(PFuncs (NAT ,A),A)),
+      Funcs (the carrier of S,
+      PFuncs (union bool A,union bool A)):] & P[y,x] from Fraenkel (A2);
+    take X;
+    thus x in X iff (ex M,N be strict feasible MSAlgebra over S,
+     F be ManySortedFunction of M,N
+     st M = i & N = j & F = x &
+  the Sorts of M is_transformable_to the Sorts of N & F is_homomorphism M,N)
+   proof
+     hereby assume x in X;
+     then consider y be set such that
+A4:   y in [:Funcs (the carrier of S, bool A),
+      Funcs (the OperSymbols of S,PFuncs(PFuncs (NAT ,A),A)),
+           Funcs (the carrier of S, bool A),
+      Funcs (the OperSymbols of S,PFuncs(PFuncs (NAT ,A),A)),
+      Funcs (the carrier of S,
+      PFuncs (union bool A,union bool A)):] & P[y,x] by A3;
+    consider M,N be strict feasible MSAlgebra over S,
+     F be ManySortedFunction of M,N
+     such that A5: x = F & i = M & j = N &
+      y = [the Sorts of M, the Charact of M,
+            the Sorts of N, the Charact of N, F] &
+      the Sorts of M is_transformable_to the Sorts of N &
+       F is_homomorphism M,N by A4;
+     thus (ex M,N be strict feasible MSAlgebra over S,
+     F be ManySortedFunction of M,N
+     st M = i & N = j & F = x &
+     the Sorts of M is_transformable_to the Sorts of N
+      & F is_homomorphism M,N) by A5;
+     end;
+     given M,N be strict feasible MSAlgebra over S,
+      F be ManySortedFunction of M,N such that
+A6:    M = i & N = j & F = x &
+       the Sorts of M is_transformable_to the Sorts of N &
+       F is_homomorphism M,N;
+       set y = [the Sorts of M, the Charact of M,
+                the Sorts of N, the Charact of N, F];
+      y in [:Funcs (the carrier of S, bool A),
+        Funcs (the OperSymbols of S,PFuncs(PFuncs (NAT ,A),A)),
+           Funcs (the carrier of S, bool A),
+        Funcs (the OperSymbols of S,PFuncs(PFuncs (NAT ,A),A)),
+        Funcs (the carrier of S,
+        PFuncs (union bool A,union bool A)):]
+       proof
+A7:      the Sorts of M in Funcs (the carrier of S, bool A) by A1,A6,Th2;
+A8:      the Charact of M in
+         Funcs (the OperSymbols of S,PFuncs(PFuncs (NAT ,A),A)) by A1,A6,Th2;
+A9:      the Sorts of N in Funcs (the carrier of S, bool A) by A1,A6,Th2;
+A10:      the Charact of N in
+         Funcs (the OperSymbols of S,PFuncs(PFuncs (NAT ,A),A)) by A1,A6,Th2;
+A11:      dom F = the carrier of S by PBOOLE:def 3;
+           rng F c= PFuncs (union bool A, union bool A)
+         proof
+           let w be set; assume w in rng F;
+           then consider w1 be set such that A12: w1 in dom F & w = F.w1
+             by FUNCT_1:def 5;
+           A13: dom (the Sorts of N) = the carrier of S &
+           dom (the Sorts of M) = the carrier of S by PBOOLE:def 3;
+           reconsider w' = w as Function of (the Sorts of M).w1,
+            (the Sorts of N).w1 by A11,A12,MSUALG_1:def 2;
+      consider M' be strict feasible MSAlgebra over S such that A14: M' = M &
+      for C be Component of the Sorts of M' holds C c= A by A1,A6,Def2;
+A15:    rng the Sorts of M c= bool A
+      proof
+        let x be set; assume x in rng the Sorts of M;
+        then reconsider x' = x as Component of the Sorts of M;
+          x' c= A by A14;
+        hence thesis;
+      end;
+      consider N' be strict feasible MSAlgebra over S such that A16: N' = N &
+      for C be Component of the Sorts of N' holds C c= A by A1,A6,Def2;
+A17:    rng the Sorts of N c= bool A
+      proof
+        let x be set; assume x in rng the Sorts of N;
+        then reconsider x' = x as Component of the Sorts of N;
+          x' c= A by A16;
+        hence thesis;
+      end;
+A18:   dom w' c= union bool A
+      proof
+        let s be set; assume A19: s in dom w';
+          (the Sorts of M).w1 in rng (the Sorts of M) by A11,A12,A13,FUNCT_1:
+def 5;
+        hence s in union bool A by A15,A19,TARSKI:def 4;
+      end;
+        rng w' c= union bool A
+      proof
+        let r be set; assume r in rng w';
+        then consider r1 be set such that A20: r1 in dom w' & r = w'.r1
+           by FUNCT_1:def 5;
+     A21: r in rng w' by A20,FUNCT_1:def 5;
+          (the Sorts of N).w1 in rng (the Sorts of N) by A11,A12,A13,FUNCT_1:
+def 5;
+        hence r in union bool A by A17,A21,TARSKI:def 4;
+      end;
+      hence w in PFuncs (union bool A, union bool A) by A18,PARTFUN1:def 5;
+    end;
+    then F in Funcs (the carrier of S, PFuncs (union bool A, union bool A))
+      by A11,FUNCT_2:def 2;
+    hence thesis by A7,A8,A9,A10,MCART_2:31;
+  end;
+     hence x in X by A3,A6;
+   end;
+  end;
+  uniqueness
+  proof
+   let A1,A2 be set;
+   assume A22: x in A1 iff (ex M,N be strict feasible MSAlgebra over S,
+    f be ManySortedFunction of M,N
+    st M = i & N = j & f = x &
+   the Sorts of M is_transformable_to the Sorts of N & f is_homomorphism M,N);
+   assume A23: x in A2 iff (ex M,N be strict feasible MSAlgebra over S,
+    f be ManySortedFunction of M,N
+    st M = i & N = j & f = x &
+   the Sorts of M is_transformable_to the Sorts of N & f is_homomorphism M,N);
+   thus A1 = A2
+   proof
+     thus A1 c= A2
+     proof
+       let a be set; assume a in A1;
+       then consider M,N be strict feasible MSAlgebra over S,
+       f be ManySortedFunction of M,N such that
+A24:    M = i & N = j & f = a &
+       the Sorts of M is_transformable_to the Sorts of N &
+       f is_homomorphism M,N by A22;
+       thus a in A2 by A23,A24;
+     end;
+     thus A2 c= A1
+     proof
+       let a be set; assume a in A2;
+       then consider M,N be strict feasible MSAlgebra over S,
+       f be ManySortedFunction of M,N such that
+A25:    M = i & N = j & f = a &
+       the Sorts of M is_transformable_to the Sorts of N &
+       f is_homomorphism M,N by A23;
+       thus a in A1 by A22,A25;
+     end;
+   end;
+  end;
+end;
+
+definition let S, A;
+  func MSAlgCat (S,A) -> strict non empty AltCatStr means :Def4:
+   the carrier of it = MSAlg_set (S,A) &
+ ( for i, j be Element of MSAlg_set (S,A) holds
+ (the Arrows of it).(i,j) = MSAlg_morph (S,A,i,j) ) &
+   ( for i,j,k be object of it, f,g be Function-yielding Function st
+     f in (the Arrows of it).(i,j) &
+     g in (the Arrows of it).(j,k) holds
+   (the Comp of it).(i,j,k).(g,f) = ( g ** f ) );
+   existence
+   proof
+    set c = MSAlg_set (S,A);
+    deffunc F((Element of c),Element of c)=MSAlg_morph (S,A,$1,$2);
+    consider M be ManySortedSet of [:c,c:] such that
+A1:  for i,j be Element of c holds M.(i,j) = F(i,j) from MSSLambda2D;
+   defpred P[set,set,set] means
+    ex i,j,k be Element of c st $3 = [i,j,k] &
+     for f,g be Function-yielding Function st
+     f in M.(i,j) & g in M.(j,k) & $2 = [g,f] holds $1 = (g ** f);
+A2:for ijk be set st ijk in [:c,c,c:] holds
+   for x be set st x in {|M,M|}.ijk ex y be set st y in {|M|}.ijk & P[y,x,ijk]
+    proof
+    let ijk be set; assume ijk in [:c,c,c:];
+    then consider x1,x2,x3 be set such that
+A3:  x1 in c & x2 in c & x3 in c & ijk = [x1,x2,x3] by MCART_1:72;
+    reconsider x1,x2,x3 as Element of c by A3;
+    let x be set; assume A4: x in {|M,M|}.ijk;
+A5: {|M,M|}.(x1,x2,x3) = {|M,M|}.[x1,x2,x3] by MULTOP_1:def 1;
+      {|M,M|}.(x1,x2,x3) = [:M.(x2,x3),M.(x1,x2):] by ALTCAT_1:def 6;
+    then x`1 in M.(x2,x3) & x`2 in M.(x1,x2) by A3,A4,A5,MCART_1:10;
+then A6: x`1 in MSAlg_morph (S,A,x2,x3) & x`2 in MSAlg_morph (S,A,x1,x2) by A1;
+    then consider M2,N2 be strict feasible MSAlgebra over S,
+     g be ManySortedFunction of M2,N2 such that
+A7:     M2 = x2 & N2 = x3 & g = x`1 &
+    the Sorts of M2 is_transformable_to the Sorts of N2 &
+    g is_homomorphism M2,N2 by Def3;
+    consider M1,N1 be strict feasible MSAlgebra over S,
+     f be ManySortedFunction of M1,N1
+     such that A8: M1 = x1 & N1 = x2 & f = x`2 &
+     the Sorts of M1 is_transformable_to the Sorts of N1 &
+     f is_homomorphism M1,N1 by A6,Def3;
+    take y = g ** f;
+A9: {|M|}.ijk = {|M|}.(x1,x2,x3) by A3,MULTOP_1:def 1;
+A10: {|M|}.(x1,x2,x3) = M.(x1,x3) by ALTCAT_1:def 5;
+    reconsider f as ManySortedFunction of M1,M2 by A7,A8;
+A11: the Sorts of M1 is_transformable_to the Sorts of N2 by A7,A8,AUTALG_1:11;
+    consider fg be ManySortedFunction of M1,N2 such that
+A12:    fg = g ** f & fg is_homomorphism M1,N2 by A7,A8,Th5;
+      y in MSAlg_morph (S,A,x1,x3) by A7,A8,A11,A12,Def3; hence
+      y in {|M|}.ijk by A1,A9,A10;
+    take x1,x2,x3;
+    thus ijk = [x1,x2,x3] by A3;
+    let F,G be Function-yielding Function; assume
+    F in M.(x1,x2) & G in M.(x2,x3) & x = [G,F];
+    then x`1 = G & x`2 = F by MCART_1:7;
+    hence y = G ** F by A7,A8;
+   end;
+  consider F be ManySortedFunction of {|M,M|}, {|M|} such that
+A13: for ijk be set st ijk in [:c,c,c:] holds
+    ex f be Function of {|M,M|}.ijk, {|M|}.ijk st f = F.ijk &
+     for x be set st x in {|M,M|}.ijk holds P[f.x,x,ijk] from MSFExFunc(A2);
+    take EX = AltCatStr(#c,M,F#);
+    reconsider EX as non empty AltCatStr;
+      for i,j,k be object of EX, f,g be Function-yielding Function st
+     f in (the Arrows of EX).(i,j) &
+     g in (the Arrows of EX).(j,k) holds
+      (the Comp of EX).(i,j,k).(g,f) = ( g ** f )
+      proof
+      let i,j,k be object of EX, f,g be Function-yielding Function; assume
+A14:   f in (the Arrows of EX).(i,j) &
+      g in (the Arrows of EX).(j,k);
+      set ijk = [i,j,k];
+        ijk in [:c,c,c:] by MCART_1:73;
+       then consider ff be Function of {|M,M|}.ijk, {|M|}.ijk such that
+A15:    ff = F.ijk &
+       for x be set st x in {|M,M|}.ijk holds P[ff.x,x,ijk] by A13;
+       set x = [g,f];
+A16:    {|M,M|}.(i,j,k) = {|M,M|}.[i,j,k] by MULTOP_1:def 1;
+         {|M,M|}.(i,j,k) = [:M.(j,k),M.(i,j):] by ALTCAT_1:def 6;
+       then x in {|M,M|}.ijk by A14,A16,ZFMISC_1:106;
+       then consider I,J,K be Element of c such that
+A17:    ijk = [I,J,K] &
+       for f,g be Function-yielding Function st
+       f in M.(I,J) & g in M.(J,K) & x = [g,f] holds ff.x = (g ** f) by A15;
+A18:    ff.(g,f) = ff.[g,f] by BINOP_1:def 1;
+A19:    I = i & J = j & K = k by A17,MCART_1:28;
+         ff = (the Comp of EX).(i,j,k) by A15,MULTOP_1:def 1;
+       hence (the Comp of EX).(i,j,k).(g,f) = g ** f by A14,A17,A18,A19;
+      end;
+     hence thesis by A1;
+   end;
+   uniqueness
+   proof
+    reconsider c = MSAlg_set (S,A) as non empty set;
+    let A1, A2 be non empty strict AltCatStr such that
+A20:  the carrier of A1 = MSAlg_set (S,A) &
+ ( for i, j be Element of MSAlg_set (S,A) holds
+   (the Arrows of A1).(i,j) = MSAlg_morph (S,A,i,j) ) &
+   ( for i,j,k be object of A1, f,g be Function-yielding Function st
+     f in (the Arrows of A1).(i,j) &
+     g in (the Arrows of A1).(j,k) holds
+   (the Comp of A1).(i,j,k).(g,f) = ( g ** f ) ) and
+A21:  the carrier of A2 = MSAlg_set (S,A) &
+ ( for i, j be Element of MSAlg_set (S,A) holds
+   (the Arrows of A2).(i,j) = MSAlg_morph (S,A,i,j) ) &
+   ( for i,j,k be object of A2, f,g be Function-yielding Function st
+     f in (the Arrows of A2).(i,j) &
+     g in (the Arrows of A2).(j,k) holds
+   (the Comp of A2).(i,j,k).(g,f) = ( g ** f ) );
+   reconsider AA1 = the Arrows of A1, AA2 = the Arrows of A2
+    as ManySortedSet of [:c, c:] by A20,A21;
+A22: now let i, j be Element of c;
+     thus AA1.(i,j) = MSAlg_morph (S,A,i,j) by A20
+      .= AA2.(i,j) by A21;
+   end;
+then A23: AA1 = AA2 by ALTCAT_1:9;
+   reconsider CC1 = (the Comp of A1), CC2 = the Comp of A2 as
+        ManySortedSet of [:c,c,c:] by A20,A21;
+     now let i,j,k be set;
+    assume A24: i in c & j in c & k in c;
+    then reconsider i'=i,j'=j,k'=k as Element of c;
+    reconsider I = i,J = j,K = k as object of A1 by A20,A24;
+    reconsider I' = i,J' = j,K' = k as object of A2 by A21,A24;
+    set ijk = [i,j,k];
+A25: CC1.(i,j,k) = CC1.[i,j,k] & CC2.(i,j,k) = CC2.[i,j,k] by MULTOP_1:def 1;
+A26: ijk in [:c,c,c:] by A24,MCART_1:73;
+    thus CC1.(i,j,k) = CC2.(i,j,k)
+    proof
+     reconsider Ci = CC1.ijk as Function of {|AA1,AA1|}.ijk, {|AA1|}.ijk
+       by A20,A26,MSUALG_1:def 2;
+     reconsider Cj = CC2.ijk as Function of {|AA2,AA2|}.ijk, {|AA2|}.ijk
+       by A21,A26,MSUALG_1:def 2;
+     per cases;
+      suppose
+      A27: {|AA1|}.ijk <> {};
+      then {|AA2|}.ijk <> {} by A22,ALTCAT_1:9;
+then A28:  dom Ci = {|AA1,AA1|}.ijk & dom Cj = {|AA2,AA2|}.ijk
+             by A27,FUNCT_2:def 1;
+       for x be set st x in {|AA1,AA1|}.ijk holds Ci.x = Cj.x
+     proof
+       let x be set; assume x in {|AA1,AA1|}.ijk;
+       then x in {|AA1,AA1|}.(i,j,k) & x in {|AA2,AA2|}.(i,j,k)
+                  by A23,MULTOP_1:def 1;
+then A29:     x in [:AA1.(j,k),AA1.(i,j):] & x in [:AA2.(j,k),AA2.(i,j):]
+             by A24,ALTCAT_1:def 6;
+then A30:    x`1 in AA1.(j,k) & x`2 in AA1.(i,j) & x`1 in AA2.(j,k) & x`2 in
+ AA2.(i,j)
+          by MCART_1:10;
+then A31:    x`1 in MSAlg_morph (S,A,j',k') & x`2 in MSAlg_morph (S,A,i',j')
+by A20;
+       then consider M1,N1 be strict feasible MSAlgebra over S,
+          f be ManySortedFunction of M1,N1 such that
+A32:     M1 = i' & N1 = j' & f = x`2 &
+        the Sorts of M1 is_transformable_to the Sorts of N1 &
+        f is_homomorphism M1,N1 by Def3;
+       consider M2,N2 be strict feasible MSAlgebra over S,
+          g be ManySortedFunction of M2,N2 such that
+A33:     M2 = j' & N2 = k' & g = x`1 &
+        the Sorts of M2 is_transformable_to the Sorts of N2 &
+        g is_homomorphism M2,N2 by A31,Def3;
+A34:     x = [g,f] by A29,A32,A33,MCART_1:23;
+         Ci.x = (the Comp of A1).(I,J,K).x by MULTOP_1:def 1
+          .= (the Comp of A1).(I,J,K).(g,f) by A34,BINOP_1:def 1
+          .= g ** f by A20,A30,A32,A33
+          .= (the Comp of A2).(I',J',K').(g,f) by A21,A30,A32,A33
+          .= (the Comp of A2).(I',J',K').x by A34,BINOP_1:def 1
+          .= Cj.x by MULTOP_1:def 1;
+       hence thesis;
+     end;
+     hence thesis by A23,A25,A28,FUNCT_1:9;
+     suppose {|AA1|}.ijk = {};
+      then rng Ci = {} & rng Cj = {} by A23,XBOOLE_1:3;
+      then Ci = {} & Cj = {} by RELAT_1:64;
+      hence thesis by A25;
+   end;
+  end;
+  hence A1 = A2 by A20,A21,A23,ALTCAT_1:10;
+   end;
+end;
+
+definition let S, A;
+  cluster MSAlgCat (S,A) -> transitive associative with_units;
+  coherence
+  proof
+   set G = MSAlgCat (S,A);
+   thus G is transitive
+   proof
+   let o1,o2,o3 be object of G;
+   reconsider o1'=o1, o2'=o2,o3'=o3 as Element of MSAlg_set (S,A) by Def4;
+   assume <^o1,o2^> <> {} & <^o2,o3^> <> {};
+   then (the Arrows of G).(o1,o2) <> {} & (the Arrows of G).(o2,o3) <> {}
+     by ALTCAT_1:def 2;
+then A1: MSAlg_morph (S,A,o1',o2') <> {} & MSAlg_morph (S,A,o2',o3') <> {}
+         by Def4;
+     consider t be Element of MSAlg_morph (S,A,o1',o2');
+     consider s be Element of MSAlg_morph (S,A,o2',o3');
+    consider M,N be strict feasible MSAlgebra over S,
+     f be ManySortedFunction of M,N such that
+A2:  M = o1' & N = o2' & f = t & the Sorts of M is_transformable_to
+      the Sorts of N & f is_homomorphism M,N by A1,Def3;
+    consider M1,N1 be strict feasible MSAlgebra over S,
+     g be ManySortedFunction of M1,N1 such that
+A3:  M1 = o2' & N1 = o3' & g = s & the Sorts of M1 is_transformable_to
+      the Sorts of N1 & g is_homomorphism M1,N1 by A1,Def3;
+A4:  the Sorts of M is_transformable_to the Sorts of N1 by A2,A3,AUTALG_1:11;
+     reconsider g' = g as ManySortedFunction of N,N1 by A2,A3;
+     consider GF be ManySortedFunction of M,N1 such that
+A5:   GF = g' ** f & GF is_homomorphism M,N1 by A2,A3,Th5;
+      GF in MSAlg_morph (S,A,o1',o3') by A2,A3,A4,A5,Def3;
+    then (g ** f) in (the Arrows of G).(o1,o3) by A5,Def4;
+    hence <^o1,o3^> <> {} by ALTCAT_1:def 2;
+   end;
+   set M = MSAlgCat (S,A);
+   set GM = the Arrows of M, C = the Comp of M;
+   thus C is associative
+   proof
+     let i,j,k,l be Element of M;
+     reconsider i'=i,j'=j,k'=k,l'=l as Element of MSAlg_set (S,A) by Def4;
+     let f,g,h be set; assume A6: f in GM.(i,j) & g in GM.(j,k) &
+       h in GM.(k,l);
+then A7:  f in MSAlg_morph (S,A,i',j') & g in MSAlg_morph (S,A,j',k') &
+     h in MSAlg_morph (S,A,k',l') by Def4;
+     then consider M1,N1 be strict feasible MSAlgebra over S,
+     F be ManySortedFunction of M1,N1 such that
+A8:  M1 = i' & N1 = j' & f = F & the Sorts of M1 is_transformable_to
+      the Sorts of N1 & F is_homomorphism M1,N1 by Def3;
+     consider M2,N2 be strict feasible MSAlgebra over S,
+     G be ManySortedFunction of M2,N2 such that
+A9:  M2 = j' & N2 = k' & g = G & the Sorts of M2 is_transformable_to
+      the Sorts of N2 & G is_homomorphism M2,N2 by A7,Def3;
+     consider M3,N3 be strict feasible MSAlgebra over S,
+     H be ManySortedFunction of M3,N3 such that
+A10:  M3 = k' & N3 = l' & h = H & the Sorts of M3 is_transformable_to
+      the Sorts of N3 & H is_homomorphism M3,N3 by A7,Def3;
+A11:  the Sorts of M1 is_transformable_to the Sorts of M3
+       by A8,A9,A10,AUTALG_1:11;
+A12:  the Sorts of M2 is_transformable_to the Sorts of N3
+       by A9,A10,AUTALG_1:11;
+     reconsider G' = G as ManySortedFunction of M2,M3 by A9,A10;
+A13:  C.(i,j,k).(g,f) = G ** F by A6,A8,A9,Def4;
+     consider GF be ManySortedFunction of M1,M3 such that
+A14:    GF = G' ** F & GF is_homomorphism M1,M3 by A8,A9,A10,Th5;
+       G' ** F in MSAlg_morph (S,A,i',k') by A8,A10,A11,A14,Def3;
+     then GF in GM.(i,k) by A14,Def4;
+then A15:  C.(i,k,l).(H,GF) = H ** GF by A6,A10,Def4;
+A16:  C.(j,k,l).(H,G) = H ** G' by A6,A9,A10,Def4;
+     consider HG be ManySortedFunction of M2,N3 such that
+A17:    HG = H ** G' & HG is_homomorphism M2,N3 by A9,A10,Th5;
+       HG in MSAlg_morph (S,A,j',l') by A9,A10,A12,A17,Def3;
+then A18:  H ** G' in GM.(j,l) by A17,Def4;
+    (H ** G') ** F = H ** (G' ** F) by AUTALG_1:13;
+     hence thesis by A6,A8,A9,A10,A13,A14,A15,A16,A18,Def4;
+   end;
+   thus C is with_left_units
+   proof
+     let j be Element of M;
+     reconsider j' = j as Element of MSAlg_set (S,A) by Def4;
+     consider MS be strict feasible MSAlgebra over S such that
+A19:    MS = j' & for C be Component of the Sorts of MS holds C c= A by Def2;
+     reconsider e = id (the Sorts of MS) as ManySortedFunction of MS,MS;
+A20:   e is_homomorphism MS,MS by MSUALG_3:9;
+     take e;
+       GM.(j,j) = MSAlg_morph (S,A,j',j') by Def4;
+     hence A21: e in GM.(j,j) by A19,A20,Def3;
+     let i be Element of M; let f be set;
+     reconsider i' = i as Element of MSAlg_set (S,A) by Def4;
+     assume A22: f in GM.(i,j);
+     then f in MSAlg_morph (S,A,i',j') by Def4;
+     then consider M1,N1 be strict feasible MSAlgebra over S,
+       F be ManySortedFunction of M1,N1 such that
+A23:    M1 = i' & N1 = j' & F = f &
+     the Sorts of M1 is_transformable_to the Sorts of N1 &
+     F is_homomorphism M1,N1 by Def3;
+     reconsider F as ManySortedFunction of M1,MS by A19,A23;
+     reconsider I=i,J=j as object of M;
+    C.(I,J,J).(e,f) = e ** F by A21,A22,A23,Def4;
+     hence C.(i,j,j).(e,f) = f by A23,MSUALG_3:4;
+   end;
+   thus C is with_right_units
+   proof
+     let i be Element of M;
+     reconsider i' = i as Element of MSAlg_set (S,A) by Def4;
+     consider MS be strict feasible MSAlgebra over S such that
+A24:    MS = i' & for C be Component of the Sorts of MS holds C c= A by Def2;
+     reconsider e = id (the Sorts of MS) as ManySortedFunction of MS,MS;
+A25:   e is_homomorphism MS,MS by MSUALG_3:9;
+     take e;
+       GM.(i,i) = MSAlg_morph (S,A,i',i') by Def4;
+     hence A26: e in GM.(i,i) by A24,A25,Def3;
+     let j be Element of M; let f be set;
+     reconsider j' = j as Element of MSAlg_set (S,A) by Def4;
+     assume A27: f in GM.(i,j);
+     then f in MSAlg_morph (S,A,i',j') by Def4;
+     then consider M1,N1 be strict feasible MSAlgebra over S,
+       F be ManySortedFunction of M1,N1 such that
+A28:    M1 = i' & N1 = j' & F = f &
+     the Sorts of M1 is_transformable_to the Sorts of N1 &
+     F is_homomorphism M1,N1 by Def3;
+     reconsider F as ManySortedFunction of MS,N1 by A24,A28;
+     reconsider I=i,J=j as object of M;
+    C.(I,I,J).(f,e) = F ** e by A26,A27,A28,Def4;
+     hence C.(i,i,j).(f,e) = f by A28,MSUALG_3:3;
+   end;
+  end;
+end;
+
+theorem
+    for C be category st C = MSAlgCat (S,A)
+   for o be object of C holds
+   o is strict feasible MSAlgebra over S
+  proof
+    let C be category such that A1: C = MSAlgCat (S,A);
+    let o be object of C;
+      o in the carrier of C;
+    then o in MSAlg_set (S,A) by A1,Def4;
+    then consider M be strict feasible MSAlgebra over S such that A2: o = M &
+     for C1 be Component of the Sorts of M holds C1 c= A by Def2;
+    thus thesis by A2;
+  end;

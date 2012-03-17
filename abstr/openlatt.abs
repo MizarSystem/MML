@@ -1,0 +1,300 @@
+:: Representation Theorem for Heyting Lattices
+::  by Jolanta Kamie\'nska
+::
+:: Received July 14, 1993
+:: Copyright (c) 1993 Association of Mizar Users
+
+environ
+
+ vocabulary LATTICE2, FILTER_0, LATTICES, PRE_TOPC, BOOLE, TOPS_1, SUBSET_1,
+      SETFAM_1, BINOP_1, FUNCT_1, RELAT_1, ZFMISC_1, TARSKI, GROUP_6, MOD_4,
+      WELLORD1, REALSET1, ZF_LANG, LATTICE4, OPENLATT, HAHNBAN;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, RELAT_1, FUNCT_1,
+      FUNCT_2, BINOP_1, SETFAM_1, STRUCT_0, PRE_TOPC, TOPS_1, LATTICES,
+      LATTICE2, FILTER_0, REALSET1, LATTICE4;
+ constructors BINOP_1, TOPS_1, LATTICE2, REALSET1, FILTER_1, LATTICE4;
+ clusters FILTER_0, PRE_TOPC, LATTICE2, RLSUB_2, STRUCT_0, RELSET_1, SUBSET_1,
+      LATTICES, XBOOLE_0, ZFMISC_1;
+ requirements BOOLE, SUBSET;
+
+
+begin
+
+definition
+ cluster Heyting -> implicative 0_Lattice;
+ cluster implicative -> upper-bounded Lattice;
+end;
+
+reserve T for TopSpace;
+reserve A,B for Subset of T;
+
+theorem :: OPENLATT:1
+   A /\ Int(A` \/ B) c= B;
+
+theorem :: OPENLATT:2
+ for C being Subset of T st C is open & A /\ C c= B holds C c= Int(A` \/ B);
+
+definition let T be TopStruct;
+ func Topology_of T -> Subset-Family of T equals
+:: OPENLATT:def 1
+   the topology of T;
+end;
+
+definition let T;
+ cluster Topology_of T -> non empty;
+end;
+
+theorem :: OPENLATT:3
+ for A being Subset of T holds A is open iff A in Topology_of T;
+
+definition let T be non empty TopSpace,
+               P, Q be Element of Topology_of T;
+ redefine func P \/ Q -> Element of Topology_of T;
+
+ redefine func P /\ Q -> Element of Topology_of T;
+end;
+
+reserve T for non empty TopSpace;
+reserve P,Q for Element of Topology_of T;
+
+definition let T;
+ func Top_Union T -> BinOp of Topology_of T means
+:: OPENLATT:def 2
+   it.(P,Q) = P \/ Q;
+
+ func Top_Meet T -> BinOp of Topology_of T means
+:: OPENLATT:def 3
+     it.(P,Q) = P /\ Q;
+end;
+
+theorem :: OPENLATT:4
+   for T being non empty TopSpace holds
+            LattStr(#Topology_of T,Top_Union T,Top_Meet T#) is Lattice;
+
+definition let T;
+   func Open_setLatt(T) -> Lattice equals
+:: OPENLATT:def 4
+   LattStr(#Topology_of T,Top_Union T,Top_Meet T#);
+end;
+
+theorem :: OPENLATT:5
+  the carrier of Open_setLatt(T) = Topology_of T;
+
+reserve p,q for Element of Open_setLatt(T);
+
+theorem :: OPENLATT:6
+  p "\/" q = p \/ q & p "/\" q = p /\ q;
+
+theorem :: OPENLATT:7
+  p [= q iff p c= q;
+
+theorem :: OPENLATT:8
+   for p',q' being Element of Topology_of T st p=p' & q=q'
+    holds p [= q iff p' c= q';
+
+theorem :: OPENLATT:9
+  Open_setLatt(T) is implicative;
+
+theorem :: OPENLATT:10
+  Open_setLatt(T) is lower-bounded & Bottom Open_setLatt(T) = {};
+
+ definition let T;
+  cluster Open_setLatt(T) -> Heyting;
+ end;
+
+theorem :: OPENLATT:11
+  Top Open_setLatt(T) = the carrier of T;
+
+reserve L for D_Lattice;
+reserve F for Filter of L;
+reserve a,b for Element of L;
+reserve x,X,X1,X2,Y,Z for set;
+
+definition let L;
+ func F_primeSet(L) -> set equals
+:: OPENLATT:def 5
+  { F: F <> the carrier of L & F is prime};
+end;
+
+theorem :: OPENLATT:12
+  F in F_primeSet(L) iff F <> the carrier of L & F is prime;
+
+definition let L;
+ func StoneH(L) -> Function means
+:: OPENLATT:def 6
+ dom it = the carrier of L &
+      it.a = { F :F in F_primeSet(L) & a in F};
+ end;
+
+theorem :: OPENLATT:13
+  F in StoneH(L).a iff F in F_primeSet(L) & a in F;
+
+theorem :: OPENLATT:14
+  x in StoneH(L).a iff
+      (ex F st F=x & F <> the carrier of L & F is prime & a in F);
+
+definition let L;
+ func StoneS(L) -> set equals
+:: OPENLATT:def 7
+    rng StoneH(L);
+end;
+
+definition let L;
+ cluster StoneS(L) -> non empty;
+end;
+
+theorem :: OPENLATT:15
+   x in StoneS(L) iff ex a st x=StoneH(L).a;
+
+theorem :: OPENLATT:16
+   StoneH(L).(a "\/" b) = StoneH(L).a \/ StoneH(L).b;
+
+theorem :: OPENLATT:17
+  StoneH(L).(a "/\" b) = StoneH(L).a /\ StoneH(L).b;
+
+definition let L, a;
+ func SF_have a -> Subset-Family of L equals
+:: OPENLATT:def 8
+   { F : a in F };
+end;
+
+definition
+ let L;let a;
+ cluster SF_have a -> non empty;
+end;
+
+theorem :: OPENLATT:18
+  x in SF_have a iff x is Filter of L & a in x;
+
+theorem :: OPENLATT:19
+  x in SF_have b \ SF_have a implies
+           x is Filter of L & b in x & not a in x;
+
+theorem :: OPENLATT:20
+ for Z st Z <> {} & Z c= SF_have b \ SF_have a &
+         Z is c=-linear
+           ex Y st Y in SF_have b \ SF_have a & for X1 st X1 in Z holds X1 c= Y
+;
+
+theorem :: OPENLATT:21
+   not b [= a implies <.b.) in SF_have b \ SF_have a;
+
+theorem :: OPENLATT:22
+  not b [= a implies ex F st (F in F_primeSet(L) & not a in F & b in F );
+
+theorem :: OPENLATT:23
+  a <> b implies ex F st F in F_primeSet(L);
+
+theorem :: OPENLATT:24
+  a <> b implies StoneH(L).a <> StoneH(L).b;
+
+theorem :: OPENLATT:25
+  StoneH(L) is one-to-one;
+
+definition let L;let A,B be Element of StoneS(L);
+ redefine func A \/ B -> Element of StoneS(L);
+
+ redefine func A /\ B -> Element of StoneS(L);
+ end;
+
+definition let L;
+ func Set_Union L -> BinOp of StoneS(L) means
+:: OPENLATT:def 9
+ for A,B being Element of StoneS(L) holds it.(A,B) = A \/ B;
+
+ func Set_Meet L -> BinOp of StoneS(L) means
+:: OPENLATT:def 10
+ for A,B being Element of StoneS(L) holds it.(A,B) = A /\ B;
+end;
+
+theorem :: OPENLATT:26
+  LattStr(#StoneS(L),Set_Union L,Set_Meet L#) is Lattice;
+
+definition let L;
+func StoneLatt L -> Lattice equals
+:: OPENLATT:def 11
+   LattStr(#StoneS(L),Set_Union L,Set_Meet L#);
+end;
+
+reserve p,q for Element of StoneLatt(L);
+
+theorem :: OPENLATT:27
+  for L holds the carrier of StoneLatt(L) = StoneS(L);
+
+theorem :: OPENLATT:28
+  p "\/" q = p \/ q & p "/\" q = p /\ q;
+
+theorem :: OPENLATT:29
+  p [= q iff p c= q;
+
+definition let L;
+  redefine func StoneH(L) -> Homomorphism of L,StoneLatt L;
+end;
+
+theorem :: OPENLATT:30
+  StoneH(L) is isomorphism;
+
+theorem :: OPENLATT:31
+   StoneLatt(L) is distributive;
+
+theorem :: OPENLATT:32
+   L,StoneLatt L are_isomorphic;
+
+definition
+  cluster non trivial H_Lattice;
+end;
+
+reserve H for non trivial H_Lattice;
+reserve p',q' for Element of H;
+
+theorem :: OPENLATT:33
+  StoneH(H).(Top H) = F_primeSet(H);
+
+theorem :: OPENLATT:34
+  StoneH(H).(Bottom H) = {};
+
+theorem :: OPENLATT:35
+  StoneS(H) c= bool F_primeSet(H);
+
+definition let H;
+ cluster F_primeSet(H) -> non empty;
+end;
+
+definition let H;
+ func HTopSpace H -> strict TopStruct means
+:: OPENLATT:def 12
+  the carrier of it = F_primeSet(H) &
+        the topology of it ={union A where A is Subset of StoneS(H):not
+                                                         contradiction};
+end;
+
+definition let H;
+ cluster HTopSpace H -> non empty TopSpace-like;
+end;
+
+theorem :: OPENLATT:36
+   the carrier of Open_setLatt(HTopSpace H) =
+           {union A where A is Subset of StoneS(H):not contradiction};
+
+theorem :: OPENLATT:37
+  StoneS(H) c= the carrier of Open_setLatt(HTopSpace H);
+
+definition let H;
+ redefine func StoneH(H) -> Homomorphism of H,Open_setLatt(HTopSpace H);
+end;
+
+theorem :: OPENLATT:38
+  StoneH(H) is monomorphism;
+
+theorem :: OPENLATT:39
+  StoneH(H).(p' => q') = (StoneH(H).p') => (StoneH(H).q');
+
+theorem :: OPENLATT:40
+    StoneH(H) preserves_implication;
+
+theorem :: OPENLATT:41
+    StoneH(H) preserves_top;
+
+theorem :: OPENLATT:42
+    StoneH(H) preserves_bottom;
+

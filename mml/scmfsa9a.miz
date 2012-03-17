@@ -1,0 +1,3045 @@
+:: The { \bf while } macro instructions of SCM+FSA, Part { II }
+::  by Piotr Rudnicki
+::
+:: Received June 3, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_3, INT_1, FUNCT_1, RELAT_1, SQUARE_1, MATRIX_2, ARYTM_1, NAT_1,
+      ARYTM_3, AMI_1, SCMFSA_2, SCM_1, SF_MASTR, CAT_1, FINSUB_1, PROB_1,
+      TARSKI, FUNCOP_1, SCMFSA_4, BOOLE, SCMFSA8A, SCMFSA6A, SCMFSA7B,
+      SCMFSA8B, CARD_1, FUNCT_4, AMI_5, RELOC, SCMFSA_9, UNIALG_2, CARD_3,
+      SCMFSA6B, AMI_2, SCMFSA6C, SFMASTR1, PRE_FF, ABSVALUE, SCMFSA9A;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1,
+      FINSUB_1, FUNCOP_1, CARD_1, CARD_3, INT_1, NAT_1, ABIAN, RELAT_1,
+      FUNCT_1, FUNCT_2, FUNCT_4, CQC_SIM1, PRE_FF, PROB_1, STRUCT_0, AMI_1,
+      AMI_3, SCM_1, AMI_5, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, SCMFSA6B,
+      SF_MASTR, SCMFSA6C, SCMFSA_7, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9,
+      SFMASTR1, GROUP_1;
+ constructors ABIAN, SCMFSA_7, SCMFSA_9, SFMASTR1, SCMFSA6B, SCMFSA6C,
+      SCMFSA8A, SCMFSA8B, SCMFSA_5, CQC_SIM1, PRE_FF, SCM_1, AMI_5, REAL_1,
+      SCMFSA6A, NAT_1, PROB_1, MEMBERED;
+ clusters XREAL_0, FINSET_1, FUNCT_1, INT_1, ABIAN, FINSUB_1, AMI_1, SCMFSA_2,
+      SCMFSA_4, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B,
+      SCMFSA_9, SFMASTR1, FUNCOP_1, RELSET_1, NAT_1, FRAENKEL, MEMBERED,
+      NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ theorems TARSKI, AXIOMS, ZFMISC_1, REAL_1, REAL_2, ABSVALUE, NAT_1, INT_1,
+      NAT_2, FUNCT_1, FUNCT_2, CQC_THE1, CQC_LANG, GRFUNC_1, PROB_1, FUNCOP_1,
+      FUNCT_4, CQC_SIM1, PRE_FF, ABIAN, GR_CY_1, GR_CY_2, FSM_1, AMI_1, SCM_1,
+      AMI_5, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, SCMFSA6B, SF_MASTR,
+      SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCMFSA_9, SFMASTR1,
+      RELSET_1, RELAT_1, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1;
+ schemes FUNCT_2, NAT_1;
+
+begin :: Arithmetic preliminaries
+
+ reserve k, m, n for Nat,
+         i, j for Integer,
+         r for Real;
+
+scheme MinPred { F(Nat)->Nat, P[set]} :
+  ex k st P[k] & for n st P[n] holds k <= n
+   provided
+A1: for k holds (F(k+1) < F(k) or P[k])
+proof
+  defpred X[set] means P[$1];
+      now assume
+    A2: for k holds not X[k];
+      deffunc V(Nat) = F($1);
+      consider f being Function of NAT, NAT such that
+    A3: for k holds f.k = V(k) from LambdaD;
+        f.0 in rng f by FUNCT_2:6;
+      then reconsider rf = rng f as non empty Subset of NAT by RELSET_1:12;
+      set m = min rf;
+        m in rf by CQC_SIM1:def 8;
+      then consider x being set such that
+    A4: x in dom f & m = f.x by FUNCT_1:def 5;
+      reconsider x as Nat by A4,FUNCT_2:def 1;
+        f.x = F(x) & f.(x+1) = F(x+1) by A3;
+      then A5: f.(x+1) < f.x or P[x] by A1;
+        f.(x+1) in rf by FUNCT_2:6;
+     hence contradiction by A2,A4,A5,CQC_SIM1:def 8;
+    end;
+then A6:  ex k st X[k];
+    thus ex k st X[k] & for n st X[n] holds k <= n from Min(A6);
+end;
+
+theorem Th1:
+ n is odd iff ex k being Nat st n = 2*k+1
+proof
+ hereby assume
+ A1: n is odd;
+   then consider j being Integer such that
+ A2: n = 2*j+1 by ABIAN:1;
+       now assume j < 0; then A3: 2*j < 2*0 by REAL_1:70;
+     per cases by A3,INT_1:20;
+     suppose 2*j+1 < 0;
+      hence contradiction by A2,NAT_1:18;
+     suppose 2*j+1 = 0; then n = 2*0;
+      hence contradiction by A1;
+     end;
+   then reconsider j as Nat by INT_1:16;
+   take j;
+   thus n = 2*j+1 by A2;
+ end;
+ thus thesis;
+end;
+
+theorem Th2:
+  for i being Integer st i <= r holds i <= [\ r /]
+proof 
+  let i be Integer;
+  assume
+A1: i <= r;
+A2: r-1 < [\ r /] by INT_1:def 4;
+   i-1 <= r-1 by A1,REAL_1:49;
+   then i-1 < [\ r /] by A2,AXIOMS:22;
+   then i-1+1 <= [\ r /] by INT_1:20;
+ hence i <= [\ r /] by XCMPLX_1:27;
+end;
+
+theorem Th3: :: Div0:
+ 0 < n implies 0 <= m qua Integer div n
+proof assume
+A1: 0 < n;
+     0 <= m by NAT_1:18;
+then A2: 0 <= m/n by A1,REAL_2:125;
+     m qua Integer div n = [\ m/n /] by INT_1:def 7;
+ hence 0 <= m qua Integer div n by A2,Th2;
+end;
+
+theorem Th4: :: Div1:
+ 0 < i & 1 < j implies i div j < i
+proof assume that
+A1: 0 < i and
+A2: 1 < j;
+A3: 0 <= j by A2,AXIOMS:22;
+A4: j <> 0 by A2;
+   assume
+A5: i <= i div j;
+   then 0 < i div j by A1;
+   then A6: 0 < (i div j)" by REAL_1:72;
+     i div j = [\ i/j /] by INT_1:def 7;
+   then i div j <= i/j by INT_1:def 4;
+   then j * (i div j) <= j * (i/j) by A3,AXIOMS:25;
+   then j * (i div j) <= i by A4,XCMPLX_1:88;
+   then j * (i div j) <= i div j by A5,AXIOMS:22;
+   then j * (i div j) * (i div j)" <= (i div j) * (i div j)" by A6,AXIOMS:25;
+   then j * ((i div j) * (i div j)") <= (i div j) * (i div j)"
+      by XCMPLX_1:4;
+   then j * 1 <= (i div j) * (i div j)" by A1,A5,XCMPLX_0:def 7;
+ hence contradiction by A1,A2,A5,XCMPLX_0:def 7;
+end;
+
+theorem Th5: :: Div2:
+ m qua Integer div n = m div n &
+ m qua Integer mod n = m mod n
+proof
+   per cases by NAT_1:18;
+   suppose
+A1: 0 < n;
+  reconsider M = m as Integer;
+A2: m = n * (m div n) + (m mod n) by A1,NAT_1:47;
+A3: M = n * (M div n) + (M mod n) by A1,GR_CY_2:4;
+     0 <= M mod n by A1,GR_CY_2:2;
+   then reconsider Mm = M mod n as Nat by INT_1:16;
+     0 <= M div n by A1,Th3;
+   then reconsider Md = M div n as Nat by INT_1:16;
+A4: m mod n < n by A1,NAT_1:46;
+A5: Mm < n by A1,GR_CY_2:3;
+    Md = M div n;
+ hence thesis by A2,A3,A4,A5,NAT_1:43;
+ suppose
+A6: n = 0;
+  hence m qua Integer div n = 0 by INT_1:75
+    .= m div n by A6,NAT_1:def 1;
+  thus m qua Integer mod n = 0 by A6,INT_1:def 8
+    .= m mod n by A6,NAT_1:def 2;
+end;
+
+begin :: SCM+FSA preliminaries
+
+reserve l for Instruction-Location of SCM+FSA,
+        i for Instruction of SCM+FSA;
+
+theorem Th6: :: LifeSpan0:
+ for N being non empty with_non-empty_elements set,
+     S being halting IC-Ins-separated definite
+     (non empty non void AMI-Struct over N),
+     s being State of S, k being Nat
+  st CurInstr((Computation s).k) = halt S
+   holds (Computation s).(LifeSpan s) = (Computation s).k
+proof let N be non empty with_non-empty_elements set,
+          S be halting IC-Ins-separated definite
+          (non empty non void AMI-Struct over N),
+          s be State of S, k be Nat such that
+A1: CurInstr((Computation s).k) = halt S;
+   set Ls = LifeSpan s;
+   A2: s is halting by A1,AMI_1:def 20;
+then A3: CurInstr((Computation s).Ls) = halt S &
+   for k being Nat st CurInstr((Computation s).k) = halt S holds Ls <= k
+              by SCM_1:def 2;
+     Ls <= k by A1,A2,SCM_1:def 2;
+  hence (Computation s).(LifeSpan s) = (Computation s).k by A3,AMI_1:52;
+end;
+
+theorem Th7: :: singleUsed
+ UsedIntLoc (l .--> i) = UsedIntLoc i
+proof set p = (l .--> i);
+   consider UIL being Function of the Instructions of SCM+FSA,
+                      Fin Int-Locations such that
+A1: for i being Instruction of SCM+FSA holds UIL.i = UsedIntLoc i and
+A2: UsedIntLoc p = Union (UIL * p) by SF_MASTR:def 2;
+   A3: dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
+ thus UsedIntLoc p
+    = union rng (UIL * p) by A2,PROB_1:def 3
+   .= union rng (UIL * ({l} --> i)) by CQC_LANG:def 2
+   .= union rng ({l} --> UIL.i) by A3,FUNCOP_1:23
+   .= union {UIL.i} by FUNCOP_1:14
+   .= union {UsedIntLoc i} by A1
+   .= UsedIntLoc i by ZFMISC_1:31;
+end;
+
+theorem Th8: :: singleUsedF:
+ UsedInt*Loc (l .--> i) = UsedInt*Loc i
+proof set p = (l .--> i);
+   consider UIL being Function of the Instructions of SCM+FSA,
+                      Fin FinSeq-Locations such that
+A1: for i being Instruction of SCM+FSA holds UIL.i = UsedInt*Loc i and
+A2: UsedInt*Loc p = Union (UIL * p) by SF_MASTR:def 4;
+   A3: dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
+ thus UsedInt*Loc p
+    = union rng (UIL * p) by A2,PROB_1:def 3
+   .= union rng (UIL * ({l} --> i)) by CQC_LANG:def 2
+   .= union rng ({l} --> UIL.i) by A3,FUNCOP_1:23
+   .= union {UIL.i} by FUNCOP_1:14
+   .= union {UsedInt*Loc i} by A1
+   .= UsedInt*Loc i by ZFMISC_1:31;
+end;
+
+theorem Th9: :: StopUsed:
+ UsedIntLoc SCM+FSA-Stop = {} by Th7,SCMFSA_4:def 5,SF_MASTR:17;
+
+theorem Th10: :: StopUsedF:
+ UsedInt*Loc SCM+FSA-Stop = {}
+proof
+ thus UsedInt*Loc SCM+FSA-Stop
+    = UsedInt*Loc halt SCM+FSA by Th8,SCMFSA_4:def 5
+   .= {} by SF_MASTR:36;
+end;
+
+theorem Th11: :: GotoUsed:
+ UsedIntLoc Goto l = {}
+proof
+   Goto l = insloc 0 .--> goto l by SCMFSA8A:def 2;
+ hence UsedIntLoc Goto l
+    = UsedIntLoc goto l by Th7
+   .= {} by SF_MASTR:19;
+end;
+
+theorem Th12: :: GotoUsedF:
+ UsedInt*Loc Goto l = {}
+proof
+   Goto l = insloc 0 .--> goto l by SCMFSA8A:def 2;
+ hence UsedInt*Loc Goto l
+    = UsedInt*Loc goto l by Th8
+   .= {} by SF_MASTR:36;
+end;
+
+ reserve s, s1, s2 for State of SCM+FSA,
+         a for read-write Int-Location,
+         b for Int-Location,
+
+         I, J for Macro-Instruction,
+         Ig for good Macro-Instruction,
+         i, j, k, m, n for Nat;
+
+ set D = Int-Locations \/ FinSeq-Locations;
+ set SAt = Start-At insloc 0;
+ set IL = the Instruction-Locations of SCM+FSA;
+
+ :: set D = Int-Locations U FinSeq-Locations;
+ :: set SAt = Start-At insloc 0;
+ :: set IL = the Instruction-Locations of SCM+FSA;
+
+theorem Th13: :: eifUsed:
+  UsedIntLoc if=0(b, I, J) = {b} \/ UsedIntLoc I \/ UsedIntLoc J
+proof set a = b;
+ set I1 = a =0_goto insloc (card J + 3);
+ set I3 = Goto insloc (card I + 1);
+ set I5 = SCM+FSA-Stop;
+ thus UsedIntLoc if=0(a, I, J)
+    = UsedIntLoc (I1 ';' J ';' I3 ';' I ';' I5) by SCMFSA8B:def 1
+   .= (UsedIntLoc (I1 ';' J ';' I3 ';' I)) \/ {} by Th9,SF_MASTR:31
+   .= (UsedIntLoc (I1 ';' J ';' I3)) \/ UsedIntLoc I by SF_MASTR:31
+   .= (UsedIntLoc (I1 ';' J)) \/ UsedIntLoc I3 \/ UsedIntLoc I by SF_MASTR:31
+   .= (UsedIntLoc (I1 ';' J)) \/ {} \/ UsedIntLoc I by Th11
+   .= UsedIntLoc I1 \/ UsedIntLoc J \/ UsedIntLoc I by SF_MASTR:33
+   .= {a} \/ UsedIntLoc J \/ UsedIntLoc I by SF_MASTR:20
+   .= {a} \/ UsedIntLoc I \/ UsedIntLoc J by XBOOLE_1:4;
+end;
+
+theorem Th14: :: eifUsedF:
+ for a being Int-Location
+  holds UsedInt*Loc if=0(a, I, J) = UsedInt*Loc I \/ UsedInt*Loc J
+proof let a be Int-Location;
+ set I1 = a =0_goto insloc (card J + 3);
+ set I3 = Goto insloc (card I + 1);
+ set I5 = SCM+FSA-Stop;
+ thus UsedInt*Loc if=0(a, I, J)
+    = UsedInt*Loc (I1 ';' J ';' I3 ';' I ';' I5) by SCMFSA8B:def 1
+   .= (UsedInt*Loc (I1 ';' J ';' I3 ';' I)) \/ {} by Th10,SF_MASTR:47
+   .= (UsedInt*Loc (I1 ';' J ';' I3)) \/ UsedInt*Loc I by SF_MASTR:47
+   .= (UsedInt*Loc (I1 ';' J)) \/ UsedInt*Loc I3 \/
+ UsedInt*Loc I by SF_MASTR:47
+   .= (UsedInt*Loc (I1 ';' J)) \/ {} \/ UsedInt*Loc I by Th12
+   .= UsedInt*Loc I1 \/ UsedInt*Loc J \/ UsedInt*Loc I by SF_MASTR:49
+   .= {} \/ UsedInt*Loc J \/ UsedInt*Loc I by SF_MASTR:36
+   .= UsedInt*Loc I \/ UsedInt*Loc J;
+end;
+
+theorem Th15: :: ifUsed:
+ UsedIntLoc if>0(b, I, J) = {b} \/ UsedIntLoc I \/ UsedIntLoc J
+proof set a = b;
+ set I1 = a >0_goto insloc (card J + 3);
+ set I3 = Goto insloc (card I + 1);
+ set I5 = SCM+FSA-Stop;
+ thus UsedIntLoc if>0(a, I, J)
+    = UsedIntLoc (I1 ';' J ';' I3 ';' I ';' I5) by SCMFSA8B:def 2
+   .= (UsedIntLoc (I1 ';' J ';' I3 ';' I)) \/ {} by Th9,SF_MASTR:31
+   .= (UsedIntLoc (I1 ';' J ';' I3)) \/ UsedIntLoc I by SF_MASTR:31
+   .= (UsedIntLoc (I1 ';' J)) \/ UsedIntLoc I3 \/ UsedIntLoc I by SF_MASTR:31
+   .= (UsedIntLoc (I1 ';' J)) \/ {} \/ UsedIntLoc I by Th11
+   .= UsedIntLoc I1 \/ UsedIntLoc J \/ UsedIntLoc I by SF_MASTR:33
+   .= {a} \/ UsedIntLoc J \/ UsedIntLoc I by SF_MASTR:20
+   .= {a} \/ UsedIntLoc I \/ UsedIntLoc J by XBOOLE_1:4;
+end;
+
+theorem Th16: :: ifUsedF:
+ UsedInt*Loc if>0(b, I, J) = UsedInt*Loc I \/ UsedInt*Loc J
+proof set a = b;
+ set I1 = a >0_goto insloc (card J + 3);
+ set I3 = Goto insloc (card I + 1);
+ set I5 = SCM+FSA-Stop;
+ thus UsedInt*Loc if>0(a, I, J)
+    = UsedInt*Loc (I1 ';' J ';' I3 ';' I ';' I5) by SCMFSA8B:def 2
+   .= (UsedInt*Loc (I1 ';' J ';' I3 ';' I)) \/ {} by Th10,SF_MASTR:47
+   .= (UsedInt*Loc (I1 ';' J ';' I3)) \/ UsedInt*Loc I by SF_MASTR:47
+   .= (UsedInt*Loc (I1 ';' J)) \/ UsedInt*Loc I3 \/
+ UsedInt*Loc I by SF_MASTR:47
+   .= (UsedInt*Loc (I1 ';' J)) \/ {} \/ UsedInt*Loc I by Th12
+   .= UsedInt*Loc I1 \/ UsedInt*Loc J \/ UsedInt*Loc I by SF_MASTR:49
+   .= {} \/ UsedInt*Loc J \/ UsedInt*Loc I by SF_MASTR:36
+   .= UsedInt*Loc I \/ UsedInt*Loc J;
+end;
+
+begin :: while=0, general
+
+Lm1: :: based on Lem09 from SCMFSA_9
+ for a being Int-Location, I being Macro-Instruction
+  holds
+   insloc (card I +4) in dom if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop) &
+   if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop).insloc (card I +4)
+      = goto ((insloc 0)+(card I +4))
+proof let a be Int-Location;
+    let I be Macro-Instruction;
+    set G = Goto insloc 0;
+    set I1= I ';' G;
+    set J = SCM+FSA-Stop;
+    set i = a =0_goto insloc (card J + 3);
+    set c4 = card I + 4;
+    set Lc4 = insloc c4;
+      card I1 = card I + card G by SCMFSA6A:61
+             .= card I +1 by SCMFSA8A:29;
+    then card I1 + card J + 3 = card I +(1+1) +3 by SCMFSA8A:17,XCMPLX_1:1
+  .= card I +(1+1+3) by XCMPLX_1:1
+  .= card I + (4+1)
+  .= card I +4 +1 by XCMPLX_1:1;
+    then c4 < card I1 + card J + 3 by NAT_1:38;
+ hence
+A1: Lc4 in dom if=0(a,I1,J) by SCMFSA8C:56;
+    set Mi= Macro i ';' J ';' Goto insloc (card I1 + 1) ';' I;
+A2: card (G ';' J) = card G + card J by SCMFSA6A:61
+     .= 1 + 1 by SCMFSA8A:17,29
+     .= 2;
+A3: if=0(a, I1, J)
+    = i ';' J ';' Goto insloc (card I1 + 1) ';' (I ';' G) ';' J
+      by SCMFSA8B:def 1
+    .= i ';' J ';' Goto insloc (card I1 + 1) ';' I ';' G ';' J
+      by SCMFSA6A:62
+    .= Mi ';' G ';' J by SCMFSA6A:def 5
+    .= Mi ';' (G ';' J) by SCMFSA6A:62;
+    then card if=0(a, I1,J) = card Mi + card (G ';' J) by SCMFSA6A:61;
+then A4: card Mi = card if=0(a,I1,J)-card (G ';' J) by XCMPLX_1:26
+    .= card I + 6 - 2 by A2,SCMFSA_9:1
+    .= card I + (4+2-2) by XCMPLX_1:29
+    .= c4;
+then A5: not Lc4 in dom Mi by SCMFSA6A:15;
+    set GJ = G ';' J;
+A6: if=0(a, I1, J) = Directed Mi +* ProgramPart Relocated(GJ, c4) by A3,A4,
+SCMFSA6A:def 4;
+then A7: dom if=0(a,I1,J) = dom Directed Mi \/ dom ProgramPart Relocated(GJ, c4
+)
+      by FUNCT_4:def 1;
+    then dom if=0(a,I1,J)
+    = dom Mi \/ dom ProgramPart Relocated(GJ, c4) by SCMFSA6A:14;
+then A8: Lc4 in dom ProgramPart Relocated(GJ, c4) by A1,A5,XBOOLE_0:def 2;
+A9: insloc 0 + c4 = insloc ( 0 + c4) by SCMFSA_4:def 1;
+A10: G = insloc 0 .--> goto insloc 0 by SCMFSA8A:def 2;
+     then dom G = {insloc 0} by CQC_LANG:5;
+then A11: insloc 0 in dom G by TARSKI:def 1;
+A12: G.insloc 0 = goto insloc 0 by A10,CQC_LANG:6;
+  A13: InsCode goto insloc 0 = 6 & InsCode halt SCM+FSA = 0 by SCMFSA_2:47,124;
+    A14: dom G c= dom GJ by SCMFSA6A:56;
+    then insloc 0 + c4 in { il+c4 where il is Instruction-Location of SCM+FSA:
+      il in dom GJ} by A11;
+then A15:  insloc c4 in dom Shift(GJ,c4) by A9,SCMFSA_4:31;
+then A16: pi(Shift(GJ,c4),Lc4) = Shift(GJ,c4).(insloc 0 +c4) by A9,AMI_5:def 5
+    .= GJ.insloc 0 by A11,A14,SCMFSA_4:30
+    .= goto insloc 0 by A11,A12,A13,SCMFSA6A:54;
+
+   thus if=0(a,I1,J).Lc4
+    = (ProgramPart Relocated(GJ,c4)).Lc4 by A1,A6,A7,A8,FUNCT_4:def 1
+   .= IncAddr(Shift(ProgramPart(GJ),c4),c4).Lc4 by SCMFSA_5:2
+   .= IncAddr(Shift(GJ,c4),c4).Lc4 by AMI_5:72
+   .= IncAddr( goto insloc 0, c4 ) by A15,A16,SCMFSA_4:24
+   .= goto ((insloc 0)+c4) by SCMFSA_4:14;
+ end;
+
+Lm2:
+ for a being Int-Location, I being Macro-Instruction
+  holds UsedIntLoc if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop)
+      = UsedIntLoc (if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop) +*
+          ( insloc (card I +4) .--> goto insloc 0 ))
+proof let a be Int-Location;
+    let I be Macro-Instruction;
+    set Lc4 = insloc (card I + 4);
+    set if0 = if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop);
+    set ic4 = insloc (card I +4) .--> goto insloc 0;
+  consider UIL1 being Function of the Instructions of SCM+FSA,
+                      Fin Int-Locations such that
+A1: for i being Instruction of SCM+FSA holds UIL1.i = UsedIntLoc i and
+A2: UsedIntLoc if0 = Union (UIL1 * if0) by SF_MASTR:def 2;
+  consider UIL2 being Function of the Instructions of SCM+FSA,
+                      Fin Int-Locations such that
+A3: for i being Instruction of SCM+FSA holds UIL2.i = UsedIntLoc i and
+A4: UsedIntLoc (if0+*ic4) = Union (UIL2*(if0+*ic4)) by SF_MASTR:def 2;
+      for c be Element of the Instructions of SCM+FSA holds UIL1.c = UIL2.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA;
+      thus UIL1.c = UsedIntLoc d by A1
+        .= UIL2.c by A3;
+    end;
+then A5: UIL1=UIL2 by FUNCT_2:113;
+A6: dom UIL1 = the Instructions of SCM+FSA by FUNCT_2:def 1;
+    now
+   thus dom (UIL1*if0) = dom (UIL1*if0);
+  A7: rng if0 c= dom UIL1 by A6,SCMFSA_4:1;
+  A8: rng (if0+*ic4) c= dom UIL1 by A6,SCMFSA_4:1;
+  A9: dom (if0+*ic4) = dom if0 \/ dom ic4 by FUNCT_4:def 1;
+  A10: dom ic4 = {insloc (card I +4)} by CQC_LANG:5;
+         insloc (card I +4) in dom if0 by Lm1;
+       then dom ic4 c= dom if0 by A10,ZFMISC_1:37;
+  then A11: dom if0 = dom (if0+*ic4) by A9,XBOOLE_1:12;
+   thus
+  A12: dom (UIL1*if0) = dom if0 by A7,RELAT_1:46
+       .= dom (UIL1*(if0+*ic4)) by A8,A11,RELAT_1:46;
+   let x be set; assume
+  A13: x in dom (UIL1*if0);
+  A14: Lc4 in dom ic4 by A10,TARSKI:def 1;
+   per cases;
+   suppose x <> Lc4;
+   then A15: not x in dom ic4 by A10,TARSKI:def 1;
+    thus (UIL1*if0).x = UIL1.(if0.x) by A13,FUNCT_1:22
+      .= UIL1.((if0+*ic4).x) by A15,FUNCT_4:12
+      .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
+   suppose A16: x = Lc4;
+    thus (UIL1*if0).x
+       = UIL1.(if0.x) by A13,FUNCT_1:22
+      .= UIL1.(goto ((insloc 0)+(card I +4))) by A16,Lm1
+      .= UsedIntLoc goto ((insloc 0)+(card I +4)) by A1
+      .= {} by SF_MASTR:19
+      .= UsedIntLoc goto insloc 0 by SF_MASTR:19
+      .= UIL1.(goto insloc 0) by A1
+      .= UIL1.(ic4.x) by A16,CQC_LANG:6
+      .= UIL1.((if0+*ic4).x) by A14,A16,FUNCT_4:14
+      .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
+  end;
+ hence thesis by A2,A4,A5,FUNCT_1:9;
+end;
+
+Lm3:
+ for a being Int-Location, I being Macro-Instruction
+  holds UsedInt*Loc if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop)
+      = UsedInt*Loc (if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop) +*
+          ( insloc (card I +4) .--> goto insloc 0 ))
+proof let a be Int-Location;
+    let I be Macro-Instruction;
+    set Lc4 = insloc (card I + 4);
+    set if0 = if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop);
+    set ic4 = insloc (card I +4) .--> goto insloc 0;
+  consider UIL1 being Function of the Instructions of SCM+FSA,
+                      Fin FinSeq-Locations such that
+A1: for i being Instruction of SCM+FSA holds UIL1.i = UsedInt*Loc i and
+A2: UsedInt*Loc if0 = Union (UIL1 * if0) by SF_MASTR:def 4;
+  consider UIL2 being Function of the Instructions of SCM+FSA,
+                      Fin FinSeq-Locations such that
+A3: for i being Instruction of SCM+FSA holds UIL2.i = UsedInt*Loc i and
+A4: UsedInt*Loc (if0+*ic4) = Union (UIL2*(if0+*ic4)) by SF_MASTR:def 4;
+      for c be Element of the Instructions of SCM+FSA holds UIL1.c = UIL2.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA;
+      thus UIL1.c = UsedInt*Loc d by A1
+        .= UIL2.c by A3;
+    end;
+then A5: UIL1=UIL2 by FUNCT_2:113;
+A6: dom UIL1 = the Instructions of SCM+FSA by FUNCT_2:def 1;
+    now
+   thus dom (UIL1*if0) = dom (UIL1*if0);
+  A7: rng if0 c= dom UIL1 by A6,SCMFSA_4:1;
+  A8: rng (if0+*ic4) c= dom UIL1 by A6,SCMFSA_4:1;
+  A9: dom (if0+*ic4) = dom if0 \/ dom ic4 by FUNCT_4:def 1;
+  A10: dom ic4 = {insloc (card I +4)} by CQC_LANG:5;
+         insloc (card I +4) in dom if0 by Lm1;
+       then dom ic4 c= dom if0 by A10,ZFMISC_1:37;
+  then A11: dom if0 = dom (if0+*ic4) by A9,XBOOLE_1:12;
+   thus
+  A12: dom (UIL1*if0) = dom if0 by A7,RELAT_1:46
+       .= dom (UIL1*(if0+*ic4)) by A8,A11,RELAT_1:46;
+   let x be set; assume
+  A13: x in dom (UIL1*if0);
+  A14: Lc4 in dom ic4 by A10,TARSKI:def 1;
+   per cases;
+   suppose x <> Lc4;
+   then A15: not x in dom ic4 by A10,TARSKI:def 1;
+    thus (UIL1*if0).x = UIL1.(if0.x) by A13,FUNCT_1:22
+      .= UIL1.((if0+*ic4).x) by A15,FUNCT_4:12
+      .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
+   suppose A16: x = Lc4;
+    thus (UIL1*if0).x
+       = UIL1.(if0.x) by A13,FUNCT_1:22
+      .= UIL1.(goto ((insloc 0)+(card I +4))) by A16,Lm1
+      .= UsedInt*Loc goto ((insloc 0)+(card I +4)) by A1
+      .= {} by SF_MASTR:36
+      .= UsedInt*Loc goto insloc 0 by SF_MASTR:36
+      .= UIL1.(goto insloc 0) by A1
+      .= UIL1.(ic4.x) by A16,CQC_LANG:6
+      .= UIL1.((if0+*ic4).x) by A14,A16,FUNCT_4:14
+      .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
+  end;
+ hence thesis by A2,A4,A5,FUNCT_1:9;
+end;
+
+theorem  :: ewhileUsed:
+   UsedIntLoc while=0(b, I) = {b} \/ UsedIntLoc I
+proof set a = b;
+  set J = SCM+FSA-Stop;
+  set IG = I ';' Goto insloc 0;
+   while=0(a, I) = if=0(a, IG, J) +*
+   ( insloc (card I +4) .--> goto insloc 0 ) by SCMFSA_9:def 1;
+ hence UsedIntLoc while=0(a, I)
+    = (UsedIntLoc if=0(a, IG, J)) by Lm2
+   .= {a} \/ UsedIntLoc IG \/ UsedIntLoc J by Th13
+   .= {a} \/ (UsedIntLoc I \/ UsedIntLoc Goto insloc 0) \/ UsedIntLoc J
+            by SF_MASTR:31
+   .= {a} \/ (UsedIntLoc I \/ {}) \/ UsedIntLoc J by Th11
+   .= {a} \/ UsedIntLoc I by Th9;
+end;
+
+theorem  :: ewhileUsedF:
+   UsedInt*Loc while=0(b, I) = UsedInt*Loc I
+proof set a = b;
+  set J = SCM+FSA-Stop;
+  set IG = I ';' Goto insloc 0;
+   while=0(a, I) = if=0(a, IG, J) +*
+   ( insloc (card I +4) .--> goto insloc 0 ) by SCMFSA_9:def 1;
+ hence UsedInt*Loc while=0(a, I)
+    = (UsedInt*Loc if=0(a, IG, J)) by Lm3
+   .= UsedInt*Loc IG \/ UsedInt*Loc J by Th14
+   .= (UsedInt*Loc I \/ UsedInt*Loc Goto insloc 0) \/ UsedInt*Loc J
+            by SF_MASTR:47
+   .= UsedInt*Loc I \/ {} by Th10,Th12
+   .= UsedInt*Loc I;
+end;
+
+definition
+ let s be State of SCM+FSA, a be read-write Int-Location,
+     I be Macro-Instruction;
+ pred ProperBodyWhile=0 a, I, s means
+:Def1:
+  for k being Nat st StepWhile=0(a,I,s).k.a = 0
+    holds I is_closed_on StepWhile=0(a,I,s).k &
+          I is_halting_on StepWhile=0(a,I,s).k;
+
+ pred WithVariantWhile=0 a, I, s means
+:Def2:
+ ex f being Function of product the Object-Kind of SCM+FSA, NAT
+  st for k being Nat
+       holds ( f.(StepWhile=0(a,I,s).(k+1)) < f.(StepWhile=0(a,I,s).k)
+              or StepWhile=0(a,I,s).k.a <> 0 );
+end;
+
+theorem Th19: :: eParaProper:
+ for I being parahalting Macro-Instruction holds ProperBodyWhile=0 a, I, s
+proof let I be parahalting Macro-Instruction;
+  let k be Nat such that StepWhile=0(a,I,s).k.a = 0;
+  thus I is_closed_on StepWhile=0(a,I,s).k by SCMFSA7B:24;
+  thus I is_halting_on StepWhile=0(a,I,s).k by SCMFSA7B:25;
+end;
+
+theorem Th20:   :: SCMFSA_9:24, corrected
+ ProperBodyWhile=0 a, I, s & WithVariantWhile=0 a, I, s
+  implies while=0(a,I) is_halting_on s & while=0(a,I) is_closed_on s
+proof assume
+A1: for k being Nat st StepWhile=0(a,I,s).k.a = 0
+                holds I is_closed_on StepWhile=0(a,I,s).k &
+                      I is_halting_on StepWhile=0(a,I,s).k;
+    given f being Function of product the Object-Kind of SCM+FSA,NAT such that
+A2:for k being Nat holds
+      (f.(StepWhile=0(a,I,s).(k+1)) < f.(StepWhile=0(a,I,s).k) or
+      (StepWhile=0(a,I,s).k).a <> 0 );
+
+    deffunc F(Nat) = f.(StepWhile=0(a,I,s).$1);
+    defpred S[Nat] means StepWhile=0(a,I,s).$1.a <> 0;
+    set s1 = s +* (while=0(a,I) +* Start-At insloc 0);
+
+A3: for k holds ( F(k+1) < F(k) or S[k] ) by A2;
+    consider m being Nat such that
+A4: S[m] and
+A5: for n st S[n] holds m <= n from MinPred(A3);
+
+    defpred P[Nat] means
+      $1+1 <= m implies
+        ex k st StepWhile=0(a,I,s).($1+1)=(Computation s1).k;
+
+A6: P[0]
+    proof assume 0+1 <= m;
+       take n=(LifeSpan (s+* (I +* SAt)) + 3);
+       thus StepWhile=0(a,I,s).(0+1)=(Computation s1).n by SCMFSA_9:30;
+    end;
+A7: IC SCM+FSA in dom (while=0(a,I) +* SAt ) by SF_MASTR:65;
+A8: now let k be Nat;
+       assume A9: P[k];
+         now assume A10: (k+1)+ 1 <= m;
+            k + 0 < k+ (1+ 1) by REAL_1:53;
+          then k < (k+1) +1 by XCMPLX_1:1;
+then A11:       k < m by A10,AXIOMS:22;
+          A12: (k+1)+ 0 < (k+ 1)+ 1 by REAL_1:53;
+          set sk=StepWhile=0(a,I,s).k;
+          set sk1=StepWhile=0(a,I,s).(k+1);
+          consider n being Nat such that
+A13:       sk1 = (Computation s1).n by A9,A10,A12,AXIOMS:22;
+A14:       sk1 = (Computation (sk +* (while=0(a,I)+* SAt))).
+                        (LifeSpan (sk +* (I +* SAt)) + 3) by SCMFSA_9:def 4;
+A15:     sk.a = 0 by A5,A11;
+       then I is_closed_on sk & I is_halting_on sk by A1;
+then A16:       IC sk1 = insloc 0 by A14,A15,SCMFSA_9:22;
+          take m=n +(LifeSpan (sk1 +* (I +* SAt)) + 3);
+          thus StepWhile=0(a,I,s).((k+1)+1)=(Computation s1).m
+            by A13,A16,SCMFSA_9:31;
+       end;
+       hence P[k+1];
+    end;
+A17: for k being Nat holds P[k] from Ind(A6,A8);
+      now per cases;
+       suppose m = 0;
+         then s.a <> 0 by A4,SCMFSA_9:def 4;
+         hence while=0(a,I) is_halting_on s & while=0(a,I) is_closed_on s
+         by SCMFSA_9:18;
+       suppose A18: m <> 0;
+         then consider i being Nat such that
+A19:      m=i+1 by NAT_1:22;
+         set si=StepWhile=0(a,I,s).i;
+         set sm=StepWhile=0(a,I,s).m;
+         set sm1=sm +* (while=0(a,I)+* SAt);
+         consider n being Nat such that
+A20:     sm = (Computation s1).n by A17,A19;
+A21:     sm= (Computation (si +* (while=0(a,I)+* SAt))).
+           (LifeSpan (si +* (I +* SAt)) + 3) by A19,SCMFSA_9:def 4;
+           i < m by A19,NAT_1:38;
+then A22:    si.a = 0 by A5;
+     then I is_closed_on si & I is_halting_on si by A1;
+then A23:     IC sm = insloc 0 by A21,A22,SCMFSA_9:22;
+A24:     IC sm1 = sm1.IC SCM+FSA by AMI_1:def 15
+         .= (while=0(a,I) +* SAt).IC SCM+FSA by A7,FUNCT_4:14
+         .= IC sm by A23,SF_MASTR:66;
+A25:     sm1 | D = sm | D by SCMFSA8A:11;
+       sm | IL =s1 | IL by A20,SCMFSA6B:17;
+         then sm1 | IL = sm | IL by SCMFSA_9:27;
+then A26:     sm1=sm by A24,A25,SCMFSA_9:29;
+           while=0(a,I) is_halting_on sm by A4,SCMFSA_9:18;
+         then sm1 is halting by SCMFSA7B:def 8;
+         then consider j being Nat such that
+A27:      CurInstr((Computation sm).j) = halt SCM+FSA by A26,AMI_1:def 20;
+           CurInstr (Computation s1).(n+j) = halt SCM+FSA by A20,A27,AMI_1:51;
+         then s1 is halting by AMI_1:def 20;
+         hence while=0(a,I) is_halting_on s by SCMFSA7B:def 8;
+
+         set p=(LifeSpan (s+* (I +* SAt)) + 3);
+           now let q be Nat;
+A28:         0<m by A18,NAT_1:19;
+            per cases;
+            suppose A29: q <= p;
+A30:           StepWhile=0(a,I,s).0 = s by SCMFSA_9:def 4;
+then A31:           s.a = 0 by A5,A28;
+              then I is_closed_on s & I is_halting_on s by A1,A30;
+              hence IC (Computation s1).q in dom while=0(a,I) by A29,A31,
+SCMFSA_9:22;
+            suppose A32: q > p;
+              defpred P2[Nat] means
+                $1<=m & $1<>0 & (ex k st StepWhile=0(a,I,s).$1=
+                (Computation s1).k & k <= q);
+A33:           for i be Nat st P2[i] holds i <= m;
+A34:           now
+                 take k=p;
+                 thus StepWhile=0(a,I,s).1=(Computation s1).k & k <= q
+                 by A32,SCMFSA_9:30;
+              end;
+                0+1 < m +1 by A28,REAL_1:53;
+then 1 <= m by NAT_1:38;
+then A35:           ex k st P2[k] by A34;
+                ex k st P2[k] & for i st P2[i] holds i <=
+ k from Max(A33,A35);
+              then consider t being Nat such that
+A36:           P2[t] & for i st P2[i] holds i <= t;
+                now per cases;
+                 suppose t=m;
+                   then consider r being Nat such that
+A37:                sm=(Computation s1).r & r <= q by A36;
+                   consider x being Nat such that
+A38:                q = r+x by A37,NAT_1:28;
+A39:                (Computation s1).q = (Computation sm1).x by A26,A37,A38,
+AMI_1:51;
+                     while=0(a,I) is_closed_on sm by A4,SCMFSA_9:18;
+                   hence IC (Computation s1).q in dom while=0(a,I) by A39,
+SCMFSA7B:def 7;
+                 suppose t<>m;
+then A40:                t < m by A36,REAL_1:def 5;
+                   consider y being Nat such that
+A41:                t=y+1 by A36,NAT_1:22;
+                   consider z being Nat such that
+A42:                StepWhile=0(a,I,s).t=(Computation s1).z & z <= q by A36;
+                     y+ 0 < t by A41,REAL_1:53;
+then A43:                y < m by A36,AXIOMS:22;
+                   set Dy=StepWhile=0(a,I,s).y;
+                   set Dt=StepWhile=0(a,I,s).t;
+A44:                Dt= (Computation (Dy +* (while=0(a,I)+* SAt))).
+                    (LifeSpan (Dy +* (I +* SAt)) + 3) by A41,SCMFSA_9:def 4;
+A45:              Dy.a = 0 by A5,A43;
+                then I is_closed_on Dy & I is_halting_on Dy by A1;
+then A46:                IC Dt =insloc 0 by A44,A45,SCMFSA_9:22;
+                   set z2=z +(LifeSpan (Dt +* (I +* SAt)) + 3);
+A47:                now assume A48: z2 <= q;
+A49:                    now take k=z2;thus
+                            StepWhile=0(a,I,s).(t+1)=(Computation s1).k & k <=q
+                          by A42,A46,A48,SCMFSA_9:31;
+                       end; t+1 <= m by A40,NAT_1:38; then t+1 <= t by A36,A49;
+                      hence contradiction by REAL_1:69;
+                   end;
+                   consider w being Nat such that
+A50:                q = z+w by A42,NAT_1:28;
+A51:                w < LifeSpan (Dt +* (I +* SAt)) + 3 by A47,A50,AXIOMS:24;
+A52:                (Computation s1).q = (Computation Dt ).w by A42,A50,AMI_1:
+51
+                   .= (Computation (Dt +* (while=0(a,I)+* SAt))).w
+                      by A42,A46,SCMFSA_9:31;
+A53:              Dt.a = 0 by A5,A40;
+                   then I is_closed_on Dt & I is_halting_on Dt by A1;
+                   hence IC (Computation s1).q in dom while=0(a,I)
+                    by A51,A52,A53,SCMFSA_9:22;
+              end;
+              hence IC (Computation s1).q in dom while=0(a,I);
+         end;
+         hence while=0(a,I) is_closed_on s by SCMFSA7B:def 7;
+    end;
+    hence thesis;
+end;
+
+theorem Th21:   :: SCMFSA_9:25, corrected
+ for I being parahalting Macro-Instruction
+  st WithVariantWhile=0 a, I, s
+   holds while=0(a,I) is_halting_on s & while=0(a,I) is_closed_on s
+proof let I be parahalting Macro-Instruction such that
+A1: WithVariantWhile=0 a, I, s;
+       ProperBodyWhile=0 a, I, s proof let k be Nat; assume
+         StepWhile=0(a,I,s).k.a = 0;
+      thus thesis by SCMFSA7B:24,25;
+     end;
+    hence thesis by A1,Th20;
+end;
+
+theorem Th22: :: based on SCMFSA_9:10
+ while=0(a, I) +* SAt c= s & s.a <> 0
+  implies LifeSpan s = 4 & for k being Nat holds (Computation s).k | D = s | D
+proof assume that
+A1: while=0(a, I) +* SAt c= s and
+A2: s.a <> 0;
+    set s1 = s +* (while=0(a,I) +* Start-At insloc 0);
+    set s2 = (Computation s1).1;
+    set s3 = (Computation s1).2;
+    set s4 = (Computation s1).3;
+    set s5 = (Computation s1).4;
+    set C1 = Computation s1;
+    set i = a =0_goto insloc 4;
+
+A3: s = s1 by A1,AMI_5:10;
+
+A4: insloc 0 in dom while=0(a,I) by SCMFSA_9:10;
+      while=0(a,I) c= while=0(a,I) +* Start-At insloc 0 by SCMFSA8A:9;
+then A5: dom while=0(a,I) c= dom (while=0(a,I) +* Start-At insloc 0)
+       by GRFUNC_1:8;
+A6:  IC SCM+FSA in dom (while=0(a,I) +* Start-At insloc 0) by SF_MASTR:65;
+A7: IC s1 = s1.IC SCM+FSA by AMI_1:def 15
+    .= (while=0(a,I) +* Start-At insloc 0).IC SCM+FSA by A6,FUNCT_4:14
+    .= insloc 0 by SF_MASTR:66;
+      s1.insloc 0 = (while=0(a,I) +* Start-At insloc 0).insloc 0 by A4,A5,
+FUNCT_4:14
+    .= while=0(a,I).insloc 0 by A4,SCMFSA6B:7
+    .= i by SCMFSA_9:11;
+then A8: CurInstr s1 = i by A7,AMI_1:def 17;
+A9: (Computation s1).(0 + 1) = Following (Computation s1).0 by AMI_1:def 19
+    .= Following s1 by AMI_1:def 19
+    .= Exec(i,s1) by A8,AMI_1:def 18;
+      not a in dom (while=0(a,I) +* Start-At insloc 0) & a in dom s
+       by SCMFSA6B:12,SCMFSA_2:66;
+    then A10: s1.a = s.a by FUNCT_4:12;
+A11: IC C1.1 = C1.1.IC SCM+FSA by AMI_1:def 15
+    .= Next insloc 0 by A2,A7,A9,A10,SCMFSA_2:96
+    .= insloc (0 + 1) by SCMFSA_2:32;
+A12: insloc 1 in dom while=0(a,I) by SCMFSA_9:10;
+      C1.1.insloc 1 = s1.insloc 1 by AMI_1:54
+    .= (while=0(a,I) +* Start-At insloc 0).insloc 1 by A5,A12,FUNCT_4:14
+    .= while=0(a,I).insloc 1 by A12,SCMFSA6B:7
+    .= goto insloc 2 by SCMFSA_9:11;
+then A13: CurInstr C1.1 = goto insloc 2 by A11,AMI_1:def 17;
+A14: (Computation s1).(1 + 1) = Following s2 by AMI_1:def 19
+    .= Exec(goto insloc 2,s2) by A13,AMI_1:def 18;
+
+A15: insloc 2 in dom while=0(a,I) by SCMFSA_9:12;
+
+A16: IC s3 = s3.IC SCM+FSA by AMI_1:def 15
+    .= insloc 2 by A14,SCMFSA_2:95;
+
+      s3.insloc 2 = s1.insloc 2 by AMI_1:54
+    .= (while=0(a,I) +* Start-At insloc 0).insloc 2 by A5,A15,FUNCT_4:14
+    .= while=0(a,I).insloc 2 by A15,SCMFSA6B:7
+    .= goto insloc 3 by SCMFSA_9:16;
+then A17:  CurInstr s3 = goto insloc 3 by A16,AMI_1:def 17;
+
+A18: (Computation s1).(2 + 1) = Following s3 by AMI_1:def 19
+    .= Exec(goto insloc 3,s3) by A17,AMI_1:def 18;
+
+A19: insloc 3 in dom while=0(a,I) by SCMFSA_9:12;
+     set loc5= insloc (card I +5);
+A20:  IC s4 = s4.IC SCM+FSA by AMI_1:def 15
+    .= insloc 3 by A18,SCMFSA_2:95;
+      s4.insloc 3 = s1.insloc 3 by AMI_1:54
+    .= (while=0(a,I) +* Start-At insloc 0).insloc 3 by A5,A19,FUNCT_4:14
+    .= while=0(a,I).insloc 3 by A19,SCMFSA6B:7
+    .= goto loc5 by SCMFSA_9:15;
+then A21: CurInstr s4 = goto loc5 by A20,AMI_1:def 17;
+A22: (Computation s1).(3 + 1) = Following s4 by AMI_1:def 19
+    .= Exec(goto loc5,s4) by A21,AMI_1:def 18;
+
+A23: loc5 in dom while=0(a,I) by SCMFSA_9:13;
+A24:  IC s5 = s5.IC SCM+FSA by AMI_1:def 15
+     .= loc5 by A22,SCMFSA_2:95;
+       s5.loc5 = s1.loc5 by AMI_1:54
+     .= (while=0(a,I) +* Start-At insloc 0).loc5 by A5,A23,FUNCT_4:14
+     .= while=0(a,I).loc5 by A23,SCMFSA6B:7
+     .= halt SCM+FSA by SCMFSA_9:14;
+then A25:  CurInstr s5 = halt SCM+FSA by A24,AMI_1:def 17;
+then A26:  s1 is halting by AMI_1:def 20;
+       now let k; assume
+     A27: CurInstr((Computation s).k) = halt SCM+FSA;
+      assume 4 > k; then 3+1 > k;
+     then A28: k <= 3 by NAT_1:38;
+      per cases by A28,CQC_THE1:4;
+      suppose k = 0; then (Computation s).k = s by AMI_1:def 19;
+       hence contradiction by A3,A8,A27,SCMFSA_2:48,124;
+      suppose k = 1;
+       hence contradiction by A3,A13,A27,SCMFSA_2:47,124;
+      suppose k = 2;
+       hence contradiction by A3,A17,A27,SCMFSA_2:47,124;
+      suppose k = 3;
+       hence contradiction by A3,A21,A27,SCMFSA_2:47,124;
+     end;
+ hence A29: LifeSpan s = 4 by A3,A25,A26,SCM_1:def 2;
+
+A30:  (for c being Int-Location holds Exec(goto loc5, s4).c = s4.c) &
+       for f being FinSeq-Location holds Exec(goto loc5, s4).f = s4.f
+           by SCMFSA_2:95;
+A31:  (for c being Int-Location holds Exec(goto insloc 3, s3).c = s3.c) &
+       for f being FinSeq-Location holds Exec(goto insloc 3, s3).f = s3.f
+           by SCMFSA_2:95;
+A32:  (for c being Int-Location holds Exec(goto insloc 2, s2).c = s2.c) &
+       for f being FinSeq-Location holds Exec(goto insloc 2, s2).f = s2.f
+           by SCMFSA_2:95;
+A33:  (for c being Int-Location holds Exec(i, s1).c = s1.c) &
+       for f being FinSeq-Location holds Exec(i, s1).f = s1.f
+           by SCMFSA_2:96;
+then A34: (Computation s).1 | D
+     = s | D by A3,A9,SCMFSA6A:38;
+then A35: (Computation s).2 | D
+     = s | D by A3,A14,A32,SCMFSA6A:38;
+then (Computation s).3 | D
+     = s | D by A3,A18,A31,SCMFSA6A:38;
+then A36: (Computation s).4 | D
+     = s | D by A3,A22,A30,SCMFSA6A:38;
+
+ let k be Nat;
+      k <= 3 or 3 < k;
+then A37: k = 0 or k = 1 or k = 2 or k = 3 or 3+1 <= k by CQC_THE1:4,NAT_1:38;
+ per cases by A37;
+ suppose k = 0;
+  hence thesis by AMI_1:def 19;
+ suppose k = 1;
+  hence thesis by A3,A9,A33,SCMFSA6A:38;
+ suppose k = 2;
+  hence thesis by A3,A14,A32,A34,SCMFSA6A:38;
+ suppose k = 3;
+  hence thesis by A3,A18,A31,A35,SCMFSA6A:38;
+ suppose 4 <= k;
+  then CurInstr (Computation s).k = halt SCM+FSA by A3,A26,A29,SCMFSA8A:4;
+  hence thesis by A29,A36,Th6;
+end;
+
+theorem Th23: :: based on SCMFSA_9:22
+ I is_closed_on s & I is_halting_on s & s.a = 0
+  implies
+   (Computation (s +* (while=0(a,I) +* Start-At insloc 0))).
+    (LifeSpan (s +* (I +* Start-At insloc 0)) + 3) | D
+ = (Computation (s +* (I +* Start-At insloc 0))).
+    (LifeSpan (s +* (I +* Start-At insloc 0))) | D
+proof assume that
+A1: I is_closed_on s and
+A2: I is_halting_on s and
+A3: s.a = 0;
+
+    set s1 = s +* (while=0(a,I) +* Start-At insloc 0);
+    set s2 = (Computation s1).1;
+    set i = a =0_goto insloc 4;
+    set sI = s +* (I +* Start-At insloc 0);
+
+A4:  insloc 0 in dom while=0(a,I) by SCMFSA_9:10;
+       while=0(a,I) c= while=0(a,I) +* Start-At insloc 0 by SCMFSA8A:9;
+then A5: dom while=0(a,I) c= dom (while=0(a,I) +* Start-At insloc 0)
+       by GRFUNC_1:8;
+A6:   IC SCM+FSA in dom (while=0(a,I) +* Start-At insloc 0) by SF_MASTR:65;
+A7:  IC s1 = s1.IC SCM+FSA by AMI_1:def 15
+     .= (while=0(a,I) +* Start-At insloc 0).IC SCM+FSA by A6,FUNCT_4:14
+     .= insloc 0 by SF_MASTR:66;
+       s1.insloc 0 = (while=0(a,I) +* Start-At insloc 0).insloc 0
+     by A4,A5,FUNCT_4:14
+     .= while=0(a,I).insloc 0 by A4,SCMFSA6B:7
+     .= i by SCMFSA_9:11;
+then A8:  CurInstr s1 = i by A7,AMI_1:def 17;
+A9:  (Computation s1).(0 + 1) = Following (Computation s1).0 by AMI_1:def 19
+     .= Following s1 by AMI_1:def 19
+     .= Exec(i,s1) by A8,AMI_1:def 18;
+       not a in dom (while=0(a,I) +* Start-At insloc 0) & a in dom s
+       by SCMFSA6B:12,SCMFSA_2:66;
+     then A10: s1.a = s.a by FUNCT_4:12;
+A11:  IC s2 = s2.IC SCM+FSA by AMI_1:def 15
+     .= insloc 4 by A3,A9,A10,SCMFSA_2:96;
+       (for c being Int-Location holds s2.c = s1.c) &
+      for f being FinSeq-Location holds s2.f = s1.f by A9,SCMFSA_2:96;
+then A12:  s2 | D = s1 | D by SCMFSA6A:38
+     .= s | D by SCMFSA8A:11
+     .= sI | D by SCMFSA8A:11;
+
+    defpred P[Nat] means
+       $1 <= LifeSpan sI implies
+       IC (Computation s1).(1 + $1) = IC (Computation sI).$1 + 4 &
+       (Computation s1).(1 + $1) | D = (Computation sI).$1 | D;
+
+A13: P[0]
+     proof assume 0 <= LifeSpan sI;
+A14:    IC SCM+FSA in dom (I +* Start-At insloc 0) by SF_MASTR:65;
+         IC (Computation sI).0 = IC sI by AMI_1:def 19
+       .= sI.IC SCM+FSA by AMI_1:def 15
+       .= (I +* Start-At insloc 0).IC SCM+FSA by A14,FUNCT_4:14
+       .= insloc 0 by SF_MASTR:66;
+       then IC (Computation sI).0 + 4 = insloc (0+ 4) by SCMFSA_4:def 1;
+       hence IC (Computation s1).(1 + 0) = IC (Computation sI).0 + 4 &
+       (Computation s1).(1 + 0) | D = (Computation sI).0 | D by A11,A12,AMI_1:
+def 19;
+    end;
+A15: now let k be Nat;
+      assume A16: P[k];
+        now assume A17: k + 1 <= LifeSpan sI;
+           k + 0 < k + 1 by REAL_1:53;
+then k < LifeSpan sI by A17,AXIOMS:22;
+         hence
+           IC (Computation s1).(1 + k+1) = IC (Computation sI).(k+1) + 4 &
+         (Computation s1).(1 + k+1) | D = (Computation sI).(k+1) | D
+          by A1,A2,A16,SCMFSA_9:19;
+      end;
+      hence P[k + 1];
+    end;
+    set s2 = (Computation s1).(1 + LifeSpan sI);
+    set loc4 = insloc (card I + 4);
+    set s3 = (Computation s1).(1+LifeSpan sI+1);
+       for k being Nat holds P[k] from Ind(A13,A15);
+then A18: P[LifeSpan sI];
+then A19: CurInstr s2 = goto loc4 by A1,A2,SCMFSA_9:20;
+A20: s3 = Following s2 by AMI_1:def 19
+    .= Exec(goto loc4,s2) by A19,AMI_1:def 18;
+A21: loc4 in dom while=0(a,I) by SCMFSA_9:13;
+A22: IC s3 = s3.IC SCM+FSA by AMI_1:def 15
+         .= loc4 by A20,SCMFSA_2:95;
+
+A23: (for c being Int-Location holds s3.c = s2.c) &
+    (for f being FinSeq-Location holds s3.f = s2.f) by A20,SCMFSA_2:95;
+
+    set s4=(Computation s1).(1+LifeSpan sI+1+1);
+
+      s3.loc4 = s1.loc4 by AMI_1:54
+    .= (while=0(a,I) +* Start-At insloc 0).loc4 by A5,A21,FUNCT_4:14
+    .= while=0(a,I).loc4 by A21,SCMFSA6B:7
+    .= goto insloc 0 by SCMFSA_9:21;
+then A24: CurInstr s3 = goto insloc 0 by A22,AMI_1:def 17;
+A25: s4 = Following s3 by AMI_1:def 19
+    .= Exec(goto insloc 0,s3) by A24,AMI_1:def 18;
+A26: LifeSpan sI+1+1+1 = LifeSpan sI+(1+1)+1 by XCMPLX_1:1
+    .= LifeSpan sI+(2+1) by XCMPLX_1:1;
+
+  (for c being Int-Location holds s4.c = s3.c) &
+    (for f being FinSeq-Location holds s4.f = s3.f) by A25,SCMFSA_2:95;
+ hence (Computation s1).(LifeSpan sI + 3) | D
+    = s3 | D by A26,SCMFSA6A:38
+   .= (Computation sI).(LifeSpan sI) | D by A18,A23,SCMFSA6A:38;
+end;
+
+theorem Th24: :: Step_eq0_0:
+  (StepWhile=0(a, I, s).k).a <> 0
+   implies StepWhile=0(a, I, s).(k+1) | D = StepWhile=0(a, I, s).k | D
+proof assume
+A1: (StepWhile=0(a, I, s).k).a <> 0;
+  set SW = StepWhile=0(a, I, s);
+A2: (SW.k +* (while=0(a,I) +* SAt)) | D
+   = SW.k | D by SCMFSA8A:11;
+then A3: SW.k.a = (SW.k +* (while=0(a,I) +* SAt)).a by SCMFSA6A:38;
+A4: while=0(a,I) +* SAt c= SW.k +* (while=0(a,I) +* SAt) by FUNCT_4:26;
+ thus SW.(k+1) | D
+    = (Computation (SW.k +* (while=0(a,I) +* SAt))).
+                (LifeSpan (SW.k +* (I +* SAt)) + 3) | D by SCMFSA_9:def 4
+   .= StepWhile=0(a, I, s).k | D by A1,A2,A3,A4,Th22;
+end;
+
+theorem Th25: :: Step_eq0_1:
+ ( I is_halting_on Initialize StepWhile=0(a, I, s).k &
+     I is_closed_on Initialize StepWhile=0(a, I, s).k
+  or I is parahalting) &
+ (StepWhile=0(a, I, s).k).a = 0 &
+ (StepWhile=0(a, I, s).k).intloc 0 = 1
+   implies StepWhile=0(a, I, s).(k+1) | D
+         = IExec(I, StepWhile=0(a, I, s).k) | D
+proof assume that
+A1:    I is_halting_on Initialize StepWhile=0(a, I, s).k &
+      I is_closed_on Initialize StepWhile=0(a, I, s).k
+   or I is parahalting and
+A2: (StepWhile=0(a, I, s).k).a = 0 and
+A3: (StepWhile=0(a, I, s).k).intloc 0 = 1;
+
+   set SW = StepWhile=0(a, I, s);
+   set ISWk = Initialize StepWhile=0(a, I, s).k;
+   set SWkI = SW.k+*Initialized I;
+   set WHS = while=0(a, I) +* SAt;
+   set IS = I +* SAt;
+   set SWkIS = SW.k+*IS;
+   set Ins = the Instruction-Locations of SCM+FSA;
+
+A4: SWkI = SWkIS by A3,SCMFSA8C:18;
+A5: SAt c= Initialized I by SCMFSA6B:4;
+  I is_halting_on ISWk by A1,SCMFSA7B:25;
+    then Initialized I is_halting_on SW.k by SCMFSA8C:22;
+    then SW.k+*(Initialized I +* SAt) is halting by SCMFSA7B:def 8;
+then A6: SWkI is halting by A5,AMI_5:10;
+        Ins misses D by SCMFSA_2:13,14,XBOOLE_1:70;
+then A7: dom (SW.k | Ins) misses D by SCMFSA8A:3;
+A8: IExec(I, SW.k) | D
+   = (Result(SWkI) +* SW.k | Ins) | D by SCMFSA6B:def 1
+  .= (Result(SWkI)) | D by A7,SCMFSA8A:2
+  .= (Computation SWkIS).(LifeSpan SWkIS) | D by A4,A6,SCMFSA6B:16;
+
+A9: SW.(k+1) = (Computation (SW.k +* WHS)).(LifeSpan (SWkIS) + 3)
+      by SCMFSA_9:def 4;
+
+A10: ISWk | D = SW.k | D by A3,SCMFSA8C:27;
+      now assume I is parahalting;
+       then reconsider I' = I as parahalting Macro-Instruction;
+         I' is paraclosed;
+     hence I is paraclosed;
+    end;
+then A11: I is_closed_on SW.k by A1,A10,SCMFSA7B:24,SCMFSA8B:6;
+     I is_halting_on SW.k by A1,A10,SCMFSA7B:25,SCMFSA8B:8;
+ hence SW.(k+1) | D = IExec(I, SW.k) | D by A2,A8,A9,A11,Th23;
+end;
+
+theorem  :: eGoodStep0:
+   (ProperBodyWhile=0 a, Ig, s or Ig is parahalting) &
+ s.intloc 0 = 1
+  implies for k holds StepWhile=0(a, Ig, s).k.intloc 0 = 1
+proof set I = Ig; assume that
+A1: (ProperBodyWhile=0 a, I, s or I is parahalting) and
+A2: s.intloc 0 = 1;
+   set SW = StepWhile=0(a, I, s);
+   defpred X[Nat] means SW.$1.intloc 0 = 1;
+A3: X[0] by A2,SCMFSA_9:def 4;
+A4:    for k being Nat st X[k] holds X[k+1]
+   proof let k be Nat such that
+ A5:  SW.k.intloc 0 = 1;
+     per cases;
+     suppose SW.k.a <> 0;
+       then SW.(k+1) | D = SW.k | D by Th24;
+      hence SW.(k+1).intloc 0 = 1 by A5,SCMFSA6A:38;
+     suppose A6: SW.k.a = 0;
+        ProperBodyWhile=0 a, I, s by A1,Th19;
+     then A7: I is_closed_on SW.k & I is_halting_on SW.k by A6,Def1;
+   set ISWk = Initialize StepWhile=0(a, I, s).k;
+   set SWkI = SW.k+*Initialized I;
+   set IS = I +* SAt;
+   set SWkIS = SW.k+*IS;
+   set Ins = the Instruction-Locations of SCM+FSA;
+
+A8: SW.k | D = ISWk | D by A5,SCMFSA8C:27;
+     then A9: I is_halting_on Initialize SW.k by A7,SCMFSA8B:8;
+     A10: I is_closed_on Initialize SW.k by A7,A8,SCMFSA8B:6;
+
+A11: SWkI = SWkIS by A5,SCMFSA8C:18;
+A12: SAt c= Initialized I by SCMFSA6B:4;
+      Initialized I is_halting_on SW.k by A9,SCMFSA8C:22;
+    then SW.k+*(Initialized I +* SAt) is halting by SCMFSA7B:def 8;
+then A13: SWkI is halting by A12,AMI_5:10;
+        Ins misses D by SCMFSA_2:13,14,XBOOLE_1:70;
+then A14: dom (SW.k | Ins) misses D by SCMFSA8A:3;
+A15: IExec(I, SW.k) | D
+   = (Result
+(SWkI) +* SW.k | Ins) | D by SCMFSA6B:def 1
+  .= (Result(SWkI)) | D by A14,SCMFSA8A:2
+  .= (Computation SWkIS).(LifeSpan SWkIS) | D by A11,A13,SCMFSA6B:16;
+        SW.(k+1) | D = IExec(I, SW.k) | D by A5,A6,A9,A10,Th25;
+     hence SW.(k+1).intloc 0
+        = ((Computation SWkIS).(LifeSpan SWkIS)).intloc 0 by A15,SCMFSA6A:38
+       .= 1 by A5,A7,SCMFSA8C:97;
+    end;
+thus for k being Nat holds X[k] from Ind(A3,A4);
+end;
+
+theorem  :: eSW12:
+   ProperBodyWhile=0 a, I, s1 & s1 | D = s2 | D implies
+   for k holds StepWhile=0(a, I, s1).k | D = StepWhile=0(a, I, s2).k | D
+proof assume that
+A1: ProperBodyWhile=0 a, I, s1 and
+A2: s1 | D = s2 | D;
+   set ST1 = StepWhile=0(a, I, s1); set ST2 = StepWhile=0(a, I, s2);
+   set WH = while=0(a,I);
+    defpred X[Nat] means ST1.$1 | D = ST2.$1 | D;
+    ST1.0 | D = s1 | D by SCMFSA_9:def 4
+             .= ST2.0 | D by A2,SCMFSA_9:def 4;
+    then
+A3: X[0];
+A4: for k being Nat st X[k] holds X[k+1]
+ proof let k; assume
+  A5: ST1.k | D = ST2.k | D;
+  then A6: ST1.k.a = ST2.k.a by SCMFSA6A:38;
+  set ST1kI = ST1.k +* (I +* SAt);
+  set ST2kI = ST2.k +* (I +* SAt);
+    per cases;
+    suppose A7: ST1.k.a <> 0;
+     hence ST1.(k+1) | D = ST1.k | D by Th24
+        .= ST2.(k+1) | D by A5,A6,A7,Th24;
+    suppose A8: ST1.k.a = 0;
+  then A9: I is_closed_on ST1.k & I is_halting_on ST1.k by A1,Def1;
+  A10:  ST1.(k+1) | D = (Computation (ST1.k +* (WH +* SAt))).
+          (LifeSpan (ST1kI) + 3) | D by SCMFSA_9:def 4
+       .= (Computation (ST1kI)). (LifeSpan (ST1kI)) | D by A8,A9,Th23;
+  A11: I is_closed_on ST2.k & I is_halting_on ST2.k by A5,A9,SCMFSA8B:8;
+  A12:  ST2.(k+1) | D = (Computation (ST2.k +* (WH +* SAt))).
+          (LifeSpan (ST2kI) + 3) | D by SCMFSA_9:def 4
+       .= (Computation (ST2kI)). (LifeSpan (ST2kI)) | D by A6,A8,A11,Th23;
+  A13: (ST1kI) | D = ST1.k | D by SCMFSA8A:11
+                 .= (ST2kI) | D by A5,SCMFSA8A:11;
+  A14: I +* SAt c= ST1kI by FUNCT_4:26;
+  A15: I +* SAt c= ST2kI by FUNCT_4:26;
+  A16: ST1.k | D = ST1kI | D by SCMFSA8A:11;
+  then A17: I is_closed_on (ST1kI) by A9,SCMFSA8B:6;
+     I is_halting_on ST1kI by A9,A16,SCMFSA8B:8;
+    then (LifeSpan (ST1kI)) = (LifeSpan (ST2kI)) by A13,A14,A15,A17,SCMFSA8C:44
+;
+    hence ST1.(k+1) | D = ST2.(k+1) | D by A10,A12,A13,A14,A15,A17,SCMFSA8C:43
+;
+    end;
+ thus for k holds X[k] from Ind(A3, A4);
+end;
+
+definition
+ let s be State of SCM+FSA,
+     a be read-write Int-Location,
+     I be Macro-Instruction;
+ assume that
+A1: ProperBodyWhile=0 a, I, s or I is parahalting and
+A2: WithVariantWhile=0 a, I, s;
+ func ExitsAtWhile=0(a, I, s) -> Nat means
+:Def3:
+  ex k being Nat st
+   it = k &
+   (StepWhile=0(a, I, s).k).a <> 0 &
+   (for i being Nat st (StepWhile=0(a, I, s).i).a <> 0 holds k <= i) &
+   (Computation (s +* (while=0(a, I) +* SAt))).
+                         (LifeSpan (s +* (while=0(a, I) +* SAt))) | D
+     = StepWhile=0(a, I, s).k | D;
+ existence proof
+
+  set SW = StepWhile=0(a, I, s);
+  set S = s +* (while=0(a, I) +* SAt);
+  defpred X[Nat] means SW.$1.a <> 0;
+  consider f being Function of product the Object-Kind of SCM+FSA, NAT
+  such that
+A3: for k being Nat holds f.(SW.(k+1))<f.(SW.(k)) or X[k] by A2,Def2;
+  deffunc U(Nat) = f.(SW.$1);
+A4: for k being Nat holds U(k+1)<U(k) or X[k] by A3;
+   consider m such that
+A5: X[m] and
+A6: for n st X[n] holds m <= n from MinPred(A4);
+  take m, m;
+  thus m = m;
+  thus SW.m.a <> 0 by A5;
+  thus for n st SW.n.a <> 0 holds m <= n by A6;
+
+A7: while=0(a, I) +* SAt c= S by FUNCT_4:26;
+
+    A8: ProperBodyWhile=0 a, I, s by A1,Th19;
+
+    defpred P[Nat] means
+      $1+1 <= m implies
+        ex k st StepWhile=0(a,I,s).($1+1)=(Computation S).k;
+
+A9: P[0]
+    proof assume 0+1 <= m;
+       take n=(LifeSpan (s+* (I +* SAt)) + 3);
+       thus StepWhile=0(a,I,s).(0+1)=(Computation S).n by SCMFSA_9:30;
+    end;
+A10: IC SCM+FSA in dom (while=0(a,I) +* SAt ) by SF_MASTR:65;
+A11: now let k be Nat;
+       assume A12: P[k];
+         now assume A13: (k+1)+ 1 <= m;
+            k + 0 < k+ (1+ 1) by REAL_1:53;
+          then k < (k+1) +1 by XCMPLX_1:1;
+then A14:       k < m by A13,AXIOMS:22;
+          A15: (k+1)+ 0 < (k+ 1)+ 1 by REAL_1:53;
+          set sk=StepWhile=0(a,I,s).k;
+          set sk1=StepWhile=0(a,I,s).(k+1);
+          consider n being Nat such that
+A16:       sk1 = (Computation S).n by A12,A13,A15,AXIOMS:22;
+A17:       sk1 = (Computation (sk +* (while=0(a,I)+* SAt))).
+                        (LifeSpan (sk +* (I +* SAt)) + 3) by SCMFSA_9:def 4;
+A18:     sk.a = 0 by A6,A14;
+       then I is_closed_on sk & I is_halting_on sk by A8,Def1;
+then A19:       IC sk1 =insloc 0 by A17,A18,SCMFSA_9:22;
+          take m=n +(LifeSpan (sk1 +* (I +* SAt)) + 3);
+          thus StepWhile=0(a,I,s).((k+1)+1)=(Computation S).m
+            by A16,A19,SCMFSA_9:31;
+       end;
+       hence P[k+1];
+    end;
+A20: for k being Nat holds P[k] from Ind(A9,A11);
+  per cases;
+  suppose A21: m = 0;
+  A22: S | D = s | D by SCMFSA8A:11
+           .= SW.m | D by A21,SCMFSA_9:def 4;
+      then S.a = SW.m.a by SCMFSA6A:38;
+   hence (Computation S).(LifeSpan S) | D
+       = SW.m | D by A5,A7,A22,Th22;
+  suppose m <> 0;
+         then consider i being Nat such that
+A23:      m=i+1 by NAT_1:22;
+         set si = StepWhile=0(a,I,s).i;
+         set sm = StepWhile=0(a,I,s).m;
+         set sm1 = sm +* (while=0(a,I)+* SAt);
+         consider n being Nat such that
+A24:     sm = (Computation S).n by A20,A23;
+A25:     sm = (Computation (si +* (while=0(a,I)+* SAt))).
+                    (LifeSpan (si +* (I +* SAt)) + 3) by A23,SCMFSA_9:def 4;
+           i < m by A23,NAT_1:38;
+then A26:    si.a = 0 by A6;
+     then I is_closed_on si & I is_halting_on si by A8,Def1;
+then A27:     IC sm =insloc 0 by A25,A26,SCMFSA_9:22;
+A28:     IC sm1 = sm1.IC SCM+FSA by AMI_1:def 15
+         .= (while=0(a,I) +* SAt).IC SCM+FSA by A10,FUNCT_4:14
+         .= IC sm by A27,SF_MASTR:66;
+A29:     sm1 | D = sm | D by SCMFSA8A:11;
+       sm | IL = S | IL by A24,SCMFSA6B:17;
+         then sm1 | IL = sm | IL by SCMFSA_9:27;
+then A30:     sm1 = sm by A28,A29,SCMFSA_9:29;
+           while=0(a,I) is_halting_on sm by A5,SCMFSA_9:18;
+         then sm1 is halting by SCMFSA7B:def 8;
+         then consider j being Nat such that
+A31:      CurInstr((Computation sm).j) = halt SCM+FSA by A30,AMI_1:def 20;
+A32:     CurInstr (Computation S).(n+j)
+             = halt SCM+FSA by A24,A31,AMI_1:51;
+
+A33:  while=0(a,I)+* SAt c= sm by A30,FUNCT_4:26;
+         (Computation S).(LifeSpan S)
+     = (Computation S).(n+j) by A32,Th6
+    .= (Computation sm).j by A24,AMI_1:51
+    .= (Computation sm).(LifeSpan sm) by A31,Th6;
+  hence (Computation S).(LifeSpan S) | D = sm | D by A5,A33,Th22;
+ end;
+ uniqueness proof let it1, it2 be Nat;
+  given k1 being Nat such that
+A34: it1 = k1 and
+A35:(StepWhile=0(a, I, s).k1).a <> 0 and
+A36: for i being Nat st (StepWhile=0(a, I, s).i).a <> 0 holds k1 <= i and
+     ((Computation (s +* (while=0(a, I) +* SAt))).
+                         (LifeSpan (s +* (while=0(a, I) +* SAt)))) | D
+     = StepWhile=0(a, I, s).k1 | D;
+  given k2 being Nat such that
+A37: it2 = k2 and
+A38: (StepWhile=0(a, I, s).k2).a <> 0 and
+A39: (for i being Nat st (StepWhile=0(a, I, s).i).a <> 0 holds k2 <= i) and
+     ((Computation (s +* (while=0(a, I) +* SAt))).
+                         (LifeSpan (s +* (while=0(a, I) +* SAt)))) | D
+     = StepWhile=0(a, I, s).k2 | D;
+     k1 <= k2 & k2 <= k1 by A35,A36,A38,A39;
+  hence it1 = it2 by A34,A37,AXIOMS:21;
+ end;
+end;
+
+theorem  :: IE_while_ne0:
+   s.intloc 0 = 1 & s.a <> 0 implies IExec(while=0(a, I), s) | D = s | D
+proof assume that
+A1: s.intloc 0 = 1 and
+A2: s.a <> 0;
+    set Is = Initialize s;
+    set WH = while=0(a, I);
+    set Ins = the Instruction-Locations of SCM+FSA;
+    set Ids = s +* Initialized WH;
+
+      Is | D = Ids | D by SCMFSA8B:5;
+then A3: Ids.a = Is.a by SCMFSA6A:38 .= s.a by SCMFSA6C:3;
+
+A4:  Ids = Is +*(WH +* SAt) by SCMFSA8A:13;
+then A5: WH +* SAt c= Ids by FUNCT_4:26;
+
+        Is.a = s.a by SCMFSA6C:3;
+      then WH is_halting_on Is by A2,SCMFSA_9:18;
+then A6: Ids is halting by A4,SCMFSA7B:def 8;
+
+        Ins misses D by SCMFSA_2:13,14,XBOOLE_1:70;
+then A7: dom (s|Ins) misses D by SCMFSA8A:3;
+ thus IExec(WH, s) | D
+    = (Result(s+*Initialized WH) +* s | Ins) | D by SCMFSA6B:def 1
+   .= (Result(s+*Initialized WH)) | D by A7,SCMFSA8A:2
+   .= (Computation Ids).(LifeSpan Ids) | D by A6,SCMFSA6B:16
+   .= Ids | D by A2,A3,A5,Th22
+   .= (Initialize s) | D by SCMFSA8B:5
+   .= s | D by A1,SCMFSA8C:27;
+end;
+
+theorem  :: IE_while_eq0:
+   (ProperBodyWhile=0 a, I, Initialize s or I is parahalting) &
+  WithVariantWhile=0 a, I, Initialize s
+   implies IExec(while=0(a, I), s) | D
+       = StepWhile=0(a, I, Initialize s).ExitsAtWhile=0(a, I, Initialize s) | D
+proof assume that
+A1: ProperBodyWhile=0 a, I, Initialize s or I is parahalting and
+A2: WithVariantWhile=0 a, I, Initialize s;
+
+    set WH = while=0(a, I);
+    set Ins = the Instruction-Locations of SCM+FSA;
+    set Ids = s +* Initialized WH;
+    set Is = Initialize s;
+
+A3:  Ids = Is +*(WH +* SAt) by SCMFSA8A:13;
+
+        WH is_halting_on Is by A1,A2,Th20,Th21;
+then A4: Ids is halting by A3,SCMFSA7B:def 8;
+
+   consider k being Nat such that
+A5: ExitsAtWhile=0(a, I, Is) = k and
+     (StepWhile=0(a, I, Is).k).a <> 0 &
+   (for i being Nat st (StepWhile=0(a, I, Is).i).a <> 0 holds k <= i) and
+A6: ((Computation (Is +* (while=0(a, I) +* SAt))).
+                      (LifeSpan (Is +* (while=0(a, I) +* SAt)))) | D
+     = StepWhile=0(a, I, Is).k | D
+       by A1,A2,Def3;
+
+        Ins misses D by SCMFSA_2:13,14,XBOOLE_1:70;
+then A7: dom (s|Ins) misses D by SCMFSA8A:3;
+ thus IExec(WH, s) | D
+    = (Result(s+*Initialized WH) +* s | Ins) | D by SCMFSA6B:def 1
+   .= (Result(s+*Initialized WH)) | D by A7,SCMFSA8A:2
+   .= StepWhile=0(a, I, Is).ExitsAtWhile=0(a, I, Is) | D by A3,A4,A5,A6,
+SCMFSA6B:16;
+end;
+
+
+begin :: while>0, general
+
+Lm4: :: based on Lem09 from SCMFSA_9
+ for a being Int-Location, I being Macro-Instruction
+  holds
+   insloc (card I +4) in dom if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop) &
+   if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop).insloc (card I +4)
+      = goto ((insloc 0)+(card I +4))
+proof let a be Int-Location;
+    let I be Macro-Instruction;
+    set G = Goto insloc 0;
+    set I1= I ';' G;
+    set J = SCM+FSA-Stop;
+    set i = a >0_goto insloc (card J + 3);
+    set c4 = card I + 4;
+    set Lc4 = insloc c4;
+      card I1 = card I + card G by SCMFSA6A:61
+             .= card I +1 by SCMFSA8A:29;
+    then card I1 + card J + 3 = card I +(1+1) +3 by SCMFSA8A:17,XCMPLX_1:1
+  .= card I +(1+1+3) by XCMPLX_1:1
+  .= card I + (4+1)
+  .= card I +4 +1 by XCMPLX_1:1;
+    then c4 < card I1 + card J + 3 by NAT_1:38;
+ hence
+A1: Lc4 in dom if>0(a,I1,J) by SCMFSA8C:57;
+    set Mi= Macro i ';' J ';' Goto insloc (card I1 + 1) ';' I;
+A2: card (G ';' J) = card G + card J by SCMFSA6A:61
+     .= 1 + 1 by SCMFSA8A:17,29
+     .= 2;
+A3: if>0(a, I1, J)
+    = i ';' J ';' Goto insloc (card I1 + 1) ';' (I ';' G) ';' J
+      by SCMFSA8B:def 2
+    .= i ';' J ';' Goto insloc (card I1 + 1) ';' I ';' G ';' J
+      by SCMFSA6A:62
+    .= Mi ';' G ';' J by SCMFSA6A:def 5
+    .= Mi ';' (G ';' J) by SCMFSA6A:62;
+    then card if>0(a, I1,J) = card Mi + card (G ';' J) by SCMFSA6A:61;
+then A4: card Mi = card if>0(a,I1,J)-card (G ';' J) by XCMPLX_1:26
+    .= card I + 6 - 2 by A2,SCMFSA_9:2
+    .= card I + (4+2-2) by XCMPLX_1:29
+    .= c4;
+then A5: not Lc4 in dom Mi by SCMFSA6A:15;
+    set GJ = G ';' J;
+A6: if>0(a, I1, J) = Directed Mi +* ProgramPart Relocated(GJ, c4) by A3,A4,
+SCMFSA6A:def 4;
+then A7: dom if>0(a,I1,J) = dom Directed Mi \/ dom ProgramPart Relocated(GJ, c4
+)
+      by FUNCT_4:def 1;
+    then dom if>0(a,I1,J)
+    = dom Mi \/ dom ProgramPart Relocated(GJ, c4) by SCMFSA6A:14;
+then A8: Lc4 in dom ProgramPart Relocated(GJ, c4) by A1,A5,XBOOLE_0:def 2;
+A9: insloc 0 + c4 = insloc ( 0 + c4) by SCMFSA_4:def 1;
+A10: G = insloc 0 .--> goto insloc 0 by SCMFSA8A:def 2;
+     then dom G = {insloc 0} by CQC_LANG:5;
+then A11: insloc 0 in dom G by TARSKI:def 1;
+A12: G.insloc 0 = goto insloc 0 by A10,CQC_LANG:6;
+  A13: InsCode goto insloc 0 = 6 & InsCode halt SCM+FSA = 0 by SCMFSA_2:47,124;
+    A14: dom G c= dom GJ by SCMFSA6A:56;
+    then insloc 0 + c4 in { il+c4 where il is Instruction-Location of SCM+FSA:
+      il in dom GJ} by A11;
+then A15:  insloc c4 in dom Shift(GJ,c4) by A9,SCMFSA_4:31;
+then A16: pi(Shift(GJ,c4),Lc4) = Shift(GJ,c4).(insloc 0 +c4) by A9,AMI_5:def 5
+    .= GJ.insloc 0 by A11,A14,SCMFSA_4:30
+    .= goto insloc 0 by A11,A12,A13,SCMFSA6A:54;
+
+   thus if>0(a,I1,J).Lc4
+    = (ProgramPart Relocated(GJ,c4)).Lc4 by A1,A6,A7,A8,FUNCT_4:def 1
+   .= IncAddr(Shift(ProgramPart(GJ),c4),c4).Lc4 by SCMFSA_5:2
+   .= IncAddr(Shift(GJ,c4),c4).Lc4 by AMI_5:72
+   .= IncAddr( goto insloc 0, c4 ) by A15,A16,SCMFSA_4:24
+   .= goto ((insloc 0)+c4) by SCMFSA_4:14;
+ end;
+
+Lm5:
+ for a being Int-Location, I being Macro-Instruction
+  holds UsedIntLoc if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop)
+      = UsedIntLoc (if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop) +*
+          ( insloc (card I +4) .--> goto insloc 0 ))
+proof let a be Int-Location;
+    let I be Macro-Instruction;
+    set Lc4 = insloc (card I + 4);
+    set if0 = if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop);
+    set ic4 = insloc (card I +4) .--> goto insloc 0;
+  consider UIL1 being Function of the Instructions of SCM+FSA,
+                      Fin Int-Locations such that
+A1: for i being Instruction of SCM+FSA holds UIL1.i = UsedIntLoc i and
+A2: UsedIntLoc if0 = Union (UIL1 * if0) by SF_MASTR:def 2;
+  consider UIL2 being Function of the Instructions of SCM+FSA,
+                      Fin Int-Locations such that
+A3: for i being Instruction of SCM+FSA holds UIL2.i = UsedIntLoc i and
+A4: UsedIntLoc (if0+*ic4) = Union (UIL2*(if0+*ic4)) by SF_MASTR:def 2;
+      for c be Element of the Instructions of SCM+FSA holds UIL1.c = UIL2.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA;
+      thus UIL1.c = UsedIntLoc d by A1
+        .= UIL2.c by A3;
+    end;
+then A5: UIL1=UIL2 by FUNCT_2:113;
+A6: dom UIL1 = the Instructions of SCM+FSA by FUNCT_2:def 1;
+    now
+   thus dom (UIL1*if0) = dom (UIL1*if0);
+  A7: rng if0 c= dom UIL1 by A6,SCMFSA_4:1;
+  A8: rng (if0+*ic4) c= dom UIL1 by A6,SCMFSA_4:1;
+  A9: dom (if0+*ic4) = dom if0 \/ dom ic4 by FUNCT_4:def 1;
+  A10: dom ic4 = {insloc (card I +4)} by CQC_LANG:5;
+         insloc (card I +4) in dom if0 by Lm4;
+       then dom ic4 c= dom if0 by A10,ZFMISC_1:37;
+  then A11: dom if0 = dom (if0+*ic4) by A9,XBOOLE_1:12;
+   thus
+  A12: dom (UIL1*if0) = dom if0 by A7,RELAT_1:46
+       .= dom (UIL1*(if0+*ic4)) by A8,A11,RELAT_1:46;
+   let x be set; assume
+  A13: x in dom (UIL1*if0);
+  A14: Lc4 in dom ic4 by A10,TARSKI:def 1;
+   per cases;
+   suppose x <> Lc4;
+   then A15: not x in dom ic4 by A10,TARSKI:def 1;
+    thus (UIL1*if0).x = UIL1.(if0.x) by A13,FUNCT_1:22
+      .= UIL1.((if0+*ic4).x) by A15,FUNCT_4:12
+      .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
+   suppose A16: x = Lc4;
+    thus (UIL1*if0).x
+       = UIL1.(if0.x) by A13,FUNCT_1:22
+      .= UIL1.(goto ((insloc 0)+(card I +4))) by A16,Lm4
+      .= UsedIntLoc goto ((insloc 0)+(card I +4)) by A1
+      .= {} by SF_MASTR:19
+      .= UsedIntLoc goto insloc 0 by SF_MASTR:19
+      .= UIL1.(goto insloc 0) by A1
+      .= UIL1.(ic4.x) by A16,CQC_LANG:6
+      .= UIL1.((if0+*ic4).x) by A14,A16,FUNCT_4:14
+      .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
+  end;
+ hence thesis by A2,A4,A5,FUNCT_1:9;
+end;
+
+Lm6:
+ for a being Int-Location, I being Macro-Instruction
+  holds UsedInt*Loc if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop)
+      = UsedInt*Loc (if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop) +*
+          ( insloc (card I +4) .--> goto insloc 0 ))
+proof let a be Int-Location;
+    let I be Macro-Instruction;
+    set Lc4 = insloc (card I + 4);
+    set if0 = if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop);
+    set ic4 = insloc (card I +4) .--> goto insloc 0;
+  consider UIL1 being Function of the Instructions of SCM+FSA,
+                      Fin FinSeq-Locations such that
+A1: for i being Instruction of SCM+FSA holds UIL1.i = UsedInt*Loc i and
+A2: UsedInt*Loc if0 = Union (UIL1 * if0) by SF_MASTR:def 4;
+  consider UIL2 being Function of the Instructions of SCM+FSA,
+                      Fin FinSeq-Locations such that
+A3: for i being Instruction of SCM+FSA holds UIL2.i = UsedInt*Loc i and
+A4: UsedInt*Loc (if0+*ic4) = Union (UIL2*(if0+*ic4)) by SF_MASTR:def 4;
+      for c be Element of the Instructions of SCM+FSA holds UIL1.c = UIL2.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA;
+      thus UIL1.c = UsedInt*Loc d by A1
+        .= UIL2.c by A3;
+    end;
+then A5: UIL1=UIL2 by FUNCT_2:113;
+A6: dom UIL1 = the Instructions of SCM+FSA by FUNCT_2:def 1;
+    now
+   thus dom (UIL1*if0) = dom (UIL1*if0);
+  A7: rng if0 c= dom UIL1 by A6,SCMFSA_4:1;
+  A8: rng (if0+*ic4) c= dom UIL1 by A6,SCMFSA_4:1;
+  A9: dom (if0+*ic4) = dom if0 \/ dom ic4 by FUNCT_4:def 1;
+  A10: dom ic4 = {insloc (card I +4)} by CQC_LANG:5;
+         insloc (card I +4) in dom if0 by Lm4;
+       then dom ic4 c= dom if0 by A10,ZFMISC_1:37;
+  then A11: dom if0 = dom (if0+*ic4) by A9,XBOOLE_1:12;
+   thus
+  A12: dom (UIL1*if0) = dom if0 by A7,RELAT_1:46
+       .= dom (UIL1*(if0+*ic4)) by A8,A11,RELAT_1:46;
+   let x be set; assume
+  A13: x in dom (UIL1*if0);
+  A14: Lc4 in dom ic4 by A10,TARSKI:def 1;
+   per cases;
+   suppose x <> Lc4;
+   then A15: not x in dom ic4 by A10,TARSKI:def 1;
+    thus (UIL1*if0).x = UIL1.(if0.x) by A13,FUNCT_1:22
+      .= UIL1.((if0+*ic4).x) by A15,FUNCT_4:12
+      .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
+   suppose A16: x = Lc4;
+    thus (UIL1*if0).x
+       = UIL1.(if0.x) by A13,FUNCT_1:22
+      .= UIL1.(goto ((insloc 0)+(card I +4))) by A16,Lm4
+      .= UsedInt*Loc goto ((insloc 0)+(card I +4)) by A1
+      .= {} by SF_MASTR:36
+      .= UsedInt*Loc goto insloc 0 by SF_MASTR:36
+      .= UIL1.(goto insloc 0) by A1
+      .= UIL1.(ic4.x) by A16,CQC_LANG:6
+      .= UIL1.((if0+*ic4).x) by A14,A16,FUNCT_4:14
+      .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
+  end;
+ hence thesis by A2,A4,A5,FUNCT_1:9;
+end;
+
+theorem  :: whileUsed:
+   UsedIntLoc while>0(b, I) = {b} \/ UsedIntLoc I
+proof set a = b;
+  set J = SCM+FSA-Stop;
+  set IG = I ';' Goto insloc 0;
+   while>0(a, I) = if>0(a, IG, J) +*
+   ( insloc (card I +4) .--> goto insloc 0 ) by SCMFSA_9:def 2;
+ hence UsedIntLoc while>0(a, I)
+    = (UsedIntLoc if>0(a, IG, J)) by Lm5
+   .= {a} \/ UsedIntLoc IG \/ UsedIntLoc J by Th15
+   .= {a} \/ (UsedIntLoc I \/ UsedIntLoc Goto insloc 0) \/ UsedIntLoc J
+            by SF_MASTR:31
+   .= {a} \/ (UsedIntLoc I \/ {}) \/ UsedIntLoc J by Th11
+   .= {a} \/ UsedIntLoc I by Th9;
+end;
+
+theorem  :: whileUsedF:
+   UsedInt*Loc while>0(b, I) = UsedInt*Loc I
+proof set a = b;
+  set J = SCM+FSA-Stop;
+  set IG = I ';' Goto insloc 0;
+   while>0(a, I) = if>0(a, IG, J) +*
+   ( insloc (card I +4) .--> goto insloc 0 ) by SCMFSA_9:def 2;
+ hence UsedInt*Loc while>0(a, I)
+    = (UsedInt*Loc if>0(a, IG, J)) by Lm6
+   .= UsedInt*Loc IG \/ UsedInt*Loc J by Th16
+   .= (UsedInt*Loc I \/ UsedInt*Loc Goto insloc 0) \/ UsedInt*Loc J
+            by SF_MASTR:47
+   .= UsedInt*Loc I \/ {} by Th10,Th12
+   .= UsedInt*Loc I;
+end;
+
+definition
+ let s be State of SCM+FSA, a be read-write Int-Location,
+     I be Macro-Instruction;
+ pred ProperBodyWhile>0 a, I, s means
+:Def4:
+  for k being Nat st StepWhile>0(a,I,s).k.a > 0
+    holds I is_closed_on StepWhile>0(a,I,s).k &
+          I is_halting_on StepWhile>0(a,I,s).k;
+
+ pred WithVariantWhile>0 a, I, s means
+:Def5:
+ ex f being Function of product the Object-Kind of SCM+FSA, NAT
+  st for k being Nat
+       holds ( f.(StepWhile>0(a,I,s).(k+1)) < f.(StepWhile>0(a,I,s).k)
+              or StepWhile>0(a,I,s).k.a <= 0 );
+end;
+
+theorem Th32: :: ParaProper:
+ for I being parahalting Macro-Instruction holds ProperBodyWhile>0 a, I, s
+proof let I be parahalting Macro-Instruction;
+  let k be Nat such that StepWhile>0(a,I,s).k.a > 0;
+  thus I is_closed_on StepWhile>0(a,I,s).k by SCMFSA7B:24;
+  thus I is_halting_on StepWhile>0(a,I,s).k by SCMFSA7B:25;
+end;
+
+theorem Th33:   :: SCMFSA_9:42, corrected
+ ProperBodyWhile>0 a, I, s & WithVariantWhile>0 a, I, s
+  implies while>0(a,I) is_halting_on s & while>0(a,I) is_closed_on s
+proof assume
+A1: for k being Nat st StepWhile>0(a,I,s).k.a > 0
+                holds I is_closed_on StepWhile>0(a,I,s).k &
+                      I is_halting_on StepWhile>0(a,I,s).k;
+    given f being Function of product the Object-Kind of SCM+FSA,NAT such that
+A2:for k being Nat holds
+      (f.(StepWhile>0(a,I,s).(k+1)) < f.(StepWhile>0(a,I,s).k) or
+      (StepWhile>0(a,I,s).k).a <= 0 );
+    deffunc F(Nat) = f.(StepWhile>0(a,I,s).$1);
+    defpred S[Nat] means StepWhile>0(a,I,s).$1.a <= 0;
+    set s1 = s +* (while>0(a,I) +* Start-At insloc 0);
+A3: for k holds ( F(k+1) < F(k) or S[k] ) by A2;
+    consider m being Nat such that
+A4: S[m] and
+A5: for n st S[n] holds m <= n from MinPred(A3);
+    defpred P[Nat] means
+      $1+1 <= m implies
+        ex k st StepWhile>0(a,I,s).($1+1)=(Computation s1).k;
+A6: P[0]
+    proof assume 0+1 <= m;
+       take n=(LifeSpan (s+* (I +* SAt)) + 3);
+       thus StepWhile>0(a,I,s).(0+1)=(Computation s1).n by SCMFSA_9:51;
+    end;
+A7: IC SCM+FSA in dom (while>0(a,I) +* SAt ) by SF_MASTR:65;
+A8: now let k be Nat;
+       assume A9: P[k];
+         now assume A10: (k+1)+ 1 <= m;
+            k + 0 < k+ (1+ 1) by REAL_1:53;
+          then k < (k+1) +1 by XCMPLX_1:1;
+then A11:       k < m by A10,AXIOMS:22;
+          A12: (k+1)+ 0 < (k+ 1)+ 1 by REAL_1:53;
+          set sk=StepWhile>0(a,I,s).k;
+          set sk1=StepWhile>0(a,I,s).(k+1);
+          consider n being Nat such that
+A13:       sk1 = (Computation s1).n by A9,A10,A12,AXIOMS:22;
+A14:       sk1 = (Computation (sk +* (while>0(a,I)+* SAt))).
+                        (LifeSpan (sk +* (I +* SAt)) + 3) by SCMFSA_9:def 5;
+A15:     sk.a > 0 by A5,A11;
+       then I is_closed_on sk & I is_halting_on sk by A1;
+then A16:       IC sk1 =insloc 0 by A14,A15,SCMFSA_9:47;
+          take m=n +(LifeSpan (sk1 +* (I +* SAt)) + 3);
+          thus StepWhile>0(a,I,s).((k+1)+1)=(Computation s1).m
+            by A13,A16,SCMFSA_9:52;
+       end;
+       hence P[k+1];
+    end;
+A17: for k being Nat holds P[k] from Ind(A6,A8);
+      now per cases;
+       suppose m=0;
+         then s.a <= 0 by A4,SCMFSA_9:def 5;
+         hence while>0(a,I) is_halting_on s & while>0(a,I) is_closed_on s
+         by SCMFSA_9:43;
+       suppose A18:m<>0;
+         then consider i being Nat such that
+A19:      m=i+1 by NAT_1:22;
+         set si=StepWhile>0(a,I,s).i;
+         set sm=StepWhile>0(a,I,s).m;
+         set sm1=sm +* (while>0(a,I)+* SAt);
+         consider n being Nat such that
+A20:     sm = (Computation s1).n by A17,A19;
+A21:     sm= (Computation (si +* (while>0(a,I)+* SAt))).
+           (LifeSpan (si +* (I +* SAt)) + 3) by A19,SCMFSA_9:def 5;
+           i < m by A19,NAT_1:38;
+then A22:    si.a > 0 by A5;
+     then I is_closed_on si & I is_halting_on si by A1;
+then A23:     IC sm =insloc 0 by A21,A22,SCMFSA_9:47;
+A24:     IC sm1 = sm1.IC SCM+FSA by AMI_1:def 15
+         .= (while>0(a,I) +* SAt).IC SCM+FSA by A7,FUNCT_4:14
+         .= IC sm by A23,SF_MASTR:66;
+A25:     sm1 | D = sm | D by SCMFSA8A:11;
+       sm | IL =s1 | IL by A20,SCMFSA6B:17;
+         then sm1 | IL = sm | IL by SCMFSA_9:27;
+then A26:     sm1=sm by A24,A25,SCMFSA_9:29;
+           while>0(a,I) is_halting_on sm by A4,SCMFSA_9:43;
+         then sm1 is halting by SCMFSA7B:def 8;
+         then consider j being Nat such that
+A27:      CurInstr((Computation sm).j) = halt SCM+FSA by A26,AMI_1:def 20;
+           CurInstr (Computation s1).(n+j) = halt SCM+FSA by A20,A27,AMI_1:51;
+         then s1 is halting by AMI_1:def 20;
+         hence while>0(a,I) is_halting_on s by SCMFSA7B:def 8;
+
+         set p=(LifeSpan (s+* (I +* SAt)) + 3);
+           now let q be Nat;
+A28:         0<m by A18,NAT_1:19;
+            per cases;
+            suppose A29: q <= p;
+A30:           StepWhile>0(a,I,s).0=s by SCMFSA_9:def 5;
+then A31:           s.a > 0 by A5,A28;
+              then I is_closed_on s & I is_halting_on s by A1,A30;
+              hence IC (Computation s1).q in dom while>0(a,I) by A29,A31,
+SCMFSA_9:47;
+            suppose A32: q > p;
+              defpred P2[Nat] means
+                $1<=m & $1<>0 & (ex k st StepWhile>0(a,I,s).$1=
+                (Computation s1).k & k <= q);
+A33:           for i be Nat st P2[i] holds i <= m;
+A34:           now
+                 take k=p;
+                 thus StepWhile>0(a,I,s).1=(Computation s1).k & k <= q
+                 by A32,SCMFSA_9:51;
+              end;
+                0+1 < m +1 by A28,REAL_1:53;
+then 1 <= m by NAT_1:38;
+then A35:           ex k st P2[k] by A34;
+                ex k st P2[k] & for i st P2[i] holds i <=
+ k from Max(A33,A35);
+              then consider t being Nat such that
+A36:           P2[t] & for i st P2[i] holds i <= t;
+                now per cases;
+                 suppose t=m;
+                   then consider r being Nat such that
+A37:                sm=(Computation s1).r & r <= q by A36;
+                   consider x being Nat such that
+A38:                q = r+x by A37,NAT_1:28;
+A39:                (Computation s1).q = (Computation sm1).x by A26,A37,A38,
+AMI_1:51;
+                     while>0(a,I) is_closed_on sm by A4,SCMFSA_9:43;
+                   hence IC (Computation s1).q in dom while>0(a,I) by A39,
+SCMFSA7B:def 7;
+                 suppose t<>m;
+then A40:                t < m by A36,REAL_1:def 5;
+                   consider y being Nat such that
+A41:                t=y+1 by A36,NAT_1:22;
+                   consider z being Nat such that
+A42:                StepWhile>0(a,I,s).t=(Computation s1).z & z <= q by A36;
+                     y+ 0 < t by A41,REAL_1:53;
+then A43:                y < m by A36,AXIOMS:22;
+                   set Dy=StepWhile>0(a,I,s).y;
+                   set Dt=StepWhile>0(a,I,s).t;
+A44:                Dt= (Computation (Dy +* (while>0(a,I)+* SAt))).
+                    (LifeSpan (Dy +* (I +* SAt)) + 3) by A41,SCMFSA_9:def 5;
+A45:              Dy.a > 0 by A5,A43;
+                then I is_closed_on Dy & I is_halting_on Dy by A1;
+then A46:                IC Dt =insloc 0 by A44,A45,SCMFSA_9:47;
+                   set z2=z +(LifeSpan (Dt +* (I +* SAt)) + 3);
+A47:                now assume A48: z2 <= q;
+A49:                    now take k=z2;thus
+                            StepWhile>0(a,I,s).(t+1)=(Computation s1).k & k <=q
+                          by A42,A46,A48,SCMFSA_9:52;
+                       end; t+1 <= m by A40,NAT_1:38; then t+1 <= t by A36,A49;
+                      hence contradiction by REAL_1:69;
+                   end;
+                   consider w being Nat such that
+A50:                q = z+w by A42,NAT_1:28;
+A51:                w < LifeSpan (Dt +* (I +* SAt)) + 3 by A47,A50,AXIOMS:24;
+A52:                (Computation s1).q = (Computation Dt ).w by A42,A50,AMI_1:
+51
+                   .= (Computation (Dt +* (while>0(a,I)+* SAt))).w
+                      by A42,A46,SCMFSA_9:52;
+A53:              Dt.a > 0 by A5,A40;
+                   then I is_closed_on Dt & I is_halting_on Dt by A1;
+                   hence IC (Computation s1).q in dom while>0(a,I)
+                    by A51,A52,A53,SCMFSA_9:47;
+              end;
+              hence IC (Computation s1).q in dom while>0(a,I);
+         end;
+         hence while>0(a,I) is_closed_on s by SCMFSA7B:def 7;
+    end;
+    hence thesis;
+end;
+
+theorem Th34:   :: SCMFSA_9:43, corrected
+ for I being parahalting Macro-Instruction
+  st WithVariantWhile>0 a, I, s
+   holds while>0(a,I) is_halting_on s & while>0(a,I) is_closed_on s
+proof let I be parahalting Macro-Instruction such that
+A1: WithVariantWhile>0 a, I, s;
+       ProperBodyWhile>0 a, I, s proof let k be Nat; assume
+         StepWhile>0(a,I,s).k.a > 0;
+      thus thesis by SCMFSA7B:24,25;
+     end;
+    hence thesis by A1,Th33;
+end;
+
+theorem Th35: :: based on SCMFSA_9:32
+ while>0(a, I) +* SAt c= s & s.a <= 0
+  implies LifeSpan s = 4 & for k being Nat holds (Computation s).k | D = s | D
+proof assume that
+A1: while>0(a, I) +* SAt c= s and
+A2: s.a <= 0;
+    set s1 = s +* (while>0(a,I) +* Start-At insloc 0);
+    set s2 = (Computation s1).1;
+    set s3 = (Computation s1).2;
+    set s4 = (Computation s1).3;
+    set s5 = (Computation s1).4;
+    set C1 = Computation s1;
+    set i = a >0_goto insloc 4;
+
+A3: s = s1 by A1,AMI_5:10;
+
+A4: insloc 0 in dom while>0(a,I) by SCMFSA_9:10;
+      while>0(a,I) c= while>0(a,I) +* Start-At insloc 0 by SCMFSA8A:9;
+then A5: dom while>0(a,I) c= dom (while>0(a,I) +* Start-At insloc 0)
+       by GRFUNC_1:8;
+A6:  IC SCM+FSA in dom (while>0(a,I) +* Start-At insloc 0) by SF_MASTR:65;
+A7: IC s1 = s1.IC SCM+FSA by AMI_1:def 15
+    .= (while>0(a,I) +* Start-At insloc 0).IC SCM+FSA by A6,FUNCT_4:14
+    .= insloc 0 by SF_MASTR:66;
+      s1.insloc 0 = (while>0(a,I) +* Start-At insloc 0).insloc 0 by A4,A5,
+FUNCT_4:14
+    .= while>0(a,I).insloc 0 by A4,SCMFSA6B:7
+    .= i by SCMFSA_9:11;
+then A8: CurInstr s1 = i by A7,AMI_1:def 17;
+A9: (Computation s1).(0 + 1) = Following (Computation s1).0 by AMI_1:def 19
+    .= Following s1 by AMI_1:def 19
+    .= Exec(i,s1) by A8,AMI_1:def 18;
+      not a in dom (while>0(a,I) +* Start-At insloc 0) & a in dom s
+       by SCMFSA6B:12,SCMFSA_2:66;
+    then A10: s1.a = s.a by FUNCT_4:12;
+A11: IC C1.1 = C1.1.IC SCM+FSA by AMI_1:def 15
+    .= Next insloc 0 by A2,A7,A9,A10,SCMFSA_2:97
+    .= insloc (0 + 1) by SCMFSA_2:32;
+A12: insloc 1 in dom while>0(a,I) by SCMFSA_9:10;
+      C1.1.insloc 1 = s1.insloc 1 by AMI_1:54
+    .= (while>0(a,I) +* Start-At insloc 0).insloc 1 by A5,A12,FUNCT_4:14
+    .= while>0(a,I).insloc 1 by A12,SCMFSA6B:7
+    .= goto insloc 2 by SCMFSA_9:11;
+then A13: CurInstr C1.1 = goto insloc 2 by A11,AMI_1:def 17;
+A14: (Computation s1).(1 + 1) = Following s2 by AMI_1:def 19
+    .= Exec(goto insloc 2,s2) by A13,AMI_1:def 18;
+
+A15: insloc 2 in dom while>0(a,I) by SCMFSA_9:37;
+
+A16: IC s3 = s3.IC SCM+FSA by AMI_1:def 15
+    .= insloc 2 by A14,SCMFSA_2:95;
+
+      s3.insloc 2 = s1.insloc 2 by AMI_1:54
+    .= (while>0(a,I) +* Start-At insloc 0).insloc 2 by A5,A15,FUNCT_4:14
+    .= while>0(a,I).insloc 2 by A15,SCMFSA6B:7
+    .= goto insloc 3 by SCMFSA_9:41;
+then A17:  CurInstr s3 = goto insloc 3 by A16,AMI_1:def 17;
+
+A18: (Computation s1).(2 + 1) = Following s3 by AMI_1:def 19
+    .= Exec(goto insloc 3,s3) by A17,AMI_1:def 18;
+
+A19: insloc 3 in dom while>0(a,I) by SCMFSA_9:37;
+     set loc5= insloc (card I +5);
+A20:  IC s4 = s4.IC SCM+FSA by AMI_1:def 15
+    .= insloc 3 by A18,SCMFSA_2:95;
+      s4.insloc 3 = s1.insloc 3 by AMI_1:54
+    .= (while>0(a,I) +* Start-At insloc 0).insloc 3 by A5,A19,FUNCT_4:14
+    .= while>0(a,I).insloc 3 by A19,SCMFSA6B:7
+    .= goto loc5 by SCMFSA_9:40;
+then A21: CurInstr s4 = goto loc5 by A20,AMI_1:def 17;
+A22: (Computation s1).(3 + 1) = Following s4 by AMI_1:def 19
+    .= Exec(goto loc5,s4) by A21,AMI_1:def 18;
+
+A23: loc5 in dom while>0(a,I) by SCMFSA_9:38;
+
+A24:  IC s5 = s5.IC SCM+FSA by AMI_1:def 15
+     .= loc5 by A22,SCMFSA_2:95;
+       s5.loc5 = s1.loc5 by AMI_1:54
+     .= (while>0(a,I) +* Start-At insloc 0).loc5 by A5,A23,FUNCT_4:14
+     .= while>0(a,I).loc5 by A23,SCMFSA6B:7
+     .= halt SCM+FSA by SCMFSA_9:39;
+then A25:  CurInstr s5 = halt SCM+FSA by A24,AMI_1:def 17;
+then A26:  s1 is halting by AMI_1:def 20;
+       now let k; assume
+     A27: CurInstr((Computation s).k) = halt SCM+FSA;
+      assume 4 > k; then 3+1 > k;
+     then A28: k <= 3 by NAT_1:38;
+      per cases by A28,CQC_THE1:4;
+      suppose k = 0; then (Computation s).k = s by AMI_1:def 19;
+       hence contradiction by A3,A8,A27,SCMFSA_2:49,124;
+      suppose k = 1;
+       hence contradiction by A3,A13,A27,SCMFSA_2:47,124;
+      suppose k = 2;
+       hence contradiction by A3,A17,A27,SCMFSA_2:47,124;
+      suppose k = 3;
+       hence contradiction by A3,A21,A27,SCMFSA_2:47,124;
+     end;
+ hence A29: LifeSpan s = 4 by A3,A25,A26,SCM_1:def 2;
+
+A30:  (for c being Int-Location holds Exec(goto loc5, s4).c = s4.c) &
+       for f being FinSeq-Location holds Exec(goto loc5, s4).f = s4.f
+           by SCMFSA_2:95;
+A31:  (for c being Int-Location holds Exec(goto insloc 3, s3).c = s3.c) &
+       for f being FinSeq-Location holds Exec(goto insloc 3, s3).f = s3.f
+           by SCMFSA_2:95;
+A32:  (for c being Int-Location holds Exec(goto insloc 2, s2).c = s2.c) &
+       for f being FinSeq-Location holds Exec(goto insloc 2, s2).f = s2.f
+           by SCMFSA_2:95;
+A33:  (for c being Int-Location holds Exec(i, s1).c = s1.c) &
+       for f being FinSeq-Location holds Exec(i, s1).f = s1.f
+           by SCMFSA_2:97;
+then A34: (Computation s).1 | D
+     = s | D by A3,A9,SCMFSA6A:38;
+then A35: (Computation s).2 | D
+     = s | D by A3,A14,A32,SCMFSA6A:38;
+then (Computation s).3 | D
+     = s | D by A3,A18,A31,SCMFSA6A:38;
+then A36: (Computation s).4 | D
+     = s | D by A3,A22,A30,SCMFSA6A:38;
+
+ let k be Nat;
+      k <= 3 or 3 < k;
+then A37: k = 0 or k = 1 or k = 2 or k = 3 or 3+1 <= k by CQC_THE1:4,NAT_1:38;
+ per cases by A37;
+ suppose k = 0;
+  hence thesis by AMI_1:def 19;
+ suppose k = 1;
+  hence thesis by A3,A9,A33,SCMFSA6A:38;
+ suppose k = 2;
+  hence thesis by A3,A14,A32,A34,SCMFSA6A:38;
+ suppose k = 3;
+  hence thesis by A3,A18,A31,A35,SCMFSA6A:38;
+ suppose 4 <= k;
+  then CurInstr (Computation s).k = halt SCM+FSA by A3,A26,A29,SCMFSA8A:4;
+  hence thesis by A29,A36,Th6;
+end;
+
+theorem Th36: :: based on SCMFSA_9:36
+ I is_closed_on s & I is_halting_on s & s.a > 0
+  implies
+   (Computation (s +* (while>0(a,I) +* Start-At insloc 0))).
+    (LifeSpan (s +* (I +* Start-At insloc 0)) + 3) | D
+ = (Computation (s +* (I +* Start-At insloc 0))).
+    (LifeSpan (s +* (I +* Start-At insloc 0))) | D
+proof assume that
+A1: I is_closed_on s and
+A2: I is_halting_on s and
+A3: s.a > 0;
+
+    set s1 = s +* (while>0(a,I) +* Start-At insloc 0);
+    set s2 = (Computation s1).1;
+    set i = a >0_goto insloc 4;
+    set sI = s +* (I +* Start-At insloc 0);
+
+A4:  insloc 0 in dom while>0(a,I) by SCMFSA_9:10;
+       while>0(a,I) c= while>0(a,I) +* Start-At insloc 0 by SCMFSA8A:9;
+then A5: dom while>0(a,I) c= dom (while>0(a,I) +* Start-At insloc 0)
+       by GRFUNC_1:8;
+A6:   IC SCM+FSA in dom (while>0(a,I) +* Start-At insloc 0) by SF_MASTR:65;
+A7:  IC s1 = s1.IC SCM+FSA by AMI_1:def 15
+     .= (while>0(a,I) +* Start-At insloc 0).IC SCM+FSA by A6,FUNCT_4:14
+     .= insloc 0 by SF_MASTR:66;
+       s1.insloc 0 = (while>0(a,I) +* Start-At insloc 0).insloc 0
+     by A4,A5,FUNCT_4:14
+     .= while>0(a,I).insloc 0 by A4,SCMFSA6B:7
+     .= i by SCMFSA_9:11;
+then A8:  CurInstr s1 = i by A7,AMI_1:def 17;
+A9:  (Computation s1).(0 + 1) = Following (Computation s1).0 by AMI_1:def 19
+     .= Following s1 by AMI_1:def 19
+     .= Exec(i,s1) by A8,AMI_1:def 18;
+       not a in dom (while>0(a,I) +* Start-At insloc 0) & a in dom s
+       by SCMFSA6B:12,SCMFSA_2:66;
+     then A10: s1.a = s.a by FUNCT_4:12;
+A11:  IC s2 = s2.IC SCM+FSA by AMI_1:def 15
+     .= insloc 4 by A3,A9,A10,SCMFSA_2:97;
+       (for c being Int-Location holds s2.c = s1.c) &
+      for f being FinSeq-Location holds s2.f = s1.f by A9,SCMFSA_2:97;
+then A12:  s2 | D = s1 | D by SCMFSA6A:38
+     .= s | D by SCMFSA8A:11
+     .= sI | D by SCMFSA8A:11;
+
+    defpred P[Nat] means
+       $1 <= LifeSpan sI implies
+       IC (Computation s1).(1 + $1) = IC (Computation sI).$1 + 4 &
+       (Computation s1).(1 + $1) | D = (Computation sI).$1 | D;
+
+A13: P[0]
+     proof assume 0 <= LifeSpan sI;
+A14:    IC SCM+FSA in dom (I +* Start-At insloc 0) by SF_MASTR:65;
+         IC (Computation sI).0 = IC sI by AMI_1:def 19
+       .= sI.IC SCM+FSA by AMI_1:def 15
+       .= (I +* Start-At insloc 0).IC SCM+FSA by A14,FUNCT_4:14
+       .= insloc 0 by SF_MASTR:66;
+       then IC (Computation sI).0 + 4 = insloc (0+ 4) by SCMFSA_4:def 1;
+       hence IC (Computation s1).(1 + 0) = IC (Computation sI).0 + 4 &
+       (Computation s1).(1 + 0) | D = (Computation sI).0 | D by A11,A12,AMI_1:
+def 19;
+    end;
+A15: now let k be Nat;
+      assume A16: P[k];
+        now assume A17: k + 1 <= LifeSpan sI;
+           k + 0 < k + 1 by REAL_1:53;
+         then k < LifeSpan sI by A17,AXIOMS:22;
+         hence
+           IC (Computation s1).(1 + k+1) = IC (Computation sI).(k+1) + 4 &
+         (Computation s1).(1 + k+1) | D = (Computation sI).(k+1) | D
+          by A1,A2,A16,SCMFSA_9:44;
+      end;
+      hence P[k + 1];
+    end;
+    set s2 = (Computation s1).(1 + LifeSpan sI);
+    set loc4 = insloc (card I + 4);
+    set s3 = (Computation s1).(1+LifeSpan sI+1);
+       for k being Nat holds P[k] from Ind(A13,A15);
+then A18: P[LifeSpan sI];
+then A19: CurInstr s2 = goto loc4 by A1,A2,SCMFSA_9:45;
+A20: s3 = Following s2 by AMI_1:def 19
+    .= Exec(goto loc4,s2) by A19,AMI_1:def 18;
+A21: loc4 in dom while>0(a,I) by SCMFSA_9:38;
+A22: IC s3 = s3.IC SCM+FSA by AMI_1:def 15
+         .= loc4 by A20,SCMFSA_2:95;
+
+A23: (for c being Int-Location holds s3.c = s2.c) &
+    (for f being FinSeq-Location holds s3.f = s2.f) by A20,SCMFSA_2:95;
+
+    set s4=(Computation s1).(1+LifeSpan sI+1+1);
+
+      s3.loc4 = s1.loc4 by AMI_1:54
+    .= (while>0(a,I) +* Start-At insloc 0).loc4 by A5,A21,FUNCT_4:14
+    .= while>0(a,I).loc4 by A21,SCMFSA6B:7
+    .= goto insloc 0 by SCMFSA_9:46;
+then A24: CurInstr s3 = goto insloc 0 by A22,AMI_1:def 17;
+A25: s4 = Following s3 by AMI_1:def 19
+    .= Exec(goto insloc 0,s3) by A24,AMI_1:def 18;
+A26: LifeSpan sI+1+1+1 = LifeSpan sI+(1+1)+1 by XCMPLX_1:1
+    .= LifeSpan sI+(2+1) by XCMPLX_1:1;
+
+  (for c being Int-Location holds s4.c = s3.c) &
+    (for f being FinSeq-Location holds s4.f = s3.f) by A25,SCMFSA_2:95;
+ hence (Computation s1).(LifeSpan sI + 3) | D
+    = s3 | D by A26,SCMFSA6A:38
+   .= (Computation sI).(LifeSpan sI) | D by A18,A23,SCMFSA6A:38;
+end;
+
+theorem Th37: :: Step_gt0_0:
+  (StepWhile>0(a, I, s).k).a <= 0
+   implies StepWhile>0(a, I, s).(k+1) | D = StepWhile>0(a, I, s).k | D
+proof assume
+A1: (StepWhile>0(a, I, s).k).a <= 0;
+  set SW = StepWhile>0(a, I, s);
+A2: (SW.k +* (while>0(a,I) +* SAt)) | D
+   = SW.k | D by SCMFSA8A:11;
+then A3: SW.k.a = (SW.k +* (while>0(a,I) +* SAt)).a by SCMFSA6A:38;
+A4: while>0(a,I) +* SAt c= SW.k +* (while>0(a,I) +* SAt) by FUNCT_4:26;
+ thus SW.(k+1) | D
+    = (Computation (SW.k +* (while>0(a,I) +* SAt))).
+                (LifeSpan (SW.k +* (I +* SAt)) + 3) | D by SCMFSA_9:def 5
+   .= StepWhile>0(a, I, s).k | D by A1,A2,A3,A4,Th35;
+end;
+
+theorem Th38: :: Step_gt0_1:
+ ( I is_halting_on Initialize StepWhile>0(a, I, s).k &
+     I is_closed_on Initialize StepWhile>0(a, I, s).k
+  or I is parahalting) &
+ (StepWhile>0(a, I, s).k).a > 0 &
+ (StepWhile>0(a, I, s).k).intloc 0 = 1
+   implies StepWhile>0(a, I, s).(k+1) | D
+         = IExec(I, StepWhile>0(a, I, s).k) | D
+proof assume that
+A1:    I is_halting_on Initialize StepWhile>0(a, I, s).k &
+      I is_closed_on Initialize StepWhile>0(a, I, s).k
+   or I is parahalting and
+A2: (StepWhile>0(a, I, s).k).a > 0 and
+A3: (StepWhile>0(a, I, s).k).intloc 0 = 1;
+
+   set SW = StepWhile>0(a, I, s);
+   set ISWk = Initialize StepWhile>0(a, I, s).k;
+   set SWkI = SW.k+*Initialized I;
+   set WHS = while>0(a, I) +* SAt;
+   set IS = I +* SAt;
+   set SWkIS = SW.k+*IS;
+   set Ins = the Instruction-Locations of SCM+FSA;
+
+A4: SWkI = SWkIS by A3,SCMFSA8C:18;
+A5: SAt c= Initialized I by SCMFSA6B:4;
+  I is_halting_on ISWk by A1,SCMFSA7B:25;
+    then Initialized I is_halting_on SW.k by SCMFSA8C:22;
+    then SW.k+*(Initialized I +* SAt) is halting by SCMFSA7B:def 8;
+then A6: SWkI is halting by A5,AMI_5:10;
+        Ins misses D by SCMFSA_2:13,14,XBOOLE_1:70;
+then A7: dom (SW.k | Ins) misses D by SCMFSA8A:3;
+A8: IExec(I, SW.k) | D
+   = (Result(SWkI) +* SW.k | Ins) | D by SCMFSA6B:def 1
+  .= (Result(SWkI)) | D by A7,SCMFSA8A:2
+  .= (Computation SWkIS).(LifeSpan SWkIS) | D by A4,A6,SCMFSA6B:16;
+
+A9: SW.(k+1) = (Computation (SW.k +* WHS)).(LifeSpan (SWkIS) + 3)
+      by SCMFSA_9:def 5;
+
+A10: ISWk | D = SW.k | D by A3,SCMFSA8C:27;
+      now assume I is parahalting;
+       then reconsider I' = I as parahalting Macro-Instruction;
+         I' is paraclosed;
+     hence I is paraclosed;
+    end;
+then A11: I is_closed_on SW.k by A1,A10,SCMFSA7B:24,SCMFSA8B:6;
+     I is_halting_on SW.k by A1,A10,SCMFSA7B:25,SCMFSA8B:8;
+ hence SW.(k+1) | D = IExec(I, SW.k) | D by A2,A8,A9,A11,Th36;
+end;
+
+theorem Th39: :: GoodStep0:
+ (ProperBodyWhile>0 a, Ig, s or Ig is parahalting) &
+ s.intloc 0 = 1
+  implies for k holds StepWhile>0(a, Ig, s).k.intloc 0 = 1
+proof set I = Ig; assume that
+A1: (ProperBodyWhile>0 a, I, s or I is parahalting) and
+A2: s.intloc 0 = 1;
+   set SW = StepWhile>0(a, I, s);
+   defpred X[Nat] means SW.$1.intloc 0 = 1;
+A3: X[0] by A2,SCMFSA_9:def 5;
+A4: for k being Nat st X[k] holds X[k+1]
+   proof let k be Nat such that
+ A5:  SW.k.intloc 0 = 1;
+     per cases;
+     suppose SW.k.a <= 0;
+       then SW.(k+1) | D = SW.k | D by Th37;
+      hence SW.(k+1).intloc 0 = 1 by A5,SCMFSA6A:38;
+     suppose A6: SW.k.a > 0;
+        ProperBodyWhile>0 a, I, s by A1,Th32;
+     then A7: I is_closed_on SW.k & I is_halting_on SW.k by A6,Def4;
+   set ISWk = Initialize StepWhile>0(a, I, s).k;
+   set SWkI = SW.k+*Initialized I;
+   set SWkIS = SW.k+*(I +* SAt);
+   set Ins = the Instruction-Locations of SCM+FSA;
+A8: SW.k | D = ISWk | D by A5,SCMFSA8C:27;
+     then A9: I is_halting_on Initialize SW.k by A7,SCMFSA8B:8;
+     A10: I is_closed_on Initialize SW.k by A7,A8,SCMFSA8B:6;
+
+A11: SWkI = SWkIS by A5,SCMFSA8C:18;
+A12: SAt c= Initialized I by SCMFSA6B:4;
+      Initialized I is_halting_on SW.k by A9,SCMFSA8C:22;
+    then SW.k+*(Initialized I +* SAt) is halting by SCMFSA7B:def 8;
+then A13: SWkI is halting by A12,AMI_5:10;
+        Ins misses D by SCMFSA_2:13,14,XBOOLE_1:70;
+then A14: dom (SW.k | Ins) misses D by SCMFSA8A:3;
+A15: IExec(I, SW.k) | D
+   = (Result
+(SWkI) +* SW.k | Ins) | D by SCMFSA6B:def 1
+  .= (Result(SWkI)) | D by A14,SCMFSA8A:2
+  .= (Computation SWkIS).(LifeSpan SWkIS) | D by A11,A13,SCMFSA6B:16;
+        SW.(k+1) | D = IExec(I, SW.k) | D by A5,A6,A9,A10,Th38;
+     hence SW.(k+1).intloc 0
+        = ((Computation SWkIS).(LifeSpan SWkIS)).intloc 0 by A15,SCMFSA6A:38
+       .= 1 by A5,A7,SCMFSA8C:97;
+    end;
+thus for k being Nat holds X[k] from Ind(A3,A4);
+end;
+
+theorem Th40: :: SW12:
+ ProperBodyWhile>0 a, I, s1 & s1 | D = s2 | D implies
+   for k holds StepWhile>0(a, I, s1).k | D = StepWhile>0(a, I, s2).k | D
+proof assume that
+A1: ProperBodyWhile>0 a, I, s1 and
+A2: s1 | D = s2 | D;
+   set ST1 = StepWhile>0(a, I, s1); set ST2 = StepWhile>0(a, I, s2);
+   set WH = while>0(a,I);
+   defpred X[Nat] means ST1.$1 | D = ST2.$1 | D;
+   ST1.0 | D = s1 | D by SCMFSA_9:def 5
+             .= ST2.0 | D by A2,SCMFSA_9:def 5;
+   then
+A3: X[0];
+A4: for k st X[k] holds X[k+1]
+   proof let k; assume
+  A5: ST1.k | D = ST2.k | D;
+  then A6: ST1.k.a = ST2.k.a by SCMFSA6A:38;
+  set ST1kI = ST1.k +* (I +* SAt);
+  set ST2kI = ST2.k +* (I +* SAt);
+    per cases;
+    suppose A7: ST1.k.a <= 0;
+     hence ST1.(k+1) | D = ST1.k | D by Th37
+        .= ST2.(k+1) | D by A5,A6,A7,Th37;
+    suppose A8: ST1.k.a > 0;
+  then A9: I is_closed_on ST1.k & I is_halting_on ST1.k by A1,Def4;
+  A10:  ST1.(k+1) | D = (Computation (ST1.k +* (WH +* SAt))).
+          (LifeSpan (ST1kI) + 3) | D by SCMFSA_9:def 5
+       .= (Computation (ST1kI)). (LifeSpan (ST1kI)) | D by A8,A9,Th36;
+  A11: I is_closed_on ST2.k & I is_halting_on ST2.k by A5,A9,SCMFSA8B:8;
+  A12:  ST2.(k+1) | D = (Computation (ST2.k +* (WH +* SAt))).
+          (LifeSpan (ST2kI) + 3) | D by SCMFSA_9:def 5
+       .= (Computation (ST2kI)). (LifeSpan (ST2kI)) | D by A6,A8,A11,Th36;
+
+  A13: (ST1kI) | D = ST1.k | D by SCMFSA8A:11
+                 .= (ST2kI) | D by A5,SCMFSA8A:11;
+  A14: I +* SAt c= ST1kI by FUNCT_4:26;
+  A15: I +* SAt c= ST2kI by FUNCT_4:26;
+  A16: ST1.k | D = ST1kI | D by SCMFSA8A:11;
+  then A17: I is_closed_on (ST1kI) by A9,SCMFSA8B:6;
+     I is_halting_on ST1kI by A9,A16,SCMFSA8B:8;
+    then (LifeSpan (ST1kI)) = (LifeSpan (ST2kI)) by A13,A14,A15,A17,SCMFSA8C:44
+;
+    hence ST1.(k+1) | D = ST2.(k+1) | D by A10,A12,A13,A14,A15,A17,SCMFSA8C:43
+;
+    end;
+ thus for k holds X[k] from Ind(A3, A4);
+end;
+
+definition
+ let s be State of SCM+FSA,
+     a be read-write Int-Location,
+     I be Macro-Instruction;
+ assume that
+A1: ProperBodyWhile>0 a, I, s or I is parahalting and
+A2: WithVariantWhile>0 a, I, s;
+ func ExitsAtWhile>0(a, I, s) -> Nat means
+:Def6:
+  ex k being Nat st
+   it = k &
+   (StepWhile>0(a, I, s).k).a <= 0 &
+   (for i being Nat st (StepWhile>0(a, I, s).i).a <= 0 holds k <= i) &
+   (Computation (s +* (while>0(a, I) +* SAt))).
+                         (LifeSpan (s +* (while>0(a, I) +* SAt))) | D
+     = StepWhile>0(a, I, s).k | D;
+ existence proof
+
+  set SW = StepWhile>0(a, I, s);
+  set S = s +* (while>0(a, I) +* SAt);
+
+  defpred X[Nat] means SW.$1.a <= 0;
+  consider f being Function of product the Object-Kind of SCM+FSA, NAT
+  such that
+A3: for k being Nat holds f.(SW.(k+1))<f.(SW.k) or X[k] by A2,Def5;
+  deffunc U(Nat) = f.(SW.$1);
+A4: for k being Nat holds U(k+1)<U(k) or X[k] by A3;
+   consider m such that
+A5: X[m] and
+A6: for n st X[n] holds m <= n from MinPred(A4);
+  take m, m;
+  thus m = m;
+  thus SW.m.a <= 0 by A5;
+  thus for n st SW.n.a <= 0 holds m <= n by A6;
+A7: while>0(a, I) +* SAt c= S by FUNCT_4:26;
+    A8: ProperBodyWhile>0 a, I, s by A1,Th32;
+    defpred P[Nat] means
+      $1+1 <= m implies
+        ex k st StepWhile>0(a,I,s).($1+1)=(Computation S).k;
+A9: P[0]
+    proof assume 0+1 <= m;
+       take n=(LifeSpan (s+* (I +* SAt)) + 3);
+       thus StepWhile>0(a,I,s).(0+1)=(Computation S).n by SCMFSA_9:51;
+    end;
+A10: IC SCM+FSA in dom (while>0(a,I) +* SAt ) by SF_MASTR:65;
+A11: now let k be Nat;
+       assume A12: P[k];
+         now assume A13: (k+1)+ 1 <= m;
+            k + 0 < k+ (1+ 1) by REAL_1:53;
+          then k < (k+1) +1 by XCMPLX_1:1;
+          then A14:      k < m by A13,AXIOMS:22;
+          A15: (k+1)+ 0 < (k+ 1)+ 1 by REAL_1:53;
+          set sk=StepWhile>0(a,I,s).k;
+          set sk1=StepWhile>0(a,I,s).(k+1);
+          consider n being Nat such that
+A16:       sk1 = (Computation S).n by A12,A13,A15,AXIOMS:22;
+A17:       sk1 = (Computation (sk +* (while>0(a,I)+* SAt))).
+                        (LifeSpan (sk +* (I +* SAt)) + 3) by SCMFSA_9:def 5;
+A18:     sk.a > 0 by A6,A14;
+       then I is_closed_on sk & I is_halting_on sk by A8,Def4;
+then A19:       IC sk1 =insloc 0 by A17,A18,SCMFSA_9:47;
+          take m=n +(LifeSpan (sk1 +* (I +* SAt)) + 3);
+          thus StepWhile>0(a,I,s).((k+1)+1)=(Computation S).m
+            by A16,A19,SCMFSA_9:52;
+       end;
+       hence P[k+1];
+    end;
+A20: for k being Nat holds P[k] from Ind(A9,A11);
+  per cases;
+  suppose A21: m = 0;
+  A22: S | D = s | D by SCMFSA8A:11
+           .= SW.m | D by A21,SCMFSA_9:def 5;
+      then S.a = SW.m.a by SCMFSA6A:38;
+   hence (Computation S).(LifeSpan S) | D
+       = SW.m | D by A5,A7,A22,Th35;
+  suppose m <> 0;
+         then consider i being Nat such that
+A23:      m=i+1 by NAT_1:22;
+         set si = StepWhile>0(a,I,s).i;
+         set sm = StepWhile>0(a,I,s).m;
+         set sm1 = sm +* (while>0(a,I)+* SAt);
+         consider n being Nat such that
+A24:     sm = (Computation S).n by A20,A23;
+A25:     sm = (Computation (si +* (while>0(a,I)+* SAt))).
+                    (LifeSpan (si +* (I +* SAt)) + 3) by A23,SCMFSA_9:def 5;
+           i < m by A23,NAT_1:38;
+then A26:    si.a > 0 by A6;
+     then I is_closed_on si & I is_halting_on si by A8,Def4;
+then A27:     IC sm =insloc 0 by A25,A26,SCMFSA_9:47;
+A28:     IC sm1 = sm1.IC SCM+FSA by AMI_1:def 15
+         .= (while>0(a,I) +* SAt).IC SCM+FSA by A10,FUNCT_4:14
+         .= IC sm by A27,SF_MASTR:66;
+A29:     sm1 | D = sm | D by SCMFSA8A:11;
+       sm | IL = S | IL by A24,SCMFSA6B:17;
+         then sm1 | IL = sm | IL by SCMFSA_9:27;
+then A30:     sm1 = sm by A28,A29,SCMFSA_9:29;
+           while>0(a,I) is_halting_on sm by A5,SCMFSA_9:43;
+         then sm1 is halting by SCMFSA7B:def 8;
+         then consider j being Nat such that
+A31:      CurInstr((Computation sm).j) = halt SCM+FSA by A30,AMI_1:def 20;
+A32:     CurInstr (Computation S).(n+j)
+             = halt SCM+FSA by A24,A31,AMI_1:51;
+
+A33:  while>0(a,I)+* SAt c= sm by A30,FUNCT_4:26;
+         (Computation S).(LifeSpan S)
+     = (Computation S).(n+j) by A32,Th6
+    .= (Computation sm).j by A24,AMI_1:51
+    .= (Computation sm).(LifeSpan sm) by A31,Th6;
+  hence (Computation S).(LifeSpan S) | D = sm | D by A5,A33,Th35;
+ end;
+ uniqueness proof let it1, it2 be Nat;
+  given k1 being Nat such that
+A34: it1 = k1 and
+A35:(StepWhile>0(a, I, s).k1).a <= 0 and
+A36: for i being Nat st (StepWhile>0(a, I, s).i).a <= 0 holds k1 <= i and
+     ((Computation (s +* (while>0(a, I) +* SAt))).
+                         (LifeSpan (s +* (while>0(a, I) +* SAt)))) | D
+     = StepWhile>0(a, I, s).k1 | D;
+  given k2 being Nat such that
+A37: it2 = k2 and
+A38: (StepWhile>0(a, I, s).k2).a <= 0 and
+A39: (for i being Nat st (StepWhile>0(a, I, s).i).a <= 0 holds k2 <= i) and
+     ((Computation (s +* (while>0(a, I) +* SAt))).
+                         (LifeSpan (s +* (while>0(a, I) +* SAt)))) | D
+     = StepWhile>0(a, I, s).k2 | D;
+     k1 <= k2 & k2 <= k1 by A35,A36,A38,A39;
+  hence it1 = it2 by A34,A37,AXIOMS:21;
+ end;
+end;
+
+theorem  :: IE_while_le0:
+   s.intloc 0 = 1 & s.a <= 0 implies IExec(while>0(a, I), s) | D = s | D
+proof assume that
+A1: s.intloc 0 = 1 and
+A2: s.a <= 0;
+    set Is = Initialize s;
+    set WH = while>0(a, I);
+    set Ins = the Instruction-Locations of SCM+FSA;
+    set Ids = s +* Initialized WH;
+
+      Is | D = Ids | D by SCMFSA8B:5;
+then A3: Ids.a = Is.a by SCMFSA6A:38 .= s.a by SCMFSA6C:3;
+
+A4:  Ids = Is +*(WH +* SAt) by SCMFSA8A:13;
+then A5: WH +* SAt c= Ids by FUNCT_4:26;
+
+        Is.a = s.a by SCMFSA6C:3;
+      then WH is_halting_on Is by A2,SCMFSA_9:43;
+then A6: Ids is halting by A4,SCMFSA7B:def 8;
+
+        Ins misses D by SCMFSA_2:13,14,XBOOLE_1:70;
+then A7: dom (s|Ins) misses D by SCMFSA8A:3;
+ thus IExec(WH, s) | D
+    = (Result(s+*Initialized WH) +* s | Ins) | D by SCMFSA6B:def 1
+   .= (Result(s+*Initialized WH)) | D by A7,SCMFSA8A:2
+   .= (Computation Ids).(LifeSpan Ids) | D by A6,SCMFSA6B:16
+   .= Ids | D by A2,A3,A5,Th35
+   .= (Initialize s) | D by SCMFSA8B:5
+   .= s | D by A1,SCMFSA8C:27;
+end;
+
+theorem Th42: :: IE_while_gt0:
+ (ProperBodyWhile>0 a, I, Initialize s or I is parahalting) &
+  WithVariantWhile>0 a, I, Initialize s
+   implies IExec(while>0(a, I), s) | D
+       = StepWhile>0(a, I, Initialize s).ExitsAtWhile>0(a, I, Initialize s) | D
+proof
+
+ assume that
+A1: ProperBodyWhile>0 a, I, Initialize s or I is parahalting and
+A2: WithVariantWhile>0 a, I, Initialize s;
+
+    set WH = while>0(a, I);
+    set Ins = the Instruction-Locations of SCM+FSA;
+    set Ids = s +* Initialized WH;
+    set Is = Initialize s;
+
+A3:  Ids = Is +*(WH +* SAt) by SCMFSA8A:13;
+
+        WH is_halting_on Is by A1,A2,Th33,Th34;
+then A4: Ids is halting by A3,SCMFSA7B:def 8;
+
+   consider k being Nat such that
+A5: ExitsAtWhile>0(a, I, Is) = k and
+     (StepWhile>0(a, I, Is).k).a <= 0 &
+   (for i being Nat st (StepWhile>0(a, I, Is).i).a <= 0 holds k <= i) and
+A6: ((Computation (Is +* (while>0(a, I) +* SAt))).
+                      (LifeSpan (Is +* (while>0(a, I) +* SAt)))) | D
+     = StepWhile>0(a, I, Is).k | D
+       by A1,A2,Def6;
+
+        Ins misses D by SCMFSA_2:13,14,XBOOLE_1:70;
+then A7: dom (s|Ins) misses D by SCMFSA8A:3;
+ thus IExec(WH, s) | D
+    = (Result(s+*Initialized WH) +* s | Ins) | D by SCMFSA6B:def 1
+   .= (Result(s+*Initialized WH)) | D by A7,SCMFSA8A:2
+   .= StepWhile>0(a, I, Is).ExitsAtWhile>0(a, I, Is) | D by A3,A4,A5,A6,
+SCMFSA6B:16;
+end;
+
+theorem Th43:
+ StepWhile>0(a, I, s).k.a <= 0 implies
+  for n being Nat st k <= n
+   holds StepWhile>0(a, I, s).n | D = StepWhile>0(a, I, s).k | D
+proof assume
+A1: StepWhile>0(a, I, s).k.a <= 0;
+  set SW = StepWhile>0(a, I, s);
+  defpred P[Nat] means k <= $1 implies SW.$1 | D = SW.k | D;
+A2: P[0] proof assume A3: k <= 0; 0 <= k by NAT_1:18;
+     hence thesis by A3,AXIOMS:21;
+    end;
+A4: now let n be Nat such that
+  A5: P[n];
+    thus P[n+1]
+     proof assume
+  A6: k <= n+1;
+      per cases by A6,NAT_1:26;
+      suppose A7: k <= n;
+           then SW.n.a <= 0 by A1,A5,SCMFSA6A:38;
+       hence SW.(n+1) | D = SW.k | D by A5,A7,Th37;
+      suppose k = n+1;
+       hence SW.(n+1) | D = SW.k | D;
+     end;
+    end;
+ thus for n being Nat holds P[n] from Ind(A2, A4);
+end;
+
+theorem
+   s1 | D = s2 | D & ProperBodyWhile>0 a, I, s1
+  implies ProperBodyWhile>0 a, I, s2
+proof assume that
+A1: s1 | D = s2 | D and
+A2: ProperBodyWhile>0 a, I, s1;
+ let k be Nat such that
+A3: StepWhile>0(a,I,s2).k.a > 0;
+A4: StepWhile>0(a,I,s2).k | D = StepWhile>0(a,I,s1).k | D by A1,A2,Th40;
+then StepWhile>0(a,I,s1).k.a > 0 by A3,SCMFSA6A:38;
+   then I is_closed_on StepWhile>0(a,I,s1).k &
+   I is_halting_on StepWhile>0(a,I,s1).k by A2,Def4;
+ hence thesis by A4,SCMFSA8B:8;
+end;
+
+Lm7: :: InitC:
+ s.intloc 0 = 1 implies (I is_closed_on s iff I is_closed_on Initialize s)
+proof assume s.intloc 0 = 1; then (Initialize s) | D = s | D by SCMFSA8C:27;
+ hence I is_closed_on s iff I is_closed_on Initialize s by SCMFSA8B:6;
+end;
+
+Lm8: :: InitH:
+ s.intloc 0 = 1 implies
+    ( I is_closed_on s & I is_halting_on s
+     iff I is_closed_on Initialize s & I is_halting_on Initialize s)
+proof assume s.intloc 0 = 1; then (Initialize s) | D = s | D by SCMFSA8C:27;
+ hence thesis by SCMFSA8B:8;
+end;
+
+theorem Th45:
+ s.intloc 0 = 1 & ProperBodyWhile>0 a, Ig, s & WithVariantWhile>0 a, Ig, s
+ implies
+  for i, j st i <> j & i <= ExitsAtWhile>0(a, Ig, s) &
+                       j <= ExitsAtWhile>0(a, Ig, s)
+     holds StepWhile>0(a, Ig, s).i <> StepWhile>0(a, Ig, s).j &
+           StepWhile>0(a, Ig, s).i | D <> StepWhile>0(a, Ig, s).j | D
+proof set I = Ig; assume that
+A1: s.intloc 0 = 1 and
+A2: ProperBodyWhile>0 a, I, s and
+A3: WithVariantWhile>0 a, I, s;
+   set SW = StepWhile>0(a, I, s);
+   consider K being Nat such that
+A4: ExitsAtWhile>0(a, I, s) = K and
+A5: SW.K.a <= 0 and
+A6: for i being Nat st SW.i.a <= 0 holds K <= i and
+     (Computation (s +* (while>0(a, I) +* SAt))).
+                         (LifeSpan (s +* (while>0(a, I) +* SAt))) | D
+     = SW.K | D by A2,A3,Def6;
+  consider f being Function of product the Object-Kind of SCM+FSA, NAT
+  such that
+A7: for k being Nat holds f.(SW.(k+1)) < f.(SW.k) or SW.k.a <= 0
+     by A3,Def5;
+
+A8: for i, j being Nat st i < j & i <= K & j <= K holds SW.i <> SW.j
+   proof let i, j be Nat; assume
+ A9: i < j & i <= K & j <= K;
+ then A10: i < K by AXIOMS:22;
+    assume
+     A11: SW.i = SW.j;
+     defpred X[Nat] means i < $1 & $1 <= j implies f.(SW.$1) < f.(SW.i);
+     A12: X[0] by NAT_1:18;
+     A13: for k being Nat st X[k] holds X[k+1]
+     proof let k be Nat such that
+         A14: i < k & k <= j implies f.(SW.k) < f.(SW.i) and
+         A15: i < k+1 & k+1 <= j;
+         A16: i <= k by A15,NAT_1:38;
+         per cases by A16,REAL_1:def 5;
+         suppose A17: i = k;
+             not SW.i.a <= 0 by A6,A10;
+          hence f.(SW.(k+1)) < f.(SW.i) by A7,A17;
+         suppose A18: i < k;
+           A19: k < j by A15,NAT_1:38;
+                 now assume SW.k.a <= 0; then K <= k by A6;
+                hence contradiction by A9,A19,AXIOMS:22;
+               end;
+               then f.(SW.(k+1)) < f.(SW.k) by A7;
+          hence f.(SW.(k+1)) < f.(SW.i) by A14,A15,A18,AXIOMS:22,NAT_1:38;
+         end;
+           for k being Nat holds X[k] from Ind(A12, A13);
+    hence contradiction by A9,A11;
+   end;
+A20: for i, j being Nat st i < j & i <= K & j <= K
+     holds SW.i | D <> SW.j | D
+   proof let i, j be Nat such that
+   A21: i < j & i <= K & j <= K;
+   per cases by A21,REAL_1:def 5;
+   suppose A22: j = K;
+    assume SW.i | D = SW.j | D;
+     then SW.i.a <= 0 by A5,A22,SCMFSA6A:38;
+    hence contradiction by A6,A21,A22;
+   suppose A23: j < K;
+     defpred X[Nat] means j+$1 <= K implies SW.(i+$1) | D = SW.(j+$1) | D;
+    assume
+        SW.i | D = SW.j | D;
+     then A24: X[0];
+     A25: for k being Nat st X[k] holds X[k+1]
+       proof
+          let k be Nat such that
+         A26: j+k <= K implies SW.(i+k) | D = SW.(j+k) | D and
+         A27: j+(k+1) <= K;
+              A28: j+k < (j+k)+1 & (j+k)+1 <= K by A27,REAL_1:69,XCMPLX_1:1;
+         then A29: j+k < K by AXIOMS:22;
+         A30: SW.(j+k).intloc 0 = 1 by A1,A2,Th39;
+         A31: SW.(j+k).a > 0 by A6,A29;
+         then A32: I is_closed_on SW.(j+k) by A2,Def4;
+         then A33: I is_closed_on Initialize SW.(j+k) by A30,Lm7;
+         A34: I is_halting_on SW.(j+k) by A2,A31,Def4;
+         then A35: I is_halting_on Initialize SW.(j+k) by A30,A32,Lm8;
+         A36: SW.(i+k).intloc 0 = 1 by A1,A2,Th39;
+         A37: SW.(i+k).a > 0 proof assume not thesis;
+              then A38: K <= i+k by A6;
+                    i+k < j+k by A21,REAL_1:53;
+              hence contradiction by A29,A38,AXIOMS:22;
+             end;
+         then A39: I is_closed_on SW.(i+k) by A2,Def4;
+         then A40: I is_closed_on Initialize SW.(i+k) by A36,Lm7;
+            I is_halting_on SW.(i+k) by A2,A37,Def4;
+         then A41: I is_halting_on Initialize SW.(i+k) by A36,A39,Lm8;
+           thus SW.(i+(k+1)) | D
+              = SW.(i+k+1) | D by XCMPLX_1:1
+             .= IExec(I, SW.(i+k)) | D by A36,A37,A40,A41,Th38
+             .= IExec(I, SW.(j+k)) | D by A26,A28,A30,A32,A34,AXIOMS:22,
+SCMFSA8C:46
+             .= SW.(j+k+1) | D by A30,A31,A33,A35,Th38
+             .= SW.(j+(k+1)) | D by XCMPLX_1:1;
+         end;
+     A42: for k being Nat holds X[k] from Ind(A24, A25);
+         consider p being Nat such that
+     A43: K = j+p and 1 <= p by A23,FSM_1:1;
+     A44: SW.(i+p) | D = SW.K | D by A42,A43;
+     A45: i+p < K by A21,A43,REAL_1:53;
+           SW.(i+p).a <= 0 by A5,A44,SCMFSA6A:38;
+    hence contradiction by A6,A45;
+   end;
+ given i, j being Nat such that
+A46: i <> j and
+A47: i <= ExitsAtWhile>0(a, I, s) and
+A48: j <= ExitsAtWhile>0(a, I, s) and
+A49: SW.i = SW.j or SW.i | D = SW.j | D;
+     i < j or j < i by A46,AXIOMS:21;
+ hence contradiction by A4,A8,A20,A47,A48,A49;
+end;
+
+definition
+ let f be Function of product the Object-Kind of SCM+FSA, NAT;
+ attr f is on_data_only means
+:Def7: for s1, s2 st s1 | D = s2 | D holds f.s1 = f.s2;
+end;
+
+theorem Th46:
+ s.intloc 0 = 1 & ProperBodyWhile>0 a, Ig, s & WithVariantWhile>0 a, Ig, s
+  implies ex f being Function of product the Object-Kind of SCM+FSA, NAT st
+   f is on_data_only &
+   for k being Nat holds
+     f.(StepWhile>0(a, Ig, s).(k+1)) < f.(StepWhile>0(a, Ig, s).k)
+     or StepWhile>0(a, Ig, s).k.a <= 0
+proof set I = Ig; assume that
+A1: s.intloc 0 = 1 and
+A2: ProperBodyWhile>0 a, I, s and
+A3: WithVariantWhile>0 a, I, s;
+  set SW = StepWhile>0(a,I,s);
+  consider g being Function of product the Object-Kind of SCM+FSA, NAT
+  such that
+A4: for k being Nat holds g.(SW.(k+1)) < g.(SW.k) or SW.k.a <= 0
+     by A3,Def5;
+
+  consider K being Nat such that
+A5: ExitsAtWhile>0(a, I, s) = K and
+A6: SW.K.a <= 0 and
+        for i being Nat st SW.i.a <= 0 holds K <= i and
+     (Computation (s +* (while>0(a, I) +* SAt))).
+                         (LifeSpan (s +* (while>0(a, I) +* SAt))) | D
+     = StepWhile>0(a, I, s).K | D by A2,A3,Def6;
+  defpred P[State of SCM+FSA, Nat] means
+      (ex k being Nat st k <= K & $1 | D = SW.k | D & $2 = g.(SW.k)) or
+      not (ex k being Nat st k <= K & $1 | D = SW.k | D) & $2 = 0;
+
+A7: for x being State of SCM+FSA ex y being Nat st P[x,y] proof
+     let x be State of SCM+FSA;
+     per cases;
+     suppose ex k being Nat st k <= K & x | D = SW.k | D;
+       then consider k being Nat such that
+     A8: k <= K & x | D = SW.k | D;
+       take g.(SW.k); thus thesis by A8;
+     suppose A9: not ex k being Nat st k <= K & x | D = SW.k | D;
+      take 0; thus thesis by A9;
+    end;
+
+  consider f being Function of product the Object-Kind of SCM+FSA, NAT
+   such that
+A10: for x being State of SCM+FSA holds P[x,f.x] from FuncExD(A7);
+  take f;
+  hereby let s1, s2 such that
+  A11: s1 | D = s2 | D;
+      P[s1, f.s1] & P[s2, f.s2] by A10;
+   hence f.s1 = f.s2 by A1,A2,A3,A5,A11,Th45;
+  end;
+  let k be Nat;
+  per cases;
+  suppose A12: k < K;
+          then A13: k+1 <= K by NAT_1:38;
+    consider kk being Nat such that
+  A14: kk <= K & SW.k | D = SW.kk | D & f.(SW.k) = g.(SW.kk) by A10,A12;
+    consider kk1 being Nat such that
+  A15:kk1 <= K & SW.(k+1) | D = SW.kk1 | D & f.(SW.(k+1))=g.(SW.kk1)by A10,A13;
+        k = kk & k+1 = kk1 by A1,A2,A3,A5,A12,A13,A14,A15,Th45;
+   hence f.(SW.(k+1)) < f.(SW.k) or SW.k.a <= 0 by A4,A14,A15;
+  suppose K <= k;
+    then SW.K | D = SW.k | D by A6,Th43;
+   hence f.(SW.(k+1)) < f.(SW.k) or SW.k.a <= 0 by A6,SCMFSA6A:38;
+end;
+
+theorem
+   s1.intloc 0 = 1 & s1 | D = s2 | D &
+ ProperBodyWhile>0 a, Ig, s1 & WithVariantWhile>0 a, Ig, s1
+  implies WithVariantWhile>0 a, Ig, s2
+proof set I = Ig; assume that
+A1: s1.intloc 0 = 1 and
+A2: s1 | D = s2 | D and
+A3: ProperBodyWhile>0 a, I, s1 and
+A4: WithVariantWhile>0 a, I, s1;
+
+  set SW1 = StepWhile>0(a,I,s1);
+  set SW2 = StepWhile>0(a,I,s2);
+  consider f being Function of product the Object-Kind of SCM+FSA, NAT
+  such that
+A5: f is on_data_only and
+A6: for k being Nat holds (f.(SW1.(k+1)) < f.(SW1.k) or SW1.k.a <= 0 )
+          by A1,A3,A4,Th46;
+  take f;
+  let k be Nat;
+A7: SW1.k | D = SW2.k | D by A2,A3,Th40;
+then A8: SW1.k.a = SW2.k.a by SCMFSA6A:38;
+   SW1.(k+1) | D = SW2.(k+1) | D by A2,A3,Th40;
+   then f.(SW1.k) = f.(SW2.k) & f.(SW1.(k+1)) = f.(SW2.(k+1)) by A5,A7,Def7;
+ hence (f.(SW2.(k+1)) < f.(SW2.k) or SW2.k.a <= 0 ) by A6,A8;
+end;
+
+begin :: fusc using while>0, bottom-up
+
+definition
+ let N, result be Int-Location;
+
+   set next = 1-stRWNotIn {N, result};
+   set aux = 2-ndRWNotIn {N, result};
+   set rem2 = 3-rdRWNotIn {N, result};
+
+    :: set next = 1-stRWNotIn {N, result};
+    :: set aux  = 2-ndRWNotIn {N, result};
+    :: set rem2 = 3-rdRWNotIn {N, result};
+
+    :: while and if do not allocate memory, no need to save anything
+
+ func Fusc_macro ( N, result ) -> Macro-Instruction equals
+:Def8:
+   SubFrom(result, result) ';'
+   (next := intloc 0) ';'
+   (aux := N) ';'
+   while>0 ( aux,
+             rem2 := 2 ';'
+             Divide(aux, rem2) ';'
+             if=0 ( rem2,
+                    Macro AddTo(next, result),
+                    Macro AddTo(result, next)
+                  )
+           );
+ correctness;
+end;
+
+theorem
+  for N, result being read-write Int-Location
+ st N <> result
+  for n being Nat st n = s.N
+   holds IExec(Fusc_macro(N, result), s).result = Fusc n &
+         IExec(Fusc_macro(N, result), s).N = n
+proof let N, result be read-write Int-Location such that
+A1: N <> result;
+
+   set next = 1-stRWNotIn {N, result};
+   set aux = 2-ndRWNotIn {N, result};
+   set rem2 = 3-rdRWNotIn {N, result};
+
+   set i0 = SubFrom(result, result);
+   set i1 = next := intloc 0;
+   set i2 = aux := N;
+   set I3i0 = rem2 := 2;
+   set I3i1 = Divide(aux, rem2);
+   set I3I2I0 = Macro AddTo(next, result);
+   set I3I2I1 = Macro AddTo(result, next);
+   set I3I2 = if=0 ( rem2, I3I2I0, I3I2I1 );
+   set I = I3i0 ';' I3i1 ';' I3I2;
+   set I3 = while>0 ( aux, I );
+   set t = IExec(i0 ';' i1 ';' i2, s);
+
+A2: Fusc_macro(N, result) = i0 ';' i1 ';' i2 ';' I3 by Def8;
+
+ let n be Nat such that
+A3: n = s.N;
+
+A4: N in {N, result} by TARSKI:def 2;
+then A5: N <> next by SFMASTR1:21;
+A6: N <> rem2 by A4,SFMASTR1:21;
+A7: N <> aux by A4,SFMASTR1:21;
+A8: aux <> rem2 by SFMASTR1:22;
+A9: aux <> next by SFMASTR1:22;
+A10: next <> rem2 by SFMASTR1:22;
+A11: result in {N, result} by TARSKI:def 2;
+then A12: aux <> result by SFMASTR1:21;
+A13: result <> rem2 by A11,SFMASTR1:21;
+A14: next <> result by A11,SFMASTR1:21;
+
+A15: for u being State of SCM+FSA
+      st ex au, ne, re being Nat
+          st u.aux = au & u.next = ne & u.result = re & u.N = n &
+             Fusc n = ne * Fusc au + re * Fusc (au+1)
+       ex au1, ne1, re1 being Nat
+        st IExec(I, u).aux = au1 & IExec(I, u).next = ne1 &
+           IExec(I, u).result = re1 & IExec(I, u).N = n &
+           Fusc n = ne1 * Fusc au1 + re1 * Fusc (au1+1) &
+           au1 = u.aux div 2
+ proof let u be State of SCM+FSA; given au, ne, re being Nat such that
+ A16: u.aux = au and
+ A17: u.next = ne and
+ A18: u.result = re and
+ A19: u.N = n and
+ A20: Fusc n = ne * Fusc au + re * Fusc (au+1);
+ A21: (Initialize IExec(I3i0 ';' I3i1, u)).aux
+      = IExec(I3i0 ';' I3i1, u).aux by SCMFSA6C:3
+     .= Exec(I3i1, IExec(I3i0, u)).aux by SCMFSA6C:7
+     .= IExec(I3i0, u).aux div IExec(I3i0, u).rem2 by A8,SCMFSA_2:93
+     .= u.aux div IExec(I3i0, u).rem2 by A8,SCMFSA7B:9
+     .= u.aux div 2 by SCMFSA7B:9;
+
+ A22: IExec(I3i0 ';' I3i1, u).rem2
+      = Exec(I3i1, IExec(I3i0, u)).rem2 by SCMFSA6C:7
+     .= IExec(I3i0, u).aux mod IExec(I3i0, u).rem2 by SCMFSA_2:93
+     .= u.aux mod IExec(I3i0, u).rem2 by A8,SCMFSA7B:9
+     .= u.aux mod 2 by SCMFSA7B:9;
+
+ A23: (Initialize IExec(I3i0 ';' I3i1, u)).N
+      = IExec(I3i0 ';' I3i1, u).N by SCMFSA6C:3
+     .= Exec(I3i1, IExec(I3i0, u)).N by SCMFSA6C:7
+     .= IExec(I3i0, u).N by A6,A7,SCMFSA_2:93
+     .= n by A6,A19,SCMFSA7B:9;
+
+ A24: (Initialize IExec(I3i0 ';' I3i1, u)).next
+      = IExec(I3i0 ';' I3i1, u).next by SCMFSA6C:3
+     .= Exec(I3i1, IExec(I3i0, u)).next by SCMFSA6C:7
+     .= IExec(I3i0, u).next by A9,A10,SCMFSA_2:93
+     .= ne by A10,A17,SCMFSA7B:9;
+
+ A25: (Initialize IExec(I3i0 ';' I3i1, u)).result
+      = IExec(I3i0 ';' I3i1, u).result by SCMFSA6C:3
+     .= Exec(I3i1, IExec(I3i0, u)).result by SCMFSA6C:7
+     .= IExec(I3i0, u).result by A12,A13,SCMFSA_2:93
+     .= re by A13,A18,SCMFSA7B:9;
+
+  per cases;
+  suppose au is even; then consider k being Nat such that
+  A26: au = 2*k by ABIAN:def 2;
+
+  A27: u.aux mod 2 = (2*k + 0) mod 2 by A16,A26,Th5
+                 .= 0 mod 2 by GR_CY_1:1
+                 .= 0 by GR_CY_1:6;
+  A28: IExec(I, u).aux
+     = IExec(I3I2, IExec(I3i0 ';' I3i1, u)).aux by SCMFSA6C:1
+    .= IExec(I3I2I0, IExec(I3i0 ';' I3i1, u)).aux by A22,A27,SCMFSA8B:21
+    .= Exec(AddTo(next, result), Initialize IExec(I3i0 ';' I3i1, u)).aux
+        by SCMFSA6C:6
+    .= u.aux div 2 by A9,A21,SCMFSA_2:90;
+
+      0 <= u.aux div 2 by A16,Th3;
+   then reconsider au1 = u.aux div 2 as Nat by INT_1:16;
+   reconsider ne1 = ne + re as Nat;
+   take au1, ne1, re;
+   thus IExec(I, u).aux = au1 by A28;
+   thus IExec(I, u).next
+     = IExec(I3I2, IExec(I3i0 ';' I3i1, u)).next by SCMFSA6C:1
+    .= IExec(I3I2I0, IExec(I3i0 ';' I3i1, u)).next by A22,A27,SCMFSA8B:21
+    .= Exec(AddTo(next, result), Initialize IExec(I3i0 ';' I3i1, u)).next
+        by SCMFSA6C:6
+    .= ne1 by A24,A25,SCMFSA_2:90;
+   thus IExec(I, u).result
+     = IExec(I3I2, IExec(I3i0 ';' I3i1, u)).result by SCMFSA6C:1
+    .= IExec(I3I2I0, IExec(I3i0 ';' I3i1, u)).result by A22,A27,SCMFSA8B:21
+    .= Exec(AddTo(next, result), Initialize IExec(I3i0 ';' I3i1, u)).result
+        by SCMFSA6C:6
+    .= re by A14,A25,SCMFSA_2:90;
+   thus IExec(I, u).N
+     = IExec(I3I2, IExec(I3i0 ';' I3i1, u)).N by SCMFSA6C:1
+    .= IExec(I3I2I0, IExec(I3i0 ';' I3i1, u)).N by A22,A27,SCMFSA8B:21
+    .= Exec(AddTo(next, result), Initialize IExec(I3i0 ';' I3i1, u)).N
+        by SCMFSA6C:6
+    .= n by A5,A23,SCMFSA_2:90;
+          au1 = au div 2 by A16,Th5
+           .= k by A26,AMI_5:3;
+   hence Fusc n = ne1 * Fusc au1 + re * Fusc (au1+1) by A20,A26,PRE_FF:22;
+   thus au1 = u.aux div 2;
+  suppose au is odd; then consider k being Nat such that
+  A29: au = 2*k +1 by Th1;
+
+  A30: u.aux mod 2 = (2*k + 1) mod 2 by A16,A29,Th5
+                 .= 1 mod 2 by GR_CY_1:1
+                 .= 1 by GR_CY_1:4;
+  A31: IExec(I, u).aux
+     = IExec(I3I2, IExec(I3i0 ';' I3i1, u)).aux by SCMFSA6C:1
+    .= IExec(I3I2I1, IExec(I3i0 ';' I3i1, u)).aux by A22,A30,SCMFSA8B:21
+    .= Exec(AddTo(result, next), Initialize IExec(I3i0 ';' I3i1, u)).aux
+        by SCMFSA6C:6
+    .= u.aux div 2 by A12,A21,SCMFSA_2:90;
+
+      0 <= u.aux div 2 by A16,Th3;
+   then reconsider au1 = u.aux div 2 as Nat by INT_1:16;
+   reconsider re1 = ne + re as Nat;
+   take au1, ne, re1;
+   thus IExec(I, u).aux = au1 by A31;
+   thus IExec(I, u).next
+     = IExec(I3I2, IExec(I3i0 ';' I3i1, u)).next by SCMFSA6C:1
+    .= IExec(I3I2I1, IExec(I3i0 ';' I3i1, u)).next by A22,A30,SCMFSA8B:21
+    .= Exec(AddTo(result, next), Initialize IExec(I3i0 ';' I3i1, u)).next
+        by SCMFSA6C:6
+    .= ne by A14,A24,SCMFSA_2:90;
+   thus IExec(I, u).result
+     = IExec(I3I2, IExec(I3i0 ';' I3i1, u)).result by SCMFSA6C:1
+    .= IExec(I3I2I1, IExec(I3i0 ';' I3i1, u)).result
+         by A22,A30,SCMFSA8B:21
+    .= Exec(AddTo(result, next), Initialize IExec(I3i0 ';' I3i1, u)).result
+        by SCMFSA6C:6
+    .= re1 by A24,A25,SCMFSA_2:90;
+   thus IExec(I, u).N
+     = IExec(I3I2, IExec(I3i0 ';' I3i1, u)).N by SCMFSA6C:1
+    .= IExec(I3I2I1, IExec(I3i0 ';' I3i1, u)).N by A22,A30,SCMFSA8B:21
+    .= Exec(AddTo(result, next), Initialize IExec(I3i0 ';' I3i1, u)).N
+        by SCMFSA6C:6
+    .= n by A1,A23,SCMFSA_2:90;
+          au1 = au div 2 by A16,Th5
+           .= 2*k div 2 by A29,NAT_2:28
+           .= k by AMI_5:3;
+   hence Fusc n = ne * Fusc au1 + re1 * Fusc (au1+1) by A20,A29,PRE_FF:21;
+   thus au1 = u.aux div 2;
+end;
+
+ set It = Initialize t;
+
+        t.intloc 0 = 1 by SCMFSA6B:35;
+then A32: t | D = It | D by SCMFSA8C:27;
+A33: It.intloc 0 = 1 by SCMFSA6C:3;
+
+ set SWt = StepWhile>0(aux, I, It);
+ defpred X[Nat] means ex au, ne, re being Nat
+    st SWt.$1.aux = au & SWt.$1.next = ne &
+       SWt.$1.result = re & SWt.$1.N = n &
+       Fusc n = ne * Fusc au + re * Fusc (au+1);
+A34: X[0]
+    proof
+  A35: SWt.0 = It by SCMFSA_9:def 5;
+     take au = n;
+     take ne = 1;
+     take re = 0;
+     thus SWt.0.aux = t.aux by A32,A35,SCMFSA6A:38
+       .= Exec(i2, IExec(i0 ';' i1, s)).aux by SCMFSA6C:7
+       .= IExec(i0 ';' i1, s).N by SCMFSA_2:89
+       .= Exec(i1, Exec(i0, Initialize s)).N by SCMFSA6C:9
+       .= Exec(i0, Initialize s).N by A5,SCMFSA_2:89
+       .= (Initialize s).N by A1,SCMFSA_2:91
+       .= au by A3,SCMFSA6C:3;
+
+     thus SWt.0.next = t.next by A32,A35,SCMFSA6A:38
+       .= Exec(i2, IExec(i0 ';' i1, s)).next by SCMFSA6C:7
+       .= IExec(i0 ';' i1, s).next by A9,SCMFSA_2:89
+       .= Exec(i1, Exec(i0, Initialize s)).next by SCMFSA6C:9
+       .= Exec(i0, Initialize s).intloc 0 by SCMFSA_2:89
+       .= (Initialize s).intloc 0 by SCMFSA_2:91
+       .= ne by SCMFSA6C:3;
+
+     thus SWt.0.result = t.result by A32,A35,SCMFSA6A:38
+       .= Exec(i2, IExec(i0 ';' i1, s)).result by SCMFSA6C:7
+       .= IExec(i0 ';' i1, s).result by A12,SCMFSA_2:89
+       .= Exec(i1, Exec(i0, Initialize s)).result by SCMFSA6C:9
+       .= Exec(i0, Initialize s).result by A14,SCMFSA_2:89
+       .= (Initialize s).result - (Initialize s).result by SCMFSA_2:91
+       .= re by XCMPLX_1:14;
+
+     thus SWt.0.N = t.N by A32,A35,SCMFSA6A:38
+       .= Exec(i2, IExec(i0 ';' i1, s)).N by SCMFSA6C:7
+       .= IExec(i0 ';' i1, s).N by A7,SCMFSA_2:89
+       .= Exec(i1, Exec(i0, Initialize s)).N by SCMFSA6C:9
+       .= Exec(i0, Initialize s).N by A5,SCMFSA_2:89
+       .= (Initialize s).N by A1,SCMFSA_2:91
+       .= n by A3,SCMFSA6C:3;
+
+     thus Fusc n
+        = ne * Fusc au + re * Fusc (au+1);
+    end;
+A36: for k being Nat st X[k] holds X[k+1]
+   proof let k be Nat;
+      given au, ne, re being Nat such that
+  A37: SWt.k.aux = au and
+  A38: SWt.k.next = ne and
+  A39: SWt.k.result = re and
+  A40: SWt.k.N = n and
+  A41: Fusc n = ne * Fusc au + re * Fusc (au+1);
+  A42: SWt.k.intloc 0 = 1 by A33,Th39;
+      per cases;
+      suppose SWt.k.aux > 0;
+      then A43:  SWt.(k+1) | D = IExec(I, SWt.k) | D by A42,Th38;
+        consider au1, ne1, re1 being Nat such that
+      A44: IExec(I, SWt.k).aux = au1 and
+      A45: IExec(I, SWt.k).next = ne1 and
+      A46: IExec(I, SWt.k).result = re1 and
+      A47: IExec(I, SWt.k).N = n and
+      A48: Fusc n = ne1 * Fusc au1 + re1 * Fusc (au1+1) and
+             au1 = SWt.k.aux div 2 by A15,A37,A38,A39,A40,A41;
+
+       take au1, ne1, re1;
+       thus SWt.(k+1).aux = au1 by A43,A44,SCMFSA6A:38;
+       thus SWt.(k+1).next = ne1 by A43,A45,SCMFSA6A:38;
+       thus SWt.(k+1).result = re1 by A43,A46,SCMFSA6A:38;
+       thus SWt.(k+1).N = n by A43,A47,SCMFSA6A:38;
+       thus Fusc n = ne1 * Fusc au1 + re1 * Fusc (au1+1) by A48;
+      suppose SWt.k.aux <= 0;
+      then A49:  SWt.(k+1) | D = SWt.k | D by Th37;
+       take au, ne, re;
+       thus SWt.(k+1).aux = au by A37,A49,SCMFSA6A:38;
+       thus SWt.(k+1).next = ne by A38,A49,SCMFSA6A:38;
+       thus SWt.(k+1).result = re by A39,A49,SCMFSA6A:38;
+       thus SWt.(k+1).N = n by A40,A49,SCMFSA6A:38;
+       thus Fusc n = ne * Fusc au + re * Fusc (au+1) by A41;
+    end;
+A50: for k being Nat holds X[k] from Ind(A34, A36);
+   deffunc U(Element of product the Object-Kind of SCM+FSA) =  abs($1.aux);
+   consider f being Function of product the Object-Kind of SCM+FSA,NAT
+     such that
+A51: for x being Element of product the Object-Kind of SCM+FSA
+      holds f.x = U(x) from LambdaD;
+
+  for k being Nat holds f.(SWt.(k+1)) < f.(SWt.k) or SWt.k.aux <= 0
+ proof let k be Nat;
+     consider au, ne, re being Nat such that
+ A52: SWt.k.aux = au and
+ A53:   SWt.k.next = ne & SWt.k.result = re & SWt.k.N = n &
+       Fusc n = ne * Fusc au + re * Fusc (au+1) by A50;
+ A54: 0 <= au by NAT_1:18;
+
+ A55:  f.(SWt.k) = abs(SWt.k.aux) by A51
+            .= au by A52,A54,ABSVALUE:def 1;
+       now assume
+     A56: au > 0;
+         consider au1, ne1, re1 being Nat such that
+     A57: IExec(I, SWt.k).aux = au1 and
+             IExec(I, SWt.k).next = ne1 & IExec(I, SWt.k).result = re1 &
+           IExec(I, SWt.k).N = n &
+           Fusc n = ne1 * Fusc au1 + re1 * Fusc (au1+1) and
+     A58:   au1 = SWt.k.aux div 2 by A15,A52,A53;
+             SWt.k.intloc 0 = 1 by A33,Th39;
+         then SWt.(k+1) | D = IExec(I, SWt.k) | D by A52,A56,Th38;
+     then A59: SWt.(k+1).aux
+       = au1 by A57,SCMFSA6A:38;
+     A60: 0 <= au1 by NAT_1:18;
+            f.(SWt.(k+1)) = abs(SWt.(k+1).aux) by A51
+                    .= au1 by A59,A60,ABSVALUE:def 1;
+      hence f.(SWt.(k+1)) < f.(SWt.k) by A52,A55,A56,A58,Th4;
+     end;
+  hence f.(SWt.(k+1)) < f.(SWt.k) or SWt.k.aux <= 0 by A52;
+ end;
+
+then A61: WithVariantWhile>0 aux, I, It by Def5;
+
+   then consider k being Nat such that
+A62: ExitsAtWhile>0(aux, I, It) = k and
+A63: (StepWhile>0(aux, I, It).k).aux <= 0 and
+       for i being Nat st SWt.i.aux <= 0 holds k <= i and
+       ((Computation (It +* (while>0(aux, I) +* SAt))).
+                        (LifeSpan (It +* (while>0(aux, I) +* SAt)))) | D
+     = StepWhile>0(aux, I, It).k | D by Def6;
+
+   consider au, ne, re being Nat such that
+A64: SWt.k.aux = au and
+       SWt.k.next = ne and
+A65: SWt.k.result = re and
+A66: SWt.k.N = n and
+A67: Fusc n = ne * Fusc au + re * Fusc (au+1) by A50;
+A68: au = 0 by A63,A64,NAT_1:18;
+
+A69:  IExec(I3, t) | D = SWt.k | D by A61,A62,Th42;
+
+       I3 is_closed_on It & I3 is_halting_on It by A61,Th34;
+then A70: I3 is_closed_on t & I3 is_halting_on t by A32,SCMFSA8B:8;
+
+ hence IExec(Fusc_macro(N, result), s).result
+    = IExec(I3, t).result by A2,SFMASTR1:8
+   .= Fusc n by A65,A67,A68,A69,PRE_FF:17,SCMFSA6A:38;
+ thus IExec(Fusc_macro(N, result), s).N
+    = IExec(I3, t).N by A2,A70,SFMASTR1:8
+   .= n by A66,A69,SCMFSA6A:38;
+end;
+

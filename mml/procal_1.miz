@@ -1,0 +1,966 @@
+:: Calculus of Propositions
+::  by Jan Popio{\l}ek and Andrzej Trybulec
+::
+:: Received October 23, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary CQC_LANG, ZF_LANG, CQC_THE1;
+ notation SUBSET_1, CQC_LANG, CQC_THE1;
+ constructors CQC_THE1, XBOOLE_0;
+ clusters CQC_LANG, ZFMISC_1, XBOOLE_0;
+ theorems CQC_THE1, QC_LANG2, LUKASI_1;
+
+begin
+ reserve p, q, r, s for Element of CQC-WFF;
+
+             :::::::::::::::::::::::::::::
+             ::   T A U T O L O G I E   ::
+             :::::::::::::::::::::::::::::
+
+theorem Th1:
+  'not' ( p '&' 'not' p ) in TAUT
+proof
+    p => p in TAUT by LUKASI_1:4;
+  hence thesis by QC_LANG2:def 2;
+end;
+
+Lm1:  p 'or' q = ( 'not' p => q )
+proof
+    'not' p => q = 'not' ( 'not' p '&' 'not' q ) by QC_LANG2:def 2;
+  hence thesis by QC_LANG2:def 3;
+end;
+
+theorem Th2:
+  p 'or' 'not' p in TAUT
+proof
+    'not' p => 'not' p in TAUT by LUKASI_1:4;
+  hence thesis by Lm1;
+end;
+
+theorem Th3:
+  p => ( p 'or' q ) in TAUT
+proof
+    p => ( 'not' p => q ) in TAUT by CQC_THE1:79;
+  hence thesis by Lm1;
+end;
+
+theorem Th4:
+  q => ( p 'or' q ) in TAUT
+proof
+    q => ( 'not' p => q ) in TAUT by LUKASI_1:5;
+  hence thesis by Lm1;
+end;
+
+theorem Th5:
+  ( p 'or' q ) => ( 'not' p => q ) in TAUT
+proof
+    ( 'not' p => q ) => ( 'not' p => q ) in TAUT by LUKASI_1:4;
+  hence thesis by Lm1;
+end;
+
+theorem Th6:
+  'not' ( p 'or' q ) => ( 'not' p '&' 'not' q ) in TAUT
+proof
+    'not' ( p 'or' q ) = 'not' 'not' ( 'not' p '&' 'not' q ) by QC_LANG2:def 3;
+  hence thesis by LUKASI_1:25;
+end;
+
+theorem Th7:
+  ( 'not' p '&' 'not' q ) => 'not' ( p 'or' q ) in TAUT
+proof
+    'not' ( p 'or' q ) = 'not' 'not' ( 'not' p '&' 'not' q ) by QC_LANG2:def 3;
+  hence thesis by LUKASI_1:27;
+end;
+
+theorem Th8:
+  ( p 'or' q ) => ( q 'or' p ) in TAUT
+proof
+    ( 'not' p => q ) => ( 'not' q => p ) in TAUT by LUKASI_1:31;
+  then ( p 'or' q ) => ( 'not' q => p ) in TAUT by Lm1;
+  hence thesis by Lm1;
+end;
+
+theorem
+    'not' p 'or' p in TAUT
+proof
+A1: ( p 'or' 'not' p ) => ( 'not' p 'or' p ) in TAUT by Th8;
+     p 'or' 'not' p in TAUT by Th2;
+   hence thesis by A1,CQC_THE1:82;
+end;
+
+theorem
+    'not' ( p 'or' q ) => 'not' p in TAUT
+proof
+A1: ( p => ( p 'or' q )) => ( 'not' ( p 'or' q ) => 'not'
+ p ) in TAUT by LUKASI_1:26;
+     ( p => ( p 'or' q )) in TAUT by Th3;
+   hence thesis by A1,CQC_THE1:82;
+end;
+
+theorem Th11:
+  ( p 'or' p ) => p in TAUT
+proof
+A1: ( p 'or' p ) => ( 'not' p => p ) in TAUT by Th5;
+     ( 'not' p => p ) => p in TAUT by CQC_THE1:78;
+   hence thesis by A1,LUKASI_1:3;
+end;
+
+theorem
+    p => ( p 'or' p ) in TAUT by Th3;
+
+theorem
+    ( p '&' 'not' p ) => q in TAUT
+proof
+    'not' ( p '&' 'not' p ) in TAUT by Th1;
+  then 'not' q => 'not' ( p '&' 'not' p ) in TAUT by LUKASI_1:13;
+  hence thesis by LUKASI_1:35;
+end;
+
+theorem
+    ( p => q ) => ( 'not' p 'or' q ) in TAUT
+proof
+A1: ( 'not' 'not' p => q ) = ( 'not' p 'or' q ) by Lm1;
+A2: 'not' 'not' p => p in TAUT by LUKASI_1:25;
+     ( 'not' 'not' p => p ) => (( p => q ) => ( 'not' 'not'
+ p => q )) in TAUT by LUKASI_1:1;
+   hence thesis by A1,A2,CQC_THE1:82;
+end;
+
+Lm2: ( p '&' q ) => ( 'not' 'not' p '&' q ) in TAUT
+proof
+A1: ( p => 'not' 'not' p ) => ('not' ( 'not' 'not' p '&' q ) => 'not'
+ ( p '&' q )) in TAUT
+                        by CQC_THE1:80;
+     p => 'not' 'not' p in TAUT by LUKASI_1:27;
+   then 'not' ( 'not' 'not' p '&' q ) => 'not'
+ ( p '&' q ) in TAUT by A1,CQC_THE1:82;
+   hence thesis by LUKASI_1:35;
+   end;
+
+Lm3: ( 'not' 'not' p '&' q ) => ( p '&' q ) in TAUT
+proof
+A1: ( 'not' 'not' p => p ) => ('not' ( p '&' q ) => 'not' ( 'not' 'not'
+ p '&' q )) in TAUT by CQC_THE1:80;
+     'not' 'not' p => p in TAUT by LUKASI_1:25;
+   then 'not' ( p '&' q ) => 'not' ( 'not' 'not'
+ p '&' q ) in TAUT by A1,CQC_THE1:82;
+   hence thesis by LUKASI_1:35;
+   end;
+
+theorem Th15:
+  ( p '&' q ) => 'not' ( p => 'not' q ) in TAUT
+   proof
+A1:  q '&' p => 'not' 'not' q '&' p in TAUT by Lm2;
+       p '&' q => q '&' p in TAUT by CQC_THE1:81;
+then A2:  p '&' q => 'not' 'not' q '&' p in TAUT by A1,LUKASI_1:3;
+       'not' 'not' q '&' p => p '&' 'not' 'not' q in TAUT by CQC_THE1:81;
+then A3:   ( p '&' q ) => ( p '&' 'not' 'not' q ) in TAUT by A2,LUKASI_1:3;
+       ( p '&' 'not' 'not' q ) => 'not' 'not' ( p '&' 'not' 'not'
+ q ) in TAUT by LUKASI_1:27;
+     then ( p '&' q ) => 'not' 'not' ( p '&' 'not' 'not'
+ q ) in TAUT by A3,LUKASI_1:3;
+    hence thesis by QC_LANG2:def 2;
+   end;
+
+theorem Th16:
+  'not' ( p => 'not' q ) => ( p '&' q ) in TAUT
+   proof
+A1:  p '&' 'not' 'not' q => 'not' 'not' q '&' p in TAUT by CQC_THE1:81;
+       'not' 'not' q '&' p => q '&' p in TAUT by Lm3;
+then A2:  p '&' 'not' 'not' q => q '&' p in TAUT by A1,LUKASI_1:3;
+       q '&' p => p '&' q in TAUT by CQC_THE1:81;
+then A3:   ( p '&' 'not' 'not' q ) => ( p '&' q ) in TAUT by A2,LUKASI_1:3;
+       'not' 'not' ( p '&' 'not' 'not' q ) => ( p '&' 'not' 'not'
+ q ) in TAUT by LUKASI_1:25;
+     then 'not' 'not' ( p '&' 'not' 'not'
+ q ) => ( p '&' q ) in TAUT by A3,LUKASI_1:3;
+    hence thesis by QC_LANG2:def 2;
+   end;
+
+theorem Th17:
+  'not' ( p '&' q ) => ( 'not' p 'or' 'not' q ) in TAUT
+proof
+     'not' ( p => 'not' q ) => p '&' q in TAUT by Th16;
+then A1: 'not' ( p '&' q ) => 'not' 'not' ( p => 'not' q ) in TAUT by LUKASI_1:
+34;
+     'not' 'not' ( p => 'not' q ) => ( p => 'not'
+ q ) in TAUT by LUKASI_1:25;
+then A2: 'not' ( p '&' q ) => ( p => 'not' q ) in TAUT by A1,LUKASI_1:3;
+A3: 'not' 'not' p => p in TAUT by LUKASI_1:25;
+     ( 'not' 'not' p => p ) => (( p => 'not' q ) => ( 'not' 'not' p => 'not'
+ q )) in TAUT
+   by LUKASI_1:1;
+   then ( p => 'not' q ) => ( 'not' 'not' p => 'not'
+ q ) in TAUT by A3,CQC_THE1:82;
+   then 'not' ( p '&' q ) => ( 'not' 'not' p => 'not'
+ q ) in TAUT by A2,LUKASI_1:3;
+   hence thesis by Lm1;
+end;
+
+theorem Th18:
+  ( 'not' p 'or' 'not' q ) => 'not' ( p '&' q ) in TAUT
+proof
+A1: ( 'not' p 'or' 'not' q ) = ( 'not' 'not' p => 'not' q ) by Lm1;
+A2: p => 'not' 'not' p in TAUT by LUKASI_1:27;
+     ( p => 'not' 'not' p ) => (( 'not' 'not' p => 'not' q ) => ( p => 'not'
+ q )) in TAUT
+        by LUKASI_1:1;
+then A3: ( 'not' p 'or' 'not' q ) => ( p => 'not' q ) in TAUT by A1,A2,CQC_THE1
+:82;
+     p '&' q => 'not' ( p => 'not' q ) in TAUT by Th15;
+then A4: 'not' 'not' ( p => 'not' q ) => 'not' ( p '&' q ) in TAUT by LUKASI_1:
+34;
+     ( p => 'not' q ) => 'not' 'not' ( p => 'not'
+ q ) in TAUT by LUKASI_1:27;
+   then ( p => 'not' q ) => 'not' ( p '&' q ) in TAUT by A4,LUKASI_1:3;
+   hence thesis by A3,LUKASI_1:3;
+end;
+
+theorem Th19:
+  ( p '&' q ) => p in TAUT
+proof
+     'not' p => ( 'not' p 'or' 'not' q ) in TAUT by Th3;
+then A1: 'not' ( 'not' p 'or' 'not' q ) => 'not' 'not' p in TAUT by LUKASI_1:34
+;
+     'not' 'not' p => p in TAUT by LUKASI_1:25;
+then A2: 'not' ( 'not' p 'or' 'not' q ) => p in TAUT by A1,LUKASI_1:3;
+     ( 'not' p 'or' 'not' q ) => 'not' ( p '&' q ) in TAUT by Th18;
+then A3: 'not' 'not' ( p '&' q ) => 'not' ( 'not' p 'or' 'not'
+ q ) in TAUT by LUKASI_1:34;
+     ( p '&' q ) => 'not' 'not' ( p '&' q ) in TAUT by LUKASI_1:27;
+   then ( p '&' q ) => 'not' ( 'not' p 'or' 'not' q ) in TAUT by A3,LUKASI_1:3
+;
+   hence thesis by A2,LUKASI_1:3;
+end;
+
+theorem Th20:
+  ( p '&' q ) => ( p 'or' q ) in TAUT
+proof
+A1:  p => ( p 'or' q ) in TAUT by Th3;
+      ( p '&' q ) => p in TAUT by Th19;
+    hence thesis by A1,LUKASI_1:3;
+end;
+
+theorem Th21:
+  ( p '&' q ) => q in TAUT
+proof
+A1: ( q '&' p ) => q in TAUT by Th19;
+     ( p '&' q ) => ( q '&' p ) in TAUT by CQC_THE1:81;
+   hence thesis by A1,LUKASI_1:3;
+end;
+
+theorem
+    p => p '&' p in TAUT
+proof
+A1: 'not' ( p '&' p ) => ( 'not' p 'or' 'not' p ) in TAUT by Th17;
+     ( 'not' p 'or' 'not' p ) => 'not' p in TAUT by Th11;
+   then 'not' ( p '&' p ) => 'not' p in TAUT by A1,LUKASI_1:3;
+   hence thesis by LUKASI_1:35;
+end;
+
+theorem
+    ( p <=> q ) => ( p => q ) in TAUT
+proof
+    ( p <=> q ) = ( p => q ) '&' ( q => p ) by QC_LANG2:def 4;
+  hence thesis by Th19;
+end;
+
+theorem
+    ( p <=> q ) => ( q => p ) in TAUT
+proof
+    ( p <=> q ) = ( p => q ) '&' ( q => p ) by QC_LANG2:def 4;
+  hence thesis by Th21;
+end;
+
+theorem Th25:
+  (( p 'or' q ) 'or' r ) => ( p 'or' ( q 'or' r )) in TAUT
+proof
+A1: (( p 'or' q ) 'or' r ) => ( r 'or' ( p 'or' q )) in TAUT by Th8;
+     ( r 'or' ( p 'or' q )) => ( 'not' r => ( p 'or' q )) in TAUT by Th5;
+   then (( p 'or' q ) 'or' r ) => ( 'not' r => ( p 'or' q )) in TAUT
+       by A1,LUKASI_1:3;
+then A2: (( p 'or' q ) 'or' r ) => ( 'not' r => ( 'not' p => q )) in TAUT by
+Lm1;
+     ( 'not' r => ( 'not' p => q )) => ( 'not' p => ( 'not' r => q )) in TAUT
+       by LUKASI_1:8;
+then A3: (( p 'or' q ) 'or' r ) => ( 'not' p => ( 'not' r => q )) in TAUT
+       by A2,LUKASI_1:3;
+     ( 'not' r => q ) => ( 'not' q => r ) in TAUT by LUKASI_1:31;
+then A4: 'not' p => (( 'not' r => q ) => ( 'not' q => r )) in TAUT by LUKASI_1:
+13;
+     ( 'not' p => (( 'not' r => q ) => ( 'not' q => r ))) => (( 'not' p => (
+'not' r => q ))
+       => ( 'not' p => ( 'not' q => r ))) in TAUT by LUKASI_1:11;
+   then ( 'not' p => ( 'not' r => q )) => ( 'not' p => ( 'not' q => r )) in
+TAUT
+       by A4,CQC_THE1:82;
+   then (( p 'or' q ) 'or' r ) => ( 'not' p => ( 'not' q => r )) in TAUT
+       by A3,LUKASI_1:3;
+   then (( p 'or' q ) 'or' r ) => ( 'not' p => ( q 'or' r )) in TAUT by Lm1;
+   hence thesis by Lm1;
+end;
+
+theorem
+    (( p '&' q ) '&' r ) => ( p '&' ( q '&' r )) in TAUT
+proof
+A1: 'not' ( p '&' ( q '&' r )) => ( 'not' p 'or' 'not'
+ ( q '&' r ))in TAUT by Th17;
+A2: 'not' ( q '&' r ) => ( 'not' q 'or' 'not' r ) in TAUT by Th17;
+     ( 'not' q 'or' 'not' r ) => ( 'not' r 'or' 'not' q ) in TAUT by Th8;
+   then 'not' ( q '&' r ) => ( 'not' r 'or' 'not'
+ q ) in TAUT by A2,LUKASI_1:3;
+then A3: 'not' 'not' p => ( 'not' ( q '&' r ) => ( 'not' r 'or' 'not'
+ q )) in TAUT by LUKASI_1:13;
+     ( 'not' 'not' p => ( 'not' ( q '&' r ) => ( 'not' r 'or' 'not' q ))) =>
+   (( 'not' 'not' p => 'not' ( q '&' r )) => ( 'not' 'not' p => ( 'not' r 'or'
+'not' q ))) in TAUT
+         by LUKASI_1:11;
+   then ( 'not' 'not' p => 'not' ( q '&' r )) => ( 'not' 'not' p => ( 'not' r
+'or'
+'not' q )) in TAUT
+         by A3,CQC_THE1:82;
+   then ( 'not' p 'or' 'not' ( q '&' r )) => ( 'not' 'not' p => ( 'not' r 'or'
+'not'
+ q )) in TAUT
+         by Lm1;
+   then ( 'not' p 'or' 'not' ( q '&' r )) => ( 'not' p 'or' ( 'not' r 'or'
+'not'
+ q )) in TAUT
+         by Lm1;
+then A4: 'not' ( p '&' ( q '&' r )) => ( 'not' p 'or' ( 'not' r 'or' 'not'
+ q )) in TAUT
+         by A1,LUKASI_1:3;
+     ( 'not' p 'or' ( 'not' r 'or' 'not' q )) => (( 'not' r 'or' 'not' q ) 'or'
+'not' p ) in TAUT
+         by Th8;
+then A5: 'not' ( p '&' ( q '&' r )) => (( 'not' r 'or' 'not' q ) 'or' 'not'
+ p ) in TAUT
+         by A4,LUKASI_1:3;
+     (( 'not' r 'or' 'not' q ) 'or' 'not' p ) => ( 'not' r 'or' ( 'not' q 'or'
+'not' p )) in TAUT
+         by Th25;
+then A6: 'not' ( p '&' ( q '&' r )) => ( 'not' r 'or' ( 'not' q 'or' 'not'
+ p )) in TAUT
+         by A5,LUKASI_1:3;
+A7: ( 'not' q 'or' 'not' p ) => ( 'not' p 'or' 'not' q ) in TAUT by Th8;
+     ( 'not' p 'or' 'not' q ) => 'not' ( p '&' q ) in TAUT by Th18;
+   then ( 'not' q 'or' 'not' p ) => 'not'
+ ( p '&' q ) in TAUT by A7,LUKASI_1:3;
+then A8: 'not' 'not' r => (( 'not' q 'or' 'not' p ) => 'not'
+ ( p '&' q )) in TAUT by LUKASI_1:13;
+     ( 'not' 'not' r => (( 'not' q 'or' 'not' p ) => 'not' ( p '&' q ))) =>
+   (( 'not' 'not' r => ( 'not' q 'or' 'not' p )) => ( 'not' 'not' r => 'not'
+ ( p '&' q ))) in TAUT
+         by LUKASI_1:11;
+   then ( 'not' 'not' r => ( 'not' q 'or' 'not' p )) => ( 'not' 'not' r =>
+'not'
+ ( p '&' q )) in TAUT
+         by A8,CQC_THE1:82;
+   then ( 'not' r 'or' ( 'not' q 'or' 'not' p )) => ( 'not' 'not' r => 'not'
+ ( p '&' q )) in TAUT
+         by Lm1;
+then A9: ( 'not' r 'or' ( 'not' q 'or' 'not' p )) => ( 'not' r 'or' 'not'
+ ( p '&' q )) in TAUT by Lm1;
+     ( 'not' r 'or' 'not' ( p '&' q )) => ( 'not' ( p '&' q ) 'or' 'not'
+ r) in TAUT
+         by Th8;
+then A10: ( 'not' r 'or' ( 'not' q 'or' 'not' p )) => ( 'not' ( p '&' q ) 'or'
+'not'
+ r) in TAUT
+         by A9,LUKASI_1:3;
+     ( 'not' ( p '&' q ) 'or' 'not' r) => 'not' (( p '&' q ) '&' r ) in TAUT
+         by Th18;
+   then ( 'not' r 'or' ( 'not' q 'or' 'not' p )) => 'not'
+ (( p '&' q ) '&' r ) in TAUT
+         by A10,LUKASI_1:3;
+   then 'not' ( p '&' ( q '&' r )) => 'not' (( p '&' q ) '&' r ) in TAUT
+         by A6,LUKASI_1:3;
+   hence thesis by LUKASI_1:35;
+end;
+
+theorem Th27:
+  ( p 'or' ( q 'or' r )) => (( p 'or' q ) 'or' r ) in TAUT
+proof
+     ( p 'or' ( q 'or' r )) => ( 'not' p => ( q 'or' r )) in TAUT by Th5;
+then A1: ( p 'or' ( q 'or' r )) => ( 'not' p => ( 'not' q => r )) in TAUT by
+Lm1;
+     ( 'not' q => r ) => ( 'not' r => q ) in TAUT by LUKASI_1:31;
+then A2: 'not' p => (( 'not' q => r ) => ( 'not' r => q )) in TAUT by LUKASI_1:
+13;
+     ( 'not' p => (( 'not' q => r ) => ( 'not' r => q ))) => (( 'not' p => (
+'not' q => r ))
+   => ( 'not' p => ( 'not' r => q ))) in TAUT by LUKASI_1:11;
+   then ( 'not' p => ( 'not' q => r )) => ( 'not' p => ( 'not' r => q )) in
+TAUT
+   by A2,CQC_THE1:82;
+then A3: ( p 'or' ( q 'or' r )) => ( 'not' p => ( 'not'
+ r => q )) in TAUT by A1,LUKASI_1:3;
+     ( 'not' p => ( 'not' r => q )) => ( 'not' r => ( 'not'
+ p => q )) in TAUT by LUKASI_1:8;
+   then ( p 'or' ( q 'or' r )) => ( 'not' r => ( 'not' p => q )) in TAUT
+    by A3,LUKASI_1:3;
+then A4: ( p 'or' ( q 'or' r )) => ( r 'or' ( 'not' p => q )) in TAUT by Lm1;
+     ( r 'or' ( 'not' p => q )) => (( 'not' p => q ) 'or' r) in TAUT by Th8;
+   then ( p 'or' ( q 'or' r )) => (( 'not'
+ p => q ) 'or' r) in TAUT by A4,LUKASI_1:3;
+   hence thesis by Lm1;
+end;
+
+theorem Th28:
+  p => ( q => ( p '&' q )) in TAUT
+proof
+       'not' ( p '&' q ) => ( 'not' p 'or' 'not' q ) in TAUT by Th17;
+   then A1: ( p '&' q ) 'or' ( 'not' p 'or' 'not' q ) in TAUT by Lm1;
+        ( p '&' q ) 'or' ( 'not' p 'or' 'not' q ) =>
+      ((( p '&' q ) 'or' 'not' p ) 'or' 'not' q ) in TAUT by Th27;
+   then A2: ((( p '&' q ) 'or' 'not' p ) 'or' 'not' q ) in TAUT by A1,CQC_THE1:
+82;
+        ((( p '&' q ) 'or' 'not' p ) 'or' 'not' q ) =>
+      ( 'not' q 'or' (( p '&' q ) 'or' 'not' p )) in TAUT by Th8;
+      then ( 'not' q 'or' (( p '&' q ) 'or' 'not'
+ p )) in TAUT by A2,CQC_THE1:82;
+   then A3: ( 'not' 'not' q => (( p '&' q ) 'or' 'not' p )) in TAUT by Lm1;
+        q => 'not' 'not' q in TAUT by LUKASI_1:27;
+   then A4: ( q => (( p '&' q ) 'or' 'not' p )) in TAUT by A3,LUKASI_1:3;
+        (( p '&' q ) 'or' 'not' p ) => ( 'not' p 'or' ( p '&' q )) in TAUT
+      by Th8;
+   then A5: q => ((( p '&' q ) 'or' 'not' p ) => ( 'not'
+ p 'or' ( p '&' q ))) in TAUT
+      by LUKASI_1:13;
+        (q => ((( p '&' q ) 'or' 'not' p ) => ( 'not' p 'or' ( p '&' q )))) =>
+      ((q => ( p '&' q ) 'or' 'not' p ) => ( q => ( 'not'
+ p 'or' ( p '&' q )))) in TAUT
+      by LUKASI_1:11;
+      then (q => ( p '&' q ) 'or' 'not' p ) => ( q => ( 'not'
+ p 'or' ( p '&' q ))) in TAUT
+      by A5,CQC_THE1:82;
+      then ( q => ( 'not' p 'or' ( p '&' q ))) in TAUT by A4,CQC_THE1:82;
+      then ( q => ( 'not' 'not' p => ( p '&' q ))) in TAUT by Lm1;
+   then A6: 'not' 'not' p => ( q => ( p '&' q )) in TAUT by LUKASI_1:15;
+        p => 'not' 'not' p in TAUT by LUKASI_1:27;
+      hence thesis by A6,LUKASI_1:3;
+end;
+
+theorem
+    ( p => q ) => (( q => p ) => ( p <=> q )) in TAUT
+proof
+    ( p => q ) => (( q => p ) => (( p => q ) '&' ( q => p ))) in TAUT by Th28;
+  hence thesis by QC_LANG2:def 4;
+end;
+
+Lm4:  p in TAUT & q in TAUT implies p '&' q in TAUT
+proof
+  assume that
+            A1: p in TAUT and
+            A2: q in TAUT;
+                  p => ( q => ( p '&' q )) in TAUT by Th28;
+                then q => ( p '&' q ) in TAUT by A1,CQC_THE1:82;
+                hence thesis by A2,CQC_THE1:82;
+end;
+
+theorem
+    ( p 'or' q ) <=> ( q 'or' p ) in TAUT
+proof
+     set P = p 'or' q;
+     set Q = q 'or' p;
+     A1: P => Q in TAUT by Th8;
+          Q => P in TAUT by Th8;
+        then ( P => Q ) '&' ( Q => P ) in TAUT by A1,Lm4;
+        hence thesis by QC_LANG2:def 4;
+end;
+
+theorem
+    (( p '&' q ) => r ) => ( p => ( q => r )) in TAUT
+proof
+       ( q => ( p '&' q )) => ((( p '&' q ) => r ) => ( q => r )) in TAUT
+     by LUKASI_1:1;
+  then A1: p => (( q => ( p '&' q )) => ((( p '&' q ) => r ) => ( q => r ))) in
+TAUT
+     by LUKASI_1:13;
+       p => ( q => ( p '&' q )) in TAUT by Th28;
+  then A2: p => ((( p '&' q ) => r ) => ( q => r )) in TAUT by A1,LUKASI_1:20;
+       (p => ((( p '&' q ) => r ) => ( q => r ))) =>
+     ((( p '&' q ) => r ) => ( p => ( q => r ))) in TAUT by LUKASI_1:8;
+     hence thesis by A2,CQC_THE1:82;
+end;
+
+theorem Th32:
+  ( p => ( q => r )) => (( p '&' q ) => r ) in TAUT
+proof
+  A1: ( p '&' q ) => q in TAUT by Th21;
+       (( p '&' q ) => q) => (( q => r ) => (( p '&' q ) => r )) in TAUT
+     by LUKASI_1:1;
+     then ( q => r ) => (( p '&' q ) => r ) in TAUT by A1,CQC_THE1:82;
+  then A2: p => (( q => r ) => (( p '&' q ) => r )) in TAUT by LUKASI_1:13;
+       p => (( q => r ) => (( p '&' q ) => r )) =>
+     ((p => ( q => r )) => ( p => (( p '&' q ) => r ))) in TAUT
+     by LUKASI_1:11;
+  then A3: (p => ( q => r )) => ( p => (( p '&' q ) => r )) in TAUT
+     by A2,CQC_THE1:82;
+       ( p => (( p '&' q ) => r )) => ((p '&' q ) => ( p => r )) in TAUT
+     by LUKASI_1:8;
+  then A4: (p => ( q => r )) => ((p '&' q ) => ( p => r )) in TAUT
+     by A3,LUKASI_1:3;
+  A5: ((p '&' q ) => ( p => r )) => ((( p '&' q ) => p ) => (( p '&' q )
+     => r )) in TAUT by LUKASI_1:11;
+       ( p '&' q ) => p in TAUT by Th19;
+     then ((p '&' q ) => ( p => r )) => (( p '&' q ) => r ) in TAUT
+     by A5,LUKASI_1:16;
+     hence thesis by A4,LUKASI_1:3;
+end;
+
+theorem Th33:
+  ( r => p ) => (( r => q ) => ( r => ( p '&' q ))) in TAUT
+proof
+       p => ( q => ( p '&' q )) in TAUT by Th28;
+  then A1: r => ( p => ( q => ( p '&' q ))) in TAUT by LUKASI_1:13;
+       (r => ( p => ( q => ( p '&' q )))) =>
+     (( r => p ) => ( r => ( q => ( p '&' q )))) in TAUT
+     by LUKASI_1:11;
+  then A2: ( r => p ) => ( r => ( q => ( p '&' q ))) in TAUT by A1,CQC_THE1:82;
+       ( r => ( q => ( p '&' q ))) => (( r => q ) => ( r => ( p '&' q )))
+     in TAUT by LUKASI_1:11;
+     hence thesis by A2,LUKASI_1:3;
+end;
+
+theorem
+    (( p 'or' q ) => r ) => (( p => r ) 'or' ( q => r )) in TAUT
+proof
+  A1: q => ( p 'or' q ) in TAUT by Th4;
+       ( q => ( p 'or' q )) => ((( p 'or' q ) => r ) => ( q => r )) in TAUT
+     by LUKASI_1:1;
+     then (( p 'or' q ) => r ) => ( q => r ) in TAUT by A1,CQC_THE1:82;
+     then 'not' ( p => r ) => ((( p 'or' q ) => r ) => ( q => r )) in TAUT
+     by LUKASI_1:13;
+     then (( p 'or' q ) => r ) => ( 'not' ( p => r ) => ( q => r )) in TAUT
+     by LUKASI_1:15;
+     hence thesis by Lm1;
+end;
+
+theorem Th35:
+  ( p => r ) => (( q => r ) => (( p 'or' q ) => r)) in TAUT
+proof
+     set A = ( 'not' r => 'not' p );
+     set B = ( 'not' r => 'not' q );
+     set C = ( 'not' r => ( 'not' p '&' 'not' q ));
+     set D = (( p 'or' q ) => r );
+     set E = q => r;
+  A1: A => ( B => C) in TAUT by Th33;
+       C => ('not' ( 'not' p '&' 'not' q ) => r ) in TAUT by LUKASI_1:31;
+     then C => D in TAUT by QC_LANG2:def 3;
+  then A2: B => ( C => D ) in TAUT by LUKASI_1:13;
+       B => ( C => D ) => (( B => C ) => ( B => D )) in TAUT by LUKASI_1:11;
+     then ( B => C ) => ( B => D ) in TAUT by A2,CQC_THE1:82;
+     then A => ( B => D ) in TAUT by A1,LUKASI_1:3;
+  then A3: B => ( A => D ) in TAUT by LUKASI_1:15;
+       E => B in TAUT by LUKASI_1:26;
+     then E => ( A => D ) in TAUT by A3,LUKASI_1:3;
+  then A4: A => ( E => D ) in TAUT by LUKASI_1:15;
+       (p => r) => A in TAUT by LUKASI_1:26;
+     hence thesis by A4,LUKASI_1:3;
+end;
+
+theorem Th36:
+  (( p => r ) '&' ( q => r )) => (( p 'or' q ) => r) in TAUT
+proof
+     set P = ( p => r );
+     set Q = ( q => r );
+     set R = (( p 'or' q ) => r);
+  A1: P => ( Q => R ) in TAUT by Th35;
+       (P => ( Q => R )) => (( P '&' Q ) => R ) in TAUT by Th32;
+     hence thesis by A1,CQC_THE1:82;
+end;
+
+theorem
+    ( p => ( q '&' 'not' q )) => 'not' p in TAUT
+proof
+       'not' ( q '&' 'not' q ) in TAUT by Th1;
+     then p => 'not' ( q '&' 'not' q ) in TAUT by LUKASI_1:13;
+  then A1: 'not' 'not' ( q '&' 'not' q ) => 'not' p in TAUT by LUKASI_1:34;
+       ( q '&' 'not' q ) => 'not' 'not' ( q '&' 'not'
+ q ) in TAUT by LUKASI_1:27;
+     then ( q '&' 'not' q ) => 'not' p in TAUT by A1,LUKASI_1:3;
+  then A2: p => (( q '&' 'not' q ) => 'not' p) in TAUT by LUKASI_1:13;
+       p => (( q '&' 'not' q ) => 'not' p) => (( p => ( q '&' 'not'
+ q )) => ( p => 'not' p ))
+     in TAUT by LUKASI_1:11;
+  then A3: ( p => ( q '&' 'not' q )) => ( p => 'not'
+ p ) in TAUT by A2,CQC_THE1:82;
+  A4: ( 'not' 'not' p => 'not' p ) => 'not' p in TAUT by CQC_THE1:78;
+  A5: 'not' 'not' p => p in TAUT by LUKASI_1:25;
+       ( 'not' 'not' p => p ) => (( p => 'not' p ) => ( 'not' 'not' p => 'not'
+ p )) in TAUT
+     by LUKASI_1:1;
+     then ( p => 'not' p ) => ( 'not' 'not' p => 'not'
+ p ) in TAUT by A5,CQC_THE1:82;
+     then ( p => 'not' p ) => 'not' p in TAUT by A4,LUKASI_1:3;
+     hence thesis by A3,LUKASI_1:3;
+end;
+
+theorem
+    (( p 'or' q ) '&' ( p 'or' r )) => ( p 'or' ( q '&' r )) in TAUT
+proof
+     ( 'not' p => q ) => (( 'not' p => r ) => ( 'not' p => ( q '&' r ))) in
+TAUT
+   by Th33;
+   then ( p 'or' q ) => (( 'not' p => r ) => ( 'not' p => ( q '&' r ))) in
+TAUT
+   by Lm1;
+   then ( p 'or' q ) => (( p 'or' r ) => ( 'not' p => ( q '&' r ))) in TAUT
+   by Lm1;
+then A1: ( p 'or' q ) => (( p 'or' r ) => ( p 'or' ( q '&' r ))) in TAUT by Lm1
+;
+     (( p 'or' q ) => (( p 'or' r ) => ( p 'or' ( q '&' r )))) =>
+   ((( p 'or' q ) '&' ( p 'or' r )) => ( p 'or' ( q '&' r ))) in TAUT
+   by Th32;
+   hence thesis by A1,CQC_THE1:82;
+end;
+
+theorem
+    ( p '&' ( q 'or' r )) => (( p '&' q ) 'or' ( p '&' r )) in TAUT
+proof
+  A1: ( p => 'not' q ) => (( p => 'not' r ) => ( p => ( 'not' q '&' 'not'
+ r ))) in TAUT
+     by Th33;
+       ( p => ( 'not' q '&' 'not' r )) = 'not' ( p '&' 'not' ( 'not' q '&'
+'not'
+ r ))
+     by QC_LANG2:def 2;
+  then A2: ( p => 'not' q ) => (( p => 'not' r ) => 'not'
+ ( p '&' ( q 'or' r ))) in TAUT
+     by A1,QC_LANG2:def 3;
+  A3: 'not' ( p => 'not' q ) => ( p '&' q ) in TAUT by Th16;
+       ('not' ( p => 'not' q ) => ( p '&' q )) =>
+     ( 'not' ( p '&' q ) => ( p => 'not' q )) in TAUT by LUKASI_1:31;
+     then 'not' ( p '&' q ) => ( p => 'not' q ) in TAUT by A3,CQC_THE1:82;
+     then 'not' ( p '&' q ) => (( p => 'not' r ) => 'not'
+ ( p '&' ( q 'or' r ))) in TAUT
+     by A2,LUKASI_1:3;
+  then A4: ( p => 'not' r ) => ( 'not' ( p '&' q ) => 'not'
+ ( p '&' ( q 'or' r ))) in TAUT
+     by LUKASI_1:15;
+  A5: 'not' ( p => 'not' r ) => ( p '&' r ) in TAUT by Th16;
+       ('not' ( p => 'not' r ) => ( p '&' r )) =>
+     ( 'not' ( p '&' r ) => ( p => 'not' r )) in TAUT by LUKASI_1:31;
+     then 'not' ( p '&' r ) => ( p => 'not' r ) in TAUT by A5,CQC_THE1:82;
+     then 'not' ( p '&' r ) => ('not' ( p '&' q ) => 'not'
+ ( p '&' ( q 'or' r ))) in TAUT
+     by A4,LUKASI_1:3;
+  then A6: 'not' ( p '&' q ) => ('not' ( p '&' r ) => 'not'
+ ( p '&' ( q 'or' r ))) in TAUT
+     by LUKASI_1:15;
+      ( 'not' ( p '&' q ) => ('not' ( p '&' r ) => 'not'
+ ( p '&' ( q 'or' r )))) =>
+    ((( 'not' ( p '&' q ) '&' 'not' ( p '&' r )) => 'not'
+ ( p '&' ( q 'or' r ))))
+    in TAUT by Th32;
+ then A7: ( 'not' ( p '&' q ) '&' 'not' ( p '&' r )) => 'not'
+ ( p '&' ( q 'or' r )) in TAUT
+    by A6,CQC_THE1:82;
+      'not' (( p '&' q ) 'or' ( p '&' r )) => ( 'not' ( p '&' q ) '&' 'not'
+ ( p '&' r ))
+    in TAUT by Th6;
+    then 'not' (( p '&' q ) 'or' ( p '&' r )) => 'not' ( p '&' ( q 'or' r ))
+in TAUT
+    by A7,LUKASI_1:3;
+    hence thesis by LUKASI_1:35;
+end;
+
+theorem Th40:
+  (( p 'or' r ) '&' ( q 'or' r )) => (( p '&' q ) 'or' r ) in TAUT
+proof
+       (( 'not' p => r ) '&' ( 'not' q => r )) => (( 'not' p 'or' 'not'
+ q ) => r) in TAUT
+     by Th36;
+     then (( p 'or' r ) '&' ( 'not' q => r )) => (( 'not' p 'or' 'not'
+ q ) => r) in TAUT
+     by Lm1;
+  then A1: (( p 'or' r ) '&' ( q 'or' r )) => (( 'not' p 'or' 'not'
+ q ) => r) in TAUT
+     by Lm1;
+  A2: 'not' ( p '&' q ) => ( 'not' p 'or' 'not' q ) in TAUT by Th17;
+       ( 'not' ( p '&' q ) => ( 'not' p 'or' 'not' q )) =>
+     ((( 'not' p 'or' 'not' q ) => r) => ( 'not' ( p '&' q ) => r )) in TAUT
+     by LUKASI_1:1;
+     then (( 'not' p 'or' 'not' q ) => r) => ( 'not' ( p '&' q ) => r ) in
+TAUT
+     by A2,CQC_THE1:82;
+     then (( p 'or' r ) '&' ( q 'or' r )) => ( 'not' ( p '&' q ) => r ) in
+TAUT
+     by A1,LUKASI_1:3;
+     hence thesis by Lm1;
+end;
+
+Lm5:  p => q in TAUT implies ( r '&' p ) => ( r '&' q ) in TAUT
+proof
+     assume
+             p => q in TAUT;
+           then 'not' q => 'not' p in TAUT by LUKASI_1:34;
+        then A1: r => ( 'not' q => 'not' p ) in TAUT by LUKASI_1:13;
+             ( r => ( 'not' q => 'not' p )) =>
+           (( r => 'not' q ) => ( r => 'not' p )) in TAUT by LUKASI_1:11;
+           then ( r => 'not' q ) => ( r => 'not'
+ p ) in TAUT by A1,CQC_THE1:82;
+        then A2: 'not' ( r => 'not' p ) => 'not' ( r => 'not'
+ q ) in TAUT by LUKASI_1:34;
+             ( r '&' p ) => 'not' ( r => 'not' p ) in TAUT by Th15;
+        then A3: ( r '&' p ) => 'not' ( r => 'not' q ) in TAUT by A2,LUKASI_1:3
+;
+             'not' ( r => 'not' q ) => ( r '&' q ) in TAUT by Th16;
+           hence thesis by A3,LUKASI_1:3;
+end;
+
+Lm6:  p => q in TAUT implies ( p 'or' r ) => ( q 'or' r ) in TAUT
+proof
+     assume
+             p => q in TAUT;
+        then A1: 'not' q => 'not' p in TAUT by LUKASI_1:34;
+             ( 'not' q => 'not' p ) => (( 'not' p => r ) => ( 'not'
+ q => r )) in TAUT
+           by LUKASI_1:1;
+           then ( 'not' p => r ) => ( 'not'
+ q => r ) in TAUT by A1,CQC_THE1:82;
+           then ( p 'or' r ) => ( 'not' q => r ) in TAUT by Lm1;
+           hence thesis by Lm1;
+end;
+
+Lm7:  p => q in TAUT implies ( r 'or' p ) => ( r 'or' q ) in TAUT
+proof
+     assume
+             p => q in TAUT;
+        then A1: 'not' r => ( p => q ) in TAUT by LUKASI_1:13;
+             'not' r => ( p => q ) => (( 'not' r => p ) => ( 'not'
+ r => q )) in TAUT
+           by LUKASI_1:11;
+           then ( 'not' r => p ) => ( 'not'
+ r => q ) in TAUT by A1,CQC_THE1:82;
+           then ( r 'or' p ) => ( 'not' r => q ) in TAUT by Lm1;
+           hence thesis by Lm1;
+end;
+
+theorem
+    (( p 'or' q ) '&' r ) => (( p '&' r ) 'or' ( q '&' r )) in TAUT
+proof
+       (( 'not' p 'or' 'not' r ) '&' ( 'not' q 'or' 'not' r )) =>
+     (( 'not' p '&' 'not' q ) 'or' 'not' r ) in TAUT by Th40;
+  then A1: 'not' (( 'not' p '&' 'not' q ) 'or' 'not' r ) =>
+     'not' (( 'not' p 'or' 'not' r ) '&' ( 'not' q 'or' 'not'
+ r )) in TAUT by LUKASI_1:34;
+       ( 'not' ( 'not' p '&' 'not' q ) '&' 'not' 'not' r ) => 'not' (( 'not'
+ p '&' 'not' q ) 'or' 'not' r )
+     in TAUT by Th7;
+     then ( 'not' ( 'not' p '&' 'not' q ) '&' 'not' 'not' r ) =>
+     'not' (( 'not' p 'or' 'not' r ) '&' ( 'not' q 'or' 'not'
+ r )) in TAUT by A1,LUKASI_1:3;
+  then A2: (( p 'or' q ) '&' 'not' 'not' r ) =>
+     'not' (( 'not' p 'or' 'not' r ) '&' ( 'not' q 'or' 'not'
+ r )) in TAUT by QC_LANG2:def 3;
+       r => 'not' 'not' r in TAUT by LUKASI_1:27;
+     then (( p 'or' q ) '&' r ) => (( p 'or' q ) '&' 'not' 'not'
+ r ) in TAUT by Lm5;
+  then A3: (( p 'or' q ) '&' r ) =>
+     'not' (( 'not' p 'or' 'not' r ) '&' ( 'not' q 'or' 'not'
+ r )) in TAUT by A2,LUKASI_1:3;
+       'not' (( 'not' p 'or' 'not' r ) '&' ( 'not' q 'or' 'not' r )) =>
+     ('not' ( 'not' p 'or' 'not' r ) 'or' 'not' ( 'not' q 'or' 'not'
+ r )) in TAUT by Th17;
+  then A4: (( p 'or' q ) '&' r ) =>
+     ('not' ( 'not' p 'or' 'not' r ) 'or' 'not' ( 'not' q 'or' 'not'
+ r )) in TAUT
+     by A3,LUKASI_1:3;
+  A5: 'not' ( p '&' r ) => ( 'not' p 'or' 'not' r ) in TAUT by Th17;
+       ( 'not' ( p '&' r ) => ( 'not' p 'or' 'not' r )) =>
+     ( 'not' ( 'not' p 'or' 'not'
+ r ) => ( p '&' r )) in TAUT by LUKASI_1:31;
+     then 'not' ( 'not' p 'or' 'not'
+ r ) => ( p '&' r ) in TAUT by A5,CQC_THE1:82;
+     then ( 'not' ( 'not' p 'or' 'not' r ) 'or' 'not' ( 'not' q 'or' 'not' r )
+) =>
+     (( p '&' r ) 'or' 'not' ( 'not' q 'or' 'not' r )) in TAUT by Lm6;
+  then A6: (( p 'or' q ) '&' r ) =>
+     (( p '&' r ) 'or' 'not' ( 'not' q 'or' 'not'
+ r )) in TAUT by A4,LUKASI_1:3;
+  A7: 'not' ( q '&' r ) => ( 'not' q 'or' 'not' r ) in TAUT by Th17;
+       ( 'not' ( q '&' r ) => ( 'not' q 'or' 'not' r )) =>
+     ( 'not' ( 'not' q 'or' 'not'
+ r ) => ( q '&' r )) in TAUT by LUKASI_1:31;
+     then 'not' ( 'not' q 'or' 'not'
+ r ) => ( q '&' r ) in TAUT by A7,CQC_THE1:82;
+     then (( p '&' r ) 'or' 'not' ( 'not' q 'or' 'not' r )) =>
+     (( p '&' r ) 'or' ( q '&' r )) in TAUT by Lm7;
+     hence thesis by A6,LUKASI_1:3;
+end;
+
+          ::::::::::::::::::::::::::::::::::::::::::::
+          ::   R E G U L Y   D O W O D Z E N I A    ::
+          ::::::::::::::::::::::::::::::::::::::::::::
+
+theorem
+    p in TAUT implies ( p 'or' q ) in TAUT
+proof
+     assume
+           A1: p in TAUT;
+                p => ( p 'or' q ) in TAUT by Th3;
+              hence thesis by A1,CQC_THE1:82;
+end;
+
+theorem
+    q in TAUT implies ( p 'or' q ) in TAUT
+proof
+     assume
+           A1: q in TAUT;
+                q => ( p 'or' q ) in TAUT by Th4;
+              hence thesis by A1,CQC_THE1:82;
+end;
+
+theorem
+    ( p '&' q ) in TAUT implies p in TAUT
+proof
+     assume
+           A1: ( p '&' q ) in TAUT;
+                ( p '&' q ) => p in TAUT by Th19;
+              hence thesis by A1,CQC_THE1:82;
+end;
+
+theorem
+    ( p '&' q ) in TAUT implies q in TAUT
+proof
+     assume
+           A1: ( p '&' q ) in TAUT;
+                ( p '&' q ) => q in TAUT by Th21;
+              hence thesis by A1,CQC_THE1:82;
+end;
+
+theorem
+    ( p '&' q ) in TAUT implies ( p 'or' q ) in TAUT
+proof
+     assume
+           A1: ( p '&' q ) in TAUT;
+                ( p '&' q ) => ( p 'or' q ) in TAUT by Th20;
+              hence thesis by A1,CQC_THE1:82;
+end;
+
+theorem
+   p in TAUT & q in TAUT implies p '&' q in TAUT by Lm4;
+
+theorem
+   p => q in TAUT implies ( p 'or' r ) => ( q 'or' r ) in TAUT by Lm6;
+
+theorem
+   p => q in TAUT implies ( r 'or' p ) => ( r 'or' q ) in TAUT by Lm7;
+
+theorem
+   p => q in TAUT implies ( r '&' p ) => ( r '&' q ) in TAUT by Lm5;
+
+theorem Th51:
+  p => q in TAUT implies ( p '&' r ) => ( q '&' r ) in TAUT
+proof
+     assume
+        A1:  p => q in TAUT;
+              ( p => q ) => (( q => 'not' r ) => ( p => 'not' r )) in TAUT
+            by LUKASI_1:1;
+            then ( q => 'not' r ) => ( p => 'not'
+ r ) in TAUT by A1,CQC_THE1:82;
+        then A2:  'not' ( p => 'not' r ) => 'not' ( q => 'not'
+ r ) in TAUT by LUKASI_1:34;
+              ( p '&' r ) => 'not' ( p => 'not' r ) in TAUT by Th15;
+        then A3:  ( p '&' r ) => 'not' ( q => 'not' r ) in TAUT by A2,LUKASI_1:
+3;
+              'not' ( q => 'not' r ) => ( q '&' r ) in TAUT by Th16;
+            hence thesis by A3,LUKASI_1:3;
+end;
+
+theorem
+    r => p in TAUT & r => q in TAUT implies r => ( p '&' q ) in TAUT
+proof
+     assume that
+            A1: r => p in TAUT and
+            A2: r => q in TAUT;
+                  ( r => p ) => (( r => q ) => ( r => ( p '&' q ))) in TAUT
+                by Th33;
+                then ( r => q ) => ( r => ( p '&' q )) in TAUT by A1,CQC_THE1:
+82;
+                hence thesis by A2,CQC_THE1:82;
+end;
+
+theorem
+    p => r in TAUT & q => r in TAUT implies ( p 'or' q ) => r in TAUT
+proof
+     assume
+             p => r in TAUT & q => r in TAUT;
+        then A1: ( p => r ) '&' ( q => r ) in TAUT by Lm4;
+             (( p => r ) '&' ( q => r )) => (( p 'or' q ) => r) in TAUT
+           by Th36;
+           hence thesis by A1,CQC_THE1:82;
+end;
+
+theorem
+    ( p 'or' q ) in TAUT & 'not' p in TAUT implies q in TAUT
+proof
+     assume that
+             A1: ( p 'or' q ) in TAUT and
+             A2: 'not' p in TAUT;
+                   ( p 'or' q ) => ( 'not' p => q ) in TAUT by Th5;
+                  then 'not' p => q in TAUT by A1,CQC_THE1:82;
+                  hence thesis by A2,CQC_THE1:82;
+end;
+
+theorem
+    ( p 'or' q ) in TAUT & 'not' q in TAUT implies p in TAUT
+proof
+     assume that
+             A1: ( p 'or' q ) in TAUT and
+             A2: 'not' q in TAUT;
+              A3: ( q 'or' p ) => ( 'not' q => p ) in TAUT by Th5;
+                   ( p 'or' q ) => ( q 'or' p ) in TAUT by Th8;
+                 then ( p 'or' q ) => ( 'not'
+ q => p ) in TAUT by A3,LUKASI_1:3;
+                 then 'not' q => p in TAUT by A1,CQC_THE1:82;
+                 hence thesis by A2,CQC_THE1:82;
+end;
+
+theorem
+    p => q in TAUT & r => s in TAUT implies ( p '&' r ) => ( q '&' s ) in TAUT
+proof
+     assume that
+             A1: p => q in TAUT and
+             A2: r => s in TAUT;
+              A3: ( p '&' r ) => ( q '&' r ) in TAUT by A1,Th51;
+                   ( q '&' r ) => ( q '&' s ) in TAUT by A2,Lm5;
+                 hence thesis by A3,LUKASI_1:3;
+end;
+
+theorem
+    p => q in TAUT & r => s in TAUT implies ( p 'or' r ) => ( q 'or' s ) in
+TAUT
+proof
+     assume that
+             A1: p => q in TAUT and
+             A2: r => s in TAUT;
+              A3: ( p 'or' r ) => ( q 'or' r ) in TAUT by A1,Lm6;
+                   ( q 'or' r ) => ( q 'or' s ) in TAUT by A2,Lm7;
+                 hence thesis by A3,LUKASI_1:3;
+end;
+
+theorem
+    ( p '&' 'not' q ) => 'not' p in TAUT implies p => q in TAUT
+proof
+ assume
+        ( p '&' 'not' q ) => 'not' p in TAUT;
+     then A1: 'not' 'not' p => 'not' ( p '&' 'not' q ) in TAUT by LUKASI_1:34;
+          p => 'not' 'not' p in TAUT by LUKASI_1:27;
+     then A2: p => 'not' ( p '&' 'not' q ) in TAUT by A1,LUKASI_1:3;
+        'not' ( p '&' 'not' q ) = ( p => q ) by QC_LANG2:def 2;
+        then 'not' ( p '&' 'not' q ) => ( p => q ) in TAUT by LUKASI_1:4;
+     then A3: p => ( 'not' ( p '&' 'not' q ) => ( p => q )) in TAUT by LUKASI_1
+:13;
+          ( p => ( 'not' ( p '&' 'not' q ) => ( p => q ))) =>
+        (( p => 'not' ( p '&' 'not' q )) => ( p => ( p => q ))) in TAUT
+        by LUKASI_1:11;
+        then ( p => 'not' ( p '&' 'not' q )) => ( p => ( p => q )) in TAUT
+        by A3,CQC_THE1:82;
+        then p => ( p => q ) in TAUT by A2,CQC_THE1:82;
+        hence thesis by LUKASI_1:18;
+end;

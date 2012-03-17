@@ -1,0 +1,2197 @@
+:: On the Decomposition of Finite Sequences
+::  by Andrzej Trybulec
+::
+:: Received May 24, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, REALSET1, FINSEQ_5, RELAT_1, BOOLE, FUNCT_1, FINSEQ_4,
+      ARYTM_1, RLSUB_2, RFINSEQ, FINSEQ_6, ORDINAL2, ARYTM;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS,
+      XCMPLX_0, XREAL_0, NAT_1, RELAT_1, RELSET_1, FUNCT_1, FINSEQ_1, FINSEQ_4,
+      RFINSEQ, FINSEQ_5, REALSET1, TOPREAL1;
+ constructors REAL_1, NAT_1, MATRIX_2, FINSEQ_5, ENUMSET1, RFINSEQ, TOPREAL1,
+      REALSET1, FINSEQ_4, INT_1, MEMBERED, XBOOLE_0;
+ clusters RELSET_1, FINSEQ_5, FUNCT_1, GOBOARD4, FINSEQ_1, INT_1, REALSET1,
+      ZFMISC_1, XBOOLE_0, ORDINAL2, ARYTM_3;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, XBOOLE_0;
+ theorems TOPREAL1, CQC_THE1, NAT_1, REAL_1, AXIOMS, FINSEQ_1, FINSEQ_4,
+      FINSEQ_3, RLVECT_1, FINSEQ_2, FUNCT_1, ZFMISC_1, FINSEQ_5, RELAT_1,
+      REAL_2, RFINSEQ, TARSKI, ENUMSET1, PARTFUN2, SPPOL_1, GRFUNC_1, HAHNBAN,
+      FSM_1, REALSET1, GROUP_5, SQUARE_1, INT_1, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+
+begin :: Preliminaries
+
+reserve x,y,z for set;
+
+definition let x,y,z;
+ cluster <*x,y,z*> -> non trivial;
+  coherence
+ proof len <*x,y,z*> = 3 by FINSEQ_1:62;
+   hence <*x,y,z*> is non trivial by SPPOL_1:2;
+ end;
+end;
+
+definition let f be non empty FinSequence;
+ cluster Rev f -> non empty;
+ coherence
+  proof
+      dom f <> {} by RELAT_1:64;
+    hence Rev f is non empty by FINSEQ_5:60,RELAT_1:60;
+  end;
+end;
+
+ Lm1:
+ rng <*x,y*> = { x,y }
+  proof
+      <*x,y*> = <*x*>^<*y*> by FINSEQ_1:def 9;
+   hence rng<*x,y*> = rng<*x*> \/ rng<*y*> by FINSEQ_1:44
+                     .= {x} \/ rng<*y*> by FINSEQ_1:55
+                     .= {x} \/ {y} by FINSEQ_1:55
+                     .= {x,y} by ENUMSET1:41;
+  end;
+
+ Lm2:
+ rng <*x,y,z*> = { x,y,z }
+  proof
+      <*x,y,z*> = <*x,y*>^<*z*> by FINSEQ_1:60;
+   hence rng<*x,y,z*> = rng<*x,y*> \/ rng<*z*> by FINSEQ_1:44
+                     .= {x,y} \/ rng<*z*> by Lm1
+                     .= {x,y} \/ {z} by FINSEQ_1:55
+                     .= {x,y,z} by ENUMSET1:43;
+  end;
+
+begin
+
+reserve f,f1,f2,f3 for FinSequence,
+        p,p1,p2,p3 for set,
+        i,k for Nat;
+
+canceled 2;
+
+theorem Th3:
+ for X being set, i st X c= Seg i & 1 in X holds (Sgm X).1 = 1
+  proof let X be set, i such that
+A1: X c= Seg i and
+A2: 1 in X;
+A3:  rng Sgm X = X by A1,FINSEQ_1:def 13;
+    then consider x such that
+A4:  x in dom Sgm X and
+A5:  (Sgm X).x = 1 by A2,FUNCT_1:def 5;
+    reconsider j = x as Nat by A4;
+A6:  j >= 1 by A4,FINSEQ_3:27;
+A7: rng Sgm X c= NAT by FINSEQ_1:def 4;
+   assume A8: (Sgm X).1 <> 1;
+      Sgm X <> {} by A1,A2,FINSEQ_1:72;
+    then len Sgm X <> 0 by FINSEQ_1:25;
+    then len Sgm X >= 1 by RLVECT_1:99;
+    then 1 in dom Sgm X by FINSEQ_3:27;
+    then A9:   (Sgm X).1 in rng Sgm X & (Sgm X).j in rng Sgm X by A4,FUNCT_1:
+def 5;
+    then reconsider k1 = (Sgm X).1 as Nat by A7;
+    A10:  k1 >= 1 by A1,A3,A9,FINSEQ_1:3;
+A11:  j <= len Sgm X by A4,FINSEQ_3:27;
+      1 < j by A5,A6,A8,REAL_1:def 5; hence contradiction by A1,A5,A10,A11,
+FINSEQ_1:def 13;
+  end;
+
+theorem Th4:
+ for f being FinSequence holds
+ k in dom f & (for i st 1 <= i & i < k holds f.i <> f.k)
+   implies (f.k)..f = k
+proof let f be FinSequence;
+ assume that
+A1: k in dom f and
+A2: for i st 1 <= i & i < k holds f.i <> f.k;
+A3: f.k in rng f by A1,FUNCT_1:def 5;
+then A4: f.(f.k..f) = f.k by FINSEQ_4:29;
+A5: f.k..f <= k by A1,FINSEQ_4:34;
+  assume f.k..f <> k;
+   then 1 <= f.k.. f & f.k..f < k by A3,A5,FINSEQ_4:31,REAL_1:def 5;
+  hence contradiction by A2,A4;
+end;
+
+theorem Th5:
+ <*p1,p2*>| Seg 1 = <*p1*>
+  proof
+     len<*p1,p2*> = 2 by FINSEQ_1:61;
+   then 1 in dom<*p1,p2*> by FINSEQ_3:27;
+   then A1:  Seg 1 c= dom<*p1,p2*> by FINSEQ_1:4,ZFMISC_1:37;
+   set f = <*p1,p2*>| Seg 1;
+A2:  dom f = dom<*p1,p2*> /\ Seg 1 by RELAT_1:90 .= Seg 1 by A1,XBOOLE_1:28;
+    then reconsider f as FinSequence by FINSEQ_1:def 2;
+A3:  len f = 1 by A2,FINSEQ_1:def 3;
+      1 in dom f by A2,FINSEQ_1:4,TARSKI:def 1;
+    then f.1 = <*p1,p2*>.1 by FUNCT_1:70 .= p1 by FINSEQ_1:61;
+   hence thesis by A3,FINSEQ_1:57;
+  end;
+
+theorem Th6:
+ <*p1,p2,p3*>| Seg 1 = <*p1*>
+  proof
+     len<*p1,p2,p3*> = 3 by FINSEQ_1:62;
+   then 1 in dom<*p1,p2,p3*> by FINSEQ_3:27;
+   then A1:  Seg 1 c= dom<*p1,p2,p3*> by FINSEQ_1:4,ZFMISC_1:37;
+   set f = <*p1,p2,p3*>| Seg 1;
+A2:  dom f = dom<*p1,p2,p3*> /\ Seg 1 by RELAT_1:90 .= Seg 1 by A1,XBOOLE_1:28
+;
+    then reconsider f as FinSequence by FINSEQ_1:def 2;
+A3:  len f = 1 by A2,FINSEQ_1:def 3;
+      1 in dom f by A2,FINSEQ_1:4,TARSKI:def 1;
+    then f.1 = <*p1,p2,p3*>.1 by FUNCT_1:70 .= p1 by FINSEQ_1:62;
+   hence thesis by A3,FINSEQ_1:57;
+  end;
+
+theorem Th7:
+ <*p1,p2,p3*>| Seg 2 = <*p1,p2*>
+  proof
+     len<*p1,p2,p3*> = 3 by FINSEQ_1:62;
+   then 1 in dom<*p1,p2,p3*> & 2 in dom<*p1,p2,p3*> by FINSEQ_3:27;
+   then A1:  Seg 2 c= dom<*p1,p2,p3*> by FINSEQ_1:4,ZFMISC_1:38;
+   set f = <*p1,p2,p3*>| Seg 2;
+A2:  dom f = dom<*p1,p2,p3*> /\ Seg 2 by RELAT_1:90 .= Seg 2 by A1,XBOOLE_1:28
+;
+    then reconsider f as FinSequence by FINSEQ_1:def 2;
+A3:  len f = 2 by A2,FINSEQ_1:def 3;
+    then 1 in dom f by FINSEQ_3:27;
+    then A4: f.1 = <*p1,p2,p3*>.1 by FUNCT_1:70 .= p1 by FINSEQ_1:62;
+      2 in dom f by A3,FINSEQ_3:27;
+    then f.2 = <*p1,p2,p3*>.2 by FUNCT_1:70 .= p2 by FINSEQ_1:62;
+   hence thesis by A3,A4,FINSEQ_1:61;
+  end;
+
+theorem Th8:
+ p in rng f1 implies p..(f1^f2) = p..f1
+ proof assume
+A1: p in rng f1;
+then A2: f1.(p..f1) = p by FINSEQ_4:29;
+A3: p..f1 in dom f1 by A1,FINSEQ_4:30;
+then A4: (f1^f2).(p..f1) = p by A2,FINSEQ_1:def 7;
+   A5: dom f1 c= dom(f1^f2) by FINSEQ_1:39;
+     now let i such that
+A6: 1 <= i and
+A7: i < p..f1;
+       p..f1 <= len f1 by A1,FINSEQ_4:31;
+     then i <= len f1 by A7,AXIOMS:22;
+     then A8:    i in dom f1 by A6,FINSEQ_3:27;
+A9:   (f1^f2).(p..f1) = f1.(p..f1) by A3,FINSEQ_1:def 7;
+     (f1^f2).i = f1.i by A8,FINSEQ_1:def 7;
+     hence (f1^f2).i <> (f1^f2).(p..f1) by A2,A7,A8,A9,FINSEQ_4:34;
+   end;
+  hence p..(f1^f2) = p..f1 by A3,A4,A5,Th4;
+ end;
+
+theorem Th9:
+ p in rng f2 \ rng f1 implies p..(f1^f2) = len f1 + p..f2
+ proof assume
+A1: p in rng f2 \ rng f1;
+then A2: p in rng f2 by XBOOLE_0:def 4;
+then A3: f2.(p..f2) = p by FINSEQ_4:29;
+A4: p..f2 in dom f2 by A2,FINSEQ_4:30;
+then A5: (f1^f2).(len f1 + p..f2) = p by A3,FINSEQ_1:def 7;
+A6: len f1 + p..f2 in dom(f1^f2) by A4,FINSEQ_1:41;
+     now let i such that
+A7: 1 <= i and
+A8: i < len f1 + p..f2;
+    per cases;
+    suppose i <= len f1;
+      then A9:     i in dom f1 by A7,FINSEQ_3:27;
+     assume (f1^f2).i = (f1^f2).(len f1 + p..f2);
+      then f1.i = p by A5,A9,FINSEQ_1:def 7;
+      then p in rng f1 by A9,FUNCT_1:def 5;
+     hence contradiction by A1,XBOOLE_0:def 4;
+    suppose
+A10:   i > len f1;
+     then reconsider j = i - len f1 as Nat by INT_1:18;
+A11:   i = j + len f1 by XCMPLX_1:27;
+       j > 0 by A10,SQUARE_1:11;
+then A12:   1 <= j by RLVECT_1:99;
+A13:  j < p..f2 by A8,A11,AXIOMS:24;
+       j <= p..f2 & p..f2 <= len f2 by A2,A8,A11,AXIOMS:24,FINSEQ_4:31;
+     then j <= len f2 by AXIOMS:22;
+     then A14:    j in dom f2 by A12,FINSEQ_3:27;
+A15:   (f1^f2).(len f1 + p..f2) = f2.(p..f2) by A4,FINSEQ_1:def 7;
+     (f1^f2).i = f2.j by A11,A14,FINSEQ_1:def 7;
+     hence (f1^f2).i <> (f1^f2).(len f1 + p..f2) by A3,A13,A14,A15,FINSEQ_4:34
+;
+   end;
+  hence p..(f1^f2) = len f1 + p..f2 by A5,A6,Th4;
+ end;
+
+theorem Th10:
+ p in rng f1 implies (f1^f2)|--p = (f1|--p)^f2
+ proof assume
+A1: p in rng f1;
+     rng(f1^f2) = rng f1 \/ rng f2 by FINSEQ_1:44;
+then A2: p in rng(f1^f2) by A1,XBOOLE_0:def 2;
+A3: p..f1 = p..(f1^f2) by A1,Th8;
+A4: len(f1|--p) = len f1 - p..f1 by A1,FINSEQ_4:def 7;
+then A5: len((f1|--p)^f2) = len f1 - p..f1 + len f2 by FINSEQ_1:35
+             .= len f1 + len f2 - p..f1 by XCMPLX_1:29
+             .= len(f1^f2) - p..(f1^f2) by A3,FINSEQ_1:35;
+A6: len f1 = len(f1|--p) + p..f1 by A4,XCMPLX_1:27;
+     now let k;
+    assume
+A7:   k in dom((f1|--p)^f2);
+    per cases by A7,FINSEQ_1:38;
+    suppose
+A8:    k in dom(f1|--p);
+     then 1 <= k & k <= k + p..f1 by FINSEQ_3:27,NAT_1:29;
+then A9:   1 <= k + p..f1 by AXIOMS:22;
+A10:   k <= len(f1|--p) by A8,FINSEQ_3:27;
+       len(f1|--p) = len f1 - p..f1 by A1,FINSEQ_4:def 7;
+     then len(f1|--p) + p..f1 = len f1 by XCMPLX_1:27;
+     then k + p..f1 <= len f1 by A10,AXIOMS:24;
+     then A11:   k + p..f1 in dom f1 by A9,FINSEQ_3:27;
+    thus ((f1|--p)^f2).k = (f1|--p).k by A8,FINSEQ_1:def 7
+                .= f1.(k + p..f1) by A1,A8,FINSEQ_4:def 7
+                .= (f1^f2).(k + p..(f1^f2)) by A3,A11,FINSEQ_1:def 7;
+    suppose ex n being Nat st n in dom f2 & k = len(f1|--p) + n;
+     then consider n being Nat such that
+A12:   n in dom f2 and
+A13:   k = len(f1|--p) + n;
+    thus ((f1|--p)^f2).k = f2.n by A12,A13,FINSEQ_1:def 7
+                .= (f1^f2).(len f1 + n) by A12,FINSEQ_1:def 7
+                .= (f1^f2).(k + p..(f1^f2)) by A3,A6,A13,XCMPLX_1:1;
+   end;
+  hence (f1^f2)|--p = (f1|--p)^f2 by A2,A5,FINSEQ_4:def 7;
+ end;
+
+theorem Th11:
+ p in rng f2 \ rng f1 implies (f1^f2)|--p = f2|--p
+ proof assume
+A1: p in rng f2 \ rng f1;
+then A2: p in rng f2 by XBOOLE_0:def 4;
+     rng(f1^f2) = rng f1 \/ rng f2 by FINSEQ_1:44;
+then A3: p in rng(f1^f2) by A2,XBOOLE_0:def 2;
+A4: len f1 + p..f2 = p..(f1^f2) by A1,Th9;
+A5: len(f2|--p) = len f2 - p..f2 by A2,FINSEQ_4:def 7
+             .= len f1 + len f2 - (len f1 + p..f2) by XCMPLX_1:32
+             .= len(f1^f2) - p..(f1^f2) by A4,FINSEQ_1:35;
+     now let k;
+    assume
+A6:   k in dom(f2|--p);
+     then 1 <= k & k <= k + p..f2 by FINSEQ_3:27,NAT_1:29;
+then A7:   1 <= k + p..f2 by AXIOMS:22;
+A8:   k <= len(f2|--p) by A6,FINSEQ_3:27;
+       len(f2|--p) = len f2 - p..f2 by A2,FINSEQ_4:def 7;
+     then len(f2|--p) + p..f2 = len f2 by XCMPLX_1:27;
+     then k + p..f2 <= len f2 by A8,AXIOMS:24;
+     then A9:   k + p..f2 in dom f2 by A7,FINSEQ_3:27;
+    thus (f2|--p).k = f2.(k + p..f2) by A2,A6,FINSEQ_4:def 7
+                .= (f1^f2).(len f1 + (k + p..f2)) by A9,FINSEQ_1:def 7
+                .= (f1^f2).(k + p..(f1^f2)) by A4,XCMPLX_1:1;
+   end;
+  hence (f1^f2)|--p = f2|--p by A3,A5,FINSEQ_4:def 7;
+ end;
+
+theorem Th12:
+ f1 c= f1^f2
+ proof
+A1: dom f1 c= dom(f1^f2) by FINSEQ_1:39;
+     for x st x in dom f1 holds f1.x = (f1^f2).x by FINSEQ_1:def 7;
+  hence f1 c= f1^f2 by A1,GRFUNC_1:8;
+ end;
+
+theorem Th13:
+ for A being set st A c= dom f1 holds (f1^f2)|A = f1 | A
+ proof let A be set; f1 c= f1^f2 by Th12; hence thesis by HAHNBAN:2; end;
+
+theorem Th14:
+ p in rng f1 implies (f1^f2)-|p = f1-|p
+ proof assume
+A1: p in rng f1;
+   then consider n being Nat such that
+A2: n = p..f1 - 1 and
+A3: f1 | Seg n = f1 -| p by FINSEQ_4:def 6;
+     rng(f1^f2) = rng f1 \/ rng f2 by FINSEQ_1:44;
+then A4: p in rng(f1^f2) by A1,XBOOLE_0:def 2;
+A5: n = p..(f1^f2) - 1 by A1,A2,Th8;
+     n + 1 = p..f1 by A2,XCMPLX_1:27;
+then A6: n <= p..f1 by NAT_1:29;
+     p..f1 <= len f1 by A1,FINSEQ_4:31;
+ then n <= len f1 by A6,AXIOMS:22;
+   then Seg n c= Seg len f1 by FINSEQ_1:7;
+   then Seg n c= dom f1 by FINSEQ_1:def 3;
+   then (f1^f2) | Seg n = f1 | Seg n by Th13;
+  hence (f1^f2)-|p = f1-|p by A3,A4,A5,FINSEQ_4:def 6;
+ end;
+
+definition let f1; let i be natural number;
+ cluster f1|Seg i -> FinSequence-like;
+ coherence by FINSEQ_1:19;
+end;
+
+theorem Th15:
+ f1 c= f2 implies f3^f1 c= f3^f2
+ proof assume
+A1: f1 c= f2;
+A2: dom(f3^f1) c= dom(f3^f2)
+    proof let x;
+     assume
+A3:    x in dom(f3^f1);
+      then reconsider i = x as Nat;
+     per cases by A3,FINSEQ_1:38;
+     suppose
+A4:    i in dom f3;
+        dom f3 c= dom(f3^f2) by FINSEQ_1:39;
+     hence x in dom(f3^f2) by A4;
+     suppose ex n being Nat st n in dom f1 & i=len f3 + n;
+      then consider k such that
+A5:    k in dom f1 and
+A6:   i = len f3 + k;
+        dom f1 c= dom f2 by A1,RELAT_1:25;
+      hence x in dom(f3^f2) by A5,A6,FINSEQ_1:41;
+    end;
+     for x st x in dom(f3^f1) holds (f3^f1).x = (f3^f2).x
+    proof let x;
+     assume
+A7:    x in dom(f3^f1);
+      then reconsider i = x as Nat;
+     per cases by A7,FINSEQ_1:38;
+     suppose
+A8:    i in dom f3;
+     hence (f3^f1).x = f3.i by FINSEQ_1:def 7
+                    .= (f3^f2).x by A8,FINSEQ_1:def 7;
+     suppose ex n being Nat st n in dom f1 & i=len f3 + n;
+      then consider k such that
+A9:    k in dom f1 and
+A10:   i = len f3 + k;
+      A11: dom f1 c= dom f2 by A1,RELAT_1:25;
+     thus (f3^f1).x = f1.k by A9,A10,FINSEQ_1:def 7
+                    .= f2.k by A1,A9,GRFUNC_1:8
+                    .= (f3^f2).x by A9,A10,A11,FINSEQ_1:def 7;
+    end;
+  hence f3^f1 c= f3^f2 by A2,GRFUNC_1:8;
+ end;
+
+theorem Th16:
+ (f1^f2)|Seg(len f1 + i) = f1^(f2|Seg i)
+proof
+A1: dom((f1^f2)|Seg(len f1 + i)) = dom(f1^f2) /\ Seg(len f1 + i) by RELAT_1:90;
+     f2|Seg i c= f2 by RELAT_1:88;
+   then f1^(f2|Seg i) c= f1^f2 by Th15;
+then A2: dom(f1^(f2|Seg i)) c= dom(f1^f2) by RELAT_1:25;
+      dom(f1^(f2|Seg i)) c= Seg(len f1 + i)
+     proof let x;
+      assume
+A3:     x in dom(f1^(f2|Seg i));
+      then reconsider j = x as Nat;
+     per cases by A3,FINSEQ_1:38;
+     suppose j in dom f1;
+then A4:     j in Seg len f1 by FINSEQ_1:def 3;
+         len f1 <= len f1 + i by NAT_1:29;
+       then Seg len f1 c= Seg(len f1 + i) by FINSEQ_1:7;
+      hence x in Seg(len f1 + i) by A4;
+     suppose ex n being Nat st n in dom(f2|Seg i) & j=len f1 + n;
+      then consider k such that
+A5:    k in dom(f2|Seg i) and
+A6:   j = len f1 + k;
+         dom(f2|Seg i) = dom f2 /\ Seg i by RELAT_1:90;
+       then k in Seg i by A5,XBOOLE_0:def 3;
+       then k <= i by FINSEQ_1:3;
+       then A7:      j <= len f1 + i by A6,AXIOMS:24;
+          1 <= k & k <= j by A5,A6,FINSEQ_3:27,NAT_1:29;
+       then 1 <= j by AXIOMS:22;
+      hence x in Seg(len f1 + i) by A7,FINSEQ_1:3;
+     end;
+then A8: dom(f1^(f2|Seg i)) c= dom(f1^f2) /\ Seg(len f1 + i) by A2,XBOOLE_1:19;
+     dom(f1^f2) /\ Seg(len f1 + i) c= dom(f1^(f2|Seg i))
+    proof let x;
+     assume
+A9:    x in dom(f1^f2) /\ Seg(len f1 + i);
+then A10:   x in dom(f1^f2) by XBOOLE_0:def 3;
+      reconsider j = x as Nat by A9;
+     per cases by A10,FINSEQ_1:38;
+     suppose
+A11:    j in dom f1;
+        dom f1 c= dom(f1^(f2|Seg i)) by FINSEQ_1:39;
+     hence x in dom(f1^(f2|Seg i)) by A11;
+     suppose ex n being Nat st n in dom f2 & j=len f1 + n;
+      then consider k such that
+A12:    k in dom f2 and
+A13:   j = len f1 + k;
+        j in Seg(len f1 + i) by A9,XBOOLE_0:def 3;
+      then j <= len f1 + i by FINSEQ_1:3;
+      then A14:     k <= i by A13,REAL_1:53;
+        1 <= k by A12,FINSEQ_3:27;
+then A15:   k in Seg i by A14,FINSEQ_1:3;
+        dom(f2|Seg i) = dom f2 /\ Seg i by RELAT_1:90;
+      then k in dom(f2|Seg i) by A12,A15,XBOOLE_0:def 3;
+     hence x in dom(f1^(f2|Seg i)) by A13,FINSEQ_1:41;
+    end;
+   then A16: dom((f1^f2)|Seg(len f1 + i)) = dom(f1^(f2|Seg i)) by A1,A8,
+XBOOLE_0:def 10
+;
+    now let k;
+   assume
+A17:  k in dom((f1^f2)|Seg(len f1 + i));
+then A18:  1 <= k by FINSEQ_3:27;
+   per cases;
+   suppose k <= len f1;
+then A19:  k in dom f1 by A18,FINSEQ_3:27;
+   thus ((f1^f2)|Seg(len f1 + i)).k = (f1^f2).k by A17,FUNCT_1:70
+            .= f1.k by A19,FINSEQ_1:def 7
+            .= (f1^(f2|Seg i)).k by A19,FINSEQ_1:def 7;
+   suppose
+A20:  k > len f1;
+    then reconsider j = k - len f1 as Nat by INT_1:18;
+A21:  k = len f1 + j by XCMPLX_1:27;
+      j > 0 by A20,SQUARE_1:11;
+then A22: 1 <= j by RLVECT_1:99;
+      k in Seg(len f1 + i) by A1,A17,XBOOLE_0:def 3;
+    then k <= len f1 + i by FINSEQ_1:3;
+    then j <= i by A21,REAL_1:53;
+then A23:  j in Seg i by A22,FINSEQ_1:3;
+A24: not k in dom f1 by A20,FINSEQ_3:27;
+      k in dom(f1^f2) by A1,A17,XBOOLE_0:def 3;
+    then consider n being Nat such that
+A25:  n in dom f2 and
+A26:  k =len f1 + n by A24,FINSEQ_1:38;
+    A27:  j in dom f2 by A21,A25,A26,XCMPLX_1:2;
+      dom(f2|Seg i) = (dom f2) /\ Seg i by RELAT_1:90;
+then A28:  j in dom(f2|Seg i) by A23,A27,XBOOLE_0:def 3;
+   thus ((f1^f2)|Seg(len f1 + i)).k = (f1^f2).k by A17,FUNCT_1:70
+            .= f2.j by A21,A27,FINSEQ_1:def 7
+            .= (f2|Seg i).j by A28,FUNCT_1:70
+            .= (f1^(f2|Seg i)).k by A21,A28,FINSEQ_1:def 7;
+  end;
+ hence (f1^f2)|Seg(len f1 + i) = f1^(f2|Seg i) by A16,FINSEQ_1:17;
+end;
+
+theorem Th17:
+ p in rng f2 \ rng f1 implies (f1^f2)-|p = f1^(f2-|p)
+ proof assume
+A1: p in rng f2 \ rng f1;
+then A2: p in rng f2 by XBOOLE_0:def 4;
+   then consider n being Nat such that
+A3: n = p..f2 - 1 and
+A4: f2 | Seg n = f2 -| p by FINSEQ_4:def 6;
+     rng(f1^f2) = rng f1 \/ rng f2 by FINSEQ_1:44;
+then A5: p in rng(f1^f2) by A2,XBOOLE_0:def 2;
+     p..(f1^f2) = len f1 + p..f2 by A1,Th9;
+then A6: len f1 + n = p..(f1^f2) - 1 by A3,XCMPLX_1:29;
+     (f1^f2) | Seg(len f1 + n) = f1^(f2-|p) by A4,Th16;
+  hence (f1^f2)-|p = f1^(f2-|p) by A5,A6,FINSEQ_4:def 6;
+ end;
+
+canceled;
+
+theorem Th19:
+ f1^f2 just_once_values p implies p in rng f1 \+\ rng f2
+ proof assume
+A1: f1^f2 just_once_values p;
+then A2: p in rng(f1^f2) by FINSEQ_4:7;
+A3: rng(f1^f2) = rng f1 \/ rng f2 by FINSEQ_1:44;
+     now assume
+A4: p in rng f1 /\ rng f2;
+     then p in rng f1 by XBOOLE_0:def 3;
+     then (f1^f2)|--p = (f1|--p)^f2 by Th10;
+     then A5:     not p in rng((f1|--p)^f2) by A1,FINSEQ_4:60;
+       rng((f1|--p)^f2) = rng(f1|--p) \/ rng f2 by FINSEQ_1:44;
+     then not p in rng f2 by A5,XBOOLE_0:def 2;
+    hence contradiction by A4,XBOOLE_0:def 3;
+   end;
+   then p in (rng f1 \/ rng f2) \ rng f1 /\ rng f2 by A2,A3,XBOOLE_0:def 4;
+  hence p in rng f1 \+\ rng f2 by XBOOLE_1:101;
+ end;
+
+theorem
+   f1^f2 just_once_values p & p in rng f1 implies f1 just_once_values p
+proof assume that
+A1: f1^f2 just_once_values p and
+A2: p in rng f1;
+A3: not p in rng((f1^f2)|--p) by A1,FINSEQ_4:60;
+    (f1^f2)|--p = (f1|--p)^f2 by A2,Th10;
+  then rng((f1^f2)|--p) = rng(f1|--p) \/ rng f2 by FINSEQ_1:44;
+  then not p in rng(f1|--p) by A3,XBOOLE_0:def 2;
+ hence f1 just_once_values p by A2,FINSEQ_4:60;
+end;
+
+theorem Th21:
+ rng f is non trivial implies f is non trivial
+ proof assume that
+A1: rng f is non trivial and
+A2: f is trivial;
+   consider y being set such that
+A3:  f = {y} by A1,A2,REALSET1:def 12,RELAT_1:60;
+     y in f by A3,TARSKI:def 1;
+   then consider y1,y2 being set such that
+A4:  y = [y1,y2] by RELAT_1:def 1;
+     rng f = {y2} by A3,A4,RELAT_1:23;
+  hence contradiction by A1,REALSET1:def 12;
+ end;
+
+theorem Th22:
+ p..<*p*> = 1
+ proof
+     dom<*p*> = Seg 1 by FINSEQ_1:55;
+then A1: 1 in dom<*p*> by FINSEQ_1:4,TARSKI:def 1;
+A2: <*p*>.1 = p by FINSEQ_1:57;
+     for i st 1<=i & i<1 holds <*p*>.i <> <*p*>.1;
+  hence thesis by A1,A2,Th4;
+ end;
+
+theorem Th23:
+ p1..<*p1,p2*> = 1
+ proof
+     len<*p1,p2*> = 2 by FINSEQ_1:61;
+   then A1: 1 in dom<*p1,p2*> by FINSEQ_3:27;
+A2: <*p1,p2*>.1 = p1 by FINSEQ_1:61;
+     for i st 1<=i & i<1 holds <*p1,p2*>.i <> <*p1,p2*>.1;
+  hence thesis by A1,A2,Th4;
+ end;
+
+theorem Th24:
+ p1 <> p2 implies p2..<*p1,p2*> = 2
+ proof assume
+A1:  p1 <> p2;
+     2 <= len<*p1,p2*> by FINSEQ_1:61;
+then A2: 2 in dom<*p1,p2*> by FINSEQ_3:27;
+A3: <*p1,p2*>.2 = p2 by FINSEQ_1:61;
+A4: <*p1,p2*>.1 = p1 by FINSEQ_1:61;
+     now let i;
+    assume
+A5:  1<=i;
+    assume i<1+1;
+     then i <= 1 by NAT_1:38;
+     hence <*p1,p2*>.i <> <*p1,p2*>.2 by A1,A3,A4,A5,AXIOMS:21;
+   end;
+  hence thesis by A2,A3,Th4;
+ end;
+
+theorem Th25:
+ p1..<*p1,p2,p3*> = 1
+ proof
+     len<*p1,p2,p3*> = 3 by FINSEQ_1:62;
+   then A1: 1 in dom<*p1,p2,p3*> by FINSEQ_3:27;
+A2: <*p1,p2,p3*>.1 = p1 by FINSEQ_1:62;
+     for i st 1<=i & i<1 holds <*p1,p2,p3*>.i <> <*p1,p2,p3*>.1;
+  hence thesis by A1,A2,Th4;
+ end;
+
+theorem Th26:
+ p1 <> p2 implies p2..<*p1,p2,p3*> = 2
+ proof assume
+A1:  p1 <> p2;
+     len<*p1,p2,p3*> = 3 by FINSEQ_1:62;
+   then A2: 2 in dom<*p1,p2,p3*> by FINSEQ_3:27;
+A3: <*p1,p2,p3*>.2 = p2 by FINSEQ_1:62;
+A4: <*p1,p2,p3*>.1 = p1 by FINSEQ_1:62;
+     now let i;
+    assume
+A5:  1<=i;
+    assume i<1+1;
+     then i <= 1 by NAT_1:38;
+     hence <*p1,p2,p3*>.i <> <*p1,p2,p3*>.2 by A1,A3,A4,A5,AXIOMS:21;
+   end;
+  hence thesis by A2,A3,Th4;
+ end;
+
+theorem Th27:
+ p1 <> p3 & p2 <> p3 implies p3..<*p1,p2,p3*> = 3
+ proof assume
+A1:  p1 <> p3 & p2 <> p3;
+     3 <= len<*p1,p2,p3*> by FINSEQ_1:62;
+then A2: 3 in dom<*p1,p2,p3*> by FINSEQ_3:27;
+A3: <*p1,p2,p3*>.3 = p3 by FINSEQ_1:62;
+A4: <*p1,p2,p3*>.2 = p2 & <*p1,p2,p3*>.1 = p1 by FINSEQ_1:62;
+     now let i;
+    assume
+A5:  1<=i;
+    assume i<2+1;
+     then i <> 0 & i <= 2 by A5,NAT_1:38;
+     hence <*p1,p2,p3*>.i <> <*p1,p2,p3*>.3 by A1,A3,A4,CQC_THE1:3;
+   end;
+  hence thesis by A2,A3,Th4;
+ end;
+
+theorem Th28:
+ for f being FinSequence holds
+ Rev(<*p*>^f) = Rev f ^ <*p*>
+proof let f be FinSequence;
+ thus Rev(<*p*>^f) = Rev f ^ Rev<*p*> by FINSEQ_5:67
+           .= Rev f ^ <*p*> by FINSEQ_5:63;
+end;
+
+theorem Th29:
+ for f being FinSequence holds
+ Rev Rev f = f
+ proof let f be FinSequence;
+A1: len f = len Rev f by FINSEQ_5:def 3;
+     now let i;
+    assume
+A2:   i in dom f;
+     then i in dom Rev f by FINSEQ_5:60;
+     then i <= len Rev f by FINSEQ_3:27;
+     then reconsider j = len(Rev f) - i as Nat by INT_1:18;
+       j + 1 + i = 1 + (j + i) by XCMPLX_1:1
+                  .= len(Rev f) + 1 by XCMPLX_1:27;
+     then A3:  j + 1 in dom Rev f by A1,A2,FINSEQ_5:62;
+    thus f.i = f.(len f -(len(Rev f) - i)) by A1,XCMPLX_1:18
+             .= f.(len f -(len(Rev f) - i) - 1 + 1) by XCMPLX_1:27
+             .= f.(len f -(len(Rev f) - i + 1) + 1) by XCMPLX_1:36
+             .= (Rev f).(len(Rev f) - i + 1) by A3,FINSEQ_5:def 3;
+   end;
+  hence Rev Rev f = f by A1,FINSEQ_5:def 3;
+ end;
+
+theorem Th30:
+ x <> y implies <*x,y*> -| y = <*x*>
+ proof assume
+A1: x <> y;
+     rng<*x,y*> = { x,y } by Lm1;
+   then A2:  y in rng<*x,y*> by TARSKI:def 2;
+     y..<*x,y*> = 1+1 by A1,Th24;
+   then 1 = y..<*x,y*>-1;
+  hence <*x,y*> -| y = <*x,y*>| Seg 1 by A2,FINSEQ_4:45 .= <*x*> by Th5;
+ end;
+
+theorem Th31:
+ x <> y implies <*x,y,z*> -| y = <*x*>
+ proof assume
+A1: x <> y;
+     rng<*x,y,z*> = { x,y,z } by Lm2;
+   then A2:  y in rng<*x,y,z*> by ENUMSET1:14;
+     y..<*x,y,z*> = 1+1 by A1,Th26;
+   then 1 = y..<*x,y,z*>-1;
+  hence <*x,y,z*> -| y = <*x,y,z*>| Seg 1 by A2,FINSEQ_4:45
+       .= <*x*> by Th6;
+ end;
+
+theorem Th32:
+ x <> z & y <> z implies <*x,y,z*> -| z = <*x,y*>
+ proof assume
+A1: x <> z & y <> z;
+     rng<*x,y,z*> = { x,y,z } by Lm2;
+   then A2:  z in rng<*x,y,z*> by ENUMSET1:14;
+     z..<*x,y,z*> = 2+1 by A1,Th27;
+   then 2 = z..<*x,y,z*>-1;
+  hence <*x,y,z*> -| z = <*x,y,z*>| Seg 2 by A2,FINSEQ_4:45
+       .= <*x,y*> by Th7;
+ end;
+
+theorem
+   <*x,y*>|--x = <*y*>
+ proof
+     x in { x,y } by TARSKI:def 2;
+then A1: x in rng<*x,y*> by Lm1;
+A2: x..<*x,y*> = 1 by Th23;
+   then len<*y*> + x..<*x,y*> = 1 + 1 by FINSEQ_1:57
+        .= len<*x,y*> by FINSEQ_1:61;
+then A3: len<*y*> = len<*x,y*> - x..<*x,y*> by XCMPLX_1:26;
+     now let k;
+    assume k in dom<*y*>;
+     then k in Seg 1 by FINSEQ_1:55;
+     then A4:   k = 1 by FINSEQ_1:4,TARSKI:def 1;
+    hence <*y*>.k = y by FINSEQ_1:57
+        .= <*x,y*>.(k + x..<*x,y*>) by A2,A4,FINSEQ_1:61;
+   end;
+  hence thesis by A1,A3,FINSEQ_4:def 7;
+ end;
+
+theorem Th34:
+ x <> y implies <*x,y,z*>|--y = <*z*>
+ proof assume
+A1: x <> y;
+     y in { x,y,z } by ENUMSET1:14;
+then A2: y in rng<*x,y,z*> by Lm2;
+A3: y..<*x,y,z*> = 2 by A1,Th26;
+   then len<*z*> + y..<*x,y,z*> = 1 + 2 by FINSEQ_1:57
+        .= len<*x,y,z*> by FINSEQ_1:62;
+then A4: len<*z*> = len<*x,y,z*> - y..<*x,y,z*> by XCMPLX_1:26;
+     now let k;
+    assume k in dom<*z*>;
+     then k in Seg 1 by FINSEQ_1:55;
+     then A5:   k = 1 by FINSEQ_1:4,TARSKI:def 1;
+    hence <*z*>.k = z by FINSEQ_1:57
+        .= <*x,y,z*>.(k + y..<*x,y,z*>) by A3,A5,FINSEQ_1:62;
+   end;
+  hence thesis by A2,A4,FINSEQ_4:def 7;
+ end;
+
+theorem
+   <*x,y,z*>|--x = <*y,z*>
+ proof
+     x in { x,y,z } by ENUMSET1:14;
+then A1: x in rng<*x,y,z*> by Lm2;
+A2: x..<*x,y,z*> = 1 by Th25;
+   then len<*y,z*> + x..<*x,y,z*> = 2 + 1 by FINSEQ_1:61
+        .= len<*x,y,z*> by FINSEQ_1:62;
+then A3: len<*y,z*> = len<*x,y,z*> - x..<*x,y,z*> by XCMPLX_1:26;
+A4: len<*y,z*> = 2 by FINSEQ_1:61;
+     now let k;
+    assume k in dom<*y,z*>;
+     then A5:    k in Seg 2 by A4,FINSEQ_1:def 3;
+    per cases by A5,FINSEQ_1:4,TARSKI:def 2;
+    suppose
+A6:   k = 1;
+    hence <*y,z*>.k = y by FINSEQ_1:61
+        .= <*x,y,z*>.(k + x..<*x,y,z*>) by A2,A6,FINSEQ_1:62;
+    suppose
+A7:    k = 2;
+    hence <*y,z*>.k = z by FINSEQ_1:61
+        .= <*x,y,z*>.(k + x..<*x,y,z*>) by A2,A7,FINSEQ_1:62;
+   end;
+  hence thesis by A1,A3,FINSEQ_4:def 7;
+ end;
+
+theorem Th36:
+ <*z*>|--z = {} & <*z*>-|z = {}
+  proof
+     z in { z } by TARSKI:def 1;
+   then A1:  z in rng<*z*> by FINSEQ_1:56;
+A2:  z..<*z*> = 1 & len<*z*> = 1 by Th22,FINSEQ_1:56;
+   hence <*z*>|--z = {} by A1,FINSEQ_4:64;
+   thus <*z*>-|z = {} by A1,A2,FINSEQ_4:52;
+  end;
+
+theorem Th37:
+ x <> y implies <*x,y*> |-- y = {}
+  proof
+     y in { x,y } by TARSKI:def 2;
+   then A1:  y in rng<*x,y*> by Lm1;
+   assume x <> y;
+    then y..<*x,y*> = 2 & len<*x,y*> = 2 by Th24,FINSEQ_1:61;
+   hence thesis by A1,FINSEQ_4:64;
+  end;
+
+theorem Th38:
+ x <> z & y <> z implies <*x,y,z*> |-- z = {}
+  proof
+     z in { x,y,z } by ENUMSET1:14;
+   then A1:  z in rng<*x,y,z*> by Lm2;
+   assume x <> z & y <> z;
+    then z..<*x,y,z*> = 3 & len<*x,y,z*> = 3 by Th27,FINSEQ_1:62;
+   hence thesis by A1,FINSEQ_4:64;
+  end;
+
+theorem Th39:
+ x in rng f & y in rng(f-|x) implies f-|x-|y = f-|y
+ proof assume that
+A1: x in rng f and
+A2: y in rng(f-|x);
+  thus f-|y = ((f -| x) ^ <* x *> ^ (f |-- x))-|y by A1,FINSEQ_4:66
+           .= ((f -| x) ^ (<* x *> ^ (f |-- x)))-|y by FINSEQ_1:45
+           .= f-|x-|y by A2,Th14;
+ end;
+
+theorem Th40:
+ not x in rng f1 implies x..(f1^<*x*>^f2) = len f1 + 1
+proof assume
+A1: not x in rng f1;
+    x in {x} by TARSKI:def 1;
+  then A2: x in rng<*x*> by FINSEQ_1:55;
+  then x in rng<*x*> \ rng f1 by A1,XBOOLE_0:def 4;
+  then A3: (f1^<*x*>)|--x = <*x*>|--x by Th11 .= {} by Th36;
+    rng(f1^<*x*>) = rng f1 \/ rng<*x*> by FINSEQ_1:44;
+then A4: x in rng(f1^<*x*>) by A2,XBOOLE_0:def 2;
+then A5: len(f1^<*x*>) - x..(f1^<*x*>) = len ((f1^<*x*>)|--x) by FINSEQ_4:def 7
+                  .= 0 by A3,FINSEQ_1:25;
+ thus x..(f1^<*x*>^f2) = x..(f1^<*x*>) by A4,Th8
+               .= len(f1^<*x*>) by A5,XCMPLX_1:15
+               .= len f1 + len<*x*> by FINSEQ_1:35
+               .= len f1 + 1 by FINSEQ_1:56;
+end;
+
+theorem Th41:
+ f just_once_values x implies x..f + x..Rev f = len f + 1
+proof assume
+A1: f just_once_values x;
+  then A2: x in rng f by FINSEQ_4:7;
+  then A3: f = (f -| x) ^ <* x *> ^ (f |-- x) by FINSEQ_4:66;
+  then A4: len f = len((f -| x) ^ <* x *>) + len(f |-- x) by FINSEQ_1:35
+            .= len(f -| x) + len<* x *> + len(f |-- x) by FINSEQ_1:35
+            .= len(f -| x) + 1 + len(f |-- x) by FINSEQ_1:56;
+A5: len(f -| x) + 1 = x..f - 1 + 1 by A2,FINSEQ_4:46
+                 .= x..f by XCMPLX_1:27;
+     not x in rng(f|--x) by A1,FINSEQ_4:60;
+then A6: not x in rng Rev(f |-- x) by FINSEQ_5:60;
+     Rev f = Rev(f |-- x) ^ Rev((f -| x) ^ <* x *>) by A3,FINSEQ_5:67
+       .= Rev(f |-- x) ^ (<*x*> ^ Rev(f -| x)) by FINSEQ_5:66
+       .= Rev(f |-- x) ^ <*x*> ^ Rev(f -| x) by FINSEQ_1:45;
+  then x..Rev f = len Rev(f |-- x) + 1 by A6,Th40;
+ hence x..f + x..Rev f = len(f -| x) + 1 + len Rev(f |-- x) + 1 by A5,XCMPLX_1:
+1
+              .= len f + 1 by A4,FINSEQ_5:def 3;
+end;
+
+theorem Th42:
+ f just_once_values x implies Rev(f-|x) = Rev f |--x
+proof assume
+A1: f just_once_values x;
+  then A2: x in rng f by FINSEQ_4:7;
+then A3: x in rng Rev f by FINSEQ_5:60;
+A4:  x..f + x..Rev f = len f + 1 by A1,Th41;
+A5: len Rev(f-|x) = len(f-|x) by FINSEQ_5:def 3;
+A6: len(f-|x) = x..f - 1 by A2,FINSEQ_4:46
+            .= len f - x..Rev f by A4,XCMPLX_1:33
+            .= len Rev f - x..Rev f by FINSEQ_5:def 3;
+    now let k;
+   assume
+A7: k in dom Rev(f-|x);
+then A8: k in dom(f-|x) by FINSEQ_5:60;
+    consider m being Nat such that
+    m = x..f - 1 and
+A9:  f-|x = f | Seg m by A2,FINSEQ_4:def 6;
+A10:  x..f - 1 - k + 1 = x..f - k - 1 + 1 by XCMPLX_1:21
+                    .= x..f - k by XCMPLX_1:27;
+A11:  len(f-|x) = x..f - 1 by A2,FINSEQ_4:46;
+    then k <= x..f - 1 by A8,FINSEQ_3:27;
+    then A12:   k + 1 <= x..f by REAL_1:84;
+then A13:  1 <= x..f - k by REAL_1:84;
+    then 0 <= x..f - k by AXIOMS:22;
+    then k <= x..f by REAL_2:105;
+    then A14:   x..f - k is Nat by INT_1:18;
+A15: 1 <= k by A7,FINSEQ_3:27;
+      k <= k + x..Rev f by NAT_1:29;
+then A16: 1 <= k + x..Rev f by A15,AXIOMS:22;
+      x..f - k <= x..f - 1 by A15,REAL_1:92;
+    then A17:  x..f - 1 - k + 1 in dom(f | Seg m) by A9,A10,A11,A13,A14,
+FINSEQ_3:27;
+      k < x..f by A12,NAT_1:38;
+    then k + x..Rev f < len f + 1 by A4,REAL_1:53;
+    then k + x..Rev f <= len f by NAT_1:38;
+    then k + x..Rev f <= len Rev f by FINSEQ_5:def 3;
+then A18: k + x..Rev f in dom Rev f by A16,FINSEQ_3:27;
+   thus (Rev(f-|x)).k = (f-|x).(x..f - 1 - k + 1) by A7,A11,FINSEQ_5:def 3
+                     .= f.(x..f - 1 - k + 1) by A9,A17,FUNCT_1:70
+                     .= f.(len f - x..Rev f - k + 1) by A4,XCMPLX_1:33
+                     .= f.(len f -(k + x..Rev f) + 1) by XCMPLX_1:36
+                     .= (Rev f).(k + x..Rev f) by A18,FINSEQ_5:def 3;
+  end;
+ hence Rev(f-|x) = Rev f |--x by A3,A5,A6,FINSEQ_4:def 7;
+end;
+
+theorem
+   f just_once_values x implies Rev f just_once_values x
+proof assume
+A1: f just_once_values x;
+then A2: x in rng f by FINSEQ_4:7;
+then A3: x in rng Rev f by FINSEQ_5:60;
+    not x in rng(f-|x) by A2,FINSEQ_4:49;
+  then not x in rng Rev(f-|x) by FINSEQ_5:60;
+  then not x in rng(Rev f |-- x) by A1,Th42;
+ hence Rev f just_once_values x by A3,FINSEQ_4:60;
+end;
+
+begin
+
+reserve D for non empty set,
+        p,p1,p2,p3 for Element of D,
+        f,f1,f2 for FinSequence of D;
+
+theorem Th44:
+ p in rng f implies f-:p = (f -| p)^<*p*>
+  proof assume p in rng f;
+   hence (f -| p)^<*p*> = f|(p..f) by FINSEQ_5:27
+                       .= f-:p by FINSEQ_5:def 1;
+  end;
+
+theorem Th45:
+ p in rng f implies f:-p = <*p*>^(f |-- p)
+  proof assume p in rng f;
+   hence <*p*>^(f |-- p) = <*p*>^(f/^(p..f)) by FINSEQ_5:38
+                       .= f:-p by FINSEQ_5:def 2;
+  end;
+
+theorem Th46:
+ f <> {} implies f/.1 in rng f
+  proof assume f <> {};
+   then 1 in dom f by FINSEQ_5:6;
+   hence thesis by PARTFUN2:4;
+  end;
+
+theorem Th47:
+ f <> {} implies f/.1..f = 1
+  proof
+   assume
+A1:  f <> {};
+     f"{f/.1} c= dom f by RELAT_1:167;
+then A2: f"{f/.1} c= Seg len f by FINSEQ_1:def 3;
+A3: 1 in dom f by A1,FINSEQ_5:6;
+     f/.1 in {f/.1} by TARSKI:def 1;
+then A4: 1 in (f qua Relation of NAT,D)"{f/.1} by A3,PARTFUN2:44;
+   thus f/.1..f = Sgm(f"{f/.1}).1 by FINSEQ_4:def 5
+                  .= 1 by A2,A4,Th3;
+  end;
+
+theorem Th48:
+ f <> {} & f/.1 = p implies f-:p = <*p*> & f:-p = f
+ proof assume
+A1:  f <> {} & f/.1 = p;
+then A2: p in rng f by Th46;
+     p..f = 1 by A1,Th47;
+   then A3: f -| p = {} by A2,FINSEQ_4:52;
+  hence f-:p = {}^<*p*> by A2,Th44
+           .= <*p*> by FINSEQ_1:47;
+  thus f = {} ^ <* p *> ^ (f |-- p) by A2,A3,FINSEQ_4:66
+        .= <* p *> ^ (f |-- p) by FINSEQ_1:47
+        .= f:-p by A2,Th45;
+ end;
+
+theorem Th49:
+ (<*p1*>^f)/^1 = f
+  proof
+A1: (<*p1*>^f)/.1 = p1 by FINSEQ_5:16;
+A2: dom<*p1*> c= dom(<*p1*>^f) by FINSEQ_1:39;
+     1 in Seg 1 by FINSEQ_1:4,TARSKI:def 1;
+   then 1 in dom<*p1*> by FINSEQ_1:55;
+  then <*(<*p1*>^f)/.(0+1)*>^((<*p1*>^f)/^1) = (<*p1*>^f)/^0 by A2,FINSEQ_5:34
+             .= <*p1*>^f by FINSEQ_5:31;
+   hence thesis by A1,FINSEQ_1:46;
+  end;
+
+theorem Th50:
+ <*p1,p2*>/^1 = <*p2*>
+  proof <*p1,p2*> = <*p1*>^<*p2*> by FINSEQ_1:def 9;
+   hence thesis by Th49;
+  end;
+
+theorem Th51:
+ <*p1,p2,p3*>/^1 = <*p2,p3*>
+  proof <*p1,p2,p3*> = <*p1*>^<*p2,p3*> by FINSEQ_1:60;
+   hence thesis by Th49;
+  end;
+
+theorem Th52:
+ k in dom f & (for i st 1 <= i & i < k holds f/.i <> f/.k)
+   implies f/.k..f = k
+proof
+ assume that
+A1: k in dom f and
+A2: for i st 1 <= i & i < k holds f/.i <> f/.k;
+A3: f/.k in rng f by A1,PARTFUN2:4;
+A4: f/.k..f <= k by A1,FINSEQ_5:42;
+  assume f/.k..f <> k;
+   then 1 <= f/.k.. f & f/.k..f < k by A3,A4,FINSEQ_4:31,REAL_1:def 5;
+   then f/.(f/.k..f) <> f/.k by A2;
+  hence contradiction by A3,FINSEQ_5:41;
+end;
+
+theorem Th53:
+ p1 <> p2 implies <*p1,p2*>-:p2 = <*p1,p2*>
+ proof assume
+A1: p1 <> p2;
+     rng<*p1,p2*> = { p1,p2 } by Lm1;
+   then p2 in rng<*p1,p2*> by TARSKI:def 2;
+  hence <*p1,p2*>-:p2 = (<*p1,p2*> -| p2)^<*p2*> by Th44
+             .= <*p1*>^<*p2*> by A1,Th30
+             .= <*p1,p2*> by FINSEQ_1:def 9;
+ end;
+
+theorem Th54:
+ p1 <> p2 implies <*p1,p2,p3*>-:p2 = <*p1,p2*>
+ proof assume
+A1: p1 <> p2;
+     rng<*p1,p2,p3*> = { p1,p2,p3 } by Lm2;
+   then p2 in rng<*p1,p2,p3*> by ENUMSET1:14;
+  hence <*p1,p2,p3*>-:p2 = (<*p1,p2,p3*> -| p2)^<*p2*> by Th44
+             .= <*p1*>^<*p2*> by A1,Th31
+             .= <*p1,p2*> by FINSEQ_1:def 9;
+ end;
+
+theorem Th55:
+ p1 <> p3 & p2 <> p3 implies <*p1,p2,p3*>-:p3 = <*p1,p2,p3*>
+ proof assume
+A1: p1 <> p3 & p2 <> p3;
+     rng<*p1,p2,p3*> = { p1,p2,p3 } by Lm2;
+   then p3 in rng<*p1,p2,p3*> by ENUMSET1:14;
+  hence <*p1,p2,p3*>-:p3 = (<*p1,p2,p3*> -| p3)^<*p3*> by Th44
+             .= <*p1,p2*>^<*p3*> by A1,Th32
+             .= <*p1,p2,p3*> by FINSEQ_1:60;
+ end;
+
+theorem
+   <*p*>:-p = <*p*> & <*p*>-:p = <*p*>
+proof
+     p in { p } by TARSKI:def 1;
+   then A1:  p in rng<*p*> by FINSEQ_1:56;
+ hence <*p*>:-p = <*p*>^(<*p*>|--p )by Th45
+               .= <*p*>^{} by Th36
+               .= <*p*> by FINSEQ_1:47;
+ thus <*p*>-:p = (<*p*>-|p)^<*p*> by A1,Th44
+               .= {}^<*p*> by Th36
+               .= <*p*> by FINSEQ_1:47;
+end;
+
+theorem Th57:
+ p1 <> p2 implies <*p1,p2*>:-p2 = <*p2*>
+ proof assume
+A1: p1 <> p2;
+     p2 in { p1,p2 } by TARSKI:def 2;
+   then p2 in rng<*p1,p2*> by Lm1;
+  hence <*p1,p2*>:-p2 = <*p2*>^(<*p1,p2*> |-- p2) by Th45
+                     .= <*p2*>^{} by A1,Th37
+                     .= <*p2*> by FINSEQ_1:47;
+ end;
+
+theorem Th58:
+ p1 <> p2 implies <*p1,p2,p3*>:-p2 = <*p2,p3*>
+proof assume
+A1: p1 <> p2;
+     p2 in { p1,p2,p3 } by ENUMSET1:14;
+   then p2 in rng<*p1,p2,p3*> by Lm2;
+  hence <*p1,p2,p3*>:-p2 = <*p2*>^(<*p1,p2,p3*> |-- p2) by Th45
+                     .= <*p2*>^<*p3*> by A1,Th34
+                     .= <*p2,p3*> by FINSEQ_1:def 9;
+end;
+
+theorem Th59:
+ p1 <> p3 & p2 <> p3 implies <*p1,p2,p3*>:-p3 = <*p3*>
+proof assume
+A1: p1 <> p3 & p2 <> p3;
+     p3 in { p1,p2,p3 } by ENUMSET1:14;
+   then p3 in rng<*p1,p2,p3*> by Lm2;
+  hence <*p1,p2,p3*>:-p3 = <*p3*>^(<*p1,p2,p3*> |-- p3) by Th45
+                     .= <*p3*>^{} by A1,Th38
+                     .= <*p3*> by FINSEQ_1:47;
+end;
+
+canceled;
+
+theorem Th61:
+ p in rng f & p..f > k implies p..f = k + p..(f/^k)
+ proof assume that
+A1: p in rng f and
+A2: p..f > k;
+   reconsider i = p..f - k as Nat by A2,INT_1:18;
+A3: k+i = p..f by XCMPLX_1:27;
+     i <> 0 by A2,XCMPLX_1:15;
+then A4: 1 <= i by RLVECT_1:99;
+A5: i + k <= len f by A1,A3,FINSEQ_4:31;
+   then A6: i <= len f - k by REAL_1:84;
+     k <= k + i by NAT_1:29;
+   then k <= len f by A5,AXIOMS:22;
+   then A7: i <= len(f/^k) by A6,RFINSEQ:def 2;
+then A8: i in dom(f/^k) by A4,FINSEQ_3:27;
+then A9: (f/^k)/.i = f/.(k+i) by FINSEQ_5:30 .= p by A1,A3,FINSEQ_5:41;
+     now let j be Nat such that
+A10: 1 <= j and
+A11: j < i;
+       j <= len(f/^k) by A7,A11,AXIOMS:22;
+     then j in dom(f/^k) by A10,FINSEQ_3:27;
+then A12:   f/.(k+j) = (f/^k)/.j by FINSEQ_5:30;
+A13:   f/.(k+i) = (f/^k)/.i by A8,FINSEQ_5:30;
+A14:   k+j < k+i by A11,REAL_1:53;
+       k+j >= j & k+i <= len f by A1,A3,FINSEQ_4:31,NAT_1:29;
+     then 1 <= k+j & k+j <= len f by A10,A14,AXIOMS:22;
+then A15:   k+j in dom f by FINSEQ_3:27;
+       k+j < p..f by A3,A11,REAL_1:53;
+     then f/.(k+j) <> p by A15,FINSEQ_5:42;
+     hence (f/^k)/.j <> (f/^k)/.i by A1,A3,A12,A13,FINSEQ_5:41;
+   end;
+   then p..f - k = p..(f/^k) by A8,A9,Th52;
+  hence p..f = k+p..(f/^k) by XCMPLX_1:27;
+ end;
+
+theorem Th62:
+ p in rng f & p..f > k implies p in rng(f/^k)
+ proof assume that
+A1: p in rng f and
+A2: p..f > k;
+     p..f <= len f by A1,FINSEQ_4:31;
+then A3: k <= len f by A2,AXIOMS:22;
+A4: k+p..(f/^k) = p..f by A1,A2,Th61;
+   then p..(f/^k) <> 0 by A2;
+then A5: 1 <= p..(f/^k) by RLVECT_1:99;
+     len(f/^k) = len f - k by A3,RFINSEQ:def 2;
+   then A6: len(f/^k) + k = len f by XCMPLX_1:27;
+      k + p..(f/^k) <= len f by A1,A4,FINSEQ_4:31;
+   then p..(f/^k) <= len(f/^k) by A6,REAL_1:53;
+   then A7:  p..(f/^k) in dom(f/^k) by A5,FINSEQ_3:27;
+   then (f/^k)/.(p..(f/^k)) in rng(f/^k) by PARTFUN2:4;
+   then f/.(k+p..(f/^k)) in rng(f/^k) by A7,FINSEQ_5:30;
+  hence thesis by A1,A4,FINSEQ_5:41;
+ end;
+
+theorem Th63:
+  k < i & i in dom f implies f/.i in rng(f/^k)
+ proof assume that
+A1: k < i and
+A2: i in dom f;
+   reconsider j = i - k as Nat by A1,INT_1:18;
+A3: i = j + k by XCMPLX_1:27;
+     j > 0 by A1,SQUARE_1:11;
+then A4: 1 <= j by RLVECT_1:99;
+A5: i <= len f by A2,FINSEQ_3:27;
+   then k <= len f by A1,AXIOMS:22;
+   then len(f/^k) = len f - k by RFINSEQ:def 2;
+   then len(f/^k) + k = len f by XCMPLX_1:27;
+   then j <= len(f/^k) by A3,A5,REAL_1:53;
+   then A6: j in dom(f/^k) by A4,FINSEQ_3:27;
+   then f/.i = (f/^k)/.j by A3,FINSEQ_5:30;
+  hence thesis by A6,PARTFUN2:4;
+ end;
+
+theorem Th64:
+ p in rng f & p..f > k implies (f/^k)-:p = (f-:p)/^k
+  proof assume that
+A1: p in rng f and
+A2: p..f > k;
+A3: k <= len(f-:p) by A1,A2,FINSEQ_5:45;
+A4: p..f = k + p..(f/^k) by A1,A2,Th61;
+A5: p in rng(f/^k) by A1,A2,Th62;
+then A6: len((f/^k)-:p) = p..(f/^k) by FINSEQ_5:45
+      .= p..f - k by A4,XCMPLX_1:26
+      .= len(f-:p) - k by A1,FINSEQ_5:45;
+     now let m be Nat;
+    assume
+A7:   m in dom((f/^k)-:p);
+A8:   m+k >= m by NAT_1:29;
+       1 <= m & m <= len(f-:p) - k by A6,A7,FINSEQ_3:27;
+     then 1 <= m+k & m+k <= len(f-:p) by A8,AXIOMS:22,REAL_1:84;
+then A9:   m+k in dom(f-:p) by FINSEQ_3:27;
+       len(f-:p) = p..f by A1,FINSEQ_5:45;
+then A10:   m+k in Seg(p..f) by A9,FINSEQ_1:def 3;
+       len((f/^k)-:p) = p..(f/^k) by A5,FINSEQ_5:45;
+then A11:   m in Seg(p..(f/^k)) by A7,FINSEQ_1:def 3;
+       (f/^k)-:p = (f/^k)|(p..(f/^k)) by FINSEQ_5:def 1;
+     then A12: dom((f/^k)-:p) c= dom(f/^k) by FINSEQ_5:20;
+    thus ((f/^k)-:p).m = ((f/^k)-:p)/.m by A7,FINSEQ_4:def 4
+                 .= (f/^k)/.m by A5,A11,FINSEQ_5:46
+                 .= f/.(m+k) by A7,A12,FINSEQ_5:30
+                 .= (f-:p)/.(m+k) by A1,A10,FINSEQ_5:46
+                 .= (f-:p).(m+k) by A9,FINSEQ_4:def 4;
+   end;
+   hence (f/^k)-:p = (f-:p)/^k by A3,A6,RFINSEQ:def 2;
+  end;
+
+theorem Th65:
+ p in rng f & p..f <> 1 implies (f/^1)-:p = (f-:p)/^1
+ proof assume that
+A1: p in rng f and
+A2: p..f <> 1;
+     p..f >= 1 by A1,FINSEQ_4:31;
+   then p..f > 1 by A2,AXIOMS:21;
+  hence (f/^1)-:p = (f-:p)/^1 by A1,Th64;
+ end;
+
+theorem Th66:
+  p in rng(f:-p)
+ proof
+    f:-p = <*p*>^(f/^p..f) by FINSEQ_5:def 2;
+  then A1: rng(f:-p) = rng<*p*> \/ rng(f/^p..f) by FINSEQ_1:44;
+     rng<*p*> = {p} by FINSEQ_1:56;
+   then p in rng<*p*> by TARSKI:def 1;
+  hence thesis by A1,XBOOLE_0:def 2;
+ end;
+
+theorem Th67:
+ x in rng f & p in rng f & x..f >= p..f implies x in rng(f:-p)
+ proof assume that
+A1: x in rng f and
+A2: p in rng f and
+A3: x..f >= p..f;
+  per cases by A3,AXIOMS:21;
+  suppose
+A4:  x..f > p..f;
+    f:-p = <*p*>^(f/^p..f) by FINSEQ_5:def 2;
+  then A5: rng(f:-p) = rng<*p*> \/ rng(f/^p..f) by FINSEQ_1:44;
+     rng f c= D by FINSEQ_1:def 4;
+   then reconsider q = x as Element of D by A1;
+     q in rng(f/^(p..f)) by A1,A4,Th62;
+  hence x in rng(f:-p) by A5,XBOOLE_0:def 2;
+  suppose
+    x..f = p..f;
+   then x = f.(p..f) by A1,FINSEQ_4:29 .= p by A2,FINSEQ_4:29;
+  hence x in rng(f:-p) by Th66;
+ end;
+
+theorem Th68:
+  p in rng f & k <= len f & k >= p..f implies f/.k in rng(f:-p)
+ proof assume that
+A1: p in rng f and
+A2: k <= len f and
+A3: k >= p..f;
+  set x = f/.k;
+  per cases by A3,AXIOMS:21;
+  suppose
+A4:  k > p..f;
+    f:-p = <*p*>^(f/^p..f) by FINSEQ_5:def 2;
+  then A5: rng(f:-p) = rng<*p*> \/ rng(f/^p..f) by FINSEQ_1:44;
+   reconsider q = x as Element of D;
+     1 <= p..f by A1,FINSEQ_4:31;
+   then 1 <= k by A3,AXIOMS:22;
+   then k in dom f by A2,FINSEQ_3:27;
+   then q in rng(f/^(p..f)) by A4,Th63;
+  hence x in rng(f:-p) by A5,XBOOLE_0:def 2;
+  suppose
+    k = p..f;
+   then x = p by A1,FINSEQ_5:41;
+  hence x in rng(f:-p) by Th66;
+ end;
+
+theorem Th69:
+ p in rng f1 implies (f1^f2):-p = (f1:-p)^f2
+ proof
+  assume
+A1: p in rng f1;
+     rng(f1^f2) = rng f1 \/ rng f2 by FINSEQ_1:44;
+   then p in rng(f1^f2) by A1,XBOOLE_0:def 2;
+  hence (f1^f2):-p = <*p*>^((f1^f2)|--p) by Th45
+              .= <*p*>^((f1|--p)^f2) by A1,Th10
+              .= <*p*>^(f1|--p)^f2 by FINSEQ_1:45
+              .= (f1:-p)^f2 by A1,Th45;
+ end;
+
+theorem Th70:
+ p in rng f2 \ rng f1 implies (f1^f2):-p = f2:-p
+ proof
+  assume
+A1: p in rng f2 \ rng f1;
+then A2: p in rng f2 by XBOOLE_0:def 4;
+     rng(f1^f2) = rng f1 \/ rng f2 by FINSEQ_1:44;
+   then p in rng(f1^f2) by A2,XBOOLE_0:def 2;
+  hence (f1^f2):-p = <*p*>^((f1^f2)|--p) by Th45
+              .= <*p*>^(f2|--p) by A1,Th11
+              .= f2:-p by A2,Th45;
+ end;
+
+theorem Th71:
+ p in rng f1 implies (f1^f2)-:p = f1-:p
+ proof
+  assume
+A1: p in rng f1;
+     rng(f1^f2) = rng f1 \/ rng f2 by FINSEQ_1:44;
+   then p in rng(f1^f2) by A1,XBOOLE_0:def 2;
+  hence (f1^f2)-:p = ((f1^f2)-|p)^<*p*> by Th44
+              .= (f1-|p)^<*p*> by A1,Th14
+              .= f1-:p by A1,Th44;
+ end;
+
+theorem Th72:
+ p in rng f2 \ rng f1 implies (f1^f2)-:p = f1^(f2-:p)
+ proof
+  assume
+A1: p in rng f2 \ rng f1;
+then A2: p in rng f2 by XBOOLE_0:def 4;
+     rng(f1^f2) = rng f1 \/ rng f2 by FINSEQ_1:44;
+   then p in rng(f1^f2) by A2,XBOOLE_0:def 2;
+  hence (f1^f2)-:p = ((f1^f2)-|p)^<*p*> by Th44
+              .= f1^(f2-|p)^<*p*> by A1,Th17
+              .= f1^((f2-|p)^<*p*>) by FINSEQ_1:45
+              .= f1^(f2-:p) by A2,Th44;
+ end;
+
+theorem
+    f:-p:-p = f:-p
+ proof
+A1: (<*p*>^(f/^p..f))/.1 = p by FINSEQ_5:16;
+  thus f:-p:-p = (<*p*>^(f/^p..f)):-p by FINSEQ_5:def 2
+              .= <*p*>^(f/^p..f) by A1,Th48
+              .= f:-p by FINSEQ_5:def 2;
+ end;
+
+theorem Th74:
+ p1 in rng f & p2 in rng f \ rng(f-:p1) implies f|--p2 = f|--p1|--p2
+ proof assume that
+A1: p1 in rng f and
+A2: p2 in rng f \ rng(f-:p1);
+     not p2 in rng(f-:p1) by A2,XBOOLE_0:def 4;
+then A3: not p2 in rng((f-|p1)^<* p1 *>) by A1,Th44;
+     f = (f-|p1)^<* p1 *>^(f|--p1) by A1,FINSEQ_4:66;
+then A4: rng f = rng((f-|p1)^<* p1 *>) \/ rng(f|--p1) by FINSEQ_1:44;
+     p2 in rng f by A2,XBOOLE_0:def 4;
+   then p2 in rng(f|--p1) by A3,A4,XBOOLE_0:def 2;
+then A5: p2 in rng(f|--p1) \ rng((f-|p1)^<* p1 *>) by A3,XBOOLE_0:def 4;
+  thus f|--p2 = ((f-|p1)^<* p1 *>^(f|--p1))|--p2 by A1,FINSEQ_4:66
+             .= f|--p1|--p2 by A5,Th11;
+ end;
+
+theorem Th75:
+ p in rng f implies rng f = rng(f-:p) \/ rng(f:-p)
+proof assume
+A1: p in rng f;
+  then A2: f = (f-|p)^<* p *>^(f|--p) by FINSEQ_4:66;
+     f-:p = (f -| p)^<*p*> by A1,Th44;
+then A3: rng( f-:p) = rng(f -| p) \/ rng<*p*> by FINSEQ_1:44;
+     f:-p = <*p*>^(f |-- p) by A1,Th45;
+then A4: rng(f:-p) = rng<*p*> \/ rng(f |-- p) by FINSEQ_1:44;
+ thus rng f = rng((f-|p)^<* p *>) \/ rng(f|--p) by A2,FINSEQ_1:44
+        .= rng(f-|p) \/ (rng<* p *> \/ rng<* p *>) \/ rng(f|--p) by FINSEQ_1:44
+        .= rng(f-|p) \/ rng<* p *> \/ rng<* p *> \/ rng(f|--p) by XBOOLE_1:4
+        .= rng(f-:p) \/ rng(f:-p) by A3,A4,XBOOLE_1:4;
+end;
+
+theorem Th76:
+ p1 in rng f & p2 in rng f \ rng(f-:p1) implies f:-p1:-p2 = f:-p2
+ proof assume that
+A1: p1 in rng f and
+A2: p2 in rng f \ rng(f-:p1);
+A3: p2 in rng f by A2,XBOOLE_0:def 4;
+A4: rng f = rng(f-:p1) \/ rng(f:-p1) by A1,Th75;
+A5: not p2 in rng(f-:p1) by A2,XBOOLE_0:def 4;
+then A6: p2 in rng(f:-p1) by A3,A4,XBOOLE_0:def 2;
+     f:-p1 = <*p1*>^(f |-- p1) by A1,Th45;
+then A7: rng(f:-p1) = rng<*p1*> \/ rng(f |-- p1) by FINSEQ_1:44;
+     f-:p1 = (f -| p1)^<*p1*> by A1,Th44;
+   then rng(f-:p1) = rng(f -| p1) \/ rng<*p1*> by FINSEQ_1:44;
+   then A8: not p2 in rng<*p1*> by A5,XBOOLE_0:def 2;
+   then p2 in rng(f|--p1) by A6,A7,XBOOLE_0:def 2;
+then A9: p2 in rng(f|--p1) \ rng<*p1*> by A8,XBOOLE_0:def 4;
+  thus f:-p1:-p2 = <*p2*>^((f:-p1)|--p2) by A6,Th45
+                 .= <*p2*>^((<*p1*>^(f|--p1))|--p2) by A1,Th45
+                 .= <*p2*>^(f|--p1|--p2) by A9,Th11
+                 .= <*p2*>^(f|--p2) by A1,A2,Th74
+                 .= f:-p2 by A3,Th45;
+ end;
+
+theorem Th77:
+ p in rng f implies p..(f-:p) = p..f
+proof assume
+A1: p in rng f;
+then A2: (f-:p)/.(p..f) = p by FINSEQ_5:48;
+A3: 1 <= p..f by A1,FINSEQ_4:31;
+     p..f <= len(f-:p) by A1,FINSEQ_5:45;
+then A4: p..f in dom(f-:p) by A3,FINSEQ_3:27;
+    now let i such that
+A5: 1 <= i and
+A6: i < p..f;
+      i in Seg(p..f) by A5,A6,FINSEQ_1:3;
+then A7:  (f-:p)/.i = f/.i by A1,FINSEQ_5:46;
+      p..f <> 0 by A1,FINSEQ_4:31;
+    then p..f in Seg(p..f) by FINSEQ_1:5;
+then A8:  (f-:p)/.(p..f) = f/.(p..f) by A1,FINSEQ_5:46;
+A9:  f/.(p..f) = p by A1,FINSEQ_5:41;
+      p..f <= len f by A1,FINSEQ_4:31;
+    then i <= len f by A6,AXIOMS:22;
+    then i in dom f by A5,FINSEQ_3:27;
+    hence (f-:p)/.i <> (f-:p)/.(p..f) by A6,A7,A8,A9,FINSEQ_5:42;
+  end;
+ hence p..(f-:p) = p..f by A2,A4,Th52;
+end;
+
+theorem Th78:
+ f|i|i = f|i
+ proof
+  f|i = f|Seg i by TOPREAL1:def 1;
+  hence f|i|i = f|(Seg i)|Seg i by TOPREAL1:def 1
+     .= f|((Seg i) /\ Seg i) by RELAT_1:100
+     .= f|i by TOPREAL1:def 1;
+ end;
+
+theorem Th79:
+  p in rng f implies f-:p-:p = f-:p
+ proof assume p in rng f;
+then A1: p..(f-:p) = p..f by Th77;
+  thus f-:p-:p = (f-:p)|(p..(f-:p)) by FINSEQ_5:def 1
+              .= (f|(p..f))|(p..f) by A1,FINSEQ_5:def 1
+              .= f|(p..f) by Th78
+              .= f-:p by FINSEQ_5:def 1;
+ end;
+
+theorem Th80:
+ p1 in rng f & p2 in rng(f-:p1) implies f-:p1-:p2 = f-:p2
+ proof assume that
+A1: p1 in rng f and
+A2: p2 in rng(f-:p1);
+  per cases;
+  suppose p1 = p2;
+   hence thesis by A1,Th79;
+  suppose p1 <> p2;
+   then not p2 in { p1 } by TARSKI:def 1;
+then A3: not p2 in rng<*p1*> by FINSEQ_1:56;
+     f-:p1 = (f-|p1)^<*p1*> by A1,Th44;
+ then rng(f-:p1) = rng(f-|p1) \/ rng<*p1*> by FINSEQ_1:44;
+then A4: p2 in rng(f-|p1) by A2,A3,XBOOLE_0:def 2;
+   A5: rng(f-|p1) c= rng f by A1,FINSEQ_4:51;
+  thus f-:p1-:p2 = ((f-:p1)-|p2)^<*p2*> by A2,Th44
+                .= (((f-|p1)^<*p1*>)-|p2)^<*p2*> by A1,Th44
+                .= ((f-|p1)-|p2)^<*p2*> by A4,Th14
+                .= (f-|p2)^<*p2*> by A1,A4,Th39
+                .= f-:p2 by A4,A5,Th44;
+ end;
+
+theorem Th81:
+ p in rng f implies (f-:p)^((f:-p)/^1) = f
+proof assume
+A1: p in rng f;
+then A2: rng(f|--p) c= rng f by FINSEQ_4:59;
+     rng f c= D by FINSEQ_1:def 4;
+   then rng(f|--p) c= D by A2,XBOOLE_1:1;
+  then reconsider f1 = f|--p as FinSequence of D by FINSEQ_1:def 4;
+ thus (f-:p)^((f:-p)/^1) = (f-|p)^<*p*>^((f:-p)/^1) by A1,Th44
+              .= (f-|p)^<*p*>^((<*p*>^f1)/^1) by A1,Th45
+              .= (f-|p)^<*p*>^(f|--p) by Th49
+              .= f by A1,FINSEQ_4:66;
+end;
+
+theorem Th82:
+ f1 <> {} implies (f1^f2)/^1 = (f1/^1)^f2
+proof
+ assume
+   f1 <> {};
+  then consider p being Element of D, df1 being FinSequence of D such that
+     p = f1.1 and
+A1:  f1 = <*p*>^df1 by FSM_1:5;
+ thus (f1^f2)/^1 = (<*p*>^(df1^f2))/^1 by A1,FINSEQ_1:45
+         .= df1^f2 by Th49
+         .= (f1/^1)^f2 by A1,Th49;
+end;
+
+theorem Th83:
+ p2 in rng f & p2..f <> 1 implies p2 in rng(f/^1)
+ proof assume that
+A1: p2 in rng f and
+A2: p2..f <> 1;
+    f = <*f/.1*>^(f/^1) by A1,FINSEQ_5:32,RELAT_1:60;
+then A3: rng f = rng<*f/.1*> \/ rng(f/^1) by FINSEQ_1:44;
+  assume not p2 in rng(f/^1);
+   then p2 in rng<*f/.1*> by A1,A3,XBOOLE_0:def 2;
+   then p2 in { f/.1 } by FINSEQ_1:56;
+   then p2 = f/.1 by TARSKI:def 1;
+  hence contradiction by A1,A2,Th47,RELAT_1:60;
+ end;
+
+theorem Th84:
+ p..(f:-p) = 1
+ proof (f:-p)/.1 = p by FINSEQ_5:56;
+  hence p..(f:-p) = 1 by Th47;
+ end;
+
+ Lm3:
+ p in rng f & p..f > i implies i + p..(f/^i) = p..f
+proof assume that
+A1: p in rng f and
+A2: p..f > i;
+  reconsider k = p..f - i as Nat by A2,INT_1:18;
+     k <> 0 by A2,XCMPLX_1:15;
+then A3: 1 <= k by RLVECT_1:99;
+A4: p..f <= len f by A1,FINSEQ_4:31;
+then A5: i <= len f by A2,AXIOMS:22;
+     p..f - i <= len f - i by A4,REAL_1:49;
+   then A6: k <= len(f/^i) by A5,RFINSEQ:def 2;
+then A7: k in dom(f/^i) by A3,FINSEQ_3:27;
+then A8: (f/^i).k = f.(k+i) by A5,RFINSEQ:def 2
+           .= f.(p..f) by XCMPLX_1:27
+           .= p by A1,FINSEQ_4:29;
+    now let j be Nat such that
+A9: 1 <= j and
+A10: j < k;
+      j <= len(f/^i) by A6,A10,AXIOMS:22;
+  then j in dom(f/^i) by A9,FINSEQ_3:27;
+then A11: f.(i+j) = (f/^i).j by A5,RFINSEQ:def 2;
+A12: f.(i+k) = (f/^i).k by A5,A7,RFINSEQ:def 2;
+A13:  i + k = p..f by XCMPLX_1:27;
+then A14:  i + j < p..f by A10,REAL_1:53;
+      j <= i + j by NAT_1:29;
+then A15: 1 <= i + j by A9,AXIOMS:22;
+      i + j <= len f by A4,A14,AXIOMS:22;
+then A16:  i + j in dom f by A15,FINSEQ_3:27;
+      f.(i+k) = p by A1,A13,FINSEQ_4:29; hence (f/^i).j <> (f/^i).k by A11,A12,
+A14,A16,FINSEQ_4:34;
+  end;
+  then p..(f/^i) = k by A7,A8,Th4;
+ hence i + p..(f/^i) = p..f by XCMPLX_1:27;
+end;
+
+canceled;
+
+theorem Th86:
+ <*>D/^k = <*>D
+proof per cases by NAT_1:19;
+ suppose k = 0; hence thesis by FINSEQ_5:31;
+ suppose k > 0;
+  then k > len <*>D by FINSEQ_1:32;
+ hence thesis by RFINSEQ:def 2;
+end;
+
+theorem Th87:
+  f/^(i+k) = f/^i/^k
+ proof
+  per cases;
+  suppose
+A1: i+k <= len f;
+     i <= i+k by NAT_1:29;
+   then A2:  i <= len f by A1,AXIOMS:22;
+   then A3:  len(f/^i) = len f - i by RFINSEQ:def 2;
+   then A4: k <= len(f/^i) by A1,REAL_1:84;
+then A5: len(f/^i/^k) = len(f/^i) - k by RFINSEQ:def 2
+         .= len f -(i+k) by A3,XCMPLX_1:36;
+     now let m be Nat;
+    assume
+A6:   m in dom(f/^i/^k);
+then A7:   m+k in dom(f/^i) by FINSEQ_5:29;
+    thus (f/^i/^k).m = (f/^i).(m+k) by A4,A6,RFINSEQ:def 2
+                 .= f.(m+k+i) by A2,A7,RFINSEQ:def 2
+                 .= f.(m+(i+k)) by XCMPLX_1:1;
+   end;
+  hence f/^(i+k) = f/^i/^k by A1,A5,RFINSEQ:def 2;
+  suppose that
+A8: i+k > len f and
+A9: i<= len f;
+     len(f/^i) = len f - i by A9,RFINSEQ:def 2;
+   then len(f/^i) + i = len f by XCMPLX_1:27;
+then A10: k > len(f/^i) by A8,AXIOMS:24;
+  thus f/^(i+k) = <*>D by A8,RFINSEQ:def 2 .= f/^i/^k by A10,RFINSEQ:def 2;
+  suppose that
+A11: i+k > len f and
+A12: i > len f;
+  thus f/^(i+k) = <*>D by A11,RFINSEQ:def 2 .= <*>D/^k by Th86
+             .= f/^i/^k by A12,RFINSEQ:def 2;
+ end;
+
+theorem Th88:
+ p in rng f & p..f > k implies (f/^k):-p = f:-p
+ proof assume
+A1: p in rng f & p..f > k;
+  thus (f/^k):-p =<*p*>^(f/^k/^(p..(f/^k))) by FINSEQ_5:def 2
+             .=<*p*>^(f/^(k + p..(f/^k))) by Th87
+             .=<*p*>^(f/^p..f) by A1,Lm3
+             .= f:-p by FINSEQ_5:def 2;
+ end;
+
+theorem Th89:
+ p in rng f & p..f <> 1 implies (f/^1):-p = f:-p
+ proof assume that
+A1: p in rng f and
+A2: p..f <> 1;
+     p..f >= 1 by A1,FINSEQ_4:31;
+   then p..f > 1 by A2,AXIOMS:21;
+  hence thesis by A1,Th88;
+ end;
+
+theorem Th90:
+ i + k = len f implies Rev(f/^k) = Rev f|i
+proof assume
+A1: i + k = len f;
+then A2: i <= len f by NAT_1:29;
+A3: k <= len f by A1,NAT_1:29;
+     i <= len Rev f by A2,FINSEQ_5:def 3;
+then A4: len(Rev f|i) = i by TOPREAL1:3
+               .= len f - k by A1,XCMPLX_1:26
+               .= len(f/^k) by A3,RFINSEQ:def 2;
+    now let j be Nat;
+   assume
+A5: j in dom(Rev f|i);
+    A6: dom(Rev f|i) c= dom Rev f by FINSEQ_5:20;
+A7: len(f/^k) = len f - k by A3,RFINSEQ:def 2;
+      j <= len(f/^k) by A4,A5,FINSEQ_3:27;
+    then reconsider m = len(f/^k) - j as Nat by INT_1:18;
+A8: 1 <= m + 1 by NAT_1:29;
+      j >= 1 by A5,FINSEQ_3:27;
+    then len(f/^k) - j <= len(f/^k) - 1 by REAL_2:106;
+    then len(f/^k) - j + 1 <= len(f/^k) by REAL_1:84;
+then A9: m + 1 in dom(f/^k) by A8,FINSEQ_3:27;
+   thus (Rev f|i).j = (Rev f|i)/.j by A5,FINSEQ_4:def 4
+                    .= (Rev f)/.j by A5,TOPREAL1:1
+                    .= (Rev f).j by A5,A6,FINSEQ_4:def 4
+                    .= f.(len f - j + 1) by A5,A6,FINSEQ_5:def 3
+                    .= f.(len(f/^k) + k - j + 1) by A7,XCMPLX_1:27
+                    .= f.(m + k + 1) by XCMPLX_1:29
+                    .= f.(m + 1 + k) by XCMPLX_1:1
+                    .= (f/^k).(len(f/^k) - j + 1) by A3,A9,RFINSEQ:def 2;
+  end;
+ hence Rev(f/^k) = Rev f|i by A4,FINSEQ_5:def 3;
+end;
+
+theorem Th91:
+ i + k = len f implies Rev(f|k) = Rev f/^i
+ proof assume
+   i + k = len f;
+then A1: i + k = len Rev f by FINSEQ_5:def 3;
+  thus Rev(f|k) = Rev(Rev Rev f |k) by Th29
+            .= Rev Rev(Rev f/^i) by A1,Th90
+            .= Rev f/^i by Th29;
+ end;
+
+theorem Th92:
+ f just_once_values p implies Rev(f|--p) = Rev f -|p
+proof assume
+A1: f just_once_values p;
+  then A2: p in rng f by FINSEQ_4:7;
+then A3: p in rng Rev f by FINSEQ_5:60;
+  then p..Rev f >= 1 by FINSEQ_4:31;
+  then reconsider n = p..Rev f - 1 as Nat by INT_1:18;
+     p..f + p..Rev f = len f + 1 by A1,Th41;
+   then p..f + p..Rev f -1 = len f by XCMPLX_1:26;
+then A4: n + p..f = len f by XCMPLX_1:29;
+    Rev(f|--p) = Rev(f/^(p..f)) by A2,FINSEQ_5:38
+        .= (Rev f) | n by A4,Th90
+        .= (Rev f) | Seg n by TOPREAL1:def 1;
+ hence Rev(f|--p) = Rev f -|p by A3,FINSEQ_4:def 6;
+end;
+
+theorem Th93:
+ f just_once_values p implies Rev(f:-p) = Rev f -:p
+proof assume
+A1: f just_once_values p;
+then A2: p in rng f by FINSEQ_4:7;
+then A3: p in rng Rev f by FINSEQ_5:60;
+ thus Rev(f:-p) = Rev(<*p*>^(f|--p)) by A2,Th45
+            .= Rev(f|--p)^<*p*> by Th28
+            .= (Rev f -|p)^<*p*> by A1,Th92
+            .= Rev f -:p by A3,Th44;
+end;
+
+theorem Th94:
+ f just_once_values p implies Rev(f-:p) = Rev f :-p
+proof
+ assume
+A1: f just_once_values p;
+then A2: p in rng f by FINSEQ_4:7;
+then A3: p in rng Rev f by FINSEQ_5:60;
+ thus Rev(f-:p) = Rev((f-|p)^<*p*>) by A2,Th44
+            .= <*p*>^Rev(f-|p) by FINSEQ_5:66
+            .= <*p*>^(Rev f |-- p) by A1,Th42
+            .= Rev f :-p by A3,Th45;
+end;
+
+begin :: rotation, circular
+
+definition let D be non empty set;
+ let IT be FinSequence of D;
+ attr IT is circular means
+:Def1: IT/.1 = IT/.len IT;
+end;
+
+definition let D,f,p;
+ func Rotate(f,p) -> FinSequence of D equals
+:Def2: (f:-p)^((f-:p)/^1) if p in rng f
+   otherwise f;
+ correctness;
+end;
+
+definition let D; let f be non empty FinSequence of D, p be Element of D;
+ cluster Rotate(f,p) -> non empty;
+ coherence
+  proof
+   per cases;
+   suppose
+A1:   p in rng f;
+      (f:-p)^((f-:p)/^1) is non empty;
+   hence thesis by A1,Def2;
+   suppose not p in rng f;
+   hence thesis by Def2;
+  end;
+end;
+
+definition let D;
+ cluster circular non empty trivial FinSequence of D;
+ existence
+  proof consider d being Element of D;
+   take <*d*>;
+   thus <*d*> is circular
+    proof thus <*d*>/.1 = <*d*>/.len<*d*> by FINSEQ_1:56;
+    end;
+   thus thesis;
+  end;
+ cluster circular non empty non trivial FinSequence of D;
+ existence
+  proof consider d being Element of D;
+   take <*d,d*>;
+   thus <*d,d*> is circular
+    proof len<*d,d*> = 2 by FINSEQ_1:61;
+     hence <*d,d*>/.len<*d,d*> = d by FINSEQ_4:26
+             .= <*d,d*>/.1 by FINSEQ_4:26;
+    end;
+   thus thesis;
+  end;
+end;
+
+theorem Th95:
+ Rotate(f,f/.1) = f
+ proof
+A1: len<*f/.1*> = 1 by FINSEQ_1:56;
+  per cases;
+  suppose
+A2:  f is non empty;
+   then f/.1 in rng f by Th46;
+  hence Rotate(f,f/.1) = (f:-f/.1)^((f-:f/.1)/^1) by Def2
+    .= f^((f-:f/.1)/^1) by A2,Th48
+    .= f^(<*f/.1*>/^1) by A2,Th48
+    .= f^{} by A1,FINSEQ_5:35
+    .= f by FINSEQ_1:47;
+  suppose f is empty;
+   hence thesis by Def2,RELAT_1:60;
+ end;
+
+definition let D,p; let f be circular non empty FinSequence of D;
+ cluster Rotate(f,p) -> circular;
+ coherence
+  proof
+   per cases;
+   suppose not p in rng f;
+    hence thesis by Def2;
+   suppose that
+A1: p in rng f and
+A2: p <> f/.1;
+A3:  Rotate(f,p) = (f:-p)^((f-:p)/^1) by A1,Def2;
+      p..f <> 1 & p..f >= 1 by A1,A2,FINSEQ_4:31,FINSEQ_5:41;
+    then p..f > 1 by REAL_1:def 5;
+    then p..f >= 1+1 by NAT_1:38;
+    then A4:  len(f-:p) >= 1+1 by A1,FINSEQ_5:45;
+    then 1 <= len(f-:p) by AXIOMS:22;
+    then len((f-:p)/^1) = len(f-:p)-1 by RFINSEQ:def 2;
+then A5:  len((f-:p)/^1) + 1 = len(f-:p) by XCMPLX_1:27;
+    then len((f-:p)/^1) >= 1 by A4,REAL_1:53;
+then A6:  len((f-:p)/^1) in dom((f-:p)/^1) by FINSEQ_3:27;
+      1 in dom(f:-p) by FINSEQ_5:6;
+   hence (Rotate(f,p))/.1 = (f:-p)/.1 by A3,GROUP_5:95
+          .= p by FINSEQ_5:56
+          .= (f-:p)/.(p..f) by A1,FINSEQ_5:48
+          .= (f-:p)/.(len((f-:p)/^1)+1) by A1,A5,FINSEQ_5:45
+          .= ((f-:p)/^1)/.(len((f-:p)/^1)) by A6,FINSEQ_5:30
+          .= ((f:-p)^((f-:p)/^1))/.(len(f:-p)+len((f-:p)/^1)) by A6,GROUP_5:96
+          .= (Rotate(f,p))/.len Rotate(f,p) by A3,FINSEQ_1:35;
+   suppose p in rng f & p = f/.1;
+   hence thesis by Th95;
+  end;
+end;
+
+theorem
+   f is circular & p in rng f implies rng Rotate(f,p) = rng f
+ proof assume that
+A1: f is circular and
+A2: p in rng f;
+A3: Rotate(f,p) = (f:-p)^((f-:p)/^1) by A2,Def2;
+A4:  rng((f:-p)^((f-:p)/^1)) = rng(f:-p) \/ rng((f-:p)/^1) by FINSEQ_1:44;
+A5: rng(f:-p) c= rng f by A2,FINSEQ_5:58;
+A6: rng(f-:p) c= rng f by FINSEQ_5:51;
+     rng((f-:p)/^1) c= rng(f-:p) by FINSEQ_5:36;
+   then rng((f-:p)/^1) c= rng f by A6,XBOOLE_1:1;
+  hence rng Rotate(f,p) c= rng f by A3,A4,A5,XBOOLE_1:8;
+  let x be set;
+  assume
+   x in rng f;
+   then consider i such that
+A7: i in dom f and
+A8: f.i = x by FINSEQ_2:11;
+    A9: x = f/.i by A7,A8,FINSEQ_4:def 4;
+   per cases;
+   suppose i = 1;
+   then A10: x = f/.len f by A1,A9,Def1
+         .= (f:-p)/.len(f:-p) by A2,FINSEQ_5:57;
+     len(f:-p) = len(<*p*>^(f/^p..f)) by FINSEQ_5:def 2
+            .= len<*p*> + len(f/^p..f) by FINSEQ_1:35
+            .= 1 + len(f/^p..f) by FINSEQ_1:56;
+   then 1 <= len(f:-p) by NAT_1:29;
+   then len(f:-p) in dom(f:-p) by FINSEQ_3:27;
+   then x in rng(f:-p) by A10,PARTFUN2:4;
+  hence x in rng Rotate(f,p) by A3,A4,XBOOLE_0:def 2;
+   suppose that
+A11:  i <= p..f and
+A12:  i <> 1;
+     A13:  i <> 0 by A7,FINSEQ_3:27;
+then A14:  i > 0+1 by A12,CQC_THE1:2;
+   consider j being Nat such that
+A15:  i = j+1 by A13,NAT_1:22;
+A16: i <= len(f-:p) by A2,A11,FINSEQ_5:45;
+    then 1 <= len(f-:p) by A14,AXIOMS:22;
+    then len((f-:p)/^1) = len(f-:p) - 1 by RFINSEQ:def 2;
+    then len((f-:p)/^1) + 1 = len(f-:p) by XCMPLX_1:27;
+    then A17: j <= len((f-:p)/^1) by A15,A16,REAL_1:53;
+      j >= 1 by A14,A15,RLVECT_1:99;
+    then A18: j in dom((f-:p)/^1) by A17,FINSEQ_3:27;
+A19: len<*(f-:p)/.1*> = 1 by FINSEQ_1:56;
+A20: i in Seg(p..f) by A11,A14,FINSEQ_1:3;
+     f-:p is non empty by A2,FINSEQ_5:50;
+   then f-:p = <*(f-:p)/.1*>^((f-:p)/^1) by FINSEQ_5:32;
+   then ((f-:p)/^1)/.j = (f-:p)/.i by A15,A18,A19,GROUP_5:96
+            .= f/.i by A2,A20,FINSEQ_5:46;
+   then x in rng((f-:p)/^1) by A9,A18,PARTFUN2:4;
+  hence x in rng Rotate(f,p) by A3,A4,XBOOLE_0:def 2;
+   suppose i > p..f;
+    then reconsider j = i - p..f as Nat by INT_1:18;
+A21:  j+1 >= 1 by NAT_1:29;
+A22: len (f:-p) = len f - p..f + 1 by A2,FINSEQ_5:53;
+     i <= len f by A7,FINSEQ_3:27;
+   then j <= len f - p..f by REAL_1:49;
+   then j + 1 <= len(f:-p) by A22,AXIOMS:24;
+   then A23: j+1 in dom(f:-p) by A21,FINSEQ_3:27;
+     j + p..f = i by XCMPLX_1:27;
+   then f/.i = (f:-p)/.(j+1) by A2,A23,FINSEQ_5:55;
+   then x in rng(f:-p) by A9,A23,PARTFUN2:4;
+  hence x in rng Rotate(f,p) by A3,A4,XBOOLE_0:def 2;
+ end;
+
+theorem Th97:
+ p in rng f implies p in rng Rotate(f,p)
+ proof assume
+   p in rng f;
+   then Rotate(f,p) = (f:-p)^((f-:p)/^1) by Def2;
+   then A1: rng Rotate(f,p) = rng(f:-p) \/ rng((f-:p)/^1) by FINSEQ_1:44;
+     p in {p} by TARSKI:def 1;
+   then p in rng<*p*> by FINSEQ_1:56;
+   then p in rng<*p*> \/ rng(f/^p..f) by XBOOLE_0:def 2;
+   then p in rng(<*p*>^(f/^p..f)) by FINSEQ_1:44;
+   then p in rng(f:-p) by FINSEQ_5:def 2;
+  hence p in rng Rotate(f,p) by A1,XBOOLE_0:def 2;
+ end;
+
+theorem Th98:
+ p in rng f implies (Rotate(f,p))/.1 = p
+ proof assume p in rng f;
+  then Rotate(f,p) =(f:-p)^((f-:p)/^1) by Def2
+         .= <*p*>^(f/^p..f)^((f-:p)/^1) by FINSEQ_5:def 2
+         .= <*p*>^((f/^p..f)^((f-:p)/^1)) by FINSEQ_1:45;
+  hence thesis by FINSEQ_5:16;
+ end;
+
+theorem Th99:
+ Rotate(Rotate(f,p),p) = Rotate(f,p)
+ proof
+  per cases;
+  suppose
+A1: p in rng f;
+   then reconsider f' = f as non empty FinSequence of D by RELAT_1:60;
+     (Rotate(f,p))/.1 = p by A1,Th98;
+   then A2: Rotate(f',p)-:p = <*p*> & Rotate(f',p):-p = Rotate(f,p) by Th48;
+A3: len<*p*> = 1 by FINSEQ_1:56;
+     p in rng Rotate(f,p) by A1,Th97;
+  hence Rotate(Rotate(f,p),p)
+          = Rotate(f,p)^(<*p*>/^1) by A2,Def2
+         .= Rotate(f,p)^{} by A3,FINSEQ_5:35
+         .= Rotate(f,p) by FINSEQ_1:47;
+  suppose not p in rng f;
+  hence thesis by Def2;
+ end;
+
+theorem
+   Rotate(<*p*>,p) = <*p*>
+ proof <*p*>/.1 = p by FINSEQ_4:25; hence thesis by Th95; end;
+
+theorem Th101:
+ Rotate(<*p1,p2*>,p1) = <*p1,p2*>
+ proof <*p1,p2*>/.1 = p1 by FINSEQ_4:26; hence thesis by Th95; end;
+
+theorem
+   Rotate(<*p1,p2*>,p2) = <*p2,p2*>
+  proof
+   per cases;
+   suppose p1 = p2;
+    hence thesis by Th101;
+   suppose
+A1:  p1 <> p2;
+      rng<*p1,p2*> = {p1,p2} by Lm1;
+    then p2 in rng<*p1,p2*> by TARSKI:def 2;
+   hence Rotate(<*p1,p2*>,p2) = (<*p1,p2*>:-p2)^((<*p1,p2*>-:p2)/^1) by Def2
+                 .= <*p2*>^((<*p1,p2*>-:p2)/^1) by A1,Th57
+                 .= <*p2*>^(<*p1,p2*>/^1) by A1,Th53
+                 .= <*p2*>^<*p2*> by Th50
+                 .= <*p2,p2*> by FINSEQ_1:def 9;
+  end;
+
+theorem Th103:
+ Rotate(<*p1,p2,p3*>,p1) = <*p1,p2,p3*>
+ proof <*p1,p2,p3*>/.1 = p1 by FINSEQ_4:27; hence thesis by Th95; end;
+
+theorem
+   p1 <> p2 implies Rotate(<*p1,p2,p3*>,p2) = <*p2,p3,p2*>
+ proof assume
+A1: p1 <> p2;
+      rng<*p1,p2,p3*> = {p1,p2,p3} by Lm2;
+    then p2 in rng<*p1,p2,p3*> by ENUMSET1:14;
+   hence Rotate(<*p1,p2,p3*>,p2)
+                  = (<*p1,p2,p3*>:-p2)^((<*p1,p2,p3*>-:p2)/^1) by Def2
+                 .= <*p2,p3*>^((<*p1,p2,p3*>-:p2)/^1) by A1,Th58
+                 .= <*p2,p3*>^(<*p1,p2*>/^1) by A1,Th54
+                 .= <*p2,p3*>^<*p2*> by Th50
+                 .= <*p2,p3,p2*> by FINSEQ_1:60;
+ end;
+
+theorem
+   p2 <> p3 implies Rotate(<*p1,p2,p3*>,p3) = <*p3,p2,p3*> :: (-:
+  proof assume
+A1:  p2 <> p3;
+   per cases;
+   suppose p1 = p3;
+    hence thesis by Th103;
+   suppose
+A2:  p1 <> p3;
+      rng<*p1,p2,p3*> = {p1,p2,p3} by Lm2;
+    then p3 in rng<*p1,p2,p3*> by ENUMSET1:14;
+   hence Rotate(<*p1,p2,p3*>,p3)
+                  = (<*p1,p2,p3*>:-p3)^((<*p1,p2,p3*>-:p3)/^1) by Def2
+                 .= <*p3*>^((<*p1,p2,p3*>-:p3)/^1) by A1,A2,Th59
+                 .= <*p3*>^(<*p1,p2,p3*>/^1) by A1,A2,Th55
+                 .= <*p3*>^<*p2,p3*> by Th51
+                 .= <*p3,p2,p3*> by FINSEQ_1:60;
+  end;
+
+theorem
+   for f being circular non trivial FinSequence of D
+  holds rng(f/^1) = rng f
+ proof let f be circular non trivial FinSequence of D;
+  thus rng(f/^1) c= rng f by FINSEQ_5:36;
+  let x be set;
+     f = <*f/.1*>^(f/^1) by FINSEQ_5:32;
+then A1: rng f = rng<*f/.1*> \/ rng(f/^1) by FINSEQ_1:44;
+  assume
+A2: x in rng f;
+  per cases by A1,A2,XBOOLE_0:def 2;
+  suppose x in rng<*f/.1*>;
+   then x in {f/.1} by FINSEQ_1:56;
+   then x = f/.1 by TARSKI:def 1;
+   then A3:  x = f/.len f by Def1;
+A4: len f >= 1+1 by SPPOL_1:2;
+   then len f >= 1 by AXIOMS:22;
+   then A5:  len(f/^1) = len f - 1 by RFINSEQ:def 2;
+   then 1 <= len(f/^1) by A4,REAL_1:84;
+   then A6:  len(f/^1) in dom(f/^1) by FINSEQ_3:27;
+     len(f/^1) + 1 = len f by A5,XCMPLX_1:27;
+   then x = (f/^1)/.len(f/^1) by A3,A6,FINSEQ_5:30;
+  hence x in rng(f/^1) by A6,PARTFUN2:4;
+  suppose x in rng(f/^1);
+  hence thesis;
+ end;
+
+theorem Th107:
+  rng(f/^1) c= rng Rotate(f,p)
+ proof
+  per cases;
+  suppose
+A1: p in rng f;
+   then Rotate(f,p) = (f:-p)^((f-:p)/^1) by Def2;
+   then A2: rng Rotate(f,p) = rng(f:-p) \/ rng((f-:p)/^1) by FINSEQ_1:44;
+
+   thus thesis
+    proof let x be set;
+     assume
+A3:     x in rng(f/^1);
+      A4: rng(f/^1) c= rng f by FINSEQ_5:36;
+then A5:   x in rng f by A3;
+     per cases;
+     suppose that
+A6:    x..f < p..f and
+A7:    x..(f/^1) >= p..(f/^1);
+      A8:   p..f <> 1 by A3,A4,A6,FINSEQ_4:31;
+        p..f >= 1 by A1,FINSEQ_4:31;
+      then p..f > 1 by A8,AXIOMS:21;
+      then A9:    p..f = p..(f/^1) + 1 by A1,Th61;
+        len f <> 0 by A1,FINSEQ_1:25,RELAT_1:60;
+      then len f >= 1 by RLVECT_1:99;
+      then len f - 1 = len(f/^1) by RFINSEQ:def 2;
+then A10:   len f = len(f/^1) + 1 by XCMPLX_1:27;
+        x..(f/^1) <= len(f/^1) by A3,FINSEQ_4:31;
+      then A11:    x..(f/^1)+1 <= len f by A10,AXIOMS:24;
+A12:    x..(f/^1)+1 >= p..f by A7,A9,AXIOMS:24;
+A13:    x..(f/^1) in dom(f/^1) by A3,FINSEQ_4:30;
+        rng f c= D by FINSEQ_1:def 4;
+      then reconsider q = x as Element of D by A5;
+        q = (f/^1)/.(q..(f/^1)) by A3,FINSEQ_5:41
+        .= f/.(q..(f/^1)+1) by A13,FINSEQ_5:30;
+      then x in rng(f:-p) by A1,A11,A12,Th68;
+      hence thesis by A2,XBOOLE_0:def 2;
+     suppose that
+A14:   x..f < p..f and
+A15:    x..(f/^1) <= p..(f/^1);
+      A16:   p..f <> 1 by A3,A4,A14,FINSEQ_4:31;
+        p..f >= 1 by A1,FINSEQ_4:31;
+      then p..f > 1 by A16,AXIOMS:21;
+      then p in rng(f/^1) by A1,Th62;
+      then x in rng((f/^1)-:p) by A3,A15,FINSEQ_5:49;
+      then x in rng((f-:p)/^1) by A1,A16,Th65;
+     hence thesis by A2,XBOOLE_0:def 2;
+     suppose x..f >= p..f;
+      then x in rng(f:-p) by A1,A3,A4,Th67;
+     hence thesis by A2,XBOOLE_0:def 2;
+    end;
+  suppose not p in rng f;
+   then Rotate(f,p) = f by Def2;
+  hence thesis by FINSEQ_5:36;
+ end;
+
+theorem Th108:
+ p2 in rng f \ rng(f-:p1) implies Rotate(Rotate(f,p1),p2) = Rotate(f,p2)
+ proof assume
+A1: p2 in rng f \ rng(f-:p1);
+  per cases;
+  suppose
+A2: p1 in rng f;
+then A3: Rotate(f,p1) = (f:-p1)^((f-:p1)/^1) by Def2;
+A4: p2 in rng f by A1,XBOOLE_0:def 4;
+A5: not p2 in rng(f-:p1) by A1,XBOOLE_0:def 4;
+      rng f = rng(f-:p1) \/ rng(f:-p1) by A2,Th75;
+then A6:  p2 in rng(f:-p1) by A4,A5,XBOOLE_0:def 2;
+A7:  f-:p1 <> {} by A2,FINSEQ_5:50;
+       rng((f-:p1)/^1) c= rng(f-:p1) by FINSEQ_5:36;
+then A8:   not p2 in rng((f-:p1)/^1) by A1,XBOOLE_0:def 4;
+A9:   p1 in rng(f:-p1) by Th66;
+       p1..f <= p1..f;
+then A10:   p1 <> p2 by A2,A5,FINSEQ_5:49;
+       p1..(f:-p1) = 1 by Th84;
+then A11:  p2..(f:-p1) <> 1 by A6,A9,A10,FINSEQ_5:10;
+A12:  now assume p2..f = 1;
+       then p2..f <= p1..f by A2,FINSEQ_4:31;
+      hence contradiction by A2,A4,A5,FINSEQ_5:49;
+     end;
+then A13:   p2 in rng(f/^1) by A4,Th83;
+       p2 in rng((f:-p1)/^1) by A6,A11,Th83;
+then A14:  p2 in rng((f:-p1)/^1)\rng((f-:p1)/^1) by A8,XBOOLE_0:def 4;
+     rng(f/^1) c= rng Rotate(f,p1) by Th107;
+   hence Rotate(Rotate(f,p1),p2)
+         = (((f:-p1)^((f-:p1)/^1)):-p2)^((((f:-p1)^((f-:p1)/^1))-:p2)/^1) by A3
+,A13,Def2
+        .= (f:-p1:-p2)^((f-:p1)/^1)^((((f:-p1)^((f-:p1)/^1))-:p2)/^1)
+                 by A6,Th69
+        .= (f:-p2)^((f-:p1)/^1)^((((f:-p1)^((f-:p1)/^1))-:p2)/^1) by A1,A2,Th76
+        .= (f:-p2)^((f-:p1)/^1)^(((f:-p1)-:p2)/^1) by A6,Th71
+        .= (f:-p2)^((f-:p1)/^1)^(((f:-p1)/^1)-:p2) by A6,A11,Th65
+        .= (f:-p2)^(((f-:p1)/^1)^(((f:-p1)/^1)-:p2)) by FINSEQ_1:45
+        .= (f:-p2)^((((f-:p1)/^1)^((f:-p1)/^1))-:p2) by A14,Th72
+        .= (f:-p2)^((((f-:p1)^((f:-p1)/^1))/^1)-:p2) by A7,Th82
+        .= (f:-p2)^((f/^1)-:p2) by A2,Th81
+        .= (f:-p2)^((f-:p2)/^1) by A4,A12,Th65
+        .= Rotate(f,p2) by A4,Def2;
+  suppose not p1 in rng f;
+  hence thesis by Def2;
+ end;
+
+theorem Th109:
+ p2..f <> 1 & p2 in rng f \ rng(f:-p1)
+     implies Rotate(Rotate(f,p1),p2) = Rotate(f,p2)
+proof assume that
+A1: p2..f <> 1 and
+A2: p2 in rng f \ rng(f:-p1);
+  per cases;
+  suppose
+A3: p1 in rng f;
+then A4: Rotate(f,p1) = (f:-p1)^((f-:p1)/^1) by Def2;
+A5: not p2 in rng(f:-p1) by A2,XBOOLE_0:def 4;
+A6: p2 in rng f by A2,XBOOLE_0:def 4;
+      rng f = rng(f-:p1) \/ rng(f:-p1) by A3,Th75;
+then A7: p2 in rng(f-:p1) by A5,A6,XBOOLE_0:def 2;
+A8: f-:p1 <> {} by A3,FINSEQ_5:50;
+      (f-:p1)^((f:-p1)/^1) = f by A3,Th81;
+    then A9: p2..(f-:p1) <> 1 by A1,A7,Th8;
+then A10: p2 in rng((f-:p1)/^1) by A7,Th83;
+then A11: p2 in rng((f-:p1)/^1) \ rng(f:-p1) by A5,XBOOLE_0:def 4;
+     rng Rotate(f,p1) = rng(f:-p1) \/ rng((f-:p1)/^1) by A4,FINSEQ_1:44;
+   then p2 in rng Rotate(f,p1) by A10,XBOOLE_0:def 2;
+  hence Rotate(Rotate(f,p1),p2)
+         = (((f:-p1)^((f-:p1)/^1)):-p2)^((((f:-p1)^((f-:p1)/^1))-:p2)/^1) by A4
+,Def2
+        .= (((f-:p1)/^1):-p2)^((((f:-p1)^((f-:p1)/^1))-:p2)/^1) by A11,Th70
+        .= (((f-:p1)/^1):-p2)^(((f:-p1)^(((f-:p1)/^1)-:p2))/^1) by A11,Th72
+        .= (((f-:p1)/^1):-p2)^(((f:-p1)/^1)^(((f-:p1)/^1)-:p2)) by Th82
+        .= (((f-:p1)/^1):-p2)^((f:-p1)/^1)^(((f-:p1)/^1)-:p2) by FINSEQ_1:45
+        .= ((((f-:p1)/^1)^((f:-p1)/^1)):-p2)^(((f-:p1)/^1)-:p2) by A10,Th69
+        .= ((((f-:p1)^((f:-p1)/^1)/^1)):-p2)^(((f-:p1)/^1)-:p2) by A8,Th82
+        .= ((f/^1):-p2)^(((f-:p1)/^1)-:p2) by A3,Th81
+        .= (f:-p2)^(((f-:p1)/^1)-:p2) by A1,A6,Th89
+        .= (f:-p2)^((f-:p1-:p2)/^1) by A7,A9,Th65
+        .= (f:-p2)^((f-:p2)/^1) by A3,A7,Th80
+        .= Rotate(f,p2) by A6,Def2;
+  suppose not p1 in rng f;
+  hence thesis by Def2;
+end;
+
+theorem Th110:
+ p2 in rng(f/^1) & f just_once_values p2
+   implies Rotate(Rotate(f,p1),p2) = Rotate(f,p2)
+proof per cases;
+  suppose
+A1: p1 in rng f;
+ assume that
+A2: p2 in rng(f/^1) and
+A3: f just_once_values p2;
+A4: p2 in rng f by A3,FINSEQ_4:7;
+    f = (f -| p1) ^ <* p1 *> ^ (f |-- p1) by A1,FINSEQ_4:66;
+   then A5: p2 in rng((f -| p1)^<* p1 *>) \+\ rng(f |-- p1) by A3,Th19;
+A6: now per cases by A5,XBOOLE_0:1;
+    case that
+    p2 in rng((f -| p1)^<* p1 *>) and
+A7:  not p2 in rng(f |-- p1);
+        now per cases;
+       case not p2 in rng<* p1 *>;
+        then not p2 in rng(f |-- p1) \/ rng<* p1 *> by A7,XBOOLE_0:def 2;
+        then not p2 in rng(<* p1 *>^(f |-- p1)) by FINSEQ_1:44;
+       hence not p2 in rng(f:-p1) by A1,Th45;
+       case p2 in rng<* p1 *>;
+        then p2 in { p1 } by FINSEQ_1:56;
+       hence p2 = p1 by TARSKI:def 1;
+      end;
+     hence p2 in rng(f:-p1) implies p1 = p2;
+    case not p2 in rng((f -| p1)^<* p1 *>);
+    hence not p2 in rng(f-:p1) by A1,Th44;
+   end;
+     f = <*f/.1*>^(f/^1) by A4,FINSEQ_5:32,RELAT_1:60;
+   then p2 in rng<*f/.1*> \+\ rng(f/^1) by A3,Th19;
+   then not p2 in rng<*f/.1*> by A2,XBOOLE_0:1;
+   then not p2 in {f/.1} by FINSEQ_1:56;
+   then p2 <> f/.1 by TARSKI:def 1;
+
+then A8: p2..f <> 1 by A4,FINSEQ_5:41;
+     now per cases by A4,A6,XBOOLE_0:def 4;
+    suppose p1 = p2;
+    hence Rotate(Rotate(f,p1),p2) = Rotate(f,p2) by Th99;
+    suppose p2 in rng f \ rng(f-:p1);
+    hence Rotate(Rotate(f,p1),p2) = Rotate(f,p2) by Th108;
+    suppose p2 in rng f \ rng(f:-p1);
+    hence Rotate(Rotate(f,p1),p2) = Rotate(f,p2) by A8,Th109;
+   end;
+   hence thesis;
+  suppose not p1 in rng f;
+  hence thesis by Def2;
+end;
+
+theorem
+   f is circular & f just_once_values p2
+    implies Rotate(Rotate(f,p1),p2) = Rotate(f,p2)
+proof per cases;
+  suppose
+A1: p1 in rng f;
+  assume that
+A2: f is circular and
+A3: f just_once_values p2;
+A4: p2 in rng f by A3,FINSEQ_4:60;
+     now per cases;
+    suppose rng f is trivial;
+     then p1 = p2 by A1,A4,SPPOL_1:3;
+    hence Rotate(Rotate(f,p1),p2) = Rotate(f,p2) by Th99;
+    suppose
+A5:   rng f is not trivial;
+     then f = <*f/.1*>^(f/^1) by FINSEQ_5:32,RELAT_1:60;
+     then A6:    rng f = rng<*f/.1*> \/ rng(f/^1) by FINSEQ_1:44;
+       now assume
+A7:   not p2 in rng(f/^1);
+       then p2 in rng<*f/.1*> by A4,A6,XBOOLE_0:def 2;
+       then p2 in {f/.1} by FINSEQ_1:56;
+       then p2 = f/.1 by TARSKI:def 1;
+       then A8:      p2 = f/.len f by A2,Def1;
+         f qua set is non trivial by A5,Th21;
+       then len f >= 1 + 1 by SPPOL_1:2;
+then A9:     1 < len f by NAT_1:38;
+         len f in dom f by A5,FINSEQ_5:6,RELAT_1:60;
+      hence contradiction by A7,A8,A9,Th63;
+     end;
+    hence Rotate(Rotate(f,p1),p2) = Rotate(f,p2) by A3,Th110;
+   end;
+   hence Rotate(Rotate(f,p1),p2) = Rotate(f,p2);
+  suppose not p1 in rng f;
+  hence thesis by Def2;
+end;
+
+theorem
+   f is circular & f just_once_values p implies
+  Rev Rotate(f,p) = Rotate(Rev f,p)
+proof assume that
+A1: f is circular and
+A2: f just_once_values p;
+A3: p in rng f by A2,FINSEQ_4:60;
+then A4: p in rng Rev f by FINSEQ_5:60;
+A5: f/.1 = f/.len f by A1,Def1;
+      0 <> len(f:-p) by FINSEQ_1:25;
+    then 1 <= len(f:-p) by RLVECT_1:99;
+    then reconsider j = len(f:-p) - 1 as Nat by INT_1:18;
+A6: j + 1 = len(f:-p) by XCMPLX_1:27;
+      f-:p is non empty by A3,FINSEQ_5:50;
+then A7: f-:p = <*(f-:p)/.1*>^((f-:p)/^1) by FINSEQ_5:32
+        .= <*f/.1*>^((f-:p)/^1) by A3,FINSEQ_5:47;
+A8: f:-p = ((f:-p)|j)^<*(f:-p)/.len(f:-p)*> by A6,FINSEQ_5:24
+        .= ((f:-p)|j)^<*f/.len f*> by A3,FINSEQ_5:57;
+ thus Rev Rotate(f,p) = Rev((f:-p)^((f-:p)/^1)) by A3,Def2
+         .= Rev((f-:p)/^1)^Rev(f:-p) by FINSEQ_5:67
+         .= Rev((f-:p)/^1)^(<*f/.len f*>^Rev((f:-p)|j)) by A8,FINSEQ_5:66
+         .= Rev((f-:p)/^1)^<*f/.1*>^Rev((f:-p)|j) by A5,FINSEQ_1:45
+         .= Rev(f-:p)^Rev((f:-p)|j) by A7,Th28
+         .= Rev(f-:p)^(Rev(f:-p)/^1) by A6,Th91
+         .= Rev(f-:p)^((Rev f-:p)/^1) by A2,Th93
+         .= (Rev f:-p)^((Rev f-:p)/^1) by A2,Th94
+         .= Rotate(Rev f,p) by A4,Def2;
+end;
+

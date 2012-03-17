@@ -1,0 +1,246 @@
+:: Schemes of Existence of some Types of Functions
+::  by Jaros{\l}aw Kotowicz
+::
+:: Received September 21, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary NAT_1, SEQ_1, SEQM_3, FUNCT_1, RELAT_1, ORDINAL2, ARYTM_3, ARYTM_1,
+      PARTFUN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, NAT_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, SEQ_1,
+      SEQM_3;
+ constructors NAT_1, SEQ_1, SEQM_3, PARTFUN1, MEMBERED, XBOOLE_0;
+ clusters RELSET_1, XREAL_0, SEQM_3, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0,
+      NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+ reserve x,y,z for set;
+ reserve n,m,k for Nat;
+ reserve r for Real;
+
+theorem :: SCHEME1:1
+  for n ex m st n = 2*m or n = 2*m+1;
+
+theorem :: SCHEME1:2
+for n ex m st n = 3*m or n = 3*m+1 or n = 3*m+2;
+
+theorem :: SCHEME1:3
+for n ex m st n = 4*m or n = 4*m+1 or n = 4*m+2 or n = 4*m+3;
+
+theorem :: SCHEME1:4
+for n ex m st n = 5*m or n = 5*m+1 or n = 5*m+2 or n = 5*m+3 or n = 5*m+4;
+
+scheme ExRealSubseq{s()->Real_Sequence,P[set]}:
+ ex q being Real_Sequence st
+  q is_subsequence_of s() & (for n holds P[q.n]) &
+  for n st (for r st r = s().n holds P[r]) ex m st s().n = q.m
+provided
+ for n ex m st n <= m & P[s().m];
+
+scheme ExRealSeq2{F,G(set)->Real}:
+ ex s being Real_Sequence st for n holds s.(2*n) = F(n) & s.(2*n+1) = G(n);
+
+scheme ExRealSeq3{F,G,H(set)->Real}:
+ ex s being Real_Sequence st
+  for n holds s.(3*n) = F(n) & s.(3*n+1) = G(n) & s.(3*n+2) = H(n);
+
+scheme ExRealSeq4{F,G,H,I(set)->Real}:
+ ex s being Real_Sequence st for n holds
+  s.(4*n) = F(n) & s.(4*n+1) = G(n) & s.(4*n+2) = H(n) & s.(4*n+3) = I(n);
+
+scheme ExRealSeq5{F,G,H,I,J(set)->Real}:
+ ex s being Real_Sequence st for n holds s.(5*n) = F(n) & s.(5*n+1) = G(n) &
+  s.(5*n+2) = H(n) & s.(5*n+3) = I(n) & s.(5*n+4) = J(n);
+
+scheme PartFuncExD2{C, D()->non empty set, P,Q[set],
+                    F,G(set)->Element of D()}:
+ ex f being PartFunc of C(),D() st
+  (for c be Element of C() holds c in dom f iff P[c] or Q[c]) &
+  (for c be Element of C() st c in dom f holds
+    (P[c] implies f.c = F(c)) & (Q[c] implies f.c = G(c)))
+provided
+ for c be Element of C() st P[c] holds not Q[c];
+
+scheme PartFuncExD2'{C, D()->non empty set,P,Q[set],
+                    F,G(set)->Element of D()}:
+ ex f being PartFunc of C(),D() st
+  (for c be Element of C() holds c in dom f iff P[c] or Q[c]) &
+  (for c be Element of C() st c in dom f holds
+    (P[c] implies f.c = F(c)) & (Q[c] implies f.c = G(c)))
+provided
+ for c be Element of C() st P[c] & Q[c] holds F(c)=G(c);
+
+scheme PartFuncExD2''{C, D()->non empty set,P[set],
+                    F,G(set)->Element of D()}:
+ ex f being PartFunc of C(),D() st f is total &
+  (for c be Element of C() st c in dom f holds
+    (P[c] implies f.c = F(c)) & (not P[c] implies f.c = G(c)));
+
+scheme PartFuncExD3{C, D()->non empty set,P,Q,R[set],
+                    F,G,H(set)->Element of D()}:
+ ex f being PartFunc of C(),D() st
+  (for c be Element of C() holds c in dom f iff P[c] or Q[c] or R[c]) &
+  (for c be Element of C() st c in dom f holds (P[c] implies f.c = F(c)) &
+    (Q[c] implies f.c = G(c)) & (R[c] implies f.c = H(c)))
+provided
+ for c be Element of C() holds (P[c] implies not Q[c]) &
+    (P[c] implies not R[c]) & (Q[c] implies not R[c]);
+
+scheme PartFuncExD3'{C, D()->non empty set,P,Q,R[set],
+                    F,G,H(set)->Element of D()}:
+ ex f being PartFunc of C(),D() st
+  (for c be Element of C() holds c in dom f iff P[c] or Q[c] or R[c]) &
+  (for c be Element of C() st c in dom f holds (P[c] implies f.c = F(c)) &
+    (Q[c] implies f.c = G(c)) & (R[c] implies f.c = H(c)))
+provided
+ for c be Element of C() holds (P[c] & Q[c] implies F(c)=G(c)) &
+    (P[c] & R[c] implies F(c)=H(c)) & (Q[c] & R[c] implies G(c)=H(c));
+
+scheme PartFuncExD4{C, D()->non empty set,P,Q,R,S[set],
+                    F,G,H,I(set)->Element of D()}:
+ ex f being PartFunc of C(),D() st
+  (for c be Element of C() holds c in dom f iff P[c] or Q[c] or R[c] or S[c]) &
+  (for c be Element of C() st c in dom f holds (P[c] implies f.c = F(c)) &
+    (Q[c] implies f.c = G(c)) & (R[c] implies f.c = H(c)) &
+    (S[c] implies f.c = I(c)))
+provided
+ for c be Element of C() holds (P[c] implies not Q[c]) &
+   (P[c] implies not R[c]) & (P[c] implies not S[c]) &
+   (Q[c] implies not R[c]) & (Q[c] implies not S[c]) & (R[c] implies not S[c]);
+
+scheme PartFuncExS2{X, Y()->set,P,Q[set],F,G(set)->set}:
+ ex f being PartFunc of X(),Y() st
+  (for x holds x in dom f iff x in X() & (P[x] or Q[x])) &
+  (for x st x in dom f holds (P[x] implies f.x=F(x)) & (Q[x] implies f.x=G(x)))
+provided
+ for x st x in X() holds P[x] implies not Q[x] and
+ for x st x in X() & P[x] holds F(x) in Y() and
+ for x st x in X() & Q[x] holds G(x) in Y();
+
+scheme PartFuncExS3{X, Y()->set,P,Q,R[set],
+                    F,G,H(set)->set}:
+ ex f being PartFunc of X(),Y() st
+  (for x holds x in dom f iff x in X() & (P[x] or Q[x] or R[x])) &
+  (for x st x in dom f holds
+  (P[x] implies f.x=F(x)) & (Q[x] implies f.x=G(x)) &
+   (R[x] implies f.x=H(x)))
+provided
+ for x st x in X() holds (P[x] implies not Q[x]) & (P[x] implies not R[x]) &
+    (Q[x] implies not R[x]) and
+ for x st x in X() & P[x] holds F(x) in Y() and
+ for x st x in X() & Q[x] holds G(x) in Y() and
+ for x st x in X() & R[x] holds H(x) in Y();
+
+scheme PartFuncExS4{X, Y()->set,P,Q,R,S[set],
+                    F,G,H,I(set)->set}:
+ ex f being PartFunc of X(),Y() st
+  (for x holds x in dom f iff x in X() & (P[x] or Q[x] or R[x] or S[x])) &
+  (for x st x in dom f holds
+  (P[x] implies f.x=F(x)) & (Q[x] implies f.x=G(x)) &
+   (R[x] implies f.x=H(x)) & (S[x] implies f.x=I(x)))
+provided
+ for x st x in X() holds (P[x] implies not Q[x]) & (P[x] implies not R[x]) &
+    (P[x] implies not S[x]) & (Q[x] implies not R[x]) &
+    (Q[x] implies not S[x]) & (R[x] implies not S[x]) and
+ for x st x in X() & P[x] holds F(x) in Y() and
+ for x st x in X() & Q[x] holds G(x) in Y() and
+ for x st x in X() & R[x] holds H(x) in Y() and
+ for x st x in X() & S[x] holds I(x) in Y();
+
+scheme PartFuncExC_D2{C, D, E()->non empty set, P,Q[set,set],
+                      F,G(set,set)->Element of E()}:
+ex f being PartFunc of [:C(),D():],E() st
+(for c be Element of C() ,d be Element of D() holds
+   [c,d] in dom f iff P[c,d] or Q[c,d]) &
+for c be Element of C() ,d be Element of D() st [c,d] in dom f holds
+  (P[c,d] implies f.[c,d]=F(c,d)) & (Q[c,d] implies f.[c,d]=G(c,d))
+provided
+ for c be Element of C() ,d be Element of D() st P[c,d] holds not Q[c,d];
+
+scheme PartFuncExC_D3{C, D, E()->non empty set,
+                      P,Q,R[set,set],
+                      F,G,H(set,set)->Element of E()}:
+ex f being PartFunc of [:C(),D():],E() st
+(for c be Element of C() ,d be Element of D() holds
+  [c,d] in dom f iff P[c,d] or Q[c,d] or R[c,d]) &
+for c be Element of C() ,r be Element of D() st [c,r] in dom f holds
+  (P[c,r] implies f.[c,r]=F(c,r)) & (Q[c,r] implies f.[c,r]=G(c,r)) &
+  (R[c,r] implies f.[c,r]=H(c,r))
+provided
+ for c be Element of C() ,s be Element of D() holds
+   (P[c,s] implies not Q[c,s]) & (P[c,s] implies not R[c,s]) &
+   (Q[c,s] implies not R[c,s]);
+
+scheme PartFuncExC_S2{X, Y, Z()->set,P,Q[set,set],
+                      F,G(set,set)->set}:
+ ex f being PartFunc of [:X(),Y():],Z() st
+  (for x,y holds [x,y] in dom f iff x in X() & y in Y() & (P[x,y] or Q[x,y])) &
+  (for x,y st [x,y] in dom f holds (P[x,y] implies f.[x,y]=F(x,y)) &
+    (Q[x,y] implies f.[x,y]=G(x,y)))
+provided
+ for x,y st x in X() & y in Y() holds P[x,y] implies not Q[x,y] and
+ for x,y st x in X() & y in Y() & P[x,y] holds F(x,y) in Z() and
+ for x,y st x in X() & y in Y() & Q[x,y] holds G(x,y) in Z();
+
+scheme PartFuncExC_S3{X, Y, Z()->set, P,Q,R[set,set],
+                      F,G,H(set,set)->set}:
+ex f being PartFunc of [:X(),Y():],Z() st
+(for x,y holds [x,y] in dom f iff x in X() & y in Y() &
+(P[x,y] or Q[x,y] or R[x,y])) &
+(for x,y st [x,y] in dom f holds (P[x,y] implies f.[x,y]=F(x,y)) &
+ (Q[x,y] implies f.[x,y]=G(x,y)) & (R[x,y] implies f.[x,y]=H(x,y)))
+provided
+ for x,y st x in X() & y in Y() holds (P[x,y] implies not Q[x,y]) &
+    (P[x,y] implies not R[x,y]) & (Q[x,y] implies not R[x,y]) and
+ for x,y st x in X() & y in Y() holds P[x,y] implies F(x,y) in Z() and
+ for x,y st x in X() & y in Y() holds Q[x,y] implies G(x,y) in Z() and
+ for x,y st x in X() & y in Y() holds R[x,y] implies H(x,y) in Z();
+
+scheme ExFuncD3{C, D()->non empty set,P,Q,R[set],
+                F,G,H(set)->Element of D()}:
+ ex f being Function of C(),D() st
+  for c be Element of C() holds (P[c] implies f.c = F(c)) &
+    (Q[c] implies f.c = G(c)) & (R[c] implies f.c = H(c))
+provided
+ for c be Element of C() holds (P[c] implies not Q[c]) &
+    (P[c] implies not R[c]) & (Q[c] implies not R[c]) and
+ for c be Element of C() holds P[c] or Q[c] or R[c];
+
+scheme ExFuncD4{C, D()->non empty set, P,Q,R,S[set],
+                    F,G,H,I(set)->Element of D()}:
+ ex f being Function of C(),D() st
+  for c be Element of C() holds (P[c] implies f.c = F(c)) &
+   (Q[c] implies f.c = G(c)) & (R[c] implies f.c = H(c)) &
+   (S[c] implies f.c = I(c))
+provided
+ for c be Element of C() holds (P[c] implies not Q[c]) &
+    (P[c] implies not R[c]) & (P[c] implies not S[c]) &
+    (Q[c] implies not R[c]) & (Q[c] implies not S[c]) &
+    (R[c] implies not S[c]) and
+ for c be Element of C() holds P[c] or Q[c] or R[c] or S[c];
+
+scheme FuncExC_D2{C, D, E()->non empty set,P[set,set],
+                      F,G(set,set)->Element of E()}:
+ex f being Function of [:C(),D():],E() st
+for c be Element of C() ,d be Element of D() st [c,d] in dom f holds
+  (P[c,d] implies f.[c,d]=F(c,d)) & (not P[c,d] implies f.[c,d]=G(c,d));
+
+scheme FuncExC_D3{C, D, E()->non empty set, P,Q,R[set,set],
+                      F,G,H(set,set)->Element of E()}:
+ex f being Function of [:C(),D():],E() st
+(for c be Element of C() ,d be Element of D() holds
+  [c,d] in dom f iff P[c,d] or Q[c,d] or R[c,d]) &
+for c be Element of C() ,d be Element of D() st [c,d] in dom f holds
+  (P[c,d] implies f.[c,d]=F(c,d)) & (Q[c,d] implies f.[c,d]=G(c,d)) &
+  (R[c,d] implies f.[c,d]=H(c,d))
+provided
+ for c be Element of C() ,d be Element of D() holds
+   (P[c,d] implies not Q[c,d]) & (P[c,d] implies not R[c,d]) &
+   (Q[c,d] implies not R[c,d]) and
+ for c be Element of C() ,d be Element of D() holds
+   P[c,d] or Q[c,d] or R[c,d];

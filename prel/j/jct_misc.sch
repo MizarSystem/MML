@@ -1,0 +1,19 @@
+HIDDEN
+XBOOLE_0
+RELAT_1
+FUNCT_1
+ZFMISC_1
+SUBSET_1
+RELSET_1
+FUNCT_2
+#
+NonEmpty
+DoubleChoice
+#
+M1 W1 ;;M1 ;;
+ªV1 èM2 F1 ;;;F2 B1 ;%;;
+#
+M1 W1 ;;M1 W1 ;;M1 W1 ;;;
+ªM5 V4 ;V6 F1 ;F2 ;;F1 ;F2 ;;M5 V4 ;V6 F1 ;F3 ;;F1 ;F3 ;;ªM2 F1 ;;P1 B3 K48 F1 ;F2 ;B1 B3 ;K48 F1 ;F3 ;B2 B3 ;;M2 F1 ;;ªM2 F2 ;;M2 F3 ;;ªP1 B1 B2 B3 ;;
+#
+!

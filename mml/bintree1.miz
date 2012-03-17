@@ -1,0 +1,1277 @@
+:: On Defining Functions on Binary Trees
+::  by Grzegorz Bancerek and Piotr Rudnicki
+::
+:: Received December 30, 1993
+:: Copyright (c) 1993 Association of Mizar Users
+
+environ
+
+ vocabulary TREES_2, FUNCT_1, BOOLE, TREES_4, DTCONSTR, FINSEQ_1, TREES_1,
+      ORDINAL1, FINSET_1, RELAT_1, TREES_3, LANG1, TDGROUP, FUNCT_2, BINTREE1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
+      RELAT_1, RELSET_1, STRUCT_0, MCART_1, FUNCT_1, FUNCT_2, FINSEQ_1,
+      FINSET_1, LANG1, TREES_1, TREES_2, TREES_3, TREES_4, DTCONSTR;
+ constructors DOMAIN_1, NAT_1, DTCONSTR, FINSOP_1, XREAL_0, MEMBERED, XBOOLE_0,
+      FINSEQOP;
+ clusters SUBSET_1, TREES_2, TREES_3, DTCONSTR, RELSET_1, FINSEQ_1, STRUCT_0,
+      ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions DTCONSTR;
+ theorems TARSKI, NAT_1, MCART_1, ZFMISC_1, ENUMSET1, MODAL_1, RELSET_1,
+      FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, LANG1, TREES_1, TREES_2,
+      TREES_3, TREES_4, DTCONSTR, AMI_1, XBOOLE_0;
+ schemes FUNCT_2, DTCONSTR, MULTOP_1;
+
+begin
+
+definition let D be non empty set, t be DecoratedTree of D;
+ func root-label t -> Element of D equals
+:Def1:  t.{};
+  coherence proof reconsider r = {} as Node of t by TREES_1:47;
+     t.r is Element of D; hence thesis;
+  end;
+end;
+
+theorem
+   for D being non empty set, t being DecoratedTree of D holds
+  roots <*t*> = <*root-label t*>
+proof
+ let D be non empty set, t be DecoratedTree of D;
+ thus roots <*t*> = <*t.{}*> by DTCONSTR:4
+                 .= <*root-label t*> by Def1;
+end;
+
+theorem
+   for D being non empty set, t1, t2 being DecoratedTree of D holds
+  roots <*t1, t2*> = <*root-label t1, root-label t2*>
+proof
+ let D be non empty set, t1, t2 be DecoratedTree of D;
+ thus roots <*t1, t2*> = <*t1.{}, t2.{}*> by DTCONSTR:6
+                      .= <*root-label t1, t2.{}*> by Def1
+                      .= <*root-label t1, root-label t2*> by Def1;
+end;
+
+definition let IT be Tree;
+ attr IT is binary means
+:Def2: for t being Element of IT st not t in Leaves IT
+  holds succ t = { t^<*0*>, t^<*1*> };
+end;
+
+theorem Th3:
+ for T being Tree, t being Element of T holds
+  t in Leaves T iff not t^<*0*> in T
+proof
+ let T be Tree, t be Element of T;
+ hereby assume
+A1:   t in Leaves T;
+     t is_a_proper_prefix_of t^<*0*> by TREES_1:30;
+  hence not t^<*0*> in T by A1,TREES_1:def 8;
+ end;
+   assume
+A2:  not t^<*0*> in T & not t in Leaves T;
+   then consider q being FinSequence of NAT such that
+A3:  q in T & t is_a_proper_prefix_of q by TREES_1:def 8;
+      t is_a_prefix_of q by A3,XBOOLE_0:def 8;
+   then consider r being FinSequence such that
+A4:  q = t^r by TREES_1:8;
+   reconsider r as FinSequence of NAT by A4,FINSEQ_1:50;
+      len q = len t+len r by A4,FINSEQ_1:35; then len r <> 0 by A3,TREES_1:24;
+    then r <> {} by FINSEQ_1:25;
+   then consider p being FinSequence of NAT, x being Nat such that
+A5:  r = <*x*>^p by MODAL_1:4;
+      q = t^<*x*>^p by A4,A5,FINSEQ_1:45;
+    then t^<*x*> in T & 0 <= x by A3,NAT_1:18,TREES_1:46;
+   hence contradiction by A2,TREES_1:def 5;
+end;
+
+theorem Th4:
+ for T being Tree, t being Element of T holds
+  t in Leaves T iff not ex n being Nat st t^<*n*> in T
+  proof let T be Tree, t be Element of T;
+   hereby assume A1: t in Leaves T;
+    given n being Nat such that
+A2:   t^<*n*> in T;
+       not t is_a_proper_prefix_of t^<*n*> & t is_a_prefix_of t^<*n*>
+      by A1,A2,TREES_1:8,def 8;
+     then t = t^<*n*> & t = t^{} by FINSEQ_1:47,XBOOLE_0:def 8;
+     then {} = <*n*> by FINSEQ_1:46;
+    hence contradiction by TREES_1:4;
+   end;
+   assume
+A3:  not (ex n being Nat st t^<*n*> in T) & not t in Leaves T;
+   then consider q being FinSequence of NAT such that
+A4:  q in T & t is_a_proper_prefix_of q by TREES_1:def 8;
+      t is_a_prefix_of q by A4,XBOOLE_0:def 8;
+   then consider r being FinSequence such that
+A5:  q = t^r by TREES_1:8;
+   reconsider r as FinSequence of NAT by A5,FINSEQ_1:50;
+      len q = len t+len r by A5,FINSEQ_1:35; then len r <> 0 by A4,TREES_1:24;
+    then r <> {} by FINSEQ_1:25;
+   then consider p being FinSequence of NAT, x being Nat such that
+A6:  r = <*x*>^p by MODAL_1:4;
+      q = t^<*x*>^p by A5,A6,FINSEQ_1:45;
+    then t^<*x*> in T by A4,TREES_1:46;
+   hence contradiction by A3;
+  end;
+
+theorem :: LeavesDef3:
+   for T being Tree, t being Element of T holds
+  succ t = {} iff t in Leaves T
+ proof
+  let T be Tree, t be Element of T;
+  hereby assume succ t = {};
+    then not t^<*0*> in {t^<*n*> where n is Nat:t^<*n*> in T } by TREES_2:def 5
+;
+    then not t^<*0*> in T;
+   hence t in Leaves T by Th3;
+  end;
+  assume t in Leaves T;
+then A1:  not t^<*0*> in T by Th3;
+  assume
+A2:  succ t <> {};
+  consider x being Element of succ t;
+     x in succ t by A2;
+then x in { t^<*n*> where n is Nat : t^<*n*> in T} by TREES_2:def 5;
+  then consider n being Nat such that
+A3: x = t^<*n*> & t^<*n*> in T;
+     0 <= n by NAT_1:18;
+  hence contradiction by A1,A3,TREES_1:def 5;
+ end;
+
+theorem Th6:
+ elementary_tree 0 is binary
+  proof set T = elementary_tree 0; let t be Element of T;
+      now let s be FinSequence of NAT; assume s in T;
+      then s = {} & t = {} by TARSKI:def 1,TREES_1:56;
+     hence not t is_a_proper_prefix_of s;
+    end;
+    hence not t in Leaves T implies succ t = {t^<*0*>,t^<*1*>}
+                by TREES_1:def 8;
+  end;
+
+theorem :: BinEx2:
+   elementary_tree 2 is binary
+  proof set T = elementary_tree 2; let t be Element of T; assume
+A1:  not t in Leaves T;
+   per cases by ENUMSET1:13,MODAL_1:10;
+   suppose
+A2:   t = {};
+A3:   succ t = { t^<*n*> where n is Nat : t^<*n*> in T} by TREES_2:def 5;
+       for x being set holds x in { t^<*n*> where n is Nat : t^<*n*> in T}
+                       iff x in {t^<*0*>,t^<*1*>}
+     proof
+      let x be set;
+      hereby assume x in { t^<*n*> where n is Nat : t^<*n*> in T};
+        then consider n being Nat such that
+A4:      x = t^<*n*> & t^<*n*> in T;
+A5:      x = <*n*> by A2,A4,FINSEQ_1:47;
+         reconsider x' = x as FinSequence by A4;
+         per cases by A4,ENUMSET1:13,MODAL_1:10;
+          suppose x = {};
+           then len x' = 0 & len x' = 1 by A5,FINSEQ_1:25,56;
+           hence x in {t^<*0*>,t^<*1*>};
+          suppose x = <*0*>; then x' = t^<*0*> by A2,FINSEQ_1:47;
+           hence x in {t^<*0*>,t^<*1*>} by TARSKI:def 2;
+          suppose x = <*1*>; then x' = t^<*1*> by A2,FINSEQ_1:47;
+           hence x in {t^<*0*>,t^<*1*>} by TARSKI:def 2;
+      end;
+      assume A6: x in {t^<*0*>,t^<*1*>};
+then A7:      x = t^<*0*> or x = t^<*1*> by TARSKI:def 2;
+        reconsider x' = x as FinSequence by A6,TARSKI:def 2;
+          x' = <*0*> or x' = <*1*> by A2,A7,FINSEQ_1:47;
+        then x' in T by ENUMSET1:14,MODAL_1:10;
+      hence x in { t^<*n*> where n is Nat : t^<*n*> in T} by A7;
+     end;
+    hence succ t = {t^<*0*>,t^<*1*>} by A3,TARSKI:2;
+   suppose
+A8:   t = <*0*>;
+       now assume
+A9:     t^<*0*> in T;
+      per cases by A9,ENUMSET1:13,MODAL_1:10;
+      suppose t^<*0*> = {};
+        then len (t^<*0*>) = 0 by FINSEQ_1:25;
+        then len t + len <*0*> = 0 by FINSEQ_1:35;
+        then 1 + len <*0*> = 0 by A8,FINSEQ_1:56;
+        then 1 + 1 = 0 by FINSEQ_1:56;
+       hence contradiction;
+      suppose t^<*0*> = <*0*>;
+        then len <*0*> + len <*0*> = len <*0*> by A8,FINSEQ_1:35;
+        then 1 + len <*0*> = len <*0*> by FINSEQ_1:56;
+        then 1 + 1 = len <*0*> by FINSEQ_1:56; hence contradiction by FINSEQ_1:
+56;
+      suppose t^<*0*> = <*1*>;
+        then len <*0*> + len <*0*> = len <*1*> by A8,FINSEQ_1:35;
+        then 1 + len <*0*> = len <*1*> by FINSEQ_1:56;
+        then 1 + 1 = len <*1*> by FINSEQ_1:56; hence contradiction by FINSEQ_1:
+56;
+     end;
+     hence thesis by A1,Th3;
+   suppose
+A10:   t = <*1*>;
+       now assume
+A11:     t^<*0*> in T;
+      per cases by A11,ENUMSET1:13,MODAL_1:10;
+      suppose t^<*0*> = {};
+        then len (t^<*0*>) = 0 by FINSEQ_1:25;
+        then len t + len <*0*> = 0 by FINSEQ_1:35;
+        then 1 + len <*0*> = 0 by A10,FINSEQ_1:56;
+        then 1 + 1 = 0 by FINSEQ_1:56;
+       hence contradiction;
+      suppose t^<*0*> = <*0*>;
+        then len <*1*> + len <*0*> = len <*0*> by A10,FINSEQ_1:35;
+        then 1 + len <*0*> = len <*0*> by FINSEQ_1:56;
+        then 1 + 1 = len <*0*> by FINSEQ_1:56; hence contradiction by FINSEQ_1:
+56;
+      suppose t^<*0*> = <*1*>;
+        then len <*1*> + len <*0*> = len <*1*> by A10,FINSEQ_1:35;
+        then 1 + len <*0*> = len <*1*> by FINSEQ_1:56;
+        then 1 + 1 = len <*1*> by FINSEQ_1:56; hence contradiction by FINSEQ_1:
+56;
+     end;
+     hence thesis by A1,Th3;
+  end;
+
+definition
+ cluster binary finite Tree;
+  existence by Th6;
+end;
+
+definition let IT be DecoratedTree;
+ attr IT is binary means
+:Def3:
+  dom IT is binary;
+end;
+
+definition
+ let D be non empty set;
+ cluster binary finite DecoratedTree of D;
+ existence proof consider t being binary finite Tree;
+  consider T being Function of t, D;
+    rng T c= D by RELSET_1:12;
+  then reconsider T as DecoratedTree of D by TREES_2:def 9;
+  take T; dom T = t by FUNCT_2:def 1;
+  hence dom T is binary & T is finite by AMI_1:21;
+ end;
+end;
+
+definition
+ cluster binary finite DecoratedTree;
+  existence proof consider D being non empty set;
+   consider t being binary finite DecoratedTree of D;
+   take t; thus thesis;
+  end;
+end;
+
+definition
+ cluster binary -> finite-order Tree;
+  coherence proof let T be Tree;
+   assume
+A1:  T is binary;
+     now
+    let t be Element of T;
+    assume
+A2:   t^<*2*> in T;
+then A3:   t^<*0*> in T by TREES_1:def 5;
+    per cases;
+    suppose t in Leaves T;
+     hence contradiction by A3,Th3;
+    suppose not t in Leaves T;
+then A4:    succ t = { t^<*0*>, t^<*1*> } by A1,Def2;
+        t^<*2*> in { t^<*n*> where n is Nat : t^<*n*> in T } by A2;
+    then t^<*2*> in succ t by TREES_2:def 5;
+      then A5: t^<*2*> = t^<*0*> or t^<*2*> = t^<*1*> by A4,TARSKI:def 2;
+A6:   now assume <*2*> = <*0*>;
+        then <*2*>.1 = 2 & <*2*>.1 = 0 by FINSEQ_1:57;
+       hence contradiction;
+      end;
+        now assume <*2*> = <*1*>;
+        then <*2*>.1 = 2 & <*2*>.1 = 1 by FINSEQ_1:57;
+       hence contradiction;
+      end;
+     hence contradiction by A5,A6,FINSEQ_1:46;
+   end;
+   hence T is finite-order by TREES_2:def 2;
+ end;
+end;
+
+theorem Th8:
+ for T0,T1 being Tree, t being Element of tree(T0,T1) holds
+  (for p being Element of T0 st t = <*0*>^p holds
+        t in Leaves tree(T0,T1) iff p in Leaves T0)
+& (for p being Element of T1 st t = <*1*>^p holds
+        t in Leaves tree(T0,T1) iff p in Leaves T1)
+proof
+ let T0,T1 be Tree, t be Element of tree(T0,T1);
+  set RT = tree(T0,T1);
+ hereby
+  let p be Element of T0; assume
+A1: t = <*0*>^p;
+  hereby assume
+A2:  t in Leaves RT;
+   assume not p in Leaves T0;
+   then consider n being Nat such that
+A3:  p^<*n*> in T0 by Th4;
+      <*0*>^(p^<*n*>) in RT by A3,TREES_3:72;
+    then (<*0*>^p)^<*n*> in RT by FINSEQ_1:45;
+   hence contradiction by A1,A2,Th4;
+  end;
+  assume
+A4: p in Leaves T0;
+  assume not t in Leaves RT;
+   then consider n being Nat such that
+A5: t^<*n*> in RT by Th4;
+     <*0*>^(p^<*n*>) in RT by A1,A5,FINSEQ_1:45;
+   then p^<*n*> in T0 by TREES_3:72;
+  hence contradiction by A4,Th4;
+ end;
+ let p be Element of T1; assume
+A6: t = <*1*>^p;
+  hereby assume
+A7:  t in Leaves RT;
+   assume not p in Leaves T1;
+   then consider n being Nat such that
+A8:  p^<*n*> in T1 by Th4;
+      <*1*>^(p^<*n*>) in RT by A8,TREES_3:73;
+    then (<*1*>^p)^<*n*> in RT by FINSEQ_1:45;
+   hence contradiction by A6,A7,Th4;
+  end;
+  assume
+A9: p in Leaves T1;
+  assume not t in Leaves RT;
+   then consider n being Nat such that
+A10: t^<*n*> in RT by Th4;
+     <*1*>^(p^<*n*>) in RT by A6,A10,FINSEQ_1:45;
+   then p^<*n*> in T1 by TREES_3:73;
+  hence contradiction by A9,Th4;
+end;
+
+theorem Th9:
+ for T0,T1 being Tree, t being Element of tree(T0,T1) holds
+  (t = {} implies succ t = { t^<*0*>, t^<*1*> })
+& (for p being Element of T0 st t = <*0*>^p for sp being FinSequence holds
+        sp in succ p iff <*0*>^sp in succ t)
+& (for p being Element of T1 st t = <*1*>^p for sp being FinSequence holds
+        sp in succ p iff <*1*>^sp in succ t)
+proof
+ let T0,T1 be Tree, t be Element of tree(T0,T1);
+ set RT = tree(T0,T1);
+ hereby assume
+A1: t = {};
+A2:   succ t = { t^<*n*> where n is Nat:t^<*n*> in RT } by TREES_2:def 5;
+        {} in T0 & <*0*> = <*0*>^{} by FINSEQ_1:47,TREES_1:47;
+      then <*0*> in RT by TREES_3:71;
+then A3:   t^<*0*> in RT by A1,FINSEQ_1:47;
+        {} in T1 & <*1*> = <*1*>^{} by FINSEQ_1:47,TREES_1:47;
+      then <*1*> in RT by TREES_3:71;
+then A4:   t^<*1*> in RT by A1,FINSEQ_1:47;
+        now let x1 be set;
+       hereby assume x1 in succ t;
+         then consider n being Nat such that
+A5:       x1 = t^<*n*> & t^<*n*> in RT by A2;
+A6:       x1 = <*n*> by A1,A5,FINSEQ_1:47;
+         reconsider x = x1 as FinSequence by A5;
+        len x = 1 & len {} = 0 by A6,FINSEQ_1:25,56; then consider p being
+FinSequence such that
+A7:       p in T0 & x = <*0*>^p or p in T1 & x = <*1*>^p by A5,TREES_3:71;
+           x.1 = 0 or x.1 = 1 by A7,FINSEQ_1:58;
+         then x = <*0*> or x = <*1*> by A6,FINSEQ_1:57;
+         then x = t^<*0*> or x = t^<*1*> by A1,FINSEQ_1:47;
+        hence x1 in { t^<*0*>, t^<*1*> } by TARSKI:def 2;
+       end;
+       assume
+          x1 in { t^<*0*>, t^<*1*> };
+        then x1 = t^<*0*> or x1 = t^<*1*> by TARSKI:def 2;
+       hence x1 in succ t by A2,A3,A4;
+      end;
+  hence succ t = { t^<*0*>, t^<*1*> } by TARSKI:2;
+ end;
+ hereby let p be Element of T0 such that
+A8: t = <*0*>^p; let sp be FinSequence;
+   hereby assume sp in succ p;
+     then sp in { p^<*n*> where n is Nat : p^<*n*> in T0 } by TREES_2:def 5;
+     then consider n being Nat such that
+A9:   sp = p^<*n*> & p^<*n*> in T0;
+       <*0*>^(p^<*n*>) in RT by A9,TREES_3:72;
+     then (<*0*>^p)^<*n*> in RT by FINSEQ_1:45;
+     then t^<*n*> in {t^<*k*> where k is Nat : t^<*k*> in RT} by A8;
+     then t^<*n*> in succ t by TREES_2:def 5;
+    hence <*0*>^sp in succ t by A8,A9,FINSEQ_1:45;
+   end;
+    set zsp = <*0*>^sp;
+   assume
+      zsp in succ t;
+    then zsp in {t^<*n*> where n is Nat:t^<*n*> in RT} by TREES_2:def 5;
+    then consider n being Nat such that
+A10:  zsp = t^<*n*> & t^<*n*> in RT;
+      <*0*>^(p^<*n*>) in RT by A8,A10,FINSEQ_1:45;
+    then p^<*n*> in T0 by TREES_3:72;
+    then p^<*n*> in { p^<*k*> where k is Nat : p^<*k*> in T0 };
+then A11:  p^<*n*> in succ p by TREES_2:def 5;
+      <*0*>^sp = <*0*>^(p^<*n*>) by A8,A10,FINSEQ_1:45;
+   hence sp in succ p by A11,FINSEQ_1:46;
+ end;
+ let p be Element of T1 such that
+A12: t = <*1*>^p; let sp be FinSequence;
+ hereby assume sp in succ p;
+   then sp in { p^<*n*> where n is Nat : p^<*n*> in T1 } by TREES_2:def 5;
+   then consider n being Nat such that
+A13: sp = p^<*n*> & p^<*n*> in T1;
+     <*1*>^(p^<*n*>) in RT by A13,TREES_3:73;
+   then (<*1*>^p)^<*n*> in RT by FINSEQ_1:45;
+   then t^<*n*> in {t^<*k*> where k is Nat : t^<*k*> in RT} by A12;
+   then t^<*n*> in succ t by TREES_2:def 5;
+  hence <*1*>^sp in succ t by A12,A13,FINSEQ_1:45;
+ end;
+  set zsp = <*1*>^sp;
+ assume
+    zsp in succ t;
+  then zsp in {t^<*n*> where n is Nat:t^<*n*> in RT} by TREES_2:def 5;
+  then consider n being Nat such that
+A14: zsp = t^<*n*> & t^<*n*> in RT;
+    <*1*>^(p^<*n*>) in RT by A12,A14,FINSEQ_1:45;
+  then p^<*n*> in T1 by TREES_3:73;
+  then p^<*n*> in { p^<*k*> where k is Nat : p^<*k*> in T1 };
+then A15: p^<*n*> in succ p by TREES_2:def 5;
+    <*1*>^sp = <*1*>^(p^<*n*>) by A12,A14,FINSEQ_1:45;
+  hence sp in succ p by A15,FINSEQ_1:46;
+end;
+
+theorem Th10:
+ for T1,T2 being Tree holds T1 is binary & T2 is binary iff
+                            tree(T1,T2) is binary
+proof
+ let T1,T2 be Tree;
+  set RT = tree(T1,T2);
+ hereby assume
+A1: T1 is binary & T2 is binary;
+     now let t be Element of RT;
+    assume
+A2:   not t in Leaves RT;
+    per cases by TREES_3:71;
+     suppose t = {};
+     hence succ t = { t^<*0*>, t^<*1*> } by Th9;
+     suppose
+        ex p being FinSequence st p in T1 & t = <*0*>^p or
+                                p in T2 & t = <*1*>^p;
+       then consider p being FinSequence such that
+A3:      p in T1 & t = <*0*>^p or p in T2 & t = <*1*>^p;
+A4:     now assume
+A5:      p in T1 & t = <*0*>^p;
+          then reconsider p as Element of T1;
+          per cases;
+          suppose
+             p in Leaves T1;
+           hence succ t = { t^<*0*>, t^<*1*> } by A2,A5,Th8;
+          suppose
+             not p in Leaves T1;
+then A6:        succ p = { p^<*0*>, p^<*1*> } by A1,Def2;
+             now let x be set;
+            hereby assume
+A7:           x in succ t;
+              then x in { t^<*n*> where n is Nat : t^<*n*> in RT }
+                                                by TREES_2:def 5;
+              then consider n being Nat such that
+A8:           x = t^<*n*> & t^<*n*> in RT;
+A9:          x = <*0*>^(p^<*n*>) by A5,A8,FINSEQ_1:45;
+              then reconsider pn = p^<*n*> as Element of T1 by A8,TREES_3:72;
+            pn in succ p by A5,A7,A9,Th9;
+              then pn = p^<*0*> or pn = p^<*1*> by A6,TARSKI:def 2;
+              then x = t^<*0*> or x = t^<*1*> by A8,FINSEQ_1:46;
+             hence x in { t^<*0*>, t^<*1*> } by TARSKI:def 2;
+            end;
+            assume x in { t^<*0*>, t^<*1*> };
+             then x = <*0*>^p^<*0*> or x = <*0*>^p^<*1*> by A5,TARSKI:def 2;
+then A10:         x = <*0*>^(p^<*0*>) or x = <*0*>^(p^<*1*>) by FINSEQ_1:45;
+               p^<*0*> in succ p & p^<*1*> in succ p by A6,TARSKI:def 2;
+            hence x in succ t by A5,A10,Th9;
+           end;
+           hence succ t = { t^<*0*>, t^<*1*> } by TARSKI:2;
+        end;
+          now assume
+A11:      p in T2 & t = <*1*>^p;
+          then reconsider p as Element of T2;
+          per cases;
+          suppose
+             p in Leaves T2;
+           hence succ t = { t^<*0*>, t^<*1*> } by A2,A11,Th8;
+          suppose
+             not p in Leaves T2;
+then A12:        succ p = { p^<*0*>, p^<*1*> } by A1,Def2;
+             now let x be set;
+            hereby assume
+A13:           x in succ t;
+              then x in { t^<*n*> where n is Nat : t^<*n*> in RT }
+                                                by TREES_2:def 5;
+              then consider n being Nat such that
+A14:           x = t^<*n*> & t^<*n*> in RT;
+A15:          x = <*1*>^(p^<*n*>) by A11,A14,FINSEQ_1:45;
+              then reconsider pn = p^<*n*> as Element of T2 by A14,TREES_3:73;
+            pn in succ p by A11,A13,A15,Th9;
+              then pn = p^<*0*> or pn = p^<*1*> by A12,TARSKI:def 2;
+              then x = t^<*0*> or x = t^<*1*> by A14,FINSEQ_1:46;
+             hence x in { t^<*0*>, t^<*1*> } by TARSKI:def 2;
+            end;
+            assume x in { t^<*0*>, t^<*1*> };
+             then x = <*1*>^p^<*0*> or x = <*1*>^p^<*1*> by A11,TARSKI:def 2;
+then A16:         x = <*1*>^(p^<*0*>) or x = <*1*>^(p^<*1*>) by FINSEQ_1:45;
+               p^<*0*> in succ p & p^<*1*> in succ p by A12,TARSKI:def 2;
+            hence x in succ t by A11,A16,Th9;
+           end;
+           hence succ t = { t^<*0*>, t^<*1*> } by TARSKI:2;
+        end;
+     hence succ t = { t^<*0*>, t^<*1*> } by A3,A4;
+   end;
+  hence tree(T1,T2) is binary by Def2;
+ end;
+ assume
+A17: RT is binary;
+    now let t be Element of T1;
+    reconsider zt = <*0*>^t as Element of RT by TREES_3:72;
+   assume not t in Leaves T1;
+    then not zt in Leaves RT by Th8;
+then A18: succ zt = { <*0*>^t^<*0*>, <*0*>^t^<*1*> } by A17,Def2;
+A19: succ zt = {zt^<*n*> where n is Nat:zt^<*n*> in RT} by TREES_2:def 5;
+     now let x be set;
+    hereby assume
+    x in succ t;
+     then x in { t^<*n*> where n is Nat : t^<*n*> in T1 }
+                                                by TREES_2:def 5;
+     then consider n being Nat such that
+A20:  x = t^<*n*> & t^<*n*> in T1;
+       <*0*>^(t^<*n*>) in RT by A20,TREES_3:72;
+     then zt^<*n*> in RT by FINSEQ_1:45;
+     then zt^<*n*> in {zt^<*k*> where k is Nat:zt^<*k*> in RT};
+     then zt^<*n*> = zt^<*0*> or zt^<*n*> = zt^<*1*> by A18,A19,TARSKI:def 2;
+     then x = t^<*0*> or x = t^<*1*> by A20,FINSEQ_1:46;
+    hence x in { t^<*0*>, t^<*1*> } by TARSKI:def 2;
+    end;
+    assume x in { t^<*0*>, t^<*1*> };
+then A21:  x = t^<*0*> or x = t^<*1*> by TARSKI:def 2;
+        <*0*>^t^<*0*> in succ zt & <*0*>^t^<*1*> in succ zt
+                                                by A18,TARSKI:def 2;
+      then <*0*>^(t^<*0*>) in succ zt & <*0*>^(t^<*1*>) in succ zt
+                                                by FINSEQ_1:45;
+    hence x in succ t by A21,Th9;
+   end;
+   hence succ t = { t^<*0*>, t^<*1*> } by TARSKI:2;
+  end;
+  hence T1 is binary by Def2;
+    now let t be Element of T2;
+   reconsider zt = <*1*>^t as Element of RT by TREES_3:73;
+   assume not t in Leaves T2;
+    then not zt in Leaves RT by Th8;
+then A22: succ zt = { <*1*>^t^<*0*>, <*1*>^t^<*1*> } by A17,Def2;
+A23: succ zt = {zt^<*n*> where n is Nat:zt^<*n*> in RT} by TREES_2:def 5;
+     now let x be set;
+    hereby assume
+    x in succ t;
+     then x in { t^<*n*> where n is Nat : t^<*n*> in T2 }
+                                                by TREES_2:def 5;
+     then consider n being Nat such that
+A24:  x = t^<*n*> & t^<*n*> in T2;
+       <*1*>^(t^<*n*>) in RT by A24,TREES_3:73;
+     then zt^<*n*> in RT by FINSEQ_1:45;
+     then zt^<*n*> in {zt^<*k*> where k is Nat:zt^<*k*> in RT};
+     then zt^<*n*> = zt^<*0*> or zt^<*n*> = zt^<*1*> by A22,A23,TARSKI:def 2;
+     then x = t^<*0*> or x = t^<*1*> by A24,FINSEQ_1:46;
+    hence x in { t^<*0*>, t^<*1*> } by TARSKI:def 2;
+    end;
+    assume x in { t^<*0*>, t^<*1*> };
+then A25:  x = t^<*0*> or x = t^<*1*> by TARSKI:def 2;
+        <*1*>^t^<*0*> in succ zt & <*1*>^t^<*1*> in succ zt
+                                                by A22,TARSKI:def 2;
+      then <*1*>^(t^<*0*>) in succ zt & <*1*>^(t^<*1*>) in succ zt
+                                                by FINSEQ_1:45;
+    hence x in succ t by A25,Th9;
+   end;
+   hence succ t = { t^<*0*>, t^<*1*> } by TARSKI:2;
+  end;
+  hence T2 is binary by Def2;
+end;
+
+ theorem Th11:
+  for T1,T2 being DecoratedTree, x being set
+   holds T1 is binary & T2 is binary iff x-tree (T1,T2) is binary
+proof
+ let T1,T2 be DecoratedTree, x be set;
+ hereby assume T1 is binary & T2 is binary;
+   then dom T1 is binary & dom T2 is binary by Def3;
+then A1: tree(dom T1, dom T2) is binary by Th10;
+     dom (x-tree (T1, T2)) = tree(dom T1, dom T2) by TREES_4:14;
+  hence x-tree (T1,T2) is binary by A1,Def3;
+ end;
+ assume x-tree (T1,T2) is binary;
+then A2: dom (x-tree (T1,T2)) is binary by Def3;
+     dom (x-tree (T1, T2)) = tree(dom T1, dom T2) by TREES_4:14;
+   then dom T1 is binary & dom T2 is binary by A2,Th10;
+ hence T1 is binary & T2 is binary by Def3;
+end;
+
+definition let D be non empty set, x be Element of D,
+               T1, T2 be binary finite DecoratedTree of D;
+ redefine func x-tree (T1,T2) -> binary finite DecoratedTree of D;
+ coherence proof
+   set t1t2 = <*T1,T2*>;
+     dom T1 is finite & dom T2 is finite by AMI_1:21;
+then A1: T1 in FinTrees D & T2 in FinTrees D by TREES_3:def 8;
+   rng <*T1, T2*> = rng (<*T1*>^<*T2*>) by FINSEQ_1:def 9
+                 .= rng <*T1*> \/ rng <*T2*> by FINSEQ_1:44
+                 .= {T1} \/ rng <*T2*> by FINSEQ_1:56
+                 .= {T1} \/ {T2} by FINSEQ_1:56
+                 .= {T1, T2} by ENUMSET1:41;
+   then for x being set st x in rng t1t2 holds x in FinTrees D by A1,TARSKI:def
+2;
+   then rng t1t2 c= FinTrees D by TARSKI:def 3;
+   then reconsider T1T2 = t1t2 as FinSequence of FinTrees D by FINSEQ_1:def 4;
+     x-tree (T1, T2) = x-tree T1T2 by TREES_4:def 6;
+   then dom (x-tree (T1, T2)) is finite by TREES_3:def 8;
+  hence x-tree (T1, T2) is binary finite DecoratedTree of D by Th11,AMI_1:21;
+end;
+end;
+
+definition let IT be non empty DTConstrStr;
+ attr IT is binary means
+:Def4:
+  for s being Symbol of IT, p being FinSequence st s ==> p
+   ex x1, x2 being Symbol of IT st p = <* x1, x2 *>;
+end;
+
+definition
+ cluster binary with_terminals with_nonterminals with_useful_nonterminals
+         strict (non empty DTConstrStr);
+  existence proof
+   reconsider 01 = {0,1} as non empty set;
+   reconsider '0 = 0, '1 = 1 as Element of 01 by TARSKI:def 2;
+   reconsider '11' = <*'1*>^<*'1*> as Element of 01*;
+   reconsider P = {['0,'11']} as Relation of 01, 01* by RELSET_1:8;
+   take cherry = DTConstrStr (# 01, P #);
+   reconsider '0, '1 as Symbol of cherry;
+   hereby let s be Symbol of cherry, p be FinSequence;
+    assume s ==> p; then [s,p] in P by LANG1:def 1;
+     then [s,p] = [0,'11'] by TARSKI:def 1;
+then A1:   p = '11' by ZFMISC_1:33 .= <*1,1*> by FINSEQ_1:def 9;
+    take x1 = '1, x2 = '1; thus p = <*x1,x2*> by A1;
+   end;
+      now let s be FinSequence; assume '1 ==> s;
+      then [1,s] in P by LANG1:def 1;
+      then [1,s] = [0,'11'] by TARSKI:def 1; hence contradiction by ZFMISC_1:33
+;
+    end;
+    then A2: '1 in {t where t is Symbol of cherry:
+               not ex s being FinSequence st t ==> s};
+then A3:  '1 in Terminals cherry by LANG1:def 2;
+   thus Terminals cherry <> {} by A2,LANG1:def 2;
+      ['0,'11'] in P by TARSKI:def 1;
+    then '0 ==> '11' by LANG1:def 1;
+then A4:  '0 in {t where t is Symbol of cherry: ex s being FinSequence st t ==>
+s}
+    & {s where s is Symbol of cherry: ex p being FinSequence st s ==> p}
+      = NonTerminals cherry by LANG1:def 3;
+   hence NonTerminals cherry <> {};
+   hereby let nt be Symbol of cherry; assume
+       nt in NonTerminals cherry;
+     then ex s being Symbol of cherry st nt = s &
+     ex p being FinSequence st s ==> p by A4;
+    then consider p being FinSequence such that
+A5:   nt ==> p;
+       [nt, p] in P by A5,LANG1:def 1;
+then A6:     [nt, p] = [0, '11'] by TARSKI:def 1;
+   reconsider X = TS cherry as non empty set by A3,DTCONSTR:def 4;
+    reconsider rt1 = root-tree '1 as Element of X by A3,DTCONSTR:def 4;
+    reconsider q = <*rt1*>^<*rt1*> as FinSequence of TS cherry;
+    take q' = q;
+       q = <*root-tree 1, root-tree 1*> by FINSEQ_1:def 9;
+     then roots q = <*(root-tree '1).{}, (root-tree '1).{}*> &
+     '11' = <*1, 1*> & (root-tree 1).{} = 1
+                                   by DTCONSTR:6,FINSEQ_1:def 9,TREES_4:3;
+    hence nt ==> roots q' by A5,A6,ZFMISC_1:33;
+   end;
+   thus thesis;
+  end;
+end;
+
+scheme BinDTConstrStrEx { S() -> non empty set, P[set, set, set] }:
+   ex G be binary strict (non empty DTConstrStr) st the carrier of G = S() &
+  for x, y, z being Symbol of G holds x ==> <*y,z*> iff P[x, y, z]
+proof
+ defpred Q[set, FinSequence] means P[$1, $2.1, $2.2] & $2 = <*$2.1, $2.2*>;
+ consider G being strict non empty DTConstrStr such that
+A1: the carrier of G = S() and
+A2: for x being Symbol of G, p being FinSequence of the carrier of G
+           holds x ==> p iff Q[x, p] from DTConstrStrEx;
+A3: now let x, y, z be Symbol of G;
+     reconsider yz = <*y,z*> as FinSequence of the carrier of G;
+     yz.1 = y & yz.2 = z by FINSEQ_1:61;
+    hence x ==> <*y,z*> iff P[x, y, z] by A2;
+   end;
+     now let s be Symbol of G, p be FinSequence;
+    assume
+A4:    s ==> p;
+      then [s,p] in the Rules of G by LANG1:def 1;
+      then p in (the carrier of G)* by ZFMISC_1:106;
+      then reconsider pp = p as FinSequence of the carrier of G by FINSEQ_2:def
+3;
+A5:    rng pp c= the carrier of G by FINSEQ_1:def 4;
+            P[s, pp.1, pp.2] & pp = <*pp.1, pp.2*> by A2,A4;
+      then rng pp = rng (<*pp.1*>^<*pp.2*>) by FINSEQ_1:def 9
+             .= rng <*pp.1*> \/ rng <*pp.2*> by FINSEQ_1:44
+             .= {pp.1} \/ rng <*pp.2*> by FINSEQ_1:56
+             .= {pp.1} \/ {pp.2} by FINSEQ_1:56
+             .= {pp.1, pp.2} by ENUMSET1:41;
+      then pp.1 in rng pp & pp.2 in rng pp by TARSKI:def 2;
+      then reconsider pp1 = pp.1, pp2 = pp.2 as Symbol of G by A5;
+      take pp1, pp2;
+     thus p = <*pp1, pp2*> by A2,A4;
+   end;
+  then G is binary by Def4;
+ hence thesis by A1,A3;
+end;
+
+theorem Th12:
+ for G being binary with_terminals with_nonterminals (non empty DTConstrStr),
+     ts being FinSequence of TS G,
+     nt being Symbol of G st nt ==> roots ts
+ holds
+     nt is NonTerminal of G &
+     dom ts = {1, 2} & 1 in dom ts & 2 in dom ts &
+  ex tl, tr being Element of TS G st
+     roots ts = <*root-label tl, root-label tr*> &
+     tl = ts.1 & tr = ts.2 & nt-tree ts = nt-tree (tl, tr) &
+     tl in rng ts & tr in rng ts
+proof
+ let G be binary with_terminals with_nonterminals (non empty DTConstrStr),
+     ts be FinSequence of TS G,
+     nt be Symbol of G;
+ assume
+A1: nt ==> roots ts;
+   then nt in {s where s is Symbol of G:ex rts being FinSequence st s ==> rts}
+;
+   hence nt is NonTerminal of G by LANG1:def 3;
+   consider rtl, rtr being Symbol of G such that
+A2:  roots ts = <* rtl, rtr *> by A1,Def4;
+A3:  dom <*rtl, rtr*> = dom ts &
+    for i being Nat st i in dom ts ex T being DecoratedTree
+        st T = ts.i & <*rtl, rtr*>.i = T.{} by A2,DTCONSTR:def 1;
+A4: len <*rtl, rtr*> = 2 by FINSEQ_1:61;
+ hence dom ts = {1, 2} by A3,FINSEQ_1:4,def 3;
+ hence
+A5:  1 in dom ts & 2 in dom ts by TARSKI:def 2;
+    then consider tl being DecoratedTree such that
+A6:  tl = ts.1 & <*rtl, rtr*>.1 = tl.{} by A2,DTCONSTR:def 1;
+    consider tr being DecoratedTree such that
+A7:  tr = ts.2 & <*rtl, rtr*>.2 = tr.{} by A2,A5,DTCONSTR:def 1;
+    rng ts c= TS G & tl in rng ts & tr in rng ts
+                              by A5,A6,A7,FINSEQ_1:def 4,FUNCT_1:def 5
+;
+    then reconsider tl, tr as Element of TS(G);
+      <*rtl, rtr*>.1 = rtl & <*rtl, rtr*>.2 = rtr by FINSEQ_1:61;
+then A8:  root-label tl = rtl & root-label tr = rtr by A6,A7,Def1;
+      Seg len <*rtl, rtr*> = dom <*rtl, rtr*> by FINSEQ_1:def 3
+                        .= Seg len ts by A3,FINSEQ_1:def 3;
+    then len ts = 2 by A4,FINSEQ_1:8;
+then A9:  ts = <*tl, tr*> by A6,A7,FINSEQ_1:61;
+ take tl, tr;
+ thus roots ts = <*root-label tl, root-label tr*> by A2,A8;
+ thus tl = ts.1 & tr = ts.2 & nt-tree ts = nt-tree (tl, tr)
+                                by A6,A7,A9,TREES_4:def 6;
+ thus tl in rng ts & tr in rng ts by A5,A6,A7,FUNCT_1:def 5;
+end;
+
+
+scheme BinDTConstrInd
+   { G() -> binary with_terminals with_nonterminals (non empty DTConstrStr),
+     P[set] }:
+ for t being Element of TS(G()) holds P[t]
+ provided
+A1: for s being Terminal of G() holds P[root-tree s]
+    and
+A2: for nt being NonTerminal of G(),
+     tl, tr being Element of TS(G())
+    st nt ==> <*root-label tl, root-label tr*> & P[tl] & P[tr]
+    holds P[nt-tree(tl, tr)]
+proof
+    defpred _P[set] means P[$1];
+A3: for s being Symbol of G() st s in Terminals G() holds _P[root-tree s]
+      by A1;
+A4: for nt being Symbol of G(),
+       ts being FinSequence of TS(G()) st nt ==> roots ts &
+    for t being DecoratedTree of the carrier of G() st t in rng ts
+                                                     holds _P[t]
+    holds _P[nt-tree ts]
+ proof let nt be Symbol of G(),
+       ts be FinSequence of TS(G()) such that
+A5: nt ==> roots ts and
+A6: for t being DecoratedTree of the carrier of G() st t in rng ts
+                                                     holds P[t];
+A7: nt is NonTerminal of G() by A5,Th12;
+  consider tl, tr being Element of TS G() such that
+A8:   roots ts = <*root-label tl, root-label tr*> and
+A9:   tl = ts.1 & tr = ts.2 & nt-tree ts = nt-tree (tl, tr) &
+      tl in rng ts & tr in rng ts by A5,Th12;
+      P[tl] & P[tr] by A6,A9;
+  hence P[nt-tree ts] by A2,A5,A7,A8,A9;
+ end;
+   for t being DecoratedTree of the carrier of G()
+       st t in TS(G()) holds _P[t] from DTConstrInd(A3, A4);
+ hence thesis;
+end;
+
+scheme BinDTConstrIndDef
+  { G() -> binary with_terminals with_nonterminals with_useful_nonterminals
+           (non empty DTConstrStr),
+    D()->non empty set,
+    TermVal(set) -> Element of D(),
+    NTermVal(set, set, set, set, set) -> Element of D()
+  }:
+ ex f being Function of TS(G()), D() st
+  (for t being Terminal of G() holds f.(root-tree t) = TermVal(t)) &
+  (for nt being NonTerminal of G(),
+       tl, tr being Element of TS(G()),
+       rtl, rtr being Symbol of G()
+     st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
+   for xl, xr being Element of D() st xl = f.tl & xr = f.tr
+               holds f.(nt-tree (tl, tr)) = NTermVal(nt, rtl, rtr, xl, xr))
+proof
+ deffunc BNTV(Symbol of G(), FinSequence, FinSequence of D()) =
+                NTermVal($1, $2.1, $2.2, $3.1, $3.2);
+  deffunc _TermVal(set) = TermVal($1);
+  consider f being Function of TS(G()), D() such that
+A1: for t being Symbol of G() st t in Terminals G()
+         holds f.(root-tree t) = _TermVal(t) and
+A2: for nt being Symbol of G(),
+       ts being FinSequence of TS(G()) st nt ==> roots ts
+         holds f.(nt-tree ts) = BNTV(nt, roots ts, f * ts) from DTConstrIndDef;
+ take f;
+A3: dom f = TS G() by FUNCT_2:def 1;
+ thus for t be Terminal of G() holds f.(root-tree t) = TermVal(t) by A1;
+ let nt be NonTerminal of G(),
+     tl, tr be Element of TS(G()),
+     rtl, rtr be Symbol of G();
+ assume
+A4: rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>;
+ let xl, xr be Element of D();
+ assume
+A5: xl = f.tl & xr = f.tr;
+   reconsider ts = <*tl, tr*> as FinSequence of TS G();
+   reconsider rts = <*rtl, rtr*> as FinSequence;
+A6: ts.1 = tl & ts.2 = tr & rts.1 = rtl & rts.2 =rtr by FINSEQ_1:61;
+A7: dom rts = {1, 2} by FINSEQ_1:4,FINSEQ_3:29;
+A8: dom ts = {1, 2} by FINSEQ_1:4,FINSEQ_3:29;
+      now let i be Nat; assume i in dom ts;
+      then i in Seg len ts by FINSEQ_1:def 3;
+then A9: i in Seg 2 by FINSEQ_1:61;
+     per cases by A9,FINSEQ_1:4,TARSKI:def 2;
+      suppose i = 1;
+       then tl = ts.i & rts.i = tl.{} by A4,A6,Def1;
+      hence ex T being DecoratedTree st T = ts.i & rts.i = T.{};
+      suppose i = 2;
+       then tr = ts.i & rts.i = tr.{} by A4,A6,Def1;
+      hence ex T being DecoratedTree st T = ts.i & rts.i = T.{};
+    end;
+then A10: rts = roots ts by A7,A8,DTCONSTR:def 1;
+   reconsider x = <*xl, xr*> as FinSequence of D();
+A11: dom x = {1, 2} by FINSEQ_1:4,FINSEQ_3:29;
+A12: now let y be set;
+A13: now assume
+A14:       y in dom x;
+      per cases by A11,A14,TARSKI:def 2;
+       suppose y = 1;
+       hence y in dom ts & ts.y in dom f by A3,A6,A8,TARSKI:def 2;
+       suppose y = 2;
+       hence y in dom ts & ts.y in dom f by A3,A6,A8,TARSKI:def 2;
+     end;
+       now assume
+A15:      y in dom ts & ts.y in dom f;
+      per cases by A8,A15,TARSKI:def 2;
+       suppose y = 1;
+       hence y in dom x by A11,TARSKI:def 2;
+       suppose y = 2;
+       hence y in dom x by A11,TARSKI:def 2;
+     end;
+     hence y in dom x iff y in dom ts & ts.y in dom f by A13;
+    end;
+  now let y be set; assume y in dom x;
+      then y = 1 or y = 2 by A11,TARSKI:def 2;
+     hence x.y = f.(ts.y) by A5,A6,FINSEQ_1:61;
+    end;
+ then x = f * ts by A12,FUNCT_1:20;
+then A16: f.(nt-tree ts) = NTermVal(nt, rts.1, rts.2, x.1, x.2) by A2,A4,A10;
+    rts.1 = rtl & rts.2 = rtr & x.1 = xl & x.2 =xr by FINSEQ_1:61;
+ hence f.(nt-tree (tl, tr)) = NTermVal(nt, rtl, rtr, xl, xr) by A16,TREES_4:def
+6;
+end;
+
+scheme BinDTConstrUniqDef
+  { G() -> binary with_terminals with_nonterminals with_useful_nonterminals
+           (non empty DTConstrStr),
+    D()->non empty set,
+    f1, f2() -> Function of TS(G()), D(),
+    TermVal(set) -> Element of D(),
+    NTermVal(set, set, set, set, set) -> Element of D()
+  }:
+f1() = f2()
+provided
+A1:
+  (for t being Terminal of G() holds f1().(root-tree t) = TermVal(t)) &
+  (for nt being NonTerminal of G(),
+       tl, tr being Element of TS(G()),
+       rtl, rtr being Symbol of G()
+     st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
+   for xl, xr being Element of D() st xl = f1().tl & xr = f1().tr
+             holds f1().(nt-tree (tl, tr)) = NTermVal(nt, rtl, rtr, xl, xr))
+ and
+A2:
+  (for t being Terminal of G() holds f2().(root-tree t) = TermVal(t)) &
+  (for nt being NonTerminal of G(),
+       tl, tr being Element of TS(G()),
+       rtl, rtr being Symbol of G()
+     st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
+   for xl, xr being Element of D() st xl = f2().tl & xr = f2().tr
+             holds f2().(nt-tree (tl, tr)) = NTermVal(nt, rtl, rtr, xl, xr))
+proof
+ deffunc BNTV(Symbol of G(), FinSequence, FinSequence of D()) =
+                NTermVal($1, $2.1, $2.2, $3.1, $3.2);
+    deffunc _TermVal(set) = TermVal($1);
+A3: now
+      thus for t being Symbol of G() st t in Terminals G()
+             holds f1().(root-tree t) = _TermVal(t) by A1;
+      let nt be Symbol of G(),
+          ts be FinSequence of TS G();
+       set rts = roots ts;
+      assume
+A4:      nt ==> rts;
+      then consider tl, tr being Element of TS G() such that
+A5:     roots ts = <*root-label tl, root-label tr*> &
+       tl = ts.1 & tr = ts.2 & nt-tree ts = nt-tree (tl, tr) &
+       tl in rng ts & tr in rng ts by Th12;
+A6:   root-label tl = rts.1 & root-label tr = rts.2 by A5,FINSEQ_1:61;
+      set x = f1() * ts;
+      reconsider xl = f1().tl as Element of D();
+      reconsider xr = f1().tr as Element of D();
+A8:     nt is NonTerminal of G() &
+       dom ts = {1, 2} & 1 in dom ts & 2 in dom ts by A4,Th12;
+then x.1 = xl & x.2 = xr by A5,FUNCT_1:23;
+      hence f1().(nt-tree ts) = BNTV(nt, rts, x) by A1,A4,A5,A6,A8;
+     end;
+A9: now
+      thus for t be Symbol of G() st t in Terminals G()
+             holds f2().(root-tree t) = _TermVal(t) by A2;
+      let nt be Symbol of G(),
+          ts be FinSequence of TS G();
+       set rts = roots ts;
+      assume
+A10:    nt ==> rts;
+      then consider tl, tr being Element of TS G() such that
+A11:     roots ts = <*root-label tl, root-label tr*> &
+       tl = ts.1 & tr = ts.2 & nt-tree ts = nt-tree (tl, tr) &
+       tl in rng ts & tr in rng ts by Th12;
+A12:  root-label tl = rts.1 & root-label tr = rts.2 by A11,FINSEQ_1:61;
+      set x = f2() * ts;
+      reconsider xl = f2().tl as Element of D();
+      reconsider xr = f2().tr as Element of D();
+A14:     nt is NonTerminal of G() &
+       dom ts = {1, 2} & 1 in dom ts & 2 in dom ts by A10,Th12;
+then x.1 = xl & x.2 = xr by A11,FUNCT_1:23;
+      hence f2().(nt-tree ts) = BNTV(nt, rts, x) by A2,A10,A11,A12,A14;
+     end;
+ thus thesis from DTConstrUniqDef(A3, A9);
+end;
+
+definition
+ let A, B, C be non empty set,
+     a be Element of A, b be Element of B, c be Element of C;
+ redefine func [a, b, c] -> Element of [:A, B, C:];
+ coherence by MCART_1:73;
+end;
+
+scheme BinDTC_DefLambda
+    { G() -> binary with_terminals with_nonterminals with_useful_nonterminals
+             (non empty DTConstrStr),
+      A, B() -> non empty set,
+      F(set, set) -> Element of B(),
+      H(set, set, set, set) -> Element of B()
+    }:
+ ex f being Function of TS G(), Funcs(A(), B()) st
+  (for t being Terminal of G() ex g being Function of A(), B()
+     st g = f.(root-tree t) &
+     for a being Element of A() holds g.a = F(t, a)) &
+  (for nt being NonTerminal of G(),
+       t1, t2 being Element of TS G(),
+       rtl, rtr being Symbol of G()
+       st rtl = root-label t1 & rtr = root-label t2 & nt ==> <* rtl, rtr *>
+     ex g, f1, f2 being Function of A(), B()
+     st g = f.(nt-tree (t1, t2)) & f1 = f.t1 & f2 = f.t2 &
+     for a being Element of A() holds g.a = H(nt, f1, f2, a))
+proof
+ reconsider FAB = Funcs(A(), B()) as non empty set by FUNCT_2:11;
+    defpred _P[set,set] means
+      for tv being Function of A(), B() st tv = $2
+       for a being Element of A() holds tv.a = F($1, a);
+A1: now let x be Element of Terminals G();
+       deffunc _F(set) = F(x,$1);
+       consider y being Function of A(), B() such that
+A2:      for a being Element of A() holds y.a = _F(a) from LambdaD;
+         A() = dom y & rng y c= B() by FUNCT_2:def 1,RELSET_1:12;
+       then reconsider y as Element of FAB by FUNCT_2:def 2;
+      take y;
+      thus _P[x,y] by A2;
+     end;
+ consider TV being Function of Terminals G(), FAB such that
+A4: for e being Element of Terminals G() holds _P[e,TV.e] from FuncExD (A1);
+    defpred _P[set,set,set,set] means
+    for a being Element of A()
+          for ntv being Function of A(), B() st ntv = $4
+            holds ntv.a = H($1, $2, $3, a);
+A5: now let x be Element of NonTerminals G(),
+               y, z be Element of FAB;
+         deffunc _F(set) = H(x, y, z, $1);
+        consider fab being Function of A(), B() such that
+A6:       for a being Element of A() holds fab.a = _F(a) from LambdaD;
+          A() = dom fab & rng fab c= B() by FUNCT_2:def 1,RELSET_1:12;
+        then reconsider fab as Element of FAB by FUNCT_2:def 2;
+       take fab;
+       thus _P[x,y,z,fab] by A6;
+      end;
+ consider NTV being Function of
+           [:NonTerminals G(), FAB, FAB:],
+           FAB such that
+A7:  for x being Element of NonTerminals G(), y,z being Element of FAB
+      holds _P[x,y,z,NTV.[x,y,z]] from FuncEx3D (A5);
+  deffunc _TermVal(Terminal of G()) = TV.$1;
+  deffunc _NTermVal(Element of NonTerminals G(), set, set,
+                    Element of FAB,Element of FAB) = NTV.[$1, $4, $5];
+ consider f being Function of TS(G()), FAB such that
+A8:(for t being Terminal of G() holds f.(root-tree t) = _TermVal(t))
+&
+  (for nt being NonTerminal of G(),
+       tl, tr being Element of TS(G()),
+       rtl, rtr being Symbol of G()
+     st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
+   for xl, xr being Element of FAB st xl = f.tl & xr = f.tr
+               holds f.(nt-tree (tl, tr)) = _NTermVal(nt,rtl,rtr,xl,xr))
+                                                from BinDTConstrIndDef;
+  reconsider f' = f as Function of TS G(), Funcs(A(), B());
+  take f';
+  hereby
+   let t be Terminal of G();
+     consider TVt being Function such that
+A9:    TV.t = TVt & dom TVt = A() & rng TVt c= B() by FUNCT_2:def 2;
+    reconsider TVt as Function of A(), B() by A9,FUNCT_2:def 1,RELSET_1:11;
+   take TVt;
+   thus TVt = f'.(root-tree t) by A8,A9;
+   let a be Element of A();
+   thus TVt.a = F(t, a) by A4,A9;
+  end;
+  let nt be NonTerminal of G(),
+      t1, t2 be Element of TS G(),
+      rtl, rtr be Symbol of G();
+  assume
+A10: rtl = root-label t1 & rtr = root-label t2 & nt ==> <* rtl, rtr *>;
+   consider f1 being Function such that
+A11: f.t1 = f1 & dom f1 = A() & rng f1 c= B() by FUNCT_2:def 2;
+   reconsider f1 = f.t1 as Function of A(), B() by A11,FUNCT_2:def 1,RELSET_1:
+11;
+   consider f2 being Function such that
+A12: f.t2 = f2 & dom f2 = A() & rng f2 c= B() by FUNCT_2:def 2;
+   reconsider f2 = f.t2 as Function of A(), B() by A12,FUNCT_2:def 1,RELSET_1:
+11;
+     NTV.[nt, f.t1, f.t2] in FAB;
+   then consider ntvval being Function such that
+A13:    ntvval = NTV.[nt, f1, f2] & dom ntvval = A() & rng ntvval c= B()
+                                                by FUNCT_2:def 2;
+    reconsider ntvval as Function of A(), B() by A13,FUNCT_2:def 1,RELSET_1:11;
+   take ntvval, f1, f2;
+   thus ntvval = f'.(nt-tree (t1, t2)) & f1 = f'.t1 & f2 = f'.t2 by A8,A10,A13
+;
+   thus for a being Element of A() holds ntvval.a = H(nt, f1, f2, a)
+                                                        by A7,A13;
+end;
+scheme BinDTC_DefLambdaUniq
+    { G() -> binary with_terminals with_nonterminals with_useful_nonterminals
+             (non empty DTConstrStr),
+      A, B() -> non empty set,
+      f1, f2() -> Function of TS G(), Funcs (A(), B()),
+      F(set, set) -> Element of B(),
+      H(set, set, set, set) -> Element of B()
+    }:
+f1() = f2()
+ provided
+A1: (for t being Terminal of G() ex g being Function of A(), B()
+     st g = f1().(root-tree t) &
+     for a being Element of A() holds g.a = F(t, a)) &
+  (for nt being NonTerminal of G(), t1, t2 being Element of TS G(),
+       rtl, rtr being Symbol of G()
+       st rtl = root-label t1 & rtr = root-label t2 & nt ==> <* rtl, rtr *>
+     ex g, f1, f2 being Function of A(), B()
+     st g = f1().(nt-tree (t1, t2)) & f1 = f1().t1 & f2 = f1().t2 &
+     for a being Element of A() holds g.a = H(nt, f1, f2, a))
+and
+A2:  (for t being Terminal of G() ex g being Function of A(), B()
+     st g = f2().(root-tree t) &
+     for a being Element of A() holds g.a = F(t, a)) &
+  (for nt being NonTerminal of G(), t1, t2 being Element of TS G(),
+       rtl, rtr being Symbol of G()
+       st rtl = root-label t1 & rtr = root-label t2 & nt ==> <* rtl, rtr *>
+     ex g, f1, f2 being Function of A(), B()
+     st g = f2().(nt-tree (t1, t2)) & f1 = f2().t1 & f2 = f2().t2 &
+     for a being Element of A() holds g.a = H(nt, f1, f2, a))
+proof
+ reconsider FAB = Funcs(A(), B()) as non empty set by FUNCT_2:11;
+
+  defpred _P[set,set] means
+      for tv being Function of A(), B() st tv = $2
+       for a being Element of A() holds tv.a = F($1, a);
+
+A3: now let x be Element of Terminals G();
+       deffunc _F(Element of A()) = F(x,$1);
+       consider y being Function of A(), B() such that
+A4:      for a being Element of A() holds y.a = _F(a) from LambdaD;
+         A() = dom y & rng y c= B() by FUNCT_2:def 1,RELSET_1:12;
+       then reconsider y as Element of FAB by FUNCT_2:def 2;
+      take y;
+      thus _P[x,y] by A4;
+     end;
+ consider TV being Function of Terminals G(), FAB such that
+A6: for e being Element of Terminals G() holds _P[e,TV.e] from FuncExD (A3);
+    defpred _P[set,set,set,set] means
+    for a being Element of A()
+          for ntv being Function of A(), B() st ntv = $4
+            holds ntv.a = H($1, $2, $3, a);
+A7: now let x be Element of NonTerminals G(),
+               y, z be Element of FAB;
+        deffunc _F(Element of A()) = H(x, y, z, $1);
+        consider fab being Function of A(), B() such that
+A8:       for a being Element of A() holds fab.a = _F(a) from LambdaD;
+          A() = dom fab & rng fab c= B() by FUNCT_2:def 1,RELSET_1:12;
+        then reconsider fab as Element of FAB by FUNCT_2:def 2;
+       take fab;
+       thus _P[x,y,z,fab] by A8;
+      end;
+ consider NTV being Function of
+           [:NonTerminals G(), FAB, FAB:],
+           FAB such that
+A9:  for x being Element of NonTerminals G(),
+      y being Element of FAB,
+      z being Element of FAB
+   holds _P[x,y,z,NTV.[x,y,z]] from FuncEx3D (A7);
+ reconsider f1' = f1() as Function of TS G(), FAB;
+ reconsider f2' = f2() as Function of TS G(), FAB;
+     deffunc _TermVal(Terminal of G()) = TV.$1;
+     deffunc _NTV(NonTerminal of G(),set,set,Element of FAB,Element of FAB) =
+             NTV.[$1, $4, $5];
+A10: now
+ hereby
+  let t be Terminal of G();
+   consider g being Function of A(), B() such that
+A11:  g = f1().(root-tree t) & for a being Element of A() holds g.a = F(t, a)
+                                        by A1;
+    consider TVt being Function such that
+A12:   TV.t = TVt & dom TVt = A() & rng TVt c= B() by FUNCT_2:def 2;
+    reconsider TVt as Function of A(), B() by A12,FUNCT_2:def 1,RELSET_1:11;
+     now
+    thus A() = dom g by FUNCT_2:def 1;
+    thus A() = dom TVt by A12;
+    let x be set;
+    assume x in A();
+     then reconsider xx = x as Element of A();
+       g.xx = F(t, xx) by A11
+         .= (TVt).xx by A6,A12;
+    hence g.x = TVt.x;
+   end;
+  hence f1'.(root-tree t) = _TermVal(t) by A11,A12,FUNCT_1:9;
+ end;
+ let nt be NonTerminal of G(),
+     tl, tr be Element of TS(G()),
+     rtl, rtr be Symbol of G();
+ assume
+A13: rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>;
+ let xl, xr be Element of FAB;
+ assume
+A14: xl = f1'.tl & xr = f1'.tr;
+  consider g, ff1, ff2 being Function of A(), B() such that
+A15: g = f1().(nt-tree (tl, tr)) & ff1 = f1().tl & ff2 = f1().tr &
+   for a being Element of A() holds g.a = H(nt, ff1, ff2, a) by A1,A13;
+   consider ntvnt being Function such that
+A16: ntvnt = NTV.[nt, xl, xr] & dom ntvnt = A() & rng ntvnt c= B()
+                                                by FUNCT_2:def 2;
+   reconsider ntvnt as Function of A(), B() by A16,FUNCT_2:def 1,RELSET_1:11;
+    now
+   thus A() = dom g by FUNCT_2:def 1;
+   thus A() = dom ntvnt by FUNCT_2:def 1;
+   let x be set;
+   assume x in A();
+    then reconsider xx = x as Element of A();
+      g.xx = H(nt, xl, xr, xx) by A14,A15
+        .= ntvnt.xx by A9,A16;
+   hence g.x = ntvnt.x;
+  end;
+ hence f1'.(nt-tree (tl, tr)) = _NTV(nt,rtl,rtr,xl,xr) by A15,A16,FUNCT_1:9;
+     end;
+A17: now
+ hereby
+  let t be Terminal of G();
+   consider g being Function of A(), B() such that
+A18:  g = f2().(root-tree t) & for a being Element of A() holds g.a = F(t, a)
+                                        by A2;
+    consider TVt being Function such that
+A19:   TV.t = TVt & dom TVt = A() & rng TVt c= B() by FUNCT_2:def 2;
+    reconsider TVt as Function of A(), B() by A19,FUNCT_2:def 1,RELSET_1:11;
+     now
+    thus A() = dom g by FUNCT_2:def 1;
+    thus A() = dom TVt by A19;
+    let x be set;
+    assume x in A();
+     then reconsider xx = x as Element of A();
+       g.xx = F(t, xx) by A18
+         .= (TVt).xx by A6,A19;
+    hence g.x = TVt.x;
+   end;
+  hence f2'.(root-tree t) = _TermVal(t) by A18,A19,FUNCT_1:9;
+ end;
+ let nt be NonTerminal of G(),
+     tl, tr be Element of TS(G()),
+     rtl, rtr be Symbol of G();
+ assume
+A20: rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>;
+ let xl, xr be Element of FAB;
+ assume
+A21: xl = f2'.tl & xr = f2'.tr;
+  consider g, ff1, ff2 being Function of A(), B() such that
+A22: g = f2().(nt-tree (tl, tr)) & ff1 = f2().tl & ff2 = f2().tr &
+   for a being Element of A() holds g.a = H(nt, ff1, ff2, a) by A2,A20;
+   consider ntvnt being Function such that
+A23: ntvnt = NTV.[nt, xl, xr] & dom ntvnt = A() & rng ntvnt c= B()
+                                                by FUNCT_2:def 2;
+   reconsider ntvnt as Function of A(), B() by A23,FUNCT_2:def 1,RELSET_1:11;
+    now
+   thus A() = dom g by FUNCT_2:def 1;
+   thus A() = dom ntvnt by FUNCT_2:def 1;
+   let x be set;
+   assume x in A();
+    then reconsider xx = x as Element of A();
+      g.xx = H(nt, xl, xr, xx) by A21,A22
+        .= ntvnt.xx by A9,A23;
+   hence g.x = ntvnt.x;
+  end;
+ hence f2'.(nt-tree (tl, tr)) = _NTV(nt, rtl,rtr,xl, xr) by A22,A23,FUNCT_1:9;
+     end;
+   f1' = f2' from BinDTConstrUniqDef ( A10, A17 );
+ hence thesis;
+end;
+
+definition
+ let G be binary with_terminals with_nonterminals (non empty DTConstrStr);
+ cluster -> binary Element of TS G;
+  coherence proof
+    defpred _P[DecoratedTree] means $1 is binary;
+A1: now let s be Terminal of G;
+        dom root-tree s is binary by Th6,TREES_4:3;
+     hence _P[root-tree s] by Def3;
+    end;
+A2: for nt being NonTerminal of G,
+        tl, tr being Element of TS(G) st
+       nt ==> <*root-label tl, root-label tr*> & _P[tl] & _P[tr]
+      holds _P[nt-tree(tl, tr)] by Th11;
+   thus for x being Element of TS(G) holds _P[x] from BinDTConstrInd ( A1, A2);
+  end;
+end;

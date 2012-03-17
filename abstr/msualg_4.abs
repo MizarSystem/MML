@@ -1,0 +1,328 @@
+:: Many Sorted Quotient Algebra
+::  by Ma{\l}gorzata Korolkiewicz
+::
+:: Received May 6, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_1, MSUALG_1, FUNCT_1, RELAT_1, PBOOLE, BOOLE, EQREL_1,
+      ZF_REFLE, QC_LANG1, PRALG_1, FINSEQ_1, TDGROUP, CARD_3, GROUP_6, ALG_1,
+      MSUALG_3, WELLORD1, MSUALG_4, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
+      EQREL_1, STRUCT_0, NAT_1, FUNCT_2, FINSEQ_1, CARD_3, FINSEQ_4, PBOOLE,
+      PRALG_1, MSUALG_1, MSUALG_3, PRALG_2;
+ constructors EQREL_1, FINSEQ_4, MSUALG_3, PRALG_2, MEMBERED, XBOOLE_0;
+ clusters FUNCT_1, FINSEQ_1, PBOOLE, MSUALG_1, PRALG_1, MSUALG_3, PRALG_2,
+      RELSET_1, STRUCT_0, ZFMISC_1, PARTFUN1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+reserve S for non void non empty ManySortedSign,
+        U1 for MSAlgebra over S,
+        o for OperSymbol of S,
+        s for SortSymbol of S;
+
+definition let IT be Function;
+attr IT is Relation-yielding means
+:: MSUALG_4:def 1
+for x be set st x in dom IT holds IT.x is Relation;
+end;
+
+definition
+ let I be set;
+cluster Relation-yielding ManySortedSet of I;
+end;
+
+definition let I be set;
+  mode ManySortedRelation of I is Relation-yielding ManySortedSet of I;
+end;
+
+definition
+ let I be set,
+     A,B be ManySortedSet of I;
+ mode ManySortedRelation of A,B -> ManySortedSet of I means
+:: MSUALG_4:def 2
+ for i be set st i in I holds it.i is Relation of A.i,B.i;
+end;
+
+definition
+ let I be set,
+     A,B be ManySortedSet of I;
+ cluster -> Relation-yielding ManySortedRelation of A,B;
+end;
+
+definition
+ let I be set,
+     A be ManySortedSet of I;
+ mode ManySortedRelation of A is ManySortedRelation of A,A;
+end;
+
+definition
+ let I be set,
+     A be ManySortedSet of I;
+ let IT be ManySortedRelation of A;
+attr IT is MSEquivalence_Relation-like means
+:: MSUALG_4:def 3
+ for i be set, R be Relation of A.i st i in I & IT.i = R holds
+  R is Equivalence_Relation of A.i;
+end;
+
+
+definition
+ let I be non empty set,
+     A,B be ManySortedSet of I,
+     F be ManySortedRelation of A,B,
+     i be Element of I;
+redefine func F.i -> Relation of A.i,B.i;
+end;
+
+definition
+ let S be non empty ManySortedSign,
+     U1 be MSAlgebra over S;
+ mode ManySortedRelation of U1 is ManySortedRelation of the Sorts of U1;
+ canceled;
+end;
+
+definition
+ let S be non empty ManySortedSign,
+     U1 be MSAlgebra over S;
+ let IT be ManySortedRelation of U1;
+attr IT is MSEquivalence-like means
+:: MSUALG_4:def 5
+ IT is MSEquivalence_Relation-like;
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+     U1 be MSAlgebra over S;
+ cluster MSEquivalence-like ManySortedRelation of U1;
+end;
+
+theorem :: MSUALG_4:1
+for R be MSEquivalence-like ManySortedRelation of U1 holds
+  R.s is Equivalence_Relation of (the Sorts of U1).s;
+
+definition
+ let S be non void non empty ManySortedSign,
+     U1 be non-empty MSAlgebra over S,
+     R be MSEquivalence-like ManySortedRelation of U1;
+ attr R is MSCongruence-like means
+:: MSUALG_4:def 6
+ for o be OperSymbol of S, x,y be Element of Args(o,U1) st
+  (for n be Nat st n in dom x holds
+    [x.n,y.n] in R.((the_arity_of o)/.n))
+ holds [Den(o,U1).x,Den(o,U1).y] in R.(the_result_sort_of o);
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+     U1 be non-empty MSAlgebra over S;
+  cluster MSCongruence-like (MSEquivalence-like ManySortedRelation of U1);
+end;
+
+definition
+ let S be non void non empty ManySortedSign,
+     U1 be non-empty MSAlgebra over S;
+ mode MSCongruence of U1 is MSCongruence-like
+    (MSEquivalence-like ManySortedRelation of U1);
+end;
+
+definition let S be non void non empty ManySortedSign,
+               U1 be MSAlgebra over S,
+               R be (MSEquivalence-like ManySortedRelation of U1),
+               i be Element of S;
+redefine func R.i -> Equivalence_Relation of ((the Sorts of U1).i);
+end;
+
+definition let S be non void non empty ManySortedSign,
+               U1 be MSAlgebra over S,
+               R be (MSEquivalence-like ManySortedRelation of U1),
+               i be Element of S,
+               x be Element of (the Sorts of U1).i;
+func Class(R,x) -> Subset of (the Sorts of U1).i equals
+:: MSUALG_4:def 7
+   Class(R.i,x);
+end;
+
+definition let S; let U1 be non-empty MSAlgebra over S;
+ let R be MSCongruence of U1;
+ func Class R -> non-empty ManySortedSet of the carrier of S means
+:: MSUALG_4:def 8
+  for s being Element of S holds
+   it.s = Class (R.s);
+end;
+
+begin
+          ::::::::::::::::::::::::::::::::::::::
+          ::   Many Sorted Quotient Algebra   ::
+          ::::::::::::::::::::::::::::::::::::::
+
+definition let S;
+           let M1,M2 be ManySortedSet of the OperSymbols of S;
+ let F be ManySortedFunction of M1,M2;
+ let o be OperSymbol of S;
+ redefine func F.o -> Function of M1.o,M2.o;
+end;
+
+definition
+ let I be non empty set,
+     p be FinSequence of I,
+     X be non-empty ManySortedSet of I;
+redefine func X * p -> non-empty ManySortedSet of (dom p);
+end;
+
+definition let S,o;
+           let A be non-empty MSAlgebra over S;
+           let R be MSCongruence of A;
+           let x be Element of Args(o,A);
+func R # x -> Element of product ((Class R) * (the_arity_of o)) means
+:: MSUALG_4:def 9
+ for n be Nat st n in dom (the_arity_of o) holds
+   it.n = Class(R.((the_arity_of o)/.n),x.n);
+end;
+
+definition let S,o; let A be non-empty MSAlgebra over S;
+  let R be MSCongruence of A;
+ func QuotRes(R,o) -> Function of ((the Sorts of A) * the ResultSort of S).o,
+              ((Class R) * the ResultSort of S).o means
+:: MSUALG_4:def 10
+ for x being Element of (the Sorts of A).(the_result_sort_of o)
+  holds it.x = Class(R,x);
+
+ func QuotArgs(R,o) -> Function of ((the Sorts of A)# * the Arity of S).o,
+            ((Class R)# * the Arity of S).o means
+:: MSUALG_4:def 11
+   for x be Element of Args(o,A) holds it.x = R # x;
+end;
+
+definition let S; let A be non-empty MSAlgebra over S;
+  let R be MSCongruence of A;
+ func QuotRes R -> ManySortedFunction of
+                        ((the Sorts of A) * the ResultSort of S),
+                        ((Class R) * the ResultSort of S) means
+:: MSUALG_4:def 12
+   for o being OperSymbol of S holds it.o = QuotRes(R,o);
+
+ func QuotArgs R -> ManySortedFunction of (the Sorts of A)# * the Arity of S,
+                       (Class R)# * the Arity of S means
+:: MSUALG_4:def 13
+    for o be OperSymbol of S holds it.o = QuotArgs(R,o);
+end;
+
+theorem :: MSUALG_4:2
+for A be non-empty MSAlgebra over S, R be MSCongruence of A, x be set
+ st x in ((Class R)# * the Arity of S).o
+ ex a be Element of Args(o,A) st x = R # a;
+
+definition let S,o; let A be non-empty MSAlgebra over S;
+  let R be MSCongruence of A;
+func QuotCharact(R,o) -> Function of ((Class R)# * the Arity of S).o,
+            ((Class R) * the ResultSort of S).o means
+:: MSUALG_4:def 14
+  for a be Element of Args(o,A) st
+    R # a in ((Class R)# * the Arity of S).o
+    holds it.(R # a) = ((QuotRes(R,o)) * (Den(o,A))).a;
+end;
+
+definition let S; let A be non-empty MSAlgebra over S;
+            let R be MSCongruence of A;
+ func QuotCharact R -> ManySortedFunction of
+      (Class R)# * the Arity of S, (Class R) * the ResultSort of S
+                     means
+:: MSUALG_4:def 15
+for o be OperSymbol of S holds it.o = QuotCharact(R,o);
+end;
+
+definition let S; let U1 be non-empty MSAlgebra over S;
+ let R be MSCongruence of U1;
+ func QuotMSAlg(U1,R) -> MSAlgebra over S equals
+:: MSUALG_4:def 16
+    MSAlgebra(# Class R, QuotCharact R #);
+end;
+
+definition let S; let U1 be non-empty MSAlgebra over S;
+ let R be MSCongruence of U1;
+ cluster QuotMSAlg (U1,R) -> strict non-empty;
+end;
+
+definition let S; let U1 be non-empty MSAlgebra over S;
+           let R be MSCongruence of U1;
+           let s be SortSymbol of S;
+ func MSNat_Hom(U1,R,s) ->
+      Function of (the Sorts of U1).s,(Class R).s means
+:: MSUALG_4:def 17
+  for x be set st x in (the Sorts of U1).s holds
+    it.x = Class(R.s,x);
+end;
+
+definition let S; let U1 be non-empty MSAlgebra over S;
+           let R be MSCongruence of U1;
+ func MSNat_Hom(U1,R) ->
+      ManySortedFunction of U1, QuotMSAlg (U1,R) means
+:: MSUALG_4:def 18
+  for s be SortSymbol of S holds it.s = MSNat_Hom(U1,R,s);
+end;
+
+theorem :: MSUALG_4:3
+  for U1 be non-empty MSAlgebra over S, R be MSCongruence of U1 holds
+ MSNat_Hom(U1,R) is_epimorphism U1, QuotMSAlg (U1,R);
+
+definition let S; let U1,U2 be non-empty MSAlgebra over S;
+           let F be ManySortedFunction of U1,U2;
+           let s be SortSymbol of S;
+func MSCng(F,s) ->
+Equivalence_Relation of (the Sorts of U1).s means
+:: MSUALG_4:def 19
+for x,y be Element of (the Sorts of U1).s holds
+ [x,y] in it iff (F.s).x = (F.s).y;
+end;
+
+definition let S; let U1,U2 be non-empty MSAlgebra over S;
+           let F be ManySortedFunction of U1,U2;
+ assume  F is_homomorphism U1,U2;
+func MSCng(F) -> MSCongruence of U1 means
+:: MSUALG_4:def 20
+for s be SortSymbol of S holds it.s = MSCng(F,s);
+end;
+
+definition let S; let U1,U2 be non-empty MSAlgebra over S;
+           let F be ManySortedFunction of U1,U2;
+           let s be SortSymbol of S;
+assume  F is_homomorphism U1,U2;
+func MSHomQuot(F,s) -> Function of
+ (the Sorts of (QuotMSAlg (U1,MSCng F))).s,(the Sorts of U2).s
+       means
+:: MSUALG_4:def 21
+ for x be Element of (the Sorts of U1).s holds
+  it.(Class(MSCng(F,s),x)) = (F.s).x;
+end;
+
+definition let S; let U1,U2 be non-empty MSAlgebra over S;
+           let F be ManySortedFunction of U1,U2;
+func MSHomQuot(F) ->
+     ManySortedFunction of (QuotMSAlg (U1, MSCng F)),U2 means
+:: MSUALG_4:def 22
+ for s be SortSymbol of S holds it.s = MSHomQuot(F,s);
+end;
+
+theorem :: MSUALG_4:4
+for U1,U2 be non-empty MSAlgebra over S,
+ F be ManySortedFunction of U1,U2 st
+  F is_homomorphism U1,U2 holds
+   MSHomQuot(F) is_monomorphism QuotMSAlg (U1,MSCng F),U2;
+
+theorem :: MSUALG_4:5
+for U1,U2 be non-empty MSAlgebra over S,
+ F be ManySortedFunction of U1,U2 st
+  F is_epimorphism U1,U2 holds
+   MSHomQuot(F) is_isomorphism QuotMSAlg (U1,MSCng F),U2;
+
+theorem :: MSUALG_4:6
+  for U1,U2 be non-empty MSAlgebra over S,
+ F be ManySortedFunction of U1,U2 st
+  F is_epimorphism U1,U2 holds
+   QuotMSAlg (U1,MSCng F),U2 are_isomorphic;
+

@@ -1,0 +1,599 @@
+:: Non negative real numbers. Part II
+::  by Andrzej Trybulec
+::
+:: Received March 7, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM_2, BOOLE, ORDINAL2, ARYTM_3, ARYTM_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL2, ARYTM_2;
+ constructors ARYTM_2, XBOOLE_0;
+ clusters ZFMISC_1, XBOOLE_0;
+ requirements SUBSET;
+ theorems ARYTM_2;
+
+begin
+
+reserve x,y,z for Element of REAL+;
+
+theorem Th1:
+ x + y = y implies x = {}
+proof reconsider o = {} as Element of REAL+ by ARYTM_2:21;
+ assume x + y = y;
+  then x + y = y + o by ARYTM_2:def 8;
+ hence x = {} by ARYTM_2:12;
+end;
+
+reconsider u = one as Element of REAL+ by ARYTM_2:21;
+
+Lm1:
+ x *' y = x *' z & x <> {} implies y = z
+proof assume
+A1: x *' y = x *' z;
+ assume x <> {};
+  then consider x1 being Element of REAL+ such that
+A2: x *' x1 = one by ARYTM_2:15;
+ thus y = x *' x1 *' y by A2,ARYTM_2:16
+     .= x1 *' (x *' z) by A1,ARYTM_2:13
+     .= x *' x1 *' z by ARYTM_2:13
+     .= z by A2,ARYTM_2:16;
+end;
+
+theorem
+   x *' y = {} implies x = {} or y = {}
+proof assume
+A1: x *' y = {};
+ assume x <> {};
+  then consider x1 being Element of REAL+ such that
+A2: x *' x1 = one by ARYTM_2:15;
+ thus y = x *' x1 *' y by A2,ARYTM_2:16
+    .= x *' y *' x1 by ARYTM_2:13
+    .= {} by A1,ARYTM_2:4;
+end;
+
+theorem Th3:
+ x <=' y & y <=' z implies x <=' z
+proof
+ assume x <=' y;
+ then consider z1 being Element of REAL+ such that
+A1: x + z1 = y by ARYTM_2:10;
+ assume y <=' z;
+ then consider z2 being Element of REAL+ such that
+A2: y + z2 = z by ARYTM_2:10;
+    z = x + (z1 + z2) by A1,A2,ARYTM_2:7;
+ hence x <=' z by ARYTM_2:20;
+end;
+
+theorem Th4:
+ x <=' y & y <=' x implies x = y
+proof
+ assume x <=' y;
+ then consider z1 being Element of REAL+ such that
+A1: x + z1 = y by ARYTM_2:10;
+ assume y <=' x;
+ then consider z2 being Element of REAL+ such that
+A2: y + z2 = x by ARYTM_2:10;
+    x = x + (z1 + z2) by A1,A2,ARYTM_2:7;
+  then z1 + z2 = {} by Th1;
+  then z1 = {} by ARYTM_2:6;
+ hence x = y by A1,ARYTM_2:def 8;
+end;
+
+theorem Th5:
+ x <=' y & y = {} implies x = {}
+proof
+ assume x <=' y;
+ then consider z being Element of REAL+ such that
+A1: x + z = y by ARYTM_2:10;
+ thus thesis by A1,ARYTM_2:6;
+end;
+
+theorem Th6:
+ x = {} implies x <=' y
+proof assume x = {};
+  then x + y = y by ARYTM_2:def 8;
+ hence x <=' y by ARYTM_2:20;
+end;
+
+theorem Th7:
+ x <=' y iff x + z <=' y + z
+proof
+ thus x <=' y implies x + z <=' y + z
+  proof
+   assume x <=' y;
+   then consider z0 being Element of REAL+ such that
+A1:  x + z0 = y by ARYTM_2:10;
+      x + z + z0 = y + z by A1,ARYTM_2:7;
+   hence thesis by ARYTM_2:20;
+  end;
+ assume x + z <=' y + z;
+ then consider z0 being Element of REAL+ such that
+A2: x + z + z0 = y + z by ARYTM_2:10;
+    y + z = x + z0 + z by A2,ARYTM_2:7;
+  then y = x + z0 by ARYTM_2:12;
+ hence thesis by ARYTM_2:20;
+end;
+
+theorem Th8:
+ x <=' y implies x *' z <=' y *' z
+proof
+ assume x <=' y;
+ then consider z0 being Element of REAL+ such that
+A1: x + z0 = y by ARYTM_2:10;
+    y *' z = x *' z + z0 *' z by A1,ARYTM_2:14;
+ hence thesis by ARYTM_2:20;
+end;
+
+Lm2: x *' y <=' x *' z & x <> {} implies y <=' z
+proof
+ assume x *' y <=' x *' z;
+ then consider z0 being Element of REAL+ such that
+A1: x *' y + z0 = x *' z by ARYTM_2:10;
+ assume
+A2: x <> {};
+  then consider x1 being Element of REAL+ such that
+A3: x *' x1 = one by ARYTM_2:15;
+    x *' z = x *' y + u *' z0 by A1,ARYTM_2:16
+   .= x *' y + x *' (x1 *' z0) by A3,ARYTM_2:13
+   .= x *' (y + x1 *' z0) by ARYTM_2:14;
+  then z = y + x1 *' z0 by A2,Lm1;
+ hence thesis by ARYTM_2:20;
+end;
+
+definition let x,y be Element of REAL+;
+ func x -' y -> Element of REAL+ means
+:Def1: it + y = x if y <=' x
+  otherwise it = {};
+ existence
+  proof
+   hereby assume y <=' x;
+     then ex IT being Element of REAL+ st y + IT = x by ARYTM_2:10;
+    hence ex IT being Element of REAL+ st IT + y = x;
+   end;
+   thus thesis by ARYTM_2:21;
+  end;
+ correctness by ARYTM_2:12;
+end;
+
+Lm3:
+ x -' x = {}
+proof
+    x <=' x;
+  then x -' x + x = x by Def1;
+ hence thesis by Th1;
+end;
+
+theorem Th9:
+ x <=' y or x -' y <> {}
+proof
+ assume
+A1: not x <=' y;
+  then A2: x -' y + y = x by Def1;
+ assume x -' y = {};
+  then x = y by A2,ARYTM_2:def 8;
+ hence contradiction by A1;
+end;
+
+theorem
+   x <=' y & y -' x = {} implies x = y
+proof assume
+A1: x <=' y;
+ assume y -' x = {};
+  then y <=' x by Th9;
+ hence thesis by A1,Th4;
+end;
+
+theorem Th11:
+ x -' y <=' x
+proof
+ per cases;
+ suppose y <=' x;
+  then x -' y + y = x by Def1;
+ hence thesis by ARYTM_2:20;
+ suppose not y <=' x;
+  then x -' y = {} by Def1;
+ hence thesis by Th6;
+end;
+
+Lm4:
+ x = {} implies y -' x = y
+proof assume
+A1: x = {};
+  then A2:  x <=' y by Th6;
+ thus y -' x = y -' x + x by A1,ARYTM_2:def 8
+     .= y by A2,Def1;
+end;
+
+Lm5:
+ x + y -' y = x
+proof
+    y <=' x + y by ARYTM_2:20;
+ hence thesis by Def1;
+end;
+
+Lm6:
+ x <=' y implies y -' (y -' x) = x
+proof assume
+A1: x <=' y;
+    y -' x <=' y by Th11;
+  then y -' (y -' x) + (y -' x) = y by Def1
+   .= y -' x + x by A1,Def1;
+ hence y -' (y -' x) = x by ARYTM_2:12;
+end;
+
+Lm7: z -' y <=' x iff z <=' x + y
+proof
+ per cases;
+ suppose y <=' z;
+  then z -' y + y = z by Def1;
+ hence thesis by Th7;
+ suppose
+A1: not y <=' z;
+then A2: z -' y = {} by Def1;
+    y <=' x + y by ARYTM_2:20;
+ hence thesis by A1,A2,Th3,Th6;
+end;
+
+Lm8: y <=' x implies (z + y <=' x iff z <=' x -' y)
+proof
+ assume y <=' x;
+  then x -' y + y = x by Def1;
+ hence thesis by Th7;
+end;
+
+Lm9: z -' y -' x = z -' (x + y)
+ proof
+  per cases;
+  suppose
+A1: x + y <=' z;
+     y <=' x + y by ARYTM_2:20;
+then A2: y <=' z by A1,Th3;
+then A3: x <=' z -' y by A1,Lm8;
+     z -' y -' x + (x + y) = z -' y -' x + x + y by ARYTM_2:7
+     .= z -' y + y by A3,Def1
+     .= z by A2,Def1;
+  hence thesis by A1,Def1;
+  suppose
+A4: x = {};
+   hence z -' y -' x = z -' y by Lm4
+         .= z -' (x + y) by A4,ARYTM_2:def 8;
+  suppose that
+A5: not y <=' z and
+A6: x <> {};
+A7:  now assume
+A8:   x <=' z -' y;
+        z -' y = {} by A5,Def1;
+     hence contradiction by A6,A8,Th5;
+    end;
+      y <=' y + x by ARYTM_2:20;
+then A9:  not x + y <=' z by A5,Th3;
+   thus z -' y -' x = {} by A7,Def1
+        .= z -' (x + y) by A9,Def1;
+  suppose that
+A10: not x + y <=' z and
+A11: y <=' z;
+     not x <=' z -' y by A10,A11,Lm8;
+  hence z -' y -' x = {} by Def1
+          .= z -' (x + y) by A10,Def1;
+ end;
+
+Lm10: y -' z -' x = y -' x -' z
+ proof
+  thus y -' z -' x = y -' (x + z) by Lm9
+      .= y -' x -' z by Lm9;
+ end;
+
+theorem
+   y <=' x & y <=' z implies x + (z -' y) = x -' y + z
+proof assume that
+A1: y <=' x and
+A2: y <=' z;
+    x + (z -' y) + y = x + ((z -' y) + y) by ARYTM_2:7
+     .= x + z by A2,Def1
+     .= x -' y + y + z by A1,Def1
+     .= x -' y + z + y by ARYTM_2:7;
+ hence x + (z -' y) = x -' y + z by ARYTM_2:12;
+end;
+
+theorem Th13:
+ z <=' y implies x + (y -' z) = x + y -' z
+proof assume
+A1: z <=' y;
+     y <=' x + y by ARYTM_2:20;
+then A2: z <=' x + y by A1,Th3;
+    x + (y -' z) + z = x + ((y -' z) + z) by ARYTM_2:7
+     .= x + y by A1,Def1
+     .= x + y -' z + z by A2,Def1;
+ hence x + (y -' z) = x + y -' z by ARYTM_2:12;
+end;
+
+Lm11:
+ y <=' z implies x -' (z -' y) = x + y -' z
+proof assume
+A1: y <=' z;
+ per cases;
+ suppose
+A2: z -' y <=' x;
+then A3: z <=' x + y by Lm7;
+    x -' (z -' y) + (z -' y) = x by A2,Def1
+     .= (x + z) -' z by Lm5
+     .= (x + (y + (z -' y))) -' z by A1,Def1
+     .= (x + y + (z -' y)) -' z by ARYTM_2:7
+     .= x + y -' z + (z -' y) by A3,Th13;
+ hence x -' (z -' y) = x + y -' z by ARYTM_2:12;
+ suppose
+A4: not z -' y <=' x;
+then A5: not z <=' x + y by Lm7;
+ thus x -' (z -' y) = {} by A4,Def1 .= x + y -' z by A5,Def1;
+end;
+
+Lm12:
+ z <=' x & y <=' z implies x -' (z -' y) = x -' z + y
+proof assume that
+A1: z <=' x and
+A2: y <=' z;
+ thus x -' (z -' y) = x + y -' z by A2,Lm11
+       .= x -' z + y by A1,Th13;
+end;
+
+Lm13:
+ x <=' z & y <=' z implies x -' (z -' y) = y -' (z -' x)
+proof assume that
+A1: x <=' z and
+A2: y <=' z;
+ thus x -' (z -' y) = x + y -' z by A2,Lm11
+       .= y -' (z -' x) by A1,Lm11;
+end;
+
+theorem
+   z <=' x & y <=' z implies x -' z + y = x -' (z -' y)
+proof assume that
+A1: z <=' x and
+A2: y <=' z;
+ thus x -' (z -' y) = x + y -' z by A2,Lm11
+       .= x -' z + y by A1,Th13;
+end;
+
+theorem
+   y <=' x & y <=' z implies z -' y + x = x -' y + z
+proof assume that
+A1: y <=' x and
+A2: y <=' z;
+    z -' y + x + y = z -' y + y + x by ARYTM_2:7
+      .= z + x by A2,Def1
+      .= x -' y + y + z by A1,Def1
+      .= x -' y + z + y by ARYTM_2:7;
+ hence z -' y + x = x -' y + z by ARYTM_2:12;
+end;
+
+theorem
+   x <=' y implies z -' y <=' z -' x
+proof assume
+A1: x <=' y;
+ per cases;
+ suppose
+A2: y <=' z;
+then A3: x <=' z by A1,Th3;
+    z -' y + x <=' z -' y + y by A1,Th7;
+  then z -' y + x <=' z by A2,Def1;
+  then z -' y + x <=' z -' x + x by A3,Def1;
+ hence z -' y <=' z -' x by Th7;
+ suppose not y <=' z;
+  then z -' y = {} by Def1;
+ hence z -' y <=' z -' x by Th6;
+end;
+
+theorem
+   x <=' y implies x -' z <=' y -' z
+proof assume
+A1: x <=' y;
+ per cases;
+ suppose
+A2: z <=' x;
+ then z <=' y by A1,Th3;
+  then x -' z + z = x & y -' z + z = y by A2,Def1;
+ hence x -' z <=' y -' z by A1,Th7;
+ suppose not z <=' x;
+  then x -' z = {} by Def1;
+ hence x -' z <=' y -' z by Th6;
+end;
+
+Lm14:
+ x *' (y -' z) = (x *' y) -' (x *' z)
+proof
+ per cases;
+ suppose
+A1: z <=' y;
+then A2: x *' z <=' x *' y by Th8;
+    x *' (y -' z) + (x *' z) = x *' (y -' z + z) by ARYTM_2:14
+     .= x *' y by A1,Def1
+     .= (x *' y) -' (x *' z) + (x *' z) by A2,Def1;
+ hence x *' (y -' z) = (x *' y) -' (x *' z) by ARYTM_2:12;
+ suppose
+A3: x = {};
+then A4: x *' y = {} & x *' z = {} by ARYTM_2:4;
+  hence x *' (y -' z) = x *' y by A3,ARYTM_2:4
+       .= (x *' y) -' (x *' z) by A4,Lm4;
+ suppose
+A5: not z <=' y & x <> {};
+then A6: not x *' z <=' x *' y by Lm2;
+    y -' z = {} by A5,Def1;
+ hence x *' (y -' z) = {} by ARYTM_2:4
+     .= (x *' y) -' (x *' z) by A6,Def1;
+end;
+
+definition let x,y be Element of REAL+;
+ func x - y equals
+:Def2:
+  x -' y if y <=' x
+  otherwise [{},y -' x];
+ correctness;
+end;
+
+theorem
+   x - x = {}
+ proof x <=' x; then x - x = x -' x by Def2;
+  hence thesis by Lm3;
+ end;
+
+theorem
+   x = {} & y <> {} implies x - y = [{},y]
+proof assume
+A1: x = {} & y <> {};
+  then x <=' y by Th6;
+  then not y <=' x by A1,Th4;
+ hence x - y =[{},y -' x] by Def2
+        .= [{},y] by A1,Lm4;
+end;
+
+theorem
+   z <=' y implies x + (y -' z) = x + y - z
+proof assume
+A1: z <=' y;
+    y <=' x + y by ARYTM_2:20;
+  then z <=' x + y by A1,Th3;
+  then x + y - z = x + y -' z by Def2;
+ hence x + (y -' z) = x + y - z by A1,Th13;
+end;
+
+theorem
+   not z <=' y implies x - (z -' y) = x + y - z
+proof assume
+A1: not z <=' y;
+ per cases;
+ suppose
+A2: z -' y <=' x;
+ then z <=' x + y by Lm7;
+  then x - (z -' y) = x -' (z -' y) & x + y - z = x + y -' z by A2,Def2;
+ hence x - (z -' y) = x + y - z by A1,Lm11;
+ suppose
+A3: not z -' y <=' x;
+then A4: not z <=' x + y by Lm7;
+    (z -' y) -' x = z -' (x + y) by Lm9;
+ hence x - (z -' y) = [{},z -' (x + y)] by A3,Def2
+    .= x + y - z by A4,Def2;
+end;
+
+theorem
+   y <=' x & not y <=' z implies x - (y -' z) = x -' y + z
+proof assume that
+A1: y <=' x and
+A2: not y <=' z;
+    y -' z <=' y by Th11;
+  then y -' z <=' x by A1,Th3;
+  then x - (y -' z) = x -' (y -' z) by Def2;
+ hence x - (y -' z) = x -' y + z by A1,A2,Lm12;
+end;
+
+theorem
+   not y <=' x & not y <=' z implies x - (y -' z) = z - (y -' x)
+proof assume that
+A1: not y <=' x and
+A2: not y <=' z;
+ per cases;
+ suppose y <=' x + z;
+  then y -' z <=' x & y -' x <=' z by Lm7;
+  then x - (y -' z) = x -' (y -' z) & z - (y -' x) = z -' (y -' x) by Def2;
+ hence x - (y -' z) = z - (y -' x) by A1,A2,Lm13;
+ suppose not y <=' x + z;
+then A3: not y -' z <=' x & not y -' x <=' z by Lm7;
+    y -' z -' x = y -' x -' z by Lm10;
+ hence x - (y -' z) = [{},y -' x -' z] by A3,Def2
+      .= z - (y -' x) by A3,Def2;
+end;
+
+theorem
+   y <=' x implies x - (y + z) = x -' y - z
+proof assume
+A1: y <=' x;
+ per cases;
+ suppose
+A2: y + z <=' x;
+  then z <=' x -' y by A1,Lm8;
+  then x - (y + z) = x -' (y + z) & x -' y - z = x -' y -' z by A2,Def2;
+ hence x - (y + z) = x -' y - z by Lm9;
+ suppose that
+A3: not y + z <=' x and
+A4: x <=' y;
+A5: not z <=' x -' y by A1,A3,Lm8;
+A6: x = y by A1,A4,Th4;
+A7: x -' x = {} by Lm3;
+    (x + z) -' x = z by Lm5
+      .= z -' (x -' x) by A7,Lm4;
+ hence x - (y + z) = [{},z -' (x -' y)] by A3,A6,Def2
+      .= x -' y - z by A5,Def2;
+ suppose that
+A8: not y + z <=' x and
+A9: not x <=' y;
+A10: not z <=' x -' y by A1,A8,Lm8;
+    y + z -' x = z -' (x -' y) by A9,Lm11;
+ hence x - (y + z) = [{},z -' (x -' y)] by A8,Def2
+         .= x -' y - z by A10,Def2;
+end;
+
+theorem
+   x <=' y & z <=' y implies y -' z - x = y -' x - z
+proof assume that
+A1: x <=' y and
+A2: z <=' y;
+ per cases;
+ suppose x + z <=' y;
+  then x <=' y -' z & z <=' y -' x by A1,A2,Lm8;
+  then y -' z -' x = y -' z - x & y -' x -' z = y -' x - z by Def2;
+ hence y -' z - x = y -' x - z by Lm10;
+ suppose that
+A3: not x + z <=' y and
+A4: y <=' x;
+A5: not x <=' y -' z & not z <=' y -' x by A1,A2,A3,Lm8;
+A6: x -' x = {} by Lm3;
+A7: x = y by A1,A4,Th4;
+  then x -' (x -' z) = z by A2,Lm6
+       .= z -' (x -' x) by A6,Lm4;
+ hence y -' z - x = [{},z -' (y -' x)] by A5,A7,Def2
+           .= y -' x - z by A5,Def2;
+ suppose that
+A8: not x + z <=' y and
+A9: y <=' z;
+A10: not x <=' y -' z & not z <=' y -' x by A1,A2,A8,Lm8;
+A11: z -' z = {} by Lm3;
+A12: z = y by A2,A9,Th4;
+    x -' (z -' z) = x by A11,Lm4
+          .= z -' (z -' x) by A1,A12,Lm6;
+ hence y -' z - x = [{},z -' (y -' x)] by A10,A12,Def2
+           .= y -' x - z by A10,Def2;
+ suppose that
+A13: not x + z <=' y and
+A14: not y <=' x & not y <=' z;
+A15: not x <=' y -' z & not z <=' y -' x by A1,A2,A13,Lm8;
+    x -' (y -' z) = z -' (y -' x) by A14,Lm13;
+ hence y -' z - x = [{},z -' (y -' x)] by A15,Def2
+           .= y -' x - z by A15,Def2;
+end;
+
+theorem
+   z <=' y implies x *' (y -' z) = (x *' y) - (x *' z)
+proof assume z <=' y;
+  then x *' z <=' x *' y by Th8;
+  then (x *' y) - (x *' z) = (x *' y) -' (x *' z) by Def2;
+ hence x *' (y -' z) = (x *' y) - (x *' z) by Lm14;
+end;
+
+theorem Th27:
+ not z <=' y & x <> {} implies [{},x *' (z -' y)] = (x *' y) - (x *' z)
+proof assume not z <=' y & x <> {};
+then A1: not x *' z <=' x *' y by Lm2;
+ thus [{},x *' (z -' y)] = [{},(x *' z) -' (x *' y)] by Lm14
+      .= (x *' y) - (x *' z) by A1,Def2;
+end;
+
+theorem
+   y -' z <> {} & z <=' y & x <> {} implies
+      (x *' z) - (x *' y) = [{},x *' (y -' z)]
+proof assume y -' z <> {};
+then A1: y <> z by Lm3;
+ assume z <=' y;
+  then not y <=' z by A1,Th4;
+ hence thesis by Th27;
+end;
+

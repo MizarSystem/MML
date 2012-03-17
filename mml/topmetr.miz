@@ -1,0 +1,1074 @@
+:: Metric Spaces as Topological Spaces - Fundamental Concepts
+::  by Agata Darmochwa{\l} and Yatsuka Nakamura
+::
+:: Received November 21, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, PRE_TOPC, SETFAM_1, TARSKI, SUBSET_1, COMPTS_1, BOOLE,
+      RELAT_1, CONNSP_2, TOPS_1, ORDINAL2, FUNCT_1, METRIC_1, RCOMP_1,
+      ABSVALUE, ARYTM_1, PCOMPS_1, EUCLID, FINSET_1, BORSUK_1, ARYTM_3,
+      TOPMETR, PARTFUN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, NAT_1, REAL_1, DOMAIN_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      FINSET_1, BINOP_1, STRUCT_0, METRIC_1, PRE_TOPC, TOPS_1, TOPS_2,
+      COMPTS_1, PCOMPS_1, CONNSP_2, RCOMP_1, ABSVALUE, BORSUK_1, EUCLID;
+ constructors REAL_1, DOMAIN_1, TOPS_1, TOPS_2, COMPTS_1, RCOMP_1, ABSVALUE,
+      BORSUK_1, EUCLID, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, FUNCT_1, PRE_TOPC, PCOMPS_1, STRUCT_0, METRIC_3, METRIC_1,
+      RELSET_1, EUCLID, TOPS_1, XREAL_0, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions STRUCT_0, PRE_TOPC, TARSKI, TOPS_2, XREAL_0;
+ theorems ABSVALUE, AXIOMS, BINOP_1, BORSUK_1, COMPTS_1, CONNSP_2, EUCLID,
+      FINSET_1, FUNCT_1, FUNCT_2, METRIC_1, PCOMPS_1, PRE_TOPC, RCOMP_1,
+      REAL_1, REAL_2, TARSKI, TOPS_1, TOPS_2, ZFMISC_1, TBSP_1, RELAT_1,
+      RELSET_1, XREAL_0, SETFAM_1, XBOOLE_0, XBOOLE_1, PARTFUN1, CARD_1,
+      XCMPLX_1;
+ schemes FUNCT_2;
+
+begin
+
+reserve r for Real, n for Nat;
+reserve a, b for real number;
+reserve T for non empty TopSpace;
+
+:: Topological spaces
+
+theorem Th1:
+ for T being TopStruct,
+     F being Subset-Family of T holds
+   F is_a_cover_of T iff the carrier of T c= union F
+proof
+  let T be TopStruct,
+      F be Subset-Family of T;
+  thus F is_a_cover_of T implies the carrier of T c= union F
+  proof
+    assume F is_a_cover_of T;
+    then [#]T = union F by PRE_TOPC:def 8;
+    hence the carrier of T c= union F by PRE_TOPC:12;
+  end;
+  assume
+   the carrier of T c= union F;
+  then the carrier of T = union F by XBOOLE_0:def 10;
+  then [#] T = union F by PRE_TOPC:12;
+  hence F is_a_cover_of T by PRE_TOPC:def 8;
+end;
+
+reserve A for non empty SubSpace of T;
+
+theorem Th2: for p being Point of A holds p is Point of T
+ proof
+    [#] A c= [#] T by PRE_TOPC:def 9;
+  then the carrier of A c= [#] T by PRE_TOPC:12;
+  then the carrier of A c= the carrier of T by PRE_TOPC:12;
+  hence thesis by TARSKI:def 3;
+ end;
+
+theorem T is_T2 implies A is_T2
+ proof
+  assume A1: T is_T2;
+     for p,q being Point of A st not p = q
+    ex W,V being Subset of A st W is open & V is open &
+     p in W & q in V & W misses V
+    proof
+     let p,q be Point of A such that A2: not p = q;
+     reconsider p' = p, q' = q as Point of T by Th2;
+     consider W,V  being Subset of T such that
+     A3: W is open & V is open &
+      p' in W & q' in V & W misses V by A1,A2,COMPTS_1:def 4;
+A4:   W /\ V = {} by A3,XBOOLE_0:def 7;
+       W /\ [#] A c= [#] A & V /\ [#] A c= [#] A by XBOOLE_1:17;
+     then reconsider W' = W /\ [#] A, V' = V /\ [#] A as Subset of A
+        by PRE_TOPC:16;
+     take W', V';
+       W in the topology of T & V in the topology of T by A3,PRE_TOPC:def 5;
+     then W' in the topology of A & V' in the topology of A by PRE_TOPC:def 9;
+     hence W' is open & V' is open by PRE_TOPC:def 5;
+       the carrier of A = [#] A by PRE_TOPC:12;
+     hence p in W' & q in V' by A3,XBOOLE_0:def 3;
+       W' /\ V' = W /\ (V /\ [#] A) /\ [#] A by XBOOLE_1:16
+            .= {} /\ [#] A by A4,XBOOLE_1:16
+            .= {};
+     hence thesis by XBOOLE_0:def 7;
+    end;
+  hence A is_T2 by COMPTS_1:def 4;
+ end;
+
+theorem Th4: for A,B being SubSpace of T st
+     the carrier of A c= the carrier of B holds A is SubSpace of B
+ proof
+  let A,B be SubSpace of T;
+   assume the carrier of A c= the carrier of B;
+   then the carrier of A c= [#] B by PRE_TOPC:12;
+ then A1: [#] A c= [#] B by PRE_TOPC:12;
+    for P being Subset of A holds P in the topology of A iff
+   ex Q being Subset of B st Q in
+ the topology of B & P = Q /\ [#] A
+  proof
+   let P be Subset of A;
+   thus P in the topology of A implies ex Q being Subset of B
+st
+                            Q in the topology of B & P = Q /\ [#] A
+    proof
+     assume P in the topology of A;
+     then consider Q' being Subset of T such that
+   A2: Q' in the topology of T & P = Q' /\ [#] A by PRE_TOPC:def 9;
+       Q' /\ [#] B c= [#] B by XBOOLE_1:17;
+     then reconsider Q = Q' /\ [#]
+ B as Subset of B by PRE_TOPC:12;
+   A3: Q in the topology of B by A2,PRE_TOPC:def 9;
+       P = Q' /\ ([#] B /\ [#] A) by A1,A2,XBOOLE_1:28 .= Q /\ [#] A by
+XBOOLE_1:16;
+     hence ex Q being Subset of B
+       st Q in the topology of B & P = Q /\ [#] A
+       by A3;
+    end;
+   given Q being Subset of B such that
+ A4: Q in the topology of B & P = Q /\ [#] A;
+   consider P' being Subset of T such that
+ A5: P' in the topology of T & Q = P' /\ [#] B by A4,PRE_TOPC:def 9;
+     P = P' /\ ([#] B /\ [#] A) by A4,A5,XBOOLE_1:16 .= P' /\ [#] A by A1,
+XBOOLE_1:28;
+   hence P in the topology of A by A5,PRE_TOPC:def 9;
+  end;
+  hence A is SubSpace of B by A1,PRE_TOPC:def 9;
+ end;
+
+reserve P,Q for Subset of T, p for Point of T;
+
+theorem T|P is SubSpace of T|(P \/ Q) & T|Q is SubSpace of T|(P \/ Q)
+ proof
+   thus T|P is SubSpace of T|(P \/ Q)
+    proof
+       [#](T|P) = P by PRE_TOPC:def 10;
+     then A1: the carrier of T|P = P by PRE_TOPC:12;
+       [#](T|(P \/ Q)) = P \/ Q
+     by PRE_TOPC:def 10;
+     then the carrier of T|(P \/ Q) = P \/ Q &
+     P c= P \/ Q
+      by PRE_TOPC:12,XBOOLE_1:7;
+     hence T|P is SubSpace of T|(P \/ Q) by A1,Th4;
+    end;
+     [#](T|Q) = Q by PRE_TOPC:def 10;
+   then A2: the carrier of T|Q = Q by PRE_TOPC:12;
+     [#](T|(P \/ Q)) = P \/ Q by PRE_TOPC:def 10;
+   then the carrier of T|(P \/ Q) = P \/ Q & Q c= P \/ Q
+    by PRE_TOPC:12,XBOOLE_1:7;
+   hence T|Q is SubSpace of T|(P \/ Q) by A2,Th4;
+ end;
+
+theorem
+   for P being non empty Subset of T st p in P
+ for Q being a_neighborhood of p holds
+ for p' being Point of T|P, Q' being Subset of T|P
+ st Q' = Q /\ P & p'= p
+   holds Q' is a_neighborhood of p'
+ proof let P be non empty Subset of T;
+  assume A1: p in P; let Q be a_neighborhood of p;
+     p in Int Q by CONNSP_2:def 1;
+  then consider S being Subset of T such that
+ A2: S is open & S c= Q & p in S by TOPS_1:54;
+  let p' be Point of T|P, Q' be Subset of T|P such that
+ A3: Q' = Q /\ P & p'= p;
+  reconsider R = S /\ P as Subset of T|P by TOPS_2:38;
+    S /\ [#](T|P) = S /\ P by PRE_TOPC:def 10;
+  then A4: R is open by A2,TOPS_2:32;
+    R c= Q' & p' in R by A1,A2,A3,XBOOLE_0:def 3,XBOOLE_1:26;
+  then p' in Int Q' by A4,TOPS_1:54;
+  hence Q' is a_neighborhood of p' by CONNSP_2:def 1;
+ end;
+
+theorem for A,B,C being TopSpace
+    for f being map of A,C holds
+     f is continuous & C is SubSpace of B implies
+    for h being map of A,B st h = f holds h is continuous
+ proof
+  let A,B,C be TopSpace, f be map of A,C; assume that
+ A1: f is continuous and
+ A2: C is SubSpace of B;
+  let h be map of A,B such that
+ A3: h = f;
+    for P being Subset of B holds P is closed implies h"P is closed
+   proof
+    let P be Subset of B such that
+ A4: P is closed;
+      rng h c= the carrier of C by A3,RELSET_1:12;
+ then A5: rng h c= [#] C by PRE_TOPC:12;
+ A6: h"P = h"(rng h /\ P) by RELAT_1:168
+       .= h"(rng h /\ [#] C /\ P) by A5,XBOOLE_1:28
+       .= h"(rng h /\ ([#] C /\ P)) by XBOOLE_1:16
+       .= h"(P /\ [#] C) by RELAT_1:168;
+    reconsider C as SubSpace of B by A2;
+      P /\ [#] C c= [#] C & [#] C = the carrier of C by PRE_TOPC:12,XBOOLE_1:17
+;
+    then reconsider Q = P /\ [#] C as Subset of C;
+      Q is closed by A4,PRE_TOPC:43;
+    hence h"P is closed by A1,A3,A6,PRE_TOPC:def 12;
+   end;
+  hence h is continuous by PRE_TOPC:def 12;
+ end;
+
+theorem for A being TopSpace, B being non empty TopSpace
+ for f being map of A,B
+  for C being SubSpace of B holds f is continuous
+ implies for h being map of A,C st h = f holds h is continuous
+ proof
+  let A be TopSpace, B be non empty TopSpace, f be map of A,B,
+      C be SubSpace of B;
+  assume that
+ A1: f is continuous;
+  let h be map of A,C such that
+ A2: h = f;
+  rng f c= the carrier of C by A2,RELSET_1:12;
+ then A3: rng f c= [#] C by PRE_TOPC:12;
+    for P being Subset of C holds P is closed implies h"P is closed
+   proof
+    let P be Subset of C; assume P is closed;
+    then consider Q being Subset of B such that
+ A4:  Q is closed & Q /\ ([#] C) = P by PRE_TOPC:43;
+A5:     f"Q c= dom f & the carrier of A = [#] A & dom f = the carrier of A
+      by FUNCT_2:def 1,PRE_TOPC:12,RELAT_1:167;
+       h"P = f"Q /\ f"([#] C) by A2,A4,FUNCT_1:137
+        .= f"Q /\ f"(rng f /\ [#] C) by RELAT_1:168
+        .= f"Q /\ f"(rng f) by A3,XBOOLE_1:28
+        .= f"Q /\ dom f by RELAT_1:169
+        .= f"Q by A5,XBOOLE_1:28;
+    hence h"P is closed by A1,A4,PRE_TOPC:def 12;
+   end;
+  hence h is continuous by PRE_TOPC:def 12;
+ end;
+
+theorem
+  for A,B being TopSpace for f being map of A,B
+  for C being Subset of B holds f is continuous
+  implies
+  for h being map of A,B|C st h = f holds h is continuous
+ proof
+  let A,B be TopSpace, f be map of A,B,
+      C be Subset of B;
+  assume that
+ A1: f is continuous;
+  let h be map of A,B|C such that
+ A2: h = f;
+A3: the carrier of B|C = [#](B|C) by PRE_TOPC:12
+       .= C by PRE_TOPC:def 10;
+ A4: rng f c= the carrier of B|C by A2,RELSET_1:12;
+    for P being Subset of B|C holds P is closed implies h"P is closed
+   proof
+    let P be Subset of B|C; assume P is closed;
+    then consider Q being Subset of B such that
+ A5:  Q is closed & Q /\ ([#](B|C)) = P by PRE_TOPC:43;
+ A6:  f"Q c= dom f by RELAT_1:167;
+       h"P = f"(Q /\ C) by A2,A5,PRE_TOPC:def 10
+             .= f"Q /\ f"C by FUNCT_1:137
+             .= f"Q /\ f"(rng f /\ C) by RELAT_1:168
+             .= f"Q /\ f"(rng f) by A3,A4,XBOOLE_1:28
+             .= f"Q /\ dom f by RELAT_1:169
+             .= f"Q by A6,XBOOLE_1:28;
+    hence h"P is closed by A1,A5,PRE_TOPC:def 12;
+   end;
+  hence h is continuous by PRE_TOPC:def 12;
+ end;
+
+theorem
+    for X being TopStruct, Y being non empty TopStruct,
+      K0 being Subset of X,
+      f being map of X,Y, g being map of X|K0,Y st
+    f is continuous & g = f|K0 holds
+  g is continuous
+proof let X be TopStruct,Y be non empty TopStruct,
+K0 be Subset of X,
+f be map of X,Y,g be map of X|K0,Y;
+assume A1:f is continuous & g=f|K0;
+    for G being Subset of Y st G is open holds g"G is open
+   proof let G be Subset of Y;
+    assume G is open; then A2:f"G is open by A1,TOPS_2:55;
+      [#](X|K0)=K0 by PRE_TOPC:def 10;
+     then g"G= [#](X|K0) /\ f"G by A1,FUNCT_1:139;
+    hence thesis by A2,TOPS_2:32;
+   end;
+  hence thesis by TOPS_2:55;
+end;
+
+:: Some definitions & theorems about metrical spaces
+
+reserve M for non empty MetrSpace, p for Point of M;
+
+ Lm1: for r being real number st r > 0 holds p in Ball(p,r)
+ proof let r be real number;
+   reconsider r' = r as Element of REAL by XREAL_0:def 1;
+  assume r > 0;
+   then p in Ball(p,r') by TBSP_1:16;
+  hence thesis;
+ end;
+
+Lm2:
+ for M be MetrSpace holds
+ MetrStruct (#the carrier of M, the distance of M#) is MetrSpace
+  proof
+   let M be MetrSpace;
+     now let a,b,c be Element of
+       the carrier of MetrStruct (#the carrier of M, the distance of M#);
+        reconsider a'=a, b'=b, c'=c as Element of M;
+A1:     dist(a,b) = (the distance of M).(a,b) by METRIC_1:def 1
+                 .= dist(a',b') by METRIC_1:def 1;
+       hence dist(a,b) = 0 iff a=b by METRIC_1:1,2;
+          dist(b,a) = (the distance of M).(b,a) by METRIC_1:def 1
+                 .= dist(b',a') by METRIC_1:def 1;
+       hence dist(a,b) = dist(b,a) by A1;
+A2:     dist(b,c) = (the distance of M).(b,c) by METRIC_1:def 1
+                 .= dist(b',c') by METRIC_1:def 1;
+          dist(a,c) = (the distance of M).(a,c) by METRIC_1:def 1
+                 .= dist(a',c') by METRIC_1:def 1;
+       hence dist(a,c)<=dist(a,b)+dist(b,c) by A1,A2,METRIC_1:4;
+     end;
+     hence thesis by METRIC_1:6;
+  end;
+
+definition let M be MetrSpace;
+ mode SubSpace of M -> MetrSpace means
+  :Def1: the carrier of it c= the carrier of M &
+  for x,y being Point of it holds
+   (the distance of it).(x,y) = (the distance of M).(x,y);
+ existence
+  proof
+    reconsider MM = MetrStruct (#the carrier of M, the distance of M#)
+      as MetrSpace by Lm2;
+    take MM;
+    thus the carrier of MM c= the carrier of M;
+    let x,y be Point of MM;
+    thus (the distance of MM).(x,y) = (the distance of M).(x,y);
+  end;
+end;
+
+definition let M be MetrSpace;
+ cluster strict SubSpace of M;
+  existence
+  proof
+     reconsider MM = MetrStruct (#the carrier of M, the distance of M#)
+      as MetrSpace by Lm2;
+       the carrier of MM c= the carrier of M &
+     for x,y being Point of MM holds
+     (the distance of MM).(x,y) = (the distance of M).(x,y);
+    then MM is SubSpace of M by Def1;
+   hence thesis;
+  end;
+end;
+
+definition let M be non empty MetrSpace;
+ cluster strict non empty SubSpace of M;
+  existence
+  proof
+     reconsider MM = MetrStruct (#the carrier of M, the distance of M#)
+      as MetrSpace by Lm2;
+       the carrier of MM c= the carrier of M &
+     for x,y being Point of MM holds
+     (the distance of MM).(x,y) = (the distance of M).(x,y);
+    then MM is SubSpace of M by Def1;
+   hence thesis;
+  end;
+end;
+
+reserve A for non empty SubSpace of M;
+
+canceled;
+
+theorem Th12: for p being Point of A holds p is Point of M
+ proof
+  let p be Point of A;
+     p in the carrier of A & the carrier of A c= the carrier of M by Def1;
+   hence p is Point of M;
+ end;
+
+theorem Th13:
+ for r being real number
+ for M being MetrSpace, A being SubSpace of M
+ for x being Point of M, x' being Point of A st x = x' holds
+    Ball(x',r) = Ball(x,r) /\ the carrier of A
+ proof
+  let r be real number;
+  let M be MetrSpace, A be SubSpace of M;
+  let x be Point of M, x' be Point of A;
+  assume A1: x = x';
+    now let a be set; assume A2: a in Ball(x',r);
+   then A3: a in the carrier of A;
+   reconsider y' = a as Point of A by A2;
+A4: A is non empty
+    proof
+      thus the carrier of A is non empty by A2;
+    end;
+A5: M is non empty
+    proof
+        the carrier of A c= the carrier of M by Def1;
+      hence the carrier of M is non empty by A3;
+    end;
+   then reconsider y = y' as Point of M by A4,Th12;
+     dist(x',y') < r by A2,METRIC_1:12;
+   then (the distance of A).(x',y') < r by METRIC_1:def 1;
+   then (the distance of M).(x,y) < r by A1,Def1;
+   then dist(x,y) < r by METRIC_1:def 1;
+   then a in Ball(x,r) by A5,METRIC_1:12;
+   hence a in Ball(x,r) /\ the carrier of A by A2,XBOOLE_0:def 3;
+  end;
+  then A6: Ball(x',r) c= Ball(x,r) /\ the carrier of A by TARSKI:def 3;
+    now let a be set; assume A7: a in Ball(x,r) /\ the carrier of A;
+   then A8: a in Ball(x,r) & a in the carrier of A by XBOOLE_0:def 3;
+A9: A is non empty
+    proof
+      thus the carrier of A is non empty by A7;
+    end;
+A10: M is non empty
+    proof
+      thus the carrier of M is non empty by A8;
+    end;
+   reconsider y' = a as Point of A by A7,XBOOLE_0:def 3;
+   reconsider y = y' as Point of M by A9,A10,Th12;
+     dist(x,y) < r by A8,METRIC_1:12;
+   then (the distance of M).(x,y) < r by METRIC_1:def 1;
+   then (the distance of A).(x',y') < r by A1,Def1;
+   then dist(x',y') < r by METRIC_1:def 1;
+   hence a in Ball(x',r) by A9,METRIC_1:12;
+  end;
+  then Ball(x,r) /\ the carrier of A c= Ball(x',r) by TARSKI:def 3;
+  hence Ball(x',r) = Ball(x,r) /\ the carrier of A by A6,XBOOLE_0:def 10;
+ end;
+
+definition let M be non empty MetrSpace,
+    A be non empty Subset of M;
+ func M|A -> strict SubSpace of M means
+:Def2: the carrier of it = A;
+ existence
+  proof
+   set d = (the distance of M) | [:A,A:];
+   reconsider B=A as non empty set;
+  A1: dom d = dom (the distance of M) /\ [:A,A:] by FUNCT_1:68
+        .= [:the carrier of M,the carrier of M:] /\ [:A,A:] by FUNCT_2:def 1
+        .= [: (the carrier of M) /\ A, (the carrier of M) /\
+ A:] by ZFMISC_1:123
+        .= [: (the carrier of M) /\ A, A:] by XBOOLE_1:28
+        .= [: A, A :] by XBOOLE_1:28;
+     then dom d = [: A,A :] & rng d c= rng the distance of M &
+       rng the distance of M c= REAL by FUNCT_1:76,RELSET_1:12;
+     then dom d = [: A,A :] & rng d c= REAL by XBOOLE_1:1;
+   then reconsider d as Function of [:B,B:],REAL by FUNCT_2:def 1,RELSET_1:11;
+   set MM = MetrStruct (# B, d #);
+ A2: now let a,b be Element of MM;
+     thus dist(a,b) = (the distance of MM).(a,b) by METRIC_1:def 1
+                   .= (the distance of MM) . [a,b] by BINOP_1:def 1
+                   .= (the distance of M) . [a,b] by A1,FUNCT_1:70
+                   .= (the distance of M).(a,b) by BINOP_1:def 1;
+    end;
+      now let a,b,c be Element of MM;
+      reconsider a'=a, b'=b, c'=c as Point of M by TARSKI:def 3;
+         dist(a,b) = (the distance of M).(a,b) by A2
+                .= dist(a',b') by METRIC_1:def 1;
+      hence dist(a,b) = 0 iff a=b by METRIC_1:1,2;
+      thus dist(a,b) = (the distance of M).(a',b') by A2
+                    .= dist(b',a') by METRIC_1:def 1
+                    .= (the distance of M).(b',a') by METRIC_1:def 1
+                    .= dist(b,a) by A2;
+      A3: dist(a,b) = (the distance of M).(a,b) by A2
+                  .= dist(a',b') by METRIC_1:def 1;
+      A4: dist(a,c) = (the distance of M).(a,c) by A2
+                  .= dist(a',c') by METRIC_1:def 1;
+           dist(b,c) = (the distance of M).(b,c) by A2
+                  .= dist(b',c') by METRIC_1:def 1;
+      hence dist(a,c)<=dist(a,b)+dist(b,c) by A3,A4,METRIC_1:4;
+    end;
+   then reconsider MM as MetrSpace by METRIC_1:6;
+     now let x, y be Point of MM;
+    thus (the distance of MM).(x,y) = dist(x,y) by METRIC_1:def 1
+                     .= (the distance of M).(x,y) by A2;
+   end;
+   then reconsider MM as strict SubSpace of M by Def1;
+   take MM;
+   thus the carrier of MM = A;
+  end;
+ uniqueness
+  proof
+   let S1,S2 be strict SubSpace of M;
+    assume A5: the carrier of S1 = A & the carrier of S2 = A;
+
+       now let a,b be Element of A;
+      thus (the distance of S1).(a,b) = (the distance of M).(a,b)
+             by A5,Def1 .= (the distance of S2).(a,b) by A5,Def1;
+     end;
+    hence S1 = S2 by A5,BINOP_1:2;
+  end;
+end;
+
+definition let M be non empty MetrSpace,
+    A be non empty Subset of M;
+ cluster M|A -> non empty;
+coherence
+  proof
+   thus the carrier of (M|A) is non empty by Def2;
+  end;
+end;
+
+definition let a,b be real number;
+assume A1: a <= b;
+ func Closed-Interval-MSpace(a,b) -> strict non empty SubSpace of RealSpace
+  means
+  :Def3: for P being non empty Subset of RealSpace st
+    P = [. a,b .] holds it = RealSpace | P;
+ existence
+  proof
+   reconsider P = [. a,b .] as Subset of RealSpace
+   by METRIC_1:def 14;
+   reconsider P as non empty Subset of RealSpace
+   by A1,RCOMP_1:15;
+   take RealSpace | P;
+   thus thesis;
+  end;
+ uniqueness
+  proof
+   let S1,S2 be strict non empty SubSpace of RealSpace; assume that
+   A2: for P being non empty Subset of RealSpace st
+       P = [. a,b .] holds S1 = RealSpace | P and
+   A3: for P being non empty Subset of RealSpace st
+       P = [. a,b .] holds S2 = RealSpace | P;
+   reconsider P = [. a,b .] as Subset of RealSpace
+   by METRIC_1:def 14;
+   reconsider P as non empty Subset of RealSpace
+   by A1,RCOMP_1:15;
+   thus S1 = RealSpace | P by A2 .= S2 by A3;
+  end;
+end;
+
+theorem Th14:
+ a <= b implies the carrier of Closed-Interval-MSpace(a,b) = [. a,b .]
+  proof
+   assume A1: a <= b;
+   then reconsider P = [. a,b .] as
+   non empty Subset of RealSpace
+     by METRIC_1:def 14,RCOMP_1:15;
+   thus the carrier of Closed-Interval-MSpace(a,b)
+          = the carrier of RealSpace | P by A1,Def3
+         .= [. a,b .] by Def2;
+  end;
+
+reserve F,G for Subset-Family of M;
+
+definition let M be MetrStruct, F be Subset-Family of M;
+ attr F is being_ball-family means
+  :Def4: for P being set holds P in F implies
+   ex p being Point of M, r st P = Ball(p,r);
+  synonym F is_ball-family;
+ pred F is_a_cover_of M means
+  :Def5: the carrier of M c= union F;
+end;
+
+theorem Th15: for p,q being Point of RealSpace, x,y being real number holds
+  x=p & y=q implies dist(p,q) = abs(x-y)
+ proof
+  let p,q be Point of RealSpace, x,y be real number;
+  assume A1: x=p & y=q;
+A2: x is Real & y is Real by XREAL_0:def 1;
+  thus dist(p,q) = real_dist.(x,y) by A1,METRIC_1:def 1,def 14
+                .= abs(x-y) by A2,METRIC_1:def 13;
+ end;
+
+:: Metric spaces and topology
+
+theorem Th16:
+  for M being MetrStruct holds
+   the carrier of M = the carrier of TopSpaceMetr M &
+   the topology of TopSpaceMetr M = Family_open_set M
+  proof
+   let M be MetrStruct;
+     TopSpaceMetr M = TopStruct (#the carrier of M, Family_open_set(M)#)
+    by PCOMPS_1:def 6;
+   hence thesis;
+  end;
+
+canceled 2;
+
+theorem Th19: TopSpaceMetr(A) is SubSpace of TopSpaceMetr(M)
+ proof
+   set T = TopSpaceMetr M, R = TopSpaceMetr A;
+     [#] R = the carrier of R & [#] T = the carrier of T by PRE_TOPC:12;
+   then A1: [#] R = the carrier of A & [#] T = the carrier of M by Th16;
+   hence [#](R) c= [#](T) by Def1;
+    let P be Subset of R;
+   thus P in the topology of R implies ex Q being Subset of T
+st
+         Q in the topology of T & P = Q /\ [#](R)
+    proof
+     assume P in the topology of R;
+     then A2: P in Family_open_set A by Th16;
+     set QQ = {Ball(x,r) where x is Point of M, r is Real : x in P & r > 0 &
+      Ball(x,r) /\ the carrier of A c= P};
+       for X being set st X in QQ holds X c= the carrier of M
+      proof
+       let X be set; assume X in QQ;
+       then ex x being Point of M, r being Real st X = Ball(x,r) &
+ x in P & r > 0 &
+         Ball(x,r) /\ the carrier of A c= P;
+       hence X c= the carrier of M;
+      end;
+     then reconsider Q = union QQ as Subset of M by ZFMISC_1:94;
+       for x being Point of M st x in Q ex r st r > 0 & Ball(x,r) c= Q
+      proof
+       let x be Point of M;
+       assume x in Q;
+       then consider Y being set such that A3: x in Y & Y in
+ QQ by TARSKI:def 4;
+       consider x' being Point of M, r being Real such that
+        A4: Y = Ball(x',r) and x' in P & r > 0 &
+          Ball(x',r) /\ the carrier of A c= P by A3;
+       consider p being Real such that A5: p > 0 & Ball(x,p) c= Ball(x',r)
+        by A3,A4,PCOMPS_1:30;
+       take p;
+        thus p > 0 by A5;
+          Y c= Q by A3,ZFMISC_1:92;
+        hence thesis by A4,A5,XBOOLE_1:1;
+      end;
+     then A6: Q in Family_open_set M by PCOMPS_1:def 5;
+     reconsider Q' = Q as Subset of T by Th16;
+     take Q';
+     thus Q' in the topology of T by A6,Th16;
+     thus P = Q' /\ [#](R)
+      proof
+       A7: P c= Q' /\ [#](R)
+        proof
+         let a be set; assume A8: a in P;
+         then a in the carrier of R;
+       then A9: a in [#](R) by PRE_TOPC:12;
+         reconsider x = a as Point of A by A8,Th16;
+         reconsider P' = P as Subset of A by Th16;
+         consider r such that
+       A10: r > 0 & Ball(x,r) c= P' by A2,A8,PCOMPS_1:def 5;
+         reconsider x' = x as Point of M by Th12;
+           Ball(x,r) = Ball(x',r) /\ the carrier of A by Th13;
+         then Ball(x',r) in QQ & x' in Ball(x',r) by A8,A10,Lm1;
+         then a in Q' by TARSKI:def 4;
+         hence thesis by A9,XBOOLE_0:def 3;
+        end;
+         Q' /\ [#](R) c= P
+        proof
+         let a be set; assume A11: a in Q' /\ [#](R);
+         then a in Q' by XBOOLE_0:def 3;
+         then consider Y being set such that
+       A12: a in Y & Y in QQ by TARSKI:def 4;
+         consider x being Point of M, r being Real such that
+       A13: Y = Ball(x,r) and x in P and r > 0 and
+       A14: Ball(x,r) /\ the carrier of A c= P by A12;
+           a in the carrier of A by A1,A11,XBOOLE_0:def 3;
+         then a in Ball(x,r) /\ the carrier of A by A12,A13,XBOOLE_0:def 3;
+         hence a in P by A14;
+        end;
+      hence thesis by A7,XBOOLE_0:def 10;
+      end;
+    end;
+   given Q being Subset of T such that
+  A15: Q in the topology of T & P = Q /\ [#](R);
+   reconsider Q' = Q as Subset of M by Th16;
+   reconsider P' = P as Subset of A by Th16;
+     for p being Point of A st p in P' ex r st r>0 & Ball(p,r) c= P'
+    proof
+     let p be Point of A;
+     reconsider p' = p as Point of M by Th12;
+     assume p in P';
+     then p' in Q' & Q' in Family_open_set M by A15,Th16,XBOOLE_0:def 3;
+     then consider r such that A16: r>0 & Ball(p',r) c= Q' by PCOMPS_1:def 5;
+       Ball(p,r) = Ball(p',r) /\ the carrier of A by Th13;
+     then Ball(p,r) c= Q /\ the carrier of A by A16,XBOOLE_1:26;
+     then Ball(p,r) c= Q /\ the carrier of R by Th16;
+     then Ball(p,r) c= P' by A15,PRE_TOPC:12;
+     hence thesis by A16;
+    end;
+   then P in Family_open_set A by PCOMPS_1:def 5;
+   hence P in the topology of R by Th16;
+ end;
+
+theorem
+   for P being Subset of TOP-REAL n,
+ Q being non empty Subset of Euclid n holds
+  P = Q implies (TOP-REAL n)|P = TopSpaceMetr((Euclid n)|Q)
+proof
+ let P be Subset of (TOP-REAL n),
+ Q be non empty Subset of Euclid n;
+   TOP-REAL n = TopSpaceMetr(Euclid n) by EUCLID:def 8;
+ then reconsider M = TopSpaceMetr((Euclid n)|Q) as SubSpace of TOP-REAL n by
+Th19;
+ assume A1: P = Q;
+   the carrier of M = the carrier of (Euclid n)|Q & the carrier of (Euclid n)|Q
+  = Q by Def2,Th16;
+ then [#](M) = P & [#]((TOP-REAL n)|P) = P by A1,PRE_TOPC:12,def 10;
+ hence thesis by PRE_TOPC:def 10;
+end;
+
+theorem Th21:
+ for r being real number
+ for M being triangle MetrStruct, p being Point of M
+ for P being Subset of TopSpaceMetr(M) st P = Ball(p,r) holds P is open
+  proof
+   let r be real number;
+   let M be triangle MetrStruct, p be Point of M;
+   let P be Subset of TopSpaceMetr(M);
+   assume P = Ball(p,r);
+   then P in Family_open_set(M) & Family_open_set M =
+     the topology of TopSpaceMetr M by Th16,PCOMPS_1:33;
+   hence P is open by PRE_TOPC:def 5;
+  end;
+
+theorem Th22: for P being Subset of TopSpaceMetr(M) holds
+  P is open iff
+  for p being Point of M st p in P
+    ex r being real number st r>0 & Ball(p,r) c= P
+  proof
+   let P be Subset of TopSpaceMetr(M);
+    reconsider P' = P as Subset of M by Th16;
+   thus P is open implies
+    for p being Point of M st p in P
+     ex r being real number st r>0 & Ball(p,r) c= P
+    proof
+     assume
+A1:   P is open;
+     let p be Point of M such that
+A2:   p in P;
+        P in the topology of TopSpaceMetr M by A1,PRE_TOPC:def 5;
+      then P' in Family_open_set M by Th16;
+      then ex r being Real st r>0 & Ball(p,r) c= P by A2,PCOMPS_1:def 5;
+      hence thesis;
+    end;
+   assume
+A3: for p being Point of M st p in P
+     ex r being real number st r>0 & Ball(p,r) c= P;
+      for p being Point of M st p in P
+     ex r being Real st r>0 & Ball(p,r) c= P
+     proof let p be Point of M;
+      assume p in P;
+       then consider r being real number such that
+A4:     r>0 & Ball(p,r) c= P by A3;
+       reconsider r as Element of REAL by XREAL_0:def 1;
+       take r;
+      thus thesis by A4;
+     end;
+    then P' in Family_open_set M by PCOMPS_1:def 5;
+    hence P in the topology of TopSpaceMetr M by Th16;
+  end;
+
+definition let M be MetrStruct;
+ attr M is compact means
+  :Def6: TopSpaceMetr(M) is compact;
+end;
+
+theorem M is compact iff
+ for F st F is_ball-family & F is_a_cover_of M
+  ex G st G c= F & G is_a_cover_of M & G is finite
+ proof
+  thus M is compact implies
+   for F st F is_ball-family & F is_a_cover_of M
+    ex G st G c= F & G is_a_cover_of M & G is finite
+     proof
+      assume M is compact;
+      then A1: TopSpaceMetr(M) is compact by Def6;
+      let F; assume that
+     A2: F is_ball-family and
+     A3: F is_a_cover_of M;
+      set TM = TopSpaceMetr(M);
+        F is Subset-Family of TM by Th16;
+      then reconsider TF = F as Subset-Family of TM;
+        the carrier of M c= union F by A3,Def5;
+      then the carrier of TM c= union TF by Th16;
+     then A4: TF is_a_cover_of TM by Th1;
+       TF is open
+      proof
+       let P be Subset of TM;
+        assume A5: P in TF;
+        reconsider P' = P as Subset of M by Th16;
+          ex p,r st P' = Ball(p,r) by A2,A5,Def4;
+       hence P is open by Th21;
+      end;
+      then consider TG being Subset-Family of TM such that
+     A6: TG c= TF & TG is_a_cover_of TM & TG is finite
+       by A1,A4,COMPTS_1:def 3;
+        TG is Subset-Family of M by Th16;
+      then reconsider G = TG as Subset-Family of M;
+      take G;
+        the carrier of TM c= union TG by A6,Th1;
+      then the carrier of M c= union G by Th16;
+      hence G c= F & G is_a_cover_of M & G is finite by A6,Def5;
+     end;
+    thus (for F st F is_ball-family & F is_a_cover_of M
+          ex G st G c= F & G is_a_cover_of M & G is finite) implies
+     M is compact
+     proof
+      assume A7: for F st F is_ball-family & F is_a_cover_of M
+                 ex G st G c= F & G is_a_cover_of M & G is finite;
+      set TM = TopSpaceMetr(M);
+        now let F be Subset-Family of TM; assume that
+     A8: F is_a_cover_of TM and
+     A9: F is open;
+      set Z = { Ball(p,r) where p is Point of M, r is Real:
+        ex P being Subset of TM st P in F & Ball(p,r) c= P};
+        Z c= bool the carrier of M
+       proof
+        let a be set;
+        assume a in Z;
+        then ex p being Point of M, r being Real st a = Ball(p,r) &
+          ex P being Subset of TM st P in F & Ball(p,r) c= P;
+        hence a in bool the carrier of M;
+       end;
+      then Z is Subset-Family of M by SETFAM_1:def 7;
+      then reconsider Z as Subset-Family of M;
+     A10: Z is_ball-family
+       proof
+        let P be set; assume P in Z;
+          then ex p being Point of M, r being Real st P = Ball(p,r) &
+            ex P being Subset of TM st P in F & Ball(p,r) c= P;
+         hence thesis;
+       end;
+        the carrier of M c= union Z
+       proof
+        let a be set; assume a in the carrier of M;
+        then reconsider p = a as Point of M;
+          the carrier of TM c= union F & the carrier of TM = the carrier of M
+         by A8,Th1,Th16;
+        then p in union F by TARSKI:def 3;
+        then consider P being set such that
+       A11: p in P and
+       A12: P in F by TARSKI:def 4;
+        reconsider P as Subset of TM by A12;
+          P is open by A9,A12,TOPS_2:def 1;
+        then consider r being real number such that
+A13:     r>0 & Ball(p,r) c= P by A11,Th22;
+        reconsider r' = r as Element of REAL by XREAL_0:def 1;
+A14:      a in Ball(p,r) by A13,Lm1;
+          Ball(p,r') in Z by A12,A13;
+       hence a in union Z by A14,TARSKI:def 4;
+      end;
+     then Z is_a_cover_of M by Def5;
+      then consider G being Subset-Family of M such that
+     A15: G c= Z and
+     A16: G is_a_cover_of M and
+     A17: G is finite by A7,A10;
+         reconsider F' = F as non empty Subset-Family of TM
+           by A8,TOPS_2:5;
+     defpred X[set,set] means $1 c= $2;
+     A18: for a being set st a in G ex u being set st u in F' & X[a,u]
+          proof
+           let a be set; assume a in G;
+           then a in Z by A15;
+           then consider p being Point of M, r being Real such that
+            A19: Ball(p,r) = a and
+            A20: ex P being Subset of TM
+            st P in F & Ball(p,r) c= P;
+           consider P being Subset of TM such that
+           A21: P in F & Ball(p,r) c= P
+            by A20;
+           take P; thus P in F' & a c= P by A19,A21;
+          end;
+      consider f being Function of G,F' such that
+     A22: for a being set st a in G holds X[a,f.a] from FuncEx1(A18);
+        rng f c= F by RELSET_1:12;
+       then reconsider GG = rng f as Subset-Family of TM by TOPS_2:3;
+       take GG;
+       thus GG c= F by RELSET_1:12;
+         the carrier of TM c= union GG
+        proof
+         let a be set such that A23: a in the carrier of TM;
+           the carrier of TM = the carrier of M & the carrier of M c= union G
+          by A16,Def5,Th16;
+         then consider P being set such that
+        A24: a in P & P in G by A23,TARSKI:def 4;
+           dom f = G by FUNCT_2:def 1;
+         then f.P in GG & P c= f.P by A22,A24,FUNCT_1:def 5;
+         hence a in union GG by A24,TARSKI:def 4;
+        end;
+       hence GG is_a_cover_of TM by Th1;
+         dom f = G by FUNCT_2:def 1;
+       hence GG is finite by A17,FINSET_1:26;
+      end;
+     then TM is compact by COMPTS_1:def 3;
+     hence thesis by Def6;
+   end;
+ end;
+
+:: REAL as topological space
+
+definition
+ func R^1 -> strict TopSpace equals
+  :Def7: TopSpaceMetr(RealSpace);
+ correctness;
+end;
+
+definition
+ cluster R^1 -> non empty;
+ coherence by Def7;
+end;
+
+theorem Th24: the carrier of R^1 = REAL
+ proof
+    the carrier of R^1 = the carrier of
+   TopStruct (# the carrier of RealSpace, Family_open_set(RealSpace) #)
+   & the carrier of RealSpace = the carrier of MetrStruct(# REAL,real_dist #)
+    by Def7,METRIC_1:def 14,PCOMPS_1:def 6;
+  hence thesis;
+ end;
+
+definition let C be set, f be PartFunc of C, the carrier of R^1, x be set;
+ cluster f.x -> real;
+  coherence
+ proof per cases;
+  suppose x in dom f;
+   hence f.x in REAL by Th24,PARTFUN1:27;
+  suppose not x in dom f;
+   hence thesis by CARD_1:51,FUNCT_1:def 4;
+ end;
+end;
+
+definition let a,b be real number;
+ func Closed-Interval-TSpace(a,b) -> strict non empty SubSpace of R^1 equals
+  :Def8:  TopSpaceMetr(Closed-Interval-MSpace(a,b));
+ coherence by Def7,Th19;
+end;
+
+theorem Th25:
+ a <= b implies the carrier of Closed-Interval-TSpace(a,b) = [. a,b .]
+ proof
+  assume A1: a <= b;
+  thus the carrier of Closed-Interval-TSpace(a,b)
+      = the carrier of TopSpaceMetr(Closed-Interval-MSpace(a,b))
+          by Def8
+     .= the carrier of Closed-Interval-MSpace(a,b) by Th16
+     .= [. a,b .] by A1,Th14;
+ end;
+
+theorem Th26:
+ a <= b implies
+  for P being Subset of R^1 st P = [. a,b .]
+         holds Closed-Interval-TSpace(a,b) = R^1|P
+ proof
+  assume A1: a <= b;
+  let P be Subset of R^1; assume P = [. a,b .];
+  then the carrier of Closed-Interval-TSpace(a,b) = P by A1,Th25;
+  then [#](Closed-Interval-TSpace(a,b)) = P & [#](R^1|P) = P
+     by PRE_TOPC:12,def 10;
+  hence Closed-Interval-TSpace(a,b) = R^1|P by PRE_TOPC:def 10;
+ end;
+
+theorem Th27: Closed-Interval-TSpace(0,1) = I[01]
+ proof
+  set TR = TopSpaceMetr(RealSpace);
+  reconsider P = [.0,1.] as Subset of R^1 by Th24;
+  reconsider P' = P as Subset of TR by Th16,METRIC_1:def 14;
+  thus Closed-Interval-TSpace(0,1) = TR|P' by Def7,Th26 .= I[01] by BORSUK_1:
+def 16;
+ end;
+
+definition
+ redefine func I[01] -> strict SubSpace of R^1;
+ coherence by Th27;
+end;
+
+Lm3: for r be real number holds r >= 0 & a + r <= b implies a <= b
+ proof
+  let r be real number;
+  assume A1: r >= 0 & a + r <= b;
+  then a + r - r <= b - r by REAL_1:49;
+  then a <= b - r & b - r <= b by A1,REAL_2:173,XCMPLX_1:26;
+  hence thesis by AXIOMS:22;
+ end;
+
+theorem
+   for f being map of R^1,R^1 st
+  ex a,b being Real st for x being Real holds f.x = a*x + b holds
+   f is continuous
+ proof
+ let f be map of R^1,R^1;
+  given a,b being Real such that
+   A1: for x being Real holds f.x = a*x + b;
+    for W being Point of R^1, G being a_neighborhood of f.W
+   ex H being a_neighborhood of W st f.:H c= G
+   proof
+    let W be Point of R^1, G be a_neighborhood of f.W;
+   A2: f.W in Int G by CONNSP_2:def 1;
+    then consider Q being Subset of R^1 such that
+   A3: Q is open & Q c= G & f.W in Q by TOPS_1:54;
+    reconsider Y = f.W as Point of RealSpace by Th24,METRIC_1:def 14;
+    consider r being real number such that
+   A4: r>0 & Ball(Y,r) c= Q by A3,Def7,Th22;
+      now per cases;
+     suppose A5: a = 0;
+
+      set H = [#](R^1);
+        the carrier of R^1 = [#](R^1) by PRE_TOPC:12;
+      then H is open & W in H;
+      then W in Int H by TOPS_1:55;
+      then reconsider H as a_neighborhood of W by CONNSP_2:def 1;
+        for y being set holds y in {b} iff
+       ex x being set st x in dom f & x in H & y = f.x
+      proof
+       let y be set;
+        thus y in {b} implies
+         ex x being set st x in dom f & x in H & y = f.x
+         proof
+          assume A6: y in {b};
+          take 0;
+            dom f = the carrier of R^1 & the carrier of R^1 = [#](R^1) &
+           the carrier of R^1 = REAL by Th24,FUNCT_2:def 1,PRE_TOPC:12;
+          hence 0 in dom f & 0 in H;
+          thus f.0 = 0 * 0 + b by A1,A5 .= y by A6,TARSKI:def 1;
+         end;
+        given x being set such that
+      A7: x in dom f & x in H & y = f.x;
+        reconsider x as Real by A7,Th24;
+           y = 0 * x + b by A1,A5,A7 .= b;
+        hence y in {b} by TARSKI:def 1;
+      end;
+      then A8: f.:H = {b} by FUNCT_1:def 12;
+      A9: Int G c= G by TOPS_1:44;
+      reconsider W' = W as Real by Th24;
+        f.W = 0 * W' + b by A1,A5 .= b;
+      then f.:H c= G by A2,A8,A9,ZFMISC_1:37;
+     hence ex H being a_neighborhood of W st f.:H c= G;
+     suppose A10: a <> 0;
+      set d = r/(2* abs(a));
+        abs(a) > 0 & 2 > 0 by A10,ABSVALUE:6;
+      then 2*abs(a) > 0 by REAL_2:122;
+      then A11: d > 0 by A4,REAL_2:127;
+      reconsider W' = W as Point of RealSpace by Th24,METRIC_1:def 14;
+      reconsider H = Ball(W',d) as Subset of R^1 by Th24,METRIC_1:def 14
+;
+        H is open by Def7,Th21;
+      then Int H = H by TOPS_1:55;
+      then W in Int H by A11,Lm1;
+      then reconsider H as a_neighborhood of W by CONNSP_2:def 1;
+    A12: f.:H c= Ball(Y,r)
+       proof
+        let y be set; assume y in f.:H;
+        then consider x being set such that A13: x in dom f & x in H & y = f.x
+         by FUNCT_1:def 12;
+        reconsider y'=y as Real by A13,Th24,FUNCT_2:7;
+        reconsider x'=x as Point of RealSpace by A13;
+        reconsider Y' = Y as Real by METRIC_1:def 14;
+        reconsider W'' = W' as Real by Th24;
+        reconsider x'' = x' as Real by METRIC_1:def 14;
+          dist(W',x') < d by A13,METRIC_1:12;
+        then abs( W'' - x'' ) < d & abs(a) > 0 by A10,Th15,ABSVALUE:6;
+        then abs(a)*abs( W'' - x'' ) < abs(a)*d by REAL_1:70;
+        then abs(a*(W'' - x'')) < abs(a)*d by ABSVALUE:10;
+        then abs(a*W'' - a*x'') < abs(a)*d by XCMPLX_1:40;
+        then abs((a*W''+b) - (a*x''+b)) < abs(a)*d by XCMPLX_1:32;
+        then abs(Y' - (a*x''+b)) < abs(a)*d by A1;
+        then A14: abs(Y' - y') < abs(a)*d by A1,A13;
+          abs(a) <> 0 & 2 <> 0 by A10,ABSVALUE:7;
+        then A15: abs(a)*d = r/2 by XCMPLX_1:93;
+        reconsider yy=y' as Point of RealSpace by METRIC_1:def 14;
+          r/2+r/2 = r & r/2>=0 by A4,REAL_2:125,XCMPLX_1:66;
+        then abs(Y'-y') < r by A14,A15,Lm3;
+        then dist(Y,yy) < r by Th15;
+        hence y in Ball(Y,r) by METRIC_1:12;
+       end;
+       Ball(Y,r) c= G by A3,A4,XBOOLE_1:1;
+     then f.:H c= G by A12,XBOOLE_1:1;
+     hence ex H being a_neighborhood of W st f.:H c= G;
+    end;
+   hence thesis;
+   end;
+  hence f is continuous by BORSUK_1:def 2;
+ end;

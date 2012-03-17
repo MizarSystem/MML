@@ -1,0 +1,326 @@
+:: The Ordinal Numbers. Transfinite Induction and Defining by
+:: Transfinite Induction
+::  by Grzegorz Bancerek
+::
+:: Received March 20, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, ZFMISC_1, TARSKI, FUNCT_1, RELAT_1, ORDINAL1, HAHNBAN,
+      ARYTM;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, RELAT_1, FUNCT_1;
+ constructors TARSKI, ENUMSET1, FUNCT_1, SUBSET_1, XBOOLE_0;
+ clusters FUNCT_1, RELAT_1, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+::
+:: 1. Some consequences of regularity axiom (TARSKI:7)
+::
+
+ reserve X,Y,Z,X1,X2,X3,X4,X5,X6,x,y for set;
+
+canceled 2;
+
+theorem :: ORDINAL1:3
+   not ( X in Y & Y in Z & Z in X);
+
+theorem :: ORDINAL1:4
+     not ( X1 in X2 & X2 in X3 & X3 in X4 & X4 in X1);
+
+theorem :: ORDINAL1:5
+    not ( X1 in X2 & X2 in X3 & X3 in X4 & X4 in X5 & X5 in X1);
+
+theorem :: ORDINAL1:6
+    not ( X1 in X2 & X2 in X3 & X3 in X4 & X4 in X5 & X5 in X6 & X6 in X1);
+
+theorem :: ORDINAL1:7
+  Y in X implies not X c= Y;
+
+ definition let X;
+  func succ X -> set equals
+:: ORDINAL1:def 1
+   X \/ { X };
+ end;
+
+ definition let X;
+  cluster succ X -> non empty;
+ end;
+
+canceled 2;
+
+theorem :: ORDINAL1:10
+  X in succ X;
+
+canceled;
+
+theorem :: ORDINAL1:12
+    succ X = succ Y implies X = Y;
+
+theorem :: ORDINAL1:13
+    x in succ X iff x in X or x = X;
+
+theorem :: ORDINAL1:14
+  X <> succ X;
+
+::
+:: 3. epsilon-transitivity & epsilon-connectedness
+::
+
+ reserve a,b,c,X,Y,Z,x,y,z for set;
+
+ definition let X;
+  attr X is epsilon-transitive means
+:: ORDINAL1:def 2
+ for x st x in X holds x c= X;
+  attr X is epsilon-connected means
+:: ORDINAL1:def 3
+ for x,y st x in X & y in X holds x in y or x = y or y in x;
+ end;
+
+::
+:: 4. Definition of ordinal numbers - Ordinal
+::
+
+ definition let IT be set;
+  attr IT is ordinal means
+:: ORDINAL1:def 4
+  IT is epsilon-transitive epsilon-connected;
+ end;
+
+definition
+  cluster ordinal -> epsilon-transitive epsilon-connected set;
+  cluster epsilon-transitive epsilon-connected -> ordinal set;
+end;
+
+definition
+  redefine mode set;
+  synonym number;
+end;
+
+ definition
+  cluster ordinal number;
+ end;
+
+definition
+  mode Ordinal is ordinal number;
+end;
+
+ reserve A,B,C,D for Ordinal;
+
+canceled 4;
+
+theorem :: ORDINAL1:19
+ for A being epsilon-transitive set st
+  A in B & B in C holds A in C;
+
+canceled;
+
+theorem :: ORDINAL1:21
+ for x being epsilon-transitive set, A being Ordinal
+     st x c< A holds x in A;
+
+theorem :: ORDINAL1:22
+   for A being epsilon-transitive set,
+     B, C being Ordinal st
+  A c= B & B in C holds A in C;
+
+theorem :: ORDINAL1:23
+  a in A implies a is Ordinal;
+
+theorem :: ORDINAL1:24
+  A in B or A = B or B in A;
+
+definition let A,B;
+ redefine pred A c= B;
+  connectedness;
+end;
+
+theorem :: ORDINAL1:25
+    A,B are_c=-comparable;
+
+theorem :: ORDINAL1:26
+  A c= B or B in A;
+
+theorem :: ORDINAL1:27
+  {} is Ordinal;
+
+ definition
+  cluster empty Ordinal;
+ end;
+
+ definition
+  cluster empty -> ordinal number;
+ end;
+
+definition
+  cluster {} -> ordinal;
+end;
+
+canceled;
+
+theorem :: ORDINAL1:29
+  x is Ordinal implies succ x is Ordinal;
+
+theorem :: ORDINAL1:30
+  x is ordinal implies union x is ordinal;
+
+definition
+ cluster non empty Ordinal;
+end;
+
+ definition let A;
+  cluster succ A -> non empty ordinal;
+  cluster union A -> ordinal;
+ end;
+
+theorem :: ORDINAL1:31
+    (for x st x in X holds x is Ordinal & x c= X) implies X is ordinal;
+
+theorem :: ORDINAL1:32
+  X c= A & X <> {} implies ex C st C in X & for B st B in X holds C c= B;
+
+theorem :: ORDINAL1:33
+  A in B iff succ A c= B;
+
+theorem :: ORDINAL1:34
+  A in succ C iff A c= C;
+
+::
+:: 6. Transfinite induction and principle of minimum of ordinals
+::
+
+scheme Ordinal_Min { P[Ordinal] } :
+  ex A st P[A] & for B st P[B] holds A c= B provided
+ ex A st P[A];
+
+scheme Transfinite_Ind { P[Ordinal] } :
+  for A holds P[A] provided
+ for A st for C st C in A holds P[C] holds P[A];
+
+::
+:: 7. Properties of sets of ordinals
+::
+
+theorem :: ORDINAL1:35
+ for X st for a st a in X holds a is Ordinal holds union X is ordinal;
+
+theorem :: ORDINAL1:36
+  for X st for a st a in X holds a is Ordinal ex A st X c= A;
+
+theorem :: ORDINAL1:37
+  not ex X st for x holds x in X iff x is Ordinal;
+
+theorem :: ORDINAL1:38
+  not ex X st for A holds A in X;
+
+theorem :: ORDINAL1:39
+    for X ex A st not A in X & for B st not B in X holds A c= B;
+
+::
+::  8. Limit ordinals
+::
+
+ definition let A be set;
+ canceled;
+
+  attr A is being_limit_ordinal means
+:: ORDINAL1:def 6
+  A = union A;
+  synonym A is_limit_ordinal;
+ end;
+
+canceled;
+
+theorem :: ORDINAL1:41
+  for A holds A is_limit_ordinal iff for C st C in A holds succ C in A;
+
+theorem :: ORDINAL1:42
+    not A is_limit_ordinal iff ex B st A = succ B;
+
+ reserve F,G for Function;
+
+::
+::  9. Transfinite sequences
+::
+
+ definition let IT be Function;
+  attr IT is T-Sequence-like means
+:: ORDINAL1:def 7
+ dom IT is ordinal;
+ end;
+
+ definition
+  cluster T-Sequence-like Function;
+ end;
+
+definition
+  mode T-Sequence is T-Sequence-like Function;
+end;
+
+ definition let Z;
+  mode T-Sequence of Z -> T-Sequence means
+:: ORDINAL1:def 8
+ rng it c= Z;
+ end;
+
+canceled 2;
+
+theorem :: ORDINAL1:45
+    {} is T-Sequence of Z;
+
+ reserve L,L1 for T-Sequence;
+
+theorem :: ORDINAL1:46
+    dom F is Ordinal implies F is T-Sequence of rng F;
+
+ definition let L;
+  cluster dom L -> ordinal;
+ end;
+
+theorem :: ORDINAL1:47
+  X c= Y implies for L being T-Sequence of X holds L is T-Sequence of Y;
+
+ definition let L,A;
+ redefine func L|A -> T-Sequence of rng L;
+ end;
+
+theorem :: ORDINAL1:48
+    for L being T-Sequence of X for A holds L|A is T-Sequence of X;
+
+definition let IT be set;
+ attr IT is c=-linear means
+:: ORDINAL1:def 9
+ for x,y being set st x in IT & y in IT holds x,y are_c=-comparable;
+end;
+
+theorem :: ORDINAL1:49
+    (for a st a in X holds a is T-Sequence) & X is c=-linear
+   implies union X is T-Sequence;
+
+::
+:: 10. Schemes of definability by transfinite induction
+::
+
+ scheme TS_Uniq { A()->Ordinal, H(T-Sequence)->set,
+                    L1, L2() -> T-Sequence } :
+  L1() = L2() provided
+ dom L1() = A() & for B,L st B in A() & L = L1()|B holds L1().B = H(L) and
+ dom L2() = A() & for B,L st B in A() & L = L2()|B holds L2().B = H(L);
+
+ scheme TS_Exist { A()->Ordinal,H(T-Sequence)->set } :
+   ex L st dom L = A() & for B,L1 st B in A() & L1 = L|B holds L.B = H(L1);
+
+ scheme Func_TS { L() -> T-Sequence, F(Ordinal)->set, H(T-Sequence)->set } :
+   for B st B in dom L() holds L().B = H(L()|B)
+     provided
+  for A,a holds a = F(A) iff
+     ex L st a = H(L) & dom L = A & for B st B in A holds L.B = H(L|B) and
+  for A st A in dom L() holds L().A = F(A);
+
+theorem :: ORDINAL1:50
+   A c< B or A = B or B c< A;
+

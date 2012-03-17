@@ -1,0 +1,509 @@
+:: On the Many Sorted Closure Operator and the Many Sorted Closure
+:: System
+::  by Artur Korni{\l}owicz
+::
+:: Received February 7, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary PBOOLE, FUNCT_1, PRALG_1, ZF_REFLE, RELAT_1, FUNCT_4, CAT_1,
+      FINSEQ_4, BOOLE, FUNCT_6, MSUALG_3, MATRIX_1, PRE_CIRC, CAT_4, RELAT_2,
+      MSAFREE2, BINOP_1, FUNCOP_1, FINSET_1, MSUALG_1, MSSUBFAM, GRCAT_1,
+      COHSP_1, MSUALG_2, SETFAM_1, CANTOR_1, CLOSURE1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, SETFAM_1, RELAT_1,
+      FUNCT_1, FUNCT_2, CQC_LANG, FINSET_1, FUNCT_4, PBOOLE, MSUALG_1,
+      MSUALG_2, MSUALG_3, PRALG_1, PRE_CIRC, EXTENS_1, CANTOR_1, MSSUBFAM;
+ constructors AUTALG_1, CQC_LANG, EXTENS_1, MSUALG_3, PRE_CIRC, CANTOR_1,
+      MSSUBFAM;
+ clusters FINSET_1, FUNCT_1, MSSUBFAM, MSUALG_1, PBOOLE, PRALG_1, CQC_LANG,
+      RELSET_1, SUBSET_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin  :: Preliminaries
+
+reserve i, x, I for set,
+        A, M for ManySortedSet of I,
+        f for Function,
+        F for ManySortedFunction of I;
+
+scheme MSSUBSET { I() -> set,
+             A() -> non-empty ManySortedSet of I(),
+             B() -> ManySortedSet of I(),
+             P[set] } :
+ (for X being ManySortedSet of I() holds X in A() iff X in B() & P[X])
+  implies A() c= B();
+
+theorem :: CLOSURE1:1
+for X being non empty set
+ for x, y being set st x c= y holds
+  { t where t is Element of X : y c= t } c=
+   { z where z is Element of X : x c= z };
+
+theorem :: CLOSURE1:2
+  (ex A st A in M) implies M is non-empty;
+
+definition let I, F, A;
+ redefine func F..A -> ManySortedSet of I;
+end;
+
+definition let I;
+           let A, B be non-empty ManySortedSet of I;
+           let F be ManySortedFunction of A, B;
+           let X be Element of A;
+ redefine func F..X -> Element of B;
+end;
+
+theorem :: CLOSURE1:3
+  for A, X being ManySortedSet of I
+ for B being non-empty ManySortedSet of I
+  for F being ManySortedFunction of A, B st X in A holds F..X in B;
+
+theorem :: CLOSURE1:4
+for F, G being ManySortedFunction of I
+ for A being ManySortedSet of I st A in doms G
+  holds F..(G..A) = (F ** G)..A;
+
+theorem :: CLOSURE1:5
+  F is "1-1" implies
+ for A, B being ManySortedSet of I st A in doms F & B in doms F &
+  F..A = F..B holds A = B;
+
+theorem :: CLOSURE1:6
+  doms F is non-empty &
+ (for A, B being ManySortedSet of I st A in doms F & B in doms F &
+  F..A = F..B holds A = B) implies F is "1-1";
+
+theorem :: CLOSURE1:7      :: FUNCT_2:18
+for A, B being non-empty ManySortedSet of I
+ for F, G being ManySortedFunction of A, B st for M st M in A holds F..M = G..M
+  holds F = G;
+
+definition let I, M;
+ cluster empty-yielding locally-finite Element of bool M;
+end;
+
+begin  :: Properties of Many Sorted Closure Operators
+
+definition let I, M;
+ mode MSSetOp of M is ManySortedFunction of bool M, bool M;
+ canceled;
+end;
+
+definition let I, M;
+           let O be MSSetOp of M;
+           let X be Element of bool M;
+ redefine func O..X -> Element of bool M;
+end;
+
+definition let I, M;
+ let IT be MSSetOp of M;
+ attr IT is reflexive means
+:: CLOSURE1:def 2
+  for X being Element of bool M holds X c= IT..X;
+
+ attr IT is monotonic means
+:: CLOSURE1:def 3
+  for X, Y being Element of bool M st X c= Y holds IT..X c= IT..Y;
+
+ attr IT is idempotent means
+:: CLOSURE1:def 4
+  for X being Element of bool M holds IT..X = IT..(IT..X);
+
+ attr IT is topological means
+:: CLOSURE1:def 5
+  for X, Y being Element of bool M holds IT..(X \/ Y) = (IT..X) \/ (IT..Y);
+end;
+
+theorem :: CLOSURE1:8
+for M being non-empty ManySortedSet of I
+ for X being Element of M holds X = (id M)..X;
+
+theorem :: CLOSURE1:9
+for M being non-empty ManySortedSet of I
+ for X, Y being Element of M st X c= Y
+  holds (id M)..X c= (id M)..Y;
+
+theorem :: CLOSURE1:10
+for M being non-empty ManySortedSet of I
+ for X, Y being Element of M st X \/ Y is Element of M
+  holds (id M)..(X \/ Y) = ((id M)..X) \/ ((id M)..Y);
+
+theorem :: CLOSURE1:11
+  for X being Element of bool M
+ for i, x being set st i in I & x in ((id (bool M))..X).i
+  ex Y being locally-finite Element of bool M st
+   Y c= X & x in ((id (bool M))..Y).i;
+
+definition let I, M;
+ cluster reflexive monotonic idempotent topological MSSetOp of M;
+end;
+
+theorem :: CLOSURE1:12
+  id (bool A) is reflexive MSSetOp of A;
+
+theorem :: CLOSURE1:13
+  id (bool A) is monotonic MSSetOp of A;
+
+theorem :: CLOSURE1:14
+  id (bool A) is idempotent MSSetOp of A;
+
+theorem :: CLOSURE1:15
+  id (bool A) is topological MSSetOp of A;
+
+reserve P, R for MSSetOp of M,
+        E, T for Element of bool M;
+
+theorem :: CLOSURE1:16
+  E = M & P is reflexive implies E = P..E;
+
+theorem :: CLOSURE1:17
+  (P is reflexive & for X being Element of bool M holds P..X c= X)
+ implies P is idempotent;
+
+theorem :: CLOSURE1:18
+  P is monotonic implies P..(E /\ T) c= P..E /\ P..T;
+
+definition let I, M;
+ cluster topological -> monotonic MSSetOp of M;
+end;
+
+theorem :: CLOSURE1:19
+  P is topological implies P..E \ P..T c= P..(E \ T);
+
+definition let I, M, R, P;
+ redefine func P ** R -> MSSetOp of M;
+end;
+
+theorem :: CLOSURE1:20
+  P is reflexive & R is reflexive implies P ** R is reflexive;
+
+theorem :: CLOSURE1:21
+  P is monotonic & R is monotonic implies P ** R is monotonic;
+
+theorem :: CLOSURE1:22
+  P is idempotent & R is idempotent & P**R = R**P implies P ** R is idempotent;
+
+theorem :: CLOSURE1:23
+  P is topological & R is topological implies P ** R is topological;
+
+theorem :: CLOSURE1:24
+P is reflexive & i in I & f = P.i implies
+  for x being Element of bool (M.i) holds x c= f.x;
+
+theorem :: CLOSURE1:25
+P is monotonic & i in I & f = P.i implies
+  for x, y being Element of bool (M.i) st x c= y holds f.x c= f.y;
+
+theorem :: CLOSURE1:26
+P is idempotent & i in I & f = P.i implies
+  for x being Element of bool (M.i) holds f.x = f.(f.x);
+
+theorem :: CLOSURE1:27
+  P is topological & i in I & f = P.i implies
+  for x, y being Element of bool (M.i) holds f.(x \/ y) = (f.x) \/ (f.y);
+
+begin  :: On the Many Sorted Closure Operator
+       ::  and the Many Sorted Closure System
+
+reserve S for 1-sorted;
+
+definition let S;
+ struct(many-sorted over S) MSClosureStr over S (#
+       Sorts -> ManySortedSet of the carrier of S,
+       Family -> MSSubsetFamily of the Sorts #);
+end;
+
+reserve
+        MS for many-sorted over S;
+
+definition let S;
+ let IT be MSClosureStr over S;
+ attr IT is additive means
+:: CLOSURE1:def 6
+  the Family of IT is additive;
+
+ attr IT is absolutely-additive means
+:: CLOSURE1:def 7
+  the Family of IT is absolutely-additive;
+
+ attr IT is multiplicative means
+:: CLOSURE1:def 8
+  the Family of IT is multiplicative;
+
+ attr IT is absolutely-multiplicative means
+:: CLOSURE1:def 9
+  the Family of IT is absolutely-multiplicative;
+
+ attr IT is properly-upper-bound means
+:: CLOSURE1:def 10
+  the Family of IT is properly-upper-bound;
+
+ attr IT is properly-lower-bound means
+:: CLOSURE1:def 11
+  the Family of IT is properly-lower-bound;
+end;
+
+definition let S, MS;
+ func MSFull MS -> MSClosureStr over S equals
+:: CLOSURE1:def 12
+   MSClosureStr (#the Sorts of MS, bool the Sorts of MS#);
+end;
+
+definition let S, MS;
+ cluster MSFull MS -> strict additive absolutely-additive
+                      multiplicative absolutely-multiplicative
+                      properly-upper-bound properly-lower-bound;
+end;
+
+definition let S;
+           let MS be non-empty many-sorted over S;
+ cluster MSFull MS -> non-empty;
+end;
+
+definition let S;
+ cluster strict non-empty additive absolutely-additive
+         multiplicative absolutely-multiplicative
+         properly-upper-bound properly-lower-bound MSClosureStr over S;
+end;
+
+definition let S;
+           let CS be additive MSClosureStr over S;
+ cluster the Family of CS -> additive;
+end;
+
+definition let S;
+           let CS be absolutely-additive MSClosureStr over S;
+ cluster the Family of CS -> absolutely-additive;
+end;
+
+definition let S;
+           let CS be multiplicative MSClosureStr over S;
+ cluster the Family of CS -> multiplicative;
+end;
+
+definition let S;
+           let CS be absolutely-multiplicative MSClosureStr over S;
+ cluster the Family of CS -> absolutely-multiplicative;
+end;
+
+definition let S;
+           let CS be properly-upper-bound MSClosureStr over S;
+ cluster the Family of CS -> properly-upper-bound;
+end;
+
+definition let S;
+           let CS be properly-lower-bound MSClosureStr over S;
+ cluster the Family of CS -> properly-lower-bound;
+end;
+
+definition let S;
+           let M be non-empty ManySortedSet of the carrier of S;
+           let F be MSSubsetFamily of M;
+ cluster MSClosureStr (#M, F#) -> non-empty;
+end;
+
+definition let S, MS;
+           let F be additive MSSubsetFamily of the Sorts of MS;
+ cluster MSClosureStr (#the Sorts of MS, F#) -> additive;
+end;
+
+definition let S, MS;
+           let F be absolutely-additive MSSubsetFamily of the Sorts of MS;
+ cluster MSClosureStr (#the Sorts of MS, F#) -> absolutely-additive;
+end;
+
+definition let S, MS;
+           let F be multiplicative MSSubsetFamily of the Sorts of MS;
+ cluster MSClosureStr (#the Sorts of MS, F#) -> multiplicative;
+end;
+
+definition let S, MS;
+         let F be absolutely-multiplicative MSSubsetFamily of the Sorts of MS;
+ cluster MSClosureStr (#the Sorts of MS, F#) -> absolutely-multiplicative;
+end;
+
+definition let S, MS;
+           let F be properly-upper-bound MSSubsetFamily of the Sorts of MS;
+ cluster MSClosureStr (#the Sorts of MS, F#) -> properly-upper-bound;
+end;
+
+definition let S, MS;
+           let F be properly-lower-bound MSSubsetFamily of the Sorts of MS;
+ cluster MSClosureStr (#the Sorts of MS, F#) -> properly-lower-bound;
+end;
+
+definition let S;
+ cluster absolutely-additive -> additive MSClosureStr over S;
+end;
+
+definition let S;
+ cluster absolutely-multiplicative -> multiplicative MSClosureStr over S;
+end;
+
+definition let S;
+ cluster absolutely-multiplicative -> properly-upper-bound MSClosureStr over S;
+end;
+
+definition let S;
+ cluster absolutely-additive -> properly-lower-bound MSClosureStr over S;
+end;
+
+definition let S;
+ mode MSClosureSystem of S is absolutely-multiplicative MSClosureStr over S;
+end;
+
+definition let I, M;
+ mode MSClosureOperator of M is reflexive monotonic idempotent MSSetOp of M;
+end;
+
+definition let I, M;
+           let F be ManySortedFunction of M, M;
+ func MSFixPoints F -> ManySortedSubset of M means
+:: CLOSURE1:def 13
+  for i st i in I holds
+   x in it.i iff ex f being Function st f = F.i & x in dom f & f.x = x;
+end;
+
+definition let I;
+           let M be empty-yielding ManySortedSet of I;
+           let F be ManySortedFunction of M, M;
+ cluster MSFixPoints F -> empty-yielding;
+end;
+
+theorem :: CLOSURE1:28
+for F being ManySortedFunction of M, M holds
+ A in M & F..A = A iff A in MSFixPoints F;
+
+theorem :: CLOSURE1:29
+  MSFixPoints id A = A;
+
+theorem :: CLOSURE1:30
+for A being ManySortedSet of the carrier of S
+ for J being reflexive monotonic MSSetOp of A
+  for D being MSSubsetFamily of A st D = MSFixPoints J holds
+   MSClosureStr (#A, D#) is MSClosureSystem of S;
+
+theorem :: CLOSURE1:31
+for D being properly-upper-bound MSSubsetFamily of M
+  for X being Element of bool M
+ ex SF being non-empty MSSubsetFamily of M st
+  for Y being ManySortedSet of I holds
+   Y in SF iff Y in D & X c= Y;
+
+theorem :: CLOSURE1:32
+for D being properly-upper-bound MSSubsetFamily of M
+ for X being Element of bool M
+  for SF being non-empty MSSubsetFamily of M st
+   (for Y being ManySortedSet of I holds
+    Y in SF iff Y in D & X c= Y) holds
+ for i being set, Di being non empty set st i in I & Di = D.i
+  holds SF.i = { z where z is Element of Di : X.i c= z };
+
+theorem :: CLOSURE1:33
+for D being properly-upper-bound MSSubsetFamily of M
+ ex J being MSSetOp of M st
+  for X being Element of bool M
+   for SF being non-empty MSSubsetFamily of M st
+    (for Y being ManySortedSet of I holds
+     Y in SF iff Y in D & X c= Y) holds J..X = meet SF;
+
+theorem :: CLOSURE1:34
+for D being properly-upper-bound MSSubsetFamily of M
+ for A being Element of bool M
+  for J being MSSetOp of M st
+
+  A in D &
+   for X being Element of bool M
+    for SF being non-empty MSSubsetFamily of M st
+     (for Y being ManySortedSet of I holds
+      Y in SF iff Y in D & X c= Y) holds J..X = meet SF
+
+  holds J..A = A;
+
+theorem :: CLOSURE1:35
+  for D being absolutely-multiplicative MSSubsetFamily of M
+ for A being Element of bool M
+  for J being MSSetOp of M st
+
+  J..A = A &
+   for X being Element of bool M
+    for SF being non-empty MSSubsetFamily of M st
+     (for Y being ManySortedSet of I holds
+      Y in SF iff Y in D & X c= Y) holds J..X = meet SF
+
+  holds A in D;
+
+theorem :: CLOSURE1:36
+for D being properly-upper-bound MSSubsetFamily of M
+  for J being MSSetOp of M st
+
+   for X being Element of bool M
+    for SF being non-empty MSSubsetFamily of M st
+     (for Y being ManySortedSet of I holds
+      Y in SF iff Y in D & X c= Y) holds J..X = meet SF
+
+  holds J is reflexive monotonic;
+
+theorem :: CLOSURE1:37
+for D being absolutely-multiplicative MSSubsetFamily of M
+  for J being MSSetOp of M st
+
+   for X being Element of bool M
+    for SF being non-empty MSSubsetFamily of M st
+     (for Y being ManySortedSet of I holds
+      Y in SF iff Y in D & X c= Y) holds J..X = meet SF
+
+  holds J is idempotent;
+
+theorem :: CLOSURE1:38
+for D being MSClosureSystem of S
+ for J being MSSetOp of the Sorts of D st
+
+  for X being Element of bool the Sorts of D
+   for SF being non-empty MSSubsetFamily of the Sorts of D st
+    (for Y being ManySortedSet of the carrier of S holds
+     Y in SF iff Y in the Family of D & X c= Y) holds J..X = meet SF
+
+  holds J is MSClosureOperator of the Sorts of D;
+
+definition let S;
+           let A be ManySortedSet of the carrier of S;
+           let C be MSClosureOperator of A;
+ func ClOp->ClSys C -> MSClosureSystem of S means
+:: CLOSURE1:def 14
+  ex D being MSSubsetFamily of A st D = MSFixPoints C &
+   it = MSClosureStr (#A, D#);
+end;
+
+definition let S;
+           let A be ManySortedSet of the carrier of S;
+           let C be MSClosureOperator of A;
+ cluster ClOp->ClSys C -> strict;
+end;
+
+definition let S;
+           let A be non-empty ManySortedSet of the carrier of S;
+           let C be MSClosureOperator of A;
+ cluster ClOp->ClSys C -> non-empty;
+end;
+
+definition let S;
+           let D be MSClosureSystem of S;
+ func ClSys->ClOp D -> MSClosureOperator of the Sorts of D means
+:: CLOSURE1:def 15
+  for X being Element of bool the Sorts of D
+   for SF being non-empty MSSubsetFamily of the Sorts of D st
+    (for Y being ManySortedSet of the carrier of S holds
+     Y in SF iff Y in the Family of D & X c= Y) holds it..X = meet SF;
+end;
+
+theorem :: CLOSURE1:39
+  for A being ManySortedSet of the carrier of S
+ for J being MSClosureOperator of A holds
+  ClSys->ClOp (ClOp->ClSys J) = J;
+
+theorem :: CLOSURE1:40
+  for D being MSClosureSystem of S holds
+ ClOp->ClSys (ClSys->ClOp D) = the MSClosureStr of D;

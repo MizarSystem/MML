@@ -1,0 +1,3211 @@
+:: Moore-Smith Convergence
+::  by Andrzej Trybulec
+::
+:: Received November 12, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCOP_1, SEQM_3, RELAT_1, FUNCT_1, BOOLE, CARD_1, ZF_LANG,
+      ORDINAL1, CLASSES1, CLASSES2, CARD_3, FUNCT_2, PROB_1, TARSKI, PRE_TOPC,
+      CONNSP_2, TOPS_1, COMPTS_1, COMPLSP1, SUBSET_1, PRALG_1, PBOOLE,
+      RLVECT_2, WAYBEL_3, YELLOW_1, FRAENKEL, ZF_REFLE, ORDERS_1, WAYBEL_0,
+      QUANTAL1, LATTICES, RELAT_2, CAT_1, YELLOW_0, WELLORD1, ORDINAL2,
+      MCART_1, REALSET1, SEQ_2, SETFAM_1, CLOSURE1, YELLOW_6;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, COMPLSP1, RELAT_1,
+      RELSET_1, FUNCT_1, FUNCT_2, BINOP_1, REALSET1, CARD_1, CARD_3, MSUALG_1,
+      PRE_CIRC, PROB_1, ORDINAL1, CLASSES1, CLASSES2, TOLER_1, SEQM_3,
+      STRUCT_0, TOPS_1, COMPTS_1, CONNSP_2, PBOOLE, PRALG_1, ORDERS_1,
+      LATTICE3, PRE_TOPC, YELLOW_0, WAYBEL_0, YELLOW_1, YELLOW_3, FRAENKEL,
+      WAYBEL_3, GRCAT_1;
+ constructors SEQM_3, CLASSES1, TOPS_1, CONNSP_2, COMPTS_1, COMPLSP1, PRALG_1,
+      WAYBEL_3, TOLER_1, YELLOW_3, BINOP_1, MSUALG_1, DOMAIN_1, PRE_CIRC,
+      GRCAT_1, LATTICE3, PROB_1, TOPS_2, PRE_TOPC;
+ clusters SUBSET_1, STRUCT_0, RELSET_1, WAYBEL_0, ORDERS_1, PRALG_1, AMI_1,
+      YELLOW_1, YELLOW_3, INDEX_1, PRE_TOPC, MSUALG_1, COMPLSP1, LATTICE3,
+      YELLOW_0, PBOOLE, FUNCOP_1, RELAT_1, FUNCT_1, CLASSES2, CARD_1, FRAENKEL,
+      SEQM_3, ZFMISC_1;
+ requirements NUMERALS, BOOLE, SUBSET;
+ definitions TARSKI, STRUCT_0, WAYBEL_0, PRALG_1, YELLOW_1, COMPTS_1, YELLOW_0,
+      RELAT_1, PRE_TOPC, WAYBEL_3, CONNSP_2;
+ theorems STRUCT_0, CONNSP_2, TOPS_1, FUNCOP_1, WAYBEL_0, PRE_TOPC, ORDERS_1,
+      TMAP_1, RELAT_1, FUNCT_2, SEQM_3, ZFMISC_1, FUNCT_1, TARSKI, PBOOLE,
+      YELLOW_1, CARD_3, PRALG_1, YELLOW_3, MSUALG_1, RELSET_1, BINOP_1,
+      DOMAIN_1, YELLOW_0, CLASSES2, CLASSES1, CARD_2, FUNCT_6, COMPLSP1,
+      PROB_1, LATTICE3, SPPOL_1, COMPTS_1, MCART_1, SUBSET_1, WELLORD1,
+      WAYBEL_3, GRCAT_1, SETFAM_1, XBOOLE_0, XBOOLE_1, ORDINAL1, PARTFUN1;
+ schemes MSUALG_1, FUNCT_7, MSUALG_9, SETWISEO, NATTRA_1, RELSET_1, DOMAIN_1,
+      MSSUBFAM, PRALG_2, FUNCT_2, XBOOLE_0;
+
+begin :: Preliminaries, classical mathematics
+
+scheme SubsetEq{X()-> non empty set, A,B()-> Subset of X(), P[set]}:
+ A() = B()
+provided
+A1: for y being Element of X() holds y in A() iff P[y] and
+A2: for y being Element of X() holds y in B() iff P[y]
+proof
+  defpred Q[set] means $1 in X() & P[$1];
+A3: for y being set holds y in A() iff Q[y] by A1;
+A4: for y being set holds y in B() iff Q[y] by A2;
+ thus A() = B() from Extensionality(A3,A4);
+end;
+
+canceled;
+
+definition let f be Function;
+ assume
+A1: f is non empty constant;
+ func the_value_of f means
+:Def1:  ex x being set st x in dom f & it = f.x;
+ existence
+  proof
+      dom f <> {} by A1,RELAT_1:64;
+    then consider x being set such that
+A2:   x in dom f by XBOOLE_0:def 1;
+   take f.x;
+   thus thesis by A2;
+  end;
+ uniqueness by A1,SEQM_3:def 5;
+end;
+
+definition
+ cluster non empty constant Function;
+ existence
+  proof consider S being set;
+   take f = {{}} --> S;
+   thus f is non empty;
+   thus f is constant;
+  end;
+end;
+
+theorem Th2:
+ for X being non empty set, x being set holds
+  the_value_of (X --> x) = x
+proof let X be non empty set, x be set;
+  set f = X --> x;
+  consider i being set such that
+A1: i in dom f & the_value_of f = f.i by Def1;
+    i in X by A1,PBOOLE:def 3;
+ hence the_value_of f = x by A1,FUNCOP_1:13;
+end;
+
+theorem Th3:
+ for f being Function holds Card rng f c= Card dom f
+proof let f be Function;
+    rng f = f.:dom f by RELAT_1:146;
+ hence Card rng f c= Card dom f by CARD_2:3;
+end;
+
+definition
+ cluster universal -> epsilon-transitive being_Tarski-Class set;
+ coherence by CLASSES2:def 1;
+ cluster epsilon-transitive being_Tarski-Class -> universal set;
+ coherence by CLASSES2:def 1;
+end;
+
+ reserve x,y,z,X for set,
+         T for Universe;
+
+definition let X;
+ canceled;
+
+ func the_universe_of X equals
+:Def3:  Tarski-Class the_transitive-closure_of X;
+ correctness;
+end;
+
+definition let X;
+ cluster the_universe_of X -> epsilon-transitive being_Tarski-Class;
+ coherence
+  proof
+     Tarski-Class the_transitive-closure_of X
+       is epsilon-transitive being_Tarski-Class;
+   hence thesis by Def3;
+  end;
+end;
+
+definition let X;
+ cluster the_universe_of X -> universal non empty;
+ coherence
+  proof
+     the_universe_of X = Tarski-Class the_transitive-closure_of X by Def3;
+   hence thesis;
+  end;
+end;
+
+canceled;
+
+theorem Th5:
+ for f being Function st dom f in T & rng f c= T
+  holds product f in T
+proof let f be Function such that
+A1: dom f in T and
+A2: rng f c= T;
+A3: product f c= Funcs(dom f, Union f) by FUNCT_6:10;
+A4: Card dom f in Card T by A1,CLASSES2:1;
+    Card rng f c= Card dom f by Th3;
+  then Card rng f in Card T by A4,ORDINAL1:22;
+  then rng f in T by A2,CLASSES1:2;
+  then union rng f in T by CLASSES2:65;
+  then Union f in T by PROB_1:def 3;
+  then Funcs(dom f, Union f) in T by A1,CLASSES2:67;
+ hence product f in T by A3,CLASSES1:def 1;
+end;
+
+begin :: Topological spaces, preliminaries
+
+theorem Th6: :: PRE_TOPC:def 13
+for T being non empty TopSpace, A being Subset of T
+for p being Point of T holds p in Cl A iff
+    for G being a_neighborhood of p holds G meets A
+proof let T be non empty TopSpace, A be Subset of T;
+ let p be Point of T;
+ hereby assume
+A1: p in Cl A;
+  let G be a_neighborhood of p;
+A2: Int G c= G by TOPS_1:44;
+     p in Int G & Int G is open by CONNSP_2:def 1,TOPS_1:51;
+   then A meets Int G by A1,PRE_TOPC:def 13;
+  hence G meets A by A2,XBOOLE_1:63;
+ end;
+ assume
+A3: for G being a_neighborhood of p holds G meets A;
+    now let G be Subset of T;
+   assume G is open & p in G;
+    then G is a_neighborhood of p by CONNSP_2:5;
+   hence A meets G by A3;
+  end;
+ hence p in Cl A by PRE_TOPC:def 13;
+end;
+
+definition let T be non empty TopSpace;
+ redefine attr T is being_T2;
+ synonym T is Hausdorff;
+end;
+
+definition
+ cluster Hausdorff (non empty TopSpace);
+ existence
+  proof take the_Complex_Space 1;
+   thus thesis by COMPLSP1:111;
+  end;
+end;
+
+theorem
+   for X be non empty TopSpace, A be Subset of X
+  holds [#]X is a_neighborhood of A
+proof let X be non empty TopSpace, A be Subset of X;
+   Int [#]X = [#]X by TOPS_1:43;
+ hence A c= Int [#]X by PRE_TOPC:14;
+end;
+
+theorem
+   for X be non empty TopSpace, A be Subset of X,
+     Y being a_neighborhood of A holds A c= Y
+proof let X be non empty TopSpace, A be Subset of X,
+          Y be a_neighborhood of A;
+    A c= Int Y & Int Y c= Y by CONNSP_2:def 2,TOPS_1:44;
+ hence A c= Y by XBOOLE_1:1;
+end;
+
+begin :: 1-sorted structures
+
+theorem Th9:
+ for Y be non empty set
+ for J being 1-sorted-yielding ManySortedSet of Y,
+     i being Element of Y holds
+  (Carrier J).i = the carrier of J.i
+proof let Y be non empty set;
+ let J be 1-sorted-yielding ManySortedSet of Y,
+     i be Element of Y;
+    ex R being 1-sorted st R = J.i & (Carrier J).i = the carrier of R
+     by PRALG_1:def 13;
+ hence (Carrier J).i = the carrier of J.i;
+end;
+
+definition
+ cluster non empty constant 1-sorted-yielding Function;
+ existence
+  proof consider S being 1-sorted;
+   take f = {{}} --> S;
+A1:   dom(f) = {{}} by FUNCOP_1:19;
+   thus f is non empty;
+   thus f is constant;
+   let x be set;
+   assume x in dom(f);
+   hence (f).x is 1-sorted by A1,FUNCOP_1:13;
+  end;
+end;
+
+definition
+ let J be 1-sorted-yielding Function;
+ redefine attr J is non-Empty means
+:Def4: for i being set st i in rng J holds i is non empty 1-sorted;
+ compatibility
+  proof
+   hereby assume
+A1:   J is non-Empty;
+    let i be set;
+    assume
+A2:  i in rng J;
+     then ex x being set st x in dom J & i = J.x by FUNCT_1:def 5;
+    hence i is non empty 1-sorted by A1,A2,PRALG_1:def 11,WAYBEL_3:def 7;
+   end;
+   assume
+A3: for i being set st i in rng J holds i is non empty 1-sorted;
+   let S be 1-sorted; thus thesis by A3;
+  end;
+ synonym J is yielding_non-empty_carriers;
+end;
+
+definition
+ let X be set;
+ let L be 1-sorted;
+ cluster X --> L -> 1-sorted-yielding;
+ coherence
+ proof set IT = X --> L;
+   let x be set;
+   assume
+A1:   x in dom IT;
+    then x in X by PBOOLE:def 3;
+    then A2:  rng IT = {L} by FUNCOP_1:14;
+      IT.x in rng IT by A1,FUNCT_1:def 5;
+   hence IT.x is 1-sorted by A2,TARSKI:def 1;
+ end;
+end;
+
+definition let I be set;
+ cluster yielding_non-empty_carriers (1-sorted-yielding ManySortedSet of I);
+ existence
+  proof consider R being non empty 1-sorted;
+   take I --> R;
+   let i be set;
+A1:  rng(I --> R) c= {R} by FUNCOP_1:19;
+   assume i in rng(I --> R);
+   hence i is non empty 1-sorted by A1,TARSKI:def 1;
+  end;
+end;
+
+definition let I be non empty set;
+ let J be RelStr-yielding ManySortedSet of I;
+ cluster the carrier of product J -> functional;
+ coherence
+  proof
+     product Carrier J is functional;
+   hence the carrier of product J is functional by YELLOW_1:def 4;
+  end;
+end;
+
+definition let I be set;
+ let J be yielding_non-empty_carriers (1-sorted-yielding ManySortedSet of I);
+ cluster Carrier J -> non-empty;
+ coherence
+  proof
+   assume {} in rng Carrier J;
+    then consider i being set such that
+A1:  i in dom Carrier J and
+A2:  (Carrier J).i = {} by FUNCT_1:def 5;
+A3:  i in I by A1,PBOOLE:def 3;
+    then consider R being 1-sorted such that
+A4:   R = J.i and
+A5: (Carrier J).i = the carrier of R by PRALG_1:def 13;
+      i in dom J by A3,PBOOLE:def 3;
+then A6:  R in rng J by A4,FUNCT_1:def 5;
+      R is empty by A2,A5,STRUCT_0:def 1;
+   hence contradiction by A6,Def4;
+  end;
+end;
+
+theorem Th10:
+ for T being non empty 1-sorted, S being Subset of T,
+     p being Element of T holds
+     not p in S iff p in S`
+ proof let T be non empty 1-sorted, S be Subset of T;
+  let p be Element of T;
+  thus not p in S iff p in S` by SUBSET_1:50,54;
+ end;
+
+begin :: Preliminaries to Relational Structures
+
+definition let T be non empty RelStr, A be lower Subset of T;
+ cluster A` -> upper;
+ coherence
+  proof let x,y be Element of T such that
+A1: x in A` and
+A2: x <= y;
+      not x in A by A1,Th10;
+    then not y in A by A2,WAYBEL_0:def 19;
+   hence y in A` by Th10;
+  end;
+end;
+
+definition let T be non empty RelStr, A be upper Subset of T;
+ cluster A` -> lower;
+ coherence
+  proof let x,y be Element of T such that
+A1: x in A` and
+A2: y <= x;
+      not x in A by A1,Th10;
+    then not y in A by A2,WAYBEL_0:def 20;
+   hence y in A` by Th10;
+  end;
+end;
+
+definition
+ let N be non empty RelStr;
+ redefine attr N is directed means
+:Def5: for x,y being Element of N ex z being Element of N st x <= z & y <= z;
+ compatibility
+  proof
+   hereby assume N is directed;
+then A1:   [#]N is directed by WAYBEL_0:def 6;
+    let x,y be Element of N;
+       x in the carrier of N & y in the carrier of N;
+     then x in [#]N & y in [#]N by PRE_TOPC:12;
+     then ex z being Element of N st z in [#]N & x <= z & y <= z
+             by A1,WAYBEL_0:def 1;
+    hence ex z being Element of N st x <= z & y <= z;
+   end;
+   assume
+A2:  for x,y being Element of N ex z being Element of N st x <= z & y <= z;
+   let x,y be Element of N such that x in [#]N & y in [#]N;
+   consider z being Element of N such that
+A3:  x <= z & y <= z by A2;
+   take z;
+      z in the carrier of N;
+   hence z in [#]N by PRE_TOPC:12;
+   thus x <= z & y <= z by A3;
+  end;
+end;
+
+definition let X be set;
+ cluster BoolePoset X -> directed;
+ coherence
+  proof
+   let x,y be Element of BoolePoset X;
+   take x "\/" y;
+A1:  x "\/" y = x \/ y by YELLOW_1:17;
+      x c= x \/ y & y c= x \/ y by XBOOLE_1:7;
+   hence x <= x "\/" y & y <= x "\/" y by A1,YELLOW_1:2;
+  end;
+end;
+
+definition
+ cluster non empty directed transitive strict RelStr;
+ existence
+  proof
+   take BoolePoset {};
+   thus thesis;
+  end;
+end;
+
+Lm1: :: WAYBEL_0:3 ?
+ for N being non empty RelStr holds
+  N is directed iff the RelStr of N is directed
+proof let N be non empty RelStr;
+ thus N is directed implies the RelStr of N is directed
+  proof
+   assume
+A1:  N is directed;
+   let x,y be Element of the RelStr of N;
+    reconsider x' = x, y' = y as Element of N;
+    consider z' being Element of N such that
+A2:   x' <= z' & y' <= z' by A1,Def5;
+    reconsider z = z' as Element of the RelStr of N;
+    take z;
+      [x,z] in the InternalRel of N & [y,z] in the InternalRel of N
+        by A2,ORDERS_1:def 9;
+   hence x <= z & y <= z by ORDERS_1:def 9;
+  end;
+   assume
+A3:  the RelStr of N is directed;
+   let x,y be Element of N;
+    reconsider x' = x, y' = y as Element of the RelStr of N;
+    consider z' being Element of the RelStr of N such that
+A4:    x' <= z' & y' <= z' by A3,Def5;
+    reconsider z = z' as Element of N;
+    take z;
+      [x',z'] in the InternalRel of the RelStr of N &
+    [y',z'] in the InternalRel of the RelStr of N by A4,ORDERS_1:def 9;
+   hence x <= z & y <= z by ORDERS_1:def 9;
+end;
+
+Lm2:
+ for N being non empty RelStr holds
+  N is transitive iff the RelStr of N is transitive
+proof let N be non empty RelStr;
+ thus N is transitive implies the RelStr of N is transitive
+  proof
+   assume
+A1:  N is transitive;
+   let x,y,z be Element of the RelStr of N such that
+A2: x <= y and
+A3: y <= z;
+    reconsider x' = x, y' = y, z' = z as Element of N;
+      [x,y] in the InternalRel of the RelStr of N &
+    [y,z] in the InternalRel of the RelStr of N by A2,A3,ORDERS_1:def 9;
+    then x' <= y' & y' <= z' by ORDERS_1:def 9;
+    then x' <= z' by A1,YELLOW_0:def 2;
+    then [x',z'] in the InternalRel of N by ORDERS_1:def 9;
+   hence x <= z by ORDERS_1:def 9;
+  end;
+   assume
+A4:  the RelStr of N is transitive;
+   let x,y,z be Element of N such that
+A5: x <= y and
+A6: y <= z;
+    reconsider x' = x, y' = y, z' = z as Element of the RelStr of N
+          ;
+      [x',y'] in the InternalRel of the RelStr of N &
+    [y',z'] in the InternalRel of the RelStr of N by A5,A6,ORDERS_1:def 9;
+    then x' <= y' & y' <= z' by ORDERS_1:def 9;
+     then x' <= z' by A4,YELLOW_0:def 2;
+    then [x,z] in the InternalRel of N by ORDERS_1:def 9;
+   hence x <= z by ORDERS_1:def 9;
+end;
+
+definition let M be non empty set, N be non empty RelStr,
+  f be Function of M, the carrier of N, m be Element of M;
+ redefine func f.m -> Element of N;
+ coherence
+  proof
+      f.m is Element of N;
+   hence thesis;
+  end;
+end;
+
+definition let I be set;
+ cluster yielding_non-empty_carriers (RelStr-yielding ManySortedSet of I);
+ existence
+  proof consider R being non empty RelStr;
+   take I --> R;
+   let i be set;
+A1:  rng(I --> R) c= {R} by FUNCOP_1:19;
+   assume i in rng(I --> R);
+   hence i is non empty 1-sorted by A1,TARSKI:def 1;
+  end;
+end;
+
+definition let I be non empty set;
+ let J be yielding_non-empty_carriers (RelStr-yielding ManySortedSet of I);
+ cluster product J -> non empty;
+ coherence
+  proof
+       the carrier of product J = product Carrier J by YELLOW_1:def 4;
+   hence the carrier of product J is non empty;
+  end;
+end;
+
+theorem Th11:
+ for R1,R2 being RelStr holds
+  [#][:R1,R2:] = [:[#]R1,[#]R2:]
+proof let R1,R2 be RelStr;
+A1: [#]R1 = the carrier of R1 & [#]R2 = the carrier of R2 by PRE_TOPC:12;
+ thus [#][:R1,R2:] = the carrier of [:R1,R2:] by PRE_TOPC:12
+   .= [:[#]R1,[#]R2:] by A1,YELLOW_3:def 2;
+end;
+
+definition let Y1,Y2 be directed RelStr;
+ cluster [:Y1,Y2:] -> directed;
+ coherence
+  proof
+   reconsider S1 = [#]Y1 as directed Subset of Y1 by WAYBEL_0:def 6;
+   reconsider S2 = [#]Y2 as directed Subset of Y2 by WAYBEL_0:def 6;
+     [:S1,S2:] is directed;
+   then [#][:Y1,Y2:] is directed by Th11;
+   hence thesis by WAYBEL_0:def 6;
+  end;
+end;
+
+theorem Th12:
+ for R being RelStr holds the carrier of R = the carrier of R~
+proof let R be RelStr;
+    R~ = RelStr(#the carrier of R, (the InternalRel of R)~#) by LATTICE3:def 5;
+ hence the carrier of R = the carrier of R~;
+end;
+
+Lm3:
+ for R,S being RelStr, p,q being Element of R,
+   p',q' being Element of S
+    st p = p' & q = q' & the RelStr of R = the RelStr of S
+   holds p <= q implies p' <= q'
+proof
+ let R,S be RelStr, p,q be Element of R,
+     p',q' be Element of S such that
+A1: p = p' & q = q' & the RelStr of R = the RelStr of S;
+ assume p <= q;
+  then [p',q'] in the InternalRel of S by A1,ORDERS_1:def 9;
+ hence p' <= q' by ORDERS_1:def 9;
+end;
+
+definition let S be 1-sorted, N be NetStr over S;
+ attr N is constant means
+:Def6:  the mapping of N is constant;
+end;
+
+definition
+ let R be RelStr, T be non empty 1-sorted, p be Element of T;
+ func R --> p -> strict NetStr over T means
+:Def7: the RelStr of it = the RelStr of R &
+     the mapping of it = (the carrier of it) --> p;
+ existence
+  proof
+    reconsider f = (the carrier of R) --> p as
+      Function of the carrier of R, the carrier of T by FUNCOP_1:58;
+   take NetStr(#the carrier of R, the InternalRel of R,f#);
+   thus thesis;
+  end;
+ correctness;
+end;
+
+definition
+ let R be RelStr, T be non empty 1-sorted, p be Element of T;
+ cluster R --> p -> constant;
+ coherence
+  proof
+      (the carrier of R --> p) --> p is constant;
+   hence the mapping of R --> p is constant by Def7;
+  end;
+end;
+
+definition
+ let R be non empty RelStr,
+     T be non empty 1-sorted, p be Element of T;
+ cluster R --> p -> non empty;
+ coherence
+  proof
+      the RelStr of R --> p = the RelStr of R by Def7;
+   hence the carrier of R --> p is non empty;
+  end;
+end;
+
+definition
+ let R be non empty directed RelStr,
+     T be non empty 1-sorted, p be Element of T;
+ cluster R --> p -> directed;
+ coherence
+  proof
+A1:  the RelStr of R --> p = the RelStr of R by Def7;
+      the RelStr of R is directed by Lm1;
+   hence thesis by A1,Lm1;
+  end;
+end;
+
+definition
+ let R be non empty transitive RelStr,
+     T be non empty 1-sorted, p be Element of T;
+ cluster R --> p -> transitive;
+ coherence
+  proof
+A1:  the RelStr of R --> p = the RelStr of R by Def7;
+      the RelStr of R is transitive by Lm2;
+   hence thesis by A1,Lm2;
+  end;
+end;
+
+theorem Th13:
+ for R be RelStr, T be non empty 1-sorted, p be Element of T
+  holds the carrier of R --> p = the carrier of R
+  proof
+   let R be RelStr, T be non empty 1-sorted, p be Element of T;
+      the RelStr of R --> p = the RelStr of R by Def7;
+   hence the carrier of R --> p = the carrier of R;
+  end;
+
+theorem Th14:
+  for R be non empty RelStr, T be non empty 1-sorted,
+      p be Element of T,
+      q be Element of (R-->p)
+  holds (R --> p).q = p
+proof
+ let R be non empty RelStr, T be non empty 1-sorted,
+     p be Element of T,
+     q be Element of R-->p;
+ thus (R --> p).q = (the mapping of R --> p).q by WAYBEL_0:def 8
+        .= ((the carrier of R --> p) --> p).q by Def7
+        .= p by FUNCOP_1:13;
+end;
+
+definition let T be non empty 1-sorted, N be non empty NetStr over T;
+ cluster the mapping of N -> non empty;
+ coherence by FUNCT_2:def 1,RELAT_1:60;
+end;
+
+begin :: Substructures of Nets
+
+theorem Th15:
+ for R being RelStr holds R is full SubRelStr of R
+proof let R be RelStr;
+    the carrier of R c= the carrier of R &
+  the InternalRel of R c= the InternalRel of R;
+  then reconsider R' = R as SubRelStr of R by YELLOW_0:def 13;
+    the InternalRel of R' = (the InternalRel of R)|_2 the carrier of R'
+   by YELLOW_0:56;
+ hence thesis by YELLOW_0:def 14;
+end;
+
+theorem Th16:
+ for R being RelStr, S being SubRelStr of R, T being SubRelStr of S
+  holds T is SubRelStr of R
+proof let R be RelStr, S be SubRelStr of R, T be SubRelStr of S;
+A1: the carrier of S c= the carrier of R &
+  the InternalRel of S c= the InternalRel of R by YELLOW_0:def 13;
+    the carrier of T c= the carrier of S &
+  the InternalRel of T c= the InternalRel of S by YELLOW_0:def 13;
+ then the carrier of T c= the carrier of R &
+  the InternalRel of T c= the InternalRel of R by A1,XBOOLE_1:1;
+ hence T is SubRelStr of R by YELLOW_0:def 13;
+end;
+
+definition let S be 1-sorted, N be NetStr over S;
+ mode SubNetStr of N -> NetStr over S means
+:Def8: it is SubRelStr of N &
+  the mapping of it = (the mapping of N)|the carrier of it;
+ existence
+  proof take N;
+   thus N is SubRelStr of N by Th15;
+   thus the mapping of N = (the mapping of N)|the carrier of N by FUNCT_2:40;
+  end;
+end;
+
+theorem
+   for S being 1-sorted, N being NetStr over S holds N is SubNetStr of N
+proof let S be 1-sorted, N be NetStr over S;
+A1: N is SubRelStr of N by Th15;
+    the mapping of N = (the mapping of N)|the carrier of N by FUNCT_2:40;
+ hence N is SubNetStr of N by A1,Def8;
+end;
+
+theorem
+   for Q being 1-sorted, R being NetStr over Q,
+     S being SubNetStr of R, T being SubNetStr of S
+  holds T is SubNetStr of R
+proof let Q be 1-sorted, R be NetStr over Q,
+          S be SubNetStr of R, T be SubNetStr of S;
+A1: T is SubRelStr of S by Def8;
+     S is SubRelStr of R by Def8;
+then A2: T is SubRelStr of R by A1,Th16;
+A3: the carrier of T c= the carrier of S by A1,YELLOW_0:def 13;
+    the mapping of T = (the mapping of S)|the carrier of T by Def8
+     .= (the mapping of R)|(the carrier of S)|the carrier of T by Def8
+     .= (the mapping of R)|((the carrier of S) /\ the carrier of T)
+                          by RELAT_1:100
+     .= (the mapping of R)|the carrier of T by A3,XBOOLE_1:28;
+ hence T is SubNetStr of R by A2,Def8;
+end;
+
+Lm4:
+ for S being 1-sorted, R being NetStr over S holds
+  the NetStr of R is SubNetStr of R
+proof let S be 1-sorted, N be NetStr over S;
+A1: the NetStr of N is SubRelStr of N by YELLOW_0:def 13;
+    the mapping of the NetStr of N
+    = (the mapping of N)|the carrier of the NetStr of N by FUNCT_2:40;
+ hence the NetStr of N is SubNetStr of N by A1,Def8;
+end;
+
+definition let S be 1-sorted, N be NetStr over S, M be SubNetStr of N;
+ attr M is full means
+:Def9: M is full SubRelStr of N;
+end;
+
+Lm5:
+ for S being 1-sorted, R being NetStr over S holds
+  the NetStr of R is full SubRelStr of R
+proof let S be 1-sorted, R be NetStr over S;
+  reconsider R' = the NetStr of R as SubRelStr of R by YELLOW_0:def 13;
+    the InternalRel of R' = (the InternalRel of R)|_2 the carrier of R'
+   by YELLOW_0:56;
+ hence thesis by YELLOW_0:def 14;
+end;
+
+definition let S be 1-sorted, N be NetStr over S;
+ cluster full strict SubNetStr of N;
+ existence
+  proof
+    reconsider M = the NetStr of N as SubNetStr of N by Lm4;
+   take M;
+   thus M is full SubRelStr of N by Lm5;
+   thus thesis;
+  end;
+end;
+
+definition let S be 1-sorted, N be non empty NetStr over S;
+ cluster full non empty strict SubNetStr of N;
+ existence
+  proof
+    reconsider M = the NetStr of N as SubNetStr of N by Lm4;
+   take M;
+   thus M is full SubRelStr of N by Lm5;
+   thus thesis;
+  end;
+end;
+
+theorem Th19:
+ for S being 1-sorted, N being NetStr over S, M be SubNetStr of N
+  holds the carrier of M c= the carrier of N
+proof let S be 1-sorted, N be NetStr over S, M be SubNetStr of N;
+    M is SubRelStr of N by Def8;
+ hence the carrier of M c= the carrier of N by YELLOW_0:def 13;
+end;
+
+theorem Th20:
+ for S being 1-sorted, N being NetStr over S, M be SubNetStr of N,
+     x,y being Element of N,
+     i,j being Element of M st x = i & y = j & i <= j
+  holds x <= y
+proof
+ let S be 1-sorted, N be NetStr over S, M be SubNetStr of N,
+     x,y be Element of N,
+     i,j be Element of M such that
+A1:  x = i & y = j and
+A2:  i <= j;
+  reconsider M as SubRelStr of N by Def8;
+  reconsider i' = i, j' = j as Element of M;
+    i' <= j' by A2;
+ hence x <= y by A1,YELLOW_0:60;
+end;
+
+theorem Th21:
+ for S being 1-sorted, N being non empty NetStr over S,
+     M be non empty full SubNetStr of N,
+     x,y being Element of N,
+     i,j being Element of M st x = i & y = j & x <= y
+  holds i <= j
+proof
+ let S be 1-sorted, N be non empty NetStr over S,
+     M be non empty full SubNetStr of N,
+     x,y be Element of N,
+     i,j be Element of M such that
+A1:  x = i & y = j and
+A2:  x <= y;
+  reconsider M as full non empty SubRelStr of N by Def9;
+  reconsider i' = i, j' = j as Element of M;
+     i' <= j' by A1,A2,YELLOW_0:61;
+ hence i <= j;
+end;
+
+begin :: More about Nets
+
+definition let T be non empty 1-sorted;
+ cluster constant strict net of T;
+ existence
+  proof
+   consider R being non empty directed transitive RelStr, p being Element of T;
+   take R --> p;
+   thus thesis;
+  end;
+end;
+
+definition let T be non empty 1-sorted, N be constant NetStr over T;
+ cluster the mapping of N -> constant;
+ coherence by Def6;
+end;
+
+definition let T be non empty 1-sorted, N be NetStr over T;
+ assume
+A1: N is constant non empty;
+ func the_value_of N -> Element of T equals
+:Def10:  the_value_of the mapping of N;
+ coherence
+  proof reconsider M = N as constant non empty NetStr over T by A1;
+   set f = the mapping of M;
+A2:  rng f c= the carrier of T by RELSET_1:12;
+      ex x being set st x in dom f & the_value_of f = f.x by Def1;
+    then the_value_of f in rng f by FUNCT_1:def 5;
+    hence thesis by A2;
+  end;
+end;
+
+theorem Th22:
+  for R be non empty RelStr, T be non empty 1-sorted,
+      p be Element of T
+  holds the_value_of (R --> p) = p
+proof
+ let R be non empty RelStr, T be non empty 1-sorted,
+     p be Element of T;
+ thus the_value_of (R --> p) = the_value_of the mapping of R --> p by Def10
+       .= the_value_of ((the carrier of R --> p) --> p) by Def7
+       .= p by Th2;
+end;
+
+definition let T be non empty 1-sorted, N be net of T;
+ canceled;
+
+ mode subnet of N -> net of T means
+:Def12: ex f being map of it, N st
+   the mapping of it = (the mapping of N)*f &
+   for m being Element of N ex n being Element of it st
+    for p being Element of it st n <= p holds m <= f.p;
+ existence
+  proof
+   take N, id N;
+   thus the mapping of N = (the mapping of N)*id N by TMAP_1:93;
+   let m be Element of N;
+   take n = m;
+   let p be Element of N;
+   assume n <= p;
+   hence m <= (id N).p by TMAP_1:91;
+  end;
+end;
+
+theorem
+   for T being non empty 1-sorted, N be net of T
+  holds N is subnet of N
+ proof let T be non empty 1-sorted, N be net of T;
+   take id N;
+   thus the mapping of N = (the mapping of N)*id N by TMAP_1:93;
+   let m be Element of N;
+   take n = m;
+   let p be Element of N;
+   assume n <= p;
+   hence m <= (id N).p by TMAP_1:91;
+ end;
+
+theorem
+   for T being non empty 1-sorted, N1,N2,N3 be net of T
+   st N1 is subnet of N2 & N2 is subnet of N3
+  holds N1 is subnet of N3
+proof let T be non empty 1-sorted, N1,N2,N3 be net of T;
+  given f being map of N1, N2 such that
+A1: the mapping of N1 = (the mapping of N2)*f and
+A2: for m being Element of N2 ex n being Element of N1 st
+    for p being Element of N1 st n <= p holds m <= f.p;
+  given g being map of N2, N3 such that
+A3: the mapping of N2 = (the mapping of N3)*g and
+A4: for m being Element of N3 ex n being Element of N2 st
+    for p being Element of N2 st n <= p holds m <= g.p;
+   take g*f;
+   thus the mapping of N1 = (the mapping of N3)*(g*f) by A1,A3,RELAT_1:55;
+   let m be Element of N3;
+    consider m1 being Element of N2 such that
+A5:    for p being Element of N2 st m1 <= p holds m <= g.p by A4;
+    consider n being Element of N1 such that
+A6:    for p being Element of N1 st n <= p holds m1 <= f.p by A2;
+   take n;
+   let p be Element of N1;
+   assume n <= p;
+    then m1 <= f.p by A6;
+    then m <= g.(f.p) by A5;
+   hence m <= (g*f).p by FUNCT_2:21;
+end;
+
+theorem Th25:
+ for T being non empty 1-sorted, N be constant net of T,
+     i being Element of N
+  holds N.i = the_value_of N
+proof
+ let T be non empty 1-sorted, N be constant net of T,
+     i be Element of N;
+A1: dom the mapping of N = the carrier of N by FUNCT_2:def 1;
+ thus N.i = (the mapping of N).i by WAYBEL_0:def 8
+         .= the_value_of the mapping of N by A1,Def1
+         .= the_value_of N by Def10;
+end;
+
+theorem Th26:
+ for L being non empty 1-sorted, N being net of L, X,Y being set
+  st N is_eventually_in X & N is_eventually_in Y
+  holds X meets Y
+proof let L be non empty 1-sorted, N be net of L, X,Y be set;
+ assume N is_eventually_in X;
+  then consider i1 being Element of N such that
+A1: for j being Element of N st i1 <= j holds N.j in X by WAYBEL_0:def 11;
+ assume N is_eventually_in Y;
+  then consider i2 being Element of N such that
+A2: for j being Element of N st i2 <= j holds N.j in Y by WAYBEL_0:def 11;
+  consider i being Element of N such that
+A3: i1 <= i and
+A4: i2 <= i by Def5;
+    N.i in X & N.i in Y by A1,A2,A3,A4;
+ hence X meets Y by XBOOLE_0:3;
+end;
+
+theorem Th27:
+ for S being non empty 1-sorted, N being net of S, M being subnet of N,
+     X st M is_often_in X
+ holds N is_often_in X
+proof
+ let S be non empty 1-sorted, N be net of S, M be subnet of N, X such that
+A1: M is_often_in X;
+  consider f being map of M, N such that
+A2: the mapping of M = (the mapping of N)*f and
+A3: for m being Element of N ex n being Element of M st
+     for p being Element of M st n <= p holds m <= f.p by Def12;
+ let i be Element of N;
+  consider n being Element of M such that
+A4: for p being Element of M st n <= p holds i <= f.p by A3;
+  consider m being Element of M such that
+A5: n <= m and
+A6: M.m in X by A1,WAYBEL_0:def 12;
+ take f.m;
+ thus i <= f.m by A4,A5;
+    N.(f.m) = (the mapping of N).(f.m) by WAYBEL_0:def 8
+   .= ((the mapping of N)*f).m by FUNCT_2:21
+   .= M.m by A2,WAYBEL_0:def 8;
+ hence N.(f.m) in X by A6;
+end;
+
+theorem Th28:
+ for S being non empty 1-sorted, N being net of S, X st N is_eventually_in X
+ holds N is_often_in X
+proof let S be non empty 1-sorted, N be net of S, X;
+ given i being Element of N such that
+A1: for j being Element of N st i <= j holds N.j in X;
+ let j be Element of N;
+  consider z being Element of N such that
+A2: i <= z and
+A3: j <= z by Def5;
+ take z;
+ thus j <= z & N.z in X by A1,A2,A3;
+end;
+
+theorem Th29:
+ for S being non empty 1-sorted, N being net of S
+  holds N is_eventually_in the carrier of S
+proof let S be non empty 1-sorted, N be net of S;
+  consider i being Element of N;
+ take i; let j be Element of N; assume i <= j;
+ thus N.j in the carrier of S;
+end;
+
+begin :: The Restriction of a Net
+
+definition let S be 1-sorted, N be NetStr over S, X;
+ func N"X -> strict SubNetStr of N means
+:Def13: it is full SubRelStr of N &
+  the carrier of it = (the mapping of N)"X;
+ existence
+  proof set c = (the mapping of N)"X;
+    reconsider i = (the InternalRel of N)|_2 c as Relation of c,c;
+   per cases;
+   suppose S is non empty;
+    then reconsider S as non empty 1-sorted;
+   set c = (the mapping of N)"X;
+    reconsider m = (the mapping of N)|c as Function of c, the carrier of S
+                             by FUNCT_2:38;
+    set S = NetStr(#c,i,m#);
+A1:    i c= the InternalRel of N by WELLORD1:15;
+  then S is SubRelStr of N by YELLOW_0:def 13;
+    then reconsider S as strict SubNetStr of N by Def8;
+   take S;
+   thus thesis by A1,YELLOW_0:def 13,def 14;
+   suppose S is empty;
+    then the carrier of S = {} by STRUCT_0:def 1;
+    then the mapping of N = {} by PARTFUN1:64;
+    then A2:   c = {} by RELAT_1:172;
+    then reconsider m = {} as Function of c, the carrier of S
+                             by FUNCT_2:55,RELAT_1:60;
+    set S = NetStr(#c,i,m#);
+A3:    i c= the InternalRel of N by WELLORD1:15;
+then A4:  S is SubRelStr of N by YELLOW_0:def 13;
+      the mapping of S = (the mapping of N)|the carrier of S by A2,RELAT_1:110;
+    then reconsider S as strict SubNetStr of N by A4,Def8;
+   take S;
+   thus thesis by A3,YELLOW_0:def 13,def 14;
+  end;
+ uniqueness
+  proof let it1,it2 be strict SubNetStr of N such that
+A5: it1 is full SubRelStr of N and
+A6: the carrier of it1 = (the mapping of N)"X and
+A7: it2 is full SubRelStr of N and
+A8: the carrier of it2 = (the mapping of N)"X;
+A9: the RelStr of it1 = the RelStr of it2 by A5,A6,A7,A8,YELLOW_0:58;
+      the mapping of it1
+         = (the mapping of N)|the carrier of it2 by A6,A8,Def8
+        .= the mapping of it2 by Def8;
+   hence it1 = it2 by A9;
+  end;
+end;
+
+definition let S be 1-sorted, N be transitive NetStr over S, X;
+ cluster N"X -> transitive full;
+ coherence
+  proof
+    reconsider M = N"X as full SubRelStr of N by Def13;
+      M is transitive;
+   hence thesis by Def9;
+  end;
+end;
+
+theorem Th30:
+ for S being non empty 1-sorted, N be net of S, X st N is_often_in X
+  holds N"X is non empty directed
+proof let S be non empty 1-sorted, N be net of S, X such that
+A1: N is_often_in X;
+  consider i being Element of N;
+  consider j being Element of N such that i <= j and
+A2: N.j in X by A1,WAYBEL_0:def 12;
+    (the mapping of N).j in X by A2,WAYBEL_0:def 8;
+  then j in (the mapping of N)"X by FUNCT_2:46;
+ hence the carrier of N"X is non empty by Def13;
+  then reconsider M = N"X as non empty full SubNetStr of N by STRUCT_0:def 1;
+   M is directed
+ proof let i,j be Element of M;
+A3: i in the carrier of M & j in the carrier of M;
+    the carrier of M c= the carrier of N by Th19;
+  then reconsider x = i, y = j as Element of N by A3;
+  consider z being Element of N such that
+A4: x <= z & y <= z by Def5;
+  consider e being Element of N such that
+A5: z <= e and
+A6: N.e in X by A1,WAYBEL_0:def 12;
+    (the mapping of N).e in X by A6,WAYBEL_0:def 8;
+  then e in (the mapping of N)"X by FUNCT_2:46;
+  then e in the carrier of N"X by Def13;
+  then reconsider k = e as Element of M;
+ take k;
+    x <= e & y <= e by A4,A5,YELLOW_0:def 2;
+ hence i <= k & j <= k by Th21;
+ end;
+ hence thesis;
+end;
+
+theorem Th31:
+ for S being non empty 1-sorted, N being net of S, X st N is_often_in X
+ holds N"X is subnet of N
+proof let S be non empty 1-sorted, N be net of S, X; assume
+A1: N is_often_in X;
+  then reconsider M = N"X as net of S by Th30;
+    M is subnet of N
+  proof set f = id M;
+    the carrier of M c= the carrier of N by Th19;
+    then f is Function of the carrier of M, the carrier of N by FUNCT_2:9;
+    then reconsider f as map of M,N;
+   take f;
+A2:  id M = id the carrier of M by GRCAT_1:def 11;
+      the mapping of M = (the mapping of N)|the carrier of M by Def8;
+   hence the mapping of M = (the mapping of N)*f by A2,RELAT_1:94;
+   let m be Element of N;
+    consider j being Element of N such that
+A3:  m <= j and
+A4:  N.j in X by A1,WAYBEL_0:def 12;
+      (the mapping of N).j in X by A4,WAYBEL_0:def 8;
+    then j in (the mapping of N)"X by FUNCT_2:46;
+    then j in the carrier of M by Def13;
+    then reconsider n = j as Element of M;
+   take n;
+   let p be Element of M such that
+A5:  n <= p;
+      f.p = p by TMAP_1:91;
+    then j <= f.p by A5,Th20;
+   hence m <= f.p by A3,YELLOW_0:def 2;
+  end;
+ hence thesis;
+end;
+
+theorem Th32:
+ for S being non empty 1-sorted, N being net of S, X
+ for M being subnet of N st M = N"X
+  holds M is_eventually_in X
+proof let S be non empty 1-sorted, N be net of S, X;
+ let M be subnet of N such that
+A1: M = N"X;
+  consider i being Element of M;
+ take i; let j be Element of M such that i <= j;
+   j in the carrier of M;
+  then j in (the mapping of N)"X by A1,Def13;
+  then A2: (the mapping of N).j in X by FUNCT_1:def 13;
+    the mapping of M = (the mapping of N)|the carrier of M by A1,Def8;
+  then (the mapping of M).j in X by A2,FUNCT_1:72;
+ hence M.j in X by WAYBEL_0:def 8;
+end;
+
+begin :: The Universe of Nets
+
+definition let X be non empty 1-sorted;
+ func NetUniv X means
+:Def14: for x holds x in it iff
+   ex N being strict net of X st N = x &
+    the carrier of N in the_universe_of the carrier of X;
+ existence
+  proof set I = the_universe_of the carrier of X;
+    deffunc f(set) = { NetStr(#$1,r,f#)
+        where r is Relation of $1,$1,
+              f is Element of Funcs($1, the carrier of X)
+          : NetStr(#$1,r,f#) is net of X };
+    consider M being ManySortedSet of I such that
+A1:   for i being set st i in I holds M.i = f(i) from MSSLambda;
+A2:  Union M = union rng M by PROB_1:def 3;
+   take IT = Union M; let x;
+   hereby assume x in IT;
+     then consider y such that
+A3:   x in y and
+A4:   y in rng M by A2,TARSKI:def 4;
+      consider z such that
+A5:    z in dom M and
+A6:    M.z = y by A4,FUNCT_1:def 5;
+       z in I by A5,PBOOLE:def 3;
+     then y ={ NetStr(#z,r,f#)
+        where r is Relation of z,z,
+              f is Element of Funcs(z, the carrier of X)
+          : NetStr(#z,r,f#) is net of X } by A1,A6;
+     then consider r being Relation of z,z,
+                   f being Element of Funcs(z, the carrier of X) such that
+A7:   x = NetStr(#z,r,f#) and
+A8:    NetStr(#z,r,f#) is net of X by A3;
+     reconsider N = NetStr(#z,r,f#) as strict net of X by A8;
+    take N;
+    thus N = x by A7;
+    thus the carrier of N in the_universe_of the carrier of X
+                    by A5,PBOOLE:def 3;
+   end;
+   given N being strict net of X such that
+A9:  N = x and
+A10:  the carrier of N in the_universe_of the carrier of X;
+    set i = the carrier of N;
+      i in dom M by A10,PBOOLE:def 3;
+    then A11:   M.i in rng M by FUNCT_1:def 5;
+A12:  M.i = { NetStr(#i,r,f#)
+        where r is Relation of i,i,
+              f is Element of Funcs(i, the carrier of X)
+          : NetStr(#i,r,f#) is net of X } by A1,A10;
+      the mapping of N in Funcs(i, the carrier of X) by FUNCT_2:11;
+    then N in M.i by A12;
+   hence x in IT by A2,A9,A11,TARSKI:def 4;
+  end;
+ uniqueness
+ proof defpred P[set] means ex N being strict net of X st N = $1 &
+    the carrier of N in the_universe_of the carrier of X;
+   thus for X1,X2 being set st
+   (for x being set holds x in X1 iff P[x]) &
+   (for x being set holds x in X2 iff P[x]) holds X1 = X2 from SetEq;
+ end;
+end;
+
+definition let X be non empty 1-sorted;
+ cluster NetUniv X -> non empty;
+ coherence
+  proof set V = the_universe_of the carrier of X;
+       {} in {{}} by TARSKI:def 1;
+     then reconsider r = {[{},{}]} as Relation of {{}} by RELSET_1:8;
+     set R = RelStr(#{{}},r#);
+A1:   now let x,y be Element of R;
+         x = {} & y = {} by TARSKI:def 1;
+       then [x,y] in {[{},{}]} by TARSKI:def 1;
+      hence x <= y by ORDERS_1:def 9;
+     end;
+A2:   R is transitive
+      proof let x,y,z be Element of R;
+       thus thesis by A1;
+      end;
+       R is directed
+      proof let x,y be Element of R;
+       take x;
+       thus thesis by A1;
+      end;
+     then reconsider R as transitive directed non empty RelStr by A2;
+     consider q being Element of X;
+     set N = R --> q;
+A3:   the RelStr of N = the RelStr of R by Def7;
+      {} in V by CLASSES2:62;
+    then the carrier of N in V by A3,CLASSES2:3;
+   hence thesis by Def14;
+  end;
+end;
+
+Lm6:
+ for S1,S2 being non empty 1-sorted st the carrier of S1 = the carrier of S2
+ for N being constant net of S1 holds N is constant net of S2
+proof
+ let S1,S2 be non empty 1-sorted such that
+A1: the carrier of S1 = the carrier of S2;
+ let N be constant net of S1;
+  reconsider M = N as net of S2 by A1;
+    the mapping of N is constant;
+  then the mapping of M is constant;
+  hence N is constant net of S2 by Def6;
+end;
+
+Lm7:
+ for S1,S2 being non empty 1-sorted st the carrier of S1 = the carrier of S2
+ for N being strict net of S1 holds N is strict net of S2
+proof
+ let S1,S2 be non empty 1-sorted such that
+A1: the carrier of S1 = the carrier of S2;
+ let N be strict net of S1;
+  reconsider M = N as net of S2 by A1;
+A2: the carrier of N = the carrier of M &
+   the InternalRel of N = the InternalRel of M &
+   the mapping of N = the mapping of M;
+    M = the NetStr of N
+   .= the NetStr of M by A2;
+  hence N is strict net of S2;
+end;
+
+Lm8:
+ for S1,S2 being non empty 1-sorted st the carrier of S1 = the carrier of S2
+  holds NetUniv S1 = NetUniv S2
+proof let S1,S2 be non empty 1-sorted;
+ assume
+A1: the carrier of S1 = the carrier of S2;
+    defpred P[set] means ex N being strict net of S2 st N = $1 &
+    the carrier of N in the_universe_of the carrier of S2;
+A2: now let x;
+    hereby assume x in NetUniv S1;
+     then consider N being strict net of S1 such that
+A3:    N = x & the carrier of N in the_universe_of the carrier of S1 by Def14;
+     reconsider N as strict net of S2 by A1,Lm7;
+     thus P[x] proof take N; thus thesis by A1,A3; end;
+    end;
+    assume P[x]; then
+    consider N being strict net of S2 such that
+A4:   N = x & the carrier of N in the_universe_of the carrier of S2;
+     reconsider N as strict net of S1 by A1,Lm7;
+       now take N;
+       thus N = x & the carrier of N in the_universe_of the carrier of S1
+         by A1,A4;
+     end;
+    hence x in NetUniv S1 by Def14;
+   end;
+A5: for x holds x in NetUniv S2 iff P[x] by Def14;
+ thus NetUniv S1 = NetUniv S2 from Extensionality(A2,A5);
+end;
+
+begin :: Parametrized Families of Nets, Iteration
+
+definition let X be set, T be 1-sorted;
+ mode net_set of X,T -> ManySortedSet of X means
+:Def15:  for i being set st i in rng it holds i is net of T;
+ existence
+  proof consider N being net of T;
+   take X --> N;
+   let i be set;
+   assume
+A1:  i in rng(X --> N);
+    then dom(X --> N) <> {} by RELAT_1:65;
+    then X <> {} by PBOOLE:def 3;
+    then rng(X --> N) = {N} by FUNCOP_1:14;
+   hence thesis by A1,TARSKI:def 1;
+  end;
+end;
+
+theorem Th33:
+ for X being set, T being 1-sorted, F being ManySortedSet of X holds
+  F is net_set of X,T
+   iff for i being set st i in X holds F.i is net of T
+proof let X be set, T be 1-sorted, F be ManySortedSet of X;
+ hereby assume
+A1: F is net_set of X,T;
+  let i be set;
+  assume i in X;
+   then i in dom F by PBOOLE:def 3;
+   then F.i in rng F by FUNCT_1:def 5;
+  hence F.i is net of T by A1,Def15;
+ end;
+ assume
+A2: for i being set st i in X holds F.i is net of T;
+ let x be set;
+ assume x in rng F;
+  then A3: ex i being set st i in dom F & x = F.i by FUNCT_1:def 5;
+    dom F = X by PBOOLE:def 3;
+ hence x is net of T by A2,A3;
+end;
+
+definition let X be non empty set, T be 1-sorted;
+ let J be net_set of X,T, i be Element of X;
+ redefine func J.i -> net of T;
+ coherence by Th33;
+end;
+
+definition let X be set, T be 1-sorted;
+ cluster -> RelStr-yielding net_set of X,T;
+ coherence
+  proof let F be net_set of X,T;
+   let v be set;
+   assume v in rng F;
+   hence v is RelStr by Def15;
+  end;
+end;
+
+definition
+ let T be 1-sorted, Y be net of T;
+ cluster -> yielding_non-empty_carriers net_set of the carrier of Y,T;
+ coherence
+  proof let J be net_set of the carrier of Y,T;
+   let i be set;
+   assume i in rng J;
+   hence i is non empty 1-sorted by Def15;
+  end;
+end;
+
+definition
+ let T be non empty 1-sorted, Y be net of T,
+     J be net_set of the carrier of Y,T;
+ cluster product J -> directed transitive;
+ coherence
+  proof
+A1:  the carrier of product J = product Carrier J by YELLOW_1:def 4;
+   thus product J is directed
+   proof
+   let x,y be Element of product J;
+   defpred P[Element of Y,set] means
+       [x .$1,$2] in the InternalRel of J.$1 &
+       [y.$1,$2] in the InternalRel of J.$1;
+A2:  now let i be Element of Y;
+      consider zi being Element of J.i such that
+A3:     x .i <= zi & y.i <= zi by Def5;
+      reconsider z = zi as set;
+     take z;
+     thus P[i,z] by A3,ORDERS_1:def 9;
+    end;
+    consider z being ManySortedSet of the carrier of Y such that
+A4:   for i being Element of Y holds P[i, z.i] from MSSExD(A2);
+A5:  dom z = the carrier of Y by PBOOLE:def 3
+         .= dom Carrier J by PBOOLE:def 3;
+      now let i be set;
+     assume i in dom Carrier J;
+      then i in the carrier of Y by PBOOLE:def 3;
+      then reconsider j = i as Element of Y;
+        [x .j,z.j] in the InternalRel of J.j by A4;
+      then z.j in the carrier of J.j by ZFMISC_1:106;
+     hence z.i in (Carrier J).i by Th9;
+    end;
+    then z in product Carrier J by A5,CARD_3:18;
+    then reconsider z as Element of product J by A1;
+   take z;
+      for i be set st i in the carrier of Y
+     ex R being RelStr, xi,yi being Element of R
+       st R = J.i & xi = x .i & yi = z.i & xi <= yi
+     proof let i be set;
+      assume i in the carrier of Y;
+       then reconsider j = i as Element of Y;
+       reconsider xi = x .j, zi = z.j as Element of J.j;
+      take J.j, xi, zi;
+      thus J.j = J.i & xi = x .i & zi = z.i;
+         [xi,zi] in the InternalRel of J.j by A4;
+      hence xi <= zi by ORDERS_1:def 9;
+     end;
+   hence x <= z by A1,YELLOW_1:def 4;
+      for i be set st i in the carrier of Y
+     ex R being RelStr, yi,zi being Element of R
+       st R = J.i & yi = y.i & zi = z.i & yi <= zi
+     proof let i be set;
+      assume i in the carrier of Y;
+       then reconsider j = i as Element of Y;
+       reconsider yi = y.j, zi = z.j as Element of J.j;
+      take J.j, yi, zi;
+      thus J.j = J.i & yi = y.i & zi = z.i;
+         [yi,zi] in the InternalRel of J.j by A4;
+      hence yi <= zi by ORDERS_1:def 9;
+     end;
+   hence y <= z by A1,YELLOW_1:def 4;
+  end;
+   let x,y,z be Element of product J such that
+A6: x <= y and
+A7: y <= z;
+    consider fx,gy being Function such that
+A8:  fx = x & gy = y and
+A9:  for i be set st i in the carrier of Y
+      ex R being RelStr, xi,yi being Element of R
+       st R = J.i & xi = fx.i & yi = gy.i & xi <= yi by A1,A6,YELLOW_1:def 4;
+    consider fy,gz being Function such that
+A10:  fy = y & gz = z and
+A11:  for i be set st i in the carrier of Y
+      ex R being RelStr, xi,yi being Element of R
+       st R = J.i & xi = fy.i & yi = gz.i & xi <= yi by A1,A7,YELLOW_1:def 4;
+      for i be set st i in the carrier of Y
+     ex R being RelStr, xi,yi being Element of R
+       st R = J.i & xi = x .i & yi = z.i & xi <= yi
+     proof let i be set;
+      assume
+A12:     i in the carrier of Y;
+       then reconsider j = i as Element of Y;
+      consider R1 being RelStr, xi,yi being Element of R1 such that
+A13:   R1 = J.i & xi = x .i & yi = y.i & xi <= yi by A8,A9,A12;
+      consider R2 being RelStr, yi',zi being Element of R2 such that
+A14:   R2 = J.i & yi' = y.i & zi = z.i & yi' <= zi by A10,A11,A12;
+       reconsider xi, zi as Element of J.j by A13,A14;
+      take J.j, xi, zi;
+      thus J.j = J.i & xi = x .i & zi = z.i by A13,A14;
+      thus xi <= zi by A13,A14,YELLOW_0:def 2;
+     end;
+   hence x <= z by A1,YELLOW_1:def 4;
+  end;
+end;
+
+definition let X be set, T be 1-sorted;
+ cluster -> yielding_non-empty_carriers net_set of X,T;
+ coherence
+  proof let F be net_set of X,T;
+   let v be set;
+   assume v in rng F;
+   hence v is non empty 1-sorted by Def15;
+  end;
+end;
+
+definition let X be set, T be 1-sorted;
+ cluster yielding_non-empty_carriers net_set of X,T;
+ existence
+  proof consider F being net_set of X,T;
+   take F; thus thesis;
+  end;
+end;
+
+definition
+ let T be non empty 1-sorted, Y be net of T,
+     J be net_set of the carrier of Y,T;
+ func Iterated J -> strict net of T means
+:Def16: the RelStr of it = [:Y, product J:] &
+  for i being Element of Y,
+      f being Function st
+       i in the carrier of Y & f in the carrier of product J
+    holds (the mapping of it).(i,f) =(the mapping of J.i).(f.i);
+ existence
+  proof
+   set R = [:Y, product J:];
+   deffunc F(Element of Y, Element of product J)
+     = (the mapping of J.$1).($2.$1);
+A1:  for i be Element of Y,
+         f be Element of product J holds
+     F(i,f) in the carrier of T;
+    consider F being
+     Function of [:the carrier of Y, the carrier of product J:],
+                 the carrier of T such that
+A2:   for i being Element of Y,
+         f being Element of product J
+      holds F. [i,f] = F(i,f) from Kappa2D(A1);
+      the carrier of R = [:the carrier of Y, the carrier of product J:]
+                        by YELLOW_3:def 2;
+    then reconsider F as Function of the carrier of R, the carrier of T;
+    reconsider N = NetStr(#the carrier of R, the InternalRel of R,F#)
+      as strict net of T by Lm1,Lm2;
+   take N;
+  thus the RelStr of N = [:Y, product J:];
+  let i be Element of Y,
+      f be Function such that
+        i in the carrier of Y and
+A3: f in the carrier of product J;
+   thus (the mapping of N).(i,f) = F. [i,f] by BINOP_1:def 1
+      .=(the mapping of J.i).(f.i) by A2,A3;
+  end;
+ uniqueness
+  proof
+   let IT1,IT2 be strict net of T such that
+A4: the RelStr of IT1 = [:Y, product J:] and
+A5: for i being Element of Y,
+      f being Function st
+       i in the carrier of Y & f in the carrier of product J
+    holds (the mapping of IT1).(i,f) =(the mapping of J.i).(f.i) and
+A6: the RelStr of IT2 = [:Y, product J:] and
+A7: for i being Element of Y,
+      f being Function st
+       i in the carrier of Y & f in the carrier of product J
+    holds (the mapping of IT2).(i,f) =(the mapping of J.i).(f.i);
+      the carrier of the RelStr of IT2
+     = [:the carrier of Y,the carrier of product J:] by A6,YELLOW_3:def 2;
+    then reconsider m1 = the mapping of IT1, m2 = the mapping of IT2
+     as Function of [:the carrier of Y,the carrier of product J:],
+        the carrier of T by A4,A6;
+      now let c be Element of [:the carrier of Y,the carrier of product J:];
+      consider c1 being Element of Y,
+               c2 being Element of product J such that
+A8:     c = [c1,c2] by DOMAIN_1:9;
+       reconsider d = c2 as Element of product Carrier J by YELLOW_1:def 4;
+     thus m1.c = m1.(c1,d) by A8,BINOP_1:def 1
+      .= (the mapping of J.c1).(d.c1) by A5
+      .= m2.(c1,d) by A7
+      .= m2.c by A8,BINOP_1:def 1;
+    end;
+   hence IT1 = IT2 by A4,A6,FUNCT_2:113;
+  end;
+end;
+
+theorem Th34:
+ for T being non empty 1-sorted, Y being net of T,
+     J being net_set of the carrier of Y,T st
+  Y in NetUniv T &
+  for i being Element of Y holds J.i in NetUniv T
+ holds Iterated J in NetUniv T
+proof
+ let T be non empty 1-sorted, Y be net of T,
+     J be net_set of the carrier of Y,T such that
+A1: Y in NetUniv T and
+A2:  for i being Element of Y holds J.i in NetUniv T;
+    the RelStr of Iterated J = [:Y, product J:] by Def16;
+then A3: the carrier of Iterated J = [:the carrier of Y, the carrier of product
+J:]
+            by YELLOW_3:def 2;
+A4: ex N being strict net of T st N = Y &
+    the carrier of N in the_universe_of the carrier of T by A1,Def14;
+then A5: dom Carrier J in the_universe_of the carrier of T by PBOOLE:def 3;
+     rng Carrier J c= the_universe_of the carrier of T
+    proof let x;
+     assume x in rng Carrier J;
+      then consider y such that
+A6:    y in dom Carrier J and
+A7:    (Carrier J).y = x by FUNCT_1:def 5;
+      reconsider i = y as Element of Y by A6,PBOOLE:def 3;
+        J.i in NetUniv T by A2;
+      then ex N being strict net of T st N = J.i &
+       the carrier of N in the_universe_of the carrier of T by Def14;
+     hence x in the_universe_of the carrier of T by A7,Th9;
+    end;
+  then product Carrier J in the_universe_of the carrier of T by A5,Th5;
+  then the carrier of product J in the_universe_of the carrier of T
+       by YELLOW_1:def 4;
+  then the carrier of Iterated J in the_universe_of the carrier of T
+              by A3,A4,CLASSES2:67;
+ hence Iterated J in NetUniv T by Def14;
+end;
+
+theorem Th35:
+ for T being non empty 1-sorted, N being net of T
+  for J being net_set of the carrier of N, T
+    holds the carrier of Iterated J = [:the carrier of N, product Carrier J:]
+proof let T be non empty 1-sorted, N be net of T;
+ let J be net_set of the carrier of N, T;
+    the RelStr of Iterated J = [:N, product J:] by Def16;
+ hence the carrier of Iterated J
+           = [:the carrier of N, the carrier of product J:] by YELLOW_3:def 2
+          .= [:the carrier of N, product Carrier J:] by YELLOW_1:def 4;
+end;
+
+theorem Th36:
+ for T being non empty 1-sorted, N being net of T,
+     J being net_set of the carrier of N, T,
+     i being Element of N,
+     f being Element of product J,
+     x being Element of Iterated J st x = [i,f]
+ holds (Iterated J).x = (the mapping of J.i).(f.i)
+proof
+ let T be non empty 1-sorted, N be net of T,
+     J be net_set of the carrier of N, T,
+     i be Element of N,
+     f be Element of product J,
+     x be Element of Iterated J; assume
+   x = [i,f];
+ hence (Iterated J).x = (the mapping of Iterated J). [i,f] by WAYBEL_0:def 8
+           .= (the mapping of Iterated J).(i,f) by BINOP_1:def 1
+           .= (the mapping of J.i).(f.i) by Def16;
+end;
+
+theorem Th37:
+ for T being non empty 1-sorted, Y being net of T,
+     J being net_set of the carrier of Y,T
+ holds rng the mapping of Iterated J c=
+  union { rng the mapping of J.i where i is Element of Y:
+            not contradiction }
+proof
+ let T be non empty 1-sorted, Y be net of T,
+     J be net_set of the carrier of Y,T;
+ let x be set;
+  set X = { rng the mapping of J.i where i is Element of Y:
+            not contradiction };
+ assume x in rng the mapping of Iterated J;
+  then consider y being set such that
+A1: y in dom the mapping of Iterated J and
+A2: (the mapping of Iterated J).y = x by FUNCT_1:def 5;
+    y in the carrier of Iterated J by A1;
+  then y in [:the carrier of Y, product Carrier J:] by Th35;
+  then consider y1 being Element of Y,
+        y2 being Element of product Carrier J such that
+A3: y = [y1,y2] by DOMAIN_1:9;
+A4: y1 in the carrier of Y;
+   y2 in product Carrier J;
+then A5: y2 in the carrier of product J by YELLOW_1:def 4;
+      y1 in dom Carrier J by A4,PBOOLE:def 3;
+    then y2.y1 in (Carrier J).y1 by CARD_3:18;
+    then y2.y1 in the carrier of J.y1 by Th9;
+then A6: y2.y1 in dom the mapping of J.y1 by FUNCT_2:def 1;
+    x = (the mapping of Iterated J).(y1,y2) by A2,A3,BINOP_1:def 1
+   .= (the mapping of J.y1).(y2.y1) by A5,Def16;
+  then A7: x in rng the mapping of J.y1 by A6,FUNCT_1:def 5;
+  reconsider y1 as Element of Y;
+    rng the mapping of J.y1 in X;
+ hence x in union X by A7,TARSKI:def 4;
+end;
+
+begin :: Poset of open neighborhoods
+
+definition let T be non empty TopSpace, p be Point of T;
+ func OpenNeighborhoods p -> RelStr equals
+:Def17:  (InclPoset { V where V is Subset of T: p in V & V is open })~;
+ correctness;
+end;
+
+definition let T be non empty TopSpace, p be Point of T;
+ cluster OpenNeighborhoods p -> non empty;
+ coherence
+  proof set Xp = { v where v is Subset of T: p in v & v is open };
+      p in [#]T & [#]T is open by PRE_TOPC:13,TOPS_1:53;
+    then [#]T in Xp;
+    then [#]T in the carrier of InclPoset Xp by YELLOW_1:1;
+    then [#]T in the carrier of (InclPoset Xp)~ by Th12;
+   hence the carrier of OpenNeighborhoods p is non empty by Def17;
+  end;
+end;
+
+theorem Th38:
+ for T being non empty TopSpace, p being Point of T,
+     x being Element of OpenNeighborhoods p
+  ex W being Subset of T st W = x & p in W & W is open
+proof
+ let T be non empty TopSpace, p be Point of T,
+     x be Element of OpenNeighborhoods p;
+  set X = { V where V is Subset of T: p in V & V is open };
+     x in the carrier of OpenNeighborhoods p;
+   then x in the carrier of (InclPoset X)~ by Def17;
+   then x in the carrier of InclPoset X by Th12;
+   then x in X by YELLOW_1:1;
+  hence thesis;
+end;
+
+theorem Th39:
+ for T be non empty TopSpace, p be Point of T
+ for x being Subset of T holds
+  x in the carrier of OpenNeighborhoods p iff p in x & x is open
+proof let T be non empty TopSpace, p be Point of T;
+ let x be Subset of T;
+  set Xp = { v where v is Subset of T: p in v & v is open };
+  reconsider i = x as Subset of T;
+ thus x in the carrier of OpenNeighborhoods p implies p in x & x is open
+  proof assume x in the carrier of OpenNeighborhoods p;
+    then ex v being Subset of T st i = v & p in v & v is open by Th38;
+   hence thesis;
+  end;
+ assume that
+A1: p in x and
+A2: x is open;
+    i in Xp by A1,A2;
+  then x in the carrier of InclPoset Xp by YELLOW_1:1;
+  then x in the carrier of (InclPoset Xp)~ by Th12;
+ hence x in the carrier of OpenNeighborhoods p by Def17;
+end;
+
+theorem Th40:
+ for T be non empty TopSpace, p be Point of T
+ for x,y being Element of OpenNeighborhoods p holds
+   x <= y iff y c= x
+proof let T be non empty TopSpace, p be Point of T;
+ let x,y be Element of OpenNeighborhoods p;
+  set X = { V where V is Subset of T: p in V & V is open };
+    p in [#]T & [#]T is open by PRE_TOPC:13,TOPS_1:53;
+  then [#]T in X;
+  then reconsider X as non empty set;
+A1: OpenNeighborhoods p = (InclPoset X)~ by Def17;
+    (InclPoset X)~ =
+     RelStr(#the carrier of InclPoset X, (the InternalRel of InclPoset X)~#)
+                             by LATTICE3:def 5;
+  then reconsider a = x, b = y as Element of InclPoset X by A1;
+A2: x = a~ & y = b~ by LATTICE3:def 6;
+    b <= a iff y c= x by YELLOW_1:3;
+ hence x <= y iff y c= x by A1,A2,LATTICE3:9;
+end;
+
+definition let T be non empty TopSpace, p be Point of T;
+ cluster OpenNeighborhoods p -> transitive directed;
+ coherence
+  proof set X = { V where V is Subset of T: p in V & V is open };
+A1:   OpenNeighborhoods p = (InclPoset X)~ by Def17;
+   hence OpenNeighborhoods p is transitive;
+   let x,y be Element of OpenNeighborhoods p;
+   consider V being Subset of T such that
+A2:  x = V & p in V & V is open by Th38;
+   consider W being Subset of T such that
+A3:  y = W & p in W & W is open by Th38;
+   set z = V /\ W;
+     p in z & z is open by A2,A3,TOPS_1:38,XBOOLE_0:def 3;
+   then z in X;
+   then z in the carrier of InclPoset X by YELLOW_1:1;
+   then z in the carrier of (InclPoset X)~ by Th12;
+   then reconsider z as Element of OpenNeighborhoods p by A1;
+   take z;
+      z c= x & z c= y by A2,A3,XBOOLE_1:17;
+   hence x <= z & y <= z by Th40;
+  end;
+end;
+
+begin :: Nets in topological spaces
+
+definition let T be non empty TopSpace, N be net of T;
+    defpred P[Point of T] means
+      for V being a_neighborhood of $1 holds N is_eventually_in V;
+ func Lim N -> Subset of T means
+:Def18: for p being Point of T holds p in it iff
+  for V being a_neighborhood of p holds N is_eventually_in V;
+ existence
+  proof
+    consider IT being Subset of T such that
+A1:   for p being Point of T holds p in IT iff P[p] from SubsetEx;
+   take IT;
+   let p be Point of T;
+   thus thesis by A1;
+  end;
+ uniqueness
+  proof let it1,it2 be Subset of T such that
+A2: for p being Point of T holds p in it1 iff P[p] and
+A3: for p being Point of T holds p in it2 iff P[p];
+   thus thesis from SubsetEq(A2,A3);
+  end;
+end;
+
+theorem Th41:
+ for T being non empty TopSpace, N being net of T, Y being subnet of N
+  holds Lim N c= Lim Y
+proof let T be non empty TopSpace, N be net of T, Y be subnet of N;
+  consider f being map of Y, N such that
+A1: the mapping of Y = (the mapping of N)*f and
+A2: for m being Element of N ex n being Element of Y st
+     for p being Element of Y st n <= p holds m <= f.p by Def12;
+ let x;
+  assume
+A3: x in Lim N;
+  then reconsider p = x as Point of T;
+    for V being a_neighborhood of p holds Y is_eventually_in V
+   proof let V be a_neighborhood of p;
+       N is_eventually_in V by A3,Def18;
+     then consider ii being Element of N such that
+A4:   for j being Element of N st ii <= j holds N.j in V by WAYBEL_0:def 11;
+     consider n being Element of Y such that
+A5:   for p being Element of Y st n <= p holds ii <= f.p by A2;
+    take n; let j be Element of Y;
+    assume n <= j;
+     then A6:   ii <= f.j by A5;
+       N.(f.j) = (the mapping of N).(f.j) by WAYBEL_0:def 8
+       .= ((the mapping of N)*f).j by FUNCT_2:21
+       .= Y.j by A1,WAYBEL_0:def 8;
+    hence Y.j in V by A4,A6;
+   end;
+ hence x in Lim Y by Def18;
+end;
+
+theorem Th42:
+ for T being non empty TopSpace, N be constant net of T
+  holds the_value_of N in Lim N
+proof let T be non empty TopSpace, N be constant net of T;
+  set p = the_value_of N;
+     for S being a_neighborhood of p holds N is_eventually_in S
+  proof let S be a_neighborhood of p;
+    consider i being Element of N;
+   take i;
+   let j be Element of N such that i <= j;
+      N.j = p by Th25;
+   hence N.j in S by CONNSP_2:6;
+  end;
+ hence p in Lim N by Def18;
+end;
+
+theorem Th43:
+ for T being non empty TopSpace, N be net of T, p be Point of T st p in Lim N
+ for d being Element of N
+  ex S being Subset of T st
+   S = { N.c where c is Element of N : d <= c } & p in Cl S
+proof let T be non empty TopSpace, N be net of T, p be Point of T such that
+A1: p in Lim N;
+ let d be Element of N;
+    { N.c where c is Element of N : d <= c } c= the carrier of T
+   proof let x be set;
+    assume x in { N.c where c is Element of N : d <= c };
+     then ex c being Element of N st x = N.c & d <= c;
+    hence thesis;
+   end;
+  then reconsider S = { N.c where c is Element of N : d <= c } as Subset of T
+     ;
+ take S;
+ thus S = { N.c where c is Element of N : d <= c };
+    now let G be a_neighborhood of p;
+      N is_eventually_in G by A1,Def18;
+    then consider i being Element of N such that
+A2:   for j being Element of N st i <= j holds N.j in G by WAYBEL_0:def 11;
+    consider e being Element of N such that
+A3:  d <= e and
+A4:  i <= e by Def5;
+A5:   N.e in G by A2,A4;
+       N.e in S by A3;
+   hence G meets S by A5,XBOOLE_0:3;
+  end;
+ hence p in Cl S by Th6;
+end;
+
+theorem Th44:
+ for T being non empty TopSpace holds
+  T is Hausdorff iff
+   for N being net of T, p,q being Point of T st p in Lim N & q in Lim N
+    holds p = q
+proof
+ let T be non empty TopSpace;
+ thus T is Hausdorff implies
+   for N being net of T, p,q being Point of T st p in Lim N & q in Lim N
+    holds p = q
+  proof assume
+A1:  T is Hausdorff;
+   let N be net of T;
+    given p1,p2 being Point of T such that
+A2:  p1 in Lim N and
+A3:  p2 in Lim N and
+A4:  p1 <> p2;
+    consider W,V being Subset of T such that
+A5:  W is open and
+A6:  V is open and
+A7:  p1 in W and
+A8:  p2 in V and
+A9:  W misses V by A1,A4,COMPTS_1:def 4;
+      W is a_neighborhood of p1 by A5,A7,CONNSP_2:5;
+then A10:  N is_eventually_in W by A2,Def18;
+      V is a_neighborhood of p2 by A6,A8,CONNSP_2:5;
+    then N is_eventually_in V by A3,Def18;
+   hence contradiction by A9,A10,Th26;
+  end;
+  assume
+A11: for N being net of T, p,q being Point of T st p in Lim N & q in Lim N
+    holds p = q;
+  given p,q be Point of T such that
+A12: p <> q and
+A13: for W,V being Subset of T st W is open & V is open &
+       p in W & q in V holds W meets V;
+  set pN = [:OpenNeighborhoods p,OpenNeighborhoods q:];
+  set cT = the carrier of T, cpN = the carrier of pN;
+A14: cpN = [:the carrier of OpenNeighborhoods p,
+           the carrier of OpenNeighborhoods q:] by YELLOW_3:def 2;
+     deffunc F(Element of cpN) = $1`1 /\ $1`2;
+A15: for i being Element of cpN holds cT meets F(i)
+   proof let i be Element of cpN;
+     consider W being Subset of T such that
+A16:    W = i`1 & p in W & W is open by Th38;
+      consider V being Subset of T such that
+A17:    V = i`2 & q in V & V is open by Th38;
+A18:   W /\ V c= cT;
+       i`1 meets i`2 by A13,A16,A17;
+     then i`1 /\ i`2 <> {} by XBOOLE_0:def 7;
+     then cT /\ (i`1 /\ i`2) <> {} by A16,A17,A18,XBOOLE_1:28;
+    hence cT meets i`1 /\ i`2 by XBOOLE_0:def 7;
+   end;
+  consider f being Function of cpN, cT such that
+A19: for i being Element of cpN holds
+     f.i in F(i) from M_Choice(A15);
+  reconsider N = NetStr(#the carrier of pN, the InternalRel of pN, f#)
+    as net of T by Lm1,Lm2;
+     now let V be a_neighborhood of p;
+A20:   Int V c= V by TOPS_1:44;
+       N is_eventually_in Int V
+      proof
+         p in Int V & Int V is open by CONNSP_2:def 1,TOPS_1:51;
+then A21:     Int V in the carrier of OpenNeighborhoods p by Th39;
+         q in [#]T & [#]T is open by PRE_TOPC:13,TOPS_1:53;
+       then [#]T in the carrier of OpenNeighborhoods q by Th39;
+       then [Int V,[#]T] in cpN by A14,A21,ZFMISC_1:106;
+        then reconsider i = [Int V,[#]T] as Element of N;
+       take i; let j be Element of N;
+        consider j1 being Element of OpenNeighborhoods p,
+                      j2 being Element of OpenNeighborhoods q
+                      such that
+A22:      j = [j1,j2] by A14,DOMAIN_1:9;
+A23:      j`1 = j1 & j`2 = j2 by A22,MCART_1:7;
+       consider W1 being Subset of T such that
+A24:     j1 = W1 & p in W1 & W1 is open by Th38;
+       consider W2 being Subset of T such that
+A25:     j2 = W2 & q in W2 & W2 is open by Th38;
+        reconsider j'=j, i'=i as Element of pN;
+A26:     i'`1 = Int V & i'`2 = [#]T by MCART_1:7;
+       assume i <= j;
+        then [i,j] in the InternalRel of pN by ORDERS_1:def 9;
+        then i' <= j' by ORDERS_1:def 9;
+        then i'`1 <= j'`1 & i'`2 <= j'`2 by YELLOW_3:12;
+        then A27:       W1 c= Int V & W2 c= [#]T by A23,A24,A25,A26,Th40;
+A28:       f.j in W1 /\ W2 by A19,A23,A24,A25;
+          W1 /\ W2 c= (Int V) /\ [#]T by A27,XBOOLE_1:27;
+        then f.j in (Int V) /\ [#]T by A28;
+        then f.j in Int V by PRE_TOPC:15;
+       hence N.j in Int V by WAYBEL_0:def 8;
+      end;
+    hence N is_eventually_in V by A20,WAYBEL_0:8;
+   end;
+then A29: p in Lim N by Def18;
+     now let V be a_neighborhood of q;
+A30:   Int V c= V by TOPS_1:44;
+       N is_eventually_in Int V
+      proof
+         q in Int V & Int V is open by CONNSP_2:def 1,TOPS_1:51;
+then A31:     Int V in the carrier of OpenNeighborhoods q by Th39;
+         p in [#]T & [#]T is open by PRE_TOPC:13,TOPS_1:53;
+       then [#]T in the carrier of OpenNeighborhoods p by Th39;
+       then [[#]T,Int V] in cpN by A14,A31,ZFMISC_1:106;
+        then reconsider i = [[#]T,Int V] as Element of N;
+       take i; let j be Element of N;
+        consider j1 being Element of OpenNeighborhoods p,
+                      j2 being Element of OpenNeighborhoods q
+                      such that
+A32:      j = [j1,j2] by A14,DOMAIN_1:9;
+A33:      j`1 = j1 & j`2 = j2 by A32,MCART_1:7;
+       consider W1 being Subset of T such that
+A34:     j1 = W1 & p in W1 & W1 is open by Th38;
+       consider W2 being Subset of T such that
+A35:     j2 = W2 & q in W2 & W2 is open by Th38;
+        reconsider j'=j, i'=i as Element of pN;
+A36:     i'`1 = [#]T & i'`2 = Int V by MCART_1:7;
+       assume i <= j;
+        then [i,j] in the InternalRel of pN by ORDERS_1:def 9;
+        then i' <= j' by ORDERS_1:def 9;
+        then i'`1 <= j'`1 & i'`2 <= j'`2 by YELLOW_3:12;
+        then A37:       W1 c= [#]T & W2 c= Int V by A33,A34,A35,A36,Th40;
+A38:       f.j in W1 /\ W2 by A19,A33,A34,A35;
+          W1 /\ W2 c= (Int V) /\ [#]T by A37,XBOOLE_1:27;
+        then f.j in (Int V) /\ [#]T by A38;
+        then f.j in Int V by PRE_TOPC:15;
+       hence N.j in Int V by WAYBEL_0:def 8;
+      end;
+    hence N is_eventually_in V by A30,WAYBEL_0:8;
+   end;
+  then q in Lim N by Def18;
+ hence contradiction by A11,A12,A29;
+end;
+
+definition let T be Hausdorff (non empty TopSpace), N be net of T;
+ cluster Lim N -> trivial;
+ coherence
+  proof
+     for p,q being Point of T st p in Lim N & q in Lim N
+    holds p = q by Th44;
+   hence thesis by SPPOL_1:4;
+  end;
+end;
+
+definition let T be non empty TopSpace, N be net of T;
+ attr N is convergent means
+:Def19: Lim N <> {};
+end;
+
+definition let T be non empty TopSpace;
+ cluster constant -> convergent net of T;
+ coherence
+  proof let N be net of T;
+   assume N is constant;
+   hence Lim N <> {} by Th42;
+  end;
+end;
+
+definition let T be non empty TopSpace;
+ cluster convergent strict net of T;
+ existence
+  proof
+   consider R being non empty transitive directed RelStr, p being Point of T;
+   take R --> p;
+   thus thesis;
+  end;
+end;
+
+definition let T be Hausdorff (non empty TopSpace), N be convergent net of T;
+ func lim N -> Element of T means
+:Def20: it in Lim N;
+ existence
+  proof Lim N <> {} by Def19;
+    then consider p being Point of T such that
+A1:   p in Lim N by SUBSET_1:10;
+   take p;
+   thus thesis by A1;
+  end;
+ correctness by SPPOL_1:4;
+end;
+
+theorem
+   for T be Hausdorff (non empty TopSpace), N be constant net of T
+  holds lim N = the_value_of N
+proof let T be Hausdorff (non empty TopSpace), N be constant net of T;
+    the_value_of N in Lim N by Th42;
+ hence lim N = the_value_of N by Def20;
+end;
+
+theorem
+   for T being non empty TopSpace, N being net of T
+ for p being Point of T st not p in Lim N
+   ex Y being subnet of N st not ex Z being subnet of Y st p in Lim Z
+proof
+ let T be non empty TopSpace, N be net of T;
+ let p be Point of T;
+ assume not p in Lim N;
+  then consider V be a_neighborhood of p such that
+A1: not N is_eventually_in V by Def18;
+    N is_often_in (the carrier of T) \ V by A1,WAYBEL_0:9;
+  then reconsider Y = N"((the carrier of T) \ V) as subnet of N by Th31;
+A2: Y is_eventually_in (the carrier of T) \ V by Th32;
+ take Y;
+ let Z be subnet of Y;
+ assume p in Lim Z;
+  then Z is_eventually_in V by Def18;
+  then Z is_often_in V by Th28;
+  then Y is_often_in V by Th27;
+ hence contradiction by A2,WAYBEL_0:10;
+end;
+
+theorem Th47:
+ for T being non empty TopSpace, N being net of T st N in NetUniv T
+ for p being Point of T st not p in Lim N
+   ex Y being subnet of N st Y in NetUniv T &
+    not ex Z being subnet of Y st p in Lim Z
+proof
+ let T be non empty TopSpace, N be net of T;
+  assume
+A1: N in NetUniv T;
+ let p be Point of T;
+ assume not p in Lim N;
+  then consider V be a_neighborhood of p such that
+A2: not N is_eventually_in V by Def18;
+    N is_often_in (the carrier of T) \ V by A2,WAYBEL_0:9;
+  then reconsider Y = N"((the carrier of T) \ V) as subnet of N by Th31;
+A3: ex M being strict net of T st M = N &
+    the carrier of M in the_universe_of the carrier of T by A1,Def14;
+A4: Y is_eventually_in (the carrier of T) \ V by Th32;
+ take Y;
+     the carrier of Y = (the mapping of N)"((the carrier of T) \ V) by Def13;
+   then the carrier of Y in the_universe_of the carrier of T
+      by A3,CLASSES1:def 1;
+  hence Y in NetUniv T by Def14;
+ let Z be subnet of Y;
+ assume p in Lim Z;
+  then Z is_eventually_in V by Def18;
+  then Z is_often_in V by Th28;
+  then Y is_often_in V by Th27;
+ hence contradiction by A4,WAYBEL_0:10;
+end;
+
+theorem Th48:
+ for T being non empty TopSpace, N being net of T,
+     p being Point of T st p in Lim N
+   for J being net_set of the carrier of N, T st
+    for i being Element of N holds N.i in Lim(J.i)
+    holds p in Lim Iterated J
+proof
+ let T be non empty TopSpace, N be net of T,
+     p be Point of T such that
+A1: p in Lim N;
+ let J be net_set of the carrier of N, T such that
+A2: for i being Element of N holds N.i in Lim(J.i);
+    for V being a_neighborhood of p holds Iterated J is_eventually_in V
+   proof let V be a_neighborhood of p;
+A3:   Int V = Int Int V by TOPS_1:45;
+     then p in Int Int V by CONNSP_2:def 1;
+     then reconsider W = Int V as a_neighborhood of p by CONNSP_2:def 1;
+       N is_eventually_in W by A1,Def18;
+     then consider i being Element of N such that
+A4:   for j being Element of N st i <= j holds N.j in W by WAYBEL_0:def 11;
+     defpred P[Element of N,set] means
+       ex m being Element of J.$1 st m = $2 &
+        (i <= $1 implies
+        for n being Element of J.$1 st m <= n holds J.$1.n in W);
+A5:   for j being Element of N ex e being set st P[j, e]
+     proof let j be Element of N;
+       reconsider j' = j as Element of N;
+       per cases;
+       suppose i <= j;
+        then A6:       N.j' in W by A4;
+A7:     N.j in Lim(J.j) by A2;
+          W is a_neighborhood of N.j by A3,A6,CONNSP_2:def 1;
+        then J.j is_eventually_in W by A7,Def18;
+        then consider e being Element of J.j such that
+A8:      for u being Element of J.j st e <= u holds J.j.u in W
+                    by WAYBEL_0:def 11;
+       take e,e;
+       thus e = e;
+       assume i <= j;
+       thus for n being Element of J.j st e <= n holds J.j.n in W by A8;
+       suppose
+A9:      not i <= j;
+         consider e being Element of J.j;
+       take e,e;
+       thus e = e &
+         (i <= j implies
+         for n being Element of J.j st e <= n holds J.j.n in W) by A9;
+     end;
+     consider f being ManySortedSet of the carrier of N such that
+A10:   for j being Element of N holds P[j, f.j] from MSSExD(A5);
+A11:  the carrier of Iterated J = [:the carrier of N, product Carrier J:]
+                                                    by Th35;
+    dom Carrier J = the carrier of N by PBOOLE:def 3;
+then A12:  dom f = dom Carrier J by PBOOLE:def 3;
+       for x st x in dom Carrier J holds f.x in (Carrier J).x
+      proof let x;
+       assume x in dom Carrier J;
+        then reconsider j = x as Element of N by PBOOLE:def 3;
+          ex m being Element of J.j st m = f.j &
+        (i <= j implies
+        for n being Element of J.j st m <= n holds J.j.n in W) by A10;
+        then f.x in the carrier of J.j;
+       hence f.x in (Carrier J).x by Th9;
+      end;
+then A13:   f in product Carrier J by A12,CARD_3:18;
+     then [i,f] in the carrier of Iterated J by A11,ZFMISC_1:106;
+     then reconsider x = [i,f] as Element of Iterated J;
+    take x;
+     let j be Element of Iterated J such that
+A14:   x <= j;
+      consider j1 being Element of N,
+                   j2 being Element of product Carrier J such that
+A15:   j = [j1,j2] by A11,DOMAIN_1:9;
+       product Carrier J = the carrier of product J by YELLOW_1:def 4;
+     then reconsider j2, i2 = f as Element of product J by A13;
+     reconsider i1 = i, j1 as Element of N;
+       the RelStr of Iterated J = [:N, product J:] by Def16;
+     then A16:    [i1,i2] <= [j1,j2] by A14,A15,YELLOW_0:1;
+     then A17:   i1 <= j1 & i2 <= j2 by YELLOW_3:11;
+     consider m being Element of J.j1 such that
+A18:   m = f.j1 and
+A19:   i <= j1 implies for n being Element of J.j1 st m <= n holds J.j1.n in W
+                             by A10;
+       i2 in the carrier of product J;
+     then i2 in product Carrier J by YELLOW_1:def 4;
+     then ex f,g being Function st f = i2 & g = j2 &
+      for i be set st i in the carrier of N
+       ex R being RelStr, xi,yi being Element of R
+        st R = J.i & xi = f.i & yi = g.i & xi <= yi by A17,YELLOW_1:def 4;
+     then ex R being RelStr, xi,yi being Element of R
+        st R = J.j1 & xi = i2.j1 & yi = j2.j1 & xi <= yi;
+     then (J.j1).(j2.j1) in W by A16,A18,A19,YELLOW_3:11;
+     then (the mapping of J.j1).(j2.j1) in W by WAYBEL_0:def 8;
+then A20:   (Iterated J).j in W by A15,Th36;
+       W c= V by TOPS_1:44;
+    hence (Iterated J).j in V by A20;
+   end;
+ hence p in Lim Iterated J by Def18;
+end;
+
+begin :: Convergence Classes
+
+definition let S be non empty 1-sorted;
+ mode Convergence-Class of S means
+:Def21:  it c= [:NetUniv S,the carrier of S:];
+ existence;
+end;
+
+definition let S be non empty 1-sorted;
+ cluster -> Relation-like Convergence-Class of S;
+ coherence
+ proof let C be Convergence-Class of S;
+     C is Subset of [:NetUniv S,the carrier of S:] by Def21;
+  hence thesis;
+ end;
+end;
+
+definition let T be non empty TopSpace;
+ func Convergence T -> Convergence-Class of T means
+:Def22: for N being net of T, p being Point of T holds
+   [N,p] in it iff N in NetUniv T & p in Lim N;
+ existence
+  proof defpred P[set,set] means
+      ex N being net of T, p being Point of T st N = $1 & p = $2 &
+        p in Lim N;
+    consider R being Relation of NetUniv T, the carrier of T such that
+A1:   for x,y holds [x,y] in R iff x in NetUniv T & y in the carrier of T &
+        P[x,y] from Rel_On_Set_Ex;
+    reconsider R as Convergence-Class of T by Def21;
+   take R; let N be net of T, p be Point of T;
+   hereby assume
+A2:  [N,p] in R;
+    hence N in NetUniv T by A1;
+        ex N' being net of T, p' being Point of T st N' = N & p' = p &
+        p' in Lim N' by A1,A2;
+    hence p in Lim N;
+   end;
+   thus thesis by A1;
+  end;
+ uniqueness
+  proof let it1,it2 be Convergence-Class of T such that
+A3: for N being net of T, p being Point of T holds
+   [N,p] in it1 iff N in NetUniv T & p in Lim N and
+A4: for N being net of T, p being Point of T holds
+   [N,p] in it2 iff N in NetUniv T & p in Lim N;
+A5: it1 c= [:NetUniv T,the carrier of T:] by Def21;
+A6: it2 c= [:NetUniv T,the carrier of T:] by Def21;
+   let x,y;
+   thus [x,y] in it1 implies [x,y] in it2
+    proof assume
+A7:    [x,y] in it1;
+      then x in NetUniv T by A5,ZFMISC_1:106;
+      then consider N being strict net of T such that
+A8:    N = x and the carrier of N in the_universe_of the carrier of T by Def14
+;
+      reconsider p = y as Point of T by A5,A7,ZFMISC_1:106;
+        [N,p] in it1 by A7,A8;
+      then N in NetUniv T & p in Lim N by A3;
+     hence [x,y] in it2 by A4,A8;
+    end;
+   assume
+A9:   [x,y] in it2;
+     then x in NetUniv T by A6,ZFMISC_1:106;
+     then consider N being strict net of T such that
+A10:   N = x and the carrier of N in the_universe_of the carrier of T by Def14
+;
+     reconsider p = y as Point of T by A6,A9,ZFMISC_1:106;
+       [N,p] in it2 by A9,A10;
+     then N in NetUniv T & p in Lim N by A4;
+    hence [x,y] in it1 by A3,A10;
+  end;
+end;
+
+definition let T be non empty 1-sorted, C be Convergence-Class of T;
+ attr C is (CONSTANTS) means
+:Def23: for N being constant net of T st N in NetUniv T
+    holds [N,the_value_of N] in C;
+ attr C is (SUBNETS) means
+:Def24: for N being net of T, Y being subnet of N st Y in NetUniv T
+       for p being Element of T
+        holds [N,p] in C implies [Y,p] in C;
+ attr C is (DIVERGENCE) means
+:Def25: for X being net of T, p being Element of T
+   st X in NetUniv T & not [X,p] in C
+   ex Y being subnet of X st Y in NetUniv T &
+    not ex Z being subnet of Y st [Z,p] in C;
+ attr C is (ITERATED_LIMITS) means
+:Def26: for X being net of T, p being Element of T
+       st [X,p] in C
+   for J being net_set of the carrier of X, T st
+    for i being Element of X holds [J.i,X.i] in C
+    holds [Iterated J,p] in C;
+end;
+
+definition let T be non empty TopSpace;
+ cluster Convergence T -> (CONSTANTS) (SUBNETS) (DIVERGENCE) (ITERATED_LIMITS);
+ coherence
+  proof set C = Convergence T;
+   thus C is (CONSTANTS)
+    proof let N be constant net of T such that
+A1:    N in NetUniv T;
+        the_value_of N in Lim N by Th42;
+     hence [N,the_value_of N] in C by A1,Def22;
+    end;
+   thus C is (SUBNETS)
+    proof
+     let N be net of T, Y be subnet of N such that
+A2:     Y in NetUniv T;
+     let p be Element of T;
+A3:    Lim N c= Lim Y by Th41;
+     assume [N,p] in C;
+      then p in Lim N by Def22;
+     hence [Y,p] in C by A2,A3,Def22;
+    end;
+   thus C is (DIVERGENCE)
+    proof let X be net of T, p be Element of T such that
+A4:    X in NetUniv T;
+     assume not [X,p] in C;
+      then not p in Lim X by A4,Def22;
+      then consider Y being subnet of X such that
+A5:   Y in NetUniv T and
+A6:     not ex Z being subnet of Y st p in Lim Z by A4,Th47;
+     take Y;
+     thus Y in NetUniv T by A5;
+     let Z be subnet of Y;
+        not p in Lim Z by A6;
+     hence not [Z,p] in C by Def22;
+    end;
+   let X be net of T, p be Element of T;
+   assume [X,p] in C;
+then A7: p in Lim X & X in NetUniv T by Def22;
+   let J be net_set of the carrier of X, T such that
+A8: for i being Element of X holds [J.i,X.i] in C;
+A9:   now let i be Element of X;
+         [J.i,X.i] in C by A8;
+      hence X.i in Lim(J.i) & J.i in NetUniv T by Def22;
+     end;
+    then A10:   p in Lim Iterated J by A7,Th48;
+      Iterated J in NetUniv T by A7,A9,Th34;
+   hence [Iterated J,p] in C by A10,Def22;
+  end;
+end;
+
+definition let S be non empty 1-sorted, C be Convergence-Class of S;
+ func ConvergenceSpace C -> strict TopStruct means
+:Def27: the carrier of it = the carrier of S &
+ the topology of it = { V where V is Subset of S:
+   for p being Element of S st p in V
+    for N being net of S st [N,p] in C holds N is_eventually_in V};
+ existence
+  proof defpred P[set] means
+     for p being Element of S st p in $1
+      for N being net of S st [N,p] in C holds N is_eventually_in $1;
+    reconsider X = { V where V is Subset of S: P[V]}
+      as Subset of bool the carrier of S from SubsetD;
+    reconsider X as Subset-Family of S by SETFAM_1:def 7;
+   take TopStruct(#the carrier of S,X#);
+   thus thesis;
+  end;
+ correctness;
+end;
+
+definition let S be non empty 1-sorted, C be Convergence-Class of S;
+ cluster ConvergenceSpace C -> non empty;
+ coherence
+  proof the carrier of ConvergenceSpace C = the carrier of S by Def27;
+   hence the carrier of ConvergenceSpace C is non empty;
+  end;
+end;
+
+definition let S be non empty 1-sorted, C be Convergence-Class of S;
+ cluster ConvergenceSpace C -> TopSpace-like;
+ coherence
+  proof set IT = ConvergenceSpace C;
+A1: the topology of IT = { V where V is Subset of S:
+         for p being Element of S st p in V
+         for N being net of S st [N,p] in
+ C holds N is_eventually_in V} by Def27
+;
+    reconsider V = [#]IT as Subset of S by Def27;
+      V = the carrier of IT by PRE_TOPC:12
+       .= the carrier of S by Def27;
+    then for p being Element of S st p in V
+    for N being net of S st [N,p] in C holds N is_eventually_in V by Th29;
+    then V in the topology of IT by A1;
+   hence the carrier of IT in the topology of IT by PRE_TOPC:12;
+   hereby let a be Subset-Family of IT such that
+A2:   a c= the topology of IT;
+     reconsider V = union a as Subset of S by Def27;
+       now let p be Element of S;
+      assume p in V;
+       then consider X such that
+A3:     p in X and
+A4:     X in a by TARSKI:def 4;
+      let N be net of S such that
+A5:    [N,p] in C;
+         X in the topology of IT by A2,A4;
+       then consider W being Subset of S such that
+A6:     X = W and
+A7:     for p being Element of S st p in W
+         for N being net of S st [N,p] in C holds N is_eventually_in W by A1;
+A8:     N is_eventually_in X by A3,A5,A6,A7;
+         X c= V by A4,ZFMISC_1:92;
+      hence N is_eventually_in V by A8,WAYBEL_0:8;
+     end;
+    hence union a in the topology of IT by A1;
+   end;
+   let a,b be Subset of IT;
+   assume a in the topology of IT;
+    then consider Va being Subset of S such that
+A9:  a = Va and
+A10:  for p being Element of S st p in Va
+         for N being net of S st [N,p] in C holds N is_eventually_in Va by A1;
+   assume b in the topology of IT;
+    then consider Vb being Subset of S such that
+A11:  b = Vb and
+A12:  for p being Element of S st p in Vb
+         for N being net of S st [N,p] in C holds N is_eventually_in Vb by A1;
+    reconsider V = a /\ b as Subset of S by Def27;
+      now let p be Element of S such that
+A13:   p in V;
+     let N be net of S;
+     assume
+A14:   [N,p] in C;
+        p in a by A13,XBOOLE_0:def 3;
+      then N is_eventually_in Va by A9,A10,A14;
+      then consider i1 being Element of N such that
+A15:    for j being Element of N st i1 <= j holds N.j in Va by WAYBEL_0:def 11;
+        p in b by A13,XBOOLE_0:def 3;
+      then N is_eventually_in Vb by A11,A12,A14;
+      then consider i2 being Element of N such that
+A16:    for j being Element of N st i2 <= j holds N.j in Vb by WAYBEL_0:def 11;
+      consider i being Element of N such that
+A17:    i1 <= i and
+A18:    i2 <= i by Def5;
+     thus N is_eventually_in V
+      proof take i; let j be Element of N; assume
+A19:     i <= j;
+        then i1 <= j by A17,YELLOW_0:def 2;
+then A20:      N.j in Va by A15;
+          i2 <= j by A18,A19,YELLOW_0:def 2;
+        then N.j in Vb by A16;
+       hence N.j in V by A9,A11,A20,XBOOLE_0:def 3;
+      end;
+    end;
+   hence a /\ b in the topology of IT by A1;
+  end;
+end;
+
+theorem Th49:
+ for S be non empty 1-sorted, C be Convergence-Class of S
+  holds C c= Convergence ConvergenceSpace C
+proof let S be non empty 1-sorted, C be Convergence-Class of S;
+  set T = ConvergenceSpace C;
+ let x,y;
+A1: C c= [:NetUniv S,the carrier of S:] by Def21;
+A2: the carrier of S = the carrier of T by Def27;
+ assume
+A3: [x,y] in C;
+  then consider M being Element of NetUniv S,
+                p being Element of S such that
+A4: [x,y] = [M,p] by A1,DOMAIN_1:9;
+A5: M in NetUniv S;
+     ex N being strict net of S st N = M &
+    the carrier of N in the_universe_of the carrier of S by Def14;
+  then reconsider M as net of S;
+  reconsider N = M as net of T by Def27;
+A6: N in NetUniv T by A2,A5,Lm8;
+  reconsider q = p as Point of T by Def27;
+A7: the topology of T = { V where V is Subset of S:
+     for p being Element of S st p in V
+      for N being net of S st [N,p] in C holds N is_eventually_in V} by Def27;
+    now let V be a_neighborhood of q;
+A8:  Int V c= V by TOPS_1:44;
+A9:  p in Int V by CONNSP_2:def 1;
+      Int V is open by TOPS_1:51;
+    then Int V in the topology of T by PRE_TOPC:def 5;
+    then ex W being Subset of S st
+     W = Int V & for p being Element of S st p in W
+      for N being net of S st [N,p] in C holds N is_eventually_in W by A7;
+    then M is_eventually_in Int V by A3,A4,A9;
+    then consider ii being Element of M such that
+A10:  for j being Element of M st ii <= j holds M.j in
+ Int V by WAYBEL_0:def 11;
+    reconsider i = ii as Element of N;
+      now let j be Element of N such that
+A11:   i <= j;
+      reconsider jj = j as Element of M;
+        M.jj = (the mapping of M).jj by WAYBEL_0:def 8
+          .= (the mapping of N).jj
+          .= N.j by WAYBEL_0:def 8;
+     hence N.j in Int V by A10,A11;
+    end;
+    then N is_eventually_in Int V by WAYBEL_0:def 11;
+   hence N is_eventually_in V by A8,WAYBEL_0:8;
+  end;
+  then p in Lim N by Def18;
+ hence [x,y] in Convergence T by A4,A6,Def22;
+end;
+
+definition let T be non empty 1-sorted, C be Convergence-Class of T;
+ attr C is topological means
+:Def28: C is (CONSTANTS) (SUBNETS) (DIVERGENCE) (ITERATED_LIMITS);
+end;
+
+definition let T be non empty 1-sorted;
+ cluster non empty topological Convergence-Class of T;
+ existence
+  proof
+    reconsider C = [:NetUniv T, the carrier of T:]
+       as Convergence-Class of T by Def21;
+   take C;
+   thus C is non empty;
+   thus C is topological
+   proof
+   thus C is (CONSTANTS)
+    proof let N be constant net of T;
+     thus thesis by ZFMISC_1:106;
+    end;
+   thus C is (SUBNETS)
+    proof let N be net of T, Y be subnet of N;
+     thus thesis by ZFMISC_1:106;
+    end;
+   thus C is (DIVERGENCE)
+    proof let X be net of T, p be Element of T;
+     thus thesis by ZFMISC_1:106;
+    end;
+   let X be net of T, p be Element of T;
+   assume [X,p] in C;
+then A1: X in NetUniv T by ZFMISC_1:106;
+   let J be net_set of the carrier of X, T such that
+A2:  for i being Element of X holds [J.i,X.i] in C;
+      now let i be Element of X;
+        [J.i,X.i] in C by A2;
+     hence J.i in NetUniv T by ZFMISC_1:106;
+    end;
+    then Iterated J in NetUniv T by A1,Th34;
+   hence [Iterated J,p] in C by ZFMISC_1:106;
+  end;
+  end;
+end;
+
+definition let T be non empty 1-sorted;
+ cluster topological -> (CONSTANTS) (SUBNETS) (DIVERGENCE) (ITERATED_LIMITS)
+    Convergence-Class of T;
+  coherence by Def28;
+ cluster (CONSTANTS) (SUBNETS) (DIVERGENCE) (ITERATED_LIMITS) -> topological
+    Convergence-Class of T;
+  coherence by Def28;
+end;
+
+theorem Th50:
+ for T being non empty 1-sorted,
+     C being topological Convergence-Class of T,
+     S being Subset of (ConvergenceSpace C qua non empty TopSpace) holds
+  S is open iff
+   for p being Element of T st p in S
+    for N being net of T st [N,p] in C holds N is_eventually_in S
+ proof
+  let T be non empty 1-sorted,
+      C be topological Convergence-Class of T,
+      S be Subset of ConvergenceSpace C;
+A1: the carrier of ConvergenceSpace C = the carrier of T by Def27;
+A2: the topology of ConvergenceSpace C =
+   { V where V is Subset of T:
+   for p being Element of T st p in V
+    for N being net of T st [N,p] in C holds N is_eventually_in V} by Def27;
+then A3: (for p being Element of T st p in S
+    for N being net of T st [N,p] in C holds N is_eventually_in S)
+    implies S in the topology of ConvergenceSpace C by A1;
+    S in the topology of ConvergenceSpace C implies
+   ex V be Subset of T st S = V &
+   for p being Element of T st p in V
+    for N being net of T st [N,p] in C holds N is_eventually_in V by A2;
+  hence thesis by A3,PRE_TOPC:def 5;
+ end;
+
+theorem Th51:
+ for T being non empty 1-sorted,
+     C being topological Convergence-Class of T,
+     S being Subset of (ConvergenceSpace C qua non empty TopSpace) holds
+  S is closed iff
+   for p being Element of T holds
+    for N being net of T st [N,p] in C & N is_often_in S
+      holds p in S
+ proof
+  let T be non empty 1-sorted,
+      C be topological Convergence-Class of T,
+      S be Subset of ConvergenceSpace C;
+   set CC = ConvergenceSpace C;
+A1: the carrier of T = the carrier of CC by Def27;
+  hereby assume
+A2: S is closed;
+   let p be Element of T;
+   let N be net of T such that
+A3:  [N,p] in C;
+A4:  S` is open by A2,TOPS_1:29;
+   assume N is_often_in S;
+    then not N is_eventually_in (the carrier of T)\S by WAYBEL_0:10;
+    then not N is_eventually_in [#]CC\S by A1,PRE_TOPC:12;
+    then not N is_eventually_in S` by PRE_TOPC:17;
+    then not p in S` by A3,A4,Th50;
+   hence p in S by A1,Th10;
+  end;
+  assume
+A5: for p being Element of T holds
+    for N being net of T st [N,p] in C & N is_often_in S
+      holds p in S;
+     now let p be Element of T;
+    assume p in S`;
+then A6: not p in S by Th10;
+    let N be net of T;
+    assume [N,p] in C;
+     then not N is_often_in S by A5,A6;
+     then N is_eventually_in (the carrier of CC)\S by A1,WAYBEL_0:10;
+     then N is_eventually_in [#]CC\S by PRE_TOPC:12;
+    hence N is_eventually_in S` by PRE_TOPC:17;
+   end;
+   then S` is open by Th50;
+  hence S is closed by TOPS_1:29;
+ end;
+
+theorem Th52:
+ for T being non empty 1-sorted,
+     C being topological Convergence-Class of T,
+     S being Subset of ConvergenceSpace C,
+     p being Point of ConvergenceSpace C st p in Cl S
+  ex N being net of ConvergenceSpace C st [N,p] in C &
+    rng the mapping of N c= S & p in Lim N
+proof
+ let T be non empty 1-sorted,
+     C be topological Convergence-Class of T,
+     S be Subset of (ConvergenceSpace C qua non empty TopSpace),
+     p be Point of ConvergenceSpace C such that
+A1: p in Cl S;
+  set CC = ConvergenceSpace C;
+  defpred P[Point of CC] means
+       ex N being net of ConvergenceSpace C st [N,$1] in C &
+         rng the mapping of N c= S & $1 in Lim N;
+  set F = { q where q is Point of CC: P[q]};
+    F is Subset of CC from SubsetD;
+  then reconsider F as Subset of CC;
+    for p being Element of T holds
+   for N being net of T st [N,p] in C & N is_often_in F
+     holds p in F
+   proof let p be Element of T;
+    let N be net of T such that
+A2:  [N,p] in C and
+A3:  N is_often_in F;
+       C c= [:NetUniv T, the carrier of T:] by Def21;
+then A4: N in NetUniv T by A2,ZFMISC_1:106;
+     reconsider M = N"F as subnet of N by A3,Th31;
+     defpred P[Element of M, set] means
+         [$2,M.$1] in C &
+         ex X being net of T st X = $2
+           & rng the mapping of X c= S;
+A5:   now let i be Element of M;
+A6:     the mapping of M = (the mapping of N)|the carrier of M by Def8;
+      i in the carrier of M;
+       then i in (the mapping of N)"F by Def13;
+       then (the mapping of N).i in F by FUNCT_2:46;
+       then (the mapping of M).i in F by A6,FUNCT_1:72;
+       then M.i in F by WAYBEL_0:def 8;
+       then consider q being Point of CC such that
+A7:     M.i = q and
+A8:     ex N being net of ConvergenceSpace C st [N,q] in C &
+         rng the mapping of N c= S & q in Lim N;
+       consider N being net of CC such that
+A9:     [N,q] in C and
+A10:     rng the mapping of N c= S and q in Lim N by A8;
+       reconsider x = N as set;
+      take x;
+      thus P[i, x]
+      proof thus [x,M.i] in C by A7,A9;
+       reconsider X = N as net of T by Def27;
+       take X;
+       thus X = x;
+       thus rng the mapping of X c= S by A10;
+      end;
+     end;
+     consider J being ManySortedSet of the carrier of M such that
+A11:   for i being Element of M holds P[i, J.i] from MSSExD(A5);
+       for i being set st i in the carrier of M holds J.i is net of T
+      proof let i be set;
+       assume i in the carrier of M;
+        then ex X being net of T st X = J.i
+           & rng the mapping of X c= S by A11;
+       hence thesis;
+      end;
+     then reconsider J as net_set of the carrier of M,T by Th33;
+A12:     for i being Element of M holds
+         [J.i,M.i] in C & rng the mapping of J.i c= S
+      proof let i be Element of M;
+        thus [J.i,M.i] in C by A11;
+           ex X being net of T st X = J.i
+           & rng the mapping of X c= S by A11;
+       hence thesis;
+      end;
+     reconsider I = Iterated J as net of CC by Def27;
+A13:   ex N0 being strict net of T st N0 = N &
+      the carrier of N0 in the_universe_of the carrier of T by A4,Def14;
+       the carrier of M = (the mapping of N)"F by Def13;
+     then the carrier of M in the_universe_of the carrier of T
+        by A13,CLASSES1:def 1;
+     then M in NetUniv T by Def14;
+     then [M,p] in C by A2,Def24;
+then A14:   [I,p] in C by A12,Def26;
+     set XX = { rng the mapping of J.i where i is Element of M:
+            not contradiction };
+A15:  rng the mapping of I c= union XX by Th37;
+       for x st x in XX holds x c= S
+      proof let x;
+       assume x in XX;
+        then ex i being Element of M st x = rng the mapping of J.i;
+       hence x c= S by A12;
+      end;
+     then union XX c= S by ZFMISC_1:94;
+then A16:   rng the mapping of I c= S by A15,XBOOLE_1:1;
+     reconsider q = p as Point of CC by Def27;
+       C c= Convergence CC by Th49;
+     then q in Lim I by A14,Def22;
+    hence p in F by A14,A16;
+   end;
+  then A17: F is closed by Th51;
+    S c= F
+   proof let x;
+    assume
+A18:  x in S;
+     then reconsider q = x as Point of CC;
+       {} in {{}} by TARSKI:def 1;
+     then reconsider r = {[{},{}]} as Relation of {{}} by RELSET_1:8;
+     set R = RelStr(#{{}},r#);
+A19:   now let x,y be Element of R;
+         x = {} & y = {} by TARSKI:def 1;
+       then [x,y] in {[{},{}]} by TARSKI:def 1;
+      hence x <= y by ORDERS_1:def 9;
+     end;
+A20:   R is transitive
+      proof let x,y,z be Element of R;
+       thus thesis by A19;
+      end;
+       R is directed
+      proof let x,y be Element of R;
+       take x;
+       thus thesis by A19;
+      end;
+     then reconsider R as transitive directed non empty RelStr by A20;
+     set N = R --> q;
+A21:  the_value_of N = q by Th22;
+       the carrier of CC = the carrier of T by Def27;
+     then reconsider M = N as constant strict net of T by Lm6,Lm7;
+       the_value_of the mapping of M = q by A21,Def10;
+then A22:  the_value_of M = q by Def10;
+     set V = the_universe_of the carrier of T;
+A23:   the RelStr of N = the RelStr of R by Def7;
+       {} in V by CLASSES2:62;
+     then the carrier of R in V by CLASSES2:3;
+     then M in NetUniv T by A23,Def14;
+then A24:   [M,q] in C by A22,Def23;
+       the mapping of N = (the carrier of N) --> q by Def7;
+     then rng the mapping of N = {q} by FUNCOP_1:14;
+then A25:   rng the mapping of N c= S by A18,ZFMISC_1:37;
+       q in Lim N by A21,Th42;
+    hence x in F by A24,A25;
+   end;
+  then Cl S c= F by A17,TOPS_1:31;
+  then p in F by A1;
+  then ex q being Point of CC st p = q &
+   ex N being net of ConvergenceSpace C st [N,q] in C &
+     rng the mapping of N c= S & q in Lim N;
+ hence thesis;
+end;
+
+theorem
+   for T be non empty 1-sorted, C be Convergence-Class of T
+  holds Convergence ConvergenceSpace C = C iff C is topological
+proof let T be non empty 1-sorted, C be Convergence-Class of T;
+ set CC = ConvergenceSpace C,
+     CCC = Convergence ConvergenceSpace C;
+A1: the carrier of ConvergenceSpace C = the carrier of T by Def27;
+A2: for N being net of T holds N is net of CC by Def27;
+A3: for N being net of T, n being net of CC st N = n
+    for X being subnet of N holds X is subnet of n
+    proof let N be net of T, n be net of CC such that
+A4:    N = n;
+     let X be subnet of N;
+      consider f being map of X, N such that
+A5:    the mapping of X = (the mapping of N)*f &
+       for m being Element of N ex n being Element of X st
+         for p being Element of X st n <= p holds m <= f.p by Def12;
+      reconsider x = X as net of CC by Def27;
+      reconsider f as map of x, n by A4;
+        the mapping of x = (the mapping of n)*f by A4,A5;
+     hence X is subnet of n by A4,A5,Def12;
+    end;
+A6: for N being net of T, n being net of CC st N = n
+    for x being subnet of n holds x is subnet of N
+    proof let N be net of T, n be net of CC such that
+A7:    N = n;
+     let X be subnet of n;
+      consider f being map of X, n such that
+A8:    the mapping of X = (the mapping of n)*f &
+       for m being Element of n ex n being Element of X st
+         for p being Element of X st n <= p holds m <= f.p by Def12;
+
+      reconsider x = X as net of T by Def27;
+      reconsider f as map of x, N by A7;
+        the mapping of x = (the mapping of N)*f by A7,A8;
+     hence X is subnet of N by A7,A8,Def12;
+    end;
+ hereby assume
+A9: CCC = C;
+  thus C is topological
+  proof
+  thus C is (CONSTANTS)
+   proof let N be constant net of T;
+     reconsider M = N as net of CC by Def27;
+     the mapping of N is constant;
+     then the mapping of M is constant;
+     then reconsider M as constant net of CC by Def6;
+A10:  the_value_of M = the_value_of the mapping of M by Def10
+          .= the_value_of the mapping of N
+          .= the_value_of N by Def10;
+    assume N in NetUniv T;
+     then M in NetUniv CC by A1,Lm8;
+    hence [N,the_value_of N] in C by A9,A10,Def23;
+   end;
+  thus C is (SUBNETS)
+   proof let N be net of T, Y be subnet of N;
+     reconsider M = N as net of CC by Def27;
+     reconsider X = Y as subnet of M by A3;
+    assume Y in NetUniv T;
+then A11:   X in NetUniv CC by A1,Lm8;
+    let p be Element of T;
+     reconsider q = p as Element of CC by Def27;
+    assume [N,p] in C;
+     then [M,q] in CCC by A9;
+    hence [Y,p] in C by A9,A11,Def24;
+   end;
+  thus C is (DIVERGENCE)
+   proof let X be net of T, p be Element of T;
+     reconsider x = X as net of CC by Def27;
+     reconsider q = p as Element of CC by Def27;
+    assume X in NetUniv T;
+then A12:  x in NetUniv CC by A1,Lm8;
+    assume not [X,p] in C;
+     then consider y being subnet of x such that
+A13:   y in NetUniv CC and
+A14:    not ex z being subnet of y st [z,q] in CCC by A9,A12,Def25;
+     reconsider Y = y as subnet of X by A6;
+    take Y;
+    thus Y in NetUniv T by A1,A13,Lm8;
+    let Z be subnet of Y;
+     reconsider z = Z as subnet of y by A3;
+       not [z,q] in CCC by A14;
+    hence not [Z,p] in C by A9;
+   end;
+  thus C is (ITERATED_LIMITS)
+   proof let X be net of T, p be Element of T;
+     reconsider x = X as net of CC by Def27;
+     reconsider q = p as Element of CC by Def27;
+    assume
+A15:  [X,p] in C;
+    let J be net_set of the carrier of X, T;
+     reconsider I = J as ManySortedSet of the carrier of x;
+       I is net_set of the carrier of x,CC
+      proof let i be set;
+       assume i in rng I;
+        then i is net of T by Def15;
+       hence i is net of CC by A2;
+      end;
+     then reconsider I = J as net_set of the carrier of x,CC;
+    assume
+A16:  for i being Element of X holds [J.i,X.i] in C;
+       now let i be Element of x;
+       reconsider j = i as Element of X;
+         X.j = (the mapping of X).j by WAYBEL_0:def 8
+          .= (the mapping of x).i
+          .= x .i by WAYBEL_0:def 8;
+      hence [I.i,x .i] in CCC by A9,A16;
+     end;
+     then A17:    [Iterated I,q] in CCC by A9,A15,Def26;
+A18:   the RelStr of Iterated I = [:X, product J:] by Def16
+                .= the RelStr of Iterated J by Def16;
+then A19:   the carrier of Iterated I = the carrier of Iterated J;
+A20:   the InternalRel of Iterated I = the InternalRel of Iterated J by A18;
+       dom the mapping of Iterated I = the carrier of Iterated I
+          by FUNCT_2:def 1;
+then A21:   dom the mapping of Iterated I = dom the mapping of Iterated J
+         by A18,FUNCT_2:def 1;
+       now let j be set;
+A22:  the carrier of Iterated I = [:the carrier of x, product Carrier I:]
+                                                    by Th35;
+A23: the carrier of Iterated J = [:the carrier of X, product Carrier J:]
+                                                    by Th35;
+      assume j in dom the mapping of Iterated I;
+       then reconsider jj = j as Element of Iterated I;
+       consider j1 being Element of x,
+                   j2 being Element of product Carrier I such that
+A24:    jj = [j1,j2] by A22,DOMAIN_1:9;
+       reconsider j2 as Element of product I by YELLOW_1:def 4;
+       reconsider i1 = j1 as Element of X;
+       set i2 = j2;
+       reconsider i = [i1,i2] as Element of Iterated J
+            by A23,ZFMISC_1:106;
+      thus (the mapping of Iterated I).j
+        = (Iterated I).jj by WAYBEL_0:def 8
+       .= (the mapping of I.j1).(j2.j1) by A24,Th36
+       .= (the mapping of J.i1).(i2.i1)
+       .= (Iterated J).i by Th36
+       .= (the mapping of Iterated J).j by A24,WAYBEL_0:def 8;
+     end;
+then A25:   the mapping of Iterated I = the mapping of Iterated J by A21,
+FUNCT_1:9;
+       Iterated I = NetStr(#the carrier of Iterated I,
+         the InternalRel of Iterated I, the mapping of Iterated I#)
+        .= NetStr(#the carrier of Iterated J,
+         the InternalRel of Iterated J, the mapping of Iterated J#) by A19,A20,
+A25
+        .= Iterated J;
+    hence [Iterated J,p] in C by A9,A17;
+   end;
+   end;
+ end;
+ assume
+A26: C is (CONSTANTS) (SUBNETS) (DIVERGENCE) (ITERATED_LIMITS);
+  then reconsider C' = C as topological Convergence-Class of T by Def28;
+A27: Convergence ConvergenceSpace C c= C
+  proof let x,y;
+A28:  Convergence CC c= [:NetUniv CC,the carrier of CC:] by Def21;
+   assume
+A29:  [x,y] in Convergence CC;
+    then consider M being Element of NetUniv CC,
+                  p being Element of CC such that
+A30:   [x,y] = [M,p] by A28,DOMAIN_1:9;
+A31:  M in NetUniv CC;
+      ex N being strict net of CC st N = M &
+     the carrier of N in the_universe_of the carrier of CC by Def14;
+    then reconsider M as net of CC;
+    reconsider N = M as net of T by Def27;
+    reconsider q = p as Point of T by Def27;
+A32: N in NetUniv T by A1,A31,Lm8;
+   assume not [x,y] in C;
+    then consider Y being subnet of N such that
+A33:   Y in NetUniv T and
+A34:   not ex Z being subnet of Y st [Z,q] in C by A26,A30,A32,Def25;
+    reconsider YY = the RelStr of Y
+       as transitive directed non empty RelStr by Lm1,Lm2;
+    set X = YY --> q;
+A35: the RelStr of X = YY by Def7;
+    reconsider X as constant non empty strict net of T;
+A36: ex N0 being strict net of T st N0 = Y &
+     the carrier of N0 in the_universe_of the carrier of T by A33,Def14;
+      the RelStr of X = the RelStr of Y by Def7;
+then A37: X in NetUniv T by A36,Def14;
+    reconsider X' = X as net of CC by Def27;
+      the mapping of X is constant;
+    then the mapping of X' is constant;
+    then reconsider X' as constant net of CC by Def6;
+      the_value_of X = q by Th22;
+then A38: [X,q] in C by A26,A37,Def23;
+A39: p in Lim M by A29,A30,Def22;
+    reconsider Y' = Y as subnet of M by A3;
+    defpred P[set,set] means
+      ex i being Element of Y, Ji being net of T st $1 = i & Ji = $2 &
+       [Ji,p] in C &
+       rng the mapping of Ji c= { Y.c where c is Element of Y : i <= c };
+A40:  for x being set st x in the carrier of X ex j being set st P[x, j]
+    proof let x be set;
+     assume x in the carrier of X;
+      then x in the carrier of Y by Th13;
+      then reconsider i' = x as Element of Y';
+        Lim M c= Lim Y' by Th41;
+      then consider S being Subset of CC such that
+A41:   S = { Y'.c where c is Element of Y' : i' <= c } and
+A42:   p in Cl S by A39,Th43;
+      consider Go being net of ConvergenceSpace C' such that
+A43:   [Go,p] in C' and
+A44:   rng the mapping of Go c= S and p in Lim Go by A42,Th52;
+      reconsider Ji = Go as net of T by Def27;
+      reconsider i = i' as Element of Y;
+     take Ji,i,Ji;
+     thus x = i & Ji = Ji & [Ji,p] in C by A43;
+     let e be set;
+     assume e in rng the mapping of Ji;
+      then e in S by A44;
+      then consider c' being Element of Y' such that
+A45:    e = Y'.c' and
+A46:    i' <= c' by A41;
+      reconsider cc = c' as Element of Y;
+        e = (the mapping of Y').c' by A45,WAYBEL_0:def 8
+         .= (the mapping of Y).cc
+         .= Y.cc by WAYBEL_0:def 8;
+     hence e in { Y.c where c is Element of Y : i <= c } by A46;
+    end;
+    consider J being ManySortedSet of the carrier of X such that
+A47: for x being set st x in the carrier of X holds P[x, J.x] from MSSEx(A40);
+A48: now let y be set;
+    assume y in rng J;
+     then consider x being set such that
+A49:   x in dom J and
+A50:   y = J.x by FUNCT_1:def 5;
+        x in the carrier of X by A49,PBOOLE:def 3;
+      then ex i being Element of Y, Ji being net of T st x = i & Ji = J.x &
+      [Ji,p] in C &
+      rng the mapping of Ji c= { Y.c where c is Element of Y : i <= c } by A47;
+     hence y is non empty 1-sorted by A50;
+    end;
+A51: now let x be set;
+    assume x in the carrier of X;
+     then ex i being Element of Y, Ji being net of T st x = i & Ji = J.x &
+      [Ji,p] in C &
+      rng the mapping of Ji c= { Y.c where c is Element of Y : i <= c } by A47;
+   hence J.x is net of T;
+  end;
+   now let x be set;
+  assume x in dom J;
+   then x in the carrier of X by PBOOLE:def 3;
+     then ex i being Element of Y, Ji being net of T st x = i & Ji = J.x &
+      [Ji,p] in C &
+      rng the mapping of Ji c= { Y.c where c is Element of Y : i <= c } by A47;
+   hence J.x is 1-sorted;
+  end;
+  then J is 1-sorted-yielding by PRALG_1:def 11;
+  then reconsider J
+    as yielding_non-empty_carriers net_set of the carrier of X,T
+             by A48,A51,Def4,Th33;
+    for i being Element of X holds [J.i,X.i] in C
+   proof let i be Element of X;
+       ex ii being Element of Y, Ji being net of T st i = ii & Ji = J.i &
+     [Ji,p] in C &
+     rng the mapping of Ji c= { Y.c where c is Element of Y : ii <= c } by A47;
+    hence [J.i,X.i] in C by Th14;
+   end;
+  then A52: [Iterated J,q] in C by A26,A38,Def26;
+A53: the RelStr of Iterated J = [:X, product J:] by Def16;
+then A54: the carrier of Iterated J = [:the carrier of X, the carrier of
+product J:]
+           by YELLOW_3:def 2;
+      Iterated J is subnet of Y
+     proof
+       deffunc F(Element of Y)
+         = { c where c is Element of Y : $1 <= c };
+       consider B being ManySortedSet of the carrier of Y such that
+A55:     for i being Element of Y holds B.i = F(i)
+          from LambdaDMS;
+         now assume {} in rng B;
+         then consider i be set such that
+A56:       i in dom B and
+A57:       B.i = {} by FUNCT_1:def 5;
+           i is Element of Y by A56,PBOOLE:def 3;
+         then reconsider i as Element of Y;
+         consider j being Element of Y such that
+A58:       i <= j and i <= j by Def5;
+           j in { c where c is Element of Y : i <= c } by A58;
+        hence contradiction by A55,A57;
+       end;
+       then reconsider B as non-empty ManySortedSet of the carrier of Y
+                                by RELAT_1:def 9;
+       reconsider B' = B as non-empty ManySortedSet of the carrier of X by A35;
+       deffunc F(Element of X) = the carrier of J.$1;
+       consider M being ManySortedSet of the carrier of X such that
+A59:      for x being Element of X holds M.x = F(x)
+           from LambdaDMS;
+       defpred P[set,set,set] means
+        ex f being Function, x being Element of X st
+         f.$2 = $1 & x = $3 &
+        (the mapping of J.x).$2 = (the mapping of Y).$1;
+A60:     for i be set st i in the carrier of X holds
+         for x be set st x in M.i ex y be set st y in B'.i & P[y,x,i]
+        proof let i be set such that
+A61:       i in the carrier of X;
+         let x be set such that
+A62:       x in M.i;
+          consider e being Element of Y, Ji being net of T such that
+A63:        i = e and
+A64:        Ji = J.i and [Ji,p] in C and
+A65:        rng the mapping of Ji c= { Y.c where c is Element of Y : e <= c }
+                       by A47,A61;
+          reconsider i' = i as Element of X by A61;
+          defpred P[set,set] means
+             (the mapping of Ji).$1 = (the mapping of Y).$2;
+A66:       for ji being Element of Ji
+            ex u being Element of B'.i' st P[ji, u]
+           proof let ji be Element of Ji;
+               ji in the carrier of Ji;
+             then ji in dom the mapping of Ji by FUNCT_2:def 1;
+             then (the mapping of Ji).ji in
+ rng the mapping of Ji by FUNCT_1:def 5;
+             then (the mapping of Ji).ji
+                 in { Y.c where c is Element of Y : e <= c } by A65;
+             then consider c being Element of Y such that
+A67:           (the mapping of Ji).ji = Y.c and
+A68:           e <= c;
+                c in { cc where cc is Element of Y : e <= cc } by A68;
+             then reconsider c as Element of B'.i' by A55,A63;
+            take c;
+            thus (the mapping of Ji).ji = (the mapping of Y).c
+                           by A67,WAYBEL_0:def 8;
+           end;
+          consider f being Function of the carrier of Ji, B'.i' such that
+A69:        for ji being Element of Ji holds P[ji, f.ji]
+             from FuncExD(A66);
+          reconsider f as Function of the carrier of Ji, B.i;
+          reconsider ji = x as Element of Ji by A59,A61,A62,A64;
+         take f.x;
+            f.ji in B.i;
+         hence f.x in B'.i;
+         take f,i';
+         thus f.x = f.x & i' = i;
+         thus (the mapping of J.i').x = (the mapping of Ji).ji by A64
+              .= (the mapping of Y).(f.x) by A69;
+        end;
+       consider u be ManySortedFunction of M, B' such that
+A70:      for i be set st i in the carrier of X holds
+          ex f be Function of M.i, B'.i st f = u.i &
+           for x be set st x in M.i holds P[f.x,x,i] from MSFExFunc(A60);
+A71:    for x being Element of X,
+           j being Element of M.x
+        holds (the mapping of J.x).j = (the mapping of Y).(u.x .j)
+        proof let i be Element of X,
+                  j be Element of M.i;
+          consider f be Function of M.i, B'.i such that
+A72:        f = u.i and
+A73:        for x be set st x in M.i holds P[f.x,x,i] by A70;
+            M.i = the carrier of J.i by A59;
+          then P[f.j,j,i] by A73;
+         hence (the mapping of J.i).j = (the mapping of Y).(u.i.j) by A72;
+        end;
+       deffunc F(Element of X,
+                 Element of product J) = u.$1 .($2.$1);
+A74:     for x being Element of X,
+           y being Element of product J
+        holds F(x,y) in the carrier of Y
+        proof
+         let x be Element of X,
+             y be Element of product J;
+          reconsider k = x as Element of Y by A35;
+A75:       u.k is Function of M.k, B.k by MSUALG_1:def 2;
+          defpred P[Element of Y] means k <= $1;
+          set ZZ = { c where c is Element of Y : P[c] };
+A76:       ZZ is Subset of Y from SubsetD;
+A77:       B.k = ZZ by A55;
+          reconsider x' = x as Element of X';
+            y in the carrier of product J;
+then A78:       y in product Carrier J by YELLOW_1:def 4;
+            x' in the carrier of X';
+          then x' in dom Carrier J by PBOOLE:def 3;
+          then y.x' in (Carrier J).x' by A78,CARD_3:18;
+          then y.x' in the carrier of J.x by Th9;
+          then y.x in M.k by A59;
+          then u.k.(y.x) in B.k by A75,FUNCT_2:7;
+         hence u.x .(y.x) in the carrier of Y by A76,A77;
+        end;
+       consider f being Function of
+         [:the carrier of X, the carrier of product J:], the carrier of Y
+       such that
+A79:     for x being Element of X,
+            y being Element of product J
+         holds f. [x,y] = F(x,y) from Kappa2D(A74);
+       reconsider f as map of Iterated J,Y by A54;
+      take f;
+       set h = the mapping of Iterated J,
+           g = the mapping of Y';
+A80:    for x holds x in dom h iff x in dom f & f.x in dom g
+        proof let x;
+         hereby assume x in dom h;
+          then x in the carrier of Iterated J;
+          then x in [:the carrier of X',product Carrier J:] by Th35;
+          then A81:        x in [:the carrier of X',the carrier of product J:]
+                by YELLOW_1:def 4;
+          hence x in dom f by FUNCT_2:def 1;
+             f.x in the carrier of Y by A81,FUNCT_2:7;
+          hence f.x in dom g by FUNCT_2:def 1;
+         end;
+         assume x in dom f & f.x in dom g;
+          then x in [:the carrier of X',the carrier of product J:]
+                by FUNCT_2:def 1;
+          then x in [:the carrier of X',product Carrier J:] by YELLOW_1:def 4;
+          then x in the carrier of Iterated J by Th35;
+         hence x in dom h by FUNCT_2:def 1;
+        end;
+         for x st x in dom h holds h.x = g.(f.x)
+        proof let x;
+         assume x in dom h;
+          then x in the carrier of Iterated J;
+          then x in [:the carrier of X',product Carrier J:] by Th35;
+          then x in [:the carrier of X',the carrier of product J:]
+                by YELLOW_1:def 4;
+          then consider x1 being Element of X',
+            x2 being Element of product J such that
+A82:        x = [x1,x2] by DOMAIN_1:9;
+          reconsider x' = x1 as Element of X;
+A83:       dom Carrier J = the carrier of X' by PBOOLE:def 3;
+            x2 in the carrier of product J;
+          then A84:       x2 in product Carrier J by YELLOW_1:def 4;
+            the carrier of J.x' = (Carrier J).x1 by Th9;
+          then x2.x1 in the carrier of J.x' by A83,A84,CARD_3:18;
+          then reconsider j = x2.x1 as Element of M.x' by A59;
+         thus h.x = h.(x1,x2) by A82,BINOP_1:def 1
+                .= (the mapping of J.x').(x2.x1) by Def16
+                .= g.(u.x'.j) by A71
+                .= g.(f.x) by A79,A82;
+        end;
+      hence the mapping of Iterated J = (the mapping of Y)*f by A80,FUNCT_1:20
+;
+      let m be Element of Y;
+       consider F being Element of product J;
+         [m,F] in the carrier of Iterated J by A35,A54,ZFMISC_1:106;
+       then reconsider n = [m,F] as Element of Iterated J;
+       reconsider F as Element of product J;
+       reconsider m' = m as Element of X by A35;
+      take n;
+      let p be Element of Iterated J;
+       consider k' being Element of X,
+                G being Element of product J such that
+A85:     p = [k',G] by A54,DOMAIN_1:9;
+       reconsider k = k' as Element of Y by A35;
+       reconsider k'' = k' as Element of X';
+A86:    f.p = u.k.(G.k) by A79,A85;
+A87:    u.k is Function of M.k, B.k by MSUALG_1:def 2;
+       then A88:     dom(u.k) = M.k by FUNCT_2:def 1
+           .= the carrier of J.k' by A59
+           .= (Carrier J).k'' by Th9;
+A89:    dom Carrier J = the carrier of X' by PBOOLE:def 3;
+         G in the carrier of product J;
+       then G in product Carrier J by YELLOW_1:def 4;
+       then G.k'' in dom(u.k) by A88,A89,CARD_3:18;
+       then A90:     f.p in rng(u.k) by A86,FUNCT_1:def 5;
+          rng(u.k) c= B.k by A87,RELSET_1:12;
+       then f.p in B.k by A90;
+       then f.p in { c where c is Element of Y : k <= c } by A55;
+       then consider c being Element of Y such that
+A91:    c = f.p and
+A92:    k <= c;
+       reconsider G as Element of product J;
+       reconsider k' = k as Element of X;
+      assume n <= p;
+       then [m',F] <= [k',G] by A53,A85,Lm3;
+       then m' <= k' by YELLOW_3:11;
+       then m <= k by A35,Lm3;
+      hence m <= f.p by A91,A92,YELLOW_0:def 2;
+     end;
+   hence contradiction by A34,A52;
+  end;
+    C c= Convergence ConvergenceSpace C by Th49;
+ hence thesis by A27,XBOOLE_0:def 10;
+end;
+

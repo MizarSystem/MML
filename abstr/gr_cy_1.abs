@@ -1,0 +1,273 @@
+:: Cyclic Groups and Some of Their Properties - Part I
+::  by Dariusz Surowik
+::
+:: Received November 22, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary INT_1, REALSET1, FINSEQ_1, NAT_1, ORDINAL2, ARYTM, BINOP_1,
+      FUNCT_1, VECTSP_1, QC_LANG1, SETWISEO, RLVECT_1, FINSEQ_2, GROUP_1,
+      GROUP_4, RELAT_1, ARYTM_1, FUNCOP_1, FINSET_1, CARD_1, GROUP_2, TARSKI,
+      ARYTM_3, FILTER_0, RLSUB_1, GRAPH_1, GR_CY_1, CARD_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL2, ORDINAL1, NUMBERS,
+      XCMPLX_0, XREAL_0, RELAT_1, FUNCT_1, REAL_1, FUNCT_2, SETWISEO, CARD_1,
+      FINSET_1, BINOP_1, DOMAIN_1, INT_1, INT_2, NAT_1, RLVECT_1, GROUP_2,
+      STRUCT_0, VECTSP_1, GROUP_1, GROUP_4, FUNCOP_1, FINSOP_1, SETWOP_2,
+      FINSEQ_1;
+ constructors WELLORD2, REAL_1, SETWISEO, DOMAIN_1, NAT_1, FUNCSDOM, GROUP_4,
+      FINSOP_1, NAT_LAT, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, FUNCT_1, CARD_1, INT_1, GROUP_1, GROUP_2, RELSET_1,
+      STRUCT_0, FINSEQ_1, ARYTM_3, XREAL_0, MEMBERED, ZFMISC_1, XBOOLE_0,
+      ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+ reserve i1,i2,i3 for Element of INT;
+ reserve j1,j2,j3 for Integer;
+ reserve p,s,r,g,k,n,m,q,t for Nat;
+ reserve x,y,xp,yp for set;
+ reserve G for Group;
+ reserve a,b for Element of G;
+ reserve F for FinSequence of the carrier of G;
+ reserve I for FinSequence of INT;
+
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     ::    Some properties of modulo function             ::
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem :: GR_CY_1:1
+ m mod n = (n*k + m) mod n;
+
+theorem :: GR_CY_1:2
+ (p+s) mod n = ((p mod n)+s) mod n;
+
+theorem :: GR_CY_1:3
+  (p+s) mod n = (p + ( s mod n)) mod n;
+
+theorem :: GR_CY_1:4
+ k < n implies k mod n = k;
+
+theorem :: GR_CY_1:5
+ n mod n = 0;
+
+theorem :: GR_CY_1:6
+ 0 = 0 mod n;
+
+definition let n be natural number such that n > 0;
+ func Segm (n) -> non empty Subset of NAT equals
+:: GR_CY_1:def 1
+  {p: p<n};
+end;
+
+canceled 3;
+
+theorem :: GR_CY_1:10
+ for n,s being natural number st n > 0 holds s in Segm (n) iff s < n;
+
+canceled;
+
+theorem :: GR_CY_1:12
+  for n being natural number st n > 0 holds 0 in Segm (n);
+
+theorem :: GR_CY_1:13
+ Segm (1) = {0};
+
+       :::::::::::::::::::::::::::::::::::::::::::::::::::::
+       ::              Definition addint                  ::
+       :::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+ func addint -> BinOp of INT means
+:: GR_CY_1:def 2
+ for i1,i2 being Element of INT holds
+ it.(i1,i2) = addreal.(i1,i2);
+end;
+
+theorem :: GR_CY_1:14
+ for j1,j2 holds addint.(j1,j2)=j1+j2;
+
+theorem :: GR_CY_1:15
+ for i1 st i1 = 0 holds i1 is_a_unity_wrt addint;
+
+theorem :: GR_CY_1:16
+ the_unity_wrt addint = 0;
+
+theorem :: GR_CY_1:17
+ addint has_a_unity;
+
+theorem :: GR_CY_1:18
+   addint is commutative;
+
+theorem :: GR_CY_1:19
+   addint is associative;
+
+definition let F be FinSequence of INT;
+ func Sum(F) -> Integer equals
+:: GR_CY_1:def 3
+  addint $$ F;
+end;
+
+theorem :: GR_CY_1:20
+ Sum(I^<*i1*>) =Sum I +@i1;
+
+theorem :: GR_CY_1:21
+   Sum <*i1*> = i1;
+
+theorem :: GR_CY_1:22
+ Sum (<*> INT) = 0;
+
+canceled;
+
+theorem :: GR_CY_1:24
+ for I being FinSequence of INT holds Product(((len I)|->a)|^I) = a|^Sum I;
+
+    :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    ::          Finite groups and their some properties              ::
+    :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem :: GR_CY_1:25
+ b in gr {a} iff ex j1 st b=a|^j1;
+
+theorem :: GR_CY_1:26
+ G is finite implies a is_not_of_order_0;
+
+theorem :: GR_CY_1:27
+ G is finite implies ord a = ord gr {a};
+
+theorem :: GR_CY_1:28
+ G is finite implies ord a divides ord G;
+
+theorem :: GR_CY_1:29
+ G is finite implies a|^ord G = 1.G;
+
+theorem :: GR_CY_1:30
+ G is finite implies (a|^n)" = a|^(ord G - (n mod ord G));
+
+theorem :: GR_CY_1:31
+ for G being strict Group holds
+  ord G > 1 implies ex a being Element of G st a <> 1.G;
+
+theorem :: GR_CY_1:32
+   for G being strict Group holds
+  G is finite & ord G = p & p is prime implies
+   for H being strict Subgroup of G holds H = (1).G or H = G;
+
+theorem :: GR_CY_1:33
+ HGrStr(#INT,addint#) is associative Group-like;
+
+ definition
+ func INT.Group -> strict Group equals
+:: GR_CY_1:def 4
+  HGrStr(#INT,addint#);
+ end;
+
+definition let n such that n > 0;
+ func addint(n) -> BinOp of Segm(n) means
+:: GR_CY_1:def 5
+  for k,l being Element of Segm(n) holds
+  it.(k,l) = (k+l) mod n;
+end;
+
+theorem :: GR_CY_1:34
+ for n st n > 0 holds HGrStr(#Segm(n),addint(n)#) is associative Group-like;
+
+definition let n such that  n > 0;
+ func INT.Group(n) -> strict Group equals
+:: GR_CY_1:def 6
+ HGrStr(#Segm(n),addint(n)#);
+end;
+
+theorem :: GR_CY_1:35
+ 1.INT.Group = 0;
+
+theorem :: GR_CY_1:36
+ for n st n>0 holds 1.INT.Group(n) = 0;
+
+definition
+ let h be Element of INT.Group;
+ func @'h -> Integer equals
+:: GR_CY_1:def 7
+  h;
+end;
+
+definition
+ let h be Integer;
+ func @'h -> Element of INT.Group equals
+:: GR_CY_1:def 8
+    h;
+end;
+
+theorem :: GR_CY_1:37
+ for h being Element of INT.Group holds h" = -@'h;
+
+ reserve G1 for Subgroup of INT.Group,
+         h for Element of INT.Group;
+
+theorem :: GR_CY_1:38
+ for h st h=1 holds for k holds h|^k = k;
+
+theorem :: GR_CY_1:39
+ for h,j1 st h=1 holds j1 = h |^ j1;
+
+definition let IT be Group;
+ attr IT is cyclic means
+:: GR_CY_1:def 9
+  ex a being Element of IT st the HGrStr of IT=gr {a};
+end;
+
+definition
+ cluster strict cyclic Group;
+end;
+
+theorem :: GR_CY_1:40
+ (1).G is cyclic;
+
+theorem :: GR_CY_1:41
+ G is cyclic Group iff ex a being Element of G st
+  for b being Element of G ex j1 st b=a|^j1;
+
+theorem :: GR_CY_1:42
+ G is finite implies (G is cyclic Group iff
+  ex a being Element of G st
+   for b being Element of G ex n st b=a|^n);
+
+theorem :: GR_CY_1:43
+ for G being strict Group holds
+  G is finite implies
+   ( G is cyclic Group iff
+      ex a being Element of G st ord a =ord G );
+
+theorem :: GR_CY_1:44
+   for H being strict Subgroup of G holds
+  G is finite & G is cyclic Group implies
+   H is cyclic Group;
+
+theorem :: GR_CY_1:45
+   for G being strict Group holds
+  G is finite & ord (G) = p & p is prime implies
+   G is cyclic Group;
+
+theorem :: GR_CY_1:46
+ for n st n>0 ex g being Element of INT.Group(n) st
+  for b being Element of INT.Group(n) ex j1 st b = g|^j1;
+
+definition
+ cluster cyclic -> commutative Group;
+end;
+
+canceled;
+
+theorem :: GR_CY_1:48
+ INT.Group is cyclic;
+
+theorem :: GR_CY_1:49
+ for n st n > 0 holds INT.Group(n) is cyclic Group;
+
+theorem :: GR_CY_1:50
+   INT.Group is commutative Group;
+
+theorem :: GR_CY_1:51
+   for n st n>0 holds INT.Group(n) is commutative Group;

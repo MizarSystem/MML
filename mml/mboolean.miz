@@ -1,0 +1,1017 @@
+:: Definitions and Basic Properties of Boolean & Union of Many
+:: Sorted Sets
+::  by Artur Korni{\l}owicz
+::
+:: Received April 27, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary PBOOLE, FUNCT_1, ZF_REFLE, RELAT_1, FUNCT_4, CAT_1, BOOLE, CAT_4,
+      FUNCOP_1, ZFMISC_1, PRALG_2, AUTALG_1, FUNCT_2, TARSKI, MATRIX_1,
+      PRE_CIRC, FINSET_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_2, FINSET_1,
+      FUNCT_4, CQC_LANG, PBOOLE, PRALG_2, AUTALG_1, PRE_CIRC;
+ constructors CQC_LANG, PRALG_2, AUTALG_1, PRE_CIRC, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, PRE_CIRC, CQC_LANG, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions PBOOLE;
+ theorems AUTALG_1, CQC_LANG, FRAENKEL, FUNCOP_1, FUNCT_4, LATTICE4, LOPCLSET,
+      PBOOLE, PRALG_2, PRE_CIRC, RLVECT_3, TARSKI, ZFMISC_1, XBOOLE_0,
+      XBOOLE_1;
+ schemes MSUALG_1;
+
+begin :: Boolean of Many Sorted Sets
+
+ reserve x, y, I for set,
+         A, B, X, Y for ManySortedSet of I;
+
+definition let I, A;
+ func bool A -> ManySortedSet of I means :Def1:
+  for i be set st i in I holds it.i = bool (A.i);
+existence
+ proof
+   deffunc V(set) = bool (A.$1);
+   thus ex X being ManySortedSet of I st
+     for i be set st i in I holds X.i = V(i) from MSSLambda;
+ end;
+uniqueness
+  proof
+   let X, Y be ManySortedSet of I such that
+A1: (for i be set st i in I holds X.i = bool (A.i)) and
+A2: for i be set st i in I holds Y.i = bool (A.i);
+     now
+    let i be set; assume
+A3:  i in I;
+    hence X.i = bool (A.i) by A1
+            .= Y.i by A2,A3;
+   end;
+   hence X = Y by PBOOLE:3;
+  end;
+end;
+
+definition let I, A;
+ cluster bool A -> non-empty;
+coherence
+  proof
+   let i be set such that
+A1: i in I;
+     bool (A.i) is non empty;
+   hence (bool A).i is non empty by A1,Def1;
+  end;
+end;
+
+Lm1:
+for i, I, X be set
+ for M be ManySortedSet of I st i in I
+  holds dom (M +* (i .--> X)) = I
+  proof
+   let i, I, X be set,
+       M be ManySortedSet of I such that
+A1: i in I;
+   thus dom (M +* (i .--> X)) = dom M \/ dom (i .--> X) by FUNCT_4:def 1
+                             .= I \/ dom (i .--> X) by PBOOLE:def 3
+                             .= I \/ {i} by CQC_LANG:5
+                             .= I by A1,ZFMISC_1:46;
+  end;
+
+Lm2:
+for i be set st i in I holds (bool (A \/ B)).i = bool (A.i \/ B.i)
+   proof
+    let i be set; assume
+A1:  i in I;
+    hence (bool (A \/ B)).i = bool ((A \/ B).i) by Def1
+                         .= bool (A.i \/ B.i) by A1,PBOOLE:def 7;
+   end;
+
+Lm3:
+for i be set st i in I holds (bool (A /\ B)).i = bool (A.i /\ B.i)
+   proof
+    let i be set; assume
+A1:  i in I;
+    hence (bool (A /\ B)).i = bool ((A /\ B).i) by Def1
+                         .= bool (A.i /\ B.i) by A1,PBOOLE:def 8;
+   end;
+
+Lm4:
+for i be set st i in I holds (bool (A \ B)).i = bool (A.i \ B.i)
+   proof
+    let i be set; assume
+A1:  i in I;
+    hence (bool (A \ B)).i = bool ((A \ B).i) by Def1
+                         .= bool (A.i \ B.i) by A1,PBOOLE:def 9;
+   end;
+
+Lm5:
+for i be set st i in I holds (bool (A \+\ B)).i = bool (A.i \+\ B.i)
+   proof
+    let i be set; assume
+A1:  i in I;
+    hence (bool (A \+\ B)).i = bool ((A \+\ B).i) by Def1
+                         .= bool (A.i \+\ B.i) by A1,PBOOLE:4;
+   end;
+
+theorem Th1:      :: Tarski:6
+X = bool Y iff for A holds A in X iff A c= Y
+  proof
+   thus X = bool Y implies for A holds A in X iff A c= Y
+   proof
+    assume
+A1:  X = bool Y;
+    let A;
+    thus A in X implies A c= Y
+    proof
+     assume
+A2:   A in X;
+     let i be set;
+     assume i in I;
+     then X.i = bool (Y.i) & A.i in X.i by A1,A2,Def1,PBOOLE:def 4;
+     hence A.i c= Y.i;
+    end;
+    assume
+A3:  A c= Y;
+    let i be set;
+    assume i in I;
+    then X.i = bool (Y.i) & A.i c= Y.i by A1,A3,Def1,PBOOLE:def 5;
+    hence A.i in X.i;
+   end;
+   assume
+A4: for A holds A in X iff A c= Y;
+     now
+    let i be set such that
+A5:  i in I;
+      [0]I c= Y by PBOOLE:49;
+then A6: [0]I in X by A4;
+      for A' be set holds A' in X.i iff A' c= Y.i
+    proof
+     let A' be set;
+A7:  dom (i .--> A') = {i} by CQC_LANG:5;
+    dom ([0]I +* (i .--> A')) = I by A5,Lm1;
+     then reconsider K = [0]I +* (i .--> A') as ManySortedSet of I by PBOOLE:
+def 3;
+       i in {i} by TARSKI:def 1;
+then A8:  K.i = (i .--> A').i by A7,FUNCT_4:14
+        .= A' by CQC_LANG:6;
+     thus A' in X.i implies A' c= Y.i
+     proof
+      assume
+A9:    A' in X.i;
+        K in X
+      proof
+       let j be set such that
+A10:     j in I;
+         now per cases;
+        case j = i;
+        hence K.j in X.j by A8,A9;
+        case j <> i;
+        then not j in dom (i .--> A') by A7,TARSKI:def 1;
+        then K.j = [0]I.j by FUNCT_4:12;
+        hence K.j in X.j by A6,A10,PBOOLE:def 4;
+       end;
+       hence K.j in X.j;
+      end;
+      then K c= Y by A4;
+      hence A' c= Y.i by A5,A8,PBOOLE:def 5;
+     end;
+     assume
+A11:   A' c= Y.i;
+       K c= Y
+     proof
+      let j be set such that
+A12:    j in I;
+        now per cases;
+       case j = i;
+       hence K.j c= Y.j by A8,A11;
+       case j <> i;
+       then not j in dom (i .--> A') by A7,TARSKI:def 1;
+then A13:    K.j = [0]I.j by FUNCT_4:12;
+         [0]I c= Y by PBOOLE:49;
+       hence K.j c= Y.j by A12,A13,PBOOLE:def 5;
+      end;
+      hence K.j c= Y.j;
+     end;
+     then K in X by A4;
+     hence A' in X.i by A5,A8,PBOOLE:def 4;
+    end;
+    then X.i = bool (Y.i) by ZFMISC_1:def 1;
+    hence X.i = (bool Y).i by A5,Def1;
+   end;
+   hence thesis by PBOOLE:3;
+  end;
+
+theorem       :: ZFMISC_1:1
+  bool [0]I = I --> {{}}
+  proof
+     now
+    let i be set; assume
+A1:  i in I;
+    then (bool [0]I).i = bool ([0]I.i) by Def1
+                 .= {{}} by A1,PBOOLE:5,ZFMISC_1:1;
+    hence (bool [0]I).i = (I --> {{}}).i by A1,FUNCOP_1:13;
+   end;
+   hence thesis by PBOOLE:3;
+  end;
+
+theorem
+  bool (I --> x) = I --> bool x
+  proof
+     now
+    let i be set; assume
+A1:  i in I;
+    hence (bool (I --> x)).i = bool ((I --> x).i) by Def1
+                           .= bool x by A1,FUNCOP_1:13
+                           .= (I --> bool x).i by A1,FUNCOP_1:13;
+   end;
+   hence thesis by PBOOLE:3;
+  end;
+
+theorem       :: ZFMISC_1:30
+  bool (I --> {x}) = I --> { {} , {x} }
+  proof
+     now
+    let i be set; assume
+A1:  i in I;
+    hence (bool (I --> {x})).i = bool ((I --> {x}).i) by Def1
+                           .= bool {x} by A1,FUNCOP_1:13
+                           .= { {} , {x} } by ZFMISC_1:30
+                           .= (I --> { {} , {x} }).i by A1,FUNCOP_1:13;
+   end;
+   hence thesis by PBOOLE:3;
+  end;
+
+theorem       :: ZFMISC_1:76
+  [0]I c= A
+  proof
+   let i be set; assume i in I;
+   then [0]I.i = {} by PBOOLE:5;
+   hence thesis by XBOOLE_1:2;
+  end;
+
+theorem       :: ZFMISC_1:79
+  A c= B implies bool A c= bool B
+  proof
+   assume
+A1: A c= B;
+   let i be set; assume
+A2: i in I;
+then A3:(bool A).i = bool (A.i) & (bool B).i = bool (B.i) by Def1;
+     A.i c= B.i by A1,A2,PBOOLE:def 5;
+   hence (bool A).i c= (bool B).i by A3,ZFMISC_1:79;
+  end;
+
+theorem       :: ZFMISC_1:81
+  bool A \/ bool B c= bool (A \/ B)
+  proof
+   let i be set; assume
+A1: i in I;
+then A2:(bool A \/ bool B).i = (bool A).i \/ (bool B).i by PBOOLE:def 7
+                      .= bool (A.i) \/ (bool B).i by A1,Def1
+                      .= bool (A.i) \/ bool (B.i) by A1,Def1;
+     (bool (A \/ B)).i = bool (A.i \/ B.i) by A1,Lm2;
+   hence thesis by A2,ZFMISC_1:81;
+  end;
+
+theorem       :: ZFMISC_1:82
+  bool A \/ bool B = bool (A \/ B) implies
+ for i be set st i in I holds A.i,B.i are_c=-comparable
+  proof
+   assume
+A1: bool A \/ bool B = bool (A \/ B);
+   let i be set such that
+A2: i in I;
+      bool (A.i \/ B.i) = (bool A \/ bool B).i by A1,A2,Lm2
+                    .= (bool A).i \/ (bool B).i by A2,PBOOLE:def 7
+                    .= (bool A).i \/ (bool (B.i)) by A2,Def1
+                    .= (bool (A.i)) \/ (bool (B.i)) by A2,Def1;
+   hence thesis by ZFMISC_1:82;
+  end;
+
+theorem       :: ZFMISC_1:83
+  bool (A /\ B) = bool A /\ bool B
+  proof
+     now
+    let i be set; assume
+A1:  i in I;
+    hence bool (A /\ B).i = bool (A.i /\ B.i) by Lm3
+                       .= (bool (A.i)) /\ (bool (B.i)) by ZFMISC_1:83
+                       .= (bool (A.i)) /\ (bool B.i) by A1,Def1
+                       .= (bool A).i /\ (bool B.i) by A1,Def1
+                       .= (bool A /\ bool B).i by A1,PBOOLE:def 8;
+   end;
+   hence thesis by PBOOLE:3;
+  end;
+
+theorem       :: ZFMISC_1:84
+  bool (A \ B) c= (I --> {{}}) \/ (bool A \ bool B)
+  proof
+   let i be set; assume
+A1: i in I;
+then A2:(bool (A \ B)).i = bool (A.i \ B.i) by Lm4;
+     ((I --> {{}}) \/ (bool A \ bool B)).i = (I --> {{}}).i \/
+ (bool A \ bool B).i
+    by A1,PBOOLE:def 7
+               .= {{}} \/ (bool A \ bool B).i by A1,FUNCOP_1:13
+               .= {{}} \/ ((bool A).i \ (bool B).i) by A1,PBOOLE:def 9
+               .= {{}} \/ ((bool (A.i)) \ (bool B).i) by A1,Def1
+               .= {{}} \/ (bool (A.i) \ bool (B.i)) by A1,Def1;
+   hence (bool (A \ B)).i c= ((I --> {{}}) \/ (bool A \ bool B)).i
+    by A2,ZFMISC_1:84;
+  end;
+
+theorem       :: ZFMISC_1:85
+  X c= A \ B iff X c= A & X misses B
+  proof
+   thus X c= A \ B implies X c= A & X misses B
+   proof
+    assume X c= A \ B;
+then A1:  X in bool (A \ B) by Th1;
+    thus X c= A
+    proof
+     let i be set; assume
+A2:   i in I;
+     then X.i in (bool (A \ B)).i by A1,PBOOLE:def 4;
+     then X.i in bool (A.i \ B.i) by A2,Lm4;
+     hence X.i c= A.i by XBOOLE_1:106;
+    end;
+    let i be set; assume
+A3:  i in I;
+    then X.i in (bool (A \ B)).i by A1,PBOOLE:def 4;
+    then X.i in bool (A.i \ B.i) by A3,Lm4;
+    hence X.i misses B.i by XBOOLE_1:106;
+   end;
+   assume
+A4: X c= A & X misses B;
+   let i be set; assume
+A5: i in I;
+   then X.i c= A.i & X.i misses B.i by A4,PBOOLE:def 5,def 11;
+   then X.i c= A.i \ B.i by XBOOLE_1:86;
+   hence thesis by A5,PBOOLE:def 9;
+  end;
+
+theorem       :: ZFMISC_1:86
+  bool (A \ B) \/ bool (B \ A) c= bool (A \+\ B)
+  proof
+   let i be set; assume
+A1: i in I;
+then A2:(bool (A \ B) \/ bool (B \ A)).i = (bool (A \ B)).i \/ (bool (B \ A)).i
+    by PBOOLE:def 7
+           .= (bool (A.i \ B.i)) \/ (bool (B \ A)).i by A1,Lm4
+           .= (bool (A.i \ B.i)) \/ (bool (B.i \ A.i)) by A1,Lm4;
+     bool (A \+\ B).i = bool (A.i \+\ B.i) by A1,Lm5;
+   hence (bool (A \ B) \/ bool (B \ A)).i c= (bool (A \+\ B).i)
+    by A2,ZFMISC_1:86;
+  end;
+
+theorem       :: ZFMISC_1:87
+  X c= A \+\ B iff X c= A \/ B & X misses A /\ B
+  proof
+   thus X c= A \+\ B implies X c= A \/ B & X misses A /\ B
+   proof
+    assume X c= A \+\ B;
+then A1:  X in bool (A \+\ B) by Th1;
+    thus X c= A \/ B
+    proof
+     let i be set; assume
+A2:   i in I;
+     then X.i in (bool (A \+\ B)).i by A1,PBOOLE:def 4;
+     then X.i in bool (A.i \+\ B.i) by A2,Lm5;
+     then X.i c= A.i \/ B.i by XBOOLE_1:107;
+     hence X.i c= (A \/ B).i by A2,PBOOLE:def 7;
+    end;
+     let i be set; assume
+A3:   i in I;
+     then X.i in (bool (A \+\ B)).i by A1,PBOOLE:def 4;
+     then X.i in bool (A.i \+\ B.i) by A3,Lm5;
+     then X.i misses A.i /\ B.i by XBOOLE_1:107;
+     hence X.i misses (A /\ B).i by A3,PBOOLE:def 8;
+   end;
+   assume
+A4: X c= A \/ B & X misses A /\ B;
+   let i be set; assume
+A5: i in I;
+   then X.i c= (A \/ B).i & X.i misses (A /\ B).i by A4,PBOOLE:def 5,def 11;
+   then X.i c= A.i \/ B.i & X.i misses A.i /\ B.i by A5,PBOOLE:def 7,def 8;
+   then X.i c= A.i \+\ B.i by XBOOLE_1:107;
+   hence thesis by A5,PBOOLE:4;
+  end;
+
+canceled;
+
+theorem       :: ZFMISC_1:89
+  X c= A or Y c= A implies X /\ Y c= A
+  proof
+   assume
+A1: X c= A or Y c= A;
+   per cases by A1;
+   suppose
+A2: X c= A;
+   let i be set; assume
+A3: i in I;
+   then X.i c= A.i by A2,PBOOLE:def 5;
+   then X.i /\ Y.i c= A.i by XBOOLE_1:108;
+   hence thesis by A3,PBOOLE:def 8;
+   suppose
+A4: Y c= A;
+   let i be set; assume
+A5: i in I;
+   then Y.i c= A.i by A4,PBOOLE:def 5;
+   then X.i /\ Y.i c= A.i by XBOOLE_1:108;
+   hence thesis by A5,PBOOLE:def 8;
+  end;
+
+theorem       :: ZFMISC_1:90
+  X c= A implies X \ Y c= A
+  proof
+   assume
+A1: X c= A;
+   let i be set; assume
+A2: i in I;
+   then X.i c= A.i by A1,PBOOLE:def 5;
+   then X.i \ Y.i c= A.i by XBOOLE_1:109;
+   hence thesis by A2,PBOOLE:def 9;
+  end;
+
+theorem       :: ZFMISC_1:91
+  X c= A & Y c= A implies X \+\ Y c= A
+  proof
+   assume
+A1: X c= A & Y c= A;
+   let i be set; assume
+A2: i in I;
+   then X.i c= A.i & Y.i c= A.i by A1,PBOOLE:def 5;
+   then X.i \+\ Y.i c= A.i by XBOOLE_1:110;
+   then X.i \+\ Y.i in bool (A.i);
+   then (X \+\ Y).i in bool (A.i) by A2,PBOOLE:4;
+   hence thesis;
+  end;
+
+theorem       :: ZFMISC_1:105
+  [|X, Y|] c= bool bool (X \/ Y)
+  proof
+   let i be set; assume
+A1: i in I;
+then A2:[|X, Y|].i = [:X.i, Y.i:] by PRALG_2:def 9;
+     (bool bool (X \/ Y)).i = bool ((bool (X \/ Y)).i) by A1,Def1
+                        .= bool bool (X.i \/ Y.i) by A1,Lm2;
+   hence [|X, Y|].i c= (bool bool (X \/ Y)).i by A2,ZFMISC_1:105;
+  end;
+
+theorem       :: FIN_TOPO:4
+  X c= A iff X in bool A
+  proof
+   thus X c= A implies X in bool A
+   proof
+    assume
+A1:  X c= A;
+    let i be set; assume
+A2:  i in I;
+    then X.i c= A.i by A1,PBOOLE:def 5;
+    then X.i in bool (A.i);
+    hence X.i in (bool A).i by A2,Def1;
+   end;
+   assume
+A3: X in bool A;
+   let i be set; assume
+A4: i in I;
+   then X.i in (bool A).i by A3,PBOOLE:def 4;
+   then X.i in bool (A.i) by A4,Def1;
+   hence X.i c= A.i;
+  end;
+
+theorem       :: FRAENKEL:5
+  MSFuncs (A, B) c= bool [|A, B|]
+  proof
+   let i be set; assume
+A1: i in I;
+then A2:(MSFuncs (A, B)).i = Funcs (A.i, B.i) by AUTALG_1:def 5;
+     (bool [|A, B|]).i = bool ([|A, B|].i) by A1,Def1
+                    .= bool [:A.i, B.i:] by A1,PRALG_2:def 9;
+   hence (MSFuncs (A, B)).i c= (bool [|A, B|]).i by A2,FRAENKEL:5;
+  end;
+
+begin :: Union of Many Sorted Sets
+
+definition let I, A;
+ func union A -> ManySortedSet of I means :Def2:
+  for i be set st i in I holds it.i = union (A.i);
+existence
+ proof
+  deffunc V(set) = union (A.$1);
+  thus ex X being ManySortedSet of I st
+   for i be set st i in I holds X.i = V(i) from MSSLambda;
+ end;
+uniqueness
+  proof
+   let X, Y be ManySortedSet of I such that
+A1: (for i be set st i in I holds X.i = union (A.i)) and
+A2: for i be set st i in I holds Y.i = union (A.i);
+     now
+    let i be set; assume
+A3:  i in I;
+    hence X.i = union (A.i) by A1
+            .= Y.i by A2,A3;
+   end;
+   hence X = Y by PBOOLE:3;
+  end;
+end;
+
+definition let I;
+ cluster union [0]I -> empty-yielding;
+coherence
+  proof
+   let i be set; assume
+A1: i in I;
+   then union ([0]I.i) is empty by PBOOLE:5,ZFMISC_1:2;
+   hence (union [0]I).i is empty by A1,Def2;
+  end;
+end;
+
+Lm6:
+for i be set st i in I holds (union (A \/ B)).i = union (A.i \/ B.i)
+   proof
+    let i be set; assume
+A1:  i in I;
+    hence (union (A \/ B)).i = union ((A \/ B).i) by Def2
+                          .= union (A.i \/ B.i) by A1,PBOOLE:def 7;
+   end;
+
+Lm7:
+for i be set st i in I holds (union (A /\ B)).i = union (A.i /\ B.i)
+   proof
+    let i be set; assume
+A1:  i in I;
+    hence (union (A /\ B)).i = union ((A /\ B).i) by Def2
+                          .= union (A.i /\ B.i) by A1,PBOOLE:def 8;
+   end;
+
+theorem       :: Tarski:def 4
+  A in union X iff ex Y st A in Y & Y in X
+  proof
+   thus A in union X implies ex Y st A in Y & Y in X
+   proof
+    assume
+A1:  A in union X;
+   defpred P[set,set] means A.$1 in $2 & $2 in X.$1;
+A2:    for i being set st i in I ex Y being set st P[i,Y]
+     proof
+     let i be set; assume
+A3:   i in I;
+     then A.i in (union X).i by A1,PBOOLE:def 4;
+     then A.i in union (X.i) by A3,Def2;
+     hence ex Y' be set st A.i in Y' & Y' in X.i by TARSKI:def 4;
+    end;
+    consider K be ManySortedSet of I such that
+A4:  for i be set st i in I holds P[i,K.i] from MSSEx(A2);
+    take K;
+    thus A in K
+    proof
+     let i be set;
+     assume i in I;
+     hence A.i in K.i by A4;
+    end;
+    thus K in X
+    proof
+     let i be set;
+     assume i in I;
+     hence K.i in X.i by A4;
+    end;
+   end;
+   given Y such that
+A5: A in Y & Y in X;
+   let i be set; assume
+A6: i in I;
+   then A.i in Y.i & Y.i in X.i by A5,PBOOLE:def 4;
+   then A.i in union (X.i) by TARSKI:def 4;
+   hence A.i in (union X.i) by A6,Def2;
+  end;
+
+theorem       :: ZFMISC_1:2
+  union [0]I = [0]I
+  proof
+     now
+    let i be set; assume
+A1:  i in I;
+    hence (union [0]I).i = union ([0]I.i) by Def2
+                       .= {} by A1,PBOOLE:5,ZFMISC_1:2
+                       .= [0]I.i by A1,PBOOLE:5;
+   end;
+   hence thesis by PBOOLE:3;
+  end;
+
+theorem
+  union (I --> x) = I --> union x
+  proof
+     now
+    let i be set; assume
+A1:  i in I;
+    hence (union (I --> x)).i = union ((I --> x).i) by Def2
+                            .= union x by A1,FUNCOP_1:13
+                            .= (I --> union x).i by A1,FUNCOP_1:13;
+   end;
+   hence thesis by PBOOLE:3;
+  end;
+
+theorem       :: ZFMISC_1:31
+  union (I --> {x}) = I --> x
+  proof
+     now
+    let i be set; assume
+A1:  i in I;
+    hence (union (I --> {x})).i = union ((I --> {x}).i) by Def2
+                              .= union {x} by A1,FUNCOP_1:13
+                              .= x by ZFMISC_1:31
+                              .= (I --> x).i by A1,FUNCOP_1:13;
+   end;
+   hence thesis by PBOOLE:3;
+  end;
+
+theorem       :: ZFMISC_1:32
+  union (I --> { {x},{y} }) = I --> {x,y}
+  proof
+     now
+    let i be set; assume
+A1:  i in I;
+    hence (union (I --> {{x},{y}})).i = union ((I --> {{x},{y}}).i) by Def2
+                              .= union {{x},{y}} by A1,FUNCOP_1:13
+                              .= {x,y} by ZFMISC_1:32
+                              .= (I --> {x,y}).i by A1,FUNCOP_1:13;
+   end;
+   hence thesis by PBOOLE:3;
+  end;
+
+theorem       :: ZFMISC_1:92
+  X in A implies X c= union A
+  proof
+   assume
+A1: X in A;
+   let i be set; assume
+A2: i in I;
+   then X.i in A.i by A1,PBOOLE:def 4;
+   then X.i c= union (A.i) by ZFMISC_1:92;
+   hence X.i c= (union A).i by A2,Def2;
+  end;
+
+theorem       :: ZFMISC_1:95
+  A c= B implies union A c= union B
+  proof
+   assume
+A1: A c= B;
+   let i be set; assume
+A2: i in I;
+   then A.i c= B.i by A1,PBOOLE:def 5;
+   then union (A.i) c= union (B.i) by ZFMISC_1:95;
+   then (union A).i c= union (B.i) by A2,Def2;
+   hence (union A).i c= (union B).i by A2,Def2;
+  end;
+
+theorem       :: ZFMISC_1:96
+  union (A \/ B) = union A \/ union B
+  proof
+     now
+    let i be set; assume
+A1:  i in I;
+    hence (union (A \/ B)).i = union (A.i \/ B.i) by Lm6
+                          .= union (A.i) \/ union (B.i) by ZFMISC_1:96
+                          .= (union A).i \/ union (B.i) by A1,Def2
+                          .= (union A).i \/ (union B).i by A1,Def2
+                          .= (union A \/ union B).i by A1,PBOOLE:def 7;
+   end;
+   hence thesis by PBOOLE:3;
+  end;
+
+theorem       :: ZFMISC_1:97
+  union (A /\ B) c= union A /\ union B
+  proof
+   let i be set; assume
+A1: i in I;
+then A2:(union (A /\ B)).i = union (A.i /\ B.i) by Lm7;
+     (union A /\ union B).i = (union A).i /\ (union B).i by A1,PBOOLE:def 8
+                        .= union (A.i) /\ (union B).i by A1,Def2
+                        .= union (A.i) /\ union (B.i) by A1,Def2;
+   hence thesis by A2,ZFMISC_1:97;
+  end;
+
+theorem       :: ZFMISC_1:99
+  union bool A = A
+  proof
+     now
+    let i be set; assume
+A1:  i in I;
+    hence (union bool A).i = union ((bool A).i) by Def2
+                         .= union bool (A.i) by A1,Def1
+                         .= A.i by ZFMISC_1:99;
+   end;
+   hence thesis by PBOOLE:3;
+  end;
+
+theorem       :: ZFMISC_1:100
+  A c= bool union A
+  proof
+   let i be set; assume
+A1: i in I;
+   then (bool union A).i = bool ((union A).i) by Def1
+                   .= bool union (A.i) by A1,Def2;
+   hence thesis by ZFMISC_1:100;
+  end;
+
+theorem       :: LATTICE4:1
+  union Y c= A & X in Y implies X c= A
+  proof
+   assume
+A1: union Y c= A & X in Y;
+   let i be set; assume
+A2: i in I;
+   then (union Y).i c= A.i by A1,PBOOLE:def 5;
+   then union (Y.i) c= A.i & X.i in Y.i by A1,A2,Def2,PBOOLE:def 4;
+   hence X.i c= A.i by LATTICE4:1;
+  end;
+
+theorem       :: ZFMISC_1:94
+  for Z be ManySortedSet of I
+ for A be non-empty ManySortedSet of I holds
+  (for X be ManySortedSet of I st X in A holds X c= Z) implies union A c= Z
+  proof
+   let Z be ManySortedSet of I,
+       A be non-empty ManySortedSet of I;
+   assume
+A1: for X be ManySortedSet of I st X in A holds X c= Z;
+   let i be set such that
+A2: i in I;
+     for X' be set st X' in A.i holds X' c= Z.i
+   proof
+    let X' be set such that
+A3:  X' in A.i;
+    consider M be ManySortedSet of I such that
+A4:  M in A by PBOOLE:146;
+A5: dom (i .--> X') = {i} by CQC_LANG:5;
+   dom (M +* (i .--> X')) = I by A2,Lm1;
+    then reconsider K = M +* (i .--> X') as ManySortedSet of I by PBOOLE:def 3;
+      i in {i} by TARSKI:def 1;
+then A6: K.i = (i .--> X').i by A5,FUNCT_4:14
+       .= X' by CQC_LANG:6;
+      K in A
+    proof
+     let j be set such that
+A7:   j in I;
+       now per cases;
+      case j = i;
+      hence K.j in A.j by A3,A6;
+      case j <> i;
+      then not j in dom (i .--> X') by A5,TARSKI:def 1;
+      then K.j = M.j by FUNCT_4:12;
+      hence K.j in A.j by A4,A7,PBOOLE:def 4;
+     end;
+     hence K.j in A.j;
+    end;
+    then K c= Z by A1;
+    hence X' c= Z.i by A2,A6,PBOOLE:def 5;
+   end;
+   then union (A.i) c= Z.i by ZFMISC_1:94;
+   hence (union A).i c= Z.i by A2,Def2;
+  end;
+
+theorem       :: ZFMISC_1:98
+  for B be ManySortedSet of I
+ for A be non-empty ManySortedSet of I holds
+  (for X be ManySortedSet of I st X in A holds X /\ B = [0]I)
+ implies union(A) /\ B = [0]I
+  proof
+   let B be ManySortedSet of I,
+       A be non-empty ManySortedSet of I;
+   assume
+A1: (for X be ManySortedSet of I st X in A holds X /\ B = [0]I);
+     now
+    let i be set such that
+A2:  i in I;
+      for X' be set st X' in A.i holds X' misses (B.i)
+    proof
+     let X' be set such that
+A3:   X' in A.i;
+    consider M be ManySortedSet of I such that
+A4:  M in A by PBOOLE:146;
+A5: dom (i .--> X') = {i} by CQC_LANG:5;
+   dom (M +* (i .--> X')) = I by A2,Lm1;
+    then reconsider K = M +* (i .--> X') as ManySortedSet of I by PBOOLE:def 3;
+      i in {i} by TARSKI:def 1;
+then A6: K.i = (i .--> X').i by A5,FUNCT_4:14
+       .= X' by CQC_LANG:6;
+      K in A
+    proof
+     let j be set such that
+A7:   j in I;
+       now per cases;
+      case j = i;
+      hence K.j in A.j by A3,A6;
+      case j <> i;
+      then not j in dom (i .--> X') by A5,TARSKI:def 1;
+      then K.j = M.j by FUNCT_4:12;
+      hence K.j in A.j by A4,A7,PBOOLE:def 4;
+     end;
+     hence K.j in A.j;
+    end;
+    then K /\ B = [0]I by A1;
+    then K.i /\ B.i = [0]I.i by A2,PBOOLE:def 8;
+    then X' /\ B.i = {} by A2,A6,PBOOLE:5;
+    hence X' misses B.i by XBOOLE_0:def 7;
+    end;
+    then union (A.i) misses (B.i) by ZFMISC_1:98;
+    then union (A.i) /\ (B.i) = {} by XBOOLE_0:def 7;
+    then (union A).i /\ B.i = {} by A2,Def2;
+    then (union A /\ B).i = {} by A2,PBOOLE:def 8;
+    hence (union(A) /\ B).i = [0]I.i by A2,PBOOLE:5;
+   end;
+   hence thesis by PBOOLE:3;
+  end;
+
+theorem       :: ZFMISC_1:101
+  for A, B be ManySortedSet of I st A \/ B is non-empty holds
+ (for X, Y be ManySortedSet of I st X <> Y & X in A \/ B & Y in A \/ B
+  holds X /\ Y = [0]I) implies union(A /\ B) = union A /\ union B
+  proof
+   let A, B be ManySortedSet of I such that
+A1: A \/ B is non-empty;
+   assume
+A2: for X, Y be ManySortedSet of I st X <> Y & X in A \/ B & Y in A \/ B
+     holds X /\ Y = [0]I;
+     now
+    let i be set such that
+A3:  i in I;
+      for X', Y' be set st X' <> Y' & X' in A.i \/ B.i & Y' in A.i \/ B.i
+     holds X' misses Y'
+    proof
+     let X', Y' be set such that
+A4:    X' <> Y' and
+A5:    X' in A.i \/ B.i and
+A6:    Y' in A.i \/ B.i;
+     consider M be ManySortedSet of I such that
+A7:   M in A \/ B by A1,PBOOLE:146;
+A8:  dom (i .--> X') = {i} by CQC_LANG:5;
+A9:  dom (M +* (i .--> X')) = I by A3,Lm1;
+A10:  dom (i .--> Y') = {i} by CQC_LANG:5;
+    dom (M +* (i .--> Y')) = I by A3,Lm1;
+     then reconsider Kx = M +* (i.-->X'), Ky = M +* (i.-->Y')
+      as ManySortedSet of I by A9,PBOOLE:def 3;
+A11:  i in {i} by TARSKI:def 1;
+then A12:  Kx.i = (i .--> X').i by A8,FUNCT_4:14
+         .= X' by CQC_LANG:6;
+A13:  Ky.i = (i .--> Y').i by A10,A11,FUNCT_4:14
+         .= Y' by CQC_LANG:6;
+A14:  Kx in A \/ B
+     proof
+      let j be set such that
+A15:    j in I;
+        now per cases;
+       case j = i;
+       hence Kx.j in (A \/ B).j by A5,A12,A15,PBOOLE:def 7;
+       case j <> i;
+       then not j in dom (i .--> X') by A8,TARSKI:def 1;
+       then Kx.j = M.j by FUNCT_4:12;
+       hence Kx.j in (A \/ B).j by A7,A15,PBOOLE:def 4;
+      end;
+      hence Kx.j in (A \/ B).j;
+     end;
+       Ky in A \/ B
+     proof
+      let j be set such that
+A16:    j in I;
+        now per cases;
+       case j = i;
+       hence Ky.j in (A \/ B).j by A6,A13,A16,PBOOLE:def 7;
+       case j <> i;
+       then not j in dom (i .--> Y') by A10,TARSKI:def 1;
+       then Ky.j = M.j by FUNCT_4:12;
+       hence Ky.j in (A \/ B).j by A7,A16,PBOOLE:def 4;
+      end;
+      hence Ky.j in (A \/ B).j;
+     end;
+     then Kx /\ Ky = [0]I by A2,A4,A12,A13,A14;
+     then (Kx /\ Ky).i = {} by A3,PBOOLE:5;
+     then X' /\ Y' = {} by A3,A12,A13,PBOOLE:def 8;
+     hence X' misses Y' by XBOOLE_0:def 7;
+    end;
+    then union(A.i /\ B.i) = union(A.i) /\ union(B.i) by ZFMISC_1:101;
+    then union(A.i /\ B.i) = (union A).i /\ union(B.i) by A3,Def2;
+    then union(A.i /\ B.i) = (union A).i /\ (union B).i by A3,Def2;
+    then union(A.i /\ B.i) = (union A /\ union B).i by A3,PBOOLE:def 8;
+    hence (union(A /\ B).i) = (union A /\ union B).i by A3,Lm7;
+   end;
+   hence thesis by PBOOLE:3;
+  end;
+
+theorem       :: LOPCLSET:31
+  for A, X be ManySortedSet of I
+ for B be non-empty ManySortedSet of I holds
+ (X c= union (A \/ B) & for Y be ManySortedSet of I st Y in
+ B holds Y /\ X = [0]I)
+  implies X c= union A
+  proof
+   let A, X be ManySortedSet of I,
+       B be non-empty ManySortedSet of I;
+   assume that
+A1: X c= union (A \/ B) and
+A2: for Y be ManySortedSet of I st Y in B holds Y /\ X = [0]I;
+   let i be set; assume
+A3: i in I;
+   then X.i c= (union (A \/ B)).i by A1,PBOOLE:def 5;
+then A4:X.i c= union (A.i \/ B.i) by A3,Lm6;
+     for Y' be set st Y' in B.i holds Y' misses X.i
+   proof
+    let Y' be set such that
+A5:  Y' in B.i;
+    consider M be ManySortedSet of I such that
+A6:  M in B by PBOOLE:146;
+A7: dom (i .--> Y') = {i} by CQC_LANG:5;
+   dom (M +* (i .--> Y')) = I by A3,Lm1;
+    then reconsider K = M +* (i .--> Y') as ManySortedSet of I by PBOOLE:def 3;
+      i in {i} by TARSKI:def 1;
+then A8: K.i = (i .--> Y').i by A7,FUNCT_4:14
+       .= Y' by CQC_LANG:6;
+      K in B
+    proof
+     let j be set such that
+A9:   j in I;
+       now per cases;
+      case j = i;
+      hence K.j in B.j by A5,A8;
+      case j <> i;
+      then not j in dom (i .--> Y') by A7,TARSKI:def 1;
+      then K.j = M.j by FUNCT_4:12;
+      hence K.j in B.j by A6,A9,PBOOLE:def 4;
+     end;
+     hence K.j in B.j;
+    end;
+    then K /\ X = [0]I by A2;
+    then (K /\ X).i = {} by A3,PBOOLE:5;
+    then Y' /\ X.i = {} by A3,A8,PBOOLE:def 8;
+    hence Y' misses X.i by XBOOLE_0:def 7;
+   end;
+   then X.i c= union (A.i) by A4,LOPCLSET:31;
+   hence X.i c= (union A).i by A3,Def2;
+  end;
+
+theorem       :: RLVECT_3:34
+  for A be locally-finite non-empty ManySortedSet of I st
+ (for X, Y be ManySortedSet of I st X in A & Y in A holds X c= Y or Y c= X)
+  holds union A in A
+  proof
+   let A be locally-finite non-empty ManySortedSet of I such that
+A1:  (for X, Y be ManySortedSet of I st X in A & Y in
+ A holds X c= Y or Y c= X);
+   let i be set; assume
+A2: i in I;
+then A3:A.i <> {} & A.i is finite by PBOOLE:def 16,PRE_CIRC:def 3;
+     for X', Y' be set st X' in A.i & Y' in A.i holds X' c= Y' or Y' c= X'
+   proof
+    let X', Y' be set such that
+A4:  X' in A.i & Y' in A.i;
+    assume
+A5:  not X' c= Y';
+    consider M be ManySortedSet of I such that
+A6:  M in A by PBOOLE:146;
+A7: dom (i .--> Y') = {i} by CQC_LANG:5;
+A8: dom (M +* (i .--> Y')) = I by A2,Lm1;
+A9: dom (i .--> X') = {i} by CQC_LANG:5;
+   dom (M +* (i .--> X')) = I by A2,Lm1;
+    then reconsider K1 = M +* (i.-->X'), K2 = M +* (i.-->Y') as ManySortedSet
+of I
+     by A8,PBOOLE:def 3;
+A10: i in {i} by TARSKI:def 1;
+then A11: K1.i = (i .--> X').i by A9,FUNCT_4:14
+        .= X' by CQC_LANG:6;
+A12: K2.i = (i .--> Y').i by A7,A10,FUNCT_4:14
+        .= Y' by CQC_LANG:6;
+A13: K1 in A
+    proof
+     let j be set such that
+A14:   j in I;
+       now per cases;
+      case j = i;
+      hence K1.j in A.j by A4,A11;
+      case j <> i;
+      then not j in dom (i .--> X') by A9,TARSKI:def 1;
+      then K1.j = M.j by FUNCT_4:12;
+      hence K1.j in A.j by A6,A14,PBOOLE:def 4;
+     end;
+     hence K1.j in A.j;
+    end;
+      K2 in A
+    proof
+     let j be set such that
+A15:   j in I;
+       now per cases;
+      case j = i;
+      hence K2.j in A.j by A4,A12;
+      case j <> i;
+      then not j in dom (i .--> Y') by A7,TARSKI:def 1;
+      then K2.j = M.j by FUNCT_4:12;
+      hence K2.j in A.j by A6,A15,PBOOLE:def 4;
+     end;
+     hence K2.j in A.j;
+    end;
+    then K1 c= K2 or K2 c= K1 by A1,A13;
+    hence Y' c= X' by A2,A5,A11,A12,PBOOLE:def 5;
+   end;
+   then union (A.i) in A.i by A3,RLVECT_3:34;
+   hence (union A).i in A.i by A2,Def2;
+  end;
+

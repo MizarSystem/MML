@@ -1,0 +1,1185 @@
+:: Partial Functions from a Domain to a Domain
+::  by Jaros{\l}aw Kotowicz
+::
+:: Received May 31, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary PARTFUN1, RELAT_1, FINSEQ_4, FUNCT_1, BOOLE, FUNCOP_1, PARTFUN2;
+ notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, RELSET_1, FUNCT_1, FUNCT_2,
+      FUNCOP_1, PARTFUN1, FINSEQ_4;
+ constructors FUNCOP_1, PARTFUN1, FINSEQ_4, MEMBERED, XBOOLE_0;
+ clusters RELAT_1, FUNCT_1, RELSET_1, FUNCOP_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, XBOOLE_0;
+ theorems TARSKI, FUNCT_1, FUNCT_2, GRFUNC_1, FUNCOP_1, PARTFUN1, FINSEQ_4,
+      RELAT_1, RELSET_1, XBOOLE_0;
+ schemes FUNCT_2, XBOOLE_0;
+
+begin
+
+ reserve x,y,X,Y for set;
+ reserve C,D,E for non empty set;
+ reserve SC for Subset of C;
+ reserve SD for Subset of D;
+ reserve SE for Subset of E;
+ reserve c,c1,c2 for Element of C;
+ reserve d,d1,d2 for Element of D;
+ reserve e for Element of E;
+ reserve f,f1,g for PartFunc of C,D;
+ reserve t for PartFunc of D,C;
+ reserve s for PartFunc of D,E;
+ reserve h for PartFunc of C,E;
+ reserve F for PartFunc of D,D;
+
+canceled 2;
+
+theorem Th3:
+dom f = dom g & (for c st c in dom f holds f/.c = g/.c) implies f = g
+ proof
+  assume A1: dom f = dom g & (for c st c in dom f holds f/.c = g/.c);
+    now let x; assume A2: x in dom f;
+   then reconsider y=x as Element of C;
+     f/.y=g/.y by A1,A2;
+   then (f qua Function).y = g/.y by A2,FINSEQ_4:def 4;
+   hence (f qua Function).x = (g qua Function).x by A1,A2,FINSEQ_4:def 4;
+  end;
+  hence thesis by A1,FUNCT_1:9;
+ end;
+
+theorem Th4:   :: ograniczyc do implikacji
+y in rng f iff ex c st c in dom f & y = f/.c
+ proof
+  thus y in rng f implies ex c st c in dom f & y = f/.c
+   proof
+    assume y in rng f;
+    then consider x such that A1: x in dom f & y = (f qua Function).x by
+FUNCT_1:def 5;
+    reconsider x as Element of C by A1; take x;
+    thus thesis by A1,FINSEQ_4:def 4;
+   end;
+  given c such that A2: c in dom f & y = f/.c;
+   (f qua Function).c in rng f by A2,FUNCT_1:def 5;
+  hence thesis by A2,FINSEQ_4:def 4;
+ end;
+
+canceled;
+
+theorem Th6:
+h = s*f iff (for c holds c in dom h iff c in dom f & f/.c in dom s) &
+             for c st c in dom h holds h/.c = s/.(f/.c)
+proof
+ thus h = s*f implies
+      (for c holds c in dom h iff c in dom f & f/.c in dom s) &
+      (for c st c in dom h holds h/.c = s/.(f/.c))
+  proof assume A1: h = s*f;
+    A2: now let c;
+     thus c in dom h implies c in dom f & f/.c in dom s
+     proof assume c in dom h;
+      then c in dom f & (f qua Function).c in dom s by A1,FUNCT_1:21;
+      hence thesis by FINSEQ_4:def 4;
+     end;
+     assume c in dom f & f/.c in dom s;
+     then c in dom f & (f qua Function).c in dom s by FINSEQ_4:def 4;
+     hence c in dom h by A1,FUNCT_1:21;
+    end;
+   hence for c holds c in dom h iff c in dom f & f/.c in dom s;
+   let c; assume A3: c in dom h; then (h qua Function).c
+    = (s qua Function).((f qua Function).c) by A1,FUNCT_1:22;
+then A4: h/.c = (s qua Function).((f qua Function).c) by A3,FINSEQ_4:def 4;
+A5: c in dom f & f/.c in dom s by A2,A3;
+    then h/.c = (s qua Function).(f/.c) by A4,FINSEQ_4:def 4;
+    hence thesis by A5,FINSEQ_4:def 4;
+   end;
+  assume that A6: for c holds c in dom h iff c in dom f & f/.c in dom s and
+              A7: for c st c in dom h holds h/.c = s/.(f/.c);
+A8: now let x;
+     thus x in dom h implies x in dom f & (f qua Function).x in dom s
+     proof
+      assume A9: x in dom h;
+      then reconsider y=x as Element of C;
+        y in dom f & f/.y in dom s by A6,A9;
+      hence thesis by FINSEQ_4:def 4;
+     end;
+     thus x in dom f & (f qua Function).x in dom s implies x in dom h
+     proof
+      assume A10: x in dom f & (f qua Function).x in dom s;
+      then reconsider y=x as Element of C;
+        y in dom f & f/.y in dom s by A10,FINSEQ_4:def 4;
+      hence thesis by A6;
+     end;
+    end;
+      now let x;
+     assume A11: x in dom h;
+     then reconsider y=x as Element of C;
+ A12: y in dom f & f/.y in dom s by A6,A11;
+       h/.y = s/.(f/.y) by A7,A11;
+     then (h qua Function).y = s/.(f/.y) by A11,FINSEQ_4:def 4;
+     then (h qua Function).x = (s qua Function).(f/.y) by A12,FINSEQ_4:def 4;
+     hence (h qua Function).x = (s qua Function).((f qua Function).x)
+      by A12,FINSEQ_4:def 4;
+    end;
+  hence thesis by A8,FUNCT_1:20;
+ end;
+
+canceled 2;
+
+theorem Th9:
+c in dom f & f/.c in dom s implies (s*f)/.c = s/.(f/.c)
+proof
+ assume c in dom f & f/.c in dom s;
+ then c in dom (s*f) by Th6;
+ hence thesis by Th6;
+end;
+
+theorem
+  rng f c= dom s & c in dom f implies (s*f)/.c = s/.(f/.c)
+proof
+ assume A1: rng f c= dom s & c in dom f;
+ then f/.c in rng f by Th4; hence thesis by A1,Th9;
+end;
+
+definition let D; let SD;
+redefine func id SD -> PartFunc of D,D;
+coherence
+proof
+   dom id SD = SD & rng id SD = SD by RELAT_1:71;
+ hence thesis by RELSET_1:11;
+end;
+end;
+
+canceled;
+
+theorem Th12:
+F = id SD iff dom F = SD & for d st d in SD holds F/.d = d
+proof
+thus F = id SD implies dom F = SD & for d st d in SD holds F/.d = d
+ proof assume A1: F = id SD;
+  hence A2: dom F = SD by RELAT_1:71;
+  let d; assume A3: d in SD;
+  then (F qua Function).d = d by A1,FUNCT_1:35;
+  hence thesis by A2,A3,FINSEQ_4:def 4;
+ end;
+assume A4: dom F = SD & for d st d in SD holds F/.d = d;
+   now let x; assume A5: x in SD;
+  then reconsider x1=x as Element of D;
+    F/.x1=x1 by A4,A5;
+  hence (F qua Function).x = x by A4,A5,FINSEQ_4:def 4;
+ end;
+hence thesis by A4,FUNCT_1:34;
+end;
+
+canceled;
+
+theorem
+  d in dom F /\ SD implies F/.d = (F*id SD)/.d
+proof assume A1: d in dom F /\ SD;
+then A2: d in dom F & d in SD by XBOOLE_0:def 3;
+then A3: (id SD)/.d in dom F by Th12;
+   d in dom id SD by A2,RELAT_1:71;
+then A4: d in dom (F*(id SD)) by A3,Th6;
+   (F qua Function).d = ((F*(id SD)) qua Function).d by A1,FUNCT_1:38;
+ then F/.d = ((F*(id SD)) qua Function).d by A2,FINSEQ_4:def 4;
+ hence thesis by A4,FINSEQ_4:def 4;
+end;
+
+theorem
+  d in dom((id SD)*F) iff d in dom F & F/.d in SD
+proof
+thus d in dom((id SD)*F) implies d in dom F & F/.d in SD
+ proof assume d in dom((id SD)*F);
+  then d in dom F & F/.d in dom (id SD) by Th6;
+  hence thesis by RELAT_1:71;
+ end;
+ assume d in dom F & F/.d in SD;
+ then d in dom F & F/.d in dom (id SD) by RELAT_1:71;
+  hence thesis by Th6;
+end;
+
+theorem
+   (for c1,c2 st c1 in dom f & c2 in dom f & f/.c1 = f/.c2 holds c1 = c2)
+ implies f is one-to-one
+proof
+ assume
+A1: for c1,c2 st c1 in dom f & c2 in dom f & f/.c1 = f/.c2 holds c1 = c2;
+    now let x,y; assume A2:  x in dom f & y in dom f &
+   (f qua Function).x = (f qua Function).y;
+   then reconsider x1 = x as Element of C;
+   reconsider y1 = y as Element of C by A2;
+     x1 in dom f & y1 in dom f & f/.x1 = (f qua Function).y1
+    by A2,FINSEQ_4:def 4;
+   then x1 in dom f & y1 in dom f & f/.x1 = f/.y1 by FINSEQ_4:def 4;
+   hence x=y by A1;
+  end;
+ hence thesis by FUNCT_1:def 8;
+end;
+
+theorem
+  f is one-to-one & x in dom f & y in dom f & f/.x = f/.y implies x = y
+proof
+ assume that
+A1: f is one-to-one and
+A2: x in dom f and
+A3: y in dom f;
+ assume f/.x = f/.y;
+  then f.x = f/.y by A2,FINSEQ_4:def 4 .= f.y by A3,FINSEQ_4:def 4;
+ hence x = y by A1,A2,A3,FUNCT_1:def 8;
+end;
+
+definition
+ cluster {} -> one-to-one;
+ coherence;
+end;
+
+definition let X,Y;
+ cluster one-to-one PartFunc of X,Y;
+ existence
+  proof
+      {} is PartFunc of X,Y by PARTFUN1:56;
+   hence thesis;
+  end;
+end;
+
+definition let X,Y; let f be one-to-one PartFunc of X,Y;
+ redefine func f" -> PartFunc of Y,X;
+ coherence by PARTFUN1:39;
+end;
+
+theorem Th18:
+for f being one-to-one PartFunc of C,D holds
+ for g be PartFunc of D,C holds g = f" iff dom g = rng f &
+            for d,c holds d in rng f & c = g/.d iff c in dom f & d = f/.c
+proof
+ let f be one-to-one PartFunc of C,D;
+ let g be PartFunc of D,C;
+ thus g = f" implies dom g = rng f &
+  for d,c holds d in rng f & c = g/.d iff c in dom f & d = f/.c
+ proof assume
+A1: g = f";
+ then A2: dom g = rng f & for y,x holds y in rng f & x = (g qua Function).y
+            iff x in dom f & y = (f qua Function).x by FUNCT_1:54;
+ thus dom g = rng f by A1,FUNCT_1:54;
+ let d,c;
+ thus d in rng f & c = g/.d implies c in dom f & d = f/.c
+ proof
+   assume A3: d in rng f & c = g/.d;
+   then c = (g qua Function).d by A2,FINSEQ_4:def 4;
+ then c in dom f & d = (f qua Function).c by A1,A3,FUNCT_1:54;
+   hence thesis by FINSEQ_4:def 4;
+ end;
+  assume c in dom f & d = f/.c;
+  then c in dom f & d = (f qua Function).c by FINSEQ_4:def 4;
+   then d in rng f & c = (g qua Function).d by A1,FUNCT_1:54;
+  hence thesis by A2,FINSEQ_4:def 4;
+ end;
+  assume that
+ A4: dom g = rng f and
+ A5: for d,c holds d in rng f & c = g/.d iff c in dom f & d = f/.c and
+ A6: g <> f";
+   now per cases by A6,Th3;
+  suppose dom (f") <> dom g;
+   hence contradiction by A4,FUNCT_1:55;
+  suppose ex d st d in dom (f") & f"/.d <> g/.d;
+  then consider d such that A7: d in dom (f") & f"/.d <> g/.d;
+A8: d in rng f by A7,FUNCT_1:55;
+    f"/.d in rng (f") by A7,Th4;
+then A9: f"/.d in dom f by FUNCT_1:55;
+    d = (f qua Function).(((f") qua Function).d) by A8,FUNCT_1:57;
+  then d = (f qua Function).(f"/.d) by A7,FINSEQ_4:def 4;
+  then d = f/.(f"/.d) by A9,FINSEQ_4:def 4;
+  hence contradiction by A5,A7,A9;
+ end;
+ hence contradiction;
+end;
+
+canceled 3;
+
+theorem
+   for f being one-to-one PartFunc of C,D st c in dom f
+  holds c = f"/.(f/.c) & c = (f"*f)/.c
+proof let f be one-to-one PartFunc of C,D;
+  assume A1: c in dom f; f" = f";
+then A2: f/.c in rng f & c = f"/.(f/.c) by A1,Th18;
+  thus A3: c = f"/.(f/.c) by A1,Th18;
+    f/.c in dom (f") & c in dom f by A1,A2,FUNCT_1:55;
+  hence thesis by A3,Th9;
+end;
+
+theorem
+   for f being one-to-one PartFunc of C,D st d in rng f
+  holds d = f/.(f"/.d) & d = (f*(f"))/.d
+proof let f be one-to-one PartFunc of C,D;
+  assume A1: d in rng f;
+then A2: d = (f qua Function).(((f") qua Function).d) &
+    d = ((f*f") qua Function).d by FUNCT_1:57;
+    d in dom (f*f") by A1,FUNCT_1:59;
+  hence thesis by A1,A2,Th18,FINSEQ_4:def 4;
+end;
+
+theorem
+  f is one-to-one & dom f = rng t & rng f = dom t &
+ (for c,d st c in dom f & d in dom t holds f/.c = d iff t/.d = c)
+  implies t = f"
+proof
+ assume A1: f is one-to-one & dom f = rng t & rng f = dom t &
+        (for c,d st c in dom f & d in dom t holds f/.c = d iff t/.d = c);
+   now let x,y; assume A2: x in dom f & y in dom t;
+  then reconsider x1=x as Element of C;
+  reconsider y1=y as Element of D by A2;
+  thus (f qua Function).x = y implies (t qua Function).y = x
+   proof assume (f qua Function).x = y;
+    then f/.x1 = y1 by A2,FINSEQ_4:def 4; then t/.y1 = x1 by A1,A2;
+    hence thesis by A2,FINSEQ_4:def 4;
+   end;
+  assume (t qua Function).y = x; then t/.y1 = x1 by A2,FINSEQ_4:def 4;
+  then f/.x1 = y1 by A1,A2;
+  hence (f qua Function).x = y by A2,FINSEQ_4:def 4;
+ end;
+hence thesis by A1,FUNCT_1:60;
+end;
+
+canceled 7;
+
+theorem Th32:
+  g = f|X iff dom g = dom f /\ X & for c st c in dom g holds g/.c = f/.c
+proof
+thus g = f|X implies
+      dom g = dom f /\ X & for c st c in dom g holds g/.c = f/.c
+ proof
+  assume A1: g = f|X;
+then A2: dom g = dom f /\ X & for x st x in dom g holds
+    (g qua Function).x = (f qua Function).x by FUNCT_1:68;
+  thus dom g = dom f /\ X by A1,FUNCT_1:68;
+  let c; assume A3: c in dom g;
+then A4: c in dom f by A2,XBOOLE_0:def 3;
+    (g qua Function).c = (f qua Function).c by A1,A3,FUNCT_1:68;
+  then g/.c = (f qua Function).c by A3,FINSEQ_4:def 4;
+  hence thesis by A4,FINSEQ_4:def 4;
+ end;
+assume A5: dom g = dom f /\ X & for c st c in dom g holds g/.c = f/.c;
+    now let x; assume A6: x in dom g;
+   then A7: x in dom f by A5,XBOOLE_0:def 3;
+   reconsider y=x as Element of C by A6;
+     g/.y = f/.y by A5,A6;
+   then (g qua Function).y = f/.y by A6,FINSEQ_4:def 4;
+   hence (g qua Function).x = (f qua Function).x by A7,FINSEQ_4:def 4;
+  end;
+ hence thesis by A5,FUNCT_1:68;
+end;
+
+canceled;
+
+theorem Th34:
+c in dom f /\ X implies f|X/.c = f/.c
+proof
+ assume c in dom f /\ X;
+ then c in dom (f|X) by RELAT_1:90;
+ hence thesis by Th32;
+end;
+
+theorem
+  c in dom f & c in X implies f|X/.c = f/.c
+proof
+ assume c in dom f & c in X; then c in dom f /\ X by XBOOLE_0:def 3;
+ hence thesis by Th34;
+end;
+
+theorem
+  c in dom f & c in X implies f/.c in rng (f|X)
+proof
+ assume A1: c in dom f & c in X;
+ then (f qua Function).c in rng (f|X) by FUNCT_1:73;
+ hence thesis by A1,FINSEQ_4:def 4;
+end;
+
+definition let C,D; let X,f;
+ redefine func X|f -> PartFunc of C,D;
+ coherence by PARTFUN1:46;
+end;
+
+theorem Th37:
+g = X|f iff (for c holds c in dom g iff c in dom f & f/.c in X) &
+            (for c st c in dom g holds g/.c = f/.c)
+proof
+thus g = X|f implies (for c holds c in dom g iff c in dom f & f/.c in X) &
+                      (for c st c in dom g holds g/.c = f/.c)
+proof assume A1: g = X|f;
+   now let c;
+      thus c in dom g implies c in dom f & f/.c in X
+      proof assume c in dom g;
+       then c in dom f & (f qua Function).c in X by A1,FUNCT_1:86;
+       hence thesis by FINSEQ_4:def 4;
+      end;
+      assume c in dom f & f/.c in X;
+      then c in dom f & (f qua Function).c in X by FINSEQ_4:def 4;
+      hence c in dom g by A1,FUNCT_1:86;
+     end;
+   hence for c holds c in dom g iff c in dom f & f/.c in X;
+  let c; assume A2: c in dom g;
+  then (g qua Function).c = (f qua Function).c by A1,FUNCT_1:87;
+then A3: g/.c = (f qua Function).c by A2,FINSEQ_4:def 4;
+     c in dom f by A1,A2,FUNCT_1:86;
+   hence thesis by A3,FINSEQ_4:def 4;
+end;
+assume A4: (for c holds c in dom g iff c in dom f & f/.c in X) &
+           for c st c in dom g holds g/.c = f/.c;
+ A5:now let x;
+     thus x in dom g implies x in dom f & (f qua Function).x in X
+     proof assume A6: x in dom g;
+      then reconsider x1=x as Element of C;
+        x1 in dom f & f/.x1 in X by A4,A6;
+      hence thesis by FINSEQ_4:def 4;
+     end;
+     assume A7: x in dom f & (f qua Function).x in X;
+     then reconsider x1=x as Element of C;
+       x1 in dom f & f/.x1 in X by A7,FINSEQ_4:def 4;
+     hence x in dom g by A4;
+    end;
+      now let x;
+     assume A8: x in dom g;
+     then reconsider x1=x as Element of C;
+A9:  x1 in dom f by A4,A8;
+       g/.x1 = f/.x1 by A4,A8;
+     then (g qua Function).x1 = f/.x1 by A8,FINSEQ_4:def 4;
+     hence (g qua Function).x = (f qua Function).x by A9,FINSEQ_4:def 4;
+    end;
+  hence thesis by A5,FUNCT_1:85;
+end;
+
+theorem
+  c in dom (X|f) iff c in dom f & f/.c in X by Th37;
+
+theorem
+  c in dom (X|f) implies X|f/.c = f/.c by Th37;
+
+
+
+theorem Th40:
+ SD = f.:
+X iff for d holds d in SD iff ex c st c in dom f & c in X & d = f/.c
+proof
+thus SD = f.:X implies
+for d holds d in SD iff ex c st c in dom f & c in X & d = f/.c
+ proof assume A1: SD = f.:X; let d;
+  thus d in SD implies ex c st c in dom f & c in X & d = f/.c
+   proof
+    assume d in SD;
+    then consider x such that
+A2: x in dom f & x in X & d = (f qua Function).x by A1,FUNCT_1:def 12;
+    reconsider x as Element of C by A2; take x;
+    thus x in dom f & x in X by A2;
+    thus thesis by A2,FINSEQ_4:def 4;
+   end;
+  given c such that A3: c in dom f & c in X & d = f/.c;
+    f/.c = (f qua Function).c by A3,FINSEQ_4:def 4;
+  hence thesis by A1,A3,FUNCT_1:def 12;
+ end;
+ assume that
+A4: for d holds d in SD iff ex c st c in dom f & c in X & d = f/.c and
+A5: SD <> f.:X;
+ consider x such that A6: not (x in SD iff x in f.:X) by A5,TARSKI:2;
+   now per cases by A6;
+  suppose A7: x in SD & not x in f.:X;
+   then reconsider x as Element of D;
+   consider c such that A8: c in dom f & c in X & x = f/.c by A4,A7;
+     x = (f qua Function).c by A8,FINSEQ_4:def 4;
+   hence contradiction by A7,A8,FUNCT_1:def 12;
+  suppose A9: x in f.:X & not x in SD;
+   then consider y such that
+   A10: y in dom f & y in X & x = (f qua Function).y by FUNCT_1:def 12;
+   reconsider y as Element of C by A10;
+     x = f/.y by A10,FINSEQ_4:def 4;
+   hence contradiction by A4,A9,A10;
+ end;
+ hence contradiction;
+end;
+
+theorem
+  d in (f qua Relation of C,D).:X iff ex c st c in dom f & c in X & d = f/.c
+  by Th40;
+
+theorem
+  c in dom f implies f.:{c} = {f/.c}
+proof
+ assume A1: c in dom f;
+ hence f.:{c} = {(f qua Function).c} by FUNCT_1:117
+            .= {f/.c} by A1,FINSEQ_4:def 4;
+end;
+
+theorem
+  c1 in dom f & c2 in dom f implies f.:{c1,c2} = {f/.c1,f/.c2}
+proof assume A1: c1 in dom f & c2 in dom f;
+hence f.:{c1,c2} = {(f qua Function).c1,(f qua Function).c2} by FUNCT_1:118
+               .= {f/.c1,(f qua Function).c2} by A1,FINSEQ_4:def 4
+               .= {f/.c1,f/.c2} by A1,FINSEQ_4:def 4;
+end;
+
+
+
+theorem Th44:
+SC = f"X iff for c holds c in SC iff c in dom f & f/.c in X
+proof
+thus SC = f"X implies for c holds c in SC iff c in dom f & f/.c in X
+proof assume A1: SC = f"X;
+let c;
+ thus c in SC implies c in dom f & f/.c in X
+  proof assume c in SC;
+   then c in dom f & (f qua Function).c in X by A1,FUNCT_1:def 13;
+   hence thesis by FINSEQ_4:def 4;
+  end;
+ assume c in dom f & f/.c in X;
+ then c in dom f & (f qua Function).c in X by FINSEQ_4:def 4;
+ hence c in SC by A1,FUNCT_1:def 13;
+end;
+assume A2: for c holds c in SC iff c in dom f & f/.c in X;
+   now let x;
+ thus x in SC implies x in dom f & (f qua Function).x in X
+  proof assume A3: x in SC;
+   then reconsider x1=x as Element of C;
+     x1 in dom f & f/.x1 in X by A2,A3;
+   hence thesis by FINSEQ_4:def 4;
+  end;
+ assume A4: x in dom f & (f qua Function).x in X;
+ then reconsider x1=x as Element of C;
+   x1 in dom f & f/.x1 in X by A4,FINSEQ_4:def 4;
+ hence x in SC by A2;
+ end;
+hence thesis by FUNCT_1:def 13;
+end;
+
+canceled;
+
+theorem
+  for f ex g being Function of C,D st for c st c in dom f holds g.c = f/.c
+proof let f;
+ consider g being Function of C,D such that
+A1: for x st x in dom f holds g.x = (f qua Function).x by FUNCT_2:136;
+ take g;
+ let c; assume A2: c in dom f;
+ then g.c = (f qua Function).c by A1;
+ hence thesis by A2,FINSEQ_4:def 4;
+end;
+
+theorem
+  f tolerates g iff for c st c in dom f /\ dom g holds f/.c = g/.c
+proof
+thus f tolerates g implies
+  for c st c in dom f /\ dom g holds f/.c = g/.c
+ proof assume A1: f tolerates g;
+  let c; assume A2: c in dom f /\ dom g;
+then A3: c in dom f & c in dom g by XBOOLE_0:def 3;
+    (f qua Function).c = (g qua Function).c by A1,A2,PARTFUN1:def 6;
+  then f/.c = (g qua Function).c by A3,FINSEQ_4:def 4;
+  hence thesis by A3,FINSEQ_4:def 4;
+ end;
+ assume A4: for c st c in dom f /\ dom g holds f/.c = g/.c;
+   now let x; assume A5: x in dom f /\ dom g;
+  then A6: x in dom f & x in dom g by XBOOLE_0:def 3;
+  reconsider x1=x as Element of C by A5;
+    f/.x1 = g/.x1 by A4,A5;
+  then (f qua Function).x = g/.x1 by A6,FINSEQ_4:def 4;
+  hence (f qua Function).x = (g qua Function).x by A6,FINSEQ_4:def 4;
+ end;
+ hence thesis by PARTFUN1:def 6;
+end;
+
+scheme PartFuncExD{D,C()->non empty set, P[set,set]}:
+ ex f being PartFunc of D(),C() st
+  (for d be Element of D() holds
+      d in dom f iff (ex c be Element of C() st P[d,c])) &
+  (for d be Element of D() st d in dom f holds P[d,f/.d])
+ proof
+  consider x being Element of C();
+  defpred Q[set,set] means
+   ((ex c be Element of C() st P[$1,c]) implies P[$1,$2]) &
+   ((for c be Element of C() holds not P[$1,c]) implies $2=x);
+A1: for d be Element of D() ex z be Element of C() st Q[d,z]
+   proof let d be Element of D();
+       (for c be Element of C() holds not P[d,c]) implies
+      ex z be Element of C()
+         st ((ex c be Element of C() st P[d,c]) implies P[d,z]) &
+          ((for c be Element of C() holds not P[d,c]) implies z=x);
+    hence thesis;
+   end;
+  consider g being Function of D(),C() such that
+A2: for d be Element of D() holds Q[d,g.d] from FuncExD(A1);
+A3: dom g = D() & rng g c= C() by FUNCT_2:def 1,RELSET_1:12;
+  defpred R[set] means ex c be Element of C() st P[$1,c];
+  consider X be set such that
+A4: for x holds x in X iff x in D() & R[x] from Separation;
+     for x holds x in X implies x in D() by A4;
+  then reconsider X as Subset of D() by TARSKI:def 3;
+   reconsider f=g|X as PartFunc of D(),C();
+   take f;
+   thus for d be Element of D() holds
+      d in dom f iff (ex c be Element of C() st P[d,c])
+    proof let d be Element of D();
+       dom f c= X by RELAT_1:87;
+hence d in dom f implies ex c be Element of C() st P[d,c] by A4;
+     assume ex c be Element of C() st P[d,c];
+     then d in X & d in D() by A4;
+     then d in dom g /\ X by A3,XBOOLE_0:def 3;
+     hence thesis by RELAT_1:90;
+    end;
+   let d be Element of D();
+   assume A5: d in dom f;
+     dom f c= X by RELAT_1:87;
+   then ex c be Element of C() st P[d,c] by A4,A5;
+   then P[d,g.d] by A2;
+   then P[d,(f qua Function).d] by A5,FUNCT_1:70;
+   hence thesis by A5,FINSEQ_4:def 4;
+ end;
+
+scheme LambdaPFD{D,C()->non empty set, F(set)->Element of C(), P[set]}:
+  ex f being PartFunc of D(),C() st
+   (for d be Element of D() holds d in dom f iff P[d]) &
+   (for d be Element of D() st d in dom f holds f/.d = F(d))
+  proof
+   defpred Q[set,set] means P[$1] & $2 = F($1);
+   consider f being PartFunc of D(),C() such that
+A1:  for d be Element of D() holds
+      d in dom f iff ex c be Element of C() st Q[d,c] and
+A2:  for d be Element of D() st d in dom f holds Q[d,f/.d] from PartFuncExD;
+   take f;
+   thus for d be Element of D() holds d in dom f iff P[d]
+    proof let d be Element of D();
+     thus d in dom f implies P[d]
+      proof assume d in dom f;
+       then ex c be Element of C() st P[d] & c = F(d) by A1;
+       hence thesis;
+      end;
+     assume P[d];
+     then ex c be Element of C() st P[d] & c = F(d);
+     hence thesis by A1;
+    end;
+   thus thesis by A2;
+  end;
+
+scheme UnPartFuncD{C,D()->non empty set, X()->set, F(set)->Element of D()}:
+  for f,g being PartFunc of C(),D() st
+   (dom f=X() & for c be Element of C() st c in dom f holds f/.c = F(c)) &
+   (dom g=X() & for c be Element of C() st c in dom g holds g/.c = F(c))
+  holds f = g
+proof let f,g be PartFunc of C(),D(); assume that
+A1: (dom f=X() & for c be Element of C() st c in dom f holds f/.c = F(c)) and
+A2: dom g=X() & for c be Element of C() st c in dom g holds g/.c = F(c);
+   now let c be Element of C(); assume A3: c in dom f;
+  hence f/.c = F(c) by A1
+            .= g/.c by A1,A2,A3;
+ end;
+ hence thesis by A1,A2,Th3;
+end;
+
+definition let C,D; let SC,d;
+redefine func SC --> d -> PartFunc of C,D;
+coherence
+proof
+   now per cases;
+  suppose SC = {};
+   then dom (SC --> d) = {} by FUNCOP_1:16;
+   hence thesis by PARTFUN1:55;
+  suppose SC <> {};
+   then dom (SC --> d) = SC & rng (SC --> d) = {d} by FUNCOP_1:14,19;
+ then (SC --> d) is PartFunc of SC,{d} by PARTFUN1:24;
+then A1: (SC --> d) is PartFunc of C,{d} by PARTFUN1:30;
+     now let x; assume x in {d}; then x = d by TARSKI:def 1;
+    hence x in D;
+   end;
+   then {d} c= D by TARSKI:def 3;
+   hence thesis by A1,PARTFUN1:31;
+  end;
+ hence thesis;
+end;
+end;
+
+theorem Th48:
+c in SC implies (SC --> d)/.c = d
+proof assume A1: c in SC;
+A2: dom (SC --> d) = SC by FUNCOP_1:19;
+     ((SC --> d) qua Function).c = d by A1,FUNCOP_1:13;
+   hence thesis by A1,A2,FINSEQ_4:def 4;
+end;
+
+theorem
+  (for c st c in dom f holds f/.c = d) implies f = dom f --> d
+proof assume A1: (for c st c in dom f holds f/.c = d);
+   now let x; assume A2: x in dom f;
+  then reconsider x1=x as Element of C;
+    f/.x1 = d by A1,A2;
+  hence ( f qua Function).x = d by A2,FINSEQ_4:def 4;
+ end;
+hence thesis by FUNCOP_1:17;
+end;
+
+theorem
+  c in dom f implies f*(SE --> c) = SE --> f/.c
+proof assume A1: c in dom f;
+ then f*(SE --> c) = SE --> (f qua Function).c by FUNCOP_1:23;
+ hence thesis by A1,FINSEQ_4:def 4;
+end;
+
+theorem
+  (id SC) is total iff SC = C
+proof
+thus (id SC) is total implies SC = C
+ proof assume (id SC) is total;
+  then dom (id SC) = C by PARTFUN1:def 4;
+  hence SC = C by RELAT_1:71;
+ end;
+ assume SC = C;
+ then dom (id SC) = C by RELAT_1:71;
+ hence (id SC) is total by PARTFUN1:def 4;
+end;
+
+theorem
+  (SC --> d) is total implies SC <> {}
+proof assume that A1: (SC --> d) is total and
+                  A2: SC = {};
+   dom (SC --> d) = C by A1,PARTFUN1:def 4;
+  hence contradiction by A2,FUNCOP_1:16;
+end;
+
+theorem
+  (SC --> d) is total iff SC = C
+proof
+thus (SC --> d) is total implies SC = C
+ proof assume (SC --> d) is total;
+then dom (SC --> d) = C by PARTFUN1:def 4;
+  hence SC = C by FUNCOP_1:19;
+ end;
+ assume SC = C;
+ then dom (SC --> d) = C by FUNCOP_1:19;
+ hence (SC --> d) is total by PARTFUN1:def 4;
+end;
+
+::
+:: PARTIAL FUNCTION CONSTANT ON SET
+::
+
+definition let C,D; let f,X;
+ canceled 2;
+
+pred f is_constant_on X means :Def3:
+ ex d st for c st c in X /\ dom f holds f/.c = d;
+end;
+
+canceled;
+
+theorem
+  f is_constant_on X iff
+ for c1,c2 st c1 in X /\ dom f & c2 in X /\ dom f holds f/.c1=f/.c2
+proof
+thus f is_constant_on X implies
+     for c1,c2 st c1 in X /\ dom f & c2 in X /\ dom f holds f/.c1=f/.c2
+ proof assume f is_constant_on X;
+  then consider d such that
+A1: for c st c in X /\ dom f holds f/.c = d by Def3;
+  let c1,c2; assume c1 in X /\ dom f & c2 in X /\ dom f;
+  then f/.c1 = d & f/.c2 = d by A1;
+  hence thesis;
+ end;
+ assume A2: for c1,c2 st c1 in X /\ dom f & c2 in
+ X /\ dom f holds f/.c1=f/.c2;
+   now per cases;
+  suppose A3: X /\ dom f = {};
+     now consider d being Element of D;
+    take d; let c;
+    thus c in X /\ dom f implies f/.c = d by A3;
+   end;
+   hence thesis by Def3;
+  suppose A4: X /\ dom f <> {};
+   consider x being Element of X /\ dom f;
+     x in dom f by A4,XBOOLE_0:def 3;
+   then reconsider x as Element of C;
+      for c holds c in X /\ dom f implies f/.c = f/.x by A2;
+  hence thesis by Def3;
+ end;
+ hence thesis;
+end;
+
+theorem
+  X meets dom f implies (f is_constant_on X iff ex d st rng (f|X) = {d})
+proof assume A1: X /\ dom f <> {};
+thus f is_constant_on X implies ex d st rng (f|X) = {d}
+ proof assume f is_constant_on X;
+  then consider d such that
+A2: for c st c in X /\ dom f holds f/.c = d by Def3;
+  take d;
+  thus rng (f|X) c= {d}
+   proof let x; assume x in rng (f|X);
+    then consider y such that
+A3: y in dom (f|X) & ((f|X) qua Function).y = x by FUNCT_1:def 5;
+    reconsider y as Element of C by A3;
+      dom (f|X) = X /\ dom f by RELAT_1:90;
+    then d = f/.y by A2,A3
+     .= f|X/.y by A3,Th32
+     .= x by A3,FINSEQ_4:def 4;
+    hence x in {d} by TARSKI:def 1;
+   end;
+  thus {d} c= rng (f|X)
+   proof let x such that A4: x in {d};
+    consider y being Element of X /\ dom f;
+   y in dom f by A1,XBOOLE_0:def 3;
+    then reconsider y as Element of C;
+A5:    dom (f|X) = X /\ dom f by RELAT_1:90;
+     then f|X/.y = f/.y by A1,Th32
+     .= d by A1,A2
+     .= x by A4,TARSKI:def 1;
+    hence x in rng (f|X) by A1,A5,Th4;
+   end;
+  end;
+ given d such that A6: rng (f|X) = {d}; take d;
+ let c; assume c in X /\ dom f;
+then A7: c in dom (f|X) by RELAT_1:90;
+ then f|X/.c in {d} by A6,Th4;
+ then f|X/.c = d by TARSKI:def 1;
+ hence thesis by A7,Th32;
+end;
+
+theorem
+  f is_constant_on X & Y c= X implies f is_constant_on Y
+proof assume A1: f is_constant_on X & Y c= X;
+  then consider d such that
+A2: for c st c in X /\ dom f holds f/.c = d by Def3;
+   now let c; assume c in Y /\ dom f;
+  then c in Y & c in dom f by XBOOLE_0:def 3;
+  then c in X /\ dom f by A1,XBOOLE_0:def 3;
+  hence f/.c = d by A2;
+ end;
+ hence thesis by Def3;
+end;
+
+theorem Th58:
+X misses dom f implies f is_constant_on X
+proof assume A1: X /\ dom f = {};
+   now consider d being Element of D;
+  take d; let c;
+  thus c in X /\ dom f implies f/.c = d by A1;
+ end;
+ hence thesis by Def3;
+end;
+
+theorem
+  f|SC = dom (f|SC) --> d implies f is_constant_on SC
+proof assume A1: f|SC = dom (f|SC) --> d;
+      now let c; assume c in SC /\ dom f;
+  then A2: c in dom (f|SC) by RELAT_1:90;
+     then f|SC/.c = d by A1,Th48;
+     hence f/.c = d by A2,Th32;
+    end;
+   hence f is_constant_on SC by Def3;
+end;
+
+theorem
+  f is_constant_on {x}
+proof
+    now per cases;
+   suppose {x} /\ dom f = {}; then {x} misses dom f by XBOOLE_0:def 7;
+   hence f is_constant_on {x} by Th58;
+   suppose A1: {x} /\ dom f <> {};
+   consider y being Element of {x} /\ dom f;
+      y in {x} & y in dom f by A1,XBOOLE_0:def 3;
+    then reconsider x1=x as Element of C by TARSKI:def 1;
+      now take d = f/.x1; let c;
+     assume c in {x} /\ dom f; then c in {x} by XBOOLE_0:def 3;
+     hence f/.c = f/.x1 by TARSKI:def 1;
+    end;
+   hence f is_constant_on {x} by Def3;
+  end;
+ hence thesis;
+end;
+
+theorem
+  f is_constant_on X & f is_constant_on Y & X /\ Y meets dom f implies
+f is_constant_on X \/ Y
+proof assume A1: f is_constant_on X & f is_constant_on Y & X /\ Y /\
+ dom f <> {};
+ then consider d1 such that
+A2: for c st c in X /\ dom f holds f/.c = d1 by Def3;
+ consider d2 such that
+A3: for c st c in Y /\ dom f holds f/.c = d2 by A1,Def3;
+ consider x being Element of X /\ Y /\ dom f;
+A4: x in X /\ Y & x in dom f by A1,XBOOLE_0:def 3;
+ then reconsider x as Element of C; take d1;
+   x in X & x in dom f by A4,XBOOLE_0:def 3;
+ then x in X /\ dom f by XBOOLE_0:def 3;
+then A5: f/.x = d1 by A2;
+   x in Y & x in dom f by A4,XBOOLE_0:def 3;
+ then x in Y /\ dom f by XBOOLE_0:def 3;
+then A6: d1 = d2 by A3,A5;
+ let c; assume c in (X \/ Y) /\ dom f;
+then A7: c in X \/ Y & c in dom f by XBOOLE_0:def 3;
+   now per cases by A7,XBOOLE_0:def 2;
+  suppose c in X; then c in
+ X /\ dom f by A7,XBOOLE_0:def 3; hence f/.c = d1 by A2;
+  suppose c in Y; then c in Y /\ dom f by A7,XBOOLE_0:def 3;
+  hence f/.c = d1 by A3,A6;
+ end;
+ hence f/.c = d1;
+end;
+
+theorem
+  f is_constant_on Y implies f|X is_constant_on Y
+proof assume f is_constant_on Y;
+ then consider d such that
+A1: for c st c in Y /\ dom f holds f/.c = d by Def3;
+ take d; let c; assume c in Y /\ dom (f|X);
+then A2: c in Y & c in dom (f|X) by XBOOLE_0:def 3;
+ then c in Y & c in dom f /\ X by RELAT_1:90;
+ then c in Y & c in dom f by XBOOLE_0:def 3;
+ then c in Y /\ dom f by XBOOLE_0:def 3;
+ then f/.c = d by A1;
+ hence f|X/.c = d by A2,Th32;
+end;
+
+theorem
+  SC --> d is_constant_on SC
+proof take d; let c; assume c in SC /\ dom (SC --> d);
+ then c in SC by XBOOLE_0:def 3;
+ hence (SC --> d)/.c = d by Th48;
+end;
+
+::
+::  OF PARTIAL FUNCTION FROM A DOMAIN TO A DOMAIN
+::
+
+theorem
+   f c= g iff dom f c= dom g & (for c st c in dom f holds f/.c = g/.c)
+proof
+thus f c= g implies
+    dom f c= dom g & (for c st c in dom f holds f/.c = g/.c)
+ proof assume A1: f c= g;
+then A2: (dom f c= dom g) &
+ for x st x in dom f holds (f qua Function).x = (g qua Function).x
+     by GRFUNC_1:8;
+  thus dom f c= dom g by A1,GRFUNC_1:8;
+  let c; assume A3: c in dom f;
+  then (f qua Function).c = (g qua Function).c by A1,GRFUNC_1:8;
+ then f/.c = (g qua Function).c by A3,FINSEQ_4:def 4;
+   hence thesis by A2,A3,FINSEQ_4:def 4;
+ end;
+ assume A4: dom f c= dom g & for c st c in dom f holds f/.c = g/.c;
+    now let x; assume A5: x in dom f;
+   then reconsider x1=x as Element of C;
+     f/.x1 = g/.x1 by A4,A5;
+ then (f qua Function).x = g/.x1 by A5,FINSEQ_4:def 4;
+   hence (f qua Function).x = (g qua Function).x by A4,A5,FINSEQ_4:def 4;
+  end;
+ hence thesis by A4,GRFUNC_1:8;
+end;
+
+theorem Th65:
+c in dom f & d = f/.c iff [c,d] in f
+proof
+thus c in dom f & d = f/.c implies [c,d] in f
+ proof assume c in dom f & d = f/.c;
+  then c in dom f & d = (f qua Function).c by FINSEQ_4:def 4;
+  hence thesis by FUNCT_1:8;
+ end;
+ assume [c,d] in f;
+ then c in dom f & d = (f qua Function).c by FUNCT_1:8;
+ hence thesis by FINSEQ_4:def 4;
+end;
+
+theorem
+  [c,e] in (s*f) implies [c,f/.c] in f & [f/.c,e] in s
+proof assume [c,e] in (s*f);
+then A1: [c,(f qua Function).c] in f & [(f qua Function).c,e] in s
+     by GRFUNC_1:12;
+ then c in dom f by FUNCT_1:8;
+ hence thesis by A1,FINSEQ_4:def 4;
+end;
+
+theorem
+   f = {[c,d]} implies f/.c = d
+proof assume A1:  f = {[c,d]};
+ then [c,d] in f by TARSKI:def 1;
+then A2:c in dom f by FUNCT_1:8;
+   (f qua Function).c = d by A1,GRFUNC_1:16;
+ hence thesis by A2,FINSEQ_4:def 4;
+end;
+
+theorem
+  dom f = {c} implies f = {[c,f/.c]}
+proof assume A1: dom f = {c};
+then A2: c in dom f by TARSKI:def 1;
+    f = {[c,(f qua Function).c]} by A1,GRFUNC_1:18;
+ hence thesis by A2,FINSEQ_4:def 4;
+end;
+
+theorem
+   f1 = f /\ g & c in dom f1 implies f1/.c = f/.c & f1/.c = g/.c
+proof assume A1:  f1 = f /\ g & c in dom f1;
+ then [c,(f1 qua Function).c] in f1 by FUNCT_1:8;
+ then [c,(f1 qua Function).c] in f & [c,(f1 qua Function).c] in g
+   by A1,XBOOLE_0:def 3;
+then A2: c in dom f & c in dom g by FUNCT_1:8;
+   (f1 qua Function).c = (f qua Function).c &
+ (f1 qua Function).c = (g qua Function).c by A1,GRFUNC_1:29;
+ then f1/.c = (f qua Function).c & f1/.c = (g qua Function).c
+  by A1,FINSEQ_4:def 4;
+ hence thesis by A2,FINSEQ_4:def 4;
+end;
+
+theorem
+  c in dom f & f1 = f \/ g implies f1/.c = f/.c
+proof assume A1: c in dom f & f1 = f \/ g;
+then [c,(f qua Function).c] in f by FUNCT_1:8;
+then [c,(f qua Function).c] in f1 by A1,XBOOLE_0:def 2;
+then A2: c in dom f1 by FUNCT_1:8;
+   (f1 qua Function).c = (f qua Function).c by A1,GRFUNC_1:34;
+ then f1/.c = (f qua Function).c by A2,FINSEQ_4:def 4;
+ hence thesis by A1,FINSEQ_4:def 4;
+end;
+
+theorem
+  c in dom g & f1 = f \/ g implies f1/.c = g/.c
+proof assume A1: c in dom g & f1 = f \/ g;
+then [c,(g qua Function).c] in g by FUNCT_1:8;
+then [c,(g qua Function).c] in f1 by A1,XBOOLE_0:def 2;
+then A2: c in dom f1 by FUNCT_1:8;
+   (f1 qua Function).c = (g qua Function).c by A1,GRFUNC_1:35;
+ then f1/.c = (g qua Function).c by A2,FINSEQ_4:def 4;
+ hence thesis by A1,FINSEQ_4:def 4;
+end;
+
+theorem
+  c in dom f1 & f1 = f \/ g implies f1/.c = f/.c or f1/.c = g/.c
+proof assume A1: c in dom f1 & f1 = f \/ g;
+ then [c,f1/.c] in f1 by Th65;
+then A2: [c,f1/.c] in f or [c,f1/.c] in g by A1,XBOOLE_0:def 2;
+   now per cases by A2,FUNCT_1:8;
+  suppose c in dom f;
+  then [c,f/.c] in f by Th65;
+  then [c,f/.c] in f1 by A1,XBOOLE_0:def 2;
+  hence thesis by Th65;
+  suppose c in dom g;
+  then [c,g/.c] in g by Th65;
+  then [c,g/.c] in f1 by A1,XBOOLE_0:def 2;
+  hence thesis by Th65;
+ end;
+hence thesis;
+end;
+
+theorem
+  c in dom f & c in SC iff [c,f/.c] in (f|SC)
+proof
+thus c in dom f & c in SC implies [c,f/.c] in (f|SC)
+ proof assume A1: c in dom f & c in SC;
+  then [c,(f qua Function).c] in (f|SC) by GRFUNC_1:52;
+  hence thesis by A1,FINSEQ_4:def 4;
+ end;
+ assume [c,f/.c] in (f|SC);
+ then c in dom (f|SC) by FUNCT_1:8;
+ then c in dom f /\ SC by RELAT_1:90;
+ hence thesis by XBOOLE_0:def 3;
+end;
+
+theorem
+  c in dom f & f/.c in SD iff [c,f/.c] in (SD|f)
+proof
+thus c in dom f & f/.c in SD implies [c,f/.c] in (SD|f)
+ proof assume A1: c in dom f & f/.c in SD;
+  then c in dom f & (f qua Function).c in SD by FINSEQ_4:def 4;
+  then [c,(f qua Function).c] in (SD|f) by GRFUNC_1:67;
+  hence thesis by A1,FINSEQ_4:def 4;
+ end;
+ assume [c,f/.c] in (SD|f);
+ then c in dom (SD|f) by FUNCT_1:8;
+ then c in dom f & (f qua Function).c in SD by FUNCT_1:86;
+ hence thesis by FINSEQ_4:def 4;
+end;
+
+theorem
+  c in f"SD iff [c,f/.c] in f & f/.c in SD
+proof
+thus c in f"SD implies [c,f/.c] in f & f/.c in SD
+ proof assume c in f"SD;
+then A1: [c,(f qua Function).c] in f & (f qua Function).c in SD
+      by GRFUNC_1:87;
+  then c in dom f by FUNCT_1:8;
+  hence thesis by A1,FINSEQ_4:def 4;
+ end;
+ assume A2: [c,f/.c] in f & f/.c in SD;
+ then c in dom f by Th65;
+ hence thesis by A2,Th44;
+end;
+
+theorem Th76:
+ f is_constant_on X iff
+  ex d st for c st c in X /\ dom f holds f.c = d
+ proof
+  hereby assume f is_constant_on X;
+   then consider d such that
+A1:   for c st c in X /\ dom f holds f/.c = d by Def3;
+   take d;
+   let c;
+   assume
+A2:   c in X /\ dom f;
+   then c in dom f by XBOOLE_0:def 3;
+   hence f.c = f/.c by FINSEQ_4:def 4 .= d by A1,A2;
+  end;
+  given d such that
+A3:   for c st c in X /\ dom f holds f.c = d;
+  take d;
+  let c;
+  assume
+A4:   c in X /\ dom f;
+  then c in dom f by XBOOLE_0:def 3;
+  hence f/.c = f.c by FINSEQ_4:def 4 .= d by A3,A4;
+ end;
+
+theorem
+  f is_constant_on X iff
+ for c1,c2 st c1 in X /\ dom f & c2 in X /\ dom f holds f.c1=f.c2
+proof
+thus f is_constant_on X implies
+     for c1,c2 st c1 in X /\ dom f & c2 in X /\ dom f holds f.c1=f.c2
+ proof assume f is_constant_on X;
+  then consider d such that
+A1: for c st c in X /\ dom f holds f.c = d by Th76;
+  let c1,c2; assume c1 in X /\ dom f & c2 in X /\ dom f;
+  then f.c1 = d & f.c2 = d by A1;
+  hence thesis;
+ end;
+ assume A2: for c1,c2 st c1 in X /\ dom f & c2 in X /\ dom f holds f.c1=f.c2;
+   now per cases;
+  suppose A3: X /\ dom f = {};
+     now consider d being Element of D;
+    take d; let c;
+    thus c in X /\ dom f implies f.c = d by A3;
+   end;
+   hence thesis by Th76;
+  suppose A4: X /\ dom f <> {};
+   consider x being Element of X /\ dom f;
+     now let c;
+    assume
+A5:  c in X /\ dom f;
+A6:  x in dom f by A4,XBOOLE_0:def 3;
+    hence f.c = f.x by A2,A5 .= f/.x by A6,FINSEQ_4:def 4;
+   end;
+  hence thesis by Th76;
+ end;
+ hence thesis;
+end;
+
+theorem
+    d in f.:X implies ex c st c in dom f & c in X & d = f.c
+proof
+ assume d in f.:X;
+ then consider x such that
+A1: x in dom f & x in X & d = (f qua Function).x by FUNCT_1:def 12;
+ reconsider x as Element of C by A1;
+ take x;
+ thus thesis by A1;
+end;
+
+theorem
+  f is one-to-one implies (d in rng f & c = (f").d iff c in dom f & d = f.c)
+proof assume
+A1: f is one-to-one;
+    f" = (f qua Function)";
+ hence thesis by A1,FUNCT_1:54;
+end;
+

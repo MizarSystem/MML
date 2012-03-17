@@ -1,0 +1,1304 @@
+:: Lines in $n$-Dimensional Euclidean Spaces
+::  by Akihiro Kubo
+::
+:: Received August 8, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary EUCLID, FINSEQ_1, FUNCT_1, PRE_TOPC, ARYTM_1, ARYTM_3, COMPLEX1,
+      ABSVALUE, ARYTM, INCSP_1, FINSEQ_2, AFF_1, EUCLID_2, BHSP_1, SQUARE_1,
+      SEQ_4, SEQ_2, EUCLID_4;
+ notation TARSKI, XBOOLE_0, FINSEQ_2, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, REAL_1, NAT_1, FUNCT_2, ABSVALUE, STRUCT_0, PRE_TOPC, FINSEQ_1,
+      RVSUM_1, EUCLID_2, SQUARE_1, EUCLID, SEQ_4;
+ constructors REAL_1, ABSVALUE, FINSEQOP, EUCLID_2, SEQ_4, SQUARE_1;
+ clusters RELSET_1, STRUCT_0, EUCLID, XREAL_0, NAT_1, MEMBERED;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI;
+ theorems EUCLID, REAL_1, REAL_2, TARSKI, SQUARE_1, XBOOLE_0, XREAL_0, SEQ_4,
+      XCMPLX_0, XCMPLX_1, RVSUM_1, EUCLID_2;
+
+begin
+
+reserve a,b,r,s,t,u,v,lambda for Real, i,j,n for Nat;
+reserve x,x1,x2,x3,y,y1,y2 for Element of REAL n;
+
+theorem Th1:  :: EUCLID:31
+ 0 * x + x = x & x + 0*n = x
+proof
+reconsider x' = x as Element of n-tuples_on REAL by EUCLID:def 1;
+A1: 0 *x + x = 0 *x' + 1*x' by RVSUM_1:74
+            .= (0+1)*x' by RVSUM_1:72
+            .= x by RVSUM_1:74;
+A2:0.REAL n = 0*n & 0*n = n|->(0 qua Real) by EUCLID:def 4,def 9;
+x + 0*n = x' by A2,RVSUM_1:33
+       .= x;
+hence thesis by A1;
+end;
+
+theorem Th2: :: EUCLID:32
+  a*(0*n) = 0*n
+proof
+  |.a*(0*n).| = abs(a)*|.0*n.| by EUCLID:14
+             .= abs(a)*0 by EUCLID:10
+             .= 0;
+hence thesis by EUCLID:11;
+end;
+
+theorem Th3:   :: EUCLID:33
+ 1*x = x & 0 * x = 0*n
+proof
+reconsider x' = x as Element of n-tuples_on REAL by EUCLID:def 1;
+A1:1*x = x' by RVSUM_1:74
+      .= x;
+(0)*x = (0)*x' + x' - x' by RVSUM_1:63
+     .= x' - x' by Th1
+     .= (n|->0) by RVSUM_1:58
+     .= 0*n by EUCLID:def 4;
+hence thesis by A1;
+end;
+
+theorem Th4: :: EUCLID:34
+ (a*b)*x = a*(b*x)
+proof
+reconsider x' = x as Element of n-tuples_on REAL by EUCLID:def 1;
+thus (a*b)*x = a*(b*x') by RVSUM_1:71
+            .= a*(b*x);
+end;
+
+theorem :: EUCLID:35
+ a*x = 0*n implies a = 0 or x = 0*n
+proof
+assume A1:a*x = 0*n & a <> 0;
+thus x = 1*x by Th3
+      .= ((1/a)*a)*x by A1,XCMPLX_1:107
+      .= (1/a)*(a*x) by Th4
+      .= 0*n by A1,Th2;
+end;
+
+theorem Th6: :: EUCLID:36
+ a*(x1 + x2) = a*x1 + a*x2
+proof
+reconsider x1' = x1, x2' = x2 as Element of n-tuples_on REAL by EUCLID:def 1;
+thus a*(x1 + x2) = a*x1' + a*x2' by RVSUM_1:73
+                .= a*x1 + a*x2;
+end;
+
+theorem Th7: :: EUCLID:37
+ (a + b)*x = a*x + b*x
+proof
+reconsider x' = x as Element of n-tuples_on REAL by EUCLID:def 1;
+thus (a + b)*x = a*x' + b*x' by RVSUM_1:72
+              .= a*x + b*x;
+end;
+
+theorem :: EUCLID:38
+ a*x1 = a*x2 implies a = 0 or x1 = x2
+proof
+assume that A1:a*x1 = a*x2 and A2:a <> 0;
+((1/a)*a)*x1 = (1/a)*(a*x2) by A1,Th4;
+then ((1/a)*a)*x1 = ((1/a)*a)*x2 by Th4;
+then 1*x1 = ((1/a)*a)*x2 by A2,XCMPLX_1:107;
+then 1*x1 = 1*x2 by A2,XCMPLX_1:107;
+hence x1 = 1*x2 by Th3
+        .= x2 by Th3;
+end;
+
+ definition let n; let x1,x2 be Element of REAL n;
+   func Line(x1,x2) -> Subset of REAL n equals
+:Def1: { (1-lambda)*x1 + lambda*x2 : not contradiction };
+  coherence
+   proof
+    set A = { (1-lambda)*x1 + lambda*x2 : not contradiction };
+    A c= REAL n
+     proof let x be set;
+      assume x in A;
+       then consider lambda such that
+       A1: x = (1-lambda)*x1 + lambda*x2;
+      thus thesis by A1;
+     end;
+    hence thesis;
+   end;
+ end;
+
+definition let n; let x1,x2 be Element of REAL n;
+ cluster Line(x1,x2) -> non empty;
+ coherence
+  proof
+A1: Line(x1,x2) = { (1-lambda)*x1 + lambda*x2 : not contradiction }
+       by Def1;
+    1 - 0 = 1 & 1 * x1 = x1 & 0 * x2 = 0*n & x1 + 0*n = x1
+      by Th1,Th3;  ::REAL_1:25,
+    then x1 in Line(x1,x2) by A1;
+    hence thesis;
+  end;
+end;
+
+Lm1:Line(x1,x2) c= Line(x2,x1)
+proof
+A1:Line(x1,x2) = { (1-lambda)*x1 + lambda*x2 : not contradiction } by Def1;
+let z be set;
+assume z in Line(x1,x2);
+then consider t such that
+A2:z = (1-t)*x1 + t*x2 by A1;
+A3:z = (t+(1+-1))*x2 + (1-t)*x1 by A2
+    .= (1+(-1+t))*x2 + (1-t)*x1 by XCMPLX_1:1
+    .= (1+(t-1))*x2 + (1-t)*x1 by XCMPLX_0:def 8
+    .= (1-(1-t))*x2 + (1-t)*x1 by XCMPLX_1:38;
+A4:Line(x2,x1) = { (1-lambda)*x2 + lambda*x1 : not contradiction } by Def1;
+thus z in Line(x2,x1) by A3,A4;
+end;
+
+theorem Th9:  :: AFF_1:25
+Line(x1,x2)=Line(x2,x1)
+proof
+  Line(x1,x2) c= Line(x2,x1) & Line(x2,x1) c= Line(x1,x2) by Lm1;
+hence thesis by XBOOLE_0:def 10;
+end;
+
+definition let n;let x1,x2 be Element of REAL n;
+ redefine func Line(x1,x2);
+ commutativity by Th9;
+end;
+
+theorem Th10: :: AFF_1:26
+ x1 in Line(x1,x2) & x2 in Line(x1,x2)
+proof
+A1:Line(x1,x2) = { (1-lambda)*x1 + lambda*x2 : not contradiction } by Def1;
+A2:1 - 0 = 1 & 1*x1 = x1 & (0)*x2 = 0*n & x1 + 0*n = x1 by Th1,Th3;
+1 - 1 = 0 & (0)*x1 = 0*n & 1*x2 = x2 & 0*n + x2 = x2 by Th1,Th3;
+hence thesis by A1,A2;
+end;
+
+Lm2:x1 + (x2 + x3) = (x1 + x2) + x3
+proof
+reconsider x1' = x1, x2' = x2, x3' = x3 as Element of n-tuples_on REAL
+   by EUCLID:def 1;
+thus x1 + (x2 + x3) = (x1' + x2') + x3' by RVSUM_1:32
+                   .= (x1 + x2) + x3;
+end;
+
+theorem Th11: :: AFF_1:27
+ y1 in Line(x1,x2) & y2 in Line(x1,x2) implies
+    Line(y1,y2) c= Line(x1,x2)
+proof
+A1:Line(x1,x2) = { (1-lambda)*x1 + lambda*x2 : not contradiction } by Def1;
+assume y1 in Line(x1,x2);
+then consider t such that A2:y1 = (1-t)*x1 + t*x2 by A1;
+assume y2 in Line(x1,x2);
+then consider s such that A3:y2 = (1-s)*x1 + s*x2 by A1;
+A4:Line(y1,y2) = { (1-lambda)*y1 + lambda*y2 : not contradiction } by Def1;
+now let z be set;
+assume z in Line(y1,y2);
+then consider u such that A5:z = (1-u)*y1 + u*y2 by A4;
+A6:z = ((1-u)*((1-t)*x1)+(1-u)*(t*x2))+u*((1-s)*x1+s*x2) by A2,A3,A5,Th6
+    .= ((1-u)*((1-t)*x1)+(1-u)*(t*x2))+(u*((1-s)*x1)+u*(s*x2)) by Th6
+    .= (((1-u)*(1-t))*x1+(1-u)*(t*x2))+(u*((1-s)*x1)+u*(s*x2)) by Th4
+    .= (((1-u)*(1-t))*x1+((1-u)*t)*x2)+(u*((1-s)*x1)+u*(s*x2)) by Th4
+    .= (((1-u)*(1-t))*x1+((1-u)*t)*x2)+((u*(1-s))*x1+u*(s*x2)) by Th4
+    .= (((1-u)*(1-t))*x1+((1-u)*t)*x2)+((u*(1-s))*x1+(u*s)*x2) by Th4
+    .= ((1-u)*(1-t))*x1+(((1-u)*t)*x2+((u*(1-s))*x1+(u*s)*x2)) by Lm2
+    .= ((1-u)*(1-t))*x1+((u*(1-s))*x1+(((1-u)*t)*x2+(u*s)*x2)) by Lm2
+    .= (((1-u)*(1-t))*x1+(u*(1-s))*x1)+(((1-u)*t)*x2+(u*s)*x2) by Lm2
+    .= ((1-u)*(1-t)+u*(1-s))*x1+(((1-u)*t)*x2+(u*s)*x2) by Th7
+    .= ((1-u)*(1-t)+u*(1-s))*x1+((1-u)*t+u*s)*x2 by Th7
+    .= (1*1-1*t-u*1+u*t+u*(1-s))*x1+((1-u)*t+u*s)*x2 by XCMPLX_1:47
+    .= (1*1-1*t-u*1+u*t+(u*1-u*s))*x1+((1-u)*t+u*s)*x2 by XCMPLX_1:40
+    .= (1*1-1*t+u*t-u*1+(u*1-u*s))*x1+((1-u)*t+u*s)*x2 by XCMPLX_1:29
+    .= (1*1-1*t+u*t-u*1-(u*s-u*1))*x1+((1-u)*t+u*s)*x2 by XCMPLX_1:38
+    .= (1*1-1*t+u*t-u*1-u*s+u*1)*x1+((1-u)*t+u*s)*x2 by XCMPLX_1:37
+    .= (1*1-1*t+u*t-u*s-u*1+u*1)*x1+((1-u)*t+u*s)*x2 by XCMPLX_1:21
+    .= (1*1-1*t+u*t-u*s)*x1+((1-u)*t+u*s)*x2 by XCMPLX_1:27
+    .= (1+-1*t+u*t-u*s)*x1+((1-u)*t+u*s)*x2 by XCMPLX_0:def 8
+    .= (1+-(-(-1*t+u*t))-u*s)*x1+((1-u)*t+u*s)*x2 by XCMPLX_1:1
+    .= (1-(-(-1*t+u*t))-u*s)*x1+((1-u)*t+u*s)*x2 by XCMPLX_0:def 8
+    .= (1-(-(-1*t+u*t)+u*s))*x1+((1-u)*t+u*s)*x2 by XCMPLX_1:36
+    .= (1-(1*t+-u*t+u*s))*x1+((1-u)*t+u*s)*x2 by XCMPLX_1:141
+    .= (1-(1*t-u*t+u*s))*x1+(t*(1-u)+u*s)*x2 by XCMPLX_0:def 8
+    .= (1-(1*t-u*t+u*s))*x1+(1*t-u*t+u*s)*x2 by XCMPLX_1:40;
+thus z in Line(x1,x2) by A1,A6;
+end;
+hence thesis by TARSKI:def 3;
+end;
+
+theorem Th12: :: AFF_1:28
+  y1 in Line(x1,x2) & y2 in Line(x1,x2) & y1<>y2 implies
+    Line(x1,x2) c= Line(y1,y2)
+proof
+A1:Line(x1,x2) = { (1-lambda)*x1 + lambda*x2 : not contradiction } by Def1;
+assume y1 in Line(x1,x2);
+then consider t such that A2:y1 = (1-t)*x1 + t*x2 by A1;
+assume y2 in Line(x1,x2);
+then consider s such that A3:y2 = (1-s)*x1 + s*x2 by A1;
+A4:Line(y1,y2) = { (1-lambda)*y1 + lambda*y2 : not contradiction } by Def1;
+A5:t=s implies y1=y2 by A2,A3;
+assume y1<>y2;
+then A6:t-s<>0 by A5,XCMPLX_1:15;
+A7:(1-(t/(t-s)))*y1 + (t/(t-s))*y2
+  = ((1*(t-s)-t)/(t-s))*y1 + (t/(t-s))*y2 by A6,XCMPLX_1:128
+ .= (((t+-s)-t)/(t-s))*y1 + (t/(t-s))*y2 by XCMPLX_0:def 8
+ .= (((t+-s)+-t)/(t-s))*y1 + (t/(t-s))*y2 by XCMPLX_0:def 8
+ .= ((-s+(t+-t))/(t-s))*y1 + (t/(t-s))*y2 by XCMPLX_1:1
+ .= ((-s+0)/(t-s))*y1 + (t/(t-s))*y2 by XCMPLX_0:def 6
+ .= (((-s)/(t-s))*((1-t)*x1) + ((-s)/(t-s))*(t*x2))
+              + (t/(t-s))*((1-s)*x1 + s*x2) by A2,A3,Th6
+ .= (((-s)/(t-s))*((1-t)*x1) + ((-s)/(t-s))*(t*x2))
+              + ((t/(t-s))*((1-s)*x1) + (t/(t-s))*(s*x2)) by Th6
+ .= ((((-s)/(t-s))*(1-t))*x1 + ((-s)/(t-s))*(t*x2))
+              + ((t/(t-s))*((1-s)*x1) + (t/(t-s))*(s*x2)) by Th4
+ .= ((((-s)/(t-s))*(1-t))*x1 + (((-s)/(t-s))*t)*x2)
+              + ((t/(t-s))*((1-s)*x1) + (t/(t-s))*(s*x2)) by Th4
+ .= ((((-s)/(t-s))*(1-t))*x1 + (((-s)/(t-s))*t)*x2)
+              + (((t/(t-s))*(1-s))*x1 + (t/(t-s))*(s*x2)) by Th4
+ .= ((((-s)/(t-s))*(1-t))*x1 + (((-s)/(t-s))*t)*x2)
+              + (((t/(t-s))*(1-s))*x1 + ((t/(t-s))*s)*x2) by Th4
+ .= ((((-s)*(1/(t-s)))*(1-t))*x1 + (((-s)/(t-s))*t)*x2)
+              + (((t/(t-s))*(1-s))*x1 + ((t/(t-s))*s)*x2) by XCMPLX_1:100
+ .= ((((-s)*(1-t))*(1/(t-s)))*x1 + (((-s)/(t-s))*t)*x2)
+              + (((t/(t-s))*(1-s))*x1 + ((t/(t-s))*s)*x2) by XCMPLX_1:4
+ .= ((((-s)*(1-t))/(t-s))*x1 + (((-s)/(t-s))*t)*x2)
+              + (((t/(t-s))*(1-s))*x1 + ((t/(t-s))*s)*x2) by XCMPLX_1:100
+ .= ((((-s)*(1-t))/(t-s))*x1 + (((-s)*(1/(t-s)))*t)*x2)
+              + (((t/(t-s))*(1-s))*x1 + ((t/(t-s))*s)*x2) by XCMPLX_1:100
+ .= ((((-s)*(1-t))/(t-s))*x1 + (((-s)*t)*(1/(t-s)))*x2)
+              + (((t/(t-s))*(1-s))*x1 + ((t/(t-s))*s)*x2) by XCMPLX_1:4
+ .= ((((-s)*(1-t))/(t-s))*x1 + (((-s)*t)/(t-s))*x2)
+              + (((t/(t-s))*(1-s))*x1 + ((t/(t-s))*s)*x2) by XCMPLX_1:100
+ .= ((((-s)*(1-t))/(t-s))*x1 + (((-s)*t)/(t-s))*x2)
+              + (((t*(1/(t-s)))*(1-s))*x1 + ((t/(t-s))*s)*x2) by XCMPLX_1:100
+ .= ((((-s)*(1-t))/(t-s))*x1 + (((-s)*t)/(t-s))*x2)
+              + (((t*(1-s))*(1/(t-s)))*x1 + ((t/(t-s))*s)*x2) by XCMPLX_1:4
+ .= ((((-s)*(1-t))/(t-s))*x1 + (((-s)*t)/(t-s))*x2)
+              + (((t*(1-s))/(t-s))*x1 + ((t/(t-s))*s)*x2) by XCMPLX_1:100
+ .= ((((-s)*(1-t))/(t-s))*x1 + (((-s)*t)/(t-s))*x2)
+              + (((t*(1-s))/(t-s))*x1 + ((t*(1/(t-s)))*s)*x2) by XCMPLX_1:100
+ .= ((((-s)*(1-t))/(t-s))*x1 + (((-s)*t)/(t-s))*x2)
+              + (((t*(1-s))/(t-s))*x1 + ((t*s)*(1/(t-s)))*x2) by XCMPLX_1:4
+ .= ((((-s)*(1-t))/(t-s))*x1 + (((-s)*t)/(t-s))*x2)
+              + (((t*(1-s))/(t-s))*x1 + ((t*s)/(t-s))*x2) by XCMPLX_1:100
+ .= (((-s)*(1-t))/(t-s))*x1 + ((((-s)*t)/(t-s))*x2
+              + (((t*(1-s))/(t-s))*x1 + ((t*s)/(t-s))*x2)) by Lm2
+ .= (((-s)*(1-t))/(t-s))*x1 + (((t*(1-s))/(t-s))*x1
+              + ((((-s)*t)/(t-s))*x2 + ((t*s)/(t-s))*x2)) by Lm2
+ .= ((((-s)*(1-t))/(t-s))*x1 + ((t*(1-s))/(t-s))*x1)
+              + ((((-s)*t)/(t-s))*x2 + ((t*s)/(t-s))*x2) by Lm2
+ .= (((-s)*(1-t))/(t-s) + (t*(1-s))/(t-s))*x1
+              + ((((-s)*t)/(t-s))*x2 + ((t*s)/(t-s))*x2) by Th7
+ .= (((-s)*(1-t))/(t-s) + (t*(1-s))/(t-s))*x1
+              + (((-s)*t)/(t-s) + (t*s)/(t-s))*x2 by Th7
+ .= (((-s)*(1-t)+t*(1-s))/(t-s))*x1
+              + (((-s)*t)/(t-s) + (t*s)/(t-s))*x2 by XCMPLX_1:63
+ .= (((-s)*(1-t)+t*(1-s))/(t-s))*x1 + (((-s)*t + t*s)/(t-s))*x2 by XCMPLX_1:63
+ .= (((-s)*(1-t)+t*(1-s))/(t-s))*x1 + (((-s+s)*t)/(t-s))*x2 by XCMPLX_1:8
+ .= (((-s)*(1-t)+t*(1-s))/(t-s))*x1 + (((0)*t)/(t-s))*x2 by XCMPLX_0:def 6
+ .= (((-s)*(1-t)+t*(1-s))/(t-s))*x1 + 0*n by Th3
+ .= (((-s)*(1-t)+t*(1-s))/(t-s))*x1 by Th1
+ .= ((((-s)*1-(-s)*t)+t*(1-s))/(t-s))*x1 by XCMPLX_1:40
+ .= ((((-s)*1-(-s)*t)+(t*1-t*s))/(t-s))*x1 by XCMPLX_1:40
+ .= ((((-s)*1+-(-s)*t)+(t*1-t*s))/(t-s))*x1 by XCMPLX_0:def 8
+ .= ((((-s)*1+s*t)+(t*1-t*s))/(t-s))*x1 by XCMPLX_1:179
+ .= ((((-s)*1+s*t)+(t*1+-t*s))/(t-s))*x1 by XCMPLX_0:def 8
+ .= (((((-s)*1+s*t)+t*1)+-t*s)/(t-s))*x1 by XCMPLX_1:1
+ .= (((((-s)*1+t*1)+s*t)+-t*s)/(t-s))*x1 by XCMPLX_1:1
+ .= ((((-s)*1+t*1)+s*t-t*s)/(t-s))*x1 by XCMPLX_0:def 8
+ .= (((-s)*1+t*1)/(t-s))*x1 by XCMPLX_1:26
+ .= ((1*(t-s))/(t-s))*x1 by XCMPLX_0:def 8
+ .= 1*x1 by A6,XCMPLX_1:90
+ .= x1 by Th3;
+
+A8:(1-((t-1)/(t-s)))*y1 + ((t-1)/(t-s))*y2
+  = ((1*(t-s)-(t-1))/(t-s))*y1 + ((t-1)/(t-s))*y2 by A6,XCMPLX_1:128
+ .= ((1-s)/(t-s))*y1 + ((t-1)/(t-s))*y2 by XCMPLX_1:23
+ .= ((-s+1)/(t-s))*y1 + ((t-1)/(t-s))*y2 by XCMPLX_0:def 8
+ .= (((-s+1)/(t-s))*((1-t)*x1) + ((-s+1)/(t-s))*(t*x2))
+              + ((t-1)/(t-s))*((1-s)*x1 + s*x2) by A2,A3,Th6
+ .= (((-s+1)/(t-s))*((1-t)*x1) + ((-s+1)/(t-s))*(t*x2))
+              + (((t-1)/(t-s))*((1-s)*x1) + ((t-1)/(t-s))*(s*x2)) by Th6
+ .= ((((-s+1)/(t-s))*(1-t))*x1 + ((-s+1)/(t-s))*(t*x2))
+              + (((t-1)/(t-s))*((1-s)*x1) + ((t-1)/(t-s))*(s*x2)) by Th4
+ .= ((((-s+1)/(t-s))*(1-t))*x1 + (((-s+1)/(t-s))*t)*x2)
+              + (((t-1)/(t-s))*((1-s)*x1) + ((t-1)/(t-s))*(s*x2)) by Th4
+ .= ((((-s+1)/(t-s))*(1-t))*x1 + (((-s+1)/(t-s))*t)*x2)
+              + ((((t-1)/(t-s))*(1-s))*x1 + ((t-1)/(t-s))*(s*x2)) by Th4
+ .= ((((-s+1)/(t-s))*(1-t))*x1 + (((-s+1)/(t-s))*t)*x2)
+              + ((((t-1)/(t-s))*(1-s))*x1 + (((t-1)/(t-s))*s)*x2) by Th4
+ .= ((((-s+1)*(1/(t-s)))*(1-t))*x1 + (((-s+1)/(t-s))*t)*x2)
+          + ((((t-1)/(t-s))*(1-s))*x1 + (((t-1)/(t-s))*s)*x2) by XCMPLX_1:100
+ .= ((((-s+1)*(1-t))*(1/(t-s)))*x1 + (((-s+1)/(t-s))*t)*x2)
+          + ((((t-1)/(t-s))*(1-s))*x1 + (((t-1)/(t-s))*s)*x2) by XCMPLX_1:4
+ .= ((((-s+1)*(1-t))/(t-s))*x1 + (((-s+1)/(t-s))*t)*x2)
+          + ((((t-1)/(t-s))*(1-s))*x1 + (((t-1)/(t-s))*s)*x2) by XCMPLX_1:100
+ .= ((((-s+1)*(1-t))/(t-s))*x1 + (((-s+1)*(1/(t-s)))*t)*x2)
+          + ((((t-1)/(t-s))*(1-s))*x1 + (((t-1)/(t-s))*s)*x2) by XCMPLX_1:100
+ .= ((((-s+1)*(1-t))/(t-s))*x1 + (((-s+1)*t)*(1/(t-s)))*x2)
+              + ((((t-1)/(t-s))*(1-s))*x1 + (((t-1)/(t-s))*s)*x2) by XCMPLX_1:4
+ .= ((((-s+1)*(1-t))/(t-s))*x1 + (((-s+1)*t)/(t-s))*x2)
+           + ((((t-1)/(t-s))*(1-s))*x1 + (((t-1)/(t-s))*s)*x2) by XCMPLX_1:100
+ .= ((((-s+1)*(1-t))/(t-s))*x1 + (((-s+1)*t)/(t-s))*x2)
+        + ((((t-1)*(1/(t-s)))*(1-s))*x1 + (((t-1)/(t-s))*s)*x2) by XCMPLX_1:100
+ .= ((((-s+1)*(1-t))/(t-s))*x1 + (((-s+1)*t)/(t-s))*x2)
+        + ((((t-1)*(1-s))*(1/(t-s)))*x1 + (((t-1)/(t-s))*s)*x2) by XCMPLX_1:4
+ .= ((((-s+1)*(1-t))/(t-s))*x1 + (((-s+1)*t)/(t-s))*x2)
+        + ((((t-1)*(1-s))/(t-s))*x1 + (((t-1)/(t-s))*s)*x2) by XCMPLX_1:100
+ .= ((((-s+1)*(1-t))/(t-s))*x1 + (((-s+1)*t)/(t-s))*x2)
+        + ((((t-1)*(1-s))/(t-s))*x1 + (((t-1)*(1/(t-s)))*s)*x2) by XCMPLX_1:100
+ .= ((((-s+1)*(1-t))/(t-s))*x1 + (((-s+1)*t)/(t-s))*x2)
+        + ((((t-1)*(1-s))/(t-s))*x1 + (((t-1)*s)*(1/(t-s)))*x2) by XCMPLX_1:4
+ .= ((((-s+1)*(1-t))/(t-s))*x1 + (((-s+1)*t)/(t-s))*x2)
+        + ((((t-1)*(1-s))/(t-s))*x1 + (((t-1)*s)/(t-s))*x2) by XCMPLX_1:100
+ .= (((-s+1)*(1-t))/(t-s))*x1 + ((((-s+1)*t)/(t-s))*x2
+              + ((((t-1)*(1-s))/(t-s))*x1 + (((t-1)*s)/(t-s))*x2)) by Lm2
+ .= (((-s+1)*(1-t))/(t-s))*x1 + ((((t-1)*(1-s))/(t-s))*x1
+              + ((((-s+1)*t)/(t-s))*x2 + (((t-1)*s)/(t-s))*x2)) by Lm2
+ .= ((((-s+1)*(1-t))/(t-s))*x1 + (((t-1)*(1-s))/(t-s))*x1)
+              + ((((-s+1)*t)/(t-s))*x2 + (((t-1)*s)/(t-s))*x2) by Lm2
+ .= (((-s+1)*(1-t))/(t-s) + ((t-1)*(1-s))/(t-s))*x1
+              + ((((-s+1)*t)/(t-s))*x2 + (((t-1)*s)/(t-s))*x2) by Th7
+ .= (((-s+1)*(1-t))/(t-s) + ((t-1)*(1-s))/(t-s))*x1
+              + (((-s+1)*t)/(t-s) + ((t-1)*s)/(t-s))*x2 by Th7
+ .= (((-s+1)*(1-t)+(t-1)*(1-s))/(t-s))*x1
+              + (((-s+1)*t)/(t-s) + ((t-1)*s)/(t-s))*x2 by XCMPLX_1:63
+ .= (((-s+1)*(1-t)+(t-1)*(1-s))/(t-s))*x1
+              + (((-s+1)*t + (t-1)*s)/(t-s))*x2 by XCMPLX_1:63
+ .= (((1-t)*(1-s)+(t-1)*(1-s))/(t-s))*x1
+              + (((-s+1)*t + (t-1)*s)/(t-s))*x2 by XCMPLX_0:def 8
+ .= (((1-t)*(1-s)+(-(1-t))*(1-s))/(t-s))*x1
+              + (((-s+1)*t + (t-1)*s)/(t-s))*x2 by XCMPLX_1:143
+ .= (((1-t)*(1-s)+-(1-t)*(1-s))/(t-s))*x1
+              + (((-s+1)*t + (t-1)*s)/(t-s))*x2 by XCMPLX_1:175
+ .= (((1-t)*(1-s)-(1-t)*(1-s))/(t-s))*x1
+              + (((-s+1)*t + (t-1)*s)/(t-s))*x2 by XCMPLX_0:def 8
+ .= (0/(t-s))*x1 + (((-s+1)*t + (t-1)*s)/(t-s))*x2 by XCMPLX_1:14
+ .= 0*n + (((-s+1)*t + (t-1)*s)/(t-s))*x2 by Th3
+ .= (((-s+1)*t + (t-1)*s)/(t-s))*x2 by Th1
+ .= ((((-s)*t+1*t)+(t-1)*s)/(t-s))*x2 by XCMPLX_1:8
+ .= ((((-s)*t+1*t)+(s*t-s*1))/(t-s))*x2 by XCMPLX_1:40
+ .= ((((-s)*t+1*t)+(s*t+-s*1))/(t-s))*x2 by XCMPLX_0:def 8
+ .= ((((1*t+(-s)*t)+s*t)+-s*1)/(t-s))*x2 by XCMPLX_1:1
+ .= (((1*t+((-s)*t+s*t))+-s*1)/(t-s))*x2 by XCMPLX_1:1
+ .= (((1*t+((-s)*t+-(-s)*t))+-s*1)/(t-s))*x2 by XCMPLX_1:179
+ .= ((1*t+((-s)*t-(-s)*t)+-s*1)/(t-s))*x2 by XCMPLX_0:def 8
+ .= ((1*t+-s*1)/(t-s))*x2 by XCMPLX_1:25
+ .= (1*(t-s)/(t-s))*x2 by XCMPLX_0:def 8
+ .= 1*x2 by A6,XCMPLX_1:90
+ .= x2 by Th3;
+A9:x1 in Line(y1,y2) by A4,A7;
+A10:x2 in Line(y1,y2) by A4,A8;
+thus thesis by A9,A10,Th11;
+end;
+
+definition let n; let A be Subset of REAL n;
+ attr A is being_line means :Def2:      :: AFF_1:def 3
+   ex x1,x2 st x1<>x2 & A=Line(x1,x2);
+   synonym A is_line;
+end;
+
+Lm3:for A be Subset of REAL n,x1,x2
+   holds A is_line & x1 in A & x2 in A & x1<>x2 implies A=Line(x1,x2)
+proof
+let A be Subset of REAL n;
+let x1,x2;
+assume that A1: A is_line and A2:x1 in A & x2 in A & x1<>x2;
+A3:ex y1,y2 st y1<>y2 & A=Line(y1,y2) by A1,Def2;
+then A4:Line(x1,x2) c= A by A2,Th11;
+A c= Line(x1,x2) by A2,A3,Th12;
+hence thesis by A4,XBOOLE_0:def 10;
+end;
+
+theorem :: AFF_1:30
+  for A,C be Subset of REAL n,x1,x2 holds A is_line & C is_line &
+          x1 in A & x2 in A & x1 in C & x2 in C implies x1=x2 or A=C
+proof
+let A,C be Subset of REAL n;let x1,x2;
+assume A1:A is_line & C is_line & x1 in A & x2 in A & x1 in C & x2 in C;
+assume x1<>x2;
+then A = Line(x1,x2) & C = Line(x1,x2) by A1,Lm3;
+hence thesis;
+end;
+
+theorem Th14: ::AFF_1:31
+ for A be Subset of REAL n st
+ A is_line holds ex x1,x2 st x1 in A & x2 in A & x1<>x2
+proof
+let A be Subset of REAL n;
+assume A is_line;
+then consider x1,x2 such that
+A1:x1<>x2 & A = Line(x1,x2) by Def2;
+x1 in A & x2 in A by A1,Th10;
+hence thesis by A1;
+end;
+
+theorem :: AFF_1:32
+ for A be Subset of REAL n st
+ A is_line holds ex x2 st x1<>x2 & x2 in A
+proof
+let A be Subset of REAL n;
+assume A is_line;
+then consider y1,y2 such that
+A1:y1 in A & y2 in A & y1<>y2 by Th14;
+x1 = y1 implies x1<>y2 & y2 in A by A1;
+hence thesis by A1;
+end;
+
+definition let n;let x be Element of REAL n;
+ func Rn2Fin (x) -> FinSequence of REAL equals :Def3:
+  x;
+correctness
+proof
+reconsider x as Point of TOP-REAL n by EUCLID:25;
+reconsider x as Element of n-tuples_on REAL by EUCLID:def 1;
+reconsider x as Function of Seg n, REAL by EUCLID:26;
+A1:x is FinSequence of REAL by EUCLID:27;
+thus thesis by A1;
+end;
+end;
+
+definition let n;let x be Element of REAL n;
+ func |. x .| -> Real equals
+ :Def4: |. Rn2Fin(x) .|;
+correctness;
+end;
+
+definition let n;let x1,x2 be Element of REAL n;
+ func |( x1,x2 )| -> Real equals
+ :Def5: |( Rn2Fin(x1),Rn2Fin(x2) )|;
+correctness  by XREAL_0:def 1;
+commutativity;
+end;
+
+Lm4:Rn2Fin(x1+x2)=Rn2Fin(x1)+Rn2Fin(x2)
+proof
+Rn2Fin(x1) = x1 & Rn2Fin(x2) = x2 by Def3;
+hence thesis by Def3;
+end;
+
+Lm5:Rn2Fin(x1-x2)=Rn2Fin(x1)-Rn2Fin(x2)
+proof
+Rn2Fin(x1) = x1 & Rn2Fin(x2) = x2 by Def3;
+hence thesis by Def3;
+end;
+
+theorem Th16: :: EUCLID_2:10
+  for x1,x2 being Element of REAL n
+     holds |(x1,x2)|=1/4*((|.(x1+x2).|)^2-(|.(x1-x2).|)^2)
+proof
+let x1,x2 be Element of REAL n;
+A1:x1 = Rn2Fin(x1) & x2 = Rn2Fin(x2) by Def3;
+|( x1,x2 )| = |(Rn2Fin(x1), Rn2Fin(x2))| by Def5
+ .= 1/4*((|.(Rn2Fin(x1)+Rn2Fin(x2)).|)^2-(|.(Rn2Fin(x1)-Rn2Fin(x2)).|)^2)
+              by A1,EUCLID_2:10
+ .= 1/4*((|.(Rn2Fin(x1+x2)).|)^2-(|.(Rn2Fin(x1)-Rn2Fin(x2)).|)^2) by Lm4
+ .= 1/4*((|.(Rn2Fin(x1+x2)).|)^2-(|.(Rn2Fin(x1-x2)).|)^2) by Lm5
+ .= 1/4*((|.(x1+x2).|)^2-(|.(Rn2Fin(x1-x2)).|)^2) by Def4
+ .= 1/4*((|.(x1+x2).|)^2-(|.(x1-x2).|)^2) by Def4;
+hence thesis;
+end;
+
+theorem :: EUCLID_2:11
+  for x being Element of REAL n holds |(x,x)| >= 0
+proof
+let x be Element of REAL n;
+|(Rn2Fin(x),Rn2Fin(x))| >= 0 by EUCLID_2:11;
+hence thesis by Def5;
+end;
+
+theorem Th18: :: EUCLID_2:12
+  for x being Element of REAL n holds (|.x.|)^2=|(x,x)|
+proof
+let x be Element of REAL n;
+A1:(|.Rn2Fin(x).|)^2=|(Rn2Fin(x),Rn2Fin(x))| by EUCLID_2:12;
+A2:|. x .| = |. Rn2Fin(x) .| by Def4;
+thus thesis by A1,A2,Def5;
+end;
+
+theorem Th19: :: EUCLID_2:14
+  for x being Element of REAL n holds 0 <= |.x.|
+proof
+let x be Element of REAL n;
+0 <= |.Rn2Fin(x).| by EUCLID_2:14;
+hence thesis by Def4;
+end;
+
+theorem :: EUCLID_2:13
+  for x being Element of REAL n holds |.x.| = sqrt |(x,x)|
+proof
+let x be Element of REAL n;
+0 <= |.x.| by Th19;
+then |.x.| = sqrt |.x.|^2 by SQUARE_1:89
+          .= sqrt|(x,x)| by Th18;
+hence thesis;
+end;
+
+theorem Th21: :: EUCLID_2:16
+  for x being Element of REAL n holds |(x,x)| = 0 iff |.x.| = 0
+proof
+let x be Element of REAL n;
+thus |(x,x)|=0 implies |.x.| = 0
+  proof
+  assume |(x,x)| = 0;
+  then |.x.|^2 = 0 by Th18;
+  hence |.x.| = 0 by SQUARE_1:73;
+  end;
+thus |.x.| = 0 implies |(x,x)| = 0 by Th18,SQUARE_1:60;
+end;
+
+Lm6:x - 0*n = x
+proof
+reconsider x' = x as Element of n-tuples_on REAL by EUCLID:def 1;
+A1:0.REAL n = 0*n & 0*n = n|->(0 qua Real) by EUCLID:def 4,def 9;
+x - 0*n = x' by A1,RVSUM_1:53
+       .= x;
+hence thesis;
+end;
+
+Lm7:0*n - x = -x
+proof
+reconsider x' = x as Element of n-tuples_on REAL by EUCLID:def 1;
+A1:0.REAL n = 0*n & 0*n = n|->(0 qua Real) by EUCLID:def 4,def 9;
+0*n - x = -x' by A1,RVSUM_1:54
+       .= -x;
+hence thesis;
+end;
+
+theorem Th22: :: EUCLID_2:15
+  for x being Element of REAL n holds |(x,x)|=0 iff x=0*n
+proof
+let x be Element of REAL n;
+thus |(x,x)| = 0 implies x = 0*n
+  proof
+  assume |(x,x)| = 0;
+  then |.x.| = 0 by Th21;
+  then A1:|.Rn2Fin(x).| = 0 by Def4;
+  x = Rn2Fin(x) by Def3;
+  hence x = 0*n by A1,EUCLID:11;
+  end;
+thus x = 0*n implies |(x,x)| = 0
+  proof
+  assume x = 0*n;
+  then |(x,x)| = 1/4*((|.(0*n+0*n).|)^2-(|.(0*n-0*n).|)^2) by Th16
+              .= 1/4*((|.(0*n).|)^2-(|.(0*n-0*n).|)^2) by Th1
+              .= 1/4*((|.(0*n).|)^2-(|.(0*n).|)^2) by Lm6
+              .= 1/4*((|.(0*n).|)^2+-(|.(0*n).|)^2) by XCMPLX_0:def 8
+              .= 1/4*0 by XCMPLX_0:def 6;
+  hence thesis;
+  end;
+end;
+
+theorem Th23: :: EUCLID_2:17
+  for x being Element of REAL n holds |(x, 0*n)| = 0
+proof
+let x be Element of REAL n;
+|(x,0*n)| = 1/4*((|.(x+0*n).|)^2-(|.(x-0*n).|)^2) by Th16
+         .= 1/4*((|.x.|)^2-(|.(x-0*n).|)^2) by Th1
+         .= 1/4*((|.x.|)^2-(|.x.|)^2) by Lm6
+         .= 1/4*((|.x.|)^2+-(|.x.|)^2) by XCMPLX_0:def 8
+         .= 1/4*0 by XCMPLX_0:def 6;
+hence thesis;
+end;
+
+theorem :: EUCLID_2:18
+  for x being Element of REAL n holds |(0*n,x)| = 0 by Th23;
+
+Lm8:for x being Element of REAL n holds len Rn2Fin(x) = n
+proof
+let x be Element of REAL n;
+Rn2Fin(x) = x by Def3;
+hence len Rn2Fin(x) = n by EUCLID:2;
+end;
+
+theorem Th25: :: EUCLID_2:19
+  for x1,x2,x3 being Element of REAL n holds
+   |((x1+x2),x3)| = |(x1,x3)| + |(x2,x3)|
+proof
+let x1,x2,x3 be Element of REAL n;
+A1:len Rn2Fin(x1) = n & len Rn2Fin(x2) = n & len Rn2Fin(x3) = n by Lm8;
+thus |((x1+x2),x3)| = |(Rn2Fin(x1+x2),Rn2Fin(x3))| by Def5
+   .= |(Rn2Fin(x1)+Rn2Fin(x2),Rn2Fin(x3))| by Lm4
+   .= |(Rn2Fin(x1),Rn2Fin(x3))|+|(Rn2Fin(x2),Rn2Fin(x3))| by A1,EUCLID_2:19
+   .= |(x1,x3)| + |(Rn2Fin(x2),Rn2Fin(x3))| by Def5
+   .= |(x1,x3)| + |(x2,x3)| by Def5;
+end;
+
+Lm9:for x being Element of REAL n,a being real number
+     holds Rn2Fin(a*x) = a*Rn2Fin(x)
+proof
+let x being Element of REAL n,a be real number;
+thus Rn2Fin(a*x) = a*x by Def3
+                .= a*Rn2Fin(x) by Def3;
+end;
+
+theorem Th26: ::EUCLID_2:20
+  for x1,x2 being Element of REAL n,a being real number
+     holds |(a*x1,x2)| = a*|(x1,x2)|
+proof
+let x1,x2 be Element of REAL n,a be real number;
+A1:len Rn2Fin(x1) = n & len Rn2Fin(x2) = n by Lm8;
+thus |(a*x1,x2)| = |(Rn2Fin(a*x1),Rn2Fin(x2))| by Def5
+              .= |(a*Rn2Fin(x1),Rn2Fin(x2))| by Lm9
+              .= a*|(Rn2Fin(x1),Rn2Fin(x2))| by A1,EUCLID_2:20
+              .= a*|(x1,x2)| by Def5;
+end;
+
+theorem :: EUCLID_2:21
+  for x1,x2 being Element of REAL n,a being real number
+     holds |(x1,a*x2)| = a*|(x1,x2)| by Th26;
+
+Lm10:for x being Element of REAL n
+     holds Rn2Fin(-x) = -Rn2Fin(x)
+proof
+let x being Element of REAL n;
+thus Rn2Fin(-x) = -x by Def3
+                .= -Rn2Fin(x) by Def3;
+end;
+
+theorem Th28: :: EUCLID_2:22
+  for x1,x2 being Element of REAL n holds
+    |(-x1, x2)| = - |(x1, x2)|
+proof
+let x1,x2 be Element of REAL n;
+A1:len Rn2Fin(x1) = n & len Rn2Fin(x2) = n by Lm8;
+thus |(-x1, x2)| = |(Rn2Fin(-x1),Rn2Fin(x2))| by Def5
+                .= |(-Rn2Fin(x1),Rn2Fin(x2))| by Lm10
+                .= - |(Rn2Fin(x1),Rn2Fin(x2))| by A1,EUCLID_2:22
+                .= - |(x1, x2)| by Def5;
+end;
+
+theorem :: EUCLID_2:23
+  for x1,x2 being Element of REAL n holds
+    |(x1, -x2)| = - |(x1, x2)| by Th28;
+
+theorem :: EUCLID_2:24
+  for x1,x2 being Element of REAL n holds
+    |(-x1, -x2)| = |(x1, x2)|
+proof
+let x1,x2 be Element of REAL n;
+thus |(-x1, -x2)| = - |(x1, -x2)| by Th28
+                 .= (-1)*|(x1, -x2)| by XCMPLX_1:180
+                 .= (-1)*(- |(x1, x2)|) by Th28
+                 .= |(x1,x2)| by XCMPLX_1:181;
+end;
+
+theorem Th31: :: EUCLID_2:25
+  for x1,x2,x3 being Element of REAL n
+    holds |(x1-x2, x3)| = |(x1, x3)| - |(x2, x3)|
+proof
+let x1,x2,x3 be Element of REAL n;
+A1:len Rn2Fin(x1) = n & len Rn2Fin(x2) = n & len Rn2Fin(x3) = n by Lm8;
+thus |(x1-x2, x3)| = |(Rn2Fin(x1-x2),Rn2Fin(x3))| by Def5
+    .= |(Rn2Fin(x1)-Rn2Fin(x2),Rn2Fin(x3))| by Lm5
+    .= |(Rn2Fin(x1),Rn2Fin(x3))| - |(Rn2Fin(x2),Rn2Fin(x3))| by A1,EUCLID_2:25
+    .= |(x1, x3)| - |(Rn2Fin(x2), Rn2Fin(x3))| by Def5
+    .= |(x1, x3)| - |(x2, x3)| by Def5;
+end;
+
+theorem :: EUCLID_2:26
+  for a,b being real number,x1,x2,x3 being Element of REAL n
+   holds
+    |( (a*x1+b*x2), x3 )| = a*|(x1,x3)| + b*|(x2,x3)|
+proof
+let a,b be real number,x1,x2,x3 be Element of REAL n;
+thus |( (a*x1+b*x2), x3 )| = |(a*x1,x3)|+|(b*x2,x3)| by Th25
+                          .= a*|(x1,x3)|+|(b*x2,x3)| by Th26
+                          .= a*|(x1,x3)| + b*|(x2,x3)| by Th26;
+end;
+
+theorem :: EUCLID_2:27
+  for x1,y1,y2 being Element of REAL n holds
+    |(x1, y1+y2)| = |(x1, y1)| + |(x1, y2)| by Th25;
+
+theorem :: EUCLID_2:28
+  for x1,y1,y2 being Element of REAL n holds
+    |(x1, y1-y2)| = |(x1, y1)| - |(x1, y2)| by Th31;
+
+theorem Th35: :: EUCLID_2:29
+  for x1,x2,y1,y2 being Element of REAL n holds
+      |(x1+x2, y1+y2)| = |(x1, y1)| + |(x1, y2)| + |(x2, y1)| + |(x2, y2)|
+proof
+let x1,x2,y1,y2 being Element of REAL n;
+thus |(x1+x2, y1+y2)| = |(x1,y1+y2)|+|(x2,y1+y2)| by Th25
+       .= |(x1, y1)| + |(x1, y2)| + |(x2, y1+y2)| by Th25
+       .= |(x1, y1)| + |(x1, y2)| + (|(x2, y1)| + |(x2, y2)|) by Th25
+       .= |(x1, y1)| + |(x1, y2)| + |(x2, y1)| + |(x2, y2)| by XCMPLX_1:1;
+end;
+
+theorem Th36: :: EUCLID_2:30
+  for x1,x2,y1,y2 being Element of REAL n holds
+      |(x1-x2, y1-y2)| = |(x1, y1)| - |(x1, y2)| - |(x2, y1)| + |(x2, y2)|
+proof
+let x1,x2,y1,y2 being Element of REAL n;
+thus |(x1-x2, y1-y2)| = |(x1,y1-y2)| - |(x2,y1-y2)| by Th31
+     .= |(x1,y1)| - |(x1,y2)| - |(x2,y1-y2)| by Th31
+     .= |(x1,y1)| - |(x1,y2)| - (|(x2,y1)| - |(x2,y2)|) by Th31
+     .= |(x1, y1)| - |(x1, y2)| - |(x2, y1)| + |(x2, y2)| by XCMPLX_1:37;
+end;
+
+theorem Th37: :: EUCLID_2:31
+  for x,y being Element of REAL n holds
+    |(x+y, x+y)| = |(x, x)| + 2*|(x, y)| + |(y, y)|
+proof
+let x,y be Element of REAL n;
+thus |(x+y, x+y)| = |(x,x)|+|(x,y)|+|(y,x)|+|(y,y)| by Th35
+                 .= |(x,x)|+(|(x,y)|+|(x,y)|)+|(y,y)| by XCMPLX_1:1
+                 .= |(x,x)|+2*|(x,y)|+|(y,y)| by XCMPLX_1:11;
+end;
+
+theorem Th38: :: EUCLID_2:32
+  for x,y being Element of REAL n holds
+    |(x-y, x-y)| = |(x, x)| - 2*|(x, y)| + |(y, y)|
+proof
+let x,y be Element of REAL n;
+thus |(x-y, x-y)| = |(x,x)| - |(x,y)| - |(y,x)| + |(y,y)| by Th36
+                 .= |(x,x)| - (|(x,y)| + |(x,y)|) + |(y,y)| by XCMPLX_1:36
+                 .= |(x, x)| - 2*|(x, y)| + |(y, y)| by XCMPLX_1:11;
+end;
+
+theorem :: EUCLID_2:33
+  for x,y being Element of REAL n holds
+    |.x+y.|^2 = |.x.|^2 + 2*|(x, y)| + |.y.|^2
+proof
+let x,y be Element of REAL n;
+thus |.x+y.|^2 = |(x+y,x+y)| by Th18
+              .= |(x,x)|+2*|(x,y)|+|(y,y)| by Th37
+              .= |.x.|^2 + 2*|(x, y)| + |(y,y)| by Th18
+              .= |.x.|^2 + 2*|(x, y)| + |.y.|^2 by Th18;
+end;
+
+theorem :: EUCLID_2:34
+  for x,y being Element of REAL n holds
+    |.x-y.|^2 = |.x.|^2 - 2*|(x, y)| + |.y.|^2
+proof
+let x,y be Element of REAL n;
+thus |.x-y.|^2 = |(x-y,x-y)| by Th18
+              .= |(x,x)|-2*|(x,y)|+|(y,y)| by Th38
+              .= |.x.|^2 - 2*|(x, y)| + |(y,y)| by Th18
+              .= |.x.|^2 - 2*|(x, y)| + |.y.|^2 by Th18;
+end;
+
+theorem :: EUCLID_2:35
+  for x,y being Element of REAL n holds
+    |.x+y.|^2 + |.x-y.|^2 = 2*(|.x.|^2 + |.y.|^2)
+proof
+let x,y be Element of REAL n;
+len Rn2Fin(x) = n & len Rn2Fin(y) = n by Lm8;
+then |.Rn2Fin(x)+Rn2Fin(y).|^2 + |.Rn2Fin(x)-Rn2Fin(y).|^2
+             = 2*(|.Rn2Fin(x).|^2+|.Rn2Fin(y).|^2) by EUCLID_2:35;
+then |.Rn2Fin(x+y).|^2 + |.Rn2Fin(x)-Rn2Fin(y).|^2
+             = 2*(|.Rn2Fin(x).|^2+|.Rn2Fin(y).|^2) by Lm4;
+then |.Rn2Fin(x+y).|^2 + |.Rn2Fin(x-y).|^2
+             = 2*(|.Rn2Fin(x).|^2+|.Rn2Fin(y).|^2) by Lm5;
+then |.x+y.|^2 + |.Rn2Fin(x-y).|^2
+             = 2*(|.Rn2Fin(x).|^2+|.Rn2Fin(y).|^2) by Def4;
+then |.x+y.|^2 + |.x-y.|^2 = 2*(|.Rn2Fin(x).|^2+|.Rn2Fin(y).|^2) by Def4;
+then |.x+y.|^2 + |.x-y.|^2 = 2*(|.x.|^2+|.Rn2Fin(y).|^2) by Def4;
+hence |.x+y.|^2 + |.x-y.|^2 = 2*(|.x.|^2+|.y.|^2) by Def4;
+end;
+
+theorem :: EUCLID_2:36
+  for x,y being Element of REAL n holds
+    |.x+y.|^2 - |.x-y.|^2 = 4* |(x,y)|
+proof
+let x,y be Element of REAL n;
+len Rn2Fin(x) = n & len Rn2Fin(y) = n by Lm8;
+then |.Rn2Fin(x)+Rn2Fin(y).|^2 - |.Rn2Fin(x)-Rn2Fin(y).|^2
+             = 4*|(Rn2Fin(x),Rn2Fin(y))| by EUCLID_2:36;
+then |.Rn2Fin(x+y).|^2 - |.Rn2Fin(x)-Rn2Fin(y).|^2
+             = 4*|(Rn2Fin(x),Rn2Fin(y))| by Lm4;
+then |.Rn2Fin(x+y).|^2 - |.Rn2Fin(x-y).|^2 = 4*|(Rn2Fin(x),Rn2Fin(y))| by Lm5;
+then |.Rn2Fin(x+y).|^2 - |.Rn2Fin(x-y).|^2 = 4*|(x,y)| by Def5;
+then |.x+y.|^2 - |.Rn2Fin(x-y).|^2 = 4*|(x,y)| by Def4;
+hence |.x+y.|^2 - |.x-y.|^2 = 4*|(x,y)| by Def4;
+end;
+
+theorem :: EUCLID_2:37  :: Schwartz
+  for x,y being Element of REAL n holds
+    abs |(x,y)| <= |.x.|*|.y.|
+proof
+let x,y be Element of REAL n;
+len Rn2Fin(x) = n & len Rn2Fin(y) = n by Lm8;
+then abs |(Rn2Fin(x),Rn2Fin(y))| <= |.Rn2Fin(x).|*|.Rn2Fin(y).| by EUCLID_2:37;
+then abs |(x,y)| <= |.Rn2Fin(x).|*|.Rn2Fin(y).| by Def5;
+then abs |(x,y)| <= |.x.|*|.Rn2Fin(y).| by Def4;
+hence abs |(x,y)| <= |.x.|*|.y.| by Def4;
+end;
+
+theorem :: EUCLID_2:38 :: Triangle
+  for x,y being Element of REAL n holds
+    |.x+y.| <= |.x.| + |.y.|
+proof
+let x,y be Element of REAL n;
+len Rn2Fin(x) = n & len Rn2Fin(y) = n by Lm8;
+then |.Rn2Fin(x)+Rn2Fin(y).| <= |.Rn2Fin(x).|+|.Rn2Fin(y).| by EUCLID_2:38;
+then |.Rn2Fin(x+y).| <= |.Rn2Fin(x).|+|.Rn2Fin(y).| by Lm4;
+then |.x+y.| <= |.Rn2Fin(x).|+|.Rn2Fin(y).| by Def4;
+then |.x+y.| <= |.x.|+|.Rn2Fin(y).| by Def4;
+hence |.x+y.| <= |.x.|+|.y.| by Def4;
+end;
+
+definition let n;let x1, x2 be Element of REAL n;
+  pred x1,x2 are_orthogonal means
+ :Def6:   :: EUCLID_2:def 3
+  |(x1,x2)| = 0;
+  symmetry;
+end;
+
+Lm11:x1 - (x2 + x3) = x1 - x2 - x3
+proof
+reconsider x1' = x1, x2' = x2, x3' = x3 as Element of n-tuples_on REAL
+   by EUCLID:def 1;
+thus x1 - (x2 + x3) = x1' - x2' - x3' by RVSUM_1:60
+                   .= x1 - x2 - x3;
+end;
+
+Lm12:-a*x = (-a)*x & -a*x = a*(-x)
+proof
+reconsider p = x, p1 = a*x as Point of TOP-REAL n by EUCLID:25;
+reconsider x'= p as Element of n-tuples_on REAL by EUCLID:def 1;
+thus A1:-a*x = -p1 by EUCLID:def 12
+         .= (-1)*p1 by EUCLID:43
+         .= (-1)*(a*x) by EUCLID:def 11
+         .= ((-1)*a)*x' by RVSUM_1:71
+         .= (-a)*x by XCMPLX_1:180;
+thus -a*x = (a*(-1))*x by A1,XCMPLX_1:180
+         .= a*((-1)*x') by RVSUM_1:71
+         .= a*(-x) by RVSUM_1:76;
+end;
+
+Lm13:x1 - x2 = x1 + -x2
+proof
+reconsider x1'= x1, x2' = x2 as Element of n-tuples_on REAL by EUCLID:def 1;
+thus x1 - x2 = x1' + -x2' by RVSUM_1:52
+            .= x1 + -x2;
+end;
+
+Lm14:x - x = 0*n
+proof
+reconsider x' = x as Element of n-tuples_on REAL by EUCLID:def 1;
+thus x - x = x' - x'
+          .=(n|->0) by RVSUM_1:58
+          .= 0*n by EUCLID:def 4;
+end;
+
+Lm15:x1<>x2 implies |.x1-x2.|<>0
+proof
+now assume A1: x1<>x2 & not |.x1-x2.| <> 0;
+|(x1-x2,x1-x2)| = 0 by A1,Th18,SQUARE_1:60;
+then A2:x1 - x2 = 0*n by Th22;
+x1 = x1 - (x1 - x2) by A2,Lm6
+  .= x1 - (x1 + -x2) by Lm13
+  .= x1 - x1 -(-x2) by Lm11
+  .= 0*n -(-x2) by Lm14
+  .= -(-x2) by Lm7
+  .= x2;
+hence contradiction by A1;
+end;
+hence thesis;
+end;
+
+Lm16:for x1, x2 being Element of REAL n holds
+y1 in Line(x1,x2) & y2 in Line(x1,x2) implies ex a st y1 - y2 =a*(x1 - x2)
+proof
+let x1, x2 be Element of REAL n;
+A1:Line(x1,x2) = { (1-lambda)*x1 + lambda*x2 : not contradiction } by Def1;
+assume y1 in Line(x1,x2);
+then consider t such that A2:y1 = (1-t)*x1 + t*x2 by A1;
+assume y2 in Line(x1,x2);
+then consider s such that A3:y2 = (1-s)*x1 + s*x2 by A1;
+A4:y1 - y2 = (1-t)*x1 + t*x2 - (1-s)*x1 - s*x2 by A2,A3,Lm11
+       .= (1-t)*x1 + t*x2 +- (1-s)*x1 - s*x2 by Lm13
+       .= (1-t)*x1 + t*x2 +- (1-s)*x1 +- s*x2 by Lm13
+       .= (1-t)*x1 + -(1-s)*x1 + t*x2 +- s*x2 by Lm2
+       .= (1-t)*x1 + -(1-s)*x1 + (t*x2 +- s*x2) by Lm2
+       .= (1-t)*x1 + (-(1-s))*x1 + (t*x2 +- s*x2) by Lm12
+       .= (1-t)*x1 + (-(1-s))*x1 + (t*x2 +(- s)*x2) by Lm12
+       .= ((1-t)+(-(1-s)))*x1 + (t*x2 +(- s)*x2) by Th7
+       .= ((1-t)+(-(1-s)))*x1 + (t+(- s))*x2 by Th7
+       .= ((1-t)-(1-s))*x1 + (t + (-s))*x2 by XCMPLX_0:def 8
+       .= (s-t)*x1 + (t + (-s))*x2 by XCMPLX_1:23
+       .= (s-t)*x1 + (-(s +- t))*x2 by XCMPLX_1:141
+       .= (s-t)*x1 + (-(s - t))*x2 by XCMPLX_0:def 8
+       .= (s-t)*x1 + -(s - t)*x2 by Lm12
+       .= (s-t)*x1 + (s - t)*(-x2) by Lm12
+       .= (s-t)*(x1 + -x2) by Th6
+       .= (s-t)*(x1 - x2) by Lm13;
+take a = s-t;
+thus y1 - y2 =a*(x1 - x2) by A4;
+end;
+
+Lm17:for x1,x2,y1 being Element of REAL n
+ ex y2 being Element of REAL n st y2 in Line(x1,x2) &
+ x1-x2,y1-y2 are_orthogonal &
+   for x being Element of REAL n st x in Line(x1,x2) holds
+     |.y1 - y2.| <= |.y1 - x.|
+proof
+let x1,x2,y1 being Element of REAL n;
+A1:Line(x1,x2) = { (1-lambda)*x1 + lambda*x2 : not contradiction } by Def1;
+A2:now per cases;
+ case A3:x1<>x2;
+  |.x1-x2.|<>0 by A3,Lm15;
+  then A4:|.x1-x2.|^2 <> 0 by SQUARE_1:74;
+  set mu = - |(x1-x2,y1-x1)|/|.x1-x2.|^2;
+  set y2 = (1-mu)*x1 + mu*x2;
+  A5:|(x1-x2,y1-y2)| = |(x1-x2,y1-((1 + -mu)*x1 + mu*x2))| by XCMPLX_0:def 8
+    .= |(x1-x2,y1 - (1 + -mu)*x1 - mu*x2)| by Lm11
+    .= |(x1-x2,y1 - (1*x1 + (-mu)*x1) - mu*x2)| by Th7
+    .= |(x1-x2,y1-1*x1-(-mu)*x1-mu*x2)| by Lm11
+    .= |(x1-x2,(y1-x1)-(-mu)*x1-mu*x2)| by Th3
+    .= |(x1-x2,(y1-x1)-((-mu)*x1+mu*x2))| by Lm11
+    .= |(x1-x2,(y1-x1)-((-mu)*x1+ (-(-mu)*x2)))| by Lm12
+    .= |(x1-x2,(y1-x1)-((-mu)*x1+ (-mu)*(-x2)))| by Lm12
+    .= |(x1-x2,(y1-x1)-(-mu)*(x1 + (-x2)))| by Th6
+    .= |(x1-x2,(y1-x1)-(-mu)*(x1 -x2))| by Lm13
+    .= |(x1-x2,y1-x1)| - |(x1-x2,(-mu)*(x1-x2))| by Th31
+    .= |(x1-x2,y1-x1)| - (-mu)*|(x1-x2,x1-x2)| by Th26
+    .= |(x1-x2,y1-x1)| + -(-mu)*|(x1-x2,x1-x2)| by XCMPLX_0:def 8
+    .= |(x1-x2,y1-x1)| + mu*|(x1-x2,x1-x2)| by XCMPLX_1:179
+    .= |(x1-x2,y1-x1)| + mu*|.x1-x2.|^2 by Th18
+    .= |(x1-x2,y1-x1)| + (- |(x1-x2,y1-x1)|)/|.x1-x2.|^2*|.x1-x2.|^2
+                                            by XCMPLX_1:188
+    .= |(x1-x2,y1-x1)| + (- |(x1-x2,y1-x1)|) by A4,XCMPLX_1:88
+    .= 0 by XCMPLX_0:def 6;
+  thus y2 in Line(x1,x2) & x1-x2,y1-y2 are_orthogonal by A1,A5,Def6;
+ case x1=x2;
+  then A6:x1 - x2 = 0*n by Lm14;
+  let mu be Real;
+  set y2 = (1-mu)*x1 + mu*x2;
+A7:|(x1-x2,y1-y2)| = 0 by A6,Th23;
+  take y2;
+  thus y2 in Line(x1,x2) & x1-x2,y1-y2 are_orthogonal by A1,A7,Def6;
+end;
+
+consider y2 such that
+A8:y2 in Line(x1,x2) & x1-x2,y1-y2 are_orthogonal by A2;
+A9:|(x1 - x2, y1 - y2)| = 0 by A8,Def6;
+A10:for x being Element of REAL n st x in Line(x1,x2) holds
+    |.y1 - y2.| <= |.y1 - x.|
+proof
+let x be Element of REAL n;
+assume A11:x in Line(x1,x2);
+A12:(y2 - x) + (y1 - y2) = (y2 +- x) + (y1 - y2) by Lm13
+                        .= (y2 +- x) + (y1 +- y2) by Lm13
+                        .= (-x + y2) +(- y2) + y1 by Lm2
+                        .= (-x + (y2 +- y2)) + y1 by Lm2
+                        .= (-x + (y2 - y2)) + y1 by Lm13
+                        .= (-x + 0*n) + y1 by Lm14
+                        .= -x + y1 by Th1
+                        .= y1 - x by Lm13;
+consider a such that A13:y2 - x =a*(x1 - x2) by A8,A11,Lm16;
+|.y1-x.|^2 = |(a*(x1 - x2) + (y1 - y2), a*(x1 - x2) + (y1 - y2))|
+   by A12,A13,Th18
+          .= |(a*(x1 - x2), a*(x1 - x2))| + 2*|(a*(x1 - x2), y1 - y2)|
+                              + |(y1 - y2, y1 - y2)| by Th37
+          .= a*|(x1 - x2, a*(x1 - x2))| + 2*|(a*(x1 - x2), y1 - y2)|
+                              + |(y1 - y2, y1 - y2)| by Th26
+          .= a*(a*|(x1 - x2, x1 - x2)|) + 2*|(a*(x1 - x2), y1 - y2)|
+                              + |(y1 - y2, y1 - y2)| by Th26
+          .= (a*a)*|(x1 - x2, x1 - x2)| + 2*|(a*(x1 - x2), y1 - y2)|
+                              + |(y1 - y2, y1 - y2)| by XCMPLX_1:4
+          .= a^2*|(x1 - x2, x1 - x2)| + 2*|(a*(x1 - x2), y1 - y2)|
+                              + |(y1 - y2, y1 - y2)| by SQUARE_1:def 3
+          .= a^2*|.x1 - x2.|^2 + 2*|(a*(x1 - x2), y1 - y2)|
+                              + |(y1 - y2, y1 - y2)| by Th18
+          .= a^2*|.x1 - x2.|^2 + 2*(a*|(x1 - x2, y1 - y2)|)
+                              + |(y1 - y2, y1 - y2)| by Th26
+          .= a^2*|.x1 - x2.|^2 + |.y1 - y2.|^2 by A9,Th18
+          .= (a*|.x1 - x2.|)^2 + |.y1 - y2.|^2 by SQUARE_1:68;
+then |.y1-x.|^2 + 0 = (a*|.x1 - x2.|)^2 + |.y1 - y2.|^2;
+then A14:|.y1-x.|^2 - |.y1 - y2.|^2 = (a*|.x1 - x2.|)^2 - 0 by XCMPLX_1:33
+                           .= (a*|.x1 - x2.|)^2;
+0 <= |.y1-x.|^2 - |.y1 - y2.|^2 by A14,SQUARE_1:72;
+then A15:|.y1 - y2.|^2 <= |.y1 - x.|^2 by REAL_2:105;
+A16:0 <= |.y1 - x.| & 0 <= |.y1 - y2.| by Th19;
+0 <= |.y1 - y2.|^2 by SQUARE_1:72;
+then sqrt |.y1 - y2.|^2 <= sqrt |.y1 - x.|^2 by A15,SQUARE_1:94;
+then |.y1 - y2.| <= sqrt |.y1 - x.|^2 by A16,SQUARE_1:89;
+hence thesis by A16,SQUARE_1:89;
+end;
+
+thus thesis by A8,A10;
+end;
+
+theorem for R being Subset of REAL,x1,x2,y1 being Element of REAL n st
+  R={|.y1-x.| where x is Element of REAL n: x in Line(x1,x2)}
+holds ex y2 being Element of REAL n st y2 in Line(x1,x2) &
+  |.y1-y2.|=lower_bound R & x1-x2,y1-y2 are_orthogonal
+proof
+let R being Subset of REAL,x1,x2,y1 being Element of REAL n;
+assume
+A1: R={|.y1-x.| where x is Element of REAL n: x in Line(x1,x2)};
+
+consider y2 being Element of REAL n such that
+A2:y2 in Line(x1,x2) and
+A3:x1-x2,y1-y2 are_orthogonal and
+A4:for x being Element of REAL n st x in Line(x1,x2) holds
+     |.y1 - y2.| <= |.y1 - x.| by Lm17;
+x1 in Line(x1,x2) by Th10;
+then A5: |.y1-x1.| in R by A1;
+A6:for s being real number st 0<s holds
+ ex r being real number st r in R & r < |.y1-y2.|+s
+proof
+let s be real number;
+assume A7:0<s;
+take r =|.y1- y2.|;
+thus thesis by A1,A2,A7,REAL_1:69;
+end;
+
+A8:for r being real number st r in R holds  |.y1-y2.| <=r
+proof
+ let r be real number;
+ assume r in R;
+ then consider x0 being Element of REAL n such that
+  A9: r= |.y1-x0.| & x0 in Line(x1,x2) by A1;
+thus |.y1-y2.| <=r by A4,A9;
+end;
+R is bounded_below by A8,SEQ_4:def 2;
+then |.y1-y2.| = lower_bound R by A5,A6,A8,SEQ_4:def 5;
+hence thesis by A2,A3;
+end;
+
+ definition let n; let p1,p2 be Point of TOP-REAL n;
+   func Line(p1,p2) -> Subset of TOP-REAL n equals
+:Def7: { (1-lambda)*p1 + lambda*p2 : not contradiction };
+  coherence
+   proof
+    set A = { (1-lambda)*p1 + lambda*p2 : not contradiction };
+    A c= the carrier of TOP-REAL n
+     proof let x be set;
+      assume x in A;
+       then ex lambda st x = (1-lambda)*p1 + lambda*p2;
+      hence thesis;
+     end;
+    hence thesis;
+   end;
+ end;
+
+definition let n; let p1,p2 be Point of TOP-REAL n;
+ cluster Line(p1,p2) -> non empty;
+ coherence
+  proof
+A1: Line(p1,p2) = { (1-lambda)*p1 + lambda*p2 : not contradiction }
+       by Def7;
+    1 - 0 = 1 & 1 * p1 = p1 & 0 * p2 = 0.REAL n & p1 + 0.REAL n = p1
+      by EUCLID:31,33;
+    then p1 in Line(p1,p2) by A1;
+    hence thesis;
+  end;
+end;
+
+reserve p,p1,p2,q1,q2 for Point of TOP-REAL n;
+
+Lm18:for p1,p2 being Point of TOP-REAL n
+ex x1,x2 being Element of REAL n st p1=x1 & p2=x2 & Line(x1,x2)=Line(p1,p2)
+proof
+  let p1,p2 be Point of TOP-REAL n;
+  reconsider x1=p1,x2=p2 as Element of REAL n by EUCLID:25;
+A1:Line(p1,p2) = { (1-lambda)*p1 + lambda*p2 : not contradiction } by Def7;
+
+A2:Line(x1,x2) = { (1-lambda)*x1 + lambda*x2 : not contradiction } by Def1;
+
+A3:Line(x1,x2) c= Line(p1,p2)
+proof
+  let x be set;
+  assume x in Line(x1,x2);
+  then consider t such that A4:x = (1-t)*x1 + t*x2 by A2;
+(1-t)*x1 = (1-t)*p1 & t*x2 = t*p2 by EUCLID:def 11;
+  then (1-t)*x1 + t*x2 = (1-t)*p1 + t*p2 by EUCLID:def 10;
+  hence thesis by A1,A4;
+end;
+
+A5:Line(p1,p2) c= Line(x1,x2)
+proof
+  let p be set;
+  assume p in Line(p1,p2);
+  then consider s such that A6:p = (1-s)*p1 + s*p2 by A1;
+  (1-s)*x1 = (1-s)*p1 & s*x2 = s*p2 by EUCLID:def 11;
+  then (1-s)*x1 + s*x2 = (1-s)*p1 + s*p2 by EUCLID:def 10;
+  hence thesis by A2,A6;
+end;
+
+  take x1,x2;
+  thus thesis by A3,A5,XBOOLE_0:def 10;
+end;
+
+theorem Th46: :: AFF_1:25
+Line(p1,p2)=Line(p2,p1)
+proof
+  consider x1, x2 be Element of REAL n such that
+A1:x1 = p1 & x2 = p2 & Line(x1,x2)=Line(p1,p2) by Lm18;
+  consider x2', x1' be Element of REAL n such that
+A2:x2' = p2 & x1' = p1 & Line(x2',x1')=Line(p2,p1) by Lm18;
+  thus thesis by A1,A2;
+end;
+
+definition let n;let p1,p2 be Point of TOP-REAL n;
+ redefine func Line(p1,p2);
+ commutativity by Th46;
+end;
+
+theorem Th47: :: AFF_1:26
+ p1 in Line(p1,p2) & p2 in Line(p1,p2)
+proof
+  consider x1,x2 be Element of REAL n such that
+A1:x1 = p1 & x2 = p2 & Line(x1,x2)=Line(p1,p2) by Lm18;
+  thus thesis by A1,Th10;
+end;
+
+theorem Th48: :: AFF_1:27
+ q1 in Line(p1,p2) & q2 in Line(p1,p2) implies
+    Line(q1,q2) c= Line(p1,p2)
+proof
+  consider x1 ,x2 be Element of REAL n such that
+A1:x1 = p1 & x2 = p2 & Line(x1,x2)=Line(p1,p2) by Lm18;
+  assume A2:q1 in Line(p1,p2) & q2 in Line(p1,p2);
+  consider y1 ,y2 be Element of REAL n such that
+A3:y1 = q1 & y2 = q2 & Line(y1,y2)=Line(q1,q2) by Lm18;
+  thus thesis by A1,A2,A3,Th11;
+end;
+
+theorem Th49: :: AFF_1:28
+  q1 in Line(p1,p2) & q2 in Line(p1,p2) & q1<>q2 implies
+    Line(p1,p2) c= Line(q1,q2)
+proof
+  consider x1 ,x2 be Element of REAL n such that
+A1:x1 = p1 & x2 = p2 & Line(x1,x2)=Line(p1,p2) by Lm18;
+  assume A2:q1 in Line(p1,p2) & q2 in Line(p1,p2) & q1<>q2;
+  consider y1 ,y2 be Element of REAL n such that
+A3:y1 = q1 & y2 = q2 & Line(y1,y2)=Line(q1,q2) by Lm18;
+  thus thesis by A1,A2,A3,Th12;
+end;
+
+definition let n; let A be Subset of TOP-REAL n;
+ attr A is being_line means
+:Def8:      :: AFF_1:def 3
+   ex p1,p2 st p1<>p2 & A=Line(p1,p2);
+  synonym A is_line;
+end;
+
+Lm19:for A be Subset of TOP-REAL n,p1,p2
+   holds A is_line & p1 in A & p2 in A & p1<>p2 implies A=Line(p1,p2)
+proof
+  let A be Subset of TOP-REAL n;
+  let p1,p2;
+  assume that A1: A is_line and A2:p1 in A & p2 in A & p1<>p2;
+  A3:ex q1,q2 st q1<>q2 & A=Line(q1,q2) by A1,Def8;
+  then A4:Line(p1,p2) c= A by A2,Th48;
+  A c= Line(p1,p2) by A2,A3,Th49;
+  hence thesis by A4,XBOOLE_0:def 10;
+end;
+
+theorem :: AFF_1:30
+  for A,C being Subset of TOP-REAL n holds A is_line & C is_line &
+          p1 in A & p2 in A & p1 in C & p2 in C implies p1=p2 or A=C
+proof
+  let A,C be Subset of TOP-REAL n;
+  assume A1:A is_line & C is_line & p1 in A & p2 in A & p1 in C & p2 in C;
+  assume p1<>p2;
+  then A = Line(p1,p2) & C = Line(p1,p2) by A1,Lm19;
+  hence thesis;
+end;
+
+theorem Th51: :: AFF_1:31
+ for A being Subset of TOP-REAL n st
+ A is_line holds ex p1,p2 st p1 in A & p2 in A & p1<>p2
+proof
+  let A be Subset of TOP-REAL n;
+  assume A is_line;
+  then consider p1,p2 such that
+  A1:p1<>p2 & A = Line(p1,p2) by Def8;
+  p1 in A & p2 in A by A1,Th47;
+  hence thesis by A1;
+end;
+
+theorem :: AFF_1:32
+ for A being Subset of TOP-REAL n st
+ A is_line holds ex p2 st p1<>p2 & p2 in A
+proof
+  let A be Subset of TOP-REAL n;
+  assume A is_line;
+  then consider q1,q2 such that
+  A1:q1 in A & q2 in A & q1<>q2 by Th51;
+  p1 = q1 implies p1<>q2 & q2 in A by A1;
+  hence thesis by A1;
+end;
+
+definition let n;let p be Point of TOP-REAL n;
+ func TPn2Rn (p) -> Element of REAL n
+ equals :Def9: p;
+correctness by EUCLID:25;
+end;
+
+definition let n;let p be Point of TOP-REAL n;
+ func |. p .| -> Real equals
+ :Def10: |. TPn2Rn(p) .|;
+correctness;
+end;
+
+definition let n;let p1,p2 be Point of TOP-REAL n;
+ func |( p1,p2 )| -> Real equals
+ :Def11: |( TPn2Rn(p1),TPn2Rn(p2) )|;
+correctness;
+commutativity;
+end;
+
+definition let n;let p1, p2 be Point of TOP-REAL n;
+  pred p1,p2 are_orthogonal means :Def12:   :: EUCLID_2:def 3
+  |(p1,p2)| = 0;
+  symmetry;
+end;
+
+theorem for R being Subset of REAL,p1,p2,q1 being Point of TOP-REAL n
+ st R={|. q1-p .| where p is Point of TOP-REAL n: p in Line(p1,p2)}
+holds ex q2 being Point of TOP-REAL n st q2 in Line(p1,p2) &
+ |. q1-q2 .| =lower_bound R & p1-p2,q1-q2 are_orthogonal
+proof
+  let R being Subset of REAL,p1,p2,q1 being Point of TOP-REAL n;
+  assume A1:R={|. q1-p .| where p is Point of TOP-REAL n: p in Line(p1,p2)};
+  consider x1,x2 being Element of REAL n such that
+A2:p1=x1 & p2=x2 & Line(x1,x2)=Line(p1,p2) by Lm18;
+  reconsider y1 = q1 as Element of REAL n by EUCLID:25;
+  consider y2 being Element of REAL n such that
+A3:y2 in Line(x1,x2) and
+A4:x1-x2,y1-y2 are_orthogonal and
+A5:for x being Element of REAL n st x in Line(x1,x2) holds
+     |.y1 - y2.| <= |.y1 - x.| by Lm17;
+  reconsider q2 = y2 as Point of TOP-REAL n by EUCLID:25;
+  p1 - p2 = x1 - x2 & y1 - y2 = q1 - q2 by A2,EUCLID:def 13;
+  then A6:TPn2Rn(p1-p2)=x1-x2 & TPn2Rn(q1-q2)=y1-y2 by Def9;
+  |(p1-p2,q1-q2)| = |(TPn2Rn(p1-p2),TPn2Rn(q1-q2))| by Def11
+               .= 0 by A4,A6,Def6;
+  then A7:p1-p2,q1-q2 are_orthogonal by Def12;
+A8:for p being Point of TOP-REAL n st p in Line(p1,p2) holds
+       |.q1 - q2.| <= |.q1 - p.|
+proof
+  let p be Point of TOP-REAL n;
+  assume A9:p in Line(p1,p2);
+  reconsider x = p as Element of REAL n by EUCLID:25;
+  q1 - p = y1 - x by EUCLID:def 13;
+  then A10:TPn2Rn(q1 - p)=y1 - x by Def9;
+  |.y1 - y2.| <= |.y1 - x.| by A2,A5,A9;
+  then |.q1 - q2.| <= |.TPn2Rn(q1 - p).| by A6,A10,Def10;
+  hence thesis by Def10;
+end;
+p1 in Line(p1,p2) by Th47;
+then A11:|.q1-p1.| in R by A1;
+A12:for s being real number st 0<s holds
+ ex r being real number st r in R & r < |.q1-q2.|+s
+proof
+let s be real number;
+assume A13:0<s;
+take r =|.q1- q2.|;
+thus thesis by A1,A2,A3,A13,REAL_1:69;
+end;
+
+A14:for r being real number st r in R holds |.q1-q2.| <=r
+proof
+  let r be real number;
+  assume r in R;
+  then consider p0 being Point of TOP-REAL n such that
+A15: r= |.q1-p0.| & p0 in Line(p1,p2) by A1;
+  thus |.q1-q2.| <=r by A8,A15;
+end;
+R is bounded_below by A14,SEQ_4:def 2;
+then A16: |.q1-q2.| = lower_bound R by A11,A12,A14,SEQ_4:def 5;
+thus thesis by A2,A3,A7,A16;
+end;

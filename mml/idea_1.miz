@@ -1,0 +1,3771 @@
+:: Algebraic group on Fixed-length bit integer and its adaptation
+::  to {IDEA} Cryptography
+::  by Yasushi Fuwa and Yoshinori Fujisawa
+::
+:: Received September 7, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary MIDSP_3, MARGREL1, FILTER_0, ARYTM_3, NAT_1, INT_1, ARYTM_1, POWER,
+      GRCAT_1, FINSEQ_2, BINARITH, FINSEQ_1, FUNCT_1, RELAT_1, BINARI_3,
+      CQC_LANG, MATRIX_1, INCSP_1, PRALG_1, FUNCT_7, FUNCT_2, FUNCT_5, BOOLE,
+      TREES_1, IDEA_1, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, INT_1, INT_2,
+      NAT_1, MARGREL1, RELAT_1, FUNCT_1, MATRIX_1, PRALG_1, PARTFUN1, FUNCT_2,
+      FUNCT_5, FUNCT_7, SERIES_1, CQC_LANG, FINSEQ_1, FINSEQ_2, FINSEQ_4,
+      BINARITH, BINARI_3, WSIERP_1, MIDSP_3;
+ constructors FUNCT_7, BINARI_2, SERIES_1, BINARITH, BINARI_3, FINSEQ_4,
+      WSIERP_1, INT_2, MEMBERED;
+ clusters INT_1, FUNCT_1, RELSET_1, MARGREL1, BINARITH, FUNCT_7, NAT_1,
+      XREAL_0, MEMBERED, FUNCT_2, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI;
+ theorems REAL_1, NAT_1, NAT_2, NAT_LAT, INT_1, INT_2, FINSEQ_1, FINSEQ_2,
+      FINSEQ_4, AXIOMS, FUNCT_1, FUNCT_2, FUNCT_5, FUNCT_7, PRALG_1, CQC_LANG,
+      POWER, GROUP_4, RLVECT_1, GR_CY_1, EULER_1, EULER_2, BINARITH, BINARI_3,
+      MATRIX_1, AMI_5, RELSET_1, RELAT_1, XBOOLE_1, XCMPLX_0, XCMPLX_1;
+ schemes FINSEQ_1, FINSEQ_2, MATRIX_2, NAT_1, FUNCT_2;
+
+begin ::Some selected theorems on integers
+
+reserve i,j,k,n for Nat;
+reserve x,y,z for Tuple of n, BOOLEAN;
+
+Lm1: i<>0 & i < j & j is prime implies i,j are_relative_prime
+proof
+  assume A1:i<>0 & i < j & j is prime;
+    now
+      set IJ = i hcf j;
+        IJ divides j by NAT_1:def 5;
+      then A2:IJ = 1 or IJ = j by A1,INT_2:def 5;
+        IJ <> j
+      proof
+        assume IJ = j;
+        then j divides i & j divides j by NAT_1:def 5;
+        then consider n being Nat such that
+          A3:i = j*n by NAT_1:def 3;
+        A4:j >= 0 by NAT_1:18;
+          j <> 0 & n <> 0 by A1,A3;
+        then n >= 1 by RLVECT_1:99;
+        then j*n >= j*1 by A4,AXIOMS:25;
+        hence contradiction by A1,A3;
+      end;
+    hence thesis by A2,INT_2:def 6;
+  end;
+  hence thesis;
+end;
+
+Lm2:
+  j is prime & i<j & k<j & i<>0 implies
+    ex a being Nat st (a*i) mod j = k
+proof
+  assume that
+    A1: j is prime and
+    A2: i<j and
+    A3: k<j and
+    A4: i<>0;
+    j>1 by A1,INT_2:def 5;
+  then A5:j>0 by AXIOMS:22;
+    i,j are_relative_prime by A1,A2,A4,Lm1;
+  then consider a,b being Integer such that
+       A6:a*i + b*j = k by EULER_1:11;
+    now per cases;
+    suppose A7:a >= 0;
+        now per cases;
+        suppose b >= 0;
+          then reconsider a,b as Nat by A7,INT_1:16;
+          A8:(a*i + b*j) mod j = k by A3,A6,GR_CY_1:4;
+          A9: (a*i + b*j) mod j = (a*i + ((b*j) mod j)) mod j by GR_CY_1:3
+                                .= (a*i + 0) mod j by GROUP_4:101
+                                .= (a*i) mod j;
+           take a;
+           thus thesis by A8,A9;
+        suppose A10: b < 0;
+           reconsider a as Nat by A7,INT_1:16;
+           consider b' being Integer such that
+             A11:b'=0-b;
+             b - b < 0 - b by A10,REAL_1:54;
+           then 0 < 0 - b by XCMPLX_1:14;
+           then reconsider b' as Nat by A11,INT_1:16;
+           take a;
+             a*i + b*j + b'*j = a*i + (b*j + b'*j) by XCMPLX_1:1
+                           .= a*i + (b + (0 - b))*j by A11,XCMPLX_1:8
+                           .= a*i + (b + -b)*j by XCMPLX_1:150
+                           .= a*i + 0*j by XCMPLX_0:def 6
+                           .= a*i;
+           then (a*i) mod j = k mod j by A6,GR_CY_1:1
+                           .= k by A3,GR_CY_1:4;
+           hence thesis;
+      end;
+      hence thesis;
+    suppose A12: a < 0;
+      consider a1 being Integer such that
+        A13:a1 = 0 - a;
+      A14: a1 = -a by A13,XCMPLX_1:150;
+        a - a < 0 - a by A12,REAL_1:54;
+      then 0 < 0 - a by XCMPLX_1:14;
+      then reconsider a1 as Nat by A13,INT_1:16;
+      consider a2 being Nat such that
+        A15:a2=(a1 div j) + 1;
+      consider a' being Integer such that
+        A16:a'=a + a2 * j;
+      A17:a' = a + ((a1 div j)*j + 1*j) by A15,A16,XCMPLX_1:8
+            .= -a1 + (a1 div j)*j + j by A14,XCMPLX_1:1;
+      consider t being Nat such that
+        A18: a1 = j * (a1 div j) + t & t < j by A5,NAT_1:def 1;
+      A19:a1 - (a1 + t) = a1 - a1 - t by XCMPLX_1:36
+                       .= 0 - t by XCMPLX_1:14
+                       .= -t by XCMPLX_1:150;
+      A20: j*(a1 div j) + t - (a1 + t)
+              = j*(a1 div j) + (t - (a1 + t)) by XCMPLX_1:29
+             .= j*(a1 div j) + (t - t - a1) by XCMPLX_1:36
+             .= j*(a1 div j) + (0 - a1) by XCMPLX_1:14
+             .= (a1 div j)*j + -a1 by XCMPLX_1:150;
+        -t + t < -t + j by A18,REAL_1:53;
+      then 0 < a' by A17,A18,A19,A20,XCMPLX_0:def 6;
+      then reconsider a' as Nat by INT_1:16;
+        now per cases;
+        suppose b >= 0;
+          then reconsider b as Nat by INT_1:16;
+          take a';
+          A21:a*i + b*j + a2*j*i
+                           = a*i + a2*j*i + b*j by XCMPLX_1:1
+                          .= a'*i + b*j by A16,XCMPLX_1:8;
+            (k + a2*j*i) mod j = (k + a2*i*j) mod j by XCMPLX_1:4
+                            .= k mod j by GR_CY_1:1
+                            .= k by A3,GR_CY_1:4;
+          hence (a'*i) mod j = k by A6,A21,GR_CY_1:1;
+        suppose A22: b < 0;
+          consider b' being Integer such that
+             A23:b'=0-b;
+            b - b < 0 - b by A22,REAL_1:54;
+          then 0 < b' by A23,XCMPLX_1:14;
+          then reconsider b' as Nat by INT_1:16;
+          take a';
+          A24: a*i + b*j + a2*j*i + b'*j
+                 = a*i + (b*j + a2*j*i) + b'*j by XCMPLX_1:1
+                .= a*i + (a2*j*i + b*j + b'*j) by XCMPLX_1:1
+                .= a*i + (a2*j*i + (b*j + b'*j)) by XCMPLX_1:1
+                .= a*i + (a2*j*i + (b + (0 - b))*j) by A23,XCMPLX_1:8
+                .= a*i + (a2*j*i + (b + -b)*j) by XCMPLX_1:150
+                .= a*i + (a2*j*i + 0*j) by XCMPLX_0:def 6
+                .= a'*i by A16,XCMPLX_1:8;
+            k + a2*j*i + b'*j = k + a2*i*j + b'*j by XCMPLX_1:4
+                           .= k + (a2*i*j + b'*j) by XCMPLX_1:1
+                           .= k + (a2*i+ b')*j by XCMPLX_1:8;
+          hence (a'*i) mod j = k mod j by A6,A24,GR_CY_1:1
+                           .= k by A3,GR_CY_1:4;
+    end;
+    hence thesis;
+  end;
+  hence thesis;
+end;
+
+theorem Th1:
+  for i,j,k holds j is prime & i<j & k<j & i<>0 implies
+    ex a being Nat st (a*i) mod j = k & a < j
+  proof
+    let i,j,k be Nat;
+    assume A1: j is prime & i<j & k<j & i<>0;
+    then j>1 by INT_2:def 5;
+    then A2:j>0 by AXIOMS:22;
+    consider a being Nat such that
+      A3: (a*i) mod j = k by A1,Lm2;
+    consider a' being Nat such that
+      A4: a' = a mod j;
+    take a';
+    thus thesis by A2,A3,A4,EULER_2:10,NAT_1:46;
+  end;
+
+theorem Th2:
+  for n,k1,k2 being Nat holds
+    n <> 0 & k1 mod n = k2 mod n & k1 <= k2 implies
+      ex t being Nat st k2 - k1 = n*t
+  proof
+    let n,k1,k2 be Nat;
+    assume A1: n <> 0 & k1 mod n = k2 mod n & k1 <= k2;
+    then A2: n>0 by NAT_1:19;
+    then k1 = n * (k1 div n) + (k1 mod n) by NAT_1:47;
+    then A3: k1 mod n = k1 - n * (k1 div n) by XCMPLX_1:26;
+      k2 = n * (k2 div n) + (k2 mod n) by A2,NAT_1:47;
+    then k2 - n * (k2 div n) = k1 - n * (k1 div n) by A1,A3,XCMPLX_1:26;
+    then k2 - (n * (k2 div n) - n * (k2 div n))
+                     = k1 - n * (k1 div n) + n * (k2 div n) by XCMPLX_1:37;
+    then k2 - 0 = k1 - n * (k1 div n) + n * (k2 div n) by XCMPLX_1:14;
+    then A4: k2 = k1 + - n * (k1 div n) + n * (k2 div n) by XCMPLX_0:def 8
+               .= k1 + (- n * (k1 div n) + n * (k2 div n)) by XCMPLX_1:1
+               .= k1 + (n * (k2 div n) - n * (k1 div n)) by XCMPLX_0:def 8
+               .= k1 + (n * ((k2 div n) - (k1 div n))) by XCMPLX_1:40;
+    consider t being Integer such that
+      A5: t = (k2 div n) - (k1 div n);
+      (k2 div n) >= (k1 div n) by A1,NAT_2:26;
+    then (k2 div n) - (k1 div n) >= (k1 div n) - (k1 div n) by REAL_1:49;
+    then t >= 0 by A5,XCMPLX_1:14;
+    then reconsider t as Nat by INT_1:16;
+    take t;
+    thus k2 - k1 = n * t + (k1 - k1) by A4,A5,XCMPLX_1:29
+                .= n * t + 0 by XCMPLX_1:14
+                .= n * t;
+  end;
+
+theorem Th3:
+  for a, b being Nat holds a - b <= a
+  proof
+    let a, b be Nat;
+      0 <= b by NAT_1:18;
+    then a - b <= a - 0 by REAL_1:92;
+    hence thesis;
+  end;
+
+theorem Th4:
+  for b1,b2,c being Nat holds b2 <= c implies b2 - b1 <= c
+  proof
+    let b1,b2,c be Nat;
+    assume A1: b2 <= c;
+    A2: c - b1 <= c by Th3;
+      b2 - b1 <= c - b1 by A1,REAL_1:49;
+    hence b2 - b1 <= c by A2,AXIOMS:22;
+  end;
+
+theorem Th5:
+  for a,b,c being Nat holds 0<a & 0<b & a<c & b<c & c is prime implies
+    (a * b) mod c <> 0
+  proof
+    let a,b,c be Nat;
+    assume A1: 0<a & 0<b & a<c & b<c & c is prime;
+    assume A2: (a * b) mod c = 0;
+        0 < c by A1,AXIOMS:22;
+      then (a * b) = c * ((a * b) div c) + 0 by A2,NAT_1:47;
+      then c divides (a * b) by NAT_1:def 3;
+      then c divides a or c divides b by A1,NAT_LAT:95;
+      hence contradiction by A1,NAT_1:54;
+  end;
+
+theorem
+    for n being non empty Nat holds 2 to_power(n) <> 1
+  proof
+    let n be non empty Nat;
+      n > 0 by NAT_1:19;
+    hence thesis by POWER:40;
+  end;
+
+begin :: Algebraic group on Fixed-length bit Integer
+:: In this section,we construct an algebraic group on
+:: Fixed-length bit Integer.
+:: IDEA's Basic operators are 'xor', ADD_MOD and MUL_MOD.
+:: 'xor' is 16-bitwise XOR. ADD_MOD is addition mod 2^{16}.
+:: MUL_MOD is multiplication mod 2^(16)+1. And, we define
+:: two functions NEG_MOD and INV_MOD that give inverse
+:: element of ADD_MOD and MUL_MOD respectively.
+
+definition
+  let n;
+  func ZERO( n ) -> Tuple of n, BOOLEAN equals
+  :Def1:
+  n |-> FALSE;
+  correctness by FINSEQ_2:132;
+end;
+
+definition
+  let n;
+  let x, y be Tuple of n, BOOLEAN;
+  func x 'xor' y -> Tuple of n, BOOLEAN means
+  :Def2:
+  for i st i in Seg n holds it/.i = (x/.i) 'xor' (y/.i);
+  existence
+    proof
+      deffunc F(Nat)=(x/.$1) 'xor' (y/.$1);
+      consider z being FinSequence of BOOLEAN such that
+        A1: len z = n and
+        A2: for j st j in Seg n holds
+                           z.j = F(j) from SeqLambdaD;
+      reconsider z as Tuple of n, BOOLEAN by A1,FINSEQ_2:110;
+      take z;
+      let i;
+      assume A3: i in Seg n;
+      then i in dom z by A1,FINSEQ_1:def 3;
+      hence z/.i = z.i by FINSEQ_4:def 4
+                .= (x/.i) 'xor' (y/.i) by A2,A3;
+    end;
+  uniqueness
+    proof
+      let z1, z2 be Tuple of n, BOOLEAN such that
+        A4: for i st i in Seg n holds z1/.i = (x/.i) 'xor' (y/.i) and
+        A5: for i st i in Seg n holds z2/.i = (x/.i) 'xor' (y/.i);
+        A6: len z1 = n & len z2 = n by FINSEQ_2:109;
+        now let j;
+        assume A7: j in Seg n;
+        then A8: j in dom z1 & j in dom z2 by A6,FINSEQ_1:def 3;
+        hence z1.j = z1/.j by FINSEQ_4:def 4
+                  .= (x/.j) 'xor' (y/.j) by A4,A7
+                  .= z2/.j by A5,A7
+                  .= z2.j by A8,FINSEQ_4:def 4;
+      end;
+      hence z1 = z2 by A6,FINSEQ_2:10;
+    end;
+end;
+
+theorem Th7:
+  for n,x holds x 'xor' x = ZERO(n)
+proof
+  let n;
+  let x be Tuple of n, BOOLEAN;
+  A1:len (x 'xor' x) = n & len (ZERO(n)) = n by FINSEQ_2:109;
+    now let j;
+  assume A2:j in Seg n;
+    then A3:j in dom (x 'xor' x) & j in dom (ZERO(n)) by A1,FINSEQ_1:def 3;
+    then j in dom (x 'xor' x) & j in dom (n |-> FALSE) by Def1;
+    then A4:j in dom (x 'xor' x) & j in Seg n by FINSEQ_2:68;
+    A5:ZERO(n).j = (n |-> FALSE).j by Def1
+                .= FALSE by A4,FINSEQ_2:70;
+    thus (x 'xor' x).j = (x 'xor' x)/.j by A3,FINSEQ_4:def 4
+                      .= (x/.j) 'xor' (x/.j) by A2,Def2
+                      .= ZERO(n).j by A5,BINARITH:15;
+  end;
+  hence thesis by A1,FINSEQ_2:10;
+end;
+
+theorem Th8:
+  for n,x,y holds x 'xor' y = y 'xor' x
+proof
+  let n;
+  let x,y be Tuple of n, BOOLEAN;
+  A1:len (x 'xor' y) = n & len (y 'xor' x) = n by FINSEQ_2:109;
+    now let j;
+  assume A2:j in Seg n;
+    then A3:j in dom (x 'xor' y) & j in dom (y 'xor' x) by A1,FINSEQ_1:def 3;
+    hence (x 'xor' y).j = (x 'xor' y)/.j by FINSEQ_4:def 4
+                       .= (y/.j) 'xor' (x/.j) by A2,Def2
+                       .= (y 'xor' x)/.j by A2,Def2
+                       .= (y 'xor' x).j by A3,FINSEQ_4:def 4;
+  end;
+  hence thesis by A1,FINSEQ_2:10;
+end;
+
+definition
+  let n;
+  let x, y be Tuple of n, BOOLEAN;
+  redefine func x 'xor' y;
+  commutativity by Th8;
+end;
+
+theorem Th9:
+  for n,x holds ZERO(n) 'xor' x = x
+proof
+  let n;
+  let x be Tuple of n, BOOLEAN;
+  A1:len ((ZERO(n)) 'xor' x) = n & len x = n by FINSEQ_2:109;
+    now let j;
+  assume A2:j in Seg n;
+    then A3:j in dom ((ZERO(n)) 'xor' x) & j in dom x by A1,FINSEQ_1:def 3;
+      j in dom (ZERO(n))
+    proof
+        dom (ZERO(n)) = dom (n |-> FALSE) by Def1
+                   .= Seg n by FINSEQ_2:68;
+      hence thesis by A2;
+    end;
+    then A4:(ZERO(n))/.j = ZERO(n).j by FINSEQ_4:def 4
+                          .= (n |-> FALSE).j by Def1
+                          .= FALSE by A2,FINSEQ_2:70;
+    thus ((ZERO(n)) 'xor' x).j = ((ZERO(n)) 'xor' x)/.j by A3,FINSEQ_4:def 4
+                              .= FALSE 'xor' (x/.j) by A2,A4,Def2
+                              .= x/.j by BINARITH:14
+                              .= x.j by A3,FINSEQ_4:def 4;
+  end;
+  hence thesis by A1,FINSEQ_2:10;
+end;
+
+theorem Th10:
+  for n,x,y,z holds (x 'xor' y) 'xor' z = x 'xor' (y 'xor' z)
+proof
+  let n;
+  let x,y,z be Tuple of n, BOOLEAN;
+  A1:len ((x 'xor' y) 'xor' z) = n &
+     len (x 'xor' (y 'xor' z)) = n by FINSEQ_2:109;
+    now let j;
+  assume A2:j in Seg n;
+    then A3:j in dom ((x 'xor' y) 'xor' z) &
+            j in dom (x 'xor' (y 'xor' z)) by A1,FINSEQ_1:def 3;
+    hence ((x 'xor' y) 'xor' z).j
+                 = ((x 'xor' y) 'xor' z)/.j by FINSEQ_4:def 4
+                .= ((x 'xor' y)/.j) 'xor' (z/.j) by A2,Def2
+                .= ((x/.j) 'xor' (y/.j)) 'xor' (z/.j) by A2,Def2
+                .= (x/.j) 'xor' ((y/.j) 'xor' (z/.j)) by BINARITH:34
+                .= (x/.j) 'xor' ((y 'xor' z)/.j) by A2,Def2
+                .= ((x 'xor' (y 'xor' z)))/.j by A2,Def2
+                .= (x 'xor' (y 'xor' z)).j by A3,FINSEQ_4:def 4;
+  end;
+  hence thesis by A1,FINSEQ_2:10;
+end;
+
+definition
+  let n;
+  let i be Nat;
+  pred i is_expressible_by n means
+  :Def3: i < 2 to_power(n);
+end;
+
+theorem
+    for n holds n-BinarySequence 0 = ZERO(n)
+  proof
+    let n;
+    A1:len (n-BinarySequence 0) = n & len (ZERO(n)) = n by FINSEQ_2:109;
+    then A2:dom (n-BinarySequence 0) = Seg n &
+            dom ZERO(n) = Seg n by FINSEQ_1:def 3;
+      now let j;
+      assume A3: j in Seg n;
+      A4: (0 div 2 to_power(j-'1)) mod 2
+              = 0 mod 2 by NAT_2:4
+             .= 0 by GR_CY_1:6;
+        j in dom (ZERO(n))
+      proof
+          dom (ZERO(n)) = dom (n |-> FALSE) by Def1
+                     .= Seg n by FINSEQ_2:68;
+        hence thesis by A3;
+      end;
+      then A5:(ZERO(n))/.j = ZERO(n).j by FINSEQ_4:def 4
+                          .= (n |-> FALSE).j by Def1
+                          .= FALSE by A3,FINSEQ_2:70;
+      thus (n-BinarySequence 0).j
+        = (n-BinarySequence 0)/.j by A2,A3,FINSEQ_4:def 4
+       .= IFEQ((0 div 2 to_power(j-'1)) mod 2,0,FALSE,TRUE)
+                                         by A3,BINARI_3:def 1
+       .= (ZERO(n))/.j by A4,A5,CQC_LANG:def 1
+       .= ZERO(n).j by A2,A3,FINSEQ_4:def 4;
+    end;
+    hence thesis by A1,FINSEQ_2:10;
+  end;
+
+definition
+  let n;
+  let i, j be Nat;
+  func ADD_MOD(i,j,n) -> Nat equals
+  :Def4:
+  (i + j) mod 2 to_power(n);
+  coherence;
+end;
+
+definition
+  let n;
+  let i be Nat;
+  assume A1: i is_expressible_by n;
+  func NEG_N(i,n) -> Nat equals
+   :Def5:
+     2 to_power(n) - i;
+  coherence
+   proof
+       i < 2 to_power(n) by A1,Def3;
+     then 2 to_power(n) - i > i - i by REAL_1:54;
+     then 2 to_power(n) - i > 0 by XCMPLX_1:14;
+     hence 2 to_power(n) - i is Nat by INT_1:16;
+   end;
+end;
+
+definition
+  let n;
+  let i be Nat;
+  func NEG_MOD(i,n) -> Nat equals
+   :Def6:
+     NEG_N(i,n) mod 2 to_power(n);
+   coherence;
+end;
+
+theorem Th12:
+  i is_expressible_by n implies ADD_MOD(i, NEG_MOD(i,n), n) = 0
+  proof
+    assume i is_expressible_by n;
+    then A1: i + NEG_N(i,n)
+               = i + (2 to_power(n) - i) by Def5
+              .= i + (2 to_power(n) + -i) by XCMPLX_0:def 8
+              .= i + -i + 2 to_power(n) by XCMPLX_1:1
+              .= 0 + 2 to_power(n) by XCMPLX_0:def 6;
+    thus ADD_MOD(i, NEG_MOD(i,n), n)
+                 = (i + NEG_MOD(i,n)) mod 2 to_power(n) by Def4
+                .= (i + (NEG_N(i,n) mod 2 to_power(n)))
+                                      mod 2 to_power(n) by Def6
+                .= 2 to_power(n) mod 2 to_power(n) by A1,GR_CY_1:3
+                .= 0 by GR_CY_1:5;
+  end;
+
+theorem Th13:
+  ADD_MOD(i,j,n) = ADD_MOD(j,i,n)
+  proof
+    thus ADD_MOD(i,j,n) = (i + j) mod 2 to_power(n) by Def4
+                       .= ADD_MOD(j,i,n) by Def4;
+  end;
+
+theorem Th14:
+  i is_expressible_by n implies ADD_MOD(0,i,n) = i
+  proof
+    assume i is_expressible_by n;
+    then A1:i < 2 to_power(n) by Def3;
+    thus ADD_MOD(0,i,n) = (0 + i) mod 2 to_power(n) by Def4
+                       .= i by A1,GR_CY_1:4;
+  end;
+
+theorem Th15:
+  ADD_MOD(ADD_MOD(i,j,n),k,n) = ADD_MOD(i,ADD_MOD(j,k,n),n)
+  proof
+    thus ADD_MOD(ADD_MOD(i,j,n),k,n)
+          = ADD_MOD((i+j) mod 2 to_power(n),k,n) by Def4
+         .= ((i+j) mod 2 to_power(n) + k) mod 2 to_power(n) by Def4
+         .= (i+j+k) mod 2 to_power(n) by GR_CY_1:3
+         .= (i+(j+k)) mod 2 to_power(n) by XCMPLX_1:1
+         .= (i + ((j+k) mod 2 to_power(n))) mod 2 to_power(n) by GR_CY_1:2
+         .= (i + ADD_MOD(j,k,n)) mod 2 to_power(n) by Def4
+         .= ADD_MOD(i,ADD_MOD(j,k,n),n) by Def4;
+  end;
+
+theorem Th16:
+  ADD_MOD(i,j,n) is_expressible_by n
+  proof
+    A1: 2 to_power(n) > 0 by POWER:39;
+      ADD_MOD(i,j,n) = (i + j) mod 2 to_power(n) by Def4;
+    then ADD_MOD(i,j,n) < 2 to_power(n) by A1,NAT_1:46;
+    hence thesis by Def3;
+  end;
+
+theorem
+    NEG_MOD(i,n) is_expressible_by n
+  proof
+    A1: 2 to_power(n) > 0 by POWER:39;
+      NEG_MOD(i,n) = NEG_N(i,n) mod 2 to_power(n) by Def6;
+    then NEG_MOD(i,n) < 2 to_power(n) by A1,NAT_1:46;
+    hence thesis by Def3;
+  end;
+
+definition
+  let n, i be Nat;
+  func ChangeVal_1(i,n) -> Nat equals
+  :Def7:
+    2 to_power(n) if i = 0
+    otherwise i;
+  correctness;
+end;
+
+theorem Th18:
+  i is_expressible_by n implies
+      ChangeVal_1(i,n) <= 2 to_power(n) & ChangeVal_1(i,n) > 0
+  proof
+    assume A1: i is_expressible_by n;
+    A2: 2 to_power(n) > 0 by POWER:39;
+    per cases;
+      suppose i=0;
+        hence thesis by A2,Def7;
+      suppose A3: i<>0;
+        then ChangeVal_1(i,n) = i by Def7;
+        hence thesis by A1,A3,Def3,NAT_1:19;
+  end;
+
+theorem Th19:
+  for n,a1,a2 be Nat holds a1 is_expressible_by n & a2 is_expressible_by n &
+    ChangeVal_1(a1,n) = ChangeVal_1(a2,n) implies a1 = a2
+  proof
+    let n;
+    let a1,a2 be Nat;
+    assume A1:a1 is_expressible_by n & a2 is_expressible_by n &
+                            ChangeVal_1(a1,n) = ChangeVal_1(a2,n);
+    then A2: a1 <> 2 to_power(n) by Def3;
+    A3: a2 <> 2 to_power(n) by A1,Def3;
+    per cases;
+      suppose A4: ChangeVal_1(a1,n) = 2 to_power(n);
+        hence a2 = 0 by A1,A3,Def7
+                .= a1 by A2,A4,Def7;
+      suppose A5: ChangeVal_1(a1,n) <> 2 to_power(n);
+        then A6: a1 <> 0 by Def7;
+          a2 <> 0 by A1,A5,Def7;
+        hence a2 = ChangeVal_1(a1,n) by A1,Def7
+               .= a1 by A6,Def7;
+  end;
+
+definition
+  let n;
+  let i be Nat;
+  func ChangeVal_2(i,n) -> Nat equals
+  :Def8:
+    0 if i = 2 to_power(n)
+    otherwise i;
+  correctness;
+end;
+
+theorem
+    i is_expressible_by n implies
+    ChangeVal_2(i,n) is_expressible_by n
+  proof
+    assume i is_expressible_by n;
+    then i < 2 to_power(n) by Def3;
+    then ChangeVal_2(i,n) < 2 to_power(n) by Def8;
+    hence thesis by Def3;
+  end;
+
+theorem Th21:
+  for n,a1,a2 be Nat holds a1 <> 0 & a2 <> 0 &
+    ChangeVal_2(a1,n) = ChangeVal_2(a2,n) implies a1 = a2
+  proof
+    let n;
+    let a1,a2 be Nat;
+    assume A1: a1 <> 0 & a2 <> 0 & ChangeVal_2(a1,n) = ChangeVal_2(a2,n);
+    per cases;
+      suppose A2: ChangeVal_2(a1,n) = 0;
+        then a2 = 2 to_power(n) or a2 = 0 by A1,Def8;
+        hence a2 = a1 by A1,A2,Def8;
+      suppose A3: ChangeVal_2(a1,n) <> 0;
+        then A4:a1 <> 2 to_power(n) by Def8;
+          a2 <> 2 to_power(n) by A1,A3,Def8;
+        hence a2 = ChangeVal_2(a1,n) by A1,Def8
+               .= a1 by A4,Def8;
+  end;
+
+definition
+  let n;
+  let i,j be Nat;
+  func MUL_MOD(i,j,n) -> Nat equals
+  :Def9:
+    ChangeVal_2((ChangeVal_1(i,n)*ChangeVal_1(j,n)) mod (2 to_power(n)+1),n);
+  coherence;
+end;
+
+definition
+  let n be non empty Nat;
+  let i be Nat;
+  assume A1: i is_expressible_by n & (2 to_power(n) + 1) is prime;
+    func INV_MOD(i,n) -> Nat means
+  :Def10:
+    MUL_MOD(i,it,n) = 1 & it is_expressible_by n;
+  existence
+    proof
+      A2: 2 to_power(n) > 0 by POWER:39;
+        2 to_power(n) + (1 - 1) > 0 by POWER:39;
+      then reconsider n2=2 to_power(n) + 1 - 1 as Nat by XCMPLX_1:29;
+      A3:2 to_power(n) + 1 > 0 + 1 by A2,REAL_1:53;
+      reconsider nn=2 to_power(n) + 1 as Nat;
+        n>0 by NAT_1:19;
+      then A4: 2 to_power(n) <> 1 by POWER:40;
+        2 to_power(n) + 1 >= 1 + 1 by A3,NAT_1:38;
+      then 2 to_power(n) + 1 - 1 >= 1 + 1 - 1 by REAL_1:49;
+      then 2 to_power(n) + 1 - 1 - 1 >= 1 + 1 - 1 - 1 by REAL_1:49;
+      then reconsider n3=2 to_power(n) + 1 - 1 - 1 as Nat by INT_1:16;
+      A5: n2 = 2 to_power(n) + (1 - 1) by XCMPLX_1:29
+            .= 2 to_power(n) + 0;
+        n2 * n2 = (2 to_power(n) + 1 - 1)*(2 to_power(n) + 1) -
+                (2 to_power(n) + 1 - 1)*1 by XCMPLX_1:40
+             .= (2 to_power(n) + 1)*(2 to_power(n) + 1 - 1) -
+                (2 to_power(n) + 1)*1 + 1 by XCMPLX_1:37
+             .= nn*n3 + 1 by XCMPLX_1:40;
+     then A6:(n2*n2) mod nn
+                      = 1 mod nn by GR_CY_1:1
+                     .= 1 by A3,GR_CY_1:4;
+        now per cases;
+        suppose A7: i=0;
+          consider j such that A8:j = 0;
+          take j;
+          A9: MUL_MOD(i,j,n)
+           = ChangeVal_2((ChangeVal_1(0,n)*ChangeVal_1(0,n)) mod nn,n)
+                                                                 by A7,A8,Def9
+          .= ChangeVal_2((2 to_power(n)*ChangeVal_1(0,n)) mod nn,n) by Def7
+          .= ChangeVal_2((n2*n2) mod nn,n) by A5,Def7
+          .= 1 by A4,A6,Def8;
+            j is_expressible_by n by A2,A8,Def3;
+          hence thesis by A9;
+        suppose A10: i<>0;
+            i < 2 to_power(n) by A1,Def3;
+          then i < 2 to_power(n)+1 by NAT_1:38;
+          then consider a being Nat such that
+            A11: (a*i) mod (2 to_power(n)+1) = 1 & a < (2 to_power(n)+1)
+                                                      by A1,A3,A10,Th1;
+          A12: a <> 0 by A11,GR_CY_1:4;
+          take k=ChangeVal_2(a,n);
+            now per cases;
+            suppose A13:a <> 2 to_power(n);
+              then A14: k = a by Def8;
+              then k <= 2 to_power(n) by A11,NAT_1:38;
+              then k < 2 to_power(n) by A13,A14,REAL_1:def 5;
+              then A15: k is_expressible_by n by Def3;
+                MUL_MOD(i,k,n)
+                = ChangeVal_2((ChangeVal_1(i,n)*
+                    ChangeVal_1(k,n)) mod (2 to_power(n)+1),n) by Def9
+               .= ChangeVal_2((i*
+                    ChangeVal_1(k,n)) mod (2 to_power(n)+1),n) by A10,Def7
+               .= ChangeVal_2((i*a)mod (2 to_power(n)+1),n) by A12,A14,Def7
+               .= 1 by A4,A11,Def8;
+              hence thesis by A15;
+            suppose A16:a = 2 to_power(n);
+              then A17: k = 0 by Def8;
+              then A18: k is_expressible_by n by A2,Def3;
+                MUL_MOD(i,k,n)
+                = ChangeVal_2((ChangeVal_1(i,n)*
+                    ChangeVal_1(k,n)) mod (2 to_power(n)+1),n) by Def9
+               .= ChangeVal_2((i*
+                    ChangeVal_1(k,n)) mod (2 to_power(n)+1),n) by A10,Def7
+               .= ChangeVal_2((i*a)mod (2 to_power(n)+1),n) by A16,A17,Def7
+               .= 1 by A4,A11,Def8;
+              hence thesis by A18;
+           end;
+           hence thesis;
+        end;
+      hence thesis;
+    end;
+  uniqueness
+    proof
+      let a1, a2 be Nat such that
+        A19: MUL_MOD(i,a1,n) = 1 & a1 is_expressible_by n and
+        A20: MUL_MOD(i,a2,n) = 1 & a2 is_expressible_by n;
+      consider k being Nat such that
+        A21: k = ChangeVal_1(i,n);
+      A22: k <= 2 to_power(n) & k > 0 by A1,A21,Th18;
+      then A23: k < 2 to_power(n)+1 by NAT_1:38;
+      consider b1 being Nat such that
+        A24: b1 = ChangeVal_1(a1,n);
+      A25: b1 <= 2 to_power(n) & b1 > 0 by A19,A24,Th18;
+      then A26: b1 < 2 to_power(n)+1 by NAT_1:38;
+      consider b2 being Nat such that
+        A27: b2 = ChangeVal_1(a2,n);
+      A28: b2 <= 2 to_power(n) & b2 > 0 by A20,A27,Th18;
+      then A29: b2 < 2 to_power(n)+1 by NAT_1:38;
+      A30: (k * b1) mod (2 to_power(n)+1) <> 0 by A1,A22,A23,A25,A26,Th5;
+      A31:(k * b2) mod (2 to_power(n)+1) <> 0 by A1,A22,A23,A28,A29,Th5;
+        ChangeVal_2((k * b1) mod (2 to_power(n)+1),n)
+         = MUL_MOD(i,a2,n) by A19,A20,A21,A24,Def9
+        .= ChangeVal_2((k * b2) mod (2 to_power(n)+1),n) by A21,A27,Def9;
+      then A32: (k * b1) mod (2 to_power(n)+1)
+              = (k * b2) mod (2 to_power(n)+1) by A30,A31,Th21;
+        now per cases;
+        suppose A33:b1 <= b2;
+          then k*b1 <= k*b2 by NAT_1:20;
+          then consider t being Nat such that
+             A34: k*b2 - k*b1 = (2 to_power(n)+1)*t by A32,Th2;
+          consider b being Integer such that A35: b = b2 - b1;
+            b1 - b1 <= b2 - b1 by A33,REAL_1:49;
+          then 0 <= b2 - b1 by XCMPLX_1:14;
+          then reconsider b as Nat by A35,INT_1:16;
+            k*b = (2 to_power(n)+1)*t by A34,A35,XCMPLX_1:40;
+          then (2 to_power(n)+1) divides k*b by NAT_1:def 3;
+          then A36: (2 to_power(n)+1) divides k or (2 to_power(n)+1)
+ divides b
+                                                     by A1,NAT_LAT:95;
+          A37: not ((2 to_power(n)+1) <= k) by A22,NAT_1:38;
+
+            b <= 2 to_power(n) by A28,A35,Th4;
+          then not ((2 to_power(n)+1) <= b) by NAT_1:38;
+          then A38:not(0 < b) by A22,A36,A37,NAT_1:54;
+            0 <= b by NAT_1:18;
+          then b2 - b1 + b1 = 0 + b1 by A35,A38,AXIOMS:21;
+          then b2 - (b1 - b1) = b1 by XCMPLX_1:37;
+          then b2 - 0 = b1 by XCMPLX_1:14;
+          hence b1 = b2;
+        suppose A39:b2 <= b1;
+          then k*b2 <= k*b1 by NAT_1:20;
+          then consider t being Nat such that
+             A40: k*b1 - k*b2 = (2 to_power(n)+1)*t by A32,Th2;
+          consider b being Integer such that A41: b = b1 - b2;
+            b2 - b2 <= b1 - b2 by A39,REAL_1:49;
+          then 0 <= b1 - b2 by XCMPLX_1:14;
+          then reconsider b as Nat by A41,INT_1:16;
+            k*b = (2 to_power(n)+1)*t by A40,A41,XCMPLX_1:40;
+          then (2 to_power(n)+1) divides k*b by NAT_1:def 3;
+          then A42: (2 to_power(n)+1) divides k or (2 to_power(n)+1)
+ divides b
+                                                     by A1,NAT_LAT:95;
+          A43: not ((2 to_power(n)+1) <= k) by A22,NAT_1:38;
+            b <= 2 to_power(n) by A25,A41,Th4;
+          then not ((2 to_power(n)+1) <= b) by NAT_1:38;
+          then A44:not(0 < b) by A22,A42,A43,NAT_1:54;
+            0 <= b by NAT_1:18;
+          then b1 - b2 + b2 = 0 + b2 by A41,A44,AXIOMS:21;
+          then b1 - (b2 - b2) = b2 by XCMPLX_1:37;
+          then b1 - 0 = b2 by XCMPLX_1:14;
+          hence b2 = b1;
+      end;
+      hence thesis by A19,A20,A24,A27,Th19;
+    end;
+end;
+
+theorem Th22:
+  MUL_MOD(i,j,n) = MUL_MOD(j,i,n)
+proof
+    MUL_MOD(i,j,n) = ChangeVal_2((ChangeVal_1(i,n)*ChangeVal_1(j,n))
+                        mod (2 to_power(n)+1),n) by Def9
+                .= MUL_MOD(j,i,n) by Def9;
+  hence thesis;
+end;
+
+theorem Th23:
+  i is_expressible_by n implies MUL_MOD(1,i,n) = i
+proof
+  assume i is_expressible_by n;
+  then A1:i < 2 to_power n by Def3;
+  A2:ChangeVal_1(1,n) = 1 by Def7;
+  A3:(1*ChangeVal_1(i,n)) mod ((2 to_power n)+1)
+                    = (ChangeVal_1(i,n)) mod ((2 to_power n)+1);
+  per cases;
+    suppose A4:i = 0;
+      then A5:ChangeVal_1(i,n) = 2 to_power(n) by Def7;
+        2 to_power n < (2 to_power n)+1 by REAL_1:69;
+      then A6:(ChangeVal_1(i,n)) mod ((2 to_power n)+1) = 2 to_power(n)
+                                                    by A5,GR_CY_1:4;
+        ChangeVal_2(2 to_power(n),n) = 0 by Def8;
+    hence thesis by A2,A3,A4,A6,Def9;
+    suppose i <> 0;
+      then A7:(ChangeVal_1(i,n)) mod ((2 to_power n)+1)
+                       = i mod ((2 to_power n)+1) by Def7;
+        2 to_power n < (2 to_power n)+1 by REAL_1:69;
+      then i < (2 to_power n)+1 by A1,AXIOMS:22;
+      then A8:(ChangeVal_1(i,n)) mod ((2 to_power n)+1) = i by A7,GR_CY_1:4;
+        ChangeVal_2(i,n) = i by A1,Def8;
+    hence thesis by A2,A3,A8,Def9;
+end;
+
+theorem Th24:
+  (2 to_power(n)+1) is prime & i is_expressible_by n &
+    j is_expressible_by n & k is_expressible_by n implies
+       MUL_MOD(MUL_MOD(i,j,n),k,n) = MUL_MOD(i,MUL_MOD(j,k,n),n)
+proof
+  assume A1:(2 to_power(n)+1) is prime & i is_expressible_by n &
+             j is_expressible_by n & k is_expressible_by n;
+  set I = ChangeVal_1(i,n);
+  set J = ChangeVal_1(j,n);
+  set K = ChangeVal_1(k,n);
+    I <= 2 to_power(n) & I > 0 by A1,Th18;
+  then A2:I < 2 to_power(n)+1 & I > 0 by NAT_1:38;
+    J <= 2 to_power(n) & J > 0 by A1,Th18;
+  then A3:J < 2 to_power(n)+1 & J > 0 by NAT_1:38;
+    K <= 2 to_power(n) & K > 0 by A1,Th18;
+  then A4:K < 2 to_power(n)+1 & K > 0 by NAT_1:38;
+
+  A5:MUL_MOD(i,j,n)
+   = ChangeVal_2((I*J) mod (2 to_power(n)+1),n) by Def9;
+  A6:MUL_MOD(j,k,n)
+   = ChangeVal_2((J*K) mod (2 to_power(n)+1),n) by Def9;
+  A7:2 to_power(n) < 2 to_power(n)+1 by REAL_1:69;
+
+    now
+        0 < 2 to_power(n) by POWER:39;
+      then 0 < (2 to_power(n)+1) by A7,AXIOMS:22;
+      then (I*J) mod (2 to_power(n)+1)
+                     < (2 to_power(n)+1) by NAT_1:46;
+      then A8:(I*J) mod (2 to_power(n)+1)
+                     <= 2 to_power(n) by NAT_1:38;
+      set CV = (I*J) mod (2 to_power(n)+1);
+      A9:CV <> 0 by A1,A2,A3,Th5;
+        now per cases by A8,AXIOMS:21;
+        suppose A10:CV = 2 to_power(n);
+          then MUL_MOD(i,j,n) = 0 by A5,Def8;
+          then A11:MUL_MOD(MUL_MOD(i,j,n),k,n)
+                 = ChangeVal_2((ChangeVal_1(0,n)*K)
+                     mod (2 to_power(n)+1),n) by Def9
+                .= ChangeVal_2((CV*K) mod (2 to_power(n)+1),n) by A10,Def7
+                .= ChangeVal_2(((I*J)*K) mod (2 to_power(n)+1),n)
+                                                    by EULER_2:10;
+          set CV2 = (J*K) mod (2 to_power(n)+1);
+            0 < 2 to_power(n) by POWER:39;
+          then 0 < (2 to_power(n)+1) by A7,AXIOMS:22;
+          then CV2 < (2 to_power(n)+1) by NAT_1:46;
+          then A12:CV2 <= 2 to_power(n) by NAT_1:38;
+          A13:CV2 <> 0 by A1,A3,A4,Th5;
+            now per cases by A12,AXIOMS:21;
+            suppose A14:CV2 = 2 to_power(n);
+              then MUL_MOD(i,MUL_MOD(j,k,n),n)
+                     = MUL_MOD(i,0,n) by A6,Def8
+                    .= ChangeVal_2((I*ChangeVal_1(0,n))
+                             mod (2 to_power(n)+1),n) by Def9
+                    .= ChangeVal_2((I*CV2) mod (2 to_power(n)+1),n) by A14,Def7
+                    .= ChangeVal_2((I*(J*K)) mod (2 to_power(n)+1),n)
+                                                       by EULER_2:10
+                    .= ChangeVal_2((I*J*K) mod (2 to_power(n)+1),n)
+                                                       by XCMPLX_1:4;
+            hence thesis by A11;
+            suppose A15:CV2 < 2 to_power(n);
+                MUL_MOD(j,k,n) = ChangeVal_2(CV2,n) by Def9
+                                 .= CV2 by A15,Def8;
+              then MUL_MOD(i,MUL_MOD(j,k,n),n)
+                 = ChangeVal_2((I*ChangeVal_1(CV2,n))
+                        mod (2 to_power(n)+1),n) by Def9
+                .= ChangeVal_2((I*CV2)
+                        mod (2 to_power(n)+1),n) by A13,Def7
+                .= ChangeVal_2((I*(J*K)) mod (2 to_power(n)+1),n)
+                                                   by EULER_2:10
+                .= ChangeVal_2((I*J*K) mod (2 to_power(n)+1),n)
+                                                   by XCMPLX_1:4;
+            hence thesis by A11;
+          end;
+        hence thesis;
+        suppose CV < 2 to_power(n);
+          then MUL_MOD(i,j,n) = CV by A5,Def8;
+          then A16:MUL_MOD(MUL_MOD(i,j,n),k,n)
+                 = ChangeVal_2((ChangeVal_1(CV,n)*K)
+                     mod (2 to_power(n)+1),n) by Def9
+                .= ChangeVal_2((CV*K) mod (2 to_power(n)+1),n) by A9,Def7
+                .= ChangeVal_2(((I*J)*K) mod (2 to_power(n)+1),n)
+                                                    by EULER_2:10;
+          set CV2 = (J*K) mod (2 to_power(n)+1);
+            0 < 2 to_power(n) by POWER:39;
+          then 0 < (2 to_power(n)+1) by A7,AXIOMS:22;
+          then CV2 < (2 to_power(n)+1) by NAT_1:46;
+          then A17:CV2 <= 2 to_power(n) by NAT_1:38;
+          A18:CV2 <> 0 by A1,A3,A4,Th5;
+            now per cases by A17,AXIOMS:21;
+            suppose A19:CV2 = 2 to_power(n);
+              then MUL_MOD(j,k,n) = 0 by A6,Def8;
+              then MUL_MOD(i,MUL_MOD(j,k,n),n)
+                     = ChangeVal_2((I*ChangeVal_1(0,n))
+                             mod (2 to_power(n)+1),n) by Def9
+                    .= ChangeVal_2((I*CV2) mod (2 to_power(n)+1),n) by A19,Def7
+                    .= ChangeVal_2((I*(J*K)) mod (2 to_power(n)+1),n)
+                                                       by EULER_2:10
+                    .= ChangeVal_2((I*J*K) mod (2 to_power(n)+1),n)
+                                                       by XCMPLX_1:4;
+            hence thesis by A16;
+            suppose A20:CV2 < 2 to_power(n);
+                MUL_MOD(j,k,n) = ChangeVal_2(CV2,n) by Def9
+                            .= CV2 by A20,Def8;
+              then MUL_MOD(i,MUL_MOD(j,k,n),n)
+                 = ChangeVal_2((I*ChangeVal_1(CV2,n))
+                        mod (2 to_power(n)+1),n) by Def9
+                .= ChangeVal_2((I*CV2)
+                        mod (2 to_power(n)+1),n) by A18,Def7
+                .= ChangeVal_2((I*(J*K)) mod (2 to_power(n)+1),n)
+                                                   by EULER_2:10
+                .= ChangeVal_2((I*J*K) mod (2 to_power(n)+1),n)
+                                                   by XCMPLX_1:4;
+            hence thesis by A16;
+          end;
+        hence thesis;
+      end;
+    hence thesis;
+  end;
+  hence thesis;
+end;
+
+theorem Th25:
+  MUL_MOD(i,j,n) is_expressible_by n
+proof
+  A1:2 to_power n < (2 to_power n)+1 by REAL_1:69;
+  A2:0 < 2 to_power(n) by POWER:39;
+  then 0 < (2 to_power(n)+1) by A1,AXIOMS:22;
+  then (ChangeVal_1(i,n)*ChangeVal_1(j,n)) mod (2 to_power(n)+1)
+                    < (2 to_power(n)+1) by NAT_1:46;
+  then A3:(ChangeVal_1(i,n)*ChangeVal_1(j,n)) mod (2 to_power(n)+1)
+                    <= 2 to_power(n) by NAT_1:38;
+  set CV = (ChangeVal_1(i,n)*ChangeVal_1(j,n)) mod (2 to_power(n)+1);
+    now per cases by A3,AXIOMS:21;
+    suppose CV = 2 to_power(n);
+      then ChangeVal_2(CV,n) = 0 by Def8;
+      then MUL_MOD(i,j,n) < 2 to_power(n) by A2,Def9;
+    hence thesis by Def3;
+    suppose A4:CV < 2 to_power(n);
+      then ChangeVal_2(CV,n) = CV by Def8;
+      then MUL_MOD(i,j,n) = CV by Def9;
+    hence thesis by A4,Def3;
+  end;
+  hence thesis;
+end;
+
+theorem
+    ChangeVal_2(i,n) = 1 implies i = 1
+proof
+  assume A1:ChangeVal_2(i,n) = 1;
+  assume A2:i <> 1;
+    now per cases;
+    suppose i = 2 to_power(n);
+    hence contradiction by A1,Def8;
+    suppose i <> 2 to_power(n);
+    hence contradiction by A1,A2,Def8;
+  end;
+  hence thesis;
+end;
+
+begin :: Operations of IDEA Cryptograms
+:: We define three IDEA's operations IDEAoperationA, IDEAoperationB
+:: and IDEAoperationC using the basic operators. IDEA Cryptogram
+:: encrypts 64-bit plain text to 64-bit ciphertext. These texts
+:: are divided into 4 16-bits text blocks. Here, we use m as the
+:: text block sequence. And, IDEA's operations use key sequence
+:: explains k in this section. n is bit-length of text blocks.
+
+:: Definiton of IDEA Operation A
+definition
+  let n;
+  let m,k be FinSequence of NAT;
+  func IDEAoperationA(m, k, n) -> FinSequence of NAT means
+  :Def11:
+   len(it) = len(m) &
+   for i being Nat st i in dom m holds
+     (i=1 implies it.i = MUL_MOD(m.1, k.1, n)) &
+     (i=2 implies it.i = ADD_MOD(m.2, k.2, n)) &
+     (i=3 implies it.i = ADD_MOD(m.3, k.3, n)) &
+     (i=4 implies it.i = MUL_MOD(m.4, k.4, n)) &
+     (i<>1 & i <> 2 & i<>3 & i<>4 implies it.i = m.i);
+  existence
+    proof
+defpred P[set,set] means
+             ($1=1 implies $2 = MUL_MOD(m.1, k.1, n)) &
+             ($1=2 implies $2 = ADD_MOD(m.2, k.2, n)) &
+             ($1=3 implies $2 = ADD_MOD(m.3, k.3, n)) &
+             ($1=4 implies $2 = MUL_MOD(m.4, k.4, n)) &
+             ($1<>1 & $1 <> 2 & $1<>3 & $1<>4 implies $2 = m.$1);
+             A1: for j st j in Seg len m ex x being Element of NAT st
+             P[j,x]
+      proof
+        let j be Nat such that j in Seg len m;
+        per cases;
+          suppose A2: j = 1;
+              take MUL_MOD(m.1, k.1, n);
+             thus thesis by A2;
+          suppose A3: j = 2;
+              take ADD_MOD(m.2, k.2, n);
+             thus thesis by A3;
+          suppose A4: j = 3;
+              take ADD_MOD(m.3, k.3, n);
+             thus thesis by A4;
+          suppose A5: j = 4;
+              take MUL_MOD(m.4, k.4, n);
+             thus thesis by A5;
+          suppose A6: j<>1 & j<>2 & j<>3 & j<>4;
+              take m.j;
+             thus thesis by A6;
+      end;
+     A7:dom m = Seg len m by FINSEQ_1:def 3;
+     consider z being FinSequence of NAT such that
+        A8: dom z = Seg len m and
+        A9: for i st i in Seg len m holds P[i,z.i] from SeqDEx(A1);
+      take z;
+      thus thesis by A7,A8,A9,FINSEQ_1:def 3;
+    end;
+  uniqueness
+    proof
+      let z1,z2 be FinSequence of NAT such that
+       A10: len(z1) = len(m) &
+            for i being Nat st i in dom m holds
+                 (i=1 implies z1.i = MUL_MOD(m.1, k.1, n)) &
+                 (i=2 implies z1.i = ADD_MOD(m.2, k.2, n)) &
+                 (i=3 implies z1.i = ADD_MOD(m.3, k.3, n)) &
+                 (i=4 implies z1.i = MUL_MOD(m.4, k.4, n)) &
+                 (i<>1 & i <> 2 & i<>3 & i<>4 implies z1.i = m.i) and
+       A11: len(z2) = len(m) &
+            for i st i in dom m holds
+                 (i=1 implies z2.i = MUL_MOD(m.1, k.1, n)) &
+                 (i=2 implies z2.i = ADD_MOD(m.2, k.2, n)) &
+                 (i=3 implies z2.i = ADD_MOD(m.3, k.3, n)) &
+                 (i=4 implies z2.i = MUL_MOD(m.4, k.4, n)) &
+                 (i<>1 & i <> 2 & i<>3 & i<>4 implies z2.i = m.i);
+
+       A12:dom m = Seg len z1 by A10,FINSEQ_1:def 3
+                .= dom z1 by FINSEQ_1:def 3;
+
+       A13:dom m = Seg len z2 by A11,FINSEQ_1:def 3
+                .= dom z2 by FINSEQ_1:def 3;
+
+        now let j be Nat;
+        assume A14: j in dom m;
+          now per cases;
+          suppose A15: j = 1;
+            hence z1.j = MUL_MOD(m.1, k.1, n) by A10,A14
+                      .= z2.j by A11,A14,A15;
+          suppose A16: j = 2;
+            hence z1.j = ADD_MOD(m.2, k.2, n) by A10,A14
+                      .= z2.j by A11,A14,A16;
+          suppose A17: j = 3;
+            hence z1.j = ADD_MOD(m.3, k.3, n) by A10,A14
+                      .= z2.j by A11,A14,A17;
+          suppose A18: j = 4;
+            hence z1.j = MUL_MOD(m.4, k.4, n) by A10,A14
+                      .= z2.j by A11,A14,A18;
+          suppose A19: j<>1 & j<>2 & j<>3 & j<>4;
+            hence z1.j = m.j by A10,A14
+                      .= z2.j by A11,A14,A19;
+        end;
+        hence z1.j = z2.j;
+      end;
+      hence z1 = z2 by A12,A13,FINSEQ_1:17;
+    end;
+end;
+
+:: Definiton of IDEA Operation B
+
+reserve m,k,k1,k2 for FinSequence of NAT;
+
+definition
+  let n be non empty Nat;
+  let m,k be FinSequence of NAT;
+  func IDEAoperationB(m, k, n) -> FinSequence of NAT means
+  :Def12:
+  len(it) = len(m) & for i being Nat st i in dom m holds
+  (i=1 implies it.i =
+    Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence
+            MUL_MOD(ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),Absval((n-BinarySequence m.2) 'xor'
+              (n-BinarySequence m.4)),n),k.6,n))))&
+  (i=2 implies it.i =
+    Absval((n-BinarySequence m.2) 'xor' (n-BinarySequence
+            ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),MUL_MOD(ADD_MOD(MUL_MOD(
+               Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence m.3)),
+                k.5,n),Absval((n-BinarySequence m.2) 'xor'
+                 (n-BinarySequence m.4)),n),k.6,n),n))))&
+  (i=3 implies it.i =
+    Absval((n-BinarySequence m.3) 'xor' (n-BinarySequence
+            MUL_MOD(ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),Absval((n-BinarySequence m.2) 'xor'
+              (n-BinarySequence m.4)),n),k.6,n))))&
+  (i=4 implies it.i =
+    Absval((n-BinarySequence m.4) 'xor' (n-BinarySequence
+            ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),MUL_MOD(ADD_MOD(MUL_MOD(
+               Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence m.3)),
+                k.5,n),Absval((n-BinarySequence m.2) 'xor'
+                 (n-BinarySequence m.4)),n),k.6,n),n))))&
+  (i<>1 & i <> 2 & i<>3 & i<>4 implies it.i = m.i);
+
+  existence
+    proof
+defpred P[set,set] means
+   ($1=1 implies $2 =
+    Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence
+            MUL_MOD(ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),Absval((n-BinarySequence m.2) 'xor'
+              (n-BinarySequence m.4)),n),k.6,n))))&
+   ($1=2 implies $2 =
+    Absval((n-BinarySequence m.2) 'xor' (n-BinarySequence
+            ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),MUL_MOD(ADD_MOD(MUL_MOD(
+               Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence m.3)),
+                k.5,n),Absval((n-BinarySequence m.2) 'xor'
+                 (n-BinarySequence m.4)),n),k.6,n),n))))&
+   ($1=3 implies $2 =
+    Absval((n-BinarySequence m.3) 'xor' (n-BinarySequence
+            MUL_MOD(ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),Absval((n-BinarySequence m.2) 'xor'
+              (n-BinarySequence m.4)),n),k.6,n))))&
+   ($1=4 implies $2 =
+    Absval((n-BinarySequence m.4) 'xor' (n-BinarySequence
+            ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),MUL_MOD(ADD_MOD(MUL_MOD(
+               Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence m.3)),
+                k.5,n),Absval((n-BinarySequence m.2) 'xor'
+                 (n-BinarySequence m.4)),n),k.6,n),n))))&
+   ($1<>1 & $1 <> 2 & $1<>3 & $1<>4 implies $2 = m.$1);
+A1: for j st j in Seg len m ex x being Element of NAT st P[j,x]
+  proof
+   let j be Nat such that j in Seg len m;
+   per cases;
+    suppose A2: j = 1;
+     take Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence
+            MUL_MOD(ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),Absval((n-BinarySequence m.2) 'xor'
+              (n-BinarySequence m.4)),n),k.6,n)));
+     thus thesis by A2;
+    suppose A3: j = 2;
+     take Absval((n-BinarySequence m.2) 'xor' (n-BinarySequence
+            ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),MUL_MOD(ADD_MOD(MUL_MOD(
+               Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence m.3)),
+                k.5,n),Absval((n-BinarySequence m.2) 'xor'
+                 (n-BinarySequence m.4)),n),k.6,n),n)));
+     thus thesis by A3;
+    suppose A4: j = 3;
+     take Absval((n-BinarySequence m.3) 'xor' (n-BinarySequence
+            MUL_MOD(ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),Absval((n-BinarySequence m.2) 'xor'
+              (n-BinarySequence m.4)),n),k.6,n)));
+     thus thesis by A4;
+    suppose A5: j = 4;
+     take Absval((n-BinarySequence m.4) 'xor' (n-BinarySequence
+            ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),MUL_MOD(ADD_MOD(MUL_MOD(
+               Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence m.3)),
+                k.5,n),Absval((n-BinarySequence m.2) 'xor'
+                 (n-BinarySequence m.4)),n),k.6,n),n)));
+     thus thesis by A5;
+    suppose A6: j<>1 & j<>2 & j<>3 & j<>4;
+     take m.j;
+     thus thesis by A6;
+  end;
+  consider z being FinSequence of NAT such that
+   A7: dom z = Seg len m and
+   A8: for i st i in Seg len m holds P[i,z.i] from SeqDEx(A1);
+   A9:Seg len m = dom m by FINSEQ_1:def 3;
+      take z;
+      thus thesis by A7,A8,A9,FINSEQ_1:def 3;
+    end;
+
+  uniqueness
+    proof
+      let z1,z2 be FinSequence of NAT such that
+       A10: len(z1) = len(m) &
+            for i st i in dom m holds
+   (i=1 implies z1.i =
+    Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence
+            MUL_MOD(ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),Absval((n-BinarySequence m.2) 'xor'
+              (n-BinarySequence m.4)),n),k.6,n))))&
+   (i=2 implies z1.i =
+    Absval((n-BinarySequence m.2) 'xor' (n-BinarySequence
+            ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),MUL_MOD(ADD_MOD(MUL_MOD(
+               Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence m.3)),
+                k.5,n),Absval((n-BinarySequence m.2) 'xor'
+                 (n-BinarySequence m.4)),n),k.6,n),n))))&
+   (i=3 implies z1.i =
+    Absval((n-BinarySequence m.3) 'xor' (n-BinarySequence
+            MUL_MOD(ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),Absval((n-BinarySequence m.2) 'xor'
+              (n-BinarySequence m.4)),n),k.6,n))))&
+   (i=4 implies z1.i =
+    Absval((n-BinarySequence m.4) 'xor' (n-BinarySequence
+            ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),MUL_MOD(ADD_MOD(MUL_MOD(
+               Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence m.3)),
+                k.5,n),Absval((n-BinarySequence m.2) 'xor'
+                 (n-BinarySequence m.4)),n),k.6,n),n))))&
+   (i<>1 & i <> 2 & i<>3 & i<>4 implies z1.i = m.i) and
+       A11: len(z2) = len(m) &
+            for i st i in dom m holds
+   (i=1 implies z2.i =
+    Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence
+            MUL_MOD(ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),Absval((n-BinarySequence m.2) 'xor'
+              (n-BinarySequence m.4)),n),k.6,n))))&
+   (i=2 implies z2.i =
+    Absval((n-BinarySequence m.2) 'xor' (n-BinarySequence
+            ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),MUL_MOD(ADD_MOD(MUL_MOD(
+               Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence m.3)),
+                k.5,n),Absval((n-BinarySequence m.2) 'xor'
+                 (n-BinarySequence m.4)),n),k.6,n),n))))&
+   (i=3 implies z2.i =
+    Absval((n-BinarySequence m.3) 'xor' (n-BinarySequence
+            MUL_MOD(ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),Absval((n-BinarySequence m.2) 'xor'
+              (n-BinarySequence m.4)),n),k.6,n))))&
+   (i=4 implies z2.i =
+    Absval((n-BinarySequence m.4) 'xor' (n-BinarySequence
+            ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),MUL_MOD(ADD_MOD(MUL_MOD(
+               Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence m.3)),
+                k.5,n),Absval((n-BinarySequence m.2) 'xor'
+                 (n-BinarySequence m.4)),n),k.6,n),n))))&
+   (i<>1 & i <> 2 & i<>3 & i<>4 implies z2.i = m.i);
+       A12: dom m = Seg len(z1) by A10,FINSEQ_1:def 3
+                 .= dom z1 by FINSEQ_1:def 3;
+       A13: dom m = Seg len(z2) by A11,FINSEQ_1:def 3
+                 .= dom z2 by FINSEQ_1:def 3;
+        now let j be Nat;
+        assume A14: j in dom m;
+          now per cases;
+          suppose A15: j = 1;
+            hence z1.j =
+    Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence
+            MUL_MOD(ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),Absval((n-BinarySequence m.2) 'xor'
+              (n-BinarySequence m.4)),n),k.6,n))) by A10,A14
+          .= z2.j by A11,A14,A15;
+          suppose A16: j = 2;
+            hence z1.j =
+    Absval((n-BinarySequence m.2) 'xor' (n-BinarySequence
+            ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),MUL_MOD(ADD_MOD(MUL_MOD(
+               Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence m.3)),
+                k.5,n),Absval((n-BinarySequence m.2) 'xor'
+                 (n-BinarySequence m.4)),n),k.6,n),n))) by A10,A14
+          .= z2.j by A11,A14,A16;
+          suppose A17: j = 3;
+            hence z1.j =
+    Absval((n-BinarySequence m.3) 'xor' (n-BinarySequence
+            MUL_MOD(ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),Absval((n-BinarySequence m.2) 'xor'
+              (n-BinarySequence m.4)),n),k.6,n))) by A10,A14
+          .= z2.j by A11,A14,A17;
+          suppose A18: j = 4;
+            hence z1.j =
+    Absval((n-BinarySequence m.4) 'xor' (n-BinarySequence
+            ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),MUL_MOD(ADD_MOD(MUL_MOD(
+               Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence m.3)),
+                k.5,n),Absval((n-BinarySequence m.2) 'xor'
+                 (n-BinarySequence m.4)),n),k.6,n),n))) by A10,A14
+          .= z2.j by A11,A14,A18;
+          suppose A19: j<>1 & j<>2 & j<>3 & j<>4;
+            hence z1.j = m.j by A10,A14
+                      .= z2.j by A11,A14,A19;
+        end;
+        hence z1.j = z2.j;
+      end;
+      hence z1 = z2 by A12,A13,FINSEQ_1:17;
+    end;
+end;
+
+:: Definiton of IDEA Operation C
+definition
+  let m be FinSequence of NAT;
+  func IDEAoperationC(m) -> FinSequence of NAT means
+  :Def13:
+   len(it) = len(m) &
+   for i being Nat st i in dom m holds
+     it.i = IFEQ(i,2,m.3,IFEQ(i,3,m.2,m.i));
+
+  existence
+    proof
+defpred P[set,set] means
+             ($1=2 implies $2 = m.3) & ($1=3 implies $2 = m.2) &
+             ($1<>2 & $1<>3 implies $2 = m.$1);
+      A1: for k be Nat st k in Seg len m ex x being Element of NAT st P[k,x]
+      proof
+        let k be Nat such that
+             k in Seg len m;
+        per cases;
+          suppose A2: k = 2;
+              take m.3;
+             thus thesis by A2;
+          suppose A3: k = 3;
+              take m.2;
+             thus thesis by A3;
+          suppose A4: k<>2 & k<>3;
+              take m.k;
+             thus thesis by A4;
+      end;
+      consider z being FinSequence of NAT such that
+        A5: dom z = Seg len m and
+        A6: for i st i in Seg len m holds P[i,z.i] from SeqDEx(A1);
+      A7:for i st i in Seg len m holds IFEQ(i,2,m.3,IFEQ(i,3,m.2,m.i)) = z.i
+      proof
+        let i be Nat;
+        assume A8:i in Seg len m;
+        A9:i = 2 implies IFEQ(i,2,m.3,IFEQ(i,3,m.2,m.i)) = m.3 by CQC_LANG:def
+1;
+        A10:i = 3 implies IFEQ(i,2,m.3,IFEQ(i,3,m.2,m.i)) = m.2
+        proof
+          assume A11:i = 3;
+          then IFEQ(i,2,m.3,IFEQ(i,3,m.2,m.i)) = IFEQ(i,3,m.2,m.i)
+                                                     by CQC_LANG:def 1
+                                              .= m.2 by A11,CQC_LANG:def 1;
+          hence thesis;
+        end;
+          i<>2 & i<>3 implies IFEQ(i,2,m.3,IFEQ(i,3,m.2,m.i)) = m.i
+        proof
+          assume A12:i <> 2 & i <> 3;
+          then IFEQ(i,2,m.3,IFEQ(i,3,m.2,m.i)) = IFEQ(i,3,m.2,m.i)
+                                                     by CQC_LANG:def 1
+                                              .= m.i by A12,CQC_LANG:def 1;
+          hence thesis;
+        end;
+        then i<>2 & i<>3 implies IFEQ(i,2,m.3,IFEQ(i,3,m.2,m.i)) = z.i
+                                                           by A6,A8;
+        hence thesis by A6,A8,A9,A10;
+      end;
+      A13:Seg len m = dom m by FINSEQ_1:def 3;
+      take z;
+      thus thesis by A5,A7,A13,FINSEQ_1:def 3;
+    end;
+  uniqueness
+    proof
+      let z1,z2 be FinSequence of NAT such that
+       A14:len(z1) = len(m) &
+            for i st i in dom m holds
+             z1.i = IFEQ(i,2,m.3,IFEQ(i,3,m.2,m.i)) and
+       A15:len(z2) = len(m) &
+            for i st i in dom m holds
+             z2.i = IFEQ(i,2,m.3,IFEQ(i,3,m.2,m.i));
+
+       A16: dom m = Seg len(z1) by A14,FINSEQ_1:def 3
+                 .= dom z1 by FINSEQ_1:def 3;
+       A17: dom m = Seg len(z2) by A15,FINSEQ_1:def 3
+                 .= dom z2 by FINSEQ_1:def 3;
+        now let j be Nat;
+        assume A18: j in dom m;
+          now per cases;
+          suppose j = 2;
+            then A19:IFEQ(j,2,m.3,IFEQ(j,3,m.2,m.j)) = m.3 by CQC_LANG:def 1;
+            then z2.j = m.3 by A15,A18;
+            hence z1.j = z2.j by A14,A18,A19;
+          suppose A20: j = 3;
+            A21:j = 3 implies IFEQ(j,2,m.3,IFEQ(j,3,m.2,m.j)) = m.2
+            proof
+              assume A22:j = 3;
+              then IFEQ(j,2,m.3,IFEQ(j,3,m.2,m.j)) = IFEQ(j,3,m.2,m.j)
+                                                         by CQC_LANG:def 1
+                                                  .= m.2 by A22,CQC_LANG:def 1;
+              hence thesis;
+            end;
+            then z2.j = m.2 by A15,A18,A20;
+            hence z1.j = z2.j by A14,A18,A20,A21;
+          suppose A23: j<>2 & j<>3;
+            A24:j<>2 & j<>3 implies IFEQ(j,2,m.3,IFEQ(j,3,m.2,m.j)) = m.j
+            proof
+              assume A25:j <> 2 & j <> 3;
+              then IFEQ(j,2,m.3,IFEQ(j,3,m.2,m.j)) = IFEQ(j,3,m.2,m.j)
+                                                          by CQC_LANG:def 1
+                                                   .= m.j by A25,CQC_LANG:def 1
+;
+              hence thesis;
+            end;
+            then z2.j = m.j by A15,A18,A23;
+            hence z1.j = z2.j by A14,A18,A23,A24;
+        end;
+        hence z1.j = z2.j;
+      end;
+      hence z1 = z2 by A16,A17,FINSEQ_1:17;
+    end;
+end;
+
+theorem Th27:
+  len m >= 4 implies
+    IDEAoperationA(m,k,n).1 is_expressible_by n &
+    IDEAoperationA(m,k,n).2 is_expressible_by n &
+    IDEAoperationA(m,k,n).3 is_expressible_by n &
+    IDEAoperationA(m,k,n).4 is_expressible_by n
+  proof
+    assume A1: len m >= 4;
+    then 1 <= len m by AXIOMS:22;
+    then 1 in Seg len m by FINSEQ_1:3;
+    then 1 in dom m by FINSEQ_1:def 3;
+    then A2: IDEAoperationA(m,k,n).1 = MUL_MOD(m.1, k.1, n) by Def11;
+      2 <= len m by A1,AXIOMS:22;
+    then 2 in Seg len m by FINSEQ_1:3;
+    then 2 in dom m by FINSEQ_1:def 3;
+    then A3: IDEAoperationA(m,k,n).2 = ADD_MOD(m.2, k.2, n) by Def11;
+      3 <= len m by A1,AXIOMS:22;
+    then 3 in Seg len m by FINSEQ_1:3;
+    then 3 in dom m by FINSEQ_1:def 3;
+    then A4: IDEAoperationA(m,k,n).3 = ADD_MOD(m.3, k.3, n) by Def11;
+      4 in Seg len m by A1,FINSEQ_1:3;
+    then 4 in dom m by FINSEQ_1:def 3;
+    then IDEAoperationA(m,k,n).4 = MUL_MOD(m.4, k.4, n) by Def11;
+    hence thesis by A2,A3,A4,Th16,Th25;
+  end;
+
+theorem Th28:
+  for n being non empty Nat holds
+    len m >= 4 implies
+    IDEAoperationB(m,k,n).1 is_expressible_by n &
+    IDEAoperationB(m,k,n).2 is_expressible_by n &
+    IDEAoperationB(m,k,n).3 is_expressible_by n &
+    IDEAoperationB(m,k,n).4 is_expressible_by n
+  proof
+    let n be non empty Nat;
+    assume A1: len m >= 4;
+    then 1 <= len m by AXIOMS:22;
+    then 1 in Seg len m by FINSEQ_1:3;
+    then 1 in dom m by FINSEQ_1:def 3;
+    then IDEAoperationB(m,k,n).1 =
+     Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence
+           MUL_MOD(ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+            (n-BinarySequence m.3)),k.5,n),Absval((n-BinarySequence m.2) 'xor'
+             (n-BinarySequence m.4)),n),k.6,n))) by Def12;
+    then A2: IDEAoperationB(m,k,n).1 < 2 to_power n by BINARI_3:1;
+
+      2 <= len m by A1,AXIOMS:22;
+    then 2 in Seg len m by FINSEQ_1:3;
+    then 2 in dom m by FINSEQ_1:def 3;
+    then IDEAoperationB(m,k,n).2 =
+      Absval((n-BinarySequence m.2) 'xor' (n-BinarySequence
+            ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),MUL_MOD(ADD_MOD(MUL_MOD(
+              Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence m.3)),
+               k.5,n),Absval((n-BinarySequence m.2) 'xor'
+                (n-BinarySequence m.4)),n),k.6,n),n))) by Def12;
+    then A3: IDEAoperationB(m,k,n).2 < 2 to_power n by BINARI_3:1;
+
+      3 <= len m by A1,AXIOMS:22;
+    then 3 in Seg len m by FINSEQ_1:3;
+    then 3 in dom m by FINSEQ_1:def 3;
+    then IDEAoperationB(m,k,n).3 =
+      Absval((n-BinarySequence m.3) 'xor' (n-BinarySequence
+            MUL_MOD(ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),Absval((n-BinarySequence m.2) 'xor'
+              (n-BinarySequence m.4)),n),k.6,n))) by Def12;
+    then A4: IDEAoperationB(m,k,n).3 < 2 to_power n by BINARI_3:1;
+
+      4 in Seg len m by A1,FINSEQ_1:3;
+    then 4 in dom m by FINSEQ_1:def 3;
+    then IDEAoperationB(m,k,n).4 =
+      Absval((n-BinarySequence m.4) 'xor' (n-BinarySequence
+            ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),MUL_MOD(ADD_MOD(MUL_MOD(
+              Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence m.3)),
+               k.5,n),Absval((n-BinarySequence m.2) 'xor'
+                (n-BinarySequence m.4)),n),k.6,n),n))) by Def12;
+    then IDEAoperationB(m,k,n).4 < 2 to_power n by BINARI_3:1;
+    hence thesis by A2,A3,A4,Def3;
+  end;
+
+Lm3:
+for i st i = 2 & i in dom m holds IDEAoperationC(m).i = m.3
+proof
+  let i be Nat;
+  assume A1:i = 2 & i in dom m;
+  then IDEAoperationC(m).i = IFEQ(i,2,m.3,IFEQ(i,3,m.2,m.i)) by Def13
+                          .= m.3 by A1,CQC_LANG:def 1;
+  hence thesis;
+end;
+
+Lm4:
+for i st i = 3 & i in dom m holds IDEAoperationC(m).i = m.2
+proof
+  let i be Nat;
+  assume A1:i = 3 & i in dom m;
+  then IDEAoperationC(m).i = IFEQ(i,2,m.3,IFEQ(i,3,m.2,m.i)) by Def13
+                     .= IFEQ(i,3,m.2,m.i) by A1,CQC_LANG:def 1
+                     .= m.2 by A1,CQC_LANG:def 1;
+  hence thesis;
+end;
+
+Lm5:
+for i st i <> 2 & i <> 3 & i in dom m holds IDEAoperationC(m).i = m.i
+proof
+  let i be Nat;
+  assume A1:i <> 2 & i <> 3 & i in dom m;
+  then IDEAoperationC(m).i = IFEQ(i,2,m.3,IFEQ(i,3,m.2,m.i)) by Def13
+                          .= IFEQ(i,3,m.2,m.i) by A1,CQC_LANG:def 1
+                          .= m.i by A1,CQC_LANG:def 1;
+  hence thesis;
+end;
+
+theorem
+    len m >= 4 &
+    m.1 is_expressible_by n & m.2 is_expressible_by n &
+    m.3 is_expressible_by n & m.4 is_expressible_by n implies
+    IDEAoperationC(m).1 is_expressible_by n &
+    IDEAoperationC(m).2 is_expressible_by n &
+    IDEAoperationC(m).3 is_expressible_by n &
+    IDEAoperationC(m).4 is_expressible_by n
+  proof
+    assume that A1: len m >= 4 and
+                A2: m.1 is_expressible_by n & m.2 is_expressible_by n &
+                     m.3 is_expressible_by n & m.4 is_expressible_by n;
+      1 <= len m by A1,AXIOMS:22;
+    then 1 in Seg len m by FINSEQ_1:3;
+    then A3:1 in dom m by FINSEQ_1:def 3;
+      2 <= len m by A1,AXIOMS:22;
+    then 2 in Seg len m by FINSEQ_1:3;
+    then A4: 2 in dom m by FINSEQ_1:def 3;
+      3 <= len m by A1,AXIOMS:22;
+    then 3 in Seg len m by FINSEQ_1:3;
+    then A5: 3 in dom m by FINSEQ_1:def 3;
+      4 in Seg len m by A1,FINSEQ_1:3;
+    then 4 in dom m by FINSEQ_1:def 3;
+    hence thesis by A2,A3,A4,A5,Lm3,Lm4,Lm5;
+  end;
+
+theorem Th30:
+  for n being non empty Nat,m,k1,k2 holds
+    2 to_power(n)+1 is prime & len m >= 4 &
+    m.1 is_expressible_by n & m.2 is_expressible_by n &
+    m.3 is_expressible_by n & m.4 is_expressible_by n &
+    k1.1 is_expressible_by n & k1.2 is_expressible_by n &
+    k1.3 is_expressible_by n & k1.4 is_expressible_by n &
+    k2.1=INV_MOD(k1.1,n) & k2.2=NEG_MOD(k1.2,n) &
+    k2.3=NEG_MOD(k1.3,n) & k2.4=INV_MOD(k1.4,n) implies
+    IDEAoperationA( IDEAoperationA(m,k1,n), k2, n) = m
+  proof
+    let n be non empty Nat;
+    let m,k1,k2 be FinSequence of NAT;
+    assume that
+           A1: 2 to_power(n)+1 is prime &
+                len m >= 4 &
+                m.1 is_expressible_by n & m.2 is_expressible_by n &
+                m.3 is_expressible_by n & m.4 is_expressible_by n &
+                k1.1 is_expressible_by n & k1.2 is_expressible_by n &
+                k1.3 is_expressible_by n & k1.4 is_expressible_by n and
+           A2: k2.1=INV_MOD(k1.1,n) and
+           A3: k2.2=NEG_MOD(k1.2,n) and
+           A4: k2.3=NEG_MOD(k1.3,n) and
+           A5: k2.4=INV_MOD(k1.4,n);
+
+    A6:k2.1 is_expressible_by n by A1,A2,Def10;
+    A7:k2.4 is_expressible_by n by A1,A5,Def10;
+
+    consider I1 being FinSequence of NAT such that
+     A8: I1 = IDEAoperationA(m,k1,n);
+
+    consider I2 being FinSequence of NAT such that
+     A9: I2 = IDEAoperationA(I1,k2,n);
+
+    A10: Seg len m = dom m by FINSEQ_1:def 3;
+    A11: Seg len m = Seg len(I1) by A8,Def11
+                 .= Seg len(I2) by A9,Def11
+                 .= dom I2 by FINSEQ_1:def 3;
+
+      Seg len m = dom m by FINSEQ_1:def 3;
+    then A12:4 in dom m by A1,FINSEQ_1:3;
+      3 <= len m by A1,AXIOMS:22;
+    then 3 in Seg len m by FINSEQ_1:3;
+    then A13:3 in dom m by FINSEQ_1:def 3;
+      2 <= len m by A1,AXIOMS:22;
+    then 2 in Seg len m by FINSEQ_1:3;
+    then A14:2 in dom m by FINSEQ_1:def 3;
+      1 <= len m by A1,AXIOMS:22;
+    then 1 in Seg len m by FINSEQ_1:3;
+    then A15:1 in dom m by FINSEQ_1:def 3;
+
+      now let j be Nat;
+      assume A16:j in Seg len m;
+      then j in Seg len I1 by A8,Def11;
+      then A17:j in dom I1 by FINSEQ_1:def 3;
+      A18:j in dom m by A16,FINSEQ_1:def 3;
+        now per cases;
+        suppose A19: j = 1;
+          hence I2.j = MUL_MOD(I1.1, k2.1, n) by A9,A17,Def11
+                   .= MUL_MOD(MUL_MOD(m.1, k1.1, n),k2.1,n)
+                                             by A8,A15,Def11
+                   .= MUL_MOD(m.1, MUL_MOD(k1.1,k2.1,n), n) by A1,A6,Th24
+                   .= MUL_MOD(m.1, 1, n) by A1,A2,Def10
+                   .= MUL_MOD(1, m.1, n) by Th22
+                   .= m.j by A1,A19,Th23;
+        suppose A20: j = 2;
+          hence I2.j = ADD_MOD(I1.2, k2.2, n) by A9,A17,Def11
+                   .= ADD_MOD(ADD_MOD(m.2, k1.2, n), k2.2, n)
+                                             by A8,A14,Def11
+                   .= ADD_MOD(m.2, ADD_MOD(k1.2, k2.2, n), n) by Th15
+                   .= ADD_MOD(m.2, 0, n) by A1,A3,Th12
+                   .= ADD_MOD(0, m.2, n) by Th13
+                   .= m.j by A1,A20,Th14;
+        suppose A21: j = 3;
+          hence I2.j = ADD_MOD(I1.3, k2.3, n) by A9,A17,Def11
+                   .= ADD_MOD(ADD_MOD(m.3, k1.3, n), k2.3, n)
+                                             by A8,A13,Def11
+                   .= ADD_MOD(m.3, ADD_MOD(k1.3, k2.3, n), n) by Th15
+                   .= ADD_MOD(m.3, 0, n) by A1,A4,Th12
+                   .= ADD_MOD(0, m.3, n) by Th13
+                   .= m.j by A1,A21,Th14;
+        suppose A22: j = 4;
+          hence I2.j = MUL_MOD(I1.4, k2.4, n) by A9,A17,Def11
+                   .= MUL_MOD(MUL_MOD(m.4, k1.4, n),k2.4,n)
+                                             by A8,A12,Def11
+                   .= MUL_MOD(m.4, MUL_MOD(k1.4,k2.4,n), n) by A1,A7,Th24
+                   .= MUL_MOD(m.4, 1, n) by A1,A5,Def10
+                   .= MUL_MOD(1, m.4, n) by Th22
+                   .= m.j by A1,A22,Th23;
+        suppose A23: j<>1 & j<>2 & j<>3 & j<>4;
+          hence I2.j = I1.j by A9,A17,Def11
+                   .= m.j by A8,A18,A23,Def11;
+      end;
+      hence I2.j = m.j;
+    end;
+    hence thesis by A8,A9,A10,A11,FINSEQ_1:17;
+  end;
+
+theorem Th31:
+  for n being non empty Nat,m,k1,k2 holds
+    2 to_power(n)+1 is prime & len m >= 4 &
+    m.1 is_expressible_by n & m.2 is_expressible_by n &
+    m.3 is_expressible_by n & m.4 is_expressible_by n &
+    k1.1 is_expressible_by n & k1.2 is_expressible_by n &
+    k1.3 is_expressible_by n & k1.4 is_expressible_by n &
+    k2.1=INV_MOD(k1.1,n) & k2.2=NEG_MOD(k1.3,n) &
+    k2.3=NEG_MOD(k1.2,n) & k2.4=INV_MOD(k1.4,n) implies
+    IDEAoperationA(IDEAoperationC(IDEAoperationA(IDEAoperationC(m),k1,n)),k2,n)
+      = m
+  proof
+    let n be non empty Nat;
+    let m,k1,k2 be FinSequence of NAT;
+    assume that
+           A1: 2 to_power(n)+1 is prime &
+                len m >= 4 &
+                m.1 is_expressible_by n & m.2 is_expressible_by n &
+                m.3 is_expressible_by n & m.4 is_expressible_by n &
+                k1.1 is_expressible_by n & k1.2 is_expressible_by n &
+                k1.3 is_expressible_by n & k1.4 is_expressible_by n and
+           A2: k2.1=INV_MOD(k1.1,n) and
+           A3: k2.2=NEG_MOD(k1.3,n) and
+           A4: k2.3=NEG_MOD(k1.2,n) and
+           A5: k2.4=INV_MOD(k1.4,n);
+
+    A6:k2.1 is_expressible_by n by A1,A2,Def10;
+    A7:k2.4 is_expressible_by n by A1,A5,Def10;
+
+    consider I1 being FinSequence of NAT such that
+     A8: I1 = IDEAoperationC(m);
+    consider I2 being FinSequence of NAT such that
+     A9: I2 = IDEAoperationA(I1,k1,n);
+    A10: len(I2) = len(I1) &
+        for i being Nat st i in dom I1 holds
+          (i=1 implies I2.i = MUL_MOD(I1.1, k1.1, n)) &
+          (i=2 implies I2.i = ADD_MOD(I1.2, k1.2, n)) &
+          (i=3 implies I2.i = ADD_MOD(I1.3, k1.3, n)) &
+          (i=4 implies I2.i = MUL_MOD(I1.4, k1.4, n)) &
+          (i<>1 & i <> 2 & i<>3 & i<>4 implies I2.i = I1.i)by A9,Def11;
+
+    consider I3 being FinSequence of NAT such that
+     A11: I3 = IDEAoperationC(I2);
+    A12: len(I3) = len(I2) &
+        for i being Nat st i in dom I2 holds
+          (i=2 implies I3.i = I2.3) &
+          (i=3 implies I3.i = I2.2) &
+          (i<>2 & i <> 3 implies I3.i = I2.i) by A11,Def13,Lm3,Lm4,Lm5;
+
+    consider I4 being FinSequence of NAT such that
+     A13: I4 = IDEAoperationA(I3,k2,n);
+    A14: len(I4) = len(I3) &
+        for i being Nat st i in dom I3 holds
+          (i=1 implies I4.i = MUL_MOD(I3.1, k2.1, n)) &
+          (i=2 implies I4.i = ADD_MOD(I3.2, k2.2, n)) &
+          (i=3 implies I4.i = ADD_MOD(I3.3, k2.3, n)) &
+          (i=4 implies I4.i = MUL_MOD(I3.4, k2.4, n)) &
+          (i<>1 & i <> 2 & i<>3 & i<>4 implies I4.i = I3.i)by A13,Def11;
+
+    A15: Seg len m = dom m by FINSEQ_1:def 3;
+    A16: Seg len m = Seg len(I1) by A8,Def13
+                 .= Seg len(I2) by A9,Def11
+                 .= Seg len(I3) by A11,Def13
+                 .= Seg len(I4) by A13,Def11
+                 .= dom I4 by FINSEQ_1:def 3;
+
+      1 <= len m by A1,AXIOMS:22;
+    then A17: 1 in Seg len m by FINSEQ_1:3;
+    then 1 in Seg len(I1) & 1 in Seg len(I2) &
+               1 in Seg len(I3) & 1 in Seg len(I4)
+                                   by A8,A10,A12,A14,Def13;
+    then A18: 1 in dom(I1) & 1 in dom(I2) &
+              1 in dom(I3) & 1 in dom(I4) by FINSEQ_1:def 3;
+    A19:1 in dom m by A17,FINSEQ_1:def 3;
+
+      2 <= len m by A1,AXIOMS:22;
+    then A20: 2 in Seg len m by FINSEQ_1:3;
+    then 2 in Seg len(I1) & 2 in Seg len(I2) &
+                2 in Seg len(I3) & 2 in Seg len(I4)
+                                    by A8,A10,A12,A14,Def13;
+    then A21: 2 in dom(I1) & 2 in dom(I2) &
+              2 in dom(I3) & 2 in dom(I4) by FINSEQ_1:def 3;
+    A22:2 in dom m by A20,FINSEQ_1:def 3;
+
+      3 <= len m by A1,AXIOMS:22;
+    then A23: 3 in Seg len m by FINSEQ_1:3;
+    then 3 in Seg len(I1) & 3 in Seg len(I2) &
+                3 in Seg len(I3) & 3 in Seg len(I4)
+                                    by A8,A10,A12,A14,Def13;
+    then A24: 3 in dom(I1) & 3 in dom(I2) &
+              3 in dom(I3) & 3 in dom(I4) by FINSEQ_1:def 3;
+    A25:3 in dom m by A23,FINSEQ_1:def 3;
+
+    A26: 4 in Seg len m by A1,FINSEQ_1:3;
+    then 4 in Seg len(I1) & 4 in Seg len(I2) &
+               4 in Seg len(I3) & 4 in Seg len(I4)
+                                     by A8,A10,A12,A14,Def13;
+    then A27: 4 in dom(I1) & 4 in dom(I2) &
+              4 in dom(I3) & 4 in dom(I4) by FINSEQ_1:def 3;
+    A28:4 in dom m by A26,FINSEQ_1:def 3;
+
+      now let j be Nat;
+      assume A29:j in Seg len m;
+      then A30: j in Seg len I1 by A8,Def13;
+      then A31: j in Seg len I2 by A9,Def11;
+      then A32: j in Seg len I3 by A11,Def13;
+
+      A33: j in dom I1 by A30,FINSEQ_1:def 3;
+      A34: j in dom I2 by A31,FINSEQ_1:def 3;
+      A35: j in dom I3 by A32,FINSEQ_1:def 3;
+
+      A36:j in dom m by A29,FINSEQ_1:def 3;
+
+        now per cases;
+        suppose A37: j = 1;
+          hence I4.j = MUL_MOD(I3.1, k2.1, n) by A13,A18,Def11
+                   .= MUL_MOD(I2.1, k2.1, n) by A11,A18,Lm5
+                   .= MUL_MOD(MUL_MOD(I1.1, k1.1, n), k2.1, n)
+                                             by A9,A18,Def11
+                   .= MUL_MOD(MUL_MOD(m.1, k1.1, n), k2.1, n)
+                                             by A8,A19,Lm5
+                   .= MUL_MOD(m.1, MUL_MOD(k1.1, k2.1, n), n) by A1,A6,Th24
+                   .= MUL_MOD(m.1, 1, n) by A1,A2,Def10
+                   .= MUL_MOD(1, m.1, n) by Th22
+                   .= m.j by A1,A37,Th23;
+        suppose A38: j = 2;
+          hence I4.j = ADD_MOD(I3.2, k2.2, n) by A13,A21,Def11
+                   .= ADD_MOD(I2.3, k2.2, n) by A11,A21,Lm3
+                   .= ADD_MOD(ADD_MOD(I1.3, k1.3, n), k2.2, n)
+                                             by A9,A24,Def11
+                   .= ADD_MOD(ADD_MOD(m.2, k1.3, n), k2.2, n)
+                                      by A8,A25,Lm4
+                   .= ADD_MOD(m.2, ADD_MOD(k1.3, k2.2, n), n) by Th15
+                   .= ADD_MOD(m.2, 0, n) by A1,A3,Th12
+                   .= ADD_MOD(0, m.2, n) by Th13
+                   .= m.j by A1,A38,Th14;
+        suppose A39: j = 3;
+          hence I4.j = ADD_MOD(I3.3, k2.3, n) by A13,A24,Def11
+                   .= ADD_MOD(I2.2, k2.3, n) by A11,A24,Lm4
+                   .= ADD_MOD(ADD_MOD(I1.2, k1.2, n), k2.3, n)
+                                             by A9,A21,Def11
+                   .= ADD_MOD(ADD_MOD(m.3, k1.2, n), k2.3, n)
+                                             by A8,A22,Lm3
+                   .= ADD_MOD(m.3, ADD_MOD(k1.2, k2.3, n), n) by Th15
+                   .= ADD_MOD(m.3, 0, n) by A1,A4,Th12
+                   .= ADD_MOD(0, m.3, n) by Th13
+                   .= m.j by A1,A39,Th14;
+        suppose A40: j = 4;
+          hence I4.j = MUL_MOD(I3.4, k2.4, n) by A13,A27,Def11
+                   .= MUL_MOD(I2.4, k2.4, n) by A11,A27,Lm5
+                   .= MUL_MOD(MUL_MOD(I1.4, k1.4, n), k2.4, n)
+                                             by A9,A27,Def11
+                   .= MUL_MOD(MUL_MOD(m.4, k1.4, n), k2.4, n)
+                                             by A8,A28,Lm5
+                   .= MUL_MOD(m.4, MUL_MOD(k1.4, k2.4, n), n) by A1,A7,Th24
+                   .= MUL_MOD(m.4, 1, n) by A1,A5,Def10
+                   .= MUL_MOD(1, m.4, n) by Th22
+                   .= m.j by A1,A40,Th23;
+        suppose A41: j<>1 & j<>2 & j<>3 & j<>4;
+          hence I4.j = I3.j by A13,A35,Def11
+                   .= I2.j by A11,A34,A41,Lm5
+                   .= I1.j by A9,A33,A41,Def11
+                   .= m.j by A8,A36,A41,Lm5;
+      end;
+      hence I4.j = m.j;
+    end;
+    hence thesis by A8,A9,A11,A13,A15,A16,FINSEQ_1:17;
+  end;
+
+theorem Th32:
+  for n being non empty Nat,m,k1,k2 holds
+    2 to_power(n)+1 is prime & len m >= 4 &
+    m.1 is_expressible_by n & m.2 is_expressible_by n &
+    m.3 is_expressible_by n & m.4 is_expressible_by n &
+    k1.5 is_expressible_by n & k1.6 is_expressible_by n &
+    k2.5=k1.5 & k2.6=k1.6 implies
+    IDEAoperationB( IDEAoperationB(m,k1,n), k2, n) = m
+  proof
+    let n be non empty Nat;
+    let m,k1,k2 be FinSequence of NAT;
+    assume that
+           A1: 2 to_power(n)+1 is prime &
+                len m >= 4 &
+                m.1 is_expressible_by n & m.2 is_expressible_by n &
+                m.3 is_expressible_by n & m.4 is_expressible_by n &
+                k1.5 is_expressible_by n & k1.6 is_expressible_by n and
+           A2: k2.5= k1.5 and
+           A3: k2.6= k1.6;
+    consider t10 being Nat such that
+     A4:t10 = MUL_MOD(
+       Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence m.3)),k1.5,n);
+    consider t11 being Nat such that
+     A5:t11 = MUL_MOD(ADD_MOD(t10,
+       Absval((n-BinarySequence m.2) 'xor' (n-BinarySequence m.4)),n),k1.6,n);
+    consider t12 being Nat such that
+     A6:t12 = ADD_MOD(t10, t11, n);
+
+    consider I1 being FinSequence of NAT such that
+     A7: I1 = IDEAoperationB(m,k1,n);
+
+    consider t20 being Nat such that
+     A8:t20 = MUL_MOD(
+       Absval((n-BinarySequence I1.1) 'xor' (n-BinarySequence I1.3)),k2.5,n);
+    consider t21 being Nat such that
+     A9:t21 = MUL_MOD(ADD_MOD(t20,
+      Absval((n-BinarySequence I1.2) 'xor' (n-BinarySequence I1.4)),n),k2.6,n);
+    consider I2 being FinSequence of NAT such that
+     A10: I2 = IDEAoperationB(I1,k2,n);
+
+    A11: Seg len m = dom m by FINSEQ_1:def 3;
+    A12: Seg len m = Seg len(I1) by A7,Def12
+                 .= Seg len(I2) by A10,Def12
+                 .= dom I2 by FINSEQ_1:def 3;
+
+      4 in Seg len m by A1,FINSEQ_1:3;
+    then 4 in dom m by FINSEQ_1:def 3;
+    then A13:I1.4 =
+           Absval((n-BinarySequence m.4) 'xor' (n-BinarySequence t12))
+                                by A4,A5,A6,A7,Def12;
+
+      3 <= len m by A1,AXIOMS:22;
+    then 3 in Seg len m by FINSEQ_1:3;
+    then 3 in dom m by FINSEQ_1:def 3;
+    then A14:I1.3 =
+           Absval((n-BinarySequence m.3) 'xor' (n-BinarySequence t11))
+                               by A4,A5,A7,Def12;
+
+      2 <= len m by A1,AXIOMS:22;
+    then 2 in Seg len m by FINSEQ_1:3;
+    then 2 in dom m by FINSEQ_1:def 3;
+    then A15:I1.2 =
+           Absval((n-BinarySequence m.2) 'xor' (n-BinarySequence t12))
+                                by A4,A5,A6,A7,Def12;
+
+      1 <= len m by A1,AXIOMS:22;
+    then 1 in Seg len m by FINSEQ_1:3;
+    then 1 in dom m by FINSEQ_1:def 3;
+    then A16:I1.1 =
+           Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence t11))
+                                by A4,A5,A7,Def12;
+
+    then A17: t20
+         = MUL_MOD(
+           Absval(((n-BinarySequence m.1) 'xor'
+                    (n-BinarySequence t11)) 'xor'
+                  (n-BinarySequence Absval((n-BinarySequence m.3) 'xor'
+                    (n-BinarySequence t11)))),k2.5,n) by A8,A14,BINARI_3:37
+        .= MUL_MOD(
+           Absval(((n-BinarySequence m.1) 'xor'
+                    (n-BinarySequence t11)) 'xor'
+                  ((n-BinarySequence m.3) 'xor'
+                    (n-BinarySequence t11))),k2.5,n) by BINARI_3:37
+        .= MUL_MOD(
+           Absval((n-BinarySequence m.1) 'xor'
+                  ((n-BinarySequence t11) 'xor'
+                   ((n-BinarySequence t11) 'xor'
+                    (n-BinarySequence m.3)))),k2.5,n) by Th10
+        .= MUL_MOD(
+           Absval((n-BinarySequence m.1) 'xor'
+                  (((n-BinarySequence t11) 'xor'
+                   (n-BinarySequence t11)) 'xor'
+                    (n-BinarySequence m.3))),k2.5,n) by Th10
+        .= MUL_MOD(
+           Absval((n-BinarySequence m.1) 'xor'
+                  (ZERO(n) 'xor'
+                    (n-BinarySequence m.3))),k2.5,n) by Th7
+        .= t10 by A2,A4,Th9;
+
+    then A18: t21
+         = MUL_MOD(ADD_MOD(t10,
+           Absval(((n-BinarySequence m.2) 'xor' (n-BinarySequence t12)
+                  ) 'xor'
+                  (n-BinarySequence Absval(
+                    (n-BinarySequence m.4) 'xor' (n-BinarySequence t12)
+                                          )
+                  )
+                 ),n),k2.6,n) by A9,A13,A15,BINARI_3:37
+        .= MUL_MOD(ADD_MOD(t10,
+           Absval(((n-BinarySequence m.2) 'xor' (n-BinarySequence t12)
+                  ) 'xor'
+                  ((n-BinarySequence m.4) 'xor' (n-BinarySequence t12)
+                  )
+                 ),n),k2.6,n) by BINARI_3:37
+        .= MUL_MOD(ADD_MOD(t10,
+           Absval( (n-BinarySequence m.2) 'xor'
+                  ((n-BinarySequence t12) 'xor'
+                   ((n-BinarySequence t12) 'xor' (n-BinarySequence m.4))
+                  )
+                 ),n),k2.6,n) by Th10
+        .= MUL_MOD(ADD_MOD(t10,
+           Absval( (n-BinarySequence m.2) 'xor'
+                  ((n-BinarySequence t12) 'xor'
+                   (n-BinarySequence t12) 'xor' (n-BinarySequence m.4)
+                  )
+                 ),n),k2.6,n) by Th10
+        .= MUL_MOD(ADD_MOD(t10,
+           Absval( (n-BinarySequence m.2) 'xor'
+                  (ZERO(n) 'xor' (n-BinarySequence m.4)
+                  )
+                 ),n),k2.6,n) by Th7
+        .= t11 by A3,A5,Th9;
+
+      now let j be Nat;
+      assume A19:j in Seg len m;
+      then j in Seg len I1 by A7,Def12;
+      then A20: j in dom I1 by FINSEQ_1:def 3;
+      A21:j in dom m by A19,FINSEQ_1:def 3;
+
+        now per cases;
+        suppose A22: j = 1;
+          A23: m.1 < 2 to_power n by A1,Def3;
+          thus I2.j
+    = Absval((n-BinarySequence I1.1) 'xor' (n-BinarySequence t11)) by A8,A9,A10
+,A18,A20,A22,Def12
+   .= Absval(((n-BinarySequence m.1) 'xor' (n-BinarySequence t11)) 'xor'
+       (n-BinarySequence t11)) by A16,BINARI_3:37
+   .= Absval((n-BinarySequence m.1) 'xor' ((n-BinarySequence t11) 'xor'
+       (n-BinarySequence t11))) by Th10
+   .= Absval(ZERO(n) 'xor' (n-BinarySequence m.1)) by Th7
+   .= Absval(n-BinarySequence m.1) by Th9
+   .= m.j by A22,A23,BINARI_3:36;
+        suppose A24: j = 2;
+          A25: m.2 < 2 to_power n by A1,Def3;
+          thus
+             I2.j
+    = Absval((n-BinarySequence I1.2) 'xor' (n-BinarySequence t12))
+                                                    by A6,A8,A9,A10,A17,A18,A20
+,A24,Def12
+   .= Absval(((n-BinarySequence m.2) 'xor' (n-BinarySequence t12)) 'xor'
+       (n-BinarySequence t12)) by A15,BINARI_3:37
+   .= Absval((n-BinarySequence m.2) 'xor' ((n-BinarySequence t12) 'xor'
+       (n-BinarySequence t12)))by Th10
+   .= Absval(ZERO(n) 'xor' (n-BinarySequence m.2)) by Th7
+   .= Absval(n-BinarySequence m.2) by Th9
+   .= m.j by A24,A25,BINARI_3:36;
+        suppose A26: j = 3;
+          A27: m.3 < 2 to_power n by A1,Def3;
+          thus I2.j
+    = Absval((n-BinarySequence I1.3) 'xor' (n-BinarySequence t11)) by A8,A9,A10
+,A18,A20,A26,Def12
+   .= Absval(((n-BinarySequence m.3) 'xor' (n-BinarySequence t11)) 'xor'
+       (n-BinarySequence t11)) by A14,BINARI_3:37
+   .= Absval((n-BinarySequence m.3) 'xor' ((n-BinarySequence t11) 'xor'
+       (n-BinarySequence t11))) by Th10
+   .= Absval(ZERO(n) 'xor' (n-BinarySequence m.3)) by Th7
+   .= Absval(n-BinarySequence m.3) by Th9
+   .= m.j by A26,A27,BINARI_3:36;
+        suppose A28: j = 4;
+          A29: m.4 < 2 to_power n by A1,Def3;
+          thus
+             I2.j
+    = Absval((n-BinarySequence I1.4) 'xor' (n-BinarySequence t12))
+                                                      by A6,A8,A9,A10,A17,A18,
+A20,A28,Def12
+   .= Absval(((n-BinarySequence m.4) 'xor' (n-BinarySequence t12)) 'xor'
+       (n-BinarySequence t12)) by A13,BINARI_3:37
+   .= Absval((n-BinarySequence m.4) 'xor' ((n-BinarySequence t12) 'xor'
+       (n-BinarySequence t12))) by Th10
+   .= Absval(ZERO(n) 'xor' (n-BinarySequence m.4)) by Th7
+   .= Absval(n-BinarySequence m.4) by Th9
+   .= m.j by A28,A29,BINARI_3:36;
+        suppose A30: j<>1 & j<>2 & j<>3 & j<>4;
+          hence I2.j = I1.j by A10,A20,Def12
+                   .= m.j by A7,A21,A30,Def12;
+      end;
+      hence I2.j = m.j;
+    end;
+    hence thesis by A7,A10,A11,A12,FINSEQ_1:17;
+  end;
+
+theorem
+    for m holds len m >= 4 implies IDEAoperationC( IDEAoperationC(m) ) = m
+  proof
+    let m be FinSequence of NAT;
+    assume A1: len m >= 4;
+
+    consider I1 being FinSequence of NAT such that
+     A2: I1 = IDEAoperationC(m);
+
+    consider I2 being FinSequence of NAT such that
+     A3: I2 = IDEAoperationC(I1);
+
+    A4: Seg len m = dom m by FINSEQ_1:def 3;
+    A5: Seg len m = Seg len(I1) by A2,Def13
+                 .= Seg len(I2) by A3,Def13
+                 .= dom I2 by FINSEQ_1:def 3;
+
+      3 <= len m by A1,AXIOMS:22;
+    then 3 in Seg len m by FINSEQ_1:3;
+    then 3 in dom m by FINSEQ_1:def 3;
+    then A6:I1.3 = m.2 by A2,Lm4;
+
+      2 <= len m by A1,AXIOMS:22;
+    then 2 in Seg len m by FINSEQ_1:3;
+    then 2 in dom m by FINSEQ_1:def 3;
+    then A7:I1.2 = m.3 by A2,Lm3;
+
+      now let j be Nat;
+      assume A8:j in Seg len m;
+      then j in Seg len I1 by A2,Def13;
+      then A9:j in dom I1 by FINSEQ_1:def 3;
+
+      A10:j in dom m by A8,FINSEQ_1:def 3;
+
+        now per cases;
+        suppose j = 2;
+          hence I2.j = m.j by A3,A6,A9,Lm3;
+        suppose j = 3;
+          hence I2.j = m.j by A3,A7,A9,Lm4;
+        suppose A11: j<>2 & j<>3;
+          hence I2.j = I1.j by A3,A9,Lm5
+                   .= m.j by A2,A10,A11,Lm5;
+      end;
+      hence I2.j = m.j;
+    end;
+    hence thesis by A2,A3,A4,A5,FINSEQ_1:17;
+  end;
+
+begin :: Sequences of IDEA Cryptogram's operations
+:: For making a model of IDEA, we define sequences of IDEA's
+:: operations IDEA_P, IDEA_PS, IDEA_PE, IDEA_Q, IDEA_QS and
+:: IDEA_QE. And, we define MESSAGES as plain and cipher text.
+
+definition
+  func MESSAGES -> set equals
+  :Def14:
+     NAT*;
+  coherence;
+end;
+
+definition
+  cluster MESSAGES -> non empty;
+  coherence by Def14;
+end;
+
+definition
+  cluster -> Function-like Relation-like Element of MESSAGES;
+  coherence by Def14,FINSEQ_1:def 11;
+end;
+
+definition
+  cluster -> FinSequence-like Element of MESSAGES;
+  coherence by Def14,FINSEQ_1:def 11;
+end;
+
+definition
+  let n be non empty Nat,k;
+  func IDEA_P(k,n) -> Function of MESSAGES, MESSAGES means
+  :Def15:
+  for m holds it.m = IDEAoperationA(IDEAoperationC(IDEAoperationB(m,k,n)),k,n);
+  existence
+    proof
+      defpred P[set,set] means
+        ex F be FinSequence of NAT st
+             $1 = F & $2 = IDEAoperationA(IDEAoperationC(
+                             IDEAoperationB(F,k,n)),k,n);
+      A1: for e being Element of MESSAGES
+                ex u being Element of MESSAGES st P[e,u]
+       proof
+         let e be Element of MESSAGES;
+         reconsider F = e as FinSequence of NAT by Def14,FINSEQ_1:def 11;
+         reconsider u = IDEAoperationA(IDEAoperationC(
+                           IDEAoperationB(F,k,n)),k,n) as Element of MESSAGES
+                                               by Def14,FINSEQ_1:def 11;
+         take u;
+         thus thesis;
+       end;
+
+      consider m1 being Function of MESSAGES,MESSAGES such that
+         A2: for e being Element of MESSAGES holds P[e,m1.e]
+                                                       from FuncExD(A1);
+
+      take m1;
+      let m be FinSequence of NAT;
+        m is Element of MESSAGES by Def14,FINSEQ_1:def 11;
+      then consider F being FinSequence of NAT such that
+              A3: m = F & m1.m = IDEAoperationA(IDEAoperationC(
+                                        IDEAoperationB(F,k,n)),k,n) by A2;
+      thus thesis by A3;
+    end;
+  uniqueness
+    proof
+      let m1,m2 be Function of MESSAGES, MESSAGES such that
+        A4: for m being FinSequence of NAT holds
+              m1.m = IDEAoperationA(IDEAoperationC(
+                      IDEAoperationB(m,k,n)),k,n) and
+        A5: for m being FinSequence of NAT holds
+              m2.m = IDEAoperationA(IDEAoperationC(
+                      IDEAoperationB(m,k,n)),k,n);
+         m1 = m2
+         proof
+           A6: dom m1 = MESSAGES & dom m2 = MESSAGES by FUNCT_2:def 1;
+             now
+             let j be set;
+             assume A7: j in MESSAGES;
+             consider jj being set such that A8: jj = j;
+             reconsider jj as FinSequence of NAT
+                                      by A7,A8,Def14,FINSEQ_1:def 11;
+             thus m1.j = IDEAoperationA(IDEAoperationC(
+                         IDEAoperationB(jj,k,n)),k,n) by A4,A8
+                      .= m2.j by A5,A8;
+           end;
+           hence m1 = m2 by A6,FUNCT_1:9;
+         end;
+       hence thesis;
+    end;
+end;
+
+definition
+  let n be non empty Nat,k;
+  func IDEA_Q(k,n) -> Function of MESSAGES, MESSAGES means
+  :Def16:
+  for m holds it.m = IDEAoperationB(IDEAoperationA(IDEAoperationC(m),k,n),k,n);
+  existence
+    proof
+      defpred P[set,set] means
+        ex F be FinSequence of NAT st
+             $1 = F & $2 = IDEAoperationB(IDEAoperationA(
+                             IDEAoperationC(F),k,n),k,n);
+      A1: for e being Element of MESSAGES
+                ex u being Element of MESSAGES st P[e,u]
+       proof
+         let e be Element of MESSAGES;
+         reconsider F = e as FinSequence of NAT by Def14,FINSEQ_1:def 11;
+         reconsider u = IDEAoperationB(IDEAoperationA(
+                           IDEAoperationC(F),k,n),k,n) as Element of MESSAGES
+                                               by Def14,FINSEQ_1:def 11;
+         take u;
+         thus thesis;
+       end;
+
+      consider m1 being Function of MESSAGES,MESSAGES such that
+         A2: for e being Element of MESSAGES holds P[e,m1.e]
+                                                       from FuncExD(A1);
+
+      take m1;
+      let m be FinSequence of NAT;
+        m is Element of MESSAGES by Def14,FINSEQ_1:def 11;
+      then consider F being FinSequence of NAT such that
+              A3: m = F & m1.m = IDEAoperationB(IDEAoperationA(
+                                        IDEAoperationC(F),k,n),k,n) by A2;
+      thus thesis by A3;
+    end;
+  uniqueness
+    proof
+      let m1,m2 be Function of MESSAGES, MESSAGES such that
+        A4: for m being FinSequence of NAT holds
+              m1.m = IDEAoperationB(IDEAoperationA(
+                      IDEAoperationC(m),k,n),k,n) and
+        A5: for m being FinSequence of NAT holds
+              m2.m = IDEAoperationB(IDEAoperationA(
+                      IDEAoperationC(m),k,n),k,n);
+         m1 = m2
+         proof
+           A6: dom m1 = MESSAGES & dom m2 = MESSAGES by FUNCT_2:def 1;
+             now
+             let j be set;
+             assume A7: j in MESSAGES;
+             consider jj being set such that A8: jj = j;
+             reconsider jj as FinSequence of NAT
+                                     by A7,A8,Def14,FINSEQ_1:def 11;
+             thus m1.j = IDEAoperationB(IDEAoperationA(
+                         IDEAoperationC(jj),k,n),k,n) by A4,A8
+                      .= m2.j by A5,A8;
+           end;
+           hence m1 = m2 by A6,FUNCT_1:9;
+         end;
+       hence thesis;
+    end;
+end;
+
+definition
+  let r,lk be Nat,n be non empty Nat,Key be Matrix of lk,6,NAT;
+  func IDEA_P_F(Key,n,r) -> FinSequence means
+  :Def17:
+  len it = r & for i st i in dom it holds it.i = IDEA_P(Line(Key,i),n);
+  existence
+    proof
+      deffunc F(Nat)=IDEA_P(Line(Key,$1),n);
+      consider z being FinSequence such that
+         A1: len z = r and
+         A2: for k being Nat st k in Seg r holds
+                          z.k= F(k) from SeqLambda;
+      A3:Seg r = dom z by A1,FINSEQ_1:def 3;
+      take z;
+      thus thesis by A1,A2,A3;
+    end;
+  uniqueness
+    proof
+      let z1,z2 be FinSequence such that
+       A4: len z1 = r &
+            for i being Nat st i in dom z1 holds
+                      z1.i = IDEA_P(Line(Key,i),n) and
+       A5: len z2 = r &
+            for i being Nat st i in dom z2 holds
+                      z2.i = IDEA_P(Line(Key,i),n);
+
+       A6: Seg r = dom z1 by A4,FINSEQ_1:def 3;
+       A7: Seg r = dom z2 by A5,FINSEQ_1:def 3;
+        now let j be Nat;
+        assume A8: j in Seg r;
+        then A9:j in dom z2 by A5,FINSEQ_1:def 3;
+          j in dom z1 by A4,A8,FINSEQ_1:def 3;
+        then z1.j = IDEA_P(Line(Key,j),n) by A4
+                 .= z2.j by A5,A9;
+        hence z1.j = z2.j;
+      end;
+      hence z1 = z2 by A6,A7,FINSEQ_1:17;
+    end;
+end;
+
+definition
+  let r,lk be Nat,n be non empty Nat,Key be Matrix of lk,6,NAT;
+  cluster IDEA_P_F(Key,n,r) -> Function-yielding;
+  coherence
+  proof
+      for x being set st x in dom IDEA_P_F(Key,n,r) holds
+      IDEA_P_F(Key,n,r).x is Function
+    proof
+      let x be set;
+      assume A1: x in dom IDEA_P_F(Key,n,r);
+      then consider xx being Nat such that A2: xx = x;
+        IDEA_P_F(Key,n,r).xx = IDEA_P(Line(Key,xx),n) by A1,A2,Def17;
+      hence IDEA_P_F(Key,n,r).x is Function by A2;
+    end;
+    hence IDEA_P_F(Key,n,r) is Function-yielding by PRALG_1:def 15;
+  end;
+end;
+
+definition
+  let r,lk be Nat,n be non empty Nat,Key be Matrix of lk,6,NAT;
+  func IDEA_Q_F(Key,n,r) -> FinSequence means
+  :Def18:
+  len it = r & for i st i in dom it holds it.i = IDEA_Q(Line(Key,r-'i+1),n);
+  existence
+    proof
+      deffunc F(Nat)=IDEA_Q(Line(Key,r-'$1+1),n);
+      consider z being FinSequence such that
+         A1: len z = r and
+         A2: for k being Nat st k in Seg r holds
+                          z.k= F(k) from SeqLambda;
+      A3:Seg r = dom z by A1,FINSEQ_1:def 3;
+      take z;
+      thus thesis by A1,A2,A3;
+    end;
+  uniqueness
+    proof
+      let z1,z2 be FinSequence such that
+       A4: len z1 = r &
+            for i being Nat st i in dom z1 holds
+                      z1.i = IDEA_Q(Line(Key,r-'i+1),n) and
+       A5: len z2 = r &
+            for i being Nat st i in dom z2 holds
+                      z2.i = IDEA_Q(Line(Key,r-'i+1),n);
+       A6: Seg r = dom z1 by A4,FINSEQ_1:def 3;
+       A7: Seg r = dom z2 by A5,FINSEQ_1:def 3;
+        now let j be Nat;
+        assume A8: j in Seg r;
+        then A9:j in dom z2 by A5,FINSEQ_1:def 3;
+          j in dom z1 by A4,A8,FINSEQ_1:def 3;
+        then z1.j = IDEA_Q(Line(Key,r-'j+1),n) by A4
+                 .= z2.j by A5,A9;
+        hence z1.j = z2.j;
+      end;
+      hence z1 = z2 by A6,A7,FINSEQ_1:17;
+    end;
+end;
+
+definition
+  let r,lk be Nat,n be non empty Nat,Key be Matrix of lk,6,NAT;
+  cluster IDEA_Q_F(Key,n,r) -> Function-yielding;
+  coherence
+  proof
+      for x being set st x in dom IDEA_Q_F(Key,n,r) holds
+                            IDEA_Q_F(Key,n,r).x is Function
+    proof
+      let x be set;
+      assume A1: x in dom IDEA_Q_F(Key,n,r);
+      then consider xx being Nat such that A2: xx = x;
+        IDEA_Q_F(Key,n,r).xx = IDEA_Q(Line(Key,r-'xx+1),n) by A1,A2,Def18;
+      hence IDEA_Q_F(Key,n,r).x is Function by A2;
+    end;
+    hence IDEA_Q_F(Key,n,r) is Function-yielding by PRALG_1:def 15;
+  end;
+end;
+
+definition
+  let k,n;
+  func IDEA_PS(k,n) -> Function of MESSAGES, MESSAGES means
+  :Def19:
+  for m holds it.m = IDEAoperationA(m,k,n);
+  existence
+    proof
+      defpred P[set,set] means
+        ex F be FinSequence of NAT st
+             $1 = F & $2 = IDEAoperationA(F,k,n);
+      A1: for e being Element of MESSAGES
+                ex u being Element of MESSAGES st P[e,u]
+       proof
+         let e be Element of MESSAGES;
+         reconsider F = e as FinSequence of NAT by Def14,FINSEQ_1:def 11;
+         reconsider u = IDEAoperationA(F,k,n) as Element of MESSAGES
+                                               by Def14,FINSEQ_1:def 11;
+         take u;
+         thus thesis;
+       end;
+      consider m1 being Function of MESSAGES,MESSAGES such that
+         A2: for e being Element of MESSAGES holds P[e,m1.e]
+                                                       from FuncExD(A1);
+      take m1;
+      let m be FinSequence of NAT;
+        m is Element of MESSAGES by Def14,FINSEQ_1:def 11;
+      then consider F being FinSequence of NAT such that
+              A3: m = F & m1.m = IDEAoperationA(F,k,n) by A2;
+      thus thesis by A3;
+    end;
+  uniqueness
+    proof
+      let m1,m2 be Function of MESSAGES, MESSAGES such that
+        A4: for m being FinSequence of NAT holds
+              m1.m = IDEAoperationA(m,k,n) and
+        A5: for m being FinSequence of NAT holds
+              m2.m = IDEAoperationA(m,k,n);
+         m1 = m2
+         proof
+           A6: dom m1 = MESSAGES & dom m2 = MESSAGES by FUNCT_2:def 1;
+             now
+             let j be set;
+             assume A7: j in MESSAGES;
+             consider jj being set such that A8: jj = j;
+             reconsider jj as FinSequence of NAT
+                                     by A7,A8,Def14,FINSEQ_1:def 11;
+             thus m1.j = IDEAoperationA(jj,k,n) by A4,A8
+                      .= m2.j by A5,A8;
+           end;
+           hence m1 = m2 by A6,FUNCT_1:9;
+         end;
+       hence thesis;
+    end;
+end;
+
+definition
+  let k,n;
+  func IDEA_QS(k,n) -> Function of MESSAGES, MESSAGES means
+  :Def20:
+  for m holds it.m = IDEAoperationA(m,k,n);
+  existence
+    proof
+      defpred P[set,set] means
+        ex F be FinSequence of NAT st
+             $1 = F & $2 = IDEAoperationA(F,k,n);
+      A1: for e being Element of MESSAGES
+                ex u being Element of MESSAGES st P[e,u]
+       proof
+         let e be Element of MESSAGES;
+         reconsider F = e as FinSequence of NAT by Def14,FINSEQ_1:def 11;
+         reconsider u = IDEAoperationA(F,k,n) as Element of MESSAGES
+                                               by Def14,FINSEQ_1:def 11;
+         take u;
+         thus thesis;
+       end;
+
+      consider m1 being Function of MESSAGES,MESSAGES such that
+         A2: for e being Element of MESSAGES holds P[e,m1.e]
+                                                       from FuncExD(A1);
+      take m1;
+      let m be FinSequence of NAT;
+        m is Element of MESSAGES by Def14,FINSEQ_1:def 11;
+      then consider F being FinSequence of NAT such that
+              A3: m = F & m1.m = IDEAoperationA(F,k,n) by A2;
+      thus thesis by A3;
+    end;
+  uniqueness
+    proof
+      let m1,m2 be Function of MESSAGES, MESSAGES such that
+        A4: for m being FinSequence of NAT holds
+              m1.m = IDEAoperationA(m,k,n) and
+        A5: for m being FinSequence of NAT holds
+              m2.m = IDEAoperationA(m,k,n);
+         m1 = m2
+         proof
+           A6: dom m1 = MESSAGES & dom m2 = MESSAGES by FUNCT_2:def 1;
+             now
+             let j be set;
+             assume A7: j in MESSAGES;
+             consider jj being set such that A8: jj = j;
+             reconsider jj as FinSequence of NAT
+                                  by A7,A8,Def14,FINSEQ_1:def 11;
+             thus m1.j = IDEAoperationA(jj,k,n) by A4,A8
+                       .= m2.j by A5,A8;
+           end;
+           hence m1 = m2 by A6,FUNCT_1:9;
+         end;
+       hence thesis;
+    end;
+end;
+
+definition
+  let n be non empty Nat,k;
+  func IDEA_PE(k,n) -> Function of MESSAGES, MESSAGES means
+  :Def21:
+  for m holds it.m = IDEAoperationA(IDEAoperationB(m,k,n),k,n);
+  existence
+    proof
+      defpred P[set,set] means
+        ex F be FinSequence of NAT st
+             $1 = F & $2 = IDEAoperationA(IDEAoperationB(F,k,n),k,n);
+      A1: for e being Element of MESSAGES
+                ex u being Element of MESSAGES st P[e,u]
+       proof
+         let e be Element of MESSAGES;
+         reconsider F = e as FinSequence of NAT by Def14,FINSEQ_1:def 11;
+         reconsider u = IDEAoperationA(
+                          IDEAoperationB(F,k,n),k,n) as Element of MESSAGES
+                                               by Def14,FINSEQ_1:def 11;
+         take u;
+         thus thesis;
+       end;
+
+      consider m1 being Function of MESSAGES,MESSAGES such that
+         A2: for e being Element of MESSAGES holds P[e,m1.e]
+                                                       from FuncExD(A1);
+      take m1;
+      let m be FinSequence of NAT;
+        m is Element of MESSAGES by Def14,FINSEQ_1:def 11;
+      then consider F being FinSequence of NAT such that
+              A3: m = F & m1.m = IDEAoperationA(
+                                    IDEAoperationB(F,k,n),k,n) by A2;
+      thus thesis by A3;
+    end;
+  uniqueness
+    proof
+      let m1,m2 be Function of MESSAGES, MESSAGES such that
+        A4: for m being FinSequence of NAT holds
+              m1.m = IDEAoperationA(
+                        IDEAoperationB(m,k,n),k,n) and
+        A5: for m being FinSequence of NAT holds
+              m2.m = IDEAoperationA(
+                        IDEAoperationB(m,k,n),k,n);
+         m1 = m2
+         proof
+           A6: dom m1 = MESSAGES & dom m2 = MESSAGES by FUNCT_2:def 1;
+             now
+             let j be set;
+             assume A7: j in MESSAGES;
+             consider jj being set such that A8: jj = j;
+             reconsider jj as FinSequence of NAT
+                                    by A7,A8,Def14,FINSEQ_1:def 11;
+             thus m1.j = IDEAoperationA(
+                           IDEAoperationB(jj,k,n),k,n) by A4,A8
+                      .= m2.j by A5,A8;
+           end;
+           hence m1 = m2 by A6,FUNCT_1:9;
+         end;
+       hence thesis;
+    end;
+end;
+
+definition
+  let n be non empty Nat,k;
+  func IDEA_QE(k,n) -> Function of MESSAGES, MESSAGES means
+  :Def22:
+  for m holds it.m = IDEAoperationB(IDEAoperationA(m,k,n),k,n);
+  existence
+    proof
+      defpred P[set,set] means
+        ex F be FinSequence of NAT st
+             $1 = F & $2 = IDEAoperationB(IDEAoperationA(F,k,n),k,n);
+      A1: for e being Element of MESSAGES
+                ex u being Element of MESSAGES st P[e,u]
+       proof
+         let e be Element of MESSAGES;
+         reconsider F = e as FinSequence of NAT by Def14,FINSEQ_1:def 11;
+         reconsider u = IDEAoperationB(
+                          IDEAoperationA(F,k,n),k,n) as Element of MESSAGES
+                                               by Def14,FINSEQ_1:def 11;
+         take u;
+         thus thesis;
+       end;
+
+      consider m1 being Function of MESSAGES,MESSAGES such that
+         A2: for e being Element of MESSAGES holds P[e,m1.e]
+                                                       from FuncExD(A1);
+
+      take m1;
+      let m be FinSequence of NAT;
+        m is Element of MESSAGES by Def14,FINSEQ_1:def 11;
+      then consider F being FinSequence of NAT such that
+              A3: m = F & m1.m = IDEAoperationB(
+                                    IDEAoperationA(F,k,n),k,n) by A2;
+      thus thesis by A3;
+    end;
+  uniqueness
+    proof
+      let m1,m2 be Function of MESSAGES, MESSAGES such that
+        A4: for m being FinSequence of NAT holds
+              m1.m = IDEAoperationB(
+                        IDEAoperationA(m,k,n),k,n) and
+        A5: for m being FinSequence of NAT holds
+              m2.m = IDEAoperationB(
+                        IDEAoperationA(m,k,n),k,n);
+         m1 = m2
+         proof
+           A6: dom m1 = MESSAGES & dom m2 = MESSAGES by FUNCT_2:def 1;
+             now
+             let j be set;
+             assume A7: j in MESSAGES;
+             consider jj being set such that A8: jj = j;
+             reconsider jj as FinSequence of NAT
+                                        by A7,A8,Def14,FINSEQ_1:def 11;
+             thus m1.j = IDEAoperationB(
+                           IDEAoperationA(jj,k,n),k,n) by A4,A8
+                      .= m2.j by A5,A8;
+           end;
+           hence m1 = m2 by A6,FUNCT_1:9;
+         end;
+       hence thesis;
+    end;
+end;
+
+theorem Th34:
+  for n being non empty Nat,m,k1,k2
+     holds 2 to_power(n)+1 is prime & len m >= 4 &
+      m.1 is_expressible_by n & m.2 is_expressible_by n &
+      m.3 is_expressible_by n & m.4 is_expressible_by n &
+      k1.1 is_expressible_by n & k1.2 is_expressible_by n &
+      k1.3 is_expressible_by n & k1.4 is_expressible_by n &
+      k1.5 is_expressible_by n & k1.6 is_expressible_by n &
+      k2.1 = INV_MOD(k1.1,n) & k2.2 = NEG_MOD(k1.3,n) &
+      k2.3 = NEG_MOD(k1.2,n) & k2.4 = INV_MOD(k1.4,n) &
+      k2.5 = k1.5 & k2.6 = k1.6 implies
+        (IDEA_Q(k2,n)*IDEA_P(k1,n)).m = m
+  proof
+       let n be non empty Nat;
+       let m,k1,k2;
+       assume that
+          A1: 2 to_power(n)+1 is prime and
+          A2: len m >= 4 and
+          A3: m.1 is_expressible_by n & m.2 is_expressible_by n &
+               m.3 is_expressible_by n & m.4 is_expressible_by n and
+          A4: k1.1 is_expressible_by n & k1.2 is_expressible_by n &
+               k1.3 is_expressible_by n & k1.4 is_expressible_by n &
+               k1.5 is_expressible_by n & k1.6 is_expressible_by n and
+          A5: k2.1 = INV_MOD(k1.1,n) & k2.2 = NEG_MOD(k1.3,n) &
+               k2.3 = NEG_MOD(k1.2,n) & k2.4 = INV_MOD(k1.4,n) and
+          A6: k2.5 = k1.5 & k2.6 = k1.6;
+         dom IDEA_P(k1,n) = MESSAGES & dom IDEA_Q(k2,n) = MESSAGES
+                                                      by FUNCT_2:def 1;
+       then A7: m in dom IDEA_P(k1,n) & m in dom IDEA_Q(k2,n)
+                                       by Def14,FINSEQ_1:def 11;
+       A8: len IDEAoperationB(m,k1,n) >= 4 by A2,Def12;
+
+       A9: IDEAoperationB(m,k1,n).1 is_expressible_by n &
+           IDEAoperationB(m,k1,n).2 is_expressible_by n &
+           IDEAoperationB(m,k1,n).3 is_expressible_by n &
+           IDEAoperationB(m,k1,n).4 is_expressible_by n by A2,Th28;
+
+         (IDEA_Q(k2,n)*IDEA_P(k1,n)).m
+         = IDEA_Q(k2,n).(IDEA_P(k1,n).m) by A7,FUNCT_1:23
+        .= IDEA_Q(k2,n).
+             IDEAoperationA(IDEAoperationC(IDEAoperationB(m,k1,n)),k1,n)
+                                                         by Def15
+        .= IDEAoperationB(IDEAoperationA(IDEAoperationC(
+             IDEAoperationA(IDEAoperationC(IDEAoperationB(m,k1,n)),k1,n)
+             ),k2,n),k2,n)
+                                                         by Def16
+        .= IDEAoperationB(IDEAoperationB(m,k1,n),k2,n)
+                                             by A1,A4,A5,A8,A9,Th31
+        .= m by A1,A2,A3,A4,A6,Th32;
+
+       hence (IDEA_Q(k2,n)*IDEA_P(k1,n)).m = m;
+  end;
+
+theorem Th35:
+  for n being non empty Nat,m,k1,k2 holds
+       2 to_power(n)+1 is prime & len m >= 4 &
+       m.1 is_expressible_by n & m.2 is_expressible_by n &
+       m.3 is_expressible_by n & m.4 is_expressible_by n &
+       k1.1 is_expressible_by n & k1.2 is_expressible_by n &
+       k1.3 is_expressible_by n & k1.4 is_expressible_by n &
+       k2.1 = INV_MOD(k1.1,n) & k2.2 = NEG_MOD(k1.2,n) &
+       k2.3 = NEG_MOD(k1.3,n) & k2.4 = INV_MOD(k1.4,n) implies
+       (IDEA_QS(k2,n)*IDEA_PS(k1,n)).m = m
+  proof
+       let n be non empty Nat;
+       let m,k1,k2;
+       assume that
+          A1: 2 to_power(n)+1 is prime and
+          A2: len m >= 4 and
+          A3: m.1 is_expressible_by n & m.2 is_expressible_by n &
+               m.3 is_expressible_by n & m.4 is_expressible_by n and
+          A4: k1.1 is_expressible_by n & k1.2 is_expressible_by n &
+               k1.3 is_expressible_by n & k1.4 is_expressible_by n and
+          A5: k2.1 = INV_MOD(k1.1,n) & k2.2 = NEG_MOD(k1.2,n) &
+               k2.3 = NEG_MOD(k1.3,n) & k2.4 = INV_MOD(k1.4,n);
+
+         dom IDEA_PS(k1,n) = MESSAGES & dom IDEA_QS(k2,n) = MESSAGES
+                                                      by FUNCT_2:def 1;
+       then m in dom IDEA_PS(k1,n) & m in dom IDEA_QS(k2,n)
+                                      by Def14,FINSEQ_1:def 11;
+
+       then (IDEA_QS(k2,n)*IDEA_PS(k1,n)).m
+         = IDEA_QS(k2,n).(IDEA_PS(k1,n).m) by FUNCT_1:23
+        .= IDEA_QS(k2,n).IDEAoperationA(m,k1,n) by Def19
+        .= IDEAoperationA(IDEAoperationA(m,k1,n),k2,n) by Def20
+        .= m by A1,A2,A3,A4,A5,Th30;
+       hence (IDEA_QS(k2,n)*IDEA_PS(k1,n)).m = m;
+  end;
+
+theorem Th36:
+  for n being non empty Nat,m,k1,k2 holds
+    2 to_power(n)+1 is prime & len m >= 4 &
+      m.1 is_expressible_by n & m.2 is_expressible_by n &
+      m.3 is_expressible_by n & m.4 is_expressible_by n &
+      k1.1 is_expressible_by n & k1.2 is_expressible_by n &
+      k1.3 is_expressible_by n & k1.4 is_expressible_by n &
+      k1.5 is_expressible_by n & k1.6 is_expressible_by n &
+      k2.1 = INV_MOD(k1.1,n) & k2.2 = NEG_MOD(k1.2,n) &
+      k2.3 = NEG_MOD(k1.3,n) & k2.4 = INV_MOD(k1.4,n) &
+      k2.5 = k1.5 & k2.6 = k1.6 implies
+      (IDEA_QE(k2,n)*IDEA_PE(k1,n)).m = m
+  proof
+       let n be non empty Nat;
+       let m,k1,k2;
+       assume that
+          A1: 2 to_power(n)+1 is prime and
+          A2: len m >= 4 and
+          A3: m.1 is_expressible_by n & m.2 is_expressible_by n &
+               m.3 is_expressible_by n & m.4 is_expressible_by n and
+          A4: k1.1 is_expressible_by n & k1.2 is_expressible_by n &
+               k1.3 is_expressible_by n & k1.4 is_expressible_by n &
+               k1.5 is_expressible_by n & k1.6 is_expressible_by n and
+          A5: k2.1 = INV_MOD(k1.1,n) & k2.2 = NEG_MOD(k1.2,n) &
+               k2.3 = NEG_MOD(k1.3,n) & k2.4 = INV_MOD(k1.4,n) and
+          A6: k2.5 = k1.5 & k2.6 = k1.6;
+         dom IDEA_PE(k1,n) = MESSAGES & dom IDEA_QE(k2,n) = MESSAGES
+                                                      by FUNCT_2:def 1;
+       then A7: m in dom IDEA_PE(k1,n) & m in dom IDEA_QE(k2,n)
+                                      by Def14,FINSEQ_1:def 11;
+       A8: len IDEAoperationB(m,k1,n) >= 4 by A2,Def12;
+
+       A9: IDEAoperationB(m,k1,n).1 is_expressible_by n &
+            IDEAoperationB(m,k1,n).2 is_expressible_by n &
+            IDEAoperationB(m,k1,n).3 is_expressible_by n &
+            IDEAoperationB(m,k1,n).4 is_expressible_by n by A2,Th28;
+
+         (IDEA_QE(k2,n)*IDEA_PE(k1,n)).m
+         = IDEA_QE(k2,n).(IDEA_PE(k1,n).m) by A7,FUNCT_1:23
+        .= IDEA_QE(k2,n).
+             IDEAoperationA(IDEAoperationB(m,k1,n),k1,n) by Def21
+        .= IDEAoperationB(IDEAoperationA(
+            IDEAoperationA(IDEAoperationB(m,k1,n),k1,n),k2,n),k2,n)
+                                                         by Def22
+        .= IDEAoperationB(IDEAoperationB(m,k1,n),k2,n)
+                                             by A1,A4,A5,A8,A9,Th30
+        .= m by A1,A2,A3,A4,A6,Th32;
+
+       hence (IDEA_QE(k2,n)*IDEA_PE(k1,n)).m = m;
+  end;
+
+theorem Th37:
+  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
+    k being Nat holds IDEA_P_F(Key,n,(k+1)) =
+      IDEA_P_F(Key,n,k)^<* IDEA_P(Line(Key,(k+1)),n) *>
+   proof
+     let n be non empty Nat;
+     let lk be Nat;
+     let Key be Matrix of lk,6,NAT;
+     let k be Nat;
+
+       len (IDEA_P_F(Key,n,k)^<* IDEA_P(Line(Key,(k+1)),n) *>)
+        = len IDEA_P_F(Key,n,k) +
+              len <* IDEA_P(Line(Key,(k+1)),n) *> by FINSEQ_1:35
+       .= k + len <* IDEA_P(Line(Key,(k+1)),n) *> by Def17
+       .= k + 1 by FINSEQ_1:56;
+     then A1: len IDEA_P_F(Key,n,(k+1))
+      = len (IDEA_P_F(Key,n,k)^<* IDEA_P(Line(Key,(k+1)),n) *>) by Def17;
+       for i being Nat st 1 <= i & i <= len IDEA_P_F(Key,n,(k+1))
+        holds IDEA_P_F(Key,n,(k+1)).i =
+                (IDEA_P_F(Key,n,k)^<* IDEA_P(Line(Key,(k+1)),n) *>).i
+       proof
+         let i be Nat;
+         assume A2: 1 <= i & i <= len IDEA_P_F(Key,n,(k+1));
+                then A3: 1 <= i & i <= k+1 by Def17;
+           i in Seg len IDEA_P_F(Key,n,(k+1)) by A2,FINSEQ_1:3;
+         then A4:i in dom IDEA_P_F(Key,n,(k+1)) by FINSEQ_1:def 3;
+           dom <* IDEA_P(Line(Key,(k+1)),n) *> = Seg 1 by FINSEQ_1:def 8;
+         then A5: 1 in dom <*IDEA_P(Line(Key,(k+1)),n)*> by FINSEQ_1:3;
+           now per cases;
+           suppose i <> k+1;
+             then 1 <= i & i <= k by A3,NAT_1:26;
+             then i in Seg k by FINSEQ_1:3;
+             then i in Seg len IDEA_P_F(Key,n,k) by Def17;
+             then A6:i in dom IDEA_P_F(Key,n,k) by FINSEQ_1:def 3;
+             hence (IDEA_P_F(Key,n,k)^<* IDEA_P(Line(Key,(k+1)),n) *>).i
+                     = IDEA_P_F(Key,n,k).i by FINSEQ_1:def 7
+                    .= IDEA_P(Line(Key,i),n) by A6,Def17
+                    .= IDEA_P_F(Key,n,(k+1)).i by A4,Def17;
+           suppose A7: i = k+1;
+             hence (IDEA_P_F(Key,n,k)^<* IDEA_P(Line(Key,(k+1)),n) *>).i
+                 =(IDEA_P_F(Key,n,k)^<* IDEA_P(Line(Key,(k+1)),n) *>).
+                          (len IDEA_P_F(Key,n,k) + 1) by Def17
+                .= <* IDEA_P(Line(Key,(k+1)),n) *>.1 by A5,FINSEQ_1:def 7
+                .= IDEA_P(Line(Key,(k+1)),n) by FINSEQ_1:57
+                .= IDEA_P_F(Key,n,(k+1)).i by A4,A7,Def17;
+         end;
+         hence thesis;
+       end;
+     hence thesis by A1,FINSEQ_1:18;
+   end;
+
+theorem Th38:
+  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
+    k being Nat holds IDEA_Q_F(Key,n,(k+1)) =
+      <* IDEA_Q(Line(Key,k+1),n) *>^IDEA_Q_F(Key,n,k)
+   proof
+     let n be non empty Nat;
+     let lk be Nat;
+     let Key be Matrix of lk,6,NAT;
+     let k be Nat;
+
+       len (<* IDEA_Q(Line(Key,k+1),n) *>^IDEA_Q_F(Key,n,k))
+        = len <* IDEA_Q(Line(Key,k+1),n) *> +
+                          len IDEA_Q_F(Key,n,k) by FINSEQ_1:35
+       .= len <* IDEA_Q(Line(Key,k+1),n) *> + k by Def18
+       .= k + 1 by FINSEQ_1:56;
+     then A1: len IDEA_Q_F(Key,n,(k+1))
+          = len (<* IDEA_Q(Line(Key,k+1),n) *>^IDEA_Q_F(Key,n,k))
+                                             by Def18;
+       for i being Nat st 1 <= i & i <= len IDEA_Q_F(Key,n,(k+1))
+        holds IDEA_Q_F(Key,n,(k+1)).i =
+                (<* IDEA_Q(Line(Key,k+1),n) *>^IDEA_Q_F(Key,n,k)).i
+       proof
+         let i be Nat;
+         assume A2: 1 <= i & i <= len IDEA_Q_F(Key,n,(k+1));
+         then A3: 1 <= i & i <= k+1 by Def18;
+           i in Seg len IDEA_Q_F(Key,n,(k+1)) by A2,FINSEQ_1:3;
+         then A4:i in dom IDEA_Q_F(Key,n,(k+1)) by FINSEQ_1:def 3;
+           dom <* IDEA_Q(Line(Key,(k+1)),n) *> = Seg 1 by FINSEQ_1:def 8;
+         then A5: 1 in dom <*IDEA_Q(Line(Key,(k+1)),n)*> by FINSEQ_1:3;
+         A6: 1 <= k+1 by A3,AXIOMS:22;
+           1 <= len IDEA_Q_F(Key,n,(k+1)) by A2,AXIOMS:22;
+         then 1 in Seg len IDEA_Q_F(Key,n,(k+1)) by FINSEQ_1:3;
+         then A7:1 in dom IDEA_Q_F(Key,n,(k+1)) by FINSEQ_1:def 3;
+           now per cases;
+           suppose A8: i <> 1;
+             consider ii be Integer such that A9: ii = i - 1;
+             A10: ii + 1 = i - (1 - 1) by A9,XCMPLX_1:37
+                        .= i;
+               1 - 1 <= i - 1 by A2,REAL_1:49;
+             then reconsider ii as Nat by A9,INT_1:16;
+               1 < i by A2,A8,REAL_1:def 5;
+             then 1 + 1 <= i by NAT_1:38;
+             then A11: 1 + 1 - 1 <= i - 1 by REAL_1:49;
+               i-1 <= k+1-1 by A3,REAL_1:49;
+             then A12:i-1 <= k+(1-1) by XCMPLX_1:29;
+             then ii in Seg k by A9,A11,FINSEQ_1:3;
+             then ii in Seg len IDEA_Q_F(Key,n,k) by Def18;
+             then A13: ii in dom IDEA_Q_F(Key,n,k) by FINSEQ_1:def 3;
+               ii - ii <= k - ii by A9,A12,REAL_1:49;
+             then A14: 0 <= k - ii by XCMPLX_1:14;
+               (k+1) - i >= i - i by A3,REAL_1:49;
+             then A15: (k+1) - i >= 0 by XCMPLX_1:14;
+             A16: k -' ii = k - (i - 1) by A9,A14,BINARITH:def 3
+                         .= k - i + 1 by XCMPLX_1:37
+                         .= k + -i + 1 by XCMPLX_0:def 8
+                         .= (k+1) + -i by XCMPLX_1:1
+                         .= (k+1) - i by XCMPLX_0:def 8
+                         .=(k+1) -' i by A15,BINARITH:def 3;
+
+             thus (<* IDEA_Q(Line(Key,k+1),n) *>^IDEA_Q_F(Key,n,k)).i
+              =(<* IDEA_Q(Line(Key,k+1),n) *>^IDEA_Q_F(Key,n,k)).
+                            (len <*IDEA_Q(Line(Key,(k+1)),n)*>+ii)
+                                                            by A10,FINSEQ_1:57
+             .=IDEA_Q_F(Key,n,k).ii by A13,FINSEQ_1:def 7
+             .=IDEA_Q(Line(Key,(k+1)-'i+1),n) by A13,A16,Def18
+             .=IDEA_Q_F(Key,n,k+1).i by A4,Def18;
+
+           suppose A17: i = 1;
+             hence (<* IDEA_Q(Line(Key,k+1),n) *>^IDEA_Q_F(Key,n,k)).i
+                 = <* IDEA_Q(Line(Key,k+1),n) *>.1 by A5,FINSEQ_1:def 7
+                .= IDEA_Q(Line(Key,k+1),n) by FINSEQ_1:57
+                .= IDEA_Q(Line(Key,(k+1)-'1 + 1),n) by A6,AMI_5:4
+                .= IDEA_Q_F(Key,n,k+1).i by A7,A17,Def18;
+         end;
+         hence thesis;
+       end;
+     hence thesis by A1,FINSEQ_1:18;
+   end;
+
+theorem Th39:
+  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
+    k being Nat holds IDEA_P_F(Key,n,k) is FuncSeq-like FinSequence
+  proof
+    let n be non empty Nat;
+    let lk be Nat;
+    let Key be Matrix of lk,6,NAT;
+    let k be Nat;
+    deffunc F(set)=MESSAGES;
+    consider p being FinSequence such that A1: len p = k+1 and
+      A2: for j being Nat st j in Seg(k+1) holds p.j = F(j) from SeqLambda;
+    A3: len p = len IDEA_P_F(Key,n,k)+1 by A1,Def17;
+      for i being Nat st i in dom IDEA_P_F(Key,n,k)
+            holds IDEA_P_F(Key,n,k).i in Funcs(p.i, p.(i+1))
+      proof
+        let i be Nat;
+        assume A4: i in dom IDEA_P_F(Key,n,k);
+        then i in Seg len IDEA_P_F(Key,n,k) by FINSEQ_1:def 3;
+        then i in Seg k by Def17;
+        then 1 <= i & i <= k by FINSEQ_1:3;
+        then 1 <= i & i <= k+1 & 1 <= (i+1) & (i+1) <=
+ k+1 by AXIOMS:24,NAT_1:37;
+        then i in Seg (k+1) & (i+1) in Seg (k+1) by FINSEQ_1:3;
+        then A5: p.i = MESSAGES & p.(i+1) = MESSAGES by A2;
+          IDEA_P_F(Key,n,k).i = IDEA_P(Line(Key,i),n) by A4,Def17;
+        hence IDEA_P_F(Key,n,k).i in Funcs(p.i,p.(i+1)) by A5,FUNCT_2:12;
+      end;
+    hence thesis by A3,FUNCT_7:def 8;
+  end;
+
+
+theorem Th40:
+  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
+    k being Nat holds IDEA_Q_F(Key,n,k) is FuncSeq-like FinSequence
+  proof
+    let n be non empty Nat;
+    let lk be Nat;
+    let Key be Matrix of lk,6,NAT;
+    let k be Nat;
+    deffunc F(set)=MESSAGES;
+    consider p being FinSequence such that A1: len p = k+1 and
+      A2: for j being Nat st j in Seg(k+1) holds p.j = F(j) from SeqLambda;
+    A3: len p = len IDEA_Q_F(Key,n,k)+1 by A1,Def18;
+      for i being Nat st i in dom IDEA_Q_F(Key,n,k)
+            holds IDEA_Q_F(Key,n,k).i in Funcs(p.i, p.(i+1))
+      proof
+        let i be Nat;
+        assume A4: i in dom IDEA_Q_F(Key,n,k);
+        then i in Seg len IDEA_Q_F(Key,n,k) by FINSEQ_1:def 3;
+        then i in Seg k by Def18;
+        then 1 <= i & i <= k by FINSEQ_1:3;
+        then 1 <= i & i <= k+1 & 1 <= (i+1) & (i+1) <=
+ k+1 by AXIOMS:24,NAT_1:37;
+        then i in Seg (k+1) & (i+1) in Seg (k+1) by FINSEQ_1:3;
+        then A5: p.i = MESSAGES & p.(i+1) = MESSAGES by A2;
+          IDEA_Q_F(Key,n,k).i = IDEA_Q(Line(Key,k-'i+1),n) by A4,Def18;
+        hence IDEA_Q_F(Key,n,k).i in Funcs(p.i,p.(i+1)) by A5,FUNCT_2:12;
+      end;
+    hence thesis by A3,FUNCT_7:def 8;
+  end;
+
+theorem Th41:
+  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
+    k being Nat holds k <> 0 implies
+      IDEA_P_F(Key,n,k) is FuncSequence of MESSAGES,MESSAGES
+  proof
+    let n be non empty Nat;
+    let lk be Nat,
+        Key be Matrix of lk,6,NAT,
+        k be Nat;
+    assume A1: k<>0;
+    A2: IDEA_P_F(Key,n,k) is FuncSequence by Th39;
+    A3: lastrng IDEA_P_F(Key,n,k) c= MESSAGES
+      proof
+          0 < k by A1,NAT_1:19;
+        then 0+1 < k+1 by REAL_1:53;
+        then A4:1 <= k & k <= k by NAT_1:38;
+          k = len IDEA_P_F(Key,n,k) by Def17;
+        then k in Seg len IDEA_P_F(Key,n,k) by A4,FINSEQ_1:3;
+        then A5:k in dom IDEA_P_F(Key,n,k) by FINSEQ_1:def 3;
+
+          len (IDEA_P_F(Key,n,k)) <> 0 by A1,Def17;
+        then not(IDEA_P_F(Key,n,k)=<*>MESSAGES)
+                                           by FINSEQ_1:32;
+        then lastrng IDEA_P_F(Key,n,k)
+            = proj2 (IDEA_P_F(Key,n,k).
+                    len (IDEA_P_F(Key,n,k))) by FUNCT_7:def 7
+           .= proj2 (IDEA_P_F(Key,n,k).k) by Def17
+           .= proj2 (IDEA_P(Line(Key,k),n)) by A5,Def17
+           .= rng IDEA_P(Line(Key,k),n) by FUNCT_5:21;
+        hence lastrng IDEA_P_F(Key,n,k) c= MESSAGES by RELSET_1:12;
+      end;
+      firstdom IDEA_P_F(Key,n,k) = MESSAGES
+      proof
+          0 < k by A1,NAT_1:19;
+        then 0+1 < k+1 by REAL_1:53;
+        then A6:1 <= 1 & 1 <= k by NAT_1:38;
+          k = len IDEA_P_F(Key,n,k) by Def17;
+        then 1 in Seg len IDEA_P_F(Key,n,k) by A6,FINSEQ_1:3;
+        then A7:1 in dom IDEA_P_F(Key,n,k) by FINSEQ_1:def 3;
+          len (IDEA_P_F(Key,n,k)) = k by Def17;
+        then not(IDEA_P_F(Key,n,k)=<*>MESSAGES) by A1,FINSEQ_1:32;
+        hence firstdom IDEA_P_F(Key,n,k)
+              = proj1 (IDEA_P_F(Key,n,k).1) by FUNCT_7:def 6
+             .= proj1 (IDEA_P(Line(Key,1),n)) by A7,Def17
+             .= dom IDEA_P(Line(Key,1),n) by FUNCT_5:21
+             .= MESSAGES by FUNCT_2:def 1;
+      end;
+    hence thesis by A2,A3,FUNCT_7:def 9;
+  end;
+
+theorem Th42:
+  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
+    k being Nat holds k <> 0 implies
+      IDEA_Q_F(Key,n,k) is FuncSequence of MESSAGES,MESSAGES
+  proof
+    let n be non empty Nat,
+        lk be Nat,
+        Key be Matrix of lk,6,NAT,
+        r be Nat;
+    assume A1: r<>0;
+    A2: IDEA_Q_F(Key,n,r) is FuncSequence by Th40;
+
+    A3: lastrng IDEA_Q_F(Key,n,r) c= MESSAGES
+      proof
+          0 < r by A1,NAT_1:19;
+        then 0+1 < r+1 by REAL_1:53;
+        then A4:1 <= r & r <= r by NAT_1:38;
+          r = len IDEA_Q_F(Key,n,r) by Def18;
+        then r in Seg len IDEA_Q_F(Key,n,r) by A4,FINSEQ_1:3;
+        then A5:r in dom IDEA_Q_F(Key,n,r) by FINSEQ_1:def 3;
+          len (IDEA_Q_F(Key,n,r)) <> 0 by A1,Def18;
+        then not(IDEA_Q_F(Key,n,r)=<*>MESSAGES) by FINSEQ_1:32;
+        then lastrng IDEA_Q_F(Key,n,r)
+            = proj2 (IDEA_Q_F(Key,n,r).
+                    len (IDEA_Q_F(Key,n,r)))
+                                           by FUNCT_7:def 7
+           .= proj2 (IDEA_Q_F(Key,n,r).r) by Def18
+           .= proj2 (IDEA_Q(Line(Key,r-'r+1),n)) by A5,Def18
+           .= rng IDEA_Q(Line(Key,r-'r+1),n) by FUNCT_5:21;
+        hence lastrng IDEA_Q_F(Key,n,r) c= MESSAGES by RELSET_1:12;
+      end;
+      firstdom IDEA_Q_F(Key,n,r) = MESSAGES
+      proof
+          0 < r by A1,NAT_1:19;
+        then 0+1 < r+1 by REAL_1:53;
+        then A6:1 <= 1 & 1 <= r by NAT_1:38;
+          r = len IDEA_Q_F(Key,n,r) by Def18;
+        then 1 in Seg len IDEA_Q_F(Key,n,r) by A6,FINSEQ_1:3;
+        then A7:1 in dom IDEA_Q_F(Key,n,r) by FINSEQ_1:def 3;
+          len (IDEA_Q_F(Key,n,r)) <> 0 by A1,Def18;
+        then not(IDEA_Q_F(Key,n,r)=<*>MESSAGES) by FINSEQ_1:32;
+        hence firstdom IDEA_Q_F(Key,n,r)
+              = proj1 (IDEA_Q_F(Key,n,r).1) by FUNCT_7:def 6
+             .= proj1 (IDEA_Q(Line(Key,r-'1+1),n)) by A7,Def18
+             .= dom IDEA_Q(Line(Key,r-'1+1),n) by FUNCT_5:21
+             .= MESSAGES by FUNCT_2:def 1;
+      end;
+    hence thesis by A2,A3,FUNCT_7:def 9;
+  end;
+
+theorem Th43:
+  for n being non empty Nat,M being FinSequence of NAT,m,k st
+    M = IDEA_P(k,n).m & len m >= 4 holds len M >= 4 &
+     M.1 is_expressible_by n & M.2 is_expressible_by n &
+     M.3 is_expressible_by n & M.4 is_expressible_by n
+  proof
+    let n be non empty Nat,
+        M be FinSequence of NAT,m,k;
+    assume that A1: M = IDEA_P(k,n).m and
+                A2: len m >= 4;
+    A3: M = IDEAoperationA(IDEAoperationC(IDEAoperationB(m,k,n)),k,n)
+                                                        by A1,Def15;
+      len m = len IDEAoperationB(m,k,n) by Def12
+              .= len IDEAoperationC(IDEAoperationB(m,k,n)) by Def13;
+    hence thesis by A2,A3,Def11,Th27;
+  end;
+
+theorem Th44:
+  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
+    r being Nat holds rng compose(IDEA_P_F(Key,n,r),MESSAGES) c=MESSAGES &
+      dom compose(IDEA_P_F(Key,n,r),MESSAGES) =MESSAGES
+  proof
+      let n be non empty Nat,
+          lk be Nat,
+          Key be Matrix of lk,6,NAT, r be Nat;
+      A1: IDEA_P_F(Key,n,r) is FuncSequence by Th39;
+
+      A2: rng compose(IDEA_P_F(Key,n,r),MESSAGES) c= MESSAGES
+        proof
+          per cases;
+          suppose A3: r<>0;
+            then 0 < r by NAT_1:19;
+            then 0+1 < r+1 by REAL_1:53;
+            then A4:1 <= r & r <= r by NAT_1:38;
+              r = len IDEA_P_F(Key,n,r) by Def17;
+            then r in Seg len IDEA_P_F(Key,n,r) by A4,FINSEQ_1:3;
+            then A5:r in dom IDEA_P_F(Key,n,r) by FINSEQ_1:def 3;
+              len (IDEA_P_F(Key,n,r)) <> 0 by A3,Def17;
+            then A6: not(IDEA_P_F(Key,n,r)=<*>MESSAGES) by FINSEQ_1:32;
+            then lastrng IDEA_P_F(Key,n,r)
+                = proj2 (IDEA_P_F(Key,n,r).
+                        len (IDEA_P_F(Key,n,r))) by FUNCT_7:def 7
+               .= proj2 (IDEA_P_F(Key,n,r).r) by Def17
+               .= proj2 (IDEA_P(Line(Key,r),n)) by A5,Def17
+               .= rng IDEA_P(Line(Key,r),n) by FUNCT_5:21;
+            then A7: lastrng IDEA_P_F(Key,n,r) c= MESSAGES
+                                                by RELSET_1:12;
+              rng compose(IDEA_P_F(Key,n,r),MESSAGES)
+                 c= lastrng IDEA_P_F(Key,n,r) by A6,FUNCT_7:61;
+            hence rng compose(IDEA_P_F(Key,n,r),MESSAGES) c= MESSAGES
+                                              by A7,XBOOLE_1:1;
+          suppose r=0;
+            then len IDEA_P_F(Key,n,r) = 0 by Def17;
+            then IDEA_P_F(Key,n,r) = {} by FINSEQ_1:25;
+            then compose(IDEA_P_F(Key,n,r),MESSAGES) = id MESSAGES
+                                              by FUNCT_7:41;
+            hence thesis by FUNCT_2:67;
+        end;
+        dom compose(IDEA_P_F(Key,n,r),MESSAGES) = MESSAGES
+        proof
+          per cases;
+          suppose r=0;
+            then len IDEA_P_F(Key,n,r) = 0 by Def17;
+            then IDEA_P_F(Key,n,r) = {} by FINSEQ_1:25;
+            then compose(IDEA_P_F(Key,n,r),MESSAGES) = id MESSAGES
+                                                    by FUNCT_7:41;
+            hence thesis by FUNCT_2:67;
+          suppose A8: r<>0;
+              firstdom IDEA_P_F(Key,n,r) = MESSAGES
+              proof
+                  0 < r by A8,NAT_1:19;
+                then 0+1 < r+1 by REAL_1:53;
+                then A9:1 <= 1 & 1 <= r by NAT_1:38;
+                  r = len IDEA_P_F(Key,n,r) by Def17;
+                then 1 in Seg len IDEA_P_F(Key,n,r) by A9,FINSEQ_1:3;
+                then A10:1 in dom IDEA_P_F(Key,n,r) by FINSEQ_1:def 3;
+                  len (IDEA_P_F(Key,n,r)) <> 0 by A8,Def17;
+                then not(IDEA_P_F(Key,n,r)=<*>MESSAGES) by FINSEQ_1:32;
+                hence firstdom IDEA_P_F(Key,n,r)
+                      = proj1 (IDEA_P_F(Key,n,r).1) by FUNCT_7:def 6
+                     .= proj1 (IDEA_P(Line(Key,1),n)) by A10,Def17
+                     .= dom IDEA_P(Line(Key,1),n) by FUNCT_5:21
+                     .= MESSAGES by FUNCT_2:def 1;
+              end;
+            hence thesis by A1,FUNCT_7:64;
+        end;
+      hence thesis by A2;
+  end;
+
+theorem
+    for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
+    r being Nat holds rng compose(IDEA_Q_F(Key,n,r),MESSAGES) c=MESSAGES &
+      dom compose(IDEA_Q_F(Key,n,r),MESSAGES) =MESSAGES
+  proof
+      let n be non empty Nat,
+          lk be Nat,
+          Key be Matrix of lk,6,NAT, r be Nat;
+      A1: IDEA_Q_F(Key,n,r) is FuncSequence by Th40;
+
+      A2: rng compose(IDEA_Q_F(Key,n,r),MESSAGES) c= MESSAGES
+        proof
+          per cases;
+          suppose A3: r<>0;
+            then 0 < r by NAT_1:19;
+            then 0+1 < r+1 by REAL_1:53;
+            then A4:1 <= r & r <= r by NAT_1:38;
+              r = len IDEA_Q_F(Key,n,r) by Def18;
+            then r in Seg len IDEA_Q_F(Key,n,r) by A4,FINSEQ_1:3;
+            then A5:r in dom IDEA_Q_F(Key,n,r) by FINSEQ_1:def 3;
+              len (IDEA_Q_F(Key,n,r)) <> 0 by A3,Def18;
+            then A6: not(IDEA_Q_F(Key,n,r)=<*>MESSAGES) by FINSEQ_1:32;
+            then lastrng IDEA_Q_F(Key,n,r)
+                = proj2 (IDEA_Q_F(Key,n,r).
+                        len (IDEA_Q_F(Key,n,r))) by FUNCT_7:def 7
+               .= proj2 (IDEA_Q_F(Key,n,r).r) by Def18
+               .= proj2 (IDEA_Q(Line(Key,r-'r+1),n)) by A5,Def18
+               .= rng IDEA_Q(Line(Key,r-'r+1),n) by FUNCT_5:21;
+            then A7: lastrng IDEA_Q_F(Key,n,r) c= MESSAGES
+                                                by RELSET_1:12;
+              rng compose(IDEA_Q_F(Key,n,r),MESSAGES)
+                 c= lastrng IDEA_Q_F(Key,n,r) by A6,FUNCT_7:61;
+            hence rng compose(IDEA_Q_F(Key,n,r),MESSAGES) c= MESSAGES
+                                              by A7,XBOOLE_1:1;
+          suppose r=0;
+            then len IDEA_Q_F(Key,n,r) = 0 by Def18;
+            then IDEA_Q_F(Key,n,r) = {} by FINSEQ_1:25;
+            then compose(IDEA_Q_F(Key,n,r),MESSAGES) = id MESSAGES
+                                              by FUNCT_7:41;
+            hence thesis by FUNCT_2:67;
+        end;
+        dom compose(IDEA_Q_F(Key,n,r),MESSAGES) = MESSAGES
+        proof
+          per cases;
+          suppose r=0;
+            then len IDEA_Q_F(Key,n,r) = 0 by Def18;
+            then IDEA_Q_F(Key,n,r) = {} by FINSEQ_1:25;
+            then compose(IDEA_Q_F(Key,n,r),MESSAGES) = id MESSAGES
+                                                    by FUNCT_7:41;
+            hence thesis by FUNCT_2:67;
+          suppose A8: r<>0;
+              firstdom IDEA_Q_F(Key,n,r) = MESSAGES
+              proof
+                  0 < r by A8,NAT_1:19;
+                then 0+1 < r+1 by REAL_1:53;
+                then A9:1 <= 1 & 1 <= r by NAT_1:38;
+                  r = len IDEA_Q_F(Key,n,r) by Def18;
+                then 1 in Seg len IDEA_Q_F(Key,n,r) by A9,FINSEQ_1:3;
+                then A10:1 in dom IDEA_Q_F(Key,n,r) by FINSEQ_1:def 3;
+                  len (IDEA_Q_F(Key,n,r)) <> 0 by A8,Def18;
+                then not(IDEA_Q_F(Key,n,r)=<*>MESSAGES) by FINSEQ_1:32;
+                hence firstdom IDEA_Q_F(Key,n,r)
+                      = proj1 (IDEA_Q_F(Key,n,r).1) by FUNCT_7:def 6
+                     .= proj1 (IDEA_Q(Line(Key,r-'1+1),n)) by A10,Def18
+                     .= dom IDEA_Q(Line(Key,r-'1+1),n) by FUNCT_5:21
+                     .= MESSAGES by FUNCT_2:def 1;
+              end;
+            hence thesis by A1,FUNCT_7:64;
+        end;
+      hence thesis by A2;
+  end;
+
+theorem Th46:
+  for n being non empty Nat,m being FinSequence of NAT, lk being Nat,
+      Key being Matrix of lk,6,NAT, r being Nat,
+      M being FinSequence of NAT st
+      M = compose(IDEA_P_F(Key,n,r),MESSAGES).m & len m >= 4
+      holds len M >= 4
+  proof
+    let n be non empty Nat,
+        m be FinSequence of NAT, lk be Nat,
+        Key be Matrix of lk,6,NAT;
+
+    A1: m in MESSAGES by Def14,FINSEQ_1:def 11;
+      for r being Nat,M being FinSequence of NAT st
+         M = compose(IDEA_P_F(Key,n,r),MESSAGES).m & len m >= 4 holds
+       len M >= 4
+    proof
+      defpred P[Nat] means
+        for M being FinSequence of NAT st
+          M = compose(IDEA_P_F(Key,n,$1),MESSAGES).m & len m >= 4 holds
+          len M >= 4;
+
+      A2: P[0]
+        proof
+          let M be FinSequence of NAT;
+          assume that A3: M = compose(IDEA_P_F(Key,n,0),MESSAGES).m and
+                      A4: len m >= 4;
+            len IDEA_P_F(Key,n,0) = 0 by Def17;
+          then IDEA_P_F(Key,n,0) = {} by FINSEQ_1:25;
+          then M = (id MESSAGES).m by A3,FUNCT_7:41
+                .= m by A1,FUNCT_1:35;
+          hence thesis by A4;
+        end;
+      A5: for k being Nat st P[k] holds P[k + 1]
+        proof
+          let k be Nat;
+          assume A6: P[k];
+          let M be FinSequence of NAT;
+          assume that A7: M = compose(IDEA_P_F(Key,n,k+1),MESSAGES).m and
+                      A8: len m >= 4;
+            M = compose(IDEA_P_F(Key,n,k)^<* IDEA_P(Line(Key,(k+1)),n) *>,
+                          MESSAGES).m by A7,Th37;
+          then A9: M = (IDEA_P(Line(Key,(k+1)),n)*
+                      compose(IDEA_P_F(Key,n,k),MESSAGES)).m by FUNCT_7:43;
+          A10: dom compose(IDEA_P_F(Key,n,k),MESSAGES) = MESSAGES &
+               rng compose(IDEA_P_F(Key,n,k),MESSAGES) c= MESSAGES by Th44;
+          then compose(IDEA_P_F(Key,n,k),MESSAGES).m
+                in rng(compose(IDEA_P_F(Key,n,k),MESSAGES)) by A1,FUNCT_1:def 5
+;
+          then reconsider M1 = compose(IDEA_P_F(Key,n,k),MESSAGES).m
+                      as FinSequence of NAT by A10,Def14,FINSEQ_1:def 11;
+          A11:len M1 >= 4 by A6,A8;
+
+            dom (IDEA_P(Line(Key,(k+1)),n)*
+                      compose(IDEA_P_F(Key,n,k),MESSAGES))=MESSAGES
+            proof
+                rng compose(IDEA_P_F(Key,n,k),MESSAGES)
+                  c= dom IDEA_P(Line(Key,(k+1)),n) by A10,FUNCT_2:def 1;
+              hence thesis by A10,RELAT_1:46;
+            end;
+          then M = IDEA_P(Line(Key,(k+1)),n).
+                  (compose(IDEA_P_F(Key,n,k),MESSAGES).m) by A1,A9,FUNCT_1:22;
+          hence thesis by A11,Th43;
+        end;
+      thus for k being Nat holds P[k] from Ind(A2,A5);
+    end;
+    hence thesis;
+   end;
+
+theorem Th47:
+  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
+    r being Nat,M being FinSequence of NAT,m st
+      M = compose(IDEA_P_F(Key,n,r),MESSAGES).m & len m >= 4 &
+       m.1 is_expressible_by n & m.2 is_expressible_by n &
+       m.3 is_expressible_by n & m.4 is_expressible_by n
+      holds
+       len M >= 4 &
+       M.1 is_expressible_by n &
+       M.2 is_expressible_by n &
+       M.3 is_expressible_by n &
+       M.4 is_expressible_by n
+  proof
+    let n be non empty Nat,
+        lk be Nat,
+        Key be Matrix of lk,6,NAT, r be Nat,
+        M be FinSequence of NAT,m;
+    assume that A1: M = compose(IDEA_P_F(Key,n,r),MESSAGES).m and
+                A2: len m >= 4 &
+                    m.1 is_expressible_by n & m.2 is_expressible_by n &
+                    m.3 is_expressible_by n & m.4 is_expressible_by n;
+    A3: m in MESSAGES by Def14,FINSEQ_1:def 11;
+    per cases;
+    suppose r = 0;
+      then len IDEA_P_F(Key,n,r) = 0 by Def17;
+      then IDEA_P_F(Key,n,r) = {} by FINSEQ_1:25;
+      then M = (id MESSAGES).m by A1,FUNCT_7:41
+            .= m by A3,FUNCT_1:35;
+      hence thesis by A2;
+    suppose A4: r <> 0;
+      consider r1 being Integer such that A5:r1=r-1;
+      A6: r1 + 1 = r -(1 - 1) by A5,XCMPLX_1:37
+                 .= r;
+
+        1 <= r by A4,RLVECT_1:99;
+      then 1 - 1 <= r - 1 by REAL_1:49;
+      then reconsider r1 as Nat by A5,INT_1:16;
+        IDEA_P_F(Key,n,(r1+1)) =
+             IDEA_P_F(Key,n,r1)^<* IDEA_P(Line(Key,(r1+1)),n) *> by Th37;
+      then A7:compose(IDEA_P_F(Key,n,r),MESSAGES) =
+                IDEA_P(Line(Key,r),n)*compose(IDEA_P_F(Key,n,r1),MESSAGES)
+                                                   by A6,FUNCT_7:43;
+      then m in dom(IDEA_P(Line(Key,r),n)*
+                     compose(IDEA_P_F(Key,n,r1),MESSAGES)) by A3,Th44;
+      then A8: M =
+            IDEA_P(Line(Key,r),n).(compose(IDEA_P_F(Key,n,r1),MESSAGES).m)
+                                                   by A1,A7,FUNCT_1:22;
+
+      A9: dom compose(IDEA_P_F(Key,n,r1),MESSAGES) = MESSAGES &
+           rng compose(IDEA_P_F(Key,n,r1),MESSAGES) c= MESSAGES by Th44;
+      then compose(IDEA_P_F(Key,n,r1),MESSAGES).m
+            in rng(compose(IDEA_P_F(Key,n,r1),MESSAGES)) by A3,FUNCT_1:def 5;
+      then reconsider M1 = compose(IDEA_P_F(Key,n,r1),MESSAGES).m
+                      as FinSequence of NAT by A9,Def14,FINSEQ_1:def 11;
+        len M1 >= 4 by A2,Th46;
+      hence thesis by A8,Th43;
+  end;
+
+begin :: Modeling of IDEA Cryptogram
+:: IDEA encryption algorithm is as follows:
+::     IDEA_PS -> IDEA_P -> IDEA_P -> ... -> IDEA_P -> IDEA_PE
+:: IDEA decryption algorithm is as follows:
+::     IDEA_QE -> IDEA_Q -> IDEA_Q -> ... -> IDEA_Q -> IDEA_QS
+:: Theorem 49 ensures that the ciphertext that is encrypted by IDEA
+:: encryption algorithm can be decrypted by IDEA decryption algorithm.
+
+theorem Th48:
+  for n being non empty Nat,lk being Nat,Key1,Key2 being Matrix of lk,6,NAT,
+    r being Nat,m st lk >= r &
+      2 to_power(n)+1 is prime & len m >= 4 &
+      m.1 is_expressible_by n & m.2 is_expressible_by n &
+      m.3 is_expressible_by n & m.4 is_expressible_by n &
+      (for i being Nat holds i <= r implies
+        Key1*(i,1) is_expressible_by n & Key1*(i,2) is_expressible_by n &
+        Key1*(i,3) is_expressible_by n & Key1*(i,4) is_expressible_by n &
+        Key1*(i,5) is_expressible_by n & Key1*(i,6) is_expressible_by n &
+        Key2*(i,1) is_expressible_by n & Key2*(i,2) is_expressible_by n &
+        Key2*(i,3) is_expressible_by n & Key2*(i,4) is_expressible_by n &
+        Key2*(i,5) is_expressible_by n & Key2*(i,6) is_expressible_by n &
+        Key2*(i,1)=INV_MOD(Key1*(i,1),n) & Key2*(i,2)=NEG_MOD(Key1*
+(i,3),n) &
+        Key2*(i,3)=NEG_MOD(Key1*(i,2),n) & Key2*(i,4)=INV_MOD(Key1*
+(i,4),n) &
+        Key1*(i,5)=Key2*(i,5) & Key1*(i,6)=Key2*(i,6))
+     holds compose(IDEA_P_F(Key1,n,r)^IDEA_Q_F(Key2,n,r),MESSAGES).m = m
+  proof
+    let n be non empty Nat,
+        lk be Nat;
+    let Key1,Key2 be Matrix of lk,6,NAT;
+      for r being Nat st
+       lk >= r &
+       2 to_power(n)+1 is prime &
+       len m >= 4 &
+       m.1 is_expressible_by n & m.2 is_expressible_by n &
+       m.3 is_expressible_by n & m.4 is_expressible_by n &
+       (for i being Nat holds i <= r implies
+         Key1*(i,1) is_expressible_by n & Key1*(i,2) is_expressible_by n &
+         Key1*(i,3) is_expressible_by n & Key1*(i,4) is_expressible_by n &
+         Key1*(i,5) is_expressible_by n & Key1*(i,6) is_expressible_by n &
+         Key2*(i,1) is_expressible_by n & Key2*(i,2) is_expressible_by n &
+         Key2*(i,3) is_expressible_by n & Key2*(i,4) is_expressible_by n &
+         Key2*(i,5) is_expressible_by n & Key2*(i,6) is_expressible_by n &
+         Key2*(i,1) = INV_MOD(Key1*(i,1),n) &
+         Key2*(i,2) = NEG_MOD(Key1*(i,3),n) &
+         Key2*(i,3) = NEG_MOD(Key1*(i,2),n) &
+         Key2*(i,4) = INV_MOD(Key1*(i,4),n) &
+         Key1*(i,5) = Key2*(i,5) &
+         Key1*(i,6) = Key2*(i,6))
+       holds
+       compose(IDEA_P_F(Key1,n,r)^IDEA_Q_F(Key2,n,r), MESSAGES).m = m
+       proof
+        defpred P[Nat] means
+          lk >= $1 &
+          2 to_power(n)+1 is prime &
+          len m >= 4 &
+          m.1 is_expressible_by n & m.2 is_expressible_by n &
+          m.3 is_expressible_by n & m.4 is_expressible_by n &
+          (for i being Nat holds i <= $1 implies
+            Key1*(i,1) is_expressible_by n & Key1*(i,2) is_expressible_by n &
+            Key1*(i,3) is_expressible_by n & Key1*(i,4) is_expressible_by n &
+            Key1*(i,5) is_expressible_by n & Key1*(i,6) is_expressible_by n &
+            Key2*(i,1) is_expressible_by n & Key2*(i,2) is_expressible_by n &
+            Key2*(i,3) is_expressible_by n & Key2*(i,4) is_expressible_by n &
+            Key2*(i,5) is_expressible_by n & Key2*(i,6) is_expressible_by n &
+            Key2*(i,1) = INV_MOD(Key1*(i,1),n) &
+            Key2*(i,2) = NEG_MOD(Key1*(i,3),n) &
+            Key2*(i,3) = NEG_MOD(Key1*(i,2),n) &
+            Key2*(i,4) = INV_MOD(Key1*(i,4),n) &
+            Key1*(i,5) = Key2*(i,5) &
+            Key1*(i,6) = Key2*(i,6))
+          implies
+          compose(IDEA_P_F(Key1,n,$1)^IDEA_Q_F(Key2,n,$1),MESSAGES).m = m;
+
+         A1: P[0]
+           proof
+             A2: len IDEA_P_F(Key1,n,0) = 0 by Def17;
+             A3:m in MESSAGES by Def14,FINSEQ_1:def 11;
+               len IDEA_Q_F(Key2,n,0) = 0 by Def18;
+             then IDEA_Q_F(Key2,n,0) = {} by FINSEQ_1:25;
+             then IDEA_P_F(Key1,n,0)^IDEA_Q_F(Key2,n,0)
+                            = IDEA_P_F(Key1,n,0) by FINSEQ_1:47
+                           .= {} by A2,FINSEQ_1:25;
+             then compose(IDEA_P_F(Key1,n,0)^IDEA_Q_F(Key2,n,0),MESSAGES)
+                   = id MESSAGES by FUNCT_7:41;
+             hence thesis by A3,FUNCT_1:35;
+           end;
+         A4: for k being Nat st P[k] holds P[k + 1]
+           proof
+             let k be Nat;
+             assume A5: P[k];
+             assume that
+               A6: lk >= k+1 and
+               A7: 2 to_power(n)+1 is prime and
+               A8: len m >= 4 and
+               A9: m.1 is_expressible_by n & m.2 is_expressible_by n &
+                     m.3 is_expressible_by n & m.4 is_expressible_by n and
+               A10:(for i being Nat holds i <= k+1 implies
+                     Key1*(i,1) is_expressible_by n &
+                     Key1*(i,2) is_expressible_by n &
+                     Key1*(i,3) is_expressible_by n &
+                     Key1*(i,4) is_expressible_by n &
+                     Key1*(i,5) is_expressible_by n &
+                     Key1*(i,6) is_expressible_by n &
+                     Key2*(i,1) is_expressible_by n &
+                     Key2*(i,2) is_expressible_by n &
+                     Key2*(i,3) is_expressible_by n &
+                     Key2*(i,4) is_expressible_by n &
+                     Key2*(i,5) is_expressible_by n &
+                     Key2*(i,6) is_expressible_by n &
+                     Key2*(i,1) = INV_MOD(Key1*(i,1),n) &
+                     Key2*(i,2) = NEG_MOD(Key1*(i,3),n) &
+                     Key2*(i,3) = NEG_MOD(Key1*(i,2),n) &
+                     Key2*(i,4) = INV_MOD(Key1*(i,4),n) &
+                     Key1*(i,5) = Key2*(i,5) &
+                     Key1*(i,6) = Key2*(i,6));
+
+             A11: k+1 >= k by NAT_1:29;
+             A12:
+             (for i being Nat holds i <= k implies
+             Key1*(i,1) is_expressible_by n & Key1*
+(i,2) is_expressible_by n &
+             Key1*(i,3) is_expressible_by n & Key1*
+(i,4) is_expressible_by n &
+             Key1*(i,5) is_expressible_by n & Key1*
+(i,6) is_expressible_by n &
+             Key2*(i,1) is_expressible_by n & Key2*
+(i,2) is_expressible_by n &
+             Key2*(i,3) is_expressible_by n & Key2*
+(i,4) is_expressible_by n &
+             Key2*(i,5) is_expressible_by n & Key2*
+(i,6) is_expressible_by n &
+             Key2*(i,1) = INV_MOD(Key1*(i,1),n) &
+             Key2*(i,2) = NEG_MOD(Key1*(i,3),n) &
+             Key2*(i,3) = NEG_MOD(Key1*(i,2),n) &
+             Key2*(i,4) = INV_MOD(Key1*(i,4),n) &
+             Key1*(i,5) = Key2*(i,5) &
+             Key1*(i,6) = Key2*(i,6))
+               proof
+                 let i be Nat;
+                 assume i <= k;
+                 then i <= k+1 by A11,AXIOMS:22;
+                 hence thesis by A10;
+               end;
+
+             A13:rng compose(IDEA_P_F(Key1,n,k),MESSAGES) c= MESSAGES by Th44;
+             A14: rng compose(IDEA_P_F(Key1,n,k)^
+                       (<*IDEA_P(Line(Key1,(k+1)),n)*>^
+                          <*IDEA_Q(Line(Key2,k+1),n)*>),MESSAGES) c= MESSAGES
+               proof
+                 A15:rng compose(IDEA_P_F(Key1,n,k)^
+                     (<*IDEA_P(Line(Key1,(k+1)),n)*>^
+                      <*IDEA_Q(Line(Key2,k+1),n)*>),MESSAGES)
+                 = rng compose(IDEA_P_F(Key1,n,k)^
+                      <*IDEA_P(Line(Key1,(k+1)),n)*>^
+                      <*IDEA_Q(Line(Key2,k+1),n)*>,MESSAGES) by FINSEQ_1:45
+                .= rng (IDEA_Q(Line(Key2,k+1),n)*
+                       compose(IDEA_P_F(Key1,n,k)^
+                       <*IDEA_P(Line(Key1,(k+1)),n)*>,MESSAGES)) by FUNCT_7:43;
+                 A16: rng (IDEA_Q(Line(Key2,k+1),n)*
+                       compose(IDEA_P_F(Key1,n,k)^
+                       <*IDEA_P(Line(Key1,(k+1)),n)*>,MESSAGES))
+                      c= rng IDEA_Q(Line(Key2,k+1),n)
+                 proof
+                   let a be set;
+                   assume a in rng (IDEA_Q(Line(Key2,k+1),n)*
+                         compose(IDEA_P_F(Key1,n,k)^
+                         <*IDEA_P(Line(Key1,(k+1)),n)*>,MESSAGES));
+                   hence a in rng IDEA_Q(Line(Key2,k+1),n) by FUNCT_1:25;
+                 end;
+                   rng IDEA_Q(Line(Key2,k+1),n) c= MESSAGES by RELSET_1:12;
+                 hence thesis by A15,A16,XBOOLE_1:1;
+               end;
+
+             A17: dom compose(IDEA_P_F(Key1,n,k),MESSAGES) = MESSAGES by Th44;
+             A18: dom ((IDEA_Q(Line(Key2,(k+1)),n) *
+                              IDEA_P(Line(Key1,(k+1)),n))*
+                              compose(IDEA_P_F(Key1,n,k),MESSAGES))=MESSAGES
+               proof
+                   dom (IDEA_Q(Line(Key2,(k+1)),n) *
+                              IDEA_P(Line(Key1,(k+1)),n)) = MESSAGES
+                                     by FUNCT_2:def 1;
+                 hence thesis by A13,A17,RELAT_1:46;
+               end;
+
+             A19: m in MESSAGES by Def14,FINSEQ_1:def 11;
+             then compose(IDEA_P_F(Key1,n,k),MESSAGES).m
+                in rng(compose(IDEA_P_F(Key1,n,k),MESSAGES))
+                                           by A17,FUNCT_1:def 5;
+             then reconsider M = compose(IDEA_P_F(Key1,n,k),MESSAGES).m
+                      as FinSequence of NAT by A13,Def14,FINSEQ_1:def 11;
+             A20: len M >= 4 &
+                    M.1 is_expressible_by n &
+                    M.2 is_expressible_by n &
+                    M.3 is_expressible_by n &
+                    M.4 is_expressible_by n by A8,A9,Th47;
+              lk > 0 by A6,NAT_1:19;
+             then width Key1 = 6 & width Key2 = 6 by MATRIX_1:24;
+             then A21: 1 in Seg(width Key1) & 2 in Seg(width Key1) &
+                          3 in Seg(width Key1) & 4 in Seg(width Key1) &
+                          5 in Seg(width Key1) & 6 in Seg(width Key1) &
+                          1 in Seg(width Key2) & 2 in Seg(width Key2) &
+                          3 in Seg(width Key2) & 4 in Seg(width Key2) &
+                          5 in Seg(width Key2) & 6 in Seg(width Key2)
+                                                   by FINSEQ_1:3;
+             consider k1 being Nat such that A22: k1 = k+1;
+               Line(Key1,(k+1)).1 = Key1*(k1,1) &
+             Line(Key1,(k+1)).2 = Key1*(k1,2) &
+             Line(Key1,(k+1)).3 = Key1*(k1,3) &
+             Line(Key1,(k+1)).4 = Key1*(k1,4) &
+             Line(Key1,(k+1)).5 = Key1*(k1,5) &
+             Line(Key1,(k+1)).6 = Key1*(k1,6) &
+             Line(Key2,(k+1)).1 = Key2*(k1,1) &
+             Line(Key2,(k+1)).2 = Key2*(k1,2) &
+             Line(Key2,(k+1)).3 = Key2*(k1,3) &
+             Line(Key2,(k+1)).4 = Key2*(k1,4) &
+             Line(Key2,(k+1)).5 = Key2*(k1,5) &
+             Line(Key2,(k+1)).6 = Key2*(k1,6) by A21,A22,MATRIX_1:def 8;
+             then A23:
+               Line(Key1,(k+1)).1 is_expressible_by n &
+               Line(Key1,(k+1)).2 is_expressible_by n &
+               Line(Key1,(k+1)).3 is_expressible_by n &
+               Line(Key1,(k+1)).4 is_expressible_by n &
+               Line(Key1,(k+1)).5 is_expressible_by n &
+               Line(Key1,(k+1)).6 is_expressible_by n &
+               Line(Key2,(k+1)).1 = INV_MOD(Line(Key1,(k+1)).1,n) &
+               Line(Key2,(k+1)).2 = NEG_MOD(Line(Key1,(k+1)).3,n) &
+               Line(Key2,(k+1)).3 = NEG_MOD(Line(Key1,(k+1)).2,n) &
+               Line(Key2,(k+1)).4 = INV_MOD(Line(Key1,(k+1)).4,n) &
+               Line(Key2,(k+1)).5 = Line(Key1,(k+1)).5 &
+               Line(Key2,(k+1)).6 = Line(Key1,(k+1)).6 by A10,A22;
+
+                 compose(IDEA_P_F(Key1,n,(k+1))^IDEA_Q_F(Key2,n,(k+1)),
+                                                             MESSAGES).m
+             = compose((IDEA_P_F(Key1,n,k)^<* IDEA_P(Line(Key1,(k+1)),n) *>)
+                        ^IDEA_Q_F(Key2,n,(k+1)),MESSAGES).m by Th37
+            .= compose((IDEA_P_F(Key1,n,k)^<*IDEA_P(Line(Key1,(k+1)),n)*>)^
+                (<*IDEA_Q(Line(Key2,(k+1)),n)*>^IDEA_Q_F(Key2,n,k)),MESSAGES).m
+                                                             by Th38
+             .= compose(IDEA_P_F(Key1,n,k)^<*IDEA_P(Line(Key1,(k+1)),n)*>^
+                  <*IDEA_Q(Line(Key2,(k+1)),n)*>^IDEA_Q_F(Key2,n,k),MESSAGES).m
+                                                             by FINSEQ_1:45
+             .= compose(IDEA_P_F(Key1,n,k)^
+              (<*IDEA_P(Line(Key1,(k+1)),n)*>^<*IDEA_Q(Line(Key2,(k+1)),n)*>)^
+                        IDEA_Q_F(Key2,n,k),MESSAGES).m by FINSEQ_1:45
+             .=(compose(IDEA_Q_F(Key2,n,k),MESSAGES) *
+                compose(IDEA_P_F(Key1,n,k)^
+               (<*IDEA_P(Line(Key1,(k+1)),n)*>^<*IDEA_Q(Line(Key2,(k+1)),n)*>)
+                                          ,MESSAGES)).m by A14,FUNCT_7:50
+             .=(compose(IDEA_Q_F(Key2,n,k),MESSAGES) *
+                (compose(<*IDEA_P(Line(Key1,(k+1)),n)*>^
+                         <*IDEA_Q(Line(Key2,(k+1)),n)*>,MESSAGES) *
+                 compose(IDEA_P_F(Key1,n,k),MESSAGES))).m by A13,FUNCT_7:50
+             .=(compose(IDEA_Q_F(Key2,n,k),MESSAGES) *
+                (compose(<*IDEA_P(Line(Key1,(k+1)),n),
+                           IDEA_Q(Line(Key2,(k+1)),n)*>,MESSAGES) *
+                 compose(IDEA_P_F(Key1,n,k),MESSAGES))).m by FINSEQ_1:def 9
+             .=(compose(IDEA_Q_F(Key2,n,k),MESSAGES) *
+                ((IDEA_Q(Line(Key2,(k+1)),n) * IDEA_P(Line(Key1,(k+1)),n)
+                       * id MESSAGES) *
+                 compose(IDEA_P_F(Key1,n,k),MESSAGES))).m by FUNCT_7:53
+             .=(compose(IDEA_Q_F(Key2,n,k),MESSAGES) *
+                ((IDEA_Q(Line(Key2,(k+1)),n) * IDEA_P(Line(Key1,(k+1)),n))*
+                 compose(IDEA_P_F(Key1,n,k),MESSAGES))).m by FUNCT_2:74
+             .= compose(IDEA_Q_F(Key2,n,k),MESSAGES).
+                (((IDEA_Q(Line(Key2,(k+1)),n) * IDEA_P(Line(Key1,(k+1)),n))*
+                compose(IDEA_P_F(Key1,n,k),MESSAGES)).m)
+                                                     by A18,A19,FUNCT_1:23
+             .= compose(IDEA_Q_F(Key2,n,k),MESSAGES).
+                ((IDEA_Q(Line(Key2,(k+1)),n) * IDEA_P(Line(Key1,(k+1)),n)).
+              ((compose(IDEA_P_F(Key1,n,k),MESSAGES)).m))
+                                                        by A17,A19,FUNCT_1:23
+             .= compose(IDEA_Q_F(Key2,n,k),MESSAGES).
+                 (compose(IDEA_P_F(Key1,n,k),MESSAGES).m)
+                                            by A7,A20,A23,Th34
+             .=(compose(IDEA_Q_F(Key2,n,k),MESSAGES) *
+                 compose(IDEA_P_F(Key1,n,k),MESSAGES)).m
+                                                        by A17,A19,FUNCT_1:23
+             .= m by A5,A6,A7,A8,A9,A11,A12,A13,AXIOMS:22,FUNCT_7:50;
+             hence thesis;
+           end;
+         thus for k being Nat holds P[k] from Ind(A1,A4);
+       end;
+     hence thesis;
+  end;
+
+theorem
+    for n being non empty Nat,lk being Nat,Key1,Key2 being Matrix of lk,6,NAT,
+    r being Nat,ks1,ks2,ke1,ke2 being FinSequence of NAT,m st lk >= r &
+        2 to_power(n)+1 is prime & len m >= 4 &
+        m.1 is_expressible_by n & m.2 is_expressible_by n &
+        m.3 is_expressible_by n & m.4 is_expressible_by n &
+        (for i being Nat holds i <= r implies
+         Key1*(i,1) is_expressible_by n & Key1*(i,2) is_expressible_by n &
+         Key1*(i,3) is_expressible_by n & Key1*(i,4) is_expressible_by n &
+         Key1*(i,5) is_expressible_by n & Key1*(i,6) is_expressible_by n &
+         Key2*(i,1) is_expressible_by n & Key2*(i,2) is_expressible_by n &
+         Key2*(i,3) is_expressible_by n & Key2*(i,4) is_expressible_by n &
+         Key2*(i,5) is_expressible_by n & Key2*(i,6) is_expressible_by n &
+         Key2*(i,1)=INV_MOD(Key1*(i,1),n) & Key2*(i,2)=NEG_MOD(Key1*
+(i,3),n) &
+         Key2*(i,3)=NEG_MOD(Key1*(i,2),n) & Key2*(i,4)=INV_MOD(Key1*
+(i,4),n) &
+         Key1*(i,5)=Key2*(i,5) & Key1*(i,6)=Key2*(i,6))&
+         ks1.1 is_expressible_by n & ks1.2 is_expressible_by n &
+         ks1.3 is_expressible_by n & ks1.4 is_expressible_by n &
+         ks2.1 = INV_MOD(ks1.1,n) & ks2.2 = NEG_MOD(ks1.2,n) &
+         ks2.3 = NEG_MOD(ks1.3,n) & ks2.4 = INV_MOD(ks1.4,n) &
+         ke1.1 is_expressible_by n & ke1.2 is_expressible_by n &
+         ke1.3 is_expressible_by n & ke1.4 is_expressible_by n &
+         ke1.5 is_expressible_by n & ke1.6 is_expressible_by n &
+         ke2.1 = INV_MOD(ke1.1,n) & ke2.2 = NEG_MOD(ke1.2,n) &
+         ke2.3 = NEG_MOD(ke1.3,n) & ke2.4 = INV_MOD(ke1.4,n) &
+         ke2.5 = ke1.5 & ke2.6 = ke1.6
+       holds (IDEA_QS(ks2,n)*(compose(IDEA_Q_F(Key2,n,r),MESSAGES)*
+        (IDEA_QE(ke2,n)*(IDEA_PE(ke1,n)*(compose(IDEA_P_F(Key1,n,r),MESSAGES)*
+         IDEA_PS(ks1,n)))))).m = m
+  proof
+    let n be non empty Nat,
+      lk be Nat,
+      Key1,Key2 be Matrix of lk,6,NAT,
+      r be Nat,
+      ks1,ks2,ke1,ke2 be FinSequence of NAT,m;
+
+    assume that
+      A1: lk >= r and
+      A2: 2 to_power(n)+1 is prime &
+           len m >= 4 and
+      A3: m.1 is_expressible_by n & m.2 is_expressible_by n &
+           m.3 is_expressible_by n & m.4 is_expressible_by n and
+      A4: (for i being Nat holds i <= r implies
+            Key1*(i,1) is_expressible_by n & Key1*(i,2) is_expressible_by n &
+            Key1*(i,3) is_expressible_by n & Key1*(i,4) is_expressible_by n &
+            Key1*(i,5) is_expressible_by n & Key1*(i,6) is_expressible_by n &
+            Key2*(i,1) is_expressible_by n & Key2*(i,2) is_expressible_by n &
+            Key2*(i,3) is_expressible_by n & Key2*(i,4) is_expressible_by n &
+            Key2*(i,5) is_expressible_by n & Key2*(i,6) is_expressible_by n &
+            Key2*(i,1) = INV_MOD(Key1*(i,1),n) &
+            Key2*(i,2) = NEG_MOD(Key1*(i,3),n) &
+            Key2*(i,3) = NEG_MOD(Key1*(i,2),n) &
+            Key2*(i,4) = INV_MOD(Key1*(i,4),n) &
+            Key1*(i,5) = Key2*(i,5) &
+            Key1*(i,6) = Key2*(i,6)) and
+      A5:  ks1.1 is_expressible_by n & ks1.2 is_expressible_by n &
+            ks1.3 is_expressible_by n & ks1.4 is_expressible_by n &
+            ks2.1 = INV_MOD(ks1.1,n) & ks2.2 = NEG_MOD(ks1.2,n) &
+            ks2.3 = NEG_MOD(ks1.3,n) & ks2.4 = INV_MOD(ks1.4,n) and
+      A6:  ke1.1 is_expressible_by n & ke1.2 is_expressible_by n &
+            ke1.3 is_expressible_by n & ke1.4 is_expressible_by n &
+            ke1.5 is_expressible_by n & ke1.6 is_expressible_by n &
+            ke2.1 = INV_MOD(ke1.1,n) & ke2.2 = NEG_MOD(ke1.2,n) &
+            ke2.3 = NEG_MOD(ke1.3,n) & ke2.4 = INV_MOD(ke1.4,n) &
+            ke2.5 = ke1.5 & ke2.6 = ke1.6;
+    A7: m in MESSAGES by Def14,FINSEQ_1:def 11;
+
+    then IDEA_PS(ks1,n).m in MESSAGES by FUNCT_2:7;
+    then reconsider m1 = IDEA_PS(ks1,n).m as FinSequence of NAT
+                                              by Def14,FINSEQ_1:def 11;
+    A8: len m1 = len IDEAoperationA(m,ks1,n) by Def19
+          .= len m by Def11;
+      m1.1 = IDEAoperationA(m,ks1,n).1 & m1.2 = IDEAoperationA(m,ks1,n).2 &
+    m1.3 = IDEAoperationA(m,ks1,n).3 & m1.4 = IDEAoperationA(m,ks1,n).4
+                                                            by Def19;
+    then A9:
+         m1.1 is_expressible_by n &
+         m1.2 is_expressible_by n &
+         m1.3 is_expressible_by n &
+         m1.4 is_expressible_by n by A2,Th27;
+    A10: m1 in MESSAGES by Def14,FINSEQ_1:def 11;
+
+    per cases;
+    suppose A11: r = 0;
+      then len IDEA_P_F(Key1,n,r) = 0 by Def17;
+      then A12: IDEA_P_F(Key1,n,r) = {} by FINSEQ_1:25;
+        len IDEA_Q_F(Key2,n,r) = 0 by A11,Def18;
+      hence
+         (IDEA_QS(ks2,n)*(compose(IDEA_Q_F(Key2,n,r),MESSAGES)*
+        (IDEA_QE(ke2,n)*(IDEA_PE(ke1,n)*(compose(IDEA_P_F(Key1,n,r),MESSAGES)*
+         IDEA_PS(ks1,n)))))).m
+      =(IDEA_QS(ks2,n)*(compose({},MESSAGES)*
+        (IDEA_QE(ke2,n)*(IDEA_PE(ke1,n)*(compose({},MESSAGES)*
+         IDEA_PS(ks1,n)))))).m by A12,FINSEQ_1:25
+     .=(IDEA_QS(ks2,n)*((id MESSAGES)*
+        (IDEA_QE(ke2,n)*(IDEA_PE(ke1,n)*(compose({},MESSAGES)*
+         IDEA_PS(ks1,n)))))).m by FUNCT_7:41
+     .=(IDEA_QS(ks2,n)*((id MESSAGES)*
+        (IDEA_QE(ke2,n)*(IDEA_PE(ke1,n)*((id MESSAGES)*
+         IDEA_PS(ks1,n)))))).m by FUNCT_7:41
+     .=(IDEA_QS(ks2,n)*((IDEA_QE(ke2,n)*(IDEA_PE(ke1,n)*((id MESSAGES)*
+         IDEA_PS(ks1,n)))))).m by FUNCT_2:74
+     .=(IDEA_QS(ks2,n)*(IDEA_QE(ke2,n)*
+        (IDEA_PE(ke1,n)*IDEA_PS(ks1,n)))).m by FUNCT_2:74
+     .=IDEA_QS(ks2,n).((IDEA_QE(ke2,n)*(IDEA_PE(ke1,n)*
+             IDEA_PS(ks1,n))).m) by A7,FUNCT_2:70
+     .=IDEA_QS(ks2,n).(IDEA_QE(ke2,n).((IDEA_PE(ke1,n)*
+             IDEA_PS(ks1,n)).m)) by A7,FUNCT_2:70
+     .=IDEA_QS(ks2,n).(IDEA_QE(ke2,n).(IDEA_PE(ke1,n).m1)) by A7,FUNCT_2:70
+     .=IDEA_QS(ks2,n).((IDEA_QE(ke2,n)*IDEA_PE(ke1,n)).m1)
+                                  by A10,FUNCT_2:70
+     .=IDEA_QS(ks2,n).(IDEA_PS(ks1,n).m) by A2,A6,A8,A9,Th36
+     .=(IDEA_QS(ks2,n)*IDEA_PS(ks1,n)).m by A7,FUNCT_2:70
+     .= m by A2,A3,A5,Th35;
+
+    suppose r <> 0;
+      then A13: IDEA_P_F(Key1,n,r) is FuncSequence of MESSAGES,MESSAGES &
+           IDEA_Q_F(Key2,n,r) is FuncSequence of MESSAGES,MESSAGES
+                                                  by Th41,Th42;
+        compose(IDEA_P_F(Key1,n,r),MESSAGES) is Function of MESSAGES,MESSAGES
+      proof
+        A14:  firstdom IDEA_P_F(Key1,n,r) = MESSAGES &
+             lastrng IDEA_P_F(Key1,n,r) c= MESSAGES by A13,FUNCT_7:def 9;
+        then IDEA_P_F(Key1,n,r) = {} implies
+                rng compose(IDEA_P_F(Key1,n,r),MESSAGES) = {} by FUNCT_7:def 6;
+        then rng compose(IDEA_P_F(Key1,n,r),MESSAGES)
+                 c= lastrng IDEA_P_F(Key1,n,r) by FUNCT_7:61,XBOOLE_1:2;
+        then A15:
+          rng compose(IDEA_P_F(Key1,n,r),MESSAGES) c= MESSAGES
+                                                     by A14,XBOOLE_1:1;
+          dom compose(IDEA_P_F(Key1,n,r),MESSAGES)
+         = MESSAGES by A13,A14,FUNCT_7:64;
+        hence thesis by A15,FUNCT_2:def 1,RELSET_1:11;
+      end;
+      then reconsider PF=compose(IDEA_P_F(Key1,n,r),MESSAGES)
+                                   as Function of MESSAGES,MESSAGES;
+
+        compose(IDEA_Q_F(Key2,n,r),MESSAGES) is Function of MESSAGES,MESSAGES
+      proof
+        A16:  firstdom IDEA_Q_F(Key2,n,r) = MESSAGES &
+             lastrng IDEA_Q_F(Key2,n,r) c= MESSAGES by A13,FUNCT_7:def 9;
+        then IDEA_Q_F(Key2,n,r) = {} implies
+              rng compose(IDEA_Q_F(Key2,n,r),MESSAGES) = {} by FUNCT_7:def 6;
+        then rng compose(IDEA_Q_F(Key2,n,r),MESSAGES)
+                 c= lastrng IDEA_Q_F(Key2,n,r) by FUNCT_7:61,XBOOLE_1:2;
+        then A17:
+          rng compose(IDEA_Q_F(Key2,n,r),MESSAGES) c= MESSAGES
+                                                     by A16,XBOOLE_1:1;
+          dom compose(IDEA_Q_F(Key2,n,r),MESSAGES)
+         = MESSAGES by A13,A16,FUNCT_7:64;
+        hence thesis by A17,FUNCT_2:def 1,RELSET_1:11;
+      end;
+      then reconsider QF=compose(IDEA_Q_F(Key2,n,r),MESSAGES)
+                                   as Function of MESSAGES,MESSAGES;
+
+      A18: rng PF c= MESSAGES & rng QF c= MESSAGES by RELSET_1:12;
+
+        PF.m1 in MESSAGES by A10,FUNCT_2:7;
+      then reconsider m2 = PF.m1 as FinSequence of NAT
+                                              by Def14,FINSEQ_1:def 11;
+      A19: len m2 >= 4 &
+          m2.1 is_expressible_by n &
+          m2.2 is_expressible_by n &
+          m2.3 is_expressible_by n &
+          m2.4 is_expressible_by n by A2,A8,A9,Th47;
+      A20: m2 in MESSAGES by Def14,FINSEQ_1:def 11;
+
+      A21:QF.(PF.m1) = m1
+        proof
+         thus
+            QF.(PF.m1)
+          = (QF*PF).m1 by A10,FUNCT_2:70
+         .= compose(IDEA_P_F(Key1,n,r)^IDEA_Q_F(Key2,n,r),MESSAGES).m1
+                                             by A18,FUNCT_7:50
+         .= m1 by A1,A2,A4,A8,A9,Th48;
+        end;
+
+      thus
+         (IDEA_QS(ks2,n)*(compose(IDEA_Q_F(Key2,n,r),MESSAGES)*
+        (IDEA_QE(ke2,n)*(IDEA_PE(ke1,n)*(compose(IDEA_P_F(Key1,n,r),MESSAGES)*
+         IDEA_PS(ks1,n)))))).m
+       =IDEA_QS(ks2,n).((QF*(IDEA_QE(ke2,n)*(IDEA_PE(ke1,n)*(PF*
+         (IDEA_PS(ks1,n)))))).m) by A7,FUNCT_2:70
+      .=IDEA_QS(ks2,n).(QF.((IDEA_QE(ke2,n)*(IDEA_PE(ke1,n)*(PF*
+         (IDEA_PS(ks1,n))))).m)) by A7,FUNCT_2:70
+      .=IDEA_QS(ks2,n).(QF.(IDEA_QE(ke2,n).((IDEA_PE(ke1,n)*(PF*
+         (IDEA_PS(ks1,n)))).m))) by A7,FUNCT_2:70
+      .=IDEA_QS(ks2,n).(QF.(IDEA_QE(ke2,n).(IDEA_PE(ke1,n).((PF*
+         (IDEA_PS(ks1,n))).m)))) by A7,FUNCT_2:70
+      .=IDEA_QS(ks2,n).(QF.(IDEA_QE(ke2,n).(IDEA_PE(ke1,n).(PF.
+         (IDEA_PS(ks1,n).m))))) by A7,FUNCT_2:70
+      .=IDEA_QS(ks2,n).(QF.((IDEA_QE(ke2,n)*IDEA_PE(ke1,n)).m2))
+                                                       by A20,FUNCT_2:70
+      .=IDEA_QS(ks2,n).(m1) by A2,A6,A19,A21,Th36
+      .=(IDEA_QS(ks2,n)*IDEA_PS(ks1,n)).m by A7,FUNCT_2:70
+      .= m by A2,A3,A5,Th35;
+  end;

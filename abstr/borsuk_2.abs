@@ -1,0 +1,251 @@
+:: Introduction to Homotopy Theory
+::  by Adam Grabowski
+::
+:: Received September 10, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, CARD_1, FUNCT_1, RELAT_1, SUBSET_1, BOOLE, COMPTS_1,
+      ORDINAL2, FUNCT_4, FUNCOP_1, TOPS_2, BORSUK_1, GRAPH_1, RCOMP_1, RELAT_2,
+      ARYTM_3, ARYTM_1, TREAL_1, SEQ_1, TOPMETR, SEQM_3, SETFAM_1, TARSKI,
+      TSP_1, METRIC_1, URYSOHN1, PCOMPS_1, EUCLID, MCART_1, CONNSP_2, TOPS_1,
+      BORSUK_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, NAT_1, REAL_1,
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, STRUCT_0, PRE_TOPC, EUCLID, TOPS_2,
+      MCART_1, RCOMP_1, PCOMPS_1, CARD_1, TOPS_1, COMPTS_1, CONNSP_1, TREAL_1,
+      FUNCT_4, SEQM_3, BORSUK_1, T_0TOPSP, TOPMETR, BINOP_1, FUNCT_3, GRCAT_1,
+      URYSOHN1, TSP_1, WEIERSTR;
+ constructors EUCLID, TOPS_2, CONNSP_1, REAL_1, T_0TOPSP, TREAL_1, SEQM_3,
+      TOPS_1, WEIERSTR, RCOMP_1, COMPTS_1, YELLOW_8, URYSOHN1, GRCAT_1,
+      MEMBERED;
+ clusters SUBSET_1, STRUCT_0, TOPMETR, FUNCT_1, PRE_TOPC, BORSUK_1, TSP_1,
+      YELLOW_6, YELLOW_8, WAYBEL10, METRIC_1, RELSET_1, MEMBERED, FUNCT_2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Preliminaries
+
+ reserve T,T1,T2,S for non empty TopSpace;
+
+scheme FrCard { A() -> non empty set, X() -> set,
+       F(set) -> set, P[set] }:
+ Card { F(w) where w is Element of A(): w in X() & P[w] } <=` Card X();
+
+theorem :: BORSUK_2:1
+   for f being map of T1,S, g being map of T2,S st
+  T1 is SubSpace of T & T2 is SubSpace of T &
+   ([#] T1) \/ ([#] T2) = [#] T &
+    T1 is compact & T2 is compact & T is_T2 &
+     f is continuous & g is continuous &
+  ( for p be set st p in ([#] T1) /\ ([#] T2) holds f.p = g.p )
+  ex h being map of T,S st h = f+*g & h is continuous;
+
+definition
+  let S, T be non empty TopSpace;
+  cluster continuous map of S, T;
+end;
+
+definition let T be non empty TopStruct;
+  cluster id T -> open continuous;
+end;
+
+definition
+  let T be non empty TopStruct;
+  cluster continuous one-to-one map of T, T;
+end;
+
+canceled;
+
+theorem :: BORSUK_2:3
+    for S, T being non empty TopSpace,
+      f being map of S, T st f is_homeomorphism holds
+   f" is open;
+
+begin :: Paths and arcwise connected spaces
+
+definition let T be TopStruct; let a, b be Point of T;
+ given f be map of I[01], T such that
+  f is continuous & f.0 = a & f.1 = b;
+ mode Path of a, b -> map of I[01], T means
+:: BORSUK_2:def 1
+   it is continuous & it.0 = a & it.1 = b;
+end;
+
+theorem :: BORSUK_2:4
+ for T be non empty TopSpace, a be Point of T
+  ex f be map of I[01], T st f is continuous & f.0 = a & f.1 = a;
+
+definition let T be non empty TopSpace; let a be Point of T;
+ cluster continuous Path of a, a;
+end;
+
+definition let T be TopStruct;
+  attr T is arcwise_connected means
+:: BORSUK_2:def 2
+   for a, b being Point of T ex f being map of I[01], T st
+          f is continuous & f.0 = a & f.1 = b;
+end;
+
+definition
+ cluster arcwise_connected non empty TopSpace;
+end;
+
+definition let T be arcwise_connected TopStruct;
+  let a, b be Point of T;
+  redefine mode Path of a, b means
+:: BORSUK_2:def 3
+     it is continuous & it.0 = a & it.1 = b;
+end;
+
+definition let T be arcwise_connected TopStruct;
+  let a, b be Point of T;
+  cluster -> continuous Path of a, b;
+end;
+
+reserve GY for non empty TopSpace,
+        r,s for Real;
+
+theorem :: BORSUK_2:5
+ for GX being non empty TopSpace st
+  GX is arcwise_connected holds GX is connected;
+
+definition
+  cluster arcwise_connected -> connected (non empty TopSpace);
+end;
+
+begin :: Basic operations on paths
+
+definition let T be non empty TopSpace;
+  let a, b, c be Point of T;
+  let P be Path of a, b,
+      Q be Path of b, c;
+ given f, g be map of I[01], T such that
+  f is continuous & f.0 = a & f.1 = b &
+    g is continuous & g.0 = b & g.1 = c;
+  func P + Q -> Path of a, c means
+:: BORSUK_2:def 4
+   for t being Point of I[01], t' being Real st t = t' holds
+    ( 0 <= t' & t' <= 1/2 implies it.t = P.(2*t') ) &
+    ( 1/2 <= t' & t' <= 1 implies it.t = Q.(2*t'-1) );
+end;
+
+definition let T be non empty TopSpace;
+ let a be Point of T;
+ cluster constant Path of a, a;
+end;
+
+theorem :: BORSUK_2:6
+   for T being non empty TopSpace,
+     a being Point of T,
+     P being constant Path of a, a holds P = I[01] --> a;
+
+theorem :: BORSUK_2:7
+  for T being non empty TopSpace,
+      a being Point of T,
+      P being constant Path of a, a holds P + P = P;
+
+definition let T be non empty TopSpace,
+               a be Point of T,
+               P be constant Path of a, a;
+ cluster P + P -> constant;
+end;
+
+definition let T be non empty TopSpace;
+  let a, b be Point of T;
+  let P be Path of a, b;
+  given f be map of I[01], T such that
+f is continuous & f.0 = a & f.1 = b;
+  func - P -> Path of b, a means
+:: BORSUK_2:def 5
+   for t being Point of I[01], t' being Real st t = t' holds
+    it.t = P.(1-t');
+end;
+
+theorem :: BORSUK_2:8
+  for T being non empty TopSpace,
+      a being Point of T,
+      P being constant Path of a, a holds - P = P;
+
+definition let T be non empty TopSpace,
+               a be Point of T,
+               P be constant Path of a, a;
+ cluster - P -> constant;
+end;
+
+begin :: The product of two topological spaces
+
+theorem :: BORSUK_2:9
+ for X, Y being non empty TopSpace
+  for A being Subset-Family of Y
+   for f being map of X, Y holds
+    f"(union A) = union (f"A);
+
+definition let S1, S2, T1, T2 be non empty TopSpace;
+ let f be map of S1, S2, g be map of T1, T2;
+ redefine func [:f, g:] -> map of [:S1, T1:], [:S2, T2:];
+end;
+
+theorem :: BORSUK_2:10
+ for S1, S2, T1, T2 be non empty TopSpace,
+     f be continuous map of S1, T1,
+     g be continuous map of S2, T2,
+     P1, P2 being Subset of [:T1, T2:] holds
+       (P2 in Base-Appr P1 implies [:f,g:]"P2 is open);
+
+theorem :: BORSUK_2:11
+ for S1, S2, T1, T2 be non empty TopSpace,
+     f be continuous map of S1, T1,
+     g be continuous map of S2, T2,
+     P2 being Subset of [:T1, T2:] holds
+       (P2 is open implies [:f,g:]"P2 is open);
+
+theorem :: BORSUK_2:12
+ for S1, S2, T1, T2 be non empty TopSpace,
+     f be continuous map of S1, T1,
+     g be continuous map of S2, T2 holds
+   [:f,g:] is continuous;
+
+definition
+  cluster empty -> T_0 TopStruct;
+end;
+
+definition let T1, T2 be discerning (non empty TopSpace);
+  cluster [:T1, T2:] -> discerning;
+end;
+
+canceled;
+
+theorem :: BORSUK_2:14
+  for T1, T2 be non empty TopSpace holds
+   T1 is_T1 & T2 is_T1 implies [:T1, T2:] is_T1;
+
+definition let T1, T2 be being_T1 (non empty TopSpace);
+ cluster [:T1, T2:] -> being_T1;
+end;
+
+definition let T1, T2 be being_T2 (non empty TopSpace);
+ cluster [:T1, T2:] -> being_T2;
+end;
+
+definition
+ cluster I[01] -> compact being_T2;
+end;
+
+definition let n be Nat;
+ cluster TOP-REAL n -> being_T2;
+end;
+
+definition let T be non empty arcwise_connected TopSpace;
+  let a, b be Point of T;
+  let P, Q be Path of a, b;
+ pred P, Q are_homotopic means
+:: BORSUK_2:def 6
+     ex f being map of [:I[01],I[01]:], T st
+    f is continuous &
+    for s being Point of I[01] holds f.(s,0) = P.s & f.(s,1) = Q.s &
+    for t being Point of I[01] holds f.(0,t) = a & f.(1,t) = b;
+  reflexivity;
+  symmetry;
+end;
+

@@ -1,0 +1,3444 @@
+:: Bilinear Functionals in Vector Spaces
+::  by Jaros{\l}aw Kotowicz
+::
+:: Received November 5, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, VECTSP_1, ARYTM_1, HAHNBAN, FUNCT_1, SUBSET_1, FUNCOP_1,
+      GRCAT_1, UNIALG_1, BINOP_1, LATTICES, RELAT_1, HAHNBAN1, FUNCT_5,
+      RLSUB_1, ALGSTR_2, REALSET1, BOOLE, SEQM_3, GROUP_6, VECTSP10, BILINEAR,
+      RELAT_2, SPPOL_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, DOMAIN_1, FUNCT_1,
+      RELAT_1, PRE_TOPC, REALSET1, RLVECT_1, BINOP_1, VECTSP_1, RELSET_1,
+      FUNCT_2, SEQM_3, FUNCT_5, VECTSP_4, BORSUK_1, HAHNBAN1, VECTSP10;
+ constructors DOMAIN_1, NATTRA_1, BORSUK_1, VECTSP10;
+ clusters STRUCT_0, SUBSET_1, RELSET_1, VECTSP_1, HAHNBAN1, VECTSP_4, VECTSP10,
+      XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions HAHNBAN1, TARSKI, XBOOLE_0, VECTSP_4;
+ theorems FUNCT_5, XBOOLE_1, FUNCT_2, HAHNBAN1, VECTSP_1, PRE_TOPC, FUNCOP_1,
+      RLVECT_1, ANPROJ_1, VECTSP_4, TARSKI, FUNCT_1, REALSET1, ZFMISC_1,
+      SEQM_3, DOMAIN_1, VECTSP10;
+ schemes FUNCT_2;
+
+begin
+:: Two Form on Vector Spaces and Operations on Them.
+
+definition
+ let K be 1-sorted;
+ let V,W be VectSpStr over K;
+mode Form of V,W is Function of [:the carrier of V,the carrier of W:],
+                                       the carrier of K;
+ canceled;
+end;
+
+definition
+ let K be non empty ZeroStr;
+ let V,W be VectSpStr over K;
+ func NulForm(V,W) -> Form of V,W equals :Def2:
+         [:the carrier of V,the carrier of W:] --> 0.K;
+  coherence;
+end;
+
+definition
+ let K be non empty LoopStr;
+ let V,W be non empty VectSpStr over K;
+ let f,g be Form of V,W;
+func f+g -> Form of V,W means :Def3:
+ for v be Vector of V, w be Vector of W holds it.[v,w] = f.[v,w]+g.[v,w];
+ existence
+  proof
+   set X = the carrier of V, Y = the carrier of W, Z = the carrier of K;
+   deffunc _F(Element of X, Element of Y) = f.[$1,$2]+g.[$1,$2];
+   consider ff be Function of [:X,Y:],Z such that
+ A1: for x be Element of X for y be Element of Y holds
+         ff.[x,y]=_F(x,y) from Lambda2D;
+   reconsider ff as Form of V,W;
+   take ff;
+   thus thesis by A1;
+  end;
+ uniqueness
+  proof
+  let F,G be Form of V, W such that
+ A2: for v be Vector of V, w be Vector of W holds F.[v,w] = f.[v,w]+g.[v,w] and
+ A3: for v be Vector of V, w be Vector of W holds G.[v,w] = f.[v,w]+g.[v,w];
+      now let v be Vector of V, w be Vector of W;
+     thus F.[v,w] = f.[v,w]+g.[v,w] by A2
+     .= G.[v,w] by A3;
+    end;
+   hence thesis by FUNCT_2:120;
+  end;
+end;
+
+definition
+ let K be non empty HGrStr;
+ let V,W be non empty VectSpStr over K;
+ let f be Form of V,W;
+ let a be Element of K;
+func a*f -> Form of V,W means :Def4:
+ for v be Vector of V, w be Vector of W holds it.[v,w] = a*f.[v,w];
+ existence
+  proof
+   set X = the carrier of V, Y = the carrier of W, Z = the carrier of K;
+   deffunc _F(Element of X, Element of Y) = a*f.[$1,$2];
+   consider ff be Function of [:X,Y:],Z such that
+ A1: for x be Element of X for y be Element of Y holds
+         ff.[x,y]=_F(x,y) from Lambda2D;
+   reconsider ff as Form of V,W;
+   take ff;
+   thus thesis by A1;
+  end;
+ uniqueness
+  proof
+  let F,G be Form of V, W such that
+ A2: for v be Vector of V, w be Vector of W holds F.[v,w] = a*f.[v,w] and
+ A3: for v be Vector of V, w be Vector of W holds G.[v,w] = a*f.[v,w];
+      now let v be Vector of V, w be Vector of W;
+     thus F.[v,w] = a*f.[v,w] by A2
+     .= G.[v,w] by A3;
+    end;
+   hence thesis by FUNCT_2:120;
+  end;
+end;
+
+definition
+ let K be non empty LoopStr;
+ let V,W be non empty VectSpStr over K;
+ let f be Form of V,W;
+func -f -> Form of V,W means :Def5:
+ for v be Vector of V, w be Vector of W holds it.[v,w] = -f.[v,w];
+ existence
+   proof
+    set X = the carrier of V, Y = the carrier of W, Z = the carrier of K;
+    deffunc _F(Element of X,Element of Y) = -f.[$1,$2];
+    consider ff be Function of [:X,Y:],Z such that
+  A1: for x be Element of X for y be Element of Y holds
+          ff.[x,y]=_F(x,y) from Lambda2D;
+    reconsider ff as Form of V,W;
+    take ff;
+    thus thesis by A1;
+   end;
+  uniqueness
+   proof let F,G be Form of V, W such that
+  A2: for v be Vector of V, w be Vector of W holds F.[v,w] = -f.[v,w] and
+  A3: for v be Vector of V, w be Vector of W holds G.[v,w] = -f.[v,w];
+      now let v be Vector of V, w be Vector of W;
+      thus F.[v,w] = -f.[v,w] by A2
+      .= G.[v,w] by A3;
+     end;
+    hence thesis by FUNCT_2:120;
+   end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       left-distributive left_unital (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f be Form of V,W;
+redefine func -f -> Form of V,W equals
+   (- 1_ K) *f;
+ coherence;
+ compatibility
+  proof
+  let g be Form of V,W;
+  thus g= -f implies g = (- 1_ K) *f
+   proof
+    assume A1: g =-f;
+      now
+     let v be Vector of V, w be Vector of W;
+      thus g.[v,w]= -f.[v,w] by A1,Def5
+       .= (-1_ K )* f.[v,w] by VECTSP10:1
+       .=((- 1_ K) *f).[v,w] by Def4;
+     end;
+    hence thesis by FUNCT_2:120;
+   end;
+  assume A2: g = (- 1_ K) *f;
+     now let v be Vector of V, w be Vector of W;
+    thus g.[v,w]= (-1_ K )* f.[v,w] by A2,Def4
+     .=- f.[v,w] by VECTSP10:1
+     .= (-f).[v,w] by Def5;
+    end;
+   hence thesis by FUNCT_2:120;
+  end;
+end;
+
+definition
+ let K be non empty LoopStr;
+ let V,W be non empty VectSpStr over K;
+ let f,g be Form of V,W;
+func f-g -> Form of V,W equals :Def7:
+   f + -g;
+correctness;
+end;
+
+definition
+ let K be non empty LoopStr;
+ let V,W be non empty VectSpStr over K;
+ let f,g be Form of V,W;
+redefine func f - g -> Form of V,W means :Def8:
+ for v be Vector of V, w be Vector of W holds it.[v,w] = f.[v,w] - g.[v,w];
+ coherence;
+ compatibility
+  proof
+  let h be Form of V,W;
+   thus h = f- g implies
+     for v be Vector of V, w be Vector of W holds h.[v,w] = f.[v,w] - g.[v,w]
+    proof
+     assume
+   A1:  h = f-g;
+    let v be Vector of V, w be Vector of W;
+     thus h.[v,w] = (f+-g).[v,w] by A1,Def7
+      .= f.[v,w] + (-g).[v,w] by Def3
+      .= f.[v,w] + -g.[v,w] by Def5
+      .= f.[v,w] -g.[v,w] by RLVECT_1:def 11;
+    end;
+    assume
+ A2: for v be Vector of V, w be Vector of W holds h.[v,w] = f.[v,w] - g.[v,w];
+       now let v be Vector of V, w be Vector of W;
+      thus h.[v,w] = f.[v,w] - g.[v,w] by A2
+       .= f.[v,w] +- g.[v,w] by RLVECT_1:def 11
+      .= f.[v,w] + (-g).[v,w] by Def5
+     .= (f+-g).[v,w] by Def3
+     .= (f-g).[v,w] by Def7;
+    end;
+   hence thesis by FUNCT_2:120;
+  end;
+end;
+
+Lm1:
+now let K be Abelian (non empty LoopStr), V,W be non empty VectSpStr over K,
+      f,g be Form of V,W;
+    now let v be Vector of V,w be Vector of W;
+   thus (f+g).[v,w] = f.[v,w] + g.[v,w] by Def3
+    .= (g+f).[v,w] by Def3;
+  end;
+ hence f+g=g+f by FUNCT_2:120;
+end;
+
+definition
+ let K be Abelian (non empty LoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f,g be Form of V,W;
+redefine func f+g;
+commutativity by Lm1;
+end;
+
+theorem Th1:
+for K be non empty ZeroStr
+for V,W be non empty VectSpStr over K
+ for v be Vector of V,w be Vector of W holds NulForm(V,W).[v,w] = 0.K
+  proof
+   let K be non empty ZeroStr;
+   let V,W be non empty VectSpStr over K, v be Vector of V, y be Vector of W;
+   set f = NulForm(V,W);
+   thus f.[v,y]
+   = ([:the carrier of V,the carrier of W:] --> 0.K).[v,y] by Def2
+    .= 0.K by FUNCOP_1:13;
+  end;
+
+theorem
+  for K be right_zeroed (non empty LoopStr)
+for V,W be non empty VectSpStr over K
+ for f be Form of V,W holds f + NulForm(V,W) = f
+ proof
+  let K be right_zeroed (non empty LoopStr),
+      V,W be non empty VectSpStr over K, f be Form of V,W;
+  set g = NulForm(V,W);
+     now let v be Vector of V, w be Vector of W;
+    thus (f+g).[v,w] = f.[v,w] + g.[v,w] by Def3
+     .= f.[v,w] + 0.K by Th1
+     .= f.[v,w] by RLVECT_1:def 7;
+   end;
+  hence thesis by FUNCT_2:120;
+end;
+
+theorem
+  for K be add-associative (non empty LoopStr)
+for V,W be non empty VectSpStr over K
+ for f,g,h be Form of V,W holds f+g+h = f+(g+h)
+ proof
+  let K be add-associative (non empty LoopStr),
+    V,W be non empty VectSpStr over K, f,g,h be Form of V,W;
+     now let v be Vector of V, w be Vector of W;
+    thus (f+g+h).[v,w] = (f+g).[v,w] + h.[v,w] by Def3
+     .= f.[v,w] + g.[v,w]+ h.[v,w] by Def3
+     .= f.[v,w] + (g.[v,w]+ h.[v,w]) by RLVECT_1:def 6
+     .= f.[v,w] + (g+h).[v,w] by Def3
+     .= (f+ (g+h)).[v,w] by Def3;
+   end;
+  hence thesis by FUNCT_2:120;
+end;
+
+theorem
+  for K be add-associative right_zeroed right_complementable (non empty LoopStr
+)
+for V,W be non empty VectSpStr over K
+ for f be Form of V,W holds f - f = NulForm(V,W)
+ proof
+  let K be add-associative right_zeroed right_complementable
+           (non empty LoopStr),
+        V,W be non empty VectSpStr over K, f be Form of V,W;
+     now let v be Vector of V, w be Vector of W;
+    thus (f-f).[v,w] = f.[v,w] - f.[v,w] by Def8
+     .= 0.K by RLVECT_1:28
+     .= (NulForm(V,W)).[v,w] by Th1;
+   end;
+  hence thesis by FUNCT_2:120;
+end;
+
+theorem
+  for K be right-distributive (non empty doubleLoopStr)
+for V,W be non empty VectSpStr over K, a be Element of K
+ for f,g be Form of V,W holds a*(f+g) = a*f+a*g
+ proof
+  let K be right-distributive (non empty doubleLoopStr),
+      V,W be non empty VectSpStr over K, r be Element of K,
+      f,g be Form of V,W;
+     now let v be Vector of V, w be Vector of W;
+    thus (r*(f+g)).[v,w] = r * (f+g).[v,w] by Def4
+    .= r*(f.[v,w] + g.[v,w]) by Def3
+    .= r*f.[v,w] + r*g.[v,w] by VECTSP_1:def 11
+    .= (r*f).[v,w] + r*g.[v,w] by Def4
+    .= (r*f).[v,w] + (r*g).[v,w] by Def4
+    .= (r*f + r*g).[v,w] by Def3;
+    end;
+  hence thesis by FUNCT_2:120;
+ end;
+
+theorem
+  for K be left-distributive (non empty doubleLoopStr)
+for V,W be non empty VectSpStr over K
+for a,b be Element of K
+ for f be Form of V,W holds (a+b)*f = a*f+b*f
+ proof
+  let K be left-distributive (non empty doubleLoopStr),
+      V,W be non empty VectSpStr over K, r,s be Element of K,
+      f be Form of V,W;
+     now
+   let v be Vector of V, w be Vector of W;
+    thus ((r+s)*f).[v,w] = (r+s) * f.[v,w] by Def4
+    .= r*f.[v,w] + s*f.[v,w] by VECTSP_1:def 12
+    .= (r*f).[v,w] + s*f.[v,w] by Def4
+    .= (r*f).[v,w] + (s*f).[v,w] by Def4
+    .= (r*f + s*f).[v,w] by Def3;
+    end;
+  hence thesis by FUNCT_2:120;
+ end;
+
+theorem
+  for K be associative (non empty doubleLoopStr)
+for V,W be non empty VectSpStr over K
+for a,b be Element of K
+ for f be Form of V,W holds (a*b)*f = a*(b*f)
+ proof
+  let K be associative (non empty doubleLoopStr),
+      V,W be non empty VectSpStr over K, r,s be Element of K,
+      f be Form of V,W;
+     now
+   let v be Vector of V, w be Vector of W;
+    thus ((r*s)*f).[v,w] = (r*s) * f.[v,w] by Def4
+    .= r*(s*f.[v,w]) by VECTSP_1:def 16
+    .= r*(s*f).[v,w] by Def4
+    .= (r*(s*f)).[v,w] by Def4;
+   end;
+  hence thesis by FUNCT_2:120;
+ end;
+
+theorem
+  for K be left_unital (non empty doubleLoopStr)
+for V,W be non empty VectSpStr over K
+ for f be Form of V,W holds (1_ K)*f = f
+ proof
+  let K be left_unital (non empty doubleLoopStr),
+      V,W be non empty VectSpStr over K, f be Form of V,W;
+     now
+   let v be Vector of V, w be Vector of W;
+    thus ((1_ K)*f).[v,w] = (1_ K) * f.[v,w] by Def4
+    .= f.[v,w] by VECTSP_1:def 19;
+   end;
+  hence thesis by FUNCT_2:120;
+ end;
+
+Lm2: now
+  let K be non empty 1-sorted, V,W be non empty VectSpStr over K,
+      f be Form of V,W, v be Element of (the carrier of V),
+      y be Element of W;
+ A1: dom f = [:the carrier of V,the carrier of W:] by FUNCT_2:def 1;
+   then consider g be Function such that
+ A2: (curry f).v = g & dom g = the carrier of W & rng g c= rng f and
+     for y be set st y in the carrier of W holds g.y = f.[v,y]
+      by FUNCT_5:36;
+     rng g c= the carrier of K by A2,XBOOLE_1:1;
+   then reconsider g as Function of the carrier of W,the carrier of K
+                   by A2,FUNCT_2:4;
+     g = (curry f).v by A2;
+   hence (curry f).v is Functional of W;
+   consider h be Function such that
+ A3: (curry' f).y = h & dom h = the carrier of V & rng h c= rng f and
+     for x be set st x in the carrier of V holds h.x = f.[x,y]
+         by A1,FUNCT_5:39;
+     rng h c= the carrier of K by A3,XBOOLE_1:1;
+   then reconsider h as Function of the carrier of V,the carrier of K
+                by A3,FUNCT_2:4;
+     h =(curry' f).y by A3;
+   hence (curry' f).y is Functional of V;
+  end;
+
+begin
+:: Functional generated by Two Form when the One of Arguments is Fixed.
+
+definition
+  let K be non empty 1-sorted;
+  let V,W be non empty VectSpStr over K;
+  let f be Form of V,W, v be Vector of V;
+ func FunctionalFAF(f,v) -> Functional of W equals :Def9:  (curry f).v;
+   correctness by Lm2;
+end;
+
+definition
+  let K be non empty 1-sorted;
+  let V,W be non empty VectSpStr over K;
+  let f be Form of V,W, w be Vector of W;
+ func FunctionalSAF(f,w) -> Functional of V equals :Def10:  (curry' f).w;
+   correctness by Lm2;
+end;
+
+theorem Th9:
+for K be non empty 1-sorted
+for V,W be non empty VectSpStr over K
+ for f be Form of V,W, v be Vector of V holds
+   dom (FunctionalFAF(f,v)) = the carrier of W &
+   rng (FunctionalFAF(f,v)) c= the carrier of K &
+   for w be Vector of W holds (FunctionalFAF(f,v)).w = f.[v,w]
+  proof
+   let K be non empty 1-sorted, V,W be non empty VectSpStr over K;
+   let f be Form of V,W, v be Vector of V;
+   set F = FunctionalFAF(f,v);
+  A1: dom f = [:the carrier of V,the carrier of W:] &
+      rng f c= the carrier of K by FUNCT_2:def 1;
+  A2: F = (curry f).v by Def9;
+   consider g be Function such that
+  A3: (curry f).v = g & dom g = the carrier of W & rng g c= rng f and
+  A4: for y be set st y in the carrier of W holds g.y = f.[v,y]
+           by A1,FUNCT_5:36;
+   thus dom F = the carrier of W & rng F c= the carrier of K by A3,Def9;
+  let y be Vector of W;
+  thus F.y = f.[v,y] by A2,A3,A4;
+ end;
+
+theorem Th10:
+for K be non empty 1-sorted
+for V,W be non empty VectSpStr over K
+ for f be Form of V,W, w be Vector of W holds
+   dom (FunctionalSAF(f,w)) = the carrier of V &
+   rng (FunctionalSAF(f,w)) c= the carrier of K &
+   for v be Vector of V holds (FunctionalSAF(f,w)).v = f.[v,w]
+ proof
+  let K be non empty 1-sorted, V,W be non empty VectSpStr over K,
+      f be Form of V,W, w be Vector of W;
+  set F = FunctionalSAF(f,w);
+ A1: dom f = [:the carrier of V,the carrier of W:] &
+     rng f c= the carrier of K by FUNCT_2:def 1;
+ A2: F = (curry' f).w by Def10;
+  consider g be Function such that
+ A3: (curry' f).w = g & dom g = the carrier of V & rng g c= rng f and
+ A4: for y be set st y in the carrier of V holds g.y = f.[y,w]
+           by A1,FUNCT_5:39;
+  thus dom F = the carrier of V & rng F c= the carrier of K by A3,Def10;
+  let v be Vector of V;
+  thus F.v = f.[v,w] by A2,A3,A4;
+ end;
+
+theorem Th11:
+for K be non empty ZeroStr
+for V,W be non empty VectSpStr over K
+  for f be Form of V,W, v be Vector of V holds
+     FunctionalFAF(NulForm(V,W),v) = 0Functional(W)
+ proof
+   let K be non empty ZeroStr, V,W be non empty VectSpStr over K,
+       f be Form of V,W, v be Vector of V;
+   set N = NulForm(V,W);
+     now let y be Vector of W;
+    thus FunctionalFAF(N,v).y = N.[v,y] by Th9
+     .= 0.K by Th1
+     .= (0Functional(W)).y by HAHNBAN1:22;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem Th12:
+for K be non empty ZeroStr
+for V,W be non empty VectSpStr over K
+  for f be Form of V,W, w be Vector of W holds
+     FunctionalSAF(NulForm(V,W),w) = 0Functional(V)
+ proof
+  let K be non empty ZeroStr, V,W be non empty VectSpStr over K,
+      f be Form of V,W, y be Vector of W;
+  set N = NulForm(V,W);
+     now let v be Vector of V;
+    thus FunctionalSAF(N,y).v = N.[v,y] by Th10
+     .= 0.K by Th1
+     .= (0Functional(V)).v by HAHNBAN1:22;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem Th13:
+for K be non empty LoopStr
+for V,W be non empty VectSpStr over K
+ for f,g be Form of V,W, w be Vector of W holds
+  FunctionalSAF(f+g,w) = FunctionalSAF(f,w) + FunctionalSAF(g,w)
+ proof
+  let K be non empty LoopStr, V,W be non empty VectSpStr over K,
+      f,g be Form of V,W, w be Vector of W;
+     now let v be Vector of V;
+    thus (FunctionalSAF(f+g,w)).v = (f+g).[v,w] by Th10
+    .= f.[v,w] + g.[v,w] by Def3
+    .= (FunctionalSAF(f,w)).v + g.[v,w] by Th10
+    .= (FunctionalSAF(f,w)).v + (FunctionalSAF(g,w)).v by Th10
+    .= (FunctionalSAF(f,w) +FunctionalSAF(g,w)).v by HAHNBAN1:def 6;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem Th14:
+for K be non empty LoopStr
+for V,W be non empty VectSpStr over K
+ for f,g be Form of V,W, v be Vector of V holds
+  FunctionalFAF(f+g,v) = FunctionalFAF(f,v) + FunctionalFAF(g,v)
+ proof
+  let K be non empty LoopStr, V,W be non empty VectSpStr over K,
+      f,g be Form of V,W, w be Vector of V;
+     now let v be Vector of W;
+    thus (FunctionalFAF(f+g,w)).v = (f+g).[w,v] by Th9
+    .= f.[w,v] + g.[w,v] by Def3
+    .= (FunctionalFAF(f,w)).v + g.[w,v] by Th9
+    .= (FunctionalFAF(f,w)).v + (FunctionalFAF(g,w)).v by Th9
+    .= (FunctionalFAF(f,w) + FunctionalFAF(g,w)).v by HAHNBAN1:def 6;
+    end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem Th15:
+for K be non empty doubleLoopStr
+for V,W be non empty VectSpStr over K
+ for f be Form of V,W, a be Element of K, w be Vector of W holds
+  FunctionalSAF(a*f,w) = a*FunctionalSAF(f,w)
+  proof
+  let K be non empty doubleLoopStr, V,W be non empty VectSpStr over K,
+      f be Form of V,W, a be Element of K, w be Vector of W;
+     now let v be Vector of V;
+    thus (FunctionalSAF(a*f,w)).v = (a*f).[v,w] by Th10
+    .= a*f.[v,w] by Def4
+    .= a*(FunctionalSAF(f,w)).v by Th10
+    .= (a*(FunctionalSAF(f,w))).v by HAHNBAN1:def 9;
+    end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem Th16:
+for K be non empty doubleLoopStr
+for V,W be non empty VectSpStr over K
+ for f be Form of V,W, a be Element of K, v be Vector of V holds
+  FunctionalFAF(a*f,v) = a*FunctionalFAF(f,v)
+ proof
+  let K be non empty doubleLoopStr, V,W be non empty VectSpStr over K,
+      f be Form of V,W, a be Element of K, w be Vector of V;
+     now let v be Vector of W;
+    thus (FunctionalFAF(a*f,w)).v = (a*f).[w,v] by Th9
+    .= a*f.[w,v] by Def4
+    .= a*(FunctionalFAF(f,w)).v by Th9
+    .= (a* FunctionalFAF(f,w)).v by HAHNBAN1:def 9;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem Th17:
+for K be non empty LoopStr
+for V,W be non empty VectSpStr over K
+ for f be Form of V,W, w be Vector of W holds
+  FunctionalSAF(-f,w) = - FunctionalSAF(f,w)
+  proof
+  let K be non empty LoopStr, V,W be non empty VectSpStr over K,
+      f be Form of V,W, w be Vector of W;
+     now let v be Vector of V;
+    thus (FunctionalSAF(-f,w)).v = (-f).[v,w] by Th10
+    .= -f.[v,w] by Def5
+    .= -(FunctionalSAF(f,w)).v by Th10
+    .= (- FunctionalSAF(f,w)).v by HAHNBAN1:def 7;
+    end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem Th18:
+for K be non empty LoopStr
+for V,W be non empty VectSpStr over K
+ for f be Form of V,W, v be Vector of V holds
+  FunctionalFAF(-f,v) = -FunctionalFAF(f,v)
+  proof
+  let K be non empty LoopStr, V,W be non empty VectSpStr over K,
+      f be Form of V,W, w be Vector of V;
+     now let v be Vector of W;
+    thus (FunctionalFAF(-f,w)).v = (-f).[w,v] by Th9
+    .= -f.[w,v] by Def5
+    .= -(FunctionalFAF(f,w)).v by Th9
+    .= (- FunctionalFAF(f,w)).v by HAHNBAN1:def 7;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem
+  for K be non empty LoopStr
+for V,W be non empty VectSpStr over K
+ for f,g be Form of V,W, w be Vector of W holds
+  FunctionalSAF(f-g,w) = FunctionalSAF(f,w) - FunctionalSAF(g,w)
+ proof
+  let K be non empty LoopStr, V,W be non empty VectSpStr over K,
+      f,g be Form of V,W, w be Vector of W;
+     now let v be Vector of V;
+    thus (FunctionalSAF(f-g,w)).v = (f-g).[v,w] by Th10
+    .= f.[v,w] - g.[v,w] by Def8
+    .= (FunctionalSAF(f,w)).v - g.[v,w] by Th10
+    .= (FunctionalSAF(f,w)).v - (FunctionalSAF(g,w)).v by Th10
+    .= (FunctionalSAF(f,w)).v +- (FunctionalSAF(g,w)).v by RLVECT_1:def 11
+    .= (FunctionalSAF(f,w)).v + (-FunctionalSAF(g,w)).v by HAHNBAN1:def 7
+    .= (FunctionalSAF(f,w) +-FunctionalSAF(g,w)).v by HAHNBAN1:def 6
+    .= (FunctionalSAF(f,w) -FunctionalSAF(g,w)).v by HAHNBAN1:def 8;
+    end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem
+  for K be non empty LoopStr
+for V,W be non empty VectSpStr over K
+ for f,g be Form of V,W, v be Vector of V holds
+  FunctionalFAF(f-g,v) = FunctionalFAF(f,v) - FunctionalFAF(g,v)
+ proof
+  let K be non empty LoopStr, V,W be non empty VectSpStr over K,
+      f,g be Form of V,W, w be Vector of V;
+     now let v be Vector of W;
+    thus (FunctionalFAF(f-g,w)).v = (f-g).[w,v] by Th9
+    .= f.[w,v] - g.[w,v] by Def8
+    .= (FunctionalFAF(f,w)).v - g.[w,v] by Th9
+    .= (FunctionalFAF(f,w)).v - (FunctionalFAF(g,w)).v by Th9
+    .= (FunctionalFAF(f,w)).v +- (FunctionalFAF(g,w)).v by RLVECT_1:def 11
+    .= (FunctionalFAF(f,w)).v + (-FunctionalFAF(g,w)).v by HAHNBAN1:def 7
+    .= (FunctionalFAF(f,w) +-FunctionalFAF(g,w)).v by HAHNBAN1:def 6
+    .= (FunctionalFAF(f,w) -FunctionalFAF(g,w)).v by HAHNBAN1:def 8;
+    end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+begin
+:: Two Form generated by Functionals.
+
+definition
+  let K be non empty HGrStr;
+  let V,W be non empty VectSpStr over K;
+  let f be Functional of V; let g be Functional of W;
+ func FormFunctional(f,g) -> Form of V,W means :Def11:
+   for v be Vector of V, w be Vector of W holds it.[v,w]= f.v * g.w;
+   existence
+    proof
+     set c1 = the carrier of V, c2 = the carrier of W, k = the carrier of K;
+     deffunc _F(Vector of V, Vector of W) = (f.$1) * (g.$2);
+     consider i be Function of [:c1,c2:],k such that
+ A1: for x be Element of c1 for y be Element of c2 holds
+            i.[x,y]=_F(x,y) from Lambda2D;
+     reconsider i as Form of V,W;
+     take i;
+     thus thesis by A1;
+    end;
+ uniqueness
+  proof
+  let F1,F2 be Form of V,W such that
+ A2: for v be Vector of V,y be Vector of W holds F1.[v,y]= f.v * g.y and
+ A3: for v be Vector of V,y be Vector of W holds F2.[v,y]= f.v * g.y;
+     now let v be Vector of V, y be Vector of W;
+    thus F1.[v,y] = f.v * g.y by A2
+     .= F2.[v,y] by A3;
+   end;
+  hence thesis by FUNCT_2:120;
+ end;
+end;
+
+theorem Th21:
+for K be add-associative right_zeroed right_complementable
+         right-distributive (non empty doubleLoopStr)
+for V,W be non empty VectSpStr over K
+ for f be Functional of V ,v be Vector of V, w be Vector of W holds
+     FormFunctional(f,0Functional(W)).[v,w] = 0.K
+ proof
+  let K be add-associative right_zeroed right_complementable
+         right-distributive (non empty doubleLoopStr);
+  let V,W be non empty VectSpStr over K;
+  let f be Functional of V, v be Vector of V, y be Vector of W;
+  set 0F = 0Functional(W), F = FormFunctional(f,0F);
+ A1: [#]W = the carrier of W by PRE_TOPC:12;
+ A2: 0F.y = ([#]W --> 0.K).y by HAHNBAN1:def 10;
+  thus F.[v,y] = f.v * 0F.y by Def11
+   .= f.v * 0.K by A1,A2,FUNCOP_1:13
+   .= 0.K by VECTSP_1:36;
+ end;
+
+theorem Th22:
+for K be add-associative right_zeroed right_complementable
+         left-distributive (non empty doubleLoopStr)
+for V,W be non empty VectSpStr over K
+  for g be Functional of W, v be Vector of V, w be Vector of W holds
+     FormFunctional(0Functional(V),g).[v,w] = 0.K
+   proof
+    let K be add-associative right_zeroed right_complementable
+             left-distributive (non empty doubleLoopStr);
+    let V,W be non empty VectSpStr over K;
+    let h be Functional of W, v be Vector of V, y be Vector of W;
+     set 0F = 0Functional(V), F = FormFunctional(0F,h);
+ A1: [#]V = the carrier of V by PRE_TOPC:12;
+ A2: 0F.v = ([#]V --> 0.K).v by HAHNBAN1:def 10;
+     thus F.[v,y] = 0F.v * h.y by Def11
+        .= 0.K * h.y by A1,A2,FUNCOP_1:13
+        .= 0.K by VECTSP_1:39;
+   end;
+
+theorem
+  for K be add-associative right_zeroed right_complementable
+         right-distributive (non empty doubleLoopStr)
+for V,W be non empty VectSpStr over K
+ for f be Functional of V holds FormFunctional(f,0Functional(W)) = NulForm(V,W)
+  proof
+   let K be add-associative right_zeroed right_complementable
+            right-distributive (non empty doubleLoopStr);
+   let V,W be non empty VectSpStr over K, f be Functional of V;
+      now let v be Vector of V, y be Vector of W;
+     thus FormFunctional(f,0Functional(W)).[v,y] = 0.K by Th21
+       .= NulForm(V,W).[v,y] by Th1;
+    end;
+   hence thesis by FUNCT_2:120;
+ end;
+
+theorem
+  for K be add-associative right_zeroed right_complementable
+         left-distributive (non empty doubleLoopStr)
+for V,W be non empty VectSpStr over K
+ for g be Functional of W holds FormFunctional(0Functional(V),g) = NulForm(V,W)
+  proof
+  let K be add-associative right_zeroed right_complementable
+            left-distributive (non empty doubleLoopStr);
+  let V,W be non empty VectSpStr over K, h be Functional of W;
+     now let v be Vector of V, y be Vector of W;
+    thus FormFunctional(0Functional(V),h).[v,y] = 0.K by Th22
+       .= NulForm(V,W).[v,y] by Th1;
+   end;
+  hence thesis by FUNCT_2:120;
+ end;
+
+theorem Th25:
+for K be non empty HGrStr
+for V,W be non empty VectSpStr over K
+  for f be Functional of V, g be Functional of W, v be Vector of V holds
+     FunctionalFAF(FormFunctional(f,g),v) = f.v * g
+ proof
+  let K be non empty HGrStr, V,W be non empty VectSpStr over K;
+  let f be Functional of V, h be Functional of W, v be Vector of V;
+  set F = FormFunctional(f,h), FF = FunctionalFAF(F,v);
+      now let y be Vector of W;
+     thus FF.y = F.[v,y] by Th9
+      .= f.v * h.y by Def11
+      .= (f.v * h).y by HAHNBAN1:def 9;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+
+theorem Th26:
+for K be commutative (non empty HGrStr)
+for V,W be non empty VectSpStr over K
+  for f be Functional of V, g be Functional of W, w be Vector of W holds
+      FunctionalSAF(FormFunctional(f,g),w) = g.w * f
+  proof
+  let K be commutative (non empty HGrStr), V,W be non empty VectSpStr over K;
+  let f be Functional of V,h be Functional of W, y be Vector of W;
+  set F = FormFunctional(f,h), FF = FunctionalSAF(F,y);
+     now let v be Vector of V;
+     thus FF.v = F.[v,y] by Th10
+      .= f.v * h.y by Def11
+      .= (h.y * f).v by HAHNBAN1:def 9;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+begin
+::Bilinear Forms and Their Properties
+
+definition
+  let K be non empty LoopStr;
+  let V,W be non empty VectSpStr over K;
+  let f be Form of V,W;
+ attr f is additiveFAF means :Def12:
+    for v be Vector of V holds FunctionalFAF(f,v) is additive;
+ attr f is additiveSAF means :Def13:
+    for w be Vector of W holds FunctionalSAF(f,w) is additive;
+end;
+
+definition
+  let K be non empty HGrStr;
+  let V,W be non empty VectSpStr over K;
+  let f be Form of V,W;
+ attr f is homogeneousFAF means :Def14:
+    for v be Vector of V holds FunctionalFAF(f,v) is homogeneous;
+ attr f is homogeneousSAF means :Def15:
+    for w be Vector of W holds FunctionalSAF(f,w) is homogeneous;
+end;
+
+definition
+  let K be right_zeroed (non empty LoopStr);
+  let V,W be non empty VectSpStr over K;
+cluster NulForm(V,W) -> additiveFAF;
+  coherence
+   proof
+    let v be Vector of V;
+      FunctionalFAF(NulForm(V,W),v)= 0Functional(W) by Th11;
+    hence thesis;
+   end;
+cluster NulForm(V,W) -> additiveSAF;
+  coherence
+   proof
+    let y be Vector of W;
+      FunctionalSAF(NulForm(V,W),y)= 0Functional(V) by Th12;
+    hence thesis;
+   end;
+end;
+
+definition
+  let K be right_zeroed (non empty LoopStr);
+  let V,W be non empty VectSpStr over K;
+cluster additiveFAF additiveSAF Form of V,W;
+  existence
+  proof
+   take NulForm(V,W); thus thesis;
+  end;
+end;
+
+definition
+  let K be add-associative right_zeroed right_complementable
+                 right-distributive (non empty doubleLoopStr);
+  let V,W be non empty VectSpStr over K;
+cluster NulForm(V,W) -> homogeneousFAF;
+  coherence
+    proof
+     let v be Vector of V;
+       FunctionalFAF(NulForm(V,W),v)= 0Functional(W) by Th11;
+     hence thesis;
+    end;
+cluster NulForm(V,W) -> homogeneousSAF;
+  coherence
+   proof
+    let y be Vector of W;
+      FunctionalSAF(NulForm(V,W),y)= 0Functional(V) by Th12;
+    hence thesis;
+   end;
+end;
+
+definition
+  let K be add-associative right_zeroed right_complementable
+           right-distributive (non empty doubleLoopStr);
+  let V,W be non empty VectSpStr over K;
+cluster additiveFAF homogeneousFAF additiveSAF homogeneousSAF Form of V,W;
+  existence proof take NulForm(V,W); thus thesis; end;
+end;
+
+definition
+  let K be add-associative right_zeroed right_complementable
+           right-distributive (non empty doubleLoopStr);
+  let V,W be non empty VectSpStr over K;
+ mode bilinear-Form of V,W is additiveSAF homogeneousSAF
+           additiveFAF homogeneousFAF Form of V,W;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+          right-distributive (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f be additiveFAF Form of V,W, v be Vector of V;
+cluster FunctionalFAF(f,v) -> additive;
+  coherence by Def12;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+          right-distributive (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f be additiveSAF Form of V,W, w be Vector of W;
+cluster FunctionalSAF(f,w) -> additive;
+  coherence by Def13;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+          right-distributive (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f be homogeneousFAF Form of V,W, v be Vector of V;
+cluster FunctionalFAF(f,v) -> homogeneous;
+  coherence by Def14;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+          right-distributive (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f be homogeneousSAF Form of V,W, w be Vector of W;
+cluster FunctionalSAF(f,w) -> homogeneous;
+  coherence by Def15;
+end;
+
+definition
+  let K be add-associative right_zeroed right_complementable
+           right-distributive (non empty doubleLoopStr);
+  let V,W be non empty VectSpStr over K;
+  let f be Functional of V, g be additive Functional of W;
+cluster FormFunctional(f,g) -> additiveFAF;
+ coherence
+  proof
+   let v be Vector of V;
+   set fg = FormFunctional(f,g), F = FunctionalFAF(fg,v);
+  A1: F= f.v * g by Th25;
+   let y,y' be Vector of W;
+   thus F.(y+y') = f.v * g.(y+y') by A1,HAHNBAN1:def 9
+     .= f.v *(g.y +g.y') by HAHNBAN1:def 11
+     .= f.v * g.y + f.v * g.y' by VECTSP_1:def 11
+     .=f.v * g.y + F.y' by A1,HAHNBAN1:def 9
+     .=F.y + F.y' by A1,HAHNBAN1:def 9;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+          commutative right-distributive (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f be additive Functional of V, g be Functional of W;
+cluster FormFunctional(f,g) -> additiveSAF;
+  coherence
+   proof
+    let y be Vector of W;
+    set fg= FormFunctional(f,g), F = FunctionalSAF(fg,y);
+   A1: F= g.y * f by Th26;
+       now let v,v' be Vector of V;
+      thus F.(v+v') = g.y * f.(v+v') by A1,HAHNBAN1:def 9
+       .= g.y *(f.v +f.v') by HAHNBAN1:def 11
+       .= g.y * f.v + g.y * f.v' by VECTSP_1:def 11
+       .= g.y * f.v + F.v' by A1,HAHNBAN1:def 9
+       .= F.v + F.v' by A1,HAHNBAN1:def 9;
+     end;
+     hence F is additive by HAHNBAN1:def 11;
+   end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable commutative
+         associative right-distributive (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f be Functional of V, g be homogeneous Functional of W;
+cluster FormFunctional(f,g) -> homogeneousFAF;
+ coherence
+  proof
+   let v be Vector of V;
+   set fg= FormFunctional(f,g), F = FunctionalFAF(fg,v);
+  A1: F= f.v * g by Th25;
+   let y be Vector of W,r be Scalar of W;
+   thus F.(r* y) = f.v * g.(r*y) by A1,HAHNBAN1:def 9
+    .= f.v *(r*g.y) by HAHNBAN1:def 12
+    .= r*(f.v * g.y) by VECTSP_1:def 16
+    .= r *F.y by A1,HAHNBAN1:def 9;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable commutative
+         associative right-distributive (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f be homogeneous Functional of V, g be Functional of W;
+cluster FormFunctional(f,g) -> homogeneousSAF;
+ coherence
+  proof
+   set fg= FormFunctional(f,g);
+   let y be Vector of W;
+   set F = FunctionalSAF(fg,y);
+  A1: F= g.y * f by Th26;
+   let v be Vector of V,r be Scalar of V;
+   thus F.(r* v) = g.y * f.(r*v) by A1,HAHNBAN1:def 9
+     .= g.y *(r*f.v) by HAHNBAN1:def 12
+     .= r*(g.y * f.v) by VECTSP_1:def 16
+     .= r *F.v by A1,HAHNBAN1:def 9;
+  end;
+end;
+
+definition
+ let K be non degenerated (non empty doubleLoopStr);
+ let V be non trivial (non empty VectSpStr over K),
+     W be non empty VectSpStr over K;
+ let f be Functional of V, g be Functional of W;
+cluster FormFunctional(f,g) -> non trivial;
+ coherence
+  proof
+   consider v be Vector of V such that
+  A1: v <> 0.V by ANPROJ_1:def 8;
+   consider w be Vector of W;
+   set fg = FormFunctional(f,g);
+   assume A2: fg is trivial;
+    dom fg = [:the carrier of V, the carrier of W:] by FUNCT_2:def 1;
+  then A3: [[0.V,0.W],fg.[0.V,0.W]] in fg & [[v,w],fg.[v,w]] in fg by FUNCT_1:8
+;
+  A4:  [0.V,0.W] <> [v,w] by A1,ZFMISC_1:33;
+   per cases by A2,REALSET1:def 12;
+    suppose fg = {};
+     hence contradiction by A3;
+    suppose ex x be set st fg = {x};
+     then consider x be set such that
+    A5: fg={x};
+       [[0.V,0.W],fg.[0.V,0.W]] = x & x=[[v,w],fg.[v,w]] by A3,A5,TARSKI:def 1;
+     hence contradiction by A4,ZFMISC_1:33;
+  end;
+end;
+
+definition
+ let K be non degenerated (non empty doubleLoopStr);
+ let V be non empty VectSpStr over K,
+     W be non trivial (non empty VectSpStr over K);
+ let f be Functional of V, g be Functional of W;
+cluster FormFunctional(f,g) -> non trivial;
+ coherence
+  proof
+   consider v be Vector of V;
+   consider w be Vector of W such that
+  A1: w <> 0.W by ANPROJ_1:def 8;
+   set fg = FormFunctional(f,g);
+   assume A2: fg is trivial;
+    dom fg = [:the carrier of V, the carrier of W:] by FUNCT_2:def 1;
+  then A3: [[0.V,0.W],fg.[0.V,0.W]] in fg & [[v,w],fg.[v,w]] in fg by FUNCT_1:8
+;
+  A4:  [0.V,0.W] <> [v,w] by A1,ZFMISC_1:33;
+   per cases by A2,REALSET1:def 12;
+    suppose fg = {};
+     hence contradiction by A3;
+    suppose ex x be set st fg = {x};
+     then consider x be set such that
+    A5: fg={x};
+       [[0.V,0.W],fg.[0.V,0.W]] = x & x=[[v,w],fg.[v,w]] by A3,A5,TARSKI:def 1;
+     hence contradiction by A4,ZFMISC_1:33;
+  end;
+end;
+
+definition
+ let K be Field;
+ let V,W be non trivial VectSp of K;
+ let f be non constant 0-preserving Functional of V,
+     g be non constant 0-preserving Functional of W;
+cluster FormFunctional(f,g) -> non constant;
+ coherence
+  proof
+   consider v be Vector of V such that
+ A1: v <> 0.V & f.v <> 0.K by VECTSP10:29;
+  consider w be Vector of W such that
+ A2: w <> 0.W & g.w <> 0.K by VECTSP10:29;
+   set fg = FormFunctional(f,g);
+ A3: fg.[0.V,0.W] = f.(0.V)*g.(0.W) by Def11
+    .= 0.K * g.(0.W) by HAHNBAN1:def 13
+    .= 0.K by VECTSP_1:39;
+ A4: dom fg = [:the carrier of V, the carrier of W:] by FUNCT_2:def 1;
+     fg.[v,w] = f.v * g.w by Def11;
+   then fg.[v,w] <> 0.K by A1,A2,VECTSP_1:44;
+   hence thesis by A3,A4,SEQM_3:def 5;
+  end;
+end;
+
+definition
+  let K be Field;
+  let V,W be non trivial VectSp of K;
+cluster non trivial non constant
+         additiveFAF homogeneousFAF additiveSAF homogeneousSAF Form of V,W;
+ existence
+  proof
+   consider f be non constant non trivial linear-Functional of V,
+    g be non constant non trivial linear-Functional of W;
+   take FormFunctional(f,g);
+   thus thesis;
+  end;
+end;
+
+definition
+ let K be Abelian add-associative right_zeroed (non empty LoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f,g be additiveSAF Form of V,W;
+cluster f+g -> additiveSAF;
+ correctness
+  proof
+  let w be Vector of W;
+   set Ffg = FunctionalSAF(f+g,w), Ff = FunctionalSAF(f,w);
+   set Fg = FunctionalSAF(g,w);
+A1: Ff is additive & Fg is additive by Def13;
+  let v,y be Vector of V;
+   thus Ffg.(v+y) = (Ff+Fg).(v+y) by Th13
+   .= Ff.(v+y) + Fg.(v+y) by HAHNBAN1:def 6
+   .= Ff.v+Ff.y + Fg.(v+y) by A1,HAHNBAN1:def 11
+   .= Ff.v+Ff.y + (Fg.v+Fg.y) by A1,HAHNBAN1:def 11
+   .= Ff.v+Ff.y + Fg.v + Fg.y by RLVECT_1:def 6
+   .= Ff.v+Fg.v + Ff.y+Fg.y by RLVECT_1:def 6
+   .= (Ff+Fg).v + Ff.y+Fg.y by HAHNBAN1:def 6
+   .= (Ff+Fg).v + (Ff.y+Fg.y) by RLVECT_1:def 6
+   .= (Ff+Fg).v + (Ff+Fg).y by HAHNBAN1:def 6
+   .= Ffg.v + (Ff+Fg).y by Th13
+   .= Ffg.v + Ffg.y by Th13;
+  end;
+end;
+
+definition
+ let K be Abelian add-associative right_zeroed (non empty LoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f,g be additiveFAF Form of V,W;
+cluster f+g -> additiveFAF;
+ correctness
+  proof
+  let w be Vector of V;
+   set Ffg = FunctionalFAF(f+g,w), Ff = FunctionalFAF(f,w);
+   set Fg = FunctionalFAF(g,w);
+A1: Ff is additive & Fg is additive by Def12;
+  let v,y be Vector of W;
+   thus Ffg.(v+y) = (Ff+Fg).(v+y) by Th14
+   .= Ff.(v+y) + Fg.(v+y) by HAHNBAN1:def 6
+   .= Ff.v+Ff.y + Fg.(v+y) by A1,HAHNBAN1:def 11
+   .= Ff.v+Ff.y + (Fg.v+Fg.y) by A1,HAHNBAN1:def 11
+   .= Ff.v+Ff.y + Fg.v +Fg.y by RLVECT_1:def 6
+   .= Ff.v+Fg.v + Ff.y+Fg.y by RLVECT_1:def 6
+   .= (Ff+Fg).v + Ff.y+Fg.y by HAHNBAN1:def 6
+   .= (Ff+Fg).v + (Ff.y+Fg.y) by RLVECT_1:def 6
+   .= (Ff+Fg).v + (Ff+Fg).y by HAHNBAN1:def 6
+   .= Ffg.v + (Ff+Fg).y by Th14
+   .= Ffg.v + Ffg.y by Th14;
+  end;
+end;
+
+definition
+ let K be right-distributive right_zeroed (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f be additiveSAF Form of V,W;
+ let a be Element of K;
+cluster a*f -> additiveSAF;
+ correctness
+  proof
+  let w be Vector of W;
+   set Ffg = FunctionalSAF(a*f,w), Ff = FunctionalSAF(f,w);
+A1: Ff is additive by Def13;
+  let v,y be Vector of V;
+   thus Ffg.(v+y) = (a*Ff).(v+y) by Th15
+   .= a*Ff.(v+y) by HAHNBAN1:def 9
+   .= a*(Ff.v + Ff.y) by A1,HAHNBAN1:def 11
+   .= a* Ff.v + a*Ff.y by VECTSP_1:def 11
+   .= (a*Ff).v +a* Ff.y by HAHNBAN1:def 9
+   .= (a*Ff).v + (a*Ff).y by HAHNBAN1:def 9
+   .= Ffg.v + (a*Ff).y by Th15
+   .= Ffg.v + Ffg.y by Th15;
+  end;
+end;
+
+definition
+ let K be right-distributive right_zeroed (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f be additiveFAF Form of V,W;
+ let a be Element of K;
+cluster a*f -> additiveFAF;
+ correctness
+  proof
+  let w be Vector of V;
+   set Ffg = FunctionalFAF(a*f,w), Ff = FunctionalFAF(f,w);
+ A1: Ff is additive by Def12;
+  let v,y be Vector of W;
+   thus Ffg.(v+y) = (a*Ff).(v+y) by Th16
+    .= a*Ff.(v+y) by HAHNBAN1:def 9
+    .= a*(Ff.v + Ff.y) by A1,HAHNBAN1:def 11
+    .= a* Ff.v +a* Ff.y by VECTSP_1:def 11
+    .= (a*Ff).v +a* Ff.y by HAHNBAN1:def 9
+    .= (a*Ff).v + (a*Ff).y by HAHNBAN1:def 9
+    .= Ffg.v + (a*Ff).y by Th16
+    .= Ffg.v + Ffg.y by Th16;
+  end;
+end;
+
+definition
+ let K be Abelian add-associative right_zeroed right_complementable
+          (non empty LoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f be additiveSAF Form of V,W;
+cluster -f -> additiveSAF;
+ correctness
+  proof
+  let w be Vector of W;
+   set Ffg = FunctionalSAF(-f,w), Ff = FunctionalSAF(f,w);
+A1: Ff is additive by Def13;
+  let v,y be Vector of V;
+   thus Ffg.(v+y) = (-Ff).(v+y) by Th17
+   .= -Ff.(v+y) by HAHNBAN1:def 7
+   .= -(Ff.v + Ff.y) by A1,HAHNBAN1:def 11
+   .= (- Ff.v) - Ff.y by RLVECT_1:44
+   .= (-Ff).v - Ff.y by HAHNBAN1:def 7
+   .= (-Ff).v + - Ff.y by RLVECT_1:def 11
+   .= (-Ff).v + (-Ff).y by HAHNBAN1:def 7
+   .= Ffg.v + (-Ff).y by Th17
+   .= Ffg.v + Ffg.y by Th17;
+  end;
+end;
+
+definition
+ let K be Abelian add-associative right_zeroed right_complementable
+         (non empty LoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f be additiveFAF Form of V,W;
+cluster -f -> additiveFAF;
+ correctness
+  proof
+  let w be Vector of V;
+   set Ffg = FunctionalFAF(-f,w), Ff = FunctionalFAF(f,w);
+ A1: Ff is additive by Def12;
+  let v,y be Vector of W;
+   thus Ffg.(v+y) = (-Ff).(v+y) by Th18
+    .= -Ff.(v+y) by HAHNBAN1:def 7
+    .= -(Ff.v + Ff.y) by A1,HAHNBAN1:def 11
+    .= (- Ff.v) - Ff.y by RLVECT_1:44
+    .= (-Ff).v - Ff.y by HAHNBAN1:def 7
+    .= (-Ff).v + - Ff.y by RLVECT_1:def 11
+    .= (-Ff).v + (-Ff).y by HAHNBAN1:def 7
+    .= Ffg.v + (-Ff).y by Th18
+    .= Ffg.v + Ffg.y by Th18;
+  end;
+end;
+
+definition
+ let K be Abelian add-associative right_zeroed right_complementable
+          (non empty LoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f,g be additiveSAF Form of V,W;
+cluster f-g -> additiveSAF;
+ correctness
+  proof f-g = f+-g by Def7; hence thesis; end;
+end;
+
+definition
+ let K be Abelian add-associative right_zeroed right_complementable
+          (non empty LoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f,g be additiveFAF Form of V,W;
+cluster f-g -> additiveFAF;
+ correctness
+  proof f-g = f+-g by Def7; hence thesis; end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+            right-distributive (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f,g be homogeneousSAF Form of V,W;
+cluster f+g -> homogeneousSAF;
+ correctness
+  proof
+  let w be Vector of W;
+   set Ffg = FunctionalSAF(f+g,w), Ff = FunctionalSAF(f,w);
+   set Fg = FunctionalSAF(g,w);
+  let v be Vector of V, a be Scalar of V;
+   thus Ffg.(a*v) = (Ff+Fg).(a*v) by Th13
+   .= Ff.(a*v) + Fg.(a*v) by HAHNBAN1:def 6
+   .= a*Ff.v + Fg.(a*v) by HAHNBAN1:def 12
+   .= a*Ff.v + a*Fg.v by HAHNBAN1:def 12
+   .= a*(Ff.v + Fg.v) by VECTSP_1:def 11
+   .= a*(Ff + Fg).v by HAHNBAN1:def 6
+   .= a* Ffg.v by Th13;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+            right-distributive (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f,g be homogeneousFAF Form of V,W;
+cluster f+g -> homogeneousFAF;
+ correctness
+  proof
+   let w be Vector of V;
+   set Ffg = FunctionalFAF(f+g,w), Ff = FunctionalFAF(f,w);
+   set Fg = FunctionalFAF(g,w);
+   let v be Vector of W, a be Scalar of V;
+   thus Ffg.(a*v) = (Ff+Fg).(a*v) by Th14
+    .= Ff.(a*v) + Fg.(a*v) by HAHNBAN1:def 6
+    .= a*Ff.v + Fg.(a*v) by HAHNBAN1:def 12
+    .= a*Ff.v + a*Fg.v by HAHNBAN1:def 12
+    .= a*(Ff.v + Fg.v) by VECTSP_1:def 11
+    .= a*(Ff + Fg).v by HAHNBAN1:def 6
+    .= a* Ffg.v by Th14;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+   associative commutative right-distributive (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f be homogeneousSAF Form of V,W;
+ let a be Element of K;
+cluster a*f -> homogeneousSAF;
+ correctness
+  proof
+  let w be Vector of W;
+   set Ffg = FunctionalSAF(a*f,w), Ff = FunctionalSAF(f,w);
+  let v be Vector of V, b be Scalar of V;
+   thus Ffg.(b*v) = (a*Ff).(b*v) by Th15
+   .= a*Ff.(b*v) by HAHNBAN1:def 9
+   .= a*(b*Ff.v) by HAHNBAN1:def 12
+   .= b*(a*Ff.v) by VECTSP_1:def 16
+   .= b*(a*Ff).v by HAHNBAN1:def 9
+   .= b* Ffg.v by Th15;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+   associative commutative right-distributive (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f be homogeneousFAF Form of V,W;
+ let a be Element of K;
+cluster a*f -> homogeneousFAF;
+ correctness
+ proof
+  let w be Vector of V;
+  set Ffg = FunctionalFAF(a*f,w), Ff = FunctionalFAF(f,w);
+  let v be Vector of W, b be Scalar of V;
+   thus Ffg.(b*v) = (a*Ff).(b*v) by Th16
+    .= a*Ff.(b*v) by HAHNBAN1:def 9
+    .= a*(b*Ff.v) by HAHNBAN1:def 12
+    .= b*(a*Ff.v) by VECTSP_1:def 16
+    .= b*(a*Ff).v by HAHNBAN1:def 9
+    .= b* Ffg.v by Th16;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+            right-distributive (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f be homogeneousSAF Form of V,W;
+cluster -f -> homogeneousSAF;
+ correctness
+  proof
+  let w be Vector of W;
+   set Ffg = FunctionalSAF(-f,w), Ff = FunctionalSAF(f,w);
+  let v be Vector of V, a be Scalar of V;
+   thus Ffg.(a*v) = (-Ff).(a*v) by Th17
+   .= -Ff.(a*v) by HAHNBAN1:def 7
+   .= -(a*Ff.v) by HAHNBAN1:def 12
+   .= a*(-Ff.v) by VECTSP_1:40
+   .= a*(-Ff).v by HAHNBAN1:def 7
+   .= a*Ffg.v by Th17;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+            right-distributive (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f be homogeneousFAF Form of V,W;
+cluster -f -> homogeneousFAF;
+ correctness
+  proof
+   let w be Vector of V;
+   set Ffg = FunctionalFAF(-f,w), Ff = FunctionalFAF(f,w);
+   let v be Vector of W, a be Scalar of W;
+   thus Ffg.(a*v) = (-Ff).(a*v) by Th18
+   .= -Ff.(a*v) by HAHNBAN1:def 7
+   .= -(a*Ff.v) by HAHNBAN1:def 12
+   .= a*(-Ff.v) by VECTSP_1:40
+   .= a*(-Ff).v by HAHNBAN1:def 7
+   .= a*Ffg.v by Th18;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+            right-distributive (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f,g be homogeneousSAF Form of V,W;
+cluster f-g -> homogeneousSAF;
+ correctness
+  proof f-g = f+-g by Def7; hence thesis; end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+            right-distributive (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f,g be homogeneousFAF Form of V,W;
+cluster f-g -> homogeneousFAF;
+ correctness
+  proof f-g = f+-g by Def7; hence thesis; end;
+end;
+
+theorem Th27:
+for K be non empty LoopStr
+ for V,W be non empty VectSpStr over K
+ for v,u be Vector of V, w be Vector of W, f be Form of V,W
+ st f is additiveSAF holds f.[v+u,w] = f.[v,w] + f.[u,w]
+ proof
+  let K be non empty LoopStr;
+  let V,W be non empty VectSpStr over K;
+  let v,w be Vector of V, y be Vector of W, f be Form of V,W;
+  set F=FunctionalSAF(f,y);
+  assume f is additiveSAF;
+ then A1: F is additive by Def13;
+  thus f.[v+w,y] = F.(v+w) by Th10
+    .= F.v+F.w by A1,HAHNBAN1:def 11
+    .= f.[v,y] + F.w by Th10
+    .= f.[v,y] + f.[w,y] by Th10;
+ end;
+
+theorem Th28:
+for K be non empty LoopStr
+ for V,W be non empty VectSpStr over K
+ for v be Vector of V, u,w be Vector of W, f be Form of V,W
+ st f is additiveFAF holds f.[v,u+w] = f.[v,u] + f.[v,w]
+  proof
+  let K be non empty LoopStr;
+  let V,W be non empty VectSpStr over K;
+  let v be Vector of V, y,z be Vector of W, f be Form of V,W;
+  set F=FunctionalFAF(f,v);
+  assume f is additiveFAF;
+ then A1: F is additive by Def12;
+  thus f.[v,y+z] = F.(y+z) by Th9
+    .= F.y+F.z by A1,HAHNBAN1:def 11
+    .= f.[v,y] + F.z by Th9
+    .= f.[v,y] + f.[v,z] by Th9;
+  end;
+
+theorem Th29:
+for K be right_zeroed (non empty LoopStr)
+for V,W be non empty VectSpStr over K
+ for v,u be Vector of V, w,t be Vector of W,
+    f be additiveSAF additiveFAF Form of V,W holds
+   f.[v+u,w+t] = f.[v,w] + f.[v,t] + (f.[u,w] + f.[u,t])
+ proof
+  let K be right_zeroed (non empty LoopStr);
+  let V,W be non empty VectSpStr over K;
+  let v,w be Vector of V, y,z be Vector of W,
+    f be additiveSAF additiveFAF Form of V,W;
+  set v1 = f.[v,y], v3 = f.[v,z], v4 = f.[w,y], v5 = f.[w,z];
+  thus f.[v+w,y+z] = f.[v,y+z] + f.[w,y+z] by Th27
+    .= (v1 + v3) + f.[w,y+z] by Th28
+    .= v1 +v3 + (v4 + v5) by Th28;
+end;
+
+theorem Th30:
+for K be add-associative right_zeroed right_complementable
+    (non empty doubleLoopStr)
+for V,W be right_zeroed (non empty VectSpStr over K)
+ for f be additiveFAF Form of V,W, v be Vector of V holds f.[v,0.W] = 0.K
+ proof
+  let F be add-associative right_zeroed right_complementable
+    (non empty doubleLoopStr);
+  let V,W be right_zeroed (non empty VectSpStr over F);
+  let f be additiveFAF Form of V,W, v be Vector of V;
+    f.[v,0.W] = f.[v,0.W+0.W] by RLVECT_1:def 7
+   .= f.[v,0.W] + f.[v,0.W] by Th28;
+  hence thesis by RLVECT_1:22;
+ end;
+
+theorem Th31:
+for K be add-associative right_zeroed right_complementable
+    (non empty doubleLoopStr)
+for V,W be right_zeroed (non empty VectSpStr over K)
+ for f be additiveSAF Form of V,W, w be Vector of W holds f.[0.V,w] = 0.K
+ proof
+  let F be add-associative right_zeroed right_complementable
+    (non empty doubleLoopStr);
+  let V,W be right_zeroed (non empty VectSpStr over F);
+  let f be additiveSAF Form of V,W, v be Vector of W;
+    f.[0.V,v] = f.[0.V+0.V,v] by RLVECT_1:def 7
+   .= f.[0.V,v] + f.[0.V,v] by Th27;
+  hence thesis by RLVECT_1:22;
+ end;
+
+theorem Th32:
+for K be non empty HGrStr
+ for V,W be non empty VectSpStr over K
+ for v be Vector of V, w be Vector of W, a be Element of K
+ for f be Form of V,W st f is homogeneousSAF holds f.[a*v,w] = a*f.[v,w]
+  proof
+  let K be non empty HGrStr;
+  let V,W be non empty VectSpStr over K;
+  let v be Vector of V, y be Vector of W, r be Element of K,
+     f be Form of V,W;
+  set F=FunctionalSAF(f,y);
+  assume f is homogeneousSAF;
+ then A1: F is homogeneous by Def15;
+  thus f.[r*v,y] = F.(r*v) by Th10
+    .= r*F.v by A1,HAHNBAN1:def 12
+    .= r*f.[v,y] by Th10;
+  end;
+
+theorem Th33:
+for K be non empty HGrStr
+ for V,W be non empty VectSpStr over K
+ for v be Vector of V, w be Vector of W, a be Element of K
+ for f be Form of V,W st f is homogeneousFAF holds f.[v,a*w] = a*f.[v,w]
+  proof
+  let K be non empty HGrStr;
+  let V,W be non empty VectSpStr over K;
+  let v be Vector of V, y be Vector of W, r be Element of K,
+      f be Form of V,W;
+  set F=FunctionalFAF(f,v);
+  assume f is homogeneousFAF;
+ then A1: F is homogeneous by Def14;
+  thus f.[v,r*y] = F.(r*y) by Th9
+    .= r*F.y by A1,HAHNBAN1:def 12
+    .= r*f.[v,y] by Th9;
+  end;
+
+theorem Th34:
+for K be add-associative right_zeroed right_complementable
+         associative left_unital distributive (non empty doubleLoopStr)
+for V,W be add-associative right_zeroed right_complementable VectSp-like
+           (non empty VectSpStr over K)
+for f be homogeneousSAF Form of V,W, w be Vector of W holds f.[0.V,w] = 0.K
+ proof
+  let F be add-associative right_zeroed right_complementable
+           associative left_unital distributive (non empty doubleLoopStr);
+  let V,W be add-associative right_zeroed right_complementable VectSp-like
+   (non empty VectSpStr over F);
+  let f be homogeneousSAF Form of V,W, v be Vector of W;
+  thus f.[0.V,v] = f.[(0.F)*(0.V),v] by VECTSP10:2
+   .= 0.F *f.[0.V,v] by Th32
+   .= 0.F by VECTSP_1:39;
+ end;
+
+theorem Th35:
+for K be add-associative right_zeroed right_complementable
+       associative left_unital distributive (non empty doubleLoopStr)
+for V,W be add-associative right_zeroed right_complementable
+           VectSp-like (non empty VectSpStr over K)
+ for f be homogeneousFAF Form of V,W, v be Vector of V holds f.[v,0.W] = 0.K
+ proof
+  let F be add-associative right_zeroed right_complementable
+          associative left_unital distributive (non empty doubleLoopStr);
+  let V,W be add-associative right_zeroed right_complementable
+             VectSp-like (non empty VectSpStr over F);
+  let f be homogeneousFAF Form of V,W, v be Vector of V;
+  thus f.[v,0.W] = f.[v,(0.F)*(0.W)] by VECTSP10:2
+   .= 0.F * f.[v,0.W] by Th33
+   .= 0.F by VECTSP_1:39;
+ end;
+
+theorem Th36:
+for K be add-associative right_zeroed right_complementable Abelian
+    associative left_unital distributive (non empty doubleLoopStr)
+ for V,W be VectSp of K
+ for v,u be Vector of V, w be Vector of W,
+   f be additiveSAF homogeneousSAF Form of V,W holds
+    f.[v-u,w] = f.[v,w] - f.[u,w]
+  proof
+  let K be add-associative right_zeroed right_complementable Abelian
+    associative left_unital distributive (non empty doubleLoopStr);
+  let V,W be VectSp of K, v,w be Vector of V, y be Vector of W;
+  let f be additiveSAF homogeneousSAF Form of V,W;
+   thus f.[v-w,y] = f.[v+(-w),y] by RLVECT_1:def 11
+    .= f.[v,y] +f.[-w,y] by Th27
+    .= f.[v,y] +f.[(-1_ K)* w,y] by VECTSP_1:59
+    .= f.[v,y] +(-1_ K)*f.[w,y] by Th32
+    .= f.[v,y] + -(1_ K * f.[w,y]) by VECTSP_1:41
+    .= f.[v,y] -(1_ K * f.[w,y]) by RLVECT_1:def 11
+    .= f.[v,y] - f.[ w,y]by VECTSP_1:def 19;
+   end;
+
+theorem Th37:
+for K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr)
+ for V,W be VectSp of K
+ for v be Vector of V, w,t be Vector of W,
+     f be additiveFAF homogeneousFAF Form of V,W holds
+   f.[v,w-t] = f.[v,w] - f.[v,t]
+  proof
+  let K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr);
+  let V,W be VectSp of K, v be Vector of V, y,z be Vector of W,
+      f be additiveFAF homogeneousFAF Form of V,W;
+  thus f.[v,y-z] = f.[v, y+(-z)] by RLVECT_1:def 11
+    .= f.[v,y] + f.[v,-z] by Th28
+    .= f.[v,y] + f.[v,(-1_ K)* z] by VECTSP_1:59
+    .= f.[v,y] + (-1_ K)*f.[v,z] by Th33
+    .= f.[v,y] + -(1_ K * f.[v,z]) by VECTSP_1:41
+    .= f.[v,y] -(1_ K * f.[v,z]) by RLVECT_1:def 11
+    .= f.[v,y] - f.[v,z]by VECTSP_1:def 19;
+  end;
+
+theorem Th38:
+for K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr)
+ for V,W be VectSp of K
+ for v,u be Vector of V, w,t be Vector of W, f be bilinear-Form of V,W
+  holds f.[v-u,w-t] = f.[v,w] - f.[v,t] -(f.[u,w] - f.[u,t])
+  proof
+  let K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr);
+  let V,W be VectSp of K;
+  let v,w be Vector of V, y,z be Vector of W,
+  f be bilinear-Form of V,W;
+  set v1 = f.[v,y], v3 = f.[v,z], v4 = f.[w,y], v5 = f.[w,z];
+  thus f.[v-w,y-z] = f.[v,y-z] - f.[w,y-z] by Th36
+     .= v1 - v3 - f.[w,y-z] by Th37
+     .= v1 - v3 - (v4 - v5) by Th37;
+  end;
+
+theorem
+  for K be add-associative right_zeroed right_complementable
+     associative left_unital distributive (non empty doubleLoopStr)
+for V,W be add-associative right_zeroed right_complementable VectSp-like
+         (non empty VectSpStr over K)
+ for v,u be Vector of V, w,t be Vector of W, a,b be Element of K
+ for f be bilinear-Form of V,W
+    holds
+   f.[v+a*u,w+b*t] = f.[v,w] + b*f.[v,t] + (a*f.[u,w] + a*(b*f.[u,t]))
+ proof
+  let K be add-associative right_zeroed right_complementable
+       associative left_unital distributive (non empty doubleLoopStr);
+  let V,W be add-associative right_zeroed right_complementable VectSp-like
+     (non empty VectSpStr over K), v,w be Vector of V, y,z be Vector of W,
+      a,b be Element of K;
+  let f be bilinear-Form of V,W;
+  set v1 = f.[v,y], v3 = f.[v,z], v4 = f.[w,y], v5 = f.[w,z];
+  thus f.[v+a*w,y+b*z] = v1 +f.[v,b*z] + (f.[a*w,y] +f.[a*w,b*z]) by Th29
+   .= v1 +b*v3 + (f.[a*w,y] +f.[a*w,b*z]) by Th33
+   .= v1 + b*v3 + (a*v4 + f.[a*w,b*z]) by Th32
+   .= v1 + b*v3 + (a*v4 + a*f.[w,b*z]) by Th32
+   .= v1 + b*v3 + (a*v4 + a*(b*v5)) by Th33;
+end;
+
+theorem
+  for K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr)
+ for V,W be VectSp of K
+ for v,u be Vector of V, w,t be Vector of W, a,b be Element of K
+ for f be bilinear-Form of V,W
+   holds f.[v-a*u,w-b*t] = f.[v,w] - b*f.[v,t] - (a*f.[u,w] - a*(b*f.[u,t]))
+ proof
+  let K be add-associative right_zeroed right_complementable
+     Abelian associative left_unital distributive (non empty doubleLoopStr),
+    V,W be VectSp of K, v,w be Vector of V, y,z be Vector of W,
+    a,b be Element of K, f be bilinear-Form of V,W;
+  set v1 = f.[v,y], v3 = f.[v,z], v4 = f.[w,y], v5 = f.[w,z];
+  thus f.[v-a*w,y-b*z]
+   = v1 -f.[v,b*z] - (f.[a*w,y] -f.[a*w,b*z]) by Th38
+   .= v1 -b*v3 - (f.[a*w,y] -f.[a*w,b*z]) by Th33
+   .= v1 - b*v3 - (a*v4 - f.[a*w,b*z]) by Th32
+   .= v1 - b*v3 - (a*v4 - a*f.[w,b*z]) by Th32
+   .= v1 - b*v3 - (a*v4 - a*(b*v5)) by Th33;
+  end;
+
+theorem Th41:
+for K be add-associative right_zeroed right_complementable
+   (non empty doubleLoopStr), V,W be right_zeroed (non empty VectSpStr over K),
+    f be Form of V,W
+st f is additiveFAF or f is additiveSAF holds
+f is constant iff for v be Vector of V, w be Vector of W holds f.[v,w]=0.K
+ proof
+  let K be add-associative right_zeroed right_complementable
+  (non empty doubleLoopStr), V,W be right_zeroed (non empty VectSpStr over K),
+      f be Form of V,W;
+  assume that
+  A1: f is additiveFAF or f is additiveSAF;
+  A2: dom f = [: the carrier of V, the carrier of W:] by FUNCT_2:def 1;
+  hereby assume A3: f is constant;
+   let v be Vector of V, w be Vector of W;
+   per cases by A1;
+    suppose A4: f is additiveFAF;
+     thus f.[v,w] = f.[v,0.W] by A2,A3,SEQM_3:def 5
+      .= 0.K by A4,Th30;
+     suppose A5: f is additiveSAF;
+     thus f.[v,w] = f.[0.V,w] by A2,A3,SEQM_3:def 5
+      .= 0.K by A5,Th31;
+  end;
+  hereby assume A6: for v be Vector of V, w be Vector of W holds f.[v,w]=0.K;
+      now let x,y be set such that
+     A7: x in dom f and
+     A8: y in dom f;
+      consider v be Vector of V, w be Vector of W such that
+     A9: x = [v,w] by A7,DOMAIN_1:9;
+      consider s be Vector of V, t be Vector of W such that
+     A10: y = [s,t] by A8,DOMAIN_1:9;
+      thus f.x = 0.K by A6,A9
+        .=f.y by A6,A10;
+    end;
+   hence f is constant by SEQM_3:def 5;
+   end;
+ end;
+
+begin
+:: Left and Right Kernel of Form. "Diagonal" Kernel of Form
+
+definition
+ let K be ZeroStr;
+ let V,W be non empty VectSpStr over K;
+ let f be Form of V,W;
+func leftker f ->
+    Subset of V equals :Def16:
+   {v where v is Vector of V : for w be Vector of W holds f.[v,w] = 0.K};
+ correctness
+  proof
+   set A={v where v is Vector of V : for w be Vector of W holds f.[v,w] = 0.K};
+     A c= the carrier of V
+    proof
+     let x be set; assume x in A;
+     then consider v be Vector of V such that
+    A1: v=x & for w be Vector of W holds f.[v,w]=0.K;
+     thus thesis by A1;
+    end;
+   hence thesis;
+ end;
+end;
+
+definition
+ let K be ZeroStr;
+ let V,W be non empty VectSpStr over K;
+ let f be Form of V,W;
+func rightker f ->
+    Subset of W equals :Def17:
+   {w where w is Vector of W : for v be Vector of V holds f.[v,w] = 0.K};
+ correctness
+  proof
+   set A={w where w is Vector of W : for v be Vector of V holds f.[v,w] = 0.K};
+     A c= the carrier of W
+    proof
+     let x be set; assume x in A;
+     then consider w be Vector of W such that
+    A1: w=x & for v be Vector of V holds f.[v,w] = 0.K;
+     thus thesis by A1;
+    end;
+   hence thesis;
+ end;
+end;
+
+definition
+ let K be ZeroStr;
+ let V be non empty VectSpStr over K;
+ let f be Form of V,V;
+func diagker f -> Subset of V equals :Def18:
+   {v where v is Vector of V : f.[v,v] = 0.K};
+ correctness
+  proof
+   set A = {v where v is Vector of V : f.[v,v] = 0.K};
+     A c= the carrier of V
+    proof
+     let x be set; assume x in A;
+     then consider v be Vector of V such that
+    A1: v=x & f.[v,v]=0.K;
+     thus thesis by A1;
+    end;
+   hence thesis;
+ end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       right-distributive (non empty doubleLoopStr);
+ let V be right_zeroed (non empty VectSpStr over K);
+ let W be non empty VectSpStr over K;
+ let f be additiveSAF Form of V,W;
+cluster leftker f -> non empty;
+  coherence
+   proof
+    A1: now let w be Vector of W;
+     thus f.[0.V,w] = (FunctionalSAF(f,w)).(0.V) by Th10
+       .= 0.K by HAHNBAN1:def 13;
+     end;
+      leftker f = {v where v is Vector of V :
+        for w be Vector of W holds f.[v,w] = 0.K} by Def16;
+    then 0.V in leftker f by A1; hence thesis;
+   end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       associative left_unital distributive (non empty doubleLoopStr);
+ let V be add-associative right_zeroed right_complementable
+       VectSp-like (non empty VectSpStr over K);
+ let W be non empty VectSpStr over K;
+ let f be homogeneousSAF Form of V,W;
+cluster leftker f -> non empty;
+ coherence
+  proof
+   A1: now let w be Vector of W;
+     thus f.[0.V,w] = (FunctionalSAF(f,w)).(0.V) by Th10
+       .= 0.K by HAHNBAN1:def 13;
+     end; leftker f = {v where v is Vector of V :
+        for w be Vector of W holds f.[v,w] = 0.K} by Def16;
+   then 0.V in leftker f by A1; hence thesis;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       right-distributive (non empty doubleLoopStr);
+ let V be non empty VectSpStr over K;
+ let W be right_zeroed (non empty VectSpStr over K);
+ let f be additiveFAF Form of V,W;
+cluster rightker f -> non empty;
+  coherence
+   proof
+    A1: now let v be Vector of V;
+     thus f.[v,0.W] = (FunctionalFAF(f,v)).(0.W) by Th9
+       .= 0.K by HAHNBAN1:def 13;
+     end;
+      rightker f = {w where w is Vector of W :
+     for v be Vector of V holds f.[v,w] = 0.K} by Def17;
+    then 0.W in rightker f by A1; hence thesis;
+   end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       associative left_unital distributive (non empty doubleLoopStr);
+ let V be non empty VectSpStr over K;
+ let W be add-associative right_zeroed right_complementable
+       VectSp-like (non empty VectSpStr over K);
+ let f be homogeneousFAF Form of V,W;
+cluster rightker f -> non empty;
+ coherence
+  proof
+   A1: now let v be Vector of V;
+     thus f.[v,0.W] = (FunctionalFAF(f,v)).(0.W) by Th9
+       .= 0.K by HAHNBAN1:def 13;
+    end;
+     rightker f = {w where w is Vector of W :
+     for v be Vector of V holds f.[v,w] = 0.K} by Def17;
+   then 0.W in rightker f by A1; hence thesis;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       (non empty doubleLoopStr);
+ let V be right_zeroed (non empty VectSpStr over K);
+ let f be additiveFAF Form of V,V;
+cluster diagker f -> non empty;
+  coherence
+   proof
+      f.[0.V,0.V] = 0.K &
+    diagker f = {v where v is Vector of V : f.[v,v] = 0.K} by Def18,Th30;
+    then 0.V in diagker f; hence thesis;
+   end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       (non empty doubleLoopStr);
+ let V be right_zeroed (non empty VectSpStr over K);
+ let f be additiveSAF Form of V,V;
+cluster diagker f -> non empty;
+  coherence
+   proof
+      f.[0.V,0.V] = 0.K &
+    diagker f = {v where v is Vector of V: f.[v,v] = 0.K} by Def18,Th31;
+    then 0.V in diagker f; hence thesis;
+   end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       associative left_unital distributive (non empty doubleLoopStr);
+ let V be add-associative right_zeroed right_complementable
+       VectSp-like (non empty VectSpStr over K);
+ let f be homogeneousFAF Form of V,V;
+cluster diagker f -> non empty;
+  coherence
+   proof
+      f.[0.V,0.V] = 0.K &
+    diagker f = {v where v is Vector of V : f.[v,v] = 0.K} by Def18,Th35;
+    then 0.V in diagker f; hence thesis;
+   end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       associative left_unital distributive (non empty doubleLoopStr);
+ let V be add-associative right_zeroed right_complementable
+       VectSp-like (non empty VectSpStr over K);
+ let f be homogeneousSAF Form of V,V;
+cluster diagker f -> non empty;
+ coherence
+  proof
+     f.[0.V,0.V] = 0.K &
+    diagker f = {v where v is Vector of V : f.[v,v] = 0.K} by Def18,Th34;
+   then 0.V in diagker f; hence thesis;
+  end;
+end;
+
+theorem
+  for K be ZeroStr, V be non empty VectSpStr over K
+for f be Form of V,V holds
+leftker f c= diagker f & rightker f c= diagker f
+ proof
+  let K be ZeroStr, V be non empty VectSpStr over K, f be Form of V,V;
+ A1: leftker f =
+   {v where v is Vector of V: for w be Vector of V holds f.[v,w]=0.K} by Def16;
+ A2: rightker f =
+   {v where v is Vector of V: for w be Vector of V holds f.[w,v]=0.K} by Def17;
+ A3: diagker f = {v where v is Vector of V: f.[v,v]=0.K} by Def18;
+  thus leftker f c= diagker f
+   proof
+    let x be set; assume x in leftker f;
+    then consider v be Vector of V such that
+   A4: v=x & for w be Vector of V holds f.[v,w]=0.K by A1;
+      f.[v,v] = 0.K by A4;
+    hence x in diagker f by A3,A4;
+   end;
+  let x be set; assume x in rightker f;
+  then consider v be Vector of V such that
+ A5: v=x & for w be Vector of V holds f.[w,v]=0.K by A2;
+    f.[v,v] = 0.K by A5;
+  hence x in diagker f by A3,A5;
+ end;
+
+theorem Th43:
+for K be add-associative right_zeroed right_complementable
+       right-distributive (non empty doubleLoopStr)
+for V,W be non empty VectSpStr over K
+for f be additiveSAF homogeneousSAF Form of V,W
+  holds leftker f is lineary-closed
+proof
+ let K be add-associative right_zeroed right_complementable
+       right-distributive (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f be additiveSAF homogeneousSAF Form of V,W;
+ set V1 = leftker f;
+ A1: leftker f =
+   {v where v is Vector of V: for w be Vector of W holds f.[v,w]=0.K} by Def16;
+ thus for v,u be Vector of V st v in V1 & u in V1 holds v + u in V1
+  proof
+   let v,u be Vector of V; assume
+  A2: v in V1 & u in V1;
+   then consider v1 be Vector of V such that
+  A3: v1= v & for w be Vector of W holds f.[v1,w]=0.K by A1;
+   consider u1 be Vector of V such that
+  A4: u1= u & for w be Vector of W holds f.[u1,w]=0.K by A1,A2;
+      now let w be Vector of W;
+     thus f.[v+u,w] = f.[v1,w] + f.[u1,w] by A3,A4,Th27
+      .= 0.K + f.[u1,w] by A3
+      .= 0.K + 0.K by A4
+      .= 0.K by RLVECT_1:def 7;
+    end;
+   hence v+u in V1 by A1;
+  end;
+ let a be Element of K, v be Vector of V; assume
+   v in V1;
+ then consider v1 be Vector of V such that
+A5: v1= v & for w be Vector of W holds f.[v1,w]=0.K by A1;
+     now let w be Vector of W;
+   thus f.[a*v,w] = a*f.[v1,w] by A5,Th32
+      .= a*0.K by A5
+      .= 0.K by VECTSP_1:36;
+    end;
+ hence a * v in V1 by A1;
+end;
+
+theorem Th44:
+for K be add-associative right_zeroed right_complementable
+       right-distributive (non empty doubleLoopStr)
+for V,W be non empty VectSpStr over K
+for f be additiveFAF homogeneousFAF Form of V,W
+  holds rightker f is lineary-closed
+proof
+ let K be add-associative right_zeroed right_complementable
+       right-distributive (non empty doubleLoopStr);
+ let V,W be non empty VectSpStr over K;
+ let f be additiveFAF homogeneousFAF Form of V,W;
+ set V1 = rightker f;
+ A1: rightker f =
+   {w where w is Vector of W: for v be Vector of V holds f.[v,w]=0.K} by Def17;
+ thus for v,u be Vector of W st v in V1 & u in V1 holds v + u in V1
+  proof
+   let v,u be Vector of W; assume
+  A2: v in V1 & u in V1;
+   then consider v1 be Vector of W such that
+  A3: v1= v & for w be Vector of V holds f.[w,v1]=0.K by A1;
+   consider u1 be Vector of W such that
+  A4: u1= u & for w be Vector of V holds f.[w,u1]=0.K by A1,A2;
+      now let w be Vector of V;
+     thus f.[w,v+u] = f.[w,v1] + f.[w,u1] by A3,A4,Th28
+      .= 0.K + f.[w,u1] by A3
+      .= 0.K + 0.K by A4
+      .= 0.K by RLVECT_1:def 7;
+    end;
+   hence v+u in V1 by A1;
+  end;
+ let a be Element of K, v be Vector of W; assume
+   v in V1;
+ then consider v1 be Vector of W such that
+A5: v1= v & for w be Vector of V holds f.[w,v1]=0.K by A1;
+     now let w be Vector of V;
+   thus f.[w,a*v] = a*f.[w,v1] by A5,Th33
+      .= a*0.K by A5
+      .= 0.K by VECTSP_1:36;
+    end;
+ hence a * v in V1 by A1;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V be VectSp of K, W be non empty VectSpStr over K;
+ let f be additiveSAF homogeneousSAF Form of V,W;
+func LKer f -> strict non empty Subspace of V means :Def19:
+     the carrier of it = leftker f;
+ existence
+  proof leftker f is lineary-closed by Th43; hence thesis by VECTSP_4:42;
+end;
+ uniqueness by VECTSP_4:37;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V be non empty VectSpStr over K, W be VectSp of K;
+ let f be additiveFAF homogeneousFAF Form of V,W;
+func RKer f -> strict non empty Subspace of W means :Def20:
+     the carrier of it = rightker f;
+ existence
+  proof rightker f is lineary-closed by Th44; hence thesis by VECTSP_4:42;
+end;
+ uniqueness by VECTSP_4:37;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V be VectSp of K, W be non empty VectSpStr over K;
+ let f be additiveSAF homogeneousSAF Form of V,W;
+func LQForm(f) -> additiveSAF homogeneousSAF Form of VectQuot(V,LKer f),W means
+:Def21:
+for A be Vector of VectQuot(V,LKer(f)), w be Vector of W, v be Vector of V
+st A = v + LKer(f) holds it.[A,w] = f.[v,w];
+ existence
+  proof
+   set L = LKer(f), vq = VectQuot(V,L), C = CosetSet(V,L),
+       aC = addCoset(V,L), mC = lmultCoset(V,L);
+ A1: C = the carrier of vq by VECTSP10:def 6;
+     defpred _P[set,set,set] means
+     for a be Vector of V st $1 = a+L holds $3 = f.[a,$2];
+ A2: now
+      let A be Vector of vq, w0 be Vector of W;
+      consider a be Vector of V such that
+    A3: A = a+L by VECTSP10:23;
+      take y = f.[a,w0];
+      now
+      let a1 be Vector of V;
+      assume A = a1+L;
+      then a in a1+L by A3,VECTSP_4:59;
+      then consider w be Vector of V such that
+    A4: w in L & a = a1 + w by VECTSP_4:57;
+    A5: leftker f =
+      {v where v is Vector of V : for ww be Vector of W holds f.[v,ww] = 0.K}
+           by Def16;
+        w in the carrier of L by A4,RLVECT_1:def 1;
+      then w in leftker f by Def19;
+      then consider aa be Vector of V such that
+    A6: aa=w & for ww be Vector of W holds f.[aa,ww] =0.K by A5;
+       thus y = f.[a1,w0]+f.[w,w0] by A4,Th27
+       .= f.[a1,w0] +0.K by A6
+       .= f.[a1,w0] by RLVECT_1:def 7;
+      end;
+      hence _P[A,w0,y];
+    end;
+   consider ff be Function of
+      [:the carrier of vq,the carrier of W:], the carrier of K such that
+ A7: for A be Vector of vq, w be Vector of W holds
+      _P[A,w,ff.[A,w]] from FuncEx2D(A2);
+   reconsider ff as Form of vq,W;
+      now
+     let w be Vector of W;
+     set ffw = FunctionalSAF(ff,w);
+         now
+        let A,B be Vector of vq;
+        consider a be Vector of V such that
+       A8: A = a+L by VECTSP10:23;
+        consider b be Vector of V such that
+       A9: B = b+L by VECTSP10:23;
+       A10: the add of vq = addCoset(V,L) by VECTSP10:def 6;
+       A11: aC.(A,B) =a+b+L by A1,A8,A9,VECTSP10:def 3;
+        thus ffw.(A+B) = ff.[A+B,w] by Th10
+         .= ff.[(the add of vq).(A,B),w] by RLVECT_1:5
+         .= f.[a+b,w] by A7,A10,A11
+         .= f.[a,w] + f.[b,w] by Th27
+         .= ff.[A,w] + f.[b,w] by A7,A8
+         .= ff.[A,w] + ff.[B,w] by A7,A9
+         .= ffw.A + ff.[B,w] by Th10
+         .= ffw.A + ffw.B by Th10;
+       end;
+     hence ffw is additive by HAHNBAN1:def 11;
+   end;
+   then reconsider ff as additiveSAF Form of vq,W by Def13;
+      now
+     let w be Vector of W;
+     set ffw = FunctionalSAF(ff,w);
+         now
+        let A be Vector of vq, r be Element of K;
+        consider a be Vector of V such that
+       A12: A = a+L by VECTSP10:23;
+       A13: the lmult of vq = lmultCoset(V,L) by VECTSP10:def 6;
+       A14: mC.(r,A) =r*a+L by A1,A12,VECTSP10:def 5;
+        thus ffw.(r*A) = ff.[r*A,w] by Th10
+         .= ff.[(the lmult of vq).(r,A),w] by VECTSP_1:def 24
+         .= f.[r*a,w] by A7,A13,A14
+         .= r*f.[a,w] by Th32
+         .= r*ff.[A,w] by A7,A12
+         .= r*ffw.A by Th10;
+       end;
+     hence ffw is homogeneous by HAHNBAN1:def 12;
+   end;
+   then reconsider ff as additiveSAF homogeneousSAF Form of vq,W by Def15;
+   take ff;
+   thus thesis by A7;
+  end;
+  uniqueness
+proof
+   set L = LKer(f), vq = VectQuot(V,L);
+   let f1,f2 be additiveSAF homogeneousSAF Form of vq,W such that
+ A15: for A be Vector of vq, w be Vector of W, a be Vector of V
+       st A = a + LKer(f) holds f1.[A,w] = f.[a,w] and
+ A16: for A be Vector of vq, w be Vector of W, a be Vector of V
+        st A = a + LKer(f) holds f2.[A,w] = f.[a,w];
+      now
+     let A be Vector of vq, w be Vector of W;
+     consider a be Vector of V such that
+    A17: A = a + L by VECTSP10:23;
+     thus f1.[A,w] = f.[a,w] by A15,A17
+     .= f2.[A,w] by A16,A17;
+    end;
+   hence thesis by FUNCT_2:120;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V be non empty VectSpStr over K, W be VectSp of K;
+ let f be additiveFAF homogeneousFAF Form of V,W;
+func RQForm(f) -> additiveFAF homogeneousFAF Form of V,VectQuot(W,RKer f) means
+:Def22:
+for A be Vector of VectQuot(W,RKer(f)), v be Vector of V, w be Vector of W
+st A = w + RKer(f) holds it.[v,A] = f.[v,w];
+ existence
+  proof
+   set L = RKer(f), vq = VectQuot(W,L), C = CosetSet(W,L),
+       aC = addCoset(W,L), mC = lmultCoset(W,L);
+ A1: C = the carrier of vq by VECTSP10:def 6;
+ defpred _P[set,set,set] means
+   for w be Vector of W st $2 = w+L holds $3 = f.[$1,w];
+ A2: now
+      let v0 be Vector of V, A be Vector of vq;
+      consider a be Vector of W such that
+    A3: A = a+L by VECTSP10:23;
+      take y = f.[v0,a];
+      now
+      let a1 be Vector of W;
+      assume A = a1+L;
+      then a in a1+L by A3,VECTSP_4:59;
+      then consider w be Vector of W such that
+    A4: w in L & a = a1 + w by VECTSP_4:57;
+    A5: rightker f =
+    {ww where ww is Vector of W : for vv be Vector of V holds f.[vv,ww] = 0.K}
+           by Def17;
+        w in the carrier of L by A4,RLVECT_1:def 1;
+      then w in rightker f by Def20;
+      then consider aa be Vector of W such that
+    A6: aa=w & for vv be Vector of V holds f.[vv,aa] =0.K by A5;
+      thus y = f.[v0,a1]+f.[v0,w] by A4,Th28
+       .= f.[v0,a1] +0.K by A6
+       .= f.[v0,a1] by RLVECT_1:def 7;
+      end; hence _P[v0,A,y];
+    end;
+   consider ff be Function of
+      [:the carrier of V,the carrier of vq:], the carrier of K such that
+ A7: for v be Vector of V, A be Vector of vq holds _P[v,A,ff.[v,A]]
+     from FuncEx2D(A2);
+   reconsider ff as Form of V,vq;
+      now
+     let v be Vector of V;
+     set ffw = FunctionalFAF(ff,v);
+         now
+        let A,B be Vector of vq;
+        consider a be Vector of W such that
+       A8: A = a+L by VECTSP10:23;
+        consider b be Vector of W such that
+       A9: B = b+L by VECTSP10:23;
+       A10: the add of vq = addCoset(W,L) by VECTSP10:def 6;
+       A11: aC.(A,B) =a+b+L by A1,A8,A9,VECTSP10:def 3;
+        thus ffw.(A+B) = ff.[v,A+B] by Th9
+         .= ff.[v,(the add of vq).(A,B)] by RLVECT_1:5
+         .= f.[v,a+b] by A7,A10,A11
+         .= f.[v,a] + f.[v,b] by Th28
+         .= ff.[v,A] + f.[v,b] by A7,A8
+         .= ff.[v,A] + ff.[v,B] by A7,A9
+         .= ffw.A + ff.[v,B] by Th9
+         .= ffw.A + ffw.B by Th9;
+       end;
+     hence ffw is additive by HAHNBAN1:def 11;
+   end;
+   then reconsider ff as additiveFAF Form of V,vq by Def12;
+      now
+     let v be Vector of V;
+     set ffw = FunctionalFAF(ff,v);
+         now
+        let A be Vector of vq, r be Element of K;
+        consider a be Vector of W such that
+       A12: A = a+L by VECTSP10:23;
+       A13: the lmult of vq = lmultCoset(W,L) by VECTSP10:def 6;
+       A14: mC.(r,A) =r*a+L by A1,A12,VECTSP10:def 5;
+        thus ffw.(r*A) = ff.[v,r*A] by Th9
+         .= ff.[v,(the lmult of vq).(r,A)] by VECTSP_1:def 24
+         .= f.[v,r*a] by A7,A13,A14
+         .= r*f.[v,a] by Th33
+         .= r*ff.[v,A] by A7,A12
+         .= r*ffw.A by Th9;
+       end;
+     hence ffw is homogeneous by HAHNBAN1:def 12;
+   end;
+   then reconsider ff as additiveFAF homogeneousFAF Form of V,vq by Def14;
+   take ff;
+   thus thesis by A7;
+  end;
+  uniqueness
+proof
+   set L = RKer(f), vq = VectQuot(W,L);
+   let f1,f2 be additiveFAF homogeneousFAF Form of V,vq such that
+ A15: for A be Vector of vq, v be Vector of V, a be Vector of W
+       st A = a + RKer(f) holds f1.[v,A] = f.[v,a] and
+ A16: for A be Vector of vq, v be Vector of V, a be Vector of W
+        st A = a + RKer(f) holds f2.[v,A] = f.[v,a];
+      now
+     let v be Vector of V, A be Vector of vq;
+     consider a be Vector of W such that
+    A17: A = a + L by VECTSP10:23;
+     thus f1.[v,A] = f.[v,a] by A15,A17
+     .= f2.[v,A] by A16,A17;
+    end;
+   hence thesis by FUNCT_2:120;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V,W be VectSp of K;
+ let f be bilinear-Form of V,W;
+cluster LQForm(f) -> additiveFAF homogeneousFAF;
+ coherence
+  proof
+   set lf = LQForm(f);
+   thus LQForm(f) is additiveFAF
+    proof
+     let A be Vector of VectQuot(V,LKer(f));
+     set flf = FunctionalFAF(lf,A);
+     consider v be Vector of V such that
+    A1: A = v + LKer(f) by VECTSP10:23;
+     let w,t be Vector of W;
+     thus flf.(w+t) = lf.[A,w+t] by Th9
+     .= f.[v,w+t] by A1,Def21
+     .= f.[v,w]+f.[v,t] by Th28
+     .= lf.[A,w]+ f.[v,t] by A1,Def21
+     .= lf.[A,w]+ lf.[A,t] by A1,Def21
+     .= flf.w+ lf.[A,t] by Th9
+     .= flf.w + flf.t by Th9;
+    end;
+   let A be Vector of VectQuot(V,LKer(f));
+   set flf = FunctionalFAF(lf,A);
+   consider v be Vector of V such that
+  A2: A = v + LKer(f) by VECTSP10:23;
+   let w be Vector of W, r be Scalar of W;
+   thus flf.(r*w) = lf.[A,r*w] by Th9
+    .= f.[v,r*w] by A2,Def21
+    .= r*f.[v,w] by Th33
+    .= r*lf.[A,w] by A2,Def21
+    .= r*flf.w by Th9;
+  end;
+cluster RQForm(f) -> additiveSAF homogeneousSAF;
+ coherence
+  proof
+   set lf = RQForm(f);
+   thus RQForm(f) is additiveSAF
+    proof
+     let A be Vector of VectQuot(W,RKer(f));
+     set flf = FunctionalSAF(lf,A);
+     consider w be Vector of W such that
+    A3: A = w + RKer(f) by VECTSP10:23;
+     let v,t be Vector of V;
+     thus flf.(v+t) = lf.[v+t,A] by Th10
+     .= f.[v+t,w] by A3,Def22
+     .= f.[v,w]+f.[t,w] by Th27
+     .= lf.[v,A]+ f.[t,w] by A3,Def22
+     .= lf.[v,A]+ lf.[t,A] by A3,Def22
+     .= flf.v+ lf.[t,A] by Th10
+     .= flf.v + flf.t by Th10;
+    end;
+   let A be Vector of VectQuot(W,RKer(f));
+   set flf = FunctionalSAF(lf,A);
+   consider w be Vector of W such that
+  A4: A = w + RKer(f) by VECTSP10:23;
+   let v be Vector of V, r be Scalar of V;
+   thus flf.(r*v) = lf.[r*v,A] by Th10
+    .= f.[r*v,w] by A4,Def22
+    .= r*f.[v,w] by Th32
+    .= r*lf.[v,A] by A4,Def22
+    .= r*flf.v by Th10;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V,W be VectSp of K;
+ let f be bilinear-Form of V,W;
+func QForm(f) -> bilinear-Form of VectQuot(V,LKer(f)),VectQuot(W,RKer(f)) means
+:Def23:
+for A be Vector of VectQuot(V,LKer f), B be Vector of VectQuot(W, RKer(f))
+ for v be Vector of V, w be Vector of W
+ st A = v + LKer f & B = w + RKer f holds it.[A,B]= f.[v,w];
+existence
+ proof
+  set L = LKer(f), vq = VectQuot(V,L), Cv = CosetSet(V,L),
+       aCv = addCoset(V,L), mCv = lmultCoset(V,L),
+       R = RKer(f), wq = VectQuot(W,R), Cw = CosetSet(W,R),
+       aCw = addCoset(W,R), mCw = lmultCoset(W,R);
+ A1: Cv = the carrier of vq by VECTSP10:def 6;
+ A2: Cw = the carrier of wq by VECTSP10:def 6;
+ A3: leftker f =
+       {v where v is Vector of V : for ww be Vector of W holds f.[v,ww] = 0.K}
+            by Def16;
+ A4: rightker f =
+       {w where w is Vector of W : for vv be Vector of V holds f.[vv,w] = 0.K}
+            by Def17;
+     defpred _P[set,set,set] means
+     for v be Vector of V, w be Vector of W
+      st $1 = v+L & $2= w+R holds $3 = f.[v,w];
+ A5: now
+      let A be Vector of vq, B  be Vector of wq;
+      consider a be Vector of V such that
+    A6: A = a+L by VECTSP10:23;
+      consider b be Vector of W such that
+    A7: B = b+R by VECTSP10:23;
+      take y = f.[a,b];
+      now
+      let a1 be Vector of V; let b1 be Vector of W;
+      assume A = a1+L;
+      then a in a1+L by A6,VECTSP_4:59;
+      then consider vv be Vector of V such that
+    A8: vv in L & a = a1 + vv by VECTSP_4:57;
+      assume B = b1+R;
+      then b in b1+R by A7,VECTSP_4:59;
+      then consider ww be Vector of W such that
+    A9: ww in R & b = b1 + ww by VECTSP_4:57;
+        vv in the carrier of L by A8,RLVECT_1:def 1;
+      then vv in leftker f by Def19;
+      then consider aa be Vector of V such that
+    A10: aa=vv & for w0 be Vector of W holds f.[aa,w0] =0.K by A3;
+        ww in the carrier of R by A9,RLVECT_1:def 1;
+      then ww in rightker f by Def20;
+      then consider bb be Vector of W such that
+    A11: bb=ww & for v0 be Vector of V holds f.[v0,bb] =0.K by A4;
+      thus y = f.[a1,b1]+f.[a1,ww] + (f.[vv,b1]+f.[vv,ww])
+          by A8,A9,Th29
+       .=f.[a1,b1]+0.K + (f.[vv,b1]+f.[vv,ww]) by A11
+       .= f.[a1,b1] +0.K + (0.K+f.[vv,ww]) by A10
+       .= f.[a1,b1] + (0.K+f.[vv,ww]) by RLVECT_1:def 7
+       .= f.[a1,b1] + f.[vv,ww] by RLVECT_1:10
+       .= f.[a1,b1] + 0.K by A10
+       .= f.[a1,b1] by RLVECT_1:def 7;
+      end; hence _P[A, B, y];
+    end;
+   consider ff be Function of
+      [:the carrier of vq,the carrier of wq:], the carrier of K such that
+ A12: for A be Vector of vq, B be Vector of wq holds _P[A,B,ff.[A,B]]
+       from FuncEx2D(A5);
+   reconsider ff as Form of vq,wq;
+   A13: now
+     let ww be Vector of wq;
+     consider w be Vector of W such that
+    A14: ww= w+R by VECTSP10:23;
+     set ffw = FunctionalSAF(ff,ww);
+         now
+        let A,B be Vector of vq;
+        consider a be Vector of V such that
+       A15: A = a+L by VECTSP10:23;
+        consider b be Vector of V such that
+       A16: B = b+L by VECTSP10:23;
+       A17: the add of vq = aCv by VECTSP10:def 6;
+       A18: aCv.(A,B) =a+b+L by A1,A15,A16,VECTSP10:def 3;
+        thus ffw.(A+B) = ff.[A+B,ww] by Th10
+         .= ff.[(the add of vq).(A,B),ww] by RLVECT_1:5
+         .= f.[a+b,w] by A12,A14,A17,A18
+         .= f.[a,w] + f.[b,w] by Th27
+         .= ff.[A,ww] + f.[b,w] by A12,A14,A15
+         .= ff.[A,ww] + ff.[B,ww] by A12,A14,A16
+         .= ffw.A + ff.[B,ww] by Th10
+         .= ffw.A + ffw.B by Th10;
+       end;
+     hence ffw is additive by HAHNBAN1:def 11;
+   end;
+  A19: now
+    let vv be Vector of vq;
+    consider v be Vector of V such that
+   A20: vv= v+L by VECTSP10:23;
+    set ffv = FunctionalFAF(ff,vv);
+         now
+        let A,B be Vector of wq;
+        consider a be Vector of W such that
+      A21: A = a+R by VECTSP10:23;
+        consider b be Vector of W such that
+      A22: B = b+R by VECTSP10:23;
+      A23: the add of wq = aCw by VECTSP10:def 6;
+      A24: aCw.(A,B) =a+b+R by A2,A21,A22,VECTSP10:def 3;
+        thus ffv.(A+B) = ff.[vv,A+B] by Th9
+         .= ff.[vv,(the add of wq).(A,B)] by RLVECT_1:5
+         .= f.[v,a+b] by A12,A20,A23,A24
+         .= f.[v,a] + f.[v,b] by Th28
+         .= ff.[vv,A] + f.[v,b] by A12,A20,A21
+         .= ff.[vv,A] + ff.[vv,B] by A12,A20,A22
+         .= ffv.A + ff.[vv,B] by Th9
+         .= ffv.A + ffv.B by Th9;
+         end;
+      hence ffv is additive by HAHNBAN1:def 11;
+     end;
+    A25:  now
+       let ww be Vector of wq;
+       consider w be Vector of W such that
+     A26: ww= w+R by VECTSP10:23;
+       set ffw = FunctionalSAF(ff,ww);
+           now
+          let A be Vector of vq, r be Element of K;
+          consider a be Vector of V such that
+         A27: A = a+L by VECTSP10:23;
+         A28: the lmult of vq = mCv by VECTSP10:def 6;
+         A29: mCv.(r,A) =r*a+L by A1,A27,VECTSP10:def 5;
+         thus ffw.(r*A) = ff.[r*A,ww] by Th10
+          .= ff.[(the lmult of vq).(r,A),ww] by VECTSP_1:def 24
+          .= f.[r*a,w] by A12,A26,A28,A29
+           .= r*f.[a,w] by Th32
+           .= r*ff.[A,ww] by A12,A26,A27
+           .= r*ffw.A by Th10;
+         end;
+       hence ffw is homogeneous by HAHNBAN1:def 12;
+     end;
+       now
+      let vv be Vector of vq;
+      consider v be Vector of V such that
+     A30: vv= v+L by VECTSP10:23;
+      set ffv = FunctionalFAF(ff,vv);
+         now
+        let A be Vector of wq, r be Element of K;
+        consider a be Vector of W such that
+       A31: A = a+R by VECTSP10:23;
+       A32: the lmult of wq = mCw by VECTSP10:def 6;
+       A33: mCw.(r,A) =r*a+R by A2,A31,VECTSP10:def 5;
+        thus ffv.(r*A) = ff.[vv,r*A] by Th9
+        .= ff.[vv,(the lmult of wq).(r,A)] by VECTSP_1:def 24
+        .= f.[v,r*a] by A12,A30,A32,A33
+        .= r*f.[v,a] by Th33
+        .= r*ff.[vv,A] by A12,A30,A31
+        .= r*ffv.A by Th9;
+       end;
+      hence ffv is homogeneous by HAHNBAN1:def 12;
+     end;
+   then reconsider ff as bilinear-Form of vq,wq by A13,A19,A25,Def12,Def13,
+Def14,Def15;
+   take ff;
+   thus thesis by A12;
+ end;
+uniqueness
+ proof
+  set L = LKer(f), vq = VectQuot(V,L),
+      R = RKer(f), wq = VectQuot(W,R);
+  let f1,f2 be bilinear-Form of vq,wq; assume that
+ A34: for A be Vector of vq, B be Vector of wq
+      for v be Vector of V, w be Vector of W
+     st A = v + L & B = w + R holds f1.[A,B]= f.[v,w] and
+ A35: for A be Vector of vq, B be Vector of wq
+      for v be Vector of V, w be Vector of W
+      st A = v + L & B = w + R holds f2.[A,B]= f.[v,w];
+     now
+     let A be Vector of vq, B be Vector of wq;
+     consider a be Vector of V such that
+    A36: A = a + L by VECTSP10:23;
+     consider b be Vector of W such that
+    A37: B = b + R by VECTSP10:23;
+     thus f1.[A,B] = f.[a,b] by A34,A36,A37
+     .= f2.[A,B] by A35,A36,A37;
+    end;
+   hence thesis by FUNCT_2:120;
+  end;
+end;
+
+theorem Th45:
+for K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr)
+for V be VectSp of K, W be non empty VectSpStr over K
+for f be additiveSAF homogeneousSAF Form of V,W holds
+rightker f = rightker (LQForm f)
+ proof
+  let K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr);
+  let V be VectSp of K, W be non empty VectSpStr over K;
+  let f be additiveSAF homogeneousSAF Form of V,W;
+  set lf = LQForm(f), qv = VectQuot(V,LKer f);
+ A1: {w where w is Vector of W : for v be Vector of V holds f.[v,w] = 0.K}
+      = rightker f by Def17;
+ A2: {w where w is Vector of W : for A be Vector of qv holds lf.[A,w] = 0.K}
+      = rightker lf by Def17;
+  thus rightker f c= rightker (LQForm f)
+   proof
+    let x be set; assume x in rightker f;
+    then consider w be Vector of W such that
+   A3: x=w & for v be Vector of V holds f.[v,w] = 0.K by A1;
+       now let A be Vector of qv;
+      consider v be Vector of V such that
+     A4: A = v+LKer f by VECTSP10:23;
+      thus lf.[A,w] = f.[v,w] by A4,Def21
+      .= 0.K by A3;
+     end;
+    hence x in rightker(LQForm f) by A2,A3;
+   end;
+    let x be set; assume x in rightker lf;
+    then consider w be Vector of W such that
+   A5: x=w & for A be Vector of qv holds lf.[A,w] = 0.K by A2;
+       now let v be Vector of V;
+      reconsider A = v + LKer f as Vector of qv by VECTSP10:24;
+      thus f.[v,w] = lf.[A,w] by Def21
+      .= 0.K by A5;
+     end;
+    hence thesis by A1,A5;
+end;
+
+theorem Th46:
+for K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr)
+for V be non empty VectSpStr over K, W be VectSp of K
+for f be additiveFAF homogeneousFAF Form of V,W holds
+leftker f = leftker (RQForm f)
+ proof
+  let K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr);
+  let V be non empty VectSpStr over K, W be VectSp of K;
+  let f be additiveFAF homogeneousFAF Form of V,W;
+  set rf = RQForm(f), qw = VectQuot(W,RKer f);
+ A1: {v where v is Vector of V : for w be Vector of W holds f.[v,w] = 0.K}
+      = leftker f by Def16;
+ A2: {v where v is Vector of V : for A be Vector of qw holds rf.[v,A] = 0.K}
+      = leftker rf by Def16;
+  thus leftker f c= leftker (RQForm f)
+   proof
+    let x be set; assume x in leftker f;
+    then consider v be Vector of V such that
+   A3: x=v & for w be Vector of W holds f.[v,w] = 0.K by A1;
+       now let A be Vector of qw;
+      consider w be Vector of W such that
+     A4: A = w+RKer f by VECTSP10:23;
+      thus rf.[v,A] = f.[v,w] by A4,Def22
+      .= 0.K by A3;
+     end;
+    hence x in leftker(RQForm f) by A2,A3;
+   end;
+    let x be set; assume x in leftker rf;
+    then consider v be Vector of V such that
+   A5: x=v & for A be Vector of qw holds rf.[v,A] = 0.K by A2;
+       now let w be Vector of W;
+      reconsider A = w + RKer f as Vector of qw by VECTSP10:24;
+      thus f.[v,w] = rf.[v,A] by Def22
+      .= 0.K by A5;
+     end;
+    hence thesis by A1,A5;
+end;
+
+theorem Th47:
+for K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr)
+for V,W be VectSp of K, f be bilinear-Form of V,W holds
+RKer f = RKer (LQForm f)
+ proof
+  let K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr);
+  let V,W be VectSp of K, f be bilinear-Form of V,W;
+    the carrier of (RKer f) = rightker f by Def20
+   .= rightker (LQForm f) by Th45
+  .= the carrier of (RKer (LQForm f)) by Def20;
+  hence thesis by VECTSP_4:37;
+ end;
+
+theorem Th48:
+for K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr)
+for V,W be VectSp of K, f be bilinear-Form of V,W holds
+LKer f = LKer (RQForm f)
+ proof
+  let K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr);
+  let V,W be VectSp of K, f be bilinear-Form of V,W;
+    the carrier of (LKer f) = leftker f by Def19
+   .= leftker (RQForm f) by Th46
+  .= the carrier of (LKer (RQForm f)) by Def19;
+  hence thesis by VECTSP_4:37;
+ end;
+
+theorem Th49:
+for K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr)
+for V,W be VectSp of K, f be bilinear-Form of V,W
+ holds QForm(f) = RQForm(LQForm(f)) & QForm(f) = LQForm(RQForm(f))
+ proof
+  let K be add-associative right_zeroed right_complementable
+        Abelian associative left_unital distributive (non empty doubleLoopStr);
+  let V,W be VectSp of K, f be bilinear-Form of V,W;
+  set L = LKer(f), vq = VectQuot(V,L),
+      R = RKer(f), wq = VectQuot(W,R),
+      RL = RKer(LQForm(f)), wqr = VectQuot(W,RL),
+      LR = LKer(RQForm(f)), vql = VectQuot(V,LR);
+  A1: dom QForm(f) = [:the carrier of vq, the carrier of wq:] by FUNCT_2:def 1;
+  A2: dom RQForm (LQForm(f))=
+      [:the carrier of vq, the carrier of wqr:] by FUNCT_2:def 1;
+  A3: dom LQForm (RQForm(f))=
+      [:the carrier of vql, the carrier of wq:] by FUNCT_2:def 1;
+  A4: the carrier of wqr = the carrier of wq by Th47;
+  A5: the carrier of vql = the carrier of vq by Th48;
+     now let x be set;
+    assume x in dom QForm(f);
+    then consider A be Vector of vq, B be Vector of wq such that
+   A6: x=[A,B] by DOMAIN_1:9;
+    consider v be Vector of V such that
+   A7: A = v + L by VECTSP10:23;
+    consider w be Vector of W such that
+   A8: B = w + R by VECTSP10:23;
+   A9:  R = RL by Th47;
+    thus (QForm(f)).x = f.[v,w] by A6,A7,A8,Def23
+    .= (LQForm(f)).[A,w] by A7,Def21
+    .=(RQForm(LQForm(f))).x by A6,A8,A9,Def22;
+   end;
+  hence QForm(f) = RQForm(LQForm(f)) by A1,A2,A4,FUNCT_1:9;
+     now let x be set;
+    assume x in dom QForm(f);
+    then consider A be Vector of vq, B be Vector of wq such that
+   A10: x=[A,B] by DOMAIN_1:9;
+    consider v be Vector of V such that
+   A11: A = v + L by VECTSP10:23;
+    consider w be Vector of W such that
+   A12: B = w + R by VECTSP10:23;
+   A13:  L = LR by Th48;
+    thus (QForm(f)).x = f.[v,w] by A10,A11,A12,Def23
+    .= (RQForm(f)).[v,B] by A12,Def22
+    .=(LQForm(RQForm(f))).x by A10,A11,A13,Def21;
+   end;
+  hence thesis by A1,A3,A5,FUNCT_1:9;
+ end;
+
+theorem Th50:
+for K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr)
+for V,W be VectSp of K, f be bilinear-Form of V,W holds
+ leftker QForm(f) = leftker (RQForm(LQForm(f))) &
+ rightker QForm(f) = rightker (RQForm(LQForm(f))) &
+ leftker QForm(f) = leftker (LQForm(RQForm(f))) &
+ rightker QForm(f) = rightker (LQForm(RQForm(f)))
+ proof
+  let K be add-associative right_zeroed right_complementable
+        Abelian associative left_unital distributive (non empty doubleLoopStr);
+  let V,W be VectSp of K, f be bilinear-Form of V,W;
+  set vq = VectQuot(V,LKer(f)), wq = VectQuot(W,RKer(f)),
+       wqr = VectQuot(W,RKer(LQForm(f))), vql = VectQuot(V,LKer(RQForm(f)));
+  set rlf = RQForm (LQForm(f)) , qf = QForm(f), lrf = LQForm (RQForm(f));
+  A1: leftker qf =
+   {vv where vv is Vector of vq: for ww be Vector of wq holds qf.[vv,ww]=0.K}
+   by Def16;
+  A2: leftker rlf =
+   {vv where vv is Vector of vq: for ww be Vector of wqr holds rlf.[vv,ww]=0.K}
+   by Def16;
+  A3: rightker qf =
+   {ww where ww is Vector of wq: for vv be Vector of vq holds qf.[vv,ww]=0.K}
+   by Def17;
+  A4: rightker rlf =
+   {ww where ww is Vector of wqr: for vv be Vector of vq holds rlf.[vv,ww]=0.K}
+   by Def17;
+  A5: leftker lrf =
+   {vv where vv is Vector of vql: for ww be Vector of wq holds lrf.[vv,ww]=0.K}
+   by Def16;
+  A6: rightker lrf =
+   {ww where ww is Vector of wq: for vv be Vector of vql holds lrf.[vv,ww]=0.K}
+   by Def17;
+  thus leftker qf c= leftker rlf
+   proof
+    let x be set; assume x in leftker qf;
+    then consider vv be Vector of vq such that
+   A7: x=vv & for ww be Vector of wq holds qf.[vv,ww]=0.K by A1;
+       now let ww be Vector of wqr;
+      reconsider w = ww as Vector of wq by Th47;
+      thus rlf.[vv,ww] = qf.[vv,w] by Th49
+      .= 0.K by A7;
+     end;
+    hence x in leftker rlf by A2,A7;
+   end;
+  thus leftker rlf c= leftker qf
+   proof
+    let x be set; assume x in leftker rlf;
+    then consider vv be Vector of vq such that
+    A8: x=vv & for ww be Vector of wqr holds rlf.[vv,ww]=0.K by A2;
+       now let ww be Vector of wq;
+      reconsider w = ww as Vector of wqr by Th47;
+      thus qf.[vv,ww] = rlf.[vv,w] by Th49
+       .= 0.K by A8;
+     end;
+    hence x in leftker qf by A1,A8;
+  end;
+ thus rightker qf c= rightker rlf
+  proof
+   let x be set; assume x in rightker qf;
+   then consider ww be Vector of wq such that
+  A9: x=ww & for vv be Vector of vq holds qf.[vv,ww]=0.K by A3;
+   reconsider w = ww as Vector of wqr by Th47;
+      now let vv be Vector of vq;
+      thus rlf.[vv,w] = qf.[vv,ww] by Th49
+      .= 0.K by A9;
+     end;
+    hence x in rightker rlf by A4,A9;
+  end;
+ thus rightker rlf c= rightker qf
+  proof
+   let x be set; assume x in rightker rlf;
+   then consider ww be Vector of wqr such that
+  A10: x=ww & for vv be Vector of vq holds rlf.[vv,ww]=0.K by A4;
+   reconsider w = ww as Vector of wq by Th47;
+      now let vv be Vector of vq;
+     thus qf.[vv,w] = rlf.[vv,ww] by Th49
+      .= 0.K by A10;
+    end;
+   hence x in rightker qf by A3,A10;
+  end;
+ thus leftker qf c= leftker lrf
+  proof
+    let x be set; assume x in leftker qf;
+    then consider vv be Vector of vq such that
+   A11: x=vv & for ww be Vector of wq holds qf.[vv,ww]=0.K by A1;
+    reconsider v=vv as Vector of vql by Th48;
+       now let ww be Vector of wq;
+      thus lrf.[v,ww] = qf.[vv,ww] by Th49
+      .= 0.K by A11;
+     end;
+    hence x in leftker lrf by A5,A11;
+   end;
+  thus leftker lrf c= leftker qf
+   proof
+    let x be set; assume x in leftker lrf;
+    then consider vv be Vector of vql such that
+    A12: x=vv & for ww be Vector of wq holds lrf.[vv,ww]=0.K by A5;
+    reconsider v=vv as Vector of vq by Th48;
+       now let ww be Vector of wq;
+      thus qf.[v,ww] = lrf.[vv,ww] by Th49
+       .= 0.K by A12;
+     end;
+    hence x in leftker qf by A1,A12;
+  end;
+ thus rightker qf c= rightker lrf
+  proof
+   let x be set; assume x in rightker qf;
+   then consider ww be Vector of wq such that
+  A13: x=ww & for vv be Vector of vq holds qf.[vv,ww]=0.K by A3;
+      now let vv be Vector of vql;
+    reconsider v = vv as Vector of vq by Th48;
+      thus lrf.[vv,ww] = qf.[v,ww] by Th49
+      .= 0.K by A13;
+     end;
+    hence x in rightker lrf by A6,A13;
+  end;
+  let x be set; assume x in rightker lrf;
+  then consider ww be Vector of wq such that
+  A14: x=ww & for vv be Vector of vql holds lrf.[vv,ww]=0.K by A6;
+      now let vv be Vector of vq;
+     reconsider v = vv as Vector of vql by Th48;
+     thus qf.[vv,ww] = lrf.[v,ww] by Th49
+      .= 0.K by A14;
+    end;
+   hence x in rightker qf by A3,A14;
+end;
+
+theorem Th51:
+for K be add-associative right_zeroed right_complementable
+      distributive (non empty doubleLoopStr)
+for V,W be non empty VectSpStr over K
+for f be Functional of V, g be Functional of W
+ holds ker f c= leftker FormFunctional(f,g)
+ proof
+  let K be add-associative right_zeroed right_complementable distributive
+       (non empty doubleLoopStr),
+   V, W be non empty VectSpStr over K,
+   f be Functional of V, g be Functional of W;
+  set fg = FormFunctional(f,g);
+ A1: leftker fg =
+   {v where v is Vector of V : for w be Vector of W holds fg.[v,w] = 0.K}
+    by Def16;
+ A2: ker f = {v where v is Vector of V : f.v = 0.K} by VECTSP10:def 9;
+  let x be set; assume x in ker f;
+  then consider v be Vector of V such that
+ A3: x=v & f.v=0.K by A2;
+     now let w be Vector of W;
+    thus fg.[v,w] = f.v*g.w by Def11
+     .= 0.K by A3,VECTSP_1:39;
+   end;
+  hence thesis by A1,A3;
+ end;
+
+theorem Th52:
+for K be add-associative right_zeroed right_complementable associative
+ commutative left_unital Field-like distributive (non empty doubleLoopStr)
+for V, W be non empty VectSpStr over K
+for f be Functional of V, g be Functional of W
+st g <> 0Functional(W) holds leftker FormFunctional(f,g) = ker f
+ proof
+  let K be add-associative right_zeroed right_complementable associative
+    commutative left_unital Field-like distributive (non empty doubleLoopStr),
+   V, W be non empty VectSpStr over K,
+   f be Functional of V, g be Functional of W;
+  set fg = FormFunctional(f,g);
+ A1: leftker fg =
+   {v where v is Vector of V : for w be Vector of W holds fg.[v,w] = 0.K}
+    by Def16;
+ A2: ker f = {v where v is Vector of V : f.v = 0.K} by VECTSP10:def 9;
+  assume
+ A3: g <> 0Functional(W);
+  thus leftker fg c= ker f
+    proof
+     let x be set; assume x in leftker fg;
+     then consider v be Vector of V such that
+    A4: x=v & for w be Vector of W holds fg.[v,w] = 0.K by A1;
+     assume
+       not x in ker f;
+    then A5: f.v <> 0.K by A2,A4;
+        now let w be Vector of W;
+          f.v*g.w = fg.[v,w] by Def11
+        .= 0.K by A4;
+        hence g.w = 0.K by A5,VECTSP_1:44
+        .= (0Functional(W)).w by HAHNBAN1:22;
+       end;
+      hence contradiction by A3,FUNCT_2:113;
+    end;
+   thus thesis by Th51;
+ end;
+
+theorem Th53:
+for K be add-associative right_zeroed right_complementable distributive
+     (non empty doubleLoopStr)
+for V,W be non empty VectSpStr over K
+for f be Functional of V, g be Functional of W
+ holds ker g c= rightker FormFunctional(f,g)
+ proof
+  let K be add-associative right_zeroed right_complementable distributive
+     (non empty doubleLoopStr),
+   V, W be non empty VectSpStr over K,
+   f be Functional of V, g be Functional of W;
+  set fg = FormFunctional(f,g);
+ A1: rightker fg =
+   {w where w is Vector of W : for v be Vector of V holds fg.[v,w] = 0.K}
+    by Def17;
+ A2: ker g = {w where w is Vector of W : g.w = 0.K} by VECTSP10:def 9;
+  let x be set; assume x in ker g;
+  then consider w be Vector of W such that
+ A3: x=w & g.w=0.K by A2;
+     now let v be Vector of V;
+    thus fg.[v,w] = f.v*g.w by Def11
+     .= 0.K by A3,VECTSP_1:36;
+   end;
+  hence thesis by A1,A3;
+ end;
+
+theorem Th54:
+for K be add-associative right_zeroed right_complementable associative
+   commutative left_unital Field-like distributive (non empty doubleLoopStr)
+for V, W be non empty VectSpStr over K
+for f be Functional of V, g be Functional of W
+st f <> 0Functional(V) holds rightker FormFunctional(f,g) = ker g
+ proof
+  let K be add-associative right_zeroed right_complementable associative
+    commutative left_unital Field-like distributive (non empty doubleLoopStr),
+   V, W be non empty VectSpStr over K,
+   f be Functional of V, g be Functional of W;
+  set fg = FormFunctional(f,g);
+ A1: rightker fg =
+   {w where w is Vector of W : for v be Vector of V holds fg.[v,w] = 0.K}
+    by Def17;
+ A2: ker g = {w where w is Vector of W : g.w = 0.K} by VECTSP10:def 9;
+  assume
+ A3: f <> 0Functional(V);
+  thus rightker fg c= ker g
+    proof
+     let x be set; assume x in rightker fg;
+     then consider w be Vector of W such that
+    A4: x=w & for v be Vector of V holds fg.[v,w] = 0.K by A1;
+     assume
+       not x in ker g;
+    then A5: g.w <> 0.K by A2,A4;
+        now let v be Vector of V;
+          f.v*g.w = fg.[v,w] by Def11
+        .= 0.K by A4;
+        hence f.v = 0.K by A5,VECTSP_1:44
+        .= (0Functional(V)).v by HAHNBAN1:22;
+       end;
+      hence contradiction by A3,FUNCT_2:113;
+    end;
+   thus thesis by Th53;
+ end;
+
+theorem Th55:
+for K be add-associative right_zeroed right_complementable commutative Abelian
+      associative left_unital distributive Field-like (non empty doubleLoopStr)
+for V be VectSp of K, W be non empty VectSpStr over K
+for f be linear-Functional of V, g be Functional of W
+st g <> 0Functional(W) holds
+  LKer FormFunctional(f,g) = Ker f &
+  LQForm(FormFunctional(f,g)) = FormFunctional(CQFunctional(f),g)
+ proof
+ let K be add-associative right_zeroed right_complementable commutative Abelian
+   associative left_unital distributive Field-like (non empty doubleLoopStr),
+   V be VectSp of K, W be non empty VectSpStr over K,
+   f be linear-Functional of V, g be Functional of W;
+  assume
+ A1: g <> 0Functional(W);
+  set fg = FormFunctional(f,g), cf = CQFunctional(f),
+     fcfg = FormFunctional(CQFunctional(f),g),
+     vql = VectQuot(V, LKer fg), vq =VectQuot(V, Ker f);
+ A2: the carrier of LKer fg = leftker fg by Def19;
+    leftker fg = ker f by A1,Th52;
+ hence A3: LKer fg = Ker f by A2,VECTSP10:def 11;
+ A4:  dom LQForm(fg) = [: the carrier of vql, the carrier of W:]
+     by FUNCT_2:def 1;
+ A5:  dom fcfg = [: the carrier of vq, the carrier of W:]
+     by FUNCT_2:def 1;
+     now
+    let x be set; assume x in dom fcfg;
+    then consider A be Vector of vq, B be Vector of W such that
+   A6: x=[A,B] by DOMAIN_1:9;
+    consider v be Vector of V such that
+   A7: A = v + Ker f by VECTSP10:23;
+    thus fcfg.x= cf.A * g.B by A6,Def11
+    .=f.v *g.B by A7,VECTSP10:36
+    .= fg.[v,B] by Def11
+    .= (LQForm(fg)).x by A3,A6,A7,Def21;
+   end;
+  hence thesis by A3,A4,A5,FUNCT_1:9;
+ end;
+
+theorem Th56:
+for K be add-associative right_zeroed right_complementable commutative Abelian
+    associative left_unital distributive Field-like (non empty doubleLoopStr)
+for V be non empty VectSpStr over K, W be VectSp of K
+for f be Functional of V, g be linear-Functional of W
+st f <> 0Functional(V) holds
+  RKer FormFunctional(f,g) = Ker g &
+ RQForm(FormFunctional(f,g)) = FormFunctional(f,CQFunctional(g))
+ proof
+ let K be add-associative right_zeroed right_complementable commutative Abelian
+   associative left_unital distributive Field-like (non empty doubleLoopStr),
+   V be non empty VectSpStr over K, W be VectSp of K,
+   f be Functional of V, g be linear-Functional of W;
+  assume
+ A1: f <> 0Functional(V);
+  set fg = FormFunctional(f,g), cg = CQFunctional(g),
+     fcfg = FormFunctional(f,CQFunctional(g)),
+     wqr = VectQuot(W, RKer fg), wq =VectQuot(W, Ker g);
+ A2: the carrier of RKer fg = rightker fg by Def20;
+   rightker fg = ker g by A1,Th54;
+ hence A3: RKer fg = Ker g by A2,VECTSP10:def 11;
+ A4:  dom RQForm(fg) = [: the carrier of V, the carrier of wqr:]
+     by FUNCT_2:def 1;
+ A5:  dom fcfg = [: the carrier of V, the carrier of wq:]
+     by FUNCT_2:def 1;
+     now
+    let x be set; assume x in dom fcfg;
+    then consider A be Vector of V, B be Vector of wq such that
+   A6: x=[A,B] by DOMAIN_1:9;
+  consider w be Vector of W such that
+   A7: B = w + Ker g by VECTSP10:23;
+    thus fcfg.x= f.A * cg.B by A6,Def11
+    .=f.A *g.w by A7,VECTSP10:36
+    .= fg.[A,w] by Def11
+    .= (RQForm(fg)).x by A3,A6,A7,Def22;
+   end;
+  hence thesis by A3,A4,A5,FUNCT_1:9;
+ end;
+
+theorem
+  for K be Field, V,W be non trivial VectSp of K
+for f be non constant linear-Functional of V,
+    g be non constant linear-Functional of W holds
+QForm(FormFunctional(f,g)) = FormFunctional(CQFunctional(f),CQFunctional(g))
+ proof
+ let K be Field, V,W be non trivial VectSp of K,
+   f be non constant linear-Functional of V,
+   g be non constant linear-Functional of W;
+ A1: g <> 0Functional(W);
+ A2: CQFunctional(f) <> 0Functional(VectQuot(V,Ker f));
+ A3: LQForm(FormFunctional(f,g)) = FormFunctional(CQFunctional(f),g)
+  by A1,Th55;
+ thus QForm(FormFunctional(f,g))
+   = RQForm(LQForm(FormFunctional(f,g))) by Th49
+   .= RQForm(FormFunctional(CQFunctional(f),g)) by A1,A3,Th55
+   .= FormFunctional(CQFunctional(f),CQFunctional(g)) by A2,Th56;
+ end;
+
+definition
+ let K be ZeroStr;
+ let V,W be non empty VectSpStr over K;
+ let f be Form of V,W;
+attr f is degenerated-on-left means :Def24:
+ leftker f <> {0.V};
+attr f is degenerated-on-right means :Def25:
+ rightker f <> {0.W};
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V be VectSp of K, W be right_zeroed (non empty VectSpStr over K);
+ let f be additiveSAF homogeneousSAF Form of V,W;
+ cluster LQForm(f) -> non degenerated-on-left;
+  coherence
+   proof
+    set qf = LQForm(f), L = LKer f, qV = VectQuot(V,L);
+    A1: leftker qf =
+       {v where v is Vector of qV : for w be Vector of W holds qf.[v,w] = 0.K}
+        by Def16;
+    A2: leftker f =
+       {v where v is Vector of V : for w be Vector of W holds f.[v,w] = 0.K}
+        by Def16;
+    thus leftker qf c= {0.qV}
+     proof
+      let x be set; assume x in leftker qf;
+      then consider vv be Vector of qV such that
+     A3: x= vv & for w be Vector of W holds qf.[vv,w]=0.K by A1;
+      consider v be Vector of V such that
+     A4: vv = v + L by VECTSP10:23;
+          now let w be Vector of W;
+         thus f.[v,w] = qf.[vv,w] by A4,Def21
+         .= 0.K by A3;
+        end;
+       then v in leftker f by A2;
+       then v in the carrier of L by Def19;
+       then v in L by RLVECT_1:def 1;
+       then v+L = the carrier of L by VECTSP_4:64
+       .= zeroCoset(V,L) by VECTSP10:def 4
+       .= 0.qV by VECTSP10:22;
+       hence thesis by A3,A4,TARSKI:def 1;
+     end;
+    let x be set; assume x in {0.qV};
+    then A5: x = 0.qV by TARSKI:def 1;
+      for w be Vector of W holds qf.[0.qV,w] = 0.K by Th31;
+    hence thesis by A1,A5;
+   end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V be right_zeroed (non empty VectSpStr over K), W be VectSp of K;
+ let f be additiveFAF homogeneousFAF Form of V,W;
+ cluster RQForm(f) -> non degenerated-on-right;
+  coherence
+  proof
+    set qf = RQForm(f), R = RKer f, qW = VectQuot(W,R);
+    A1: rightker qf =
+       {w where w is Vector of qW : for v be Vector of V holds qf.[v,w] = 0.K}
+        by Def17;
+    A2: rightker f =
+       {w where w is Vector of W : for v be Vector of V holds f.[v,w] = 0.K}
+        by Def17;
+    thus rightker qf c= {0.qW}
+     proof
+      let x be set; assume x in rightker qf;
+      then consider ww be Vector of qW such that
+     A3: x= ww & for v be Vector of V holds qf.[v,ww]=0.K by A1;
+      consider w be Vector of W such that
+     A4: ww = w + R by VECTSP10:23;
+          now let v be Vector of V;
+         thus f.[v,w] = qf.[v,ww] by A4,Def22
+         .= 0.K by A3;
+        end;
+       then w in rightker f by A2;
+       then w in the carrier of R by Def20;
+       then w in R by RLVECT_1:def 1;
+       then w+R = the carrier of R by VECTSP_4:64
+       .= zeroCoset(W,R) by VECTSP10:def 4
+       .= 0.qW by VECTSP10:22;
+       hence thesis by A3,A4,TARSKI:def 1;
+     end;
+    let x be set; assume x in {0.qW};
+    then A5: x = 0.qW by TARSKI:def 1;
+      for v be Vector of V holds qf.[v,0.qW] = 0.K by Th30;
+    hence thesis by A1,A5;
+ end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V,W be VectSp of K;
+ let f be bilinear-Form of V,W;
+ cluster QForm(f) -> non degenerated-on-left non degenerated-on-right;
+  coherence
+   proof
+   A1: leftker RQForm(LQForm(f)) = leftker QForm(f) &
+       rightker LQForm(RQForm(f)) = rightker QForm(f) by Th50;
+      leftker LQForm(f) = {0.(VectQuot(V,LKer f))} by Def24;
+   then A2: leftker RQForm(LQForm(f)) = {0.(VectQuot(V,LKer f))} by Th46;
+      rightker RQForm(f) = {0.(VectQuot(W,RKer f))} by Def25;
+    then rightker LQForm(RQForm(f)) = {0.(VectQuot(W,RKer f))} by Th45;
+    hence thesis by A1,A2,Def24,Def25;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V,W be VectSp of K;
+ let f be bilinear-Form of V,W;
+cluster RQForm(LQForm(f)) -> non degenerated-on-left non degenerated-on-right;
+ coherence
+  proof
+     leftker LQForm(f) = {0.(VectQuot(V,LKer f))} by Def24;
+   then leftker RQForm(LQForm(f)) = {0.(VectQuot(V,LKer f))} by Th46;
+   hence thesis by Def24;
+  end;
+cluster LQForm(RQForm(f)) -> non degenerated-on-left non degenerated-on-right;
+ coherence
+ proof
+     rightker RQForm(f) = {0.(VectQuot(W,RKer f))} by Def25;
+   then rightker LQForm(RQForm(f)) = {0.(VectQuot(W,RKer f))} by Th45;
+   hence thesis by Def25;
+  end;
+end;
+
+definition
+ let K be Field;
+ let V,W be non trivial VectSp of K;
+ let f be non constant bilinear-Form of V,W;
+ cluster QForm(f) -> non constant;
+coherence
+ proof
+  consider v be Vector of V, w be Vector of W such that
+ A1: f.[v,w] <> 0.K by Th41;
+  reconsider A = v +LKer f as Vector of VectQuot(V,LKer(f)) by VECTSP10:24;
+  reconsider B = w + RKer f as Vector of VectQuot(W,RKer(f)) by VECTSP10:24;
+    (QForm(f)).[A,B] = f.[v,w] by Def23;
+  hence thesis by A1,Th41;
+ end;
+end;
+
+begin
+:: Bilinear Symmetric and Alternating Forms
+
+definition
+ let K be 1-sorted;
+ let V be VectSpStr over K;
+ let f be Form of V,V;
+attr f is symmetric means :Def26:
+ for v,w be Vector of V holds f.[v,w] = f.[w,v];
+end;
+
+definition
+ let K be ZeroStr;
+ let V be VectSpStr over K;
+ let f be Form of V,V;
+attr f is alternating means :Def27:
+ for v be Vector of V holds f.[v,v] = 0.K;
+end;
+
+definition
+ let K be non empty ZeroStr;
+ let V be non empty VectSpStr over K;
+cluster NulForm(V,V) -> symmetric;
+ coherence
+  proof
+   let v,w be Vector of V;
+   thus NulForm(V,V).[v,w] = 0.K by Th1
+    .= NulForm(V,V).[w,v] by Th1;
+  end;
+cluster NulForm(V,V) -> alternating;
+ coherence
+  proof
+   let v be Vector of V;
+   thus NulForm(V,V).[v,v] = 0.K by Th1;
+  end;
+end;
+
+definition
+ let K be non empty ZeroStr;
+ let V be non empty VectSpStr over K;
+cluster symmetric Form of V,V;
+ existence proof take NulForm(V,V); thus thesis; end;
+cluster alternating Form of V,V;
+ existence proof take NulForm(V,V); thus thesis; end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+         right-distributive (non empty doubleLoopStr);
+ let V be non empty VectSpStr over K;
+cluster symmetric
+         additiveFAF homogeneousFAF additiveSAF homogeneousSAF Form of V,V;
+ existence proof take NulForm(V,V); thus thesis; end;
+cluster alternating
+         additiveFAF homogeneousFAF additiveSAF homogeneousSAF Form of V,V;
+ existence proof take NulForm(V,V); thus thesis; end;
+end;
+
+definition
+ let K be Field;
+ let V be non trivial VectSp of K;
+cluster symmetric non trivial non constant
+         additiveFAF homogeneousFAF additiveSAF homogeneousSAF Form of V,V;
+ existence
+  proof
+   consider f be non constant non trivial linear-Functional of V;
+   take ff = FormFunctional(f,f);
+      now let v,w be Vector of V;
+     thus ff.[v,w]= f.v * f.w by Def11
+      .= ff.[w,v] by Def11;
+    end;
+   hence thesis by Def26;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       (non empty LoopStr);
+ let V be non empty VectSpStr over K;
+cluster alternating additiveFAF additiveSAF Form of V,V;
+ existence proof take NulForm(V,V); thus thesis; end;
+end;
+
+definition
+ let K be non empty LoopStr;
+ let V be non empty VectSpStr over K;
+ let f,g be symmetric Form of V,V;
+cluster f+g -> symmetric;
+coherence
+ proof
+  let v,w be Vector of V;
+  thus (f+g).[v,w] = f.[v,w] + g.[v,w] by Def3
+  .= f.[w,v] + g.[v,w] by Def26
+  .= f.[w,v] + g.[w,v] by Def26
+  .= (f+g).[w,v] by Def3;
+ end;
+end;
+
+definition
+ let K be non empty doubleLoopStr;
+ let V be non empty VectSpStr over K;
+ let f be symmetric Form of V,V;
+ let a be Element of K;
+cluster a*f -> symmetric;
+ coherence
+  proof
+   let v,w be Vector of V;
+   thus (a*f).[v,w] = a*f.[v,w] by Def4
+  .= a*f.[w,v] by Def26
+  .= (a*f).[w,v] by Def4;
+ end;
+end;
+
+definition
+ let K be non empty LoopStr;
+ let V be non empty VectSpStr over K;
+ let f be symmetric Form of V,V;
+cluster -f -> symmetric;
+ coherence
+  proof
+   let v,w be Vector of V;
+   thus (-f).[v,w] = -f.[v,w] by Def5
+  .= -f.[w,v] by Def26
+  .= (-f).[w,v] by Def5;
+ end;
+end;
+
+definition
+ let K be non empty LoopStr;
+ let V be non empty VectSpStr over K;
+ let f,g be symmetric Form of V,V;
+cluster f-g -> symmetric;
+ coherence proof f-g = f+-g by Def7; hence thesis; end;
+end;
+
+definition
+ let K be right_zeroed (non empty LoopStr);
+ let V be non empty VectSpStr over K;
+ let f,g be alternating Form of V,V;
+cluster f+g -> alternating;
+coherence
+ proof
+  let v be Vector of V;
+  thus (f+g).[v,v] = f.[v,v] + g.[v,v] by Def3
+  .= 0.K + g.[v,v] by Def27
+  .= 0.K + 0.K by Def27
+  .= 0.K by RLVECT_1:def 7;
+ end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       right-distributive (non empty doubleLoopStr);
+ let V be non empty VectSpStr over K;
+ let f be alternating Form of V,V;
+ let a be Scalar of K;
+cluster a*f -> alternating;
+ coherence
+  proof
+   let v be Vector of V;
+   thus (a*f).[v,v] = a*f.[v,v] by Def4
+  .= a*0.K by Def27
+  .= 0.K by VECTSP_1:36;
+ end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       (non empty LoopStr);
+ let V be non empty VectSpStr over K;
+ let f be alternating Form of V,V;
+cluster -f -> alternating;
+ coherence
+  proof
+   let v be Vector of V;
+   thus (-f).[v,v] = -f.[v,v] by Def5
+  .= -0.K by Def27
+  .= 0.K by RLVECT_1:25;
+ end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+      (non empty LoopStr);
+ let V be non empty VectSpStr over K;
+ let f,g be alternating Form of V,V;
+cluster f-g -> alternating;
+ coherence proof f-g = f+-g by Def7; hence thesis; end;
+end;
+
+theorem
+  for K be add-associative right_zeroed right_complementable
+       right-distributive (non empty doubleLoopStr)
+for V be non empty VectSpStr over K
+for f be symmetric bilinear-Form of V,V holds
+ leftker f = rightker f
+ proof
+  let K be add-associative right_zeroed right_complementable
+         right-distributive (non empty doubleLoopStr),
+      V be non empty VectSpStr over K,
+      f be symmetric bilinear-Form of V,V;
+ A1: {v where v is Vector of V : for w be Vector of V holds f.[v,w] = 0.K}
+     = leftker f by Def16;
+ A2: {w where w is Vector of V : for v be Vector of V holds f.[v,w] = 0.K}
+     = rightker f by Def17;
+  thus leftker f c= rightker f
+   proof
+    let x be set; assume x in leftker f;
+    then consider v be Vector of V such that
+   A3: v = x & for w be Vector of V holds f.[v,w]=0.K by A1;
+       now
+      let w be Vector of V;
+      thus f.[w,v] = f.[v,w] by Def26
+      .= 0.K by A3;
+     end;
+    hence thesis by A2,A3;
+   end;
+  let x be set; assume x in rightker f;
+  then consider w be Vector of V such that
+ A4: w = x & for v be Vector of V holds f.[v,w]=0.K by A2;
+     now
+    let v be Vector of V;
+    thus f.[w,v] = f.[v,w] by Def26
+      .= 0.K by A4;
+   end;
+  hence thesis by A1,A4;
+ end;
+
+theorem Th59:
+for K be add-associative right_zeroed right_complementable
+    (non empty LoopStr)
+for V be non empty VectSpStr over K
+for f be alternating additiveSAF additiveFAF Form of V,V
+for v,w be Vector of V holds f.[v,w]=-f.[w,v]
+ proof
+  let K be add-associative right_zeroed right_complementable
+          (non empty LoopStr),
+      V be non empty VectSpStr over K,
+      f be alternating additiveSAF additiveFAF Form of V,V,
+      v,w be Vector of V;
+    0.K = f.[v+w,v+w] by Def27
+   .= f.[v,v] + f.[v,w] + (f.[w,v] + f.[w,w]) by Th29
+   .= 0.K + f.[v,w] + (f.[w,v] + f.[w,w]) by Def27
+   .= 0.K + f.[v,w] + (f.[w,v] + 0.K) by Def27
+   .= 0.K + f.[v,w] + f.[w,v] by RLVECT_1:def 7
+   .= f.[v,w] + f.[w,v] by RLVECT_1:10;
+  hence f.[v,w]= - f.[w,v] by RLVECT_1:19;
+ end;
+
+definition
+ let K be Fanoian Field;
+ let V be non empty VectSpStr over K;
+ let f be additiveSAF additiveFAF Form of V,V;
+redefine attr f is alternating means
+   for v,w be Vector of V holds f.[v,w] = -f.[w,v];
+ compatibility
+   proof
+    thus f is alternating implies
+     for v,w be Vector of V holds f.[v,w] = -f.[w,v] by Th59;
+    assume A1: for v,w be Vector of V holds f.[v,w] = -f.[w,v];
+    let v be Vector of V;
+      f.[v,v] = - f.[v,v] by A1;
+    then f.[v,v]+f.[v,v]= 0.K by VECTSP_1:63;
+    hence thesis by VECTSP_1:def 28;
+  end;
+end;
+
+theorem
+  for K be add-associative right_zeroed right_complementable
+       right-distributive (non empty doubleLoopStr)
+for V be non empty VectSpStr over K
+for f be alternating bilinear-Form of V,V holds
+ leftker f = rightker f
+ proof
+   let K be add-associative right_zeroed right_complementable
+          right-distributive (non empty doubleLoopStr),
+       V be non empty VectSpStr over K,
+       f be alternating bilinear-Form of V,V;
+ A1: {v where v is Vector of V : for w be Vector of V holds f.[v,w] = 0.K}
+     = leftker f by Def16;
+ A2: {w where w is Vector of V : for v be Vector of V holds f.[v,w] = 0.K}
+     = rightker f by Def17;
+  thus leftker f c= rightker f
+   proof
+    let x be set; assume x in leftker f;
+    then consider v be Vector of V such that
+   A3: v = x & for w be Vector of V holds f.[v,w]=0.K by A1;
+       now
+      let w be Vector of V;
+      thus f.[w,v] = -f.[v,w] by Th59
+      .= -0.K by A3
+      .= 0.K by RLVECT_1:25;
+     end;
+    hence thesis by A2,A3;
+   end;
+  let x be set; assume x in rightker f;
+  then consider w be Vector of V such that
+ A4: w = x & for v be Vector of V holds f.[v,w]=0.K by A2;
+     now
+    let v be Vector of V;
+    thus f.[w,v] = -f.[v,w] by Th59
+      .= -0.K by A4
+      .= 0.K by RLVECT_1:25;
+   end;
+  hence thesis by A1,A4;
+ end;

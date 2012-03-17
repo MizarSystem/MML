@@ -1,0 +1,14 @@
+HIDDEN
+TARSKI
+XBOOLE_0
+ZFMISC_1
+SUBSET_1
+SETFAM_1
+STRUCT_0
+COLLSP
+#
+«V5 ;;;G3 ;
+«W4 ;V5 ;;;G3 ;
+«W4 ;V5 ;V6 ;V7 ;;;G3 ;
+«W4 ;V5 ;V6 ;V7 ;V8 ;;;G3 ;
+!

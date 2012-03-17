@@ -1,0 +1,233 @@
+:: On Powers of Cardinals
+::  by Grzegorz Bancerek
+::
+:: Received August 24, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL1, BOOLE, ORDINAL2, FINSEQ_1, FUNCT_1, CARD_1, PROB_1,
+      RELAT_1, TARSKI, FINSET_1, WELLORD1, WELLORD2, ZFREFLE1, CARD_2,
+      ORDINAL3, FUNCT_2, CARD_3, ZFMISC_1, FUNCOP_1, RLVECT_1, MCART_1, CARD_5;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, NAT_1, RELAT_1,
+      FUNCT_1, FINSEQ_1, FINSET_1, ORDINAL1, FUNCT_2, WELLORD1, WELLORD2,
+      MCART_1, FUNCOP_1, ORDINAL2, CARD_1, FUNCT_4, ORDINAL3, CARD_2, PROB_1,
+      CARD_3, ORDINAL4, ZFREFLE1;
+ constructors ZF_REFLE, NAT_1, WELLORD1, WELLORD2, MCART_1, FUNCOP_1, ORDINAL3,
+      CARD_2, CARD_3, ZFREFLE1, XBOOLE_0;
+ clusters SUBSET_1, FUNCT_1, ORDINAL1, ORDINAL2, CARD_1, CARD_3, ORDINAL3,
+      ARYTM_3, ORDINAL4, FINSET_1, XREAL_0, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Results of [(30),AXIOMS].
+
+reserve k,n,m for Nat, A,B,C for Ordinal, X for set, x,y,z for set;
+
+theorem :: CARD_5:1
+   1 = {0} & 2 = {0,1};
+
+canceled 6;
+
+theorem :: CARD_5:8
+   Seg n = (n+1) \ {0};
+
+begin :: Infinity, alephs and cofinality
+
+reserve f,g,h,fx for Function, K,M,N for Cardinal,
+ phi,psi for Ordinal-Sequence;
+
+theorem :: CARD_5:9
+ nextcard Card X = nextcard X;
+
+theorem :: CARD_5:10
+ y in Union f iff ex x st x in dom f & y in f.x;
+
+theorem :: CARD_5:11
+ alef A is infinite;
+
+theorem :: CARD_5:12
+ M is infinite implies ex A st M = alef A;
+
+theorem :: CARD_5:13
+   (ex n st M = Card n) or (ex A st M = alef A);
+
+ definition let phi;
+  cluster Union phi -> ordinal;
+ end;
+
+theorem :: CARD_5:14
+ X c= A implies ex phi st
+  phi = canonical_isomorphism_of(RelIncl order_type_of RelIncl X, RelIncl X) &
+   phi is increasing & dom phi = order_type_of RelIncl X & rng phi = X;
+
+theorem :: CARD_5:15
+ X c= A implies sup X is_cofinal_with order_type_of RelIncl X;
+
+theorem :: CARD_5:16
+ X c= A implies Card X = Card order_type_of RelIncl X;
+
+theorem :: CARD_5:17
+ ex B st B c= Card A & A is_cofinal_with B;
+
+theorem :: CARD_5:18
+ ex M st M <=` Card A & A is_cofinal_with M &
+   for B st A is_cofinal_with B holds M c= B;
+
+theorem :: CARD_5:19
+ rng phi = rng psi & phi is increasing & psi is increasing implies phi = psi;
+
+theorem :: CARD_5:20
+ phi is increasing implies phi is one-to-one;
+
+theorem :: CARD_5:21
+ (phi^psi)|(dom phi) = phi;
+
+theorem :: CARD_5:22
+   X <> {} implies
+   Card { Y where Y is Element of bool X: Card Y <` M } <=` M*`exp(Card X,M);
+
+theorem :: CARD_5:23
+ M <` exp(2,M);
+
+ definition
+  cluster infinite set;
+
+  cluster infinite Cardinal;
+ end;
+
+ definition
+  cluster infinite -> non empty set;
+ end;
+
+ definition
+  mode Aleph is infinite Cardinal;
+  let M;
+ canceled;
+
+  func cf M -> Cardinal means
+:: CARD_5:def 2
+
+   M is_cofinal_with it &
+    for N st M is_cofinal_with N holds it <=` N;
+  let N;
+  func N-powerfunc_of M -> Cardinal-Function means
+:: CARD_5:def 3
+
+   (for x holds x in dom it iff x in M & x is Cardinal) &
+    for K st K in M holds it.K = exp(K,N);
+ end;
+
+ definition let A;
+  cluster alef A -> infinite;
+ end;
+
+begin :: Arithmetics of alephs
+
+ reserve a,b for Aleph;
+
+theorem :: CARD_5:24
+   ex A st a = alef A;
+
+theorem :: CARD_5:25
+ a <> 0 & a <> 1 & a <> 2 & a <> Card n & Card n <` a & alef 0 <=` a;
+
+theorem :: CARD_5:26
+ a <=` M or a <` M implies M is Aleph;
+
+theorem :: CARD_5:27
+ a <=` M or a <` M implies a +` M = M & M +` a = M & a *` M = M & M *` a = M;
+
+theorem :: CARD_5:28
+  a +` a = a & a *` a = a;
+
+canceled 2;
+
+theorem :: CARD_5:31
+ M <=` exp(M,a);
+
+theorem :: CARD_5:32
+ union a = a;
+
+ definition let a,M;
+  cluster a +` M -> infinite;
+ end;
+
+ definition let M,a;
+  cluster M +` a -> infinite;
+ end;
+
+ definition let a,b;
+  cluster a *` b -> infinite;
+  cluster exp(a,b) -> infinite;
+ end;
+
+begin :: Regular alephs
+
+ definition let IT be Aleph;
+  attr IT is regular means
+:: CARD_5:def 4
+     cf IT = IT;
+  antonym IT is irregular;
+end;
+
+definition
+  let a;
+  cluster nextcard a -> infinite;
+  cluster -> ordinal Element of a;
+ end;
+
+canceled;
+
+theorem :: CARD_5:34
+ cf alef 0 = alef 0;
+
+theorem :: CARD_5:35
+ cf nextcard a = nextcard a;
+
+theorem :: CARD_5:36
+ alef 0 <=` cf a;
+
+theorem :: CARD_5:37
+   cf 0 = 0 & cf Card (n+1) = 1;
+
+theorem :: CARD_5:38
+ X c= M & Card X <` cf M implies sup X in M & union X in M;
+
+theorem :: CARD_5:39
+ dom phi = M & rng phi c= N & M <` cf N implies
+   sup phi in N & Union phi in N;
+
+ definition let a;
+  cluster cf a -> infinite;
+ end;
+
+theorem :: CARD_5:40
+ cf a <` a implies a is_limit_cardinal;
+
+theorem :: CARD_5:41
+ cf a <` a implies ex xi being Ordinal-Sequence st
+   dom xi = cf a & rng xi c= a & xi is increasing & a = sup xi &
+   xi is Cardinal-Function & not 0 in rng xi;
+
+theorem :: CARD_5:42
+   alef 0 is regular & nextcard a is regular;
+
+begin :: Infinite powers
+
+reserve a,b for Aleph;
+
+theorem :: CARD_5:43
+ a <=` b implies exp(a,b) = exp(2,b);
+
+theorem :: CARD_5:44
+   exp(nextcard a,b) = exp(a,b) *` nextcard a;
+
+theorem :: CARD_5:45
+ Sum (b-powerfunc_of a) <=` exp(a,b);
+
+theorem :: CARD_5:46
+   a is_limit_cardinal & b <` cf a implies exp(a,b) = Sum (b-powerfunc_of a);
+
+theorem :: CARD_5:47
+   cf a <=` b & b <` a implies exp(a,b) = exp(Sum (b-powerfunc_of a), cf a);

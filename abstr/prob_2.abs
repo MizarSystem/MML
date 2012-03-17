@@ -1,0 +1,283 @@
+:: Probability. Independence of Events and Conditional Probability
+::  by Andrzej N\c{e}dzusiak
+::
+:: Received June 1, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary SEQ_1, PROB_1, ARYTM_3, RELAT_1, SEQ_2, FUNCT_1, ARYTM_1, ORDINAL2,
+      ARYTM, ABSVALUE, BOOLE, SUBSET_1, PROB_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, RELAT_1, REAL_1, FUNCT_1, FUNCT_2, ABSVALUE, SEQ_1, SEQ_2,
+      PROB_1, NAT_1;
+ constructors REAL_1, ABSVALUE, SEQ_2, PROB_1, NAT_1, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, XREAL_0, RELSET_1, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0,
+      NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+reserve Omega for non empty set;
+reserve m,n,k for Nat;
+reserve x,y,z for set;
+reserve r,r1,r2,r3 for Real;
+reserve seq,seq1 for Real_Sequence;
+reserve Sigma for SigmaField of Omega;
+reserve ASeq,BSeq for SetSequence of Sigma;
+reserve P,P1,P2 for Probability of Sigma;
+reserve A, B, C, A1, A2, A3 for Event of Sigma;
+
+canceled 3;
+
+theorem :: PROB_2:4
+ for r,r1,r2,r3 st (r <> 0 & r1 <> 0) holds
+  (r3/r1 = r2/r iff r3 * r = r2 * r1);
+
+theorem :: PROB_2:5
+ (seq is convergent & for n holds seq1.n = r - seq.n) implies
+  seq1 is convergent & lim seq1 = r - lim seq;
+
+::
+:: THEOREMS CONCERNED EVENTS
+::
+theorem :: PROB_2:6
+  A /\ Omega = A & A /\ ([#] Sigma) = A;
+
+scheme SeqExProb{F(Nat) -> set}:
+  ex f being Function st dom f = NAT & for n holds f.n = F(n);
+
+definition let Omega,Sigma,ASeq,n;
+  redefine func ASeq.n -> Event of Sigma;
+end;
+
+definition let Omega,Sigma,ASeq;
+  func @Intersection ASeq -> Event of Sigma equals
+:: PROB_2:def 1
+   Intersection ASeq;
+end;
+
+canceled 2;
+
+theorem :: PROB_2:9
+ ex BSeq st for n holds BSeq.n = ASeq.n /\ B;
+
+theorem :: PROB_2:10
+ (ASeq is non-increasing &
+       for n holds BSeq.n = ASeq.n /\ B) implies BSeq is non-increasing;
+
+theorem :: PROB_2:11
+ for f being Function of Sigma,REAL holds
+       (f*ASeq).n = f.(ASeq.n);
+
+theorem :: PROB_2:12
+ (for n holds BSeq.n = ASeq.n /\ B) implies
+       (Intersection ASeq) /\ B = Intersection BSeq;
+
+theorem :: PROB_2:13
+ (for A holds P.A = P1.A) implies P = P1;
+
+theorem :: PROB_2:14
+   for ASeq being SetSequence of Omega holds
+          ASeq is non-increasing iff for n holds ASeq.(n+1) c= ASeq.n;
+
+theorem :: PROB_2:15
+   for ASeq being SetSequence of Omega holds
+      ASeq is non-decreasing iff for n holds ASeq.n c= ASeq.(n+1);
+
+theorem :: PROB_2:16
+   for ASeq,BSeq being SetSequence of Omega
+          st (for n holds ASeq.n = BSeq.n) holds ASeq = BSeq;
+
+theorem :: PROB_2:17
+ for ASeq being SetSequence of Omega holds
+    (ASeq is non-increasing iff Complement ASeq is non-decreasing);
+
+definition let Omega,Sigma,ASeq;
+ func @Complement ASeq -> SetSequence of Sigma equals
+:: PROB_2:def 2
+        Complement ASeq;
+end;
+
+definition let F be Function;
+attr F is disjoint_valued means
+:: PROB_2:def 3
+ x <> y implies F.x misses F.y;
+end;
+
+definition let Omega,Sigma,ASeq;
+redefine attr ASeq is disjoint_valued means
+:: PROB_2:def 4
+   for m,n st m <> n holds ASeq.m misses ASeq.n;
+end;
+
+::
+:: THEOREMS CONCERNED PROBABILITY
+::
+
+canceled 2;
+
+theorem :: PROB_2:20
+:: Equivalent Definition of Probability
+   for P being Function of Sigma,REAL holds
+      P is Probability of Sigma iff
+     (for A holds 0 <= P.A) &
+     (P.Omega = 1) &
+     (for A,B st A misses B holds P.(A \/ B) = P.A + P.B) &
+     (for ASeq st ASeq is non-decreasing holds
+     (P * ASeq is convergent & lim (P * ASeq) = P.Union ASeq));
+
+theorem :: PROB_2:21
+   P.(A \/ B \/ C) =
+  P.A + P.B + P.C - (P.(A /\ B) + P.(B /\ C) + P.(A /\ C)) + P.(A /\ B /\ C);
+
+theorem :: PROB_2:22
+ P.(A \ (A /\ B)) = P.A - P.(A /\ B);
+
+theorem :: PROB_2:23
+ P.(A /\ B) <= P.B & P.(A /\ B) <= P.A;
+
+theorem :: PROB_2:24
+ C = B` implies P.A = P.(A /\ B) + P.(A /\ C);
+
+theorem :: PROB_2:25
+ P.A + P.B - 1 <= P.(A /\ B);
+
+theorem :: PROB_2:26
+ P.A = 1 - P.([#] Sigma \ A);
+
+theorem :: PROB_2:27
+ P.A < 1 iff 0 < P.([#] Sigma \ A);
+
+theorem :: PROB_2:28
+   P.([#] Sigma \ A) < 1 iff 0 < P.A;
+
+::
+:: INDEPENDENCE OF EVENTS
+::
+
+definition
+  let Omega, Sigma, P, A, B;
+  pred A,B are_independent_respect_to P means
+:: PROB_2:def 5
+   P.(A /\ B) = P.A * P.B;
+  let C;
+  pred A,B,C are_independent_respect_to P means
+:: PROB_2:def 6
+   P.(A /\ B /\ C) = P.A * P.B * P.C &
+        P.(A /\ B) = P.A * P.B &
+        P.(A /\ C) = P.A * P.C &
+        P.(B /\ C) = P.B * P.C;
+end;
+
+canceled 2;
+
+theorem :: PROB_2:31
+  A,B are_independent_respect_to P iff
+      B,A are_independent_respect_to P;
+
+theorem :: PROB_2:32
+ (A,B,C are_independent_respect_to P iff
+     (P.(A /\ B /\ C) = P.A * P.B * P.C &
+      A,B are_independent_respect_to P &
+      B,C are_independent_respect_to P &
+      A,C are_independent_respect_to P));
+
+theorem :: PROB_2:33
+   A,B,C are_independent_respect_to P
+      implies B,A,C are_independent_respect_to P;
+
+theorem :: PROB_2:34
+    A,B,C are_independent_respect_to P
+      implies A,C,B are_independent_respect_to P;
+
+theorem :: PROB_2:35
+   for E being Event of Sigma st E = {} holds
+ A, E are_independent_respect_to P;
+
+theorem :: PROB_2:36
+   A, [#] Sigma are_independent_respect_to P;
+
+theorem :: PROB_2:37
+ for A,B,P st A,B are_independent_respect_to P
+  holds A,([#] Sigma \ B) are_independent_respect_to P;
+
+theorem :: PROB_2:38
+ A,B are_independent_respect_to P implies
+  ([#] Sigma \ A),([#] Sigma \ B) are_independent_respect_to P;
+
+theorem :: PROB_2:39
+   for A,B,C,P st (A,B are_independent_respect_to P &
+  A,C are_independent_respect_to P & B misses C) holds
+  A,B \/ C are_independent_respect_to P;
+
+theorem :: PROB_2:40
+   for P,A,B st (A,B are_independent_respect_to P & P.A < 1 & P.B < 1)
+       holds P.(A \/ B) < 1;
+
+::
+:: CONDITIONAL PROBABILITY
+::
+
+definition let Omega,Sigma,P,B;
+  assume  0 < P.B;
+  func P.|.B -> Probability of Sigma means
+:: PROB_2:def 7
+   for A holds it.A = P.(A /\ B)/P.B;
+end;
+
+canceled;
+
+theorem :: PROB_2:42
+ for P,B,A st 0 < P.B holds P.(A /\ B) = P.|.B.A * P.B;
+
+theorem :: PROB_2:43
+   for P,A,B,C st 0 < P.(A /\ B) holds
+       P.(A /\ B /\ C) = P.A * P.|.A.B * P.|.(A /\ B).C;
+
+theorem :: PROB_2:44
+:: Total Probability Rule for Two Events
+ for P,A,B,C st (C = B` & 0 < P.B & 0 < P.C ) holds
+       P.A = P.|.B.A * P.B + P.|.C.A * P.C;
+
+theorem :: PROB_2:45
+:: Total Probability Rule for Three Events
+ for P,A,A1,A2,A3 st (A1 misses A2 & A3 = (A1 \/ A2)` &
+       0 < P.A1 & 0 < P.A2 & 0 < P.A3) holds
+       P.A = (P.|.A1.A * P.A1) + (P.|.A2.A * P.A2) + (P.|.A3.A * P.A3);
+
+theorem :: PROB_2:46
+   for P,A,B st 0 < P.B holds
+       (P.|.B.A = P.A iff A,B are_independent_respect_to P);
+
+theorem :: PROB_2:47
+   for P,A,B st (0 < P.B & P.B < 1 & P.|.B.A = P.|.([#] Sigma \ B).A) holds
+       A,B are_independent_respect_to P;
+
+theorem :: PROB_2:48
+   for P,A,B st 0 < P.B holds (P.A + P.B - 1)/ P.B <= P.|.B.A;
+
+theorem :: PROB_2:49
+ for A,B,P st (0 < P.A & 0 < P.B) holds
+  P.|.B.A = P.|.A.B * P.A / P.B;
+
+theorem :: PROB_2:50
+::Bayes' Theorem for Two Events
+   for B,A1,A2,P st (0 < P.B & A2 = A1` & 0 < P.A1 & 0 < P.A2) holds
+  P.|.B.A1 = (P.|.A1.B * P.A1) / (P.|.A1.B * P.A1 + P.|.A2.B * P.A2) &
+   P.|.B.A2 = (P.|.A2.B * P.A2) / (P.|.A1.B * P.A1 + P.|.A2.B * P.A2);
+
+theorem :: PROB_2:51
+:: Bayes' Theorem for Three Events
+   for B,A1,A2,A3,P st (0<P.B & 0<P.A1 & 0<P.A2 & 0<P.A3 &
+                             A1 misses A2 & A3=(A1 \/ A2)`) holds
+P.|.B.A1 = (P.|.A1.B * P.A1)/((P.|.A1.B * P.A1 + P.|.A2.B * P.A2) + P.|.
+A3.B * P.A3) &
+ P.|.B.A2 = (P.|.A2.B * P.A2)/((P.|.A1.B * P.A1 + P.|.A2.B * P.A2) + P.|.
+A3.B * P.A3) &
+P.|.B.A3 = (P.|.A3.B * P.A3)/((P.|.A1.B * P.A1 + P.|.A2.B * P.A2) + P.|.
+A3.B * P.A3);
+
+theorem :: PROB_2:52
+   for A,B,P st 0 < P.B holds 1 - P.([#] Sigma \ A)/P.B <= P.|.B.A;

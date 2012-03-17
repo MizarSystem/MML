@@ -1,0 +1,1087 @@
+:: Gauges
+::  by Czes\law Byli\'nski
+::
+:: Received January 22, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, MATRIX_1, RELAT_1, FINSEQ_4, BOOLE, FUNCT_1, GOBOARD1,
+      ABSVALUE, ARYTM_1, RFINSEQ, PRE_TOPC, EUCLID, GOBOARD5, TOPREAL1,
+      GOBOARD2, TREES_1, MCART_1, SEQM_3, COMPTS_1, SPPOL_1, PSCOMP_1, ARYTM_3,
+      GROUP_1, INCSP_1, JORDAN8;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, XREAL_0, REAL_1, NAT_1, STRUCT_0,
+      BINARITH, ABSVALUE, RELAT_1, FUNCT_1, CARD_4, FINSEQ_1, FINSEQ_4,
+      RFINSEQ, MATRIX_1, PRE_TOPC, COMPTS_1, EUCLID, TOPREAL1, GOBOARD1,
+      GOBOARD2, SPPOL_1, PSCOMP_1, GOBOARD5;
+ constructors REAL_1, ABSVALUE, FINSEQ_4, CARD_4, RFINSEQ, SEQM_3, BINARITH,
+      COMPTS_1, GOBOARD2, SPPOL_1, PSCOMP_1, GOBOARD5;
+ clusters STRUCT_0, RELAT_1, RELSET_1, EUCLID, GOBOARD2, FINSEQ_5, SPRECT_1,
+      NAT_1, MEMBERED;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions GOBOARD1, GOBOARD5, TOPREAL1, XBOOLE_0;
+ theorems ZFMISC_1, NAT_1, FINSEQ_1, MATRIX_1, GOBOARD1, FINSEQ_4, EUCLID,
+      FINSEQ_3, AXIOMS, REAL_1, REAL_2, HEINE, JORDAN3, SQUARE_1, PSCOMP_1,
+      SPRECT_1, FINSEQ_5, GOBOARD7, TOPREAL1, GOBOARD5, SPRECT_2, ABSVALUE,
+      GROUP_5, GOBOARD9, UNIFORM1, SUBSET_1, GOBRD11, GOBOARD2, SPRECT_3,
+      JORDAN5D, SCMFSA_7, RELAT_1, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+ schemes MATRIX_1;
+
+begin
+
+reserve i,i1,i2,i',i1',j,j1,j2,j',j1',k,l,m,n for Nat;
+reserve r,s,r',s' for Real;
+
+reserve D for set,
+        f for FinSequence of D,
+        G for Matrix of D;
+
+theorem
+    len f >= 2 implies f|2 = <*f/.1,f/.2*>
+proof assume
+A1: len f >= 2;
+then A2: len(f|2) = 2 by TOPREAL1:3;
+  set d1 = f/.1, d2 = f/.2;
+     now
+A3:  rng f c= D by FINSEQ_1:def 4;
+    assume D is empty;
+     then rng f = {} by A3,XBOOLE_1:3;
+     then f = {} by RELAT_1:64;
+     then len f = 0 by FINSEQ_1:25;
+    hence contradiction by A1;
+   end;
+   then reconsider D as non empty set;
+   reconsider f as FinSequence of D;
+     1 in dom(f|2) by A2,FINSEQ_3:27;
+then A4:  d1 = (f|2)/.1 by TOPREAL1:1
+       .= (f|2).1 by A2,FINSEQ_4:24;
+     2 in dom(f|2) by A2,FINSEQ_3:27;
+   then d2 = (f|2)/.2 by TOPREAL1:1
+          .= (f|2).2 by A2,FINSEQ_4:24;
+  hence thesis by A2,A4,FINSEQ_1:61;
+end;
+
+theorem
+    k+1 <= len f implies f|(k+1) = (f|k)^<*f/.(k+1)*>
+proof assume
+A1:  k+1 <= len f;
+   1 <= k+1 by NAT_1:37;
+then A2: k+1 in dom f by A1,FINSEQ_3:27;
+   f|k = f|Seg k by TOPREAL1:def 1;
+ then f|Seg(k+1) = (f|k)^<*f.(k+1)*> by A2,FINSEQ_5:11;
+ hence f|(k+1) = (f|k)^<*f.(k+1)*> by TOPREAL1:def 1
+              .= (f|k)^<*f/.(k+1)*> by A2,FINSEQ_4:def 4;
+end;
+
+theorem
+    <*>D is_sequence_on G
+proof set f = <*>D;
+ thus (for n st n in dom f ex i,j st [i,j] in Indices G & f/.n = G*(i,j)) &
+ for n st n in dom f & n+1 in dom f holds
+    for m,k,i,j st [m,k] in Indices G & [i,j] in Indices G &
+                   f/.n = G*(m,k) & f/.(n+1) = G*(i,j)
+     holds abs(m-i)+abs(k-j) = 1;
+end;
+
+canceled;
+
+theorem
+   for D being non empty set, f being FinSequence of D, G being Matrix of D
+   st f is_sequence_on G
+  holds f/^m is_sequence_on G
+proof let D be non empty set, f be FinSequence of D, G be Matrix of D such that
+A1: for n st n in dom f ex i,j st [i,j] in Indices G & f/.n = G*(i,j) and
+A2: for n st n in dom f & n+1 in dom f
+     for m,k,i,j
+      st [m,k] in Indices G & [i,j] in
+Indices G & f/.n=G*(m,k) & f/.(n+1)=G*(i,j)
+     holds abs(m-i)+abs(k-j) = 1;
+ set g = f/^m;
+ hereby
+  let n; assume
+A3:  n in dom g;
+  then n+m in dom f by FINSEQ_5:29;
+  then consider i,j such that
+A4:  [i,j] in Indices G and
+A5:  f/.(n+m) = G*(i,j) by A1;
+  take i,j;
+  thus [i,j] in Indices G by A4;
+  thus g/.n = G*(i,j) by A3,A5,FINSEQ_5:30;
+ end;
+ let n such that
+A6:  n in dom g and
+A7:  n+1 in dom g;
+ let i1,j1,i2,j2 such that
+A8:  [i1,j1] in Indices G & [i2,j2] in Indices G and
+A9:  g/.n = G*(i1,j1) & g/.(n+1) = G*(i2,j2);
+A10:  n+m in dom f by A6,FINSEQ_5:29;
+A11:  n+1+m = n+m+1 by XCMPLX_1:1;
+then A12:  n+m+1 in dom f by A7,FINSEQ_5:29;
+   f/.(n+m) = g/.n & f/.(n+m+1) = g/.(n+1) by A6,A7,A11,FINSEQ_5:30;
+ hence abs(i1-i2)+abs(j1-j2) = 1 by A2,A8,A9,A10,A12;
+end;
+
+theorem Th6:
+  1 <= k & k+1 <= len f & f is_sequence_on G
+   implies ex i1,j1,i2,j2 being Nat st
+     [i1,j1] in Indices G & f/.k = G*(i1,j1) &
+     [i2,j2] in Indices G & f/.(k+1) = G*(i2,j2) &
+     (i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+      i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1)
+proof
+ assume that
+A1:  1 <= k & k+1 <= len f and
+A2:  f is_sequence_on G;
+      k <= k+1 by NAT_1:29;
+    then k <= len f by A1,AXIOMS:22;
+then A3:  k in dom f by A1,FINSEQ_3:27;
+    then consider i1,j1 being Nat such that
+A4:  [i1,j1] in Indices G & f/.k = G*(i1,j1) by A2,GOBOARD1:def 11;
+      k+1 >= 1 by NAT_1:29;
+then A5:  k+1 in dom f by A1,FINSEQ_3:27;
+    then consider i2,j2 being Nat such that
+A6:  [i2,j2] in Indices G & f/.(k+1) = G*(i2,j2) by A2,GOBOARD1:def 11;
+A7:  abs(i1-i2)+abs(j1-j2) = 1 by A2,A3,A4,A5,A6,GOBOARD1:def 11;
+      now per cases by A7,GOBOARD1:2;
+     case that
+A8:  abs(i1-i2) = 1 and
+A9:  j1 = j2;
+A10:   -(i1-i2) = i2-i1 by XCMPLX_1:143;
+        i1-i2 >= 0 or i1-i2 < 0;
+      then i1-i2 = 1 or -(i1-i2) = 1 by A8,ABSVALUE:def 1;
+     hence i1 = i2+1 or i1+1 = i2 by A10,XCMPLX_1:27;
+     thus j1 = j2 by A9;
+     case that
+A11:  i1 = i2 and
+A12:  abs(j1-j2) = 1;
+A13:   -(j1-j2) = j2-j1 by XCMPLX_1:143;
+        j1-j2 >= 0 or j1-j2 < 0;
+      then j1-j2 = 1 or -(j1-j2) = 1 by A12,ABSVALUE:def 1;
+     hence j1 = j2+1 or j1+1 = j2 by A13,XCMPLX_1:27;
+     thus i1 = i2 by A11;
+    end;
+  hence thesis by A4,A6;
+end;
+
+reserve G for Go-board,
+        p for Point of TOP-REAL 2;
+
+theorem
+   for f being non empty FinSequence of TOP-REAL 2 st f is_sequence_on G
+   holds f is standard special
+proof let f be non empty FinSequence of TOP-REAL 2 such that
+A1:  f is_sequence_on G;
+ thus f is_sequence_on GoB f
+  proof set F = GoB f;
+   thus for n st n in dom f
+     ex i,j st [i,j] in Indices GoB f & f/.n = (GoB f)*
+(i,j) by GOBOARD2:25;
+   let n such that
+A2:   n in dom f & n+1 in dom f;
+   let m,k,i,j such that
+A3:  [m,k] in Indices GoB f and
+A4:  [i,j] in Indices GoB f and
+A5:  f/.n = (GoB f)*(m,k) and
+A6:  f/.(n+1) = (GoB f)*(i,j);
+A7:  1 <= m & m <= len F & 1 <= k & k <= width F by A3,GOBOARD5:1;
+A8:  1 <= i & i <= len F & 1 <= j & j <= width F by A4,GOBOARD5:1;
+then A9:  F*(i,j)`1 = F*(i,1)`1 & F*(i,k)`1 = F*(i,1)`1 by A7,GOBOARD5:3;
+A10:  F*(i,j)`2 = F*(1,j)`2 & F*(m,j)`2 = F*(1,j)`2 by A7,A8,GOBOARD5:2;
+     1 <= n & n+1 <= len f by A2,FINSEQ_3:27;
+   then consider i1,j1,i2,j2 such that
+A11:  [i1,j1] in Indices G and
+A12:  f/.n = G*(i1,j1) and
+A13:  [i2,j2] in Indices G and
+A14:  f/.(n+1) = G*(i2,j2) and
+A15:  i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+      i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1 by A1,Th6;
+A16:  1 <= i1 & i1 <= len G & 1 <= j1 & j1 <= width G by A11,GOBOARD5:1;
+A17:  1 <= i2 & i2 <= len G & 1 <= j2 & j2 <= width G by A13,GOBOARD5:1;
+then A18:  G*(i1,j1)`1 = G*(i1,1)`1 & G*(i2,j2)`1 = G*(i2,1)`1
+        by A16,GOBOARD5:3;
+A19:  G*(i1,j1)`2 = G*(1,j1)`2 & G*(i2,j1)`2 = G*(1,j1)`2
+        by A16,A17,GOBOARD5:2;
+A20:  k+1 >= 1 & j+1 >= 1 & m+1 >= 1 & i+1 >= 1 by NAT_1:37;
+A21:  k+1 > k & j+1 > j & m+1 > m & i+1 > i by NAT_1:38;
+   per cases by A15;
+   suppose
+A22:   i1 = i2 & j1+1 = j2;
+      now assume m <> i;
+       then m < i or m > i by REAL_1:def 5;
+      hence contradiction by A5,A6,A7,A8,A9,A12,A14,A18,A22,GOBOARD5:4;
+    end;
+    then m-i = 0 by XCMPLX_1:14;
+then A23: abs(m-i) = 0 by ABSVALUE:7;
+      now assume j <= k;
+then A24:     F*(i,j)`2 <= F*(m,k)`2 by A7,A8,A10,SPRECT_3:24;
+       j1 < j2 by A22,NAT_1:38;
+     hence contradiction by A5,A6,A12,A14,A16,A17,A19,A24,GOBOARD5:5;
+    end;
+then A25:   k+1 <= j by NAT_1:38;
+      now assume
+A26:    k+1 < j;
+then A27:    k+1 < width F by A8,AXIOMS:22;
+     then consider l,i' such that
+A28:    l in dom f and
+A29:    [i',k+1] in Indices F and
+A30:    f/.l = F*(i',k+1) by A20,JORDAN5D:10;
+      1 <= i' & i' <= len F by A29,GOBOARD5:1;
+then A31:    F*(i',k+1)`2 = F*(1,k+1)`2 & F*(m,k+1)`2 = F*(1,k+1)`2
+        by A7,A20,A27,GOBOARD5:2;
+     consider i1',j1' such that
+A32:    [i1',j1'] in Indices G and
+A33:    f/.l = G*(i1',j1') by A1,A28,GOBOARD1:def 11;
+A34:    1 <= i1' & i1' <= len G & 1 <= j1' & j1' <= width G by A32,GOBOARD5:1;
+then A35:    G*(i1',j1')`2 = G*(1,j1')`2 & G*(i1',j1)`2 = G*(1,j1)`2
+        by A16,GOBOARD5:2;
+A36:    G*(i2,j2)`2 = G*(1,j2)`2 & G*(i1',j2)`2 = G*(1,j2)`2
+        by A17,A34,GOBOARD5:2;
+A37:  now assume j1 >= j1';
+then G*(i1',j1')`2 <= G*(i1,j1)`2 by A16,A19,A34,A35,SPRECT_3:24;
+       hence contradiction by A5,A7,A12,A21,A27,A30,A31,A33,GOBOARD5:5;
+      end;
+        now assume j2 <= j1';
+then G*(i2,j2)`2 <= G*(i1',j1')`2 by A17,A34,A36,SPRECT_3:24;
+       hence contradiction by A6,A7,A8,A10,A14,A20,A26,A30,A31,A33,GOBOARD5:5;
+      end;
+     hence contradiction by A22,A37,NAT_1:38;
+    end;
+    then k+1 = j by A25,AXIOMS:21;
+    then j-k = 1 by XCMPLX_1:26;
+    then abs(j-k) = 1 by ABSVALUE:def 1;
+    hence thesis by A23,UNIFORM1:13;
+   suppose
+A38:   i1+1 = i2 & j1 = j2;
+      now assume k <> j;
+       then k < j or k > j by REAL_1:def 5;
+      hence contradiction by A5,A6,A7,A8,A10,A12,A14,A19,A38,GOBOARD5:5;
+    end;
+    then k-j = 0 by XCMPLX_1:14;
+then A39:   abs(k-j) = 0 by ABSVALUE:7;
+      now assume i <= m;
+then A40:     F*(i,j)`1 <= F*(m,k)`1 by A7,A8,A9,SPRECT_3:25;
+       i1 < i2 by A38,NAT_1:38;
+     hence contradiction by A5,A6,A12,A14,A16,A17,A38,A40,GOBOARD5:4;
+    end;
+then A41:   m+1 <= i by NAT_1:38;
+      now assume
+A42:    m+1 < i;
+then A43:    m+1 < len F by A8,AXIOMS:22;
+     then consider l,j' such that
+A44:    l in dom f and
+A45:    [m+1,j'] in Indices F and
+A46:    f/.l = F*(m+1,j') by A20,JORDAN5D:9;
+      1 <= j' & j' <= width F by A45,GOBOARD5:1;
+then A47:    F*(m+1,j')`1 = F*(m+1,1)`1 & F*(m+1,k)`1 = F*(m+1,1)`1
+        by A7,A20,A43,GOBOARD5:3;
+     consider i1',j1' such that
+A48:    [i1',j1'] in Indices G and
+A49:    f/.l = G*(i1',j1') by A1,A44,GOBOARD1:def 11;
+A50:    1 <= i1' & i1' <= len G & 1 <= j1' & j1' <= width G by A48,GOBOARD5:1;
+then A51:    G*(i1',j1')`1 = G*(i1',1)`1 & G*(i1,j1')`1 = G*(i1,1)`1
+        by A16,GOBOARD5:3;
+A52:    G*(i2,j2)`1 = G*(i2,1)`1 & G*(i2,j1')`1 = G*(i2,1)`1
+        by A17,A50,GOBOARD5:3;
+A53:  now assume i1 >= i1';
+then G*(i1',j1')`1 <= G*(i1,j1)`1 by A16,A18,A50,A51,SPRECT_3:25;
+       hence contradiction by A5,A7,A12,A21,A43,A46,A47,A49,GOBOARD5:4;
+      end;
+        now assume i2 <= i1';
+then G*(i2,j2)`1 <= G*(i1',j1')`1 by A17,A50,A52,SPRECT_3:25;
+       hence contradiction by A6,A7,A8,A9,A14,A20,A42,A46,A47,A49,GOBOARD5:4
+;
+      end;
+     hence contradiction by A38,A53,NAT_1:38;
+    end;
+    then m+1 = i by A41,AXIOMS:21;
+    then i-m = 1 by XCMPLX_1:26;
+    then abs(i-m) = 1 by ABSVALUE:def 1;
+    hence thesis by A39,UNIFORM1:13;
+   suppose
+A54:   i1 = i2+1 & j1 = j2;
+      now assume k <> j;
+       then k < j or k > j by REAL_1:def 5;
+      hence contradiction by A5,A6,A7,A8,A10,A12,A14,A19,A54,GOBOARD5:5;
+    end;
+    then k-j = 0 by XCMPLX_1:14;
+then A55:   abs(k-j) = 0 by ABSVALUE:7;
+      now assume m <= i;
+then A56:     F*(i,j)`1 >= F*(m,k)`1 by A7,A8,A9,SPRECT_3:25;
+       i1 > i2 by A54,NAT_1:38;
+     hence contradiction by A5,A6,A12,A14,A16,A17,A54,A56,GOBOARD5:4;
+    end;
+then A57:   i+1 <= m by NAT_1:38;
+      now assume
+A58:    i+1 < m;
+then A59:    i+1 < len F by A7,AXIOMS:22;
+     then consider l,j' such that
+A60:    l in dom f and
+A61:    [i+1,j'] in Indices F and
+A62:    f/.l = F*(i+1,j') by A20,JORDAN5D:9;
+      1 <= j' & j' <= width F by A61,GOBOARD5:1;
+then A63:    F*(i+1,j')`1 = F*(i+1,1)`1 & F*(i+1,j)`1 = F*(i+1,j)`1
+        by A20,A59,GOBOARD5:3;
+A64:    F*(i+1,k)`1 = F*(i+1,1)`1 & F*(i+1,j)`1 = F*(i+1,1)`1
+        by A7,A8,A20,A59,GOBOARD5:3;
+     consider i1',j1' such that
+A65:    [i1',j1'] in Indices G and
+A66:    f/.l = G*(i1',j1') by A1,A60,GOBOARD1:def 11;
+A67:    1 <= i1' & i1' <= len G & 1 <= j1' & j1' <= width G by A65,GOBOARD5:1;
+then A68:    G*(i1',j1')`1 = G*(i1',1)`1 & G*(i1,j1')`1 = G*(i1,1)`1
+        by A16,GOBOARD5:3;
+A69:    G*(i2,j2)`1 = G*(i2,1)`1 & G*(i2,j1')`1 = G*(i2,1)`1
+        by A17,A67,GOBOARD5:3;
+A70:  now assume i2 >= i1';
+then G*(i1',j1')`1 <= G*(i2,j2)`1 by A17,A67,A69,SPRECT_3:25;
+       hence contradiction by A6,A8,A14,A21,A59,A62,A63,A64,A66,GOBOARD5:4;
+      end;
+        now assume i1 <= i1';
+then G*(i1,j1)`1 <= G*(i1',j1')`1 by A16,A18,A67,A68,SPRECT_3:25;
+       hence contradiction by A5,A7,A12,A20,A58,A62,A63,A64,A66,GOBOARD5:4;
+      end;
+     hence contradiction by A54,A70,NAT_1:38;
+    end;
+    then i+1 = m by A57,AXIOMS:21;
+    then m-i = 1 by XCMPLX_1:26;
+    hence thesis by A55,ABSVALUE:def 1;
+   suppose
+A71:   i1 = i2 & j1 = j2+1;
+      now assume m <> i;
+       then m < i or m > i by REAL_1:def 5;
+      hence contradiction by A5,A6,A7,A8,A9,A12,A14,A18,A71,GOBOARD5:4;
+    end;
+    then m-i = 0 by XCMPLX_1:14;
+then A72:   abs(m-i) = 0 by ABSVALUE:7;
+      now assume j >= k;
+then A73:     F*(i,j)`2 >= F*(m,k)`2 by A7,A8,A10,SPRECT_3:24;
+       j1 > j2 by A71,NAT_1:38;
+     hence contradiction by A5,A6,A12,A14,A16,A17,A19,A73,GOBOARD5:5;
+    end;
+then A74:   j+1 <= k by NAT_1:38;
+      now assume
+A75:    j+1 < k;
+then A76:    j+1 < width F by A7,AXIOMS:22;
+     then consider l,i' such that
+A77:    l in dom f and
+A78:    [i',j+1] in Indices F and
+A79:    f/.l = F*(i',j+1) by A20,JORDAN5D:10;
+      1 <= i' & i' <= len F by A78,GOBOARD5:1;
+then A80:    F*(i',j+1)`2 = F*(1,j+1)`2 & F*(i,j+1)`2 = F*(1,j+1)`2
+        by A8,A20,A76,GOBOARD5:2;
+A81:    F*(m,j+1)`2 = F*(1,j+1)`2 & F*(i,j+1)`2 = F*(1,j+1)`2
+        by A7,A8,A20,A76,GOBOARD5:2;
+     consider i1',j1' such that
+A82:    [i1',j1'] in Indices G and
+A83:    f/.l = G*(i1',j1') by A1,A77,GOBOARD1:def 11;
+A84:    1 <= i1' & i1' <= len G & 1 <= j1' & j1' <= width G by A82,GOBOARD5:1;
+then A85:    G*(i1',j1')`2 = G*(1,j1')`2 & G*(i1',j1)`2 = G*(1,j1)`2
+        by A16,GOBOARD5:2;
+A86:    G*(i2,j2)`2 = G*(1,j2)`2 & G*(i1',j2)`2 = G*(1,j2)`2
+        by A17,A84,GOBOARD5:2;
+A87:  now assume j2 >= j1';
+then G*(i1',j1')`2 <= G*(i2,j2)`2 by A17,A84,A86,SPRECT_3:24;
+       hence contradiction by A6,A8,A14,A21,A76,A79,A80,A83,GOBOARD5:5;
+      end;
+        now assume j1 <= j1';
+then G*(i1,j1)`2 <= G*(i1',j1')`2 by A16,A19,A84,A85,SPRECT_3:24;
+       hence contradiction by A5,A7,A12,A20,A75,A79,A80,A81,A83,GOBOARD5:5;
+      end;
+     hence contradiction by A71,A87,NAT_1:38;
+    end;
+    then j+1 = k by A74,AXIOMS:21;
+    then k-j = 1 by XCMPLX_1:26;
+    hence thesis by A72,ABSVALUE:def 1;
+  end;
+ thus f is special
+  proof let i;
+   assume 1 <= i & i+1 <= len f;
+   then consider i1,j1,i2,j2 such that
+A88:  [i1,j1] in Indices G and
+A89: f/.i = G*(i1,j1) and
+A90:  [i2,j2] in Indices G and
+A91: f/.(i+1) = G*(i2,j2) and
+A92:  i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+      i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1 by A1,Th6;
+    1 <= i1 & i1 <= len G & 1 <= j1 & j1 <= width G &
+      1 <= i2 & i2 <= len G & 1 <= j2 & j2 <= width G by A88,A90,GOBOARD5:1;
+   then G*(i1,j1)`2 = G*(1,j1)`2 & G*(i2,j1)`2 = G*(1,j1)`2 &
+    G*(i1,j2)`2 = G*(1,j2)`2 & G*(i2,j2)`2 = G*(1,j2)`2 &
+     G*(i1,j1)`1 = G*(i1,1)`1 & G*(i1,j2)`1 = G*(i1,1)`1 &
+      G*(i2,j1)`1 = G*(i2,1)`1 & G*(i2,j2)`1 = G*(i2,1)`1 by GOBOARD5:2,3;
+   hence (f/.i)`1 = (f/.(i+1))`1 or (f/.i)`2 = (f/.(i+1))`2
+    by A89,A91,A92;
+  end;
+end;
+
+theorem
+   for f being non empty FinSequence of TOP-REAL 2 st
+    len f >= 2 & f is_sequence_on G
+   holds f is non constant
+proof let f be non empty FinSequence of TOP-REAL 2 such that
+A1:  len f >= 2 and
+A2:  f is_sequence_on G;
+   assume
+A3:  for n,m st n in dom f & m in dom f holds f.n = f.m;
+       1 <= len f by A1,AXIOMS:22;
+then A4:  1 in dom f by FINSEQ_3:27;
+    then consider i1,j1 such that
+A5:   [i1,j1] in Indices G and
+A6:   f/.1 = G*(i1,j1) by A2,GOBOARD1:def 11;
+A7:  1+1 in dom f by A1,FINSEQ_3:27;
+    then consider i2,j2 such that
+A8:   [i2,j2] in Indices G and
+A9:   f/.2 = G*(i2,j2) by A2,GOBOARD1:def 11;
+     f/.1 = f.1 by A4,FINSEQ_4:def 4
+         .= f.2 by A3,A4,A7
+         .= f/.2 by A7,FINSEQ_4:def 4;
+   then i1 = i2 & j1 = j2 by A5,A6,A8,A9,GOBOARD1:21;
+   then i1-i2 = 0 & j1-j2 = 0 by XCMPLX_1:14;
+then A10:  abs(i1-i2) = 0 & abs(j1-j2) = 0 by ABSVALUE:7;
+     abs(i1-i2) + abs(j1-j2) = 1 by A2,A4,A5,A6,A7,A8,A9,GOBOARD1:def 11;
+   hence contradiction by A10;
+end;
+
+theorem
+   for f being non empty FinSequence of TOP-REAL 2
+   st f is_sequence_on G &
+     (ex i,j st [i,j] in Indices G & p = G*(i,j)) &
+     (for i1,j1,i2,j2
+      st [i1,j1] in Indices G & [i2,j2] in Indices G &
+         f/.len f = G*(i1,j1) & p = G*(i2,j2)
+      holds abs(i2-i1)+abs(j2-j1) = 1)
+  holds f^<*p*> is_sequence_on G
+proof let f be non empty FinSequence of TOP-REAL 2 such that
+A1: f is_sequence_on G and
+A2: ex i,j st [i,j] in Indices G & p = G*(i,j) and
+A3: for i1,j1,i2,j2
+      st [i1,j1] in Indices G & [i2,j2] in Indices G &
+         f/.len f = G*(i1,j1) & p = G*(i2,j2)
+      holds abs(i2-i1)+abs(j2-j1) = 1;
+A4: for n st n in dom f & n+1 in dom f holds
+ for m,k,i,j st [m,k] in Indices G & [i,j] in Indices G & f/.n=G*(m,k) &
+                f/.(n+1)=G*(i,j) holds abs(m-i)+abs(k-j)=1
+  by A1,GOBOARD1:def 11;
+A5: now let n;
+     assume n in dom <*p*> & n+1 in dom <*p*>;
+     then 1 <= n & n+1 <= len <*p*> by FINSEQ_3:27;
+     then 1+1 <= n+1 & n+1 <= 1 by AXIOMS:24,FINSEQ_1:56;
+     hence for m,k,i,j st [m,k] in Indices G & [i,j] in Indices G &
+             <*p*>/.n=G*(m,k) & <*p*>/.(n+1)=G*(i,j)
+            holds abs(m-i)+abs(k-j)=1 by AXIOMS:22;
+    end;
+    now let m,k,i,j such that
+A6:  [m,k] in Indices G & [i,j] in Indices G & f/.len f=G*(m,k) &
+      <*p*>/.1=G*(i,j) and len f in dom f & 1 in dom <*p*>;
+      <*p*>/.1 = p by FINSEQ_4:25;
+    then abs(i-m)+abs(j-k)=1 by A3,A6;
+    hence 1 = abs(m-i)+abs(j-k) by UNIFORM1:13
+           .= abs(m-i)+abs(k-j) by UNIFORM1:13;
+  end;
+then A7:  for n st n in dom(f^<*p*>) & n+1 in dom(f^<*p*>) holds
+   for m,k,i,j st [m,k] in Indices G & [i,j] in Indices G &
+     (f^<*p*>)/.n =G*(m,k) & (f^<*p*>)/.(n+1)=G*(i,j)
+  holds abs(m-i)+abs(k-j)=1 by A4,A5,GOBOARD1:40;
+   now let n such that
+A8:  n in dom(f^<*p*>);
+  per cases by A8,FINSEQ_1:38;
+  suppose
+A9:  n in dom f;
+   then consider i,j such that
+A10:  [i,j] in Indices G and
+A11:  f/.n = G*(i,j) by A1,GOBOARD1:def 11;
+   take i,j;
+   thus [i,j] in Indices G by A10;
+   thus (f^<*p*>)/.n = G*(i,j) by A9,A11,GROUP_5:95;
+  suppose ex l st l in dom <*p*> & n = (len f) + l;
+   then consider l such that
+A12:  l in dom <*p*> and
+A13:  n = (len f) + l;
+    consider i,j such that
+A14:  [i,j] in Indices G and
+A15:  p = G*(i,j) by A2;
+   take i,j;
+   thus [i,j] in Indices G by A14;
+     1 <= l & l <= len <*p*> by A12,FINSEQ_3:27;
+   then 1 <= l & l <= 1 by FINSEQ_1:56;
+   then l = 1 by AXIOMS:21;
+   then <*p*>/.l = p by FINSEQ_4:25;
+   hence (f^<*p*>)/.n = G*(i,j) by A12,A13,A15,GROUP_5:96;
+ end;
+ hence f^<*p*> is_sequence_on G by A7,GOBOARD1:def 11;
+end;
+
+theorem
+    i+k < len G & 1 <= j & j < width G & cell(G,i,j) meets cell(G,i+k,j)
+    implies k <= 1
+proof assume that
+A1: i+k < len G and
+A2: 1 <= j & j < width G and
+A3: cell(G,i,j) meets cell(G,i+k,j) and
+A4: k > 1;
+   cell(G,i,j) /\ cell(G,i+k,j) <> {} by A3,XBOOLE_0:def 7;
+ then consider p such that
+A5: p in cell(G,i,j) /\ cell(G,i+k,j) by SUBSET_1:10;
+A6: p in cell(G,i,j) & p in cell(G,i+k,j) by A5,XBOOLE_0:def 3;
+    i+k >= 1 by A4,NAT_1:37;
+  then cell(G,i+k,j) = { |[r',s']| : G*(i+k,1)`1 <= r' & r' <= G*(i+k+1,1)`1
+&
+                     G*(1,j)`2 <= s' & s' <= G*(1,j+1)`2 }
+    by A1,A2,GOBRD11:32;
+  then consider r',s' such that
+A7: p = |[r',s']| and
+A8: G*(i+k,1)`1 <= r' and r' <= G*(i+k+1,1)`1 & G*(1,j)`2 <= s' & s' <=
+ G*(1,j+1)`2
+   by A6;
+A9: 1 < width G by A2,AXIOMS:22;
+   i = 0 or i > 0 by NAT_1:19;
+then A10: i = 0 or i >= 1+0 by NAT_1:27;
+ per cases by A10;
+ suppose
+A11: i = 0;
+  then cell(G,i,j) = {|[r,s]| : r <= G*(1,1)`1 & G*(1,j)`2 <= s & s <= G*
+(1,j+1)`2}
+   by A2,GOBRD11:26;
+  then consider r,s such that
+A12: p = |[r,s]| and
+A13: r <= G*(1,1)`1 and G*(1,j)`2 <= s & s <= G*(1,j+1)`2 by A6;
+A14: k <= len G by A1,NAT_1:37;
+    p`1 = r & p`1 = r' by A7,A12,EUCLID:56;
+  then G*(k,1)`1 <= G*(1,1)`1 by A8,A11,A13,AXIOMS:22;
+  hence contradiction by A4,A9,A14,GOBOARD5:4;
+ suppose
+A15: i >= 1;
+    i < len G by A1,NAT_1:37;
+  then cell(G,i,j) =
+   {|[r,s]|: G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & G*(1,j)`2 <= s & s <=
+ G*(1,j+1)`2}
+    by A2,A15,GOBRD11:32;
+  then consider r,s such that
+A16: p = |[r,s]| and G*(i,1)`1 <= r and
+A17: r <= G*(i+1,1)`1 and G*(1,j)`2 <= s & s <= G*(1,j+1)`2 by A6;
+A18: 1 <= i+1 & i+1 < k+i by A4,NAT_1:37,REAL_1:53;
+    p`1 = r & p`1 = r' by A7,A16,EUCLID:56;
+  then G*(i+k,1)`1 <= G*(i+1,1)`1 by A8,A17,AXIOMS:22;
+  hence contradiction by A1,A9,A18,GOBOARD5:4;
+end;
+
+theorem Th11:
+ for C being non empty compact Subset of TOP-REAL 2
+   holds C is vertical iff E-bound C <= W-bound C
+proof let C be non empty compact Subset of TOP-REAL 2;
+A1: E-bound C >= W-bound C by SPRECT_1:23;
+     C is vertical iff W-bound C = E-bound C by SPRECT_1:17;
+   hence thesis by A1,REAL_1:def 5;
+end;
+
+theorem Th12:
+ for C being non empty compact Subset of TOP-REAL 2
+   holds C is horizontal iff N-bound C <= S-bound C
+proof let C be non empty compact Subset of TOP-REAL 2;
+A1: N-bound C >= S-bound C by SPRECT_1:24;
+     C is horizontal iff N-bound C = S-bound C by SPRECT_1:18;
+   hence thesis by A1,REAL_1:def 5;
+end;
+
+definition let C be Subset of TOP-REAL 2, n be Nat;
+ deffunc f(Nat,Nat) = |[(W-bound C)+(((E-bound C)-(W-bound C))/(2|^n))*($1-2),
+                       (S-bound C)+(((N-bound C)-(S-bound C))/(2|^n))*($2-2)]|;
+A1: 2|^n + 3 > 0 by NAT_1:19;
+
+ func Gauge (C,n) -> Matrix of TOP-REAL 2 means
+:Def1: len it = 2|^n + 3 & len it = width it &
+   for i,j st [i,j] in Indices it holds
+      it*(i,j) = |[(W-bound C)+(((E-bound C)-(W-bound C))/(2|^n))*(i-2),
+                   (S-bound C)+(((N-bound C)-(S-bound C))/(2|^n))*(j-2)]|;
+  existence
+ proof
+   consider M being Matrix of (2|^n + 3) ,(2|^n + 3), the carrier of TOP-REAL 2
+   such that
+A2:  for i,j st [i,j] in Indices M holds M*(i,j) = f(i,j) from MatrixLambda;
+   take M;
+   thus len M = 2|^n + 3 by MATRIX_1:def 3;
+   hence len M = width M by A1,MATRIX_1:24;
+   thus thesis by A2;
+ end;
+  uniqueness
+ proof let M1,M2 be Matrix of TOP-REAL 2 such that
+A3:  len M1 = 2|^n + 3 & len M1 = width M1 and
+A4:  for i,j st [i,j] in Indices M1 holds M1*(i,j) = f(i,j) and
+A5:  len M2 = 2|^n + 3 & len M2 = width M2 and
+A6:  for i,j st [i,j] in Indices M2 holds M2*(i,j) = f(i,j);
+     now let i,j; assume
+A7:  [i,j] in Indices M1;
+     M1 is Matrix of (2|^n + 3) ,(2|^n + 3), the carrier of TOP-REAL 2 &
+    M2 is Matrix of (2|^n + 3) ,(2|^n + 3), the carrier of TOP-REAL 2
+       by A1,A3,A5,MATRIX_1:20;
+then A8:  [i,j] in Indices M2 by A7,MATRIX_1:27;
+    thus M1*(i,j) = f(i,j) by A4,A7
+                 .= M2*(i,j) by A6,A8;
+   end;
+   hence thesis by A3,A5,MATRIX_1:21;
+ end;
+end;
+
+definition
+ let C be non empty Subset of TOP-REAL 2, n be Nat;
+ cluster Gauge (C,n) -> non empty-yielding X_equal-in-line Y_equal-in-column;
+  coherence
+ proof
+  set M = Gauge (C,n);
+   len M = 2|^n + 3 & len M = width M by Def1;
+  hence M is non empty-yielding by GOBOARD1:def 5;
+A1:  Indices M = [:dom M,Seg width M:] by MATRIX_1:def 5;
+  thus M is X_equal-in-line
+   proof
+    let i; assume
+A2:   i in dom M;
+    set l= Line(M,i), f = X_axis(l);
+    let j1,j2 such that
+A3:   j1 in dom f and
+A4:   j2 in dom f;
+      len l = width M by MATRIX_1:def 8;
+then A5:   dom l = Seg width M by FINSEQ_1:def 3;
+A6:   dom f = dom l by SPRECT_2:19;
+then A7:   l/.j1 = l.j1 by A3,FINSEQ_4:def 4
+             .= M*(i,j1) by A3,A5,A6,MATRIX_1:def 8;
+A8:   [i,j1] in Indices M by A1,A2,A3,A5,A6,ZFMISC_1:106;
+A9:   l/.j2 = l.j2 by A4,A6,FINSEQ_4:def 4
+             .= M*(i,j2) by A4,A5,A6,MATRIX_1:def 8;
+A10:   [i,j2] in Indices M by A1,A2,A4,A5,A6,ZFMISC_1:106;
+    set x = (W-bound C)+(((E-bound C)-(W-bound C))/(2|^n))*(i-2);
+    set d = ((N-bound C)-(S-bound C))/(2|^n);
+   thus f.j1 = (l/.j1)`1 by A3,GOBOARD1:def 3
+            .= |[x,(S-bound C)+d*(j1-2)]|`1 by A7,A8,Def1
+            .= x by EUCLID:56
+            .= |[x,(S-bound C)+d*(j2-2)]|`1 by EUCLID:56
+            .= (l/.j2)`1 by A9,A10,Def1
+            .= f.j2 by A4,GOBOARD1:def 3;
+   end;
+  thus M is Y_equal-in-column
+   proof
+    let j; assume
+A11:   j in Seg width M;
+    set c = Col(M,j), f = Y_axis(c);
+    let i1,i2 such that
+A12:   i1 in dom f and
+A13:   i2 in dom f;
+      len c = len M by MATRIX_1:def 9;
+then A14:   dom c = dom M by FINSEQ_3:31;
+A15:   dom f = dom c by SPRECT_2:20;
+then A16:   c/.i1 = c.i1 by A12,FINSEQ_4:def 4
+             .= M*(i1,j) by A12,A14,A15,MATRIX_1:def 9;
+A17:   [i1,j] in Indices M by A1,A11,A12,A14,A15,ZFMISC_1:106;
+A18:   c/.i2 = c.i2 by A13,A15,FINSEQ_4:def 4
+             .= M*(i2,j) by A13,A14,A15,MATRIX_1:def 9;
+A19:   [i2,j] in Indices M by A1,A11,A13,A14,A15,ZFMISC_1:106;
+    set y = (S-bound C)+(((N-bound C)-(S-bound C))/(2|^n))*(j-2);
+    set d = ((E-bound C)-(W-bound C))/(2|^n);
+    thus f.i1 = (c/.i1)`2 by A12,GOBOARD1:def 4
+             .= |[(W-bound C)+d*(i1-2),y]|`2 by A16,A17,Def1
+             .= y by EUCLID:56
+             .= |[(W-bound C)+d*(i2-2),y]|`2 by EUCLID:56
+             .= (c/.i2)`2 by A18,A19,Def1
+             .= f.i2 by A13,GOBOARD1:def 4;
+   end;
+ end;
+end;
+
+definition
+  let C be compact non vertical non horizontal non empty Subset of TOP-REAL 2,
+      n;
+ cluster Gauge (C,n) -> Y_increasing-in-line X_increasing-in-column;
+  coherence
+ proof
+  set M = Gauge (C,n);
+A1:  Indices M = [:dom M,Seg width M:] by MATRIX_1:def 5;
+  thus M is Y_increasing-in-line
+   proof
+    let i; assume
+A2:    i in dom M;
+    set l = Line(M,i), f = Y_axis(l);
+    let j1,j2 such that
+A3:   j1 in dom f and
+A4:   j2 in dom f and
+A5:   j1 < j2;
+      len l = width M by MATRIX_1:def 8;
+then A6:   dom l = Seg width M by FINSEQ_1:def 3;
+A7:   dom f = dom l by SPRECT_2:20;
+then A8:   l/.j1 = l.j1 by A3,FINSEQ_4:def 4
+             .= M*(i,j1) by A3,A6,A7,MATRIX_1:def 8;
+A9:   [i,j1] in Indices M by A1,A2,A3,A6,A7,ZFMISC_1:106;
+A10:   l/.j2 = l.j2 by A4,A7,FINSEQ_4:def 4
+             .= M*(i,j2) by A4,A6,A7,MATRIX_1:def 8;
+A11:   [i,j2] in Indices M by A1,A2,A4,A6,A7,ZFMISC_1:106;
+    set x = (W-bound C)+(((E-bound C)-(W-bound C))/(2|^n))*(i-2);
+    set d = ((N-bound C)-(S-bound C))/(2|^n);
+A12:   f.j1 = (l/.j1)`2 by A3,GOBOARD1:def 4
+          .= |[x,(S-bound C)+d*(j1-2)]|`2 by A8,A9,Def1
+          .= (S-bound C)+d*(j1-2) by EUCLID:56;
+A13:   f.j2 = (l/.j2)`2 by A4,GOBOARD1:def 4
+          .= |[x,(S-bound C)+d*(j2-2)]|`2 by A10,A11,Def1
+          .= (S-bound C)+d*(j2-2) by EUCLID:56;
+      N-bound C > S-bound C by Th12;
+    then (N-bound C)-(S-bound C) > 0 & (2|^n) > 0 by HEINE:5,SQUARE_1:11;
+then A14:    d > 0 by REAL_2:127;
+      j1-2 < j2 -2 by A5,REAL_1:54;
+    then d*(j1-2) < d*(j2-2) by A14,REAL_1:70;
+    hence f.j1 < f.j2 by A12,A13,REAL_1:67;
+   end;
+  let j; assume
+A15:   j in Seg width M;
+  set c = Col(M,j), f = X_axis(c);
+  let i1,i2 such that
+A16:   i1 in dom f and
+A17:   i2 in dom f and
+A18:   i1 < i2;
+     len c = len M by MATRIX_1:def 9;
+then A19:   dom c = dom M by FINSEQ_3:31;
+A20:   dom f = dom c by SPRECT_2:19;
+then A21:   c/.i1 = c.i1 by A16,FINSEQ_4:def 4
+             .= M*(i1,j) by A16,A19,A20,MATRIX_1:def 9;
+A22:   [i1,j] in Indices M by A1,A15,A16,A19,A20,ZFMISC_1:106;
+A23:   c/.i2 = c.i2 by A17,A20,FINSEQ_4:def 4
+             .= M*(i2,j) by A17,A19,A20,MATRIX_1:def 9;
+A24:   [i2,j] in Indices M by A1,A15,A17,A19,A20,ZFMISC_1:106;
+    set y = (S-bound C)+(((N-bound C)-(S-bound C))/(2|^n))*(j-2);
+    set d = ((E-bound C)-(W-bound C))/(2|^n);
+A25:   f.i1 = (c/.i1)`1 by A16,GOBOARD1:def 3
+          .= |[(W-bound C)+d*(i1-2),y]|`1 by A21,A22,Def1
+          .= (W-bound C)+d*(i1-2) by EUCLID:56;
+A26:   f.i2 = (c/.i2)`1 by A17,GOBOARD1:def 3
+          .= |[(W-bound C)+d*(i2-2),y]|`1 by A23,A24,Def1
+          .= (W-bound C)+d*(i2-2) by EUCLID:56;
+      E-bound C > W-bound C by Th11;
+    then (E-bound C)-(W-bound C) > 0 & (2|^n) > 0 by HEINE:5,SQUARE_1:11;
+then A27:   d > 0 by REAL_2:127;
+      i1-2 < i2 -2 by A18,REAL_1:54;
+    then d*(i1-2) < d*(i2-2) by A27,REAL_1:70;
+    hence f.i1 < f.i2 by A25,A26,REAL_1:67;
+ end;
+end;
+
+reserve T for non empty Subset of TOP-REAL 2;
+
+theorem Th13:
+ len Gauge(T,n) >= 4
+proof set G = Gauge(T,n);
+A1:  len G = 2|^n + 3 by Def1;
+    2|^n >= n + 1 by HEINE:7;
+  then len G >= n + 1 + 3 by A1,AXIOMS:24;
+  then len G >= n + (3 + 1) & n+4 >= 4 by NAT_1:37,XCMPLX_1:1;
+  hence len G >= 4 by AXIOMS:22;
+end;
+
+theorem
+    1 <= j & j <= len Gauge(T,n) implies Gauge(T,n)*(2,j)`1 = W-bound T
+proof set G = Gauge(T,n);
+  set W = W-bound T, S = S-bound T, E = E-bound T, N = N-bound T;
+  assume
+A1:  1 <= j & j <= len Gauge(T,n);
+A2:  len G = 2|^n + 3 & len G = width G by Def1;
+    len G >= 4 by Th13;
+  then 2 <= len G by AXIOMS:22;
+  then [2,j] in Indices G by A1,A2,GOBOARD7:10;
+  then G*(2,j) = |[W+((E-W)/(2|^n))*(2-2), S+(N-S)/(2|^n)*(j-2)]| by Def1;
+  hence G*(2,j)`1 = W-bound T by EUCLID:56;
+end;
+
+theorem
+    1 <= j & j <= len Gauge(T,n) implies
+    Gauge(T,n)*(len Gauge(T,n)-'1,j)`1 = E-bound T
+proof set G = Gauge(T,n);
+  set W = W-bound T, S = S-bound T, E = E-bound T, N = N-bound T;
+  assume
+A1:  1 <= j & j <= len Gauge(T,n);
+A2:  len G = 2|^n + 3 & len G = width G by Def1;
+    len G >= 4 by Th13;
+then A3:  1 < len G by AXIOMS:22;
+then A4:  1 <= (len G)-'1 by JORDAN3:12;
+A5:  (len G)-'1-2 = (len G)-1-2 by A3,SCMFSA_7:3
+                 .= (len G)-(1+2) by XCMPLX_1:36
+                 .= 2|^n by A2,XCMPLX_1:26;
+A6:  2|^n > 0 by HEINE:5;
+    (len G)-'1 <= len G by GOBOARD9:2;
+  then [(len G)-'1,j] in Indices G by A1,A2,A4,GOBOARD7:10;
+  then G*((len G)-'1,j)
+    = |[W+((E-W)/(2|^n))*((len G)-'1-2), S+((N-S)/(2|^n))*(j-2)]| by Def1;
+  hence G*((len G)-'1,j)`1 = W+((E-W)/(2|^n))*(2|^n) by A5,EUCLID:56
+                          .= W+(E-W) by A6,XCMPLX_1:88
+                          .= E-bound T by XCMPLX_1:27;
+end;
+
+theorem
+    1 <= i & i <= len Gauge(T,n) implies Gauge(T,n)*(i,2)`2 = S-bound T
+proof set G = Gauge(T,n);
+  set W = W-bound T, S = S-bound T, E = E-bound T, N = N-bound T;
+  assume
+A1:  1 <= i & i <= len Gauge(T,n);
+A2:  len G = 2|^n + 3 & len G = width G by Def1;
+    len G >= 4 by Th13;
+  then 2 <= len G by AXIOMS:22;
+  then [i,2] in Indices G by A1,A2,GOBOARD7:10;
+  then G*(i,2) = |[W+((E-W)/(2|^n))*(i-2), S+((N-S)/(2|^n))*(2-2)]| by Def1;
+  hence G*(i,2)`2 = S-bound T by EUCLID:56;
+end;
+
+theorem
+    1 <= i & i <= len Gauge(T,n) implies
+    Gauge(T,n)*(i,len Gauge(T,n)-'1)`2 = N-bound T
+proof set G = Gauge(T,n);
+  set W = W-bound T, S = S-bound T, E = E-bound T, N = N-bound T;
+  assume
+A1:  1 <= i & i <= len Gauge(T,n);
+A2:  len G = 2|^n + 3 & len G = width G by Def1;
+    len G >= 4 by Th13;
+then A3:  1 < len G by AXIOMS:22;
+then A4:  1 <= (len G)-'1 by JORDAN3:12;
+A5:  (len G)-'1-2 = (len G)-1-2 by A3,SCMFSA_7:3
+                 .= (len G)-(1+2) by XCMPLX_1:36
+                 .= 2|^n by A2,XCMPLX_1:26;
+A6:  2|^n > 0 by HEINE:5;
+    (len G)-'1 <= len G by GOBOARD9:2;
+  then [i,(len G)-'1] in Indices G by A1,A2,A4,GOBOARD7:10;
+  then G*(i,(len G)-'1)
+    = |[W+((E-W)/(2|^n))*(i-2), S+((N-S)/(2|^n))*((len G)-'1-2)]| by Def1;
+  hence G*(i,(len G)-'1)`2 = S+((N-S)/(2|^n))*(2|^n) by A5,EUCLID:56
+                          .= S+(N-S) by A6,XCMPLX_1:88
+                          .= N-bound T by XCMPLX_1:27;
+end;
+
+reserve C for
+   compact non vertical non horizontal non empty Subset of TOP-REAL 2;
+
+theorem
+    i <= len Gauge(C,n) implies cell(Gauge(C,n),i,len Gauge(C,n)) misses C
+proof set G = Gauge(C,n);
+ assume
+A1:  i <= len G;
+A2:  len G = 2|^n + (1+2) & len G = width G by Def1;
+ assume cell(G,i,len G) /\ C <> {};
+ then consider p such that
+A3: p in cell(G,i,len G) /\ C by SUBSET_1:10;
+A4: p in cell(G,i,len G) & p in C by A3,XBOOLE_0:def 3;
+   4 <= len G by Th13;
+then A5: 1 <= len G by AXIOMS:22;
+  set W = W-bound C, S = S-bound C, E = E-bound C, N = N-bound C;
+  set NS = (N-S)/(2|^n);
+    [1,width G] in Indices G by A2,A5,GOBOARD7:10;
+  then G*(1,width G) = |[W+((E-W)/(2|^n))*(1-2), S+NS*((width G)-2)]| by Def1;
+  then A6:  G*(1,width G)`2 = S+NS*((width G)-2) by EUCLID:56;
+A7:  2|^n > 0 by HEINE:5;
+    N > S by Th12;
+  then N-S > 0 by SQUARE_1:11;
+then A8:  NS > 0 by A7,REAL_2:127;
+     (width G)-2 = 2|^n + 1 + 2 - 2 by A2,XCMPLX_1:1
+              .= 2|^n + 1 by XCMPLX_1:26;
+   then NS*((width G)-2) = NS*(2|^n) + NS*1 by XCMPLX_1:8
+                        .= N-S+NS by A7,XCMPLX_1:88;
+   then G*(1,width G)`2 = S+(N-S)+NS by A6,XCMPLX_1:1
+                       .= N + NS by XCMPLX_1:27;
+then A9:  G*(1,width G)`2 > N by A8,REAL_1:69;
+    i = 0 or i > 0 by NAT_1:19;
+then A10: i = 0 or i >= 1+0 by NAT_1:27;
+ per cases by A1,A10,REAL_1:def 5;
+ suppose i = 0;
+  then cell(G,i,width G) = { |[r,s]| : r <= G*(1,1)`1 & G*(1,width G)`2 <= s }
+   by GOBRD11:25;
+  then consider r,s such that
+A11: p = |[r,s]| and
+A12: r <= G*(1,1)`1 & G*(1,width G)`2 <= s by A2,A4;
+    p`2 = s by A11,EUCLID:56;
+  then N < p`2 & p`2 <= N by A4,A9,A12,AXIOMS:22,PSCOMP_1:71;
+  hence contradiction;
+ suppose i = len G;
+   then cell(G,i,width G)={|[r,s]| : G*(len G,1)`1 <= r & G*(1,width G)`2 <= s
+}
+     by GOBRD11:28;
+  then consider r,s such that
+A13: p = |[r,s]| and
+A14: G*(len G,1)`1 <= r & G*(1,width G)`2 <= s by A2,A4;
+    p`2 = s by A13,EUCLID:56;
+  then N < p`2 & p`2 <= N by A4,A9,A14,AXIOMS:22,PSCOMP_1:71;
+  hence contradiction;
+ suppose 1 <= i & i < len G;
+  then cell(G,i,width G)
+          = {|[r,s]|: G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & G*
+(1,width G)`2 <= s}
+  by GOBRD11:31;
+  then consider r,s such that
+A15: p = |[r,s]| and
+A16: G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & G*(1,width G)`2 <= s by A2,A4;
+    p`2 = s by A15,EUCLID:56;
+  then N < p`2 & p`2 <= N by A4,A9,A16,AXIOMS:22,PSCOMP_1:71;
+  hence contradiction;
+end;
+
+theorem
+    j <= len Gauge(C,n) implies cell(Gauge(C,n),len Gauge(C,n),j) misses C
+proof set G = Gauge(C,n);
+ assume
+A1:  j <= len G;
+A2:  len G = 2|^n + (1+2) & len G = width G by Def1;
+ assume cell(G,len G,j) /\ C <> {};
+ then consider p such that
+A3: p in cell(G,len G,j) /\ C by SUBSET_1:10;
+A4: p in cell(G,len G,j) & p in C by A3,XBOOLE_0:def 3;
+   4 <= len G by Th13;
+then A5: 1 <= len G by AXIOMS:22;
+  set W = W-bound C, S = S-bound C, E = E-bound C, N = N-bound C;
+  set EW = (E-W)/(2|^n);
+    [len G,1] in Indices G by A2,A5,GOBOARD7:10;
+  then G*(len G,1) = |[W+EW*((len G)-2), S+((N-S)/(2|^n))*(1-2)]| by Def1;
+  then A6:  G*(len G,1)`1 = W+EW*((len G)-2) by EUCLID:56;
+A7:  2|^n > 0 by HEINE:5;
+    E > W by Th11;
+  then E-W > 0 by SQUARE_1:11;
+then A8:  EW > 0 by A7,REAL_2:127;
+     (len G)-2 = 2|^n + 1 + 2 - 2 by A2,XCMPLX_1:1
+            .= 2|^n + 1 by XCMPLX_1:26;
+   then EW*((len G)-2) = EW*(2|^n) + EW*1 by XCMPLX_1:8
+                      .= E-W+EW by A7,XCMPLX_1:88;
+   then G*(len G,1)`1 = W+(E-W)+EW by A6,XCMPLX_1:1
+                       .= E + EW by XCMPLX_1:27;
+then A9:  G*(len G,1)`1 > E by A8,REAL_1:69;
+    j = 0 or j > 0 by NAT_1:19;
+then A10: j = 0 or j >= 1+0 by NAT_1:27;
+ per cases by A1,A10,REAL_1:def 5;
+ suppose j = 0;
+  then cell(G,len G,j) = {|[r,s]| : G*(len G,1)`1 <= r & s <= G*(1,1)`2}
+    by GOBRD11:27;
+  then consider r,s such that
+A11: p = |[r,s]| and
+A12: G*(len G,1)`1 <= r & s <= G*(1,1)`2 by A4;
+    p`1 = r by A11,EUCLID:56;
+  then E < p`1 & p`1 <= E by A4,A9,A12,AXIOMS:22,PSCOMP_1:71;
+  hence contradiction;
+ suppose j = len G;
+   then cell(G,len G,j)={|[r,s]| : G*(len G,1)`1 <= r & G*(1,width G)`2 <= s}
+     by A2,GOBRD11:28;
+  then consider r,s such that
+A13: p = |[r,s]| and
+A14: G*(len G,1)`1 <= r & G*(1,width G)`2 <= s by A4;
+    p`1 = r by A13,EUCLID:56;
+  then E < p`1 & p`1 <= E by A4,A9,A14,AXIOMS:22,PSCOMP_1:71;
+  hence contradiction;
+ suppose 1 <= j & j < len G;
+  then cell(G,len G,j)
+   = { |[r,s]| : G*(len G,1)`1 <= r & G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }
+    by A2,GOBRD11:29;
+  then consider r,s such that
+A15: p = |[r,s]| and
+A16: G*(len G,1)`1 <= r & G*(1,j)`2 <= s & s <= G*(1,j+1)`2 by A4;
+    p`1 = r by A15,EUCLID:56;
+  then E < p`1 & p`1 <= E by A4,A9,A16,AXIOMS:22,PSCOMP_1:71;
+  hence contradiction;
+end;
+
+theorem
+    i <= len Gauge(C,n) implies cell(Gauge(C,n),i,0) misses C
+proof set G = Gauge(C,n);
+ assume
+A1:  i <= len G;
+A2:  len G = 2|^n + (1+2) & len G = width G by Def1;
+ assume cell(G,i,0) /\ C <> {};
+ then consider p such that
+A3: p in cell(G,i,0) /\ C by SUBSET_1:10;
+A4: p in cell(G,i,0) & p in C by A3,XBOOLE_0:def 3;
+   4 <= len G by Th13;
+then A5: 1 <= len G by AXIOMS:22;
+  set W = W-bound C, S = S-bound C, E = E-bound C, N = N-bound C;
+  set NS = (N-S)/(2|^n);
+    [1,1] in Indices G by A2,A5,GOBOARD7:10;
+  then G*(1,1) = |[W+((E-W)/(2|^n))*(1-2), S+NS*(1-2)]| by Def1;
+then A6:  G*(1,1)`2 = S+NS*(-1) by EUCLID:56;
+A7:  2|^n > 0 by HEINE:5;
+    N > S by Th12;
+  then N-S > 0 by SQUARE_1:11;
+  then NS > 0 by A7,REAL_2:127;
+  then NS*(-1) < 0 * (-1) by REAL_1:71;
+then A8:  G*(1,1)`2 < S+0 by A6,REAL_1:53;
+    i = 0 or i > 0 by NAT_1:19;
+then A9: i = 0 or i >= 1+0 by NAT_1:27;
+ per cases by A1,A9,REAL_1:def 5;
+ suppose i = 0;
+  then cell(G,i,0) ={ |[r,s]| : r <= G*(1,1)`1 & s <= G*(1,1)`2 }
+   by GOBRD11:24;
+  then consider r,s such that
+A10: p = |[r,s]| and
+A11: r <= G*(1,1)`1 & s <= G*(1,1)`2 by A4;
+    p`2 = s by A10,EUCLID:56;
+  then S > p`2 & p`2 >= S by A4,A8,A11,AXIOMS:22,PSCOMP_1:71;
+  hence contradiction;
+ suppose i = len G;
+   then cell(G,i,0)={ |[r,s]| : G*(len G,1)`1 <= r & s <= G*(1,1)`2 }
+     by GOBRD11:27;
+  then consider r,s such that
+A12: p = |[r,s]| and
+A13: G*(len G,1)`1 <= r & s <= G*(1,1)`2 by A4;
+    p`2 = s by A12,EUCLID:56;
+  then S > p`2 & p`2 >= S by A4,A8,A13,AXIOMS:22,PSCOMP_1:71;
+  hence contradiction;
+ suppose 1 <= i & i < len G;
+  then cell(G,i,0) = { |[r,s]|: G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & s <= G*
+(1,1)`2 }
+    by GOBRD11:30;
+  then consider r,s such that
+A14: p = |[r,s]| and
+A15: G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & s <= G*(1,1)`2 by A4;
+    p`2 = s by A14,EUCLID:56;
+  then S > p`2 & p`2 >= S by A4,A8,A15,AXIOMS:22,PSCOMP_1:71;
+  hence contradiction;
+end;
+
+theorem
+    j <= len Gauge(C,n) implies cell(Gauge(C,n),0,j) misses C
+proof set G = Gauge(C,n);
+ assume
+A1:  j <= len G;
+A2:  len G = 2|^n + (1+2) & len G = width G by Def1;
+ assume cell(G,0,j) /\ C <> {};
+ then consider p such that
+A3: p in cell(G,0,j) /\ C by SUBSET_1:10;
+A4: p in cell(G,0,j) & p in C by A3,XBOOLE_0:def 3;
+   4 <= len G by Th13;
+then A5: 1 <= len G by AXIOMS:22;
+  set W = W-bound C, S = S-bound C, E = E-bound C, N = N-bound C;
+  set EW = (E-W)/(2|^n);
+    [1,1] in Indices G by A2,A5,GOBOARD7:10;
+  then G*(1,1) = |[W+EW*(1-2), S+((N-S)/(2|^n))*(1-2)]| by Def1;
+then A6:  G*(1,1)`1 = W+EW*(-1) by EUCLID:56;
+A7:  2|^n > 0 by HEINE:5;
+    E > W by Th11;
+  then E-W > 0 by SQUARE_1:11;
+  then EW > 0 by A7,REAL_2:127;
+  then EW*(-1) < 0 * (-1) by REAL_1:71;
+then A8:  G*(1,1)`1 < W+0 by A6,REAL_1:53;
+    j = 0 or j > 0 by NAT_1:19;
+then A9: j = 0 or j >= 1+0 by NAT_1:27;
+ per cases by A1,A9,REAL_1:def 5;
+ suppose j = 0;
+  then cell(G,0,j) = { |[r,s]| : r <= G*(1,1)`1 & s <= G*(1,1)`2 }
+   by GOBRD11:24;
+  then consider r,s such that
+A10: p = |[r,s]| and
+A11: r <= G*(1,1)`1 & s <= G*(1,1)`2 by A4;
+    p`1 = r by A10,EUCLID:56;
+  then W > p`1 & p`1 >= W by A4,A8,A11,AXIOMS:22,PSCOMP_1:71;
+  hence contradiction;
+ suppose j = len G;
+   then cell(G,0,j)={ |[r,s]| : r <= G*(1,1)`1 & G*(1,width G)`2 <= s }
+     by A2,GOBRD11:25;
+  then consider r,s such that
+A12: p = |[r,s]| and
+A13: r <= G*(1,1)`1 & G*(1,width G)`2 <= s by A4;
+    p`1 = r by A12,EUCLID:56;
+  then W > p`1 & p`1 >= W by A4,A8,A13,AXIOMS:22,PSCOMP_1:71;
+  hence contradiction;
+ suppose 1 <= j & j < len G;
+  then cell(G,0,j) = { |[r,s]| : r <= G*(1,1)`1 & G*(1,j)`2 <= s & s <=
+ G*(1,j+1)`2 }
+    by A2,GOBRD11:26;
+  then consider r,s such that
+A14: p = |[r,s]| and
+A15: r <= G*(1,1)`1 & G*(1,j)`2 <= s & s <= G*(1,j+1)`2 by A4;
+    p`1 = r by A14,EUCLID:56;
+  then W > p`1 & p`1 >= W by A4,A8,A15,AXIOMS:22,PSCOMP_1:71;
+  hence contradiction;
+end;

@@ -1,0 +1,297 @@
+:: Fano-Desargues Parallelity Spaces
+::  by Eugeniusz Kusak and Wojciech Leo\'nczuk
+::
+:: Received March 23, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, ARYTM_1, VECTSP_1, PARSP_1, MCART_1, RELAT_1, INCSP_1,
+      PARSP_2;
+ notation ZFMISC_1, SUBSET_1, MCART_1, DOMAIN_1, STRUCT_0, RLVECT_1, VECTSP_1,
+      PARSP_1;
+ constructors DOMAIN_1, PARSP_1, MEMBERED, XBOOLE_0;
+ clusters VECTSP_1, PARSP_1, STRUCT_0, MEMBERED, ZFMISC_1, XBOOLE_0;
+
+
+begin
+
+reserve F for Field;
+
+theorem :: PARSP_2:1
+ MPS(F) is ParSp;
+
+reserve a,b,c,d,p,q,r for
+        Element of MPS(F);
+reserve e,f,g,h,i,j,k,l,m,n,o,w for
+           Element of [:the carrier of F,the carrier of F,the carrier of F:];
+reserve K,L,M,N,R,S for Element of F;
+
+theorem :: PARSP_2:2
+ a,b '||' c,d iff ex e,f,g,h st [a,b,c,d] = [e,f,g,h] &
+      ((ex K st
+      K*(e`1-f`1) = g`1-h`1 & K*(e`2-f`2) = g`2-h`2 &
+      K*(e`3-f`3) = g`3-h`3) or
+      (e`1-f`1 = 0.F & e`2-f`2 = 0.F & e`3-f`3 = 0.F));
+
+theorem :: PARSP_2:3
+ not a,b '||' a,c & [a,b,a,c]=[e,f,e,g] implies e<>f & e<>g & f<>g;
+
+theorem :: PARSP_2:4
+ not a,b '||' a,c & [a,b,a,c] = [e,f,e,g] & K*(e`1-f`1)=L*(e`1-g`1) &
+      K*(e`2-f`2)=L*(e`2-g`2) & K*(e`3-f`3)=L*(e`3-g`3) implies K=0.F & L=0.F;
+
+theorem :: PARSP_2:5
+ not a,b '||' a,c & a,b '||' c,d & a,c '||' b,d & [a,b,c,d] = [e,f,g,h]
+        implies h`1=f`1+g`1-e`1 & h`2=f`2+g`2-e`2 & h`3=f`3+g`3-e`3;
+
+theorem :: PARSP_2:6
+ ex a,b,c st not a,b '||' a,c;
+
+theorem :: PARSP_2:7
+ 1_ F+1_ F<>0.F & b,c '||' a,d & a,b '||' c,d & a,c '||' b,d implies a,b
+'||' a,c;
+
+theorem :: PARSP_2:8
+ not a,p '||' a,b & not a,p '||' a,c & a,p '||' b,q & a,p '||' c,r & a,b
+'||' p,q &
+      a,c '||' p,r implies b,c '||' q,r;
+
+::
+::              2. DEFINITION OF A FANO-DESARGUES SPACE
+::
+
+definition let IT be ParSp;
+ attr IT is FanodesSp-like means
+:: PARSP_2:def 1
+  (ex a,b,c being Element of IT st not a,b '||' a,c)
+        & (for a,b,c,d being Element of IT holds
+           b,c '||' a,d & a,b '||' c,d & a,c '||' b,d implies a,b '||' a,c)
+        & (for a,b,c,p,q,r being Element of IT holds
+          not a,p '||' a,b & not a,p '||' a,c & a,p '||' b,q & a,p '||'
+ c,r & a,b '||' p,q &
+                                              a,c '||' p,r implies b,c '||'
+ q,r);
+end;
+
+definition
+ cluster strict FanodesSp-like ParSp;
+end;
+
+definition
+ mode FanodesSp is FanodesSp-like ParSp;
+end;
+
+reserve FdSp for FanodesSp;
+reserve a,b,c,d,p,q,r,s,o,x,y for Element of FdSp;
+
+::
+::           3. AXIOMS OF A FANO-DESARGUES PARALLELITY SPACE
+::
+
+canceled 4;
+
+theorem :: PARSP_2:13
+ p<>q implies ex r st not p,q '||' p,r;
+
+definition let FdSp,a,b,c;
+ pred a,b,c is_collinear means
+:: PARSP_2:def 2
+  a,b '||' a,c;
+end;
+
+canceled;
+
+theorem :: PARSP_2:15
+ a,b,c is_collinear implies a,c,b is_collinear & c,b,a is_collinear &
+  b,a,c is_collinear & b,c,a is_collinear & c,a,b is_collinear;
+
+canceled;
+
+theorem :: PARSP_2:17
+ not a,b,c is_collinear & a,b '||' p,q & a,c '||'
+ p,r & p<>q & p<>r implies
+      not p,q,r is_collinear;
+
+theorem :: PARSP_2:18
+ a=b or b=c or c =a implies a,b,c is_collinear;
+
+theorem :: PARSP_2:19
+ a<>b & a,b,p is_collinear & a,b,q is_collinear & a,b,r is_collinear
+  implies p,q,r is_collinear;
+
+theorem :: PARSP_2:20
+ p<>q implies ex r st not p,q,r is_collinear;
+
+theorem :: PARSP_2:21
+ a,b,c is_collinear & a,b,d is_collinear implies a,b '||' c,d;
+
+theorem :: PARSP_2:22
+ not a,b,c is_collinear & a,b '||' c,d implies not a,b,d is_collinear;
+
+theorem :: PARSP_2:23
+ not a,b,c is_collinear & a,b '||' c,d & c <>d implies
+  not a,b,x is_collinear or not c,d,x is_collinear;
+
+theorem :: PARSP_2:24
+   not o,a,b is_collinear implies not o,a,x is_collinear or
+   not o,b,x is_collinear or o=x;
+
+theorem :: PARSP_2:25
+   o<>a & o<>b & o,a,b is_collinear & o,a,p is_collinear &
+   o,b,q is_collinear implies a,b '||' p,q;
+
+theorem :: PARSP_2:26
+   not a,b '||' c,d & a,b,p is_collinear & a,b,q is_collinear &
+   c,d,p is_collinear & c,d,q is_collinear implies p=q;
+
+theorem :: PARSP_2:27
+   a<>b & a,b,c is_collinear & a,b '||' c,d implies a,c '||' b,d;
+
+theorem :: PARSP_2:28
+   a<>b & a,b,c is_collinear & a,b '||' c,d implies c,b '||' c,d;
+
+theorem :: PARSP_2:29
+   not o,a,c is_collinear & o,a,b is_collinear & o,c,p is_collinear &
+       o,c,q is_collinear & a,c '||' b,p & a,c '||' b,q implies p=q;
+
+theorem :: PARSP_2:30
+   a<>b & a,b,c is_collinear & a,b,d is_collinear implies a,c,d is_collinear;
+
+theorem :: PARSP_2:31
+   a,b,c is_collinear & a,c,d is_collinear & a<>c implies b,c,d is_collinear;
+
+definition let FdSp,a,b,c,d;
+ pred parallelogram a,b,c,d means
+:: PARSP_2:def 3
+  not a,b,c is_collinear & a,b '||' c,d & a,c '||' b,d;
+end;
+
+canceled 2;
+
+theorem :: PARSP_2:34
+ parallelogram a,b,c,d implies a<>b & b<>c & c <>a & a<>d & b<>d & c <>d;
+
+theorem :: PARSP_2:35
+ parallelogram a,b,c,d implies
+  not a,b,c is_collinear & not b,a,d is_collinear & not c,d,a is_collinear &
+    not d,c,b is_collinear;
+
+theorem :: PARSP_2:36
+ parallelogram a,b,c,d implies
+  not a,b,c is_collinear & not b,a,d is_collinear & not c,d,a is_collinear &
+  not d,c,b is_collinear & not a,c,b is_collinear & not b,a,c is_collinear &
+  not b,c,a is_collinear & not c,a,b is_collinear & not c,b,a is_collinear &
+  not b,d,a is_collinear & not a,b,d is_collinear & not a,d,b is_collinear &
+  not d,a,b is_collinear & not d,b,a is_collinear & not c,a,d is_collinear &
+  not a,c,d is_collinear & not a,d,c is_collinear & not d,a,c is_collinear &
+  not d,c,a is_collinear & not d,b,c is_collinear & not b,c,d is_collinear &
+  not b,d,c is_collinear & not c,b,d is_collinear & not c,d,b is_collinear;
+
+theorem :: PARSP_2:37
+ parallelogram a,b,c,d implies not a,b,x is_collinear or
+  not c,d,x is_collinear;
+
+theorem :: PARSP_2:38
+ parallelogram a,b,c,d implies parallelogram a,c,b,d;
+
+theorem :: PARSP_2:39
+ parallelogram a,b,c,d implies parallelogram c,d,a,b;
+
+theorem :: PARSP_2:40
+ parallelogram a,b,c,d implies parallelogram b,a,d,c;
+
+theorem :: PARSP_2:41
+ parallelogram a,b,c,d implies parallelogram a,c,b,d &
+  parallelogram c,d,a,b & parallelogram b,a,d,c & parallelogram c,a,d,b &
+  parallelogram d,b,c,a & parallelogram b,d,a,c & parallelogram d,c,b,a;
+
+theorem :: PARSP_2:42
+ not a,b,c is_collinear implies ex d st parallelogram a,b,c,d;
+
+theorem :: PARSP_2:43
+ parallelogram a,b,c,p & parallelogram a,b,c,q implies p=q;
+
+theorem :: PARSP_2:44
+ parallelogram a,b,c,d implies not a,d '||' b,c;
+
+theorem :: PARSP_2:45
+ parallelogram a,b,c,d implies not parallelogram a,b,d,c;
+
+theorem :: PARSP_2:46
+ a<>b implies ex c st a,b,c is_collinear & c <>a & c <>b;
+
+theorem :: PARSP_2:47
+ parallelogram a,p,b,q & parallelogram a,p,c,r implies b,c '||' q,r;
+
+theorem :: PARSP_2:48
+ not b,q,c is_collinear & parallelogram a,p,b,q & parallelogram a,p,c,r
+  implies parallelogram b,q,c,r;
+
+theorem :: PARSP_2:49
+ a,b,c is_collinear & b<>c & parallelogram a,p,b,q &
+  parallelogram a,p,c,r implies parallelogram b,q,c,r;
+
+theorem :: PARSP_2:50
+ parallelogram a,p,b,q & parallelogram a,p,c,r & parallelogram b,q,d,s
+  implies c,d '||' r,s;
+
+theorem :: PARSP_2:51
+ a<>b implies ex c,d st parallelogram a,b,c,d;
+
+theorem :: PARSP_2:52
+   a<>d implies ex b,c st parallelogram a,b,c,d;
+
+definition let FdSp,a,b,r,s;
+ pred a,b congr r,s means
+:: PARSP_2:def 4
+  (a=b & r=s) or (ex p,q st parallelogram p,q,a,b &
+   parallelogram p,q,r,s);
+end;
+
+canceled 2;
+
+theorem :: PARSP_2:55
+ a,a congr b,c implies b=c;
+
+theorem :: PARSP_2:56
+   a,b congr c,c implies a=b;
+
+theorem :: PARSP_2:57
+   a,b congr b,a implies a=b;
+
+theorem :: PARSP_2:58
+ a,b congr c,d implies a,b '||' c,d;
+
+theorem :: PARSP_2:59
+ a,b congr c,d implies a,c '||' b,d;
+
+theorem :: PARSP_2:60
+ a,b congr c,d & not a,b,c is_collinear implies parallelogram a,b,c,d;
+
+theorem :: PARSP_2:61
+ parallelogram a,b,c,d implies a,b congr c,d;
+
+theorem :: PARSP_2:62
+ a,b congr c,d & a,b,c is_collinear & parallelogram r,s,a,b implies
+parallelogram r,s,c,d;
+
+theorem :: PARSP_2:63
+   a,b congr c,x & a,b congr c,y implies x=y;
+
+theorem :: PARSP_2:64
+   ex d st a,b congr c,d;
+
+canceled;
+
+theorem :: PARSP_2:66
+ a,b congr a,b;
+
+theorem :: PARSP_2:67
+ r,s congr a,b & r,s congr c,d implies a,b congr c,d;
+
+theorem :: PARSP_2:68
+   a,b congr c,d implies c,d congr a,b;
+
+theorem :: PARSP_2:69
+   a,b congr c,d implies b,a congr d,c;

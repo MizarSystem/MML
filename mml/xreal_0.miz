@@ -1,0 +1,1257 @@
+:: Introduction to Arithmetic of Real Numbers
+::  by Library Committee
+::
+:: Received February 11, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary XREAL_0, ARYTM_2, BOOLE, ARYTM_1, ARYTM_3, ORDINAL2, ARYTM,
+      RELAT_1, ASYMPT_0, ZF_LANG, XCMPLX_0, COMPLEX1, FUNCOP_1, OPPCAT_1,
+      ORDINAL1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_4, ORDINAL1, ORDINAL2,
+      ARYTM_2, ARYTM_1, NUMBERS, ARYTM_0, XCMPLX_0;
+ constructors ARYTM_1, ARYTM_0, ORDINAL2, XCMPLX_0, FUNCT_4, XBOOLE_0, TARSKI;
+ clusters ARYTM_2, NUMBERS, ARYTM_3, ORDINAL2, SUBSET_1, XBOOLE_0, XCMPLX_0,
+      ZFMISC_1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions XCMPLX_0;
+ theorems XBOOLE_0, ARYTM_1, ZFMISC_1, TARSKI, ARYTM_2, ORDINAL2, ARYTM_0,
+      XCMPLX_0, NUMBERS;
+
+begin
+
+definition let r be number;
+  attr r is real means :Def1:
+    r in REAL;
+end;
+
+definition
+  cluster natural -> real number;
+coherence
+  proof
+    let x be number;
+    assume x is natural;
+    then x in NAT by ORDINAL2:def 21;
+    hence x in REAL;
+  end;
+  cluster real -> complex number;
+coherence
+  proof
+    let x be number;
+    assume x is real;
+    then x in REAL by Def1;
+    hence x in COMPLEX by NUMBERS:def 2,XBOOLE_0:def 2;
+  end;
+end;
+
+definition
+  cluster real number;
+existence
+ proof
+   consider r being Element of REAL;
+   take r;
+   thus r in REAL;
+ end;
+end;
+
+definition let x,y be real number;
+  pred x <= y means :Def2:
+   ex x',y' being Element of REAL+ st x = x' & y = y' & x' <=' y'
+              if x in REAL+ & y in REAL+,
+  ex x',y' being Element of REAL+ st x = [0,x'] & y = [0,y'] & y' <=' x'
+              if x in [:{0},REAL+:] & y in [:{0},REAL+:]
+  otherwise y in REAL+ & x in [:{0},REAL+:];
+  consistency by ARYTM_0:5,XBOOLE_0:3;
+  reflexivity
+   proof let x be real number such that
+A1:  not((x in REAL+ & x in REAL+ implies
+      ex x',y' being Element of REAL+ st x = x' & x = y' & x' <=' y') &
+    (x in [:{0},REAL+:] & x in [:{0},REAL+:] implies
+      ex x',y' being Element of REAL+
+       st x = [0,x'] & x = [0,y'] & y' <=' x') &
+         (not(x in REAL+ & x in REAL+) &
+         not(x in [:{0},REAL+:] & x in [:{0},REAL+:])
+     implies x in REAL+ & x in [:{0},REAL+:]));
+      x in REAL by Def1;
+then A2: x in REAL+ \/ [:{0},REAL+:] by NUMBERS:def 1,XBOOLE_0:def 4;
+    per cases by A1;
+    suppose that
+A3:   x in REAL+ and
+A4:   not ex x',y' being Element of REAL+ st x = x' & x = y' & x' <=' y';
+     reconsider x' = x as Element of REAL+ by A3;
+     not x' <=' x' by A4;
+    hence thesis;
+    suppose that
+A5:   x in [:{0},REAL+:] and
+A6:   not ex x',y' being Element of REAL+
+              st x = [0,x'] & x = [0,y'] & y' <=' x';
+      consider z,x' being set such that
+A7:    z in {0} and
+A8:    x' in REAL+ and
+A9:    x = [z,x'] by A5,ZFMISC_1:103;
+      reconsider x' as Element of REAL+ by A8;
+        x = [0,x'] by A7,A9,TARSKI:def 1;
+    then not x' <=' x' by A6;
+     hence thesis;
+    suppose not(not x in REAL+ & not x in [:{0},REAL+:]
+     implies x in REAL+ & x in [:{0},REAL+:]);
+    hence thesis by A2,XBOOLE_0:def 2;
+   end;
+  connectedness
+   proof let x,y be real number such that
+A10: not((x in REAL+ & y in REAL+ implies
+     ex x',y' being Element of REAL+ st x = x' & y = y' & x' <=' y') &
+      (x in [:{0},REAL+:] & y in [:{0},REAL+:] implies
+     ex x',y' being Element of REAL+ st x = [0,x'] & y = [0,y'] & y' <=' x')
+     & (not(x in REAL+ & y in REAL+)
+     & not(x in [:{0},REAL+:] & y in [:{0},REAL+:])
+     implies y in REAL+ & x in [:{0},REAL+:]));
+      x in REAL & y in REAL by Def1;
+then A11: x in REAL+ \/ [:{0},REAL+:] &
+    y in REAL+ \/ [:{0},REAL+:] by NUMBERS:def 1,XBOOLE_0:def 4;
+    per cases by A10;
+    suppose that
+A12:   x in REAL+ & y in REAL+ and
+A13:   not ex x',y' being Element of REAL+ st x = x' & y = y' & x' <=' y';
+    hereby assume y in REAL+ & x in REAL+;
+      then reconsider x' = x, y' = y as Element of REAL+;
+      take y',x';
+      thus y = y' & x = x';
+      thus y' <=' x' by A13;
+    end;
+    thus thesis by A12,ARYTM_0:5,XBOOLE_0:3;
+    suppose that
+A14:   x in [:{0},REAL+:] & y in [:{0},REAL+:] and
+A15:   not ex x',y' being Element of REAL+
+              st x = [0,x'] & y = [0,y'] & y' <=' x';
+       now assume y in [:{0},REAL+:];
+       then consider z,y' being set such that
+A16:    z in {0} and
+A17:    y' in REAL+ and
+A18:    y = [z,y'] by ZFMISC_1:103;
+A19:     z = 0 by A16,TARSKI:def 1;
+      assume x in [:{0},REAL+:];
+       then consider z,x' being set such that
+A20:    z in {0} and
+A21:    x' in REAL+ and
+A22:    x = [z,x'] by ZFMISC_1:103;
+A23:     z = 0 by A20,TARSKI:def 1;
+       reconsider x',y' as Element of REAL+ by A17,A21;
+      take y',x';
+      thus y = [0,y'] & x = [0,x'] by A16,A18,A20,A22,TARSKI:def 1;
+      thus x' <=' y' by A15,A18,A19,A22,A23;
+     end;
+    hence thesis by A14,ARYTM_0:5,XBOOLE_0:3;
+    suppose not(not(x in REAL+ & y in REAL+) &
+                not(x in [:{0},REAL+:] & y in [:{0},REAL+:])
+     implies y in REAL+ & x in [:{0},REAL+:]);
+    hence thesis by A11,XBOOLE_0:def 2;
+   end;
+  synonym y >= x;
+  antonym y < x;
+  antonym x > y;
+end;
+
+definition let x be real number;
+  attr x is positive means :Def3:
+     x > 0;
+  attr x is negative means :Def4:
+     x < 0;
+end;
+
+Lm1: for x being real number, x1,x2 being Element of REAL st x = [*x1,x2*]
+       holds x2 = 0 & x = x1
+ proof let x be real number, x1,x2 being Element of REAL;
+  assume
+A1:  x = [*x1,x2*];
+A2: x in REAL by Def1;
+  hereby assume x2 <> 0;
+    then x = (0,one) --> (x1,x2) by A1,ARYTM_0:def 7;
+   hence contradiction by A2,ARYTM_0:10;
+  end;
+  hence x = x1 by A1,ARYTM_0:def 7;
+ end;
+
+definition let x be real number;
+  cluster -x -> real;
+ coherence
+  proof
+      x + -x = 0 by XCMPLX_0:def 6;
+   then consider x1,x2,y1,y2 being Element of REAL such that
+A1:  x = [*x1,x2*] and
+A2:  -x = [*y1,y2*] and
+A3:  0 = [*+(x1,y1),+(x2,y2)*] by XCMPLX_0:def 4;
+A4:   +(x2,y2) = 0 by A3,Lm1;
+      x2 = 0 by A1,Lm1;
+    then y2 = 0 by A4,ARYTM_0:13;
+    then -x = y1 by A2,ARYTM_0:def 7;
+   hence thesis by Def1;
+  end;
+  cluster x" -> real;
+coherence
+  proof
+A5:one = succ 0 by ORDINAL2:def 4 .= 1;
+   per cases;
+   suppose x = 0;
+    hence thesis by XCMPLX_0:def 7;
+   suppose
+A6:   x <> 0;
+    then x * x" = one by A5,XCMPLX_0:def 7;
+    then consider x1,x2,y1,y2 being Element of REAL such that
+A7:  x = [*x1,x2*] and
+A8:  x" = [*y1,y2*] and
+A9:  one = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *]
+          by XCMPLX_0:def 5;
+A10:    +(*(x1,y2),*(x2,y1)) = 0 by A9,Lm1;
+      x2 = 0 by A7,Lm1;
+    then *(x2,y1) = 0 by ARYTM_0:14;
+    then 0 = *(x1,y2) by A10,ARYTM_0:13;
+    then x1 = 0 or y2 = 0 by ARYTM_0:23;
+    then x" = y1 by A6,A7,A8,Lm1,ARYTM_0:def 7;
+   hence thesis by Def1;
+  end;
+  let y be real number;
+  cluster x + y -> real;
+coherence
+  proof
+   consider x1,x2,y1,y2 being Element of REAL such that
+A11:  x = [*x1,x2*] and
+A12:  y = [*y1,y2*] and
+A13:  x+y = [*+(x1,y1),+(x2,y2)*] by XCMPLX_0:def 4;
+      x2 = 0 & y2 = 0 by A11,A12,Lm1;
+    then +(x2,y2) = 0 by ARYTM_0:13;
+    then x + y = +(x1,y1) by A13,ARYTM_0:def 7;
+   hence thesis by Def1;
+  end;
+  cluster x * y -> real;
+coherence
+  proof
+   consider x1,x2,y1,y2 being Element of REAL such that
+A14:  x = [*x1,x2*] and
+A15:  y = [*y1,y2*] and
+A16:  x*y = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *]
+          by XCMPLX_0:def 5;
+A17:  x2 = 0 & y2 = 0 by A14,A15,Lm1;
+    then *(x2,y1) = 0 & *(x1,y2) = 0 by ARYTM_0:14;
+    then A18:   +(*(x1,y2),*(x2,y1)) = 0 by ARYTM_0:13;
+      *(opp x2,y2) = 0 by A17,ARYTM_0:14;
+    then opp*(x2,y2) = 0 by ARYTM_0:17;
+    then x * y = +(*(x1,y1),0) by A16,A18,ARYTM_0:def 7
+        .= *(x1,y1) by ARYTM_0:13;
+   hence thesis by Def1;
+  end;
+end;
+
+definition let x,y be real number;
+  cluster x-y -> real;
+ coherence proof x-y = x+-y by XCMPLX_0:def 8; hence thesis; end;
+  cluster x/y -> real;
+ coherence proof x/y = x*y" by XCMPLX_0:def 9; hence thesis; end;
+end;
+
+begin
+
+ reserve r,s,t for real number;
+
+Lm2:  one = succ 0 by ORDINAL2:def 4 .= 1;
+
+Lm3: {} in {{}} by TARSKI:def 1;
+Lm4:
+ r <= s & s <= r implies r = s
+proof assume that
+A1: r <= s and
+A2: s <= r;
+     r in REAL & s in REAL by Def1;
+then A3: r in REAL+ \/ [:{0},REAL+:] & s in REAL+ \/ [:{0},REAL+:]
+      by NUMBERS:def 1,XBOOLE_0:def 4;
+ per cases by A3,XBOOLE_0:def 2;
+ suppose that
+A4: r in REAL+ and
+A5: s in REAL+;
+  consider r',s' being Element of REAL+ such that
+A6: r = r' and
+A7: s = s' and
+A8: r' <=' s' by A1,A4,A5,Def2;
+  consider s'',r'' being Element of REAL+ such that
+A9: s = s'' and
+A10: r = r'' and
+A11: s'' <=' r'' by A2,A4,A5,Def2;
+ thus thesis by A6,A7,A8,A9,A10,A11,ARYTM_1:4;
+ suppose
+A12:  r in REAL+ & s in [:{0},REAL+:];
+  then not(r in REAL+ & s in REAL+) &
+       not(r in [:{0},REAL+:] & s in [:{0},REAL+:]) by ARYTM_0:5,XBOOLE_0:3;
+ hence thesis by A1,A12,Def2;
+ suppose
+A13:  s in REAL+ & r in [:{0},REAL+:];
+  then not(r in REAL+ & s in REAL+) &
+       not(r in [:{0},REAL+:] & s in [:{0},REAL+:]) by ARYTM_0:5,XBOOLE_0:3;
+ hence thesis by A2,A13,Def2;
+ suppose that
+A14: r in [:{0},REAL+:] and
+A15: s in [:{0},REAL+:];
+  consider r',s' being Element of REAL+ such that
+A16: r = [0,r'] and
+A17: s = [0,s'] and
+A18: s' <=' r' by A1,A14,A15,Def2;
+  consider s'',r'' being Element of REAL+ such that
+A19: s = [0,s''] and
+A20: r = [0,r''] and
+A21: r'' <=' s'' by A2,A14,A15,Def2;
+   r' = r'' & s' = s'' by A16,A17,A19,A20,ZFMISC_1:33;
+ hence thesis by A18,A19,A20,A21,ARYTM_1:4;
+end;
+
+Lm5: r <= s implies r + t <= s + t
+proof
+ assume
+A1: r <= s;
+  reconsider x1=r, y1=s, z1=t as Element of REAL by Def1;
+   for x' being Element of REAL, r st x' = r
+   holds +(x',z1) = r + t
+   proof let x' be Element of REAL, r such that
+A2: x' = r;
+     consider x1,x2,y1,y2 being Element of REAL such that
+A3: r = [* x1,x2 *] and
+A4: t = [*y1,y2*] and
+A5: r+t = [*+(x1,y1),+(x2,y2)*] by XCMPLX_0:def 4;
+A6: r = x1 & t = y1 by A3,A4,Lm1;
+      x2 = 0 & y2 = 0 by A3,A4,Lm1;
+     then +(x2,y2) = 0 by ARYTM_0:13;
+    hence +(x',z1) = r + t by A2,A5,A6,ARYTM_0:def 7;
+   end;
+  then A7: +(y1,z1) = s + t & +(x1,z1) = r + t;
+ per cases by A1,Def2;
+ suppose that
+A8: r in REAL+ and
+A9: s in REAL+ and
+A10: t in REAL+;
+  consider x'',s'' being Element of REAL+ such that
+A11: r = x'' and
+A12: s = s'' and
+A13: x'' <=' s'' by A1,A8,A9,Def2;
+  consider x',t' being Element of REAL+ such that
+A14: r = x' and
+A15: t = t' and
+A16: +(x1,z1) = x' + t' by A8,A10,ARYTM_0:def 2;
+  consider s',t'' being Element of REAL+ such that
+A17: s = s' and
+A18: t = t'' and
+A19: +(y1,z1) = s' + t'' by A9,A10,ARYTM_0:def 2;
+    x' + t' <=' s' + t'' by A11,A12,A13,A14,A15,A17,A18,ARYTM_1:7;
+ hence r + t <= s + t by A7,A16,A19,Def2;
+ suppose that
+A20: r in [:{0},REAL+:] and
+A21: s in REAL+ and
+A22: t in REAL+;
+  consider x',t' being Element of REAL+ such that
+     r = [0,x'] and
+A23: t = t' and
+A24: +(x1,z1) = t' - x' by A20,A22,ARYTM_0:def 2;
+  consider s',t'' being Element of REAL+ such that
+     s = s' and
+A25: t = t'' and
+A26: +(y1,z1) = s' + t'' by A21,A22,ARYTM_0:def 2;
+   now per cases;
+   suppose x' <=' t';
+    then A27:   t' - x' = t' -' x' by ARYTM_1:def 2;
+A28:  t' -' x' <=' t' by ARYTM_1:11;
+     t' <=' s' + t'' by A23,A25,ARYTM_2:20;
+    then t' -' x' <=' s' + t'' by A28,ARYTM_1:3;
+   hence r + t <= s + t by A7,A24,A26,A27,Def2;
+   suppose
+     not x' <=' t';
+    then t' - x' = [0,x' -' t'] by ARYTM_1:def 2;
+    then t' - x' in [:{0},REAL+:] by Lm3,ZFMISC_1:106;
+    then not r + t in REAL+ & not s + t in [:{0},REAL+:]
+                 by A7,A24,A26,ARYTM_0:5,XBOOLE_0:3;
+   hence r + t <= s + t by Def2;
+  end;
+ hence thesis;
+ suppose that
+A29: r in [:{0},REAL+:] and
+A30: s in [:{0},REAL+:] and
+A31: t in REAL+;
+  consider x'',s'' being Element of REAL+ such that
+A32: r = [0,x''] and
+A33: s = [0,s''] and
+A34: s'' <=' x'' by A1,A29,A30,Def2;
+  consider x',t' being Element of REAL+ such that
+A35: r = [0,x'] and
+A36: t = t' and
+A37: +(x1,z1) = t' - x' by A29,A31,ARYTM_0:def 2;
+  consider s',t'' being Element of REAL+ such that
+A38: s = [0,s'] and
+A39: t = t'' and
+A40: +(y1,z1) = t'' - s' by A30,A31,ARYTM_0:def 2;
+A41: x' = x'' by A32,A35,ZFMISC_1:33;
+A42: s' = s'' by A33,A38,ZFMISC_1:33;
+   now per cases;
+   suppose
+A43:  x' <=' t';
+then A44:   t' - x' = t' -' x' by ARYTM_1:def 2;
+     s' <=' t' by A34,A41,A42,A43,ARYTM_1:3;
+then A45:   t' - s' = t' -' s' by ARYTM_1:def 2;
+     t' -' x' <=' t'' -' s' by A34,A36,A39,A41,A42,ARYTM_1:16;
+   hence r + t <= s + t by A7,A36,A37,A39,A40,A44,A45,Def2;
+   suppose not x' <=' t';
+    then A46:  +(x1,z1) = [0,x' -' t'] by A37,ARYTM_1:def 2;
+    then A47:   +(x1,z1) in [:{0},REAL+:] by Lm3,ZFMISC_1:106;
+    now per cases;
+    suppose s' <=' t';
+     then t' - s' = t' -' s' by ARYTM_1:def 2;
+     then not +(x1,z1) in REAL+ & not +(y1,z1) in [:{0},REAL+:]
+                 by A36,A39,A40,A47,ARYTM_0:5,XBOOLE_0:3;
+    hence r + t <= s + t by A7,Def2;
+    suppose not s' <=' t';
+     then A48:  +(y1,z1) = [0,s' -' t'] by A36,A39,A40,ARYTM_1:def 2;
+    then A49:   +(y1,z1) in [:{0},REAL+:] by Lm3,ZFMISC_1:106;
+      s' -' t' <=' x' -' t' by A34,A41,A42,ARYTM_1:17;
+    hence r + t <= s + t by A7,A46,A47,A48,A49,Def2;
+   end;
+   hence thesis;
+  end;
+ hence thesis;
+ suppose that
+A50: r in REAL+ and
+A51: s in REAL+ and
+A52: t in [:{0},REAL+:];
+  consider x'',s'' being Element of REAL+ such that
+A53: r = x'' and
+A54: s = s'' and
+A55: x'' <=' s'' by A1,A50,A51,Def2;
+  consider x',t' being Element of REAL+ such that
+A56: r = x' and
+A57: t = [0,t'] and
+A58: +(x1,z1) = x' - t' by A50,A52,ARYTM_0:def 2;
+  consider s',t'' being Element of REAL+ such that
+A59: s = s' and
+A60: t = [0,t''] and
+A61: +(y1,z1) = s' - t'' by A51,A52,ARYTM_0:def 2;
+A62: t' = t'' by A57,A60,ZFMISC_1:33;
+   now per cases;
+   suppose
+A63:  t' <=' x';
+then A64:   x' - t' = x' -' t' by ARYTM_1:def 2;
+     t' <=' s' by A53,A54,A55,A56,A59,A63,ARYTM_1:3;
+then A65:   s' - t' = s' -' t' by ARYTM_1:def 2;
+     x' -' t' <=' s' -' t'' by A53,A54,A55,A56,A59,A62,ARYTM_1:17;
+   hence r + t <= s + t by A7,A58,A61,A62,A64,A65,Def2;
+   suppose not t' <=' x';
+    then A66:  +(x1,z1) = [0,t' -' x'] by A58,ARYTM_1:def 2;
+    then A67:   +(x1,z1) in [:{0},REAL+:] by Lm3,ZFMISC_1:106;
+    now per cases;
+    suppose t' <=' s';
+     then s' - t' = s' -' t' by ARYTM_1:def 2;
+     then not +(x1,z1) in REAL+ & not +(y1,z1) in [:{0},REAL+:]
+                 by A61,A62,A67,ARYTM_0:5,XBOOLE_0:3;
+    hence r + t <= s + t by A7,Def2;
+    suppose not t' <=' s';
+     then A68:  +(y1,z1) = [0,t' -' s'] by A61,A62,ARYTM_1:def 2;
+    then A69:   +(y1,z1) in [:{0},REAL+:] by Lm3,ZFMISC_1:106;
+      t' -' s' <=' t' -' x' by A53,A54,A55,A56,A59,ARYTM_1:16;
+    hence r + t <= s + t by A7,A66,A67,A68,A69,Def2;
+   end;
+   hence thesis;
+  end;
+ hence thesis;
+ suppose that
+A70: r in [:{0},REAL+:] and
+A71: s in REAL+ and
+A72: t in [:{0},REAL+:];
+   not r in REAL+ & not t in REAL+ by A70,A72,ARYTM_0:5,XBOOLE_0:3;
+  then consider x',t' being Element of REAL+ such that
+     r = [0,x'] and
+A73: t = [0,t'] and
+A74: +(x1,z1) = [0,x' + t'] by ARYTM_0:def 2;
+  consider s',t'' being Element of REAL+ such that
+     s = s' and
+A75: t = [0,t''] and
+A76: +(y1,z1) = s' - t'' by A71,A72,ARYTM_0:def 2;
+A77: t' = t'' by A73,A75,ZFMISC_1:33;
+A78:  +(x1,z1) in [:{0},REAL+:] by A74,Lm3,ZFMISC_1:106;
+   now per cases;
+   suppose t' <=' s';
+    then s' - t'' = s' -' t'' by A77,ARYTM_1:def 2;
+    then not +(x1,z1) in REAL+ & not +(y1,z1) in [:{0},REAL+:]
+                 by A76,A78,ARYTM_0:5,XBOOLE_0:3;
+   hence r + t <= s + t by A7,Def2;
+   suppose
+     not t' <=' s';
+    then A79:   +(y1,z1) = [0,t' -' s'] by A76,A77,ARYTM_1:def 2;
+then A80:  +(y1,z1) in [:{0},REAL+:] by Lm3,ZFMISC_1:106;
+A81:  t' -' s' <=' t' by ARYTM_1:11;
+     t' <=' t' + x' by ARYTM_2:20;
+    then t' -' s' <=' t' + x' by A81,ARYTM_1:3;
+   hence r + t <= s + t by A7,A74,A78,A79,A80,Def2;
+  end;
+ hence thesis;
+ suppose that
+A82: r in [:{0},REAL+:] and
+A83: s in [:{0},REAL+:] and
+A84: t in [:{0},REAL+:];
+  consider x'',s'' being Element of REAL+ such that
+A85: r = [0,x''] and
+A86: s = [0,s''] and
+A87: s'' <=' x'' by A1,A82,A83,Def2;
+   not r in REAL+ & not t in REAL+ by A82,A84,ARYTM_0:5,XBOOLE_0:3;
+  then consider x',t' being Element of REAL+ such that
+A88: r = [0,x'] and
+A89: t = [0,t'] and
+A90: +(x1,z1) = [0,x' + t'] by ARYTM_0:def 2;
+   not s in REAL+ & not t in REAL+ by A83,A84,ARYTM_0:5,XBOOLE_0:3;
+  then consider s',t'' being Element of REAL+ such that
+A91: s = [0,s'] and
+A92: t = [0,t''] and
+A93: +(y1,z1) = [0,s' + t''] by ARYTM_0:def 2;
+A94: x' = x'' by A85,A88,ZFMISC_1:33;
+A95: s' = s'' by A86,A91,ZFMISC_1:33;
+A96: t' = t'' by A89,A92,ZFMISC_1:33;
+then A97: s' + t' <=' x' + t'' by A87,A94,A95,ARYTM_1:7;
+A98: +(x1,z1) in [:{0},REAL+:] by A90,Lm3,ZFMISC_1:106;
+    +(y1,z1) in [:{0},REAL+:] by A93,Lm3,ZFMISC_1:106;
+ hence r + t <= s + t by A7,A90,A93,A96,A97,A98,Def2;
+end;
+
+Lm6: r <= s & s <= t implies r <= t
+proof assume that
+A1: r <= s and
+A2: s <= t;
+     r in REAL & s in REAL & t in REAL by Def1;
+then A3: r in REAL+ \/ [:{0},REAL+:] & s in REAL+ \/ [:{0},REAL+:]
+       & t in REAL+ \/ [:{0},REAL+:] by NUMBERS:def 1,XBOOLE_0:def 4;
+ per cases by A3,XBOOLE_0:def 2;
+ suppose that
+A4: r in REAL+ and
+A5: s in REAL+ and
+A6: t in REAL+;
+  consider x',s' being Element of REAL+ such that
+A7: r = x' and
+A8: s = s' and
+A9: x' <=' s' by A1,A4,A5,Def2;
+  consider s'',t' being Element of REAL+ such that
+A10: s = s'' and
+A11: t = t' and
+A12: s'' <=' t' by A2,A5,A6,Def2;
+   x' <=' t' by A8,A9,A10,A12,ARYTM_1:3;
+ hence thesis by A7,A11,Def2;
+ suppose
+A13:  r in REAL+ & s in [:{0},REAL+:];
+  then not(r in REAL+ & s in REAL+) &
+       not(r in [:{0},REAL+:] & s in [:{0},REAL+:]) by ARYTM_0:5,XBOOLE_0:3;
+ hence thesis by A1,A13,Def2;
+ suppose
+A14:  s in REAL+ & t in [:{0},REAL+:];
+  then not(t in REAL+ & s in REAL+) &
+       not(t in [:{0},REAL+:] & s in [:{0},REAL+:]) by ARYTM_0:5,XBOOLE_0:3;
+ hence thesis by A2,A14,Def2;
+ suppose that
+A15: r in [:{0},REAL+:] and
+A16: t in REAL+;
+   not(r in REAL+ & t in REAL+) &
+  not(r in [:{0},REAL+:] & t in
+ [:{0},REAL+:]) by A15,A16,ARYTM_0:5,XBOOLE_0:3;
+ hence thesis by A16,Def2;
+ suppose that
+A17: r in [:{0},REAL+:] and
+A18: s in [:{0},REAL+:] and
+A19: t in [:{0},REAL+:];
+  consider x',s' being Element of REAL+ such that
+A20: r = [0,x'] and
+A21: s = [0,s'] and
+A22: s' <=' x' by A1,A17,A18,Def2;
+  consider s'',t' being Element of REAL+ such that
+A23: s = [0,s''] and
+A24: t = [0,t'] and
+A25: t' <=' s'' by A2,A18,A19,Def2;
+   s' = s'' by A21,A23,ZFMISC_1:33;
+  then t' <=' x' by A22,A25,ARYTM_1:3;
+ hence thesis by A17,A19,A20,A24,Def2;
+end;
+
+   reconsider z = 0 as Element of REAL+ by ARYTM_2:21;
+Lm7: not 0 in [:{0},REAL+:] by ARYTM_0:5,ARYTM_2:21,XBOOLE_0:3;
+   reconsider j = 1 as Element of REAL+ by Lm2,ARYTM_2:21;
+    z <=' j by ARYTM_1:6;
+   then Lm8:0 <= 1 by Def2;
+    1 + -1 = 0;
+   then consider x1,x2,y1,y2 being Element of REAL such that
+Lm9: 1 = [*x1,x2*] and
+Lm10: -1 = [*y1,y2*] and
+Lm11: 0 = [*+(x1,y1),+(x2,y2)*] by XCMPLX_0:def 4;
+Lm12: x1 = 1 by Lm1,Lm9;
+Lm13: y1 = -1 by Lm1,Lm10;
+Lm14: +(x1,y1) = 0 by Lm1,Lm11;
+Lm15:
+   now assume -1 in REAL+;
+     then ex x',y' being Element of REAL+ st
+       x1 = x' & y1 = y' & z = x' + y' by Lm2,Lm12,Lm13,Lm14,ARYTM_0:def 2,
+ARYTM_2:21;
+    hence contradiction by Lm12,ARYTM_2:6;
+   end;
+
+Lm16: r >= 0 & s > 0 implies r + s > 0
+ proof assume r >= 0;
+  then r + s >= 0 + s by Lm5;
+  hence thesis by Lm6;
+ end;
+
+Lm17: r <= 0 & s < 0 implies r + s < 0
+ proof assume r <= 0;
+  then r + s <= 0 + s by Lm5;
+  hence thesis by Lm6;
+ end;
+
+ reconsider o = 0 as Element of REAL+ by ARYTM_2:21;
+
+Lm18: r <= s & 0 <= t implies r * t <= s * t
+proof assume that
+A1: r <= s and
+A2: 0 <= t;
+  reconsider x1=r, y1=s, z1=t as Element of REAL by Def1;
+  for x' being Element of REAL, r st x' = r
+  holds *(x',z1) = r * t
+proof let x' be Element of REAL, r such that
+A3: x' = r;
+  consider x1,x2,y1,y2 being Element of REAL such that
+A4: r = [* x1,x2 *] and
+A5: t = [*y1,y2*] and
+A6: r*t = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *]
+      by XCMPLX_0:def 5;
+A7: r = x1 & t = y1 by A4,A5,Lm1;
+A8: x2 = 0 & y2 = 0 by A4,A5,Lm1;
+  then *(x1,y2) = 0 & *(x2,y1) = 0 by ARYTM_0:14;
+  then A9: +(*(x1,y2),*(x2,y1)) = 0 by ARYTM_0:13;
+ thus *(x',z1) = +(*(x1,y1),0) by A3,A7,ARYTM_0:13
+      .= +(*(x1,y1),*(opp x2,y2)) by A8,ARYTM_0:14
+      .= +(*(x1,y1),opp*(x2,y2)) by ARYTM_0:17
+      .= r * t by A6,A9,ARYTM_0:def 7;
+end;
+  then A10: *(y1,z1) = s * t & *(x1,z1) = r * t;
+ not o in [:{0},REAL+:] by ARYTM_0:5,XBOOLE_0:3;
+then A11: t in REAL+ by A2,Def2;
+assume
+A12: not thesis;
+then A13: t <> 0;
+ per cases by A1,Def2;
+ suppose that
+A14: r in REAL+ and
+A15: s in REAL+;
+  consider x'',s'' being Element of REAL+ such that
+A16: r = x'' and
+A17: s = s'' and
+A18: x'' <=' s'' by A1,A14,A15,Def2;
+  consider x',t' being Element of REAL+ such that
+A19: r = x' and
+A20: t = t' and
+A21: *(x1,z1) = x' *' t' by A11,A14,ARYTM_0:def 3;
+  consider s',t'' being Element of REAL+ such that
+A22: s = s' and
+A23: t = t'' and
+A24: *(y1,z1) = s' *' t'' by A11,A15,ARYTM_0:def 3;
+    x' *' t' <=' s' *' t' by A16,A17,A18,A19,A22,ARYTM_1:8;
+ hence contradiction by A10,A12,A20,A21,A23,A24,Def2;
+ suppose that
+A25: r in [:{0},REAL+:] and
+A26: s in REAL+;
+  consider x',t' being Element of REAL+ such that
+     r = [0,x'] and
+     t = t' and
+A27: *(x1,z1) = [0,t' *' x'] by A11,A13,A25,ARYTM_0:def 3;
+  consider s',t'' being Element of REAL+ such that
+     s = s' and
+     t = t'' and
+A28: *(y1,z1) = s' *' t'' by A11,A26,ARYTM_0:def 3;
+    *(x1,z1) in [:{0},REAL+:] by A27,Lm3,ZFMISC_1:106;
+  then not *(x1,z1) in REAL+ & not *(y1,z1) in [:{0},REAL+:]
+     by A28,ARYTM_0:5,XBOOLE_0:3;
+ hence contradiction by A10,A12,Def2;
+ suppose that
+A29: r in [:{0},REAL+:] and
+A30: s in [:{0},REAL+:];
+  consider x'',s'' being Element of REAL+ such that
+A31: r = [0,x''] and
+A32: s = [0,s''] and
+A33: s'' <=' x'' by A1,A29,A30,Def2;
+  consider x',t' being Element of REAL+ such that
+A34: r = [0,x'] and
+A35: t = t' and
+A36: *(x1,z1) = [0,t' *' x'] by A11,A13,A29,ARYTM_0:def 3;
+  consider s',t'' being Element of REAL+ such that
+A37: s = [0,s'] and
+A38: t = t'' and
+A39: *(y1,z1) = [0,t'' *' s'] by A11,A13,A30,ARYTM_0:def 3;
+A40: x' = x'' by A31,A34,ZFMISC_1:33;
+A41: s' = s'' by A32,A37,ZFMISC_1:33;
+A42: *(x1,z1) in [:{0},REAL+:] & *(y1,z1) in [:{0},REAL+:]
+  by A36,A39,Lm3,ZFMISC_1:106;
+    s' *' t' <=' x' *' t' by A33,A40,A41,ARYTM_1:8;
+ hence contradiction by A10,A12,A35,A36,A38,A39,A42,Def2;
+end;
+
+Lm19:
+  (r * s) * t = r * (s * t)
+proof
+   consider x1,x2,y1,y2 being Element of REAL such that
+A1: r = [*x1,x2*] and
+A2: s = [*y1,y2*] and
+A3: r*s = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *]
+      by XCMPLX_0:def 5;
+   consider y3,y4,z1,z2 being Element of REAL such that
+A4: s = [*y3,y4*] and
+A5: t = [*z1,z2*] and
+A6: s*t = [* +(*(y3,z1),opp*(y4,z2)), +(*(y3,z2),*(y4,z1)) *]
+      by XCMPLX_0:def 5;
+A7: y1 = y3 & y2 = y4 by A2,A4,ARYTM_0:12;
+   consider x3,x4,yz1,yz2 being Element of REAL such that
+A8: r = [*x3,x4*] and
+A9: s*t = [*yz1,yz2*] and
+A10: r*(s*t) = [* +(*(x3,yz1),opp*(x4,yz2)), +(*(x3,yz2),*(x4,yz1)) *]
+      by XCMPLX_0:def 5;
+A11: x1 = x3 & x2 = x4 by A1,A8,ARYTM_0:12;
+   consider xy1,xy2,z3,z4 being Element of REAL such that
+A12: r*s = [*xy1,xy2*] and
+A13: t = [*z3,z4*] and
+A14: (r*s)*t = [* +(*(xy1,z3),opp*(xy2,z4)), +(*(xy1,z4),*(xy2,z3)) *]
+       by XCMPLX_0:def 5;
+A15: z1 = z3 & z2 = z4 by A5,A13,ARYTM_0:12;
+A16: xy1 = +(*(x1,y1),opp*(x2,y2)) & xy2 = +(*(x1,y2),*(x2,y1))
+          by A3,A12,ARYTM_0:12;
+A17: yz1 = +(*(y3,z1),opp*(y4,z2)) & yz2 = +(*(y3,z2),*(y4,z1))
+          by A6,A9,ARYTM_0:12;
+       +(*(opp x4,*(y3,z2)),*(opp x4,*(y4,z1)))
+       = +(*(opp x4,*(y4,z1)),*(*(opp x2,y1),z4)) by A7,A11,A15,ARYTM_0:15
+      .= +(*(*(opp x2,y2),z3),*(*(opp x2,y1),z4)) by A7,A11,A15,ARYTM_0:15;
+     then A18: +(*(x3,*(opp y4,z2)),+(*(opp x4,*(y3,z2)),*(opp
+x4,*(y4,z1))))
+       = +(*(*(x1,opp y2),z4), +(*(*(opp x2,y2),z3),*(*(opp x2,y1),z4)))
+                 by A7,A11,A15,ARYTM_0:15
+      .= +(*(opp *(x1,y2),z4), +(*(*(opp x2,y2),z3),*(*(opp x2,y1),z4)))
+                by ARYTM_0:17
+      .= +(*(*(opp x1,y2),z4), +(*(*(opp x2,y2),z3),*(*(opp x2,y1),z4)))
+                by ARYTM_0:17
+      .= +(*(*(opp x2,y2),z3), +(*(*(opp x1,y2),z4),*(*(opp x2,y1),z4)))
+                              by ARYTM_0:25;
+A19:  +(*(x3,yz1),opp*(x4,yz2)) = +(*(x3,yz1),*(opp x4,yz2)) by ARYTM_0:17
+       .= +(*(x3,+(*(y3,z1),*(opp y4,z2))),*(opp x4,yz2)) by A17,ARYTM_0:17
+       .= +(+(*(x3,*(y3,z1)),*(x3,*(opp y4,z2))),
+            *(opp x4,+(*(y3,z2),*(y4,z1)))) by A17,ARYTM_0:16
+       .= +(+(*(x3,*(y3,z1)),*(x3,*(opp y4,z2))),
+            +(*(opp x4,*(y3,z2)),*(opp x4,*(y4,z1)))) by ARYTM_0:16
+       .= +(*(x3,*(y3,z1)),+(*(*(opp x2,y2),z3),
+            +(*(*(opp x1,y2),z4),*(*(opp x2,y1),z4)))) by A18,ARYTM_0:25
+      .= +(+(*(x3,*(y3,z1)),*(*(opp x2,y2),z3)),
+            +(*(*(opp x1,y2),z4),*(*(opp x2,y1),z4))) by ARYTM_0:25
+       .= +(+(*(*(x1,y1),z3),*(*(opp x2,y2),z3)),
+            +(*(*(opp x1,y2),z4),*(*(opp x2,y1),z4))) by A7,A11,A15,ARYTM_0:15
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            +(*(*(opp x1,y2),z4),*(*(opp x2,y1),z4))) by ARYTM_0:16
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            +(*(*(opp x1,y2),z4),*(opp *(x2,y1),z4))) by ARYTM_0:17
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            +(*(*(opp x1,y2),z4),opp *(*(x2,y1),z4))) by ARYTM_0:17
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            +(*(opp *(x1,y2),z4),opp *(*(x2,y1),z4))) by ARYTM_0:17
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            +(opp *(*(x1,y2),z4),opp *(*(x2,y1),z4))) by ARYTM_0:17
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            opp +(*(*(x1,y2),z4),*(*(x2,y1),z4))) by ARYTM_0:27
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            opp*( +(*(x1,y2),*(x2,y1)),z4)) by ARYTM_0:16
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),*(opp xy2,z4)) by A16,ARYTM_0:17
+       .= +(*(xy1,z3),*(opp xy2,z4)) by A16,ARYTM_0:17
+       .= +(*(xy1,z3),opp*(xy2,z4)) by ARYTM_0:17;
+A20: +(*(opp*(x2,y2),z4),*(*(x2,y1),z3))
+       = +(opp*(*(x2,y2),z4),*(*(x2,y1),z3)) by ARYTM_0:17
+      .= +(*(x4,*(y3,z1)),opp*(*(x2,y2),z4)) by A7,A11,A15,ARYTM_0:15
+      .= +(*(x4,*(y3,z1)),opp*(x4,*(y4,z2))) by A7,A11,A15,ARYTM_0:15
+      .= +(*(x4,*(y3,z1)),*(x4,opp*(y4,z2))) by ARYTM_0:17;
+A21: +(*(opp*(x2,y2),z4),*(xy2,z3))
+        = +(*(opp*(x2,y2),z4),+(*(*(x1,y2),z3),*(*(x2,y1),z3)))
+               by A16,ARYTM_0:16
+       .= +(*(*(x1,y2),z3),+(*(opp*(x2,y2),z4),*(*(x2,y1),z3))) by ARYTM_0:25
+       .= +(*(x3,*(y4,z1)),+(*(x4,*(y3,z1)),*(x4,opp*(y4,z2))))
+                 by A7,A11,A15,A20,ARYTM_0:15
+       .= +(*(x3,*(y4,z1)),*(x4,yz1)) by A17,ARYTM_0:16;
+     +(*(xy1,z4),*(xy2,z3))
+        = +(+(*(*(x1,y1),z4),*(opp*(x2,y2),z4)),*(xy2,z3)) by A16,ARYTM_0:16
+       .= +(*(*(x1,y1),z4),+(*(opp*(x2,y2),z4),*(xy2,z3))) by ARYTM_0:25
+       .= +(*(x3,*(y3,z2)),+(*(x3,*(y4,z1)),*(x4,yz1)))
+                   by A7,A11,A15,A21,ARYTM_0:15
+       .= +(+(*(x3,*(y3,z2)),*(x3,*(y4,z1))),*(x4,yz1)) by ARYTM_0:25
+       .= +(*(x3,yz2),*(x4,yz1)) by A17,ARYTM_0:16;
+  hence thesis by A10,A14,A19;
+end;
+
+Lm20: r*s = 0 implies r = 0 or s = 0
+proof
+  assume A1:r*s=0;
+  assume A2:r<>0;
+    r"*r*s=r"*0 by A1,Lm19;
+  then 1*s=0 by A2,XCMPLX_0:def 7;
+  hence thesis;
+end;
+
+Lm21: r > 0 & s > 0 implies r*s > 0
+ proof assume
+A1: r > 0 & s > 0;
+   then A2: r * s >= 0 * s by Lm18;
+  assume 0 >= r * s;
+   then r * s = 0 by A2,Lm4;
+  hence thesis by A1,Lm20;
+ end;
+
+Lm22: r > 0 & s < 0 implies r*s < 0
+ proof assume
+A1: r > 0 & s < 0;
+   then A2: r * s <= r * 0 by Lm18;
+  assume 0 <= r * s;
+   then r * s = 0 by A2,Lm4;
+  hence thesis by A1,Lm20;
+ end;
+
+Lm23:
+  r <= s implies r - t <= s - t
+proof
+   r <= s implies r + -t <= s + -t by Lm5;
+  then r <= s implies r - t <= s + -t by XCMPLX_0:def 8;
+  hence thesis by XCMPLX_0:def 8;
+end;
+
+Lm24:
+  0 - r = -r
+proof
+  thus 0-r=0+ -r by XCMPLX_0:def 8
+     .=-r;
+end;
+
+Lm25:
+  r + (s + t) = (r + s) + t
+proof
+   consider x1,x2,y1,y2 being Element of REAL such that
+A1: r = [*x1,x2*] and
+A2: s = [*y1,y2*] and
+A3: r+s = [*+(x1,y1),+(x2,y2)*] by XCMPLX_0:def 4;
+   consider y3,y4,z1,z2 being Element of REAL such that
+A4: s = [*y3,y4*] and
+A5: t = [*z1,z2*] and
+A6: s+t = [*+(y3,z1),+(y4,z2)*] by XCMPLX_0:def 4;
+A7: y1 = y3 & y2 = y4 by A2,A4,ARYTM_0:12;
+   consider x3,x4,yz1,yz2 being Element of REAL such that
+A8: r = [*x3,x4*] and
+A9: s+t = [*yz1,yz2*] and
+A10: r+(s+t) = [*+(x3,yz1),+(x4,yz2)*] by XCMPLX_0:def 4;
+A11: x1 = x3 & x2 = x4 by A1,A8,ARYTM_0:12;
+   consider xy1,xy2,z3,z4 being Element of REAL such that
+A12: r+s = [*xy1,xy2*] and
+A13: t = [*z3,z4*] and
+A14: (r+s)+t = [*+(xy1,z3),+(xy2,z4)*] by XCMPLX_0:def 4;
+A15: z1 = z3 & z2 = z4 by A5,A13,ARYTM_0:12;
+A16: xy1 = +(x1,y1) & xy2 = +(x2,y2) by A3,A12,ARYTM_0:12;
+A17: yz1 = +(y1,z1) & yz2 = +(y2,z2) by A6,A7,A9,ARYTM_0:12;
+   then +(x3,yz1) = +(xy1,z3) by A11,A15,A16,ARYTM_0:25;
+  hence thesis by A10,A11,A14,A15,A16,A17,ARYTM_0:25;
+end;
+
+Lm26: s<=t implies -t<=-s
+proof
+    assume s<=t;
+    then s-t<=t-t by Lm23;
+    then s-t<=t+ -t by XCMPLX_0:def 8;
+    then s-t<=0 by XCMPLX_0:def 6;
+    then s-t-s<=0-s by Lm23;
+    then s-t-s<=-s by Lm24;
+    then -s+(s-t)<=-s by XCMPLX_0:def 8;
+    then -s+(s+ -t)<=-s by XCMPLX_0:def 8;
+    then -s+s+ -t<=-s by Lm25;
+    then 0+ -t<=-s by XCMPLX_0:def 6;
+    hence thesis;
+end;
+
+Lm27: r <= 0 & s >= 0 implies r*s <= 0
+ proof assume that
+A1: r <= 0 and
+A2: s >= 0;
+  per cases by A1,A2,Lm4;
+  suppose r = 0 or s = 0;
+  hence r * s <= 0;
+  suppose r < 0 & s > 0;
+  hence r * s <= 0 by Lm22;
+ end;
+
+definition
+ cluster positive -> non negative non zero (real number);
+ coherence
+  proof let r be real number;
+   assume r > 0;
+   hence r >= 0 & r <> 0;
+  end;
+ cluster non negative non zero -> positive (real number);
+ coherence
+  proof let r be real number;
+   assume r >= 0 & r <> 0;
+   hence r > 0 by Lm4;
+  end;
+ cluster negative -> non positive non zero (real number);
+ coherence
+  proof let r be real number;
+   assume r < 0;
+   hence r <= 0 & r <> 0;
+  end;
+ cluster non positive non zero -> negative (real number);
+ coherence
+  proof let r be real number;
+   assume r <= 0 & r <> 0;
+   hence r < 0 by Lm4;
+  end;
+ cluster zero -> non negative non positive (real number);
+ coherence
+  proof let r be real number;
+   assume r = 0;
+   hence r >= 0 & 0 >= r;
+  end;
+ cluster non negative non positive -> zero (real number);
+ coherence
+  proof let r be real number;
+   assume r >= 0 & 0 >= r;
+   hence r = 0 by Lm4;
+  end;
+end;
+
+definition
+ cluster positive (real number);
+ existence
+  proof take r = 1;
+   thus 0 < r by Lm4,Lm8;
+  end;
+ cluster negative (real number);
+ existence
+  proof take r = -1;
+   thus 0 > r by Def2,Lm7,Lm15;
+  end;
+ cluster zero (real number);
+ existence
+  proof take 0;
+   thus thesis;
+  end;
+end;
+
+definition let r,s be non negative (real number);
+ cluster r + s -> non negative;
+ coherence
+  proof
+A1:  r >= 0 & s >= 0 by Def4;
+   per cases by A1,Lm4;
+   suppose r = 0;
+   hence r + s >= 0 by Def4;
+   suppose r > 0;
+   hence r+s >= 0 by A1,Lm16;
+  end;
+end;
+
+definition let r,s be non positive (real number);
+ cluster r + s -> non positive;
+ coherence
+  proof
+A1:  r <= 0 & s <= 0 by Def3;
+   per cases by A1,Lm4;
+   suppose r = 0;
+   hence r + s <= 0 by Def3;
+   suppose r < 0;
+   hence r + s <= 0 by A1,Lm17;
+  end;
+end;
+
+definition let r be positive (real number);
+ let s be non negative (real number);
+ cluster r + s -> positive;
+ coherence
+  proof
+     r > 0 & s >= 0 by Def3,Def4;
+    hence r+s > 0 by Lm16;
+  end;
+ cluster s + r -> positive;
+ coherence
+  proof
+     r > 0 & s >= 0 by Def3,Def4;
+    hence s+r > 0 by Lm16;
+  end;
+end;
+
+definition let r be negative (real number);
+ let s be non positive (real number);
+ cluster r + s -> negative;
+ coherence
+  proof
+     r < 0 & s <= 0 by Def3,Def4;
+   hence r+s < 0 by Lm17;
+  end;
+ cluster s + r -> negative;
+ coherence
+  proof
+     r < 0 & s <= 0 by Def3,Def4;
+    hence s+r < 0 by Lm17;
+  end;
+end;
+
+definition let r be non positive (real number);
+ cluster -r -> non negative;
+ coherence
+  proof
+A1:  --r <= 0 by Def3;
+   assume -r < 0;
+    then -r+--r < 0 by A1,Lm17;
+   hence contradiction by XCMPLX_0:def 6;
+  end;
+end;
+
+definition let r be non negative (real number);
+ cluster -r -> non positive;
+ coherence
+  proof
+A1:  --r >= 0 by Def4;
+   assume -r > 0;
+   then -r+--r > 0 by A1,Lm16;
+   hence contradiction by XCMPLX_0:def 6;
+  end;
+end;
+
+definition
+ let r be non negative (real number),
+     s be non positive (real number);
+ cluster r - s -> non negative;
+ coherence
+  proof r - s = r + -s by XCMPLX_0:def 8;
+   hence thesis;
+  end;
+ cluster s - r -> non positive;
+ coherence
+  proof s - r = s + -r by XCMPLX_0:def 8;
+   hence thesis;
+  end;
+end;
+
+definition let r be positive (real number);
+ let s be non positive (real number);
+ cluster r - s -> positive;
+ coherence
+  proof r - s = r + -s by XCMPLX_0:def 8;
+   hence thesis;
+  end;
+ cluster s - r -> negative;
+ coherence
+  proof
+    s - r = s + -r by XCMPLX_0:def 8;
+   hence thesis;
+  end;
+end;
+
+definition let r be negative (real number);
+ let s be non negative (real number);
+ cluster r - s -> negative;
+ coherence
+  proof r - s = r + -s by XCMPLX_0:def 8;
+   hence thesis;
+  end;
+ cluster s - r -> positive;
+ coherence
+  proof s - r = s + -r by XCMPLX_0:def 8;
+   hence thesis;
+  end;
+end;
+
+definition
+ let r be non positive (real number),
+     s be non negative (real number);
+ cluster r*s -> non positive;
+ coherence
+  proof
+     r <= 0 & s >= 0 by Def3,Def4;
+   hence r*s <= 0 by Lm27;
+  end;
+ cluster s*r -> non positive;
+ coherence
+  proof
+     r <= 0 & s >= 0 by Def3,Def4;
+   hence s*r <= 0 by Lm27;
+  end;
+end;
+
+Lm28:
+  r * (s + t) = r * s + r * t
+proof
+   consider y3,y4,z1,z2 being Element of REAL such that
+A1: s = [*y3,y4*] and
+A2: t = [*z1,z2*] and
+A3: s+t = [*+(y3,z1),+(y4,z2)*] by XCMPLX_0:def 4;
+   consider x3,x4,yz1,yz2 being Element of REAL such that
+A4: r = [*x3,x4*] and
+A5: s+t = [*yz1,yz2*] and
+A6: r*(s+t) = [* +(*(x3,yz1),opp*(x4,yz2)), +(*(x3,yz2),*(x4,yz1)) *]
+      by XCMPLX_0:def 5;
+   consider x1,x2,y1,y2 being Element of REAL such that
+A7: r = [*x1,x2*] and
+A8: s = [*y1,y2*] and
+A9: r*s = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *]
+      by XCMPLX_0:def 5;
+A10: y1 = y3 & y2 = y4 by A1,A8,ARYTM_0:12;
+   consider x5,x6,z3,z4 being Element of REAL such that
+A11: r = [*x5,x6*] and
+A12: t = [*z3,z4*] and
+A13: r*t = [* +(*(x5,z3),opp*(x6,z4)), +(*(x5,z4),*(x6,z3)) *]
+      by XCMPLX_0:def 5;
+A14: x1 = x3 & x2 = x4 & x1 = x5 & x2 = x6 by A4,A7,A11,ARYTM_0:12;
+A15: z1 = z3 & z2 = z4 by A2,A12,ARYTM_0:12;
+   consider xy3,xy4,xz1,xz2 being Element of REAL such that
+A16: r*s = [*xy3,xy4*] and
+A17: r*t = [*xz1,xz2*] and
+A18: r*s+r*t = [*+(xy3,xz1),+(xy4,xz2)*] by XCMPLX_0:def 4;
+A19: yz1 = +(y3,z1) & yz2 = +(y4,z2) by A3,A5,ARYTM_0:12;
+A20: xy3 = +(*(x1,y1),opp*(x2,y2)) & xy4 = +(*(x1,y2),*(x2,y1))
+                     by A9,A16,ARYTM_0:12;
+A21: xz1 = +(*(x5,z3),opp*(x6,z4)) & xz2 = +(*(x5,z4),*(x6,z3))
+                     by A13,A17,ARYTM_0:12;
+     *(x4,yz2) = +(*(x2,y2),*(x6,z4)) by A10,A14,A15,A19,ARYTM_0:16;
+   then opp*(x4,yz2) = +(opp*(x2,y2),opp*(x6,z4)) by ARYTM_0:27;
+   then A22: +(*(x3,z1),opp*(x4,yz2))
+          = +(opp*(x2,y2),xz1) by A14,A15,A21,ARYTM_0:25;
+A23: +(*(x3,yz1),opp*(x4,yz2))
+        = +(+(*(x3,y3),*(x3,z1)),opp*(x4,yz2)) by A19,ARYTM_0:16
+       .= +(*(x1,y1),+(opp*(x2,y2),xz1)) by A10,A14,A22,ARYTM_0:25
+       .= +(xy3,xz1) by A20,ARYTM_0:25;
+     *(x4,yz1) = +(*(x2,y1),*(x6,z3)) by A10,A14,A15,A19,ARYTM_0:16;
+   then A24: +(*(x3,z2),*(x4,yz1)) = +(*(x2,y1),xz2) by A14,A15,A21,ARYTM_0:25;
+    +(*(x3,yz2),*(x4,yz1))
+        = +(+(*(x3,y4),*(x3,z2)),*(x4,yz1)) by A19,ARYTM_0:16
+       .= +(*(x1,y2),+(*(x2,y1),xz2)) by A10,A14,A24,ARYTM_0:25
+       .= +(xy4,xz2) by A20,ARYTM_0:25;
+ hence thesis by A6,A18,A23;
+end;
+
+Lm29:
+  (- r) * s = -(r * s)
+proof
+  thus (-r)*s = (-r)*s + 0
+    .= (-r)*s + (r*s + -(r*s)) by XCMPLX_0:def 6
+    .= (-r)*s + r*s + -(r*s) by Lm25
+    .= (-r + r)*s + -(r*s) by Lm28
+    .= 0*s+ -(r*s) by XCMPLX_0:def 6
+    .= -(r*s);
+end;
+
+definition
+ let r,s be non positive (real number);
+ cluster r*s -> non negative;
+ coherence
+  proof
+A1:  r <= 0 & s <= 0 by Def3;
+   per cases by A1,Lm4;
+   suppose r = 0 or s = 0;
+   hence r * s >= 0;
+   suppose
+A2:  --r < --0 & s < 0;
+then 0<-r by Lm26;
+then A3: s*(-r)<=0*(-r) by A2,Lm18;
+     s*1 <> 0*((-r)*(-r)") by A2;
+    then s*((-r)*(-r)") <> 0*(-r)*(-r)" by A2,XCMPLX_0:def 7;
+    then s*(-r)<>0*(-r) by Lm19;
+    then s*(-r)<0*(-r) by A3,Lm4;
+    then -(s*r)<0*(-r) by Lm29;
+    then --0*r<--s*r by Lm26;
+   hence r * s >= 0;
+  end;
+end;
+
+definition let r,s be non negative (real number);
+ cluster r*s -> non negative;
+ coherence
+  proof
+A1:  r >= 0 & s >= 0 by Def4;
+   per cases by A1,Lm4;
+   suppose r = 0 or s = 0;
+   hence r * s >= 0;
+   suppose r > 0 & s > 0;
+   hence r * s >= 0 by Lm21;
+  end;
+end;
+
+Lm30:
+  r" = 0 implies r = 0
+proof
+  assume A1:r"=0;
+  assume A2:r<>0;
+   r"*r=0 by A1;
+  hence contradiction by A2,XCMPLX_0:def 7;
+end;
+
+definition let r be non positive (real number);
+ cluster r" -> non positive;
+ coherence
+  proof
+A1: r"" <= 0 by Def3;
+   assume that
+A2:  r" > 0;
+   per cases by A1,Lm4;
+   suppose r"" = 0;
+   hence contradiction by A2,Lm30;
+   suppose
+A3:  r"" < 0;
+     r"*r"" = 1 by A2,XCMPLX_0:def 7;
+   hence contradiction by A2,A3,Lm8,Lm22;
+  end;
+end;
+
+definition let r be non negative (real number);
+ cluster r" -> non negative;
+ coherence
+  proof
+A1: r"" >= 0 by Def4;
+   assume that
+A2:  r" < 0;
+   per cases by A1,Lm4;
+   suppose r"" = 0;
+   hence contradiction by A2,Lm30;
+   suppose
+A3:  r"" > 0;
+     r"*r"" = 1 by A2,XCMPLX_0:def 7;
+   hence contradiction by A2,A3,Lm8,Lm22;
+  end;
+end;
+
+definition
+ let r be non negative (real number),
+     s be non positive (real number);
+ cluster r/s -> non positive;
+ coherence
+  proof
+     r/s = r*s" by XCMPLX_0:def 9;
+   hence thesis;
+  end;
+ cluster s/r -> non positive;
+ coherence
+  proof
+     s/r = s*r" by XCMPLX_0:def 9;
+   hence thesis;
+  end;
+end;
+
+definition let r,s be non negative (real number);
+ cluster r/s -> non negative;
+ coherence
+  proof
+     r/s = r*s" by XCMPLX_0:def 9;
+   hence thesis;
+  end;
+end;
+
+definition
+ let r,s be non positive (real number);
+ cluster r/s -> non negative;
+ coherence
+  proof
+     r/s = r*s" by XCMPLX_0:def 9;
+   hence thesis;
+  end;
+end;
+

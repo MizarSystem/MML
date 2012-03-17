@@ -1,0 +1,1224 @@
+:: On $T_{1}$ Reflex of Topological Space
+::  by Adam Naumowicz and Mariusz {\L}api\'nski
+::
+:: Received March 7, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, RELAT_1, PRE_TOPC, EQREL_1, BORSUK_1, TARSKI, BOOLE,
+      SUBSET_1, SETFAM_1, PROB_1, URYSOHN1, ORDINAL2, T_1TOPSP;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
+      SETFAM_1, STRUCT_0, PRE_TOPC, EQREL_1, TOPS_2, URYSOHN1, BORSUK_1;
+ constructors URYSOHN1, TOPS_2;
+ clusters PRE_TOPC, BORSUK_1, STRUCT_0, FSM_1, FUNCT_1, RELSET_1, SUBSET_1,
+      XBOOLE_0, EQREL_1, PARTFUN1;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, EQREL_1, PRE_TOPC, XBOOLE_0;
+ theorems ZFMISC_1, PRE_TOPC, TARSKI, SETFAM_1, EQREL_1, URYSOHN1, BORSUK_1,
+      FUNCT_2, FUNCT_1, TOPS_2, RELSET_1, RELAT_1, XBOOLE_0, XBOOLE_1;
+ schemes FUNCT_1;
+
+begin
+
+reserve X for non empty set, x for Element of X, y,v,w for set;
+
+canceled;
+
+theorem Th2:
+ for T being non empty TopSpace,
+     A being non empty a_partition of the carrier of T,
+     y being Subset of space A holds (Proj(A))"y = union y
+      proof
+       let T be non empty TopSpace;
+       let A be non empty a_partition of the carrier of T;
+       let y be Subset of space A;
+       reconsider y as Subset of A by BORSUK_1:def 10;
+         (Proj(A))"y = (proj A)"y by BORSUK_1:def 11
+                      .= union y by BORSUK_1:31;
+       hence thesis;
+      end;
+
+theorem Th3:
+ for X being non empty set,
+     S being a_partition of X,
+     A being Subset of S holds (union S) \ (union A) = union (S \ A)
+      proof
+       let X be non empty set;
+       let S be a_partition of X;
+       let A be Subset of S;
+       thus (union S) \ (union A) c= union (S \ A)
+        proof
+         let y be set;
+         assume y in (union S) \ (union A);
+         then A1:       y in (union S) & not y in (union A) by XBOOLE_0:def 4;
+         then consider z being set such that
+A2:       y in z & z in S by TARSKI:def 4;
+           not z in A by A1,A2,TARSKI:def 4;
+         then y in z & z in S \ A by A2,XBOOLE_0:def 4;
+         hence thesis by TARSKI:def 4;
+        end;
+       thus union (S \ A) c= (union S) \ (union A)
+        proof
+         let y be set;
+         assume y in union(S \ A);
+         then consider z being set such that
+A3:       y in z & z in S \ A by TARSKI:def 4;
+A4:      y in z & z in S & not z in A by A3,XBOOLE_0:def 4;
+         then A5:      y in union S by TARSKI:def 4;
+         A6: now
+          let w be set;
+          assume
+A7:        w in A;
+          then w in S;
+          then z misses w by A4,A7,EQREL_1:def 6;
+          hence not y in w by A3,XBOOLE_0:3;
+         end;
+           now
+          assume y in union A;
+          then consider v being set such that
+A8:        y in v & v in A by TARSKI:def 4;
+          thus contradiction by A6,A8;
+         end;
+         hence thesis by A5,XBOOLE_0:def 4;
+        end;
+      end;
+
+theorem Th4:
+ for X being non empty set,A being Subset of X,
+     S being a_partition of X holds A in S implies union(S \ {A}) = X \ A
+      proof
+       let X be non empty set;
+       let A be Subset of X;
+       let S be a_partition of X;
+       assume
+A1:     A in S;
+         {A} c= S
+       proof
+        let y be set;
+        assume y in {A};
+        hence thesis by A1,TARSKI:def 1;
+       end;
+       then reconsider AA = {A} as Subset of S;
+       thus union (S \ {A}) = (union S) \ (union AA) by Th3
+                           .= X \ (union {A}) by EQREL_1:def 6
+                           .= X \ A by ZFMISC_1:31;
+      end;
+
+theorem Th5:
+ for T being non empty TopSpace,
+     S being non empty a_partition of the carrier of T,
+     A being Subset of space S,
+     B being Subset of T holds
+     B = union A implies (A is closed iff B is closed)
+      proof
+       let T be non empty TopSpace;
+       let S be non empty a_partition of the carrier of T;
+       let A be Subset of space S;
+       let B be Subset of T;
+       assume
+A1:   B = union A;
+       reconsider C = A as Subset of S by BORSUK_1:def 10;
+A2:    [#](T) \ union A = (the carrier of T) \ union A by PRE_TOPC:def 3
+                     .= (union S) \ (union C) by EQREL_1:def 6
+                     .= union (S \ A) by Th3
+                     .= union ((the carrier of space S) \ A)
+                                          by BORSUK_1:def 10
+                     .= union ([#](space S) \ A) by PRE_TOPC:def 3;
+       thus A is closed implies B is closed
+        proof
+         assume A is closed;
+then A3:       [#](space S) \ A is open by PRE_TOPC:def 6;
+         reconsider om = [#](space S) \ A as Subset of S by BORSUK_1:def 10;
+         om in the topology of space S by A3,PRE_TOPC:def 5;
+         then [#](T) \ B in the topology of T by A1,A2,BORSUK_1:69;
+         then [#](T) \ B is open by PRE_TOPC:def 5;
+         hence thesis by PRE_TOPC:def 6;
+        end;
+       thus B is closed implies A is closed
+        proof
+         assume B is closed;
+         then [#](T) \ B is open by PRE_TOPC:def 6;
+         then A4:       [#](T) \ union A in the topology of T by A1,PRE_TOPC:
+def 5;
+         reconsider om = [#](space S) \ A as Subset of S by BORSUK_1:def 10;
+           om in the topology of space S by A2,A4,BORSUK_1:69;
+         then [#](space S) \ A is open by PRE_TOPC:def 5;
+         hence thesis by PRE_TOPC:def 6;
+        end;
+      end;
+
+:: Classes of partitions of a set
+
+definition
+ let X be non empty set,x be Element of X,S1 be a_partition of X;
+ func EqClass(x,S1) -> Subset of X means :Def1:
+ x in it & it in S1;
+
+ existence
+  proof
+   consider EQR being Equivalence_Relation of X such that
+A1: S1 = Class EQR by EQREL_1:43;
+   take Class(EQR,x);
+   thus x in Class(EQR,x) by EQREL_1:28;
+   thus Class(EQR,x) in S1 by A1,EQREL_1:def 5;
+  end;
+ uniqueness
+  proof
+   let A,B be Subset of X; assume
+A2: x in A & A in S1 & x in B & B in S1;
+   then A meets B by XBOOLE_0:3;
+   hence A = B by A2,EQREL_1:def 6;
+  end;
+end;
+
+theorem Th6:
+ for S1,S2 being a_partition of X st
+ (for x being Element of X holds EqClass(x,S1) = EqClass(x,S2)) holds S1=S2
+  proof
+   let S1,S2 be a_partition of X;
+   assume
+A1: for x being Element of X holds EqClass(x,S1) = EqClass(x,S2);
+     now let P be Subset of X;
+    thus P in S1 implies P in S2
+     proof
+      assume
+A2:    P in S1;
+      then A3:    P is non empty by EQREL_1:def 6;
+      consider x being Element of P;
+        x in P by A3;
+      then reconsider x as Element of X;
+        P = EqClass(x,S1) by A2,A3,Def1;
+      then P = EqClass(x,S2) by A1;
+      hence P in S2 by Def1;
+     end;
+    thus P in S2 implies P in S1
+     proof
+      assume
+A4:   P in S2;
+then A5:   P <> {} by EQREL_1:def 6;
+      consider x being Element of P;
+        x in P by A5;
+      then reconsider x as Element of X;
+        P = EqClass(x,S2) by A4,A5,Def1;
+      then P = EqClass(x,S1) by A1;
+      hence P in S1 by Def1;
+     end;
+   end;
+   hence thesis by SETFAM_1:44;
+  end;
+
+theorem Th7:
+ for X being non empty set holds {X} is a_partition of X
+  proof
+   let X be non empty set;
+     {X} c= bool X by ZFMISC_1:80;
+   then reconsider A1 = {X} as Subset-Family of X by SETFAM_1:def 7;
+A1: union A1 = X by ZFMISC_1:31;
+  for A being Subset of X st A in A1 holds A <> {} & for B being
+             Subset of X st B in A1 holds A = B or A misses B
+    proof
+     let A be Subset of X;
+     assume
+A2:  A in A1;
+     hence A <> {} by TARSKI:def 1;
+     let B be Subset of X;
+     assume B in A1;
+     then B = X by TARSKI:def 1;
+     hence A = B or A misses B by A2,TARSKI:def 1;
+    end;
+   hence {X} is a_partition of X by A1,EQREL_1:def 6;
+  end;
+
+definition let X be set;
+  mode Family-Class of X means :Def2:
+   it c= bool bool X;
+  existence;
+end;
+
+Lm1: for X being set holds {} is Family-Class of X
+  proof
+    let X be set;
+      {} c= bool bool X by XBOOLE_1:2;
+    hence thesis by Def2;
+  end;
+
+definition let X be set;
+ let F be Family-Class of X;
+ attr F is partition-membered means :Def3:
+   for S being set st S in F holds S is a_partition of X;
+end;
+
+definition let X be set;
+ cluster partition-membered Family-Class of X;
+ existence
+  proof
+   reconsider E = {} as Family-Class of X by Lm1;
+   take E;
+   let S be set; assume S in E;
+   hence thesis;
+  end;
+end;
+
+definition let X be set;
+  mode Part-Family of X is partition-membered Family-Class of X;
+end;
+
+reserve F for Part-Family of X;
+
+definition
+ let X be non empty set;
+ cluster non empty a_partition of X;
+ existence
+  proof
+   take {X};
+   thus thesis by Th7;
+ end;
+end;
+
+theorem Th8:
+ for X being set, p being a_partition of X holds
+  {p} is Part-Family of X
+   proof
+    let X be set;
+    let p be a_partition of X;
+    A1: {p} c= bool bool X
+    proof
+      let x be set; assume x in {p};
+      then x is a_partition of X by TARSKI:def 1;
+      hence thesis;
+    end;
+      for x be set st x in {p} holds x is a_partition of X by TARSKI:def 1;
+    hence thesis by A1,Def2,Def3;
+end;
+
+definition
+ let X be set;
+ cluster non empty Part-Family of X;
+
+ existence
+  proof
+   consider p being a_partition of X;
+    reconsider P = {p} as Part-Family of X by Th8;
+   take P;
+   thus thesis;
+  end;
+end;
+
+theorem Th9:
+ for S1 being a_partition of X,
+     x,y being Element of X holds
+    EqClass(x,S1) meets EqClass(y,S1) implies EqClass(x,S1) = EqClass(y,S1)
+     proof
+      let S1 be a_partition of X;
+      let x,y be Element of X;
+      assume
+A1:    EqClass(x,S1) meets EqClass(y,S1);
+      consider EQR being Equivalence_Relation of X such that
+A2:    S1 = Class EQR by EQREL_1:43;
+A3:    Class(EQR,x) = EqClass(x,S1)
+       proof
+A4:     x in Class(EQR,x) by EQREL_1:28;
+         Class(EQR,x) in S1 by A2,EQREL_1:def 5;
+       hence thesis by A4,Def1;
+      end;
+        Class(EQR,y) = EqClass(y,S1)
+       proof
+A5:     y in Class(EQR,y) by EQREL_1:28;
+         Class(EQR,y) in S1 by A2,EQREL_1:def 5;
+       hence thesis by A5,Def1;
+      end;
+      hence thesis by A1,A3,EQREL_1:32;
+     end;
+
+Lm2:
+ for A being set holds
+  A in {EqClass(x,S) where S is a_partition of X : S in F} implies
+  ex T being a_partition of X st T in F & A = EqClass(x,T)
+   proof
+    let A be set;
+    assume
+      A in {EqClass(x,S) where S is a_partition of X : S in F};
+    then consider S being a_partition of X such that
+A1:  A = EqClass(x,S) & S in F;
+    take S;
+    thus thesis by A1;
+   end;
+
+theorem Th10:
+ for A being set,X being non empty set,S being a_partition of X holds
+ A in S implies ex x being Element of X st A = EqClass(x,S)
+  proof
+   let A be set,X be non empty set,S be a_partition of X;
+   assume
+A1: A in S;
+   then A is non empty by EQREL_1:def 6;
+   then consider x being set such that
+A2: x in A by XBOOLE_0:def 1;
+   take x;
+   thus thesis by A1,A2,Def1;
+  end;
+
+definition
+ let X be non empty set,F be non empty Part-Family of X;
+ func Intersection F -> non empty a_partition of X means :Def4:
+ for x being Element of X holds EqClass(x,it)
+  = meet{EqClass(x,S) where S is a_partition of X : S in F};
+ uniqueness
+  proof
+   given S1,S2 being a_partition of X such that
+A1: for x being Element of X holds
+     EqClass(x,S1) = meet{EqClass(x,S) where S is a_partition of X : S in F}
+     and
+A2: for x being Element of X holds
+     EqClass(x,S2) = meet{EqClass(x,S) where S is a_partition of X : S in F}
+     and
+A3: not S1 = S2;
+     now let x be Element of X;
+      EqClass(x,S1) =
+         meet{EqClass(x,S) where S is a_partition of X : S in F} by A1;
+    hence EqClass(x,S1) = EqClass(x,S2) by A2;
+   end;
+   hence contradiction by A3,Th6;
+  end;
+ existence
+  proof
+   thus ex G being non empty a_partition of X st
+         for x being Element of X holds EqClass(x,G)
+              = meet{EqClass(x,S) where S is a_partition of X : S in F}
+    proof
+     set G = {meet{EqClass(x,S) where S is a_partition of X : S in F}
+                   where x is Element of X : not contradiction };
+       G c= bool X
+      proof
+       let y be set;
+       assume y in G;
+       then consider x being Element of X such that
+A4:    y = meet{EqClass(x,S) where S is a_partition of X : S in F};
+         y c= X
+        proof
+         let e be set;
+         assume
+A5:      e in y;
+         consider T being set such that
+A6:      T in F by XBOOLE_0:def 1;
+         reconsider T as a_partition of X by A6,Def3;
+           EqClass(x,T) in {EqClass(x,S) where S is a_partition of X : S in F}
+                   by A6;
+         then consider f being set such that
+A7:      f in {EqClass(x,S) where S is a_partition of X : S in F};
+         consider S being a_partition of X such that
+A8:      f = EqClass(x,S) & S in F by A7;
+           e in EqClass(x,S) by A4,A5,A7,A8,SETFAM_1:def 1;
+         hence e in X;
+        end;
+       hence y in bool X;
+      end;
+     then reconsider G as Subset-Family of X by SETFAM_1:def 7;
+       G is a_partition of X
+      proof
+       per cases;
+       case X <> {};
+       thus union G = X
+        proof
+         thus union G c= X;
+         thus X c= union G
+          proof
+           let a be set;
+           assume a in X;
+           then reconsider a1=a as Element of X;
+           consider T being set such that
+A9:        T in F by XBOOLE_0:def 1;
+           reconsider T as a_partition of X by A9,Def3;
+A10:        EqClass(a1,T) in
+           {EqClass(a1,S) where S is a_partition of X : S in F} by A9;
+             for T being set
+           st T in {EqClass(a1,S) where S is a_partition of X : S in F} holds
+           a1 in T
+            proof
+             let T be set;
+             assume
+               T in {EqClass(a1,S) where S is a_partition of X : S in F};
+             then consider A being a_partition of X such that
+A11:          T = EqClass(a1,A)
+             and A in F;
+             thus thesis by A11,Def1;
+            end;
+           then A12:        a in meet{EqClass(a1,S) where S is a_partition of X
+: S in F}
+                                       by A10,SETFAM_1:def 1;
+             meet{EqClass(a1,S) where S is a_partition of X : S in F} in G;
+           hence a in union G by A12,TARSKI:def 4;
+          end;
+        end;
+       let A be Subset of X;
+       assume
+A13:   A in G;
+       then consider x being Element of X such that
+A14:    A = meet{EqClass(x,S) where S is a_partition of X : S in F};
+       consider T being set such that
+A15:    T in F by XBOOLE_0:def 1;
+       reconsider T as a_partition of X by A15,Def3;
+A16:    EqClass(x,T) in {EqClass(x,S) where S is a_partition of X : S in F}
+                     by A15;
+         for Y being set
+       st Y in {EqClass(x,S) where S is a_partition of X : S in F} holds
+       x in Y
+        proof
+         let Y be set;
+         assume
+           Y in {EqClass(x,S) where S is a_partition of X : S in F};
+         then ex T being a_partition of X st Y = EqClass(x,T) & T in F;
+         hence x in Y by Def1;
+        end;
+       hence A<>{} by A14,A16,SETFAM_1:def 1;
+       consider x being Element of X such that
+A17:    A = meet{EqClass(x,S) where S is a_partition of X : S in F} by A13;
+
+       let B be Subset of X;
+       assume B in G;
+       then consider y being Element of X such that
+A18:    B = meet{EqClass(y,S) where S is a_partition of X : S in F};
+       thus A = B or A misses B
+        proof
+A19:      {EqClass(x,S) where S is a_partition of X : S in F} is non empty
+           proof
+            consider T being set such that
+A20:         T in F by XBOOLE_0:def 1;
+            reconsider T as a_partition of X by A20,Def3;
+              EqClass(x,T) in
+            {EqClass(x,S) where S is a_partition of X : S in F} by A20;
+            hence thesis;
+           end;
+A21:      {EqClass(y,S) where S is a_partition of X : S in F} is non empty
+           proof
+            consider T being set such that
+A22:         T in F by XBOOLE_0:def 1;
+            reconsider T as a_partition of X by A22,Def3;
+              EqClass(y,T) in
+            {EqClass(y,S) where S is a_partition of X : S in F} by A22;
+            hence thesis;
+           end;
+           now
+         assume A meets B;
+         then consider c being set such that
+A23:      c in A & c in B by XBOOLE_0:3;
+            c in meet{EqClass(x,S) where S is a_partition of X : S in F} /\
+              meet{EqClass(y,S) where S is a_partition of X : S in F}
+          by A17,A18,A23,XBOOLE_0:def 3;
+         then A24: c in meet({EqClass(x,S) where S is a_partition of X : S in F
+}
+             \/ {EqClass(y,S) where S is a_partition of X : S in F})
+                                                      by A19,A21,SETFAM_1:10;
+
+A25:     now let T be a_partition of X;
+          assume
+            T in F;
+          then EqClass(x,T) in {EqClass(x,S) where S is a_partition of X : S
+in F};
+          then EqClass(x,T) in {EqClass(x,S) where S is a_partition of X : S
+in F}
+        \/ {EqClass(y,S) where S is a_partition of X : S in F} by XBOOLE_0:def
+2;
+          hence c in EqClass(x,T) by A24,SETFAM_1:def 1;
+         end;
+         A26: now
+          let T be a_partition of X;
+          assume T in F;
+          then EqClass(y,T) in {EqClass(y,S) where S is a_partition of X : S
+in F};
+          then EqClass(y,T) in {EqClass(x,S) where S is a_partition of X : S
+in F}
+        \/ {EqClass(y,S) where S is a_partition of X : S in F} by XBOOLE_0:def
+2;
+          hence c in EqClass(y,T) by A24,SETFAM_1:def 1;
+         end;
+A27:      for T being a_partition of X st T in F holds
+         ex A being set st A in EqClass(x,T) & A in EqClass(y,T)
+          proof
+           let T be a_partition of X;
+           assume
+A28:        T in F;
+           take c;
+           thus thesis by A25,A26,A28;
+          end;
+A29:      for T being a_partition of X st T in F holds
+         (EqClass(x,T)) meets (EqClass(y,T))
+          proof
+           let T be a_partition of X; assume T in F;
+           then consider A being set such that
+A30:        A in EqClass(x,T) & A in EqClass(y,T) by A27;
+           thus thesis by A30,XBOOLE_0:3;
+          end;
+A31:       for T being a_partition of X st T in F holds
+                             EqClass(x,T) = EqClass(y,T)
+          proof
+           let T be a_partition of X;
+           assume T in F;
+           then EqClass(x,T) meets EqClass(y,T) by A29;
+           hence thesis by Th9;
+          end;
+            {EqClass(x,S) where S is a_partition of X : S in F} =
+          {EqClass(y,S) where S is a_partition of X : S in F}
+           proof
+            thus {EqClass(x,S) where S is a_partition of X : S in F}
+             c= {EqClass(y,S) where S is a_partition of X : S in F}
+             proof
+              let A be set;
+              assume
+                A in {EqClass(x,S) where S is a_partition of X : S in F};
+              then consider T being a_partition of X such that
+A32:           T in F &
+              A = EqClass(x,T) by Lm2;
+                A = EqClass(y,T) by A31,A32;
+              hence thesis by A32;
+             end;
+            thus {EqClass(y,S) where S is a_partition of X : S in F}
+             c= {EqClass(x,S) where S is a_partition of X : S in F}
+             proof
+              let A be set;
+              assume A in {EqClass(y,S) where S is a_partition of X : S in F};
+              then consider T being a_partition of X such that
+A33:           T in F & A = EqClass(y,T) by Lm2;
+                A = EqClass(x,T) by A31,A33;
+              hence thesis by A33;
+             end;
+           end;
+          hence thesis by A17,A18;
+         end;
+         hence thesis;
+        end;
+
+       case X = {};
+       hence G = {};
+      end;
+     then reconsider G as non empty a_partition of X;
+     take G;
+       for x being Element of X holds EqClass(x,G)
+         = meet{EqClass(x,S) where S is a_partition of X : S in F}
+      proof
+       let x be Element of X;
+A34:     meet{EqClass(x,S) where S is a_partition of X : S in F} in G;
+      x in meet{EqClass(x,S) where S is a_partition of X : S in F}
+        proof
+A35:       {EqClass(x,S) where S is a_partition of X : S in F} is non empty
+           proof
+            consider T being set such that
+A36:          T in F by XBOOLE_0:def 1;
+            reconsider T as a_partition of X by A36,Def3;
+              EqClass(x,T) in
+            {EqClass(x,S) where S is a_partition of X : S in F} by A36;
+            hence thesis;
+           end;
+           now
+          let Y be set;
+          assume Y in {EqClass(x,S) where S is a_partition of X : S in F};
+          then ex T being a_partition of X st
+          Y = EqClass(x,T) & T in F;
+          hence x in Y by Def1;
+         end;
+         hence thesis by A35,SETFAM_1:def 1;
+        end;
+       hence thesis by A34,Def1;
+      end;
+     hence thesis;
+  end;
+ end;
+end;
+
+:: Families of partitions of topological spaces
+
+reserve T for non empty TopSpace;
+
+theorem Th11:
+ { A where A is a_partition of the carrier of T : A is closed } is
+                                        Part-Family of the carrier of T
+  proof
+   set S = { A where A is a_partition of the carrier of T : A is closed };
+   A1: S c= bool bool the carrier of T
+   proof
+     let B be set; assume B in S;
+     then consider A being a_partition of the carrier of T such that
+A2:   B = A and A is closed;
+     thus thesis by A2;
+   end;
+     now let B be set;
+   assume B in { A where A is a_partition of the carrier of T : A is closed };
+   then consider A being a_partition of the carrier of T such that
+A3: B = A and A is closed;
+   thus B is a_partition of the carrier of T by A3;
+   end;
+   hence thesis by A1,Def2,Def3;
+  end;
+
+definition
+ let T;
+ func Closed_Partitions T -> non empty Part-Family of the carrier of T equals
+  :Def5:
+ { A where A is a_partition of the carrier of T : A is closed };
+ coherence
+  proof
+   set F = { A where A is a_partition of the carrier of T : A is closed };
+   reconsider ct = {the carrier of T} as
+                            a_partition of the carrier of T by Th7;
+     for A being Subset of T st A in ct holds A is closed
+    proof
+     let A be Subset of T; assume A in ct;
+     then A = the carrier of T by TARSKI:def 1;
+     then A = [#](T) by PRE_TOPC:def 3;
+     hence thesis;
+    end;
+  then ct is closed by TOPS_2:def 2;
+  then ct in F; hence thesis by Th11;
+ end;
+end;
+
+:: T_1 reflex of a topological space
+
+definition
+ let T be non empty TopSpace;
+ func T_1-reflex T -> TopSpace equals :Def6:
+   space (Intersection Closed_Partitions T);
+ correctness;
+end;
+
+definition
+ let T;
+ cluster T_1-reflex T -> strict non empty;
+ coherence
+  proof
+     T_1-reflex T = space (Intersection Closed_Partitions T) by Def6;
+   hence thesis;
+ end;
+end;
+
+theorem Th12:
+ for T being non empty TopSpace holds T_1-reflex T is being_T1
+  proof
+   let T be non empty TopSpace;
+     now
+    let p be Point of T_1-reflex T;
+      T_1-reflex T = space (Intersection Closed_Partitions T) by Def6;
+    then A1: the carrier of T_1-reflex T = Intersection Closed_Partitions T
+                                    by BORSUK_1:def 10;
+    then A2:  p in Intersection Closed_Partitions T;
+    consider x being Element of T such that
+A3:  p = EqClass(x,Intersection Closed_Partitions T) by A1,Th10;
+
+    A4:  p = meet { EqClass(x,S) where S is a_partition of the carrier of T :
+    S in Closed_Partitions T } by A3,Def4;
+    reconsider q=p as Subset of T by A3;
+
+A5:  { EqClass(x,S) where S is a_partition of the carrier of T :
+               S in Closed_Partitions T } is non empty
+     proof
+      consider Y being set such that
+A6:   Y in Closed_Partitions T by XBOOLE_0:def 1;
+      reconsider Y as a_partition of the carrier of T by A6,Def3;
+        EqClass(x,Y) in
+      {EqClass(x,S) where S is a_partition of the carrier of T
+      : S in Closed_Partitions T} by A6;
+      hence thesis;
+     end;
+   { EqClass(x,S) where S is a_partition of the carrier of T :
+               S in Closed_Partitions T } c= bool the carrier of T
+     proof
+      let Z be set;
+      assume Z in { EqClass(x,S) where S is a_partition of the carrier of T
+                  : S in Closed_Partitions T };
+      then consider Y being a_partition of the carrier of T such that
+A7:   Z = EqClass(x,Y) & Y in Closed_Partitions T;
+      thus thesis by A7;
+     end;
+    then reconsider m = { EqClass(x,S) where S is a_partition of the carrier of
+T :
+    S in Closed_Partitions T } as non empty Subset-Family of T
+      by A5,SETFAM_1:def 7;
+    reconsider m as non empty Subset-Family of T;
+   for A being Subset of T st A in m holds A is closed
+     proof
+      let A be Subset of T;
+      assume A in m;
+      then consider S being a_partition of the carrier of T such that
+A8:    A = EqClass(x,S) & S in Closed_Partitions T;
+        S in { B where B is a_partition of the carrier of T : B is closed }
+                       by A8,Def5;
+      then consider B being a_partition of the carrier of T such that
+A9:    S = B & B is closed;
+        A in S by A8,Def1;
+      hence thesis by A9,TOPS_2:def 2;
+     end;
+    then q is closed by A4,PRE_TOPC:44;
+    then [#](T) \ q is open by PRE_TOPC:def 6;
+    then [#](T) \ p in the topology of T by PRE_TOPC:def 5;
+    then (the carrier of T) \ p in the topology of T by PRE_TOPC:def 3;
+    then A10:  union((Intersection Closed_Partitions T) \ {p}) in the topology
+of T
+                                         by A2,Th4;
+    reconsider I = (Intersection Closed_Partitions T) \ {p} as
+    Subset of (Intersection Closed_Partitions T) by XBOOLE_1:36;
+A11:  I in {A where A is Subset of (Intersection Closed_Partitions T) :
+    union A in the topology of T} by A10;
+      the topology of space(Intersection Closed_Partitions T) =
+    {A where A is Subset of
+    (Intersection Closed_Partitions T) : union A in the topology of T}
+              by BORSUK_1:def 10;
+    then A12:  I in the topology of T_1-reflex T by A11,Def6;
+    reconsider I as Subset of
+    space(Intersection Closed_Partitions T)
+              by BORSUK_1:def 10;
+    reconsider I as Subset of T_1-reflex T by Def6;
+      I = (the carrier of space(Intersection Closed_Partitions T)) \ {p}
+              by BORSUK_1:def 10
+     .= (the carrier of T_1-reflex T) \ {p} by Def6
+     .= ([#] T_1-reflex T) \ {p} by PRE_TOPC:def 3;
+    then ([#] T_1-reflex T) \ {p} is open by A12,PRE_TOPC:def 5;
+    hence {p} is closed by PRE_TOPC:def 6;
+   end;
+   hence thesis by URYSOHN1:27;
+  end;
+
+definition let T;
+ cluster T_1-reflex T -> being_T1;
+ coherence by Th12;
+end;
+
+definition
+ let T be non empty TopSpace;
+  func T_1-reflect T -> continuous map of T,T_1-reflex T equals :Def7:
+   Proj Intersection Closed_Partitions T;
+  correctness
+  proof
+      space Intersection Closed_Partitions T = T_1-reflex T by Def6;
+    hence thesis;
+  end;
+end;
+
+theorem Th13:
+ for T,T1 being non empty TopSpace,f being continuous map of T,T1 holds
+   T1 is being_T1 implies
+   ({f"{z} where z is Element of T1 : z in rng f}
+   is a_partition of the carrier of T) &
+   (for A being Subset of T st
+   A in {f"{z} where z is Element of T1 : z in rng f} holds
+   A is closed)
+    proof
+     let T,T1 be non empty TopSpace;
+     let f be continuous map of T,T1;
+A1: dom f = the carrier of T & rng f c= the carrier of T1
+      by FUNCT_2:def 1,RELSET_1:12;
+     assume
+A2: T1 is being_T1;
+     thus {f"{z} where z is Element of T1 : z in rng f}
+      is a_partition of the carrier of T
+       proof
+          {f"{z} where z is Element of T1 : z in rng f} c=
+        bool the carrier of T
+         proof
+          let y;
+          assume y in {f"{z} where z is Element of T1 : z in rng f};
+          then consider z being Element of T1 such that
+A3:        y = f"{z} & z in rng f;
+          thus thesis by A3;
+         end;
+        then reconsider fz = {f"{z} where z is Element of T1 : z in rng f}
+          as Subset-Family of T by SETFAM_1:def 7;
+        reconsider fz as Subset-Family of T;
+A4:     union fz = the carrier of T
+         proof
+          thus union fz c= the carrier of T;
+          thus the carrier of T c= union fz
+           proof
+            let y;
+            assume
+A5:          y in the carrier of T;
+            consider z being set such that
+A6:          z = f.y;
+A7:       z in rng f by A1,A5,A6,FUNCT_1:def 5;
+            then reconsider z as Element of T1 by A1;
+A8:          f"{z} in fz by A7;
+              f.y in {f.y} by TARSKI:def 1;
+            then y in f"{z} by A1,A5,A6,FUNCT_1:def 13;
+            hence thesis by A8,TARSKI:def 4;
+           end;
+         end;
+          for A being Subset of T st
+             A in fz holds A <> {} &
+             for B being Subset of T st
+             B in fz holds A = B or A misses B
+         proof
+          let A be Subset of T;
+          assume A in fz;
+          then consider z being Element of T1 such that
+A9:        A = f"{z} & z in rng f;
+          consider y being set such that
+A10:        y in dom f & z = f.y by A9,FUNCT_1:def 5;
+            f.y in {f.y} by TARSKI:def 1;
+          hence A <> {} by A9,A10,FUNCT_1:def 13;
+          let B be Subset of T;
+          assume B in fz;
+          then consider w being Element of T1 such that
+A11:        B = f"{w} & w in rng f;
+          thus A = B or A misses B
+           proof
+              now
+             assume not A misses B;
+             then consider v being set such that
+A12:           v in A & v in B by XBOOLE_0:3;
+               f.v in {z} & f.v in {w} by A9,A11,A12,FUNCT_1:def 13;
+             then f.v = z & f.v = w by TARSKI:def 1;
+             hence A = B by A9,A11;
+            end;
+            hence thesis;
+           end;
+         end;
+        hence thesis by A4,EQREL_1:def 6;
+       end;
+     thus for A being Subset of T st
+      A in {f"{z} where z is Element of T1 : z in rng f} holds A is closed
+       proof
+        let A be Subset of T;
+        assume
+          A in {f"{z} where z is Element of T1 : z in rng f};
+        then consider z being Element of T1 such that
+A13:    A = f"{z} & z in rng f;
+          {z} is closed by A2,URYSOHN1:27;
+        hence thesis by A13,PRE_TOPC:def 12;
+       end;
+    end;
+
+theorem Th14:
+ for T,T1 being non empty TopSpace,f being continuous map of T,T1 holds
+   T1 is being_T1 implies for w for x being Element of T holds
+    w = EqClass(x,(Intersection Closed_Partitions T)) implies w c= f"{f.x}
+     proof
+      let T,T1 be non empty TopSpace;
+      let f be continuous map of T,T1;
+A1: dom f = the carrier of T & rng f c= the carrier of T1
+      by FUNCT_2:def 1,RELSET_1:12;
+      assume
+A2:  T1 is being_T1;
+      let w be set;
+      let x be Element of T;
+      assume
+A3:   w = EqClass(x,(Intersection Closed_Partitions T));
+      let y be set;
+      assume
+A4:    y in w;
+      reconsider fz = {f"{z} where z is Element of T1 : z in rng f}
+       as a_partition of the carrier of T by A2,Th13;
+        for A being Subset of T st A in fz holds A is closed by A2,Th13;
+      then fz is closed by TOPS_2:def 2;
+      then fz in {B where B is a_partition of the carrier of T : B is closed};
+      then fz in Closed_Partitions T by Def5;
+then A5:   EqClass(x,fz) in
+      {EqClass(x,S) where S is a_partition of the carrier of T :
+      S in Closed_Partitions T};
+A6:  f"{f.x} = EqClass(x,fz)
+       proof
+          f.x in {f.x} by TARSKI:def 1;
+        then A7:     x in f"{f.x} by A1,FUNCT_1:def 13;
+A8:     f.x in rng f by A1,FUNCT_1:def 5;
+        reconsider fx = f.x as Element of T1;
+          f"{fx} in fz by A8;
+        hence thesis by A7,Def1;
+       end;
+        EqClass(x,(Intersection Closed_Partitions T)) =
+      meet{EqClass(x,S) where S is a_partition of the carrier of T :
+      S in Closed_Partitions T} by Def4;
+      hence y in f"{f.x} by A3,A4,A5,A6,SETFAM_1:def 1;
+     end;
+
+theorem Th15:
+ for T,T1 being non empty TopSpace,f being continuous map of T,T1 holds
+   T1 is being_T1 implies
+    for w st w in the carrier of T_1-reflex T ex z being Element of T1
+    st z in rng f & w c= f"{z}
+     proof
+      let T,T1 be non empty TopSpace;
+      let f be continuous map of T,T1;
+      assume
+A1:  T1 is being_T1;
+      let w be set;
+      assume
+    w in the carrier of T_1-reflex T;
+      then w in the carrier of space (Intersection Closed_Partitions T) by Def6
+;
+      then w in Intersection (Closed_Partitions T) by BORSUK_1:def 10;
+      then consider x being Element of T such that
+A2:    w = EqClass(x,Intersection (Closed_Partitions T)) by Th10;
+      reconsider x as Element of T;
+A3: dom f = the carrier of T & rng f c= the carrier of T1
+      by FUNCT_2:def 1,RELSET_1:12;
+      reconsider fx = f.x as Element of T1;
+      take fx;
+      thus thesis by A1,A2,A3,Th14,FUNCT_1:def 5;
+     end;
+
+:: The theorem on factorization
+
+theorem Th16:
+ for T,T1 being non empty TopSpace,f being continuous map of T,T1 holds
+   T1 is being_T1 implies
+    ex h being continuous map of T_1-reflex T, T1 st
+     f = h*T_1-reflect T
+      proof
+       let T,T1 be non empty TopSpace;
+       let f be continuous map of T,T1;
+       assume
+A1:   T1 is being_T1;
+       then reconsider fx = {f"{x} where x is Element of T1 : x in rng f}
+        as a_partition of the carrier of T by Th13;
+       set g = T_1-reflect T;
+A2:  dom f = the carrier of T & rng f c= the carrier of T1
+       by FUNCT_2:def 1,RELSET_1:12;
+A3:  dom g = the carrier of T & rng g c= the carrier of T_1-reflex T
+       by FUNCT_2:def 1,RELSET_1:12;
+       defpred X[set,set] means for z being Element of T1 holds
+       (z in rng f & $1 c= f"{z}) implies $2 = f"{z};
+A4:    for y,w,v st y in the carrier of T_1-reflex T & X[y,w] & X[y,v]
+       holds w = v
+        proof
+         let y,w,v;
+         assume
+A5:       y in the carrier of T_1-reflex T &
+(for z being Element of T1 holds (z in rng f & y c= f"{z}) implies w = f"{z})
+         &
+(for z being Element of T1 holds (z in rng f & y c= f"{z}) implies v = f"{z});
+         then y in the carrier of space Intersection(Closed_Partitions T) by
+Def6;
+         then y in Intersection(Closed_Partitions T) by BORSUK_1:def 10;
+         then consider x being Element of T such that
+A6:       y = EqClass(x,Intersection(Closed_Partitions T)) by Th10;
+         reconsider x as Element of T;
+         reconsider fix = f.x as Element of T1;
+           fix in rng f & y c= f"{fix} by A1,A2,A6,Th14,FUNCT_1:def 5;
+         then w = f"{fix} & v = f"{fix} by A5;
+         hence w = v;
+        end;
+
+A7:    for y st y in the carrier of T_1-reflex T ex w st X[y,w]
+        proof
+         let y;
+         assume y in the carrier of T_1-reflex T;
+         then y in the carrier of space Intersection(Closed_Partitions T) by
+Def6;
+         then y in Intersection(Closed_Partitions T) by BORSUK_1:def 10;
+         then consider x being Element of T such that
+A8:       y = EqClass(x,Intersection(Closed_Partitions T)) by Th10;
+         reconsider x as Element of T;
+         set w = f"{f.x};
+         take w;
+         let z be Element of T1;
+         assume
+A9:      z in rng f & y c= f"{z};
+         then A10:      f"{z} in fx;
+A11:      f.x in rng f by A2,FUNCT_1:def 5;
+         reconsider fix = f.x as Element of T1;
+           f"{fix} in fx by A11;
+         then A12:     w misses f"{z} or w = f"{z} by A10,EQREL_1:def 6;
+A13:     y c= w & y c= f"{z} by A1,A8,A9,Th14;
+           y is non empty by A8,Def1;
+         then consider z1 being set such that
+A14:      z1 in y by XBOOLE_0:def 1;
+         thus w = f"{z} by A12,A13,A14,XBOOLE_0:3;
+        end;
+
+       consider h1 being Function such that
+A15:     dom h1 = the carrier of T_1-reflex T &
+       for y st y in the carrier of T_1-reflex T
+           holds X[y,h1.y] from FuncEx(A4,A7);
+        defpred X[set,set] means for z being Element of T1 holds
+       (z in rng f & $1 = f"{z}) implies $2 = z;
+A16:    for y,w,v st y in fx & X[y,w] & X[y,v]
+       holds w = v
+        proof
+         let y,w,v;
+         assume
+A17: y in fx &
+   (for z being Element of T1 holds (z in rng f & y = f"{z}) implies w = z)
+    &
+   (for z being Element of T1 holds (z in rng f & y = f"{z}) implies v = z);
+         then consider z1 being Element of T1 such that
+A18:      y = f"{z1} & z1 in rng f;
+           w = z1 & v = z1 by A17,A18;
+         hence thesis;
+        end;
+
+A19:    for y st y in fx ex w st X[y,w]
+        proof
+         let y be set;
+         assume y in fx;
+         then consider w being Element of T1 such that
+A20:       y = f"{w} & w in rng f;
+         take w;
+         let z be Element of T1;
+         assume
+A21:     z in rng f & y = f"{z};
+           now
+          assume
+A22:       z <> w;
+          consider v being set such that
+A23:        v in dom f & z = f.v by A21,FUNCT_1:def 5;
+            z in {z} by TARSKI:def 1;
+          then v in f"{w} by A20,A21,A23,FUNCT_1:def 13;
+          then f.v in {w} by FUNCT_1:def 13;
+          hence contradiction by A22,A23,TARSKI:def 1;
+         end;
+         hence w = z;
+        end;
+       consider h2 being Function such that
+A24:     dom h2 = fx &
+       for y st y in fx holds X[y,h2.y] from FuncEx(A16,A19);
+       set h = h2*h1;
+A25:  dom h = the carrier of T_1-reflex T
+        proof
+         thus dom h c= the carrier of T_1-reflex T by A15,RELAT_1:44;
+         let z be set;
+         assume
+A26:     z in the carrier of T_1-reflex T;
+         then consider w being Element of T1 such that
+A27:       w in rng f & z c= f"{w} by A1,Th15;
+           h1.z = f"{w} by A15,A26,A27;
+         then h1.z in dom h2 by A24,A27;
+         hence z in dom h by A15,A26,FUNCT_1:21;
+        end;
+A28:  rng h c= rng h2
+        proof
+         let z be set;
+         thus thesis by FUNCT_1:25;
+        end;
+         rng h2 c= the carrier of T1
+        proof
+         let y;
+         assume y in rng h2;
+         then consider w being set such that
+A29:       w in dom h2 & y = h2.w by FUNCT_1:def 5;
+         consider x being Element of T1 such that
+A30:       w = f"{x} & x in rng f by A24,A29;
+           h2.w = x by A24,A29,A30;
+         hence y in the carrier of T1 by A29;
+        end;
+       then A31:    rng h c= the carrier of T1 by A28,XBOOLE_1:1;
+
+A32:  dom (h*g) = the carrier of T
+        proof
+         thus dom (h*g) c= the carrier of T by A3,RELAT_1:44;
+         let y be set;
+         assume
+A33:       y in the carrier of T;
+         then g.y in rng g by A3,FUNCT_1:def 5;
+         hence y in dom (h*g) by A3,A25,A33,FUNCT_1:21;
+        end;
+
+A34:    f = h*g
+        proof
+           for x being set st x in dom f holds f.x = (h*g).x
+          proof
+           let x be set;
+           assume
+A35:         x in dom f;
+           then g.x in rng g by A2,A3,FUNCT_1:def 5;
+           then g.x in the carrier of T_1-reflex T by A3;
+           then g.x in the carrier of space (Intersection Closed_Partitions T)
+                           by Def6;
+           then g.x in Intersection (Closed_Partitions T) by BORSUK_1:def 10;
+           then consider y being Element of T such that
+A36:         g.x = EqClass(y,Intersection (Closed_Partitions T)) by Th10;
+           reconsider x as Element of T by A2,A35;
+             g = Proj (Intersection Closed_Partitions T) by Def7;
+           then g = proj (Intersection Closed_Partitions T) by BORSUK_1:def 11
+;
+           then A37:       x in g.x by BORSUK_1:def 1;
+             x in EqClass(x,Intersection (Closed_Partitions T)) by Def1;
+           then A38:       EqClass(x,Intersection (Closed_Partitions T)) meets
+           EqClass(y,Intersection (Closed_Partitions T)) by A36,A37,XBOOLE_0:3;
+           reconsider fix = f.x as Element of T1;
+             g.x = EqClass(x,Intersection (Closed_Partitions T)) by A36,A38,Th9
+;
+           then A39:       fix in rng f & g.x c= f"{fix} by A1,A35,Th14,FUNCT_1
+:def 5;
+then A40:      f"{fix} in fx;
+             (h*g).x = (h2*h1).(g.x) by A32,FUNCT_1:22
+                  .= h2.(h1.(g.x)) by A15,FUNCT_1:23
+                  .= h2.(f"{fix}) by A15,A39
+                  .= f.x by A24,A39,A40;
+           hence thesis;
+          end;
+        hence thesis by A2,A32,FUNCT_1:9;
+       end;
+       reconsider h as Function of
+       the carrier of T_1-reflex T,the carrier of T1
+                    by A25,A31,FUNCT_2:def 1,RELSET_1:11;
+       reconsider h as map of T_1-reflex T,T1;
+         h is continuous
+        proof
+         let y be Subset of T1;
+         assume
+A41:     y is closed;
+         reconsider hy = h"y as Subset of
+           space Intersection(Closed_Partitions T) by Def6;
+           union hy c= the carrier of T
+          proof
+           let z1 be set;
+           assume z1 in union hy;
+           then consider z2 being set such that
+A42:        z1 in z2 & z2 in hy by TARSKI:def 4;
+             z2 in the carrier of space Intersection(Closed_Partitions T) by
+A42
+;
+           then z2 in Intersection(Closed_Partitions T) by BORSUK_1:def 10;
+           hence thesis by A42;
+          end;
+         then reconsider uhy = union hy as Subset of T;
+A43:      T_1-reflex T = space (Intersection Closed_Partitions T) by Def6;
+           (h*g)"y is closed by A34,A41,PRE_TOPC:def 12;
+         then g"(h"y) is closed by RELAT_1:181;
+         then (Proj (Intersection Closed_Partitions T))"hy is closed by Def7;
+         then uhy is closed by Th2; hence h"y is closed by A43,Th5;
+        end;
+       then reconsider h as continuous map of T_1-reflex T,T1;
+       take h;
+       thus thesis by A34;
+      end;
+
+definition
+ let T,S be non empty TopSpace;
+ let f be continuous map of T,S;
+  func T_1-reflex f -> continuous map of T_1-reflex T, T_1-reflex S means
+   (T_1-reflect S) * f = it * (T_1-reflect T);
+existence by Th16;
+uniqueness
+ proof
+  let g1,g2 be continuous map of T_1-reflex T, T_1-reflex S;
+  assume that
+A1: (T_1-reflect S) * f = g1 * (T_1-reflect T) and
+A2: (T_1-reflect S) * f = g2 * (T_1-reflect T);
+A3: dom g1 = the carrier of (T_1-reflex T) &
+   dom g2 = the carrier of (T_1-reflex T) by FUNCT_2:def 1;
+    now
+   let x be set;
+   assume x in dom g1;
+   then A4: x in the carrier of T_1-reflex T by FUNCT_2:def 1;
+A5: the carrier of T_1-reflex T = the carrier of
+                    space (Intersection Closed_Partitions T) by Def6
+    .= (Intersection Closed_Partitions T) by BORSUK_1:def 10;
+   then consider y being Element of T such that
+A6: x = EqClass(y,(Intersection (Closed_Partitions T))) by A4,Th10;
+ A7: dom (T_1-reflect T) = the carrier of T &
+   rng (T_1-reflect T) c= the carrier of T_1-reflex T
+        by FUNCT_2:def 1,RELSET_1:12;
+   reconsider y as Element of T;
+     T_1-reflect T = Proj (Intersection Closed_Partitions T) by Def7
+                      .= proj (Intersection Closed_Partitions T)
+                               by BORSUK_1:def 11;
+   then A8: y in (T_1-reflect T).y & y in x by A6,Def1,BORSUK_1:def 1;
+   set ty=(T_1-reflect T).y;
+     ty in (Intersection Closed_Partitions T) by A5;
+   then A9: ty misses x or ty = x by A4,A5,EQREL_1:def 6;
+   hence g2.x = (g2 * (T_1-reflect T)).y by A7,A8,FUNCT_1:23,XBOOLE_0:3
+            .= g1.x by A1,A2,A7,A8,A9,FUNCT_1:23,XBOOLE_0:3;
+  end;
+  hence g1=g2 by A3,FUNCT_1:9;
+ end;
+end;

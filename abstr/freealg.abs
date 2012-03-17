@@ -1,0 +1,362 @@
+:: Free Universal Algebra Construction
+::  by Beata Perkowska
+::
+:: Received October 20, 1993
+:: Copyright (c) 1993 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, ARYTM_1, FINSEQ_1, RELAT_1, FUNCT_1, UNIALG_1, UNIALG_2,
+      PRELAMB, CQC_SIM1, ALG_1, FUNCOP_1, PARTFUN1, FUNCT_2, ZF_REFLE,
+      FINSEQ_4, FINSEQ_2, LANG1, TDGROUP, DTCONSTR, TREES_4, TREES_3, TREES_2,
+      QC_LANG1, FREEALG, CARD_3;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, NAT_1,
+      RELSET_1, STRUCT_0, FUNCT_1, PARTFUN1, FINSEQ_1, FUNCT_2, FUNCOP_1,
+      FINSEQ_2, TREES_2, TREES_3, TREES_4, FINSEQ_4, UNIALG_1, UNIALG_2, LANG1,
+      DTCONSTR, TOPREAL1, ALG_1;
+ constructors DOMAIN_1, DTCONSTR, ALG_1, FINSOP_1, FINSEQ_4, FINSEQOP,
+      XCMPLX_0, XREAL_0, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, TREES_3, UNIALG_1, UNIALG_2, DTCONSTR, RELSET_1, XBOOLE_0,
+      PRVECT_1, STRUCT_0, FINSEQ_2, PARTFUN1, ARYTM_3, MEMBERED, ZFMISC_1,
+      ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+::
+:: Preliminaries
+::
+
+reserve x,y for set,
+        n for Nat;
+
+definition let IT be set;
+attr IT is missing_with_Nat means
+:: FREEALG:def 1
+ IT misses NAT;
+end;
+
+definition
+cluster non empty missing_with_Nat set;
+end;
+
+definition let IT be FinSequence;
+attr IT is with_zero means
+:: FREEALG:def 2
+ 0 in rng IT;
+antonym IT is without_zero;
+end;
+
+definition
+cluster non empty with_zero FinSequence of NAT;
+cluster non empty without_zero FinSequence of NAT;
+end;
+
+begin
+::
+:: Free Universal Algebra - General Notions
+::
+
+definition let U1 be Universal_Algebra,
+     n be Nat;
+assume  n in dom (the charact of U1);
+ canceled;
+
+func oper(n,U1) -> operation of U1 equals
+:: FREEALG:def 4
+  (the charact of U1).n;
+end;
+
+definition
+ let U0 be Universal_Algebra;
+mode GeneratorSet of U0 -> Subset of U0 means
+:: FREEALG:def 5
+
+the carrier of GenUnivAlg(it) = the carrier of U0;
+end;
+
+definition
+ let U0 be Universal_Algebra;
+ let IT be GeneratorSet of U0;
+attr IT is free means
+:: FREEALG:def 6
+for U1 be Universal_Algebra st U0,U1 are_similar holds
+  for f be Function of IT,the carrier of U1
+    ex h be Function of U0,U1 st h is_homomorphism U0,U1 & h|IT = f;
+end;
+
+definition let IT be Universal_Algebra;
+attr IT is free means
+:: FREEALG:def 7
+ex G being GeneratorSet of IT st G is free;
+end;
+
+definition
+cluster free strict Universal_Algebra;
+end;
+
+definition
+ let U0 be free Universal_Algebra;
+cluster free GeneratorSet of U0;
+end;
+
+theorem :: FREEALG:1
+  for U0 be strict Universal_Algebra,A be Subset of U0 holds
+A is GeneratorSet of U0 iff GenUnivAlg(A) = U0;
+
+begin
+::
+:: Construction of a Decorated Tree Structure for Free Universal Algebra
+::
+
+definition
+ let f be non empty FinSequence of NAT,
+     X be set;
+func REL(f,X) -> Relation of ((dom f) \/ X),(((dom f) \/ X)*) means
+:: FREEALG:def 8
+for a be Element of (dom f) \/ X, b be Element of ((dom f) \/ X)* holds
+  [a,b] in it iff a in dom f & f.a = len b;
+end;
+
+definition
+ let f be non empty FinSequence of NAT,
+     X be set;
+func DTConUA(f,X) -> strict DTConstrStr equals
+:: FREEALG:def 9
+ DTConstrStr (# (dom f) \/ X, REL(f,X) #);
+end;
+
+definition
+ let f be non empty FinSequence of NAT,
+     X be set;
+cluster DTConUA(f,X) -> non empty;
+end;
+
+theorem :: FREEALG:2
+for f be non empty FinSequence of NAT, X be set holds
+ (Terminals (DTConUA(f,X))) c= X & NonTerminals(DTConUA(f,X)) = dom f;
+
+theorem :: FREEALG:3
+for f be non empty FinSequence of NAT, X be missing_with_Nat set holds
+ (Terminals (DTConUA(f,X))) = X;
+
+definition
+ let f be non empty FinSequence of NAT,
+     X be set;
+cluster DTConUA(f,X) -> with_nonterminals;
+end;
+
+definition
+ let f be with_zero non empty FinSequence of NAT,
+     X be set;
+cluster DTConUA(f,X) ->
+  with_nonterminals with_useful_nonterminals;
+end;
+
+definition
+ let f be non empty FinSequence of NAT,
+     D be missing_with_Nat non empty set;
+cluster DTConUA(f,D) ->
+ with_terminals with_nonterminals with_useful_nonterminals;
+end;
+
+definition
+ let f be non empty FinSequence of NAT,
+     X be set,
+     n be Nat;
+ assume  n in dom f;
+ func Sym(n,f,X) -> Symbol of DTConUA(f,X) equals
+:: FREEALG:def 10
+   n;
+end;
+
+begin
+::
+:: Construction of Free Universal Algebra for Non Empty Set of Generators and
+::                           Given Signature
+
+definition
+ let f be non empty FinSequence of NAT qua non empty set,
+     D be missing_with_Nat non empty set,
+     n be Nat;
+assume  n in dom f;
+func FreeOpNSG(n,f,D) -> homogeneous quasi_total non empty
+             PartFunc of (TS DTConUA(f,D))*, TS(DTConUA(f,D)) means
+:: FREEALG:def 11
+dom it = (f/.n)-tuples_on TS(DTConUA(f,D)) &
+for p be FinSequence of TS(DTConUA(f,D))
+  st p in dom it holds it.p = Sym(n,f,D)-tree(p);
+end;
+
+definition
+ let f be non empty FinSequence of NAT,
+     D be missing_with_Nat non empty set;
+func FreeOpSeqNSG(f,D) -> PFuncFinSequence of TS DTConUA(f,D) means
+:: FREEALG:def 12
+len it = len f & for n st n in dom it holds it.n = FreeOpNSG(n,f,D);
+end;
+
+definition
+ let f be non empty FinSequence of NAT,
+     D be missing_with_Nat non empty set;
+func FreeUnivAlgNSG(f,D) -> strict Universal_Algebra equals
+:: FREEALG:def 13
+  UAStr (# TS(DTConUA(f,D)), FreeOpSeqNSG(f,D)#);
+end;
+
+theorem :: FREEALG:4
+for f be non empty FinSequence of NAT, D be missing_with_Nat non empty set
+ holds signature (FreeUnivAlgNSG(f,D)) = f;
+
+definition
+ let f be non empty FinSequence of NAT,
+     D be non empty missing_with_Nat set;
+func FreeGenSetNSG(f,D) -> Subset of FreeUnivAlgNSG(f,D) equals
+:: FREEALG:def 14
+
+   {root-tree s where s is Symbol of DTConUA(f,D):
+         s in Terminals DTConUA(f,D)};
+end;
+
+theorem :: FREEALG:5
+for f be non empty FinSequence of NAT,D be non empty missing_with_Nat set holds
+  FreeGenSetNSG(f,D) is non empty;
+
+definition
+ let f be non empty FinSequence of NAT qua non empty set,
+     D be non empty missing_with_Nat set;
+redefine func FreeGenSetNSG(f,D) -> GeneratorSet of FreeUnivAlgNSG(f,D);
+end;
+
+definition
+ let f be non empty FinSequence of NAT,
+     D be non empty missing_with_Nat set,
+     C be non empty set,
+     s be Symbol of (DTConUA(f,D)),
+     F be Function of FreeGenSetNSG(f,D),C;
+ assume  s in Terminals (DTConUA(f,D));
+func pi(F,s) -> Element of C equals
+:: FREEALG:def 15
+  F.(root-tree s);
+end;
+
+definition
+ let f be non empty FinSequence of NAT,
+     D be set,
+     s be Symbol of (DTConUA(f,D));
+ given p be FinSequence such that  s ==> p;
+  func @s -> Nat equals
+:: FREEALG:def 16
+    s;
+ end;
+
+theorem :: FREEALG:6
+for f be non empty FinSequence of NAT,D be non empty missing_with_Nat set holds
+FreeGenSetNSG(f,D) is free;
+
+definition
+ let f be non empty FinSequence of NAT,
+     D be non empty missing_with_Nat set;
+ cluster FreeUnivAlgNSG(f,D) -> free;
+end;
+
+definition
+ let f be non empty FinSequence of NAT,
+     D be non empty missing_with_Nat set;
+redefine func FreeGenSetNSG(f,D) -> free GeneratorSet of FreeUnivAlgNSG(f,D);
+end;
+
+begin
+::
+:: Construction of Free Universal Algebra for Given Signature
+::  (with at Last One Zero Argument Operation) and Set of Generators
+::
+
+definition
+ let f be with_zero non empty FinSequence of NAT qua non empty set,
+     D be missing_with_Nat set,
+     n be Nat;
+assume  n in dom f;
+func FreeOpZAO(n,f,D) -> homogeneous quasi_total non empty
+             PartFunc of (TS DTConUA(f,D))*, TS(DTConUA(f,D)) means
+:: FREEALG:def 17
+dom it = (f/.n)-tuples_on TS(DTConUA(f,D)) &
+for p be FinSequence of TS(DTConUA(f,D))
+  st p in dom it holds it.p = Sym(n,f,D)-tree(p);
+end;
+
+definition
+ let f be with_zero non empty FinSequence of NAT,
+     D be missing_with_Nat set;
+func FreeOpSeqZAO(f,D) -> PFuncFinSequence of TS DTConUA(f,D) means
+:: FREEALG:def 18
+len it = len f & for n st n in dom it holds it.n = FreeOpZAO(n,f,D);
+end;
+
+definition
+ let f be with_zero non empty FinSequence of NAT,
+     D be missing_with_Nat set;
+func FreeUnivAlgZAO(f,D) -> strict Universal_Algebra equals
+:: FREEALG:def 19
+  UAStr (# TS(DTConUA(f,D)), FreeOpSeqZAO(f,D)#);
+end;
+
+theorem :: FREEALG:7
+for f be with_zero non empty FinSequence of NAT, D be missing_with_Nat set
+ holds signature (FreeUnivAlgZAO(f,D)) = f;
+
+theorem :: FREEALG:8
+for f be with_zero non empty FinSequence of NAT,D be missing_with_Nat set holds
+  FreeUnivAlgZAO(f,D) is with_const_op;
+
+theorem :: FREEALG:9
+for f be with_zero non empty FinSequence of NAT,D be missing_with_Nat set holds
+  Constants(FreeUnivAlgZAO(f,D)) <> {};
+
+definition
+ let f be with_zero non empty FinSequence of NAT,
+     D be missing_with_Nat set;
+func FreeGenSetZAO(f,D) -> Subset of FreeUnivAlgZAO(f,D) equals
+:: FREEALG:def 20
+
+   {root-tree s where s is Symbol of DTConUA(f,D):
+         s in Terminals DTConUA(f,D)};
+end;
+
+definition
+ let f be with_zero non empty FinSequence of NAT qua non empty set,
+     D be missing_with_Nat set;
+redefine func FreeGenSetZAO(f,D) -> GeneratorSet of FreeUnivAlgZAO(f,D);
+end;
+
+definition
+ let f be with_zero non empty FinSequence of NAT,
+     D be missing_with_Nat set,
+     C be non empty set,
+     s be Symbol of (DTConUA(f,D)),
+     F be Function of (FreeGenSetZAO(f,D)),C;
+ assume  s in Terminals (DTConUA(f,D));
+func pi(F,s) -> Element of C equals
+:: FREEALG:def 21
+  F.(root-tree s);
+end;
+
+theorem :: FREEALG:10
+for f be with_zero non empty FinSequence of NAT,D be missing_with_Nat set holds
+FreeGenSetZAO(f,D) is free;
+
+definition
+ let f be with_zero non empty FinSequence of NAT,
+     D be missing_with_Nat set;
+cluster FreeUnivAlgZAO(f,D) -> free;
+end;
+
+definition
+ let f be with_zero non empty FinSequence of NAT,
+     D be missing_with_Nat set;
+redefine func FreeGenSetZAO(f,D) -> free GeneratorSet of FreeUnivAlgZAO(f,D);
+end;
+
+definition
+cluster strict free with_const_op Universal_Algebra;
+end;

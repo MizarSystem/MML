@@ -1,0 +1,457 @@
+:: The Lattice of Natural Numbers and The Sublattice of it.
+:: The Set of Prime Numbers
+::  by Marek Chmur
+::
+:: Received April 26, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM_3, QC_LANG1, ARYTM_1, BINOP_1, FUNCT_1, LATTICES, ARYTM,
+      RELAT_1, BOOLE, FILTER_0, FINSEQ_1, FINSET_1, CARD_1, TARSKI, NAT_1,
+      NAT_LAT;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      STRUCT_0, CARD_1, INT_2, NAT_1, LATTICES, BINOP_1, FINSEQ_1, FINSET_1,
+      RELAT_1, FUNCT_1, NEWTON;
+ constructors WELLORD2, INT_2, NAT_1, LATTICES, BINOP_1, NEWTON, PARTFUN1,
+      MEMBERED, XBOOLE_0;
+ clusters FINSET_1, RLSUB_2, STRUCT_0, XREAL_0, FINSEQ_1, RELSET_1, INT_1,
+      LATTICES, NAT_1, MEMBERED, ZFMISC_1, XBOOLE_0, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Auxiliary Theorems
+
+reserve n,m,l,k,i,j,s,r,t for Nat;
+
+canceled;
+
+theorem :: NAT_LAT:2
+  l >= 1 implies k*l>=k;
+
+definition let n;
+ redefine func n! -> Nat;
+end;
+
+theorem :: NAT_LAT:3
+ l >= 1 & n >= k*l implies n>=k;
+
+canceled;
+
+theorem :: NAT_LAT:5
+ l <> 0 implies l divides l!;
+
+canceled 2;
+
+theorem :: NAT_LAT:8
+   n <> 0 implies (n+1)/n > 1;
+
+theorem :: NAT_LAT:9
+  k/(k+1) < 1;
+
+theorem :: NAT_LAT:10
+  for l being Nat holds l! >= l;
+
+canceled;
+
+theorem :: NAT_LAT:12
+  for m,n st m<>1 holds m divides n implies not m divides (n+1);
+
+theorem :: NAT_LAT:13
+    j divides l & j divides l+1 iff j=1;
+
+canceled;
+
+theorem :: NAT_LAT:15
+ for k,j st j<>0 holds j divides (j+k)!;
+
+theorem :: NAT_LAT:16
+  j<=l & j<>0 implies j divides l!;
+
+theorem :: NAT_LAT:17
+  for l,j st j<>1 & j<>0 holds j divides (l!+1) implies j>l;
+
+:: The fundamental properties of lcm, hcf
+
+canceled;
+
+theorem :: NAT_LAT:19
+  m lcm (n lcm k) = (m lcm n) lcm k;
+
+theorem :: NAT_LAT:20
+   m divides n iff m lcm n = n;
+
+canceled 2;
+
+theorem :: NAT_LAT:23
+   n divides m & k divides m iff n lcm k divides m;
+
+canceled 2;
+
+theorem :: NAT_LAT:26
+    m lcm 1 = m;
+
+theorem :: NAT_LAT:27
+ m lcm n divides m*n;
+
+theorem :: NAT_LAT:28
+  m hcf (n hcf k) = (m hcf n) hcf k;
+
+canceled;
+
+theorem :: NAT_LAT:30
+  n divides m implies n hcf m = n;
+
+canceled;
+
+theorem :: NAT_LAT:32
+    m divides n & m divides k iff m divides n hcf k;
+
+canceled 2;
+
+theorem :: NAT_LAT:35
+  m hcf 1 = 1;
+
+theorem :: NAT_LAT:36
+    m hcf 0 = m;
+
+theorem :: NAT_LAT:37
+  (m hcf n) lcm n = n;
+
+theorem :: NAT_LAT:38
+  m hcf (m lcm n) = m;
+
+theorem :: NAT_LAT:39
+    m hcf (m lcm n) = (n hcf m) lcm m;
+
+theorem :: NAT_LAT:40
+    m divides n implies m hcf k divides n hcf k;
+
+theorem :: NAT_LAT:41
+    m divides n implies k hcf m divides k hcf n;
+
+theorem :: NAT_LAT:42
+    m > 0 implies 0 hcf m > 0;
+
+theorem :: NAT_LAT:43
+  n > 0 implies n hcf m > 0;
+
+theorem :: NAT_LAT:44
+  m > 0 & n > 0 implies m lcm n > 0;
+
+theorem :: NAT_LAT:45
+    (n hcf m) lcm (n hcf k) divides n hcf (m lcm k);
+
+theorem :: NAT_LAT:46
+    m divides l implies m lcm (n hcf l) divides (m lcm n) hcf l;
+
+theorem :: NAT_LAT:47
+     n hcf m divides n lcm m;
+
+definition
+ canceled 2;
+
+ func hcflat-> BinOp of NAT means
+:: NAT_LAT:def 3
+  it.(m,n)=m hcf n;
+
+ func lcmlat-> BinOp of NAT means
+:: NAT_LAT:def 4
+  it.(m,n)=m lcm n;
+end;
+
+reserve p,q,r for Element of LattStr (# NAT, lcmlat, hcflat #);
+
+definition
+ let m be Element of LattStr (# NAT, lcmlat, hcflat #);
+ func @m -> Nat equals
+:: NAT_LAT:def 5
+  m;
+ end;
+
+theorem :: NAT_LAT:48
+ p"\/"q =@p lcm @q;
+
+theorem :: NAT_LAT:49
+ p"/\"q = @p hcf @q;
+
+canceled 2;
+
+theorem :: NAT_LAT:52
+   for a,b being Element of LattStr (# NAT, lcmlat, hcflat #)
+           holds a[=b implies @a divides @b;
+
+definition
+ func 0_NN -> Element of LattStr (# NAT, lcmlat, hcflat #)
+  equals
+:: NAT_LAT:def 6
+  1;
+
+ func 1_NN -> Element of LattStr (# NAT, lcmlat, hcflat #)
+  equals
+:: NAT_LAT:def 7
+0;
+ end;
+
+canceled 2;
+
+theorem :: NAT_LAT:55
+  @0_NN=1;
+
+theorem :: NAT_LAT:56
+ for a being Element of LattStr (# NAT, lcmlat, hcflat #) holds
+                0_NN"/\"a = 0_NN & a"/\"0_NN = 0_NN;
+
+definition
+ func Nat_Lattice -> Lattice equals
+:: NAT_LAT:def 8
+  LattStr (# NAT, lcmlat, hcflat #);
+end;
+
+definition
+ cluster Nat_Lattice -> strict;
+end;
+
+reserve p,q,r for Element of Nat_Lattice;
+
+canceled 3;
+
+theorem :: NAT_LAT:60
+    Nat_Lattice is 0_Lattice;
+
+theorem :: NAT_LAT:61
+  lcmlat.(p,q)=lcmlat.(q,p);
+
+theorem :: NAT_LAT:62
+  hcflat.(q,p)=hcflat.(p,q);
+
+theorem :: NAT_LAT:63
+  lcmlat.(p,lcmlat.(q,r)) = lcmlat.(lcmlat.(p,q),r);
+
+theorem :: NAT_LAT:64
+    lcmlat.(p,lcmlat.(q,r)) = lcmlat.(lcmlat.(q,p),r) &
+  lcmlat.(p,lcmlat.(q,r)) = lcmlat.(lcmlat.(p,r),q) &
+  lcmlat.(p,lcmlat.(q,r)) = lcmlat.(lcmlat.(r,q),p) &
+  lcmlat.(p,lcmlat.(q,r)) = lcmlat.(lcmlat.(r,p),q);
+
+theorem :: NAT_LAT:65
+  hcflat.(p,hcflat.(q,r)) = hcflat.(hcflat.(p,q),r);
+
+theorem :: NAT_LAT:66
+    hcflat.(p,hcflat.(q,r)) = hcflat.(hcflat.(q,p),r) &
+  hcflat.(p,hcflat.(q,r)) = hcflat.(hcflat.(p,r),q) &
+  hcflat.(p,hcflat.(q,r)) = hcflat.(hcflat.(r,q),p) &
+  hcflat.(p,hcflat.(q,r)) = hcflat.(hcflat.(r,p),q);
+
+theorem :: NAT_LAT:67
+    hcflat.(q,lcmlat.(q,p))=q & hcflat.(lcmlat.(p,q),q)=q &
+  hcflat.(q,lcmlat.(p,q))=q & hcflat.(lcmlat.(q,p),q)=q;
+
+theorem :: NAT_LAT:68
+    lcmlat.(q,hcflat.(q,p))=q & lcmlat.(hcflat.(p,q),q)=q &
+  lcmlat.(q,hcflat.(p,q))=q & lcmlat.(hcflat.(q,p),q)=q;
+
+:: NATPLUS
+
+definition
+  func NATPLUS -> Subset of NAT means
+:: NAT_LAT:def 9
+ for n being Nat holds n in it iff 0 < n;
+end;
+
+definition
+  cluster NATPLUS -> non empty;
+  end;
+
+definition let D be non empty set, S be non empty Subset of D,
+               N be non empty Subset of S;
+redefine mode Element of N -> Element of S;
+end;
+
+definition let D be Subset of REAL;
+  cluster -> real Element of D;
+end;
+
+definition let D be Subset of NAT;
+  cluster -> real Element of D;
+end;
+
+definition
+  mode NatPlus is Element of NATPLUS;
+end;
+
+:: LATTICE of NATURAL NUMBERS > 0
+
+definition
+ let k be Nat such that
+  k>0;
+ func @k->Element of NATPLUS equals
+:: NAT_LAT:def 10
+  k;
+end;
+
+definition
+ let k be Element of NATPLUS;
+ func @k -> NatPlus equals
+:: NAT_LAT:def 11
+  k;
+ end;
+
+reserve m,n for NatPlus;
+
+definition
+ func hcflatplus -> BinOp of NATPLUS means
+:: NAT_LAT:def 12
+  it.(m,n) = m hcf n;
+
+ func lcmlatplus-> BinOp of NATPLUS means
+:: NAT_LAT:def 13
+  it.(m,n)=m lcm n;
+end;
+
+reserve p,q,r for Element of LattStr
+                            (# NATPLUS, lcmlatplus, hcflatplus #);
+
+definition
+ let m be Element of LattStr
+                            (# NATPLUS, lcmlatplus, hcflatplus #);
+ func @m->NatPlus equals
+:: NAT_LAT:def 14
+  m;
+ end;
+
+theorem :: NAT_LAT:69
+ p"\/"q =@p lcm @q;
+
+theorem :: NAT_LAT:70
+ p"/\"q = @p hcf @q;
+
+definition
+ func NatPlus_Lattice -> Lattice equals
+:: NAT_LAT:def 15
+  LattStr (# NATPLUS, lcmlatplus, hcflatplus #);
+end;
+
+definition
+ cluster NatPlus_Lattice -> strict;
+end;
+
+reserve x,y1,y2 for set;
+
+definition let L be Lattice;
+ mode SubLattice of L -> Lattice means
+:: NAT_LAT:def 16
+  the carrier of it c= the carrier of L &
+   the L_join of it = (the L_join of L) | [:the carrier of it,
+   the carrier of it:] &
+   the L_meet of it = (the L_meet of L) | [:the carrier of it,
+   the carrier of it:];
+end;
+
+definition let L be Lattice;
+ cluster strict SubLattice of L;
+end;
+
+canceled 4;
+
+theorem :: NAT_LAT:75
+  for L being Lattice holds L is SubLattice of L;
+
+theorem :: NAT_LAT:76
+  NatPlus_Lattice is SubLattice of Nat_Lattice;
+
+:: SET OF PRIME NUMBERS
+
+
+ reserve n,j,i,k,k1,k2,k3,k4,m,l,s for Nat;
+
+definition
+  func SetPrimes -> Subset of NAT means
+:: NAT_LAT:def 17
+ for n being Nat holds n in it iff n is prime;
+end;
+
+definition
+  cluster prime Nat;
+end;
+
+definition
+  mode Prime is prime Nat;
+end;
+
+reserve p,f for Prime;
+reserve x for set;
+
+definition let p;
+ canceled;
+
+  func SetPrimenumber p -> Subset of NAT means
+:: NAT_LAT:def 19
+ for q being Nat holds q in it iff (q < p & q is prime);
+end;
+
+theorem :: NAT_LAT:77
+ SetPrimenumber p c= SetPrimes;
+
+theorem :: NAT_LAT:78
+   for q being Prime st p < q holds
+       SetPrimenumber p c= SetPrimenumber q;
+
+theorem :: NAT_LAT:79
+ SetPrimenumber p c= Seg p;
+
+theorem :: NAT_LAT:80
+   SetPrimenumber p is finite;
+
+theorem :: NAT_LAT:81
+   for l holds ex p st p is prime & p>l;
+
+canceled 2;
+
+theorem :: NAT_LAT:84
+   SetPrimes <> {};
+
+theorem :: NAT_LAT:85
+    {k:k<2 & k is prime}={};
+
+theorem :: NAT_LAT:86
+   for p holds {k:k<p & k is prime} c= NAT;
+
+theorem :: NAT_LAT:87
+ for m holds {k:k<m & k is prime} c= Seg m;
+
+theorem :: NAT_LAT:88
+ for m holds {k:k<m & k is prime} is finite;
+
+theorem :: NAT_LAT:89
+ for f being Prime holds not f in {k: k<f & k is prime};
+
+theorem :: NAT_LAT:90
+   for f holds {k: k<f & k is prime}\/{f} is finite;
+
+theorem :: NAT_LAT:91
+ for f,g being Prime st f<g holds
+   {k1: k1<f & k1 is prime}\/{f} c={k2: k2<g & k2 is prime};
+
+theorem :: NAT_LAT:92
+   for k st k>m holds not k in {k1:k1<m & k1 is prime};
+
+definition let n;
+  func primenumber n -> Prime means
+:: NAT_LAT:def 20
+
+ ex B being finite set st B = {k:k<it & k is prime} & n = card B;
+end;
+
+theorem :: NAT_LAT:93
+  SetPrimenumber p = {k:k<p & k is prime};
+
+theorem :: NAT_LAT:94 ::Euklidesa::
+   SetPrimes is infinite;
+
+:: Slawek Bialecki;
+reserve m',m1,p',p1 for Nat;
+
+theorem :: NAT_LAT:95 :: divisibility
+          for i st i is prime holds
+   for m,n holds i divides m * n implies (i divides m or i divides n);

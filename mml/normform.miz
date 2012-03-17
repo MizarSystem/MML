@@ -1,0 +1,1355 @@
+:: Algebra of Normal Forms
+::  by Andrzej Trybulec
+::
+:: Received October 5, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, FINSUB_1, MCART_1, BINOP_1, FUNCT_1, SETWISEO, RELAT_1,
+      FINSET_1, FINSEQ_1, LATTICES, NORMFORM;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, FUNCT_2,
+      FINSET_1, BINOP_1, DOMAIN_1, FINSUB_1, SETWISEO, STRUCT_0, LATTICES;
+ constructors FINSET_1, BINOP_1, DOMAIN_1, SETWISEO, LATTICES, PARTFUN1,
+      MEMBERED, XBOOLE_0;
+ clusters FINSUB_1, LATTICES, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, BINOP_1, LATTICES, XBOOLE_0;
+ theorems FUNCT_2, BINOP_1, FINSUB_1, DOMAIN_1, MCART_1, ZFMISC_1, SETWISEO,
+      LATTICE2, TARSKI, FINSET_1, LATTICES, STRUCT_0, XBOOLE_0, XBOOLE_1;
+ schemes BINOP_1, SETWISEO, FRAENKEL;
+
+begin
+
+:: A u x i l i a r y   t h e o r e m s
+
+
+
+:: Part 1. BOOLEan operations on pairs & relations between pairs
+
+reserve A, B for non empty preBoolean set,
+        x, y for Element of [:A,B:];
+
+definition let A,B,x,y;
+ pred x c= y means
+   x`1 c= y`1 & x`2 c= y`2;
+ reflexivity;
+ func x \/ y -> Element of [:A, B:] equals
+:Def2:  [x`1 \/ y`1, x`2 \/ y`2];
+  correctness;
+  commutativity;
+  idempotence by MCART_1:23;
+ func x /\ y -> Element of [:A, B:] equals
+:Def3: [x`1 /\ y`1, x`2 /\ y`2];
+  correctness;
+  commutativity;
+  idempotence by MCART_1:23;
+ func x \ y -> Element of [:A, B:] equals
+:Def4:  [x`1 \ y`1, x`2 \ y`2];
+  correctness;
+ func x \+\ y -> Element of [:A, B:] equals
+:Def5:  [x`1 \+\ y`1, x`2 \+\ y`2];
+  correctness;
+  commutativity;
+end;
+
+reserve X for set,
+        a,b,c for Element of [:A,B:];
+
+canceled 3;
+
+theorem Th4:
+ a c= b & b c= a implies a = b
+ proof assume a`1 c= b`1 & a`2 c= b`2 & b`1 c= a`1 & b`2 c= a`2;
+   then a`1 = b`1 & a`2 = b`2 by XBOOLE_0:def 10;
+  hence thesis by DOMAIN_1:12;
+ end;
+
+theorem Th5:
+ a c= b & b c= c implies a c= c
+ proof assume a`1 c= b`1 & a`2 c= b`2 & b`1 c= c`1 & b`2 c= c`2;
+  hence a`1 c= c`1 & a`2 c= c`2 by XBOOLE_1:1;
+ end;
+
+canceled 4;
+
+theorem
+ Th10: (a \/ b)`1 = a`1 \/ b`1 & (a \/ b)`2 = a`2 \/ b`2
+  proof a \/ b = [a`1 \/ b`1, a`2 \/ b`2] by Def2;
+   hence thesis by MCART_1:7;
+  end;
+
+theorem
+ Th11: (a /\ b)`1 = a`1 /\ b`1 & (a /\ b)`2 = a`2 /\ b`2
+  proof a /\ b = [a`1 /\ b`1, a`2 /\ b`2] by Def3;
+   hence thesis by MCART_1:7;
+  end;
+
+theorem
+ Th12: (a \ b)`1 = a`1 \ b`1 & (a \ b)`2 = a`2 \ b`2
+  proof a \ b = [a`1 \ b`1, a`2 \ b`2] by Def4;
+   hence thesis by MCART_1:7;
+  end;
+
+theorem
+    (a \+\ b)`1 = a`1 \+\ b`1 & (a \+\ b)`2 = a`2 \+\ b`2
+  proof a \+\ b = [a`1 \+\ b`1, a`2 \+\ b`2] by Def5;
+   hence thesis by MCART_1:7;
+  end;
+
+canceled 2;
+
+theorem Th16:
+  (a \/ b) \/ c = a \/ (b \/ c)
+   proof
+       now
+      thus ((a \/ b) \/ c)`1 = (a \/ b)`1 \/ c`1 by Th10
+            .= a`1 \/ b`1 \/ c`1 by Th10
+            .= a`1 \/ (b`1 \/ c`1) by XBOOLE_1:4
+            .= a`1 \/ (b \/ c)`1 by Th10
+            .= (a \/ (b \/ c))`1 by Th10;
+      thus ((a \/ b) \/ c)`2 = (a \/ b)`2 \/ c`2 by Th10
+            .= a`2 \/ b`2 \/ c`2 by Th10
+            .= a`2 \/ (b`2 \/ c`2) by XBOOLE_1:4
+            .= a`2 \/ (b \/ c)`2 by Th10
+            .= (a \/ (b \/ c))`2 by Th10;
+     end;
+    hence thesis by DOMAIN_1:12;
+   end;
+
+canceled 2;
+
+theorem
+    (a /\ b) /\ c = a /\ (b /\ c)
+   proof
+       now
+      thus ((a /\ b) /\ c)`1 = (a /\ b)`1 /\ c`1 by Th11
+            .= a`1 /\ b`1 /\ c`1 by Th11
+            .= a`1 /\ (b`1 /\ c`1) by XBOOLE_1:16
+            .= a`1 /\ (b /\ c)`1 by Th11
+            .= (a /\ (b /\ c))`1 by Th11;
+      thus ((a /\ b) /\ c)`2 = (a /\ b)`2 /\ c`2 by Th11
+            .= a`2 /\ b`2 /\ c`2 by Th11
+            .= a`2 /\ (b`2 /\ c`2) by XBOOLE_1:16
+            .= a`2 /\ (b /\ c)`2 by Th11
+            .= (a /\ (b /\ c))`2 by Th11;
+     end;
+    hence thesis by DOMAIN_1:12;
+   end;
+
+theorem
+Th20:  a /\ (b \/ c) = a /\ b \/ a /\ c
+   proof
+       now
+      thus (a /\ (b \/ c))`1 = a`1 /\ (b \/ c)`1 by Th11
+               .= a`1 /\ (b`1 \/ c`1) by Th10
+               .= a`1 /\ b`1 \/ a`1 /\ c`1 by XBOOLE_1:23
+               .= a`1 /\ b`1 \/ (a /\ c)`1 by Th11
+               .= (a /\ b)`1 \/ (a /\ c)`1 by Th11
+               .= (a /\ b \/ a /\ c)`1 by Th10;
+      thus (a /\ (b \/ c))`2 = a`2 /\ (b \/ c)`2 by Th11
+               .= a`2 /\ (b`2 \/ c`2) by Th10
+               .= a`2 /\ b`2 \/ a`2 /\ c`2 by XBOOLE_1:23
+               .= a`2 /\ b`2 \/ (a /\ c)`2 by Th11
+               .= (a /\ b)`2 \/ (a /\ c)`2 by Th11
+               .= (a /\ b \/ a /\ c)`2 by Th10;
+     end;
+    hence a /\ (b \/ c) = a /\ b \/ a /\ c by DOMAIN_1:12;
+   end;
+
+theorem Th21:
+  a \/ (b /\ a) = a
+   proof
+       now
+      thus (a \/ (b /\ a))`1 = a`1 \/ (b /\ a)`1 by Th10
+            .= a`1 \/ b`1 /\ a`1 by Th11
+            .= a`1 by XBOOLE_1:22;
+      thus (a \/ (b /\ a))`2 = a`2 \/ (b /\ a)`2 by Th10
+            .= a`2 \/ b`2 /\ a`2 by Th11
+            .= a`2 by XBOOLE_1:22;
+     end;
+    hence thesis by DOMAIN_1:12;
+   end;
+
+theorem Th22:
+  a /\ (b \/ a) = a
+   proof
+    thus a /\ (b \/ a) = a /\ b \/ a /\ a by Th20
+             .= a by Th21;
+   end;
+
+canceled;
+
+theorem
+    a \/ (b /\ c) = (a \/ b) /\ (a \/ c)
+   proof
+    thus a \/ (b /\ c) = a \/ c /\ a \/ c /\ b by Th21
+            .= a \/ (c /\ a \/ c /\ b) by Th16
+            .= a \/ c /\ (a \/ b) by Th20
+            .= (a \/ b) /\ a \/ (a \/ b) /\ c by Th22
+            .= (a \/ b) /\ (a \/ c) by Th20;
+   end;
+
+theorem Th25:
+  a c= c & b c= c implies a \/ b c= c
+ proof
+  assume a`1 c= c`1 & a`2 c= c`2 & b`1 c= c`1 & b`2 c= c`2;
+   then a`1 \/ b`1 c= c`1 & a`2 \/ b`2 c= c`2 by XBOOLE_1:8;
+  hence (a \/ b)`1 c= c`1 & (a \/ b)`2 c= c`2 by Th10;
+ end;
+
+theorem
+Th26:  a c= a \/ b & b c= a \/ b
+    proof a \/ b = [a`1 \/ b`1, a`2 \/ b`2] by Def2;
+     then (a \/ b)`1 = a`1 \/ b`1 & (a \/ b)`2 = a`2 \/ b`2 by MCART_1:7;
+     hence a`1 c= (a \/ b)`1 & a`2 c= (a \/ b)`2 &
+           b`1 c= (a \/ b)`1 & b`2 c= (a \/ b)`2 by XBOOLE_1:7;
+    end;
+
+theorem
+    a = a \/ b implies b c= a by Th26;
+
+theorem
+Th28:  a c= b implies c \/ a c= c \/ b & a \/ c c= b \/ c
+ proof assume
+A1: a`1 c= b`1 & a`2 c= b`2;
+     c \/ a = [c`1 \/ a`1, c`2 \/ a`2] & c \/ b = [c`1 \/ b`1, c`2 \/
+ b`2] by Def2;
+   then (c \/ a)`1 = c`1 \/ a`1 & (c \/ a)`2 = c`2 \/ a`2 &
+        (c \/ b)`1 = c`1 \/ b`1 & ( c \/ b)`2 = c`2 \/ b`2 by MCART_1:7;
+  hence (c \/ a)`1 c= (c \/ b)`1 & (c \/ a)`2 c= (c \/ b)`2 by A1,XBOOLE_1:9;
+     a \/ c = [a`1 \/ c`1, a`2 \/ c`2] & b \/ c = [b`1 \/ c`1, b`2 \/
+ c`2] by Def2;
+   then (a \/ c)`1 = a`1 \/ c`1 & (a \/ c)`2 = a`2 \/ c`2 &
+        (b \/ c)`1 = b`1 \/ c`1 & ( b \/ c)`2 = b`2 \/ c`2 by MCART_1:7;
+  hence (a \/ c)`1 c= (b \/ c)`1 & (a \/ c)`2 c= (b \/ c)`2 by A1,XBOOLE_1:9;
+ end;
+
+theorem
+    a\b \/ b = a \/ b
+ proof
+A1: a`1 \ b`1 \/ b`1 = a`1 \/ b`1 & a`2 \ b`2 \/ b`2 = a`2 \/ b`2 by XBOOLE_1:
+39;
+     a \ b = [a`1 \ b`1, a`2 \ b`2] by Def4;
+   then (a\b)`1 = a`1 \ b`1 & (a\b)`2 = a`2 \ b`2 by MCART_1:7;
+   then a \/ b = [(a\b)`1 \/ b`1, (a\b)`2 \/ b`2] by A1,Def2;
+  hence thesis by Def2;
+ end;
+
+theorem
+    a \ b c= c implies a c= b \/ c
+ proof assume (a\b)`1 c= c`1 & (a\b)`2 c= c`2;
+   then a`1 \ b`1 c= c`1 & a`2 \ b`2 c= c`2 by Th12;
+   then a`1 c= b`1 \/ c`1 & a`2 c= b`2 \/ c`2 by XBOOLE_1:44;
+  hence a`1 c= (b \/ c)`1 & a`2 c= (b \/ c)`2 by Th10;
+ end;
+
+theorem
+    a c= b \/ c implies a \ c c= b
+ proof assume
+A1: a`1 c= (b \/ c)`1 & a`2 c= (b \/ c)`2;
+     b \/ c = [b`1 \/ c`1, b`2 \/ c`2] by Def2;
+then A2: (b \/ c)`1 = b`1 \/ c`1 & (b \/ c)`2 = b`2 \/ c`2 by MCART_1:7;
+    a \ c = [a`1 \ c`1, a`2 \ c`2] by Def4;
+  then (a \ c)`1 = a`1 \ c`1 & (a \ c)`2 = a`2 \ c`2 by MCART_1:7;
+ hence (a \ c)`1 c= b`1 & (a \ c)`2 c= b`2 by A1,A2,XBOOLE_1:43;
+end;
+
+reserve a for Element of [:Fin X, Fin X:];
+
+ definition let A be set;
+  func FinPairUnion A -> BinOp of [:Fin A, Fin A:] means
+:Def6: for x,y being Element of [:Fin A, Fin A:] holds
+        it.(x,y) = x \/ y;
+  existence
+   proof
+     deffunc O(Element of [:Fin A, Fin A:],Element of [:Fin A, Fin A:])
+           = $1 \/ $2;
+      ex IT being BinOp of [:Fin A, Fin A:] st
+     for x,y being Element of [:Fin A, Fin A:] holds
+            IT.(x,y) = O(x,y) from BinOpLambda;
+    hence thesis;
+   end;
+  uniqueness
+   proof let IT, IT' be BinOp of [:Fin A, Fin A:] such that
+A1:  for x,y being Element of [:Fin A, Fin A:] holds IT.(x,y) = x \/ y and
+A2:  for x,y being Element of [:Fin A, Fin A:] holds IT'.(x,y) = x \/ y;
+       now let x,y be Element of [:Fin A, Fin A:];
+      thus IT.[x,y] = IT.(x,y) by BINOP_1:def 1
+              .= x \/ y by A1
+              .= IT'.(x,y) by A2
+              .= IT'.[x,y] by BINOP_1:def 1;
+     end;
+    hence IT = IT' by FUNCT_2:120;
+   end;
+ end;
+
+reserve A for set;
+
+definition let X be non empty set, A be set;
+ let B be Element of Fin X; let f be Function of X, [:Fin A, Fin A:];
+  func FinPairUnion(B,f) -> Element of [:Fin A, Fin A:] equals
+:Def7: FinPairUnion A $$(B,f);
+ correctness;
+end;
+
+Lm1: FinPairUnion A is idempotent
+ proof let a be Element of [:Fin A, Fin A:];
+  thus FinPairUnion A.(a, a) = a \/ a by Def6 .= a;
+ end;
+
+Lm2: FinPairUnion A is commutative
+ proof let a,b be Element of [:Fin A, Fin A:];
+  thus FinPairUnion A.(a,b) = b \/ a by Def6
+            .= FinPairUnion A.(b,a) by Def6;
+ end;
+
+Lm3: FinPairUnion A is associative
+ proof let a,b,c be Element of [:Fin A, Fin A:];
+  thus FinPairUnion A.(a, FinPairUnion A.(b,c))
+               = a \/ FinPairUnion A.(b,c) by Def6
+              .= a \/ (b \/ c) by Def6
+              .= a \/ b \/ c by Th16
+              .= FinPairUnion A.(a,b) \/ c by Def6
+              .= FinPairUnion A.(FinPairUnion A.(a,b), c) by Def6;
+ end;
+
+definition let A be set;
+ cluster FinPairUnion A -> commutative idempotent associative;
+ coherence by Lm1,Lm2,Lm3;
+end;
+
+canceled 3;
+
+theorem
+   for X being non empty set for f being Function of X, [:Fin A,Fin A:]
+  for B being Element of Fin X
+   for x being Element of X st x in B holds f.x c= FinPairUnion(B,f)
+ proof let X be non empty set, f be Function of X, [:Fin A,Fin A:];
+  let B be (Element of Fin X), x be Element of X;
+  assume
+A1: x in B;
+   then FinPairUnion A $$(B, f) = FinPairUnion A $$(B \/ {x}, f) by ZFMISC_1:46
+         .= FinPairUnion A.(FinPairUnion A $$(B,f),f.x) by A1,SETWISEO:29
+         .= FinPairUnion A $$(B,f) \/ f.x by Def6;
+   then f.x c= FinPairUnion A $$(B,f) by Th26;
+  hence f.x c= FinPairUnion(B,f) by Def7;
+ end;
+
+theorem Th36:
+ [{}.A, {}.A] is_a_unity_wrt FinPairUnion A
+ proof
+A1: [{}.A, {}.A]`1 = {}.A & [{}.A, {}.A]`2 = {}.A by MCART_1:7;
+     now let x be Element of [:Fin A, Fin A:];
+    thus FinPairUnion A.([{}.A, {}.A], x) = [{}.A, {}.A] \/ x by Def6
+     .= [{}.A \/ x`1, {}.A \/ x`2] by A1,Def2
+     .= x by MCART_1:23;
+   end;
+  hence thesis by BINOP_1:12;
+ end;
+
+theorem Th37:
+ FinPairUnion A has_a_unity
+  proof [{}.A, {}.A] is_a_unity_wrt FinPairUnion A by Th36;
+   hence thesis by SETWISEO:def 2;
+  end;
+
+theorem Th38:
+ the_unity_wrt FinPairUnion A = [{}.A, {}.A]
+  proof [{}.A, {}.A] is_a_unity_wrt FinPairUnion A by Th36;
+   hence thesis by BINOP_1:def 8;
+  end;
+
+theorem Th39:
+ for x being Element of [:Fin A, Fin A:] holds
+  the_unity_wrt FinPairUnion A c= x
+  proof let x be Element of [:Fin A, Fin A:];
+     [{}.A, {}.A] is_a_unity_wrt FinPairUnion A by Th36;
+    then the_unity_wrt FinPairUnion A = [{}, {}] by BINOP_1:def 8;
+    then (the_unity_wrt FinPairUnion A)`1 = {}
+       & (the_unity_wrt FinPairUnion A)`2 = {} by MCART_1:7;
+   hence (the_unity_wrt FinPairUnion A)`1 c= x`1
+       & (the_unity_wrt FinPairUnion A)`2 c= x`2 by XBOOLE_1:2;
+  end;
+
+theorem
+   for X being non empty set
+  for f being (Function of X,[:Fin A,Fin A:]), B being (Element of Fin X)
+  for c being Element of [:Fin A, Fin A:] st
+   for x being Element of X st x in B holds f.x c= c
+    holds FinPairUnion(B,f) c= c
+ proof let X be non empty set, f be Function of X,[:Fin A,Fin A:];
+  let B be (Element of Fin X), c be Element of [:Fin A, Fin A:];
+A1:  FinPairUnion A has_a_unity by Th37;
+  assume
+A2: for x being Element of X st x in B holds f.x c= c;
+    defpred P[Element of Fin X] means
+    $1 c= B implies FinPairUnion A $$($1,f) c= c;
+
+A3: P[{}.X] proof assume {}.X c= B;
+    FinPairUnion A has_a_unity by Th37;
+     then FinPairUnion A $$({}.X,f) = the_unity_wrt FinPairUnion A
+                                              by SETWISEO:40;
+    hence FinPairUnion A $$({}.X,f) c= c by Th39;
+   end;
+A4: now let C be (Element of Fin X), b be Element of X;
+    assume
+A5:   P[C];
+    now  assume
+A6:  C \/ {b} c= B;
+      then {b} c= B by XBOOLE_1:11;
+then A7:   b in B by ZFMISC_1:37;
+A8:  FinPairUnion A $$(C \/
+ {b},f) = FinPairUnion A.(FinPairUnion A $$(C,f),f.b)
+                                         by A1,SETWISEO:41
+              .= FinPairUnion A $$(C,f) \/ f.b by Def6;
+       f.b c= c by A2,A7;
+    hence FinPairUnion A $$(C \/ {b},f) c= c by A5,A6,A8,Th25,XBOOLE_1:11;
+    end; hence P[C \/ {b}];
+   end;
+  for C being Element of Fin X holds P[C] from FinSubInd3(A3,A4);
+   then FinPairUnion A $$(B,f) c= c;
+  hence FinPairUnion(B,f) c= c by Def7;
+ end;
+
+theorem
+   for X being non empty set, B being Element of Fin X
+  for f,g being Function of X,[:Fin A,Fin A:] st f|B = g|B
+   holds FinPairUnion(B,f) = FinPairUnion(B,g)
+ proof let X be non empty set, B be Element of Fin X;
+  let f,g be Function of X,[:Fin A,Fin A:];
+    set J = FinPairUnion A;
+A1: J has_a_unity & [{}.A, {}.A] = the_unity_wrt J by Th37,Th38;
+   assume
+A2:  f|B = g|B;
+      now per cases;
+     suppose A3: B = {};
+      hence FinPairUnion(B,f) = J$$({}.X,f) by Def7
+              .= [{}.A, {}.A] by A1,SETWISEO:40
+              .= J$$({}.X,g) by A1,SETWISEO:40
+              .= FinPairUnion(B,g) by A3,Def7;
+     suppose
+A4:   B <> {};
+A5:  f.:B = g.:B by A2,LATTICE2:16;
+      thus FinPairUnion(B,f) = J$$(B,f) by Def7
+           .= J$$(B,g) by A4,A5,SETWISEO:35
+           .= FinPairUnion(B,g) by Def7;
+    end;
+   hence thesis;
+ end;
+
+:: Part 2. Disjoint pairs of finite sets
+
+definition let X;
+ func DISJOINT_PAIRS(X) -> Subset of [:Fin X, Fin X:] equals
+:Def8: { a : a`1 misses a`2 };
+ coherence
+  proof
+    set D = { a : a`1 misses a`2 };
+      D c= [:Fin X, Fin X:]
+     proof let x be set;
+      assume x in D; then ex a st x = a & a`1 misses a`2;
+      hence x in [:Fin X, Fin X:];
+     end;
+   hence thesis;
+  end;
+end;
+
+definition let X;
+ cluster DISJOINT_PAIRS(X) -> non empty;
+ coherence
+  proof
+      {} is Element of Fin X by FINSUB_1:18;
+    then reconsider b = [{},{}] as Element of [:Fin X, Fin X:]
+          by ZFMISC_1:def 2;
+      b`1 = {} & b`2 = {} by MCART_1:7;
+    then b`1 misses b`2 by XBOOLE_1:65;
+    then b in { a : a`1 misses a`2 };
+    hence thesis by Def8;
+  end;
+end;
+
+theorem
+Th42: for y being Element of [:Fin X, Fin X:]
+      holds y in DISJOINT_PAIRS X iff y`1 misses y`2
+ proof let y be Element of [:Fin X, Fin X:];
+     DISJOINT_PAIRS X = { a : a`1 misses a`2 } by Def8;
+   then y in DISJOINT_PAIRS X iff ex a st y = a & a`1 misses a`2;
+  hence y in DISJOINT_PAIRS X iff y`1 misses y`2;
+ end;
+
+ reserve x,y for Element of [:Fin X, Fin X:],
+         a,b for Element of DISJOINT_PAIRS X;
+
+theorem
+    y in DISJOINT_PAIRS X & x in DISJOINT_PAIRS X implies
+   (y \/ x in DISJOINT_PAIRS X iff y`1 /\ x`2 \/ x`1 /\ y`2 = {})
+ proof assume y in DISJOINT_PAIRS X & x in DISJOINT_PAIRS X;
+    then y`1 misses y`2 & x`1 misses x`2 by Th42;
+    then A1: y`1 /\ y`2 = {} & x`1 /\ x`2 = {} by XBOOLE_0:def 7;
+     y \/ x = [y`1 \/ x`1, y`2 \/ x`2] by Def2;
+then A2: (y \/ x)`1 = y`1 \/ x`1 & (y \/ x)`2 = y`2 \/ x`2 by MCART_1:7;
+A3: (y`1 \/ x`1) /\ (y`2 \/ x`2) = (y`1 \/ x`1) /\ y`2 \/ (y`1 \/ x`1) /\ x`2
+                                                            by XBOOLE_1:23;
+A4: (y`1 \/ x`1) /\ y`2 = y`1 /\ y`2 \/ x`1 /\ y`2 &
+    (y`1 \/ x`1) /\ x`2 = y`1 /\ x`2 \/ x`1 /\ x`2 by XBOOLE_1:23;
+   hereby assume y \/ x in DISJOINT_PAIRS X;
+     then (y \/ x)`1 misses (y \/ x)`2 by Th42;
+    hence y`1 /\ x`2 \/ x`1 /\y`2 = {} by A1,A2,A3,A4,XBOOLE_0:def 7;
+   end;
+   assume y`1 /\ x`2 \/ x`1 /\ y`2 = {};
+    then (y \/ x)`1 misses (y \/ x)`2 by A1,A2,A3,A4,XBOOLE_0:def 7;
+   hence thesis by Th42;
+  end;
+
+theorem
+    a`1 misses a`2 by Th42;
+
+theorem
+Th45:  x c= b implies x is Element of DISJOINT_PAIRS X
+ proof assume
+A1: x`1 c= b`1 & x`2 c= b`2;
+     b`1 misses b`2 by Th42;
+   then x`1 misses x`2 by A1,XBOOLE_1:64;
+  hence thesis by Th42;
+ end;
+
+theorem Th46:
+ not (ex x being set st x in a`1 & x in a`2)
+ proof a`1 misses a`2 by Th42;
+  hence thesis by XBOOLE_0:3;
+ end;
+
+theorem
+   not a \/ b in DISJOINT_PAIRS X implies
+  ex p being Element of X st
+   p in a`1 & p in b`2 or p in b`1 & p in a`2
+ proof
+  assume not a \/ b in DISJOINT_PAIRS X;
+   then (a \/ b)`1 meets (a \/ b)`2 by Th42;
+   then A1: (a \/ b)`1 /\ (a \/ b)`2 <> {} by XBOOLE_0:def 7;
+   consider p being Element of (a \/ b)`1 /\ (a \/ b)`2;
+      (a \/ b)`1 /\ (a \/ b)`2 is Subset of X by FINSUB_1:32;
+   then reconsider p as Element of X by A1,TARSKI:def 3;
+   take p;
+      p in (a \/ b)`1 & p in (a \/ b)`2 by A1,XBOOLE_0:def 3;
+    then p in a`1 \/ b`1 & p in a`2 \/ b`2 by Th10;
+    then (p in a`1 or p in b`1) & (p in b`2 or p in a`2) by XBOOLE_0:def 2;
+  hence p in a`1 & p in b`2 or p in b`1 & p in a`2 by Th46;
+ end;
+
+canceled;
+
+theorem
+   x`1 misses x`2 implies x is Element of DISJOINT_PAIRS X by Th42;
+
+theorem for V,W being set st V c= a`1 & W c= a`2
+    holds [V,W] is Element of DISJOINT_PAIRS X
+ proof let V,W be set;
+A1: a`1 misses a`2 by Th42;
+A2: [V,W]`1 = V & [V,W]`2 = W by MCART_1:7;
+  assume
+A3:  V c= a`1 & W c= a`2;
+   then V is Element of Fin X & W is Element of Fin X by SETWISEO:16;
+   then reconsider x = [V,W] as Element of [:Fin X, Fin X:] by ZFMISC_1:def 2;
+     x`1 misses x`2 by A1,A2,A3,XBOOLE_1:64;
+  hence [V,W] is Element of DISJOINT_PAIRS X by Th42;
+ end;
+
+ reserve A for set,
+         x for Element of [:Fin A, Fin A:],
+         a,b,c,d,s,t for Element of DISJOINT_PAIRS A,
+         B,C,D for Element of Fin DISJOINT_PAIRS A;
+
+Lm4: for A holds {} in { B : a in B & b in B & a c= b implies a = b}
+ proof let A;
+A1: {} is Element of Fin DISJOINT_PAIRS A by FINSUB_1:18;
+     for a,b holds a in {} & b in {} & a c= b implies a = b;
+  hence thesis by A1;
+ end;
+
+definition let A;
+  func Normal_forms_on A -> Subset of Fin DISJOINT_PAIRS A equals
+:Def9:  { B : a in B & b in B & a c= b implies a = b};
+ coherence
+  proof
+    set IT = { B : a in B & b in B & a c= b implies a = b};
+      IT c= Fin DISJOINT_PAIRS A
+     proof let x be set;
+      assume x in IT;
+       then ex B st x = B &
+           for a,b holds a in B & b in B & a c= b implies a = b;
+      hence x in Fin DISJOINT_PAIRS A;
+     end;
+   hence IT is Subset of Fin DISJOINT_PAIRS A;
+  end;
+end;
+
+definition let A;
+  cluster Normal_forms_on A -> non empty;
+ coherence
+  proof
+     Normal_forms_on A = { B : a in B & b in B & a c= b implies a = b} by Def9;
+   hence thesis by Lm4;
+  end;
+end;
+
+ reserve K,L,M for Element of Normal_forms_on A;
+
+theorem Th51:
+  {} in Normal_forms_on A
+  proof {} in { B : a in B & b in B & a c= b implies a = b} by Lm4;
+   hence thesis by Def9;
+  end;
+
+theorem
+Th52:  B in Normal_forms_on A & a in B & b in B & a c= b implies a = b
+ proof
+A1: Normal_forms_on A = { C : c in C & d in C & c c= d implies c = d} by Def9;
+  assume B in Normal_forms_on A;
+   then ex C st B = C & for a,b holds a in C & b in C & a c= b implies a = b
+by A1;
+  hence thesis;
+ end;
+
+theorem
+Th53: (for a,b st a in B & b in B & a c= b holds a = b)
+         implies B in Normal_forms_on A
+  proof
+A1: Normal_forms_on A = { C : a in C & b in C & a c= b implies a = b} by Def9;
+   assume for a,b st a in B & b in B & a c= b holds a = b;
+   hence B in Normal_forms_on A by A1;
+  end;
+
+definition let A,B;
+  func mi B -> Element of Normal_forms_on A equals
+:Def10:  { t : s in B & s c= t iff s = t };
+ coherence
+  proof set M = { t : s in B & s c= t iff s = t };
+A1: B c= DISJOINT_PAIRS A by FINSUB_1:def 5;
+      now let x be set; assume x in M;
+      then ex t st x = t & for s holds s in B & s c= t iff s = t;
+     hence x in B;
+    end;
+then A2: M c= B by TARSKI:def 3;
+then A3: M c= DISJOINT_PAIRS A by A1,XBOOLE_1:1;
+      M is finite by A2,FINSET_1:13;
+    then reconsider M' = M as Element of Fin DISJOINT_PAIRS A
+      by A3,FINSUB_1:def 5;
+      now let c,d be Element of DISJOINT_PAIRS A;
+     assume c in M;
+      then ex t st c = t & for s holds s in B & s c= t iff s = t;
+then A4:    c in B;
+     assume d in M;
+      then ex t st d = t & for s holds s in B & s c= t iff s = t;
+     hence c c= d implies c = d by A4;
+    end;
+    then M' is Element of Normal_forms_on A by Th53;
+   hence thesis;
+  end;
+ correctness;
+ let C;
+  func B^C -> Element of Fin DISJOINT_PAIRS A equals
+:Def11:  DISJOINT_PAIRS A /\ { s \/ t: s in B & t in C };
+ coherence
+  proof
+    deffunc F(Element of DISJOINT_PAIRS A,Element of DISJOINT_PAIRS A)
+      = $1 \/ $2;
+  set M = DISJOINT_PAIRS A /\ { F(s,t): s in B & t in C };
+A5: M c= DISJOINT_PAIRS A by XBOOLE_1:17;
+A6: M c= { s \/ t: s in B & t in C } by XBOOLE_1:17;
+A7:  B is finite;
+A8:  C is finite;
+      { F(s, t) : s in B & t in C } is finite from CartFin(A7,A8);
+    then M is finite by A6,FINSET_1:13;
+   hence M is Element of Fin DISJOINT_PAIRS A by A5,FINSUB_1:def 5;
+  end;
+ correctness;
+end;
+
+canceled;
+
+theorem Th55:
+ x in B^C implies ex b,c st b in B & c in C & x = b \/ c
+proof assume x in B^C;
+  then x in DISJOINT_PAIRS A /\ { s \/ t: s in B & t in C } by Def11;
+  then x in { s \/ t: s in B & t in C } by XBOOLE_0:def 3;
+  then ex s,t st x = s \/ t & s in B & t in C;
+ hence thesis;
+end;
+
+theorem Th56:
+ b in B & c in C & b \/ c in DISJOINT_PAIRS A implies b \/ c in B^C
+proof assume b in B & c in C;
+then A1: b \/ c in { s \/ t: s in B & t in C };
+ assume b \/ c in DISJOINT_PAIRS A;
+  then b \/ c in DISJOINT_PAIRS A /\ { s \/ t: s in B & t in
+ C } by A1,XBOOLE_0:def 3;
+ hence thesis by Def11;
+end;
+
+canceled;
+
+theorem Th58:
+  a in mi B implies a in B & (b in B & b c= a implies b = a)
+ proof
+  assume a in mi B; then a in { t : s in B & s c= t iff s = t } by Def10;
+   then ex t st a = t & for s holds s in B & s c= t iff s = t;
+  hence thesis;
+ end;
+
+theorem
+    a in mi B implies a in B by Th58;
+
+theorem
+    a in mi B & b in B & b c= a implies b = a by Th58;
+
+theorem Th61:
+  a in B & (for b st b in B & b c= a holds b = a) implies a in mi B
+  proof
+   assume a in B & for s st s in B & s c= a holds s = a;
+    then s in B & s c= a iff s = a;
+    then a in { t : s in B & s c= t iff s = t };
+   hence a in mi B by Def10;
+  end;
+
+definition let A be non empty set;
+ let B be non empty Subset of A;
+ let O be BinOp of B;
+ let a,b be Element of B;
+ redefine func O.(a,b) -> Element of B;
+ coherence
+   proof
+    thus O.(a,b) is Element of B;
+   end;
+end;
+
+Lm5:
+ (for a holds a in B implies a in C) implies B c= C
+ proof assume
+A1: for a holds a in B implies a in C;
+  let x be set;
+   assume
+A2: x in B;
+    then x is Element of DISJOINT_PAIRS A by SETWISEO:14;
+   hence x in C by A1,A2;
+ end;
+
+canceled 2;
+
+theorem
+ Th64: mi B c= B
+  proof for a holds a in mi B implies a in B by Th58;
+   hence thesis by Lm5;
+  end;
+
+theorem
+ Th65: b in B implies ex c st c c= b & c in mi B
+  proof assume
+A1:  b in B;
+defpred P[Element of DISJOINT_PAIRS A,Element of DISJOINT_PAIRS A] means
+      $1 c= $2;
+A2:  for a holds P[a,a];
+A3:  for a,b,c st P[a,b] & P[b,c] holds P[a,c] by Th5;
+      for a st a in B
+     ex b st b in B & P[b,a] &
+      for c st c in B & P[c,b] holds P[b,c] from Finiteness(A2,A3);
+    then consider c such that
+A4:  c in B and
+A5:  c c= b and
+A6:  for a st a in B & a c= c holds c c= a by A1;
+   take c;
+   thus c c= b by A5;
+      now let b; assume that
+A7:   b in B and
+A8:   b c= c;
+        c c= b by A6,A7,A8;
+     hence b = c by A8,Th4;
+    end;
+   hence c in mi B by A4,Th61;
+  end;
+
+theorem
+Th66:  mi K = K
+   proof
+    thus mi K c= K by Th64;
+       now let a; assume
+A1:     a in K;
+       then for b st b in K & b c= a holds b = a by Th52;
+      hence a in mi K by A1,Th61;
+     end;
+    hence thesis by Lm5;
+   end;
+
+theorem
+Th67: mi (B \/ C) c= mi B \/ C
+ proof
+     now let a;
+    assume
+A1:   a in mi(B \/ C);
+     then A2:   a in B \/ C by Th58;
+       now per cases by A2,XBOOLE_0:def 2;
+      suppose
+A3:     a in B;
+          now let b;
+         assume b in B;
+          then b in B \/ C by XBOOLE_0:def 2;
+         hence b c= a implies b = a by A1,Th58;
+        end;
+        then a in mi B by A3,Th61;
+       hence a in mi B \/ C by XBOOLE_0:def 2;
+      suppose a in C;
+       hence a in mi B \/ C by XBOOLE_0:def 2;
+     end;
+    hence a in mi B \/ C;
+   end;
+  hence thesis by Lm5;
+ end;
+
+theorem Th68:
+ mi(mi B \/ C) = mi (B \/ C)
+   proof
+      mi B c= B by Th64;
+then A1: mi B \/ C c= B \/ C by XBOOLE_1:9;
+A2: mi(B \/ C) c= mi B \/ C by Th67;
+       now let a;
+      assume
+A3:     a in mi(mi B \/ C);
+then A4:     a in mi B \/ C by Th58;
+         now let b; assume that
+A5:      b in B \/ C and
+A6:      b c= a;
+           now per cases by A5,XBOOLE_0:def 2;
+          suppose b in B; then consider c such that
+A7:          c c= b and
+A8:          c in mi B by Th65;
+A9:          c in mi B \/ C by A8,XBOOLE_0:def 2;
+              c c= a by A6,A7,Th5;
+            then c = a by A3,A9,Th58;
+           hence b = a by A6,A7,Th4;
+          suppose b in C; then b in mi B \/ C by XBOOLE_0:def 2;
+           hence b = a by A3,A6,Th58;
+         end;
+        hence b = a;
+       end;
+      hence a in mi (B \/ C) by A1,A4,Th61;
+     end;
+    hence mi(mi B \/ C) c= mi (B \/ C) by Lm5;
+       now let a;
+      assume
+A10:     a in mi (B \/ C);
+       then for b st b in mi B \/ C holds b c= a implies b = a by A1,Th58;
+      hence a in mi(mi B \/ C) by A2,A10,Th61;
+     end;
+    hence thesis by Lm5;
+   end;
+
+theorem
+    mi(B \/ mi C) = mi (B \/ C) by Th68;
+
+theorem
+Th70: B c= C implies B ^ D c= C ^ D
+ proof assume
+A1: B c= C;
+   deffunc F(Element of DISJOINT_PAIRS A, Element of DISJOINT_PAIRS A)
+   = $1 \/ $2;
+   defpred P[set,set] means $1 in B & $2 in D;
+   defpred Q[set,set] means $1 in C & $2 in D;
+   set X1 = { F(s,t): P[s,t] };
+   set X2 = { F(s,t): Q[s,t] };
+A2: P[s, t] implies Q[s, t] by A1;
+A3: X1 c= X2 from Fraenkel5''(A2);
+     B ^ D = DISJOINT_PAIRS A /\ X1 & C ^ D = DISJOINT_PAIRS A /\ X2 by Def11;
+  hence thesis by A3,XBOOLE_1:26;
+ end;
+
+Lm6: a in B ^ C implies ex b st b c= a & b in mi B ^ C
+ proof assume a in B ^ C;
+   then consider b,c such that
+A1: b in B and
+A2: c in C and
+A3: a = b \/ c by Th55;
+   consider d such that
+A4: d c= b and
+A5: d in mi B by A1,Th65;
+   d \/ c c= a by A3,A4,Th28;
+   then reconsider e = d \/ c as Element of DISJOINT_PAIRS A by Th45;
+  take e;
+  thus e c= a by A3,A4,Th28;
+  thus e in mi B ^ C by A2,A5,Th56;
+ end;
+
+theorem
+Th71: mi(B ^ C) c= mi B ^ C
+ proof mi B c= B by Th64;
+then A1: mi B ^ C c= B ^ C by Th70;
+     now let a;
+    assume
+A2:   a in mi(B ^ C);
+     then a in B ^ C by Th58;
+     then consider b such that
+A3:   b c= a and
+A4:   b in mi B ^ C by Lm6;
+     thus a in mi B ^ C by A1,A2,A3,A4,Th58;
+   end;
+  hence thesis by Lm5;
+ end;
+
+theorem
+Th72: B^C = C^B
+ proof
+   deffunc F(Element of DISJOINT_PAIRS A,Element of DISJOINT_PAIRS A)
+   = $1 \/ $2;
+   defpred P[set,set] means $1 in B & $2 in C;
+   defpred Q[set,set] means $2 in C & $1 in B;
+   set X1 = { F(s,t): P[s,t]  };
+   set X2 = { F(t,s) where t is Element of DISJOINT_PAIRS A: Q[s,t] };
+A1: P[s,t] iff Q[s,t];
+A2: F(s,t) = F(t,s);
+A3: X1 = X2 from FraenkelF6''(A1,A2);
+     now let x be set;
+       x in X2 iff ex s,t st x = t \/ s & t in C & s in B;
+     then x in X2 iff ex t,s st x = t \/ s & t in C & s in B;
+    hence x in X2 iff x in{ t \/ s : t in C & s in B };
+   end;
+   then X2 = { t \/ s : t in C & s in B } by TARSKI:2;
+   then B ^ C = DISJOINT_PAIRS A /\ X1 & C ^ B = DISJOINT_PAIRS A /\ X2
+                                                                    by Def11;
+  hence thesis by A3;
+ end;
+
+theorem
+Th73: B c= C implies D ^ B c= D ^ C
+ proof D ^ C = C ^ D & D ^ B = B ^ D by Th72;
+  hence thesis by Th70;
+ end;
+
+theorem
+Th74: mi(mi B ^ C) = mi (B ^ C)
+  proof mi B c= B by Th64;
+then A1: mi B ^ C c= B ^ C by Th70;
+A2: mi(B ^ C) c= mi B ^ C by Th71;
+      now let a;
+     assume
+A3:    a in mi(mi B ^ C);
+then A4:    a in mi B ^ C by Th58;
+        now let b;
+       assume b in B ^ C;
+        then consider c such that
+A5:      c c= b and
+A6:      c in mi B ^ C by Lm6;
+       assume
+A7:     b c= a;
+        then c c= a by A5,Th5;
+        then c = a by A3,A6,Th58;
+       hence b = a by A5,A7,Th4;
+      end;
+     hence a in mi(B ^ C) by A1,A4,Th61;
+    end;
+   hence mi(mi B ^ C) c= mi(B ^ C) by Lm5;
+      now let a;
+     assume
+A8:    a in mi(B ^ C);
+      then for b st b in mi B ^ C holds b c= a implies b = a by A1,Th58;
+     hence a in mi(mi B ^ C) by A2,A8,Th61;
+    end;
+   hence mi(B ^ C) c= mi(mi B ^ C) by Lm5;
+  end;
+
+theorem
+Th75: mi(B ^ mi C) = mi (B ^ C)
+ proof B ^ mi C = mi C ^ B & B ^ C = C ^ B by Th72;
+  hence thesis by Th74;
+ end;
+
+theorem
+Th76: K^(L^M) = K^L^M
+   proof
+A1:   K^L^M = M^(K^L) & K^(L^M) = L^M^K & L^M = M^L & K^L = L^K by Th72;
+     now let K,L,M;
+       now let a; assume
+     a in K^(L^M); then consider b,c such that
+A2:      b in K and
+A3:      c in L^M and
+A4:     a = b \/ c by Th55;
+       consider b1,c1 being Element of DISJOINT_PAIRS A such that
+A5:      b1 in L and
+A6:      c1 in M and
+A7:    c = b1 \/ c1 by A3,Th55;
+      reconsider d = b \/ (b1 \/ c1) as Element of DISJOINT_PAIRS A by A4,A7;
+A8:     b \/(b1 \/ c1) = b \/ b1 \/ c1 by Th16;
+       then b \/ b1 c= d by Th26;
+       then reconsider c2 = b \/ b1 as Element of DISJOINT_PAIRS A by Th45;
+          c2 in K^L by A2,A5,Th56;
+      hence a in K^L^M by A4,A6,A7,A8,Th56;
+     end;
+    hence K^(L^M) c= K^L^M by Lm5;
+   end;
+     then K^L^M c= K^(L^M) & K^(L^M) c= K^L^M by A1;
+    hence thesis by XBOOLE_0:def 10;
+   end;
+
+theorem
+Th77: K^(L \/ M) = K^L \/ K^M
+ proof
+     now let a;
+    assume a in K^(L \/ M);
+     then consider b,c such that
+A1:    b in K & c in L \/ M & a = b \/ c by Th55;
+       c in L or c in M by A1,XBOOLE_0:def 2;
+     then a in K^L or a in K^M by A1,Th56;
+    hence a in K^L \/ K^M by XBOOLE_0:def 2;
+   end;
+  hence K^(L \/ M) c= K^L \/ K^M by Lm5;
+     L c= L \/ M & M c= L \/ M by XBOOLE_1:7;
+   then K^L c= K^(L \/ M) & K^M c= K^(L \/ M) by Th73;
+  hence K^L \/ K^M c= K^(L \/ M) by XBOOLE_1:8;
+ end;
+
+Lm7: a in B ^ C implies ex c st c in C & c c= a
+ proof assume a in B ^ C;
+   then consider b,c such that
+   b in B and
+A1: c in C and
+A2: a = b \/ c by Th55;
+  take c;
+  thus c in C by A1;
+  thus c c= a by A2,Th26;
+ end;
+
+Lm8: mi(K ^ L \/ L) = mi L
+ proof
+     now let a;
+    assume
+A1:   a in mi(K ^ L \/ L);
+     then a in K ^ L \/ L by Th58;
+then A2:   a in K ^ L or a in L by XBOOLE_0:def 2;
+A3:  now assume a in K ^ L;
+       then consider b such that
+A4:     b in L and
+A5:     b c= a by Lm7;
+      b in K ^ L \/ L by A4,XBOOLE_0:def 2;
+      hence a in L by A1,A4,A5,Th58;
+     end;
+       now let b;
+      assume b in L;
+       then b in K ^ L \/ L by XBOOLE_0:def 2;
+      hence b c= a implies b = a by A1,Th58;
+     end;
+    hence a in mi L by A2,A3,Th61;
+   end;
+  hence mi(K ^ L \/ L) c= mi L by Lm5;
+     now let a;
+    assume
+A6:   a in mi L;
+then A7:  a in L by Th58;
+then A8:  a in K ^ L \/ L by XBOOLE_0:def 2;
+       now let b;
+      assume
+      b in K ^ L \/ L;
+then A9:    b in K ^ L or b in L by XBOOLE_0:def 2;
+      assume
+A10:    b c= a;
+         now assume b in K ^ L;
+         then consider c such that
+A11:       c in L and
+A12:       c c= b by Lm7;
+           c c= a by A10,A12,Th5;
+         then c = a by A6,A11,Th58;
+        hence b in L by A7,A10,A12,Th4;
+       end;
+      hence b = a by A6,A9,A10,Th58;
+     end;
+    hence a in mi(K ^ L \/ L) by A8,Th61;
+   end;
+  hence mi L c= mi(K ^ L \/ L) by Lm5;
+ end;
+
+theorem
+Th78: B c= B ^ B
+ proof
+     now let a; a = a \/ a;
+    hence a in B implies a in B ^ B by Th56;
+   end;
+  hence thesis by Lm5;
+ end;
+
+theorem
+Th79: mi(K ^ K) = mi K
+ proof K c= K ^ K by Th78;
+  hence mi (K ^ K) = mi (K ^ K \/ K) by XBOOLE_1:12
+             .= mi K by Lm8;
+ end;
+
+definition let A;
+ canceled 2;
+
+ func NormForm A -> strict LattStr means :Def14:
+  the carrier of it = Normal_forms_on A &
+  for B, C being Element of Normal_forms_on A holds
+    (the L_join of it).(B, C) = mi (B \/ C) &
+    (the L_meet of it).(B, C) = mi (B^C);
+ existence
+ proof
+   set L = Normal_forms_on A;
+   deffunc O(Element of L,Element of L) = mi ($1 \/ $2);
+   consider j being BinOp of L such that
+A1:  for x,y being Element of L holds j.(x,y) = O(x,y) from BinOpLambda;
+   deffunc O1(Element of L,Element of L) = mi ($1 ^ $2);
+   consider m being BinOp of L such that
+A2:  for x,y being Element of L holds m.(x,y) = O1(x,y) from BinOpLambda;
+   take LattStr (# L, j, m #);
+   thus thesis by A1,A2;
+  end;
+  uniqueness
+  proof
+   set L = Normal_forms_on A;
+   let A1, A2 be strict LattStr such that
+A3:  the carrier of A1 = L &
+    for A, B being Element of L holds
+     (the L_join of A1).(A,B) = mi (A \/ B) &
+     (the L_meet of A1).(A,B) = mi (A^B) and
+A4:  the carrier of A2 = L &
+    for A, B being Element of L holds
+     (the L_join of A2).(A,B) = mi (A \/ B) &
+     (the L_meet of A2).(A,B) = mi (A^B);
+    reconsider a3 = the L_meet of A1, a4 = the L_meet of A2,
+               a1 = the L_join of A1, a2 = the L_join of A2
+        as BinOp of L by A3,A4;
+      now let x,y be Element of L;
+     thus a1.(x,y) = mi (x \/ y) by A3 .= a2.(x,y) by A4;
+    end;
+then A5: a1 = a2 by BINOP_1:2;
+      now let x,y be Element of L;
+     thus a3.(x,y) = mi (x^y) by A3 .= a4.(x,y) by A4;
+    end;
+   hence thesis by A3,A4,A5,BINOP_1:2;
+  end;
+ end;
+
+definition let A;
+  cluster NormForm A -> non empty;
+  coherence
+  proof
+     the carrier of NormForm A = Normal_forms_on A by Def14;
+   hence thesis by STRUCT_0:def 1;
+  end;
+end;
+
+Lm9: for a,b being Element of NormForm A holds
+   a"\/"b = b"\/"a
+ proof
+  set G = NormForm A;
+  let a,b be Element of G;
+  reconsider a' = a, b' = b as Element of Normal_forms_on A by Def14;
+    a"\/"b = (the L_join of G).(a,b) by LATTICES:def 1
+      .= mi (b' \/ a') by Def14
+      .= (the L_join of G).(b,a) by Def14
+      .= b"\/"a by LATTICES:def 1;
+  hence thesis;
+ end;
+
+Lm10: for a,b,c being Element of NormForm A
+                                holds a"\/"(b"\/"c) = (a"\/"b)"\/"c
+proof
+ set G = NormForm A;
+ let a, b, c be Element of G;
+ reconsider a' = a, b' = b, c' = c as Element of Normal_forms_on A
+    by Def14;
+   a"\/"(b"\/"c) = (the L_join of G).(a,b"\/"c) by LATTICES:def 1
+          .= (the L_join of G).(a,((the L_join of G).(b,c))) by LATTICES:def 1
+          .= (the L_join of G).(a, mi (b' \/ c')) by Def14
+          .= mi (mi (b' \/ c') \/ a') by Def14
+          .= mi ( a' \/ ( b' \/ c' ) ) by Th68
+          .= mi ( a' \/ b' \/ c' ) by XBOOLE_1:4
+          .= mi ( mi ( a' \/ b' ) \/ c' ) by Th68
+          .= (the L_join of G).(mi (a' \/ b'), c' ) by Def14
+          .= (the L_join of G).(((the L_join of G).(a,b)), c) by Def14
+          .= (the L_join of G).((a"\/"b), c) by LATTICES:def 1
+  .= (a"\/"b)"\/"c by LATTICES:def 1;
+ hence thesis;
+end;
+
+reserve K, L, M for Element of Normal_forms_on A;
+
+Lm11:   (the L_join of NormForm A).((the L_meet of NormForm A).(K,L), L) = L
+      proof
+       thus (the L_join of NormForm A).
+        ((the L_meet of NormForm A).(K,L), L) =
+         (the L_join of NormForm A).(mi (K^L), L) by Def14
+              .= mi(mi(K ^ L) \/ L) by Def14
+              .= mi(K ^ L \/ L) by Th68
+              .= mi L by Lm8
+              .= L by Th66;
+      end;
+
+Lm12: for a,b being Element of NormForm A holds (a"/\"b)"\/"
+b = b
+proof
+ let a,b be Element of NormForm A;
+ set G = NormForm A;
+ reconsider a' = a, b' = b as Element of Normal_forms_on A by Def14;
+ thus (a"/\"b)"\/"b = (the L_join of G).((a"/\"b), b') by LATTICES:def 1
+     .= (the L_join of G).((the L_meet of G).(a',b'), b') by LATTICES:def 2
+                      .= b by Lm11;
+end;
+
+Lm13: for a,b being Element of NormForm A holds
+      a"/\"b = b"/\"a
+    proof
+     set G = NormForm A;
+     let a, b be Element of G;
+     reconsider a' = a, b' = b as Element of Normal_forms_on A by Def14;
+       a"/\"b = (the L_meet of G).(a,b) by LATTICES:def 2
+         .= mi (a' ^ b') by Def14
+         .= mi (b' ^ a') by Th72
+         .= (the L_meet of G).(b,a) by Def14
+         .= b"/\"a by LATTICES:def 2;
+     hence thesis;
+    end;
+
+Lm14: for a,b,c being Element of NormForm A
+                                      holds a"/\"(b"/\"c) = (a"/\"b)"/\"c
+proof
+ set G = NormForm A;
+ let a, b, c be Element of G;
+ reconsider a' = a, b' = b, c' = c as Element of Normal_forms_on A
+   by Def14;
+   a"/\"(b"/\"c) = (the L_meet of G).(a,b"/\"c) by LATTICES:def 2
+          .= (the L_meet of G).(a,((the L_meet of G).(b,c))) by LATTICES:def 2
+          .= (the L_meet of G).(a, mi (b' ^ c')) by Def14
+          .= mi (a' ^ mi (b' ^ c')) by Def14
+          .= mi ( a' ^ ( b' ^ c' ) ) by Th75
+          .= mi ( a' ^ b' ^ c' ) by Th76
+          .= mi ( mi ( a' ^ b' ) ^ c' ) by Th74
+          .= (the L_meet of G).(mi (a' ^ b'), c' ) by Def14
+          .= (the L_meet of G).(((the L_meet of G).(a,b)), c) by Def14
+          .= (the L_meet of G).((a"/\"b), c) by LATTICES:def 2
+  .= (a"/\"b)"/\"c by LATTICES:def 2;
+ hence thesis;
+end;
+
+Lm15: (the L_meet of NormForm A).(K,(the L_join of NormForm A).
+   (L,M)) =
+ (the L_join of NormForm A).((the L_meet of NormForm A).(K,L),
+  (the L_meet of NormForm A).(K,M))
+ proof
+    (the L_join of NormForm A).(L, M) = mi (L \/ M) &
+  (the L_meet of NormForm A).(K,L) = mi (K ^ L) &
+  (the L_meet of NormForm A).(K,M) = mi (K ^ M) by Def14;
+  then reconsider La = (the L_join of NormForm A).(L, M),
+             Lb = (the L_meet of NormForm A).(K,L),
+             Lc = (the L_meet of NormForm A).(K,M)
+   as Element of Normal_forms_on A;
+    (the L_meet of NormForm A).
+   (K,(the L_join of NormForm A).(L,M)) = mi (K^La) by Def14
+          .= mi (K^mi(L \/ M)) by Def14
+          .= mi (K^(L \/ M)) by Th75
+          .= mi (K^L \/ K^M) by Th77
+          .= mi (mi(K^L) \/ K^M) by Th68
+          .= mi (mi(K^L) \/ mi (K^M)) by Th68
+          .= mi (Lb \/ mi(K^M)) by Def14
+          .= mi (Lb \/ Lc) by Def14;
+   hence thesis by Def14;
+ end;
+
+Lm16: for a,b being Element of NormForm A holds
+       a"/\"(a"\/"b)=a
+proof
+ set G = NormForm A;
+ let a,b be Element of G;
+ reconsider a' = a, b' = b as Element of Normal_forms_on A by Def14;
+ thus a"/\"(a"\/"b) = (the L_meet of G).(a',(a"\/"b)) by LATTICES:def 2
+     .= (the L_meet of G).(a',(the L_join of G).(a', b')) by LATTICES:def 1
+.= (the L_join of G).((the L_meet of G).(a',a'),
+      (the L_meet of G).(a',b')) by Lm15
+.= (the L_join of G).(mi (a' ^ a'),
+      (the L_meet of G).(a',b')) by Def14
+.= (the L_join of G).(mi a',
+      (the L_meet of G).(a',b')) by Th79
+.= (the L_join of G).(a',
+      (the L_meet of G).(a',b')) by Th66
+.= (the L_join of G).(a', a"/\"b) by LATTICES:def 2
+.= a"\/"(a"/\"b) by LATTICES:def 1
+.= (a"/\"b)"\/"a by Lm9
+.= (b"/\"a)"\/"a by Lm13
+                      .= a by Lm12;
+end;
+
+definition let A;
+  cluster NormForm A -> Lattice-like;
+  coherence
+proof
+  set G = NormForm A;
+   thus for u,v being Element of G holds u"\/"v = v"\/"
+u by Lm9;
+   thus for u,v,w being Element of G holds
+     u"\/"(v"\/"w) = (u"\/"v)"\/"w by Lm10;
+   thus for u,v being Element of G holds (u"/\"v)"\/"
+v = v by Lm12;
+   thus for u,v being Element of G holds u"/\"v = v"/\"
+u by Lm13;
+   thus for u,v,w being Element of G holds
+    u"/\"(v"/\"w) = (u"/\"v)"/\"w by Lm14;
+   let u,v be Element of G;
+   thus u"/\"(u"\/"v) = u by Lm16;
+ end;
+end;
+
+definition let A;
+  cluster NormForm A -> distributive lower-bounded;
+  coherence
+  proof
+   set G = NormForm A;
+   thus G is distributive
+   proof
+    let u,v,w be Element of G;
+    reconsider K = u, L = v, M = w as Element of Normal_forms_on A by Def14;
+A1: u "/\" w = (the L_meet of G).(K,M) by LATTICES:def 2;
+  thus u "/\" (v "\/" w) =
+  (the L_meet of G).(K,v "\/" w) by LATTICES:def 2
+.= (the L_meet of G).(K,(the L_join of G).
+       (L,M)) by LATTICES:def 1
+.= (the L_join of G).((the L_meet of G).(K,L),
+   (the L_meet of G).(K,M)) by Lm15
+   .= (the L_join of G).(u "/\" v, u "/\" w) by A1,LATTICES:def 2
+   .= (u "/\" v) "\/" (u "/\" w) by LATTICES:def 1;
+  end;
+   thus G is lower-bounded
+   proof
+   reconsider E = {} as Element of Normal_forms_on A by Th51;
+   reconsider e = E as Element of G by Def14;
+   take e; let u be Element of G;
+   reconsider K = u as Element of Normal_forms_on A by Def14;
+     e "\/" u = (the L_join of G).(E,K) by LATTICES:def 1
+       .= mi (E \/ K) by Def14
+       .= u by Th66;
+   then e "/\" u = e & u "/\" e = e by LATTICES:def 9;
+   hence thesis;
+  end;
+  end;
+end;
+
+canceled 5;
+
+theorem
+   {} is Element of NormForm A
+proof the carrier of NormForm A = Normal_forms_on A by Def14;
+ hence thesis by Th51;
+end;
+
+theorem
+   Bottom NormForm A = {}
+ proof
+     {} in Normal_forms_on A by Th51;
+   then reconsider Z = {} as Element of NormForm A by Def14;
+     now let u be Element of NormForm A;
+     reconsider z = Z, u' = u as Element of Normal_forms_on A by Def14;
+    thus Z "\/" u = (the L_join of NormForm A).(z,u') by LATTICES:def 1
+            .= mi (z \/ u') by Def14
+            .= u by Th66;
+   end;
+  hence thesis by LATTICE2:21;
+ end;
+
+

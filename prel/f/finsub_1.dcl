@@ -1,0 +1,13 @@
+HIDDEN
+XBOOLE_0
+ZFMISC_1
+SUBSET_1
+FINSET_1
+FINSUB_1
+#
+«W1 ;V3 ;V4 ;V5 ;V6 ;;;M1 ;
+fW1 ;V3 ;V5 ;V6 ;;M1 ;;K22 A1 ;
+­V6 ;;;M1 ;V3 ;V5 ;;
+­V3 ;V5 ;;;M1 ;V6 ;;
+­;M1 ;;M2 K22 A1 ;;V2 ;;
+!

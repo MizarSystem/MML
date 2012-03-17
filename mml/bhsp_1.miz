@@ -1,0 +1,1202 @@
+:: Introduction to Banach and Hilbert spaces - Part I
+::  by Jan Popio{\l}ek
+::
+:: Received July 19, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, BINOP_1, FUNCT_1, PRE_TOPC, PROB_2, RLSUB_1, ARYTM_1,
+      ABSVALUE, SQUARE_1, FUNCT_3, ARYTM_3, NORMSP_1, METRIC_1, RELAT_1,
+      SEQM_3, BHSP_1, ARYTM;
+ notation XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      NAT_1, REAL_1, FUNCT_1, FUNCT_2, BINOP_1, STRUCT_0, RELAT_1, DOMAIN_1,
+      PRE_TOPC, ABSVALUE, RLVECT_1, RLSUB_1, SQUARE_1, NORMSP_1, QUIN_1;
+ constructors REAL_1, NAT_1, DOMAIN_1, ABSVALUE, RLSUB_1, SQUARE_1, NORMSP_1,
+      QUIN_1, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, STRUCT_0, XREAL_0, RELSET_1, SQUARE_1, MEMBERED, ZFMISC_1,
+      XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions RLVECT_1, NORMSP_1, STRUCT_0;
+ theorems TARSKI, REAL_1, REAL_2, AXIOMS, SQUARE_1, ABSVALUE, RLVECT_1,
+      RLSUB_1, QUIN_1, FUNCT_2, NORMSP_1, XREAL_0, XCMPLX_0, XCMPLX_1;
+ schemes FUNCT_1, FUNCT_2;
+
+begin
+
+definition
+ struct(RLSStruct) UNITSTR (# carrier -> set,
+         Zero -> Element of the carrier,
+          add -> BinOp of the carrier,
+         Mult -> Function of [:REAL, the carrier:], the carrier,
+       scalar -> Function of [: the carrier, the carrier :], REAL #);
+end;
+
+definition
+ cluster non empty strict UNITSTR;
+ existence
+  proof
+    consider D being non empty set, Z being Element of D,
+             a being BinOp of D,m being Function of [:REAL, D:], D,
+             s being Function of [: D,D:],REAL;
+    take UNITSTR (#D,Z,a,m,s#);
+    thus the carrier of UNITSTR (#D,Z,a,m,s#) is non empty;
+    thus thesis;
+  end;
+end;
+
+definition
+  let D be non empty set, Z be Element of D,
+      a be BinOp of D,m be Function of [:REAL, D:], D,
+      s be Function of [: D,D:],REAL;
+  cluster UNITSTR (#D,Z,a,m,s#) -> non empty;
+ coherence
+  proof
+   thus the carrier of UNITSTR (#D,Z,a,m,s#) is non empty;
+  end;
+end;
+
+ reserve X for non empty UNITSTR;
+ reserve a, b for Real;
+ reserve x, y for Point of X;
+
+deffunc 0'(UNITSTR) = 0.$1;
+
+definition let X; let x, y;
+  func x .|. y -> Real equals
+:Def1:   (the scalar of X).[x,y];
+ correctness;
+end;
+
+consider V0 being RealLinearSpace;
+Lm1:  the carrier of (0).V0 = {0.V0} by RLSUB_1:def 3;
+  deffunc F(set,set) = 0;
+consider nil_func being Function of
+   [: the carrier of (0).V0 , the carrier of (0).V0 :] , REAL such that
+Lm2:  for x, y being VECTOR of (0).V0 holds
+     nil_func.[x,y] = F(x,y) from Lambda2D;
+
+Lm3:
+ nil_func.[0.V0,0.V0] = 0
+proof
+   0.V0 in the carrier of (0).V0 by Lm1,TARSKI:def 1;
+ hence thesis by Lm2;
+end;
+
+Lm4:
+ for u being VECTOR of (0).V0 holds 0 <= nil_func.[u,u]
+proof
+ let u be VECTOR of (0).V0;
+   u = 0.V0 by Lm1,TARSKI:def 1;
+ hence thesis by Lm3;
+end;
+
+Lm5:
+ for u , v being VECTOR of (0).V0 holds nil_func.[u,v] = nil_func.[v,u]
+proof
+ let u , v be VECTOR of (0).V0;
+   u = 0.V0 & v = 0.V0 by Lm1,TARSKI:def 1;
+ hence thesis;
+end;
+
+Lm6:
+ for u , v , w being VECTOR of (0).V0 holds
+ nil_func.[u+v,w] = nil_func.[u,w] + nil_func.[v,w]
+proof
+ let u , v , w be VECTOR of (0).V0;
+   u = 0.V0 & v = 0.V0 & w = 0.V0 by Lm1,TARSKI:def 1;
+ hence thesis by Lm1,Lm3,TARSKI:def 1;
+end;
+
+Lm7:
+ for u , v being VECTOR of (0).V0 , a holds
+  nil_func.[a*u,v] = a * nil_func.[u,v]
+proof
+ let u , v be VECTOR of (0).V0;
+ let a;
+   u = 0.V0 & v = 0.V0 by Lm1,TARSKI:def 1;
+ hence thesis by Lm1,Lm3,TARSKI:def 1;
+end;
+set X0 = UNITSTR(# the carrier of (0).V0,the Zero of (0).V0,the add of (0).V0,
+                  the Mult of (0).V0, nil_func #);
+
+Lm8:
+now let x , y , z be Point of X0;
+    let a;
+ thus x .|. x = 0 iff x = 0'(X0)
+ proof
+    0'(X0) = the Zero of X0 by RLVECT_1:def 2
+      .= 0.(0).V0 by RLVECT_1:def 2
+      .= 0.V0 by RLSUB_1:19;
+  hence thesis by Def1,Lm1,Lm3,TARSKI:def 1;
+ end;
+ thus 0 <= x .|. x
+ proof
+  reconsider u = x as VECTOR of (0).V0;
+    x .|. x = nil_func.[u,u] by Def1;
+  hence thesis by Lm4;
+ end;
+ thus x .|. y = y .|. x
+ proof
+  reconsider u = x , v = y as VECTOR of (0).V0;
+    x .|. y = nil_func.[u,v] &
+  y .|. x = nil_func.[v,u] by Def1;
+  hence thesis by Lm5;
+ end;
+ thus (x+y) .|. z = x .|. z + y .|. z
+ proof
+  reconsider u = x , v = y , w = z as VECTOR of (0).V0;
+    x + y = (the add of X0).[x,y] by RLVECT_1:def 3
+       .= u + v by RLVECT_1:def 3;
+  then (x+y) .|. z = nil_func.[u+v,w] &
+  x .|. z = nil_func.[u,w] &
+  y .|. z = nil_func.[v,w] by Def1;
+  hence thesis by Lm6;
+ end;
+ thus (a*x) .|. y = a * ( x .|. y )
+ proof
+  reconsider u = x , v = y as VECTOR of (0).V0;
+    a * x = (the Mult of X0).[a,u] by RLVECT_1:def 4
+       .= a * u by RLVECT_1:def 4;
+  then (a*x) .|. y = nil_func.[a*u,v] &
+  x .|. y = nil_func.[u,v] by Def1;
+  hence thesis by Lm7;
+ end;
+end;
+
+definition let IT be non empty UNITSTR;
+  attr IT is RealUnitarySpace-like means :Def2:
+  for x , y , z being Point of IT , a holds
+    ( x .|. x = 0 iff x = 0.IT ) &
+    0 <= x .|. x &
+    x .|. y = y .|. x &
+    (x+y) .|. z = x .|. z + y .|. z &
+    (a*x) .|. y = a * ( x .|. y );
+end;
+
+definition
+ cluster RealUnitarySpace-like RealLinearSpace-like Abelian add-associative
+   right_zeroed right_complementable strict (non empty UNITSTR);
+  existence
+   proof
+    take X0;
+    thus X0 is RealUnitarySpace-like by Def2,Lm8;
+A1: now
+       let x,y be VECTOR of X0;
+       let x',y' be VECTOR of (0).V0;
+       assume A2: x = x' & y = y';
+       hence x + y= (the add of X0).[x',y'] by RLVECT_1:def 3 .=
+       x' + y' by RLVECT_1:def 3;
+       let a;
+       thus a * x = (the Mult of X0).[a,x'] by A2,RLVECT_1:def 4 .=
+       a * x' by RLVECT_1:def 4;
+      end;
+A3:  0.X0 = the Zero of X0 by RLVECT_1:def 2 .=
+     0.(0).V0 by RLVECT_1:def 2;
+    thus X0 is RealLinearSpace-like
+    proof
+     thus for a for v,w being VECTOR of X0 holds a * (v + w) = a * v + a * w
+     proof
+      let a;
+      let v,w be VECTOR of X0;
+      reconsider v'= v, w' = w as VECTOR of (0).V0;
+A4:   a * v' = a * v by A1;
+A5:  a * w' = a * w by A1;
+    v + w = v'+ w' by A1;
+      hence a * (v + w) = a *( v' + w') by A1 .=
+      a * v' + a * w' by RLVECT_1:def 9 .= a * v + a * w by A1,A4,A5;
+     end;
+     thus for a,b for v being VECTOR of X0 holds (a + b) * v = a * v + b * v
+     proof
+      let a,b;
+      let v be VECTOR of X0;
+      reconsider v'= v as VECTOR of (0).V0;
+A6:   a * v' = a * v by A1;
+A7:  b * v' = b * v by A1;
+      thus (a + b) * v = (a + b) * v' by A1 .=
+      a * v' + b * v' by RLVECT_1:def 9 .= a * v + b * v by A1,A6,A7;
+     end;
+     thus for a,b for v being VECTOR of X0 holds (a * b) * v = a * (b * v)
+     proof
+      let a,b;
+      let v be VECTOR of X0;
+      reconsider v'= v as VECTOR of (0).V0;
+A8:   b * v' = b * v by A1;
+      thus (a * b) * v = (a * b) * v' by A1
+                .= a * (b * v') by RLVECT_1:def 9
+                .= a * (b * v) by A1,A8;
+     end;
+     let v be VECTOR of X0;
+     reconsider v'= v as VECTOR of (0).V0;
+     thus 1 * v = 1 * v' by A1 .= v by RLVECT_1:def 9;
+    end;
+    thus for v,w being VECTOR of X0 holds v + w = w + v
+    proof
+     let v,w be VECTOR of X0;
+     reconsider v'= v , w'= w as VECTOR of (0).V0;
+     thus v + w = w'+ v' by A1 .= w + v by A1;
+    end;
+     thus for u,v,w being VECTOR of X0 holds (u + v) + w = u + (v + w)
+     proof
+      let u,v,w be VECTOR of X0;
+      reconsider u'= u, v'= v, w'= w as VECTOR of (0).V0;
+      A9: u + v = u'+ v' by A1;
+      A10: v + w = v' + w' by A1;
+      thus (u + v) + w = (u' + v') + w' by A1,A9 .=
+      u' + (v' + w') by RLVECT_1:def 6 .= u + (v + w) by A1,A10;
+     end;
+     thus for v being VECTOR of X0 holds v + 0.X0 = v
+     proof
+      let v be VECTOR of X0;
+      reconsider v'= v as VECTOR of (0).V0;
+      thus v + 0.X0 = v'+ 0.(0).V0 by A1,A3 .=v by RLVECT_1:10;
+     end;
+     thus for v being VECTOR of X0
+       ex w being VECTOR of X0 st v + w = 0.X0
+       proof
+        let v be VECTOR of X0;
+        reconsider v'= v as VECTOR of (0).V0;
+        consider w' be VECTOR of (0).V0 such that
+        A11: v' + w' = 0.(0).V0 by RLVECT_1:def 8;
+        reconsider w = w' as VECTOR of X0;
+        take w;
+        thus v + w = 0.X0 by A1,A3,A11;
+       end;
+    thus thesis;
+   end;
+end;
+
+definition
+ mode RealUnitarySpace is RealUnitarySpace-like RealLinearSpace-like
+  Abelian add-associative right_zeroed right_complementable
+   (non empty UNITSTR);
+end;
+
+reserve X for RealUnitarySpace;
+reserve x , y , z , u , v for Point of X;
+
+definition let X; let x, y;
+  redefine func x .|. y;
+  commutativity by Def2;
+end;
+
+canceled 5;
+
+theorem
+    (0.X) .|. (0.X) = 0 by Def2;
+
+theorem
+   x .|. (y+z) = x .|. y + x .|. z by Def2;
+
+theorem
+   x .|. (a*y) = a * x .|. y by Def2;
+
+theorem
+    (a*x) .|. y = x .|. (a*y)
+proof
+    (a*x) .|. y = a * x .|. y by Def2;
+  hence thesis by Def2;
+end;
+
+theorem Th10:
+  (a*x+b*y) .|. z = a * x .|. z + b * y .|. z
+proof
+    (a*x+b*y) .|. z = (a*x) .|. z + (b*y) .|. z by Def2
+               .= a * x .|. z + (b*y) .|. z by Def2;
+  hence thesis by Def2;
+end;
+
+theorem
+    x .|. (a*y + b*z) = a * x .|. y + b * x .|. z by Th10;
+
+theorem
+    (-x) .|. y = x .|. (-y)
+proof
+    (-x) .|. y = ((-1)*x) .|. y by RLVECT_1:29
+          .= (-1) * x .|. y by Def2
+          .= x .|. ((-1)*y) by Def2;
+  hence thesis by RLVECT_1:29;
+end;
+
+theorem Th13:
+  (-x) .|. y = - x .|. y
+proof
+    (-x) .|. y = ((-1)*x) .|. y by RLVECT_1:29
+          .= (-1) * x .|. y by Def2;
+   hence thesis by XCMPLX_1:180;
+end;
+
+theorem
+   x .|. (-y) = - x .|. y by Th13;
+
+theorem Th15:
+  (-x) .|. (-y) = x .|. y
+proof
+    (-x) .|. (-y) = - x .|. (-y) by Th13
+             .= - ( - x .|. y ) by Th13;
+  hence thesis;
+end;
+
+theorem Th16:
+  (x - y) .|. z = x .|. z - y .|. z
+proof
+    (x - y) .|. z = (x + (-y)) .|. z by RLVECT_1:def 11
+             .= x .|. z + (-y) .|. z by Def2
+             .= x .|. z + ( - y .|. z ) by Th13;
+   hence thesis by XCMPLX_0:def 8;
+end;
+
+theorem Th17:
+  x .|. (y - z) = x .|. y - x .|. z
+proof
+    x .|. (y - z) = x .|. (y + (-z)) by RLVECT_1:def 11
+             .= x .|. y + x .|. (-z) by Def2
+             .= x .|. y + ( - x .|. z ) by Th13;
+  hence thesis by XCMPLX_0:def 8;
+end;
+
+theorem
+    (x - y) .|. (u - v) = x .|. u - x .|. v - y .|. u + y .|. v
+proof
+    (x - y) .|. (u - v) = x .|. (u - v) - y .|. (u - v) by Th16
+                   .= ( x .|. u - x .|. v ) - y .|. (u - v) by Th17
+                   .= ( x .|. u - x .|. v ) - ( y .|. u - y .|. v ) by Th17;
+  hence thesis by XCMPLX_1:37;
+end;
+
+theorem Th19:
+  (0.X) .|. x = 0
+proof
+    0'(X) .|. x = (x + (-x)) .|. x by RLVECT_1:16
+           .= x .|. x + (-x) .|. x by Def2
+           .= x .|. x + ( - x .|. x ) by Th13;
+  hence thesis by XCMPLX_0:def 6;
+end;
+
+theorem
+   x .|. 0.X = 0 by Th19;
+
+theorem Th21:
+  (x + y) .|. (x + y) = x .|. x + 2 * x .|. y + y .|. y
+proof
+    (x + y) .|. (x + y) = x .|. (x + y) + y .|. (x + y) by Def2
+                   .= (x .|. x + x .|. y) + y .|. (x + y) by Def2
+                   .= (x .|. x + x .|. y) + (x .|. y + y .|. y) by Def2
+                   .= ((x .|. x + x .|. y) + x .|. y) + y .|. y by XCMPLX_1:1
+                   .= (x .|. x + (x .|. y + x .|. y)) + y .|. y by XCMPLX_1:1;
+  hence thesis by XCMPLX_1:11;
+end;
+
+theorem
+    (x + y) .|. (x - y) = x .|. x - y .|. y
+proof
+    (x + y) .|. (x - y) = x .|. (x - y) + y .|. (x - y) by Def2
+                   .= (x .|. x - x .|. y) + y .|. (x - y) by Th17
+                   .= (x .|. x - x .|. y) + (x .|. y - y .|. y) by Th17;
+  hence thesis by XCMPLX_1:39;
+end;
+
+theorem Th23:
+  (x - y) .|. (x - y) = x .|. x - 2 * x .|. y + y .|. y
+proof
+    (x - y) .|. (x - y) = x .|. (x - y) - y .|. (x - y) by Th16
+                   .= x .|. x - x .|. y - y .|. (x - y) by Th17
+                   .= x .|. x - x .|. y - ( x .|. y - y .|. y ) by Th17
+                   .= x .|. x - ( x .|. y + ( x .|. y - y .|.
+ y )) by XCMPLX_1:36
+          .= x .|. x - (( x .|. y + x .|. y ) - y .|. y ) by XCMPLX_1:29
+                   .= x .|. x - ( x .|. y + x .|. y ) + y .|. y by XCMPLX_1:37;
+  hence thesis by XCMPLX_1:11;
+end;
+
+theorem Th24:
+  abs(x .|. y) <= sqrt (x .|. x) * sqrt (y .|. y)
+proof
+A1:   x = 0'(X) implies abs(x .|. y) <= sqrt (x .|. x) * sqrt (y .|. y)
+     proof
+          assume
+     A2:   x = 0'(X);
+          then A3: x .|. y = 0 by Th19;
+            sqrt (x .|. x) = 0 by A2,Def2,SQUARE_1:82;
+          hence thesis by A3,ABSVALUE:7;
+     end;
+       x <> 0'(X) implies abs(x .|. y) <= sqrt (x .|. x) * sqrt (y .|. y)
+     proof
+          assume
+            x <> 0'(X);
+     then A4:   x .|. x <> 0 by Def2;
+     A5:   x .|. x >= 0 by Def2;
+     A6:   for t be real number holds
+          x .|. x * t^2 + (2 * x .|. y) * t + y .|. y >= 0
+          proof
+               let t be real number;
+               reconsider t as Real by XREAL_0:def 1;
+            (t * x + y) .|. (t * x + y) >= 0 by Def2;
+          then (t * x) .|. (t * x) + 2 * (t * x) .|. y + y .|. y >= 0 by Th21;
+          then t * x .|. (t * x) + 2 * (t * x) .|. y + y .|. y >= 0 by Def2;
+          then t * ( t * x .|. x) + 2 * (t * x) .|. y + y .|. y >= 0 by Def2;
+          then (t * t) * x .|. x + 2 * (t * x) .|. y + y .|.
+ y >= 0 by XCMPLX_1:4;
+          then x .|. x * t^2 + 2 * (t * x) .|. y + y .|.
+ y >= 0 by SQUARE_1:def 3;
+          then x .|. x * t^2 + 2 * (x .|. y * t) + y .|. y >= 0 by Def2;
+          hence thesis by XCMPLX_1:4;
+          end;
+     A7:   (abs(x .|. y))^2 >= 0 by SQUARE_1:72;
+     A8:   abs(x .|. y) >= 0 by ABSVALUE:5;
+     A9:   y .|. y >= 0 by Def2;
+            delta(x .|. x,(2 * x .|. y),y.|.y) <= 0 by A4,A5,A6,QUIN_1:10;
+          then (2 * x .|. y)^2 - 4 * x .|. x * y .|. y <= 0 by QUIN_1:def 1;
+          then 2^2 * (x .|. y)^2 - 4 * x .|. x * y .|. y <= 0 by SQUARE_1:68;
+          then (2 * 2) * (x .|. y)^2 - 4 * x .|. x * y .|.
+ y <= 0 by SQUARE_1:def 3;
+          then 4 * (x .|. y)^2 - 4 * (x .|. x * y .|. y) <= 0 by XCMPLX_1:4;
+          then 4 * ((x .|. y)^2 - x .|. x * y .|. y) <= 0 by XCMPLX_1:40;
+          then (x .|. y)^2 - x .|. x * y .|. y <= 0/4 by REAL_2:177;
+          then (x .|. y)^2 <= x .|. x * y .|. y by SQUARE_1:11;
+          then (abs(x .|. y))^2 <= x .|. x * y .|. y by SQUARE_1:62;
+          then sqrt (abs(x .|. y))^2 <= sqrt (x .|. x * y .|.
+ y) by A7,SQUARE_1:94;
+          then abs(x .|. y) <= sqrt (x .|. x * y .|. y) by A8,SQUARE_1:89;
+          hence thesis by A5,A9,SQUARE_1:97;
+     end;
+     hence thesis by A1;
+end;
+
+definition let X; let x, y;
+  pred x, y are_orthogonal means :Def3:
+   x .|. y = 0;
+  symmetry;
+end;
+
+canceled;
+
+theorem
+    x, y are_orthogonal implies x, - y are_orthogonal
+proof
+  assume x, y are_orthogonal;
+  then - x .|. y = - 0 by Def3;
+  then x .|. (-y) = 0 by Th13;
+  hence thesis by Def3;
+end;
+
+theorem
+    x, y are_orthogonal implies -x, y are_orthogonal
+proof
+  assume x, y are_orthogonal;
+  then - x .|. y = - 0 by Def3;
+  then (-x) .|. y = 0 by Th13;
+  hence thesis by Def3;
+end;
+
+theorem
+    x, y are_orthogonal implies -x, -y are_orthogonal
+proof
+  assume x, y are_orthogonal;
+  then x .|. y = 0 by Def3;
+  then (-x) .|. (-y) = 0 by Th15;
+  hence thesis by Def3;
+end;
+
+theorem
+    x, 0.X are_orthogonal
+proof
+    x .|. 0'(X) = 0 by Th19;
+  hence thesis by Def3;
+end;
+
+theorem
+    x, y are_orthogonal implies (x + y) .|. (x + y) = x .|. x + y .|. y
+proof
+  assume x, y are_orthogonal;
+then A1:x .|. y = 0 by Def3;
+    (x + y) .|. (x + y) = x .|. x + 2 * x .|. y + y .|. y by Th21;
+  hence thesis by A1;
+end;
+
+theorem
+    x, y are_orthogonal implies (x - y) .|. (x - y) = x .|. x + y .|. y
+proof
+  assume x, y are_orthogonal;
+then A1:x .|. y = 0 by Def3;
+    (x - y) .|. (x - y) = x .|. x - 2 * x .|. y + y .|. y by Th23
+                   .= x .|. x + y .|. y - 0 by A1;
+  hence thesis;
+end;
+
+definition let X, x;
+  func ||.x.|| -> Real equals
+:Def4:  sqrt (x .|. x);
+ correctness;
+end;
+
+theorem Th32:
+  ||.x.|| = 0 iff x = 0.X
+proof
+     thus ||.x.|| = 0 implies x = 0'(X)
+     proof
+          assume ||.x.|| = 0;
+      then A1:  sqrt (x .|. x) = 0 by Def4;
+            0 <= x .|. x by Def2;
+          then x .|. x = 0 by A1,SQUARE_1:92;
+          hence thesis by Def2;
+     end;
+     assume x = 0'(X);
+     then sqrt (x .|. x) = 0 by Def2,SQUARE_1:82;
+     hence thesis by Def4;
+end;
+
+theorem Th33:
+  ||.a * x.|| = abs(a) * ||.x.||
+proof
+     A1: 0 <= a^2 by SQUARE_1:72;
+     A2: 0 <= x .|. x by Def2;
+       ||.a * x.|| = sqrt ((a * x) .|. (a * x)) by Def4
+              .= sqrt (a * (x .|. (a * x))) by Def2
+              .= sqrt (a * (a * (x .|. x))) by Def2
+              .= sqrt ((a * a) * (x .|. x)) by XCMPLX_1:4
+              .= sqrt (a^2 * (x .|. x)) by SQUARE_1:def 3
+              .= sqrt (a^2) * sqrt (x .|. x) by A1,A2,SQUARE_1:97
+              .= abs(a) * sqrt (x .|. x) by SQUARE_1:91;
+      hence thesis by Def4;
+      end;
+
+theorem Th34:
+  0 <= ||.x.||
+proof
+       0 <= x .|. x by Def2;
+     then 0 <= sqrt (x .|. x) by SQUARE_1:def 4;
+     hence thesis by Def4;
+end;
+
+theorem Th35:
+  abs(x .|. y) <= ||.x.|| * ||.y.||
+proof
+       abs(x .|. y) <= sqrt (x .|. x) * sqrt (y .|. y) by Th24;
+     then abs(x .|. y) <= ||.x.|| * sqrt (y .|. y) by Def4;
+     hence thesis by Def4;
+end;
+
+theorem Th36:
+  ||.x + y.|| <= ||.x.|| + ||.y.||
+proof
+ A1:  ||.x + y.|| = sqrt ((x + y) .|. (x + y)) by Def4;
+ A2:  ||.x + y.|| >= 0 by Th34;
+ A3:  (x + y) .|. (x + y) >= 0 by Def2;
+ A4:  ||.x + y.||^2 >= 0 by SQUARE_1:72;
+ A5:  x .|. x >= 0 by Def2;
+ A6:  y .|. y >= 0 by Def2;
+       sqrt ||.x + y.||^2 = sqrt ((x + y) .|. (x + y)) by A1,A2,SQUARE_1:89;
+     then ||.x + y.||^2 = (x + y) .|. (x + y) by A3,A4,SQUARE_1:96;
+     then ||.x + y.||^2 = x .|. x + 2 * x .|. y + y .|. y by Th21;
+     then ||.x + y.||^2 = (sqrt (x .|. x))^2 + 2 * x .|. y + y .|.
+ y by A5,SQUARE_1:def 4;
+     then ||.x + y.||^2 = ||.x.||^2 + 2 * x .|. y + y .|. y by Def4;
+     then ||.x + y.||^2 = ||.x.||^2 + 2 * x .|. y + (sqrt (y .|. y))^2
+       by A6,SQUARE_1:def 4;
+then A7:   ||.x + y.||^2 = ||.x.||^2 + 2 * x .|. y + ||.y.||^2 by Def4;
+A8:   abs(x .|. y) <= ||.x.|| * ||.y.|| by Th35;
+       x .|. y <= abs(x .|. y) by ABSVALUE:11;
+   then x .|. y <= ||.x.|| * ||.y.|| by A8,AXIOMS:22;
+     then 2 * x .|. y <= 2 * (||.x.|| * ||.y.||) by AXIOMS:25;
+     then 2 * x .|. y <= 2 * ||.x.|| * ||.y.|| by XCMPLX_1:4;
+     then ||.x.||^2 + 2 * x .|. y <= ||.x.||^2 + 2 * ||.x.|| * ||.y.||
+ by REAL_1:55;
+     then ||.x.||^2 + 2 * x .|. y + ||.y.||^2 <=
+     ||.x.||^2 + 2 * ||.x.|| * ||.y.|| + ||.y.||^2 by AXIOMS:24;
+then A9:   ||.x + y.||^2 <= (||.x.|| + ||.y.||)^2 by A7,SQUARE_1:63;
+A10:   ||.x.|| >= 0 by Th34;
+       ||.y.|| >= 0 by Th34;
+     then ||.x.|| + ||.y.|| >= ||.x.|| + 0 by REAL_1:55;
+     hence thesis by A9,A10,SQUARE_1:78;
+end;
+
+theorem Th37:
+  ||.-x.|| = ||.x.||
+proof
+A1:  abs(-1) = -(-1) by ABSVALUE:def 1;
+       ||.-x.|| = ||.(-1) * x.|| by RLVECT_1:29
+           .= 1 * ||.x.|| by A1,Th33;
+     hence thesis;
+end;
+
+theorem Th38:
+  ||.x.|| - ||.y.|| <= ||.x - y.||
+proof
+       (x - y) + y = x - (y - y) by RLVECT_1:43
+                .= x - 0'(X) by RLVECT_1:28
+                .= x by RLVECT_1:26;
+     then ||.x.|| <= ||.x - y.|| + ||.y.|| by Th36;
+     hence thesis by REAL_1:86;
+end;
+
+theorem
+    abs(||.x.|| - ||.y.||) <= ||.x - y.||
+proof
+A1:  ||.x.|| - ||.y.|| <= ||.x - y.|| by Th38;
+       (y - x) + x = y - (x - x) by RLVECT_1:43
+                .= y - 0'(X) by RLVECT_1:28
+                .= y by RLVECT_1:26;
+     then ||.y.|| <= ||.y - x.|| + ||.x.|| by Th36;
+     then ||.y.|| - ||.x.|| <= ||.y - x.|| by REAL_1:86;
+     then ||.y.|| - ||.x.|| <= ||.(-x) + y.|| by RLVECT_1:def 11;
+     then ||.y.|| - ||.x.|| <= ||.-(x - y).|| by RLVECT_1:47;
+     then ||.y.|| - ||.x.|| <= ||.x - y.|| by Th37;
+     then -(||.x.|| - ||.y.||) <= ||.x - y.|| by XCMPLX_1:143;
+     then -||.x - y.|| <= -(-(||.x.|| - ||.y.||)) by REAL_1:50;
+     hence thesis by A1,ABSVALUE:12;
+end;
+
+definition let X, x, y;
+ func dist(x,y) -> Real equals
+:Def5:  ||.x - y.||;
+ correctness;
+end;
+
+theorem Th40:
+  dist(x,y) = dist(y,x)
+proof
+  thus dist(x,y) = ||.x-y.|| by Def5
+              .= ||.(-y)+x.|| by RLVECT_1:def 11
+              .= ||.-(y-x).|| by RLVECT_1:47
+              .= ||.y-x.|| by Th37
+              .= dist(y,x) by Def5;
+end;
+
+definition let X, x, y;
+  redefine func dist(x,y);
+  commutativity by Th40;
+end;
+
+theorem Th41:
+  dist(x,x) = 0
+proof
+  thus dist(x,x) = ||.x-x.|| by Def5
+              .= ||.0'(X).|| by RLVECT_1:28
+              .= 0 by Th32;
+end;
+
+theorem
+    dist(x,z) <= dist(x,y) + dist(y,z)
+proof
+       dist(x,z) = ||.x-z.|| by Def5
+              .= ||.(x-z)+0'(X).|| by RLVECT_1:10
+              .= ||.(x-z)+(y-y).|| by RLVECT_1:28
+              .= ||.x-(z-(y-y)).|| by RLVECT_1:43
+              .= ||.x-(y+(z-y)).|| by RLVECT_1:43
+              .= ||.(x-y)-(z-y).|| by RLVECT_1:41
+              .= ||.(x-y)+-(z-y).|| by RLVECT_1:def 11
+              .= ||.(x-y)+(y+(-z)).|| by RLVECT_1:47
+              .= ||.(x-y)+(y-z).|| by RLVECT_1:def 11;
+     then dist(x,z) <= ||.x-y.|| + ||.y-z.|| by Th36;
+     then dist(x,z) <= dist(x,y) + ||.y-z.|| by Def5;
+     hence thesis by Def5;
+end;
+
+theorem Th43:
+  x <> y iff dist(x,y) <> 0
+proof
+     thus x <> y implies dist(x,y) <> 0
+     proof
+          assume that
+     A1:   x <> y and
+     A2:   dist(x,y) = 0;
+            ||.x-y.|| = 0 by A2,Def5;
+          then x - y = 0'(X) by Th32;
+          hence contradiction by A1,RLVECT_1:35;
+     end;
+     thus thesis by Th41;
+end;
+
+theorem Th44:
+  dist(x,y) >= 0
+proof
+       dist(x,y) = ||.x-y.|| by Def5;
+     hence thesis by Th34;
+end;
+
+theorem
+    x <> y iff dist(x,y) > 0
+proof
+     thus x <> y implies dist(x,y) > 0
+     proof
+          assume
+        x <> y;
+           then dist(x,y) <> 0 by Th43;
+         hence thesis by Th44;
+     end;
+     thus thesis by Th41;
+end;
+
+theorem
+    dist(x,y) = sqrt ((x-y) .|. (x-y))
+proof
+       dist(x,y) = ||.x-y.|| by Def5;
+     hence thesis by Def4;
+end;
+
+theorem
+    dist(x + y,u + v) <= dist(x,u) + dist(y,v)
+proof
+       dist(x + y,u + v) = ||.(x + y) - (u + v).|| by Def5
+  .= ||.x + (y - (u + v)).|| by RLVECT_1:42
+  .= ||.x + (-(u + v) + y).|| by RLVECT_1:def 11
+  .= ||.-(u + v) + (x + y).|| by RLVECT_1:def 6
+  .= ||.((-u) + (-v)) + (x + y).|| by RLVECT_1:45
+  .= ||.x + ((-u) + (-v)) + y.|| by RLVECT_1:def 6
+  .= ||.(x + (-u)) + (-v) + y.|| by RLVECT_1:def 6
+  .= ||.x - u + (-v) + y.|| by RLVECT_1:def 11
+  .= ||.x - u + (y + -v).|| by RLVECT_1:def 6
+  .= ||.x - u + (y - v).|| by RLVECT_1:def 11;
+     then dist(x + y,u + v) <= ||.x - u.|| + ||.y - v.|| by Th36;
+     then dist(x + y,u + v) <= dist(x,u) + ||.y - v.|| by Def5;
+     hence thesis by Def5;
+end;
+
+theorem
+    dist(x - y,u - v) <= dist(x,u) + dist(y,v)
+proof
+       dist(x - y,u - v) = ||.(x - y) - (u - v).|| by Def5
+  .= ||.((x - y) - u) + v.|| by RLVECT_1:43
+  .= ||.(x - (u + y)) + v.|| by RLVECT_1:41
+  .= ||.((x - u) - y) + v.|| by RLVECT_1:41
+  .= ||.(x - u) - (y - v).|| by RLVECT_1:43
+  .= ||.(x - u) + -(y - v).|| by RLVECT_1:def 11;
+     then dist(x - y,u - v) <= ||.x - u.|| + ||.-(y - v).|| by Th36;
+     then dist(x - y,u - v) <= ||.x - u.|| + ||.y - v.|| by Th37;
+     then dist(x - y,u - v) <= dist(x,u) + ||.y - v.|| by Def5;
+     hence thesis by Def5;
+end;
+
+theorem
+    dist(x - z, y - z) = dist(x,y)
+proof
+     thus dist(x - z,y - z) = ||.(x - z) - (y -z).|| by Def5
+  .= ||.((x - z) - y) + z.|| by RLVECT_1:43
+  .= ||.(x - (y + z)) + z.|| by RLVECT_1:41
+  .= ||.((x - y) - z) + z.|| by RLVECT_1:41
+  .= ||.(x - y) - (z - z).|| by RLVECT_1:43
+  .= ||.(x - y) - 0'(X).|| by RLVECT_1:28
+  .= ||.x - y.|| by RLVECT_1:26
+  .= dist(x,y) by Def5;
+end;
+
+theorem
+    dist(x - z,y - z) <= dist(z,x) + dist(z,y)
+proof
+       dist(x - z,y - z) = ||.(x - z) - (y - z).|| by Def5
+  .= ||.(x - z) + -(y - z).|| by RLVECT_1:def 11
+  .= ||.(x - z) + (z +(-y)).|| by RLVECT_1:47
+  .= ||.(x - z) + (z - y).|| by RLVECT_1:def 11
+  .= ||.((-z) + x) + (z - y).|| by RLVECT_1:def 11
+  .= ||.-(z - x) + (z - y).|| by RLVECT_1:47;
+     then dist(x - z,y - z) <= ||.-(z - x).|| + ||.z - y.|| by Th36;
+     then dist(x - z,y - z) <= ||.z - x.|| + ||.z - y.|| by Th37;
+     then dist(x - z,y - z) <= dist(z,x) + ||.z - y.|| by Def5;
+     hence thesis by Def5;
+end;
+
+reserve seq, seq1, seq2, seq3 for sequence of X;
+reserve k, n, m for Nat;
+reserve f for Function;
+reserve d, s, t for set;
+
+scheme Ex_Seq_in_RUS { X() -> non empty UNITSTR, F(Nat) -> Point of X() } :
+       ex seq be sequence of X() st for n holds seq.n = F(n)
+       proof
+       defpred P[set,set] means ex n st n =$1 & $2 = F(n);
+    A1: for d st d in NAT ex s st P[d,s]
+       proof
+            let d; assume d in NAT;
+            then reconsider n = d as Nat;
+            reconsider z = F(n) as set;
+            take z;
+            thus thesis;
+       end;
+    A2: for d , s , t st d in NAT & P[d,s] & P[d,t] holds s = t;
+       consider f such that
+    A3: dom f = NAT and
+    A4: for d st d in NAT holds P[d,f.d] from FuncEx(A2,A1);
+         for d st d in NAT holds f.d is Point of X()
+       proof
+            let d; assume d in NAT;
+            then ex n st n = d & f.d = F(n) by A4;
+            hence f.d is Point of X();
+       end;
+       then reconsider f as sequence of X() by A3,NORMSP_1:17;
+       take seq = f;
+       let n;
+         P[n,seq.n] by A4;
+       hence seq.n = F(n);
+end;
+
+definition let X; let seq;
+ canceled 4;
+
+  func - seq -> sequence of X means
+:Def10: for n holds it.n = - seq.n;
+existence
+proof
+  deffunc F(Nat) = -seq.$1;
+  ex seq be sequence of X st for n holds seq.n = F(n) from Ex_Seq_in_RUS;
+  hence thesis;
+end;
+uniqueness
+  proof
+    let seq1, seq2 such that
+    A1:  for n holds seq1.n = - seq.n and
+    A2:  for n holds seq2.n = - seq.n;
+      now let n;
+        seq1.n = - seq.n by A1;
+      hence seq1.n = seq2.n by A2;
+    end;
+    hence seq1 = seq2 by FUNCT_2:113;
+  end;
+end;
+
+definition let X; let seq; let x;
+ canceled;
+
+ func seq + x -> sequence of X means
+:Def12:     for n holds it.n = seq.n + x;
+existence
+proof
+  deffunc F(Nat) = seq.$1 + x;
+  ex seq be sequence of X st for n holds seq.n = F(n) from Ex_Seq_in_RUS;
+  hence thesis;
+end;
+uniqueness
+proof
+               let seq1, seq2;
+               assume that
+          A1:  ( for n holds seq1.n = seq.n + x ) and
+          A2:  ( for n holds seq2.n = seq.n + x );
+                 for n holds seq1.n = seq2.n
+               proof
+                    let n;
+                    seq1.n = seq.n + x by A1;
+                    hence thesis by A2;
+               end;
+              hence thesis by FUNCT_2:113;
+          end;
+end;
+
+canceled 4;
+
+theorem
+Th55:  seq1 + seq2 = seq2 + seq1
+proof
+       now let n;
+     thus (seq1 + seq2).n = seq2.n + seq1.n by NORMSP_1:def 5
+                    .= (seq2 + seq1).n by NORMSP_1:def 5;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+definition let X, seq1, seq2;
+ redefine func seq1 + seq2;
+ commutativity by Th55;
+end;
+
+theorem
+    seq1 + (seq2 + seq3) = (seq1 + seq2) + seq3
+proof
+       now let n;
+     thus
+       (seq1 + (seq2 + seq3)).n = seq1.n + (seq2 + seq3).n by NORMSP_1:def 5
+  .= seq1.n + (seq2.n + seq3.n) by NORMSP_1:def 5
+  .= (seq1.n + seq2.n) + seq3.n by RLVECT_1:def 6
+  .= (seq1 + seq2).n + seq3.n by NORMSP_1:def 5
+  .= ((seq1 + seq2) + seq3).n by NORMSP_1:def 5;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem
+    seq1 is constant & seq2 is constant & seq = seq1 + seq2
+    implies seq is constant
+proof
+     assume that
+A1:   seq1 is constant and
+A2:   seq2 is constant and
+A3:   seq = seq1 + seq2;
+     consider x such that
+A4:   for n holds seq1.n = x by A1,NORMSP_1:def 4;
+     consider y such that
+A5:   for n holds seq2.n = y by A2,NORMSP_1:def 4;
+     take z = x + y;
+       now let n;
+     thus seq.n = seq1.n + seq2.n by A3,NORMSP_1:def 5
+          .= x + seq2.n by A4
+          .= z by A5;
+     end;
+     hence thesis;
+end;
+
+theorem
+    seq1 is constant & seq2 is constant & seq = seq1 - seq2
+    implies seq is constant
+proof
+     assume that
+A1:   seq1 is constant and
+A2:   seq2 is constant and
+A3:   seq = seq1 - seq2;
+     consider x such that
+A4:   for n holds seq1.n = x by A1,NORMSP_1:def 4;
+     consider y such that
+A5:   for n holds seq2.n = y by A2,NORMSP_1:def 4;
+     take z = x - y;
+       now let n;
+     thus seq.n = seq1.n - seq2.n by A3,NORMSP_1:def 6
+          .= x - seq2.n by A4
+          .= z by A5;
+     end;
+     hence thesis;
+end;
+
+theorem
+    seq1 is constant & seq = a * seq1
+    implies seq is constant
+proof
+     assume that
+A1:   seq1 is constant and
+A2:   seq = a * seq1;
+     consider x such that
+A3:   for n holds seq1.n = x by A1,NORMSP_1:def 4;
+     take z = a * x;
+       now let n;
+     thus seq.n = a * seq1.n by A2,NORMSP_1:def 8
+          .= z by A3;
+     end;
+     hence thesis;
+end;
+
+canceled 8;
+
+theorem Th68:
+  seq is constant iff for n holds seq.n = seq.(n + 1)
+proof
+     thus seq is constant implies for n holds seq.n=seq.(n + 1)
+     proof
+          assume
+            seq is constant;
+          then ex x st rng seq = {x} by NORMSP_1:27;
+          hence thesis by NORMSP_1:21;
+     end;
+     assume for n holds seq.n = seq.(n + 1);
+     then for n, k holds seq.n = seq.(n + k) by NORMSP_1:22;
+     then for n, m holds seq.n = seq.m by NORMSP_1:23;
+     hence ex x st for n holds seq.n = x by NORMSP_1:24;
+end;
+
+theorem Th69:
+  seq is constant iff for n , k holds seq.n = seq.(n + k)
+proof
+     thus seq is constant implies for n , k holds seq.n = seq.(n + k)
+     proof
+          assume seq is constant;
+          then for n holds seq.n=seq.(n+1) by Th68;
+          hence thesis by NORMSP_1:22;
+     end;
+     assume for n, k holds seq.n = seq.(n + k);
+     then for n, m holds seq.n = seq.m by NORMSP_1:23;
+     hence ex x st for n holds seq.n = x by NORMSP_1:24;
+end;
+
+theorem
+    seq is constant iff for n, m holds seq.n = seq.m
+proof
+     thus seq is constant implies for n, m holds seq.n = seq.m
+     proof
+          assume seq is constant;
+          then for n, k holds seq.n = seq.(n + k) by Th69;
+          hence thesis by NORMSP_1:23;
+     end;
+     assume for n, m holds seq.n = seq.m;
+     hence ex x st for n holds seq.n = x by NORMSP_1:24;
+end;
+
+theorem
+    seq1 - seq2 = seq1 + -seq2
+proof
+       now let n;
+     thus
+       (seq1 - seq2).n = seq1.n - seq2.n by NORMSP_1:def 6
+                    .= seq1.n + -seq2.n by RLVECT_1:def 11
+                    .= seq1.n + (-seq2).n by Def10
+                    .= (seq1 + -seq2).n by NORMSP_1:def 5;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem
+    seq = seq + 0.X
+proof
+       now let n;
+     thus (seq + 0'(X)).n = seq.n + 0'(X) by Def12
+                    .= seq.n by RLVECT_1:10;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem
+    a * (seq1 + seq2) = a * seq1 + a * seq2
+proof
+       now let n;
+     thus (a * (seq1 + seq2)).n = a * (seq1 + seq2).n by NORMSP_1:def 8
+                          .= a * (seq1.n + seq2.n) by NORMSP_1:def 5
+                          .= a * seq1.n + a * seq2.n by RLVECT_1:def 9
+                          .= (a * seq1).n + a * seq2.n by NORMSP_1:def 8
+                          .= (a * seq1).n + (a * seq2).n by NORMSP_1:def 8
+                          .= (a * seq1 + a * seq2).n by NORMSP_1:def 5;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem
+    (a + b) * seq = a * seq + b * seq
+proof
+       now let n;
+     thus ((a + b) * seq).n = (a + b) * seq.n by NORMSP_1:def 8
+                      .= a * seq.n + b * seq.n by RLVECT_1:def 9
+                      .= (a * seq).n + b * seq.n by NORMSP_1:def 8
+                      .= (a * seq).n + (b * seq).n by NORMSP_1:def 8
+                      .= (a * seq + b * seq).n by NORMSP_1:def 5;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem
+    (a * b) * seq = a * (b * seq)
+proof
+       now let n;
+     thus ((a * b) * seq).n = (a * b) * seq.n by NORMSP_1:def 8
+                      .= a * (b * seq.n) by RLVECT_1:def 9
+                      .= a * (b * seq).n by NORMSP_1:def 8
+                      .= (a * (b * seq)).n by NORMSP_1:def 8;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem
+    1 * seq = seq
+proof
+       now let n;
+     thus (1 * seq).n = 1 * seq.n by NORMSP_1:def 8
+                .= seq.n by RLVECT_1:def 9;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem
+    (-1) * seq = - seq
+proof
+       now let n;
+     thus ((-1) * seq).n = (-1) * seq.n by NORMSP_1:def 8
+                   .= - seq.n by RLVECT_1:29
+                   .= (-seq).n by Def10;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem
+    seq - x = seq + -x
+proof
+       now let n;
+     thus (seq - x).n = seq.n - x by NORMSP_1:def 7
+                .= seq.n + -x by RLVECT_1:def 11
+                .= (seq + -x).n by Def12;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem
+    seq1 - seq2 = - (seq2 - seq1)
+proof
+       now let n;
+     thus (seq1 - seq2).n = seq1.n - seq2.n by NORMSP_1:def 6
+                    .= -seq2.n + seq1.n by RLVECT_1:def 11
+                    .= - (seq2.n - seq1.n) by RLVECT_1:47
+                    .= - (seq2 - seq1).n by NORMSP_1:def 6
+                    .= (- (seq2 - seq1)).n by Def10;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem
+    seq = seq - 0.X
+proof
+       now let n;
+     thus (seq - 0'(X)).n = seq.n - 0'(X) by NORMSP_1:def 7
+                    .= seq.n by RLVECT_1:26;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem
+    seq = - ( - seq )
+proof
+       now let n;
+     thus (- ( - seq )).n = - (- seq).n by Def10
+                    .= - ( - seq.n) by Def10
+                    .= seq.n by RLVECT_1:30;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem
+    seq1 - (seq2 + seq3) = (seq1 - seq2) - seq3
+proof
+       now let n;
+     thus
+       (seq1 - (seq2 + seq3)).n = seq1.n - (seq2 + seq3).n by NORMSP_1:def 6
+                             .= seq1.n - (seq2.n + seq3.n) by NORMSP_1:def 5
+                             .= (seq1.n - seq2.n) - seq3.n by RLVECT_1:41
+                             .= (seq1 - seq2).n - seq3.n by NORMSP_1:def 6
+                             .= ((seq1 - seq2) - seq3).n by NORMSP_1:def 6;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem
+    (seq1 + seq2) - seq3 = seq1 + (seq2 - seq3)
+proof
+       now let n;
+     thus
+       ((seq1 + seq2) - seq3).n = (seq1 + seq2).n - seq3.n by NORMSP_1:def 6
+                             .= (seq1.n + seq2.n) - seq3.n by NORMSP_1:def 5
+                             .= seq1.n + (seq2.n - seq3.n) by RLVECT_1:42
+                             .= seq1.n + (seq2 - seq3).n by NORMSP_1:def 6
+                             .= (seq1 + (seq2 - seq3)).n by NORMSP_1:def 5;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem
+    seq1 - (seq2 - seq3) = (seq1 - seq2) + seq3
+proof
+       now let n;
+     thus
+       (seq1 - (seq2 - seq3)).n = seq1.n - (seq2 - seq3).n by NORMSP_1:def 6
+                             .= seq1.n - (seq2.n - seq3.n) by NORMSP_1:def 6
+                             .= (seq1.n - seq2.n) + seq3.n by RLVECT_1:43
+                             .= (seq1 - seq2).n + seq3.n by NORMSP_1:def 6
+                             .= ((seq1 - seq2) + seq3).n by NORMSP_1:def 5;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem
+    a * (seq1 - seq2) = a * seq1 - a * seq2
+proof
+       now let n;
+     thus
+       (a * (seq1 - seq2)).n = a * (seq1 - seq2).n by NORMSP_1:def 8
+                          .= a * (seq1.n - seq2.n) by NORMSP_1:def 6
+                          .= a * seq1.n - a * seq2.n by RLVECT_1:48
+                          .= (a * seq1).n - a * seq2.n by NORMSP_1:def 8
+                          .= (a * seq1).n - (a * seq2).n by NORMSP_1:def 8
+                          .= (a * seq1 - a * seq2).n by NORMSP_1:def 6;
+     end;
+     hence thesis by FUNCT_2:113;
+end;

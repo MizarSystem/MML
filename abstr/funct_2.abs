@@ -1,0 +1,659 @@
+:: Functions from a Set to a Set
+::  by Czes{\l}aw Byli\'nski
+::
+:: Received April 6, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, BOOLE, FUNCT_1, PARTFUN1, FUNCT_2, SGRAPH1, RELAT_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, RELSET_1,
+      FUNCT_1, PARTFUN1;
+ constructors TARSKI, PARTFUN1, RELAT_2, XBOOLE_0;
+ clusters FUNCT_1, RELAT_1, RELSET_1, SUBSET_1, XBOOLE_0, ZFMISC_1, PARTFUN1;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+ reserve P,Q,X,Y,Z,p,x,x',x1,x2,y,y1,y2,z for set;
+
+::::::::::::::::::::::::::::::::::::
+:: function from a set into a set ::
+::::::::::::::::::::::::::::::::::::
+
+definition let X,Y; let R be Relation of X,Y;
+ attr R is quasi_total means
+:: FUNCT_2:def 1
+ X = dom R if Y = {} implies X = {}
+   otherwise R = {};
+end;
+
+definition let X,Y;
+ cluster quasi_total Function-like Relation of X,Y;
+end;
+
+definition let X,Y;
+ cluster total -> quasi_total PartFunc of X,Y;
+end;
+
+definition let X,Y;
+ mode Function of X,Y is quasi_total Function-like Relation of X,Y;
+end;
+
+canceled 2;
+
+theorem :: FUNCT_2:3
+     for f being Function holds f is Function of dom f, rng f;
+
+theorem :: FUNCT_2:4
+   for f being Function st rng f c= Y holds f is Function of dom f, Y;
+
+theorem :: FUNCT_2:5
+     for f being Function
+    st dom f = X & for x st x in X holds f.x in Y holds f is Function of X,Y;
+
+theorem :: FUNCT_2:6
+   for f being Function of X,Y st Y <> {} & x in X holds f.x in rng f;
+
+theorem :: FUNCT_2:7
+   for f being Function of X,Y st Y <> {} & x in X holds f.x in Y;
+
+theorem :: FUNCT_2:8
+     for f being Function of X,Y st (Y = {} implies X = {}) & rng f c= Z
+     holds f is Function of X,Z;
+
+theorem :: FUNCT_2:9
+     for f being Function of X,Y
+    st (Y = {} implies X = {}) & Y c= Z holds f is Function of X,Z;
+
+scheme FuncEx1{X, Y() -> set, P[set,set]}:
+ ex f being Function of X(),Y() st for x st x in X() holds P[x,f.x]
+provided
+ for x st x in X() ex y st y in Y() & P[x,y];
+
+scheme Lambda1{X, Y() -> set, F(set)->set}:
+ ex f being Function of X(),Y() st for x st x in X() holds f.x = F(x)
+provided
+ for x st x in X() holds F(x) in Y();
+
+::::::::::::::::::::::::::::::::::::::::::::
+:: set of functions from a set into a set ::
+::::::::::::::::::::::::::::::::::::::::::::
+
+definition let X,Y;
+ func Funcs(X,Y) -> set means
+:: FUNCT_2:def 2
+ x in it iff ex f being Function st x = f & dom f = X & rng f c= Y;
+end;
+
+canceled;
+
+theorem :: FUNCT_2:11
+   for f being Function of X,Y st Y = {} implies X = {} holds f in Funcs(X,Y);
+
+theorem :: FUNCT_2:12
+   for f being Function of X,X holds f in Funcs(X,X);
+
+definition let X be set, Y be non empty set;
+  cluster Funcs(X,Y) -> non empty;
+end;
+
+definition let X be set;
+  cluster Funcs(X,X) -> non empty;
+end;
+
+canceled;
+
+theorem :: FUNCT_2:14
+   X <> {} implies Funcs(X,{}) = {};
+
+canceled;
+
+theorem :: FUNCT_2:16
+     for f being Function of X,Y
+     st Y <> {} & for y st y in Y ex x st x in X & y = f.x holds rng f = Y;
+
+theorem :: FUNCT_2:17
+     for f being Function of X,Y st y in Y & rng f = Y ex x st x in X & f.x = y
+;
+
+theorem :: FUNCT_2:18
+   for f1,f2 being Function of X,Y
+     st for x st x in X holds f1.x = f2.x
+    holds f1 = f2;
+
+theorem :: FUNCT_2:19
+   for f being Function of X,Y for g being Function of Y,Z
+     st Y = {} implies Z = {} or X = {}
+    holds g*f is Function of X,Z;
+
+theorem :: FUNCT_2:20
+     for f being Function of X,Y for g being Function of Y,Z
+    st Y <> {} & Z <> {} & rng f = Y & rng g = Z holds rng(g*f) = Z;
+
+theorem :: FUNCT_2:21
+     for f being Function of X,Y, g being Function
+      st Y <> {} & x in X holds (g*f).x = g.(f.x);
+
+theorem :: FUNCT_2:22
+     for f being Function of X,Y st Y <> {}
+     holds rng f = Y iff
+      for Z st Z <> {} for g,h being Function of Y,Z st g*f = h*f holds g = h;
+
+theorem :: FUNCT_2:23
+     for f being Function of X,Y
+     st Y = {} implies X = {} holds f*(id X) = f & (id Y)*f = f;
+
+theorem :: FUNCT_2:24
+     for f being Function of X,Y for g being Function of Y,X
+     st f*g = id Y holds rng f = Y;
+
+theorem :: FUNCT_2:25
+     for f being Function of X,Y st Y = {} implies X = {}
+    holds f is one-to-one iff
+      for x1,x2 st x1 in X & x2 in X & f.x1 = f.x2 holds x1 = x2;
+
+theorem :: FUNCT_2:26
+     for f being Function of X,Y for g being Function of Y,Z
+     st (Z = {} implies Y = {}) & (Y = {} implies X = {}) & g*f is one-to-one
+    holds f is one-to-one;
+
+theorem :: FUNCT_2:27
+     for f being Function of X,Y st X <> {} & Y <> {}
+     holds f is one-to-one iff
+      for Z for g,h being Function of Z,X st f*g = f*h holds g = h;
+
+theorem :: FUNCT_2:28
+     for f being Function of X,Y for g being Function of Y,Z
+     st Z <> {} & rng(g*f) = Z & g is one-to-one holds rng f = Y;
+
+theorem :: FUNCT_2:29
+     for f being Function of X,Y for g being Function of Y,X
+     st Y <> {} & g*f = id X holds f is one-to-one & rng g = X;
+
+theorem :: FUNCT_2:30
+     for f being Function of X,Y for g being Function of Y,Z
+     st (Z = {} implies Y = {}) & g*f is one-to-one & rng f = Y
+    holds f is one-to-one & g is one-to-one;
+
+theorem :: FUNCT_2:31
+   for f being Function of X,Y st f is one-to-one & rng f = Y
+    holds f" is Function of Y,X;
+
+theorem :: FUNCT_2:32
+     for f being Function of X,Y
+    st Y <> {} & f is one-to-one & x in X holds (f").(f.x) = x;
+
+canceled;
+
+theorem :: FUNCT_2:34
+     for f being Function of X,Y for g being Function of Y,X
+      st X <> {} & Y <> {} & rng f = Y & f is one-to-one &
+         for y,x holds y in Y & g.y = x iff x in X & f.x = y
+    holds g = f";
+
+theorem :: FUNCT_2:35
+     for f being Function of X,Y
+     st Y <> {} & rng f = Y & f is one-to-one holds f"*f = id X & f*f" = id Y;
+
+theorem :: FUNCT_2:36
+     for f being Function of X,Y for g being Function of Y,X
+     st X <> {} & Y <> {} & rng f = Y & g*f = id X & f is one-to-one
+    holds g = f";
+
+theorem :: FUNCT_2:37
+     for f being Function of X,Y
+     st Y <> {}
+ & ex g being Function of Y,X st g*f = id X holds f is one-to-one;
+
+theorem :: FUNCT_2:38
+     for f being Function of X,Y
+    st (Y = {} implies X = {}) & Z c= X holds f|Z is Function of Z,Y;
+
+canceled;
+
+theorem :: FUNCT_2:40
+     for f being Function of X,Y st X c= Z holds f|Z = f;
+
+theorem :: FUNCT_2:41
+     for f being Function of X,Y st Y <> {} & x in X & f.x in Z holds
+    (Z|f).x = f.x;
+
+canceled;
+
+theorem :: FUNCT_2:43
+     for f being Function of X,Y st Y <> {}
+    for y holds
+     (ex x st x in X & x in P & y = f.x) implies y in f.:P;
+
+theorem :: FUNCT_2:44
+   for f being Function of X,Y holds f.:P c= Y;
+
+definition let X,Y; let f be Function of X,Y; let P;
+  redefine func f.:P -> Subset of Y;
+end;
+
+theorem :: FUNCT_2:45
+   for f being Function of X,Y st Y = {} implies X = {} holds f.:X = rng f;
+
+theorem :: FUNCT_2:46
+    for f being Function of X,Y
+    st Y <> {} for x holds x in f"Q iff x in X & f.x in Q;
+
+theorem :: FUNCT_2:47
+   for f being PartFunc of X,Y holds f"Q c= X;
+
+definition let X,Y; let f be PartFunc of X,Y; let Q;
+  redefine func f"Q -> Subset of X;
+end;
+
+theorem :: FUNCT_2:48
+     for f being Function of X,Y st Y = {} implies X = {} holds f"Y = X;
+
+theorem :: FUNCT_2:49
+     for f being Function of X,Y
+    holds (for y st y in Y holds f"{y} <> {}) iff rng f = Y;
+
+theorem :: FUNCT_2:50
+     for f being Function of X,Y
+     st (Y = {} implies X = {}) & P c= X holds P c= f"(f.:P);
+
+theorem :: FUNCT_2:51
+   for f being Function of X,Y st Y = {} implies X = {} holds f"(f.:X) = X;
+
+canceled;
+
+theorem :: FUNCT_2:53
+     for f being Function of X,Y for g being Function of Y,Z
+     st (Z = {} implies Y = {}) & (Y = {} implies X = {})
+    holds f"Q c= (g*f)"(g.:Q);
+
+::::::::::::::::::::
+:: Empty Function ::
+::::::::::::::::::::
+
+canceled;
+
+theorem :: FUNCT_2:55
+   for f being Function st dom f = {} holds f is Function of {},Y;
+
+canceled 3;
+
+theorem :: FUNCT_2:59
+     for f being Function of {},Y holds f.:P = {};
+
+theorem :: FUNCT_2:60
+     for f being Function of {},Y holds f"Q = {};
+
+:::::::::::::::::::::::::::::::::::::::
+:: Function from a singelton into set::
+:::::::::::::::::::::::::::::::::::::::
+
+theorem :: FUNCT_2:61
+     for f being Function of {x},Y st Y <> {} holds f.x in Y;
+
+theorem :: FUNCT_2:62
+   for f being Function of {x},Y st Y <> {} holds rng f = {f.x};
+
+canceled;
+
+theorem :: FUNCT_2:64
+     for f being Function of {x},Y st Y <> {} holds f.:P c= {f.x};
+
+::::::::::::::::::::::::::::::::::::::::::
+:: Function from a set into a singelton ::
+::::::::::::::::::::::::::::::::::::::::::
+
+theorem :: FUNCT_2:65
+   for f being Function of X,{y} st x in X holds f.x = y;
+
+theorem :: FUNCT_2:66
+   for f1,f2 being Function of X,{y} holds f1 = f2;
+
+::::::::::::::::::::::::::::
+:: Function from X into X ::
+::::::::::::::::::::::::::::
+
+definition let X;
+   let f,g be Function of X,X;
+  redefine func g*f -> Function of X,X;
+end;
+
+theorem :: FUNCT_2:67
+   for f being Function of X,X holds dom f = X & rng f c= X;
+
+canceled 2;
+
+theorem :: FUNCT_2:70
+     for f being Function of X,X, g being Function
+    st x in X holds (g*f).x = g.(f.x);
+
+canceled 2;
+
+theorem :: FUNCT_2:73
+   for f,g being Function of X,X st rng f = X & rng g = X holds rng(g*f) = X;
+
+theorem :: FUNCT_2:74
+     for f being Function of X,X holds f*(id X) = f & (id X)*f = f;
+
+theorem :: FUNCT_2:75
+     for f,g being Function of X,X st g*f = f & rng f = X holds g = id X;
+
+theorem :: FUNCT_2:76
+     for f,g being Function of X,X st f*g = f & f is one-to-one holds g = id X;
+
+theorem :: FUNCT_2:77
+   for f being Function of X,X
+    holds f is one-to-one iff
+     for x1,x2 st x1 in X & x2 in X & f.x1 = f.x2 holds x1 = x2;
+
+canceled;
+
+theorem :: FUNCT_2:79
+     for f being Function of X,X holds f.:X = rng f
+;
+
+canceled 2;
+
+theorem :: FUNCT_2:82
+     for f being Function of X,X holds f"(f.:X) = X
+;
+
+::::::::::::::::::::::::::
+:: Permutation of a set ::
+::::::::::::::::::::::::::
+
+definition let X, Y be set; let f be Function of X, Y;
+  attr f is onto means
+:: FUNCT_2:def 3
+  rng f = Y;
+end;
+
+definition let X, Y; let f be Function of X,Y;
+ attr f is bijective means
+:: FUNCT_2:def 4
+ f is one-to-one onto;
+end;
+
+definition let X, Y be set;
+  cluster bijective -> one-to-one onto Function of X,Y;
+  cluster one-to-one onto -> bijective Function of X,Y;
+end;
+
+definition let X;
+ cluster bijective Function of X,X;
+end;
+
+definition let X;
+ mode Permutation of X is bijective Function of X,X;
+end;
+
+theorem :: FUNCT_2:83
+  for f being Function of X, X st f is one-to-one & rng f = X
+   holds f is Permutation of X;
+
+canceled;
+
+theorem :: FUNCT_2:85
+     for f being Function of X,X st f is one-to-one holds
+    for x1,x2 st x1 in X & x2 in X & f.x1 = f.x2 holds x1 = x2;
+
+definition let X; let f,g be Permutation of X;
+  redefine func g*f -> Permutation of X;
+end;
+
+definition let X;
+ cluster reflexive total -> bijective Function of X,X;
+end;
+
+definition let X; let f be Permutation of X;
+  redefine func f" -> Permutation of X;
+end;
+
+theorem :: FUNCT_2:86
+     for f,g being Permutation of X st g*f = g holds f = id X;
+
+theorem :: FUNCT_2:87
+     for f,g being Permutation of X st g*f = id X holds g = f";
+
+theorem :: FUNCT_2:88
+     for f being Permutation of X holds (f")*f =id X & f*(f") = id X;
+
+canceled 3;
+
+theorem :: FUNCT_2:92
+     for f being Permutation of X st P c= X holds f.:(f"P) = P & f"(f.:P) = P;
+
+::::::::::::::::::::::::::::::::::::::::::::
+:: Function from a set into a nonempty set
+::::::::::::::::::::::::::::::::::::::::::::
+
+ reserve C,D,E for non empty set;
+
+definition let X,D;
+ cluster quasi_total -> total PartFunc of X,D;
+end;
+
+definition let X,D,Z;
+  let f be Function of X,D; let g be Function of D,Z;
+  redefine func g*f -> Function of X,Z;
+end;
+
+reserve c for Element of C;
+reserve d for Element of D;
+
+definition let C be non empty set, D be set; let f be Function of C,D;
+  let c be Element of C;
+  redefine func f.c -> Element of D;
+end;
+
+scheme FuncExD{C, D() -> non empty set, P[set,set]}:
+ ex f being Function of C(),D() st for x being Element of C() holds P[x,f.x]
+provided
+ for x being Element of C() ex y being Element of D() st P[x,y];
+
+scheme LambdaD{C, D() -> non empty set, F(Element of C()) -> Element of D()}:
+ ex f being Function of C(),D() st
+  for x being Element of C() holds f.x = F(x);
+
+canceled 20;
+
+theorem :: FUNCT_2:113
+     for f1,f2 being Function of X,Y st
+    for x being Element of X holds f1.x = f2.x holds f1 = f2;
+
+canceled;
+
+theorem :: FUNCT_2:115
+   for P being set
+   for f being Function of X,Y
+    for y holds y in f.:P implies ex x st x in X & x in P & y = f.x;
+
+theorem :: FUNCT_2:116
+     for f being Function of X,Y for y st y in f.:P
+    ex c being Element of X st c in P & y = f.c;
+
+canceled;
+
+theorem :: FUNCT_2:118
+   for f1,f2 being Function of [:X,Y:],Z
+     st for x,y st x in X & y in Y holds f1.[x,y] = f2.[x,y]
+    holds f1 = f2;
+
+theorem :: FUNCT_2:119
+     for f being Function of [:X,Y:],Z st x in X & y in Y & Z <> {}
+    holds f.[x,y] in Z;
+
+scheme FuncEx2{X, Y, Z() -> set, P[set,set,set]}:
+ ex f being Function of [:X(),Y():],Z() st
+   for x,y st x in X() & y in Y() holds P[x,y,f.[x,y]]
+provided
+ for x,y st x in X() & y in Y() ex z st z in Z() & P[x,y,z];
+
+scheme Lambda2{X, Y, Z() -> set, F(set,set)->set}:
+ ex f being Function of [:X(),Y():],Z()
+  st for x,y st x in X() & y in Y() holds f.[x,y] = F(x,y)
+provided
+ for x,y st x in X() & y in Y() holds F(x,y) in Z();
+
+theorem :: FUNCT_2:120
+     for f1,f2 being Function of [:C,D:],E st for c,d holds f1.[c,d] = f2.[c,d]
+    holds f1 = f2;
+
+scheme FuncEx2D{X, Y, Z() -> non empty set, P[set,set,set]}:
+ ex f being Function of [:X(),Y():],Z() st
+   for x being Element of X() for y being Element of Y() holds P[x,y,f.[x,y]]
+provided
+ for x being Element of X() for y being Element of Y()
+      ex z being Element of Z() st P[x,y,z];
+
+scheme Lambda2D{X, Y, Z() -> non empty set,
+                F(Element of X(),Element of Y()) -> Element of Z()}:
+ ex f being Function of [:X(),Y():],Z()
+  st for x being Element of X() for y being Element of Y() holds f.[x,y]=F(x,y)
+;
+
+begin :: PARTFUN1
+
+theorem :: FUNCT_2:121
+   for f being set st f in Funcs(X,Y) holds f is Function of X,Y;
+
+scheme Lambda1C{A, B() -> set, C[set], F(set)->set, G(set)->set}:
+ ex f being Function of A(),B() st
+  for x st x in A() holds
+   (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x))
+ provided
+ for x st x in A() holds
+     (C[x] implies F(x) in B()) & (not C[x] implies G(x) in B());
+
+canceled 8;
+
+theorem :: FUNCT_2:130
+     for f being PartFunc of X,Y st dom f = X holds f is Function of X,Y;
+
+theorem :: FUNCT_2:131
+    for f being PartFunc of X,Y st f is total holds f is Function of X,Y;
+
+theorem :: FUNCT_2:132
+   for f being PartFunc of X,Y st (Y = {} implies X = {}) &
+   f is Function of X,Y holds f is total;
+
+theorem :: FUNCT_2:133
+   for f being Function of X,Y
+     st (Y = {} implies X = {}) holds <:f,X,Y:> is total;
+
+theorem :: FUNCT_2:134
+     for f being Function of X,X holds <:f,X,X:> is total;
+
+canceled;
+
+theorem :: FUNCT_2:136
+    for f being PartFunc of X,Y st Y = {} implies X = {}
+     ex g being Function of X,Y st for x st x in dom f holds g.x = f.x;
+
+canceled 4;
+
+theorem :: FUNCT_2:141
+     Funcs(X,Y) c= PFuncs(X,Y);
+
+theorem :: FUNCT_2:142
+   for f,g being Function of X,Y st (Y = {} implies X = {}) &
+   f tolerates g holds f = g;
+
+theorem :: FUNCT_2:143
+     for f,g being Function of X,X st f tolerates g holds f = g;
+
+canceled;
+
+theorem :: FUNCT_2:145
+   for f being PartFunc of X,Y for g being Function of X,Y
+     st Y = {} implies X = {}
+    holds f tolerates g iff for x st x in dom f holds f.x = g.x;
+
+theorem :: FUNCT_2:146
+     for f being PartFunc of X,X for g being Function of X,X
+    holds f tolerates g iff for x st x in dom f holds f.x = g.x;
+
+canceled;
+
+theorem :: FUNCT_2:148
+   for f being PartFunc of X,Y st Y = {} implies X = {}
+    ex g being Function of X,Y st f tolerates g;
+
+theorem :: FUNCT_2:149
+     for f being PartFunc of X,X ex g being Function of X,X st f tolerates g;
+
+canceled;
+
+theorem :: FUNCT_2:151
+   for f,g being PartFunc of X,Y for h being Function of X,Y
+    st (Y = {} implies X = {}) & f tolerates h & g tolerates h holds
+      f tolerates g;
+
+theorem :: FUNCT_2:152
+     for f,g being PartFunc of X,X for h being Function of X,X
+     st f tolerates h & g tolerates h holds f tolerates g;
+
+canceled;
+
+theorem :: FUNCT_2:154
+     for f,g being PartFunc of X,Y st (Y = {} implies X = {}) & f tolerates g
+    ex h being Function of X,Y st f tolerates h & g tolerates h;
+
+theorem :: FUNCT_2:155
+   for f being PartFunc of X,Y for g being Function of X,Y
+     st (Y = {} implies X = {}) & f tolerates g holds g in TotFuncs f;
+
+theorem :: FUNCT_2:156
+     for f being PartFunc of X,X for g being Function of X,X
+     st f tolerates g holds g in TotFuncs f;
+
+canceled;
+
+theorem :: FUNCT_2:158
+  for f being PartFunc of X,Y for g being set
+   st g in TotFuncs(f) holds g is Function of X,Y;
+
+theorem :: FUNCT_2:159
+     for f being PartFunc of X,Y holds TotFuncs f c= Funcs(X,Y);
+
+theorem :: FUNCT_2:160
+     TotFuncs <:{},X,Y:> = Funcs(X,Y);
+
+theorem :: FUNCT_2:161
+   for f being Function of X,Y st Y = {} implies X = {}
+     holds TotFuncs <:f,X,Y:> = {f};
+
+theorem :: FUNCT_2:162
+     for f being Function of X,X holds TotFuncs <:f,X,X:> = {f};
+
+canceled;
+
+theorem :: FUNCT_2:164
+     for f being PartFunc of X,{y} for g being Function of X,{y}
+    holds TotFuncs f = {g};
+
+theorem :: FUNCT_2:165
+     for f,g being PartFunc of X,Y
+     st g c= f holds TotFuncs f c= TotFuncs g;
+
+theorem :: FUNCT_2:166
+   for f,g being PartFunc of X,Y
+     st dom g c= dom f & TotFuncs f c= TotFuncs g holds g c= f;
+
+theorem :: FUNCT_2:167
+   for f,g being PartFunc of X,Y
+     st TotFuncs f c= TotFuncs g & (for y holds Y <> {y})
+    holds g c= f;
+
+theorem :: FUNCT_2:168
+     for f,g being PartFunc of X,Y
+    st (for y holds Y <> {y}) & TotFuncs f = TotFuncs g holds f = g;
+
+:: from WAYBEL_1
+
+definition let A,B be non empty set;
+ cluster -> non empty Function of A,B;
+end;
+

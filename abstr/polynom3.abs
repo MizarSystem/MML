@@ -1,0 +1,505 @@
+:: The Ring of Polynomials
+::  by Robert Milewski
+::
+:: Received April 17, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, FINSEQ_1, RELAT_1, FUNCT_1, FINSEQ_5, BOOLE, MATRIX_2,
+      FINSEQ_2, MATRLIN, MEASURE6, SQUARE_1, ORDERS_1, RELAT_2, ORDERS_2,
+      FINSET_1, TRIANG_1, ARYTM_1, CARD_1, VECTSP_1, NORMSP_1, FUNCT_2,
+      POLYNOM1, ALGSEQ_1, FUNCOP_1, FUNCT_4, ARYTM_3, LATTICES, ALGSTR_2,
+      GROUP_1, BINOP_1, DTCONSTR, RFINSEQ, POLYNOM3, FINSEQ_4, PARTFUN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      SQUARE_1, STRUCT_0, NAT_1, RELAT_1, RELAT_2, RELSET_1, CARD_1, FINSET_1,
+      FUNCT_1, PARTFUN1, FUNCT_2, ORDERS_1, ORDERS_2, TRIANG_1, FINSEQ_1,
+      FINSEQ_2, FINSEQ_4, FINSEQ_5, FINSOP_1, FINSEQOP, TOPREAL1, RFINSEQ,
+      BINOP_1, RVSUM_1, FVSUM_1, GOBOARD1, TREES_4, WSIERP_1, MATRLIN,
+      BINARITH, GROUP_1, DTCONSTR, RLVECT_1, VECTSP_1, NORMSP_1, POLYNOM1,
+      ALGSEQ_1;
+ constructors SQUARE_1, REAL_1, MONOID_0, DOMAIN_1, ORDERS_2, TRIANG_1,
+      FINSEQOP, ALGSTR_2, FINSEQ_5, FINSOP_1, RFINSEQ, BINARITH, ALGSEQ_1,
+      SETWOP_2, FVSUM_1, TOPREAL1, POLYNOM1, GOBOARD1, WSIERP_1, MEMBERED;
+ clusters XREAL_0, SUBSET_1, FINSEQ_1, STRUCT_0, RELSET_1, VECTSP_1, BINARITH,
+      FINSEQ_2, FINSEQ_5, INT_1, GROUP_2, POLYNOM1, GOBRD13, FUNCT_2, MEMBERED,
+      ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+
+
+begin  :: Preliminaries
+
+  theorem :: POLYNOM3:1
+   for L be add-associative right_zeroed right_complementable
+    (non empty LoopStr)
+   for p be FinSequence of the carrier of L st
+    for i be Nat st i in dom p holds p.i = 0.L holds
+     Sum p = 0.L;
+
+  theorem :: POLYNOM3:2
+   for V be Abelian add-associative right_zeroed (non empty LoopStr)
+   for p be FinSequence of the carrier of V holds
+    Sum p = Sum Rev p;
+
+  theorem :: POLYNOM3:3
+   for p be FinSequence of REAL holds
+    Sum p = Sum Rev p;
+
+  theorem :: POLYNOM3:4
+   for p be FinSequence of NAT
+   for i be Nat st i in dom p holds
+    Sum p >= p.i;
+
+  definition
+   let D be non empty set;
+   let i be Nat;
+   let p be FinSequence of D;
+   redefine func Del(p,i) -> FinSequence of D;
+  end;
+
+  definition
+   let D be non empty set;
+   let a,b be Element of D;
+   redefine func <*a,b*> -> Element of 2-tuples_on D;
+  end;
+
+  definition
+   let D be non empty set;
+   let k,n be Nat;
+   let p be Element of k-tuples_on D;
+   let q be Element of n-tuples_on D;
+   redefine func p^q -> Element of (k+n)-tuples_on D;
+  end;
+
+  definition
+   let D be non empty set;
+   let n be Nat;
+   cluster -> FinSequence-yielding FinSequence of n-tuples_on D;
+  end;
+
+  definition
+   let D be non empty set;
+   let k,n be Nat;
+   let p be FinSequence of (k-tuples_on D);
+   let q be FinSequence of (n-tuples_on D);
+   redefine func p ^^ q -> Element of ((k+n)-tuples_on D)*;
+  end;
+
+  scheme SeqOfSeqLambdaD{D()->non empty set,A()->Nat,T(Nat)->Nat,
+                         F(set,set)->Element of D()}:
+   ex p be FinSequence of D()* st
+    len p = A() &
+    for k be Nat st k in Seg A() holds
+     len (p/.k) = T(k) &
+     for n be Nat st n in dom (p/.k) holds
+      (p/.k).n = F(k,n);
+
+begin  :: The Lexicographic Order of Finite Sequences
+
+  definition
+   let n be Nat;
+   let p,q be Element of n-tuples_on NAT;
+   pred p < q means
+:: POLYNOM3:def 1
+    ex i be Nat st i in Seg n & p.i < q.i &
+     for k be Nat st 1 <= k & k < i holds p.k = q.k;
+   asymmetry;
+   synonym q > p;
+  end;
+
+  definition
+   let n be Nat;
+   let p,q be Element of n-tuples_on NAT;
+   pred p <= q means
+:: POLYNOM3:def 2
+    p < q or p = q;
+   reflexivity;
+   synonym q >= p;
+  end;
+
+  theorem :: POLYNOM3:5
+   for n be Nat
+   for p,q,r be Element of n-tuples_on NAT holds
+    (p < q & q < r implies p < r) &
+    ((p < q & q <= r) or (p <= q & q < r) or (p <= q & q <= r) implies p <= r);
+
+  theorem :: POLYNOM3:6
+   for n be Nat
+   for p,q be Element of n-tuples_on NAT holds
+    p <> q implies ex i be Nat st i in Seg n & p.i <> q.i &
+     for k be Nat st 1 <= k & k < i holds p.k = q.k;
+
+  theorem :: POLYNOM3:7
+   for n be Nat
+   for p,q be Element of n-tuples_on NAT holds
+    p <= q or p > q;
+
+  definition
+   let n be Nat;
+   func TuplesOrder n -> Order of n-tuples_on NAT means
+:: POLYNOM3:def 3
+    for p,q be Element of n-tuples_on NAT holds [p,q] in it iff p <= q;
+  end;
+
+  definition
+   let n be Nat;
+   cluster TuplesOrder n -> being_linear-order;
+  end;
+
+begin  :: Decomposition of Natural Numbers
+
+  definition
+   let i be non empty Nat;
+   let n be Nat;
+   func Decomp(n,i) -> FinSequence of i-tuples_on NAT means
+:: POLYNOM3:def 4
+    ex A be finite Subset of i-tuples_on NAT st
+     it = SgmX (TuplesOrder i,A) &
+     for p be Element of i-tuples_on NAT holds p in A iff Sum p = n;
+  end;
+
+  definition
+   let i be non empty Nat;
+   let n be Nat;
+   cluster Decomp(n,i) -> non empty one-to-one FinSequence-yielding;
+  end;
+
+  theorem :: POLYNOM3:8
+   for n be Nat holds len Decomp(n,1) = 1;
+
+  theorem :: POLYNOM3:9
+   for n be Nat holds len Decomp(n,2) = n+1;
+
+  theorem :: POLYNOM3:10
+     for n be Nat holds Decomp(n,1) = <*<*n*>*>;
+
+  theorem :: POLYNOM3:11
+   for i,j,n,k1,k2 be Nat st Decomp(n,2).i = <*k1,n-'k1*> &
+    Decomp(n,2).j = <*k2,n-'k2*> holds i<j iff k1<k2;
+
+  theorem :: POLYNOM3:12
+   for i,n,k1,k2 be Nat st Decomp(n,2).i = <*k1,n-'k1*> &
+    Decomp(n,2).(i+1) = <*k2,n-'k2*> holds k2=k1+1;
+
+  theorem :: POLYNOM3:13
+   for n be Nat holds Decomp(n,2).1 = <*0,n*>;
+
+  theorem :: POLYNOM3:14
+   for n,i be Nat st i in Seg (n+1) holds Decomp(n,2).i = <*i-'1,n+1-'i*>;
+
+  definition
+   let L be non empty HGrStr;
+   let p,q,r be sequence of L;
+   let t be FinSequence of 3-tuples_on NAT;
+   func prodTuples(p,q,r,t) -> Element of (the carrier of L)* means
+:: POLYNOM3:def 5
+    len it = len t &
+    for k be Nat st k in dom t holds
+     it.k = (p.((t/.k)/.1))*(q.((t/.k)/.2))*(r.((t/.k)/.3));
+  end;
+
+  theorem :: POLYNOM3:15
+   for L be non empty HGrStr
+   for p,q,r be sequence of L
+   for t be FinSequence of 3-tuples_on NAT
+   for P be Permutation of dom t
+   for t1 be FinSequence of 3-tuples_on NAT st t1 = t*P holds
+    prodTuples(p,q,r,t1) = prodTuples(p,q,r,t)*P;
+
+  theorem :: POLYNOM3:16
+   for D be set
+   for f be FinSequence of D*
+   for i be Nat holds
+    Card (f|i) = (Card f)|i;
+
+  theorem :: POLYNOM3:17
+   for p be FinSequence of REAL
+   for q be FinSequence of NAT st p=q
+   for i be Nat holds
+    p|i = q|i;
+
+  theorem :: POLYNOM3:18
+   for p be FinSequence of NAT
+   for i,j be Nat st i <= j holds
+    Sum (p|i) <= Sum (p|j);
+
+  theorem :: POLYNOM3:19
+   for D being set,
+       p be FinSequence of D
+   for i be Nat st i < len p holds
+    p|(i+1) = p|i ^ <*p.(i+1)*>;
+
+  theorem :: POLYNOM3:20
+   for p be FinSequence of REAL
+   for i be Nat st i < len p holds
+    Sum (p|(i+1)) = Sum (p|i) + p.(i+1);
+
+  theorem :: POLYNOM3:21
+   for p be FinSequence of NAT
+   for i,j,k1,k2 be Nat st i < len p & j < len p &
+    1 <= k1 & 1 <= k2 & k1 <= p.(i+1) & k2 <= p.(j+1) &
+    (Sum (p|i)) + k1 = (Sum (p|j)) + k2 holds
+     i = j & k1 = k2;
+
+  theorem :: POLYNOM3:22
+   for D1,D2 be set
+   for f1 be FinSequence of D1*
+   for f2 be FinSequence of D2*
+   for i1,i2,j1,j2 be Nat st
+    i1 in dom f1 & i2 in dom f2 & j1 in dom (f1.i1) & j2 in dom (f2.i2) &
+    Card f1 = Card f2 &
+    (Sum ((Card f1)|(i1-'1))) + j1 = (Sum ((Card f2)|(i2-'1))) + j2 holds
+     i1 = i2 & j1 = j2;
+
+begin  :: Polynomials
+
+  definition
+   let L be non empty ZeroStr;
+   mode Polynomial of L is AlgSequence of L;
+  end;
+
+  theorem :: POLYNOM3:23
+   for L be non empty ZeroStr
+   for p be Polynomial of L
+   for n be Nat holds
+    n >= len p iff n is_at_least_length_of p;
+
+  scheme PolynomialLambdaF{R()->non empty LoopStr, A()->Nat,
+                           F(Nat)->Element of R()}:
+   ex p be Polynomial of R() st
+    len p <= A() & for n be Nat st n < A() holds p.n=F(n);
+
+  scheme ExDLoopStrSeq{ R() -> non empty LoopStr,
+                        F(set) -> Element of R() } :
+   ex S be sequence of R() st for n be Nat holds S.n = F(n);
+
+  definition
+   let L be non empty LoopStr;
+   let p,q be sequence of L;
+   func p+q -> sequence of L means
+:: POLYNOM3:def 6
+    for n be Nat holds it.n = p.n + q.n;
+  end;
+
+  definition
+   let L be right_zeroed (non empty LoopStr);
+   let p,q be Polynomial of L;
+   cluster p+q -> finite-Support;
+  end;
+
+  theorem :: POLYNOM3:24
+   for L be right_zeroed (non empty LoopStr)
+   for p,q be Polynomial of L
+   for n be Nat holds
+    (n is_at_least_length_of p & n is_at_least_length_of q) implies
+     n is_at_least_length_of p+q;
+
+  theorem :: POLYNOM3:25
+     for L be right_zeroed (non empty LoopStr)
+   for p,q be Polynomial of L holds
+    support (p+q) c= support p \/ support q;
+
+  definition
+   let L be Abelian (non empty LoopStr);
+   let p,q be sequence of L;
+   redefine func p+q;
+   commutativity;
+  end;
+
+  theorem :: POLYNOM3:26
+   for L be add-associative (non empty LoopStr)
+   for p,q,r be sequence of L holds
+    p+q+r = p+(q+r);
+
+  definition
+   let L be non empty LoopStr;
+   let p be sequence of L;
+   func -p -> sequence of L means
+:: POLYNOM3:def 7
+    for n be Nat holds it.n = -p.n;
+  end;
+
+  definition
+   let L be add-associative right_zeroed right_complementable
+    (non empty LoopStr);
+   let p be Polynomial of L;
+   cluster -p -> finite-Support;
+  end;
+
+  definition
+   let L be non empty LoopStr;
+   let p,q be sequence of L;
+   func p-q -> sequence of L equals
+:: POLYNOM3:def 8
+    p+-q;
+  end;
+
+  definition
+   let L be add-associative right_zeroed right_complementable
+    (non empty LoopStr);
+   let p,q be Polynomial of L;
+   cluster p-q -> finite-Support;
+  end;
+
+  theorem :: POLYNOM3:27
+   for L be non empty LoopStr
+   for p,q be sequence of L
+   for n be Nat holds
+    (p-q).n = p.n - q.n;
+
+  definition
+   let L be non empty ZeroStr;
+   func 0_.(L) -> sequence of L equals
+:: POLYNOM3:def 9
+    NAT --> 0.L;
+  end;
+
+  definition
+   let L be non empty ZeroStr;
+   cluster 0_.(L) -> finite-Support;
+  end;
+
+  theorem :: POLYNOM3:28
+   for L be non empty ZeroStr
+   for n be Nat holds
+    (0_.(L)).n = 0.L;
+
+  theorem :: POLYNOM3:29
+   for L be right_zeroed (non empty LoopStr)
+   for p be sequence of L holds
+    p+0_.(L) = p;
+
+  theorem :: POLYNOM3:30
+   for L be add-associative right_zeroed right_complementable
+    (non empty LoopStr)
+   for p be sequence of L holds
+    p-p = 0_.(L);
+
+  definition
+   let L be non empty multLoopStr_0;
+   func 1_.(L) -> sequence of L equals
+:: POLYNOM3:def 10
+    0_.(L)+*(0,1_(L));
+  end;
+
+  definition
+   let L be non empty multLoopStr_0;
+   cluster 1_.(L) -> finite-Support;
+  end;
+
+  theorem :: POLYNOM3:31
+   for L be non empty multLoopStr_0 holds
+    (1_.(L)).0 = 1_(L) &
+    for n be Nat st n <> 0 holds (1_.(L)).n = 0.L;
+
+  definition
+   let L be non empty doubleLoopStr;
+   let p,q be sequence of L;
+   func p*'q -> sequence of L means
+:: POLYNOM3:def 11
+    for i be Nat
+    ex r be FinSequence of the carrier of L st
+     len r = i+1 & it.i = Sum r &
+     for k be Nat st k in dom r holds r.k = p.(k-'1) * q.(i+1-'k);
+  end;
+
+  definition
+   let L be add-associative right_zeroed right_complementable distributive
+    (non empty doubleLoopStr);
+   let p,q be Polynomial of L;
+   cluster p*'q -> finite-Support;
+  end;
+
+  theorem :: POLYNOM3:32
+   for L be Abelian add-associative right_zeroed right_complementable
+    right-distributive (non empty doubleLoopStr)
+   for p,q,r be sequence of L holds
+    p*'(q+r) = p*'q+p*'r;
+
+  theorem :: POLYNOM3:33
+   for L be Abelian add-associative right_zeroed right_complementable
+    left-distributive (non empty doubleLoopStr)
+   for p,q,r be sequence of L holds
+    (p+q)*'r = p*'r+q*'r;
+
+  theorem :: POLYNOM3:34
+   for L be Abelian add-associative right_zeroed right_complementable unital
+    associative distributive (non empty doubleLoopStr)
+   for p,q,r be sequence of L holds
+    p*'q*'r = p*'(q*'r);
+
+  definition
+   let L be Abelian add-associative right_zeroed commutative
+    (non empty doubleLoopStr);
+   let p,q be sequence of L;
+   redefine func p*'q;
+   commutativity;
+  end;
+
+  theorem :: POLYNOM3:35
+     for L be add-associative right_zeroed right_complementable
+    right-distributive (non empty doubleLoopStr)
+   for p be sequence of L holds
+    p*'0_.(L) = 0_.(L);
+
+  theorem :: POLYNOM3:36
+   for L be add-associative right_zeroed right_unital right_complementable
+    right-distributive (non empty doubleLoopStr)
+   for p be sequence of L holds
+    p*'1_.(L) = p;
+
+begin  :: The Ring of Polynomials
+
+  definition
+   let L be add-associative right_zeroed right_complementable distributive
+    (non empty doubleLoopStr);
+   func Polynom-Ring L -> strict non empty doubleLoopStr means
+:: POLYNOM3:def 12
+    (for x be set holds x in the carrier of it iff x is Polynomial of L) &
+    (for x,y be Element of it, p,q be sequence of L st
+      x = p & y = q holds x+y = p+q) &
+    (for x,y be Element of it, p,q be sequence of L st
+      x = p & y = q holds x*y = p*'q) &
+    0.it = 0_.(L) &
+    1_(it) = 1_.(L);
+  end;
+
+  definition
+   let L be Abelian add-associative right_zeroed right_complementable
+                                      distributive (non empty doubleLoopStr);
+   cluster Polynom-Ring L -> Abelian;
+  end;
+
+  definition
+   let L be add-associative right_zeroed right_complementable
+                                      distributive (non empty doubleLoopStr);
+   cluster Polynom-Ring L -> add-associative;
+
+   cluster Polynom-Ring L -> right_zeroed;
+
+   cluster Polynom-Ring L -> right_complementable;
+  end;
+
+  definition
+   let L be Abelian add-associative right_zeroed right_complementable
+                          commutative distributive (non empty doubleLoopStr);
+   cluster Polynom-Ring L -> commutative;
+  end;
+
+  definition
+   let L be Abelian add-associative right_zeroed right_complementable unital
+                          associative distributive (non empty doubleLoopStr);
+   cluster Polynom-Ring L -> associative;
+  end;
+
+  definition
+   let L be add-associative right_zeroed right_complementable right_unital
+                                      distributive (non empty doubleLoopStr);
+   cluster Polynom-Ring L -> right_unital;
+  end;
+
+  definition
+   let L be Abelian add-associative right_zeroed right_complementable
+                                      distributive (non empty doubleLoopStr);
+   cluster Polynom-Ring L -> distributive;
+  end;

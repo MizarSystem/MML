@@ -1,0 +1,122 @@
+:: Classes of Independent Partitions
+::  by Andrzej Trybulec
+::
+:: Received February 14, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, FUNCT_2, MARGREL1, PARTIT1, EQREL_1, BOOLE, FUNCT_1,
+      SETFAM_1, CANTOR_1, T_1TOPSP, RELAT_2, ZF_LANG, BVFUNC_1, BVFUNC_2,
+      FUNCT_4, PARTFUN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, MARGREL1, VALUAT_1,
+      CANTOR_1, RELAT_1, RELAT_2, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
+      FRAENKEL, FUNCT_4, EQREL_1, PARTIT1, BVFUNC_1, BVFUNC_2;
+ constructors FUNCT_7, BVFUNC_2, BVFUNC_1, CANTOR_1;
+ clusters PARTIT1, SUBSET_1, MARGREL1, VALUAT_1, RELSET_1, FUNCT_1, RELAT_1,
+      EQREL_1, PARTFUN1;
+ requirements SUBSET, BOOLE;
+
+
+begin :: Preliminaries
+
+definition let X,Y be set, R,S be Relation of X,Y;
+ redefine pred R c= S means
+:: PARTIT_2:def 1
+    for x being Element of X, y being Element of Y
+   holds [x,y] in R implies [x,y] in S;
+end;
+
+reserve Y for non empty set,
+        a for Element of Funcs(Y,BOOLEAN),
+        G for Subset of PARTITIONS(Y),
+        P,Q for a_partition of Y;
+
+definition let Y be non empty set, G be non empty Subset of PARTITIONS Y;
+ redefine mode Element of G -> a_partition of Y;
+end;
+
+theorem :: PARTIT_2:1
+ '/\' {} PARTITIONS Y = %O Y;
+
+theorem :: PARTIT_2:2
+ for R,S being Equivalence_Relation of Y holds
+  R \/ S c= R*S;
+
+theorem :: PARTIT_2:3
+ for R being Relation of Y holds R c= nabla Y;
+
+theorem :: PARTIT_2:4
+ for R being Equivalence_Relation of Y holds
+  (nabla Y)*R = nabla Y & R*nabla Y = nabla Y;
+
+theorem :: PARTIT_2:5
+ for P being a_partition of Y, x,y being Element of Y holds
+  [x,y] in ERl P iff x in EqClass(y,P);
+
+theorem :: PARTIT_2:6
+    for P,Q,R being a_partition of Y st ERl(R) = ERl(P)*ERl(Q)
+  for x,y being Element of Y holds
+   x in EqClass(y,R) iff
+     ex z being Element of Y st x in EqClass(z,P) & z in EqClass(y,Q);
+
+theorem :: PARTIT_2:7
+ for R,S being Relation, Y being set st
+  R is_reflexive_in Y & S is_reflexive_in Y
+  holds R*S is_reflexive_in Y;
+
+theorem :: PARTIT_2:8
+ for R being Relation, Y being set st R is_reflexive_in Y
+  holds Y c= field R;
+
+theorem :: PARTIT_2:9
+ for Y being set, R being Relation of Y st R is_reflexive_in Y
+  holds Y = field R;
+
+theorem :: PARTIT_2:10
+   for R,S being Equivalence_Relation of Y st R*S = S*R
+  holds R*S is Equivalence_Relation of Y;
+
+begin :: Boolean-valued Functions
+
+theorem :: PARTIT_2:11
+ for a,b being Element of Funcs(Y,BOOLEAN) st a '<' b
+  holds 'not' b '<' 'not' a;
+
+canceled;
+
+theorem :: PARTIT_2:13
+ for a,b being Element of Funcs(Y,BOOLEAN),
+     G being Subset of PARTITIONS(Y),
+     P being a_partition of Y st a '<' b holds
+ All(a,P,G) '<' All(b,P,G);
+
+canceled;
+
+theorem :: PARTIT_2:15
+   for a,b being Element of Funcs(Y,BOOLEAN),
+     G being Subset of PARTITIONS(Y),
+     P being a_partition of Y st a '<' b holds
+ Ex(a,P,G) '<' Ex(b,P,G);
+
+begin
+
+theorem :: PARTIT_2:16
+ G is independent implies
+ for P,Q being Subset of PARTITIONS Y st P c= G & Q c= G
+  holds ERl('/\'P)*ERl('/\'Q) = ERl('/\'Q)*ERl('/\'P);
+
+theorem :: PARTIT_2:17
+ G is independent
+ implies All(All(a,P,G),Q,G) = All(All(a,Q,G),P,G);
+
+theorem :: PARTIT_2:18
+   G is independent
+ implies Ex(Ex(a,P,G),Q,G) = Ex(Ex(a,Q,G),P,G);
+
+theorem :: PARTIT_2:19
+   for a being Element of Funcs(Y,BOOLEAN),
+     G being Subset of PARTITIONS(Y),
+     P,Q being a_partition of Y st G is independent holds
+ Ex(All(a,P,G),Q,G) '<' All(Ex(a,Q,G),P,G);
+

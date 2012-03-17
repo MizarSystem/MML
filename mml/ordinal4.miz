@@ -1,0 +1,1838 @@
+:: Increasing and Continuous Ordinal Sequences
+::  by Grzegorz Bancerek
+::
+:: Received May 31, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL2, ORDINAL1, FUNCT_1, TARSKI, RELAT_1, BOOLE, FINSEQ_1,
+      ORDINAL3, CLASSES2, CLASSES1, CARD_1, ORDINAL4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1,
+      ORDINAL2, ORDINAL3, CARD_1, CLASSES1, CLASSES2;
+ constructors WELLORD2, ORDINAL3, CARD_1, CLASSES1, CLASSES2, XBOOLE_0;
+ clusters FUNCT_1, ORDINAL1, ORDINAL2, ORDINAL3, CLASSES2, ARYTM_3, CARD_1,
+      ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, ORDINAL2, XBOOLE_0;
+ theorems ZFMISC_1, FUNCT_1, GRFUNC_1, ORDINAL1, ORDINAL2, ORDINAL3, CARD_2,
+      CLASSES2, RELAT_1, CLASSES1, XBOOLE_0, XBOOLE_1;
+ schemes ORDINAL1, ORDINAL2, PARTFUN1;
+
+begin
+
+ reserve phi,fi,psi for Ordinal-Sequence,
+         A,A1,B,C,D for Ordinal,
+         f,g for Function,
+         X for set,
+         x,y,z for set;
+
+definition let L be Ordinal-Sequence;
+  cluster last L -> ordinal;
+  coherence
+  proof
+      last L = L.(union dom L) by ORDINAL2:def 1;
+    hence thesis;
+  end;
+end;
+
+theorem
+   dom fi = succ A implies last fi is_limes_of fi & lim fi = last fi
+  proof assume
+A1:  dom fi = succ A;
+then A2:  fi.A is Ordinal & last fi = fi.A by ORDINAL2:7;
+   thus last fi is_limes_of fi
+     proof per cases;
+      case
+A3:      last fi = {};
+       take A; thus A in dom fi by A1,ORDINAL1:10;
+       let B; assume
+A4:      A c= B & B in dom fi;
+        then B c= A by A1,ORDINAL1:34;
+       hence fi.B = {} by A2,A3,A4,XBOOLE_0:def 10;
+      case last fi <> {};
+       let B,C such that
+A5:      B in last fi & last fi in C;
+       take A; thus A in dom fi by A1,ORDINAL1:10;
+       let D; assume
+A6:      A c= D & D in dom fi;
+        then D c= A by A1,ORDINAL1:34;
+       hence thesis by A2,A5,A6,XBOOLE_0:def 10;
+     end;
+   hence lim fi = last fi by ORDINAL2:def 14;
+  end;
+
+definition let fi,psi be T-Sequence;
+ func fi^psi -> T-Sequence means:
+Def1:    dom it = (dom fi)+^(dom psi) &
+   (for A st A in dom fi holds it.A = fi.A) &
+   (for A st A in dom psi holds it.((dom fi)+^A) = psi.A);
+  existence
+   proof
+    deffunc F(Ordinal) = fi.$1;
+    deffunc G(Ordinal) = psi.(($1)-^dom fi);
+    defpred P[set] means $1 in dom fi;
+    consider f such that
+A1:   dom f = (dom fi)+^(dom psi) and
+A2:   for x being set st x in (dom fi)+^(dom psi) holds
+      (P[x] implies f.x = F(x)) &
+       (not P[x] implies f.x = G(x))
+        from LambdaC;
+    reconsider f as T-Sequence by A1,ORDINAL1:def 7;
+    take f; thus dom f = (dom fi)+^(dom psi) by A1;
+    thus for A st A in dom fi holds f.A = fi.A
+      proof let A such that
+A3:      A in dom fi;
+          dom fi c= dom f by A1,ORDINAL3:27; hence thesis by A1,A2,A3;
+      end;
+    let A; assume A in dom psi;
+then A4:   (dom fi)+^A in dom f by A1,ORDINAL2:49;
+       dom fi c= (dom fi)+^A by ORDINAL3:27;
+     then not (dom fi)+^A in dom fi by ORDINAL1:7;
+     then f.((dom fi)+^A) = psi.((((dom fi)+^A))-^dom fi) &
+      ((dom fi)+^A)-^dom fi = A by A1,A2,A4,ORDINAL3:65;
+    hence thesis;
+   end;
+  uniqueness
+   proof let f1,f2 be T-Sequence such that
+A5:  dom f1 = (dom fi)+^(dom psi) &
+      (for A st A in dom fi holds f1.A = fi.A) &
+      (for A st A in dom psi holds f1.((dom fi)+^A) = psi.A) and
+A6:  dom f2 = (dom fi)+^(dom psi) &
+      (for A st A in dom fi holds f2.A = fi.A) &
+      (for A st A in dom psi holds f2.((dom fi)+^A) = psi.A);
+       now let x; assume
+A7:     x in (dom fi)+^(dom psi);
+      then reconsider A = x as Ordinal by ORDINAL1:23;
+         now per cases;
+        suppose x in dom fi; then f1.A = fi.A & f2.A = fi.A by A5,A6;
+         hence f1.x = f2.x;
+        suppose not x in dom fi;
+          then dom fi c= A by ORDINAL1:26;
+then A8:        (dom fi)+^(A-^dom fi) = A by ORDINAL3:def 6;
+          then A-^dom fi in dom psi by A7,ORDINAL3:25;
+          then f1.A = psi.(A-^dom fi) & f2.A = psi.(A-^dom fi) by A5,A6,A8;
+         hence f1.x = f2.x;
+       end;
+      hence f1.x = f2.x;
+     end;
+    hence thesis by A5,A6,FUNCT_1:9;
+   end;
+end;
+
+definition let fi,psi;
+ cluster fi^psi -> Ordinal-yielding;
+ coherence
+  proof set f = fi^psi;
+A1:  dom f = dom fi +^ dom psi by Def1;
+    consider A1 being Ordinal such that
+A2:  rng fi c= A1 by ORDINAL2:def 8;
+    consider A2 being Ordinal such that
+A3:  rng psi c= A2 by ORDINAL2:def 8;
+       rng f c= A1+^A2
+      proof let y; assume y in rng f;
+       then consider x such that
+A4:     x in dom f & y = f.x by FUNCT_1:def 5;
+       reconsider x as Ordinal by A4,ORDINAL1:23;
+A5:     A1 c= A1+^A2 & A2 c= A1+^A2 by ORDINAL3:27;
+          now per cases;
+         suppose x in dom fi;
+           then y = fi.x & fi.x in rng fi by A4,Def1,FUNCT_1:def 5;
+           then y in A1 by A2;
+          hence thesis by A5;
+         suppose not x in dom fi;
+           then dom fi c= x by ORDINAL1:26;
+then A6:        (dom fi)+^(x-^dom fi) = x
+             by ORDINAL3:def 6;
+then A7:        x-^dom fi in dom psi by A1,A4,ORDINAL3:25;
+           then y = psi.(x-^dom fi) by A4,A6,Def1;
+           then y in rng psi by A7,FUNCT_1:def 5;
+           then y in A2 by A3;
+          hence thesis by A5;
+        end;
+       hence thesis;
+      end;
+   hence f is Ordinal-yielding by ORDINAL2:def 8;
+  end;
+end;
+
+canceled;
+
+theorem
+ Th3: A is_limes_of psi implies A is_limes_of fi^psi
+  proof assume
+A1:  A = {} &
+    (ex B st B in dom psi & for C st B c= C & C in dom psi holds psi.C = {}) or
+    A <> {} &
+     for B,C st B in A & A in C ex D st D in dom psi &
+      for E being Ordinal st D c= E & E in dom psi holds B in psi.E & psi.E in
+ C;
+A2:  dom(fi^psi) = (dom fi)+^(dom psi) by Def1;
+   per cases;
+    case A = {};
+     then consider B such that
+A3:    B in dom psi & for C st B c= C & C in dom psi holds psi.C = {} by A1;
+     take B1 = (dom fi)+^B;
+     thus B1 in dom(fi^psi) by A2,A3,ORDINAL2:49;
+     let C; assume
+A4:    B1 c= C & C in dom(fi^psi);
+then A5:    C = B1+^(C-^B1) by ORDINAL3:def 6
+ .= (dom fi)+^(B+^(C-^B1)) by ORDINAL3:33;
+      then B c= B+^(C-^B1) & B+^(C-^B1) in dom psi by A2,A4,ORDINAL3:25,27;
+      then (fi^psi).C = psi.(B+^(C-^B1)) & psi.(B+^(C-^B1)) = {} by A3,A5,Def1
+;
+     hence thesis;
+    case
+      A <> {};
+     let B,C; assume
+      B in A & A in C;
+     then consider D such that
+A6:     D in dom psi and
+A7:     for E being Ordinal st D c= E & E in dom psi holds B in psi.E & psi.E
+in C
+         by A1;
+     take D1 = (dom fi)+^D;
+     thus D1 in dom(fi^psi) by A2,A6,ORDINAL2:49;
+     let E be Ordinal; assume
+A8:    D1 c= E & E in dom(fi^psi);
+then A9:    E = D1+^(E-^D1) by ORDINAL3:def 6
+ .= (dom fi)+^(D+^(E-^D1)) by ORDINAL3:33;
+      then D c= D+^(E-^D1) & D+^(E-^D1) in dom psi by A2,A8,ORDINAL3:25,27;
+      then (fi^psi).E = psi.(D+^(E-^D1)) & B in psi.(D+^(E-^D1)) &
+      psi.(D+^(E-^D1)) in C
+        by A7,A9,Def1;
+     hence thesis;
+  end;
+
+theorem
+    A is_limes_of fi implies B+^A is_limes_of B+^fi
+  proof assume
+A1:  A = {} &
+    (ex B st B in dom fi & for C st B c= C & C in dom fi holds fi.C = {}) or
+    A <> {} &
+     for B,C st B in A & A in C ex D st D in dom fi &
+      for E being Ordinal st D c= E & E in dom fi holds B in fi.E & fi.E in C;
+A2:  dom fi = dom(B+^fi) by ORDINAL3:def 2;
+   per cases;
+    case A3: B+^A = {};
+     then consider A1 such that
+A4:    A1 in dom fi & for C st A1 c= C & C in dom fi holds fi.C = {}
+       by A1,ORDINAL3:29;
+     take A1; thus A1 in dom(B+^fi) by A4,ORDINAL3:def 2;
+     let C; assume A1 c= C & C in dom(B+^fi);
+      then (B+^fi).C = B+^(fi.C) & fi.C = {} & {} = {}
+        by A2,A4,ORDINAL3:def 2;
+     hence (B+^fi).C = {} by A3,ORDINAL3:29;
+    case
+      B+^A <> {};
+        now per cases;
+       suppose
+A5:       A = {};
+        then consider A1 such that
+A6:       A1 in dom fi & for C st A1 c= C & C in dom fi holds fi.C = {} by A1;
+        let B1,B2 be Ordinal such that
+A7:       B1 in B+^A & B+^A in B2;
+        take A1; thus A1 in dom(B+^fi) by A6,ORDINAL3:def 2;
+        let C; assume A1 c= C & C in dom(B+^fi);
+         then (B+^fi).C = B+^(fi.C) & fi.C = {} & {} = {}
+           by A2,A6,ORDINAL3:def 2;
+        hence B1 in (B+^fi).C & (B+^fi).C in B2 by A5,A7;
+       suppose
+A8:       A <> {};
+        let B1,B2 be Ordinal; assume
+           B1 in B+^A & B+^A in B2;
+then A9:       B1-^B in A & A in B2-^B & B+^A c= B2
+          by A8,ORDINAL1:def 2,ORDINAL3:73,74;
+        then consider A1 such that
+A10:       A1 in dom fi &
+          for C st A1 c= C & C in dom fi holds B1-^B in fi.C & fi.C in
+ B2-^B by A1;
+        take A1; thus A1 in dom(B+^fi) by A10,ORDINAL3:def 2;
+           B c= B+^A by ORDINAL3:27;
+then A11:       B c= B2 & B1 c= B+^(B1-^B) by A9,ORDINAL3:75,XBOOLE_1:1;
+        let C; assume
+A12:       A1 c= C & C in dom(B+^fi);
+        reconsider E = fi.C as Ordinal;
+A13:       (B+^fi).C = B+^(fi.C) & B1-^B in E & E in B2-^B & E = E &
+           B+^(B2-^B) = B2
+            by A2,A10,A11,A12,ORDINAL3:def 2,def 6;
+         then B+^(B1-^B) in B+^E by ORDINAL2:49;
+        hence B1 in (B+^fi).C & (B+^fi).C in B2 by A11,A13,ORDINAL1:22,ORDINAL2
+:49;
+      end;
+     hence for A1,C st A1 in B+^A & B+^A in C ex D st D in dom(B+^fi) &
+       for E being Ordinal st D c= E & E in dom(B+^fi) holds
+        A1 in (B+^fi).E & (B+^fi).E in C;
+  end;
+
+ Lm1: A is_limes_of fi implies dom fi <> {}
+  proof assume
+A1:  A = {} &
+    (ex B st B in dom fi & for C st B c= C & C in dom fi holds fi.C = {}) or
+    A <> {} &
+     for B,C st B in A & A in C ex D st D in dom fi &
+      for E being Ordinal st D c= E & E in dom fi holds B in fi.E & fi.E in C;
+      now per cases;
+     suppose A = {};
+      hence thesis by A1;
+     suppose
+       A <> {};
+       then {} in A & A in succ A by ORDINAL1:10,ORDINAL3:10;
+       then ex B st B in dom fi &
+        for C st B c= C & C in dom fi holds {} in fi.C & fi.C in succ A by A1;
+      hence thesis;
+    end;
+   hence thesis;
+  end;
+
+theorem
+ Th5: A is_limes_of fi implies A*^B is_limes_of fi*^B
+  proof assume
+A1:  A is_limes_of fi;
+then A2:  dom fi = dom(fi*^B) & dom fi <> {} by Lm1,ORDINAL3:def 5;
+   per cases;
+    case A*^B = {};
+then A3:    B = {} or A = {} by ORDINAL3:34;
+        now per cases;
+       suppose
+A4:      B = {};
+        consider x being Element of dom fi;
+        reconsider x as Ordinal;
+        take A1 = x; thus A1 in dom(fi*^B) by A2;
+        let C; assume A1 c= C & C in dom(fi*^B);
+        hence (fi*^B).C = (fi.C)*^B by A2,ORDINAL3:def 5
+                      .= {} by A4,ORDINAL2:55;
+       suppose B <> {};
+        then consider A1 such that
+A5:      A1 in dom fi & for C st A1 c= C & C in dom fi holds fi.C = {}
+          by A1,A3,ORDINAL2:def 13;
+        take A1; thus A1 in dom(fi*^B) by A5,ORDINAL3:def 5;
+        let C; assume A1 c= C & C in dom(fi*^B);
+         then (fi*^B).C = (fi.C)*^B & fi.C = {} & {} = {}
+          by A2,A5,ORDINAL3:def 5;
+        hence (fi*^B).C = {} by ORDINAL2:52;
+      end;
+     hence ex A1 st A1 in dom(fi*^B) &
+       for C st A1 c= C & C in dom(fi*^B) holds (fi*^B).C = {};
+    case A*^B <> {};
+then A6:    A <> {} & B <> {} by ORDINAL2:52,55;
+     let B1,B2 be Ordinal such that
+A7:    B1 in A*^B & A*^B in B2;
+A8:    now given A1 such that
+A9:     A = succ A1;
+          A1 in A & A in succ A by A9,ORDINAL1:10;
+       then consider D such that
+A10:     D in dom fi &
+         for C st D c= C & C in dom fi holds A1 in fi.C & fi.C in succ A by A1,
+ORDINAL2:def 13;
+       take D; thus D in dom(fi*^B) by A10,ORDINAL3:def 5;
+       let C; assume
+A11:     D c= C & C in dom(fi*^B);
+       reconsider E = fi.C as Ordinal;
+A12:     A1 in E & E in succ A & (fi*^B).C = E*^B by A2,A10,A11,ORDINAL3:def 5;
+        then A c= E & E c= A by A9,ORDINAL1:33,34;
+       hence B1 in (fi*^B).C & (fi*^B).C in B2 by A7,A12,XBOOLE_0:def 10;
+      end;
+        now assume not ex A1 st A = succ A1;
+        then A is_limit_ordinal by ORDINAL1:42;
+       then consider C such that
+A13:      C in A & B1 in C*^B by A7,ORDINAL3:49;
+          A in succ A by ORDINAL1:10;
+       then consider D such that
+A14:      D in dom fi &
+         for A1 st D c= A1 & A1 in dom fi holds C in fi.A1 & fi.A1 in succ A
+          by A1,A13,ORDINAL2:def 13;
+       take D; thus D in dom(fi*^B) by A14,ORDINAL3:def 5;
+       let A1; assume
+A15:      D c= A1 & A1 in dom(fi*^B);
+       reconsider E = fi.A1 as Ordinal;
+          C in fi.A1 & fi.A1 in succ A by A2,A14,A15;
+        then C*^B in E*^B & E c= A by A6,ORDINAL1:34,ORDINAL2:57;
+        then B1 in E*^B & E*^B c= A*^B & E = E &
+        (fi*^B).A1 = (fi.A1)*^B
+         by A2,A13,A15,ORDINAL1:19,ORDINAL2:58,ORDINAL3:def 5;
+       hence B1 in (fi*^B).A1 & (fi*^B).A1 in B2 by A7,ORDINAL1:22;
+      end;
+     hence thesis by A8;
+  end;
+
+theorem
+ Th6: dom fi = dom psi & B is_limes_of fi & C is_limes_of psi &
+  ((for A st A in dom fi holds fi.A c= psi.A) or
+    (for A st A in dom fi holds fi.A in psi.A)) implies B c= C
+  proof assume that
+A1: dom fi = dom psi and
+A2: B = {} &
+    (ex A1 st A1 in dom fi & for C st A1 c= C & C in dom fi holds fi.C = {}) or
+    B <> {} &
+     for A1,C st A1 in B & B in C ex D st D in dom fi &
+      for E being Ordinal st D c= E & E in dom fi holds A1 in fi.E & fi.E in
+ C and
+A3: C = {} & (ex B st B in dom psi &
+      for A1 st B c= A1 & A1 in dom psi holds psi.A1 = {}) or
+    C <> {} &
+     for B,A1 st B in C & C in A1 ex D st D in dom psi &
+      for E being Ordinal st D c= E & E in dom psi holds B in psi.E & psi.E in
+ A1
+   and
+A4:  (for A st A in dom fi holds fi.A c= psi.A) or
+     (for A st A in dom fi holds fi.A in psi.A);
+A5:  now let A; assume
+A6:   A in dom fi;
+     reconsider A1 = fi.A, A2 = psi.A as Ordinal;
+        A1 c= A2 or A1 in A2 by A4,A6;
+     hence fi.A c= psi.A by ORDINAL1:def 2;
+    end;
+      now per cases;
+     suppose B = {} & C = {}; hence thesis;
+     suppose B = {} & C <> {}; then B in C by ORDINAL3:10;
+      hence thesis by ORDINAL1:def 2;
+     suppose
+A7:     B <> {} & C = {};
+      then consider A1 such that
+A8:    A1 in dom psi & for A st A1 c= A & A in dom psi holds psi.A = {} by A3;
+         {} in B & B in succ B by A7,ORDINAL1:10,ORDINAL3:10;
+      then consider A2 being Ordinal such that
+A9:    A2 in dom fi & for A st A2 c= A & A in dom fi holds
+        {} in fi.A & fi.A in succ B by A2;
+         A1 c= A1 \/ A2 & A2 c= A1 \/ A2 & (A1 \/ A2 = A1 or A1 \/ A2 = A2)
+        by ORDINAL3:15,XBOOLE_1:7;
+       then psi.(A1 \/ A2) = {} & {} in fi.(A1 \/ A2) &
+        fi.(A1 \/ A2) c= psi.(A1 \/ A2) by A1,A5,A8,A9;
+      hence thesis;
+     suppose
+A10:     B <> {} & C <> {};
+      assume not B c= C;
+     then C in B & B in succ B by ORDINAL1:10,26;
+      then consider A1 such that
+A11:    A1 in dom fi & for A st A1 c= A & A in dom fi holds
+        C in fi.A & fi.A in succ B by A2;
+         {} in C & C in succ C by A10,ORDINAL1:10,ORDINAL3:10;
+      then consider A2 being Ordinal such that
+A12:    A2 in dom psi & for A st A2 c= A & A in dom psi holds
+        {} in psi.A & psi.A in succ C by A3;
+         A1 c= A1 \/ A2 & A2 c= A1 \/ A2 & (A1 \/ A2 = A1 or A1 \/ A2 = A2)
+        by ORDINAL3:15,XBOOLE_1:7;
+then A13:     psi.(A1 \/ A2) in succ C & C in fi.(A1 \/ A2) & A1 \/ A2 in dom
+psi &
+        fi.(A1 \/ A2) c= psi.(A1 \/ A2) by A1,A5,A11,A12;
+      reconsider A3 = psi.(A1 \/ A2) as Ordinal;
+         A3 c= C & C in A3 by A13,ORDINAL1:34;
+      hence contradiction by ORDINAL1:7;
+    end;
+   hence thesis;
+  end;
+
+ reserve f1,f2 for Ordinal-Sequence;
+
+theorem
+   dom f1 = dom fi & dom fi = dom f2 & A is_limes_of f1 & A is_limes_of f2 &
+  (for A st A in dom fi holds f1.A c= fi.A & fi.A c= f2.A) implies
+    A is_limes_of fi
+  proof assume that
+A1: dom f1 = dom fi & dom fi = dom f2 and
+A2: A = {} &
+    (ex B st B in dom f1 & for C st B c= C & C in dom f1 holds f1.C = {}) or
+    A <> {} &
+     for B,C st B in A & A in C ex D st D in dom f1 &
+      for E being Ordinal st D c= E & E in dom f1 holds B in f1.E & f1.E in
+ C and
+A3: A = {} &
+    (ex B st B in dom f2 & for C st B c= C & C in dom f2 holds f2.C = {}) or
+    A <> {} &
+     for B,C st B in A & A in C ex D st D in dom f2 &
+      for E being Ordinal st D c= E & E in dom f2 holds B in f2.E & f2.E in
+ C and
+A4: for A st A in dom fi holds f1.A c= fi.A & fi.A c= f2.A;
+   per cases;
+    case
+      A = {};
+     then consider B being Ordinal such that
+A5:    B in dom f2 & for C st B c= C & C in dom f2 holds f2.C = {} by A3;
+     take B; thus B in dom fi by A1,A5;
+     let C; assume B c= C & C in dom fi;
+      then f2.C = {} & fi.C c= f2.C by A1,A4,A5;
+     hence fi.C = {} by XBOOLE_1:3;
+    case
+      A <> {};
+     let B,C; assume
+A6:    B in A & A in C;
+     then consider D1 being Ordinal such that
+A7:    D1 in dom f1 &
+       for A1 st D1 c= A1 & A1 in dom f1 holds B in f1.A1 & f1.A1 in C by A2;
+     consider D2 being Ordinal such that
+A8:    D2 in dom f2 &
+       for A1 st D2 c= A1 & A1 in dom f2 holds B in f2.A1 & f2.A1 in
+ C by A3,A6;
+     take D = D1 \/ D2;
+     thus D in dom fi by A1,A7,A8,ORDINAL3:15;
+     let A1; assume
+A9:    D c= A1 & A1 in dom fi;
+     reconsider B1 = fi.A1, B2 = f2.A1 as Ordinal;
+        D1 c= D & D2 c= D by XBOOLE_1:7;
+      then D1 c= A1 & D2 c= A1 by A9,XBOOLE_1:1;
+      then B in f1.A1 & f1.A1 c= fi.A1 & B1 c= B2 & B2 in C by A1,A4,A7,A8,A9;
+     hence thesis by ORDINAL1:22;
+  end;
+
+theorem
+ Th8: dom fi <> {} & dom fi is_limit_ordinal & fi is increasing implies
+   sup fi is_limes_of fi & lim fi = sup fi
+  proof assume that
+A1: dom fi <> {} & dom fi is_limit_ordinal and
+A2: A in B & B in dom fi implies fi.A in fi.B;
+A3: sup fi = sup rng fi by ORDINAL2:35;
+A4: {} in dom fi by A1,ORDINAL3:10;
+   reconsider x = fi.{} as Ordinal;
+A5:    x in rng fi by A4,FUNCT_1:def 5;
+   thus sup fi is_limes_of fi
+     proof per cases;
+      case sup fi = {}; hence thesis by A3,A5,ORDINAL2:27;
+      case sup fi <> {};
+       let A,B; assume
+A6:      A in sup fi & sup fi in B;
+       then consider C such that
+A7:      C in rng fi & A c= C by A3,ORDINAL2:29;
+       consider x such that
+A8:      x in dom fi & C = fi.x by A7,FUNCT_1:def 5;
+       reconsider x as Ordinal by A8,ORDINAL1:23;
+       take M = succ x; thus M in dom fi by A1,A8,ORDINAL1:41;
+       let D; assume
+A9:      M c= D & D in dom fi;
+       reconsider E = fi.D as Ordinal;
+          x in M by ORDINAL1:10;
+        then C in E by A2,A8,A9;
+       hence A in fi.D by A7,ORDINAL1:22;
+          fi.D in rng fi by A9,FUNCT_1:def 5;
+        then E in sup fi by A3,ORDINAL2:27;
+       hence thesis by A6,ORDINAL1:19;
+     end;
+   hence lim fi = sup fi by ORDINAL2:def 14;
+  end;
+
+theorem
+ Th9: fi is increasing & A c= B & B in dom fi implies fi.A c= fi.B
+  proof assume that
+A1:  for A,B st A in B & B in dom fi holds fi.A in fi.B and
+A2:  A c= B & B in dom fi;
+   reconsider C = fi.B as Ordinal;
+      now per cases;
+     suppose A = B; hence thesis;
+     suppose A <> B;
+       then A c< B by A2,XBOOLE_0:def 8;
+       then A in B by ORDINAL1:21;
+       then fi.A in C by A1,A2;
+      hence thesis by ORDINAL1:def 2;
+    end;
+   hence thesis;
+  end;
+
+theorem
+ Th10: fi is increasing & A in dom fi implies A c= fi.A
+  proof assume that
+A1:  for A,B st A in B & B in dom fi holds fi.A in fi.B and
+A2:  A in dom fi & not A c= fi.A;
+    defpred P[set] means
+     $1 in dom fi & not $1 c= fi.$1;
+A3:  ex A st P[A] by A2;
+   consider A such that
+A4:  P[A] and
+A5:  for B st P[B] holds A c= B from Ordinal_Min(A3);
+   reconsider B = fi.A as Ordinal;
+A6:  B in A by A4,ORDINAL1:26;
+    then fi.B in B by A1,A4;
+    then B in dom fi & not B c= fi.B by A4,A6,ORDINAL1:7,19;
+   hence contradiction by A4,A5;
+  end;
+
+theorem
+ Th11: phi is increasing implies phi"A is Ordinal
+  proof assume
+A1:  for A,B st A in B & B in dom phi holds phi.A in phi.B;
+      now let X; assume X in phi"A;
+then A2:    X in dom phi & phi.X in A by FUNCT_1:def 13;
+     hence X is Ordinal by ORDINAL1:23;
+     reconsider B = X as Ordinal by A2,ORDINAL1:23;
+     thus X c= phi"A
+       proof let x; assume A3: x in X;
+then A4:       x in B;
+        then reconsider C = x, D = phi.B as Ordinal by ORDINAL1:23;
+A5:       C in dom phi by A2,A4,ORDINAL1:19;
+        reconsider E = phi.C as Ordinal;
+           E in D by A1,A2,A3;
+         then phi.x in A by A2,ORDINAL1:19;
+        hence thesis by A5,FUNCT_1:def 13;
+       end;
+    end;
+   hence thesis by ORDINAL1:31;
+  end;
+
+theorem
+ Th12: f1 is increasing implies f2*f1 is Ordinal-Sequence
+  proof assume
+A1:  f1 is increasing;
+      dom(f2*f1) = f1"dom f2 by RELAT_1:182;
+    then dom(f2*f1) is Ordinal by A1,Th11;
+   then reconsider f = f2*f1 as T-Sequence by ORDINAL1:def 7;
+   consider A such that
+A2:  rng f2 c= A by ORDINAL2:def 8;
+      rng f c= rng f2 by RELAT_1:45;
+    then rng f c= A by A2,XBOOLE_1:1;
+   hence thesis by ORDINAL2:def 8;
+  end;
+
+theorem
+   f1 is increasing & f2 is increasing implies
+   ex phi st phi = f1*f2 & phi is increasing
+  proof assume
+A1:  f1 is increasing & f2 is increasing;
+   then reconsider f = f1*f2 as Ordinal-Sequence by Th12;
+   take f; thus f = f1*f2;
+   let A,B; assume
+A2:  A in B & B in dom f;
+then A3:  A in dom f by ORDINAL1:19;
+    A4: dom f c= dom f2 by RELAT_1:44;
+   reconsider A1 = f2.A, B1 = f2.B as Ordinal;
+      A1 in B1 & B1 in dom f1 by A1,A2,A4,FUNCT_1:21,ORDINAL2:def 16;
+    then f.A = f1.A1 & f.B = f1.B1 & f1.A1 in f1.B1 by A1,A2,A3,FUNCT_1:22,
+ORDINAL2:def 16;
+   hence thesis;
+  end;
+
+theorem Th14:
+ f1 is increasing & A is_limes_of f2 & sup rng f1 = dom f2 &
+   fi = f2*f1 implies A is_limes_of fi
+  proof assume that
+A1:  f1 is increasing and
+A2:  A = {} & (ex B st B in dom f2 &
+      for C st B c= C & C in dom f2 holds f2.C = {}) or
+    A <> {} &
+      for B,C st B in A & A in C ex D st D in dom f2 &
+       for E being Ordinal st D c= E & E in dom f2 holds B in f2.E & f2.E in
+ C and
+A3:  sup rng f1 = dom f2 & fi = f2*f1;
+   per cases;
+    case A = {};
+     then consider B such that
+A4:    B in dom f2 & for C st B c= C & C in dom f2 holds f2.C = {} by A2;
+     consider B1 being Ordinal such that
+A5:    B1 in rng f1 & B c= B1 by A3,A4,ORDINAL2:29;
+     consider x such that
+A6:    x in dom f1 & B1 = f1.x by A5,FUNCT_1:def 5;
+     reconsider x as Ordinal by A6,ORDINAL1:23;
+     take x; B1 in dom f2 by A3,A5,ORDINAL2:27;
+     hence x in dom fi by A3,A6,FUNCT_1:21;
+     let C such that
+A7:    x c= C & C in dom fi;
+      A8: dom fi c= dom f1 by A3,RELAT_1:44;
+     reconsider C1 = f1.C as Ordinal;
+        B1 c= C1 by A1,A6,A7,A8,Th9;
+then A9:    B c= C1 by A5,XBOOLE_1:1;
+        C1 in rng f1 by A7,A8,FUNCT_1:def 5;
+      then C1 in dom f2 by A3,ORDINAL2:27;
+      then f2.C1 = {} by A4,A9;
+     hence thesis by A3,A7,FUNCT_1:22;
+    case
+      A <> {};
+     let B,C; assume
+      B in A & A in C;
+     then consider D such that
+A10:    D in dom f2 & for A1 st D c= A1 & A1 in dom f2 holds B in f2.A1 & f2.A1
+in
+ C
+        by A2;
+     consider B1 being Ordinal such that
+A11:    B1 in rng f1 & D c= B1 by A3,A10,ORDINAL2:29;
+     consider x such that
+A12:    x in dom f1 & B1 = f1.x by A11,FUNCT_1:def 5;
+     reconsider x as Ordinal by A12,ORDINAL1:23;
+     take x; B1 in dom f2 by A3,A11,ORDINAL2:27;
+     hence x in dom fi by A3,A12,FUNCT_1:21;
+     let E be Ordinal such that
+A13:    x c= E & E in dom fi;
+      A14: dom fi c= dom f1 by A3,RELAT_1:44;
+     reconsider E1 = f1.E as Ordinal;
+        B1 c= E1 by A1,A12,A13,A14,Th9;
+then A15:    D c= E1 by A11,XBOOLE_1:1;
+        E1 in rng f1 by A13,A14,FUNCT_1:def 5;
+      then E1 in dom f2 by A3,ORDINAL2:27;
+      then B in f2.E1 & f2.E1 in C by A10,A15;
+     hence thesis by A3,A13,FUNCT_1:22;
+  end;
+
+theorem
+ Th15: phi is increasing implies phi|A is increasing
+  proof assume
+A1:  for A,B st A in B & B in dom phi holds phi.A in phi.B;
+   let B,C such that
+A2:  B in C & C in dom (phi|A);
+      dom (phi|A) c= dom phi by FUNCT_1:76;
+    then B in dom (phi|A) & C in dom phi by A2,ORDINAL1:19;
+    then phi.B in phi.C & phi.B = (phi|A).B & phi.C = (phi|A).C by A1,A2,
+FUNCT_1:70;
+   hence thesis;
+  end;
+
+theorem
+ Th16: phi is increasing & dom phi is_limit_ordinal implies
+   sup phi is_limit_ordinal
+  proof assume
+A1:  phi is increasing & dom phi is_limit_ordinal;
+A2:  sup phi = sup rng phi by ORDINAL2:35;
+      now let A; assume A in sup phi;
+     then consider B such that
+A3:    B in rng phi & A c= B by A2,ORDINAL2:29;
+     consider x such that
+A4:    x in dom phi & B = phi.x by A3,FUNCT_1:def 5;
+     reconsider x as Ordinal by A4,ORDINAL1:23;
+A5:    x in succ x & succ x in dom phi by A1,A4,ORDINAL1:10,41;
+     reconsider C = phi.succ x as Ordinal;
+        B in C & C in rng phi by A1,A4,A5,FUNCT_1:def 5,ORDINAL2:def 16;
+      then succ B c= C & C in sup phi by A2,ORDINAL1:33,ORDINAL2:27;
+      then succ A c= succ B & succ B in sup phi by A3,ORDINAL1:22,ORDINAL2:1;
+     hence succ A in sup phi by ORDINAL1:22;
+    end;
+   hence thesis by ORDINAL1:41;
+  end;
+
+ Lm2: rng f c= X implies (g|X)*f = g*f
+  proof assume rng f c= X;
+    then f"rng f c= f"X & f"X c= dom f & f"rng f = dom f
+     by RELAT_1:167,169,178;
+then A1:  f"X = dom f & f"dom g c= dom f by RELAT_1:167,XBOOLE_0:def 10;
+A2:  dom ((g|X)*f) = f"(dom (g|X)) by RELAT_1:182
+                 .= f"(dom g /\ X) by RELAT_1:90
+                 .= f"(dom g) /\ f"X by FUNCT_1:137
+                 .= f"(dom g) by A1,XBOOLE_1:28
+                 .= dom (g*f) by RELAT_1:182;
+      (g|X)*f c= g*f by GRFUNC_1:54;
+   hence thesis by A2,GRFUNC_1:9;
+  end;
+
+theorem
+   fi is increasing & fi is continuous & psi is continuous &
+   phi = psi*fi implies phi is continuous
+  proof assume that
+A1: fi is increasing and
+A2: for A,B st A in dom fi & A <> {} & A is_limit_ordinal & B = fi.A
+         holds B is_limes_of fi|A and
+A3: for A,B st A in dom psi & A <> {} & A is_limit_ordinal & B = psi.A
+         holds B is_limes_of psi|A and
+A4: phi = psi*fi;
+   let A,B such that
+A5:  A in dom phi & A <> {} & A is_limit_ordinal & B = phi.A;
+  A6: dom phi c= dom fi & rng phi c= rng psi by A4,RELAT_1:44,45;
+   reconsider A1 = fi.A as Ordinal;
+A7:    rng (fi|A) c= sup rng (fi|A)
+     proof let x; assume
+A8:     x in rng (fi|A);
+      then consider y such that
+A9:     y in dom (fi|A) & x = (fi|A).y by FUNCT_1:def 5;
+      reconsider y as Ordinal by A9,ORDINAL1:23;
+      reconsider B = (fi|A).y as Ordinal;
+         B in sup rng (fi|A) by A8,A9,ORDINAL2:27;
+      hence thesis by A9;
+     end;
+      A c= dom fi by A5,A6,ORDINAL1:def 2;
+then A10:  A1 is_limes_of fi|A & B = psi.A1 & A1 in dom psi & phi|A = psi*(fi|A
+) &
+     dom (fi|A) = A & A c= A1 & {} in A
+      by A1,A2,A4,A5,A6,Th10,FUNCT_1:21,22,ORDINAL3:10,RELAT_1:91,112;
+then A11:  fi|A is increasing & A1 c= dom psi & lim (fi|A) = A1 & {} in A1
+     by A1,Th15,ORDINAL1:def 2,ORDINAL2:def 14;
+then A12:  dom (psi|A1) = A1 & sup (fi|A) = A1 & sup rng (fi|A) = sup (fi|A) &
+     sup (fi|A) is_limit_ordinal & A1 <> {}
+       by A5,A10,Th8,Th16,ORDINAL2:35,RELAT_1:91;
+    then B is_limes_of psi|A1 & phi|A = (psi|A1)*(fi|A) by A3,A7,A10,Lm2;
+   hence B is_limes_of phi|A by A11,A12,Th14;
+  end;
+
+theorem
+   (for A st A in dom fi holds fi.A = C+^A) implies fi is increasing
+  proof assume
+A1:  for A st A in dom fi holds fi.A = C+^A;
+   let A,B; assume
+A2:  A in B & B in dom fi;
+    then A in dom fi by ORDINAL1:19;
+    then fi.A = C+^A & fi.B = C+^B by A1,A2;
+   hence thesis by A2,ORDINAL2:49;
+  end;
+
+theorem Th19:
+ C <> {} & (for A st A in dom fi holds fi.A = A*^C) implies fi is increasing
+  proof assume that
+A1:  C <> {} and
+A2:  for A st A in dom fi holds fi.A = A*^C;
+   let A,B; assume
+A3:  A in B & B in dom fi;
+    then A in dom fi by ORDINAL1:19;
+    then fi.A = A*^C & fi.B = B*^C by A2,A3;
+   hence thesis by A1,A3,ORDINAL2:57;
+  end;
+
+theorem
+ Th20: A <> {} implies exp({},A) = {}
+  proof
+   defpred FF[Ordinal] means $1 <> {} implies exp({},$1) = {};
+A1:  FF[{}];
+A2:  FF[B] implies FF[succ B]
+     proof assume FF[B] & succ B <> {};
+      thus exp({},succ B) = {}*^exp({},B) by ORDINAL2:61
+             .= {} by ORDINAL2:52;
+     end;
+A3:  for B st B <> {} & B is_limit_ordinal & for C st C in B holds FF[C]
+       holds FF[B]
+     proof let A such that
+A4:    A <> {} & A is_limit_ordinal and
+A5:    for C st C in A holds FF[C] and A <> {};
+      deffunc F(Ordinal) = exp({},$1);
+      consider fi such that
+A6:    dom fi = A & for B st B in A holds fi.B = F(B) from OS_Lambda;
+         {} is_limes_of fi
+        proof per cases;
+         case {} = {};
+          take B = one;
+             {} in A by A4,ORDINAL3:10;
+          hence B in dom fi by A4,A6,ORDINAL1:41,ORDINAL2:def 4;
+          let D; assume A7: B c= D;
+          assume D in dom fi;
+           then FF[D] & fi.D = exp({},D) by A5,A6;
+          hence fi.D = {} by A7,ORDINAL1:33,ORDINAL2:def 4;
+         case {} <> {}; thus thesis;
+        end;
+       then lim fi = {} & exp({},A) = lim fi by A4,A6,ORDINAL2:62,def 14;
+      hence thesis;
+     end;
+      FF[B] from Ordinal_Ind(A1,A2,A3);
+   hence thesis;
+  end;
+
+ Lm3: A <> {} & A is_limit_ordinal implies
+  for fi st dom fi = A & for B st B in A holds fi.B = exp({},B) holds
+   {} is_limes_of fi
+  proof assume
+A1:  A <> {} & A is_limit_ordinal;
+   let fi; assume
+A2:  dom fi = A & for B st B in A holds fi.B = exp({},B);
+   per cases;
+    case {} = {};
+     take B = one;
+        {} in A by A1,ORDINAL3:10;
+     hence B in dom fi by A1,A2,ORDINAL1:41,ORDINAL2:def 4;
+     let D; assume
+      B c= D & D in dom fi;
+      then D <> {} & exp({},D) = fi.D by A2,ORDINAL1:33,ORDINAL2:def 4
+;
+     hence fi.D = {} by Th20;
+    case {} <> {}; thus thesis;
+  end;
+
+ Lm4: A <> {} & A is_limit_ordinal implies
+  for fi st dom fi = A & for B st B in A holds fi.B = exp(one,B) holds
+   one is_limes_of fi
+  proof assume
+A1:  A <> {} & A is_limit_ordinal;
+   let fi; assume
+A2:  dom fi = A & for B st B in A holds fi.B = exp(one,B);
+   per cases;
+    case one = {};
+     hence thesis;
+    case one <> {};
+     let A1,A2 be Ordinal such that
+A3:    A1 in one & one in A2;
+     take B = {};
+     thus B in dom fi by A1,A2,ORDINAL3:10;
+     let D; assume B c= D & D in dom fi;
+      then exp(one,D) = fi.D & exp(one,D) = one by A2,ORDINAL2:63;
+     hence thesis by A3;
+  end;
+
+Lm5: for A st
+     A <> {} & A is_limit_ordinal holds
+     ex fi st dom fi = A & (for B st B in A holds fi.B = exp(C,B)) &
+        ex D st D is_limes_of fi
+ proof
+  defpred P[Ordinal] means
+    $1 <> {} & $1 is_limit_ordinal &
+    for fi st dom fi = $1 & for B st B in $1 holds fi.B = exp(C,B)
+     for D holds not D is_limes_of fi;
+ let A such that
+A1: A <> {} & A is_limit_ordinal &
+    for fi st dom fi = A & for B st B in A holds fi.B = exp(C,B)
+     for D holds not D is_limes_of fi;
+A2: ex A st P[A] by A1;
+  consider A such that
+A3:P[A] and
+A4:for A1 st P[A1] holds A c= A1 from Ordinal_Min(A2);
+  deffunc F(Ordinal) = exp(C,$1);
+  consider fi such that
+A5: dom fi = A & for B st B in A holds fi.B = F(B) from OS_Lambda;
+A6: now assume C = {} or C = one;
+     then {} is_limes_of fi or one is_limes_of fi by A3,A5,Lm3,Lm4;
+    hence contradiction by A3,A5;
+   end;
+   then {} in C by ORDINAL3:10;
+   then one c= C by ORDINAL1:33,ORDINAL2:def 4;
+   then one c< C by A6,XBOOLE_0:def 8;
+then A7: one in C by ORDINAL1:21;
+A8: for B2,B1 being Ordinal st B1 in B2 & B2 in A holds exp(C,B1) in exp(C,B2)
+    proof defpred V[Ordinal] means
+      for B1 being Ordinal st B1 in $1 & $1 in A holds exp(C,B1) in exp(C,$1);
+A9:   V[{}];
+A10:   V[B] implies V[succ B]
+       proof assume
+A11:      for B1 being Ordinal st B1 in B & B in A holds exp(C,B1) in exp(C,B);
+        let B1 be Ordinal such that
+A12:      B1 in succ B & succ B in A;
+A13:      exp(C,B) <> {}
+          proof
+              now per cases;
+             suppose B = {};
+              hence thesis by ORDINAL2:60;
+             suppose B <> {};
+then A14:            {} in B by ORDINAL3:10;
+                 B in succ B by ORDINAL1:10;
+               then B in A by A12,ORDINAL1:19;
+              hence thesis by A11,A14;
+            end;
+           hence thesis;
+          end;
+A15:     exp(C,succ B) = C*^exp(C,B) & one*^exp(C,B) = exp(C,B) & B in succ B
+           by ORDINAL1:10,ORDINAL2:56,61;
+then A16:      exp(C,B) in exp(C,succ B) & B in A & B1 c= B
+           by A7,A12,A13,ORDINAL1:19,34,ORDINAL2:57;
+           now assume B1 <> B;
+           then B1 c< B by A16,XBOOLE_0:def 8;
+           then B1 in B by ORDINAL1:21;
+           then exp(C,B1) in exp(C,B) by A11,A16;
+          hence thesis by A16,ORDINAL1:19;
+         end;
+        hence thesis by A7,A13,A15,ORDINAL2:57;
+       end;
+A17:   for B st B <> {} & B is_limit_ordinal & for D st D in B holds V[D]
+         holds V[B]
+       proof let B such that
+A18:      B <> {} & B is_limit_ordinal and
+A19:      for D st D in B holds V[D];
+        let B1 be Ordinal; assume
+A20:      B1 in B & B in A;
+         then not A c= B by ORDINAL1:7;
+        then consider psi such that
+A21:      dom psi = B & (for D st D in B holds psi.D = exp(C,D)) &
+          ex D st D is_limes_of psi by A4,A18;
+A22:      exp(C,B) = lim psi by A18,A21,ORDINAL2:62;
+           psi is increasing
+          proof let B1,B2 be Ordinal; assume
+A23:         B1 in B2 & B2 in dom psi;
+            then V[B2] & B2 in A & B1 in B by A19,A20,A21,ORDINAL1:19;
+            then exp(C,B1) in exp(C,B2) & psi.B1 = exp(C,B1) & psi.B2 = exp(C,
+B2)
+              by A21,A23;
+           hence thesis;
+          end;
+then A24:      lim psi = sup psi by A18,A21,Th8;
+           psi.B1 = exp(C,B1) by A20,A21;
+         then exp(C,B1) in rng psi & sup psi = sup rng psi
+           by A20,A21,FUNCT_1:def 5,ORDINAL2:35;
+        hence thesis by A22,A24,ORDINAL2:27;
+       end;
+     thus for B holds V[B] from Ordinal_Ind(A9,A10,A17);
+    end;
+     fi is increasing
+    proof let B1,B2 be Ordinal; assume
+A25:   B1 in B2 & B2 in dom fi;
+      then B1 in dom fi by ORDINAL1:19;
+      then exp(C,B1) in exp(C,B2) & fi.B1 = exp(C,B1) & fi.B2 = exp(C,B2) by A5
+,A8,A25;
+     hence thesis;
+    end;
+   then sup fi is_limes_of fi by A3,A5,Th8;
+  hence contradiction by A3,A5;
+ end;
+
+theorem
+ Th21: A <> {} & A is_limit_ordinal implies
+  for fi st dom fi = A & for B st B in A holds fi.B = exp(C,B) holds
+   exp(C,A) is_limes_of fi
+  proof assume
+A1:  A <> {} & A is_limit_ordinal;
+   let fi such that
+A2:  dom fi = A & for B st B in A holds fi.B = exp(C,B);
+   consider psi such that
+A3:  dom psi = A & for B st B in A holds psi.B = exp(C,B) and
+A4:  ex D st D is_limes_of psi by A1,Lm5;
+      now let x; assume
+A5:    x in A;
+     then reconsider B = x as Ordinal by ORDINAL1:23;
+     thus fi.x = exp(C,B) by A2,A5 .= psi.x by A3,A5;
+    end;
+    then fi = psi by A2,A3,FUNCT_1:9;
+   then consider D such that
+A6:  D is_limes_of fi by A4;
+      D = lim fi by A6,ORDINAL2:def 14 .= exp(C,A) by A1,A2,ORDINAL2:62;
+   hence thesis by A6;
+  end;
+
+theorem
+ Th22: C <> {} implies exp(C,A) <> {}
+  proof
+    defpred P[Ordinal] means exp(C,$1) <> {};
+    assume
+A1:  C <> {};
+A2:  P[{}] by ORDINAL2:60;
+A3:  for A st P[A] holds P[succ A]
+     proof let A such that
+A4:    exp(C,A) <> {};
+      exp(C,succ A) = C*^exp(C,A) by ORDINAL2:61;
+      hence thesis by A1,A4,ORDINAL3:34;
+     end;
+A5:  for A st A <> {} & A is_limit_ordinal &
+      for B st B in A holds P[B] holds P[A]
+     proof let A such that
+A6:    A <> {} & A is_limit_ordinal and
+A7:    for B st B in A holds exp(C,B) <> {};
+      consider fi such that
+A8:    dom fi = A & (for B st B in A holds fi.B = exp(C,B)) &
+        ex D st D is_limes_of fi by A6,Lm5;
+A9:    exp(C,A) = lim fi by A6,A8,ORDINAL2:62;
+      consider D such that
+A10:    D is_limes_of fi by A8;
+A11:    lim fi = D by A10,ORDINAL2:def 14;
+      assume exp(C,A) = {};
+      then consider B such that
+A12:    B in dom fi & for D st B c= D & D in dom fi holds fi.D = {}
+        by A9,A10,A11,ORDINAL2:def 13;
+         fi.B = exp(C,B) & exp(C,B) <> {} & fi.B = {} by A7,A8,A12;
+      hence contradiction;
+     end;
+     for A holds P[A] from Ordinal_Ind(A2,A3,A5);
+   hence thesis;
+  end;
+
+theorem
+ Th23: one in C implies exp(C,A) in exp(C,succ A)
+  proof assume
+A1:  one in C;
+    then exp(C,A) <> {} & one*^exp(C,A) = exp(C,A) by Th22,ORDINAL2:56;
+    then exp(C,succ A) = C*^exp(C,A) & exp(C,A) in C*^exp(C,A)
+     by A1,ORDINAL2:57,61;
+   hence thesis;
+  end;
+
+theorem
+ Th24: one in C & A in B implies exp(C,A) in exp(C,B)
+  proof assume
+A1:  one in C;
+   defpred OO[Ordinal] means for A st A in $1 holds exp(C,A) in exp(C,$1);
+A2:  OO[{}];
+A3:  for B st OO[B] holds OO[succ B]
+     proof let B such that
+A4:    for A st A in B holds exp(C,A) in exp(C,B);
+      let A; assume A in succ B;
+then A5:    A c= B by ORDINAL1:34;
+A6:    exp(C,B) in exp(C,succ B) by A1,Th23;
+         now assume A <> B;
+         then A c< B by A5,XBOOLE_0:def 8;
+         then A in B by ORDINAL1:21;
+        hence exp(C,A) in exp(C,B) by A4;
+       end;
+      hence thesis by A6,ORDINAL1:19;
+     end;
+A7:  for B st B <> {} & B is_limit_ordinal & for D st D in B holds OO[D]
+       holds OO[B]
+     proof let B such that
+A8:    B <> {} & B is_limit_ordinal and
+A9:    for D st D in B holds OO[D];
+      let A such that
+A10:    A in B;
+      deffunc F(Ordinal) = exp(C,$1);
+      consider fi such that
+A11:    dom fi = B & (for D st D in B holds fi.D = F(D)) from OS_Lambda;
+A12:    exp(C,B) = lim fi by A8,A11,ORDINAL2:62;
+         fi is increasing
+        proof let B1,B2 be Ordinal; assume
+A13:       B1 in B2 & B2 in dom fi;
+          then B1 in dom fi & OO[B2] by A9,A11,ORDINAL1:19;
+          then fi.B1 = exp(C,B1) & fi.B2 = exp(C,B2) & exp(C,B1) in exp(C,B2)
+            by A11,A13;
+         hence thesis;
+        end;
+then A14:    sup fi = lim fi by A8,A11,Th8;
+         fi.A = exp(C,A) by A10,A11;
+       then exp(C,A) in rng fi & sup fi = sup rng fi by A10,A11,FUNCT_1:def 5,
+ORDINAL2:35;
+      hence thesis by A12,A14,ORDINAL2:27;
+     end;
+      for B holds OO[B] from Ordinal_Ind(A2,A3,A7);
+   hence thesis;
+  end;
+
+theorem Th25:
+ one in C & (for A st A in dom fi holds fi.A = exp(C,A)) implies
+   fi is increasing
+  proof assume
+A1:  one in C & (for A st A in dom fi holds fi.A = exp(C,A));
+   let A,B; assume
+A2:  A in B & B in dom fi;
+    then A in dom fi by ORDINAL1:19;
+    then fi.A = exp(C,A) & fi.B = exp(C,B) by A1,A2;
+   hence fi.A in fi.B by A1,A2,Th24;
+  end;
+
+theorem
+    one in C & A <> {} & A is_limit_ordinal implies
+  for fi st dom fi = A & for B st B in A holds fi.B = exp(C,B) holds
+   exp(C,A) = sup fi
+  proof assume
+A1:  one in C & A <> {} & A is_limit_ordinal;
+   let fi; assume
+A2:  dom fi = A & for B st B in A holds fi.B = exp(C,B);
+    then fi is increasing by A1,Th25;
+    then lim fi = sup fi by A1,A2,Th8;
+   hence thesis by A1,A2,ORDINAL2:62;
+  end;
+
+theorem
+    C <> {} & A c= B implies exp(C,A) c= exp(C,B)
+  proof assume C <> {};
+    then {} in C by ORDINAL3:10;
+then A1:  one c= C by ORDINAL1:33,ORDINAL2:def 4;
+A2: A c< B iff A c= B & A <> B by XBOOLE_0:def 8;
+   assume A c= B;
+then A3:  A in B or A = B by A2,ORDINAL1:21;
+      now per cases;
+     suppose C = one;
+       then exp(C,A) = one & exp(C,B) = one by ORDINAL2:63;
+      hence thesis;
+     suppose C <> one;
+       then one c< C by A1,XBOOLE_0:def 8;
+       then one in C by ORDINAL1:21;
+       then exp(C,A) in exp(C,B) or exp(C,A) = exp(C,B) by A3,Th24;
+      hence thesis by ORDINAL1:def 2;
+    end;
+   hence thesis;
+  end;
+
+theorem
+   A c= B implies exp(A,C) c= exp(B,C)
+  proof assume
+A1:  A c= B;
+     defpred P[Ordinal] means exp(A,$1) c= exp(B,$1);
+      exp(A,{}) = one & exp(B,{}) = one by ORDINAL2:60;
+then A2:  P[{}];
+A3:  for C st P[C] holds P[succ C]
+     proof let C;
+         exp(A,succ C) = A*^exp(A,C) & exp(B,succ C) = B*^exp(B,C)
+        by ORDINAL2:61;
+      hence thesis by A1,ORDINAL3:23;
+     end;
+A4:  for C st C <> {} & C is_limit_ordinal &
+      for D st D in C holds P[D] holds P[C]
+     proof let C; assume that
+A5:    C <> {} & C is_limit_ordinal and
+A6:    for D st D in C holds exp(A,D) c= exp(B,D);
+      deffunc F(Ordinal) = exp(A,$1);
+      consider f1 such that
+A7:    dom f1 = C & for D st D in C holds f1.D = F(D) from OS_Lambda;
+      deffunc F(Ordinal) = exp(B,$1);
+      consider f2 such that
+A8:    dom f2 = C & for D st D in C holds f2.D = F(D) from OS_Lambda;
+A9:    exp(A,C) is_limes_of f1 & exp(B,C) is_limes_of f2 by A5,A7,A8,Th21;
+         now let D; assume D in dom f1;
+         then f1.D = exp(A,D) & f2.D = exp(B,D) & exp(A,D) c= exp(B,D) by A6,A7
+,A8;
+        hence f1.D c= f2.D;
+       end;
+      hence exp(A,C) c= exp(B,C) by A7,A8,A9,Th6;
+     end;
+      for C holds P[C] from Ordinal_Ind(A2,A3,A4);
+   hence thesis;
+  end;
+
+theorem
+    one in C & A <> {} implies one in exp(C,A)
+  proof assume
+A1:  one in C & A <> {};
+    then {} in A & exp(C,{}) = one by ORDINAL2:60,ORDINAL3:10;
+   hence thesis by A1,Th24;
+  end;
+
+theorem
+ Th30: exp(C,A+^B) = exp(C,B)*^exp(C,A)
+  proof
+     defpred P[Ordinal] means exp(C,A+^$1) = exp(C,$1)*^exp(C,A);
+      exp(C,A) = one*^exp(C,A) & one = exp(C,{})
+      by ORDINAL2:56,60;
+then A1:  P[{}] by ORDINAL2:44;
+A2:  for B st P[B] holds P[succ B]
+     proof let B such that
+A3:    exp(C,A+^B) = exp(C,B)*^exp(C,A);
+      thus exp(C,A+^succ B) = exp(C,succ(A+^B)) by ORDINAL2:45
+               .= C*^exp(C,A+^B) by ORDINAL2:61
+               .= C*^exp(C,B)*^exp(C,A) by A3,ORDINAL3:58
+               .= exp(C,succ B)*^exp(C,A) by ORDINAL2:61;
+     end;
+A4:  for B st B <> {} & B is_limit_ordinal &
+     for D st D in B holds P[D] holds P[B]
+     proof let B such that
+A5:    B <> {} & B is_limit_ordinal and
+A6:    for D st D in B holds exp(C,A+^D) = exp(C,D)*^exp(C,A);
+      deffunc F(Ordinal) = exp(C,$1);
+      consider fi such that
+A7:    dom fi = B & for D st D in B holds fi.D = F(D) from OS_Lambda;
+      consider psi such that
+A8:    dom psi = A+^B & for D st D in A+^B holds psi.D = F(D)
+      from OS_Lambda;
+         A+^B <> {} & A+^B is_limit_ordinal by A5,ORDINAL3:29,32;
+then A9:    lim psi = exp(C,A+^B) by A8,ORDINAL2:62;
+      deffunc F(Ordinal) = exp(C,$1);
+      consider f1 such that
+A10:    dom f1 = A & for D st D in A holds f1.D = F(D) from OS_Lambda;
+A11:    dom psi = (dom f1)+^(dom(fi*^exp(C,A))) by A7,A8,A10,ORDINAL3:def 5;
+A12:    now let D such that
+A13:      D in dom f1;
+           A c= A+^B by ORDINAL3:27; hence psi.D = exp(C,D) by A8,A10,A13
+ .= f1.D by A10,A13;
+       end;
+A14:    exp(C,B) is_limes_of fi by A5,A7,Th21;
+         now let D; assume
+           D in dom(fi*^exp(C,A));
+then A15:      D in dom fi by ORDINAL3:def 5;
+         then A+^D in A+^B by A7,ORDINAL2:49;
+        hence psi.((dom f1)+^D) = exp(C,A+^D) by A8,A10
+                .= (exp(C,D))*^exp(C,A) by A6,A7,A15
+                .= (fi.D)*^exp(C,A) by A7,A15
+                .= (fi*^exp(C,A)).D by A15,ORDINAL3:def 5;
+       end;
+       then psi = f1^(fi*^exp(C,A)) & exp(C,B)*^exp(C,A) is_limes_of fi*^exp(C
+,A)
+        by A11,A12,A14,Def1,Th5;
+       then exp(C,B)*^exp(C,A) is_limes_of psi by Th3;
+      hence thesis by A9,ORDINAL2:def 14;
+     end;
+      for B holds P[B] from Ordinal_Ind(A1,A2,A4);
+   hence thesis;
+  end;
+
+theorem
+   exp(exp(C,A),B) = exp(C,B*^A)
+  proof
+     defpred P[Ordinal] means exp(exp(C,A),$1) = exp(C,$1*^A);
+      exp(exp(C,A),{}) = one & exp(C,{}) = one by ORDINAL2:60;
+then A1:  P[{}] by ORDINAL2:52;
+A2:  for B st P[B] holds P[succ B]
+     proof let B; assume exp(exp(C,A),B) = exp(C,B*^A);
+      hence exp(exp(C,A),succ B) = exp(C,A)*^exp(C,B*^A) by ORDINAL2:61
+             .= exp(C,B*^A+^A) by Th30 .= exp(C,(succ B)*^A) by ORDINAL2:53;
+     end;
+A3:  for B st B <> {} & B is_limit_ordinal &
+     for D st D in B holds P[D] holds P[B]
+     proof let B; assume that
+A4:    B <> {} & B is_limit_ordinal and
+A5:    for D st D in B holds exp(exp(C,A),D) = exp(C,D*^A);
+      deffunc F(Ordinal) = exp(exp(C,A),$1);
+      consider fi such that
+A6:    dom fi = B & for D st D in
+ B holds fi.D = F(D) from OS_Lambda;
+      deffunc F(Ordinal) = $1*^A;
+      consider f1 such that
+A7:    dom f1 = B & for D st D in B holds f1.D = F(D) from OS_Lambda;
+      deffunc F(Ordinal) = exp(C,$1);
+      consider f2 such that
+A8:    dom f2 = B*^A & for D st D in B*^A holds f2.D = F(D) from OS_Lambda;
+A9:       exp(C,{}) = one & B*^{} = {} by ORDINAL2:55,60;
+         now assume
+A10:      A <> {};
+A11:       dom(f2*f1) = B
+          proof
+           thus dom(f2*f1) c= B by A7,RELAT_1:44;
+           let x; assume
+A12:         x in B;
+           then reconsider E = x as Ordinal by ORDINAL1:23;
+              E*^A in B*^A & f1.E = E*^A by A7,A10,A12,ORDINAL2:57;
+           hence thesis by A7,A8,A12,FUNCT_1:21;
+          end;
+           now let x; assume
+A13:        x in B;
+          then reconsider D = x as Ordinal by ORDINAL1:23;
+A14:        D*^A in B*^A & f1.D = D*^A by A7,A10,A13,ORDINAL2:57;
+          thus fi.x = exp(exp(C,A),D) by A6,A13 .= exp(C,D*^A) by A5,A13
+                 .= f2.(f1.D) by A8,A14
+                 .= (f2*f1).x by A7,A13,FUNCT_1:23;
+         end;
+then A15:       fi = f2*f1 by A6,A11,FUNCT_1:9;
+           B*^A <> {} & B*^A is_limit_ordinal
+          by A4,A10,ORDINAL3:34,48;
+then A16:       exp(C,B*^A) is_limes_of f2 by A8,Th21;
+A17:      rng f1 c= dom f2
+          proof let x; assume x in rng f1;
+           then consider y such that
+A18:         y in dom f1 & x = f1.y by FUNCT_1:def 5;
+           reconsider y as Ordinal by A18,ORDINAL1:23;
+              x = y*^A & y*^A in B*^A by A7,A10,A18,ORDINAL2:57;
+           hence thesis by A8;
+          end;
+A19:       sup rng f1 = dom f2
+          proof
+              sup rng f1 c= sup dom f2 by A17,ORDINAL2:30;
+           hence sup rng f1 c= dom f2 by ORDINAL2:26;
+           let x; assume
+A20:         x in dom f2;
+           then reconsider D = x as Ordinal by ORDINAL1:23;
+           consider A1 such that
+A21:         A1 in B & D in A1*^A by A4,A8,A20,ORDINAL3:49;
+              f1.A1 = A1*^A by A7,A21;
+            then A1*^A in rng f1 by A7,A21,FUNCT_1:def 5;
+            then A1*^A in sup rng f1 by ORDINAL2:27;
+           hence thesis by A21,ORDINAL1:19;
+          end;
+           f1 is increasing by A7,A10,Th19;
+         then exp(C,B*^A) is_limes_of fi by A15,A16,A19,Th14;
+         then exp(C,B*^A) = lim fi by ORDINAL2:def 14;
+        hence thesis by A4,A6,ORDINAL2:62;
+       end;
+      hence exp(exp(C,A),B) = exp(C,B*^A) by A9,ORDINAL2:63;
+     end;
+      for B holds P[B] from Ordinal_Ind(A1,A2,A3);
+   hence thesis;
+  end;
+
+theorem
+   one in C implies A c= exp(C,A)
+  proof assume
+A1:  one in C;
+     defpred P[Ordinal] means $1 c= exp(C,$1);
+A2:  P[{}] by XBOOLE_1:2;
+A3:  P[B] implies P[succ B]
+     proof assume
+A4:    B c= exp(C,B);
+         exp(C,B) <> {} & exp(C,succ B) = C*^exp(C,B) &
+       exp(C,B) = one*^exp(C,B)
+        by A1,Th22,ORDINAL2:56,61;
+       then exp(C,B) in exp(C,succ B) by A1,ORDINAL2:57;
+       then B in exp(C,succ B) by A4,ORDINAL1:22;
+      hence thesis by ORDINAL1:33;
+     end;
+A5:  for A st A <> {} & A is_limit_ordinal &
+      for B st B in A holds P[B] holds P[A]
+     proof let A such that
+A6:    A <> {} & A is_limit_ordinal and
+A7:    for B st B in A holds B c= exp(C,B);
+      deffunc F(Ordinal) = exp(C,$1);
+      consider fi such that
+A8:    dom fi = A & for B st B in A holds fi.B = F(B) from OS_Lambda;
+         fi is increasing by A1,A8,Th25;
+then A9:    sup fi = lim fi by A6,A8,Th8 .= exp(C,A) by A6,A8,ORDINAL2:62;
+      let x; assume
+A10:    x in A;
+      then reconsider B = x as Ordinal by ORDINAL1:23;
+         fi.B = exp(C,B) by A8,A10;
+       then exp(C,B) in rng fi & sup fi = sup rng fi
+        by A8,A10,FUNCT_1:def 5,ORDINAL2:35;
+       then B c= exp(C,B) & exp(C,B) in sup fi by A7,A10,ORDINAL2:27;
+      hence x in exp(C,A) by A9,ORDINAL1:22;
+     end;
+      P[B] from Ordinal_Ind(A2,A3,A5);
+   hence thesis;
+  end;
+
+scheme CriticalNumber { phi(Ordinal) -> Ordinal } :
+ ex A st phi(A) = A
+  provided
+A1: for A,B st A in B holds phi(A) in phi(B) and
+A2: for A st A <> {} & A is_limit_ordinal
+    for phi st dom fi = A & for B st B in A holds phi.B = phi(B) holds
+     phi(A) is_limes_of phi
+  proof assume
+A3:  not thesis;
+   deffunc F(Ordinal,Ordinal) = phi($2);
+   deffunc G(Ordinal,T-Sequence) = {};
+   consider phi such that
+   A4: dom phi = omega and
+A5: {} in omega implies phi.{} = phi({}) and
+A6: for A st succ A in omega holds phi.(succ A) = F(A,phi.A) and
+    for A st A in omega & A <> {} & A is_limit_ordinal
+          holds phi.A = G(A,phi|A) from OS_Exist;
+A7: now
+     defpred P[Ordinal] means not $1 c= phi($1);
+     assume
+A8:    ex A st P[A];
+     consider A such that
+A9:    P[A] and
+A10:    for B st P[B] holds A c= B from Ordinal_Min(A8);
+      phi(A) in A by A9,ORDINAL1:26;
+      then phi(phi(A)) in phi(A) by A1;
+      then not phi(A) c= phi(phi(A)) by ORDINAL1:7;
+     hence contradiction by A9,A10;
+    end;
+A11:  now let A; A c= phi(A) & A <> phi(A) by A3,A7;
+     then A c< phi(A) by XBOOLE_0:def 8;
+     hence A in phi(A) by ORDINAL1:21;
+    end;
+A12:  phi is increasing
+     proof let A,B; assume
+A13:    A in B & B in dom phi;
+ then A14:      ex C st B = A+^C & C <> {} by ORDINAL3:31;
+        defpred R[Ordinal] means
+          A+^$1 in omega & $1 <> {} implies phi.A in phi.(A+^$1);
+A15:    R[{}];
+A16:    for C st R[C] holds R[succ C]
+        proof let C such that
+A17:       A+^C in omega & C <> {} implies phi.A in phi.(A+^C) and
+A18:       A+^succ C in omega & succ C <> {};
+A19:       A+^C in succ(A+^C) & A+^succ C = succ(A+^C)
+           by ORDINAL1:10,ORDINAL2:45;
+         reconsider D = phi.(A+^C) as Ordinal;
+        phi.(A+^succ C) = phi(D) & D in phi(D) & A+^{} = A
+           by A6,A11,A18,A19,ORDINAL2:44;
+          hence thesis by A17,A18,A19,ORDINAL1:19;
+        end;
+A20:    for B st B <> {} & B is_limit_ordinal &
+        for C st C in B holds R[C] holds R[B]
+        proof let B such that
+A21:       B <> {} & B is_limit_ordinal and
+            for C st C in B holds A+^C in omega & C <> {} implies
+           phi.A in phi.(A+^C) and
+A22:       A+^B in omega & B <> {};
+            A+^B <> {} by A22,ORDINAL3:29;
+          then A+^B is_limit_ordinal & {} in A+^B by A21,ORDINAL3:10,32;
+          then omega c= A+^B by ORDINAL2:def 5;
+         hence thesis by A22,ORDINAL1:7;
+        end;
+         for C holds R[C] from Ordinal_Ind(A15,A16,A20);
+      hence thesis by A4,A13,A14;
+     end;
+   deffunc F(Ordinal) = phi ($1);
+   consider fi such that
+A23:  dom fi = sup phi & for A st A in sup phi holds fi.A = F(A)
+     from OS_Lambda;
+      phi({}) in rng phi & sup rng phi = sup phi
+     by A4,A5,FUNCT_1:def 5,ORDINAL2:19,35;
+then A24: sup phi <> {} & sup phi is_limit_ordinal
+     by A4,A12,Th16,ORDINAL2:19,27;
+then A25:  phi(sup phi) is_limes_of fi by A2,A23;
+      fi is increasing
+     proof let A,B; assume
+A26:    A in B & B in dom fi;
+       then A in dom fi by ORDINAL1:19;
+       then fi.A = phi(A) & fi.B = phi(B) by A23,A26;
+      hence thesis by A1,A26;
+     end;
+then A27:  sup fi = lim fi by A23,A24,Th8 .= phi(sup phi) by A25,ORDINAL2:def
+14;
+      sup fi c= sup phi
+     proof let x; assume
+A28:    x in sup fi;
+      then reconsider A = x as Ordinal by ORDINAL1:23;
+A29:    sup fi = sup rng fi & sup phi = sup rng phi by ORDINAL2:35;
+      then consider B such that
+A30:    B in rng fi & A c= B by A28,ORDINAL2:29;
+      consider y such that
+A31:    y in dom fi & B = fi.y by A30,FUNCT_1:def 5;
+      reconsider y as Ordinal by A31,ORDINAL1:23;
+      consider C such that
+A32:    C in rng phi & y c= C by A23,A29,A31,ORDINAL2:29;
+      consider z such that
+A33:    z in dom phi & C = phi.z by A32,FUNCT_1:def 5;
+      reconsider z as Ordinal by A33,ORDINAL1:23;
+         succ z in omega by A4,A33,ORDINAL1:41,ORDINAL2:19;
+then A34:    phi.succ z = phi(C) & phi.succ z in rng phi & B = phi(y)
+        by A4,A6,A23,A31,A33,FUNCT_1:def 5;
+         y c< C iff y <> C & y c= C by XBOOLE_0:def 8;
+       then y in C or y = C by A32,ORDINAL1:21;
+       then phi(y) in phi(C) or y = C by A1;
+       then B c= phi(C) & phi(C) in sup phi
+        by A29,A34,ORDINAL1:def 2,ORDINAL2:27;
+       then B in sup phi by ORDINAL1:22;
+      hence thesis by A30,ORDINAL1:22;
+     end;
+    then not sup phi in phi(sup phi) by A27,ORDINAL1:7;
+   hence contradiction by A11;
+  end;
+
+ reserve W for Universe;
+
+ definition let W;
+  mode Ordinal of W -> Ordinal means:
+Def2:   it in W;
+   existence
+    proof On W <> {} by CLASSES2:55;
+      then {} in On W & On W c= W by ORDINAL2:9,ORDINAL3:10; hence thesis;
+    end;
+  mode Ordinal-Sequence of W -> Ordinal-Sequence means:
+Def3:   dom it = On W & rng it c= On W;
+   existence
+    proof
+     deffunc F(Ordinal) = {};
+     consider phi such that
+A1:    dom phi = On W & for A st A in On W holds phi.A = F(A) from OS_Lambda;
+     take phi; thus dom phi = On W by A1;
+     let x; assume x in rng phi;
+     then consider y such that
+A2:    y in dom phi & x = phi.y by FUNCT_1:def 5;
+     reconsider y as Ordinal by A2,ORDINAL1:23;
+        phi.y = {} & On W <> {} by A1,A2;
+     hence x in On W by A2,ORDINAL3:10;
+    end;
+ end;
+
+definition let W;
+ cluster non empty Ordinal of W;
+  existence
+ proof On W <> {} by CLASSES2:55;
+  then {} in On W & On W c= W by ORDINAL2:9,ORDINAL3:10;
+  then one in W by CLASSES2:6,ORDINAL2:def 4;
+  then one is non empty & one is Ordinal of W by Def2;
+  hence thesis;
+ end;
+end;
+
+ reserve A1,B1 for Ordinal of W,
+         phi for Ordinal-Sequence of W;
+
+scheme UOS_Lambda { W() -> Universe, F(set) -> Ordinal of W() } :
+ ex phi being Ordinal-Sequence of W() st
+   for a being Ordinal of W() holds phi.a = F(a)
+  proof
+    deffunc FF(Ordinal) = F($1);
+    consider psi such that
+A1:dom psi = On W() & for A st A in On W() holds psi.A = FF(A) from OS_Lambda;
+      rng psi c= On W()
+     proof let x; assume x in rng psi;
+      then consider y such that
+A2:     y in dom psi & x = psi.y by FUNCT_1:def 5;
+      reconsider y as Ordinal by A2,ORDINAL1:23;
+         x = F(y) & F(y) in W() by A1,A2,Def2;
+      hence thesis by ORDINAL2:def 2;
+     end;
+   then reconsider phi = psi as Ordinal-Sequence of W() by A1,Def3;
+   take phi; let a be Ordinal of W(); a in W() by Def2;
+    then a in On W() by ORDINAL2:def 2;
+   hence thesis by A1;
+  end;
+
+ definition let W;
+  func 0-element_of W -> Ordinal of W equals:
+Def4:   {};
+   correctness
+    proof On W <> {} by CLASSES2:55;
+      then {} in On W & On W c= W by ORDINAL2:9,ORDINAL3:10;
+     then reconsider A = {} as Ordinal of W by Def2;
+        A = {};
+     hence thesis;
+    end;
+  func 1-element_of W -> non empty Ordinal of W equals:
+Def5:    one;
+   correctness
+    proof On W <> {} by CLASSES2:55;
+      then {} in On W & On W c= W by ORDINAL2:9,ORDINAL3:10;
+      then one in W by CLASSES2:6,ORDINAL2:def 4;
+     then reconsider A = one as Ordinal of W by Def2;
+        A = one;
+     hence thesis;
+    end;
+  let phi,A1;
+  redefine func phi.A1 -> Ordinal of W;
+    coherence
+     proof A1 in W by Def2;
+then A1:     A1 in On W & dom phi = On W by Def3,ORDINAL2:def 2;
+      reconsider B = phi.A1 as Ordinal;
+         B in rng phi & rng phi c= On W by A1,Def3,FUNCT_1:def 5;
+       then B in On W & On W c= W by ORDINAL2:9; hence thesis by Def2;
+     end;
+ end;
+
+ definition let W; let p2,p1 be Ordinal-Sequence of W;
+  redefine func p1*p2 -> Ordinal-Sequence of W;
+    coherence
+     proof
+         dom p1 = On W & dom p2 = On W & rng p2 c= On W by Def3;
+then A1:     dom(p1*p2) = On W & rng(p1*p2) c= rng p1 & rng p1 c= On W
+        by Def3,RELAT_1:45,46;
+      then reconsider f = p1*p2 as T-Sequence by ORDINAL1:def 7;
+A2:     rng f c= On W by A1,XBOOLE_1:1;
+      then reconsider f as Ordinal-Sequence by ORDINAL2:def 8;
+         f is Ordinal-Sequence of W by A1,A2,Def3;
+      hence thesis;
+     end;
+ end;
+
+canceled 2;
+
+theorem
+   0-element_of W = {} & 1-element_of W = one by Def4,Def5;
+
+ definition let W,A1;
+  redefine func succ A1 -> non empty Ordinal of W;
+    coherence
+     proof A1 in W & W is_Tarski-Class by Def2;
+       then succ A1 in W by CLASSES2:6;
+      hence thesis by Def2;
+     end;
+   let B1;
+   func A1 +^ B1 -> Ordinal of W;
+    coherence
+     proof
+        defpred P[Ordinal] means $1 in W implies A1+^$1 in W;
+A1:     for B st for C st C in B holds P[C] holds P[B]
+        proof let B such that
+A2:       for C st C in B holds C in W implies A1+^C in W and
+A3:       B in W;
+            0-element_of W in W & 1-element_of W in W by Def2;
+then A4:       {0-element_of W} in W & {1-element_of W} in W & A1 in W
+            by Def2,CLASSES2:63;
+          then [:A1,{0-element_of W}:] in W & [:B,{1-element_of W}:] in W
+            by A3,CLASSES2:67;
+       then [:A1,{0-element_of W}:] \/ [:B,{1-element_of W}:] in W & {} <>
+succ {} &
+           W is_Tarski-Class & 0-element_of W = {} & 1-element_of W = one
+            by Def4,Def5,CLASSES2:66;
+then A5:   Card(A1+^B) = Card([:A1,{0-element_of W}:] \/ [:B,{1-element_of W}:]
+) &
+           Card([:A1,{0-element_of W}:] \/ [:B,{1-element_of W}:]) <` Card W
+            by CARD_2:16,CLASSES2:1;
+            A1+^B c= W
+           proof let x; assume
+A6:          x in A1+^B;
+            then reconsider A = x as Ordinal by ORDINAL1:23;
+A7:           A1 c= W & (A in A1 or A1 c= A) by A4,ORDINAL1:26,def 2;
+               now assume A1 c= A;
+              then consider C such that
+A8:            A = A1+^C by ORDINAL3:30;
+              C in B & B c= W by A3,A6,A8,ORDINAL1:def 2,ORDINAL3:25;
+              hence x in W by A2,A8;
+             end;
+            hence thesis by A7;
+           end;
+         hence A1+^B in W by A5,CLASSES1:2;
+        end;
+A9:     for B holds P[B] from Transfinite_Ind(A1);
+         B1 in W by Def2;
+       then A1+^B1 in W by A9;
+      hence thesis by Def2;
+     end;
+ end;
+
+ definition let W,A1,B1;
+  redefine func A1 *^ B1 -> Ordinal of W;
+    coherence
+     proof
+        defpred P[Ordinal] means $1 in W implies $1*^B1 in W;
+A1:     for A st for C st C in A holds P[C] holds P[A]
+        proof let A such that
+A2:       for C st C in A holds C in W implies C*^B1 in W and
+A3:       A in W;
+A4:       B1 in W & W is_Tarski-Class by Def2;
+          then [:A,B1:] in W by A3,CLASSES2:67;
+then A5:       Card(A*^B1) = Card [:A,B1:] & Card [:A,B1:] <` Card W
+            by CARD_2:18,CLASSES2:1;
+            A*^B1 c= W
+           proof let x; assume
+A6:          x in A*^B1;
+            then reconsider B = x as Ordinal by ORDINAL1:23;
+               B1 <> {} by A6,ORDINAL2:55;
+            then consider C,D such that
+A7:          B = C*^B1+^D & D in B1 by ORDINAL3:55;
+A8:          B1 c= W & C*^B1 c= B by A4,A7,ORDINAL1:def 2,ORDINAL3:27;
+             then C*^B1 in A*^B1 by A6,ORDINAL1:22;
+          then C in A & A c= W by A3,ORDINAL1:def 2,ORDINAL3:37;
+             then D in W & C*^B1 in W by A2,A7,A8;
+            then reconsider CB = C*^B1, D as Ordinal of W by Def2;
+               x = CB+^D by A7;
+            hence thesis by Def2;
+           end;
+         hence A*^B1 in W by A5,CLASSES1:2;
+        end;
+A9:     for A holds P[A] from Transfinite_Ind(A1);
+         A1 in W by Def2;
+       then A1*^B1 in W by A9;
+      hence thesis by Def2;
+     end;
+ end;
+
+theorem
+ Th36: A1 in dom phi
+  proof A1 in W & dom phi = On W by Def2,Def3;
+   hence thesis by ORDINAL2:def 2;
+  end;
+
+theorem
+ Th37: dom fi in W & rng fi c= W implies sup fi in W
+  proof assume
+A1:  dom fi in W & rng fi c= W;
+    rng fi = fi.:(dom fi) & W is_Tarski-Class by RELAT_1:146;
+    then Card rng fi <=` Card dom fi & Card dom fi <` Card W
+     by A1,CARD_2:3,CLASSES2:1;
+    then Card rng fi <` Card W by ORDINAL1:22;
+    then rng fi in W by A1,CLASSES1:2;
+then A2:  union rng fi in W by CLASSES2:65;
+   consider A such that
+A3:  rng fi c= A by ORDINAL2:def 8;
+      for x st x in rng fi holds x is Ordinal by A3,ORDINAL1:23;
+   then reconsider B = union rng fi as Ordinal by ORDINAL1:35;
+A4:  succ B in W by A2,CLASSES2:6;
+      sup fi c= succ B
+     proof let x; assume
+A5:     x in sup fi;
+      then reconsider A = x as Ordinal by ORDINAL1:23;
+         sup fi = sup rng fi by ORDINAL2:35;
+      then consider C such that
+A6:     C in rng fi & A c= C by A5,ORDINAL2:29;
+         C c= union rng fi by A6,ZFMISC_1:92;
+       then A c= B by A6,XBOOLE_1:1;
+      hence x in succ B by ORDINAL1:34;
+     end;
+   hence thesis by A4,CLASSES1:def 1;
+  end;
+
+ reserve L,L1 for T-Sequence;
+
+theorem
+   phi is increasing & phi is continuous & omega in W implies
+   ex A st A in dom phi & phi.A = A
+  proof assume that
+A1:  phi is increasing and
+A2:  phi is continuous and
+A3: omega in W;
+   assume
+A4:  not thesis;
+   reconsider N = phi.(0-element_of W) as Ordinal;
+   deffunc C(Ordinal,Ordinal) = phi.$2;
+   deffunc D(Ordinal,Ordinal) = {};
+   consider L such that
+A5: dom L = omega and
+A6: {} in omega implies L.{} = N and
+A7: for A st succ A in omega holds L.(succ A) = C(A,L.A) and
+    for A st A in omega & A <> {} & A is_limit_ordinal
+          holds L.A = D(A,L|A) from TS_Exist1;
+    defpred P[Ordinal] means $1 in dom L implies L.$1 is Ordinal of W;
+A8: P[{}] by A5,A6;
+A9: for A st P[A] holds P[succ A]
+     proof let A such that
+A10:    A in dom L implies L.A is Ordinal of W and
+A11:    succ A in dom L;
+         A in succ A by ORDINAL1:10;
+      then reconsider x = L.A as Ordinal of W by A10,A11,ORDINAL1:19;
+         L.succ A = phi.x by A5,A7,A11;
+      hence thesis;
+     end;
+A12: for A st A <> {} & A is_limit_ordinal &
+     for B st B in A holds P[B] holds P[A]
+     proof let A such that
+A13:    A <> {} & A is_limit_ordinal and
+         for B st B in A holds B in dom L implies L.B is Ordinal of W and
+A14:    A in dom L;
+         {} in A by A13,ORDINAL3:10;
+       then omega c= A by A13,ORDINAL2:def 5;
+      hence thesis by A5,A14,ORDINAL1:7;
+     end;
+A15:  for A holds P[A] from Ordinal_Ind(A8,A9,A12);
+      rng L c= sup rng L
+     proof let x; assume
+A16:    x in rng L;
+      then consider y such that
+A17:    y in dom L & x = L.y by FUNCT_1:def 5;
+      reconsider y as Ordinal by A17,ORDINAL1:23;
+      reconsider A = L.y as Ordinal of W by A15,A17;
+         A in sup rng L by A16,A17,ORDINAL2:27;
+      hence thesis by A17;
+     end;
+   then reconsider L as Ordinal-Sequence by ORDINAL2:def 8;
+A18:  now let A1; A1 in dom phi by Th36;
+      then A1 c= phi.A1 & A1 <> phi.A1 by A1,A4,Th10;
+      then A1 c< phi.A1 by XBOOLE_0:def 8;
+     hence A1 in phi.A1 by ORDINAL1:21;
+    end;
+A19:  L is increasing
+     proof let A,B; assume
+A20:    A in B & B in dom L;
+ then A21:      ex C st B = A+^C & C <> {} by ORDINAL3:31;
+        defpred P[Ordinal] means
+          A+^$1 in omega & $1 <> {} implies L.A in L.(A+^$1);
+A22:    P[{}];
+A23:    for C st P[C] holds P[succ C]
+        proof let C such that
+A24:       A+^C in omega & C <> {} implies L.A in L.(A+^C) and
+A25:       A+^succ C in omega & succ C <> {};
+A26:       A+^C in succ(A+^C) & A+^succ C = succ(A+^C)
+           by ORDINAL1:10,ORDINAL2:45;
+       then A+^C in omega & A in omega by A5,A20,A25,ORDINAL1:19;
+         then reconsider D = L.(A+^C) as Ordinal of W by A5,A15;
+        L.(A+^succ C) = phi.D & D in phi.D & A+^{} = A
+           by A7,A18,A25,A26,ORDINAL2:44;
+          hence thesis by A24,A25,A26,ORDINAL1:19;
+        end;
+A27:    for B st B <> {} & B is_limit_ordinal &
+        for C st C in B holds P[C] holds P[B]
+        proof let B such that
+A28:       B <> {} & B is_limit_ordinal and
+            for C st C in B holds A+^C in omega & C <> {} implies
+           L.A in L.(A+^C) and
+A29:       A+^B in omega & B <> {};
+            A+^B <> {} by A29,ORDINAL3:29;
+          then A+^B is_limit_ordinal & {} in A+^B by A28,ORDINAL3:10,32;
+          then omega c= A+^B by ORDINAL2:def 5;
+         hence thesis by A29,ORDINAL1:7;
+        end;
+       for C holds P[C] from Ordinal_Ind(A22,A23,A27);
+      hence thesis by A5,A20,A21;
+     end;
+   set fi = phi|sup L;
+   N in rng L & sup rng L = sup L
+     by A5,A6,FUNCT_1:def 5,ORDINAL2:19,35;
+then A30: sup L <> {} & sup L is_limit_ordinal
+     by A5,A19,Th16,ORDINAL2:19,27;
+A31: rng L c= W
+     proof let x; assume x in rng L;
+      then consider y such that
+A32:    y in dom L & x = L.y by FUNCT_1:def 5;
+      reconsider y as Ordinal by A32,ORDINAL1:23;
+         L.y is Ordinal of W by A15,A32;
+      hence thesis by A32,Def2;
+     end;
+then A33: sup L in W by A3,A5,Th37;
+   then reconsider S = sup L as Ordinal of W by Def2;
+A34: S in On W & dom phi = On W by A33,Def3,ORDINAL2:def 2;
+then A35: phi.S is_limes_of fi by A2,A30,ORDINAL2:def 17;
+      S c= dom phi by A34,ORDINAL1:def 2;
+then A36:  dom fi = S by RELAT_1:91;
+      fi is increasing
+     proof let A,B; assume
+A37:    A in B & B in dom fi;
+       then A in dom fi & dom fi c= dom phi by FUNCT_1:76,ORDINAL1:19;
+       then fi.A = phi.A & fi.B = phi.B & B in dom phi by A37,FUNCT_1:70;
+      hence thesis by A1,A37,ORDINAL2:def 16;
+     end;
+then A38:  sup fi = lim fi by A30,A36,Th8 .= phi.(sup L) by A35,ORDINAL2:def 14
+;
+      sup fi c= sup L
+     proof let x; assume
+A39:    x in sup fi;
+      then reconsider A = x as Ordinal by ORDINAL1:23;
+A40:    sup fi = sup rng fi & sup L = sup rng L by ORDINAL2:35;
+      then consider B such that
+A41:    B in rng fi & A c= B by A39,ORDINAL2:29;
+      consider y such that
+A42:    y in dom fi & B = fi.y by A41,FUNCT_1:def 5;
+      reconsider y as Ordinal by A42,ORDINAL1:23;
+      consider C such that
+A43:    C in rng L & y c= C by A36,A40,A42,ORDINAL2:29;
+      consider z such that
+A44:    z in dom L & C = L.z by A43,FUNCT_1:def 5;
+      reconsider z as Ordinal by A44,ORDINAL1:23;
+         succ z in omega by A5,A44,ORDINAL1:41,ORDINAL2:19;
+then A45:    L.succ z = phi.C & L.succ z in rng L & B = phi.y
+        by A5,A7,A42,A44,FUNCT_1:70,def 5;
+      reconsider C1 = C as Ordinal of W by A31,A43,Def2;
+         y c< C1 iff y c= C1 & y <> C1 by XBOOLE_0:def 8;
+       then y in C1 & C1 in dom phi or y = C by A31,A34,A43,ORDINAL1:21,
+ORDINAL2:def 2;
+       then phi.y in phi.C1 or y = C1 by A1,ORDINAL2:def 16;
+       then B c= phi.C1 & phi.C1 in sup L
+        by A40,A45,ORDINAL1:def 2,ORDINAL2:27;
+       then B in sup L by ORDINAL1:22;
+      hence thesis by A41,ORDINAL1:22;
+     end;
+    then not S in phi.S by A38,ORDINAL1:7;
+   hence contradiction by A18;
+  end;

@@ -1,0 +1,1751 @@
+:: A First Order Language
+::  by Piotr Rudnicki and Andrzej Trybulec
+::
+:: Received August 8, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary MCART_1, FINSEQ_1, RELAT_1, BOOLE, ZF_LANG, FUNCT_1, PRE_TOPC,
+      QC_LANG1, FUNCOP_1;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0,
+      MCART_1, NAT_1, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FUNCOP_1, FINSEQ_1;
+ constructors MCART_1, NAT_1, FUNCT_2, ENUMSET1, FINSEQ_1, XREAL_0, MEMBERED,
+      XBOOLE_0, FUNCOP_1;
+ clusters RELSET_1, FINSEQ_1, SUBSET_1, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0,
+      NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, XBOOLE_0;
+ theorems AXIOMS, ZFMISC_1, SUBSET_1, TARSKI, ENUMSET1, FINSEQ_1, MCART_1,
+      NAT_1, FUNCT_1, FUNCT_2, RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1,
+      FUNCOP_1;
+ schemes NAT_1, FUNCT_2, FUNCT_1, XBOOLE_0;
+
+begin
+
+:: Preliminaries
+
+theorem
+  for D1 being non empty set, D2 being set, k being Element of D1 holds
+  [: {k}, D2 :] c= [: D1, D2 :]
+proof
+  let D1 be non empty set, D2 be set, k be Element of D1;
+    {k} is Subset of D1 by SUBSET_1:63;
+ hence [: {k}, D2 :] c= [: D1, D2 :] by ZFMISC_1:118;
+end;
+
+theorem Th2:
+for D1 being non empty set, D2 being set, k1, k2, k3 being Element of D1 holds
+  [: {k1, k2, k3}, D2 :] c= [: D1, D2 :]
+proof
+  let D1 be non empty set, D2 be set, k1, k2, k3 be Element of D1;
+    {k1, k2, k3} is Subset of D1 by SUBSET_1:57;
+ hence [: {k1, k2, k3}, D2 :] c= [: D1, D2 :] by ZFMISC_1:118;
+end;
+
+reserve k, l, m, n for Nat;
+
+definition
+ func QC-variables -> set equals
+:Def1:  [: { 4, 5, 6 }, NAT :];
+ coherence;
+end;
+
+definition
+ cluster QC-variables -> non empty;
+coherence
+  proof
+   reconsider X = {4, 5, 6} as non empty set by ENUMSET1:14;
+      [: X, NAT :] is non empty set;
+    hence thesis by Def1;
+  end;
+end;
+
+canceled;
+
+theorem Th4: QC-variables c= [: NAT, NAT :] by Def1,Th2;
+
+definition
+ mode QC-variable is Element of QC-variables;
+
+ func bound_QC-variables -> Subset of QC-variables equals
+:Def2:  [: {4}, NAT :];
+ coherence
+  proof
+     4 in {4, 5, 6} by ENUMSET1:14;
+   then {4} c= {4, 5, 6} by ZFMISC_1:37;
+   hence thesis by Def1,ZFMISC_1:118;
+  end;
+
+ func fixed_QC-variables -> Subset of QC-variables equals
+:Def3: [: {5}, NAT :];
+ coherence
+  proof
+     5 in {4, 5, 6} by ENUMSET1:14;
+   then {5} c= {4, 5, 6} by ZFMISC_1:37;
+   hence thesis by Def1,ZFMISC_1:118;
+  end;
+
+ func free_QC-variables -> Subset of QC-variables equals
+:Def4:  [: {6}, NAT :];
+ coherence
+  proof
+     6 in {4, 5, 6} by ENUMSET1:14;
+   then {6} c= {4, 5, 6} by ZFMISC_1:37;
+   hence thesis by Def1,ZFMISC_1:118;
+  end;
+
+  func QC-pred_symbols -> set equals
+:Def5:  { [k, l]: 7 <= k };
+ coherence;
+end;
+
+definition
+ cluster bound_QC-variables -> non empty;
+ coherence by Def2;
+
+ cluster fixed_QC-variables -> non empty;
+ coherence by Def3;
+
+ cluster free_QC-variables -> non empty;
+ coherence by Def4;
+
+  cluster QC-pred_symbols -> non empty;
+ coherence
+   proof
+       [7, 7] in { [k, l]: 7 <= k };
+     hence thesis by Def5;
+   end;
+end;
+
+canceled 5;
+
+theorem Th10: QC-pred_symbols c= [: NAT, NAT :]
+        proof
+         let x be set;
+        assume x in QC-pred_symbols;
+        then ex k, l being Nat st x = [k, l] & 7 <= k by Def5;
+        hence thesis by ZFMISC_1:def 2;
+        end;
+
+definition
+  mode QC-pred_symbol is Element of QC-pred_symbols;
+end;
+
+definition let P be Element of QC-pred_symbols;
+  func the_arity_of P -> Nat means
+:Def6: P`1 = 7+it;
+existence
+  proof
+      P in {[k, l] : 7 <= k} by Def5;
+    then consider k, l such that
+  A1: P = [k, l] and
+ A2: 7 <= k;
+      k = P`1 by A1,MCART_1:7;
+    hence thesis by A2,NAT_1:28;
+  end;
+uniqueness by XCMPLX_1:2;
+end;
+
+ reserve P for QC-pred_symbol;
+
+definition let k;
+ func k-ary_QC-pred_symbols -> Subset of QC-pred_symbols equals
+:Def7:  { P : the_arity_of P = k };
+ coherence
+  proof
+   set Y = {7+k};
+      [: {7+k}, NAT :] c= QC-pred_symbols
+        proof
+          let x be set; assume
+        A1: x in [: {7+k}, NAT :];
+       then A2: x`1 = 7+k & x`2 in NAT by MCART_1:12;
+            reconsider x1 = x`1, x2 = x`2 as Element of NAT by A1,MCART_1:12;
+              7 <= x1 by A2,NAT_1:37;
+            then [x1, x2] in { [m, n] : 7 <= m };
+          hence x in QC-pred_symbols by A1,Def5,MCART_1:23;
+        end;
+   then reconsider X = [: Y, NAT :] as Subset of QC-pred_symbols;
+      X = { P : the_arity_of P = k }
+   proof
+   thus X c= { P : the_arity_of P = k }
+     proof
+        let x be set; assume
+     A3: x in X;
+         then reconsider Q = x as QC-pred_symbol;
+           x`1 in Y by A3,MCART_1:10;
+         then x`1 = 7+k by TARSKI:def 1;
+         then the_arity_of Q = k by Def6;
+        hence x in { P : the_arity_of P = k };
+     end;
+   let x be set;
+   assume x in { P : the_arity_of P = k };
+   then consider P such that
+  A4: x = P and
+ A5: the_arity_of P = k;
+A6: P in [: NAT, NAT :] by Th10,TARSKI:def 3;
+      P`1 = 7+k by A5,Def6;
+    then P`1 in Y & P`2 in NAT by A6,MCART_1:10,TARSKI:def 1;
+    then [P`1, P`2] in X by ZFMISC_1:106;
+   hence x in X by A4,A6,MCART_1:23;
+   end;
+   hence thesis;
+  end;
+end;
+
+definition let k;
+ cluster k-ary_QC-pred_symbols -> non empty;
+ coherence
+  proof
+   set Y = {7+k};
+      [: {7+k}, NAT :] c= QC-pred_symbols
+        proof
+          let x be set; assume
+        A1: x in [: {7+k}, NAT :];
+       then A2: x`1 = 7+k & x`2 in NAT by MCART_1:12;
+            reconsider x1 = x`1, x2 = x`2 as Element of NAT by A1,MCART_1:12;
+              7 <= x1 by A2,NAT_1:37;
+            then [x1, x2] in { [m, n] : 7 <= m };
+          hence x in QC-pred_symbols by A1,Def5,MCART_1:23;
+        end;
+   then reconsider X = [: Y, NAT :] as non empty Subset of QC-pred_symbols;
+      X = { P : the_arity_of P = k }
+   proof
+   thus X c= { P : the_arity_of P = k }
+     proof
+        let x be set; assume
+     A3: x in X;
+         then reconsider Q = x as QC-pred_symbol;
+           x`1 in Y by A3,MCART_1:10;
+         then x`1 = 7+k by TARSKI:def 1;
+         then the_arity_of Q = k by Def6;
+        hence x in { P : the_arity_of P = k };
+     end;
+   let x be set;
+   assume x in { P : the_arity_of P = k };
+   then consider P such that
+  A4: x = P and
+ A5: the_arity_of P = k;
+A6: P in [: NAT, NAT :] by Th10,TARSKI:def 3;
+      P`1 = 7+k by A5,Def6;
+    then P`1 in Y & P`2 in NAT by A6,MCART_1:10,TARSKI:def 1;
+    then [P`1, P`2] in X by ZFMISC_1:106;
+   hence x in X by A4,A6,MCART_1:23;
+   end;
+   hence thesis by Def7;
+  end;
+end;
+
+definition
+ mode bound_QC-variable is Element of bound_QC-variables;
+ mode fixed_QC-variable is Element of fixed_QC-variables;
+ mode free_QC-variable is Element of free_QC-variables;
+
+let k;
+ mode QC-pred_symbol of k is Element of k-ary_QC-pred_symbols;
+end;
+
+definition let k be Nat;
+  mode QC-variable_list of k -> FinSequence of QC-variables means
+:Def8: len it = k;
+existence by FINSEQ_1:24;
+end;
+
+definition let D be set;
+  attr D is QC-closed means :Def9:
+   D is Subset of [:NAT, NAT:]* &
+                :: Includes atomic formulae
+     (for k being Nat, p being (QC-pred_symbol of k),
+          ll being QC-variable_list of k holds <*p*>^ll in D) &
+                :: Is closed under VERUM, 'not', '&', and quantification
+     <*[0, 0]*> in D &
+     (for p being FinSequence of [:NAT,NAT:]
+      st p in D holds <*[1, 0]*>^p in D) &
+     (for p, q being FinSequence of [:NAT, NAT:] st
+      p in D & q in D
+           holds <*[2, 0]*>^p^q in D) &
+     (for x being bound_QC-variable,
+          p being FinSequence of [:NAT, NAT:]
+           st p in D holds <*[3, 0]*>^<*x*>^p in D);
+end;
+
+Lm1:
+  for k, l being Nat holds <*[k, l]*> is FinSequence of [:NAT, NAT:]
+  proof
+    let k, l be Nat;
+  :: Why do I have to state this?
+      [k, l] in [:NAT, NAT:] by ZFMISC_1:def 2;
+    then rng <*[k, l]*> = {[k, l]} & {[k, l]} c= [:NAT, NAT:]
+                                 by FINSEQ_1:56,ZFMISC_1:37;
+    hence <*[k, l]*> is FinSequence of [:NAT, NAT:] by FINSEQ_1:def 4;
+  end;
+
+Lm2:
+  for k being Nat, p being (QC-pred_symbol of k),
+                ll being (QC-variable_list of k)
+        holds <*p*>^ll is FinSequence of [:NAT, NAT:]
+  proof
+    let k be Nat, p be (QC-pred_symbol of k), ll be QC-variable_list of k;
+   k-ary_QC-pred_symbols c= [:NAT,NAT:] & QC-variables c= [:NAT,NAT:]
+                                                  by Def1,Th2,Th10,XBOOLE_1:1;
+    then rng <*p*> c= [:NAT,NAT:] & rng ll c= [:NAT,NAT:] by XBOOLE_1:1;
+    then rng <*p*> \/ rng ll c= [:NAT,NAT:] by XBOOLE_1:8;
+    then rng (<*p*>^ll) c= [:NAT,NAT:] by FINSEQ_1:44;
+    hence <*p*>^ll is FinSequence of [:NAT,NAT:]
+       by FINSEQ_1:def 4;
+  end;
+
+Lm3: for x being bound_QC-variable,
+            p being FinSequence of [:NAT, NAT:]
+                holds <*[3, 0]*>^<*x*>^p is
+                 FinSequence of [:NAT, NAT:]
+  proof
+     let x be bound_QC-variable, p be FinSequence of [:NAT, NAT:];
+    reconsider y = <*[3, 0]*> as FinSequence of [:NAT, NAT:] by Lm1;
+     bound_QC-variables c= [:NAT,NAT:] by Th4,XBOOLE_1:1;
+    then rng <*x*> c= [:NAT,NAT:] by XBOOLE_1:1;
+    then reconsider z = <*x*> as FinSequence of [:NAT, NAT:]
+     by FINSEQ_1:def 4;
+      y^z^p is FinSequence of [:NAT, NAT:];
+    hence thesis;
+  end;
+
+definition
+   func QC-WFF -> non empty set means
+:Def10: it is QC-closed &
+                :: Is the smallest that is_QC-closed
+   for D being non empty set st D is QC-closed holds it c= D;
+existence
+  proof
+     defpred P[set] means
+      for D being non empty set st D is QC-closed holds $1 in D;
+     consider D0 being set such that
+A1:   for x being set holds x in D0 iff x in [:NAT, NAT:]* & P[x]
+       from Separation;
+        <*[0, 0]*> is FinSequence of [:NAT, NAT:] by Lm1;
+  then A2: <*[0, 0]*> in [:NAT, NAT:]* by FINSEQ_1:def 11;
+ A3: for D being non empty set
+ st D is QC-closed holds <*[0, 0]*> in D by Def9;
+   then reconsider D0 as non empty set by A1,A2;
+   take D0;
+        D0 c= [:NAT, NAT:]*
+        proof let x be set;
+          thus thesis by A1;
+        end;
+   hence D0 is Subset of [:NAT, NAT:]*;
+   thus for k being Nat, p being (QC-pred_symbol of k),
+          ll being QC-variable_list of k holds <*p*>^ll in D0
+         proof
+           let k be Nat, p be (QC-pred_symbol of k),
+             ll be QC-variable_list of k;
+             <*p*>^ll is FinSequence of [:NAT, NAT:] by Lm2;
+           then <*p*>^ll in [:NAT, NAT:]* &
+                for D being non empty set st D is QC-closed holds <*p*>^ll in D
+                                                by Def9,FINSEQ_1:def 11;
+           hence <*p*>^ll in D0 by A1;
+         end;
+   thus <*[0, 0]*> in D0 by A1,A2,A3;
+   thus for p being FinSequence of [:NAT, NAT:] st p in D0
+                 holds <*[1, 0]*>^p in D0
+         proof
+           let p be FinSequence of [:NAT, NAT:];
+           assume
+     A4:   p in D0;
+           reconsider h = <*[1, 0]*> as FinSequence of [:NAT, NAT:]
+            by Lm1;
+             h^p is FinSequence of [:NAT, NAT:];
+    then A5:   <*[1, 0]*>^p in [:NAT, NAT:]* by FINSEQ_1:def 11;
+              for D being non empty set st D is QC-closed holds <*[1, 0]*>^p in
+D
+                proof let D be non empty set; assume
+                A6:    D is QC-closed;
+                    then p in D by A1,A4;
+                  hence thesis by A6,Def9;
+                end;
+           hence thesis by A1,A5;
+         end;
+   thus for p, q being FinSequence of [:NAT, NAT:]
+    st p in D0 & q in D0
+           holds <*[2, 0]*>^p^q in D0
+        proof
+          let p, q be FinSequence of [:NAT, NAT:] such that
+        A7: p in D0 & q in D0;
+            reconsider h = <*[2, 0]*> as FinSequence of [:NAT, NAT:]
+             by Lm1;
+              h^p^q is FinSequence of [:NAT, NAT:];
+       then A8: <*[2, 0]*>^p^q in [:NAT, NAT:]* by FINSEQ_1:def 11;
+              for D being non empty set
+ st D is QC-closed holds <*[2, 0]*>^p^q in D
+                proof let D be non empty set; assume
+                A9:    D is QC-closed;
+                    then p in D & q in D by A1,A7;
+                  hence thesis by A9,Def9;
+                end;
+           hence <*[2, 0]*>^p^q in D0 by A1,A8;
+        end;
+   thus for x being bound_QC-variable,
+          p being FinSequence of [:NAT, NAT:]
+           st p in D0 holds <*[3, 0]*>^<*x*>^p in D0
+        proof
+           let x be bound_QC-variable,
+            p be FinSequence of [:NAT, NAT:];
+           assume
+     A10:   p in D0;
+             <*[3, 0]*>^<*x*>^p is FinSequence of [:NAT, NAT:]
+            by Lm3;
+    then A11:   <*[3, 0]*>^<*x*>^p in [:NAT, NAT:]* by FINSEQ_1:def 11;
+              for D being non empty set
+ st D is QC-closed holds <*[3, 0]*>^<*x*>^p in D
+                proof let D be non empty set; assume
+                A12:    D is QC-closed;
+                    then p in D by A1,A10;
+                  hence thesis by A12,Def9;
+                end;
+           hence thesis by A1,A11;
+        end;
+   let D be non empty set such that
+A13:   D is QC-closed;
+   let x be set; assume
+     x in D0;
+   hence thesis by A1,A13;
+  end;
+uniqueness
+  proof
+        let D1, D2 be non empty set such that
+A14:  D1 is QC-closed & for D being non empty set
+ st D is QC-closed holds D1 c= D and
+A15:  D2 is QC-closed & for D being non empty set
+ st D is QC-closed holds D2 c= D;
+      D1 c= D2 & D2 c= D1 by A14,A15;
+  hence D1 = D2 by XBOOLE_0:def 10;
+  end;
+end;
+
+canceled 10;
+
+theorem Th21: QC-WFF is QC-closed by Def10;
+
+definition
+  mode QC-formula is Element of QC-WFF;
+end;
+
+definition let P be QC-pred_symbol,l be FinSequence of QC-variables;
+ assume A1: the_arity_of P = len l;
+  func P!l -> Element of QC-WFF equals
+:Def11:  <*P*>^l;
+  coherence
+ proof set k = len l;
+  set QCP = {Q where Q is QC-pred_symbol: the_arity_of Q = k };
+    QCP = k-ary_QC-pred_symbols & P in QCP by A1,Def7;
+  then reconsider P as QC-pred_symbol of k;
+  reconsider l as QC-variable_list of k by Def8;
+  reconsider X = <*P*>^l as FinSequence of [:NAT,NAT:] by Lm2;
+     X is QC-formula by Def9,Th21;
+  hence thesis;
+ end;
+end;
+
+canceled;
+
+theorem Th23:
+   for k being Nat, p being QC-pred_symbol of k,
+           ll be QC-variable_list of k
+         holds p!ll = <*p*>^ll
+ proof let k be Nat, p be QC-pred_symbol of k,ll be QC-variable_list of k;
+  set QCP = {Q where Q is QC-pred_symbol: the_arity_of Q = k };
+    QCP = k-ary_QC-pred_symbols by Def7;
+  then p in QCP;
+  then ex Q being QC-pred_symbol st p = Q & the_arity_of Q = k;
+  then len ll = k & the_arity_of p = k by Def8;
+  hence thesis by Def11;
+ end;
+
+definition
+  let p be Element of QC-WFF;
+
+  func @p -> FinSequence of [:NAT, NAT:] equals
+:Def12:  p;
+coherence
+   proof
+          QC-WFF is Subset of [:NAT, NAT:]* & p in QC-WFF by Def9,Th21;
+        hence thesis by FINSEQ_1:def 11;
+   end;
+end;
+
+definition
+  func VERUM -> QC-formula equals
+:Def13:  <*[0, 0]*>;
+correctness by Def9,Th21;
+
+let p be Element of QC-WFF;
+
+  func 'not' p -> QC-formula equals
+:Def14:  <*[1, 0]*>^@p;
+coherence
+  proof
+      p in QC-WFF;
+    then @p in QC-WFF by Def12;
+    hence thesis by Def9,Th21;
+  end;
+correctness;
+
+let q be Element of QC-WFF;
+
+        func p '&' q -> QC-formula equals
+:Def15:  <*[2, 0]*>^@p^@q;
+correctness
+  proof
+      p in QC-WFF & q in QC-WFF;
+    then @p in QC-WFF & @q in QC-WFF by Def12;
+    hence thesis by Def9,Th21;
+  end;
+end;
+
+definition let x be bound_QC-variable, p be Element of QC-WFF;
+  func All(x, p) -> QC-formula equals
+:Def16: <*[3, 0]*>^<*x*>^@p;
+coherence
+  proof
+      p in QC-WFF;
+    then @p in QC-WFF by Def12;
+    hence thesis by Def9,Th21;
+  end;
+end;
+
+        reserve F for Element of QC-WFF;
+scheme QC_Ind { Prop[Element of QC-WFF] }:
+        for F being Element of QC-WFF holds Prop[F]
+  provided
+        A1: for k being Nat, P being (QC-pred_symbol of k),
+                ll being QC-variable_list of k
+              holds Prop[P!ll] and
+        A2: Prop[VERUM] and
+        A3: for p being Element of QC-WFF st Prop[p] holds Prop['not' p] and
+        A4: for p, q being Element of QC-WFF st Prop[p] & Prop[q]
+              holds Prop[p '&' q] and
+        A5: for x being bound_QC-variable, p being Element of QC-WFF st Prop[p]
+                        holds Prop[All(x, p)]
+  proof
+      VERUM in { F : Prop[F] } by A2;
+    then reconsider X = { F : Prop[F] } as non empty set;
+      X is QC-closed
+      proof
+          X c= [:NAT, NAT:]*
+         proof
+           let x be set;
+           assume x in X;
+           then consider p being Element of QC-WFF such that
+        A6: x = p & Prop[p];
+             p = @p by Def12;
+           hence thesis by A6,FINSEQ_1:def 11;
+         end;
+       hence X is Subset of [:NAT, NAT:]*;
+       thus for k being Nat, P being (QC-pred_symbol of k),
+                ll being QC-variable_list of k
+              holds <*P*>^ll in X
+         proof
+           let k be Nat, P be (QC-pred_symbol of k),
+                ll be QC-variable_list of k;
+               Prop[P!ll] by A1;
+             then P!ll in X;
+           hence thesis by Th23;
+         end;
+       thus <*[0, 0]*> in X by A2,Def13;
+       thus for p being FinSequence of [:NAT, NAT:]
+                 st p in X holds <*[1, 0]*>^p in X
+         proof
+          let p be FinSequence of [:NAT, NAT:];
+          assume p in X;
+          then consider p' being Element of QC-WFF such that
+         A7: p = p' & Prop[p'];
+            Prop['not' p'] by A3,A7;
+          then 'not' p' in X;
+          then <*[1, 0]*>^@p' in X by Def14;
+          hence thesis by A7,Def12;
+         end;
+       thus for p, q being FinSequence of [:NAT, NAT:]
+             st p in X & q in X
+              holds <*[2, 0]*>^p^q in X
+         proof
+           let p, q be FinSequence of [:NAT, NAT:];
+           assume p in X;
+            then consider p' being Element of QC-WFF such that
+         A8: p = p' & Prop[p'];
+           assume q in X;
+            then consider q' being Element of QC-WFF such that
+         A9: q = q' & Prop[q'];
+         A10: @p' = p & @q' = q by A8,A9,Def12;
+              Prop[p' '&' q'] by A4,A8,A9;
+            then p' '&' q' in X;
+           hence thesis by A10,Def15;
+         end;
+        thus for x being bound_QC-variable,
+              p being FinSequence of [:NAT, NAT:]
+                 st p in X holds <*[3, 0]*>^<*x*>^p in X
+         proof
+          let x be bound_QC-variable,
+              p be FinSequence of [:NAT, NAT:];
+           assume p in X;
+            then consider p' being Element of QC-WFF such that
+         A11: p = p' & Prop[p'];
+              Prop[All(x, p')] by A5,A11;
+            then All(x, p') in X;
+            then <*[3, 0]*>^<*x*>^@p' in X by Def16;
+          hence thesis by A11,Def12;
+         end;
+      end;
+  then A12: QC-WFF c= X by Def10;
+    let F' be Element of QC-WFF;
+      F' in X by A12,TARSKI:def 3;
+    then ex F'' being Element of QC-WFF st F' = F'' & Prop[F''];
+    hence Prop[F'];
+  end;
+
+definition
+
+let F be Element of QC-WFF;
+        attr F is atomic means
+:Def17: ex k being Nat, p being (QC-pred_symbol of k),
+                ll being QC-variable_list of k
+                        st F = p!ll;
+        attr F is negative means
+:Def18: ex p being Element of QC-WFF st F = 'not' p;
+        attr F is conjunctive means
+:Def19: ex p, q being Element of QC-WFF st F = p '&' q;
+        attr F is universal means
+:Def20: ex x being bound_QC-variable, p being Element of QC-WFF
+                        st F = All(x, p);
+end;
+canceled 9;
+
+theorem Th33: for F being Element of QC-WFF holds
+                F = VERUM or F is atomic or F is negative or
+                F is conjunctive or F is universal
+proof
+        defpred P[Element of QC-WFF] means $1 = VERUM or $1 is atomic or
+                $1 is negative or $1 is conjunctive or $1 is universal;
+     A1:   for k being Nat, p being (QC-pred_symbol of k),
+              ll being QC-variable_list of k
+            holds P[p!ll] by Def17;
+     A2:   P[VERUM];
+     A3:   for p being Element of QC-WFF st P[p] holds P['not' p] by Def18;
+     A4:   for p, q being Element of QC-WFF st P[p] & P[q] holds P[p '&' q]
+ by Def19;
+     A5:   for x being bound_QC-variable, p being Element of QC-WFF st P[p]
+                 holds P[All(x, p)] by Def20;
+
+        thus for F being Element of QC-WFF holds P[F]
+                                         from QC_Ind (A1, A2, A3, A4, A5);
+
+end;
+
+theorem Th34: for F being Element of QC-WFF holds 1 <= len @F
+proof let F be Element of QC-WFF;
+   now per cases by Th33;
+  suppose F = VERUM;
+   then @F = <*[0, 0]*> by Def12,Def13;
+   hence thesis by FINSEQ_1:56;
+  suppose F is atomic;
+   then consider k being Nat, p being (QC-pred_symbol of k),
+                ll being QC-variable_list of k such that
+  A1: F = p!ll by Def17;
+       @F = p!ll by A1,Def12
+       .= <*p*>^ll by Th23;
+     then len @F = len <*p*> + len ll by FINSEQ_1:35
+                .= 1 + len ll by FINSEQ_1:56;
+   hence thesis by NAT_1:29;
+  suppose F is negative;
+   then consider p being Element of QC-WFF such that
+  A2: F = 'not' p by Def18;
+      @F = 'not' p by A2,Def12
+      .= <*[1, 0]*>^@p by Def14;
+    then len @F = len <*[1, 0]*> + len @p by FINSEQ_1:35
+               .= 1 + len @p by FINSEQ_1:56;
+   hence thesis by NAT_1:29;
+  suppose F is conjunctive;
+   then consider p, q being Element of QC-WFF such that
+  A3: F = p '&' q by Def19;
+      @F = p '&' q by A3,Def12
+      .= <*[2, 0]*>^@p^@q by Def15
+      .= <*[2, 0]*>^(@p^@q) by FINSEQ_1:45;
+    then len @F = len <*[2, 0]*> + len (@p^@q) by FINSEQ_1:35
+               .= 1 + len (@p^@q) by FINSEQ_1:56;
+   hence thesis by NAT_1:29;
+  suppose F is universal;
+   then consider x being bound_QC-variable, p being Element of QC-WFF such that
+  A4: F = All(x, p) by Def20;
+      @F = All(x, p) by A4,Def12
+      .= <*[3, 0]*>^<*x*>^@p by Def16
+      .= <*[3, 0]*>^(<*x*>^@p) by FINSEQ_1:45;
+    then len @F = len <*[3, 0]*> + len (<*x*>^@p) by FINSEQ_1:35
+               .= 1 + len (<*x*>^@p) by FINSEQ_1:56;
+   hence thesis by NAT_1:29;
+ end;
+ hence thesis;
+end;
+
+ reserve Q for QC-pred_symbol;
+
+theorem Th35: for k being Nat, P being QC-pred_symbol of k
+                  holds the_arity_of P = k
+proof let k be Nat, P be QC-pred_symbol of k;
+      reconsider P as Element of k-ary_QC-pred_symbols;
+        k-ary_QC-pred_symbols = { Q : the_arity_of Q = k }
+                                                by Def7;
+      then P in { Q : the_arity_of Q = k };
+      then ex Q st P = Q & the_arity_of Q = k;
+      hence thesis;
+end;
+
+ reserve F, G for (Element of QC-WFF), k,n for Nat, s for FinSequence;
+
+theorem Th36:
+    ((@F.1)`1 = 0 implies F = VERUM) &
+    ((@F.1)`1 = 1 implies F is negative) &
+    ((@F.1)`1 = 2 implies F is conjunctive) &
+    ((@F.1)`1 = 3 implies F is universal) &
+    ((ex k being Nat st @F.1 is QC-pred_symbol of k) implies F is atomic)
+ proof
+    A1:  now let k be Nat, P be QC-pred_symbol of k;
+                reconsider P' = P as QC-pred_symbol;
+                  P'`1 = 7+the_arity_of P' by Def6;
+        hence P`1 <> 0 & P`1 <> 1 & P`1 <> 2 & P`1 <> 3 by NAT_1:29;
+        end;
+     now per cases by Th33;
+    case F is atomic;
+        then consider k being Nat, P being (QC-pred_symbol of k),
+                      ll being QC-variable_list of k such that
+        A2: F = P!ll by Def17;
+             @F = F by Def12
+             .= <*P*>^ll by A2,Th23;
+           then @F.1 = P by FINSEQ_1:58;
+        hence ex k being Nat st @F.1 is QC-pred_symbol of k;
+    case F = VERUM; then @F = VERUM by Def12;
+      hence (@F.1)`1 = [0,0]`1 by Def13,FINSEQ_1:def 8
+          .= 0 by MCART_1:7;
+    case F is negative; then consider p being Element of QC-WFF such that
+        A3: F = 'not' p by Def18;
+             @F = F by Def12
+             .= <*[1, 0]*>^@p by A3,Def14;
+           then @F.1 = [1, 0] by FINSEQ_1:58;
+      hence (@F.1)`1 = 1 by MCART_1:7;
+    case F is conjunctive;
+        then consider p, q being Element of QC-WFF such that
+        A4: F = p '&' q by Def19;
+            @F = F by Def12
+            .= <*[2, 0]*>^@p^@q by A4,Def15
+            .= <*[2, 0]*>^(@p^@q) by FINSEQ_1:45;
+          then @F.1 = [2, 0] by FINSEQ_1:58;
+        hence (@F.1)`1 = 2 by MCART_1:7;
+    case F is universal;
+        then consider x being bound_QC-variable, p being Element of QC-WFF
+                                                 such that
+        A5: F = All(x, p) by Def20;
+            @F = F by Def12
+            .= <*[3, 0]*>^<*x*>^@p by A5,Def16
+            .= <*[3, 0]*>^(<*x*>^@p) by FINSEQ_1:45;
+          then @F.1 = [3, 0] by FINSEQ_1:58;
+        hence (@F.1)`1 = 3 by MCART_1:7;
+   end;
+  hence thesis by A1;
+ end;
+
+theorem Th37: @F = @G^s implies @F = @G
+proof
+ defpred P[set] means for F,G,s st len @F = $1 & @F = @G^s holds @F = @G;
+ A1: for n st for k st k < n holds P[k] holds P[n]
+ proof let n be Nat such that
+ A2: for k st k < n holds for F, G, s st len @F = k & @F = @G^s holds @F = @G;
+    let F, G be (Element of QC-WFF), s be FinSequence such that
+ A3: len @F = n and
+ A4: @F = @G^s;
+ A5: len (@G^s) = len @G + len s by FINSEQ_1:35;
+ A6: dom @G = Seg len @G by FINSEQ_1:def 3;
+      1 <= len @G & 1 <= 1 by Th34;
+    then 1 in dom @G by A6,FINSEQ_1:3;
+ then A7: @F.1 = @G.1 by A4,FINSEQ_1:def 7;
+   now per cases by Th33;
+  suppose F = VERUM;
+   then @F = VERUM by Def12;
+then A8:  len @F = 1 by Def13,FINSEQ_1:56;
+    then 1 <= len @G & len @G <= 1 by A4,A5,Th34,NAT_1:29;
+    then 1 + 0 = 1 + len s by A4,A5,A8,AXIOMS:21;
+    then len s = 0 by XCMPLX_1:2;
+    then s = {} by FINSEQ_1:25;
+   hence thesis by A4,FINSEQ_1:47;
+  suppose F is atomic;
+   then consider k being Nat, P being (QC-pred_symbol of k),
+                 ll being QC-variable_list of k such that
+  A9: F = P!ll by Def17;
+  A10: @F = F by Def12
+        .= <*P*>^ll by A9,Th23;
+ then A11: @G.1 = P by A7,FINSEQ_1:58;
+      then G is atomic by Th36;
+      then consider k' being Nat, P' being (QC-pred_symbol of k'),
+                 ll' being QC-variable_list of k' such that
+  A12: G = P'!ll' by Def17;
+  A13:  @G = G by Def12
+         .= <*P'*>^ll' by A12,Th23;
+ then A14: @G.1 = P' by FINSEQ_1:58;
+  A15: len ll' = k' by Def8
+             .= the_arity_of P by A11,A14,Th35
+             .= k by Th35
+             .= len ll by Def8;
+        <*P*>^ll = <*P*>^(ll'^s) by A4,A10,A11,A13,A14,FINSEQ_1:45;
+      then ll = ll'^s by FINSEQ_1:46;
+      then len ll + 0 = len ll' + len s by FINSEQ_1:35;
+      then len s = 0 by A15,XCMPLX_1:2;
+    then s = {} by FINSEQ_1:25;
+   hence thesis by A4,FINSEQ_1:47;
+  suppose F is negative;
+      then consider p being Element of QC-WFF such that
+  A16:  F = 'not' p by Def18;
+ A17: @F = F by Def12
+        .= <*[1, 0]*>^@p by A16,Def14;
+      then @F.1 = [1, 0] by FINSEQ_1:58;
+      then (@G.1)`1 = 1 by A7,MCART_1:7;
+      then G is negative by Th36;
+      then consider p' being Element of QC-WFF such that
+  A18:  G = 'not' p' by Def18;
+     @G = G by Def12
+        .= <*[1, 0]*>^@p' by A18,Def14;
+       then <*[1, 0]*>^@p = <*[1, 0]*>^(@p'^s) by A4,A17,FINSEQ_1:45;
+  then A19: @p = @p'^s by FINSEQ_1:46;
+     len @F = len @p + len <*[1, 0]*> by A17,FINSEQ_1:35
+            .= len @p + 1 by FINSEQ_1:57;
+
+      then len @p < len @F by NAT_1:38;
+      then @p = @p' by A2,A3,A19;
+      then @p'^{} = @p'^s by A19,FINSEQ_1:47;
+      then s = {} by FINSEQ_1:46;
+   hence thesis by A4,FINSEQ_1:47;
+  suppose F is conjunctive;
+      then consider p, q being Element of QC-WFF such that
+  A20:  F = p '&' q by Def19;
+ A21: @F = F by Def12
+        .= <*[2, 0]*>^@p^@q by A20,Def15
+        .= <*[2, 0]*>^(@p^@q) by FINSEQ_1:45;
+      then @F.1 = [2, 0] by FINSEQ_1:58;
+      then (@G.1)`1 = 2 by A7,MCART_1:7;
+      then G is conjunctive by Th36;
+      then consider p', q' being Element of QC-WFF such that
+  A22:  G = p' '&' q' by Def19;
+  A23: @G = G by Def12
+        .= <*[2, 0]*>^@p'^@q' by A22,Def15
+        .= <*[2, 0]*>^(@p'^@q') by FINSEQ_1:45;
+       then <*[2, 0]*>^(@p^@q) = <*[2, 0]*>^(@p'^@q'^s) by A4,A21,FINSEQ_1:45;
+  then A24: @p^@q = @p'^@q'^s by FINSEQ_1:46
+           .= @p'^(@q'^s) by FINSEQ_1:45;
+        len @p <= len @p' or len @p' <= len @p;
+        then consider a, b, c, d being FinSequence such that
+  A25:  a = @p & b = @p' or a = @p' & b = @p and
+  A26:  len a <= len b and
+  A27:  a^c = b^d by A24;
+ A28:        ex t being FinSequence st
+  a^t = b by A26,A27,FINSEQ_1:64;
+  A29: len @F = len (@p^@q) + len <*[2, 0]*> by A21,FINSEQ_1:35
+            .= len (@p^@q) + 1 by FINSEQ_1:57;
+then A30:   len @F = len @p + len @q + 1 by FINSEQ_1:35;
+        len @p <= len @p + len @q by NAT_1:29;
+  then A31: len @p < len @F by A30,NAT_1:38;
+A32:  len @F = len @p' + len (@q'^s) + 1 by A24,A29,FINSEQ_1:35;
+        len @p' <= len @p' + len (@q'^s) by NAT_1:29;
+      then len @p' < len @F by A32,NAT_1:38;
+  then A33: @p = @p' by A2,A3,A25,A28,A31;
+  then A34: @q = @q'^s by A24,FINSEQ_1:46;
+        len @q <= len @p + len @q by NAT_1:29;
+      then len @q < len @F by A30,NAT_1:38;
+   hence thesis by A2,A3,A21,A23,A33,A34;
+  suppose F is universal;
+      then consider x being bound_QC-variable, p being Element of QC-WFF
+                                                 such that
+  A35:  F = All(x, p) by Def20;
+ A36: @F = F by Def12
+        .= <*[3, 0]*>^<*x*>^@p by A35,Def16;
+ then A37: @F = <*[3, 0]*>^(<*x*>^@p) by FINSEQ_1:45;
+      then @F.1 = [3, 0] by FINSEQ_1:58;
+      then (@G.1)`1 = 3 by A7,MCART_1:7;
+      then G is universal by Th36;
+      then consider x' being bound_QC-variable, p' being Element of QC-WFF such
+that
+  A38:  G = All(x', p') by Def20;
+  A39: @G = G by Def12
+        .= <*[3, 0]*>^<*x'*>^@p' by A38,Def16;
+       then <*[3, 0]*>^<*x*>^@p = <*[3, 0]*>^(<*x'*>^@p')^s by A4,A36,FINSEQ_1:
+45
+                   .= <*[3, 0]*>^(<*x'*>^@p'^s) by FINSEQ_1:45;
+  then A40: <*x*>^@p = <*x'*>^@p'^s by A36,A37,FINSEQ_1:46
+             .= <*x'*>^(@p'^s) by FINSEQ_1:45;
+ then A41: x = (<*x'*>^(@p'^s)).1 by FINSEQ_1:58
+       .= x' by FINSEQ_1:58;
+ then A42: @p = @p'^s by A40,FINSEQ_1:46;
+     len @F = len (<*x*>^@p) + len <*[3, 0]*> by A37,FINSEQ_1:35
+            .= len (<*x*>^@p) + 1 by FINSEQ_1:57
+            .= len <*x*> + len @p + 1 by FINSEQ_1:35
+            .= 1 + len @p + 1 by FINSEQ_1:57;
+
+      then len @p + 1 <= len @F by NAT_1:38;
+      then len @p < len @F by NAT_1:38;
+   hence thesis by A2,A3,A36,A39,A41,A42;
+ end;
+ hence thesis;
+end;
+ A43: for n holds P[n] from Comp_Ind(A1);
+      len @F = len @F;
+    hence thesis by A43;
+end;
+
+definition
+
+        let F be Element of QC-WFF such that A1: F is atomic;
+
+        func the_pred_symbol_of F -> QC-pred_symbol means
+:Def21: ex k being Nat, ll being (QC-variable_list of k),
+                        P being QC-pred_symbol of k
+                st it = P & F = P!ll;
+existence
+        proof ex k being Nat, P being (QC-pred_symbol of k),
+                       ll being QC-variable_list of k st
+ F = P!ll by A1,Def17;
+        hence thesis;
+        end;
+uniqueness
+        proof let P1, P2 be QC-pred_symbol;
+         given k1 being Nat, ll1 being (QC-variable_list of k1),
+                        P1' being QC-pred_symbol of k1 such that
+        A2: P1 = P1' & F = P1'!ll1;
+         given k2 being Nat, ll2 being (QC-variable_list of k2),
+                        P2' being QC-pred_symbol of k2 such that
+        A3: P2 = P2' & F = P2'!ll2;
+        A4: <*P1*>^ll1 = F by A2,Th23
+                      .= <*P2*>^ll2 by A3,Th23;
+         thus P1 = (<*P1*>^ll1).1 by FINSEQ_1:58
+                .= P2 by A4,FINSEQ_1:58;
+        end;
+end;
+
+definition let F be Element of QC-WFF such that A1: F is atomic;
+  func the_arguments_of F -> FinSequence of QC-variables means
+:Def22: ex k being Nat, P being (QC-pred_symbol of k),
+                        ll being QC-variable_list of k
+                st it = ll & F = P!ll;
+existence
+  proof
+    consider k being Nat, P being (QC-pred_symbol of k),
+                        ll being QC-variable_list of k such that
+A2: F = P!ll by A1,Def17;
+    reconsider ll as FinSequence of QC-variables;
+    take ll;
+    thus thesis by A2;
+  end;
+uniqueness
+        proof let ll1, ll2 be FinSequence of QC-variables;
+         given k1 being Nat, P1 being (QC-pred_symbol of k1),
+                ll1' being QC-variable_list of k1 such that
+        A3: ll1 = ll1' & F = P1!ll1';
+         given k2 being Nat, P2 being (QC-pred_symbol of k2),
+                ll2' being QC-variable_list of k2 such that
+        A4: ll2 = ll2' & F = P2!ll2';
+        A5: F = <*P1*>^ll1' & F = <*P2*>^ll2' by A3,A4,Th23;
+              P1 = the_pred_symbol_of F
+                                by A1,A3,Def21
+              .= P2 by A1,A4,Def21;
+        hence ll1 = ll2 by A3,A4,A5,FINSEQ_1:46;
+        end;
+end;
+
+definition let F be Element of QC-WFF such that A1: F is negative;
+  func the_argument_of F -> QC-formula means
+:Def23: F = 'not' it;
+existence by A1,Def18;
+uniqueness
+ proof let p1, p2 be QC-formula; assume
+           F = 'not' p1 & F = 'not' p2;
+        then A2: <*[1, 0]*>^@p1 = 'not' p2 by Def14
+                          .= <*[1, 0]*>^@p2 by Def14;
+          thus p1 = @p1 by Def12
+                 .= @p2 by A2,FINSEQ_1:46
+                 .= p2 by Def12;
+ end;
+
+end;
+definition
+  let F be Element of QC-WFF such that A1: F is conjunctive;
+  func the_left_argument_of F -> QC-formula means
+:Def24: ex q being Element of QC-WFF st F = it '&' q;
+existence by A1,Def19;
+uniqueness
+        proof let p1, p2 be QC-formula;
+         given q1 being Element of QC-WFF such that
+        A2: F = p1 '&' q1;
+         given q2 being Element of QC-WFF such that
+        A3: F = p2 '&' q2;
+           <*[2, 0]*>^(@p1^@q1) = <*[2, 0]*>^@p1^@q1 by FINSEQ_1:45
+                          .= p2 '&' q2 by A2,A3,Def15
+                          .= <*[2, 0]*>^@p2^@q2 by Def15
+                          .= <*[2, 0]*>^(@p2^@q2) by FINSEQ_1:45;
+        then A4: @p1^@q1 = @p2^@q2 by FINSEQ_1:46;
+             len @p1 <= len @p2 or len @p2 <= len @p1;
+           then consider a, b, c, d being FinSequence such that
+        A5:  a = @p1 & b = @p2 or a = @p2 & b = @p1 and
+        A6:  len a <= len b and
+        A7:  a^c = b^d by A4;
+ A8:        ex t being FinSequence st
+  a^t = b by A6,A7,FINSEQ_1:64;
+            p1 = @p1 & p2 =@p2 by Def12;
+         hence p1 = p2 by A5,A8,Th37;
+        end;
+end;
+
+definition
+        let F be Element of QC-WFF such that A1: F is conjunctive;
+
+        func the_right_argument_of F -> QC-formula means
+:Def25: ex p being Element of QC-WFF st F = p '&' it;
+existence
+  proof
+       ex p, q being Element of QC-WFF st
+ F = p '&' q by A1,Def19;
+    hence thesis;
+  end;
+uniqueness
+        proof let q1, q2 be QC-formula;
+         given p1 being Element of QC-WFF such that
+        A2: F = p1 '&' q1;
+         given p2 being Element of QC-WFF such that
+        A3: F = p2 '&' q2;
+           <*[2, 0]*>^(@p1^@q1) = <*[2, 0]*>^@p1^@q1 by FINSEQ_1:45
+                          .= p2 '&' q2 by A2,A3,Def15
+                          .= <*[2, 0]*>^@p2^@q2 by Def15
+                          .= <*[2, 0]*>^(@p2^@q2) by FINSEQ_1:45;
+        then A4: @p1^@q1 = @p2^@q2 by FINSEQ_1:46;
+
+              p1 = the_left_argument_of F
+                                by A1,A2,Def24
+              .= p2 by A1,A3,Def24;
+            then @q1 = @q2 by A4,FINSEQ_1:46;
+        hence q1 = @q2 by Def12 .= q2 by Def12;
+        end;
+end;
+
+definition let F be Element of QC-WFF such that A1: F is universal;
+  func bound_in F -> bound_QC-variable means
+:Def26: ex p being Element of QC-WFF st F = All(it, p);
+existence by A1,Def20;
+uniqueness
+ proof let x1, x2 be bound_QC-variable;
+  given p1 being Element of QC-WFF such that
+A2: F = All(x1, p1);
+  given p2 being Element of QC-WFF such that
+A3: F = All(x2, p2);
+   <*[3, 0]*>^(<*x1*>^@p1) = <*[3, 0]*>^<*x1*>^@p1 by FINSEQ_1:45
+                          .= All(x2, p2) by A2,A3,Def16
+                          .= <*[3, 0]*>^<*x2*>^@p2 by Def16
+                          .= <*[3, 0]*>^(<*x2*>^@p2) by FINSEQ_1:45;
+then A4: <*x1*>^@p1 = <*x2*>^@p2 by FINSEQ_1:46;
+  thus x1 = (<*x1*>^@p1).1 by FINSEQ_1:58
+         .= x2 by A4,FINSEQ_1:58;
+ end;
+
+  func the_scope_of F -> QC-formula means
+:Def27: ex x being bound_QC-variable st F = All(x, it);
+existence
+  proof
+       ex x being bound_QC-variable, p being Element of QC-WFF st
+ F = All(x, p) by A1,Def20;
+    hence thesis;
+  end;
+uniqueness
+ proof let p1, p2 be QC-formula;
+  given x1 being bound_QC-variable such that
+A5: F = All(x1, p1);
+  given x2 being bound_QC-variable such that
+A6: F = All(x2, p2);
+   <*[3, 0]*>^(<*x1*>^@p1) = <*[3, 0]*>^<*x1*>^@p1 by FINSEQ_1:45
+                          .= All(x2, p2) by A5,A6,Def16
+                          .= <*[3, 0]*>^<*x2*>^@p2 by Def16
+                          .= <*[3, 0]*>^(<*x2*>^@p2) by FINSEQ_1:45;
+then A7: <*x1*>^@p1 = <*x2*>^@p2 by FINSEQ_1:46;
+A8: x1 = (<*x1*>^@p1).1 by FINSEQ_1:58
+  .= x2 by A7,FINSEQ_1:58;
+  thus p1 = @p1 by Def12
+         .= @p2 by A7,A8,FINSEQ_1:46
+         .= p2 by Def12;
+ end;
+end;
+
+  reserve p for Element of QC-WFF;
+
+canceled 7;
+
+theorem Th45: p is negative implies len @the_argument_of p < len @p
+proof assume A1: p is negative;
+ then consider q being Element of QC-WFF such that
+A2: p = 'not' q by Def18;
+A3:    p = <*[1, 0]*>^@q by A2,Def14;
+      p = @p by Def12;
+ then len @p = len <*[1, 0]*> + len @q by A3,FINSEQ_1:35
+          .= len @q + 1 by FINSEQ_1:57;
+
+then len @q < len @p by NAT_1:38;
+   hence thesis by A1,A2,Def23;
+end;
+
+theorem Th46: p is conjunctive implies len @the_left_argument_of p < len @p
+                        & len @the_right_argument_of p < len @p
+proof assume A1: p is conjunctive;
+ then consider l, q being Element of QC-WFF such that
+A2: p = l '&' q by Def19;
+A3:    p = <*[2, 0]*>^@l^@q by A2,Def15
+         .= <*[2, 0]*>^(@l^@q) by FINSEQ_1:45;
+      p = @p by Def12;
+then A4: len @p = len <*[2, 0]*> + len (@l^@q) by A3,FINSEQ_1:35
+          .= len (@l^@q) + 1 by FINSEQ_1:57;
+
+
+   len @q + len @l = len (@l^@q) by FINSEQ_1:35;
+    then len @l <= len (@l^@q) & len @q <= len (@l^@q) by NAT_1:29;
+ then len @l < len @p & len @q < len @p by A4,NAT_1:38;
+   hence thesis by A1,A2,Def24,Def25;
+end;
+theorem Th47: p is universal implies len @the_scope_of p < len @p
+proof assume A1: p is universal;
+ then consider x being bound_QC-variable, q being Element of QC-WFF such that
+A2: p = All(x, q) by Def20;
+A3:  p = <*[3, 0]*>^<*x*>^@q by A2,Def16
+         .= <*[3, 0]*>^(<*x*>^@q) by FINSEQ_1:45;
+      p = @p by Def12;
+then A4: len @p = len <*[3, 0]*> + len (<*x*>^@q) by A3,FINSEQ_1:35
+          .= len (<*x*>^@q) + 1 by FINSEQ_1:57;
+   len @q + len <*x*> = len (<*x*>^@q) by FINSEQ_1:35;
+    then len @q <= len (<*x*>^@q) by NAT_1:29;
+ then len @q < len @p by A4,NAT_1:38;
+   hence thesis by A1,A2,Def27;
+end;
+
+scheme QC_Ind2 { Prop[Element of QC-WFF] }:
+        for p being Element of QC-WFF holds Prop[p]
+  provided
+  A1:     for p being Element of QC-WFF holds
+         (p is atomic implies Prop[p]) &
+         Prop[VERUM] &
+         (p is negative & Prop[the_argument_of p] implies Prop[p]) &
+         (p is conjunctive & Prop[the_left_argument_of p] &
+                Prop[the_right_argument_of p] implies Prop[p]) &
+         (p is universal & Prop[the_scope_of p] implies Prop[p])
+proof
+defpred Q[Element of QC-WFF] means Prop[$1];
+A2: now let k be Nat, P be (QC-pred_symbol of k), ll be QC-variable_list of k;
+          P!ll is atomic by Def17;
+        hence Q[P!ll] by A1;
+    end;
+A3: Q[VERUM] by A1;
+A4: now let p be Element of QC-WFF such that
+     A5: Q[p];
+     A6: 'not' p is negative by Def18;
+        then p= the_argument_of 'not' p by Def23;
+        hence Q['not' p] by A1,A5,A6;
+    end;
+A7: now let p, q be Element of QC-WFF such that
+     A8: Q[p] & Q[q];
+     A9: p '&' q is conjunctive by Def19;
+        then p = the_left_argument_of (p '&' q) &
+             q = the_right_argument_of (p '&' q)
+          by Def24,Def25;
+        hence Q[p '&' q] by A1,A8,A9;
+    end;
+A10: now let x be bound_QC-variable, p be Element of QC-WFF such that
+     A11: Q[p];
+     A12: All(x, p) is universal by Def20;
+         then p = the_scope_of All(x, p) by Def27;
+        hence Q[All(x, p)] by A1,A11,A12;
+    end;
+ thus for p be Element of QC-WFF holds Q[p] from QC_Ind (A2, A3, A4, A7, A10);
+end;
+        reserve F for Element of QC-WFF;
+
+theorem Th48: for k being Nat, P being QC-pred_symbol of k holds
+                P`1 <> 0 & P`1 <> 1 & P`1 <> 2 & P`1 <> 3
+    proof let k be Nat, P be QC-pred_symbol of k;
+                reconsider P' = P as QC-pred_symbol;
+                  P'`1 = 7+the_arity_of P' by Def6;
+        hence P`1 <> 0 & P`1 <> 1 & P`1 <> 2 & P`1 <> 3 by NAT_1:29;
+     end;
+
+theorem Th49:
+    (@VERUM.1)`1 = 0 &
+    (F is atomic implies ex k being Nat st @F.1 is QC-pred_symbol of k) &
+    (F is negative implies (@F.1)`1 = 1) &
+    (F is conjunctive implies (@F.1)`1 = 2) &
+    (F is universal implies (@F.1)`1 = 3)
+ proof
+      @VERUM = VERUM by Def12;
+    hence (@VERUM.1)`1 = [0,0]`1 by Def13,FINSEQ_1:def 8
+          .= 0 by MCART_1:7;
+    thus F is atomic implies ex k being Nat st @F.1 is QC-pred_symbol of k
+        proof assume F is atomic;
+        then consider k being Nat, P being (QC-pred_symbol of k),
+                      ll being QC-variable_list of k such that
+        A1: F = P!ll by Def17;
+             @F = F by Def12
+             .= <*P*>^ll by A1,Th23;
+           then @F.1 = P by FINSEQ_1:58;
+        hence ex k being Nat st @F.1 is QC-pred_symbol of k;
+        end;
+    thus F is negative implies (@F.1)`1 = 1
+        proof assume F is negative;
+         then consider p being Element of QC-WFF such that
+        A2: F = 'not' p by Def18;
+             @F = F by Def12
+             .= <*[1, 0]*>^@p by A2,Def14;
+           then @F.1 = [1, 0] by FINSEQ_1:58;
+         hence (@F.1)`1 = 1 by MCART_1:7;
+        end;
+    thus F is conjunctive implies (@F.1)`1 = 2
+        proof assume F is conjunctive;
+        then consider p, q being Element of QC-WFF such that
+        A3: F = p '&' q by Def19;
+            @F = F by Def12
+            .= <*[2, 0]*>^@p^@q by A3,Def15
+            .= <*[2, 0]*>^(@p^@q) by FINSEQ_1:45;
+          then @F.1 = [2, 0] by FINSEQ_1:58;
+        hence (@F.1)`1 = 2 by MCART_1:7;
+        end;
+     thus F is universal implies (@F.1)`1 = 3
+        proof assume F is universal;
+        then consider x being bound_QC-variable, p being Element of QC-WFF
+                                                 such that
+        A4: F = All(x, p) by Def20;
+            @F = F by Def12
+            .= <*[3, 0]*>^<*x*>^@p by A4,Def16
+            .= <*[3, 0]*>^(<*x*>^@p) by FINSEQ_1:45;
+          then @F.1 = [3, 0] by FINSEQ_1:58;
+        hence (@F.1)`1 = 3 by MCART_1:7;
+     end;
+   end;
+
+theorem Th50: F is atomic implies
+                (@F.1)`1 <> 0 & (@F.1)`1 <> 1 & (@F.1)`1 <> 2 & (@F.1)`1 <> 3
+        proof assume F is atomic;
+        then ex k being Nat st @F.1 is QC-pred_symbol of k by Th49;
+        hence thesis by Th48;
+        end;
+
+ reserve p for Element of QC-WFF;
+
+theorem Th51: not (VERUM is atomic or VERUM is negative or VERUM is conjunctive
+                                  or VERUM is universal) &
+        not (ex p st p is atomic & p is negative or
+                        p is atomic & p is conjunctive or
+                        p is atomic & p is universal or
+                        p is negative & p is conjunctive or
+                        p is negative & p is universal or
+                        p is conjunctive & p is universal)
+proof
+   thus not (VERUM is atomic or VERUM is negative or VERUM is conjunctive
+                                  or VERUM is universal) by Th49,Th50;
+   let p be Element of QC-WFF;
+       (@VERUM.1)`1 = 0 &
+    (p is negative implies (@p.1)`1 = 1) &
+    (p is conjunctive implies (@p.1)`1 = 2) &
+    (p is universal implies (@p.1)`1 = 3) by Th49;
+        hence thesis by Th50;
+  end;
+
+scheme QC_Func_Ex { D() -> non empty set,
+                V() -> (Element of D()),
+                A(Element of QC-WFF) -> (Element of D()),
+                N(Element of D()) -> (Element of D()),
+                C((Element of D()), Element of D()) -> (Element of D()),
+                Q((Element of QC-WFF), Element of D()) -> Element of D()} :
+ex F being Function of QC-WFF, D() st
+        F.VERUM = V() &
+        for p being Element of QC-WFF holds
+        (p is atomic implies F.p = A(p)) &
+        (p is negative implies F.p = N(F.the_argument_of p)) &
+        (p is conjunctive implies
+           F.p = C(F.the_left_argument_of p, F.the_right_argument_of p)) &
+        (p is universal implies F.p = Q(p, F.the_scope_of p))
+proof
+defpred Pfgp[(Element of D()),
+          (Function of QC-WFF, D()),
+           Element of QC-WFF] means
+      ($3 = VERUM implies $1 = V()) &
+      ($3 is atomic implies $1 = A($3)) &
+      ($3 is negative implies $1 = N($2.the_argument_of $3)) &
+      ($3 is conjunctive implies
+           $1 = C($2.the_left_argument_of $3,
+                     $2.the_right_argument_of $3)) &
+      ($3 is universal implies $1 = Q($3, $2.the_scope_of $3));
+defpred Pfn[(Function of QC-WFF, D()), Nat] means
+      $1.VERUM = V() &
+      for p being Element of QC-WFF st len @p <= $2 holds
+      (p is atomic implies $1.p = A(p)) &
+      (p is negative implies $1.p = N($1.the_argument_of p)) &
+      (p is conjunctive implies
+           $1.p = C($1.the_left_argument_of p, $1.the_right_argument_of p)) &
+      (p is universal implies
+               $1.p = Q(p, $1.the_scope_of p));
+defpred S[Nat] means ex F being Function of QC-WFF, D() st Pfn[F, $1];
+A1: S[0]
+    proof
+      reconsider F = QC-WFF --> V() as Function of QC-WFF, D() by FUNCOP_1:57;
+     take F;
+     thus F.VERUM = V() by FUNCOP_1:13;
+     let p be Element of QC-WFF such that
+    A2: len @p <= 0;
+          1 <= len @p by Th34;
+        hence thesis by A2,AXIOMS:22;
+    end;
+A3: for n be Nat st S[n] holds S[n+1]
+proof
+  let n be Nat;
+  given F being Function of QC-WFF, D() such that
+  A4: Pfn[F, n];
+  defpred R[Element of QC-WFF,Element of D()] means
+   (len @$1 <> n+1 implies $2 = F.$1) & (len @$1 = n+1 implies Pfgp[$2,F,$1]);
+  A5: for p be Element of QC-WFF ex y be Element of D() st R[p,y]
+  proof
+        let p be Element of QC-WFF;
+        now per cases by Th33;
+        case len @p <> n+1;
+         take y = F.p;
+         thus y =F.p;
+        case A6:len @p = n+1 & p = VERUM;
+         take y = V();
+         thus Pfgp[y, F, p] by A6,Th51;
+        case A7: len @p = n+1 & p is atomic;
+         take y = A(p);
+         thus Pfgp[y, F, p] by A7,Th51;
+        case A8: len @p = n+1 & p is negative;
+         take y = N(F.the_argument_of p);
+         thus Pfgp[y, F, p] by A8,Th51;
+        case A9: len @p = n+1 & p is conjunctive;
+         take y = C(F.the_left_argument_of p, F.the_right_argument_of p);
+         thus Pfgp[y, F, p] by A9,Th51;
+        case A10: len @p = n+1 & p is universal;
+         take y = Q(p, F.the_scope_of p);
+         thus Pfgp[y, F, p] by A10,Th51;
+      end;
+      hence ex y being Element of D() st
+                (len @p <> n+1 implies y = F.p) &
+                (len @p = n+1 implies Pfgp[y, F, p]);
+     end;
+     consider G being Function of QC-WFF, D() such that
+   A11:      for p being Element of QC-WFF holds R[p,G.p] from FuncExD(A5);
+       take H = G;
+     thus Pfn[H, n+1]
+    proof
+      thus H.VERUM = V()
+        proof
+         per cases;
+          suppose len @VERUM <> n+1;
+           hence thesis by A4,A11;
+          suppose len @VERUM = n+1;
+           hence thesis by A11;
+        end;
+      let p be Element of QC-WFF such that
+   A12: len @p <= n+1;
+     thus p is atomic implies H.p = A(p)
+        proof
+           now per cases;
+          suppose A15: len @p <> n+1; then A16: len @p <= n by A12,NAT_1:26;
+                  H.p = F.p by A11,A15;
+           hence thesis by A4,A16;
+          suppose len @p = n+1;
+           hence thesis by A11;
+         end;
+        hence thesis;
+        end;
+     thus p is negative implies H.p = N(H.the_argument_of p)
+        proof assume A17: p is negative;
+          then len @the_argument_of p <> n+1 by A12,Th45;
+        then A18:  H.the_argument_of p = F.the_argument_of p by A11;
+           now per cases;
+          suppose A19: len @p <> n+1; then A20: len @p <= n by A12,NAT_1:26;
+              H.p = F.p by A11,A19;
+           hence thesis by A4,A17,A18,A20;
+          suppose len @p = n+1;
+           hence thesis by A11,A17,A18;
+         end;
+        hence thesis;
+        end;
+      thus p is conjunctive implies
+           H.p = C(H.the_left_argument_of p, H.the_right_argument_of p)
+        proof assume A21: p is conjunctive;
+          then len @the_left_argument_of p <> n+1 by A12,Th46;
+        then A22:  H.the_left_argument_of p = F.the_left_argument_of p by A11;
+            len @the_right_argument_of p <> n+1 by A12,A21,Th46;
+        then A23: H.the_right_argument_of p = F.the_right_argument_of p by A11;
+           now per cases;
+          suppose A24: len @p <> n+1; then A25: len @p <= n by A12,NAT_1:26;
+                  H.p = F.p by A11,A24;
+           hence thesis by A4,A21,A22,A23,A25;
+          suppose len @p = n+1;
+           hence thesis by A11,A21,A22,A23;
+         end;
+        hence thesis;
+        end;
+      thus p is universal implies H.p = Q(p, H.the_scope_of p)
+        proof assume A26: p is universal;
+          then len @the_scope_of p <> n+1 by A12,Th47;
+        then A27:  H.the_scope_of p = F.the_scope_of p by A11;
+           now per cases;
+          suppose A28: len @p <> n+1; then A29: len @p <= n by A12,NAT_1:26;
+                  H.p = F.p by A11,A28;
+           hence thesis by A4,A26,A27,A29;
+          suppose len @p = n+1;
+           hence thesis by A11,A26,A27;
+         end;
+        hence thesis;
+        end;
+     end;
+   end;
+
+A30: for n being Nat holds S[n] from Ind (A1, A3);
+
+defpred Qfn[set, set] means
+        ex p being Element of QC-WFF st p = $1 &
+          for g being Function of QC-WFF, D() st Pfn[g, len @p] holds
+                $2 = g.p;
+
+A31: for x, y1, y2 being set st x in QC-WFF & Qfn[x, y1] & Qfn[x, y2]
+        holds y1 = y2
+   proof
+        let x, y1, y2 be set such that
+      x in QC-WFF and
+   A32: Qfn[x, y1] and
+   A33: Qfn[x, y2];
+       consider p being Element of QC-WFF such that
+   A34: p = x and
+   A35: for g being Function of QC-WFF, D() st Pfn[g, len @p] holds y1 = g.p
+                                                by A32;
+       consider F being Function of QC-WFF, D() such that
+   A36: Pfn[F, len @p] by A30;
+     thus y1 = F.p by A35,A36
+            .= y2 by A33,A34,A36;
+   end;
+
+A37: for x being set st x in QC-WFF ex y being set st Qfn[x, y]
+   proof let x be set; assume
+      x in QC-WFF;
+       then reconsider x' = x as Element of QC-WFF;
+       consider F being Function of QC-WFF, D() such that
+   A38: Pfn[F, len @x'] by A30;
+       take F.x, x';
+       thus x = x';
+       let G be Function of QC-WFF, D() such that
+   A39: Pfn[G, len @x'];
+
+     defpred  Prop[Element of QC-WFF] means
+        len @$1 <= len@x' implies F.$1 = G.$1;
+   A40: now
+        let p be Element of QC-WFF;
+        thus p is atomic implies Prop[p]
+         proof assume that
+         A41: p is atomic and
+         A42: len @p <= len@x';
+           thus F.p = A(p) by A38,A41,A42
+                   .= G.p by A39,A41,A42;
+         end;
+        thus Prop[VERUM] by A38,A39;
+        thus p is negative & Prop[the_argument_of p] implies Prop[p]
+         proof assume that
+          A44: p is negative and
+          A45: Prop[the_argument_of p] and
+          A46: len @p <= len @x';
+            len @the_argument_of p < len @p by A44,Th45;
+          hence F.p = N(G.the_argument_of p) by A38,A44,A45,A46,AXIOMS:22
+                  .= G.p by A39,A44,A46;
+         end;
+        thus (p is conjunctive & Prop[the_left_argument_of p] &
+                Prop[the_right_argument_of p] implies Prop[p])
+         proof assume that
+          A47: p is conjunctive and
+          A48: Prop[the_left_argument_of p] and
+         A49: Prop[the_right_argument_of p] and
+          A50: len @p <= len @x';
+A51:          len @the_left_argument_of p < len @p by A47,Th46;
+            len @the_right_argument_of p < len @p by A47,Th46;
+          hence F.p = C(G.the_left_argument_of p, G.the_right_argument_of p)
+                                                 by A38,A47,A48,A49,A50,A51,
+AXIOMS:22
+                  .= G.p by A39,A47,A50;
+         end;
+        thus (p is universal & Prop[the_scope_of p] implies Prop[p])
+         proof assume that
+          A52: p is universal and
+          A53: Prop[the_scope_of p] and
+          A54: len @p <= len @x';
+            len @the_scope_of p < len @p by A52,Th47;
+          hence F.p = Q(p, G.the_scope_of p) by A38,A52,A53,A54,AXIOMS:22
+                  .= G.p by A39,A52,A54;
+         end;
+       end;
+      for p being Element of QC-WFF holds Prop[p]
+                                from QC_Ind2 (A40);
+       hence F.x = G.x';
+   end;
+
+ consider F being Function such that
+A55: dom F = QC-WFF and
+A56: for x being set st x in QC-WFF holds Qfn[x, F.x]
+                                 from FuncEx (A31, A37);
+    rng F c= D()
+  proof
+    let y be set; assume
+     y in rng F;
+    then consider x being set such that
+  A57: x in QC-WFF and
+  A58: y = F.x by A55,FUNCT_1:def 5;
+      consider p being Element of QC-WFF such that
+     p = x and
+  A59: for g being Function of QC-WFF, D() st Pfn[g, len @p] holds y = g.p
+                                          by A56,A57,A58;
+    consider G being Function of QC-WFF, D() such that
+  A60: Pfn[G, len @p] by A30;
+        y = G.p by A59,A60;
+    hence y in D();
+  end;
+   then reconsider F as Function of QC-WFF, D() by A55,FUNCT_2:def 1,RELSET_1:
+11;
+ take F;
+  consider G being Function of QC-WFF, D() such that
+Y: Pfn[G, len @VERUM] by A30;
+  Qfn[VERUM, F.VERUM] by A56;
+ hence F.VERUM = V() by Y;
+ let p be Element of QC-WFF;
+ consider p1 being Element of QC-WFF such that
+A61: p1 = p and
+A62: for g being Function of QC-WFF, D() st Pfn[g, len @p1] holds F.p = g.p1
+by A56;
+ consider G being Function of QC-WFF, D() such that
+A63: Pfn[G, len @p1] by A30;
+A64: F.p = G.p by A61,A62,A63;
+  thus p is atomic implies F.p = A(p) by A61,A63,A64;
+  A65: for k being Nat st k < len @p holds Pfn[G, k]
+        proof let k be Nat;
+         assume
+A66:            k < len @p;
+         thus G.VERUM = V() by A63;
+          let p' be Element of QC-WFF; assume
+             len @p' <= k;
+           then len @p' <= len@p by A66,AXIOMS:22;
+         hence thesis by A61,A63;
+        end;
+  thus p is negative implies F.p = N(F.the_argument_of p)
+        proof assume
+        A67: p is negative;
+             set p' = the_argument_of p;
+             set k = len @p';
+               k < len @p by A67,Th45;
+        then A68: Pfn[G, k] by A65;
+                ex p1 being Element of QC-WFF st p1 = p' &
+ for g being Function of QC-WFF, D() st Pfn[g, len @p1] holds
+                F.p' = g.p1 by A56;
+             then F.p' = G.p' by A68;
+         hence thesis by A61,A63,A64,A67;
+        end;
+  thus p is conjunctive implies
+          F.p = C(F.the_left_argument_of p, F.the_right_argument_of p)
+        proof assume
+        A69: p is conjunctive;
+             set p' = the_left_argument_of p;
+             set k' = len @p';
+             set p'' = the_right_argument_of p;
+             set k'' = len @p'';
+               k' < len @p by A69,Th46;
+        then A70: Pfn[G, k'] by A65;
+               k'' < len @p by A69,Th46;
+       then A71: Pfn[G, k''] by A65;
+ A72:             ex p1 being Element of QC-WFF st p1 = p' &
+ for g being Function of QC-WFF, D() st Pfn[g, len @p1] holds
+                F.p' = g.p1 by A56;
+ A73:             ex p2 being Element of QC-WFF st p2 = p'' &
+ for g being Function of QC-WFF, D() st Pfn[g, len @p2] holds
+                F.p'' = g.p2 by A56;
+        A74: F.p' = G.p' by A70,A72;
+               F.p'' = G.p'' by A71,A73;
+         hence thesis by A61,A63,A64,A69,A74;
+        end;
+  assume
+   A75: p is universal;
+        set p' = the_scope_of p;
+        set k = len @p';
+          k < len @p by A75,Th47;
+   then A76: Pfn[G, k] by A65;
+           ex p1 being Element of QC-WFF st p1 = p' &
+ for g being Function of QC-WFF, D() st Pfn[g, len @p1] holds
+                         F.p' = g.p1 by A56;
+        then F.p' = G.p' by A76;
+  hence thesis by A61,A63,A64,A75;
+end;
+
+        reserve j,k for Nat;
+definition
+        let ll be FinSequence of QC-variables;
+func still_not-bound_in ll -> Element of (bool bound_QC-variables)
+         equals
+:Def28: { ll.k : 1 <= k & k <= len ll & ll.k in bound_QC-variables };
+coherence
+        proof
+          set IT = { ll.k : 1 <= k & k <= len ll & ll.k in
+ bound_QC-variables };
+            now let x be set;
+                assume x in IT;
+                then ex k being Nat st x = ll.k &
+                         1 <= k & k <= len ll & ll.k in bound_QC-variables;
+             hence x in bound_QC-variables;
+          end;
+         hence thesis by TARSKI:def 3;
+        end;
+end;
+
+definition
+  let b be bound_QC-variable;
+redefine func { b } -> Element of bool bound_QC-variables;
+coherence by SUBSET_1:63;
+end;
+
+definition
+  let X, Y be Element of bool bound_QC-variables;
+redefine
+  func X \/ Y -> Element of bool bound_QC-variables;
+coherence by XBOOLE_1:8;
+  func X \ Y -> Element of bool bound_QC-variables;
+coherence by XBOOLE_1:109;
+end;
+
+        reserve k for Nat;
+definition let p be QC-formula;
+ func still_not-bound_in p -> Element of bool bound_QC-variables means
+
+          ex F being Function of QC-WFF, bool bound_QC-variables st
+         it = F.p &
+         for p being Element of QC-WFF holds
+         F.VERUM = {} &
+         (p is atomic implies
+           F.p = { (the_arguments_of p).k :
+                         1 <= k & k <= len the_arguments_of p &
+                         (the_arguments_of p).k in bound_QC-variables }) &
+         (p is negative implies F.p = F.the_argument_of p) &
+         (p is conjunctive implies F.p = (F.the_left_argument_of p) \/
+                                         (F.the_right_argument_of p)) &
+         (p is universal implies F.p = (F.the_scope_of p) \ {bound_in p});
+existence
+proof
+reconsider Emp = {} as Element of (bool bound_QC-variables)
+ by XBOOLE_1:2;
+
+deffunc A(Element of QC-WFF) = still_not-bound_in (the_arguments_of $1);
+deffunc N(Element of bool bound_QC-variables) = $1;
+deffunc C(Element of bool bound_QC-variables,
+ Element of bool bound_QC-variables) = $1 \/ $2;
+deffunc Q(Element of QC-WFF, Element of bool bound_QC-variables) =
+ $2 \ {bound_in $1};
+consider F being Function of QC-WFF, bool bound_QC-variables such that
+A1:     F.VERUM = Emp &
+        for p being Element of QC-WFF holds
+         (p is atomic implies F.p = A(p)) &
+         (p is negative implies F.p = N(F.the_argument_of p)) &
+         (p is conjunctive implies
+          F.p = C(F.the_left_argument_of p,F.the_right_argument_of p)) &
+         (p is universal implies F.p = Q(p,F.the_scope_of p))
+          from QC_Func_Ex;
+ take F.p, F;
+thus
+           F.p = F.p;
+let p be Element of QC-WFF;
+thus F.VERUM = {} by A1;
+thus (p is atomic implies
+           F.p = { (the_arguments_of p).k :
+                         1 <= k & k <= len the_arguments_of p &
+                         (the_arguments_of p).k in bound_QC-variables })
+proof
+        assume p is atomic;
+         then F.p = still_not-bound_in (the_arguments_of p) by A1;
+        hence thesis by Def28;
+end;
+thus (p is negative implies F.p = F.the_argument_of p) by A1;
+thus (p is conjunctive implies F.p =
+         (F.the_left_argument_of p) \/ (F.the_right_argument_of p)) by A1;
+assume p is universal;
+hence thesis by A1;
+
+end;
+
+uniqueness
+ proof let IT,IT' be Element of bool bound_QC-variables;
+  given F1 being Function of QC-WFF, bool bound_QC-variables such that
+A2:    IT = F1.p and
+A3:    for p being Element of QC-WFF holds
+         F1.VERUM = {} &
+         (p is atomic implies
+           F1.p = { (the_arguments_of p).k :
+                         1 <= k & k <= len the_arguments_of p &
+                         (the_arguments_of p).k in bound_QC-variables }) &
+         (p is negative implies F1.p = F1.the_argument_of p) &
+         (p is conjunctive implies F1.p = (F1.the_left_argument_of p) \/
+                                         (F1.the_right_argument_of p)) &
+         (p is universal implies F1.p = (F1.the_scope_of p) \ {bound_in p});
+  given F2 being Function of QC-WFF, bool bound_QC-variables such that
+A4:    IT' = F2.p and
+A5:    for p being Element of QC-WFF holds
+         F2.VERUM = {} &
+         (p is atomic implies
+           F2.p = { (the_arguments_of p).k :
+                         1 <= k & k <= len the_arguments_of p &
+                         (the_arguments_of p).k in bound_QC-variables }) &
+         (p is negative implies F2.p = F2.the_argument_of p) &
+         (p is conjunctive implies F2.p = (F2.the_left_argument_of p) \/
+                                         (F2.the_right_argument_of p)) &
+         (p is universal implies F2.p = (F2.the_scope_of p) \ {bound_in p});
+     defpred Prop[Element of QC-WFF] means F1.$1 = F2.$1;
+     A6: for k being Nat, P being (QC-pred_symbol of k),
+             ll being QC-variable_list of k holds Prop[P!ll]
+         proof let k be Nat, P be (QC-pred_symbol of k),
+             ll be QC-variable_list of k;
+A7:        P!ll is atomic by Def17;
+then A8:        the_arguments_of P!ll = ll by Def22;
+          hence F1.(P!ll) =
+           { ll.j : 1 <= j & j <= len ll & ll.j in
+ bound_QC-variables } by A3,A7
+                         .= F2.(P!ll) by A5,A7,A8;
+         end;
+         A9: Prop[VERUM] by A3,A5;
+     A10: for p being Element of QC-WFF st Prop[p] holds Prop['not' p]
+          proof let p be Element of QC-WFF such that
+A11:          F1.p = F2.p;
+A12:         'not' p is negative by Def18;
+then A13:         the_argument_of 'not' p = p by Def23;
+           hence F1.'not' p = F2.p by A3,A11,A12 .= F2.'not' p by A5,A12,A13;
+          end;
+     A14: for p, q being Element of QC-WFF st Prop[p] & Prop[q] holds
+      Prop[p '&' q]
+          proof let p, q be Element of QC-WFF such that
+A15:          F1.p = F2.p & F1.q = F2.q;
+A16:         p '&' q is conjunctive by Def19;
+then A17:         the_left_argument_of (p '&' q) = p &
+            the_right_argument_of (p '&' q) = q by Def24,Def25;
+           hence F1.(p '&' q) = (F2.p) \/ (F2.q) by A3,A15,A16
+                             .= F2.(p '&' q) by A5,A16,A17;
+          end;
+     A18: for x being bound_QC-variable, p being Element of QC-WFF holds
+               Prop[p] implies Prop[All(x, p)]
+          proof let x be bound_QC-variable, p be Element of QC-WFF such that
+A19:          F1.p = F2.p;
+A20:         All(x,p) is universal by Def20;
+then A21:         the_scope_of All(x, p) = p &
+            bound_in All(x, p) = x by Def26,Def27;
+           hence F1.All(x, p) = (F2.p) \ { x } by A3,A19,A20
+                             .= F2.All(x, p) by A5,A20,A21;
+          end;
+   for p be Element of QC-WFF holds Prop[p] from QC_Ind(A6,A9,A10,A14,A18);
+  hence thesis by A2,A4;
+ end;
+end;
+
+definition let p be QC-formula;
+  attr p is closed means
+     still_not-bound_in p = {};
+end;

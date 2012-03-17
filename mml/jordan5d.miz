@@ -1,0 +1,2543 @@
+:: Bounding Boxes for Special Sequences in ${\calE}^2$
+::  by Yatsuka Nakamura and Adam Grabowski
+::
+:: Received June 8, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, EUCLID, SEQM_3, GOBOARD5, FINSEQ_1, SEQ_2, SEQ_4,
+      ARYTM_1, TOPREAL1, NAT_1, RELAT_1, FUNCT_1, JORDAN4, GOBOARD2, TREES_1,
+      MCART_1, GOBOARD1, MATRIX_1, PSCOMP_1, FUNCT_5, REALSET1, SUBSET_1,
+      BOOLE, ORDINAL2, FINSET_1, SQUARE_1, SPPOL_1, JORDAN5D, FINSEQ_4, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, MCART_1,
+      REAL_1, NAT_1, BINARITH, RELAT_1, FINSEQ_1, FUNCT_1, FINSEQ_4, FINSET_1,
+      SEQ_4, MATRIX_1, CQC_SIM1, STRUCT_0, TOPREAL1, SPPOL_1, GOBOARD1,
+      GOBOARD2, GOBOARD5, PRE_TOPC, EUCLID, PRE_CIRC, JORDAN4, PSCOMP_1;
+ constructors REAL_1, SPPOL_1, CQC_SIM1, GOBOARD2, BINARITH, PRE_CIRC, JORDAN4,
+      PSCOMP_1, FINSEQ_4, COMPTS_1, REALSET1;
+ clusters EUCLID, GOBOARD2, GOBOARD5, RELSET_1, STRUCT_0, GROUP_2, PRELAMB,
+      SPRECT_1, FINSEQ_1, XREAL_0, ARYTM_3, MEMBERED, PRE_CIRC, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, XBOOLE_0;
+ theorems AXIOMS, BINARITH, EUCLID, FINSEQ_3, FINSEQ_4, FINSEQ_6, FUNCT_1,
+      FUNCT_2, JORDAN3, GOBOARD1, GOBOARD2, GOBOARD5, GOBOARD7, FINSET_1,
+      GOBOARD9, NAT_1, PRE_TOPC, REAL_1, SEQ_4, SCMFSA_7, SPPOL_1, CQC_SIM1,
+      SPPOL_2, TOPREAL1, MATRIX_1, FINSEQ_1, RLVECT_1, ZFMISC_1, JORDAN4,
+      PSCOMP_1, AMI_5, SPRECT_2, FINSEQ_2, PRE_CIRC, XBOOLE_0, XBOOLE_1,
+      XCMPLX_1, ORDINAL2;
+ schemes DOMAIN_1;
+
+begin :: Preliminaries
+
+ reserve p, q for Point of TOP-REAL 2,
+         r for Real,
+         h for non constant standard special_circular_sequence,
+         g for FinSequence of TOP-REAL 2,
+         f for non empty FinSequence of TOP-REAL 2,
+         I, i1, i, j, k for Nat;
+
+canceled 2;
+
+theorem Th3:
+ for n be Nat,
+     h be FinSequence of TOP-REAL n st len h >= 2 holds
+  h/.len h in LSeg(h,len h-'1)
+proof
+ let n be Nat;
+ let h be FinSequence of TOP-REAL n;
+ set i = len h;
+ assume A1: len h >= 2;
+ then i >= 1 by AXIOMS:22;
+ then A2: i-'1+1 = len h by AMI_5:4;
+   2-1 <= i-1 by A1,REAL_1:49;
+ then 1 <= i-'1 by JORDAN3:1;
+ hence h/.i in LSeg(h,i-'1) by A2,TOPREAL1:27;
+end;
+
+theorem Th4:
+  3 <= i implies i mod (i-'1) = 1
+proof
+A1: 3-'1 = 2+1-'1
+       .= 2 by BINARITH:39;
+   assume A2: 3 <= i;
+   then 1 <= i by AXIOMS:22;
+then A3: i-'1 = i-1 by SCMFSA_7:3;
+A4: 2 <= i-'1 by A1,A2,JORDAN3:5;
+then A5: 0 < i-'1 by AXIOMS:22;
+A6: i-'1 <= i by GOBOARD9:2;
+     1 < i-1 by A3,A4,AXIOMS:22;
+   then 1+i < (i-1)+i by REAL_1:67;
+   then 1+i-1 < (i-1)+i-1 by REAL_1:92;
+   then 1-1+i < (i-1)+i-1 by XCMPLX_1:29;
+   then i < (i-1) + (i-1) by XCMPLX_1:29;
+   hence i mod (i-'1) = i - (i-1) by A3,A5,A6,JORDAN4:7
+              .= 1 by XCMPLX_1:18;
+end;
+
+theorem Th5:
+  p in rng h implies ex i be Nat st 1 <= i & i+1 <= len h & h.i = p
+  proof
+    assume p in rng h;
+    then consider x be set such that
+A1:    x in dom h & p = h.x by FUNCT_1:def 5;
+    reconsider i = x as Nat by A1;
+    set j = S_Drop (i,h);
+A2: 1 <= i & i <= len h by A1,FINSEQ_3:27;
+A3: 4 < len h by GOBOARD7:36;
+then A4: 3 <= len h by AXIOMS:22;
+A5:  1 < len h & 1+1 <= len h by A3,AXIOMS:22;
+      1 <= j & j+1 <= len h & h.j = p
+    proof
+A6:   i <= len h -' 1 + 1 by A2,A5,AMI_5:4;
+      per cases by A6,NAT_1:26;
+      suppose A7: i <= len h-'1;
+      then j = i by A2,JORDAN4:34;
+      then j + 1 <= len h -' 1 + 1 by A7,REAL_1:55;
+      hence thesis by A1,A2,A5,A7,AMI_5:4,JORDAN4:34;
+      suppose A8: i = len h-'1+1;
+then i = len h by A5,AMI_5:4;
+      then i mod (len h -'1) = 1 by A4,Th4;
+then A9:   j = 1 by JORDAN4:def 1;
+        1 <= len h & len h <= len h by A3,AXIOMS:22;
+then A10:    1 in dom h & len h in dom h by FINSEQ_3:27;
+      then h.1 = h/.1 by FINSEQ_4:def 4
+         .= h/.len h by FINSEQ_6:def 1
+         .= h.len h by A10,FINSEQ_4:def 4;
+      hence thesis by A1,A5,A8,A9,AMI_5:4;
+    end;
+    hence thesis;
+  end;
+
+theorem Th6:
+  for g being FinSequence of REAL st r in rng g holds
+    Incr g.1 <= r & r <= Incr g.len Incr g
+proof let g be FinSequence of REAL;
+ assume r in rng g; then r in rng Incr g by GOBOARD2:def 2;
+  then consider x being set such that
+  A1: x in dom Incr g & Incr g.x=r by FUNCT_1:def 5;
+  A2: x in Seg len Incr g by A1,FINSEQ_1:def 3;
+  reconsider j=x as Nat by A1;
+  A3:1 <= j & j <= len Incr g by A2,FINSEQ_1:3;
+then A4: 1 <= len Incr g by AXIOMS:22;
+  then 1 in dom Incr g by FINSEQ_3:27;
+  hence Incr g.1 <= r by A1,A3,GOBOARD2:18;
+    len Incr g in dom Incr g by A4,FINSEQ_3:27;
+  hence thesis by A1,A3,GOBOARD2:18;
+end;
+
+theorem Th7:
+  1 <= i & i <= len h & 1 <= I & I <= width GoB h implies
+   (GoB h)*(1,I)`1 <= (h/.i)`1 & (h/.i)`1 <= (GoB h)*(len GoB h,I)`1
+proof
+ assume A1: 1<=i & i<=len h & 1 <= I & I <= width GoB h;
+     A2:GoB h=GoB(Incr(X_axis h),Incr(Y_axis(h))) by GOBOARD2:def 3;
+    then A3:1<=1 & 1<=len GoB(Incr(X_axis h),Incr(Y_axis h)) by GOBOARD7:34;
+A4: len GoB h <= len GoB(Incr(X_axis h),Incr(Y_axis h)) &
+    I<=width GoB(Incr(X_axis(h)),Incr(Y_axis(h))) by A1,GOBOARD2:def 3;
+then A5: [1,I] in Indices GoB(Incr(X_axis h),Incr(Y_axis h)) by A1,A3,GOBOARD7:
+10;
+      1<=len GoB h by GOBOARD7:34;
+then A6: [len GoB h,I] in Indices GoB(Incr(X_axis h),Incr(Y_axis h))
+       by A1,A4,GOBOARD7:10;
+    (GoB h)*(len GoB h,I)=(GoB(Incr(X_axis h),Incr(Y_axis h)))*
+         (len GoB h,I) by GOBOARD2:def 3
+    .=|[Incr(X_axis h).len GoB h,Incr(Y_axis(h)).I]|
+       by A6,GOBOARD2:def 1;
+    then A7:(GoB h)*(len GoB h,I)`1 = Incr(X_axis h).len GoB h by EUCLID:56;
+       (GoB h)*(1,I)=(GoB(Incr(X_axis(h)),Incr(Y_axis(h))))*(1,I)
+                        by GOBOARD2:def 3
+                   .=|[Incr(X_axis(h)).1,Incr(Y_axis(h)).I]|
+                        by A5,GOBOARD2:def 1;
+     then A8:(GoB h)*(1,I)`1=Incr(X_axis(h)).1 by EUCLID:56;
+A9:   len GoB h = len Incr (X_axis h) by A2,GOBOARD2:def 1;
+       i<=len (X_axis h) by A1,GOBOARD1:def 3;
+     then A10:i in dom (X_axis h) by A1,FINSEQ_3:27;
+     then (X_axis(h)).i=(h/.i)`1 by GOBOARD1:def 3;
+     then (h/.i)`1 in rng X_axis h by A10,FUNCT_1:def 5;
+    hence thesis by A7,A8,A9,Th6;
+end;
+
+theorem Th8:
+  1 <= i & i <= len h & 1 <= I & I <= len GoB h implies
+   (GoB h)*(I,1)`2 <= (h/.i)`2 & (h/.i)`2 <= (GoB h)*(I,width GoB h)`2
+proof
+ assume A1: 1<=i & i<=len h & 1 <= I & I <= len GoB h;
+     A2:GoB h=GoB(Incr(X_axis h),Incr(Y_axis h)) by GOBOARD2:def 3;
+    A3:1<=I & I<=len GoB(Incr(X_axis h),Incr(Y_axis h)) by A1,GOBOARD2:def 3;
+    A4:1<=width GoB h by GOBOARD7:35;
+      width GoB h <= width GoB(Incr(X_axis h),Incr(Y_axis h)) &
+    1<=width GoB(Incr(X_axis h),Incr(Y_axis h)) by A2,GOBOARD7:35;
+    then A5:[I,1] in Indices GoB(Incr(X_axis h),Incr(Y_axis h)) by A3,GOBOARD7:
+10;
+A6: [I,width GoB h] in Indices GoB(Incr(X_axis h),Incr(Y_axis h))
+       by A1,A2,A4,GOBOARD7:10;
+    (GoB h)*(I,width GoB h)=(GoB(Incr(X_axis h),Incr(Y_axis h)))*
+         (I,width GoB h) by GOBOARD2:def 3
+    .=|[Incr(X_axis(h)).I,Incr(Y_axis(h)).width GoB h]|
+       by A6,GOBOARD2:def 1;
+     then A7:(GoB h)*(I,width GoB h)`2 = Incr(Y_axis h).width GoB h by EUCLID:
+56;
+       (GoB h)*(I,1)=(GoB(Incr(X_axis h),Incr(Y_axis h)))*(I,1)
+                        by GOBOARD2:def 3
+    .= |[Incr(X_axis(h)).I,Incr(Y_axis(h)).1]| by A5,GOBOARD2:def 1;
+     then A8:(GoB h)*(I,1)`2 = Incr(Y_axis h).1 by EUCLID:56;
+A9:   width GoB h = len Incr Y_axis h by A2,GOBOARD2:def 1;
+       i <= len Y_axis h by A1,GOBOARD1:def 4;
+     then A10:i in dom Y_axis h by A1,FINSEQ_3:27;
+     then (Y_axis h).i = (h/.i)`2 by GOBOARD1:def 4;
+     then (h/.i)`2 in rng Y_axis h by A10,FUNCT_1:def 5;
+    hence thesis by A7,A8,A9,Th6;
+end;
+
+theorem Th9:
+  1 <= i & i <= len GoB f implies
+    ex k,j st k in dom f & [i,j] in Indices GoB f & f/.k = (GoB f)*(i,j)
+ proof
+  assume
+A1: 1 <= i & i <= len GoB f;
+A2: GoB f = GoB(Incr X_axis f,Incr Y_axis f) by GOBOARD2:def 3;
+   then len Incr X_axis f = len GoB f by GOBOARD2:def 1;
+   then i in dom Incr X_axis f by A1,FINSEQ_3:27;
+   then (Incr X_axis f).i in rng Incr X_axis f by FUNCT_1:def 5;
+   then (Incr X_axis f).i in rng X_axis f by GOBOARD2:def 2;
+   then consider k such that
+A3: k in dom X_axis f and
+A4: (X_axis f).k = (Incr X_axis f).i by FINSEQ_2:11;
+A5: len X_axis f = len f by GOBOARD1:def 3 .= len Y_axis f by GOBOARD1:def 4;
+   then dom X_axis f = dom Y_axis f by FINSEQ_3:31;
+   then (Y_axis f).k in rng Y_axis f by A3,FUNCT_1:def 5;
+   then (Y_axis f).k in rng Incr Y_axis f by GOBOARD2:def 2;
+   then consider j such that
+A6: j in dom Incr Y_axis f and
+A7: (Y_axis f).k = (Incr Y_axis f).j by FINSEQ_2:11;
+  take k,j;
+     len X_axis f = len f by GOBOARD1:def 3;
+  hence k in dom f by A3,FINSEQ_3:31;
+A8: i in dom GoB f by A1,FINSEQ_3:27;
+     j in Seg len Incr Y_axis f by A6,FINSEQ_1:def 3;
+   then j in Seg width GoB(Incr X_axis f,Incr Y_axis f) by GOBOARD2:def 1;
+   then [i,j] in [:dom GoB f, Seg width GoB f:] by A2,A8,ZFMISC_1:106;
+  hence
+A9: [i,j] in Indices GoB f by MATRIX_1:def 5;
+     dom X_axis f = dom Y_axis f by A5,FINSEQ_3:31;
+then (X_axis f).k = (f/.k)`1 & (Y_axis f).k = (f/.k)`2
+        by A3,GOBOARD1:def 3,def 4;
+  hence f/.k = |[Incr(X_axis f).i,Incr(Y_axis f).j]| by A4,A7,EUCLID:57
+   .= (GoB f)*(i,j) by A2,A9,GOBOARD2:def 1;
+ end;
+
+theorem Th10:
+  1 <= j & j <= width GoB f implies
+    ex k,i st k in dom f & [i,j] in Indices GoB f & f/.k = (GoB f)*(i,j)
+ proof
+  assume
+A1: 1 <= j & j <= width GoB f;
+A2: GoB f = GoB(Incr X_axis f,Incr Y_axis f) by GOBOARD2:def 3;
+   then len Incr Y_axis f = width GoB f by GOBOARD2:def 1;
+   then j in dom Incr Y_axis f by A1,FINSEQ_3:27;
+   then (Incr Y_axis f).j in rng Incr Y_axis f by FUNCT_1:def 5;
+   then (Incr Y_axis f).j in rng Y_axis f by GOBOARD2:def 2;
+   then consider k such that
+A3: k in dom Y_axis f and
+A4: (Y_axis f).k = (Incr Y_axis f).j by FINSEQ_2:11;
+A5: len X_axis f = len f by GOBOARD1:def 3 .= len Y_axis f by GOBOARD1:def 4;
+   then k in dom X_axis f by A3,FINSEQ_3:31;
+   then (X_axis f).k in rng X_axis f by FUNCT_1:def 5;
+   then (X_axis f).k in rng Incr X_axis f by GOBOARD2:def 2;
+   then consider i such that
+A6: i in dom Incr X_axis f and
+A7: (X_axis f).k = (Incr X_axis f).i by FINSEQ_2:11;
+  take k,i;
+     len Y_axis f = len f by GOBOARD1:def 4;
+  hence k in dom f by A3,FINSEQ_3:31;
+A8: j in Seg width GoB f by A1,FINSEQ_1:3;
+     len GoB(Incr X_axis f,Incr Y_axis f) = len Incr X_axis f
+     by GOBOARD2:def 1;
+   then i in dom GoB(Incr X_axis f,Incr Y_axis f) by A6,FINSEQ_3:31;
+   then [i,j] in [:dom GoB f, Seg width GoB f:] by A2,A8,ZFMISC_1:106;
+  hence
+A9: [i,j] in Indices GoB f by MATRIX_1:def 5;
+     k in dom X_axis f & k in dom Y_axis f by A3,A5,FINSEQ_3:31;
+   then (X_axis f).k = (f/.k)`1 & (Y_axis f).k = (f/.k)`2 by GOBOARD1:def 3,def
+4;
+  hence f/.k = |[Incr(X_axis f).i,Incr(Y_axis f).j]| by A4,A7,EUCLID:57
+   .= (GoB f)*(i,j) by A2,A9,GOBOARD2:def 1;
+ end;
+
+theorem Th11:
+  1 <= i & i <= len GoB f & 1 <= j & j <= width GoB f implies
+    ex k st k in dom f & [i,j] in Indices GoB f & (f/.k)`1 = (GoB f)*(i,j)`1
+ proof
+  assume
+A1: 1 <= i & i <= len GoB f & 1 <= j & j <= width GoB f;
+A2: GoB f = GoB (Incr X_axis f,Incr Y_axis f) by GOBOARD2:def 3;
+   then len Incr X_axis f = len GoB f by GOBOARD2:def 1;
+   then i in dom Incr X_axis f by A1,FINSEQ_3:27;
+   then (Incr X_axis f).i in rng Incr X_axis f by FUNCT_1:def 5;
+   then (Incr X_axis f).i in rng X_axis f by GOBOARD2:def 2;
+   then consider k such that
+A3: k in dom X_axis f and
+A4: (X_axis f).k = (Incr X_axis f).i by FINSEQ_2:11;
+     len Incr Y_axis f = width GoB f by A2,GOBOARD2:def 1;
+then A5: j in dom Incr Y_axis f by A1,FINSEQ_3:27;
+  take k;
+     len X_axis f = len f by GOBOARD1:def 3;
+  hence k in dom f by A3,FINSEQ_3:31;
+A6: i in dom GoB f by A1,FINSEQ_3:27;
+     j in Seg len Incr Y_axis f by A5,FINSEQ_1:def 3;
+   then j in Seg width GoB(Incr X_axis f,Incr Y_axis f) by GOBOARD2:def 1;
+   then [i,j] in [:dom GoB f, Seg width GoB f:] by A2,A6,ZFMISC_1:106;
+  hence [i,j] in Indices GoB f by MATRIX_1:def 5;
+then A7:(GoB f)*(i,j) = |[Incr(X_axis f).i,Incr(Y_axis f).j]|
+     by A2,GOBOARD2:def 1;
+  thus (f/.k)`1 = Incr(X_axis f).i by A3,A4,GOBOARD1:def 3
+   .= (GoB f)*(i,j)`1 by A7,EUCLID:56;
+ end;
+
+theorem Th12:
+  1 <= i & i <= len GoB f & 1 <= j & j <= width GoB f implies
+    ex k st k in dom f & [i,j] in Indices GoB f & (f/.k)`2 = (GoB f)*(i,j)`2
+ proof
+  assume
+A1: 1 <= i & i <= len GoB f & 1 <= j & j <= width GoB f;
+A2: GoB f = GoB (Incr X_axis f,Incr Y_axis f) by GOBOARD2:def 3;
+   then len Incr Y_axis f = width GoB f by GOBOARD2:def 1;
+   then j in dom Incr Y_axis f by A1,FINSEQ_3:27;
+   then (Incr Y_axis f).j in rng Incr Y_axis f by FUNCT_1:def 5;
+   then (Incr Y_axis f).j in rng Y_axis f by GOBOARD2:def 2;
+   then consider k such that
+A3: k in dom Y_axis f and
+A4: (Y_axis f).k = (Incr Y_axis f).j by FINSEQ_2:11;
+     len Incr Y_axis f = width GoB f by A2,GOBOARD2:def 1;
+then A5: j in dom Incr Y_axis f by A1,FINSEQ_3:27;
+  take k;
+     len Y_axis f = len f by GOBOARD1:def 4;
+  hence k in dom f by A3,FINSEQ_3:31;
+A6: i in dom GoB f by A1,FINSEQ_3:27;
+     j in Seg len Incr Y_axis f by A5,FINSEQ_1:def 3;
+   then j in Seg width GoB(Incr X_axis f,Incr Y_axis f) by GOBOARD2:def 1;
+   then [i,j] in [:dom GoB f, Seg width GoB f:] by A2,A6,ZFMISC_1:106;
+  hence
+   [i,j] in Indices GoB f by MATRIX_1:def 5;
+then A7: (GoB f)*(i,j) = |[Incr(X_axis f).i,Incr(Y_axis f).j]|
+     by A2,GOBOARD2:def 1;
+  thus (f/.k)`2 = Incr(Y_axis f).j by A3,A4,GOBOARD1:def 4
+   .= (GoB f)*(i,j)`2 by A7,EUCLID:56;
+ end;
+
+begin :: Extrema of projections
+
+theorem Th13:
+  1 <= i & i <= len h implies
+    S-bound L~h <= (h/.i)`2 & (h/.i)`2 <= N-bound L~h
+proof
+   len h > 4 by GOBOARD7:36;
+then A1: len h >= 2 by AXIOMS:22;
+ assume 1<=i & i<=len h;
+ then i in dom h by FINSEQ_3:27;
+ then h/.i in L~h by A1,GOBOARD1:16;
+ hence thesis by PSCOMP_1:71;
+end;
+
+theorem Th14:
+  1 <= i & i <= len h implies
+    W-bound L~h <= (h/.i)`1 & (h/.i)`1 <= E-bound L~h
+proof
+   len h > 4 by GOBOARD7:36;
+then A1: len h >= 2 by AXIOMS:22;
+ assume 1<=i & i<=len h;
+ then i in dom h by FINSEQ_3:27;
+ then h/.i in L~h by A1,GOBOARD1:16;
+ hence thesis by PSCOMP_1:71;
+end;
+
+theorem Th15:
+  for X being Subset of REAL st
+    X = { q`2 : q`1 = W-bound L~h & q in L~h } holds
+  X = (proj2 || W-most L~h).:the carrier of (TOP-REAL 2)|(W-most L~h)
+proof
+  set T = (TOP-REAL 2)|(W-most L~h);
+  set F = proj2 || W-most L~h;
+  let X be Subset of REAL such that
+A1:  X = { q`2 : q`1 = W-bound L~h & q in L~h };
+    thus X c= (proj2 || W-most L~h).:the carrier of T
+    proof
+      let x be set; assume x in X;
+      then consider q1 being Point of TOP-REAL 2 such that
+A2:      q1`2 = x & q1`1 = W-bound L~h & q1 in L~h by A1;
+A3:   dom F = the carrier of T by FUNCT_2:def 1
+           .= [#] ((TOP-REAL 2)|(W-most L~h)) by PRE_TOPC:12
+           .= W-most L~h by PRE_TOPC:def 10;
+        q1 in W-most L~h by A2,SPRECT_2:16;
+      then q1 in dom F & q1 in the carrier of T & x = F.q1
+        by A2,A3,FUNCT_2:def 1,PSCOMP_1:70;
+      hence thesis by FUNCT_1:def 12;
+    end;
+    thus (proj2 || W-most L~h).:the carrier of T c= X
+    proof
+      let x be set; assume x in (proj2 || W-most L~h).:the carrier of T;
+      then consider x1 be set such that
+A4:     x1 in dom F & x1 in the carrier of T & x = F.x1 by FUNCT_1:def 12;
+        x1 in [#] ((TOP-REAL 2)|(W-most L~h)) by A4,PRE_TOPC:12;
+then A5:   x1 in W-most L~h by PRE_TOPC:def 10;
+      then reconsider x2 = x1 as Element of TOP-REAL 2;
+A6:   x = x2`2 by A4,A5,PSCOMP_1:70;
+A7:   x2`1 = (W-min L~h)`1 by A5,PSCOMP_1:88
+          .= W-bound L~h by PSCOMP_1:84;
+        W-most L~h = LSeg(SW-corner L~h, NW-corner L~h) /\ L~h
+        by PSCOMP_1:def 38;
+      then W-most L~h c= L~h by XBOOLE_1:17;
+      hence thesis by A1,A5,A6,A7;
+    end;
+end;
+
+theorem Th16:
+  for X being Subset of REAL st
+    X = { q`2 : q`1 = E-bound L~h & q in L~h } holds
+  X = (proj2 || E-most L~h).:the carrier of (TOP-REAL 2)|(E-most L~h)
+proof
+  set T = (TOP-REAL 2)|(E-most L~h);
+  set F = proj2 || E-most L~h;
+  let X be Subset of REAL such that
+A1:  X = { q`2 : q`1 = E-bound L~h & q in L~h };
+    thus X c= (proj2 || E-most L~h).:the carrier of T
+    proof
+      let x be set; assume x in X;
+      then consider q1 being Point of TOP-REAL 2 such that
+A2:      q1`2 = x & q1`1 = E-bound L~h & q1 in L~h by A1;
+A3:   dom F = the carrier of T by FUNCT_2:def 1
+           .= [#] ((TOP-REAL 2)|(E-most L~h)) by PRE_TOPC:12
+           .= E-most L~h by PRE_TOPC:def 10;
+        q1 in E-most L~h by A2,SPRECT_2:17;
+      then q1 in dom F & q1 in the carrier of T & x = F.q1
+        by A2,A3,FUNCT_2:def 1,PSCOMP_1:70;
+      hence thesis by FUNCT_1:def 12;
+    end;
+    thus (proj2 || E-most L~h).:the carrier of T c= X
+    proof
+      let x be set; assume x in (proj2 || E-most L~h).:the carrier of T;
+      then consider x1 be set such that
+A4:     x1 in dom F & x1 in the carrier of T & x = F.x1 by FUNCT_1:def 12;
+        x1 in [#] ((TOP-REAL 2)|(E-most L~h)) by A4,PRE_TOPC:12;
+then A5:   x1 in E-most L~h by PRE_TOPC:def 10;
+      then reconsider x2 = x1 as Element of TOP-REAL 2;
+A6:   x = x2`2 by A4,A5,PSCOMP_1:70;
+A7:   x2`1 = (E-min L~h)`1 by A5,PSCOMP_1:108
+          .= E-bound L~h by PSCOMP_1:104;
+        E-most L~h = LSeg(SE-corner L~h, NE-corner L~h) /\ L~h
+        by PSCOMP_1:def 40;
+      then E-most L~h c= L~h by XBOOLE_1:17;
+      hence thesis by A1,A5,A6,A7;
+    end;
+end;
+
+theorem Th17:
+  for X being Subset of REAL st
+    X = { q`1 : q`2 = N-bound L~h & q in L~h } holds
+  X = (proj1 || N-most L~h).:the carrier of (TOP-REAL 2)|(N-most L~h)
+proof
+  set T = (TOP-REAL 2)|(N-most L~h);
+  set F = proj1 || N-most L~h;
+  let X be Subset of REAL such that
+A1:  X = { q`1 : q`2 = N-bound L~h & q in L~h };
+    thus X c= (proj1 || N-most L~h).:the carrier of T
+    proof
+      let x be set; assume x in X;
+      then consider q1 being Point of TOP-REAL 2 such that
+A2:      q1`1 = x & q1`2 = N-bound L~h & q1 in L~h by A1;
+A3:   dom F = the carrier of T by FUNCT_2:def 1
+           .= [#] ((TOP-REAL 2)|(N-most L~h)) by PRE_TOPC:12
+           .= N-most L~h by PRE_TOPC:def 10;
+        q1 in N-most L~h by A2,SPRECT_2:14;
+      then q1 in dom F & q1 in the carrier of T & x = F.q1
+        by A2,A3,FUNCT_2:def 1,PSCOMP_1:69;
+      hence thesis by FUNCT_1:def 12;
+    end;
+    thus (proj1 || N-most L~h).:the carrier of T c= X
+    proof
+      let x be set; assume x in (proj1 || N-most L~h).:the carrier of T;
+      then consider x1 be set such that
+A4:     x1 in dom F & x1 in the carrier of T & x = F.x1 by FUNCT_1:def 12;
+        x1 in [#] ((TOP-REAL 2)|(N-most L~h)) by A4,PRE_TOPC:12;
+then A5:   x1 in N-most L~h by PRE_TOPC:def 10;
+      then reconsider x2 = x1 as Element of TOP-REAL 2;
+A6:   x = x2`1 by A4,A5,PSCOMP_1:69;
+A7:   x2`2 = (N-min L~h)`2 by A5,PSCOMP_1:98
+          .= N-bound L~h by PSCOMP_1:94;
+        N-most L~h = LSeg(NW-corner L~h, NE-corner L~h) /\ L~h
+        by PSCOMP_1:def 39;
+      then N-most L~h c= L~h by XBOOLE_1:17;
+      hence thesis by A1,A5,A6,A7;
+    end;
+end;
+
+theorem Th18:
+  for X being Subset of REAL st
+    X = { q`1 : q`2 = S-bound L~h & q in L~h } holds
+  X = (proj1 || S-most L~h).:the carrier of (TOP-REAL 2)|(S-most L~h)
+proof
+  set T = (TOP-REAL 2)|(S-most L~h);
+  set F = proj1 || S-most L~h;
+  let X be Subset of REAL such that
+A1:  X = { q`1 : q`2 = S-bound L~h & q in L~h };
+    thus X c= (proj1 || S-most L~h).:the carrier of T
+    proof
+      let x be set; assume x in X;
+      then consider q1 being Point of TOP-REAL 2 such that
+A2:      q1`1 = x & q1`2 = S-bound L~h & q1 in L~h by A1;
+A3:   dom F = the carrier of T by FUNCT_2:def 1
+           .= [#] ((TOP-REAL 2)|(S-most L~h)) by PRE_TOPC:12
+           .= S-most L~h by PRE_TOPC:def 10;
+        q1 in S-most L~h by A2,SPRECT_2:15;
+      then q1 in dom F & q1 in the carrier of T & x = F.q1
+        by A2,A3,FUNCT_2:def 1,PSCOMP_1:69;
+      hence thesis by FUNCT_1:def 12;
+    end;
+    thus (proj1 || S-most L~h).:the carrier of T c= X
+    proof
+      let x be set; assume x in (proj1 || S-most L~h).:the carrier of T;
+      then consider x1 be set such that
+A4:     x1 in dom F & x1 in the carrier of T & x = F.x1 by FUNCT_1:def 12;
+        x1 in [#] ((TOP-REAL 2)|(S-most L~h)) by A4,PRE_TOPC:12;
+then A5:   x1 in S-most L~h by PRE_TOPC:def 10;
+      then reconsider x2 = x1 as Element of TOP-REAL 2;
+A6:   x = x2`1 by A4,A5,PSCOMP_1:69;
+A7:   x2`2 = (S-min L~h)`2 by A5,PSCOMP_1:118
+          .= S-bound L~h by PSCOMP_1:114;
+        S-most L~h = LSeg(SW-corner L~h, SE-corner L~h) /\ L~h
+        by PSCOMP_1:def 41;
+      then S-most L~h c= L~h by XBOOLE_1:17;
+      hence thesis by A1,A5,A6,A7;
+    end;
+end;
+
+theorem Th19:
+  for X being Subset of REAL st X = { q`1 : q in L~g } holds
+    X = (proj1 || L~g).:the carrier of (TOP-REAL 2)|L~g
+proof
+  set T = (TOP-REAL 2)|L~g;
+  set F = proj1 || L~g;
+  let X be Subset of REAL such that
+A1:  X = { q`1 : q in L~g };
+    thus X c= (proj1 || L~g).:the carrier of T
+    proof
+      let x be set; assume x in X;
+      then consider q1 being Point of TOP-REAL 2 such that
+A2:      q1`1 = x & q1 in L~g by A1;
+     dom F = the carrier of T by FUNCT_2:def 1
+           .= [#] ((TOP-REAL 2)|L~g) by PRE_TOPC:12
+           .= L~g by PRE_TOPC:def 10;
+      then q1 in dom F & q1 in the carrier of T & x = F.q1
+        by A2,FUNCT_2:def 1,PSCOMP_1:69;
+      hence thesis by FUNCT_1:def 12;
+    end;
+    thus (proj1 || L~g).:the carrier of T c= X
+    proof
+      let x be set; assume x in (proj1 || L~g).:the carrier of T;
+      then consider x1 be set such that
+A3:     x1 in dom F & x1 in the carrier of T & x = F.x1 by FUNCT_1:def 12;
+        x1 in [#] ((TOP-REAL 2)|L~g) by A3,PRE_TOPC:12;
+then A4:   x1 in L~g by PRE_TOPC:def 10;
+      then reconsider x2 = x1 as Element of TOP-REAL 2;
+         x = x2`1 by A3,A4,PSCOMP_1:69;
+      hence thesis by A1,A4;
+    end;
+end;
+
+theorem Th20:
+  for X being Subset of REAL st X = { q`2 : q in L~g } holds
+    X = (proj2 || L~g).:the carrier of (TOP-REAL 2)|L~g
+proof
+  set T = (TOP-REAL 2)|L~g;
+  set F = proj2 || L~g;
+  let X be Subset of REAL such that
+A1:  X = { q`2 : q in L~g };
+    thus X c= (proj2 || L~g).:the carrier of T
+    proof
+      let x be set; assume x in X;
+      then consider q1 being Point of TOP-REAL 2 such that
+A2:      q1`2 = x & q1 in L~g by A1;
+     dom F = the carrier of T by FUNCT_2:def 1
+           .= [#] ((TOP-REAL 2)|L~g) by PRE_TOPC:12
+           .= L~g by PRE_TOPC:def 10;
+      then q1 in dom F & q1 in the carrier of T & x = F.q1
+        by A2,FUNCT_2:def 1,PSCOMP_1:70;
+      hence thesis by FUNCT_1:def 12;
+    end;
+    thus (proj2 || L~g).:the carrier of T c= X
+    proof
+      let x be set; assume x in (proj2 || L~g).:the carrier of T;
+      then consider x1 be set such that
+A3:     x1 in dom F & x1 in the carrier of T & x = F.x1 by FUNCT_1:def 12;
+        x1 in [#] ((TOP-REAL 2)|L~g) by A3,PRE_TOPC:12;
+then A4:   x1 in L~g by PRE_TOPC:def 10;
+      then reconsider x2 = x1 as Element of TOP-REAL 2;
+        x = x2`2 by A3,A4,PSCOMP_1:70;
+      hence thesis by A1,A4;
+    end;
+end;
+
+theorem Th21:
+  for X being Subset of REAL st
+    X = { q`2 : q`1 = W-bound L~h & q in L~h } holds
+  lower_bound X = inf (proj2 || W-most L~h)
+proof
+  set T = (TOP-REAL 2)|(W-most L~h);
+  let X be Subset of REAL; assume
+    X = { q`2 : q`1 = W-bound L~h & q in L~h };
+  then X = (proj2 || W-most L~h).:the carrier of T by Th15;
+  hence thesis by PSCOMP_1:def 20;
+end;
+
+theorem Th22:
+  for X being Subset of REAL st
+    X = { q`2 : q`1 = W-bound L~h & q in L~h } holds
+  upper_bound X = sup (proj2 || W-most L~h)
+proof
+  set T = (TOP-REAL 2)|(W-most L~h);
+  set F = proj2 || W-most L~h;
+  let X be Subset of REAL; assume
+    X = { q`2 : q`1 = W-bound L~h & q in L~h };
+  then X = F.:the carrier of T by Th15;
+  hence thesis by PSCOMP_1:def 21;
+end;
+
+theorem Th23:
+  for X being Subset of REAL st
+    X = { q`2 : q`1 = E-bound L~h & q in L~h } holds
+  lower_bound X = inf (proj2 || E-most L~h)
+proof
+  set T = (TOP-REAL 2)|(E-most L~h);
+  set F = proj2 || E-most L~h;
+  let X be Subset of REAL; assume
+    X = { q`2 : q`1 = E-bound L~h & q in L~h };
+  then X = F.:the carrier of T by Th16;
+  hence thesis by PSCOMP_1:def 20;
+end;
+
+theorem Th24:
+  for X being Subset of REAL st
+    X = { q`2 : q`1 = E-bound L~h & q in L~h } holds
+  upper_bound X = sup (proj2 || E-most L~h)
+proof
+  set T = (TOP-REAL 2)|(E-most L~h);
+  set F = proj2 || E-most L~h;
+  let X be Subset of REAL; assume
+    X = { q`2 : q`1 = E-bound L~h & q in L~h };
+  then X = F.:the carrier of T by Th16;
+  hence thesis by PSCOMP_1:def 21;
+end;
+
+theorem Th25:
+  for X being Subset of REAL st X = { q`1 : q in L~g } holds
+    lower_bound X = inf (proj1 || L~g)
+proof
+  set T = (TOP-REAL 2)|L~g;
+  set F = proj1 || L~g;
+  let X be Subset of REAL; assume
+    X = { q`1 : q in L~g };
+  then X = F.:the carrier of T by Th19;
+  hence thesis by PSCOMP_1:def 20;
+end;
+
+theorem Th26:
+  for X being Subset of REAL st
+    X = { q`1 : q`2 = S-bound L~h & q in L~h } holds
+  lower_bound X = inf (proj1 || S-most L~h)
+proof
+  set T = (TOP-REAL 2)|(S-most L~h);
+  set F = proj1 || S-most L~h;
+  let X be Subset of REAL; assume
+    X = { q`1 : q`2 = S-bound L~h & q in L~h };
+  then X = F.:the carrier of T by Th18;
+  hence thesis by PSCOMP_1:def 20;
+end;
+
+theorem Th27:
+  for X being Subset of REAL st
+    X = { q`1 : q`2 = S-bound L~h & q in L~h } holds
+  upper_bound X = sup (proj1 || S-most L~h)
+proof
+  set T = (TOP-REAL 2)|(S-most L~h);
+  set F = proj1 || S-most L~h;
+  let X be Subset of REAL; assume
+    X = { q`1 : q`2 = S-bound L~h & q in L~h };
+  then X = F.:the carrier of T by Th18;
+  hence thesis by PSCOMP_1:def 21;
+end;
+
+theorem Th28:
+  for X being Subset of REAL st
+    X = { q`1 : q`2 = N-bound L~h & q in L~h } holds
+  lower_bound X = inf (proj1 || N-most L~h)
+proof
+  set T = (TOP-REAL 2)|(N-most L~h);
+  set F = proj1 || N-most L~h;
+  let X be Subset of REAL; assume
+    X = { q`1 : q`2 = N-bound L~h & q in L~h };
+  then X = F.:the carrier of T by Th17;
+  hence thesis by PSCOMP_1:def 20;
+end;
+
+theorem Th29:
+  for X being Subset of REAL st
+    X = { q`1 : q`2 = N-bound L~h & q in L~h } holds
+  upper_bound X = sup (proj1 || N-most L~h)
+proof
+  set T = (TOP-REAL 2)|(N-most L~h);
+  set F = proj1 || N-most L~h;
+  let X be Subset of REAL; assume
+    X = { q`1 : q`2 = N-bound L~h & q in L~h };
+  then X = F.:the carrier of T by Th17;
+  hence thesis by PSCOMP_1:def 21;
+end;
+
+theorem Th30:
+  for X being Subset of REAL st X = { q`2 : q in L~g } holds
+    lower_bound X = inf (proj2 || L~g)
+proof
+  set T = (TOP-REAL 2)|L~g;
+  set F = proj2 || L~g;
+  let X be Subset of REAL; assume
+    X = { q`2 : q in L~g };
+  then X = F.:the carrier of T by Th20;
+  hence thesis by PSCOMP_1:def 20;
+end;
+
+theorem Th31:
+  for X being Subset of REAL st X = { q`1 : q in L~g } holds
+    upper_bound X = sup (proj1 || L~g)
+proof
+  set T = (TOP-REAL 2)|L~g;
+  set F = proj1 || L~g;
+  let X be Subset of REAL; assume
+    X = { q`1 : q in L~g };
+  then X = F.:the carrier of T by Th19;
+  hence thesis by PSCOMP_1:def 21;
+end;
+
+theorem Th32:
+  for X being Subset of REAL st X = { q`2 : q in L~g } holds
+    upper_bound X = sup (proj2 || L~g)
+proof
+  set T = (TOP-REAL 2)|L~g;
+  set F = proj2 || L~g;
+  let X be Subset of REAL; assume
+    X = { q`2 : q in L~g };
+  then X = F.:the carrier of T by Th20;
+  hence thesis by PSCOMP_1:def 21;
+end;
+
+theorem Th33:
+  p in L~h & 1 <= I & I <= width GoB h implies (GoB h)*(1,I)`1 <= p`1
+proof
+ assume A1: p in L~h & 1 <= I & I <= width GoB h;
+ then consider i such that
+ A2:1<=i & i+1<=len h & p in LSeg(h/.i,h/.(i+1)) by SPPOL_2:14;
+      i<=i+1 by NAT_1:29; then i<=len h by A2,AXIOMS:22;
+ then A3: (GoB h)*(1,I)`1<=(h/.i)`1 by A1,A2,Th7;
+   1<=i+1 by NAT_1:29;
+ then A4: (GoB h)*(1,I)`1<=(h/.(i+1))`1 by A1,A2,Th7;
+   now per cases;
+ case (h/.i)`1<=(h/.(i+1))`1;
+   then (h/.i)`1<=p`1 by A2,TOPREAL1:9;
+  hence (GoB h)*(1,I)`1<=p`1 by A3,AXIOMS:22;
+ case (h/.i)`1>(h/.(i+1))`1;
+   then (h/.(i+1))`1<=p`1 by A2,TOPREAL1:9;
+  hence (GoB h)*(1,I)`1<=p`1 by A4,AXIOMS:22;
+ end;
+ hence (GoB h)*(1,I)`1<=p`1;
+end;
+
+theorem Th34:
+  p in L~h & 1 <= I & I <= width GoB h implies p`1 <= (GoB h)*(len GoB h,I)`1
+proof
+assume A1: p in L~h & 1 <= I & I <= width GoB h;
+ then consider i such that
+ A2:1<=i & i+1<=len h & p in LSeg(h/.i,h/.(i+1)) by SPPOL_2:14;
+     i<=i+1 by NAT_1:29;
+ then A3: i<=len h by A2,AXIOMS:22;
+A4: 1<=i+1 by NAT_1:29;
+ A5: (GoB h)*(len GoB h,I)`1>=(h/.i)`1 by A1,A2,A3,Th7;
+ A6: (GoB h)*(len GoB h,I)`1>=(h/.(i+1))`1 by A1,A2,A4,Th7;
+   now per cases;
+ case (h/.i)`1<=(h/.(i+1))`1;
+   then (h/.(i+1))`1>=p`1 by A2,TOPREAL1:9;
+  hence (GoB h)*(len GoB h,I)`1>=p`1 by A6,AXIOMS:22;
+ case (h/.i)`1>(h/.(i+1))`1;
+   then (h/.i)`1>=p`1 by A2,TOPREAL1:9;
+  hence (GoB h)*(len GoB h, I)`1>=p`1 by A5,AXIOMS:22;
+ end;
+ hence (GoB h)*(len GoB h, I)`1>=p`1;
+end;
+
+theorem Th35:
+  p in L~h & 1 <= I & I <= len GoB h implies (GoB h)*(I,1)`2 <= p`2
+proof
+ assume A1: p in L~h & 1 <= I & I <= len GoB h;
+ then consider i such that
+ A2:1<=i & i+1<=len h & p in LSeg(h/.i,h/.(i+1)) by SPPOL_2:14;
+      i<=i+1 by NAT_1:29; then i<=len h by A2,AXIOMS:22;
+ then A3: (GoB h)*(I,1)`2<=(h/.i)`2 by A1,A2,Th8;
+   1<=i+1 by NAT_1:29;
+ then A4: (GoB h)*(I,1)`2<=(h/.(i+1))`2 by A1,A2,Th8;
+   now per cases;
+ case (h/.i)`2<=(h/.(i+1))`2;
+   then (h/.i)`2<=p`2 by A2,TOPREAL1:10;
+  hence (GoB h)*(I,1)`2<=p`2 by A3,AXIOMS:22;
+ case (h/.i)`2>(h/.(i+1))`2;
+   then (h/.(i+1))`2<=p`2 by A2,TOPREAL1:10;
+  hence (GoB h)*(I,1)`2<=p`2 by A4,AXIOMS:22;
+ end;
+ hence (GoB h)*(I,1)`2<=p`2;
+end;
+
+theorem Th36:
+  p in L~h & 1 <= I & I <= len GoB h implies p`2 <= (GoB h)*(I,width GoB h)`2
+proof
+ assume A1: p in L~h & 1 <= I & I <= len GoB h;
+ then consider i such that
+ A2:1<=i & i+1<=len h & p in LSeg(h/.i,h/.(i+1)) by SPPOL_2:14;
+      i<=i+1 by NAT_1:29;
+ then A3: i<=len h by A2,AXIOMS:22;
+A4: 1<=i+1 by NAT_1:29;
+ A5: (GoB h)*(I,width GoB h)`2>=(h/.i)`2 by A1,A2,A3,Th8;
+ A6: (GoB h)*(I,width GoB h)`2>=(h/.(i+1))`2 by A1,A2,A4,Th8;
+   now per cases;
+ case (h/.i)`2<=(h/.(i+1))`2;
+   then (h/.(i+1))`2>=p`2 by A2,TOPREAL1:10;
+  hence (GoB h)*(I,width GoB h)`2>=p`2 by A6,AXIOMS:22;
+ case (h/.i)`2>(h/.(i+1))`2;
+   then (h/.i)`2>=p`2 by A2,TOPREAL1:10;
+  hence (GoB h)*(I,width GoB h)`2>=p`2 by A5,AXIOMS:22;
+ end;
+ hence (GoB h)*(I,width GoB h)`2>=p`2;
+end;
+
+theorem Th37:
+  1 <= i & i <= len GoB h & 1 <= j & j <= width GoB h implies
+    ex q st q`1 = (GoB h)*(i,j)`1 & q in L~h
+proof
+ assume
+     1 <= i & i <= len GoB h & 1 <= j & j <= width GoB h;
+  then consider k such that
+A1:  k in dom h & [i,j] in Indices GoB h & (h/.k)`1 = (GoB h)*
+(i,j)`1 by Th11;
+  take q = h/.k;
+  thus q`1 = (GoB h)*(i,j)`1 by A1;
+    4 < len h by GOBOARD7:36;
+  then 2 <= len h by AXIOMS:22;
+  hence thesis by A1,GOBOARD1:16;
+end;
+
+theorem Th38:
+  1 <= i & i <= len GoB h & 1 <= j & j <= width GoB h implies
+    ex q st q`2 = (GoB h)*(i,j)`2 & q in L~h
+proof
+ assume
+     1 <= i & i <= len GoB h & 1 <= j & j <= width GoB h;
+  then consider k such that
+A1:  k in dom h & [i,j] in Indices GoB h & (h/.k)`2 = (GoB h)*(i,j)`2
+     by Th12;
+  take q = h/.k;
+  thus q`2 = (GoB h)*(i,j)`2 by A1;
+    4 < len h by GOBOARD7:36;
+  then 2 <= len h by AXIOMS:22;
+  hence thesis by A1,GOBOARD1:16;
+end;
+
+theorem Th39:
+  W-bound L~h = (GoB h)*(1,1)`1
+proof
+ set X = { q`1 : q in L~h }, A = (GoB h)*(1,1)`1;
+ consider a be set such that A1: a in L~h by XBOOLE_0:def 1;
+ reconsider a as Point of TOP-REAL 2 by A1;
+A2: a`1 in X by A1;
+   X c= REAL
+ proof
+  let b be set; assume b in X;
+  then consider qq be Point of TOP-REAL 2 such that
+A3:  b = qq`1 & qq in L~h;
+  thus thesis by A3;
+ end;
+ then reconsider X as non empty Subset of REAL by A2;
+   lower_bound X = A
+ proof
+A4:1 <= len GoB h & 1 <= width GoB h by GOBOARD7:34,35;
+A5: for p be real number st p in X holds p >= A
+   proof
+    let p be real number; assume p in X;
+    then consider s be Point of TOP-REAL 2 such that
+A6:    p = s`1 & s in L~h;
+     thus thesis by A4,A6,Th33;
+   end;
+   consider q1 be Point of TOP-REAL 2 such that
+A7:    q1`1 = (GoB h)*(1,1)`1 & q1 in L~h by A4,Th37;
+   reconsider q11 = q1`1 as Real;
+   for q be real number st
+   for p be real number st p in X holds p >= q holds A >= q
+   proof
+     let q be real number such that
+A8:      for p be real number st p in X holds p >= q;
+       q11 in X by A7;
+     hence thesis by A7,A8;
+   end;
+   hence thesis by A5,PSCOMP_1:9;
+ end;
+ then A = inf (proj1 || L~h) by Th25;
+ hence thesis by PSCOMP_1:def 30;
+end;
+
+theorem Th40:
+  S-bound L~h = (GoB h)*(1,1)`2
+proof
+ set X = { q`2 : q in L~h }, A = (GoB h)*(1,1)`2;
+ consider a be set such that A1: a in L~h by XBOOLE_0:def 1;
+ reconsider a as Point of TOP-REAL 2 by A1;
+A2: a`2 in X by A1;
+   X c= REAL
+ proof
+  let b be set; assume b in X;
+  then consider qq be Point of TOP-REAL 2 such that
+A3:  b = qq`2 & qq in L~h;
+  thus thesis by A3;
+ end;
+ then reconsider X as non empty Subset of REAL by A2;
+   lower_bound X = A
+ proof
+A4:1 <= len GoB h & 1 <= width GoB h by GOBOARD7:34,35;
+A5: for p be real number st p in X holds p >= A
+   proof
+    let p be real number; assume p in X;
+    then consider s be Point of TOP-REAL 2 such that
+A6:    p = s`2 & s in L~h;
+     thus thesis by A4,A6,Th35;
+   end;
+   consider q1 be Point of TOP-REAL 2 such that
+A7:    q1`2 = (GoB h)*(1,1)`2 & q1 in L~h by A4,Th38;
+   reconsider q11 = q1`2 as Real;
+     for q be real number st
+   for p be real number st p in X holds p >= q holds A >= q
+   proof
+     let q be real number such that
+A8:      for p be real number st p in X holds p >= q;
+       q11 in X by A7;
+     hence thesis by A7,A8;
+   end;
+   hence thesis by A5,PSCOMP_1:9;
+ end;
+ then A = inf (proj2 || L~h) by Th30;
+ hence thesis by PSCOMP_1:def 33;
+end;
+
+theorem Th41:
+  E-bound L~h = (GoB h)*(len GoB h,1)`1
+proof
+ set X = { q`1 : q in L~h }, A = (GoB h)*(len GoB h,1)`1;
+ consider a be set such that A1: a in L~h by XBOOLE_0:def 1;
+ reconsider a as Point of TOP-REAL 2 by A1;
+A2: a`1 in X by A1;
+   X c= REAL
+ proof
+  let b be set; assume b in X;
+  then consider qq be Point of TOP-REAL 2 such that
+A3:  b = qq`1 & qq in L~h;
+  thus thesis by A3;
+ end;
+ then reconsider X as non empty Subset of REAL by A2;
+   upper_bound X = A
+ proof
+A4: for p be real number st p in X holds p <= A
+   proof
+    let p be real number; assume p in X;
+    then consider s be Point of TOP-REAL 2 such that
+A5:    p = s`1 & s in L~h;
+      1 <= width GoB h by GOBOARD7:35;
+     hence thesis by A5,Th34;
+   end;
+     1 <= len GoB h & 1 <= width GoB h by GOBOARD7:34,35;
+   then consider q1 be Point of TOP-REAL 2 such that
+A6:    q1`1 = (GoB h)*(len GoB h,1)`1 & q1 in L~h by Th37;
+   reconsider q11 = q1`1 as Real;
+   for q be real number st
+   for p be real number st p in X holds p <= q holds A <= q
+   proof
+     let q be real number such that
+A7:      for p be real number st p in X holds p <= q;
+       q11 in X by A6;
+     hence thesis by A6,A7;
+   end;
+   hence thesis by A4,PSCOMP_1:11;
+ end;
+ then A = sup (proj1 || L~h) by Th31;
+ hence thesis by PSCOMP_1:def 32;
+end;
+
+theorem Th42:
+  N-bound L~h = (GoB h)*(1,width GoB h)`2
+proof
+ set X = { q`2 : q in L~h }, A = (GoB h)*(1,width GoB h)`2;
+ consider a be set such that A1: a in L~h by XBOOLE_0:def 1;
+ reconsider a as Point of TOP-REAL 2 by A1;
+A2: a`2 in X by A1;
+   X c= REAL
+ proof
+  let b be set; assume b in X;
+  then consider qq be Point of TOP-REAL 2 such that
+A3:  b = qq`2 & qq in L~h;
+  thus thesis by A3;
+ end;
+ then reconsider X as non empty Subset of REAL by A2;
+   upper_bound X = A
+ proof
+A4:1 <= len GoB h & 1 <= width GoB h by GOBOARD7:34,35;
+A5: for p be real number st p in X holds p <= A
+   proof
+    let p be real number; assume p in X;
+    then consider s be Point of TOP-REAL 2 such that
+A6:    p = s`2 & s in L~h;
+     thus thesis by A4,A6,Th36;
+   end;
+   consider q1 be Point of TOP-REAL 2 such that
+A7:    q1`2 = (GoB h)*(1,width GoB h)`2 & q1 in L~h by A4,Th38;
+   reconsider q11 = q1`2 as Real;
+   for q be real number st
+   for p be real number st p in X holds p <= q holds A <= q
+   proof
+     let q be real number such that
+A8:      for p be real number st p in X holds p <= q;
+       q11 in X by A7;
+     hence thesis by A7,A8;
+   end;
+   hence thesis by A5,PSCOMP_1:11;
+ end;
+ then A = sup (proj2 || L~h) by Th32;
+ hence thesis by PSCOMP_1:def 31;
+end;
+
+theorem Th43:
+  for Y being non empty finite Subset of NAT st
+    1 <= i & i <= len f & 1 <= I & I <= len GoB f &
+      Y = { j : [I,j] in Indices GoB f & ex k st k in dom f &
+  f/.k = (GoB f)*(I,j) } & (f/.i)`1 = ((GoB f)*(I,1))`1 & i1 = min Y holds
+    (GoB f)*(I,i1)`2 <= (f/.i)`2
+proof let Y be non empty finite Subset of NAT;
+ assume A1: 1<=i & i<=len f & 1<=I & I<=len GoB f &
+   Y={j:[I,j] in Indices GoB f & ex k st k in dom f &
+               f/.k=(GoB f)*(I,j)} & (f/.i)`1=((GoB f)*(I,1))`1 &
+               i1=min Y;
+     then i1 in Y by CQC_SIM1:def 8;
+     then consider j such that
+     A2:i1=j & [I,j] in Indices GoB f & ex k st k in dom f &
+               f/.k=(GoB f)*(I,j) by A1;
+     A3:i in dom f by A1,FINSEQ_3:27;
+     then consider i2,j2 be Nat such that
+     A4: [i2,j2] in Indices GoB f & f/.i=(GoB f)*(i2,j2) by GOBOARD5:12;
+     A5:1<=i2 & i2<=len GoB f & 1<=j2 & j2<=width GoB f by A4,GOBOARD5:1;
+     then A6:(f/.i)`1=((GoB f)*(I,j2))`1 by A1,GOBOARD5:3;
+     A7:(f/.i)`2=((GoB f)*(1,j2))`2 by A4,A5,GOBOARD5:2
+             .=((GoB f)*(I,j2))`2 by A1,A5,GOBOARD5:2;
+       f/.i=|[(f/.i)`1,(f/.i)`2]| by EUCLID:57;
+then A8:  f/.i=(GoB f)*(I,j2) by A6,A7,EUCLID:57;
+       [I,j2] in Indices GoB f by A1,A5,GOBOARD7:10;
+     then j2 in Y by A1,A3,A8;
+     then A9:1<=i1 & i1<=j2 & j2<=width GoB f & 1<=1 & 1<=len GoB f
+         by A1,A2,A4,AXIOMS:22,CQC_SIM1:def 8,GOBOARD5:1;
+        now per cases;
+      case i1<j2;
+        hence (GoB f)*(I,i1)`2<=(GoB f)*(I,j2)`2 by A1,A9,GOBOARD5:5;
+      case i1>=j2;
+        hence (GoB f)*(I,i1)`2<=(GoB f)*(I,j2)`2 by A9,AXIOMS:21;
+      end;
+     hence thesis by A7;
+end;
+
+theorem Th44:
+  for Y being non empty finite Subset of NAT st
+    1 <= i & i <= len h & 1 <= I & I <= width GoB h &
+      Y = { j : [j,I] in Indices GoB h & ex k st k in dom h &
+  h/.k = (GoB h)*(j,I) } & (h/.i)`2 = ((GoB h)*
+(1,I))`2 & i1 = min Y holds
+    (GoB h)*(i1,I)`1 <= (h/.i)`1
+proof let Y be non empty finite Subset of NAT;
+ assume A1: 1<=i & i<=len h & 1 <= I & I <= width GoB h &
+   Y={j:[j,I] in Indices GoB h & ex k st k in dom h &
+               h/.k=(GoB h)*(j,I)} & (h/.i)`2=((GoB h)*(1,I))`2 &
+               i1=min Y;
+     then i1 in Y by CQC_SIM1:def 8;
+     then consider j such that
+A2:i1=j & [j,I] in Indices GoB h & ex k st k in dom h &
+               h/.k=(GoB h)*(j,I) by A1;
+     A3:i in dom h by A1,FINSEQ_3:27;
+     then consider i2,j2 be Nat such that
+     A4: [i2,j2] in Indices GoB h & h/.i=(GoB h)*(i2,j2) by GOBOARD5:12;
+     A5:1<=i2 & i2<=len GoB h & 1<=j2 & j2<=width GoB h by A4,GOBOARD5:1;
+     then A6:(h/.i)`2=((GoB h)*(i2,I))`2 by A1,GOBOARD5:2;
+     A7:(h/.i)`1=((GoB h)*(i2,1))`1 by A4,A5,GOBOARD5:3
+               .=((GoB h)*(i2,I))`1 by A1,A5,GOBOARD5:3;
+       h/.i=|[(h/.i)`1,(h/.i)`2]| by EUCLID:57;
+then A8:  h/.i=(GoB h)*(i2,I) by A6,A7,EUCLID:57;
+       [i2,I] in Indices GoB h by A1,A5,GOBOARD7:10;
+     then i2 in Y by A1,A3,A8;
+     then A9:1<=i1 & i1<=i2 & i2<=len GoB h & 1<=width GoB h
+         by A1,A2,A4,CQC_SIM1:def 8,GOBOARD5:1,GOBOARD7:35;
+        now per cases;
+      case i1<i2;
+        hence (GoB h)*(i1,I)`1<=(GoB h)*(i2,I)`1 by A1,A9,GOBOARD5:4;
+      case i1>=i2;
+        hence (GoB h)*(i1,I)`1<=(GoB h)*(i2,I)`1 by A9,AXIOMS:21;
+      end;
+     hence thesis by A7;
+end;
+
+theorem Th45:
+  for Y being non empty finite Subset of NAT st
+    1 <= i & i <= len h & 1 <= I & I <= width GoB h &
+      Y = { j : [j,I] in Indices GoB h & ex k st k in dom h &
+  h/.k = (GoB h)*(j,I) } & (h/.i)`2 = ((GoB h)*
+(1,I))`2 & i1 = max Y holds
+    (GoB h)*(i1,I)`1 >= (h/.i)`1
+proof let Y be non empty finite Subset of NAT;
+ assume A1: 1<=i & i<=len h & 1<=I & I<=width GoB h &
+   Y={j:[j,I] in Indices GoB h & ex k st k in dom h &
+               h/.k=(GoB h)*(j,I)} & (h/.i)`2=((GoB h)*
+(1,I))`2 & i1=max Y;
+       i1 in Y by A1,PRE_CIRC:def 1;
+     then consider j such that
+A2:  i1=j & [j,I] in Indices GoB h & ex k st k in dom h &
+               h/.k=(GoB h)*(j,I) by A1;
+     A3:i in dom h by A1,FINSEQ_3:27;
+     then consider i2,j2 be Nat such that
+     A4: [i2,j2] in Indices GoB h & h/.i=(GoB h)*(i2,j2) by GOBOARD5:12;
+     A5:1<=i2 & i2<=len GoB h & 1<=j2 & j2<=width GoB h by A4,GOBOARD5:1;
+     then A6:(h/.i)`2=((GoB h)*(i2,I))`2 by A1,GOBOARD5:2;
+     A7:(h/.i)`1=((GoB h)*(i2,1))`1 by A4,A5,GOBOARD5:3
+               .=((GoB h)*(i2,I))`1 by A1,A5,GOBOARD5:3;
+       h/.i=|[(h/.i)`1,(h/.i)`2]| by EUCLID:57;
+then A8:  h/.i=(GoB h)*(i2,I) by A6,A7,EUCLID:57;
+       [i2,I] in Indices GoB h by A1,A5,GOBOARD7:10;
+     then i2 in Y by A1,A3,A8;
+     then A9:1<=i1 & i1>=i2 & i2<=len GoB h & 1<=width GoB h
+         by A1,A2,A4,GOBOARD5:1,GOBOARD7:35,PRE_CIRC:def 1;
+A10:   i1 <= len GoB h by A2,GOBOARD5:1;
+        now per cases;
+      case i1>i2;
+        hence (GoB h)*(i1,I)`1>=(GoB h)*(i2,I)`1
+          by A1,A5,A10,GOBOARD5:4;
+      case i1<=i2;
+        hence (GoB h)*(i1,I)`1>=(GoB h)*(i2,I)`1 by A9,AXIOMS:21;
+      end;
+     hence thesis by A7;
+end;
+
+theorem Th46:
+  for Y being non empty finite Subset of NAT st
+    1 <= i & i <= len f & 1 <= I & I <= len GoB f &
+      Y = { j : [I,j] in Indices GoB f & ex k st k in dom f &
+  f/.k = (GoB f)*(I,j) } & (f/.i)`1 = ((GoB f)*
+(I,1))`1 & i1 = max Y holds
+    (GoB f)*(I,i1)`2 >= (f/.i)`2
+proof let Y be non empty finite Subset of NAT;
+ assume A1: 1<=i & i<=len f & 1 <= I & I <= len GoB f &
+   Y={j:[I,j] in Indices GoB f & ex k st k in dom f &
+     f/.k=(GoB f)*(I,j)} & (f/.i)`1=((GoB f)*(I,1))`1 & i1=max Y;
+       i1 in Y by A1,PRE_CIRC:def 1;
+     then consider j such that
+     A2:i1=j & [I,j] in Indices GoB f & ex k st k in dom f &
+               f/.k=(GoB f)*(I,j) by A1;
+     A3:1<=I & I<=len GoB f & 1<=i1 & i1<=width GoB f by A2,GOBOARD5:1;
+     A4:i in dom f by A1,FINSEQ_3:27;
+     then consider i2,j2 be Nat such that
+     A5: [i2,j2] in Indices GoB f & f/.i=(GoB f)*(i2,j2) by GOBOARD5:12;
+     A6:1<=i2 & i2<=len GoB f & 1<=j2 & j2<=width GoB f by A5,GOBOARD5:1;
+     then A7:(f/.i)`1=((GoB f)*(I,j2))`1 by A1,GOBOARD5:3;
+     A8:(f/.i)`2=((GoB f)*(1,j2))`2 by A5,A6,GOBOARD5:2
+             .=((GoB f)*(I,j2))`2 by A1,A6,GOBOARD5:2;
+       f/.i=|[(f/.i)`1,(f/.i)`2]| by EUCLID:57;
+then A9:  f/.i=(GoB f)*(I,j2) by A7,A8,EUCLID:57;
+       [I,j2] in Indices GoB f by A1,A6,GOBOARD7:10;
+     then j2 in Y by A1,A4,A9;
+then A10:  i1>=j2 by A1,PRE_CIRC:def 1;
+        now per cases;
+      case i1 > j2;
+        hence (GoB f)*(I,i1)`2 >= (GoB f)*(I,j2)`2 by A3,A6,GOBOARD5:5;
+      case i1<=j2;
+        hence (GoB f)*(I,i1)`2 >= (GoB f)*(I,j2)`2 by A10,AXIOMS:21;
+      end;
+     hence thesis by A8;
+end;
+
+Lm1: for p being Point of TOP-REAL 2,
+  Y being non empty finite Subset of NAT,
+  h st p`1=W-bound L~h & p in L~h
+  & Y={j:[1,j] in Indices GoB h & ex i st i in dom h &
+               h/.i=(GoB h)*(1,j)} & i1=min Y
+ holds (GoB h)*(1,i1)`2<=p`2
+proof let p be Point of TOP-REAL 2,Y be
+  non empty finite Subset of NAT,h;assume A1:
+  p`1=W-bound L~h & p in L~h
+  & Y={j:[1,j] in Indices GoB h & ex i st i in dom h &
+               h/.i=(GoB h)*(1,j)} & i1=min Y;
+  then A2: p`1=((GoB h)*(1,1))`1 by Th39;
+ A3: 1 <= width GoB h by GOBOARD7:35;
+ A4: 1 <= len GoB h by GOBOARD7:34;
+ consider i such that
+ A5:1<=i & i+1<=len h & p in LSeg(h/.i,h/.(i+1)) by A1,SPPOL_2:14;
+   i<=i+1 by NAT_1:29;
+ then A6:i<=len h by A5,AXIOMS:22;
+ A7:1<=i+1 by A5,SPPOL_1:5;
+   now per cases by SPPOL_1:41;
+ case LSeg(h,i) is vertical;
+   then LSeg(h/.i,h/.(i+1)) is vertical by A5,TOPREAL1:def 5;
+   then (h/.i)`1=(h/.(i+1))`1 by SPPOL_1:37;
+   then A8:p`1=(h/.(i+1))`1 & p`1=(h/.i)`1 by A5,GOBOARD7:5;
+     now per cases;
+   case (h/.i)`2<=(h/.(i+1))`2;
+     then A9: (h/.i)`2<=p`2 & p`2<=(h/.(i+1))`2
+                    by A5,TOPREAL1:10;
+       (GoB h)*(1,i1)`2<=(h/.i)`2 by A1,A2,A4,A5,A6,A8,Th43;
+    hence (GoB h)*(1,i1)`2<=p`2 by A9,AXIOMS:22;
+   case (h/.i)`2>(h/.(i+1))`2;
+     then A10: (h/.(i+1))`2<=p`2 & p`2<=(h/.i)`2 by A5,TOPREAL1:10;
+       (GoB h)*(1,i1)`2<=(h/.(i+1))`2 by A1,A2,A4,A5,A7,A8,Th43;
+    hence (GoB h)*(1,i1)`2<=p`2 by A10,AXIOMS:22;
+   end;
+   hence (GoB h)*(1,i1)`2<=p`2;
+  case LSeg(h,i) is horizontal;
+   then LSeg(h/.i,h/.(i+1)) is horizontal by A5,TOPREAL1:def 5;
+   then (h/.i)`2=(h/.(i+1))`2 by SPPOL_1:36;
+   then A11:p`2=(h/.(i+1))`2 & p`2=(h/.i)`2 by A5,GOBOARD7:6;
+     now per cases;
+   case (h/.i)`1<=(h/.(i+1))`1;
+     then A12:(h/.i)`1<=((GoB h)*(1,1))`1 by A2,A5,TOPREAL1:9;
+       (h/.i)`1>=((GoB h)*(1,1))`1 by A3,A5,A6,Th7;
+     then (h/.i)`1=((GoB h)*(1,1))`1 by A12,AXIOMS:21;
+    hence (GoB h)*(1,i1)`2<=p`2 by A1,A4,A5,A6,A11,Th43;
+   case (h/.i)`1>(h/.(i+1))`1;
+     then A13:(h/.(i+1))`1<=((GoB h)*(1,1))`1 by A2,A5,TOPREAL1:9;
+       (h/.(i+1))`1>=((GoB h)*(1,1))`1 by A3,A5,A7,Th7;
+     then (h/.(i+1))`1=((GoB h)*(1,1))`1 by A13,AXIOMS:21;
+    hence (GoB h)*(1,i1)`2<=p`2 by A1,A4,A5,A7,A11,Th43;
+   end;
+   hence (GoB h)*(1,i1)`2<=p`2;
+  end;
+ hence (GoB h)*(1,i1)`2<=p`2;
+end;
+
+Lm2:
+ for p being Point of TOP-REAL 2,
+  Y being non empty finite Subset of NAT,
+  h st p`1=W-bound L~h & p in L~h
+  & Y={j:[1,j] in Indices GoB h & ex i st i in dom h &
+               h/.i=(GoB h)*(1,j)} & i1=max Y
+ holds (GoB h)*(1,i1)`2 >= p`2
+proof let p be Point of TOP-REAL 2,Y be
+  non empty finite Subset of NAT,h;assume A1:
+  p`1=W-bound L~h & p in L~h
+  & Y={j:[1,j] in Indices GoB h & ex i st i in dom h &
+               h/.i=(GoB h)*(1,j)} & i1=max Y;
+  then A2: p`1=((GoB h)*(1,1))`1 by Th39;
+ consider i such that
+ A3:1<=i & i+1<=len h & p in LSeg(h/.i,h/.(i+1)) by A1,SPPOL_2:14;
+ A4: 1 <= width GoB h by GOBOARD7:35;
+ A5: 1 <= len GoB h by GOBOARD7:34;
+   i<=i+1 by NAT_1:29;
+ then A6:i<=len h by A3,AXIOMS:22;
+ A7:1<=i+1 by A3,SPPOL_1:5;
+   now per cases by SPPOL_1:41;
+ case LSeg(h,i) is vertical;
+   then LSeg(h/.i,h/.(i+1)) is vertical by A3,TOPREAL1:def 5;
+   then (h/.i)`1=(h/.(i+1))`1 by SPPOL_1:37;
+   then A8:p`1=(h/.(i+1))`1 & p`1=(h/.i)`1 by A3,GOBOARD7:5;
+     now per cases;
+   case (h/.i)`2>=(h/.(i+1))`2;
+     then A9: (h/.i)`2 >= p`2 & p`2 >= (h/.(i+1))`2
+                    by A3,TOPREAL1:10;
+       (GoB h)*(1,i1)`2>=(h/.i)`2 by A1,A2,A3,A5,A6,A8,Th46;
+    hence (GoB h)*(1,i1)`2>=p`2 by A9,AXIOMS:22;
+   case (h/.i)`2<(h/.(i+1))`2;
+     then A10: (h/.(i+1))`2>=p`2 & p`2>=(h/.i)`2
+                    by A3,TOPREAL1:10;
+       (GoB h)*(1,i1)`2>=(h/.(i+1))`2 by A1,A2,A3,A5,A7,A8,Th46;
+    hence (GoB h)*(1,i1)`2>=p`2 by A10,AXIOMS:22;
+   end;
+   hence (GoB h)*(1,i1)`2>=p`2;
+  case LSeg(h,i) is horizontal;
+   then LSeg(h/.i,h/.(i+1)) is horizontal by A3,TOPREAL1:def 5;
+   then (h/.i)`2=(h/.(i+1))`2 by SPPOL_1:36;
+   then A11:p`2=(h/.(i+1))`2 & p`2=(h/.i)`2 by A3,GOBOARD7:6;
+     now per cases;
+   case (h/.i)`1<=(h/.(i+1))`1;
+     then A12:(h/.i)`1<=((GoB h)*(1,1))`1 by A2,A3,TOPREAL1:9;
+       (h/.i)`1>=((GoB h)*(1,1))`1 by A3,A4,A6,Th7;
+     then (h/.i)`1=((GoB h)*(1,1))`1 by A12,AXIOMS:21;
+    hence (GoB h)*(1,i1)`2>=p`2 by A1,A3,A5,A6,A11,Th46;
+   case (h/.i)`1>(h/.(i+1))`1;
+     then A13:(h/.(i+1))`1<=((GoB h)*(1,1))`1 by A2,A3,TOPREAL1:9;
+       (h/.(i+1))`1>=((GoB h)*(1,1))`1 by A3,A4,A7,Th7;
+     then (h/.(i+1))`1=((GoB h)*(1,1))`1 by A13,AXIOMS:21;
+    hence (GoB h)*(1,i1)`2>=p`2 by A1,A3,A5,A7,A11,Th46;
+   end;
+   hence (GoB h)*(1,i1)`2>=p`2;
+  end;
+ hence (GoB h)*(1,i1)`2>=p`2;
+end;
+
+Lm3: for p being Point of TOP-REAL 2,
+  Y being non empty finite Subset of NAT,
+  h st p`1=E-bound L~h & p in L~h
+  & Y={j:[len GoB h,j] in Indices GoB h & ex i st i in dom h &
+               h/.i=(GoB h)*(len GoB h,j)} & i1=min Y
+ holds (GoB h)*(len GoB h,i1)`2<=p`2
+proof let p be Point of TOP-REAL 2,Y be
+  non empty finite Subset of NAT,h;assume A1:
+  p`1=E-bound L~h & p in L~h
+  & Y={j:[len GoB h,j] in Indices GoB h & ex i st i in dom h &
+               h/.i=(GoB h)*(len GoB h,j)} & i1=min Y;
+  then A2: p`1=((GoB h)*(len GoB h,1))`1 by Th41;
+ A3: 1 <= width GoB h by GOBOARD7:35;
+ consider i such that
+ A4:1<=i & i+1<=len h & p in LSeg(h/.i,h/.(i+1)) by A1,SPPOL_2:14;
+   i<=i+1 by NAT_1:29;
+ then A5:i<=len h by A4,AXIOMS:22;
+ A6:1<=i+1 by A4,SPPOL_1:5;
+A7: 1 <= len GoB h by GOBOARD7:34;
+   now per cases by SPPOL_1:41;
+ case LSeg(h,i) is vertical;
+   then LSeg(h/.i,h/.(i+1)) is vertical by A4,TOPREAL1:def 5;
+   then (h/.i)`1=(h/.(i+1))`1 by SPPOL_1:37;
+   then A8:p`1=(h/.(i+1))`1 & p`1=(h/.i)`1 by A4,GOBOARD7:5;
+     now per cases;
+   case (h/.i)`2<=(h/.(i+1))`2;
+     then A9: (h/.i)`2<=p`2 & p`2<=(h/.(i+1))`2
+                    by A4,TOPREAL1:10;
+       (GoB h)*(len GoB h,i1)`2<=(h/.i)`2 by A1,A2,A4,A5,A7,A8,Th43;
+    hence (GoB h)*(len GoB h,i1)`2<=p`2 by A9,AXIOMS:22;
+   case (h/.i)`2>(h/.(i+1))`2;
+     then A10: (h/.(i+1))`2<=p`2 & p`2<=(h/.i)`2 by A4,TOPREAL1:10;
+       (GoB h)*(len GoB h,i1)`2<=(h/.(i+1))`2
+       by A1,A2,A4,A6,A7,A8,Th43;
+    hence (GoB h)*(len GoB h,i1)`2<=p`2 by A10,AXIOMS:22;
+   end;
+   hence (GoB h)*(len GoB h,i1)`2<=p`2;
+  case LSeg(h,i) is horizontal;
+   then LSeg(h/.i,h/.(i+1)) is horizontal by A4,TOPREAL1:def 5;
+   then (h/.i)`2=(h/.(i+1))`2 by SPPOL_1:36;
+   then A11:p`2=(h/.(i+1))`2 & p`2=(h/.i)`2 by A4,GOBOARD7:6;
+     now per cases;
+   case (h/.i)`1>=(h/.(i+1))`1;
+     then A12:(h/.i)`1>=((GoB h)*(len GoB h,1))`1 by A2,A4,TOPREAL1:9;
+       (h/.i)`1<=((GoB h)*(len GoB h,1))`1 by A3,A4,A5,Th7;
+     then (h/.i)`1=((GoB h)*(len GoB h,1))`1 by A12,AXIOMS:21;
+    hence (GoB h)*(len GoB h,i1)`2<=p`2
+      by A1,A4,A5,A7,A11,Th43;
+   case (h/.i)`1<(h/.(i+1))`1;
+     then A13:(h/.(i+1))`1>=((GoB h)*(len GoB h,1))`1 by A2,A4,TOPREAL1:9;
+       (h/.(i+1))`1<=((GoB h)*(len GoB h,1))`1 by A3,A4,A6,Th7;
+     then (h/.(i+1))`1=((GoB h)*(len GoB h,1))`1 by A13,AXIOMS:21;
+    hence (GoB h)*(len GoB h,i1)`2<=p`2
+      by A1,A4,A6,A7,A11,Th43;
+   end;
+   hence (GoB h)*(len GoB h,i1)`2<=p`2;
+  end;
+ hence (GoB h)*(len GoB h,i1)`2<=p`2;
+end;
+
+Lm4:
+ for p being Point of TOP-REAL 2,
+  Y being non empty finite Subset of NAT,
+  h st p`1=E-bound L~h & p in L~h
+  & Y={j:[len GoB h,j] in Indices GoB h & ex i st i in dom h &
+               h/.i=(GoB h)*(len GoB h,j)} & i1=max Y
+ holds (GoB h)*(len GoB h,i1)`2 >= p`2
+proof let p be Point of TOP-REAL 2,Y be
+  non empty finite Subset of NAT,h;assume A1:
+  p`1=E-bound L~h & p in L~h
+  & Y={j:[len GoB h,j] in Indices GoB h & ex i st i in dom h &
+               h/.i=(GoB h)*(len GoB h,j)} & i1=max Y;
+  then A2: p`1=((GoB h)*(len GoB h,1))`1 by Th41;
+A3: 1 <= len GoB h by GOBOARD7:34;
+A4: 1 <= width GoB h by GOBOARD7:35;
+ consider i such that
+ A5:1<=i & i+1<=len h & p in LSeg(h/.i,h/.(i+1)) by A1,SPPOL_2:14;
+   i<=i+1 by NAT_1:29;
+ then A6:i<=len h by A5,AXIOMS:22;
+ A7:1<=i+1 by A5,SPPOL_1:5;
+   now per cases by SPPOL_1:41;
+ case LSeg(h,i) is vertical;
+   then LSeg(h/.i,h/.(i+1)) is vertical by A5,TOPREAL1:def 5;
+   then (h/.i)`1=(h/.(i+1))`1 by SPPOL_1:37;
+   then A8:p`1=(h/.(i+1))`1 & p`1=(h/.i)`1 by A5,GOBOARD7:5;
+     now per cases;
+   case (h/.i)`2>=(h/.(i+1))`2;
+     then A9: (h/.i)`2 >= p`2 & p`2 >= (h/.(i+1))`2
+                    by A5,TOPREAL1:10;
+       (GoB h)*(len GoB h,i1)`2>=(h/.i)`2
+       by A1,A2,A3,A5,A6,A8,Th46;
+    hence (GoB h)*(len GoB h,i1)`2>=p`2 by A9,AXIOMS:22;
+   case (h/.i)`2<(h/.(i+1))`2;
+     then A10: (h/.(i+1))`2>=p`2 & p`2>=(h/.i)`2
+                    by A5,TOPREAL1:10;
+       (GoB h)*(len GoB h,i1)`2>=(h/.(i+1))`2
+       by A1,A2,A3,A5,A7,A8,Th46;
+    hence (GoB h)*(len GoB h,i1)`2>=p`2 by A10,AXIOMS:22;
+   end;
+   hence (GoB h)*(len GoB h,i1)`2>=p`2;
+  case LSeg(h,i) is horizontal;
+   then LSeg(h/.i,h/.(i+1)) is horizontal by A5,TOPREAL1:def 5;
+   then (h/.i)`2=(h/.(i+1))`2 by SPPOL_1:36;
+   then A11:p`2=(h/.(i+1))`2 & p`2=(h/.i)`2 by A5,GOBOARD7:6;
+     now per cases;
+   case (h/.i)`1>=(h/.(i+1))`1;
+     then A12:(h/.i)`1>=((GoB h)*(len GoB h,1))`1 by A2,A5,TOPREAL1:9;
+       (h/.i)`1<=((GoB h)*(len GoB h,1))`1 by A4,A5,A6,Th7;
+     then (h/.i)`1=((GoB h)*(len GoB h,1))`1 by A12,AXIOMS:21;
+    hence (GoB h)*(len GoB h,i1)`2>=p`2
+      by A1,A3,A5,A6,A11,Th46;
+   case (h/.i)`1<(h/.(i+1))`1;
+     then A13:(h/.(i+1))`1>=((GoB h)*(len GoB h,1))`1 by A2,A5,TOPREAL1:9;
+       (h/.(i+1))`1<=((GoB h)*(len GoB h,1))`1 by A4,A5,A7,Th7;
+     then (h/.(i+1))`1=((GoB h)*(len GoB h,1))`1 by A13,AXIOMS:21;
+    hence (GoB h)*(len GoB h,i1)`2>=p`2
+      by A1,A3,A5,A7,A11,Th46;
+   end;
+   hence (GoB h)*(len GoB h,i1)`2>=p`2;
+  end;
+ hence (GoB h)*(len GoB h,i1)`2>=p`2;
+end;
+
+Lm5:
+ for p being Point of TOP-REAL 2,
+  Y being non empty finite Subset of NAT,
+  h st p`2=S-bound L~h & p in L~h
+  & Y={j:[j,1] in Indices GoB h & ex i st i in dom h &
+               h/.i=(GoB h)*(j,1)} & i1=min Y
+ holds (GoB h)*(i1,1)`1<=p`1
+proof let p be Point of TOP-REAL 2,Y be
+  non empty finite Subset of NAT,h;assume A1:
+  p`2=S-bound L~h & p in L~h
+  & Y={j:[j,1] in Indices GoB h & ex i st i in dom h &
+               h/.i=(GoB h)*(j,1)} & i1=min Y;
+  then A2: p`2=((GoB h)*(1,1))`2 by Th40;
+ consider i such that
+ A3:1<=i & i+1<=len h & p in LSeg(h/.i,h/.(i+1)) by A1,SPPOL_2:14;
+   i<=i+1 by NAT_1:29;
+ then A4:i<=len h by A3,AXIOMS:22;
+A5: 1 <= len GoB h & 1 <= width GoB h by GOBOARD7:34,35;
+ A6:1<=i+1 by A3,SPPOL_1:5;
+   now per cases by SPPOL_1:41;
+ case LSeg(h,i) is horizontal;
+   then LSeg(h/.i,h/.(i+1)) is horizontal by A3,TOPREAL1:def 5;
+   then (h/.i)`2=(h/.(i+1))`2 by SPPOL_1:36;
+   then A7:p`2=(h/.(i+1))`2 & p`2=(h/.i)`2 by A3,GOBOARD7:6;
+     now per cases;
+   case (h/.i)`1<=(h/.(i+1))`1;
+     then A8: (h/.i)`1<=p`1 & p`1<=(h/.(i+1))`1 by A3,TOPREAL1:9;
+       (GoB h)*(i1,1)`1<=(h/.i)`1 by A1,A2,A3,A4,A5,A7,Th44;
+    hence (GoB h)*(i1,1)`1<=p`1 by A8,AXIOMS:22;
+   case (h/.i)`1>(h/.(i+1))`1;
+     then A9: (h/.(i+1))`1<=p`1 & p`1<=(h/.i)`1 by A3,TOPREAL1:9;
+       (GoB h)*(i1,1)`1<=(h/.(i+1))`1 by A1,A2,A3,A5,A6,A7,Th44;
+    hence (GoB h)*(i1,1)`1<=p`1 by A9,AXIOMS:22;
+   end;
+   hence (GoB h)*(i1,1)`1<=p`1;
+  case LSeg(h,i) is vertical;
+   then LSeg(h/.i,h/.(i+1)) is vertical by A3,TOPREAL1:def 5;
+   then (h/.i)`1=(h/.(i+1))`1 by SPPOL_1:37;
+   then A10:p`1=(h/.(i+1))`1 & p`1=(h/.i)`1 by A3,GOBOARD7:5;
+     now per cases;
+   case (h/.i)`2<=(h/.(i+1))`2;
+     then A11:(h/.i)`2<=((GoB h)*(1,1))`2 by A2,A3,TOPREAL1:10;
+       (h/.i)`2>=((GoB h)*(1,1))`2 by A3,A4,A5,Th8;
+     then (h/.i)`2=((GoB h)*(1,1))`2 by A11,AXIOMS:21;
+    hence (GoB h)*(i1,1)`1<=p`1 by A1,A3,A4,A5,A10,Th44;
+   case (h/.i)`2>(h/.(i+1))`2;
+     then A12:(h/.(i+1))`2<=((GoB h)*(1,1))`2 by A2,A3,TOPREAL1:10;
+       (h/.(i+1))`2>=((GoB h)*(1,1))`2 by A3,A5,A6,Th8;
+     then (h/.(i+1))`2=((GoB h)*(1,1))`2 by A12,AXIOMS:21;
+    hence (GoB h)*(i1,1)`1<=p`1 by A1,A3,A5,A6,A10,Th44;
+   end;
+   hence (GoB h)*(i1,1)`1<=p`1;
+  end;
+ hence (GoB h)*(i1,1)`1<=p`1;
+end;
+
+Lm6:
+ for p being Point of TOP-REAL 2,
+  Y being non empty finite Subset of NAT,
+  h st p`2=N-bound L~h & p in L~h
+  & Y={j:[j,width GoB h] in Indices GoB h & ex i st i in dom h &
+               h/.i=(GoB h)*(j,width GoB h)} & i1=min Y
+ holds (GoB h)*(i1,width GoB h)`1<=p`1
+proof let p be Point of TOP-REAL 2,Y be
+  non empty finite Subset of NAT,h;assume A1:
+  p`2=N-bound L~h & p in L~h
+  & Y={j:[j,width GoB h] in Indices GoB h & ex i st i in dom h &
+               h/.i=(GoB h)*(j,width GoB h)} & i1=min Y;
+  then A2: p`2=((GoB h)*(1,width GoB h))`2 by Th42;
+ set I = width GoB h;
+A3: 1 <= I by GOBOARD7:35;
+ consider i such that
+ A4:1<=i & i+1<=len h & p in LSeg(h/.i,h/.(i+1)) by A1,SPPOL_2:14;
+   i<=i+1 by NAT_1:29;
+ then A5:i<=len h by A4,AXIOMS:22;
+ A6:1<=i+1 by A4,SPPOL_1:5;
+   now per cases by SPPOL_1:41;
+ case LSeg(h,i) is horizontal;
+   then LSeg(h/.i,h/.(i+1)) is horizontal by A4,TOPREAL1:def 5;
+   then (h/.i)`2=(h/.(i+1))`2 by SPPOL_1:36;
+   then A7:p`2=(h/.(i+1))`2 & p`2=(h/.i)`2 by A4,GOBOARD7:6;
+     now per cases;
+   case (h/.i)`1<=(h/.(i+1))`1;
+     then A8: (h/.i)`1<=p`1 & p`1<=(h/.(i+1))`1 by A4,TOPREAL1:9;
+       (GoB h)*(i1,I)`1<=(h/.i)`1 by A1,A2,A3,A4,A5,A7,Th44;
+    hence (GoB h)*(i1,I)`1<=p`1 by A8,AXIOMS:22;
+   case (h/.i)`1>(h/.(i+1))`1;
+     then A9: (h/.(i+1))`1<=p`1 & p`1<=(h/.i)`1 by A4,TOPREAL1:9;
+       (GoB h)*(i1,I)`1<=(h/.(i+1))`1 by A1,A2,A3,A4,A6,A7,Th44;
+    hence (GoB h)*(i1,I)`1<=p`1 by A9,AXIOMS:22;
+   end;
+   hence (GoB h)*(i1,I)`1<=p`1;
+  case LSeg(h,i) is vertical;
+   then LSeg(h/.i,h/.(i+1)) is vertical by A4,TOPREAL1:def 5;
+   then (h/.i)`1=(h/.(i+1))`1 by SPPOL_1:37;
+   then A10:p`1=(h/.(i+1))`1 & p`1=(h/.i)`1 by A4,GOBOARD7:5;
+A11: 1 <= len GoB h & 1 <= width GoB h by GOBOARD7:34,35;
+     now per cases;
+   case (h/.i)`2>=(h/.(i+1))`2;
+     then A12:(h/.i)`2>=((GoB h)*(1,I))`2 by A2,A4,TOPREAL1:10;
+       (h/.i)`2<=((GoB h)*(1,I))`2 by A4,A5,A11,Th8;
+     then (h/.i)`2=((GoB h)*(1,I))`2 by A12,AXIOMS:21;
+    hence (GoB h)*(i1,I)`1<=p`1 by A1,A3,A4,A5,A10,Th44;
+   case (h/.i)`2<(h/.(i+1))`2;
+     then A13:(h/.(i+1))`2>=((GoB h)*(1,I))`2 by A2,A4,TOPREAL1:10;
+       (h/.(i+1))`2 <= ((GoB h)*(1,I))`2 by A4,A6,A11,Th8;
+     then (h/.(i+1))`2=((GoB h)*(1,I))`2 by A13,AXIOMS:21;
+    hence (GoB h)*(i1,width GoB h)`1<=p`1 by A1,A3,A4,A6,A10,Th44;
+   end;
+   hence (GoB h)*(i1,width GoB h)`1<=p`1;
+  end;
+ hence (GoB h)*(i1,width GoB h)`1<=p`1;
+end;
+
+Lm7:
+  for p being Point of TOP-REAL 2,
+      Y being non empty finite Subset of NAT st p`2=S-bound L~h & p in L~h
+  & Y={j:[j,1] in Indices GoB h & ex i st i in dom h &
+               h/.i=(GoB h)*(j,1)} & i1=max Y
+ holds (GoB h)*(i1,1)`1>=p`1
+proof let p be Point of TOP-REAL 2,Y be
+  non empty finite Subset of NAT;assume A1:
+  p`2=S-bound L~h & p in L~h
+  & Y={j:[j,1] in Indices GoB h & ex i st i in dom h &
+               h/.i=(GoB h)*(j,1)} & i1=max Y;
+  then A2: p`2=((GoB h)*(1,1))`2 by Th40;
+ consider i such that
+ A3:1<=i & i+1<=len h & p in LSeg(h/.i,h/.(i+1)) by A1,SPPOL_2:14;
+   i<=i+1 by NAT_1:29;
+ then A4:i<=len h by A3,AXIOMS:22;
+A5: 1 <= len GoB h & 1 <= width GoB h by GOBOARD7:34,35;
+ A6:1<=i+1 by A3,SPPOL_1:5;
+   now per cases by SPPOL_1:41;
+ case LSeg(h,i) is horizontal;
+   then LSeg(h/.i,h/.(i+1)) is horizontal by A3,TOPREAL1:def 5;
+   then (h/.i)`2=(h/.(i+1))`2 by SPPOL_1:36;
+   then A7:p`2=(h/.(i+1))`2 & p`2=(h/.i)`2 by A3,GOBOARD7:6;
+     now per cases;
+   case (h/.i)`1>=(h/.(i+1))`1;
+     then A8: (h/.i)`1>=p`1 & p`1>=(h/.(i+1))`1 by A3,TOPREAL1:9;
+       (GoB h)*(i1,1)`1>=(h/.i)`1 by A1,A2,A3,A4,A5,A7,Th45;
+    hence (GoB h)*(i1,1)`1>=p`1 by A8,AXIOMS:22;
+   case (h/.i)`1<(h/.(i+1))`1;
+     then A9: (h/.(i+1))`1>=p`1 & p`1>=(h/.i)`1 by A3,TOPREAL1:9;
+       (GoB h)*(i1,1)`1>=(h/.(i+1))`1 by A1,A2,A3,A5,A6,A7,Th45;
+    hence (GoB h)*(i1,1)`1>=p`1 by A9,AXIOMS:22;
+   end;
+   hence (GoB h)*(i1,1)`1>=p`1;
+  case LSeg(h,i) is vertical;
+   then LSeg(h/.i,h/.(i+1)) is vertical by A3,TOPREAL1:def 5;
+   then (h/.i)`1=(h/.(i+1))`1 by SPPOL_1:37;
+   then A10:p`1=(h/.(i+1))`1 & p`1=(h/.i)`1 by A3,GOBOARD7:5;
+     now per cases;
+   case (h/.i)`2<=(h/.(i+1))`2;
+     then A11:(h/.i)`2<=((GoB h)*(1,1))`2 by A2,A3,TOPREAL1:10;
+       (h/.i)`2>=((GoB h)*(1,1))`2 by A3,A4,A5,Th8;
+     then (h/.i)`2=((GoB h)*(1,1))`2 by A11,AXIOMS:21;
+    hence (GoB h)*(i1,1)`1>=p`1 by A1,A3,A4,A5,A10,Th45;
+   case (h/.i)`2>(h/.(i+1))`2;
+     then A12:(h/.(i+1))`2<=((GoB h)*(1,1))`2 by A2,A3,TOPREAL1:10;
+       (h/.(i+1))`2>=((GoB h)*(1,1))`2 by A3,A5,A6,Th8;
+     then (h/.(i+1))`2=((GoB h)*(1,1))`2 by A12,AXIOMS:21;
+    hence (GoB h)*(i1,1)`1>=p`1 by A1,A3,A5,A6,A10,Th45;
+   end;
+   hence (GoB h)*(i1,1)`1>=p`1;
+  end;
+ hence (GoB h)*(i1,1)`1>=p`1;
+end;
+
+Lm8:
+  for p being Point of TOP-REAL 2,
+      Y being non empty finite Subset of NAT st p`2=N-bound L~h & p in L~h
+  & Y={j:[j,width GoB h] in Indices GoB h & ex i st i in dom h &
+               h/.i=(GoB h)*(j,width GoB h)} & i1=max Y
+ holds (GoB h)*(i1,width GoB h)`1>=p`1
+proof let p be Point of TOP-REAL 2,Y be
+  non empty finite Subset of NAT;assume A1:
+  p`2=N-bound L~h & p in L~h
+  & Y={j:[j,width GoB h] in Indices GoB h & ex i st i in dom h &
+               h/.i=(GoB h)*(j,width GoB h)} & i1=max Y;
+  then A2: p`2=((GoB h)*(1,width GoB h))`2 by Th42;
+ consider i such that
+ A3:1<=i & i+1<=len h & p in LSeg(h/.i,h/.(i+1)) by A1,SPPOL_2:14;
+   i<=i+1 by NAT_1:29;
+ then A4:i<=len h by A3,AXIOMS:22;
+ A5:1<=i+1 by A3,SPPOL_1:5;
+   now per cases by SPPOL_1:41;
+ case LSeg(h,i) is horizontal;
+   then LSeg(h/.i,h/.(i+1)) is horizontal by A3,TOPREAL1:def 5;
+   then (h/.i)`2=(h/.(i+1))`2 by SPPOL_1:36;
+   then A6:p`2=(h/.(i+1))`2 & p`2=(h/.i)`2 by A3,GOBOARD7:6;
+     now per cases;
+   case (h/.i)`1>=(h/.(i+1))`1;
+     then A7: (h/.i)`1>=p`1 & p`1>=(h/.(i+1))`1 by A3,TOPREAL1:9;
+        1 <= width GoB h by GOBOARD7:35;
+     then (GoB h)*(i1,width GoB h)`1>=(h/.i)`1 by A1,A2,A3,A4,A6,Th45;
+    hence (GoB h)*(i1,width GoB h)`1>=p`1 by A7,AXIOMS:22;
+   case (h/.i)`1<(h/.(i+1))`1;
+     then A8: (h/.(i+1))`1>=p`1 & p`1>=(h/.i)`1 by A3,TOPREAL1:9;
+        1 <= width GoB h by GOBOARD7:35;
+     then (GoB h)*(i1,width GoB h)`1>=(h/.(i+1))`1 by A1,A2,A3,A5,A6,Th45;
+    hence (GoB h)*(i1,width GoB h)`1>=p`1 by A8,AXIOMS:22;
+   end;
+   hence (GoB h)*(i1,width GoB h)`1>=p`1;
+  case LSeg(h,i) is vertical;
+   then LSeg(h/.i,h/.(i+1)) is vertical by A3,TOPREAL1:def 5;
+   then (h/.i)`1=(h/.(i+1))`1 by SPPOL_1:37;
+   then A9:p`1=(h/.(i+1))`1 & p`1=(h/.i)`1 by A3,GOBOARD7:5;
+A10: 1 <= len GoB h & 1 <= width GoB h by GOBOARD7:34,35;
+     now per cases;
+   case (h/.i)`2>=(h/.(i+1))`2;
+     then A11:(h/.i)`2>=((GoB h)*(1,width GoB h))`2 by A2,A3,TOPREAL1:10;
+A12:   1 <= width GoB h by GOBOARD7:35;
+       (h/.i)`2<=((GoB h)*(1,width GoB h))`2 by A3,A4,A10,Th8;
+     then (h/.i)`2=((GoB h)*(1,width GoB h))`2 by A11,AXIOMS:21;
+    hence (GoB h)*(i1,width GoB h)`1>=p`1 by A1,A3,A4,A9,A12,Th45;
+   case (h/.i)`2 < (h/.(i+1))`2;
+     then A13:(h/.(i+1))`2>=((GoB h)*(1,width GoB h))`2 by A2,A3,TOPREAL1:10;
+A14:   1 <= width GoB h by GOBOARD7:35;
+       (h/.(i+1))`2<=((GoB h)*(1,width GoB h))`2 by A3,A5,A10,Th8;
+     then (h/.(i+1))`2=((GoB h)*(1,width GoB h))`2 by A13,AXIOMS:21;
+    hence (GoB h)*(i1,width GoB h)`1>=p`1 by A1,A3,A5,A9,A14,Th45;
+   end;
+   hence (GoB h)*(i1,width GoB h)`1>=p`1;
+  end;
+ hence (GoB h)*(i1,width GoB h)`1>=p`1;
+end;
+
+Lm9:len h >= 2
+proof
+ len h > 4 by GOBOARD7:36;
+  hence thesis by AXIOMS:22;
+end;
+
+begin :: Coordinates of the special circular sequences bounding boxes
+
+definition let g be non constant standard special_circular_sequence;
+  func i_s_w g -> Nat means :Def1:
+  [1,it] in Indices GoB g & (GoB g)*(1,it) = W-min L~g;
+ existence
+  proof
+    defpred P[Nat] means
+    [1,$1] in Indices GoB g & ex i st i in dom g &
+               g/.i=(GoB g)*(1,$1);
+    set Y={j:P[j]};
+A1:    1 <= len GoB g by GOBOARD7:34;
+      then consider i,j such that
+A2:       i in dom g & [1,j] in Indices GoB g &
+         g/.i = (GoB g)*(1,j) by Th9;
+A3:    j in Y by A2;
+A4:    Y c= Seg width GoB g
+      proof let y be set;
+        assume y in Y;
+         then ex j st y=j & [1,j] in Indices GoB g &
+               ex i st i in dom g & g/.i = (GoB g)*(1,j);
+         then [1,y] in [: dom GoB g, Seg width GoB g :] by MATRIX_1:def 5;
+        hence y in Seg width GoB g by ZFMISC_1:106;
+       end;
+        Y is Subset of NAT from SubsetD;
+      then reconsider Y as non empty finite Subset of NAT by A3,A4,FINSET_1:13;
+      set i1 = min Y;
+        i1 in Y by CQC_SIM1:def 8;
+      then consider j such that A5:j=i1 & ([1,j] in Indices GoB g
+      & ex i st i in dom g & g/.i=(GoB g)*(1,j));
+      consider i such that A6: i in dom g & g/.i=(GoB g)*(1,j) by A5;
+        1 <= 1 & 1 <= len GoB g
+      & 1 <= i1 & i1 <= width (GoB g) by A5,GOBOARD5:1;
+      then A7:(GoB g)*(1,i1)`1=(GoB g)*(1,1)`1 by GOBOARD5:3;
+      then A8:(GoB g)*(1,i1)`1=W-bound L~g by Th39;
+          {q`2:q`1=W-bound L~g & q in L~g} c= REAL
+         proof
+          let X be set;
+          assume X in {q`2:q`1=W-bound(L~g) & q in L~g};
+          then ex q st X=q`2 & q`1=W-bound L~g & q in L~g;
+          hence thesis;
+         end;
+        then reconsider B={q`2:q`1=W-bound L~g & q in L~g} as Subset of REAL;
+        set s1=(GoB g)*(1,1)`2;
+          for r be real number st r in B holds s1<=r
+          proof let r be real number;assume r in B;
+           then consider q such that A9: r=q`2 & q`1 = W-bound L~g & q in L~g;
+          thus thesis by A1,A9,Th35;
+          end;
+        then A10:B is bounded_below by SEQ_4:def 2;
+        A11:1<=i & i<=len g by A6,FINSEQ_3:27;
+          now per cases by A11,REAL_1:def 5;
+        case i<len g; then i+1<=len g by NAT_1:38;
+          then g/.i in LSeg(g,i) by A11,TOPREAL1:27;
+         hence (GoB g)*(1,i1) in L~g by A5,A6,SPPOL_2:17;
+        case A12:i=len g;
+            len g >= 2 by Lm9;
+          then g/.i in LSeg(g,i-'1) by A12,Th3;
+         hence (GoB g)*(1,i1) in L~g by A5,A6,SPPOL_2:17;
+        end;
+        then (GoB g)*(1,i1)`1=W-bound(L~g) & (GoB g)*(1,i1) in L~g by A7,Th39;
+        then A13:(GoB g)*(1,i1)`2 in {q`2:q`1=W-bound(L~g) & q in L~g};
+        then A14:lower_bound B <=(GoB g)*(1,i1)`2 by A10,SEQ_4:def 5;
+          for r being real number st r in B holds r>= (GoB g)*(1,i1)`2
+        proof let r be real number;assume r in B;
+          then consider q such that A15:r=q`2 & (q`1=W-bound(L~g) & q in L~g);
+         thus r>= (GoB g)*(1,i1)`2 by A15,Lm1;
+        end;
+        then lower_bound B >=(GoB g)*(1,i1)`2 by A13,PSCOMP_1:8;
+then A16:   (GoB g)*(1,i1)`2=lower_bound B by A14,AXIOMS:21
+                     .= inf (proj2 || W-most L~g) by Th21;
+        (GoB g)*(1,i1)=|[(GoB g)*(1,i1)`1,(GoB g)*(1,i1)`2]|
+                                       by EUCLID:57;
+       then (GoB g)*(1,i1)=W-min(L~g) by A8,A16,PSCOMP_1:def 42;
+      hence thesis by A5;
+  end;
+  uniqueness by GOBOARD1:21;
+
+  func i_n_w g -> Nat means :Def2:
+  [1,it] in Indices GoB g & (GoB g)*(1,it) = W-max L~g;
+ existence
+  proof
+    defpred P[Nat] means
+    [1,$1] in Indices GoB g & ex i st i in dom g &
+               g/.i=(GoB g)*(1,$1);
+    set Y={j:P[j]};
+A17:   1 <= len GoB g by GOBOARD7:34;
+      then consider i,j such that
+A18:       i in dom g & [1,j] in Indices GoB g &
+         g/.i = (GoB g)*(1,j) by Th9;
+A19:    j in Y by A18;
+A20:    Y c= Seg width GoB g
+      proof let y be set;
+        assume y in Y;
+         then ex j st y=j & [1,j] in Indices GoB g &
+               ex i st i in dom g & g/.i = (GoB g)*(1,j);
+         then [1,y] in [: dom GoB g, Seg width GoB g :] by MATRIX_1:def 5;
+        hence y in Seg width GoB g by ZFMISC_1:106;
+       end;
+        Y is Subset of NAT from SubsetD;
+      then reconsider Y as non empty finite Subset of NAT by A19,A20,FINSET_1:
+13;
+      reconsider i1 = max Y as Nat by ORDINAL2:def 21;
+        i1 in Y by PRE_CIRC:def 1;
+      then consider j such that A21:j=i1 & [1,j] in Indices GoB g
+      & ex i st i in dom g & g/.i=(GoB g)*(1,j);
+      consider i such that A22: i in dom g & g/.i=(GoB g)*(1,j) by A21;
+        1 <= 1 & 1 <= len GoB g
+      & 1 <= i1 & i1 <= width GoB g by A21,GOBOARD5:1;
+      then A23:(GoB g)*(1,i1)`1=(GoB g)*(1,1)`1 by GOBOARD5:3;
+      then A24:(GoB g)*(1,i1)`1=W-bound L~g by Th39;
+          {q`2:q`1=W-bound L~g & q in L~g} c= REAL
+         proof
+          let X be set;
+          assume X in {q`2:q`1=W-bound(L~g) & q in L~g};
+          then ex q st X=q`2 & q`1=W-bound L~g & q in L~g;
+          hence thesis;
+         end;
+        then reconsider B={q`2:q`1=W-bound L~g & q in L~g} as Subset of REAL;
+        set s1 = (GoB g)*(1,width GoB g)`2;
+          for r be real number st r in B holds s1 >= r
+          proof let r be real number; assume r in B;
+           then consider q such that A25: r=q`2 & q`1 = W-bound L~g & q in L~g;
+          thus thesis by A17,A25,Th36;
+          end;
+        then A26:B is bounded_above by SEQ_4:def 1;
+        A27:1<=i & i<=len g by A22,FINSEQ_3:27;
+          now per cases by A27,REAL_1:def 5;
+        case i<len g; then i+1<=len g by NAT_1:38;
+          then g/.i in LSeg(g,i) by A27,TOPREAL1:27;
+         hence (GoB g)*(1,i1) in L~g by A21,A22,SPPOL_2:17;
+        case A28:i=len g;
+            len g >= 2 by Lm9;
+          then g/.i in LSeg(g,i-'1) by A28,Th3;
+         hence (GoB g)*(1,i1) in L~g by A21,A22,SPPOL_2:17;
+        end;
+        then (GoB g)*(1,i1)`1=W-bound L~g & (GoB g)*(1,i1) in L~g by A23,Th39;
+        then A29:(GoB g)*(1,i1)`2 in {q`2:q`1=W-bound L~g & q in L~g};
+        then A30:upper_bound B >= (GoB g)*(1,i1)`2 by A26,SEQ_4:def 4;
+          for r being real number st r in B holds r <= (GoB g)*(1,i1)`2
+        proof let r be real number;assume r in B;
+          then consider q such that A31:r = q`2 & q`1 = W-bound L~g & q in L~g;
+         thus r <= (GoB g)*(1,i1)`2 by A31,Lm2;
+        end;
+        then upper_bound B <= (GoB g)*(1,i1)`2 by A29,PSCOMP_1:10;
+then A32:   (GoB g)*(1,i1)`2 = upper_bound B by A30,AXIOMS:21
+                      .= sup (proj2 || W-most L~g) by Th22;
+        (GoB g)*(1,i1)=|[(GoB g)*(1,i1)`1,(GoB g)*(1,i1)`2]|
+                                       by EUCLID:57;
+       then (GoB g)*(1,i1)=W-max L~g by A24,A32,PSCOMP_1:def 43;
+      hence thesis by A21;
+  end;
+  uniqueness by GOBOARD1:21;
+
+  func i_s_e g -> Nat means :Def3:
+  [len GoB g,it] in Indices GoB g & (GoB g)*(len GoB g,it) = E-min L~g;
+ existence
+  proof
+    defpred P[Nat] means
+    [len GoB g,$1] in Indices GoB g & ex i st i in dom g &
+               g/.i=(GoB g)*(len GoB g,$1);
+    set Y={j:P[j]};
+A33:    1 <= len GoB g by GOBOARD7:34;
+      then consider i,j such that
+A34:       i in dom g & [len GoB g,j] in Indices GoB g &
+         g/.i = (GoB g)*(len GoB g,j) by Th9;
+A35:    j in Y by A34;
+A36:    Y c= Seg width GoB g
+      proof let y be set;
+        assume y in Y;
+         then ex j st y=j & [len GoB g,j] in Indices GoB g &
+               ex i st i in dom g & g/.i = (GoB g)*(len GoB g,j);
+         then [len GoB g,y] in [: dom GoB g, Seg width GoB g :]
+           by MATRIX_1:def 5;
+        hence y in Seg width GoB g by ZFMISC_1:106;
+       end;
+        Y is Subset of NAT from SubsetD;
+      then reconsider Y as non empty finite Subset of NAT by A35,A36,FINSET_1:
+13;
+      set i1 = min Y;
+        i1 in Y by CQC_SIM1:def 8;
+      then consider j such that
+A37:   j=i1 & [len GoB g,j] in Indices GoB g
+      & ex i st i in dom g & g/.i=(GoB g)*(len GoB g,j);
+      consider i such that
+A38:   i in dom g & g/.i=(GoB g)*(len GoB g,j) by A37;
+        1 <= 1 & 1 <= len GoB g
+      & 1 <= i1 & i1 <= width GoB g by A37,GOBOARD5:1;
+      then A39:(GoB g)*(len GoB g,i1)`1=(GoB g)*(len GoB g,1)`1 by GOBOARD5:3;
+      then A40:(GoB g)*(len GoB g,i1)`1=E-bound L~g by Th41;
+          {q`2:q`1=E-bound L~g & q in L~g} c= REAL
+         proof
+          let X be set;
+          assume X in {q`2:q`1=E-bound L~g & q in L~g};
+          then ex q st X=q`2 & q`1=E-bound L~g & q in L~g;
+          hence thesis;
+         end;
+        then reconsider B={q`2:q`1=E-bound L~g & q in L~g} as Subset of REAL;
+        set s1=(GoB g)*(len GoB g,1)`2;
+          for r be real number st r in B holds s1<=r
+          proof let r be real number;assume r in B;
+           then consider q such that A41: r=q`2 & q`1 = E-bound L~g & q in L~g;
+          thus thesis by A33,A41,Th35;
+          end;
+        then A42:B is bounded_below by SEQ_4:def 2;
+        A43:1<=i & i<=len g by A38,FINSEQ_3:27;
+          now per cases by A43,REAL_1:def 5;
+        case i<len g;
+          then i+1<=len g by NAT_1:38;
+          then g/.i in LSeg(g,i) by A43,TOPREAL1:27;
+         hence (GoB g)*(len GoB g,i1) in L~g by A37,A38,SPPOL_2:17;
+        case A44:i=len g;
+            len g >= 2 by Lm9;
+          then g/.i in LSeg(g,i-'1) by A44,Th3;
+         hence (GoB g)*(len GoB g,i1) in L~g by A37,A38,SPPOL_2:17;
+        end;
+        then (GoB g)*(len GoB g,i1)`1=E-bound L~g &
+          (GoB g)*(len GoB g,i1) in L~g by A39,Th41;
+        then A45:(GoB g)*(len GoB g,i1)`2 in {q`2:q`1=E-bound L~g & q in L~g};
+        then A46:lower_bound B <=(GoB g)*(len GoB g,i1)`2 by A42,SEQ_4:def 5;
+        for r be real number st r in B holds r>= (GoB g)*(len GoB g,i1)`2
+        proof let r be real number;assume r in B;
+          then consider q such that A47:r=q`2 & q`1=E-bound L~g & q in L~g;
+         thus r >= (GoB g)*(len GoB g,i1)`2
+           by A47,Lm3;
+        end;
+        then lower_bound B >= (GoB g)*(len GoB g,i1)`2 by A45,PSCOMP_1:8;
+then A48:   (GoB g)*(len GoB g,i1)`2=lower_bound B by A46,AXIOMS:21
+                     .= inf (proj2 || E-most L~g) by Th23;
+        (GoB g)*(len GoB g,i1)=|[(GoB g)*(len GoB g,i1)`1,
+         (GoB g)*(len GoB g,i1)`2]| by EUCLID:57;
+       then (GoB g)*(len GoB g,i1)=E-min(L~g) by A40,A48,PSCOMP_1:def 47;
+      hence thesis by A37;
+  end;
+  uniqueness by GOBOARD1:21;
+
+  func i_n_e g -> Nat means :Def4:
+  [len GoB g,it] in Indices GoB g & (GoB g)*(len GoB g,it) = E-max L~g;
+ existence
+  proof
+    defpred P[Nat] means [len GoB g,$1] in Indices GoB g & ex i st i in dom g &
+               g/.i=(GoB g)*(len GoB g,$1);
+    set Y={j:P[j]};
+        0 <> len GoB g by GOBOARD1:def 5;
+      then 1 <= len GoB g by RLVECT_1:99;
+      then consider i,j such that
+A49:       i in dom g & [len GoB g,j] in Indices GoB g &
+         g/.i = (GoB g)*(len GoB g,j) by Th9;
+A50:    j in Y by A49;
+A51:    Y c= Seg width GoB g
+      proof let y be set;
+        assume y in Y;
+         then ex j st y=j & [len GoB g,j] in Indices GoB g &
+               ex i st i in dom g & g/.i = (GoB g)*(len GoB g,j);
+         then [len GoB g,y] in [: dom GoB g, Seg width GoB g :]
+          by MATRIX_1:def 5;
+        hence y in Seg width GoB g by ZFMISC_1:106;
+       end;
+        Y is Subset of NAT from SubsetD;
+      then reconsider Y as non empty finite Subset of NAT by A50,A51,FINSET_1:
+13;
+      reconsider i1 = max Y as Nat by ORDINAL2:def 21;
+        i1 in Y by PRE_CIRC:def 1;
+      then consider j such that A52:j=i1 & [len GoB g,j] in Indices GoB g
+      & ex i st i in dom g & g/.i=(GoB g)*(len GoB g,j);
+      consider i such that
+      A53: i in dom g & g/.i=(GoB g)*(len GoB g,j) by A52;
+        1 <= 1 & 1 <= len GoB g
+      & 1 <= i1 & i1 <= width GoB g by A52,GOBOARD5:1;
+      then A54:(GoB g)*(len GoB g,i1)`1=(GoB g)*(len GoB g,1)`1 by GOBOARD5:3;
+      then A55:(GoB g)*(len GoB g,i1)`1 = E-bound L~g by Th41;
+          {q`2:q`1=E-bound L~g & q in L~g} c= REAL
+         proof
+          let X be set;
+          assume X in {q`2:q`1=E-bound(L~g) & q in L~g};
+          then ex q st X=q`2 & q`1=E-bound L~g & q in L~g;
+          hence thesis;
+         end;
+        then reconsider B={q`2:q`1=E-bound L~g & q in L~g} as Subset of REAL;
+        set s1 = (GoB g)*(len GoB g,width GoB g)`2;
+          for r be real number st r in B holds s1 >= r
+          proof let r be real number; assume r in B;
+           then consider q such that A56: r=q`2 & q`1 = E-bound L~g & q in L~g;
+            1 <= len GoB g by GOBOARD7:34;
+          hence thesis by A56,Th36;
+          end;
+        then A57:B is bounded_above by SEQ_4:def 1;
+        A58:1<=i & i<=len g by A53,FINSEQ_3:27;
+          now per cases by A58,REAL_1:def 5;
+        case i<len g; then i+1<=len g by NAT_1:38;
+          then g/.i in LSeg(g,i) by A58,TOPREAL1:27;
+         hence (GoB g)*(len GoB g,i1) in L~g by A52,A53,SPPOL_2:17;
+        case A59:i=len g;
+            len g >= 2 by Lm9;
+          then g/.i in LSeg(g,i-'1) by A59,Th3;
+         hence (GoB g)*(len GoB g,i1) in L~g by A52,A53,SPPOL_2:17;
+        end;
+        then (GoB g)*(len GoB g,i1)`1=E-bound L~g &
+          (GoB g)*(len GoB g,i1) in L~g by A54,Th41;
+        then A60:(GoB g)*(len GoB g,i1)`2 in {q`2:q`1=E-bound L~g & q in L~g};
+        then A61:upper_bound B >= (GoB g)*(len GoB g,i1)`2 by A57,SEQ_4:def 4;
+        for r being real number st r in B holds
+        r <= (GoB g)*(len GoB g,i1)`2
+        proof let r be real number;assume r in B;
+          then consider q such that A62:r = q`2 & q`1 = E-bound L~g & q in L~g;
+         thus r <= (GoB g)*(len GoB g,i1)`2 by A62,Lm4;
+        end;
+        then upper_bound B <= (GoB g)*(len GoB g,i1)`2 by A60,PSCOMP_1:10;
+then A63:   (GoB g)*(len GoB g,i1)`2 = upper_bound B by A61,AXIOMS:21
+                      .= sup (proj2 || E-most L~g) by Th24;
+        (GoB g)*(len GoB g,i1)=|[(GoB g)*(len GoB g,i1)`1,(GoB g)*
+      (len GoB g,i1)`2]| by EUCLID:57;
+       then (GoB g)*(len GoB g,i1)=E-max L~g by A55,A63,PSCOMP_1:def 46;
+      hence thesis by A52;
+  end;
+  uniqueness by GOBOARD1:21;
+
+  func i_w_s g -> Nat means :Def5:
+  [it, 1] in Indices GoB g & (GoB g)*(it,1) = S-min L~g;
+ existence
+  proof
+    defpred P[Nat] means
+    [$1,1] in Indices GoB g & ex i st i in dom g &
+               g/.i=(GoB g)*($1,1);
+    set Y={j:P[j]};
+A64:   1 <= width GoB g by GOBOARD7:35;
+      then consider i,j such that
+A65:       i in dom g & [j,1] in Indices GoB g &
+         g/.i = (GoB g)*(j,1) by Th10;
+A66:    j in Y by A65;
+A67:    Y c= dom GoB g
+      proof let y be set;
+        assume y in Y;
+         then ex j st y=j & [j,1] in Indices GoB g &
+               ex i st i in dom g & g/.i = (GoB g)*(j,1);
+         then [y,1] in [: dom GoB g, Seg width GoB g :] by MATRIX_1:def 5;
+        hence y in dom GoB g by ZFMISC_1:106;
+       end;
+        Y is Subset of NAT from SubsetD;
+      then reconsider Y as non empty finite Subset of NAT by A66,A67,FINSET_1:
+13;
+      set i1 = min Y;
+        i1 in Y by CQC_SIM1:def 8;
+      then consider j such that A68:j=i1 & [j,1] in Indices GoB g
+      & ex i st i in dom g & g/.i=(GoB g)*(j,1);
+      consider i such that A69: i in dom g & g/.i=(GoB g)*(j,1) by A68;
+        1 <= i1 & i1 <= len GoB g
+      & 1 <= 1 & 1 <= width GoB g by A68,GOBOARD5:1;
+      then A70:(GoB g)*(i1,1)`2=(GoB g)*(1,1)`2 by GOBOARD5:2;
+      then A71:(GoB g)*(i1,1)`2=S-bound L~g by Th40;
+          {q`1:q`2=S-bound L~g & q in L~g} c= REAL
+         proof
+          let X be set;
+          assume X in {q`1:q`2=S-bound L~g & q in L~g};
+          then ex q st X=q`1 & q`2=S-bound L~g & q in L~g;
+          hence thesis;
+         end;
+        then reconsider B={q`1:q`2=S-bound L~g & q in L~g} as Subset of REAL;
+        set s1=(GoB g)*(1,1)`1;
+          for r be real number st r in B holds s1<=r
+          proof let r be real number;assume r in B;
+           then consider q such that A72: r=q`1 & q`2 = S-bound L~g & q in L~g;
+          thus thesis by A64,A72,Th33;
+          end;
+        then A73:B is bounded_below by SEQ_4:def 2;
+        A74:1<=i & i<=len g by A69,FINSEQ_3:27;
+          now per cases by A74,REAL_1:def 5;
+        case i<len g; then i+1<=len g by NAT_1:38;
+          then g/.i in LSeg(g,i) by A74,TOPREAL1:27;
+         hence (GoB g)*(i1,1) in L~g by A68,A69,SPPOL_2:17;
+        case A75:i=len g;
+            len g >= 2 by Lm9;
+          then g/.i in LSeg(g,i-'1) by A75,Th3;
+         hence (GoB g)*(i1,1) in L~g by A68,A69,SPPOL_2:17;
+        end;
+        then (GoB g)*(i1,1)`2=S-bound L~g & (GoB g)*(i1,1) in L~g by A70,Th40;
+        then A76:(GoB g)*(i1,1)`1 in {q`1:q`2=S-bound L~g & q in L~g};
+        then A77:lower_bound B <=(GoB g)*(i1,1)`1 by A73,SEQ_4:def 5;
+        for r being real number st r in B holds r>= (GoB g)*(i1,1)`1
+        proof let r be real number;assume r in B;
+          then consider q such that A78:r=q`1 & q`2=S-bound L~g & q in L~g;
+         thus r >= (GoB g)*(i1,1)`1 by A78,Lm5;
+        end;
+        then lower_bound B >=(GoB g)*(i1,1)`1 by A76,PSCOMP_1:8;
+then A79:   (GoB g)*(i1,1)`1=lower_bound B by A77,AXIOMS:21
+                     .= inf (proj1 || S-most L~g) by Th26;
+        (GoB g)*(i1,1)=|[(GoB g)*(i1,1)`1,(GoB g)*(i1,1)`2]|
+                                       by EUCLID:57;
+       then (GoB g)*(i1,1)=S-min L~g by A71,A79,PSCOMP_1:def 49;
+      hence thesis by A68;
+  end;
+  uniqueness by GOBOARD1:21;
+
+  func i_e_s g -> Nat means :Def6:
+  [it, 1] in Indices GoB g & (GoB g)*(it,1) = S-max L~g;
+ existence
+  proof
+    defpred P[Nat] means
+    [$1,1] in Indices GoB g & ex i st i in dom g &
+               g/.i=(GoB g)*($1,1);
+    set Y={j:P[j]};
+        1 <= width GoB g by GOBOARD7:35;
+      then consider i,j such that
+A80:       i in dom g & [j,1] in Indices GoB g &
+         g/.i = (GoB g)*(j,1) by Th10;
+A81:    j in Y by A80;
+A82:    Y c= dom GoB g
+      proof let y be set;
+        assume y in Y;
+         then ex j st y=j & [j,1] in Indices GoB g &
+               ex i st i in dom g & g/.i = (GoB g)*(j,1);
+         then [y,1] in [: dom GoB g, Seg width GoB g :] by MATRIX_1:def 5;
+        hence y in dom GoB g by ZFMISC_1:106;
+       end;
+        Y is Subset of NAT from SubsetD;
+      then reconsider Y as non empty finite Subset of NAT by A81,A82,FINSET_1:
+13;
+      reconsider i1 = max Y as Nat by ORDINAL2:def 21;
+        i1 in Y by PRE_CIRC:def 1;
+      then consider j such that
+      A83:j=i1 & [j,1] in Indices GoB g
+      & ex i st i in dom g & g/.i=(GoB g)*(j,1);
+      consider i such that A84: i in dom g & g/.i=(GoB g)*(j,1) by A83;
+        1 <= i1 & i1 <= len GoB g
+      & 1 <= 1 & 1 <= width GoB g by A83,GOBOARD5:1;
+      then A85:(GoB g)*(i1,1)`2=(GoB g)*(1,1)`2 by GOBOARD5:2;
+      then A86:(GoB g)*(i1,1)`2 = S-bound L~g by Th40;
+          {q`1:q`2=S-bound L~g & q in L~g} c= REAL
+         proof
+          let X be set;
+          assume X in {q`1:q`2=S-bound L~g & q in L~g};
+          then ex q st X=q`1 & q`2=S-bound L~g & q in L~g;
+          hence thesis;
+         end;
+        then reconsider B={q`1:q`2 = S-bound L~g & q in L~g} as Subset of REAL;
+        set s1 = (GoB g)*(len GoB g,1)`1;
+          for r be real number st r in B holds s1 >= r
+          proof let r be real number; assume r in B;
+           then consider q such that A87: r=q`1 & q`2 = S-bound L~g & q in L~g;
+            1 <= width GoB g by GOBOARD7:35;
+          hence thesis by A87,Th34;
+          end;
+        then A88:B is bounded_above by SEQ_4:def 1;
+        A89:1<=i & i<=len g by A84,FINSEQ_3:27;
+          now per cases by A89,REAL_1:def 5;
+        case i<len g; then i+1<=len g by NAT_1:38;
+          then g/.i in LSeg(g,i) by A89,TOPREAL1:27;
+         hence (GoB g)*(i1,1) in L~g by A83,A84,SPPOL_2:17;
+        case A90:i=len g;
+            len g >= 2 by Lm9;
+          then g/.i in LSeg(g,i-'1) by A90,Th3;
+         hence (GoB g)*(i1,1) in L~g by A83,A84,SPPOL_2:17;
+        end;
+        then (GoB g)*(i1,1)`2=S-bound L~g &
+          (GoB g)*(i1,1) in L~g by A85,Th40;
+        then A91:(GoB g)*(i1,1)`1 in {q`1:q`2=S-bound L~g & q in L~g};
+        then A92:upper_bound B >= (GoB g)*(i1,1)`1 by A88,SEQ_4:def 4;
+        for r being real number st r in B holds r <= (GoB g)*(i1,1)`1
+        proof let r be real number;assume r in B;
+          then consider q such that A93:r = q`1 & q`2 = S-bound L~g & q in L~g;
+          thus r <= (GoB g)*(i1,1)`1 by A93,Lm7;
+        end;
+        then upper_bound B <= (GoB g)*(i1,1)`1 by A91,PSCOMP_1:10;
+then A94:   (GoB g)*(i1,1)`1 = upper_bound B by A92,AXIOMS:21
+                      .= sup (proj1 || S-most L~g) by Th27;
+        (GoB g)*(i1,1)=|[(GoB g)*(i1,1)`1,(GoB g)*(i1,1)`2]| by EUCLID:57;
+       then (GoB g)*(i1,1)=S-max L~g by A86,A94,PSCOMP_1:def 48;
+      hence thesis by A83;
+  end;
+  uniqueness by GOBOARD1:21;
+
+  func i_w_n g -> Nat means :Def7:
+  [it, width GoB g] in Indices GoB g & (GoB g)*(it,width GoB g) = N-min L~g;
+ existence
+  proof
+    defpred P[Nat] means
+    [$1,width GoB g] in Indices GoB g & ex i st i in dom g &
+               g/.i=(GoB g)*($1,width GoB g);
+    set Y={j:P[j]};
+        1 <= width GoB g by GOBOARD7:35;
+      then consider i,j such that
+A95:       i in dom g & [j,width GoB g] in Indices GoB g &
+         g/.i = (GoB g)*(j,width GoB g) by Th10;
+A96:    j in Y by A95;
+A97:    Y c= dom GoB g
+      proof let y be set;
+        assume y in Y;
+         then ex j st y=j & [j,width GoB g] in Indices GoB g &
+               ex i st i in dom g & g/.i = (GoB g)*(j,width GoB g);
+         then [y,width GoB g] in [: dom GoB g, Seg width GoB g :]
+           by MATRIX_1:def 5;
+        hence y in dom GoB g by ZFMISC_1:106;
+       end;
+        Y is Subset of NAT from SubsetD;
+      then reconsider Y as non empty finite Subset of NAT by A96,A97,FINSET_1:
+13;
+      set i1 = min Y;
+        i1 in Y by CQC_SIM1:def 8;
+      then consider j such that A98:j=i1 & [j,width GoB g] in Indices GoB g
+      & ex i st i in dom g & g/.i=(GoB g)*(j,width GoB g);
+      consider i such that
+      A99: i in dom g & g/.i=(GoB g)*(j,width GoB g) by A98;
+        1 <= i1 & i1 <= len GoB g
+      & 1 <= 1 & 1 <= width GoB g by A98,GOBOARD5:1;
+      then A100:(GoB g)*(i1,width GoB g)`2=(GoB g)*(1,width GoB g)`2
+        by GOBOARD5:2;
+      then A101:(GoB g)*(i1,width GoB g)`2=N-bound L~g by Th42;
+          {q`1:q`2=N-bound L~g & q in L~g} c= REAL
+         proof
+          let X be set;
+          assume X in {q`1:q`2=N-bound L~g & q in L~g};
+          then ex q st X=q`1 & q`2=N-bound L~g & q in L~g;
+          hence thesis;
+         end;
+        then reconsider B={q`1:q`2=N-bound L~g & q in L~g} as Subset of REAL;
+        set s1=(GoB g)*(1,width GoB g)`1;
+          for r be real number st r in B holds s1<=r
+          proof let r be real number;assume r in B;
+           then consider q1 be Point of TOP-REAL 2 such that
+   A102: r=q1`1 & q1`2 = N-bound L~g & q1 in L~g;
+              1 <= width GoB g & width GoB g <= width GoB g by GOBOARD7:35;
+          hence thesis by A102,Th33;
+          end;
+        then A103:B is bounded_below by SEQ_4:def 2;
+        A104:1<=i & i<=len g by A99,FINSEQ_3:27;
+          now per cases by A104,REAL_1:def 5;
+        case i<len g; then i+1<=len g by NAT_1:38;
+          then g/.i in LSeg(g,i) by A104,TOPREAL1:27;
+         hence (GoB g)*(i1,width GoB g) in L~g by A98,A99,SPPOL_2:17;
+        case A105:i=len g;
+            len g >= 2 by Lm9;
+          then g/.i in LSeg(g,i-'1) by A105,Th3;
+         hence (GoB g)*(i1,width GoB g) in L~g by A98,A99,SPPOL_2:17;
+        end;
+        then (GoB g)*(i1,width GoB g)`2=N-bound L~g & (GoB g)*(i1,width GoB g)
+           in L~g by A100,Th42;
+        then A106:(GoB g)*(i1,width GoB g)`1 in
+        {q`1:q`2=N-bound L~g & q in L~g};
+        then A107:lower_bound B <=
+(GoB g)*(i1,width GoB g)`1 by A103,SEQ_4:def 5;
+        for r being real number st r in B holds
+        r>= (GoB g)*(i1,width GoB g)`1
+        proof let r be real number;assume r in B;
+          then consider q such that A108:r=q`1 & q`2=N-bound L~g & q in L~g;
+         thus r >= (GoB g)*(i1,width GoB g)`1
+           by A108,Lm6;
+        end;
+        then lower_bound B >=(GoB g)*(i1,width GoB g)`1 by A106,PSCOMP_1:8;
+then A109:   (GoB g)*(i1,width GoB g)`1=lower_bound B by A107,AXIOMS:21
+                     .= inf (proj1 || N-most L~g) by Th28;
+        (GoB g)*(i1,width GoB g)=|[(GoB g)*(i1,width GoB g)`1,
+           (GoB g)*(i1,width GoB g)`2]| by EUCLID:57;
+       then (GoB g)*(i1,width GoB g)=N-min L~g by A101,A109,PSCOMP_1:def 44;
+      hence thesis by A98;
+  end;
+  uniqueness by GOBOARD1:21;
+
+  func i_e_n g -> Nat means :Def8:
+  [it, width GoB g] in Indices GoB g & (GoB g)*(it,width GoB g) = N-max L~g;
+ existence
+  proof
+    defpred P[Nat] means
+    [$1,width GoB g] in Indices GoB g & ex i st i in dom g &
+               g/.i=(GoB g)*($1,width GoB g);
+    set Y={j:P[j]};
+        1 <= width GoB g by GOBOARD7:35;
+      then consider i,j such that
+A110:       i in dom g & [j,width GoB g] in Indices GoB g &
+         g/.i = (GoB g)*(j,width GoB g) by Th10;
+A111:    j in Y by A110;
+A112:    Y c= dom GoB g
+      proof let y be set;
+        assume y in Y;
+         then ex j st y=j & [j,width GoB g] in Indices GoB g &
+               ex i st i in dom g & g/.i = (GoB g)*(j,width GoB g);
+         then [y,width GoB g] in [: dom GoB g, Seg width GoB g :]
+            by MATRIX_1:def 5;
+        hence y in dom GoB g by ZFMISC_1:106;
+       end;
+        Y is Subset of NAT from SubsetD;
+      then reconsider Y as non empty finite Subset of NAT by A111,A112,FINSET_1
+:13;
+      reconsider i1 = max Y as Nat by ORDINAL2:def 21;
+        i1 in Y by PRE_CIRC:def 1;
+      then consider j such that
+      A113:j=i1 & [j,width GoB g] in Indices GoB g
+      & ex i st i in dom g & g/.i=(GoB g)*(j,width GoB g);
+      consider i such that
+      A114: i in dom g & g/.i=(GoB g)*(j,width GoB g) by A113;
+        1 <= i1 & i1 <= len GoB g
+      & 1 <= 1 & 1 <= width GoB g by A113,GOBOARD5:1;
+      then A115:(GoB g)*(i1,width GoB g)`2=(GoB g)*(1,width GoB g)`2
+         by GOBOARD5:2;
+      then A116:(GoB g)*(i1,width GoB g)`2 = N-bound L~g by Th42;
+          {q`1:q`2=N-bound L~g & q in L~g} c= REAL
+         proof
+          let X be set;
+          assume X in {q`1:q`2=N-bound L~g & q in L~g};
+          then ex q st X=q`1 & q`2=N-bound L~g & q in L~g;
+          hence thesis;
+         end;
+        then reconsider B={q`1:q`2 = N-bound L~g & q in L~g} as Subset of REAL;
+        set s1 = (GoB g)*(len GoB g,width GoB g)`1;
+          for r be real number st r in B holds s1 >= r
+          proof let r be real number; assume r in B;
+           then consider q such that A117: r=q`1 & q`2 = N-bound L~g & q in L~g
+;
+            1 <= len GoB g & 1 <= width GoB g by GOBOARD7:34,35;
+          hence thesis by A117,Th34;
+          end;
+        then A118:B is bounded_above by SEQ_4:def 1;
+        A119:1<=i & i<=len g by A114,FINSEQ_3:27;
+          now per cases by A119,REAL_1:def 5;
+        case i<len g; then i+1<=len g by NAT_1:38;
+          then g/.i in LSeg(g,i) by A119,TOPREAL1:27;
+         hence (GoB g)*(i1,width GoB g) in L~g by A113,A114,SPPOL_2:17;
+        case A120:i=len g;
+            len g >= 2 by Lm9;
+          then g/.i in LSeg(g,i-'1) by A120,Th3;
+         hence (GoB g)*(i1,width GoB g) in L~g by A113,A114,SPPOL_2:17;
+        end;
+        then (GoB g)*(i1,width GoB g)`2=N-bound L~g &
+          (GoB g)*(i1,width GoB g) in L~g by A115,Th42;
+        then A121:(GoB g)*(i1,width GoB g)`1 in {q`1:q`2=N-bound L~g & q in L~g
+};
+        then A122:upper_bound B >= (GoB g)*(i1,width GoB g)`1 by A118,SEQ_4:def
+4;
+        for r being real number st r in B holds
+        r <= (GoB g)*(i1,width GoB g)`1
+        proof let r be real number;assume r in B;
+          then consider q such that
+A123:r = q`1 & q`2 = N-bound L~g & q in L~g;
+          thus r <= (GoB g)*(i1,width GoB g)`1
+            by A123,Lm8;
+        end;
+        then upper_bound B <= (GoB g)*(i1,width GoB g)`1 by A121,PSCOMP_1:10;
+        then A124:   (GoB g)*(i1,width GoB g)`1 = upper_bound B by A122,AXIOMS:
+21
+                      .= sup (proj1 || N-most L~g) by Th29;
+        (GoB g)*(i1,width GoB g)=|[(GoB g)*(i1,width GoB g)`1,
+           (GoB g)*(i1,width GoB g)`2]| by EUCLID:57;
+       then (GoB g)*(i1,width GoB g)=N-max L~g by A116,A124,PSCOMP_1:def 45;
+      hence thesis by A113;
+  end;
+  uniqueness by GOBOARD1:21;
+end;
+
+theorem
+    1 <= i_w_n h & i_w_n h <= len GoB h &
+   1 <= i_e_n h & i_e_n h <= len GoB h &
+    1 <= i_w_s h & i_w_s h <= len GoB h &
+     1 <= i_e_s h & i_e_s h <= len GoB h
+proof
+A1: [i_w_n h, width GoB h] in Indices GoB h by Def7;
+A2: [i_e_n h, width GoB h] in Indices GoB h by Def8;
+A3: [i_w_s h, 1] in Indices GoB h by Def5;
+   [i_e_s h, 1] in Indices GoB h by Def6;
+ hence thesis by A1,A2,A3,GOBOARD5:1;
+end;
+
+theorem
+    1 <= i_n_e h & i_n_e h <= width GoB h &
+   1 <= i_s_e h & i_s_e h <= width GoB h &
+    1 <= i_n_w h & i_n_w h <= width GoB h &
+     1 <= i_s_w h & i_s_w h <= width GoB h
+proof
+A1: [len GoB h, i_n_e h] in Indices GoB h by Def4;
+A2: [len GoB h, i_s_e h] in Indices GoB h by Def3;
+A3: [1, i_n_w h] in Indices GoB h by Def2;
+   [1, i_s_w h] in Indices GoB h by Def1;
+ hence thesis by A1,A2,A3,GOBOARD5:1;
+end;
+
+Lm10:
+  for i1, i2 be Nat st 1 <= i1 & i1+1<=len h & 1<=i2 & i2+1<=len h & h.i1=h.i2
+   holds i1 = i2
+  proof
+    let i1, i2 be Nat;
+    assume A1: 1 <= i1 & i1+1 <= len h;
+    assume A2: 1 <= i2 & i2+1 <= len h & h.i1 = h.i2;
+    assume A3: i1 <> i2;
+A4: i1 < len h & i2 < len h by A1,A2,NAT_1:38;
+then A5: i1 in dom h & i2 in dom h by A1,A2,FINSEQ_3:27;
+then A6: h/.i1 = h.i2 by A2,FINSEQ_4:def 4
+           .= h/.i2 by A5,FINSEQ_4:def 4;
+      now per cases by A3,AXIOMS:21;
+      suppose i1 < i2;
+      hence h/.i1 <> h/.i2 by A1,A4,GOBOARD7:38;
+      suppose i2 < i1;
+      hence h/.i1 <> h/.i2 by A2,A4,GOBOARD7:38;
+    end;
+    hence thesis by A6;
+  end;
+
+definition let g be non constant standard special_circular_sequence;
+  func n_s_w g -> Nat means :Def9:
+  1 <= it & it+1 <= len g & g.it = W-min L~g;
+  existence
+  proof
+     W-min L~g in rng g by SPRECT_2:47;
+   then consider i be Nat such that A1: 1 <= i & i+1 <= len g & g.i = W-min L~g
+     by Th5;
+   thus thesis by A1;
+  end;
+  uniqueness by Lm10;
+
+  func n_n_w g -> Nat means :Def10:
+  1 <= it & it+1 <= len g & g.it = W-max L~g;
+  existence
+  proof
+     W-max L~g in rng g by SPRECT_2:48;
+   then consider i be Nat such that A2: 1 <= i & i+1 <= len g & g.i = W-max L~g
+     by Th5;
+   thus thesis by A2;
+  end;
+  uniqueness by Lm10;
+
+  func n_s_e g -> Nat means :Def11:
+  1 <= it & it+1 <= len g & g.it = E-min L~g;
+  existence
+  proof
+     E-min L~g in rng g by SPRECT_2:49;
+   then consider i be Nat such that A3: 1 <= i & i+1 <= len g & g.i = E-min L~g
+     by Th5;
+   thus thesis by A3;
+  end;
+  uniqueness by Lm10;
+
+  func n_n_e g -> Nat means :Def12:
+  1 <= it & it+1 <= len g & g.it = E-max L~g;
+  existence
+  proof
+     E-max L~g in rng g by SPRECT_2:50;
+   then consider i be Nat such that A4: 1 <= i & i+1 <= len g & g.i = E-max L~g
+     by Th5;
+   thus thesis by A4;
+  end;
+  uniqueness by Lm10;
+
+  func n_w_s g -> Nat means :Def13:
+  1 <= it & it+1 <= len g & g.it = S-min L~g;
+  existence
+  proof
+     S-min L~g in rng g by SPRECT_2:45;
+   then consider i be Nat such that A5: 1 <= i & i+1 <= len g & g.i = S-min L~g
+     by Th5;
+   thus thesis by A5;
+  end;
+  uniqueness by Lm10;
+
+  func n_e_s g -> Nat means :Def14:
+  1 <= it & it+1 <= len g & g.it = S-max L~g;
+  existence
+  proof
+     S-max L~g in rng g by SPRECT_2:46;
+   then consider i be Nat such that A6: 1 <= i & i+1 <= len g & g.i = S-max L~g
+     by Th5;
+   thus thesis by A6;
+  end;
+  uniqueness by Lm10;
+
+  func n_w_n g -> Nat means :Def15:
+  1 <= it & it+1 <= len g & g.it = N-min L~g;
+  existence
+  proof
+     N-min L~g in rng g by SPRECT_2:43;
+   then consider i be Nat such that A7: 1 <= i & i+1 <= len g & g.i = N-min L~g
+     by Th5;
+   thus thesis by A7;
+  end;
+  uniqueness by Lm10;
+
+  func n_e_n g -> Nat means :Def16:
+  1 <= it & it+1 <= len g & g.it = N-max L~g;
+  existence
+  proof
+     N-max L~g in rng g by SPRECT_2:44;
+   then consider i be Nat such that A8: 1 <= i & i+1 <= len g & g.i = N-max L~g
+     by Th5;
+   thus thesis by A8;
+  end;
+  uniqueness by Lm10;
+end;
+
+theorem
+    n_w_n h <> n_w_s h
+proof
+ set i1 = n_w_n h, i2 = n_w_s h;
+A1: i1 <= i1 + 1 & i2 <= i2 + 1 by NAT_1:29;
+A2: 1 <= i1 & i1+1 <= len h & 1 <= i2 & i2+1 <= len h by Def13,Def15;
+   then i1 <= len h & i2 <= len h by A1,AXIOMS:22;
+then A3: i1 in dom h & i2 in dom h by A2,FINSEQ_3:27;
+A4: h.i1 = N-min L~h by Def15;
+A5: h.i2 = S-min L~h by Def13;
+A6: h.i1 = h/.i1 & h.i2 = h/.i2 by A3,FINSEQ_4:def 4;
+ thus i1 <> i2
+proof
+    assume i1 = i2;
+then A7: N-bound(L~h) = (h/.i2)`2 by A4,A6,PSCOMP_1:94
+             .= S-bound(L~h) by A5,A6,PSCOMP_1:114;
+      len h > 4 by GOBOARD7:36;
+    then 1 <= len h by AXIOMS:22;
+    then (h/.1)`2 <= N-bound (L~h) & (h/.1)`2 >= S-bound (L~h) by Th13;
+then A8: (h/.1)`2 = N-bound (L~h) by A7,AXIOMS:21;
+    consider ii be Nat such that
+A9:   ii in dom h & (h/.ii)`2 <> (h/.1)`2 by GOBOARD7:33;
+A10: 1 <= ii & ii <= len h by A9,FINSEQ_3:27;
+then A11: (h/.ii)`2 <= N-bound (L~h) by Th13;
+      (h/.ii)`2 >= S-bound L~h by A10,Th13;
+    hence thesis by A7,A8,A9,A11,AXIOMS:21;
+  end;
+end;
+
+theorem
+    n_s_w h <> n_s_e h
+proof
+ set i1 = n_s_w h, i2 = n_s_e h;
+A1: i1 <= i1 + 1 & i2 <= i2 + 1 by NAT_1:29;
+A2: 1 <= i1 & i1+1 <= len h & 1 <= i2 & i2+1 <= len h by Def9,Def11;
+   then i1 <= len h & i2 <= len h by A1,AXIOMS:22;
+then A3: i1 in dom h & i2 in dom h by A2,FINSEQ_3:27;
+A4: h.i1 = W-min L~h by Def9;
+A5: h.i2 = E-min L~h by Def11;
+A6: h.i1 = h/.i1 & h.i2 = h/.i2 by A3,FINSEQ_4:def 4;
+ thus i1 <> i2
+proof
+    assume i1 = i2;
+then A7: W-bound L~h = (h/.i2)`1 by A4,A6,PSCOMP_1:84
+             .= E-bound L~h by A5,A6,PSCOMP_1:104;
+      len h > 4 by GOBOARD7:36;
+    then 1 <= len h by AXIOMS:22;
+    then (h/.1)`1 <= E-bound L~h & (h/.1)`1 >= W-bound L~h
+           by Th14;
+then A8: (h/.1)`1 = W-bound L~h by A7,AXIOMS:21;
+    consider ii be Nat such that
+A9:   ii in dom h & (h/.ii)`1 <> (h/.1)`1 by GOBOARD7:32;
+A10: 1 <= ii & ii <= len h by A9,FINSEQ_3:27;
+then A11: (h/.ii)`1 <= E-bound L~h by Th14;
+      (h/.ii)`1 >= W-bound L~h by A10,Th14;
+    hence thesis by A7,A8,A9,A11,AXIOMS:21;
+  end;
+end;
+
+theorem
+    n_e_n h <> n_e_s h
+proof
+ set i1 = n_e_n h, i2 = n_e_s h;
+A1: i1 <= i1 + 1 & i2 <= i2 + 1 by NAT_1:29;
+A2: 1 <= i1 & i1+1 <= len h & 1 <= i2 & i2+1 <= len h by Def14,Def16;
+   then i1 <= len h & i2 <= len h by A1,AXIOMS:22;
+then A3: i1 in dom h & i2 in dom h by A2,FINSEQ_3:27;
+A4: h.i1 = N-max L~h by Def16;
+A5: h.i2 = S-max L~h by Def14;
+A6: h.i1 = h/.i1 & h.i2 = h/.i2 by A3,FINSEQ_4:def 4;
+ thus i1 <> i2
+proof
+    assume i1 = i2;
+then A7: N-bound(L~h) = (h/.i2)`2 by A4,A6,PSCOMP_1:94
+             .= S-bound(L~h) by A5,A6,PSCOMP_1:114;
+      len h > 4 by GOBOARD7:36;
+    then 1 <= len h by AXIOMS:22;
+    then (h/.1)`2 <= N-bound (L~h) & (h/.1)`2 >= S-bound (L~h) by Th13;
+then A8: (h/.1)`2 = N-bound (L~h) by A7,AXIOMS:21;
+    consider ii be Nat such that
+A9:   ii in dom h & (h/.ii)`2 <> (h/.1)`2 by GOBOARD7:33;
+A10: 1 <= ii & ii <= len h by A9,FINSEQ_3:27;
+then A11: (h/.ii)`2 <= N-bound (L~h) by Th13;
+      (h/.ii)`2 >= S-bound L~h by A10,Th13;
+    hence thesis by A7,A8,A9,A11,AXIOMS:21;
+  end;
+end;
+
+theorem
+    n_n_w h <> n_n_e h
+proof
+ set i1 = n_n_w h, i2 = n_n_e h;
+A1: i1 <= i1 + 1 & i2 <= i2 + 1 by NAT_1:29;
+A2: 1 <= i1 & i1+1 <= len h & 1 <= i2 & i2+1 <= len h by Def10,Def12;
+   then i1 <= len h & i2 <= len h by A1,AXIOMS:22;
+then A3: i1 in dom h & i2 in dom h by A2,FINSEQ_3:27;
+A4: h.i1 = W-max L~h by Def10;
+A5: h.i2 = E-max L~h by Def12;
+A6: h.i1 = h/.i1 & h.i2 = h/.i2 by A3,FINSEQ_4:def 4;
+ thus i1 <> i2
+proof
+    assume i1 = i2;
+then A7: W-bound L~h = (h/.i2)`1 by A4,A6,PSCOMP_1:84
+             .= E-bound L~h by A5,A6,PSCOMP_1:104;
+      len h > 4 by GOBOARD7:36;
+    then 1 <= len h by AXIOMS:22;
+    then (h/.1)`1 <= E-bound L~h & (h/.1)`1 >= W-bound L~h by Th14;
+then A8: (h/.1)`1 = W-bound L~h by A7,AXIOMS:21;
+    consider ii be Nat such that
+A9:   ii in dom h & (h/.ii)`1 <> (h/.1)`1 by GOBOARD7:32;
+A10: 1 <= ii & ii <= len h by A9,FINSEQ_3:27;
+then A11: (h/.ii)`1 <= E-bound L~h by Th14;
+      (h/.ii)`1 >= W-bound L~h by A10,Th14;
+    hence thesis by A7,A8,A9,A11,AXIOMS:21;
+  end;
+end;

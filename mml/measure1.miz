@@ -1,0 +1,1880 @@
+:: The $\sigma$-additive Measure Theory
+::  by J\'ozef Bia{\l}as
+::
+:: Received October 15, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary TARSKI, BOOLE, SUPINF_1, RLVECT_1, ARYTM_3, ARYTM_1, SETFAM_1,
+      PROB_1, SUBSET_1, FINSUB_1, FUNCT_1, SUPINF_2, RELAT_1, FUNCOP_1, CARD_4,
+      PROB_2, MEASURE1;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0,
+      REAL_1, RELAT_1, FINSUB_1, FUNCT_1, FUNCT_2, NAT_1, SETFAM_1, FUNCOP_1,
+      PROB_1, PROB_2, SUPINF_1, SUPINF_2;
+ constructors ENUMSET1, NAT_1, REAL_1, SUPINF_2, FUNCOP_1, FINSUB_1, PROB_2,
+      MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, SUPINF_1, RELSET_1, ARYTM_3, PROB_1, MEMBERED, ZFMISC_1,
+      XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions SUPINF_2, TARSKI, FINSUB_1, PROB_2, PROB_1, XBOOLE_0;
+ theorems TARSKI, FUNCT_1, FUNCT_2, ENUMSET1, ZFMISC_1, NAT_1, SETFAM_1,
+      SUPINF_1, SUPINF_2, CQC_THE1, RELAT_1, RELSET_1, FUNCOP_1, FINSUB_1,
+      PROB_2, PROB_1, SUBSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1;
+ schemes FUNCT_2, XBOOLE_0;
+
+begin :: Some useful theorems about sets and R_eal numbers
+
+ reserve X for set;
+
+theorem Th1:
+  for X,Y being set holds union {X,Y,{}} = union {X,Y}
+proof
+   let X,Y be set;
+   thus union {X,Y,{}} = union ({X,Y} \/ {{}}) by ENUMSET1:43
+                .= union {X,Y} \/ union {{}} by ZFMISC_1:96
+                .= union {X,Y} \/ {} by ZFMISC_1:31
+                .= union {X,Y};
+end;
+
+canceled 2;
+
+theorem Th4:
+   for x,y,s,t being R_eal holds
+   0.<=' x & 0.<=' s & x <=' y & s <=' t implies
+   x + s <=' y + t
+proof
+   let x,y,s,t be R_eal;
+   assume
+A1:0. <=' x & 0.<=' s & x <=' y & s <=' t;
+     not ((x = +infty & s = -infty) or (x = -infty & s = +infty)) &
+   not ((y = +infty & t = -infty) or (y = -infty & t = +infty))
+   proof
+        0.<=' y & 0.<=' t by A1,SUPINF_1:29;
+      hence thesis by A1,SUPINF_1:17,SUPINF_2:def 1;
+   end;
+   hence thesis by A1,SUPINF_2:14;
+end;
+
+theorem Th5:
+   for x,y,z being R_eal holds
+   0.<=' y & 0.<=' z & x = y + z & y <' +infty implies z = x - y
+proof
+   let x,y,z be R_eal;
+   assume
+A1:0. <=' y & 0.<=' z & x = y + z & y <' +infty;
+   then 0. + 0. <=' y + z by Th4;
+then A2:0. <=' x by A1,SUPINF_2:18;
+     (y + z) - y = z
+   proof
+   A3:not x = -infty & not y = -infty & not z = -infty
+        by A1,A2,SUPINF_1:17,SUPINF_2:def 1;
+        x in REAL \/ {-infty,+infty} & y in REAL \/ {-infty,+infty}
+        by SUPINF_1:def 5;
+then A4:  (x in REAL or x in {-infty,+infty}) & (y in REAL or
+       y in {-infty,+infty}) by XBOOLE_0:def 2;
+A5:  (x in REAL & y in REAL) implies (y + z) - y = z
+      proof
+         assume x in REAL & y in REAL;
+         then reconsider a = y, b = z as Real by A1,A3,SUPINF_2:12;
+           y + z = a + b by SUPINF_2:1;
+         then (y + z) - y = (a + b) - a by SUPINF_2:5
+                   .= (b - a) + a by XCMPLX_1:29
+                   .= (b + (-a)) + a by XCMPLX_0:def 8
+                   .= b + ((-a) + a) by XCMPLX_1:1
+                   .= b + 0 by XCMPLX_0:def 6
+                   .= z;
+         hence thesis;
+      end;
+        (x = +infty & y in REAL) implies (y + z) - y = z
+      proof
+         assume
+      A6:x = +infty & y in REAL;
+         then (y + z) - y = +infty by A1,SUPINF_2:6
+                    .= z by A1,A6,SUPINF_2:8;
+         hence thesis;
+      end;
+      hence thesis by A1,A3,A4,A5,TARSKI:def 2;
+   end;
+   hence thesis by A1;
+end;
+
+theorem
+     for A being Subset of X holds
+   {A} is Subset-Family of X
+proof
+   let A be Subset of X;
+     {A} c= bool X by ZFMISC_1:37;
+   hence thesis by SETFAM_1:def 7;
+end;
+
+theorem Th7:
+   for A,B being Subset of X holds
+   {A,B} is Subset-Family of X
+proof
+   let A,B be Subset of X;
+   set C = {A,B};
+     C c= bool X
+   proof
+      let x be set;
+      assume x in C;
+      then x = A or x = B by TARSKI:def 2;
+      hence thesis;
+   end;
+   hence thesis by SETFAM_1:def 7;
+end;
+
+theorem Th8:
+   for A,B,C being Subset of X holds
+   {A,B,C} is non empty Subset-Family of X
+proof
+   let A,B,C be Subset of X;
+   set D = {A,B,C};
+     D c= bool X
+   proof
+      let x be set;
+      assume x in D;
+      then x = A or x = B or x = C by ENUMSET1:def 1;
+      hence thesis;
+   end;
+   hence thesis by ENUMSET1:def 1,SETFAM_1:def 7;
+end;
+
+theorem Th9:
+   {{}} is Subset-Family of X
+proof
+     {} c= X by XBOOLE_1:2;
+   then {{}} c= bool X by ZFMISC_1:37;
+   hence thesis by SETFAM_1:def 7;
+end;
+
+scheme DomsetFamEx {A() -> set,P[set]}:
+   ex F being non empty Subset-Family of A() st
+   for B being set holds B in F iff (B c= A() & P[B])
+   provided A1: ex B being set st B c= A() & P[B]
+proof
+   defpred X[set] means ex Z being set st $1 = Z & P[Z];
+   consider X being set such that
+A2:for x being set holds x in X iff x in bool A() & X[x] from Separation;
+   consider B being set such that A3: B c= A() & P[B] by A1;
+     X c= bool A()
+   proof
+     let x be set; assume x in X;
+     hence thesis by A2;
+   end;
+   then reconsider X as non empty Subset-Family of A() by A2,A3,SETFAM_1:def 7;
+   take X;
+     for B being set holds B in X iff (B c= A() & P[B])
+   proof
+      let B be set;
+      thus B in X implies B c= A() & P[B]
+      proof
+         assume
+      A4:B in X;
+         then ex Z being set st B = Z & P[Z] by A2;
+         hence thesis by A4;
+      end;
+      assume B c= A() & P[B];
+      hence B in X by A2;
+   end;
+  hence thesis;
+end;
+
+definition let X be set;
+   let S be non empty Subset-Family of X;
+ canceled;
+
+   func X\S -> Subset-Family of X means :Def2:
+     for A being set holds
+      A in it iff ex B being set st B in S & A = X \ B;
+existence
+proof
+   defpred P[set] means ex B being set st B in S & $1 = X \ B;
+A1:ex C being set st C c= X & P[C]
+   proof consider C0 being Element of S;
+      take X \ C0;
+      thus thesis by XBOOLE_1:36;
+   end;
+     ex R being non empty Subset-Family of X st
+   for A being set holds A in R iff A c= X & P[A] from DomsetFamEx(A1);
+   then consider R being Subset-Family of X such that
+A2:for A being set holds A in R iff (A c= X &
+   (ex B being set st B in S & A = X \ B));
+   take R;
+   let A be set;
+   thus A in R implies (ex B being set st B in S & A = X \ B) by A2;
+   given B being set such that A3: B in S & A = X \ B;
+     A c= X by A3,XBOOLE_1:36;
+   hence A in R by A2,A3;
+end;
+uniqueness
+proof
+   let R1,R2 be Subset-Family of X such that
+A4:for A being set holds A in R1 iff
+      (ex B being set st B in S & A = X \ B) and
+A5:for A being set holds A in R2 iff
+      (ex B being set st B in S & A = X \ B);
+     R1 = R2
+   proof
+        for A being set holds A in R1 iff A in R2
+      proof
+         let A be set;
+         hereby assume A in R1;
+            then ex B being set st B in S & A = X \ B by A4;
+            hence A in R2 by A5;
+         end;
+         assume A in R2;
+         then ex B being set st B in S & A = X \ B by A5;
+         hence thesis by A4;
+      end;
+      hence thesis by TARSKI:2;
+   end;
+   hence thesis;
+end;
+end;
+
+definition let X be set;
+   let S be non empty Subset-Family of X;
+   cluster X\S -> non empty;
+   coherence
+   proof
+     consider x being set such that A1: x in S by XBOOLE_0:def 1;
+       X\x in X\S by A1,Def2;
+     hence thesis;
+   end;
+end;
+
+canceled 4;
+
+theorem Th14:
+   for S being non empty Subset-Family of X holds
+   S = X \ (X \ S)
+proof
+   let S be non empty Subset-Family of X;
+A1:S c= X \ (X \ S)
+   proof
+      let A be set;
+      assume
+   A2:A in S;
+   then A3:X\A in X \ S by Def2;
+        X \ (X \ A) = X /\ A by XBOOLE_1:48;
+      then A = X \ (X\A) by A2,XBOOLE_1:28;
+      hence thesis by A3,Def2;
+   end;
+     X \ (X \ S) c= S
+   proof
+      let A be set;
+      assume A in X \ (X \ S);
+      then consider B being set such that
+   A4:B in X \ S & A = X \ B by Def2;
+      consider C being set such that
+   A5:C in S & B = X \ C by A4,Def2;
+    A = X /\ C by A4,A5,XBOOLE_1:48; hence thesis by A5,XBOOLE_1:28;
+   end;
+   hence thesis by A1,XBOOLE_0:def 10;
+end;
+
+theorem Th15:
+   for S being non empty Subset-Family of X holds
+   meet S = X \ union (X \ S) & union S = X \ meet (X \ S)
+proof
+   let S be non empty Subset-Family of X;
+   thus meet S = X \ union (X \ S)
+   proof
+      thus meet S c= X \ union (X \ S)
+      proof
+         let x be set;
+         assume
+A1:      x in meet S;
+           not x in union (X \ S)
+         proof
+           assume x in union (X \ S);
+           then consider Z being set such that
+        A2:x in Z & Z in X \ S by TARSKI:def 4;
+           consider B being set such that
+        A3:B in S & Z = X \ B by A2,Def2;
+             not x in B by A2,A3,XBOOLE_0:def 4;
+           hence thesis by A1,A3,SETFAM_1:def 1;
+         end;
+         hence thesis by A1,XBOOLE_0:def 4;
+      end;
+      thus X \ union (X \ S) c= meet S
+      proof
+         let x be set;
+         assume x in X \ union (X \ S);
+      then A4:x in X & not x in union (X \ S) by XBOOLE_0:def 4;
+           for Y being set st Y in S holds x in Y
+         proof
+            let Y be set;
+            assume that
+         A5:Y in S and
+         A6:not x in Y;
+         A7:x in X\Y by A4,A6,XBOOLE_0:def 4;
+              X\Y in X \ S by A5,Def2;
+            hence thesis by A4,A7,TARSKI:def 4;
+         end;
+         hence thesis by SETFAM_1:def 1;
+      end;
+   end;
+   thus union S c= X \ meet (X \ S)
+   proof
+      let x be set;
+      assume x in union S;
+      then consider Y being set such that
+   A8:x in Y & Y in S by TARSKI:def 4;
+        not x in meet (X \ S)
+      proof
+         assume
+     A9:x in meet (X \ S);
+         set Z = X \ Y;
+     A10:Z in X \ S by A8,Def2;
+           not x in Z by A8,XBOOLE_0:def 4;
+         hence thesis by A9,A10,SETFAM_1:def 1;
+      end;
+      hence thesis by A8,XBOOLE_0:def 4;
+   end;
+   let x be set;
+   assume x in X \ meet (X \ S);
+then A11:x in X & not x in meet (X \ S) by XBOOLE_0:def 4;
+   then consider Z being set such that
+A12:Z in X \ S & not x in Z by SETFAM_1:def 1;
+     ex Y being set st Y in S & x in Y
+   proof
+      set Y = X \ Z;
+        Y in X \ (X \ S) by A12,Def2;
+  then A13:Y in S by Th14;
+        x in Y by A11,A12,XBOOLE_0:def 4;
+      hence thesis by A13;
+   end;
+   hence thesis by TARSKI:def 4;
+end;
+
+::
+::        Field Subset of X and nonnegative measure
+::
+
+definition
+   let X be set;
+   let IT be Subset-Family of X;
+   redefine attr IT is compl-closed means :Def3:
+    for A being set holds A in IT implies X\A in IT;
+   compatibility
+   proof
+     hereby assume A1: IT is compl-closed;
+       let A be set;
+       assume A2: A in IT;
+       then reconsider A' = A as Subset of X;
+         A'` in IT by A1,A2,PROB_1:def 1;
+       hence X\A in IT by SUBSET_1:def 5;
+     end;
+     assume A3: for A being set holds A in IT implies X\A in IT;
+     let A be Subset of X;
+     assume A in IT;
+     then X\A in IT by A3;
+     hence thesis by SUBSET_1:def 5;
+   end;
+end;
+
+theorem Th16:
+  for X being set,
+      F being Subset-Family of X st
+    F is cup-closed compl-closed holds F is cap-closed
+proof
+  let X be set;
+  let S be Subset-Family of X;
+  assume A1: S is cup-closed compl-closed;
+  let A,B be set;
+  assume
+ A2:A in S & B in S;
+    then X \ A in S & X \ B in S by A1,Def3;
+ then A3:(X \ A) \/ (X \ B) in S by A1,FINSUB_1:def 1;
+      A /\ B c= A by XBOOLE_1:17;
+    then A /\ B c= X by A2,XBOOLE_1:1;
+    then A /\ B = X /\ (A /\ B) by XBOOLE_1:28
+         .= X \ (X \ (A /\ B)) by XBOOLE_1:48
+         .= X \ ((X \ A) \/ (X \ B)) by XBOOLE_1:54;
+    hence thesis by A1,A3,Def3;
+end;
+
+definition let X be set;
+  cluster cup-closed compl-closed -> cap-closed Subset-Family of X;
+  coherence by Th16;
+  cluster cap-closed compl-closed -> cup-closed Subset-Family of X;
+  coherence
+  proof
+    let S be Subset-Family of X;
+    assume A1: S is cap-closed compl-closed;
+    let A,B be set;
+    assume
+    A2:A in S & B in S;
+    then X \ A in S & X \ B in S by A1,Def3;
+    then A3:(X \ A) /\ (X \ B) in S by A1,FINSUB_1:def 2;
+      A \/ B c= X by A2,XBOOLE_1:8;
+    then A \/ B = X /\ (A \/ B) by XBOOLE_1:28
+         .= X \ (X \ (A \/ B)) by XBOOLE_1:48
+         .= X \ ((X \ A) /\ (X \ B)) by XBOOLE_1:53;
+    hence thesis by A1,A3,Def3;
+  end;
+end;
+
+theorem Th17:
+   for S being Field_Subset of X holds S = X \ S
+proof
+   let S be Field_Subset of X;
+     for A being set holds A in S iff A in X \ S
+   proof
+      let A be set;
+      hereby assume
+      A1:A in S;
+         then A2:X \ A in S by Def3;
+           A = X \ (X \ A)
+         proof
+              for x be set holds x in A iff x in X\(X\A)
+            proof
+               let x be set;
+               hereby assume x in A;
+                 then x in X & not x in X\A by A1,XBOOLE_0:def 4;
+                 hence x in X\(X\A) by XBOOLE_0:def 4;
+               end;
+               assume x in X\(X\A);
+               then x in X & not x in X\A by XBOOLE_0:def 4;
+               hence thesis by XBOOLE_0:def 4;
+            end;
+            hence thesis by TARSKI:2;
+         end;
+         hence A in X \ S by A2,Def2;
+      end;
+      assume A in X \ S;
+      then ex B being set st B in S & A = X \ B by Def2;
+      hence thesis by Def3;
+   end;
+   hence thesis by TARSKI:2;
+end;
+
+theorem
+     for M being set holds
+   M is Field_Subset of X iff
+   ex S being non empty Subset-Family of X st M = S &
+   for A being set st A in S holds X\A in S &
+   for A,B being set st A in S & B in S holds A \/ B in S
+proof
+   let M be set;
+   hereby assume
+A1:  M is Field_Subset of X;
+     then reconsider S = M as non empty Subset-Family of X;
+     take S;
+     thus M = S;
+     thus for A being set st A in S holds X\A in S &
+     for A,B being set st (A in S & B in S) holds A \/ B in S
+       by A1,Def3,FINSUB_1:def 1;
+   end;
+   given S being non empty Subset-Family of X such that
+A2: M = S & for A being set st A in S holds X\A in S &
+   for A,B being set st A in S & B in S holds A \/ B in S;
+A3:S is cup-closed
+   proof
+     let A, B be set; assume A in S & B in S;
+     hence A \/ B in S by A2;
+   end;
+     S is compl-closed
+   proof
+     let A be set; assume A in S;
+     hence X\A in S by A2;
+   end;
+   hence thesis by A2,A3,Th16;
+end;
+
+theorem Th19:
+   for S being non empty Subset-Family of X holds
+   S is Field_Subset of X iff
+   for A being set st A in S holds X\A in S &
+   for A,B being set st A in S & B in S holds A /\ B in S
+proof
+   let S be non empty Subset-Family of X;
+   hereby assume A1: S is Field_Subset of X;
+       for A,B being set holds A in S & B in S implies A /\ B in S
+     proof
+       let A,B be set;
+       assume
+    A2:A in S & B in S;
+       then X \ A in S & X \ B in S by A1,Def3;
+    then A3:(X \ A) \/ (X \ B) in S by A1,FINSUB_1:def 1;
+         A /\ B c= A by XBOOLE_1:17;
+       then A /\ B c= X by A2,XBOOLE_1:1;
+       then A /\ B = X /\ (A /\ B) by XBOOLE_1:28
+            .= X \ (X \ (A /\ B)) by XBOOLE_1:48
+            .= X \ ((X \ A) \/ (X \ B)) by XBOOLE_1:54;
+       hence thesis by A1,A3,Def3;
+     end;
+     hence for A being set st A in S holds X\A in S &
+     for A,B being set st A in S & B in S holds A /\ B in S by A1,Def3;
+   end;
+   assume A4: for A being set st A in S holds X\A in S &
+   for A,B being set st A in S & B in S holds A /\ B in S;
+   then A5:for A being set st A in S holds X\A in S;
+     for A,B being set st A in S & B in S holds A \/ B in S
+   proof
+     let A,B be set;
+     assume
+     A6:A in S & B in S;
+     then X \ A in S & X \ B in S by A4;
+     then A7:(X \ A) /\ (X \ B) in S by A4;
+       A \/ B c= X by A6,XBOOLE_1:8;
+     then A \/ B = X /\ (A \/ B) by XBOOLE_1:28
+          .= X \ (X \ (A \/ B)) by XBOOLE_1:48
+          .= X \ ((X \ A) /\ (X \ B)) by XBOOLE_1:53;
+     hence thesis by A4,A7;
+   end;
+   then S is cup-closed compl-closed by A5,Def3,FINSUB_1:def 1;
+   hence thesis by Th16;
+end;
+
+theorem Th20:
+   for S being Field_Subset of X holds
+   for A,B being set st A in S & B in S holds A \ B in S
+proof
+   let S be Field_Subset of X;
+   let A,B be set;
+   assume
+   A1:A in S & B in S;
+then A2:X \ B in S by Th19;
+     A /\ (X \ B) = (A /\ X) \ B by XBOOLE_1:49
+              .= A \ B by A1,XBOOLE_1:28;
+   hence thesis by A1,A2,Th19;
+end;
+
+theorem
+     for S being Field_Subset of X holds {} in S & X in S by PROB_1:10,11;
+
+definition
+   let S be non empty set;
+   let F be Function of S,ExtREAL;
+   let A be Element of S;
+   redefine func F.A -> R_eal;
+coherence by FUNCT_2:7;
+end;
+
+definition
+   let X be non empty set,
+       F be Function of X,ExtREAL;
+   redefine attr F is nonnegative means
+:Def4:for A being Element of X holds
+         0. <=' F.A;
+  compatibility by SUPINF_2:58;
+end;
+
+canceled;
+
+theorem Th23:
+   for S being Field_Subset of X holds
+   ex M being Function of S,ExtREAL st
+   M is nonnegative & M.{} = 0.&
+   for A,B being Element of S st A misses B holds M.(A \/ B) = M.A + M.B
+proof
+   let S be Field_Subset of X;
+   deffunc F(Element of S) = 0.;
+     ex f being Function of S,ExtREAL st for x being Element of S holds
+   f.x = F(x) from LambdaD;
+   then consider M being Function of S,ExtREAL such that
+A1:for x being Element of S holds M.x = 0.;
+A2:M is nonnegative
+   proof
+        for x being Element of S holds 0.<=' M.x by A1;
+      hence thesis by Def4;
+   end;
+A3:M.{} = 0.
+   proof
+      reconsider A = {} as Element of S by PROB_1:10;
+        M.A = 0.by A1;
+      hence thesis;
+   end;
+A4:for A,B being Element of S st
+   A misses B holds M.(A \/ B) = M.A + M.B
+   proof
+      let A,B be Element of S;
+      assume A misses B;
+   A5:M.A = 0.& M.B = 0.by A1;
+      reconsider A,B as set;
+A6:   A \/ B is Element of S by FINSUB_1:def 1;
+      reconsider A,B as Element of S;
+        0.= M.A + M.B by A5,SUPINF_2:18;
+      hence thesis by A1,A6;
+   end;
+   take M;
+   thus thesis by A2,A3,A4;
+end;
+
+definition
+   let X be set,
+       S be Field_Subset of X;
+   mode Measure of S -> Function of S,ExtREAL means
+:Def5:it is nonnegative & it.{} = 0. &
+         for A,B being Element of S st A misses B holds
+          it.(A \/ B) = it.A + it.B;
+existence by Th23;
+end;
+
+canceled;
+
+theorem Th25:
+   for S being Field_Subset of X,
+       M being Measure of S,
+       A,B being Element of S holds
+   A c= B implies M.A <=' M.B
+proof
+   let S be Field_Subset of X,
+       M be Measure of S,
+       A,B be Element of S;
+   assume
+A1:A c= B;
+   reconsider C = B \ A as Element of S by Th20;
+     A misses C by XBOOLE_1:79;
+   then M.(A \/ C) = M.A + M.C by Def5;
+   then A2:M.B = M.A + M.C by A1,XBOOLE_1:45;
+     M is nonnegative by Def5; then 0.<=' M.A & 0.<=' M.C by Def4;
+   hence thesis by A2,SUPINF_2:20;
+end;
+
+theorem Th26:
+   for S being Field_Subset of X,
+       M being Measure of S,
+       A,B being Element of S holds
+   A c= B & M.A <' +infty implies M.(B \ A) = M.B - M.A
+proof
+   let S be Field_Subset of X,
+       M be Measure of S,
+       A,B be Element of S;
+   assume
+A1:A c= B & M.A <' +infty;
+   reconsider C = B \ A as Element of S by Th20;
+     A misses C by XBOOLE_1:79;
+   then M.(A \/ C) = M.A + M.C by Def5;
+   then A2:M.B = M.A + M.C by A1,XBOOLE_1:45;
+     M is nonnegative by Def5; then 0.<=' M.A & 0.<=' M.C & M.A <' +infty
+   by A1,Def4;
+   hence thesis by A2,Th5;
+end;
+
+definition let X be set;
+   cluster non empty compl-closed cap-closed Subset-Family of X;
+  existence
+   proof
+     consider S being non empty compl-closed cap-closed Subset-Family of X;
+    take S;
+    thus thesis;
+   end;
+end;
+
+definition
+   let X be set,
+       S be non empty cup-closed Subset-Family of X,
+       A,B be Element of S;
+  redefine func A \/ B -> Element of S;
+coherence by FINSUB_1:def 1;
+end;
+
+definition
+   let X be set,
+       S be Field_Subset of X,
+       A,B be Element of S;
+  redefine func A /\ B -> Element of S;
+coherence by Th19;
+  redefine func A \ B -> Element of S;
+coherence by Th20;
+end;
+
+theorem Th27:
+   for S being Field_Subset of X,
+       M being Measure of S,
+       A,B being Element of S holds
+   M.(A \/ B) <=' M.A + M.B
+proof
+   let S be Field_Subset of X,
+       M be Measure of S,
+       A,B be Element of S;
+   set C = B \ A;
+A1:A misses C by XBOOLE_1:79;
+A2:M.(A \/ B) = M.(A \/ C) by XBOOLE_1:39
+            .= M.A + M.C by A1,Def5;
+A3:C c= B by XBOOLE_1:36;
+     M is nonnegative by Def5;
+   then 0.<=' M.A & 0.<=' M.C & M.A <=' M.A & M.C <=' M.B by A3,Def4,Th25;
+   hence thesis by A2,Th4;
+end;
+
+definition
+   let X be set,
+       S be Field_Subset of X,
+       M be Measure of S,
+       A be set;
+pred A is_measurable M means
+:Def6:A in S;
+end;
+
+canceled;
+
+theorem
+     for S being Field_Subset of X,
+       M being Measure of S holds
+   {} is_measurable M & X is_measurable M &
+   for A,B being set st
+   A is_measurable M & B is_measurable M holds
+   X \ A is_measurable M & A \/ B is_measurable M & A /\ B is_measurable M
+proof
+   let S be Field_Subset of X,
+       M be Measure of S;
+A1:{} in S & X in S by PROB_1:10,11;
+     for A,B being set st
+   A is_measurable M & B is_measurable M holds
+   X \ A is_measurable M & A \/ B is_measurable M & A /\ B is_measurable M
+   proof
+      let A,B be set;
+      assume A is_measurable M & B is_measurable M;
+      then A in S & B in S by Def6;
+      then X \ A in S & A \/ B in S & A /\ B in S & A \ B in S
+        by Th19,Th20,FINSUB_1:def 1;
+      hence thesis by Def6;
+   end;
+   hence thesis by A1,Def6;
+end;
+
+definition
+   let X be set,
+       S be Field_Subset of X,
+       M be Measure of S;
+   mode measure_zero of M -> Element of S means
+:Def7:M.it = 0.;
+existence
+proof
+   reconsider A = {} as Element of S by PROB_1:10;
+   take A;
+   thus thesis by Def5;
+end;
+end;
+
+canceled;
+
+theorem
+     for S being Field_Subset of X,
+       M being Measure of S,
+       A being Element of S,
+       B being measure_zero of M st
+   A c= B holds A is measure_zero of M
+proof
+   let S be Field_Subset of X,
+       M be Measure of S,
+       A be Element of S,
+       B be measure_zero of M;
+   assume
+A1:A c= B;
+     M is nonnegative by Def5;
+   then 0.<=' M.A & M.A <=' M.B by A1,Def4,Th25;
+   then 0.<=' M.A & M.A <=' 0.by Def7;
+   then M.A = 0.by SUPINF_1:22;
+   hence thesis by Def7;
+end;
+
+theorem
+     for S being Field_Subset of X,
+       M being Measure of S,
+       A,B being measure_zero of M holds
+   A \/ B is measure_zero of M & A /\ B is measure_zero of M &
+    A \ B is measure_zero of M
+proof
+   let S be Field_Subset of X,
+       M be Measure of S,
+       A,B be measure_zero of M;
+A1:M.A = 0.& M.B = 0.by Def7;
+     M is nonnegative by Def5;
+   then A2: 0.<=' M.(A \/ B) & 0.<=' M.(A /\ B) & 0.<=' M.(A \ B) by Def4;
+     M.(A \/ B) <=' 0.+ 0.by A1,Th27;
+   then M.(A \/ B) <=' 0.by SUPINF_2:18;
+then A3:M.(A \/ B) = 0.by A2,SUPINF_1:22;
+     A /\ B c= A by XBOOLE_1:17;
+   then M.(A /\ B) <=' 0.by A1,Th25;
+then A4:M.(A /\ B) = 0.by A2,SUPINF_1:22;
+     A \ B c= A by XBOOLE_1:36;
+   then M.(A \ B) <=' 0.by A1,Th25;
+   then M.(A \ B) = 0.by A2,SUPINF_1:22;
+   hence thesis by A3,A4,Def7;
+end;
+
+theorem
+     for S being Field_Subset of X,
+       M being Measure of S,
+       A being Element of S,
+       B being measure_zero of M holds
+   M.(A \/ B) = M.A & M.(A /\ B) = 0.& M.(A \ B) = M.A
+proof
+   let S be Field_Subset of X,
+       M be Measure of S,
+       A be Element of S,
+       B be measure_zero of M;
+A1:M.B = 0.by Def7;
+  M is nonnegative by Def5;
+then A2: 0.<=' M.(A \/ B) & 0.<=' M.(A /\ B) & 0.<=' M.(A \ B) by Def4;
+     M.(A \/ B) <=' M.A + 0.by A1,Th27;
+then A3:M.(A \/ B) <=' M.A by SUPINF_2:18;
+     A c= A \/ B by XBOOLE_1:7; then A4: M.A <=' M.(A \/ B) by Th25;
+     A /\ B c= B by XBOOLE_1:17;
+then A5:   M.(A /\ B) <=' 0.by A1,Th25;
+then A6:M.(A /\ B) = 0.by A2,SUPINF_1:22;
+     A \ B c= A by XBOOLE_1:36;
+then A7:M.(A \ B) <=' M.A by Th25;
+     M.A = M.((A /\ B) \/ (A \ B)) by XBOOLE_1:51; then M.A <='
+   0.+ M.(A \ B) by A6,Th27;
+   then M.A <=' M.(A \ B) by SUPINF_2:18;
+   hence thesis by A2,A3,A4,A5,A7,SUPINF_1:22;
+end;
+
+::
+::       sigma_Field Subset of X and sigma_additive nonnegative measure
+::
+
+theorem Th34:
+   for A being Subset of X
+   ex F being Function of NAT,bool X st rng F = {A}
+proof
+   let A be Subset of X;
+   reconsider F = NAT --> A as Function of NAT, bool X by FUNCOP_1:57;
+   take F;
+   thus thesis by FUNCOP_1:14;
+end;
+
+theorem Th35:
+   for A being set
+   ex F being Function of NAT,{A} st
+   for n being Nat holds F.n = A
+proof
+   let A be set;
+     A in {A} by TARSKI:def 1;
+   then reconsider F = NAT --> A as Function of NAT, {A} by FUNCOP_1:57;
+   take F;
+   thus thesis by TARSKI:def 1;
+end;
+
+definition let X be set;
+   cluster non empty countable Subset-Family of X;
+existence
+proof
+A1:{} is Subset of X by XBOOLE_1:2;
+   reconsider S = {{}} as Subset-Family of X by Th9;
+   take S;
+   thus S is non empty;
+   thus S is empty or ex F being Function of NAT,bool X st S = rng F
+      by A1,Th34;
+end;
+end;
+
+definition let X be set;
+   mode N_Sub_set_fam of X is non empty countable Subset-Family of X;
+end;
+
+canceled 2;
+
+theorem Th38:
+   for A,B,C being Subset of X
+   ex F being Function of NAT,bool X st rng F = {A,B,C} &
+   F.0 = A & F.1 = B & for n being Nat st 1 < n holds F.n = C
+proof
+   let A,B,C be Subset of X;
+   defpred P0[Nat,set] means ($1 = 0 implies $2 = A) &
+                          ($1 = 1 implies $2 = B) &
+                          (1 < $1 implies $2 = C);
+   defpred P[set] means ex n being Nat st
+                     ex X being set st
+                     ($1 = [n,X] & P0[n,X]);
+     ex GRAF being set st for x being set holds x in GRAF iff
+   x in [:NAT,bool X:] & P[x] from Separation;
+   then consider GRAF being set such that
+A1:for x being set holds x in GRAF iff
+   x in [:NAT,bool X:] & P[x];
+A2:for x being set holds x in GRAF iff (x = [0,A] or x = [1,B] or
+   (ex n being Nat st (x = [n,C] & 1 < n)))
+   proof
+      let x be set;
+   A3:x in GRAF implies (x = [0,A] or x = [1,B] or
+      (ex n being Nat st (x = [n,C] & 1 < n)))
+      proof
+         assume x in GRAF;
+         then consider n being Nat such that
+      A4:ex X0 being set st x = [n,X0] & P0[n,X0] by A1;
+           n = 0 or n = 1 or 1 < n by CQC_THE1:2;
+         hence thesis by A4;
+      end;
+        (x = [0,A] or x = [1,B] or (ex n being Nat st (x = [n,C] & 1 < n)))
+      implies x in GRAF
+      proof
+         assume
+      A5:x = [0,A] or x = [1,B] or (ex n being Nat st (x = [n,C] & 1 < n));
+      A6:x = [0,A] implies x in GRAF
+         proof
+            assume x = [0,A];
+            then x in [:NAT,bool X:] & P[x] by ZFMISC_1:106;
+            hence thesis by A1;
+         end;
+      A7:x = [1,B] implies x in GRAF
+         proof
+            assume x = [1,B];
+            then x in [:NAT,bool X:] & P[x] by ZFMISC_1:106;
+            hence thesis by A1;
+         end;
+        (ex n being Nat st (x = [n,C] & 1 < n)) implies x in GRAF
+         proof
+            given n being Nat such that A8: x = [n,C] & 1 < n;
+              P0[n,C] by A8;
+            then x in [:NAT,bool X:] & P[x] by A8,ZFMISC_1:106;
+            hence thesis by A1;
+         end;
+         hence thesis by A5,A6,A7;
+      end;
+      hence thesis by A3;
+   end;
+A9:for p being set st p in GRAF ex x,y being set st [x,y] = p
+   proof
+      let p be set;
+      assume p in GRAF;
+      then p = [0,A] or p = [1,B] or (ex n being Nat st p = [n,C] & 1 < n)
+      by A2;
+      hence thesis;
+   end;
+     for x,y1,y2 being set st [x,y1] in GRAF & [x,y2] in GRAF holds y1 = y2
+   proof
+      let x,y1,y2 be set;
+      assume
+   A10:[x,y1] in GRAF & [x,y2] in GRAF;
+   then A11:[x,y1] in [:NAT,bool X:] & P[[x,y1]] by A1;
+   A12:[x,y2] in [:NAT,bool X:] & P[[x,y2]] by A1,A10;
+      then reconsider x as Nat by ZFMISC_1:106;
+    per cases by CQC_THE1:2;
+    suppose
+A13:   x = 0;
+     then y1 = A by A11,ZFMISC_1:33;
+      hence thesis by A12,A13,ZFMISC_1:33;
+    suppose
+A14:   x = 1;
+     then y1 = B by A11,ZFMISC_1:33;
+      hence thesis by A12,A14,ZFMISC_1:33;
+    suppose
+A15:   x > 1;
+     then y1 = C by A11,ZFMISC_1:33;
+      hence thesis by A12,A15,ZFMISC_1:33;
+   end;
+   then reconsider F = GRAF as Function by A9,FUNCT_1:2;
+A16:dom F = NAT
+   proof
+        for x being set holds x in NAT iff ex y being set st [x,y] in F
+      proof
+         let x be set;
+         thus x in NAT implies ex y being set st [x,y] in F
+         proof
+            assume x in NAT; then reconsider x as Nat;
+        A17:x = 0 implies ex y being set st [x,y] in F
+            proof
+               assume A18:x = 0;
+               take A;
+               thus thesis by A2,A18;
+            end;
+        A19:x = 1 implies ex y being set st [x,y] in F
+            proof
+               assume A20:x = 1;
+               take B;
+               thus thesis by A2,A20;
+            end;
+              1 < x implies ex y being set st [x,y] in F
+            proof
+               assume
+           A21:1 < x;
+               take C;
+               thus thesis by A2,A21;
+            end;
+            hence thesis by A17,A19,CQC_THE1:2;
+         end;
+         given y being set such that
+     A22:[x,y] in F;
+           [x,y] in [:NAT,bool X:] by A1,A22;
+         hence thesis by ZFMISC_1:106;
+      end;
+      hence thesis by RELAT_1:def 4;
+   end;
+A23:rng F = {A,B,C}
+   proof
+        for y being set holds y in {A,B,C} iff
+      ex x being set st x in dom F & y = F.x
+      proof
+         let y be set;
+         thus y in {A,B,C} implies ex x being set st (x in dom F & y = F.x)
+         proof
+           assume
+A24:       y in {A,B,C};
+           per cases by A24,ENUMSET1:def 1;
+           suppose
+            y = A;
+           then A25:[0,y] in F by A2;
+               take 0;
+               thus thesis by A25,FUNCT_1:8;
+           suppose
+            y = B;
+           then A26:[1,y] in F by A2;
+               take 1;
+               thus thesis by A26,FUNCT_1:8;
+           suppose
+            y = C;
+           then A27:[2,y] in F by A2;
+              take 2;
+               thus thesis by A27,FUNCT_1:8;
+         end;
+         given x being set such that
+     A28:x in dom F & y = F.x;
+         reconsider x as Nat by A16,A28;
+         per cases by CQC_THE1:2;
+         suppose
+            A29:x = 0; [0,A] in F by A2; then A = F.x by A29,FUNCT_1:8;
+                hence thesis by A28,ENUMSET1:def 1;
+         suppose
+            A30:x = 1; [1,B] in F by A2; then B = F.x by A30,FUNCT_1:8;
+                hence thesis by A28,ENUMSET1:def 1;
+         suppose
+              1 < x; then [x,C] in F by A2; then y = C by A28,FUNCT_1:8;
+                hence thesis by ENUMSET1:def 1;
+     end;
+     hence thesis by FUNCT_1:def 5;
+   end;
+     rng F c= bool X
+   proof
+      let a be set; assume a in rng F;
+      then a = A or a = B or a = C by A23,ENUMSET1:def 1;
+      hence thesis;
+   end;
+   then reconsider F as Function of NAT,bool X by A16,FUNCT_2:4;
+   take F;
+     F.0 = A & F.1 = B & for n being Nat st 1 < n holds F.n = C
+   proof
+A31:   [0,A] in F by A2;
+A32:   [1,B] in F by A2;
+         for n being Nat st 1 < n holds F.n = C
+       proof
+          let n be Nat;
+          assume 1 < n; then [n,C] in F by A2;
+          hence thesis by FUNCT_1:8;
+       end;
+       hence thesis by A31,A32,FUNCT_1:8;
+   end;
+   hence thesis by A23;
+end;
+
+theorem
+     for A,B being Subset of X holds
+   {A,B,{}} is N_Sub_set_fam of X
+proof
+   let A,B be Subset of X;
+     {} is Subset of X by XBOOLE_1:2;
+   then consider C being Subset of X such that
+A1:C = {};
+     ex F being Function of NAT,bool X st rng F = {A,B,C} &
+   F.0 = A & F.1 = B & for n being Nat st 1 < n holds F.n = C by Th38;
+   hence thesis by A1,Th8,SUPINF_2:def 14;
+end;
+
+theorem Th40:
+   for A,B being Subset of X
+   ex F being Function of NAT,bool X st rng F = {A,B} &
+   F.0 = A & for n being Nat st 0 < n holds F.n = B
+proof
+   let A,B be Subset of X;
+   consider F being Function of NAT,bool X such that
+A1:rng F = {A,B,B} &
+   F.0 = A & F.1 = B & for n being Nat st 1 < n holds F.n = B by Th38;
+A2:{A,B,B} = {B,B,A} by ENUMSET1:100
+          .= {A,B} by ENUMSET1:70;
+A3:for n being Nat st 0 < n holds F.n = B
+   proof
+      let n be Nat;
+      assume 0 < n;
+      then n = 1 or 1 < n by CQC_THE1:2;
+      hence thesis by A1;
+   end;
+   take F;
+   thus thesis by A1,A2,A3;
+end;
+
+theorem Th41:
+   for A,B being Subset of X holds
+   {A,B} is N_Sub_set_fam of X
+proof
+   let A,B be Subset of X;
+     ex F being Function of NAT,bool X st (rng F = {A,B} &
+   F.0 = A & for n being Nat st 0 < n holds F.n = B) by Th40;
+   hence thesis by Th7,SUPINF_2:def 14;
+end;
+
+theorem Th42:
+   for S being N_Sub_set_fam of X holds
+   X \ S is N_Sub_set_fam of X
+proof
+   let S be N_Sub_set_fam of X;
+   consider F being Function of NAT,bool X such that
+A1:S = rng F by SUPINF_2:def 14;
+A2:NAT = dom F by FUNCT_2:def 1;
+A3:for n being set st n in NAT ex Y being set st Y in S & Y=F.n
+   proof
+      let n be set;
+      assume
+   A4:n in NAT;
+      take F.n;
+      thus thesis by A1,A4,FUNCT_2:6;
+   end;
+   defpred P[set,set] means ex V being set st V = F.$1 & $2 = X \ V;
+A5:for n being set st n in NAT ex y being set st y in X\S & P[n,y]
+   proof
+      let n be set;
+      assume n in NAT;
+      then consider V being set such that
+  A6: V in S & V=F.n by A3;
+      take X \ V;
+      thus thesis by A6,Def2;
+   end;
+A7:ex G being Function of NAT,X \ S st for n being set st n in NAT holds
+    P[n,G.n] from FuncEx1(A5);
+     ex G being Function of NAT,bool X st X \ S = rng G
+   proof
+       consider G being Function of NAT,X \ S such that
+   A8:for n being set st n in NAT holds
+       (ex V being set st V = F.n & G.n = X \ V) by A7;
+   A9:dom G = NAT & rng G c= X \ S by FUNCT_2:def 1,RELSET_1:12;
+A10:   X \ S c= rng G
+       proof
+         let x be set;
+         assume x in X \ S;
+         then consider B being set such that
+     A11:B in S & x = X \ B by Def2;
+         consider n being set such that
+     A12:n in NAT & F.n = B by A1,A2,A11,FUNCT_1:def 5;
+           ex V being set st V = F.n & G.n = X \ V by A8,A12;
+         hence thesis by A9,A11,A12,FUNCT_1:def 5;
+       end;
+       reconsider G as Function of NAT,bool X by FUNCT_2:9;
+       take G;
+       thus thesis by A9,A10,XBOOLE_0:def 10;
+   end;
+   hence thesis by SUPINF_2:def 14;
+end;
+
+definition
+   let X be set;
+   let IT be Subset-Family of X;
+ canceled;
+
+   attr IT is sigma_Field_Subset-like means :Def9:
+    for M being N_Sub_set_fam of X st M c= IT holds union M in IT;
+end;
+
+definition let X be set;
+   cluster non empty compl-closed sigma_Field_Subset-like Subset-Family of X;
+existence
+proof
+   reconsider S = {{},X} as non empty Subset-Family of X by PROB_1:14;
+   take S;
+   thus S is non empty;
+   thus for A being set holds A in S implies X\A in S
+   proof
+      let A be set;
+      assume
+A1:   A in S;
+A2:   A = {} implies X\A in S by TARSKI:def 2;
+        A = X implies X\A in S
+      proof
+         assume A = X;
+         then X\A = {} by XBOOLE_1:37;
+         hence thesis by TARSKI:def 2;
+      end;
+      hence thesis by A1,A2,TARSKI:def 2;
+   end;
+   let M be N_Sub_set_fam of X;
+   assume
+A3:M c= S;
+A4:X in M implies union M in S
+   proof
+      assume X in M;
+      then X c= union M by ZFMISC_1:92;
+      then X = union M by XBOOLE_0:def 10;
+      hence thesis by TARSKI:def 2;
+   end;
+     not X in M implies union M in S
+   proof
+      assume not X in M;
+      then for A being set st
+      A in M holds A c= {} by A3,TARSKI:def 2;
+      then union M c= {} by ZFMISC_1:94;
+      then union M = {} by XBOOLE_1:3;
+      hence thesis by TARSKI:def 2;
+   end;
+   hence thesis by A4;
+end;
+end;
+
+definition let X be set;
+   mode sigma_Field_Subset of X is
+     compl-closed sigma_Field_Subset-like (non empty Subset-Family of X);
+end;
+
+Lm1:
+   for S being non empty Subset-Family of X st
+   S is sigma_Field_Subset of X holds S is Field_Subset of X
+proof
+   let S be non empty Subset-Family of X;
+   assume
+A1:S is sigma_Field_Subset of X;
+     for A,B being set st A in S & B in S holds A \/ B in S
+   proof
+      let A,B be set;
+      assume
+   A2:A in S & B in S;
+      then reconsider A,B as Subset of X;
+   A3:{A,B} is N_Sub_set_fam of X by Th41;
+   A4:union{A,B} = A \/ B by ZFMISC_1:93;
+        {A,B} c= S
+      proof
+           for x being set holds x in {A,B} implies x in S by A2,TARSKI:def 2;
+         hence thesis by TARSKI:def 3;
+      end;
+      hence thesis by A1,A3,A4,Def9;
+   end;
+   then S is cup-closed by FINSUB_1:def 1;
+   hence thesis by A1,Th16;
+end;
+
+canceled 2;
+
+theorem Th45:
+   for S being sigma_Field_Subset of X holds {} in S & X in S
+proof
+   let S be sigma_Field_Subset of X;
+     S is Field_Subset of X by Lm1;
+   hence thesis by PROB_1:10,11;
+end;
+
+definition let X be set;
+ cluster -> non empty sigma_Field_Subset of X;
+ coherence;
+end;
+
+theorem Th46:
+   for S being sigma_Field_Subset of X,
+       A,B being set st A in S & B in S holds A \/ B in S & A /\ B in S
+proof
+   let S be sigma_Field_Subset of X;
+   let A,B be set;
+   assume
+A1:A in S & B in S;
+     S is Field_Subset of X by Lm1;
+   hence thesis by A1,Th19,FINSUB_1:def 1;
+end;
+
+theorem Th47:
+   for S being sigma_Field_Subset of X,
+       A,B being set st A in S & B in S holds A \ B in S
+proof
+   let S be sigma_Field_Subset of X;
+   let A,B be set;
+   assume
+A1:A in S & B in S;
+     S is Field_Subset of X by Lm1;
+   hence thesis by A1,Th20;
+end;
+
+theorem
+     for S being sigma_Field_Subset of X holds S = X \ S
+proof
+   let S be sigma_Field_Subset of X;
+     S is Field_Subset of X by Lm1;
+   hence thesis by Th17;
+end;
+
+theorem Th49:
+   for S being non empty Subset-Family of X holds
+   ((for A being set holds A in S implies X\A in S) &
+   (for M being N_Sub_set_fam of X st M c= S holds meet M in S)) iff
+   S is sigma_Field_Subset of X
+proof
+   let S be non empty Subset-Family of X;
+   hereby assume
+A1:  (for A being set holds A in S implies X\A in S) &
+     (for M being N_Sub_set_fam of X st M c= S holds meet M in S);
+        for M being N_Sub_set_fam of X st M c= S holds union M in S
+      proof
+          let M be N_Sub_set_fam of X;
+          assume
+      A2: M c= S;
+      A3: X \ M is N_Sub_set_fam of X by Th42;
+            X \ M c= S
+          proof
+             let y be set;
+             assume y in X \ M;
+             then consider B being set such that
+          A4:B in M & y = X \ B by Def2;
+             thus thesis by A1,A2,A4;
+          end;
+          then meet (X \ M) in S by A1,A3;
+          then X \ meet (X \ M) in S by A1;
+          hence thesis by Th15;
+      end;
+      hence S is sigma_Field_Subset of X by A1,Def3,Def9;
+    end;
+    assume A5: S is sigma_Field_Subset of X;
+      for M being N_Sub_set_fam of X st M c= S holds meet M in S
+    proof
+        let M be N_Sub_set_fam of X;
+        assume
+    A6: M c= S;
+    A7: X \ M is N_Sub_set_fam of X by Th42;
+          X \ M c= S
+        proof
+           let y be set;
+           assume y in X \ M;
+           then consider B being set such that
+        A8:B in M & y = X \ B by Def2;
+           thus thesis by A5,A6,A8,Def3;
+        end;
+        then union (X \ M) in S by A5,A7,Def9;
+        then X \ union (X \ M) in S by A5,Def3;
+        hence thesis by Th15;
+    end;
+    hence thesis by A5,Def3;
+end;
+
+definition
+   let X be set;
+   let S be sigma_Field_Subset of X;
+   cluster disjoint_valued Function of NAT, S;
+existence
+proof
+   consider F being Function of NAT,{{}} such that
+A1:for n being Nat holds F.n = {} by Th35;
+     {} in S by Th45; then {{}} c= S by ZFMISC_1:37;
+   then reconsider F as Function of NAT,S by FUNCT_2:9;
+   take F;
+A2:for n being set holds F.n = {}
+   proof
+     let n be set;
+     per cases;
+     suppose n in dom F; then n in NAT by FUNCT_2:def 1; hence thesis by A1;
+     suppose not n in dom F; hence thesis by FUNCT_1:def 4;
+   end;
+   thus for x,y being set st x <> y holds F.x misses F.y
+   proof
+     let x,y be set;
+       F.x = {} & F.y = {} by A2;
+     hence thesis by XBOOLE_1:65;
+   end;
+end;
+end;
+
+definition
+   let X be set;
+   let S be sigma_Field_Subset of X;
+   mode Sep_Sequence of S is disjoint_valued Function of NAT, S;
+end;
+
+definition
+   let X be set;
+   let S be sigma_Field_Subset of X;
+   let F be Function of NAT,S;
+   redefine func rng F -> non empty Subset-Family of X;
+coherence
+proof
+     0 in NAT;
+   then rng F <> {} by FUNCT_2:6;
+   then consider x being set such that A1: x in rng F by XBOOLE_0:def 1;
+  rng F c= S by RELSET_1:12;
+   then rng F c= bool X by XBOOLE_1:1;
+   hence thesis by A1,SETFAM_1:def 7;
+end;
+end;
+
+canceled 2;
+
+theorem Th52:
+   for S being sigma_Field_Subset of X,
+       F being Function of NAT,S holds
+   rng F is N_Sub_set_fam of X
+proof
+   let S be sigma_Field_Subset of X;
+   let F be Function of NAT,S;
+     ex H being Function of NAT,bool X st rng F = rng H
+   proof
+        rng F c= bool X;
+      then reconsider F as Function of NAT,bool X by FUNCT_2:8;
+      take F;
+      thus thesis;
+   end;
+   hence thesis by SUPINF_2:def 14;
+end;
+
+theorem Th53:
+   for S being sigma_Field_Subset of X,
+       F being Function of NAT,S holds
+   union rng F is Element of S
+proof
+   let S be sigma_Field_Subset of X,
+       F be Function of NAT,S;
+A1:rng F is N_Sub_set_fam of X by Th52;
+     rng F c= S by RELSET_1:12;
+   hence thesis by A1,Def9;
+end;
+
+theorem Th54:
+   for Y,S being non empty set,
+       F being Function of Y,S,
+       M being Function of S,ExtREAL st
+   M is nonnegative holds M*F is nonnegative
+proof
+   let Y,S be non empty set;
+   let F be Function of Y,S;
+   let M be Function of S,ExtREAL;
+   assume
+A1:M is nonnegative;
+     for n being Element of Y holds 0.<=' (M*F).n
+   proof
+      let n be Element of Y;
+        dom (M*F) = Y & rng (M*F) c= ExtREAL by FUNCT_2:def 1,RELSET_1:12;
+      then (M*F).n = M.(F.n) by FUNCT_1:22;
+      hence thesis by A1,Def4;
+   end;
+   hence thesis by SUPINF_2:58;
+end;
+
+theorem Th55:
+   for S being sigma_Field_Subset of X,
+       a,b being R_eal holds
+   ex M being Function of S,ExtREAL st
+   for A being Element of S holds
+   (A = {} implies M.A = a) & (A <> {} implies M.A = b)
+proof
+   let S be sigma_Field_Subset of X,
+       a,b be R_eal;
+   defpred P[set,set] means ($1 = {} implies $2 = a) &
+                            ($1 <> {} implies $2 = b);
+   A1:for x being set st x in S ex y being set st y in ExtREAL & P[x,y]
+      proof
+         let x be set;
+           x <> {} implies ex y being set st y in ExtREAL & P[x,y];
+         hence thesis;
+      end;
+        ex F being Function of S,ExtREAL st for x being set st x in S holds
+      P[x,F.x] from FuncEx1(A1);
+      then consider M being Function of S,ExtREAL such that
+   A2:for x being set st x in S holds P[x,M.x];
+      take M;
+      thus thesis by A2;
+end;
+
+theorem
+     for S being sigma_Field_Subset of X
+   ex M being Function of S,ExtREAL st
+   for A being Element of S holds
+   (A = {} implies M.A = 0.) & (A <> {} implies M.A = +infty) by Th55;
+
+theorem Th57:
+   for S being sigma_Field_Subset of X
+   ex M being Function of S,ExtREAL st
+   for A being Element of S holds M.A = 0.
+proof
+   let S be sigma_Field_Subset of X;
+   consider M being Function of S,ExtREAL such that
+A1:for A being Element of S holds
+   (A = {} implies M.A = 0.) & (A <> {} implies M.A = 0.) by Th55;
+A2:for A being Element of S holds M.A = 0.
+   proof
+      let A be Element of S;
+        A = {} implies M.A = 0.by A1;
+      hence thesis by A1;
+   end;
+   take M;
+   thus thesis by A2;
+end;
+
+theorem Th58:
+   for S being sigma_Field_Subset of X
+   ex M being Function of S,ExtREAL st
+   M is nonnegative & M.{} = 0. &
+   for F being Sep_Sequence of S holds
+   SUM(M*F) = M.(union rng F)
+proof
+   let S be sigma_Field_Subset of X;
+   consider M being Function of S,ExtREAL such that
+A1:for A being Element of S holds M.A = 0. by Th57;
+   take M;
+     for A being Element of S holds 0.<=' M.A by A1;
+   hence A2: M is nonnegative by Def4;
+     {} is Element of S by Th45;
+   hence M.{} = 0. by A1;
+   let F be Sep_Sequence of S;
+     union rng F is Element of S by Th53;
+then A3:M.(union rng F) = 0.by A1;
+A4:M*F is nonnegative by A2,Th54;
+A5:for r being Nat st 0 <= r holds (M*F).r = 0.
+   proof
+      let r be Nat;
+        dom (M*F) = NAT by FUNCT_2:def 1;
+      then (M*F).r = M.(F.r) by FUNCT_1:22;
+      hence thesis by A1;
+   end;
+   then A6:SUM(M*F) = Ser(M*F).0 by A4,SUPINF_2:67;
+     Ser(M*F).0 = (M*F).0 by SUPINF_2:63;
+   hence thesis by A3,A5,A6;
+end;
+
+definition
+   let X be set;
+   let S be sigma_Field_Subset of X;
+ canceled;
+
+   mode sigma_Measure of S -> Function of S,ExtREAL means
+:Def11:it is nonnegative &
+         it.{} = 0.&
+         for F being Sep_Sequence of S holds
+         SUM(it*F) = it.(union rng F);
+existence by Th58;
+end;
+
+definition let X be set;
+   cluster sigma_Field_Subset-like compl-closed -> cup-closed
+     (non empty Subset-Family of X);
+   coherence by Lm1;
+end;
+
+canceled;
+
+theorem Th60:
+   for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S holds M is Measure of S
+proof
+   let S be sigma_Field_Subset of X,
+       M be sigma_Measure of S;
+A1:M is nonnegative & M.{} = 0.by Def11;
+     for A,B being Element of S holds
+   (A misses B implies M.(A \/ B) = M.A + M.B)
+   proof
+      let A,B be Element of S;
+      assume
+   A2:A misses B;
+   A3:A in S & B in S & {} in S by Th45;
+A4:   {} is Subset of X by XBOOLE_1:2;
+      reconsider A,B as Subset of X;
+      consider F being Function of NAT,bool X such that
+   A5:rng F = {A,B,{}} &
+      F.0 = A & F.1 = B & for n being Nat st 1 < n holds F.n = {} by A4,Th38;
+        F is Function of NAT,S
+      proof
+           {A,B,{}} c= S
+         proof
+              for x being set holds x in {A,B,{}} implies x in S
+              by A3,ENUMSET1:13;
+            hence thesis by TARSKI:def 3;
+         end;
+         hence thesis by A5,FUNCT_2:8;
+      end; then reconsider F as Function of NAT,S;
+A6:    for n,m being Nat st n <> m holds F.n misses F.m
+      proof
+         let n,m be Nat;
+         assume
+      A7: n <> m;
+A8:      (n = 0 or n = 1 or 1 < n) & (m = 0 or m = 1 or 1 < m) by CQC_THE1:2;
+      A9:n = 0 & 1 < m implies F.n misses F.m
+         proof
+            assume n = 0 & 1 < m;
+            then F.n = A & F.m = {} by A5;
+            then F.n /\ F.m = {};
+            hence thesis by XBOOLE_0:def 7;
+         end;
+      A10:n = 1 & 1 < m implies F.n misses F.m
+         proof
+            assume n = 1 & 1 < m;
+            then F.n = B & F.m = {} by A5;
+            then F.n /\ F.m = {};
+            hence thesis by XBOOLE_0:def 7;
+         end;
+     A11:(1 < n & m = 0) implies F.n misses F.m
+         proof
+            assume 1 < n & m = 0;
+            then F.n = {} & F.m = A by A5;
+            then F.n /\ F.m = {};
+            hence thesis by XBOOLE_0:def 7;
+         end;
+     A12:1 < n & m = 1 implies F.n misses F.m
+         proof
+            assume 1 < n & m = 1;
+            then F.n = {} & F.m = B by A5;
+            then F.n /\ F.m = {};
+            hence thesis by XBOOLE_0:def 7;
+         end;
+           1 < n & 1 < m implies F.n misses F.m
+         proof
+            assume 1 < n & 1 < m;
+            then F.n = {} & F.m = {} by A5;
+            then F.n /\ F.m = {};
+            hence thesis by XBOOLE_0:def 7;
+         end;
+         hence thesis by A2,A5,A7,A8,A9,A10,A11,A12;
+      end;
+        for m,n being set st m <> n holds F.m misses F.n
+      proof
+        let m,n be set; assume A13: m <> n;
+        per cases;
+        suppose m in NAT & n in NAT;
+        hence thesis by A6,A13;
+        suppose not m in NAT or not n in NAT;
+        then not m in dom F or not n in dom F by FUNCT_2:def 1;
+        then F.m = {} or F.n = {} by FUNCT_1:def 4;
+        hence thesis by XBOOLE_1:65;
+      end;
+      then reconsider F as disjoint_valued Function of NAT, S by PROB_2:def 3;
+   A14:union rng F = A \/ B
+      proof
+           union {A,B,{}} = union {A,B} by Th1;
+         hence thesis by A5,ZFMISC_1:93;
+      end;
+   A15:for r being Nat holds (M*F).0 = M.A & (M*F).1 = M.B &
+      (1+1 <= r implies (M*F).r = 0.)
+      proof
+         let r be Nat;
+     A16:for r being Nat holds (M*F).r = M.(F.r)
+         proof
+            let r be Nat;
+              dom (M*F) = NAT by FUNCT_2:def 1;
+            hence thesis by FUNCT_1:22;
+         end;
+           1 + 1 <= r implies (M*F).r = 0.
+         proof
+            assume 1 + 1 <= r;
+            then 1 < r by NAT_1:38; then F.r = {} by A5;
+            hence thesis by A1,A16;
+         end;
+         hence thesis by A5,A16;
+      end;
+      set H = M*F;
+  A17:H is nonnegative by A1,Th54;
+A18:  0 + 1 = 0 + 1;
+      set y1 = Ser H.1;
+      set n2 = 1 + 1;
+      reconsider A,B as Element of S;
+        Ser H.n2 = y1 + H.n2 by SUPINF_2:63;
+      then Ser H.n2 = y1 + 0.by A15
+                  .= Ser H.1 by SUPINF_2:18
+                  .= Ser H.0 + H.1 by A18,SUPINF_2:63
+                  .= M.A + M.B by A15,SUPINF_2:63;
+      then SUM(M*F) = M.A + M.B by A15,A17,SUPINF_2:67;
+      hence thesis by A14,Def11;
+   end;
+   hence thesis by A1,Def5;
+end;
+
+theorem
+     for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S,
+       A,B being Element of S st
+   A misses B holds M.(A \/ B) = M.A + M.B
+proof
+   let S be sigma_Field_Subset of X,
+       M be sigma_Measure of S,
+       A,B be Element of S;
+   assume
+A1:A misses B;
+     M is Measure of S by Th60;
+   hence thesis by A1,Def5;
+end;
+
+theorem Th62:
+   for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S,
+       A,B being Element of S st A c= B holds M.A <=' M.B
+proof
+   let S be sigma_Field_Subset of X,
+       M be sigma_Measure of S,
+       A,B be Element of S;
+   assume
+A1:A c= B;
+     M is Measure of S by Th60;
+   hence thesis by A1,Th25;
+end;
+
+theorem
+     for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S,
+       A,B being Element of S st
+   A c= B & M.A <' +infty holds M.(B \ A) = M.B - M.A
+proof
+   let S be sigma_Field_Subset of X,
+       M be sigma_Measure of S,
+       A,B be Element of S;
+   assume
+A1:A c= B & M.A <' +infty;
+     M is Measure of S by Th60;
+   hence thesis by A1,Th26;
+end;
+
+theorem Th64:
+   for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S,
+       A,B being Element of S holds
+   M.(A \/ B) <=' M.A + M.B
+proof
+   let S be sigma_Field_Subset of X,
+       M be sigma_Measure of S,
+       A,B be Element of S;
+     M is Measure of S by Th60;
+   hence thesis by Th27;
+end;
+
+definition
+   let X be set,
+       S be sigma_Field_Subset of X,
+       M be sigma_Measure of S,
+       A be set;
+   pred A is_measurable M means
+:Def12:A in S;
+end;
+
+canceled;
+
+theorem
+     for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S holds
+   {} is_measurable M & X is_measurable M &
+   for A,B being set st A is_measurable M & B is_measurable M holds
+   X \ A is_measurable M & A \/ B is_measurable M &
+   A /\ B is_measurable M
+proof
+   let S be sigma_Field_Subset of X,
+       M be sigma_Measure of S;
+A1:{} in S & X in S by Th45;
+     for A,B being set st
+   A is_measurable M & B is_measurable M holds
+   X \ A is_measurable M & A \/ B is_measurable M &
+   A /\ B is_measurable M
+   proof
+      let A,B be set;
+      assume A is_measurable M & B is_measurable M;
+      then A in S & B in S by Def12;
+      then X \ A in S & A \/ B in S & A /\ B in S & A \ B in S by Def3,Th46,
+Th47;
+      hence thesis by Def12;
+   end;
+   hence thesis by A1,Def12;
+end;
+
+theorem
+     for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S,
+       T being N_Sub_set_fam of X st
+   (for A being set st A in T holds A is_measurable M) holds
+   union T is_measurable M & meet T is_measurable M
+proof
+   let S be sigma_Field_Subset of X,
+       M be sigma_Measure of S,
+       T be N_Sub_set_fam of X;
+   assume
+A1:for A being set st A in T holds A is_measurable M;
+A2:T c= S
+   proof
+     let x be set;
+     assume x in T;
+     then x is_measurable M by A1;
+     hence thesis by Def12;
+   end;
+then A3:union T in S by Def9;
+     meet T in S by A2,Th49;
+   hence thesis by A3,Def12;
+end;
+
+definition
+   let X be set,
+       S be sigma_Field_Subset of X,
+       M be sigma_Measure of S;
+   mode measure_zero of M -> Element of S means
+:Def13:M.it = 0.;
+existence
+proof
+     {} is Element of S by Th45;
+   then consider A being Element of S such that
+A1:A = {};
+   take A;
+   thus thesis by A1,Def11;
+end;
+end;
+
+canceled;
+
+theorem
+     for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S,
+       A being Element of S,
+       B being measure_zero of M st
+   A c= B holds A is measure_zero of M
+proof
+   let S be sigma_Field_Subset of X,
+       M be sigma_Measure of S,
+       A be Element of S,
+       B be measure_zero of M;
+   assume
+A1:A c= B;
+     M is nonnegative by Def11;
+   then 0.<=' M.A & M.A <=' M.B by A1,Def4,Th62;
+   then 0.<=' M.A & M.A <=' 0.by Def13;
+   then M.A = 0.by SUPINF_1:22;
+   hence thesis by Def13;
+end;
+
+theorem
+     for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S,
+       A,B being measure_zero of M holds
+   A \/ B is measure_zero of M & A /\ B is measure_zero of M &
+   A \ B is measure_zero of M
+proof
+   let S be sigma_Field_Subset of X,
+       M be sigma_Measure of S,
+       A,B be measure_zero of M;
+A1:M.A = 0.& M.B = 0.by Def13;
+     M is nonnegative by Def11;
+   then A2: 0.<=' M.(A \/ B) & 0.<=' M.(A /\ B) & 0.<=' M.(A \ B) by Def4;
+     M.(A \/ B) <=' 0.+ 0.by A1,Th64;
+   then M.(A \/ B) <=' 0.by SUPINF_2:18;
+then A3:   M.(A \/ B) = 0.by A2,SUPINF_1:22;
+     A /\ B c= A by XBOOLE_1:17;
+   then M.(A /\ B) <=' 0.by A1,Th62;
+then A4:   M.(A /\ B) = 0.by A2,SUPINF_1:22;
+     A \ B c= A by XBOOLE_1:36;
+   then M.(A \ B) <=' 0.by A1,Th62;
+   then M.(A \ B) = 0.by A2,SUPINF_1:22;
+   hence thesis by A3,A4,Def13;
+end;
+
+theorem
+     for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S,
+       A being Element of S,
+       B being measure_zero of M holds
+   M.(A \/ B) = M.A & M.(A /\ B) = 0.& M.(A \ B) = M.A
+proof
+   let S be sigma_Field_Subset of X,
+       M be sigma_Measure of S,
+       A be Element of S,
+       B be measure_zero of M;
+A1:M.B = 0.by Def13;
+     M is nonnegative by Def11;
+   then A2: 0.<=' M.(A \/ B) & 0.<=' M.(A /\ B) & 0.<=' M.(A \ B) by Def4;
+     M.(A \/ B) <=' M.A + 0.by A1,Th64;
+then A3:M.(A \/ B) <=' M.A by SUPINF_2:18;
+     A c= A \/ B by XBOOLE_1:7; then A4: M.A <=' M.(A \/ B) by Th62;
+     A /\ B c= B by XBOOLE_1:17;
+then A5:M.(A /\ B) <=' 0.by A1,Th62;
+then A6:M.(A /\ B) = 0.by A2,SUPINF_1:22;
+     A \ B c= A by XBOOLE_1:36;
+then A7:M.(A \ B) <=' M.A by Th62;
+     M.A = M.((A /\ B) \/ (A \ B)) by XBOOLE_1:51;
+   then M.A <=' 0.+ M.(A \ B) by A6,Th64;
+   then M.A <=' M.(A \ B) by SUPINF_2:18;
+   hence thesis by A2,A3,A4,A5,A7,SUPINF_1:22;
+end;

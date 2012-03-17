@@ -1,0 +1,2527 @@
+:: Memory handling for SCM+FSA
+::  by Piotr Rudnicki and Andrzej Trybulec
+::
+:: Received July 18, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, RELAT_1, FUNCT_4, BOOLE, FINSET_1, FINSUB_1, PROB_1,
+      AMI_1, AMI_3, SCMFSA_2, FINSEQ_1, AMI_5, TARSKI, SCMFSA6A, RELOC, CAT_1,
+      CARD_1, FUNCOP_1, SQUARE_1, AMI_2, ARYTM_1, NAT_1, ABSVALUE, FINSEQ_2,
+      SF_MASTR, CARD_3, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0,
+      XREAL_0, FINSET_1, FINSUB_1, NAT_1, INT_1, STRUCT_0, GROUP_1, SETWISEO,
+      CQC_LANG, CQC_SIM1, CARD_1, PROB_1, FINSEQ_1, FINSEQ_2, FINSEQ_4,
+      RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, FUNCT_7, AMI_1, AMI_3, AMI_5,
+      SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A;
+ constructors FUNCT_7, SETWISEO, NAT_1, CQC_SIM1, AMI_5, SCMFSA_5, SCMFSA6A,
+      FINSEQ_4, PROB_1, MEMBERED;
+ clusters FINSET_1, FINSUB_1, RELSET_1, FUNCT_1, AMI_1, SCMFSA_2, SCMFSA_4,
+      INT_1, CQC_LANG, AMI_3, FRAENKEL, MEMBERED, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, XBOOLE_0;
+ theorems TARSKI, ENUMSET1, ZFMISC_1, FINSEQ_1, FINSUB_1, SETWISEO, NAT_1,
+      FINSET_1, RELAT_1, GRFUNC_1, FUNCT_1, FUNCT_2, FUNCT_4, FUNCT_7,
+      CQC_LANG, CQC_SIM1, CQC_THE1, CARD_3, CARD_4, AMI_1, AMI_3, AMI_5,
+      SCMFSA_2, PROB_1, SCMFSA_4, SCMFSA_5, SCMFSA6A, RELSET_1, XBOOLE_0,
+      XBOOLE_1;
+ schemes NAT_1, DOMAIN_1, FUNCT_2;
+
+begin :: Preliminaries
+
+theorem Th1:
+ for x, y, a being set, f being Function
+  st f.x = f.y holds f.a = (f*((id dom f)+*(x,y))).a
+proof
+ let x, y, a be set, f be Function; assume
+A1: f.x = f.y;
+A2: dom id dom f = dom f by RELAT_1:71;
+  set g1 = (id dom f)+*(x,y);
+ per cases;
+ suppose not x in dom f;
+   then id dom f = g1 by A2,FUNCT_7:def 3;
+  hence f.a = (f*((id dom f)+*(x,y))).a by RELAT_1:78;
+ suppose
+ A3: x in dom f;
+ then A4: g1.x = y by A2,FUNCT_7:33;
+ A5: dom g1 = dom f by A2,FUNCT_7:32;
+  thus f.a = (f*((id dom f)+*(x,y))).a proof
+   per cases;
+   suppose
+   A6: a in dom f;
+         now assume a <> x;
+         then g1.a = (id dom f).a by FUNCT_7:34 .= a by A6,FUNCT_1:35;
+        hence thesis by A5,A6,FUNCT_1:23;
+       end;
+    hence thesis by A1,A3,A4,A5,FUNCT_1:23;
+   suppose
+   A7: not a in dom f; dom (f*g1) c= dom g1 by RELAT_1:44;
+       then not a in dom (f*g1) by A5,A7;
+       then (f*g1).a = {} & f.a = {} by A7,FUNCT_1:def 4;
+    hence thesis;
+  end;
+end;
+
+theorem Th2:
+ for x, y being set, f being Function
+  st x in dom f implies y in dom f & f.x = f.y
+   holds f = f*((id dom f)+*(x,y))
+proof
+ let x, y be set, f be Function; assume
+A1: x in dom f implies y in dom f & f.x = f.y;
+  set g1 = (id dom f)+*(x,y);
+  set g = f*g1;
+A2: dom id dom f = dom f by RELAT_1:71;
+  per cases;
+  suppose not x in dom f;
+    then id dom f = g1 by A2,FUNCT_7:def 3;
+   hence f = f*g1 by RELAT_1:78;
+  suppose A3: x in dom f;
+A4: dom g1 = dom f by A2,FUNCT_7:32;
+     now
+      rng g1 c= dom f proof
+     let b be set; assume b in rng g1; then consider a being set such that
+   A5: a in dom g1 & b = g1.a by FUNCT_1:def 5;
+      per cases;
+      suppose a = x;
+       hence b in dom f by A1,A2,A3,A5,FUNCT_7:33;
+      suppose a <> x;
+       then (id dom f).a = g1.a by FUNCT_7:34;
+       hence b in dom f by A4,A5,FUNCT_1:35;
+    end;
+    hence dom f = dom g by A4,RELAT_1:46;
+    let a be set; assume a in dom f;
+    thus f.a = g.a by A1,A3,Th1;
+   end;
+  hence f = f*((id dom f)+*(x,y)) by FUNCT_1:9;
+end;
+
+definition
+ let A be finite set, B be set;
+ cluster -> finite Function of A, B;
+ coherence proof
+  let f be Function of A, B;
+    dom f c= A by RELSET_1:12; then dom f is finite by FINSET_1:13;
+  hence thesis by AMI_1:21;
+ end;
+end;
+
+definition
+ let A be finite set, B be set, f be Function of A, Fin B;
+ cluster Union f -> finite;
+ coherence proof
+    now
+   thus dom f is finite by AMI_1:21;
+   let x be set; assume
+  A1: x in dom f;
+     then reconsider A as non empty set by FUNCT_2:def 1;
+     reconsider x' = x as Element of A by A1,FUNCT_2:def 1;
+     reconsider f' = f as Function of A, Fin B;
+       f'.x' is finite;
+   hence f.x is finite;
+  end;
+  hence Union f is finite by CARD_4:63;
+ end;
+end;
+
+
+
+definition
+ cluster Int-Locations -> non empty;
+ coherence by SCMFSA_2:9;
+end;
+
+definition
+ cluster FinSeq-Locations -> non empty;
+ coherence by SCMFSA_2:10;
+end;
+
+begin :: Uniqueness of instruction components
+
+ reserve a, b, c, a1, a2, b1, b2 for Int-Location,
+         l, l1, l2 for Instruction-Location of SCM+FSA,
+         f, g, f1, f2 for FinSeq-Location,
+         i, j for Instruction of SCM+FSA;
+
+canceled 2;
+
+theorem Th5:
+  a1:=b1 = a2:=b2 implies a1 = a2 & b1 = b2
+proof assume
+A1:   a1:=b1 = a2:=b2;
+  consider A1, B1 being Data-Location such that
+A2: a1 = A1 & b1 = B1 & a1:=b1 = A1:=B1 by SCMFSA_2:def 11;
+  consider A2, B2 being Data-Location such that
+A3: a2 = A2 & b2 = B2 & a2:=b2 = A2:=B2 by SCMFSA_2:def 11;
+A4: A1:=B1 = [ 1, <*A1, B1*>] by AMI_3:def 3;
+ A5: A2:=B2 = [ 1, <*A2, B2*>] by AMI_3:def 3;
+      <*A1,B1*>.1 = A1 & <*A1,B1*>.2 = B1 & <*A2,B2*>.1 = A2 & <*A2,B2*>.2 = B2
+                      by FINSEQ_1:61;
+ hence a1 = a2 & b1 = b2 by A1,A2,A3,A4,A5,ZFMISC_1:33;
+end;
+
+theorem Th6:
+  AddTo(a1,b1) = AddTo(a2,b2) implies a1 = a2 & b1 = b2
+proof assume
+A1:   AddTo(a1,b1) = AddTo(a2,b2);
+  consider A1, B1 being Data-Location such that
+A2: a1 = A1 & b1 = B1 & AddTo(a1,b1) = AddTo(A1,B1) by SCMFSA_2:def 12;
+  consider A2, B2 being Data-Location such that
+A3: a2 = A2 & b2 = B2 & AddTo(a2,b2) = AddTo(A2,B2) by SCMFSA_2:def 12;
+A4: AddTo(A1,B1) = [ 2, <*A1, B1*>] by AMI_3:def 4;
+ A5: AddTo(A2,B2) = [ 2, <*A2, B2*>] by AMI_3:def 4;
+      <*A1,B1*>.1 = A1 & <*A1,B1*>.2 = B1 & <*A2,B2*>.1 = A2 & <*A2,B2*>.2 = B2
+                      by FINSEQ_1:61;
+ hence a1 = a2 & b1 = b2 by A1,A2,A3,A4,A5,ZFMISC_1:33;
+end;
+
+theorem Th7:
+  SubFrom(a1,b1) = SubFrom(a2,b2) implies a1 = a2 & b1 = b2
+proof assume
+A1:   SubFrom(a1,b1) = SubFrom(a2,b2);
+  consider A1, B1 being Data-Location such that
+A2: a1 = A1 & b1 = B1 & SubFrom(a1,b1) = SubFrom(A1,B1) by SCMFSA_2:def 13;
+  consider A2, B2 being Data-Location such that
+A3: a2 = A2 & b2 = B2 & SubFrom(a2,b2) = SubFrom(A2,B2) by SCMFSA_2:def 13;
+A4: SubFrom(A1,B1) = [ 3, <*A1, B1*>] by AMI_3:def 5;
+ A5: SubFrom(A2,B2) = [ 3, <*A2, B2*>] by AMI_3:def 5;
+      <*A1,B1*>.1 = A1 & <*A1,B1*>.2 = B1 & <*A2,B2*>.1 = A2 & <*A2,B2*>.2 = B2
+                      by FINSEQ_1:61;
+ hence a1 = a2 & b1 = b2 by A1,A2,A3,A4,A5,ZFMISC_1:33;
+end;
+
+theorem Th8:
+  MultBy(a1,b1) = MultBy(a2,b2) implies a1 = a2 & b1 = b2
+proof assume
+A1:   MultBy(a1,b1) = MultBy(a2,b2);
+  consider A1, B1 being Data-Location such that
+A2: a1 = A1 & b1 = B1 & MultBy(a1,b1) = MultBy(A1,B1) by SCMFSA_2:def 14;
+  consider A2, B2 being Data-Location such that
+A3: a2 = A2 & b2 = B2 & MultBy(a2,b2) = MultBy(A2,B2) by SCMFSA_2:def 14;
+A4: MultBy(A1,B1) = [ 4, <*A1, B1*>] by AMI_3:def 6;
+ A5: MultBy(A2,B2) = [ 4, <*A2, B2*>] by AMI_3:def 6;
+      <*A1,B1*>.1 = A1 & <*A1,B1*>.2 = B1 & <*A2,B2*>.1 = A2 & <*A2,B2*>.2 = B2
+                      by FINSEQ_1:61;
+ hence a1 = a2 & b1 = b2 by A1,A2,A3,A4,A5,ZFMISC_1:33;
+end;
+
+theorem Th9:
+  Divide(a1,b1) = Divide(a2,b2) implies a1 = a2 & b1 = b2
+proof assume
+A1:   Divide(a1,b1) = Divide(a2,b2);
+  consider A1, B1 being Data-Location such that
+A2: a1 = A1 & b1 = B1 & Divide(a1,b1) = Divide(A1,B1) by SCMFSA_2:def 15;
+  consider A2, B2 being Data-Location such that
+A3: a2 = A2 & b2 = B2 & Divide(a2,b2) = Divide(A2,B2) by SCMFSA_2:def 15;
+A4: Divide(A1,B1) = [ 5, <*A1, B1*>] by AMI_3:def 7;
+ A5: Divide(A2,B2) = [ 5, <*A2, B2*>] by AMI_3:def 7;
+      <*A1,B1*>.1 = A1 & <*A1,B1*>.2 = B1 & <*A2,B2*>.1 = A2 & <*A2,B2*>.2 = B2
+                      by FINSEQ_1:61;
+ hence a1 = a2 & b1 = b2 by A1,A2,A3,A4,A5,ZFMISC_1:33;
+end;
+
+theorem :: Lgoto6:
+    goto l1 = goto l2 implies l1 = l2
+proof assume
+A1: goto l1 = goto l2;
+  consider L1 being Instruction-Location of SCM such that
+A2: l1 = L1 & goto l1 = goto L1 by SCMFSA_2:def 16;
+  consider L2 being Instruction-Location of SCM such that
+A3: l2 = L2 & goto l2 = goto L2 by SCMFSA_2:def 16;
+A4: goto L1 = [ 6, <*L1*>] by AMI_3:def 8;
+ A5: goto L2 = [ 6, <*L2*>] by AMI_3:def 8;
+      <*L1*>.1 = L1 & <*L2*>.1 = L2 by FINSEQ_1:57;
+ hence l1 = l2 by A1,A2,A3,A4,A5,ZFMISC_1:33;
+end;
+
+theorem Th11:
+  a1=0_goto l1 = a2=0_goto l2 implies a1 = a2 & l1 = l2
+proof assume
+A1:   a1=0_goto l1 = a2=0_goto l2;
+  consider A1 being Data-Location, L1 being Instruction-Location of SCM
+    such that
+A2: a1 = A1 & l1 = L1 & a1=0_goto l1 = A1=0_goto L1 by SCMFSA_2:def 17;
+  consider A2 being Data-Location, L2 being Instruction-Location of SCM
+    such that
+A3: a2 = A2 & l2 = L2 & a2=0_goto l2 = A2=0_goto L2 by SCMFSA_2:def 17;
+A4: A1=0_goto L1 = [ 7, <*L1, A1*>] by AMI_3:def 9;
+ A5: A2=0_goto L2 = [ 7, <*L2, A2*>] by AMI_3:def 9;
+      <*L1,A1*>.1 = L1 & <*L1,A1*>.2 = A1 & <*L2,A2*>.1 = L2 & <*L2,A2*>.2 = A2
+                      by FINSEQ_1:61;
+ hence a1 = a2 & l1 = l2 by A1,A2,A3,A4,A5,ZFMISC_1:33;
+end;
+
+theorem Th12:
+  a1>0_goto l1 = a2>0_goto l2 implies a1 = a2 & l1 = l2
+proof assume
+A1:   a1>0_goto l1 = a2>0_goto l2;
+  consider A1 being Data-Location, L1 being Instruction-Location of SCM
+    such that
+A2: a1 = A1 & l1 = L1 & a1>0_goto l1 = A1>0_goto L1 by SCMFSA_2:def 18;
+  consider A2 being Data-Location, L2 being Instruction-Location of SCM
+    such that
+A3: a2 = A2 & l2 = L2 & a2>0_goto l2 = A2>0_goto L2 by SCMFSA_2:def 18;
+A4: A1>0_goto L1 = [ 8, <*L1, A1*>] by AMI_3:def 10;
+ A5: A2>0_goto L2 = [ 8, <*L2, A2*>] by AMI_3:def 10;
+      <*L1,A1*>.1 = L1 & <*L1,A1*>.2 = A1 & <*L2,A2*>.1 = L2 & <*L2,A2*>.2 = A2
+                      by FINSEQ_1:61;
+ hence a1 = a2 & l1 = l2 by A1,A2,A3,A4,A5,ZFMISC_1:33;
+end;
+
+theorem Th13:
+  b1:=(f1, a1) = b2:=(f2, a2) implies a1 = a2 & b1 = b2 & f1 = f2
+proof assume
+A1: b1:=(f1, a1) = b2:=(f2, a2);
+ A2: b1:=(f1, a1) = [9,<*b1,f1,a1*>] & b2:=(f2, a2) = [9,<*b2,f2,a2*>]
+          by SCMFSA_2:def 19;
+     <*b1,f1,a1*>.1 = b1 & <*b1,f1,a1*>.2 = f1 & <*b1,f1,a1*>.3 = a1 &
+   <*b2,f2,a2*>.1 = b2 & <*b2,f2,a2*>.2 = f2 & <*b2,f2,a2*>.3 = a2
+          by FINSEQ_1:62;
+ hence a1 = a2 & b1 = b2 & f1 = f2 by A1,A2,ZFMISC_1:33;
+end;
+
+theorem Th14:
+  (f1, a1):=b1 = (f2, a2):=b2 implies a1 = a2 & b1 = b2 & f1 = f2
+proof assume
+A1: (f1, a1):=b1 = (f2, a2):=b2;
+ A2: (f1, a1):=b1 = [10,<*b1,f1,a1*>] & (f2, a2):=b2 = [10,<*b2,f2,a2*>]
+          by SCMFSA_2:def 20;
+     <*b1,f1,a1*>.1 = b1 & <*b1,f1,a1*>.2 = f1 & <*b1,f1,a1*>.3 = a1 &
+   <*b2,f2,a2*>.1 = b2 & <*b2,f2,a2*>.2 = f2 & <*b2,f2,a2*>.3 = a2
+          by FINSEQ_1:62;
+ hence a1 = a2 & b1 = b2 & f1 = f2 by A1,A2,ZFMISC_1:33;
+end;
+
+theorem Th15:
+  a1:=len f1 = a2:=len f2 implies a1 = a2 & f1 = f2
+proof assume
+A1: a1:=len f1 = a2:=len f2;
+ A2: a1:=len f1 = [11,<*a1,f1*>] & a2:=len f2 = [11,<*a2,f2*>]
+          by SCMFSA_2:def 21;
+     <*a1,f1*>.1 = a1 & <*a1,f1*>.2 = f1 & <*a2,f2*>.1 = a2 & <*a2,f2*>.2 = f2
+         by FINSEQ_1:61;
+ hence a1 = a2 & f1 = f2 by A1,A2,ZFMISC_1:33;
+end;
+
+theorem Th16:
+  f1:=<0,...,0>a1 = f2:=<0,...,0>a2 implies a1 = a2 & f1 = f2
+proof assume
+A1: f1:=<0,...,0>a1 = f2:=<0,...,0>a2;
+ A2: f1:=<0,...,0>a1 = [12,<*a1,f1*>] & f2:=<0,...,0>a2 = [12,<*a2,f2*>]
+          by SCMFSA_2:def 22;
+     <*a1,f1*>.1 = a1 & <*a1,f1*>.2 = f1 & <*a2,f2*>.1 = a2 & <*a2,f2*>.2 = f2
+         by FINSEQ_1:61;
+ hence a1 = a2 & f1 = f2 by A1,A2,ZFMISC_1:33;
+end;
+
+begin :: Integer locations used in a macro instruction
+
+definition
+  let i be Instruction of SCM+FSA;
+ func UsedIntLoc i -> Element of Fin Int-Locations means
+:Def1:
+ ex a, b being Int-Location st
+  (i = (a := b) or i = AddTo(a, b) or i = SubFrom(a, b) or i = MultBy(a, b) or
+   i = Divide(a, b)) & it = {a, b}
+   if InsCode i in {1, 2, 3, 4, 5},
+ ex a being Int-Location, l being Instruction-Location of SCM+FSA
+      st (i = a=0_goto l or i = a>0_goto l) & it = {a}
+   if InsCode i = 7 or InsCode i = 8,
+ ex a, b being Int-Location, f being FinSeq-Location
+      st (i = b := (f, a) or i = (f, a) := b) & it = {a, b}
+   if InsCode i = 9 or InsCode i = 10,
+ ex a being Int-Location, f being FinSeq-Location
+      st (i = a :=len f or i = f :=<0,...,0>a) & it = {a}
+   if InsCode i = 11 or InsCode i = 12
+   otherwise it = {};
+ existence proof
+  hereby assume InsCode i in {1, 2, 3, 4, 5};
+   then InsCode i = 1 or InsCode i = 2 or
+             InsCode i = 3 or InsCode i = 4 or InsCode i = 5 by ENUMSET1:23;
+   then consider a, b being Int-Location such that
+  A1: i = (a := b) or i = AddTo(a, b) or i = SubFrom(a, b) or i = MultBy(a, b)
+     or i = Divide(a, b) by SCMFSA_2:54,55,56,57,58;
+   reconsider a' = a, b' = b as Element of Int-Locations by SCMFSA_2:9;
+   reconsider IT = {a', b'} as Element of Fin Int-Locations;
+   take IT;
+   take a, b;
+   thus (i = (a := b) or i = AddTo(a, b) or i = SubFrom(a, b) or
+         i = MultBy(a, b) or i = Divide(a, b)) & IT = {a, b} by A1;
+  end;
+  hereby assume InsCode i = 7 or InsCode i = 8;
+     then consider l being Instruction-Location of SCM+FSA, a being
+Int-Location
+      such that
+  A2: i = a=0_goto l or i = a>0_goto l by SCMFSA_2:60,61;
+   reconsider a' = a as Element of Int-Locations by SCMFSA_2:9;
+   reconsider IT = {a'} as Element of Fin Int-Locations;
+   take IT;
+   take a, l;
+   thus (i = a=0_goto l or i = a>0_goto l) & IT = {a} by A2;
+  end;
+  hereby assume InsCode i = 9 or InsCode i = 10;
+    then consider a, b being Int-Location, f being FinSeq-Location such that
+  A3:  i = b := (f, a) or i = (f, a) := b by SCMFSA_2:62,63;
+   reconsider a' = a, b' = b as Element of Int-Locations by SCMFSA_2:9;
+   reconsider IT = {a', b'} as Element of Fin Int-Locations;
+   take IT;
+   take a, b, f;
+   thus (i = b := (f, a) or i = (f, a) := b) & IT = {a, b} by A3;
+  end;
+  hereby assume InsCode i = 11 or InsCode i = 12;
+    then consider a being Int-Location, f being FinSeq-Location such that
+  A4: i = a :=len f or i = f :=<0,...,0>a by SCMFSA_2:64,65;
+   reconsider a' = a as Element of Int-Locations by SCMFSA_2:9;
+   reconsider IT = {a'} as Element of Fin Int-Locations;
+   take IT;
+   take a, f;
+   thus (i = a :=len f or i = f :=<0,...,0>a) & IT = {a} by A4;
+  end;
+     {} in Fin Int-Locations by FINSUB_1:18;
+  hence thesis;
+ end;
+ uniqueness proof
+  let it1, it2 be Element of Fin Int-Locations;
+  hereby assume InsCode i in {1, 2, 3, 4, 5};
+     given a1, b1 being Int-Location such that
+  A5: (i = (a1 := b1) or i = AddTo(a1, b1) or i = SubFrom(a1, b1) or
+      i = MultBy(a1, b1) or i = Divide(a1, b1)) & it1 = {a1, b1};
+     given a2, b2 being Int-Location such that
+  A6: (i = (a2 := b2) or i = AddTo(a2, b2) or i = SubFrom(a2, b2) or
+      i = MultBy(a2, b2) or i = Divide(a2, b2)) & it2 = {a2, b2};
+  A7: i = AddTo(a1, b1) or i = AddTo(a2, b2) implies InsCode i = 2
+                                 by SCMFSA_2:43;
+  A8: i = SubFrom(a1, b1) or i = SubFrom(a2, b2) implies InsCode i = 3
+                                 by SCMFSA_2:44;
+  A9: i = MultBy(a1, b1) or i = MultBy(a2, b2) implies InsCode i = 4
+                                 by SCMFSA_2:45;
+  A10: i = Divide(a1, b1) or i = Divide(a2, b2) implies InsCode i = 5
+                                 by SCMFSA_2:46;
+    per cases by A5,A6,A7,A8,A9,A10,SCMFSA_2:42;
+    suppose i = (a1 := b1) & i = (a2 := b2); then a1 = a2 & b1 = b2 by Th5;
+     hence it1 = it2 by A5,A6;
+    suppose i = AddTo(a1, b1) & i = AddTo(a2, b2);
+      then a1 = a2 & b1 = b2 by Th6; hence it1 = it2 by A5,A6;
+    suppose i = SubFrom(a1, b1) & i = SubFrom(a2, b2);
+      then a1 = a2 & b1 = b2 by Th7; hence it1 = it2 by A5,A6;
+    suppose i = MultBy(a1, b1) & i = MultBy(a2, b2);
+      then a1 = a2 & b1 = b2 by Th8; hence it1 = it2 by A5,A6;
+    suppose i = Divide(a1, b1) & i = Divide(a2, b2);
+      then a1 = a2 & b1 = b2 by Th9; hence it1 = it2 by A5,A6;
+  end;
+  hereby assume InsCode i = 7 or InsCode i = 8;
+     given a1 being Int-Location, l1 being Instruction-Location of SCM+FSA
+      such that
+  A11: (i = a1=0_goto l1 or i = a1>0_goto l1) & it1 = {a1};
+     given a2 being Int-Location, l2 being Instruction-Location of SCM+FSA
+      such that
+  A12: (i = a2=0_goto l2 or i = a2>0_goto l2) & it2 = {a2};
+  A13: i = a1>0_goto l1 or i = a2>0_goto l2 implies InsCode i = 8
+                                 by SCMFSA_2:49;
+     per cases by A11,A12,A13,SCMFSA_2:48;
+     suppose i = a1=0_goto l1 & i = a2=0_goto l2; hence it1 = it2 by A11,A12,
+Th11;
+     suppose i = a1>0_goto l1 & i = a2>0_goto l2; hence it1 = it2 by A11,A12,
+Th12;
+  end;
+  hereby assume InsCode i = 9 or InsCode i = 10;
+     given a1, b1 being Int-Location, f1 being FinSeq-Location such that
+  A14: (i = b1 := (f1, a1) or i = (f1, a1) := b1) & it1 = {a1, b1};
+     given a2, b2 being Int-Location, f2 being FinSeq-Location such that
+  A15: (i = b2 := (f2, a2) or i = (f2, a2) := b2) & it2 = {a2, b2};
+  A16: i = (f1, a1) := b1 or i = (f2, a2) := b2 implies InsCode i = 10
+                                 by SCMFSA_2:51;
+     per cases by A14,A15,A16,SCMFSA_2:50;
+     suppose i = b1 := (f1, a1) & i = b2 := (f2, a2);
+      then a1 = a2 & b1 = b2 by Th13; hence it1 = it2 by A14,A15;
+     suppose i = (f1, a1) := b1 & i = (f2, a2) := b2;
+      then a1 = a2 & b1 = b2 by Th14; hence it1 = it2 by A14,A15;
+  end;
+  hereby assume InsCode i = 11 or InsCode i = 12;
+     given a1 being Int-Location, f1 being FinSeq-Location such that
+  A17: (i = a1 :=len f1 or i = f1 :=<0,...,0>a1) & it1 = {a1};
+     given a2 being Int-Location, f2 being FinSeq-Location such that
+  A18: (i = a2 :=len f2 or i = f2 :=<0,...,0>a2) & it2 = {a2};
+  A19: i = f1 :=<0,...,0>a1 or i = f2 :=<0,...,0>a2 implies InsCode i = 12
+                                 by SCMFSA_2:53;
+     per cases by A17,A18,A19,SCMFSA_2:52;
+     suppose i = a1 :=len f1 & i = a2 :=len f2; hence it1 = it2 by A17,A18,Th15
+;
+     suppose i = f1 :=<0,...,0>a1 & i = f2 :=<0,...,0>a2; hence it1 = it2 by
+A17,A18,Th16;
+  end;
+  thus thesis;
+ end;
+ consistency by ENUMSET1:23;
+end;
+
+theorem Th17:
+ UsedIntLoc halt SCM+FSA = {}
+proof
+  not 0 in {1, 2, 3, 4, 5} by ENUMSET1:23;
+ hence UsedIntLoc halt SCM+FSA = {} by Def1,SCMFSA_2:124;
+end;
+
+theorem Th18:
+   i = a:=b or i = AddTo(a, b) or i = SubFrom(a, b) or
+   i = MultBy(a, b) or i = Divide(a, b)
+  implies UsedIntLoc i = {a, b}
+ proof assume
+A1: i = a:=b or i = AddTo(a, b) or i = SubFrom(a, b) or
+   i = MultBy(a, b) or i = Divide(a, b);
+     a in Int-Locations & b in Int-Locations by SCMFSA_2:9;
+   then {a, b} c= Int-Locations by ZFMISC_1:38;
+   then reconsider ab = {a, b} as Element of Fin Int-Locations by FINSUB_1:def
+5;
+     InsCode i = 1 or InsCode i = 2 or InsCode i = 3 or InsCode i = 4 or
+   InsCode i = 5 by A1,SCMFSA_2:42,43,44,45,46;
+   then InsCode i in {1, 2, 3, 4, 5} by ENUMSET1:24;
+   then UsedIntLoc i = ab by A1,Def1;
+ hence UsedIntLoc i = {a, b};
+end;
+
+theorem Th19:
+ UsedIntLoc goto l = {}
+proof
+A1: InsCode goto l = 6 by SCMFSA_2:47;
+  not 6 in {1, 2, 3, 4, 5} by ENUMSET1:23;
+ hence UsedIntLoc goto l = {} by A1,Def1;
+end;
+
+theorem Th20:
+ i = a=0_goto l or i = a>0_goto l implies UsedIntLoc i = {a}
+proof assume
+A1: i = a=0_goto l or i = a>0_goto l;
+     a in Int-Locations by SCMFSA_2:9;
+   then {a} c= Int-Locations by ZFMISC_1:37;
+   then reconsider ab = {a} as Element of Fin Int-Locations by FINSUB_1:def 5;
+     InsCode i = 7 or InsCode i = 8 by A1,SCMFSA_2:48,49;
+   then UsedIntLoc i = ab by A1,Def1;
+ hence UsedIntLoc i = {a};
+end;
+
+theorem Th21:
+ i = b := (f, a) or i = (f, a) := b implies UsedIntLoc i = {a, b}
+proof assume
+A1: i = b := (f, a) or i = (f, a) := b;
+     a in Int-Locations & b in Int-Locations by SCMFSA_2:9;
+   then {a, b} c= Int-Locations by ZFMISC_1:38;
+   then reconsider ab = {a, b} as Element of Fin Int-Locations by FINSUB_1:def
+5;
+     InsCode i = 9 or InsCode i = 10 by A1,SCMFSA_2:50,51;
+   then UsedIntLoc i = ab by A1,Def1;
+ hence UsedIntLoc i = {a, b};
+end;
+
+theorem Th22:
+ i = a :=len f or i = f :=<0,...,0>a implies UsedIntLoc i = {a}
+proof assume
+A1: i = a :=len f or i = f :=<0,...,0>a;
+     a in Int-Locations by SCMFSA_2:9;
+   then {a} c= Int-Locations by ZFMISC_1:37;
+   then reconsider ab = {a} as Element of Fin Int-Locations by FINSUB_1:def 5;
+     InsCode i = 11 or InsCode i = 12 by A1,SCMFSA_2:52,53;
+   then UsedIntLoc i = ab by A1,Def1;
+ hence UsedIntLoc i = {a};
+end;
+
+definition
+ let p be programmed FinPartState of SCM+FSA;
+ func UsedIntLoc p -> Subset of Int-Locations means
+:Def2:
+   ex UIL being Function of the Instructions of SCM+FSA, Fin Int-Locations
+    st (for i being Instruction of SCM+FSA holds UIL.i = UsedIntLoc i) &
+       it = Union (UIL * p);
+ existence proof
+ defpred P[set,set] means
+  ex I being Instruction of SCM+FSA st $1 = I & $2 = UsedIntLoc I;
+A1:
+  for e being Element of the Instructions of SCM+FSA
+   ex u being Element of Fin Int-Locations st P[e,u]
+  proof let e be Element of the Instructions of SCM+FSA;
+    reconsider f = e as Instruction of SCM+FSA ;
+    reconsider u = UsedIntLoc f as Element of Fin Int-Locations;
+    take u, f; thus thesis;
+   end;
+  consider UIL being Function of the Instructions of SCM+FSA, Fin Int-Locations
+    such that
+A2: for i being Element of the Instructions of SCM+FSA holds P[i,UIL.i]
+     from FuncExD(A1);
+   set IT = Union (UIL * p);
+   reconsider dp = dom p as finite set by AMI_1:21;
+     rng p c= the Instructions of SCM+FSA by SCMFSA_4:1;
+   then reconsider p' = p as Function of
+                   dp, the Instructions of SCM+FSA by FUNCT_2:4;
+   reconsider Up = UIL * p' as
+                   Function of dp, Fin Int-Locations;
+A3: IT = union rng Up by PROB_1:def 3;
+A4: rng Up c= Fin Int-Locations by RELSET_1:12;
+     Fin Int-Locations c= bool Int-Locations by FINSUB_1:26;
+   then rng Up c= bool Int-Locations by A4,XBOOLE_1:1;
+   then A5: union rng Up c= union bool Int-Locations by ZFMISC_1:95;
+   take IT;
+   thus IT is Subset of Int-Locations by A3,A5,ZFMISC_1:99;
+   take UIL;
+   hereby
+     let i be Instruction of SCM+FSA;
+       P[i,UIL.i] by A2;
+     hence UIL.i = UsedIntLoc i;
+   end;
+  thus thesis;
+ end;
+ uniqueness proof let IT1, IT2 be Subset of Int-Locations;
+   given UIL1 being Function of the Instructions of SCM+FSA, Fin Int-Locations
+   such that
+A6: (for i being Instruction of SCM+FSA holds UIL1.i = UsedIntLoc i) &
+   IT1 = Union (UIL1 * p);
+   given UIL2 being Function of the Instructions of SCM+FSA, Fin Int-Locations
+   such that
+A7: (for i being Instruction of SCM+FSA holds UIL2.i = UsedIntLoc i) &
+   IT2 = Union (UIL2 * p);
+      for c be Element of the Instructions of SCM+FSA holds UIL1.c = UIL2.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA ;
+      thus UIL1.c = UsedIntLoc d by A6
+        .= UIL2.c by A7;
+    end;
+  hence IT1 = IT2 by A6,A7,FUNCT_2:113;
+ end;
+end;
+
+definition
+ let p be programmed FinPartState of SCM+FSA;
+ cluster UsedIntLoc p -> finite;
+ coherence proof
+  consider UIL being Function of the Instructions of SCM+FSA, Fin Int-Locations
+    such that
+A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedIntLoc i) &
+       UsedIntLoc p = Union (UIL * p) by Def2;
+   reconsider dp = dom p as finite set by AMI_1:21;
+     rng p c= the Instructions of SCM+FSA by SCMFSA_4:1;
+ then reconsider p' = p as Function of dp, the Instructions of SCM+FSA by
+FUNCT_2:4;
+   reconsider Up = UIL * p' as Function of dp, Fin Int-Locations;
+     Union Up is finite;
+  hence thesis by A1;
+ end;
+end;
+
+reserve p, r for programmed FinPartState of SCM+FSA,
+        I, J for Macro-Instruction,
+        k, m, n for Nat;
+
+theorem Th23:
+  i in rng p implies UsedIntLoc i c= UsedIntLoc p
+proof assume
+   i in rng p;
+   then consider x being set such that
+A1: x in dom p & i = p.x by FUNCT_1:def 5;
+  consider UIL being Function of the Instructions of SCM+FSA, Fin Int-Locations
+    such that
+A2: (for i being Instruction of SCM+FSA holds UIL.i = UsedIntLoc i) &
+       UsedIntLoc p = Union (UIL * p) by Def2;
+A3: (UIL * p).x = UIL.i by A1,FUNCT_1:23 .= UsedIntLoc i by A2;
+     dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
+   then x in dom (UIL * p) by A1,FUNCT_1:21;
+then A4: (UIL * p).x in rng (UIL * p) by FUNCT_1:def 5;
+     UsedIntLoc p = union rng (UIL * p) by A2,PROB_1:def 3;
+ hence UsedIntLoc i c= UsedIntLoc p by A3,A4,ZFMISC_1:92;
+end;
+
+theorem :: UFP1:
+   UsedIntLoc (p +* r) c= (UsedIntLoc p) \/ (UsedIntLoc r)
+proof
+  consider UIL being Function of the Instructions of SCM+FSA, Fin Int-Locations
+    such that
+A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedIntLoc i) &
+    UsedIntLoc (p +* r) = Union (UIL * (p +* r)) by Def2;
+ consider UIL1 being Function of the Instructions of SCM+FSA, Fin Int-Locations
+    such that
+A2: (for i being Instruction of SCM+FSA holds UIL1.i = UsedIntLoc i) &
+   UsedIntLoc p = Union (UIL1 * p) by Def2;
+ consider UIL2 being Function of the Instructions of SCM+FSA, Fin Int-Locations
+    such that
+A3: (for i being Instruction of SCM+FSA holds UIL2.i = UsedIntLoc i) &
+   UsedIntLoc r = Union (UIL2 * r) by Def2;
+      for c be Element of the Instructions of SCM+FSA holds UIL.c = UIL1.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA ;
+      thus UIL.c = UsedIntLoc d by A1
+        .= UIL1.c by A2;
+    end;
+then A4: UIL=UIL1 by FUNCT_2:113;
+      for c be Element of the Instructions of SCM+FSA holds UIL.c = UIL2.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA ;
+      thus UIL.c = UsedIntLoc d by A1
+        .= UIL2.c by A3;
+    end;
+then A5: UIL=UIL2 by FUNCT_2:113;
+A6: Union (UIL * (p +* r)) = union rng (UIL * (p +* r)) by PROB_1:def 3;
+A7: Union (UIL * p) = union rng (UIL * p) by PROB_1:def 3;
+A8: Union (UIL * r) = union rng (UIL * r) by PROB_1:def 3;
+      dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
+    then rng p c= dom UIL & rng r c= dom UIL by SCMFSA_4:1;
+    then UIL * (p +* r) = (UIL * p) +* (UIL * r) by FUNCT_7:10;
+    then rng (UIL * (p +* r)) c= rng (UIL * p) \/ rng (UIL * r)
+          by FUNCT_4:18;
+then union rng (UIL * (p +* r)) c= union (rng (UIL * p) \/ rng (UIL * r))
+          by ZFMISC_1:95;
+ hence thesis by A1,A2,A3,A4,A5,A6,A7,A8,ZFMISC_1:96;
+end;
+
+theorem Th25:
+ dom p misses dom r implies
+  UsedIntLoc (p +* r) = (UsedIntLoc p) \/ (UsedIntLoc r)
+proof
+  consider UIL being Function of the Instructions of SCM+FSA, Fin Int-Locations
+    such that
+A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedIntLoc i) &
+    UsedIntLoc (p +* r) = Union (UIL * (p +* r)) by Def2;
+ consider UIL1 being Function of the Instructions of SCM+FSA, Fin Int-Locations
+    such that
+A2: (for i being Instruction of SCM+FSA holds UIL1.i = UsedIntLoc i) &
+   UsedIntLoc p = Union (UIL1 * p) by Def2;
+ consider UIL2 being Function of the Instructions of SCM+FSA, Fin Int-Locations
+    such that
+A3: (for i being Instruction of SCM+FSA holds UIL2.i = UsedIntLoc i) &
+   UsedIntLoc r = Union (UIL2 * r) by Def2;
+      for c be Element of the Instructions of SCM+FSA holds UIL.c = UIL1.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA ;
+      thus UIL.c = UsedIntLoc d by A1
+        .= UIL1.c by A2;
+    end;
+then A4: UIL=UIL1 by FUNCT_2:113;
+      for c be Element of the Instructions of SCM+FSA holds UIL.c = UIL2.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA ;
+      thus UIL.c = UsedIntLoc d by A1
+        .= UIL2.c by A3;
+    end;
+then A5: UIL=UIL2 by FUNCT_2:113;
+A6: Union (UIL * (p +* r)) = union rng (UIL * (p +* r))
+       by PROB_1:def 3;
+A7: Union (UIL * p) = union rng (UIL * p) by PROB_1:def 3;
+A8: Union (UIL * r) = union rng (UIL * r) by PROB_1:def 3;
+      dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
+    then rng p c= dom UIL & rng r c= dom UIL by SCMFSA_4:1;
+then A9:  UIL * (p +* r) = (UIL * p) +* (UIL * r) by FUNCT_7:10;
+ assume
+A10: dom p misses dom r;
+A11: dom (UIL * p) c= dom p & dom (UIL * r) c= dom r by RELAT_1:44;
+   then dom p misses dom (UIL * r) by A10,XBOOLE_1:63;
+   then dom (UIL * p) misses dom (UIL * r) by A11,XBOOLE_1:63;
+   then (UIL * p) +* (UIL * r) = (UIL * p) \/ (UIL * r)
+       by FUNCT_4:32;
+then union rng (UIL * (p +* r)) = union (rng (UIL * p) \/ rng (UIL * r))
+          by A9,RELAT_1:26;
+ hence thesis by A1,A2,A3,A4,A5,A6,A7,A8,ZFMISC_1:96;
+end;
+
+
+theorem Th26:
+ UsedIntLoc p = UsedIntLoc Shift(p, k)
+proof
+ consider UIL being Function of the Instructions of SCM+FSA, Fin Int-Locations
+    such that
+A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedIntLoc i) &
+   UsedIntLoc p = Union (UIL * p) by Def2;
+ consider UIL2 being Function of the Instructions of SCM+FSA, Fin Int-Locations
+    such that
+A2: (for i being Instruction of SCM+FSA holds UIL2.i = UsedIntLoc i) &
+   UsedIntLoc Shift (p, k) = Union (UIL2 * Shift (p, k)) by Def2;
+      for c be Element of the Instructions of SCM+FSA holds UIL.c = UIL2.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA ;
+      thus UIL.c = UsedIntLoc d by A1
+        .= UIL2.c by A2;
+    end;
+then A3: UIL=UIL2 by FUNCT_2:113;
+  set Sp = Shift (p, k);
+A4: Union (UIL * Sp) = union rng (UIL * Sp) by PROB_1:def 3;
+A5: dom Sp = { insloc(m+k) where m is Nat : insloc m in dom p }
+         by SCMFSA_4:def 7;
+      now let y be set;
+     hereby assume y in rng Sp; then consider x being set such that
+     A6: x in dom Sp & y = Sp.x by FUNCT_1:def 5;
+        consider m being Nat such that
+     A7: x = insloc (m+k) & insloc m in dom p by A5,A6;
+          Sp.x = p.insloc m by A7,SCMFSA_4:def 7;
+      hence y in rng p by A6,A7,FUNCT_1:def 5;
+     end;
+     assume y in rng p; then consider x being set such that
+     A8: x in dom p & y = p.x by FUNCT_1:def 5;
+          dom p c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
+        then reconsider x' = x as Instruction-Location of SCM+FSA by A8;
+        consider m being Nat such that
+     A9: x' = insloc m by SCMFSA_2:21;
+     A10: insloc (m+k) in dom Sp by A5,A8,A9;
+          Sp.insloc (m+k) = p.insloc m by A8,A9,SCMFSA_4:def 7;
+     hence y in rng Sp by A8,A9,A10,FUNCT_1:def 5;
+    end;
+then A11:  rng Sp = rng p by TARSKI:2;
+      rng (UIL * Sp) = UIL.:rng Sp by RELAT_1:160
+                     .= rng (UIL * p) by A11,RELAT_1:160;
+  hence thesis by A1,A2,A3,A4,PROB_1:def 3;
+end;
+
+theorem Th27:
+  UsedIntLoc i = UsedIntLoc IncAddr(i, k)
+proof
+   A1: InsCode i <= 11+1 by SCMFSA_2:35;
+A2: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:26;
+A3: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:26;
+A4: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
+  per cases by A1,A2,A3,A4,CQC_THE1:9,NAT_1:26;
+  suppose InsCode i = 0; then i = halt SCM+FSA by SCMFSA_2:122;
+   hence UsedIntLoc IncAddr(i, k) = UsedIntLoc i by SCMFSA_4:8;
+  suppose InsCode i = 1; then consider a, b such that
+  A5: i = a:=b by SCMFSA_2:54;
+   thus UsedIntLoc IncAddr(i, k) = UsedIntLoc i by A5,SCMFSA_4:9;
+  suppose InsCode i = 2; then consider a, b such that
+  A6: i = AddTo(a,b) by SCMFSA_2:55;
+   thus UsedIntLoc IncAddr(i, k) = UsedIntLoc i by A6,SCMFSA_4:10;
+  suppose InsCode i = 3; then consider a, b such that
+  A7: i = SubFrom(a, b) by SCMFSA_2:56;
+   thus UsedIntLoc IncAddr(i, k) = UsedIntLoc i by A7,SCMFSA_4:11;
+  suppose InsCode i = 4; then consider a, b such that
+  A8: i = MultBy(a, b) by SCMFSA_2:57;
+   thus UsedIntLoc IncAddr(i, k) = UsedIntLoc i by A8,SCMFSA_4:12;
+  suppose InsCode i = 5; then consider a, b such that
+  A9: i = Divide(a, b) by SCMFSA_2:58;
+   thus UsedIntLoc IncAddr(i, k) = UsedIntLoc i by A9,SCMFSA_4:13;
+  suppose InsCode i = 6; then consider l such that
+  A10: i = goto l by SCMFSA_2:59; IncAddr(i, k) = goto (l+k) by A10,SCMFSA_4:14
+;
+   hence UsedIntLoc IncAddr(i, k) = {} by Th19 .= UsedIntLoc i by A10,Th19;
+  suppose InsCode i = 7; then consider l, a such that
+  A11: i = a=0_goto l by SCMFSA_2:60;
+       IncAddr(i, k) = a=0_goto (l+k) by A11,SCMFSA_4:15;
+   hence UsedIntLoc IncAddr(i, k) = {a} by Th20
+          .= UsedIntLoc i by A11,Th20;
+  suppose InsCode i = 8; then consider l, a such that
+  A12: i = a>0_goto l by SCMFSA_2:61;
+       IncAddr(i, k) = a>0_goto (l+k) by A12,SCMFSA_4:16;
+   hence UsedIntLoc IncAddr(i, k) = {a} by Th20
+          .= UsedIntLoc i by A12,Th20;
+  suppose InsCode i = 9; then consider a, b, f such that
+  A13: i = b:=(f,a) by SCMFSA_2:62;
+   thus UsedIntLoc IncAddr(i, k) = UsedIntLoc i by A13,SCMFSA_4:17;
+  suppose InsCode i = 10; then consider a, b, f such that
+  A14: i = (f,a):=b by SCMFSA_2:63;
+   thus UsedIntLoc IncAddr(i, k) = UsedIntLoc i by A14,SCMFSA_4:18;
+  suppose InsCode i = 11; then consider a, f such that
+  A15: i = a:=len f by SCMFSA_2:64;
+   thus UsedIntLoc IncAddr(i, k) = UsedIntLoc i by A15,SCMFSA_4:19;
+  suppose InsCode i = 12; then consider a,f such that
+  A16: i = f:=<0,...,0>a by SCMFSA_2:65;
+   thus UsedIntLoc IncAddr(i, k) = UsedIntLoc i by A16,SCMFSA_4:20;
+end;
+
+theorem Th28:
+ UsedIntLoc p = UsedIntLoc IncAddr(p, k)
+proof
+ consider UIL being Function of the Instructions of SCM+FSA, Fin Int-Locations
+    such that
+A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedIntLoc i) &
+   UsedIntLoc p = Union (UIL * p) by Def2;
+ consider UIL2 being Function of the Instructions of SCM+FSA, Fin Int-Locations
+    such that
+A2: (for i being Instruction of SCM+FSA holds UIL2.i = UsedIntLoc i) &
+   UsedIntLoc IncAddr (p, k) = Union (UIL2 * IncAddr (p, k)) by Def2;
+      for c be Element of the Instructions of SCM+FSA holds UIL.c = UIL2.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA ;
+      thus UIL.c = UsedIntLoc d by A1
+        .= UIL2.c by A2;
+    end;
+then A3: UIL=UIL2 by FUNCT_2:113;
+  set Ip = IncAddr (p, k); set f = UIL * Ip; set g = UIL * p;
+   now
+ A4: dom Ip = dom p by SCMFSA_4:def 6;
+ A5:  dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
+ then A6: rng p c= dom UIL & rng Ip c= dom UIL by SCMFSA_4:1;
+ then A7: dom f = dom Ip by RELAT_1:46;
+  hence dom f = dom g by A4,A6,RELAT_1:46;
+  let x be set; assume
+ A8: x in dom f;
+    then Ip.x in rng Ip by A7,FUNCT_1:def 5;
+    then reconsider Ipx = Ip.x as Instruction of SCM+FSA by A5,A6;
+      p.x in rng p by A4,A7,A8,FUNCT_1:def 5;
+    then reconsider px = p.x as Instruction of SCM+FSA by A5,A6;
+      dom p c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
+    then reconsider x' = x as Instruction-Location of SCM+FSA by A4,A7,A8;
+    consider m being Nat such that
+ A9: x' = insloc m by SCMFSA_2:21;
+ A10: Ip.x = IncAddr(pi(p,x'),k) by A4,A7,A8,A9,SCMFSA_4:def 6
+          .= IncAddr(px, k) by A4,A7,A8,AMI_5:def 5;
+  thus f.x = UIL.Ipx by A8,FUNCT_1:22
+          .= UsedIntLoc Ipx by A1
+          .= UsedIntLoc px by A10,Th27
+          .= UIL.px by A2,A3
+          .= g.x by A4,A7,A8,FUNCT_1:23;
+ end;
+  hence thesis by A1,A2,A3,FUNCT_1:9;
+end;
+
+theorem Th29:
+ UsedIntLoc I = UsedIntLoc ProgramPart Relocated (I, k)
+proof
+    UsedIntLoc ProgramPart Relocated (I, k)
+   = UsedIntLoc IncAddr(Shift(ProgramPart(I),k),k) by SCMFSA_5:2
+               .= UsedIntLoc Shift (ProgramPart I, k) by Th28
+               .= UsedIntLoc ProgramPart I by Th26;
+ hence thesis by AMI_5:72;
+end;
+
+theorem Th30:
+ UsedIntLoc I = UsedIntLoc Directed I
+proof
+ consider UIL being Function of the Instructions of SCM+FSA, Fin Int-Locations
+    such that
+A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedIntLoc i) &
+   UsedIntLoc I = Union (UIL * I) by Def2;
+ consider UIL2 being Function of the Instructions of SCM+FSA, Fin Int-Locations
+    such that
+A2: (for i being Instruction of SCM+FSA holds UIL2.i = UsedIntLoc i) &
+   UsedIntLoc Directed I = Union (UIL2 * Directed I) by Def2;
+    A3: for c be Element of the Instructions of SCM+FSA holds UIL.c = UIL2.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA ;
+      thus UIL.c = UsedIntLoc d by A1
+        .= UIL2.c by A2;
+    end;
+A4: dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
+      dom id the Instructions of SCM+FSA = the Instructions of SCM+FSA
+         by RELAT_1:71;
+then A5: (id the Instructions of SCM+FSA) +*
+         (halt SCM+FSA .--> goto insloc card I)
+    = (id the Instructions of SCM+FSA)+*
+         (halt SCM+FSA, goto insloc card I) by FUNCT_7:def 3;
+A6: UIL.halt SCM+FSA = {} by A1,Th17;
+    A7: UIL.goto insloc card I = UsedIntLoc goto insloc card I by A1
+     .= {} by Th19;
+     UIL * Directed I
+ = UIL * (((id the Instructions of SCM+FSA) +*
+         (halt SCM+FSA .--> goto insloc card I))*I) by SCMFSA6A:def 1
+.= UIL * ((id the Instructions of SCM+FSA) +*
+         (halt SCM+FSA .--> goto insloc card I)) * I by RELAT_1:55
+.= UIL * I by A4,A5,A6,A7,Th2;
+ hence thesis by A1,A2,A3,FUNCT_2:113;
+end;
+
+theorem Th31:
+  UsedIntLoc (I ';' J) = (UsedIntLoc I) \/ (UsedIntLoc J)
+proof
+     dom I = dom Directed I by SCMFSA6A:14;
+then A1: dom (Directed I) misses dom (ProgramPart Relocated(J, card I))
+       by SCMFSA6A:16;
+ thus UsedIntLoc (I ';' J)
+ = UsedIntLoc (Directed I +* ProgramPart Relocated(J, card I))
+      by SCMFSA6A:def 4
+.= UsedIntLoc (Directed I) \/ UsedIntLoc ProgramPart Relocated(J, card I)
+      by A1,Th25
+.= (UsedIntLoc I) \/ UsedIntLoc ProgramPart Relocated(J, card I) by Th30
+.= (UsedIntLoc I) \/ (UsedIntLoc J) by Th29;
+end;
+
+theorem Th32:
+ UsedIntLoc Macro i = UsedIntLoc i
+proof
+  consider UIL being Function of the Instructions of SCM+FSA, Fin Int-Locations
+    such that
+A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedIntLoc i) &
+   UsedIntLoc Macro i = Union (UIL * Macro i) by Def2;
+A2: insloc 0 <> insloc 1 by SCMFSA_2:18;
+A3:  rng (Macro i)
+      = rng ((insloc 0,insloc 1) --> (i,halt SCM+FSA)) by SCMFSA6A:def 2
+     .= {i, halt SCM+FSA} by A2,FUNCT_4:67;
+    A4: dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
+ thus
+   UsedIntLoc Macro i = union rng (UIL * Macro i) by A1,PROB_1:def 3
+    .= union (UIL.:rng Macro i) by RELAT_1:160
+    .= union {UIL.i,UIL.halt SCM+FSA} by A3,A4,FUNCT_1:118
+    .= UIL.i \/ UIL.halt SCM+FSA by ZFMISC_1:93
+    .= (UsedIntLoc i) \/ UIL.halt SCM+FSA by A1
+    .= (UsedIntLoc i) \/ (UsedIntLoc halt SCM+FSA) by A1
+    .= UsedIntLoc i by Th17;
+end;
+
+theorem :: MiJ:
+   UsedIntLoc (i ';' J) = (UsedIntLoc i) \/ UsedIntLoc J
+proof
+ thus UsedIntLoc (i ';' J)
+    = UsedIntLoc (Macro i ';' J) by SCMFSA6A:def 5
+   .= (UsedIntLoc Macro i) \/ UsedIntLoc J by Th31
+   .= (UsedIntLoc i) \/ UsedIntLoc J by Th32;
+end;
+
+theorem :: MIj:
+   UsedIntLoc (I ';' j) = (UsedIntLoc I) \/ UsedIntLoc j
+proof
+ thus UsedIntLoc (I ';' j)
+    = UsedIntLoc (I ';' Macro j) by SCMFSA6A:def 6
+   .= (UsedIntLoc I) \/ UsedIntLoc Macro j by Th31
+   .= (UsedIntLoc I) \/ UsedIntLoc j by Th32;
+end;
+
+theorem :: Mij:
+   UsedIntLoc (i ';' j) = (UsedIntLoc i) \/ UsedIntLoc j
+proof
+ thus UsedIntLoc (i ';' j)
+    = UsedIntLoc (Macro i ';' Macro j) by SCMFSA6A:def 7
+   .= (UsedIntLoc Macro i) \/ UsedIntLoc Macro j by Th31
+   .= (UsedIntLoc Macro i) \/ UsedIntLoc j by Th32
+   .= (UsedIntLoc i) \/ UsedIntLoc j by Th32;
+end;
+
+begin :: Finite sequence locations used in macro instructions
+
+definition
+  let i be Instruction of SCM+FSA;
+ func UsedInt*Loc i -> Element of Fin FinSeq-Locations means
+:Def3:
+ ex a, b being Int-Location, f being FinSeq-Location
+      st (i = b := (f, a) or i = (f, a) := b) & it = {f}
+   if InsCode i = 9 or InsCode i = 10,
+ ex a being Int-Location, f being FinSeq-Location
+      st (i = a :=len f or i = f :=<0,...,0>a) & it = {f}
+   if InsCode i = 11 or InsCode i = 12
+   otherwise it = {};
+ existence proof
+  hereby assume InsCode i = 9 or InsCode i = 10;
+    then consider a, b being Int-Location, f being FinSeq-Location such that
+  A1:  i = b := (f, a) or i = (f, a) := b by SCMFSA_2:62,63;
+   reconsider f' = f as Element of FinSeq-Locations by SCMFSA_2:10;
+   reconsider IT = {f'} as Element of Fin FinSeq-Locations;
+   take IT;
+   take a, b, f;
+   thus (i = b := (f, a) or i = (f, a) := b) & IT = {f} by A1;
+  end;
+  hereby assume InsCode i = 11 or InsCode i = 12;
+    then consider a being Int-Location, f being FinSeq-Location such that
+  A2: i = a :=len f or i = f :=<0,...,0>a by SCMFSA_2:64,65;
+   reconsider f' = f as Element of FinSeq-Locations by SCMFSA_2:10;
+   reconsider IT = {f'} as Element of Fin FinSeq-Locations;
+   take IT;
+   take a, f;
+   thus (i = a :=len f or i = f :=<0,...,0>a) & IT = {f} by A2;
+  end;
+     {} in Fin FinSeq-Locations by FINSUB_1:18;
+  hence thesis;
+ end;
+ uniqueness proof
+  let it1, it2 be Element of Fin FinSeq-Locations;
+  hereby assume InsCode i = 9 or InsCode i = 10;
+     given a1, b1 being Int-Location, f1 being FinSeq-Location such that
+  A3: (i = b1 := (f1, a1) or i = (f1, a1) := b1) & it1 = {f1};
+     given a2, b2 being Int-Location, f2 being FinSeq-Location such that
+  A4: (i = b2 := (f2, a2) or i = (f2, a2) := b2) & it2 = {f2};
+  A5: i = (f1, a1) := b1 or i = (f2, a2) := b2 implies InsCode i = 10
+                                 by SCMFSA_2:51;
+     per cases by A3,A4,A5,SCMFSA_2:50;
+     suppose i = b1 := (f1, a1) & i = b2 := (f2, a2); hence it1 = it2 by A3,A4,
+Th13;
+     suppose i = (f1, a1) := b1 & i = (f2, a2) := b2; hence it1 = it2 by A3,A4,
+Th14;
+  end;
+  hereby assume InsCode i = 11 or InsCode i = 12;
+     given a1 being Int-Location, f1 being FinSeq-Location such that
+  A6: (i = a1 :=len f1 or i = f1 :=<0,...,0>a1) & it1 = {f1};
+     given a2 being Int-Location, f2 being FinSeq-Location such that
+  A7: (i = a2 :=len f2 or i = f2 :=<0,...,0>a2) & it2 = {f2};
+  A8: i = f1 :=<0,...,0>a1 or i = f2 :=<0,...,0>a2 implies InsCode i = 12
+                                 by SCMFSA_2:53;
+     per cases by A6,A7,A8,SCMFSA_2:52;
+     suppose i = a1 :=len f1 & i = a2 :=len f2; hence it1 = it2 by A6,A7,Th15
+;
+     suppose i = f1 :=<0,...,0>a1 & i = f2 :=<0,...,0>a2; hence it1 = it2 by A6
+,A7,Th16;
+  end;
+  thus thesis;
+ end;
+ consistency;
+end;
+
+theorem Th36:
+   i = halt SCM+FSA or i = a:=b or i = AddTo(a, b) or i = SubFrom(a, b) or
+   i = MultBy(a, b) or i = Divide(a, b) or i = goto l or i = a=0_goto l or
+   i = a>0_goto l
+ implies UsedInt*Loc i = {}
+proof assume
+   i = halt SCM+FSA or i = a:=b or i = AddTo(a, b) or i = SubFrom(a, b) or
+   i = MultBy(a, b) or i = Divide(a, b) or i = goto l or i = a=0_goto l or
+   i = a>0_goto l;
+   then InsCode i = 0 or InsCode i = 1 or InsCode i = 2 or InsCode i = 3 or
+   InsCode i = 4 or InsCode i = 5 or InsCode i = 6 or InsCode i = 7 or
+   InsCode i = 8 by SCMFSA_2:42,43,44,45,46,47,48,49,124;
+ hence UsedInt*Loc i = {} by Def3;
+end;
+
+theorem Th37:
+ i = b := (f, a) or i = (f, a) := b implies UsedInt*Loc i = {f}
+proof assume
+A1: i = b := (f, a) or i = (f, a) := b;
+     f in FinSeq-Locations by SCMFSA_2:10;
+   then {f} c= FinSeq-Locations by ZFMISC_1:37;
+   then reconsider ab = {f} as Element of Fin FinSeq-Locations by FINSUB_1:def
+5;
+     InsCode i = 9 or InsCode i = 10 by A1,SCMFSA_2:50,51;
+   then UsedInt*Loc i = ab by A1,Def3;
+ hence UsedInt*Loc i = {f};
+end;
+
+theorem Th38:
+ i = a :=len f or i = f :=<0,...,0>a implies UsedInt*Loc i = {f}
+proof assume
+A1: i = a :=len f or i = f :=<0,...,0>a;
+     f in FinSeq-Locations by SCMFSA_2:10;
+   then {f} c= FinSeq-Locations by ZFMISC_1:37;
+   then reconsider ab = {f} as Element of Fin FinSeq-Locations by FINSUB_1:def
+5;
+     InsCode i = 11 or InsCode i = 12 by A1,SCMFSA_2:52,53;
+   then UsedInt*Loc i = ab by A1,Def3;
+ hence UsedInt*Loc i = {f};
+end;
+
+definition
+ let p be programmed FinPartState of SCM+FSA;
+ func UsedInt*Loc p -> Subset of FinSeq-Locations means
+:Def4:
+   ex UIL being Function of the Instructions of SCM+FSA, Fin FinSeq-Locations
+    st (for i being Instruction of SCM+FSA holds UIL.i = UsedInt*Loc i) &
+       it = Union (UIL * p);
+ existence proof
+ defpred P[set,set] means
+  ex I being Instruction of SCM+FSA st $1 = I & $2 = UsedInt*Loc I;
+A1:
+  for e being Element of the Instructions of SCM+FSA
+   ex u being Element of Fin FinSeq-Locations st P[e,u]
+  proof let e be Element of the Instructions of SCM+FSA;
+    reconsider f = e as Instruction of SCM+FSA ;
+    reconsider u = UsedInt*Loc f as Element of Fin FinSeq-Locations;
+    take u, f; thus thesis;
+   end;
+  consider UIL being Function of the Instructions of SCM+FSA,
+  Fin FinSeq-Locations
+    such that
+A2: for i being Element of the Instructions of SCM+FSA holds P[i,UIL.i]
+     from FuncExD(A1);
+   set IT = Union (UIL * p);
+   reconsider dp = dom p as finite set by AMI_1:21;
+     rng p c= the Instructions of SCM+FSA by SCMFSA_4:1;
+   then reconsider p' = p as Function of
+                   dp, the Instructions of SCM+FSA by FUNCT_2:4;
+   reconsider Up = UIL * p' as
+                   Function of dp, Fin FinSeq-Locations;
+A3: IT = union rng Up by PROB_1:def 3;
+A4: rng Up c= Fin FinSeq-Locations by RELSET_1:12;
+     Fin FinSeq-Locations c= bool FinSeq-Locations by FINSUB_1:26;
+   then rng Up c= bool FinSeq-Locations by A4,XBOOLE_1:1;
+   then A5: union rng Up c= union bool FinSeq-Locations by ZFMISC_1:95;
+   take IT;
+   thus IT is Subset of FinSeq-Locations by A3,A5,ZFMISC_1:99;
+   take UIL;
+   hereby
+     let i be Instruction of SCM+FSA;
+       P[i,UIL.i] by A2;
+     hence UIL.i = UsedInt*Loc i;
+   end;
+  thus thesis;
+ end;
+ uniqueness proof let IT1, IT2 be Subset of FinSeq-Locations;
+ given UIL1 being Function of the Instructions of SCM+FSA, Fin FinSeq-Locations
+   such that
+A6: (for i being Instruction of SCM+FSA holds UIL1.i = UsedInt*Loc i) &
+   IT1 = Union (UIL1 * p);
+ given UIL2 being Function of the Instructions of SCM+FSA, Fin FinSeq-Locations
+   such that
+A7: (for i being Instruction of SCM+FSA holds UIL2.i = UsedInt*Loc i) &
+   IT2 = Union (UIL2 * p);
+      for c be Element of the Instructions of SCM+FSA holds UIL1.c = UIL2.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA ;
+      thus UIL1.c = UsedInt*Loc d by A6
+        .= UIL2.c by A7;
+    end;
+  hence IT1 = IT2 by A6,A7,FUNCT_2:113;
+ end;
+end;
+
+definition
+ let p be programmed FinPartState of SCM+FSA;
+ cluster UsedInt*Loc p -> finite;
+ coherence proof
+  consider UIL being Function of the Instructions of SCM+FSA,
+                                 Fin FinSeq-Locations such that
+A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedInt*Loc i) &
+       UsedInt*Loc p = Union (UIL * p) by Def4;
+   reconsider dp = dom p as finite set by AMI_1:21;
+     rng p c= the Instructions of SCM+FSA by SCMFSA_4:1;
+ then reconsider p' = p as Function of dp, the Instructions of SCM+FSA by
+FUNCT_2:4;
+   reconsider Up = UIL * p' as Function of dp, Fin FinSeq-Locations;
+     Union Up is finite;
+  hence thesis by A1;
+ end;
+end;
+
+theorem Th39:
+  i in rng p implies UsedInt*Loc i c= UsedInt*Loc p
+proof assume
+   i in rng p;
+   then consider x being set such that
+A1: x in dom p & i = p.x by FUNCT_1:def 5;
+  consider UIL being Function of the Instructions of SCM+FSA,
+                                 Fin FinSeq-Locations such that
+A2: (for i being Instruction of SCM+FSA holds UIL.i = UsedInt*Loc i) &
+       UsedInt*Loc p = Union (UIL * p) by Def4;
+A3: (UIL * p).x = UIL.i by A1,FUNCT_1:23 .= UsedInt*Loc i by A2;
+     dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
+   then x in dom (UIL * p) by A1,FUNCT_1:21;
+then A4: (UIL * p).x in rng (UIL * p) by FUNCT_1:def 5;
+     UsedInt*Loc p = union rng (UIL * p) by A2,PROB_1:def 3;
+ hence UsedInt*Loc i c= UsedInt*Loc p by A3,A4,ZFMISC_1:92;
+end;
+
+theorem :: FUFP1:
+   UsedInt*Loc (p +* r) c= (UsedInt*Loc p) \/ (UsedInt*Loc r)
+proof
+  consider UIL being Function of the Instructions of SCM+FSA,
+                                 Fin FinSeq-Locations such that
+A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedInt*Loc i) &
+    UsedInt*Loc (p +* r) = Union (UIL * (p +* r)) by Def4;
+ consider UIL1 being Function of the Instructions of SCM+FSA,
+                                 Fin FinSeq-Locations such that
+A2: (for i being Instruction of SCM+FSA holds UIL1.i = UsedInt*Loc i) &
+   UsedInt*Loc p = Union (UIL1 * p) by Def4;
+ consider UIL2 being Function of the Instructions of SCM+FSA,
+                                 Fin FinSeq-Locations such that
+A3: (for i being Instruction of SCM+FSA holds UIL2.i = UsedInt*Loc i) &
+   UsedInt*Loc r = Union (UIL2 * r) by Def4;
+      for c be Element of the Instructions of SCM+FSA holds UIL.c = UIL1.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA ;
+      thus UIL.c = UsedInt*Loc d by A1
+        .= UIL1.c by A2;
+    end;
+then A4: UIL=UIL1 by FUNCT_2:113;
+      for c be Element of the Instructions of SCM+FSA holds UIL.c = UIL2.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA ;
+      thus UIL.c = UsedInt*Loc d by A1
+        .= UIL2.c by A3;
+    end;
+then A5: UIL=UIL2 by FUNCT_2:113;
+A6: Union (UIL * (p +* r)) = union rng (UIL * (p +* r))
+       by PROB_1:def 3;
+A7: Union (UIL * p) = union rng (UIL * p) by PROB_1:def 3;
+A8: Union (UIL * r) = union rng (UIL * r) by PROB_1:def 3;
+      dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
+    then rng p c= dom UIL & rng r c= dom UIL by SCMFSA_4:1;
+    then UIL * (p +* r) = (UIL * p) +* (UIL * r) by FUNCT_7:10;
+    then rng (UIL * (p +* r)) c= rng (UIL * p) \/ rng (UIL * r)
+          by FUNCT_4:18;
+then union rng (UIL * (p +* r)) c= union (rng (UIL * p) \/ rng (UIL * r))
+          by ZFMISC_1:95;
+ hence thesis by A1,A2,A3,A4,A5,A6,A7,A8,ZFMISC_1:96;
+end;
+
+theorem Th41:
+ dom p misses dom r implies
+  UsedInt*Loc (p +* r) = (UsedInt*Loc p) \/ (UsedInt*Loc r)
+proof
+  consider UIL being Function of the Instructions of SCM+FSA,
+                                     Fin FinSeq-Locations such that
+A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedInt*Loc i) &
+    UsedInt*Loc (p +* r) = Union (UIL * (p +* r)) by Def4;
+ consider UIL1 being Function of the Instructions of SCM+FSA,
+                                 Fin FinSeq-Locations such that
+A2: (for i being Instruction of SCM+FSA holds UIL1.i = UsedInt*Loc i) &
+   UsedInt*Loc p = Union (UIL1 * p) by Def4;
+ consider UIL2 being Function of the Instructions of SCM+FSA,
+                                 Fin FinSeq-Locations such that
+A3: (for i being Instruction of SCM+FSA holds UIL2.i = UsedInt*Loc i) &
+   UsedInt*Loc r = Union (UIL2 * r) by Def4;
+      for c be Element of the Instructions of SCM+FSA holds UIL.c = UIL1.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA ;
+      thus UIL.c = UsedInt*Loc d by A1
+        .= UIL1.c by A2;
+    end;
+then A4: UIL=UIL1 by FUNCT_2:113;
+      for c be Element of the Instructions of SCM+FSA holds UIL.c = UIL2.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA ;
+      thus UIL.c = UsedInt*Loc d by A1
+        .= UIL2.c by A3;
+    end;
+then A5: UIL=UIL2 by FUNCT_2:113;
+A6: Union (UIL * (p +* r)) = union rng (UIL * (p +* r))
+       by PROB_1:def 3;
+A7: Union (UIL * p) = union rng (UIL * p) by PROB_1:def 3;
+A8: Union (UIL * r) = union rng (UIL * r) by PROB_1:def 3;
+      dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
+    then rng p c= dom UIL & rng r c= dom UIL by SCMFSA_4:1;
+then A9:  UIL * (p +* r) = (UIL * p) +* (UIL * r) by FUNCT_7:10;
+ assume
+A10: dom p misses dom r;
+A11: dom (UIL * p) c= dom p & dom (UIL * r) c= dom r by RELAT_1:44;
+   then dom p misses dom (UIL * r) by A10,XBOOLE_1:63;
+   then dom (UIL * p) misses dom (UIL * r) by A11,XBOOLE_1:63;
+   then (UIL * p) +* (UIL * r) = (UIL * p) \/ (UIL * r)
+       by FUNCT_4:32;
+then union rng (UIL * (p +* r)) = union (rng (UIL * p) \/ rng (UIL * r))
+          by A9,RELAT_1:26;
+ hence thesis by A1,A2,A3,A4,A5,A6,A7,A8,ZFMISC_1:96;
+end;
+
+
+theorem Th42:
+ UsedInt*Loc p = UsedInt*Loc Shift(p, k)
+proof
+ consider UIL being Function of the Instructions of SCM+FSA,
+                                Fin FinSeq-Locations such that
+A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedInt*Loc i) &
+   UsedInt*Loc p = Union (UIL * p) by Def4;
+ consider UIL2 being Function of the Instructions of SCM+FSA,
+                                 Fin FinSeq-Locations such that
+A2: (for i being Instruction of SCM+FSA holds UIL2.i = UsedInt*Loc i) &
+   UsedInt*Loc Shift (p, k) = Union (UIL2 * Shift (p, k)) by Def4;
+      for c be Element of the Instructions of SCM+FSA holds UIL.c = UIL2.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA ;
+      thus UIL.c = UsedInt*Loc d by A1
+        .= UIL2.c by A2;
+    end;
+then A3: UIL=UIL2 by FUNCT_2:113;
+  set Sp = Shift (p, k);
+A4: Union (UIL * Sp) = union rng (UIL * Sp) by PROB_1:def 3;
+A5: dom Sp = { insloc(m+k) where m is Nat : insloc m in dom p }
+         by SCMFSA_4:def 7;
+      now let y be set;
+     hereby assume y in rng Sp; then consider x being set such that
+     A6: x in dom Sp & y = Sp.x by FUNCT_1:def 5;
+        consider m being Nat such that
+     A7: x = insloc (m+k) & insloc m in dom p by A5,A6;
+          Sp.x = p.insloc m by A7,SCMFSA_4:def 7;
+      hence y in rng p by A6,A7,FUNCT_1:def 5;
+     end;
+     assume y in rng p; then consider x being set such that
+     A8: x in dom p & y = p.x by FUNCT_1:def 5;
+          dom p c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
+        then reconsider x' = x as Instruction-Location of SCM+FSA by A8;
+        consider m being Nat such that
+     A9: x' = insloc m by SCMFSA_2:21;
+     A10: insloc (m+k) in dom Sp by A5,A8,A9;
+          Sp.insloc (m+k) = p.insloc m by A8,A9,SCMFSA_4:def 7;
+     hence y in rng Sp by A8,A9,A10,FUNCT_1:def 5;
+    end;
+then A11:  rng Sp = rng p by TARSKI:2;
+      rng (UIL * Sp) = UIL.:rng Sp by RELAT_1:160
+                     .= rng (UIL * p) by A11,RELAT_1:160;
+  hence thesis by A1,A2,A3,A4,PROB_1:def 3;
+end;
+
+theorem Th43:
+  UsedInt*Loc i = UsedInt*Loc IncAddr(i, k)
+proof
+   A1: InsCode i <= 11+1 by SCMFSA_2:35;
+A2: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:26;
+A3: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:26;
+A4: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
+  per cases by A1,A2,A3,A4,CQC_THE1:9,NAT_1:26;
+  suppose InsCode i = 0; then i = halt SCM+FSA by SCMFSA_2:122;
+   hence UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by SCMFSA_4:8;
+  suppose InsCode i = 1; then consider a, b such that
+  A5: i = a:=b by SCMFSA_2:54;
+   thus UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by A5,SCMFSA_4:9;
+  suppose InsCode i = 2; then consider a, b such that
+  A6: i = AddTo(a,b) by SCMFSA_2:55;
+   thus UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by A6,SCMFSA_4:10;
+  suppose InsCode i = 3; then consider a, b such that
+  A7: i = SubFrom(a, b) by SCMFSA_2:56;
+   thus UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by A7,SCMFSA_4:11;
+  suppose InsCode i = 4; then consider a, b such that
+  A8: i = MultBy(a, b) by SCMFSA_2:57;
+   thus UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by A8,SCMFSA_4:12;
+  suppose InsCode i = 5; then consider a, b such that
+  A9: i = Divide(a, b) by SCMFSA_2:58;
+   thus UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by A9,SCMFSA_4:13;
+  suppose InsCode i = 6; then consider l such that
+  A10: i = goto l by SCMFSA_2:59; IncAddr(i, k) = goto (l+k) by A10,SCMFSA_4:14
+;
+   hence UsedInt*Loc IncAddr(i, k) = {} by Th36
+         .= UsedInt*Loc i by A10,Th36;
+  suppose InsCode i = 7; then consider l, a such that
+  A11: i = a=0_goto l by SCMFSA_2:60;
+       IncAddr(i, k) = a=0_goto (l+k) by A11,SCMFSA_4:15;
+   hence UsedInt*Loc IncAddr(i, k) = {} by Th36
+          .= UsedInt*Loc i by A11,Th36;
+  suppose InsCode i = 8; then consider l, a such that
+  A12: i = a>0_goto l by SCMFSA_2:61;
+       IncAddr(i, k) = a>0_goto (l+k) by A12,SCMFSA_4:16;
+   hence UsedInt*Loc IncAddr(i, k) = {} by Th36
+          .= UsedInt*Loc i by A12,Th36;
+  suppose InsCode i = 9; then consider a, b, f such that
+  A13: i = b:=(f,a) by SCMFSA_2:62;
+   thus UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by A13,SCMFSA_4:17;
+  suppose InsCode i = 10; then consider a, b, f such that
+  A14: i = (f,a):=b by SCMFSA_2:63;
+   thus UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by A14,SCMFSA_4:18;
+  suppose InsCode i = 11; then consider a, f such that
+  A15: i = a:=len f by SCMFSA_2:64;
+   thus UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by A15,SCMFSA_4:19;
+  suppose InsCode i = 12; then consider a,f such that
+  A16: i = f:=<0,...,0>a by SCMFSA_2:65;
+   thus UsedInt*Loc IncAddr(i, k) = UsedInt*Loc i by A16,SCMFSA_4:20;
+end;
+
+theorem Th44:
+ UsedInt*Loc p = UsedInt*Loc IncAddr(p, k)
+proof
+ consider UIL being Function of the Instructions of SCM+FSA,
+                                Fin FinSeq-Locations such that
+A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedInt*Loc i) &
+   UsedInt*Loc p = Union (UIL * p) by Def4;
+ consider UIL2 being Function of the Instructions of SCM+FSA,
+                                 Fin FinSeq-Locations such that
+A2: (for i being Instruction of SCM+FSA holds UIL2.i = UsedInt*Loc i) &
+   UsedInt*Loc IncAddr (p, k) = Union (UIL2 * IncAddr (p, k)) by Def4;
+      for c be Element of the Instructions of SCM+FSA holds UIL.c = UIL2.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA ;
+      thus UIL.c = UsedInt*Loc d by A1
+        .= UIL2.c by A2;
+    end;
+then A3: UIL=UIL2 by FUNCT_2:113;
+  set Ip = IncAddr (p, k); set f = UIL * Ip; set g = UIL * p;
+   now
+ A4: dom Ip = dom p by SCMFSA_4:def 6;
+ A5:  dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
+ then A6: rng p c= dom UIL & rng Ip c= dom UIL by SCMFSA_4:1;
+ then A7: dom f = dom Ip by RELAT_1:46;
+  hence dom f = dom g by A4,A6,RELAT_1:46;
+  let x be set; assume
+ A8: x in dom f;
+    then Ip.x in rng Ip by A7,FUNCT_1:def 5;
+    then reconsider Ipx = Ip.x as Instruction of SCM+FSA by A5,A6;
+      p.x in rng p by A4,A7,A8,FUNCT_1:def 5;
+    then reconsider px = p.x as Instruction of SCM+FSA by A5,A6;
+      dom p c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
+    then reconsider x' = x as Instruction-Location of SCM+FSA by A4,A7,A8;
+    consider m being Nat such that
+ A9: x' = insloc m by SCMFSA_2:21;
+ A10: Ip.x = IncAddr(pi(p,x'),k) by A4,A7,A8,A9,SCMFSA_4:def 6
+          .= IncAddr(px, k) by A4,A7,A8,AMI_5:def 5;
+  thus f.x = UIL.Ipx by A8,FUNCT_1:22
+          .= UsedInt*Loc Ipx by A1
+          .= UsedInt*Loc px by A10,Th43
+          .= UIL.px by A2,A3
+          .= g.x by A4,A7,A8,FUNCT_1:23;
+ end;
+  hence thesis by A1,A2,A3,FUNCT_1:9;
+end;
+
+theorem Th45:
+ UsedInt*Loc I = UsedInt*Loc ProgramPart Relocated (I, k)
+proof
+    UsedInt*Loc ProgramPart Relocated (I, k)
+  = UsedInt*Loc IncAddr(Shift(ProgramPart(I),k),k) by SCMFSA_5:2
+               .= UsedInt*Loc Shift (ProgramPart I, k) by Th44
+               .= UsedInt*Loc ProgramPart I by Th42;
+ hence thesis by AMI_5:72;
+end;
+
+theorem Th46:
+ UsedInt*Loc I = UsedInt*Loc Directed I
+proof
+ consider UIL being Function of the Instructions of SCM+FSA,
+                                Fin FinSeq-Locations such that
+A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedInt*Loc i) &
+   UsedInt*Loc I = Union (UIL * I) by Def4;
+ consider UIL2 being Function of the Instructions of SCM+FSA,
+                                 Fin FinSeq-Locations such that
+A2: (for i being Instruction of SCM+FSA holds UIL2.i = UsedInt*Loc i) &
+   UsedInt*Loc Directed I = Union (UIL2 * Directed I) by Def4;
+    A3: for c be Element of the Instructions of SCM+FSA holds UIL.c = UIL2.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA ;
+      thus UIL.c = UsedInt*Loc d by A1
+        .= UIL2.c by A2;
+    end;
+A4: dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
+      dom id the Instructions of SCM+FSA = the Instructions of SCM+FSA
+         by RELAT_1:71;
+then A5: (id the Instructions of SCM+FSA) +*
+         (halt SCM+FSA .--> goto insloc card I)
+    = (id the Instructions of SCM+FSA)+*
+         (halt SCM+FSA, goto insloc card I) by FUNCT_7:def 3;
+A6: UIL.halt SCM+FSA = UsedInt*Loc halt SCM+FSA by A1
+     .= {} by Th36;
+    A7: UIL.goto insloc card I = UsedInt*Loc goto insloc card I by A1
+     .= {} by Th36;
+     UIL * Directed I
+ = UIL * (((id the Instructions of SCM+FSA) +*
+         (halt SCM+FSA .--> goto insloc card I))*I) by SCMFSA6A:def 1
+.= UIL * ((id the Instructions of SCM+FSA) +*
+         (halt SCM+FSA .--> goto insloc card I)) * I by RELAT_1:55
+.= UIL * I by A4,A5,A6,A7,Th2;
+ hence thesis by A1,A2,A3,FUNCT_2:113;
+end;
+
+theorem Th47:
+  UsedInt*Loc (I ';' J) = (UsedInt*Loc I) \/ (UsedInt*Loc J)
+proof
+     dom I = dom Directed I by SCMFSA6A:14;
+then A1: dom (Directed I) misses dom (ProgramPart Relocated(J, card I))
+       by SCMFSA6A:16;
+ thus UsedInt*Loc (I ';' J)
+ = UsedInt*Loc (Directed I +* ProgramPart Relocated(J, card I))
+      by SCMFSA6A:def 4
+.= UsedInt*Loc (Directed I) \/ UsedInt*Loc ProgramPart Relocated(J, card I)
+      by A1,Th41
+.= (UsedInt*Loc I) \/ UsedInt*Loc ProgramPart Relocated(J, card I) by Th46
+.= (UsedInt*Loc I) \/ (UsedInt*Loc J) by Th45;
+end;
+
+theorem Th48:
+ UsedInt*Loc Macro i = UsedInt*Loc i
+proof
+  consider UIL being Function of the Instructions of SCM+FSA,
+                                 Fin FinSeq-Locations such that
+A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedInt*Loc i) &
+   UsedInt*Loc Macro i = Union (UIL * Macro i) by Def4;
+A2: insloc 0 <> insloc 1 by SCMFSA_2:18;
+A3:  rng (Macro i)
+      = rng ((insloc 0,insloc 1) --> (i,halt SCM+FSA)) by SCMFSA6A:def 2
+     .= {i, halt SCM+FSA} by A2,FUNCT_4:67;
+    A4: dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
+ thus
+   UsedInt*Loc Macro i = union rng (UIL * Macro i) by A1,PROB_1:def 3
+    .= union (UIL.:rng Macro i) by RELAT_1:160
+    .= union {UIL.i,UIL.halt SCM+FSA} by A3,A4,FUNCT_1:118
+    .= UIL.i \/ UIL.halt SCM+FSA by ZFMISC_1:93
+    .= (UsedInt*Loc i) \/ UIL.halt SCM+FSA by A1
+    .= (UsedInt*Loc i) \/ (UsedInt*Loc halt SCM+FSA) by A1
+    .= UsedInt*Loc i \/ {} by Th36
+    .= UsedInt*Loc i;
+end;
+
+theorem :: FMiJ:
+   UsedInt*Loc (i ';' J) = (UsedInt*Loc i) \/ UsedInt*Loc J
+proof
+ thus UsedInt*Loc (i ';' J)
+    = UsedInt*Loc (Macro i ';' J) by SCMFSA6A:def 5
+   .= (UsedInt*Loc Macro i) \/ UsedInt*Loc J by Th47
+   .= (UsedInt*Loc i) \/ UsedInt*Loc J by Th48;
+end;
+
+theorem :: FMIj:
+   UsedInt*Loc (I ';' j) = (UsedInt*Loc I) \/ UsedInt*Loc j
+proof
+ thus UsedInt*Loc (I ';' j)
+    = UsedInt*Loc (I ';' Macro j) by SCMFSA6A:def 6
+   .= (UsedInt*Loc I) \/ UsedInt*Loc Macro j by Th47
+   .= (UsedInt*Loc I) \/ UsedInt*Loc j by Th48;
+end;
+
+theorem :: FMij:
+   UsedInt*Loc (i ';' j) = (UsedInt*Loc i) \/ UsedInt*Loc j
+proof
+ thus UsedInt*Loc (i ';' j)
+    = UsedInt*Loc (Macro i ';' Macro j) by SCMFSA6A:def 7
+   .= (UsedInt*Loc Macro i) \/ UsedInt*Loc Macro j by Th47
+   .= (UsedInt*Loc Macro i) \/ UsedInt*Loc j by Th48
+   .= (UsedInt*Loc i) \/ UsedInt*Loc j by Th48;
+end;
+
+begin :: Choosing integer location not used in a macro instruction
+
+definition let IT be Int-Location;
+ attr IT is read-only means
+:Def5: IT = intloc 0;
+ antonym IT is read-write;
+end;
+
+definition
+ cluster intloc 0 -> read-only;
+ coherence by Def5;
+end;
+
+definition
+ cluster read-write Int-Location;
+ existence proof take intloc 1; intloc 0 <> intloc 1 by SCMFSA_2:16;
+  hence thesis by Def5; end;
+end;
+
+reserve L for finite Subset of Int-Locations;
+
+definition
+ let L be finite Subset of Int-Locations;
+ func FirstNotIn L -> Int-Location means
+:Def6: ex sn being non empty Subset of NAT st
+        it = intloc min sn &
+        sn = {k where k is Nat : not intloc k in L};
+ existence proof
+    defpred X[Nat] means not intloc $1 in L;
+    set sn = {k where k is Nat : X[k]};
+ A1: sn is Subset of NAT from SubsetD;
+      not Int-Locations c= L by SCMFSA_2:22,XBOOLE_0:def 10;
+    then consider x being set such that
+ A2: x in Int-Locations & not x in L by TARSKI:def 3;
+    reconsider x as Int-Location by A2,SCMFSA_2:11;
+    consider k being Nat such that
+ A3: x = intloc k by SCMFSA_2:19; k in sn by A2,A3;
+    then reconsider sn as non empty Subset of NAT by A1;
+  take intloc min sn, sn;
+  thus thesis;
+ end;
+ uniqueness;
+end;
+
+theorem Th52:
+  not FirstNotIn L in L
+proof
+  set FNI = FirstNotIn L;
+   consider sn being non empty Subset of NAT such that
+A1: FNI = intloc min sn and
+A2: sn = {k where k is Nat : not intloc k in L} by Def6;
+     min sn in sn by CQC_SIM1:def 8;
+   then consider k being Nat such that
+A3: k = min sn & not intloc k in L by A2;
+ thus not FNI in L by A1,A3;
+end;
+
+theorem :: FNI2:
+    FirstNotIn L = intloc m & not intloc n in L implies m <= n
+proof assume
+A1: FirstNotIn L = intloc m & not intloc n in L;
+   consider sn being non empty Subset of NAT such that
+A2: FirstNotIn L = intloc min sn and
+A3: sn = {k where k is Nat : not intloc k in L} by Def6;
+A4: m = min sn by A1,A2,SCMFSA_2:16;
+     n in sn by A1,A3;
+ hence m <= n by A4,CQC_SIM1:def 8;
+end;
+
+definition
+ let p be programmed FinPartState of SCM+FSA;
+ func FirstNotUsed p -> Int-Location means
+:Def7: ex sil being finite Subset of Int-Locations st
+        sil = UsedIntLoc p \/ {intloc 0} &
+        it = FirstNotIn sil;
+ existence proof
+    intloc 0 in Int-Locations by SCMFSA_2:9;
+  then reconsider i0 = {intloc 0} as finite Subset of Int-Locations by ZFMISC_1
+:37;
+  reconsider sil = UsedIntLoc p \/ i0 as finite Subset of Int-Locations;
+  take FirstNotIn sil, sil;
+  thus thesis;
+ end;
+ uniqueness;
+end;
+
+definition
+ let p be programmed FinPartState of SCM+FSA;
+ cluster FirstNotUsed p -> read-write;
+ coherence proof
+  consider sil being finite Subset of Int-Locations such that
+A1: sil = UsedIntLoc p \/ {intloc 0} & FirstNotUsed p = FirstNotIn sil by Def7;
+    now assume FirstNotIn sil = intloc 0; then not intloc 0 in sil by Th52;
+   hence contradiction by A1,SETWISEO:6;
+  end;
+ hence thesis by A1,Def5;
+ end;
+end;
+
+theorem Th54:
+  not FirstNotUsed p in UsedIntLoc p
+proof consider sil being finite Subset of Int-Locations such that
+A1: sil = UsedIntLoc p \/ {intloc 0} & FirstNotUsed p = FirstNotIn sil by Def7;
+     not FirstNotUsed p in sil by A1,Th52;
+  hence thesis by A1,XBOOLE_0:def 2;
+end;
+
+theorem :: FUi15:
+    a:=b in rng p or AddTo(a, b) in rng p or SubFrom(a, b) in rng p or
+     MultBy(a, b) in rng p or Divide(a, b) in rng p
+   implies FirstNotUsed p <> a & FirstNotUsed p <> b
+proof assume
+       a:=b in rng p or AddTo(a, b) in rng p or SubFrom(a, b) in rng p or
+     MultBy(a, b) in rng p or Divide(a, b) in rng p;
+   then consider i being Instruction of SCM+FSA such that
+A1: i in rng p & (i = a:=b or i = AddTo(a, b) or i = SubFrom(a, b) or
+   i = MultBy(a, b) or i = Divide(a, b));
+     UsedIntLoc i = {a, b} by A1,Th18;
+   then {a, b} c= UsedIntLoc p & not FirstNotUsed p in UsedIntLoc p by A1,Th23,
+Th54;
+ hence FirstNotUsed p <> a & FirstNotUsed p <> b by ZFMISC_1:38;
+end;
+
+theorem :: FUi78:
+    a=0_goto l in rng p or a>0_goto l in rng p implies FirstNotUsed p <> a
+proof assume
+       a=0_goto l in rng p or a>0_goto l in rng p;
+   then consider i being Instruction of SCM+FSA such that
+A1: i in rng p & (i = a=0_goto l or i = a>0_goto l);
+     UsedIntLoc i = {a} by A1,Th20;
+   then {a} c= UsedIntLoc p & not FirstNotUsed p in UsedIntLoc p by A1,Th23,
+Th54;
+ hence FirstNotUsed p <> a by ZFMISC_1:37;
+end;
+
+theorem :: FUi910:
+    b := (f, a) in rng p or (f, a) := b in rng p
+   implies FirstNotUsed p <> a & FirstNotUsed p <> b
+proof assume
+     b := (f, a) in rng p or (f, a) := b in rng p;
+   then consider i being Instruction of SCM+FSA such that
+A1: i in rng p & (i = b := (f, a) or i = (f, a) := b);
+     UsedIntLoc i = {a, b} by A1,Th21;
+   then {a, b} c= UsedIntLoc p & not FirstNotUsed p in UsedIntLoc p by A1,Th23,
+Th54;
+ hence FirstNotUsed p <> a & FirstNotUsed p <> b by ZFMISC_1:38;
+end;
+
+theorem :: FUi1112:
+    a :=len f in rng p or f :=<0,...,0>a in rng p
+   implies FirstNotUsed p <> a
+proof assume
+       a :=len f in rng p or f :=<0,...,0>a in rng p;
+   then consider i being Instruction of SCM+FSA such that
+A1: i in rng p & (i = a :=len f or i = f :=<0,...,0>a);
+     UsedIntLoc i = {a} by A1,Th22;
+   then {a} c= UsedIntLoc p & not FirstNotUsed p in UsedIntLoc p by A1,Th23,
+Th54;
+ hence FirstNotUsed p <> a by ZFMISC_1:37;
+end;
+
+begin :: Choosing finite sequence location not used in a macro instruction
+
+reserve L for finite Subset of FinSeq-Locations;
+
+definition
+ let L be finite Subset of FinSeq-Locations;
+ func First*NotIn L -> FinSeq-Location means
+:Def8: ex sn being non empty Subset of NAT st
+        it = fsloc min sn &
+        sn = {k where k is Nat : not fsloc k in L};
+ existence proof
+    defpred X[Nat] means not fsloc $1 in L;
+    set sn = {k where k is Nat : X[k]};
+ A1: sn is Subset of NAT from SubsetD;
+      not FinSeq-Locations c= L by SCMFSA_2:23,XBOOLE_0:def 10;
+    then consider x being set such that
+ A2: x in FinSeq-Locations & not x in L by TARSKI:def 3;
+    reconsider x as FinSeq-Location by A2,SCMFSA_2:12;
+    consider k being Nat such that
+ A3: x = fsloc k by SCMFSA_2:20; k in sn by A2,A3;
+    then reconsider sn as non empty Subset of NAT by A1;
+  take fsloc min sn, sn;
+  thus thesis;
+ end;
+ uniqueness;
+end;
+
+theorem Th59:
+  not First*NotIn L in L
+proof
+  set FNI = First*NotIn L;
+   consider sn being non empty Subset of NAT such that
+A1: FNI = fsloc min sn and
+A2: sn = {k where k is Nat : not fsloc k in L} by Def8;
+     min sn in sn by CQC_SIM1:def 8;
+   then consider k being Nat such that
+A3: k = min sn & not fsloc k in L by A2;
+ thus not FNI in L by A1,A3;
+end;
+
+theorem :: FFNI2:
+    First*NotIn L = fsloc m & not fsloc n in L implies m <= n
+proof assume
+A1: First*NotIn L = fsloc m & not fsloc n in L;
+   consider sn being non empty Subset of NAT such that
+A2: First*NotIn L = fsloc min sn and
+A3: sn = {k where k is Nat : not fsloc k in L} by Def8;
+A4: m = min sn by A1,A2,SCMFSA_2:17;
+     n in sn by A1,A3;
+ hence m <= n by A4,CQC_SIM1:def 8;
+end;
+
+definition
+ let p be programmed FinPartState of SCM+FSA;
+ func First*NotUsed p -> FinSeq-Location means
+:Def9: ex sil being finite Subset of FinSeq-Locations st
+        sil = UsedInt*Loc p &
+        it = First*NotIn sil;
+ existence proof
+  take First*NotIn UsedInt*Loc p, UsedInt*Loc p;
+  thus thesis;
+ end;
+ uniqueness;
+end;
+
+theorem Th61:
+  not First*NotUsed p in UsedInt*Loc p
+proof consider sil being finite Subset of FinSeq-Locations such that
+A1: sil = UsedInt*Loc p & First*NotUsed p = First*NotIn sil by Def9;
+  thus thesis by A1,Th59;
+end;
+
+theorem :: FFUi910:
+    b := (f, a) in rng p or (f, a) := b in rng p
+   implies First*NotUsed p <> f
+proof assume
+     b := (f, a) in rng p or (f, a) := b in rng p;
+   then consider i being Instruction of SCM+FSA such that
+A1: i in rng p & (i = b := (f, a) or i = (f, a) := b);
+     UsedInt*Loc i = {f} by A1,Th37;
+   then {f} c= UsedInt*Loc p & not First*NotUsed p in UsedInt*Loc p
+          by A1,Th39,Th61;
+ hence First*NotUsed p <> f by ZFMISC_1:37;
+end;
+
+theorem :: FFUi1112:
+    a :=len f in rng p or f :=<0,...,0>a in rng p
+   implies First*NotUsed p <> f
+proof assume
+       a :=len f in rng p or f :=<0,...,0>a in rng p;
+   then consider i being Instruction of SCM+FSA such that
+A1: i in rng p & (i = a :=len f or i = f :=<0,...,0>a);
+     UsedInt*Loc i = {f} by A1,Th38;
+   then {f} c= UsedInt*Loc p & not First*NotUsed p in UsedInt*Loc p
+          by A1,Th39,Th61;
+ hence First*NotUsed p <> f by ZFMISC_1:37;
+end;
+
+begin :: Semantics
+
+ reserve s, t for State of SCM+FSA;
+
+theorem Th64:
+  dom I misses dom Start-At insloc n
+proof
+A1: dom Start-At insloc n = {IC SCM+FSA} by AMI_3:34;
+A2: dom I c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
+  assume dom I /\ dom (Start-At insloc n) <> {};
+       then consider x being set such that
+   A3: x in dom I /\ dom (Start-At insloc n) by XBOOLE_0:def 1;
+         x in dom I & x in dom (Start-At insloc n) by A3,XBOOLE_0:def 3;
+       then IC SCM+FSA in dom I by A1,TARSKI:def 1;
+    hence contradiction by A2,AMI_1:48;
+end;
+
+theorem Th65:
+  IC SCM+FSA in dom (I +* Start-At insloc n)
+proof
+      dom Start-At insloc n = {IC SCM+FSA} by AMI_3:34;
+   then IC SCM+FSA in dom Start-At insloc n by TARSKI:def 1;
+ hence IC SCM+FSA in dom (I +* Start-At insloc n) by FUNCT_4:13;
+end;
+
+theorem Th66:
+  (I +* Start-At insloc n).IC SCM+FSA = insloc n
+proof
+    dom Start-At insloc n = {IC SCM+FSA} by AMI_3:34;
+then A1: IC SCM+FSA in dom Start-At insloc n by TARSKI:def 1;
+    Start-At insloc n = IC SCM+FSA .--> insloc n by AMI_3:def 12;
+  then (Start-At insloc n).IC SCM+FSA = insloc n by CQC_LANG:6;
+ hence (I +* Start-At insloc n).IC SCM+FSA = insloc n by A1,FUNCT_4:14;
+end;
+
+theorem Th67:
+ I +* Start-At insloc n c= s implies IC s = insloc n
+proof assume
+A1: I +* Start-At insloc n c= s;
+A2: IC SCM+FSA in dom (I +* Start-At insloc n) by Th65;
+ thus IC s = s.IC SCM+FSA by AMI_1:def 15
+           .= (I +* Start-At insloc n).IC SCM+FSA by A1,A2,GRFUNC_1:8
+           .= insloc n by Th66;
+end;
+
+theorem Th68:
+ not c in UsedIntLoc i implies Exec(i, s).c = s.c
+proof assume
+A1:  not c in UsedIntLoc i;
+   A2: InsCode i <= 11+1 by SCMFSA_2:35;
+A3: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:26;
+A4: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:26;
+A5: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
+  per cases by A2,A3,A4,A5,CQC_THE1:9,NAT_1:26;
+  suppose InsCode i = 0; then i = halt SCM+FSA by SCMFSA_2:122;
+   hence Exec(i, s).c = s.c by AMI_1:def 8;
+  suppose InsCode i = 1; then consider a, b such that
+  A6: i = a:=b by SCMFSA_2:54;
+       UsedIntLoc i = {a, b} by A6,Th18;
+     then c <> a by A1,TARSKI:def 2;
+   hence Exec(i, s).c = s.c by A6,SCMFSA_2:89;
+  suppose InsCode i = 2; then consider a, b such that
+  A7: i = AddTo(a,b) by SCMFSA_2:55;
+       UsedIntLoc i = {a, b} by A7,Th18;
+     then c <> a by A1,TARSKI:def 2;
+   hence Exec(i, s).c = s.c by A7,SCMFSA_2:90;
+  suppose InsCode i = 3; then consider a, b such that
+  A8: i = SubFrom(a, b) by SCMFSA_2:56;
+       UsedIntLoc i = {a, b} by A8,Th18;
+     then c <> a by A1,TARSKI:def 2;
+   hence Exec(i, s).c = s.c by A8,SCMFSA_2:91;
+  suppose InsCode i = 4; then consider a, b such that
+  A9: i = MultBy(a, b) by SCMFSA_2:57;
+       UsedIntLoc i = {a, b} by A9,Th18;
+     then c <> a by A1,TARSKI:def 2;
+   hence Exec(i, s).c = s.c by A9,SCMFSA_2:92;
+  suppose InsCode i = 5; then consider a, b such that
+  A10: i = Divide(a, b) by SCMFSA_2:58;
+       UsedIntLoc i = {a, b} by A10,Th18;
+     then c <> a & c <> b by A1,TARSKI:def 2;
+   hence Exec(i, s).c = s.c by A10,SCMFSA_2:93;
+  suppose InsCode i = 6; then consider l such that
+  A11: i = goto l by SCMFSA_2:59;
+   thus Exec(i, s).c = s.c by A11,SCMFSA_2:95;
+  suppose InsCode i = 7; then consider l, a such that
+  A12: i = a=0_goto l by SCMFSA_2:60;
+   thus Exec(i, s).c = s.c by A12,SCMFSA_2:96;
+  suppose InsCode i = 8; then consider l, a such that
+  A13: i = a>0_goto l by SCMFSA_2:61;
+   thus Exec(i, s).c = s.c by A13,SCMFSA_2:97;
+  suppose InsCode i = 9; then consider a, b, f such that
+  A14: i = b:=(f,a) by SCMFSA_2:62;
+       UsedIntLoc i = {a, b} by A14,Th21;
+     then c <> b by A1,TARSKI:def 2;
+   hence Exec(i, s).c = s.c by A14,SCMFSA_2:98;
+  suppose InsCode i = 10; then consider a, b, f such that
+  A15: i = (f,a):=b by SCMFSA_2:63;
+   thus Exec(i, s).c = s.c by A15,SCMFSA_2:99;
+  suppose InsCode i = 11; then consider a, f such that
+  A16: i = a:=len f by SCMFSA_2:64;
+       UsedIntLoc i = {a} by A16,Th22;
+     then c <> a by A1,TARSKI:def 1;
+   hence Exec(i, s).c = s.c by A16,SCMFSA_2:100;
+  suppose InsCode i = 12; then consider a,f such that
+  A17: i = f:=<0,...,0>a by SCMFSA_2:65;
+   thus Exec(i, s).c = s.c by A17,SCMFSA_2:101;
+end;
+
+theorem :: UIOneS:
+    I+*Start-At insloc 0 c= s &
+  (for m st m < n holds IC (Computation s).m in dom I) &
+  not a in UsedIntLoc I
+ implies (Computation s).n.a = s.a
+proof assume
+A1: I+*Start-At insloc 0 c= s &
+   (for m st m < n holds IC (Computation s).m in dom I) &
+   not a in UsedIntLoc I;
+   defpred X[Nat] means $1 <= n implies (Computation s).$1.a = s.a;
+A2: X[0] by AMI_1:def 19;
+A3: for m st X[m] holds X[m+1]
+   proof let m; set sm = (Computation s).m;
+     assume
+ A4: m <= n implies sm.a = s.a;
+      assume A5: m+1 <= n;
+ then m < n by NAT_1:38;
+ then A6: IC sm in dom I by A1;
+ then A7: I.IC sm in rng I by FUNCT_1:def 5;
+       dom I misses dom Start-At insloc 0 by Th64;
+     then I c= I+*Start-At insloc 0 by FUNCT_4:33;
+     then I c= s by A1,XBOOLE_1:1;
+     then I c= sm by AMI_3:38;
+     then I.IC sm = sm.IC sm by A6,GRFUNC_1:8;
+    then UsedIntLoc sm.IC sm c= UsedIntLoc I by A7,Th23;
+ then A8: not a in UsedIntLoc sm.IC sm by A1;
+     thus (Computation s).(m+1).a
+      = (Following sm).a by AMI_1:def 19
+     .= (Exec(CurInstr sm, sm)).a by AMI_1:def 18
+     .= (Exec(sm.IC sm, sm)).a by AMI_1:def 17
+     .= s.a by A4,A5,A8,Th68,NAT_1:38;
+    end;
+     for m holds X[m] from Ind(A2, A3);
+  hence (Computation s).n.a = s.a;
+end;
+
+theorem Th70:
+ not f in UsedInt*Loc i implies Exec(i, s).f = s.f
+proof assume
+A1:  not f in UsedInt*Loc i;
+   A2: InsCode i <= 11+1 by SCMFSA_2:35;
+A3: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:26;
+A4: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:26;
+A5: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
+  per cases by A2,A3,A4,A5,CQC_THE1:9,NAT_1:26;
+  suppose InsCode i = 0; then i = halt SCM+FSA by SCMFSA_2:122;
+   hence Exec(i, s).f = s.f by AMI_1:def 8;
+  suppose InsCode i = 1; then consider a, b such that
+  A6: i = a:=b by SCMFSA_2:54;
+   thus Exec(i, s).f = s.f by A6,SCMFSA_2:89;
+  suppose InsCode i = 2; then consider a, b such that
+  A7: i = AddTo(a,b) by SCMFSA_2:55;
+   thus Exec(i, s).f = s.f by A7,SCMFSA_2:90;
+  suppose InsCode i = 3; then consider a, b such that
+  A8: i = SubFrom(a, b) by SCMFSA_2:56;
+   thus Exec(i, s).f = s.f by A8,SCMFSA_2:91;
+  suppose InsCode i = 4; then consider a, b such that
+  A9: i = MultBy(a, b) by SCMFSA_2:57;
+   thus Exec(i, s).f = s.f by A9,SCMFSA_2:92;
+  suppose InsCode i = 5; then consider a, b such that
+  A10: i = Divide(a, b) by SCMFSA_2:58;
+   thus Exec(i, s).f = s.f by A10,SCMFSA_2:93;
+  suppose InsCode i = 6; then consider l such that
+  A11: i = goto l by SCMFSA_2:59;
+   thus Exec(i, s).f = s.f by A11,SCMFSA_2:95;
+  suppose InsCode i = 7; then consider l, a such that
+  A12: i = a=0_goto l by SCMFSA_2:60;
+   thus Exec(i, s).f = s.f by A12,SCMFSA_2:96;
+  suppose InsCode i = 8; then consider l, a such that
+  A13: i = a>0_goto l by SCMFSA_2:61;
+   thus Exec(i, s).f = s.f by A13,SCMFSA_2:97;
+  suppose InsCode i = 9; then consider a, b, g such that
+  A14: i = b:=(g,a) by SCMFSA_2:62;
+   thus Exec(i, s).f = s.f by A14,SCMFSA_2:98;
+  suppose InsCode i = 10; then consider a, b, g such that
+  A15: i = (g,a):=b by SCMFSA_2:63;
+       UsedInt*Loc i = {g} by A15,Th37;
+     then f <> g by A1,TARSKI:def 1;
+   hence Exec(i, s).f = s.f by A15,SCMFSA_2:99;
+  suppose InsCode i = 11; then consider a, g such that
+  A16: i = a:=len g by SCMFSA_2:64;
+   thus Exec(i, s).f = s.f by A16,SCMFSA_2:100;
+  suppose InsCode i = 12; then consider a,g such that
+  A17: i = g:=<0,...,0>a by SCMFSA_2:65;
+       UsedInt*Loc i = {g} by A17,Th38;
+     then f <> g by A1,TARSKI:def 1;
+   hence Exec(i, s).f = s.f by A17,SCMFSA_2:101;
+end;
+
+theorem :: UIFOneS:
+    I+*Start-At insloc 0 c= s &
+  (for m st m < n holds IC (Computation s).m in dom I) &
+  not f in UsedInt*Loc I
+ implies (Computation s).n.f = s.f
+proof assume
+A1: I+*Start-At insloc 0 c= s &
+   (for m st m < n holds IC (Computation s).m in dom I) &
+   not f in UsedInt*Loc I;
+   defpred X[Nat] means $1 <= n implies (Computation s).$1.f = s.f;
+A2: X[0] by AMI_1:def 19;
+A3: for m st X[m] holds X[m+1]
+   proof let m; set sm = (Computation s).m;
+     assume
+ A4: m <= n implies sm.f = s.f;
+      assume A5: m+1 <= n;
+ then m < n by NAT_1:38;
+ then A6: IC sm in dom I by A1;
+ then A7: I.IC sm in rng I by FUNCT_1:def 5;
+       dom I misses dom Start-At insloc 0 by Th64;
+     then I c= I+*Start-At insloc 0 by FUNCT_4:33;
+     then I c= s by A1,XBOOLE_1:1;
+     then I c= sm by AMI_3:38;
+     then I.IC sm = sm.IC sm by A6,GRFUNC_1:8;
+     then UsedInt*Loc sm.IC sm c= UsedInt*Loc I by A7,Th39;
+ then A8: not f in UsedInt*Loc sm.IC sm by A1;
+     thus (Computation s).(m+1).f
+      = (Following sm).f by AMI_1:def 19
+     .= (Exec(CurInstr sm, sm)).f by AMI_1:def 18
+     .= (Exec(sm.IC sm, sm)).f by AMI_1:def 17
+     .= s.f by A4,A5,A8,Th70,NAT_1:38;
+    end;
+     for m holds X[m] from Ind(A2, A3);
+  hence (Computation s).n.f = s.f;
+end;
+
+theorem Th72:
+ s | UsedIntLoc i = t | UsedIntLoc i & s | UsedInt*Loc i = t | UsedInt*Loc i &
+ IC s = IC t
+ implies
+  IC Exec(i, s) = IC Exec(i, t) &
+  Exec(i, s) | UsedIntLoc i = Exec(i, t) | UsedIntLoc i &
+  Exec(i, s) | UsedInt*Loc i = Exec(i, t) | UsedInt*Loc i
+proof assume
+A1: s | UsedIntLoc i = t | UsedIntLoc i &
+    s | UsedInt*Loc i = t | UsedInt*Loc i &
+    IC s = IC t;
+ set Es = Exec(i, s); set Et = Exec(i, t);
+ set Ui = UsedIntLoc i; set UFi = UsedInt*Loc i;
+A2: dom Es = the carrier of SCM+FSA by AMI_3:36 .= dom Et by AMI_3:36;
+   A3: InsCode i <= 11+1 by SCMFSA_2:35;
+A4: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:26;
+A5: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:26;
+A6: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
+  per cases by A3,A4,A5,A6,CQC_THE1:9,NAT_1:26;
+  suppose InsCode i = 0; then i = halt SCM+FSA by SCMFSA_2:122;
+     then Exec(i, s) = s & Exec(i, t) = t by AMI_1:def 8;
+   hence IC Exec(i, s) = IC Exec(i, t) &
+         Exec(i, s) | UsedIntLoc i = Exec(i, t) | UsedIntLoc i &
+         Exec(i, s) | UsedInt*Loc i = Exec(i, t) | UsedInt*Loc i by A1;
+  suppose InsCode i = 1; then consider a, b such that
+  A7: i = a:=b by SCMFSA_2:54;
+   thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
+             .= Next IC t by A1,A7,SCMFSA_2:89
+             .= Et.IC SCM+FSA by A7,SCMFSA_2:89
+             .= IC Et by AMI_1:def 15;
+  A8: Ui = {a, b} & UFi = {} by A7,Th18,Th36;
+  then A9: a in Ui & b in Ui by TARSKI:def 2;
+     then s.a = (s | Ui).a & s.b = (s | Ui).b by FUNCT_1:72;
+  then A10: s.a = t.a & s.b = t.b by A1,A9,FUNCT_1:72;
+       a = b or a <> b;
+     then Es.a = s.b & Es.b = s.b & Et.a = t.b & Et.b = t.b by A7,SCMFSA_2:89;
+   hence Es | Ui = Et | Ui by A2,A8,A10,AMI_3:25;
+   thus Es | UFi = {} by A8,RELAT_1:110 .= Et | UFi by A8,RELAT_1:110;
+  suppose InsCode i = 2; then consider a, b such that
+  A11: i = AddTo(a,b) by SCMFSA_2:55;
+    thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
+             .= Next IC t by A1,A11,SCMFSA_2:90
+             .= Et.IC SCM+FSA by A11,SCMFSA_2:90
+             .= IC Et by AMI_1:def 15;
+  A12: Ui = {a, b} & UFi = {} by A11,Th18,Th36;
+  then A13: a in Ui & b in Ui by TARSKI:def 2;
+     then s.a = (s | Ui).a & s.b = (s | Ui).b by FUNCT_1:72;
+  then A14: s.a = t.a & s.b = t.b by A1,A13,FUNCT_1:72;
+  A15: Es.a = s.a + s.b & Et.a = t.a + t.b by A11,SCMFSA_2:90;
+       now
+      per cases;
+      case a = b; hence Es.b = s.a + s.b & Et.b = t.a + t.b by A11,SCMFSA_2:90;
+      case a<> b; hence Es.b = s.b & Et.b = t.b by A11,SCMFSA_2:90;
+     end;
+   hence Es | Ui = Et | Ui by A2,A12,A14,A15,AMI_3:25;
+   thus Es | UFi = {} by A12,RELAT_1:110 .= Et | UFi by A12,RELAT_1:110;
+  suppose InsCode i = 3; then consider a, b such that
+  A16: i = SubFrom(a, b) by SCMFSA_2:56;
+    thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
+             .= Next IC t by A1,A16,SCMFSA_2:91
+             .= Et.IC SCM+FSA by A16,SCMFSA_2:91
+             .= IC Et by AMI_1:def 15;
+  A17: Ui = {a, b} & UFi = {} by A16,Th18,Th36;
+  then A18: a in Ui & b in Ui by TARSKI:def 2;
+     then s.a = (s | Ui).a & s.b = (s | Ui).b by FUNCT_1:72;
+  then A19: s.a = t.a & s.b = t.b by A1,A18,FUNCT_1:72;
+  A20: Es.a = s.a - s.b & Et.a = t.a - t.b by A16,SCMFSA_2:91;
+       now
+      per cases;
+      case a = b; hence Es.b = s.a - s.b & Et.b = t.a - t.b by A16,SCMFSA_2:91;
+      case a<> b; hence Es.b = s.b & Et.b = t.b by A16,SCMFSA_2:91;
+     end;
+   hence Es | Ui = Et | Ui by A2,A17,A19,A20,AMI_3:25;
+   thus Es | UFi = {} by A17,RELAT_1:110 .= Et | UFi by A17,RELAT_1:110;
+  suppose InsCode i = 4; then consider a, b such that
+  A21: i = MultBy(a, b) by SCMFSA_2:57;
+    thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
+             .= Next IC t by A1,A21,SCMFSA_2:92
+             .= Et.IC SCM+FSA by A21,SCMFSA_2:92
+             .= IC Et by AMI_1:def 15;
+  A22: Ui = {a, b} & UFi = {} by A21,Th18,Th36;
+  then A23: a in Ui & b in Ui by TARSKI:def 2;
+     then s.a = (s | Ui).a & s.b = (s | Ui).b by FUNCT_1:72;
+  then A24: s.a = t.a & s.b = t.b by A1,A23,FUNCT_1:72;
+  A25: Es.a = s.a * s.b & Et.a = t.a * t.b by A21,SCMFSA_2:92;
+       now
+      per cases;
+      case a = b; hence Es.b = s.a * s.b & Et.b = t.a * t.b by A21,SCMFSA_2:92;
+      case a<> b; hence Es.b = s.b & Et.b = t.b by A21,SCMFSA_2:92;
+     end;
+   hence Es | Ui = Et | Ui by A2,A22,A24,A25,AMI_3:25;
+   thus Es | UFi = {} by A22,RELAT_1:110 .= Et | UFi by A22,RELAT_1:110;
+   suppose InsCode i = 5; then consider a, b such that
+  A26: i = Divide(a, b) by SCMFSA_2:58;
+  A27: Ui = {a, b} & UFi = {} by A26,Th18,Th36;
+  then A28: a in Ui & b in Ui by TARSKI:def 2;
+     then s.a = (s | Ui).a & s.b = (s | Ui).b by FUNCT_1:72;
+  then A29: s.a = t.a & s.b = t.b by A1,A28,FUNCT_1:72;
+   hereby
+   per cases;
+   suppose A30: a = b;
+    thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
+             .= Next IC t by A1,A26,A30,SCMFSA_2:94
+             .= Et.IC SCM+FSA by A26,A30,SCMFSA_2:94
+             .= IC Et by AMI_1:def 15;
+     Es.a = s.a mod s.a & Et.a = t.a mod t.b by A26,A30,SCMFSA_2:94;
+   hence Es | Ui = Et | Ui by A2,A27,A29,A30,AMI_3:25;
+   thus Es | UFi = {} by A27,RELAT_1:110 .= Et | UFi by A27,RELAT_1:110;
+   suppose A31: a <> b;
+    thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
+             .= Next IC t by A1,A26,SCMFSA_2:93
+             .= Et.IC SCM+FSA by A26,SCMFSA_2:93
+             .= IC Et by AMI_1:def 15;
+       Es.a = s.a div s.b & Et.a = t.a div t.b &
+     Es.b = s.a mod s.b & Et.b = t.a mod t.b by A26,A31,SCMFSA_2:93;
+   hence Es | Ui = Et | Ui by A2,A27,A29,AMI_3:25;
+   thus Es | UFi = {} by A27,RELAT_1:110 .= Et | UFi by A27,RELAT_1:110;
+  end;
+  suppose InsCode i = 6; then consider l such that
+  A32: i = goto l by SCMFSA_2:59;
+   thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
+             .= l by A32,SCMFSA_2:95
+             .= Et.IC SCM+FSA by A32,SCMFSA_2:95
+             .= IC Et by AMI_1:def 15;
+  A33: Ui = {} & UFi = {} by A32,Th19,Th36;
+   hence Es | Ui = {} by RELAT_1:110 .= Et | Ui by A33,RELAT_1:110;
+   thus Es | UFi = {} by A33,RELAT_1:110 .= Et | UFi by A33,RELAT_1:110;
+  suppose InsCode i = 7; then consider l, a such that
+  A34: i = a=0_goto l by SCMFSA_2:60;
+  A35: Ui = {a} & UFi = {} by A34,Th20,Th36;
+  then A36: a in Ui by TARSKI:def 1;
+     then s.a = (s | Ui).a by FUNCT_1:72;
+  then A37: s.a = t.a by A1,A36,FUNCT_1:72;
+   hereby
+   per cases;
+   suppose A38: s.a = 0;
+   thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
+             .= l by A34,A38,SCMFSA_2:96
+             .= Et.IC SCM+FSA by A34,A37,A38,SCMFSA_2:96
+             .= IC Et by AMI_1:def 15;
+   suppose A39: s.a <> 0;
+   thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
+             .= Next IC s by A34,A39,SCMFSA_2:96
+             .= Et.IC SCM+FSA by A1,A34,A37,A39,SCMFSA_2:96
+             .= IC Et by AMI_1:def 15;
+   end;
+      Es.a = s.a & Et.a = t.a by A34,SCMFSA_2:96;
+   hence Es | Ui = Et | Ui by A2,A35,A37,AMI_3:24;
+   thus Es | UFi = {} by A35,RELAT_1:110 .= Et | UFi by A35,RELAT_1:110;
+  suppose InsCode i = 8; then consider l, a such that
+  A40: i = a>0_goto l by SCMFSA_2:61;
+  A41: Ui = {a} & UFi = {} by A40,Th20,Th36;
+  then A42: a in Ui by TARSKI:def 1;
+     then s.a = (s | Ui).a by FUNCT_1:72;
+  then A43: s.a = t.a by A1,A42,FUNCT_1:72;
+   hereby
+   per cases;
+   suppose A44: s.a > 0;
+   thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
+             .= l by A40,A44,SCMFSA_2:97
+             .= Et.IC SCM+FSA by A40,A43,A44,SCMFSA_2:97
+             .= IC Et by AMI_1:def 15;
+   suppose A45: s.a <= 0;
+   thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
+             .= Next IC s by A40,A45,SCMFSA_2:97
+             .= Et.IC SCM+FSA by A1,A40,A43,A45,SCMFSA_2:97
+             .= IC Et by AMI_1:def 15;
+   end;
+      Es.a = s.a & Et.a = t.a by A40,SCMFSA_2:97;
+   hence Es | Ui = Et | Ui by A2,A41,A43,AMI_3:24;
+   thus Es | UFi = {} by A41,RELAT_1:110 .= Et | UFi by A41,RELAT_1:110;
+  suppose InsCode i = 9; then consider a, b, f such that
+  A46: i = b:=(f,a) by SCMFSA_2:62;
+   thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
+             .= Next IC t by A1,A46,SCMFSA_2:98
+             .= Et.IC SCM+FSA by A46,SCMFSA_2:98
+             .= IC Et by AMI_1:def 15;
+  A47: Ui = {a, b} & UFi = {f} by A46,Th21,Th37;
+  then A48: a in Ui & b in Ui & f in UFi by TARSKI:def 1,def 2;
+     then s.a = (s | Ui).a & s.b = (s | Ui).b & s.f = (s | UFi).f by FUNCT_1:72
+;
+  then A49: s.a = t.a & s.b = t.b & s.f = t.f by A1,A48,FUNCT_1:72;
+     consider m such that
+  A50: m = abs(s.a) & Es.b = (s.f)/.m by A46,SCMFSA_2:98;
+     consider n such that
+  A51: n = abs(t.a) & Et.b = (t.f)/.n by A46,SCMFSA_2:98;
+  A52: Es.f = s.f & Et.f = t.f by A46,SCMFSA_2:98;
+       now
+     per cases;
+     case a = b; thus Es.b = Et.b by A49,A50,A51;
+     case a <> b; hence Es.a = s.a & Et.a = t.a by A46,SCMFSA_2:98;
+     end;
+   hence Es | Ui = Et | Ui by A2,A47,A49,A50,A51,AMI_3:25;
+   thus Es | UFi = Et | UFi by A2,A47,A49,A52,AMI_3:24;
+  suppose InsCode i = 10; then consider a, b, f such that
+  A53: i = (f,a):=b by SCMFSA_2:63;
+   thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
+             .= Next IC t by A1,A53,SCMFSA_2:99
+             .= Et.IC SCM+FSA by A53,SCMFSA_2:99
+             .= IC Et by AMI_1:def 15;
+  A54: Ui = {a, b} & UFi = {f} by A53,Th21,Th37;
+  then A55: a in Ui & b in Ui & f in UFi by TARSKI:def 1,def 2;
+     then s.a = (s | Ui).a & s.b = (s | Ui).b & s.f = (s | UFi).f by FUNCT_1:72
+;
+  then A56: s.a = t.a & s.b = t.b & s.f = t.f by A1,A55,FUNCT_1:72;
+     consider m such that
+  A57: m = abs(s.a) & Es.f = s.f+*(m,s.b) by A53,SCMFSA_2:99;
+     consider n such that
+  A58: n = abs(t.a) & Et.f = t.f+*(n,t.b) by A53,SCMFSA_2:99;
+     Es.a = s.a & Es.b = s.b & Et.a = t.a & Et.b = t.b by A53,SCMFSA_2:99;
+   hence Es | Ui = Et | Ui by A2,A54,A56,AMI_3:25;
+   thus Es | UFi = Et | UFi by A2,A54,A56,A57,A58,AMI_3:24;
+  suppose InsCode i = 11; then consider a, f such that
+  A59: i = a:=len f by SCMFSA_2:64;
+   thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
+             .= Next IC t by A1,A59,SCMFSA_2:100
+             .= Et.IC SCM+FSA by A59,SCMFSA_2:100
+             .= IC Et by AMI_1:def 15;
+  A60: Ui = {a} & UFi = {f} by A59,Th22,Th38;
+  then A61: a in Ui & f in UFi by TARSKI:def 1;
+     then s.a = (s | Ui).a & s.f = (s | UFi).f by FUNCT_1:72;
+  then A62: s.a = t.a & s.f = t.f by A1,A61,FUNCT_1:72;
+  A63: Es.a = len(s.f) & Es.f = s.f & Et.a = len(t.f) & Et.f = t.f
+                                                by A59,SCMFSA_2:100;
+   hence Es | Ui = Et | Ui by A2,A60,A62,AMI_3:24;
+   thus Es | UFi = Et | UFi by A2,A60,A62,A63,AMI_3:24;
+  suppose InsCode i = 12; then consider a,f such that
+  A64: i = f:=<0,...,0>a by SCMFSA_2:65;
+   thus IC Es = Es.IC SCM+FSA by AMI_1:def 15
+             .= Next IC t by A1,A64,SCMFSA_2:101
+             .= Et.IC SCM+FSA by A64,SCMFSA_2:101
+             .= IC Et by AMI_1:def 15;
+  A65: Ui = {a} & UFi = {f} by A64,Th22,Th38;
+  then A66: a in Ui & f in UFi by TARSKI:def 1;
+     then s.a = (s | Ui).a & s.f = (s | UFi).f by FUNCT_1:72;
+  then A67: s.a = t.a & s.f = t.f by A1,A66,FUNCT_1:72;
+     consider m such that
+  A68: m = abs(s.a) & Es.f = m |-> 0 by A64,SCMFSA_2:101;
+     consider n such that
+  A69: n = abs(t.a) & Et.f = n |-> 0 by A64,SCMFSA_2:101;
+       Es.a = s.a & Et.a = t.a by A64,SCMFSA_2:101;
+   hence Es | Ui = Et | Ui by A2,A65,A67,AMI_3:24;
+   thus Es | UFi = Et | UFi by A2,A65,A67,A68,A69,AMI_3:24;
+end;
+
+theorem :: UITwoS:
+   I+*Start-At insloc 0 c= s & I+*Start-At insloc 0 c= t &
+ s | UsedIntLoc I = t | UsedIntLoc I & s | UsedInt*Loc I = t | UsedInt*Loc I &
+ (for m st m < n holds IC (Computation s).m in dom I)
+ implies
+ (for m st m < n holds IC (Computation t).m in dom I) &
+ for m st m <= n holds
+  IC (Computation s).m = IC (Computation t).m &
+    (for a st a in UsedIntLoc I
+            holds (Computation s).m.a = (Computation t).m.a) &
+     for f st f in UsedInt*Loc I
+            holds (Computation s).m.f = (Computation t).m.f
+proof assume that
+A1: I+*Start-At insloc 0 c= s & I+*Start-At insloc 0 c= t and
+A2: s | UsedIntLoc I = t | UsedIntLoc I & s | UsedInt*Loc I = t | UsedInt*Loc I
+   and
+A3: for m st m < n holds IC (Computation s).m in dom I;
+defpred P[Nat] means
+  $1 < n implies
+   IC (Computation t).$1 in dom I &
+   IC (Computation s).$1 = IC (Computation t).$1 &
+   (for a st a in UsedIntLoc I
+           holds (Computation s).$1.a = (Computation t).$1.a) &
+    for f st f in UsedInt*Loc I
+            holds (Computation s).$1.f = (Computation t).$1.f;
+A4: P[0]
+   proof assume
+    A5: 0 < n;
+    A6: IC (Computation s).0 = IC s by AMI_1:def 19 .= insloc 0 by A1,Th67;
+    A7: IC (Computation t).0 = IC t by AMI_1:def 19 .= insloc 0 by A1,Th67;
+     hence IC (Computation t).0 in dom I by A3,A5,A6;
+     thus IC (Computation s).0 = IC (Computation t).0 by A6,A7;
+     hereby let a; assume
+     A8: a in UsedIntLoc I;
+      thus (Computation s).0.a = s.a by AMI_1:def 19
+        .= (s | UsedIntLoc I).a by A8,FUNCT_1:72 .= t.a by A2,A8,FUNCT_1:72
+        .= (Computation t).0.a by AMI_1:def 19;
+     end;
+     let f; assume
+     A9: f in UsedInt*Loc I;
+     thus (Computation s).0.f = s.f by AMI_1:def 19
+        .= (s | UsedInt*Loc I).f by A9,FUNCT_1:72 .= t.f by A2,A9,FUNCT_1:72
+        .= (Computation t).0.f by AMI_1:def 19;
+    end;
+    set Cs = Computation s; set Ct = Computation t;
+A10: now let m; assume
+ A11: P[m];
+      thus P[m+1]
+      proof
+       set m1 = m+1;
+       assume
+ A12: m1 < n;
+ then A13:  m < n by NAT_1:38;
+ A14: Cs.m1 = Following Cs.m by AMI_1:def 19
+            .= Exec(CurInstr Cs.m, Cs.m) by AMI_1:def 18
+            .= Exec(Cs.m.IC Cs.m, Cs.m) by AMI_1:def 17;
+ A15: Ct.m1 = Following Ct.m by AMI_1:def 19
+            .= Exec(CurInstr Ct.m, Ct.m) by AMI_1:def 18
+            .= Exec(Ct.m.IC Ct.m, Ct.m) by AMI_1:def 17;
+         dom I misses dom Start-At insloc 0 by Th64;
+       then I c= I +* Start-At insloc 0 by FUNCT_4:33;
+       then I c= s & I c= t by A1,XBOOLE_1:1;
+ then A16: I c= Cs.m & I c= Ct.m by AMI_3:38;
+ then A17:  Cs.m.IC Cs.m = I.IC Cs.m by A11,A12,GRFUNC_1:8,NAT_1:38;
+ then A18:   Cs.m.IC Cs.m = Ct.m.IC Ct.m by A11,A12,A16,GRFUNC_1:8,NAT_1:38;
+     set i = Cs.m.IC Cs.m;
+       IC Cs.m in dom I by A3,A13;
+ then A19: i in rng I by A17,FUNCT_1:def 5;
+ then A20: UsedIntLoc i c= UsedIntLoc I by Th23;
+        now
+       thus dom (Cs.m | UsedIntLoc I)
+          = dom (Cs.m) /\ UsedIntLoc I by RELAT_1:90
+         .= (dom the Object-Kind of SCM+FSA) /\ UsedIntLoc I by CARD_3:18
+         .= dom (Ct.m) /\ UsedIntLoc I by CARD_3:18;
+       let x be set; assume
+        x in dom (Cs.m | UsedIntLoc I);
+     then A21: x in UsedIntLoc I by RELAT_1:86;
+         then reconsider x' = x as Int-Location by SCMFSA_2:11;
+       thus (Cs.m | UsedIntLoc I).x = Cs.m.x' by A21,FUNCT_1:72
+                                   .= Ct.m.x by A11,A12,A21,NAT_1:38;
+      end;
+ then A22: Cs.m | UsedIntLoc I = Ct.m | UsedIntLoc I by FUNCT_1:68;
+ A23: Cs.m | UsedIntLoc i
+       = (Cs.m | UsedIntLoc I) | UsedIntLoc i by A20,RELAT_1:103
+      .= Ct.m | UsedIntLoc i by A20,A22,RELAT_1:103;
+ A24: UsedInt*Loc i c= UsedInt*Loc I by A19,Th39;
+      now
+       thus dom (Cs.m | UsedInt*Loc I)
+          = dom (Cs.m) /\ UsedInt*Loc I by RELAT_1:90
+         .= (dom the Object-Kind of SCM+FSA) /\ UsedInt*Loc I by CARD_3:18
+         .= dom (Ct.m) /\ UsedInt*Loc I by CARD_3:18;
+       let x be set; assume
+        x in dom (Cs.m | UsedInt*Loc I);
+     then A25: x in UsedInt*Loc I by RELAT_1:86;
+         then reconsider x' = x as FinSeq-Location by SCMFSA_2:12;
+       thus (Cs.m | UsedInt*Loc I).x = Cs.m.x' by A25,FUNCT_1:72
+                                   .= Ct.m.x by A11,A12,A25,NAT_1:38;
+      end;
+ then A26: Cs.m | UsedInt*Loc I = Ct.m | UsedInt*Loc I by FUNCT_1:68;
+    Cs.m | UsedInt*Loc i
+       = (Cs.m | UsedInt*Loc I) | UsedInt*Loc i by A24,RELAT_1:103
+      .= Ct.m | UsedInt*Loc i by A24,A26,RELAT_1:103;
+ then A27:  Exec(i, Cs.m) | UsedIntLoc i = Exec(i, Ct.m) | UsedIntLoc i &
+      Exec(i, Cs.m) | UsedInt*Loc i = Exec(i, Ct.m) | UsedInt*Loc i &
+      IC Exec(i, Cs.m) = IC Exec(i, Ct.m)
+                                    by A11,A12,A23,Th72,NAT_1:38;
+    hence IC Ct.m1 in dom I by A3,A12,A14,A15,A18;
+    thus IC Cs.m1 = IC Ct.m1 by A11,A12,A14,A15,A16,A17,A27,GRFUNC_1:8,NAT_1:38
+;
+    hereby let a; assume
+    A28: a in UsedIntLoc I;
+     per cases;
+     suppose A29: a in UsedIntLoc i;
+      hence Cs.m1.a = (Exec(i, Cs.m) | UsedIntLoc i).a by A14,FUNCT_1:72
+                   .= Ct.m1.a by A15,A18,A27,A29,FUNCT_1:72;
+     suppose A30: not a in UsedIntLoc i;
+      hence Cs.m1.a = Cs.m.a by A14,Th68
+                   .= Ct.m.a by A11,A12,A28,NAT_1:38
+                   .= Ct.m1.a by A15,A18,A30,Th68;
+    end;
+    let f; assume
+    A31: f in UsedInt*Loc I;
+    per cases;
+     suppose A32: f in UsedInt*Loc i;
+      hence Cs.m1.f = (Exec(i, Cs.m) | UsedInt*Loc i).f by A14,FUNCT_1:72
+                   .= Ct.m1.f by A15,A18,A27,A32,FUNCT_1:72;
+     suppose A33: not f in UsedInt*Loc i;
+      hence Cs.m1.f = Cs.m.f by A14,Th70
+                   .= Ct.m.f by A11,A12,A31,NAT_1:38
+                   .= Ct.m1.f by A15,A18,A33,Th70;
+     end;
+    end;
+A34: for m holds P[m] from Ind(A4, A10);
+ hence for m st m < n holds IC Ct.m in dom I;
+ let m; assume
+A35: m <= n;
+ per cases by NAT_1:22;
+  suppose A36: m = 0;
+    A37: IC (Computation s).0 = IC s by AMI_1:def 19 .= insloc 0 by A1,Th67;
+       IC (Computation t).0 = IC t by AMI_1:def 19 .= insloc 0 by A1,Th67;
+   hence IC (Computation s).m = IC (Computation t).m by A36,A37;
+   hereby let a; assume
+     A38: a in UsedIntLoc I;
+    thus (Computation s).m.a = s.a by A36,AMI_1:def 19
+      .= (s | UsedIntLoc I).a by A38,FUNCT_1:72 .= t.a by A2,A38,FUNCT_1:72
+      .= (Computation t).m.a by A36,AMI_1:def 19;
+   end;
+   let f; assume
+  A39: f in UsedInt*Loc I;
+   thus (Computation s).m.f = s.f by A36,AMI_1:def 19
+     .= (s | UsedInt*Loc I).f by A39,FUNCT_1:72 .= t.f by A2,A39,FUNCT_1:72
+     .= (Computation t).m.f by A36,AMI_1:def 19;
+  suppose ex p being Nat st m = p+1; then consider p being Nat such that
+  A40: m = p+1; set p1 = p+1;
+  A41: p < n by A35,A40,NAT_1:38;
+ A42: Cs.p1 = Following Cs.p by AMI_1:def 19
+            .= Exec(CurInstr Cs.p, Cs.p) by AMI_1:def 18
+            .= Exec(Cs.p.IC Cs.p, Cs.p) by AMI_1:def 17;
+ A43: Ct.p1 = Following Ct.p by AMI_1:def 19
+            .= Exec(CurInstr Ct.p, Ct.p) by AMI_1:def 18
+            .= Exec(Ct.p.IC Ct.p, Ct.p) by AMI_1:def 17;
+ A44:  IC Cs.p = IC Ct.p & IC Cs.p in dom I by A3,A34,A41;
+         dom I misses dom Start-At insloc 0 by Th64;
+       then I c= I +* Start-At insloc 0 by FUNCT_4:33;
+       then I c= s & I c= t by A1,XBOOLE_1:1;
+ then A45: I c= Cs.p & I c= Ct.p by AMI_3:38;
+ then A46:  Cs.p.IC Cs.p = I.IC Cs.p by A44,GRFUNC_1:8;
+ then A47:   Cs.p.IC Cs.p = Ct.p.IC Ct.p by A44,A45,GRFUNC_1:8;
+     set i = Cs.p.IC Cs.p;
+       IC Cs.p in dom I by A3,A41;
+ then A48: i in rng I by A46,FUNCT_1:def 5;
+ then A49: UsedIntLoc i c= UsedIntLoc I by Th23;
+        now
+       thus dom (Cs.p | UsedIntLoc I)
+          = dom (Cs.p) /\ UsedIntLoc I by RELAT_1:90
+         .= (dom the Object-Kind of SCM+FSA) /\ UsedIntLoc I by CARD_3:18
+         .= dom (Ct.p) /\ UsedIntLoc I by CARD_3:18;
+       let x be set; assume
+        x in dom (Cs.p | UsedIntLoc I);
+     then A50: x in UsedIntLoc I by RELAT_1:86;
+         then reconsider x' = x as Int-Location by SCMFSA_2:11;
+       thus (Cs.p | UsedIntLoc I).x = Cs.p.x' by A50,FUNCT_1:72
+                                   .= Ct.p.x by A34,A41,A50;
+      end;
+ then A51: Cs.p | UsedIntLoc I = Ct.p | UsedIntLoc I by FUNCT_1:68;
+ A52: Cs.p | UsedIntLoc i
+       = (Cs.p | UsedIntLoc I) | UsedIntLoc i by A49,RELAT_1:103
+      .= Ct.p | UsedIntLoc i by A49,A51,RELAT_1:103;
+ A53: UsedInt*Loc i c= UsedInt*Loc I by A48,Th39;
+      now
+       thus dom (Cs.p | UsedInt*Loc I)
+          = dom (Cs.p) /\ UsedInt*Loc I by RELAT_1:90
+         .= (dom the Object-Kind of SCM+FSA) /\ UsedInt*Loc I by CARD_3:18
+         .= dom (Ct.p) /\ UsedInt*Loc I by CARD_3:18;
+       let x be set; assume
+        x in dom (Cs.p | UsedInt*Loc I);
+     then A54: x in UsedInt*Loc I by RELAT_1:86;
+         then reconsider x' = x as FinSeq-Location by SCMFSA_2:12;
+       thus (Cs.p | UsedInt*Loc I).x = Cs.p.x' by A54,FUNCT_1:72
+                                   .= Ct.p.x by A34,A41,A54;
+      end;
+ then A55: Cs.p | UsedInt*Loc I = Ct.p | UsedInt*Loc I by FUNCT_1:68;
+  A56: Cs.p | UsedInt*Loc i
+       = (Cs.p | UsedInt*Loc I) | UsedInt*Loc i by A53,RELAT_1:103
+      .= Ct.p | UsedInt*Loc i by A53,A55,RELAT_1:103;
+ then A57:  Exec(i, Cs.p) | UsedIntLoc i = Exec(i, Ct.p) | UsedIntLoc i &
+      Exec(i, Cs.p) | UsedInt*Loc i = Exec(i, Ct.p) | UsedInt*Loc i &
+      IC Exec(i, Cs.p) = IC Exec(i, Ct.p)
+                                    by A44,A52,Th72;
+    thus IC Cs.m = IC Ct.m by A40,A42,A43,A44,A47,A52,A56,Th72;
+    hereby let a; assume
+    A58: a in UsedIntLoc I;
+     per cases;
+     suppose A59: a in UsedIntLoc i;
+      hence Cs.m.a = (Exec(i, Cs.p) | UsedIntLoc i).a by A40,A42,FUNCT_1:72
+                   .= Ct.m.a by A40,A43,A47,A57,A59,FUNCT_1:72;
+     suppose A60: not a in UsedIntLoc i;
+      hence Cs.m.a = Cs.p.a by A40,A42,Th68
+                   .= Ct.p.a by A34,A41,A58
+                   .= Ct.m.a by A40,A43,A47,A60,Th68;
+    end;
+    hereby let f; assume
+    A61: f in UsedInt*Loc I;
+    per cases;
+     suppose A62: f in UsedInt*Loc i;
+      hence Cs.m.f = (Exec(i, Cs.p) | UsedInt*Loc i).f by A40,A42,FUNCT_1:72
+                   .= Ct.m.f by A40,A43,A47,A57,A62,FUNCT_1:72;
+     suppose A63: not f in UsedInt*Loc i;
+      hence Cs.m.f = Cs.p.f by A40,A42,Th70
+                   .= Ct.p.f by A34,A41,A61
+                   .= Ct.m.f by A40,A43,A47,A63,Th70;
+    end;
+end;
+

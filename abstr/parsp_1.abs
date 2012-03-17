@@ -1,0 +1,324 @@
+:: Parallelity Spaces
+::  by Eugeniusz Kusak, Wojciech Leo\'nczuk and Micha{\l} Muzalewski
+::
+:: Received November 23, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary VECTSP_1, RLVECT_1, ARYTM_1, RELAT_1, BINOP_1, FUNCT_1, MCART_1,
+      PARSP_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, DOMAIN_1, FUNCT_2,
+      BINOP_1, STRUCT_0, RLVECT_1, VECTSP_1;
+ constructors DOMAIN_1, BINOP_1, VECTSP_1, MEMBERED, XBOOLE_0;
+ clusters STRUCT_0, SUBSET_1, VECTSP_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+reserve F for Field, a,b,c,d,e,f,g,h for Element of F;
+
+::
+::               1. A THREE-DIMENSION CARTESIAN GROUP
+::
+
+reserve x,y
+   for Element of [:the carrier of F,the carrier of F,the carrier of F:];
+
+ definition let F;
+  func c3add(F) ->
+   BinOp of [:the carrier of F,the carrier of F,the carrier of F:] means
+:: PARSP_1:def 1
+    it.(x,y) = [x`1+y`1,x`2+y`2,x`3+y`3];
+  end;
+
+definition let F,x,y;
+ func x+y -> Element of
+     [:the carrier of F,the carrier of F,the carrier of F:] equals
+:: PARSP_1:def 2
+   (c3add(F)).(x,y);
+end;
+
+canceled 2;
+
+theorem :: PARSP_1:3
+ x+y = [x`1+y`1,x`2+y`2,x`3+y`3];
+
+theorem :: PARSP_1:4
+ [a,b,c]+[f,g,h]=[a+f,b+g,c+h];
+
+definition let F;
+ func c3compl(F) ->
+  UnOp of [:the carrier of F,the carrier of F,the carrier of F:] means
+:: PARSP_1:def 3
+   it.(x) = [-x`1,-x`2,-x`3];
+ end;
+
+definition let F,x;
+ func -x -> Element of
+   [:the carrier of F,the carrier of F,the carrier of F:] equals
+:: PARSP_1:def 4
+   (c3compl(F)).(x);
+end;
+
+canceled 2;
+
+theorem :: PARSP_1:7
+ -x = [-x`1,-x`2,-x`3];
+
+::
+::                      2. PARALLELITY STRUCTURE
+::
+
+
+reserve S for set;
+
+definition let S;
+ mode Relation4 of S -> set means
+:: PARSP_1:def 5
+  it c= [:S,S,S,S:];
+end;
+
+definition
+  struct(1-sorted) ParStr (# carrier -> set,
+                      4_arg_relation -> Relation4 of the carrier #);
+end;
+
+definition
+ cluster non empty ParStr;
+end;
+
+reserve F for Field;
+reserve PS for non empty ParStr;
+
+definition let PS;
+ let a,b,c,d be Element of PS;
+ pred a,b '||' c,d means
+:: PARSP_1:def 6
+  [a,b,c,d] in the 4_arg_relation of PS;
+end;
+
+definition let F;
+ func C3(F) -> set equals
+:: PARSP_1:def 7
+   [:the carrier of F,the carrier of F,the carrier of F:];
+end;
+
+definition let F;
+ cluster C3(F) -> non empty;
+end;
+
+definition let F;
+ func 4C3(F) -> set equals
+:: PARSP_1:def 8
+   [:C3(F),C3(F),C3(F),C3(F):];
+end;
+
+definition let F;
+ cluster 4C3(F) -> non empty;
+end;
+
+reserve x for set, a,b,c,d,e,f,g,h,i,j,k,l for
+   Element of [:the carrier of F,the carrier of F,the carrier of F:];
+
+definition let F;
+ func PRs(F) -> set means
+:: PARSP_1:def 9
+  x in it iff x in 4C3(F) &
+  ex a,b,c,d st x = [a,b,c,d] &
+  (a`1-b`1)*(c`2-d`2) - (c`1-d`1)*(a`2-b`2) = 0.F &
+  (a`1-b`1)*(c`3-d`3) - (c`1-d`1)*(a`3-b`3) = 0.F &
+  (a`2-b`2)*(c`3-d`3) - (c`2-d`2)*(a`3-b`3) = 0.F;
+end;
+
+canceled 5;
+
+theorem :: PARSP_1:13
+ PRs(F) c= [:C3(F),C3(F),C3(F),C3(F):];
+
+definition let F;
+ func PR(F) -> Relation4 of C3(F) equals
+:: PARSP_1:def 10
+   PRs(F);
+end;
+
+definition let F;
+ func MPS(F) -> ParStr equals
+:: PARSP_1:def 11
+   ParStr (# C3(F),PR(F) #);
+end;
+
+definition let F;
+ cluster MPS(F) -> strict non empty;
+end;
+
+canceled 2;
+
+theorem :: PARSP_1:16
+ the carrier of MPS(F) = C3(F);
+
+theorem :: PARSP_1:17
+ the 4_arg_relation of MPS(F) = PR(F);
+
+reserve a,b,c,d,p,q,r,s for Element of MPS(F);
+
+theorem :: PARSP_1:18
+ a,b '||' c,d iff [a,b,c,d] in PR(F);
+
+theorem :: PARSP_1:19
+ [a,b,c,d] in PR(F) iff ([a,b,c,d] in 4C3(F) &
+     ex e,f,g,h st [a,b,c,d] = [e,f,g,h] &
+      (e`1-f`1)*(g`2-h`2) - (g`1-h`1)*(e`2-f`2) = 0.F &
+      (e`1-f`1)*(g`3-h`3) - (g`1-h`1)*(e`3-f`3) = 0.F &
+      (e`2-f`2)*(g`3-h`3) - (g`2-h`2)*(e`3-f`3) = 0.F);
+
+theorem :: PARSP_1:20
+ a,b '||' c,d iff ([a,b,c,d] in 4C3(F) &
+     ex e,f,g,h st [a,b,c,d] = [e,f,g,h] &
+      (e`1-f`1)*(g`2-h`2) - (g`1-h`1)*(e`2-f`2) = 0.F &
+      (e`1-f`1)*(g`3-h`3) - (g`1-h`1)*(e`3-f`3) = 0.F &
+      (e`2-f`2)*(g`3-h`3) - (g`2-h`2)*(e`3-f`3) = 0.F)
+;
+
+theorem :: PARSP_1:21
+ the carrier of MPS(F) =
+             [:the carrier of F,the carrier of F,the carrier of F:];
+
+theorem :: PARSP_1:22
+ [a,b,c,d] in 4C3(F);
+
+theorem :: PARSP_1:23
+ a,b '||' c,d iff ex e,f,g,h st [a,b,c,d] = [e,f,g,h] &
+        (e`1-f`1)*(g`2-h`2) - (g`1-h`1)*(e`2-f`2) = 0.F &
+        (e`1-f`1)*(g`3-h`3) - (g`1-h`1)*(e`3-f`3) = 0.F &
+        (e`2-f`2)*(g`3-h`3) - (g`2-h`2)*(e`3-f`3) = 0.F;
+
+theorem :: PARSP_1:24
+ a,b '||' b,a;
+
+theorem :: PARSP_1:25
+ a,b '||' c,c;
+
+theorem :: PARSP_1:26
+ a,b '||' p,q & a,b '||' r,s implies p,q '||' r,s or a=b;
+
+theorem :: PARSP_1:27
+ a,b '||' a,c implies b,a '||' b,c;
+
+theorem :: PARSP_1:28
+ ex d st a,b '||' c,d & a,c '||' b,d;
+
+::
+::                  3. DEFINITION OF PARALLELITY SPACE
+::
+
+definition let IT be non empty ParStr;
+ attr IT is ParSp-like means
+:: PARSP_1:def 12
+  for a,b,c,d,p,q,r,s being Element of IT
+          holds a,b '||' b,a & a,b '||' c,c & (a,b '||' p,q & a,b '||' r,s
+          implies p,q '||' r,s or a=b) & (a,b '||' a,c implies b,a '||' b,c)
+          & (ex x being Element of IT st
+          a,b '||' c,x & a,c '||' b,x);
+end;
+
+definition
+ cluster strict ParSp-like (non empty ParStr);
+end;
+
+definition
+ mode ParSp is ParSp-like (non empty ParStr);
+end;
+
+reserve PS for ParSp, a,b,c,d,p,q,r,s for Element of PS;
+
+canceled 6;
+
+theorem :: PARSP_1:35
+ a,b '||' a,b;
+
+theorem :: PARSP_1:36
+ a,b '||' c,d implies c,d '||' a,b;
+
+theorem :: PARSP_1:37
+ a,a '||' b,c;
+
+theorem :: PARSP_1:38
+ a,b '||' c,d implies b,a '||' c,d;
+
+theorem :: PARSP_1:39
+ a,b '||' c,d implies a,b '||' d,c;
+
+theorem :: PARSP_1:40
+ a,b '||' c,d implies
+      b,a '||' c,d & a,b '||' d,c & b,a '||' d,c & c,d '||' a,b &
+      d,c '||' a,b & c,d '||' b,a & d,c '||' b,a;
+
+theorem :: PARSP_1:41
+ a,b '||' a,c implies
+       a,c '||' a,b & b,a '||' a,c & a,b '||' c,a & a,c '||' b,a & b,a '||'
+ c,a &
+       c,a '||' a,b & c,a '||' b,a & b,a '||' b,c & a,b '||' b,c & b,a '||'
+ c,b &
+       b,c '||' b,a & a,b '||' c,b & c,b '||' b,a & b,c '||' a,b & c,b '||'
+ a,b &
+       c,a '||' c,b & a,c '||' c,b & c,a '||' b,c & a,c '||' b,c & c,b '||'
+ c,a &
+       b,c '||' c,a & c,b '||' a,c & b,c '||' a,c;
+
+theorem :: PARSP_1:42
+  a=b or c = d or a=c & b=d or a=d & b=c implies a,b '||' c,d;
+
+theorem :: PARSP_1:43
+ a<>b & p,q '||' a,b & a,b '||' r,s implies p,q '||' r,s;
+
+theorem :: PARSP_1:44
+  not a,b '||' a,c implies a<>b & b<>c & c <>a;
+
+theorem :: PARSP_1:45
+    not a,b '||' c,d implies a<>b & c <>d;
+
+canceled;
+
+theorem :: PARSP_1:47
+ not a,b '||' a,c implies
+ not a,c '||' a,b & not b,a '||' a,c & not a,b '||' c,a & not a,c '||' b,a &
+ not b,a '||' c,a & not c,a '||' a,b & not c,a '||' b,a & not b,a '||' b,c &
+ not a,b '||' b,c & not b,a '||' c,b & not b,c '||' b,a & not b,a '||' c,b &
+ not c,b '||' b,a & not b,c '||' a,b & not c,b '||' a,b & not c,a '||' c,b &
+ not a,c '||' c,b & not c,a '||' b,c & not a,c '||' b,c & not c,b '||' c,a &
+ not b,c '||' c,a & not c,b '||' a,c & not b,c '||' a,c;
+
+theorem :: PARSP_1:48
+ not a,b '||' c,d & a,b '||' p,q & c,d '||' r,s & p<>q & r<>s
+  implies not p,q '||' r,s;
+
+theorem :: PARSP_1:49
+ not a,b '||' a,c & a,b '||' p,q & a,c '||' p,r & b,c '||' q,r & p<>q
+implies not p,q '||' p,r;
+
+theorem :: PARSP_1:50
+ not a,b '||' a,c & a,c '||' p,r & b,c '||' p,r implies p=r;
+
+theorem :: PARSP_1:51
+ not p,q '||' p,r & p,r '||' p,s & q,r '||' q,s implies r=s;
+
+theorem :: PARSP_1:52
+   not a,b '||' a,c & a,b '||' p,q & a,c '||' p,r & a,c '||' p,s &
+b,c '||' q,r & b,c '||' q,s implies r=s;
+
+theorem :: PARSP_1:53
+ a,b '||' a,c & a,b '||' a,d implies a,b '||' c,d;
+
+theorem :: PARSP_1:54
+  (for a,b holds a=b) implies for p,q,r,s holds p,q '||' r,s;
+
+theorem :: PARSP_1:55
+  (ex a,b st a<>b & for c holds a,b '||' a,c) implies for p,q,r,s holds p,q
+'||'
+ r,s;
+
+theorem :: PARSP_1:56
+  not a,b '||' a,c & p<>q implies not p,q '||' p,a or not p,q '||'
+ p,b or not p,q '||' p,c;

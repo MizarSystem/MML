@@ -1,0 +1,165 @@
+:: Representation theorem for free continuous lattices
+::  by Piotr Rudnicki
+::
+:: Received July 21, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary BHSP_3, WAYBEL_0, LATTICES, TARSKI, ORDINAL2, QUANTAL1, YELLOW_1,
+      OPPCAT_1, ORDERS_1, PRE_TOPC, WAYBEL16, FUNCT_1, YELLOW_0, RELAT_1,
+      LATTICE3, WAYBEL_5, WELLORD2, FILTER_0, WELLORD1, BOOLE, CAT_1, SUBSET_1,
+      SETFAM_1, CARD_1, FILTER_1, SEQM_3, AMI_1, ZF_REFLE, PBOOLE, FUNCOP_1,
+      PRALG_1, YELLOW_2, FUNCT_6, CARD_3, FRAENKEL, WAYBEL22;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
+      STRUCT_0, FUNCT_2, FUNCT_6, PRALG_3, GRCAT_1, WELLORD1, CARD_1, CARD_3,
+      PRE_TOPC, ORDERS_1, LATTICE3, PBOOLE, MSUALG_1, AMI_1, FRAENKEL,
+      YELLOW_0, YELLOW_1, YELLOW_2, YELLOW_7, WAYBEL_0, WAYBEL_1, WAYBEL_3,
+      WAYBEL_5, WAYBEL16;
+ constructors ORDERS_3, TOPS_2, GRCAT_1, TOLER_1, PRALG_3, WAYBEL_1, WAYBEL_5,
+      WAYBEL_8, WAYBEL16;
+ clusters STRUCT_0, FUNCT_1, LATTICE3, PBOOLE, PRALG_1, PRVECT_1, AMI_1,
+      YELLOW_0, YELLOW_7, WAYBEL_0, WAYBEL_3, WAYBEL_5, WAYBEL_8, WAYBEL16,
+      RELSET_1, SUBSET_1, FRAENKEL, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+theorem :: WAYBEL22:1  :: cf. WAYBEL13:9
+for L being upper-bounded Semilattice,
+    F being non empty directed Subset of InclPoset Filt L
+ holds sup F = union F;
+
+theorem :: WAYBEL22:2
+ for L, S, T being complete (non empty Poset),
+     f being CLHomomorphism of L, S, g being CLHomomorphism of S, T
+  holds g*f is CLHomomorphism of L, T;
+
+theorem :: WAYBEL22:3
+ for L being non empty RelStr holds id L is infs-preserving;
+
+theorem :: WAYBEL22:4
+ for L being non empty RelStr holds id L is directed-sups-preserving;
+
+theorem :: WAYBEL22:5
+ for L being complete (non empty Poset) holds id L is CLHomomorphism of L, L;
+
+theorem :: WAYBEL22:6
+ for L being upper-bounded with_infima non empty Poset
+  holds InclPoset Filt L is CLSubFrame of BoolePoset the carrier of L;
+
+definition
+ let L be upper-bounded with_infima non empty Poset;
+ cluster InclPoset Filt L -> continuous;
+end;
+
+definition
+ let L be upper-bounded non empty Poset;
+ cluster -> non empty Element of InclPoset Filt L;
+end;
+
+begin :: Free generators of continuous lattices
+
+definition :: replaces :: WAYBEL16:def 2
+ let S be continuous complete (non empty Poset);
+ let A be set;
+ pred A is_FreeGen_set_of S means
+:: WAYBEL22:def 1
+  for T be continuous complete (non empty Poset)
+   for f be Function of A, the carrier of T
+    ex h be CLHomomorphism of S, T st
+     h|A = f & for h' being CLHomomorphism of S,T st h'|A = f holds h' = h;
+end;
+
+theorem :: WAYBEL22:7
+ for S being continuous complete (non empty Poset), A being set
+  st A is_FreeGen_set_of S holds A is Subset of S;
+
+theorem :: WAYBEL22:8
+ for S being continuous complete (non empty Poset), A being set
+  st A is_FreeGen_set_of S
+   for h' being CLHomomorphism of S, S st h'|A = id A holds h' = id S;
+
+begin :: Representation theorem for free continuous lattices
+
+  reserve X for set,
+          F for Filter of BoolePoset X,
+          x for Element of BoolePoset X,
+          z for Element of X;
+
+definition :: See proof of Theorem 4.17, p. 90
+ let X;
+ func FixedUltraFilters X -> Subset-Family of BoolePoset X equals
+:: WAYBEL22:def 2
+   { uparrow x : ex z st x = {z} };
+end;
+
+theorem :: WAYBEL22:9
+ FixedUltraFilters X c= Filt BoolePoset X;
+
+theorem :: WAYBEL22:10
+ Card FixedUltraFilters X = Card X;
+
+theorem :: WAYBEL22:11
+F = "\/"({"/\"({uparrow x : ex z st x = {z} & z in Y},
+           InclPoset Filt BoolePoset X) where Y is Subset of X : Y in F},
+        InclPoset Filt BoolePoset X);
+
+definition :: See proof of Theorem 4.17, p. 90
+ let X; let L be continuous complete (non empty Poset);
+ let f be Function of FixedUltraFilters X, the carrier of L;
+ func f-extension_to_hom -> map of InclPoset Filt BoolePoset X, L means
+:: WAYBEL22:def 3
+
+ for Fi being Element of InclPoset Filt BoolePoset X holds
+  it.Fi = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
+                  }, L) where Y is Subset of X : Y in Fi
+              }, L);
+end;
+
+theorem :: WAYBEL22:12
+   for L being continuous complete (non empty Poset),
+     f being Function of FixedUltraFilters X, the carrier of L
+  holds f-extension_to_hom is monotone;
+
+theorem :: WAYBEL22:13
+ for L being continuous complete (non empty Poset),
+     f being Function of FixedUltraFilters X, the carrier of L
+   holds (f-extension_to_hom).Top (InclPoset Filt BoolePoset X) = Top L;
+
+definition :: See proof of Theorem 4.17, p. 91
+ let X; let L be continuous complete (non empty Poset),
+     f be Function of FixedUltraFilters X, the carrier of L;
+ cluster f-extension_to_hom -> directed-sups-preserving;
+end;
+
+definition :: See proof of Theorem 4.17, p. 91
+ let X; let L be continuous complete (non empty Poset),
+     f be Function of FixedUltraFilters X, the carrier of L;
+ cluster f-extension_to_hom -> infs-preserving;
+end;
+
+theorem :: WAYBEL22:14
+for L being continuous complete (non empty Poset),
+    f being Function of FixedUltraFilters X, the carrier of L
+ holds f-extension_to_hom | FixedUltraFilters X = f;
+
+theorem :: WAYBEL22:15
+for L being continuous complete (non empty Poset),
+    f being Function of FixedUltraFilters X, the carrier of L,
+    h being CLHomomorphism of InclPoset Filt BoolePoset X, L
+ st h | FixedUltraFilters X = f holds h = f-extension_to_hom;
+
+theorem :: WAYBEL22:16
+ FixedUltraFilters X is_FreeGen_set_of InclPoset Filt BoolePoset X;
+
+theorem :: WAYBEL22:17
+ for L, M being continuous complete LATTICE, F, G being set
+  st F is_FreeGen_set_of L & G is_FreeGen_set_of M & Card F = Card G
+   holds L, M are_isomorphic;
+
+theorem :: WAYBEL22:18 :: Theorem 4.17, p. 90-91
+   for L being continuous complete LATTICE, G being set
+  st G is_FreeGen_set_of L & Card G = Card X
+   holds L, InclPoset Filt BoolePoset X are_isomorphic;

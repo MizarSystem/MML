@@ -1,0 +1,1990 @@
+:: Introduction to Categories and Functors
+::  by Czes{\l}aw Byli\'nski
+::
+:: Received October 25, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, RELAT_1, BOOLE, FUNCOP_1, PARTFUN1, TARSKI, WELLORD1,
+      CAT_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, FUNCOP_1;
+ constructors FUNCOP_1, WELLORD2, MEMBERED, PARTFUN1, XBOOLE_0;
+ clusters FUNCT_1, RELSET_1, FUNCOP_1, SUBSET_1, MEMBERED, ZFMISC_1, FUNCT_2,
+      XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI;
+ theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, PARTFUN1, FUNCOP_1, SUBSET_1,
+      WELLORD2, RELAT_1, RELSET_1, XBOOLE_1;
+ schemes FUNCT_2;
+
+begin   :: Auxiliary theorems
+
+reserve a,b,c,o,m for set;
+
+canceled 3;
+
+theorem Th4:
+   for X,Y,Z being set, D being non empty set, f being Function of X,D
+    st Y c= X & f.:Y c= Z holds f|Y is Function of Y,Z
+ proof let X,Y,Z be set, D be non empty set, f be Function of X,D;
+   assume that
+A1:  Y c= X and
+A2:  f.:Y c= Z;
+     dom f = X by FUNCT_2:def 1;
+then A3:  dom(f|Y) = Y by A1,RELAT_1:91;
+A4:  rng(f|Y) c= Z by A2,RELAT_1:148;
+     now assume Z = {}; then rng(f|Y) = {} by A4,XBOOLE_1:3;
+    hence Y = {} by A3,RELAT_1:65;
+   end;
+   hence f|Y is Function of Y,Z by A3,A4,FUNCT_2:def 1,RELSET_1:11;
+ end;
+
+definition let A be non empty set,b;
+ redefine func A --> b -> Function of A,{b};
+  coherence
+   proof {b} <> {} &
+    dom(A --> b) = A & rng(A --> b) c= {b} by FUNCOP_1:19;
+    hence thesis by FUNCT_2:def 1,RELSET_1:11;
+   end;
+end;
+
+definition let a,b,c;
+ func (a,b).-->c -> PartFunc of [:{a},{b}:],{c} equals
+:Def1: {[a,b]} --> c;
+ correctness
+  proof [:{a},{b}:] = {[a,b]} by ZFMISC_1:35;
+   hence thesis;
+  end;
+end;
+
+canceled 2;
+
+theorem Th7:
+   dom (a,b).-->c = {[a,b]} & dom (a,b).-->c = [:{a},{b}:]
+ proof (a,b).-->c = {[a,b]} --> c by Def1;
+  hence dom (a,b).-->c = {[a,b]} by FUNCT_2:def 1;
+  hence dom (a,b).-->c = [:{a},{b}:] by ZFMISC_1:35;
+ end;
+
+theorem Th8:
+   ((a,b).-->c).[a,b] = c
+ proof [:{a},{b}:] = {[a,b]} & [a,b] in {[a,b]} & (a,b).-->c = {[a,b]} --> c
+     by Def1,TARSKI:def 1,ZFMISC_1:35;
+   hence thesis by FUNCT_2:65;
+ end;
+
+theorem Th9:
+   for x being Element of {a} for y being Element of {b}
+     holds ((a,b).-->c).[x,y] = c
+ proof let x be Element of {a}; let y be Element of {b};
+    x = a & y = b by TARSKI:def 1; hence thesis by Th8;
+ end;
+
+:: Structure of a Category
+
+definition
+  struct CatStr
+   (# Objects,Morphisms -> non empty set,
+     Dom,Cod -> Function of the Morphisms, the Objects,
+     Comp -> PartFunc of [:the Morphisms, the Morphisms :],the Morphisms,
+     Id -> Function of the Objects, the Morphisms
+   #);
+end;
+
+reserve C for CatStr;
+
+definition let C;
+   mode Object of C is Element of the Objects of C;
+   mode Morphism of C is Element of the Morphisms of C;
+end;
+
+reserve a,b,c,d for Object of C;
+reserve f,g for Morphism of C;
+
+:: Domain and Codomain of a Morphism
+
+definition let C,f;
+ func dom(f) -> Object of C equals
+:Def2:  (the Dom of C).f;
+  correctness;
+ func cod(f) -> Object of C equals
+:Def3:  (the Cod of C).f;
+  correctness;
+end;
+
+definition let C,f,g;
+  assume A1: [g,f] in dom(the Comp of C);
+   func g*f -> Morphism of C equals
+:Def4:  ( the Comp of C ).[g,f];
+ coherence by A1,PARTFUN1:27;
+end;
+
+definition let C,a;
+   func id (a) -> Morphism of C equals
+:Def5: ( the Id of C ).a;
+ correctness;
+end;
+
+definition let C,a,b;
+   func Hom(a,b) -> Subset of the Morphisms of C equals
+:Def6:  { f : dom(f)=a & cod(f)=b };
+  correctness
+   proof set M = { f : dom(f)=a & cod(f)=b };
+      M c= the Morphisms of C
+     proof let x be set; assume x in M;
+      then ex f st x = f & dom(f)=a & cod(f)=b;
+      hence thesis;
+     end;
+    hence thesis;
+   end;
+end;
+
+canceled 8;
+
+theorem Th18:
+   f in Hom(a,b) iff dom(f)=a & cod(f)=b
+ proof
+A1:  Hom(a,b) = { g : dom(g)=a & cod(g)=b } by Def6;
+   thus f in Hom(a,b) implies dom(f) = a & cod(f) = b
+    proof assume f in Hom(a,b);
+     then ex g st f = g & dom(g) = a & cod(g) = b by A1;
+     hence thesis;
+    end;
+   thus thesis by A1;
+ end;
+
+theorem
+    Hom(dom(f),cod(f)) <> {} by Th18;
+
+definition let C,a,b;
+assume A1: Hom(a,b)<>{};
+  mode Morphism of a,b -> Morphism of C means
+:Def7: it in Hom(a,b);
+  existence by A1,SUBSET_1:10;
+end;
+
+canceled;
+
+theorem
+     for f being set st f in Hom(a,b) holds f is Morphism of a,b by Def7;
+
+theorem Th22:
+  for f being Morphism of C holds f is Morphism of dom(f),cod(f)
+ proof let f be Morphism of C; f in Hom(dom(f),cod(f)) by Th18;
+   hence f is Morphism of dom(f),cod(f) by Def7;
+ end;
+
+theorem Th23:
+  for f being Morphism of a,b st Hom(a,b) <> {} holds dom(f) = a & cod(f) = b
+ proof let f be Morphism of a,b;
+   assume Hom(a,b) <> {}; then f in Hom(a,b) by Def7;
+   hence dom(f) = a & cod(f) = b by Th18;
+ end;
+
+theorem
+    for f being Morphism of a,b for h being Morphism of c,d
+   st Hom(a,b) <> {} & Hom(c,d) <> {} & f = h holds a = c & b = d
+ proof let f be Morphism of a,b; let h be Morphism of c,d;
+   assume Hom(a,b) <> {} & Hom(c,d) <> {};
+   then dom(f) = a & cod(f) = b & dom(h) = c & cod(h) = d by Th23;
+   hence thesis;
+ end;
+
+theorem Th25:
+  for f being Morphism of a,b st Hom(a,b) = {f}
+   for g being Morphism of a,b holds f = g
+ proof let f be Morphism of a,b such that
+A1:   Hom(a,b) = {f};
+  let g be Morphism of a,b;
+    g in {f} by A1,Def7; hence thesis by TARSKI:def 1;
+ end;
+
+theorem Th26:
+  for f being Morphism of a,b
+    st Hom(a,b) <> {} & for g being Morphism of a,b holds f = g
+   holds Hom(a,b) = {f}
+ proof let f be Morphism of a,b such that
+A1:   Hom(a,b) <> {} and
+A2:   for g being Morphism of a,b holds f = g;
+     for x being set holds x in Hom(a,b) iff x = f
+    proof let x be set;
+     thus x in Hom(a,b) implies x = f
+      proof
+A3:      Hom(a,b) = { g: dom(g)=a & cod(g)=b } by Def6;
+       assume x in Hom(a,b);
+       then consider g being Morphism of C such that
+A4:      x = g and
+A5:      dom(g)=a & cod(g)=b by A3;
+         g is Morphism of a,b by A5,Th22;
+       hence thesis by A2,A4;
+      end;
+     thus thesis by A1,Def7;
+    end;
+   hence thesis by TARSKI:def 1;
+ end;
+
+theorem
+    for f being Morphism of a,b st Hom(a,b),Hom(c,d) are_equipotent &
+  Hom(a,b) = {f}
+   holds ex h being Morphism of c,d st Hom(c,d) = {h}
+ proof let f be Morphism of a,b;
+  assume Hom(a,b),Hom(c,d) are_equipotent;
+  then consider F being Function such that F is one-to-one and
+A1:  dom F = Hom(a,b) & rng F = Hom(c,d) by WELLORD2:def 4;
+  assume Hom(a,b) = {f};
+then A2:  Hom(c,d) = {F.f} by A1,FUNCT_1:14;
+  then F.f in Hom(c,d) by TARSKI:def 1; then F.f is Morphism of c,d by Def7;
+  hence thesis by A2;
+ end;
+
+Lm1:
+ now let o,m be set; let C be CatStr such that
+A1:  C = CatStr(# {o},{m},{m}-->o,{m}-->o,(m,m).-->m,{o}-->m #);
+  set CP = the Comp of C, CD = the Dom of C, CC = the Cod of C,
+      CI = the Id of C;
+  thus for f,g being Element of the Morphisms of C holds
+      [g,f] in dom CP iff CD.g=CC.f
+    proof let f,g be Element of the Morphisms of C;
+       f = m & g = m & dom CP = {[m,m]} by A1,Th7,TARSKI:def 1;
+     hence thesis by A1,TARSKI:def 1;
+    end;
+  thus for f,g being Element of the Morphisms of C
+    st CD.g=CC.f holds CD.(CP.[g,f]) = CD.f & CC.(CP.[g,f]) = CC.g
+    proof let f,g be Element of the Morphisms of C;
+       CP.[g,f] = m by A1,Th9;
+     then reconsider gf = CP.[g,f] as Element of the Morphisms of C by A1,
+TARSKI:def 1;
+       CD.f = o & CC.g = o & CD.gf = o & CC.gf = o by A1,FUNCT_2:65;
+     hence thesis;
+    end;
+  thus for f,g,h being Element of the Morphisms of C
+      st CD.h = CC.g & CD.g = CC.f
+     holds CP.[h,CP.[g,f]] = CP.[CP.[h,g],f]
+   proof let f,g,h be Element of the Morphisms of C;
+       CP.[g,f] = m & CP.[h,g] = m by A1,Th9;
+     then reconsider gf = CP.[g,f],hg = CP.[h,g] as Element of the Morphisms of
+C
+      by A1,TARSKI:def 1; CP.[h,gf] = m & CP.[hg,f] = m by A1,Th9;
+    hence thesis;
+   end;
+  let b be Element of the Objects of C;
+    b = o by A1,TARSKI:def 1;
+  hence CD.(CI.b) = b & CC.(CI.b) = b by A1,FUNCT_2:65;
+  thus for f being Element of the Morphisms of C st CC.f = b
+        holds CP.[CI.b,f] = f
+    proof let f be Element of the Morphisms of C; f = m by A1,TARSKI:def 1;
+     hence thesis by A1,Th9;
+    end;
+  let g be Element of the Morphisms of C;
+    g = m by A1,TARSKI:def 1; hence CP.[g,CI.b] = g by A1,Th9;
+ end;
+
+:: Category
+
+definition let C be CatStr;
+ attr C is Category-like means
+:Def8:
+      (for f,g being Element of the Morphisms of C holds
+         [g,f] in dom(the Comp of C) iff (the Dom of C).g=(the Cod of C).f)
+   & (for f,g being Element of the Morphisms of C
+         st (the Dom of C).g=(the Cod of C).f holds
+         (the Dom of C).((the Comp of C).[g,f]) = (the Dom of C).f &
+         (the Cod of C).((the Comp of C).[g,f]) = (the Cod of C).g)
+    & (for f,g,h being Element of the Morphisms of C
+         st (the Dom of C).h = (the Cod of C).g &
+            (the Dom of C).g = (the Cod of C).f
+        holds (the Comp of C).[h,(the Comp of C).[g,f]]
+            = (the Comp of C).[(the Comp of C).[h,g],f] )
+    & (for b being Element of the Objects of C holds
+         (the Dom of C).((the Id of C).b) = b &
+         (the Cod of C).((the Id of C).b) = b &
+         (for f being Element of the Morphisms of C st (the Cod of C).f = b
+           holds (the Comp of C).[(the Id of C).b,f] = f ) &
+         (for g being Element of the Morphisms of C st (the Dom of C).g = b
+           holds (the Comp of C).[g,(the Id of C).b] = g ) );
+end;
+
+definition
+ cluster Category-like CatStr;
+   existence
+    proof take C = CatStr(# {0},{1},{1}-->0,{1}-->0,(1,1).-->1,{0}-->1 #);
+     thus (for f,g being Element of the Morphisms of C holds
+         [g,f] in dom(the Comp of C) iff (the Dom of C).g=(the Cod of C).f)
+   & (for f,g being Element of the Morphisms of C
+         st (the Dom of C).g=(the Cod of C).f holds
+         (the Dom of C).((the Comp of C).[g,f]) = (the Dom of C).f &
+         (the Cod of C).((the Comp of C).[g,f]) = (the Cod of C).g)
+    & (for f,g,h being Element of the Morphisms of C
+         st (the Dom of C).h = (the Cod of C).g &
+            (the Dom of C).g = (the Cod of C).f
+        holds (the Comp of C).[h,(the Comp of C).[g,f]]
+            = (the Comp of C).[(the Comp of C).[h,g],f] )
+    & (for b being Element of the Objects of C holds
+         (the Dom of C).((the Id of C).b) = b &
+         (the Cod of C).((the Id of C).b) = b &
+         (for f being Element of the Morphisms of C st (the Cod of C).f = b
+           holds (the Comp of C).[(the Id of C).b,f] = f ) &
+         (for g being Element of the Morphisms of C st (the Dom of C).g = b
+           holds (the Comp of C).[g,(the Id of C).b] = g ) ) by Lm1;
+    end;
+end;
+
+definition
+ mode Category is Category-like CatStr;
+end;
+
+definition
+ cluster strict Category;
+  existence
+   proof
+     set C = CatStr(# {0},{1},{1}-->0,{1}-->0,(1,1).-->1,{0}-->1 #);
+        (for f,g being Element of the Morphisms of C holds
+         [g,f] in dom(the Comp of C) iff (the Dom of C).g=(the Cod of C).f)
+   & (for f,g being Element of the Morphisms of C
+         st (the Dom of C).g=(the Cod of C).f holds
+         (the Dom of C).((the Comp of C).[g,f]) = (the Dom of C).f &
+         (the Cod of C).((the Comp of C).[g,f]) = (the Cod of C).g)
+    & (for f,g,h being Element of the Morphisms of C
+         st (the Dom of C).h = (the Cod of C).g &
+            (the Dom of C).g = (the Cod of C).f
+        holds (the Comp of C).[h,(the Comp of C).[g,f]]
+            = (the Comp of C).[(the Comp of C).[h,g],f] )
+    & (for b being Element of the Objects of C holds
+         (the Dom of C).((the Id of C).b) = b &
+         (the Cod of C).((the Id of C).b) = b &
+         (for f being Element of the Morphisms of C st (the Cod of C).f = b
+           holds (the Comp of C).[(the Id of C).b,f] = f ) &
+         (for g being Element of the Morphisms of C st (the Dom of C).g = b
+           holds (the Comp of C).[g,(the Id of C).b] = g ) ) by Lm1;
+     then C is Category by Def8;
+    hence thesis;
+   end;
+end;
+
+canceled;
+
+theorem
+     for C being CatStr
+    st ( for f,g being Morphism of C
+          holds [g,f] in dom(the Comp of C) iff dom g = cod f )
+     & ( for f,g being Morphism of C st dom g = cod f
+          holds dom(g*f) = dom f & cod (g*f) = cod g )
+     & ( for f,g,h being Morphism of C st dom h = cod g & dom g = cod f
+          holds h*(g*f) = (h*g)*f )
+     & ( for b being Object of C
+          holds dom id b = b & cod id b = b &
+           (for f being Morphism of C st cod f = b holds (id b)*f = f) &
+           (for g being Morphism of C st dom g = b holds g*(id b) = g) )
+    holds C is Category-like
+ proof let C be CatStr;
+  set CP = the Comp of C, CD = the Dom of C, CC = the Cod of C,
+      CI = the Id of C;
+   assume that
+A1: for f,g being Morphism of C
+      holds [g,f] in dom CP iff dom g = cod f and
+A2: for f,g being Morphism of C st dom g = cod f
+      holds dom(g*f) = dom f & cod (g*f) = cod g and
+A3: for f,g,h being Morphism of C st dom h = cod g & dom g = cod f
+      holds h*(g*f) = (h*g)*f and
+A4: for b being Object of C
+      holds dom id b = b & cod id b = b &
+       (for f being Morphism of C st cod f = b holds (id b)*f = f) &
+       (for g being Morphism of C st dom g = b holds g*(id b) = g);
+  thus
+A5:  for f,g being Element of the Morphisms of C
+      holds [g,f] in dom CP iff CD.g=CC.f
+   proof let f,g be Element of the Morphisms of C;
+      CD.g = dom g & CC.f = cod f by Def2,Def3;
+    hence thesis by A1;
+   end;
+  thus
+A6: for f,g being Element of the Morphisms of C st CD.g=CC.f
+    holds CD.(CP.[g,f]) = CD.f & CC.(CP.[g,f]) = CC.g
+   proof let f,g be Element of the Morphisms of C such that
+A7:  CD.g=CC.f;
+      CD.g = dom g & CC.f = cod f by Def2,Def3;
+    then dom(g*f)=dom f & cod(g*f)=cod g & [g,f] in dom CP &
+      CD.(g*f) = dom(g*f) & CC.(g*f) = cod(g*f)
+       by A2,A5,A7,Def2,Def3;
+    then CD.(CP.[g,f]) = dom f & CC.(CP.[g,f]) = cod g by Def4;
+    hence thesis by Def2,Def3;
+   end;
+  thus for f,g,h being Element of the Morphisms of C
+     st CD.h = CC.g & CD.g = CC.f
+    holds CP.[h,CP.[g,f]] = CP.[CP.[h,g],f]
+   proof let f,g,h be Element of the Morphisms of C such that
+A8:  CD.h = CC.g & CD.g = CC.f;
+A9:    CD.h = dom h & CC.g = cod g & CD.g = dom g & CC.f = cod f
+     by Def2,Def3;
+      [g,f] in dom CP & [h,g] in dom CP by A5,A8;
+then A10:    g*f = CP.[g,f] & h*g = CP.[h,g] by Def4;
+      CD.(CP.[h,g]) = CD.g & CC.(CP.[g,f]) = CC.g by A6,A8;
+    then [h,g*f] in dom CP & [h*g,f] in dom CP by A5,A8,A10;
+    then CP.[h,g*f] = h*(g*f) & CP.[h*g,f] = (h*g)*f by Def4;
+    hence thesis by A3,A8,A9,A10;
+   end;
+  let b be Element of the Objects of C;
+    dom id b = b & cod id b = b & id b = CI.b by A4,Def5;
+  hence CD.(CI.b) = b & CC.(CI.b) = b by Def2,Def3;
+  thus for f being Element of the Morphisms of C st CC.f = b
+    holds CP.[CI.b,f] = f
+   proof let f be Element of the Morphisms of C such that
+A11:   CC.f = b;
+A12:   dom id b = b & id b = CI.b by A4,Def5;
+    then CD.(CI.b) = b & CC.f = cod f by Def2,Def3;
+    then (id b)*f = f & [CI.b,f] in dom CP by A4,A5,A11;
+    hence thesis by A12,Def4;
+   end;
+  let g be Element of the Morphisms of C such that
+A13:  CD.g = b;
+A14:  cod id b = b & id b = CI.b by A4,Def5;
+  then CC.(CI.b) = b & CD.g = dom g by Def2,Def3;
+  then g*(id b) = g & [g,CI.b] in dom CP by A4,A5,A13;
+  hence thesis by A14,Def4;
+ end;
+
+definition let o,m;
+ func 1Cat(o,m) -> strict Category equals
+:Def9:  CatStr(# {o},{m},{m}-->o,{m}-->o,(m,m).-->m,{o}-->m #);
+ correctness
+  proof
+    consider O,M being non empty set,d,c being (Function of M,O),
+             p being (PartFunc of [:M,M:],M),i being (Function of O,M),
+             C being CatStr such that
+A1:  O = {o} & M = {m} & d = {m}-->o & c = {m}-->o & p = (m,m).-->m
+     & i = {o}-->m & C = CatStr(# {o},{m},{m}-->o,{m}-->o,
+       (m,m).-->m,{o}-->m #);
+        (for f,g being Element of the Morphisms of C holds
+         [g,f] in dom(the Comp of C) iff (the Dom of C).g=(the Cod of C).f)
+    & (for f,g being Element of the Morphisms of C
+         st (the Dom of C).g=(the Cod of C).f
+        holds
+         (the Dom of C).((the Comp of C).[g,f]) = (the Dom of C).f &
+         (the Cod of C).((the Comp of C).[g,f]) = (the Cod of C).g)
+    & (for f,g,h being Element of the Morphisms of C
+         st (the Dom of C).h = (the Cod of C).g &
+            (the Dom of C).g = (the Cod of C).f
+        holds
+             (the Comp of C).[h,(the Comp of C).[g,f]]
+           = (the Comp of C).[(the Comp of C).[h,g],f] )
+    & (for b being Element of the Objects of C
+        holds
+         (the Dom of C).((the Id of C).b) = b &
+         (the Cod of C).((the Id of C).b) = b &
+         (for f being Element of the Morphisms of C st (the Cod of C).f = b
+           holds (the Comp of C).[(the Id of C).b,f] = f ) &
+         (for g being Element of the Morphisms of C st (the Dom of C).g = b
+           holds (the Comp of C).[g,(the Id of C).b] = g ) ) by A1,Lm1;
+   hence thesis by A1,Def8;
+  end;
+end;
+
+canceled 2;
+
+theorem
+     o is Object of 1Cat(o,m)
+ proof
+    1Cat(o,m) = CatStr(# {o},{m},{m}-->o,{m}-->o,(m,m).-->m,{o}-->m #) by Def9;
+  hence thesis by TARSKI:def 1;
+ end;
+
+theorem
+     m is Morphism of 1Cat(o,m)
+ proof 1Cat(o,m)=CatStr(# {o},{m},{m}-->o,{m}-->o,(m,m).-->m,{o}-->m #)
+   by Def9;
+  hence thesis by TARSKI:def 1;
+ end;
+
+theorem Th34:
+   for a being Object of 1Cat(o,m) holds a = o
+ proof let a be Object of 1Cat(o,m);
+    1Cat(o,m) = CatStr(# {o},{m},{m}-->o,{m}-->o,(m,m).-->m,{o}-->m #) by Def9;
+  hence thesis by TARSKI:def 1;
+ end;
+
+theorem Th35:
+   for f being Morphism of 1Cat(o,m) holds f = m
+ proof let f be Morphism of 1Cat(o,m);
+    1Cat(o,m) = CatStr(# {o},{m},{m}-->o,{m}-->o,(m,m).-->m,{o}-->m #) by Def9;
+  hence thesis by TARSKI:def 1;
+ end;
+
+theorem Th36:
+   for a,b being Object of 1Cat(o,m) for f being Morphism of 1Cat(o,m)
+     holds f in Hom(a,b)
+ proof let a,b be Object of 1Cat(o,m); let f be Morphism of 1Cat(o,m);
+    dom f = o & cod f = o by Th34; then dom f = a & cod f = b by Th34;
+  hence f in Hom(a,b) by Th18;
+ end;
+
+theorem
+     for a,b being Object of 1Cat(o,m) for f being Morphism of 1Cat(o,m)
+    holds f is Morphism of a,b
+ proof let a,b be Object of 1Cat(o,m); let f be Morphism of 1Cat(o,m);
+    f in Hom(a,b) by Th36; hence thesis by Def7;
+ end;
+
+theorem
+     for a,b being Object of 1Cat(o,m) holds Hom(a,b) <> {} by Th36;
+
+theorem
+     for a,b,c,d being Object of 1Cat(o,m)
+     for f being Morphism of a,b for g being Morphism of c,d holds f=g
+ proof let a,b,c,d be Object of 1Cat(o,m);
+  let f be Morphism of a,b; let g be Morphism of c,d;
+    f = m & g = m by Th35; hence thesis;
+ end;
+
+reserve B,C,D for Category;
+reserve a,b,c,d for Object of C;
+reserve f,f1,f2,g,g1,g2 for Morphism of C;
+
+theorem Th40:
+   dom(g) = cod(f) iff [g,f] in dom(the Comp of C)
+ proof dom(g) = (the Dom of C).g & cod(f) = (the Cod of C).f by Def2,Def3;
+  hence thesis by Def8;
+ end;
+
+theorem Th41:
+   dom(g) = cod(f) implies g*f = ( the Comp of C ).[g,f]
+ proof assume dom(g) = cod(f); then [g,f] in dom(the Comp of C) by Th40;
+  hence g*f = ( the Comp of C ).[g,f] by Def4;
+ end;
+
+theorem Th42:
+   for f,g being Morphism of C
+    st dom(g) = cod(f) holds dom(g*f) = dom(f) & cod(g*f) = cod(g)
+ proof let f,g be Morphism of C;
+  assume
+A1:  dom(g) = cod(f);
+  then dom(g) = (the Dom of C).g & cod(g) = (the Cod of C).g &
+   dom(f) = (the Dom of C).f & cod(f) = (the Cod of C).f &
+   (the Dom of C).(g*f) = dom(g*f) & (the Cod of C).(g*f) = cod(g*f) &
+   (the Comp of C).[g,f] = g*f by Def2,Def3,Th41;
+  hence thesis by A1,Def8;
+ end;
+
+theorem Th43:
+   for f,g,h being Morphism of C
+     st dom(h) = cod(g) & dom(g) = cod(f) holds h*(g*f) = (h*g)*f
+ proof let f,g,h be Morphism of C; assume
+A1:  dom(h) = cod(g) & dom(g) = cod(f);
+   then cod(g*f) = cod(g) & dom(h*g) = dom(g) by Th42;
+   then dom(g) = (the Dom of C).g & cod(g) = (the Cod of C).g &
+    dom(h) = (the Dom of C).h & cod(f) = (the Cod of C).f &
+    (the Dom of C).(g*f) = dom(g*f) & (the Cod of C).(g*f) = cod(g*f) &
+    (the Comp of C).[h,g*f] = h*(g*f) & (the Comp of C).[h*g,f] = (h*g)*f &
+    (the Comp of C).[h,g] = h*g & (the Comp of C).[g,f] = g*f
+     by A1,Def2,Def3,Th41;
+  hence thesis by A1,Def8;
+ end;
+
+theorem Th44:
+   dom(id b) = b & cod(id b) = b
+ proof dom(id b) = (the Dom of C).(id b) & cod(id b) = (the Cod of C).(id b) &
+   id b = (the Id of C).b by Def2,Def3,Def5;
+  hence thesis by Def8;
+ end;
+
+theorem Th45:
+   id a = id b implies a = b
+ proof dom id a = a & dom id b = b by Th44; hence thesis; end;
+
+theorem Th46:
+   for f being Morphism of C st cod(f) = b holds (id b)*f = f
+ proof let f be Morphism of C;
+   assume
+A1:  cod(f) = b;
+   then dom(id b) = cod(f) by Th44;
+   then cod(f) = (the Cod of C).f & id b = (the Id of C).b &
+    (the Comp of C).[id b,f] = (id b)*f by Def3,Def5,Th41;
+   hence thesis by A1,Def8;
+ end;
+
+theorem Th47:
+   for g being Morphism of C st dom(g) = b holds g*(id b) = g
+ proof let g be Morphism of C;
+   assume
+A1:  dom(g) = b;
+   then cod(id b) = dom(g) by Th44;
+   then dom(g) = (the Dom of C).g & id b = (the Id of C).b &
+    (the Comp of C).[g,id b] = g*(id b) by Def2,Def5,Th41;
+   hence thesis by A1,Def8;
+ end;
+
+definition let C,g;
+   attr g is monic means
+     for f1,f2 st dom f1 = dom f2 & cod f1 = dom g & cod f2 = dom g & g*f1=g*f2
+   holds f1=f2;
+end;
+
+definition let C,f;
+  attr f is epi means
+    for g1,g2 st dom g1 = cod f & dom g2 = cod f & cod g1 = cod g2 & g1*f=g2*f
+   holds g1=g2;
+end;
+
+definition let C,f;
+  attr f is invertible means
+    ex g st dom g = cod f & cod g = dom f & f*g = id cod f & g*f = id dom f;
+end;
+
+reserve f,f1,f2 for Morphism of a,b;
+reserve f' for Morphism of b,a;
+reserve g for Morphism of b,c;
+reserve h,h1,h2 for Morphism of c,d;
+
+canceled 3;
+
+theorem Th51:
+   Hom(a,b)<>{} & Hom(b,c)<>{} implies g*f in Hom(a,c)
+ proof assume Hom(a,b)<>{} & Hom(b,c)<>{};
+   then f in Hom(a,b) & g in Hom(b,c) by Def7;
+   then dom(g)=b & cod(g)=c & dom(f)=a & cod(f)=b by Th18;
+   then dom(g*f) = a & cod(g*f) = c by Th42;
+   hence (g*f) in Hom(a,c) by Th18;
+ end;
+
+theorem
+     Hom(a,b)<>{} & Hom(b,c)<>{} implies Hom(a,c)<>{} by Th51;
+
+definition let C,a,b,c,f,g;
+ assume A1: Hom(a,b)<>{} & Hom(b,c)<>{};
+   func g*f -> Morphism of a,c equals
+:Def13:  g*f;
+ correctness
+  proof g*f in Hom(a,c) by A1,Th51; hence thesis by Def7;
+  end;
+end;
+
+canceled;
+
+theorem Th54:
+   Hom(a,b)<>{} & Hom(b,c)<>{} & Hom(c,d)<>{} implies (h*g)*f=h*(g*f)
+ proof assume that
+A1:   Hom(a,b)<>{} and
+A2:   Hom(b,c)<>{} and
+A3:   Hom(c,d)<>{};
+   reconsider ff = f as Morphism of C;
+   reconsider gg = g as Morphism of C;
+   reconsider hh = h as Morphism of C;
+     f in Hom(a,b) & g in Hom(b,c) & h in Hom(c,d) by A1,A2,A3,Def7;
+then A4:   dom(h) = c & cod(g) = c & dom(g) = b & cod(f) = b by Th18;
+A5:   Hom(a,c)<>{} by A1,A2,Th51;
+     Hom(b,d) <> {} by A2,A3,Th51;
+   hence (h*g)*f = (h*g)*ff by A1,Def13 .= (hh*gg)*ff by A2,A3,Def13
+                .= hh*(gg*ff) by A4,Th43 .= hh*(g*f) by A1,A2,Def13
+                .= h*(g*f) by A3,A5,Def13;
+ end;
+
+theorem Th55:
+   id a in Hom(a,a)
+ proof dom(id a)=a & cod(id a)=a by Th44; hence thesis by Th18; end;
+
+theorem
+    Hom(a,a) <> {} by Th55;
+
+definition let C,a;
+redefine func id a -> Morphism of a,a;
+ coherence
+  proof id a in Hom(a,a) by Th55; hence id a is Morphism of a,a by Def7; end;
+end;
+
+theorem Th57:
+   Hom(a,b)<>{} implies (id b)*f=f
+ proof assume
+A1:   Hom(a,b)<>{};
+  then f in Hom(a,b) by Def7; then cod(f) = b by Th18;
+  then (id b)*(f qua Morphism of C) = f & Hom(b,b) <> {} by Th46,Th55;
+  hence (id b)*f = f by A1,Def13;
+ end;
+
+theorem Th58:
+   Hom(b,c)<>{} implies g*(id b)=g
+ proof assume
+A1:  Hom(b,c)<>{};
+  then g in Hom(b,c) by Def7; then dom(g) = b by Th18;
+  then g*((id b) qua Morphism of C) = g & Hom(b,b) <> {} by Th47,Th55;
+  hence g*(id b) = g by A1,Def13;
+ end;
+
+theorem Th59:
+   (id a)*(id a) = id a
+ proof Hom(a,a) <> {} by Th55; hence thesis by Th57; end;
+
+:: Monics, Epis
+
+theorem Th60:
+   Hom(b,c) <> {} implies
+    (g is monic iff for a
+     for f1,f2 being Morphism of a,b st Hom(a,b)<>{} & g*f1=g*f2 holds f1=f2)
+ proof assume
+A1:   Hom(b,c) <> {};
+   thus g is monic implies for a
+     for f1,f2 being Morphism of a,b st Hom(a,b)<>{} & g*f1=g*f2 holds f1=f2
+    proof assume
+A2:  for f1,f2 being Morphism of C
+       st dom f1 = dom f2 & cod f1 = dom g & cod f2 = dom g & g*f1=g*f2
+      holds f1=f2;
+     let a; let f1,f2 be Morphism of a,b;
+     assume Hom(a,b)<>{};
+     then dom f1 = a & dom f2 = a & cod f1 = b & cod f2 = b & dom g = b &
+          g*f2 = g*(f2 qua Morphism of C) & g*f1 = g*(f1 qua Morphism of C)
+      by A1,Def13,Th23;
+     hence thesis by A2;
+    end;
+   assume
+A3:  for f1,f2 being Morphism of a,b st Hom(a,b)<>{} & g*f1=g*f2 holds f1=f2;
+   let f1,f2 be Morphism of C such that
+A4:  dom f1 = dom f2 and
+A5:  cod f1 = dom g and
+A6:  cod f2 = dom g;
+A7:  dom g = b by A1,Th23;
+   set a = dom(f1);
+   reconsider f1 as Morphism of a,b by A5,A7,Th22;
+   reconsider f2 as Morphism of a,b by A4,A6,A7,Th22;
+A8:  Hom(a,b) <> {} by A5,A7,Th18;
+   then g*f2 = g*(f2 qua Morphism of C) & g*f1 = g*(f1 qua Morphism of C)
+    by A1,Def13;
+   hence thesis by A3,A8;
+ end;
+
+theorem
+     Hom(b,c)<>{} & Hom(c,d)<>{} & g is monic & h is monic implies h*g is monic
+ proof assume that
+A1:  Hom(b,c)<>{} & Hom(c,d)<>{} and
+A2:  g is monic and
+A3:  h is monic;
+A4:  Hom(b,d) <> {} by A1,Th51;
+    now let a,f1,f2 such that
+A5:  Hom(a,b)<>{} and
+A6:  (h*g)*f1 = (h*g)*f2;
+     h*(g*f1) = (h*g)*f1 & (h*g)*f2 = h*(g*f2) & Hom(a,c) <> {}
+     by A1,A5,Th51,Th54; then g*f1 = g*f2 by A1,A3,A6,Th60;
+   hence f1 = f2 by A1,A2,A5,Th60;
+  end;
+  hence thesis by A4,Th60;
+ end;
+
+theorem
+     Hom(b,c)<>{} & Hom(c,d)<>{} & h*g is monic implies g is monic
+ proof assume that
+A1:  Hom(b,c)<>{} & Hom(c,d)<>{} and
+A2:  h*g is monic;
+    now let a,f1,f2; assume
+A3:  Hom(a,b)<>{};
+   then Hom(b,d) <> {} & h*(g*f1) = (h*g)*f1 & h*(g*f2) = (h*g)*f2
+     by A1,Th51,Th54;
+   hence g*f1 = g*f2 implies f1 = f2 by A2,A3,Th60;
+  end;
+  hence thesis by A1,Th60;
+ end;
+
+theorem
+     for h being Morphism of a,b for g being Morphism of b,a
+     st Hom(a,b) <> {} & Hom(b,a) <> {} & h*g = id b
+    holds g is monic
+ proof let h be Morphism of a,b; let g be Morphism of b,a such that
+A1:  Hom(a,b) <> {} and
+A2:  Hom(b,a) <> {} and
+A3:  h*g = id b;
+    now let c;
+   let g1,g2 be Morphism of c,b such that
+A4:  Hom(c,b) <> {} and
+A5:  g*g1 = g*g2;
+   thus g1 = (h*g)*g1 by A3,A4,Th57
+          .= h*(g*g2) by A1,A2,A4,A5,Th54
+          .= (h*g)*g2 by A1,A2,A4,Th54
+          .= g2 by A3,A4,Th57;
+  end;
+  hence thesis by A2,Th60;
+ end;
+
+theorem
+     id b is monic
+ proof
+A1:  Hom(b,b) <> {} by Th55;
+    now let a; let f1,f2 be Morphism of a,b;
+   assume Hom(a,b)<>{}; then (id b)*f1 = f1 & (id b)*f2 = f2 by Th57;
+   hence (id b)*f1 = (id b)*f2 implies f1 = f2;
+  end;
+  hence thesis by A1,Th60;
+ end;
+
+theorem Th65:
+   Hom(a,b) <> {} implies
+    (f is epi iff for c
+      for g1,g2 being Morphism of b,c st Hom(b,c)<>{} & g1*f=g2*f holds g1=g2)
+ proof assume
+A1:  Hom(a,b) <> {};
+  thus f is epi implies for c
+      for g1,g2 being Morphism of b,c st Hom(b,c)<>{} & g1*f=g2*f holds g1=g2
+   proof assume
+A2:  for g1,g2 being Morphism of C
+       st dom g1 = cod f & dom g2 = cod f & cod g1 = cod g2 & g1*f = g2*f
+      holds g1=g2;
+    let c; let g1,g2 be Morphism of b,c;
+    assume Hom(b,c)<>{};
+    then dom g1 = b & dom g2 = b & cod g1 = c & cod g2 = c & cod f = b &
+         g1*f = g1*(f qua Morphism of C) & g2*f = g2*(f qua Morphism of C)
+     by A1,Def13,Th23;
+    hence thesis by A2;
+   end;
+  assume
+A3:  for g1,g2 being Morphism of b,c st Hom(b,c)<>{} & g1*f=g2*f holds g1=g2;
+  let g1,g2 be Morphism of C such that
+A4:  dom g1 = cod f and
+A5:  dom g2 = cod f and
+A6:  cod g1 = cod g2;
+A7:  cod f = b by A1,Th23;
+   set c = cod g1;
+   reconsider g1 as Morphism of b,c by A4,A7,Th22;
+   reconsider g2 as Morphism of b,c by A5,A6,A7,Th22;
+A8:  Hom(b,c) <> {} by A4,A7,Th18;
+   then g1*f = g1*(f qua Morphism of C) & g2*f = g2*(f qua Morphism of C)
+    by A1,Def13;
+   hence thesis by A3,A8;
+ end;
+
+theorem
+     Hom(a,b)<>{} & Hom(b,c)<>{} & f is epi & g is epi implies g*f is epi
+ proof assume that
+A1:  Hom(a,b)<>{} & Hom(b,c)<>{} and
+A2:  f is epi and
+A3:  g is epi;
+A4:  Hom(a,c) <> {} by A1,Th51;
+    now let d,h1,h2 such that
+A5:  Hom(c,d)<>{} and
+A6:  h1*(g*f) = h2*(g*f);
+     h1*(g*f) = (h1*g)*f & (h2*g)*f = h2*(g*f) & Hom(b,d) <> {}
+     by A1,A5,Th51,Th54;
+   then h1*g = h2*g by A1,A2,A6,Th65;
+   hence h1 = h2 by A1,A3,A5,Th65;
+  end;
+  hence thesis by A4,Th65;
+ end;
+
+theorem
+     Hom(a,b)<>{} & Hom(b,c)<>{} & g*f is epi implies g is epi
+ proof assume that
+A1:  Hom(a,b)<>{} & Hom(b,c)<>{} and
+A2:  g*f is epi;
+    now let d,h1,h2; assume
+A3:  Hom(c,d)<>{};
+   then Hom(a,c) <> {} & h1*(g*f) = (h1*g)*f & h2*(g*f) = (h2*g)*f
+     by A1,Th51,Th54;
+   hence h1*g = h2*g implies h1 = h2 by A2,A3,Th65;
+  end;
+  hence thesis by A1,Th65;
+ end;
+
+theorem
+     for h being Morphism of a,b for g being Morphism of b,a
+     st Hom(a,b) <> {} & Hom(b,a) <> {} & h*g = id b holds h is epi
+ proof let h be Morphism of a,b; let g be Morphism of b,a;
+  assume that
+A1:  Hom(a,b) <> {} and
+A2:  Hom(b,a) <> {} and
+A3:  h*g = id b;
+    now let c;
+   let h1,h2 be Morphism of b,c such that
+A4:  Hom(b,c) <> {} and
+A5:  h1*h = h2*h;
+   thus h1 = h1*(h*g) by A3,A4,Th58
+          .= (h2*h)*g by A1,A2,A4,A5,Th54
+          .= h2*(h*g) by A1,A2,A4,Th54
+          .= h2 by A3,A4,Th58;
+  end;
+  hence thesis by A1,Th65;
+ end;
+
+theorem
+     id b is epi
+ proof
+A1:  Hom(b,b) <> {} by Th55;
+    now let c; let g1,g2 be Morphism of b,c;
+   assume Hom(b,c)<>{}; then g1*(id b) = g1 & g2*(id b) = g2 by Th58;
+   hence g1*(id b) = g2*(id b) implies g1 = g2;
+  end;
+  hence thesis by A1,Th65;
+ end;
+
+theorem Th70:
+   Hom(a,b) <> {} implies
+     (f is invertible iff
+       Hom(b,a)<>{} & ex g being Morphism of b,a st f*g=id b & g*f=id a)
+ proof assume
+A1:  Hom(a,b) <> {};
+   thus f is invertible implies
+     Hom(b,a)<>{} & ex g being Morphism of b,a st f*g=id b & g*f=id a
+    proof given g being Morphism of C such that
+A2:    dom g = cod f & cod g = dom f and
+A3:    f*g = id cod f & g*f = id dom f;
+A4:    dom f = a & cod f = b by A1,Th23;
+     hence
+A5:     Hom(b,a) <> {} by A2,Th18;
+     reconsider g as Morphism of b,a by A2,A4,Th22;
+     take g;
+     thus thesis by A1,A3,A4,A5,Def13;
+    end;
+  assume
+A6:  Hom(b,a)<>{};
+  given g being Morphism of b,a such that
+A7:  f*g=id b & g*f=id a;
+   reconsider g as Morphism of C;
+  take g; dom f = a & cod g = a & cod f = b & dom g = b by A1,A6,Th23;
+  hence thesis by A1,A6,A7,Def13;
+ end;
+
+theorem Th71:
+   Hom(a,b) <> {} & Hom(b,a) <> {} implies
+    for g1,g2 being Morphism of b,a st f*g1=id b & g2*f=id a holds g1=g2
+ proof assume that
+A1: Hom(a,b) <> {} and
+A2: Hom(b,a) <> {};
+   let g1,g2 be Morphism of b,a; assume
+A3:   f*g1=id b;
+   assume g2*f=id a;
+   hence g1 = (g2*f)*g1 by A2,Th57 .= g2*(id b) by A1,A2,A3,Th54
+           .= g2 by A2,Th58;
+ end;
+
+definition let C,a,b,f;
+  assume that A1: Hom(a,b) <> {} and A2: f is invertible;
+ func f" -> Morphism of b,a means
+:Def14: f*it = id b & it*f = id a;
+ existence by A1,A2,Th70;
+ uniqueness proof Hom(b,a) <> {} by A1,A2,Th70; hence thesis by A1,Th71; end;
+end;
+
+canceled;
+
+theorem
+     Hom(a,b)<>{} & f is invertible implies f is monic & f is epi
+ proof assume that
+A1:    Hom(a,b)<>{} and
+A2:    f is invertible;
+A3:    Hom(b,a)<>{} by A1,A2,Th70;
+   consider k being Morphism of b,a such that
+A4:    f*k=id b and
+A5:    k*f=id a by A1,A2,Th70;
+      now
+     let c be (Object of C),g,h be Morphism of c,a such that
+A6:    Hom(c,a)<>{} and
+A7:    f*g=f*h;
+         g = (k*f)*g by A5,A6,Th57 .= k*(f*h) by A1,A3,A6,A7,Th54
+        .= (id a)*h by A1,A3,A5,A6,Th54;
+     hence g=h by A6,Th57;
+    end;
+  hence f is monic by A1,Th60;
+     now let c be (Object of C), g,h be Morphism of b,c such that
+A8:   Hom(b,c)<>{} and
+A9:   g*f=h*f;
+        g = g*(f*k) by A4,A8,Th58 .= (h*f)*k by A1,A3,A8,A9,Th54
+       .= h*(id b) by A1,A3,A4,A8,Th54;
+     hence g=h by A8,Th58;
+   end;
+  hence f is epi by A1,Th65;
+ end;
+
+theorem
+     id a is invertible
+ proof Hom(a,a) <> {} & (id a)*(id a) = id a by Th55,Th59;
+  hence thesis by Th70;
+ end;
+
+theorem Th75:
+   Hom(a,b) <> {} & Hom(b,c) <> {} & f is invertible & g is invertible
+    implies g*f is invertible
+ proof assume that
+A1:   Hom(a,b) <> {} and
+A2:   Hom(b,c) <> {};
+  assume
+A3:   f is invertible;
+then A4:   Hom(b,a) <> {} by A1,Th70;
+   consider f1 being Morphism of b,a such that
+A5:   f*f1 = id b and
+A6:   f1*f = id a by A1,A3,Th70;
+  assume
+A7:   g is invertible;
+then A8:   Hom(c,b) <> {} by A2,Th70;
+   consider g1 being Morphism of c,b such that
+A9:   g*g1 = id c and
+A10:   g1*g = id b by A2,A7,Th70;
+A11:  Hom(a,c) <> {} by A1,A2,Th51;
+    now thus
+A12:   Hom(c,a) <> {} by A4,A8,Th51;
+   take f1g1 = f1*g1;
+   thus (g*f)*(f1g1) = g*(f*(f1*g1)) by A1,A2,A12,Th54
+       .= g*((id b )*g1) by A1,A4,A5,A8,Th54 .= id c by A8,A9,Th57;
+     Hom(a,c) <> {} by A1,A2,Th51;
+   hence (f1g1)*(g*f) = f1*(g1*(g*f)) by A4,A8,Th54
+       .= f1*((id b)*f) by A1,A2,A8,A10,Th54 .= id a by A1,A6,Th57;
+  end;
+  hence thesis by A11,Th70;
+ end;
+
+theorem
+     Hom(a,b)<>{} & f is invertible implies f" is invertible
+ proof assume
+A1:  Hom(a,b) <> {};
+  assume f is invertible;
+  then Hom(b,a) <> {} & (f")*f = id a & f*(f") = id b by A1,Def14,Th70;
+  hence thesis by A1,Th70;
+ end;
+
+theorem
+     Hom(a,b) <> {} & Hom(b,c) <> {} & f is invertible & g is invertible
+    implies (g*f)" = f"*g"
+ proof assume that
+A1:   Hom(a,b) <> {} and
+A2:   Hom(b,c) <> {} and
+A3:   f is invertible and
+A4:   g is invertible;
+    now thus Hom(a,c) <> {} by A1,A2,Th51;
+   thus g*f is invertible by A1,A2,A3,A4,Th75;
+A5:  Hom(b,a) <> {} by A1,A3,Th70;
+A6:  Hom(c,b) <> {} by A2,A4,Th70;
+then A7:  Hom(c,a) <> {} by A5,Th51;
+   hence (g*f)*(f"*g")
+        = g*(f*(f"*g")) by A1,A2,Th54
+       .= g*((f*f")*g") by A1,A5,A6,Th54
+       .= g*((id b)*g") by A1,A3,Def14
+       .= g*g" by A6,Th57
+       .= id c by A2,A4,Def14;
+   thus (f"*g")*(g*f)
+        = ((f"*g")*g)*f by A1,A2,A7,Th54
+       .= (f"*(g"*g))*f by A2,A5,A6,Th54
+       .= (f"*(id b))*f by A2,A4,Def14
+       .= f"*f by A5,Th58
+       .= id a by A1,A3,Def14;
+  end;
+  hence thesis by Def14;
+ end;
+
+definition let C,a;
+   attr a is terminal means
+:Def15: Hom(b,a)<>{} &
+    ex f being Morphism of b,a st for g being Morphism of b,a holds f=g;
+   attr a is initial means
+:Def16: Hom(a,b)<>{} &
+    ex f being Morphism of a,b st for g being Morphism of a,b holds f=g;
+ let b;
+   pred a,b are_isomorphic means
+:Def17: Hom(a,b)<>{} & ex f st f is invertible;
+end;
+
+canceled 3;
+
+theorem Th81:
+   a,b are_isomorphic iff
+     Hom(a,b)<>{} & Hom(b,a)<>{} & ex f,f' st f*f' = id b & f'*f = id a
+ proof
+   thus a,b are_isomorphic implies
+     Hom(a,b)<>{} & Hom(b,a)<>{} & ex f,f' st f*f' = id b & f'*f = id a
+    proof assume
+A1:     Hom(a,b) <> {};
+      given f such that
+A2:     f is invertible;
+      thus Hom(a,b) <> {} & Hom(b,a) <> {} by A1,A2,Th70;
+      take f; thus thesis by A1,A2,Th70;
+    end;
+   assume that
+A3:  Hom(a,b)<>{} and
+A4:  Hom(b,a)<>{};
+   given f such that
+A5:  ex f' st f*f' = id b & f'*f = id a;
+   thus Hom(a,b) <> {} by A3;
+   take f; thus thesis by A3,A4,A5,Th70;
+ end;
+
+theorem
+     a is initial iff
+    for b ex f being Morphism of a,b st Hom(a,b) = {f}
+ proof
+   thus a is initial implies
+     for b ex f being Morphism of a,b st Hom(a,b) = {f}
+    proof assume
+A1:    a is initial;
+     let b;
+     consider f being Morphism of a,b such that
+A2:    for g being Morphism of a,b holds f = g by A1,Def16;
+     take f;
+       Hom(a,b) <> {} by A1,Def16;
+     hence thesis by A2,Th26;
+    end;
+   assume
+A3:   for b ex f being Morphism of a,b st Hom(a,b) = {f};
+   let b;
+   consider f being Morphism of a,b such that
+A4:   Hom(a,b) = {f} by A3;
+   thus Hom(a,b) <> {} by A4;
+   take f;
+   thus thesis by A4,Th25;
+ end;
+
+theorem Th83:
+   a is initial implies for h being Morphism of a,a holds id a = h
+ proof assume a is initial;
+   then consider f being Morphism of a,a such that
+A1:   for g being Morphism of a,a holds f = g by Def16;
+   let h be Morphism of a,a;
+     id a = f by A1;
+   hence thesis by A1;
+ end;
+
+theorem
+     a is initial & b is initial implies a,b are_isomorphic
+ proof assume that
+A1:  a is initial and
+A2:  b is initial;
+   thus
+A3:  Hom(a,b) <> {} by A1,Def16;
+   consider f being Morphism of a,b;
+   consider g being Morphism of b,a;
+   take f;
+     now thus Hom(b,a) <> {} by A2,Def16;
+    take g; thus f*g = id b & g*f = id a by A1,A2,Th83;
+   end;
+   hence thesis by A3,Th70;
+ end;
+
+theorem
+     a is initial & a,b are_isomorphic implies b is initial
+ proof assume that
+A1:  a is initial and
+A2:  a,b are_isomorphic;
+    let c;
+    consider h being Morphism of a,c such that
+A3:   for g being Morphism of a,c holds h = g by A1,Def16;
+    consider f,f' such that
+A4:   f*f' = id b and f'*f = id a by A2,Th81;
+A5:   Hom(b,a) <> {} by A2,Th81;
+      Hom(a,c) <> {} by A1,Def16;
+    hence
+A6:   Hom(b,c) <> {} by A5,Th51;
+    take h*f';
+A7:   Hom(a,b) <> {} by A2,Def17;
+    let h' be Morphism of b,c;
+    thus h' = h'*(f*f') by A4,A6,Th58 .= (h'*f)*f' by A5,A6,A7,Th54
+           .= h*f' by A3;
+ end;
+
+theorem
+     b is terminal iff
+    for a ex f being Morphism of a,b st Hom(a,b) = {f}
+ proof
+   thus b is terminal implies
+     for a ex f being Morphism of a,b st Hom(a,b) = {f}
+    proof assume
+A1:    b is terminal;
+     let a;
+     consider f being Morphism of a,b such that
+A2:    for g being Morphism of a,b holds f = g by A1,Def15;
+     take f;
+       Hom(a,b) <> {} by A1,Def15;
+     hence thesis by A2,Th26;
+    end;
+   assume
+A3:   for a ex f being Morphism of a,b st Hom(a,b) = {f};
+   let a;
+   consider f being Morphism of a,b such that
+A4:   Hom(a,b) = {f} by A3;
+   thus Hom(a,b) <> {} by A4;
+   take f; thus thesis by A4,Th25;
+ end;
+
+theorem Th87:
+   a is terminal implies for h being Morphism of a,a holds id a = h
+ proof assume a is terminal;
+   then consider f being Morphism of a,a such that
+A1:   for g being Morphism of a,a holds f = g by Def15;
+   let h be Morphism of a,a;
+     id a = f by A1;
+   hence thesis by A1;
+ end;
+
+theorem
+     a is terminal & b is terminal implies a,b are_isomorphic
+ proof assume that
+A1:   a is terminal and
+A2:   b is terminal;
+   thus
+A3:   Hom(a,b) <> {} by A2,Def15;
+   consider f being Morphism of a,b;
+   consider g being Morphism of b,a;
+   take f;
+     now thus Hom(b,a) <> {} by A1,Def15;
+    take g; thus f*g = id b & g*f = id a by A1,A2,Th87;
+   end;
+   hence thesis by A3,Th70;
+ end;
+
+theorem
+     b is terminal & a,b are_isomorphic implies a is terminal
+ proof assume that
+A1:   b is terminal and
+A2:   a,b are_isomorphic;
+    let c;
+    consider h being Morphism of c,b such that
+A3:   for g being Morphism of c,b holds h = g by A1,Def15;
+    consider f,f' such that f*f' = id b and
+A4:   f'*f = id a by A2,Th81;
+A5:   Hom(b,a) <> {} by A2,Th81;
+      Hom(c,b) <> {} by A1,Def15;
+    hence
+A6:   Hom(c,a) <> {} by A5,Th51;
+    take f'*h;
+A7:   Hom(a,b) <> {} by A2,Def17;
+    let h' be Morphism of c,a;
+    thus f'*h = f'*(f*h') by A3 .= (f'*f)*h' by A5,A6,A7,Th54
+               .= h' by A4,A6,Th57;
+ end;
+
+theorem
+     Hom(a,b) <> {} & a is terminal implies f is monic
+ proof assume that
+A1:  Hom(a,b) <> {} and
+A2:  a is terminal;
+    now let c be (Object of C),g,h be Morphism of c,a such that
+     Hom(c,a)<>{} and f*g=f*h;
+   consider ff being Morphism of c,a such that
+A3:   for gg being Morphism of c,a holds ff=gg by A2,Def15;
+     ff = g by A3; hence g=h by A3;
+  end;
+  hence thesis by A1,Th60;
+ end;
+
+theorem
+     a,a are_isomorphic
+ proof thus
+A1:  Hom(a,a) <> {} by Th55;
+  take id a; (id a)*(id a) = id a by Th59;
+  hence thesis by A1,Th70;
+ end;
+
+theorem
+     a,b are_isomorphic implies b,a are_isomorphic
+ proof assume
+A1:   Hom(a,b) <> {};
+   given f being Morphism of a,b such that
+A2:   f is invertible;
+   thus
+A3:  Hom(b,a) <> {} by A1,A2,Th70;
+   consider g being Morphism of b,a such that
+A4:   f*g = id b & g*f = id a by A1,A2,Th70;
+   take g; thus thesis by A1,A3,A4,Th70;
+ end;
+
+theorem
+     a,b are_isomorphic & b,c are_isomorphic implies a,c are_isomorphic
+ proof assume
+A1:   Hom(a,b) <> {};
+   given f being Morphism of a,b such that
+A2:   f is invertible;
+  assume
+A3:   Hom(b,c) <> {};
+   given g being Morphism of b,c such that
+A4:   g is invertible;
+   thus Hom(a,c) <> {} by A1,A3,Th51;
+   take g*f; thus thesis by A1,A2,A3,A4,Th75;
+ end;
+
+::  Functors (Covariant Functors)
+
+definition let C,D;
+ mode Functor of C,D -> Function of the Morphisms of C,the Morphisms of D
+   means
+:Def18:
+    ( for c being Element of the Objects of C
+       ex d being Element of the Objects of D
+        st it.((the Id of C).c) = (the Id of D).d )
+    & ( for f being Element of the Morphisms of C holds
+         it.((the Id of C).((the Dom of C).f)) =
+            (the Id of D).((the Dom of D).(it.f)) &
+         it.((the Id of C).((the Cod of C).f)) =
+            (the Id of D).((the Cod of D).(it.f)) )
+    & ( for f,g being Element of the Morphisms of C
+           st [g,f] in dom(the Comp of C)
+         holds it.((the Comp of C).[g,f]) = (the Comp of D).[it.g,it.f] );
+ existence
+  proof consider d being Element of the Objects of D;
+    deffunc F(set) = (the Id of D).d;
+   consider F being Function of the Morphisms of C,the Morphisms of D such that
+A1: for f being Element of the Morphisms of C holds F.f = F(f) from LambdaD;
+   take F;
+   thus for c being Element of the Objects of C
+     ex d being Element of the Objects of D
+       st F.((the Id of C).c) = (the Id of D).d
+    proof let c be Element of the Objects of C;
+     take d; thus thesis by A1;
+    end;
+   thus for f being Element of the Morphisms of C holds
+     F.((the Id of C).((the Dom of C).f)) =
+       (the Id of D).((the Dom of D).(F.f)) &
+     F.((the Id of C).((the Cod of C).f)) =
+       (the Id of D).((the Cod of D).(F.f))
+    proof let f be Element of the Morphisms of C;
+A2:    F.f = (the Id of D).d by A1;
+     thus F.((the Id of C).((the Dom of C).f))
+         = (the Id of D).d by A1
+        .= (the Id of D).((the Dom of D).(F.f)) by A2,Def8;
+     thus F.((the Id of C).((the Cod of C).f))
+         = (the Id of D).d by A1
+        .= (the Id of D).((the Cod of D).(F.f)) by A2,Def8;
+    end;
+   let f,g be Element of the Morphisms of C such that
+A3:   [g,f] in dom(the Comp of C);
+     set f' = F.f;
+A4:  (the Id of D).d = id d by Def5;
+     F.g = (the Id of D).d & F.f = (the Id of D).d by A1;
+   then (the Dom of D).(F.g) = d & (the Cod of D).(F.f) = d by Def8;
+then A5:   [F.g,F.f] in dom(the Comp of D) by Def8;
+A6:   Hom(d,d) <> {} by Th55;
+     (the Comp of C).[g,f] is Element of the Morphisms of C by A3,PARTFUN1:27;
+   hence F.((the Comp of C).[g,f])
+        = (the Id of D).d by A1
+       .= (id d)*(id d) by A4,Th59
+       .= (id d)*((id d) qua Morphism of D) by A6,Def13
+       .= (id d)*f' by A1,A4
+       .= F.g*f' by A1,A4
+       .= (the Comp of D).[F.g,F.f] by A5,Def4;
+  end;
+end;
+
+canceled 2;
+
+theorem Th96:
+   for T being Function of the Morphisms of C,the Morphisms of D
+    st ( for c being Object of C ex d being Object of D st T.(id c) = id d )
+       & ( for f being Morphism of C
+            holds T.(id dom f) = id dom (T.f) & T.(id cod f) = id cod (T.f) )
+       & ( for f,g being Morphism of C st dom g = cod f
+            holds T.(g*f) = (T.g)*(T.f))
+     holds T is Functor of C,D
+ proof let T be Function of the Morphisms of C,the Morphisms of D such that
+A1:  for c being Object of C ex d being Object of D st T.(id c) = id d and
+A2:  for f being Morphism of C
+       holds T.(id dom f) = id dom (T.f) & T.(id cod f) = id cod (T.f) and
+A3:  for f,g being Morphism of C st dom g = cod f holds T.(g*f) = (T.g)*(T.f);
+   thus for c being Element of the Objects of C
+          ex d being Element of the Objects of D
+           st T.((the Id of C).c) = (the Id of D).d
+    proof let c be Element of the Objects of C;
+      consider d being Object of D such that
+A4:     T.(id c) = id d by A1;
+       id c = (the Id of C).c & id d = (the Id of D).d by Def5;
+     hence thesis by A4;
+    end;
+   thus for f being Element of the Morphisms of C holds
+         T.((the Id of C).((the Dom of C).f)) =
+            (the Id of D).((the Dom of D).(T.f)) &
+         T.((the Id of C).((the Cod of C).f)) =
+            (the Id of D).((the Cod of D).(T.f))
+    proof let f be Element of the Morphisms of C;
+       (the Dom of C).f = dom f & (the Id of C).(dom f) = id dom f &
+     (the Dom of D).(T.f) = dom(T.f) &
+     (the Id of D).(dom (T.f)) = id dom(T.f) &
+     (the Cod of C).f = cod f & (the Id of C).(cod f) = id cod f &
+     (the Cod of D).(T.f) = cod(T.f) &
+     (the Id of D).(cod (T.f)) = id cod(T.f) by Def2,Def3,Def5;
+     hence thesis by A2;
+    end;
+   let f,g be Element of the Morphisms of C;
+   assume [g,f] in dom(the Comp of C);
+then A5:  dom g = cod f by Th40;
+   then id dom (T.g) = T.(id cod f) by A2 .= id cod (T.f) by A2;
+   then dom (T.g) = cod (T.f) by Th45;
+   then (the Comp of C).[g,f] = g*f &
+        (the Comp of D).[T.g,T.f] = (T.g)*(T.f) by A5,Th41;
+   hence thesis by A3,A5;
+ end;
+
+theorem Th97:
+   for T being Functor of C,D for c being Object of C
+    ex d being Object of D st T.(id c) = id d
+ proof let T  be Functor of C,D; let c be Object of C;
+  consider d being Element of the Objects of D such that
+A1:  T.((the Id of C).c) = (the Id of D).d by Def18;
+    id c = (the Id of C).c & id d = (the Id of D).d by Def5;
+  hence thesis by A1;
+ end;
+
+theorem Th98:
+   for T being Functor of C,D for f being Morphism of C
+     holds T.(id dom f) = id dom (T.f) & T.(id cod f) = id cod (T.f)
+ proof let T be Functor of C,D; let f be Morphism of C;
+     (the Dom of C).f = dom f & (the Id of C).(dom f) = id dom f &
+   (the Dom of D).(T.f) = dom(T.f) & (the Id of D).(dom (T.f)) = id dom(T.f) &
+   (the Cod of C).f = cod f & (the Id of C).(cod f) = id cod f &
+   (the Cod of D).(T.f) = cod(T.f) & (the Id of D).(cod (T.f)) = id cod(T.f)
+    by Def2,Def3,Def5;
+   hence thesis by Def18;
+ end;
+
+theorem Th99:
+   for T being Functor of C,D for f,g being Morphism of C st dom g = cod f
+     holds dom(T.g) = cod(T.f) & T.(g*f) = (T.g)*(T.f)
+ proof let T be Functor of C,D; let f,g be Morphism of C;
+  assume
+A1:  dom g = cod f;
+   then id dom (T.g) = T.(id cod f) by Th98 .= id cod (T.f) by Th98;
+   hence dom (T.g) = cod (T.f) by Th45;
+   then (the Comp of C).[g,f] = g*f & (the Comp of D).[T.g,T.f] = (T.g)*(T.f)
+&
+         [g,f] in dom(the Comp of C) by A1,Th40,Th41;
+   hence thesis by Def18;
+ end;
+
+theorem Th100:
+   for T being Function of the Morphisms of C,the Morphisms of D
+     for F being Function of the Objects of C, the Objects of D
+       st ( for c being Object of C holds T.(id c) = id(F.c) )
+        & ( for f being Morphism of C
+             holds F.(dom f) = dom (T.f) & F.(cod f) = cod (T.f) )
+        & ( for f,g being Morphism of C st dom g = cod f
+             holds T.(g*f) = (T.g)*(T.f))
+      holds T is Functor of C,D
+ proof let T be Function of the Morphisms of C,the Morphisms of D;
+  let F be Function of the Objects of C, the Objects of D;
+  assume that
+A1:  for c being Object of C holds T.(id c) = id(F.c) and
+A2:  for f being Morphism of C
+       holds F.(dom f) = dom (T.f) & F.(cod f) = cod (T.f) and
+A3:  for f,g being Morphism of C st dom g = cod f holds T.(g*f) = (T.g)*(T.f);
+    now
+    thus for c being Object of C ex d being Object of D st T.(id c) = id d
+     proof let c be Object of C;
+      take F.c;
+      thus thesis by A1;
+     end;
+    thus for f being Morphism of C
+           holds T.(id dom f) = id dom (T.f) & T.(id cod f) = id cod (T.f)
+     proof let f be Morphism of C;
+      thus T.(id dom f) = id (F.(dom f)) by A1 .= id dom (T.f) by A2;
+      thus T.(id cod f) = id (F.(cod f)) by A1 .= id cod (T.f) by A2;
+     end;
+  end;
+  hence thesis by A3,Th96;
+ end;
+
+:: Object Function of a Functor
+
+definition let C,D;
+ let F be Function of the Morphisms of C,the Morphisms of D;
+ assume
+A1: for c being Element of the Objects of C
+    ex d being Element of the Objects of D
+     st F.((the Id of C).c) = (the Id of D).d;
+ func Obj(F) -> Function of the Objects of C,the Objects of D means
+:Def19:
+  for c being Element of the Objects of C
+    for d being Element of the Objects of D
+     st F.((the Id of C).c) = (the Id of D).d holds it.c = d;
+ existence
+  proof
+    defpred P[set,set] means
+      for d being Element of the Objects of D
+       st F.((the Id of C).$1) = (the Id of D).d holds $2 = d;
+A2: for c being Element of the Objects of C
+     ex y being Element of the Objects of D st P[c,y]
+    proof let c be Element of the Objects of C;
+     consider y being Element of the Objects of D such that
+A3:     F.((the Id of C).c) = (the Id of D).y by A1;
+     take y;
+     let d be Element of the Objects of D;
+     assume
+A4:     F.((the Id of C).c) = (the Id of D).d;
+       id d = (the Id of D).d & id y = (the Id of D).y by Def5;
+     hence y = d by A3,A4,Th45;
+    end;
+   thus ex f being Function of the Objects of C,the Objects of D st
+    for x being Element of the Objects of C holds P[x,f.x] from FuncExD(A2);
+  end;
+ uniqueness
+  proof
+   let F1,F2 be Function of the Objects of C,the Objects of D such that
+A5:  for c being Element of the Objects of C
+      for d being Element of the Objects of D
+       st F.((the Id of C).c) = (the Id of D).d holds F1.c = d and
+A6:  for c being Element of the Objects of C
+      for d being Element of the Objects of D
+       st F.((the Id of C).c) = (the Id of D).d holds F2.c = d;
+      for c being Element of the Objects of C holds F1.c = F2.c
+     proof let c be Element of the Objects of C;
+      consider d1 being Element of the Objects of D such that
+A7:    F.((the Id of C).c) = (the Id of D).d1 by A1;
+      consider d2 being Element of the Objects of D such that
+A8:    F.((the Id of C).c) = (the Id of D).d2 by A1;
+        id d1 = (the Id of D).d1 & id d2 = ( the Id of D ).d2 &
+        dom id d1 = d1 & dom id d2 = d2 & c is Object of C
+       by Def5,Th44;
+      then F1.c = d1 & F2.c = d2 & d1 = d2 by A5,A6,A7,A8;
+      hence thesis;
+     end;
+    hence thesis by FUNCT_2:113;
+  end;
+end;
+
+canceled;
+
+theorem Th102:
+   for T being Function of the Morphisms of C,the Morphisms of D
+     st for c being Object of C ex d being Object of D st T.(id c) = id d
+    for c being Object of C for d being Object of D
+       st T.(id c) = id d holds (Obj T).c = d
+ proof let T be Function of the Morphisms of C,the Morphisms of D such that
+A1:  for c being Object of C ex d being Object of D st T.(id c) = id d;
+A2:  for c being Element of the Objects of C
+       ex d being Element of the Objects of D
+        st T.((the Id of C).c) = (the Id of D).d
+   proof let c be Element of the Objects of C;
+    consider d being Object of D such that
+A3:   T.(id c) = id d by A1;
+    take d;
+      (the Id of C).c = id c & (the Id of D).d = id d by Def5;
+    hence thesis by A3;
+   end;
+  let c be Object of C; let d be Object of D;
+    (the Id of C).c = id c & (the Id of D).d = id d by Def5;
+  hence thesis by A2,Def19;
+ end;
+
+theorem Th103:
+   for T being Functor of C,D
+    for c being Object of C for d being Object of D st T.(id c) = id d
+     holds (Obj T).c = d
+ proof let T be Functor of C,D;
+    for c being Object of C ex d being Object of D st T.(id c) = id d by Th97;
+  hence thesis by Th102;
+ end;
+
+theorem Th104:
+   for T being (Functor of C,D),c being Object of C
+    holds T.(id c) = id((Obj T).c)
+ proof let T be (Functor of C,D),c be Object of C;
+    ex d being Object of D st T.(id c) = id d by Th97;
+  hence thesis by Th103;
+ end;
+
+theorem Th105:
+   for T being (Functor of C,D), f being Morphism of C
+    holds (Obj T).(dom f) = dom (T.f) & (Obj T).(cod f) = cod (T.f)
+ proof let T be (Functor of C,D), f be Morphism of C;
+     T.(id dom f) = id dom (T.f) & T.(id cod f) = id cod (T.f) by Th98;
+   hence thesis by Th103;
+ end;
+
+definition let C,D be Category;
+ let T be Functor of C,D; let c be Object of C;
+func T.c -> Object of D equals
+:Def20:  (Obj T).c;
+  correctness;
+end;
+
+canceled;
+
+theorem
+     for T being Functor of C,D
+    for c being Object of C for d being Object of D st T.(id c) = id d
+     holds T.c = d
+ proof let T be Functor of C,D; let c be Object of C; let d be Object of D;
+    T.c = (Obj T).c by Def20; hence thesis by Th103;
+ end;
+
+theorem Th108:
+   for T being (Functor of C, D),c being Object of C
+    holds T.(id c) = id(T.c)
+ proof let T be (Functor of C, D),c be Object of C;
+    T.c = (Obj T).c by Def20; hence thesis by Th104;
+ end;
+
+theorem Th109:
+   for T being (Functor of C, D), f being Morphism of C
+    holds T.(dom f) = dom (T.f) & T.(cod f) = cod (T.f)
+ proof let T be (Functor of C, D), f be Morphism of C;
+      T.(dom f) = (Obj T).(dom f) & T.(cod f) = (Obj T).(cod f) by Def20;
+    hence thesis by Th105;
+ end;
+
+theorem Th110:
+   for T being Functor of B,C for S being Functor of C,D
+     holds S*T is Functor of B,D
+ proof let T be Functor of B,C; let S be Functor of C,D;
+  reconsider FF = (Obj S)*(Obj T)
+    as Function of the Objects of B , the Objects of D;
+  reconsider TT = S*T
+    as Function of the Morphisms of B , the Morphisms of D;
+    now
+    thus for b being Object of B holds TT.(id b) = id(FF.b)
+     proof let b be Object of B;
+      thus TT.(id b) = S.(T.(id b)) by FUNCT_2:21
+                    .= S.(id(T.b)) by Th108
+                    .= id((S.(T.b))) by Th108
+                    .= id((S.((Obj T).b))) by Def20
+                    .= id(((Obj S).((Obj T).b))) by Def20
+                    .= id(FF.b) by FUNCT_2:21;
+     end;
+    thus for f being Morphism of B
+       holds FF.(dom f) = dom (TT.f) & FF.(cod f) = cod (TT.f)
+     proof let f be Morphism of B;
+       thus FF.(dom f) = (Obj S).((Obj T).(dom f)) by FUNCT_2:21
+                      .= (Obj S).(dom (T.f)) by Th105
+                      .= (dom (S.(T.f))) by Th105
+                      .= dom (TT.f) by FUNCT_2:21;
+       thus FF.(cod f) = (Obj S).((Obj T).(cod f)) by FUNCT_2:21
+                      .= (Obj S).(cod (T.f)) by Th105
+                      .= (cod (S.(T.f))) by Th105
+                      .= cod (TT.f) by FUNCT_2:21;
+     end;
+    let f,g be Morphism of B;
+    assume
+A1:   dom g = cod f;
+then A2:   dom(T.g) = cod(T.f) by Th99;
+    thus TT.(g*f) = S.(T.(g*f)) by FUNCT_2:21
+                 .= S.((T.g)*(T.f)) by A1,Th99
+                 .= (S.(T.g))*(S.(T.f)) by A2,Th99
+                 .= ((TT.g)*(S.(T.f))) by FUNCT_2:21
+                 .= (TT.g)*(TT.f) by FUNCT_2:21;
+  end;
+  hence thesis by Th100;
+ end;
+
+:: Composition of Functors
+
+definition let B,C,D;
+  let T be Functor of B,C; let S be Functor of C,D;
+ redefine func S*T -> Functor of B,D;
+  coherence by Th110;
+end;
+
+theorem Th111:
+   id the Morphisms of C is Functor of C,C
+ proof
+  set F = id the Objects of C;
+  set T = id the Morphisms of C;
+    now
+    thus for c being Object of C holds T.(id c) = id(F.c)
+     proof let c be Object of C;
+        F.c = c by FUNCT_1:35;
+      hence thesis by FUNCT_1:35;
+     end;
+    thus for f being Morphism of C
+       holds F.(dom f) = dom (T.f) & F.(cod f) = cod (T.f)
+     proof let f be Morphism of C;
+         T.f = f by FUNCT_1:35;
+       hence thesis by FUNCT_1:35;
+     end;
+    let f,g be Morphism of C;
+    assume dom g = cod f;
+    thus T.(g*f) = g*f by FUNCT_1:35 .= (T.g)*f by FUNCT_1:35
+        .= (T.g)*(T.f) by FUNCT_1:35;
+  end;
+  hence thesis by Th100;
+ end;
+
+theorem Th112:
+   for T being (Functor of B,C),S being (Functor of C,D),b being Object of B
+    holds (Obj (S*T)).b = (Obj S).((Obj T).b)
+ proof let T be (Functor of B,C),S be (Functor of C,D),b be Object of B;
+  consider d being Object of D such that
+A1:  (S*T).(id b) = id d by Th97;
+  consider c being Object of C such that
+A2:  T.(id b) = id c by Th97;
+A3:  (S*T).(id b) = S.(T.(id b)) by FUNCT_2:21;
+  thus (Obj (S*T)).b = d by A1,Th103 .= (Obj S).c by A1,A2,A3,Th103
+     .= (Obj S).((Obj T).b) by A2,Th103;
+ end;
+
+theorem Th113:
+   for T being Functor of B,C for S being Functor of C,D
+    for b being Object of B holds (S*T).b = S.(T.b)
+ proof let T be Functor of B,C; let S be Functor of C,D;
+   let b be Object of B;
+    thus (S*T).b = (Obj (S*T)).b by Def20
+                .= (Obj S).((Obj T).b) by Th112
+                .= (Obj S).(T.b) by Def20
+                .= S.(T.b) by Def20;
+ end;
+
+:: Identity Functor
+
+definition let C;
+  func id C -> Functor of C,C equals
+:Def21:  id the Morphisms of C;
+ coherence by Th111;
+end;
+
+canceled;
+
+theorem Th115:
+   for f being Morphism of C holds (id C).f = f
+ proof let f be Morphism of C;
+  thus (id C).f = (id the Morphisms of C).f by Def21 .= f by FUNCT_1:35;
+ end;
+
+theorem Th116:
+   for c being Object of C holds (Obj id C).c = c
+ proof let c be Object of C; (id C).(id c) = id c by Th115;
+  hence (Obj id C).c = c by Th103;
+ end;
+
+theorem Th117:
+   Obj id C = id the Objects of C
+ proof
+     dom Obj id C = the Objects of C & for x be set holds x in the Objects of
+C
+ implies (Obj id C).x = x by Th116,FUNCT_2:def 1;
+  hence thesis by FUNCT_1:34;
+ end;
+
+theorem
+     for c being Object of C holds (id C).c = c
+ proof let c be Object of C; (Obj id C).c = c by Th116;
+  hence thesis by Def20;
+ end;
+
+definition let C,D be Category; let T be Functor of C,D;
+  attr T is isomorphic means
+    T is one-to-one & rng T = the Morphisms of D & rng Obj T = the Objects of D
+;
+  synonym T is_an_isomorphism;
+
+  attr T is full means :Def23:
+  for c,c' being Object of C st Hom(T.c,T.c') <> {}
+   for g being Morphism of T.c,T.c' holds
+    Hom(c,c') <> {} & ex f being Morphism of c,c' st g = T.f;
+
+  attr T is faithful means :Def24:
+  for c,c' being Object of C st Hom(c,c') <> {}
+   for f1,f2 being Morphism of c,c' holds T.f1 = T.f2 implies f1 = f2;
+end;
+
+canceled 3;
+
+theorem
+     id C is_an_isomorphism
+ proof
+    rng id the Morphisms of C
+ = the Morphisms of C & rng id the Objects of C = the Objects of C &
+   id the Morphisms of C is one-to-one by FUNCT_1:52,RELAT_1:71;
+  hence id C is one-to-one
+    & rng id C = the Morphisms of C & rng Obj id C = the Objects of C
+     by Def21,Th117;
+ end;
+
+theorem Th123:
+  for T being Functor of C,D for c,c' being Object of C
+   for f being set st f in Hom(c,c') holds T.f in Hom(T.c,T.c')
+ proof let T be Functor of C,D; let c,c' be Object of C;
+  let f be set;
+  assume
+A1:   f in Hom(c,c');
+  then reconsider f' = f as Morphism of c,c' by Def7;
+    dom f' = c & cod f' = c' by A1,Th18;
+  then T.c = dom (T.f') & T.c' = cod(T.f') by Th109;
+  hence T.f in Hom(T.c,T.c') by Th18;
+ end;
+
+theorem Th124:
+  for T being Functor of C,D for c,c' being Object of C st Hom(c,c') <> {}
+   for f being Morphism of c,c' holds T.f in Hom(T.c,T.c')
+ proof let T be Functor of C,D; let c,c' be Object of C such that
+A1:   Hom(c,c') <> {};
+  let f be Morphism of c,c'; f in Hom(c,c') by A1,Def7;
+  hence thesis by Th123;
+ end;
+
+theorem Th125:
+  for T being Functor of C,D for c,c' being Object of C st Hom(c,c') <> {}
+   for f being Morphism of c,c' holds T.f is Morphism of T.c,T.c'
+ proof let T be Functor of C,D; let c,c' be Object of C such that
+A1:   Hom(c,c') <> {};
+  let f be Morphism of c,c'; T.f in Hom(T.c,T.c') by A1,Th124;
+  hence T.f is Morphism of T.c,T.c' by Def7;
+ end;
+
+theorem Th126:
+  for T being Functor of C,D for c,c' being Object of C
+   st Hom(c,c') <> {} holds Hom(T.c,T.c') <> {}
+ proof let T be Functor of C,D; let c,c' be Object of C;
+  assume A1: Hom(c,c') <> {};
+  consider f being Element of Hom(c,c');
+    f in Hom(c,c') by A1;
+  hence Hom(T.c,T.c') <> {} by Th123;
+ end;
+
+theorem
+     for T being Functor of B,C for S being Functor of C,D
+     st T is full & S is full holds S*T is full
+ proof let T be Functor of B,C; let S be Functor of C,D;
+  assume that
+A1:  T is full and
+A2:  S is full;
+  let b,b' be Object of B such that
+A3:  Hom((S*T).b,(S*T).b') <> {};
+  let g be Morphism of (S*T).b,(S*T).b';
+A4:  (S*T).b = S.(T.b) & (S*T).b' = S.(T.b') by Th113;
+  then consider f being Morphism of T.b,T.b' such that
+A5:  g = S.f by A2,A3,Def23;
+A6:  Hom(T.b,T.b') <> {} by A2,A3,A4,Def23;
+  hence Hom(b,b') <> {} by A1,Def23;
+  consider h being Morphism of b,b' such that
+A7:  f = T.h by A1,A6,Def23;
+  take h;
+  thus g = (S*T).h by A5,A7,FUNCT_2:21;
+ end;
+
+theorem
+     for T being Functor of B,C for S being Functor of C,D
+     st T is faithful & S is faithful holds S*T is faithful
+ proof let T be Functor of B,C; let S be Functor of C,D;
+  assume that
+A1:  T is faithful and
+A2:  S is faithful;
+   let b,b' be Object of B such that
+A3:   Hom(b,b') <> {};
+   let f1,f2 be Morphism of b,b';
+   assume
+A4:   (S*T).f1 = (S*T).f2;
+     Hom(T.b,T.b') <> {} & (S*T).f1 = S.(T.f1) & (S*T).f2 = S.(T.f2) &
+        T.f1 is Morphism of T.b,T.b' & T.f2 is Morphism of T.b,T.b'
+     by A3,Th125,Th126,FUNCT_2:21;
+   then T.f1 = T.f2 by A2,A4,Def24;
+   hence f1 = f2 by A1,A3,Def24;
+ end;
+
+theorem Th129:
+   for T being Functor of C,D for c,c' being Object of C
+    holds T.:Hom(c,c') c= Hom(T.c,T.c')
+ proof let T be Functor of C,D; let c,c' be Object of C;
+  let f be set;
+  assume f in T.:Hom(c,c');
+  then ex g being Element of the Morphisms of C
+    st g in Hom(c,c') & f = T.g by FUNCT_2:116;
+  hence f in Hom(T.c,T.c') by Th123;
+ end;
+
+definition let C,D be Category;
+  let T be Functor of C,D; let c,c' be Object of C;
+ func hom(T,c,c') -> Function of Hom(c,c') , Hom(T.c,T.c') equals
+:Def25:   T|Hom(c,c');
+ correctness
+  proof
+      T is Function of the Morphisms of C, the Morphisms of D &
+     Hom(c,c') c= the Morphisms of C & T.:Hom(c,c') c= Hom(T.c,T.c')
+       by Th129;
+   hence thesis by Th4;
+  end;
+end;
+
+canceled;
+
+theorem Th131:
+   for T being Functor of C,D for c,c' being Object of C st Hom(c,c') <> {}
+    for f being Morphism of c,c' holds hom(T,c,c').f = T.f
+ proof let T be Functor of C,D; let c,c' be Object of C;
+  assume A1: Hom(c,c') <> {};
+  let f be Morphism of c,c';
+    T is Function of the Morphisms of C,the Morphisms of D & f in Hom(c,c')
+   by A1,Def7;
+  then (T|Hom(c,c')).f = T.f by FUNCT_1:72; hence thesis by Def25;
+ end;
+
+theorem
+     for T being Functor of C,D holds
+    T is full iff
+      for c,c' being Object of C holds rng hom(T,c,c') = Hom(T.c,T.c')
+ proof let T be Functor of C,D;
+   thus T is full implies
+      for c,c' being Object of C holds rng hom(T,c,c') = Hom(T.c,T.c')
+    proof assume
+A1:     T is full;
+      let c,c' be Object of C;
+A2:   now assume
+A3:       Hom(T.c,T.c') = {};
+       then Hom(c,c') = {} by Th126;
+       hence rng hom(T,c,c') = Hom(T.c,T.c') by A3,PARTFUN1:54;
+      end;
+        now assume
+A4:       Hom(T.c,T.c') <> {};
+         for g being set holds g in rng hom(T,c,c') iff g in Hom(T.c,T.c')
+        proof let g be set;
+         thus g in rng hom(T,c,c') implies g in Hom(T.c,T.c')
+          proof assume g in rng hom(T,c,c');
+           then consider f being set such that
+A5:          f in dom hom(T,c,c') and
+A6:          hom(T,c,c').f = g by FUNCT_1:def 5;
+             f in Hom(c,c') by A4,A5,FUNCT_2:def 1;
+           hence thesis by A4,A6,FUNCT_2:7;
+          end;
+         assume g in Hom(T.c,T.c');
+         then g is Morphism of T.c,T.c' by Def7;
+         then consider f being Morphism of c,c' such that
+A7:        g = T.f by A1,A4,Def23;
+A8:        Hom(c,c') <> {} by A1,A4,Def23;
+         then f in Hom(c,c') by Def7;
+         then hom(T,c,c').f in rng hom(T,c,c') by A4,FUNCT_2:6;
+         hence g in rng hom(T,c,c') by A7,A8,Th131;
+        end;
+       hence rng hom(T,c,c') = Hom(T.c,T.c') by TARSKI:2;
+      end;
+     hence thesis by A2;
+    end;
+   assume
+A9:  for c,c' being Object of C holds rng hom(T,c,c') = Hom(T.c,T.c');
+   let c,c' be Object of C such that
+A10:   Hom(T.c,T.c') <> {};
+   let g be Morphism of T.c,T.c';
+     g in Hom(T.c,T.c') by A10,Def7;
+   then g in rng hom(T,c,c') by A9;
+   then consider f being set such that
+A11:  f in dom hom(T,c,c') and
+A12:  hom(T,c,c').f = g by FUNCT_1:def 5;
+A13:  f in Hom(c,c') by A10,A11,FUNCT_2:def 1;
+   thus
+   Hom(c,c') <> {} by A11,FUNCT_2:def 1;
+   reconsider f as Morphism of c,c' by A13,Def7;
+   take f; thus T.f = g by A12,A13,Th131;
+ end;
+
+theorem
+     for T being Functor of C,D holds
+    T is faithful iff
+      for c,c' being Object of C holds hom(T,c,c') is one-to-one
+ proof let T be Functor of C,D;
+   thus T is faithful implies
+      for c,c' being Object of C holds hom(T,c,c') is one-to-one
+    proof assume
+A1:   T is faithful;
+     let c,c' be Object of C;
+A2:  now assume Hom(T.c,T.c') = {}; then Hom(c,c') = {} by Th126;
+      hence hom(T,c,c') is one-to-one by PARTFUN1:59;
+     end;
+       now assume
+A3:     Hom(T.c,T.c') <> {};
+        now let f1,f2 be set;
+       assume f1 in Hom(c,c') & f2 in Hom(c,c');
+then A4:       f1 is Morphism of c,c' & f2 is Morphism of c,c' & Hom(c,c') <>
+{}
+       by Def7;
+       then T.f1 = hom(T,c,c').f1 & T.f2 = hom(T,c,c').f2 by Th131;
+       hence hom(T,c,c').f1 = hom(T,c,c').f2 implies f1 = f2
+        by A1,A4,Def24;
+      end;
+      hence hom(T,c,c') is one-to-one by A3,FUNCT_2:25;
+     end;
+     hence thesis by A2;
+    end;
+   assume
+A5:   for c,c' being Object of C holds hom(T,c,c') is one-to-one;
+   let c,c' be Object of C such that
+A6:   Hom(c,c') <> {};
+   let f1,f2 be Morphism of c,c';
+     Hom(T.c,T.c') <> {} & f1 in Hom(c,c') & f2 in Hom(c,c') &
+   hom(T,c,c') is one-to-one & T.f1 = hom(T,c,c').f1 & T.f2 = hom(T,c,c').f2
+     by A5,A6,Def7,Th126,Th131;
+   hence thesis by FUNCT_2:25;
+ end;

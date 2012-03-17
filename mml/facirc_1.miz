@@ -1,0 +1,2555 @@
+:: Full Adder Circuit. Part { I }
+::  by Grzegorz Bancerek and Yatsuka Nakamura
+::
+:: Received August 10, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, RELAT_1, FUNCT_1, FINSEQ_1, CIRCCOMB, FINSEQ_2, MSUALG_1,
+      PARTFUN1, MSAFREE2, FUNCT_4, MARGREL1, MIDSP_3, BINARITH, ZF_LANG, AMI_1,
+      ZF_REFLE, CIRCUIT1, QC_LANG1, CARD_3, LATTICES, MCART_1, FINSET_1,
+      CIRCUIT2, CLASSES1, FACIRC_1;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
+      MCART_1, RELAT_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSET_1,
+      FINSEQ_2, FUNCT_4, MARGREL1, BINARITH, CARD_3, CLASSES1, PARTFUN1,
+      MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB, MIDSP_3;
+ constructors MCART_1, BINARITH, CLASSES1, CIRCUIT1, CIRCUIT2, CIRCCOMB,
+      ENUMSET1;
+ clusters NUMBERS, SUBSET_1, STRUCT_0, RELAT_1, FUNCT_1, RELSET_1, FINSEQ_2,
+      PRVECT_1, MSUALG_1, PRE_CIRC, CIRCCOMB, FINSEQ_1, XREAL_0, ARYTM_3,
+      ORDINAL1, ZFMISC_1, ORDINAL2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, RELAT_1, MSAFREE2, CIRCUIT2, CIRCCOMB, XBOOLE_0;
+ theorems TARSKI, AXIOMS, NAT_1, ENUMSET1, MCART_1, RELAT_1, FUNCT_1, FUNCT_2,
+      FUNCT_4, ORDINAL1, FINSEQ_1, FINSEQ_2, MSUALG_1, MSAFREE2, CIRCUIT1,
+      CIRCUIT2, CIRCCOMB, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+ schemes NAT_1, RECDEF_1, FUNCT_2;
+
+begin :: Pairs, Set Without Pairs, and Nonpair-yielding Functions
+
+definition let IT be set;
+ attr IT is pair means:
+Def1:
+ ex x,y being set st IT = [x,y];
+end;
+
+definition
+ cluster pair -> non empty set;
+  coherence
+   proof let z be set; given x,y being set such that
+A1:   z = [x,y];
+    thus thesis by A1;
+   end;
+end;
+
+definition
+ let x,y be set;
+ cluster [x,y] -> pair;
+  coherence proof take x,y; thus thesis; end;
+end;
+
+definition
+ cluster pair set;
+  existence proof take [0,1]; take 0,1; thus thesis; end;
+ cluster non pair set;
+  existence
+   proof take {}; let x,y be set;
+    thus thesis;
+   end;
+end;
+
+definition
+ cluster -> non pair Nat;
+  coherence
+   proof let n be Nat; given x,y being set such that
+A1:   n = [x,y];
+A2:   n = {{x,y},{x}} & 0 = {} by A1,TARSKI:def 5;
+      n > 0 & n = {k where k is Nat: k < n} by A1,AXIOMS:30,NAT_1:18;
+     then 0 in n; hence contradiction by A2,TARSKI:def 2;
+   end;
+end;
+
+definition let IT be set;
+ attr IT is with_pair means:
+Def2:
+   ex x being pair set st x in IT;
+ antonym IT is without_pairs;
+end;
+
+definition
+ cluster empty -> without_pairs set;
+  coherence
+   proof let x be set; assume
+A1:   x is empty;
+    let a be pair set; thus thesis by A1;
+   end;
+ let x be non pair set;
+ cluster {x} -> without_pairs;
+  coherence
+   proof let a be pair set; assume a in {x};
+    hence contradiction by TARSKI:def 1;
+   end;
+ let y be non pair set;
+ cluster {x,y} -> without_pairs;
+  coherence
+   proof let a be pair set; assume a in {x,y};
+    hence contradiction by TARSKI:def 2;
+   end;
+ let z be non pair set;
+ cluster {x,y,z} -> without_pairs;
+  coherence
+   proof let a be pair set; assume a in {x,y,z};
+    hence contradiction by ENUMSET1:13;
+   end;
+end;
+
+definition
+ cluster without_pairs (non empty set);
+  existence
+   proof consider x being non pair set;
+    take {x}; thus thesis;
+   end;
+end;
+
+definition
+ let X, Y be without_pairs set;
+ cluster X \/ Y -> without_pairs;
+  coherence
+   proof let a be pair set; assume a in X \/ Y;
+     then a in X or a in Y by XBOOLE_0:def 2;
+    hence contradiction by Def2;
+   end;
+end;
+
+definition
+ let X be without_pairs set, Y be set;
+ cluster X \ Y -> without_pairs;
+  coherence
+   proof let a be pair set; assume a in X \ Y;
+     then a in X by XBOOLE_0:def 4;
+    hence contradiction by Def2;
+   end;
+ cluster X /\ Y -> without_pairs;
+  coherence
+   proof let a be pair set; assume a in X /\ Y;
+     then a in X by XBOOLE_0:def 3;
+    hence contradiction by Def2;
+   end;
+ cluster Y /\ X -> without_pairs;
+  coherence
+   proof let a be pair set; assume a in Y /\ X;
+     then a in X by XBOOLE_0:def 3;
+    hence contradiction by Def2;
+   end;
+end;
+
+definition
+ let x be pair set;
+ cluster {x} -> Relation-like;
+  coherence
+   proof let a be set; assume a in {x}; then a = x by TARSKI:def 1;
+    hence ex x,y being set st a = [x,y] by Def1;
+   end;
+ let y be pair set;
+ cluster {x,y} -> Relation-like;
+  coherence
+   proof let a be set; assume a in {x,y}; then a = x or a = y by TARSKI:def 2
+;
+    hence ex x,y being set st a = [x,y] by Def1;
+   end;
+ let z be pair set;
+ cluster {x,y,z} -> Relation-like;
+  coherence
+   proof let a be set; assume a in {x,y,z};
+     then a = x or a = y or a = z by ENUMSET1:13;
+    hence ex x,y being set st a = [x,y] by Def1;
+   end;
+end;
+
+definition
+ cluster without_pairs Relation-like -> empty set;
+  coherence
+   proof let x be set; assume
+A1:   not ex a being pair set st a in x;
+    assume
+A2:   for a being set st a in x holds ex y,z being set st a = [y,z];
+    assume x is non empty;
+    then reconsider X = x as non empty set;
+    consider a being Element of X;
+       ex y,z being set st a = [y,z] by A2; hence contradiction by A1;
+   end;
+end;
+
+definition let IT be Function;
+ attr IT is nonpair-yielding means
+    for x being set st x in dom IT holds IT.x is non pair;
+end;
+
+definition
+ let x be non pair set;
+ cluster <*x*> -> nonpair-yielding;
+ coherence
+  proof let a be set; assume a in dom <*x*>;
+    then <*x*>.a in rng <*x*> by FUNCT_1:def 5;
+    then <*x*>.a in {x} by FINSEQ_1:56; hence thesis by TARSKI:def 1;
+  end;
+ let y be non pair set;
+ cluster <*x,y*> -> nonpair-yielding;
+ coherence
+  proof let a be set; assume a in dom <*x,y*>;
+    then <*x,y*>.a in rng <*x,y*> by FUNCT_1:def 5;
+    then <*x,y*>.a in {x,y} by FINSEQ_2:147; hence thesis by TARSKI:def 2;
+  end;
+ let z be non pair set;
+ cluster <*x,y,z*> -> nonpair-yielding;
+ coherence
+  proof let a be set; assume a in dom <*x,y,z*>;
+    then <*x,y,z*>.a in rng <*x,y,z*> by FUNCT_1:def 5;
+    then <*x,y,z*>.a in {x,y,z} by FINSEQ_2:148; hence thesis by ENUMSET1:13
+;
+  end;
+end;
+
+theorem Th1:
+ for f being Function st f is nonpair-yielding holds rng f is without_pairs
+  proof let f be Function; assume
+A1:  for x being set st x in dom f holds f.x is non pair;
+   let y be pair set; assume y in rng f;
+   then consider x being set such that
+A2:  x in dom f & y = f.x by FUNCT_1:def 5;
+   thus thesis by A1,A2;
+  end;
+
+definition let n be Nat;
+ cluster one-to-one nonpair-yielding FinSeqLen of n;
+  existence
+   proof reconsider p = id Seg n as FinSequence by FINSEQ_2:52;
+       len p = len idseq n by FINSEQ_2:def 1 .= n by FINSEQ_2:55;
+    then reconsider p as FinSeqLen of n by CIRCCOMB:def 12;
+    take p; thus p is one-to-one by FUNCT_1:52;
+    let x be set; assume A1: x in dom p;
+then A2:   x in Seg n by RELAT_1:71;
+    reconsider i = x as Nat by A1;
+       p.x = i by A2,FUNCT_1:34;
+    hence thesis;
+   end;
+end;
+
+definition
+ cluster one-to-one nonpair-yielding FinSequence;
+  existence
+   proof
+    consider n being Nat, p being one-to-one nonpair-yielding FinSeqLen of n;
+    take p; thus thesis;
+   end;
+end;
+
+definition
+ let f be nonpair-yielding Function;
+ cluster rng f -> without_pairs;
+ coherence by Th1;
+end;
+
+theorem Th2:
+ for S1,S2 being non empty ManySortedSign st S1 tolerates S2 &
+  InnerVertices S1 is Relation & InnerVertices S2 is Relation
+ holds InnerVertices (S1+*S2) is Relation
+  proof let S1, S2 be non empty ManySortedSign; assume A1: S1 tolerates S2;
+   assume
+      InnerVertices S1 is Relation & InnerVertices S2 is Relation;
+   then reconsider R1 = InnerVertices S1, R2 = InnerVertices S2 as Relation;
+      R1 \/ R2 is Relation;
+   hence thesis by A1,CIRCCOMB:15;
+  end;
+
+theorem Th3:
+ for S1,S2 being unsplit gate`1=arity non empty ManySortedSign st
+  InnerVertices S1 is Relation & InnerVertices S2 is Relation
+ holds InnerVertices (S1+*S2) is Relation
+  proof let S1, S2 be unsplit gate`1=arity non empty ManySortedSign;
+      S1 tolerates S2 by CIRCCOMB:55;
+   hence thesis by Th2;
+  end;
+
+theorem Th4:
+ for S1,S2 being non empty ManySortedSign st S1 tolerates S2 &
+  InnerVertices S2 misses InputVertices S1
+ holds InputVertices S1 c= InputVertices (S1+*S2) &
+   InputVertices (S1+*S2) =
+           (InputVertices S1) \/ (InputVertices S2 \ InnerVertices S1)
+  proof let S1,S2 be non empty ManySortedSign;
+   set S = S1+*S2;
+   set R = the ResultSort of S;
+   set R1 = the ResultSort of S1;
+   set R2 = the ResultSort of S2;
+   assume that
+A1:  S1 tolerates S2 and
+A2:  InnerVertices S2 misses InputVertices S1;
+A3:  InputVertices S = (the carrier of S) \ rng R &
+    InputVertices S1 = (the carrier of S1) \ rng R1 &
+    InputVertices S2 = (the carrier of S2) \ rng R2 by MSAFREE2:def 2;
+A4:  InnerVertices S1 = rng R1 & InnerVertices S2 = rng R2 &
+    InnerVertices S = rng R by MSAFREE2:def 3;
+A5:  the carrier of S = (the carrier of S1) \/ the carrier of S2 &
+    R = R1+*R2 by CIRCCOMB:def 2;
+A6:  rng R = (rng R1) \/ rng R2 by A1,A4,CIRCCOMB:15;
+   hereby let x be set; assume x in InputVertices S1;
+     then x in the carrier of S1 & not x in rng R1 & not x in rng R2
+      by A2,A3,A4,XBOOLE_0:3,def 4;
+     then x in the carrier of S & not x in rng R by A5,A6,XBOOLE_0:def 2;
+    hence x in InputVertices S by A3,XBOOLE_0:def 4;
+   end;
+A7:  InputVertices S c= (InputVertices S1) \/
+ InputVertices S2 by A1,CIRCCOMB:15
+;
+   hereby let x be set; assume x in InputVertices (S1+*S2);
+     then x in (InputVertices S1) \/ InputVertices S2 & not x in rng R
+      by A3,A7,XBOOLE_0:def 4;
+     then x in InputVertices S1 or x in InputVertices S2 & not x in
+InnerVertices S1
+      by A4,A6,XBOOLE_0:def 2;
+     then x in InputVertices S1 or x in InputVertices S2 \ InnerVertices S1
+      by XBOOLE_0:def 4;
+    hence x in (InputVertices S1) \/ (InputVertices S2 \ InnerVertices S1)
+      by XBOOLE_0:def 2;
+   end;
+   let x be set; assume
+      x in (InputVertices S1) \/ (InputVertices S2 \ InnerVertices S1);
+    then x in InputVertices S1 or x in InputVertices S2 \ rng R1 by A4,XBOOLE_0
+:def 2
+;
+    then x in InputVertices S1 & not x in rng R2 or
+    x in InputVertices S2 & not x in rng R1 by A2,A4,XBOOLE_0:3,def 4
+;
+    then (x in the carrier of S1 or x in the carrier of S2) & not x in rng R1
+&
+    not x in rng R2 by A3,XBOOLE_0:def 4;
+    then x in the carrier of S & not x in rng R by A5,A6,XBOOLE_0:def 2;
+   hence x in InputVertices (S1+*S2) by A3,XBOOLE_0:def 4;
+  end;
+
+theorem Th5:
+ for X,R being set st X is without_pairs & R is Relation holds X misses R
+  proof let X,R be set; assume
+A1:  for x being pair set holds not x in X;
+   assume
+A2:  R is Relation;
+     now let x be set; assume x in X;
+    then not ex z1,z2 being set st x = [z1,z2] by A1;
+   hence not x in R by A2,RELAT_1:def 1;
+   end; hence thesis by XBOOLE_0:3;
+  end;
+
+theorem Th6:
+ for S1,S2 being unsplit gate`1=arity non empty ManySortedSign st
+  InputVertices S1 is without_pairs & InnerVertices S2 is Relation
+ holds InputVertices S1 c= InputVertices (S1+*S2) &
+   InputVertices (S1+*S2) =
+           (InputVertices S1) \/ (InputVertices S2 \ InnerVertices S1)
+  proof let S1,S2 be unsplit gate`1=arity non empty ManySortedSign; assume
+      InputVertices S1 is without_pairs & InnerVertices S2 is Relation;
+    then S1 tolerates S2 & InnerVertices S2 misses InputVertices S1
+    by Th5,CIRCCOMB:55;
+   hence thesis by Th4;
+  end;
+
+theorem Th7:
+ for S1,S2 being unsplit gate`1=arity non empty ManySortedSign st
+  InputVertices S1 is without_pairs & InnerVertices S1 is Relation &
+  InputVertices S2 is without_pairs & InnerVertices S2 is Relation
+ holds InputVertices (S1+*S2) = (InputVertices S1) \/ (InputVertices S2)
+  proof let S1,S2 be unsplit gate`1=arity non empty ManySortedSign; assume
+A1:  InputVertices S1 is without_pairs & InnerVertices S1 is Relation &
+    InputVertices S2 is without_pairs & InnerVertices S2 is Relation;
+then A2:  InputVertices (S1+*S2) =
+           (InputVertices S1) \/ (InputVertices S2 \ InnerVertices S1) by Th6;
+      InnerVertices S1 misses InputVertices S2 by A1,Th5;
+    hence thesis by A2,XBOOLE_1:83;
+  end;
+
+theorem Th8:
+ for S1,S2 being non empty ManySortedSign st S1 tolerates S2 &
+  InputVertices S1 is without_pairs & InputVertices S2 is without_pairs
+ holds InputVertices (S1+*S2) is without_pairs
+  proof let S1, S2 be non empty ManySortedSign; assume S1 tolerates S2;
+then A1:  InputVertices (S1+*S2) c= (InputVertices S1) \/ InputVertices S2
+     by CIRCCOMB:15;
+   assume
+A2:  for x being pair set holds not x in InputVertices S1;
+   assume
+A3:  for x being pair set holds not x in InputVertices S2;
+   let x be pair set; assume x in InputVertices (S1+*S2);
+    then x in InputVertices S1 or x in InputVertices S2 by A1,XBOOLE_0:def 2;
+   hence contradiction by A2,A3;
+  end;
+
+theorem Th9:
+ for S1,S2 being unsplit gate`1=arity non empty ManySortedSign st
+  InputVertices S1 is without_pairs & InputVertices S2 is without_pairs
+ holds InputVertices (S1+*S2) is without_pairs
+  proof let S1, S2 be unsplit gate`1=arity non empty ManySortedSign;
+      S1 tolerates S2 by CIRCCOMB:55;
+   hence thesis by Th8;
+  end;
+
+begin :: Boolean Operations
+
+scheme 2AryBooleEx {F(set,set) -> Element of BOOLEAN}:
+ ex f being Function of 2-tuples_on BOOLEAN, BOOLEAN st
+  for x,y being Element of BOOLEAN holds f.<*x,y*> = F(x,y)
+  proof
+   deffunc G(Tuple of 2, BOOLEAN) = F($1.1,$1.2);
+   consider f being Function of 2-tuples_on BOOLEAN, BOOLEAN such that
+A1:  for a being Tuple of 2, BOOLEAN holds f.a = G(a) from LambdaD;
+   hereby take f; let x,y be Element of BOOLEAN;
+    reconsider a = <*x,y*> as Tuple of 2, BOOLEAN by FINSEQ_2:121;
+    thus f.<*x,y*> = F(a.1,a.2) by A1
+       .= F(x,a.2) by FINSEQ_1:61
+       .= F(x,y) by FINSEQ_1:61;
+   end;
+  end;
+
+scheme 2AryBooleUniq {F(set,set) -> Element of BOOLEAN}:
+ for f1,f2 being Function of 2-tuples_on BOOLEAN, BOOLEAN st
+  (for x,y being Element of BOOLEAN holds f1.<*x,y*> = F(x,y)) &
+  (for x,y being Element of BOOLEAN holds f2.<*x,y*> = F(x,y))
+ holds f1 = f2
+  proof
+   deffunc G(Tuple of 2, BOOLEAN) = F($1.1,$1.2);
+   let f1,f2 be Function of 2-tuples_on BOOLEAN, BOOLEAN such that
+A1:  for x,y being Element of BOOLEAN holds f1.<*x,y*> = F(x,y) and
+A2:  for x,y being Element of BOOLEAN holds f2.<*x,y*> = F(x,y);
+      now let a be Tuple of 2, BOOLEAN;
+     consider x,y being Element of BOOLEAN such that
+A3:    a = <*x,y*> by FINSEQ_2:120;
+     thus f1.a = F(x,y) by A1,A3 .= f2.a by A2,A3;
+    end;
+   hence f1 = f2 by FUNCT_2:113;
+  end;
+
+scheme 2AryBooleDef {F(set,set) -> Element of BOOLEAN}:
+ (ex f being Function of 2-tuples_on BOOLEAN, BOOLEAN st
+  for x,y being Element of BOOLEAN holds f.<*x,y*> = F(x,y)) &
+ for f1,f2 being Function of 2-tuples_on BOOLEAN, BOOLEAN st
+  (for x,y being Element of BOOLEAN holds f1.<*x,y*> = F(x,y)) &
+  (for x,y being Element of BOOLEAN holds f2.<*x,y*> = F(x,y))
+ holds f1 = f2
+  proof
+   deffunc G(Tuple of 2, BOOLEAN) = F($1.1,$1.2);
+   consider f being Function of 2-tuples_on BOOLEAN, BOOLEAN such that
+A1:  for a being Tuple of 2, BOOLEAN holds f.a = G(a) from LambdaD;
+   hereby take f; let x,y be Element of BOOLEAN;
+    reconsider a = <*x,y*> as Tuple of 2, BOOLEAN by FINSEQ_2:121;
+    thus f.<*x,y*> = F(a.1,a.2) by A1
+       .= F(x,a.2) by FINSEQ_1:61
+       .= F(x,y) by FINSEQ_1:61;
+   end;
+   let f1,f2 be Function of 2-tuples_on BOOLEAN, BOOLEAN such that
+A2:  for x,y being Element of BOOLEAN holds f1.<*x,y*> = F(x,y) and
+A3:  for x,y being Element of BOOLEAN holds f2.<*x,y*> = F(x,y);
+      now let a be Tuple of 2, BOOLEAN;
+     consider x,y being Element of BOOLEAN such that
+A4:    a = <*x,y*> by FINSEQ_2:120;
+     thus f1.a = F(x,y) by A2,A4 .= f2.a by A3,A4;
+    end;
+   hence f1 = f2 by FUNCT_2:113;
+  end;
+
+scheme 3AryBooleEx {F(set,set,set) -> Element of BOOLEAN}:
+ ex f being Function of 3-tuples_on BOOLEAN, BOOLEAN st
+  for x,y,z being Element of BOOLEAN holds f.<*x,y,z*> = F(x,y,z)
+  proof
+    deffunc G(Tuple of 3, BOOLEAN) = F($1.1,$1.2,$1.3);
+    consider f being Function of 3-tuples_on BOOLEAN, BOOLEAN such that
+A1:  for a being Tuple of 3, BOOLEAN holds f.a = G(a) from LambdaD;
+   hereby take f; let x,y,z be Element of BOOLEAN;
+    reconsider a = <*x,y,z*> as Tuple of 3, BOOLEAN by FINSEQ_2:124;
+    thus f.<*x,y,z*> = F(a.1,a.2,a.3) by A1
+       .= F(x,a.2,a.3) by FINSEQ_1:62
+       .= F(x,y,a.3) by FINSEQ_1:62
+       .= F(x,y,z) by FINSEQ_1:62;
+   end;
+  end;
+
+scheme 3AryBooleUniq {F(set,set,set) -> Element of BOOLEAN}:
+ for f1,f2 being Function of 3-tuples_on BOOLEAN, BOOLEAN st
+  (for x,y,z being Element of BOOLEAN holds f1.<*x,y,z*> = F(x,y,z)) &
+  (for x,y,z being Element of BOOLEAN holds f2.<*x,y,z*> = F(x,y,z))
+ holds f1 = f2
+  proof
+    deffunc G(Tuple of 3, BOOLEAN) = F($1.1,$1.2,$1.3);
+   let f1,f2 be Function of 3-tuples_on BOOLEAN, BOOLEAN such that
+A1:  for x,y,z being Element of BOOLEAN holds f1.<*x,y,z*> = F(x,y,z) and
+A2:  for x,y,z being Element of BOOLEAN holds f2.<*x,y,z*> = F(x,y,z);
+      now let a be Tuple of 3, BOOLEAN;
+     consider x,y,z being Element of BOOLEAN such that
+A3:    a = <*x,y,z*> by FINSEQ_2:123;
+     thus f1.a = F(x,y,z) by A1,A3 .= f2.a by A2,A3;
+    end;
+   hence f1 = f2 by FUNCT_2:113;
+  end;
+
+scheme 3AryBooleDef {F(set,set,set) -> Element of BOOLEAN}:
+ (ex f being Function of 3-tuples_on BOOLEAN, BOOLEAN st
+  for x,y,z being Element of BOOLEAN holds f.<*x,y,z*> = F(x,y,z)) &
+ for f1,f2 being Function of 3-tuples_on BOOLEAN, BOOLEAN st
+  (for x,y,z being Element of BOOLEAN holds f1.<*x,y,z*> = F(x,y,z)) &
+  (for x,y,z being Element of BOOLEAN holds f2.<*x,y,z*> = F(x,y,z))
+ holds f1 = f2
+  proof
+    deffunc G(Tuple of 3, BOOLEAN) = F($1.1,$1.2,$1.3);
+    consider f being Function of 3-tuples_on BOOLEAN, BOOLEAN such that
+A1:  for a being Tuple of 3, BOOLEAN holds f.a = G(a) from LambdaD;
+   hereby take f; let x,y,z be Element of BOOLEAN;
+    reconsider a = <*x,y,z*> as Tuple of 3, BOOLEAN by FINSEQ_2:124;
+    thus f.<*x,y,z*> = F(a.1,a.2,a.3) by A1
+       .= F(x,a.2,a.3) by FINSEQ_1:62
+       .= F(x,y,a.3) by FINSEQ_1:62
+       .= F(x,y,z) by FINSEQ_1:62;
+   end;
+   let f1,f2 be Function of 3-tuples_on BOOLEAN, BOOLEAN such that
+A2:  for x,y,z being Element of BOOLEAN holds f1.<*x,y,z*> = F(x,y,z) and
+A3:  for x,y,z being Element of BOOLEAN holds f2.<*x,y,z*> = F(x,y,z);
+      now let a be Tuple of 3, BOOLEAN;
+     consider x,y,z being Element of BOOLEAN such that
+A4:    a = <*x,y,z*> by FINSEQ_2:123;
+     thus f1.a = F(x,y,z) by A2,A4 .= f2.a by A3,A4;
+    end;
+   hence f1 = f2 by FUNCT_2:113;
+  end;
+
+definition
+ func 'xor' -> Function of 2-tuples_on BOOLEAN, BOOLEAN means:
+Def4:
+  for x,y being Element of BOOLEAN holds it.<*x,y*> = x 'xor' y;
+  correctness
+  proof
+   deffunc F(Element of BOOLEAN,Element of BOOLEAN) = $1 'xor' $2;
+ (ex f being Function of 2-tuples_on BOOLEAN, BOOLEAN st
+  for x,y being Element of BOOLEAN holds f.<*x,y*> = F(x,y)) &
+ for f1,f2 being Function of 2-tuples_on BOOLEAN, BOOLEAN st
+  (for x,y being Element of BOOLEAN holds f1.<*x,y*> = F(x,y)) &
+  (for x,y being Element of BOOLEAN holds f2.<*x,y*> = F(x,y))
+   holds f1 = f2 from 2AryBooleDef;
+   hence thesis;
+ end;
+ func 'or' -> Function of 2-tuples_on BOOLEAN, BOOLEAN means:
+Def5:
+  for x,y being Element of BOOLEAN holds it.<*x,y*> = x 'or' y;
+  correctness
+  proof
+   deffunc F(Element of BOOLEAN,Element of BOOLEAN) = $1 'or' $2;
+ (ex f being Function of 2-tuples_on BOOLEAN, BOOLEAN st
+  for x,y being Element of BOOLEAN holds f.<*x,y*> = F(x,y)) &
+ for f1,f2 being Function of 2-tuples_on BOOLEAN, BOOLEAN st
+  (for x,y being Element of BOOLEAN holds f1.<*x,y*> = F(x,y)) &
+  (for x,y being Element of BOOLEAN holds f2.<*x,y*> = F(x,y))
+   holds f1 = f2 from 2AryBooleDef;
+   hence thesis;
+ end;
+ func '&' -> Function of 2-tuples_on BOOLEAN, BOOLEAN means:
+Def6:
+  for x,y being Element of BOOLEAN holds it.<*x,y*> = x '&' y;
+  correctness
+  proof
+   deffunc F(Element of BOOLEAN,Element of BOOLEAN) = $1 '&' $2;
+ (ex f being Function of 2-tuples_on BOOLEAN, BOOLEAN st
+  for x,y being Element of BOOLEAN holds f.<*x,y*> = F(x,y)) &
+ for f1,f2 being Function of 2-tuples_on BOOLEAN, BOOLEAN st
+  (for x,y being Element of BOOLEAN holds f1.<*x,y*> = F(x,y)) &
+  (for x,y being Element of BOOLEAN holds f2.<*x,y*> = F(x,y))
+   holds f1 = f2 from 2AryBooleDef;
+   hence thesis;
+ end;
+end;
+
+definition
+ func or3 -> Function of 3-tuples_on BOOLEAN, BOOLEAN means:
+Def7:
+  for x,y,z being Element of BOOLEAN holds it.<*x,y,z*> = x 'or' y 'or' z;
+  correctness
+  proof
+   deffunc F(Element of BOOLEAN,Element of BOOLEAN,Element of BOOLEAN) =
+     $1 'or' $2 'or' $3;
+ (ex f being Function of 3-tuples_on BOOLEAN, BOOLEAN st
+  for x,y,z being Element of BOOLEAN holds f.<*x,y,z*> = F(x,y,z)) &
+ for f1,f2 being Function of 3-tuples_on BOOLEAN, BOOLEAN st
+  (for x,y,z being Element of BOOLEAN holds f1.<*x,y,z*> = F(x,y,z)) &
+  (for x,y,z being Element of BOOLEAN holds f2.<*x,y,z*> = F(x,y,z))
+ holds f1 = f2 from 3AryBooleDef;
+  hence thesis;
+ end;
+end;
+
+definition
+ let x be set;
+ redefine func <*x*> -> FinSeqLen of 1;
+  coherence proof thus len <*x*> = 1 by FINSEQ_1:57; end;
+ let y be set;
+ func <*x,y*> -> FinSeqLen of 2;
+  coherence proof thus len <*x,y*> = 2 by FINSEQ_1:61; end;
+ let z be set;
+ func <*x,y,z*> -> FinSeqLen of 3;
+  coherence proof thus len <*x,y,z*> = 3 by FINSEQ_1:62; end;
+end;
+
+definition let n,m be Nat;
+ let p be FinSeqLen of n;
+ let q be FinSeqLen of m;
+ redefine func p^q -> FinSeqLen of n+m;
+  coherence
+   proof
+    thus len (p^q) = len p + len q by FINSEQ_1:35
+                  .= n+len q by CIRCCOMB:def 12
+                  .= n+m by CIRCCOMB:def 12;
+   end;
+end;
+
+begin :: Computation and Stabilizable
+
+Lm1:
+ now let S be non void non empty ManySortedSign;
+  let o be Gate of S;
+     the OperSymbols of S is non empty by MSUALG_1:def 5;
+  hence o in the OperSymbols of S;
+ end;
+
+theorem Th10:
+ for S being Circuit-like non void (non empty ManySortedSign)
+ for A being non-empty Circuit of S
+ for s being State of A, g being Gate of S holds
+  (Following s).the_result_sort_of g = Den(g, A).(s*the_arity_of g)
+  proof let S be Circuit-like non void (non empty ManySortedSign);
+   let A be non-empty Circuit of S;
+   let s be State of A, g be Gate of S;
+   set v = the_result_sort_of g;
+A1:  g in the OperSymbols of S by Lm1;
+A2:  g depends_on_in s = s*the_arity_of g by CIRCUIT1:def 3;
+      dom the ResultSort of S = the OperSymbols of S by FUNCT_2:def 1;
+    then (the ResultSort of S).g in rng the ResultSort of S by A1,FUNCT_1:def 5
+;
+    then (the ResultSort of S).g in InnerVertices S by MSAFREE2:def 3;
+then A3:  v in InnerVertices S by MSUALG_1:def 7;
+    then action_at v = g by MSAFREE2:def 7;
+   hence thesis by A2,A3,CIRCUIT2:def 5;
+  end;
+
+definition
+ let S be non void Circuit-like (non empty ManySortedSign);
+ let A be non-empty Circuit of S;
+ let s be State of A;
+ let n be Nat;
+ func Following(s,n) -> State of A means
+:Def8:
+  ex f being Function of NAT, product the Sorts of A st
+   it = f.n & f.0 = s &
+   for n being Nat holds f.(n+1) = Following f.n;
+ correctness
+ proof
+   set D = product the Sorts of A;
+   deffunc R(Nat,Element of D) = Following $2;
+   (ex y being Element of D st ex f being Function of NAT,D st
+     y = f.n & f.0 = s &
+       for n being Nat holds f.(n+1) = R(n,f.n)) &
+     for y1,y2 being Element of D st
+     (ex f being Function of NAT,D st
+     y1 = f.n & f.0 = s &
+       for n being Nat holds f.(n+1) = R(n,f.n)) &
+     (ex f being Function of NAT,D st
+     y2 = f.n & f.0 = s &
+     for n being Nat holds f.(n+1) = R(n,f.n)) holds y1 = y2
+         from LambdaDefRecD;
+    hence thesis;
+ end;
+end;
+
+theorem Th11:
+ for S being Circuit-like non void (non empty ManySortedSign)
+ for A being non-empty Circuit of S, s being State of A holds
+   Following(s,0) = s
+  proof let S be Circuit-like non void (non empty ManySortedSign);
+   let A be non-empty Circuit of S, s be State of A;
+      ex f being Function of NAT, product the Sorts of A st
+     Following(s,0) = f.0 & f.0 = s &
+     for n being Nat holds f.(n+1) = Following f.n by Def8;
+   hence thesis;
+  end;
+
+theorem Th12:
+ for S being Circuit-like non void (non empty ManySortedSign)
+ for A being non-empty Circuit of S, s being State of A
+ for n being Nat holds Following(s,n+1) = Following Following(s,n)
+  proof let S be Circuit-like non void (non empty ManySortedSign);
+   let A be non-empty Circuit of S, s be State of A;
+   let n be Nat;
+   consider f being Function of NAT, product the Sorts of A such that
+A1:  Following(s,n) = f.n & f.0 = s &
+    for n being Nat holds f.(n+1) = Following f.n by Def8;
+   thus Following(s,n+1) = f.(n+1) by A1,Def8
+                        .= Following Following(s,n) by A1;
+  end;
+
+theorem Th13:
+ for S being Circuit-like non void (non empty ManySortedSign)
+ for A being non-empty Circuit of S, s being State of A
+ for n,m being Nat holds Following(s,n+m) = Following(Following(s,n),m)
+  proof let S be Circuit-like non void (non empty ManySortedSign);
+   let A be non-empty Circuit of S, s be State of A;
+   let n be Nat;
+   defpred P[Nat] means Following(s,n+$1) = Following(Following(s,n),$1);
+A1:  P[0] by Th11;
+A2:  for m being Nat st P[m] holds P[m+1]
+     proof let m be Nat; assume
+A3:    Following(s,n+m) = Following(Following(s,n),m);
+     thus Following(s,n+(m+1)) = Following(s,n+m+1) by XCMPLX_1:1
+       .= Following Following(s,n+m) by Th12
+       .= Following(Following(s,n),m+1) by A3,Th12;
+    end;
+   thus for i being Nat holds P[i] from Ind(A1,A2);
+  end;
+
+theorem Th14:
+ for S being non void Circuit-like (non empty ManySortedSign)
+ for A being non-empty Circuit of S, s being State of A holds
+   Following(s,1) = Following s
+  proof let S be non void Circuit-like (non empty ManySortedSign);
+   let A be non-empty Circuit of S, s be State of A; 0+1 = 1;
+   hence Following(s,1) = Following Following(s,0) by Th12
+      .= Following s by Th11;
+  end;
+
+theorem Th15:
+ for S being non void Circuit-like (non empty ManySortedSign)
+ for A being non-empty Circuit of S, s being State of A holds
+   Following(s,2) = Following Following s
+  proof let S be non void Circuit-like (non empty ManySortedSign);
+   let A be non-empty Circuit of S, s be State of A; 2 = 1+1;
+   hence Following(s,2) = Following Following(s,0+1) by Th12
+      .= Following Following s by Th14;
+  end;
+
+theorem Th16:
+ for S being Circuit-like non void (non empty ManySortedSign)
+ for A being non-empty Circuit of S, s being State of A
+ for n being Nat holds Following(s,n+1) = Following(Following s, n)
+  proof let S be Circuit-like non void (non empty ManySortedSign);
+   let A be non-empty Circuit of S, s be State of A;
+   let n be Nat;
+      Following(s,n+1) = Following(Following(s,1), n) by Th13;
+   hence thesis by Th14;
+  end;
+
+definition
+ let S be non void Circuit-like (non empty ManySortedSign);
+ let A be non-empty Circuit of S;
+ let s be State of A;
+ let x be set;
+ pred s is_stable_at x means:
+Def9:
+  for n being Nat holds (Following(s,n)).x = s.x;
+end;
+
+theorem
+   for S being non void Circuit-like (non empty ManySortedSign)
+ for A being non-empty Circuit of S, s being State of A
+ for x being set st s is_stable_at x
+ for n being Nat holds Following(s,n) is_stable_at x
+  proof let S be non void Circuit-like (non empty ManySortedSign);
+   let A be non-empty Circuit of S;
+   let s be State of A;
+   let x be set such that
+A1:  for n being Nat holds (Following(s,n)).x = s.x;
+   let n, m be Nat;
+   thus (Following(Following(s,n),m)).x = (Following(s,n+m)).x by Th13
+        .= s.x by A1
+        .= (Following(s,n)).x by A1;
+  end;
+
+theorem
+   for S being non void Circuit-like (non empty ManySortedSign)
+ for A being non-empty Circuit of S, s being State of A
+ for x being set st x in InputVertices S holds s is_stable_at x
+  proof let S be non void Circuit-like (non empty ManySortedSign);
+   let A be non-empty Circuit of S;
+   let s be State of A;
+   let x be set; assume
+A1:  x in InputVertices S;
+   defpred P[Nat] means (Following(s,$1)).x = s.x;
+A2:  P[0] by Th11;
+A3:  now let n be Nat; assume
+A4:    P[n];
+     (Following(s,n+1)).x = (Following Following(s,n)).x by Th12
+          .= s.x by A1,A4,CIRCUIT2:def 5;
+     hence P[n+1];
+    end;
+   thus for n being Nat holds P[n] from Ind(A2,A3);
+  end;
+
+theorem Th19:
+ for S being non void Circuit-like (non empty ManySortedSign)
+ for A being non-empty Circuit of S, s being State of A
+ for g being Gate of S st
+   for x being set st x in rng the_arity_of g holds s is_stable_at x
+ holds Following s is_stable_at the_result_sort_of g
+  proof let S be non void Circuit-like (non empty ManySortedSign);
+   let A be non-empty Circuit of S;
+   let s be State of A;
+   let g be Gate of S; set p = the_arity_of g;
+   assume
+A1:  for x being set st x in rng p holds s is_stable_at x;
+   let n be Nat;
+      rng p c= the carrier of S & dom s = the carrier of S &
+    dom Following(s, n) = the carrier of S by CIRCUIT1:4,FINSEQ_1:def 4;
+then A2:  dom ((Following(s, n))*p) = dom p & dom (s*p) = dom p by RELAT_1:46;
+      now let a be set; assume
+        a in dom p;
+then A3:    ((Following(s, n))*p).a = (Following(s, n)).(p.a) & (s*p).a = s.(p.
+a) &
+      p.a in rng p by FUNCT_1:23,def 5;
+      then s is_stable_at p.a by A1;
+     hence ((Following(s, n))*p).a = (s*p).a by A3,Def9;
+    end;
+then A4:  (Following(s, n))*p = s*p by A2,FUNCT_1:9;
+   thus (Following(Following s, n)).the_result_sort_of g
+      = (Following(s, n+1)).the_result_sort_of g by Th16
+     .= (Following Following(s, n)).the_result_sort_of g by Th12
+     .= (Den(g,A)).((Following(s, n))*p) by Th10
+     .= (Following s).the_result_sort_of g by A4,Th10;
+  end;
+
+begin :: Combined Circuits
+
+theorem Th20:
+ for S1,S2 being non empty ManySortedSign, v being Vertex of S1 holds
+   v in the carrier of S1+*S2 & v in the carrier of S2+*S1
+  proof let S1,S2 be non empty ManySortedSign; let v be Vertex of S1;
+      the carrier of (S1+*S2) = (the carrier of S1) \/ the carrier of S2 &
+    the carrier of (S2+*S1) = (the carrier of S2) \/ the carrier of S1
+     by CIRCCOMB:def 2;
+   hence v in the carrier of S1+*S2 & v in
+ the carrier of S2+*S1 by XBOOLE_0:def 2;
+  end;
+
+theorem Th21:
+ for S1,S2 being unsplit gate`1=arity non empty ManySortedSign
+ for x being set st x in InnerVertices S1 holds
+   x in InnerVertices (S1+*S2) & x in InnerVertices (S2+*S1)
+  proof let S1,S2 be unsplit gate`1=arity non empty ManySortedSign;
+      S1 tolerates S2 by CIRCCOMB:55;
+    then InnerVertices (S1+*S2) = InnerVertices S1 \/ InnerVertices S2 &
+    InnerVertices (S2+*S1) = InnerVertices S2 \/ InnerVertices S1
+     by CIRCCOMB:15;
+   hence thesis by XBOOLE_0:def 2;
+  end;
+
+theorem
+   for S1,S2 being non empty ManySortedSign
+ for x being set st x in InnerVertices S2 holds x in InnerVertices (S1+*S2)
+  proof let S1,S2 be non empty ManySortedSign;
+   set R1 = the ResultSort of S1, R2 = the ResultSort of S2;
+A1:  InnerVertices (S1+*S2) = rng the ResultSort of S1+*S2 by MSAFREE2:def 3
+                          .= rng (R1+*R2) by CIRCCOMB:def 2;
+      InnerVertices S2 = rng R2 by MSAFREE2:def 3;
+    then InnerVertices S2 c= InnerVertices (S1+*S2) by A1,FUNCT_4:19;
+   hence thesis;
+  end;
+
+theorem Th23:
+ for S1,S2 being unsplit gate`1=arity non empty ManySortedSign holds
+   S1+*S2 = S2+*S1
+  proof let S1,S2 be unsplit gate`1=arity non empty ManySortedSign;
+      S1 tolerates S2 by CIRCCOMB:55;
+   hence S1+*S2 = S2+*S1 by CIRCCOMB:9;
+  end;
+
+theorem Th24:
+ for S1,S2 being unsplit gate`1=arity gate`2isBoolean
+                 non void non empty ManySortedSign
+ for A1 being Boolean gate`2=den Circuit of S1
+ for A2 being Boolean gate`2=den Circuit of S2 holds A1+*A2 = A2+*A1
+  proof
+   let S1,S2 be unsplit gate`1=arity gate`2isBoolean
+                non void non empty ManySortedSign;
+   let A1 be Boolean gate`2=den Circuit of S1;
+   let A2 be Boolean gate`2=den Circuit of S2;
+      A1 tolerates A2 by CIRCCOMB:68;
+   hence A1+*A2 = A2+*A1 by CIRCCOMB:26;
+  end;
+
+theorem Th25:
+ for S1,S2,S3 be unsplit gate`1=arity gate`2isBoolean
+                 non void non empty ManySortedSign
+ for A1 being Boolean Circuit of S1, A2 being Boolean Circuit of S2
+ for A3 being Boolean Circuit of S3 holds (A1+*A2)+*A3 = A1+*(A2+*A3)
+  proof let S1,S2,S3 be
+      unsplit gate`1=arity gate`2isBoolean non void non empty ManySortedSign;
+   let A1 be Boolean Circuit of S1;
+   let A2 be Boolean Circuit of S2;
+   let A3 be Boolean Circuit of S3;
+      the Sorts of A1 tolerates the Sorts of A2 & the Sorts of A2 tolerates
+    the Sorts of A3 &
+    the Sorts of A3 tolerates the Sorts of A1 by CIRCCOMB:67;
+   hence A1+*A2+*A3 = A1+*(A2+*A3) by CIRCCOMB:27;
+  end;
+
+theorem Th26:
+ for S1,S2 being unsplit gate`1=arity gate`2isBoolean
+                 non void non empty ManySortedSign
+ for A1 being Boolean gate`2=den non-empty Circuit of S1
+ for A2 being Boolean gate`2=den non-empty Circuit of S2
+ for s being State of A1+*A2 holds
+   s|the carrier of S1 is State of A1 & s|the carrier of S2 is State of A2
+  proof
+   let S1,S2 be unsplit gate`1=arity gate`2isBoolean
+                non void non empty ManySortedSign;
+   let A1 be Boolean gate`2=den Circuit of S1;
+   let A2 be Boolean gate`2=den Circuit of S2;
+   let s be State of A1+*A2;
+      the Sorts of A1 tolerates the Sorts of A2 by CIRCCOMB:67;
+   hence thesis by CIRCCOMB:33;
+  end;
+
+theorem Th27:
+ for S1,S2 being unsplit gate`1=arity non empty ManySortedSign holds
+  InnerVertices (S1+*S2) = (InnerVertices S1) \/ InnerVertices S2
+  proof
+   let S1,S2 be unsplit gate`1=arity non empty ManySortedSign;
+      S1 tolerates S2 by CIRCCOMB:55;
+   hence thesis by CIRCCOMB:15;
+  end;
+
+theorem Th28:
+ for S1,S2 being unsplit gate`1=arity gate`2isBoolean
+                 non void non empty ManySortedSign
+   st InnerVertices S2 misses InputVertices S1
+ for A1 being Boolean gate`2=den Circuit of S1
+ for A2 being Boolean gate`2=den Circuit of S2
+ for s being State of A1+*A2, s1 being State of A1
+   st s1 = s|the carrier of S1
+   holds (Following s)|the carrier of S1 = Following s1
+  proof
+   let S1,S2 be unsplit gate`1=arity gate`2isBoolean
+                non void non empty ManySortedSign such that
+A1:  InnerVertices S2 misses InputVertices S1;
+   let A1 be Boolean gate`2=den Circuit of S1;
+   let A2 be Boolean gate`2=den Circuit of S2;
+   let s be State of A1+*A2, s1 be State of A1 such that
+A2:  s1 = s|the carrier of S1;
+   reconsider s2 = s|the carrier of S2 as State of A2 by Th26;
+      A1 tolerates A2 by CIRCCOMB:68;
+    then dom Following s1 = the carrier of S1 &
+    Following s = (Following s2)+*Following s1 by A1,A2,CIRCCOMB:40,CIRCUIT1:4;
+   hence (Following s)|the carrier of S1 = Following s1 by FUNCT_4:24;
+  end;
+
+theorem Th29:
+ for S1,S2 being unsplit gate`1=arity gate`2isBoolean
+                 non void non empty ManySortedSign
+   st InnerVertices S1 misses InputVertices S2
+ for A1 being Boolean gate`2=den Circuit of S1
+ for A2 being Boolean gate`2=den Circuit of S2
+ for s being State of A1+*A2, s2 being State of A2
+   st s2 = s|the carrier of S2
+   holds (Following s)|the carrier of S2 = Following s2
+  proof
+   let S1,S2 be unsplit gate`1=arity gate`2isBoolean
+                non void non empty ManySortedSign such that
+A1:  InnerVertices S1 misses InputVertices S2;
+   let A1 be Boolean gate`2=den Circuit of S1;
+   let A2 be Boolean gate`2=den Circuit of S2;
+   let s be State of A1+*A2, s2 be State of A2 such that
+A2:  s2 = s|the carrier of S2;
+   reconsider s1 = s|the carrier of S1 as State of A1 by Th26;
+      A1 tolerates A2 by CIRCCOMB:68;
+    then dom Following s2 = the carrier of S2 &
+    Following s = (Following s1)+*Following s2 by A1,A2,CIRCCOMB:39,CIRCUIT1:4;
+   hence (Following s)|the carrier of S2 = Following s2 by FUNCT_4:24;
+  end;
+
+theorem Th30:
+ for S1,S2 being unsplit gate`1=arity gate`2isBoolean
+                 non void non empty ManySortedSign
+   st InnerVertices S2 misses InputVertices S1
+ for A1 being Boolean gate`2=den Circuit of S1
+ for A2 being Boolean gate`2=den Circuit of S2
+ for s being State of A1+*A2, s1 being State of A1
+   st s1 = s|the carrier of S1
+ for n being Nat holds Following(s,n)|the carrier of S1 = Following(s1,n)
+  proof
+   let S1,S2 be unsplit gate`1=arity gate`2isBoolean
+                non void non empty ManySortedSign such that
+A1:  InnerVertices S2 misses InputVertices S1;
+   let A1 be Boolean gate`2=den Circuit of S1;
+   let A2 be Boolean gate`2=den Circuit of S2;
+   let s be State of A1+*A2, s1 be State of A1 such that
+A2:  s1 = s|the carrier of S1;
+    defpred P[Nat] means
+      Following(s,$1)|the carrier of S1 = Following(s1,$1);
+      Following(s,0) = s by Th11;
+then A3:  P[0] by A2,Th11;
+A4:  for n being Nat st P[n] holds P[n+1]
+     proof let n be Nat; assume
+A5:     Following(s,n)|the carrier of S1 = Following(s1,n);
+      thus Following(s,n+1)|the carrier of S1
+         = (Following Following(s,n))|the carrier of S1 by Th12
+        .= Following Following(s1,n) by A1,A5,Th28
+        .= Following(s1,n+1) by Th12;
+     end;
+   thus for n being Nat holds P[n] from Ind(A3,A4);
+  end;
+
+theorem Th31:
+ for S1,S2 being unsplit gate`1=arity gate`2isBoolean
+                 non void non empty ManySortedSign
+   st InnerVertices S1 misses InputVertices S2
+ for A1 being Boolean gate`2=den Circuit of S1
+ for A2 being Boolean gate`2=den Circuit of S2
+ for s being State of A1+*A2, s2 being State of A2
+   st s2 = s|the carrier of S2
+ for n being Nat holds Following(s,n)|the carrier of S2 = Following(s2,n)
+  proof
+   let S1,S2 be unsplit gate`1=arity gate`2isBoolean
+                non void non empty ManySortedSign such that
+A1:  InnerVertices S1 misses InputVertices S2;
+   let A1 be Boolean gate`2=den Circuit of S1;
+   let A2 be Boolean gate`2=den Circuit of S2;
+   let s be State of A1+*A2, s2 be State of A2 such that
+A2:  s2 = s|the carrier of S2;
+   defpred P[Nat] means
+   Following(s,$1)|the carrier of S2 = Following(s2,$1);
+      Following(s,0) = s by Th11;
+then A3:  P[0] by A2,Th11;
+A4:  for n being Nat st P[n] holds P[n+1]
+     proof let n be Nat; assume
+A5:     Following(s,n)|the carrier of S2 = Following(s2,n);
+      thus Following(s,n+1)|the carrier of S2
+         = (Following Following(s,n))|the carrier of S2 by Th12
+        .= Following Following(s2,n) by A1,A5,Th29
+        .= Following(s2,n+1) by Th12;
+     end;
+   thus for n being Nat holds P[n] from Ind(A3,A4);
+  end;
+
+theorem Th32:
+ for S1,S2 being unsplit gate`1=arity gate`2isBoolean
+                 non void non empty ManySortedSign
+   st InnerVertices S2 misses InputVertices S1
+ for A1 being Boolean gate`2=den Circuit of S1
+ for A2 being Boolean gate`2=den Circuit of S2
+ for s being State of A1+*A2, s1 being State of A1
+   st s1 = s|the carrier of S1 holds
+ for v being set st v in the carrier of S1
+ for n being Nat holds (Following(s,n)).v = (Following(s1,n)).v
+  proof
+   let S1,S2 be unsplit gate`1=arity gate`2isBoolean
+                non void non empty ManySortedSign such that
+A1:  InnerVertices S2 misses InputVertices S1;
+   let A1 be Boolean gate`2=den Circuit of S1;
+   let A2 be Boolean gate`2=den Circuit of S2;
+   let s be State of A1+*A2, s1 be State of A1 such that
+A2:  s1 = s|the carrier of S1;
+   let v be set; assume
+A3:  v in the carrier of S1;
+   let n be Nat;
+A4:  Following(s,n)|the carrier of S1 = Following(s1,n) by A1,A2,Th30;
+      the carrier of S1 = dom Following(s1,n) by CIRCUIT1:4;
+   hence thesis by A3,A4,FUNCT_1:70;
+  end;
+
+theorem Th33:
+ for S1,S2 being unsplit gate`1=arity gate`2isBoolean
+                 non void non empty ManySortedSign
+   st InnerVertices S1 misses InputVertices S2
+ for A1 being Boolean gate`2=den Circuit of S1
+ for A2 being Boolean gate`2=den Circuit of S2
+ for s being State of A1+*A2, s2 being State of A2
+   st s2 = s|the carrier of S2 holds
+ for v being set st v in the carrier of S2
+ for n being Nat holds (Following(s,n)).v = (Following(s2,n)).v
+  proof
+   let S1,S2 be unsplit gate`1=arity gate`2isBoolean
+                non void non empty ManySortedSign such that
+A1:  InnerVertices S1 misses InputVertices S2;
+   let A1 be Boolean gate`2=den Circuit of S1;
+   let A2 be Boolean gate`2=den Circuit of S2;
+   let s be State of A1+*A2, s1 be State of A2 such that
+A2:  s1 = s|the carrier of S2;
+   let v be set; assume
+A3:  v in the carrier of S2;
+   let n be Nat;
+A4:  Following(s,n)|the carrier of S2 = Following(s1,n) by A1,A2,Th31;
+      the carrier of S2 = dom Following(s1,n) by CIRCUIT1:4;
+   hence thesis by A3,A4,FUNCT_1:70;
+  end;
+
+definition
+ let S be gate`2=den non void (non empty ManySortedSign);
+ let g be Gate of S;
+ cluster g`2 -> Function-like Relation-like;
+  coherence
+   proof consider A being MSAlgebra over S such that
+A1:   A is gate`2=den by CIRCCOMB:def 11;
+       g in the OperSymbols of S by Lm1;
+     then g`2 = [g`1, (the Charact of A).g]`2 by A1,CIRCCOMB:def 10
+        .= (the Charact of A).g by MCART_1:7
+        .= Den(g, A) by MSUALG_1:def 11;
+    hence thesis;
+   end;
+end;
+
+theorem Th34:
+ for S being gate`2=den Circuit-like non void (non empty ManySortedSign)
+ for A being non-empty Circuit of S st A is gate`2=den
+ for s being State of A, g being Gate of S holds
+  (Following s).the_result_sort_of g = g`2.(s*the_arity_of g)
+  proof let S be gate`2=den Circuit-like non void (non empty ManySortedSign);
+   let A be non-empty Circuit of S such that
+A1:  for g being set st g in the OperSymbols of S holds
+     g = [g`1, (the Charact of A).g];
+   let s be State of A, g be Gate of S;
+   set v = the_result_sort_of g;
+A2:  g in the OperSymbols of S by Lm1;
+A3:  g depends_on_in s = s*the_arity_of g by CIRCUIT1:def 3;
+A4:  Den(g, A) = (the Charact of A).g by MSUALG_1:def 11
+             .= [g`1, (the Charact of A).g]`2 by MCART_1:7 .= g`2 by A1,A2;
+      dom the ResultSort of S = the OperSymbols of S by FUNCT_2:def 1;
+    then (the ResultSort of S).g in rng the ResultSort of S by A2,FUNCT_1:def 5
+;
+    then (the ResultSort of S).g in InnerVertices S by MSAFREE2:def 3;
+then A5:  v in InnerVertices S by MSUALG_1:def 7;
+    then action_at v = g by MSAFREE2:def 7;
+   hence thesis by A3,A4,A5,CIRCUIT2:def 5;
+  end;
+
+theorem Th35:
+ for S being gate`1=arity gate`2isBoolean unsplit
+             non void non empty ManySortedSign
+ for A being Boolean gate`2=den non-empty Circuit of S
+ for s being State of A, p being FinSequence, f being Function
+  st [p,f] in the OperSymbols of S holds (Following s).[p,f] = f.(s*p)
+  proof let S be gate`1=arity gate`2isBoolean unsplit
+                 non void non empty ManySortedSign;
+   let A be Boolean gate`2=den non-empty Circuit of S;
+   let s be State of A, p be FinSequence, f be Function; assume
+A1:  [p,f] in the OperSymbols of S;
+   then reconsider g = [p,f] as Gate of S;
+A2:  the_arity_of g = (the Arity of S).g by MSUALG_1:def 6
+                  .= [(the Arity of S).g, g`2]`1 by MCART_1:7
+                  .= g`1 by A1,CIRCCOMB:def 8;
+A3:  g`1 = p & g`2 = f by MCART_1:7;
+      the_result_sort_of g = (the ResultSort of S).g by MSUALG_1:def 7 .= g
+     by A1,CIRCCOMB:52;
+   hence (Following s).[p,f] = f.(s*p) by A2,A3,Th34;
+  end;
+
+theorem
+   for S being gate`1=arity gate`2isBoolean unsplit
+             non void non empty ManySortedSign
+ for A being Boolean gate`2=den non-empty Circuit of S
+ for s being State of A, p being FinSequence, f being Function
+  st [p,f] in the OperSymbols of S &
+     for x being set st x in rng p holds s is_stable_at x
+  holds Following s is_stable_at [p,f]
+  proof let S be gate`1=arity gate`2isBoolean unsplit
+                 non void non empty ManySortedSign;
+   let A be Boolean gate`2=den non-empty Circuit of S;
+   let s be State of A, p be FinSequence, f be Function; assume
+A1:  [p,f] in the OperSymbols of S;
+   then reconsider g = [p,f] as Gate of S;
+   assume
+A2:  for x being set st x in rng p holds s is_stable_at x;
+A3:  the_arity_of g = (the Arity of S).g by MSUALG_1:def 6
+                  .= [(the Arity of S).g, g`2]`1 by MCART_1:7
+                  .= g`1 by A1,CIRCCOMB:def 8
+                  .= p by MCART_1:7;
+      the_result_sort_of g = (the ResultSort of S).g by MSUALG_1:def 7
+     .= g by A1,CIRCCOMB:52;
+   hence thesis by A2,A3,Th19;
+  end;
+
+theorem Th37:
+ for S being unsplit non empty ManySortedSign holds
+  InnerVertices S = the OperSymbols of S
+  proof let S be unsplit non empty ManySortedSign;
+      the ResultSort of S = id the OperSymbols of S by CIRCCOMB:def 7;
+    then rng the ResultSort of S = the OperSymbols of S by RELAT_1:71;
+   hence thesis by MSAFREE2:def 3;
+  end;
+
+begin :: One Gate Circuit
+
+theorem Th38:
+ for f being set, p being FinSequence holds
+  InnerVertices 1GateCircStr(p,f) is Relation
+  proof let f be set, p be FinSequence;
+      InnerVertices 1GateCircStr(p,f) = {[p,f]} by CIRCCOMB:49;
+   hence thesis;
+  end;
+
+theorem
+   for f being set, p being nonpair-yielding FinSequence holds
+  InputVertices 1GateCircStr(p,f) is without_pairs
+  proof let f be set, p be nonpair-yielding FinSequence;
+      InputVertices 1GateCircStr(p,f) = rng p by CIRCCOMB:49;
+   hence thesis;
+  end;
+
+theorem Th40:
+ for f being set, x,y being set holds
+  InputVertices 1GateCircStr(<*x,y*>,f) = {x,y}
+  proof let f be set, x,y be set;
+   set p = <*x,y*>;
+   thus InputVertices 1GateCircStr(p,f) = rng p by CIRCCOMB:49
+          .= {x,y} by FINSEQ_2:147;
+  end;
+
+theorem Th41:
+ for f being set, x,y being non pair set holds
+  InputVertices 1GateCircStr(<*x,y*>,f) is without_pairs
+  proof let f be set, x,y be non pair set;
+   set p = <*x,y*>;
+A1:  InputVertices 1GateCircStr(p,f) = {x,y} by Th40;
+   let z be pair set; assume z in
+ InputVertices 1GateCircStr(p,f); hence thesis
+ by A1,TARSKI:def 2;
+  end;
+
+theorem Th42:
+ for f being set, x,y,z being set holds
+  InputVertices 1GateCircStr(<*x,y,z*>,f) = {x,y,z}
+  proof let f be set, x,y,z be set;
+   set p = <*x,y,z*>;
+   thus InputVertices 1GateCircStr(p,f) = rng p by CIRCCOMB:49
+          .= {x,y,z} by FINSEQ_2:148;
+  end;
+
+theorem Th43:
+ for x,y,f being set holds
+   x in the carrier of 1GateCircStr(<*x,y*>,f) &
+   y in the carrier of 1GateCircStr(<*x,y*>,f) &
+   [<*x,y*>,f] in the carrier of 1GateCircStr(<*x,y*>,f)
+  proof let x,y,f be set; set p = <*x,y*>;
+      x in {x,y} & y in {x,y} by TARSKI:def 2;
+    then the carrier of 1GateCircStr(p,f) = rng p \/ {[p,f]} &
+    x in rng p & y in rng p & [p,f] in {[p,f]}
+     by CIRCCOMB:def 6,FINSEQ_2:147,TARSKI:def 1;
+   hence thesis by XBOOLE_0:def 2;
+  end;
+
+theorem Th44:
+ for x,y,z,f being set holds
+   x in the carrier of 1GateCircStr(<*x,y,z*>,f) &
+   y in the carrier of 1GateCircStr(<*x,y,z*>,f) &
+   z in the carrier of 1GateCircStr(<*x,y,z*>,f)
+  proof let x,y,z,f be set; set p = <*x,y,z*>;
+   set A = the carrier of 1GateCircStr(p,f);
+      x in {x,y,z} & y in {x,y,z} & z in {x,y,z} by ENUMSET1:14;
+    then A = rng p \/ {[p,f]} & x in rng p & y in rng p & z in rng p
+     by CIRCCOMB:def 6,FINSEQ_2:148;
+   hence x in A & y in A & z in A by XBOOLE_0:def 2;
+  end;
+
+theorem
+   for f,x being set, p being FinSequence holds
+  x in the carrier of 1GateCircStr(p,f,x) &
+   for y being set st y in rng p holds y in the carrier of 1GateCircStr(p,f,x)
+  proof let f,x be set; let p be FinSequence;
+   set A = the carrier of 1GateCircStr(p,f,x);
+      A = rng p \/ {x} & x in {x} by CIRCCOMB:def 5,TARSKI:def 1;
+   hence x in A & for y being set st y in rng p holds y in A by XBOOLE_0:def 2
+;
+  end;
+
+theorem
+   for f,x being set, p being FinSequence holds
+   1GateCircStr(p,f,x) is gate`1=arity Circuit-like
+  proof let f,x be set; let p be FinSequence;
+   set S = 1GateCircStr(p,f,x);
+   thus S is gate`1=arity
+     proof let g be set; assume g in the OperSymbols of S;
+       then g in {[p,f]} by CIRCCOMB:def 5;
+       then g = [p,f] & [p,f]`2 = f by MCART_1:7,TARSKI:def 1;
+      hence thesis by CIRCCOMB:def 5;
+     end;
+   thus S is Circuit-like
+     proof let S' be non void non empty ManySortedSign such that
+A1:     S' = S;
+      let o1, o2 be OperSymbol of S';
+         o1 = [p,f] & o2 = [p,f] by A1,CIRCCOMB:44;
+      hence thesis;
+     end;
+  end;
+
+theorem Th47:
+ for p being FinSequence, f be set holds
+   [p,f] in InnerVertices 1GateCircStr(p,f)
+  proof let p be FinSequence, f be set;
+      InnerVertices 1GateCircStr(p,f) = {[p,f]} by CIRCCOMB:49;
+   hence [p,f] in InnerVertices 1GateCircStr(p,f) by TARSKI:def 1;
+  end;
+
+definition
+ let x,y be set;
+ let f be Function of 2-tuples_on BOOLEAN, BOOLEAN;
+ func 1GateCircuit(x,y,f) ->
+   Boolean gate`2=den strict Circuit of 1GateCircStr(<*x,y*>, f) equals:
+Def10:
+   1GateCircuit(<*x,y*>, f);
+  coherence by CIRCCOMB:69;
+end;
+
+reserve x,y,z,c for set,
+ f for Function of 2-tuples_on BOOLEAN, BOOLEAN;
+
+theorem Th48:
+ for X being finite non empty set, f being Function of 2-tuples_on X, X
+ for s being State of 1GateCircuit(<*x,y*>,f) holds
+  (Following s).[<*x,y*>, f] = f.<*s.x, s.y*> &
+  (Following s).x = s.x & (Following s).y = s.y
+  proof let X be finite non empty set, f be Function of 2-tuples_on X, X;
+   let s be State of 1GateCircuit(<*x,y*>,f);
+   set p = <*x,y*>;
+      x in {x,y} & y in {x,y} & dom s = the carrier of 1GateCircStr(p , f)
+     by CIRCUIT1:4,TARSKI:def 2;
+    then x in rng p & y in rng p & dom s = rng p \/ {[p,f]}
+     by CIRCCOMB:def 6,FINSEQ_2:147;
+then A1:  x in dom s & y in dom s by XBOOLE_0:def 2;
+   thus (Following s).[<*x,y*>, f] = f.(s*<*x,y*>) by CIRCCOMB:64
+         .= f.<*s.x, s.y*> by A1,FINSEQ_2:145;
+   reconsider x, y as Vertex of 1GateCircStr(p,f) by Th43;
+      InputVertices 1GateCircStr(p,f) = rng p by CIRCCOMB:49
+       .= {x,y} by FINSEQ_2:147;
+    then x in InputVertices 1GateCircStr(p,f) &
+    y in InputVertices 1GateCircStr(p,f) by TARSKI:def 2;
+   hence thesis by CIRCUIT2:def 5;
+  end;
+
+theorem Th49:
+ for X being finite non empty set, f being Function of 2-tuples_on X, X
+ for s being State of 1GateCircuit(<*x,y*>,f) holds
+  Following s is stable
+  proof let X be finite non empty set, f be Function of 2-tuples_on X, X;
+   set S = 1GateCircStr(<*x,y*>,f);
+   let s be State of 1GateCircuit(<*x,y*>,f);
+   set s1 = Following s, s2 = Following s1;
+   set p = <*x,y*>;
+A1:  dom s1 = the carrier of S & dom s2 = the carrier of S by CIRCUIT1:4;
+A2:  the carrier of S = rng p \/ {[p,f]} by CIRCCOMB:def 6
+                    .= {x,y} \/ {[p,f]} by FINSEQ_2:147;
+      now let a be set; assume a in the carrier of S;
+      then a in {x,y} or a in {[p,f]} by A2,XBOOLE_0:def 2;
+then A3:    a = x or a = y or a = [p,f] by TARSKI:def 1,def 2;
+        s2.x = s1.x & s1.x = s.x & s2.y = s1.y & s1.y = s.y &
+      s2.[p,f] = f.<*s1.x, s1.y*> & s1.[p,f] = f.<*s.x, s.y*> by Th48;
+     hence s2.a = s1.a by A3;
+    end;
+   hence Following s = Following Following s by A1,FUNCT_1:9;
+  end;
+
+theorem Th50:
+ for s being State of 1GateCircuit(x,y,f) holds
+  (Following s).[<*x,y*>, f] = f.<*s.x, s.y*> &
+  (Following s).x = s.x & (Following s).y = s.y
+  proof let s be State of 1GateCircuit(x,y,f);
+      1GateCircuit(x,y,f) = 1GateCircuit(<*x,y*>, f) by Def10;
+   hence thesis by Th48;
+  end;
+
+theorem
+   for s being State of 1GateCircuit(x,y,f) holds Following s is stable
+  proof let s be State of 1GateCircuit(x,y,f);
+      1GateCircuit(x,y,f) = 1GateCircuit(<*x,y*>, f) by Def10;
+   hence thesis by Th49;
+  end;
+
+definition
+ let x,y,z be set;
+ let f be Function of 3-tuples_on BOOLEAN, BOOLEAN;
+ func 1GateCircuit(x,y,z,f) ->
+   Boolean gate`2=den strict Circuit of 1GateCircStr(<*x,y,z*>, f) equals:
+Def11:
+   1GateCircuit(<*x,y,z*>, f);
+  coherence by CIRCCOMB:69;
+end;
+
+theorem Th52:
+ for X being finite non empty set, f being Function of 3-tuples_on X, X
+ for s being State of 1GateCircuit(<*x,y,z*>,f) holds
+  (Following s).[<*x,y,z*>, f] = f.<*s.x, s.y, s.z*> &
+  (Following s).x = s.x & (Following s).y = s.y & (Following s).z = s.z
+  proof let X be finite non empty set, f be Function of 3-tuples_on X, X;
+   let s be State of 1GateCircuit(<*x,y,z*>,f);
+   set p = <*x,y,z*>;
+      x in {x,y,z} & y in {x,y,z} & z in {x,y,z} &
+    dom s = the carrier of 1GateCircStr(p , f) by CIRCUIT1:4,ENUMSET1:14;
+    then x in rng p & y in rng p & z in rng p & dom s = rng p \/ {[p,f]}
+     by CIRCCOMB:def 6,FINSEQ_2:148;
+then A1:  x in dom s & y in dom s & z in dom s by XBOOLE_0:def 2;
+   thus (Following s).[p, f] = f.(s*p) by CIRCCOMB:64
+         .= f.<*s.x, s.y, s.z*> by A1,FINSEQ_2:146;
+   reconsider x, y, z as Vertex of 1GateCircStr(p,f) by Th44;
+      InputVertices 1GateCircStr(p,f) = rng p by CIRCCOMB:49
+       .= {x,y,z} by FINSEQ_2:148;
+    then x in InputVertices 1GateCircStr(p,f) &
+    y in InputVertices 1GateCircStr(p,f) &
+    z in InputVertices 1GateCircStr(p,f) by ENUMSET1:14;
+   hence thesis by CIRCUIT2:def 5;
+  end;
+
+theorem Th53:
+ for X being finite non empty set, f being Function of 3-tuples_on X, X
+ for s being State of 1GateCircuit(<*x,y,z*>,f) holds
+  Following s is stable
+  proof let X be finite non empty set, f be Function of 3-tuples_on X, X;
+   set p = <*x,y,z*>;
+   set S = 1GateCircStr(p,f);
+   let s be State of 1GateCircuit(p,f);
+   set s1 = Following s, s2 = Following s1;
+A1:  dom s1 = the carrier of S & dom s2 = the carrier of S by CIRCUIT1:4;
+A2:  the carrier of S = rng p \/ {[p,f]} by CIRCCOMB:def 6
+                    .= {x,y,z} \/ {[p,f]} by FINSEQ_2:148;
+      now let a be set; assume a in the carrier of S;
+      then a in {x,y,z} or a in {[p,f]} by A2,XBOOLE_0:def 2;
+then A3:    a = x or a = y or a = z or a = [p,f] by ENUMSET1:13,TARSKI:def 1;
+        s2.x = s1.x & s1.x = s.x & s2.y = s1.y & s1.y = s.y &
+      s2.z = s1.z & s1.z = s.z & s2.[p,f] = f.<*s1.x, s1.y, s1.z*> &
+      s1.[p,f] = f.<*s.x, s.y, s.z*> by Th52;
+     hence s2.a = s1.a by A3;
+    end;
+   hence Following s = Following Following s by A1,FUNCT_1:9;
+  end;
+
+theorem
+   for f being Function of 3-tuples_on BOOLEAN, BOOLEAN
+  for s being State of 1GateCircuit(x,y,z,f) holds
+   (Following s).[<*x,y,z*>, f] = f.<*s.x, s.y, s.z*> &
+   (Following s).x = s.x & (Following s).y = s.y & (Following s).z = s.z
+  proof let f be Function of 3-tuples_on BOOLEAN, BOOLEAN;
+   let s be State of 1GateCircuit(x,y,z,f);
+      1GateCircuit(x,y,z,f) = 1GateCircuit(<*x,y,z*>, f) by Def11;
+   hence thesis by Th52;
+  end;
+
+theorem
+   for f being Function of 3-tuples_on BOOLEAN, BOOLEAN
+  for s being State of 1GateCircuit(x,y,z,f) holds Following s is stable
+  proof let f be Function of 3-tuples_on BOOLEAN, BOOLEAN;
+   let s be State of 1GateCircuit(x,y,z,f);
+      1GateCircuit(x,y,z,f) = 1GateCircuit(<*x,y,z*>, f) by Def11;
+   hence thesis by Th53;
+  end;
+
+begin :: Two Gates Circuit
+
+definition
+ let x,y,c be set;
+ let f be Function of 2-tuples_on BOOLEAN, BOOLEAN;
+ func 2GatesCircStr(x,y,c,f) ->
+    unsplit gate`1=arity gate`2isBoolean
+    non void strict non empty ManySortedSign equals:
+Def12:
+   1GateCircStr(<*x,y*>, f) +* 1GateCircStr(<*[<*x,y*>, f], c*>, f);
+  correctness;
+end;
+
+definition let x,y,c be set;
+ let f be Function of 2-tuples_on BOOLEAN, BOOLEAN;
+ func 2GatesCircOutput(x,y,c,f) ->
+      Element of InnerVertices 2GatesCircStr(x,y,c,f) equals:
+Def13:
+   [<*[<*x,y*>, f], c*>, f];
+  coherence
+   proof set p = <*[<*x,y*>, f], c*>;
+    set S1 = 1GateCircStr(<*x,y*>, f);
+    set S2 = 1GateCircStr(p, f);
+       [p,f] in InnerVertices S2 &
+ 2GatesCircStr(x,y,c,f) = S1+*S2 by Def12,Th47; hence thesis by Th21;
+   end;
+  correctness;
+end;
+
+definition let x,y,c be set;
+ let f be Function of 2-tuples_on BOOLEAN, BOOLEAN;
+ cluster 2GatesCircOutput(x,y,c,f) -> pair;
+ coherence
+  proof 2GatesCircOutput(x,y,c,f) = [<*[<*x,y*>, f], c*>, f] by Def13;
+   hence thesis;
+  end;
+end;
+
+theorem Th56:
+ InnerVertices 2GatesCircStr(x,y,c,f)
+    = {[<*x,y*>, f], 2GatesCircOutput(x,y,c,f)}
+  proof set p = <*[<*x,y*>, f], c*>;
+   set S1 = 1GateCircStr(<*x,y*>, f), S2 = 1GateCircStr(p, f);
+   set S = 2GatesCircStr(x,y,c,f);
+      S = S1+*S2 & S1 tolerates S2 by Def12,CIRCCOMB:51;
+   hence InnerVertices S
+      = (InnerVertices S1) \/ (InnerVertices S2) by CIRCCOMB:15
+     .= {[<*x,y*>, f]} \/ (InnerVertices S2) by CIRCCOMB:49
+     .= {[<*x,y*>, f]} \/ {[p, f]} by CIRCCOMB:49
+     .= {[<*x,y*>, f], [p, f]} by ENUMSET1:41
+     .= {[<*x,y*>, f], 2GatesCircOutput(x,y,c,f)} by Def13;
+  end;
+
+theorem Th57:
+ c <> [<*x,y*>, f] implies
+   InputVertices 2GatesCircStr(x,y,c,f) = {x,y,c}
+  proof assume
+A1:  c <> [<*x,y*>, f];
+   set p = <*[<*x,y*>, f], c*>;
+   set S1 = 1GateCircStr(<*x,y*>, f);
+   set S2 = 1GateCircStr(p, f);
+   set S = 2GatesCircStr(x,y,c,f);
+   set R = the ResultSort of S;
+      S = S1+*S2 by Def12;
+then A2:  the carrier of S = (the carrier of S1) \/ the carrier of S2
+     by CIRCCOMB:def 2;
+A3:  InputVertices S = (the carrier of S) \ rng R by MSAFREE2:def 2;
+A4:  rng R = InnerVertices S by MSAFREE2:def 3
+         .= {[<*x,y*>, f], 2GatesCircOutput(x,y,c,f)} by Th56
+         .= {[<*x,y*>, f], [p,f]} by Def13;
+A5:  rng <*x,y*> = {x,y} by FINSEQ_2:147;
+then A6:  the carrier of S1 = {x,y} \/ {[<*x,y*>,f]} by CIRCCOMB:def 6;
+A7:  rng p = {[<*x,y*>, f], c} by FINSEQ_2:147;
+then A8:  the carrier of S2 = {[<*x,y*>, f], c} \/ {[p,f]} by CIRCCOMB:def 6;
+   thus InputVertices S c= {x,y,c}
+     proof let z be set; assume A9: z in InputVertices S;
+then A10:     z in the carrier of S & not z in rng R by A3,XBOOLE_0:def 4;
+         z in the carrier of S1 or z in the carrier of S2 by A2,A9,XBOOLE_0:def
+2;
+       then z in {x,y} or z in {[<*x,y*>,f]} or z in {[<*x,y*>, f], c} or
+       z in {[p,f]} by A6,A8,XBOOLE_0:def 2;
+then z = x or z = y or z = [<*x,y*>,f] or z = c or z = [p,f] by TARSKI:def 1,
+def 2;
+       hence thesis by A4,A10,ENUMSET1:14,TARSKI:def 2;
+     end;
+   let z be set;
+    assume z in {x,y,c};
+    then A11: z = x or z = y or z = c by ENUMSET1:13;
+then z in {x,y} & [<*x,y*>, f] in rng p or z in {c} by A7,TARSKI:def 1,def 2;
+    then the_rank_of z in the_rank_of [<*x,y*>, f] &
+    the_rank_of [<*x,y*>, f] in the_rank_of [p,f] or
+    z = c & c in rng p by A5,A7,CIRCCOMB:50,TARSKI:def 1,def 2;
+then A12:  the_rank_of z in the_rank_of [p,f] & z <> [<*x,y*>, f]
+     by A1,CIRCCOMB:50,ORDINAL1:19;
+    then z <> [p,f];
+then A13:  not z in rng R by A4,A12,TARSKI:def 2;
+      z in {x,y} or z in rng p by A7,A11,TARSKI:def 2;
+    then z in InputVertices S1 or z in InputVertices S2 by A5,CIRCCOMB:49;
+    then z in the carrier of S by A2,XBOOLE_0:def 2;
+   hence thesis by A3,A13,XBOOLE_0:def 4;
+  end;
+
+definition
+ let x,y,c be set;
+ let f be Function of 2-tuples_on BOOLEAN, BOOLEAN;
+A1:  2GatesCircStr(x,y,c,f)
+     = 1GateCircStr(<*x,y*>, f) +* 1GateCircStr(<*[<*x,y*>, f], c*>, f)
+      by Def12;
+ func 2GatesCircuit(x,y,c,f) ->
+      strict Boolean gate`2=den Circuit of 2GatesCircStr(x,y,c,f) equals:
+Def14:
+   1GateCircuit(x,y, f) +* 1GateCircuit([<*x,y*>, f], c, f);
+  coherence by A1;
+end;
+
+theorem Th58:
+ InnerVertices 2GatesCircStr(x,y,c,f) is Relation
+  proof
+      InnerVertices 2GatesCircStr(x,y,c,f)
+      = {[<*x,y*>, f], 2GatesCircOutput(x,y,c,f)} by Th56;
+   hence thesis;
+  end;
+
+theorem Th59:
+ for x,y,c being non pair set holds
+   InputVertices 2GatesCircStr(x,y,c,f) is without_pairs
+  proof let x,y,c be non pair set;
+      c <> [<*x,y*>, f];
+    then InputVertices 2GatesCircStr(x,y,c,f) = {x,y,c} by Th57;
+   hence thesis;
+  end;
+
+theorem Th60:
+ x in the carrier of 2GatesCircStr(x,y,c,f) &
+ y in the carrier of 2GatesCircStr(x,y,c,f) &
+ c in the carrier of 2GatesCircStr(x,y,c,f)
+  proof set S1 = 1GateCircStr(<*x,y*>, f);
+   set S2 = 1GateCircStr(<*[<*x,y*>, f], c*>, f);
+      x in the carrier of S1 & y in the carrier of S1 & c in the carrier of S2
+&
+    2GatesCircStr(x,y,c,f) = S1 +* S2 by Def12,Th43;
+   hence thesis by Th20;
+  end;
+
+theorem
+   [<*x,y*>,f] in the carrier of 2GatesCircStr(x,y,c,f) &
+ [<*[<*x,y*>,f], c*>, f] in the carrier of 2GatesCircStr(x,y,c,f)
+  proof set S1 = 1GateCircStr(<*x,y*>, f);
+   set S2 = 1GateCircStr(<*[<*x,y*>, f], c*>, f);
+      [<*x,y*>, f] in the carrier of S1 &
+    [<*[<*x,y*>,f], c*>, f] in the carrier of S2 &
+    2GatesCircStr(x,y,c,f) = S1 +* S2 by Def12,Th43;
+   hence thesis by Th20;
+  end;
+
+definition let S be unsplit non void non empty ManySortedSign;
+ let A be Boolean Circuit of S;
+ let s be State of A;
+ let v be Vertex of S;
+ redefine func s.v -> Element of BOOLEAN;
+  coherence
+   proof s.v in (the Sorts of A).v by CIRCUIT1:5;
+    hence thesis by CIRCCOMB:def 15;
+   end;
+end;
+
+reserve s for State of 2GatesCircuit(x,y,c,f);
+
+Lm2: c <> [<*x,y*>, f] implies
+ (Following s).2GatesCircOutput(x,y,c,f) = f.<*s.[<*x,y*>,f], s.c*> &
+ (Following s).[<*x,y*>,f] = f.<*s.x, s.y*> &
+ (Following s).x = s.x & (Following s).y = s.y & (Following s).c = s.c
+  proof set p = <*[<*x,y*>, f], c*>;
+   set xyf = [<*x,y*>,f];
+   set S1 = 1GateCircStr(<*x,y*>, f), A1 = 1GateCircuit(x,y, f);
+   set S2 = 1GateCircStr(p, f), A2 = 1GateCircuit(xyf,c, f);
+   set S = 2GatesCircStr(x,y,c,f);
+A1:  S = S1+*S2 & 2GatesCircuit(x,y,c,f) = A1+*A2 by Def12,Def14;
+   assume c <> [<*x,y*>, f];
+then A2: InputVertices S = {x,y,c} by Th57;
+A3: InnerVertices S = {[<*x,y*>, f], 2GatesCircOutput(x,y,c,f)} by Th56;
+A4: 2GatesCircOutput(x,y,c,f) = [p,f] by Def13;
+A5: x in InputVertices S & y in InputVertices S & c in InputVertices S
+     by A2,ENUMSET1:14;
+   reconsider xyf as Element of InnerVertices S by A3,TARSKI:def 2;
+      rng p = {xyf,c} by FINSEQ_2:147;
+    then xyf in rng p & c in rng p by TARSKI:def 2;
+then A6: xyf in InputVertices S2 & c in InputVertices S2 by CIRCCOMB:49;
+   reconsider s1 = s|the carrier of S1 as State of A1 by A1,Th26;
+   reconsider s2 = s|the carrier of S2 as State of A2 by A1,Th26;
+A7: dom s2 = the carrier of S2 by CIRCUIT1:4;
+A8: dom s1 = the carrier of S1 by CIRCUIT1:4;
+   reconsider vx = x, vy = y as Vertex of S1 by Th43;
+ reconsider xyf1 = xyf as Element of InnerVertices S1 by Th47;
+   reconsider xyf' = xyf, c' = c as Vertex of S2 by A6;
+   reconsider v2 = [p,f] as Element of InnerVertices S2 by Th47;
+   thus (Following s).2GatesCircOutput(x,y,c,f)
+      = (Following s2).v2 by A1,A4,CIRCCOMB:72
+     .= f.<*s2.xyf', s2.c'*> by Th50
+     .= f.<*s.[<*x,y*>,f], s2.c'*> by A7,FUNCT_1:70
+     .= f.<*s.[<*x,y*>,f], s.c*> by A7,FUNCT_1:70;
+   thus (Following s).[<*x,y*>,f]
+      = (Following s1).xyf1 by A1,CIRCCOMB:72
+     .= f.<*s1.vx, s1.vy*> by Th50
+     .= f.<*s.x, s1.vy*> by A8,FUNCT_1:70
+     .= f.<*s.x, s.y*> by A8,FUNCT_1:70;
+   thus thesis by A5,CIRCUIT2:def 5;
+  end;
+
+theorem Th62:
+ c <> [<*x,y*>, f] implies
+ (Following(s,2)).2GatesCircOutput(x,y,c,f) = f.<*f.<*s.x, s.y*>, s.c*> &
+ (Following(s,2)).[<*x,y*>,f] = f.<*s.x, s.y*> &
+ (Following(s,2)).x = s.x & (Following(s,2)).y = s.y &
+ (Following(s,2)).c = s.c
+  proof set p = <*[<*x,y*>, f], c*>;
+   set xyf = [<*x,y*>,f];
+   set S1 = 1GateCircStr(<*x,y*>, f), A1 = 1GateCircuit(x,y, f);
+   set S2 = 1GateCircStr(p, f), A2 = 1GateCircuit(xyf,c, f);
+   set S = 2GatesCircStr(x,y,c,f);
+A1:  S = S1+*S2 & 2GatesCircuit(x,y,c,f) = A1+*A2 by Def12,Def14;
+   assume c <> [<*x,y*>, f];
+then A2: InputVertices S = {x,y,c} by Th57;
+A3: InnerVertices S = {[<*x,y*>, f], 2GatesCircOutput(x,y,c,f)} by Th56;
+A4: 2GatesCircOutput(x,y,c,f) = [p,f] by Def13;
+A5: x in {x,y} & y in {x,y} & c in {c} & c in {[<*x,y*>,f], c} by TARSKI:def 1,
+def 2;
+A6: x in InputVertices S & y in InputVertices S & c in InputVertices S
+     by A2,ENUMSET1:14;
+   reconsider xx = x, yy = y, cc = c as Vertex of S by Th60;
+A7: (Following s).xx = s.x & (Following s).yy = s.y &
+    (Following s).cc = s.c by A6,CIRCUIT2:def 5;
+then A8: (Following Following s).xx = s.x & (Following Following s).yy = s.y &
+    (Following Following s).cc = s.c by A6,CIRCUIT2:def 5;
+   reconsider xyf as Element of InnerVertices S by A3,TARSKI:def 2;
+      rng p = {xyf,c} by FINSEQ_2:147;
+    then xyf in rng p & c in rng p by TARSKI:def 2;
+then A9: xyf in InputVertices S2 & c in InputVertices S2 by CIRCCOMB:49;
+   reconsider s1 = s|the carrier of S1 as State of A1 by A1,Th26;
+   set fs = Following s;
+   reconsider fs2 = fs|the carrier of S2 as State of A2 by A1,Th26;
+   reconsider fs1 = fs|the carrier of S1 as State of A1 by A1,Th26;
+A10: dom fs2 = the carrier of S2 by CIRCUIT1:4;
+A11: dom fs1 = the carrier of S1 by CIRCUIT1:4;
+   reconsider vx = x, vy = y as Vertex of S1 by Th43;
+A12: xyf in InnerVertices S1 by Th47;
+   reconsider xyf1 = xyf as Element of InnerVertices S1 by Th47;
+    A13: dom s1 = the carrier of S1 & InputVertices S1 = rng <*x,y*> &
+    rng <*x,y*> = {x,y} & InputVertices S1 c= the carrier of S1
+      by CIRCCOMB:49,CIRCUIT1:4,FINSEQ_2:147;
+   reconsider xyf' = xyf, c' = c as Vertex of S2 by A9;
+   reconsider v2 = [p,f] as Element of InnerVertices S2 by Th47;
+A14:  Following(s,1+1) = Following Following s by Th15;
+   hence (Following(s,2)).2GatesCircOutput(x,y,c,f)
+      = (Following fs2).v2 by A1,A4,CIRCCOMB:72
+     .= f.<*fs2.xyf', fs2.c'*> by Th50
+     .= f.<*(Following s).xyf, fs2.c*> by A10,FUNCT_1:70
+     .= f.<*(Following s).xyf, (Following s).c'*> by A10,FUNCT_1:70
+     .= f.<*(Following s).xyf, s.cc*> by A6,CIRCUIT2:def 5
+     .= f.<*(Following s1).xyf, s.cc*> by A1,A12,CIRCCOMB:72
+     .= f.<*f.<*s1.x, s1.y*>, s.cc*> by Th50
+     .= f.<*f.<*s.x,s1.y*>, s.cc*> by A5,A13,FUNCT_1:70
+     .= f.<*f.<*s.x,s.y*>, s.c*> by A5,A13,FUNCT_1:70;
+   thus (Following(s,2)).[<*x,y*>,f]
+      = (Following fs1).xyf1 by A1,A14,CIRCCOMB:72
+     .= f.<*fs1.vx, fs1.vy*> by Th50
+     .= f.<*s.x, fs1.vy*> by A7,A11,FUNCT_1:70
+     .= f.<*s.x, s.y*> by A7,A11,FUNCT_1:70;
+   thus thesis by A8,Th15;
+  end;
+
+theorem Th63:
+ c <> [<*x,y*>, f] implies Following(s,2) is stable
+  proof assume
+A1:  c <> [<*x,y*>, f];
+   set S = 2GatesCircStr(x,y,c,f);
+      now
+     thus dom Following Following(s,2) = the carrier of S &
+          dom Following(s,2) = the carrier of S by CIRCUIT1:4;
+     let a be set; assume a in the carrier of S;
+     then reconsider v = a as Vertex of S;
+A2:   InputVertices S = {x,y,c} by A1,Th57;
+A3:   InnerVertices S = {[<*x,y*>, f], 2GatesCircOutput(x,y,c,f)} by Th56;
+      A4: InputVertices S \/ InnerVertices S = the carrier of S by MSAFREE2:3;
+A5:    (Following(s,2)).[<*x,y*>,f] = f.<*s.x, s.y*> &
+      (Following(s,2)).2GatesCircOutput(x,y,c,f) = f.<*f.<*s.x, s.y*>, s.c*> &
+      (Following(s,2)).x = s.x & (Following(s,2)).y = s.y &
+      (Following(s,2)).c = s.c
+       by A1,Th62;
+     per cases by A4,XBOOLE_0:def 2;
+     suppose v in InputVertices S;
+       then v = x or v = y or v = c by A2,ENUMSET1:13;
+      hence (Following Following(s,2)).a = (Following(s,2)).a by A1,Lm2;
+     suppose v in InnerVertices S;
+       then v = [<*x,y*>, f] or v = 2GatesCircOutput(x,y,c,f) by A3,TARSKI:def
+2;
+      hence (Following Following(s,2)).a = (Following(s,2)).a by A1,A5,Lm2;
+    end;
+   hence Following(s,2) = Following Following(s,2) by FUNCT_1:9;
+  end;
+
+theorem Th64:
+ c <> [<*x,y*>, 'xor'] implies
+ for s being State of 2GatesCircuit(x,y,c,'xor')
+ for a1,a2,a3 being Element of BOOLEAN st a1 = s.x & a2 = s.y & a3 = s.c holds
+   (Following(s,2)).2GatesCircOutput(x,y,c,'xor') = a1 'xor' a2 'xor' a3
+  proof set f = 'xor'; assume
+A1:  c <> [<*x,y*>, f];
+   let s be State of 2GatesCircuit(x,y,c,f);
+   let a1,a2,a3 be Element of BOOLEAN; assume
+      a1 = s.x & a2 = s.y & a3 = s.c;
+   hence (Following(s,2)).2GatesCircOutput(x,y,c,f)
+      = f.<*f.<*a1, a2*>, a3*> by A1,Th62
+     .= f.<*a1 'xor' a2, a3*> by Def4
+     .= a1 'xor' a2 'xor' a3 by Def4;
+  end;
+
+theorem
+   c <> [<*x,y*>, 'or'] implies
+ for s being State of 2GatesCircuit(x,y,c,'or')
+ for a1,a2,a3 being Element of BOOLEAN st a1 = s.x & a2 = s.y & a3 = s.c holds
+   (Following(s,2)).2GatesCircOutput(x,y,c,'or') = a1 'or' a2 'or' a3
+  proof set f = 'or'; assume
+A1:  c <> [<*x,y*>, f];
+   let s be State of 2GatesCircuit(x,y,c,f);
+   let a1,a2,a3 be Element of BOOLEAN; assume
+      a1 = s.x & a2 = s.y & a3 = s.c;
+   hence (Following(s,2)).2GatesCircOutput(x,y,c,f)
+      = f.<*f.<*a1, a2*>, a3*> by A1,Th62
+     .= f.<*a1 'or' a2, a3*> by Def5
+     .= a1 'or' a2 'or' a3 by Def5;
+  end;
+
+theorem
+   c <> [<*x,y*>, '&'] implies
+ for s being State of 2GatesCircuit(x,y,c,'&')
+ for a1,a2,a3 being Element of BOOLEAN st a1 = s.x & a2 = s.y & a3 = s.c holds
+   (Following(s,2)).2GatesCircOutput(x,y,c,'&') = a1 '&' a2 '&' a3
+  proof set f = '&'; assume
+A1:  c <> [<*x,y*>, f];
+   let s be State of 2GatesCircuit(x,y,c,f);
+   let a1,a2,a3 be Element of BOOLEAN; assume
+      a1 = s.x & a2 = s.y & a3 = s.c;
+   hence (Following(s,2)).2GatesCircOutput(x,y,c,f)
+      = f.<*f.<*a1, a2*>, a3*> by A1,Th62
+     .= f.<*a1 '&' a2, a3*> by Def6
+     .= a1 '&' a2 '&' a3 by Def6;
+  end;
+
+begin :: Bit Adder Circuit
+
+definition
+ let x,y,c be set;
+ func BitAdderOutput(x,y,c) ->
+      Element of InnerVertices 2GatesCircStr(x,y,c, 'xor') equals:
+Def15:
+   2GatesCircOutput(x,y,c, 'xor');
+  coherence;
+end;
+
+definition
+ let x,y,c be set;
+ func BitAdderCirc(x,y,c) ->
+      strict Boolean gate`2=den Circuit of 2GatesCircStr(x,y,c, 'xor') equals:
+Def16:
+   2GatesCircuit(x,y,c, 'xor');
+  coherence;
+end;
+
+
+
+definition
+ let x,y,c be set;
+ func MajorityIStr(x,y,c) ->
+    unsplit gate`1=arity gate`2isBoolean
+    non void strict non empty ManySortedSign equals:
+Def17:
+   1GateCircStr(<*x,y*>, '&') +* 1GateCircStr(<*y,c*>, '&') +*
+       1GateCircStr(<*c,x*>, '&');
+  correctness;
+end;
+
+
+definition
+ let x,y,c be set;
+ func MajorityStr(x,y,c) ->
+    unsplit gate`1=arity gate`2isBoolean
+    non void strict non empty ManySortedSign equals:
+Def18:
+   MajorityIStr(x,y,c) +*
+       1GateCircStr(<*[<*x,y*>, '&'], [<*y,c*>, '&'], [<*c,x*>, '&']*>, or3);
+  correctness;
+end;
+
+definition
+ let x,y,c be set;
+A1:  MajorityIStr(x,y,c) = 1GateCircStr(<*x,y*>, '&') +*
+      1GateCircStr(<*y,c*>, '&') +* 1GateCircStr(<*c,x*>, '&') by Def17;
+ func MajorityICirc(x,y,c) ->
+      strict Boolean gate`2=den Circuit of MajorityIStr(x,y,c) equals:
+Def19:
+   1GateCircuit(x,y, '&') +* 1GateCircuit(y,c, '&') +*
+       1GateCircuit(c,x, '&');
+  coherence by A1;
+end;
+
+
+theorem Th67:
+ InnerVertices MajorityStr(x,y,c) is Relation
+  proof
+A1:  MajorityStr(x,y,c) = MajorityIStr(x,y,c) +*
+    1GateCircStr(<*[<*x,y*>, '&'], [<*y,c*>, '&'], [<*c,x*>, '&']*>, or3)
+     by Def18;
+A2:  MajorityIStr(x,y,c) = 1GateCircStr(<*x,y*>, '&') +*
+      1GateCircStr(<*y,c*>, '&') +* 1GateCircStr(<*c,x*>, '&') by Def17;
+A3:  InnerVertices 1GateCircStr(<*x,y*>,'&') is Relation &
+    InnerVertices 1GateCircStr(<*c,x*>,'&') is Relation &
+    InnerVertices 1GateCircStr(<*y,c*>,'&') is Relation by Th38;
+    then InnerVertices (1GateCircStr(<*x,y*>,'&')+*1GateCircStr(<*y,c*>,'&'))
+     is Relation by Th3;
+    then InnerVertices 1GateCircStr(<*[<*x,y*>, '&'], [<*y,c*>, '&'],
+                   [<*c,x*>, '&']*>, or3) is Relation &
+    InnerVertices MajorityIStr(x,y,c) is Relation by A2,A3,Th3,Th38;
+   hence thesis by A1,Th3;
+  end;
+
+theorem Th68:
+ for x,y,c being non pair set holds
+  InputVertices MajorityStr(x,y,c) is without_pairs
+  proof let x,y,c be non pair set;
+   set M = MajorityStr(x,y,c), MI = MajorityIStr(x,y,c);
+   set S = 1GateCircStr(<*[<*x,y*>, '&'], [<*y,c*>, '&'],
+                          [<*c,x*>, '&']*>, or3);
+A1:  M = MI +* S by Def18;
+A2:  MI = 1GateCircStr(<*x,y*>, '&') +*
+      1GateCircStr(<*y,c*>, '&') +* 1GateCircStr(<*c,x*>, '&') by Def17;
+A3:  InputVertices 1GateCircStr(<*x,y*>,'&') is without_pairs &
+    InputVertices 1GateCircStr(<*c,x*>,'&') is without_pairs &
+    InputVertices 1GateCircStr(<*y,c*>,'&') is without_pairs by Th41;
+    then InputVertices (1GateCircStr(<*x,y*>,'&')+*1GateCircStr(<*y,c*>,'&'))
+     is without_pairs by Th9;
+then A4:  InputVertices MI is without_pairs by A2,A3,Th9;
+      InnerVertices S is Relation by Th38;
+then A5:  InputVertices M =
+        (InputVertices MI) \/
+ (InputVertices S \ InnerVertices MI) by A1,A4,Th6;
+   given xx being pair set such that
+A6:  xx in InputVertices M;
+A7:  InputVertices S = {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} by Th42;
+A8:  InnerVertices 1GateCircStr(<*x,y*>, '&') = {[<*x,y*>, '&']} &
+    InnerVertices 1GateCircStr(<*y,c*>, '&') = {[<*y,c*>, '&']} &
+    InnerVertices 1GateCircStr(<*c,x*>, '&') = {[<*c,x*>, '&']} by CIRCCOMB:49;
+A9:  1GateCircStr(<*x,y*>, '&') tolerates 1GateCircStr(<*y,c*>, '&') &
+    1GateCircStr(<*x,y*>, '&') tolerates 1GateCircStr(<*c,x*>, '&') &
+    1GateCircStr(<*y,c*>, '&') tolerates 1GateCircStr(<*c,x*>, '&')
+     by CIRCCOMB:51;
+then A10:  InnerVertices (1GateCircStr(<*x,y*>, '&') +* 1GateCircStr(<*y,c*>,
+'&')) =
+     {[<*x,y*>, '&']} \/ {[<*y,c*>, '&']} by A8,CIRCCOMB:15;
+      1GateCircStr(<*x,y*>, '&') +* 1GateCircStr(<*y,c*>, '&')
+       tolerates 1GateCircStr(<*c,x*>, '&') by A9,CIRCCOMB:7;
+    then InnerVertices MI = {[<*x,y*>,'&']} \/ {[<*y,c*>,'&']} \/ {[<*c,x*>,
+'&']}
+       by A2,A8,A10,CIRCCOMB:15
+     .= {[<*x,y*>,'&'], [<*y,c*>,'&']} \/ {[<*c,x*>,'&']} by ENUMSET1:41
+     .= {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} by ENUMSET1:43;
+    then InputVertices S \ InnerVertices MI = {} by A7,XBOOLE_1:37;
+hence thesis by A4,A5,A6,Def2;
+  end;
+
+theorem
+   for s being State of MajorityICirc(x,y,c), a,b being Element of BOOLEAN
+   st a = s.x & b = s.y holds (Following s).[<*x,y*>, '&'] = a '&' b
+  proof set xy = <*x,y*>;
+   set S1 = 1GateCircStr(xy, '&'), A1 = 1GateCircuit(x,y, '&');
+   set S2 = 1GateCircStr(<*y,c*>, '&'), A2 = 1GateCircuit(y,c, '&');
+   set S3 = 1GateCircStr(<*c,x*>, '&'), A3 = 1GateCircuit(c,x, '&');
+   set S = MajorityIStr(x,y,c), A = MajorityICirc(x,y,c);
+   let s be State of A; let a,b be Element of BOOLEAN such that
+A1:  a = s.x & b = s.y;
+   reconsider v1 = [xy, '&'] as Element of InnerVertices S1 by Th47;
+      S = S1+*S2+*S3 by Def17;
+then A2:  S = S1+*(S2+*S3) by CIRCCOMB:10;
+   then reconsider v = v1 as Element of InnerVertices S by Th21;
+      A = A1+*A2+*A3 by Def19;
+then A3:  A = A1+*(A2+*A3) by Th25;
+   then reconsider s1 = s|the carrier of S1 as State of A1 by Th26;
+A4:  dom s1 = the carrier of S1 by CIRCUIT1:4;
+   reconsider xx = x, yy = y as Vertex of S1 by Th43;
+   reconsider xx, yy as Vertex of S by A2,Th20;
+   thus (Following s).[xy, '&'] = (Following s1).v by A2,A3,CIRCCOMB:72
+      .= '&'.<*s1.xx,s1.yy*> by Th50
+      .= '&'.<*s.xx,s1.yy*> by A4,FUNCT_1:70
+      .= '&'.<*s.xx,s.yy*> by A4,FUNCT_1:70
+      .= a '&' b by A1,Def6;
+  end;
+
+theorem
+   for s being State of MajorityICirc(x,y,c), a,b being Element of BOOLEAN
+   st a = s.y & b = s.c holds (Following s).[<*y,c*>, '&'] = a '&' b
+  proof set yc = <*y,c*>;
+   set S1 = 1GateCircStr(<*x,y*>, '&'), A1 = 1GateCircuit(x,y, '&');
+   set S2 = 1GateCircStr(yc, '&'), A2 = 1GateCircuit(y,c, '&');
+   set S3 = 1GateCircStr(<*c,x*>, '&'), A3 = 1GateCircuit(c,x, '&');
+   set S = MajorityIStr(x,y,c), A = MajorityICirc(x,y,c);
+   let s be State of A; let a,b be Element of BOOLEAN such that
+A1:  a = s.y & b = s.c;
+   reconsider v2 = [yc, '&'] as Element of InnerVertices S2 by Th47;
+A2:  S = S1+*S2+*S3 & S1+*S2 = S2+*S1 by Def17,Th23;
+then A3:  S = S2+*(S1+*S3) by CIRCCOMB:10;
+   then reconsider v = v2 as Element of InnerVertices S by Th21;
+      A = A1+*A2+*A3 & A1+*A2 = A2+*A1 by Def19,Th24;
+then A4:  A = A2+*(A1+*A3) by A2,Th25;
+   then reconsider s2 = s|the carrier of S2 as State of A2 by Th26;
+A5:  dom s2 = the carrier of S2 by CIRCUIT1:4;
+   reconsider yy = y, cc = c as Vertex of S2 by Th43;
+   reconsider yy, cc as Vertex of S by A3,Th20;
+   thus (Following s).[yc, '&'] = (Following s2).v by A3,A4,CIRCCOMB:72
+      .= '&'.<*s2.yy,s2.cc*> by Th50
+      .= '&'.<*s.yy,s2.cc*> by A5,FUNCT_1:70
+      .= '&'.<*s.yy,s.cc*> by A5,FUNCT_1:70
+      .= a '&' b by A1,Def6;
+  end;
+
+theorem
+   for s being State of MajorityICirc(x,y,c), a,b being Element of BOOLEAN
+   st a = s.c & b = s.x holds (Following s).[<*c,x*>, '&'] = a '&' b
+  proof set cx = <*c,x*>;
+   set S1 = 1GateCircStr(<*x,y*>, '&'), A1 = 1GateCircuit(x,y, '&');
+   set S2 = 1GateCircStr(<*y,c*>, '&'), A2 = 1GateCircuit(y,c, '&');
+   set S3 = 1GateCircStr(cx, '&'), A3 = 1GateCircuit(c,x, '&');
+   set S = MajorityIStr(x,y,c), A = MajorityICirc(x,y,c);
+   let s be State of A; let a,b be Element of BOOLEAN such that
+A1:  a = s.c & b = s.x;
+   reconsider v3 = [cx, '&'] as Element of InnerVertices S3 by Th47;
+A2:  S = S1+*S2+*S3 by Def17;
+   then reconsider v = v3 as Element of InnerVertices S by Th21;
+A3:  A = A1+*A2+*A3 by Def19;
+   then reconsider s3 = s|the carrier of S3 as State of A3 by Th26;
+A4:  dom s3 = the carrier of S3 by CIRCUIT1:4;
+   reconsider cc = c, xx = x as Vertex of S3 by Th43;
+   reconsider cc, xx as Vertex of S by A2,Th20;
+   thus (Following s).[cx, '&'] = (Following s3).v by A2,A3,CIRCCOMB:72
+      .= '&'.<*s3.cc,s3.xx*> by Th50
+      .= '&'.<*s.cc,s3.xx*> by A4,FUNCT_1:70
+      .= '&'.<*s.cc,s.xx*> by A4,FUNCT_1:70
+      .= a '&' b by A1,Def6;
+  end;
+
+definition
+ let x,y,c be set;
+A1:  MajorityStr(x,y,c) = MajorityIStr(x,y,c) +*
+    1GateCircStr(<*[<*x,y*>, '&'], [<*y,c*>, '&'], [<*c,x*>, '&']*>, or3)
+     by Def18;
+ func MajorityOutput(x,y,c) -> Element of InnerVertices MajorityStr(x,y,c)
+  equals:
+Def20:
+   [<*[<*x,y*>, '&'], [<*y,c*>, '&'], [<*c,x*>, '&']*>, or3];
+  coherence
+   proof
+       [<*[<*x,y*>, '&'], [<*y,c*>, '&'], [<*c,x*>, '&']*>, or3] in
+InnerVertices
+     1GateCircStr(<*[<*x,y*>, '&'], [<*y,c*>, '&'], [<*c,x*>, '&']*>, or3)
+       by Th47; hence thesis by A1,Th21;
+   end;
+  correctness;
+end;
+
+definition
+ let x,y,c be set;
+A1:  MajorityStr(x,y,c) = MajorityIStr(x,y,c) +*
+    1GateCircStr(<*[<*x,y*>, '&'], [<*y,c*>, '&'], [<*c,x*>, '&']*>, or3)
+     by Def18;
+ func MajorityCirc(x,y,c) ->
+      strict Boolean gate`2=den Circuit of MajorityStr(x,y,c) equals
+     MajorityICirc(x,y,c) +*
+       1GateCircuit([<*x,y*>, '&'], [<*y,c*>, '&'], [<*c,x*>, '&'], or3);
+  coherence by A1;
+end;
+
+theorem Th72:
+ x in the carrier of MajorityStr(x,y,c) &
+ y in the carrier of MajorityStr(x,y,c) &
+ c in the carrier of MajorityStr(x,y,c)
+  proof
+A1:  MajorityStr(x,y,c) = MajorityIStr(x,y,c) +*
+    1GateCircStr(<*[<*x,y*>, '&'], [<*y,c*>, '&'], [<*c,x*>, '&']*>, or3)
+     by Def18;
+A2:  MajorityIStr(x,y,c) = 1GateCircStr(<*x,y*>, '&') +*
+      1GateCircStr(<*y,c*>, '&') +* 1GateCircStr(<*c,x*>, '&') by Def17;
+      y in the carrier of 1GateCircStr(<*x,y*>, '&') by Th43;
+then A3:  y in the carrier of 1GateCircStr(<*x,y*>, '&')+*1GateCircStr(<*y,c*>,
+'&')
+     by Th20;
+      x in the carrier of 1GateCircStr(<*c,x*>, '&') &
+    c in the carrier of 1GateCircStr(<*c,x*>, '&') by Th43;
+    then x in the carrier of MajorityIStr(x,y,c) &
+    y in the carrier of MajorityIStr(x,y,c) &
+    c in the carrier of MajorityIStr(x,y,c)
+     by A2,A3,Th20;
+   hence thesis by A1,Th20;
+  end;
+
+theorem Th73:
+ [<*x,y*>,'&'] in InnerVertices MajorityStr(x,y,c) &
+ [<*y,c*>,'&'] in InnerVertices MajorityStr(x,y,c) &
+ [<*c,x*>,'&'] in InnerVertices MajorityStr(x,y,c)
+  proof
+A1:  MajorityStr(x,y,c) = MajorityIStr(x,y,c) +*
+    1GateCircStr(<*[<*x,y*>, '&'], [<*y,c*>, '&'], [<*c,x*>, '&']*>, or3)
+     by Def18;
+A2:  MajorityIStr(x,y,c) = 1GateCircStr(<*x,y*>, '&') +*
+      1GateCircStr(<*y,c*>, '&') +* 1GateCircStr(<*c,x*>, '&') by Def17;
+      [<*x,y*>,'&'] in InnerVertices 1GateCircStr(<*x,y*>, '&') &
+    [<*y,c*>,'&'] in InnerVertices 1GateCircStr(<*y,c*>, '&') by Th47;
+    then [<*c,x*>,'&'] in InnerVertices 1GateCircStr(<*c,x*>, '&') &
+    [<*x,y*>,'&'] in InnerVertices
+      (1GateCircStr(<*x,y*>, '&')+*1GateCircStr(<*y,c*>, '&')) &
+    [<*y,c*>,'&'] in InnerVertices
+      (1GateCircStr(<*x,y*>, '&')+*1GateCircStr(<*y,c*>, '&'))
+       by Th21,Th47;
+    then [<*x,y*>,'&'] in InnerVertices MajorityIStr(x,y,c) &
+    [<*y,c*>,'&'] in InnerVertices MajorityIStr(x,y,c) &
+    [<*c,x*>,'&'] in InnerVertices MajorityIStr(x,y,c) by A2,Th21;
+   hence thesis by A1,Th21;
+  end;
+
+theorem Th74:
+ for x,y,c being non pair set holds
+  x in InputVertices MajorityStr(x,y,c) &
+  y in InputVertices MajorityStr(x,y,c) &
+  c in InputVertices MajorityStr(x,y,c)
+  proof let x,y,c be non pair set;
+      InputVertices MajorityStr(x,y,c) = (the carrier of MajorityStr(x,y,c)) \
+      rng the ResultSort of MajorityStr(x,y,c) by MSAFREE2:def 2;
+then A1:  InputVertices MajorityStr(x,y,c) =
+      (the carrier of MajorityStr(x,y,c)) \ InnerVertices MajorityStr(x,y,c)
+       by MSAFREE2:def 3;
+A2:  x in the carrier of MajorityStr(x,y,c) &
+    y in the carrier of MajorityStr(x,y,c) &
+    c in the carrier of MajorityStr(x,y,c) by Th72;
+A3:  InnerVertices MajorityStr(x,y,c) is Relation by Th67;
+   assume not thesis;
+    then x in InnerVertices MajorityStr(x,y,c) or
+    y in InnerVertices MajorityStr(x,y,c) or
+    c in InnerVertices MajorityStr(x,y,c) by A1,A2,XBOOLE_0:def 4;
+    then (ex a,b being set st x = [a,b]) or
+    (ex a,b being set st y = [a,b]) or
+    (ex a,b being set st c = [a,b]) by A3,RELAT_1:def 1;
+   hence contradiction;
+  end;
+
+theorem Th75:
+ for x,y,c being non pair set holds
+  InputVertices MajorityStr(x,y,c) = {x,y,c} &
+  InnerVertices MajorityStr(x,y,c) =
+    {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/ {MajorityOutput(x,y,c)}
+  proof let x,y,c be non pair set;
+   set x_y =[<*x,y*>,'&'], y_c = [<*y,c*>,'&'], c_x = [<*c,x*>,'&'];
+   set MI = MajorityIStr(x,y,c), S = 1GateCircStr(<*x_y, y_c, c_x*>, or3);
+   set M = MajorityStr(x,y,c);
+A1:  M = MI +* S by Def18;
+A2:  MI = 1GateCircStr(<*x,y*>, '&') +*
+      1GateCircStr(<*y,c*>, '&') +* 1GateCircStr(<*c,x*>, '&') by Def17;
+A3:  InputVertices 1GateCircStr(<*x,y*>,'&') is without_pairs &
+    InputVertices 1GateCircStr(<*c,x*>,'&') is without_pairs &
+    InputVertices 1GateCircStr(<*y,c*>,'&') is without_pairs by Th41;
+then A4: InputVertices (1GateCircStr(<*x,y*>,'&')+*1GateCircStr(<*y,c*>,'&'))
+     is without_pairs by Th9;
+then A5:  InputVertices MI is without_pairs by A2,A3,Th9;
+A6: InputVertices 1GateCircStr(<*x,y*>,'&') = {x,y} &
+    InputVertices 1GateCircStr(<*c,x*>,'&') = {c,x} &
+    InputVertices 1GateCircStr(<*y,c*>,'&') = {y,c} by Th40;
+      InnerVertices S is Relation by Th38;
+then A7:  InputVertices M =
+        (InputVertices MI) \/
+ (InputVertices S \ InnerVertices MI) by A1,A5,Th6;
+A8:  InputVertices S = {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} by Th42;
+A9:  InnerVertices 1GateCircStr(<*x,y*>, '&') = {[<*x,y*>, '&']} &
+    InnerVertices 1GateCircStr(<*y,c*>, '&') = {[<*y,c*>, '&']} &
+    InnerVertices 1GateCircStr(<*c,x*>, '&') = {[<*c,x*>, '&']} by CIRCCOMB:49;
+A10:  1GateCircStr(<*x,y*>, '&') tolerates 1GateCircStr(<*y,c*>, '&') &
+    1GateCircStr(<*x,y*>, '&') tolerates 1GateCircStr(<*c,x*>, '&') &
+    1GateCircStr(<*y,c*>, '&') tolerates 1GateCircStr(<*c,x*>, '&')
+     by CIRCCOMB:51;
+then A11:  InnerVertices (1GateCircStr(<*x,y*>, '&') +* 1GateCircStr(<*y,c*>,
+'&')) =
+     {[<*x,y*>, '&']} \/ {[<*y,c*>, '&']} by A9,CIRCCOMB:15;
+      1GateCircStr(<*x,y*>, '&') +* 1GateCircStr(<*y,c*>, '&')
+       tolerates 1GateCircStr(<*c,x*>, '&') by A10,CIRCCOMB:7;
+then A12:  InnerVertices MI = {[<*x,y*>,'&']} \/ {[<*y,c*>,'&']} \/ {[<*c,x*>,
+'&']}
+       by A2,A9,A11,CIRCCOMB:15
+     .= {[<*x,y*>,'&'], [<*y,c*>,'&']} \/ {[<*c,x*>,'&']} by ENUMSET1:41
+     .= {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} by ENUMSET1:43;
+    then InputVertices S \ InnerVertices MI = {} by A8,XBOOLE_1:37;
+   hence InputVertices M =
+ (InputVertices(1GateCircStr(<*x,y*>,'&')+*1GateCircStr(<*y,c*>,'&')))
+         \/ InputVertices 1GateCircStr(<*c,x*>,'&') by A2,A3,A4,A7,A9,A11,Th7
+      .= (InputVertices 1GateCircStr(<*x,y*>,'&')) \/
+         (InputVertices 1GateCircStr(<*y,c*>,'&')) \/
+         (InputVertices 1GateCircStr(<*c,x*>,'&')) by A3,A9,Th7
+      .= {x,y,y,c} \/ {c,x} by A6,ENUMSET1:45
+      .= {y,y,x,c} \/ {c,x} by ENUMSET1:110
+      .= {y,x,c} \/ {c,x} by ENUMSET1:71
+      .= {x,y,c} \/ {c,x} by ENUMSET1:99
+      .= {x,y,c} \/ ({c}\/{x}) by ENUMSET1:41
+      .= {x,y,c} \/ {c} \/ {x} by XBOOLE_1:4
+      .= {c,x,y} \/ {c} \/ {x} by ENUMSET1:100
+      .= {c,c,x,y} \/ {x} by ENUMSET1:44
+      .= {c,x,y} \/ {x} by ENUMSET1:71
+      .= {x,y,c} \/ {x} by ENUMSET1:100
+      .= {x,x,y,c} by ENUMSET1:44
+      .= {x,y,c} by ENUMSET1:71;
+      MI tolerates S by CIRCCOMB:55;
+   hence InnerVertices M = (InnerVertices MI) \/ (InnerVertices S)
+      by A1,CIRCCOMB:15
+    .= {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/
+       {[<*x_y, y_c, c_x*>, or3]} by A12,CIRCCOMB:49
+    .= {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/
+       {MajorityOutput(x,y,c)} by Def20;
+  end;
+
+Lm3:
+ for x,y,c being non pair set for s being State of MajorityCirc(x,y,c)
+  for a1,a2,a3 being Element of BOOLEAN st a1 = s.x & a2 = s.y & a3 = s.c
+  holds
+   (Following s).[<*x,y*>,'&'] = a1 '&' a2 &
+   (Following s).[<*y,c*>,'&'] = a2 '&' a3 &
+   (Following s).[<*c,x*>,'&'] = a3 '&' a1
+  proof let x,y,c be non pair set;
+   let s be State of MajorityCirc(x,y,c);
+   let a1,a2,a3 be Element of BOOLEAN such that
+A1:  a1 = s.x & a2 = s.y & a3 = s.c;
+   set S = MajorityStr(x,y,c);
+A2:  InnerVertices S = the OperSymbols of S by Th37;
+A3:  dom s = the carrier of S by CIRCUIT1:4;
+A4:  x in the carrier of S & y in the carrier of S & c in the carrier of S
+     by Th72;
+      [<*x,y*>,'&'] in InnerVertices MajorityStr(x,y,c) by Th73;
+   hence (Following s).[<*x,y*>,'&']
+      = '&'.(s*<*x,y*>) by A2,Th35
+     .= '&'.<*a1,a2*> by A1,A3,A4,FINSEQ_2:145
+     .= a1 '&' a2 by Def6;
+      [<*y,c*>,'&'] in InnerVertices MajorityStr(x,y,c) by Th73;
+   hence (Following s).[<*y,c*>,'&']
+      = '&'.(s*<*y,c*>) by A2,Th35
+     .= '&'.<*a2,a3*> by A1,A3,A4,FINSEQ_2:145
+     .= a2 '&' a3 by Def6;
+      [<*c,x*>,'&'] in InnerVertices MajorityStr(x,y,c) by Th73;
+   hence (Following s).[<*c,x*>,'&']
+      = '&'.(s*<*c,x*>) by A2,Th35
+     .= '&'.<*a3,a1*> by A1,A3,A4,FINSEQ_2:145
+     .= a3 '&' a1 by Def6;
+  end;
+
+theorem
+   for x,y,c being non pair set for s being State of MajorityCirc(x,y,c)
+  for a1,a2 being Element of BOOLEAN st a1 = s.x & a2 = s.y
+  holds (Following s).[<*x,y*>,'&'] = a1 '&' a2
+   proof let x,y,c be non pair set; let s be State of MajorityCirc(x,y,c);
+    reconsider a = c as Vertex of MajorityStr(x,y,c) by Th72;
+       s.a is Element of BOOLEAN;
+    hence thesis by Lm3;
+   end;
+
+theorem
+   for x,y,c being non pair set for s being State of MajorityCirc(x,y,c)
+  for a2,a3 being Element of BOOLEAN st a2 = s.y & a3 = s.c
+  holds (Following s).[<*y,c*>,'&'] = a2 '&' a3
+   proof let x,y,c be non pair set; let s be State of MajorityCirc(x,y,c);
+    reconsider a = x as Vertex of MajorityStr(x,y,c) by Th72;
+       s.a is Element of BOOLEAN;
+    hence thesis by Lm3;
+   end;
+
+theorem
+   for x,y,c being non pair set for s being State of MajorityCirc(x,y,c)
+  for a1,a3 being Element of BOOLEAN st a1 = s.x & a3 = s.c
+  holds (Following s).[<*c,x*>,'&'] = a3 '&' a1
+   proof let x,y,c be non pair set; let s be State of MajorityCirc(x,y,c);
+    reconsider a = y as Vertex of MajorityStr(x,y,c) by Th72;
+       s.a is Element of BOOLEAN;
+    hence thesis by Lm3;
+   end;
+
+theorem Th79:
+ for x,y,c being non pair set for s being State of MajorityCirc(x,y,c)
+  for a1,a2,a3 being Element of BOOLEAN st
+    a1 = s.[<*x,y*>,'&'] & a2 = s.[<*y,c*>,'&'] & a3 = s.[<*c,x*>,'&']
+  holds (Following s).MajorityOutput(x,y,c) = a1 'or' a2 'or' a3
+  proof let x,y,c be non pair set;
+   let s be State of MajorityCirc(x,y,c);
+   let a1,a2,a3 be Element of BOOLEAN such that
+A1:  a1 = s.[<*x,y*>,'&'] & a2 = s.[<*y,c*>,'&'] & a3 = s.[<*c,x*>,'&'];
+   set x_y =[<*x,y*>,'&'], y_c = [<*y,c*>,'&'], c_x = [<*c,x*>,'&'];
+   set S = MajorityStr(x,y,c);
+A2:  InnerVertices S = the OperSymbols of S by Th37;
+A3:  dom s = the carrier of S by CIRCUIT1:4;
+   reconsider x_y, y_c, c_x as Element of InnerVertices S by Th73;
+      MajorityOutput(x,y,c) = [<*x_y, y_c, c_x*>, or3] by Def20;
+   hence (Following s).MajorityOutput(x,y,c)
+      = or3.(s*<*x_y, y_c, c_x*>) by A2,Th35
+     .= or3.<*a1,a2,a3*> by A1,A3,FINSEQ_2:146
+     .= a1 'or' a2 'or' a3 by Def7;
+  end;
+
+Lm4:
+ for x,y,c being non pair set for s being State of MajorityCirc(x,y,c)
+  for a1,a2,a3 being Element of BOOLEAN st a1 = s.x & a2 = s.y & a3 = s.c
+  holds
+   (Following(s,2)).MajorityOutput(x,y,c) =
+        a1 '&' a2 'or' a2 '&' a3 'or' a3 '&' a1 &
+   (Following(s,2)).[<*x,y*>,'&'] = a1 '&' a2 &
+   (Following(s,2)).[<*y,c*>,'&'] = a2 '&' a3 &
+   (Following(s,2)).[<*c,x*>,'&'] = a3 '&' a1
+  proof let x,y,c be non pair set;
+   let s be State of MajorityCirc(x,y,c);
+   let a1,a2,a3 be Element of BOOLEAN such that
+A1:  a1 = s.x & a2 = s.y & a3 = s.c;
+   set x_y =[<*x,y*>,'&'], y_c = [<*y,c*>,'&'], c_x = [<*c,x*>,'&'];
+   set S = MajorityStr(x,y,c);
+   reconsider x' = x, y' = y, c' = c as Vertex of S by Th72;
+    x in InputVertices S & y in InputVertices S & c in InputVertices S
+     by Th74;
+then A2:  (Following s).x' = s.x & (Following s).y' = s.y & (Following s).c' =
+s.c
+     by CIRCUIT2:def 5;
+A3:  Following(s,2) = Following Following s by Th15;
+    (Following s).x_y = a1 '&' a2 & (Following s).y_c = a2 '&' a3 &
+    (Following s).c_x = a3 '&' a1 by A1,Lm3;
+   hence (Following(s,2)).MajorityOutput(x,y,c) =
+         a1 '&' a2 'or' a2 '&' a3 'or' a3 '&' a1 by A3,Th79;
+   thus thesis by A1,A2,A3,Lm3;
+  end;
+
+theorem
+   for x,y,c being non pair set for s being State of MajorityCirc(x,y,c)
+  for a1,a2 being Element of BOOLEAN st a1 = s.x & a2 = s.y
+  holds (Following(s,2)).[<*x,y*>,'&'] = a1 '&' a2
+   proof let x,y,c be non pair set; let s be State of MajorityCirc(x,y,c);
+    reconsider a = c as Vertex of MajorityStr(x,y,c) by Th72;
+       s.a is Element of BOOLEAN;
+    hence thesis by Lm4;
+   end;
+
+theorem
+   for x,y,c being non pair set for s being State of MajorityCirc(x,y,c)
+  for a2,a3 being Element of BOOLEAN st a2 = s.y & a3 = s.c
+  holds (Following(s,2)).[<*y,c*>,'&'] = a2 '&' a3
+   proof let x,y,c be non pair set; let s be State of MajorityCirc(x,y,c);
+    reconsider a = x as Vertex of MajorityStr(x,y,c) by Th72;
+       s.a is Element of BOOLEAN;
+    hence thesis by Lm4;
+   end;
+
+theorem
+   for x,y,c being non pair set for s being State of MajorityCirc(x,y,c)
+  for a1,a3 being Element of BOOLEAN st a1 = s.x & a3 = s.c
+  holds (Following(s,2)).[<*c,x*>,'&'] = a3 '&' a1
+   proof let x,y,c be non pair set; let s be State of MajorityCirc(x,y,c);
+    reconsider a = y as Vertex of MajorityStr(x,y,c) by Th72;
+       s.a is Element of BOOLEAN;
+    hence thesis by Lm4;
+   end;
+
+theorem
+   for x,y,c being non pair set for s being State of MajorityCirc(x,y,c)
+  for a1,a2,a3 being Element of BOOLEAN st a1 = s.x & a2 = s.y & a3 = s.c
+  holds
+   (Following(s,2)).MajorityOutput(x,y,c) =
+        a1 '&' a2 'or' a2 '&' a3 'or' a3 '&' a1 by Lm4;
+
+theorem Th84:
+ for x,y,c being non pair set for s being State of MajorityCirc(x,y,c)
+  holds Following(s,2) is stable
+  proof let x,y,c be non pair set; set S = MajorityStr(x,y,c);
+   let s be State of MajorityCirc(x,y,c);
+A1:  dom Following Following(s,2) = the carrier of S &
+    dom Following(s,2) = the carrier of S by CIRCUIT1:4;
+   reconsider xx = x, yy = y, cc = c as Vertex of S by Th72;
+   set a1 = s.xx, a2 = s.yy, a3 = s.cc;
+   set ffs = Following(s,2), fffs = Following ffs;
+      a1 = s.x & a2 = s.y & a3 = s.c;
+then A2:  ffs.MajorityOutput(x,y,c) = a1 '&' a2 'or' a2 '&' a3 'or' a3 '&' a1 &
+    ffs.[<*x,y*>,'&'] = a1 '&' a2 &
+    ffs.[<*y,c*>,'&'] = a2 '&' a3 &
+    ffs.[<*c,x*>,'&'] = a3 '&' a1 by Lm4;
+A3:  ffs = Following Following s by Th15;
+A4:  x in InputVertices S & y in InputVertices S & c in InputVertices S
+     by Th74;
+    then (Following s).x = a1 & (Following s).y = a2 & (Following s).c = a3
+     by CIRCUIT2:def 5;
+  then A5: ffs.x = a1 & ffs.y = a2 & ffs.c = a3 by A3,A4,CIRCUIT2:def 5;
+      now let a be set; assume
+A6:   a in the carrier of S;
+     then reconsider v = a as Vertex of S;
+A7:    v in InputVertices S \/ InnerVertices S by A6,MSAFREE2:3;
+     thus ffs.a = (fffs).a
+      proof per cases by A7,XBOOLE_0:def 2;
+       suppose v in InputVertices S;
+        hence thesis by CIRCUIT2:def 5;
+       suppose v in InnerVertices S;
+         then v in {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/
+             {MajorityOutput(x,y,c)} by Th75;
+         then v in {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} or
+         v in {MajorityOutput(x,y,c)} by XBOOLE_0:def 2;
+         then v = [<*x,y*>,'&'] or v = [<*y,c*>,'&'] or v = [<*c,x*>,'&'] or
+         v = MajorityOutput(x,y,c) by ENUMSET1:13,TARSKI:def 1;
+        hence thesis by A2,A5,Lm3,Th79;
+      end;
+    end;
+   hence ffs = fffs by A1,FUNCT_1:9;
+  end;
+
+definition
+ let x,y,c be set;
+ func BitAdderWithOverflowStr(x,y,c) ->
+      unsplit gate`1=arity gate`2isBoolean
+      non void strict non empty ManySortedSign
+  equals:
+Def22:
+    2GatesCircStr(x,y,c, 'xor') +* MajorityStr(x,y,c);
+  coherence;
+end;
+
+theorem Th85:
+ for x,y,c being non pair set holds
+   InputVertices BitAdderWithOverflowStr(x,y,c) = {x,y,c}
+  proof let x,y,c be non pair set;
+   set S = BitAdderWithOverflowStr(x,y,c);
+   set S1 = 2GatesCircStr(x,y,c, 'xor'), S2 = MajorityStr(x,y,c);
+A1:  S = S1 +* S2 by Def22;
+A2:  InputVertices S1 is without_pairs & InnerVertices S1 is Relation
+      by Th58,Th59;
+A3:  InputVertices S2 is without_pairs & InnerVertices S2 is Relation
+      by Th67,Th68;
+      c <> [<*x,y*>, 'xor'];
+    then InputVertices S1 = {x,y,c} & InputVertices S2 = {x,y,c} by Th57,Th75;
+   hence InputVertices S = {x,y,c} \/ {x,y,c} by A1,A2,A3,Th7
+                        .= {x,y,c};
+  end;
+
+theorem
+   for x,y,c being non pair set holds
+   InnerVertices BitAdderWithOverflowStr(x,y,c) =
+     {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} \/
+     {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/ {MajorityOutput(x,y,c)}
+  proof let x,y,c be non pair set;
+   set S1 = 2GatesCircStr(x,y,c, 'xor'), S2 = MajorityStr(x,y,c);
+A1:  BitAdderWithOverflowStr(x,y,c) = S1 +* S2 by Def22;
+A2:  {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} \/
+    {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/ {MajorityOutput(x,y,c)}
+    = {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} \/
+    ({[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/ {MajorityOutput(x,y,c)})
+     by XBOOLE_1:4;
+      InnerVertices S1 = {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} &
+    InnerVertices S2 = {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/
+      {MajorityOutput(x,y,c)} by Th56,Th75;
+   hence thesis by A1,A2,Th27;
+  end;
+
+theorem
+   for S being non empty ManySortedSign st S = BitAdderWithOverflowStr(x,y,c)
+   holds x in the carrier of S & y in the carrier of S & c in the carrier of S
+  proof set S1 = 2GatesCircStr(x,y,c, 'xor');
+   let S be non empty ManySortedSign;
+   assume S = BitAdderWithOverflowStr(x,y,c);
+    then x in the carrier of S1 & y in the carrier of S1 & c in the carrier of
+S1 &
+    S = S1 +* MajorityStr(x,y,c) by Def22,Th60;
+   hence thesis by Th20;
+  end;
+
+definition
+ let x,y,c be set;
+A1:   BitAdderWithOverflowStr(x,y,c)
+      = 2GatesCircStr(x,y,c, 'xor') +* MajorityStr(x,y,c) by Def22;
+ func BitAdderWithOverflowCirc(x,y,c) ->
+   strict Boolean gate`2=den Circuit of BitAdderWithOverflowStr(x,y,c) equals:
+Def23:
+   BitAdderCirc(x,y,c) +* MajorityCirc(x,y,c);
+  coherence by A1;
+end;
+
+theorem
+   InnerVertices BitAdderWithOverflowStr(x,y,c) is Relation
+  proof
+A1:  BitAdderWithOverflowStr(x,y,c) =
+      2GatesCircStr(x,y,c, 'xor') +* MajorityStr(x,y,c) by Def22;
+      InnerVertices 2GatesCircStr(x,y,c, 'xor') is Relation &
+    InnerVertices MajorityStr(x,y,c) is Relation by Th58,Th67;
+   hence thesis by A1,Th3;
+  end;
+
+theorem
+   for x,y,c being non pair set holds
+  InputVertices BitAdderWithOverflowStr(x,y,c) is without_pairs
+  proof let x,y,c be non pair set;
+      InputVertices BitAdderWithOverflowStr(x,y,c) = {x,y,c} by Th85;
+   hence thesis;
+  end;
+
+theorem
+   BitAdderOutput(x,y,c) in InnerVertices BitAdderWithOverflowStr(x,y,c) &
+ MajorityOutput(x,y,c) in InnerVertices BitAdderWithOverflowStr(x,y,c)
+  proof
+      BitAdderWithOverflowStr(x,y,c)
+     = 2GatesCircStr(x,y,c, 'xor') +* MajorityStr(x,y,c) by Def22;
+   hence thesis by Th21;
+  end;
+
+theorem
+   for x,y,c being non pair set
+ for s being State of BitAdderWithOverflowCirc(x,y,c)
+ for a1,a2,a3 being Element of BOOLEAN st a1 = s.x & a2 = s.y & a3 = s.c holds
+   (Following(s,2)).BitAdderOutput(x,y,c) = a1 'xor' a2 'xor' a3 &
+   (Following(s,2)).MajorityOutput(x,y,c)
+           = a1 '&' a2 'or' a2 '&' a3 'or' a3 '&' a1
+  proof let x,y,c be non pair set;
+   set f = 'xor';
+   set S = BitAdderWithOverflowStr(x,y,c);
+   set S1 = 2GatesCircStr(x,y,c, 'xor'), S2 = MajorityStr(x,y,c);
+   set A = BitAdderWithOverflowCirc(x,y,c);
+   set A1 = BitAdderCirc(x,y,c), A2 = MajorityCirc(x,y,c);
+   let s be State of A;
+   let a1,a2,a3 be Element of BOOLEAN; assume
+A1:  a1 = s.x & a2 = s.y & a3 = s.c;
+A2: x in the carrier of S1 & y in the carrier of S1 & c in the carrier of S1
+     by Th60;
+A3: x in the carrier of S2 & y in the carrier of S2 & c in the carrier of S2
+     by Th72;
+A4:  A = A1 +* A2 & S = S1+*S2 by Def22,Def23;
+   then reconsider s1 = s|the carrier of S1 as State of A1 by Th26;
+   reconsider s2 = s|the carrier of S2 as State of A2 by A4,Th26;
+   reconsider t = s as State of A1+*A2 by A4;
+      InputVertices S1 is without_pairs & InnerVertices S1 is Relation &
+    InputVertices S2 is without_pairs & InnerVertices S2 is Relation
+      by Th58,Th59,Th67,Th68;
+then A5:  InnerVertices S1 misses InputVertices S2 &
+    InnerVertices S2 misses InputVertices S1 by Th5;
+A6:  BitAdderOutput(x,y,c) = 2GatesCircOutput(x,y,c, f) &
+    BitAdderCirc(x,y,c) = 2GatesCircuit(x,y,c, f) by Def15,Def16;
+      dom s1 = the carrier of S1 by CIRCUIT1:4;
+then A7:  a1 = s1.x & a2 = s1.y & a3 = s1.c by A1,A2,FUNCT_1:70;
+      c <> [<*x,y*>, f];
+    then (Following(t,2)).2GatesCircOutput(x,y,c, f)
+      = (Following(s1,2)).2GatesCircOutput(x,y,c, f) &
+    (Following(s1,2)).2GatesCircOutput(x,y,c,f) = a1 'xor' a2 'xor' a3
+     by A5,A6,A7,Th32,Th64;
+   hence (Following(s,2)).BitAdderOutput(x,y,c) = a1 'xor' a2 'xor' a3
+      by A4,Def15;
+      dom s2 = the carrier of S2 by CIRCUIT1:4;
+  then a1 = s2.x & a2 = s2.y & a3 = s2.c by A1,A3,FUNCT_1:70;
+    then (Following(t,2)).MajorityOutput(x,y,c)
+      = (Following(s2,2)).MajorityOutput(x,y,c) &
+    (Following(s2,2)).MajorityOutput(x,y,c)
+      = a1 '&' a2 'or' a2 '&' a3 'or' a3 '&' a1 by A5,Lm4,Th33;
+   hence (Following(s,2)).MajorityOutput(x,y,c)
+           = a1 '&' a2 'or' a2 '&' a3 'or' a3 '&' a1 by A4;
+  end;
+
+theorem
+   for x,y,c being non pair set
+ for s being State of BitAdderWithOverflowCirc(x,y,c)
+  holds Following(s,2) is stable
+  proof let x,y,c be non pair set;
+   set f = 'xor';
+   set S = BitAdderWithOverflowStr(x,y,c);
+   set S1 = 2GatesCircStr(x,y,c, 'xor'), S2 = MajorityStr(x,y,c);
+   set A = BitAdderWithOverflowCirc(x,y,c);
+   set A1 = BitAdderCirc(x,y,c), A2 = MajorityCirc(x,y,c);
+   let s be State of A;
+A1:  A = A1 +* A2 & S = S1+*S2 by Def22,Def23;
+   then reconsider s1 = s|the carrier of S1 as State of A1 by Th26;
+   reconsider s2 = s|the carrier of S2 as State of A2 by A1,Th26;
+   reconsider t = s as State of A1+*A2 by A1;
+      InputVertices S1 is without_pairs & InnerVertices S1 is Relation &
+    InputVertices S2 is without_pairs & InnerVertices S2 is Relation
+      by Th58,Th59,Th67,Th68;
+    then InnerVertices S1 misses InputVertices S2 &
+    InnerVertices S2 misses InputVertices S1 by Th5;
+then A2:  Following(s1,2) = Following(t,2)|the carrier of S1 &
+    Following(s1,3) = Following(t,3)|the carrier of S1 &
+    Following(s2,2) = Following(t,2)|the carrier of S2 &
+    Following(s2,3) = Following(t,3)|the carrier of S2 by Th30,Th31;
+      c <> [<*x,y*>, f] & A1 = 2GatesCircuit(x,y,c, f) by Def16;
+    then Following(s1,2) is stable by Th63;
+then A3:  Following(s1,2) = Following Following(s1,2) by CIRCUIT2:def 6
+                   .= Following(s1,2+1) by Th12;
+      Following(s2,2) is stable by Th84;
+then A4:  Following(s2,2) = Following Following(s2,2) by CIRCUIT2:def 6
+                   .= Following(s2,2+1) by Th12;
+A5:  Following(s,2+1) = Following Following(s,2) by Th12;
+A6:  dom Following(s,2) = the carrier of S &
+    dom Following(s,3) = the carrier of S &
+    dom Following(s1,2) = the carrier of S1 &
+    dom Following(s2,2) = the carrier of S2 by CIRCUIT1:4;
+      S = S1+*S2 by Def22;
+then A7:  the carrier of S = (the carrier of S1) \/ the carrier of S2
+     by CIRCCOMB:def 2;
+      now let a be set; assume a in the carrier of S;
+      then a in the carrier of S1 or a in the carrier of S2 by A7,XBOOLE_0:def
+2;
+      then (Following(s,2)).a = (Following(s1,2)).a &
+      (Following(s,3)).a = (Following(s1,3)).a or
+      (Following(s,2)).a = (Following(s2,2)).a &
+      (Following(s,3)).a = (Following(s2,3)).a by A1,A2,A3,A4,A6,FUNCT_1:70;
+     hence (Following(s,2)).a = (Following Following(s,2)).a by A3,A4,Th12;
+    end;
+   hence Following(s,2) = Following Following(s,2) by A5,A6,FUNCT_1:9;
+  end;
+

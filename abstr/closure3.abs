@@ -1,0 +1,202 @@
+:: Algebraic Operation on Subsets of Many Sorted Sets
+::  by Agnieszka Julia Marasik
+::
+:: Received June 23, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary PBOOLE, FUNCT_4, RELAT_1, CLOSURE2, SETFAM_1, MSSUBFAM, AMI_1,
+      MSUALG_1, ZF_REFLE, MSUALG_2, UNIALG_2, BOOLE, CAT_4, FUNCT_1, QC_LANG1,
+      TDGROUP, CANTOR_1, PRE_CIRC, FINSET_1, FUNCOP_1, TARSKI, MATRIX_1,
+      WAYBEL_8, RELAT_2, MSAFREE2, BINOP_1, CLOSURE1, PROB_1, FUNCT_2,
+      CLOSURE3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CANTOR_1, SETFAM_1, RELAT_1,
+      FUNCT_1, STRUCT_0, PARTFUN1, FUNCT_2, FINSET_1, FUNCT_4, PBOOLE,
+      MSUALG_1, MSUALG_2, PROB_1, CLOSURE2, MSSUBFAM, MBOOLEAN, PRE_CIRC;
+ constructors CLOSURE2, PRE_CIRC, PRALG_2, CANTOR_1, PROB_1, MSSUBFAM;
+ clusters STRUCT_0, MSUALG_1, FUNCT_1, PBOOLE, CLOSURE2, FINSET_1, MSSUBFAM,
+      RELSET_1, SUBSET_1, FUNCT_2, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin  :: Preliminaries
+
+definition let S be non empty 1-sorted;
+ cluster the 1-sorted of S -> non empty;
+end;
+
+theorem :: CLOSURE3:1
+ for I be non empty set, M, N be ManySortedSet of I holds
+  M +* N = N;
+
+theorem :: CLOSURE3:2
+ for I be set, M, N be ManySortedSet of I, F be SubsetFamily of M holds
+  N in F implies meet |:F:| c=' N;
+
+theorem :: CLOSURE3:3
+for S be non void non empty ManySortedSign,
+    MA be strict non-empty MSAlgebra over S
+for F be SubsetFamily of the Sorts of MA st
+      F c= SubSort MA
+for B be MSSubset of MA st B = meet |:F:| holds
+    B is opers_closed;
+
+begin :: Relationships between Subsets Families
+
+definition let I be set, M be ManySortedSet of I,
+               B be SubsetFamily of M, A be SubsetFamily of M;
+ pred A is_finer_than B means
+:: CLOSURE3:def 1
+      for a be set st a in A ex b be set st b in B & a c= b;
+  reflexivity;
+ pred B is_coarser_than A means
+:: CLOSURE3:def 2
+      for b be set st b in B ex a be set st a in A & a c= b;
+  reflexivity;
+ end;
+
+theorem :: CLOSURE3:4
+   for I be set, M be ManySortedSet of I
+ for A,B,C be SubsetFamily of M holds
+ A is_finer_than B & B is_finer_than C implies A is_finer_than C;
+
+theorem :: CLOSURE3:5
+   for I be set, M be ManySortedSet of I
+ for A,B,C be SubsetFamily of M holds
+ A is_coarser_than B & B is_coarser_than C implies A is_coarser_than C;
+
+definition let I be non empty set, M be ManySortedSet of I;
+func supp M -> set means
+:: CLOSURE3:def 3
+
+     it = { x where x is Element of I : M.x <> {} };
+end;
+
+theorem :: CLOSURE3:6
+   for I be non empty set, M be non-empty ManySortedSet of I holds
+  M = [0]I +* (M|supp M);
+
+theorem :: CLOSURE3:7
+   for I be non empty set, M1, M2 be non-empty ManySortedSet of I holds
+  supp M1 = supp M2 & M1|supp M1 = M2|supp M2 implies M1 = M2;
+
+theorem :: CLOSURE3:8
+   for I be non empty set, M be ManySortedSet of I, x be Element of I holds
+  (not x in supp M) implies M.x = {};
+
+theorem :: CLOSURE3:9
+ for I being non empty set, M being ManySortedSet of I,
+     x being Element of Bool M, i being Element of I
+ for y being set st y in x.i
+  ex a being Element of Bool M st y in a.i &
+    a is locally-finite & supp a is finite & a c= x;
+
+
+definition let I be set, M be ManySortedSet of I;
+           let A be SubsetFamily of M;
+func MSUnion A -> ManySortedSubset of M means
+:: CLOSURE3:def 4
+
+     for i be set st i in I holds
+     it.i = union { f.i where f is Element of Bool M: f in A };
+end;
+
+definition let I be set, M be ManySortedSet of I;
+ let B be non empty SubsetFamily of M;
+ redefine
+  mode Element of B -> ManySortedSet of I;
+end;
+
+definition let I be set, M be ManySortedSet of I,
+ A be empty SubsetFamily of M;
+ cluster MSUnion A -> empty-yielding;
+end;
+
+theorem :: CLOSURE3:10
+   for I be set, M be ManySortedSet of I,
+     A be SubsetFamily of M holds
+ MSUnion A = union |:A:|;
+
+definition let I be set, M be ManySortedSet of I,
+ A, B be SubsetFamily of M;
+ redefine func A \/ B -> SubsetFamily of M;
+ end;
+
+theorem :: CLOSURE3:11
+  for I be set, M be ManySortedSet of I
+for A, B be SubsetFamily of M holds
+ MSUnion (A \/ B) = MSUnion A \/ MSUnion B;
+
+theorem :: CLOSURE3:12
+  for I be set, M be ManySortedSet of I
+for A, B be SubsetFamily of M holds
+ A c= B implies MSUnion A c= MSUnion B;
+
+definition let I be set, M be ManySortedSet of I,
+ A, B be SubsetFamily of M;
+ redefine func A /\ B -> SubsetFamily of M;
+ end;
+
+theorem :: CLOSURE3:13
+   for I be set, M be ManySortedSet of I
+ for A, B be SubsetFamily of M holds
+ MSUnion (A /\ B) c= MSUnion A /\ MSUnion B;
+
+theorem :: CLOSURE3:14
+    for I be set, M be ManySortedSet of I,
+      AA be set st for x being set st x in AA holds x is SubsetFamily of M
+  for A,B be SubsetFamily of M
+   st B = { MSUnion X where X is SubsetFamily of M : X in AA} & A = union AA
+  holds MSUnion B = MSUnion A;
+
+begin ::Algebraic Operation on Subsets of Many Sorted Sets
+
+definition let I be non empty set, M be ManySortedSet of I, S be SetOp of M;
+attr S is algebraic means
+:: CLOSURE3:def 5
+
+        for x be Element of Bool M st x = S.x
+       ex A be SubsetFamily of M st A = { S.a where a is Element of Bool M :
+                 a is locally-finite & supp a is finite & a c= x} &
+          x = MSUnion A;
+end;
+
+definition let I be non empty set, M be ManySortedSet of I;
+ cluster algebraic reflexive monotonic idempotent SetOp of M;
+end;
+
+definition let S be non empty 1-sorted,
+               IT be ClosureSystem of S;
+attr IT is algebraic means
+:: CLOSURE3:def 6
+   ClSys->ClOp IT is algebraic;
+end;
+
+definition let S be non void non empty ManySortedSign,
+               MA be non-empty MSAlgebra over S;
+func SubAlgCl MA -> strict ClosureStr over the 1-sorted of S means
+:: CLOSURE3:def 7
+
+  the Sorts of it = the Sorts of MA &
+  the Family of it = SubSort MA;
+end;
+
+canceled;
+
+theorem :: CLOSURE3:16
+for S be non void non empty ManySortedSign,
+    MA be strict non-empty MSAlgebra over S holds
+SubSort MA is absolutely-multiplicative SubsetFamily of the Sorts of MA;
+
+
+definition let S be non void non empty ManySortedSign,
+               MA be strict non-empty MSAlgebra over S;
+ cluster SubAlgCl MA -> absolutely-multiplicative;
+end;
+
+definition let S be non void non empty ManySortedSign,
+               MA be strict non-empty MSAlgebra over S;
+ cluster SubAlgCl MA -> algebraic;
+end;
+

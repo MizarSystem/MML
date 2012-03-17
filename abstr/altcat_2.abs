@@ -1,0 +1,423 @@
+:: Examples of Category Structures.Subcategories
+::  by Andrzej Trybulec
+::
+:: Received January 22, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCOP_1, RELAT_1, FUNCT_1, CAT_4, PRALG_1, BOOLE, PBOOLE,
+      NATTRA_1, MSUALG_3, CAT_1, MCART_1, ALTCAT_1, BINOP_1, RELAT_2, ALTCAT_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, MCART_1, FUNCT_1,
+      STRUCT_0, FUNCT_2, BINOP_1, MULTOP_1, FUNCT_3, FUNCT_4, CQC_LANG, CAT_4,
+      CAT_1, PBOOLE, PRALG_1, ALTCAT_1, MSUALG_1, AUTALG_1, MSUALG_3;
+ constructors ALTCAT_1, CAT_4, CQC_LANG, MSUALG_3, AUTALG_1;
+ clusters STRUCT_0, ALTCAT_1, MSUALG_1, FUNCT_1, RELAT_1, PRALG_1, RELSET_1,
+      CQC_LANG, SUBSET_1;
+ requirements SUBSET, BOOLE;
+
+
+begin :: Preliminaries
+
+ reserve e for set;
+
+theorem :: ALTCAT_2:1
+   for X1,X2 being set, a1,a2 being set
+  holds [:X1 -->a1,X2-->a2:] = [:X1,X2:] --> [a1,a2];
+
+definition let I be set;
+ cluster [0]I -> Function-yielding;
+end;
+
+theorem :: ALTCAT_2:2
+   for f,g being Function holds ~(g*f) = g*~f;
+
+theorem :: ALTCAT_2:3
+   for f,g,h being Function holds ~(f*[:g,h:]) = ~f*[:h,g:];
+
+definition let f be Function-yielding Function;
+ cluster ~f -> Function-yielding;
+end;
+
+theorem :: ALTCAT_2:4
+   for I being set, A,B,C being ManySortedSet of I st A is_transformable_to B
+
+ for F being ManySortedFunction of A,B, G being ManySortedFunction of B,C
+ holds G**F is ManySortedFunction of A,C;
+
+definition let I be set; let A be ManySortedSet of [:I,I:];
+ redefine func ~A -> ManySortedSet of [:I,I:];
+end;
+
+theorem :: ALTCAT_2:5
+   for I1 being set, I2 being non empty set,
+     f being Function of I1,I2, B,C being ManySortedSet of I2,
+     G being ManySortedFunction of B,C
+holds G*f is ManySortedFunction of B*f,C*f;
+
+definition let I be set, A,B be ManySortedSet of [:I,I:],
+     F be ManySortedFunction of A,B;
+ redefine func ~F -> ManySortedFunction of ~A,~B;
+end;
+
+theorem :: ALTCAT_2:6
+   for I1,I2 being non empty set, M being ManySortedSet of [:I1,I2:],
+  o1 being Element of I1, o2 being Element of I2
+  holds (~M).(o2,o1) = M.(o1,o2);
+
+definition let I1 be set,
+ f,g be ManySortedFunction of I1;
+ redefine func g**f -> ManySortedFunction of I1;
+ end;
+
+begin :: An auxiliary notion
+
+definition let f,g be Function;
+ pred f cc= g means
+:: ALTCAT_2:def 1
+ dom f c= dom g & for i being set st i in dom f holds f.i c= g.i;
+ reflexivity;
+end;
+
+definition let I,J be set, A be ManySortedSet of I, B be ManySortedSet of J;
+ redefine
+ pred A cc= B means
+:: ALTCAT_2:def 2
+ I c= J & for i being set st i in I holds A.i c= B.i;
+end;
+
+canceled;
+
+theorem :: ALTCAT_2:8
+ for I,J being set,
+     A being ManySortedSet of I, B being ManySortedSet of J
+ holds A cc= B & B cc= A implies A = B;
+
+theorem :: ALTCAT_2:9
+ for I,J,K being set, A being ManySortedSet of I,
+     B being ManySortedSet of J, C being ManySortedSet of K
+ holds A cc= B & B cc= C implies A cc= C;
+
+theorem :: ALTCAT_2:10
+   for I being set, A being ManySortedSet of I, B being ManySortedSet of I
+ holds A cc= B iff A c= B;
+
+begin :: A bit of lambda calculus
+
+scheme OnSingletons{X()-> non empty set, F(set)-> set, P[set]}:
+ { [o,F(o)] where o is Element of X(): P[o] } is Function;
+
+scheme DomOnSingletons
+  {X()-> non empty set,f()-> Function, F(set)-> set, P[set]}:
+ dom f() = { o where o is Element of X(): P[o]}
+provided
+ f() = { [o,F(o)] where o is Element of X(): P[o] };
+
+scheme ValOnSingletons
+  {X()-> non empty set,f()-> Function,
+   x()-> Element of X(), F(set)-> set, P[set]}:
+ f().x() = F(x())
+provided
+ f() = { [o,F(o)] where o is Element of X(): P[o] } and
+ P[x()];
+
+begin :: More on old categories
+
+theorem :: ALTCAT_2:11
+ for C being Category, i,j,k being Object of C
+  holds [:Hom(j,k),Hom(i,j):] c= dom the Comp of C;
+
+theorem :: ALTCAT_2:12
+ for C being Category, i,j,k being Object of C
+  holds (the Comp of C).:[:Hom(j,k),Hom(i,j):] c= Hom(i,k);
+
+ definition let C be CatStr;
+  func the_hom_sets_of C
+    -> ManySortedSet of [:the Objects of C, the Objects of C:] means
+:: ALTCAT_2:def 3
+ for i,j being Object of C holds it.(i,j) = Hom(i,j);
+ end;
+
+theorem :: ALTCAT_2:13
+ for C be Category, i be Object of C holds
+  id i in (the_hom_sets_of C).(i,i);
+
+ definition let C be Category;
+  func the_comps_of C -> BinComp of the_hom_sets_of C means
+:: ALTCAT_2:def 4
+  for i,j,k being Object of C holds it.(i,j,k)
+   = (the Comp of C)|[:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):];
+ end;
+
+theorem :: ALTCAT_2:14
+ for C being Category, i,j,k being Object of C
+   st Hom(i,j) <> {} & Hom(j,k) <> {}
+ for f being Morphism of i,j, g being Morphism of j,k
+  holds (the_comps_of C).(i,j,k).(g,f) = g*f;
+
+theorem :: ALTCAT_2:15
+ for C being Category holds the_comps_of C is associative;
+
+theorem :: ALTCAT_2:16
+ for C being Category holds
+  the_comps_of C is with_left_units with_right_units;
+
+begin :: Transforming an old category into new one
+
+ definition let C be Category;
+  func Alter C -> strict non empty AltCatStr equals
+:: ALTCAT_2:def 5
+ AltCatStr(#the Objects of C,the_hom_sets_of C, the_comps_of C#);
+ end;
+
+theorem :: ALTCAT_2:17
+ for C being Category holds Alter C is associative;
+
+theorem :: ALTCAT_2:18
+ for C being Category holds Alter C is with_units;
+
+theorem :: ALTCAT_2:19
+ for C being Category holds Alter C is transitive;
+
+definition let C be Category;
+ cluster Alter C -> transitive associative with_units;
+end;
+
+begin :: More on new categories
+
+definition
+ cluster non empty strict AltGraph;
+end;
+
+definition let C be AltGraph;
+ attr C is reflexive means
+:: ALTCAT_2:def 6
+  for x being set st x in the carrier of C
+   holds (the Arrows of C).(x,x) <> {};
+end;
+
+definition let C be non empty AltGraph;
+ redefine attr C is reflexive means
+:: ALTCAT_2:def 7
+     for o being object of C holds <^o,o^> <> {};
+end;
+
+definition let C be non empty transitive AltCatStr;
+ redefine attr C is associative means
+:: ALTCAT_2:def 8
+ for o1,o2,o3,o4 being object of C
+  for f being Morphism of o1,o2, g being Morphism of o2,o3,
+      h being Morphism of o3,o4
+    st <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,o4^> <> {}
+   holds h*g*f = h*(g*f);
+end;
+
+definition let C be non empty AltCatStr;
+ redefine attr C is with_units means
+:: ALTCAT_2:def 9
+      for o being object of C holds <^o,o^> <> {} &
+   ex i being Morphism of o,o st
+    for o' being object of C,
+        m' being Morphism of o',o, m'' being Morphism of o,o'
+    holds
+     (<^o',o^> <> {} implies i*m' = m') &
+     (<^o,o'^> <> {} implies m''*i = m'');
+end;
+
+definition
+ cluster with_units -> reflexive (non empty AltCatStr);
+end;
+
+definition
+ cluster non empty reflexive AltGraph;
+end;
+
+definition
+ cluster non empty reflexive AltCatStr;
+end;
+
+begin
+
+definition
+ func the_empty_category -> strict AltCatStr means
+:: ALTCAT_2:def 10
+ the carrier of it is empty;
+end;
+
+definition
+ cluster the_empty_category -> empty;
+end;
+
+definition
+ cluster empty strict AltCatStr;
+end;
+
+theorem :: ALTCAT_2:20
+   for E being empty strict AltCatStr holds
+  E = the_empty_category;
+
+begin :: Subcategories
+      :: Semadeni Wiweger 1.6.1 str. 24
+
+definition let C be AltCatStr;
+ mode SubCatStr of C -> AltCatStr means
+:: ALTCAT_2:def 11
+ the carrier of it c= the carrier of C &
+     the Arrows of it cc= the Arrows of C &
+     the Comp of it cc= the Comp of C;
+end;
+
+reserve C,C1,C2,C3 for AltCatStr;
+
+theorem :: ALTCAT_2:21
+ C is SubCatStr of C;
+
+theorem :: ALTCAT_2:22
+   C1 is SubCatStr of C2 & C2 is SubCatStr of C3 implies C1 is SubCatStr of C3;
+
+theorem :: ALTCAT_2:23
+ for C1,C2 being AltCatStr st
+  C1 is SubCatStr of C2 & C2 is SubCatStr of C1
+    holds the AltCatStr of C1 = the AltCatStr of C2;
+
+
+
+definition let C be AltCatStr;
+ cluster strict SubCatStr of C;
+end;
+
+definition let C be non empty AltCatStr, o be object of C;
+ func ObCat o -> strict SubCatStr of C means
+:: ALTCAT_2:def 12
+ the carrier of it = { o } &
+   the Arrows of it = (o,o):-> <^o,o^> &
+   the Comp of it = [o,o,o] .--> (the Comp of C).(o,o,o);
+end;
+
+reserve C for non empty AltCatStr,
+        o for object of C;
+
+theorem :: ALTCAT_2:24
+ for o' being object of ObCat o holds o' = o;
+
+definition let C be non empty AltCatStr, o be object of C;
+ cluster ObCat o -> transitive non empty;
+end;
+
+definition let C be non empty AltCatStr;
+ cluster transitive non empty strict SubCatStr of C;
+end;
+
+theorem :: ALTCAT_2:25
+ for C being transitive non empty AltCatStr,
+     D1,D2 being transitive non empty SubCatStr of C
+  st the carrier of D1 c= the carrier of D2 &
+     the Arrows of D1 cc= the Arrows of D2
+ holds D1 is SubCatStr of D2;
+
+definition let C be AltCatStr, D be SubCatStr of C;
+ attr D is full means
+:: ALTCAT_2:def 13
+ the Arrows of D
+    = (the Arrows of C)|[:the carrier of D, the carrier of D:];
+end;
+
+definition let C be with_units (non empty AltCatStr), D be SubCatStr of C;
+ attr D is id-inheriting means
+:: ALTCAT_2:def 14
+ for o being object of D, o' being object of C st o = o'
+       holds idm o' in <^o,o^> if D is non empty
+       otherwise not contradiction;
+end;
+
+definition let C be AltCatStr;
+ cluster full strict SubCatStr of C;
+end;
+
+definition let C be non empty AltCatStr;
+ cluster full non empty strict SubCatStr of C;
+end;
+
+definition let C be category, o be object of C;
+ cluster ObCat o -> full id-inheriting;
+end;
+
+definition let C be category;
+ cluster full id-inheriting non empty strict SubCatStr of C;
+end;
+
+reserve C for non empty transitive AltCatStr;
+
+theorem :: ALTCAT_2:26
+for D being SubCatStr of C
+ st the carrier of D = the carrier of C & the Arrows of D = the Arrows of C
+holds the AltCatStr of D = the AltCatStr of C;
+
+theorem :: ALTCAT_2:27
+for D1,D2 being non empty transitive SubCatStr of C
+ st the carrier of D1 = the carrier of D2 & the Arrows of D1 = the Arrows of D2
+holds the AltCatStr of D1 = the AltCatStr of D2;
+
+theorem :: ALTCAT_2:28
+   for D being full SubCatStr of C st the carrier of D = the carrier of C
+   holds the AltCatStr of D = the AltCatStr of C;
+
+theorem :: ALTCAT_2:29
+ for C being non empty AltCatStr, D being full non empty SubCatStr of C,
+     o1,o2 being object of C, p1,p2 being object of D st o1 = p1 & o2 = p2
+ holds <^o1,o2^> = <^p1,p2^>;
+
+theorem :: ALTCAT_2:30
+ for C being non empty AltCatStr, D being non empty SubCatStr of C
+ for o being object of D holds o is object of C;
+
+definition let C be transitive non empty AltCatStr;
+ cluster full non empty -> transitive SubCatStr of C;
+end;
+
+theorem :: ALTCAT_2:31
+  for D1,D2 being full non empty SubCatStr of C
+ st the carrier of D1 = the carrier of D2
+holds the AltCatStr of D1 = the AltCatStr of D2;
+
+theorem :: ALTCAT_2:32
+ for C being non empty AltCatStr, D being non empty SubCatStr of C,
+     o1,o2 being object of C, p1,p2 being object of D st o1 = p1 & o2 = p2
+  holds <^p1,p2^> c= <^o1,o2^>;
+
+theorem :: ALTCAT_2:33
+ for C being non empty transitive AltCatStr,
+     D being non empty transitive SubCatStr of C,
+      p1,p2,p3 being object of D st <^p1,p2^> <> {} & <^p2,p3^> <> {}
+ for o1,o2,o3 being object of C st o1 = p1 & o2 = p2 & o3 = p3
+ for f being Morphism of o1,o2, g being Morphism of o2,o3,
+     ff being Morphism of p1,p2, gg being Morphism of p2,p3 st f = ff & g = gg
+  holds g*f = gg*ff;
+
+definition let C be associative transitive (non empty AltCatStr);
+ cluster transitive -> associative (non empty SubCatStr of C);
+end;
+
+theorem :: ALTCAT_2:34
+ for C being non empty AltCatStr, D being non empty SubCatStr of C,
+     o1,o2 being object of C, p1,p2 being object of D st
+      o1 = p1 & o2 = p2 & <^p1,p2^> <> {}
+ for n being Morphism of p1,p2 holds n is Morphism of o1,o2;
+
+definition let C be transitive with_units (non empty AltCatStr);
+ cluster id-inheriting transitive -> with_units (non empty SubCatStr of C);
+end;
+
+definition let C be category;
+ cluster id-inheriting transitive (non empty SubCatStr of C);
+end;
+
+definition let C be category;
+ mode subcategory of C is id-inheriting transitive SubCatStr of C;
+end;
+
+theorem :: ALTCAT_2:35
+  for C being category, D being non empty subcategory of C
+ for o being object of D, o' being object of C st o = o'
+holds idm o = idm o';
+

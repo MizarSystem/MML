@@ -1,0 +1,2743 @@
+:: The Product of the Families of the Groups
+::  by Artur Korni{\l}owicz
+::
+:: Received June 10, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, FUNCT_1, PBOOLE, RELAT_1, VECTSP_1, PRALG_1, RLVECT_2,
+      ZF_REFLE, CARD_3, TARSKI, BINOP_1, GROUP_1, REALSET1, BOOLE, SEMI_AF1,
+      GROUP_2, FINSET_1, FUNCT_4, GROUP_6, WELLORD1, GROUP_7;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
+      PARTFUN1, XREAL_0, NAT_1, FINSEQ_1, FUNCT_2, FUNCT_4, FINSET_1, BINOP_1,
+      STRUCT_0, VECTSP_1, GROUP_1, GROUP_2, GROUP_6, PBOOLE, CARD_3, PRALG_1,
+      PRALG_2;
+ constructors BINOP_1, GROUP_6, PRALG_2, ENUMSET1, XCMPLX_0, MEMBERED;
+ clusters STRUCT_0, PRALG_2, GROUP_1, FINSET_1, RELAT_1, GROUP_2, FINSEQ_1,
+      MOD_2, RELSET_1, ARYTM_3, MEMBERED;
+ requirements NUMERALS, BOOLE, SUBSET;
+ definitions STRUCT_0, PBOOLE, VECTSP_1, PRALG_1, GROUP_1, TARSKI, GROUP_2,
+      GROUP_6, FUNCT_1, FINSEQ_1, XBOOLE_0;
+ theorems PRALG_1, FUNCT_1, PBOOLE, STRUCT_0, CARD_3, FUNCT_2, BINOP_1, TARSKI,
+      ZFMISC_1, VECTSP_1, GROUP_1, GROUP_2, GROUP_6, FUNCT_4, FINSEQ_1,
+      FINSEQ_3, ENUMSET1, RELSET_1, XBOOLE_0, XBOOLE_1, RELAT_1;
+ schemes BINOP_1, COMPTS_1, MSUALG_1, FUNCT_2, XBOOLE_0;
+
+begin  :: Preliminaries
+
+reserve a, b, c, d, e, f for set;
+
+theorem Th1:
+ <*a*> = <*b*> implies a = b
+  proof
+    assume
+A1:   <*a*> = <*b*>;
+    thus a = <*a*>.1 by FINSEQ_1:def 8
+          .= b by A1,FINSEQ_1:def 8;
+  end;
+
+theorem
+   <*a,b*> = <*c,d*> implies a = c & b = d
+  proof
+    assume
+A1:  <*a,b*> = <*c,d*>;
+    thus a = <*a,b*>.1 by FINSEQ_1:61
+          .= c by A1,FINSEQ_1:61;
+    thus b = <*a,b*>.2 by FINSEQ_1:61
+          .= d by A1,FINSEQ_1:61;
+  end;
+
+theorem
+   <*a,b,c*> = <*d,e,f*> implies a = d & b = e & c = f
+  proof
+    assume
+A1:   <*a,b,c*> = <*d,e,f*>;
+    thus a = <*a,b,c*>.1 by FINSEQ_1:62
+          .= d by A1,FINSEQ_1:62;
+    thus b = <*a,b,c*>.2 by FINSEQ_1:62
+          .= e by A1,FINSEQ_1:62;
+    thus c = <*a,b,c*>.3 by FINSEQ_1:62
+          .= f by A1,FINSEQ_1:62;
+  end;
+
+
+begin  :: The product of the families of the groups
+
+reserve i, I for set,
+        f, g, h for Function,
+        s for ManySortedSet of I;
+
+definition let R be Relation;
+ attr R is HGrStr-yielding means :Def1:
+  for y being set st y in rng R holds y is non empty HGrStr;
+end;
+
+definition
+ cluster HGrStr-yielding -> 1-sorted-yielding Function;
+coherence
+  proof
+    let f be Function such that
+A1:   f is HGrStr-yielding;
+    let x be set;
+    assume x in dom f;
+    then f.x in rng f by FUNCT_1:def 5;
+    hence f.x is 1-sorted by A1,Def1;
+  end;
+end;
+
+definition let I be set;
+ cluster HGrStr-yielding ManySortedSet of I;
+existence
+  proof
+    consider H being non empty HGrStr;
+    deffunc F(set) = H;
+    consider f being ManySortedSet of I such that
+A1:   for i being set st i in I holds f.i = F(i) from MSSLambda;
+    take f;
+    let a be set;
+    assume a in rng f;
+then A2: ex x being set st x in dom f & a = f.x by FUNCT_1:def 5;
+      dom f = I by PBOOLE:def 3;
+    hence a is non empty HGrStr by A1,A2;
+  end;
+end;
+
+definition
+ cluster HGrStr-yielding Function;
+existence
+  proof
+    consider I being set, f being HGrStr-yielding ManySortedSet of I;
+    take f;
+    thus thesis;
+  end;
+end;
+
+definition let I be set;
+ mode HGrStr-Family of I is HGrStr-yielding ManySortedSet of I;
+end;
+
+definition let I be non empty set,
+               F be HGrStr-Family of I,
+               i be Element of I;
+ redefine func F.i -> non empty HGrStr;
+coherence
+  proof
+      dom F = I by PBOOLE:def 3;
+    then F.i in rng F by FUNCT_1:def 5;
+    hence thesis by Def1;
+  end;
+end;
+
+definition let I be set, F be HGrStr-Family of I;
+ cluster Carrier F -> non-empty;
+coherence
+  proof
+    let i be set; assume
+A1:   i in I;
+then A2: ex R being 1-sorted st R = F.i & (Carrier F).i = the carrier of R
+      by PRALG_1:def 13;
+      dom F = I by PBOOLE:def 3;
+    then F.i in rng F by A1,FUNCT_1:def 5;
+    then F.i is non empty HGrStr by Def1;
+    hence thesis by A2,STRUCT_0:def 1;
+  end;
+end;
+
+Lm1: now
+  let I be non empty set, i be Element of I,
+      F be HGrStr-yielding ManySortedSet of I,
+      f be Element of product Carrier F;
+A1:ex R being 1-sorted st R = F.i & (Carrier F).i = the carrier of R
+    by PRALG_1:def 13;
+    dom Carrier F = I by PBOOLE:def 3;
+  hence f.i in the carrier of (F.i) by A1,CARD_3:18;
+end;
+
+definition let I be set,
+               F be HGrStr-Family of I;
+ func product F -> strict HGrStr means :Def2:
+  the carrier of it = product Carrier F &
+  for f, g being Element of product Carrier F, i being set st i in I
+   ex Fi being non empty HGrStr, h being Function st
+    Fi = F.i & h = (the mult of it).(f,g) &
+   h.i = (the mult of Fi).(f.i,g.i);
+existence
+  proof
+    set A = product Carrier F;
+A1: dom Carrier F = I by PBOOLE:def 3;
+defpred P[Element of A, Element of A, set] means
+  for i being set st i in I ex Fi being non empty HGrStr, h being Function st
+    Fi = F.i & h = $3 & h.i = (the mult of Fi).($1.i,$2.i);
+A2: for x, y being Element of A ex z being Element of A st P[x,y,z]
+    proof
+      let x, y be Element of A;
+defpred R[set,set] means
+ ex Fi being non empty HGrStr st Fi = F.$1 &
+  $2 = (the mult of Fi).(x.$1,y.$1);
+A3:   for i being set st i in I ex w being set st w in union rng Carrier F &
+        R[i,w]
+      proof
+        let i be set; assume
+A4:       i in I;
+        then reconsider I1 = I as non empty set;
+        reconsider i1 = i as Element of I1 by A4;
+        reconsider F1 = F as HGrStr-Family of I1;
+        take w = (the mult of (F1.i1)).(x.i1,y.i1);
+A5:     ex R being 1-sorted st R = F.i1 & (Carrier F1).i1 = the carrier of R
+          by PRALG_1:def 13;
+        then x.i1 in the carrier of (F1.i1) & y.i1 in the carrier of (F1.i1)
+          by A1,CARD_3:18;
+        then (the mult of (F1.i1)).[x.i1,y.i1] in the carrier of (F1.i1)
+          by FUNCT_2:119;
+then A6:     w in the carrier of (F1.i1) by BINOP_1:def 1;
+          (Carrier F).i1 in rng Carrier F by A1,FUNCT_1:def 5;
+        hence w in union rng Carrier F by A5,A6,TARSKI:def 4;
+        thus R[i,w];
+      end;
+      consider z being Function such that
+A7:     dom z = I & rng z c= union rng Carrier F &
+        for x being set st x in I holds R[x,z.x]
+          from NonUniqBoundFuncEx(A3);
+A8:   dom z = dom Carrier F by A7,PBOOLE:def 3;
+        for i being set st i in dom Carrier F holds z.i in (Carrier F).i
+      proof
+        let i be set; assume
+A9:      i in dom Carrier F;
+then A10:    ex Fi being non empty HGrStr st Fi = F.i &
+         z.i = (the mult of Fi).(x.i,y.i) by A1,A7;
+A11:    ex R being 1-sorted st R = F.i & (Carrier F).i = the carrier of R
+            by A1,A9,PRALG_1:def 13;
+        reconsider I1 = I as non empty set by A9,PBOOLE:def 3;
+        reconsider i1 = i as Element of I1 by A9,PBOOLE:def 3;
+        reconsider F1 = F as HGrStr-Family of I1;
+          x.i1 in the carrier of (F1.i1) & y.i1 in the carrier of (F1.i1)
+          by A1,A11,CARD_3:18;
+        then (the mult of (F1.i1)).[x.i1,y.i1] in the carrier of (F1.i1)
+          by FUNCT_2:119;
+        hence z.i in (Carrier F).i by A10,A11,BINOP_1:def 1;
+      end;
+      then reconsider z as Element of A by A8,CARD_3:18;
+      take z;
+      let i be set;
+      assume i in I;
+      then consider Fi being non empty HGrStr such that
+A12:    Fi = F.i & z.i = (the mult of Fi).(x.i,y.i) by A7;
+      take Fi, z;
+      thus Fi = F.i & z = z & z.i = (the mult of Fi).(x.i,y.i) by A12;
+    end;
+    consider B being BinOp of A such that
+A13:  for a, b being Element of A holds P[a,b,B.(a,b)]
+       from BinOpEx(A2);
+    take HGrStr (#A,B#);
+    thus the carrier of HGrStr (#A,B#) = product Carrier F;
+    let f, g be Element of product Carrier F,
+        i be set;
+    assume i in I;
+    hence thesis by A13;
+  end;
+uniqueness
+  proof
+    let A, B be strict HGrStr such that
+A14:  the carrier of A = product Carrier F and
+A15:  for f, g being Element of product Carrier F, i being set st i in I
+      ex Fi being non empty HGrStr, h being Function st
+       Fi = F.i & h = (the mult of A).(f,g) & h.i = (the mult of Fi).(f.i,g.i)
+     and
+A16:  the carrier of B = product Carrier F and
+A17:  for f, g being Element of product Carrier F, i being set st i in I
+      ex Fi being non empty HGrStr, h being Function st
+       Fi = F.i & h = (the mult of B).(f,g) & h.i = (the mult of Fi).(f.i,g.i);
+      for x, y being set st x in the carrier of A & y in the carrier of A
+     holds (the mult of A).[x,y] = (the mult of B).[x,y]
+    proof
+      let x, y be set such that
+A18:     x in the carrier of A & y in the carrier of A;
+      set P = product Carrier F;
+      reconsider x1 = x, y1 = y as Element of P by A14,A18;
+        [x1,y1] in [:the carrier of A, the carrier of A:] by A18,ZFMISC_1:106;
+       then reconsider f = (the mult of A).[x1,y1] as Element of P
+        by A14,FUNCT_2:7;
+        [x1,y1] in [:the carrier of B, the carrier of B:]
+        by A16,ZFMISC_1:106;
+      then reconsider g = (the mult of B).[x1,y1] as Element of P
+        by A16,FUNCT_2:7;
+        dom Carrier F = I by PBOOLE:def 3;
+then A19:  dom f = I & dom g = I by CARD_3:18;
+        for i being set st i in I holds f.i = g.i
+      proof
+        let i be set; assume
+A20:      i in I;
+        then consider Fi being non empty HGrStr,
+                 h1 being Function such that
+A21:      Fi = F.i & h1 = (the mult of A).(x1,y1) &
+           h1.i = (the mult of Fi).(x1.i,y1.i) by A15;
+A22:    ex Gi being non empty HGrStr, h2 being Function st
+         Gi = F.i & h2 = (the mult of B).(x1,y1) &
+          h2.i = (the mult of Gi).(x1.i,y1.i) by A17,A20;
+        thus f.i = h1.i by A21,BINOP_1:def 1
+                .= g.i by A21,A22,BINOP_1:def 1;
+      end;
+      hence (the mult of A).[x,y] = (the mult of B).[x,y] by A19,FUNCT_1:9;
+    end;
+    hence thesis by A14,A16,FUNCT_2:118;
+  end;
+end;
+
+definition let I be set, F be HGrStr-Family of I;
+ cluster product F -> non empty;
+coherence
+  proof
+      the carrier of product F = product Carrier F by Def2;
+    hence the carrier of product F is non empty;
+  end;
+end;
+
+definition let I be set, F be HGrStr-Family of I;
+ cluster -> Function-like Relation-like Element of product F;
+coherence
+  proof
+    let x be Element of product F;
+    reconsider y = x as Element of product Carrier F by Def2;
+      y is Function;
+    hence thesis;
+  end;
+end;
+
+definition let I be set,
+               F be HGrStr-Family of I,
+               f, g be Element of product Carrier F;
+ cluster (the mult of product F).(f,g) -> Function-like Relation-like;
+coherence
+  proof
+    set A = product Carrier F;
+A1: the carrier of product F = product Carrier F by Def2;
+    then [f,g] in [:the carrier of product F, the carrier of product F:]
+      by ZFMISC_1:106;
+    then (the mult of product F).[f,g] is Element of A by A1,FUNCT_2:7;
+    then reconsider h = (the mult of product F).(f,g) as Element of A
+      by BINOP_1:def 1;
+      h is Function;
+    hence thesis;
+  end;
+end;
+
+theorem Th4:
+ for F being HGrStr-Family of I, G being non empty HGrStr,
+     p, q being Element of product F,
+     x, y being Element of G st
+   i in I & G = F.i & f = p & g = q & h = p * q & f.i = x & g.i = y holds
+  x * y = h.i
+  proof
+    let F be HGrStr-Family of I,
+        G be non empty HGrStr,
+        p, q be Element of product F,
+        x, y be Element of G such that
+A1:   i in I and
+A2:   G = F.i and
+A3:   f = p & g = q and
+A4:   h = p * q & f.i = x & g.i = y;
+    set GP = product F;
+      p in the carrier of GP & q in the carrier of GP;
+    then f in product Carrier F & g in product Carrier F by A3,Def2;
+    then consider Fi being non empty HGrStr, m being Function such that
+A5:  Fi = F.i & m = (the mult of GP).(f,g) &
+      m.i = (the mult of Fi).(f.i,g.i) by A1,Def2;
+      m = p * q by A3,A5,VECTSP_1:def 10;
+    hence x * y = h.i by A2,A4,A5,VECTSP_1:def 10;
+  end;
+
+definition let I be set, F be HGrStr-Family of I;
+ attr F is Group-like means :Def3:
+  for i being set st i in I ex Fi being Group-like (non empty HGrStr)
+   st Fi = F.i;
+ attr F is associative means :Def4:
+  for i being set st i in I ex Fi being associative (non empty HGrStr)
+   st Fi = F.i;
+ attr F is commutative means :Def5:
+  for i being set st i in I ex Fi being commutative (non empty HGrStr)
+   st Fi = F.i;
+end;
+
+definition let I be non empty set, F be HGrStr-Family of I;
+ redefine attr F is Group-like means :Def6:
+  for i being Element of I holds F.i is Group-like;
+compatibility
+  proof
+    hereby
+      assume
+A1:     F is Group-like;
+      let i be Element of I;
+        ex Fi being Group-like (non empty HGrStr) st Fi = F.i by A1,Def3;
+      hence F.i is Group-like;
+    end;
+    assume
+A2:   for i being Element of I holds F.i is Group-like;
+    let i be set;
+    assume i in I;
+    then reconsider i1 = i as Element of I;
+    reconsider F1 = F.i1 as Group-like (non empty HGrStr) by A2;
+    take F1;
+    thus thesis;
+  end;
+ redefine attr F is associative means :Def7:
+  for i being Element of I holds F.i is associative;
+compatibility
+  proof
+    hereby
+      assume
+A3:     F is associative;
+      let i be Element of I;
+        ex Fi being associative (non empty HGrStr) st Fi = F.i by A3,Def4;
+      hence F.i is associative;
+    end;
+    assume
+A4:   for i being Element of I holds F.i is associative;
+    let i be set;
+    assume i in I;
+    then reconsider i1 = i as Element of I;
+    reconsider Fi = F.i1 as associative (non empty HGrStr) by A4;
+    take Fi;
+    thus thesis;
+  end;
+ redefine attr F is commutative means
+    for i being Element of I holds F.i is commutative;
+compatibility
+  proof
+    hereby
+      assume
+A5:     F is commutative;
+      let i be Element of I;
+        ex Fi being commutative (non empty HGrStr) st Fi = F.i by A5,Def5;
+      hence F.i is commutative;
+    end;
+    assume
+A6:   for i being Element of I holds F.i is commutative;
+    let i be set;
+    assume i in I;
+    then reconsider i1 = i as Element of I;
+    reconsider Fi = F.i1 as commutative (non empty HGrStr) by A6;
+    take Fi;
+    thus thesis;
+  end;
+end;
+
+definition let I be set;
+ cluster Group-like associative
+         commutative HGrStr-Family of I;
+existence
+  proof
+    consider H being commutative Group;
+    deffunc F(set) = H;
+    consider f being ManySortedSet of I such that
+A1:   for i being set st i in I holds f.i = F(i) from MSSLambda;
+      f is HGrStr-yielding
+    proof
+      let i be set;
+      assume i in rng f;
+then A2:   ex x being set st x in dom f & i = f.x by FUNCT_1:def 5;
+        dom f = I by PBOOLE:def 3;
+      hence i is non empty HGrStr by A1,A2;
+    end;
+    then reconsider f as HGrStr-Family of I;
+    take f;
+    hereby
+      let i be set; assume
+A3:     i in I;
+      then reconsider I1 = I as non empty set;
+      reconsider i1 = i as Element of I1 by A3;
+      reconsider F1 = f as HGrStr-Family of I1;
+      reconsider Fi = F1.i1 as Group-like (non empty HGrStr) by A1;
+      take Fi;
+      thus Fi = f.i;
+    end;
+    hereby
+      let i be set; assume
+A4:     i in I;
+      then reconsider I1 = I as non empty set;
+      reconsider i1 = i as Element of I1 by A4;
+      reconsider F1 = f as HGrStr-Family of I1;
+      reconsider Fi = F1.i1 as associative (non empty HGrStr) by A1;
+      take Fi;
+      thus Fi = f.i;
+    end;
+    let i be set; assume
+A5:   i in I;
+    then reconsider I1 = I as non empty set;
+    reconsider i1 = i as Element of I1 by A5;
+    reconsider F1 = f as HGrStr-Family of I1;
+    reconsider Fi = F1.i1 as commutative (non empty HGrStr) by A1;
+    take Fi;
+    thus Fi = f.i;
+  end;
+end;
+
+definition let I be set, F be Group-like HGrStr-Family of I;
+ cluster product F -> Group-like;
+coherence
+  proof
+    set G = product F;
+defpred P[set,set] means
+ ex Fi being non empty HGrStr,
+    e being Element of Fi st Fi = F.$1 & $2 = e &
+   for h being Element of Fi holds h * e = h & e * h = h &
+    ex g being Element of Fi st h * g = e & g * h = e;
+A1: dom Carrier F = I by PBOOLE:def 3;
+A2: for i being set st i in I ex y being set st
+     y in union rng Carrier F & P[i,y]
+    proof
+      let i be set; assume
+A3:     i in I;
+     then reconsider I1 = I as non empty set;
+     reconsider i1 = i as Element of I1 by A3;
+     reconsider F1 = F as Group-like HGrStr-Family of I1;
+       F1.i1 is Group-like by Def6;
+     then consider e being Element of F1.i1 such that
+A4:    for h being Element of F1.i1 holds
+         h * e = h & e * h = h &
+         ex g being Element of F1.i1 st h * g = e & g * h = e
+      by GROUP_1:def 3;
+     take e;
+A5:  ex R being 1-sorted st R = F.i1 & (Carrier F1).i1 = the carrier of R
+       by PRALG_1:def 13;
+       (Carrier F).i1 in rng Carrier F by A1,FUNCT_1:def 5;
+     hence e in union rng Carrier F by A5,TARSKI:def 4;
+     take F1.i1, e;
+     thus F1.i1 = F.i & e = e;
+     let h be Element of F1.i1;
+     thus thesis by A4;
+    end;
+    consider ee being Function such that
+A6:   dom ee = I and rng ee c= union rng Carrier F and
+A7:   for x being set st x in I holds P[x,ee.x] from NonUniqBoundFuncEx(A2);
+      now
+      let i be set; assume
+A8:    i in dom ee;
+      then consider Fi being non empty HGrStr,
+               e being Element of Fi such that
+A9:    Fi = F.i & ee.i = e &
+       for h being Element of Fi holds h * e = h & e * h = h &
+        ex g being Element of Fi st h * g = e & g * h = e
+         by A6,A7;
+    ex R being 1-sorted st R = F.i & (Carrier F).i = the carrier of R
+        by A6,A8,PRALG_1:def 13;
+      hence ee.i in (Carrier F).i by A9;
+    end;
+then A10:ee in product Carrier F by A1,A6,CARD_3:18;
+    then reconsider e1 = ee as Element of G by Def2;
+    take e1;
+    let h be Element of G;
+    reconsider h1 = h as Element of product Carrier F by Def2;
+    reconsider he = (the mult of G).(h,e1), eh = (the mult of G).(e1,h)
+      as Element of product Carrier F by Def2;
+A11:dom he = I & dom eh = I & dom h1 = I by A1,CARD_3:18;
+      now
+      let i be set; assume
+A12:     i in I;
+then A13:  ex Gi being non empty HGrStr, f being Function st
+        Gi = F.i & f = (the mult of G).(h1,e1) &
+        f.i = (the mult of Gi).(h1.i,ee.i) by A10,Def2;
+      consider Fi being non empty HGrStr,
+               e2 being Element of Fi such that
+A14:   Fi = F.i & ee.i = e2 &
+       for h being Element of Fi holds h * e2 = h & e2 * h = h &
+        ex g being Element of Fi st h * g = e2 & g * h = e2
+         by A7,A12;
+      reconsider h2 = h1.i as Element of Fi by A12,A14,Lm1;
+        h2 * e2 = h2 by A14;
+      hence he.i = h1.i by A13,A14,VECTSP_1:def 10;
+    end;
+    then he = h by A11,FUNCT_1:9;
+    hence h * e1 = h by VECTSP_1:def 10;
+      now
+      let i be set; assume
+A15:    i in I;
+then A16:  ex Gi being non empty HGrStr, f being Function st
+        Gi = F.i & f = (the mult of G).(e1,h1) &
+        f.i = (the mult of Gi).(ee.i,h1.i) by A10,Def2;
+      consider Fi being non empty HGrStr,
+               e2 being Element of Fi such that
+A17:   Fi = F.i & ee.i = e2 &
+       for h being Element of Fi holds h * e2 = h & e2 * h = h &
+        ex g being Element of Fi st h * g = e2 & g * h = e2
+         by A7,A15;
+      reconsider h2 = h1.i as Element of Fi by A15,A17,Lm1;
+        e2 * h2 = h2 by A17;
+      hence eh.i = h1.i by A16,A17,VECTSP_1:def 10;
+    end;
+    then eh = h by A11,FUNCT_1:9;
+    hence e1 * h = h by VECTSP_1:def 10;
+defpred R[set,set] means
+ ex Fi being non empty HGrStr,
+    hi being Element of Fi st Fi = F.$1 & hi = h1.$1 &
+  ex g being Element of Fi st hi * g = ee.$1 & g * hi = ee.$1
+     & $2 = g;
+A18:for i being set st i in I ex y being set st
+     y in union rng Carrier F & R[i,y]
+    proof
+      let i be set; assume
+A19:    i in I;
+      then consider Fi being non empty HGrStr,
+               e being Element of Fi such that
+A20:    Fi = F.i & ee.i = e and
+A21:    for h being Element of Fi holds h * e = h & e * h = h &
+         ex g being Element of Fi st h * g = e & g * h = e
+          by A7;
+      reconsider hi = h1.i as Element of Fi by A19,A20,Lm1;
+      consider g being Element of Fi such that
+A22:    hi * g = e & g * hi = e by A21;
+      take g;
+A23:  ex R being 1-sorted st R = F.i & (Carrier F).i = the carrier of R
+        by A19,PRALG_1:def 13;
+        (Carrier F).i in rng Carrier F by A1,A19,FUNCT_1:def 5;
+      hence g in union rng Carrier F by A20,A23,TARSKI:def 4;
+      take Fi, hi;
+      thus Fi = F.i & hi = h1.i by A20;
+      take g;
+      thus thesis by A20,A22;
+    end;
+    consider gg being Function such that
+A24:  dom gg = I and rng gg c= union rng Carrier F and
+A25:  for x being set st x in I holds R[x,gg.x] from NonUniqBoundFuncEx(A18);
+      now
+      let i be set; assume
+A26:    i in dom gg;
+then A27:  ex R being 1-sorted st R = F.i & (Carrier F).i = the carrier of R
+       by A24,PRALG_1:def 13;
+      consider Fi being non empty HGrStr,
+               hi being Element of Fi such that
+A28:    Fi = F.i & hi = h1.i &
+        ex g being Element of Fi
+         st hi * g = ee.i & g * hi = ee.i & gg.i = g by A24,A25,A26;
+      thus gg.i in (Carrier F).i by A27,A28;
+    end;
+then A29:gg in product Carrier F by A1,A24,CARD_3:18;
+    then reconsider g1 = gg as Element of G by Def2;
+    take g1;
+    reconsider he = (the mult of G).(h,g1), eh = (the mult of G).(g1,h)
+      as Element of product Carrier F by Def2;
+A30:dom he = I & dom eh = I by A1,CARD_3:18;
+      now
+      let i be set; assume
+A31:    i in I;
+then A32:  ex Fi being non empty HGrStr,
+         hi being Element of Fi st
+       Fi = F.i & hi = h1.i &
+        ex g being Element of Fi st
+         hi * g = ee.i & g * hi = ee.i & gg.i = g by A25;
+      consider Gi being non empty HGrStr, h5 being Function such that
+A33:    Gi = F.i & h5 = (the mult of G).(h1,gg) &
+        h5.i = (the mult of Gi).(h1.i,gg.i) by A29,A31,Def2;
+      thus he.i = ee.i by A32,A33,VECTSP_1:def 10;
+    end;
+    then he = ee by A6,A30,FUNCT_1:9;
+    hence h * g1 = e1 by VECTSP_1:def 10;
+      now
+      let i be set; assume
+A34:    i in I;
+      then consider Fi being non empty HGrStr,
+               hi being Element of Fi such that
+A35:    Fi = F.i & hi = h1.i &
+        ex g being Element of Fi st
+         hi * g = ee.i & g * hi = ee.i & gg.i = g by A25;
+      consider Gi being non empty HGrStr, h5 being Function such that
+A36:    Gi = F.i & h5 = (the mult of G).(gg,h1) &
+        h5.i = (the mult of Gi).(gg.i,h1.i) by A29,A34,Def2;
+      thus eh.i = ee.i by A35,A36,VECTSP_1:def 10;
+    end;
+    then eh = ee by A6,A30,FUNCT_1:9;
+    hence g1 * h = e1 by VECTSP_1:def 10;
+  end;
+end;
+
+definition let I be set, F be associative HGrStr-Family of I;
+ cluster product F -> associative;
+coherence
+  proof
+    set G = product F;
+    let x, y, z be Element of G;
+    reconsider x1 = x, y1 = y, z1 = z as Element of product Carrier F by Def2;
+    set xy = (the mult of G).(x,y),
+        yz = (the mult of G).(y,z),
+        s = (the mult of G).(xy,z),
+        t = (the mult of G).(x,yz);
+    reconsider xy, yz, s, t as Element of product Carrier F by Def2;
+      dom Carrier F = I by PBOOLE:def 3;
+then A1: dom s = I & dom t = I by CARD_3:18;
+A2: now
+      let i be set; assume
+A3:     i in I;
+      then consider XY being non empty HGrStr, hxy being Function such that
+A4:     XY = F.i & hxy = (the mult of G).(x,y) &
+        hxy.i = (the mult of XY).(x1.i,y1.i) by Def2;
+      consider YZ being non empty HGrStr, hyz being Function such that
+A5:     YZ = F.i & hyz = (the mult of G).(y,z) &
+        hyz.i = (the mult of YZ).(y1.i,z1.i) by A3,Def2;
+      consider XY_Z being non empty HGrStr, hxy_z being Function such that
+A6:     XY_Z = F.i & hxy_z = (the mult of G).(xy,z) &
+        hxy_z.i = (the mult of XY_Z).(xy.i,z1.i) by A3,Def2;
+      consider X_YZ being non empty HGrStr, hx_yz being Function such that
+A7:     X_YZ = F.i & hx_yz = (the mult of G).(x,yz) &
+        hx_yz.i = (the mult of X_YZ).(x1.i,yz.i) by A3,Def2;
+     reconsider xi = x1.i, yi = y1.i as Element of XY
+       by A3,A4,Lm1;
+     reconsider zi = z1.i, xiyi = xi*yi
+       as Element of XY_Z by A3,A4,A6,Lm1;
+     reconsider xii = xi, yii = yi as Element of XY_Z
+       by A4,A6;
+     reconsider y3 = y1.i, z3 = zi as Element of YZ
+       by A3,A5,Lm1;
+A8:  XY_Z is associative by A3,A6,Def7;
+     thus s.i = (the mult of XY_Z).(xi*yi,z1.i) by A4,A6,VECTSP_1:def 10
+             .= xiyi*zi by VECTSP_1:def 10
+             .= xii*(yii*zi) by A4,A6,A8,VECTSP_1:def 16
+             .= (the mult of X_YZ).(x1.i,y3*z3) by A5,A6,A7,VECTSP_1:def 10
+             .= t.i by A5,A7,VECTSP_1:def 10;
+    end;
+    thus x*y*z = (the mult of G).(x*y,z) by VECTSP_1:def 10
+              .= (the mult of G).((the mult of G).(x,y),z) by VECTSP_1:def 10
+              .= (the mult of G).(x,(the mult of G).(y,z)) by A1,A2,FUNCT_1:9
+              .= (the mult of G).(x,y*z) by VECTSP_1:def 10
+              .= x*(y*z) by VECTSP_1:def 10;
+  end;
+end;
+
+definition let I be set, F be commutative HGrStr-Family of I;
+ cluster product F -> commutative;
+coherence
+  proof
+    set G = product F;
+    let x, y be Element of G;
+    reconsider x1 = x, y1 = y, xy = (the mult of G).(x,y),
+        yx = (the mult of G).(y,x) as Element of product Carrier F by Def2;
+      dom Carrier F = I by PBOOLE:def 3;
+then A1: dom xy = I & dom yx = I by CARD_3:18;
+A2: now
+      let i be set; assume
+A3:     i in I;
+      then consider XY being non empty HGrStr, hxy being Function such that
+A4:     XY = F.i & hxy = (the mult of G).(x,y) &
+        hxy.i = (the mult of XY).(x1.i,y1.i) by Def2;
+      consider YX being non empty HGrStr, hyx being Function such that
+A5:     YX = F.i & hyx = (the mult of G).(y,x) &
+        hyx.i = (the mult of YX).(y1.i,x1.i) by A3,Def2;
+      reconsider xi = x1.i, yi = y1.i as Element of XY
+       by A3,A4,Lm1;
+      consider Fi being commutative (non empty HGrStr) such that
+A6:     Fi = F.i by A3,Def5;
+      thus xy.i = xi * yi by A4,VECTSP_1:def 10
+               .= yi * xi by A4,A6,VECTSP_1:def 17
+               .= yx.i by A4,A5,VECTSP_1:def 10;
+    end;
+    thus x*y = (the mult of G).(x,y) by VECTSP_1:def 10
+            .= (the mult of G).(y,x) by A1,A2,FUNCT_1:9
+            .= y*x by VECTSP_1:def 10;
+  end;
+end;
+
+theorem
+   for F being HGrStr-Family of I, G being non empty HGrStr st
+   i in I & G = F.i & product F is Group-like holds
+  G is Group-like
+  proof
+    let F be HGrStr-Family of I,
+        G be non empty HGrStr such that
+A1:  i in I & G = F.i;
+    set GP = product F;
+    given e being Element of GP such that
+A2:   for h being Element of GP holds
+       h * e = h & e * h = h &
+       ex g being Element of GP st h * g = e & g * h = e;
+    reconsider f = e as Element of product Carrier F by Def2;
+    reconsider ei = f.i as Element of G by A1,Lm1;
+    take ei;
+    let h be Element of G;
+defpred P[set,set] means
+ ($1 = i implies $2 = h) &
+ ($1 <> i implies ex H being non empty HGrStr,
+  a being Element of H st H = F.$1 & $2 = a);
+A3: for j being set st j in I ex k being set st P[j,k]
+    proof
+      let j be set such that
+A4:     j in I;
+      per cases;
+      suppose j = i;
+      hence thesis;
+      suppose
+A5:     j <> i;
+        j in dom F by A4,PBOOLE:def 3;
+      then F.j in rng F by FUNCT_1:def 5;
+      then reconsider Fj = F.j as non empty HGrStr by Def1;
+      consider a being Element of Fj;
+      take a;
+      thus j = i implies a = h by A5;
+      thus thesis;
+    end;
+    consider g being ManySortedSet of I such that
+A6:   for j being set st j in I holds P[j,g.j] from MSSEx(A3);
+A7: dom g = I by PBOOLE:def 3;
+A8: dom Carrier F = I by PBOOLE:def 3;
+      now
+      let j be set; assume
+A9:    j in dom g;
+      then consider R being 1-sorted such that
+A10:    R = F.j & (Carrier F).j = the carrier of R
+         by A7,PRALG_1:def 13;
+      per cases;
+      suppose
+A11:    i = j;
+      then g.j = h by A6,A7,A9;
+      hence g.j in (Carrier F).j by A1,A10,A11;
+      suppose j <> i;
+      then consider H being non empty HGrStr,
+               a being Element of H such that
+A12:    H = F.j & g.j = a by A6,A7,A9;
+      thus g.j in (Carrier F).j by A10,A12;
+    end;
+    then reconsider g as Element of product Carrier F by A7,A8,CARD_3:18;
+    reconsider g1 = g as Element of GP by Def2;
+A13: g.i = h by A1,A6;
+      g1 * e = g1 & e * g1 = g1 by A2;
+    hence h * ei = h & ei * h = h by A1,A13,Th4;
+    consider gg being Element of GP such that
+A14:  g1 * gg = e & gg * g1 = e by A2;
+    reconsider r = gg as Element of product Carrier F by Def2;
+    reconsider r1 = r.i as Element of G by A1,Lm1;
+    take r1;
+    thus h * r1 = ei & r1 * h = ei by A1,A13,A14,Th4;
+  end;
+
+theorem
+   for F being HGrStr-Family of I, G being non empty HGrStr st
+   i in I & G = F.i & product F is associative holds
+  G is associative
+  proof
+    let F be HGrStr-Family of I,
+        G be non empty HGrStr such that
+A1:  i in I & G = F.i and
+A2:  for x, y, z being Element of product F holds
+      (x*y)*z = x*(y*z);
+    set GP = product F;
+    let x, y, z be Element of G;
+defpred X[set,set] means
+ ($1 = i implies $2 = x) &
+ ($1 <> i implies ex H being non empty HGrStr,
+  a being Element of H st H = F.$1 & $2 = a);
+A3: for j being set st j in I ex k being set st X[j,k]
+    proof
+      let j be set such that
+A4:     j in I;
+      per cases;
+      suppose j = i;
+      hence thesis;
+      suppose
+A5:     j <> i;
+        j in dom F by A4,PBOOLE:def 3;
+      then F.j in rng F by FUNCT_1:def 5;
+      then reconsider Fj = F.j as non empty HGrStr by Def1;
+      consider a being Element of Fj;
+      take a;
+      thus j = i implies a = x by A5;
+      thus thesis;
+    end;
+    consider gx being ManySortedSet of I such that
+A6:   for j being set st j in I holds X[j,gx.j] from MSSEx(A3);
+defpred Y[set,set] means
+ ($1 = i implies $2 = y) &
+ ($1 <> i implies ex H being non empty HGrStr,
+  a being Element of H st H = F.$1 & $2 = a);
+A7: for j being set st j in I ex k being set st Y[j,k]
+    proof
+      let j be set such that
+A8:     j in I;
+      per cases;
+      suppose j = i;
+      hence thesis;
+      suppose
+A9:     j <> i;
+        j in dom F by A8,PBOOLE:def 3;
+      then F.j in rng F by FUNCT_1:def 5;
+      then reconsider Fj = F.j as non empty HGrStr by Def1;
+      consider a being Element of Fj;
+      take a;
+      thus j = i implies a = y by A9;
+      thus thesis;
+    end;
+    consider gy being ManySortedSet of I such that
+A10:   for j being set st j in I holds Y[j,gy.j] from MSSEx(A7);
+defpred Z[set,set] means
+ ($1 = i implies $2 = z) &
+ ($1 <> i implies ex H being non empty HGrStr,
+  a being Element of H st H = F.$1 & $2 = a);
+A11: for j being set st j in I ex k being set st Z[j,k]
+    proof
+      let j be set such that
+A12:     j in I;
+      per cases;
+      suppose j = i;
+      hence thesis;
+      suppose
+A13:     j <> i;
+        j in dom F by A12,PBOOLE:def 3;
+      then F.j in rng F by FUNCT_1:def 5;
+      then reconsider Fj = F.j as non empty HGrStr by Def1;
+      consider a being Element of Fj;
+      take a;
+      thus j = i implies a = z by A13;
+      thus thesis;
+    end;
+    consider gz being ManySortedSet of I such that
+A14:   for j being set st j in I holds Z[j,gz.j] from MSSEx(A11);
+A15: dom gx = I & dom gy = I & dom gz = I by PBOOLE:def 3;
+A16: dom Carrier F = I by PBOOLE:def 3;
+      now
+      let j be set; assume
+A17:    j in dom gx;
+      then consider R being 1-sorted such that
+A18:    R = F.j & (Carrier F).j = the carrier of R
+         by A15,PRALG_1:def 13;
+      per cases;
+      suppose
+A19:    i = j;
+      then gx.j = x by A6,A15,A17;
+      hence gx.j in (Carrier F).j by A1,A18,A19;
+      suppose j <> i;
+      then consider H being non empty HGrStr,
+               a being Element of H such that
+A20:    H = F.j & gx.j = a by A6,A15,A17;
+      thus gx.j in (Carrier F).j by A18,A20;
+    end;
+    then reconsider gx as Element of product Carrier F by A15,A16,CARD_3:18;
+      now
+      let j be set; assume
+A21:    j in dom gy;
+      then consider R being 1-sorted such that
+A22:    R = F.j & (Carrier F).j = the carrier of R
+         by A15,PRALG_1:def 13;
+      per cases;
+      suppose
+A23:    i = j;
+      then gy.j = y by A10,A15,A21;
+      hence gy.j in (Carrier F).j by A1,A22,A23;
+      suppose j <> i;
+      then consider H being non empty HGrStr,
+               a being Element of H such that
+A24:    H = F.j & gy.j = a by A10,A15,A21;
+      thus gy.j in (Carrier F).j by A22,A24;
+    end;
+    then reconsider gy as Element of product Carrier F by A15,A16,CARD_3:18;
+      now
+      let j be set; assume
+A25:    j in dom gz;
+      then consider R being 1-sorted such that
+A26:    R = F.j & (Carrier F).j = the carrier of R
+         by A15,PRALG_1:def 13;
+      per cases;
+      suppose
+A27:    i = j;
+      then gz.j = z by A14,A15,A25;
+      hence gz.j in (Carrier F).j by A1,A26,A27;
+      suppose j <> i;
+      then consider H being non empty HGrStr,
+               a being Element of H such that
+A28:    H = F.j & gz.j = a by A14,A15,A25;
+      thus gz.j in (Carrier F).j by A26,A28;
+    end;
+    then reconsider gz as Element of product Carrier F by A15,A16,CARD_3:18;
+    reconsider x1 = gx, y1 = gy, z1 = gz as Element of GP
+     by Def2;
+    reconsider xy = x1*y1, xy_z = x1*y1*z1, yz = y1*z1, x_yz = x1*(y1*z1)
+      as Element of product Carrier F by Def2;
+    reconsider xyi = xy.i, yzi = yz.i as Element of G
+      by A1,Lm1;
+A29: x1 * y1 * z1 = x1 * (y1 * z1) by A2;
+A30: gx.i = x & gy.i = y & gz.i = z by A1,A6,A10,A14;
+    then xy.i = x * y & xyi * z = xy_z.i & x * yzi = x_yz.i by A1,Th4;
+    hence x*y*z = x*(y*z) by A1,A29,A30,Th4;
+  end;
+
+theorem
+   for F being HGrStr-Family of I, G being non empty HGrStr st
+   i in I & G = F.i & product F is commutative holds
+  G is commutative
+  proof
+    let F be HGrStr-Family of I,
+        G be non empty HGrStr such that
+A1:  i in I & G = F.i and
+A2:  for x, y being Element of product F holds
+      x*y = y*x;
+    set GP = product F;
+    let x, y be Element of G;
+defpred X[set,set] means
+ ($1 = i implies $2 = x) &
+ ($1 <> i implies ex H being non empty HGrStr,
+  a being Element of H st H = F.$1 & $2 = a);
+A3: for j being set st j in I ex k being set st X[j,k]
+    proof
+      let j be set such that
+A4:     j in I;
+      per cases;
+      suppose j = i;
+      hence thesis;
+      suppose
+A5:     j <> i;
+        j in dom F by A4,PBOOLE:def 3;
+      then F.j in rng F by FUNCT_1:def 5;
+      then reconsider Fj = F.j as non empty HGrStr by Def1;
+      consider a being Element of Fj;
+      take a;
+      thus j = i implies a = x by A5;
+      thus thesis;
+    end;
+    consider gx being ManySortedSet of I such that
+A6:   for j being set st j in I holds X[j,gx.j] from MSSEx(A3);
+defpred Y[set,set] means
+ ($1 = i implies $2 = y) &
+ ($1 <> i implies ex H being non empty HGrStr,
+  a being Element of H st H = F.$1 & $2 = a);
+A7: for j being set st j in I ex k being set st Y[j,k]
+    proof
+      let j be set such that
+A8:     j in I;
+      per cases;
+      suppose j = i;
+      hence thesis;
+      suppose
+A9:     j <> i;
+        j in dom F by A8,PBOOLE:def 3;
+      then F.j in rng F by FUNCT_1:def 5;
+      then reconsider Fj = F.j as non empty HGrStr by Def1;
+      consider a being Element of Fj;
+      take a;
+      thus j = i implies a = y by A9;
+      thus thesis;
+    end;
+    consider gy being ManySortedSet of I such that
+A10:   for j being set st j in I holds Y[j,gy.j] from MSSEx(A7);
+A11: dom gx = I & dom gy = I by PBOOLE:def 3;
+A12: dom Carrier F = I by PBOOLE:def 3;
+      now
+      let j be set; assume
+A13:    j in dom gx;
+      then consider R being 1-sorted such that
+A14:    R = F.j & (Carrier F).j = the carrier of R
+         by A11,PRALG_1:def 13;
+      per cases;
+      suppose
+A15:    i = j;
+      then gx.j = x by A6,A11,A13;
+      hence gx.j in (Carrier F).j by A1,A14,A15;
+      suppose j <> i;
+      then consider H being non empty HGrStr,
+               a being Element of H such that
+A16:    H = F.j & gx.j = a by A6,A11,A13;
+      thus gx.j in (Carrier F).j by A14,A16;
+    end;
+    then reconsider gx as Element of product Carrier F by A11,A12,CARD_3:18;
+      now
+      let j be set; assume
+A17:    j in dom gy;
+      then consider R being 1-sorted such that
+A18:    R = F.j & (Carrier F).j = the carrier of R
+         by A11,PRALG_1:def 13;
+      per cases;
+      suppose
+A19:    i = j;
+      then gy.j = y by A10,A11,A17;
+      hence gy.j in (Carrier F).j by A1,A18,A19;
+      suppose j <> i;
+      then consider H being non empty HGrStr,
+               a being Element of H such that
+A20:    H = F.j & gy.j = a by A10,A11,A17;
+      thus gy.j in (Carrier F).j by A18,A20;
+    end;
+    then reconsider gy as Element of product Carrier F by A11,A12,CARD_3:18;
+    reconsider x1 = gx, y1 = gy as Element of GP by Def2;
+    reconsider xy = x1*y1 as Element of product Carrier F by Def2;
+A21: x1 * y1 = y1 * x1 by A2;
+A22: gx.i = x & gy.i = y by A1,A6,A10;
+    then xy.i = x * y by A1,Th4;
+    hence x*y = y*x by A1,A21,A22,Th4;
+  end;
+
+theorem Th8:
+ for F being Group-like HGrStr-Family of I
+  st for i being set st i in I ex G being Group-like (non empty HGrStr)
+   st G = F.i & s.i = 1.G
+ holds s = 1.product F
+  proof
+    let F be Group-like HGrStr-Family of I such that
+A1:   for i being set st i in I ex G being Group-like (non empty HGrStr)
+       st G = F.i & s.i = 1.G;
+    set GP = product F;
+A2: dom s = I by PBOOLE:def 3;
+A3: dom Carrier F = I by PBOOLE:def 3;
+      now
+      let i be set; assume
+A4:     i in dom s;
+      then consider G being Group-like (non empty HGrStr) such that
+A5:     G = F.i & s.i = 1.G by A1,A2;
+      consider R being 1-sorted such that
+A6:    R = F.i & (Carrier F).i = the carrier of R by A2,A4,PRALG_1:def 13;
+      thus s.i in (Carrier F).i by A5,A6;
+    end;
+then A7: s in product Carrier F by A2,A3,CARD_3:18;
+    then reconsider e = s as Element of GP by Def2;
+      now
+      let h be Element of GP;
+      reconsider h1 = h, he = h*e, eh = e*h as Element of product Carrier F
+        by Def2;
+A8:   dom he = I & dom eh = I & dom h1 = I by A3,CARD_3:18;
+        now
+        let i be set; assume
+A9:       i in I;
+        then consider Fi being non empty HGrStr, m being Function such that
+A10:      Fi = F.i & m = (the mult of GP).(h,s) &
+          m.i = (the mult of Fi).(h1.i,s.i) by A7,Def2;
+        consider G being Group-like (non empty HGrStr) such that
+A11:      G = F.i & s.i = 1.G by A1,A9;
+        reconsider b = h1.i, c = s.i as Element of G
+          by A9,A11,Lm1;
+          b * c = b by A11,GROUP_1:def 4;
+        then (the mult of G).(b,c) = b by VECTSP_1:def 10;
+        hence he.i = h1.i by A10,A11,VECTSP_1:def 10;
+      end;
+      hence h * e = h by A8,FUNCT_1:9;
+        now
+        let i be set; assume
+A12:       i in I;
+        then consider Fi being non empty HGrStr, m being Function such that
+A13:      Fi = F.i & m = (the mult of GP).(s,h) &
+          m.i = (the mult of Fi).(s.i,h1.i) by A7,Def2;
+        consider G being Group-like (non empty HGrStr) such that
+A14:      G = F.i & s.i = 1.G by A1,A12;
+        reconsider b = h1.i, c = s.i as Element of G
+          by A12,A14,Lm1;
+          c * b = b by A14,GROUP_1:def 4;
+        then (the mult of G).(c,b) = b by VECTSP_1:def 10;
+        hence eh.i = h1.i by A13,A14,VECTSP_1:def 10;
+      end;
+      hence e * h = h by A8,FUNCT_1:9;
+    end;
+    hence s = 1.GP by GROUP_1:10;
+  end;
+
+theorem Th9:
+ for F being Group-like HGrStr-Family of I,
+     G being Group-like (non empty HGrStr) st i in I & G = F.i &
+   f = 1.product F
+ holds f.i = 1.G
+  proof
+    let F be Group-like HGrStr-Family of I,
+        G be Group-like (non empty HGrStr) such that
+A1:  i in I & G = F.i & f = 1.product F;
+    set GP = product F;
+      f in the carrier of GP by A1;
+then A2: f in product Carrier F by Def2;
+    then reconsider e = f.i as Element of G by A1,Lm1;
+      now
+      let h be Element of G;
+A3:   dom Carrier F = I by PBOOLE:def 3;
+defpred P[set,set] means
+ ($1 = i implies $2 = h) &
+ ($1 <> i implies ex H being Group-like (non empty HGrStr) st H = F.$1
+   & $2 = 1.H);
+A4:   for j being set st j in I ex k being set st P[j,k]
+      proof
+        let j be set such that
+A5:       j in I;
+        per cases;
+        suppose j = i;
+        hence thesis;
+        suppose
+A6:       j <> i;
+        consider Fj being Group-like (non empty HGrStr) such that
+A7:       Fj = F.j by A5,Def3;
+        take 1.Fj;
+        thus j = i implies 1.Fj = h by A6;
+        thus thesis by A7;
+      end;
+      consider g being ManySortedSet of I such that
+A8:     for j being set st j in I holds P[j,g.j] from MSSEx(A4);
+A9:   dom g = I by PBOOLE:def 3;
+        now
+        let j be set; assume
+A10:      j in dom g;
+        then consider R being 1-sorted such that
+A11:      R = F.j & (Carrier F).j = the carrier of R
+            by A9,PRALG_1:def 13;
+        per cases;
+        suppose
+A12:       i = j;
+        then g.j = h by A8,A9,A10;
+        hence g.j in (Carrier F).j by A1,A11,A12;
+        suppose j <> i;
+        then consider H being Group-like (non empty HGrStr) such that
+A13:      H = F.j & g.j = 1.H by A8,A9,A10;
+        thus g.j in (Carrier F).j by A11,A13;
+      end;
+then A14:  g in product Carrier F by A3,A9,CARD_3:18;
+      then reconsider g1 = g as Element of GP by Def2;
+      consider Fi being non empty HGrStr, m being Function such that
+A15:    Fi = F.i & m = (the mult of GP).(g,f) &
+        m.i = (the mult of Fi).(g.i,f.i) by A1,A2,A14,Def2;
+        g1 * 1.product F = g1 by GROUP_1:def 4;
+then A16:  m.i = g.i by A1,A15,VECTSP_1:def 10;
+        g.i = h by A1,A8;
+      hence h * e = h by A1,A15,A16,VECTSP_1:def 10;
+      consider Fi being non empty HGrStr, m being Function such that
+A17:    Fi = F.i & m = (the mult of GP).(f,g) &
+        m.i = (the mult of Fi).(f.i,g.i) by A1,A2,A14,Def2;
+        1.product F * g1 = g1 by GROUP_1:def 4;
+then A18:  m.i = g.i by A1,A17,VECTSP_1:def 10;
+        g.i = h by A1,A8;
+      hence e * h = h by A1,A17,A18,VECTSP_1:def 10;
+    end;
+    hence f.i = 1.G by GROUP_1:10;
+  end;
+
+theorem Th10:
+ for F being associative Group-like HGrStr-Family of I,
+     x being Element of product F
+  st x = g & for i being set st i in I
+   ex G being Group, y being Element of G st G = F.i & s.i = y"
+    & y = g.i
+  holds s = x"
+  proof
+    let F be associative Group-like HGrStr-Family of I,
+        x be Element of product F such that
+A1:  x = g and
+A2:  for i being set st i in I
+      ex G being Group, y being Element of G st
+       G = F.i & s.i = y" & y = g.i;
+    set GP = product F;
+A3: dom Carrier F = I & dom s = I by PBOOLE:def 3;
+      now
+      let i be set; assume
+A4:    i in dom s;
+      then consider G being Group, y being Element of G such
+that
+A5:     G = F.i & s.i = y" & y = g.i by A2,A3;
+      consider R being 1-sorted such that
+A6:     R = F.i & (Carrier F).i = the carrier of R by A3,A4,PRALG_1:def 13;
+      thus s.i in (Carrier F).i by A5,A6;
+    end;
+then A7: s in product Carrier F by A3,CARD_3:18;
+    then reconsider f1 = s as Element of GP by Def2;
+    reconsider II = 1.GP, xf = x * f1, fx = f1 * x, x1 = x
+     as Element of product Carrier F by Def2;
+A8: dom xf = I & dom fx = I & dom II = I by A3,CARD_3:18;
+      now
+      let i be set; assume
+A9:    i in I;
+      then consider Fi being non empty HGrStr, m being Function such that
+A10:    Fi = F.i & m = (the mult of GP).(x,s) &
+        m.i = (the mult of Fi).(x1.i,s.i) by A7,Def2;
+      consider G being Group, y being Element of G such that
+A11:    G = F.i & s.i = y" & y = g.i by A2,A9;
+A12:    II.i = 1.G by A9,A11,Th9;
+        y * y" = 1.G by GROUP_1:def 5;
+      then (the mult of G).(y,y") = 1.G by VECTSP_1:def 10;
+      hence xf.i = II.i by A1,A10,A11,A12,VECTSP_1:def 10;
+    end;
+then A13: x * f1 = 1.GP by A8,FUNCT_1:9;
+      now
+      let i be set; assume
+A14:    i in I;
+      then consider Fi being non empty HGrStr, m being Function such that
+A15:    Fi = F.i & m = (the mult of GP).(s,x) &
+        m.i = (the mult of Fi).(s.i,x1.i) by A7,Def2;
+      consider G being Group, y being Element of G such that
+A16:    G = F.i & s.i = y" & y = g.i by A2,A14;
+A17:  II.i = 1.G by A14,A16,Th9;
+        y" * y = 1.G by GROUP_1:def 5;
+      then (the mult of G).(y",y) = 1.G by VECTSP_1:def 10;
+      hence fx.i = II.i by A1,A15,A16,A17,VECTSP_1:def 10;
+    end;
+then f1 * x = 1.GP by A8,FUNCT_1:9;
+    hence s = x" by A13,GROUP_1:def 5;
+  end;
+
+theorem Th11:
+ for F being associative Group-like HGrStr-Family of I,
+     x being Element of product F,
+     G being Group, y being Element of G
+   st i in I & G = F.i & f = x & g = x" & f.i = y
+  holds g.i = y"
+  proof
+    let F be associative Group-like HGrStr-Family of I,
+        x be Element of product F,
+        G be Group,
+        y be Element of G such that
+A1:  i in I & G = F.i & f = x & g = x" & f.i = y;
+    set GP = product F;
+      x in the carrier of GP & x" in the carrier of GP;
+then A2: f in product Carrier F & g in product Carrier F by A1,Def2;
+    then reconsider gi = g.i as Element of G by A1,Lm1;
+    consider Fi being non empty HGrStr, h being Function such that
+A3:   Fi = F.i & h = (the mult of GP).(f,g) &
+      h.i = (the mult of Fi).(f.i,g.i) by A1,A2,Def2;
+      (the mult of GP).(f,g) = x * x" by A1,VECTSP_1:def 10
+      .= 1.GP by GROUP_1:def 5;
+    then h.i = 1.G by A1,A3,Th9;
+then A4: y * gi = 1.G by A1,A3,VECTSP_1:def 10;
+    consider Fi being non empty HGrStr, h being Function such that
+A5:   Fi = F.i & h = (the mult of GP).(g,f) &
+      h.i = (the mult of Fi).(g.i,f.i) by A1,A2,Def2;
+      (the mult of GP).(g,f) = x" * x by A1,VECTSP_1:def 10
+      .= 1.GP by GROUP_1:def 5;
+    then h.i = 1.G by A1,A5,Th9;
+then  gi * y = 1.G by A1,A5,VECTSP_1:def 10;
+    hence g.i = y" by A4,GROUP_1:def 5;
+  end;
+
+definition let I be set,
+      F be associative Group-like HGrStr-Family of I;
+ func sum F -> strict Subgroup of product F means :Def9:
+  for x being set holds x in the carrier of it iff
+   ex g being Element of product Carrier F,
+      J being finite Subset of I, f being ManySortedSet of J st
+     g = 1.product F & x = g +* f &
+     for j being set st j in J ex G being Group-like (non empty HGrStr) st
+      G = F.j & f.j in the carrier of G & f.j <> 1.G;
+existence
+  proof
+    set GP = product F,
+        CF = Carrier F;
+    reconsider g = 1.GP as Element of product CF by Def2;
+A1: dom g = dom CF & dom CF = I by CARD_3:18,PBOOLE:def 3;
+A2: now
+      let p be Element of product CF;
+      thus dom p = dom CF by CARD_3:18
+                .= I by PBOOLE:def 3;
+    end;
+
+defpred P[set] means
+ ex J being finite Subset of I, f being ManySortedSet of J st
+  $1 = g +* f &
+  for j being set st j in J ex G being Group-like (non empty HGrStr) st
+   G = F.j & f.j in the carrier of G & f.j <> 1.G;
+
+    consider A being set such that
+A3:  for x being set holds x in A iff x in product CF & P[x]
+      from Separation;
+
+A4: A c= the carrier of GP
+    proof
+      let a be set;
+      assume a in A;
+      then a in product CF by A3;
+      hence thesis by Def2;
+    end;
+A5: P[g]
+    proof
+      reconsider J = {} as finite Subset of I by XBOOLE_1:2;
+        dom {} = J;
+      then reconsider f = {} as ManySortedSet of J by PBOOLE:def 3;
+      take J, f;
+      thus g = g +* f by FUNCT_4:22;
+      thus for j being set st j in J
+       ex G being Group-like (non empty HGrStr) st
+        G = F.j & f.j in the carrier of G & f.j <> 1.G;
+    end;
+    then reconsider A as non empty set by A3;
+    set b = (the mult of GP)|[:A,A:];
+      dom b = [:A,A:] & rng b c= A
+    proof
+        dom the mult of GP = [:the carrier of GP,the carrier of GP:] by FUNCT_2
+:def 1;
+      then [:A,A:] c= dom the mult of GP by A4,ZFMISC_1:119;
+      hence
+A6:     dom b = [:A,A:] by RELAT_1:91;
+      let y be set;
+      assume y in rng b;
+      then consider x being set such that
+A7:     x in dom b & b.x = y by FUNCT_1:def 5;
+      consider x1, x2 being set such that
+A8:     x1 in A & x2 in A & x = [x1,x2] by A6,A7,ZFMISC_1:def 2;
+      consider J1 being finite Subset of I,
+               f1 being ManySortedSet of J1 such that
+A9:    x1 = g +* f1 and
+A10:    for j being set st j in J1
+         ex G being Group-like (non empty HGrStr) st
+          G = F.j & f1.j in the carrier of G & f1.j <> 1.G by A3,A8;
+      consider J2 being finite Subset of I,
+               f2 being ManySortedSet of J2 such that
+A11:     x2 = g +* f2 and
+A12:     for j being set st j in J2
+         ex G being Group-like (non empty HGrStr) st
+          G = F.j & f2.j in the carrier of G & f2.j <> 1.G by A3,A8;
+A13:  dom f1 = J1 & dom f2 = J2 by PBOOLE:def 3;
+      reconsider x1, x2 as Function by A9,A11;
+A14:  dom x1 = dom g \/ dom f1 by A9,FUNCT_4:def 1
+            .= I by A1,A13,XBOOLE_1:12;
+        now
+        let i be set; assume
+A15:      i in I;
+then A16:    ex R being 1-sorted st R = F.i & CF.i = the carrier of R
+          by PRALG_1:def 13;
+        per cases;
+        suppose
+A17:      i in J1;
+        then ex G being Group-like (non empty HGrStr) st
+          G = F.i & f1.i in the carrier of G & f1.i <> 1.G by A10;
+        hence x1.i in CF.i by A9,A13,A16,A17,FUNCT_4:14;
+        suppose
+A18:      not i in J1;
+        consider G being Group-like (non empty HGrStr) such that
+A19:      G = F.i by A15,Def3;
+          x1.i = g.i by A9,A13,A18,FUNCT_4:12
+            .= 1.G by A15,A19,Th9;
+        hence x1.i in CF.i by A16,A19;
+      end;
+      then reconsider x1 as Element of product CF by A1,A14,CARD_3:18;
+A20:  dom x2 = dom g \/ dom f2 by A11,FUNCT_4:def 1
+            .= I by A1,A13,XBOOLE_1:12;
+        now
+        let i be set; assume
+A21:      i in I;
+then A22:    ex R being 1-sorted st R = F.i & CF.i = the carrier of R
+         by PRALG_1:def 13;
+        per cases;
+        suppose
+A23:      i in J2;
+        then ex G being Group-like (non empty HGrStr) st
+         G = F.i & f2.i in the carrier of G & f2.i <> 1.G by A12;
+        hence x2.i in CF.i by A11,A13,A22,A23,FUNCT_4:14;
+        suppose
+A24:      not i in J2;
+        consider G being Group-like (non empty HGrStr) such that
+A25:      G = F.i by A21,Def3;
+          x2.i = g.i by A11,A13,A24,FUNCT_4:12
+            .= 1.G by A21,A25,Th9;
+        hence x2.i in CF.i by A22,A25;
+      end;
+      then reconsider x2 as Element of product CF by A1,A20,CARD_3:18;
+      reconsider X1 = x1, X2 = x2 as Element of GP by Def2;
+      reconsider ff = X1*X2 as Element of product CF by Def2;
+      defpred S[set] means
+        ex G being Group-like (non empty HGrStr),
+           k1, k2 being Element of G st
+         G = F.$1 & k1 = x1.$1 & k2 = x2.$1 & k1*k2 = 1.G &
+          f1.$1 <> 1.G & f2.$1 <> 1.G;
+      consider K being set such that
+A26:    for k being set holds k in K iff k in I & S[k] from Separation;
+A27:  now
+        reconsider J = {} as finite Subset of I by XBOOLE_1:2;
+        take J;
+        thus for j being set st j in J
+         ex G being Group-like (non empty HGrStr) st
+          G = F.j & ff.j in the carrier of G & ff.j <> 1.G;
+      end;
+        [x1,x2] in [:A,A:] by A8,ZFMISC_1:106;
+then A28:  y = (the mult of GP).[x1,x2] by A7,A8,FUNCT_1:72
+       .= (the mult of GP).(x1,x2) by BINOP_1:def 1
+       .= X1*X2 by VECTSP_1:def 10;
+      then reconsider y1 = y as Element of product CF by Def2;
+      P[y]
+      proof
+          J1 \/ J2 \ K c= I
+        proof
+          let a be set;
+          assume a in J1 \/ J2 \ K;
+          then a in J1 \/ J2 by XBOOLE_0:def 4;
+          hence a in I;
+        end;
+        then reconsider J = J1 \/ J2 \ K as finite Subset of I;
+        take J;
+        defpred R[set,set] means
+        ex G being Group-like (non empty HGrStr),
+           k1, k2 being Element of G st
+        G = F.$1 & k1 = x1.$1 & k2 = x2.$1 & $2 = k1*k2;
+A29:    for j being set st j in J ex t being set st R[j,t]
+        proof
+          let j be set; assume
+A30:        j in J;
+          then consider G being Group-like (non empty HGrStr) such that
+A31:        G = F.j by Def3;
+          reconsider k1 = x1.j, k2 = x2.j as Element of G
+            by A30,A31,Lm1;
+          take k1*k2;
+          thus R[j,k1*k2] by A31;
+        end;
+        consider f being ManySortedSet of J such that
+A32:      for j being set st j in J holds R[j,f.j] from MSSEx(A29);
+        take f;
+        set gf = g +* f;
+A33:    dom f = J by PBOOLE:def 3;
+A34:    dom y1 = I by A2;
+A35:    dom gf = dom g \/ dom f by FUNCT_4:def 1
+              .= I by A1,A33,XBOOLE_1:12;
+          now
+          let i be set; assume
+A36:        i in I;
+          then consider Fi being non empty HGrStr, h being Function such that
+A37:        Fi = F.i & h = (the mult of GP).(x1,x2) &
+            h.i = (the mult of Fi).(x1.i,x2.i) by Def2;
+          consider FF being Group-like (non empty HGrStr) such that
+A38:        FF = F.i by A36,Def3;
+          reconsider Fi as Group-like (non empty HGrStr) by A37,A38;
+          reconsider x1i = x1.i, x2i = x2.i as Element of Fi
+           by A36,A37,Lm1;
+A39:      y1.i = x1i * x2i by A28,A36,A37,Th4;
+          per cases;
+          suppose
+A40:        i in J;
+          then ex GG being Group-like (non empty HGrStr),
+             k1a, k2a being Element of GG st
+            GG = F.i & k1a = x1.i & k2a = x2.i & f.i = k1a*k2a by A32;
+          hence y1.i = gf.i by A33,A37,A39,A40,FUNCT_4:14;
+          suppose
+A41:        not i in J;
+then A42:      gf.i = g.i by A33,FUNCT_4:12
+              .= 1.FF by A36,A38,Th9;
+            now per cases by A41,XBOOLE_0:def 4;
+            case not i in J1 \/ J2;
+            then not i in J1 & not i in J2 by XBOOLE_0:def 2;
+            then x1.i = g.i & x2.i = g.i by A9,A11,A13,FUNCT_4:12;
+            then x1.i = 1.FF & x2.i = 1.FF by A36,A38,Th9;
+            hence y1.i = gf.i by A37,A38,A39,A42,GROUP_1:def 4;
+            case i in K;
+            then ex GG being Group-like (non empty HGrStr),
+               k1, k2 being Element of GG st
+              GG = F.i & k1 = x1.i & k2 = x2.i & k1*k2 = 1.GG &
+              f1.i <> 1.GG & f2.i <> 1.GG by A26;
+            hence y1.i = gf.i by A28,A36,A38,A42,Th4;
+          end;
+          hence y1.i = gf.i;
+        end;
+        hence y = gf by A34,A35,FUNCT_1:9;
+        let j be set; assume
+A43:      j in J;
+        then consider G being Group-like (non empty HGrStr),
+                 k1, k2 being Element of G such that
+A44:      G = F.j & k1 = x1.j & k2 = x2.j & f.j = k1*k2 by A32;
+        take G;
+        thus G = F.j by A44;
+        thus f.j in the carrier of G by A44;
+A45:    j in J1 \/ J2 by A43,XBOOLE_0:def 4;
+        per cases by A45,XBOOLE_0:def 2;
+        suppose
+A46:      j in J1 & not j in J2;
+then A47:    x1.j = f1.j by A9,A13,FUNCT_4:14;
+        consider G1 being Group-like (non empty HGrStr) such that
+A48:      G1 = F.j & f1.j in the carrier of G1 & f1.j <> 1.G1 by A10,A46;
+          x2.j = g.j by A11,A13,A46,FUNCT_4:12
+            .= 1.G1 by A43,A48,Th9;
+        hence f.j <> 1.G by A44,A47,A48,GROUP_1:def 4;
+        suppose
+A49:      not j in J1 & j in J2;
+then A50:    x2.j = f2.j by A11,A13,FUNCT_4:14;
+        consider G2 being Group-like (non empty HGrStr) such that
+A51:      G2 = F.j & f2.j in the carrier of G2 & f2.j <> 1.G2 by A12,A49;
+          x1.j = g.j by A9,A13,A49,FUNCT_4:12
+            .= 1.G2 by A43,A51,Th9;
+        hence f.j <> 1.G by A44,A50,A51,GROUP_1:def 4;
+        suppose
+A52:      j in J1 & j in J2;
+then A53:    ex G1 being Group-like (non empty HGrStr) st
+         G1 = F.j & f1.j in the carrier of G1 & f1.j <> 1.G1 by A10;
+A54:    ex G2 being Group-like (non empty HGrStr) st
+          G2 = F.j & f2.j in the carrier of G2 & f2.j <> 1.G2 by A12,A52;
+          not j in K by A43,XBOOLE_0:def 4;
+        hence f.j <> 1.G by A26,A43,A44,A53,A54;
+      end;
+      hence y in A by A3,A27,A28;
+    end;
+    then reconsider b as BinOp of A by FUNCT_2:def 1,RELSET_1:11;
+    set H = HGrStr (#A,b#);
+      H is Group-like
+    proof
+      reconsider e = g as Element of H by A3,A5;
+      take e;
+      let h be Element of H;
+        h in the carrier of H;
+      then reconsider h1 = h as Element of GP by A4;
+A55:  [h,e] in [:A,A:] & [e,h] in [:A,A:] by ZFMISC_1:106;
+      thus h * e = b.(h,e) by VECTSP_1:def 10
+                .= b.[h,e] by BINOP_1:def 1
+                .= (the mult of GP).[h,e] by A55,FUNCT_1:72
+                .= (the mult of GP).(h1,g) by BINOP_1:def 1
+                .= h1 * 1.GP by VECTSP_1:def 10
+                .= h by GROUP_1:def 4;
+      thus e * h = b.(e,h) by VECTSP_1:def 10
+                .= b.[e,h] by BINOP_1:def 1
+                .= (the mult of GP).[e,h] by A55,FUNCT_1:72
+                .= (the mult of GP).(g,h1) by BINOP_1:def 1
+                .= 1.GP * h1 by VECTSP_1:def 10
+                .= h by GROUP_1:def 4;
+      reconsider h2 = h1, hh = h1" as Element of product Carrier F by Def2;
+A56:  P[h1"]
+      proof
+        consider J being finite Subset of I,
+                 f being ManySortedSet of J such that
+A57:      h = g +* f and
+A58:      for j being set st j in J ex G being Group-like (non empty HGrStr) st
+           G = F.j & f.j in the carrier of G & f.j <> 1.G by A3;
+
+defpred W[set,set] means
+ex G being Group, m being Element of G st
+ G = F.$1 & m = f.$1 & $2 = m";
+
+A59:    for i being set st i in J ex j being set st W[i,j]
+        proof
+          let i be set; assume
+A60:        i in J;
+          then consider Gg being Group-like (non empty HGrStr) such that
+A61:        Gg = F.i by Def3;
+            ex Ga being associative (non empty HGrStr) st Ga = F.i by A60,Def4;
+          then reconsider G = Gg as Group by A61;
+            ex GG being Group-like (non empty HGrStr) st
+           GG = F.i & f.i in the carrier of GG & f.i <> 1.GG by A58,A60;
+          then reconsider m = f.i as Element of G by A61;
+          take m";
+          thus W[i,m"] by A61;
+        end;
+        take J;
+        consider f' being ManySortedSet of J such that
+A62:      for j being set st j in J holds W[j,f'.j] from MSSEx(A59);
+        take f';
+A63:    dom hh = I by A2;
+        set gf' = g +* f';
+A64:    dom f = J & dom f' = J by PBOOLE:def 3;
+A65:    dom gf' = dom g \/ dom f' by FUNCT_4:def 1
+               .= I by A1,A64,XBOOLE_1:12;
+          now
+          let i be set; assume
+A66:        i in I;
+          then consider G3 being Group-like (non empty HGrStr) such that
+A67:        G3 = F.i by Def3;
+            ex G4 being associative (non empty HGrStr) st G4 = F.i by A66,Def4;
+          then consider G5 being Group such that
+A68:        G5 = F.i by A67;
+          per cases;
+          suppose
+A69:        i in J;
+then A70:      ex G being Group, m being Element of G st
+            G = F.i & m = f.i & f'.i = m" by A62;
+A71:      gf'.i = f'.i by A64,A69,FUNCT_4:14;
+            h2.i = f.i by A57,A64,A69,FUNCT_4:14;
+          hence hh.i = gf'.i by A66,A70,A71,Th11;
+          suppose
+A72:        not i in J;
+then A73:      gf'.i = g.i by A64,FUNCT_4:12
+               .= 1.G3 by A66,A67,Th9;
+A74:      h2.i = g.i by A57,A64,A72,FUNCT_4:12
+              .= 1.G3 by A66,A67,Th9;
+            1.G5 = (1.G5)" by GROUP_1:16;
+          hence hh.i = gf'.i by A66,A67,A68,A73,A74,Th11;
+        end;
+        hence h1" = g +* f' by A63,A65,FUNCT_1:9;
+        let j be set; assume
+A75:      j in J;
+        then consider G being Group, m being Element of G such
+that
+A76:      G = F.j & m = f.j & f'.j = m" by A62;
+        take G;
+        thus G = F.j & f'.j in the carrier of G by A76;
+          ex G1 being Group-like (non empty HGrStr) st
+         G1 = F.j & f.j in the carrier of G1 & f.j <> 1.G1 by A58,A75;
+        hence f'.j <> 1.G by A76,GROUP_1:18;
+      end;
+        product CF = the carrier of GP by Def2;
+      then reconsider h' = h1" as Element of H by A3,A56;
+      take h';
+A77:  [h,h'] in [:A,A:] & [h',h] in [:A,A:] by ZFMISC_1:106;
+      thus h * h' = b.(h,h') by VECTSP_1:def 10
+        .= b.[h,h'] by BINOP_1:def 1
+        .= (the mult of GP).[h,h'] by A77,FUNCT_1:72
+        .= (the mult of GP).(h,h') by BINOP_1:def 1
+        .= h1 * h1" by VECTSP_1:def 10
+        .= e by GROUP_1:def 5;
+      thus h' * h = b.(h',h) by VECTSP_1:def 10
+        .= b.[h',h] by BINOP_1:def 1
+        .= (the mult of GP).[h',h] by A77,FUNCT_1:72
+        .= (the mult of GP).(h',h) by BINOP_1:def 1
+        .= h1" * h1 by VECTSP_1:def 10
+        .= e by GROUP_1:def 5;
+    end;
+    then reconsider H as Group-like (non empty HGrStr);
+      H is Subgroup of GP
+    proof
+     thus the carrier of H c= the carrier of GP by A4;
+     thus thesis;
+    end;
+    then reconsider H as strict Subgroup of GP;
+    take H;
+    let x be set;
+    hereby
+      assume x in the carrier of H;
+      then P[x] by A3;
+      hence ex g being Element of product CF,
+               J being finite Subset of I, f being ManySortedSet of J st
+        g = 1.product F & x = g +* f &
+        for j being set st j in J ex G being Group-like (non empty HGrStr) st
+         G = F.j & f.j in the carrier of G & f.j <> 1.G;
+    end;
+    given g being Element of product CF,
+          J being finite Subset of I, f being ManySortedSet of J such that
+A78:   g = 1.product F & x = g +* f &
+        for j being set st j in J ex G being Group-like (non empty HGrStr) st
+         G = F.j & f.j in the carrier of G & f.j <> 1.G;
+    set gf = g +* f;
+A79:dom g = I by A2;
+A80:dom f = J by PBOOLE:def 3;
+A81:dom gf = dom g \/ dom f by FUNCT_4:def 1
+          .= I by A79,A80,XBOOLE_1:12;
+      now
+      let i be set; assume
+A82:    i in I;
+then A83:  ex R being 1-sorted st R = F.i & CF.i = the carrier of R
+        by PRALG_1:def 13;
+      per cases;
+      suppose
+A84:    i in J;
+      then consider G being Group-like (non empty HGrStr) such that
+A85:    G = F.i & f.i in the carrier of G & f.i <> 1.G by A78;
+      thus gf.i in CF.i by A80,A83,A84,A85,FUNCT_4:14;
+      suppose
+A86:    not i in J;
+      consider G being Group-like (non empty HGrStr) such that
+A87:    G = F.i by A82,Def3;
+        gf.i = g.i by A80,A86,FUNCT_4:12
+          .= 1.G by A78,A82,A87,Th9;
+      hence gf.i in CF.i by A83,A87;
+    end;
+    then x in product CF by A1,A78,A81,CARD_3:18;
+    hence thesis by A3,A78;
+  end;
+uniqueness
+  proof
+    defpred P[set] means
+      ex g being Element of product Carrier F,
+       J being finite Subset of I, f being ManySortedSet of J st
+      g = 1.product F & $1 = g +* f &
+      for j being set st j in J ex G being Group-like (non empty HGrStr) st
+       G = F.j & f.j in the carrier of G & f.j <> 1.G;
+    let A, B be strict Subgroup of product F such that
+A88:  for x being set holds x in the carrier of A iff P[x] and
+A89:  for x being set holds x in the carrier of B iff P[x];
+      the carrier of A = the carrier of B from Extensionality(A88,A89);
+    hence thesis by GROUP_2:68;
+  end;
+end;
+
+definition let I be set,
+     F be associative Group-like HGrStr-Family of I,
+               f, g be Element of sum F;
+ cluster (the mult of sum F).(f,g) -> Function-like Relation-like;
+coherence
+  proof
+A1: the carrier of sum F c= the carrier of product F by GROUP_2:def 5;
+      (the mult of sum F).(f,g) in the carrier of sum F;
+    then reconsider h = (the mult of sum F).(f,g) as Element of product Carrier
+F
+     by A1,Def2;
+      h is Function;
+    hence thesis;
+  end;
+end;
+
+theorem
+   for I being finite set,
+     F being associative Group-like HGrStr-Family of I
+   holds product F = sum F
+  proof
+    let I be finite set,
+        F be associative Group-like HGrStr-Family of I;
+    set GP = product F,
+        S = sum F;
+A1: the carrier of S = the carrier of GP
+    proof
+      thus the carrier of S c= the carrier of GP by GROUP_2:def 5;
+      reconsider g = 1.GP as Element of product Carrier F by Def2;
+      let x be set;
+      assume x in the carrier of GP;
+      then reconsider f = x as Element of product Carrier F by Def2;
+A2:   now
+        let p be Element of product Carrier F;
+        thus dom p = dom Carrier F by CARD_3:18
+                  .= I by PBOOLE:def 3;
+      end;
+then A3:   dom f = I;
+      then reconsider f as ManySortedSet of I by PBOOLE:def 3;
+        ex g being Element of product Carrier F,
+         J being finite Subset of I, f being ManySortedSet of J st
+        g = 1.GP & x = g +* f &
+        for j being set st j in J ex G being Group-like (non empty HGrStr) st
+         G = F.j & f.j in the carrier of G & f.j <> 1.G
+      proof
+defpred P[set] means
+ ex G being Group-like (non empty HGrStr),
+    m being Element of G st G = F.$1 & m = f.$1 & m <> 1.G;
+        consider J being set such that
+A4:       for j being set holds j in J iff j in I & P[j] from Separation;
+          J c= I
+        proof
+          let j be set;
+          assume j in J;
+          hence j in I by A4;
+        end;
+        then reconsider J as Subset of I;
+        take g, J;
+        deffunc F(set) = f.$1;
+        consider ff being ManySortedSet of J such that
+A5:       for j being set st j in J holds ff.j = F(j) from MSSLambda;
+        take ff;
+        thus g = 1.GP;
+A6:     dom ff = J by PBOOLE:def 3;
+A7:     dom g = I by A2;
+A8:     dom (g +* ff) = dom g \/ dom ff by FUNCT_4:def 1
+                     .= I by A6,A7,XBOOLE_1:12;
+          now
+          let i be set such that
+A9:         i in I;
+          per cases;
+          suppose
+A10:        i in J;
+          hence f.i = ff.i by A5
+                   .= (g +* ff).i by A6,A10,FUNCT_4:14;
+          suppose
+A11:        not i in J;
+          consider G being Group-like (non empty HGrStr) such that
+A12:         G = F.i by A9,Def3;
+            f.i is Element of G by A9,A12,Lm1;
+          hence f.i = 1.G by A4,A9,A11,A12
+                   .= g.i by A9,A12,Th9
+                   .= (g +* ff).i by A6,A11,FUNCT_4:12;
+        end;
+        hence x = g +* ff by A3,A8,FUNCT_1:9;
+        let j be set; assume
+A13:      j in J;
+        then consider G being Group-like (non empty HGrStr),
+                 m being Element of G such that
+A14:      G = F.j & m = f.j & m <> 1.G by A4;
+        take G;
+          ff.j = f.j by A5,A13;
+        hence thesis by A14;
+      end;
+      hence x in the carrier of S by Def9;
+    end;
+      product F is Subgroup of product F by GROUP_2:63;
+    hence product F = sum F by A1,GROUP_2:68;
+  end;
+
+
+begin  :: The product of one, two and three groups
+
+theorem Th13:
+ for G1 being non empty HGrStr holds <*G1*> is HGrStr-Family of {1}
+ proof
+    let G1 be non empty HGrStr;
+A1: dom <*G1*> = {1} by FINSEQ_1:4,def 8;
+    then reconsider A = <*G1*> as ManySortedSet of {1} by PBOOLE:def 3;
+      A is HGrStr-yielding
+   proof
+      let y be set;
+      assume y in rng A;
+      then consider x being set such that
+A2:     x in dom A & A.x = y by FUNCT_1:def 5;
+        x = 1 by A1,A2,TARSKI:def 1;
+      hence thesis by A2,FINSEQ_1:def 8;
+    end;
+    hence thesis;
+  end;
+
+definition let G1 be non empty HGrStr;
+ redefine func <*G1*> -> HGrStr-Family of {1};
+coherence by Th13;
+end;
+
+theorem Th14:
+ for G1 being Group-like (non empty HGrStr) holds
+  <*G1*> is Group-like HGrStr-Family of {1}
+ proof
+    let G1 be Group-like (non empty HGrStr);
+    reconsider A = <*G1*> as HGrStr-Family of {1};
+      A is Group-like
+   proof
+      let x be Element of {1};
+        x = 1 by TARSKI:def 1;
+      hence A.x is Group-like by FINSEQ_1:def 8;
+    end;
+    hence thesis;
+  end;
+
+definition let G1 be Group-like (non empty HGrStr);
+ redefine func <*G1*> -> Group-like HGrStr-Family of {1};
+coherence by Th14;
+end;
+
+theorem Th15:
+ for G1 being associative (non empty HGrStr) holds
+  <*G1*> is associative HGrStr-Family of {1}
+ proof
+    let G1 be associative (non empty HGrStr);
+    reconsider A = <*G1*> as HGrStr-Family of {1};
+      A is associative
+   proof
+      let x be Element of {1};
+        x = 1 by TARSKI:def 1;
+      hence A.x is associative by FINSEQ_1:def 8;
+    end;
+    hence thesis;
+  end;
+
+definition let G1 be associative (non empty HGrStr);
+ redefine func <*G1*> -> associative HGrStr-Family of {1};
+coherence by Th15;
+end;
+
+theorem Th16:
+ for G1 being commutative (non empty HGrStr) holds
+  <*G1*> is commutative HGrStr-Family of {1}
+ proof
+    let G1 be commutative (non empty HGrStr);
+    reconsider A = <*G1*> as HGrStr-Family of {1};
+      A is commutative
+   proof
+      let x be Element of {1};
+        x = 1 by TARSKI:def 1;
+      hence A.x is commutative by FINSEQ_1:def 8;
+    end;
+    hence thesis;
+  end;
+
+definition let G1 be commutative (non empty HGrStr);
+ redefine func <*G1*> -> commutative HGrStr-Family of {1};
+coherence by Th16;
+end;
+
+theorem Th17:
+ for G1 being Group holds
+  <*G1*> is Group-like associative HGrStr-Family of {1}
+  proof
+    let G1 be Group;
+    reconsider A = <*G1*> as HGrStr-Family of {1};
+      A is Group-like
+    proof
+      let x be Element of {1};
+        x = 1 by TARSKI:def 1;
+      hence A.x is Group-like by FINSEQ_1:def 8;
+    end;
+    hence thesis;
+  end;
+
+definition let G1 be Group;
+ redefine func <*G1*> -> Group-like associative HGrStr-Family of {1};
+coherence by Th17;
+end;
+
+theorem Th18:
+ for G1 being commutative Group holds
+  <*G1*> is commutative Group-like associative HGrStr-Family of {1}
+  proof
+    let G1 be commutative Group;
+    reconsider A = <*G1*> as HGrStr-Family of {1};
+      A is commutative
+    proof
+      let x be Element of {1};
+        x = 1 by TARSKI:def 1;
+      hence A.x is commutative by FINSEQ_1:def 8;
+    end;
+    hence thesis;
+  end;
+
+definition let G1 be commutative Group;
+ redefine func <*G1*> ->
+                    Group-like associative commutative HGrStr-Family of {1};
+coherence by Th18;
+end;
+
+definition let G1 be non empty HGrStr;
+ cluster -> FinSequence-like Element of product Carrier <*G1*>;
+coherence
+ proof
+    let x be Element of product Carrier <*G1*>;
+    take 1;
+    thus dom x = dom Carrier <*G1*> by CARD_3:18
+              .= Seg 1 by FINSEQ_1:4,PBOOLE:def 3;
+  end;
+end;
+
+definition let G1 be non empty HGrStr;
+ cluster -> FinSequence-like Element of product <*G1*>;
+coherence
+ proof
+    let x be Element of product <*G1*>;
+    reconsider y = x as Element of product Carrier <*G1*> by Def2;
+      y is FinSequence-like;
+    hence thesis;
+  end;
+end;
+
+definition let G1 be non empty HGrStr,
+               x be Element of G1;
+ redefine func <*x*> -> Element of product <*G1*>;
+coherence
+  proof
+    set xy = <*x*>,
+        G = <*G1*>;
+A1: dom xy = {1} by FINSEQ_1:4,def 8;
+A2: dom Carrier G = {1} by PBOOLE:def 3;
+A3: xy.1 = x & G.1 = G1 by FINSEQ_1:def 8;
+      for a being set st a in {1} holds xy.a in (Carrier G).a
+    proof
+      let a be set; assume
+A4:      a in {1};
+then A5:   a = 1 by TARSKI:def 1;
+      then ex R being 1-sorted st R = G.1 & (Carrier G).1 = the carrier of R
+        by A4,PRALG_1:def 13;
+      hence xy.a in (Carrier G).a by A3,A5;
+    end;
+    then xy in product Carrier G by A1,A2,CARD_3:18;
+    then xy in the carrier of product G by Def2;
+    hence thesis;
+  end;
+end;
+
+theorem Th19:
+ for G1, G2 being non empty HGrStr holds <*G1,G2*> is HGrStr-Family of {1,2}
+  proof
+    let G1, G2 be non empty HGrStr;
+A1: dom <*G1,G2*> = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
+    then reconsider A = <*G1,G2*> as ManySortedSet of {1,2} by PBOOLE:def 3;
+      A is HGrStr-yielding
+    proof
+      let y be set;
+      assume y in rng A;
+      then consider x being set such that
+A2:     x in dom A & A.x = y by FUNCT_1:def 5;
+        x = 1 or x = 2 by A1,A2,TARSKI:def 2;
+      hence thesis by A2,FINSEQ_1:61;
+    end;
+    hence thesis;
+  end;
+
+definition let G1, G2 be non empty HGrStr;
+ redefine func <*G1,G2*> -> HGrStr-Family of {1,2};
+coherence by Th19;
+end;
+
+theorem Th20:
+ for G1, G2 being Group-like (non empty HGrStr) holds
+  <*G1,G2*> is Group-like HGrStr-Family of {1,2}
+  proof
+    let G1, G2 be Group-like (non empty HGrStr);
+    reconsider A = <*G1,G2*> as HGrStr-Family of {1,2};
+      A is Group-like
+    proof
+      let x be Element of {1,2};
+        x = 1 or x = 2 by TARSKI:def 2;
+      hence A.x is Group-like by FINSEQ_1:61;
+    end;
+    hence thesis;
+  end;
+
+definition let G1, G2 be Group-like (non empty HGrStr);
+ redefine func <*G1,G2*> -> Group-like HGrStr-Family of {1,2};
+coherence by Th20;
+end;
+
+theorem Th21:
+ for G1, G2 being associative (non empty HGrStr) holds
+  <*G1,G2*> is associative HGrStr-Family of {1,2}
+  proof
+    let G1, G2 be associative (non empty HGrStr);
+    reconsider A = <*G1,G2*> as HGrStr-Family of {1,2};
+      A is associative
+    proof
+      let x be Element of {1,2};
+        x = 1 or x = 2 by TARSKI:def 2;
+      hence A.x is associative by FINSEQ_1:61;
+    end;
+    hence thesis;
+  end;
+
+definition let G1, G2 be associative (non empty HGrStr);
+ redefine func <*G1,G2*> -> associative HGrStr-Family of {1,2};
+coherence by Th21;
+end;
+
+theorem Th22:
+ for G1, G2 being commutative (non empty HGrStr) holds
+  <*G1,G2*> is commutative HGrStr-Family of {1,2}
+  proof
+    let G1, G2 be commutative (non empty HGrStr);
+    reconsider A = <*G1,G2*> as HGrStr-Family of {1,2};
+      A is commutative
+    proof
+      let x be Element of {1,2};
+        x = 1 or x = 2 by TARSKI:def 2;
+      hence A.x is commutative by FINSEQ_1:61;
+    end;
+    hence thesis;
+  end;
+
+definition let G1, G2 be commutative (non empty HGrStr);
+ redefine func <*G1,G2*> -> commutative HGrStr-Family of {1,2};
+coherence by Th22;
+end;
+
+theorem Th23:
+ for G1, G2 being Group holds
+  <*G1,G2*> is Group-like associative HGrStr-Family of {1,2}
+  proof
+    let G1, G2 be Group;
+    reconsider A = <*G1,G2*> as HGrStr-Family of {1,2};
+      A is Group-like
+    proof
+      let x be Element of {1,2};
+        x = 1 or x = 2 by TARSKI:def 2;
+      hence A.x is Group-like by FINSEQ_1:61;
+    end;
+    hence thesis;
+  end;
+
+definition let G1, G2 be Group;
+ redefine func <*G1,G2*> -> Group-like associative HGrStr-Family of {1,2};
+coherence by Th23;
+end;
+
+theorem Th24:
+ for G1, G2 being commutative Group holds
+  <*G1,G2*> is Group-like associative commutative HGrStr-Family of {1,2}
+  proof
+    let G1, G2 be commutative Group;
+    reconsider A = <*G1,G2*> as HGrStr-Family of {1,2};
+      A is commutative
+    proof
+      let x be Element of {1,2};
+        x = 1 or x = 2 by TARSKI:def 2;
+      hence A.x is commutative by FINSEQ_1:61;
+    end;
+    hence thesis;
+  end;
+
+definition let G1, G2 be commutative Group;
+ redefine func <*G1,G2*> ->
+                   Group-like associative commutative HGrStr-Family of {1,2};
+coherence by Th24;
+end;
+
+definition let G1, G2 be non empty HGrStr;
+ cluster -> FinSequence-like Element of product Carrier <*G1,G2*>;
+coherence
+  proof
+    let x be Element of product Carrier <*G1,G2*>;
+    take 2;
+    thus dom x = dom Carrier <*G1,G2*> by CARD_3:18
+              .= Seg 2 by FINSEQ_1:4,PBOOLE:def 3;
+  end;
+end;
+
+definition let G1, G2 be non empty HGrStr;
+ cluster -> FinSequence-like Element of product <*G1,G2*>;
+coherence
+  proof
+    let x be Element of product <*G1,G2*>;
+    reconsider y = x as Element of product Carrier <*G1,G2*> by Def2;
+      y is FinSequence-like;
+    hence thesis;
+  end;
+end;
+
+definition let G1, G2 be non empty HGrStr,
+               x be Element of G1,
+               y be Element of G2;
+ redefine func <*x,y*> -> Element of product <*G1,G2*>;
+coherence
+  proof
+    set xy = <*x,y*>,
+        G = <*G1,G2*>;
+A1: dom xy = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
+A2: dom Carrier G = {1,2} by PBOOLE:def 3;
+A3: xy.1 = x & xy.2 = y & G.1 = G1 & G.2 = G2 by FINSEQ_1:61;
+      for a being set st a in {1,2} holds xy.a in (Carrier G).a
+    proof
+      let a be set;
+      assume
+A4:     a in {1,2};
+      per cases by A4,TARSKI:def 2;
+      suppose
+A5:     a = 1;
+      then ex R being 1-sorted st R = G.1 & (Carrier G).1 = the carrier of R
+        by A4,PRALG_1:def 13;
+      hence xy.a in (Carrier G).a by A3,A5;
+      suppose
+A6:     a = 2;
+      then ex R being 1-sorted st R = G.2 & (Carrier G).2 = the carrier of R
+        by A4,PRALG_1:def 13;
+      hence xy.a in (Carrier G).a by A3,A6;
+    end;
+    then xy in product Carrier G by A1,A2,CARD_3:18;
+    then xy in the carrier of product G by Def2;
+    hence thesis;
+  end;
+end;
+
+theorem Th25:
+ for G1, G2, G3 being non empty HGrStr holds
+  <*G1,G2,G3*> is HGrStr-Family of {1,2,3}
+  proof
+    let G1, G2, G3 be non empty HGrStr;
+A1: dom <*G1,G2,G3*> = {1,2,3} by FINSEQ_3:1,30;
+    then reconsider A = <*G1,G2,G3*> as ManySortedSet of {1,2,3} by PBOOLE:def
+3;
+      A is HGrStr-yielding
+    proof
+      let y be set;
+      assume y in rng A;
+      then consider x being set such that
+A2:     x in dom A & A.x = y by FUNCT_1:def 5;
+        x = 1 or x = 2 or x = 3 by A1,A2,ENUMSET1:def 1;
+      hence thesis by A2,FINSEQ_1:62;
+    end;
+    hence thesis;
+  end;
+
+definition let G1, G2, G3 be non empty HGrStr;
+ redefine func <*G1,G2,G3*> -> HGrStr-Family of {1,2,3};
+coherence by Th25;
+end;
+
+theorem Th26:
+ for G1, G2, G3 being Group-like (non empty HGrStr) holds
+  <*G1,G2,G3*> is Group-like HGrStr-Family of {1,2,3}
+  proof
+    let G1, G2, G3 be Group-like (non empty HGrStr);
+    reconsider A = <*G1,G2,G3*> as HGrStr-Family of {1,2,3};
+      A is Group-like
+    proof
+      let x be Element of {1,2,3};
+        x = 1 or x = 2 or x = 3 by ENUMSET1:def 1;
+      hence A.x is Group-like by FINSEQ_1:62;
+    end;
+    hence thesis;
+  end;
+
+definition let G1, G2, G3 be Group-like (non empty HGrStr);
+ redefine func <*G1,G2,G3*> -> Group-like HGrStr-Family of {1,2,3};
+coherence by Th26;
+end;
+
+theorem Th27:
+ for G1, G2, G3 being associative (non empty HGrStr) holds
+  <*G1,G2,G3*> is associative HGrStr-Family of {1,2,3}
+  proof
+    let G1, G2, G3 be associative (non empty HGrStr);
+    reconsider A = <*G1,G2,G3*> as HGrStr-Family of {1,2,3};
+      A is associative
+    proof
+      let x be Element of {1,2,3};
+        x = 1 or x = 2 or x = 3 by ENUMSET1:def 1;
+      hence A.x is associative by FINSEQ_1:62;
+    end;
+    hence thesis;
+  end;
+
+definition let G1, G2, G3 be associative (non empty HGrStr);
+ redefine func <*G1,G2,G3*> -> associative HGrStr-Family of {1,2,3};
+coherence by Th27;
+end;
+
+theorem Th28:
+ for G1, G2, G3 being commutative (non empty HGrStr) holds
+  <*G1,G2,G3*> is commutative HGrStr-Family of {1,2,3}
+  proof
+    let G1, G2, G3 be commutative (non empty HGrStr);
+    reconsider A = <*G1,G2,G3*> as HGrStr-Family of {1,2,3};
+      A is commutative
+    proof
+      let x be Element of {1,2,3};
+        x = 1 or x = 2 or x = 3 by ENUMSET1:def 1;
+      hence A.x is commutative by FINSEQ_1:62;
+    end;
+    hence thesis;
+  end;
+
+definition let G1, G2, G3 be commutative (non empty HGrStr);
+ redefine func <*G1,G2,G3*> -> commutative HGrStr-Family of {1,2,3};
+coherence by Th28;
+end;
+
+theorem Th29:
+ for G1, G2, G3 being Group holds
+  <*G1,G2,G3*> is Group-like associative HGrStr-Family of {1,2,3}
+  proof
+    let G1, G2, G3 be Group;
+    reconsider A = <*G1,G2,G3*> as HGrStr-Family of {1,2,3};
+      A is Group-like
+    proof
+      let x be Element of {1,2,3};
+        x = 1 or x = 2 or x = 3 by ENUMSET1:def 1;
+      hence A.x is Group-like by FINSEQ_1:62;
+    end;
+    hence thesis;
+  end;
+
+definition let G1, G2, G3 be Group;
+ redefine func <*G1,G2,G3*> -> Group-like associative HGrStr-Family of {1,2,3};
+coherence by Th29;
+end;
+
+theorem Th30:
+ for G1, G2, G3 being commutative Group holds
+  <*G1,G2,G3*> is Group-like associative commutative HGrStr-Family of {1,2,3}
+  proof
+    let G1, G2, G3 be commutative Group;
+    reconsider A = <*G1,G2,G3*> as HGrStr-Family of {1,2,3};
+      A is commutative
+    proof
+      let x be Element of {1,2,3};
+        x = 1 or x = 2 or x = 3 by ENUMSET1:def 1;
+      hence A.x is commutative by FINSEQ_1:62;
+    end;
+    hence thesis;
+  end;
+
+definition let G1, G2, G3 be commutative Group;
+ redefine func <*G1,G2,G3*> ->
+                 Group-like associative commutative HGrStr-Family of {1,2,3};
+coherence by Th30;
+end;
+
+definition let G1, G2, G3 be non empty HGrStr;
+ cluster -> FinSequence-like Element of product Carrier <*G1,G2,G3*>;
+coherence
+  proof
+    let x be Element of product Carrier <*G1,G2,G3*>;
+    take 3;
+    thus dom x = dom Carrier <*G1,G2,G3*> by CARD_3:18
+              .= Seg 3 by FINSEQ_3:1,PBOOLE:def 3;
+  end;
+end;
+
+definition let G1, G2, G3 be non empty HGrStr;
+ cluster -> FinSequence-like Element of product <*G1,G2,G3*>;
+coherence
+  proof
+    let x be Element of product <*G1,G2,G3*>;
+    reconsider y = x as Element of product Carrier <*G1,G2,G3*> by Def2;
+      y is FinSequence-like;
+    hence thesis;
+  end;
+end;
+
+definition let G1, G2, G3 be non empty HGrStr,
+               x be Element of G1,
+               y be Element of G2,
+               z be Element of G3;
+ redefine func <*x,y,z*> -> Element of product <*G1,G2,G3*>;
+coherence
+  proof
+    set xy = <*x,y,z*>,
+        G = <*G1,G2,G3*>;
+A1: dom xy = {1,2,3} by FINSEQ_3:1,30;
+A2: dom Carrier G = {1,2,3} by PBOOLE:def 3;
+A3: xy.1 = x & xy.2 = y & xy.3 = z & G.1 = G1 & G.2 = G2 & G.3 = G3
+      by FINSEQ_1:62;
+      for a being set st a in {1,2,3} holds xy.a in (Carrier G).a
+    proof
+      let a be set;
+      assume
+A4:     a in {1,2,3};
+      per cases by A4,ENUMSET1:def 1;
+      suppose
+A5:     a = 1;
+      then ex R being 1-sorted st R = G.1 & (Carrier G).1 = the carrier of R
+        by A4,PRALG_1:def 13;
+      hence xy.a in (Carrier G).a by A3,A5;
+      suppose
+A6:     a = 2;
+      then ex R being 1-sorted st R = G.2 & (Carrier G).2 = the carrier of R
+        by A4,PRALG_1:def 13;
+      hence xy.a in (Carrier G).a by A3,A6;
+      suppose
+A7:     a = 3;
+      then ex R being 1-sorted st R = G.3 & (Carrier G).3 = the carrier of R
+        by A4,PRALG_1:def 13;
+      hence xy.a in (Carrier G).a by A3,A7;
+    end;
+    then xy in product Carrier G by A1,A2,CARD_3:18;
+    then xy in the carrier of product G by Def2;
+    hence thesis;
+  end;
+end;
+
+reserve G1, G2, G3 for non empty HGrStr,
+        x1, x2 for Element of G1,
+        y1, y2 for Element of G2,
+        z1, z2 for Element of G3;
+
+theorem Th31:
+ <*x1*> * <*x2*> = <*x1*x2*>
+  proof
+    set G = <*G1*>;
+    reconsider l = <*x1*>, p = <*x2*>,
+               lpl = <*x1*> * <*x2*>, lpp = <*x1*x2*>
+      as Element of product Carrier G by Def2;
+A1: 1 in {1} by TARSKI:def 1;
+A2: l.1 = x1 & p.1 = x2 & G.1 = G1 by FINSEQ_1:def 8;
+      dom lpl = dom Carrier G by CARD_3:18
+           .= Seg 1 by FINSEQ_1:4,PBOOLE:def 3;
+then A3: len lpl = 1 by FINSEQ_1:def 3;
+A4: len lpp = 1 by FINSEQ_1:56;
+A5: lpp.1 = x1 * x2 by FINSEQ_1:def 8;
+      for k being Nat st 1 <= k & k <= 1 holds lpl.k = lpp.k
+    proof
+      let k be Nat;
+      assume 1 <= k & k <= 1;
+      then k in Seg 1 by FINSEQ_1:3;
+      then k = 1 by FINSEQ_1:4,TARSKI:def 1;
+      hence lpl.k = lpp.k by A1,A2,A5,Th4;
+    end;
+    hence thesis by A3,A4,FINSEQ_1:18;
+  end;
+
+theorem
+   <*x1,y1*> * <*x2,y2*> = <*x1*x2,y1*y2*>
+  proof
+    set G = <*G1,G2*>;
+    reconsider l = <*x1,y1*>, p = <*x2,y2*>,
+               lpl = <*x1,y1*> * <*x2,y2*>, lpp = <*x1*x2,y1*y2*>
+      as Element of product Carrier G by Def2;
+A1: 1 in {1,2} & 2 in {1,2} by TARSKI:def 2;
+A2: l.1 = x1 & l.2 = y1 & p.1 = x2 & p.2 = y2 & G.1 = G1 & G.2 = G2
+      by FINSEQ_1:61;
+      dom lpl = dom Carrier G by CARD_3:18
+           .= Seg 2 by FINSEQ_1:4,PBOOLE:def 3;
+then A3: len lpl = 2 by FINSEQ_1:def 3;
+A4: len lpp = 2 by FINSEQ_1:61;
+A5: lpp.1 = x1 * x2 & lpp.2 = y1 * y2 by FINSEQ_1:61;
+      for k being Nat st 1 <= k & k <= 2 holds lpl.k = lpp.k
+    proof
+      let k be Nat;
+      assume 1 <= k & k <= 2;
+then A6:   k in Seg 2 by FINSEQ_1:3;
+      per cases by A6,FINSEQ_1:4,TARSKI:def 2;
+      suppose k = 1;
+      hence lpl.k = lpp.k by A1,A2,A5,Th4;
+      suppose k = 2;
+      hence lpl.k = lpp.k by A1,A2,A5,Th4;
+    end;
+    hence thesis by A3,A4,FINSEQ_1:18;
+  end;
+
+theorem
+   <*x1,y1,z1*> * <*x2,y2,z2*> = <*x1*x2,y1*y2,z1*z2*>
+  proof
+    set G = <*G1,G2,G3*>;
+    reconsider l = <*x1,y1,z1*>, p = <*x2,y2,z2*>,
+               lpl = <*x1,y1,z1*> * <*x2,y2,z2*>, lpp = <*x1*x2,y1*y2,z1*z2*>
+      as Element of product Carrier G by Def2;
+A1: 1 in {1,2,3} & 2 in {1,2,3} & 3 in {1,2,3} by ENUMSET1:def 1;
+A2: l.1 = x1 & l.2 = y1 & l.3 = z1 & p.1 = x2 & p.2 = y2 & p.3 = z2 &
+      G.1 = G1 & G.2 = G2 & G.3 = G3 by FINSEQ_1:62;
+      dom lpl = dom Carrier G by CARD_3:18
+           .= Seg 3 by FINSEQ_3:1,PBOOLE:def 3;
+then A3: len lpl = 3 by FINSEQ_1:def 3;
+A4: len lpp = 3 by FINSEQ_1:62;
+A5: lpp.1 = x1 * x2 & lpp.2 = y1 * y2 & lpp.3 = z1 * z2 by FINSEQ_1:62;
+      for k being Nat st 1 <= k & k <= 3 holds lpl.k = lpp.k
+    proof
+      let k be Nat;
+      assume 1 <= k & k <= 3;
+then A6:   k in Seg 3 by FINSEQ_1:3;
+      per cases by A6,ENUMSET1:def 1,FINSEQ_3:1;
+      suppose k = 1;
+      hence lpl.k = lpp.k by A1,A2,A5,Th4;
+      suppose k = 2;
+      hence lpl.k = lpp.k by A1,A2,A5,Th4;
+      suppose k = 3;
+      hence lpl.k = lpp.k by A1,A2,A5,Th4;
+    end;
+    hence thesis by A3,A4,FINSEQ_1:18;
+  end;
+
+reserve G1, G2, G3 for Group-like (non empty HGrStr);
+
+theorem
+   1.product <*G1*> = <*1.G1*>
+  proof
+    set s = <*1.G1*>,
+        f = <*G1*>;
+      s is ManySortedSet of {1}
+    proof
+      thus dom s = {1} by FINSEQ_1:4,def 8;
+    end;
+    then reconsider s as ManySortedSet of {1};
+      for i being set st i in {1} ex G being Group-like (non empty HGrStr)
+     st G = f.i & s.i = 1.G
+    proof
+      let i be set;
+      assume i in {1};
+then A1:   i = 1 by TARSKI:def 1;
+      then reconsider G = f.i as Group-like (non empty HGrStr) by FINSEQ_1:def
+8;
+      take G;
+        f.i = G1 by A1,FINSEQ_1:def 8;
+      hence G = f.i & s.i = 1.G by A1,FINSEQ_1:def 8;
+    end;
+    hence thesis by Th8;
+  end;
+
+theorem
+   1.product <*G1,G2*> = <*1.G1,1.G2*>
+  proof
+    set s = <*1.G1,1.G2*>,
+        f = <*G1,G2*>;
+      s is ManySortedSet of {1,2}
+    proof
+      thus dom s = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
+    end;
+    then reconsider s as ManySortedSet of {1,2};
+      for i being set st i in {1,2} ex G being Group-like (non empty HGrStr)
+     st G = f.i & s.i = 1.G
+    proof
+      let i be set such that
+A1:     i in {1,2};
+      per cases by A1,TARSKI:def 2;
+      suppose
+A2:     i = 1;
+      then reconsider G = f.i as Group-like (non empty HGrStr) by FINSEQ_1:61;
+      take G;
+        f.i = G1 by A2,FINSEQ_1:61;
+      hence G = f.i & s.i = 1.G by A2,FINSEQ_1:61;
+      suppose
+A3:     i = 2;
+      then reconsider G = f.i as Group-like (non empty HGrStr)by FINSEQ_1:61;
+      take G;
+        f.i = G2 by A3,FINSEQ_1:61;
+      hence G = f.i & s.i = 1.G by A3,FINSEQ_1:61;
+    end;
+    hence thesis by Th8;
+  end;
+
+theorem
+   1.product <*G1,G2,G3*> = <*1.G1,1.G2,1.G3*>
+  proof
+    set s = <*1.G1,1.G2,1.G3*>,
+        f = <*G1,G2,G3*>;
+      s is ManySortedSet of {1,2,3}
+    proof
+      thus dom s = {1,2,3} by FINSEQ_3:1,30;
+    end;
+    then reconsider s as ManySortedSet of {1,2,3};
+      for i being set st i in {1,2,3} ex G being Group-like (non empty HGrStr)
+     st G = f.i & s.i = 1.G
+    proof
+      let i be set such that
+A1:     i in {1,2,3};
+      per cases by A1,ENUMSET1:def 1;
+      suppose
+A2:     i = 1;
+      then reconsider G = f.i as Group-like (non empty HGrStr) by FINSEQ_1:62;
+      take G;
+        f.i = G1 by A2,FINSEQ_1:62;
+      hence G = f.i & s.i = 1.G by A2,FINSEQ_1:62;
+      suppose
+A3:     i = 2;
+      then reconsider G = f.i as Group-like (non empty HGrStr) by FINSEQ_1:62;
+      take G;
+        f.i = G2 by A3,FINSEQ_1:62;
+      hence G = f.i & s.i = 1.G by A3,FINSEQ_1:62;
+      suppose
+A4:     i = 3;
+      then reconsider G = f.i as Group-like (non empty HGrStr) by FINSEQ_1:62;
+      take G;
+        f.i = G3 by A4,FINSEQ_1:62;
+      hence G = f.i & s.i = 1.G by A4,FINSEQ_1:62;
+    end;
+    hence thesis by Th8;
+  end;
+
+reserve G1, G2, G3 for Group,
+        x for Element of G1,
+        y for Element of G2,
+        z for Element of G3;
+
+theorem
+   (<*x*> qua Element of product <*G1*>)" = <*x"*>
+  proof
+    reconsider G = <*G1*> as associative Group-like HGrStr-Family of {1};
+    reconsider lF = <*x*>, p = <*x"*> as Element of product Carrier G
+      by Def2;
+A1: p.1 = x" & G.1 = G1 & lF.1 = x by FINSEQ_1:def 8;
+A2: p is ManySortedSet of {1}
+    proof
+      thus dom p = {1} by FINSEQ_1:4,def 8;
+    end;
+      for i being set st i in {1}
+     ex H being Group, z being Element of H st H = G.i &
+      p.i = z" & z = lF.i
+    proof
+      let i be set;
+      assume A3: i in {1};
+then A4:   i = 1 by TARSKI:def 1;
+      reconsider H = G.1 as Group by FINSEQ_1:def 8;
+      reconsider z = p.1 as Element of H by A1;
+      take H, z";
+      thus H = G.i by A3,TARSKI:def 1;
+      thus p.i = z"" by A4,GROUP_1:19;
+      thus z" = lF.i by A1,A4,GROUP_1:19;
+    end;
+    hence thesis by A2,Th10;
+  end;
+
+theorem
+   (<*x,y*> qua Element of product <*G1,G2*>)" = <*x",y"*>
+  proof
+    set G = <*G1,G2*>;
+    reconsider lF = <*x,y*>, p = <*x",y"*> as Element of product Carrier G
+      by Def2;
+A1: p.1 = x" & p.2 = y" & G.1 = G1 & G.2 = G2 & lF.1 = x & lF.2 = y
+     by FINSEQ_1:61;
+A2: p is ManySortedSet of {1,2}
+    proof
+      thus dom p = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
+    end;
+      for i being set st i in {1,2}
+     ex H being Group, z being Element of H st H = G.i &
+      p.i = z" & z = lF.i
+    proof
+      let i be set such that
+A3:     i in {1,2};
+      per cases by A3,TARSKI:def 2;
+      suppose
+A4:     i = 1;
+      reconsider H = G.1 as Group by FINSEQ_1:61;
+      reconsider z = p.1 as Element of H by A1;
+      take H, z";
+      thus H = G.i by A4;
+      thus p.i = z"" by A4,GROUP_1:19;
+      thus z" = lF.i by A1,A4,GROUP_1:19;
+      suppose
+A5:     i = 2;
+      reconsider H = G.2 as Group by FINSEQ_1:61;
+      reconsider z = p.2 as Element of H by A1;
+      take H, z";
+      thus H = G.i by A5;
+      thus p.i = z"" by A5,GROUP_1:19;
+      thus z" = lF.i by A1,A5,GROUP_1:19;
+    end;
+    hence thesis by A2,Th10;
+  end;
+
+theorem
+   (<*x,y,z*> qua Element of product <*G1,G2,G3*>)" = <*x",y",z"
+*>
+  proof
+    set G = <*G1,G2,G3*>;
+    reconsider lF = <*x,y,z*>, p = <*x",y",z"*> as Element of product Carrier G
+      by Def2;
+A1: p.1 = x" & p.2 = y" & p.3 = z" & G.1 = G1 & G.2 = G2 & G.3 = G3 &
+      lF.1 = x & lF.2 = y & lF.3 = z by FINSEQ_1:62;
+A2: p is ManySortedSet of {1,2,3}
+    proof
+      thus dom p = {1,2,3} by FINSEQ_3:1,30;
+    end;
+      for i being set st i in {1,2,3}
+     ex H being Group, z being Element of H st H = G.i &
+      p.i = z" & z = lF.i
+    proof
+      let i be set such that
+A3:     i in {1,2,3};
+      per cases by A3,ENUMSET1:def 1;
+      suppose
+A4:     i = 1;
+      reconsider H = G.1 as Group by FINSEQ_1:62;
+      reconsider z = p.1 as Element of H by A1;
+      take H, z";
+      thus H = G.i by A4;
+      thus p.i = z"" by A4,GROUP_1:19;
+      thus z" = lF.i by A1,A4,GROUP_1:19;
+      suppose
+A5:     i = 2;
+      reconsider H = G.2 as Group by FINSEQ_1:62;
+      reconsider z = p.2 as Element of H by A1;
+      take H, z";
+      thus H = G.i by A5;
+      thus p.i = z"" by A5,GROUP_1:19;
+      thus z" = lF.i by A1,A5,GROUP_1:19;
+      suppose
+A6:     i = 3;
+      reconsider H = G.3 as Group by FINSEQ_1:62;
+      reconsider z = p.3 as Element of H by A1;
+      take H, z";
+      thus H = G.i by A6;
+      thus p.i = z"" by A6,GROUP_1:19;
+      thus z" = lF.i by A1,A6,GROUP_1:19;
+    end;
+    hence thesis by A2,Th10;
+  end;
+
+theorem Th40:
+ for f being Function of the carrier of G1, the carrier of product <*G1*> st
+  for x being Element of G1 holds f.x = <*x*> holds
+   f is Homomorphism of G1, product <*G1*>
+  proof
+    let f be Function of the carrier of G1, the carrier of product <*G1*>
+      such that
+A1:   for x being Element of G1 holds f.x = <*x*>;
+    let a, b be Element of G1;
+    thus f.(a * b) = <*a * b*> by A1
+                  .= <*a*> * <*b*> by Th31
+                  .= <*a*> * f.b by A1
+                  .= f.a * f.b by A1;
+   end;
+
+theorem Th41:
+ for f being Homomorphism of G1, product <*G1*> st
+  for x being Element of G1 holds f.x = <*x*> holds
+   f is_isomorphism
+  proof
+    let f be Homomorphism of G1, product <*G1*> such that
+A1:   for x being Element of G1 holds f.x = <*x*>;
+A2: dom f = the carrier of G1 by FUNCT_2:def 1;
+A3: rng f = the carrier of product <*G1*>
+    proof
+      thus rng f c= the carrier of product <*G1*>;
+      let x be set;
+      assume x in the carrier of product <*G1*>;
+      then reconsider a = x as Element of product <*G1*>;
+        a in the carrier of product <*G1*>;
+then A4:   a in product Carrier <*G1*> by Def2;
+then A5:   dom a = dom Carrier <*G1*> by CARD_3:18;
+then A6:   dom a = {1} by PBOOLE:def 3;
+A7:   1 in {1} by TARSKI:def 1;
+then A8:   a.1 in (Carrier <*G1*>).1 by A4,A5,A6,CARD_3:18;
+        ex R being 1-sorted st
+       R = <*G1*>.1 & (Carrier <*G1*>).1 = the carrier of R
+        by A7,PRALG_1:def 13;
+      then reconsider b = a.1 as Element of G1
+        by A8,FINSEQ_1:def 8;
+        f.b = <*b*> by A1
+         .= x by A6,FINSEQ_1:4,def 8;
+      hence x in rng f by A2,FUNCT_1:def 5;
+    end;
+      f is one-to-one
+    proof
+      let m, n be set; assume
+A9:    m in dom f & n in dom f & f.m = f.n;
+      then reconsider m1 = m, n1 = n as Element of G1
+        by FUNCT_2:def 1;
+        <*m1*> = f.m1 by A1
+            .= <*n1*> by A1,A9;
+      hence m = n by Th1;
+    end;
+    hence f is_isomorphism by A3,GROUP_6:70;
+  end;
+
+theorem
+   G1, product <*G1*> are_isomorphic
+  proof
+    deffunc F(Element of G1) = <*$1*>;
+    consider f being Function of the carrier of G1,
+                                 the carrier of product <*G1*> such that
+A1:   for x being Element of G1 holds f.x = F(x)
+        from LambdaD;
+    reconsider f as Homomorphism of G1, product <*G1*> by A1,Th40;
+    take f;
+    thus thesis by A1,Th41;
+  end;

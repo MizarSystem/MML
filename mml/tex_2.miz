@@ -1,0 +1,3065 @@
+:: Maximal Discrete Subspaces of Almost Discrete Topological Spaces
+::  by Zbigniew Karno
+::
+:: Received November 5, 1993
+:: Copyright (c) 1993 Association of Mizar Users
+
+environ
+
+ vocabulary REALSET1, BOOLE, COLLSP, TARSKI, SUBSET_1, PRE_TOPC, SETFAM_1,
+      RELAT_1, NATTRA_1, TDLAT_3, TOPS_3, TOPS_1, FUNCT_1, ORDINAL2, TEX_1,
+      BORSUK_1, TEX_2, PCOMPS_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, DOMAIN_1, RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, REALSET1, STRUCT_0, PRE_TOPC, TOPS_1, TOPS_2, BORSUK_1, TSEP_1,
+      TDLAT_3, TOPS_3, PCOMPS_1, TEX_1;
+ constructors DOMAIN_1, REALSET1, TOPS_1, TOPS_2, TMAP_1, BORSUK_1, TOPS_3,
+      TEX_1, TDLAT_3, MEMBERED, PARTFUN1;
+ clusters PRE_TOPC, TDLAT_3, TEX_1, REALSET1, STRUCT_0, RELSET_1, PCOMPS_1,
+      SUBSET_1, BORSUK_1, MEMBERED, ZFMISC_1, FUNCT_2, PARTFUN1;
+ requirements BOOLE, SUBSET;
+ definitions PRE_TOPC, XBOOLE_0, REALSET1;
+ theorems TARSKI, SUBSET_1, ZFMISC_1, FUNCT_2, PRE_TOPC, TOPS_1, TOPS_2,
+      PCOMPS_1, BORSUK_1, TSEP_1, TDLAT_3, REALSET1, TOPS_3, TEX_1, RELAT_1,
+      STRUCT_0, RELSET_1, SETFAM_1, XBOOLE_0, XBOOLE_1;
+ schemes COMPTS_1;
+
+begin
+:: 1. Proper Subsets of 1-sorted Structures.
+
+definition let X be non empty set;
+redefine attr X is trivial means
+:Def1: ex s being Element of X st X = {s};
+ compatibility
+  proof
+   hereby assume X is trivial;
+    then consider s being set such that
+A1:   X = {s} by REALSET1:def 12;
+      s in X by A1,TARSKI:def 1;
+    hence ex s being Element of X st X = {s} by A1;
+   end;
+   thus thesis by REALSET1:def 12;
+  end;
+end;
+
+definition
+ cluster trivial non empty set;
+ existence
+  proof
+   set o = {0};
+   take o;
+       now
+      reconsider d = 0 as Element of o by TARSKI:def 1;
+      take d;
+      thus o = {d};
+     end;
+   hence thesis by Def1;
+  end;
+end;
+
+theorem Th1:
+ for A being non empty set, B being trivial non empty set st
+  A c= B holds A = B
+ proof let A be non empty set, B be trivial non empty set;
+  assume A1: A c= B;
+    consider s being Element of B such that
+        A2: B = {s} by Def1;
+  thus A = B by A1,A2,ZFMISC_1:39;
+ end;
+
+theorem
+  for A being trivial non empty set, B being set st
+   A /\ B is non empty holds A c= B
+ proof let A be trivial non empty set, B be set;
+  assume A /\ B is non empty;
+    then consider a being set such that
+           A1: a in A /\ B by XBOOLE_0:def 1;
+     consider s being Element of A such that
+           A2: A = {s} by Def1;
+        A /\ B c= A by XBOOLE_1:17;
+    then {a} c= A by A1,ZFMISC_1:37;
+    then A3: {a} = A by A2,ZFMISC_1:24;
+        A /\ B c= B by XBOOLE_1:17;
+  hence A c= B by A1,A3,ZFMISC_1:37;
+ end;
+
+canceled;
+
+theorem
+ for S, T being 1-sorted st the carrier of S = the carrier of T
+  holds S is trivial implies T is trivial
+  proof let S,T be 1-sorted such that
+A1: the carrier of S = the carrier of T;
+   assume for x,y being Element of S holds x = y;
+   hence for x,y being Element of T holds x = y by A1;
+  end;
+
+definition let S be set;
+  let IT be Element of S;
+ attr IT is proper means
+:Def2: IT <> union S;
+end;
+
+definition let S be set;
+ cluster non proper Subset of S;
+ existence
+  proof
+   take [#]S;
+     [#]S = S by SUBSET_1:def 4;
+   hence [#]S = union bool S by ZFMISC_1:99;
+  end;
+end;
+
+theorem Th5:
+ for S being set, A being Subset of S holds A is proper iff A <> S
+ proof let S be set, A be Subset of S;
+  hereby assume A is proper;
+    then A <> union bool S by Def2;
+   hence A <> S by ZFMISC_1:99;
+  end;
+  assume A <> S;
+  hence A <> union bool S by ZFMISC_1:99;
+ end;
+
+definition let S be non empty set;
+ cluster non proper -> non empty Subset of S;
+ coherence by Th5;
+ cluster empty -> proper Subset of S;
+ coherence by Th5;
+end;
+
+definition let S be trivial non empty set;
+ cluster proper -> empty Subset of S;
+ coherence
+  proof let A be Subset of S;
+   assume A is proper;
+    then A1: A <> S by Th5;
+      consider s being Element of S such that A2: S = {s} by Def1;
+   thus thesis by A1,A2,ZFMISC_1:39;
+  end;
+ cluster non empty -> non proper Subset of S;
+ coherence
+  proof let A be Subset of S;
+   assume A3: A is non empty;
+   assume A is proper;
+    then A4: A <> S by Th5;
+      consider s being Element of S such that A5: S = {s} by Def1;
+   thus contradiction by A3,A4,A5,ZFMISC_1:39;
+  end;
+end;
+
+definition let S be non empty set;
+ cluster proper Subset of S;
+ existence
+  proof
+   take {} S;
+   thus {} S <> union bool S by ZFMISC_1:99;
+  end;
+ cluster non proper Subset of S;
+ existence
+  proof consider A being non proper Subset of S;
+   take A;
+   thus thesis;
+  end;
+end;
+
+definition let S be non empty set;
+ cluster trivial (non empty Subset of S);
+ existence
+  proof consider s being Element of S;
+   take {s};
+       now
+        reconsider e = s as Element of {s} by TARSKI:def 1;
+      take e;
+      thus {s} = {e};
+     end;
+   hence thesis by Def1;
+  end;
+end;
+
+definition let y be set;
+ cluster {y} -> trivial;
+ coherence
+  proof
+       now
+        reconsider e = y as Element of {y} by TARSKI:def 1;
+      take e;
+      thus {y} = {e};
+     end;
+   hence thesis by Def1;
+  end;
+end;
+
+theorem
+   for S being non empty set, y being Element of S holds
+  {y} is proper implies S is non trivial
+ proof let S be non empty set, y be Element of S;
+  assume A1: {y} is proper;
+  assume S is trivial;
+    then consider s being Element of S such that A2: S = {s} by Def1;
+      {y} = S by A2,ZFMISC_1:24;
+  hence contradiction by A1,Th5;
+ end;
+
+theorem
+  for S being non trivial non empty set, y being Element of S holds
+  {y} is proper by Th5;
+
+definition let S be trivial non empty set;
+ cluster non proper -> trivial (non empty Subset of S);
+ coherence by Th5;
+end;
+
+definition let S be non trivial non empty set;
+ cluster trivial -> proper (non empty Subset of S);
+ coherence by Th5;
+ cluster non proper -> non trivial (non empty Subset of S);
+ coherence by Th5;
+end;
+
+definition let S be non trivial non empty set;
+ cluster trivial proper (non empty Subset of S);
+ existence
+  proof consider A being trivial (non empty Subset of S);
+   take A;
+   thus thesis;
+  end;
+ cluster non trivial non proper (non empty Subset of S);
+ existence
+  proof consider A being non proper Subset of S;
+    reconsider A as non empty Subset of S;
+   take A;
+   thus thesis;
+  end;
+end;
+
+theorem Th8:
+ for Y being non empty 1-sorted, y being Element of Y holds
+  {y} is proper implies Y is non trivial
+ proof let Y be non empty 1-sorted, y be Element of Y;
+  assume A1: {y} is proper;
+  assume Y is trivial;
+    then consider s being Element of Y such that
+               A2: the carrier of Y = {s} by TEX_1:def 1;
+      {y} = the carrier of Y by A2,ZFMISC_1:24;
+  hence contradiction by A1,Th5;
+ end;
+
+theorem Th9:
+ for Y being non trivial non empty 1-sorted,
+     y being Element of Y holds
+  {y} is proper
+ proof let Y be non trivial non empty 1-sorted,
+           y be Element of Y;
+  assume {y} is non proper;
+    then the carrier of Y = {y} by Th5;
+  hence contradiction by TEX_1:def 1;
+ end;
+
+definition let Y be trivial non empty 1-sorted;
+ cluster -> non proper (non empty Subset of Y);
+ coherence
+  proof let A be non empty Subset of Y;
+   assume A is proper;
+    then A1: A <> the carrier of Y by Th5;
+      consider s being Element of Y such that
+                  A2: the carrier of Y = {s} by TEX_1:def 1;
+   thus contradiction by A1,A2,ZFMISC_1:39;
+  end;
+ cluster non proper -> trivial (non empty Subset of Y);
+ coherence
+  proof let A be non empty Subset of Y;
+   assume A3: A is non proper;
+        ex s being Element of Y st
+        the carrier of Y = {s} by TEX_1:def 1;
+   hence thesis by A3,Th5;
+  end;
+end;
+
+definition let Y be non trivial non empty 1-sorted;
+ cluster trivial -> proper (non empty Subset of Y);
+ coherence
+  proof let A be non empty Subset of Y;
+   assume A is trivial;
+    then consider s being Element of A such that A1: A = {s} by Def1;
+   thus A is proper by A1,Th9;
+  end;
+ cluster non proper -> non trivial (non empty Subset of Y);
+ coherence
+  proof let A be non empty Subset of Y;
+   assume A2: A is non proper;
+   assume A is trivial;
+    then consider s being Element of A such that A3: A = {s} by Def1;
+   thus contradiction by A2,A3,Th9;
+  end;
+end;
+
+definition let Y be non trivial non empty 1-sorted;
+ cluster trivial proper (non empty Subset of Y);
+ existence
+  proof consider A being trivial (non empty Subset of Y);
+   take A;
+   thus thesis;
+  end;
+ cluster non trivial non proper (non empty Subset of Y);
+ existence
+  proof consider A being non proper Subset of Y;
+    reconsider A as non empty Subset of Y;
+   take A;
+   thus thesis;
+  end;
+end;
+
+definition let Y be non trivial non empty 1-sorted;
+  cluster non empty trivial proper Subset of Y;
+  existence
+  proof
+    consider X being trivial proper (non empty Subset of Y);
+    reconsider X as Subset of Y;
+    take X;
+    thus thesis;
+  end;
+end;
+
+begin
+:: 2. Proper Subspaces of Topological Spaces.
+
+theorem
+    for X being non empty TopStruct, X0 being SubSpace of X holds
+               the TopStruct of X0 is strict SubSpace of X
+ proof let X be non empty TopStruct, X0 be SubSpace of X;
+   set S = the TopStruct of X0;
+    S is SubSpace of X
+   proof
+     A1: [#](S) = the carrier of S & [#]
+(X0) = the carrier of X0 by PRE_TOPC:12;
+    hence [#](S) c= [#](X) by PRE_TOPC:def 9;
+     let P be Subset of S;
+    thus P in
+ the topology of S implies ex Q being Subset of X st
+                 Q in the topology of X & P = Q /\ [#](S) by A1,PRE_TOPC:def 9;
+     given Q being Subset of X such that
+         A2: Q in the topology of X & P = Q /\ [#](S);
+    thus P in the topology of S by A1,A2,PRE_TOPC:def 9;
+   end;
+  hence thesis;
+ end;
+
+canceled;
+
+theorem Th12:
+ for Y0, Y1 being TopStruct st
+    the TopStruct of Y0 = the TopStruct of Y1 holds
+   Y0 is TopSpace-like implies Y1 is TopSpace-like
+ proof let Y0, Y1 be TopStruct;
+  assume A1: the TopStruct of Y0 = the TopStruct of Y1;
+  assume A2: Y0 is TopSpace-like;
+   hence the carrier of Y1 in the topology of Y1 by A1,PRE_TOPC:def 1;
+   thus thesis by A1,A2,PRE_TOPC:def 1;
+ end;
+
+definition let Y be TopStruct;
+  let IT be SubSpace of Y;
+ attr IT is proper means
+:Def3: for A being Subset of Y st A = the carrier of IT
+  holds A is proper;
+end;
+
+reserve Y for TopStruct;
+
+theorem Th13:
+ for Y0 being SubSpace of Y, A being Subset of Y st
+   A = the carrier of Y0 holds A is proper iff Y0 is proper
+ proof let Y0 be SubSpace of Y, A be Subset of Y;
+  assume A1: A = the carrier of Y0;
+  hereby
+   assume A is proper;
+    then for A be Subset of Y st A = the carrier of Y0
+     holds A is proper by A1;
+   hence Y0 is proper by Def3;
+  end;
+  thus Y0 is proper implies A is proper by A1,Def3;
+ end;
+
+Lm1:
+ now let Z be TopStruct; let Z0 be SubSpace of Z;
+      [#]Z0 c= [#]Z & [#]Z0 = the carrier of Z0 by PRE_TOPC:12,def 9;
+  hence the carrier of Z0 is Subset of Z by PRE_TOPC:12;
+ end;
+
+theorem
+   for Y0, Y1 being SubSpace of Y st
+    the TopStruct of Y0 = the TopStruct of Y1 holds
+   Y0 is proper implies Y1 is proper
+ proof let Y0, Y1 be SubSpace of Y;
+  assume A1: the TopStruct of Y0 = the TopStruct of Y1;
+  assume Y0 is proper;
+   then for A be Subset of Y st A = the carrier of Y1
+    holds A is proper by A1,Def3;
+  hence Y1 is proper by Def3;
+ end;
+
+theorem Th15:
+ for Y0 being SubSpace of Y holds
+  the carrier of Y0 = the carrier of Y implies Y0 is non proper
+ proof let Y0 be SubSpace of Y;
+   reconsider A = the carrier of Y0 as Subset of Y by Lm1;
+  assume A1: the carrier of Y0 = the carrier of Y;
+      now take A;
+     thus A = the carrier of Y0 & A is non proper by A1,Th5;
+    end;
+  hence Y0 is non proper by Def3;
+ end;
+
+definition let Y be trivial non empty TopStruct;
+ cluster -> non proper (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+    reconsider A = the carrier of Y0 as non empty Subset of Y
+    by Lm1;
+       now take A;
+      thus A = the carrier of Y0 & A is non proper;
+     end;
+   hence Y0 is non proper by Def3;
+  end;
+ cluster non proper -> trivial (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume Y0 is non proper;
+    then consider A being Subset of Y such that
+           A1: A = the carrier of Y0 and A is non proper by Def3;
+   reconsider A = the carrier of Y0 as non empty Subset of Y
+   by A1;
+       A is trivial;
+   hence Y0 is trivial by REALSET1:def 13;
+  end;
+end;
+
+definition let Y be non trivial non empty TopStruct;
+ cluster trivial -> proper (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume A1: Y0 is trivial;
+       now let A be Subset of Y;
+      assume A2: A = the carrier of Y0;
+       then reconsider B = A as non empty Subset of Y;
+        reconsider B as trivial (non empty Subset of Y)
+        by A1,A2,REALSET1:def 13;
+           B is proper;
+      hence A is proper;
+     end;
+   hence Y0 is proper by Def3;
+  end;
+ cluster non proper -> non trivial (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume A3: Y0 is non proper;
+   assume A4: Y0 is trivial;
+       now let A be Subset of Y;
+      assume A5: A = the carrier of Y0;
+       then reconsider B = A as non empty Subset of Y;
+        reconsider B as trivial (non empty Subset of Y)
+        by A4,A5,REALSET1:def 13;
+           B is proper;
+      hence A is proper;
+     end;
+   hence contradiction by A3,Def3;
+  end;
+end;
+
+definition let Y be non empty TopStruct;
+ cluster non proper strict non empty SubSpace of Y;
+ existence
+  proof
+       [#]Y = the carrier of Y by PRE_TOPC:12;
+    then reconsider A0 = the carrier of Y
+      as non empty Subset of Y;
+   set Y0 = Y|A0;
+   take Y0;
+      A0 = [#]Y0 by PRE_TOPC:def 10;
+    then A0 = the carrier of Y0 by PRE_TOPC:12;
+   hence thesis by Th15;
+  end;
+end;
+
+theorem
+   for Y being non empty TopStruct,
+     Y0 being non proper SubSpace of Y holds
+   the TopStruct of Y0 = the TopStruct of Y
+ proof let Y be non empty TopStruct;
+   let Y0 be non proper SubSpace of Y;
+   consider A being Subset of Y such that
+        A1: A = the carrier of Y0 and A2: A is non proper by Def3;
+    A3: the carrier of Y0 = the carrier of Y by A1,A2,Th5;
+     A4: [#](Y) = the carrier of Y & [#]
+(Y0) = the carrier of Y0 by PRE_TOPC:12;
+     the topology of Y0 = the topology of Y
+    proof
+         now let D be set;
+        assume A5: D in the topology of Y0;
+          then reconsider C = D as Subset of Y0;
+         consider E being Subset of Y such that
+               A6: E in
+ the topology of Y and A7: C = E /\ [#]Y0 by A5,PRE_TOPC:def 9;
+        thus D in the topology of Y by A3,A4,A6,A7,XBOOLE_1:28;
+       end;
+      then A8: the topology of Y0 c= the topology of Y by TARSKI:def 3;
+         now let D be set;
+        assume A9: D in the topology of Y;
+          then reconsider E = D as Subset of Y;
+           reconsider C = E as Subset of Y0 by A1,A2,Th5;
+            now take E;
+           thus E in the topology of Y & C = E /\ [#]Y0 by A4,A9,XBOOLE_1:28;
+          end;
+        hence D in the topology of Y0 by PRE_TOPC:def 9;
+       end;
+      then the topology of Y c= the topology of Y0 by TARSKI:def 3;
+     hence thesis by A8,XBOOLE_0:def 10;
+    end;
+  hence thesis by A1,A2,Th5;
+ end;
+
+definition let Y be non empty TopStruct;
+ cluster discrete -> TopSpace-like SubSpace of Y;
+ coherence
+  proof let Y0 be SubSpace of Y;
+   assume Y0 is discrete;
+    then the topology of Y0 = bool the carrier of Y0 by TDLAT_3:def 1;
+    then the carrier of Y0 in the topology of Y0 &
+         (for F being Subset-Family of Y0 st
+           F c= the topology of Y0 holds union F in the topology of Y0) &
+          (for A,B being Subset of Y0 st
+            A in the topology of Y0 & B in the topology of Y0 holds
+              A /\ B in the topology of Y0) by ZFMISC_1:def 1;
+   hence thesis by PRE_TOPC:def 1;
+  end;
+ cluster anti-discrete -> TopSpace-like SubSpace of Y;
+ coherence
+  proof let Y0 be SubSpace of Y;
+   assume Y0 is anti-discrete;
+    then A1: the topology of Y0 = {{}, the carrier of Y0} by TDLAT_3:def 2;
+     now
+    thus the carrier of Y0 in the topology of Y0 by A1,TARSKI:def 2;
+    thus for F being Subset-Family of Y0 st
+          F c= the topology of Y0 holds union F in the topology of Y0
+     proof let F be Subset-Family of Y0;
+      assume F c= the topology of Y0;
+       then F = {} or F = {{}} or F = {the carrier of Y0} or
+            F = {{},the carrier of Y0} by A1,ZFMISC_1:42;
+       then union F = {} or union F = the carrier of Y0 or
+            union F = {} \/ (the carrier of Y0) by ZFMISC_1:2,31,93;
+      hence thesis by A1,TARSKI:def 2;
+     end;
+    thus for A,B being Subset of Y0 st
+          A in the topology of Y0 & B in the topology of Y0 holds
+           A /\ B in the topology of Y0
+     proof
+       let A,B be Subset of Y0;
+      assume A in the topology of Y0 & B in the topology of Y0;
+       then (A = {} or A = the carrier of Y0) &
+             (B = {} or B = the carrier of Y0) by A1,TARSKI:def 2;
+      hence A /\ B in the topology of Y0 by A1,TARSKI:def 2;
+     end;
+   end;
+   hence thesis by PRE_TOPC:def 1;
+  end;
+ cluster non TopSpace-like -> non discrete SubSpace of Y;
+ coherence
+  proof let Y0 be SubSpace of Y;
+   assume A2: Y0 is non TopSpace-like;
+   assume Y0 is discrete;
+    then the topology of Y0 = bool the carrier of Y0 by TDLAT_3:def 1;
+    then the carrier of Y0 in the topology of Y0 &
+         (for F being Subset-Family of Y0 st
+           F c= the topology of Y0 holds union F in the topology of Y0) &
+          (for A,B being Subset of Y0 st
+            A in the topology of Y0 & B in the topology of Y0 holds
+              A /\ B in the topology of Y0) by ZFMISC_1:def 1;
+   hence contradiction by A2,PRE_TOPC:def 1;
+  end;
+ cluster non TopSpace-like -> non anti-discrete SubSpace of Y;
+ coherence
+  proof let Y0 be SubSpace of Y;
+   assume A3: Y0 is non TopSpace-like;
+   assume Y0 is anti-discrete;
+    then A4: the topology of Y0 = {{}, the carrier of Y0} by TDLAT_3:def 2;
+     now
+    thus the carrier of Y0 in the topology of Y0 by A4,TARSKI:def 2;
+    thus for F being Subset-Family of Y0 st
+          F c= the topology of Y0 holds union F in the topology of Y0
+     proof let F be Subset-Family of Y0;
+      assume F c= the topology of Y0;
+       then F = {} or F = {{}} or F = {the carrier of Y0} or
+            F = {{},the carrier of Y0} by A4,ZFMISC_1:42;
+       then union F = {} or union F = the carrier of Y0 or
+            union F = {} \/ (the carrier of Y0) by ZFMISC_1:2,31,93;
+      hence thesis by A4,TARSKI:def 2;
+     end;
+    thus for A,B being Subset of Y0 st
+          A in the topology of Y0 & B in the topology of Y0 holds
+           A /\ B in the topology of Y0
+     proof
+       let A,B be Subset of Y0;
+      assume A in the topology of Y0 & B in the topology of Y0;
+       then (A = {} or A = the carrier of Y0) &
+             (B = {} or B = the carrier of Y0) by A4,TARSKI:def 2;
+      hence A /\ B in the topology of Y0 by A4,TARSKI:def 2;
+     end;
+   end;
+   hence contradiction by A3,PRE_TOPC:def 1;
+  end;
+end;
+
+theorem Th17:
+ for Y0, Y1 being TopStruct st
+    the TopStruct of Y0 = the TopStruct of Y1 holds
+   Y0 is discrete implies Y1 is discrete
+ proof let Y0, Y1 be TopStruct;
+  assume A1: the TopStruct of Y0 = the TopStruct of Y1;
+  assume Y0 is discrete;
+   then the topology of Y0 = bool the carrier of Y0 by TDLAT_3:def 1;
+  hence Y1 is discrete by A1,TDLAT_3:def 1;
+ end;
+
+theorem Th18:
+ for Y0, Y1 being TopStruct st
+    the TopStruct of Y0 = the TopStruct of Y1 holds
+   Y0 is anti-discrete implies Y1 is anti-discrete
+ proof let Y0, Y1 be TopStruct;
+  assume A1: the TopStruct of Y0 = the TopStruct of Y1;
+  assume Y0 is anti-discrete;
+   then the topology of Y0 = {{},the carrier of Y0} by TDLAT_3:def 2;
+  hence Y1 is anti-discrete by A1,TDLAT_3:def 2;
+ end;
+
+definition let Y be non empty TopStruct;
+ cluster discrete -> almost_discrete SubSpace of Y;
+ coherence
+  proof let Y0 be SubSpace of Y;
+   assume Y0 is discrete;
+    then for A be Subset of Y0 holds
+          A in the topology of Y0 implies
+      (the carrier of Y0) \ A in the topology of Y0 by TDLAT_3:14;
+   hence Y0 is almost_discrete by TDLAT_3:def 3;
+  end;
+ cluster non almost_discrete -> non discrete SubSpace of Y;
+ coherence
+  proof let Y0 be SubSpace of Y;
+   assume A1: Y0 is non almost_discrete;
+   assume Y0 is discrete;
+    then for A be Subset of Y0 holds
+          A in the topology of Y0 implies
+      (the carrier of Y0) \ A in the topology of Y0 by TDLAT_3:14;
+   hence contradiction by A1,TDLAT_3:def 3;
+  end;
+ cluster anti-discrete -> almost_discrete SubSpace of Y;
+ coherence
+  proof let Y0 be SubSpace of Y;
+   assume Y0 is anti-discrete;
+    then for A be Subset of Y0 holds
+            A in the topology of Y0 implies
+         (the carrier of Y0) \ A in the topology of Y0 by TDLAT_3:15;
+   hence Y0 is almost_discrete by TDLAT_3:def 3;
+  end;
+ cluster non almost_discrete -> non anti-discrete SubSpace of Y;
+ coherence
+  proof let Y0 be SubSpace of Y;
+   assume A2: Y0 is non almost_discrete;
+   assume Y0 is anti-discrete;
+    then for A be Subset of Y0 holds
+            A in the topology of Y0 implies
+         (the carrier of Y0) \ A in the topology of Y0 by TDLAT_3:15;
+   hence contradiction by A2,TDLAT_3:def 3;
+  end;
+end;
+
+theorem
+   for Y0, Y1 being TopStruct st
+    the TopStruct of Y0 = the TopStruct of Y1 holds
+   Y0 is almost_discrete implies Y1 is almost_discrete
+ proof let Y0, Y1 be TopStruct;
+  assume A1: the TopStruct of Y0 = the TopStruct of Y1;
+  assume Y0 is almost_discrete;
+   then for A being Subset of Y0 st
+            A in the topology of Y0 holds
+          (the carrier of Y0) \ A in the topology of Y0 by TDLAT_3:def 3;
+  hence Y1 is almost_discrete by A1,TDLAT_3:def 3;
+ end;
+
+definition let Y be non empty TopStruct;
+ cluster discrete anti-discrete -> trivial (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume Y0 is discrete anti-discrete;
+    then A1: bool the carrier of Y0 = {{}, the carrier of Y0} by TDLAT_3:12;
+       now
+       consider d0 being Element of Y0;
+      take d0;
+      thus {d0} = the carrier of Y0 by A1,TARSKI:def 2;
+     end;
+   hence Y0 is trivial by TEX_1:def 1;
+  end;
+ cluster anti-discrete non trivial -> non discrete (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume A2: Y0 is anti-discrete non trivial;
+   assume Y0 is discrete;
+    then A3: bool the carrier of Y0 = {{}, the carrier of Y0} by A2,TDLAT_3:12;
+       now
+       consider d0 being Element of Y0;
+      take d0;
+      thus {d0} = the carrier of Y0 by A3,TARSKI:def 2;
+     end;
+   hence contradiction by A2,TEX_1:def 1;
+  end;
+ cluster discrete non trivial -> non anti-discrete (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume A4: Y0 is discrete non trivial;
+   assume Y0 is anti-discrete;
+    then A5: bool the carrier of Y0 = {{}, the carrier of Y0} by A4,TDLAT_3:12;
+       now
+       consider d0 being Element of Y0;
+      take d0;
+      thus {d0} = the carrier of Y0 by A5,TARSKI:def 2;
+     end;
+   hence contradiction by A4,TEX_1:def 1;
+  end;
+end;
+
+definition let Y be non empty TopStruct, y be Point of Y;
+ func Sspace(y) -> strict non empty SubSpace of Y means
+:Def4: the carrier of it = {y};
+ existence
+  proof
+   reconsider D = {y} as non empty Subset of Y;
+   set Y0 = Y|D;
+   take Y0;
+       D = [#]Y0 by PRE_TOPC:def 10;
+   hence {y} = the carrier of Y0 by PRE_TOPC:12;
+  end;
+ uniqueness
+  proof let Y1, Y2 be strict non empty SubSpace of Y;
+   assume A1: the carrier of Y1 = {y} & the carrier of Y2 = {y};
+   set A1 = the carrier of Y1, A2 = the carrier of Y2;
+     A2: A1 = [#]Y1 & A2 = [#]Y2 by PRE_TOPC:12;
+     then A1 c= [#]Y & A2 c= [#]Y by PRE_TOPC:def 9;
+    then reconsider A1, A2 as Subset of Y by PRE_TOPC:16;
+      Y1 = Y|A1 & Y2 = Y|A2 by A2,PRE_TOPC:def 10;
+   hence thesis by A1;
+  end;
+end;
+
+Lm2:
+ now let Y be non empty TopStruct, y be Point of Y;
+   set Y0 = Sspace(y);
+         the carrier of Y0 = {y} by Def4;
+     then reconsider y0 = y as Point of Y0 by TARSKI:def 1;
+        the carrier of Y0 = {y0} by Def4;
+   hence Sspace(y) is trivial by TEX_1:def 1;
+ end;
+
+definition let Y be non empty TopStruct;
+ cluster trivial strict non empty SubSpace of Y;
+ existence
+  proof
+   consider y being Point of Y;
+   take Sspace(y);
+   thus thesis by Lm2;
+  end;
+end;
+
+definition let Y be non empty TopStruct, y be Point of Y;
+ cluster Sspace(y) -> trivial;
+ coherence by Lm2;
+end;
+
+theorem Th20:
+ for Y being non empty TopStruct, y being Point of Y holds
+  Sspace(y) is proper iff {y} is proper
+ proof let Y be non empty TopStruct, y be Point of Y;
+  hereby
+   assume A1: Sspace(y) is proper;
+    reconsider A = the carrier of Sspace(y) as Subset of Y
+    by Lm1;
+        A = {y} by Def4;
+   hence {y} is proper by A1,Def3;
+  end;
+  hereby
+   assume {y} is proper;
+     then for A be Subset of Y st A = the carrier of Sspace(y)
+      holds A is proper by Def4;
+   hence Sspace(y) is proper by Def3;
+  end;
+ end;
+
+theorem
+   for Y being non empty TopStruct, y being Point of Y holds
+  Sspace(y) is proper implies Y is non trivial
+ proof let Y be non empty TopStruct, y be Point of Y;
+  assume Sspace(y) is proper;
+   then {y} is proper by Th20;
+  hence thesis by Th8;
+ end;
+
+theorem
+   for Y being non trivial non empty TopStruct, y being Point of Y holds
+  Sspace(y) is proper
+ proof let Y be non trivial non empty TopStruct, y be Point of Y;
+  thus thesis;
+ end;
+
+definition let Y be non trivial non empty TopStruct;
+ cluster proper trivial strict (non empty SubSpace of Y);
+ existence
+  proof consider Y0 being trivial strict non empty SubSpace of Y;
+   take Y0;
+   thus thesis;
+  end;
+end;
+
+theorem Th23:
+ for Y being non empty TopStruct, Y0 be trivial non empty SubSpace of Y holds
+   ex y being Point of Y st the TopStruct of Y0 = the TopStruct of Sspace(y)
+ proof let Y be non empty TopStruct, Y0 be trivial non empty SubSpace of Y;
+   consider y0 being Element of Y0 such that
+              A1: the carrier of Y0 = {y0} by TEX_1:def 1;
+       the carrier of Y0 is Subset of Y by Lm1;
+     then reconsider y = y0 as Point of Y by A1,ZFMISC_1:37;
+   take y;
+      the carrier of Y0 = the carrier of Sspace(y) by A1,Def4;
+  hence thesis by TSEP_1:5;
+ end;
+
+theorem Th24:
+ for Y being non empty TopStruct, y being Point of Y holds
+  Sspace(y) is TopSpace-like implies Sspace(y) is discrete anti-discrete
+ proof let Y be non empty TopStruct, y be Point of Y;
+  set Y0 = Sspace(y);
+  assume A1: Y0 is TopSpace-like;
+     consider d being Element of Y0 such that
+                A2: the carrier of Y0 = {d} by TEX_1:def 1;
+       {} in the topology of Y0 & the carrier of Y0 in the topology of Y0
+                                                       by A1,PRE_TOPC:5,def 1;
+    then A3: {{}, the carrier of Y0} c= the topology of Y0 by ZFMISC_1:38;
+        A4: bool the carrier of Y0 = {{}, the carrier of Y0} by A2,ZFMISC_1:30;
+    then the topology of Y0 = bool the carrier of Y0 by A3,XBOOLE_0:def 10;
+  hence thesis by A4,TDLAT_3:def 1,def 2;
+ end;
+
+definition let Y be non empty TopStruct;
+ cluster trivial TopSpace-like ->
+      discrete anti-discrete (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume A1: Y0 is trivial TopSpace-like;
+    then consider y being Point of Y such that
+          A2: the TopStruct of Y0 = the TopStruct of Sspace(y) by Th23;
+        Sspace(y) is trivial TopSpace-like by A1,A2,Th12;
+    then Sspace(y) is discrete anti-discrete by Th24;
+   hence Y0 is discrete anti-discrete by A2,Th17,Th18;
+  end;
+end;
+
+definition let X be non empty TopSpace;
+ cluster trivial strict TopSpace-like non empty SubSpace of X;
+ existence
+  proof
+    consider x being Point of X;
+   take Sspace(x);
+   thus thesis;
+  end;
+end;
+
+definition let X be non empty TopSpace, x be Point of X;
+ cluster Sspace(x) -> TopSpace-like;
+ coherence;
+end;
+
+definition let X be non empty TopSpace;
+ cluster discrete anti-discrete strict non empty SubSpace of X;
+ existence
+  proof
+    consider x being Point of X;
+   take Sspace(x);
+   thus thesis;
+  end;
+end;
+
+definition let X be non empty TopSpace, x be Point of X;
+ cluster Sspace(x) -> discrete anti-discrete;
+ coherence;
+end;
+
+definition let X be non empty TopSpace;
+ cluster non proper -> open closed SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume X0 is non proper;
+    then consider A being Subset of X such that
+             A1: A = the carrier of X0 and A2: A is non proper by Def3;
+      A3: A = the carrier of X by A2,Th5;
+A4:    now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A = [#]X by A1,A3,PRE_TOPC:12;
+     hence A is open by TOPS_1:53;
+    end;
+      now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A = [#]X by A1,A3,PRE_TOPC:12;
+     hence A is closed;
+    end;
+   hence thesis by A4,BORSUK_1:def 14,TSEP_1:def 1;
+  end;
+ cluster non open -> proper SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A5: X0 is non open;
+   assume X0 is non proper;
+    then consider A being Subset of X such that
+             A6: A = the carrier of X0 and A7: A is non proper by Def3;
+      A8: A = the carrier of X by A7,Th5;
+      now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A = [#]X by A6,A8,PRE_TOPC:12;
+     hence A is open by TOPS_1:53;
+    end;
+   hence contradiction by A5,TSEP_1:def 1;
+  end;
+ cluster non closed -> proper SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A9: X0 is non closed;
+   assume X0 is non proper;
+    then consider A being Subset of X such that
+             A10: A = the carrier of X0 and A11: A is non proper by Def3;
+      A12: A = the carrier of X by A11,Th5;
+      now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A = [#]X by A10,A12,PRE_TOPC:12;
+     hence A is closed;
+    end;
+   hence contradiction by A9,BORSUK_1:def 14;
+  end;
+end;
+
+definition let X be non empty TopSpace;
+ cluster open closed strict SubSpace of X;
+ existence
+  proof consider X0 being non proper strict SubSpace of X;
+   take X0;
+   thus thesis;
+  end;
+end;
+
+definition let X be discrete non empty TopSpace;
+ cluster anti-discrete -> trivial (non empty SubSpace of X);
+ coherence
+  proof let Y0 be non empty SubSpace of X;
+   assume Y0 is anti-discrete;
+    then reconsider Y0 as discrete anti-discrete non empty SubSpace of X;
+       Y0 is trivial;
+   hence thesis;
+  end;
+ cluster non trivial -> non anti-discrete (non empty SubSpace of X);
+ coherence
+  proof let Y0 be non empty SubSpace of X;
+   assume A1: Y0 is non trivial;
+   assume Y0 is anti-discrete;
+    then reconsider Y0 as discrete anti-discrete non empty SubSpace of X;
+       Y0 is trivial;
+   hence contradiction by A1;
+  end;
+end;
+
+definition let X be discrete non trivial non empty TopSpace;
+ cluster discrete open closed proper strict SubSpace of X;
+ existence
+  proof consider X0 being proper strict SubSpace of X;
+   take X0;
+   thus thesis;
+  end;
+end;
+
+definition let X be anti-discrete non empty TopSpace;
+ cluster discrete -> trivial (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+   assume X0 is discrete;
+    then reconsider Y0 = X0 as discrete anti-discrete non empty SubSpace of X;
+        Y0 is trivial;
+   hence X0 is trivial;
+  end;
+ cluster non trivial -> non discrete (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+   assume A1: X0 is non trivial;
+   assume X0 is discrete;
+    then reconsider Y0 = X0 as discrete anti-discrete non empty SubSpace of X;
+        Y0 is trivial;
+   hence contradiction by A1;
+  end;
+end;
+
+definition let X be anti-discrete non trivial non empty TopSpace;
+ cluster -> non open non closed (proper non empty SubSpace of X);
+ coherence
+  proof let X0 be proper non empty SubSpace of X;
+      the carrier of X0 is non empty Subset of X by Lm1;
+    then reconsider A = the carrier of X0 as non empty Subset of X
+    ;
+     set B = A`;
+        A is proper by Def3;
+     then A1: A <> the carrier of X by Th5;
+     then A2: B <> {} & B <> the carrier of X by TOPS_3:1,2;
+   assume A3: X0 is open or X0 is closed;
+      now per cases by A3;
+     suppose X0 is open;
+       then A is open by TSEP_1:def 1;
+       then A in the topology of X by PRE_TOPC:def 5;
+       then A in {{},the carrier of X} by TDLAT_3:def 2;
+      hence contradiction by A1,TARSKI:def 2;
+     suppose X0 is closed;
+       then A is closed by BORSUK_1:def 14;
+       then B is open by TOPS_1:29;
+       then B in the topology of X by PRE_TOPC:def 5;
+       then B in {{},the carrier of X} by TDLAT_3:def 2;
+      hence contradiction by A2,TARSKI:def 2;
+    end;
+   hence thesis;
+  end;
+ cluster -> trivial proper (discrete non empty SubSpace of X);
+ coherence;
+end;
+
+definition let X be anti-discrete non trivial non empty TopSpace;
+ cluster anti-discrete non open non closed proper strict SubSpace of X;
+ existence
+  proof consider X0 being proper strict non empty SubSpace of X;
+   take X0;
+   thus thesis;
+  end;
+end;
+
+definition let X be almost_discrete non trivial non empty TopSpace;
+ cluster almost_discrete proper strict non empty SubSpace of X;
+ existence
+  proof consider X0 being proper strict non empty SubSpace of X;
+   take X0;
+   thus thesis;
+  end;
+end;
+
+
+begin
+:: 3. Maximal Discrete Subsets and Subspaces.
+
+definition let Y be TopStruct,
+               IT be Subset of Y;
+ attr IT is discrete means
+:Def5: for D being Subset of Y st D c= IT
+   ex G being Subset of Y st G is open & IT /\ G = D;
+end;
+
+definition let Y be TopStruct;
+  let A be Subset of Y;
+ redefine attr A is discrete means
+:Def6: for D being Subset of Y st D c= A
+   ex F being Subset of Y st F is closed & A /\ F = D;
+ compatibility
+  proof
+   hereby
+    assume A1: A is discrete;
+      let D be Subset of Y;
+    assume A2: D c= A;
+         A \ D c= A by XBOOLE_1:36;
+      then consider G being Subset of Y such that
+              A3: G is open and A4: A /\ G = A \ D by A1,Def5;
+       now
+      take F = [#]Y \ G;
+          G = [#]Y \ F by PRE_TOPC:22;
+      hence F is closed by A3,PRE_TOPC:def 6;
+           A c= [#]Y by PRE_TOPC:14;
+        then A /\ [#]Y = A by XBOOLE_1:28;
+        then A /\ F = A \ G by XBOOLE_1:49;
+        then A /\ F = A \ (A \ D) by A4,XBOOLE_1:47;
+        then A /\ F = A /\ D by XBOOLE_1:48;
+      hence A /\ F = D by A2,XBOOLE_1:28;
+     end;
+    hence ex F being Subset of Y st F is closed & A /\ F = D;
+   end;
+   hereby
+    assume A5: for D being Subset of Y st D c= A
+           ex F being Subset of Y st F is closed & A /\ F = D;
+       now let D be Subset of Y;
+      assume A6: D c= A;
+         A \ D c= A by XBOOLE_1:36;
+      then consider F being Subset of Y such that
+              A7: F is closed and A8: A /\ F = A \ D by A5;
+         now
+        take G = [#]Y \ F;
+        thus G is open by A7,PRE_TOPC:def 6;
+            A c= [#]Y by PRE_TOPC:14;
+         then A /\ [#]Y = A by XBOOLE_1:28;
+         then A /\ G = A \ F by XBOOLE_1:49;
+         then A /\ G = A \ (A \ D) by A8,XBOOLE_1:47;
+         then A /\ G = A /\ D by XBOOLE_1:48;
+        hence A /\ G = D by A6,XBOOLE_1:28;
+       end;
+      hence ex G being Subset of Y st G is open & A /\ G = D;
+     end;
+    hence A is discrete by Def5;
+   end;
+  end;
+end;
+
+theorem Th25:
+ for Y0, Y1 being TopStruct, D0 being Subset of Y0,
+     D1 being Subset of Y1 st
+    the TopStruct of Y0 = the TopStruct of Y1 & D0 = D1 holds
+   D0 is discrete implies D1 is discrete
+ proof let Y0, Y1 be TopStruct,
+           D0 be Subset of Y0,
+           D1 be Subset of Y1;
+  assume A1: the TopStruct of Y0 = the TopStruct of Y1;
+  assume A2: D0 = D1;
+  assume A3: D0 is discrete;
+       now let D be Subset of Y1;
+       reconsider E = D as Subset of Y0 by A1;
+      assume D c= D1;
+        then consider G0 being Subset of Y0 such that
+              A4: G0 is open and A5: D0 /\ G0 = E by A2,A3,Def5;
+       reconsider G = G0 as Subset of Y1 by A1;
+          now
+         take G;
+            G in the topology of Y1 by A1,A4,PRE_TOPC:def 5;
+         hence G is open by PRE_TOPC:def 5;
+         thus D1 /\ G = D by A2,A5;
+        end;
+      hence ex G being Subset of Y1 st G is open & D1 /\ G = D;
+     end;
+  hence D1 is discrete by Def5;
+ end;
+
+theorem Th26:
+ for Y being non empty TopStruct,
+  Y0 being non empty SubSpace of Y, A being Subset of Y
+  st A = the carrier of Y0 holds
+    A is discrete iff Y0 is discrete
+ proof let Y be non empty TopStruct, Y0 be non empty SubSpace of Y,
+           A be Subset of Y;
+  assume A1: A = the carrier of Y0;
+       [#]Y0 = the carrier of Y0 & [#]Y = the carrier of Y by PRE_TOPC:12;
+     then A2: the carrier of Y0 c= the carrier of Y by PRE_TOPC:def 9;
+  hereby
+   assume A3: A is discrete;
+       bool the carrier of Y0 c= the topology of Y0
+          proof
+             now let C be set;
+            assume C in bool the carrier of Y0;
+             then reconsider B = C as Subset of Y0;
+             reconsider D = B as Subset of Y by A2,XBOOLE_1:1;
+              consider G being Subset of Y such that
+                       A4: G is open and A5: A /\ G = D by A1,A3,Def5;
+                  now
+                 take G;
+                 thus G in the topology of Y by A4,PRE_TOPC:def 5;
+                 thus B = G /\ [#]Y0 by A1,A5,PRE_TOPC:12;
+                end;
+            hence C in the topology of Y0 by PRE_TOPC:def 9;
+           end;
+           hence thesis by TARSKI:def 3;
+          end;
+    then the topology of Y0 = bool the carrier of Y0 by XBOOLE_0:def 10;
+   hence Y0 is discrete by TDLAT_3:def 1;
+  end;
+  hereby
+   assume A6: Y0 is discrete;
+    then the topology of Y0 = bool the carrier of Y0 by TDLAT_3:def 1;
+    then the carrier of Y0 in the topology of Y0 &
+         (for F being Subset-Family of Y0 st
+           F c= the topology of Y0 holds union F in the topology of Y0) &
+          (for A,B being Subset of Y0 st
+            A in the topology of Y0 & B in the topology of Y0 holds
+              A /\ B in the topology of Y0) by ZFMISC_1:def 1;
+      then A7: Y0 is TopSpace-like by PRE_TOPC:def 1;
+      now let D be Subset of Y;
+     assume D c= A;
+      then reconsider B = D as Subset of Y0 by A1;
+          B is open by A6,A7,TDLAT_3:17;
+       then B in the topology of Y0 by PRE_TOPC:def 5;
+       then consider G being Subset of Y such that
+         A8: G in the topology of Y and A9: B = G /\ [#]Y0 by PRE_TOPC:def 9;
+      reconsider G as Subset of Y;
+     take G;
+     thus G is open by A8,PRE_TOPC:def 5;
+     thus A /\ G = D by A1,A9,PRE_TOPC:12;
+    end;
+   hence A is discrete by Def5;
+  end;
+ end;
+
+theorem Th27:
+ for Y being non empty TopStruct, A being Subset of Y
+  st A = the carrier of Y
+  holds A is discrete iff Y is discrete
+ proof let Y be non empty TopStruct, A be Subset of Y;
+  assume A1: A = the carrier of Y;
+  hereby
+   assume A2: A is discrete;
+       bool the carrier of Y c= the topology of Y
+          proof
+             now let C be set;
+            assume C in bool the carrier of Y;
+             then reconsider B = C as Subset of Y;
+              consider G being Subset of Y such that
+                       A3: G is open and A4: A /\ G = B by A1,A2,Def5;
+                 G = B by A1,A4,XBOOLE_1:28;
+            hence C in the topology of Y by A3,PRE_TOPC:def 5;
+           end;
+           hence thesis by TARSKI:def 3;
+          end;
+    then the topology of Y = bool the carrier of Y by XBOOLE_0:def 10;
+   hence Y is discrete by TDLAT_3:def 1;
+  end;
+  hereby
+   assume Y is discrete;
+    then reconsider Y as discrete non empty TopStruct;
+      now let D be Subset of Y;
+     assume A5: D c= A;
+     reconsider G = D as Subset of Y;
+     take G;
+     thus G is open by TDLAT_3:17;
+     thus A /\ G = D by A5,XBOOLE_1:28;
+    end;
+   hence A is discrete by Def5;
+  end;
+ end;
+
+theorem Th28:
+ for A, B being Subset of Y st B c= A holds
+    A is discrete implies B is discrete
+ proof let A, B be Subset of Y;
+  assume A1: B c= A;
+  assume A2: A is discrete;
+     now let D be Subset of Y;
+    assume A3: D c= B;
+      then D c= A by A1,XBOOLE_1:1;
+      then consider G being Subset of Y such that
+        A4: G is open and A5: A /\ G = D by A2,Def5;
+     hereby
+      take G;
+            D c= G by A5,XBOOLE_1:17;
+        then A6: D c= B /\ G by A3,XBOOLE_1:19;
+            B /\ G c= A /\ G by A1,XBOOLE_1:26;
+      hence G is open & B /\ G = D by A4,A5,A6,XBOOLE_0:def 10;
+     end;
+   end;
+  hence thesis by Def5;
+ end;
+
+theorem
+   for A, B being Subset of Y holds
+    A is discrete or B is discrete implies A /\ B is discrete
+ proof let A, B be Subset of Y;
+  assume A1: A is discrete or B is discrete;
+  hereby per cases by A1;
+    suppose A2: A is discrete;
+        A /\ B c= A by XBOOLE_1:17;
+     hence A /\ B is discrete by A2,Th28;
+    suppose A3: B is discrete;
+        A /\ B c= B by XBOOLE_1:17;
+     hence A /\ B is discrete by A3,Th28;
+  end;
+ end;
+
+theorem Th30:
+ (for P, Q being Subset of Y st P is open & Q is open holds
+     P /\ Q is open & P \/ Q is open)
+   implies
+       for A, B being Subset of Y st A is open & B is open holds
+        A is discrete & B is discrete implies A \/ B is discrete
+ proof
+  assume A1: for P,Q being Subset of Y st P is open & Q is open holds
+                 P /\ Q is open & P \/ Q is open;
+   let A, B be Subset of Y;
+  assume A2: A is open & B is open;
+  assume A3: A is discrete & B is discrete;
+     now let D be Subset of Y;
+    assume D c= A \/ B;
+      then A4: D = D /\ (A \/ B) by XBOOLE_1:28;
+          D /\ A c= A by XBOOLE_1:17;
+       then consider G1 being Subset of Y such that
+              A5: G1 is open and A6: A /\ G1 = D /\ A by A3,Def5;
+          D /\ B c= B by XBOOLE_1:17;
+       then consider G2 being Subset of Y such that
+              A7: G2 is open and A8: B /\ G2 = D /\ B by A3,Def5;
+       now
+      take G = (A /\ G1) \/ (B /\ G2);
+          A /\ G1 is open & B /\ G2 is open by A1,A2,A5,A7;
+      hence G is open by A1;
+      thus (A \/ B) /\ G = D by A4,A6,A8,XBOOLE_1:23;
+     end;
+    hence ex G being Subset of Y st G is open & (A \/ B) /\ G = D;
+   end;
+  hence A \/ B is discrete by Def5;
+ end;
+
+theorem Th31:
+  (for P, Q being Subset of Y st P is closed & Q is closed holds
+     P /\ Q is closed & P \/ Q is closed)
+   implies
+       for A, B being Subset of Y st A is closed & B is closed
+       holds
+        A is discrete & B is discrete implies A \/ B is discrete
+ proof
+  assume A1: for P,Q being Subset of Y st P is closed & Q is closed holds
+                 P /\ Q is closed & P \/ Q is closed;
+   let A, B be Subset of Y;
+  assume A2: A is closed & B is closed;
+  assume A3: A is discrete & B is discrete;
+     now let D be Subset of Y;
+    assume D c= A \/ B;
+      then A4: D = D /\ (A \/ B) by XBOOLE_1:28;
+          D /\ A c= A by XBOOLE_1:17;
+       then consider F1 being Subset of Y such that
+              A5: F1 is closed and A6: A /\ F1 = D /\ A by A3,Def6;
+          D /\ B c= B by XBOOLE_1:17;
+       then consider F2 being Subset of Y such that
+              A7: F2 is closed and A8: B /\ F2 = D /\ B by A3,Def6;
+       now
+      take F = (A /\ F1) \/ (B /\ F2);
+          A /\ F1 is closed & B /\ F2 is closed by A1,A2,A5,A7;
+      hence F is closed by A1;
+      thus (A \/ B) /\ F = D by A4,A6,A8,XBOOLE_1:23;
+     end;
+    hence ex F being Subset of Y st F is closed & (A \/ B) /\ F = D;
+   end;
+  hence A \/ B is discrete by Def6;
+ end;
+
+theorem Th32:
+ for A being Subset of Y holds A is discrete implies
+    for x being Point of Y st x in A
+   ex G being Subset of Y st G is open & A /\ G = {x}
+ proof let A be Subset of Y;
+  assume A1: A is discrete;
+    let x be Point of Y;
+  assume A2: x in A;
+   then reconsider Y' = Y as non empty TopStruct by STRUCT_0:def 1;
+   reconsider A' = A as Subset of Y';
+     {x} c= the carrier of Y by A2,ZFMISC_1:37;
+   then reconsider B = {x} as Subset of Y';
+     {x} c= A' by A2,ZFMISC_1:37;
+    then consider G being Subset of Y' such that
+          A3: G is open & A' /\ G = B by A1,Def5;
+  reconsider G as Subset of Y;
+  take G;
+  thus thesis by A3;
+ end;
+
+theorem
+   for A being Subset of Y holds A is discrete implies
+    for x being Point of Y st x in A
+   ex F being Subset of Y st F is closed & A /\ F = {x}
+ proof let A be Subset of Y;
+  assume A1: A is discrete;
+    let x be Point of Y;
+  assume A2: x in A;
+   then reconsider Y' = Y as non empty TopStruct by STRUCT_0:def 1;
+   reconsider A' = A as Subset of Y';
+     {x} c= the carrier of Y by A2,ZFMISC_1:37;
+   then reconsider B = {x} as Subset of Y';
+     {x} c= A' by A2,ZFMISC_1:37;
+    then consider F being Subset of Y such that
+          A3: F is closed & A' /\ F = B by A1,Def6;
+  take F;
+  thus thesis by A3;
+ end;
+
+reserve X for non empty TopSpace;
+
+theorem Th34:
+ for A0 being non empty Subset of X st A0 is discrete
+  ex X0 being discrete strict non empty SubSpace of X st A0 = the carrier of X0
+ proof let A0 be non empty Subset of X;
+  assume A1: A0 is discrete;
+    consider X0 being strict non empty SubSpace of X such that
+          A2: A0 = the carrier of X0 by TSEP_1:10;
+   reconsider X0 as discrete strict non empty SubSpace of X by A1,A2,Th26;
+  take X0;
+  thus thesis by A2;
+ end;
+
+theorem Th35:
+ for A being empty Subset of X holds A is discrete
+ proof let A be empty Subset of X;
+     now let D be Subset of X;
+     assume A1: D c= A;
+      now
+      take G = {}X;
+     thus G is open & A /\ G = D by A1,TOPS_1:52,XBOOLE_1:3;
+    end;
+    hence ex G being Subset of X st G is open & A /\ G = D;
+   end;
+  hence thesis by Def5;
+ end;
+
+theorem Th36:
+ for x being Point of X holds {x} is discrete
+ proof let x be Point of X;
+     now let D be Subset of X;
+    assume A1: D c= {x};
+     A2: now assume A3: D = {};
+         hereby
+          take G = {}X;
+          thus G is open & {x} /\ G = D by A3,TOPS_1:52;
+         end;
+        end;
+        now assume A4: D = {x};
+       hereby
+        take G = [#]X;
+        thus G is open & {x} /\ G = D by A4,PRE_TOPC:15,TOPS_1:53;
+       end;
+      end;
+    hence ex G being Subset of X st G is open & {x} /\ G = D
+     by A1,A2,ZFMISC_1:39;
+   end;
+  hence {x} is discrete by Def5;
+ end;
+
+theorem Th37:
+ for A being Subset of X holds
+    (for x being Point of X st x in A
+       ex G being Subset of X st G is open & A /\ G = {x})
+       implies
+   A is discrete
+ proof let A be Subset of X;
+  assume A1: for x being Point of X st x in A
+                ex G being Subset of X st G is open & A /\ G = {x};
+  hereby per cases;
+   suppose A is empty;
+    hence A is discrete by Th35;
+   suppose A is non empty;
+     then consider X0 being strict non empty SubSpace of X such that
+                    A2: A = the carrier of X0 by TSEP_1:10;
+         [#]X0 = the carrier of X0 & [#]X = the carrier of X by PRE_TOPC:12;
+       then A3: the carrier of X0 c= the carrier of X by PRE_TOPC:def 9;
+        now let C be Subset of X0; let y be Point of X0;
+       assume A4: C = {y};
+         reconsider x = y as Point of X by A3,TARSKI:def 3;
+        consider G being Subset of X such that
+               A5: G is open and A6: A /\ G = {x} by A1,A2;
+           now
+          take G;
+          thus G in the topology of X by A5,PRE_TOPC:def 5;
+          thus G /\ [#]X0 = C by A2,A4,A6,PRE_TOPC:12;
+         end;
+        then C in the topology of X0 by PRE_TOPC:def 9;
+       hence C is open by PRE_TOPC:def 5;
+      end;
+     then X0 is discrete by TDLAT_3:19;
+    hence A is discrete by A2,Th26;
+  end;
+ end;
+
+theorem
+   for A, B being Subset of X st A is open & B is open holds
+    A is discrete & B is discrete implies A \/ B is discrete
+ proof let A, B be Subset of X;
+  assume A1: A is open & B is open;
+  assume A2: A is discrete & B is discrete;
+     for P, Q being Subset of X st
+    P is open & Q is open holds P /\ Q is open & P \/
+ Q is open by TOPS_1:37,38;
+  hence A \/ B is discrete by A1,A2,Th30;
+ end;
+
+theorem
+   for A, B being Subset of X st A is closed & B is closed holds
+    A is discrete & B is discrete implies A \/ B is discrete
+ proof let A, B be Subset of X;
+  assume A1: A is closed & B is closed;
+  assume A2: A is discrete & B is discrete;
+     for P, Q being Subset of X st
+    P is closed & Q is closed holds P /\ Q is closed & P \/ Q is closed by
+TOPS_1:35,36;
+  hence A \/ B is discrete by A1,A2,Th31;
+ end;
+
+Lm3:
+ for P, Q being set st P c= Q & P <> Q holds Q \ P <> {}
+  proof let P, Q be set;
+   assume P c= Q;
+    then A1: Q = P \/ (Q \ P) by XBOOLE_1:45;
+   assume A2: P <> Q;
+   assume Q \ P = {};
+   hence contradiction by A1,A2;
+  end;
+
+theorem
+   for A being Subset of X st A is everywhere_dense holds
+   A is discrete implies A is open
+ proof let A be Subset of X;
+  assume A is everywhere_dense;
+     then A1: Cl Int A = the carrier of X by TOPS_3:def 5;
+  assume A2: A is discrete;
+  assume A is not open;
+   then A3: Int A <> A by TOPS_1:55;
+                                  Int A c= A by TOPS_1:44;
+                               then A \ Int A <> {} by A3,Lm3;
+    then consider a being set such that
+            A4: a in A \ Int A by XBOOLE_0:def 1;
+      reconsider a as Point of X by A4;
+          A \ Int A c= A by XBOOLE_1:36;
+       then consider G being Subset of X such that
+             A5: G is open and A6: A /\ G = {a} by A2,A4,Th32;
+                A7: now Int A c= A by TOPS_1:44;
+                      then Int A /\ G c= {a} by A6,XBOOLE_1:26;
+                      then Int A /\ G = {} or Int A /\ G = {a}
+                        by ZFMISC_1:39;
+                      then A8: Int A misses G or Int A /\ G = {a}
+                        by XBOOLE_0:def 7;
+                             now assume Int A /\ G = {a};
+                                then {a} c= Int A by XBOOLE_1:17;
+                               then a in Int A by ZFMISC_1:37;
+                             hence contradiction by A4,XBOOLE_0:def 4;
+                           end;
+                     then Cl Int A misses G by A5,A8,TSEP_1:40;
+                     hence Cl Int A /\ G = {} by XBOOLE_0:def 7;
+                    end;
+          {a} c= Cl Int A & {a} c= G by A1,A6,XBOOLE_1:17;
+        then {a} c= Cl Int A /\ G & {a} <> {} by XBOOLE_1:19;
+   hence contradiction by A7,XBOOLE_1:3;
+ end;
+
+theorem Th41:
+ for A being Subset of X holds
+  A is discrete iff
+     for D being Subset of X st D c= A holds A /\ Cl D = D
+ proof let A be Subset of X;
+  thus A is discrete implies
+         for D being Subset of X st D c= A holds A /\ Cl D = D
+   proof
+    assume A1: A is discrete;
+     let D be Subset of X;
+    assume A2: D c= A;
+     then consider F being Subset of X such that
+            A3: F is closed and A4: A /\ F = D by A1,Def6;
+         D c= F by A4,XBOOLE_1:17;
+      then Cl D c= F by A3,TOPS_1:31;
+      then A5: A /\ Cl D c= D by A4,XBOOLE_1:26;
+         D c= Cl D by PRE_TOPC:48;
+      then D c= A /\ Cl D by A2,XBOOLE_1:19;
+    hence A /\ Cl D = D by A5,XBOOLE_0:def 10;
+   end;
+  assume
+   A6: for D being Subset of X st D c= A holds A /\ Cl D = D;
+      now let D be Subset of X;
+     assume A7: D c= A;
+        now
+       take F = Cl D;
+       thus F is closed by PCOMPS_1:4;
+       thus A /\ F = D by A6,A7;
+      end;
+     hence ex F being Subset of X st F is closed & A /\ F = D;
+    end;
+  hence A is discrete by Def6;
+ end;
+
+theorem Th42:
+ for A being Subset of X holds A is discrete implies
+    for x being Point of X st x in A holds A /\ Cl {x} = {x}
+ proof let A be Subset of X;
+  assume A1: A is discrete;
+    let x be Point of X;
+  assume x in A;
+   then {x} c= A by ZFMISC_1:37;
+  hence thesis by A1,Th41;
+ end;
+
+theorem
+   for X being discrete non empty TopSpace, A being Subset of X
+ holds A is discrete
+ proof let X be discrete non empty TopSpace, A be Subset of X;
+  hereby per cases;
+   suppose A is empty;
+    hence A is discrete by Th35;
+   suppose A is non empty;
+    then consider X0 being strict non empty SubSpace of X such that
+          A1: A = the carrier of X0 by TSEP_1:10;
+    thus A is discrete by A1,Th26;
+  end;
+ end;
+
+theorem Th44:
+ for X being anti-discrete non empty TopSpace,
+     A being non empty Subset of X holds
+   A is discrete iff A is trivial
+ proof let X be anti-discrete non empty TopSpace,
+           A be non empty Subset of X;
+  hereby
+   assume A1: A is discrete;
+    consider a being set such that
+            A2: a in A by XBOOLE_0:def 1;
+      reconsider a as Point of X by A2;
+    consider G being Subset of X such that
+        A3: G is open and A4: A /\ G = {a} by A1,A2,Th32;
+      G <> {} by A4;
+    then A5: G = the carrier of X by A3,TDLAT_3:20;
+       now
+      take a;
+      thus A = {a} by A4,A5,XBOOLE_1:28;
+     end;
+   hence A is trivial;
+  end;
+  hereby
+   assume A is trivial;
+    then consider a being Element of A such that
+           A6: A = {a} by Def1;
+   thus A is discrete by A6,Th36;
+  end;
+ end;
+
+definition let Y be TopStruct,
+               IT be Subset of Y;
+ attr IT is maximal_discrete means
+:Def7: IT is discrete &
+   for D being Subset of Y st D is discrete & IT c= D holds IT = D;
+end;
+
+theorem
+   for Y0, Y1 being TopStruct, D0 being Subset of Y0,
+     D1 being Subset of Y1 st
+    the TopStruct of Y0 = the TopStruct of Y1 & D0 = D1 holds
+   D0 is maximal_discrete implies D1 is maximal_discrete
+ proof let Y0, Y1 be TopStruct,
+           D0 be Subset of Y0,
+           D1 be Subset of Y1;
+  assume A1: the TopStruct of Y0 = the TopStruct of Y1;
+  assume A2: D0 = D1;
+  assume A3: D0 is maximal_discrete;
+   then D0 is discrete by Def7;
+   then A4: D1 is discrete by A1,A2,Th25;
+       now let D be Subset of Y1;
+      assume A5: D is discrete;
+      assume A6: D1 c= D;
+       reconsider E = D as Subset of Y0 by A1;
+           E is discrete & D0 c= E by A1,A2,A5,A6,Th25;
+      hence D1 = D by A2,A3,Def7;
+     end;
+  hence D1 is maximal_discrete by A4,Def7;
+ end;
+
+theorem Th46:
+ for A being empty Subset of X holds A is not maximal_discrete
+ proof let A be empty Subset of X;
+    consider a being set such that
+           A1: a in the carrier of X by XBOOLE_0:def 1;
+   reconsider a as Point of X by A1;
+      now
+     take C = {a};
+     thus C is discrete & A c= C & A <> C by Th36,XBOOLE_1:2;
+    end;
+  hence A is not maximal_discrete by Def7;
+ end;
+
+theorem Th47:
+ for A being Subset of X st A is open holds
+   A is maximal_discrete implies A is dense
+ proof let A be Subset of X;
+  assume A1: A is open;
+  assume A2: A is maximal_discrete;
+   then A3: A is discrete by Def7;
+  assume A is not dense;
+   then Cl A <> the carrier of X &
+         Cl A c= the carrier of X by TOPS_3:def 2;
+    then (the carrier of X) \ Cl A <> {} by Lm3;
+    then consider a being set such that
+           A4: a in (the carrier of X) \ Cl A by XBOOLE_0:def 1;
+     reconsider a as Point of X by A4,XBOOLE_0:def 4;
+  set B = A \/ {a};
+    A5: not a in A
+          proof
+              not a in Cl A & A c= Cl A by A4,PRE_TOPC:48,XBOOLE_0:def 4;
+           hence thesis;
+          end;
+    A6: A c= B by XBOOLE_1:7;
+    A7: B is discrete
+          proof
+              now let x be Point of X;
+             assume x in B;
+              then A8: x in A or x in {a} by XBOOLE_0:def 2;
+                 now per cases by A8,TARSKI:def 1;
+                suppose A9: x in A;
+                  then consider G being Subset of X such that
+                        A10: G is open and A11: A /\ G = {x} by A3,Th32;
+                     now
+                    take E = {x};
+                    thus E is open by A1,A10,A11,TOPS_1:38;
+                        {x} c= B by A6,A9,ZFMISC_1:37;
+                    hence B /\ E = {x} by XBOOLE_1:28;
+                   end;
+                 hence ex E being Subset of X st E is open & B /\ E = {x};
+                suppose A12: x = a;
+                    now
+                   take G = [#]X \ Cl A;
+                     A13: G = (Cl A)` by PRE_TOPC:17;
+                        Cl A is closed by PCOMPS_1:4;
+                   hence G is open by A13,TOPS_1:29;
+                        a in G by A4,PRE_TOPC:12;
+                     then A14: {a} c= G by ZFMISC_1:37;
+                         A c= Cl A by PRE_TOPC:48;
+                     then A misses G by A13,TOPS_1:20;
+                     then A15: A /\ G = {} by XBOOLE_0:def 7;
+                        B /\ G = (A /\ G) \/ ({a} /\ G) by XBOOLE_1:23;
+                   hence B /\ G = {x} by A12,A14,A15,XBOOLE_1:28;
+                  end;
+                 hence ex G being Subset of X st G is open & B /\ G = {x};
+               end;
+             hence ex G being Subset of X st G is open & B /\ G = {x};
+            end;
+           hence B is discrete by Th37;
+          end;
+       ex D being Subset of X st D is discrete & A c= D & A <> D
+      proof
+       take B;
+       thus B is discrete by A7;
+       thus A c= B by XBOOLE_1:7;
+           now
+          assume A = B;
+           then {a} c= A by XBOOLE_1:7;
+          hence contradiction by A5,ZFMISC_1:37;
+         end;
+       hence A <> B;
+      end;
+  hence contradiction by A2,Def7;
+ end;
+
+theorem
+   for A being Subset of X st A is dense holds
+   A is discrete implies A is maximal_discrete
+ proof let A be Subset of X;
+  assume A1: A is dense;
+  assume A2: A is discrete;
+  assume A is not maximal_discrete;
+   then consider D being Subset of X such that
+          A3: D is discrete and A4: A c= D and A5: A <> D by A2,Def7;
+       D \ A <> {} by A4,A5,Lm3;
+    then consider a being set such that
+           A6: a in D \ A by XBOOLE_0:def 1;
+     reconsider a as Point of X by A6;
+         a in D by A6,XBOOLE_0:def 4;
+      then consider G being Subset of X such that
+             A7: G is open and A8: D /\ G = {a} by A3,Th32;
+          A /\ G c= D /\ G by A4,XBOOLE_1:26;
+       then A /\ G = {} or A /\ G = {a} by A8,ZFMISC_1:39;
+       then A9: A misses G or A /\ G = {a} by XBOOLE_0:def 7;
+                             now assume A /\ G = {a};
+                                then {a} c= A by XBOOLE_1:17;
+                               then a in A by ZFMISC_1:37;
+                             hence contradiction by A6,XBOOLE_0:def 4;
+                           end;
+      then Cl A misses G by A7,A9,TSEP_1:40;
+      then A10: Cl A /\ G = {} by XBOOLE_0:def 7;
+                       now
+                      assume Cl A = the carrier of X;
+                        then G = {} by A10,XBOOLE_1:28;
+                      hence contradiction by A8;
+                     end;
+  hence contradiction by A1,TOPS_3:def 2;
+ end;
+
+theorem Th49:
+ for X being discrete non empty TopSpace, A being Subset of X
+ holds A is maximal_discrete iff A is non proper
+ proof let X be discrete non empty TopSpace, A be Subset of X;
+  hereby
+   assume A1: A is maximal_discrete;
+        X is SubSpace of X by TSEP_1:2;
+     then the carrier of X is Subset of X by TSEP_1:1;
+     then reconsider C = the carrier of X as Subset of X;
+         C is discrete & A c= C by Th27;
+      then A = C by A1,Def7;
+   hence A is non proper by Th5;
+  end;
+  hereby
+   assume A is non proper;
+    then A2: A = the carrier of X by Th5;
+    then A3: A is discrete by Th27;
+       for D be Subset of X st D is discrete & A c= D
+      holds A = D by A2,XBOOLE_0:def 10;
+   hence A is maximal_discrete by A3,Def7;
+  end;
+ end;
+
+theorem Th50:
+ for X being anti-discrete non empty TopSpace,
+     A being non empty Subset of X holds
+   A is maximal_discrete iff A is trivial
+ proof let X be anti-discrete non empty TopSpace,
+           A be non empty Subset of X;
+  hereby
+   assume A is maximal_discrete;
+    then A is discrete by Def7;
+   hence A is trivial by Th44;
+  end;
+  hereby
+   assume A is trivial;
+    then A1: A is discrete by Th44;
+       now let D be Subset of X;
+      assume A2: D is discrete;
+      assume A3: A c= D;
+        then reconsider E = D as non empty Subset of X
+        by XBOOLE_1:3;
+            E is trivial by A2,Th44;
+      hence A = D by A3,Th1;
+     end;
+   hence A is maximal_discrete by A1,Def7;
+  end;
+ end;
+
+definition let Y be non empty TopStruct;
+  let IT be SubSpace of Y;
+ attr IT is maximal_discrete means
+:Def8: for A being Subset of Y st A = the carrier of IT holds
+    A is maximal_discrete;
+end;
+
+theorem Th51:
+ for Y being non empty TopStruct, Y0 being SubSpace of Y,
+     A being Subset of Y st
+   A = the carrier of Y0 holds
+      A is maximal_discrete iff Y0 is maximal_discrete
+ proof let Y be non empty TopStruct, Y0 be SubSpace of Y,
+           A be Subset of Y;
+  assume A1: A = the carrier of Y0;
+  hereby
+   assume A is maximal_discrete;
+    then for A be Subset of Y st A = the carrier of Y0
+     holds A is maximal_discrete by A1;
+   hence Y0 is maximal_discrete by Def8;
+  end;
+  thus Y0 is maximal_discrete implies
+    A is maximal_discrete by A1,Def8;
+ end;
+
+definition let Y be non empty TopStruct;
+ cluster maximal_discrete -> discrete (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume A1: Y0 is maximal_discrete;
+       the carrier of Y0 is Subset of Y by Lm1;
+     then reconsider A = the carrier of Y0 as Subset of Y;
+         A is maximal_discrete by A1,Def8;
+      then A is discrete by Def7;
+   hence thesis by Th26;
+  end;
+ cluster non discrete -> non maximal_discrete (non empty SubSpace of Y);
+ coherence
+  proof let Y0 be non empty SubSpace of Y;
+   assume A2: Y0 is non discrete;
+   assume A3: Y0 is maximal_discrete;
+       the carrier of Y0 is Subset of Y by Lm1;
+     then reconsider A = the carrier of Y0 as Subset of Y;
+         A is maximal_discrete by A3,Def8;
+      then A is discrete by Def7;
+   hence contradiction by A2,Th26;
+  end;
+end;
+
+theorem
+   for X0 being non empty SubSpace of X holds
+  X0 is maximal_discrete iff
+     X0 is discrete &
+    for Y0 being discrete non empty SubSpace of X st X0 is SubSpace of Y0 holds
+                              the TopStruct of X0 = the TopStruct of Y0
+ proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+  hereby
+   assume X0 is maximal_discrete;
+     then A1: A is maximal_discrete by Th51;
+     then A is discrete by Def7;
+   hence X0 is discrete by Th26;
+   thus for Y0 being discrete non empty SubSpace of X st X0 is SubSpace of Y0
+    holds the TopStruct of X0 = the TopStruct of Y0
+    proof let Y0 be discrete non empty SubSpace of X;
+         the carrier of Y0 is Subset of X by TSEP_1:1;
+       then reconsider D = the carrier of Y0 as Subset of X;
+     assume X0 is SubSpace of Y0;
+       then A c= D & D is discrete by Th26,TSEP_1:4;
+       then A = D by A1,Def7;
+     hence the TopStruct of X0 = the TopStruct of Y0 by TSEP_1:5;
+    end;
+  end;
+  hereby
+   assume X0 is discrete;
+    then A2: A is discrete by Th26;
+   assume A3: for Y0 being discrete non empty SubSpace of X st
+         X0 is SubSpace of Y0 holds the TopStruct of X0 = the TopStruct of Y0;
+       now let D be Subset of X;
+      assume A4: D is discrete;
+      assume A5: A c= D;
+         then D <> {} by XBOOLE_1:3;
+        then consider Y0 being discrete strict non empty SubSpace of X
+        such that
+               A6: D = the carrier of Y0 by A4,Th34;
+           X0 is SubSpace of Y0 by A5,A6,TSEP_1:4;
+      hence A = D by A3,A6;
+     end;
+    then A is maximal_discrete by A2,Def7;
+   hence X0 is maximal_discrete by Th51;
+  end;
+ end;
+
+theorem Th53:
+ for A0 being non empty Subset of X st A0 is maximal_discrete
+  ex X0 being strict non empty SubSpace of X st
+            X0 is maximal_discrete & A0 = the carrier of X0
+ proof let A0 be non empty Subset of X;
+  assume A1: A0 is maximal_discrete;
+    consider X0 being strict non empty SubSpace of X such that
+          A2: A0 = the carrier of X0 by TSEP_1:10;
+  take X0;
+  thus thesis by A1,A2,Th51;
+ end;
+
+definition let X be discrete non empty TopSpace;
+ cluster maximal_discrete -> non proper SubSpace of X;
+ coherence
+  proof let Y0 be SubSpace of X;
+   assume A1: Y0 is maximal_discrete;
+       the carrier of Y0 is Subset of X by Lm1;
+     then reconsider A = the carrier of Y0 as Subset of X;
+A2:       A is maximal_discrete by A1,Def8;
+       now
+      take A;
+      thus A = the carrier of Y0;
+      thus A is non proper by A2,Th49;
+     end;
+   hence thesis by Def3;
+  end;
+ cluster proper -> non maximal_discrete SubSpace of X;
+ coherence
+  proof let Y0 be SubSpace of X;
+   assume A3: Y0 is proper;
+   assume A4: Y0 is maximal_discrete;
+       the carrier of Y0 is Subset of X by Lm1;
+     then reconsider A = the carrier of Y0 as Subset of X;
+A5:       A is maximal_discrete by A4,Def8;
+       now
+      take A;
+      thus A = the carrier of Y0;
+      thus A is non proper by A5,Th49;
+     end;
+   hence contradiction by A3,Def3;
+  end;
+ cluster non proper -> maximal_discrete SubSpace of X;
+ coherence
+  proof let Y0 be SubSpace of X;
+   assume A6: Y0 is non proper;
+     reconsider A = the carrier of Y0 as Subset of X by Lm1;
+        A is non proper by A6,Th13;
+     then for A be Subset of X st A = the carrier of Y0
+      holds A is maximal_discrete by Th49;
+   hence thesis by Def8;
+  end;
+ cluster non maximal_discrete -> proper SubSpace of X;
+ coherence
+  proof let Y0 be SubSpace of X;
+   assume A7: Y0 is non maximal_discrete;
+   assume A8: Y0 is non proper;
+     reconsider A = the carrier of Y0 as Subset of X by Lm1;
+        A is non proper by A8,Th13;
+     then for A be Subset of X st A = the carrier of Y0
+      holds A is maximal_discrete by Th49;
+   hence contradiction by A7,Def8;
+  end;
+end;
+
+definition let X be anti-discrete non empty TopSpace;
+ cluster maximal_discrete -> trivial (non empty SubSpace of X);
+ coherence
+  proof let Y0 be non empty SubSpace of X;
+   assume A1: Y0 is maximal_discrete;
+       the carrier of Y0 is non empty Subset of X by Lm1;
+     then reconsider A = the carrier of Y0 as non empty Subset of X
+    ;
+         A is maximal_discrete by A1,Def8;
+      then A is trivial by Th50;
+   hence thesis by REALSET1:def 13;
+  end;
+ cluster non trivial -> non maximal_discrete (non empty SubSpace of X);
+ coherence
+  proof let Y0 be non empty SubSpace of X;
+   assume A2: Y0 is non trivial;
+   assume A3: Y0 is maximal_discrete;
+       the carrier of Y0 is non empty Subset of X by Lm1;
+     then reconsider A = the carrier of Y0 as non empty Subset of X
+    ;
+         A is maximal_discrete by A3,Def8;
+      then A is trivial by Th50;
+   hence contradiction by A2,REALSET1:def 13;
+  end;
+ cluster trivial -> maximal_discrete (non empty SubSpace of X);
+ coherence
+  proof let Y0 be non empty SubSpace of X;
+   assume A4: Y0 is trivial;
+    reconsider A = the carrier of Y0 as non empty Subset of X
+    by Lm1;
+        A is trivial by A4,REALSET1:def 13;
+     then for A be Subset of X st A = the carrier of Y0
+      holds A is maximal_discrete by Th50;
+   hence thesis by Def8;
+  end;
+ cluster non maximal_discrete -> non trivial (non empty SubSpace of X);
+ coherence
+  proof let Y0 be non empty SubSpace of X;
+   assume A5: Y0 is non maximal_discrete;
+   assume A6: Y0 is trivial;
+    reconsider A = the carrier of Y0 as non empty Subset of X
+    by Lm1;
+        A is trivial by A6,REALSET1:def 13;
+     then for A be Subset of X st A = the carrier of Y0
+      holds A is maximal_discrete by Th50;
+   hence contradiction by A5,Def8;
+  end;
+end;
+
+
+begin
+:: 4. Maximal Discrete Subspaces of Almost Discrete Spaces.
+
+scheme
+ ExChoiceFCol{X()->non empty TopStruct,F()->Subset-Family of X(),P[set,set]}:
+ ex f being Function of F(),the carrier of X() st
+  for S being Subset of X() st S in F() holds P[S,f.S]
+ provided
+  A1: for S being Subset of X() st S in F()
+                   ex x being Point of X() st P[S,x]
+ proof
+   defpred X[set,set] means $2 in the carrier of X() & P[$1,$2];
+    A2: for S being set st S in F()
+          ex x being set st x in the carrier of X() & X[S,x]
+         proof let S be set;
+          assume A3: S in F();
+            then reconsider Q = S as Subset of X();
+           consider x being Point of X() such that
+              A4: P[Q,x] by A1,A3;
+          take x;
+          thus thesis by A4;
+         end;
+   consider f being Function such that
+      A5: dom f = F() and A6: rng f c= the carrier of X() and
+      A7: for S being set st S in F() holds X[S,f.S]
+           from NonUniqBoundFuncEx(A2);
+   reconsider f as Function of F(),the carrier of X()
+     by A5,A6,FUNCT_2:def 1,RELSET_1:11;
+  take f;
+  thus for S being Subset of X() st S in F() holds P[S,f.S]
+  by A7;
+ end;
+
+reserve X for almost_discrete non empty TopSpace;
+
+theorem Th54:
+ for A being Subset of X holds
+   Cl A = union {Cl {a} where a is Point of X : a in A}
+ proof let A be Subset of X;
+  set F = {Cl {a} where a is Point of X : a in A};
+       F c= bool the carrier of X
+       proof
+           now let C be set;
+          assume C in F;
+           then consider a being Point of X such that
+                  A1: C = Cl {a} and a in A;
+           thus C in bool the carrier of X by A1;
+         end;
+        hence thesis by TARSKI:def 3;
+       end;
+    then reconsider F as Subset-Family of X by SETFAM_1:def 7;
+    reconsider F as Subset-Family of X;
+      A2: A c= union F
+             proof
+                 now let x be set;
+                assume A3: x in A;
+                 then reconsider a = x as Point of X;
+                    Cl {a} in F by A3;
+                 then A4: Cl {a} c= union F by ZFMISC_1:92;
+                     a in {a} & {a} c= Cl {a} by PRE_TOPC:48,TARSKI:def 1;
+                  then a in Cl {a};
+                hence x in union F by A4;
+               end;
+              hence thesis by TARSKI:def 3;
+             end;
+        F is open
+       proof
+           now let G be Subset of X;
+          assume G in F;
+           then consider a being Point of X such that
+                 A5: G = Cl {a} and a in A;
+              Cl {a} is closed by PCOMPS_1:4;
+          hence G is open by A5,TDLAT_3:24;
+         end;
+        hence thesis by TOPS_2:def 1;
+       end;
+     then union F is open by TOPS_2:26;
+     then union F is closed by TDLAT_3:23;
+    then A6: Cl A c= union F by A2,TOPS_1:31;
+     union F c= Cl A
+    proof
+        now let C be set;
+       assume C in F;
+        then consider a being Point of X such that
+              A7: C = Cl {a} and A8: a in A;
+           {a} c= A by A8,ZFMISC_1:37;
+       hence C c= Cl A by A7,PRE_TOPC:49;
+      end;
+     hence thesis by ZFMISC_1:94;
+    end;
+  hence thesis by A6,XBOOLE_0:def 10;
+ end;
+
+theorem Th55:
+ for a, b being Point of X holds
+   a in Cl {b} implies Cl {a} = Cl {b}
+ proof let a, b be Point of X;
+  assume a in Cl {b};
+   then {a} c= Cl {b} & Cl {b} is closed by PCOMPS_1:4,ZFMISC_1:37;
+   then A1: Cl {a} c= Cl {b} by TOPS_1:31;
+       b in Cl {a}
+       proof
+        assume not b in Cl {a};
+          then A2:{b} misses Cl {a} by ZFMISC_1:56;
+              Cl {a} is closed by PCOMPS_1:4;
+           then Cl {a} is open by TDLAT_3:24;
+           then Cl {b} misses Cl {a} by A2,TSEP_1:40;
+           then Cl {b} /\ Cl {a} = {} by XBOOLE_0:def 7;
+          then A3: Cl {a} = {} by A1,XBOOLE_1:28;
+              {a} c= Cl {a} & {a} <> {} by PRE_TOPC:48;
+        hence contradiction by A3,XBOOLE_1:3;
+       end;
+    then {b} c= Cl {a} & Cl {a} is closed by PCOMPS_1:4,ZFMISC_1:37;
+    then Cl {b} c= Cl {a} by TOPS_1:31;
+  hence thesis by A1,XBOOLE_0:def 10;
+ end;
+
+theorem Th56:
+ for a, b being Point of X holds
+   Cl {a} misses Cl {b} or Cl {a} = Cl {b}
+ proof let a, b be Point of X;
+  assume Cl {a} /\ Cl {b} <> {};
+    then consider x being set such that
+           A1: x in Cl {a} /\ Cl {b} by XBOOLE_0:def 1;
+       reconsider x as Point of X by A1;
+      x in Cl {a} & x in Cl {b} by A1,XBOOLE_0:def 3;
+   then Cl {x} = Cl {a} & Cl {x} = Cl {b} by Th55;
+  hence Cl {a} = Cl {b};
+ end;
+
+theorem Th57:
+ for A being Subset of X holds
+    (for x being Point of X st x in A
+       ex F being Subset of X st F is closed & A /\ F = {x})
+       implies
+   A is discrete
+ proof let A be Subset of X;
+  assume A1: for x being Point of X st x in A
+       ex F being Subset of X st F is closed & A /\ F = {x};
+      now let x be Point of X;
+     assume A2: x in A;
+         now
+        consider F being Subset of X such that
+           A3: F is closed and A4: A /\ F = {x} by A1,A2;
+        take F;
+        thus F is open by A3,TDLAT_3:24;
+        thus A /\ F = {x} by A4;
+       end;
+     hence ex G being Subset of X st G is open & A /\ G = {x};
+    end;
+  hence A is discrete by Th37;
+ end;
+
+theorem Th58:
+ for A being Subset of X holds
+    (for x being Point of X st x in A holds A /\ Cl {x} = {x}) implies
+   A is discrete
+ proof let A be Subset of X;
+  assume A1: for x being Point of X st x in A holds A /\ Cl {x} = {x};
+     now let x be Point of X;
+    assume A2: x in A;
+        now
+       take F = Cl {x};
+       thus F is closed by PCOMPS_1:4;
+       thus A /\ F = {x} by A1,A2;
+      end;
+    hence ex F being Subset of X st F is closed & A /\ F = {x};
+   end;
+  hence A is discrete by Th57;
+ end;
+
+theorem
+   for A being Subset of X holds
+    A is discrete iff
+     for a, b being Point of X st a in A & b in A holds
+                          a <> b implies Cl {a} misses Cl {b}
+ proof let A be Subset of X;
+  thus A is discrete implies
+         for a, b being Point of X st a in A & b in A holds
+                    a <> b implies Cl {a} misses Cl {b}
+   proof
+    assume A1: A is discrete;
+     let a, b be Point of X;
+    assume a in A & b in A;
+     then A2: A /\ Cl {a} = {a} & A /\ Cl {b} = {b} by A1,Th42;
+    assume A3: a <> b;
+    assume Cl {a} /\ Cl {b} <> {};
+     then Cl {a} meets Cl {b} by XBOOLE_0:def 7;
+     then {a} = {b} by A2,Th56;
+    hence contradiction by A3,ZFMISC_1:6;
+   end;
+  assume A4: for a, b being Point of X st a in A & b in A holds
+                a <> b implies Cl {a} misses Cl {b};
+      now let x be Point of X;
+     assume A5: x in A;
+      then {x} c= A & {x} c= Cl {x} by PRE_TOPC:48,ZFMISC_1:37;
+      then A6: {x} c= A /\ Cl {x} by XBOOLE_1:19;
+     assume A /\ Cl {x} <> {x};
+      then (A /\ Cl {x}) \ {x} <> {} by A6,Lm3;
+      then consider y being set such that
+              A7: y in (A /\ Cl {x}) \ {x} by XBOOLE_0:def 1;
+     reconsider y as Point of X by A7;
+         y in A /\ Cl {x} by A7,XBOOLE_0:def 4;
+      then A8: y in A & y in Cl {x} by XBOOLE_0:def 3;
+          not y in {x} by A7,XBOOLE_0:def 4;
+       then y <> x by TARSKI:def 1;
+       then Cl {y} misses Cl {x} by A4,A5,A8;
+       then A9: Cl {y} /\ Cl {x} = {} by XBOOLE_0:def 7;
+         A10: Cl {y} = Cl {x} by A8,Th55;
+            {x} <> {} & {x} c= Cl {x} by PRE_TOPC:48;
+     hence contradiction by A9,A10,XBOOLE_1:3;
+    end;
+  hence A is discrete by Th58;
+ end;
+
+theorem Th60:
+ for A being Subset of X holds
+   A is discrete iff
+      for x being Point of X st x in Cl A
+        ex a being Point of X st a in A & A /\ Cl {x} = {a}
+ proof let A be Subset of X;
+  thus A is discrete implies
+    for x being Point of X st x in Cl A
+           ex a being Point of X st a in A & A /\ Cl {x} = {a}
+    proof
+     assume A1: A is discrete;
+      let x be Point of X;
+     assume A2: x in Cl A;
+            Cl A = union {Cl {a} where a is Point of X : a in A} by Th54;
+       then consider C being set such that
+              A3: x in C and
+              A4: C in {Cl {a} where a is Point of X : a in A}
+                                               by A2,TARSKI:def 4;
+         consider a being Point of X such that
+           A5: C = Cl {a} and A6: a in A by A4;
+         now
+        take a;
+        thus a in A by A6;
+             Cl {x} = Cl {a} by A3,A5,Th55;
+        hence A /\ Cl {x} = {a} by A1,A6,Th42;
+       end;
+     hence thesis;
+    end;
+  assume A7: for x being Point of X st x in Cl A
+                ex a being Point of X st a in A & A /\ Cl {x} = {a};
+       for x being Point of X st x in A holds A /\ Cl {x} = {x}
+       proof let x be Point of X;
+        assume A8: x in A;
+            A c= Cl A by PRE_TOPC:48;
+         then consider a being Point of X such that
+                    a in A and A9: A /\ Cl {x} = {a} by A7,A8;
+             {x} c= A & {x} c= Cl {x} by A8,PRE_TOPC:48,ZFMISC_1:37;
+          then {x} c= A /\ Cl {x} by XBOOLE_1:19;
+        hence thesis by A9,ZFMISC_1:24;
+       end;
+  hence A is discrete by Th58;
+ end;
+
+theorem
+   for A being Subset of X st A is open or A is closed holds
+   A is maximal_discrete implies A is not proper
+ proof let A be Subset of X;
+  assume A is open or A is closed;
+   then A1: A is open & A is closed by TDLAT_3:23,24;
+   then A2: A = Cl A by PRE_TOPC:52;
+  assume A is maximal_discrete;
+   then A is dense by A1,Th47;
+   then A = the carrier of X by A2,TOPS_3:def 2;
+  hence A is non proper by Th5;
+ end;
+
+theorem Th62:
+ for A being Subset of X holds
+   A is maximal_discrete implies A is dense
+ proof let A be Subset of X;
+  assume A1: A is maximal_discrete;
+   then A2: A is discrete by Def7;
+  assume A is not dense;
+   then Cl A <> the carrier of X &
+         Cl A c= the carrier of X by TOPS_3:def 2;
+    then (the carrier of X) \ Cl A <> {} by Lm3;
+    then consider a being set such that
+           A3: a in (the carrier of X) \ Cl A by XBOOLE_0:def 1;
+     reconsider a as Point of X by A3,XBOOLE_0:def 4;
+  set B = A \/ {a};
+    A4: not a in A
+          proof
+              not a in Cl A & A c= Cl A by A3,PRE_TOPC:48,XBOOLE_0:def 4;
+           hence thesis;
+          end;
+    A5: A c= B by XBOOLE_1:7;
+    A6: B is discrete
+          proof
+              now let x be Point of X;
+             assume x in B;
+              then A7: x in A or x in {a} by XBOOLE_0:def 2;
+                 now per cases by A7,TARSKI:def 1;
+                suppose A8: x in A;
+                  then consider G being Subset of X such that
+                        A9: G is open and A10: A /\ G = {x} by A2,Th32;
+                     now
+                    take E = Cl A /\ G;
+                        Cl A is closed by PCOMPS_1:4;
+                     then Cl A is open by TDLAT_3:24;
+                    hence E is open by A9,TOPS_1:38;
+                          A c= Cl A by PRE_TOPC:48;
+                       then A11: {x} c= E by A10,XBOOLE_1:26;
+                            {x} c= B by A5,A8,ZFMISC_1:37;
+                        then A12: {x} c= B /\ E by A11,XBOOLE_1:19;
+                               not a in Cl A & E c= Cl A by A3,XBOOLE_0:def 4,
+XBOOLE_1:17;
+                            then not a in E;
+                          then {a} misses E by ZFMISC_1:56;
+                          then A13: {a} /\ E = {} by XBOOLE_0:def 7;
+                              E c= G by XBOOLE_1:17;
+                           then A14: A /\ E c= A /\ G by XBOOLE_1:26;
+                            B /\ E = (A /\ E) \/ ({a} /\ E) by XBOOLE_1:23;
+                    hence B /\ E = {x} by A10,A12,A13,A14,XBOOLE_0:def 10;
+                   end;
+                 hence ex E being Subset of X st E is open & B /\ E = {x};
+                suppose A15: x = a;
+                    now
+                   take G = [#]X \ Cl A;
+                     A16: G = (Cl A)` by PRE_TOPC:17;
+                        Cl A is closed by PCOMPS_1:4;
+                   hence G is open by A16,TOPS_1:29;
+                        a in G by A3,PRE_TOPC:12;
+                     then A17: {a} c= G by ZFMISC_1:37;
+                         A c= Cl A by PRE_TOPC:48;
+                     then A misses G by A16,TOPS_1:20;
+                     then A18: A /\ G = {} by XBOOLE_0:def 7;
+                        B /\ G = (A /\ G) \/ ({a} /\ G) by XBOOLE_1:23;
+                   hence B /\ G = {x} by A15,A17,A18,XBOOLE_1:28;
+                  end;
+                 hence ex G being Subset of X st G is open & B /\ G = {x};
+               end;
+             hence ex G being Subset of X st G is open & B /\ G = {x};
+            end;
+           hence B is discrete by Th37;
+          end;
+       ex D being Subset of X st D is discrete & A c= D & A <> D
+      proof
+       take B;
+       thus B is discrete by A6;
+       thus A c= B by XBOOLE_1:7;
+           now
+          assume A = B;
+           then {a} c= A by XBOOLE_1:7;
+          hence contradiction by A4,ZFMISC_1:37;
+         end;
+       hence A <> B;
+      end;
+  hence contradiction by A1,Def7;
+ end;
+
+theorem Th63:
+ for A being Subset of X st A is maximal_discrete holds
+   union {Cl {a} where a is Point of X : a in A} = the carrier of X
+ proof let A be Subset of X;
+  assume A is maximal_discrete;
+   then A is dense by Th62;
+   then Cl A = the carrier of X by TOPS_3:def 2;
+  hence thesis by Th54;
+ end;
+
+theorem Th64:
+ for A being Subset of X holds
+   A is maximal_discrete iff
+      for x being Point of X ex a being Point of X st
+                                        a in A & A /\ Cl {x} = {a}
+ proof let A be Subset of X;
+  thus A is maximal_discrete implies
+    for x being Point of X ex a being Point of X st a in A & A /\ Cl {x} = {a}
+    proof
+     assume A1: A is maximal_discrete;
+       then A2: A is discrete by Def7;
+      let x be Point of X;
+           the carrier of X =
+             union {Cl {a} where a is Point of X : a in A} by A1,Th63;
+       then consider C being set such that
+              A3: x in C and
+              A4: C in {Cl {a} where a is Point of X : a in A}
+                                               by TARSKI:def 4;
+         consider a being Point of X such that
+           A5: C = Cl {a} and A6: a in A by A4;
+         now
+        take a;
+        thus a in A by A6;
+             Cl {x} = Cl {a} by A3,A5,Th55;
+        hence A /\ Cl {x} = {a} by A2,A6,Th42;
+       end;
+     hence thesis;
+    end;
+  assume A7:
+    for x being Point of X ex a being Point of X st a in A & A /\ Cl {x} = {a};
+  thus A is maximal_discrete
+     proof
+        for x being Point of X st x in A holds A /\ Cl {x} = {x}
+       proof let x be Point of X;
+        assume A8: x in A;
+          consider a being Point of X such that
+                a in A and A9: A /\ Cl {x} = {a} by A7;
+             {x} c= A & {x} c= Cl {x} by A8,PRE_TOPC:48,ZFMISC_1:37;
+          then {x} c= A /\ Cl {x} by XBOOLE_1:19;
+        hence thesis by A9,ZFMISC_1:24;
+       end;
+        then A10: A is discrete by Th58;
+        for D being Subset of X st D is discrete & A c= D
+      holds A = D
+       proof let D be Subset of X;
+        assume A11: D is discrete;
+        assume A12: A c= D;
+           D c= A
+          proof
+              now let x be set;
+             assume A13: x in D;
+              then reconsider y = x as Point of X;
+               consider a being Point of X such that
+                 A14: a in A and A15: A /\ Cl {y} = {a} by A7;
+                    D /\ Cl {y} = {y} by A11,A13,Th42;
+                then {a} c= {y} by A12,A15,XBOOLE_1:26;
+             hence x in A by A14,ZFMISC_1:24;
+            end;
+           hence thesis by TARSKI:def 3;
+          end;
+        hence A = D by A12,XBOOLE_0:def 10;
+       end;
+      hence thesis by A10,Def7;
+     end;
+ end;
+
+theorem Th65:
+ for A being Subset of X holds A is discrete implies
+   ex M being Subset of X st A c= M & M is maximal_discrete
+ proof let A be Subset of X;
+  assume A1: A is discrete;
+    set D = [#]X \ Cl A;
+    set F = {Cl {d} where d is Point of X : d in D};
+       F c= bool the carrier of X
+       proof
+           now let C be set;
+          assume C in F;
+           then consider a being Point of X such that
+                  A2: C = Cl {a} and a in D;
+           thus C in bool the carrier of X by A2;
+         end;
+        hence thesis by TARSKI:def 3;
+       end;
+    then reconsider F as Subset-Family of X by SETFAM_1:def 7;
+     reconsider F as Subset-Family of X;
+   defpred X[set,set] means $2 in D & $2 in $1;
+  A3: for S being Subset of X st S in F
+               ex x being Point of X st X[S,x]
+       proof let S be Subset of X;
+        assume S in F;
+           then consider d being Point of X such that
+             A4: S = Cl {d} and A5: d in D;
+        take d;
+             {d} c= Cl {d} by PRE_TOPC:48;
+        hence thesis by A4,A5,ZFMISC_1:37;
+       end;
+    consider f being Function of F,the carrier of X such that
+      A6: for S being Subset of X
+      st S in F holds X[S,f.S] from ExChoiceFCol(A3);
+  set M = A \/ (f.: F);
+     A7: f.: F c= D
+           proof
+              now let x be set;
+             assume x in f.: F;
+              then consider S being set such that
+                    A8: S in F and S in F and A9: x = f.S by FUNCT_2:115;
+                 thus x in D by A6,A8,A9;
+            end;
+            hence thesis by TARSKI:def 3;
+           end;
+                            A10: D = (Cl A)` by PRE_TOPC:17;
+                              Cl A is closed by PCOMPS_1:4;
+                           then D is open by A10,TOPS_1:29;
+                           then D is closed by TDLAT_3:23;
+                          then A11: D = Cl D by PRE_TOPC:52;
+                             D misses Cl A by A10,TOPS_1:20;
+                          then A12:Cl A misses (f.: F) by A7,XBOOLE_1:63;
+                            A c= Cl A by PRE_TOPC:48;
+                          then A misses D by A10,TOPS_1:20;
+                          then A13: A /\ D = {} by XBOOLE_0:def 7;
+  thus ex M being Subset of X st A c= M & M is maximal_discrete
+   proof
+    take M;
+    thus A14: A c= M by XBOOLE_1:7;
+    thus M is maximal_discrete
+     proof
+        for x being Point of X ex a being Point of X st
+                               a in M & M /\ Cl {x} = {a}
+       proof let x be Point of X;
+A15:          [#]X = Cl A \/ D & [#]X = the carrier of X by PRE_TOPC:12,24;
+           now per cases by A15,XBOOLE_0:def 2;
+          suppose A16: x in Cl A;
+              now
+              consider a being Point of X such that
+               A17: a in A and A18: A /\ Cl {x} = {a} by A1,A16,Th60;
+             take a;
+             thus a in M by A14,A17;
+                  {x} c= Cl A & Cl A is closed by A16,PCOMPS_1:4,ZFMISC_1:37;
+               then Cl {x} c= Cl A by TOPS_1:31;
+               then (f.: F) misses Cl {x} by A12,XBOOLE_1:63;
+               then (f.: F) /\ Cl {x} = {} by XBOOLE_0:def 7;
+               then M /\ Cl {x} = (A /\ Cl {x}) \/ {} by XBOOLE_1:23;
+             hence M /\ Cl {x} = {a} by A18;
+            end;
+           hence ex a being Point of X st a in M & M /\ Cl {x} = {a};
+          suppose A19: x in D;
+           then A20: Cl {x} in F;
+              now
+              reconsider a = f.(Cl {x}) as Point of X by A20,FUNCT_2:7;
+             take a;
+               A21: f.: F c= M by XBOOLE_1:7;
+                A22: a in f.: F by A20,FUNCT_2:43;
+             hence a in M by A21;
+                  a in Cl {x} by A6,A20;
+               then {a} c= Cl {x} & {a} c= M by A21,A22,ZFMISC_1:37;
+               then A23: {a} c= M /\ Cl {x} by XBOOLE_1:19;
+                   M /\ Cl {x} c= {a}
+                  proof
+                      now let y be set;
+                     assume A24: y in M /\ Cl {x};
+                        then reconsider z = y as Point of X;
+                       A25: z in Cl {x} by A24,XBOOLE_0:def 3;
+                      then A26: Cl {z} = Cl {x} by Th55;
+                             {x} c= D by A19,ZFMISC_1:37;
+                          then Cl {x} c= D by A11,PRE_TOPC:49;
+                          then A27: not z in A by A13,A25,XBOOLE_0:def 3;
+                             z in M by A24,XBOOLE_0:def 3;
+                          then z in f.: F by A27,XBOOLE_0:def 2;
+                        then consider C being set such that
+                          A28: C in F and C in
+ F and A29: z = f.C by FUNCT_2:115;
+                         reconsider C as Subset of X by A28;
+                          consider w being Point of X such that
+                            A30: C = Cl {w} and w in D by A28;
+                           z in Cl {w} by A6,A28,A29,A30;
+                      then f.(Cl {w}) = a by A26,Th55;
+                     hence y in {a} by A29,A30,TARSKI:def 1;
+                    end;
+                   hence thesis by TARSKI:def 3;
+                  end;
+             hence M /\ Cl {x} = {a} by A23,XBOOLE_0:def 10;
+            end;
+           hence ex a being Point of X st a in M & M /\ Cl {x} = {a};
+         end;
+        hence ex a being Point of X st a in M & M /\ Cl {x} = {a};
+       end;
+      hence thesis by Th64;
+     end;
+   end;
+ end;
+
+theorem Th66:
+ ex M being Subset of X st M is maximal_discrete
+ proof
+  set A = {}X;
+      A is discrete by Th35;
+   then consider M being Subset of X such that
+            A c= M and A1: M is maximal_discrete by Th65;
+  take M;
+  thus thesis by A1;
+ end;
+
+theorem Th67:
+ for Y0 being discrete non empty SubSpace of X
+   ex X0 being strict non empty SubSpace of X st
+                       Y0 is SubSpace of X0 & X0 is maximal_discrete
+ proof let Y0 be discrete non empty SubSpace of X;
+    the carrier of Y0 is Subset of X by TSEP_1:1;
+  then reconsider A = the carrier of Y0 as Subset of X;
+      A is discrete by Th26;
+   then consider M being Subset of X such that
+         A1: A c= M and A2: M is maximal_discrete by Th65;
+       M is non empty by A2,Th46;
+    then consider X0 being strict non empty SubSpace of X such that
+          A3: X0 is maximal_discrete and
+          A4: M = the carrier of X0 by A2,Th53;
+  take X0;
+  thus thesis by A1,A3,A4,TSEP_1:4;
+ end;
+
+definition let X be almost_discrete non discrete non empty TopSpace;
+ cluster maximal_discrete -> proper (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+   assume A1: X0 is maximal_discrete;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+         A is maximal_discrete by A1,Def8;
+      then A is discrete by Def7;
+    then A2: X0 is discrete by Th26;
+            X0 is proper
+            proof
+             assume X0 is non proper;
+                then A is not proper by Th13;
+               then A = the carrier of X & X is SubSpace of X
+                                                  by Th5,TSEP_1:2;
+               then the TopStruct of X0 = the TopStruct of X by TSEP_1:5;
+              hence contradiction by A2,Th17;
+            end;
+   hence thesis;
+  end;
+ cluster non proper -> non maximal_discrete (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+   assume A3: X0 is non proper;
+   assume A4: X0 is maximal_discrete;
+       the carrier of X0 is Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as Subset of X;
+         A is maximal_discrete by A4,Def8;
+      then A is discrete by Def7;
+    then A5: X0 is discrete by Th26;
+         A is not proper by A3,Th13;
+      then A = the carrier of X & X is SubSpace of X by Th5,TSEP_1:2;
+      then the TopStruct of X0 = the TopStruct of X by TSEP_1:5;
+   hence contradiction by A5,Th17;
+  end;
+end;
+
+definition let X be almost_discrete non anti-discrete non empty TopSpace;
+ cluster maximal_discrete -> non trivial (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+       the carrier of X0 is non empty Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as non empty Subset of X
+     ;
+   assume X0 is maximal_discrete;
+    then A1: A is maximal_discrete by Def8;
+   assume X0 is trivial;
+    then the carrier of X0 is trivial by REALSET1:def 13;
+      then consider s being Element of X0 such that
+                                   A2: the carrier of X0 = {s} by Def1;
+          s in A & A c= the carrier of X;
+      then reconsider a = s as Point of X;
+       A3: A = {a} by A2;
+           A is dense by A1,Th62;
+        then Cl A = the carrier of X by TOPS_3:def 2;
+      then for C being Subset of X, x being Point of X
+      st C = {x} holds Cl C = the carrier of X by A3,Th55;
+   hence contradiction by TDLAT_3:22;
+  end;
+ cluster trivial -> non maximal_discrete (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+       the carrier of X0 is non empty Subset of X by Lm1;
+     then reconsider A = the carrier of X0 as non empty Subset of X
+     ;
+   assume X0 is trivial;
+    then A4: the carrier of X0 is trivial by REALSET1:def 13;
+   assume X0 is maximal_discrete;
+    then A5: A is maximal_discrete by Def8;
+      consider s being Element of X0 such that
+                                   A6: the carrier of X0 = {s} by A4,Def1;
+          s in A & A c= the carrier of X;
+      then reconsider a = s as Point of X;
+       A7: A = {a} by A6;
+           A is dense by A5,Th62;
+        then Cl A = the carrier of X by TOPS_3:def 2;
+      then for C being Subset of X, x being Point of X
+      st C = {x} holds Cl C = the carrier of X by A7,Th55;
+   hence contradiction by TDLAT_3:22;
+  end;
+end;
+
+definition let X be almost_discrete non empty TopSpace;
+ cluster maximal_discrete strict non empty non empty SubSpace of X;
+ existence
+  proof
+   consider M being Subset of X such that
+        A1: M is maximal_discrete by Th66;
+       M is non empty by A1,Th46;
+    then consider X0 being strict non empty SubSpace of X such that
+          A2: X0 is maximal_discrete and
+                 M = the carrier of X0 by A1,Th53;
+   take X0;
+   thus thesis by A2;
+  end;
+end;
+
+
+begin
+:: 5. Continuous Mappings and Almost Discrete Spaces.
+
+scheme MapExChoiceF{X,Y()->non empty TopStruct,P[set,set]}:
+ ex f being map of X(),Y() st
+  for x being Point of X() holds P[x,f.x]
+ provided
+  A1: for x being Point of X() ex y being Point of Y() st P[x,y]
+ proof
+   set A = [#]Y();
+     A2: A = the carrier of Y() by PRE_TOPC:12;
+    reconsider A as non empty Subset of Y();
+   set C = [#]X();
+     A3: C = the carrier of X() by PRE_TOPC:12;
+    reconsider C as non empty Subset of X();
+   defpred X[set,set] means $2 in A & P[$1,$2];
+   A4: for x being set st x in C ex a being set st a in A & X[x,a]
+         proof let x be set;
+          assume x in C;
+           then consider a being Point of Y() such that
+                    A5: P[x,a] by A1;
+          take a;
+          thus thesis by A2,A5;
+         end;
+   consider f being Function such that
+        A6: dom f = C and A7: rng f c= A and
+        A8: for x being set st x in C holds X[x,f.x]
+                                                from NonUniqBoundFuncEx(A4);
+   reconsider f as Function of C,A by A6,A7,FUNCT_2:def 1,RELSET_1:11;
+        reconsider f as map of X(),Y() by A2,A3;
+   take f;
+  thus for x be Point of X() holds P[x,f.x] by A3,A8;
+ end;
+
+reserve X,Y for non empty TopSpace;
+
+theorem Th68:
+ for X being discrete non empty TopSpace, f being map of X,Y holds
+   f is continuous
+ proof let X be discrete non empty TopSpace, f be map of X,Y;
+     for B be Subset of Y st B is closed holds
+    f" B is closed by TDLAT_3:18;
+  hence f is continuous by PRE_TOPC:def 12;
+ end;
+
+theorem
+   (for Y being non empty TopSpace, f being map of X,Y holds f is continuous)
+    implies X is discrete
+ proof
+  assume A1: for Y being non empty TopSpace, f being map of X,Y holds
+                 f is continuous;
+  set Y = 1TopSp(the carrier of X);
+A2:     Y = TopStruct(#the carrier of X, bool the carrier of X#)
+ by PCOMPS_1:def 1;
+   then reconsider f = id the carrier of X as map of X,Y;
+     A3: f is continuous by A1;
+      for A being Subset of X holds A is closed
+     proof let A be Subset of X;
+       reconsider B = A as Subset of Y by A2;
+    A4: B is closed by TDLAT_3:18;
+          f"B = A by BORSUK_1:4;
+      hence A is closed by A3,A4,PRE_TOPC:def 12;
+     end;
+  hence X is discrete by TDLAT_3:18;
+ end;
+
+theorem
+   for Y being anti-discrete non empty TopSpace, f being map of X,Y holds
+   f is continuous
+ proof let Y be anti-discrete non empty TopSpace, f be map of X,Y;
+     now let B be Subset of Y;
+    assume A1: B is closed;
+        now per cases by A1,TDLAT_3:21;
+       suppose B = {};
+         then f" B = {}X by RELAT_1:171;
+        hence f" B is closed by TOPS_1:22;
+       suppose B = the carrier of Y;
+         then B = [#]Y by PRE_TOPC:12;
+         then f" B = [#]X by TOPS_2:52;
+        hence f" B is closed;
+      end;
+    hence f" B is closed;
+   end;
+  hence f is continuous by PRE_TOPC:def 12;
+ end;
+
+theorem
+   (for X being non empty TopSpace, f being map of X,Y holds f is continuous)
+    implies Y is anti-discrete
+ proof
+  assume A1: for X being non empty TopSpace, f being map of X,Y holds
+              f is continuous;
+  set X = ADTS(the carrier of Y);
+A2: X = TopStruct(#the carrier of Y, cobool the carrier of Y#) by TEX_1:def 3;
+   then reconsider f = id (the carrier of Y) as map of X,Y;
+     A3: f is continuous by A1;
+      for A being Subset of Y st A is closed
+    holds A = {} or A = the carrier of Y
+     proof let A be Subset of Y;
+      assume A4: A is closed;
+       reconsider B = A as Subset of X by A2;
+           f"A = B by BORSUK_1:4;
+        then B is closed by A3,A4,PRE_TOPC:def 12;
+      hence A = {} or A = the carrier of Y by A2,TDLAT_3:21;
+     end;
+  hence Y is anti-discrete by TDLAT_3:21;
+ end;
+
+reserve X for discrete non empty TopSpace, X0 for non empty SubSpace of X;
+
+theorem Th72:
+ ex r being continuous map of X,X0 st r is_a_retraction
+ proof
+   reconsider A = the carrier of X0 as Subset of X by TSEP_1:1;
+   defpred X[set,set] means $1 in A implies $2 = $1;
+   A1: for x being Point of X ex a being Point of X0 st X[x,a];
+   consider r being map of X,X0 such that
+        A2: for x being Point of X holds X[x,r.x] from MapExChoiceF(A1);
+   reconsider r as continuous map of X,X0 by Th68;
+  take r;
+  thus r is_a_retraction by A2,BORSUK_1:def 19;
+ end;
+
+theorem
+   X0 is_a_retract_of X
+ proof
+  consider r being continuous map of X,X0 such that
+    A1: r is_a_retraction by Th72;
+  thus thesis by A1,BORSUK_1:def 20;
+ end;
+
+reserve X for almost_discrete non empty TopSpace,
+        X0 for maximal_discrete non empty SubSpace of X;
+
+theorem Th74:
+ ex r being continuous map of X,X0 st r is_a_retraction
+ proof
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+      A1: A is maximal_discrete by Th51;
+     then A2: A is discrete by Def7;
+   defpred X[Point of X,Point of X0] means A /\ Cl {$1} = {$2};
+   A3: for x being Point of X ex a being Point of X0 st X[x,a]
+         proof let x be Point of X;
+            consider a being Point of X such that
+               A4: a in A and A5: A /\ Cl {x} = {a} by A1,Th64;
+           reconsider a as Point of X0 by A4;
+          take a;
+          thus thesis by A5;
+         end;
+   consider r being map of X,X0 such that
+        A6: for x being Point of X holds X[x,r.x] from MapExChoiceF(A3);
+      for F being Subset of X0 holds F is closed
+    implies r" F is closed
+     proof let F be Subset of X0;
+      assume F is closed;
+           F c= A;
+       then reconsider E = F as Subset of X by XBOOLE_1:1;
+        A7:  Cl E is closed by PCOMPS_1:4;
+          set R = {Cl {a} where a is Point of X : a in E};
+        A8: Cl E = union R by Th54;
+        A9: union R c= r" F
+               proof
+                   now let C be set;
+                  assume C in R;
+                   then consider a being Point of X such that
+                         A10: C = Cl {a} and A11: a in E;
+                     now let x be set;
+                    assume A12: x in C;
+                     then reconsider b = x as Point of X by A10;
+                               A13: Cl {a} = Cl {b} by A10,A12,Th55;
+                        A14: A /\ Cl {a} = {a} by A2,A11,Th42;
+                          A /\ Cl {b} = {r.b} by A6;
+                      then a = r.x by A13,A14,ZFMISC_1:6;
+                    hence x in r" F by A10,A11,A12,FUNCT_2:46;
+                   end;
+                  hence C c= r" F by TARSKI:def 3;
+                 end;
+                hence thesis by ZFMISC_1:94;
+               end;
+          r" F c= union R
+          proof
+              now let x be set;
+             assume A15: x in r" F;
+              then reconsider b = x as Point of X;
+                A16:  r.b in F by A15,FUNCT_2:46;
+                    E c= the carrier of X;
+                 then reconsider a = r.b as Point of X by A16;
+                      A /\ Cl {b} = {a} by A6;
+                   then a in A /\ Cl {b} by ZFMISC_1:37;
+                   then a in Cl {b} by XBOOLE_0:def 3;
+                   then A17: Cl {a} = Cl {b} by Th55;
+                 Cl {a} in R by A16;
+              then A18: Cl {a} c= union R by ZFMISC_1:92;
+                   b in {b} & {b} c= Cl {b} by PRE_TOPC:48,TARSKI:def 1;
+               then b in Cl {a} by A17;
+             hence x in union R by A18;
+            end;
+           hence thesis by TARSKI:def 3;
+          end;
+      hence r" F is closed by A7,A8,A9,XBOOLE_0:def 10;
+     end;
+   then reconsider r as continuous map of X,X0 by PRE_TOPC:def 12;
+  take r;
+      for x being Point of X st x in the carrier of X0 holds r.x = x
+        proof let x be Point of X;
+         assume x in the carrier of X0;
+           then A /\ Cl {x} = {r.x} & A /\ Cl {x} = {x} by A2,A6,Th42;
+         hence thesis by ZFMISC_1:6;
+        end;
+  hence r is_a_retraction by BORSUK_1:def 19;
+ end;
+
+theorem
+   X0 is_a_retract_of X
+ proof
+  consider r being continuous map of X,X0 such that
+    A1: r is_a_retraction by Th74;
+  thus thesis by A1,BORSUK_1:def 20;
+ end;
+
+Lm4:
+ for r being continuous map of X,X0 holds
+   r is_a_retraction implies
+  for a being Point of X0, b being Point of X st a = b holds Cl {b} c= r" {a}
+ proof let r be continuous map of X,X0;
+  assume A1: r is_a_retraction;
+       let a be Point of X0, b be Point of X;
+  assume a = b;
+    then r.b = a & a in {a} by A1,BORSUK_1:def 19,TARSKI:def 1;
+    then b in r" {a} by FUNCT_2:46;
+    then A2: {b} c= r" {a} by ZFMISC_1:37;
+         {a} is closed by TDLAT_3:18;
+      then r" {a} is closed by PRE_TOPC:def 12;
+  hence Cl {b} c= r" {a} by A2,TOPS_1:31;
+ end;
+
+theorem Th76:
+ for r being continuous map of X,X0 holds
+   r is_a_retraction implies
+  for F being Subset of X0, E being Subset of X
+  st F = E holds r" F = Cl E
+ proof let r be continuous map of X,X0;
+  assume A1: r is_a_retraction;
+       let F be Subset of X0, E be Subset of X;
+  assume A2: F = E;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+       A3: A is maximal_discrete by Th51;
+      then A4: A is discrete by Def7;
+                  A5: for a being Point of X holds A /\ Cl {a} = {r.a}
+                         proof let a be Point of X;
+                             consider c being Point of X such that
+                               A6: c in A and A7: A /\ Cl {a} = {c}
+                                                        by A3,Th64;
+                              reconsider b = c as Point of X0 by A6;
+                                A8: Cl {c} c= r" {b} by A1,Lm4;
+                                   {c} c= Cl {a} by A7,XBOOLE_1:17;
+                                then c in Cl {a} by ZFMISC_1:37;
+                                then Cl {a} c= r" {b} & {a} c= Cl {a}
+                                                    by A8,Th55,PRE_TOPC:48;
+                                then {a} c= r" {b} by XBOOLE_1:1;
+                                then a in r" {b} by ZFMISC_1:37;
+                               then r.a in {b} by FUNCT_2:46;
+                          hence A /\ Cl {a} = {r.a} by A7,TARSKI:def 1;
+                         end;
+          set R = {Cl {a} where a is Point of X : a in E};
+        A9: Cl E = union R by Th54;
+        A10: union R c= r" F
+               proof
+                   now let C be set;
+                  assume C in R;
+                   then consider a being Point of X such that
+                         A11: C = Cl {a} and A12: a in E;
+                     now let x be set;
+                    assume A13: x in C;
+                     then reconsider b = x as Point of X by A11;
+                               A14: Cl {a} = Cl {b} by A11,A13,Th55;
+                        A15: A /\ Cl {a} = {a} by A2,A4,A12,Th42;
+                       A /\ Cl {b} = {r.b} by A5;
+                      then a = r.x by A14,A15,ZFMISC_1:6;
+                    hence x in r" F by A2,A11,A12,A13,FUNCT_2:46;
+                   end;
+                  hence C c= r" F by TARSKI:def 3;
+                 end;
+                hence thesis by ZFMISC_1:94;
+               end;
+          r" F c= union R
+          proof
+              now let x be set;
+             assume A16: x in r" F;
+              then reconsider b = x as Point of X;
+                A17:  r.b in F by A16,FUNCT_2:46;
+                 then reconsider a = r.b as Point of X by A2;
+                      A /\ Cl {b} = {a} by A5;
+                   then a in A /\ Cl {b} by ZFMISC_1:37;
+                   then a in Cl {b} by XBOOLE_0:def 3;
+                   then A18: Cl {a} = Cl {b} by Th55;
+                 Cl {a} in R by A2,A17;
+              then A19: Cl {a} c= union R by ZFMISC_1:92;
+                   b in {b} & {b} c= Cl {b} by PRE_TOPC:48,TARSKI:def 1;
+               then b in Cl {a} by A18;
+             hence x in union R by A19;
+            end;
+           hence thesis by TARSKI:def 3;
+          end;
+  hence r" F = Cl E by A9,A10,XBOOLE_0:def 10;
+ end;
+
+theorem
+   for r being continuous map of X,X0 holds
+   r is_a_retraction implies
+  for a being Point of X0, b being Point of X st a = b holds r" {a} = Cl {b}
+ by Th76;
+
+reserve X0 for discrete non empty SubSpace of X;
+
+theorem Th78:
+ ex r being continuous map of X,X0 st r is_a_retraction
+ proof
+    consider Z0 being strict non empty SubSpace of X such that
+       A1: X0 is SubSpace of Z0 and A2: Z0 is maximal_discrete by Th67;
+    reconsider Z0 as maximal_discrete strict non empty SubSpace of X by A2;
+    reconsider Z1 = Z0 as non empty TopSpace;
+    reconsider Z1 as discrete non empty TopSpace;
+      reconsider X1 = X0 as non empty SubSpace of Z1 by A1;
+      consider g being continuous map of Z1,X1 such that
+            A3: g is_a_retraction by Th72;
+     reconsider g as continuous map of Z0,X0;
+     consider h being continuous map of X,Z0 such that
+            A4: h is_a_retraction by Th74;
+   reconsider r = g * h as continuous map of X,X0;
+  take r;
+        for x being Point of X st x in the carrier of X0 holds r.x = x
+        proof let x be Point of X;
+         assume A5: x in the carrier of X0;
+                the carrier of X1 c= the carrier of Z1 by BORSUK_1:35;
+             then reconsider y = x as Point of Z1 by A5;
+            g.y = y by A3,A5,BORSUK_1:def 19;
+           then g.(h.x) = x by A4,BORSUK_1:def 19;
+         hence thesis by FUNCT_2:21;
+        end;
+   hence r is_a_retraction by BORSUK_1:def 19;
+ end;
+
+theorem
+   X0 is_a_retract_of X
+ proof
+  consider r being continuous map of X,X0 such that
+    A1: r is_a_retraction by Th78;
+  thus thesis by A1,BORSUK_1:def 20;
+ end;

@@ -1,0 +1,770 @@
+:: On a Mathematical Model of Programs
+::  by Yatsuka Nakamura and Andrzej Trybulec
+::
+:: Received December 29, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary GR_CY_1, TARSKI, INT_1, BOOLE, FINSEQ_1, NAT_1, FUNCT_1, CARD_3,
+      RELAT_1, AMI_1, FUNCT_4, CAT_1, MCART_1, ARYTM_1, CQC_LANG, FUNCT_2,
+      FUNCT_5, AMI_2, FINSEQ_4, ARYTM;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS,
+      XCMPLX_0, XREAL_0, CARD_3, RELAT_1, FUNCT_1, FUNCT_2, GR_CY_1, DOMAIN_1,
+      INT_1, NAT_1, CQC_LANG, FRAENKEL, FUNCT_4, CAT_2, FINSEQ_1, FINSEQ_4;
+ constructors GR_CY_1, DOMAIN_1, NAT_1, CAT_2, FINSEQ_4, AMI_1, MEMBERED,
+      XBOOLE_0;
+ clusters SUBSET_1, INT_1, AMI_1, FINSEQ_1, CQC_LANG, RELSET_1, XBOOLE_0,
+      NAT_1, FRAENKEL, MEMBERED, ZFMISC_1, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI;
+ theorems ZFMISC_1, FUNCT_2, TARSKI, NAT_1, CAT_2, CQC_LANG, GR_CY_1, SCHEME1,
+      ENUMSET1, INT_1, CARD_3, FINSEQ_1, FINSEQ_4, MCART_1, FUNCT_4, AMI_1,
+      XBOOLE_0, XBOOLE_1, XCMPLX_1;
+ schemes FUNCT_2;
+
+begin :: A small concrete machine
+
+ reserve x for set;
+ reserve i,j,k for Nat;
+
+definition
+ func SCM-Halt -> Element of Segm 9 equals
+:Def1:  0;
+ correctness by GR_CY_1:12;
+end;
+
+definition
+ func SCM-Data-Loc -> Subset of NAT equals
+:Def2:  { 2*k + 1: not contradiction };
+  coherence
+   proof
+       { 2*k + 1: not contradiction } c= NAT
+      proof let x be set;
+       assume x in { 2*k + 1: not contradiction };
+        then ex k st x = 2*k+1;
+       hence x in NAT;
+      end;
+    hence thesis;
+   end;
+ func SCM-Instr-Loc -> Subset of NAT equals
+:Def3:  { 2*k : k > 0 };
+  coherence
+   proof
+       { 2*k : k > 0 } c= NAT
+      proof let x be set;
+       assume x in { 2*k : k > 0 };
+        then ex k st x = 2*k & k > 0;
+       hence x in NAT;
+      end;
+    hence thesis;
+   end;
+end;
+
+definition
+ cluster SCM-Data-Loc -> non empty;
+  coherence
+   proof
+   2*0+1 in { 2*k + 1: not contradiction };
+    hence thesis by Def2;
+   end;
+ cluster SCM-Instr-Loc -> non empty;
+  coherence
+   proof
+   2*1 in { 2*k:k > 0 };
+    hence thesis by Def3;
+   end;
+end;
+
+reserve I,J,K for Element of Segm 9,
+        a,a1,a2 for Element of SCM-Instr-Loc,
+        b,b1,b2,c,c1 for Element of SCM-Data-Loc;
+
+definition
+ func SCM-Instr -> Subset of [: Segm 9, (union {INT} \/ NAT)* :] equals
+:Def4: { [SCM-Halt,{}] } \/
+       { [J,<*a*>] : J = 6 } \/
+       { [K,<*a1,b1*>] : K in { 7,8 } } \/
+       { [I,<*b,c*>] : I in { 1,2,3,4,5} };
+ coherence
+  proof
+A1: NAT c= union { INT } \/ NAT by XBOOLE_1:7;
+A2: { [I,<*b,c*>] : I in { 1,2,3,4,5} }
+     c= [: Segm 9, (union {INT} \/ NAT)* :]
+     proof let x be set;
+      assume x in { [I,<*b,c*>] : I in { 1,2,3,4,5} };
+       then consider I,b,c such that
+A3:       x = [I,<*b,c*>] & I in { 1,2,3,4,5};
+       reconsider b, c as Element of union {INT} \/ NAT by A1,TARSKI:def 3;
+         <*b,c*> in (union {INT} \/ NAT)* by FINSEQ_1:def 11;
+      hence x in [: Segm 9, (union {INT} \/ NAT)* :] by A3,ZFMISC_1:106;
+     end;
+A4: { [J,<*a*>] : J = 6 } c= [: Segm 9, (union {INT} \/ NAT)* :]
+     proof let x be set;
+      assume x in { [J,<*a*>] : J = 6 };
+       then consider J,a such that
+A5:       x = [J,<*a*>] & J = 6;
+       reconsider a as Element of union {INT} \/ NAT by A1,TARSKI:def 3;
+         <*a*> in (union {INT} \/ NAT)* by FINSEQ_1:def 11;
+      hence x in [: Segm 9, (union {INT} \/ NAT)* :] by A5,ZFMISC_1:106;
+     end;
+A6: { [K,<*a1,b1*>] : K in { 7,8 } } c= [: Segm 9, (union {INT} \/ NAT)* :]
+     proof let x be set;
+      assume x in { [K,<*a1,b1*>] : K in { 7,8 } };
+       then consider K,a1,b1 such that
+A7:       x = [K,<*a1,b1*>] & K in { 7,8 };
+       reconsider b1,a1 as Element of union {INT} \/ NAT by A1,TARSKI:def 3;
+         <*a1,b1*> in (union {INT} \/ NAT)* by FINSEQ_1:def 11;
+      hence x in [: Segm 9, (union {INT} \/ NAT)* :] by A7,ZFMISC_1:106;
+     end;
+      SCM-Halt in Segm(9) & {} in (union {INT} \/ NAT)* by FINSEQ_1:66;
+    then [SCM-Halt,{}] in [: Segm 9, (union {INT} \/ NAT)* :]
+     by ZFMISC_1:106;
+    then { [SCM-Halt,{}] }c= [: Segm 9, (union {INT} \/ NAT)* :]
+     by ZFMISC_1:37;
+    then { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 }
+      c= [: Segm 9, (union {INT} \/ NAT)* :] by A4,XBOOLE_1:8;
+    then { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } \/
+         { [K,<*a1,b1*>] : K in { 7,8 } }
+      c= [: Segm 9, (union {INT} \/ NAT)* :] by A6,XBOOLE_1:8;
+   hence thesis by A2,XBOOLE_1:8;
+  end;
+end;
+
+canceled;
+
+theorem Th2:
+ [0,{}] in SCM-Instr
+proof
+   [0,{}] in { [SCM-Halt,{}] } by Def1,TARSKI:def 1;
+ then [0,{}] in { [SCM-Halt,{}] } \/
+ { [J,<*a*>] : J = 6 } by XBOOLE_0:def 2;
+ then [0,{}] in { [SCM-Halt,{}] } \/
+ { [J,<*a*>] : J = 6 } \/ { [K,<*a1,b1*>] : K in { 7,8 } } by XBOOLE_0:def 2;
+ hence [0,{}] in SCM-Instr by Def4,XBOOLE_0:def 2;
+end;
+
+definition
+ cluster SCM-Instr -> non empty;
+ coherence by Th2;
+end;
+
+theorem
+   [6,<*a2*>] in SCM-Instr
+ proof
+   reconsider x = 6 as Element of Segm 9 by GR_CY_1:10;
+     [x,<*a2*>] in { [J,<*a*>] : J = 6 };
+   then [x,<*a2*>] in { [SCM-Halt,{}] } \/
+   { [J,<*a*>] : J = 6 } by XBOOLE_0:def 2;
+   then [x,<*a2*>] in { [SCM-Halt,{}] } \/
+   { [J,<*a*>] : J = 6 } \/ { [K,<*a1,b1*>] : K in { 7,8 } } by XBOOLE_0:def 2;
+  hence thesis by Def4,XBOOLE_0:def 2;
+ end;
+
+theorem
+   x in { 7, 8 } implies [x,<*a2,b2*>] in SCM-Instr
+ proof assume
+A1: x in { 7, 8 };
+   then (x = 7 or x = 8) & 9 > 0 & 7 < 9 & 8 < 9 by TARSKI:def 2;
+   then reconsider x as Element of Segm 9 by GR_CY_1:10;
+     [x,<*a2,b2*>] in { [K,<*a1,b1*>] : K in { 7,8 } } by A1;
+   then [x,<*a2,b2*>] in { [SCM-Halt,{}] } \/
+   { [J,<*a*>] : J = 6 } \/ { [K,<*a1,b1*>] : K in { 7,8 } } by XBOOLE_0:def 2;
+  hence thesis by Def4,XBOOLE_0:def 2;
+ end;
+
+theorem
+   x in { 1,2,3,4,5} implies [x,<*b1,c1*>] in SCM-Instr
+ proof assume
+A1:  x in { 1,2,3,4,5};
+ then x=1 or x=2 or x=3 or x=4 or x=5 by ENUMSET1:23;
+   then reconsider x as Element of Segm 9 by GR_CY_1:10;
+     [x,<*b1,c1*>] in { [J,<*b,c*>] : J in { 1,2,3,4,5 } } by A1;
+  hence thesis by Def4,XBOOLE_0:def 2;
+ end;
+
+Lm1:
+now let k;
+  consider i such that
+A1:     k = 2*i or k = 2*i+1 by SCHEME1:1;
+    now assume
+A2:  k = 2*i;
+A3:  i = 0 or ex j st i = j + 1 by NAT_1:22;
+      now given j such that
+A4:    i = j + 1;
+     take j;
+     thus k = 2*j + 2*1 by A2,A4,XCMPLX_1:8;
+    end;
+   hence k = 0 or ex j st k = 2*j+2 by A2,A3;
+  end;
+ hence k= 0 or (ex j st k = 2*j+1) or (ex j st k = 2*j+2) by A1;
+end;
+
+Lm2:
+now let k;
+ thus (ex j st k = 2*j+1) implies k<>0 &not (ex j st k = 2*j+2)
+  proof given j such that
+A1:  k = 2*j+1;
+   thus k<>0 by A1;
+   given i such that
+A2:  k = 2*i+2;
+A3:  (2*i+2*1) = 2*(i+1) + 0 by XCMPLX_1:8;
+      1 = (2*i+2) mod 2 by A1,A2,NAT_1:def 2
+          .= 0 by A3,NAT_1:def 2;
+   hence thesis;
+  end;
+ given j such that
+A4:  k = 2*j+(1+1);
+ thus k<>0 by A4;
+ given i such that
+A5:  k = 2*i+1;
+A6:  (2*j+2*1) = 2*(j+1) + 0 by XCMPLX_1:8;
+    1 = (2*j+2) mod 2 by A4,A5,NAT_1:def 2
+        .= 0 by A6,NAT_1:def 2;
+ hence contradiction;
+end;
+
+definition
+ func SCM-OK -> Function of NAT, {INT} \/ { SCM-Instr, SCM-Instr-Loc } means
+:Def5:  it.0 = SCM-Instr-Loc &
+  for k being Nat holds it.(2*k+1) = INT & it.(2*k+2) = SCM-Instr;
+ existence
+  proof
+   defpred P[set,set] means
+    ($1 = 0 & $2 = SCM-Instr-Loc)or
+    ((ex j st $1 = 2*j+1) & $2 = INT)or
+    ((ex j st $1 = 2*j+2) & $2 = SCM-Instr);
+A1:  now let k be Nat;
+       {INT} \/ { SCM-Instr, SCM-Instr-Loc } = {INT, SCM-Instr, SCM-Instr-Loc }
+     by ENUMSET1:42;
+then A2:   INT in {INT} \/ { SCM-Instr, SCM-Instr-Loc } &
+     SCM-Instrin {INT} \/ { SCM-Instr, SCM-Instr-Loc } &
+     SCM-Instr-Loc in {INT} \/ { SCM-Instr, SCM-Instr-Loc } by ENUMSET1:14;
+        P[k,SCM-Instr-Loc] or P[k,INT] or P[k,SCM-Instr]by Lm1;
+     hence ex b being Element of {INT} \/ { SCM-Instr, SCM-Instr-Loc }
+           st P[k,b] by A2;
+    end;
+    consider h being Function of NAT, {INT} \/ { SCM-Instr, SCM-Instr-Loc }
+    such that
+A3:   for a being Element of NAT holds P[a,h.a] from FuncExD(A1);
+   take h;
+      P[0,h.0] by A3;
+   hence h.0 = SCM-Instr-Loc;
+   let k be Nat;
+      P[2*k+1,h.(2*k+1)] & P[2*k+2,h.(2*k+2)] by A3;
+   hence h.(2*k+1) = INT & h.(2*k+2) = SCM-Instr by Lm2;
+  end;
+ uniqueness
+  proof let f,g be Function of NAT, {INT} \/ { SCM-Instr, SCM-Instr-Loc }
+  such that
+A4: f.0 = SCM-Instr-Loc &
+    for k being Nat holds f.(2*k+1) = INT & f.(2*k+2) = SCM-Instr and
+A5: g.0 = SCM-Instr-Loc &
+    for k being Nat holds g.(2*k+1) = INT & g.(2*k+2) = SCM-Instr;
+      now let k be Nat;
+        now per cases by Lm1;
+       suppose
+        k = 0;
+        hence f.k = g.k by A4,A5;
+       suppose A6:ex i st k = 2*i+1;
+        hence f.k = INT by A4 .= g.k by A5,A6;
+       suppose A7:ex i st k = 2*i+2;
+
+        hence f.k = SCM-Instr by A4 .= g.k by A5,A7;
+      end;
+     hence f.k = g.k;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+end;
+
+theorem Th6:
+   SCM-Instr-Loc <> INT & SCM-Instr <> INT & SCM-Instr-Loc <> SCM-Instr
+ proof
+  thus SCM-Instr-Loc <> INT by AMI_1:1,INT_1:14,XBOOLE_0:def 10;
+A1: 2*1 in { 2*k : k > 0 };
+     now assume 2 in SCM-Instr;
+    then 2 in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } \/
+       { [K,<*a1,b1*>] : K in { 7,8 } }
+    or 2 in { [I,<*b,c*>] : I in { 1,2,3,4,5} } by Def4,XBOOLE_0:def 2;
+    then 2 in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 }
+    or 2 in { [K,<*a1,b1*>] : K in { 7,8 } }
+    or 2 in { [I,<*b,c*>] : I in { 1,2,3,4,5} } by XBOOLE_0:def 2;
+    then 2 in { [SCM-Halt,{}] } or 2 in { [J,<*a*>] : J = 6 }
+    or 2 in { [K,<*a1,b1*>] : K in { 7,8 } }
+    or 2 in { [I,<*b,c*>] : I in { 1,2,3,4,5} } by XBOOLE_0:def 2;
+    then 2 = [SCM-Halt,{}] or
+     (ex J,a st 2 = [J,<*a*>] & J = 6) or
+     (ex K,a1,b1 st 2 = [K,<*a1,b1*>] & K in { 7,8 }) or
+     (ex I,b,c st 2 = [I,<*b,c*>] & I in { 1,2,3,4,5}) by TARSKI:def 1;
+    hence contradiction by AMI_1:3;
+   end;
+  hence SCM-Instr <> INT & SCM-Instr-Loc <> SCM-Instr
+   by A1,Def3,INT_1:12;
+ end;
+
+theorem Th7:
+ SCM-OK.i = SCM-Instr-Loc iff i = 0
+ proof
+  thus SCM-OK.i = SCM-Instr-Loc implies i = 0
+   proof assume
+A1:  SCM-OK.i = SCM-Instr-Loc;
+    assume i <> 0;
+     then (ex j st i = 2*j+1) or (ex j st i = 2*j+2) by Lm1;
+    hence contradiction by A1,Def5,Th6;
+   end;
+  thus thesis by Def5;
+ end;
+
+theorem Th8:
+ SCM-OK.i = INT iff ex k st i = 2*k+1
+ proof
+  thus SCM-OK.i = INT implies ex k st i = 2*k+1
+   proof assume
+A1:   SCM-OK.i = INT;
+    assume not ex k st i = 2*k+1;
+     then i = 0 or (ex j st i = 2*j+2) by Lm1;
+    hence contradiction by A1,Def5,Th6;
+   end;
+  thus thesis by Def5;
+ end;
+
+theorem Th9:
+ SCM-OK.i = SCM-Instr iff ex k st i = 2*k+2
+ proof
+  thus SCM-OK.i = SCM-Instr implies ex k st i = 2*k+2
+   proof assume
+A1:   SCM-OK.i = SCM-Instr;
+    assume not ex k st i = 2*k+2;
+     then i = 0 or (ex j st i = 2*j+1) by Lm1;
+    hence contradiction by A1,Def5,Th6;
+   end;
+  thus thesis by Def5;
+ end;
+
+definition
+ mode SCM-State is Element of product SCM-OK;
+end;
+
+theorem Th10:
+ for a being Element of SCM-Data-Loc holds
+  SCM-OK.a = INT
+ proof let a be Element of SCM-Data-Loc;
+      a in { 2*k + 1: not contradiction } by Def2;
+    then ex k st a = 2*k+1;
+  hence SCM-OK.a = INT by Th8;
+ end;
+
+theorem Th11:
+ for a being Element of SCM-Instr-Loc holds
+  SCM-OK.a = SCM-Instr
+ proof let a be Element of SCM-Instr-Loc;
+      a in { 2*k : k > 0 } by Def3;
+    then consider k such that
+A1:   a = 2*k & k > 0;
+    consider j such that
+A2:  k = j+1 by A1,NAT_1:22;
+      a = 2*j + 2*1 by A1,A2,XCMPLX_1:8;
+  hence SCM-OK.a = SCM-Instr by Th9;
+ end;
+
+theorem
+   for a being Element of SCM-Instr-Loc,
+     t being Element of SCM-Data-Loc holds a <> t
+ proof let a be Element of SCM-Instr-Loc, t be Element of SCM-Data-Loc;
+     SCM-OK.a = SCM-Instr & SCM-OK.t = INT by Th10,Th11;
+  hence a <> t by Th6;
+ end;
+
+theorem Th13:
+ pi(product SCM-OK,0) = SCM-Instr-Loc
+ proof
+     dom SCM-OK = NAT by FUNCT_2:def 1;
+  hence pi(product SCM-OK,0) = SCM-OK.0 by CARD_3:22 .= SCM-Instr-Loc by Th7;
+ end;
+
+theorem Th14:
+ for a being Element of SCM-Data-Loc holds
+    pi(product SCM-OK,a) = INT
+ proof let a be Element of SCM-Data-Loc;
+     dom SCM-OK = NAT by FUNCT_2:def 1;
+  hence pi(product SCM-OK,a) = SCM-OK.a by CARD_3:22 .= INT by Th10;
+ end;
+
+theorem
+   for a being Element of SCM-Instr-Loc holds
+    pi(product SCM-OK,a) = SCM-Instr
+ proof let a be Element of SCM-Instr-Loc;
+     dom SCM-OK = NAT by FUNCT_2:def 1;
+  hence pi(product SCM-OK,a) = SCM-OK.a by CARD_3:22 .= SCM-Instr by Th11;
+ end;
+
+definition let s be SCM-State;
+ func IC(s) -> Element of SCM-Instr-Loc equals
+    s.0;
+ coherence by Th13,CARD_3:def 6;
+end;
+
+definition let s be SCM-State, u be Element of SCM-Instr-Loc;
+ func SCM-Chg(s,u) -> SCM-State equals
+:Def7:  s +* (0 .--> u);
+ coherence
+  proof
+A1:  dom(SCM-OK) = NAT by FUNCT_2:def 1;
+    then dom s = NAT by CARD_3:18;
+then A2:  dom(s +* (0 .--> u)) = NAT \/ dom(0 .--> u) by FUNCT_4:def 1
+      .= NAT \/ {0} by CQC_LANG:5
+      .= dom(SCM-OK) by A1,ZFMISC_1:46;
+      now let x be set;
+     assume
+A3:    x in dom(SCM-OK);
+       now per cases;
+      suppose
+A4:     x = 0;
+          {0} = dom(0 .--> u) by CQC_LANG:5;
+        then 0 in dom(0 .--> u) by TARSKI:def 1;
+        then (s +* (0 .--> u)).0 = (0 .--> u).0 by FUNCT_4:14
+          .= u by CQC_LANG:6;
+        then (s +* (0 .--> u)).0 in SCM-Instr-Loc;
+       hence (s +* (0 .--> u)).x in SCM-OK.x by A4,Th7;
+      suppose
+A5:     x <> 0;
+          {0} = dom(0 .--> u) by CQC_LANG:5;
+        then not x in dom(0 .--> u) by A5,TARSKI:def 1;
+        then (s +* (0 .--> u)).x = s.x by FUNCT_4:12;
+       hence (s +* (0 .--> u)).x in SCM-OK.x by A3,CARD_3:18;
+     end;
+     hence (s +* (0 .--> u)).x in SCM-OK.x;
+    end;
+   hence thesis by A2,CARD_3:18;
+  end;
+end;
+
+theorem
+   for s being SCM-State, u being Element of SCM-Instr-Loc
+  holds SCM-Chg(s,u).0 = u
+ proof let s be SCM-State, u be Element of SCM-Instr-Loc;
+    {0} = dom(0 .--> u) by CQC_LANG:5;
+  then A1: 0 in dom(0 .--> u) by TARSKI:def 1;
+  thus SCM-Chg(s,u).0 = (s +* (0 .--> u)).0 by Def7
+    .= (0 .--> u).0 by A1,FUNCT_4:14
+    .= u by CQC_LANG:6;
+ end;
+
+theorem
+   for s being SCM-State, u being Element of SCM-Instr-Loc,
+     mk being Element of SCM-Data-Loc
+  holds SCM-Chg(s,u).mk = s.mk
+proof let s be SCM-State, u be Element of SCM-Instr-Loc,
+     mk be Element of SCM-Data-Loc;
+A1:  SCM-OK.0 = SCM-Instr-Loc & SCM-OK.mk = INT by Th7,Th10;
+    {0} = dom(0 .--> u) by CQC_LANG:5;
+then A2:  not mk in dom(0 .--> u) by A1,Th6,TARSKI:def 1;
+  thus SCM-Chg(s,u).mk = (s +* (0 .--> u)).mk by Def7
+ .= s.mk by A2,FUNCT_4:12;
+end;
+
+theorem
+   for s being SCM-State, u,v being Element of SCM-Instr-Loc
+  holds SCM-Chg(s,u).v = s.v
+proof let s be SCM-State, u,v be Element of SCM-Instr-Loc;
+A1:  SCM-OK.0 = SCM-Instr-Loc & SCM-OK.v = SCM-Instr by Th7,Th11;
+    {0} = dom(0 .--> u) by CQC_LANG:5;
+then A2: not v in dom(0 .--> u) by A1,Th6,TARSKI:def 1;
+  thus SCM-Chg(s,u).v = (s +* (0 .--> u)).v by Def7 .= s.v by A2,FUNCT_4:12;
+end;
+
+definition let s be SCM-State, t be Element of SCM-Data-Loc, u be Integer;
+ func SCM-Chg(s,t,u) -> SCM-State equals
+:Def8:  s +* (t .--> u);
+ coherence
+  proof
+A1:  dom(SCM-OK) = NAT by FUNCT_2:def 1;
+    then dom s = NAT by CARD_3:18;
+then A2:  dom(s +* (t .--> u)) = NAT \/ dom(t .--> u) by FUNCT_4:def 1
+      .= NAT \/ {t} by CQC_LANG:5
+      .= dom(SCM-OK) by A1,ZFMISC_1:46;
+      now let x be set;
+     assume
+A3:    x in dom(SCM-OK);
+       now per cases;
+      suppose
+A4:     x = t;
+          {t} = dom(t .--> u) by CQC_LANG:5;
+        then t in dom(t .--> u) by TARSKI:def 1;
+        then (s +* (t .--> u)).t = (t .--> u).t by FUNCT_4:14
+          .= u by CQC_LANG:6;
+        then (s +* (t .--> u)).t in INT by INT_1:12;
+       hence (s +* (t .--> u)).x in SCM-OK.x by A4,Th10;
+      suppose
+A5:     x <> t;
+          {t} = dom(t .--> u) by CQC_LANG:5;
+        then not x in dom(t .--> u) by A5,TARSKI:def 1;
+        then (s +* (t .--> u)).x = s.x by FUNCT_4:12;
+       hence (s +* (t .--> u)).x in SCM-OK.x by A3,CARD_3:18;
+     end;
+     hence (s +* (t .--> u)).x in SCM-OK.x;
+    end;
+   hence thesis by A2,CARD_3:18;
+  end;
+end;
+
+theorem
+   for s being SCM-State, t being Element of SCM-Data-Loc, u being Integer
+  holds SCM-Chg(s,t,u).0 = s.0
+proof let s be SCM-State, t be Element of SCM-Data-Loc, u be Integer;
+A1:  SCM-OK.0 = SCM-Instr-Loc & SCM-OK.t = INT by Th7,Th10;
+    {t} = dom(t .--> u) by CQC_LANG:5;
+then A2:  not 0 in dom(t .--> u) by A1,Th6,TARSKI:def 1;
+ thus SCM-Chg(s,t,u).0 = (s +* (t .--> u)).0 by Def8
+         .= s.0 by A2,FUNCT_4:12;
+end;
+
+theorem
+   for s being SCM-State, t being Element of SCM-Data-Loc, u being Integer
+  holds SCM-Chg(s,t,u).t = u
+proof let s be SCM-State, t be Element of SCM-Data-Loc, u be Integer;
+   {t} = dom(t .--> u) by CQC_LANG:5;
+then A1: t in dom(t .--> u) by TARSKI:def 1;
+ thus SCM-Chg(s,t,u).t = (s +* (t .--> u)).t by Def8
+   .= (t .--> u).t by A1,FUNCT_4:14
+   .= u by CQC_LANG:6;
+end;
+
+theorem
+   for s being SCM-State, t being Element of SCM-Data-Loc, u being Integer,
+     mk being Element of SCM-Data-Loc st mk <> t
+  holds SCM-Chg(s,t,u).mk = s.mk
+proof let s be SCM-State, t be Element of SCM-Data-Loc, u be Integer,
+     mk be Element of SCM-Data-Loc such that
+A1:   mk <> t;
+    {t} = dom(t .--> u) by CQC_LANG:5;
+then A2:  not mk in dom(t .--> u) by A1,TARSKI:def 1;
+ thus SCM-Chg(s,t,u).mk = (s +* (t .--> u)).mk by Def8
+         .= s.mk by A2,FUNCT_4:12;
+end;
+
+theorem
+   for s being SCM-State, t being Element of SCM-Data-Loc, u being Integer,
+     v being Element of SCM-Instr-Loc
+  holds SCM-Chg(s,t,u).v = s.v
+proof let s be SCM-State, t be Element of SCM-Data-Loc, u be Integer,
+     v be Element of SCM-Instr-Loc;
+A1:     SCM-OK.v = SCM-Instr & SCM-OK.t = INT by Th10,Th11;
+    {t} = dom(t .--> u) by CQC_LANG:5;
+then A2:  not v in dom(t .--> u) by A1,Th6,TARSKI:def 1;
+ thus SCM-Chg(s,t,u).v = (s +* (t .--> u)).v by Def8
+         .= s.v by A2,FUNCT_4:12;
+end;
+
+definition let x be Element of SCM-Instr;
+ given mk, ml being Element of SCM-Data-Loc, I such that
+A1: x = [ I, <*mk, ml*>];
+ func x address_1 -> Element of SCM-Data-Loc means
+:Def9: ex f being FinSequence of SCM-Data-Loc st f = x`2 & it = f/.1;
+  existence
+   proof
+    take mk,<*mk, ml*>;
+    thus thesis by A1,FINSEQ_4:26,MCART_1:7;
+   end;
+  uniqueness;
+ func x address_2 -> Element of SCM-Data-Loc means
+:Def10: ex f being FinSequence of SCM-Data-Loc st f = x`2 & it = f/.2;
+  existence
+   proof
+    take ml,<*mk, ml*>;
+    thus thesis by A1,FINSEQ_4:26,MCART_1:7;
+   end;
+  correctness;
+end;
+
+theorem
+   for x being Element of SCM-Instr, mk, ml being Element of SCM-Data-Loc, I
+  st x = [ I, <*mk, ml*>]
+  holds x address_1 = mk & x address_2 = ml
+ proof let x be Element of SCM-Instr, mk,ml be Element of SCM-Data-Loc, I;
+  assume
+A1: x = [ I, <*mk,ml*>];
+   then consider f being FinSequence of SCM-Data-Loc such that
+A2:  f = x`2 & x address_1 = f/.1 by Def9;
+     f = <*mk,ml*> by A1,A2,MCART_1:7;
+  hence x address_1 = mk by A2,FINSEQ_4:26;
+   consider f being FinSequence of SCM-Data-Loc such that
+A3:  f = x`2 & x address_2 = f/.2 by A1,Def10;
+     f = <*mk,ml*> by A1,A3,MCART_1:7;
+  hence x address_2 = ml by A3,FINSEQ_4:26;
+ end;
+
+definition let x be Element of SCM-Instr;
+ given mk being Element of SCM-Instr-Loc, I such that
+A1: x = [ I, <*mk*>];
+ func x jump_address -> Element of SCM-Instr-Loc means
+:Def11: ex f being FinSequence of SCM-Instr-Loc st f = x`2 & it = f/.1;
+  existence
+   proof
+    take mk,<*mk*>;
+    thus thesis by A1,FINSEQ_4:25,MCART_1:7;
+   end;
+  correctness;
+end;
+
+theorem
+   for x being Element of SCM-Instr, mk being Element of SCM-Instr-Loc, I
+  st x = [ I, <*mk*>]
+  holds x jump_address = mk
+ proof let x be Element of SCM-Instr, mk be Element of SCM-Instr-Loc, I;
+  assume
+A1: x = [ I, <*mk*>];
+   then consider f being FinSequence of SCM-Instr-Loc such that
+A2:  f = x`2 & x jump_address = f/.1 by Def11;
+     f = <*mk*> by A1,A2,MCART_1:7;
+  hence x jump_address = mk by A2,FINSEQ_4:25;
+ end;
+
+definition let x be Element of SCM-Instr;
+ given mk being Element of SCM-Instr-Loc,
+       ml being Element of SCM-Data-Loc, I such that
+A1: x = [ I, <*mk,ml*>];
+ func x cjump_address -> Element of SCM-Instr-Loc means
+:Def12:
+ ex mk being Element of SCM-Instr-Loc,
+    ml being Element of SCM-Data-Loc st <*mk,ml*> = x`2 & it = <*mk,ml*>/.1;
+  existence
+   proof
+    take mk,mk,ml;
+    thus thesis by A1,FINSEQ_4:26,MCART_1:7;
+   end;
+  correctness;
+ func x cond_address -> Element of SCM-Data-Loc means
+:Def13:
+ ex mk being Element of SCM-Instr-Loc,
+    ml being Element of SCM-Data-Loc st <*mk,ml*> = x`2 & it = <*mk,ml*>/.2;
+  existence
+   proof
+    take ml,mk,ml;
+    thus thesis by A1,FINSEQ_4:26,MCART_1:7;
+   end;
+  correctness;
+end;
+
+theorem
+   for x being Element of SCM-Instr,
+     mk being Element of SCM-Instr-Loc,
+     ml being Element of SCM-Data-Loc, I
+  st x = [ I, <*mk,ml*>]
+  holds x cjump_address = mk & x cond_address = ml
+ proof let x be Element of SCM-Instr,
+     mk be Element of SCM-Instr-Loc,
+     ml be Element of SCM-Data-Loc, I;
+  assume
+A1: x = [ I, <*mk,ml*>];
+   then consider mk' being Element of SCM-Instr-Loc,
+                 ml' being Element of SCM-Data-Loc such that
+A2:  <*mk',ml'*> = x`2 & x cjump_address = <*mk',ml'*>/.1 by Def12;
+     <*mk',ml'*> = <*mk,ml*> by A1,A2,MCART_1:7;
+  hence x cjump_address = mk by A2,FINSEQ_4:26;
+   consider mk' being Element of SCM-Instr-Loc,
+                 ml' being Element of SCM-Data-Loc such that
+A3:  <*mk',ml'*> = x`2 & x cond_address = <*mk',ml'*>/.2 by A1,Def13;
+     <*mk',ml'*> = <*mk,ml*> by A1,A3,MCART_1:7;
+  hence x cond_address = ml by A3,FINSEQ_4:26;
+ end;
+
+definition let s be SCM-State, a be Element of SCM-Data-Loc;
+ cluster s.a -> integer;
+ coherence
+  proof
+      s.a in pi(product SCM-OK,a) by CARD_3:def 6;
+    then s.a in INT by Th14;
+    hence s.a is integer by INT_1:12;
+  end;
+end;
+
+definition let D be non empty set; let x,y be real number,
+  a,b be Element of D;
+ func IFGT(x,y,a,b) -> Element of D equals
+    a if x > y
+   otherwise b;
+ correctness;
+end;
+
+definition let d be Element of SCM-Instr-Loc;
+ func Next d -> Element of SCM-Instr-Loc equals
+    d + 2;
+ coherence
+  proof
+      d in { 2*k : k > 0 } by Def3;
+    then consider k such that
+A1:   d = 2*k and k > 0;
+       2*k + 2*1 = 2*(k+1) & k+1 >0 by NAT_1:19,XCMPLX_1:8;
+    then d + 2 in { 2*i : i > 0 } by A1;
+   hence thesis by Def3;
+  end;
+end;
+
+definition let x be Element of SCM-Instr, s be SCM-State;
+ func SCM-Exec-Res(x,s) -> SCM-State equals
+    SCM-Chg(SCM-Chg(s, x address_1,s.(x address_2)), Next IC s)
+        if ex mk, ml being Element of SCM-Data-Loc st x = [ 1, <*mk, ml*>],
+  SCM-Chg(SCM-Chg(s,x address_1,
+            s.(x address_1)+s.(x address_2)),Next IC s)
+        if ex mk, ml being Element of SCM-Data-Loc st x = [ 2, <*mk, ml*>],
+  SCM-Chg(SCM-Chg(s,x address_1,
+            s.(x address_1)-s.(x address_2)),Next IC s)
+        if ex mk, ml being Element of SCM-Data-Loc st x = [ 3, <*mk, ml*>],
+  SCM-Chg(SCM-Chg(s,x address_1,
+            s.(x address_1)*s.(x address_2)),Next IC s)
+        if ex mk, ml being Element of SCM-Data-Loc st x = [ 4, <*mk, ml*>],
+  SCM-Chg(SCM-Chg(
+           SCM-Chg(s,x address_1,s.(x address_1) div s.(x address_2)),
+           x address_2,s.(x address_1) mod s.(x address_2)),Next IC s)
+        if ex mk, ml being Element of SCM-Data-Loc st x = [ 5, <*mk, ml*>],
+  SCM-Chg(s,x jump_address)
+        if ex mk being Element of SCM-Instr-Loc st x = [ 6, <*mk*>],
+  SCM-Chg(s,IFEQ(s.(x cond_address),0,x cjump_address,Next IC s))
+        if ex mk being Element of SCM-Instr-Loc,
+              ml being Element of SCM-Data-Loc st x = [ 7, <*mk,ml*>],
+  SCM-Chg(s,IFGT(s.(x cond_address),0,x cjump_address,Next IC s))
+        if ex mk being Element of SCM-Instr-Loc,
+              ml being Element of SCM-Data-Loc st x = [ 8, <*mk,ml*>]
+  otherwise s;
+ consistency by ZFMISC_1:33;
+ coherence;
+end;
+
+definition
+ func SCM-Exec ->
+  Function of SCM-Instr, Funcs(product SCM-OK, product SCM-OK) means
+   for x being Element of SCM-Instr, y being SCM-State holds
+    (it.x).y = SCM-Exec-Res(x,y);
+ existence
+  proof
+   deffunc F(Element of SCM-Instr, SCM-State) = SCM-Exec-Res($1,$2);
+   consider f being
+    Function of [:SCM-Instr,product SCM-OK:], product SCM-OK such that
+A1:   for x being Element of SCM-Instr, y being SCM-State holds
+    f.[x,y] = F(x,y) from Lambda2D;
+   take curry f;
+   let x be Element of SCM-Instr, y be SCM-State;
+   thus (curry f).x.y = f.[x,y] by CAT_2:3 .= SCM-Exec-Res(x,y) by A1;
+  end;
+ uniqueness
+  proof
+   let f,g be Function of SCM-Instr, Funcs(product SCM-OK, product SCM-OK)
+   such that
+A2:   for x being Element of SCM-Instr, y being SCM-State holds
+      (f.x).y = SCM-Exec-Res(x,y) and
+A3:   for x being Element of SCM-Instr, y being SCM-State holds
+      (g.x).y = SCM-Exec-Res(x,y);
+      now let x be Element of SCM-Instr;
+     reconsider gx=g.x, fx=f.x as Function of product SCM-OK, product SCM-OK;
+       now let y be SCM-State;
+      thus fx.y = SCM-Exec-Res(x,y) by A2
+      .= gx.y by A3;
+     end;
+     hence f.x = g.x by FUNCT_2:113;
+    end;
+   hence f = g by FUNCT_2:113;
+  end;
+end;
+

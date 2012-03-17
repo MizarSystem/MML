@@ -1,0 +1,380 @@
+:: Subtrees
+::  by Grzegorz Bancerek
+::
+:: Received November 25, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary FINSET_1, TREES_2, TREES_1, CARD_1, FINSEQ_1, FUNCT_1, ARYTM_1,
+      RELAT_1, ORDINAL1, BOOLE, TREES_4, TARSKI, TREES_3, FUNCT_6, DTCONSTR,
+      TREES_9;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      NAT_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, FINSET_1, FINSEQ_2, FUNCT_6,
+      CARD_1, TREES_1, TREES_2, TREES_3, TREES_4, DTCONSTR;
+ constructors WELLORD2, REAL_1, NAT_1, DTCONSTR, FINSOP_1, XREAL_0, MEMBERED,
+      XBOOLE_0;
+ clusters FUNCT_1, FINSET_1, PRELAMB, TREES_1, TREES_2, TREES_3, PRE_CIRC,
+      FINSEQ_1, RELSET_1, XREAL_0, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0,
+      NUMBERS, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Root tree and successors of node in decorated tree
+
+definition
+ cluster finite -> finite-order Tree;
+end;
+
+theorem :: TREES_9:1
+ for t being DecoratedTree holds t|<*>NAT = t;
+
+theorem :: TREES_9:2
+ for t being Tree, p,q being FinSequence of NAT st p^q in t holds
+  t|(p^q) = (t|p)|q;
+
+theorem :: TREES_9:3
+ for t being DecoratedTree, p,q being FinSequence of NAT st p^q in dom t holds
+  t|(p^q) = (t|p)|q;
+
+definition let IT be DecoratedTree;
+ attr IT is root means
+:: TREES_9:def 1
+
+  dom IT = elementary_tree 0;
+end;
+
+definition
+ cluster root -> finite DecoratedTree;
+end;
+
+theorem :: TREES_9:4
+ for t being DecoratedTree holds t is root iff {} in Leaves dom t;
+
+theorem :: TREES_9:5
+ for t being Tree, p being Element of t holds
+  t|p = elementary_tree 0 iff p in Leaves t;
+
+theorem :: TREES_9:6
+   for t being DecoratedTree, p being Node of t holds
+  t|p is root iff p in Leaves dom t;
+
+definition
+ cluster root DecoratedTree;
+ cluster finite non root DecoratedTree;
+end;
+
+definition let x be set;
+ cluster root-tree x -> finite root;
+end;
+
+definition let IT be Tree;
+ attr IT is finite-branching means
+:: TREES_9:def 2
+
+  for x being Element of IT holds succ x is finite;
+end;
+
+definition
+ cluster finite-order -> finite-branching Tree;
+end;
+
+definition
+ cluster finite Tree;
+end;
+
+definition let IT be DecoratedTree;
+ attr IT is finite-order means
+:: TREES_9:def 3
+
+  dom IT is finite-order;
+ attr IT is finite-branching means
+:: TREES_9:def 4
+
+  dom IT is finite-branching;
+end;
+
+definition
+ cluster finite -> finite-order DecoratedTree;
+ cluster finite-order -> finite-branching DecoratedTree;
+end;
+
+definition
+ cluster finite DecoratedTree;
+end;
+
+definition
+ let t be finite-order DecoratedTree;
+ cluster dom t -> finite-order;
+end;
+
+definition
+ let t be finite-branching DecoratedTree;
+ cluster dom t -> finite-branching;
+end;
+
+definition
+ let t be finite-branching Tree;
+ let p be Element of t;
+ cluster succ p -> finite;
+end;
+
+scheme FinOrdSet{f(set) -> set, X() -> finite set}:
+ for n being Nat holds f(n) in X() iff n < card X()
+  provided
+    for x being set st x in X() ex n being Nat st x = f(n) and
+    for i,j being Nat st i < j & f(j) in X() holds f(i) in X() and
+    for i,j being Nat st f(i) = f(j) holds i = j;
+
+definition let X be set;
+ cluster one-to-one empty FinSequence of X;
+end;
+
+theorem :: TREES_9:7
+ for t being finite-branching Tree, p being Element of t
+  for n being Nat holds p^<*n*> in succ p iff n < card succ p;
+
+definition
+ let t be finite-branching Tree;
+ let p be Element of t;
+ func p succ -> one-to-one FinSequence of t means
+:: TREES_9:def 5
+
+  len it = card succ p & rng it = succ p &
+  for i being Nat st i < len it holds it.(i+1) = p^<*i*>;
+end;
+
+definition
+ let t be finite-branching DecoratedTree;
+ let p be FinSequence such that
+  p in dom t;
+ func succ(t,p) -> FinSequence means
+:: TREES_9:def 6
+
+  ex q being Element of dom t st q = p & it = t*(q succ);
+end;
+
+theorem :: TREES_9:8
+ for t being finite-branching DecoratedTree
+  ex x being set, p being DTree-yielding FinSequence st
+   t = x-tree p;
+
+definition let t be finite DecoratedTree;
+ let p be Node of t;
+ cluster t|p -> finite;
+end;
+
+canceled;
+
+theorem :: TREES_9:10
+ for t being finite Tree, p being Element of t st t = t|p holds p = {};
+
+definition let D be non empty set;
+ let S be non empty Subset of FinTrees D;
+ cluster -> finite Element of S;
+end;
+
+begin :: Set of subtrees of decorated tree
+
+definition
+ let t be DecoratedTree;
+ func Subtrees t -> set equals
+:: TREES_9:def 7
+
+  {t|p where p is Node of t: not contradiction};
+end;
+
+definition
+ let t be DecoratedTree;
+ cluster Subtrees t -> constituted-DTrees non empty;
+end;
+
+definition
+ let D be non empty set;
+ let t be DecoratedTree of D;
+ redefine func Subtrees t -> non empty Subset of Trees D;
+end;
+
+definition
+ let D be non empty set;
+ let t be finite DecoratedTree of D;
+ redefine func Subtrees t -> non empty Subset of FinTrees D;
+end;
+
+definition let t be finite DecoratedTree;
+ cluster -> finite Element of Subtrees t;
+end;
+
+reserve x for set, t,t1,t2 for DecoratedTree;
+
+theorem :: TREES_9:11
+ x in Subtrees t iff ex n being Node of t st x = t|n;
+
+theorem :: TREES_9:12
+ t in Subtrees t;
+
+theorem :: TREES_9:13
+   t1 is finite & Subtrees t1 = Subtrees t2 implies t1 = t2;
+
+theorem :: TREES_9:14
+   for n being Node of t holds Subtrees (t|n) c= Subtrees t;
+
+definition
+ let t be DecoratedTree;
+ func FixedSubtrees t -> Subset of [:dom t, Subtrees t:] equals
+:: TREES_9:def 8
+
+   {[p,t|p] where p is Node of t: not contradiction};
+end;
+
+definition
+ let t be DecoratedTree;
+ cluster FixedSubtrees t -> non empty;
+end;
+
+theorem :: TREES_9:15
+ x in FixedSubtrees t iff ex n being Node of t st x = [n,t|n];
+
+theorem :: TREES_9:16
+ [{},t] in FixedSubtrees t;
+
+theorem :: TREES_9:17
+   FixedSubtrees t1 = FixedSubtrees t2 implies t1 = t2;
+
+definition
+ let t be DecoratedTree;
+ let C be set;
+ func C-Subtrees t -> Subset of Subtrees t equals
+:: TREES_9:def 9
+
+   {t|p where p is Node of t: not p in Leaves dom t or t.p in C};
+end;
+
+reserve C for set;
+
+theorem :: TREES_9:18
+ x in C-Subtrees t iff
+  ex n being Node of t st x = t|n & (not n in Leaves dom t or t.n in C);
+
+theorem :: TREES_9:19
+   C-Subtrees t is empty iff t is root & not t.{} in C;
+
+definition
+ let t be finite DecoratedTree;
+ let C be set;
+ func C-ImmediateSubtrees t -> Function of C-Subtrees t, (Subtrees t)*
+ means
+:: TREES_9:def 10
+    for d being DecoratedTree st d in C-Subtrees t
+  for p being FinSequence of Subtrees t st p = it.d holds d = (d.{})-tree p;
+end;
+
+begin :: Set of subtrees of set of decorated tree
+
+definition
+ let X be constituted-DTrees non empty set;
+ func Subtrees X -> set equals
+:: TREES_9:def 11
+
+   {t|p where t is Element of X, p is Node of t: not contradiction};
+end;
+
+definition
+ let X be constituted-DTrees non empty set;
+ cluster Subtrees X -> constituted-DTrees non empty;
+end;
+
+definition
+ let D be non empty set;
+ let X be non empty Subset of Trees D;
+ redefine func Subtrees X -> non empty Subset of Trees D;
+end;
+
+definition
+ let D be non empty set;
+ let X be non empty Subset of FinTrees D;
+ redefine func Subtrees X -> non empty Subset of FinTrees D;
+end;
+
+reserve X,Y for non empty constituted-DTrees set;
+
+theorem :: TREES_9:20
+ x in Subtrees X iff ex t being Element of X, n being Node of t st x = t|n;
+
+theorem :: TREES_9:21
+   t in X implies t in Subtrees X;
+
+theorem :: TREES_9:22
+   X c= Y implies Subtrees X c= Subtrees Y;
+
+definition
+ let t be DecoratedTree;
+ cluster {t} -> non empty constituted-DTrees;
+end;
+
+theorem :: TREES_9:23
+   Subtrees {t} = Subtrees t;
+
+theorem :: TREES_9:24
+   Subtrees X = union {Subtrees t where t is Element of X: not contradiction};
+
+definition
+ let X be constituted-DTrees non empty set;
+ let C be set;
+ func C-Subtrees X -> Subset of Subtrees X equals
+:: TREES_9:def 12
+
+  {t|p where t is Element of X, p is Node of t:
+        not p in Leaves dom t or t.p in C};
+end;
+
+theorem :: TREES_9:25
+ x in C-Subtrees X iff ex t being Element of X, n being Node of t st
+     x = t|n & (not n in Leaves dom t or t.n in C);
+
+theorem :: TREES_9:26
+   C-Subtrees X is empty iff
+   for t being Element of X holds t is root & not t.{} in C;
+
+theorem :: TREES_9:27
+   C-Subtrees {t} = C-Subtrees t;
+
+theorem :: TREES_9:28
+   C-Subtrees X =
+    union {C-Subtrees t where t is Element of X: not contradiction};
+
+definition
+ let X be non empty constituted-DTrees set such that
+     for t being Element of X holds t is finite;
+ let C be set;
+ func C-ImmediateSubtrees X -> Function of C-Subtrees X, (Subtrees X)*
+ means
+:: TREES_9:def 13
+    for d being DecoratedTree st d in C-Subtrees X
+  for p being FinSequence of Subtrees X st p = it.d holds d = (d.{})-tree p;
+end;
+
+definition
+ let t be Tree;
+ cluster empty Element of t;
+end;
+
+theorem :: TREES_9:29
+   for t being finite DecoratedTree, p being Element of dom t holds
+  len succ(t,p) = len (p succ) & dom succ(t,p) = dom (p succ);
+
+theorem :: TREES_9:30
+ for p being FinTree-yielding FinSequence, n being empty Element of tree p
+  holds
+  card succ n = len p;
+
+theorem :: TREES_9:31
+   for t being finite DecoratedTree, x being set,
+     p being DTree-yielding FinSequence st t = x-tree p
+ for n being empty Element of dom t holds succ(t,n) = roots p;
+
+theorem :: TREES_9:32
+   for t being finite DecoratedTree, p being Node of t, q being Node of t|p
+ holds succ(t,p^q) = succ(t|p,q);
+
+

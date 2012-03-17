@@ -1,0 +1,1048 @@
+:: On the Lattice of Subalgebras of a Universal Algebra
+::  by Miros{\l}aw Jan Paszek
+::
+:: Received May 23, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary UNIALG_1, UNIALG_2, BOOLE, BINOP_1, GROUP_2, FUNCT_1, FINSEQ_1,
+      FINSEQ_4, RELAT_1, FINSEQ_2, CQC_SIM1, SETFAM_1, LATTICES, SUBSET_1,
+      BHSP_3, LATTICE3, VECTSP_8, UNIALG_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, SETFAM_1, RELAT_1,
+      FUNCT_1, STRUCT_0, FUNCT_2, FINSEQ_1, FINSEQ_2, BINOP_1, LATTICES,
+      LATTICE3, UNIALG_1, RLVECT_1, UNIALG_2;
+ constructors DOMAIN_1, BINOP_1, LATTICE3, RLVECT_1, UNIALG_2;
+ clusters SUBSET_1, UNIALG_2, RELSET_1, STRUCT_0, ARYTM_3, LATTICES, XBOOLE_0;
+ requirements NUMERALS, BOOLE, SUBSET;
+ definitions LATTICE3, VECTSP_8, LATTICES, UNIALG_2, TARSKI, XBOOLE_0;
+ theorems TARSKI, UNIALG_2, SETFAM_1, FUNCT_1, FUNCT_2, LATTICE3, RELAT_1,
+      LATTICES, SUBSET_1, FINSEQ_2, RLVECT_1, UNIALG_1, FINSEQ_1, FINSEQ_3,
+      RELSET_1, XBOOLE_0, XBOOLE_1;
+ schemes FUNCT_2;
+
+begin
+
+reserve U0 for Universal_Algebra,
+        U1 for SubAlgebra of U0,
+        o for operation of U0;
+
+definition let U0;
+ mode SubAlgebra-Family of U0 means
+:Def1:     for U1 be set st U1 in it holds U1 is SubAlgebra of U0;
+  existence
+   proof
+    take {};
+    thus thesis;
+   end;
+end;
+
+definition let U0;
+ cluster non empty SubAlgebra-Family of U0;
+  existence
+   proof
+    consider U1;
+      for U2 be set st
+        U2 in { U1 } holds
+        U2 is SubAlgebra of U0 by TARSKI:def 1;
+    then reconsider U00 = { U1 } as SubAlgebra-Family of U0 by Def1;
+    take U00;
+    thus thesis;
+   end;
+end;
+
+definition let U0;
+  redefine func Sub(U0) -> non empty SubAlgebra-Family of U0;
+  coherence
+   proof
+      Sub(U0) is SubAlgebra-Family of U0
+     proof
+      let U1 be set;
+      assume U1 in Sub(U0);
+      hence thesis by UNIALG_2:def 15;
+     end;
+    hence thesis;
+   end;
+
+let U00 be non empty SubAlgebra-Family of U0;
+  mode Element of U00 -> SubAlgebra of U0;
+  coherence by Def1;
+end;
+
+definition let U0;
+ redefine func UniAlg_join(U0) -> BinOp of Sub(U0);
+ coherence;
+  func UniAlg_meet(U0) -> BinOp of Sub(U0);
+ coherence;
+end;
+
+definition let U0;
+ let u be Element of Sub(U0);
+ func carr u -> Subset of U0 means
+:Def2:                 ex U1 being SubAlgebra of U0 st
+                                        u = U1 & it = the carrier of U1;
+  existence
+   proof
+    consider U1 being SubAlgebra of U0 such that
+A1:                                              U1 = u;
+    reconsider A = the carrier of U1 as Subset of U0
+                                                          by UNIALG_2:def 8;
+    take A,U1;
+    thus thesis by A1;
+   end;
+ uniqueness;
+end;
+
+definition let U0;
+ func Carr U0 -> Function of Sub(U0), bool the carrier of U0 means
+:Def3:  for u being Element of Sub(U0) holds it.u = carr u;
+  existence
+   proof
+    deffunc F(Element of Sub(U0))=carr $1;
+    ex f being Function of Sub(U0), bool the carrier of U0 st
+    for x being Element of Sub(U0) holds f.x = F(x) from LambdaD;
+    hence thesis;
+   end;
+  uniqueness
+   proof
+    let F1, F2 be Function of Sub(U0) ,bool the carrier of U0 such that
+A1:     for u1 being Element of Sub(U0) holds F1.u1 = carr u1 and
+A2:     for u2 being Element of Sub(U0) holds F2.u2 = carr u2;
+      for u being set st u in Sub(U0) holds F1.u = F2.u
+     proof
+       let u be set; assume u in Sub(U0);
+       then reconsider u1 = u as Element of Sub(U0);
+       consider U1 being SubAlgebra of U0 such that
+A3:             u1 = U1 & carr u1 = the carrier of U1 by Def2;
+         F1.u1 = the carrier of U1 by A1,A3;
+       hence thesis by A2,A3;
+     end;
+    hence thesis by FUNCT_2:18;
+   end;
+end;
+
+theorem Th1:
+ for u being set holds
+     u in Sub(U0) iff ex U1 be strict SubAlgebra of U0 st u = U1
+   proof
+    let u be set;
+    thus u in Sub(U0) implies
+                     ex U1 being strict SubAlgebra of U0 st u = U1
+     proof
+      assume u in Sub(U0);
+      then u is strict SubAlgebra of U0 by UNIALG_2:def 15;
+      hence thesis;
+     end;
+    thus thesis by UNIALG_2:def 15;
+   end;
+
+theorem
+   for H being non empty Subset of U0
+  for o holds arity o = 0 implies (H is_closed_on o iff o.{} in H)
+   proof
+    let H be non empty Subset of U0;
+    let o;
+    assume
+A1:        arity o = 0;
+    thus H is_closed_on o implies o.{} in H
+     proof
+      assume
+A2:          H is_closed_on o;
+      consider s being FinSequence of H such that
+A3:            len s = arity o by FINSEQ_1:24;
+        o.s in H by A2,A3,UNIALG_2:def 4;
+      hence o.{} in H by A1,A3,FINSEQ_1:25;
+     end;
+
+    thus o.{} in H implies H is_closed_on o
+     proof
+      assume o.{} in H;
+      then for s being FinSequence of H st len s = arity o holds o.s in H
+                                                         by A1,FINSEQ_1:25;
+      hence H is_closed_on o by UNIALG_2:def 4;
+     end;
+   end;
+
+theorem Th3:
+  for U1 be SubAlgebra of U0 holds the carrier of U1 c= the carrier of U0
+   proof
+    let U1 be SubAlgebra of U0;
+      the carrier of U1 is Subset of U0 by UNIALG_2:def 8;
+    hence thesis;
+   end;
+
+theorem
+   for H being non empty Subset of U0
+  for o holds
+       (H is_closed_on o & (arity o = 0)) implies ((o/.H) = o)
+   proof
+    let H be non empty Subset of U0;
+    let o;
+    assume
+A1:        H is_closed_on o & arity o = 0;
+    then A2:      dom o = 0 -tuples_on the carrier of U0 by UNIALG_2:2
+              .= { <*>the carrier of U0 } by FINSEQ_2:112
+              .= { <*>H }
+              .= 0 -tuples_on H by FINSEQ_2:112;
+      o/.H = o|(0 -tuples_on H) by A1,UNIALG_2:def 6;
+    hence ((o/.H) = o) by A2,RELAT_1:98;
+   end;
+
+theorem
+         Constants(U0) = { o.{} where o is operation of U0: arity o = 0 }
+   proof
+    set S = { o.{} where o is operation of U0: arity o = 0 };
+
+    thus Constants(U0) c= S
+     proof
+      let a be set;
+      assume a in Constants(U0);
+      then a in { a1 where a1 is Element of U0:
+                 ex o be operation of U0 st arity o = 0 & a1 in rng o}
+                                                        by UNIALG_2:def 11;
+      then consider u being Element of U0 such that
+A1:                 u = a &
+                    ex o be operation of U0 st arity o = 0 & u in rng o;
+      consider o be operation of U0 such that
+A2:            arity o = 0 and
+A3:            u in rng o by A1;
+      consider a2 being set such that
+A4:            a2 in dom o & u = o.a2 by A3,FUNCT_1:def 5;
+        dom o = 0 -tuples_on the carrier of U0 by A2,UNIALG_2:2;
+      then a2 = <*>(the carrier of U0) by A4,FINSEQ_2:113;
+      then reconsider a1 = a2 as FinSequence of the carrier of U0;
+        len a1 = 0 by A2,A4,UNIALG_1:def 10;
+      then u = o.{} by A4,FINSEQ_1:25;
+      hence thesis by A1,A2;
+     end;
+
+    thus S c= Constants(U0)
+    proof
+      let a be set;
+      assume a in S;
+      then consider o being operation of U0 such that
+A5:                 a = o.{} &
+                    arity o = 0;
+        dom o = 0-tuples_on the carrier of U0 by A5,UNIALG_2:2
+           .={<*>the carrier of U0} by FINSEQ_2:112;
+      then {}the carrier of U0 in dom o by TARSKI:def 1;
+      then A6:   o.({}the carrier of U0) in rng o & rng o c= the carrier of U0
+                                                  by FUNCT_1:def 5,RELSET_1:12;
+      then reconsider u = o.({}the carrier of U0) as
+                      Element of U0;
+        u in { a2 where a2 is Element of U0:
+            ex o be operation of U0 st arity o = 0 & a2 in rng o} by A5,A6;
+      hence thesis by A5,UNIALG_2:def 11;
+     end;
+   end;
+
+theorem Th6:
+ for U0 be with_const_op Universal_Algebra
+  for U1 be SubAlgebra of U0 holds Constants(U0) = Constants(U1)
+   proof
+    let U0 be with_const_op Universal_Algebra;
+    let U1 be SubAlgebra of U0;
+    thus Constants(U0) c= Constants(U1)
+     proof
+      let a be set;
+      assume
+A1:   a in Constants(U0);
+      then a in { a1 where a1 is Element of U0:
+            ex o be operation of U0 st arity o = 0 & a1 in rng o}
+                                                     by UNIALG_2:def 11;
+      then consider u being Element of U0 such that
+A2:                 u = a &
+                    ex o be operation of U0 st arity o = 0 & u in rng o;
+      consider o1 be operation of U0 such that
+A3:            arity o1 = 0 &
+               u in rng o1 by A2;
+        Constants(U0) is Subset of U1 by UNIALG_2:18;
+      then consider u1 be Element of U1 such that
+A4:                 u1 = u by A1,A2;
+        o1 in Operations(U0);
+      then o1 in rng (the charact of U0) by UNIALG_2:def 3;
+      then consider x being set such that
+A5:   x in dom (the charact of U0) & o1 = (the charact of U0).x by FUNCT_1:def
+5;
+      reconsider x as Nat by A5;
+      reconsider A = the carrier of U1 as non empty Subset of U0
+                                                         by UNIALG_2:def 8;
+        x in dom (the charact of U1) by A5,UNIALG_2:10;
+      then reconsider o = (the charact of U1).x as operation of U1 by UNIALG_2:
+6;
+        x in dom Opers(U0,A) by A5,UNIALG_2:def 7;
+      then A6:        Opers(U0,A).x = o1/.A by A5,UNIALG_2:def 7;
+        A is opers_closed by UNIALG_2:def 8;
+then A7:        A is_closed_on o1 by UNIALG_2:def 5;
+        len(signature U0) = len (the charact of U0) by UNIALG_1:def 11;
+then A8:   x in dom(signature U0) by A5,FINSEQ_3:31;
+        U0,U1 are_similar by UNIALG_2:16;
+      then signature U1 = signature U0 by UNIALG_2:def 2;
+then A9:        arity o = (signature U0).x by A8,UNIALG_1:def 11
+                   .= 0 by A3,A5,A8,UNIALG_1:def 11;
+A10:   dom o1 = 0 -tuples_on the carrier of U0 by A3,UNIALG_2:2
+            .= { <*>the carrier of U0 } by FINSEQ_2:112
+            .= { <*>A }
+            .= 0 -tuples_on A by FINSEQ_2:112;
+        o = o1/.A by A6,UNIALG_2:def 8
+       .= o1|(0 -tuples_on A) by A3,A7,UNIALG_2:def 6
+       .= o1 by A10,RELAT_1:98;
+      then u1 in { a1 where a1 is Element of U1:
+                  ex o be operation of U1 st arity o = 0 & a1 in rng o}
+                                                              by A3,A4,A9;
+      hence thesis by A2,A4,UNIALG_2:def 11;
+     end;
+
+    thus Constants(U1) c= Constants(U0)
+     proof
+      let a be set;
+      assume a in Constants(U1);
+      then a in { a1 where a1 is Element of U1:
+            ex o be operation of U1 st arity o = 0 & a1 in rng o}
+                                                     by UNIALG_2:def 11;
+      then consider u being Element of U1 such that
+A11:                 u = a &
+                    ex o be operation of U1 st arity o = 0 & u in rng o;
+      consider o be operation of U1 such that
+A12:            arity o = 0 &
+               u in rng o by A11;
+        the carrier of U1 is Subset of U0 by UNIALG_2:def 8;
+      then u in the carrier of U0 by TARSKI:def 3;
+      then consider u1 be Element of U0 such that
+A13:                 u1 = u;
+        o in Operations(U1);
+      then o in rng (the charact of U1) by UNIALG_2:def 3;
+      then consider x being set such that
+A14:   x in dom (the charact of U1) & o = (the charact of U1).x by FUNCT_1:def
+5;
+      reconsider x as Nat by A14;
+      reconsider A = the carrier of U1 as non empty Subset of U0
+                                                         by UNIALG_2:def 8;
+A15:   x in dom (the charact of U0) by A14,UNIALG_2:10;
+      then reconsider o1 = (the charact of U0).x as operation of U0 by UNIALG_2
+:6;
+        x in dom Opers(U0,A) by A15,UNIALG_2:def 7;
+      then A16:        Opers(U0,A).x = o1/.A by UNIALG_2:def 7;
+        A is opers_closed by UNIALG_2:def 8;
+      then A17:  A is_closed_on o1 by UNIALG_2:def 5;
+        len(signature U1) = len (the charact of U1) by UNIALG_1:def 11;
+then A18:   x in dom(signature U1) by A14,FINSEQ_3:31;
+        U1,U0 are_similar by UNIALG_2:16;
+      then signature U0 = signature U1 by UNIALG_2:def 2;
+      then A19:        arity o1 = (signature U1).x by A18,UNIALG_1:def 11
+                   .= 0 by A12,A14,A18,UNIALG_1:def 11;
+then A20:   dom o1 = 0 -tuples_on the carrier of U0 by UNIALG_2:2
+            .= { <*>the carrier of U0 } by FINSEQ_2:112
+            .= { <*>A }
+            .= 0 -tuples_on A by FINSEQ_2:112;
+        o = o1/.A by A14,A16,UNIALG_2:def 8
+       .= o1|(0 -tuples_on A) by A17,A19,UNIALG_2:def 6
+       .= o1 by A20,RELAT_1:98;
+      then u1 in { a1 where a1 is Element of U0:
+             ex o be operation of U0 st arity o = 0 & a1 in rng o}
+                                                              by A12,A13,A19;
+      hence thesis by A11,A13,UNIALG_2:def 11;
+     end;
+   end;
+
+definition
+ let U0 be with_const_op Universal_Algebra;
+ cluster -> with_const_op SubAlgebra of U0;
+  coherence
+   proof
+    let U1 be SubAlgebra of U0;
+    reconsider U2 = U1 as Universal_Algebra;
+A1: Constants(U2) = { a where a is Element of U2:
+                       ex o be operation of U2 st arity o = 0 & a in rng o}
+                                                        by UNIALG_2:def 11;
+    consider u be Element of Constants(U2);
+      Constants(U2) = Constants (U0) by Th6;
+    then u in Constants(U2);
+    then consider u1 be Element of U2 such that
+A2:               u = u1 &
+                  ex o be operation of U2 st arity o = 0 & u1 in rng o by A1;
+    thus thesis by A2,UNIALG_2:def 12;
+   end;
+  end;
+
+theorem
+   for U0 be with_const_op Universal_Algebra
+  for U1,U2 be SubAlgebra of U0 holds Constants(U1) = Constants(U2)
+   proof
+    let U0 be with_const_op Universal_Algebra,U1,U2 be SubAlgebra of U0;
+      Constants(U0) = Constants(U1) &
+    Constants(U0) = Constants(U2) by Th6;
+    hence thesis;
+   end;
+
+definition let U0;
+ redefine func Carr U0 -> Function of Sub(U0), bool the carrier of U0 means
+:Def4:  for u being Element of Sub(U0),
+     U1 being SubAlgebra of U0 st u = U1 holds it.u = the carrier of U1;
+  coherence;
+  compatibility
+   proof
+    let f be Function of Sub(U0),bool the carrier of U0;
+     hereby
+      assume
+A1:   f = Carr U0;
+      let u be Element of Sub(U0), U1 be SubAlgebra of U0;
+      assume
+A2:   u = U1;
+        ex U2 being SubAlgebra of U0 st u = U2 & carr u = the carrier of U2
+                                                                    by Def2;
+      hence f.u = the carrier of U1 by A1,A2,Def3;
+     end;
+    assume
+A3:        for u be Element of Sub(U0), U1 be SubAlgebra of U0 st
+               u = U1 holds
+               f.u = the carrier of U1;
+      for u1 be Element of Sub(U0) holds f.u1 = carr u1
+    proof
+      let u be Element of Sub(U0);
+      reconsider U1 = u as Element of Sub(U0);
+        f.u = the carrier of U1 by A3;
+      hence thesis by Def2;
+     end;
+    hence f = Carr U0 by Def3;
+   end;
+end;
+
+theorem
+   for H being strict SubAlgebra of U0
+  for u being Element of U0 holds u in (Carr U0).H iff u in H
+proof
+    let H be strict SubAlgebra of U0;
+    let u be Element of U0;
+    thus u in (Carr U0).H implies u in H
+     proof
+      assume
+A1:          u in (Carr U0).H;
+        H in Sub(U0) by UNIALG_2:def 15;
+      then u in the carrier of H by A1,Def4;
+      hence thesis by RLVECT_1:def 1;
+     end;
+
+    thus u in H implies u in (Carr U0).H
+     proof
+      assume
+A2:          u in H;
+        H in Sub(U0) by UNIALG_2:def 15;
+      then (Carr U0).H = the carrier of H by Def4;
+      hence thesis by A2,RLVECT_1:def 1;
+     end;
+   end;
+
+theorem Th9:
+ for H be non empty Subset of Sub(U0) holds ((Carr U0).:H) is non empty
+   proof
+    let H be non empty Subset of Sub(U0);
+    consider u being Element of Sub(U0) such that
+A1:          u in H by SUBSET_1:10;
+      (Carr U0).u in ((Carr U0).:H) by A1,FUNCT_2:43;
+    hence ((Carr U0).:H) is non empty;
+   end;
+
+theorem
+   for U0 being with_const_op Universal_Algebra
+  for U1 being strict SubAlgebra of U0 holds Constants(U0) c= (Carr U0).U1
+   proof
+    let U0 be with_const_op Universal_Algebra;
+    let U1 be strict SubAlgebra of U0;
+      U1 in Sub(U0) by Th1;
+    then A1:      (Carr U0).U1 = the carrier of U1 by Def4;
+      Constants(U1) = Constants(U0) by Th6;
+    hence thesis by A1;
+   end;
+
+theorem Th11:
+ for U0 being with_const_op Universal_Algebra
+  for U1 be SubAlgebra of U0
+   for a be set holds
+                a is Element of Constants(U0) implies a in the carrier of U1
+   proof
+    let U0 be with_const_op Universal_Algebra;
+    let U1 be SubAlgebra of U0;
+    let a be set;
+    assume
+A1:        a is Element of Constants(U0);
+      Constants(U0) is Subset of U1 by UNIALG_2:18;
+    hence a in the carrier of U1 by A1,TARSKI:def 3;
+   end;
+
+theorem Th12:
+ for U0 being with_const_op Universal_Algebra
+  for H be non empty Subset of Sub(U0) holds
+     meet ((Carr U0).:H) is non empty Subset of U0
+   proof
+    let U0 be with_const_op Universal_Algebra;
+    let H be non empty Subset of Sub(U0);
+    consider u be Element of Constants(U0);
+A1: for S being set st S in (Carr U0).:H holds u in S
+     proof
+      let S be set; assume
+A2:   S in (Carr U0).:H;
+      then reconsider S as Subset of U0;
+      consider X1 being Element of Sub(U0) such that
+A3:            X1 in H & S = (Carr U0).X1 by A2,FUNCT_2:116;
+      reconsider X1 as strict SubAlgebra of U0 by UNIALG_2:def 15;
+        S = the carrier of X1 by A3,Def4;
+      hence thesis by Th11;
+     end;
+    reconsider CH = (Carr U0).:H as Subset-Family of U0
+      by SETFAM_1:def 7;
+      CH <> {} by Th9;
+    then meet CH is non empty Subset of U0 by A1,SETFAM_1:def 1
+;
+    hence thesis;
+   end;
+
+theorem Th13:
+ for U0 being with_const_op Universal_Algebra holds
+     the carrier of UnSubAlLattice(U0) = Sub(U0)
+   proof
+    let U0 be with_const_op Universal_Algebra;
+      UnSubAlLattice(U0)=LattStr (# Sub(U0),UniAlg_join(U0),UniAlg_meet(U0) #)
+                                                        by UNIALG_2:def 18;
+    hence thesis;
+   end;
+
+theorem Th14:
+ for U0 being with_const_op Universal_Algebra
+  for H be non empty Subset of Sub(U0)
+   for S being non empty Subset of U0 st
+       S = meet ((Carr U0).:H) holds S is opers_closed
+   proof
+    let U0 be with_const_op Universal_Algebra;
+    let H be non empty Subset of Sub(U0);
+    let S be non empty Subset of U0 such that
+A1:     S = meet ((Carr U0).:H);
+A2: (Carr U0).:H <> {} by Th9;
+      for o be operation of U0 holds S is_closed_on o
+     proof
+      let o be operation of U0;
+      let s be FinSequence of S;
+      assume
+A3:          len s = arity o;
+         now
+        let a be set;
+        assume
+A4:            a in (Carr U0).:H;
+        then reconsider H1 = a as Subset of U0;
+        consider H2 being Element of Sub U0 such that
+A5:              H2 in H & H1 = (Carr U0).H2 by A4,FUNCT_2:116;
+A6:     H1 = the carrier of H2 by A5,Def4;
+        then reconsider H3 = H1 as non empty Subset of U0;
+          S c= H1 by A1,A4,SETFAM_1:4;
+        then reconsider s1 = s as FinSequence of H3 by FINSEQ_2:27;
+          H3 is opers_closed by A6,UNIALG_2:def 8;
+        then H3 is_closed_on o by UNIALG_2:def 5;
+        then o.s1 in H3 by A3,UNIALG_2:def 4;
+        hence o.s in a;
+       end;
+      hence o.s in S by A1,A2,SETFAM_1:def 1;
+     end;
+    hence S is opers_closed by UNIALG_2:def 5;
+   end;
+
+definition
+ let U0 be with_const_op strict Universal_Algebra;
+  let H be non empty Subset of Sub(U0);
+  func meet H -> strict SubAlgebra of U0 means
+:Def5:                                the carrier of it = meet ((Carr U0).:H);
+  existence
+   proof
+    reconsider H1 = (meet ((Carr U0).:H))
+    as non empty Subset of U0 by Th12;
+      H1 is opers_closed by Th14;
+    then UniAlgSetClosed (H1) = UAStr (# H1, Opers(U0,H1) #) by UNIALG_2:def 9
+;
+    hence thesis;
+   end;
+  uniqueness by UNIALG_2:15;
+end;
+
+theorem Th15:
+ for U0 being with_const_op Universal_Algebra
+  for l1,l2 being Element of UnSubAlLattice(U0),
+   U1,U2 being strict SubAlgebra of U0 st l1 = U1 & l2 = U2 holds
+                      l1 "\/" l2 = U1 "\/" U2
+   proof
+    let U0 be with_const_op Universal_Algebra;
+    let l1,l2 be Element of UnSubAlLattice(U0);
+    let U1,U2 be strict SubAlgebra of U0;
+A1: UnSubAlLattice(U0)=LattStr (# Sub(U0),UniAlg_join(U0),UniAlg_meet(U0) #)
+                                                        by UNIALG_2:def 18;
+    then reconsider l1 = U1 as Element of UnSubAlLattice(U0)
+                                                      by UNIALG_2:def 15;
+    reconsider l2 = U2 as Element of UnSubAlLattice(U0)
+                                                      by A1,UNIALG_2:def 15;
+      l1 "\/" l2 = (UniAlg_join(U0) qua Function).(l1,l2) by A1,LATTICES:def 1;
+    hence thesis by A1,UNIALG_2:def 16;
+   end;
+
+theorem
+   for U0 being with_const_op Universal_Algebra
+  for l1,l2 being Element of UnSubAlLattice(U0),
+      U1,U2 being strict SubAlgebra of U0 st l1 = U1 & l2 = U2 holds
+                         l1 "/\" l2 = U1 /\ U2
+   proof
+    let U0 be with_const_op Universal_Algebra;
+    let l1,l2 be Element of UnSubAlLattice(U0);
+    let U1,U2 be strict SubAlgebra of U0;
+A1: UnSubAlLattice(U0)=LattStr (# Sub(U0),UniAlg_join(U0),UniAlg_meet(U0) #)
+                                                        by UNIALG_2:def 18;
+    then reconsider l1 = U1 as Element of UnSubAlLattice(U0)
+                                                      by UNIALG_2:def 15;
+    reconsider l2 = U2 as Element of UnSubAlLattice(U0)
+                                                      by A1,UNIALG_2:def 15;
+      l1 "/\" l2 = (UniAlg_meet(U0) qua Function).(l1,l2) by A1,LATTICES:def 2;
+    hence thesis by A1,UNIALG_2:def 17;
+   end;
+
+theorem Th17:
+ for U0 being with_const_op Universal_Algebra
+  for l1,l2 being Element of UnSubAlLattice(U0),
+      U1,U2 being strict SubAlgebra of U0 st l1 = U1 & l2 = U2 holds
+                         l1 [= l2 iff the carrier of U1 c= the carrier of U2
+   proof
+    let U0 be with_const_op Universal_Algebra;
+    let l1,l2 be Element of UnSubAlLattice(U0);
+    let U1,U2 be strict SubAlgebra of U0;
+A1: UnSubAlLattice(U0)=LattStr (# Sub(U0),UniAlg_join(U0),UniAlg_meet(U0) #)
+                                                        by UNIALG_2:def 18;
+    then reconsider l1 = U1 as Element of UnSubAlLattice(U0)
+                                                      by UNIALG_2:def 15;
+    reconsider l2 = U2 as Element of UnSubAlLattice(U0)
+                                                      by A1,UNIALG_2:def 15;
+A2: l1 [= l2 implies the carrier of U1 c= the carrier of U2
+     proof
+      assume l1 [= l2;
+      then l1 "\/" l2 = l2 by LATTICES:def 3;
+      then A3:        U1 "\/" U2 = U2 by Th15;
+      reconsider U11 = the carrier of U1 as Subset of U0
+      by UNIALG_2:def 8;
+      reconsider U21 = the carrier of U2 as Subset of U0
+      by UNIALG_2:def 8;
+      reconsider U3 = U11 \/ U21 as non empty Subset of U0
+      by XBOOLE_1:15;
+        GenUnivAlg (U3) = U2 by A3,UNIALG_2:def 14;
+      then A4:        (the carrier of U1) \/ the carrier of U2 c= the carrier
+of U2
+                                                         by UNIALG_2:def 13;
+        the carrier of U2 c= (the carrier of U1) \/ the carrier of U2
+                                                                by XBOOLE_1:7;
+      then (the carrier of U1) \/ the carrier of U2 = the carrier of U2
+                                                             by A4,XBOOLE_0:def
+10;
+      hence thesis by XBOOLE_1:7;
+     end;
+      the carrier of U1 c= the carrier of U2 implies l1 [= l2
+     proof
+      assume the carrier of U1 c= the carrier of U2;
+      then A5:        (the carrier of U1) \/ the carrier of U2 = the carrier of
+U2
+                                                               by XBOOLE_1:12;
+      reconsider U11 = the carrier of U1 as Subset of U0
+      by UNIALG_2:def 8;
+      reconsider U21 = the carrier of U2 as Subset of U0
+      by UNIALG_2:def 8;
+      reconsider U3 = U11 \/ U21 as non empty Subset of U0
+      by XBOOLE_1:15;
+        GenUnivAlg (U3) = U2 by A5,UNIALG_2:22;
+      then U1 "\/" U2 = U2 by UNIALG_2:def 14;
+      then l1 "\/" l2 = l2 by Th15;
+      hence thesis by LATTICES:def 3;
+     end;
+    hence thesis by A2;
+   end;
+
+theorem
+   for U0 being with_const_op Universal_Algebra
+  for l1,l2 being Element of UnSubAlLattice(U0),
+      U1,U2 being strict SubAlgebra of U0 st l1 = U1 & l2 = U2 holds
+                         l1 [= l2 iff U1 is SubAlgebra of U2
+   proof
+    let U0 be with_const_op Universal_Algebra;
+    let l1,l2 be Element of UnSubAlLattice(U0);
+    let U1,U2 be strict SubAlgebra of U0 such that
+A1:                                                l1 = U1 & l2 = U2;
+    thus l1 [= l2 implies U1 is SubAlgebra of U2
+     proof
+      assume l1 [= l2;
+      then the carrier of U1 c= the carrier of U2 by A1,Th17;
+      hence thesis by UNIALG_2:14;
+     end;
+
+    thus U1 is SubAlgebra of U2 implies l1 [= l2
+     proof
+      assume U1 is SubAlgebra of U2;
+      then the carrier of U1 is Subset of U2 by UNIALG_2:def 8;
+      hence thesis by A1,Th17;
+     end;
+   end;
+
+theorem Th19:
+ for U0 being with_const_op strict Universal_Algebra holds
+                                   UnSubAlLattice(U0) is bounded
+   proof
+    let U0 be with_const_op strict Universal_Algebra;
+A1: UnSubAlLattice(U0) is lower-bounded
+     proof
+A2:   UnSubAlLattice(U0)=LattStr (# Sub(U0),UniAlg_join(U0),UniAlg_meet(U0) #)
+                                                        by UNIALG_2:def 18;
+      then reconsider l1 = GenUnivAlg(Constants(U0))
+                           as Element of UnSubAlLattice(U0)
+                                                         by UNIALG_2:def 15;
+      take l1;
+      let l2 be Element of UnSubAlLattice(U0);
+      reconsider U1 = l2 as strict SubAlgebra of U0 by A2,UNIALG_2:def 15;
+        Constants(U0) is Subset of U1 by UNIALG_2:19;
+then A3:   (Constants(U0)) \/ the carrier of U1 = the carrier of U1 by XBOOLE_1
+:12;
+      reconsider U2 = GenUnivAlg(Constants(U0)) as strict SubAlgebra of U0;
+      reconsider U11 = Constants(U0) as Subset of U0;
+      reconsider U21 = the carrier of U1 as Subset of U0
+      by UNIALG_2:def 8;
+      reconsider U3 = U11 \/ U21 as non empty Subset of U0
+      by XBOOLE_1:15;
+        GenUnivAlg (U3) = U1 by A3,UNIALG_2:22;
+      then U2 "\/" U1 = U1 by UNIALG_2:23;
+      then l1 "\/" l2 = l2 by Th15;
+      then A4: l1 [= l2 by LATTICES:22;
+      hence l1 "/\" l2 = l1 by LATTICES:21;
+      thus l2 "/\" l1 = l1 by A4,LATTICES:21;
+     end;
+      UnSubAlLattice(U0) is upper-bounded
+     proof
+A5:   UnSubAlLattice(U0)=LattStr (# Sub(U0),UniAlg_join(U0),UniAlg_meet(U0) #)
+                                                        by UNIALG_2:def 18;
+        U0 is strict SubAlgebra of U0 by UNIALG_2:11;
+      then reconsider l1 = U0 as Element of UnSubAlLattice(U0)
+                                                      by A5,UNIALG_2:def 15;
+      take l1;
+      let l2 be Element of UnSubAlLattice(U0);
+      reconsider U1 = l1 as strict SubAlgebra of U0 by UNIALG_2:11;
+      reconsider U2 = l2 as strict SubAlgebra of U0 by A5,UNIALG_2:def 15;
+      reconsider U11 = the carrier of U1 as Subset of U0
+      by UNIALG_2:def 8;
+      reconsider U21 = the carrier of U2 as Subset of U0
+      by UNIALG_2:def 8;
+      reconsider H = U11 \/ U21 as non empty Subset of U0
+      by XBOOLE_1:15;
+A6:   H = the carrier of U1 by XBOOLE_1:12;
+      thus l1 "\/" l2 = U1 "\/" U2 by Th15
+                   .= GenUnivAlg(H) by UNIALG_2:def 14
+                   .= GenUnivAlg([#](the carrier of U1)) by A6,SUBSET_1:def 4
+                   .= l1 by UNIALG_2:21;
+      hence l2 "\/" l1 = l1;
+     end;
+    hence thesis by A1,LATTICES:def 15;
+   end;
+
+definition
+  let U0 be with_const_op strict Universal_Algebra;
+  cluster UnSubAlLattice U0 -> bounded;
+  coherence by Th19;
+end;
+
+theorem Th20:
+ for U0 being with_const_op strict Universal_Algebra
+  for U1 be strict SubAlgebra of U0 holds
+      GenUnivAlg(Constants(U0)) /\ U1 = GenUnivAlg(Constants(U0))
+   proof
+    let U0 be with_const_op strict Universal_Algebra;
+    let U1 be strict SubAlgebra of U0;
+    set C = Constants(U0),
+        G = GenUnivAlg(C);
+      (the carrier of G) meets (the carrier of U1) by UNIALG_2:20;
+    then A1:      the carrier of ( G /\ U1) = (the carrier of G) /\ (the
+carrier of U1)
+                                                         by UNIALG_2:def 10;
+      C is Subset of U1 by UNIALG_2:18;
+    then G is strict SubAlgebra of U1 by UNIALG_2:def 13;
+    then the carrier of G is Subset of U1 by UNIALG_2:def 8;
+    then the carrier of (G /\ U1) = the carrier of G by A1,XBOOLE_1:28;
+    hence thesis by UNIALG_2:15;
+   end;
+
+theorem
+   for U0 being with_const_op strict Universal_Algebra holds
+                          Bottom
+(UnSubAlLattice(U0)) = GenUnivAlg(Constants(U0))
+   proof
+    let U0 be with_const_op strict Universal_Algebra;
+    set L = UnSubAlLattice(U0);
+A1: L = LattStr (# Sub(U0),UniAlg_join(U0),UniAlg_meet(U0) #)
+                                                         by UNIALG_2:def 18;
+    set C = Constants(U0);
+    reconsider G = GenUnivAlg(C) as Element of Sub(U0) by UNIALG_2:def 15;
+    reconsider l1 = G as Element of L by A1;
+       now
+      let l be Element of L;
+      reconsider u1 = l as Element of Sub(U0) by A1;
+      reconsider U2 = u1 as strict SubAlgebra of U0 by UNIALG_2:def 15;
+      thus l1 "/\" l =(UniAlg_meet(U0)).(G,u1) by A1,LATTICES:def 2
+                  .= GenUnivAlg(C) /\ U2 by UNIALG_2:def 17
+                  .= l1 by Th20;
+      hence l "/\" l1 = l1;
+     end;
+    hence thesis by LATTICES:def 16;
+   end;
+
+theorem Th22:
+ for U0 being with_const_op strict Universal_Algebra
+  for U1 be SubAlgebra of U0
+   for H be Subset of U0 st H = the carrier of U0 holds
+                                    GenUnivAlg(H) "\/" U1 = GenUnivAlg(H)
+   proof
+    let U0 be with_const_op strict Universal_Algebra;
+    let U1 be SubAlgebra of U0, H be Subset of U0;
+    assume
+         H = the carrier of U0;
+    then the carrier of U1 c= H by Th3;
+    then H \/ the carrier of U1 = H by XBOOLE_1:12;
+    hence thesis by UNIALG_2:23;
+   end;
+
+theorem Th23:
+ for U0 being with_const_op strict Universal_Algebra
+  for H be Subset of U0 st H = the carrier of U0 holds
+                           Top (UnSubAlLattice(U0)) = GenUnivAlg(H)
+   proof
+    let U0 be with_const_op strict Universal_Algebra;
+    let H be Subset of U0;
+    assume
+A1:        H = the carrier of U0;
+    set L = UnSubAlLattice(U0);
+A2: L = LattStr (# Sub(U0), UniAlg_join(U0), UniAlg_meet(U0) #)
+                                                         by UNIALG_2:def 18;
+    reconsider u1 = GenUnivAlg(H) as Element of Sub(U0) by UNIALG_2:def 15;
+    reconsider l1 = u1 as Element of L by A2;
+       now
+      let l be Element of L;
+      reconsider u2 = l as Element of Sub(U0) by A2;
+      reconsider U2 = u2 as strict SubAlgebra of U0 by UNIALG_2:def 15;
+      thus l1"\/"l =(UniAlg_join(U0)).(l1,l) by A2,LATTICES:def 1
+                .= GenUnivAlg(H)"\/"U2 by UNIALG_2:def 16
+                .= l1 by A1,Th22;
+      hence l"\/"l1 = l1;
+     end;
+    hence thesis by LATTICES:def 17;
+   end;
+
+theorem
+   for U0 being with_const_op strict Universal_Algebra holds
+                            Top (UnSubAlLattice(U0)) = U0
+   proof
+    let U0 be with_const_op strict Universal_Algebra;
+      the carrier of U0 c= the carrier of U0;
+    then reconsider H = the carrier of U0 as Subset of U0;
+A1: U0 is strict SubAlgebra of U0 by UNIALG_2:11;
+    thus Top (UnSubAlLattice(U0)) = GenUnivAlg(H) by Th23
+                              .= U0 by A1,UNIALG_2:22;
+   end;
+
+theorem
+   for U0 being with_const_op strict Universal_Algebra holds
+                                   UnSubAlLattice(U0) is complete
+   proof
+    let U0 be with_const_op strict Universal_Algebra;
+A1: UnSubAlLattice(U0)=LattStr (# Sub(U0),UniAlg_join(U0),UniAlg_meet(U0) #)
+                                                        by UNIALG_2:def 18;
+    let L be Subset of UnSubAlLattice(U0);
+    per cases;
+     suppose
+A2:          L = {};
+     thus thesis
+      proof
+       take Top UnSubAlLattice(U0);
+       thus Top UnSubAlLattice(U0) is_less_than L
+        proof
+         let l1 be Element of UnSubAlLattice(U0);
+         thus thesis by A2;
+        end;
+       let l2 be Element of UnSubAlLattice(U0);
+       assume l2 is_less_than L;
+       thus thesis by LATTICES:45;
+      end;
+
+     suppose L <> {};
+     then reconsider H = L as non empty Subset of Sub(U0) by A1;
+     reconsider l1 = meet H as Element of UnSubAlLattice(U0)
+                                                      by A1,UNIALG_2:def 15;
+     take l1;
+     thus l1 is_less_than L
+      proof
+       let l2 be Element of UnSubAlLattice(U0);
+       reconsider U1 = l2 as strict SubAlgebra of U0 by A1,UNIALG_2:def 15;
+       reconsider u = l2 as Element of Sub(U0) by A1;
+A3:    (Carr U0).u = the carrier of U1 by Def4;
+       assume l2 in L;
+       then the carrier of U1 in (Carr U0).:H by A3,FUNCT_2:43;
+       then meet ((Carr U0).:H) c= the carrier of U1 by SETFAM_1:4;
+       then the carrier of meet H c= the carrier of U1 by Def5;
+       hence l1 [= l2 by Th17;
+      end;
+    let l3 be Element of UnSubAlLattice(U0);
+    assume
+A4:        l3 is_less_than L;
+    reconsider U1 = l3 as strict SubAlgebra of U0 by A1,UNIALG_2:def 15;
+    consider x being Element of H;
+A5: (Carr U0).x in (Carr U0).:L by FUNCT_2:43;
+      for A be set st A in (Carr U0).:H holds the carrier of U1 c= A
+     proof
+      let A be set;
+      assume
+A6:          A in (Carr U0).:H;
+      then reconsider H1 = A as Subset of U0;
+      consider l4 being Element of Sub(U0) such that
+A7:                           l4 in H & H1 = (Carr U0).l4 by A6,FUNCT_2:116;
+      reconsider l4 as Element of UnSubAlLattice(U0) by A1;
+      reconsider U2 = l4 as strict SubAlgebra of U0 by UNIALG_2:def 15;
+A8:   A = the carrier of U2 by A7,Def4;
+        l3 [= l4 by A4,A7,LATTICE3:def 16;
+      hence the carrier of U1 c= A by A8,Th17;
+     end;
+
+    then the carrier of U1 c= meet ((Carr U0).:H) by A5,SETFAM_1:6;
+    then the carrier of U1 c= the carrier of meet H by Def5;
+    hence l3 [= l1 by Th17;
+   end;
+
+definition
+  let U01,U02 be with_const_op Universal_Algebra;
+   let F be Function of the carrier of U01, the carrier of U02;
+    func FuncLatt F -> Function of the carrier of UnSubAlLattice(U01),
+                                   the carrier of UnSubAlLattice(U02) means
+:Def6:            for U1 being strict SubAlgebra of U01,
+                      H being Subset of U02 st
+                      H = F.: the carrier of U1 holds
+                                               it.U1 = GenUnivAlg(H);
+  existence
+   proof
+    defpred P [set, set] means
+            for U1 being strict SubAlgebra of U01 st U1 = $1
+             for S being Subset of U02 st
+                 S = F.: the carrier of U1 holds
+                         $2 = GenUnivAlg(F.: the carrier of U1);
+
+A1: for u1 being set st u1 in the carrier of UnSubAlLattice(U01)
+     ex u2 being set st u2 in the carrier of UnSubAlLattice(U02) & P [u1,u2]
+      proof
+       let u1 be set; assume
+      u1 in the carrier of UnSubAlLattice(U01);
+       then u1 in Sub(U01) by Th13;
+       then consider U2 being strict SubAlgebra of U01 such that
+A2:                                                         U2 = u1 by Th1;
+       reconsider u2 = GenUnivAlg(F.: the carrier of U2) as
+                                                  strict SubAlgebra of U02;
+         u2 in Sub(U02) by UNIALG_2:def 15;
+       then reconsider u2 as Element of UnSubAlLattice(U02)
+                                                                    by Th13;
+       take u2;
+       thus thesis by A2;
+      end;
+     consider f1 being Function of the carrier of UnSubAlLattice(U01),
+                               the carrier of UnSubAlLattice(U02) such that
+A3:           for u1 being set st
+                  u1 in the carrier of UnSubAlLattice(U01) holds
+                                          P [u1,f1.u1] from FuncEx1 (A1);
+     take f1;
+     thus thesis
+      proof
+       let U1 be strict SubAlgebra of U01;
+       let S be Subset of U02;
+       assume
+A4:           S = F.:the carrier of U1;
+         U1 is Element of Sub U01 by UNIALG_2:def 15;
+       then U1 is Element of UnSubAlLattice(U01) by Th13;
+       hence thesis by A3,A4;
+      end;
+   end;
+  uniqueness
+   proof
+    let F1,F2 be Function of the carrier of UnSubAlLattice(U01),
+                                the carrier of UnSubAlLattice(U02) such that
+A5:     for U1 being strict SubAlgebra of U01,
+            H being Subset of U02 st
+            H = F.: the carrier of U1 holds F1.U1 = GenUnivAlg(H) and
+A6:     for U1 being strict SubAlgebra of U01,
+            H being Subset of U02 st
+            H = F.: the carrier of U1 holds F2.U1 = GenUnivAlg(H);
+      for l being set st l in the carrier of UnSubAlLattice(U01) holds
+        F1.l = F2.l
+     proof
+      let l be set; assume
+         l in the carrier of UnSubAlLattice(U01);
+      then l is Element of Sub(U01) by Th13;
+      then consider U1 being strict SubAlgebra of U01 such that
+A7:                 U1 = l by Th1;
+      consider H being Subset of U02 such that
+A8:            H = F.: the carrier of U1;
+        F1.l = GenUnivAlg(H) by A5,A7,A8;
+      hence thesis by A6,A7,A8;
+     end;
+    hence F1 = F2 by FUNCT_2:18;
+   end;
+  end;
+
+theorem
+   for U0 being with_const_op strict Universal_Algebra
+  for F being Function of the carrier of U0, the carrier of U0
+      st F = id the carrier of U0 holds
+                    FuncLatt F = id the carrier of UnSubAlLattice(U0)
+
+   proof
+    let U0 be with_const_op strict Universal_Algebra;
+    let F be Function of the carrier of U0, the carrier of U0 such that
+A1:     F = id the carrier of U0;
+A2: dom FuncLatt F = the carrier of UnSubAlLattice(U0) by FUNCT_2:def 1;
+
+      for a being set st a in the carrier of UnSubAlLattice(U0) holds
+                                                         (FuncLatt F).a = a
+     proof
+      let a be set; assume
+         a in the carrier of UnSubAlLattice(U0);
+      then a in Sub U0 by Th13;
+      then reconsider a as strict SubAlgebra of U0 by UNIALG_2:def 15;
+A3:   F.:the carrier of a = the carrier of a
+       proof
+
+        thus F.:the carrier of a c= the carrier of a
+         proof
+            for a1 being set holds
+          a1 in F.:the carrier of a implies a1 in the carrier of a
+           proof
+            let a1 be set;
+            assume
+A4:                a1 in F.:the carrier of a;
+            then reconsider a1 as Element of U0;
+            consider H being Element of U0 such that
+A5:                  H in the carrier of a & a1 = F.H by A4,FUNCT_2:116;
+            thus thesis by A1,A5,FUNCT_1:34;
+           end;
+          hence thesis by TARSKI:def 3;
+         end;
+        thus the carrier of a c= F.:the carrier of a
+         proof
+            for a1 being set holds
+              a1 in the carrier of a implies a1 in F.:the carrier of a
+           proof
+            let a1 be set;
+            assume
+A6:                a1 in the carrier of a;
+              the carrier of a c= the carrier of U0 by Th3;
+            then reconsider a1 as Element of U0 by A6;
+              F.a1 = a1 by A1,FUNCT_1:34;
+            hence thesis by A6,FUNCT_2:43;
+           end;
+          hence thesis by TARSKI:def 3;
+         end;
+        end;
+       then reconsider H1 = the carrier of a as Subset of U0;
+         (FuncLatt F).a = GenUnivAlg(H1) by A3,Def6;
+       hence thesis by UNIALG_2:22;
+     end;
+    hence thesis by A2,FUNCT_1:34;
+   end;

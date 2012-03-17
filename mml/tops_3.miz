@@ -1,0 +1,1548 @@
+:: Remarks on Special Subsets of Topological Spaces
+::  by Zbigniew Karno
+::
+:: Received April 6, 1993
+:: Copyright (c) 1993 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, BOOLE, SUBSET_1, TOPS_1, TOPS_3;
+ notation TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, PRE_TOPC, TOPS_1, BORSUK_1,
+      TSEP_1;
+ constructors TOPS_1, BORSUK_1, TSEP_1, MEMBERED;
+ clusters BORSUK_1, TSEP_1, PRE_TOPC, TOPS_1, MEMBERED, ZFMISC_1;
+ requirements BOOLE, SUBSET;
+ definitions PRE_TOPC, XBOOLE_0;
+ theorems PRE_TOPC, TOPS_1, TOPS_2, TSEP_1, TDLAT_3, SUBSET_1, TARSKI,
+      XBOOLE_0, XBOOLE_1;
+
+begin
+:: 1. Selected Properties of Subsets of a Topological Space.
+reserve X for TopStruct, A for Subset of X;
+
+theorem Th1:
+ (A = {}X iff  A` = [#]X) &
+   (A = {} iff  A` = the carrier of X)
+ proof
+  thus A = {}X iff  A` = [#]X
+   proof thus A = {}X implies  A` = [#]X by PRE_TOPC:27;
+    assume  A` = [#]X;
+     then A`` = {}X by TOPS_1:8;
+    hence thesis;
+   end;
+  hence A = {} iff  A` = the carrier of X by PRE_TOPC:12;
+ end;
+
+theorem Th2:
+ (A = [#]X iff  A` = {}X) &
+   (A = the carrier of X iff  A` = {})
+ proof
+  thus A = [#]X iff  A` = {}X
+   proof thus A = [#]X implies  A` = {}X by TOPS_1:8;
+    assume  A` = {}X;
+     then A`` = [#]X by PRE_TOPC:27;
+    hence thesis;
+   end;
+  hence A = the carrier of X iff  A` = {} by PRE_TOPC:12;
+ end;
+
+theorem Th3:
+ for X being TopSpace, A,B being Subset of X holds
+  Int A /\ Cl B c= Cl(A /\ B)
+ proof
+   let X be TopSpace, A,B be Subset of X;
+      Int A c= A by TOPS_1:44;
+   then (Int A) /\ B c= A /\ B by XBOOLE_1:26;
+  then A1: Cl((Int A) /\ B) c= Cl(A /\ B) by PRE_TOPC:49;
+  Int A /\ Cl B c= Cl((Int A) /\ B) by TOPS_1:40;
+  hence thesis by A1,XBOOLE_1:1;
+ end;
+
+reserve X for TopSpace, A,B for Subset of X;
+
+theorem Th4:
+ Int(A \/ B) c= (Cl A) \/ Int B
+ proof
+      (Int  A`) /\ Cl  B` c= Cl(( A`) /\  B`) by Th3;
+   then (Cl(( A`) /\  B`))` c= ((Int  A`) /\ Cl  B`)` by PRE_TOPC:19;
+   then Int((( A`) /\  B`)`) c= (((Int  A`) /\ Cl  B`))` by TDLAT_3:4;
+   then Int((( A`) /\  B`)`) c= (((Int  A`) /\ Cl  B`))`;
+   then Int(( A``) \/ ( B``)) c= (((Int  A`) /\ Cl  B`))` & ( A``) = A
+         by SUBSET_1:30;
+   then Int(A \/ B) c= ((Int  A`) /\ Cl  B`)`;
+   then Int(A \/ B) c= ((Int  A`) /\ Cl  B`)`;
+   then Int(A \/ B) c= (Int  A`)` \/ (Cl  B`)` by SUBSET_1:30;
+   then Int(A \/ B) c= Cl A \/ (Cl  B`)` by TDLAT_3:2;
+  hence thesis by TOPS_1:def 1;
+ end;
+
+theorem Th5:
+ for A being Subset of X st A is closed holds Int(A \/ B) c= A \/ Int B
+ proof
+  let A be Subset of X;
+  assume A is closed;
+   then Cl A = A & Int(A \/ B) c= (Cl A) \/ Int B by Th4,PRE_TOPC:52;
+  hence thesis;
+ end;
+
+theorem Th6:
+ for A being Subset of X st A is closed holds Int(A \/ B) = Int(A \/ Int B)
+ proof
+  let A be Subset of X;
+  assume A is closed;
+   then Int(A \/ B) c= A \/ Int B by Th5;
+   then Int Int(A \/ B) c= Int(A \/ Int B) by TOPS_1:48;
+  then A1: Int(A \/ B) c= Int(A \/ Int B) by TOPS_1:45;
+      Int B c= B by TOPS_1:44;
+   then A \/ Int B c= A \/ B by XBOOLE_1:9;
+   then Int(A \/ Int B) c= Int(A \/ B) by TOPS_1:48;
+  hence thesis by A1,XBOOLE_0:def 10;
+ end;
+
+theorem Th7:
+ A misses Int Cl A implies Int Cl A = {}
+ proof
+  reconsider A' = A as Subset of X;
+  assume A /\ Int Cl A = {};
+   then A' misses Int Cl A' by XBOOLE_0:def 7;
+   then (Cl A) misses (Int Cl A) by TSEP_1:40;
+   then (Cl A) /\ (Int Cl A) = {} & Int Cl A c= Cl A
+     by TOPS_1:44,XBOOLE_0:def 7;
+  hence thesis by XBOOLE_1:28;
+ end;
+
+theorem
+   A \/ Cl Int A = the carrier of X implies Cl Int A = the carrier of X
+ proof
+  reconsider A' = A as Subset of X;
+  assume A \/ Cl Int A = the carrier of X;
+then A' \/ Cl Int A' = the carrier of X;
+   then (Int A) \/ (Cl Int A) = the carrier of X &
+              Int A c= Cl Int A by PRE_TOPC:48,TDLAT_3:6;
+  hence thesis by XBOOLE_1:12;
+ end;
+
+begin
+:: 2. Special Subsets of a Topological Space.
+
+definition let X be TopStruct, A be Subset of X;
+ redefine attr A is boundary means
+:Def1: Int A = {};
+ compatibility by TOPS_1:84;
+end;
+
+theorem Th9:
+ {}X is boundary
+ proof
+     Int({}X) = {} by TOPS_1:47;
+  hence thesis by TOPS_1:84;
+ end;
+
+reserve X for non empty TopSpace, A for Subset of X;
+
+theorem Th10:
+ A is boundary implies A <> the carrier of X
+ proof
+  assume A1: Int A = {};
+  assume A = the carrier of X;
+   then A = [#]X by PRE_TOPC:12;
+  hence contradiction by A1,TOPS_1:43;
+ end;
+
+reserve X for TopSpace, A,B for Subset of X;
+
+theorem Th11:
+ B is boundary & A c= B implies A is boundary
+ proof
+  assume B is boundary; then A1: Int B = {} by TOPS_1:84;
+  assume A c= B; then Int A c= Int B by TOPS_1:48;
+                 then Int A = {} by A1,XBOOLE_1:3;
+  hence thesis by TOPS_1:84;
+ end;
+
+theorem
+   A is boundary iff
+  for C being Subset of X st  A` c= C & C is closed
+   holds C = the carrier of X
+ proof
+  thus A is boundary implies
+         for C being Subset of X st  A` c= C & C is closed
+           holds C = the carrier of X
+   proof assume A1: A is boundary;
+     let C be Subset of X;
+    assume  A` c= C;
+     then  C` c=  A`` by PRE_TOPC:19;
+     then A2:  C` c= A;
+    assume C is closed;
+     then  C` is open by TOPS_1:29;
+     then  C` = {}X by A1,A2,TOPS_1:86;
+    hence thesis by Th2;
+   end;
+  assume
+A3: for C being Subset of X st  A` c= C & C is closed holds
+               C = the carrier of X;
+     now let G be Subset of X;
+    assume G c= A & G is open;
+     then  A` c=  G` &  G` is closed by PRE_TOPC:19,TOPS_1:30;
+     then  G` = the carrier of X by A3;
+    hence G = {} by Th1;
+   end;
+  hence thesis by TOPS_1:86;
+ end;
+
+theorem
+    A is boundary iff
+   for G being Subset of X st G <> {} & G is open holds ( A`) meets G
+ proof
+  thus A is boundary implies
+        for G being Subset of X st G <> {} & G is open
+         holds ( A`) meets G
+   proof assume A1: A is boundary;
+     let G be Subset of X;
+    assume A2: G <> {};
+    assume A3: G is open;
+    assume ( A`) misses G;
+     then G c= A by TOPS_1:20;
+    hence contradiction by A1,A2,A3,TOPS_1:86;
+   end;
+  assume A4: for G being Subset of X st G <> {} & G is open
+   holds ( A`) meets G;
+  assume A5: Int A <> {};
+      Int A is open & Int A c= A by TOPS_1:44;
+   then ( A`) meets Int A & (Int A) misses  A` &
+         ( A`) /\ Int A = (Int A) /\  A` by A4,A5,TOPS_1:20;
+  hence contradiction;
+ end;
+
+theorem
+    A is boundary iff
+   for F being Subset of X holds F is closed
+    implies Int F = Int(F \/ A)
+ proof
+  thus A is boundary implies for F being Subset of X holds
+                              F is closed implies Int F = Int(F \/ A)
+   proof assume A1: Int A = {};
+     let F be Subset of X;
+    assume F is closed;
+     then Int(F \/ A) = Int(F \/ Int A) & F \/ {} = F by Th6;
+    hence thesis by A1;
+   end;
+  assume for F being Subset of X holds
+              F is closed implies Int F = Int(F \/ A);
+   then Int {}X = Int({}X \/ A) & Int {}X = {}X by TOPS_1:47;
+  hence thesis by Def1;
+ end;
+
+theorem
+   A is boundary or B is boundary implies A /\ B is boundary
+ proof
+  assume A1: A is boundary or B is boundary;
+     A /\ B c= A & A /\ B c= B by XBOOLE_1:17;
+  hence thesis by A1,Th11;
+ end;
+
+definition let X be TopStruct, A be Subset of X;
+ redefine attr A is dense means
+:Def2: Cl A = the carrier of X;
+ compatibility
+  proof
+   thus A is dense implies Cl A = the carrier of X
+    proof assume A is dense;
+      then Cl A = [#]X by TOPS_1:def 3;
+     hence thesis by PRE_TOPC:12;
+    end;
+   assume Cl A = the carrier of X;
+    then Cl A = [#]X by PRE_TOPC:12;
+   hence thesis by TOPS_1:def 3;
+  end;
+end;
+
+theorem
+   [#]X is dense
+ proof
+     Cl([#]X) = [#]X by TOPS_1:27;
+  hence thesis by TOPS_1:def 3;
+ end;
+
+reserve X for non empty TopSpace, A, B for Subset of X;
+
+theorem Th17:
+ A is dense implies A <> {}
+ proof
+  assume A is dense;
+   then A1: Cl A = [#]X by TOPS_1:def 3;
+  assume A = {};
+   then Cl A = {}X by PRE_TOPC:52;
+  hence contradiction by A1;
+ end;
+
+theorem Th18:
+ A is dense iff  A` is boundary
+ proof
+  thus A is dense implies  A` is boundary
+   proof
+    assume A is dense;
+     then ( A``) is dense;
+    hence thesis by TOPS_1:def 4;
+   end;
+  assume  A` is boundary;
+   then ( A``) is dense by TOPS_1:def 4;
+  hence thesis;
+ end;
+
+theorem
+   A is dense iff
+  for C being Subset of X st A c= C & C is closed
+   holds C = the carrier of X
+ proof
+  thus A is dense implies for C being Subset of X st
+                           A c= C & C is closed holds C = the carrier of X
+   proof assume A1: Cl A = the carrier of X;
+     let C be Subset of X;
+    assume A c= C & C is closed;
+     then Cl A c= C & C c= the carrier of X by TOPS_1:31;
+    hence thesis by A1,XBOOLE_0:def 10;
+   end;
+  assume A2: for C being Subset of X st
+              A c= C & C is closed holds C = the carrier of X;
+      A c= Cl A & Cl A is closed by PRE_TOPC:48;
+   then Cl A = the carrier of X by A2;
+  hence thesis by Def2;
+ end;
+
+theorem
+   A is dense iff
+  for G being Subset of X holds G is open
+   implies Cl G = Cl(G /\ A)
+ proof
+  thus A is dense implies for G being Subset of X holds
+                            G is open implies Cl G = Cl(G /\ A)
+   proof assume A1: A is dense;
+     let G be Subset of X;
+    assume G is open;
+     then Cl(G /\ Cl A) = Cl(G /\ A) & G /\ [#]X = G by PRE_TOPC:15,TOPS_1:41;
+    hence thesis by A1,TOPS_1:def 3;
+   end;
+  assume
+  for G being Subset of X holds G is open
+      implies Cl G = Cl(G /\ A);
+   then Cl [#]X = Cl([#]X /\ A);
+   then [#]X = Cl([#]X /\ A) & [#]X /\ A = A by PRE_TOPC:15,TOPS_1:27;
+   then Cl A = the carrier of X by PRE_TOPC:12;
+  hence thesis by Def2;
+ end;
+
+theorem
+   A is dense or B is dense implies A \/ B is dense
+ proof
+  assume A1: A is dense or B is dense;
+      A c= A \/ B & B c= A \/ B by XBOOLE_1:7;
+  hence thesis by A1,TOPS_1:79;
+ end;
+
+definition let X be TopStruct, A be Subset of X;
+ redefine attr A is nowhere_dense means
+:Def3: Int(Cl A) = {};
+ compatibility
+  proof
+   thus A is nowhere_dense implies Int Cl A = {}
+    proof assume A is nowhere_dense;
+     then Cl A is boundary by TOPS_1:def 5;
+     hence thesis by Def1;
+    end;
+   assume Int Cl A = {};
+     then Cl A is boundary by Def1;
+   hence thesis by TOPS_1:def 5;
+  end;
+end;
+
+theorem Th22:
+ {}X is nowhere_dense
+ proof
+     Cl({}X) = {}X & {}X is boundary by Th9,PRE_TOPC:52;
+  hence thesis by TOPS_1:def 5;
+ end;
+
+theorem
+   A is nowhere_dense implies A <> the carrier of X
+ proof
+  assume A is nowhere_dense;
+   then A is boundary by TOPS_1:92;
+  hence thesis by Th10;
+ end;
+
+theorem
+   A is nowhere_dense implies Cl A is nowhere_dense
+ proof
+  assume A is nowhere_dense;
+   then Cl A is boundary & Cl A is closed by TOPS_1:def 5;
+  hence thesis by TOPS_1:93;
+ end;
+
+theorem
+   A is nowhere_dense implies A is not dense
+ proof
+  assume A1: Int Cl A = {};
+  assume A is dense;
+   then Cl A = [#]X by TOPS_1:def 3;
+  hence contradiction by A1,TOPS_1:43;
+ end;
+
+theorem Th26:
+ B is nowhere_dense & A c= B implies A is nowhere_dense
+ proof
+  assume B is nowhere_dense;
+   then A1: Cl B is boundary by TOPS_1:def 5;
+  assume A c= B;
+   then Cl A c= Cl B by PRE_TOPC:49;
+   then Cl A is boundary by A1,Th11;
+  hence thesis by TOPS_1:def 5;
+ end;
+
+theorem Th27:
+ A is nowhere_dense iff ex C being Subset of X st
+                          A c= C & C is closed & C is boundary
+ proof
+  thus A is nowhere_dense implies
+     ex C being Subset of X
+      st A c= C & C is closed & C is boundary
+   proof
+    assume A1: A is nowhere_dense;
+    take Cl A;
+    thus thesis by A1,PRE_TOPC:48,TOPS_1:def 5;
+   end;
+  given C being Subset of X such that
+        A2: A c= C & C is closed and A3: C is boundary;
+      Cl A c= C by A2,TOPS_1:31;
+   then Cl A is boundary by A3,Th11;
+  hence thesis by TOPS_1:def 5;
+ end;
+
+theorem Th28:
+ A is nowhere_dense iff
+  for G being Subset of X st G <> {} & G is open
+   ex H being Subset of X
+    st H c= G & H <> {} & H is open & A misses H
+ proof
+  thus A is nowhere_dense implies
+        for G being Subset of X st G <> {} & G is open
+         ex H being Subset of X
+          st H c= G & H <> {} & H is open & A misses H
+   proof assume A is nowhere_dense;
+        then A1: Cl A is boundary by TOPS_1:def 5;
+     let G be Subset of X;
+    assume G <> {} & G is open;
+     then consider H being Subset of X such that
+            A2: H c= G & H <> {} & H is open and
+             A3: Cl A misses H by A1,TOPS_1:87;
+    take H;
+        A c= Cl A by PRE_TOPC:48;
+    hence thesis by A2,A3,XBOOLE_1:63;
+   end;
+  assume A4: for G being Subset of X st G <> {} & G is open
+            ex H being Subset of X
+              st H c= G & H <> {} & H is open & A misses H;
+     for G being Subset of X st G <> {} & G is open
+     ex H being Subset of X
+      st H c= G & H <> {} & H is open & Cl A misses H
+    proof let G be Subset of X;
+     assume G <> {} & G is open;
+      then consider H being Subset of X such that
+             A5: H c= G & H <> {} & H is open and A6: A misses H by A4;
+     take H;
+     thus thesis by A5,A6,TSEP_1:40;
+    end;
+   then Cl A is boundary by TOPS_1:87;
+  hence thesis by TOPS_1:def 5;
+ end;
+
+theorem
+   A is nowhere_dense or B is nowhere_dense implies A /\ B is nowhere_dense
+ proof
+  assume A1: A is nowhere_dense or B is nowhere_dense;
+     A /\ B c= A & A /\ B c= B by XBOOLE_1:17;
+  hence thesis by A1,Th26;
+ end;
+
+theorem Th30:
+ A is nowhere_dense & B is boundary implies A \/ B is boundary
+ proof
+  assume A is nowhere_dense;
+   then A1: Cl A is boundary & Cl A is closed by TOPS_1:def 5;
+      A c= Cl A by PRE_TOPC:48;
+   then A2: B \/ A c= B \/ Cl A by XBOOLE_1:9;
+  assume B is boundary;
+   then B \/ Cl A is boundary by A1,TOPS_1:85;
+  hence thesis by A2,Th11;
+ end;
+
+definition let X be TopStruct, A be Subset of X;
+ attr A is everywhere_dense means
+:Def4: Cl(Int A) = [#]X;
+end;
+
+definition let X be TopStruct, A be Subset of X;
+ redefine attr A is everywhere_dense means
+    Cl(Int A) = the carrier of X;
+ compatibility
+  proof
+   thus A is everywhere_dense implies Cl Int A = the carrier of X
+    proof assume A is everywhere_dense;
+     then Cl Int A = [#]X by Def4;
+     hence thesis by PRE_TOPC:12;
+    end;
+   assume Cl Int A = the carrier of X;
+    then Cl Int A = [#]X by PRE_TOPC:12;
+   hence thesis by Def4;
+  end;
+end;
+
+theorem
+   [#]X is everywhere_dense
+ proof
+      Int [#]X = [#]X by TOPS_1:43;
+   then Cl Int [#]X = [#]X by TOPS_1:27;
+  hence thesis by Def4;
+ end;
+
+theorem Th32:
+ A is everywhere_dense implies Int A is everywhere_dense
+ proof
+  assume A is everywhere_dense;
+   then Cl Int A = [#]X by Def4;
+   then Cl Int Int A = [#]X by TOPS_1:45;
+  hence Int A is everywhere_dense by Def4;
+ end;
+
+theorem Th33:
+ A is everywhere_dense implies A is dense
+ proof
+  assume A is everywhere_dense; then A1: Cl Int A = [#] X by Def4;
+      Int A c= A by TOPS_1:44;
+   then [#]X c= Cl A & Cl A c= [#]X by A1,PRE_TOPC:14,49;
+   then Cl A = [#]X by XBOOLE_0:def 10;
+  hence thesis by TOPS_1:def 3;
+ end;
+
+theorem
+   A is everywhere_dense implies A <> {}
+ proof
+  assume A is everywhere_dense;
+   then A is dense by Th33;
+  hence thesis by Th17;
+ end;
+
+theorem Th35:
+ A is everywhere_dense iff Int A is dense
+ proof
+  thus A is everywhere_dense implies Int A is dense
+   proof
+    assume A is everywhere_dense;
+     then Int A is everywhere_dense by Th32;
+    hence Int A is dense by Th33;
+   end;
+  assume Int A is dense;
+   then Cl Int A = [#]X by TOPS_1:def 3;
+  hence A is everywhere_dense by Def4;
+ end;
+
+theorem Th36:
+ A is open & A is dense implies A is everywhere_dense
+ proof
+  assume A is open;
+   then A1: A = Int A by TOPS_1:55;
+  assume A is dense;
+  hence thesis by A1,Th35;
+ end;
+
+theorem
+   A is everywhere_dense implies A is not boundary
+ proof
+  assume A is everywhere_dense;
+   then A1: Cl Int A = [#]X by Def4;
+  assume A is boundary;
+   then Int A = {}X by TOPS_1:84;
+  hence contradiction by A1,PRE_TOPC:52;
+ end;
+
+theorem Th38:
+ A is everywhere_dense & A c= B implies B is everywhere_dense
+ proof
+  assume A is everywhere_dense; then A1: Cl Int A = [#]X by Def4;
+  assume A c= B; then Int A c= Int B by TOPS_1:48;
+    then Cl Int A c= Cl Int B & Cl Int B c= [#]X by PRE_TOPC:14,49;
+    then [#]X = Cl Int B by A1,XBOOLE_0:def 10;
+  hence thesis by Def4;
+ end;
+
+theorem Th39:
+ A is everywhere_dense iff  A` is nowhere_dense
+ proof
+  thus A is everywhere_dense implies  A` is nowhere_dense
+   proof assume A is everywhere_dense;
+    then Cl Int A = [#]X by Def4;
+    then (Cl Int A)` = {}X by Th2;
+    then Int (Int A)` = {}X by TDLAT_3:4;
+    then Int Cl  A` = {} by TDLAT_3:3;
+    then Cl  A` is boundary by TOPS_1:84;
+    hence thesis by TOPS_1:def 5;
+   end;
+  assume  A` is nowhere_dense;
+   then Cl  A` is boundary by TOPS_1:def 5;
+   then Int Cl  A` = {}X by TOPS_1:84;
+   then Int (Int A)` = {}X by TDLAT_3:3;
+   then (Cl Int A)` = {}X by TDLAT_3:4;
+   then Cl Int A = [#]X by Th2;
+  hence thesis by Def4;
+ end;
+
+theorem Th40:
+ A is nowhere_dense iff  A` is everywhere_dense
+ proof
+  thus A is nowhere_dense implies  A` is everywhere_dense
+   proof assume A is nowhere_dense;
+    then Cl A is boundary by TOPS_1:def 5;
+    then Int Cl A = {}X by TOPS_1:84;
+    then Int (Int  A`)` = {}X by TDLAT_3:2;
+    then (Cl Int  A`)` = {}X by TDLAT_3:4;
+    then Cl Int  A` = [#]X by Th2;
+    hence thesis by Def4;
+   end;
+  assume  A` is everywhere_dense;
+   then Cl Int  A` = [#]X by Def4;
+   then (Cl Int  A`)` = {}X by Th2;
+   then Int (Int  A`)` = {}X by TDLAT_3:4;
+   then Int Cl A = {} by TDLAT_3:2;
+   then Cl A is boundary by TOPS_1:84;
+  hence A is nowhere_dense by TOPS_1:def 5;
+ end;
+
+theorem Th41:
+ A is everywhere_dense iff ex C being Subset of X st
+                             C c= A & C is open & C is dense
+ proof
+  thus A is everywhere_dense implies ex C being Subset of X st
+                                      C c= A & C is open & C is dense
+   proof
+    assume A1: A is everywhere_dense;
+    take Int A;
+    thus thesis by A1,Th35,TOPS_1:44;
+   end;
+  given C being Subset of X such that
+        A2: C c= A & C is open and A3: C is dense;
+      C c= Int A by A2,TOPS_1:56;
+   then Int A is dense by A3,TOPS_1:79;
+  hence thesis by Th35;
+ end;
+
+theorem
+   A is everywhere_dense iff
+  for F being Subset of X st F <> the carrier of X & F is closed
+   ex H being Subset of X st
+    F c= H & H <> the carrier of X & H is closed & A \/ H = the carrier of X
+ proof
+  thus A is everywhere_dense implies
+        for F being Subset of X
+           st F <> the carrier of X & F is closed
+          ex H being Subset of X
+          st F c= H & H <> the carrier of X &
+                                    H is closed & A \/ H = the carrier of X
+   proof assume A is everywhere_dense;
+          then A1:  A` is nowhere_dense by Th39;
+     let F be Subset of X;
+    assume F <> the carrier of X;
+      then F <> [#]X by PRE_TOPC:12;
+      then [#]X \ F <> {} by PRE_TOPC:23;
+     then A2:  F` <> {} by PRE_TOPC:17;
+    assume F is closed;
+      then  F` is open by TOPS_1:29;
+     then consider G being Subset of X such that
+           A3: G c=  F` and A4: G <> {} and A5: G is open and
+           A6: ( A`) misses G by A1,A2,Th28;
+    take H =  G`;
+       F`` c= H by A3,PRE_TOPC:19;
+    hence F c= H;
+         H` <> {} by A4;
+     then [#]X \ H <> {} by PRE_TOPC:17;
+     then H <> [#]X by PRE_TOPC:23;
+    hence H <> the carrier of X by PRE_TOPC:12;
+    thus H is closed by A5,TOPS_1:30;
+        ( A`) misses  H` by A6;
+      then ( A`) /\  H` = {} by XBOOLE_0:def 7;
+     then (A \/ H)` = {}X by SUBSET_1:29;
+     then (A \/ H)` = {}X;
+    hence A \/ H = the carrier of X by Th2;
+   end;
+  assume A7: for F being Subset of X
+      st F <> the carrier of X & F is closed
+               ex H being Subset of X
+               st F c= H & H <> the carrier of X &
+                               H is closed & A \/ H = the carrier of X;
+      for G being Subset of X st G <> {} & G is open
+     ex H being Subset of X
+      st H c= G & H <> {} & H is open & ( A`) misses H
+     proof let G be Subset of X;
+      assume G <> {};
+        then G`` <> {};
+        then [#]X \  G` <> {} by PRE_TOPC:17;
+        then  G` <> [#]X by PRE_TOPC:23;
+       then A8:  G` <> the carrier of X by PRE_TOPC:12;
+      assume G is open;
+       then  G` is closed by TOPS_1:30;
+      then consider F being Subset of X such that
+             A9:  G` c= F and A10: F <> the carrier of X and
+             A11: F is closed and A12: A \/ F = the carrier of X by A7,A8;
+      take H =  F`;
+         H c= G`` by A9,PRE_TOPC:19;
+      hence H c= G;
+           F <> [#]X by A10,PRE_TOPC:12;
+        then [#]X \ F <> {} by PRE_TOPC:23;
+      hence H <> {} by PRE_TOPC:17;
+      thus H is open by A11,TOPS_1:29;
+          (A \/ F)` = {}X & {}X = {} by A12,Th2;
+       then (A \/ F)` = {};
+      hence ( A`) /\ H = {} by SUBSET_1:29;
+     end;
+   then  A` is nowhere_dense by Th28;
+  hence thesis by Th39;
+ end;
+
+theorem
+   A is everywhere_dense or B is everywhere_dense implies
+  A \/ B is everywhere_dense
+ proof
+  assume A1: A is everywhere_dense or B is everywhere_dense;
+     A c= A \/ B & B c= A \/ B by XBOOLE_1:7;
+  hence thesis by A1,Th38;
+ end;
+
+theorem Th44:
+ A is everywhere_dense & B is everywhere_dense implies
+  A /\ B is everywhere_dense
+ proof
+  assume A is everywhere_dense & B is everywhere_dense;
+   then A1:   A` is nowhere_dense &  B` is nowhere_dense by Th39;
+A2:   A` \/  B` = (A /\ B)` by SUBSET_1:30;
+      A` \/  B` is nowhere_dense by A1,TOPS_1:90;
+  hence thesis by A2,Th39;
+ end;
+
+theorem Th45:
+ A is everywhere_dense & B is dense implies A /\ B is dense
+ proof
+  assume A is everywhere_dense;
+   then A1:  A` is nowhere_dense by Th39;
+  assume B is dense;
+then A2:  B` is boundary by Th18;
+A3:  A` \/  B` = (A /\ B)` by SUBSET_1:30;
+      A` \/  B` is boundary by A1,A2,Th30;
+  hence thesis by A3,Th18;
+ end;
+
+theorem
+   A is dense & B is nowhere_dense implies A \ B is dense
+ proof
+  assume A1: A is dense;
+  assume B is nowhere_dense;
+   then A2:  B` is everywhere_dense by Th40;
+      A \ B = B` /\ A by SUBSET_1:32;
+    then A \ B = ( B`) /\ A;
+  hence thesis by A1,A2,Th45;
+ end;
+
+theorem
+   A is everywhere_dense & B is boundary implies A \ B is dense
+ proof
+  assume A1: A is everywhere_dense;
+  assume B is boundary;
+   then A2:  B` is dense by TOPS_1:def 4;
+      A \ B = A /\ B` by SUBSET_1:32;
+    then A \ B = A /\  B`;
+  hence thesis by A1,A2,Th45;
+ end;
+
+theorem
+   A is everywhere_dense & B is nowhere_dense implies A \ B is everywhere_dense
+ proof
+  assume A1: A is everywhere_dense;
+  assume B is nowhere_dense;
+   then A2:  B` is everywhere_dense by Th40;
+      A \ B = A /\ B` by SUBSET_1:32;
+    then A \ B = A /\  B`;
+  hence thesis by A1,A2,Th44;
+ end;
+
+reserve D for Subset of X;
+
+theorem
+   D is everywhere_dense implies
+   ex C,B being Subset of X st
+     C is open & C is dense & B is nowhere_dense & C \/ B = D & C misses B
+ proof
+  assume D is everywhere_dense;
+   then consider C being Subset of X such that
+         A1: C c= D and A2: C is open and A3: C is dense by Th41;
+  take C;
+  take B = D \ C;
+  thus C is open & C is dense by A2,A3;
+        D c= [#]X by PRE_TOPC:14;
+     then B c= [#]X \ C by XBOOLE_1:33;
+    then A4: B c=  C` by PRE_TOPC:17;
+       C is everywhere_dense by A2,A3,Th36;
+    then  C` is nowhere_dense by Th39;
+  hence B is nowhere_dense by A4,Th26;
+  thus C \/ B = D & C misses B by A1,XBOOLE_1:45,79;
+ end;
+
+theorem
+   D is everywhere_dense implies
+  ex C,B being Subset of X
+    st C is open & C is dense & B is closed &
+      B is boundary & C \/ (D /\ B) = D &
+      C misses B & C \/ B = the carrier of X
+ proof
+  assume D is everywhere_dense;
+   then consider C being Subset of X such that
+         A1: C c= D and A2: C is open and A3: C is dense by Th41;
+  take C;
+  take B =  C`;
+  thus C is open & C is dense & B is closed & B is boundary
+                                      by A2,A3,Th18,TOPS_1:30;
+  thus C \/ (D /\ B) = (C \/ D) /\ (C \/  C`) by XBOOLE_1:24
+                  .= (C \/ D) /\ [#]X by PRE_TOPC:18
+                  .= C \/ D by PRE_TOPC:15
+                  .= D by A1,XBOOLE_1:12;
+     C misses B by PRE_TOPC:26;
+  hence C /\ B = {} by XBOOLE_0:def 7;
+     C \/ B = [#]X by PRE_TOPC:18;
+  hence C \/ B = the carrier of X by PRE_TOPC:12;
+ end;
+
+theorem
+   D is nowhere_dense implies
+  ex C,B being Subset of X st C is closed & C is boundary &
+      B is everywhere_dense & C /\ B = D & C \/ B = the carrier of X
+ proof
+  assume D is nowhere_dense;
+   then consider C being Subset of X such that
+         A1: D c= C and A2: C is closed and A3: C is boundary by Th27;
+  take C;
+  take B = D \/  C`;
+  thus C is closed & C is boundary by A2,A3;
+    A4:  C` c= B by XBOOLE_1:7;
+        C is nowhere_dense by A2,A3,TOPS_1:93;
+    then  C` is everywhere_dense by Th40;
+  hence B is everywhere_dense by A4,Th38;
+A5:C misses  C` by PRE_TOPC:26;
+  thus C /\ B = (C /\ D) \/ (C /\  C`) by XBOOLE_1:23
+            .= (C /\ D) \/ {}X by A5,XBOOLE_0:def 7
+            .= D by A1,XBOOLE_1:28;
+  thus C \/ B = D \/ (C \/  C`) by XBOOLE_1:4
+            .= D \/ [#]X by PRE_TOPC:18
+            .= [#]X by TOPS_1:2
+            .= the carrier of X by PRE_TOPC:12;
+ end;
+
+theorem
+   D is nowhere_dense implies
+  ex C,B being Subset of X st C is closed & C is boundary & B is open &
+      B is dense & C /\ (D \/ B) = D & C misses B & C \/ B = the carrier of X
+ proof
+  assume D is nowhere_dense;
+   then consider C being Subset of X such that
+         A1: D c= C and A2: C is closed and A3: C is boundary by Th27;
+  take C;
+  take B =  C`;
+  thus C is closed & C is boundary & B is open & B is dense
+                                     by A2,A3,TOPS_1:29,def 4;
+A4:C misses  C` by PRE_TOPC:26;
+  thus C /\ (D \/ B) = (C /\ D) \/ (C /\  C`) by XBOOLE_1:23
+                  .= (C /\ D) \/ {}X by A4,XBOOLE_0:def 7
+                  .= D by A1,XBOOLE_1:28;
+     C misses B by PRE_TOPC:26;
+  hence C /\ B = {} by XBOOLE_0:def 7;
+     C \/ B = [#]X by PRE_TOPC:18;
+  hence C \/ B = the carrier of X by PRE_TOPC:12;
+ end;
+
+
+begin
+:: 3. Properties of Subsets in Subspaces.
+reserve Y0 for SubSpace of X;
+
+theorem Th53:
+ for A being Subset of X, B being Subset of Y0
+  st B c= A holds Cl B c= Cl A
+ proof let A be Subset of X, B be Subset of Y0;
+  assume A1: B c= A;
+   then reconsider D = B as Subset of X by XBOOLE_1:1;
+      Cl B = (Cl D) /\ [#]Y0 by PRE_TOPC:47;
+   then Cl B c= Cl D & Cl D c= Cl A by A1,PRE_TOPC:49,XBOOLE_1:17;
+  hence thesis by XBOOLE_1:1;
+ end;
+
+theorem Th54:
+ for C, A being Subset of X,
+     B being Subset of Y0 st
+  C is closed & C c= the carrier of Y0 & A c= C & A = B holds Cl A = Cl B
+ proof let C, A be Subset of X,
+   B be Subset of Y0;
+    assume A1: C is closed;
+   assume A2: C c= the carrier of Y0;
+   assume A3: A c= C;
+   assume A4: A = B;
+       Cl A c= Cl C by A3,PRE_TOPC:49;
+    then Cl A c= C by A1,PRE_TOPC:52;
+    then Cl A c= the carrier of Y0 by A2,XBOOLE_1:1;
+    then Cl A c= [#]Y0 by PRE_TOPC:12;
+    then Cl A = (Cl A) /\ [#]Y0 by XBOOLE_1:28;
+  hence thesis by A4,PRE_TOPC:47;
+ end;
+
+theorem
+   for Y0 being closed non empty SubSpace of X
+  for A being Subset of X, B being Subset of Y0
+   st A = B holds Cl A = Cl B
+ proof let Y0 be closed non empty SubSpace of X;
+    the carrier of Y0 is Subset of X by TSEP_1:1;
+  then reconsider C = the carrier of Y0 as Subset of X;
+   let A be Subset of X, B be Subset of Y0;
+  assume A1: A = B;
+    then A c= C & C is closed by TSEP_1:11;
+  hence thesis by A1,Th54;
+ end;
+
+theorem Th56:
+ for A being Subset of X, B being Subset of Y0
+  st A c= B holds Int A c= Int B
+ proof let A be Subset of X, B be Subset of Y0;
+  assume A1: A c= B;
+      Int A c= A by TOPS_1:44;
+   then A2: Int A c= B by A1,XBOOLE_1:1;
+   then Int A is Subset of Y0 by XBOOLE_1:1;
+   then reconsider C = Int A as Subset of Y0;
+   C is open by TOPS_2:33;
+  hence thesis by A2,TOPS_1:56;
+ end;
+
+theorem Th57:
+ for Y0 being non empty SubSpace of X,
+     C, A being Subset of X,
+     B being Subset of Y0 st
+  C is open & C c= the carrier of Y0 & A c= C & A = B holds Int A = Int B
+ proof let Y0 be non empty SubSpace of X,
+   C, A be Subset of X,
+  B be Subset of Y0;
+    assume A1: C is open;
+   assume A2: C c= the carrier of Y0;
+   assume A3: A c= C;
+   assume A4: A = B;
+    then A5: B c= C & Int B c= B by A3,TOPS_1:44;
+    then A6: Int B c= C & Int B is open by XBOOLE_1:1;
+    then Int B is Subset of X by XBOOLE_1:1;
+    then reconsider D = Int B as Subset of X;
+          D is open by A1,A2,A6,TSEP_1:9;
+    then D c= Int A & Int A c= Int B by A4,A5,Th56,TOPS_1:56;
+  hence thesis by XBOOLE_0:def 10;
+ end;
+
+theorem
+   for Y0 being open non empty SubSpace of X
+  for A being Subset of X, B being Subset of Y0
+   st A = B holds Int A = Int B
+ proof let Y0 be open non empty SubSpace of X;
+    the carrier of Y0 is Subset of X by TSEP_1:1;
+  then reconsider C = the carrier of Y0 as Subset of X;
+   let A be Subset of X, B be Subset of Y0;
+  assume A1: A = B;
+   then A c= C & C is open by TSEP_1:16;
+  hence thesis by A1,Th57;
+ end;
+
+reserve X0 for SubSpace of X;
+
+theorem Th59:
+ for A being Subset of X, B being Subset of X0 st A c= B holds
+  A is dense implies B is dense
+ proof let A be Subset of X, B be Subset of X0;
+  assume A1: A c= B;
+   then A is Subset of X0 by XBOOLE_1:1;
+   then reconsider C = A as Subset of X0;
+  assume A is dense;
+   then Cl A = [#]X & [#]X0 c= [#]X by PRE_TOPC:def 9,TOPS_1:def 3;
+   then [#]X0 = (Cl A) /\ [#]X0 by XBOOLE_1:28;
+   then Cl C = [#]X0 by PRE_TOPC:47;
+   then C is dense by TOPS_1:def 3;
+  hence thesis by A1,TOPS_1:79;
+ end;
+
+theorem Th60:
+ for C, A being Subset of X, B being Subset of X0 st
+    C c= the carrier of X0 & A c= C & A = B holds
+  C is dense & B is dense iff A is dense
+ proof let C, A be Subset of X,
+  B be Subset of X0;
+   assume A1: C c= the carrier of X0;
+   assume A2: A c= C;
+   assume A3: A = B;
+  reconsider P = the carrier of X0
+   as Subset of X by TSEP_1:1;
+  thus C is dense & B is dense implies A is dense
+   proof
+    assume C is dense;
+     then A4: Cl C = [#]X by TOPS_1:def 3;
+    assume B is dense;
+     then Cl B = [#]X0 by TOPS_1:def 3;
+     then Cl B = P by PRE_TOPC:12;
+     then P = (Cl A) /\ [#]X0 by A3,PRE_TOPC:47;
+     then P c= Cl A by XBOOLE_1:17;
+     then Cl P c= Cl Cl A by PRE_TOPC:49;
+     then A5: Cl P c= Cl A by TOPS_1:26;
+        [#]X c= Cl P by A1,A4,PRE_TOPC:49;
+      then [#]X c= Cl A & Cl A c= [#]X by A5,PRE_TOPC:14,XBOOLE_1:1;
+     then Cl A = [#]X by XBOOLE_0:def 10;
+    hence thesis by TOPS_1:def 3;
+   end;
+  thus A is dense implies C is dense & B is dense by A2,A3,Th59,TOPS_1:79;
+ end;
+
+reserve X0 for non empty SubSpace of X;
+
+theorem Th61:
+ for A being Subset of X, B being Subset of X0 st A c= B holds
+  A is everywhere_dense implies B is everywhere_dense
+ proof let A be Subset of X, B be Subset of X0;
+  assume A1: A c= B;
+   then reconsider C = A as Subset of X0 by XBOOLE_1:1;
+    A2: Int A c= Int C by Th56;
+  assume A is everywhere_dense;
+   then Int A is dense by Th35;
+   then Int C is dense & Int C c= Int B by A1,A2,Th59,TOPS_1:48;
+   then Int B is dense by TOPS_1:79;
+  hence thesis by Th35;
+ end;
+
+theorem Th62:
+ for C, A being Subset of X,
+     B being Subset of X0 st
+   C is open & C c= the carrier of X0 & A c= C & A = B holds
+  C is dense & B is everywhere_dense iff A is everywhere_dense
+ proof let C, A be Subset of X,
+   B be Subset of X0;
+   assume A1: C is open;
+   assume C c= the carrier of X0;
+    then reconsider E = C as Subset of X0;
+      A2: E is open by A1,TOPS_2:33;
+   assume A3: A c= C;
+   assume A4: A = B;
+     A5: Int B c= B by TOPS_1:44;
+    then Int B is Subset of X by A4,XBOOLE_1:1;
+    then reconsider D = Int B as Subset of X;
+       Int B c= Int E by A3,A4,TOPS_1:48;
+     then A6: Int B c= E & Int B is open by A2,TOPS_1:55;
+     then D is open by A1,TSEP_1:9;
+      then A7: D c= Int A by A4,A5,TOPS_1:56;
+  thus C is dense & B is everywhere_dense
+        implies A is everywhere_dense
+   proof
+    assume A8: C is dense;
+    assume B is everywhere_dense;
+     then Int B is dense by Th35;
+     then D is dense by A6,A8,Th60;
+     then Int A is dense by A7,TOPS_1:79;
+    hence thesis by Th35;
+   end;
+  thus A is everywhere_dense implies
+        C is dense & B is everywhere_dense
+   proof
+    assume A9: A is everywhere_dense;
+    then C is everywhere_dense by A3,Th38;
+    hence C is dense by Th33;
+    thus thesis by A4,A9,Th61;
+   end;
+ end;
+
+theorem
+   for X0 being open non empty SubSpace of X
+  for A,C being Subset of X,
+      B being Subset of X0 st
+    C = the carrier of X0 & A = B holds
+   C is dense & B is everywhere_dense iff A is everywhere_dense
+ proof let X0 be open non empty SubSpace of X;
+        let A,C be Subset of X,
+            B be Subset of X0;
+  assume A1: C = the carrier of X0;
+   then A2: C is open by TSEP_1:def 1;
+  assume A = B;
+  hence thesis by A1,A2,Th62;
+ end;
+
+theorem
+   for C, A being Subset of X,
+     B being Subset of X0 st
+   C c= the carrier of X0 & A c= C & A = B holds
+  C is everywhere_dense & B is everywhere_dense iff A is everywhere_dense
+ proof let C, A be Subset of X,
+   B be Subset of X0;
+   assume A1: C c= the carrier of X0;
+   assume A2: A c= C;
+   assume A3: A = B;
+  thus C is everywhere_dense & B is everywhere_dense
+        implies A is everywhere_dense
+   proof
+    assume C is everywhere_dense;
+     then A4: Int C is everywhere_dense by Th32;
+     then A5: Int C is dense & Int C is open by Th33;
+        Int C c= C by TOPS_1:44;
+     then Int C is Subset of X0 by A1,XBOOLE_1:1;
+     then reconsider D = Int C as Subset of X0;
+    assume A6: B is everywhere_dense;
+         D is everywhere_dense by A4,Th61;
+     then A7: D /\ B is everywhere_dense by A6,Th44;
+       A8: D /\ B c= Int C by XBOOLE_1:17;
+      then D /\ B is Subset of X by XBOOLE_1:1;
+      then reconsider E = D /\ B as Subset of X;
+       A9: E is everywhere_dense by A5,A7,A8,Th62;
+          E c= A by A3,XBOOLE_1:17;
+    hence thesis by A9,Th38;
+   end;
+  thus A is everywhere_dense implies C is everywhere_dense &
+                             B is everywhere_dense by A2,A3,Th38,Th61;
+ end;
+
+theorem Th65:
+ for A being Subset of X,
+     B being Subset of X0 st A c= B holds
+  B is boundary implies A is boundary
+ proof let A be Subset of X, B be Subset of X0;
+  assume A1: A c= B;
+   then reconsider C = A as Subset of X0 by XBOOLE_1:1;
+     A2: Int A c= Int C by Th56;
+     A3: Int C c= Int B by A1,TOPS_1:48;
+  assume Int B = {};
+   then Int C = {} by A3,XBOOLE_1:3;
+   then Int A = {} by A2,XBOOLE_1:3;
+  hence thesis by Def1;
+ end;
+
+theorem Th66:
+ for C, A being Subset of X,
+     B being Subset of X0 st
+   C is open & C c= the carrier of X0 & A c= C & A = B holds
+  A is boundary implies B is boundary
+ proof let C, A be Subset of X,
+    B be Subset of X0;
+  assume C is open & C c= the carrier of X0 & A c= C & A = B;
+    then A1: Int A = Int B by Th57;
+  assume A is boundary;
+   then Int A = {} by TOPS_1:84;
+  hence thesis by A1,TOPS_1:84;
+ end;
+
+theorem
+   for X0 being open non empty SubSpace of X
+  for A being Subset of X,
+      B being Subset of X0 st A = B holds
+   A is boundary iff B is boundary
+ proof let X0 be open non empty SubSpace of X;
+   let A be Subset of X,
+    B be Subset of X0;
+  assume A1: A = B;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider C = the carrier of X0 as Subset of X;
+     A c= C & C is open by A1,TSEP_1:def 1;
+  hence thesis by A1,Th65,Th66;
+ end;
+
+theorem Th68:
+ for A being Subset of X,
+     B being Subset of X0 st A c= B holds
+   B is nowhere_dense implies A is nowhere_dense
+ proof let A be Subset of X, B be Subset of X0;
+  assume A1: A c= B;
+   then A is Subset of X0 by XBOOLE_1:1;
+   then reconsider C = A as Subset of X0;
+        reconsider D = the carrier of X0 as Subset of X
+         by TSEP_1:1;
+       Int Cl A c= Cl A by TOPS_1:44;
+    then (Int Cl A) /\ [#]X0 c= (Cl A) /\ [#]X0 by XBOOLE_1:26;
+    then A2: (Int Cl A) /\ [#]X0 c= Cl C by PRE_TOPC:47;
+    then (Int Cl A) /\ [#]X0 is Subset of X0 by XBOOLE_1:1;
+    then reconsider G = (Int Cl A) /\ [#]X0 as Subset of X0;
+      G is open by TOPS_2:32;
+   then A3: G c= Int Cl C by A2,TOPS_1:56;
+  assume B is nowhere_dense;
+   then C is nowhere_dense by A1,Th26;
+   then A4: Int Cl C = {} by Def3;
+      now
+     assume Int Cl A <> {};
+      then A meets Int Cl A by Th7;
+      then A5: A /\ Int Cl A <> {} by XBOOLE_0:def 7;
+        C c= D;
+      then A /\ Int Cl A c= D /\ Int Cl A by XBOOLE_1:26;
+      then (Int Cl A) /\ D <> {} by A5,XBOOLE_1:3;
+      then G <> {} by PRE_TOPC:12;
+     hence contradiction by A3,A4,XBOOLE_1:3;
+    end;
+  hence thesis by Def3;
+ end;
+
+Lm1:
+ for C, A being Subset of X,
+     B being Subset of X0 st
+   C is open & C = the carrier of X0 & A c= C & A = B holds
+  A is nowhere_dense implies B is nowhere_dense
+ proof let C, A be Subset of X,
+    B be Subset of X0;
+  assume A1: C is open;
+  assume A2: C = the carrier of X0;
+  assume A c= C & A = B;
+   then A3: Cl B c= Cl A by Th53;
+   then Cl B is Subset of X by XBOOLE_1:1;
+   then reconsider D = Cl B as Subset of X;
+    A4: Int D = Int Cl B by A1,A2,Th57;
+  assume A is nowhere_dense;
+   then Int Cl A = {} & Int D c= Int Cl A by A3,Def3,TOPS_1:48;
+   then Int Cl B = {} by A4,XBOOLE_1:3;
+  hence thesis by Def3;
+ end;
+
+theorem Th69:
+ for C, A being Subset of X,
+     B being Subset of X0 st
+   C is open & C c= the carrier of X0 & A c= C & A = B holds
+  A is nowhere_dense implies B is nowhere_dense
+ proof let C, A be Subset of X,
+    B be Subset of X0;
+  assume A1: C is open;
+  assume A2: C c= the carrier of X0;
+  assume A3: A c= C & A = B;
+  assume A4: A is nowhere_dense;
+   A5:now assume C = {};
+       then B = {}X0 by A3,XBOOLE_1:3;
+       hence B is nowhere_dense by Th22;
+      end;
+     now assume C <> {};
+    then consider X1 being strict non empty SubSpace of X such that
+       A6: C = the carrier of X1 by TSEP_1:10;
+      reconsider E = B as Subset of X1 by A3,A6;
+     A7: E is nowhere_dense by A1,A3,A4,A6,Lm1;
+        X1 is SubSpace of X0 by A2,A6,TSEP_1:4;
+    hence B is nowhere_dense by A7,Th68;
+   end;
+  hence thesis by A5;
+ end;
+
+theorem
+   for X0 being open non empty SubSpace of X
+  for A being Subset of X,
+      B being Subset of X0 st A = B holds
+   A is nowhere_dense iff B is nowhere_dense
+ proof let X0 be open non empty SubSpace of X;
+  let A be Subset of X,
+      B be Subset of X0;
+  assume A1: A = B;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider C = the carrier of X0 as Subset of X;
+     A c= C & C is open by A1,TSEP_1:def 1;
+  hence thesis by A1,Th68,Th69;
+ end;
+
+
+begin
+:: 4. Subsets in Topological Spaces with the same Topological Structures.
+theorem
+   for X1, X2 being 1-sorted holds
+ the carrier of X1 = the carrier of X2 implies
+  for C1 being Subset of X1,
+      C2 being Subset of X2 holds
+    C1 = C2 iff  C1` =  C2`
+ proof
+  let X1, X2 be 1-sorted;
+  assume the carrier of X1 = the carrier of X2;
+     then [#]X1 = the carrier of X2 by PRE_TOPC:12;
+    then A1: [#]X1 = [#]X2 by PRE_TOPC:12;
+   let C1 be Subset of X1, C2 be Subset of X2;
+  thus C1 = C2 implies  C1` =  C2`
+   proof
+    assume C1 = C2;
+    hence  C1` = [#]X2 \ C2 by A1,PRE_TOPC:17
+            .=  C2` by PRE_TOPC:17;
+   end;
+  thus  C1` =  C2` implies C1 = C2
+   proof
+    assume A2:  C1` =  C2`;
+    thus C1 = [#]X1 \ ([#]X1 \ C1) by PRE_TOPC:22
+           .= [#]X2 \  C2` by A1,A2,PRE_TOPC:17
+           .= [#]X2 \ ([#]X2 \ C2) by PRE_TOPC:17
+           .= C2 by PRE_TOPC:22;
+   end;
+ end;
+
+reserve X1,X2 for TopStruct;
+
+theorem Th72:
+ the carrier of X1 = the carrier of X2 &
+  (for C1 being Subset of X1,
+       C2 being Subset of X2 st C1 = C2 holds
+    (C1 is open iff C2 is open)) implies
+  the TopStruct of X1 = the TopStruct of X2
+ proof
+  assume A1: the carrier of X1 = the carrier of X2;
+  assume A2: for C1 being Subset of X1,
+                 C2 being Subset of X2 st C1 = C2 holds
+               (C1 is open iff C2 is open);
+     the topology of X1 = the topology of X2
+    proof
+         now let D be set;
+        assume A3: D in the topology of X1;
+         then reconsider C1 = D as Subset of X1;
+         reconsider C2 = C1 as Subset of X2 by A1;
+            C1 is open by A3,PRE_TOPC:def 5;
+         then C2 is open by A2;
+        hence D in the topology of X2 by PRE_TOPC:def 5;
+       end;
+      then A4: the topology of X1 c= the topology of X2 by TARSKI:def 3;
+         now let D be set;
+        assume A5: D in the topology of X2;
+         then reconsider C2 = D as Subset of X2;
+         reconsider C1 = C2 as Subset of X1 by A1;
+            C2 is open by A5,PRE_TOPC:def 5;
+         then C1 is open by A2;
+        hence D in the topology of X1 by PRE_TOPC:def 5;
+       end;
+      then the topology of X2 c= the topology of X1 by TARSKI:def 3;
+     hence thesis by A4,XBOOLE_0:def 10;
+    end;
+  hence thesis by A1;
+ end;
+
+theorem Th73:
+ the carrier of X1 = the carrier of X2 &
+  (for C1 being Subset of X1,
+       C2 being Subset of X2 st C1 = C2 holds
+    (C1 is closed iff C2 is closed)) implies
+  the TopStruct of X1 = the TopStruct of X2
+ proof
+  assume A1: the carrier of X1 = the carrier of X2;
+  assume A2: for C1 being Subset of X1,
+                 C2 being Subset of X2 st C1 = C2 holds
+               (C1 is closed iff C2 is closed);
+     now let C1 be Subset of X1,
+           C2 be Subset of X2;
+    assume C1 = C2;
+then A3:   C1` =  C2` by A1;
+    thus C1 is open implies C2 is open
+     proof
+      assume C1 is open;
+       then  C1` is closed &  C1` =  C2` by A3,TOPS_1:30;
+       then  C2` is closed by A2;
+      hence thesis by TOPS_1:30;
+     end;
+    thus C2 is open implies C1 is open
+     proof
+      assume C2 is open;
+       then  C2` is closed &  C1` =  C2` by A3,TOPS_1:30;
+       then  C1` is closed by A2;
+      hence thesis by TOPS_1:30;
+     end;
+   end;
+  hence thesis by A1,Th72;
+ end;
+
+reserve X1,X2 for TopSpace;
+
+theorem
+   the carrier of X1 = the carrier of X2 &
+  (for C1 being Subset of X1,
+       C2 being Subset of X2 st C1 = C2 holds
+    Int C1 = Int C2) implies
+  the TopStruct of X1 = the TopStruct of X2
+ proof
+  assume A1: the carrier of X1 = the carrier of X2;
+  assume A2: for C1 being Subset of X1,
+          C2 being Subset of X2 st C1 = C2 holds
+                Int C1 = Int C2;
+     now let C1 be Subset of X1,
+     C2 be Subset of X2;
+    assume A3: C1 = C2;
+    thus C1 is open implies C2 is open
+     proof assume C1 is open;
+      then C1 = Int C1 by TOPS_1:55;
+      then C2 = Int C2 by A2,A3;
+      hence thesis;
+     end;
+    thus C2 is open implies C1 is open
+     proof assume C2 is open;
+      then C2 = Int C2 by TOPS_1:55;
+      then C1 = Int C1 by A2,A3;
+      hence thesis;
+     end;
+   end;
+  hence thesis by A1,Th72;
+ end;
+
+theorem
+   the carrier of X1 = the carrier of X2 &
+  (for C1 being Subset of X1,
+       C2 being Subset of X2 st C1 = C2 holds
+    Cl C1 = Cl C2) implies
+  the TopStruct of X1 = the TopStruct of X2
+ proof
+  assume A1: the carrier of X1 = the carrier of X2;
+  assume A2: for C1 being Subset of X1,
+    C2 being Subset of X2 st C1 = C2 holds
+                Cl C1 = Cl C2;
+     now let C1 be Subset of X1,
+     C2 be Subset of X2;
+    assume A3: C1 = C2;
+    thus C1 is closed implies C2 is closed
+     proof assume C1 is closed;
+      then C1 = Cl C1 by PRE_TOPC:52;
+      then C2 = Cl C2 by A2,A3;
+      hence thesis;
+     end;
+    thus C2 is closed implies C1 is closed
+     proof assume C2 is closed;
+      then C2 = Cl C2 by PRE_TOPC:52;
+      then C1 = Cl C1 by A2,A3;
+      hence thesis;
+     end;
+   end;
+  hence thesis by A1,Th73;
+ end;
+
+reserve D1 for Subset of X1, D2 for Subset of X2;
+
+theorem Th76:
+ D1 = D2 & the TopStruct of X1 = the TopStruct of X2 implies
+   (D1 is open implies D2 is open)
+ proof
+  assume A1: D1 = D2;
+  assume A2: the TopStruct of X1 = the TopStruct of X2;
+  assume D1 in the topology of X1;
+  hence D2 is open by A1,A2,PRE_TOPC:def 5;
+ end;
+
+theorem Th77:
+ D1 = D2 & the TopStruct of X1 = the TopStruct of X2 implies Int D1 = Int D2
+ proof
+  assume A1: D1 = D2;
+  assume A2: the TopStruct of X1 = the TopStruct of X2;
+    A3: Int D1 c= D1 by TOPS_1:44;
+   then Int D1 is Subset of X2 by A1,XBOOLE_1:1;
+   then reconsider C2 = Int D1 as Subset of X2;
+    A4: Int D2 c= D2 by TOPS_1:44;
+   then Int D2 is Subset of X1 by A1,XBOOLE_1:1;
+   then reconsider C1 = Int D2 as Subset of X1;
+      C2 is open & C1 is open by A2,Th76;
+    then C1 c= Int D1 & C2 c= Int D2 by A1,A3,A4,TOPS_1:56;
+  hence thesis by XBOOLE_0:def 10;
+ end;
+
+theorem Th78:
+ D1 c= D2 & the TopStruct of X1 = the TopStruct of X2 implies Int D1 c= Int D2
+ proof
+  assume A1: D1 c= D2;
+   then D1 is Subset of X2 by XBOOLE_1:1;
+   then reconsider C2 = D1 as Subset of X2;
+  assume the TopStruct of X1 = the TopStruct of X2;
+   then Int D1 = Int C2 & Int C2 c= Int D2 by A1,Th77,TOPS_1:48;
+  hence thesis;
+ end;
+
+theorem Th79:
+ D1 = D2 & the TopStruct of X1 = the TopStruct of X2 implies
+   (D1 is closed implies D2 is closed)
+ proof
+  assume A1: D1 = D2;
+  assume A2: the TopStruct of X1 = the TopStruct of X2;
+    then [#]X1 = the carrier of X2 by PRE_TOPC:12;
+   then [#]X1 = [#]X2 by PRE_TOPC:12;
+    then D1` = [#]X2 \ D2 by A1,PRE_TOPC:17;
+   then A3: D1` = D2` by PRE_TOPC:17;
+  assume D1 is closed;
+   then D1` is open by TOPS_1:29;
+   then D2` is open by A2,A3,Th76;
+  hence D2 is closed by TOPS_1:29;
+ end;
+
+theorem Th80:
+ D1 = D2 & the TopStruct of X1 = the TopStruct of X2 implies Cl D1 = Cl D2
+ proof
+  assume A1: D1 = D2;
+  assume A2: the TopStruct of X1 = the TopStruct of X2;
+    A3: D1 c= Cl D1 by PRE_TOPC:48;
+   reconsider C2 = Cl D1 as Subset of X2 by A2;
+    A4: D2 c= Cl D2 by PRE_TOPC:48;
+   reconsider C1 = Cl D2 as Subset of X1 by A2;
+      C2 is closed & C1 is closed by A2,Th79;
+    then Cl D1 c= C1 & Cl D2 c= C2 by A1,A3,A4,TOPS_1:31;
+  hence thesis by XBOOLE_0:def 10;
+ end;
+
+theorem Th81:
+ D1 c= D2 & the TopStruct of X1 = the TopStruct of X2 implies Cl D1 c= Cl D2
+ proof
+  assume A1: D1 c= D2;
+  assume A2: the TopStruct of X1 = the TopStruct of X2;
+   then reconsider C2 = D1 as Subset of X2;
+      Cl D1 = Cl C2 & Cl C2 c= Cl D2 by A1,A2,Th80,PRE_TOPC:49;
+  hence thesis;
+ end;
+
+theorem Th82:
+ D2 c= D1 & the TopStruct of X1 = the TopStruct of X2 implies
+   (D1 is boundary implies D2 is boundary)
+ proof
+  assume A1: D2 c= D1;
+   then D2 is Subset of X1 by XBOOLE_1:1;
+   then reconsider C1 = D2 as Subset of X1;
+  assume A2: the TopStruct of X1 = the TopStruct of X2;
+  assume D1 is boundary;
+   then C1 is boundary by A1,Th11;
+   then Int C1 = {} & Int C1 = Int D2 by A2,Def1,Th77;
+  hence thesis by Def1;
+ end;
+
+theorem Th83:
+ D1 c= D2 & the TopStruct of X1 = the TopStruct of X2 implies
+   (D1 is dense implies D2 is dense)
+ proof
+  assume A1: D1 c= D2;
+   then D1 is Subset of X2 by XBOOLE_1:1;
+   then reconsider C2 = D1 as Subset of X2;
+  assume A2: the TopStruct of X1 = the TopStruct of X2;
+  assume D1 is dense;
+   then Cl D1 = the carrier of X1 & Cl D1 = Cl C2 by A2,Def2,Th80;
+   then C2 is dense by A2,Def2;
+  hence thesis by A1,TOPS_1:79;
+ end;
+
+theorem
+   D2 c= D1 & the TopStruct of X1 = the TopStruct of X2 implies
+   (D1 is nowhere_dense implies D2 is nowhere_dense)
+ proof
+  assume A1: D2 c= D1;
+  assume A2: the TopStruct of X1 = the TopStruct of X2;
+  assume D1 is nowhere_dense;
+   then Cl D1 is boundary & Cl D2 c= Cl D1 by A1,A2,Th81,TOPS_1:def 5;
+   then Cl D2 is boundary by A2,Th82;
+  hence thesis by TOPS_1:def 5;
+ end;
+
+reserve X1,X2 for non empty TopSpace;
+reserve D1 for Subset of X1, D2 for Subset of X2;
+
+theorem
+   D1 c= D2 & the TopStruct of X1 = the TopStruct of X2 implies
+   (D1 is everywhere_dense implies D2 is everywhere_dense)
+ proof
+  assume A1: D1 c= D2;
+  assume A2: the TopStruct of X1 = the TopStruct of X2;
+  assume D1 is everywhere_dense;
+   then Int D1 is dense & Int D1 c= Int D2 by A1,A2,Th35,Th78;
+   then Int D2 is dense by A2,Th83;
+  hence thesis by Th35;
+ end;
+

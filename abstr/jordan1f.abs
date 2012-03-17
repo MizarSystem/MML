@@ -1,0 +1,115 @@
+:: Some Remarks on Finite Sequences on Go-boards
+::  by Adam Naumowicz
+::
+:: Received August 29, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, EUCLID, GOBOARD1, TOPREAL1, BOOLE, MATRIX_1, MCART_1,
+      ORDINAL2, FUNCT_5, RELAT_1, REALSET1, SUBSET_1, PSCOMP_1, COMPTS_1,
+      PRE_TOPC, TARSKI, FINSEQ_4, TREES_1, ARYTM_1, ABSVALUE, SPPOL_1,
+      JORDAN1E, JORDAN9, FINSEQ_6, FINSEQ_5, JORDAN6, TOPREAL2, RELAT_2,
+      JORDAN8, FUNCT_1, RFINSEQ, ARYTM_3, JORDAN1A;
+ notation TARSKI, XBOOLE_0, XCMPLX_0, XREAL_0, NAT_1, ABSVALUE, RELAT_1,
+      FUNCT_1, BINARITH, FUNCT_2, FINSEQ_1, FINSEQ_4, FINSEQ_5, FINSEQ_6,
+      MATRIX_1, STRUCT_0, PRE_TOPC, COMPTS_1, CONNSP_1, RFINSEQ, EUCLID,
+      TOPREAL1, TOPREAL2, GOBOARD1, SPPOL_1, PSCOMP_1, JORDAN6, JORDAN8,
+      JORDAN9, JORDAN1A, JORDAN1E;
+ constructors TOPREAL2, FINSEQ_4, REALSET1, GOBOARD9, GOBRD13, PSCOMP_1,
+      CONNSP_1, GROUP_1, REAL_1, JORDAN6, JORDAN9, JORDAN5C, JORDAN1E,
+      JORDAN1A, JORDAN8, CARD_4, BINARITH, RFINSEQ;
+ clusters RELSET_1, SPRECT_1, SPRECT_3, TOPREAL6, XREAL_0, PSCOMP_1, REVROT_1,
+      JORDAN1A, JORDAN1E, JORDAN8, NAT_1, MEMBERED;
+ requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
+
+
+begin
+
+reserve i,j,k,m,n,l for Nat,
+        f for FinSequence of the carrier of TOP-REAL 2,
+        G for Go-board;
+
+theorem :: JORDAN1F:1
+ f is_sequence_on G & LSeg(G*(i,j),G*(i,k)) meets L~f &
+ [i,j] in Indices G & [i,k] in Indices G & j <= k implies
+ ex n st j <= n & n <= k &
+ G*(i,n)`2 = inf(proj2.:(LSeg(G*(i,j),G*(i,k)) /\ L~f));
+
+theorem :: JORDAN1F:2
+   f is_sequence_on G & LSeg(G*(i,j),G*(i,k)) meets L~f &
+ [i,j] in Indices G & [i,k] in Indices G & j <= k implies
+ ex n st j <= n & n <= k &
+ G*(i,n)`2 = sup(proj2.:(LSeg(G*(i,j),G*(i,k)) /\ L~f));
+
+theorem :: JORDAN1F:3
+   f is_sequence_on G & LSeg(G*(j,i),G*(k,i)) meets L~f &
+ [j,i] in Indices G & [k,i] in Indices G & j <= k implies
+ ex n st j <= n & n <= k &
+ G*(n,i)`1 = inf(proj1.:(LSeg(G*(j,i),G*(k,i)) /\ L~f));
+
+theorem :: JORDAN1F:4
+   f is_sequence_on G & LSeg(G*(j,i),G*(k,i)) meets L~f &
+ [j,i] in Indices G & [k,i] in Indices G & j <= k implies
+ ex n st j <= n & n <= k &
+ G*(n,i)`1 = sup(proj1.:(LSeg(G*(j,i),G*(k,i)) /\ L~f));
+
+theorem :: JORDAN1F:5
+ for C being compact non vertical non horizontal Subset of TOP-REAL 2
+ for n being Nat holds Upper_Seq(C,n)/.1 = W-min(L~Cage(C,n));
+
+theorem :: JORDAN1F:6
+ for C be compact non vertical non horizontal Subset of TOP-REAL 2
+ for n be Nat holds
+ Lower_Seq(C,n)/.1 = E-max L~Cage(C,n);
+
+theorem :: JORDAN1F:7
+ for C being compact non vertical non horizontal Subset of TOP-REAL 2
+ for n being Nat holds
+ Upper_Seq(C,n)/. len Upper_Seq(C,n) = E-max(L~Cage(C,n));
+
+theorem :: JORDAN1F:8
+ for C be compact non vertical non horizontal Subset of TOP-REAL 2
+ for n be Nat holds
+ Lower_Seq(C,n)/.(len Lower_Seq(C,n)) = W-min L~Cage(C,n);
+
+theorem :: JORDAN1F:9
+   for C being compact non vertical non horizontal Subset of TOP-REAL 2
+   for n being Nat holds
+   L~Upper_Seq(C,n) = Upper_Arc L~Cage(C,n) &
+   L~Lower_Seq(C,n) = Lower_Arc L~Cage(C,n) or
+   L~Upper_Seq(C,n) = Lower_Arc L~Cage(C,n) &
+   L~Lower_Seq(C,n) = Upper_Arc L~Cage(C,n);
+
+reserve C for compact non vertical non horizontal non empty
+              being_simple_closed_curve Subset of TOP-REAL 2,
+              p for Point of TOP-REAL 2,
+              i1,j1,i2,j2 for Nat;
+
+theorem :: JORDAN1F:10
+for C being connected compact non vertical non horizontal Subset of TOP-REAL 2
+for n being Nat holds
+Upper_Seq(C,n) is_sequence_on Gauge(C,n);
+
+theorem :: JORDAN1F:11  :: symmetric to JORDAN8:9
+ for f being FinSequence of TOP-REAL 2
+   st f is_sequence_on G &
+     (ex i,j st [i,j] in Indices G & p = G*(i,j)) &
+     (for i1,j1,i2,j2
+      st [i1,j1] in Indices G & [i2,j2] in Indices G &
+        p = G*(i1,j1) & f/.1 = G*(i2,j2)
+      holds abs(i2-i1)+abs(j2-j1) = 1)
+  holds <*p*>^f is_sequence_on G;
+
+theorem :: JORDAN1F:12
+for C being connected compact non vertical non horizontal Subset of TOP-REAL 2
+for n being Nat holds
+Lower_Seq(C,n) is_sequence_on Gauge(C,n);
+
+theorem :: JORDAN1F:13
+   p`1 = (W-bound C + E-bound C)/2 &
+ p`2 = inf(proj2.:(LSeg(Gauge(C,1)*(Center Gauge(C,1),1),
+ Gauge(C,1)*(Center Gauge(C,1),width Gauge(C,1))) /\ Upper_Arc L~Cage(C,i+1)))
+ implies
+ ex j st 1 <= j & j <= width Gauge(C,i+1) &
+ p = Gauge(C,i+1)*(Center Gauge(C,i+1),j);

@@ -1,0 +1,183 @@
+:: Ordered Rings - Part I
+::  by Micha{\l} Muzalewski and Les{\l}aw W. Szczerba
+::
+:: Received October 11, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary VECTSP_1, FINSEQ_1, RELAT_1, FUNCT_1, SQUARE_1, O_RING_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XREAL_0, NAT_1, FUNCT_1, FINSEQ_1,
+      STRUCT_0, RLVECT_1, VECTSP_1;
+ constructors NAT_1, VECTSP_1, XREAL_0, XBOOLE_0;
+ clusters VECTSP_1, STRUCT_0, RELSET_1, NAT_1, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, REAL, SUBSET, ARITHM;
+
+
+begin
+
+ reserve i,j,k,m,n for Nat;
+
+::
+::                         FIELD-LIKE ALGEBRAS
+::
+
+reserve R for non empty doubleLoopStr;
+reserve x,y for Scalar of R;
+reserve f,g,h for FinSequence of the carrier of R;
+
+definition let D be non empty set,
+               f be FinSequence of D,
+               k be Nat;
+ assume
+ 0<>k & k<=len f;
+  func f.:k -> Element of D equals
+:: O_RING_1:def 1
+ f.k;
+end;
+
+definition let R be non empty doubleLoopStr, x be Scalar of R;
+  func x^2 -> Scalar of R equals
+:: O_RING_1:def 2
+    x*x;
+end;
+
+definition let R be non empty doubleLoopStr, x be Scalar of R;
+  attr x is being_a_square means
+:: O_RING_1:def 3
+    ex y being Scalar of R st x=y^2;
+  synonym x is_a_square;
+end;
+
+definition let R,f;
+  attr f is being_a_Sum_of_squares means
+:: O_RING_1:def 4
+  len f<>0 & f.:1 is_a_square &
+  (for n st n<>0 & n<len f ex y st y is_a_square & f.:(n+1)=f.:n+y);
+  synonym f is_a_Sum_of_squares;
+end;
+
+definition let R be non empty doubleLoopStr, x be Scalar of R;
+  attr x is being_a_sum_of_squares means
+:: O_RING_1:def 5
+  ex f being FinSequence of the carrier of R st
+    f is_a_Sum_of_squares & x=f.:len f;
+  synonym x is_a_sum_of_squares;
+end;
+
+definition let R,f;
+  attr f is being_a_Product_of_squares means
+:: O_RING_1:def 6
+    len f<>0 & f.:1 is_a_square &
+      (for n st n<>0 & n<len f ex y
+        st y is_a_square & f.:(n+1)=f.:n*y);
+  synonym f is_a_Product_of_squares;
+end;
+
+definition let R,x;
+  attr x is being_a_product_of_squares means
+:: O_RING_1:def 7
+  ex f st f is_a_Product_of_squares & x=f.:len f;
+  synonym x is_a_product_of_squares;
+end;
+
+definition let R,f;
+  attr f is being_a_Sum_of_products_of_squares means
+:: O_RING_1:def 8
+    len f<>0 & (f.:1 is_a_product_of_squares) &
+    (for n st n<>0 & n<len f ex y
+         st y is_a_product_of_squares & f.:(n+1)=f.:n+y);
+  synonym f is_a_Sum_of_products_of_squares;
+end;
+
+definition let R,x;
+  attr x is being_a_sum_of_products_of_squares means
+:: O_RING_1:def 9
+  ex f st f is_a_Sum_of_products_of_squares & x=f.:len f;
+  synonym x is_a_sum_of_products_of_squares;
+end;
+
+definition let R,f;
+  attr f is being_an_Amalgam_of_squares means
+:: O_RING_1:def 10
+  len f<>0 &
+  (for n st n<>0 & n<=len f holds f.:n is_a_product_of_squares or
+    ex i,j st f.:n=f.:i*f.:j & i<>0 & i<n & j<>0 & j<n);
+  synonym f is_an_Amalgam_of_squares;
+end;
+
+definition let R,x;
+  attr x is being_an_amalgam_of_squares means
+:: O_RING_1:def 11
+  ex f st f is_an_Amalgam_of_squares & x=f.:len f;
+  synonym x is_an_amalgam_of_squares;
+end;
+
+definition let R,f;
+  attr f is being_a_Sum_of_amalgams_of_squares means
+:: O_RING_1:def 12
+
+  len f<>0 & (f.:1 is_an_amalgam_of_squares) &
+  (for n st n<>0 & n<len f ex y
+    st y is_an_amalgam_of_squares & f.:(n+1)=f.:n+y);
+  synonym f is_a_Sum_of_amalgams_of_squares;
+end;
+
+definition let R,x;
+  attr x is being_a_sum_of_amalgams_of_squares means
+:: O_RING_1:def 13
+
+  ex f st f is_a_Sum_of_amalgams_of_squares & x=f.:len f;
+  synonym x is_a_sum_of_amalgams_of_squares;
+end;
+
+definition let R,f;
+  attr f is being_a_generation_from_squares means
+:: O_RING_1:def 14
+  len f<>0 &
+  (for n st n<>0 & n<=len f holds f.:n is_an_amalgam_of_squares or
+    ex i,j st (f.:n=f.:i*f.:j or f.:n=f.:i+f.:j) & i<>0 & i<n & j<>0 & j<n);
+  synonym f is_a_generation_from_squares;
+end;
+
+definition let R,x;
+  attr x is generated_from_squares means
+:: O_RING_1:def 15
+  ex f st f is_a_generation_from_squares & x=f.:len f;
+  synonym x is_generated_from_squares;
+end;
+
+theorem :: O_RING_1:1
+    x is_a_square implies
+    x is_a_sum_of_squares &
+    x is_a_product_of_squares &
+    x is_a_sum_of_products_of_squares &
+    x is_an_amalgam_of_squares &
+    x is_a_sum_of_amalgams_of_squares &
+    x is_generated_from_squares;
+
+theorem :: O_RING_1:2
+    x is_a_sum_of_squares implies
+    x is_a_sum_of_products_of_squares &
+    x is_a_sum_of_amalgams_of_squares &
+    x is_generated_from_squares;
+
+theorem :: O_RING_1:3
+    x is_a_product_of_squares implies
+    x is_a_sum_of_products_of_squares &
+    x is_an_amalgam_of_squares &
+    x is_a_sum_of_amalgams_of_squares &
+    x is_generated_from_squares;
+
+theorem :: O_RING_1:4
+    x is_a_sum_of_products_of_squares implies
+    x is_a_sum_of_amalgams_of_squares &
+    x is_generated_from_squares;
+
+theorem :: O_RING_1:5
+    x is_an_amalgam_of_squares implies
+    x is_a_sum_of_amalgams_of_squares &
+    x is_generated_from_squares;
+
+theorem :: O_RING_1:6
+    x is_a_sum_of_amalgams_of_squares implies x is_generated_from_squares;

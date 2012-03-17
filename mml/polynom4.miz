@@ -1,0 +1,1560 @@
+:: Evaluation of Polynomials
+::  by Robert Milewski
+::
+:: Received June 7, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM_1, FINSEQ_1, RELAT_1, FUNCT_1, RFINSEQ, RLVECT_1, FINSEQ_2,
+      BINOP_1, VECTSP_1, LATTICES, REALSET1, ALGSTR_2, NORMSP_1, POLYNOM3,
+      ARYTM_3, ALGSEQ_1, POLYNOM1, FUNCOP_1, SQUARE_1, FINSEQ_4, FUNCT_4,
+      GROUP_1, POLYNOM2, VECTSP_2, PRE_TOPC, ENDALG, GRCAT_1, COHSP_1,
+      QUOFIELD, POLYNOM4;
+ notation TARSKI, XBOOLE_0, NUMBERS, XCMPLX_0, XREAL_0, STRUCT_0, NAT_1,
+      SQUARE_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FINSEQ_1, FINSEQ_2,
+      FINSEQ_4, FINSOP_1, RFINSEQ, TOPREAL1, BINARITH, PRE_TOPC, NORMSP_1,
+      RLVECT_1, VECTSP_1, VECTSP_2, FVSUM_1, REALSET1, GROUP_1, GRCAT_1,
+      ENDALG, QUOFIELD, POLYNOM1, ALGSEQ_1, POLYNOM3;
+ constructors REAL_1, SQUARE_1, FINSOP_1, SETWOP_2, RFINSEQ, TOPREAL1,
+      BINARITH, QUOFIELD, FVSUM_1, ALGSTR_2, ALGSEQ_1, GRCAT_1, ENDALG,
+      POLYNOM1, POLYNOM3, FINSEQOP, MEMBERED;
+ clusters STRUCT_0, RELSET_1, ALGSTR_1, FINSEQ_1, FINSEQ_2, VECTSP_2, VECTSP_1,
+      POLYNOM1, POLYNOM3, INT_1, MONOID_0, XREAL_0, MEMBERED, ORDINAL2;
+ requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
+ definitions ALGSEQ_1, QUOFIELD, ENDALG, GRCAT_1;
+ theorems AXIOMS, REAL_1, NAT_1, SQUARE_1, FUNCT_2, FUNCT_7, FUNCOP_1,
+      FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FINSEQ_5, RFINSEQ, BINARITH,
+      RLVECT_1, VECTSP_1, VECTSP_2, TOPREAL1, FVSUM_1, NORMSP_1, ALGSEQ_1,
+      GOBOARD9, AMI_5, GROUP_1, POLYNOM2, POLYNOM3, INT_1, NAT_2, MATRIX_3,
+      XCMPLX_0, XCMPLX_1;
+ schemes NAT_1, FINSEQ_2, POLYNOM3, FUNCT_2;
+
+begin  :: Preliminaries
+
+  theorem Th1:
+   for n be Nat holds 0-'n = 0
+   proof
+    let n be Nat;
+      n >= 0 by NAT_1:18;
+    hence thesis by NAT_2:10;
+   end;
+
+canceled;
+
+  theorem Th3:
+   for D be non empty set
+   for p be FinSequence of D
+   for n be Nat st 1 <= n & n <= len p holds
+    p = (p|(n-'1))^<*p.n*>^(p/^n)
+   proof
+    let D be non empty set;
+    let p be FinSequence of D;
+    let n be Nat;
+    assume that
+     A1: 1 <= n and
+     A2: n <= len p;
+      len p >= n-'1+1 by A1,A2,AMI_5:4;
+    then A3: len p > n-'1 by NAT_1:38;
+      p|n = p|(n-'1+1) by A1,AMI_5:4
+       .= p|(n-'1)^<*p.(n-'1+1)*> by A3,POLYNOM3:19
+       .= p|(n-'1)^<*p.n*> by A1,AMI_5:4;
+    hence p = (p|(n-'1))^<*p.n*>^(p/^n) by RFINSEQ:21;
+   end;
+
+  definition
+   cluster add-associative right_zeroed right_complementable Abelian
+    commutative associative left_unital right_unital distributive Field-like
+    non trivial strict (non empty doubleLoopStr);
+   existence
+   proof
+    consider F be non degenerated strict Field;
+    take F;
+    thus thesis;
+   end;
+  end;
+
+begin  :: About Polynomials
+
+canceled;
+
+  theorem Th5:
+   for L be add-associative right_zeroed right_complementable
+    left-distributive (non empty doubleLoopStr)
+   for p be sequence of L holds
+    (0_.(L))*'p = 0_.(L)
+   proof
+    let L be add-associative right_zeroed right_complementable
+     left-distributive (non empty doubleLoopStr);
+    let p be sequence of L;
+      now let i be Nat;
+     consider r be FinSequence of the carrier of L such that
+        len r = i+1 and
+      A1: ((0_.(L))*'p).i = Sum r and
+      A2: for k be Nat st k in dom r holds r.k = (0_.(L)).(k-'1) * p.(i+1-'k)
+                                                         by POLYNOM3:def 11;
+       now let k be Nat;
+      assume k in dom r;
+      hence r.k = (0_.(L)).(k-'1) * p.(i+1-'k) by A2
+         .= 0.L * p.(i+1-'k) by POLYNOM3:28
+         .= 0.L by VECTSP_1:39;
+     end;
+     hence ((0_.(L))*'p).i = 0.L by A1,POLYNOM3:1
+        .= (0_.(L)).i by POLYNOM3:28;
+    end;
+    hence thesis by FUNCT_2:113;
+   end;
+
+  theorem Th6:
+   for L be non empty ZeroStr holds
+    len 0_.(L) = 0
+   proof
+    let L be non empty ZeroStr;
+      for i be Nat st i >= 0 holds (0_.(L)).i = 0.L by POLYNOM3:28;
+    then A1: 0 is_at_least_length_of 0_.(L) by ALGSEQ_1:def 3;
+      for i be Nat st i is_at_least_length_of 0_.(L) holds 0 <= i by NAT_1:18;
+    hence thesis by A1,ALGSEQ_1:def 4;
+   end;
+
+  theorem Th7:
+   for L be non degenerated (non empty multLoopStr_0) holds
+    len 1_.(L) = 1
+   proof
+    let L be non degenerated (non empty multLoopStr_0);
+      now let i be Nat;
+     assume i >= 1;
+     then i <> 0;
+     hence (1_.(L)).i = 0.L by POLYNOM3:31;
+    end;
+    then A1: 1 is_at_least_length_of 1_.(L) by ALGSEQ_1:def 3;
+      now let i be Nat;
+     assume that
+      A2: i is_at_least_length_of 1_.(L) and
+      A3: 0+1 > i;
+     A4: 1_(L) <> 0.L by VECTSP_1:def 21;
+       0 >= i by A3,NAT_1:38;
+     then (1_.(L)).0 = 0.L by A2,ALGSEQ_1:def 3;
+     hence contradiction by A4,POLYNOM3:31;
+    end;
+    hence thesis by A1,ALGSEQ_1:def 4;
+   end;
+
+  theorem Th8:
+   for L be non empty ZeroStr
+   for p be Polynomial of L st len p = 0 holds
+    p = 0_.(L)
+   proof
+    let L be non empty ZeroStr;
+    let p be Polynomial of L;
+    assume len p = 0;
+    then A1: 0 is_at_least_length_of p by ALGSEQ_1:def 4;
+    A2: dom p = NAT by NORMSP_1:17;
+      now let x be set;
+     assume x in dom p;
+     then reconsider i=x as Nat by NORMSP_1:17;
+       i >= 0 by NAT_1:18;
+     hence p.x = 0.L by A1,ALGSEQ_1:def 3;
+    end;
+    then p = NAT --> 0.L by A2,FUNCOP_1:17;
+    hence thesis by POLYNOM3:def 9;
+   end;
+
+  theorem Th9:
+   for L be right_zeroed (non empty LoopStr)
+   for p,q be Polynomial of L
+   for n be Nat st n >= len p & n >= len q holds
+    n >= len (p+q)
+   proof
+    let L be right_zeroed (non empty LoopStr);
+    let p,q be Polynomial of L;
+    let n be Nat;
+    assume that
+     A1: n >= len p and
+     A2: n >= len q;
+      n is_at_least_length_of p & n is_at_least_length_of q
+                                                        by A1,A2,POLYNOM3:23;
+    then n is_at_least_length_of p+q by POLYNOM3:24;
+    hence thesis by POLYNOM3:23;
+   end;
+
+  theorem Th10:
+   for L be add-associative right_zeroed right_complementable
+    (non empty LoopStr)
+   for p,q be Polynomial of L st len p <> len q holds
+    len (p+q) = max(len p,len q)
+   proof
+    let L be add-associative right_zeroed right_complementable
+     (non empty LoopStr);
+    let p,q be Polynomial of L;
+    assume A1: len p <> len q;
+    per cases by A1,REAL_1:def 5;
+     suppose A2: len p < len q;
+      then A3: max(len p,len q) = len q by SQUARE_1:def 2;
+        len p >= 0 by NAT_1:18;
+      then A4: len q >= 0+1 by A2,NAT_1:38;
+      then A5: len q - 1 >= 0 by REAL_1:84;
+        len q >= len p+1 by A2,NAT_1:38;
+      then len q-1 >= len p by REAL_1:84;
+      then A6: len q-'1 >= len p by A5,BINARITH:def 3;
+      A7: (p+q).(len q-'1) = p.(len q-'1) + q.(len q-'1) by POLYNOM3:def 6
+         .= 0.L + q.(len q-'1) by A6,ALGSEQ_1:22
+         .= q.(len q-'1) by RLVECT_1:10;
+      A8: len q = len q-'1+1 by A4,AMI_5:4;
+      A9: len (p+q) <= len q by A2,Th9;
+        len (p+q) >= len q
+      proof
+       assume len (p+q) < len q;
+       then len (p+q) + 1 <= len q by NAT_1:38;
+       then len (p+q) <= len q - 1 by REAL_1:84;
+       then len (p+q) <= len q-'1 by A5,BINARITH:def 3;
+       then (p+q).(len q-'1) = 0.L by ALGSEQ_1:22;
+       hence contradiction by A7,A8,ALGSEQ_1:25;
+      end;
+      hence thesis by A3,A9,AXIOMS:21;
+     suppose A10: len p > len q;
+      then A11: max(len p,len q) = len p by SQUARE_1:def 2;
+        len q >= 0 by NAT_1:18;
+      then A12: len p >= 0+1 by A10,NAT_1:38;
+      then A13: len p - 1 >= 0 by REAL_1:84;
+        len p >= len q+1 by A10,NAT_1:38;
+      then len p-1 >= len q by REAL_1:84;
+      then A14: len p-'1 >= len q by A13,BINARITH:def 3;
+      A15: (p+q).(len p-'1) = p.(len p-'1) + q.(len p-'1) by POLYNOM3:def 6
+         .= p.(len p-'1) + 0.L by A14,ALGSEQ_1:22
+         .= p.(len p-'1) by RLVECT_1:10;
+      A16: len p = len p-'1+1 by A12,AMI_5:4;
+      A17: len (p+q) <= len p by A10,Th9;
+        len (p+q) >= len p
+      proof
+       assume len (p+q) < len p;
+       then len (p+q) + 1 <= len p by NAT_1:38;
+       then len (p+q) <= len p - 1 by REAL_1:84;
+       then len (p+q) <= len p-'1 by A13,BINARITH:def 3;
+       then (p+q).(len p-'1) = 0.L by ALGSEQ_1:22;
+       hence contradiction by A15,A16,ALGSEQ_1:25;
+      end;
+      hence thesis by A11,A17,AXIOMS:21;
+   end;
+
+  theorem Th11:
+   for L be add-associative right_zeroed right_complementable
+    (non empty LoopStr)
+   for p be Polynomial of L holds
+    len (-p) = len p
+   proof
+    let L be add-associative right_zeroed right_complementable
+     (non empty LoopStr);
+    let p be Polynomial of L;
+    A1: len p is_at_least_length_of -p
+    proof
+     let i be Nat;
+     assume A2: i >= len p;
+     thus (-p).i = -(p.i) by POLYNOM3:def 7
+        .= -0.L by A2,ALGSEQ_1:22
+        .= 0.L by RLVECT_1:25;
+    end;
+      now let n be Nat;
+     assume A3: n is_at_least_length_of -p;
+       n is_at_least_length_of p
+     proof
+      let i be Nat;
+      assume i >= n;
+      then (-p).i = 0.L by A3,ALGSEQ_1:def 3;
+      then -p.i = 0.L by POLYNOM3:def 7;
+      hence p.i = 0.L by VECTSP_2:34;
+     end;
+     hence len p <= n by ALGSEQ_1:def 4;
+    end;
+    hence thesis by A1,ALGSEQ_1:def 4;
+   end;
+
+  theorem
+     for L be add-associative right_zeroed right_complementable
+    (non empty LoopStr)
+   for p,q be Polynomial of L
+   for n be Nat st n >= len p & n >= len q holds
+    n >= len (p-q)
+   proof
+    let L be add-associative right_zeroed right_complementable
+     (non empty LoopStr);
+    let p,q be Polynomial of L;
+    let n be Nat;
+    assume that
+     A1: n >= len p and
+     A2: n >= len q;
+    A3: p-q = p+-q by POLYNOM3:def 8;
+      len q = len (-q) by Th11;
+    hence thesis by A1,A2,A3,Th9;
+   end;
+
+  theorem
+     for L be add-associative right_zeroed right_complementable distributive
+    commutative associative left_unital Field-like (non empty doubleLoopStr)
+   for p,q be Polynomial of L st len p > 0 & len q > 0 holds
+    len (p*'q) = len p + len q - 1
+   proof
+    let L be add-associative right_zeroed right_complementable distributive
+     commutative associative left_unital Field-like (non empty doubleLoopStr);
+    let p,q be Polynomial of L;
+    assume that
+     A1: len p > 0 and
+     A2: len q > 0;
+      len p + len q > 0+0 by A1,A2,REAL_1:67;
+    then len p + len q >= 0+1 by NAT_1:38;
+    then A3: len p + len q - 1 >= 1-1 by REAL_1:49;
+    A4: len p + len q -' 1 is_at_least_length_of p*'q
+    proof
+     let i be Nat;
+     consider r be FinSequence of the carrier of L such that
+      A5: len r = i+1 and
+      A6: (p*'q).i = Sum r and
+      A7: for k be Nat st k in dom r holds r.k = p.(k-'1) * q.(i+1-'k)
+                                                         by POLYNOM3:def 11;
+     assume i >= len p + len q -' 1;
+     then i >= len p + len q - 1 by A3,BINARITH:def 3;
+     then i+1 >= len p + len q by REAL_1:86;
+     then len p <= i+1 - len q by REAL_1:84;
+     then -len p >= -(i+1 - len q) by REAL_1:50;
+     then A8: -len p >= len q - (i+1) by XCMPLX_1:143;
+       now let k be Nat;
+      assume A9: k in dom r;
+      then A10: r.k = p.(k-'1) * q.(i+1-'k) by A7;
+        k in Seg len r by A9,FINSEQ_1:def 3;
+      then A11: 1 <= k & k <= i+1 by A5,FINSEQ_1:3;
+      then A12: i+1-k >= 0 by SQUARE_1:12;
+      A13: k-1 >= 0 by A11,SQUARE_1:12;
+      per cases;
+       suppose k-'1 < len p;
+        then k-1 < len p by A13,BINARITH:def 3;
+        then -(k-1) > -len p by REAL_1:50;
+        then 1-k > -len p by XCMPLX_1:143;
+        then 1-k > len q - (i+1) by A8,AXIOMS:22;
+        then i+1+(1-k) > len q by REAL_1:84;
+        then i+1+1-k > len q by XCMPLX_1:29;
+        then i+1-k+1 > len q by XCMPLX_1:29;
+        then i+1-'k+1 > len q by A12,BINARITH:def 3;
+        then i+1-'k >= len q by NAT_1:38;
+        then q.(i+1-'k) = 0.L by ALGSEQ_1:22;
+        hence r.k = 0.L by A10,VECTSP_1:36;
+       suppose k-'1 >= len p;
+        then p.(k-'1) = 0.L by ALGSEQ_1:22;
+        hence r.k = 0.L by A10,VECTSP_1:39;
+     end;
+     hence (p*'q).i = 0.L by A6,POLYNOM3:1;
+    end;
+      now let n be Nat;
+     assume that
+      A14: n is_at_least_length_of p*'q and
+      A15: len p + len q -' 1 > n;
+     consider r be FinSequence of the carrier of L such that
+      A16: len r = len p + len q-'2+1 and
+      A17: (p*'q).(len p + len q-'2) = Sum r and
+      A18: for k be Nat st k in dom r holds r.k =
+                    p.(k-'1) * q.(len p + len q-'2+1-'k) by POLYNOM3:def 11;
+     A19: len p + len q -' 1 - 1 = len p + len q - 1 - 1 by A3,BINARITH:def 3;
+     A20: len q >= 0+1 by A2,NAT_1:38;
+     then len p + len q > 0+1 by A1,REAL_1:67;
+     then len p + len q >= 1+1 by NAT_1:38;
+     then len p + len q - 2 >= 2-2 by REAL_1:49;
+     then A21: len p + len q -' 2 = len p + len q - (1+1) by BINARITH:def 3;
+     A22: len p + len q - 1 - 1 = len p + len q - (1+1) by XCMPLX_1:36;
+       len p + len q -' 1 >= n+1 by A15,NAT_1:38;
+     then len p + len q -' 1 - 1 >= n by REAL_1:84;
+     then A23: Sum r = 0.L by A14,A17,A19,A21,A22,ALGSEQ_1:def 3;
+     A24: len q - 1 >= 0 by A20,REAL_1:84;
+     A25: len r = len p + len q - 1 - 1 + 1 by A16,A21,XCMPLX_1:36
+        .= len p + len q - 1 +- 1 + 1 by XCMPLX_0:def 8
+        .= len p + len q - 1 by XCMPLX_1:139
+        .= len p + (len q - 1) by XCMPLX_1:29;
+     then len r - (len p) = len q - 1 by XCMPLX_1:26;
+     then A26: len p + 0 <= len r by A24,REAL_1:84;
+     A27: len p >= 0+1 by A1,NAT_1:38;
+     then r = (r|((len p)-'1))^<*r.(len p)*>^(r/^len p) by A26,Th3;
+     then r = (r|((len p)-'1))^<*r/.(len p)*>^(r/^len p) by A26,A27,FINSEQ_4:24
+;
+     then A28: Sum r =
+           Sum((r|((len p)-'1))^<*r/.(len p)*>) + Sum (r/^len p) by RLVECT_1:58
+        .= Sum(r|((len p)-'1)) + Sum<*r/.(len p)*> + Sum
+ (r/^len p) by RLVECT_1:58;
+       now let i be Nat;
+      assume A29: i in dom (r|((len p)-'1));
+      A30: dom (r|((len p)-'1)) c= dom r by FINSEQ_5:20;
+      A31: len p - 1 >= 1-1 by A27,REAL_1:49;
+        len p < len r + 1 by A26,NAT_1:38;
+      then len p - 1 < len r + 1 - 1 by REAL_1:54;
+      then len p - 1 < len r by XCMPLX_1:26;
+      then (len p)-'1 < len r by A31,BINARITH:def 3;
+      then len (r|((len p)-'1)) = (len p)-'1 by TOPREAL1:3;
+      then i in Seg ((len p)-'1) by A29,FINSEQ_1:def 3;
+      then 1 <= i & i <= (len p)-'1 by FINSEQ_1:3;
+      then A32: i + len q <= (len p)-'1 + len q by AXIOMS:24;
+      A33: len p + len q-'2+1 = len p + len q - 1 by A16,A25,XCMPLX_1:29
+         .= len p - 1 + len q by XCMPLX_1:29
+         .= len p -' 1 + len q by A31,BINARITH:def 3;
+      then A34: len q <= len p + len q-'2+1-i by A32,REAL_1:84;
+        i+len q >= i+0 by A2,AXIOMS:24;
+      then len p + len q-'2+1 >= i+0 by A32,A33,AXIOMS:22;
+      then len p + len q-'2+1-i >= 0 by REAL_1:84;
+      then A35: len q <= len p + len q-'2+1-'i by A34,BINARITH:def 3;
+      thus (r|((len p)-'1)).i = (r|((len p)-'1))/.i by A29,FINSEQ_4:def 4
+         .= r/.i by A29,TOPREAL1:1
+         .= r.i by A29,A30,FINSEQ_4:def 4
+         .= p.(i-'1) * q.(len p + len q-'2+1-'i) by A18,A29,A30
+         .= p.(i-'1) * 0.L by A35,ALGSEQ_1:22
+         .= 0.L by VECTSP_1:39;
+     end;
+     then A36: Sum(r|((len p)-'1)) = 0.L by POLYNOM3:1;
+       len p in Seg len r by A26,A27,FINSEQ_1:3;
+     then A37: len p in dom r by FINSEQ_1:def 3;
+      len p+len q-'2+1-(len p) >= 0 by A16,A24,A25,REAL_1:84;
+     then A38: len p+len q-'2+1-'(len p) = len p+len q-'2+1-(len p)
+                                                           by BINARITH:def 3
+        .= len q-1 by A16,A25,XCMPLX_1:26
+        .= len q-'1 by A24,BINARITH:def 3;
+       len p = len p-'1+1 & len q = len q-'1+1 by A20,A27,AMI_5:4;
+     then A39: p.(len p-'1) <> 0.L & q.(len q-'1) <> 0.L by ALGSEQ_1:25;
+       now let i be Nat;
+      assume A40: i in dom (r/^len p);
+      then i in Seg len (r/^len p) by FINSEQ_1:def 3;
+      then A41: 1 <= i & i <= len (r/^len p) by FINSEQ_1:3;
+      then A42: 0+1 <= i & i <= len r-len p by A26,RFINSEQ:def 2;
+        i+len p >= i by NAT_1:29;
+      then A43: i+len p >= 1 by A41,AXIOMS:22;
+        i+len p <= len r by A42,REAL_1:84;
+      then i+len p in Seg len r by A43,FINSEQ_1:3;
+      then A44: i+len p in dom r by FINSEQ_1:def 3;
+      A45: i-1 >= 0 by A42,REAL_1:84;
+        i+len p >= i by NAT_1:29;
+      then i+len p >= 0+1 by A41,AXIOMS:22;
+      then i+len p-1 >= 0 by REAL_1:84;
+      then i+len p-'1 = i+len p-1 by BINARITH:def 3
+         .= len p+(i-1) by XCMPLX_1:29;
+      then A46: i+len p-'1 >= len p+0 by A45,AXIOMS:24;
+      thus (r/^len p).i = r.(i+len p) by A26,A40,RFINSEQ:def 2
+         .= p.(i+len p-'1) * q.(len p + len q-'2+1-'(i+len p)) by A18,A44
+         .= 0.L * q.(len p + len q-'2+1-'(i+len p)) by A46,ALGSEQ_1:22
+         .= 0.L by VECTSP_1:39;
+     end;
+     then Sum (r/^len p) = 0.L by POLYNOM3:1;
+     then Sum r = Sum<*r/.(len p)*> + 0.L by A28,A36,RLVECT_1:10
+        .= Sum<*r/.(len p)*> by RLVECT_1:10
+        .= r/.(len p) by RLVECT_1:61
+        .= r.(len p) by A37,FINSEQ_4:def 4
+        .= p.(len p-'1) * q.(len q-'1) by A18,A37,A38;
+     hence contradiction by A23,A39,VECTSP_1:44;
+    end;
+    then len (p*'q) = len p + len q -' 1 by A4,ALGSEQ_1:def 4;
+    hence thesis by A3,BINARITH:def 3;
+   end;
+
+begin  :: Leading Monomials
+
+  definition
+   let L be non empty ZeroStr;
+   let p be Polynomial of L;
+   func Leading-Monomial(p) -> sequence of L means :Def1:
+    it.(len p-'1) = p.(len p-'1) &
+    for n be Nat st n <> len p-'1 holds it.n = 0.L;
+   existence
+   proof
+    reconsider P=0_.(L)+*(len p-'1,p.(len p-'1)) as sequence of L
+                                                          by NORMSP_1:def 3;
+    take P;
+      len p-'1 in NAT;
+    then len p-'1 in dom 0_.(L) by NORMSP_1:17;
+    hence P.(len p-'1) = p.(len p-'1) by FUNCT_7:33;
+    let n be Nat;
+    assume n <> len p-'1;
+    hence P.n = (0_.(L)).n by FUNCT_7:34
+       .= 0.L by POLYNOM3:28;
+   end;
+   uniqueness
+   proof
+    let P1,P2 be sequence of L such that
+     A1: P1.(len p-'1) = p.(len p-'1) and
+     A2: for n be Nat st n <> len p-'1 holds P1.n = 0.L and
+     A3: P2.(len p-'1) = p.(len p-'1) and
+     A4: for n be Nat st n <> len p-'1 holds P2.n = 0.L;
+      now let i be Nat;
+     per cases;
+      suppose i = len p-'1;
+       hence P1.i = P2.i by A1,A3;
+      suppose A5: i <> len p-'1;
+       hence P1.i = 0.L by A2
+          .= P2.i by A4,A5;
+    end;
+    hence P1 = P2 by FUNCT_2:113;
+   end;
+  end;
+
+  theorem Th14:
+   for L be non empty ZeroStr
+   for p be Polynomial of L holds
+    Leading-Monomial(p) = 0_.(L)+*(len p-'1,p.(len p-'1))
+   proof
+    let L be non empty ZeroStr;
+    let p be Polynomial of L;
+    reconsider P=0_.(L)+*(len p-'1,p.(len p-'1)) as sequence of L
+                                                          by NORMSP_1:def 3;
+      len p-'1 in NAT;
+    then len p-'1 in dom 0_.(L) by NORMSP_1:17;
+    then A1: P.(len p-'1) = p.(len p-'1) by FUNCT_7:33;
+      now let n be Nat;
+     assume n <> len p-'1;
+     hence P.n = (0_.(L)).n by FUNCT_7:34
+        .= 0.L by POLYNOM3:28;
+    end;
+    hence thesis by A1,Def1;
+   end;
+
+  definition
+   let L be non empty ZeroStr;
+   let p be Polynomial of L;
+   cluster Leading-Monomial(p) -> finite-Support;
+   coherence
+   proof
+    take len p;
+    let i be Nat;
+    A1: Leading-Monomial(p) = 0_.(L)+*(len p-'1,p.(len p-'1)) by Th14;
+    assume i >= len p;
+    then i+1 > len p by NAT_1:38;
+    then i+1-1 > len p-1 by REAL_1:54;
+    then A2: i <> len p-1 by XCMPLX_1:26;
+    per cases by NAT_1:18;
+     suppose len p > 0;
+      then len p >= 0+1 by NAT_1:38;
+      then len p-1 >= 0+1-1 by REAL_1:49;
+      then i <> len p-'1 by A2,BINARITH:def 3;
+      hence (Leading-Monomial(p)).i = (0_.(L)).i by A1,FUNCT_7:34
+         .= 0.L by POLYNOM3:28;
+     suppose A3: len p = 0;
+      then A4: len p-'1 = 0 by Th1;
+        0 in NAT;
+      then A5: 0 in dom 0_.(L) by NORMSP_1:17;
+        now per cases by NAT_1:18;
+       suppose i > 0;
+        hence (Leading-Monomial(p)).i = (0_.(L)).i by A1,A4,FUNCT_7:34
+           .= 0.L by POLYNOM3:28;
+       suppose i = 0;
+        hence (Leading-Monomial(p)).i = p.0 by A1,A4,A5,FUNCT_7:33
+           .= (0_.(L)).0 by A3,Th8
+           .= 0.L by POLYNOM3:28;
+      end;
+      hence thesis;
+   end;
+  end;
+
+  theorem Th15:
+   for L be non empty ZeroStr
+   for p be Polynomial of L st len p = 0 holds
+    Leading-Monomial(p) = 0_.(L)
+   proof
+    let L be non empty ZeroStr;
+    let p be Polynomial of L;
+    assume len p = 0;
+    then A1: (0_.(L)).(len p-'1) = p.(len p-'1) by Th8;
+      for n be Nat st n <> len p-'1 holds (0_.(L)).n = 0.L by POLYNOM3:28;
+    hence thesis by A1,Def1;
+   end;
+
+  theorem
+     for L be non empty ZeroStr holds
+    Leading-Monomial(0_.(L)) = 0_.(L)
+   proof
+    let L be non empty ZeroStr;
+      len (0_.(L)) = 0 by Th6;
+    hence thesis by Th15;
+   end;
+
+  theorem
+     for L be non degenerated (non empty multLoopStr_0) holds
+    Leading-Monomial(1_.(L)) = 1_.(L)
+   proof
+    let L be non degenerated (non empty multLoopStr_0);
+    A1: (1_.(L)).(len (1_.(L))-'1) = (1_.(L)).(len (1_.(L))-'1);
+      now let n be Nat;
+     assume n <> len (1_.(L))-'1;
+     then n <> 1-'1 by Th7;
+     then n <> 0 by GOBOARD9:1;
+     hence (1_.(L)).n = 0.L by POLYNOM3:31;
+    end;
+    hence thesis by A1,Def1;
+   end;
+
+  theorem Th18:
+   for L be non empty ZeroStr
+   for p be Polynomial of L holds
+    len Leading-Monomial(p) = len p
+   proof
+    let L be non empty ZeroStr;
+    let p be Polynomial of L;
+    A1: Leading-Monomial(p) = 0_.(L)+*(len p-'1,p.(len p-'1)) by Th14;
+    set r = Leading-Monomial(p);
+    per cases by NAT_1:18;
+     suppose len p > 0;
+      then A2: len p >= 0+1 by NAT_1:38;
+      then A3: len p-1 >= 0 by REAL_1:84;
+      A4: len p is_at_least_length_of r
+      proof
+       let i be Nat;
+       assume i >= len p;
+       then i+1 > len p by NAT_1:38;
+       then i+1-1 > len p-1 by REAL_1:54;
+       then i <> len p-1 by XCMPLX_1:26;
+       then i <> len p-'1 by A3,BINARITH:def 3;
+       hence r.i = (0_.(L)).i by A1,FUNCT_7:34
+          .= 0.L by POLYNOM3:28;
+      end;
+        len p-'1 in NAT;
+      then A5: len p-'1 in dom 0_.(L) by NORMSP_1:17;
+        now let m be Nat;
+       assume A6: m is_at_least_length_of r;
+       A7: len p = len p-'1+1 by A2,AMI_5:4;
+       assume len p > m;
+       then len p >= m+1 by NAT_1:38;
+       then len p-1 >= m+1-1 by REAL_1:49;
+       then len p-1 >= m by XCMPLX_1:26;
+       then len p-'1 >= m by A3,BINARITH:def 3;
+       then r.(len p-'1) = 0.L by A6,ALGSEQ_1:def 3;
+       then p.(len p-'1) = 0.L by A1,A5,FUNCT_7:33;
+       hence contradiction by A7,ALGSEQ_1:25;
+      end;
+      hence thesis by A4,ALGSEQ_1:def 4;
+     suppose A8: len p = 0;
+      hence len Leading-Monomial(p) = len (0_.(L)) by Th15
+         .= len p by A8,Th8;
+   end;
+
+  theorem Th19:
+   for L be add-associative right_zeroed right_complementable
+    (non empty LoopStr)
+   for p be Polynomial of L st len p <> 0
+   ex q be Polynomial of L st
+    len q < len p & p = q+Leading-Monomial(p) &
+    for n be Nat st n < len p-1 holds q.n = p.n
+   proof
+    let L be add-associative right_zeroed right_complementable
+     (non empty LoopStr);
+    let p be Polynomial of L;
+    assume A1: len p <> 0;
+    deffunc F(Nat) = p.$1;
+    consider q be Polynomial of L such that
+     A2: len q <= len p-'1 and
+     A3: for n be Nat st n < len p-'1 holds q.n=F(n) from PolynomialLambdaF;
+    take q;
+      len p > 0 by A1,NAT_1:19;
+    then A4: len p >= 0+1 by NAT_1:38;
+    then A5: len p-1 >= 0+1-1 by REAL_1:49;
+      len q < len p-'1+1 by A2,NAT_1:38;
+    hence A6: len q < len p by A4,AMI_5:4;
+    A7: len Leading-Monomial(p) = len p by Th18;
+    then A8: len (q+Leading-Monomial(p)) = max(len q,len Leading-Monomial(p))
+                                                                   by A6,Th10
+       .= len p by A6,A7,SQUARE_1:def 2;
+      now let k be Nat;
+     assume k < len p;
+     then k+1 <= len p by NAT_1:38;
+     then k+1-1 <= len p-1 by REAL_1:49;
+     then A9: k <= len p-1 by XCMPLX_1:26;
+     per cases by A9,REAL_1:def 5;
+      suppose k < len p-1;
+       then A10: k < len p-'1 by A5,BINARITH:def 3;
+       thus (q+Leading-Monomial(p)).k = q.k + (Leading-Monomial(p)).k
+                                                           by POLYNOM3:def 6
+          .= p.k + (Leading-Monomial(p)).k by A3,A10
+          .= p.k + 0.L by A10,Def1
+          .= p.k by RLVECT_1:def 7;
+      suppose k = len p-1;
+       then A11: k = len p-'1 by A5,BINARITH:def 3;
+       thus (q+Leading-Monomial(p)).k = q.k + (Leading-Monomial(p)).k
+                                                           by POLYNOM3:def 6
+          .= 0.L + (Leading-Monomial(p)).k by A2,A11,ALGSEQ_1:22
+          .= (Leading-Monomial(p)).k by RLVECT_1:10
+          .= p.k by A11,Def1;
+    end;
+    hence p = q+Leading-Monomial(p) by A8,ALGSEQ_1:28;
+    let n be Nat;
+    assume n < len p-1;
+    then n < len p-'1 by A5,BINARITH:def 3;
+    hence q.n = p.n by A3;
+   end;
+
+begin  :: Evaluation of Polynomials
+
+  definition
+   let L be unital (non empty doubleLoopStr);
+   let p be Polynomial of L;
+   let x be Element of L;
+   func eval(p,x) -> Element of L means :Def2:
+    ex F be FinSequence of the carrier of L st
+     it = Sum F &
+     len F = len p &
+     for n be Nat st n in dom F holds F.n = p.(n-'1) * (power L).(x,n-'1);
+   existence
+   proof
+    deffunc G(Nat) = p.($1-'1)*(power L).(x,$1-'1);
+    consider F be FinSequence of the carrier of L such that
+     A1: len F = len p and
+     A2: for n be Nat st n in Seg len p holds F.n = G(n) from SeqLambdaD;
+    take y = Sum F;
+    take F;
+    thus y = Sum F & len F = len p by A1;
+    let n be Nat;
+    assume n in dom F;
+    then n in Seg len p by A1,FINSEQ_1:def 3;
+    hence F.n = p.(n-'1) * (power L).(x,n-'1) by A2;
+   end;
+   uniqueness
+   proof
+    let y1,y2 be Element of L;
+    given F1 be FinSequence of the carrier of L such that
+     A3: y1 = Sum F1 and
+     A4: len F1 = len p and
+     A5: for n be Nat st n in dom F1 holds F1.n = p.(n-'1)*(power L).(x,n-'1);
+    given F2 be FinSequence of the carrier of L such that
+     A6: y2 = Sum F2 and
+     A7: len F2 = len p and
+     A8: for n be Nat st n in dom F2 holds F2.n = p.(n-'1)*(power L).(x,n-'1);
+      now let n be Nat;
+     assume n in Seg len p;
+     then A9: n in dom F1 & n in dom F2 by A4,A7,FINSEQ_1:def 3;
+     hence F1.n = p.(n-'1)*(power L).(x,n-'1) by A5
+        .= F2.n by A8,A9;
+    end;
+    hence y1 = y2 by A3,A4,A6,A7,FINSEQ_2:10;
+   end;
+  end;
+
+  theorem Th20:
+   for L be unital (non empty doubleLoopStr)
+   for x be Element of L holds
+    eval(0_.(L),x) = 0.L
+   proof
+    let L be unital (non empty doubleLoopStr);
+    let x be Element of L;
+    consider F be FinSequence of the carrier of L such that
+     A1: eval(0_.(L),x) = Sum F and
+     A2: len F = len 0_.(L) and
+       for n be Nat st n in dom F holds
+                       F.n = (0_.(L)).(n-'1) * (power L).(x,n-'1) by Def2;
+      len F = 0 by A2,Th6;
+    then F = <*>the carrier of L by FINSEQ_1:32;
+    hence thesis by A1,RLVECT_1:60;
+   end;
+
+  theorem Th21:
+   for L be well-unital add-associative right_zeroed right_complementable
+    associative non degenerated (non empty doubleLoopStr)
+   for x be Element of L holds
+    eval(1_.(L),x) = 1_(L)
+   proof
+    let L be well-unital add-associative right_zeroed right_complementable
+     associative non degenerated (non empty doubleLoopStr);
+    let x be Element of L;
+    consider F be FinSequence of the carrier of L such that
+     A1: eval(1_.(L),x) = Sum F and
+     A2: len F = len 1_.(L) and
+     A3: for n be Nat st n in dom F holds
+                       F.n = (1_.(L)).(n-'1) * (power L).(x,n-'1) by Def2;
+    A4: len F = 1 by A2,Th7;
+    then 1 in Seg len F by FINSEQ_1:3;
+    then 1 in dom F by FINSEQ_1:def 3;
+    then F.1 = (1_.(L)).(1-'1) * (power L).(x,1-'1) by A3
+       .= (1_.(L)).(0) * (power L).(x,1-'1) by GOBOARD9:1
+       .= 1_(L) * (power L).(x,1-'1) by POLYNOM3:31
+       .= (power L).(x,1-'1) by VECTSP_1:def 19
+       .= (power L).(x,0) by GOBOARD9:1
+       .= 1.L by GROUP_1:def 7
+       .= 1_(L) by POLYNOM2:3;
+    then F = <*1_(L)*> by A4,FINSEQ_1:57;
+    hence thesis by A1,RLVECT_1:61;
+   end;
+
+  Lm1:
+   for F be add-associative right_zeroed right_complementable
+            left-distributive (non empty doubleLoopStr)
+   for x be Element of F holds (0.F)*x = 0.F
+   proof
+    let F be add-associative right_zeroed right_complementable
+             left-distributive (non empty doubleLoopStr);
+    let x be Element of F;
+      (0.F)*x+(0.F) = ((0.F)+(0.F))*x+(0.F) by RLVECT_1:10
+       .= ((0.F)+(0.F))*x by RLVECT_1:10
+       .= (0.F)*x+(0.F)*x by VECTSP_1:def 12;
+    hence thesis by RLVECT_1:21;
+   end;
+
+  theorem Th22:
+   for L be Abelian add-associative right_zeroed right_complementable unital
+    left-distributive (non empty doubleLoopStr)
+   for p,q be Polynomial of L
+   for x be Element of L holds
+    eval(p+q,x) = eval(p,x) + eval(q,x)
+   proof
+    let L be Abelian add-associative right_zeroed right_complementable unital
+     left-distributive (non empty doubleLoopStr);
+    let p,q be Polynomial of L;
+    let x be Element of L;
+    consider F1 be FinSequence of the carrier of L such that
+     A1: eval(p,x) = Sum F1 and
+     A2: len F1 = len p and
+     A3: for n be Nat st n in dom F1 holds
+                             F1.n = p.(n-'1) * (power L).(x,n-'1) by Def2;
+    consider F2 be FinSequence of the carrier of L such that
+     A4: eval(q,x) = Sum F2 and
+     A5: len F2 = len q and
+     A6: for n be Nat st n in dom F2 holds
+                             F2.n = q.(n-'1) * (power L).(x,n-'1) by Def2;
+    consider F3 be FinSequence of the carrier of L such that
+     A7: eval(p+q,x) = Sum F3 and
+     A8: len F3 = len (p+q) and
+     A9: for n be Nat st n in dom F3 holds
+                         F3.n = (p+q).(n-'1) * (power L).(x,n-'1) by Def2;
+    reconsider k = max(len p,len q) as Nat by FINSEQ_2:1;
+    A10: k >= len p & k >= len q by SQUARE_1:46;
+    then k >= len (p+q) by Th9;
+    then A11: k - len p >= 0 & k - len q >= 0 & k - len (p+q) >= 0
+      by A10,SQUARE_1:12;
+    A12: len (F1 ^ ((k-'(len F1)) |-> 0.L)) =
+          len p + len ((k-'(len p)) |-> 0.L) by A2,FINSEQ_1:35
+       .= len p + (k-'(len p)) by FINSEQ_2:69
+       .= len p + (k-(len p)) by A11,BINARITH:def 3
+       .= len p - (len p - k) by XCMPLX_1:38
+       .= k by XCMPLX_1:18;
+    A13: len (F2 ^ ((k-'(len F2)) |-> 0.L)) =
+          len q + len ((k-'(len q)) |-> 0.L) by A5,FINSEQ_1:35
+       .= len q + (k-'(len q)) by FINSEQ_2:69
+       .= len q + (k-(len q)) by A11,BINARITH:def 3
+       .= len q - (len q - k) by XCMPLX_1:38
+       .= k by XCMPLX_1:18;
+      len (F3 ^ ((k-'(len F3)) |-> 0.L)) =
+          len (p+q) + len ((k-'(len (p+q))) |-> 0.L) by A8,FINSEQ_1:35
+       .= len (p+q) + (k-'(len (p+q))) by FINSEQ_2:69
+       .= len (p+q) + (k-(len (p+q))) by A11,BINARITH:def 3
+       .= len (p+q) - (len (p+q) - k) by XCMPLX_1:38
+       .= k by XCMPLX_1:18;
+    then reconsider G1 = F1 ^ ((k-'(len F1)) |-> 0.L),
+               G2 = F2 ^ ((k-'(len F2)) |-> 0.L),
+               G3 = F3 ^ ((k-'(len F3)) |-> 0.L)
+      as Element of k-tuples_on the carrier of L by A12,A13,FINSEQ_2:110;
+    A14: Sum G1 = Sum F1 + Sum ((k-'(len F1)) |-> 0.L) by RLVECT_1:58
+       .= Sum F1 + 0.L by MATRIX_3:13
+       .= Sum F1 by RLVECT_1:def 7;
+    A15: Sum G2 = Sum F2 + Sum ((k-'(len F2)) |-> 0.L) by RLVECT_1:58
+       .= Sum F2 + 0.L by MATRIX_3:13
+       .= Sum F2 by RLVECT_1:def 7;
+    A16: Sum G3 = Sum F3 + Sum ((k-'(len F3)) |-> 0.L) by RLVECT_1:58
+       .= Sum F3 + 0.L by MATRIX_3:13
+       .= Sum F3 by RLVECT_1:def 7;
+      now let n be Nat;
+     assume A17: n in Seg k;
+     then A18: 0+1 <= n & n <= k by FINSEQ_1:3;
+     then A19: n-1 >= 0 by REAL_1:84;
+     per cases by REAL_1:def 5;
+      suppose A20: len p > len q;
+       then A21: k = len p by SQUARE_1:def 2;
+       then A22: len(p+q) = len p by A20,Th10;
+       A23: n in dom F1 by A2,A17,A21,FINSEQ_1:def 3;
+       A24: n in dom F3 by A8,A17,A21,A22,FINSEQ_1:def 3;
+       A25: F1.n = p.(n-'1)*(power L).(x,n-'1) by A3,A23;
+       A26: len G1 = k & len G2 = k by FINSEQ_2:109;
+       then A27: n in dom G1 & n in dom G2 by A17,FINSEQ_1:def 3;
+       then A28: G1/.n = G1.n & G2/.n = G2.n by FINSEQ_4:def 4;
+       A29: G1/.n = G1.n by A27,FINSEQ_4:def 4
+          .= F1.n by A23,FINSEQ_1:def 7
+          .= F1/.n by A23,FINSEQ_4:def 4;
+         now per cases;
+        suppose n <= len q;
+         then n in Seg len q by A18,FINSEQ_1:3;
+         then A30: n in dom F2 by A5,FINSEQ_1:def 3;
+         then A31: F2.n = q.(n-'1)*(power L).(x,n-'1) by A6;
+         A32: G2/.n = G2.n by A27,FINSEQ_4:def 4
+            .= F2.n by A30,FINSEQ_1:def 7
+            .= F2/.n by A30,FINSEQ_4:def 4;
+         thus G3.n = F3.n by A24,FINSEQ_1:def 7
+            .= (p+q).(n-'1) * (power L).(x,n-'1) by A9,A24
+            .= (p.(n-'1) + q.(n-'1)) * (power L).(x,n-'1) by POLYNOM3:def 6
+            .= p.(n-'1)*(power L).(x,n-'1) + q.(n-'1)*(power L).(x,n-'1)
+                                                          by VECTSP_1:def 12
+            .= p.(n-'1)*(power L).(x,n-'1) + F2/.n by A30,A31,FINSEQ_4:def 4
+            .= F1/.n + F2/.n by A23,A25,FINSEQ_4:def 4
+            .= (G1 + G2).n by A17,A28,A29,A32,FVSUM_1:22;
+        suppose A33: n > len q;
+         then A34: n >= len q+1 by NAT_1:38;
+         then n-1 >= len q by REAL_1:84;
+         then A35: n-'1 >= len q by A19,BINARITH:def 3;
+         A36: n-len F2 >= 1 by A5,A34,REAL_1:84;
+         then n-len F2 >= 0 by AXIOMS:22;
+         then A37: n-len F2 = n-'len F2 by BINARITH:def 3;
+           n-len F2 <= k-len F2 by A18,REAL_1:49;
+         then n-len F2 <= k-'len F2 by A5,A11,BINARITH:def 3;
+         then A38: n-len F2 in Seg (k-'len F2) by A36,A37,FINSEQ_1:3;
+           n <= len G2 by A17,A26,FINSEQ_1:3;
+         then A39: G2/.n = ((k-'(len F2))|->0.L).(n-len F2)
+                                                    by A5,A28,A33,FINSEQ_1:37
+            .= 0.L by A38,FINSEQ_2:70;
+         thus G3.n = F3.n by A24,FINSEQ_1:def 7
+            .= (p+q).(n-'1) * (power L).(x,n-'1) by A9,A24
+            .= (p.(n-'1) + q.(n-'1)) * (power L).(x,n-'1) by POLYNOM3:def 6
+            .= (p.(n-'1) + 0.L) * (power L).(x,n-'1) by A35,ALGSEQ_1:22
+            .= (p.(n-'1)) * (power L).(x,n-'1) by RLVECT_1:10
+            .= F1.n by A3,A23
+            .= G1/.n by A23,A29,FINSEQ_4:def 4
+            .= G1/.n + 0.L by RLVECT_1:10
+            .= (G1 + G2).n by A17,A28,A39,FVSUM_1:22;
+       end;
+       hence G3.n = (G1 + G2).n;
+      suppose A40: len p < len q;
+       then A41: k = len q by SQUARE_1:def 2;
+       then A42: len(p+q) = len q by A40,Th10;
+       A43: n in dom F2 by A5,A17,A41,FINSEQ_1:def 3;
+       A44: n in dom F3 by A8,A17,A41,A42,FINSEQ_1:def 3;
+       A45: F2.n = q.(n-'1)*(power L).(x,n-'1) by A6,A43;
+       A46: len G1 = k & len G2 = k by FINSEQ_2:109;
+       then A47: n in dom G1 & n in dom G2 by A17,FINSEQ_1:def 3;
+       then A48: G1/.n = G1.n & G2/.n = G2.n by FINSEQ_4:def 4;
+       A49: G2/.n = G2.n by A47,FINSEQ_4:def 4
+          .= F2.n by A43,FINSEQ_1:def 7
+          .= F2/.n by A43,FINSEQ_4:def 4;
+         now per cases;
+        suppose n <= len p;
+         then n in Seg len p by A18,FINSEQ_1:3;
+         then A50: n in dom F1 by A2,FINSEQ_1:def 3;
+         then A51: F1.n = p.(n-'1)*(power L).(x,n-'1) by A3;
+         A52: G1/.n = G1.n by A47,FINSEQ_4:def 4
+            .= F1.n by A50,FINSEQ_1:def 7
+            .= F1/.n by A50,FINSEQ_4:def 4;
+         thus G3.n = F3.n by A44,FINSEQ_1:def 7
+            .= (p+q).(n-'1) * (power L).(x,n-'1) by A9,A44
+            .= (p.(n-'1) + q.(n-'1)) * (power L).(x,n-'1) by POLYNOM3:def 6
+            .= p.(n-'1)*(power L).(x,n-'1) + q.(n-'1)*(power L).(x,n-'1)
+                                                          by VECTSP_1:def 12
+            .= F1/.n + q.(n-'1)*(power L).(x,n-'1) by A50,A51,FINSEQ_4:def 4
+            .= F1/.n + F2/.n by A43,A45,FINSEQ_4:def 4
+            .= (G1 + G2).n by A17,A48,A49,A52,FVSUM_1:22;
+        suppose A53: n > len p;
+         then A54: n >= len p+1 by NAT_1:38;
+         then n-1 >= len p by REAL_1:84;
+         then A55: n-'1 >= len p by A19,BINARITH:def 3;
+         A56: n-len F1 >= 1 by A2,A54,REAL_1:84;
+         then n-len F1 >= 0 by AXIOMS:22;
+         then A57: n-len F1 = n-'len F1 by BINARITH:def 3;
+           n-len F1 <= k-len F1 by A18,REAL_1:49;
+         then n-len F1 <= k-'len F1 by A2,A11,BINARITH:def 3;
+         then A58: n-len F1 in Seg (k-'len F1) by A56,A57,FINSEQ_1:3;
+           n <= len G1 by A17,A46,FINSEQ_1:3;
+         then A59: G1/.n = ((k-'(len F1))|->0.L).(n-len F1)
+                                                    by A2,A48,A53,FINSEQ_1:37
+            .= 0.L by A58,FINSEQ_2:70;
+         thus G3.n = F3.n by A44,FINSEQ_1:def 7
+            .= (p+q).(n-'1) * (power L).(x,n-'1) by A9,A44
+            .= (p.(n-'1) + q.(n-'1)) * (power L).(x,n-'1) by POLYNOM3:def 6
+            .= (0.L + q.(n-'1)) * (power L).(x,n-'1) by A55,ALGSEQ_1:22
+            .= (q.(n-'1)) * (power L).(x,n-'1) by RLVECT_1:10
+            .= F2.n by A6,A43
+            .= G2/.n by A43,A49,FINSEQ_4:def 4
+            .= 0.L + G2/.n by RLVECT_1:10
+            .= (G1 + G2).n by A17,A48,A59,FVSUM_1:22;
+       end;
+       hence G3.n = (G1 + G2).n;
+      suppose A60: len p = len q;
+       then A61: n in dom F1 & n in dom F2 by A2,A5,A17,FINSEQ_1:def 3;
+       then A62: F1.n = p.(n-'1)*(power L).(x,n-'1) by A3;
+       A63: len G1 = k & len G2 = k & len G3 = k by FINSEQ_2:109;
+       then A64: n in dom G1 & n in dom G2 & n in dom G3 by A17,FINSEQ_1:def 3;
+       then A65: G1/.n = G1.n & G2/.n = G2.n & G3/.n = G3.n by FINSEQ_4:def 4;
+       A66: G1/.n = G1.n by A64,FINSEQ_4:def 4
+          .= F1.n by A61,FINSEQ_1:def 7
+          .= F1/.n by A61,FINSEQ_4:def 4;
+         now per cases;
+        suppose A67: n <= len (p+q);
+         A68: n in dom F2 by A5,A17,A60,FINSEQ_1:def 3;
+         then A69: F2.n = q.(n-'1)*(power L).(x,n-'1) by A6;
+           n in Seg len (p+q) by A18,A67,FINSEQ_1:3;
+         then A70: n in dom F3 by A8,FINSEQ_1:def 3;
+         A71: G2/.n = G2.n by A64,FINSEQ_4:def 4
+            .= F2.n by A68,FINSEQ_1:def 7
+            .= F2/.n by A68,FINSEQ_4:def 4;
+         thus G3.n = F3.n by A70,FINSEQ_1:def 7
+            .= (p+q).(n-'1) * (power L).(x,n-'1) by A9,A70
+            .= (p.(n-'1) + q.(n-'1)) * (power L).(x,n-'1) by POLYNOM3:def 6
+            .= p.(n-'1)*(power L).(x,n-'1) + q.(n-'1)*(power L).(x,n-'1)
+                                                          by VECTSP_1:def 12
+            .= p.(n-'1)*(power L).(x,n-'1) + F2/.n by A68,A69,FINSEQ_4:def 4
+            .= F1/.n + F2/.n by A61,A62,FINSEQ_4:def 4
+            .= (G1 + G2).n by A17,A65,A66,A71,FVSUM_1:22;
+        suppose A72: n > len (p+q);
+         then A73: n >= len (p+q)+1 by NAT_1:38;
+         then A74: n-len F3 >= 1 by A8,REAL_1:84;
+         then n-len F3 >= 0 by AXIOMS:22;
+         then A75: n-len F3 = n-'len F3 by BINARITH:def 3;
+           n-1 >= len (p+q)+1-1 by A73,REAL_1:49;
+         then n-1 >= len (p+q) by XCMPLX_1:26;
+         then A76: n-'1 >= len (p+q) by A19,BINARITH:def 3;
+           n-len F3 <= k-len F3 by A18,REAL_1:49;
+         then n-len F3 <= k-'len F3 by A8,A11,BINARITH:def 3;
+         then A77: n-len F3 in Seg (k-'len F3) by A74,A75,FINSEQ_1:3;
+         A78: G1.n = F1.n by A61,FINSEQ_1:def 7
+            .= (p.(n-'1))*(power L).(x,n-'1) by A3,A61;
+         A79: G2.n = F2.n by A61,FINSEQ_1:def 7
+            .= (q.(n-'1))*(power L).(x,n-'1) by A6,A61;
+           n <= len G3 by A17,A63,FINSEQ_1:3;
+         hence G3.n = ((k-'(len F3))|->0.L).(n-len F3) by A8,A72,FINSEQ_1:37
+            .= 0.L by A77,FINSEQ_2:70
+            .= 0.L * (power L).(x,n-'1) by Lm1
+            .= (p+q).(n-'1) * (power L).(x,n-'1) by A76,ALGSEQ_1:22
+            .= (p.(n-'1) + q.(n-'1)) * (power L).(x,n-'1) by POLYNOM3:def 6
+            .= (p.(n-'1))*(power L).(x,n-'1) + (q.(n-'1))*(power L).(x,n-'1)
+                                                          by VECTSP_1:def 12
+            .= (G1 + G2).n by A17,A78,A79,FVSUM_1:22;
+       end;
+       hence G3.n = (G1 + G2).n;
+    end;
+    then G3 = G1 + G2 by FINSEQ_2:139;
+    hence thesis by A1,A4,A7,A14,A15,A16,FVSUM_1:95;
+   end;
+
+  theorem Th23:
+   for L be Abelian add-associative right_zeroed right_complementable unital
+    distributive (non empty doubleLoopStr)
+   for p be Polynomial of L
+   for x be Element of L holds
+    eval(-p,x) = -eval(p,x)
+   proof
+    let L be Abelian add-associative right_zeroed right_complementable unital
+     distributive (non empty doubleLoopStr);
+    let p be Polynomial of L;
+    let x be Element of L;
+    consider F1 be FinSequence of the carrier of L such that
+     A1: eval(p,x) = Sum F1 and
+     A2: len F1 = len p and
+     A3: for n be Nat st n in dom F1 holds F1.n = p.(n-'1) * (power L).(x,n-'1)
+                                                                  by Def2;
+    consider F2 be FinSequence of the carrier of L such that
+     A4: eval(-p,x) = Sum F2 and
+     A5: len F2 = len (-p) and
+     A6: for n be Nat st n in dom F2 holds F2.n=(-p).(n-'1)*(power L).(x,n-'1)
+                                                                  by Def2;
+    A7: len F2 = len F1 by A2,A5,Th11;
+    then A8: dom F2 = dom F1 by FINSEQ_3:31;
+      now let n be Nat;
+        let v be Element of L;
+     assume that
+      A9: n in dom F2 and
+      A10: v = F1.n;
+     thus F2.n = (-p).(n-'1)*(power L).(x,n-'1) by A6,A9
+        .= (-p.(n-'1))*(power L).(x,n-'1) by POLYNOM3:def 7
+        .= -p.(n-'1)*(power L).(x,n-'1) by VECTSP_1:41
+        .= -v by A3,A8,A9,A10;
+    end;
+    hence thesis by A1,A4,A7,RLVECT_1:57;
+   end;
+
+  theorem
+     for L be Abelian add-associative right_zeroed right_complementable unital
+    distributive (non empty doubleLoopStr)
+   for p,q be Polynomial of L
+   for x be Element of L holds
+    eval(p-q,x) = eval(p,x) - eval(q,x)
+   proof
+    let L be Abelian add-associative right_zeroed right_complementable unital
+     distributive (non empty doubleLoopStr);
+    let p,q be Polynomial of L;
+    let x be Element of L;
+    thus eval(p-q,x) = eval(p+-q,x) by POLYNOM3:def 8
+       .= eval(p,x) + eval(-q,x) by Th22
+       .= eval(p,x) +- eval(q,x) by Th23
+       .= eval(p,x) - eval(q,x) by RLVECT_1:def 11;
+   end;
+
+  theorem Th25:
+   for L be add-associative right_zeroed right_complementable right_zeroed
+    distributive unital (non empty doubleLoopStr)
+   for p be Polynomial of L
+   for x be Element of L holds
+    eval(Leading-Monomial(p),x) = p.(len p-'1) * (power L).(x,len p-'1)
+   proof
+    let L be add-associative right_zeroed right_complementable right_zeroed
+     distributive unital (non empty doubleLoopStr);
+    let p be Polynomial of L;
+    let x be Element of L;
+    set LMp=Leading-Monomial(p);
+    consider F be FinSequence of the carrier of L such that
+     A1: eval(LMp,x) = Sum F and
+     A2: len F = len LMp and
+     A3: for n be Nat st n in dom F holds F.n = LMp.(n-'1)*(power L).(x,n-'1)
+                                                                  by Def2;
+    A4: len F = len p by A2,Th18;
+    per cases by NAT_1:18;
+     suppose len p > 0;
+      then A5: len p >= 0+1 by NAT_1:38;
+      then len p in Seg len F by A4,FINSEQ_1:3;
+      then A6: len p in dom F by FINSEQ_1:def 3;
+      A7: len p-1 >=0 by A5,REAL_1:84;
+        now let i be Nat;
+       assume that
+        A8: i in dom F and
+        A9: i <> len p;
+         i in Seg len F by A8,FINSEQ_1:def 3;
+       then i >= 0+1 by FINSEQ_1:3;
+       then i-1 >= 0 by REAL_1:84;
+       then i-'1 = i-1 & len p-'1 = len p-1 by A7,BINARITH:def 3;
+       then A10: i-'1 <> len p-'1 by A9,XCMPLX_1:19;
+       thus F/.i = F.i by A8,FINSEQ_4:def 4
+          .= LMp.(i-'1)*(power L).(x,i-'1) by A3,A8
+          .= 0.L*(power L).(x,i-'1) by A10,Def1
+          .= 0.L by VECTSP_1:39;
+      end;
+      then Sum F = F/.(len p) by A6,POLYNOM2:5
+         .= F.(len p) by A6,FINSEQ_4:def 4
+         .= LMp.(len p-'1)*(power L).(x,len p-'1) by A3,A6;
+      hence thesis by A1,Def1;
+     suppose A11: len p = 0;
+      then A12: p = 0_.(L) by Th8;
+        LMp = 0_.(L) by A11,Th15;
+      hence eval(Leading-Monomial(p),x) = 0.L by Th20
+         .= 0.L*(power L).(x,len p-'1) by VECTSP_1:39
+         .= p.(len p-'1)*(power L).(x,len p-'1) by A12,POLYNOM3:28;
+   end;
+
+  Lm2:
+   for L be add-associative right_zeroed right_complementable well-unital
+    distributive associative (non empty doubleLoopStr)
+   for p,q be Polynomial of L st len p > 0 & len q > 0
+   for x be Element of L holds
+    eval((Leading-Monomial(p))*'(Leading-Monomial(q)),x) =
+    p.(len p-'1)*q.(len q-'1)*(power L).(x,len p+len q-'2)
+   proof
+    let L be add-associative right_zeroed right_complementable well-unital
+     distributive associative (non empty doubleLoopStr);
+    let p,q be Polynomial of L;
+    assume A1: len p > 0 & len q > 0;
+    let x be Element of L;
+    set LMp=Leading-Monomial(p), LMq=Leading-Monomial(q);
+    consider F be FinSequence of the carrier of L such that
+     A2: eval(LMp*'LMq,x) = Sum F and
+     A3: len F = len (LMp*'LMq) and
+     A4: for n be Nat st n in dom F holds
+      F.n = (LMp*'LMq).(n-'1) * (power L).(x,n-'1) by Def2;
+    A5: len p >= 0+1 & len q >= 0+1 by A1,NAT_1:38;
+    then A6: len p-1 >= 0 & len q-1 >= 0 by REAL_1:84;
+    then A7: len p-1 = len p-'1 & len q-1 = len q-'1 by BINARITH:def 3;
+    A8: len p + len q >= 0+(1+1) by A5,REAL_1:55;
+    then A9: len p + len q - 1 >= 1 by REAL_1:84;
+    then len p + len q - 1 >= 0 by AXIOMS:22;
+    then reconsider i1=len p + len q - 1 as Nat by INT_1:16;
+    A10: i1-'1+1 = i1 by A9,AMI_5:4;
+    consider r be FinSequence of the carrier of L such that
+     A11: len r = i1-'1+1 and
+     A12: (LMp*'LMq).(i1-'1) = Sum r and
+     A13: for k be Nat st k in dom r holds r.k = LMp.(k-'1)*LMq.(i1-'1+1-'k)
+                                                          by POLYNOM3:def 11;
+      len p+(len q-1)-len p >= 0 by A6,XCMPLX_1:26;
+    then len p+len q-1-len p >= 0 by XCMPLX_1:29;
+    then A14: i1-'len p = len p+len q-1-len p by BINARITH:def 3
+       .= len p+(len q-1)-len p by XCMPLX_1:29
+       .= len q-'1 by A7,XCMPLX_1:26;
+    A15: len p+len q-2 >= 0 by A8,REAL_1:84;
+      len p+len q-(1+1) >= 0 by A8,REAL_1:84;
+    then len p+len q-1-1 >= 0 by XCMPLX_1:36;
+    then A16: i1-'1 = len p+len q-1-1 by BINARITH:def 3
+       .= len p+len q-(1+1) by XCMPLX_1:36
+       .= len p+len q-'2 by A15,BINARITH:def 3;
+      len p+0 <= len p+(len q-1) by A6,REAL_1:55;
+    then len p <= len p+len q-1 by XCMPLX_1:29;
+    then len p in Seg len r by A5,A10,A11,FINSEQ_1:3;
+    then A17: len p in dom r by FINSEQ_1:def 3;
+    then A18: r.(len p) = LMp.(len p-'1) * LMq.(len q-'1) by A10,A13,A14;
+      now let i be Nat;
+     assume that
+      A19: i in dom r and
+      A20: i <> len p;
+       i in Seg len r by A19,FINSEQ_1:def 3;
+     then i >= 0+1 by FINSEQ_1:3;
+     then i-1 >= 0 by REAL_1:84;
+     then i-'1 = i-1 by BINARITH:def 3;
+     then A21: i-'1 <> len p-'1 by A7,A20,XCMPLX_1:19;
+     thus r/.i = r.i by A19,FINSEQ_4:def 4
+        .= LMp.(i-'1) * LMq.(i1-'1+1-'i) by A13,A19
+        .= 0.L*LMq.(i1-'1+1-'i) by A21,Def1
+        .= 0.L by VECTSP_1:39;
+    end;
+    then A22: Sum r = r/.(len p) by A17,POLYNOM2:5
+       .= LMp.(len p-'1) * LMq.(len q-'1) by A17,A18,FINSEQ_4:def 4
+       .= p.(len p-'1) * LMq.(len q-'1) by Def1
+       .= p.(len p-'1) * q.(len q-'1) by Def1;
+    A23: now let i be Nat;
+     assume that
+      A24: i in dom F and
+      A25: i <> i1;
+     consider r1 be FinSequence of the carrier of L such that
+      A26: len r1 = i-'1+1 and
+      A27: (LMp*'LMq).(i-'1) = Sum r1 and
+      A28: for k be Nat st k in dom r1 holds r1.k=LMp.(k-'1)*LMq.(i-'1+1-'k)
+                                                         by POLYNOM3:def 11;
+       i in Seg len F by A24,FINSEQ_1:def 3;
+     then i >= 1 by FINSEQ_1:3;
+     then A29: i-'1+1 = i by AMI_5:4;
+     A30: now let j be Nat;
+      assume A31: j in dom r1;
+      then j in Seg len r1 by FINSEQ_1:def 3;
+      then j >= 0+1 by FINSEQ_1:3;
+      then j-1 >= 0 by REAL_1:84;
+      then A32: j-'1 = j-1 by BINARITH:def 3;
+      per cases;
+       suppose j<>len p;
+        then A33: j-'1 <> len p-'1 by A7,A32,XCMPLX_1:19;
+        thus r1.j = LMp.(j-'1)*LMq.(i-'1+1-'j) by A28,A31
+           .= 0.L*LMq.(i-'1+1-'j) by A33,Def1
+           .= 0.L by VECTSP_1:39;
+       suppose A34: j=len p;
+          j in Seg len r1 by A31,FINSEQ_1:def 3;
+        then i >= 0+j by A26,A29,FINSEQ_1:3;
+        then i-j >= 0 by REAL_1:84;
+        then A35: i-'len p = i-len p by A34,BINARITH:def 3;
+        A36: i-'len p <> len q-'1
+        proof
+         assume i-'len p = len q-'1;
+         then i = len q-1+len p by A7,A35,XCMPLX_1:27;
+         hence contradiction by A25,XCMPLX_1:29;
+        end;
+        thus r1.j = LMp.(j-'1)*LMq.(i-'len p) by A28,A29,A31,A34
+           .= LMp.(j-'1)*0.L by A36,Def1
+           .= 0.L by VECTSP_1:36;
+     end;
+     thus F/.i = F.i by A24,FINSEQ_4:def 4
+        .= (Sum r1)*(power L).(x,i-'1) by A4,A24,A27
+        .= 0.L*(power L).(x,i-'1) by A30,POLYNOM3:1
+        .= 0.L by VECTSP_1:39;
+    end;
+    per cases;
+     suppose (LMp*'LMq).(i1-'1) <> 0.L;
+      then len F > i1-'1 by A3,ALGSEQ_1:22;
+      then len F >= i1 by A10,NAT_1:38;
+      then i1 in Seg len F by A9,FINSEQ_1:3;
+      then A37: i1 in dom F by FINSEQ_1:def 3;
+      hence eval((Leading-Monomial(p))*'(Leading-Monomial(q)),x) = F/.i1
+                                                          by A2,A23,POLYNOM2:5
+         .= F.i1 by A37,FINSEQ_4:def 4
+         .= p.(len p-'1)*q.(len q-'1)*(power L).(x,len p+len q-'2)
+                                                         by A4,A12,A16,A22,A37;
+     suppose A38: (LMp*'LMq).(i1-'1) = 0.L;
+        now let j be Nat;
+       assume j >= 0;
+       consider r1 be FinSequence of the carrier of L such that
+        A39: len r1 = j+1 and
+        A40: (LMp*'LMq).j = Sum r1 and
+        A41: for k be Nat st k in dom r1 holds r1.k = LMp.(k-'1)*LMq.(j+1-'k)
+                                                         by POLYNOM3:def 11;
+         now per cases;
+        suppose j = i1-'1;
+         hence (LMp*'LMq).j = 0.L by A38;
+        suppose A42: j <> i1-'1;
+           now let k be Nat;
+          assume A43: k in dom r1;
+          per cases;
+           suppose A44: k-'1 <> len p-'1;
+            thus r1.k = LMp.(k-'1)*LMq.(j+1-'k) by A41,A43
+               .= 0.L*LMq.(j+1-'k) by A44,Def1
+               .= 0.L by VECTSP_1:39;
+           suppose A45: k-'1 = len p-'1;
+              k in Seg len r1 by A43,FINSEQ_1:def 3;
+            then A46: 0+1 <= k & 0+k <= j+1 by A39,FINSEQ_1:3;
+            then k-1 >= 0 by REAL_1:84;
+            then A47: k-'1 = k-1 by BINARITH:def 3;
+              j+1-k >= 0 by A46,REAL_1:84;
+            then A48: j+1-'k = j+1-k by BINARITH:def 3
+               .= j+(1-k) by XCMPLX_1:29
+               .= j-(len p-1) by A7,A45,A47,XCMPLX_1:38
+               .= j-len p+1 by XCMPLX_1:37;
+              j-len p <> i1-'1-len p by A42,XCMPLX_1:19;
+            then j-len p+1 <> i1-'1-len p+1 by XCMPLX_1:2;
+            then j-len p+1 <> len p+len q-1-len p by A10,XCMPLX_1:29;
+            then j-len p+1 <> len p+(len q-1)-len p by XCMPLX_1:29;
+            then A49: j-len p+1 <> len q-'1 by A7,XCMPLX_1:26;
+            thus r1.k = LMp.(k-'1)*LMq.(j+1-'k) by A41,A43
+               .= LMp.(k-'1)*0.L by A48,A49,Def1
+               .= 0.L by VECTSP_1:36;
+         end;
+         hence (LMp*'LMq).j = 0.L by A40,POLYNOM3:1;
+       end;
+       hence (LMp*'LMq).j = 0.L;
+      end;
+      then A50: 0 is_at_least_length_of (LMp*'LMq) by ALGSEQ_1:def 3;
+        for m be Nat st m is_at_least_length_of (LMp*'
+LMq) holds 0<=m by NAT_1:18;
+      then len (LMp*'LMq) = 0 by A50,ALGSEQ_1:def 4;
+      then LMp*'LMq = 0_.(L) by Th8;
+      then eval(LMp*'LMq,x) = 0.L by Th20;
+      hence eval((Leading-Monomial(p))*'(Leading-Monomial(q)),x) =
+ p.(len p-'1)*q.(len q-'1)*(power L).(x,len p+len q-'2)
+                                                                by A12,A22,A38,
+VECTSP_1:39;
+   end;
+
+  Lm3:
+   for L be add-associative right_zeroed right_complementable left_unital
+    distributive commutative associative non trivial (non empty doubleLoopStr)
+   for p,q be Polynomial of L
+   for x be Element of L holds
+    eval((Leading-Monomial(p))*'(Leading-Monomial(q)),x) =
+    eval(Leading-Monomial(p),x)*eval(Leading-Monomial(q),x)
+   proof
+    let L be add-associative right_zeroed right_complementable left_unital
+     distributive commutative associative non trivial
+     (non empty doubleLoopStr);
+    let p,q be Polynomial of L;
+    let x be Element of L;
+    per cases;
+     suppose len p <> 0 & len q <> 0;
+      then A1: len p > 0 & len q > 0 by NAT_1:19;
+      then A2: len p >= 0+1 & len q >= 0+1 by NAT_1:38;
+      then len p-1 >= 0 & len q-1 >= 0 by REAL_1:84;
+      then A3: len p-1 = len p-'1 & len q-1 = len q-'1 by BINARITH:def 3;
+        len p+len q >= 0+(1+1) by A2,REAL_1:55;
+      then len p+len q-2 >= 0 by REAL_1:84;
+      then A4: len p+len q-'2 = len p+len q-2 by BINARITH:def 3;
+      A5: len p+len q-(1+1) = len p+(len q-(1+1)) by XCMPLX_1:29
+         .= len p+(len q-1-1) by XCMPLX_1:36
+         .= len p+(-1+(len q-1)) by XCMPLX_0:def 8
+         .= len p+-1+(len q-1) by XCMPLX_1:1
+         .= len p-1+(len q-1) by XCMPLX_0:def 8;
+      thus eval((Leading-Monomial(p))*'(Leading-Monomial(q)),x) =
+            p.(len p-'1)*q.(len q-'1)*(power L).(x,len p+len q-'2) by A1,Lm2
+         .= p.(len p-'1)*q.(len q-'1)*((power L).(x,len p-'1)*
+            (power L).(x,len q-'1)) by A3,A4,A5,POLYNOM2:2
+         .= p.(len p-'1)*(q.(len q-'1)*((power L).(x,len p-'1)*
+            (power L).(x,len q-'1))) by VECTSP_1:def 16
+         .= p.(len p-'1)*((power L).(x,len p-'1)*(q.(len q-'1)*
+            (power L).(x,len q-'1))) by VECTSP_1:def 16
+         .= p.(len p-'1)*(power L).(x,len p-'1)*
+            (q.(len q-'1)*(power L).(x,len q-'1)) by VECTSP_1:def 16
+         .= p.(len p-'1)*(power L).(x,len p-'1)*eval(Leading-Monomial(q),x)
+                                                                      by Th25
+         .= eval(Leading-Monomial(p),x)*eval(Leading-Monomial(q),x) by Th25;
+     suppose len p = 0;
+      then A6: Leading-Monomial(p) = 0_.(L) by Th15;
+      hence eval((Leading-Monomial(p))*'(Leading-Monomial(q)),x) =
+            eval(0_.(L),x) by Th5
+         .= 0.L by Th20
+         .= 0.L*eval(Leading-Monomial(q),x) by VECTSP_1:39
+         .= eval(Leading-Monomial(p),x)*eval(Leading-Monomial(q),x)
+                                                                 by A6,Th20;
+     suppose len q = 0;
+      then len Leading-Monomial(q) = 0 by Th18;
+      then A7: Leading-Monomial(q) = 0_.(L) by Th8;
+      hence eval((Leading-Monomial(p))*'(Leading-Monomial(q)),x) =
+            eval(0_.(L),x) by POLYNOM3:35
+         .= 0.L by Th20
+         .= eval(Leading-Monomial(p),x)*0.L by VECTSP_1:39
+         .= eval(Leading-Monomial(p),x)*eval(Leading-Monomial(q),x)
+                                                                 by A7,Th20;
+   end;
+
+  theorem Th26:
+   for L be add-associative right_zeroed right_complementable Abelian
+    left_unital distributive commutative associative non trivial
+    (non empty doubleLoopStr)
+   for p,q be Polynomial of L
+   for x be Element of L holds
+    eval((Leading-Monomial(p))*'q,x) = eval(Leading-Monomial(p),x) * eval(q,x)
+   proof
+    let L be add-associative right_zeroed right_complementable Abelian
+     left_unital distributive commutative associative non trivial
+     (non empty doubleLoopStr);
+    let p1,q be Polynomial of L;
+    let x be Element of L;
+    set p=Leading-Monomial(p1);
+    defpred P[Nat] means for q be Polynomial of L holds
+     len q = $1 implies eval(p*'q,x) = eval(p,x)*eval(q,x);
+    A1: for k be Nat st for n be Nat st n < k holds P[n] holds P[k]
+    proof
+     let k be Nat;
+     assume A2: for n be Nat st n < k holds
+      for q be Polynomial of L holds
+       len q = n implies eval(p*'q,x) = eval(p,x) * eval(q,x);
+     let q be Polynomial of L;
+     assume A3: len q = k;
+     per cases;
+      suppose len q <> 0;
+       then consider r be Polynomial of L such that
+        A4: len r < len q and
+        A5: q = r+Leading-Monomial(q) and
+          for n be Nat st n < len q-1 holds r.n = q.n by Th19;
+       set LMq = Leading-Monomial(q);
+       thus eval(p*'q,x) = eval(p*'r+p*'LMq,x) by A5,POLYNOM3:32
+          .= eval(p*'r,x) + eval(p*'LMq,x) by Th22
+          .= eval(p,x)*eval(r,x) + eval(p*'LMq,x) by A2,A3,A4
+          .= eval(p,x)*eval(r,x) + eval(p,x)*eval(LMq,x) by Lm3
+          .= eval(p,x)*(eval(r,x) + eval(LMq,x)) by VECTSP_1:def 18
+          .= eval(p,x) * eval(q,x) by A5,Th22;
+      suppose len q = 0;
+       then A6: q = 0_.(L) by Th8;
+       hence eval(p*'q,x) = eval(0_.(L),x) by POLYNOM3:35
+          .= 0.L by Th20
+          .= eval(p,x) * 0.L by VECTSP_1:39
+          .= eval(p,x) * eval(q,x) by A6,Th20;
+    end;
+    A7: len q = len q;
+    for n be Nat holds P[n] from Comp_Ind(A1);
+    hence thesis by A7;
+   end;
+
+  theorem Th27:
+   for L be add-associative right_zeroed right_complementable Abelian
+    left_unital distributive commutative associative non trivial
+    (non empty doubleLoopStr)
+   for p,q be Polynomial of L
+   for x be Element of L holds
+    eval(p*'q,x) = eval(p,x) * eval(q,x)
+   proof
+    let L be add-associative right_zeroed right_complementable Abelian
+     left_unital distributive commutative associative non trivial
+     (non empty doubleLoopStr);
+    let p,q be Polynomial of L;
+    let x be Element of L;
+    defpred P[Nat] means for p be Polynomial of L holds
+     len p = $1 implies eval(p*'q,x) = eval(p,x)*eval(q,x);
+    A1: for k be Nat st for n be Nat st n < k holds P[n] holds P[k]
+    proof
+     let k be Nat;
+     assume A2: for n be Nat st n < k holds
+      for p be Polynomial of L holds
+       len p = n implies eval(p*'q,x) = eval(p,x) * eval(q,x);
+     let p be Polynomial of L;
+     assume A3: len p = k;
+     per cases;
+      suppose len p <> 0;
+       then consider r be Polynomial of L such that
+        A4: len r < len p and
+        A5: p = r+Leading-Monomial(p) and
+          for n be Nat st n < len p-1 holds r.n = p.n by Th19;
+       set LMp = Leading-Monomial(p);
+       thus eval(p*'q,x) = eval(r*'q+LMp*'q,x) by A5,POLYNOM3:33
+          .= eval(r*'q,x) + eval(LMp*'q,x) by Th22
+          .= eval(r,x)*eval(q,x) + eval(LMp*'q,x) by A2,A3,A4
+          .= eval(r,x)*eval(q,x) + eval(LMp,x)*eval(q,x) by Th26
+          .= (eval(r,x) + eval(LMp,x))*eval(q,x) by VECTSP_1:def 18
+          .= eval(p,x) * eval(q,x) by A5,Th22;
+      suppose len p = 0;
+       then A6: p = 0_.(L) by Th8;
+       hence eval(p*'q,x) = eval(0_.(L),x) by Th5
+          .= 0.L by Th20
+          .= 0.L * eval(q,x) by VECTSP_1:39
+          .= eval(p,x) * eval(q,x) by A6,Th20;
+    end;
+    A7: len p = len p;
+    for n be Nat holds P[n] from Comp_Ind(A1);
+    hence thesis by A7;
+   end;
+
+begin  :: Evaluation Homomorphism
+
+  definition
+   let L be add-associative right_zeroed right_complementable distributive
+    unital (non empty doubleLoopStr);
+   let x be Element of L;
+   func Polynom-Evaluation(L,x) -> map of Polynom-Ring L,L means :Def3:
+    for p be Polynomial of L holds it.p = eval(p,x);
+   existence
+   proof
+    defpred P[set,set] means
+     ex p be Polynomial of L st p = $1 & $2 = eval(p,x);
+    A1: for y be Element of Polynom-Ring L
+     ex z be Element of L st P[y,z]
+    proof
+     let y be Element of Polynom-Ring L;
+     reconsider p=y as Polynomial of L by POLYNOM3:def 12;
+     take eval(p,x);
+     take p;
+     thus thesis;
+    end;
+    consider f be Function of the carrier of Polynom-Ring L,the carrier of L
+      such that
+     A2: for y be Element of Polynom-Ring L holds P[y,f.y]
+                                                            from FuncExD(A1);
+    reconsider f as map of Polynom-Ring L,L;
+    take f;
+    let p be Polynomial of L;
+      p in the carrier of Polynom-Ring L by POLYNOM3:def 12;
+    then consider q be Polynomial of L such that
+     A3: q = p and
+     A4: f.p = eval(q,x) by A2;
+    thus thesis by A3,A4;
+   end;
+   uniqueness
+   proof
+    let f1,f2 be map of Polynom-Ring L,L such that
+     A5: for p be Polynomial of L holds f1.p = eval(p,x) and
+     A6: for p be Polynomial of L holds f2.p = eval(p,x);
+      now let y be Element of Polynom-Ring L;
+     reconsider p=y as Polynomial of L by POLYNOM3:def 12;
+     thus f1.y = eval(p,x) by A5
+        .= f2.y by A6;
+    end;
+    hence f1 = f2 by FUNCT_2:113;
+   end;
+  end;
+
+  definition
+   let L be add-associative right_zeroed right_complementable distributive
+    associative well-unital non degenerated (non empty doubleLoopStr);
+   let x be Element of L;
+   cluster Polynom-Evaluation(L,x) -> unity-preserving;
+   coherence
+   proof
+    thus (Polynom-Evaluation(L,x)).(1_(Polynom-Ring L)) =
+          (Polynom-Evaluation(L,x)).(1_.(L)) by POLYNOM3:def 12
+       .= eval(1_.(L),x) by Def3
+       .= 1_(L) by Th21;
+   end;
+  end;
+
+  definition
+   let L be Abelian add-associative right_zeroed right_complementable
+    distributive unital (non empty doubleLoopStr);
+   let x be Element of L;
+   cluster Polynom-Evaluation(L,x) -> additive;
+   coherence
+   proof
+    let a,b be Element of Polynom-Ring L;
+    reconsider p=a,q=b as Polynomial of L by POLYNOM3:def 12;
+    thus (Polynom-Evaluation(L,x)).(a+b) = (Polynom-Evaluation(L,x)).(p+q)
+                                                          by POLYNOM3:def 12
+       .= eval(p+q,x) by Def3
+       .= eval(p,x) + eval(q,x) by Th22
+       .= (Polynom-Evaluation(L,x)).a + eval(q,x) by Def3
+       .= (Polynom-Evaluation(L,x)).a+(Polynom-Evaluation(L,x)).b by Def3;
+   end;
+  end;
+
+  definition
+   let L be add-associative right_zeroed right_complementable Abelian
+    left_unital distributive commutative associative non trivial
+    (non empty doubleLoopStr);
+   let x be Element of L;
+   cluster Polynom-Evaluation(L,x) -> multiplicative;
+   coherence
+   proof
+    let a,b be Element of Polynom-Ring L;
+    reconsider p=a,q=b as Polynomial of L by POLYNOM3:def 12;
+    thus (Polynom-Evaluation(L,x)).(a*b) = (Polynom-Evaluation(L,x)).(p*'q)
+                                                          by POLYNOM3:def 12
+       .= eval(p*'q,x) by Def3
+       .= eval(p,x)*eval(q,x) by Th27
+       .= (Polynom-Evaluation(L,x)).a*eval(q,x) by Def3
+       .= (Polynom-Evaluation(L,x)).a*(Polynom-Evaluation(L,x)).b by Def3;
+   end;
+  end;
+
+  definition
+   let L be add-associative right_zeroed right_complementable Abelian
+    left_unital distributive commutative associative non degenerated
+    (non empty doubleLoopStr);
+   let x be Element of L;
+   cluster Polynom-Evaluation(L,x) -> RingHomomorphism;
+   coherence
+   proof
+    thus Polynom-Evaluation(L,x) is additive multiplicative unity-preserving;
+   end;
+  end;

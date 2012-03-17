@@ -1,0 +1,366 @@
+:: Filters - Part II. Quotient Lattices Modulo Filters and
+:: Direct Product of Two Lattices
+::  by Grzegorz Bancerek
+::
+:: Received April 19, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary LATTICES, FILTER_0, RELAT_1, EQREL_1, BINOP_1, BOOLE, FUNCT_1,
+      LATTICE2, ZF_LANG, SUBSET_1, FUNCT_4, WELLORD1, FUNCT_3, PARTFUN1,
+      FILTER_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
+      BINOP_1, EQREL_1, DOMAIN_1, WELLORD1, FUNCT_3, FUNCT_4, STRUCT_0,
+      LATTICES, FILTER_0, LATTICE2;
+ constructors BINOP_1, DOMAIN_1, WELLORD1, FUNCT_3, FUNCT_4, FILTER_0,
+      LATTICE2, MEMBERED, EQREL_1, XBOOLE_0;
+ clusters LATTICES, FILTER_0, LATTICE2, RELSET_1, STRUCT_0, SUBSET_1, MEMBERED,
+      ZFMISC_1, XBOOLE_0, PARTFUN1;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+ reserve L,L1,L2 for Lattice, F1,F2 for Filter of L,
+  p,q,r,s for Element of L,
+  p1,q1,r1,s1 for Element of L1,
+  p2,q2,r2,s2 for Element of L2,
+  X,x,x1,x2,y,y1,y2 for set,
+  D,D1,D2 for non empty set, R for Relation,
+  R_D for Equivalence_Relation of D,
+  a,b,d for Element of D,
+  a1,b1,c1 for Element of D1,
+  a2,b2,c2 for Element of D2,
+  B for B_Lattice, F_B for Filter of B,
+  I for I_Lattice, F_I for Filter of I,
+  i,i1,i2,j,j1,j2,k for Element of I,
+  f1,g1 for BinOp of D1, f2,g2 for BinOp of D2;
+
+theorem :: FILTER_1:1
+  F1 /\ F2 is Filter of L;
+
+theorem :: FILTER_1:2
+   <.p.) = <.q.) implies p = q;
+
+ definition let L,F1,F2;
+  redefine func F1 /\ F2 -> Filter of L;
+ end;
+
+ definition let D,R;
+  mode UnOp of D,R -> UnOp of D means
+:: FILTER_1:def 1
+   for x,y being Element of D st [x,y] in R
+      holds [it.x,it.y] in R;
+
+  mode BinOp of D,R -> BinOp of D means
+:: FILTER_1:def 2
+   for x1,y1, x2,y2 being Element of D
+   st [x1,y1] in R & [x2,y2] in R holds
+    [it.(x1,x2),it.(y1,y2)] in R;
+ end;
+
+ reserve F,G for BinOp of D,R_D;
+
+ definition let D; let R be Equivalence_Relation of D;
+  mode UnOp of R is UnOp of D,R;
+  mode BinOp of R is BinOp of D,R;
+  cluster Class R -> non empty;
+ end;
+
+ definition let D; let R be Equivalence_Relation of D;
+  let d be Element of D;
+  redefine func Class(R,d) -> Element of Class R;
+ end;
+
+ definition let D; let R be Equivalence_Relation of D; let u be UnOp of D;
+  assume
+ u is UnOp of D,R;
+  func u /\/ R -> UnOp of Class R means
+:: FILTER_1:def 3
+     for x,y st x in Class R & y in x holds it.x = Class(R,u.y);
+ end;
+
+ definition let D; let R be Equivalence_Relation of D; let b be BinOp of D;
+  assume
+ b is BinOp of D,R;
+  func b /\/ R -> BinOp of Class R means
+:: FILTER_1:def 4
+   for x,y, x1,y1 st x in Class R & y in Class R & x1 in x & y1 in y holds
+    it.(x,y) = Class(R,b.(x1,y1));
+ end;
+
+theorem :: FILTER_1:3
+  (F /\/ R_D).(Class(R_D,a), Class(R_D,b)) = Class(R_D, F.(a,b));
+
+theorem :: FILTER_1:4
+  F is commutative implies F/\/R_D is commutative;
+
+theorem :: FILTER_1:5
+  F is associative implies F/\/R_D is associative;
+
+theorem :: FILTER_1:6
+  d is_a_left_unity_wrt F implies Class(R_D,d) is_a_left_unity_wrt F/\/R_D;
+
+theorem :: FILTER_1:7
+  d is_a_right_unity_wrt F implies
+   Class(R_D,d) is_a_right_unity_wrt F/\/R_D;
+
+theorem :: FILTER_1:8
+   d is_a_unity_wrt F implies Class(R_D,d) is_a_unity_wrt F/\/R_D;
+
+theorem :: FILTER_1:9
+ F is_left_distributive_wrt G implies F/\/R_D is_left_distributive_wrt G/\/R_D;
+
+theorem :: FILTER_1:10
+ F is_right_distributive_wrt G implies
+   F/\/R_D is_right_distributive_wrt G/\/R_D;
+
+theorem :: FILTER_1:11
+   F is_distributive_wrt G implies F/\/R_D is_distributive_wrt G/\/R_D;
+
+theorem :: FILTER_1:12
+  F absorbs G implies F/\/R_D absorbs G/\/R_D;
+
+theorem :: FILTER_1:13
+  the L_join of I is BinOp of the carrier of I, equivalence_wrt F_I;
+
+theorem :: FILTER_1:14
+  the L_meet of I is BinOp of the carrier of I, equivalence_wrt F_I;
+
+ definition let L be Lattice, F be Filter of L;
+  assume
+
+   L is I_Lattice;
+  func L /\/ F -> strict Lattice means
+:: FILTER_1:def 5
+
+   for R being Equivalence_Relation of the carrier of L st
+    R = equivalence_wrt F holds
+     it = LattStr (#Class R, (the L_join of L)/\/R, (the L_meet of L)/\/R#);
+ end;
+
+ definition let L be Lattice, F be Filter of L,
+    a be Element of L;
+  assume
+
+   L is I_Lattice;
+  func a /\/ F -> Element of L /\/ F means
+:: FILTER_1:def 6
+
+    for R being Equivalence_Relation of the carrier of L st
+      R = equivalence_wrt F holds it = Class(R, a);
+ end;
+
+theorem :: FILTER_1:15
+  (i/\/F_I) "\/" (j/\/F_I) = (i"\/"j)/\/F_I &
+   (i/\/F_I) "/\" (j/\/F_I) = (i"/\"j)/\/F_I;
+
+theorem :: FILTER_1:16
+  i/\/F_I [= j/\/F_I iff i => j in F_I;
+
+theorem :: FILTER_1:17
+  (i"/\"j) => k = i => (j => k);
+
+theorem :: FILTER_1:18
+  I is lower-bounded
+    implies I/\/F_I is 0_Lattice & Bottom (I/\/F_I) = (Bottom I)/\/F_I;
+
+theorem :: FILTER_1:19
+  I/\/F_I is 1_Lattice & Top (I/\/F_I) = (Top I)/\/F_I;
+
+theorem :: FILTER_1:20
+  I/\/F_I is implicative;
+
+theorem :: FILTER_1:21
+   B/\/F_B is B_Lattice;
+
+ definition let D1,D2 be set;
+  let f1 be BinOp of D1; let f2 be BinOp of D2;
+  redefine func |:f1,f2:| -> BinOp of [:D1,D2:];
+ end;
+
+theorem :: FILTER_1:22
+  |:f1,f2:|.([a1,a2],[b1,b2]) = [f1.(a1,b1),f2.(a2,b2)];
+
+theorem :: FILTER_1:23
+  f1 is commutative & f2 is commutative iff |:f1,f2:| is commutative;
+
+theorem :: FILTER_1:24
+  f1 is associative & f2 is associative iff |:f1,f2:| is associative;
+
+theorem :: FILTER_1:25
+  a1 is_a_left_unity_wrt f1 & a2 is_a_left_unity_wrt f2 iff
+   [a1,a2] is_a_left_unity_wrt |:f1,f2:|;
+
+theorem :: FILTER_1:26
+  a1 is_a_right_unity_wrt f1 & a2 is_a_right_unity_wrt f2 iff
+   [a1,a2] is_a_right_unity_wrt |:f1,f2:|;
+
+theorem :: FILTER_1:27
+   a1 is_a_unity_wrt f1 & a2 is_a_unity_wrt f2 iff
+   [a1,a2] is_a_unity_wrt |:f1,f2:|;
+
+theorem :: FILTER_1:28
+  f1 is_left_distributive_wrt g1 & f2 is_left_distributive_wrt g2 iff
+   |:f1,f2:| is_left_distributive_wrt |:g1,g2:|;
+
+theorem :: FILTER_1:29
+  f1 is_right_distributive_wrt g1 & f2 is_right_distributive_wrt g2 iff
+   |:f1,f2:| is_right_distributive_wrt |:g1,g2:|;
+
+theorem :: FILTER_1:30
+  f1 is_distributive_wrt g1 & f2 is_distributive_wrt g2 iff
+   |:f1,f2:| is_distributive_wrt |:g1,g2:|;
+
+theorem :: FILTER_1:31
+  f1 absorbs g1 & f2 absorbs g2 iff |:f1,f2:| absorbs |:g1,g2:|;
+
+ definition let L1,L2 be non empty LattStr;
+  func [:L1,L2:] -> strict LattStr equals
+:: FILTER_1:def 7
+
+    LattStr (#[:the carrier of L1, the carrier of L2:],
+                 |:the L_join of L1, the L_join of L2:|,
+                 |:the L_meet of L1, the L_meet of L2:|#);
+ end;
+
+definition let L1,L2 be non empty LattStr;
+ cluster [:L1,L2:] -> non empty;
+end;
+
+ definition let L be Lattice;
+  func LattRel L -> Relation equals
+:: FILTER_1:def 8
+
+     { [p,q] where p is Element of L,
+              q is Element of L: p [= q };
+ end;
+
+theorem :: FILTER_1:32
+  [p,q] in LattRel L iff p [= q;
+
+theorem :: FILTER_1:33
+  dom LattRel L = the carrier of L &
+  rng LattRel L = the carrier of L & field LattRel L = the carrier of L;
+
+ definition let L1,L2 be Lattice;
+  pred L1,L2 are_isomorphic means
+:: FILTER_1:def 9
+      LattRel L1, LattRel L2 are_isomorphic;
+   reflexivity;
+   symmetry;
+  cluster [:L1,L2:] -> Lattice-like;
+ end;
+
+theorem :: FILTER_1:34
+   for L1,L2,L3 being Lattice st L1,L2 are_isomorphic & L2,L3 are_isomorphic
+   holds L1,L3 are_isomorphic;
+
+theorem :: FILTER_1:35
+   for L1,L2 being non empty LattStr st [:L1,L2:] is Lattice holds
+   L1 is Lattice & L2 is Lattice;
+
+ definition let L1,L2 be Lattice;
+  let a be Element of L1, b be Element of L2;
+  redefine func [a,b] -> Element of [:L1,L2:];
+ end;
+
+theorem :: FILTER_1:36
+  [p1,p2] "\/" [q1,q2] = [p1"\/"q1,p2"\/"q2] &
+   [p1,p2] "/\" [q1,q2] = [p1"/\"q1,p2"/\"q2];
+
+theorem :: FILTER_1:37
+  [p1,p2] [= [q1,q2] iff p1 [= q1 & p2 [= q2;
+
+theorem :: FILTER_1:38
+   L1 is modular & L2 is modular iff [:L1,L2:] is modular;
+
+theorem :: FILTER_1:39
+  L1 is D_Lattice & L2 is D_Lattice iff [:L1,L2:] is D_Lattice;
+
+theorem :: FILTER_1:40
+  L1 is lower-bounded & L2 is lower-bounded
+    iff [:L1,L2:] is lower-bounded;
+
+theorem :: FILTER_1:41
+  L1 is upper-bounded & L2 is upper-bounded
+   iff [:L1,L2:] is upper-bounded;
+
+theorem :: FILTER_1:42
+  L1 is bounded & L2 is bounded
+   iff [:L1,L2:] is bounded;
+
+theorem :: FILTER_1:43
+  L1 is 0_Lattice & L2 is 0_Lattice implies Bottom [:L1,L2:] = [Bottom L1,
+Bottom L2];
+
+theorem :: FILTER_1:44
+  L1 is 1_Lattice & L2 is 1_Lattice implies Top [:L1,L2:] = [Top L1,Top
+L2];
+
+theorem :: FILTER_1:45
+  L1 is 01_Lattice & L2 is 01_Lattice implies
+  (p1 is_a_complement_of q1 & p2 is_a_complement_of q2 iff
+    [p1,p2] is_a_complement_of [q1,q2]);
+
+theorem :: FILTER_1:46
+  L1 is C_Lattice & L2 is C_Lattice iff [:L1,L2:] is C_Lattice;
+
+theorem :: FILTER_1:47
+   L1 is B_Lattice & L2 is B_Lattice iff [:L1,L2:] is B_Lattice;
+
+theorem :: FILTER_1:48
+   L1 is implicative & L2 is implicative
+   iff [:L1,L2:] is implicative;
+
+theorem :: FILTER_1:49
+   [:L1,L2:].: = [:L1.:,L2.: :];
+
+theorem :: FILTER_1:50
+   [:L1,L2:], [:L2,L1:] are_isomorphic;
+
+ reserve B for B_Lattice,
+  a,b,c,d for Element of B;
+
+theorem :: FILTER_1:51
+  a <=> b = (a"/\"b)"\/"(a`"/\"b`);
+
+theorem :: FILTER_1:52
+  (a => b)` = a "/\" b` & (a <=> b)` = (a "/\" b`) "\/" (a` "/\" b) &
+   (a <=> b)` = a <=> b` & (a <=> b)` = a` <=> b;
+
+theorem :: FILTER_1:53
+  a <=> b = a <=> c implies b = c;
+
+theorem :: FILTER_1:54
+  a <=> (a <=> b) = b;
+
+theorem :: FILTER_1:55
+   (i"\/"j) => i = j => i & i => (i"/\"j) = i => j;
+
+theorem :: FILTER_1:56
+  i => j [= i => (j"\/"k) & i => j [= (i"/\"k) => j &
+   i => j [= i => (k"\/"j) & i => j [= (k"/\"i) => j;
+
+theorem :: FILTER_1:57
+  (i => k)"/\"(j => k) [= (i"\/"j) => k;
+
+theorem :: FILTER_1:58
+  (i => j)"/\"(i => k) [= i => (j"/\"k);
+
+theorem :: FILTER_1:59
+  i1 <=> i2 in F_I & j1 <=> j2 in F_I implies
+   (i1"\/"j1) <=> (i2"\/"j2) in F_I & (i1"/\"j1) <=> (i2"/\"j2) in F_I;
+
+theorem :: FILTER_1:60
+ i in Class(equivalence_wrt F_I,k) & j in Class(equivalence_wrt F_I,k) implies
+   i"\/"j in Class(equivalence_wrt F_I,k) & i"/\"
+j in Class(equivalence_wrt F_I,k);
+
+theorem :: FILTER_1:61
+  c"\/"(c <=>d) in Class(equivalence_wrt <.d.),c) &
+   for b st b in Class(equivalence_wrt <.d.),c) holds b [= c"\/"(c <=>d);
+
+theorem :: FILTER_1:62
+   B, [:B/\/<.a.),latt <.a.):] are_isomorphic;

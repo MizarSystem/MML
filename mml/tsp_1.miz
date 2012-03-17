@@ -1,0 +1,2027 @@
+:: On Kolmogorov Topological Spaces
+::  by Zbigniew Karno
+::
+:: Received July 26, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, BOOLE, SUBSET_1, METRIC_1, REALSET1, TDLAT_3, NATTRA_1,
+      SETFAM_1, TARSKI, COLLSP, TSP_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, PRE_TOPC, BORSUK_1, TSEP_1,
+      TDLAT_3, TEX_1, TEX_2, T_0TOPSP, TEX_4;
+ constructors REALSET1, TSEP_1, TDLAT_3, TEX_2, T_0TOPSP, TEX_4, BORSUK_1,
+      MEMBERED;
+ clusters TDLAT_3, TEX_1, TEX_2, STRUCT_0, MEMBERED, ZFMISC_1;
+ requirements SUBSET, BOOLE;
+ definitions T_0TOPSP;
+ theorems ZFMISC_1, REALSET1, SUBSET_1, PRE_TOPC, TOPS_1, PCOMPS_1, TSEP_1,
+      TDLAT_3, TEX_1, TEX_2, TEX_4, TARSKI, T_0TOPSP, STRUCT_0, XBOOLE_0,
+      XBOOLE_1;
+
+begin
+:: 1. Subspaces.
+
+definition let Y be TopStruct;
+ redefine mode SubSpace of Y -> TopStruct means
+:Def1: the carrier of it c= the carrier of Y &
+ for G0 being Subset of it holds G0 is open iff
+   ex G being Subset of Y
+      st G is open & G0 = G /\ the carrier of it;
+ compatibility
+  proof let Y0 be TopStruct;
+    A1: [#]Y0 = the carrier of Y0 & [#]Y = the carrier of Y by PRE_TOPC:12;
+   thus Y0 is SubSpace of Y implies
+       the carrier of Y0 c= the carrier of Y &
+         for G0 being Subset of Y0 holds G0 is open iff
+        ex G being Subset of Y st G is open & G0 = G /\ the carrier of Y0
+    proof
+     assume A2: Y0 is SubSpace of Y;
+       hence the carrier of Y0 c= the carrier of Y by A1,PRE_TOPC:def 9;
+     thus for G0 being Subset of Y0 holds G0 is open iff
+        ex G being Subset of Y
+         st G is open & G0 = G /\ the carrier of Y0
+      proof let G0 be Subset of Y0;
+       thus G0 is open implies
+           ex G being Subset of Y
+            st G is open & G0 = G /\ the carrier of Y0
+        proof
+         assume G0 is open;
+          then G0 in the topology of Y0 by PRE_TOPC:def 5;
+          then consider G being Subset of Y such that
+           A3: G in the topology of Y and A4: G0 = G /\ [#]
+Y0 by A2,PRE_TOPC:def 9
+;
+         reconsider G as Subset of Y;
+         take G;
+         thus G is open by A3,PRE_TOPC:def 5;
+         thus G0 = G /\ the carrier of Y0 by A4,PRE_TOPC:12;
+        end;
+       given G being Subset of Y such that
+              A5: G is open and A6: G0 = G /\ the carrier of Y0;
+           now
+          take G;
+          thus G in the topology of Y by A5,PRE_TOPC:def 5;
+          thus G0 = G /\ [#]Y0 by A6,PRE_TOPC:12;
+         end;
+        then G0 in the topology of Y0 by A2,PRE_TOPC:def 9;
+       hence G0 is open by PRE_TOPC:def 5;
+      end;
+    end;
+   assume A7: the carrier of Y0 c= the carrier of Y &
+                for G0 being Subset of Y0 holds G0 is open iff
+              ex G being Subset of Y
+              st G is open & G0 = G /\ the carrier of Y0;
+      now
+     thus [#]Y0 c= [#]Y by A1,A7;
+     thus for G0 being Subset of Y0
+      holds G0 in the topology of Y0 iff
+           ex G being Subset of Y
+             st G in the topology of Y & G0 = G /\ [#]Y0
+      proof let G0 be Subset of Y0;
+       thus G0 in the topology of Y0 implies
+           ex G being Subset of Y
+           st G in the topology of Y & G0 = G /\ [#]Y0
+        proof
+         reconsider M = G0 as Subset of Y0;
+         assume G0 in the topology of Y0;
+          then M is open by PRE_TOPC:def 5;
+          then consider G being Subset of Y such that
+                A8: G is open and A9: G0 = G /\ the carrier of Y0 by A7;
+         take G;
+         thus G in the topology of Y by A8,PRE_TOPC:def 5;
+         thus G0 = G /\ [#]Y0 by A9,PRE_TOPC:12;
+        end;
+       given G being Subset of Y such that
+               A10: G in the topology of Y and A11: G0 = G /\ [#]Y0;
+         reconsider G as Subset of Y;
+         reconsider M = G0 as Subset of Y0;
+            now
+           take G;
+           thus G is open by A10,PRE_TOPC:def 5;
+           thus G0 = G /\ the carrier of Y0 by A11,PRE_TOPC:12;
+          end;
+         then M is open by A7;
+       hence G0 in the topology of Y0 by PRE_TOPC:def 5;
+      end;
+    end;
+   hence Y0 is SubSpace of Y by PRE_TOPC:def 9;
+  end;
+ coherence;
+end;
+
+canceled;
+
+theorem Th2:
+ for Y being TopStruct, Y0 being SubSpace of Y
+  for G being Subset of Y st G is open holds
+    ex G0 being Subset of Y0
+    st G0 is open & G0 = G /\ the carrier of Y0
+ proof let Y be TopStruct, Y0 be SubSpace of Y;
+       [#]Y0 = the carrier of Y0 & [#]Y = the carrier of Y by PRE_TOPC:12;
+       then reconsider A = the carrier of Y0 as Subset of Y
+       by PRE_TOPC:def 9;
+   let G be Subset of Y;
+       G /\ A is Subset of Y0 by XBOOLE_1:17;
+     then reconsider G0 = G /\ A as Subset of Y0;
+  assume A1: G is open;
+  take G0;
+  thus G0 is open by A1,Def1;
+  thus G0 = G /\ the carrier of Y0;
+ end;
+
+definition let Y be TopStruct;
+ redefine
+ mode SubSpace of Y -> TopStruct means
+:Def2: the carrier of it c= the carrier of Y &
+ for F0 being Subset of it holds F0 is closed iff
+   ex F being Subset of Y
+   st F is closed & F0 = F /\ the carrier of it;
+ compatibility
+  proof let Y0 be TopStruct;
+    A1: [#]Y0 = the carrier of Y0 & [#]Y = the carrier of Y by PRE_TOPC:12;
+   thus Y0 is SubSpace of Y implies
+       the carrier of Y0 c= the carrier of Y &
+         for F0 being Subset of Y0 holds F0 is closed iff
+        ex F being Subset of Y
+        st F is closed & F0 = F /\ the carrier of Y0
+    proof
+     assume A2: Y0 is SubSpace of Y;
+       then A3: [#]Y0 c= [#]Y by PRE_TOPC:def 9;
+     thus the carrier of Y0 c= the carrier of Y by A1,A2,PRE_TOPC:def 9;
+       A4: [#]Y0 \ [#]Y = {} by A3,XBOOLE_1:37;
+     thus for F0 being Subset of Y0 holds F0 is closed iff
+        ex F being Subset of Y
+        st F is closed & F0 = F /\ the carrier of Y0
+      proof let F0 be Subset of Y0;
+       thus F0 is closed implies
+           ex F being Subset of Y
+           st F is closed & F0 = F /\ the carrier of Y0
+        proof
+         assume F0 is closed;
+          then [#]Y0 \ F0 is open by PRE_TOPC:def 6;
+          then consider G being Subset of Y such that
+           A5: G is open and A6: [#]Y0 \ F0 = G /\
+ the carrier of Y0 by A2,Def1;
+         take F = [#]Y \ G;
+           A7: G = [#]Y \ F by PRE_TOPC:22;
+         hence F is closed by A5,PRE_TOPC:def 6;
+             F0 = [#]Y0 \ (G /\ the carrier of Y0) by A6,PRE_TOPC:22
+             .= ([#]Y0 \ G) \/ ([#]Y0 \ the carrier of Y0) by XBOOLE_1:54
+             .= ([#]Y0 \ G) \/ {} by XBOOLE_1:37
+             .= ([#]Y0 \ [#]Y) \/ ([#]Y0 /\ F) by A7,XBOOLE_1:52
+             .= [#]Y0 /\ F by A4;
+         hence F0 = F /\ the carrier of Y0 by PRE_TOPC:12;
+        end;
+       given F being Subset of Y such that
+              A8: F is closed and A9: F0 = F /\ the carrier of Y0;
+        set G0 = [#]Y0 \F0;
+            now
+           take G = [#]Y \ F;
+           thus G is open by A8,PRE_TOPC:def 6;
+               A10: F = [#]Y \ G by PRE_TOPC:22;
+               G0 = ([#]Y0 \ F) \/ ([#]Y0 \ the carrier of Y0) by A9,XBOOLE_1:
+54
+               .= ([#]Y0 \ F) \/ {} by XBOOLE_1:37
+               .= ([#]Y0 \ [#]Y) \/ ([#]Y0 /\ G) by A10,XBOOLE_1:52
+               .= [#]Y0 /\ G by A4;
+           hence G0 = G /\ the carrier of Y0 by PRE_TOPC:12;
+          end;
+         then G0 is open by A2,Def1;
+       hence F0 is closed by PRE_TOPC:def 6;
+      end;
+    end;
+   assume A11: the carrier of Y0 c= the carrier of Y &
+                for F0 being Subset of Y0 holds F0 is closed iff
+           ex F being Subset of Y
+           st F is closed & F0 = F /\ the carrier of Y0;
+
+      now
+     thus the carrier of Y0 c= the carrier of Y by A11;
+      A12: [#]Y0 \ [#]Y = {} by A1,A11,XBOOLE_1:37;
+     thus for G0 being Subset of Y0 holds G0 is open iff
+           ex G being Subset of Y
+           st G is open & G0 = G /\ the carrier of Y0
+      proof let G0 be Subset of Y0;
+       thus G0 is open implies
+           ex G being Subset of Y
+           st G is open & G0 = G /\ the carrier of Y0
+        proof
+         set F0 = [#]Y0 \ G0;
+         assume A13: G0 is open;
+           A14: G0 = [#]Y0 \ F0 by PRE_TOPC:22;
+          then F0 is closed by A13,PRE_TOPC:def 6;
+          then consider F being Subset of Y such that
+                A15: F is closed and A16: F0 = F /\ the carrier of Y0 by A11;
+         take G = [#]Y \ F;
+           A17: F = [#]Y \ G by PRE_TOPC:22;
+         thus G is open by A15,PRE_TOPC:def 6;
+             G0 = ([#]Y0 \ F) \/ ([#]Y0 \ the carrier of Y0) by A14,A16,
+XBOOLE_1:54
+             .= ([#]Y0 \ F) \/ {} by XBOOLE_1:37
+             .= ([#]Y0 \ [#]Y) \/ ([#]Y0 /\ G) by A17,XBOOLE_1:52
+             .= [#]Y0 /\ G by A12;
+         hence G0 = G /\ the carrier of Y0 by PRE_TOPC:12;
+        end;
+       given G being Subset of Y such that
+               A18: G is open and A19: G0 = G /\ the carrier of Y0;
+        set F0 = [#]Y0 \ G0;
+           A20: G0 = [#]Y0 \ F0 by PRE_TOPC:22;
+            now
+           take F = [#]Y \ G;
+            A21: G = [#]Y \ F by PRE_TOPC:22;
+           hence F is closed by A18,PRE_TOPC:def 6;
+               F0 = ([#]Y0 \ G) \/ ([#]Y0 \ the carrier of Y0) by A19,XBOOLE_1:
+54
+               .= ([#]Y0 \ G) \/ {} by XBOOLE_1:37
+               .= ([#]Y0 \ [#]Y) \/ ([#]Y0 /\ F) by A21,XBOOLE_1:52
+               .= [#]Y0 /\ F by A12;
+           hence F0 = F /\ the carrier of Y0 by PRE_TOPC:12;
+          end;
+         then F0 is closed by A11;
+       hence G0 is open by A20,PRE_TOPC:def 6;
+      end;
+    end;
+   hence Y0 is SubSpace of Y by Def1;
+  end;
+ coherence;
+end;
+
+canceled;
+
+theorem Th4:
+ for Y being TopStruct, Y0 being SubSpace of Y
+  for F being Subset of Y st F is closed holds
+    ex F0 being Subset of Y0
+    st F0 is closed & F0 = F /\ the carrier of Y0
+ proof let Y be TopStruct, Y0 be SubSpace of Y;
+       [#]Y0 = the carrier of Y0 & [#]Y = the carrier of Y by PRE_TOPC:12;
+       then reconsider A = the carrier of Y0 as Subset of Y
+       by PRE_TOPC:def 9;
+   let F be Subset of Y;
+       F /\ A is Subset of Y0 by XBOOLE_1:17;
+     then reconsider F0 = F /\ A as Subset of Y0;
+  assume A1: F is closed;
+  take F0;
+  thus F0 is closed by A1,Def2;
+  thus F0 = F /\ the carrier of Y0;
+ end;
+
+
+begin
+:: 2. Kolmogorov Spaces.
+
+definition let T be TopStruct;
+ redefine attr T is discerning means
+:Def3: T is empty or
+   for x, y being Point of T st x <> y holds
+   (ex V being Subset of T st V is open & x in V & not y in V) or
+   (ex W being Subset of T st W is open & not x in W & y in W);
+ compatibility
+  proof
+   hereby assume A1: T is discerning;
+   assume
+A2: T is not empty;
+   let x, y be Point of T;
+   assume x <> y;
+   then ex V being Subset of T st V is open &
+      ((x in V & not y in V) or (y in V & not x in V)) by A1,A2,T_0TOPSP:def 7;
+   hence
+     (ex V being Subset of T st V is open & x in V & not y in V) or
+   (ex W being Subset of T st W is open & not x in W & y in W);
+   end;
+  assume
+A3: T is empty or
+   for x, y being Point of T st x <> y holds
+   (ex V being Subset of T st V is open & x in V & not y in V) or
+   (ex W being Subset of T st W is open & not x in W & y in W);
+  assume
+A4: T is not empty;
+  let x,y be Point of T;
+  assume x <> y;
+   then (ex V being Subset of T st V is open & x in V & not y in V) or
+   (ex W being Subset of T st W is open & not x in W & y in W)
+    by A3,A4;
+  hence ex V being Subset of T st V is open &
+      ((x in V & not y in V) or (y in V & not x in V));
+end;
+ synonym T is T_0;
+end;
+
+definition let Y be TopStruct;
+ redefine attr Y is T_0 means
+:Def4: Y is empty or
+  for x, y being Point of Y st x <> y holds
+   (ex E being Subset of Y st E is closed & x in E & not y in E)
+   or
+   (ex F being Subset of Y st F is closed & not x in F & y in F);
+ compatibility
+  proof
+   thus Y is T_0 implies
+     Y is empty or
+     for x, y being Point of Y st x <> y holds
+     (ex E being Subset of Y st E is closed & x in E & not y in E)
+     or
+     (ex F being Subset of Y st F is closed & not x in F & y in F)
+     proof
+      assume
+A1:    Y is empty or
+       for x, y being Point of Y st x <> y holds
+       (ex V being Subset of Y st V is open & x in V & not y in V)
+       or
+      (ex W being Subset of Y st W is open & not x in W & y in W);
+      assume
+A2:      Y is not empty;
+       let x, y be Point of Y;
+A3:     the carrier of Y <> {} by A2,STRUCT_0:def 1;
+      assume A4: x <> y;
+      hereby per cases by A1,A2,A4;
+       suppose ex V being Subset of Y
+        st V is open & x in V & not y in V;
+         then consider V being Subset of Y such that
+                 A5: V is open and
+                A6: x in V and
+                A7: not y in V;
+            now
+           take F = V`;
+               F = [#]Y \ V by PRE_TOPC:17;
+            then V = [#]Y \ F by PRE_TOPC:22;
+           hence F is closed by A5,PRE_TOPC:def 6;
+             thus not x in F by A6,SUBSET_1:54;
+            thus y in F by A3,A7,SUBSET_1:50;
+          end;
+        hence (ex E being Subset of Y
+          st E is closed & x in E & not y in E) or
+          (ex F being Subset of Y
+            st F is closed & not x in F & y in F);
+       suppose ex W being Subset of Y
+         st W is open & not x in W & y in W;
+         then consider W being Subset of Y such that
+                 A8: W is open and
+                A9: not x in W and
+                A10: y in W;
+            now
+           take E = W`;
+               E = [#]Y \ W by PRE_TOPC:17;
+            then W = [#]Y \ E by PRE_TOPC:22;
+           hence E is closed by A8,PRE_TOPC:def 6;
+            thus x in E by A3,A9,SUBSET_1:50;
+             thus not y in E by A10,SUBSET_1:54;
+          end;
+        hence (ex E being Subset of Y
+            st E is closed & x in E & not y in E) or
+          (ex F being Subset of Y
+           st F is closed & not x in F & y in F);
+      end;
+     end;
+   assume
+    A11: Y is empty or
+     for x, y being Point of Y st x <> y holds
+               (ex E being Subset of Y
+                  st E is closed & x in E & not y in E) or
+                 (ex F being Subset of Y
+                 st F is closed & not x in F & y in F);
+      Y is not empty implies
+    for x, y being Point of Y st x <> y holds
+      (ex V being Subset of Y
+         st V is open & x in V & not y in V) or
+        (ex W being Subset of Y
+        st W is open & not x in W & y in W)
+     proof assume
+A12:    Y is not empty;
+      let x, y be Point of Y;
+A13:   the carrier of Y <> {} by A12,STRUCT_0:def 1;
+      assume A14: x <> y;
+      hereby per cases by A11,A12,A14;
+       suppose ex E being Subset of Y
+         st E is closed & x in E & not y in E;
+         then consider E being Subset of Y such that
+                 A15: E is closed and
+                A16: x in E and
+                A17: not y in E;
+            now
+           take W = E`;
+               W = [#]Y \ E by PRE_TOPC:17;
+           hence W is open by A15,PRE_TOPC:def 6;
+             thus not x in W by A16,SUBSET_1:54;
+            thus y in W by A13,A17,SUBSET_1:50;
+          end;
+        hence (ex V being Subset of Y
+            st V is open & x in V & not y in V) or
+         (ex W being Subset of Y
+            st W is open & not x in W & y in W);
+       suppose ex F being Subset of Y
+         st F is closed & not x in F & y in F;
+         then consider F being Subset of Y such that
+                 A18: F is closed and
+                A19: not x in F and
+                A20: y in F;
+            now
+           take V = F`;
+            V = [#]Y \ F by PRE_TOPC:17;
+           hence V is open by A18,PRE_TOPC:def 6;
+            thus x in V by A13,A19,SUBSET_1:50;
+             thus not y in V by A20,SUBSET_1:54;
+          end;
+        hence (ex V being Subset of Y
+           st V is open & x in V & not y in V) or
+                (ex W being Subset of Y
+                st W is open & not x in W & y in W);
+      end;
+     end;
+   hence Y is T_0 by Def3;
+  end;
+end;
+
+definition
+ cluster trivial -> T_0 (non empty TopStruct);
+ coherence
+  proof let Y be non empty TopStruct;
+   assume Y is trivial;
+    then consider a being Point of Y such that
+           A1: the carrier of Y = {a} by TEX_1:def 1;
+       now let x, y be Point of Y;
+        A2: x = a & y = a by A1,TARSKI:def 1;
+      assume x <> y;
+      hence (ex V being Subset of Y
+        st V is open & x in V & not y in V) or
+       (ex W being Subset of Y
+         st W is open & not x in W & y in W) by A2;
+     end;
+   hence thesis by Def3;
+  end;
+ cluster non T_0 -> non trivial (non empty TopStruct);
+ coherence
+  proof let Y be non empty TopStruct;
+   assume A3: Y is non T_0;
+   assume Y is trivial;
+    then consider a being Point of Y such that
+           A4: the carrier of Y = {a} by TEX_1:def 1;
+       now let x, y be Point of Y;
+        A5: x = a & y = a by A4,TARSKI:def 1;
+      assume x <> y;
+      hence (ex V being Subset of Y
+        st V is open & x in V & not y in V) or
+       (ex W being Subset of Y
+         st W is open & not x in W & y in W) by A5;
+     end;
+    hence contradiction by A3,Def3;
+  end;
+end;
+
+Lm1:
+ for X being anti-discrete non trivial (non empty TopStruct) holds X is non T_0
+ proof let X be anti-discrete non trivial (non empty TopStruct);
+       now
+       consider x, y being Point of X such that
+           A1: x <> y by REALSET1:def 20;
+      take x, y;
+      thus x <> y by A1;
+       A2:now let V be Subset of X;
+           assume V is open;
+            then A3: V = {} or V = the carrier of X by TDLAT_3:20;
+           assume x in V;
+            hence y in V by A3;
+          end;
+            now let V be Subset of X;
+           assume V is open;
+            then A4: V = {} or V = the carrier of X by TDLAT_3:20;
+           assume y in V;
+            hence x in V by A4;
+          end;
+      hence not (ex V being Subset of X
+         st V is open & x in V & not y in V) &
+       not (ex W being Subset of X
+          st W is open & not x in W & y in W) by A2;
+     end;
+   hence thesis by Def3;
+ end;
+
+definition
+ cluster strict T_0 non empty TopSpace;
+ existence
+  proof
+    consider X being trivial strict (non empty TopSpace);
+   take X;
+   thus thesis;
+  end;
+ cluster strict non T_0 non empty TopSpace;
+ existence
+  proof
+    consider X being anti-discrete non trivial strict (non empty TopSpace);
+   take X;
+   thus thesis by Lm1;
+  end;
+end;
+
+definition
+ cluster discrete -> T_0 (non empty TopSpace);
+ coherence
+  proof let Y be non empty TopSpace;
+   assume A1: Y is discrete;
+       now let x, y be Point of Y;
+      assume A2: x <> y;
+         now
+        take V = {x};
+        thus V is open by A1,TDLAT_3:17;
+        thus x in V by TARSKI:def 1;
+        thus not y in V by A2,TARSKI:def 1;
+       end;
+      hence (ex V being Subset of Y
+         st V is open & x in V & not y in V) or
+       (ex W being Subset of Y
+          st W is open & not x in W & y in W);
+     end;
+   hence thesis by Def3;
+  end;
+ cluster non T_0 -> non discrete (non empty TopSpace);
+ coherence
+  proof let Y be non empty TopSpace;
+   assume A3: Y is non T_0;
+   assume A4: Y is discrete;
+       now let x, y be Point of Y;
+      assume A5: x <> y;
+         now
+        take V = {x};
+        thus V is open by A4,TDLAT_3:17;
+        thus x in V by TARSKI:def 1;
+        thus not y in V by A5,TARSKI:def 1;
+       end;
+      hence (ex V being Subset of Y
+         st V is open & x in V & not y in V) or
+       (ex W being Subset of Y
+         st W is open & not x in W & y in W);
+     end;
+    hence contradiction by A3,Def3;
+  end;
+ cluster anti-discrete non trivial -> non T_0 (non empty TopSpace);
+ coherence by Lm1;
+ cluster anti-discrete T_0 -> trivial (non empty TopSpace);
+ coherence by Lm1;
+ cluster T_0 non trivial -> non anti-discrete (non empty TopSpace);
+ coherence by Lm1;
+end;
+
+Lm2:
+ for X being non empty TopSpace, x being Point of X holds x in Cl {x}
+  proof let X be non empty TopSpace, x be Point of X;
+      x in {x} & {x} c= Cl {x} by PRE_TOPC:48,TARSKI:def 1;
+   hence thesis;
+  end;
+
+Lm3:
+ for X being non empty TopSpace, A, B being Subset of X holds
+                            B c= Cl A implies Cl B c= Cl A
+ proof let X be non empty TopSpace, A, B be Subset of X;
+  assume A1: B c= Cl A;
+      Cl A is closed by PCOMPS_1:4;
+  hence thesis by A1,TOPS_1:31;
+ end;
+
+definition let X be non empty TopSpace;
+ redefine attr X is T_0 means
+:Def5: for x, y being Point of X st x <> y holds Cl {x} <> Cl {y};
+ compatibility
+  proof
+   thus X is T_0 implies
+         for x, y being Point of X st x <> y holds Cl {x} <> Cl {y}
+     proof
+      assume A1: X is T_0;
+       hereby let x, y be Point of X;
+        assume A2: x <> y;
+            now per cases by A1,A2,Def3;
+           suppose ex V being Subset of X
+             st V is open & x in V & not y in V;
+             then consider V being Subset of X such that
+                    A3: V is open and A4: x in V and A5: not y in V;
+                   y in V` by A5,SUBSET_1:50;
+                then {y} c= V` by ZFMISC_1:37;
+                then {y} misses V by SUBSET_1:43;
+               then A6: Cl {y} misses V by A3,TSEP_1:40;
+                  x in {x} & {x} c= Cl {x} by PRE_TOPC:48,TARSKI:def 1;
+               then A7: (Cl {x}) /\ V <> {} by A4,XBOOLE_0:def 3;
+             assume Cl {x} = Cl {y};
+            hence contradiction by A6,A7,XBOOLE_0:def 7;
+           suppose ex W being Subset of X
+             st W is open & not x in W & y in W;
+             then consider W being Subset of X such that
+                    A8: W is open and A9: not x in W and A10: y in W;
+                   x in W` by A9,SUBSET_1:50;
+                then {x} c= W` by ZFMISC_1:37;
+                then {x} misses W by SUBSET_1:43;
+               then A11: (Cl {x}) misses W by A8,TSEP_1:40;
+                  y in {y} & {y} c= Cl {y} by PRE_TOPC:48,TARSKI:def 1;
+               then A12: (Cl {y}) /\ W <> {} by A10,XBOOLE_0:def 3;
+             assume Cl {x} = Cl {y};
+            hence contradiction by A11,A12,XBOOLE_0:def 7;
+          end;
+        hence Cl {x} <> Cl {y};
+       end;
+     end;
+   assume A13: for x, y being Point of X st x <> y holds Cl {x} <> Cl {y};
+        now let x, y be Point of X;
+       assume A14: x <> y;
+       assume
+A15: for E being Subset of X st E is closed & x in E holds y in E;
+       thus ex F being Subset of X
+          st F is closed & not x in F & y in F
+        proof
+         set F = Cl {y};
+         take F;
+         thus F is closed by PCOMPS_1:4;
+            now assume x in F;
+            then {x} c= F by ZFMISC_1:37;
+            then A16: Cl {x} c= F by Lm3;
+                 x in Cl {x} & Cl {x} is closed by Lm2,PCOMPS_1:4;
+             then y in Cl {x} by A15;
+             then {y} c= Cl {x} by ZFMISC_1:37;
+             then F c= Cl {x} by Lm3;
+            then Cl {x} = F by A16,XBOOLE_0:def 10;
+           hence contradiction by A13,A14;
+          end;
+         hence not x in F;
+         thus y in F by Lm2;
+        end;
+      end;
+   hence X is T_0 by Def4;
+  end;
+end;
+
+definition let X be non empty TopSpace;
+ redefine attr X is T_0 means
+:Def6: for x, y being Point of X st x <> y holds
+            not x in Cl {y} or not y in Cl {x};
+ compatibility
+  proof
+   thus X is T_0 implies for x, y being Point of X st x <> y holds
+                                       not x in Cl {y} or not y in Cl {x}
+     proof
+      assume A1: X is T_0;
+       hereby let x, y be Point of X;
+        assume A2: x <> y;
+        assume x in Cl {y} & y in Cl {x};
+         then {x} c= Cl {y} & {y} c= Cl {x} by ZFMISC_1:37;
+         then Cl {x} c= Cl {y} & Cl {y} c= Cl {x} by Lm3;
+         then Cl {x} = Cl {y} by XBOOLE_0:def 10;
+        hence contradiction by A1,A2,Def5;
+       end;
+     end;
+    assume A3: for x, y being Point of X st x <> y holds
+                                   not x in Cl {y} or not y in Cl {x};
+       for x, y being Point of X st x <> y holds Cl {x} <> Cl {y}
+      proof let x, y be Point of X;
+       assume A4: x <> y;
+       assume A5: Cl {x} = Cl {y};
+          now per cases by A3,A4;
+         suppose not x in Cl {y};
+          hence contradiction by A5,Lm2;
+         suppose not y in Cl {x};
+          hence contradiction by A5,Lm2;
+        end;
+       hence contradiction;
+      end;
+    hence X is T_0 by Def5;
+  end;
+end;
+
+definition let X be non empty TopSpace;
+ redefine attr X is T_0 means
+   for x, y being Point of X st x <> y & x in Cl {y} holds
+                                   not Cl {y} c= Cl {x};
+ compatibility
+  proof
+   thus X is T_0 implies for x, y being Point of X st x <> y & x in
+ Cl {y} holds
+                                                           not Cl {y} c= Cl {x}
+     proof
+      assume A1: X is T_0;
+       hereby let x, y be Point of X;
+        assume A2: x <> y;
+        assume x in Cl {y};
+         then {x} c= Cl {y} by ZFMISC_1:37;
+         then A3: Cl {x} c= Cl {y} by Lm3;
+        assume Cl {y} c= Cl {x};
+         then Cl {x} = Cl {y} by A3,XBOOLE_0:def 10;
+        hence contradiction by A1,A2,Def5;
+       end;
+     end;
+    assume A4: for x, y being Point of X st x <> y & x in Cl {y} holds
+                                                  not Cl {y} c= Cl {x};
+        for x, y being Point of X st x <> y holds
+                    not x in Cl {y} or not y in Cl {x}
+       proof let x, y be Point of X;
+        assume A5: x <> y;
+        assume x in Cl {y};
+          then A6: not Cl {y} c= Cl {x} by A4,A5;
+        assume y in Cl {x};
+          then {y} c= Cl {x} by ZFMISC_1:37;
+          hence contradiction by A6,Lm3;
+       end;
+    hence X is T_0 by Def6;
+  end;
+end;
+
+definition
+ cluster almost_discrete T_0 -> discrete (non empty TopSpace);
+ coherence
+  proof let Y be non empty TopSpace;
+   assume A1: Y is almost_discrete T_0;
+      for A being Subset of Y, x being Point of Y st A = {x}
+      holds A is closed
+     proof let A be Subset of Y, x be Point of Y;
+      assume A2: A = {x};
+            x in Cl {x} by Lm2;
+         then A3: {x} c= Cl {x} by ZFMISC_1:37;
+            now
+           assume not Cl {x} c= {x};
+            then consider a being set such that
+                  A4: a in Cl {x} and A5: not a in {x} by TARSKI:def 3;
+              reconsider a as Point of Y by A4;
+                  a <> x by A5,TARSKI:def 1;
+               then not x in Cl {a} by A1,A4,Def6;
+                then x in (Cl {a})` by SUBSET_1:50;
+                then {x} c= (Cl {a})` by ZFMISC_1:37;
+               then A6: {x} misses Cl {a} by SUBSET_1:43;
+                 Cl {a} is closed by PCOMPS_1:4;
+               then Cl {a} is open by A1,TDLAT_3:24;
+               then A7: (Cl {x}) misses Cl {a} by A6,TSEP_1:40;
+                   a in {a} & {a} c= Cl {a} by PRE_TOPC:48,TARSKI:def 1;
+                hence contradiction by A4,A7,XBOOLE_0:3;
+          end;
+       then Cl {x} = {x} by A3,XBOOLE_0:def 10;
+      hence A is closed by A2,PCOMPS_1:4;
+     end;
+    hence thesis by A1,TDLAT_3:28;
+  end;
+ cluster almost_discrete non discrete -> non T_0 (non empty TopSpace);
+ coherence
+  proof let Y be non empty TopSpace;
+   assume A8: Y is almost_discrete non discrete;
+   assume A9: Y is T_0;
+      for A being Subset of Y, x being Point of Y st A = {x}
+      holds A is closed
+     proof let A be Subset of Y, x be Point of Y;
+      assume A10: A = {x};
+            x in Cl {x} by Lm2;
+         then A11: {x} c= Cl {x} by ZFMISC_1:37;
+            now
+           assume not Cl {x} c= {x};
+            then consider a being set such that
+                  A12: a in Cl {x} and A13: not a in {x} by TARSKI:def 3;
+              reconsider a as Point of Y by A12;
+                  a <> x by A13,TARSKI:def 1;
+               then not x in Cl {a} by A9,A12,Def6;
+                then x in (Cl {a})` by SUBSET_1:50;
+                then {x} c= (Cl {a})` by ZFMISC_1:37;
+               then A14: {x} misses Cl {a} by SUBSET_1:43;
+                    Cl {a} is closed by PCOMPS_1:4;
+                 then Cl {a} is open by A8,TDLAT_3:24;
+               then A15: (Cl {x}) misses Cl {a} by A14,TSEP_1:40;
+                   a in {a} & {a} c= Cl {a} by PRE_TOPC:48,TARSKI:def 1;
+                hence contradiction by A12,A15,XBOOLE_0:3;
+          end;
+       then Cl {x} = {x} by A11,XBOOLE_0:def 10;
+      hence A is closed by A10,PCOMPS_1:4;
+     end;
+    hence contradiction by A8,TDLAT_3:28;
+  end;
+ cluster non discrete T_0 -> non almost_discrete (non empty TopSpace);
+ coherence
+  proof let Y be non empty TopSpace;
+   assume A16: Y is non discrete T_0;
+   assume A17: Y is almost_discrete;
+      for A being Subset of Y, x being Point of Y st A = {x}
+      holds A is closed
+     proof let A be Subset of Y, x be Point of Y;
+      assume A18: A = {x};
+            x in Cl {x} by Lm2;
+         then A19: {x} c= Cl {x} by ZFMISC_1:37;
+            now
+           assume not Cl {x} c= {x};
+            then consider a being set such that
+                  A20: a in Cl {x} and A21: not a in {x} by TARSKI:def 3;
+              reconsider a as Point of Y by A20;
+                  a <> x by A21,TARSKI:def 1;
+               then not x in Cl {a} by A16,A20,Def6;
+                then x in (Cl {a})` by SUBSET_1:50;
+                then {x} c= (Cl {a})` by ZFMISC_1:37;
+               then A22:{x} misses Cl {a} by SUBSET_1:43;
+                    Cl {a} is closed by PCOMPS_1:4;
+                 then Cl {a} is open by A17,TDLAT_3:24;
+               then A23: (Cl {x}) misses Cl {a} by A22,TSEP_1:40;
+                   a in {a} & {a} c= Cl {a} by PRE_TOPC:48,TARSKI:def 1;
+                hence contradiction by A20,A23,XBOOLE_0:3;
+          end;
+       then Cl {x} = {x} by A19,XBOOLE_0:def 10;
+      hence A is closed by A18,PCOMPS_1:4;
+     end;
+    hence contradiction by A16,A17,TDLAT_3:28;
+  end;
+end;
+
+definition
+ mode Kolmogorov_space is T_0 non empty TopSpace;
+ mode non-Kolmogorov_space is non T_0 non empty TopSpace;
+end;
+
+definition
+ cluster non trivial strict Kolmogorov_space;
+ existence
+  proof
+    consider X being non trivial discrete strict (non empty TopSpace);
+   take X;
+   thus thesis;
+  end;
+ cluster non trivial strict non-Kolmogorov_space;
+ existence
+  proof
+    consider X being non trivial anti-discrete strict (non empty TopSpace);
+   take X;
+   thus thesis;
+  end;
+end;
+
+
+begin
+:: 3. T_{0} Subsets.
+
+definition let Y be TopStruct;
+  let IT be Subset of Y;
+ attr IT is T_0 means
+:Def8: for x, y being Point of Y st x in IT & y in IT & x <> y holds
+   (ex V being Subset of Y st V is open & x in V & not y in V) or
+       (ex W being Subset of Y st W is open & not x in W & y in W);
+end;
+
+definition let Y be non empty TopStruct;
+  let A be Subset of Y;
+ redefine attr A is T_0 means
+:Def9: for x, y being Point of Y st x in A & y in A & x <> y holds
+   (ex E being Subset of Y st E is closed & x in E & not y in E)
+   or
+   (ex F being Subset of Y st F is closed & not x in F & y in F);
+ compatibility
+  proof
+   thus A is T_0 implies
+          for x, y being Point of Y st x in A & y in A & x <> y holds
+           (ex E being Subset of Y
+               st E is closed & x in E & not y in E) or
+            (ex F being Subset of Y
+               st F is closed & not x in F & y in F)
+     proof
+      assume A1: for x, y being Point of Y st x in A & y in A & x <> y holds
+                   (ex V being Subset of Y
+                     st V is open & x in V & not y in V) or
+                     (ex W being Subset of Y
+                       st W is open & not x in W & y in W);
+       let x, y be Point of Y;
+      assume A2: x in A & y in A & x <> y;
+      hereby per cases by A1,A2;
+       suppose ex V being Subset of Y
+         st V is open & x in V & not y in V;
+         then consider V being Subset of Y such that
+                 A3: V is open and
+                A4: x in V and
+                A5: not y in V;
+            now
+           take F = V`;
+               F = [#]Y \ V by PRE_TOPC:17;
+            then V = [#]Y \ F by PRE_TOPC:22;
+           hence F is closed by A3,PRE_TOPC:def 6;
+             thus not x in F by A4,SUBSET_1:54;
+            thus y in F by A5,SUBSET_1:50;
+          end;
+        hence (ex E being Subset of Y
+          st E is closed & x in E & not y in E) or
+                (ex F being Subset of Y
+                   st F is closed & not x in F & y in F);
+       suppose ex W being Subset of Y
+       st W is open & not x in W & y in W;
+         then consider W being Subset of Y such that
+                 A6: W is open and
+                A7: not x in W and
+                A8: y in W;
+            now
+           take E = W`;
+               E = [#]Y \ W by PRE_TOPC:17;
+            then W = [#]Y \ E by PRE_TOPC:22;
+           hence E is closed by A6,PRE_TOPC:def 6;
+            thus x in E by A7,SUBSET_1:50;
+             thus not y in E by A8,SUBSET_1:54;
+          end;
+        hence (ex E being Subset of Y
+          st E is closed & x in E & not y in E) or
+                (ex F being Subset of Y
+                   st F is closed & not x in F & y in F);
+      end;
+     end;
+   assume
+A9: for x, y being Point of Y st x in A & y in A & x <> y holds
+               (ex E being Subset of Y
+                    st E is closed & x in E & not y in E) or
+                 (ex F being Subset of Y
+                    st F is closed & not x in F & y in F);
+      for x, y being Point of Y st x in A & y in A & x <> y holds
+      (ex V being Subset of Y
+      st V is open & x in V & not y in V) or
+        (ex W being Subset of Y
+        st W is open & not x in W & y in W)
+     proof let x, y be Point of Y;
+      assume A10: x in A & y in A & x <> y;
+      hereby per cases by A9,A10;
+       suppose ex E being Subset of Y
+         st E is closed & x in E & not y in E;
+         then consider E being Subset of Y such that
+                 A11: E is closed and
+                A12: x in E and
+                A13: not y in E;
+            now
+           take W = E`;
+               W = [#]Y \ E by PRE_TOPC:17;
+           hence W is open by A11,PRE_TOPC:def 6;
+             thus not x in W by A12,SUBSET_1:54;
+            thus y in W by A13,SUBSET_1:50;
+          end;
+        hence (ex V being Subset of Y
+           st V is open & x in V & not y in V) or
+                (ex W being Subset of Y
+                  st W is open & not x in W & y in W);
+       suppose ex F being Subset of Y
+       st F is closed & not x in F & y in F;
+         then consider F being Subset of Y such that
+                 A14: F is closed and
+                A15: not x in F and
+                A16: y in F;
+            now
+           take V = F`;
+               V = [#]Y \ F by PRE_TOPC:17;
+           hence V is open by A14,PRE_TOPC:def 6;
+            thus x in V by A15,SUBSET_1:50;
+             thus not y in V by A16,SUBSET_1:54;
+          end;
+        hence (ex V being Subset of Y
+           st V is open & x in V & not y in V) or
+                (ex W being Subset of Y
+                   st W is open & not x in W & y in W);
+      end;
+     end;
+   hence A is T_0 by Def8;
+  end;
+end;
+
+theorem
+   for Y0, Y1 being TopStruct, D0 being Subset of Y0,
+     D1 being Subset of Y1 st
+    the TopStruct of Y0 = the TopStruct of Y1 & D0 = D1 holds
+   D0 is T_0 implies D1 is T_0
+ proof let Y0, Y1 be TopStruct, D0 be Subset of Y0,
+           D1 be Subset of Y1;
+  assume A1: the TopStruct of Y0 = the TopStruct of Y1;
+  assume A2: D0 = D1;
+  assume A3: D0 is T_0;
+     now let x, y be Point of Y1;
+    assume A4: x in D1 & y in D1;
+    assume A5: x <> y;
+     reconsider x0 = x, y0 = y as Point of Y0 by A1;
+     hereby per cases by A2,A3,A4,A5,Def8;
+      suppose ex V being Subset of Y0
+        st V is open & x0 in V & not y0 in V;
+        then consider V being Subset of Y0 such that
+               A6: V is open and A7: x0 in V & not y0 in V;
+         reconsider V1 = V as Subset of Y1 by A1;
+          now
+         take V1;
+             V1 in the topology of Y1 by A1,A6,PRE_TOPC:def 5;
+         hence V1 is open by PRE_TOPC:def 5;
+         thus x in V1 & not y in V1 by A7;
+        end;
+       hence (ex V1 being Subset of Y1
+          st V1 is open & x in V1 & not y in V1) or
+               (ex W1 being Subset of Y1
+               st W1 is open & not x in W1 & y in W1);
+      suppose ex W being Subset of Y0
+      st W is open & not x0 in W & y0 in W;
+        then consider W being Subset of Y0 such that
+               A8: W is open and A9: not x0 in W & y0 in W;
+         reconsider W1 = W as Subset of Y1 by A1;
+          now
+         take W1;
+             W1 in the topology of Y1 by A1,A8,PRE_TOPC:def 5;
+         hence W1 is open by PRE_TOPC:def 5;
+         thus not x in W1 & y in W1 by A9;
+        end;
+       hence (ex V1 being Subset of Y1
+         st V1 is open & x in V1 & not y in V1) or
+           (ex W1 being Subset of Y1
+           st W1 is open & not x in W1 & y in W1);
+     end;
+   end;
+  hence D1 is T_0 by Def8;
+ end;
+
+theorem Th6:
+ for Y being non empty TopStruct, A being Subset of Y
+   st A = the carrier of Y
+  holds A is T_0 iff Y is T_0
+ proof let Y be non empty TopStruct, A be Subset of Y;
+  assume A1: A = the carrier of Y;
+  hereby
+   assume A is T_0;
+    then for x, y be Point of Y st x <> y holds
+       (ex V being Subset of Y
+          st V is open & x in V & not y in V) or
+            (ex W being Subset of Y
+            st W is open & not x in W & y in W) by A1,Def8;
+   hence Y is T_0 by Def3;
+  end;
+  hereby
+   assume Y is T_0;
+    then for x, y be Point of Y st x in A & y in A & x <> y holds
+     (ex V being Subset of Y
+        st V is open & x in V & not y in V) or
+            (ex W being Subset of Y
+            st W is open & not x in W & y in W) by Def3;
+   hence A is T_0 by Def8;
+  end;
+ end;
+
+reserve Y for non empty TopStruct;
+
+theorem Th7:
+ for A, B being Subset of Y st B c= A
+   holds A is T_0 implies B is T_0
+ proof let A, B be Subset of Y;
+  assume A1: B c= A;
+  assume A is T_0;
+   then for x, y be Point of Y st x in B & y in B & x <> y holds
+     ((ex V being Subset of Y st V is open & x in V & not y in V) or
+            (ex W being Subset of Y
+            st W is open & not x in W & y in W)) by A1,Def8;
+  hence B is T_0 by Def8;
+ end;
+
+theorem Th8:
+ for A, B being Subset of Y
+    holds A is T_0 or B is T_0 implies A /\ B is T_0
+ proof let A, B be Subset of Y;
+  assume A1: A is T_0 or B is T_0;
+  hereby per cases by A1;
+    suppose A2: A is T_0;
+        A /\ B c= A by XBOOLE_1:17;
+     hence A /\ B is T_0 by A2,Th7;
+    suppose A3: B is T_0;
+        A /\ B c= B by XBOOLE_1:17;
+     hence A /\ B is T_0 by A3,Th7;
+  end;
+ end;
+
+theorem Th9:
+ for A, B being Subset of Y st A is open or B is open holds
+                     A is T_0 & B is T_0 implies A \/ B is T_0
+ proof let A, B be Subset of Y;
+  assume A1: A is open or B is open;
+  assume A2: A is T_0 & B is T_0;
+     now let x, y be Point of Y;
+    assume A3: x in A \/ B & y in A \/ B;
+      then A4: x in A \/ (B \ A) & y in A \/ (B \ A) by XBOOLE_1:39;
+      A5: x in (A \ B) \/ B & y in (A \ B) \/ B by A3,XBOOLE_1:39;
+    assume A6: x <> y;
+      now per cases by A1;
+     suppose A7: A is open;
+         now per cases by A4,XBOOLE_0:def 2;
+        suppose x in A & y in A;
+         hence (ex V being Subset of Y
+            st V is open & x in V & not y in V) or
+                  (ex W being Subset of Y
+                  st W is open & not x in W & y in W)
+                                                           by A2,A6,Def8;
+        suppose A8: x in A & y in B \ A;
+            now
+           take A;
+           thus A is open by A7;
+           thus x in A by A8;
+           thus not y in A by A8,XBOOLE_0:def 4;
+          end;
+         hence (ex V being Subset of Y
+            st V is open & x in V & not y in V) or
+                  (ex W being Subset of Y
+                  st W is open & not x in W & y in W);
+        suppose A9: x in B \ A & y in A;
+            now
+           take A;
+           thus A is open by A7;
+           thus not x in A by A9,XBOOLE_0:def 4;
+           thus y in A by A9;
+          end;
+         hence (ex V being Subset of Y
+         st V is open & x in V & not y in V) or
+                  (ex W being Subset of Y
+                  st W is open & not x in W & y in W);
+        suppose A10: x in B \ A & y in B \ A;
+             B \ A c= B by XBOOLE_1:36;
+          hence (ex V being Subset of Y
+            st V is open & x in V & not y in V) or
+                  (ex W being Subset of Y
+                  st W is open & not x in W & y in W)
+                                                           by A2,A6,A10,Def8
+;
+       end;
+      hence (ex V being Subset of Y
+        st V is open & x in V & not y in V) or
+              (ex W being Subset of Y
+              st W is open & not x in W & y in W);
+     suppose A11: B is open;
+         now per cases by A5,XBOOLE_0:def 2;
+        suppose A12: x in A \ B & y in A \ B;
+             A \ B c= A by XBOOLE_1:36;
+          hence (ex V being Subset of Y
+            st V is open & x in V & not y in V) or
+                  (ex W being Subset of Y
+                  st W is open & not x in W & y in W)
+                                                           by A2,A6,A12,Def8
+;
+        suppose A13: x in A \ B & y in B;
+            now
+           take B;
+           thus B is open by A11;
+           thus not x in B by A13,XBOOLE_0:def 4;
+           thus y in B by A13;
+          end;
+         hence (ex V being Subset of Y
+           st V is open & x in V & not y in V) or
+                  (ex W being Subset of Y
+                  st W is open & not x in W & y in W);
+        suppose A14: x in B & y in A \ B;
+            now
+           take B;
+           thus B is open by A11;
+           thus x in B by A14;
+           thus not y in B by A14,XBOOLE_0:def 4;
+          end;
+         hence (ex V being Subset of Y
+            st V is open & x in V & not y in V) or
+                  (ex W being Subset of Y
+                  st W is open & not x in W & y in W);
+        suppose x in B & y in B;
+         hence (ex V being Subset of Y
+           st V is open & x in V & not y in V) or
+                  (ex W being Subset of Y
+                  st W is open & not x in W & y in W)
+                                                           by A2,A6,Def8;
+       end;
+      hence (ex V being Subset of Y
+         st V is open & x in V & not y in V) or
+              (ex W being Subset of Y
+              st W is open & not x in W & y in W);
+    end;
+    hence (ex V being Subset of Y
+      st V is open & x in V & not y in V) or
+              (ex W being Subset of Y
+              st W is open & not x in W & y in W);
+   end;
+  hence A \/ B is T_0 by Def8;
+ end;
+
+theorem Th10:
+ for A, B being Subset of Y st A is closed or B is closed holds
+                         A is T_0 & B is T_0 implies A \/ B is T_0
+ proof let A, B be Subset of Y;
+  assume A1: A is closed or B is closed;
+  assume A2: A is T_0 & B is T_0;
+     now let x, y be Point of Y;
+    assume A3: x in A \/ B & y in A \/ B;
+      then A4: x in A \/ (B \ A) & y in A \/ (B \ A) by XBOOLE_1:39;
+      A5: x in (A \ B) \/ B & y in (A \ B) \/ B by A3,XBOOLE_1:39;
+    assume A6: x <> y;
+      now per cases by A1;
+     suppose A7: A is closed;
+         now per cases by A4,XBOOLE_0:def 2;
+        suppose x in A & y in A;
+         hence (ex V being Subset of Y
+            st V is closed & x in V & not y in V) or
+                  (ex W being Subset of Y
+                  st W is closed & not x in W & y in W)
+                                                           by A2,A6,Def9;
+        suppose A8: x in A & y in B \ A;
+            now
+           take A;
+           thus A is closed by A7;
+           thus x in A by A8;
+           thus not y in A by A8,XBOOLE_0:def 4;
+          end;
+         hence (ex V being Subset of Y
+           st V is closed & x in V & not y in V) or
+                  (ex W being Subset of Y
+                  st W is closed & not x in W & y in W);
+        suppose A9: x in B \ A & y in A;
+            now
+           take A;
+           thus A is closed by A7;
+           thus not x in A by A9,XBOOLE_0:def 4;
+           thus y in A by A9;
+          end;
+         hence (ex V being Subset of Y
+           st V is closed & x in V & not y in V) or
+                  (ex W being Subset of Y
+                  st W is closed & not x in W & y in W);
+        suppose A10: x in B \ A & y in B \ A;
+             B \ A c= B by XBOOLE_1:36;
+          hence (ex V being Subset of Y
+            st V is closed & x in V & not y in V) or
+                  (ex W being Subset of Y
+                  st W is closed & not x in W & y in W)
+                                                           by A2,A6,A10,Def9
+;
+       end;
+      hence (ex V being Subset of Y
+         st V is closed & x in V & not y in V) or
+              (ex W being Subset of Y
+              st W is closed & not x in W & y in W);
+     suppose A11: B is closed;
+         now per cases by A5,XBOOLE_0:def 2;
+        suppose A12: x in A \ B & y in A \ B;
+             A \ B c= A by XBOOLE_1:36;
+          hence (ex V being Subset of Y
+            st V is closed & x in V & not y in V) or
+                  (ex W being Subset of Y
+                  st W is closed & not x in W & y in W)
+                                                           by A2,A6,A12,Def9
+;
+        suppose A13: x in A \ B & y in B;
+            now
+           take B;
+           thus B is closed by A11;
+           thus not x in B by A13,XBOOLE_0:def 4;
+           thus y in B by A13;
+          end;
+         hence (ex V being Subset of Y
+           st V is closed & x in V & not y in V) or
+                  (ex W being Subset of Y
+                  st W is closed & not x in W & y in W);
+        suppose A14: x in B & y in A \ B;
+            now
+           take B;
+           thus B is closed by A11;
+           thus x in B by A14;
+           thus not y in B by A14,XBOOLE_0:def 4;
+          end;
+         hence (ex V being Subset of Y
+            st V is closed & x in V & not y in V) or
+                  (ex W being Subset of Y
+                  st W is closed & not x in W & y in W);
+        suppose x in B & y in B;
+         hence (ex V being Subset of Y
+           st V is closed & x in V & not y in V) or
+                  (ex W being Subset of Y
+                  st W is closed & not x in W & y in W)
+                                                           by A2,A6,Def9;
+       end;
+      hence (ex V being Subset of Y
+         st V is closed & x in V & not y in V) or
+              (ex W being Subset of Y
+              st W is closed & not x in W & y in W);
+    end;
+    hence (ex V being Subset of Y
+       st V is closed & x in V & not y in V) or
+              (ex W being Subset of Y
+              st W is closed & not x in W & y in W);
+   end;
+  hence A \/ B is T_0 by Def9;
+ end;
+
+theorem Th11:
+ for A being Subset of Y holds A is discrete implies A is T_0
+ proof let A be Subset of Y;
+  assume A1: A is discrete;
+       now let x, y be Point of Y;
+      assume A2: x in A & y in A;
+        then {x} c= A by ZFMISC_1:37;
+        then consider G being Subset of Y such that
+              A3: G is open and A4: A /\ G = {x} by A1,TEX_2:def 5;
+      assume A5: x <> y;
+         now
+        take G;
+        thus G is open by A3;
+            x in {x} by TARSKI:def 1;
+        hence x in G by A4,XBOOLE_0:def 3;
+           now
+          assume y in G;
+           then y in {x} by A2,A4,XBOOLE_0:def 3;
+           hence contradiction by A5,TARSKI:def 1;
+         end;
+        hence not y in G;
+       end;
+      hence (ex V being Subset of Y
+         st V is open & x in V & not y in V) or
+       (ex W being Subset of Y
+       st W is open & not x in W & y in W);
+     end;
+  hence thesis by Def8;
+ end;
+
+theorem
+   for A being non empty Subset of Y holds
+  A is anti-discrete & A is not trivial implies A is not T_0
+ proof let A be non empty Subset of Y;
+  assume A1: A is anti-discrete;
+  assume A2: A is not trivial;
+     consider s being set such that
+         A3: s in A by XBOOLE_0:def 1;
+     reconsider s0 = s as Element of A by A3;
+          A <> {s0} by A2;
+      then consider t being set such that
+             A4: t in A and A5: t <> s0 by ZFMISC_1:41;
+        reconsider s, t as Point of Y by A3,A4;
+  assume A6: A is T_0;
+      now per cases by A4,A5,A6,Def9;
+     suppose ex E being Subset of Y
+       st E is closed & s in E & not t in E;
+       then consider E being Subset of Y such that
+             A7: E is closed and A8: s in E and A9: not t in E;
+          A c= E by A1,A3,A7,A8,TEX_4:def 2;
+       hence contradiction by A4,A9;
+     suppose ex F being Subset of Y
+        st F is closed & not s in F & t in F;
+       then consider F being Subset of Y such that
+             A10: F is closed and A11: not s in F and A12: t in F;
+          A c= F by A1,A4,A10,A12,TEX_4:def 2;
+       hence contradiction by A3,A11;
+    end;
+  hence contradiction;
+ end;
+
+definition let X be non empty TopSpace;
+  let A be Subset of X;
+ redefine attr A is T_0 means
+:Def10: for x, y being Point of X st x in A & y in A & x <> y holds
+                                            Cl {x} <> Cl {y};
+ compatibility
+  proof
+   thus A is T_0 implies
+          for x, y being Point of X st x in A & y in A & x <> y holds
+                                                     Cl {x} <> Cl {y}
+     proof
+      assume A1: A is T_0;
+       hereby let x, y be Point of X;
+        assume A2: x in A & y in A & x <> y;
+            now per cases by A1,A2,Def8;
+           suppose ex V being Subset of X
+             st V is open & x in V & not y in V;
+             then consider V being Subset of X such that
+                    A3: V is open and A4: x in V and A5: not y in V;
+                   y in V` by A5,SUBSET_1:50;
+                then {y} c= V` by ZFMISC_1:37;
+                then A6: {y} misses V by SUBSET_1:43;
+                  x in {x} & {x} c= Cl {x} by PRE_TOPC:48,TARSKI:def 1;
+               then A7: (Cl {x}) meets V by A4,XBOOLE_0:3;
+             assume Cl {x} = Cl {y};
+            hence contradiction by A3,A6,A7,TSEP_1:40;
+           suppose ex W being Subset of X
+              st W is open & not x in W & y in W;
+             then consider W being Subset of X such that
+                    A8: W is open and A9: not x in W and A10: y in W;
+                   x in W` by A9,SUBSET_1:50;
+                then {x} c= W` by ZFMISC_1:37;
+                then A11: {x} misses W by SUBSET_1:43;
+                  y in {y} & {y} c= Cl {y} by PRE_TOPC:48,TARSKI:def 1;
+               then A12: (Cl {y}) meets W by A10,XBOOLE_0:3;
+             assume Cl {x} = Cl {y};
+            hence contradiction by A8,A11,A12,TSEP_1:40;
+          end;
+        hence Cl {x} <> Cl {y};
+       end;
+     end;
+   assume A13: for x, y being Point of X st x in A & y in A & x <> y holds
+                                                          Cl {x} <> Cl {y};
+        now let x, y be Point of X;
+       assume A14: x in A & y in A & x <> y;
+       assume
+A15: for E being Subset of X st E is closed & x in E holds y in E;
+       thus ex F being Subset of X
+       st F is closed & not x in F & y in F
+        proof
+         set F = Cl {y};
+         take F;
+         thus F is closed by PCOMPS_1:4;
+            now assume x in F;
+            then {x} c= F by ZFMISC_1:37;
+            then A16: Cl {x} c= F by Lm3;
+                 x in Cl {x} & Cl {x} is closed by Lm2,PCOMPS_1:4;
+             then y in Cl {x} by A15;
+             then {y} c= Cl {x} by ZFMISC_1:37;
+             then F c= Cl {x} by Lm3;
+            then Cl {x} = F by A16,XBOOLE_0:def 10;
+           hence contradiction by A13,A14;
+          end;
+         hence not x in F;
+         thus y in F by Lm2;
+        end;
+      end;
+   hence A is T_0 by Def9;
+  end;
+end;
+
+definition let X be non empty TopSpace;
+  let A be Subset of X;
+ redefine attr A is T_0 means
+:Def11: for x, y being Point of X st x in A & y in A & x <> y holds
+                                  not x in Cl {y} or not y in Cl {x};
+ compatibility
+  proof
+   thus A is T_0 implies
+            for x, y being Point of X st x in A & y in A & x <> y holds
+                                         not x in Cl {y} or not y in Cl {x}
+     proof
+      assume A1: A is T_0;
+       hereby let x, y be Point of X;
+        assume A2: x in A & y in A & x <> y;
+        assume x in Cl {y} & y in Cl {x};
+         then {x} c= Cl {y} & {y} c= Cl {x} by ZFMISC_1:37;
+         then Cl {x} c= Cl {y} & Cl {y} c= Cl {x} by Lm3;
+         then Cl {x} = Cl {y} by XBOOLE_0:def 10;
+        hence contradiction by A1,A2,Def10;
+       end;
+     end;
+    assume A3: for x, y being Point of X st x in A & y in A & x <> y holds
+                                          not x in Cl {y} or not y in Cl {x};
+       for x, y being Point of X st x in A & y in
+ A & x <> y holds Cl {x} <> Cl {y}
+      proof let x, y be Point of X;
+       assume A4: x in A & y in A & x <> y;
+       assume A5: Cl {x} = Cl {y};
+          now per cases by A3,A4;
+         suppose not x in Cl {y};
+          hence contradiction by A5,Lm2;
+         suppose not y in Cl {x};
+          hence contradiction by A5,Lm2;
+        end;
+       hence contradiction;
+      end;
+    hence A is T_0 by Def10;
+  end;
+end;
+
+definition let X be non empty TopSpace;
+  let A be Subset of X;
+ redefine attr A is T_0 means
+   for x, y being Point of X st x in A & y in A & x <> y holds
+                      x in Cl {y} implies not Cl {y} c= Cl {x};
+ compatibility
+  proof
+   thus A is T_0 implies
+          for x, y being Point of X st x in A & y in A & x <> y holds
+                             x in Cl {y} implies not Cl {y} c= Cl {x}
+     proof
+      assume A1: A is T_0;
+       hereby let x, y be Point of X;
+        assume A2: x in A & y in A & x <> y;
+        assume x in Cl {y};
+         then {x} c= Cl {y} by ZFMISC_1:37;
+         then A3: Cl {x} c= Cl {y} by Lm3;
+        assume Cl {y} c= Cl {x};
+         then Cl {x} = Cl {y} by A3,XBOOLE_0:def 10;
+        hence contradiction by A1,A2,Def10;
+       end;
+     end;
+    assume A4: for x, y being Point of X st x in A & y in A & x <> y holds
+                                 x in Cl {y} implies not Cl {y} c= Cl {x};
+        for x, y being Point of X st x in A & y in A & x <> y holds
+                    not x in Cl {y} or not y in Cl {x}
+       proof let x, y be Point of X;
+        assume A5: x in A & y in A & x <> y;
+        assume x in Cl {y};
+          then A6: not Cl {y} c= Cl {x} by A4,A5;
+        assume y in Cl {x};
+          then {y} c= Cl {x} by ZFMISC_1:37;
+          hence contradiction by A6,Lm3;
+       end;
+    hence A is T_0 by Def11;
+  end;
+end;
+
+reserve X for non empty TopSpace;
+
+theorem Th13:
+ for A being empty Subset of X holds A is T_0
+ proof let A be empty Subset of X;
+     A is discrete by TEX_2:35;
+  hence thesis by Th11;
+ end;
+
+theorem
+   for x being Point of X holds {x} is T_0
+ proof let x be Point of X;
+     {x} is discrete by TEX_2:36;
+  hence thesis by Th11;
+ end;
+
+
+begin
+:: 4. Kolmogorov Subspaces.
+
+definition let Y be non empty TopStruct;
+ cluster strict T_0 non empty SubSpace of Y;
+ existence
+  proof
+    consider X0 being trivial strict (non empty SubSpace of Y);
+   take X0;
+   thus thesis;
+  end;
+end;
+
+Lm4:
+ now let Z be TopStruct; let Z0 be SubSpace of Z;
+      [#]Z0 c= [#]Z & [#]Z0 = the carrier of Z0 by PRE_TOPC:12,def 9;
+  hence the carrier of Z0 is Subset of Z by PRE_TOPC:12;
+ end;
+
+definition let Y be TopStruct;
+  let Y0 be SubSpace of Y;
+ redefine attr Y0 is T_0 means
+   Y0 is empty or
+ for x, y being Point of Y st
+      x is Point of Y0 & y is Point of Y0 & x <> y holds
+   (ex V being Subset of Y st V is open & x in V & not y in V) or
+       (ex W being Subset of Y
+          st W is open & not x in W & y in W);
+ compatibility
+  proof
+    reconsider A = the carrier of Y0 as Subset of Y by Lm4;
+   thus Y0 is T_0 implies
+          Y0 is empty or
+          for x, y being Point of Y st
+              x is Point of Y0 & y is Point of Y0 & x <> y holds
+           (ex V being Subset of Y
+               st V is open & x in V & not y in V) or
+            (ex W being Subset of Y
+            st W is open & not x in W & y in W)
+     proof
+      assume A1: Y0 is T_0;
+      hereby assume
+A2:     Y0 is non empty;
+       let x, y be Point of Y;
+       assume x is Point of Y0 & y is Point of Y0;
+         then reconsider x0 = x, y0 = y as Point of Y0;
+A3:    the carrier of Y0 <> {} by A2,STRUCT_0:def 1;
+       assume A4: x <> y;
+           now per cases by A1,A2,A4,Def3;
+          suppose
+               ex E0 being Subset of Y0
+                st E0 is open & x0 in E0 & not y0 in E0;
+            then consider E0 being Subset of Y0 such that
+                  A5: E0 is open and A6: x0 in E0 and A7: not y0 in E0;
+               now
+              consider E being Subset of Y such that
+                A8: E is open and A9: E0 = E /\ A by A5,Def1;
+              take E;
+              thus E is open by A8;
+                  E /\ A c= E by XBOOLE_1:17;
+              hence x in E by A6,A9;
+              thus not y in E by A3,A7,A9,XBOOLE_0:def 3;
+             end;
+           hence (ex E being Subset of Y
+               st E is open & x in E & not y in E) or
+                  (ex F being Subset of Y
+                  st F is open & not x in F & y in F);
+          suppose
+               ex F0 being Subset of Y0
+             st F0 is open & not x0 in F0 & y0 in F0;
+            then consider F0 being Subset of Y0 such that
+                  A10: F0 is open and A11: not x0 in F0 and A12: y0 in F0;
+               now
+              consider F being Subset of Y such that
+                A13: F is open and A14: F0 = F /\ A by A10,Def1;
+              take F;
+              thus F is open by A13;
+              thus not x in F by A3,A11,A14,XBOOLE_0:def 3;
+                  F /\ A c= F by XBOOLE_1:17;
+              hence y in F by A12,A14;
+             end;
+           hence (ex E being Subset of Y
+              st E is open & x in E & not y in E) or
+                  (ex F being Subset of Y
+                  st F is open & not x in F & y in F);
+         end;
+       hence (ex E being Subset of Y
+          st E is open & x in E & not y in E) or
+                (ex F being Subset of Y
+                st F is open & not x in F & y in F);
+      end;
+     end;
+   assume
+    A15: Y0 is empty or
+     for x, y being Point of Y st
+                x is Point of Y0 & y is Point of Y0 & x <> y holds
+              (ex V being Subset of Y
+                 st V is open & x in V & not y in V) or
+               (ex W being Subset of Y
+               st W is open & not x in W & y in W);
+        now assume
+A16:    Y0 is non empty;
+       let x0, y0 be Point of Y0;
+A17:     the carrier of Y0 <> {} by A16,STRUCT_0:def 1;
+         the carrier of Y0 <> {} by A16,STRUCT_0:def 1;
+       then A18:      x0 in the carrier of Y0 & y0 in the carrier of Y0;
+          the carrier of Y0 c= the carrier of Y by Def1;
+        then reconsider x = x0, y = y0 as Point of Y by A18;
+       assume A19: x0 <> y0;
+           now per cases by A15,A16,A19;
+          suppose ex E being Subset of Y
+              st E is open & x in E & not y in E;
+            then consider E being Subset of Y such that
+                  A20: E is open and A21: x in E and A22: not y in E;
+               now
+              consider E0 being Subset of Y0 such that
+                A23: E0 is open and A24: E0 = E /\ A by A20,Th2;
+              take E0;
+              thus E0 is open by A23;
+              thus x0 in E0 by A17,A21,A24,XBOOLE_0:def 3;
+                  now assume A25: y0 in E0;
+                     E /\ A c= E by XBOOLE_1:17;
+                  hence contradiction by A22,A24,A25;
+                end;
+              hence not y0 in E0;
+             end;
+           hence
+              (ex E0 being Subset of Y0
+               st E0 is open & x0 in E0 & not y0 in E0) or
+             (ex F0 being Subset of Y0
+             st F0 is open & not x0 in F0 & y0 in F0);
+          suppose ex F being Subset of Y
+          st F is open & not x in F & y in F;
+            then consider F being Subset of Y such that
+                  A26: F is open and A27: not x in F and A28: y in F;
+               now
+              consider F0 being Subset of Y0 such that
+                A29: F0 is open and A30: F0 = F /\ A by A26,Th2;
+              take F0;
+              thus F0 is open by A29;
+                  now assume A31: x0 in F0;
+                     F /\ A c= F by XBOOLE_1:17;
+                  hence contradiction by A27,A30,A31;
+                end;
+              hence not x0 in F0;
+              thus y0 in F0 by A17,A28,A30,XBOOLE_0:def 3;
+             end;
+           hence
+              (ex E0 being Subset of Y0
+               st E0 is open & x0 in E0 & not y0 in E0) or
+             (ex F0 being Subset of Y0
+             st F0 is open & not x0 in F0 & y0 in F0);
+         end;
+       hence
+              (ex E0 being Subset of Y0
+              st E0 is open & x0 in E0 & not y0 in E0) or
+             (ex F0 being Subset of Y0
+             st F0 is open & not x0 in F0 & y0 in F0);
+      end;
+   hence Y0 is T_0 by Def3;
+  end;
+end;
+
+definition let Y be TopStruct;
+  let Y0 be SubSpace of Y;
+ redefine attr Y0 is T_0 means
+:Def14: Y0 is empty or
+   for x, y being Point of Y st
+      x is Point of Y0 & y is Point of Y0 & x <> y holds
+   (ex E being Subset of Y
+      st E is closed & x in E & not y in E) or
+       (ex F being Subset of Y
+       st F is closed & not x in F & y in F);
+ compatibility
+  proof
+    reconsider A = the carrier of Y0 as Subset of Y by Lm4;
+   thus Y0 is T_0 implies
+        Y0 is empty or
+          for x, y being Point of Y st
+              x is Point of Y0 & y is Point of Y0 & x <> y holds
+           (ex E being Subset of Y
+              st E is closed & x in E & not y in E) or
+            (ex F being Subset of Y
+            st F is closed & not x in F & y in F)
+     proof
+      assume A1: Y0 is T_0;
+      hereby assume
+A2:     Y0 is not empty;
+       let x, y be Point of Y;
+       assume x is Point of Y0 & y is Point of Y0;
+         then reconsider x0 = x, y0 = y as Point of Y0;
+A3:    the carrier of Y0 <> {} by A2,STRUCT_0:def 1;
+       assume A4: x <> y;
+           now per cases by A1,A2,A4,Def4;
+          suppose
+               ex E0 being Subset of Y0
+                st E0 is closed & x0 in E0 & not y0 in E0;
+            then consider E0 being Subset of Y0 such that
+                  A5: E0 is closed and A6: x0 in E0 and A7: not y0 in E0;
+               now
+              consider E being Subset of Y such that
+                A8: E is closed and A9: E0 = E /\ A by A5,Def2;
+              take E;
+              thus E is closed by A8;
+                  E /\ A c= E by XBOOLE_1:17;
+              hence x in E by A6,A9;
+              thus not y in E by A3,A7,A9,XBOOLE_0:def 3;
+             end;
+           hence (ex E being Subset of Y
+              st E is closed & x in E & not y in E) or
+                  (ex F being Subset of Y
+                  st F is closed & not x in F & y in F);
+          suppose
+               ex F0 being Subset of Y0
+             st F0 is closed & not x0 in F0 & y0 in F0;
+            then consider F0 being Subset of Y0 such that
+                  A10: F0 is closed and A11: not x0 in F0 and A12: y0 in F0;
+               now
+              consider F being Subset of Y such that
+                A13: F is closed and A14: F0 = F /\ A by A10,Def2;
+              take F;
+              thus F is closed by A13;
+              thus not x in F by A3,A11,A14,XBOOLE_0:def 3;
+                F /\ A c= F by XBOOLE_1:17;
+              hence y in F by A12,A14;
+             end;
+           hence (ex E being Subset of Y
+             st E is closed & x in E & not y in E) or
+                  (ex F being Subset of Y
+                  st F is closed & not x in F & y in F);
+         end;
+       hence (ex E being Subset of Y
+          st E is closed & x in E & not y in E) or
+                (ex F being Subset of Y
+                st F is closed & not x in F & y in F);
+      end;
+     end;
+   assume
+   A15: Y0 is empty or
+    for x, y being Point of Y st
+                x is Point of Y0 & y is Point of Y0 & x <> y holds
+              (ex E being Subset of Y
+                 st E is closed & x in E & not y in E) or
+               (ex F being Subset of Y
+               st F is closed & not x in F & y in F);
+        now assume
+A16:     Y0 is not empty;
+       let x0, y0 be Point of Y0;
+A17:     the carrier of Y0 <> {} by A16,STRUCT_0:def 1;
+         the carrier of Y0 <> {} by A16,STRUCT_0:def 1;
+       then A18:      x0 in the carrier of Y0 & y0 in the carrier of Y0;
+          the carrier of Y0 c= the carrier of Y by Def1;
+        then reconsider x = x0, y = y0 as Point of Y by A18;
+       assume A19: x0 <> y0;
+           now per cases by A15,A16,A19;
+          suppose ex E being Subset of Y
+             st E is closed & x in E & not y in E;
+            then consider E being Subset of Y such that
+                  A20: E is closed and A21: x in E and A22: not y in E;
+               now
+              consider E0 being Subset of Y0 such that
+                A23: E0 is closed and A24: E0 = E /\ A by A20,Th4;
+              take E0;
+              thus E0 is closed by A23;
+              thus x0 in E0 by A17,A21,A24,XBOOLE_0:def 3;
+                  now assume A25: y0 in E0;
+                     E /\ A c= E by XBOOLE_1:17;
+                  hence contradiction by A22,A24,A25;
+                end;
+              hence not y0 in E0;
+             end;
+           hence
+            (ex E0 being Subset of Y0
+             st E0 is closed & x0 in E0 & not y0 in E0) or
+            (ex F0 being Subset of Y0
+            st F0 is closed & not x0 in F0 & y0 in F0);
+          suppose ex F being Subset of Y
+          st F is closed & not x in F & y in F;
+            then consider F being Subset of Y such that
+                  A26: F is closed and A27: not x in F and A28: y in F;
+               now
+              consider F0 being Subset of Y0 such that
+                A29: F0 is closed and A30: F0 = F /\ A by A26,Th4;
+              take F0;
+              thus F0 is closed by A29;
+                  now assume A31: x0 in F0;
+                     F /\ A c= F by XBOOLE_1:17;
+                  hence contradiction by A27,A30,A31;
+                end;
+              hence not x0 in F0;
+              thus y0 in F0 by A17,A28,A30,XBOOLE_0:def 3;
+             end;
+           hence
+            (ex E0 being Subset of Y0
+             st E0 is closed & x0 in E0 & not y0 in E0) or
+            (ex F0 being Subset of Y0
+            st F0 is closed & not x0 in F0 & y0 in F0);
+         end;
+       hence
+          (ex E0 being Subset of Y0
+           st E0 is closed & x0 in E0 & not y0 in E0) or
+         (ex F0 being Subset of Y0
+         st F0 is closed & not x0 in F0 & y0 in F0);
+      end;
+   hence Y0 is T_0 by Def4;
+  end;
+end;
+
+reserve Y for non empty TopStruct;
+
+theorem Th15:
+ for Y0 being non empty SubSpace of Y, A being Subset of Y st
+                          A = the carrier of Y0 holds A is T_0 iff Y0 is T_0
+ proof let Y0 be non empty SubSpace of Y, A be Subset of Y;
+  assume A1: A = the carrier of Y0;
+  hereby
+   assume A is T_0;
+     then for x, y be Point of Y st x is Point of Y0 & y is Point of Y0 &
+      x <> y holds
+       (ex E being Subset of Y
+          st E is closed & x in E & not y in E) or
+               (ex F being Subset of Y
+               st F is closed & not x in F & y in F) by A1,Def9;
+   hence Y0 is T_0 by Def14;
+  end;
+  hereby
+   assume Y0 is T_0;
+     then for x, y be Point of Y st x in A & y in A & x <> y holds
+       (ex E being Subset of Y
+          st E is closed & x in E & not y in E) or
+               (ex F being Subset of Y
+               st F is closed & not x in F & y in F) by A1,Def14;
+   hence A is T_0 by Def9;
+  end;
+ end;
+
+theorem
+   for Y0 being non empty SubSpace of Y,
+     Y1 being T_0 non empty SubSpace of Y st
+                       Y0 is SubSpace of Y1 holds Y0 is T_0
+ proof let Y0 be non empty SubSpace of Y,
+           Y1 be T_0 non empty SubSpace of Y;
+     the carrier of Y1 is non empty Subset of Y &
+   the carrier of Y0 is non empty Subset of Y by Lm4;
+   then reconsider A1 = the carrier of Y1, A0 = the carrier of Y0
+                          as non empty Subset of Y;
+    A1: [#]Y0 = A0 & [#]Y1 = A1 by PRE_TOPC:12;
+  assume Y0 is SubSpace of Y1;
+    then A2: A0 c= A1 by A1,PRE_TOPC:def 9;
+       A1 is T_0 by Th15;
+    then A0 is T_0 by A2,Th7;
+  hence Y0 is T_0 by Th15;
+ end;
+
+reserve X for non empty TopSpace;
+
+theorem
+   for X1 being T_0 non empty SubSpace of X, X2 being non empty SubSpace of X
+ holds X1 meets X2 implies X1 meet X2 is T_0
+ proof let X1 be T_0 non empty SubSpace of X, X2 be non empty SubSpace of X;
+     the carrier of X1 is non empty Subset of X by TSEP_1:1;
+   then reconsider A1 = the carrier of X1 as non empty Subset of X
+   ;
+     the carrier of X2 is non empty Subset of X by TSEP_1:1;
+   then reconsider A2 = the carrier of X2 as non empty Subset of X
+  ;
+  assume X1 meets X2;
+   then A1: the carrier of X1 meet X2 = A1 /\ A2 by TSEP_1:def 5;
+        A1 is T_0 by Th15;
+    then A1 /\ A2 is T_0 by Th8;
+  hence thesis by A1,Th15;
+ end;
+
+theorem
+   for X1, X2 being T_0 non empty SubSpace of X holds
+  X1 is open or X2 is open implies X1 union X2 is T_0
+ proof let X1, X2 be T_0 non empty SubSpace of X;
+     the carrier of X1 is non empty Subset of X &
+   the carrier of X2 is non empty Subset of X by TSEP_1:1;
+   then reconsider A1 = the carrier of X1, A2 = the carrier of X2
+      as non empty Subset of X;
+  assume X1 is open or X2 is open;
+   then A1: A1 is open or A2 is open by TSEP_1:16;
+     A2: the carrier of X1 union X2 = A1 \/ A2 by TSEP_1:def 2;
+        A1 is T_0 & A2 is T_0 by Th15;
+    then A1 \/ A2 is T_0 by A1,Th9;
+  hence thesis by A2,Th15;
+ end;
+
+theorem
+   for X1, X2 being T_0 non empty SubSpace of X holds
+   X1 is closed or X2 is closed implies X1 union X2 is T_0
+ proof let X1, X2 be T_0 non empty SubSpace of X;
+     the carrier of X1 is non empty Subset of X &
+   the carrier of X2 is non empty Subset of X by TSEP_1:1;
+   then reconsider A1 = the carrier of X1, A2 = the carrier of X2
+      as non empty Subset of X;
+  assume X1 is closed or X2 is closed;
+   then A1: A1 is closed or A2 is closed by TSEP_1:11;
+     A2: the carrier of X1 union X2 = A1 \/ A2 by TSEP_1:def 2;
+        A1 is T_0 & A2 is T_0 by Th15;
+    then A1 \/ A2 is T_0 by A1,Th10;
+  hence thesis by A2,Th15;
+ end;
+
+definition let X be non empty TopSpace;
+ mode Kolmogorov_subspace of X is T_0 non empty SubSpace of X;
+end;
+
+theorem
+   for X being non empty TopSpace,
+    A0 being non empty Subset of X st A0 is T_0
+  ex X0 being strict Kolmogorov_subspace of X st A0 = the carrier of X0
+ proof let X be non empty TopSpace, A0 be non empty Subset of X;
+  assume A1: A0 is T_0;
+    consider X0 being strict non empty SubSpace of X such that
+          A2: A0 = the carrier of X0 by TSEP_1:10;
+    reconsider X0 as strict Kolmogorov_subspace of X by A1,A2,Th15;
+  take X0;
+  thus thesis by A2;
+ end;
+
+definition let X be non trivial (non empty TopSpace);
+ cluster proper strict Kolmogorov_subspace of X;
+ existence
+  proof
+    consider X0 being trivial strict (non empty SubSpace of X);
+   take X0;
+   thus thesis;
+  end;
+end;
+
+definition let X be Kolmogorov_space;
+ cluster -> T_0 (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is non empty Subset of X by TSEP_1:1;
+  then reconsider A0 = the carrier of X0 as non empty Subset of X;
+       X is SubSpace of X by TSEP_1:2;
+   then the carrier of X is non empty Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X as non empty Subset of X;
+       A is T_0 & A0 c= A by Th6;
+    then A0 is T_0 by Th7;
+    hence thesis by Th15;
+  end;
+end;
+
+definition let X be non-Kolmogorov_space;
+ cluster non proper -> non T_0 (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+      the carrier of X0 is non empty Subset of X by TSEP_1:1;
+    then reconsider A0 = the carrier of X0 as non empty Subset of X
+   ;
+        X is SubSpace of X by TSEP_1:2;
+    then reconsider A = the carrier of X
+       as non empty Subset of X by TSEP_1:1;
+   assume X0 is non proper;
+     then A0 is not proper by TEX_2:13;
+     then A0 = A by TEX_2:5;
+     then A0 is not T_0 by Th6;
+    hence thesis by Th15;
+  end;
+ cluster T_0 -> proper (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+      the carrier of X0 is non empty Subset of X by TSEP_1:1;
+    then reconsider A0 = the carrier of X0 as non empty Subset of X
+     ;
+        X is SubSpace of X by TSEP_1:2;
+    then reconsider A = the carrier of X
+       as non empty Subset of X by TSEP_1:1;
+   assume A1: X0 is T_0;
+   assume X0 is non proper;
+     then A0 is not proper by TEX_2:13;
+     then A0 = A by TEX_2:5;
+     then A0 is not T_0 by Th6;
+    hence contradiction by A1,Th15;
+  end;
+end;
+
+definition let X be non-Kolmogorov_space;
+ cluster strict non T_0 SubSpace of X;
+ existence
+  proof
+    consider X0 being non proper strict (non empty SubSpace of X);
+   take X0;
+   thus thesis;
+  end;
+end;
+
+definition let X be non-Kolmogorov_space;
+ mode non-Kolmogorov_subspace of X is non T_0 SubSpace of X;
+end;
+
+theorem
+   for X being non empty non-Kolmogorov_space,
+    A0 being Subset of X st A0 is not T_0
+  ex X0 being strict non-Kolmogorov_subspace of X st A0 = the carrier of X0
+ proof let X be non empty non-Kolmogorov_space,
+      A0 be Subset of X;
+  assume A1: A0 is not T_0;
+   then A0 is non empty by Th13;
+   then consider X0 being strict non empty SubSpace of X such that
+          A2: A0 = the carrier of X0 by TSEP_1:10;
+    reconsider X0 as non T_0 strict SubSpace of X by A1,A2,Th15;
+  take X0;
+  thus thesis by A2;
+ end;

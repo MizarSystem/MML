@@ -1,0 +1,347 @@
+:: Real Sequences and Basic Operations on Them
+::  by Jaros{\l}aw Kotowicz
+::
+:: Received July 4, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, ARYTM, RELAT_1, PARTFUN1, BOOLE, ARYTM_1, ABSVALUE,
+      ARYTM_3, SEQ_1, ZF_REFLE;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      NAT_1, REAL_1, RELAT_1, FUNCT_1, ABSVALUE, RELSET_1, PARTFUN1, FUNCT_2;
+ constructors REAL_1, ABSVALUE, FUNCT_2, PARTFUN1, MEMBERED, XBOOLE_0;
+ clusters XREAL_0, RELSET_1, FUNCT_2, MEMBERED, ZFMISC_1, XBOOLE_0, ORDINAL2;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+  reserve f for Function;
+  reserve n,k,n1 for Nat;
+  reserve r,p for real number;
+  reserve x,y,z for set;
+
+definition
+ mode Real_Sequence is Function of NAT,REAL;
+end;
+
+reserve seq,seq1,seq2,seq3,seq',seq1' for Real_Sequence;
+
+canceled 2;
+
+theorem :: SEQ_1:3
+ f is Real_Sequence iff (dom f=NAT & for x st x in NAT holds f.x is real);
+
+theorem :: SEQ_1:4
+f is Real_Sequence iff (dom f=NAT & for n holds f.n is real);
+
+definition let f be Relation;
+ attr f is real-yielding means
+:: SEQ_1:def 1
+ rng f c= REAL;
+end;
+
+definition let C be set;
+ cluster -> real-yielding PartFunc of C, REAL;
+end;
+
+definition
+ cluster real-yielding Function;
+end;
+
+definition let f be real-yielding Function, x be set;
+ cluster f.x -> real;
+end;
+
+definition let f be real-yielding Function, x be set;
+ redefine func f.x -> Real;
+end;
+
+definition let C be set, f be PartFunc of C, REAL, x be set;
+ redefine func f.x -> Real;
+end;
+
+definition
+ let f be PartFunc of NAT, REAL;
+ redefine attr f is non-empty means
+:: SEQ_1:def 2
+rng f c= REAL \ {0};
+  synonym f is being_not_0;
+  synonym f is_not_0;
+end;
+
+canceled;
+
+theorem :: SEQ_1:6
+  seq is being_not_0 iff for x st x in NAT holds seq.x<>0;
+
+theorem :: SEQ_1:7
+  seq is being_not_0 iff for n holds seq.n<>0;
+
+theorem :: SEQ_1:8
+   for seq,seq1 st (for x st x in NAT holds seq.x=seq1.x) holds seq=seq1;
+
+canceled;
+
+theorem :: SEQ_1:10
+   for r ex seq st rng seq={r};
+
+scheme ExRealSeq{F(set)->real number}:
+ ex seq st for n holds seq.n=F(n);
+
+::
+::  BASIC OPERATIONS ON SEQUENCES
+::
+
+scheme PartFuncExD'{D,C()->non empty set, P[set,set]}:
+ ex f being PartFunc of D(),C() st
+  (for d be Element of D() holds
+      d in dom f iff (ex c be Element of C() st P[d,c])) &
+  (for d be Element of D() st d in dom f holds P[d,f.d]);
+
+scheme LambdaPFD'{D,C()->non empty set, F(set)->Element of C(), P[set]}:
+  ex f being PartFunc of D(),C() st
+   (for d be Element of D() holds d in dom f iff P[d]) &
+   (for d be Element of D() st d in dom f holds f.d = F(d));
+
+scheme UnPartFuncD'{C,D,X() -> set, F(set)->set}:
+  for f,g being PartFunc of C(),D() st
+   (dom f=X() & for c be Element of C() st c in dom f holds f.c = F(c)) &
+   (dom g=X() & for c be Element of C() st c in dom g holds g.c = F(c))
+  holds f = g;
+
+definition let C be :::non empty
+  set; let f1,f2 be PartFunc of C,REAL;
+func f1+f2 -> PartFunc of C,REAL means
+:: SEQ_1:def 3
+ dom it = dom f1 /\ dom f2 &
+  for c being Element of C st c in dom it holds it.c = f1.c + f2.c;
+  commutativity;
+func f1-f2 -> PartFunc of C,REAL means
+:: SEQ_1:def 4
+dom it = dom f1 /\ dom f2 &
+ for c being Element of C st c in dom it holds it.c = f1.c - f2.c;
+func f1(#)f2 -> PartFunc of C,REAL means
+:: SEQ_1:def 5
+dom it = dom f1 /\ dom f2 &
+   for c being Element of C st c in dom it holds it.c = f1.c * f2.c;
+  commutativity;
+end;
+
+theorem :: SEQ_1:11
+ seq = seq1 + seq2 iff for n holds seq.n =seq1.n + seq2.n;
+
+theorem :: SEQ_1:12
+ seq = seq1 (#) seq2 iff for n holds seq.n =seq1.n * seq2.n;
+
+definition
+  let seq1,seq2;
+  cluster seq1+seq2 -> total;
+  cluster seq1(#)seq2 -> total;
+end;
+
+definition let C be set; let f be PartFunc of C,REAL;
+   let r be real number;
+func r(#)f -> PartFunc of C,REAL means
+:: SEQ_1:def 6
+ dom it = dom f & for c being Element of C st c in dom it holds it.c = r * f.c;
+end;
+
+definition
+ let r,seq;
+ cluster r(#)seq -> total;
+end;
+
+theorem :: SEQ_1:13
+  seq1 = r(#)seq2 iff for n holds seq1.n=r*seq2.n;
+
+definition let C be set; let f be PartFunc of C,REAL;
+func -f ->PartFunc of C,REAL means
+:: SEQ_1:def 7
+ dom it = dom f & for c being Element of C st c in dom it holds it.c = -(f.c);
+end;
+
+definition
+ let seq;
+ cluster - seq -> total;
+end;
+
+theorem :: SEQ_1:14
+  seq1 = -seq2 iff for n holds seq1.n= -seq2.n;
+
+definition
+ let seq1,seq2;
+ cluster seq1-seq2 -> total;
+end;
+
+theorem :: SEQ_1:15
+ seq1 - seq2 = seq1 +- seq2;
+
+definition
+ let seq;
+func seq" -> Real_Sequence means
+:: SEQ_1:def 8
+for n holds it.n=(seq.n)";
+end;
+
+definition
+ let seq1,seq;
+func seq1 /" seq ->Real_Sequence equals
+:: SEQ_1:def 9
+seq1(#)(seq");
+end;
+
+definition let C be set; let f be PartFunc of C,REAL;
+func abs f -> PartFunc of C,REAL means
+:: SEQ_1:def 10
+ dom it = dom f & for c being Element of C st c in dom it holds
+   it.c = abs(f.c);
+end;
+
+definition let seq;
+  cluster abs seq -> total;
+end;
+
+theorem :: SEQ_1:16
+  seq1 = abs seq iff for n holds seq1.n= abs(seq.n);
+
+canceled 3;
+
+theorem :: SEQ_1:20
+  (seq1+seq2)+seq3=seq1+(seq2+seq3);
+
+canceled;
+
+theorem :: SEQ_1:22
+  (seq1(#)seq2)(#)seq3=seq1(#)(seq2(#)seq3);
+
+theorem :: SEQ_1:23
+  (seq1+seq2)(#)seq3=seq1(#)seq3+seq2(#)seq3;
+
+theorem :: SEQ_1:24
+    seq3(#)(seq1+seq2)=seq3(#)seq1+seq3(#)seq2;
+
+theorem :: SEQ_1:25
+  -seq=(-1)(#)seq;
+
+theorem :: SEQ_1:26
+  r(#)(seq1(#)seq2)=r(#)seq1(#)seq2;
+
+theorem :: SEQ_1:27
+  r(#)(seq1(#)seq2)=seq1(#)(r(#)seq2);
+
+theorem :: SEQ_1:28
+  (seq1-seq2)(#)seq3=seq1(#)seq3-seq2(#)seq3;
+
+theorem :: SEQ_1:29
+    seq3(#)seq1-seq3(#)seq2=seq3(#)(seq1-seq2);
+
+theorem :: SEQ_1:30
+  r(#)(seq1+seq2)=r(#)seq1+r(#)seq2;
+
+theorem :: SEQ_1:31
+  (r*p)(#)seq=r(#)(p(#)seq);
+
+theorem :: SEQ_1:32
+  r(#)(seq1-seq2)=r(#)seq1-r(#)seq2;
+
+theorem :: SEQ_1:33
+  r(#)(seq1/"seq)=(r(#)seq1)/"seq;
+
+theorem :: SEQ_1:34
+    seq1-(seq2+seq3)=seq1-seq2-seq3;
+
+theorem :: SEQ_1:35
+   1(#)seq=seq;
+
+theorem :: SEQ_1:36
+   -(-seq)=seq;
+
+theorem :: SEQ_1:37
+  seq1-(-seq2)=seq1+seq2;
+
+theorem :: SEQ_1:38
+    seq1-(seq2-seq3)=seq1-seq2+seq3;
+
+theorem :: SEQ_1:39
+    seq1+(seq2-seq3)=seq1+seq2-seq3;
+
+theorem :: SEQ_1:40
+    (-seq1)(#)seq2=-(seq1(#)seq2) & seq1(#)(-seq2)=-(seq1(#)seq2);
+
+theorem :: SEQ_1:41
+ seq is being_not_0 implies seq" is being_not_0;
+
+theorem :: SEQ_1:42
+ seq""=seq;
+
+theorem :: SEQ_1:43
+ seq is being_not_0 & seq1 is being_not_0 iff seq(#)seq1 is being_not_0;
+
+theorem :: SEQ_1:44
+ seq"(#)seq1"=(seq(#)seq1)";
+
+theorem :: SEQ_1:45
+   seq is being_not_0 implies (seq1/"seq)(#)seq=seq1;
+
+theorem :: SEQ_1:46
+   (seq'/"seq)(#)(seq1'/"seq1)=(seq'(#)seq1')/"(seq(#)seq1);
+
+theorem :: SEQ_1:47
+   seq is being_not_0 & seq1 is being_not_0 implies seq/"seq1 is being_not_0;
+
+theorem :: SEQ_1:48
+ (seq/"seq1)"=seq1/"seq;
+
+theorem :: SEQ_1:49
+  seq2(#)(seq1/"seq)=(seq2(#)seq1)/"seq;
+
+theorem :: SEQ_1:50
+    seq2/"(seq/"seq1)=(seq2(#)seq1)/"seq;
+
+theorem :: SEQ_1:51
+ seq1 is being_not_0 implies
+                  seq2/"seq=(seq2(#)seq1)/"(seq(#)seq1);
+
+theorem :: SEQ_1:52
+ r<>0 & seq is being_not_0 implies r(#)seq is being_not_0;
+
+theorem :: SEQ_1:53
+   seq is being_not_0 implies -seq is being_not_0;
+
+theorem :: SEQ_1:54
+ (r(#)seq)"=r"(#)seq";
+
+theorem :: SEQ_1:55
+ (-seq)"=(-1)(#)seq";
+
+theorem :: SEQ_1:56
+   -seq1/"seq=(-seq1)/"seq & seq1/"(-seq)=-seq1/"seq;
+
+theorem :: SEQ_1:57
+  seq1/"seq + seq1'/"seq=(seq1+seq1')/"seq &
+                           seq1/"seq - seq1'/"seq=(seq1-seq1')/"seq;
+
+theorem :: SEQ_1:58
+   seq is being_not_0 & seq' is being_not_0 implies
+       (seq1/"seq + seq1'/"seq'=(seq1(#)seq'+seq1'(#)seq)/"(seq(#)seq')) &
+       (seq1/"seq - seq1'/"seq'=(seq1(#)seq'-seq1'(#)seq)/"(seq(#)seq'));
+
+theorem :: SEQ_1:59
+   (seq1'/"seq)/"(seq'/"seq1)=(seq1'(#)seq1)/"(seq(#)seq');
+
+theorem :: SEQ_1:60
+ abs(seq(#)seq')=abs(seq)(#)abs(seq');
+
+theorem :: SEQ_1:61
+   seq is being_not_0 implies abs(seq) is being_not_0;
+
+theorem :: SEQ_1:62
+ abs(seq)"=abs(seq");
+
+theorem :: SEQ_1:63
+   abs(seq'/"seq)=abs(seq')/"abs(seq);
+
+theorem :: SEQ_1:64
+   abs(r(#)seq)=abs(r)(#)abs(seq);

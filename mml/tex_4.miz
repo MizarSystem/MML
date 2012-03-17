@@ -1,0 +1,2801 @@
+:: Maximal Anti-Discrete Subspaces of Topological Spaces
+::  by Zbigniew Karno
+::
+:: Received July 26, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, BOOLE, COLLSP, SUBSET_1, REALSET1, SETFAM_1, TOPS_1,
+      TARSKI, TDLAT_3, RELAT_1, TEX_2, TEX_4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, STRUCT_0, REALSET1,
+      PRE_TOPC, TOPS_1, TOPS_2, BORSUK_1, TSEP_1, TDLAT_3, TEX_2;
+ constructors REALSET1, TOPS_1, TOPS_2, BORSUK_1, TSEP_1, TDLAT_3, TEX_2,
+      MEMBERED;
+ clusters SUBSET_1, PRE_TOPC, BORSUK_1, TSEP_1, TEX_1, TEX_2, STRUCT_0, TOPS_1,
+      SETFAM_1, MEMBERED, ZFMISC_1;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, STRUCT_0, XBOOLE_0;
+ theorems TARSKI, SUBSET_1, ZFMISC_1, SETFAM_1, PRE_TOPC, TOPS_1, TOPS_2,
+      PCOMPS_1, TSEP_1, TDLAT_3, TEX_2, REALSET1, XBOOLE_0, XBOOLE_1;
+
+begin
+:: 1. Properties of the Closure and the Interior Operations.
+
+definition
+ let X be non empty TopSpace, A be non empty Subset of X;
+ cluster Cl A -> non empty;
+ coherence by PCOMPS_1:2;
+end;
+
+definition let X be non empty TopSpace, A be empty Subset of X;
+ cluster Cl A -> empty;
+ coherence
+  proof
+       A = {}X;
+   hence thesis by PRE_TOPC:52;
+  end;
+end;
+
+definition
+ let X be non empty TopSpace, A be non proper Subset of X;
+ cluster Cl A -> non proper;
+ coherence
+  proof
+       A = the carrier of X by TEX_2:5;
+    then A = [#]X by PRE_TOPC:12;
+    then Cl A = [#]X by TOPS_1:27;
+    then Cl A = the carrier of X by PRE_TOPC:12;
+   hence thesis by TEX_2:5;
+  end;
+end;
+
+definition let X be non trivial non empty TopSpace,
+                A be non trivial (non empty Subset of X);
+ cluster Cl A -> non trivial;
+ coherence
+  proof
+      now
+     assume A1: Cl A is trivial;
+          A c= Cl A by PRE_TOPC:48;
+     hence contradiction by A1,TEX_2:1;
+    end;
+   hence thesis;
+  end;
+end;
+
+reserve X for non empty TopSpace;
+
+theorem Th1:
+ for A being Subset of X holds
+   Cl A = meet {F where F is Subset of X : F is closed & A c= F}
+ proof let A be Subset of X;
+  set G = {F where F is Subset of X : F is closed & A c= F};
+    A1: G c= bool the carrier of X
+           proof let C be set;
+            assume C in G;
+             then ex P being Subset of X st C = P & P is closed & A c= P;
+            hence C in bool the carrier of X;
+           end;
+        [#]X is closed & A c= [#]X by PRE_TOPC:14;
+     then [#]X in G;
+     then G is non empty Subset-Family of X by A1,SETFAM_1:def 7
+;
+     then reconsider G as non empty Subset-Family of X;
+        now let S be Subset of X;
+       assume S in G;
+        then consider F being Subset of X such that
+               A2: F = S and A3: F is closed and A c= F;
+       thus S is closed by A2,A3;
+      end;
+     then G is closed by TOPS_2:def 2;
+    then A4: meet G is closed by TOPS_2:29;
+         now let P be set;
+        assume P in G;
+         then consider F being Subset of X such that
+                A5: F = P and F is closed and A6: A c= F;
+        thus A c= P by A5,A6;
+       end;
+     then A c= meet G by SETFAM_1:6;
+   then A7: Cl A c= meet G by A4,TOPS_1:31;
+       A c= Cl A by PRE_TOPC:48;
+       then Cl A in G;
+    then meet G c= Cl A by SETFAM_1:4;
+  hence thesis by A7,XBOOLE_0:def 10;
+ end;
+
+theorem Th2:
+ for x being Point of X holds
+   Cl {x} = meet {F where F is Subset of X : F is closed & x in F}
+ proof let x be Point of X;
+  set G = {F where F is Subset of X : F is closed & x in F};
+  set H = {F where F is Subset of X : F is closed & {x} c= F};
+   A1: Cl {x} = meet H by Th1;
+      now let P be set;
+     assume P in G;
+       then consider F being Subset of X such that
+               A2: F = P and A3: F is closed and A4: x in F;
+           {x} c= F by A4,ZFMISC_1:37;
+     hence P in H by A2,A3;
+    end;
+   then A5: G c= H by TARSKI:def 3;
+      now let P be set;
+     assume P in H;
+       then consider F being Subset of X such that
+               A6: F = P and A7: F is closed and A8: {x} c= F;
+           x in F by A8,ZFMISC_1:37;
+     hence P in G by A6,A7;
+    end;
+   then H c= G by TARSKI:def 3;
+  hence thesis by A1,A5,XBOOLE_0:def 10;
+ end;
+
+theorem Th3:
+ for A, B being Subset of X holds B c= Cl A implies Cl B c= Cl A
+   by TOPS_1:31;
+
+definition
+ let X be non empty TopSpace, A be non proper Subset of X;
+ cluster Int A -> non proper;
+ coherence
+  proof
+       A = the carrier of X by TEX_2:5;
+    then A = [#]X by PRE_TOPC:12;
+    then Int A = [#]X by TOPS_1:43;
+    then Int A = the carrier of X by PRE_TOPC:12;
+   hence thesis by TEX_2:5;
+  end;
+end;
+
+definition let X be non empty TopSpace, A be proper Subset of X;
+ cluster Int A -> proper;
+ coherence
+  proof
+      now
+     assume Int A is non proper;
+      then Int A = the carrier of X by TEX_2:5;
+      then Int A = [#]X & Int A c= A & A c= [#]X by PRE_TOPC:12,14,TOPS_1:44;
+      then A = [#]X by XBOOLE_0:def 10;
+      then A = the carrier of X by PRE_TOPC:12;
+     hence contradiction by TEX_2:5;
+    end;
+   hence thesis;
+  end;
+end;
+
+definition let X be non empty TopSpace, A be empty Subset of X;
+ cluster Int A -> empty;
+ coherence
+  proof
+       A = {}X;
+   hence thesis by TOPS_1:47;
+  end;
+end;
+
+theorem
+   for A being Subset of X holds
+   Int A = union {G where G is Subset of X : G is open & G c= A}
+ proof let A be Subset of X;
+  set F = {G where G is Subset of X : G is open & G c= A};
+    A1: F c= bool the carrier of X
+           proof let C be set;
+            assume C in F;
+             then ex P being Subset of X st C = P & P is open & P c= A;
+            hence C in bool the carrier of X;
+           end;
+        {} in the topology of X & {} c= A by PRE_TOPC:5,XBOOLE_1:2;
+     then {}X in F;
+   then F is non empty Subset-Family of X by A1,SETFAM_1:def 7;
+   then reconsider F as non empty Subset-Family of X;
+        now let S be Subset of X;
+       assume S in F;
+        then consider G being Subset of X such that
+               A2: G = S and A3: G is open and G c= A;
+       thus S is open by A2,A3;
+      end;
+     then F is open by TOPS_2:def 1;
+    then A4: union F is open by TOPS_2:26;
+         now let P be set;
+        assume P in F;
+         then consider G being Subset of X such that
+                A5: G = P and G is open and A6: G c= A;
+        thus P c= A by A5,A6;
+       end;
+     then union F c= A by ZFMISC_1:94;
+   then A7: union F c= Int A by A4,TOPS_1:56;
+       Int A c= A by TOPS_1:44;
+       then Int A in F;
+    then Int A c= union F by ZFMISC_1:92;
+  hence thesis by A7,XBOOLE_0:def 10;
+ end;
+
+theorem
+   for A, B being Subset of X holds Int A c= B
+  implies Int A c= Int B by TOPS_1:56;
+
+begin
+:: 2. Anti-discrete Subsets of Topological Structures.
+
+definition let Y be TopStruct;
+  let IT be Subset of Y;
+ attr IT is anti-discrete means
+:Def1: for x being Point of Y, G being Subset of Y st
+    G is open & x in G holds x in IT implies IT c= G;
+end;
+
+definition let Y be non empty TopStruct;
+  let A be Subset of Y;
+ redefine attr A is anti-discrete means
+:Def2: for x being Point of Y, F being Subset of Y st
+    F is closed & x in F holds x in A implies A c= F;
+ compatibility
+  proof
+   hereby
+    assume A1: A is anti-discrete;
+     let x be Point of Y, F be Subset of Y;
+    assume A2: F is closed;
+    assume A3: x in F;
+    assume x in A;
+     then A4: A /\ F is non empty by A3,XBOOLE_0:def 3;
+    assume not A c= F;
+      then A \ F <> {} by XBOOLE_1:37;
+      then consider a being set such that
+       A5: a in A \ F by XBOOLE_0:def 1;
+       A6: a in A by A5,XBOOLE_0:def 4;
+         A7: A c= the carrier of Y;
+     set G = [#]Y \ F;
+A8:   G` = (F`)` by PRE_TOPC:17
+        .= F;
+         A c= [#]Y by A7,PRE_TOPC:12;
+      then A9: A \ F c= G by XBOOLE_1:33;
+         G is open by A2,PRE_TOPC:def 6;
+      then A c= G by A1,A5,A6,A9,Def1;
+      then A misses G` & G` = F by A8,TOPS_1:20;
+    hence contradiction by A4,XBOOLE_0:def 7;
+   end;
+   hereby
+    assume A10: for x being Point of Y, F being Subset of Y st
+                 F is closed & x in F holds x in A implies A c= F;
+       now let x be Point of Y, G be Subset of Y;
+      assume A11: G is open;
+      assume A12: x in G;
+      assume x in A;
+       then A13: A meets G by A12,XBOOLE_0:3;
+      assume not A c= G;
+       then A \ G <> {} by XBOOLE_1:37;
+       then consider a being set such that
+             A14: a in A \ G by XBOOLE_0:def 1;
+         A15: a in A by A14,XBOOLE_0:def 4;
+          A16: A c= the carrier of Y;
+      set F = [#]Y \ G;
+          A c= [#]Y by A16,PRE_TOPC:12;
+       then A17: A \ G c= F by XBOOLE_1:33;
+         G = [#]Y \ F by PRE_TOPC:22;
+       then F is closed by A11,PRE_TOPC:def 6;
+       then A c= F by A10,A14,A15,A17;
+       then A misses F` & F = G` by PRE_TOPC:17,TOPS_1:20;
+      hence contradiction by A13;
+     end;
+    hence A is anti-discrete by Def1;
+   end;
+  end;
+end;
+
+definition let Y be TopStruct;
+  let A be Subset of Y;
+ redefine attr A is anti-discrete means
+:Def3: for G being Subset of Y st G is open holds A misses G or A c= G;
+ compatibility
+  proof
+   hereby
+    assume A1: A is anti-discrete;
+     let G be Subset of Y;
+    assume A2: G is open;
+    assume A meets G;
+     then consider a being set such that
+            A3: a in A /\ G by XBOOLE_0:4;
+     reconsider a as Point of Y by A3;
+        a in A & a in G by A3,XBOOLE_0:def 3;
+    hence A c= G by A1,A2,Def1;
+   end;
+   assume A4: for G being Subset of Y st G is open
+     holds A misses G or A c= G;
+      now let x be Point of Y, G be Subset of Y;
+     assume A5: G is open;
+     assume A6: x in G;
+     assume x in A;
+      then A meets G by A6,XBOOLE_0:3;
+     hence A c= G by A4,A5;
+    end;
+   hence A is anti-discrete by Def1;
+  end;
+end;
+
+definition let Y be TopStruct;
+  let A be Subset of Y;
+ redefine attr A is anti-discrete means
+:Def4: for F being Subset of Y st F is closed holds A misses F or A c= F;
+ compatibility
+  proof
+   hereby assume A1: A is anti-discrete;
+     let G be Subset of Y;
+    assume G is closed;
+     then [#]Y \ G is open by PRE_TOPC:def 6;
+     then G` is open by PRE_TOPC:17;
+     then A2: A misses G` or A c= G` by A1,Def3;
+    assume A meets G;
+     then A c= (G`)` by A2,SUBSET_1:43;
+    hence A c= G;
+   end;
+   hereby
+    assume A3: for G being Subset of Y st G is closed
+     holds A misses G or A c= G;
+      now let G be Subset of Y;
+     assume A4: G is open;
+         G = [#]Y \ ([#]Y \ G) by PRE_TOPC:22;
+      then [#]Y \ G is closed by A4,PRE_TOPC:def 6;
+      then G` is closed by PRE_TOPC:17;
+      then A5: A misses G` or A c= G` by A3;
+     assume A meets G;
+      then A c= G`` by A5,SUBSET_1:43;
+     hence A c= G;
+    end;
+    hence A is anti-discrete by Def3;
+   end;
+  end;
+end;
+
+theorem Th6:
+ for Y0, Y1 being TopStruct, D0 being Subset of Y0,
+   D1 being Subset of Y1 st
+    the TopStruct of Y0 = the TopStruct of Y1 & D0 = D1 holds
+   D0 is anti-discrete implies D1 is anti-discrete
+ proof let Y0, Y1 be TopStruct, D0 be Subset of Y0,
+   D1 be Subset of Y1;
+  assume A1: the TopStruct of Y0 = the TopStruct of Y1;
+  assume A2: D0 = D1;
+  assume A3: D0 is anti-discrete;
+       now let D be Subset of Y1;
+      reconsider E = D as Subset of Y0 by A1;
+      assume D is open;
+      then E in the topology of Y0 by A1,PRE_TOPC:def 5;
+      then E is open by PRE_TOPC:def 5;
+      hence D1 misses D or D1 c= D by A2,A3,Def3;
+     end;
+  hence D1 is anti-discrete by Def3;
+ end;
+
+reserve Y for non empty TopStruct;
+
+theorem Th7:
+ for A, B being Subset of Y st B c= A holds
+    A is anti-discrete implies B is anti-discrete
+ proof let A, B be Subset of Y;
+  assume A1: B c= A;
+  assume A2: A is anti-discrete;
+     now let G be Subset of Y;
+    assume A3: G is open;
+    assume B meets G; then A4: B /\ G <> {} by XBOOLE_0:def 7;
+        B /\ G c= A /\ G by A1,XBOOLE_1:26;
+      then A /\ G <> {} by A4,XBOOLE_1:3;
+      then A meets G by XBOOLE_0:def 7;
+      then A c= G by A2,A3,Def3;
+    hence B c= G by A1,XBOOLE_1:1;
+   end;
+  hence B is anti-discrete by Def3;
+ end;
+
+theorem Th8:
+ for x being Point of Y holds {x} is anti-discrete
+ proof let x be Point of Y;
+     now let G be Subset of Y such that G is open;
+    assume {x} meets G;
+      then consider a being set such that
+       A1: a in {x} /\ G by XBOOLE_0:4;
+         a in {x} & a in G by A1,XBOOLE_0:def 3;
+       then a = x & {a} c= G by TARSKI:def 1,ZFMISC_1:37;
+    hence {x} c= G;
+   end;
+  hence thesis by Def3;
+ end;
+
+theorem Th9:
+ for A being empty Subset of Y holds A is anti-discrete
+ proof let A be empty Subset of Y;
+     for G be Subset of Y st G is open holds
+    A misses G or A c= G by XBOOLE_1:65;
+  hence A is anti-discrete by Def3;
+ end;
+
+definition let Y be TopStruct;
+  let IT be Subset-Family of Y;
+ attr IT is anti-discrete-set-family means
+:Def5: for A being Subset of Y st A in IT holds A is anti-discrete;
+end;
+
+theorem Th10:
+ for F being Subset-Family of Y st F is anti-discrete-set-family holds
+  meet F <> {} implies union F is anti-discrete
+ proof let F be Subset-Family of Y;
+  assume A1: F is anti-discrete-set-family;
+  assume A2: meet F <> {};
+     for G being Subset of Y st G is open holds
+      (union F) misses G or union F c= G
+    proof let G be Subset of Y;
+     assume A3: G is open;
+     assume union F meets G;
+      then consider A0 being set such that
+             A4: A0 in F and A5: A0 meets G by ZFMISC_1:98;
+       reconsider A0 as Subset of Y by A4;
+           A0 is anti-discrete by A1,A4,Def5;
+        then A6: A0 c= G by A3,A5,Def3;
+              meet F c= A0 by A4,SETFAM_1:4;
+          then A7: meet F c= G by A6,XBOOLE_1:1;
+         for B being set st B in F holds B c= G
+        proof let B be set;
+         assume A8: B in F;
+          then reconsider B0 = B as Subset of Y;
+              meet F c= B0 by A8,SETFAM_1:4;
+           then meet F c= B0 /\ G by A7,XBOOLE_1:19;
+           then B0 /\ G <> {} by A2,XBOOLE_1:3;
+           then A9: B0 meets G by XBOOLE_0:def 7;
+              B0 is anti-discrete by A1,A8,Def5;
+         hence thesis by A3,A9,Def3;
+        end;
+     hence union F c= G by ZFMISC_1:94;
+    end;
+  hence union F is anti-discrete by Def3;
+ end;
+
+theorem
+   for F being Subset-Family of Y st F is anti-discrete-set-family holds
+  meet F is anti-discrete
+ proof let F be Subset-Family of Y;
+  assume A1: F is anti-discrete-set-family;
+  hereby per cases;
+   suppose meet F = {};
+    hence meet F is anti-discrete by Th9;
+   suppose meet F <> {};
+     then meet F c= union F & union F is anti-discrete by A1,Th10,SETFAM_1:3;
+    hence meet F is anti-discrete by Th7;
+  end;
+ end;
+
+definition let Y be TopStruct, x be Point of Y;
+ func MaxADSF(x) -> Subset-Family of Y equals
+:Def6: {A where A is Subset of Y : A is anti-discrete & x in A};
+ coherence
+  proof
+   set F = {A where A is Subset of Y : A is anti-discrete & x in A};
+        F c= bool the carrier of Y
+       proof let C be set;
+        assume C in F;
+         then ex A being Subset of Y st C = A & A is anti-discrete & x in A;
+        hence C in bool the carrier of Y;
+       end;
+   then F is Subset-Family of Y by SETFAM_1:def 7;
+   hence thesis;
+  end;
+end;
+
+definition let Y be non empty TopStruct, x be Point of Y;
+ cluster MaxADSF(x) -> non empty;
+ coherence
+ proof
+   set F = {A where A is Subset of Y : A is anti-discrete & x in A};
+     {x} is anti-discrete & x in {x} by Th8,TARSKI:def 1;
+    then {x} in F;
+   hence thesis by Def6;
+ end;
+end;
+
+reserve x for Point of Y;
+
+theorem Th12:
+ MaxADSF(x) is anti-discrete-set-family
+ proof
+     now let A be Subset of Y;
+    assume A in MaxADSF(x);
+      then A in {B where B is Subset of Y : B is anti-discrete & x in B}
+                                                             by Def6;
+      then consider C being Subset of Y such that
+         A1: C = A and A2: C is anti-discrete and x in C;
+    thus A is anti-discrete by A1,A2;
+   end;
+  hence thesis by Def5;
+ end;
+
+theorem Th13:
+ {x} = meet MaxADSF(x)
+ proof
+   A1: MaxADSF(x) = {B where B is Subset of Y : B is anti-discrete & x in B}
+                                                                   by Def6;
+  A2: {x} c= meet MaxADSF(x)
+       proof
+           now let A be set;
+          assume A in MaxADSF(x);
+            then consider C being Subset of Y such that
+               A3: C = A and C is anti-discrete and A4: x in C by A1;
+          thus {x} c= A by A3,A4,ZFMISC_1:37;
+         end;
+        hence thesis by SETFAM_1:6;
+       end;
+      meet MaxADSF(x) c= {x}
+     proof
+          {x} is anti-discrete & x in {x} by Th8,TARSKI:def 1;
+       then {x} in MaxADSF(x) by A1;
+      hence thesis by SETFAM_1:4;
+     end;
+  hence thesis by A2,XBOOLE_0:def 10;
+ end;
+
+theorem Th14:
+ {x} c= union MaxADSF(x)
+ proof
+     {x} = meet MaxADSF(x) & meet MaxADSF(x) c= union MaxADSF(x)
+                                              by Th13,SETFAM_1:3;
+  hence thesis;
+ end;
+
+theorem Th15:
+ union MaxADSF(x) is anti-discrete
+ proof
+    A1: {x} <> {} & {x} = meet MaxADSF(x) by Th13;
+       MaxADSF(x) is anti-discrete-set-family by Th12;
+  hence thesis by A1,Th10;
+ end;
+
+
+begin
+:: 3. Maximal Anti-discrete Subsets of Topological Structures.
+
+definition let Y be TopStruct;
+  let IT be Subset of Y;
+ attr IT is maximal_anti-discrete means
+:Def7: IT is anti-discrete &
+   for D being Subset of Y st D is anti-discrete & IT c= D holds IT = D;
+end;
+
+theorem
+   for Y0, Y1 being TopStruct, D0 being Subset of Y0,
+   D1 being Subset of Y1 st
+    the TopStruct of Y0 = the TopStruct of Y1 & D0 = D1 holds
+   D0 is maximal_anti-discrete implies D1 is maximal_anti-discrete
+ proof let Y0, Y1 be TopStruct, D0 be Subset of Y0,
+   D1 be Subset of Y1;
+  assume A1: the TopStruct of Y0 = the TopStruct of Y1;
+  assume A2: D0 = D1;
+  assume A3: D0 is maximal_anti-discrete;
+   then D0 is anti-discrete by Def7;
+   then A4: D1 is anti-discrete by A1,A2,Th6;
+       now let D be Subset of Y1;
+      assume A5: D is anti-discrete;
+      assume A6: D1 c= D;
+       reconsider E = D as Subset of Y0 by A1;
+           E is anti-discrete & D0 c= E by A1,A2,A5,A6,Th6;
+      hence D1 = D by A2,A3,Def7;
+     end;
+  hence D1 is maximal_anti-discrete by A4,Def7;
+ end;
+
+reserve Y for non empty TopStruct;
+
+theorem Th17:
+ for A being empty Subset of Y holds A is not maximal_anti-discrete
+ proof let A be empty Subset of Y;
+    consider a being set such that
+           A1: a in the carrier of Y by XBOOLE_0:def 1;
+   reconsider a as Point of Y by A1;
+      now
+     take C = {a};
+     thus C is anti-discrete & A c= C & A <> C by Th8,XBOOLE_1:2;
+    end;
+  hence A is not maximal_anti-discrete by Def7;
+ end;
+
+theorem Th18:
+ for A being non empty Subset of Y holds
+  A is anti-discrete & A is open implies A is maximal_anti-discrete
+ proof let A be non empty Subset of Y;
+  assume A1: A is anti-discrete;
+  assume A2: A is open;
+     for D being Subset of Y st D is anti-discrete & A c= D holds A = D
+    proof let D be Subset of Y;
+     assume A3: D is anti-discrete;
+     assume A4: A c= D;
+         D c= A
+        proof
+           D misses A or D c= A by A2,A3,Def3;
+         then D /\ A = {} or D c= A by XBOOLE_0:def 7;
+         hence thesis by A4,XBOOLE_1:28;
+        end;
+     hence A = D by A4,XBOOLE_0:def 10;
+    end;
+  hence A is maximal_anti-discrete by A1,Def7;
+ end;
+
+theorem Th19:
+ for A being non empty Subset of Y holds
+  A is anti-discrete & A is closed implies A is maximal_anti-discrete
+ proof let A be non empty Subset of Y;
+  assume A1: A is anti-discrete;
+  assume A2: A is closed;
+     for D being Subset of Y st D is anti-discrete & A c= D holds A = D
+    proof let D be Subset of Y;
+     assume A3: D is anti-discrete;
+     assume A4: A c= D;
+         D c= A
+        proof
+           D misses A or D c= A by A2,A3,Def4;
+         then D /\ A = {} or D c= A by XBOOLE_0:def 7;
+         hence thesis by A4,XBOOLE_1:28;
+        end;
+     hence A = D by A4,XBOOLE_0:def 10;
+    end;
+  hence A is maximal_anti-discrete by A1,Def7;
+ end;
+
+definition let Y be TopStruct, x be Point of Y;
+ func MaxADSet(x) -> Subset of Y equals
+:Def8: union MaxADSF(x);
+ coherence;
+end;
+
+definition let Y be non empty TopStruct, x be Point of Y;
+ cluster MaxADSet(x) -> non empty;
+ coherence
+  proof
+A1: MaxADSet(x) = union MaxADSF(x) by Def8;
+        {x} <> {} & {x} c= union MaxADSF(x) by Th14;
+   hence thesis by A1,XBOOLE_1:3;
+  end;
+end;
+
+theorem Th20:
+ for x being Point of Y holds {x} c= MaxADSet(x)
+ proof let x be Point of Y;
+     {x} c= union MaxADSF(x) by Th14;
+  hence thesis by Def8;
+ end;
+
+theorem Th21:
+ for D being Subset of Y, x being Point of Y st
+    D is anti-discrete & x in D holds D c= MaxADSet(x)
+ proof let D be Subset of Y, x be Point of Y;
+   A1: MaxADSet(x) = union MaxADSF(x) by Def8;
+  assume A2: D is anti-discrete;
+  assume x in D;
+   then D in {A where A is Subset of Y : A is anti-discrete & x in A} by A2;
+   then D in MaxADSF(x) by Def6;
+  hence D c= MaxADSet(x) by A1,ZFMISC_1:92;
+ end;
+
+theorem Th22:
+ for x being Point of Y holds
+   MaxADSet(x) is maximal_anti-discrete
+ proof let x be Point of Y;
+       MaxADSet(x) = union MaxADSF(x) by Def8;
+      then A1: MaxADSet(x) is anti-discrete by Th15;
+     for D being Subset of Y st
+     D is anti-discrete & MaxADSet(x) c= D holds MaxADSet(x) = D
+    proof let D be Subset of Y;
+     assume A2: D is anti-discrete;
+     assume A3: MaxADSet(x) c= D;
+         {x} c= MaxADSet(x) by Th20;
+      then {x} c= D by A3,XBOOLE_1:1;
+      then x in D by ZFMISC_1:37;
+      then D c= MaxADSet(x) by A2,Th21;
+     hence MaxADSet(x) = D by A3,XBOOLE_0:def 10;
+    end;
+  hence MaxADSet(x) is maximal_anti-discrete by A1,Def7;
+ end;
+
+theorem Th23:
+ for x, y being Point of Y holds
+   y in MaxADSet(x) iff MaxADSet(y) = MaxADSet(x)
+ proof let x, y be Point of Y;
+     A1: MaxADSet(x) is maximal_anti-discrete by Th22;
+    then A2: MaxADSet(x) is anti-discrete by Def7;
+            MaxADSet(y) is maximal_anti-discrete by Th22;
+    then A3: MaxADSet(y) is anti-discrete by Def7;
+      A4: MaxADSet(y) = union MaxADSF(y) by Def8;
+  thus y in MaxADSet(x) implies MaxADSet(y) = MaxADSet(x)
+   proof
+    assume y in MaxADSet(x);
+      then MaxADSet(x) in
+         {A where A is Subset of Y : A is anti-discrete & y in A} by A2;
+      then MaxADSet(x) in MaxADSF(y) by Def6;
+      then MaxADSet(x) c= MaxADSet(y) by A4,ZFMISC_1:92;
+    hence MaxADSet(y) = MaxADSet(x) by A1,A3,Def7;
+   end;
+  assume A5: MaxADSet(y) = MaxADSet(x);
+      {y} c= MaxADSet(y) by Th20;
+  hence y in MaxADSet(x) by A5,ZFMISC_1:37;
+ end;
+
+theorem Th24:
+ for x, y being Point of Y holds
+   MaxADSet(x) misses MaxADSet(y) or MaxADSet(x) = MaxADSet(y)
+ proof let x, y be Point of Y;
+  assume MaxADSet(x) /\ MaxADSet(y) <> {};
+    then consider a being set such that
+           A1: a in MaxADSet(x) /\ MaxADSet(y) by XBOOLE_0:def 1;
+    reconsider a as Point of Y by A1;
+       a in MaxADSet(x) & a in MaxADSet(y) by A1,XBOOLE_0:def 3;
+   then MaxADSet(a) = MaxADSet(x) & MaxADSet(a) = MaxADSet(y) by Th23;
+  hence thesis;
+ end;
+
+theorem Th25:
+ for F being Subset of Y, x being Point of Y st F is closed & x in F holds
+   MaxADSet(x) c= F
+ proof let F be Subset of Y, x be Point of Y;
+  assume A1: F is closed & x in F;
+      MaxADSet(x) is maximal_anti-discrete by Th22;
+   then A2: MaxADSet(x) is anti-discrete by Def7;
+       {x} c= MaxADSet(x) by Th20;
+    then x in MaxADSet(x) by ZFMISC_1:37;
+  hence thesis by A1,A2,Def2;
+ end;
+
+theorem Th26:
+ for G being Subset of Y, x being Point of Y st G is open & x in G holds
+   MaxADSet(x) c= G
+ proof let G be Subset of Y, x be Point of Y;
+  assume A1: G is open & x in G;
+      MaxADSet(x) is maximal_anti-discrete by Th22;
+   then A2: MaxADSet(x) is anti-discrete by Def7;
+       {x} c= MaxADSet(x) by Th20;
+    then x in MaxADSet(x) by ZFMISC_1:37;
+  hence thesis by A1,A2,Def1;
+ end;
+
+theorem
+   for x being Point of Y holds
+   {F where F is Subset of Y : F is closed & x in F} <> {} implies
+  MaxADSet(x) c= meet {F where F is Subset of Y : F is closed & x in F}
+ proof let x be Point of Y;
+  assume A1: {F where F is Subset of Y : F is closed & x in F} <> {};
+  set G = {F where F is Subset of Y : F is closed & x in F};
+       G c= bool the carrier of Y
+       proof let C be set;
+        assume C in G;
+         then ex P being Subset of Y st C = P & P is closed & x in P;
+        hence C in bool the carrier of Y;
+       end;
+   then reconsider G as Subset-Family of Y by SETFAM_1:def 7;
+      now let C be set;
+     assume C in G;
+      then consider F being Subset of Y such that
+               A2: F = C and
+             A3: F is closed & x in F;
+     thus MaxADSet(x) c= C by A2,A3,Th25;
+    end;
+  hence thesis by A1,SETFAM_1:6;
+ end;
+
+theorem
+   for x being Point of Y holds
+   {G where G is Subset of Y : G is open & x in G} <> {} implies
+  MaxADSet(x) c= meet {G where G is Subset of Y : G is open & x in G}
+ proof let x be Point of Y;
+  assume
+A1: {G where G is Subset of Y : G is open & x in G} <> {};
+  set F = {G where G is Subset of Y : G is open & x in G};
+       F c= bool the carrier of Y
+       proof let C be set;
+        assume C in F;
+         then ex P being Subset of Y st C = P & P is open & x in P;
+        hence C in bool the carrier of Y;
+       end;
+   then reconsider F as Subset-Family of Y by SETFAM_1:def 7;
+      now let C be set;
+     assume C in F;
+      then consider G being Subset of Y such that
+               A2: G = C and
+             A3: G is open & x in G;
+     thus MaxADSet(x) c= C by A2,A3,Th26;
+    end;
+  hence thesis by A1,SETFAM_1:6;
+ end;
+
+definition let Y be non empty TopStruct;
+  let A be Subset of Y;
+ redefine attr A is maximal_anti-discrete means
+:Def9: ex x being Point of Y st x in A & A = MaxADSet(x);
+ compatibility
+  proof
+   thus A is maximal_anti-discrete implies
+          ex x being Point of Y st x in A & A = MaxADSet(x)
+    proof
+     assume A1: A is maximal_anti-discrete;
+      then A <> {} by Th17;
+       then consider x being set such that
+              A2: x in A by XBOOLE_0:def 1;
+        reconsider x as Point of Y by A2;
+      take x;
+      thus x in A by A2;
+          MaxADSet(x) is maximal_anti-discrete by Th22;
+       then A3: MaxADSet(x) is anti-discrete by Def7;
+           A is anti-discrete by A1,Def7;
+       then A c= MaxADSet(x) by A2,Th21;
+     hence A = MaxADSet(x) by A1,A3,Def7;
+    end;
+   assume ex x being Point of Y st x in A & A = MaxADSet(x);
+   hence A is maximal_anti-discrete by Th22;
+  end;
+end;
+
+theorem Th29:
+ for A being Subset of Y, x being Point of Y st x in A holds
+   A is maximal_anti-discrete implies A = MaxADSet(x)
+ proof let A be Subset of Y, x be Point of Y;
+  assume A1: x in A;
+  assume A is maximal_anti-discrete;
+    then consider y being Point of Y such that
+              y in A and A2: A = MaxADSet(y) by Def9;
+  thus A = MaxADSet(x) by A1,A2,Th23;
+ end;
+
+definition let Y be non empty TopStruct;
+  let A be non empty Subset of Y;
+ redefine attr A is maximal_anti-discrete means
+   for x being Point of Y st x in A holds A = MaxADSet(x);
+ compatibility
+  proof
+   thus A is maximal_anti-discrete implies
+          for x being Point of Y st x in A holds A = MaxADSet(x) by Th29;
+   assume A1: for x being Point of Y st x in A holds A = MaxADSet(x);
+    consider a being set such that
+              A2: a in A by XBOOLE_0:def 1;
+      reconsider a as Point of Y by A2;
+      now
+     take a;
+     thus a in A by A2;
+     thus A = MaxADSet(a) by A1,A2;
+    end;
+   hence A is maximal_anti-discrete by Def9;
+  end;
+end;
+
+definition let Y be non empty TopStruct, A be Subset of Y;
+ func MaxADSet(A) -> Subset of Y equals
+:Def11: union {MaxADSet(a) where a is Point of Y : a in A};
+ coherence
+  proof
+   set M = {MaxADSet(a) where a is Point of Y : a in A};
+       M c= bool the carrier of Y
+       proof let C be set;
+        assume C in M;
+         then ex a being Point of Y st C = MaxADSet(a) & a in A;
+        hence C in bool the carrier of Y;
+       end;
+     then reconsider M as Subset-Family of Y by SETFAM_1:def 7;
+      union M is Subset of Y;
+   hence thesis;
+  end;
+end;
+
+theorem Th30:
+ for x being Point of Y holds MaxADSet(x) = MaxADSet({x})
+ proof let x be Point of Y;
+  set M = {MaxADSet(a) where a is Point of Y : a in {x}};
+    A1: MaxADSet({x}) = union M by Def11;
+         x in {x} by TARSKI:def 1;
+     then MaxADSet(x) in M;
+   then A2: MaxADSet(x) c= MaxADSet({x}) by A1,ZFMISC_1:92;
+       now let P be set;
+      assume P in M;
+       then consider a being Point of Y such that
+                A3: P = MaxADSet(a) and A4: a in {x};
+      thus P c= MaxADSet(x) by A3,A4,TARSKI:def 1;
+     end;
+   then MaxADSet({x}) c= MaxADSet(x) by A1,ZFMISC_1:94;
+  hence thesis by A2,XBOOLE_0:def 10;
+ end;
+
+theorem Th31:
+ for A being Subset of Y, x being Point of Y holds
+  MaxADSet(x) meets MaxADSet(A) implies MaxADSet(x) meets A
+ proof let A be Subset of Y, x be Point of Y;
+   set E = {MaxADSet(a) where a is Point of Y : a in A};
+  assume MaxADSet(x) /\ MaxADSet(A) <> {};
+   then consider z being set such that
+          A1: z in MaxADSet(x) /\ MaxADSet(A) by XBOOLE_0:def 1;
+    reconsider z as Point of Y by A1;
+         z in MaxADSet(A) by A1,XBOOLE_0:def 3;
+      then z in union E by Def11;
+       then consider C being set such that
+             A2: z in C and A3: C in E by TARSKI:def 4;
+        consider b being Point of Y such that
+              A4: C = MaxADSet(b) and A5: b in A by A3;
+        z in MaxADSet(x) by A1,XBOOLE_0:def 3;
+     then MaxADSet(b) = MaxADSet(z) & MaxADSet(z) = MaxADSet(x) by A2,A4,Th23;
+     then {b} c= MaxADSet(x) by Th20;
+     then b in MaxADSet(x) by ZFMISC_1:37;
+  hence MaxADSet(x) meets A by A5,XBOOLE_0:3;
+ end;
+
+theorem Th32:
+ for A being Subset of Y, x being Point of Y holds
+  MaxADSet(x) meets MaxADSet(A) implies MaxADSet(x) c= MaxADSet(A)
+ proof let A be Subset of Y, x be Point of Y;
+  assume MaxADSet(x) meets MaxADSet(A);
+    then MaxADSet(x) meets A by Th31;
+     then consider z being set such that
+          A1: z in MaxADSet(x) /\ A by XBOOLE_0:4;
+    reconsider z as Point of Y by A1;
+        z in A by A1,XBOOLE_0:def 3;
+     then A2: {z} c= A by ZFMISC_1:37;
+  set E = {MaxADSet(a) where a is Point of Y : a in {z}};
+  set F = {MaxADSet(b) where b is Point of Y : b in A};
+     E c= F
+    proof let C be set;
+     assume C in E;
+      then consider a being Point of Y such that
+              A3: C = MaxADSet(a) and A4: a in {z};
+       thus C in F by A2,A3,A4;
+    end;
+   then union E c= union F by ZFMISC_1:95;
+   then MaxADSet({z}) c= union F by Def11;
+    then MaxADSet({z}) c= MaxADSet(A) & z in MaxADSet(x) by A1,Def11,XBOOLE_0:
+def 3;
+   then MaxADSet(z) c= MaxADSet(A) & MaxADSet(z) = MaxADSet(x) by Th23,Th30;
+  hence thesis;
+ end;
+
+theorem Th33:
+ for A, B being Subset of Y holds A c= B
+   implies MaxADSet(A) c= MaxADSet(B)
+ proof let A, B be Subset of Y;
+  assume A1: A c= B;
+  set E = {MaxADSet(a) where a is Point of Y : a in A};
+  set F = {MaxADSet(b) where b is Point of Y : b in B};
+     E c= F
+    proof let C be set;
+     assume C in E;
+      then consider a being Point of Y such that
+              A2: C = MaxADSet(a) and A3: a in A;
+       thus C in F by A1,A2,A3;
+    end;
+   then union E c= union F by ZFMISC_1:95;
+  then MaxADSet(A) c= union F by Def11;
+  hence MaxADSet(A) c= MaxADSet(B) by Def11;
+ end;
+
+theorem Th34:
+ for A being Subset of Y holds A c= MaxADSet(A)
+ proof let A be Subset of Y;
+     now let x be set;
+    assume A1: x in A;
+     then reconsider a = x as Point of Y;
+         {a} c= A by A1,ZFMISC_1:37;
+      then MaxADSet({a}) c= MaxADSet(A) by Th33;
+      then MaxADSet(a) c= MaxADSet(A) & {a} c= MaxADSet(a) by Th20,Th30;
+      then {a} c= MaxADSet(A) & a in {a} by TARSKI:def 1,XBOOLE_1:1;
+    hence x in MaxADSet(A);
+   end;
+  hence thesis by TARSKI:def 3;
+ end;
+
+theorem Th35:
+ for A being Subset of Y
+   holds MaxADSet(A) = MaxADSet(MaxADSet(A))
+ proof let A be Subset of Y;
+   A1: MaxADSet(A) c= MaxADSet(MaxADSet(A)) by Th34;
+      MaxADSet(MaxADSet(A)) c= MaxADSet(A)
+     proof let x be set;
+      assume x in MaxADSet(MaxADSet(A));
+       then x in union {MaxADSet(a) where a is Point of Y : a in MaxADSet(A)}
+                                                                     by Def11;
+       then consider C being set such that
+             A2: x in C and
+             A3: C in {MaxADSet(a) where a is Point of Y : a in MaxADSet(A)}
+                                                            by TARSKI:def 4;
+        consider a being Point of Y such that
+              A4: C = MaxADSet(a) and A5: a in MaxADSet(A) by A3;
+           a in union {MaxADSet(b) where b is Point of Y : b in A} by A5,Def11;
+        then consider D being set such that
+              A6: a in D and
+              A7: D in {MaxADSet(b) where b is Point of Y : b in A}
+                                                            by TARSKI:def 4;
+        consider b being Point of Y such that
+             A8: D = MaxADSet(b) and b in A by A7;
+           MaxADSet(a) = MaxADSet(b) by A6,A8,Th23;
+       then x in union {MaxADSet(c) where c is Point of Y : c in A}
+                                                      by A2,A4,A7,A8,TARSKI:def
+4;
+      hence x in MaxADSet(A) by Def11;
+     end;
+  hence thesis by A1,XBOOLE_0:def 10;
+ end;
+
+theorem Th36:
+ for A, B being Subset of Y holds
+    A c= MaxADSet(B) implies MaxADSet(A) c= MaxADSet(B)
+ proof let A, B be Subset of Y;
+  assume A c= MaxADSet(B);
+   then MaxADSet(A) c= MaxADSet(MaxADSet(B)) by Th33;
+  hence thesis by Th35;
+ end;
+
+theorem Th37:
+ for A, B being Subset of Y holds
+   B c= MaxADSet(A) & A c= MaxADSet(B) iff MaxADSet(A) = MaxADSet(B)
+ proof let A, B be Subset of Y;
+  thus B c= MaxADSet(A) & A c= MaxADSet(B) implies MaxADSet(A) = MaxADSet(B)
+   proof
+    assume B c= MaxADSet(A) & A c= MaxADSet(B);
+     then MaxADSet(B) c= MaxADSet(A) & MaxADSet(A) c= MaxADSet(B) by Th36;
+    hence thesis by XBOOLE_0:def 10;
+   end;
+  thus MaxADSet(A) = MaxADSet(B) implies B c= MaxADSet(A) & A c= MaxADSet(B)
+ by Th34;
+ end;
+
+theorem
+   for A, B being Subset of Y
+   holds MaxADSet(A \/ B) = MaxADSet(A) \/ MaxADSet(B)
+ proof let A, B be Subset of Y;
+      A c= A \/ B & B c= A \/ B by XBOOLE_1:7;
+   then MaxADSet(A) c= MaxADSet(A \/ B) & MaxADSet(B) c= MaxADSet(A \/ B)
+                                                                by Th33;
+   then A1: MaxADSet(A) \/ MaxADSet(B) c= MaxADSet(A \/ B) by XBOOLE_1:8;
+       MaxADSet(A \/ B) c= MaxADSet(A) \/ MaxADSet(B)
+      proof let x be set;
+       assume x in MaxADSet(A \/ B);
+        then x in union {MaxADSet(a) where a is Point of Y : a in
+ A \/ B} by Def11
+;
+        then consider C being set such that
+              A2: x in C and
+              A3: C in {MaxADSet(a) where a is Point of Y : a in A \/ B}
+                                                             by TARSKI:def 4;
+         consider a being Point of Y such that
+               A4: C = MaxADSet(a) and A5: a in A \/ B by A3;
+           now per cases by A5,XBOOLE_0:def 2;
+          suppose A6: a in A;
+                now
+               take C;
+               thus x in C by A2;
+               thus C in {MaxADSet(c) where c is Point of Y : c in A} by A4,A6
+;
+              end;
+             then x in union {MaxADSet(c) where c is Point of Y : c in A}
+                                                            by TARSKI:def 4;
+            then x in MaxADSet(A) &
+                   MaxADSet(A) c= MaxADSet(A) \/ MaxADSet(B) by Def11,XBOOLE_1:
+7;
+           hence x in MaxADSet(A) \/ MaxADSet(B);
+          suppose A7: a in B;
+                now
+               take C;
+               thus x in C by A2;
+               thus C in {MaxADSet(c) where c is Point of Y : c in B} by A4,A7
+;
+              end;
+             then x in union {MaxADSet(c) where c is Point of Y : c in B}
+                                                            by TARSKI:def 4;
+            then x in MaxADSet(B) &
+                   MaxADSet(B) c= MaxADSet(A) \/ MaxADSet(B) by Def11,XBOOLE_1:
+7;
+           hence x in MaxADSet(A) \/ MaxADSet(B);
+         end;
+       hence x in MaxADSet(A) \/ MaxADSet(B);
+      end;
+  hence thesis by A1,XBOOLE_0:def 10;
+ end;
+
+theorem Th39:
+ for A, B being Subset of Y
+  holds MaxADSet(A /\ B) c= MaxADSet(A) /\ MaxADSet(B)
+ proof let A, B be Subset of Y;
+      A /\ B c= A & A /\ B c= B by XBOOLE_1:17;
+   then MaxADSet(A /\ B) c= MaxADSet(A) & MaxADSet(A /\ B) c= MaxADSet(B)
+                                                                by Th33;
+  hence MaxADSet(A /\ B) c= MaxADSet(A) /\ MaxADSet(B) by XBOOLE_1:19;
+ end;
+
+definition let Y be non empty TopStruct,
+  A be non empty Subset of Y;
+ cluster MaxADSet(A) -> non empty;
+ coherence
+  proof
+       A <> {} & A c= MaxADSet(A) by Th34;
+   hence thesis by XBOOLE_1:3;
+  end;
+end;
+
+definition let Y be non empty TopStruct, A be empty Subset of Y;
+ cluster MaxADSet(A) -> empty;
+ coherence
+  proof
+     now
+    assume MaxADSet(A) is non empty;
+     then consider x being set such that
+            A1: x in MaxADSet(A) by XBOOLE_0:def 1;
+      reconsider a = x as Point of Y by A1;
+            a in union {MaxADSet(b) where b is Point of Y : b in A} by A1,Def11
+;
+         then consider D being set such that
+                     a in D and
+               A2: D in {MaxADSet(b) where b is Point of Y : b in A}
+                                                             by TARSKI:def 4;
+         consider b being Point of Y such that
+                     D = MaxADSet(b) and A3: b in A by A2;
+    thus contradiction by A3;
+   end;
+   hence thesis;
+  end;
+end;
+
+definition let Y be non empty TopStruct,
+   A be non proper Subset of Y;
+ cluster MaxADSet(A) -> non proper;
+ coherence
+  proof
+       A = the carrier of Y by TEX_2:5;
+    then the carrier of Y c= MaxADSet(A) &
+           MaxADSet(A) c= the carrier of Y by Th34;
+    then MaxADSet(A) = the carrier of Y by XBOOLE_0:def 10;
+   hence thesis by TEX_2:5;
+  end;
+end;
+
+definition let Y be non trivial non empty TopStruct,
+                A be non trivial (non empty Subset of Y);
+ cluster MaxADSet(A) -> non trivial;
+ coherence
+  proof
+      now
+     assume A1: MaxADSet(A) is trivial;
+          A c= MaxADSet(A) by Th34;
+     hence contradiction by A1,TEX_2:1;
+    end;
+   hence thesis;
+  end;
+end;
+
+theorem Th40:
+ for G being Subset of Y, A being Subset of Y
+    st G is open & A c= G holds MaxADSet(A) c= G
+ proof let G be Subset of Y, A be Subset of Y;
+  assume A1: G is open;
+  assume A2: A c= G;
+     MaxADSet(A) c= G
+    proof let x be set;
+     assume A3: x in MaxADSet(A);
+      then reconsider a = x as Point of Y;
+           a in union {MaxADSet(b) where b is Point of Y : b in A} by A3,Def11;
+        then consider D being set such that
+              A4: a in D and
+              A5: D in {MaxADSet(b) where b is Point of Y : b in A}
+                                                            by TARSKI:def 4;
+        consider b being Point of Y such that
+              A6: D = MaxADSet(b) and A7: b in A by A5;
+        A8: MaxADSet(a) = MaxADSet(b) by A4,A6,Th23;
+            {a} c= MaxADSet(a) & MaxADSet(b) c= G by A1,A2,A7,Th20,Th26;
+        then {a} c= G by A8,XBOOLE_1:1;
+     hence x in G by ZFMISC_1:37;
+    end;
+  hence thesis;
+ end;
+
+theorem Th41:
+ for A being Subset of Y holds
+   {G where G is Subset of Y : G is open & A c= G} <> {} implies
+  MaxADSet(A) c= meet {G where G is Subset of Y : G is open & A c= G}
+ proof let A be Subset of Y;
+  assume A1: {G where G is Subset of Y : G is open & A c= G} <> {};
+  set F = {G where G is Subset of Y : G is open & A c= G};
+       F c= bool the carrier of Y
+       proof let C be set;
+        assume C in F;
+         then ex P being Subset of Y st C = P & P is open & A c= P;
+        hence C in bool the carrier of Y;
+       end;
+   then reconsider F as Subset-Family of Y by SETFAM_1:def 7;
+      now let C be set;
+     assume C in F;
+      then consider G being Subset of Y such that
+               A2: G = C and
+             A3: G is open & A c= G;
+     thus MaxADSet(A) c= C by A2,A3,Th40;
+    end;
+  hence thesis by A1,SETFAM_1:6;
+ end;
+
+theorem Th42:
+ for F being Subset of Y, A being Subset of Y
+    st F is closed & A c= F holds
+   MaxADSet(A) c= F
+ proof let F be Subset of Y, A be Subset of Y;
+  assume A1: F is closed;
+  assume A2: A c= F;
+     MaxADSet(A) c= F
+    proof let x be set;
+     assume A3: x in MaxADSet(A);
+      then reconsider a = x as Point of Y;
+           a in union {MaxADSet(b) where b is Point of Y : b in A} by A3,Def11;
+        then consider D being set such that
+              A4: a in D and
+              A5: D in {MaxADSet(b) where b is Point of Y : b in A}
+                                                            by TARSKI:def 4;
+        consider b being Point of Y such that
+              A6: D = MaxADSet(b) and A7: b in A by A5;
+        A8: MaxADSet(a) = MaxADSet(b) by A4,A6,Th23;
+            {a} c= MaxADSet(a) & MaxADSet(b) c= F by A1,A2,A7,Th20,Th25;
+        then {a} c= F by A8,XBOOLE_1:1;
+     hence x in F by ZFMISC_1:37;
+    end;
+  hence thesis;
+ end;
+
+theorem Th43:
+ for A being Subset of Y holds
+   {F where F is Subset of Y : F is closed & A c= F} <> {}
+   implies
+  MaxADSet(A) c= meet {F where F is Subset of Y : F is closed & A c= F}
+ proof let A be Subset of Y;
+  assume
+   A1: {F where F is Subset of Y : F is closed & A c= F} <> {};
+  set G = {F where F is Subset of Y : F is closed & A c= F};
+       G c= bool the carrier of Y
+       proof let C be set;
+        assume C in G;
+         then ex P being Subset of Y st C = P & P is closed & A c= P;
+        hence C in bool the carrier of Y;
+       end;
+   then reconsider G as Subset-Family of Y by SETFAM_1:def 7;
+      now let C be set;
+     assume C in G;
+      then consider F being Subset of Y such that
+               A2: F = C and
+             A3: F is closed & A c= F;
+     thus MaxADSet(A) c= C by A2,A3,Th42;
+    end;
+  hence thesis by A1,SETFAM_1:6;
+ end;
+
+
+begin
+:: 4. Anti-discrete and Maximal Anti-discrete Subsets of Topological Spaces.
+
+definition let X be non empty TopSpace;
+  let A be Subset of X;
+ redefine attr A is anti-discrete means
+:Def12: for x being Point of X st x in A holds A c= Cl {x};
+ compatibility
+  proof
+   thus A is anti-discrete implies
+          for x being Point of X st x in A holds A c= Cl {x}
+    proof
+     assume A1: A is anti-discrete;
+     let x be Point of X;
+     assume A2: x in A;
+     thus A c= Cl {x}
+     proof
+       A3: A misses Cl {x} or A c= Cl {x} by A1,Def4;
+         {x} c= Cl {x} by PRE_TOPC:48;
+       then x in Cl {x} by ZFMISC_1:37;
+       hence thesis by A2,A3,XBOOLE_0:3;
+     end;
+    end;
+   thus (for x being Point of X st x in A holds A c= Cl {x}) implies
+             A is anti-discrete
+    proof
+     assume A4: for x being Point of X st x in A holds A c= Cl {x};
+        now let F be Subset of X;
+       assume A5: F is closed;
+       assume A meets F;
+        then consider a being set such that
+               A6: a in A /\ F by XBOOLE_0:4;
+       reconsider a as Point of X by A6;
+         A7: a in A & a in F by A6,XBOOLE_0:def 3;
+        then A8: A c= Cl {a} by A4;
+            {a} c= F by A7,ZFMISC_1:37;
+         then Cl {a} c= F by A5,TOPS_1:31;
+       hence A c= F by A8,XBOOLE_1:1;
+      end;
+     hence thesis by Def4;
+    end;
+  end;
+end;
+
+definition let X be non empty TopSpace;
+  let A be Subset of X;
+ redefine attr A is anti-discrete means
+   for x being Point of X st x in A holds Cl A = Cl {x};
+ compatibility
+  proof
+   thus A is anti-discrete implies
+         for x being Point of X st x in A holds Cl A = Cl {x}
+    proof
+     assume A1: A is anti-discrete;
+      let x be Point of X;
+     assume A2: x in A;
+      then A c= Cl {x} by A1,Def12;
+      then A3: Cl A c= Cl {x} by Th3;
+          {x} c= A by A2,ZFMISC_1:37;
+       then Cl {x} c= Cl A by PRE_TOPC:49;
+      hence thesis by A3,XBOOLE_0:def 10;
+    end;
+   assume A4: for x being Point of X st x in A holds Cl A = Cl {x};
+       now let x be Point of X;
+      assume x in A;
+       then Cl A = Cl {x} & A c= Cl A by A4,PRE_TOPC:48;
+      hence A c= Cl {x};
+     end;
+   hence A is anti-discrete by Def12;
+  end;
+end;
+
+definition let X be non empty TopSpace;
+  let A be Subset of X;
+ redefine attr A is anti-discrete means
+:Def14: for x, y being Point of X st x in A & y in A holds Cl {x} = Cl {y};
+ compatibility
+  proof
+   thus A is anti-discrete implies
+         for x, y being Point of X st x in A & y in A holds Cl {x} = Cl {y}
+    proof
+     assume A1: A is anti-discrete;
+          let x, y be Point of X;
+     assume A2: x in A & y in A;
+      then A c= Cl {x} & A c= Cl {y} by A1,Def12;
+       then {y} c= Cl {x} & {x} c= Cl {y} by A2,ZFMISC_1:37;
+       then Cl {y} c= Cl {x} & Cl {x} c= Cl {y} by Th3;
+     hence Cl {x} = Cl {y} by XBOOLE_0:def 10;
+    end;
+   thus (for x, y being Point of X st x in A & y in A holds Cl {x} = Cl {y})
+            implies A is anti-discrete
+    proof
+     assume A3: for x, y being Point of X st x in A & y in A holds
+                   Cl {x} = Cl {y};
+        now let x be Point of X;
+       assume A4: x in A;
+          now let a be set;
+         assume A5: a in A;
+          then reconsider y = a as Point of X;
+              {y} c= Cl {y} by PRE_TOPC:48;
+           then y in Cl {y} by ZFMISC_1:37;
+         hence a in Cl {x} by A3,A4,A5;
+        end;
+       hence A c= Cl {x} by TARSKI:def 3;
+      end;
+     hence thesis by Def12;
+    end;
+  end;
+end;
+
+reserve X for non empty TopSpace;
+
+theorem
+   for x being Point of X, D being Subset of X st
+   D is anti-discrete & Cl {x} c= D holds D = Cl {x}
+ proof let x be Point of X, D be Subset of X;
+  assume A1: D is anti-discrete;
+  assume A2: Cl {x} c= D;
+         D c= Cl {x}
+        proof
+            D misses Cl {x} or D c= Cl {x} by A1,Def4;
+          then D /\ Cl {x} = {} or D c= Cl {x} by XBOOLE_0:def 7;
+         hence thesis by A2,XBOOLE_1:28;
+        end;
+  hence D = Cl {x} by A2,XBOOLE_0:def 10;
+ end;
+
+theorem
+   for A being Subset of X holds
+    A is anti-discrete & A is closed iff
+   for x being Point of X st x in A holds A = Cl {x}
+ proof let A be Subset of X;
+  thus A is anti-discrete & A is closed implies
+        for x being Point of X st x in A holds A = Cl {x}
+   proof
+    assume A1: A is anti-discrete;
+    assume A2: A is closed;
+         let x be Point of X;
+    assume A3: x in A;
+     then A4: A c= Cl {x} by A1,Def12;
+         {x} c= A by A3,ZFMISC_1:37;
+      then Cl {x} c= A by A2,TOPS_1:31;
+    hence A = Cl {x} by A4,XBOOLE_0:def 10;
+   end;
+  thus (for x being Point of X st x in A holds A = Cl {x}) implies
+         A is anti-discrete & A is closed
+   proof
+    assume A5: for x being Point of X st x in A holds A = Cl {x};
+     then for x be Point of X st x in A holds A c= Cl {x};
+    hence A is anti-discrete by Def12;
+    hereby per cases;
+     suppose A is empty;
+       then A = {}X;
+      hence A is closed;
+     suppose A is non empty;
+         then consider a being set such that
+                A6: a in A by XBOOLE_0:def 1;
+        reconsider a as Point of X by A6;
+            A = Cl {a} by A5,A6;
+      hence A is closed;
+    end;
+   end;
+ end;
+
+theorem
+   for A being Subset of X holds
+    A is anti-discrete & A is not open implies A is boundary
+ proof let A be Subset of X;
+  assume A1: A is anti-discrete;
+  assume A2: A is not open;
+  assume A is not boundary;
+   then A3: Int A <> {} by TOPS_1:84;
+       A misses Int A or A c= Int A by A1,Def3;
+    then A4: A /\ Int A = {} or A c= Int A by XBOOLE_0:def 7;
+      Int A c= A by TOPS_1:44;
+  hence contradiction by A2,A3,A4,XBOOLE_0:def 10,XBOOLE_1:28;
+ end;
+
+theorem Th47:
+ for x being Point of X st Cl {x} = {x} holds
+   {x} is maximal_anti-discrete
+ proof let x be Point of X;
+  assume Cl {x} = {x};
+   then {x} is closed & {x} is anti-discrete by Th8;
+  hence {x} is maximal_anti-discrete by Th19;
+ end;
+
+reserve x,y for Point of X;
+
+theorem Th48:
+ MaxADSet(x) c= meet {G where G is Subset of X : G is open & x in G}
+ proof
+  set F = {G where G is Subset of X : G is open & x in G};
+       F c= bool the carrier of X
+       proof let C be set;
+        assume C in F;
+         then ex P being Subset of X st C = P & P is open & x in P;
+        hence C in bool the carrier of X;
+       end;
+   then reconsider F as Subset-Family of X by SETFAM_1:def 7;
+       [#]X is open & x in [#]X by PRE_TOPC:13;
+    then A1: [#]X in F;
+      now let C be set;
+     assume C in F;
+      then consider G being Subset of X such that
+               A2: G = C and
+             A3: G is open & x in G;
+     thus MaxADSet(x) c= C by A2,A3,Th26;
+    end;
+  hence thesis by A1,SETFAM_1:6;
+ end;
+
+theorem Th49:
+ MaxADSet(x) c= meet {F where F is Subset of X : F is closed & x in F}
+ proof
+  set G = {F where F is Subset of X : F is closed & x in F};
+       G c= bool the carrier of X
+       proof let C be set;
+        assume C in G;
+         then ex P being Subset of X st C = P & P is closed & x in P;
+        hence C in bool the carrier of X;
+       end;
+   then reconsider G as Subset-Family of X by SETFAM_1:def 7;
+       [#]X is closed & x in [#]X by PRE_TOPC:13;
+    then A1: [#]X in G;
+      now let C be set;
+     assume C in G;
+      then consider F being Subset of X such that
+               A2: F = C and
+             A3: F is closed & x in F;
+     thus MaxADSet(x) c= C by A2,A3,Th25;
+    end;
+  hence thesis by A1,SETFAM_1:6;
+ end;
+
+theorem Th50:
+ MaxADSet(x) c= Cl {x}
+ proof
+     Cl {x} = meet {F where F is Subset of X : F is closed & x in F} by Th2;
+  hence MaxADSet(x) c= Cl {x} by Th49;
+ end;
+
+Lm1:
+ MaxADSet(x) = MaxADSet(y) implies Cl {x} = Cl {y}
+ proof
+  assume A1: MaxADSet(x) = MaxADSet(y);
+     then A2: x in MaxADSet(y) & y in MaxADSet(x) by Th23;
+           MaxADSet(y) is maximal_anti-discrete by Th22;
+        then MaxADSet(y) is anti-discrete by Def7;
+  hence Cl {x} = Cl {y} by A1,A2,Def14;
+ end;
+
+theorem Th51:
+ MaxADSet(x) = MaxADSet(y) iff Cl {x} = Cl {y}
+ proof
+  thus MaxADSet(x) = MaxADSet(y) implies Cl {x} = Cl {y} by Lm1;
+  assume A1: Cl {x} = Cl {y};
+    A2: MaxADSet(x) \/ MaxADSet(y) is anti-discrete
+          proof
+              now let a be Point of X;
+             assume A3: a in MaxADSet(x) \/ MaxADSet(y);
+                 now per cases by A3,XBOOLE_0:def 2;
+                suppose a in MaxADSet(x);
+                  then A4: MaxADSet(a) = MaxADSet(x) by Th23;
+                  then A5: Cl {a} = Cl {x} by Lm1;
+                    A6: MaxADSet(x) c= Cl {a} by A4,Th50;
+                      MaxADSet(y) c= Cl {a} by A1,A5,Th50;
+                 hence MaxADSet(x) \/ MaxADSet(y) c= Cl {a} by A6,XBOOLE_1:8;
+                suppose a in MaxADSet(y);
+                  then A7: MaxADSet(a) = MaxADSet(y) by Th23;
+                  then A8: Cl {a} = Cl {y} by Lm1;
+                    A9: MaxADSet(y) c= Cl {a} by A7,Th50;
+                      MaxADSet(x) c= Cl {a} by A1,A8,Th50;
+                 hence MaxADSet(x) \/ MaxADSet(y) c= Cl {a} by A9,XBOOLE_1:8;
+               end;
+             hence MaxADSet(x) \/ MaxADSet(y) c= Cl {a};
+            end;
+           hence thesis by Def12;
+          end;
+    A10: MaxADSet(x) is maximal_anti-discrete &
+           MaxADSet(y) is maximal_anti-discrete by Th22;
+       MaxADSet(x) c= MaxADSet(x) \/ MaxADSet(y) &
+      MaxADSet(y) c= MaxADSet(x) \/ MaxADSet(y) by XBOOLE_1:7;
+    then MaxADSet(x) = MaxADSet(x) \/ MaxADSet(y) &
+      MaxADSet(y) = MaxADSet(x) \/ MaxADSet(y) by A2,A10,Def7;
+  hence MaxADSet(x) = MaxADSet(y);
+ end;
+
+theorem
+   MaxADSet(x) misses MaxADSet(y) iff Cl {x} <> Cl {y}
+ proof
+  thus MaxADSet(x) misses MaxADSet(y) implies Cl {x} <> Cl {y}
+    by Th51;
+  assume A1: Cl {x} <> Cl {y};
+  assume MaxADSet(x) meets MaxADSet(y);
+   then MaxADSet(x) = MaxADSet(y) by Th24;
+  hence contradiction by A1,Th51;
+ end;
+
+definition let X be non empty TopSpace, x be Point of X;
+ redefine func MaxADSet(x) -> non empty Subset of X equals
+:Def15: (Cl {x}) /\ meet {G where G is Subset of X : G is open & x in G};
+ compatibility
+  proof
+   set F = {G where G is Subset of X : G is open & x in G};
+        F c= bool the carrier of X
+        proof let C be set;
+         assume C in F;
+          then ex P being Subset of X st C = P & P is open & x in P;
+         hence C in bool the carrier of X;
+        end;
+    then reconsider F as Subset-Family of X by SETFAM_1:def 7;
+        MaxADSet(x) c= meet F & MaxADSet(x) c= Cl {x} by Th48,Th50;
+    then A1: MaxADSet(x) c= (Cl {x}) /\ meet F by XBOOLE_1:19;
+       (Cl {x}) /\ meet F c= MaxADSet(x)
+      proof
+       assume not (Cl {x}) /\ meet F c= MaxADSet(x);
+        then ((Cl {x}) /\ meet F) \ MaxADSet(x) <> {} by XBOOLE_1:37;
+        then consider a being set such that
+              A2: a in ((Cl {x}) /\ meet F) \ MaxADSet(x) by XBOOLE_0:def 1;
+           A3: a in (Cl {x}) /\ meet F by A2,XBOOLE_0:def 4;
+            reconsider a as Point of X by A2;
+             not a in MaxADSet(x) by A2,XBOOLE_0:def 4;
+          then A4: MaxADSet(a) <> MaxADSet(x) by Th23;
+              a in Cl {x} by A3,XBOOLE_0:def 3;
+           then {a} c= Cl {x} by ZFMISC_1:37;
+           then A5: Cl {a} c= Cl {x} by Th3;
+               now
+              assume A6: not x in Cl {a};
+                set G = (Cl{a})`;
+                x in G by A6,SUBSET_1:50;
+                then G in F;
+                then A7: meet F c= G & a in meet F by A3,SETFAM_1:4,XBOOLE_0:
+def 3;
+                    {a} c= Cl {a} by PRE_TOPC:48;
+                 then a in Cl {a} by ZFMISC_1:37;
+              hence contradiction by A7,SUBSET_1:54;
+             end;
+            then {x} c= Cl {a} by ZFMISC_1:37;
+            then Cl {x} c= Cl {a} by Th3;
+            then Cl {x} = Cl {a} by A5,XBOOLE_0:def 10;
+       hence contradiction by A4,Th51;
+      end;
+   hence thesis by A1,XBOOLE_0:def 10;
+  end;
+ coherence;
+end;
+
+theorem Th53:
+ for x, y being Point of X holds
+  Cl {x} c= Cl {y} iff
+      meet {G where G is Subset of X : G is open & y in G} c=
+         meet {G where G is Subset of X : G is open & x in G}
+ proof let x, y be Point of X;
+  set FX = {G where G is Subset of X : G is open & x in G};
+       [#]X is open & x in [#]X by PRE_TOPC:13;
+    then A1: [#]X in FX;
+  set FY = {G where G is Subset of X : G is open & y in G};
+  thus Cl {x} c= Cl {y} implies
+          meet {G where G is Subset of X : G is open & y in G} c=
+          meet {G where G is Subset of X : G is open & x in G}
+   proof
+    assume A2: Cl {x} c= Cl {y};
+         now let P be set;
+        assume P in FX;
+          then consider G being Subset of X such that
+                 A3: G = P and A4: G is open and A5: x in G;
+             now
+            assume not y in G;
+              then {y} misses G by ZFMISC_1:56;
+              then A6: (Cl {y}) misses G by A4,TSEP_1:40;
+                   {x} c= Cl {x} by PRE_TOPC:48;
+                then x in Cl {x} by ZFMISC_1:37;
+                hence contradiction by A2,A5,A6,XBOOLE_0:3;
+           end;
+        hence P in FY by A3,A4;
+       end;
+      then FX c= FY by TARSKI:def 3;
+    hence thesis by A1,SETFAM_1:7;
+   end;
+  assume
+A7: meet {G where G is Subset of X : G is open & y in G} c=
+       meet {G where G is Subset of X : G is open & x in G};
+  assume A8: not Cl {x} c= Cl {y};
+    A9: now
+          assume x in Cl {y};
+            then {x} c= Cl {y} by ZFMISC_1:37;
+          hence contradiction by A8,Th3;
+         end;
+   set G = (Cl {y})`;
+    x in G & G is open by A9,SUBSET_1:50;
+    then G in FX;
+    then meet FX c= G by SETFAM_1:4;
+    then A10: meet FY c= G by A7,XBOOLE_1:1;
+          {y} c= MaxADSet(y) by Th20;
+       then y in MaxADSet(y) & MaxADSet(y) c= meet FY by Th48,ZFMISC_1:37;
+       then A11: y in meet FY;
+           {y} c= Cl {y} by PRE_TOPC:48;
+        then y in Cl {y} by ZFMISC_1:37;
+  hence contradiction by A10,A11,SUBSET_1:54;
+ end;
+
+theorem
+   for x, y being Point of X holds
+  Cl {x} c= Cl {y} iff
+     MaxADSet(y) c=
+       meet {G where G is Subset of X : G is open & x in G}
+ proof let x, y be Point of X;
+  set FX = {G where G is Subset of X : G is open & x in G};
+       FX c= bool the carrier of X
+       proof let C be set;
+        assume C in FX;
+         then ex P being Subset of X st C = P & P is open & x in P;
+        hence C in bool the carrier of X;
+       end;
+   then reconsider FX as Subset-Family of X by SETFAM_1:def 7;
+  set FY = {G where G is Subset of X : G is open & y in G};
+       FY c= bool the carrier of X
+       proof let C be set;
+        assume C in FY;
+         then ex P being Subset of X st C = P & P is open & y in P;
+        hence C in bool the carrier of X;
+       end;
+   then reconsider FY as Subset-Family of X by SETFAM_1:def 7;
+  thus Cl {x} c= Cl {y} implies
+         MaxADSet(y) c=
+          meet {G where G is Subset of X : G is open & x in G}
+   proof
+    assume Cl {x} c= Cl {y};
+     then A1: meet FY c= meet FX by Th53;
+        (Cl {y}) /\ meet FY c= meet FY & MaxADSet(y) = (Cl {y}) /\ meet FY
+                                                    by Def15,XBOOLE_1:17;
+    hence thesis by A1,XBOOLE_1:1;
+   end;
+  assume
+    A2: MaxADSet(y) c= meet {G where G is Subset of X : G is open & x in G};
+  assume A3: not Cl {x} c= Cl {y};
+    A4: now
+          assume x in Cl {y};
+            then {x} c= Cl {y} by ZFMISC_1:37;
+          hence contradiction by A3,Th3;
+         end;
+   set G = (Cl {y})`;
+    x in G & G is open by A4,SUBSET_1:50;
+    then G in FX;
+    then A5: meet FX c= G by SETFAM_1:4;
+          {y} c= MaxADSet(y) by Th20;
+       then y in MaxADSet(y) by ZFMISC_1:37;
+       then A6: y in meet FX by A2;
+           {y} c= Cl {y} by PRE_TOPC:48;
+        then y in Cl {y} by ZFMISC_1:37;
+  hence contradiction by A5,A6,SUBSET_1:54;
+ end;
+
+theorem Th55:
+ for x, y being Point of X holds
+  MaxADSet(x) misses MaxADSet(y) iff
+   (ex V being Subset of X st
+        V is open & MaxADSet(x) c= V & V misses MaxADSet(y)) or
+    (ex W being Subset of X st
+         W is open & W misses MaxADSet(x) & MaxADSet(y) c= W)
+ proof let x, y be Point of X;
+  thus MaxADSet(x) misses MaxADSet(y) implies
+         (ex V being Subset of X st
+            V is open & MaxADSet(x) c= V & V misses MaxADSet(y)) or
+          (ex W being Subset of X st
+             W is open & W misses MaxADSet(x) & MaxADSet(y) c= W)
+   proof
+    assume A1: MaxADSet(x) /\ MaxADSet(y) = {};
+    assume A2: for V being Subset of X holds
+                V is open & MaxADSet(x) c= V implies V meets MaxADSet(y);
+    set W = (Cl {x})`;
+    set V = (Cl {y})`;
+        now
+       take W;
+       thus W is open;
+         MaxADSet(x) c= Cl {x} by Th50;
+       hence W misses MaxADSet(x) by TOPS_1:20;
+           now
+          assume not MaxADSet(y) c= W;
+           then MaxADSet(y) \ W <> {} by XBOOLE_1:37;
+            then consider a being set such that
+                   A3: a in MaxADSet(y) \ W by XBOOLE_0:def 1;
+              A4: a in MaxADSet(y) by A3,XBOOLE_0:def 4;
+            reconsider a as Point of X by A3;
+                MaxADSet(a) = MaxADSet(y) by A4,Th23;
+             then A5: Cl {a} = Cl {y} by Th51;
+                 not a in W by A3,XBOOLE_0:def 4;
+              then a in Cl {x} by SUBSET_1:50;
+              then {a} c= Cl {x} by ZFMISC_1:37;
+             then A6: Cl {y} c= Cl {x} by A5,Th3;
+                     MaxADSet(y) c= Cl {y} by Th50;
+                 then V misses MaxADSet(y) by TOPS_1:20;
+                then not MaxADSet(x) c= V by A2;
+                then MaxADSet(x) \ V <> {} by XBOOLE_1:37;
+                 then consider b being set such that
+                      A7: b in MaxADSet(x) \ V by XBOOLE_0:def 1;
+                   A8: b in MaxADSet(x) by A7,XBOOLE_0:def 4;
+                 reconsider b as Point of X by A7;
+                     MaxADSet(b) = MaxADSet(x) by A8,Th23;
+                  then A9: Cl {b} = Cl {x} by Th51;
+                      not b in V by A7,XBOOLE_0:def 4;
+                   then b in Cl {y} by SUBSET_1:50;
+                 then {b} c= Cl {y} by ZFMISC_1:37;
+                 then Cl {x} c= Cl {y} by A9,Th3;
+              then Cl {x} = Cl {y} by A6,XBOOLE_0:def 10;
+            then MaxADSet(x) = MaxADSet(y) & {x} c= MaxADSet(x)
+                                                       by Th20,Th51;
+          hence contradiction by A1;
+         end;
+       hence MaxADSet(y) c= W;
+      end;
+    hence ex W being Subset of X st
+           W is open & W misses MaxADSet(x) & MaxADSet(y) c= W;
+   end;
+  assume A10: (ex V being Subset of X st
+                 V is open & MaxADSet(x) c= V & V misses MaxADSet(y)) or
+               (ex W being Subset of X st
+                  W is open & W misses MaxADSet(x) & MaxADSet(y) c= W);
+  assume MaxADSet(x) meets MaxADSet(y);
+   then A11: MaxADSet(x) = MaxADSet(y) by Th24;
+       now per cases by A10;
+      suppose ex V being Subset of X st
+                V is open & MaxADSet(x) c= V & V misses MaxADSet(y);
+        then consider V being Subset of X such that
+          V is open and A12: MaxADSet(x) c= V and A13: V misses MaxADSet(y);
+         V /\ MaxADSet(y) = {} by A13,XBOOLE_0:def 7;
+       hence contradiction by A11,A12,XBOOLE_1:28;
+      suppose ex W being Subset of X st
+                W is open & W misses MaxADSet(x) & MaxADSet(y) c= W;
+        then consider W being Subset of X such that
+                W is open and A14: W misses MaxADSet(x) and
+              A15: MaxADSet(y) c= W;
+         W /\ MaxADSet(x) = {} by A14,XBOOLE_0:def 7;
+       hence contradiction by A11,A15,XBOOLE_1:28;
+     end;
+  hence contradiction;
+ end;
+
+theorem
+   for x, y being Point of X holds
+  MaxADSet(x) misses MaxADSet(y) iff
+   (ex E being Subset of X st
+        E is closed & MaxADSet(x) c= E & E misses MaxADSet(y)) or
+    (ex F being Subset of X st
+         F is closed & F misses MaxADSet(x) & MaxADSet(y) c= F)
+ proof let x, y be Point of X;
+  thus MaxADSet(x) misses MaxADSet(y) implies
+         (ex E being Subset of X st
+             E is closed & MaxADSet(x) c= E & E misses MaxADSet(y)) or
+          (ex F being Subset of X st
+              F is closed & F misses MaxADSet(x) & MaxADSet(y) c= F)
+   proof
+    assume A1: MaxADSet(x) misses MaxADSet(y);
+    hereby per cases by A1,Th55;
+     suppose ex V being Subset of X st
+                 V is open & MaxADSet(x) c= V & V misses MaxADSet(y);
+       then consider V being Subset of X such that
+               A2: V is open and
+              A3: MaxADSet(x) c= V and
+              A4: V misses MaxADSet(y);
+          now
+         take F = V`;
+         thus F is closed by A2,TOPS_1:30;
+         thus F misses MaxADSet(x) by A3,TOPS_1:20;
+         thus MaxADSet(y) c= F by A4,PRE_TOPC:21;
+        end;
+      hence (ex E being Subset of X st
+              E is closed & MaxADSet(x) c= E & E misses MaxADSet(y)) or
+             (ex F being Subset of X st
+               F is closed & F misses MaxADSet(x) & MaxADSet(y) c= F);
+     suppose ex W being Subset of X st
+                 W is open & W misses MaxADSet(x) & MaxADSet(y) c= W;
+       then consider W being Subset of X such that
+               A5: W is open and
+              A6: W misses MaxADSet(x) and
+              A7: MaxADSet(y) c= W;
+          now
+         take E = W`;
+         thus E is closed by A5,TOPS_1:30;
+         thus MaxADSet(x) c= E by A6,PRE_TOPC:21;
+         thus E misses MaxADSet(y) by A7,TOPS_1:20;
+        end;
+      hence (ex E being Subset of X st
+              E is closed & MaxADSet(x) c= E & E misses MaxADSet(y)) or
+             (ex F being Subset of X st
+               F is closed & F misses MaxADSet(x) & MaxADSet(y) c= F);
+    end;
+   end;
+  assume A8: (ex E being Subset of X st
+                 E is closed & MaxADSet(x) c= E & E misses MaxADSet(y)) or
+               (ex F being Subset of X st
+                  F is closed & F misses MaxADSet(x) & MaxADSet(y) c= F);
+  assume MaxADSet(x) meets MaxADSet(y);
+   then A9: MaxADSet(x) = MaxADSet(y) by Th24;
+       now per cases by A8;
+      suppose ex E being Subset of X st
+                E is closed & MaxADSet(x) c= E & E misses MaxADSet(y);
+        then consider E being Subset of X such that
+                E is closed and A10: MaxADSet(x) c= E and
+              A11: E misses MaxADSet(y);
+         E /\ MaxADSet(y) = {} by A11,XBOOLE_0:def 7;
+       hence contradiction by A9,A10,XBOOLE_1:28;
+      suppose ex F being Subset of X st
+                F is closed & F misses MaxADSet(x) & MaxADSet(y) c= F;
+        then consider F being Subset of X such that
+                F is closed and A12: F misses MaxADSet(x) and
+              A13: MaxADSet(y) c= F;
+         F /\ MaxADSet(x) = {} by A12,XBOOLE_0:def 7;
+       hence contradiction by A9,A13,XBOOLE_1:28;
+     end;
+  hence contradiction;
+ end;
+
+reserve A, B for Subset of X;
+reserve P, Q for Subset of X;
+
+theorem Th57:
+ MaxADSet(A) c= meet {G where G is Subset of X : G is open & A c= G}
+ proof
+  set F = {G where G is Subset of X : G is open & A c= G};
+       F c= bool the carrier of X
+       proof let C be set;
+        assume C in F;
+         then ex P being Subset of X st C = P & P is open & A c= P;
+        hence C in bool the carrier of X;
+       end;
+   then reconsider F as Subset-Family of X by SETFAM_1:def 7;
+       [#]X is open & A c= [#]X by PRE_TOPC:14;
+    then [#]X in F;
+  hence thesis by Th41;
+ end;
+
+theorem Th58:
+ P is open implies MaxADSet(P) = P
+ proof
+  set F = {G where G is Subset of X : G is open & P c= G};
+  assume P is open;
+   then P in F;
+   then A1: meet F c= P by SETFAM_1:4;
+       MaxADSet(P) c= meet F by Th57;
+    then MaxADSet(P) c= P & P c= MaxADSet(P) by A1,Th34,XBOOLE_1:1;
+  hence thesis by XBOOLE_0:def 10;
+ end;
+
+theorem
+   MaxADSet(Int A) = Int A by Th58;
+
+theorem Th60:
+ MaxADSet(A) c= meet {F where F is Subset of X : F is closed & A c= F}
+ proof
+  set G = {F where F is Subset of X : F is closed & A c= F};
+       G c= bool the carrier of X
+       proof let C be set;
+        assume C in G;
+         then ex P being Subset of X st C = P & P is closed & A c= P;
+        hence C in bool the carrier of X;
+       end;
+   then reconsider G as Subset-Family of X by SETFAM_1:def 7;
+       [#]X is closed & A c= [#]X by PRE_TOPC:14;
+    then [#]X in G;
+  hence thesis by Th43;
+end;
+
+theorem Th61:
+ MaxADSet(A) c= Cl A
+ proof
+     Cl A = meet {F where F is Subset of X : F is closed & A c= F} by Th1;
+  hence MaxADSet(A) c= Cl A by Th60;
+ end;
+
+theorem Th62:
+ P is closed implies MaxADSet(P) = P
+ proof
+  assume P is closed;
+   then Cl P = P & MaxADSet(P) c= Cl P & P c= MaxADSet(P)
+                                         by Th34,Th61,PRE_TOPC:52;
+  hence thesis by XBOOLE_0:def 10;
+ end;
+
+theorem
+   MaxADSet(Cl A) = Cl A by Th62;
+
+theorem
+   Cl MaxADSet(A) = Cl A
+ proof
+      A c= MaxADSet(A) by Th34;
+   then A1: Cl A c= Cl MaxADSet(A) by PRE_TOPC:49;
+      MaxADSet(A) c= Cl A by Th61;
+   then Cl MaxADSet(A) c= Cl A by Th3;
+  hence thesis by A1,XBOOLE_0:def 10;
+ end;
+
+theorem
+   MaxADSet(A) = MaxADSet(B) implies Cl A = Cl B
+ proof
+  assume MaxADSet(A) = MaxADSet(B);
+     then A1: B c= MaxADSet(A) & A c= MaxADSet(B) by Th37;
+         MaxADSet(A) c= Cl A & MaxADSet(B) c= Cl B by Th61;
+      then B c= Cl A & A c= Cl B by A1,XBOOLE_1:1;
+      then Cl B c= Cl A & Cl A c= Cl B by Th3;
+  hence thesis by XBOOLE_0:def 10;
+ end;
+
+theorem
+   P is closed or Q is closed implies
+    MaxADSet(P /\ Q) = MaxADSet(P) /\ MaxADSet(Q)
+ proof
+  assume A1: P is closed or Q is closed;
+     A2: MaxADSet(P /\ Q) c= MaxADSet(P) /\ MaxADSet(Q) by Th39;
+     MaxADSet(P) /\ MaxADSet(Q) c= MaxADSet(P /\ Q)
+    proof
+     assume not MaxADSet(P) /\ MaxADSet(Q) c= MaxADSet(P /\ Q);
+      then consider x being set such that
+             A3: x in MaxADSet(P) /\ MaxADSet(Q) and
+             A4: not x in MaxADSet(P /\ Q) by TARSKI:def 3;
+       reconsider x as Point of X by A3;
+          now per cases by A1;
+         suppose A5: P is closed;
+           then P = MaxADSet(P) by Th62;
+           then x in P by A3,XBOOLE_0:def 3;
+           then A6: MaxADSet(x) c= P by A5,Th25;
+               x in MaxADSet(Q) by A3,XBOOLE_0:def 3;
+            then x in union {MaxADSet(b) where b is Point of X : b in Q}
+                                                              by Def11;
+            then consider D being set such that
+                   A7: x in D and
+                   A8: D in {MaxADSet(b) where b is Point of X : b in Q}
+                                                            by TARSKI:def 4;
+              consider b being Point of X such that
+                   A9: D = MaxADSet(b) and A10: b in Q by A8;
+              A11: MaxADSet(x) = MaxADSet(b) by A7,A9,Th23;
+                  {b} c= MaxADSet(b) by Th20;
+               then A12: b in MaxADSet(b) by ZFMISC_1:37;
+              then A13: b in P /\ Q by A6,A10,A11,XBOOLE_0:def 3;
+                          P /\ Q c= MaxADSet(P /\ Q) by Th34;
+             then MaxADSet(b) meets MaxADSet(P /\ Q) by A12,A13,XBOOLE_0:3;
+                     then MaxADSet(b) c= MaxADSet(P /\ Q) by Th32;
+          hence contradiction by A4,A7,A9;
+         suppose A14: Q is closed;
+           then Q = MaxADSet(Q) by Th62;
+           then x in Q by A3,XBOOLE_0:def 3;
+           then A15: MaxADSet(x) c= Q by A14,Th25;
+               x in MaxADSet(P) by A3,XBOOLE_0:def 3;
+            then x in union {MaxADSet(b) where b is Point of X : b in P}
+                                                              by Def11;
+            then consider D being set such that
+                   A16: x in D and
+                   A17: D in {MaxADSet(b) where b is Point of X : b in P}
+                                                            by TARSKI:def 4;
+              consider b being Point of X such that
+                   A18: D = MaxADSet(b) and A19: b in P by A17;
+              A20: MaxADSet(x) = MaxADSet(b) by A16,A18,Th23;
+                  {b} c= MaxADSet(b) by Th20;
+               then A21: b in MaxADSet(b) by ZFMISC_1:37;
+              then A22: b in P /\ Q by A15,A19,A20,XBOOLE_0:def 3;
+                          P /\ Q c= MaxADSet(P /\ Q) by Th34;
+            then MaxADSet(b) meets MaxADSet(P /\ Q) by A21,A22,XBOOLE_0:3;
+                     then MaxADSet(b) c= MaxADSet(P /\ Q) by Th32;
+          hence contradiction by A4,A16,A18;
+        end;
+     hence contradiction;
+    end;
+  hence thesis by A2,XBOOLE_0:def 10;
+ end;
+
+theorem
+   P is open or Q is open implies
+    MaxADSet(P /\ Q) = MaxADSet(P) /\ MaxADSet(Q)
+ proof
+  assume A1: P is open or Q is open;
+     A2: MaxADSet(P /\ Q) c= MaxADSet(P) /\ MaxADSet(Q) by Th39;
+     MaxADSet(P) /\ MaxADSet(Q) c= MaxADSet(P /\ Q)
+    proof
+     assume not MaxADSet(P) /\ MaxADSet(Q) c= MaxADSet(P /\ Q);
+      then consider x being set such that
+             A3: x in MaxADSet(P) /\ MaxADSet(Q) and
+             A4: not x in MaxADSet(P /\ Q) by TARSKI:def 3;
+       reconsider x as Point of X by A3;
+          now per cases by A1;
+         suppose A5: P is open;
+           then P = MaxADSet(P) by Th58;
+           then x in P by A3,XBOOLE_0:def 3;
+           then A6: MaxADSet(x) c= P by A5,Th26;
+               x in MaxADSet(Q) by A3,XBOOLE_0:def 3;
+            then x in union {MaxADSet(b) where b is Point of X : b in Q}
+                                                              by Def11;
+            then consider D being set such that
+                   A7: x in D and
+                   A8: D in {MaxADSet(b) where b is Point of X : b in Q}
+                                                            by TARSKI:def 4;
+              consider b being Point of X such that
+                   A9: D = MaxADSet(b) and A10: b in Q by A8;
+              A11: MaxADSet(x) = MaxADSet(b) by A7,A9,Th23;
+                  {b} c= MaxADSet(b) by Th20;
+               then A12: b in MaxADSet(b) by ZFMISC_1:37;
+              then A13: b in P /\ Q by A6,A10,A11,XBOOLE_0:def 3;
+                          P /\ Q c= MaxADSet(P /\ Q) by Th34;
+            then MaxADSet(b) meets MaxADSet(P /\ Q) by A12,A13,XBOOLE_0:3;
+            then MaxADSet(b) c= MaxADSet(P /\ Q) by Th32;
+          hence contradiction by A4,A7,A9;
+         suppose A14: Q is open;
+           then Q = MaxADSet(Q) by Th58;
+           then x in Q by A3,XBOOLE_0:def 3;
+           then A15: MaxADSet(x) c= Q by A14,Th26;
+               x in MaxADSet(P) by A3,XBOOLE_0:def 3;
+            then x in union {MaxADSet(b) where b is Point of X : b in P}
+                                                              by Def11;
+            then consider D being set such that
+                   A16: x in D and
+                   A17: D in {MaxADSet(b) where b is Point of X : b in P}
+                                                            by TARSKI:def 4;
+              consider b being Point of X such that
+                   A18: D = MaxADSet(b) and A19: b in P by A17;
+              A20: MaxADSet(x) = MaxADSet(b) by A16,A18,Th23;
+                  {b} c= MaxADSet(b) by Th20;
+               then A21: b in MaxADSet(b) by ZFMISC_1:37;
+              then A22: b in P /\ Q by A15,A19,A20,XBOOLE_0:def 3;
+                         P /\ Q c= MaxADSet(P /\ Q) by Th34;
+             then MaxADSet(b) meets MaxADSet(P /\ Q) by A21,A22,XBOOLE_0:3;
+             then MaxADSet(b) c= MaxADSet(P /\ Q) by Th32;
+          hence contradiction by A4,A16,A18;
+        end;
+     hence contradiction;
+    end;
+  hence thesis by A2,XBOOLE_0:def 10;
+ end;
+
+
+begin
+:: 5. Maximal Anti-discrete Subspaces.
+reserve Y for non empty TopStruct;
+
+theorem Th68:
+ for Y0 being SubSpace of Y, A being Subset of Y
+    st A = the carrier of Y0 holds
+  Y0 is anti-discrete implies A is anti-discrete
+ proof let Y0 be SubSpace of Y, A be Subset of Y;
+  assume A1: A = the carrier of Y0;
+  assume Y0 is anti-discrete;
+    then A2: the topology of Y0 = {{}, the carrier of Y0} by TDLAT_3:def 2;
+      now let G be Subset of Y;
+     assume A3: G is open;
+       reconsider H = A /\ G as Subset of Y0 by A1,XBOOLE_1:17;
+           now
+          take G;
+          thus G in the topology of Y by A3,PRE_TOPC:def 5;
+          thus H = G /\ [#]Y0 by A1,PRE_TOPC:12;
+         end;
+       then H in the topology of Y0 by PRE_TOPC:def 9;
+      then A /\ G = {} or A /\ G = the carrier of Y0 by A2,TARSKI:def 2;
+     hence A misses G or A c= G by A1,XBOOLE_0:def 7,XBOOLE_1:17;
+    end;
+  hence A is anti-discrete by Def3;
+ end;
+
+theorem Th69:
+ for Y0 being SubSpace of Y st Y0 is TopSpace-like
+  for A being Subset of Y st A = the carrier of Y0 holds
+               A is anti-discrete implies Y0 is anti-discrete
+ proof let Y0 be SubSpace of Y;
+  assume A1: Y0 is TopSpace-like;
+   let A be Subset of Y;
+  assume A2: A = the carrier of Y0;
+    A3: [#]Y0 = the carrier of Y0 & [#]Y = the carrier of Y by PRE_TOPC:12;
+  assume A4: A is anti-discrete;
+          {} in the topology of Y0 & the carrier of Y0 in the topology of Y0
+                                                        by A1,PRE_TOPC:5,def 1;
+       then A5: {{},the carrier of Y0} c= the topology of Y0 by ZFMISC_1:38;
+        now let D be set;
+       assume A6: D in the topology of Y0;
+          then reconsider C = D as Subset of Y0;
+         consider E being Subset of Y such that
+               A7: E in
+ the topology of Y and A8: C = E /\ [#]Y0 by A6,PRE_TOPC:def 9;
+           reconsider E as Subset of Y;
+           A9: E is open by A7,PRE_TOPC:def 5;
+              now per cases by A4,A9,Def3;
+             suppose A misses E;
+              hence C = {} or C = A by A2,A3,A8,XBOOLE_0:def 7;
+             suppose A c= E;
+              hence C = {} or C = A by A2,A3,A8,XBOOLE_1:28;
+            end;
+        hence D in {{},the carrier of Y0} by A2,TARSKI:def 2;
+      end;
+     then the topology of Y0 c= {{},the carrier of Y0} by TARSKI:def 3;
+    then the topology of Y0 = {{},the carrier of Y0} by A5,XBOOLE_0:def 10;
+  hence Y0 is anti-discrete by TDLAT_3:def 2;
+ end;
+
+reserve X for non empty TopSpace, Y0 for non empty SubSpace of X;
+
+theorem
+   (for X0 being open SubSpace of X holds
+      Y0 misses X0 or Y0 is SubSpace of X0) implies Y0 is anti-discrete
+ proof
+     the carrier of Y0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of Y0 as Subset of X;
+  assume A1: for X0 being open SubSpace of X holds
+               Y0 misses X0 or Y0 is SubSpace of X0;
+      now let G be Subset of X;
+     assume A2: G is open;
+        now per cases;
+       suppose G is empty;
+       hence A misses G or A c= G by XBOOLE_1:65;
+       suppose G is non empty;
+        then consider X0 being strict open non empty SubSpace of X such that
+               A3: G = the carrier of X0 by A2,TSEP_1:20;
+           Y0 misses X0 or Y0 is SubSpace of X0 by A1;
+       hence A misses G or A c= G by A3,TSEP_1:4,def 3;
+      end;
+     hence A misses G or A c= G;
+    end;
+   then A is anti-discrete by Def3;
+  hence Y0 is anti-discrete by Th69;
+ end;
+
+theorem
+   (for X0 being closed SubSpace of X holds
+      Y0 misses X0 or Y0 is SubSpace of X0) implies Y0 is anti-discrete
+ proof
+     the carrier of Y0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of Y0 as Subset of X;
+  assume A1: for X0 being closed SubSpace of X holds
+               Y0 misses X0 or Y0 is SubSpace of X0;
+      now let G be Subset of X;
+     assume A2: G is closed;
+        now per cases;
+       suppose G is empty;
+       hence A misses G or A c= G by XBOOLE_1:65;
+       suppose G is non empty;
+        then consider X0 being strict closed non empty SubSpace of X such that
+               A3: G = the carrier of X0 by A2,TSEP_1:15;
+           Y0 misses X0 or Y0 is SubSpace of X0 by A1;
+       hence A misses G or A c= G by A3,TSEP_1:4,def 3;
+      end;
+     hence A misses G or A c= G;
+    end;
+   then A is anti-discrete by Def4;
+  hence Y0 is anti-discrete by Th69;
+ end;
+
+theorem
+   for Y0 being anti-discrete SubSpace of X
+  for X0 being open SubSpace of X holds Y0 misses X0 or Y0 is SubSpace of X0
+ proof let Y0 be anti-discrete SubSpace of X;
+     the carrier of Y0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of Y0 as Subset of X;
+       let X0 be open SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider G = the carrier of X0 as Subset of X;
+       G is open & A is anti-discrete by Th68,TSEP_1:16;
+    then A misses G or A c= G by Def3;
+  hence thesis by TSEP_1:4,def 3;
+ end;
+
+theorem
+   for Y0 being anti-discrete SubSpace of X
+  for X0 being closed SubSpace of X holds Y0 misses X0 or Y0 is SubSpace of X0
+ proof let Y0 be anti-discrete SubSpace of X;
+     the carrier of Y0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of Y0 as Subset of X;
+       let X0 be closed SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider G = the carrier of X0 as Subset of X;
+       G is closed & A is anti-discrete by Th68,TSEP_1:11;
+    then A misses G or A c= G by Def4;
+  hence Y0 misses X0 or Y0 is SubSpace of X0 by TSEP_1:4,def 3;
+ end;
+
+definition let Y be non empty TopStruct;
+  let IT be SubSpace of Y;
+ attr IT is maximal_anti-discrete means
+:Def16: IT is anti-discrete &
+   for Y0 being SubSpace of Y st Y0 is anti-discrete holds
+              the carrier of IT c= the carrier of Y0 implies
+                           the carrier of IT = the carrier of Y0;
+end;
+
+definition let Y be non empty TopStruct;
+ cluster maximal_anti-discrete -> anti-discrete SubSpace of Y;
+ coherence by Def16;
+ cluster non anti-discrete -> non maximal_anti-discrete SubSpace of Y;
+ coherence by Def16;
+end;
+
+theorem Th74:
+ for Y0 being non empty SubSpace of X, A being Subset of X
+    st A = the carrier of Y0 holds
+  Y0 is maximal_anti-discrete iff A is maximal_anti-discrete
+ proof let Y0 be non empty SubSpace of X, A be Subset of X;
+  assume A1: A = the carrier of Y0;
+  thus Y0 is maximal_anti-discrete implies A is maximal_anti-discrete
+   proof
+    assume A2: Y0 is maximal_anti-discrete;
+     then Y0 is anti-discrete by Def16;
+     then A3: A is anti-discrete by A1,Th68;
+        now let D be Subset of X;
+       assume A4: D is anti-discrete;
+       assume A5: A c= D;
+         then D <> {} by A1,XBOOLE_1:3;
+         then consider X0 being strict non empty SubSpace of X such that
+                A6: D = the carrier of X0 by TSEP_1:10;
+            X0 is anti-discrete by A4,A6,Th69;
+       hence A = D by A1,A2,A5,A6,Def16;
+      end;
+    hence thesis by A3,Def7;
+   end;
+  assume A7: A is maximal_anti-discrete;
+    then A is anti-discrete by Def7;
+   then A8: Y0 is anti-discrete by A1,Th69;
+       now let X0 be SubSpace of X;
+       the carrier of X0 is Subset of X by TSEP_1:1;
+     then reconsider D = the carrier of X0 as Subset of X;
+      assume X0 is anti-discrete;
+       then A9: D is anti-discrete by Th68;
+      assume the carrier of Y0 c= the carrier of X0;
+      hence the carrier of Y0 = the carrier of X0 by A1,A7,A9,Def7;
+     end;
+  hence Y0 is maximal_anti-discrete by A8,Def16;
+ end;
+
+definition let X be non empty TopSpace;
+ cluster open anti-discrete -> maximal_anti-discrete (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is open;
+    then A1: A is open by TSEP_1:16;
+   assume X0 is anti-discrete;
+    then A is anti-discrete by Th68;
+    then A is maximal_anti-discrete by A1,Th18;
+   hence thesis by Th74;
+  end;
+ cluster open non maximal_anti-discrete ->
+    non anti-discrete (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is open;
+    then A2: A is open by TSEP_1:16;
+   assume A3: X0 is non maximal_anti-discrete;
+   assume X0 is anti-discrete;
+    then A is anti-discrete by Th68;
+    then A is maximal_anti-discrete by A2,Th18;
+   hence contradiction by A3,Th74;
+  end;
+ cluster anti-discrete non maximal_anti-discrete ->
+    non open (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is anti-discrete;
+    then A4: A is anti-discrete by Th68;
+   assume A5: X0 is non maximal_anti-discrete;
+   assume X0 is open;
+    then A is open by TSEP_1:16;
+    then A is maximal_anti-discrete by A4,Th18;
+   hence contradiction by A5,Th74;
+  end;
+ cluster closed anti-discrete ->
+       maximal_anti-discrete (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is closed;
+    then A6: A is closed by TSEP_1:11;
+   assume X0 is anti-discrete;
+    then A is anti-discrete by Th68;
+    then A is maximal_anti-discrete by A6,Th19;
+   hence thesis by Th74;
+  end;
+ cluster closed non maximal_anti-discrete ->
+      non anti-discrete (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is closed;
+    then A7: A is closed by TSEP_1:11;
+   assume A8: X0 is non maximal_anti-discrete;
+   assume X0 is anti-discrete;
+    then A is anti-discrete by Th68;
+    then A is maximal_anti-discrete by A7,Th19;
+   hence contradiction by A8,Th74;
+  end;
+ cluster anti-discrete non maximal_anti-discrete ->
+      non closed (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is anti-discrete;
+    then A9: A is anti-discrete by Th68;
+   assume A10: X0 is non maximal_anti-discrete;
+   assume X0 is closed;
+    then A is closed by TSEP_1:11;
+    then A is maximal_anti-discrete by A9,Th19;
+   hence contradiction by A10,Th74;
+  end;
+end;
+
+definition let Y be TopStruct, x be Point of Y;
+ func MaxADSspace(x) -> strict SubSpace of Y means
+:Def17: the carrier of it = MaxADSet(x);
+ existence
+  proof
+   set D = MaxADSet(x);
+   set Y0 = Y|D;
+   take Y0;
+       D = [#]Y0 by PRE_TOPC:def 10;
+   hence MaxADSet(x) = the carrier of Y0 by PRE_TOPC:12;
+  end;
+ uniqueness
+  proof let Y1, Y2 be strict SubSpace of Y;
+   assume A1:the carrier of Y1 = MaxADSet(x) & the carrier of Y2 = MaxADSet(x);
+   set A1 = the carrier of Y1, A2 = the carrier of Y2;
+     A2: A1 = [#]Y1 & A2 = [#]Y2 by PRE_TOPC:12;
+     then A1 c= [#]Y & A2 c= [#]Y by PRE_TOPC:def 9;
+    then reconsider A1, A2 as Subset of Y by PRE_TOPC:16;
+      Y1 = Y|A1 & Y2 = Y|A2 by A2,PRE_TOPC:def 10;
+   hence thesis by A1;
+  end;
+end;
+
+definition let Y be non empty TopStruct, x be Point of Y;
+ cluster MaxADSspace(x) -> non empty;
+ coherence
+  proof
+     the carrier of MaxADSspace(x) = MaxADSet(x) by Def17;
+   hence the carrier of MaxADSspace(x) is non empty;
+  end;
+end;
+
+Lm2: for X1, X2 being SubSpace of Y holds
+       the carrier of X1 c= the carrier of X2 implies X1 is SubSpace of X2
+ proof let X1, X2 be SubSpace of Y;
+  set A1 = the carrier of X1, A2 = the carrier of X2;
+   A1: A1 = [#]X1 & A2 = [#]X2 & the carrier of Y = [#]Y by PRE_TOPC:12;
+  assume A2: A1 c= A2;
+     for P being Subset of X1 holds P in the topology of X1 iff
+   ex Q being Subset of X2 st Q in the topology of X2 &
+   P = Q /\ A1
+    proof let P be Subset of X1;
+     thus P in the topology of X1 implies
+       ex Q being Subset of X2 st
+           Q in the topology of X2 & P = Q /\ A1
+      proof assume P in the topology of X1;
+       then consider R being Subset of Y such that
+        A3: R in the topology of Y and A4: P = R /\ A1 by A1,PRE_TOPC:def 9;
+       reconsider Q = R /\ A2 as Subset of X2 by XBOOLE_1:17;
+       take Q;
+       thus Q in the topology of X2 by A1,A3,PRE_TOPC:def 9;
+          Q /\ A1 = R /\ (A2 /\ A1) by XBOOLE_1:16
+              .= R /\ A1 by A2,XBOOLE_1:28;
+       hence thesis by A4;
+      end;
+     given Q being Subset of X2 such that
+      A5: Q in the topology of X2 and A6: P = Q /\ A1;
+     consider R being Subset of Y such that
+      A7: R in the topology of Y and A8: Q = R /\ [#]X2 by A5,PRE_TOPC:def 9;
+          P = R /\ (A2 /\ A1) by A1,A6,A8,XBOOLE_1:16
+         .= R /\ A1 by A2,XBOOLE_1:28;
+     hence thesis by A1,A7,PRE_TOPC:def 9;
+    end;
+  hence thesis by A1,A2,PRE_TOPC:def 9;
+ end;
+
+theorem
+   for x being Point of Y holds Sspace(x) is SubSpace of MaxADSspace(x)
+ proof let x be Point of Y;
+      the carrier of Sspace(x) = {x} &
+     the carrier of MaxADSspace(x) = MaxADSet(x) by Def17,TEX_2:def 4;
+   then the carrier of Sspace(x) c= the carrier of MaxADSspace(x) by Th20;
+  hence thesis by Lm2;
+ end;
+
+theorem
+   for x, y being Point of Y holds
+   y is Point of MaxADSspace(x) iff
+      the TopStruct of MaxADSspace(y) = the TopStruct of MaxADSspace(x)
+ proof let x, y be Point of Y;
+   A1: the carrier of MaxADSspace(x) = MaxADSet(x) &
+         the carrier of MaxADSspace(y) = MaxADSet(y) by Def17;
+  thus y is Point of MaxADSspace(x) implies
+      the TopStruct of MaxADSspace(y) = the TopStruct of MaxADSspace(x)
+   proof
+    assume y is Point of MaxADSspace(x);
+     then MaxADSet(y) = MaxADSet(x) by A1,Th23;
+    hence thesis by A1,TSEP_1:5;
+   end;
+  assume the TopStruct of MaxADSspace(y) = the TopStruct of MaxADSspace(x);
+  hence thesis by A1,Th23;
+ end;
+
+theorem
+   for x, y being Point of Y holds
+   the carrier of MaxADSspace(x) misses the carrier of MaxADSspace(y) or
+     the TopStruct of MaxADSspace(x) = the TopStruct of MaxADSspace(y)
+ proof let x, y be Point of Y;
+   A1: the carrier of MaxADSspace(x) = MaxADSet(x) &
+         the carrier of MaxADSspace(y) = MaxADSet(y) by Def17;
+  assume the carrier of MaxADSspace(x) meets the carrier of MaxADSspace(y);
+   then MaxADSet(x) = MaxADSet(y) by A1,Th24;
+  hence thesis by A1,TSEP_1:5;
+ end;
+
+definition let X be non empty TopSpace;
+ cluster maximal_anti-discrete strict SubSpace of X;
+ existence
+  proof
+    consider a being set such that
+          A1: a in the carrier of X by XBOOLE_0:def 1;
+     reconsider a as Point of X by A1;
+    consider X0 being strict non empty SubSpace of X such that
+            A2: MaxADSet(a) = the carrier of X0 by TSEP_1:10;
+   take X0;
+       MaxADSet(a) is maximal_anti-discrete by Th22;
+   hence thesis by A2,Th74;
+  end;
+end;
+
+definition let X be non empty TopSpace, x be Point of X;
+ cluster MaxADSspace(x) -> maximal_anti-discrete;
+ coherence
+  proof
+   A1: MaxADSet(x) = the carrier of MaxADSspace(x) by Def17;
+     MaxADSet(x) is maximal_anti-discrete by Th22;
+   hence thesis by A1,Th74;
+  end;
+end;
+
+theorem
+   for X0 being closed non empty SubSpace of X, x being Point of X holds
+  x is Point of X0 implies MaxADSspace(x) is SubSpace of X0
+ proof let X0 be closed non empty SubSpace of X, x be Point of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+  assume x is Point of X0;
+   then x in A & A is closed by TSEP_1:11;
+   then MaxADSet(x) c= A by Th25;
+   then the carrier of MaxADSspace(x) c= the carrier of X0 by Def17;
+  hence thesis by Lm2;
+ end;
+
+theorem
+   for X0 being open non empty SubSpace of X, x being Point of X holds
+  x is Point of X0 implies MaxADSspace(x) is SubSpace of X0
+ proof let X0 be open non empty SubSpace of X, x be Point of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+  assume x is Point of X0;
+   then x in A & A is open by TSEP_1:16;
+   then MaxADSet(x) c= A by Th26;
+   then the carrier of MaxADSspace(x) c= the carrier of X0 by Def17;
+  hence thesis by Lm2;
+ end;
+
+theorem
+   for x being Point of X st Cl {x} = {x} holds
+   Sspace(x) is maximal_anti-discrete
+ proof let x be Point of X;
+  assume Cl {x} = {x};
+   then {x} is maximal_anti-discrete &
+          the carrier of Sspace(x) = {x} by Th47,TEX_2:def 4;
+  hence Sspace(x) is maximal_anti-discrete by Th74;
+ end;
+
+definition let Y be TopStruct,
+  A be Subset of Y;
+ func Sspace(A) -> strict SubSpace of Y means
+:Def18: the carrier of it = A;
+ existence
+  proof
+   set Y0 = Y|A;
+   take Y0;
+       A = [#]Y0 by PRE_TOPC:def 10;
+   hence A = the carrier of Y0 by PRE_TOPC:12;
+  end;
+ uniqueness
+  proof let Y1, Y2 be strict SubSpace of Y;
+   assume the carrier of Y1 = A & the carrier of Y2 = A;
+    then A = [#]Y1 & A = [#]Y2 by PRE_TOPC:12;
+    then Y1 = Y|A & Y2 = Y|A by PRE_TOPC:def 10;
+   hence thesis;
+  end;
+end;
+
+definition let Y be non empty TopStruct,
+  A be non empty Subset of Y;
+ cluster Sspace(A) -> non empty;
+ coherence
+ proof
+   thus the carrier of Sspace A is non empty by Def18;
+ end;
+end;
+
+theorem
+   for A being non empty Subset of Y
+   holds A is Subset of Sspace(A)
+ proof let A be non empty Subset of Y;
+    the carrier of Sspace(A) c= the carrier of Sspace(A);
+  hence thesis by Def18;
+ end;
+
+theorem
+   for Y0 being SubSpace of Y, A being non empty Subset of Y
+holds
+              A is Subset of Y0
+              implies Sspace(A) is SubSpace of Y0
+ proof let Y0 be SubSpace of Y, A be non empty Subset of Y;
+  assume A is Subset of Y0;
+   then A c= the carrier of Y0;
+   then the carrier of Sspace(A) c= the carrier of Y0 by Def18;
+  hence thesis by Lm2;
+ end;
+
+definition let Y be non trivial non empty TopStruct;
+ cluster non proper strict SubSpace of Y;
+ existence
+  proof
+       [#]Y = the carrier of Y by PRE_TOPC:12;
+    then reconsider A0 = the carrier of Y
+       as non empty Subset of Y;
+   set Y0 = Y|A0;
+   take Y0;
+      A0 = [#]Y0 by PRE_TOPC:def 10;
+    then A0 = the carrier of Y0 by PRE_TOPC:12;
+   hence thesis by TEX_2:15;
+  end;
+end;
+
+definition let Y be non trivial non empty TopStruct,
+                A be non trivial (non empty Subset of Y);
+ cluster Sspace(A) -> non trivial;
+ coherence
+  proof
+      now
+     assume Sspace(A) is trivial;
+        then the carrier of Sspace(A) is trivial by REALSET1:def 13;
+     hence contradiction by Def18;
+    end;
+   hence thesis;
+  end;
+end;
+
+definition let Y be non empty TopStruct,
+  A be non proper non empty Subset of Y;
+ cluster Sspace(A) -> non proper;
+ coherence
+  proof
+      now
+       A1: the carrier of Sspace(A) = A by Def18;
+     assume Sspace(A) is proper;
+     hence contradiction by A1,TEX_2:13;
+    end;
+   hence thesis;
+  end;
+end;
+
+definition let Y be non empty TopStruct,
+   A be Subset of Y;
+ func MaxADSspace(A) -> strict SubSpace of Y means
+:Def19: the carrier of it = MaxADSet(A);
+ existence
+  proof
+   set D = MaxADSet(A);
+   set Y0 = Y|D;
+   take Y0;
+       D = [#]Y0 by PRE_TOPC:def 10;
+   hence MaxADSet(A) = the carrier of Y0 by PRE_TOPC:12;
+  end;
+ uniqueness
+  proof let Y1, Y2 be strict SubSpace of Y;
+   assume
+A1:the carrier of Y1 = MaxADSet(A) & the carrier of Y2 = MaxADSet(A);
+   set A1 = the carrier of Y1, A2 = the carrier of Y2;
+     A2: A1 = [#]Y1 & A2 = [#]Y2 by PRE_TOPC:12;
+     then A1 c= [#]Y & A2 c= [#]Y by PRE_TOPC:def 9;
+    then reconsider A1, A2 as Subset of Y by PRE_TOPC:16;
+      Y1 = Y|A1 & Y2 = Y|A2 by A2,PRE_TOPC:def 10;
+   hence thesis by A1;
+  end;
+end;
+
+definition let Y be non empty TopStruct,
+   A be non empty Subset of Y;
+ cluster MaxADSspace(A) -> non empty;
+ coherence
+ proof
+     the carrier of MaxADSspace(A) = MaxADSet(A) by Def19;
+   hence the carrier of MaxADSspace(A) is non empty;
+ end;
+end;
+
+theorem
+   for A being non empty Subset of Y
+   holds A is Subset of MaxADSspace(A)
+ proof let A be non empty Subset of Y;
+     the carrier of MaxADSspace(A) = MaxADSet(A) & A c= MaxADSet(A)
+                                                        by Def19,Th34;
+  hence thesis;
+ end;
+
+theorem
+   for A being non empty Subset of Y holds
+   Sspace(A) is SubSpace of MaxADSspace(A)
+ proof let A be non empty Subset of Y;
+     the carrier of MaxADSspace(A) = MaxADSet(A) & A c= MaxADSet(A) &
+                         the carrier of Sspace(A) = A by Def18,Def19,Th34;
+  hence thesis by Lm2;
+ end;
+
+theorem
+   for x being Point of Y holds
+   the TopStruct of MaxADSspace(x) = the TopStruct of MaxADSspace({x})
+ proof let x be Point of Y;
+     the carrier of MaxADSspace(x) = MaxADSet(x) &
+    the carrier of MaxADSspace({x}) = MaxADSet({x}) &
+     MaxADSet(x) = MaxADSet({x}) by Def17,Def19,Th30;
+  hence thesis by TSEP_1:5;
+ end;
+
+theorem
+   for A, B being non empty Subset of Y holds
+   A c= B implies MaxADSspace(A) is SubSpace of MaxADSspace(B)
+ proof let A, B be non empty Subset of Y;
+     A1: the carrier of MaxADSspace(A) = MaxADSet(A) &
+           the carrier of MaxADSspace(B) = MaxADSet(B) by Def19;
+  assume A c= B;
+   then MaxADSet(A) c= MaxADSet(B) by Th33;
+  hence thesis by A1,Lm2;
+ end;
+
+theorem
+   for A being non empty Subset of Y holds
+  the TopStruct of MaxADSspace(A) = the TopStruct of MaxADSspace(MaxADSet(A))
+ proof let A be non empty Subset of Y;
+     A1: the carrier of MaxADSspace(A) = MaxADSet(A) &
+           the carrier of MaxADSspace(MaxADSet(A)) = MaxADSet(MaxADSet(A))
+                                                                   by Def19;
+      MaxADSet(A) = MaxADSet(MaxADSet(A)) by Th35;
+  hence thesis by A1,TSEP_1:5;
+ end;
+
+theorem
+   for A, B being non empty Subset of Y holds
+  A is Subset of MaxADSspace(B) implies
+    MaxADSspace(A) is SubSpace of MaxADSspace(B)
+ proof let A, B be non empty Subset of Y;
+     A1: the carrier of MaxADSspace(A) = MaxADSet(A) &
+           the carrier of MaxADSspace(B) = MaxADSet(B) by Def19;
+  assume A is Subset of MaxADSspace(B);
+   then MaxADSet(A) c= MaxADSet(B) by A1,Th36;
+  hence thesis by A1,Lm2;
+ end;
+
+theorem
+   for A, B being non empty Subset of Y holds
+   B is Subset of MaxADSspace(A) &
+   A is Subset of MaxADSspace(B) iff
+    the TopStruct of MaxADSspace(A) = the TopStruct of MaxADSspace(B)
+ proof let A, B be non empty Subset of Y;
+     A1: the carrier of MaxADSspace(A) = MaxADSet(A) &
+           the carrier of MaxADSspace(B) = MaxADSet(B) by Def19;
+  thus B is Subset of MaxADSspace(A) &
+       A is Subset of MaxADSspace(B) implies
+         the TopStruct of MaxADSspace(A) = the TopStruct of MaxADSspace(B)
+   proof
+    assume B is Subset of MaxADSspace(A) &
+           A is Subset of MaxADSspace(B);
+     then MaxADSet(A) = MaxADSet(B) by A1,Th37;
+    hence thesis by A1,TSEP_1:5;
+   end;
+  assume the TopStruct of MaxADSspace(A) = the TopStruct of MaxADSspace(B);
+  hence thesis by A1,Th37;
+ end;
+
+definition let Y be non trivial non empty TopStruct,
+                A be non trivial (non empty Subset of Y);
+ cluster MaxADSspace(A) -> non trivial;
+ coherence
+  proof
+      now
+     assume MaxADSspace(A) is trivial;
+        then the carrier of MaxADSspace(A) is trivial by REALSET1:def 13;
+       then MaxADSet(A) is trivial by Def19;
+     hence contradiction;
+    end;
+   hence thesis;
+  end;
+end;
+
+definition let Y be non empty TopStruct,
+   A be non proper non empty Subset of Y;
+ cluster MaxADSspace(A) -> non proper;
+ coherence
+  proof
+      now
+       A1: the carrier of MaxADSspace(A) = MaxADSet(A) by Def19;
+     assume MaxADSspace(A) is proper;
+     hence contradiction by A1,TEX_2:13;
+    end;
+   hence thesis;
+  end;
+end;
+
+theorem
+   for X0 being open SubSpace of X, A being non empty Subset of
+X
+   holds A is Subset of X0
+     implies MaxADSspace(A) is SubSpace of X0
+ proof let X0 be open SubSpace of X,
+           A be non empty Subset of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider D = the carrier of X0 as Subset of X;
+  assume A is Subset of X0;
+   then A c= D & D is open by TSEP_1:16;
+   then MaxADSet(A) c= D by Th40;
+   then the carrier of MaxADSspace(A) c= the carrier of X0 by Def19;
+  hence thesis by Lm2;
+ end;
+
+theorem
+   for X0 being closed SubSpace of X,
+     A being non empty Subset of X holds
+     A is Subset of X0 implies MaxADSspace(A) is SubSpace of X0
+ proof let X0 be closed SubSpace of X,
+           A be non empty Subset of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider D = the carrier of X0 as Subset of X;
+  assume A is Subset of X0;
+   then A c= D & D is closed by TSEP_1:11;
+   then MaxADSet(A) c= D by Th42;
+   then the carrier of MaxADSspace(A) c= the carrier of X0 by Def19;
+  hence thesis by Lm2;
+ end;

@@ -1,0 +1,1492 @@
+:: Some Properties of Cells and Arcs
+::  by Robert Milewski , Andrzej Trybulec , Artur Korni{\l}owicz
+::   and Adam Naumowicz
+::
+:: Received October 6, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary COMPTS_1, SPPOL_1, EUCLID, RELAT_2, GOBOARD1, PRE_TOPC, TOPREAL2,
+      RELAT_1, TOPREAL1, TOPS_2, SUBSET_1, BOOLE, MCART_1, CONNSP_3, CONNSP_1,
+      SETFAM_1, TARSKI, FINSEQ_1, JORDAN3, ARYTM_1, FINSEQ_5, FUNCT_1, GROUP_2,
+      PSCOMP_1, ORDINAL2, FUNCT_5, REALSET1, FINSEQ_4, SPRECT_2, FINSEQ_6,
+      JORDAN1A, NAT_1, INT_1, JORDAN8, GROUP_1, ARYTM_3, GOBOARD5, TREES_1,
+      JORDAN2C, JORDAN9, JORDAN6, COMPLEX1, SQUARE_1, ABSVALUE, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, REAL_1,
+      INT_1, NAT_1, ABSVALUE, SQUARE_1, RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_4,
+      FINSEQ_5, MATRIX_1, REALSET1, FINSEQ_6, STRUCT_0, PRE_TOPC, TOPS_2,
+      JGRAPH_1, TOPREAL2, CARD_4, BINARITH, CONNSP_1, CONNSP_3, COMPTS_1,
+      EUCLID, PSCOMP_1, SPRECT_2, GOBOARD1, TOPREAL1, GOBOARD5, SPPOL_1,
+      JORDAN3, JORDAN8, JORDAN2C, JORDAN6, JORDAN9, JORDAN1A;
+ constructors JORDAN8, REALSET1, JORDAN6, REAL_1, CARD_4, PSCOMP_1, BINARITH,
+      JORDAN2C, CONNSP_1, JORDAN9, JORDAN1A, WSIERP_1, SQUARE_1, ABSVALUE,
+      FINSEQ_4, JORDAN1, JORDAN3, RFINSEQ, TOPS_2, TOPREAL2, JORDAN5C,
+      CONNSP_3, TOPREAL4, SPRECT_1, FINSEQ_5, GOBOARD1, TOPRNS_1, INT_1;
+ clusters XREAL_0, TOPREAL6, JORDAN8, INT_1, RELSET_1, STRUCT_0, EUCLID,
+      SPRECT_3, FINSEQ_1, FINSEQ_5, JORDAN1A, PRE_TOPC, JORDAN3, MEMBERED;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+ definitions TARSKI, XBOOLE_0;
+ theorems AXIOMS, BINARITH, EUCLID, GOBRD11, JORDAN8, NEWTON, PSCOMP_1,
+      JORDAN1A, NAT_1, SCMFSA9A, GROUP_4, TOPREAL6, REAL_1, GOBOARD5, SQUARE_1,
+      NAT_2, FINSEQ_1, FINSEQ_2, JORDAN4, JORDAN6, SPRECT_2, FINSEQ_4,
+      FINSEQ_5, FINSEQ_6, GOBOARD7, GOBOARD9, SPPOL_1, SPPOL_2, TOPREAL4,
+      REVROT_1, TOPREAL1, SPRECT_3, BOOLMARK, JORDAN5B, AMI_5, JORDAN3,
+      RLVECT_1, JORDAN2C, SUBSET_1, CQC_THE1, JGRAPH_1, ABSVALUE, GOBOARD1,
+      RELAT_1, PRE_TOPC, TOPREAL5, XREAL_0, TOPREAL2, TOPS_2, CONNSP_3,
+      ORDERS_1, ZFMISC_1, TARSKI, CONNSP_1, SCMFSA_7, FINSEQ_3, XBOOLE_0,
+      XBOOLE_1, INT_1, XCMPLX_0, XCMPLX_1;
+
+begin
+
+reserve
+  E for compact non vertical non horizontal Subset of TOP-REAL 2,
+  C for compact connected non vertical non horizontal Subset of TOP-REAL 2,
+  G for Go-board,
+  i, j, m, n for Nat,
+  p for Point of TOP-REAL 2;
+
+  definition
+   cluster -> non vertical non horizontal Simple_closed_curve;
+   coherence
+   proof
+   let S be Simple_closed_curve;
+   consider f being map of (TOP-REAL 2)|R^2-unit_square, (TOP-REAL 2)|S
+   such that
+A1: f is_homeomorphism by TOPREAL2:def 1;
+     dom f = [#]((TOP-REAL 2)|R^2-unit_square) by A1,TOPS_2:def 5
+   .= R^2-unit_square by PRE_TOPC:def 10;
+   then rng f <> {} by RELAT_1:65;
+   then [#]((TOP-REAL 2)|S) <> {} by A1,TOPS_2:def 5;
+   then A2: S is non empty by PRE_TOPC:def 10;
+   then consider p1 be set such that
+    A3: p1 in S by XBOOLE_0:def 1;
+   reconsider p1 as Point of TOP-REAL 2 by A3;
+     ex p2 be Point of TOP-REAL 2 st p2 in S & p2`1 <> p1`1 by A2,TOPREAL5:21;
+   hence S is non vertical by A3,SPPOL_1:def 3;
+     ex p2 be Point of TOP-REAL 2 st p2 in S & p2`2 <> p1`2 by A2,TOPREAL5:20;
+   hence S is non horizontal by A3,SPPOL_1:def 2;
+   end;
+  end;
+
+  definition
+   let T be non empty TopSpace;
+   cluster non empty a_union_of_components of T;
+   existence
+   proof
+      [#]T = the carrier of T by PRE_TOPC:12;
+    then reconsider A = [#]T as a_union_of_components of T by CONNSP_3:20;
+      A is non empty;
+    hence thesis;
+   end;
+  end;
+
+  theorem
+     for T being non empty TopSpace
+   for A being non empty a_union_of_components of T st A is connected holds
+    A is_a_component_of T
+ proof
+  let T be non empty TopSpace;
+  let A be non empty a_union_of_components of T;
+  consider F being Subset-Family of T such that
+A1:  (for B being Subset of T st B in F holds B is_a_component_of T) &
+    A = union F by CONNSP_3:def 2;
+  consider X being set such that
+A2: X <> {} & X in F by A1,ORDERS_1:91;
+  reconsider X as Subset of T by A2;
+  assume A3: A is connected;
+    F={X}
+   proof
+    thus F c= {X}
+     proof
+      let x be set; assume A4: x in F;
+      then reconsider Y=x as Subset of T;
+A5:   Y is_a_component_of T & X is_a_component_of T by A1,A2,A4;
+A6:   X c= A by A1,A2,ZFMISC_1:92;
+        Y c= A by A1,A4,ZFMISC_1:92;
+      then Y = A by A3,A5,CONNSP_1:def 5
+       .= X by A3,A5,A6,CONNSP_1:def 5;
+      hence x in {X} by TARSKI:def 1;
+     end;
+    let x be set; assume x in {X};
+    hence x in F by A2,TARSKI:def 1;
+   end;
+  then A = X by A1,ZFMISC_1:31;
+  hence A is_a_component_of T by A1,A2;
+ end;
+
+Lm1:
+ for D being non empty set, f being FinSequence of D
+ for i,j st 1 <= i & i <= j & j <= len f
+  holds mid(f,i,j) is non empty
+proof let D be non empty set, f be FinSequence of D, i,j;
+ assume 1 <= i & i <= j & j <= len f;
+  then len mid(f,i,j) = j-'i+1 by JORDAN4:20;
+  then len mid(f,i,j) <> 0 by NAT_1:29;
+ hence mid(f,i,j) is non empty by FINSEQ_1:25;
+end;
+
+theorem Th2:
+ for f being FinSequence holds
+  f is empty iff Rev f is empty
+proof let f be FinSequence;
+ hereby assume f is empty;
+   then reconsider g=f as empty FinSequence;
+     Rev g is empty;
+  hence Rev f is empty;
+ end;
+ assume Rev f is empty;
+  then reconsider g=Rev f as empty FinSequence;
+    Rev g is empty;
+ hence f is empty by FINSEQ_6:29;
+end;
+
+theorem
+   for D being non empty set, f being FinSequence of D
+ for i,j st 1 <= i & i <= len f & 1 <= j & j <= len f
+  holds mid(f,i,j) is non empty
+proof let D be non empty set, f be FinSequence of D;
+ let i,j such that
+A1: 1 <= i and
+A2: i <= len f and
+A3: 1 <= j and
+A4: j <= len f;
+ per cases;
+ suppose i <= j;
+ hence mid(f,i,j) is non empty by A1,A4,Lm1;
+ suppose j <= i;
+  then A5: mid(f,j,i) is non empty by A2,A3,Lm1;
+    mid(f,i,j) = Rev mid(f,j,i) by JORDAN4:30;
+ hence mid(f,i,j) is non empty by A5,Th2;
+end;
+
+theorem Th4:
+   for f be non empty FinSequence of TOP-REAL 2
+   for p be Point of TOP-REAL 2 st 1 <= len f & p in L~f holds
+    R_Cut(f,p).1 = f.1
+   proof
+    let f be non empty FinSequence of TOP-REAL 2;
+    let p be Point of TOP-REAL 2;
+    assume that
+A1:  1 <= len f and
+A2:  p in L~f;
+    A3: 1 in dom f by FINSEQ_5:6;
+A4: 1 <= Index(p,f) by A2,JORDAN3:41;
+       now per cases;
+     suppose
+A5:    p<>f.1;
+A6:   Index(p,f) < len f by A2,JORDAN3:41;
+then Index(p,f) in dom f by A4,FINSEQ_3:27;
+      then A7: len mid(f,1,Index(p,f)) >= 1 by A3,SPRECT_2:9;
+        R_Cut(f,p) = mid(f,1,Index(p,f))^<*p*> by A5,JORDAN3:def 5;
+      hence R_Cut(f,p).1 = mid(f,1,Index(p,f)).1 by A7,JORDAN3:17
+         .= f.1 by A1,A4,A6,JORDAN3:27;
+     suppose
+A8:   p = f.1;
+       then R_Cut(f,p) = <*p*> by JORDAN3:def 5;
+      hence R_Cut(f,p).1 = f.1 by A8,FINSEQ_1:57;
+    end;
+    hence R_Cut(f,p).1 = f.1;
+   end;
+
+  theorem
+     for f be non empty FinSequence of TOP-REAL 2
+   for p be Point of TOP-REAL 2 st f is_S-Seq & p in L~f holds
+    L_Cut(f,p).(len L_Cut(f,p)) = f.(len f)
+   proof let f be non empty FinSequence of TOP-REAL 2;
+    let p be Point of TOP-REAL 2 such that
+A1:  f is_S-Seq and
+A2:  p in L~f;
+A3:  Rev f is_S-Seq by A1,SPPOL_2:47;
+A4:  p in L~Rev f by A2,SPPOL_2:22;
+then A5:  L_Cut(Rev Rev f,p) = Rev R_Cut(Rev f,p) by A3,JORDAN3:57;
+       2 <= len Rev f by A3,TOPREAL1:def 10;
+     then A6:   1 <= len Rev f by AXIOMS:22;
+       Rev Rev f = f by FINSEQ_6:29;
+    hence L_Cut(f,p).(len L_Cut(f,p))
+         = Rev R_Cut(Rev f,p).(len R_Cut(Rev f,p)) by A5,FINSEQ_5:def 3
+        .= R_Cut(Rev f,p).1 by FINSEQ_5:65
+        .= Rev f.1 by A4,A6,Th4
+        .= f.(len f) by FINSEQ_5:65;
+   end;
+
+  theorem
+     for P be Simple_closed_curve holds W-max(P) <> E-max(P)
+   proof
+    let P be Simple_closed_curve;
+      now assume A1: W-max(P) = E-max(P);
+     A2:|[W-bound P, sup (proj2||W-most P)]|=W-max(P) by PSCOMP_1:def 43;
+       |[E-bound P, sup (proj2||E-most P)]|=E-max(P) by PSCOMP_1:def 46;
+     then W-bound P= E-bound P by A1,A2,SPPOL_2:1;
+     hence contradiction by TOPREAL5:23;
+    end;
+    hence W-max(P) <> E-max(P);
+   end;
+
+  theorem
+     for D be non empty set
+   for f be FinSequence of D st 1 <= i & i < len f holds
+    mid(f,i,len f-'1)^<*f/.(len f)*> = mid(f,i,len f)
+   proof
+    let D be non empty set;
+    let f be FinSequence of D;
+    assume A1: 1 <= i & i < len f;
+    then A2: i+1 <= len f by NAT_1:38;
+    then i+1-1 <= len f-1 by REAL_1:49;
+    then A3: 0+i <= len f-1 by XCMPLX_1:26;
+    then len f-1 >= 1 by A1,AXIOMS:22;
+    then A4: len f-1 >= 0 by AXIOMS:22;
+    then A5: i <= len f-'1 by A3,BINARITH:def 3;
+      len f <= len f+1 by NAT_1:29;
+    then len f-1 <= len f+1-1 by REAL_1:49;
+    then len f-1 <= len f by XCMPLX_1:26;
+    then A6: len f-'1 <= len f by A4,BINARITH:def 3;
+      len f-i >= 1 by A2,REAL_1:84;
+    then A7: len f-i >= 0 by AXIOMS:22;
+      len f-1-i >= 0 by A3,REAL_1:84;
+    then A8: len f-'1-i >= 0 by A4,BINARITH:def 3;
+    A9: len (mid(f,i,len f-'1)^<*f/.(len f)*>) = len mid(f,i,len f-'1) + 1
+                                                              by FINSEQ_2:19;
+    A10: len mid(f,i,len f-'1) + 1 = len f-'1-'i+1+1 by A1,A5,A6,JORDAN4:20
+       .= len f-'1-i+1+1 by A8,BINARITH:def 3
+       .= len f-1-i+1+1 by A4,BINARITH:def 3
+       .= len f-i-1+1+1 by XCMPLX_1:21
+       .= len f-i+-1+1+1 by XCMPLX_0:def 8
+       .= len f-i+1 by XCMPLX_1:139
+       .= len f-'i+1 by A7,BINARITH:def 3
+       .= len mid(f,i,len f) by A1,JORDAN4:20;
+      now let j;
+     assume A11: 1 <= j & j <= len mid(f,i,len f);
+       1 < len f by A1,AXIOMS:22;
+     then i in Seg len f & len f in Seg len f by A1,FINSEQ_1:3;
+     then A12: i in dom f & len f in dom f by FINSEQ_1:def 3;
+     per cases by A11,REAL_1:def 5;
+      suppose j < len mid(f,i,len f);
+       then A13: j <= len mid(f,i,len f-'1) by A10,NAT_1:38;
+       then j in Seg len mid(f,i,len f-'1) by A11,FINSEQ_1:3;
+       then A14: j in dom mid(f,i,len f-'1) by FINSEQ_1:def 3;
+         j in Seg len mid(f,i,len f) by A11,FINSEQ_1:3;
+       then A15: j in dom mid(f,i,len f) by FINSEQ_1:def 3;
+         1 <= len f-'1 by A1,A5,AXIOMS:22;
+       then len f-'1 in Seg len f by A6,FINSEQ_1:3;
+       then A16: len f-'1 in dom f by FINSEQ_1:def 3;
+       thus (mid(f,i,len f-'1)^<*f/.(len f)*>)/.j = mid(f,i,len f-'1)/.j
+                                                          by A11,A13,BOOLMARK:8
+          .= f/.(j+i-'1) by A5,A12,A14,A16,SPRECT_2:7
+          .= mid(f,i,len f)/.j by A1,A12,A15,SPRECT_2:7;
+      suppose A17: j = len mid(f,i,len f);
+       hence (mid(f,i,len f-'1)^<*f/.(len f)*>)/.j = f/.(len f)
+                                                            by A10,TOPREAL4:1
+          .= mid(f,i,len f)/.j by A12,A17,SPRECT_2:13;
+    end;
+    hence mid(f,i,len f-'1)^<*f/.(len f)*> = mid(f,i,len f)
+                                                       by A9,A10,FINSEQ_5:14;
+   end;
+
+  theorem
+     for p,q be Point of TOP-REAL 2 st p <> q & LSeg(p,q) is vertical holds
+    <*p,q*> is_S-Seq
+   proof
+    let p,q be Point of TOP-REAL 2;
+    assume that
+     A1: p <> q and
+     A2: LSeg(p,q) is vertical;
+      p`1 = q`1 by A2,SPPOL_1:37;
+    hence <*p,q*> is_S-Seq by A1,SPPOL_2:46;
+   end;
+
+  theorem
+     for p,q be Point of TOP-REAL 2 st p <> q & LSeg(p,q) is horizontal holds
+    <*p,q*> is_S-Seq
+   proof
+    let p,q be Point of TOP-REAL 2;
+    assume that
+     A1: p <> q and
+     A2: LSeg(p,q) is horizontal;
+      p`2 = q`2 by A2,SPPOL_1:36;
+    hence <*p,q*> is_S-Seq by A1,SPPOL_2:46;
+   end;
+
+  theorem Th10:
+   for p,q be FinSequence of TOP-REAL 2
+   for v be Point of TOP-REAL 2 st p is_in_the_area_of q holds
+    Rotate(p,v) is_in_the_area_of q
+   proof
+    let p,q be FinSequence of TOP-REAL 2;
+    let v be Point of TOP-REAL 2;
+    assume A1: p is_in_the_area_of q;
+    per cases;
+     suppose A2: v in rng p;
+        now let n;
+       assume n in dom Rotate(p,v);
+       then n in dom p by REVROT_1:15;
+       then n in Seg len p by FINSEQ_1:def 3;
+       then A3: 0+1 <= n & n <= len p by FINSEQ_1:3;
+       then A4: n-1 >= 0 by REAL_1:84;
+       per cases;
+        suppose A5: n <= len(p:-v);
+         then A6: Rotate(p,v)/.n = p/.(n-'1+v..p) by A2,A3,REVROT_1:9;
+           n <= len p-v..p+1 by A2,A5,FINSEQ_5:53;
+         then n-1 <= len p-v..p by REAL_1:86;
+         then n-1+v..p <= len p by REAL_1:84;
+         then A7: n-'1+v..p <= len p by A4,BINARITH:def 3;
+         A8: n-'1 >= 0 by NAT_1:18;
+           1 <= v..p by A2,FINSEQ_4:31;
+         then 0+1 <= n-'1+v..p by A8,REAL_1:55;
+         then n-'1+v..p in Seg len p by A7,FINSEQ_1:3;
+         then A9: n-'1+v..p in dom p by FINSEQ_1:def 3;
+         hence W-bound L~q <= (Rotate(p,v)/.n)`1 by A1,A6,SPRECT_2:def 1;
+         thus (Rotate(p,v)/.n)`1 <= E-bound L~q by A1,A6,A9,SPRECT_2:def 1;
+         thus S-bound L~q <= (Rotate(p,v)/.n)`2 by A1,A6,A9,SPRECT_2:def 1;
+         thus (Rotate(p,v)/.n)`2 <= N-bound L~q by A1,A6,A9,SPRECT_2:def 1;
+        suppose A10: n > len(p:-v);
+         then A11: Rotate(p,v)/.n = p/.(n+v..p-'len p) by A2,A3,REVROT_1:12;
+           n > len p-v..p+1 by A2,A10,FINSEQ_5:53;
+         then n > 1+len p-v..p by XCMPLX_1:29;
+         then n+v..p > 1+len p by REAL_1:84;
+         then A12: n+v..p-len p > 1 by REAL_1:86;
+         then A13: n+v..p-len p >= 0 by AXIOMS:22;
+           v..p <= len p by A2,FINSEQ_4:31;
+         then n+v..p <= len p+len p by A3,REAL_1:55;
+         then n+v..p-len p <= len p by REAL_1:86;
+         then A14: n+v..p-'len p <= len p by A13,BINARITH:def 3;
+           1 <= n+v..p-'len p by A12,A13,BINARITH:def 3;
+         then n+v..p-'len p in Seg len p by A14,FINSEQ_1:3;
+         then A15: n+v..p-'len p in dom p by FINSEQ_1:def 3;
+         hence W-bound L~q <= (Rotate(p,v)/.n)`1 by A1,A11,SPRECT_2:def 1;
+         thus (Rotate(p,v)/.n)`1 <= E-bound L~q by A1,A11,A15,SPRECT_2:def 1;
+         thus S-bound L~q <= (Rotate(p,v)/.n)`2 by A1,A11,A15,SPRECT_2:def 1;
+         thus (Rotate(p,v)/.n)`2 <= N-bound L~q by A1,A11,A15,SPRECT_2:def 1;
+      end;
+      hence Rotate(p,v) is_in_the_area_of q by SPRECT_2:def 1;
+     suppose not v in rng p;
+      hence Rotate(p,v) is_in_the_area_of q by A1,FINSEQ_6:def 2;
+   end;
+
+  theorem
+     for p be non trivial FinSequence of TOP-REAL 2
+   for v be Point of TOP-REAL 2 holds
+    Rotate(p,v) is_in_the_area_of p
+   proof
+    let p be non trivial FinSequence of TOP-REAL 2;
+    let v be Point of TOP-REAL 2;
+      p is_in_the_area_of p by SPRECT_2:25;
+    hence Rotate(p,v) is_in_the_area_of p by Th10;
+   end;
+
+  theorem Th12:
+   for f be FinSequence holds
+    Center f >= 1
+   proof
+    let f be FinSequence;
+      len f div 2 >= 0 by NAT_1:19;
+    then len f div 2 + 1 >= 0+1 by AXIOMS:24;
+    hence thesis by JORDAN1A:def 1;
+   end;
+
+  theorem
+     for f be FinSequence st len f >= 1 holds
+    Center f <= len f
+   proof
+    let f be FinSequence;
+    assume len f >= 1;
+    then len f >= 0+1;
+    then len f > 0 by NAT_1:38;
+    then 0 + len f < len f + len f by REAL_1:53;
+    then len f < 2*len f by XCMPLX_1:11;
+    then len f+1 <= 2*len f by NAT_1:38;
+    then (len f+1+1) div 2 <= len f by NAT_2:27;
+    then (len f+(1+1)) div 2 <= len f by XCMPLX_1:1;
+    then len f div 2+1 <= len f by NAT_2:16;
+    hence thesis by JORDAN1A:def 1;
+   end;
+
+  theorem Th14:
+   Center G <= len G
+   proof
+    A1: Center G = len G div 2 + 1 by JORDAN1A:def 1;
+      1 <= len G by GOBRD11:34;
+    then 0 < len G by AXIOMS:22;
+    then len G div (2 qua Integer) < len G by SCMFSA9A:4;
+    then len G div 2 < len G by SCMFSA9A:5;
+    hence thesis by A1,NAT_1:38;
+   end;
+
+  theorem Th15:
+   for f be FinSequence st len f >= 2 holds
+    Center f > 1
+   proof
+    let f be FinSequence;
+    assume len f >= 2;
+    then len f div 2 >= 1 by NAT_2:15;
+    then len f div 2 + 1 > 1 by NAT_1:38;
+    hence thesis by JORDAN1A:def 1;
+   end;
+
+  theorem Th16:
+   for f be FinSequence st len f >= 3 holds
+    Center f < len f
+   proof
+    let f be FinSequence;
+    assume len f >= 3;
+    then len f+(2+1) <= len f+len f by AXIOMS:24;
+    then len f+2+1 <= len f+len f by XCMPLX_1:1;
+    then len f+2+1 <= 2*len f by XCMPLX_1:11;
+    then (len f+2+1+1) div 2 <= len f by NAT_2:27;
+    then (len f+2+(1+1)) div 2 <= len f by XCMPLX_1:1;
+    then (len f+2) div 2+1 <= len f by NAT_2:16;
+    then (len f+2) div 2 < len f by NAT_1:38;
+    then len f div 2 + 1 < len f by NAT_2:16;
+    hence thesis by JORDAN1A:def 1;
+   end;
+
+Lm2:
+  now
+    let E be non empty Subset of TOP-REAL 2;
+    thus len Gauge(E,0)-'1 = 2|^0 + 3 -' 1 by JORDAN8:def 1
+        .= 1+3-'1 by NEWTON:9
+        .= 3 by BINARITH:39;
+  end;
+
+theorem
+   Center Gauge(E,n) = 2|^(n-'1) + 2
+  proof
+    set G = Gauge(E,n);
+    per cases by NAT_1:19;
+    suppose
+A1:   n = 0;
+A2: 0-1 < 0;
+A3: 4 = 2 * 2 + 0;
+      Center G = len G div 2 + 1 by JORDAN1A:def 1;
+    hence Center G = (2|^0 + 3) div 2 + 1 by A1,JORDAN8:def 1
+      .= (1+3) div 2 + 1 by NEWTON:9
+      .= 1 + 1 + 1 by A3,NAT_1:def 1
+      .= 2|^0 + 1 + 1 by NEWTON:9
+      .= 2|^(0-'1) + 1 + 1 by A2,BINARITH:def 3
+      .= 2|^(0-'1) + (1 + 1) by XCMPLX_1:1
+      .= 2|^(n-'1) + 2 by A1;
+    suppose
+A4:   n > 0;
+then A5: 2|^n mod 2 = 0 by JORDAN1A:3;
+      3 = 2 * 1 + 1;
+then A6: 3 div 2 = 1 by NAT_1:def 1;
+A7: len G div 2 + 1 = (2|^n + 3) div 2 + 1 by JORDAN8:def 1
+       .= (2|^n div 2) + (3 div 2) + 1 by A5,GROUP_4:106
+       .= (2|^n div 2) + (1 + 1) by A6,XCMPLX_1:1;
+A8: 0+1 <= n by A4,NAT_1:38;
+      2|^n div 2 = 2|^n / 2 by A4,JORDAN1A:5
+      .= 2|^n / 2|^1 by NEWTON:10
+      .= 2|^(n-'1) by A8,TOPREAL6:15;
+    hence thesis by A7,JORDAN1A:def 1;
+  end;
+
+theorem Th18:
+ E c= cell(Gauge(E,0),2,2)
+  proof
+    set G = Gauge(E,0);
+    let x be set;
+    assume
+A1:   x in E;
+    then reconsider x as Point of TOP-REAL 2;
+A2: x = |[x`1,x`2]| by EUCLID:57;
+A3: len G = width G by JORDAN8:def 1;
+A4: len G-'1 = 3 by Lm2;
+A5: 4 <= len G by JORDAN8:13;
+    then 1 < len G by AXIOMS:22;
+    then G*(2+1,1)`1 = E-bound E & G*(1,2)`2 = S-bound E &
+    G*(1,2+1)`2 = N-bound E & G*(2,1)`1 = W-bound E
+      by A4,JORDAN8:14,15,16,17;
+then A6: G*(2,1)`1 <= x`1 & x`1 <= G*(2+1,1)`1 &
+     G*(1,2)`2 <= x`2 & x`2 <= G*(1,2+1)`2 by A1,PSCOMP_1:71;
+      2 < len G by A5,AXIOMS:22;
+    then cell(G,2,2) =
+      { |[p,q]| where p, q is Real: G*(2,1)`1 <= p & p <= G*(2+1,1)`1 &
+        G*(1,2)`2 <= q & q <= G*(1,2+1)`2 } by A3,GOBRD11:32;
+    hence thesis by A2,A6;
+  end;
+
+theorem Th19:
+ not cell(Gauge(E,0),2,2) c= BDD E
+  proof
+    assume
+A1:   cell(Gauge(E,0),2,2) c= BDD E;
+      E c= cell(Gauge(E,0),2,2) by Th18;
+then A2: E c= BDD E by A1,XBOOLE_1:1;
+    consider e being Element of E;
+A3: e in E;
+      BDD E misses E by JORDAN1A:15;
+    hence thesis by A2,A3,XBOOLE_0:3;
+  end;
+
+theorem
+   Gauge(C,1)*(Center Gauge(C,1),1)
+   = |[(W-bound C + E-bound C)/2,S-bound L~Cage(C,1)]|
+  proof
+    set G = Gauge(C,1);
+      1 <= len G by GOBRD11:34;
+then A1: G*(Center G,1)`1 = (W-bound C + E-bound C) / 2 by JORDAN1A:59;
+      1 <= Center G & Center G <= len G by Th12,Th14;
+    then G*(Center G,1)`2 = S-bound L~Cage(C,1) by JORDAN1A:93;
+    hence thesis by A1,EUCLID:57;
+  end;
+
+theorem
+   Gauge(C,1)*(Center Gauge(C,1),len Gauge(C,1))
+   = |[(W-bound C + E-bound C)/2,N-bound L~Cage(C,1)]|
+  proof
+    set G = Gauge(C,1);
+      1 <= len G by GOBRD11:34;
+then A1: G*(Center G,len G)`1 = (W-bound C + E-bound C) / 2 by JORDAN1A:59;
+      1 <= Center G & Center G <= len G by Th12,Th14;
+    then G*(Center G,len G)`2 = N-bound L~Cage(C,1) by JORDAN1A:91;
+    hence thesis by A1,EUCLID:57;
+  end;
+
+Lm3:
+ i <= m & m <= i+1 implies i = m or i = m -' 1
+  proof
+    assume that
+A1:   i <= m and
+A2:   m <= i+1 and
+A3:   i <> m;
+      i < m by A1,A3,REAL_1:def 5;
+    then i+1 <= m by NAT_1:38;
+    then m = i+1 by A2,AXIOMS:21;
+    hence i = m -' 1 by BINARITH:39;
+  end;
+
+theorem Th22:
+ 1 <= j & j < width G &
+ 1 <= m & m <= len G & 1 <= n & n <= width G &
+ p in cell(G,len G,j) & p`1 = G*(m,n)`1
+   implies len G = m
+  proof
+    assume that
+A1:   1 <= j & j < width G and
+A2:   1 <= m & m <= len G and
+A3:   1 <= n & n <= width G and
+A4:   p in cell(G,len G,j) and
+A5:   p`1 = G*(m,n)`1;
+A6: 1 <= width G by A1,AXIOMS:22;
+A7: G*(m,1)`1 = G*(m,n)`1 by A2,A3,GOBOARD5:3;
+      cell(G,len G,j) =
+      { |[r,s]| where r, s is Real:
+        G*(len G,1)`1 <= r & G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }
+        by A1,GOBRD11:29;
+    then consider r, s being Real such that
+A8:   p = |[r,s]| and
+A9:   G*(len G,1)`1 <= r and G*(1,j)`2 <= s & s <= G*(1,j+1)`2 by A4;
+      p`1 = r by A8,EUCLID:56;
+    then len G <= m by A2,A5,A6,A7,A9,GOBOARD5:4;
+    hence thesis by A2,AXIOMS:21;
+  end;
+
+theorem
+   1 <= i & i <= len G & 1 <= j & j < width G &
+ 1 <= m & m <= len G & 1 <= n & n <= width G &
+ p in cell(G,i,j) & p`1 = G*(m,n)`1
+   implies i = m or i = m -' 1
+  proof
+    assume that
+A1:   1 <= i & i <= len G and
+A2:   1 <= j & j < width G and
+A3:   1 <= m & m <= len G and
+A4:   1 <= n & n <= width G and
+A5:   p in cell(G,i,j) and
+A6:   p`1 = G*(m,n)`1;
+A7: 1 <= width G by A2,AXIOMS:22;
+A8: G*(m,1)`1 = G*(m,n)`1 by A3,A4,GOBOARD5:3;
+    per cases by A1,REAL_1:def 5;
+    suppose i = len G;
+    hence thesis by A2,A3,A4,A5,A6,Th22;
+    suppose i < len G;
+    then cell(G,i,j) =
+      { |[r,s]| where r, s is Real: G*(i,1)`1 <= r & r <= G*(i+1,1)`1 &
+          G*(1,j)`2 <= s & s <= G*(1,j+1)`2 } by A1,A2,GOBRD11:32;
+    then consider r, s being Real such that
+A9:   p = |[r,s]| and
+A10:   G*(i,1)`1 <= r & r <= G*(i+1,1)`1 and
+        G*(1,j)`2 <= s & s <= G*(1,j+1)`2 by A5;
+A11: p`1 = r by A9,EUCLID:56;
+      i <= m & m <= i+1
+    proof
+      assume
+A12:     not thesis;
+      per cases by A12;
+      suppose i > m;
+      hence contradiction by A1,A3,A6,A7,A8,A10,A11,GOBOARD5:4;
+      suppose
+A13:     m > i+1;
+        1 <= i+1 by NAT_1:29;
+      hence contradiction by A3,A6,A7,A8,A10,A11,A13,GOBOARD5:4;
+    end;
+    hence thesis by Lm3;
+  end;
+
+theorem Th24:
+ 1 <= i & i < len G &
+ 1 <= m & m <= len G & 1 <= n & n <= width G &
+ p in cell(G,i,width G) & p`2 = G*(m,n)`2
+   implies width G = n
+  proof
+    assume that
+A1:   1 <= i & i < len G and
+A2:   1 <= m & m <= len G and
+A3:   1 <= n & n <= width G and
+A4:   p in cell(G,i,width G) and
+A5:   p`2 = G*(m,n)`2;
+A6: 1 <= len G by A1,AXIOMS:22;
+A7: G*(1,n)`2 = G*(m,n)`2 by A2,A3,GOBOARD5:2;
+      cell(G,i,width G) =
+      { |[r,s]| where r, s is Real:
+        G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & G*(1,width G)`2 <= s }
+        by A1,GOBRD11:31;
+    then consider r, s being Real such that
+A8:   p = |[r,s]| and
+        G*(i,1)`1 <= r and
+A9:   r <= G*(i+1,1)`1 & G*(1,width G)`2 <= s by A4;
+      p`2 = s by A8,EUCLID:56;
+    then width G <= n by A3,A5,A6,A7,A9,GOBOARD5:5;
+    hence thesis by A3,AXIOMS:21;
+  end;
+
+theorem
+   1 <= i & i < len G & 1 <= j & j <= width G &
+ 1 <= m & m <= len G & 1 <= n & n <= width G &
+ p in cell(G,i,j) & p`2 = G*(m,n)`2
+   implies j = n or j = n -' 1
+  proof
+    assume that
+A1:   1 <= i & i < len G and
+A2:   1 <= j & j <= width G and
+A3:   1 <= m & m <= len G and
+A4:   1 <= n & n <= width G and
+A5:   p in cell(G,i,j) and
+A6:   p`2 = G*(m,n)`2;
+A7: 1 <= len G by A1,AXIOMS:22;
+A8: G*(1,n)`2 = G*(m,n)`2 by A3,A4,GOBOARD5:2;
+    per cases by A2,REAL_1:def 5;
+    suppose j = width G;
+    hence thesis by A1,A3,A4,A5,A6,Th24;
+    suppose j < width G;
+    then cell(G,i,j) =
+      { |[r,s]| where r, s is Real: G*(i,1)`1 <= r & r <= G*(i+1,1)`1 &
+          G*(1,j)`2 <= s & s <= G*(1,j+1)`2 } by A1,A2,GOBRD11:32;
+    then consider r, s being Real such that
+A9:   p = |[r,s]| and
+        G*(i,1)`1 <= r & r <= G*(i+1,1)`1 and
+A10:   G*(1,j)`2 <= s & s <= G*(1,j+1)`2 by A5;
+A11: p`2 = s by A9,EUCLID:56;
+      j <= n & n <= j+1
+    proof
+      assume
+A12:     not thesis;
+      per cases by A12;
+      suppose j > n;
+      hence contradiction by A2,A4,A6,A7,A8,A10,A11,GOBOARD5:5;
+      suppose
+A13:     n > j+1;
+        1 <= j+1 by NAT_1:29;
+      hence contradiction by A4,A6,A7,A8,A10,A11,A13,GOBOARD5:5;
+    end;
+    hence thesis by Lm3;
+  end;
+
+  theorem Th26:
+   for C be Simple_closed_curve
+   for r be real number st W-bound C <= r & r <= E-bound C holds
+    LSeg(|[r,S-bound C]|,|[r,N-bound C]|) meets Upper_Arc C
+   proof
+    let C be Simple_closed_curve;
+    let r be real number;
+    A1: (W-min C)`1 = W-bound C by PSCOMP_1:84;
+    A2: (E-max C)`1 = E-bound C by PSCOMP_1:104;
+    A3: r is Real by XREAL_0:def 1;
+    assume A4: W-bound C <= r & r <= E-bound C;
+      Upper_Arc C is_an_arc_of W-min(C),E-max(C) by JORDAN6:def 8;
+    then Upper_Arc C meets Vertical_Line(r) by A1,A2,A3,A4,JORDAN6:64;
+    then consider x be set such that
+     A5: x in Upper_Arc C /\ Vertical_Line(r) by XBOOLE_0:4;
+    A6: x in Upper_Arc C & x in Vertical_Line(r) by A5,XBOOLE_0:def 3;
+    reconsider fs = x as Point of TOP-REAL 2 by A5;
+      Upper_Arc C c= C by JORDAN1A:16;
+    then A7: S-bound C <= fs`2 & fs`2 <= N-bound C by A6,PSCOMP_1:71;
+    A8: |[r,S-bound C]|`1 = r by EUCLID:56
+       .= fs`1 by A6,JORDAN6:34;
+    A9: |[r,N-bound C]|`1 = r by EUCLID:56
+       .= fs`1 by A6,JORDAN6:34;
+      |[r,S-bound C]|`2 = S-bound C & |[r,N-bound C]|`2 = N-bound C by EUCLID:
+56
+;
+    then x in LSeg(|[r,S-bound C]|,|[r,N-bound C]|) by A7,A8,A9,GOBOARD7:8;
+    hence LSeg(|[r,S-bound C]|,|[r,N-bound C]|) meets Upper_Arc C
+                                                          by A6,XBOOLE_0:3;
+   end;
+
+  theorem Th27:
+   for C be Simple_closed_curve
+   for r be real number st W-bound C <= r & r <= E-bound C holds
+    LSeg(|[r,S-bound C]|,|[r,N-bound C]|) meets Lower_Arc C
+   proof
+    let C be Simple_closed_curve;
+    let r be real number;
+    A1: (W-min C)`1 = W-bound C by PSCOMP_1:84;
+    A2: (E-max C)`1 = E-bound C by PSCOMP_1:104;
+    A3: r is Real by XREAL_0:def 1;
+    assume A4: W-bound C <= r & r <= E-bound C;
+      Lower_Arc C is_an_arc_of E-max(C),W-min(C) by JORDAN6:def 9;
+    then Lower_Arc C is_an_arc_of W-min(C),E-max(C) by JORDAN5B:14;
+    then Lower_Arc C meets Vertical_Line(r) by A1,A2,A3,A4,JORDAN6:64;
+    then consider x be set such that
+     A5: x in Lower_Arc C /\ Vertical_Line(r) by XBOOLE_0:4;
+    A6: x in Lower_Arc C & x in Vertical_Line(r) by A5,XBOOLE_0:def 3;
+    reconsider fs = x as Point of TOP-REAL 2 by A5;
+      Lower_Arc C c= C by JORDAN1A:16;
+    then A7: S-bound C <= fs`2 & fs`2 <= N-bound C by A6,PSCOMP_1:71;
+    A8: |[r,S-bound C]|`1 = r by EUCLID:56
+       .= fs`1 by A6,JORDAN6:34;
+    A9: |[r,N-bound C]|`1 = r by EUCLID:56
+       .= fs`1 by A6,JORDAN6:34;
+      |[r,S-bound C]|`2 = S-bound C & |[r,N-bound C]|`2 = N-bound C by EUCLID:
+56
+;
+    then x in LSeg(|[r,S-bound C]|,|[r,N-bound C]|) by A7,A8,A9,GOBOARD7:8;
+    hence LSeg(|[r,S-bound C]|,|[r,N-bound C]|) meets Lower_Arc C
+                                                          by A6,XBOOLE_0:3;
+   end;
+
+  theorem Th28:
+   for C be Simple_closed_curve
+   for i be Nat st 1 < i & i < len Gauge(C,n) holds
+   LSeg(Gauge(C,n)*(i,1),Gauge(C,n)*(i,len Gauge(C,n)))
+    meets Upper_Arc C
+   proof
+    let C be Simple_closed_curve;
+    let i be Nat;
+    assume A1: 1 < i & i < len Gauge(C,n);
+    A2: Gauge(C,n)*(i,2) = |[(Gauge(C,n)*(i,2))`1,(Gauge(C,n)*(i,2))`2]|
+                                                                 by EUCLID:57
+       .= |[(Gauge(C,n)*(i,2))`1,S-bound C]| by A1,JORDAN8:16;
+    A3: Gauge(C,n)*(i,len Gauge(C,n)-'1) =
+          |[(Gauge(C,n)*(i,len Gauge(C,n)-'1))`1,
+            (Gauge(C,n)*(i,len Gauge(C,n)-'1))`2]| by EUCLID:57
+       .= |[(Gauge(C,n)*(i,len Gauge(C,n)-'1))`1,N-bound C]| by A1,JORDAN8:17;
+    set r = (Gauge(C,n)*(i,2))`1;
+    A4: len Gauge(C,n) = width Gauge(C,n) by JORDAN8:def 1;
+    A5: 4 <= len Gauge(C,n) by JORDAN8:13;
+    then len Gauge(C,n) >= 0+1 by AXIOMS:22;
+    then A6: len Gauge(C,n)-1 >= 0 by REAL_1:84;
+    A7: 1+1 <= len Gauge(C,n) by A5,AXIOMS:22;
+    then 1 <= len Gauge(C,n)-1 by REAL_1:84;
+    then A8: 1 <= len Gauge(C,n)-'1 by A6,BINARITH:def 3;
+    A9: len Gauge(C,n)-'1 <= len Gauge(C,n) by GOBOARD9:2;
+    A10: r = (Gauge(C,n)*(i,1))`1 by A1,A4,A7,GOBOARD5:3
+       .= (Gauge(C,n)*(i,len Gauge(C,n)-'1))`1 by A1,A4,A8,A9,GOBOARD5:3;
+      1+1 <= i by A1,NAT_1:38;
+    then (Gauge(C,n)*(2,2))`1 <= r by A1,A4,A7,SPRECT_3:25;
+    then A11: W-bound C <= r by A7,JORDAN8:14;
+      i+1 <= len Gauge(C,n) by A1,NAT_1:38;
+    then i <= len Gauge(C,n)-1 by REAL_1:84;
+    then i <= len Gauge(C,n)-'1 by A6,BINARITH:def 3;
+    then r <= Gauge(C,n)*(len Gauge(C,n)-'1,len Gauge(C,n)-'1)`1
+                                              by A1,A4,A8,A9,A10,SPRECT_3:25;
+    then r <= E-bound C by A8,A9,JORDAN8:15;
+    then A12: LSeg(Gauge(C,n)*(i,2),Gauge(C,n)*(i,len Gauge(C,n)-'1))
+     meets Upper_Arc C by A2,A3,A10,A11,Th26;
+    A13: Gauge(C,n)*(i,2) in
+     LSeg(Gauge(C,n)*(i,1),Gauge(C,n)*(i,len Gauge(C,n)))
+                                                     by A1,A4,A7,JORDAN1A:37;
+      Gauge(C,n)*(i,len Gauge(C,n)-'1) in
+     LSeg(Gauge(C,n)*(i,1),Gauge(C,n)*(i,len Gauge(C,n)))
+                                                 by A1,A4,A8,A9,JORDAN1A:37;
+    then LSeg(Gauge(C,n)*(i,2),Gauge(C,n)*(i,len Gauge(C,n)-'1)) c=
+     LSeg(Gauge(C,n)*(i,1),Gauge(C,n)*(i,len Gauge(C,n))) by A13,TOPREAL1:12;
+    hence LSeg(Gauge(C,n)*(i,1),Gauge(C,n)*(i,len Gauge(C,n)))
+     meets Upper_Arc C by A12,XBOOLE_1:63;
+   end;
+
+  theorem Th29:
+   for C be Simple_closed_curve
+   for i be Nat st 1 < i & i < len Gauge(C,n) holds
+   LSeg(Gauge(C,n)*(i,1),Gauge(C,n)*(i,len Gauge(C,n)))
+    meets Lower_Arc C
+   proof
+    let C be Simple_closed_curve;
+    let i be Nat;
+    assume A1: 1 < i & i < len Gauge(C,n);
+    A2: Gauge(C,n)*(i,2) = |[(Gauge(C,n)*(i,2))`1,(Gauge(C,n)*(i,2))`2]|
+                                                                 by EUCLID:57
+       .= |[(Gauge(C,n)*(i,2))`1,S-bound C]| by A1,JORDAN8:16;
+    A3: Gauge(C,n)*(i,len Gauge(C,n)-'1) =
+          |[(Gauge(C,n)*(i,len Gauge(C,n)-'1))`1,
+            (Gauge(C,n)*(i,len Gauge(C,n)-'1))`2]| by EUCLID:57
+       .= |[(Gauge(C,n)*(i,len Gauge(C,n)-'1))`1,N-bound C]| by A1,JORDAN8:17;
+    set r = (Gauge(C,n)*(i,2))`1;
+    A4: len Gauge(C,n) = width Gauge(C,n) by JORDAN8:def 1;
+    A5: 4 <= len Gauge(C,n) by JORDAN8:13;
+    then len Gauge(C,n) >= 0+1 by AXIOMS:22;
+    then A6: len Gauge(C,n)-1 >= 0 by REAL_1:84;
+    A7: 1+1 <= len Gauge(C,n) by A5,AXIOMS:22;
+    then 1 <= len Gauge(C,n)-1 by REAL_1:84;
+    then A8: 1 <= len Gauge(C,n)-'1 by A6,BINARITH:def 3;
+    A9: len Gauge(C,n)-'1 <= len Gauge(C,n) by GOBOARD9:2;
+    A10: r = (Gauge(C,n)*(i,1))`1 by A1,A4,A7,GOBOARD5:3
+       .= (Gauge(C,n)*(i,len Gauge(C,n)-'1))`1 by A1,A4,A8,A9,GOBOARD5:3;
+      1+1 <= i by A1,NAT_1:38;
+    then (Gauge(C,n)*(2,2))`1 <= r by A1,A4,A7,SPRECT_3:25;
+    then A11: W-bound C <= r by A7,JORDAN8:14;
+      i+1 <= len Gauge(C,n) by A1,NAT_1:38;
+    then i <= len Gauge(C,n)-1 by REAL_1:84;
+    then i <= len Gauge(C,n)-'1 by A6,BINARITH:def 3;
+    then r <= Gauge(C,n)*(len Gauge(C,n)-'1,len Gauge(C,n)-'1)`1
+                                              by A1,A4,A8,A9,A10,SPRECT_3:25;
+    then r <= E-bound C by A8,A9,JORDAN8:15;
+    then A12: LSeg(Gauge(C,n)*(i,2),Gauge(C,n)*(i,len Gauge(C,n)-'1))
+     meets Lower_Arc C by A2,A3,A10,A11,Th27;
+    A13: Gauge(C,n)*(i,2) in
+     LSeg(Gauge(C,n)*(i,1),Gauge(C,n)*(i,len Gauge(C,n)))
+                                                     by A1,A4,A7,JORDAN1A:37;
+      Gauge(C,n)*(i,len Gauge(C,n)-'1) in
+     LSeg(Gauge(C,n)*(i,1),Gauge(C,n)*(i,len Gauge(C,n)))
+                                                 by A1,A4,A8,A9,JORDAN1A:37;
+    then LSeg(Gauge(C,n)*(i,2),Gauge(C,n)*(i,len Gauge(C,n)-'1)) c=
+     LSeg(Gauge(C,n)*(i,1),Gauge(C,n)*(i,len Gauge(C,n))) by A13,TOPREAL1:12;
+    hence LSeg(Gauge(C,n)*(i,1),Gauge(C,n)*(i,len Gauge(C,n)))
+     meets Lower_Arc C by A12,XBOOLE_1:63;
+   end;
+
+  theorem
+     for C be Simple_closed_curve holds
+   LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+        Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n)))
+    meets Upper_Arc C
+   proof
+    let C be Simple_closed_curve;
+    A1: 4 <= len Gauge(C,n) by JORDAN8:13;
+    then len Gauge(C,n) >= 2 by AXIOMS:22;
+    then A2: 1 < Center Gauge(C,n) by Th15;
+      len Gauge(C,n) >= 3 by A1,AXIOMS:22;
+    then Center Gauge(C,n) < len Gauge(C,n) by Th16;
+    hence LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+         Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n))) meets Upper_Arc C
+                                                              by A2,Th28;
+   end;
+
+  theorem
+     for C be Simple_closed_curve holds
+   LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+        Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n)))
+    meets Lower_Arc C
+   proof
+    let C be Simple_closed_curve;
+    A1: 4 <= len Gauge(C,n) by JORDAN8:13;
+    then len Gauge(C,n) >= 2 by AXIOMS:22;
+    then A2: 1 < Center Gauge(C,n) by Th15;
+      len Gauge(C,n) >= 3 by A1,AXIOMS:22;
+    then Center Gauge(C,n) < len Gauge(C,n) by Th16;
+    hence LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+         Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n))) meets Lower_Arc C
+                                                              by A2,Th29;
+   end;
+
+  theorem Th32:
+   for C be compact connected non vertical non horizontal Subset of TOP-REAL 2
+   for i be Nat st 1 <= i & i <= len Gauge(C,n) holds
+   LSeg(Gauge(C,n)*(i,1),Gauge(C,n)*(i,len Gauge(C,n)))
+    meets Upper_Arc L~Cage(C,n)
+   proof
+    let C be compact connected non vertical non horizontal
+     Subset of TOP-REAL 2;
+    let i be Nat;
+    assume A1: 1 <= i & i <= len Gauge(C,n);
+    A2: Gauge(C,n)*(i,1) = |[(Gauge(C,n)*(i,1))`1,(Gauge(C,n)*(i,1))`2]|
+                                                                 by EUCLID:57
+       .= |[(Gauge(C,n)*(i,1))`1,S-bound L~Cage(C,n)]| by A1,JORDAN1A:93;
+    A3: Gauge(C,n)*(i,len Gauge(C,n)) =
+          |[(Gauge(C,n)*(i,len Gauge(C,n)))`1,
+            (Gauge(C,n)*(i,len Gauge(C,n)))`2]| by EUCLID:57
+       .= |[(Gauge(C,n)*(i,len Gauge(C,n)))`1,
+             N-bound L~Cage(C,n)]| by A1,JORDAN1A:91;
+    set r = (Gauge(C,n)*(i,1))`1;
+    A4: len Gauge(C,n) = width Gauge(C,n) by JORDAN8:def 1;
+      4 <= len Gauge(C,n) by JORDAN8:13;
+    then A5: 1 <= len Gauge(C,n) by AXIOMS:22;
+    then A6: r = (Gauge(C,n)*(i,len Gauge(C,n)))`1 by A1,A4,GOBOARD5:3;
+      (Gauge(C,n)*(1,1))`1 <= r by A1,A4,A5,SPRECT_3:25;
+    then A7: W-bound L~Cage(C,n) <= r by A5,JORDAN1A:94;
+      r <= Gauge(C,n)*(len Gauge(C,n),1)`1 by A1,A4,A5,SPRECT_3:25;
+    then r <= E-bound L~Cage(C,n) by A5,JORDAN1A:92;
+    hence LSeg(Gauge(C,n)*(i,1),Gauge(C,n)*(i,len Gauge(C,n)))
+     meets Upper_Arc L~Cage(C,n) by A2,A3,A6,A7,Th26;
+   end;
+
+  theorem Th33:
+   for C be compact connected non vertical non horizontal Subset of TOP-REAL 2
+   for i be Nat st 1 <= i & i <= len Gauge(C,n) holds
+   LSeg(Gauge(C,n)*(i,1),Gauge(C,n)*(i,len Gauge(C,n)))
+    meets Lower_Arc L~Cage(C,n)
+   proof
+    let C be compact connected non vertical non horizontal
+     Subset of TOP-REAL 2;
+    let i be Nat;
+    assume A1: 1 <= i & i <= len Gauge(C,n);
+    A2: Gauge(C,n)*(i,1) = |[(Gauge(C,n)*(i,1))`1,(Gauge(C,n)*(i,1))`2]|
+                                                                 by EUCLID:57
+       .= |[(Gauge(C,n)*(i,1))`1,S-bound L~Cage(C,n)]| by A1,JORDAN1A:93;
+    A3: Gauge(C,n)*(i,len Gauge(C,n)) =
+          |[(Gauge(C,n)*(i,len Gauge(C,n)))`1,
+            (Gauge(C,n)*(i,len Gauge(C,n)))`2]| by EUCLID:57
+       .= |[(Gauge(C,n)*(i,len Gauge(C,n)))`1,
+             N-bound L~Cage(C,n)]| by A1,JORDAN1A:91;
+    set r = (Gauge(C,n)*(i,1))`1;
+    A4: len Gauge(C,n) = width Gauge(C,n) by JORDAN8:def 1;
+      4 <= len Gauge(C,n) by JORDAN8:13;
+    then A5: 1 <= len Gauge(C,n) by AXIOMS:22;
+    then A6: r = (Gauge(C,n)*(i,len Gauge(C,n)))`1 by A1,A4,GOBOARD5:3;
+      (Gauge(C,n)*(1,1))`1 <= r by A1,A4,A5,SPRECT_3:25;
+    then A7: W-bound L~Cage(C,n) <= r by A5,JORDAN1A:94;
+      r <= Gauge(C,n)*(len Gauge(C,n),1)`1 by A1,A4,A5,SPRECT_3:25;
+    then r <= E-bound L~Cage(C,n) by A5,JORDAN1A:92;
+    hence LSeg(Gauge(C,n)*(i,1),Gauge(C,n)*(i,len Gauge(C,n)))
+     meets Lower_Arc L~Cage(C,n) by A2,A3,A6,A7,Th27;
+   end;
+
+  theorem
+     for C be compact connected non vertical non horizontal Subset of TOP-REAL
+2
+    holds
+   LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+        Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n)))
+    meets Upper_Arc L~Cage(C,n)
+   proof
+    let C be compact connected non vertical non horizontal
+     Subset of TOP-REAL 2;
+    A1: 4 <= len Gauge(C,n) by JORDAN8:13;
+    then len Gauge(C,n) >= 2 by AXIOMS:22;
+    then A2: 1 < Center Gauge(C,n) by Th15;
+      len Gauge(C,n) >= 3 by A1,AXIOMS:22;
+    then Center Gauge(C,n) < len Gauge(C,n) by Th16;
+    hence LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+         Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n))) meets
+     Upper_Arc L~Cage(C,n) by A2,Th32;
+   end;
+
+  theorem
+     for C be compact connected non vertical non horizontal Subset of TOP-REAL
+2
+    holds
+   LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+        Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n)))
+    meets Lower_Arc L~Cage(C,n)
+   proof
+    let C be compact connected non vertical non horizontal
+     Subset of TOP-REAL 2;
+    A1: 4 <= len Gauge(C,n) by JORDAN8:13;
+    then len Gauge(C,n) >= 2 by AXIOMS:22;
+    then A2: 1 < Center Gauge(C,n) by Th15;
+      len Gauge(C,n) >= 3 by A1,AXIOMS:22;
+    then Center Gauge(C,n) < len Gauge(C,n) by Th16;
+    hence LSeg(Gauge(C,n)*(Center Gauge(C,n),1),
+         Gauge(C,n)*(Center Gauge(C,n),len Gauge(C,n))) meets
+     Lower_Arc L~Cage(C,n) by A2,Th33;
+   end;
+
+theorem Th36:
+ j <= width G implies cell(G,0,j) is not Bounded
+proof assume
+A1: j <= width G;
+ per cases by A1,AXIOMS:21,RLVECT_1:99;
+ suppose j = 0;
+  then A2: cell(G,0,j) = { |[r,s]| where r, s is Real :
+        r <= G*(1,1)`1 & s <= G*(1,1)`2 } by GOBRD11:24;
+    not ex r being Real st for q being Point of TOP-REAL 2 st
+     q in cell(G,0,j) holds |.q.| < r
+   proof let r be Real;
+    take q = |[min(-r,G*(1,1)`1),min(-r,G*(1,1)`2)]|;
+       min(-r,G*(1,1)`1) <= G*(1,1)`1 & min(-r,G*(1,1)`2) <= G*(1,1)`2
+                                  by SQUARE_1:35;
+    hence q in cell(G,0,j) by A2;
+A3:   abs(q`1)<=|.q.| by JGRAPH_1:50;
+     per cases;
+     suppose
+A4:    r <= 0;
+        abs(q`1) >= 0 by ABSVALUE:5;
+    hence thesis by A4,JGRAPH_1:50;
+     suppose r > 0;
+    then --r > 0;
+    then A5:    -r < 0 by REAL_1:66;
+       q`1 = min(-r,G*(1,1)`1) by EUCLID:56;
+     then q`1 <= -r by SQUARE_1:35;
+     then abs(-r) <= abs(q`1) by A5,TOPREAL6:8;
+     then --r <= abs(q`1) by A5,ABSVALUE:def 1;
+    hence thesis by A3,AXIOMS:22;
+   end;
+ hence cell(G,0,j) is not Bounded by JORDAN2C:40;
+ suppose
+A6: j >= 1 & j < width G;
+  then A7: cell(G,0,j) =
+       { |[r,s]| where r is Element of REAL, s is Element of REAL:
+          r <= G*(1,1)`1 & G*(1,j)`2 <= s & s <= G*
+(1,j+1)`2 } by GOBRD11:26;
+    not ex r being Real st for q being Point of TOP-REAL 2 st
+     q in cell(G,0,j) holds |.q.| < r
+   proof let r be Real;
+    take q = |[min(-r,G*(1,1)`1),G*(1,j)`2]|;
+       len G <> 0 by GOBOARD1:def 5;
+     then A8:   1 <= len G by RLVECT_1:99;
+       j < j+1 & j+1 <= width G by A6,NAT_1:38;
+     then A9:   G*(1,j)`2 <= G*(1,j+1)`2 by A6,A8,GOBOARD5:5;
+       min(-r,G*(1,1)`1) <= G*(1,1)`1 by SQUARE_1:35;
+    hence q in cell(G,0,j) by A7,A9;
+A10:   abs(q`1)<=|.q.| by JGRAPH_1:50;
+     per cases;
+     suppose
+A11:    r <= 0;
+        abs(q`1) >= 0 by ABSVALUE:5;
+    hence thesis by A11,JGRAPH_1:50;
+     suppose r > 0;
+    then --r > 0;
+    then A12:    -r < 0 by REAL_1:66;
+       q`1 = min(-r,G*(1,1)`1) by EUCLID:56;
+     then q`1 <= -r by SQUARE_1:35;
+     then abs(-r) <= abs(q`1) by A12,TOPREAL6:8;
+     then --r <= abs(q`1) by A12,ABSVALUE:def 1;
+    hence thesis by A10,AXIOMS:22;
+   end;
+ hence cell(G,0,j) is not Bounded by JORDAN2C:40;
+ suppose j = width G;
+  then A13: cell(G,0,j) = { |[r,s]| where r is Element of REAL, s is Element of
+REAL :
+      r <= G*(1,1)`1 & G*(1,width G)`2 <= s }
+     by GOBRD11:25;
+    not ex r being Real st for q being Point of TOP-REAL 2 st
+     q in cell(G,0,j) holds |.q.| < r
+   proof let r be Real;
+    take q = |[G*(1,1)`1,max(r,G*(1,width G)`2)]|;
+       G*(1, width G)`2 <= max(r,G*(1,width G)`2) by SQUARE_1:46;
+    hence q in cell(G,0,j) by A13;
+A14:   abs(q`2)<=|.q.| by JGRAPH_1:50;
+     per cases;
+     suppose
+A15:    r <= 0;
+        abs(q`2) >= 0 by ABSVALUE:5;
+    hence thesis by A15,JGRAPH_1:50;
+     suppose
+A16:     r > 0;
+      A17: q`2 = max(r,G*(1,width G)`2) by EUCLID:56;
+     then A18:    r <= q`2 by SQUARE_1:46;
+      q`2 > 0 by A16,A17,SQUARE_1:46;
+     then r <= abs(q`2) by A18,ABSVALUE:def 1;
+    hence thesis by A14,AXIOMS:22;
+   end;
+ hence cell(G,0,j) is not Bounded by JORDAN2C:40;
+end;
+
+theorem Th37:
+ i <= width G implies cell(G,len G,i) is not Bounded
+proof assume
+A1: i <= width G;
+ per cases by A1,AXIOMS:21,RLVECT_1:99;
+ suppose
+A2: i = 0;
+A3: cell(G,len G,0) =
+     { |[r,s]| where r is Element of REAL, s is Element of REAL :
+      G*(len G,1)`1 <= r & s <= G*(1,1)`2 }
+                              by GOBRD11:27;
+    not ex r being Real st for q being Point of TOP-REAL 2 st
+     q in cell(G,len G,0) holds |.q.| < r
+   proof let r be Real;
+    take q = |[G*(len G,1)`1,min(-r,G*(1,1)`2)]|;
+       min(-r,G*(1,1)`2) <= G*(1,1)`2 by SQUARE_1:35;
+    hence q in cell(G,len G,0) by A3;
+A4:   abs(q`2)<=|.q.| by JGRAPH_1:50;
+     per cases;
+     suppose
+A5:    r <= 0;
+        abs(q`2) >= 0 by ABSVALUE:5;
+    hence thesis by A5,JGRAPH_1:50;
+     suppose r > 0;
+    then --r > 0;
+    then A6:    -r < 0 by REAL_1:66;
+       q`2 = min(-r,G*(1,1)`2) by EUCLID:56;
+     then q`2 <= -r by SQUARE_1:35;
+     then abs(-r) <= abs(q`2) by A6,TOPREAL6:8;
+     then --r <= abs(q`2) by A6,ABSVALUE:def 1;
+    hence thesis by A4,AXIOMS:22;
+   end;
+ hence cell(G,len G,i) is not Bounded by A2,JORDAN2C:40;
+ suppose
+A7: i >= 1 & i < width G;
+  then A8: cell(G,len G,i) =
+       { |[r,s]| where r is Element of REAL, s is Element of REAL:
+          G*(len G,1)`1 <= r & G*(1,i)`2 <=s & s <= G*(1,i+1)`2 }
+                              by GOBRD11:29;
+    not ex r being Real st for q being Point of TOP-REAL 2 st
+     q in cell(G,len G,i) holds |.q.| < r
+   proof let r be Real;
+    take q = |[max(r,G*(len G,1)`1),G*(1,i)`2]|;
+       len G <> 0 by GOBOARD1:def 5;
+     then A9:   1 <= len G by RLVECT_1:99;
+       i < i+1 & i+1 <= width G by A7,NAT_1:38;
+     then A10:   G*(1,i)`2 <= G*(1,i+1)`2 by A7,A9,GOBOARD5:5;
+       max(r,G*(len G,1)`1) >= G*(len G,1)`1 by SQUARE_1:46;
+    hence q in cell(G,len G,i) by A8,A10;
+A11:   abs(q`1)<=|.q.| by JGRAPH_1:50;
+     per cases;
+     suppose
+A12:    r <= 0;
+        abs(q`1) >= 0 by ABSVALUE:5;
+    hence thesis by A12,JGRAPH_1:50;
+     suppose
+A13:    r > 0;
+       q`1 = max(r,G*(len G,1)`1) by EUCLID:56;
+     then q`1 >= r by SQUARE_1:46;
+     then abs(r) <= abs(q`1) by A13,TOPREAL6:7;
+     then r <= abs(q`1) by A13,ABSVALUE:def 1;
+    hence thesis by A11,AXIOMS:22;
+   end;
+ hence cell(G,len G,i) is not Bounded by JORDAN2C:40;
+ suppose
+A14: i = width G;
+A15:  cell(G,len G,width G)
+      = { |[r,s]| where r, s is Real :
+           G*(len G,1)`1 <= r & G*(1,width G)`2 <= s } by GOBRD11:28;
+    not ex r being Real st for q being Point of TOP-REAL 2 st
+     q in cell(G,len G,i) holds |.q.| < r
+   proof let r be Real;
+    take q = |[G*(len G,1)`1,max(r,G*(1,width G)`2)]|;
+       G*(1,width G)`2 <= max(r,G*(1,width G)`2) by SQUARE_1:46;
+    hence q in cell(G,len G,i) by A14,A15;
+A16:   abs(q`2)<=|.q.| by JGRAPH_1:50;
+     per cases;
+     suppose
+A17:    r <= 0;
+        abs(q`2) >= 0 by ABSVALUE:5;
+    hence thesis by A17,JGRAPH_1:50;
+     suppose
+A18:     r > 0;
+      A19: q`2 = max(r,G*(1,width G)`2) by EUCLID:56;
+     then A20:    r <= q`2 by SQUARE_1:46;
+      q`2 > 0 by A18,A19,SQUARE_1:46;
+     then r <= abs(q`2) by A20,ABSVALUE:def 1;
+    hence thesis by A16,AXIOMS:22;
+   end;
+ hence cell(G,len G,i) is not Bounded by JORDAN2C:40;
+end;
+
+theorem Th38:
+ j <= width Gauge(C,n) implies cell(Gauge(C,n),0,j) c= UBD C
+proof
+A1: len Gauge(C,n) = width Gauge(C,n) by JORDAN8:def 1;
+ assume
+A2: j <= width Gauge(C,n);
+  then cell(Gauge(C,n),0,j) misses C by A1,JORDAN8:21;
+  then A3: cell(Gauge(C,n),0,j) c= C` by SUBSET_1:43;
+A4: 0 <= width Gauge(C,n) by NAT_1:18;
+  then A5: cell(Gauge(C,n),0,j) is connected by A1,A2,JORDAN1A:46;
+     C is Bounded by JORDAN2C:73;
+  then A6: C` is non empty by JORDAN2C:74;
+    cell(Gauge(C,n),0,j) is non empty by A1,A2,A4,JORDAN1A:45;
+  then consider W being Subset of TOP-REAL 2 such that
+A7: W is_a_component_of C` and
+A8: cell(Gauge(C,n),0,j) c= W by A3,A5,A6,GOBOARD9:5;
+    cell(Gauge(C,n),0,j) is not Bounded by A2,Th36;
+  then W is not Bounded by A8,JORDAN2C:16;
+  then W is_outside_component_of C by A7,JORDAN2C:def 4;
+  then W c= UBD C by JORDAN2C:27;
+ hence cell(Gauge(C,n),0,j) c= UBD C by A8,XBOOLE_1:1;
+end;
+
+theorem Th39:
+ j <= len Gauge(E,n) implies cell(Gauge(E,n),len Gauge(E,n),j) c= UBD E
+proof
+A1: width Gauge(E,n) = len Gauge(E,n) by JORDAN8:def 1;
+ assume
+A2: j <= len Gauge(E,n);
+  then cell(Gauge(E,n),len Gauge(E,n),j) misses E by JORDAN8:19;
+  then A3: cell(Gauge(E,n),len Gauge(E,n),j) c= E` by SUBSET_1:43;
+A4: cell(Gauge(E,n),len Gauge(E,n),j) is connected by A1,A2,JORDAN1A:46;
+     E is Bounded by JORDAN2C:73;
+  then A5: E` is non empty by JORDAN2C:74;
+    cell(Gauge(E,n),len Gauge(E,n),j) is non empty by A1,A2,JORDAN1A:45;
+  then consider W being Subset of TOP-REAL 2 such that
+A6: W is_a_component_of E` and
+A7: cell(Gauge(E,n),len Gauge(E,n),j) c= W by A3,A4,A5,GOBOARD9:5;
+    cell(Gauge(E,n),len Gauge(E,n),j) is not Bounded by A1,A2,Th37;
+  then W is not Bounded by A7,JORDAN2C:16;
+  then W is_outside_component_of E by A6,JORDAN2C:def 4;
+  then W c= UBD E by JORDAN2C:27;
+ hence cell(Gauge(E,n),len Gauge(E,n),j) c= UBD E by A7,XBOOLE_1:1;
+end;
+
+Lm4:
+  j <= width Gauge(C,n) & cell(Gauge(C,n),i,j) c= BDD C
+  implies i <> 0
+  proof assume that
+A1: j <= width Gauge(C,n) and
+A2: cell(Gauge(C,n),i,j) c= BDD C and
+A3: i = 0;
+     0 <= len Gauge(C,n) by NAT_1:18;
+   then A4: cell(Gauge(C,n),0,j) is non empty by A1,JORDAN1A:45;
+     cell(Gauge(C,n),0,j) c= UBD C by A1,Th38;
+   then UBD C meets BDD C by A2,A3,A4,XBOOLE_1:68;
+  hence contradiction by JORDAN2C:28;
+ end;
+
+Lm5:
+ i <= len Gauge(C,n) & cell(Gauge(C,n),i,j) c= BDD C
+  implies j <> 0
+  proof assume that
+A1: i <= len Gauge(C,n) and
+A2: cell(Gauge(C,n),i,j) c= BDD C and
+A3: j = 0;
+     0 <= width Gauge(C,n) by NAT_1:18;
+   then A4: cell(Gauge(C,n),i,0) is non empty by A1,JORDAN1A:45;
+     cell(Gauge(C,n),i,0) c= UBD C by A1,JORDAN1A:70;
+   then UBD C meets BDD C by A2,A3,A4,XBOOLE_1:68;
+  hence contradiction by JORDAN2C:28;
+ end;
+
+Lm6:
+ j <= width Gauge(C,n) & cell(Gauge(C,n),i,j) c= BDD C
+  implies i <> len Gauge(C,n)
+ proof assume that
+A1: j <= width Gauge(C,n) and
+A2: cell(Gauge(C,n),i,j) c= BDD C;
+A3: len Gauge(C,n) = width Gauge(C,n) by JORDAN8:def 1;
+  assume
+A4: i = len Gauge(C,n);
+A5: cell(Gauge(C,n),len Gauge(C,n),j) is non empty
+                            by A1,JORDAN1A:45;
+    cell(Gauge(C,n),len Gauge(C,n),j) c= UBD C by A1,A3,Th39;
+  then UBD C meets BDD C by A2,A4,A5,XBOOLE_1:68;
+ hence contradiction by JORDAN2C:28;
+ end;
+
+Lm7:
+ i <= len Gauge(C,n) & cell(Gauge(C,n),i,j) c= BDD C
+  implies j <> width Gauge(C,n)
+ proof assume that
+A1: i <= len Gauge(C,n) and
+A2: cell(Gauge(C,n),i,j) c= BDD C;
+  assume
+A3: j = width Gauge(C,n);
+A4: cell(Gauge(C,n),i,width Gauge(C,n)) is non empty
+                            by A1,JORDAN1A:45;
+    cell(Gauge(C,n),i,width Gauge(C,n)) c= UBD C by A1,JORDAN1A:71;
+  then UBD C meets BDD C by A2,A3,A4,XBOOLE_1:68;
+ hence contradiction by JORDAN2C:28;
+ end;
+
+theorem Th40:
+ i <= len Gauge(C,n) & j <= width Gauge(C,n) &
+  cell(Gauge(C,n),i,j) c= BDD C
+  implies j > 1
+ proof assume that
+A1: i <= len Gauge(C,n) and
+A2: j <= width Gauge(C,n) and
+A3: cell(Gauge(C,n),i,j) c= BDD C and
+A4: j <= 1;
+   per cases by A4,CQC_THE1:2;
+   suppose j = 0;
+   hence contradiction by A1,A3,Lm5;
+   suppose
+A5:  j = 1;
+     width Gauge(C,n) <> 0 by GOBOARD1:def 5;
+   then A6: 0+1 <= width Gauge(C,n) by RLVECT_1:99;
+   then A7: cell(Gauge(C,n),i,1) is non empty by A1,JORDAN1A:45;
+ A8: cell(Gauge(C,n),i,0) c= UBD C by A1,JORDAN1A:70;
+ A9: C is Bounded by JORDAN2C:73;
+     i <> len Gauge(C,n) by A2,A3,Lm6;
+   then A10: i < len Gauge(C,n) by A1,AXIOMS:21;
+ A11:  0 < width Gauge(C,n) by A6,NAT_1:38;
+      i <> 0 by A2,A3,Lm4;
+    then 1 <= i by RLVECT_1:99;
+    then cell(Gauge(C,n),i,0) /\ cell(Gauge(C,n),i,0+1)
+     = LSeg(Gauge(C,n)*(i,0+1),Gauge(C,n)*(i+1,0+1))
+               by A10,A11,GOBOARD5:27;
+     then A12:   cell(Gauge(C,n),i,0) meets cell(Gauge(C,n),i,0+1) by XBOOLE_0:
+def 7;
+      ex B being Subset of TOP-REAL 2 st B is_outside_component_of C & B=UBD C
+                           by A9,JORDAN2C:76;
+    then A13:  UBD C is_a_component_of C` by JORDAN2C:def 4;
+ A14:  cell(Gauge(C,n),i,1) is connected by A1,A6,JORDAN1A:46;
+     BDD C c= C` by JORDAN2C:29;
+   then cell(Gauge(C,n),i,1) c= C` by A3,A5,XBOOLE_1:1;
+   then cell(Gauge(C,n),i,1) c= UBD C by A8,A12,A13,A14,GOBOARD9:6;
+   then UBD C meets BDD C by A3,A5,A7,XBOOLE_1:68;
+  hence contradiction by JORDAN2C:28;
+ end;
+
+theorem Th41:
+ i <= len Gauge(C,n) & j <= width Gauge(C,n) &
+  cell(Gauge(C,n),i,j) c= BDD C
+  implies i > 1
+ proof assume that
+A1: i <= len Gauge(C,n) and
+A2: j <= width Gauge(C,n) and
+A3: cell(Gauge(C,n),i,j) c= BDD C and
+
+A4: i <= 1;
+   per cases by A4,CQC_THE1:2;
+   suppose i = 0;
+   hence contradiction by A2,A3,Lm4;
+   suppose
+A5:  i = 1;
+     len Gauge(C,n) <> 0 by GOBOARD1:def 5;
+   then A6: 0+1 <= len Gauge(C,n) by RLVECT_1:99;
+   then A7: cell(Gauge(C,n),1,j) is non empty by A2,JORDAN1A:45;
+ A8: cell(Gauge(C,n),0,j) c= UBD C by A2,Th38;
+ A9: C is Bounded by JORDAN2C:73;
+     j <> width Gauge(C,n) by A1,A3,Lm7;
+   then A10: j < width Gauge(C,n) by A2,AXIOMS:21;
+ A11:  0 < len Gauge(C,n) by A6,NAT_1:38;
+      j <> 0 by A1,A3,Lm5;
+    then 1 <= j by RLVECT_1:99;
+    then cell(Gauge(C,n),0,j) /\ cell(Gauge(C,n),0+1,j)
+     = LSeg(Gauge(C,n)*(0+1,j),Gauge(C,n)*(0+1,j+1))
+               by A10,A11,GOBOARD5:26;
+     then A12:   cell(Gauge(C,n),0,j) meets cell(Gauge(C,n),0+1,j) by XBOOLE_0:
+def 7;
+      ex B being Subset of TOP-REAL 2 st B is_outside_component_of C & B=UBD C
+                           by A9,JORDAN2C:76;
+    then A13:  UBD C is_a_component_of C` by JORDAN2C:def 4;
+ A14:  cell(Gauge(C,n),1,j) is connected by A2,A6,JORDAN1A:46;
+     BDD C c= C` by JORDAN2C:29;
+   then cell(Gauge(C,n),1,j) c= C` by A3,A5,XBOOLE_1:1;
+   then cell(Gauge(C,n),1,j) c= UBD C by A8,A12,A13,A14,GOBOARD9:6;
+   then UBD C meets BDD C by A3,A5,A7,XBOOLE_1:68;
+  hence contradiction by JORDAN2C:28;
+ end;
+
+theorem Th42:
+ i <= len Gauge(C,n) & j <= width Gauge(C,n) &
+  cell(Gauge(C,n),i,j) c= BDD C
+  implies j+1 < width Gauge(C,n)
+ proof assume that
+A1: i <= len Gauge(C,n) and
+A2: j <= width Gauge(C,n) and
+A3: cell(Gauge(C,n),i,j) c= BDD C;
+ assume j + 1 >= width Gauge(C,n);
+  then A4: j + 1 > width Gauge(C,n) or
+    j + 1 = width Gauge(C,n) by AXIOMS:21;
+A5: j < width Gauge(C,n) or j = width Gauge(C,n) by A2,AXIOMS:21;
+  per cases by A4,A5,NAT_1:38;
+  suppose j = width Gauge(C,n);
+  hence contradiction by A1,A3,Lm7;
+  suppose j + 1 = width Gauge(C,n);
+   then A6:  cell(Gauge(C,n),i,width Gauge(C,n)-'1) c= BDD C by A3,BINARITH:39;
+    width Gauge(C,n)-'1 <= width Gauge(C,n) by JORDAN3:7;
+  then A7: cell(Gauge(C,n),i,width Gauge(C,n)-'1) is non empty
+                                         by A1,JORDAN1A:45;
+A8: cell(Gauge(C,n),i,width Gauge(C,n)) c= UBD C by A1,JORDAN1A:71;
+A9: C is Bounded by JORDAN2C:73;
+    width Gauge(C,n) <> 0 by GOBOARD1:def 5;
+  then A10: 0+1 <= width Gauge(C,n) by RLVECT_1:99;
+      i <> len Gauge(C,n) by A2,A3,Lm6;
+    then A11: i < len Gauge(C,n) by A1,AXIOMS:21;
+      width Gauge(C,n)-1 < width Gauge(C,n) by INT_1:26;
+    then A12: width Gauge(C,n)-'1 < width Gauge(C,n) by A10,SCMFSA_7:3;
+A13: width Gauge(C,n)-'1+1 = width Gauge(C,n) by A10,AMI_5:4;
+     i <> 0 by A2,A3,Lm4;
+   then 1 <= i by RLVECT_1:99;
+   then cell(Gauge(C,n),i,width Gauge(C,n)) /\
+        cell(Gauge(C,n),i,width Gauge(C,n)-'1)
+    = LSeg(Gauge(C,n)*(i,width Gauge(C,n)),
+           Gauge(C,n)*(i+1,width Gauge(C,n))) by A11,A12,A13,GOBOARD5:27;
+    then A14:   cell(Gauge(C,n),i,width Gauge(C,n)) meets
+                cell(Gauge(C,n),i,width Gauge(C,n)-'1) by XBOOLE_0:def 7;
+     ex B being Subset of TOP-REAL 2 st B is_outside_component_of C & B=UBD C
+                          by A9,JORDAN2C:76;
+   then A15:  UBD C is_a_component_of C` by JORDAN2C:def 4;
+A16:  cell(Gauge(C,n),i,width Gauge(C,n)-'1) is connected
+                              by A1,A12,JORDAN1A:46;
+    BDD C c= C` by JORDAN2C:29;
+  then cell(Gauge(C,n),i,width Gauge(C,n)-'1) c= C`
+                               by A6,XBOOLE_1:1;
+  then cell(Gauge(C,n),i,width Gauge(C,n)-'1)
+                        c= UBD C by A8,A14,A15,A16,GOBOARD9:6;
+  then UBD C meets BDD C by A6,A7,XBOOLE_1:68;
+ hence contradiction by JORDAN2C:28;
+end;
+
+theorem Th43:
+ i <= len Gauge(C,n) & j <= width Gauge(C,n) &
+  cell(Gauge(C,n),i,j) c= BDD C
+  implies i+1 < len Gauge(C,n)
+ proof assume that
+A1: i <= len Gauge(C,n) and
+A2: j <= width Gauge(C,n) and
+A3: cell(Gauge(C,n),i,j) c= BDD C;
+ assume i + 1 >= len Gauge(C,n);
+  then A4: i + 1 > len Gauge(C,n) or
+    i + 1 = len Gauge(C,n) by AXIOMS:21;
+A5: i < len Gauge(C,n) or i = len Gauge(C,n) by A1,AXIOMS:21;
+  per cases by A4,A5,NAT_1:38;
+  suppose i = len Gauge(C,n);
+  hence contradiction by A2,A3,Lm6;
+  suppose i + 1 = len Gauge(C,n);
+   then A6:  cell(Gauge(C,n),len Gauge(C,n)-'1,j) c= BDD C by A3,BINARITH:39;
+    len Gauge(C,n)-'1 <= len Gauge(C,n) by JORDAN3:7;
+  then A7: cell(Gauge(C,n),len Gauge(C,n)-'1,j) is non empty
+                                         by A2,JORDAN1A:45;
+      len Gauge(C,n) = width Gauge(C,n) by JORDAN8:def 1;
+   then A8: cell(Gauge(C,n),len Gauge(C,n),j) c= UBD C by A2,Th39;
+A9: C is Bounded by JORDAN2C:73;
+    len Gauge(C,n) <> 0 by GOBOARD1:def 5;
+  then A10: 0+1 <= len Gauge(C,n) by RLVECT_1:99;
+      j <> width Gauge(C,n) by A1,A3,Lm7;
+    then A11: j < width Gauge(C,n) by A2,AXIOMS:21;
+      len Gauge(C,n)-1 < len Gauge(C,n) by INT_1:26;
+    then A12: len Gauge(C,n)-'1 < len Gauge(C,n) by A10,SCMFSA_7:3;
+A13: len Gauge(C,n)-'1+1 = len Gauge(C,n) by A10,AMI_5:4;
+     j <> 0 by A1,A3,Lm5;
+   then 1 <= j by RLVECT_1:99;
+   then cell(Gauge(C,n),len Gauge(C,n),j) /\
+        cell(Gauge(C,n),len Gauge(C,n)-'1,j)
+    = LSeg(Gauge(C,n)*(len Gauge(C,n),j),
+           Gauge(C,n)*(len Gauge(C,n),j+1)) by A11,A12,A13,GOBOARD5:26;
+    then A14:   cell(Gauge(C,n),len Gauge(C,n),j) meets
+                cell(Gauge(C,n),len Gauge(C,n)-'1,j) by XBOOLE_0:def 7;
+     ex B being Subset of TOP-REAL 2 st B is_outside_component_of C & B=UBD C
+                          by A9,JORDAN2C:76;
+   then A15:  UBD C is_a_component_of C` by JORDAN2C:def 4;
+A16:  cell(Gauge(C,n),len Gauge(C,n)-'1,j) is connected
+                              by A2,A12,JORDAN1A:46;
+    BDD C c= C` by JORDAN2C:29;
+  then cell(Gauge(C,n),len Gauge(C,n)-'1,j) c= C`
+                               by A6,XBOOLE_1:1;
+  then cell(Gauge(C,n),len Gauge(C,n)-'1,j)
+                        c= UBD C by A8,A14,A15,A16,GOBOARD9:6;
+  then UBD C meets BDD C by A6,A7,XBOOLE_1:68;
+ hence contradiction by JORDAN2C:28;
+end;
+
+theorem
+    (ex i,j st i <= len Gauge(C,n) & j <= width Gauge(C,n) &
+      cell(Gauge(C,n),i,j) c= BDD C)
+ implies n >= 1
+proof given i,j such that
+A1: i <= len Gauge(C,n) and
+A2: j <= width Gauge(C,n) and
+A3: cell(Gauge(C,n),i,j) c= BDD C;
+A4: width Gauge(C,n) = 2|^n + 3 by JORDAN1A:49;
+A5: len Gauge(C,n) = 2|^n + 3 by JORDAN8:def 1;
+A6: j + 1 < width Gauge(C,n) by A1,A2,A3,Th42;
+A7: i + 1 < len Gauge(C,n) by A1,A2,A3,Th43;
+A8: 2|^0 = 1 by NEWTON:9;
+ assume
+A9: n < 1;
+  then A10: width Gauge(C,n) = 1 + 3 by A4,A8,RLVECT_1:99;
+A11: len Gauge(C,n) = 1 + 3 by A5,A8,A9,RLVECT_1:99;
+  per cases by A1,A2,A10,A11,CQC_THE1:5;
+  suppose j= 0 or j=1;
+   hence thesis by A1,A2,A3,Th40;
+  suppose i= 0 or i=1;
+   hence thesis by A1,A2,A3,Th41;
+  suppose j=2 & i=2;
+   then cell(Gauge(C,0),2,2) c= BDD C by A3,A9,RLVECT_1:99;
+  hence contradiction by Th19;
+  suppose j=3 or j=4 or i=3 or i=4;
+ hence thesis by A6,A7,A10,A11;
+end;

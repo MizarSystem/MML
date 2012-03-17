@@ -1,0 +1,319 @@
+:: Matrices. Abelian Group of Matrices
+::  by Katarzyna Jankowska
+::
+:: Received June 8, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary VECTSP_1, FINSEQ_1, RLVECT_1, RELAT_1, BOOLE, FINSEQ_2, FUNCOP_1,
+      CARD_1, TREES_1, FUNCT_1, QC_LANG1, INCSP_1, GROUP_1, ARYTM_1, BINOP_1,
+      MATRIX_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, NAT_1, STRUCT_0,
+      RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, FUNCOP_1, FINSEQ_2, BINOP_1,
+      FINSEQOP, RLVECT_1, VECTSP_1, CARD_1;
+ constructors BINOP_1, FINSEQOP, VECTSP_1, XREAL_0, XCMPLX_0, MEMBERED,
+      XBOOLE_0;
+ clusters FINSEQ_1, VECTSP_1, STRUCT_0, FINSEQ_2, RELSET_1, GROUP_1, ARYTM_3,
+      RELAT_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, SUBSET, BOOLE;
+
+
+begin
+
+ reserve x,y,z,y1,y2 for set,
+  i,j,k,l,n,m for Nat,
+  D for non empty set,
+  K for non empty doubleLoopStr,
+  s,t,v for FinSequence,
+  a,a1,a2,b1,b2,d for Element of D,
+  p,p1,p2,q,r for FinSequence of D,
+  F for add-associative right_zeroed right_complementable Abelian
+      (non empty doubleLoopStr);
+
+ definition let f be FinSequence;
+  attr f is tabular means
+:: MATRIX_1:def 1
+   ex n being Nat st for x st x in rng f
+   ex s st s=x & len s = n;
+ end;
+
+ definition
+  cluster tabular FinSequence;
+ end;
+
+theorem :: MATRIX_1:1
+ <*<*d*>*> is tabular;
+
+theorem :: MATRIX_1:2
+ m |-> (n |-> x) is tabular;
+
+theorem :: MATRIX_1:3
+for s holds <*s*> is tabular;
+
+theorem :: MATRIX_1:4
+  for s1,s2 be FinSequence st len s1 =n & len s2 = n holds <*s1,s2*> is tabular
+;
+
+theorem :: MATRIX_1:5
+{} is tabular;
+
+theorem :: MATRIX_1:6
+<*{},{}*> is tabular;
+
+theorem :: MATRIX_1:7
+<*<*a1*>,<*a2*>*> is tabular;
+
+theorem :: MATRIX_1:8
+<*<*a1,a2*>,<*b1,b2*>*> is tabular;
+
+ definition let f be Relation;
+  attr f is empty-yielding means
+:: MATRIX_1:def 2
+     for s being set st s in rng f holds Card s = 0;
+ end;
+
+ definition
+  let D be set;
+  cluster tabular FinSequence of D*;
+ end;
+
+ definition
+  let D be set;
+  mode Matrix of D is tabular FinSequence of D*;
+ end;
+
+ definition
+  let D be non empty set;
+  cluster non empty-yielding Matrix of D;
+ end;
+
+theorem :: MATRIX_1:9
+  s is Matrix of D iff ex n st for x st x in rng s ex p st x = p & len p = n;
+
+ definition let D,m,n;
+  mode Matrix of m,n,D -> Matrix of D means
+:: MATRIX_1:def 3
+
+   len it = m & for p st p in rng it holds len p = n;
+ end;
+
+ definition let D,n;
+  mode Matrix of n,D is Matrix of n,n,D;
+ end;
+
+ definition let K be non empty 1-sorted;
+  mode Matrix of K is Matrix of the carrier of K;
+  let n;
+  mode Matrix of n,K is Matrix of n,n,the carrier of K;
+  let m;
+  mode Matrix of n,m,K is Matrix of n,m,the carrier of K;
+ end;
+
+theorem :: MATRIX_1:10
+ m |-> (n |-> a) is Matrix of m,n,D;
+
+theorem :: MATRIX_1:11
+for p being FinSequence of D
+     holds <*p*> is Matrix of 1,len p,D;
+
+theorem :: MATRIX_1:12
+  for p1,p2 st len p1 =n & len p2 = n holds <*p1,p2*> is Matrix of 2,n,D;
+
+theorem :: MATRIX_1:13
+{} is Matrix of 0,m,D;
+
+theorem :: MATRIX_1:14
+<*{}*> is Matrix of 1,0,D;
+
+theorem :: MATRIX_1:15
+<*<*a*>*> is Matrix of 1,D;
+
+theorem :: MATRIX_1:16
+<*{},{}*> is Matrix of 2,0,D;
+
+theorem :: MATRIX_1:17
+<*<*a1,a2*>*> is Matrix of 1,2,D;
+
+theorem :: MATRIX_1:18
+<*<*a1*>,<*a2*>*> is Matrix of 2,1,D;
+
+theorem :: MATRIX_1:19
+<*<*a1,a2*>,<*b1,b2*>*> is Matrix of 2,D;
+
+ reserve M,M1,M2 for Matrix of D;
+
+ definition let M be tabular FinSequence;
+  func width M -> Nat means
+:: MATRIX_1:def 4
+
+   ex s st s in rng M & len s = it if len M > 0 otherwise it = 0;
+ end;
+
+theorem :: MATRIX_1:20
+len M > 0 implies for n holds
+  M is Matrix of len M, n, D iff n = width M;
+
+ definition let M be tabular FinSequence;
+  func Indices M -> set equals
+:: MATRIX_1:def 5
+   [:dom M,Seg width M:];
+ end;
+
+ definition let D be set; let M be Matrix of D; let i,j;
+ assume [i,j] in Indices M;
+  func M*(i,j) -> Element of D means
+:: MATRIX_1:def 6
+    ex p being FinSequence of D st p= M.i & it =p.j;
+ end;
+
+theorem :: MATRIX_1:21
+len M1 =len M2 & width M1= width M2 &
+ (for i,j st [i,j] in Indices M1 holds M1*(i,j) = M2*(i,j))
+  implies M1 = M2;
+
+
+ scheme MatrixLambda { D() -> non empty set, n() -> Nat, m() -> Nat,
+                   f(set,set) -> Element of D()} :
+  ex M being Matrix of n(),m(),D() st
+   for i,j st [i,j] in Indices M holds M*(i,j) = f(i,j);
+
+
+ scheme MatrixEx { D() -> non empty set, n() -> Nat, m() -> Nat,
+                   P[set,set,set] } :
+  ex M being Matrix of n(),m(),D() st
+   for i,j st [i,j] in Indices M holds P[i,j,M*(i,j)]
+  provided
+    for i,j st [i,j] in [:Seg n(), Seg m():]
+     for x1,x2 being Element of D() st P[i,j,x1] & P[i,j,x2]
+      holds x1 = x2 and
+  for i,j st [i,j] in [:Seg n(), Seg m():]
+     ex x being Element of D() st P[i,j,x];
+
+canceled;
+
+theorem :: MATRIX_1:23
+    for M being Matrix of 0,m,D holds
+       len M=0 & width M = 0 & Indices M = {};
+
+theorem :: MATRIX_1:24
+ n > 0 implies for M being Matrix of n,m,D holds
+       len M=n & width M = m & Indices M = [:Seg n, Seg m:];
+
+theorem :: MATRIX_1:25
+ for M being Matrix of n,D holds len M=n & width M =n &
+       Indices M = [:Seg n, Seg n:];
+
+theorem :: MATRIX_1:26
+for M being Matrix of n,m,D holds
+       len M = n & Indices M=[:Seg n,Seg width M:];
+
+theorem :: MATRIX_1:27
+for M1,M2 being Matrix of n,m,D holds
+    Indices M1=Indices M2;
+
+theorem :: MATRIX_1:28
+ for M1,M2 being Matrix of n,m,D st
+ (for i,j st [i,j] in Indices M1 holds M1*(i,j) = M2*(i,j))
+  holds M1 = M2;
+
+theorem :: MATRIX_1:29
+    for M1 being Matrix of n,D holds
+       for i,j st [i,j] in Indices M1 holds [j,i] in Indices M1;
+
+ definition let D; let M be Matrix of D;
+  func M@ -> Matrix of D means
+:: MATRIX_1:def 7
+     len it = width M &
+   (for i,j holds [i,j] in Indices it iff [j,i] in Indices M) &
+   for i,j st [j,i] in Indices M holds it*(i,j) = M*(j,i);
+ end;
+
+ definition let D,M,i;
+  func Line(M,i) -> FinSequence of D means
+:: MATRIX_1:def 8
+
+   len it = width M & for j st j in Seg width M holds it.j = M*(i,j);
+
+  func Col(M,i) -> FinSequence of D means
+:: MATRIX_1:def 9
+
+   len it = len M & for j st j in dom M holds it.j = M*(j,i);
+ end;
+
+ definition let D; let M be Matrix of D; let i;
+  redefine func Line(M,i) -> Element of (width M)-tuples_on D;
+
+   func Col(M,i) -> Element of (len M)-tuples_on D;
+ end;
+
+ reserve A,B for Matrix of n,K;
+
+ definition let K,n;
+  func n-Matrices_over K -> set equals
+:: MATRIX_1:def 10
+
+      n-tuples_on (n-tuples_on the carrier of K);
+
+  func 0.(K,n) -> Matrix of n,K equals
+:: MATRIX_1:def 11
+
+   n |-> (n |-> 0.K);
+
+  func 1.(K,n) -> Matrix of n,K means
+:: MATRIX_1:def 12
+
+   (for i st [i,i] in Indices it holds it*(i,i) = 1_ K) &
+   for i,j st [i,j] in Indices it & i <> j holds it*(i,j) = 0.K;
+
+  let A;
+  func -A -> Matrix of n,K means
+:: MATRIX_1:def 13
+
+   for i,j holds [i,j] in Indices A implies it*(i,j) = -(A*(i,j));
+
+  let B;
+  func A+B -> Matrix of n,K means
+:: MATRIX_1:def 14
+
+   for i,j holds [i,j] in Indices A implies it*(i,j) = A*(i,j) + B*(i,j);
+ end;
+
+ definition let K,n;
+  cluster n-Matrices_over K -> non empty;
+   end;
+
+theorem :: MATRIX_1:30
+[i,j] in Indices (0.(K,n)) implies (0.(K,n))*(i,j)= 0.K;
+
+theorem :: MATRIX_1:31
+x is Element of n-Matrices_over K iff
+              x is Matrix of n,K;
+
+ definition let K,n;
+  mode Diagonal of n,K -> Matrix of n,K means
+:: MATRIX_1:def 15
+     for i,j st [i,j] in Indices it & it*(i,j) <> 0.K holds i=j;
+   end;
+
+reserve A,A',B,B',C for Matrix of n,F;
+
+theorem :: MATRIX_1:32
+A + B = B + A;
+
+theorem :: MATRIX_1:33
+(A + B) + C = A + (B + C);
+
+theorem :: MATRIX_1:34
+A + 0.(F,n)= A;
+
+theorem :: MATRIX_1:35
+A + (-A) = 0.(F,n);
+
+ definition let F,n;
+  func n-G_Matrix_over F -> strict AbGroup means
+:: MATRIX_1:def 16
+     the carrier of it = n-Matrices_over F &
+   (for A,B holds (the add of it).(A,B) = A+B) &
+   the Zero of it = 0.(F,n);
+ end;

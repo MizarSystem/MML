@@ -1,0 +1,1805 @@
+:: Terms over many sorted universal algebra
+::  by Grzegorz Bancerek
+::
+:: Received November 25, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, RELAT_1, FUNCT_1, ZF_REFLE, PBOOLE, AMI_1, MSUALG_1,
+      TREES_3, MSAFREE, DTCONSTR, FREEALG, LANG1, TREES_4, BOOLE, TDGROUP,
+      PROB_1, TREES_2, FINSET_1, MCART_1, QC_LANG1, FINSEQ_4, TREES_9, TREES_1,
+      PRALG_1, ORDINAL1, FUNCT_6, CARD_3, MSATERM;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
+      MCART_1, RELAT_1, STRUCT_0, FUNCT_1, FINSEQ_1, FUNCT_2, FINSET_1,
+      TREES_1, TREES_2, PROB_1, CARD_3, FINSEQ_4, FUNCT_6, LANG1, TREES_3,
+      TREES_4, TREES_9, PBOOLE, MSUALG_1, DTCONSTR, MSUALG_3, MSAFREE;
+ constructors NAT_1, MCART_1, TREES_9, MSUALG_3, MSAFREE, FINSOP_1, FINSEQ_4,
+      MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, FUNCT_1, FINSEQ_1, PRELAMB, TREES_3, DTCONSTR, PBOOLE,
+      MSUALG_1, MSAFREE, PRALG_1, TREES_9, RELSET_1, MSUALG_2, STRUCT_0,
+      ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, PBOOLE, XBOOLE_0;
+ theorems TARSKI, NAT_1, ZFMISC_1, MCART_1, CARD_3, FUNCT_1, FINSEQ_1, FUNCT_2,
+      FINSEQ_3, FINSEQ_4, CARD_5, FUNCT_6, TREES_1, TREES_2, MODAL_1, TREES_3,
+      TREES_4, LANG1, DTCONSTR, TREES_9, PBOOLE, MSUALG_1, MSAFREE, REAL_1,
+      DOMAIN_1, AMI_1, RELAT_1, XBOOLE_0;
+ schemes TREES_2, ZFREFLE1, DTCONSTR, MSUALG_1;
+
+begin
+
+Lm1: for n being set, p being FinSequence st n in dom p
+       ex k being Nat st n = k+1 & k < len p
+ proof let n be set, p be FinSequence; assume
+A1:  n in dom p;
+   then reconsider n as Nat;
+A2:     n >= 1 & n <= len p by A1,FINSEQ_3:27;
+      then consider k being Nat such that
+A3:     n = 1+k by NAT_1:28;
+      take k; thus thesis by A2,A3,NAT_1:38;
+ end;
+
+Lm2:
+  now let n be Nat, x be set; let p be FinSequence of x; assume
+A1:    n < len p;
+      n >= 0 by NAT_1:18;
+    then n+1 >= 0+1 & n+1 <= len p by A1,NAT_1:38,REAL_1:55;
+    then n+1 in dom p by FINSEQ_3:27;
+    then A2:   p.(n+1) in rng p by FUNCT_1:def 5;
+      rng p c= x by FINSEQ_1:def 4;
+   hence p.(n+1) in x by A2;
+  end;
+
+definition let I be non empty set;
+ let X be non-empty ManySortedSet of I;
+ let i be Element of I;
+ cluster X.i -> non empty;
+  coherence;
+end;
+
+reserve S for non void non empty ManySortedSign,
+        V for non-empty ManySortedSet of the carrier of S;
+
+definition let S; let V be ManySortedSet of the carrier of S;
+ func S-Terms V -> Subset of FinTrees the carrier of DTConMSA V equals :Def1:
+  TS DTConMSA V;
+ correctness;
+end;
+
+definition let S, V;
+ cluster S-Terms V -> non empty;
+ correctness
+ proof
+    S-Terms V = TS DTConMSA V by Def1;
+  hence thesis;
+ end;
+end;
+
+definition let S, V;
+ mode Term of S,V is Element of S-Terms V;
+end;
+
+reserve A for MSAlgebra over S,
+        t for Term of S,V;
+
+definition let S, V;
+ let o be OperSymbol of S;
+ redefine func Sym(o, V) -> NonTerminal of DTConMSA V;
+  coherence
+   proof
+A1:   Sym(o, V) = [o,the carrier of S] &
+     NonTerminals DTConMSA V = [:the OperSymbols of S,{the carrier of S}:]
+       by MSAFREE:6,def 11;
+       the carrier of S in { the carrier of S } by TARSKI:def 1;
+    hence thesis by A1,ZFMISC_1:106;
+   end;
+end;
+
+definition let S, V; let sy be NonTerminal of DTConMSA V;
+ mode ArgumentSeq of sy -> FinSequence of S-Terms V means :Def2:
+  it is SubtreeSeq of sy;
+  existence
+   proof consider q being SubtreeSeq of sy;
+       q is FinSequence of S-Terms V by Def1;
+    hence thesis;
+   end;
+end;
+
+theorem Th1:
+ for o being OperSymbol of S, a being FinSequence holds
+   [o,the carrier of S]-tree a in S-Terms V & a is DTree-yielding
+      iff a is ArgumentSeq of Sym(o,V)
+  proof let o be OperSymbol of S, a be FinSequence;
+A1:  S-Terms V = TS DTConMSA V by Def1;
+A2:  [o,the carrier of S] = Sym(o, V) by MSAFREE:def 11;
+   hereby assume [o,the carrier of S]-tree a in S-Terms V;
+    then reconsider t = [o,the carrier of S]-tree a as Element of TS DTConMSA V
+            by Def1;
+    assume
+A3:   a is DTree-yielding;
+     then t.{} = [o,the carrier of S] by TREES_4:def 4;
+    then consider p being FinSequence of TS DTConMSA V such that
+A4:   t = Sym(o, V)-tree p & Sym(o, V) ==> roots p by A2,DTCONSTR:10;
+       a = p by A3,A4,TREES_4:15;
+     then a is SubtreeSeq of Sym(o, V) by A4,DTCONSTR:def 9;
+    hence a is ArgumentSeq of Sym(o,V) by A1,Def2;
+   end;
+   assume a is ArgumentSeq of Sym(o,V);
+   then reconsider a as ArgumentSeq of Sym(o,V);
+   reconsider p = a as FinSequence of TS DTConMSA V by Def1;
+      p is SubtreeSeq of Sym(o, V) by Def2;
+    then Sym(o, V) ==> roots p by DTCONSTR:def 9;
+   hence thesis by A1,A2,DTCONSTR:def 4;
+  end;
+
+Lm3:
+ now let S, V; let x be set;
+  set X = V, G = DTConMSA X;
+A1: Terminals G = Union coprod X by MSAFREE:6;
+A2: dom coprod X = the carrier of S by PBOOLE:def 3;
+  hereby assume x in Terminals G;
+   then consider s being set such that
+A3:  s in dom coprod X & x in (coprod X).s by A1,CARD_5:10;
+   reconsider s as SortSymbol of S by A3,PBOOLE:def 3;
+      (coprod X).s = coprod(s, X) by MSAFREE:def 3;
+   then consider a being set such that
+A4:  a in X.s & x = [a,s] by A3,MSAFREE:def 2;
+   thus
+       ex s being SortSymbol of S, v being Element of V.s st x = [v,s] by A4;
+  end;
+  let s be SortSymbol of S;
+  let a be Element of V.s; assume x = [a,s];
+   then x in coprod (s, X) by MSAFREE:def 2;
+   then x in (coprod X).s by MSAFREE:def 3;
+  hence x in Terminals G by A1,A2,CARD_5:10;
+ end;
+
+Lm4:
+ now let S, A, V; let x be set;
+  set X = (the Sorts of A) \/ V, G = DTConMSA X;
+A1: Terminals G = Union coprod X by MSAFREE:6;
+A2: dom coprod X = the carrier of S by PBOOLE:def 3;
+  hereby assume x in Terminals G;
+   then consider s being set such that
+A3:  s in dom coprod X & x in (coprod X).s by A1,CARD_5:10;
+   reconsider s as SortSymbol of S by A3,PBOOLE:def 3;
+      (coprod X).s = coprod(s, X) by MSAFREE:def 3;
+   then consider a being set such that
+A4:  a in X.s & x = [a,s] by A3,MSAFREE:def 2;
+      X.s = (the Sorts of A).s \/ V.s by PBOOLE:def 7;
+    then a in (the Sorts of A).s or a in V.s by A4,XBOOLE_0:def 2;
+   hence
+       (ex s being SortSymbol of S, a being set st
+      a in (the Sorts of A).s & x = [a,s])
+    or
+     (ex s being SortSymbol of S, v being Element of V.s st x = [v,s]) by A4;
+  end;
+  let s be SortSymbol of S;
+A5: X.s = (the Sorts of A).s \/ V.s by PBOOLE:def 7;
+  hereby let a be set; assume
+A6:  a in (the Sorts of A).s; assume
+A7:  x = [a,s]; a in X.s by A5,A6,XBOOLE_0:def 2;
+    then x in coprod (s, X) by A7,MSAFREE:def 2;
+    then x in (coprod X).s by MSAFREE:def 3;
+   hence x in Terminals G by A1,A2,CARD_5:10;
+  end;
+  let a be Element of V.s; assume
+A8: x = [a,s]; a in X.s by A5,XBOOLE_0:def 2;
+   then x in coprod (s, X) by A8,MSAFREE:def 2;
+   then x in (coprod X).s by MSAFREE:def 3;
+  hence x in Terminals G by A1,A2,CARD_5:10;
+ end;
+
+Lm5:
+ now let S, V;
+  set G = DTConMSA V;
+  let x be set;
+       NonTerminals G = [:the OperSymbols of S,{the carrier of S}:]
+                       by MSAFREE:6;
+   hence x is NonTerminal of G iff
+      x in [:the OperSymbols of S,{the carrier of S}:];
+ end;
+
+scheme TermInd
+ { S() -> non void non empty ManySortedSign,
+   V() -> non-empty ManySortedSet of the carrier of S(),
+   P[set]
+ }:
+  for t being Term of S(),V() holds P[t]
+provided
+A1:  for s being SortSymbol of S(), v being Element of V().s
+     holds P[root-tree [v,s]]
+    and
+A2:  for o being OperSymbol of S(),
+      p being ArgumentSeq of Sym(o,V()) st
+       for t being Term of S(),V() st t in rng p holds P[t]
+    holds P[[o,the carrier of S()]-tree p]
+  proof set X = V(), G = DTConMSA X;
+A3:  S()-Terms X = TS G by Def1;
+     defpred Q[DecoratedTree of the carrier of G] means P[$1];
+A4: for s being Symbol of G st s in Terminals G holds Q[root-tree s]
+     proof let x be Symbol of G; assume x in Terminals G;
+       then ex s being SortSymbol of S(), v being Element of V().s st x = [v,s
+]
+        by Lm3;
+      hence thesis by A1;
+     end;
+A5: for nt being Symbol of G,
+       ts being FinSequence of TS G st nt ==> roots ts &
+            for t being DecoratedTree of the carrier of G st t in rng ts
+            holds Q[t]
+    holds Q[nt-tree ts]
+     proof let nt be Symbol of G, ts be FinSequence of TS G such that
+A6:     nt ==> roots ts and
+A7:     for t being DecoratedTree of the carrier of G st t in rng ts
+       holds P[t];
+         nt in {s where s is Symbol of G: ex n being FinSequence st s ==> n} &
+       NonTerminals G =
+          {s where s is Symbol of G: ex n being FinSequence st s ==> n}
+        by A6,LANG1:def 3;
+      then reconsider sy = nt as NonTerminal of G;
+        sy in [:the OperSymbols of S(),{the carrier of S()}:] by Lm5;
+      then consider o being OperSymbol of S(),
+                    x2 being Element of {the carrier of S()} such that
+A8:     sy = [o,x2] by DOMAIN_1:9;
+A9:     x2 = the carrier of S() by TARSKI:def 1;
+      reconsider p = ts as FinSequence of S()-Terms X by Def1;
+         [o,the carrier of S()] = Sym(o,X) by MSAFREE:def 11;
+       then ts is SubtreeSeq of Sym(o,X) by A6,A8,A9,DTCONSTR:def 9;
+      then reconsider p as ArgumentSeq of Sym(o,V()) by Def2;
+         for t be Term of S(),V() st t in rng p holds P[t] by A7;
+      hence thesis by A2,A8,A9;
+     end;
+      for t being DecoratedTree of the carrier of G
+       st t in TS G holds Q[t] from DTConstrInd(A4,A5);
+   hence thesis by A3;
+  end;
+
+definition let S, A, V;
+ mode c-Term of A,V is Term of S, (the Sorts of A) \/ V;
+end;
+
+definition let S, A, V;
+ let o be OperSymbol of S;
+ mode ArgumentSeq of o,A,V is ArgumentSeq of Sym(o,(the Sorts of A) \/ V);
+end;
+
+scheme CTermInd
+ { S() -> non void non empty ManySortedSign,
+   A() -> non-empty MSAlgebra over S(),
+   V() -> non-empty ManySortedSet of the carrier of S(),
+   P[set]
+ }:
+  for t being c-Term of A(),V() holds P[t]
+provided
+A1:  for s being SortSymbol of S(), x being Element of (the Sorts of A()).s
+     holds P[root-tree [x,s]]
+    and
+A2:  for s being SortSymbol of S(), v being Element of V().s
+     holds P[root-tree [v,s]]
+    and
+A3:  for o being OperSymbol of S(),
+      p being ArgumentSeq of o,A(),V() st
+       for t being c-Term of A(),V() st t in rng p holds P[t]
+    holds P[Sym(o,(the Sorts of A()) \/ V())-tree p]
+  proof set X = (the Sorts of A()) \/ V(), G = DTConMSA X;
+A4:  S()-Terms X = TS G by Def1;
+     defpred Q[DecoratedTree of the carrier of G] means P[$1];
+A5: for s being Symbol of G st s in Terminals G holds Q[root-tree s]
+     proof let x be Symbol of G; assume x in Terminals G;
+       then (ex s being SortSymbol of S(), a being set st
+         a in (the Sorts of A()).s & x = [a,s]) or
+       ex s being SortSymbol of S(), v being Element of V().s st x = [v,s]
+        by Lm4;
+      hence thesis by A1,A2;
+     end;
+A6: for nt being Symbol of G,
+       ts being FinSequence of TS G st nt ==> roots ts &
+            for t being DecoratedTree of the carrier of G st t in rng ts
+            holds Q[t]
+    holds Q[nt-tree ts]
+     proof let nt be Symbol of G, ts be FinSequence of TS G such that
+A7:     nt ==> roots ts and
+A8:     for t being DecoratedTree of the carrier of G st t in rng ts
+       holds P[t];
+         nt in {s where s is Symbol of G: ex n being FinSequence st s ==> n} &
+       NonTerminals G =
+          {s where s is Symbol of G: ex n being FinSequence st s ==> n}
+        by A7,LANG1:def 3;
+      then reconsider sy = nt as NonTerminal of G;
+        sy in [:the OperSymbols of S(),{the carrier of S()}:] by Lm5;
+      then consider o being OperSymbol of S(),
+                    x2 being Element of {the carrier of S()} such that
+A9:     sy = [o,x2] by DOMAIN_1:9;
+A10:     x2 = the carrier of S() by TARSKI:def 1;
+      reconsider p = ts as FinSequence of S()-Terms X by Def1;
+A11:     [o,the carrier of S()] = Sym(o,X) by MSAFREE:def 11;
+       then ts is SubtreeSeq of Sym(o,X) by A7,A9,A10,DTCONSTR:def 9;
+      then reconsider p as ArgumentSeq of Sym(o,(the Sorts of A()) \/ V()) by
+Def2;
+         for t be c-Term of A(),V() st
+        t in rng p holds P[t] by A8;
+      hence thesis by A3,A9,A10,A11;
+     end;
+
+      for t being DecoratedTree of the carrier of G
+       st t in TS G holds Q[t] from DTConstrInd(A5,A6);
+   hence thesis by A4;
+  end;
+
+definition let S, V, t;
+ let p be Node of t;
+ redefine func t.p -> Symbol of DTConMSA V;
+  coherence
+   proof reconsider t as Element of TS DTConMSA V by Def1;
+    reconsider t as DecoratedTree of the carrier of DTConMSA V;
+    reconsider p as Node of t; t.p = t.p;
+    hence thesis;
+   end;
+end;
+
+definition let S, V;
+ cluster -> finite Term of S,V;
+  coherence;
+end;
+
+Lm6:
+ now let G be with_terminals with_nonterminals (non empty DTConstrStr);
+  let s be Symbol of G;
+     the carrier of G = (Terminals G) \/ (NonTerminals G) by LANG1:1;
+  hence s is Terminal of G or s is NonTerminal of G by XBOOLE_0:def 2;
+     (Terminals G) misses (NonTerminals G) by DTCONSTR:8;
+  hence not (s is Terminal of G & s is NonTerminal of G) by XBOOLE_0:3;
+ end;
+
+theorem Th2:
+   (ex s being SortSymbol of S, v being Element of V.s st t.{} = [v,s])
+  or
+   t.{} in [:the OperSymbols of S,{the carrier of S}:]
+  proof set G = DTConMSA V;
+A1:  NonTerminals G = [:the OperSymbols of S,{the carrier of S}:] by MSAFREE:6;
+A2:  the carrier of G = (Terminals G) \/ (NonTerminals G) by LANG1:1;
+   reconsider e = {} as Node of t by TREES_1:47;
+      t.e in Terminals G or t.e in [:the OperSymbols of S,{the carrier of S}:]
+      by A1,A2,XBOOLE_0:def 2;
+   hence thesis by Lm3;
+  end;
+
+theorem
+   for t being c-Term of A,V holds
+   (ex s being SortSymbol of S, x being set st
+       x in (the Sorts of A).s & t.{} = [x,s])
+  or
+   (ex s being SortSymbol of S, v being Element of V.s st t.{} = [v,s])
+  or
+   t.{} in [:the OperSymbols of S,{the carrier of S}:]
+  proof let t be c-Term of A,V;
+   set G = DTConMSA ((the Sorts of A) \/ V);
+A1:  NonTerminals G = [:the OperSymbols of S,{the carrier of S}:]
+       by MSAFREE:6;
+A2:  the carrier of G = (Terminals G) \/ (NonTerminals G) by LANG1:1;
+   reconsider e = {} as Node of t by TREES_1:47;
+      t.e in Terminals G or
+    t.e in [:the OperSymbols of S,{the carrier of S}:] by A1,A2,XBOOLE_0:def 2;
+   hence thesis by Lm4;
+  end;
+
+theorem Th4:
+ for s being SortSymbol of S, v being Element of V.s holds
+  root-tree [v,s] is Term of S, V
+  proof let s be SortSymbol of S, v be Element of V.s;
+   reconsider vs = [v,s] as Terminal of DTConMSA V by MSAFREE:7;
+      root-tree vs in TS DTConMSA V; hence thesis by Def1;
+  end;
+
+theorem Th5:
+ for s being SortSymbol of S, v being Element of V.s
+  st t.{} = [v,s] holds t = root-tree [v,s]
+  proof let s be SortSymbol of S, x be Element of V.s;
+   set G = DTConMSA V;
+   reconsider a = [x,s] as Terminal of G by Lm3;
+    reconsider t as Element of TS G by Def1;
+      t.{} = a implies t = root-tree a by DTCONSTR:9;
+   hence thesis;
+  end;
+
+theorem Th6:
+ for s being SortSymbol of S, x being set st x in (the Sorts of A).s holds
+  root-tree [x,s] is c-Term of A, V
+  proof let s be SortSymbol of S, x be set; assume
+A1:  x in (the Sorts of A).s;
+      ((the Sorts of A) \/ V).s = (the Sorts of A).s \/ V.s by PBOOLE:def 7;
+    then x in ((the Sorts of A) \/ V).s by A1,XBOOLE_0:def 2;
+   then reconsider xs = [x,s] as Terminal of
+        DTConMSA ((the Sorts of A) \/ V) by MSAFREE:7;
+      root-tree xs in TS DTConMSA ((the Sorts of A) \/ V); hence thesis by Def1
+;
+  end;
+
+theorem
+   for t being c-Term of A,V
+ for s being SortSymbol of S, x being set st x in (the Sorts of A).s &
+  t.{} = [x,s] holds t = root-tree [x,s]
+  proof let t be c-Term of A,V; let s be SortSymbol of S, x be set;
+   set G = DTConMSA ((the Sorts of A) \/ V);
+   assume x in (the Sorts of A).s;
+   then reconsider a = [x,s] as Terminal of G by Lm4;
+    reconsider t as Element of TS G by Def1;
+      t.{} = a implies t = root-tree a by DTCONSTR:9;
+   hence thesis;
+  end;
+
+theorem Th8:
+ for s being SortSymbol of S, v being Element of V.s holds
+  root-tree [v,s] is c-Term of A, V
+  proof let s be SortSymbol of S, v be Element of V.s;
+      ((the Sorts of A) \/ V).s = (the Sorts of A).s \/ V.s by PBOOLE:def 7;
+    then v in ((the Sorts of A) \/ V).s by XBOOLE_0:def 2;
+   then reconsider vs = [v,s] as Terminal of
+        DTConMSA ((the Sorts of A) \/ V) by MSAFREE:7;
+      root-tree vs in TS DTConMSA ((the Sorts of A) \/ V); hence thesis by Def1
+;
+  end;
+
+theorem
+   for t being c-Term of A,V
+ for s being SortSymbol of S, v being Element of V.s
+  st t.{} = [v,s] holds t = root-tree [v,s]
+  proof let t be c-Term of A,V; let s be SortSymbol of S, x be Element of V.s;
+   set G = DTConMSA ((the Sorts of A) \/ V);
+   reconsider a = [x,s] as Terminal of G by Lm4;
+    reconsider t as Element of TS G by Def1;
+      t.{} = a implies t = root-tree a by DTCONSTR:9;
+   hence thesis;
+  end;
+
+theorem Th10:
+ for o being OperSymbol of S st t.{} = [o,the carrier of S]
+  ex a being ArgumentSeq of Sym(o,V) st t = [o,the carrier of S]-tree a
+  proof let o be OperSymbol of S such that
+A1:  t.{} = [o,the carrier of S];
+   set X = V, G = DTConMSA X;
+   reconsider t as Element of TS G by Def1;
+   [o,the carrier of S] = Sym(o, X) by MSAFREE:def 11;
+   then consider p being FinSequence of TS G such that
+A2:  t = Sym(o,X)-tree p & Sym(o,X) ==> roots p by A1,DTCONSTR:10;
+   reconsider a = p as FinSequence of S-Terms V by Def1;
+      a is SubtreeSeq of Sym(o,X) by A2,DTCONSTR:def 9;
+   then reconsider a as ArgumentSeq of Sym(o,V) by Def2;
+   take a; thus thesis by A2,MSAFREE:def 11;
+  end;
+
+definition let S;
+ let A be non-empty MSAlgebra over S;
+ let V;
+ let s be SortSymbol of S;
+ let x be Element of (the Sorts of A).s;
+ func x-term(A,V) -> c-Term of A,V equals :Def3:
+   root-tree [x,s];
+  correctness by Th6;
+end;
+
+definition let S, A, V;
+ let s be SortSymbol of S;
+ let v be Element of V.s;
+ func v-term A -> c-Term of A,V equals :Def4:
+   root-tree [v,s];
+  correctness by Th8;
+end;
+
+definition let S, V;
+ let sy be NonTerminal of DTConMSA V;
+ let p be ArgumentSeq of sy;
+ redefine func sy-tree p -> Term of S,V;
+  coherence
+   proof
+       sy in [:the OperSymbols of S,{the carrier of S}:] by Lm5;
+     then consider o being OperSymbol of S,
+                   x2 being Element of {the carrier of S} such that
+A1:    sy = [o,x2] by DOMAIN_1:9;
+A2:     x2 = the carrier of S by TARSKI:def 1;
+      then sy = Sym(o,V) by A1,MSAFREE:def 11;
+      hence thesis by A1,A2,Th1;
+   end;
+end;
+
+scheme TermInd2
+ { S() -> non void non empty ManySortedSign,
+   A() -> non-empty MSAlgebra over S(),
+   V() -> non-empty ManySortedSet of the carrier of S(),
+   P[set]
+ }:
+  for t being c-Term of A(),V() holds P[t]
+provided
+A1:  for s being SortSymbol of S(), x being Element of (the Sorts of A()).s
+     holds P[x-term (A(), V())]
+    and
+A2:  for s being SortSymbol of S(), v being Element of V().s
+     holds P[v-term A()]
+    and
+
+A3:  for o being OperSymbol of S(),
+      p being ArgumentSeq of Sym(o,(the Sorts of A()) \/ V()) st
+       for t being c-Term of A(),V() st t in rng p holds P[t]
+    holds P[Sym(o,(the Sorts of A()) \/ V())-tree p]
+  proof
+    defpred Q[set] means P[$1];
+A4:  for o being OperSymbol of S(),
+      p being ArgumentSeq of Sym(o,(the Sorts of A()) \/ V()) st
+       for t being c-Term of A(),V() st t in rng p holds Q[t]
+    holds Q[Sym(o,(the Sorts of A()) \/ V())-tree p] by A3;
+A5: now let s be SortSymbol of S(), x be Element of (the Sorts of A()).s;
+        Q[x-term (A(), V())] by A1;
+     hence Q[root-tree [x,s]] by Def3;
+    end;
+A6: now let s be SortSymbol of S(), v be Element of V().s;
+        Q[v-term A()] by A2;
+     hence Q[root-tree [v,s]] by Def4;
+    end;
+   for t being c-Term of A(),V() holds Q[t] from CTermInd(A5,A6,A4);
+   hence thesis;
+  end;
+
+begin :: Sort of a term
+
+theorem Th11:
+ for t being Term of S,V ex s being SortSymbol of S st t in FreeSort (V, s)
+  proof let t be Term of S,V;
+   set X = V; set G = DTConMSA X;
+A1:  S-Terms V = TS G by Def1;
+   reconsider e = {} as Node of t by TREES_1:47;
+   per cases;
+    suppose t.{} is Terminal of G;
+     then reconsider ts = t.{} as Terminal of G;
+     consider s being SortSymbol of S, x being set such that
+A2:    x in X.s & ts = [x,s] by MSAFREE:7;
+     take s;
+        t = root-tree [x,s] by A1,A2,DTCONSTR:9;
+      then t in {a where a is Element of TS G:
+           (ex x be set st x in X.s & a = root-tree [x,s]) or
+           ex o be OperSymbol of S st
+             [o,the carrier of S] = a.{} & the_result_sort_of o = s}
+       by A1,A2;
+     hence t in FreeSort(X, s) by MSAFREE:def 12;
+    suppose t.{} is not Terminal of G;
+     then reconsider nt = t.e as NonTerminal of G by Lm6;
+        nt in [:the OperSymbols of S,{the carrier of S}:] by Lm5;
+      then consider o being OperSymbol of S,
+                    x2 being Element of {the carrier of S} such that
+A3:     nt = [o,x2] by DOMAIN_1:9;
+A4:     x2 = the carrier of S by TARSKI:def 1;
+     take s = the_result_sort_of o;
+        t in {a where a is Element of TS G:
+           (ex x be set st x in X.s & a = root-tree [x,s]) or
+           ex o be OperSymbol of S st
+             [o,the carrier of S] = a.{} & the_result_sort_of o = s}
+       by A1,A3,A4;
+     hence t in FreeSort(X, s) by MSAFREE:def 12;
+  end;
+
+theorem Th12:
+ for s being SortSymbol of S holds FreeSort (V, s) c= S-Terms V
+  proof let s be SortSymbol of S;
+      FreeSort (V, s) c= TS DTConMSA V;
+   hence thesis by Def1;
+  end;
+
+theorem
+   S-Terms V = Union FreeSort V
+  proof set T = S-Terms V, X = V;
+A1:  dom FreeSort X = the carrier of S by PBOOLE:def 3;
+   hereby let x be set; assume x in T;
+    then reconsider t = x as Term of S,V;
+    consider s being SortSymbol of S such that
+A2:   t in FreeSort (X, s) by Th11;
+       FreeSort (X,s) = (FreeSort X).s by MSAFREE:def 13;
+    hence x in Union FreeSort X by A1,A2,CARD_5:10;
+   end;
+   let x be set; assume x in Union FreeSort X;
+   then consider y being set such that
+A3:  y in dom FreeSort X & x in (FreeSort X).y by CARD_5:10;
+   reconsider y as SortSymbol of S by A3,PBOOLE:def 3;
+      x in FreeSort(X,y) & FreeSort(X,y) c= T by A3,Th12,MSAFREE:def 13;
+   hence thesis;
+  end;
+
+Lm7: for x being set holds not x in x;
+
+definition let S, V, t;
+ func the_sort_of t -> SortSymbol of S means :Def5:
+   t in FreeSort (V, it);
+  existence by Th11;
+  uniqueness
+   proof set X = V;
+    let s1,s2 be SortSymbol of S such that
+A1:   t in FreeSort (X, s1) and
+A2:   t in FreeSort (X, s2);
+       FreeSort (X, s1) = {a where a is Element of TS(DTConMSA(X)):
+       (ex x be set st x in X.s1 & a = root-tree [x,s1]) or
+       ex o be OperSymbol of S st
+         [o,the carrier of S] = a.{} & the_result_sort_of o = s1}
+      by MSAFREE:def 12;
+    then consider a1 being Element of TS(DTConMSA(X)) such that
+A3:  t = a1 and
+A4:  (ex x be set st x in X.s1 & a1 = root-tree [x,s1]) or
+     ex o be OperSymbol of S st
+       [o,the carrier of S] = a1.{} & the_result_sort_of o = s1 by A1;
+       FreeSort (X, s2) = {a where a is Element of TS(DTConMSA(X)):
+       (ex x be set st x in X.s2 & a = root-tree [x,s2]) or
+       ex o be OperSymbol of S st
+         [o,the carrier of S] = a.{} & the_result_sort_of o = s2}
+      by MSAFREE:def 12;
+    then consider a2 being Element of TS(DTConMSA(X)) such that
+A5:  t = a2 and
+A6:  (ex x be set st x in X.s2 & a2 = root-tree [x,s2]) or
+     ex o be OperSymbol of S st
+       [o,the carrier of S] = a2.{} & the_result_sort_of o = s2 by A2;
+    per cases by A4;
+    suppose ex x be set st x in X.s1 & a1 = root-tree [x,s1];
+     then consider x1 being set such that
+A7:    x1 in X.s1 & a1 = root-tree [x1,s1];
+A8:   t.{} = [x1,s1] & [x1,s1]`2 = s1 by A3,A7,MCART_1:7,TREES_4:3;
+       now let o be OperSymbol of S;
+      assume [o,the carrier of S] = [x1,s1];
+       then the carrier of S = s1 by ZFMISC_1:33;
+      hence contradiction by Lm7;
+     end;
+     then consider x2 being set such that
+A9:    x2 in X.s2 & a2 = root-tree [x2,s2] by A5,A6,A8;
+        [x1,s1] = [x2,s2] by A3,A5,A7,A9,TREES_4:4;
+     hence thesis by ZFMISC_1:33;
+    suppose ex o be OperSymbol of S st
+      [o,the carrier of S] = a1.{} & the_result_sort_of o = s1;
+     then consider o1 being OperSymbol of S such that
+A10:    [o1,the carrier of S] = a1.{} & the_result_sort_of o1 = s1;
+        now given x2 being set such that
+A11:      x2 in X.s2 & a2 = root-tree [x2,s2];
+          [o1,the carrier of S] = [x2,s2] by A3,A5,A10,A11,TREES_4:3;
+        then the carrier of S = s2 by ZFMISC_1:33;
+       hence contradiction by Lm7;
+      end;
+     then consider o be OperSymbol of S such that
+A12:    [o,the carrier of S] = t.{} & the_result_sort_of o = s2 by A5,A6;
+     thus thesis by A3,A10,A12,ZFMISC_1:33;
+   end;
+end;
+
+theorem Th14:
+ for s being SortSymbol of S, v be Element of V.s st
+  t = root-tree [v,s] holds the_sort_of t = s
+  proof let s be SortSymbol of S, x be Element of V.s;
+   set X = V, G = DTConMSA X;
+   set tst = the_sort_of t;
+A1:  t in FreeSort (V, the_sort_of t) by Def5;
+      FreeSort (X, tst) = {a where a is Element of TS G:
+        (ex x be set st x in X.tst & a = root-tree [x,tst]) or
+        ex o be OperSymbol of S st
+          [o,the carrier of S] = a.{} & the_result_sort_of o = tst}
+     by MSAFREE:def 12;
+   then consider a being Element of TS G such that
+A2:  t = a and
+A3:  (ex x be set st x in X.tst & a = root-tree [x,tst]) or
+     ex o be OperSymbol of S st
+        [o,the carrier of S] = a.{} & the_result_sort_of o = tst by A1;
+   assume
+A4:  t = root-tree [x,s];
+    then [x,s] in Terminals G & t.{} = [x,s] by Lm3,TREES_4:3;
+    then t.{} is not NonTerminal of G by Lm6;
+then A5: not t.{} in [:the OperSymbols of S,{the carrier of S}:] by Lm5;
+     the carrier of S in {the carrier of S} by TARSKI:def 1;
+    then consider y being set such that
+A6:  y in X.tst & a = root-tree [y,tst] by A2,A3,A5,ZFMISC_1:106;
+      [y,tst] = [x,s] by A2,A4,A6,TREES_4:4;
+   hence thesis by ZFMISC_1:33;
+  end;
+
+theorem Th15:
+ for t being c-Term of A,V
+ for s being SortSymbol of S, x be set st x in (the Sorts of A).s &
+  t = root-tree [x,s] holds the_sort_of t = s
+  proof let t be c-Term of A,V;
+   let s be SortSymbol of S, x be set;
+   assume x in (the Sorts of A).s;
+    then x in (the Sorts of A).s \/ V.s by XBOOLE_0:def 2;
+    then x in ((the Sorts of A) \/ V).s by PBOOLE:def 7;
+   hence thesis by Th14;
+  end;
+
+theorem
+   for t being c-Term of A,V
+ for s being SortSymbol of S, v being Element of V.s st
+  t = root-tree [v,s] holds the_sort_of t = s
+  proof let t be c-Term of A,V;
+   let s be SortSymbol of S, x be Element of V.s;
+      x in (the Sorts of A).s \/ V.s by XBOOLE_0:def 2;
+    then x in ((the Sorts of A) \/ V).s by PBOOLE:def 7;
+   hence thesis by Th14;
+  end;
+
+theorem Th17:
+ for o being OperSymbol of S st t.{} = [o,the carrier of S] holds
+  the_sort_of t = the_result_sort_of o
+  proof let o be OperSymbol of S;
+   set X = V, G = DTConMSA X;
+   set tst = the_sort_of t;
+A1:  t in FreeSort (V, the_sort_of t) by Def5;
+      FreeSort (X, tst) = {a where a is Element of TS G:
+        (ex x be set st x in X.tst & a = root-tree [x,tst]) or
+        ex o be OperSymbol of S st
+         [o,the carrier of S] = a.{} & the_result_sort_of o = tst}
+     by MSAFREE:def 12;
+   then consider a being Element of TS G such that
+A2:  t = a and
+A3:  (ex x be set st x in X.tst & a = root-tree [x,tst]) or
+     ex o be OperSymbol of S st
+      [o,the carrier of S] = a.{} & the_result_sort_of o = tst by A1;
+   assume
+A4:  t.{} = [o,the carrier of S];
+   per cases by A3;
+    suppose ex x be set st x in X.tst & a = root-tree [x,tst];
+     then consider x being set such that
+A5:    x in X.tst & a = root-tree [x,tst];
+        [o,the carrier of S] = [x,tst] by A2,A4,A5,TREES_4:3;
+      then the carrier of S = tst by ZFMISC_1:33;
+     hence thesis by Lm7;
+    suppose
+        ex o be OperSymbol of S st
+       [o,the carrier of S] = a.{} & the_result_sort_of o = tst;
+      then consider o' be OperSymbol of S such that
+A6:     [o',the carrier of S] = a.{} & the_result_sort_of o' = tst;
+      thus thesis by A2,A4,A6,ZFMISC_1:33;
+  end;
+
+theorem Th18:
+ for A being non-empty MSAlgebra over S
+ for s being SortSymbol of S, x being Element of (the Sorts of A).s holds
+  the_sort_of (x-term (A,V)) = s
+  proof let A be non-empty MSAlgebra over S;
+   let s be SortSymbol of S, x be Element of (the Sorts of A).s;
+      x-term (A,V) = root-tree [x,s] by Def3;
+   hence thesis by Th15;
+  end;
+
+theorem Th19:
+ for s being SortSymbol of S, v being Element of V.s holds
+  the_sort_of (v-term A) = s
+  proof let s be SortSymbol of S, v be Element of V.s;
+      ((the Sorts of A) \/ V).s = (the Sorts of A).s \/ V.s by PBOOLE:def 7;
+    then v-term A = root-tree [v,s] & v in ((the Sorts of A) \/ V).s
+     by Def4,XBOOLE_0:def 2;
+   hence thesis by Th14;
+  end;
+
+theorem Th20:
+ for o being OperSymbol of S, p being ArgumentSeq of Sym(o,V) holds
+  the_sort_of (Sym(o,V)-tree p qua Term of S,V) = the_result_sort_of o
+  proof let o be OperSymbol of S, p be ArgumentSeq of Sym(o,V);
+A1:  [o,the carrier of S] = Sym(o,V) by MSAFREE:def 11;
+      ([o,the carrier of S]-tree p).{} = [o,the carrier of S] by TREES_4:def 4;
+   hence thesis by A1,Th17;
+  end;
+
+begin :: Argument Sequence
+
+theorem Th21:
+ for o being OperSymbol of S, a being FinSequence of S-Terms V holds
+  a is ArgumentSeq of Sym(o,V) iff Sym(o, V) ==> roots a
+  proof let o be OperSymbol of S, a be FinSequence of S-Terms V;
+    S-Terms V = TS DTConMSA V by Def1;
+  then a is SubtreeSeq of Sym(o, V) iff Sym(o, V) ==> roots a by DTCONSTR:def 9
+;
+    hence thesis by Def2;
+  end;
+
+Lm8:
+ for o being OperSymbol of S, a being ArgumentSeq of Sym(o,V) holds
+  len a = len the_arity_of o & dom a = dom the_arity_of o &
+  for i being Nat st i in dom a ex t being Term of S,V st t = a.i &
+     t = (a qua FinSequence of S-Terms V qua non empty set)/.i &
+     the_sort_of t = (the_arity_of o).i &
+     the_sort_of t = (the_arity_of o)/.i
+  proof let o be OperSymbol of S, a be ArgumentSeq of Sym(o,V);
+   set X = V;
+  reconsider p = a as FinSequence of TS DTConMSA X by Def1;
+      Sym(o, X) ==> roots a by Th21;
+    then A1: p in ((FreeSort X)# * (the Arity of S)).o by MSAFREE:10;
+then A2:  dom p = dom the_arity_of o &
+    for n be Nat st n in dom p holds p.n in FreeSort(X,(the_arity_of o)/.n)
+     by MSAFREE:9;
+   hence len a = len the_arity_of o & dom a = dom the_arity_of o
+     by FINSEQ_3:31;
+   let i be Nat; assume
+A3:  i in dom a;
+then A4:   1 <= i & i <= len a by FINSEQ_3:27;
+   reconsider t = (a qua FinSequence of S-Terms V qua non empty set)/.i
+     as Term of S,V;
+   take t; thus t = a.i by A4,FINSEQ_4:24;
+    then t in FreeSort(X, (the_arity_of o)/.i) by A1,A3,MSAFREE:9;
+    then the_sort_of t = (the_arity_of o)/.i by Def5;
+   hence thesis by A2,A3,FINSEQ_4:def 4;
+  end;
+
+theorem Th22:
+ for o being OperSymbol of S, a being ArgumentSeq of Sym(o,V) holds
+  len a = len the_arity_of o & dom a = dom the_arity_of o &
+   for i being Nat st i in dom a holds a.i is Term of S,V
+  proof let o be OperSymbol of S, a be ArgumentSeq of Sym(o,V);
+   thus len a = len the_arity_of o & dom a = dom the_arity_of o by Lm8;
+   let i be Nat; assume i in dom a;
+    then ex t being Term of S,V st t = a.i &
+     t = (a qua FinSequence of S-Terms V qua non empty set)/.i &
+     the_sort_of t = (the_arity_of o).i &
+     the_sort_of t = (the_arity_of o)/.i by Lm8;
+   hence thesis;
+  end;
+
+theorem
+   for o being OperSymbol of S, a being ArgumentSeq of Sym(o,V)
+ for i being Nat st i in dom a for t being Term of S,V st t = a.i holds
+  t = (a qua FinSequence of S-Terms V qua non empty set)/.i &
+  the_sort_of t = (the_arity_of o).i &
+  the_sort_of t = (the_arity_of o)/.i
+  proof let o be OperSymbol of S, a be ArgumentSeq of Sym(o,V);
+   let i be Nat; assume i in dom a;
+    then ex t being Term of S,V st t = a.i &
+     t = (a qua FinSequence of S-Terms V qua non empty set)/.i &
+     the_sort_of t = (the_arity_of o).i &
+     the_sort_of t = (the_arity_of o)/.i by Lm8;
+   hence thesis;
+  end;
+
+theorem Th24:
+ for o being OperSymbol of S, a being FinSequence st
+  (len a = len the_arity_of o or dom a = dom the_arity_of o) &
+  ((for i being Nat st i in dom a ex t being Term of S,V st t = a.i &
+     the_sort_of t = (the_arity_of o).i) or
+   for i being Nat st i in dom a ex t being Term of S,V st t = a.i &
+     the_sort_of t = (the_arity_of o)/.i)
+ holds a is ArgumentSeq of Sym(o,V)
+  proof set X = V;
+   let o be OperSymbol of S, a be FinSequence such that
+A1:  len a = len the_arity_of o or dom a = dom the_arity_of o and
+A2:  (for i being Nat st i in dom a ex t being Term of S,V st t = a.i &
+      the_sort_of t = (the_arity_of o).i) or
+    for i being Nat st i in dom a ex t being Term of S,V st t = a.i &
+      the_sort_of t = (the_arity_of o)/.i;
+A3:  dom a = dom the_arity_of o by A1,FINSEQ_3:31;
+A4:  S-Terms V = TS DTConMSA X by Def1;
+      rng a c= TS DTConMSA X
+     proof let x be set; assume x in rng a;
+      then consider i being set such that
+A5:     i in dom a & x = a.i by FUNCT_1:def 5;
+      reconsider i as Nat by A5;
+         (ex t being Term of S,V st
+         t = a.i & the_sort_of t = (the_arity_of o).i) or
+       ex t being Term of S,V st
+         t = a.i & the_sort_of t = (the_arity_of o)/.i by A2,A5;
+       hence x in TS DTConMSA X by A4,A5;
+     end;
+   then reconsider p = a as FinSequence of TS DTConMSA X by FINSEQ_1:def 4;
+      now let n be Nat; assume
+A6:    n in dom p;
+     thus p.n in FreeSort(X,(the_arity_of o)/.n)
+      proof per cases by A2,A6;
+       suppose ex t being Term of S,V st
+         t = a.n & the_sort_of t = (the_arity_of o).n;
+        then consider t be Term of S,V such that
+A7:       t = a.n & the_sort_of t = (the_arity_of o).n;
+           the_sort_of t = (the_arity_of o)/.n by A3,A6,A7,FINSEQ_4:def 4;
+        hence p.n in FreeSort(X,(the_arity_of o)/.n) by A7,Def5;
+       suppose ex t being Term of S,V st
+         t = a.n & the_sort_of t = (the_arity_of o)/.n;
+        hence p.n in FreeSort(X,(the_arity_of o)/.n) by Def5;
+      end;
+    end;
+    then p in ((FreeSort X)# * (the Arity of S)).o by A3,MSAFREE:9;
+    then Sym(o, X) ==> roots p by MSAFREE:10;
+   hence thesis by A4,Th21;
+  end;
+
+theorem
+   for o being OperSymbol of S, a being FinSequence of S-Terms V st
+  (len a = len the_arity_of o or dom a = dom the_arity_of o) &
+  ((for i being Nat st i in dom a for t being Term of S,V st t = a.i holds
+     the_sort_of t = (the_arity_of o).i) or
+   for i being Nat st i in dom a for t being Term of S,V st t = a.i holds
+     the_sort_of t = (the_arity_of o)/.i)
+ holds a is ArgumentSeq of Sym(o,V)
+  proof
+   let o be OperSymbol of S, a be FinSequence of S-Terms V such that
+A1:  len a = len the_arity_of o or dom a = dom the_arity_of o and
+A2:  (for i being Nat st i in dom a for t being Term of S,V st t = a.i holds
+      the_sort_of t = (the_arity_of o).i) or
+     for i being Nat st i in dom a for t being Term of S,V st t = a.i holds
+      the_sort_of t = (the_arity_of o)/.i;
+A3:  now let i be Nat; assume i in dom a;
+      then a.i in rng a & rng a c= S-Terms V by FINSEQ_1:def 4,FUNCT_1:def 5;
+     hence a.i in S-Terms V;
+    end;
+      now per cases by A2;
+     case
+A4:     for i being Nat st i in dom a for t being Term of S,V st t = a.i holds
+        the_sort_of t = (the_arity_of o).i;
+      let i be Nat; assume
+A5:     i in dom a; then reconsider t = a.i as Term of S,V by A3;
+      take t; thus t = a.i & the_sort_of t = (the_arity_of o).i by A4,A5;
+     case
+A6:    for i being Nat st i in dom a for t being Term of S,V st t = a.i holds
+       the_sort_of t = (the_arity_of o)/.i;
+      let i be Nat; assume
+A7:     i in dom a; then reconsider t = a.i as Term of S,V by A3;
+      take t; thus t = a.i & the_sort_of t = (the_arity_of o)/.i by A6,A7;
+    end;
+   hence thesis by A1,Th24;
+  end;
+
+theorem Th26:
+ for S being non void non empty ManySortedSign,
+     V1,V2 being non-empty ManySortedSet of the carrier of S st V1 c= V2
+ for t being Term of S, V1 holds t is Term of S, V2
+  proof
+   let S be non void non empty ManySortedSign;
+   let V1,V2 be non-empty ManySortedSet of the carrier of S such that
+A1:  for s being set st s in the carrier of S holds V1.s c= V2.s;
+   defpred P[set] means $1 is Term of S,V2;
+A2:   for s being SortSymbol of S, v being Element of V1.s
+     holds P[root-tree [v,s]]
+ proof let s be SortSymbol of S, v be Element of V1.s;
+        V1.s c= V2.s by A1;
+      then v in V2.s by TARSKI:def 3;
+     hence root-tree [v,s] is Term of S,V2 by Th4;
+    end;
+A3:   for o being OperSymbol of S,
+      p being ArgumentSeq of Sym(o,V1) st
+       for t being Term of S,V1 st t in rng p holds P[t]
+    holds P[[o,the carrier of S]-tree p]
+ proof let o be OperSymbol of S, p be ArgumentSeq of Sym(o,V1); assume
+A4:    for t being Term of S,V1 st t in rng p holds t is Term of S,V2;
+        rng p c= S-Terms V2
+       proof let x be set; assume
+A5:       x in rng p; rng p c= S-Terms V1 by FINSEQ_1:def 4;
+        then reconsider x as Term of S,V1 by A5;
+           x is Term of S,V2 by A4,A5;
+        hence thesis;
+       end;
+     then reconsider q = p as FinSequence of S-Terms V2 by FINSEQ_1:def 4;
+A6:    len p = len the_arity_of o by Lm8;
+        now let i be Nat; assume
+A7:      i in dom q;
+       then consider t being Term of S,V1 such that
+A8:  t = q.i & t = (p qua FinSequence of S-Terms V1 qua non empty set)/.i &
+        the_sort_of t = (the_arity_of o).i &
+        the_sort_of t = (the_arity_of o)/.i by Lm8;
+          t in rng p by A7,A8,FUNCT_1:def 5;
+       then reconsider T = t as Term of S,V2 by A4;
+       take T; thus T = q.i by A8;
+       thus the_sort_of T = (the_arity_of o).i
+        proof per cases by Th2;
+         suppose ex s being SortSymbol of S, v being Element of V1.s st
+           t.{} = [v,s];
+          then consider s being SortSymbol of S, v being Element of V1.s such
+that
+A9:         t.{} = [v,s];
+             V1.s c= V2.s by A1;
+then A10:         t = root-tree [v,s] & v in V2.s by A9,Th5,TARSKI:def 3;
+          hence the_sort_of T = s by Th14 .= (the_arity_of o).i by A8,A10,Th14
+;
+         suppose t.{} in [:the OperSymbols of S,{the carrier of S}:];
+          then consider o' being OperSymbol of S,
+                   x2 being Element of {the carrier of S} such that
+A11:         t.{} = [o',x2] by DOMAIN_1:9;
+A12:        x2 = the carrier of S by TARSKI:def 1;
+          hence the_sort_of T = the_result_sort_of o' by A11,Th17
+            .= (the_arity_of o).i by A8,A11,A12,Th17;
+        end;
+      end;
+      then q is ArgumentSeq of Sym(o,V2) by A6,Th24;
+     hence [o,the carrier of S]-tree p is Term of S,V2 by Th1;
+    end;
+   for t being Term of S,V1 holds P[t]  from TermInd(A2,A3);
+   hence thesis;
+  end;
+
+theorem
+   for S being non void non empty ManySortedSign,
+     A being MSAlgebra over S,
+     V being non-empty ManySortedSet of the carrier of S,
+     t being Term of S, V
+  holds t is c-Term of A, V
+  proof
+   let S be non void non empty ManySortedSign;
+   let A be MSAlgebra over S;
+   let V be non-empty ManySortedSet of the carrier of S;
+      V c= (the Sorts of A) \/ V by PBOOLE:16;
+   hence thesis by Th26;
+  end;
+
+begin :: Compound terms
+
+definition
+ let S be non void non empty ManySortedSign;
+ let V be non-empty ManySortedSet of the carrier of S;
+ mode CompoundTerm of S,V -> Term of S,V means
+    it.{} in [:the OperSymbols of S, {the carrier of S}:];
+  existence
+   proof consider s being OperSymbol of S;
+    reconsider nt = Sym(s, V) as NonTerminal of DTConMSA V;
+    consider p being SubtreeSeq of nt;
+    reconsider t = nt-tree p as Term of S,V by Def1;
+    take t;
+       nt = [s,the carrier of S] by MSAFREE:def 11;
+     then [s,the carrier of S] = t.{} & the carrier of S in {the carrier of S}
+      by TARSKI:def 1,TREES_4:def 4;
+    hence thesis by ZFMISC_1:106;
+   end;
+end;
+
+definition
+ let S be non void non empty ManySortedSign;
+ let V be non-empty ManySortedSet of the carrier of S;
+ mode SetWithCompoundTerm of S,V -> non empty Subset of S-Terms V means
+    ex t being CompoundTerm of S,V st t in it;
+  existence
+   proof consider t being CompoundTerm of S,V;
+     reconsider X = {t} as non empty Subset of S-Terms V by ZFMISC_1:37;
+    take X, t; thus thesis by TARSKI:def 1;
+   end;
+end;
+
+theorem
+   t is not root implies t is CompoundTerm of S,V
+  proof assume
+A1: t is not root;
+   per cases by Th2;
+    suppose
+        ex s being SortSymbol of S, v being Element of V.s st t.{} = [v,s];
+     then consider s being SortSymbol of S, x being Element of V.s such that
+A2:    t.{} = [x,s];
+        t = root-tree [x,s] by A2,Th5;
+     hence thesis by A1;
+    suppose t.{} in [:the OperSymbols of S,{the carrier of S}:];
+     hence t.{} in [:the OperSymbols of S,{the carrier of S}:];
+  end;
+
+Lm9: for n being Nat, p being FinSequence holds
+  n < len p implies n+1 in dom p & p.(n+1) in rng p
+ proof let n be Nat, p be FinSequence; assume
+A1:    n < len p; n >= 0 by NAT_1:18;
+       then n+1 >= 0+1 & n+1 <= len p by A1,NAT_1:38,REAL_1:55;
+       then n+1 in dom p by FINSEQ_3:27;
+      hence thesis by FUNCT_1:def 5;
+ end;
+
+theorem Th29:
+ for p being Node of t holds t|p is Term of S,V
+  proof
+    defpred P[set] means for q being Node of t st q = $1
+        holds t|q is Term of S,V;
+A1:  P[{}] by TREES_9:1;
+A2: for p be Node of t,n be Nat st P[p] & p^<*n*> in dom t
+        holds P[p^<*n*>]
+proof let p be Node of t, n be Nat; assume that
+A3:        for q being Node of t st q = p holds t|q is Term of S,V and
+A4:        p^<*n*> in dom t;
+     reconsider u = t|p as Term of S,V by A3;
+A5:   (ex s being SortSymbol of S, v being Element of V.s st u.{} = [v,s])
+     or u.{} in [:the OperSymbols of S,{the carrier of S}:] by Th2;
+ A6:    <*n*> in (dom t)|p & dom u = (dom t)|p & <*n*> <> {}
+       by A4,TREES_1:4,def 9,TREES_2:def 11;
+     let q be Node of t; assume
+A7:    q = p^<*n*>;
+        now
+       given s being SortSymbol of S, x being Element of V.s such that
+A8:      u.{} = [x,s];
+          u = root-tree [x,s] by A8,Th5;
+        then <*n*> in {{}} by A6,TREES_1:56,TREES_4:3;
+       hence contradiction by A6,TARSKI:def 1;
+      end;
+     then consider o being OperSymbol of S, x2 being Element of {the carrier of
+S}
+     such that
+A9:    u.{} = [o,x2] by A5,DOMAIN_1:9;
+      x2 = the carrier of S by TARSKI:def 1;
+     then consider a being ArgumentSeq of Sym(o,V) such that
+A10:    u = [o,the carrier of S]-tree a by A9,Th10;
+     consider i being Nat, T being DecoratedTree, r being Node of T such that
+A11:    i < len a & T = a.(i+1) & <*n*> = <*i*>^r by A6,A10,TREES_4:11;
+        n = <*n*>.1 by FINSEQ_1:57 .= i by A11,FINSEQ_1:58;
+      then n+1 in dom a & u|<*n*> = a.(n+1) by A10,A11,Lm9,TREES_4:def 4;
+      then ex t being Term of S,V st t = u|<*n*> &
+       t = (a qua FinSequence of S-Terms V qua non empty set)/.(n+1) &
+       the_sort_of t = (the_arity_of o).(n+1) &
+       the_sort_of t = (the_arity_of o)/.(n+1) by Lm8;
+     hence t|q is Term of S,V by A7,TREES_9:3;
+    end;
+      for p being Node of t holds P[p] from TreeStruct_Ind(A1,A2);
+
+::      holds P[p] from TreeStruct_Ind(A1,A2);
+   hence thesis;
+  end;
+
+definition
+ let S be non void non empty ManySortedSign;
+ let V be non-empty ManySortedSet of the carrier of S;
+ let t be Term of S,V;
+ let p be Node of t;
+ redefine func t|p -> Term of S,V;
+  coherence by Th29;
+end;
+
+begin :: Evaluation of terms
+
+definition
+ let S be non void non empty ManySortedSign;
+ let A be MSAlgebra over S;
+ mode Variables of A -> non-empty ManySortedSet of the carrier of S means:
+Def8:
+  it misses the Sorts of A;
+  existence
+   proof
+     deffunc F(set)= {(the Sorts of A).$1};
+     consider V being ManySortedSet of the carrier of S such that
+A1:   for s be set st s in the carrier of S holds V.s = F(s)
+      from MSSLambda;
+       V is non-empty
+      proof let s be set; assume s in the carrier of S;
+        then V.s = {(the Sorts of A).s} by A1;
+       hence V.s is non empty;
+      end;
+    then reconsider V as non-empty ManySortedSet of the carrier of S;
+    take V; let s be set; assume s in the carrier of S;
+then A2:   V.s = {(the Sorts of A).s} by A1;
+      now let x be set; assume x in V.s;
+     then x = (the Sorts of A).s by A2,TARSKI:def 1;
+     hence not x in (the Sorts of A).s;
+    end; hence thesis by XBOOLE_0:3;
+   end;
+end;
+
+theorem Th30:
+ for V being Variables of A
+ for s being SortSymbol of S, x being set st x in (the Sorts of A).s
+ for v being Element of V.s holds x <> v
+  proof let V be Variables of A;
+   let s be SortSymbol of S, x be set such that
+A1:  x in (the Sorts of A).s;
+   let v be Element of V.s;
+      V misses the Sorts of A by Def8;
+    then V.s misses (the Sorts of A).s by PBOOLE:def 11;
+   hence thesis by A1,XBOOLE_0:3;
+  end;
+
+definition
+ let S be non void non empty ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ let V be non-empty ManySortedSet of the carrier of S;
+ let t be c-Term of A,V;
+ let f be ManySortedFunction of V, the Sorts of A;
+ let vt be finite DecoratedTree;
+ pred vt is_an_evaluation_of t,f means:
+Def9:
+  dom vt = dom t &
+  for p being Node of vt holds
+   (for s being SortSymbol of S, v being Element of V.s st t.p = [v,s]
+    holds vt.p = f.s.v) &
+   (for s being SortSymbol of S, x being Element of (the Sorts of A).s st
+     t.p = [x,s] holds vt.p = x) &
+   (for o being OperSymbol of S st t.p = [o,the carrier of S] holds
+     vt.p = Den(o, A).succ(vt,p));
+end;
+
+reserve S for non void non empty ManySortedSign,
+ A for non-empty MSAlgebra over S,
+ V for Variables of A,
+ t for c-Term of A,V,
+ f for ManySortedFunction of V, the Sorts of A;
+
+theorem Th31:
+ for s being SortSymbol of S, x being Element of (the Sorts of A).s st
+  t = root-tree [x,s] holds root-tree x is_an_evaluation_of t,f
+  proof let s be SortSymbol of S, x be Element of (the Sorts of A).s such that
+A1:  t = root-tree [x,s];
+   set vt = root-tree x;
+A2:  dom vt = elementary_tree 0 & dom t = elementary_tree 0 &
+    t.{} = [x,s] & vt.{} = x by A1,TREES_4:3;
+   hence dom vt = dom t;
+   let p be Node of vt; reconsider e = p as empty FinSequence of NAT by A2,
+TARSKI:def 1,TREES_1:56;
+   hereby let s1 be SortSymbol of S, v be Element of V.s1; assume
+       t.p = [v,s1]; then [v,s1] = t.e .= [x,s] by A1,TREES_4:3;
+     then s = s1 & x = v by ZFMISC_1:33;
+    hence vt.p = f.s1.v by Th30;
+   end;
+   hereby let s1 be SortSymbol of S, x1 be Element of (the Sorts of A).s1;
+    assume t.p = [x1,s1]; then [x1,s1] = t.e;
+    hence vt.p = x1 by A2,ZFMISC_1:33;
+   end;
+   let o be OperSymbol of S; assume t.p = [o,the carrier of S];
+    then the carrier of S = (t.e)`2 by MCART_1:7 .= s by A2,MCART_1:7;
+   hence vt.p = Den(o, A).succ(vt,p) by Lm7;
+  end;
+
+theorem Th32:
+ for s being SortSymbol of S, v being Element of V.s st
+  t = root-tree [v,s] holds root-tree (f.s.v) is_an_evaluation_of t,f
+  proof let s be SortSymbol of S, x be Element of V.s such that
+A1:  t = root-tree [x,s];
+   set vt = root-tree (f.s.x);
+A2:  dom vt = elementary_tree 0 & dom t = elementary_tree 0 &
+    t.{} = [x,s] & vt.{} = f.s.x by A1,TREES_4:3;
+   hence dom vt = dom t;
+   let p be Node of vt; reconsider e = p as empty FinSequence of NAT by A2,
+TARSKI:def 1,TREES_1:56;
+   hereby let s1 be SortSymbol of S, x1 be Element of V.s1;
+    assume t.p = [x1,s1]; then [x1,s1] = t.e;
+    then x = x1 & s = s1 & e = p by A2,ZFMISC_1:33;
+    hence vt.p = f.s1.x1 by TREES_4:3;
+   end;
+   hereby let s1 be SortSymbol of S, v be Element of (the Sorts of A).s1;
+    assume t.p = [v,s1]; then [v,s1] = t.e .= [x,s] by A1,TREES_4:3;
+     then s = s1 & x = v by ZFMISC_1:33;
+    hence vt.p = v by Th30;
+   end;
+   let o be OperSymbol of S; assume t.p = [o,the carrier of S];
+    then the carrier of S = (t.e)`2 by MCART_1:7 .= s by A2,MCART_1:7;
+   hence vt.p = Den(o, A).succ(vt,p) by Lm7;
+  end;
+
+theorem Th33:
+ for o being OperSymbol of S, p being ArgumentSeq of o,A,V
+ for q being DTree-yielding FinSequence st len q = len p &
+  for i being Nat, t being c-Term of A,V st i in dom p & t = p.i
+   ex vt being finite DecoratedTree st vt = q.i & vt is_an_evaluation_of t,f
+ ex vt being finite DecoratedTree st
+  vt = (Den(o,A).roots q)-tree q &
+     vt is_an_evaluation_of
+            (Sym(o,(the Sorts of A) \/ V)-tree p qua c-Term of A,V), f
+  proof let o be OperSymbol of S, p be ArgumentSeq of o,A,V;
+A1:  Sym(o,(the Sorts of A) \/ V) = [o,the carrier of S] by MSAFREE:def 11;
+   let q be DTree-yielding FinSequence such that
+A2:  len q = len p and
+A3:  for i being Nat, t being c-Term of A,V st i in dom p & t = p.i
+    ex vt being finite DecoratedTree st vt = q.i & vt is_an_evaluation_of t,f;
+A4:  dom p = Seg len p & dom q = Seg len q by FINSEQ_1:def 3;
+      now let x be set; assume A5: x in dom doms q;
+then A6:   x in dom q by TREES_3:39;
+      then p.x in rng p & rng p c= S-Terms ((the Sorts of A) \/ V)
+       by A2,A4,FINSEQ_1:def 4,FUNCT_1:def 5;
+     then reconsider t = p.x as c-Term of A,V;
+     reconsider i = x as Nat by A5;
+     consider vt being finite DecoratedTree such that
+A7:   vt = q.i & vt is_an_evaluation_of t,f by A2,A3,A4,A6;
+        (doms q).x = dom vt by A6,A7,FUNCT_6:31;
+     hence (doms q).x is finite Tree;
+    end;
+   then reconsider r = doms q as FinTree-yielding FinSequence by TREES_3:25;
+   set vt = (Den(o,A).roots q)-tree q;
+A8:  dom vt = tree r & tree doms p =
+      dom ([o,the carrier of S]-tree p) by TREES_4:10;
+    then reconsider vt as finite DecoratedTree by AMI_1:21;
+   take vt; thus vt = (Den(o,A).roots q)-tree q;
+A9:  dom doms p = dom p & len doms p = len p & dom doms q = dom q &
+    len doms q = len q by TREES_3:39,40;
+      now let i be Nat; assume
+A10:   i in dom p;
+      then p.i in rng p & rng p c= S-Terms ((the Sorts of A) \/ V)
+       by FINSEQ_1:def 4,FUNCT_1:def 5;
+     then reconsider t = p.i as c-Term of A,V;
+     consider vt being finite DecoratedTree such that
+A11:   vt = q.i & vt is_an_evaluation_of t,f by A3,A10;
+     thus r.i = dom vt by A2,A4,A10,A11,FUNCT_6:31
+             .= dom t by A11,Def9
+             .= (doms p).i by A10,FUNCT_6:31;
+    end;
+   hence dom vt = dom(Sym(o,(the Sorts of A) \/ V)-tree p)
+                                          by A1,A2,A4,A8,A9,FINSEQ_1:17;
+   let n be Node of vt;
+A12:  ([o,the carrier of S]-tree p).{} = [o,the carrier of S] by TREES_4:def 4;
+   hereby let s be SortSymbol of S, v be Element of V.s;
+    assume
+A13:   (Sym(o,(the Sorts of A) \/ V)-tree p).n = [v,s];
+       now assume n = {};
+      then s = the carrier of S by A1,A12,A13,ZFMISC_1:33;
+      hence contradiction by Lm7;
+     end;
+    then consider w being FinSequence of NAT, i being Nat such that
+A14:   n = <*i*>^w by MODAL_1:4;
+A15:   i < len p & w in (doms q).(i+1) by A2,A8,A9,A14,TREES_3:51;
+    then reconsider t = p.(i+1) as c-Term of A,V by Lm2;
+A16:  i+1 in dom p by A15,Lm9;
+    then consider e being finite DecoratedTree such that
+A17:   e = q.(i+1) & e is_an_evaluation_of t,f by A3;
+A18:   dom e = dom t & dom e = (doms q).(i+1) by A2,A4,A16,A17,Def9,FUNCT_6:31;
+    reconsider w as Node of e by A2,A4,A15,A16,A17,FUNCT_6:31;
+A19:   t.w = [v,s] by A13,A14,A15,A18,TREES_4:12;
+    thus vt.n = e.w by A2,A14,A15,A17,TREES_4:12
+             .= f.s.v by A17,A19,Def9;
+   end;
+   hereby let s be SortSymbol of S, x be Element of (the Sorts of A).s;
+    assume
+A20:   (Sym(o,(the Sorts of A) \/ V)-tree p).n = [x,s];
+       now assume n = {};
+      then s = the carrier of S by A1,A12,A20,ZFMISC_1:33;
+      hence contradiction by Lm7;
+     end;
+    then consider w being FinSequence of NAT, i being Nat such that
+A21:   n = <*i*>^w by MODAL_1:4;
+A22:   i < len p & w in (doms q).(i+1) by A2,A8,A9,A21,TREES_3:51;
+    then reconsider t = p.(i+1) as c-Term of A,V by Lm2;
+A23:  i+1 in dom p by A22,Lm9;
+    then consider e being finite DecoratedTree such that
+A24:   e = q.(i+1) & e is_an_evaluation_of t,f by A3;
+A25:   dom e = dom t & dom e = (doms q).(i+1) by A2,A4,A23,A24,Def9,FUNCT_6:31;
+    reconsider w as Node of e by A2,A4,A22,A23,A24,FUNCT_6:31;
+A26:   t.w = [x,s] by A20,A21,A22,A25,TREES_4:12;
+    thus vt.n = e.w by A2,A21,A22,A24,TREES_4:12
+             .= x by A24,A26,Def9;
+   end;
+   let o1 be OperSymbol of S; assume
+A27:  (Sym(o,(the Sorts of A) \/ V)-tree p).n = [o1,the carrier of S];
+   per cases;
+    suppose
+A28:    n = {};
+      then (Sym(o,(the Sorts of A) \/ V)-tree p).n
+             = Sym(o,(the Sorts of A) \/ V) by TREES_4:def 4
+            .= [o,the carrier of S] by MSAFREE:def 11;
+      then o = o1 & succ(vt,n) = roots q by A27,A28,TREES_9:31,ZFMISC_1:33;
+     hence vt.n = Den(o1, A).succ(vt,n) by A28,TREES_4:def 4;
+    suppose n <> {};
+     then consider w being FinSequence of NAT, i being Nat such that
+A29:    n = <*i*>^w by MODAL_1:4;
+A30:    i < len p & w in (doms q).(i+1) by A2,A8,A9,A29,TREES_3:51;
+     then reconsider t = p.(i+1) as c-Term of A,V by Lm2;
+A31:   i+1 in dom p by A30,Lm9;
+     then consider e being finite DecoratedTree such that
+A32:    e = q.(i+1) & e is_an_evaluation_of t,f by A3;
+A33:    dom e = dom t & dom e = (doms q).(i+1) by A2,A4,A31,A32,Def9,FUNCT_6:31
+;
+     reconsider w as Node of e by A2,A4,A30,A31,A32,FUNCT_6:31;
+     reconsider ii = <*i*> as Node of vt by A29,TREES_1:46;
+A34:    e = vt|ii by A2,A30,A32,TREES_4:def 4;
+        t.w = [o1,the carrier of S] by A27,A29,A30,A33,TREES_4:12;
+    then e.w = Den(o1, A).succ(e,w) by A32,Def9
+         .= Den(o1, A).succ(vt,n) by A29,A34,TREES_9:32;
+     hence vt.n = Den(o1, A).succ(vt,n) by A2,A29,A30,A32,TREES_4:12;
+  end;
+
+theorem Th34:
+ for t being c-Term of A,V, e being finite DecoratedTree st
+  e is_an_evaluation_of t,f
+ for p being Node of t, n being Node of e st n = p holds
+  e|n is_an_evaluation_of t|p, f
+  proof let t be c-Term of A,V, e be finite DecoratedTree such that
+A1: dom e = dom t and
+A2: for p being Node of e holds
+     (for s being SortSymbol of S, v being Element of V.s st t.p = [v,s]
+      holds e.p = f.s.v) &
+     (for s being SortSymbol of S, x being Element of (the Sorts of A).s st
+       t.p = [x,s] holds e.p = x) &
+     (for o being OperSymbol of S st t.p = [o,the carrier of S] holds
+       e.p = Den(o, A).succ(e,p));
+   let p be Node of t, n be Node of e; assume
+A3:  n = p;
+   set vt = e|n, tp = t|p;
+A4:  dom vt = (dom e)|n & dom tp = (dom t)|p by TREES_2:def 11;
+   hence
+   dom vt = dom tp by A1,A3;
+   let q be Node of vt;
+   reconsider nq = n^q as Node of e by A4,TREES_1:def 9;
+   reconsider pq = p^q as Node of t by A1,A3,A4,TREES_1:def 9;
+   hereby let s be SortSymbol of S, v be Element of V.s; assume
+       tp.q = [v,s]; then t.pq = [v,s] by A1,A3,A4,TREES_2:def 11;
+     then e.nq = f.s.v by A2,A3;
+    hence vt.q = f.s.v by A4,TREES_2:def 11;
+   end;
+   hereby let s be SortSymbol of S, x be Element of (the Sorts of A).s; assume
+       tp.q = [x,s]; then t.pq = [x,s] by A1,A3,A4,TREES_2:def 11;
+     then e.nq = x by A2,A3;
+    hence vt.q = x by A4,TREES_2:def 11;
+   end;
+   let o be OperSymbol of S; assume tp.q = [o,the carrier of S];
+    then t.pq = [o,the carrier of S] by A1,A3,A4,TREES_2:def 11;
+    then e.nq = Den(o, A).succ(e,nq) by A2,A3;
+    then vt.q = Den(o, A).succ(e,n^q) by A4,TREES_2:def 11;
+   hence vt.q = Den(o, A).succ(vt,q) by TREES_9:32;
+  end;
+
+theorem Th35:
+ for o being OperSymbol of S, p being ArgumentSeq of o,A,V
+ for vt being finite DecoratedTree st
+     vt is_an_evaluation_of
+       (Sym(o,(the Sorts of A) \/ V)-tree p qua c-Term of A,V), f
+ ex q being DTree-yielding FinSequence st len q = len p &
+  vt = (Den(o,A).roots q)-tree q &
+  for i being Nat, t being c-Term of A,V st i in dom p & t = p.i
+   ex vt being finite DecoratedTree st vt = q.i & vt is_an_evaluation_of t,f
+  proof let o be OperSymbol of S, p be ArgumentSeq of o,A,V;
+A1:  Sym(o,(the Sorts of A) \/ V) = [o,the carrier of S] by MSAFREE:def 11;
+   let vt be finite DecoratedTree; assume
+A2:  vt is_an_evaluation_of
+      (Sym(o,(the Sorts of A) \/ V)-tree p qua c-Term of A,V), f;
+then A3: dom vt = dom ([o,the carrier of S]-tree p) by A1,Def9;
+   consider x being set, q being DTree-yielding FinSequence such that
+A4:  vt = x-tree q by TREES_9:8;
+   take q;
+      dom vt = tree doms q & dom vt = tree doms p by A3,A4,TREES_4:10;
+    then A5: doms q = doms p & len doms q = len q & len doms p = len p by
+TREES_3:40,53;
+   hence
+   len q = len p;
+   reconsider r = {} as empty Element of dom vt by TREES_1:47;
+      ([o,the carrier of S]-tree p).r = [o,the carrier of S] by TREES_4:def 4;
+   then vt.r = Den(o, A).succ(vt,r) by A1,A2,Def9 .= Den(o, A).roots q by A4,
+TREES_9:31;
+   hence vt = (Den(o,A).roots q)-tree q by A4,TREES_4:def 4;
+   let i be Nat, t be c-Term of A,V; assume
+A6:  i in dom p & t = p.i;
+   then consider k being Nat such that
+A7:  i = k+1 & k < len p by Lm1;
+   reconsider u = {} as Node of t by TREES_1:47;
+      <*k*>^u = <*k*> by FINSEQ_1:47;
+   then reconsider r = <*k*> as Node of vt by A3,A6,A7,TREES_4:11;
+   take e = vt|r;
+   thus e = q.i by A4,A5,A7,TREES_4:def 4;
+   reconsider r1 = r as Node of [o,the carrier of S]-tree p by A1,A2,Def9;
+      t = ([o,the carrier of S]-tree p)|r1 by A6,A7,TREES_4:def 4;
+   hence e is_an_evaluation_of t,f by A1,A2,Th34;
+  end;
+
+theorem Th36:
+ ex vt being finite DecoratedTree st vt is_an_evaluation_of t,f
+  proof
+    defpred P[set] means ex t being c-Term of A,V, vt
+    being finite DecoratedTree st
+      t = $1 & vt is_an_evaluation_of t,f;
+A1: for s being SortSymbol of S, x being Element of (the Sorts of A).s
+      holds  P[root-tree [x,s]]
+     proof let s be SortSymbol of S, x be Element of (the Sorts of A).s;
+      reconsider t = root-tree [x,s] as c-Term of A,V by Th6;
+      take t, root-tree x; thus t = root-tree [x,s];
+      thus thesis by Th31;
+     end;
+A2: for s being SortSymbol of S, v being Element of V.s
+         holds P[root-tree [v,s]]
+     proof let s be SortSymbol of S, x be Element of V.s;
+      reconsider t = root-tree [x,s] as c-Term of A,V by Th8;
+      take t, root-tree (f.s.x); thus t = root-tree [x,s];
+      thus thesis by Th32;
+     end;
+A3: for o being OperSymbol of S, p being ArgumentSeq of o,A,V st
+     for t being c-Term of A,V st t in rng p
+     holds P[t] holds P[Sym(o,(the Sorts of A) \/ V)-tree p]
+     proof let o be OperSymbol of S, p be ArgumentSeq of o,A,V such that
+A4:     for t being c-Term of A,V st t in rng p
+        ex u being c-Term of A,V, vt being finite DecoratedTree st
+         u = t & vt is_an_evaluation_of u,f;
+A5:     dom p = Seg len p by FINSEQ_1:def 3;
+      defpred Q[set,set] means
+              ex t being c-Term of A,V, vt being finite DecoratedTree st
+         $2 = vt & t = p.$1 & vt is_an_evaluation_of t,f;
+A6:  for e be set st e in dom p ex u be set st Q[e,u]
+  proof let x be set; assume x in dom p;
+then A7:      p.x in rng p & rng p c= S-Terms ((the Sorts of A) \/ V)
+          by FINSEQ_1:def 4,FUNCT_1:def 5;
+        then reconsider t = p.x as c-Term of A,V;
+           ex u being c-Term of A,V, vt being finite DecoratedTree st
+          u = t & vt is_an_evaluation_of u,f by A4,A7;
+        hence ex y being set st
+          ex t being c-Term of A,V, vt being finite DecoratedTree st
+           y = vt & t = p.x & vt is_an_evaluation_of t,f;
+       end;
+      consider q being Function such that
+A8:     dom q = dom p &
+       for x being set st x in dom p holds  Q[x,q.x] from NonUniqFuncEx(A6);
+
+      reconsider q as FinSequence by A5,A8,FINSEQ_1:def 2;
+A9:     len p = len q by A8,FINSEQ_3:31;
+         now let x be set; assume x in dom q;
+         then ex t being c-Term of A,V, vt being finite DecoratedTree st
+          q.x = vt & t = p.x & vt is_an_evaluation_of t,f by A8;
+        hence q.x is DecoratedTree;
+       end;
+      then reconsider q as DTree-yielding FinSequence by TREES_3:26;
+         now let i be Nat, t be c-Term of A,V; assume i in dom p;
+         then ex t being c-Term of A,V, vt being finite DecoratedTree st
+          q.i = vt & t = p.i & vt is_an_evaluation_of t,f by A8;
+        hence t = p.i implies ex vt being finite DecoratedTree st
+            vt = q.i & vt is_an_evaluation_of t,f;
+       end;
+       then ex vt being finite DecoratedTree st vt = (Den(o,A).roots q)-tree q
+&
+         vt is_an_evaluation_of
+          (Sym(o,(the Sorts of A) \/
+ V)-tree p qua c-Term of A,V), f by A9,Th33;
+      hence thesis;
+     end;
+      for t being c-Term of A,V holds P[t] from CTermInd(A1,A2,A3);
+    then ex u being c-Term of A,V, vt being finite DecoratedTree st
+     u = t & vt is_an_evaluation_of u,f;
+   hence thesis;
+  end;
+
+theorem Th37:
+ for e1, e2 being finite DecoratedTree st
+  e1 is_an_evaluation_of t,f & e2 is_an_evaluation_of t,f holds e1 = e2
+  proof defpred P[c-Term of A,V] means
+    for e1, e2 being finite DecoratedTree st
+     e1 is_an_evaluation_of $1,f & e2 is_an_evaluation_of $1,f holds e1 = e2;
+A1: now let s be SortSymbol of S, x be Element of (the Sorts of A).s;
+     thus P[x-term (A, V)]
+     proof
+     set t = x-term (A, V);
+     let e1,e2 be finite DecoratedTree; assume
+A2:    e1 is_an_evaluation_of t,f & e2 is_an_evaluation_of t,f;
+then A3:    dom e1 = dom t & dom e2 = dom t & t = root-tree [x,s] &
+      dom root-tree [x,s] = elementary_tree 0 & (root-tree [x,s]).{} = [x,s]
+       by Def3,Def9,TREES_4:3;
+        {} is Node of e1 by TREES_1:47;
+      then e1.{} = x & e2.{} = x by A2,A3,Def9;
+      then e1 = root-tree x & e2 = root-tree x by A3,TREES_4:5;
+     hence e1 = e2;
+     end;
+    end;
+A4: now let s be SortSymbol of S, v be Element of V.s;
+     thus P[v-term A]
+     proof
+     set t = v-term A;
+     let e1,e2 be finite DecoratedTree; assume
+A5:    e1 is_an_evaluation_of t,f & e2 is_an_evaluation_of t,f;
+then A6:    dom e1 = dom t & dom e2 = dom t & t = root-tree [v,s] &
+      dom root-tree [v,s] = elementary_tree 0 & (root-tree [v,s]).{} = [v,s]
+       by Def4,Def9,TREES_4:3;
+        {} is Node of e1 by TREES_1:47;
+      then e1.{} = f.s.v & e2.{} = f.s.v by A5,A6,Def9;
+      then e1 = root-tree (f.s.v) & e2 = root-tree (f.s.v) by A6,TREES_4:5;
+     hence e1 = e2;
+     end;
+    end;
+A7: now let o be OperSymbol of S, p be ArgumentSeq of o,A,V; assume
+A8:    for t being c-Term of A,V st t in rng p holds P[t];
+     thus P[Sym(o,(the Sorts of A) \/ V)-tree p]
+     proof
+     let e1, e2 be finite DecoratedTree;
+     set t = Sym(o,(the Sorts of A) \/ V)-tree p; assume
+A9:    e1 is_an_evaluation_of t qua c-Term of A,V,f &
+      e2 is_an_evaluation_of t qua c-Term of A,V,f;
+     then consider q1 being DTree-yielding FinSequence such that
+A10:   len q1 = len p &
+      e1 = (Den(o,A).roots q1)-tree q1 &
+      for i being Nat, t being c-Term of A,V st i in dom p & t = p.i
+       ex vt being finite DecoratedTree st
+        vt = q1.i & vt is_an_evaluation_of t,f by Th35;
+     consider q2 being DTree-yielding FinSequence such that
+A11:   len q2 = len p &
+      e2 = (Den(o,A).roots q2)-tree q2 &
+      for i being Nat, t being c-Term of A,V st i in dom p & t = p.i
+       ex vt being finite DecoratedTree st
+        vt = q2.i & vt is_an_evaluation_of t,f by A9,Th35;
+A12:    now let i be Nat; assume
+A13:      i < len p;
+       then reconsider t = p.(i+1) as c-Term of A,V by Lm2;
+A14:      i+1 in dom p by A13,Lm9;
+       then consider vt1 being finite DecoratedTree such that
+A15:      vt1 = q1.(i+1) & vt1 is_an_evaluation_of t,f by A10;
+       consider vt2 being finite DecoratedTree such that
+A16:      vt2 = q2.(i+1) & vt2 is_an_evaluation_of t,f by A11,A14;
+          t in rng p by A13,Lm9; hence q1.(i+1) = q2.(i+1) by A8,A15,A16;
+      end;
+A17:   dom q1 = Seg len q1 & dom q2 = Seg len q2 by FINSEQ_1:def 3;
+        now let i be Nat; assume i in dom q1;
+        then ex k being Nat st i = k+1 & k < len q1 by Lm1;
+       hence q1.i = q2.i by A10,A12;
+      end;
+      then q1 = q2 by A10,A11,A17,FINSEQ_1:17;
+     hence e1 = e2 by A10,A11;
+     end;
+    end;
+      for t being c-Term of A,V holds P[t] from TermInd2(A1,A4,A7);
+   hence thesis;
+  end;
+
+theorem Th38:
+ for vt being finite DecoratedTree st vt is_an_evaluation_of t,f holds
+  vt.{} in (the Sorts of A).the_sort_of t
+  proof defpred P[c-Term of A,V] means
+    for vt being finite DecoratedTree st vt is_an_evaluation_of $1,f holds
+     vt.{} in (the Sorts of A).the_sort_of $1;
+A1: now let s be SortSymbol of S, x be Element of (the Sorts of A).s;
+     thus  P[x-term (A, V)]
+     proof
+     set t = x-term (A, V);
+     let vt be finite DecoratedTree; assume
+A2:    vt is_an_evaluation_of t,f;
+        t = root-tree [x,s] by Def3;
+      then root-tree x is_an_evaluation_of t,f by Th31;
+      then vt = root-tree x by A2,Th37;
+      then vt.{} = x & s = the_sort_of t by Th18,TREES_4:3;
+     hence vt.{} in (the Sorts of A).the_sort_of t;
+     end;
+    end;
+A3: now let s be SortSymbol of S, v be Element of V.s;
+     thus P[v-term A]
+     proof
+     set t = v-term A;
+     let vt be finite DecoratedTree; assume
+A4:    vt is_an_evaluation_of t,f;
+        t = root-tree [v,s] by Def4;
+      then root-tree (f.s.v) is_an_evaluation_of t,f by Th32;
+      then vt = root-tree (f.s.v) by A4,Th37;
+      then vt.{} = f.s.v & s = the_sort_of t by Th19,TREES_4:3;
+     hence vt.{} in (the Sorts of A).the_sort_of t;
+     end;
+    end;
+A5: now let o be OperSymbol of S, p be ArgumentSeq of o,A,V; assume
+A6:    for t being c-Term of A,V st t in rng p holds P[t];
+     thus  P[Sym(o,(the Sorts of A) \/ V)-tree p]
+     proof
+     set t = Sym(o,(the Sorts of A) \/ V)-tree p;
+     let vt be finite DecoratedTree; assume
+      vt is_an_evaluation_of t qua c-Term of A,V,f;
+     then consider q being DTree-yielding FinSequence such that
+A7:    len q = len p and
+A8:    vt = (Den(o,A).roots q)-tree q and
+A9:    for i being Nat, t being c-Term of A,V st i in dom p & t = p.i
+       ex vt being finite DecoratedTree st
+        vt = q.i & vt is_an_evaluation_of t,f by Th35;
+A10:    vt.{} = Den(o,A).roots q by A8,TREES_4:def 4;
+A11:    dom ((the Sorts of A) * the ResultSort of S) = the OperSymbols of S &
+      dom ((the Sorts of A)#*the Arity of S) = the OperSymbols of S &
+      o in the OperSymbols of S by PBOOLE:def 3;
+A12:    Result(o,A)
+       = ((the Sorts of A) * the ResultSort of S).o by MSUALG_1:def 10
+      .= (the Sorts of A).((the ResultSort of S).o) by A11,FUNCT_1:22
+      .= (the Sorts of A).the_result_sort_of o by MSUALG_1:def 7
+      .= (the Sorts of A).the_sort_of (t qua c-Term of A,V) by Th20;
+        now
+A13:      dom the Sorts of A = the carrier of S &
+        rng the_arity_of o c= the carrier of S by FINSEQ_1:def 4,PBOOLE:def 3;
+A14:     dom roots q = dom q by DTCONSTR:def 1;
+       hence
+A15:      dom roots q = Seg len q by FINSEQ_1:def 3
+             .= Seg len the_arity_of o by A7,Lm8
+             .= dom the_arity_of o by FINSEQ_1:def 3
+             .= dom ((the Sorts of A)*the_arity_of o) by A13,RELAT_1:46;
+       let x be set; assume
+A16:      x in dom ((the Sorts of A)*the_arity_of o);
+       then consider i being Nat such that
+A17:      x = i+1 & i < len q by A14,A15,Lm1;
+       consider T being DecoratedTree such that
+A18:      T = q.(i+1) & (roots q).(i+1) = T.{}
+          by A14,A15,A16,A17,DTCONSTR:def 1;
+       reconsider t = p.(i+1) as c-Term of A,V by A7,A17,Lm2;
+A19:      i+1 in dom p by A7,A17,Lm9;
+       then consider vt being finite DecoratedTree such that
+A20:      vt = q.(i+1) & vt is_an_evaluation_of t,f by A9;
+        A21: ex t being c-Term of A,V st t = p.(i+1) &
+         t = (p qua FinSequence of S-Terms ((the Sorts of A) \/ V)
+               qua non empty set)/.(i+1) &
+         the_sort_of t = (the_arity_of o).(i+1) &
+         the_sort_of t = (the_arity_of o)/.(i+1) by A19,Lm8;
+          t in rng p by A7,A17,Lm9;
+        then vt.{} in (the Sorts of A).the_sort_of t by A6,A20;
+       hence (roots q).x in ((the Sorts of A)*the_arity_of o).x
+        by A16,A17,A18,A20,A21,FUNCT_1:22;
+      end;
+      then roots q in product ((the Sorts of A)*the_arity_of o) by CARD_3:18;
+      then roots q in (the Sorts of A)#.the_arity_of o by MSUALG_1:def 3;
+      then roots q in (the Sorts of A)#.((the Arity of S).o)
+       by MSUALG_1:def 6;
+      then roots q in ((the Sorts of A)# * the Arity of S).o
+       by A11,FUNCT_1:22;
+      then roots q in Args(o,A) & Den(o,A) is Function of Args(o,A), Result(o,
+A)
+       by MSUALG_1:def 9;
+     hence vt.{} in (the Sorts of A).the_sort_of (t qua c-Term of A,V)
+           by A10,A12,FUNCT_2:7;
+     end;
+    end;
+      for t being c-Term of A,V holds P[t] from TermInd2(A1,A3,A5);
+   hence thesis;
+  end;
+
+definition
+ let S be non void non empty ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ let V be Variables of A;
+ let t be c-Term of A,V;
+ let f be ManySortedFunction of V, the Sorts of A;
+ func t@f -> Element of (the Sorts of A).the_sort_of t means:
+Def10:
+  ex vt being finite DecoratedTree st
+    vt is_an_evaluation_of t,f & it = vt.{};
+  existence
+   proof
+    consider vt being finite DecoratedTree such that
+A1:   vt is_an_evaluation_of t,f by Th36;
+    reconsider tf = vt.{} as Element of (the Sorts of A).the_sort_of t
+      by A1,Th38;
+    take tf, vt; thus thesis by A1;
+   end;
+  uniqueness by Th37;
+end;
+
+reserve t for c-Term of A,V;
+
+theorem Th39:
+ for vt being finite DecoratedTree st vt is_an_evaluation_of t,f holds
+  t@f = vt.{}
+  proof let vt be finite DecoratedTree such that
+A1:  vt is_an_evaluation_of t,f;
+   consider e being finite DecoratedTree such that
+A2:  e is_an_evaluation_of t,f & t@f = e.{} by Def10;
+    thus thesis by A1,A2,Th37;
+  end;
+
+theorem
+   for vt being finite DecoratedTree st vt is_an_evaluation_of t,f
+  for p being Node of t holds vt.p = (t|p)@f
+  proof let vt be finite DecoratedTree such that
+A1:  vt is_an_evaluation_of t,f;
+   let p be Node of t;
+    reconsider n = p as Node of vt by A1,Def9;
+      vt|n is_an_evaluation_of t|p, f by A1,Th34;
+    then (t|p)@f = (vt|n).<*>NAT & n^{} = n & {} in (dom vt)|p
+     by Th39,FINSEQ_1:47,TREES_1:47;
+   hence vt.p = (t|p)@f by TREES_2:def 11;
+  end;
+
+theorem
+   for s being SortSymbol of S, x being Element of (the Sorts of A).s holds
+  (x-term(A,V))@f = x
+  proof let s be SortSymbol of S, x be Element of (the Sorts of A).s;
+      x-term(A,V) = root-tree [x,s] by Def3;
+    then root-tree x is_an_evaluation_of x-term(A,V), f & x = (root-tree x).{}
+     by Th31,TREES_4:3;
+   hence thesis by Th39;
+  end;
+
+theorem
+   for s being SortSymbol of S, v being Element of V.s holds
+  (v-term A)@f = f.s.v
+  proof let s be SortSymbol of S, v be Element of V.s;
+      v-term A = root-tree [v,s] by Def4;
+    then root-tree f.s.v is_an_evaluation_of v-term A, f &
+    f.s.v = (root-tree f.s.v).{} by Th32,TREES_4:3;
+   hence thesis by Th39;
+  end;
+
+theorem
+   for o being OperSymbol of S, p being ArgumentSeq of o,A,V
+ for q being FinSequence st len q = len p &
+   for i being Nat st i in dom p
+   for t being c-Term of A,V st t = p.i holds q.i = t@f
+ holds (Sym(o,(the Sorts of A) \/ V)-tree p qua c-Term of A,V)@f = Den(o,A).q
+  proof let o be OperSymbol of S, p be ArgumentSeq of o,A,V;
+   let q be FinSequence; assume
+A1:  len q = len p &
+    for i being Nat st i in dom p
+    for t being c-Term of A,V st t = p.i holds q.i = t@f;
+   consider vt being finite DecoratedTree such that
+A2:  vt is_an_evaluation_of Sym(o,(the Sorts of A) \/ V)-tree p, f by Th36;
+   consider r being DTree-yielding FinSequence such that
+A3:  len r = len p &
+    vt = (Den(o,A).roots r)-tree r &
+    for i being Nat, t being c-Term of A,V st i in dom p & t = p.i
+     ex vt being finite DecoratedTree st vt = r.i & vt is_an_evaluation_of t,f
+      by A2,Th35;
+      now
+     thus
+A4:    dom p = dom p & dom q = dom p & dom r = dom p by A1,A3,FINSEQ_3:31;
+     let i be Nat; assume
+A5:    i in dom r;
+     then reconsider t = p.i as c-Term of A,V by A4,Th22;
+     consider vt being finite DecoratedTree such that
+A6:    vt = r.i & vt is_an_evaluation_of t,f by A3,A4,A5;
+     reconsider T = vt as DecoratedTree;
+     take T; thus T = r.i by A6;
+     thus q.i = t@f by A1,A4,A5 .= T.{} by A6,Th39;
+    end;
+    then q = roots r by DTCONSTR:def 1;
+   hence (Sym(o,(the Sorts of A) \/ V)-tree p qua c-Term of A,V)@f
+                    = (((Den(o,A)).q)-tree r).{} by A2,A3,Th39
+      .= Den(o,A).q by TREES_4:def 4;
+  end;
+

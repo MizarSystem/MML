@@ -1,0 +1,1128 @@
+:: Miscellaneous Facts about Relation Structure
+::  by Agnieszka Julia Marasik
+::
+:: Received November 8, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_2, LATTICE3, ORDERS_1, LATTICES, WAYBEL_0, ZF_LANG, BOOLE;
+ notation STRUCT_0, LATTICE3, WAYBEL_0, WAYBEL_1, YELLOW_0, ORDERS_1;
+ constructors WAYBEL_1, LATTICE3;
+ clusters LATTICE3, WAYBEL_1;
+ theorems LATTICE3, YELLOW_0, WAYBEL_1;
+
+begin :: Introduction
+
+theorem
+   for L being reflexive antisymmetric with_suprema RelStr
+ for a being Element of L holds
+  a "\/" a = a
+  proof
+    let L be reflexive antisymmetric with_suprema RelStr,
+        a be Element of L;
+A1:  a <= a "\/" a by YELLOW_0:22;
+      a <= a;
+    then a "\/" a <= a by YELLOW_0:22;
+    hence thesis by A1,YELLOW_0:def 3;
+  end;
+
+theorem Th2:
+ for L being reflexive antisymmetric with_infima RelStr
+ for a being Element of L holds
+  a "/\" a = a
+  proof
+    let L be reflexive antisymmetric with_infima RelStr,
+        a be Element of L;
+A1:  a "/\" a <= a by YELLOW_0:23;
+      a <= a;
+    then a <= a "/\" a by YELLOW_0:23;
+    hence thesis by A1,YELLOW_0:def 3;
+  end;
+
+theorem
+   for L be transitive antisymmetric with_suprema RelStr
+ for a,b,c being Element of L holds
+ a"\/"b <= c implies a <= c
+ proof
+   let L be transitive antisymmetric with_suprema RelStr;
+   let a,b,c be Element of L;
+   assume
+A1: a"\/"b <= c;
+     a <= a"\/"b by YELLOW_0:22;
+   hence thesis by A1,YELLOW_0:def 2;
+  end;
+
+theorem
+   for L be transitive antisymmetric with_infima RelStr
+ for a,b,c being Element of L holds
+ c <= a"/\"b implies c <= a
+ proof
+   let L be transitive antisymmetric with_infima RelStr;
+   let a,b,c be Element of L;
+   assume
+A1:   c <= a"/\"b;
+       a"/\"b <= a by YELLOW_0:23;
+   hence thesis by A1,YELLOW_0:def 2;
+  end;
+
+theorem
+   for L be antisymmetric transitive with_suprema with_infima RelStr
+ for a,b,c being Element of L holds
+ a"/\"b <= a"\/"c
+ proof
+   let L be antisymmetric transitive with_suprema with_infima RelStr;
+   let a,b,c be Element of L;
+A1: a"/\"b <= a by YELLOW_0:23;
+     a <= a"\/"c by YELLOW_0:22;
+   hence thesis by A1,YELLOW_0:def 2;
+ end;
+
+theorem Th6:
+for L be antisymmetric transitive with_infima RelStr
+for a,b,c be Element of L holds
+a <= b implies a"/\"c <= b"/\"c
+ proof
+   let L be antisymmetric transitive with_infima RelStr;
+   let a,b,c be Element of L;
+   assume
+A1: a <= b;
+     a"/\"c <= a by YELLOW_0:23;
+then A2:a"/\"c <= b by A1,YELLOW_0:def 2;
+     a"/\"c <= c by YELLOW_0:23;
+   hence thesis by A2,YELLOW_0:23;
+ end;
+
+theorem Th7:
+for L be antisymmetric transitive with_suprema RelStr
+for a,b,c be Element of L holds
+a <= b implies a"\/"c <= b"\/"c
+ proof
+   let L be non empty antisymmetric transitive with_suprema RelStr;
+   let a,b,c be Element of L;
+   assume
+A1: a <= b;
+     b <= b "\/" c by YELLOW_0:22;
+then A2:a <= b "\/" c by A1,YELLOW_0:def 2;
+     c <= b "\/" c by YELLOW_0:22;
+   hence thesis by A2,YELLOW_0:22;
+ end;
+
+theorem Th8:
+for L be sup-Semilattice
+for a,b be Element of L holds
+ a <= b implies a "\/" b = b
+ proof
+   let L be sup-Semilattice;
+   let a,b be Element of L;
+   assume
+A1: a <= b;
+A2: b <= a "\/" b by YELLOW_0:22;
+     b <= b;
+   then a "\/" b <= b by A1,YELLOW_0:22;
+   hence thesis by A2,YELLOW_0:def 3;
+ end;
+
+theorem Th9:
+ for L be sup-Semilattice
+ for a,b,c being Element of L holds
+ a <= c & b <= c implies a"\/"b <= c
+ proof
+   let L be sup-Semilattice;
+   let a,b,c be Element of L;
+   assume that
+A1:  a <= c and
+A2:  b <= c;
+      c "\/" b = c by A2,Th8;
+    hence thesis by A1,Th7;
+    end;
+
+theorem Th10:
+for L be Semilattice
+for a,b be Element of L holds
+ b <= a implies a"/\"b = b
+ proof
+   let L be Semilattice;
+   let a,b be Element of L;
+   assume
+A1: b <= a;
+A2: a"/\"b <= b by YELLOW_0:23;
+     b "/\" b <= a "/\" b by A1,Th6;
+   then b <= a "/\" b by Th2;
+   hence thesis by A2,YELLOW_0:def 3;
+ end;
+
+:: Difference in Relation Structure
+begin
+
+theorem Th11:
+ for L being Boolean LATTICE, x,y being Element of L holds
+   y is_a_complement_of x iff y = 'not' x
+  proof
+    let L be Boolean LATTICE, x,y be Element of L;
+A1:  for x being Element of L holds 'not' 'not' x = x by WAYBEL_1:90;
+    then 'not' x is_a_complement_of x by WAYBEL_1:89;
+then A2:  x "\/" 'not' x = Top L & x "/\" 'not' x = Bottom L by WAYBEL_1:def 23
+;
+   hereby assume y is_a_complement_of x;
+then A3:   x "\/" y = Top L & x "/\" y = Bottom L by WAYBEL_1:def 23;
+A4:   Bottom L <= y"/\"'not' x by YELLOW_0:44;
+       Top L >= 'not' x by YELLOW_0:45;
+then A5:   'not' x = (x"\/"y)"/\"'not' x by A3,YELLOW_0:25
+       .= (x"/\"'not' x)"\/"(y"/\"'not' x) by WAYBEL_1:def 3
+       .= y"/\"'not' x by A2,A4,YELLOW_0:24;
+       Top L >= y by YELLOW_0:45;
+     then y = (x"\/"'not' x)"/\"y by A2,YELLOW_0:25
+       .= (x"/\"y)"\/"(y"/\"'not' x) by WAYBEL_1:def 3
+       .= y"/\"'not' x by A3,A4,YELLOW_0:24;
+    hence y = 'not' x by A5;
+   end;
+   thus thesis by A1,WAYBEL_1:89;
+  end;
+
+definition let L be non empty RelStr,
+             a,b be Element of L;
+ func a \ b -> Element of L equals :Def1:
+   a "/\" 'not' b;
+ correctness;
+end;
+
+definition let L be non empty RelStr,
+             a, b be Element of L;
+ func a \+\ b -> Element of L equals :Def2:
+   (a \ b) "\/" (b \ a);
+ correctness;
+end;
+
+Lm1:
+for L be antisymmetric with_infima with_suprema RelStr,
+     a, b be Element of L holds
+  a \+\ b = b \+\ a
+  proof
+    let L be antisymmetric with_infima with_suprema RelStr,
+     a, b be Element of L;
+    thus a \+\ b = (a \ b) "\/" (b \ a) by Def2
+              .= b \+\ a by Def2;
+  end;
+
+definition let L be antisymmetric with_infima with_suprema RelStr,
+             a, b be Element of L;
+redefine func a \+\ b;
+ commutativity by Lm1;
+end;
+
+definition let L be non empty RelStr,
+             a, b be Element of L;
+ pred a meets b means :Def3:
+  a "/\" b <> Bottom L;
+  antonym a misses b;
+end;
+
+definition let L be with_infima antisymmetric RelStr,
+             a, b be Element of L;
+redefine pred a meets b;
+  symmetry
+   proof
+     let a, b be Element of L;
+       a"/\"b <> Bottom L implies b"/\"a <> Bottom L;
+     hence thesis by Def3;
+ end;
+  antonym a misses b;
+end;
+
+theorem
+  for L be antisymmetric transitive with_infima with_suprema RelStr
+for a,b,c be Element of L holds
+ a <= c implies a \ b <= c
+ proof
+   let L be antisymmetric transitive with_infima with_suprema RelStr;
+   let a,b,c be Element of L;
+   assume
+A1:  a <= c;
+A2:  a \ b = a "/\" 'not' b by Def1;
+     a "/\" 'not' b <= a by YELLOW_0:23;
+  hence thesis by A1,A2,YELLOW_0:def 2;
+ end;
+
+theorem
+  for L be antisymmetric transitive with_infima with_suprema RelStr
+for a,b,c be Element of L holds
+ a <= b implies a \ c <= b \ c
+ proof
+   let L be antisymmetric transitive with_infima with_suprema RelStr;
+   let a,b,c be Element of L;
+   assume
+A1:  a <= b;
+A2:  a \ c = a "/\" 'not' c by Def1;
+      b \ c = b "/\" 'not' c by Def1;
+    hence thesis by A1,A2,Th6;
+ end;
+
+theorem
+  for L be antisymmetric transitive with_infima with_suprema RelStr
+for a,b be Element of L holds
+ a \ b <= a
+ proof
+   let L be antisymmetric transitive with_infima with_suprema RelStr;
+   let a,b be Element of L;
+     a \ b = a "/\" 'not' b by Def1;
+   hence thesis by YELLOW_0:23;
+ end;
+
+
+theorem
+  for L be antisymmetric transitive with_infima with_suprema RelStr
+for a,b be Element of L holds
+ a \ b <= a \+\ b
+  proof
+    let L be antisymmetric transitive with_infima with_suprema RelStr,
+        a,b be Element of L;
+      a \ b <= (a \ b) "\/" (b \ a) by YELLOW_0:22;
+    hence thesis by Def2;
+  end;
+
+theorem
+  for L be LATTICE
+for a,b,c be Element of L holds
+  a \ b <= c & b \ a <= c implies a \+\ b <= c
+  proof
+    let
+     L be LATTICE,
+     a,b,c be Element of L;
+    assume
+A1:    a \ b <= c & b \ a <= c;
+       a \+\ b = (a \ b) "\/" (b \ a) by Def2;
+     hence thesis by A1,Th9;
+  end;
+
+
+theorem
+  for L be LATTICE
+for a be Element of L holds
+ a meets a iff a <> Bottom L
+ proof
+   let L be LATTICE,
+       a be Element of L;
+   thus a meets a implies a <> Bottom L
+    proof
+      assume
+      a meets a;
+      then a "/\" a <> Bottom L by Def3;
+      hence thesis by Th2;
+    end;
+   thus a <> Bottom L implies a meets a
+    proof
+      assume
+      a <> Bottom L;
+      then a "/\" a <> Bottom L by Th2;
+      hence thesis by Def3;
+    end;
+ end;
+
+
+theorem
+  for L be antisymmetric transitive with_infima with_suprema RelStr
+for a,b,c be Element of L holds
+ a "/\" (b \ c) = (a "/\" b) \ c
+ proof
+    let L be antisymmetric transitive with_infima with_suprema RelStr;
+    let a,b,c be Element of L;
+    thus a "/\" (b \ c) = a "/\" (b "/\" 'not' c) by Def1
+                .= (a "/\" b) "/\" 'not' c by LATTICE3:16
+                .= (a "/\" b) \ c by Def1;
+ end;
+
+theorem
+  for L be antisymmetric transitive with_infima RelStr st
+    L is distributive
+for a,b,c be Element of L holds
+ (a "/\" b) "\/" (a "/\" c) = a implies a <= b "\/" c
+ proof
+    let L be antisymmetric transitive with_infima RelStr such that
+A1:        L is distributive;
+    let a,b,c be Element of L;
+    assume (a "/\" b) "\/" (a "/\" c) = a;
+     then (b "\/" c) "/\" a = a by A1,WAYBEL_1:def 3;
+    hence thesis by YELLOW_0:23;
+ end;
+
+theorem Th20:
+for L be LATTICE st L is distributive
+for a,b,c be Element of L holds
+ a"\/"(b"/\"c) = (a"\/"b) "/\" (a"\/"c)
+ proof
+   let L be LATTICE such that
+A1:    L is distributive;
+   let a,b,c be Element of L;
+     (a"\/"b) "/\" (a"\/"c) = ((a"\/"b) "/\" a) "\/"((a"\/"b) "/\"
+ c) by A1,WAYBEL_1:def 3
+        .= a "\/" ((a"\/"b) "/\" c) by LATTICE3:18
+        .= a "\/" ((c"/\"a) "\/" (c"/\"b)) by A1,WAYBEL_1:def 3
+        .= (a "\/" (c"/\"a)) "\/" (c"/\"b) by LATTICE3:14
+        .= a "\/" (c"/\"b) by LATTICE3:17;
+   hence thesis;
+ end;
+
+theorem
+  for L be LATTICE st L is distributive
+for a,b,c be Element of L holds
+ (a "\/" b) \ c = (a \ c) "\/" (b \ c)
+ proof
+   let L be with_suprema with_infima reflexive transitive antisymmetric
+      non empty RelStr such that
+A1:    L is distributive;
+   let a,b,c be Element of L;
+   thus (a "\/" b) \ c = (a "\/" b) "/\" 'not' c by Def1
+        .= ('not' c "/\" a) "\/" ('not' c"/\" b) by A1,WAYBEL_1:def 3
+        .= (a \ c) "\/" (b "/\" 'not' c) by Def1
+        .= (a \ c) "\/" (b \ c) by Def1;
+ end;
+
+:: Lower-bound in Relation Structure
+begin
+
+theorem Th22:
+for L be lower-bounded non empty antisymmetric RelStr
+for a be Element of L holds
+ a <= Bottom L implies a = Bottom L
+ proof
+   let L be lower-bounded non empty antisymmetric RelStr;
+   let a be Element of L;
+   assume
+A1:   a <= Bottom L;
+      Bottom L <= a by YELLOW_0:44;
+   hence thesis by A1,YELLOW_0:def 3;
+ end;
+
+theorem
+  for L be lower-bounded Semilattice
+for a,b,c be Element of L holds
+ a <= b & a <= c & b"/\"c = Bottom L implies a = Bottom L
+ proof
+  let L be lower-bounded Semilattice;
+  let a,b,c be Element of L;
+  assume that
+A1:  a <= b and
+A2:  a <= c and
+A3:  b"/\"c = Bottom L;
+     a"/\"c <= b"/\"c by A1,Th6;
+   then a <= b"/\"c by A2,Th10;
+   hence thesis by A3,Th22;
+ end;
+
+theorem
+  for L be lower-bounded antisymmetric with_suprema RelStr
+for a,b be Element of L holds
+  a"\/"b = Bottom L implies a = Bottom L & b = Bottom L
+  proof
+    let L be lower-bounded antisymmetric with_suprema RelStr;
+    let a,b be Element of L;
+    assume
+     a"\/"b = Bottom L;
+    then a <= Bottom L & b <= Bottom L by YELLOW_0:22;
+    hence thesis by Th22;
+  end;
+
+theorem
+  for L be lower-bounded antisymmetric transitive with_infima RelStr
+for a,b,c be Element of L holds
+  a <= b & b"/\"c = Bottom L implies a"/\"c = Bottom L
+  proof
+    let L be lower-bounded antisymmetric transitive with_infima
+             RelStr;
+    let a,b,c be Element of L;
+    assume a <= b & b"/\"c = Bottom L;
+then A1:  a"/\"c <= Bottom L by Th6;
+      Bottom L <= a"/\"c by YELLOW_0:44;
+    hence thesis by A1,YELLOW_0:def 3;
+  end;
+
+theorem
+  for L be lower-bounded Semilattice
+for a be Element of L holds
+  Bottom L \ a = Bottom L
+ proof
+    let L be lower-bounded Semilattice;
+    let a be Element of L;
+A1:  Bottom L <= 'not' a by YELLOW_0:44;
+    thus Bottom L \ a = Bottom L "/\" 'not' a by Def1
+               .= Bottom L by A1,Th10;
+  end;
+
+theorem
+  for L be lower-bounded antisymmetric transitive with_infima RelStr
+for a,b,c be Element of L holds
+  a meets b & b <= c implies a meets c
+ proof
+    let L be lower-bounded antisymmetric transitive with_infima RelStr;
+    let a,b,c be Element of L;
+    assume that
+A1:  a meets b;
+    assume
+      b <= c;
+then A2:  a"/\"b <= a"/\"c by Th6;
+    assume
+      not (a meets c);
+then A3:  not (a"/\"c <> Bottom L) by Def3;
+      Bottom L <= a"/\"b by YELLOW_0:44;
+    then a"/\"b = Bottom L by A2,A3,YELLOW_0:def 3;
+    hence contradiction by A1,Def3;
+  end;
+
+theorem Th28:
+for L be lower-bounded with_infima antisymmetric RelStr
+for a be Element of L holds
+ a"/\"Bottom L = Bottom L
+ proof
+   let L be lower-bounded with_infima antisymmetric RelStr;
+   let a be Element of L;
+A1: Bottom L <= a "/\" Bottom L by YELLOW_0:44;
+     a"/\"Bottom L <= Bottom L by YELLOW_0:23;
+   hence thesis by A1,YELLOW_0:def 3;
+ end;
+
+theorem
+  for L be lower-bounded antisymmetric transitive
+         with_infima with_suprema RelStr
+for a,b,c be Element of L holds
+  a meets b"/\"c implies a meets b
+  proof
+    let L be lower-bounded antisymmetric transitive
+             with_infima with_suprema RelStr;
+    let a,b,c be Element of L;
+    assume
+A1:    a meets b"/\"c;
+    assume
+A2:   not(a meets b);
+       a"/\"(b"/\"c)= (a"/\"b)"/\"c by LATTICE3:16
+          .= Bottom L "/\"c by A2,Def3
+          .= Bottom L by Th28;
+     hence contradiction by A1,Def3;
+  end;
+
+theorem
+  for L be lower-bounded antisymmetric transitive
+         with_infima with_suprema RelStr
+for a,b,c be Element of L holds
+ a meets b\c implies a meets b
+ proof
+   let L be lower-bounded antisymmetric transitive
+         with_infima with_suprema RelStr;
+   let a,b,c be Element of L;
+   assume
+A1:  a meets b\c;
+   assume
+A2:  not (a meets b);
+     a"/\"(b\c) = a"/\"(b"/\"'not' c) by Def1
+           .= (a"/\"b)"/\"'not' c by LATTICE3:16
+           .= Bottom L "/\"'not' c by A2,Def3
+           .= Bottom L by Th28;
+   hence contradiction by A1,Def3;
+ end;
+
+theorem
+  for L be lower-bounded antisymmetric transitive with_infima RelStr
+for a be Element of L holds
+ a misses Bottom L
+ proof
+  let L be lower-bounded antisymmetric transitive with_infima RelStr;
+  let a be Element of L;
+    a "/\" Bottom L = Bottom L by Th28;
+  hence thesis by Def3;
+ end;
+
+theorem
+  for L be lower-bounded antisymmetric transitive with_infima RelStr
+for a,b,c be Element of L holds
+ a misses c & b <= c implies a misses b
+ proof
+   let L be lower-bounded antisymmetric transitive with_infima RelStr;
+   let a,b,c be Element of L;
+   assume that
+A1:  a misses c and
+A2:  b <= c;
+      a"/\"c = Bottom L by A1,Def3;
+then A3:  a"/\"b <= Bottom L by A2,Th6;
+      Bottom L <= a"/\"b by YELLOW_0:44;
+    then a"/\"b = Bottom L by A3,YELLOW_0:def 3;
+    hence thesis by Def3;
+ end;
+
+theorem
+  for L be lower-bounded antisymmetric transitive with_infima RelStr
+for a,b,c be Element of L holds
+ a misses b or a misses c implies a misses b"/\"c
+ proof
+  let L be lower-bounded antisymmetric transitive with_infima RelStr;
+  let a,b,c be Element of L;
+  assume
+A1: a misses b or a misses c;
+   per cases by A1;
+   suppose
+A2:  a misses b;
+   a"/\" (b"/\"c) = (a"/\"b)"/\"c by LATTICE3:16
+                  .= Bottom L "/\" c by A2,Def3
+                  .= Bottom L by Th28;
+   hence a misses b"/\"c by Def3;
+   suppose
+A3:  a misses c;
+   a"/\" (b"/\"c) = (a"/\"c)"/\"b by LATTICE3:16
+                  .= Bottom L "/\" b by A3,Def3
+                  .= Bottom L by Th28;
+   hence a misses b"/\"c by Def3;
+   thus thesis;
+ end;
+
+theorem
+  for L be lower-bounded LATTICE
+for a,b,c be Element of L holds
+ a <= b & a <= c & b misses c implies a = Bottom L
+ proof
+   let L be lower-bounded LATTICE;
+   let a,b,c be Element of L;
+   assume that
+A1: a <= b and
+A2: a <= c and
+A3: b misses c;
+A4: b"/\"c = Bottom L by A3,Def3;
+A5: Bottom L <= a"/\"c by YELLOW_0:44;
+     a"/\"c <= Bottom L by A1,A4,Th6;
+   then a"/\"c = Bottom L by A5,YELLOW_0:def 3;
+   hence thesis by A2,Th10;
+ end;
+
+theorem
+  for L be lower-bounded antisymmetric transitive with_infima RelStr
+for a,b,c be Element of L holds
+ a misses b implies (a"/\"c) misses (b"/\"c)
+ proof
+   let L be lower-bounded antisymmetric transitive with_infima RelStr;
+   let a,b,c be Element of L;
+   assume
+A1: a misses b;
+     (a"/\"c)"/\"(b"/\"c) = c"/\"(a"/\"(b"/\"c)) by LATTICE3:16
+                 .= c"/\"(a"/\"b)"/\"c by LATTICE3:16
+                 .= c"/\"Bottom L"/\"c by A1,Def3
+                 .= Bottom L"/\"c by Th28
+                 .=Bottom L by Th28;
+   hence thesis by Def3;
+ end;
+
+:: Boolean Lattice
+begin
+
+ reserve L for Boolean (non empty RelStr);
+ reserve a,b,c,d for Element of L;
+
+theorem
+   (a"/\"b) "\/" (b"/\"c) "\/" (c"/\"a) = (a"\/"b) "/\" (b"\/"c) "/\" (c"\/"a)
+ proof
+      (a"/\"b) "\/" (b"/\"c) "\/" (c"/\"a) =
+ ((a"\/"(b"/\"c)) "/\" (b"\/"(b"/\"c))) "\/" (c"/\"a) by WAYBEL_1:6
+      .= ((a"\/"(b"/\"c)) "/\" b) "\/" (c"/\"a) by LATTICE3:17
+      .= ((a"\/"(b"/\"c)) "\/" (c"/\"a)) "/\" (b "\/" (c"/\"a)) by WAYBEL_1:6
+      .= ((a"\/"(b"/\"c)) "\/" (c"/\"a)) "/\" ((b"\/"c) "/\" (b"\/"
+a)) by WAYBEL_1:6
+      .= ((b"/\"c)"\/"(a"\/"(c"/\"a))) "/\" ((b"\/"c) "/\" (b"\/"
+a)) by LATTICE3:14
+      .= ((b"/\"c)"\/"a) "/\" ((b"\/"c) "/\" (b"\/"a)) by LATTICE3:17
+      .= ((b"\/"a) "/\" (c"\/"a)) "/\" ((b"\/"c) "/\" (b"\/"a)) by WAYBEL_1:6
+      .= (b"\/"a) "/\" (((c"\/"a) "/\" (b"\/"a)) "/\" (b"\/"c)) by LATTICE3:16
+      .= (b"\/"a) "/\" ( (b"\/"a) "/\" ((c"\/"a) "/\" (b"\/"c))) by LATTICE3:16
+      .= ((b"\/"a) "/\" (b"\/"a)) "/\" ((c"\/"a) "/\" (b"\/"c)) by LATTICE3:16
+      .= (b"\/"a) "/\" ((c"\/"a) "/\" (b"\/"c)) by Th2
+      .= ((a"\/"b) "/\" (b"\/"c)) "/\" (c"\/"a) by LATTICE3:16;
+   hence (a"/\"b)"\/" (b"/\"c) "\/" (c"/\"a) = (a"\/"b) "/\" (b"\/"c) "/\" (c
+"\/"a);
+ end;
+
+theorem Th37:
+ a"/\"'not' a = Bottom L & a"\/"'not' a = Top L
+ proof
+     'not' a is_a_complement_of a by Th11;
+   hence thesis by WAYBEL_1:def 23;
+ end;
+
+theorem
+   a \ b <= c implies a <= b"\/"c
+ proof
+   assume
+     a \ b <= c;
+   then a"/\"'not' b <= c by Def1;
+then A1: (a"/\"'not' b)"\/"b <= c"\/"b by Th7;
+A2: (a"/\"'not' b)"\/"b = (b"\/"a) "/\" (b"\/"'not' b) by Th20
+             .= (b"\/"a) "/\" Top L by Th37
+             .= a"\/"b by WAYBEL_1:5;
+     a <= a"\/" b by YELLOW_0:22;
+   hence thesis by A1,A2,YELLOW_0:def 2;
+ end;
+
+theorem Th39:
+ 'not' (a"\/"b) = 'not' a"/\" 'not' b & 'not' (a"/\"b) = 'not' a"\/" 'not' b
+ proof
+    thus 'not' (a"\/"b) = 'not' a"/\" 'not' b
+      proof
+A1:      (a"\/"b) "\/" ('not' a"/\" 'not' b) = a"\/"(b "\/" ('not' a"/\" 'not'
+b)) by LATTICE3:14
+                 .= a"\/"((b"\/"'not' a)"/\"(b"\/"'not' b)) by Th20
+                 .= a"\/"((b"\/"'not' a)"/\" Top L) by Th37
+                 .= a"\/"(b"\/"'not' a) by WAYBEL_1:5
+                 .= (a"\/"'not' a)"\/"b by LATTICE3:14
+                 .= Top L"\/"b by Th37
+                 .= Top L by WAYBEL_1:5;
+      (a"\/"b) "/\" ('not' a"/\" 'not' b) = ((a"\/"b) "/\" 'not' a)"/\" 'not' b
+    by LATTICE3:16
+                 .= (('not' a"/\"a)"\/"('not' a"/\"b))"/\"
+ 'not' b by WAYBEL_1:def 3
+                 .= (Bottom L "\/"('not' a"/\"b))"/\" 'not' b by Th37
+                 .= ('not' a"/\"b)"/\" 'not' b by WAYBEL_1:4
+                 .= 'not' a"/\"(b"/\" 'not' b) by LATTICE3:16
+                 .= 'not' a"/\" Bottom L by Th37
+                 .= Bottom L by WAYBEL_1:4;
+    then ('not' a"/\"'not' b) is_a_complement_of (a"\/"
+b) by A1,WAYBEL_1:def 23;
+       hence thesis by Th11;
+      end;
+      thus 'not' (a"/\"b) = 'not' a"\/" 'not' b
+        proof
+A2:       (a"/\"b) "\/" ('not' a"\/" 'not' b) = ((a"/\"b) "\/"'not' a)"\/"
+ 'not'
+b by LATTICE3:14
+                 .= (('not' a"\/"a) "/\" ('not' a "\/"b) )"\/" 'not' b by Th20
+                 .= (Top L "/\" ('not' a "\/"b) )"\/" 'not' b by Th37
+                 .= ('not' a "\/"b)"\/" 'not' b by WAYBEL_1:5
+                 .= 'not' a"\/"(b"\/" 'not' b) by LATTICE3:14
+                 .= 'not' a"\/"Top L by Th37
+                 .= Top L by WAYBEL_1:5;
+            (a"/\"b) "/\" ('not' a"\/" 'not' b) = a"/\"(b"/\" ('not' a"\/"
+'not'
+b)) by LATTICE3:16
+                 .= a"/\"((b"/\"'not' a)"\/"(b"/\"'not' b)) by WAYBEL_1:def 3
+                 .= a"/\"((b"/\"'not' a)"\/" Bottom L) by Th37
+                 .= a"/\"(b"/\"'not' a) by WAYBEL_1:4
+                 .= (a"/\"'not' a)"/\"b by LATTICE3:16
+                 .= Bottom L"/\"b by Th37
+                 .= Bottom L by WAYBEL_1:4;
+          then ('not' a"\/" 'not' b) is_a_complement_of (a"/\"
+b) by A2,WAYBEL_1:def 23;
+          hence thesis by Th11;
+        end;
+ end;
+
+theorem Th40:
+ a <= b implies 'not' b <= 'not' a
+ proof
+   assume
+   a <= b;
+   then 'not' a = 'not' (b"/\"a) by Th10
+     .= 'not' b "\/" 'not' a by Th39;
+   hence thesis by YELLOW_0:22;
+ end;
+
+theorem
+   a <= b implies c\b <= c\a
+ proof
+   assume
+    a <= b;
+    then 'not' b <= 'not' a by Th40;
+    then c"/\"'not' b <= c"/\"'not' a by Th6;
+    then c\b <= c"/\"'not' a by Def1;
+    hence thesis by Def1;
+ end;
+
+theorem
+   a <= b & c <= d implies a\d <= b\c
+ proof
+    assume that
+A1:   a <= b and
+A2:   c <= d;
+      'not' d <= 'not' c by A2,Th40;
+then A3:  a"/\"'not' d <= a"/\" 'not' c by Th6;
+      a"/\"'not' c <= b"/\" 'not' c by A1,Th6;
+    then a"/\"'not' d <= b"/\" 'not' c by A3,YELLOW_0:def 2;
+    then a\d <= b"/\" 'not' c by Def1;
+    hence thesis by Def1;
+ end;
+
+theorem
+   a <= b"\/"c implies a\b <= c & a\c <= b
+ proof
+   assume
+A1:  a <= b"\/"c;
+A2:  c"/\"'not' b <= c by YELLOW_0:23;
+      (b"\/"c)"/\" 'not' b = ('not' b"/\"b) "\/" ('not' b"/\"c) by WAYBEL_1:def
+3
+              .= Bottom L "\/" ('not' b"/\"c) by Th37
+              .= c"/\"'not' b by WAYBEL_1:4;
+   then a"/\"'not' b <= c"/\"'not' b by A1,Th6;
+ then a\b <= c"/\"'not' b by Def1;
+   hence a\b <= c by A2,YELLOW_0:def 2;
+A3:  'not' c"/\"b <= b by YELLOW_0:23;
+       (b"\/"c)"/\" 'not' c = ('not' c"/\"b) "\/" ('not' c"/\"
+c) by WAYBEL_1:def 3
+              .= ('not' c"/\"b)"\/" Bottom L by Th37
+              .= 'not' c"/\"b by WAYBEL_1:4;
+   then a"/\"'not' c <= 'not' c"/\"b by A1,Th6;
+ then a\c <= 'not' c"/\"b by Def1;
+   hence a\c <= b by A3,YELLOW_0:def 2;
+ end;
+
+theorem
+   'not' a <= 'not' (a"/\"b) & 'not' b <= 'not' (a"/\"b)
+ proof
+     'not' a <= 'not' a"\/" 'not' b & 'not' b <= 'not' a"\/" 'not' b
+     by YELLOW_0:22;
+   hence thesis by Th39;
+ end;
+
+theorem
+   'not' (a"\/"b) <= 'not' a & 'not' (a"\/"b) <= 'not' b
+ proof
+    'not' a"/\"'not' b <= 'not' a & 'not' a"/\"'not' b <= 'not' b by YELLOW_0:
+23
+;
+  hence thesis by Th39;
+ end;
+
+theorem
+   a <= b\a implies a = Bottom L
+ proof
+   assume
+     a <= b\a;
+then A1: a <= b"/\"'not' a by Def1;
+     (b"/\"'not' a) "/\" a = b"/\"('not' a"/\"a) by LATTICE3:16
+               .= b"/\"Bottom L by Th37
+               .= Bottom L by WAYBEL_1:4;
+   hence thesis by A1,Th10;
+ end;
+
+theorem
+   a <= b implies b = a "\/" (b\a)
+ proof
+   assume
+A1: a <= b;
+     a "\/" (b\a) = a "\/" (b"/\"'not' a) by Def1
+             .= (a"\/"b) "/\" (a"\/"'not' a) by WAYBEL_1:6
+             .= b"/\"('not' a"\/"a) by A1,Th8
+             .= b"/\"Top L by Th37
+             .= b by WAYBEL_1:5;
+   hence thesis;
+ end;
+
+theorem
+   a\b = Bottom L iff a <= b
+ proof
+   thus a\b = Bottom L implies a <= b
+     proof
+       assume a\b = Bottom L;
+       then a"/\"'not' b = Bottom L by Def1;
+       then (b"\/"a) "/\" (b "\/" 'not' b) <= b "\/"Bottom L by Th20;
+       then (b"\/"a) "/\" (b "\/" 'not' b) <= b by WAYBEL_1:4;
+       then (a"\/"b) "/\" Top L <= b by Th37;
+then A1:    a"\/"b <= b by WAYBEL_1:5;
+         a <= a "\/" b by YELLOW_0:22;
+       hence thesis by A1,YELLOW_0:def 2;
+     end;
+   thus a <= b implies a\b = Bottom L
+     proof
+       assume
+       a <= b;
+       then a "/\" 'not' b <= b "/\"'not' b by Th6;
+       then a "/\" 'not' b <= Bottom L by Th37;
+then A2:     a\b <= Bottom L by Def1;
+         Bottom L <= a\b by YELLOW_0:44;
+       hence thesis by A2,YELLOW_0:def 3;
+     end;
+ end;
+
+theorem
+   (a <= b"\/"c & a"/\"c = Bottom L) implies a <= b
+  proof
+    assume that
+A1:   a <= b"\/"c and
+A2:   a"/\"c = Bottom L;
+A3:  a"/\"(b"\/"c) = a by A1,Th10;
+      a"/\"(b"\/"c) = (a"/\"b)"\/" Bottom L by A2,WAYBEL_1:def 3;
+    then a"/\"b = a by A3,WAYBEL_1:4;
+    hence thesis by YELLOW_0:23;
+end;
+
+theorem
+   a"\/"b = (a\b)"\/"b
+ proof
+  thus (a\b)"\/"b = (a"/\"'not' b)"\/"b by Def1
+               .= (b"\/"a)"/\"(b"\/"'not' b) by Th20
+               .= (b"\/"a)"/\" Top L by Th37
+               .= a"\/"b by WAYBEL_1:5;
+ end;
+
+theorem
+   a\(a"\/"b) = Bottom L
+ proof
+   thus a\(a"\/"b) = a"/\"'not' (a"\/"b) by Def1
+                 .= a"/\"('not' a"/\"'not' b) by Th39
+                 .= (a"/\"'not' a)"/\"'not' b by LATTICE3:16
+                 .= Bottom L"/\"'not' b by Th37
+                 .= Bottom L by WAYBEL_1:4;
+ end;
+
+theorem
+    a\a"/\"b = a\b
+ proof
+   thus a\a"/\"b = a"/\"'not' (a"/\"b) by Def1
+               .= a"/\"('not' a"\/"'not' b) by Th39
+               .= (a"/\"'not' a)"\/"(a"/\"'not' b) by WAYBEL_1:def 3
+               .= Bottom L "\/"(a"/\"'not' b) by Th37
+               .= a"/\"'not' b by WAYBEL_1:4
+               .= a\b by Def1;
+ end;
+
+theorem
+   (a\b)"/\"b = Bottom L
+ proof
+   thus (a\b)"/\"b = (a"/\"'not' b)"/\"b by Def1
+                 .= a"/\"('not' b"/\"b) by LATTICE3:16
+                 .= a"/\"Bottom L by Th37
+                 .= Bottom L by WAYBEL_1:4;
+ end;
+
+theorem
+   a"\/"(b\a) = a"\/"b
+ proof
+   thus a"\/"(b\a) = a"\/"(b"/\"'not' a) by Def1
+                 .= (a"\/"b)"/\"(a"\/"'not' a) by Th20
+                 .= (a"\/"b)"/\"Top L by Th37
+                 .= a"\/"b by WAYBEL_1:5;
+ end;
+
+theorem
+   (a"/\"b)"\/"(a\b) = a
+ proof
+   thus (a"/\"b)"\/"(a\b) = (a"/\"b)"\/"(a"/\"'not' b) by Def1
+                      .= ((a"/\"b)"\/"a)"/\"((a"/\"b)"\/"'not' b) by Th20
+                      .= a"/\"((a"/\"b)"\/"'not' b) by LATTICE3:17
+                      .= a"/\"(('not' b"\/"a)"/\"('not' b"\/"b)) by Th20
+                      .= a"/\"(('not' b"\/"a)"/\"Top L) by Th37
+                      .= a"/\"('not' b"\/"a) by WAYBEL_1:5
+                      .= a by LATTICE3:18;
+ end;
+
+theorem
+   a\(b\c)= (a\b)"\/"(a"/\"c)
+ proof
+   thus a\(b\c) = a"/\"'not' (b\c) by Def1
+               .= a"/\"'not' (b"/\"'not' c) by Def1
+               .= a"/\"('not' b"\/"'not' ('not' c)) by Th39
+               .= a"/\"('not' b"\/"c) by WAYBEL_1:90
+               .= (a"/\"'not' b)"\/"(a"/\"c) by WAYBEL_1:def 3
+               .= (a\b)"\/"(a"/\"c) by Def1;
+ end;
+
+theorem
+   a\(a\b) = a"/\"b
+ proof
+    thus a\(a\b) = a"/\"'not' (a\b) by Def1
+                 .= a"/\"'not' (a"/\"'not' b) by Def1
+                 .= a"/\"('not' a"\/"'not' 'not' b) by Th39
+                 .= a"/\"('not' a"\/"b) by WAYBEL_1:90
+                 .= (a"/\"'not' a)"\/"(a"/\"b) by WAYBEL_1:def 3
+                 .= Bottom L"\/"(a"/\"b) by Th37
+                 .= a"/\"b by WAYBEL_1:4;
+ end;
+
+theorem
+   (a"\/"b)\b = a\b
+ proof
+   thus (a"\/"b)\b = (a"\/"b)"/\"'not' b by Def1
+                .= (a"/\"'not' b)"\/"(b"/\"'not' b) by WAYBEL_1:def 3
+                .= (a"/\"'not' b)"\/"Bottom L by Th37
+                .= a"/\"'not' b by WAYBEL_1:4
+                .= a\b by Def1;
+ end;
+
+theorem
+   a"/\"b = Bottom L iff a\b = a
+ proof
+    thus a"/\"b = Bottom L implies a\b = a
+     proof
+       assume
+         a"/\"b = Bottom L;
+       then a <= 'not' b by WAYBEL_1:85;
+       then a"/\"a <= a"/\"'not' b by Th6;
+       then a <= a"/\"'not' b by Th2;
+then A1:     a <= a\b by Def1;
+         a\b = a"/\"'not' b by Def1;
+       then a\b <= a by YELLOW_0:23;
+       hence thesis by A1,YELLOW_0:def 3;
+     end;
+   thus a\b = a implies a"/\"b = Bottom L
+     proof
+       assume
+       a\b = a;
+       then a"/\"'not' b = a by Def1;
+       then 'not' a"\/"'not' 'not' b = 'not' a by Th39;
+       then a"/\"('not' a"\/"b) <= a"/\"'not' a by WAYBEL_1:90;
+       then (a"/\"'not' a)"\/"(a"/\"b) <= a"/\"'not' a by WAYBEL_1:def 3;
+       then Bottom L"\/"(a"/\"b) <= a"/\"'not' a by Th37;
+       then Bottom L"\/"(a"/\"b) <= Bottom L by Th37;
+then A2:     a"/\"b <= Bottom L by WAYBEL_1:4;
+         Bottom L <= a"/\"b by YELLOW_0:44;
+       hence thesis by A2,YELLOW_0:def 3;
+     end;
+ end;
+
+theorem
+   a\(b"\/"c) = (a\b)"/\"(a\c)
+ proof
+   thus a\(b"\/"c) = a"/\"'not' (b"\/"c) by Def1
+                 .= a"/\"('not' b"/\"'not' c) by Th39
+                 .= (a"/\"a)"/\"('not' b"/\"'not' c) by Th2
+                 .= ((a"/\"a)"/\"'not' b)"/\"'not' c by LATTICE3:16
+                 .= (a"/\"(a"/\"'not' b))"/\"'not' c by LATTICE3:16
+                 .= (a"/\"'not' b)"/\" (a"/\"'not' c) by LATTICE3:16
+                 .= (a\b)"/\" (a"/\"'not' c) by Def1
+                 .= (a\b)"/\" (a\c) by Def1;
+ end;
+
+theorem
+   a\(b"/\"c) = (a\b)"\/"(a\c)
+ proof
+   thus a\(b"/\"c) = a"/\"'not' (b"/\"c) by Def1
+                 .= a"/\"('not' b"\/"'not' c) by Th39
+                 .= (a"/\"'not' b)"\/"(a"/\"'not' c) by WAYBEL_1:def 3
+                 .= (a\b)"\/"(a"/\"'not' c) by Def1
+                 .= (a\b)"\/"(a\c) by Def1;
+ end;
+
+theorem
+   a"/\"(b\c) = a"/\"b \ a"/\"c
+ proof
+   thus a"/\"b \ a"/\"c = (a"/\"b) "/\"'not' (a"/\"c) by Def1
+                     .= (a"/\"b) "/\"('not' a"\/"'not' c) by Th39
+                     .= ((a"/\"b)"/\"'not' a)"\/"((a"/\"b)"/\"
+'not' c) by WAYBEL_1:def 3
+                     .= ((a"/\"'not' a)"/\"b)"\/"((a"/\"b)"/\"
+'not' c) by LATTICE3:16
+                     .= (Bottom L"/\"b)"\/"((a"/\"b)"/\"'not' c) by Th37
+                     .= Bottom L"\/"((a"/\"b)"/\"'not' c) by WAYBEL_1:4
+                     .= (a"/\"b)"/\"'not' c by WAYBEL_1:4
+                     .= a"/\"(b"/\"'not' c) by LATTICE3:16
+                     .= a"/\"(b\c) by Def1;
+ end;
+
+theorem
+   (a"\/"b)\(a"/\"b) = (a\b)"\/"(b\a)
+ proof
+   thus (a"\/"b)\(a"/\"b) = (a"\/"b)"/\"'not' (a"/\"b) by Def1
+                     .= (a"\/"b)"/\"('not' a"\/"'not' b) by Th39
+                     .= ((a"\/"b)"/\"'not' a)"\/"((a"\/"b)"/\"
+'not' b) by WAYBEL_1:def 3
+                     .= ((a"/\"'not' a)"\/"(b"/\"'not' a))"\/"((a"\/"b)"/\"
+'not'
+b) by WAYBEL_1:def 3
+                     .= (Bottom
+L"\/"(b"/\"'not' a))"\/"((a"\/"b)"/\"'not' b) by Th37
+                     .= (b"/\"'not' a)"\/"((a"\/"b)"/\"'not' b) by WAYBEL_1:4
+                     .= (b\a)"\/"((a"\/"b)"/\"'not' b) by Def1
+                     .= (b\a)"\/"((a"/\"'not' b)"\/"(b"/\"
+'not' b)) by WAYBEL_1:def 3
+                     .= (b\a)"\/"((a"/\"'not' b)"\/"Bottom L) by Th37
+                     .= (b\a)"\/"(a"/\"'not' b) by WAYBEL_1:4
+                     .= (a\b)"\/"(b\a) by Def1;
+
+ end;
+
+theorem
+   (a\b)\c = a\(b"\/"c)
+ proof
+   thus (a\b)\c = (a"/\"'not' b)\c by Def1
+               .= (a"/\"'not' b)"/\"'not' c by Def1
+               .= a"/\"('not' b"/\"'not' c) by LATTICE3:16
+               .= a"/\"'not' (b"\/"c) by Th39
+               .= a\(b"\/"c) by Def1;
+ end;
+
+theorem Th65:
+ 'not' (Bottom L) = Top L
+ proof
+A1: Bottom L "/\" Top L = Bottom L by WAYBEL_1:4;
+     Bottom L "\/" Top L = Top L by WAYBEL_1:5;
+   then Top L is_a_complement_of Bottom L by A1,WAYBEL_1:def 23;
+   hence thesis by Th11;
+ end;
+
+theorem
+   'not' (Top L) = Bottom L
+ proof
+A1: Bottom L "/\" Top L = Bottom L by WAYBEL_1:4;
+     Bottom L "\/" Top L = Top L by WAYBEL_1:5;
+   then Bottom L is_a_complement_of Top L by A1,WAYBEL_1:def 23;
+   hence thesis by Th11;
+ end;
+
+theorem
+   a\a = Bottom L
+ proof
+   thus a\a = a"/\"'not' a by Def1
+           .= Bottom L by Th37;
+ end;
+
+theorem
+   a \ Bottom L = a
+  proof
+    thus a \ Bottom L = a"/\"'not' (Bottom L) by Def1
+               .= a"/\"Top L by Th65
+               .= a by WAYBEL_1:5;
+  end;
+
+theorem
+   'not' (a\b) = 'not' a"\/"b
+ proof
+   thus 'not' (a\b) = 'not' (a"/\"'not' b) by Def1
+              .= 'not' a"\/"'not' 'not' b by Th39
+              .= 'not' a"\/"b by WAYBEL_1:90;
+ end;
+
+theorem
+   a"/\"b misses a\b
+  proof
+     (a"/\"b)"/\"(a\b) = (a"/\"b)"/\"(a"/\"'not' b) by Def1
+                .= ((a"/\"b)"/\"'not' b)"/\"a by LATTICE3:16
+                .= (a"/\"(b"/\"'not' b))"/\"a by LATTICE3:16
+                .= (a"/\"Bottom L)"/\"a by Th37
+                .= Bottom L"/\"a by WAYBEL_1:4
+                .= Bottom L by WAYBEL_1:4;
+    hence thesis by Def3;
+  end;
+
+theorem
+   (a\b) misses b
+ proof
+    (a\b)"/\"b = (a"/\"'not' b)"/\"b by Def1
+          .= a"/\"('not' b"/\"b) by LATTICE3:16
+          .= a"/\"Bottom L by Th37
+          .= Bottom L by WAYBEL_1:4;
+  hence thesis by Def3;
+ end;
+
+theorem
+   a misses b implies (a"\/"b)\b = a
+ proof
+   assume
+     a misses b;
+   then a"/\"b = Bottom L by Def3;
+   then (a"\/"'not' b)"/\"(b"\/"'not' b) <= Bottom L "\/"'not' b by Th20;
+   then (a"\/"'not' b)"/\"(b"\/"'not' b) <= 'not' b by WAYBEL_1:4;
+   then (a"\/"'not' b)"/\"Top L <= 'not' b by Th37;
+then A1: a"\/"'not' b <= 'not' b by WAYBEL_1:5;
+     'not' b <= a"\/"'not' b by YELLOW_0:22;
+   then a"\/"'not' b = 'not' b by A1,YELLOW_0:def 3;
+then A2: a <= 'not' b by YELLOW_0:22;
+     (a"\/"b)\b = (a"\/"b)"/\"'not' b by Def1
+           .= (a"/\"'not' b)"\/"(b"/\"'not' b) by WAYBEL_1:def 3
+           .= (a"/\"'not' b)"\/"Bottom L by Th37
+           .= a"/\"'not' b by WAYBEL_1:4
+           .= a by A2,Th10;
+    hence thesis;
+ end;
+

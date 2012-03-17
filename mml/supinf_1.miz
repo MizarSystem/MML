@@ -1,0 +1,2272 @@
+:: Infimum and Supremum of the Set of Real Numbers. Measure Theory
+::  by J\'ozef Bia{\l}as
+::
+:: Received September 27, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, ARYTM_3, SEQ_2, ARYTM, LATTICES, ORDINAL2, TARSKI, SUPINF_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0,
+      REAL_1;
+ constructors REAL_1, XREAL_0, MEMBERED, XBOOLE_0;
+ clusters XREAL_0, SUBSET_1, XBOOLE_0, MEMBERED, ZFMISC_1;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, XBOOLE_0;
+ theorems AXIOMS, TARSKI, ZFMISC_1, REAL_1, XREAL_0, XBOOLE_0, XBOOLE_1;
+ schemes XBOOLE_0;
+
+begin
+
+::
+:: -infty , +infty and ExtREAL enlarged set of real numbers
+::
+
+definition
+   func +infty -> set equals
+:Def1: REAL;
+correctness;
+end;
+
+canceled;
+
+theorem Th2:
+   not +infty in REAL by Def1;
+
+definition let IT be set;
+  attr IT is +Inf-like means
+:Def2:IT = +infty;
+end;
+
+definition
+  cluster +Inf-like set;
+existence proof take +infty; thus thesis by Def2; end;
+end;
+
+definition
+   mode +Inf is +Inf-like set;
+end;
+
+canceled;
+
+theorem
+     +infty is +Inf by Def2;
+
+definition
+   func -infty -> set equals
+:Def3: {REAL};
+correctness;
+end;
+
+canceled;
+
+theorem Th6:
+   not -infty in REAL by Def3,TARSKI:def 1;
+
+definition let IT be set;
+   attr IT is -Inf-like means
+:Def4:IT = -infty;
+end;
+
+definition
+   cluster -Inf-like set;
+existence proof take -infty; thus thesis by Def4; end;
+end;
+
+definition
+   mode -Inf is -Inf-like set;
+end;
+
+canceled;
+
+theorem
+     -infty is -Inf by Def4;
+
+definition let IT be set;
+   attr IT is ext-real means
+:Def5: IT in REAL \/ {-infty,+infty};
+end;
+
+definition
+   cluster ext-real set;
+existence
+proof
+   set x = -infty;
+A1:   x in {-infty,+infty} by TARSKI:def 2;
+   take x;
+   thus x in REAL \/ {-infty,+infty} by A1,XBOOLE_0:def 2;
+end;
+end;
+
+definition
+   func ExtREAL -> set equals
+:Def6: REAL \/ {-infty,+infty};
+correctness;
+end;
+
+definition
+  cluster -> ext-real Element of ExtREAL;
+coherence by Def5,Def6;
+end;
+
+definition
+   mode R_eal is Element of ExtREAL;
+end;
+
+definition
+  cluster -> ext-real Real;
+  coherence
+  proof
+    let r be Real;
+      r in REAL \/ {-infty,+infty} by XBOOLE_0:def 2;
+    hence thesis by Def5;
+  end;
+end;
+
+canceled;
+
+theorem
+     for x being Real holds x is R_eal by Def5,Def6;
+
+theorem Th11:
+   for x being set holds
+   x = -infty or x = +infty implies x is R_eal
+proof
+   let x be set;
+   assume x = -infty or x = +infty;
+   then x in {-infty,+infty} by TARSKI:def 2;
+   hence thesis by Def6,XBOOLE_0:def 2;
+end;
+
+definition
+   redefine func +infty -> R_eal;
+coherence by Th11;
+   redefine func -infty -> R_eal;
+coherence by Th11;
+end;
+
+canceled 2;
+
+theorem Th14:
+   -infty <> +infty
+proof
+   assume A1: -infty = +infty;
+   consider x being Element of REAL;
+A2: x = REAL by A1,Def1,Def3,TARSKI:def 1;
+     for X,Y be set holds not ( X in Y & Y in X);
+   hence thesis by A2;
+end;
+
+::
+::       Relations " <=' "," < " in the set of r_eal numbers
+::
+
+Lm1:
+ for x being R_eal holds
+  x in REAL or x = +infty or x = -infty
+proof let x be R_eal;
+    x in REAL or x in {-infty,+infty} by Def6,XBOOLE_0:def 2;
+ hence x in REAL or x = +infty or x = -infty by TARSKI:def 2;
+end;
+
+definition
+   let x,y be R_eal;
+   pred x <=' y means
+:Def7: ex p,q being Real st p = x & q = y & p <= q if x in REAL & y in REAL
+    otherwise x = -infty or y = +infty;
+  consistency;
+  reflexivity by Lm1;
+  connectedness
+   proof let x,y be R_eal;
+    assume
+A1:     not(x in REAL & y in REAL implies
+       ex p,q being Real st p = x & q = y & p <= q) or
+       not (not(x in REAL & y in REAL) implies x = -infty or y = +infty);
+    per cases by A1;
+    suppose that
+A2:  x in REAL & y in REAL and
+A3:  not ex p,q being Real st p = x & q = y & p <= q;
+    thus y in REAL & x in REAL implies
+       ex p,q being Real st p = y & q = x & p <= q
+     proof assume y in REAL & x in REAL;
+       then reconsider a = x, b = y as Real;
+      take b,a;
+      thus thesis by A3;
+     end;
+    thus thesis by A2;
+    suppose not(x in REAL & y in REAL) & not(x = -infty or y = +infty);
+    hence thesis by Lm1;
+   end;
+  antonym y <' x;
+end;
+
+canceled;
+
+theorem
+     for x,y being R_eal holds
+   ((x is Real & y is Real) implies
+   (x <=' y iff ex p,q being Real st (p = x & q = y & p <= q)))
+      by Def7;
+
+theorem Th17:
+   for x being R_eal holds (x in REAL implies not (x <=' -infty))
+      by Def7,Th6,Th14;
+
+theorem Th18:
+   for x being R_eal holds x in REAL implies not +infty <=' x
+     by Def7,Th2,Th14;
+
+theorem
+     not +infty <=' -infty by Def7,Th2,Th14;
+
+theorem
+     for x being R_eal holds x <=' +infty by Def7,Th2;
+
+theorem
+     for x being R_eal holds -infty <=' x by Def7,Th6;
+
+theorem Th22:
+   for x,y being R_eal holds x <=' y & y <=' x implies x = y
+proof
+   let x,y be R_eal;
+   assume that
+A1:x <=' y and
+A2:y <=' x;
+     x in (REAL \/ {-infty,+infty}) & y in (REAL \/ {-infty,+infty}) by Def5;
+   then (x in REAL or x in {-infty,+infty}) & (y in REAL or y in {-infty,
++infty
+}) by XBOOLE_0:def 2;
+   then A3:(x in REAL & y in REAL) or (x in REAL & y = -infty) or (x in
+ REAL & y = +infty
+) or
+   (x = -infty & y in REAL) or (x = -infty & y = -infty) or (x = -infty & y =
++infty) or
+   (x = +infty & y in REAL) or (x = +infty & y = -infty) or (x = +infty & y =
++infty) by TARSKI:def 2;
+  (x in REAL & y in REAL) implies x = y
+   proof
+      assume
+   A4:x in REAL & y in REAL;
+ then A5: ex p0,q0 being Real st x = p0 & y = q0 & p0 <= q0 by A1,Def7;
+         ex p1,q1 being Real st y = p1 & x = q1 & p1 <= q1 by A2,A4,Def7;
+      hence thesis by A5,AXIOMS:21;
+   end;
+    hence thesis by A1,A2,A3,Def7,Th14;
+end;
+
+theorem
+     for x being R_eal holds
+   x <=' -infty implies x = -infty
+proof
+   let x be R_eal;
+   assume
+A1:x <=' -infty;
+     -infty <=' x by Def7,Th6;
+   hence thesis by A1,Th22;
+end;
+
+theorem Th24:
+   for x being R_eal holds
+   +infty <=' x implies x = +infty
+proof
+   let x be R_eal;
+   assume
+A1:+infty <=' x;
+     x <=' +infty by Def7,Th2;
+   hence thesis by A1,Th22;
+end;
+
+scheme SepR_eal { P[R_eal]}:
+   ex X being Subset of REAL \/ {-infty,+infty} st
+   for x being R_eal holds x in X iff P[x]
+proof defpred Q[set] means ex x being R_eal st x=$1 & P[x];
+   consider X being set such that
+A1:for r being set holds r in X iff r in REAL \/ {-infty,+infty} & Q[r]
+        from Separation;
+     X c= REAL \/ {-infty,+infty}
+   proof
+      let r be set;
+      assume r in X;
+      hence thesis by A1;
+   end;
+   then reconsider X as Subset of REAL \/ {-infty,+infty};
+   take X;
+   let x be R_eal;
+   hereby assume x in X;
+      then ex y being R_eal st y = x & P[y] by A1;
+      hence P[x];
+   end;
+   assume A2: P[x];
+     x in REAL \/ {-infty,+infty} by Def5;
+   hence thesis by A1,A2;
+end;
+
+canceled;
+
+theorem
+     ExtREAL is non empty set by Def6;
+
+theorem
+     for x being set holds
+   x is R_eal iff x in ExtREAL by Def6;
+
+canceled;
+
+theorem Th29:
+   for x,y,z being R_eal holds ((x <=' y & y <=' z) implies x <=' z)
+proof
+   let x,y,z be R_eal;
+   assume that
+A1:x <=' y and
+A2:y <=' z;
+A3:x in (REAL \/ {-infty,+infty}) & y in (REAL \/ {-infty,+infty}) & z in
+ (REAL \/ {
+-infty,+infty}) by Def5;
+A4:(x in REAL & y in REAL & z in REAL) implies x <=' z
+   proof
+       assume
+   A5: x in REAL & y in REAL & z in REAL;
+       then consider p0,q0 being Real such that
+   A6: x = p0 & y = q0 & p0 <= q0 by A1,Def7;
+       consider p1,q1 being Real such that
+   A7: y = p1 & z = q1 & p1 <= q1 by A2,A5,Def7;
+         p0 <= q1 by A6,A7,AXIOMS:22;
+       hence thesis by A6,A7,Def7;
+   end;
+A8:(x in {-infty,+infty} & y in REAL & z in REAL) implies x <=' z
+   proof
+       assume x in {-infty,+infty} & y in REAL & z in REAL;
+   then ((x = +infty) & y in REAL & z in REAL) or
+       ((x = -infty) & y in REAL & z in REAL) by TARSKI:def 2;
+       hence thesis by A1,A2,Def7,Th6,Th24;
+   end;
+A9:(x in REAL & y in {-infty,+infty} & z in REAL) implies x <=' z
+   proof
+       assume x in REAL & y in {-infty,+infty} & z in REAL;
+   then A10: x in REAL & (y = -infty) & z in REAL or x in REAL & (y = +infty
+) & z in REAL
+       by TARSKI:def 2;
+         x in REAL & (y = +infty) & z in REAL implies x <=' z by A2,Th2,Th24;
+       hence thesis by A1,A10,Def7,Th6;
+   end;
+A11:(x in {-infty,+infty} & y in {-infty,+infty} & z in REAL) implies x <=' z
+   proof
+       assume x in {-infty,+infty} & y in {-infty,+infty} & z in REAL;
+   then (x = -infty) & (y = -infty) & z in REAL or
+       (x = -infty) & (y = +infty) & z in REAL or
+       (x = +infty) & (y = -infty) & z in REAL or
+       (x = +infty) & (y = +infty) & z in REAL by TARSKI:def 2;
+       hence thesis by A1,A2,Def7,Th2;
+   end;
+A12:(x in REAL & y in REAL & z in {-infty,+infty}) implies x <=' z
+   proof
+       assume x in REAL & y in REAL & z in {-infty,+infty};
+   then x in REAL & y in REAL & z = -infty or x in REAL & y in
+ REAL & z = +infty
+       by TARSKI:def 2;
+       hence thesis by A2,Def7,Th2,Th6,Th14;
+   end;
+A13:(x in {-infty,+infty} & y in REAL & z in {-infty,+infty}) implies x <=' z
+   proof
+       assume x in {-infty,+infty} & y in REAL & z in {-infty,+infty};
+   then (x = -infty) & y in REAL & (z = -infty) or
+       (x = -infty) & y in REAL & (z = +infty) or
+       (x = +infty) & y in REAL & (z = -infty) or
+       (x = +infty) & y in REAL & (z = +infty) by TARSKI:def 2;
+       hence thesis by A2,Def7,Th6;
+   end;
+A14:(x in REAL & y in {-infty,+infty} & z in {-infty,+infty}) implies x <=' z
+   proof
+       assume
+     x in REAL & y in {-infty,+infty} & z in {-infty,+infty};
+   then x in REAL & (y = -infty) & (z = -infty) or
+       x in REAL & (y = -infty) & (z = +infty) or
+       x in REAL & (y = +infty) & (z = -infty) or
+       x in REAL & (y = +infty) & (z = +infty) by TARSKI:def 2;
+       hence thesis by A1,A2,Def7,Th2;
+   end;
+  (x in {-infty,+infty} & y in {-infty,+infty} & z in {-infty,+infty
+}) implies x <=' z
+   proof
+       assume x in {-infty,+infty} & y in {-infty,+infty} & z in
+ {-infty,+infty};
+   then (x = +infty) & (y = -infty) & (z = -infty) or
+       (x = +infty) & (y = -infty) & (z = +infty) or
+       (x = +infty) & (y = +infty) & (z = -infty) or
+       (x = +infty) & (y = +infty) & (z = +infty) or
+       (x = -infty) & (y = -infty) & (z = -infty) or
+       (x = -infty) & (y = -infty) & (z = +infty) or
+       (x = -infty) & (y = +infty) & (z = -infty) or
+       (x = -infty) & (y = +infty) & (z = +infty) by TARSKI:def 2;
+       hence thesis by A1,A2;
+   end;
+   hence thesis by A3,A4,A8,A9,A11,A12,A13,A14,XBOOLE_0:def 2;
+end;
+
+definition
+   cluster ExtREAL -> non empty;
+coherence by Def6;
+end;
+
+canceled;
+
+theorem
+     for x being R_eal holds
+   x in REAL implies -infty <' x & x <' +infty
+proof
+   let x be R_eal;
+   assume
+A1:x in REAL;
+  -infty <=' x by Def7,Th6;
+   hence -infty <' x by A1,Th6,Th22;
+     x <=' +infty by Def7,Th2;
+   hence thesis by A1,Th2,Th22;
+end;
+
+::
+::       Majorant and minorant element of X being SUBDOMAIN of ExtREAL
+::
+
+definition
+   let X be non empty Subset of ExtREAL;
+ canceled;
+
+   mode majorant of X -> R_eal means
+:Def9:for x be R_eal holds x in X implies x <=' it;
+existence
+proof
+   take +infty;
+   thus thesis by Def7,Th2;
+end;
+end;
+
+canceled;
+
+theorem Th33:
+   for X being non empty Subset of ExtREAL holds
+   +infty is majorant of X
+proof
+   let X be non empty Subset of ExtREAL;
+     for x being R_eal holds x in X implies x <=' +infty by Def7,Th2;
+   hence thesis by Def9;
+end;
+
+theorem Th34:
+   for X,Y being non empty Subset of ExtREAL holds
+   X c= Y implies
+   (for UB being R_eal holds UB is majorant of Y implies UB is majorant of X)
+proof
+   let X,Y be non empty Subset of ExtREAL;
+   assume
+A1:X c= Y;
+   let UB be R_eal;
+   assume UB is majorant of Y;
+   then for x be R_eal st x in X holds x <=' UB by A1,Def9;
+   hence thesis by Def9;
+end;
+
+definition
+   let X be non empty Subset of ExtREAL;
+   mode minorant of X -> R_eal means
+:Def10:for x be R_eal holds x in X implies it <=' x;
+existence
+proof
+   take -infty;
+   thus thesis by Def7,Th6;
+end;
+end;
+
+canceled;
+
+theorem Th36:
+   for X being non empty Subset of ExtREAL holds
+   -infty is minorant of X
+proof
+   let X be non empty Subset of ExtREAL;
+     for x being R_eal st x in X holds -infty <=' x by Def7,Th6;
+   hence thesis by Def10;
+end;
+
+canceled 2;
+
+theorem Th39:
+   for X,Y being non empty Subset of ExtREAL holds
+   X c= Y implies
+   (for LB being R_eal holds LB is minorant of Y implies LB is minorant of X)
+proof
+   let X,Y be non empty Subset of ExtREAL;
+   assume
+A1:X c= Y;
+   let LB be R_eal;
+   assume LB is minorant of Y;
+   then for x be R_eal st x in X holds LB <=' x by A1,Def10;
+   hence thesis by Def10;
+end;
+
+definition
+   redefine func REAL -> non empty Subset of ExtREAL;
+coherence by Def6,XBOOLE_1:7;
+end;
+
+canceled;
+
+theorem
+     +infty is majorant of REAL by Th33;
+
+theorem
+     -infty is minorant of REAL by Th36;
+
+::
+::       Bounded above, bounded below and bounded sets of r_eal numbers
+::
+
+definition
+   let X be non empty Subset of ExtREAL;
+   attr X is bounded_above means
+:Def11: ex UB being majorant of X st UB in REAL;
+end;
+
+canceled;
+
+theorem Th44:
+   for X,Y being non empty Subset of ExtREAL holds
+   X c= Y implies (Y is bounded_above implies X is bounded_above)
+proof
+   let X,Y be non empty Subset of ExtREAL;
+   assume
+A1:X c= Y;
+   assume Y is bounded_above;
+then ex UB being majorant of Y st UB in REAL by Def11;
+      then consider UB being R_eal such that
+   A2:UB is majorant of Y & UB in REAL;
+        UB is majorant of X & UB in REAL by A1,A2,Th34;
+   hence thesis by Def11;
+end;
+
+theorem
+     not REAL is bounded_above
+proof
+     for X being non empty Subset of ExtREAL holds
+   X = REAL implies not X is bounded_above
+   proof
+      let X be non empty Subset of ExtREAL;
+      assume
+   A1:X = REAL;
+      assume X is bounded_above;
+      then consider UB being majorant of X such that
+   A2:UB in REAL by Def11;
+      reconsider UB as Real by A2;
+      consider x being real number such that
+   A3:UB < x by REAL_1:76;
+      reconsider x as Real by XREAL_0:def 1;
+      reconsider x as R_eal by Def5,Def6;
+      reconsider UB as R_eal;
+   A4:x <=' UB by A1,Def9;
+      consider a,b being R_eal such that
+   A5:a = UB & b = x;
+        a <=' b by A3,A5,Def7;
+      hence thesis by A3,A4,A5,Th22;
+   end;
+   hence thesis;
+end;
+
+definition
+   let X be non empty Subset of ExtREAL;
+   attr X is bounded_below means
+:Def12: ex LB being minorant of X st LB in REAL;
+end;
+
+canceled;
+
+theorem Th47:
+   for X,Y being non empty Subset of ExtREAL holds
+   X c= Y implies (Y is bounded_below implies X is bounded_below)
+proof
+   let X,Y be non empty Subset of ExtREAL;
+   assume
+A1:X c= Y;
+   assume Y is bounded_below;
+then ex LB being minorant of Y st LB in REAL by Def12;
+   then consider LB being R_eal such that
+A2:LB is minorant of Y & LB in REAL;
+     LB is minorant of X & LB in REAL by A1,A2,Th39;
+   hence thesis by Def12;
+end;
+
+theorem
+     not REAL is bounded_below
+proof
+     for X being non empty Subset of ExtREAL holds
+   X = REAL implies not X is bounded_below
+   proof
+      let X be non empty Subset of ExtREAL;
+      assume
+   A1:X = REAL;
+      assume X is bounded_below;
+      then consider LB being minorant of X such that
+   A2:LB in REAL by Def12;
+      reconsider LB as Real by A2;
+      consider x being real number such that
+   A3:x < LB by REAL_1:77;
+      reconsider x as Real by XREAL_0:def 1;
+      reconsider x as R_eal by Def5,Def6;
+      reconsider LB as R_eal;
+   A4:LB <=' x by A1,Def10;
+      consider a,b being R_eal such that
+   A5:a = x & b = LB;
+        a <=' b by A3,A5,Def7;
+      hence thesis by A3,A4,A5,Th22;
+   end;
+   hence thesis;
+end;
+
+definition
+   let X be non empty Subset of ExtREAL;
+   attr X is bounded means
+:Def13:X is bounded_above bounded_below;
+end;
+
+canceled;
+
+theorem
+     for X,Y being non empty Subset of ExtREAL holds
+   X c= Y implies (Y is bounded implies X is bounded)
+proof
+   let X,Y be non empty Subset of ExtREAL;
+   assume
+A1:X c= Y;
+   assume Y is bounded;
+   then Y is bounded_above & Y is bounded_below by Def13;
+   then X is bounded_above & X is bounded_below by A1,Th44,Th47;
+   hence thesis by Def13;
+end;
+
+theorem Th51:
+   for X being non empty Subset of ExtREAL holds
+   ex Y being non empty Subset of ExtREAL st
+   for x being R_eal holds x in Y iff x is majorant of X
+proof
+   let X be non empty Subset of ExtREAL;
+    defpred P[R_eal] means $1 is majorant of X;
+     ex Y being Subset of REAL \/ {-infty,+infty} st
+   for x being R_eal holds x in Y iff P[x] from SepR_eal;
+   then consider Y being Subset of REAL \/ {-infty,+infty} such that
+A1:for x being R_eal holds x in Y iff x is majorant of X;
+     +infty is majorant of X by Th33;
+   then reconsider Y as non empty set by A1;
+   reconsider Y as non empty Subset of ExtREAL by Def6;
+   take Y;
+   thus thesis by A1;
+end;
+
+::
+::       Set of majorant and set of minorant of X being SUBDOMAIN of ExtREAL
+::
+
+definition
+   let X be non empty Subset of ExtREAL;
+   func SetMajorant(X) -> Subset of ExtREAL means
+:Def14: for x being R_eal holds x in it iff x is majorant of X;
+existence
+  proof
+   consider Y being non empty Subset of ExtREAL such that
+A1:   for x being R_eal holds x in Y iff x is majorant of X by Th51;
+  take Y;
+  thus thesis by A1;
+  end;
+uniqueness
+proof
+   let Y1,Y2 be Subset of ExtREAL such that
+A2:for x being R_eal holds
+   x in Y1 iff x is majorant of X and
+A3:for x being R_eal holds
+   x in Y2 iff x is majorant of X;
+A4:for x being R_eal holds x in Y1 iff x in Y2
+   proof
+      let x be R_eal;
+        x in Y1 iff x is majorant of X by A2;
+      hence thesis by A3;
+   end;
+   thus Y1 c= Y2
+   proof
+        for x being set holds x in Y1 implies x in Y2 by A4;
+      hence thesis by TARSKI:def 3;
+   end;
+   thus Y2 c= Y1
+   proof
+        for x being set holds x in Y2 implies x in Y1 by A4;
+      hence thesis by TARSKI:def 3;
+   end;
+end;
+end;
+
+definition
+   let X be non empty Subset of ExtREAL;
+   cluster SetMajorant(X) -> non empty;
+   coherence
+   proof
+      consider x being majorant of X;
+        x in SetMajorant(X) by Def14;
+      hence thesis;
+   end;
+end;
+
+canceled 2;
+
+theorem
+     for X,Y being non empty Subset of ExtREAL holds
+   X c= Y implies
+   for x being R_eal holds (x in SetMajorant(Y) implies x in SetMajorant(X))
+proof
+   let X,Y be non empty Subset of ExtREAL;
+   assume
+A1:X c= Y;
+   let x be R_eal;
+   assume x in SetMajorant(Y);
+   then x is majorant of Y by Def14;
+   then x is majorant of X by A1,Th34;
+   hence thesis by Def14;
+end;
+
+theorem Th55:
+   for X being non empty Subset of ExtREAL holds
+   ex Y being non empty Subset of ExtREAL st
+   for x being R_eal holds x in Y iff x is minorant of X
+proof
+   let X be non empty Subset of ExtREAL;
+    defpred P[R_eal] means $1 is minorant of X;
+     ex Y being Subset of REAL \/ {-infty,+infty} st
+   for x being R_eal holds x in Y iff P[x] from SepR_eal;
+   then consider Y being Subset of REAL \/ {-infty,+infty} such that
+A1:for x being R_eal holds x in Y iff x is minorant of X;
+     -infty is minorant of X by Th36;
+   then reconsider Y as non empty set by A1;
+   reconsider Y as non empty Subset of ExtREAL by Def6;
+   take Y;
+   thus thesis by A1;
+end;
+
+definition
+   let X be non empty Subset of ExtREAL;
+   func SetMinorant(X) -> Subset of ExtREAL means
+:Def15: for x being R_eal holds x in it iff x is minorant of X;
+existence
+ proof
+  consider Y being non empty Subset of ExtREAL such that
+A1:  for x being R_eal holds x in Y iff x is minorant of X by Th55;
+  take Y;
+  thus thesis by A1;
+ end;
+uniqueness
+proof
+   let Y1,Y2 be Subset of ExtREAL such that
+A2:for x being R_eal holds
+   x in Y1 iff x is minorant of X and
+A3:for x being R_eal holds
+   x in Y2 iff x is minorant of X;
+A4:for x being R_eal holds x in Y1 iff x in Y2
+   proof
+      let x be R_eal;
+     x in Y1 iff x is minorant of X by A2;
+      hence thesis by A3;
+   end;
+   thus Y1 c= Y2
+   proof
+        for x being set holds x in Y1 implies x in Y2 by A4;
+      hence thesis by TARSKI:def 3;
+   end;
+   thus Y2 c= Y1
+   proof
+        for x being set holds x in Y2 implies x in Y1 by A4;
+      hence thesis by TARSKI:def 3;
+   end;
+end;
+end;
+
+definition
+   let X be non empty Subset of ExtREAL;
+   cluster SetMinorant(X) -> non empty;
+   coherence
+   proof
+      consider x being minorant of X;
+        x in SetMinorant(X) by Def15;
+      hence thesis;
+   end;
+end;
+
+canceled 2;
+
+theorem
+     for X,Y being non empty Subset of ExtREAL holds
+   X c= Y implies
+   for x being R_eal holds (x in SetMinorant(Y) implies x in SetMinorant(X))
+proof
+   let X,Y be non empty Subset of ExtREAL;
+   assume
+A1:X c= Y;
+   let x be R_eal;
+   assume x in SetMinorant(Y);
+   then x is minorant of Y by Def15;
+   then x is minorant of X by A1,Th39;
+   hence thesis by Def15;
+end;
+
+theorem Th59:
+   for X being non empty Subset of ExtREAL holds
+   X is bounded_above & not X = {-infty} implies
+   ex x being Real st x in X & not x = -infty
+proof
+   let X be non empty Subset of ExtREAL;
+   assume
+A1:X is bounded_above & not X = {-infty};
+     ex x being set st x in X & not x = -infty
+   proof
+      assume
+A2:   not ex x being set st x in X & not x = -infty;
+        for x being set holds x in X implies x in {-infty}
+      proof
+         let x be set;
+         assume x in X;
+         then x = -infty by A2;
+         hence thesis by TARSKI:def 1;
+      end;
+      then X c= {-infty} by TARSKI:def 3;
+      hence thesis by A1,ZFMISC_1:39;
+   end;
+   then consider x being set such that
+A3:x in X & not x = -infty;
+     x in REAL
+   proof
+   A4:not x = +infty
+      proof
+         assume
+      A5:x = +infty;
+         then reconsider x as R_eal;
+         consider UB0 being majorant of X such that
+      A6:UB0 in REAL by A1,Def11;
+         reconsider UB0 as Real by A6;
+         reconsider UB0 as R_eal;
+           x <=' UB0 by A3,Def9;
+         hence thesis by A5,Th18;
+      end;
+        x in REAL or x in {-infty,+infty} by A3,Def6,XBOOLE_0:def 2;
+      hence thesis by A3,A4,TARSKI:def 2;
+   end;
+   then reconsider x as Real;
+   take x;
+   thus thesis by A3;
+end;
+
+theorem Th60:
+   for X being non empty Subset of ExtREAL holds
+   X is bounded_below & not X = {+infty} implies
+   ex x being Real st x in X & not x = +infty
+proof
+   let X be non empty Subset of ExtREAL;
+   assume
+A1:X is bounded_below & not X = {+infty};
+     ex x being set st x in X & not x = +infty
+   proof
+      assume
+A2:   not ex x being set st x in X & not x = +infty;
+        for x being set holds x in X implies x in {+infty}
+      proof
+         let x be set;
+         assume x in X;
+         then x = +infty by A2;
+         hence thesis by TARSKI:def 1;
+      end;
+      then X c= {+infty} by TARSKI:def 3;
+      hence thesis by A1,ZFMISC_1:39;
+   end;
+   then consider x being set such that
+A3:x in X & not x = +infty;
+     x in REAL
+   proof
+   A4:not x = -infty
+      proof
+         assume
+      A5:x = -infty;
+         then reconsider x as R_eal;
+         consider LB0 being minorant of X such that
+      A6:LB0 in REAL by A1,Def12;
+         reconsider LB0 as Real by A6;
+         reconsider LB0 as R_eal;
+           LB0 <=' x by A3,Def10;
+         hence thesis by A5,Th17;
+      end;
+        x in REAL or x in {-infty,+infty} by A3,Def6,XBOOLE_0:def 2;
+      hence thesis by A3,A4,TARSKI:def 2;
+   end;
+   then reconsider x as Real;
+   take x;
+   thus thesis by A3;
+end;
+
+canceled;
+
+theorem Th62:
+   for X being non empty Subset of ExtREAL holds
+   (X is bounded_above & not X = {-infty}) implies
+   ex UB being R_eal st ((UB is majorant of X) &
+   (for y being R_eal holds
+   (y is majorant of X ) implies (UB <=' y)))
+proof
+   let X be non empty Subset of ExtREAL;
+   assume
+A1:X is bounded_above & not X = {-infty};
+   then consider UB0 being majorant of X such that
+A2:UB0 in REAL by Def11;
+A3:UB0 in SetMajorant(X) by Def14;
+   consider x being Real such that
+A4:x in X & not x = -infty by A1,Th59;
+   reconsider S = X /\ REAL as Subset of REAL by XBOOLE_1:17;
+   reconsider Y = REAL /\ SetMajorant(X) as Subset of REAL by XBOOLE_1:17;
+   reconsider UB0 as Real by A2;
+A5:x in S by A4,XBOOLE_0:def 3;
+     now let a,b be real number;
+       assume
+   A6:a in S & b in Y;
+   then A7:a in X by XBOOLE_0:def 3;
+   A8:b in SetMajorant(X) by A6,XBOOLE_0:def 3;
+A9:  a is Real & b is Real by XREAL_0:def 1;
+       then reconsider d = b as R_eal by Def5,Def6;
+   A10:d is majorant of X by A8,Def14;
+       reconsider c = a as R_eal by A9,Def5,Def6;
+         c <=' d by A7,A10,Def9;
+       then ex p,q being Real st p = c & q = d & p <= q by A9,Def7;
+       hence a <= b;
+   end;
+   then consider UB being real number such that
+A11:for a,b being real number st a in S & b in Y holds a <= UB & UB <= b by
+AXIOMS:26;
+    set d = UB;
+    reconsider UB as Real by XREAL_0:def 1;
+    reconsider UB as R_eal by Def5,Def6;
+A12:now let a,b be R_eal;
+       assume
+   A13:a in X & b in SetMajorant(X);
+       thus (a <=' UB & UB <=' b)
+       proof
+       A14:(not a = -infty & b = +infty) implies (a <=' UB & UB <=' b)
+           proof
+               assume
+           A15:not a = -infty & b = +infty;
+             a in REAL
+               proof
+               A16:a <> +infty
+                   proof
+                       assume
+                   A17:a = +infty;
+                       reconsider UB0 as R_eal;
+                         a <=' UB0 by A13,Def9;
+                       hence thesis by A17,Th18;
+                   end;
+                     a in REAL or a in {-infty,+infty} by Def6,XBOOLE_0:def 2;
+                   hence thesis by A15,A16,TARSKI:def 2;
+               end;
+               then reconsider a as Real;
+           A18:a in S by A13,XBOOLE_0:def 3;
+                 a <= d & d <= UB0
+               proof
+                    UB0 in Y by A3,XBOOLE_0:def 3;
+                  hence thesis by A11,A18;
+               end;
+               hence thesis by A15,Def7,Th2;
+           end;
+       A19:(a = -infty & not b = +infty) implies (a <=' UB & UB <=' b)
+           proof
+               assume
+           A20:a = -infty & b <> +infty;
+A21:              b is majorant of X by A13,Def14;
+               reconsider x as R_eal by Def5,Def6;
+             x <=' b by A4,A21,Def9;
+           then A22:not b = -infty by Th17;
+                 b in REAL or b in {-infty,+infty} by Def6,XBOOLE_0:def 2;
+               then reconsider b as Real by A20,A22,TARSKI:def 2;
+           A23:b in Y by A13,XBOOLE_0:def 3;
+               reconsider x as Real;
+             x <= d & d <= b by A5,A11,A23;
+               hence thesis by A20,Def7,Th6;
+           end;
+         (a <> -infty & b <> +infty) implies (a <=' UB & UB <=' b)
+           proof
+               assume
+           A24:a <> -infty & b <> +infty;
+             a in REAL
+               proof
+               A25:not a = +infty
+                   proof
+                       assume
+                   A26:a = +infty;
+                       reconsider UB0 as R_eal;
+                         a <=' UB0 by A13,Def9;
+                       hence thesis by A26,Th18;
+                   end;
+                     a in REAL or a in {-infty,+infty} by Def6,XBOOLE_0:def 2;
+                   hence thesis by A24,A25,TARSKI:def 2;
+               end;
+               then reconsider a as Real;
+A27:              b is majorant of X by A13,Def14;
+               reconsider x as R_eal by Def5,Def6;
+             x <=' b by A4,A27,Def9;
+           then A28:not b = -infty by Th17;
+                 b in REAL or b in {-infty,+infty} by Def6,XBOOLE_0:def 2;
+               then reconsider b as Real by A24,A28,TARSKI:def 2;
+           A29:b in Y by A13,XBOOLE_0:def 3;
+             a in S by A13,XBOOLE_0:def 3;
+           then a <= d & d <= b by A11,A29;
+               hence thesis by Def7;
+           end;
+           hence thesis by A14,A19,Def7,Th2,Th6;
+       end;
+   end;
+A30:UB is majorant of X
+   proof
+        for a being R_eal st a in X holds a <=' UB by A3,A12;
+      hence thesis by Def9;
+   end;
+A31:for y being R_eal holds
+   (y is majorant of X ) implies (UB <=' y)
+   proof
+       let y be R_eal;
+       assume
+     y is majorant of X;
+   then y in SetMajorant(X) by Def14;
+       hence thesis by A4,A12;
+   end;
+   take UB;
+   thus thesis by A30,A31;
+end;
+
+theorem Th63:
+   for X being non empty Subset of ExtREAL holds
+   (X is bounded_below & not X = {+infty}) implies
+   ex LB being R_eal st ((LB is minorant of X) &
+   (for y being R_eal holds
+   (y is minorant of X ) implies (y <=' LB)))
+proof
+   let X be non empty Subset of ExtREAL;
+   assume
+A1:X is bounded_below & not X = {+infty};
+   then consider LB0 being minorant of X such that
+A2:LB0 in REAL by Def12;
+A3:LB0 in SetMinorant(X) by Def15;
+   consider x being Real such that
+A4:x in X & not x = +infty by A1,Th60;
+   reconsider S = X /\ REAL as Subset of REAL by XBOOLE_1:17;
+   reconsider Y = REAL /\ SetMinorant(X) as Subset of REAL by XBOOLE_1:17;
+   reconsider LB0 as Real by A2;
+A5:x in S by A4,XBOOLE_0:def 3;
+     now let b,a be real number;
+       assume
+   A6:b in Y & a in S;
+   then A7:a in X by XBOOLE_0:def 3;
+   A8:b in SetMinorant(X) by A6,XBOOLE_0:def 3;
+   A9: a is Real & b is Real by XREAL_0:def 1;
+       then reconsider d = b as R_eal by Def5,Def6;
+   A10:d is minorant of X by A8,Def15;
+       reconsider c = a as R_eal by A9,Def5,Def6;
+         d <=' c by A7,A10,Def10;
+       then ex p,q being Real st p = d & q = c & p <= q by A9,Def7;
+       hence b <= a;
+   end;
+   then consider LB being real number such that
+A11:for b,a being real number st b in Y & a in S holds b <= LB & LB <= a by
+AXIOMS:26;
+   reconsider LB as Real by XREAL_0:def 1;
+   set d = LB;
+   reconsider LB as R_eal by Def5,Def6;
+A12:for b,a being R_eal st b in SetMinorant(X) & a in
+ X holds b <=' LB & LB <=' a
+   proof
+       let b,a be R_eal;
+       assume
+   A13:b in SetMinorant(X) & a in X;
+   A14:(b = -infty & a <> +infty) implies (b <=' LB & LB <=' a)
+       proof
+           assume
+       A15:b = -infty & not a = +infty;
+         a in REAL
+           proof
+           A16:a <> -infty
+               proof
+                   assume
+               A17:a = -infty;
+                   reconsider LB0 as R_eal;
+                     LB0 <=' a by A13,Def10;
+                   hence thesis by A17,Th17;
+               end;
+                 a in REAL or a in {-infty,+infty} by Def6,XBOOLE_0:def 2;
+               hence thesis by A15,A16,TARSKI:def 2;
+           end;
+           then reconsider a as Real;
+       A18:a in S by A13,XBOOLE_0:def 3;
+             LB0 <= d & d <= a
+           proof
+                LB0 in Y by A3,XBOOLE_0:def 3;
+              hence thesis by A11,A18;
+           end;
+           hence thesis by A15,Def7,Th6;
+       end;
+   A19:(not b = -infty & a = +infty) implies (b <=' LB & LB <=' a)
+       proof
+           assume
+       A20:not b = -infty & a = +infty;
+A21:       b is minorant of X by A13,Def15;
+           reconsider x as R_eal by Def5,Def6;
+         b <=' x by A4,A21,Def10;
+       then A22:not b = +infty by Th18;
+             b in REAL or b in {-infty,+infty} by Def6,XBOOLE_0:def 2;
+           then reconsider b as Real by A20,A22,TARSKI:def 2;
+       A23:b in Y by A13,XBOOLE_0:def 3;
+           reconsider x as Real;
+         b <= d & d <= x by A5,A11,A23;
+           hence thesis by A20,Def7,Th2;
+       end;
+     (not b = -infty & not a = +infty) implies (b <=' LB & LB <=' a)
+       proof
+           assume
+       A24:not b = -infty & not a = +infty;
+         a in REAL
+           proof
+           A25:not a = -infty
+               proof
+                   assume
+               A26:a = -infty;
+                   reconsider LB0 as R_eal;
+                     LB0 <=' a by A13,Def10;
+                   hence thesis by A26,Th17;
+               end;
+                 a in REAL or a in {-infty,+infty} by Def6,XBOOLE_0:def 2;
+               hence thesis by A24,A25,TARSKI:def 2;
+           end;
+           then reconsider a as Real;
+A27:              b is minorant of X by A13,Def15;
+           reconsider x as R_eal by Def5,Def6;
+         b <=' x by A4,A27,Def10;
+       then A28:not b = +infty by Th18;
+             b in REAL or b in {-infty,+infty} by Def6,XBOOLE_0:def 2;
+           then reconsider b as Real by A24,A28,TARSKI:def 2;
+       A29:b in Y by A13,XBOOLE_0:def 3;
+         a in S by A13,XBOOLE_0:def 3;
+       then b <= d & d <= a by A11,A29;
+           hence thesis by Def7;
+       end;
+       hence thesis by A14,A19,Def7,Th2,Th6;
+   end;
+   take LB;
+     for a being R_eal st a in X holds LB <=' a by A3,A12;
+   hence LB is minorant of X by Def10;
+   let y be R_eal;
+   assume
+  y is minorant of X;
+then y in SetMinorant(X) by Def15;
+   hence thesis by A4,A12;
+end;
+
+theorem Th64:
+   for X being non empty Subset of ExtREAL holds
+   X = {-infty} implies X is bounded_above
+proof
+   let X be non empty Subset of ExtREAL;
+   assume
+A1:X = {-infty};
+   consider x being Element of REAL;
+   reconsider x as R_eal;
+     now let a be R_eal;
+      assume a in X;
+      then a = -infty by A1,TARSKI:def 1;
+      hence a <=' x by Def7,Th6;
+   end;
+   then x is majorant of X by Def9;
+   hence thesis by Def11;
+end;
+
+theorem Th65:
+   for X being non empty Subset of ExtREAL holds
+   X = {+infty} implies X is bounded_below
+proof
+   let X be non empty Subset of ExtREAL;
+   assume
+A1:X = {+infty};
+   consider x being Element of REAL;
+   reconsider x as R_eal;
+     now let a be R_eal;
+      assume a in X;
+      then a = +infty by A1,TARSKI:def 1;
+      hence x <=' a by Def7,Th2;
+   end;
+   then x is minorant of X by Def10;
+   hence thesis by Def12;
+end;
+
+theorem Th66:
+   for X being non empty Subset of ExtREAL holds
+   X = {-infty} implies
+   ex UB being R_eal st ((UB is majorant of X) &
+   (for y being R_eal holds
+   (y is majorant of X ) implies (UB <=' y)))
+proof
+   let X be non empty Subset of ExtREAL;
+   assume
+A1:X = {-infty};
+   set UB = -infty;
+A2:for a being R_eal holds a in X implies a <=' UB by A1,TARSKI:def 1;
+   take UB;
+   thus thesis by A2,Def7,Def9,Th6;
+end;
+
+theorem Th67:
+   for X being non empty Subset of ExtREAL holds
+   X = {+infty} implies
+   ex LB being R_eal st ((LB is minorant of X) &
+   (for y being R_eal holds
+   (y is minorant of X ) implies (y <=' LB)))
+proof
+   let X be non empty Subset of ExtREAL;
+   assume
+A1:X = {+infty};
+   set LB = +infty;
+A2:   for a being R_eal holds a in X implies LB <=' a by A1,TARSKI:def 1;
+   take LB;
+   thus thesis by A2,Def7,Def10,Th2;
+end;
+
+theorem Th68:
+   for X being non empty Subset of ExtREAL holds
+   X is bounded_above implies
+   ex UB being R_eal st ((UB is majorant of X) &
+   (for y being R_eal holds
+   y is majorant of X implies UB <=' y))
+proof
+   let X be non empty Subset of ExtREAL;
+   assume X is bounded_above;
+then (X is bounded_above & not X = {-infty}) or (X is bounded_above & X = {
+-infty});
+   hence thesis by Th62,Th66;
+end;
+
+theorem Th69:
+   for X being non empty Subset of ExtREAL holds
+   X is bounded_below implies
+   ex LB being R_eal st ((LB is minorant of X) &
+   (for y being R_eal holds
+   (y is minorant of X ) implies (y <=' LB)))
+proof
+   let X be non empty Subset of ExtREAL;
+   assume X is bounded_below;
+then (X is bounded_below & not X = {+infty}) or (X is bounded_below & X = {
++infty});
+   hence thesis by Th63,Th67;
+end;
+
+theorem Th70:
+   for X being non empty Subset of ExtREAL holds
+   not X is bounded_above implies
+   (for y being R_eal holds
+   (y is majorant of X implies y = +infty))
+proof
+   let X be non empty Subset of ExtREAL;
+   assume
+A1:not X is bounded_above;
+     for y being R_eal holds
+   (y is majorant of X implies y = +infty)
+   proof
+      let y be R_eal;
+      assume
+   A2:y is majorant of X;
+   then not y in REAL by A1,Def11;
+      then A3: y in {-infty,+infty} by Def6,XBOOLE_0:def 2;
+
+     not y = -infty
+      proof
+         assume
+      A4:y = -infty;
+           for a being set holds a in X implies a in {-infty}
+         proof
+            let a be set;
+            assume
+         A5:a in X;
+            then a in REAL or a in {-infty,+infty} by Def6,XBOOLE_0:def 2;
+            then A6:a in REAL or a = -infty or a = +infty by TARSKI:def 2;
+            reconsider a as R_eal by A5;
+          a <=' -infty by A2,A4,A5,Def9;
+            hence thesis by A6,Def7,Th6,Th14,TARSKI:def 1;
+         end;
+         then X c= {-infty} by TARSKI:def 3;
+         then X = {} or X = {-infty} by ZFMISC_1:39;
+         hence thesis by A1,Th64;
+      end;
+      hence thesis by A3,TARSKI:def 2;
+   end;
+   hence thesis;
+end;
+
+theorem Th71:
+   for X being non empty Subset of ExtREAL holds
+   not X is bounded_below implies
+   (for y being R_eal holds
+   (y is minorant of X implies y = -infty))
+proof
+   let X be non empty Subset of ExtREAL;
+   assume
+A1:not X is bounded_below;
+
+     for y being R_eal holds
+   (y is minorant of X implies y = -infty)
+   proof
+      let y be R_eal;
+      assume
+   A2:y is minorant of X;
+   then not y in REAL by A1,Def12;
+      then A3: y in {-infty,+infty} by Def6,XBOOLE_0:def 2;
+     not y = +infty
+      proof
+         assume
+      A4:y = +infty;
+           for a being set holds a in X implies a in {+infty}
+         proof
+            let a be set;
+            assume
+         A5:a in X;
+
+            then a in REAL or a in {-infty,+infty} by Def6,XBOOLE_0:def 2;
+            then A6:a in REAL or a = -infty or a = +infty by TARSKI:def 2;
+            reconsider a as R_eal by A5;
+          +infty <=' a by A2,A4,A5,Def10;
+            hence thesis by A6,Def7,Th2,Th14,TARSKI:def 1;
+         end;
+         then X c= {+infty} by TARSKI:def 3;
+         then X = {} or X = {+infty} by ZFMISC_1:39;
+         hence thesis by A1,Th65;
+      end;
+      hence thesis by A3,TARSKI:def 2;
+   end;
+   hence thesis;
+end;
+
+theorem Th72:
+   for X being non empty Subset of ExtREAL holds
+   ex UB being R_eal st ((UB is majorant of X) &
+   (for y being R_eal holds
+   (y is majorant of X ) implies (UB <=' y)))
+proof
+   let X be non empty Subset of ExtREAL;
+  not X is bounded_above implies
+   ex UB being R_eal st ((UB is majorant of X) &
+   (for y being R_eal holds
+   (y is majorant of X ) implies (UB <=' y)))
+   proof
+      assume
+A1:   not X is bounded_above;
+      set UB = +infty;
+      take UB;
+      thus thesis by A1,Th33,Th70;
+   end;
+   hence thesis by Th68;
+end;
+
+theorem Th73:
+   for X being non empty Subset of ExtREAL holds
+   ex LB being R_eal st ((LB is minorant of X) &
+   (for y being R_eal holds
+   (y is minorant of X) implies (y <=' LB)))
+proof
+   let X be non empty Subset of ExtREAL;
+  not X is bounded_below implies
+   ex LB being R_eal st ((LB is minorant of X) &
+   (for y being R_eal holds
+   (y is minorant of X ) implies (y <=' LB)))
+   proof
+      assume
+A1:   not X is bounded_below;
+      set LB = -infty;
+      take LB;
+      thus thesis by A1,Th36,Th71;
+   end;
+   hence thesis by Th69;
+end;
+
+::
+::       sup X, inf X least upper bound and greatest lower bound of set X
+::
+
+definition
+   let X be non empty Subset of ExtREAL;
+   func sup X -> R_eal means
+:Def16: it is majorant of X &
+      for y being R_eal holds
+      y is majorant of X implies it <=' y;
+existence by Th72;
+uniqueness
+proof
+   let S1,S2 be R_eal such that
+A1:S1 is majorant of X &
+   for y being R_eal holds
+   (y is majorant of X ) implies (S1 <=' y) and
+A2:S2 is majorant of X &
+   for y being R_eal holds
+   (y is majorant of X ) implies (S2 <=' y);
+     S1 <=' S2 & S2 <=' S1 by A1,A2;
+   hence thesis by Th22;
+end;
+end;
+
+canceled 2;
+
+theorem Th76:
+   for X being non empty Subset of ExtREAL holds
+   for x being R_eal holds
+   x in X implies x <=' sup X
+proof
+   let X be non empty Subset of ExtREAL;
+   let x be R_eal;
+   assume
+A1:x in X;
+     sup X is majorant of X by Def16;
+   hence thesis by A1,Def9;
+end;
+
+definition
+   let X be non empty Subset of ExtREAL;
+   func inf X -> R_eal means
+:Def17: it is minorant of X &
+      for y being R_eal holds
+      y is minorant of X implies y <=' it;
+existence by Th73;
+uniqueness
+proof
+   let S1,S2 be R_eal such that
+A1:S1 is minorant of X &
+   for y being R_eal holds
+   (y is minorant of X ) implies (y <=' S1) and
+A2:S2 is minorant of X &
+   for y being R_eal holds
+   (y is minorant of X ) implies (y <=' S2);
+     S1 <=' S2 & S2 <=' S1 by A1,A2;
+   hence thesis by Th22;
+end;
+end;
+
+canceled 2;
+
+theorem Th79:
+   for X being non empty Subset of ExtREAL holds
+   for x being R_eal holds
+   x in X implies inf X <=' x
+proof
+   let X be non empty Subset of ExtREAL;
+   let x be R_eal;
+   assume
+A1:x in X;
+     inf X is minorant of X by Def17;
+   hence thesis by A1,Def10;
+end;
+
+theorem Th80:
+   for X being non empty Subset of ExtREAL holds
+   for x being majorant of X holds
+   x in X implies x = sup X
+proof
+   let X be non empty Subset of ExtREAL;
+   let x be majorant of X;
+   assume x in X;
+   then for y being R_eal holds
+   (y is majorant of X) implies (x <=' y) by Def9;
+   hence thesis by Def16;
+end;
+
+theorem Th81:
+   for X being non empty Subset of ExtREAL holds
+   for x being minorant of X holds
+   x in X implies x = inf X
+proof
+   let X be non empty Subset of ExtREAL;
+   let x be minorant of X;
+   assume x in X;
+   then for y being R_eal holds
+   (y is minorant of X) implies (y <=' x) by Def10;
+   hence thesis by Def17;
+end;
+
+theorem
+     for X being non empty Subset of ExtREAL holds
+   sup X = inf SetMajorant(X) & inf X = sup SetMinorant(X)
+proof
+   let X be non empty Subset of ExtREAL;
+     sup X is majorant of X by Def16;
+then A1:sup X in SetMajorant(X) by Def14;
+     for y being R_eal holds (y in SetMajorant(X)) implies
+   sup X <=' y
+   proof
+      let y be R_eal;
+      assume y in SetMajorant(X);
+      then y is majorant of X by Def14;
+      hence thesis by Def16;
+   end;
+   then A2: sup X is minorant of SetMajorant(X) by Def10;
+     inf X is minorant of X by Def17;
+then A3:inf X in SetMinorant(X) by Def15;
+     for y being R_eal holds (y in SetMinorant(X)) implies
+   (y <=' inf X)
+   proof
+      let y be R_eal;
+      assume y in SetMinorant(X);
+      then y is minorant of X by Def15;
+      hence thesis by Def17;
+   end;
+   then inf X is majorant of SetMinorant(X) by Def9;
+   hence thesis by A1,A2,A3,Th80,Th81;
+end;
+
+theorem
+     for X being non empty Subset of ExtREAL holds
+   X is bounded_above & not X = {-infty} implies sup X in REAL
+proof
+   let X be non empty Subset of ExtREAL;
+   assume
+A1:X is bounded_above & not X = {-infty};
+   then consider UB0 being majorant of X such that
+A2:UB0 in REAL by Def11;
+A3:sup X <=' UB0 by Def16;
+   consider x being Real such that
+A4:x in X & not x = -infty by A1,Th59;
+   reconsider x as R_eal by Def5,Def6;
+  sup X is majorant of X by Def16;
+then x <=' sup X by A4,Def9;
+then not sup X = -infty by Th17;
+   hence thesis by A2,A3,Def7,Th2;
+end;
+
+theorem
+     for X being non empty Subset of ExtREAL holds
+   X is bounded_below & not X = {+infty} implies inf X in REAL
+proof
+   let X be non empty Subset of ExtREAL;
+   assume
+A1:X is bounded_below & not X = {+infty};
+   then consider LB0 being minorant of X such that
+A2:LB0 in REAL by Def12;
+A3:LB0 <=' inf X by Def17;
+   consider x being Real such that
+A4:x in X & not x = +infty by A1,Th60;
+   reconsider x as R_eal by Def5,Def6;
+  inf X is minorant of X by Def17;
+then inf X <=' x by A4,Def10;
+then not inf X = +infty by Th18;
+   hence thesis by A2,A3,Def7,Th6;
+end;
+
+definition let x be R_eal;
+  redefine func {x} -> Subset of ExtREAL;
+coherence by ZFMISC_1:37;
+end;
+
+definition let x,y be R_eal;
+  redefine func {x,y} -> Subset of ExtREAL;
+coherence by ZFMISC_1:38;
+end;
+
+theorem Th85:
+   for x being R_eal holds sup{x} = x
+proof
+   let x be R_eal;
+A1:sup{x} is majorant of {x} by Def16;
+  x is majorant of {x}
+   proof
+        for a being R_eal holds a in {x} implies a <=' x by TARSKI:def 1;
+      hence thesis by Def9;
+   end;
+then A2:sup{x} <=' x by Def16;
+     x in {x} by TARSKI:def 1;
+   then x <=' sup{x} by A1,Def9;
+   hence thesis by A2,Th22;
+end;
+
+theorem Th86:
+   for x being R_eal holds inf{x} = x
+proof
+   let x be R_eal;
+A1:inf{x} is minorant of {x} by Def17;
+  x is minorant of {x}
+   proof
+        for a being R_eal holds a in {x} implies x <=' a by TARSKI:def 1;
+      hence thesis by Def10;
+   end;
+then A2:x <=' inf{x} by Def17;
+     x in {x} by TARSKI:def 1;
+   then inf{x} <=' x by A1,Def10;
+   hence thesis by A2,Th22;
+end;
+
+theorem
+     sup {-infty} = -infty by Th85;
+
+theorem
+     sup {+infty} = +infty by Th85;
+
+theorem
+     inf {-infty} = -infty by Th86;
+
+theorem
+     inf {+infty} = +infty by Th86;
+
+theorem Th91:
+   for X,Y being non empty Subset of ExtREAL holds
+   X c= Y implies sup X <=' sup Y
+proof
+   let X,Y be non empty Subset of ExtREAL;
+   assume
+A1:X c= Y;
+      set S2 = sup Y;
+     S2 is majorant of Y &
+      for y being R_eal holds
+      (y is majorant of Y implies (S2 <=' y)) by Def16;
+   then S2 is majorant of X by A1,Th34;
+      hence thesis by Def16;
+end;
+
+theorem Th92:
+   for x,y being R_eal holds
+   for a being R_eal holds
+   (x <=' a & y <=' a implies sup{x,y} <=' a)
+proof
+   let x,y be R_eal;
+   let a be R_eal;
+   assume x <=' a & y <=' a;
+   then for c being R_eal holds c in {x,y} implies c <=' a by TARSKI:def 2;
+   then a is majorant of {x,y} by Def9;
+   hence thesis by Def16;
+end;
+
+theorem
+     for x,y being R_eal holds
+   (x <=' y implies sup{x,y} = y) & (y <=' x implies sup{x,y} = x)
+proof
+   let x,y be R_eal;
+   thus x <=' y implies sup{x,y} = y
+   proof
+      assume x <=' y;
+   then A1:sup{x,y} <=' y by Th92;
+   A2:y in {x,y} by TARSKI:def 2;
+        sup{x,y} is majorant of {x,y} by Def16;
+      then y <=' sup{x,y} by A2,Def9;
+      hence thesis by A1,Th22;
+   end;
+      assume y <=' x;
+   then A3:sup{x,y} <=' x by Th92;
+   A4:x in {x,y} by TARSKI:def 2;
+        sup{x,y} is majorant of {x,y} by Def16;
+      then x <=' sup{x,y} by A4,Def9;
+      hence thesis by A3,Th22;
+end;
+
+theorem Th94:
+   for X,Y being non empty Subset of ExtREAL holds
+   X c= Y implies inf Y <=' inf X
+proof
+   let X,Y be non empty Subset of ExtREAL;
+   assume
+A1:X c= Y;
+     inf Y <=' inf X
+   proof
+      set S2 = inf Y;
+     S2 is minorant of Y &
+      for y being R_eal holds
+      (y is minorant of Y implies (y <=' S2)) by Def17;
+   then S2 is minorant of X by A1,Th39;
+      hence thesis by Def17;
+   end;
+   hence thesis;
+end;
+
+theorem Th95:
+   for x,y being R_eal holds
+   for a being R_eal holds
+   (a <=' x & a <=' y implies a <=' inf{x,y})
+proof
+   let x,y be R_eal;
+   let a be R_eal;
+   assume a <=' x & a <=' y;
+   then for c being R_eal holds c in {x,y} implies a <=' c by TARSKI:def 2;
+   then a is minorant of {x,y} by Def10;
+   hence thesis by Def17;
+end;
+
+theorem
+     for x,y being R_eal holds
+   (x <=' y implies inf{x,y} = x) & (y <=' x implies inf{x,y} = y)
+proof
+   let x,y be R_eal;
+   thus x <=' y implies inf{x,y} = x
+   proof
+      assume x <='y;
+   then A1:x <=' inf{x,y} by Th95;
+   A2:x in {x,y} by TARSKI:def 2;
+        inf{x,y} is minorant of {x,y} by Def17;
+      then inf{x,y} <=' x by A2,Def10;
+      hence thesis by A1,Th22;
+   end;
+      assume y <='x;
+   then A3:y <=' inf{x,y} by Th95;
+   A4:y in {x,y} by TARSKI:def 2;
+        inf{x,y} is minorant of {x,y} by Def17;
+      then inf{x,y} <=' y by A4,Def10;
+      hence thesis by A3,Th22;
+end;
+
+theorem Th97:
+   for X being non empty Subset of ExtREAL holds
+   for x being R_eal holds
+   ((ex y being R_eal st (y in X & x <=' y)) implies x <=' sup X)
+proof
+   let X be non empty Subset of ExtREAL;
+   let x be R_eal;
+   given y being R_eal such that
+A1:y in X & x <=' y;
+     sup X is majorant of X by Def16;
+   then y <=' sup X by A1,Def9;
+   hence thesis by A1,Th29;
+end;
+
+theorem Th98:
+   for X being non empty Subset of ExtREAL holds
+   for x being R_eal holds
+   ((ex y being R_eal st (y in X & y <=' x)) implies inf X <=' x)
+proof
+   let X be non empty Subset of ExtREAL;
+   let x be R_eal;
+   given y being R_eal such that
+A1:y in X & y <=' x;
+     inf X is minorant of X by Def17;
+   then inf X <=' y by A1,Def10;
+   hence thesis by A1,Th29;
+end;
+
+theorem
+     for X,Y being non empty Subset of ExtREAL holds
+   (for x being R_eal st x in X holds
+   (ex y being R_eal st y in Y & x <=' y)) implies
+   sup X <=' sup Y
+proof
+   let X,Y be non empty Subset of ExtREAL;
+   assume
+A1:for x being R_eal st x in X holds (ex y being R_eal st y in Y & x <=' y);
+     for x being R_eal st x in X holds x <=' sup Y
+   proof
+      let x be R_eal;
+      assume x in X;
+      then consider y being R_eal such that
+   A2:y in Y & x <=' y by A1;
+        y <=' sup Y by A2,Th76;
+      hence thesis by A2,Th29;
+   end;
+   then sup Y is majorant of X by Def9;
+   hence thesis by Def16;
+end;
+
+theorem
+     for X,Y being non empty Subset of ExtREAL holds
+   (for y being R_eal st y in Y holds
+   (ex x being R_eal st x in X & x <=' y)) implies
+   inf X <=' inf Y
+proof
+   let X,Y be non empty Subset of ExtREAL;
+   assume
+A1:for y being R_eal st y in Y holds (ex x being R_eal st x in X & x <=' y);
+     for y being R_eal st y in Y holds inf X <=' y
+   proof
+      let y be R_eal;
+      assume y in Y;
+      then consider x being R_eal such that
+   A2:x in X & x <=' y by A1;
+        inf X <=' x by A2,Th79;
+      hence thesis by A2,Th29;
+   end;
+   then inf X is minorant of Y by Def10;
+   hence thesis by Def17;
+end;
+
+theorem Th101:
+   for X,Y being non empty Subset of ExtREAL holds
+   for UB1 being majorant of X holds
+   for UB2 being majorant of Y holds
+   sup{UB1,UB2} is majorant of X \/ Y
+proof
+   let X,Y be non empty Subset of ExtREAL;
+   let UB1 be majorant of X;
+   let UB2 be majorant of Y;
+     for a being R_eal holds
+   a in X \/ Y implies a <=' sup{UB1,UB2}
+   proof
+      let a be R_eal;
+      assume
+A1:   a in X \/ Y;
+   A2:a in X implies a <=' sup{UB1,UB2}
+      proof
+         assume a in X;
+      then A3:a <=' UB1 by Def9;
+      A4:UB1 in {UB1,UB2} by TARSKI:def 2;
+           sup{UB1,UB2} is majorant of {UB1,UB2} by Def16;
+         then UB1 <=' sup{UB1,UB2}by A4,Def9;
+         hence thesis by A3,Th29;
+      end;
+     a in Y implies a <=' sup{UB1,UB2}
+      proof
+         assume a in Y;
+      then A5:a <=' UB2 by Def9;
+      A6:UB2 in {UB1,UB2} by TARSKI:def 2;
+           sup{UB1,UB2} is majorant of {UB1,UB2} by Def16;
+         then UB2 <=' sup{UB1,UB2}by A6,Def9;
+         hence thesis by A5,Th29;
+      end;
+      hence thesis by A1,A2,XBOOLE_0:def 2;
+   end;
+   hence thesis by Def9;
+end;
+
+theorem Th102:
+   for X,Y being non empty Subset of ExtREAL holds
+   for LB1 being minorant of X holds
+   for LB2 being minorant of Y holds
+   inf{LB1,LB2} is minorant of X \/ Y
+proof
+   let X,Y be non empty Subset of ExtREAL;
+   let LB1 be minorant of X;
+   let LB2 be minorant of Y;
+     for a being R_eal holds
+   a in X \/ Y implies inf{LB1,LB2} <=' a
+   proof
+      let a be R_eal;
+      assume
+A1:   a in X \/ Y;
+
+   A2:a in X implies inf{LB1,LB2} <=' a
+      proof
+         assume a in X;
+      then A3:LB1 <=' a by Def10;
+      A4:LB1 in {LB1,LB2} by TARSKI:def 2;
+           inf{LB1,LB2} is minorant of {LB1,LB2} by Def17;
+         then inf{LB1,LB2} <=' LB1 by A4,Def10;
+         hence thesis by A3,Th29;
+      end;
+     a in Y implies inf{LB1,LB2} <=' a
+      proof
+         assume a in Y;
+      then A5:LB2 <=' a by Def10;
+      A6:LB2 in {LB1,LB2} by TARSKI:def 2;
+           inf{LB1,LB2} is minorant of {LB1,LB2} by Def17;
+         then inf{LB1,LB2} <=' LB2 by A6,Def10;
+         hence thesis by A5,Th29;
+      end;
+      hence thesis by A1,A2,XBOOLE_0:def 2;
+   end;
+   hence thesis by Def10;
+end;
+
+theorem Th103:
+   for X,Y,S being non empty Subset of ExtREAL holds
+   for UB1 being majorant of X holds
+   for UB2 being majorant of Y holds
+   S = X /\ Y implies inf{UB1,UB2} is majorant of S
+proof
+   let X,Y,S be non empty Subset of ExtREAL;
+   let UB1 be majorant of X;
+   let UB2 be majorant of Y;
+   assume
+A1:S = X /\ Y;
+     now let a be R_eal;
+      assume a in S;
+      then a in X & a in Y by A1,XBOOLE_0:def 3;
+      then a <=' UB1 & a <=' UB2 by Def9;
+      hence a <=' inf{UB1,UB2} by Th95;
+   end;
+   hence thesis by Def9;
+end;
+
+theorem Th104:
+   for X,Y,S being non empty Subset of ExtREAL holds
+   for LB1 being minorant of X holds
+   for LB2 being minorant of Y holds
+   S = X /\ Y implies sup{LB1,LB2} is minorant of S
+proof
+   let X,Y,S be non empty Subset of ExtREAL;
+   let LB1 be minorant of X;
+   let LB2 be minorant of Y;
+   assume
+A1:S = X /\ Y;
+     now let a be R_eal;
+      assume a in S;
+      then a in X & a in Y by A1,XBOOLE_0:def 3;
+      then LB1 <=' a & LB2 <=' a by Def10;
+      hence sup{LB1,LB2} <=' a by Th92;
+   end;
+   hence thesis by Def10;
+end;
+
+theorem
+     for X,Y being non empty Subset of ExtREAL holds
+   sup(X \/ Y) = sup{sup X,sup Y}
+proof
+    let X,Y be non empty Subset of ExtREAL;
+    set a = sup(X \/ Y);
+ A1:sup X is majorant of X by Def16;
+   sup Y is majorant of Y by Def16;
+ then sup{sup X,sup Y} is majorant of X \/ Y by A1,Th101;
+ then A2:a <=' sup{sup X,sup Y} by Def16;
+      X c= X \/ Y by XBOOLE_1:7;
+ then A3:sup X <=' a by Th91;
+      Y c= X \/ Y by XBOOLE_1:7;
+    then sup Y <=' a by Th91;
+    then sup{sup X,sup Y} <=' a by A3,Th92;
+    hence thesis by A2,Th22;
+end;
+
+theorem
+     for X,Y being non empty Subset of ExtREAL holds
+   inf(X \/ Y) = inf{inf X,inf Y}
+proof
+    let X,Y be non empty Subset of ExtREAL;
+    set a = inf(X \/ Y);
+ A1:inf X is minorant of X by Def17;
+   inf Y is minorant of Y by Def17;
+ then inf{inf X,inf Y} is minorant of X \/ Y by A1,Th102;
+ then A2:inf{inf X,inf Y} <=' a by Def17;
+      X c= X \/ Y by XBOOLE_1:7;
+ then A3:a <=' inf X by Th94;
+      Y c= X \/ Y by XBOOLE_1:7;
+then a <=' inf Y by Th94;
+    then a <=' inf{inf X,inf Y} by A3,Th95;
+    hence thesis by A2,Th22;
+end;
+
+theorem
+     for X,Y,S being non empty Subset of ExtREAL holds
+   S = X /\ Y implies sup(S) <=' inf{sup X,sup Y}
+proof
+   let X,Y,S be non empty Subset of ExtREAL;
+   assume
+A1:S = X /\ Y;
+     sup(S) <=' inf{sup X,sup Y}
+   proof
+   A2:sup X is majorant of X by Def16;
+     sup Y is majorant of Y by Def16;
+  then inf{sup X,sup Y} is majorant of S by A1,A2,Th103;
+      hence thesis by Def16;
+   end;
+   hence thesis;
+end;
+
+theorem
+     for X,Y,S being non empty Subset of ExtREAL holds
+   S = X /\ Y implies sup{inf X,inf Y} <=' inf(S)
+proof
+   let X,Y,S be non empty Subset of ExtREAL;
+   assume
+A1:S = X /\ Y;
+     sup{inf X,inf Y} <=' inf(S)
+   proof
+   A2:inf X is minorant of X by Def17;
+     inf Y is minorant of Y by Def17;
+  then sup{inf X,inf Y} is minorant of S by A1,A2,Th104;
+      hence thesis by Def17;
+   end;
+   hence thesis;
+end;
+
+definition
+   let X be non empty set;
+   mode bool_DOMAIN of X -> set means
+:Def18: it is non empty Subset of bool X &
+        for A being set holds
+        A in it implies A is non empty set;
+existence
+proof
+   set F = {X};
+ A1: for x being set holds x in F implies x in bool X
+   proof
+      let x be set;
+      assume
+   A2:x in F;
+       X in bool X by ZFMISC_1:def 1;
+      hence thesis by A2,TARSKI:def 1;
+   end;
+   take F;
+   thus thesis by A1,TARSKI:def 1,def 3;
+end;
+end;
+
+definition
+   let F be bool_DOMAIN of ExtREAL;
+   func SUP(F) -> Subset of ExtREAL means
+:Def19:for a being R_eal holds
+         a in it iff ex A being non empty Subset of ExtREAL st
+          A in F & a = sup A;
+existence
+proof
+ defpred P[R_eal] means
+   ex A being non empty Subset of ExtREAL st A in F & $1 = sup A;
+ ex S being Subset of REAL \/ {-infty,+infty} st
+   for a being R_eal holds a in S iff P[a] from SepR_eal;
+   then consider S being Subset of ExtREAL such that
+A1:for a being R_eal holds a in S iff
+   ex A being non empty Subset of ExtREAL st (A in F & a = sup A) by Def6;
+   reconsider S as Subset of ExtREAL;
+   take S;
+   thus thesis by A1;
+end;
+uniqueness
+proof
+   let S1,S2 be Subset of ExtREAL such that
+A2:for a being R_eal holds a in S1 iff
+   ex A being non empty Subset of ExtREAL st (A in F & a = sup A) and
+A3:for a being R_eal holds a in S2 iff
+   ex A being non empty Subset of ExtREAL st (A in F & a = sup A);
+  for a being set holds (a in S1 iff a in S2)
+   proof
+      let a be set;
+      hereby assume
+       a in S1;
+         then ex A being non empty Subset of ExtREAL st A in F & a = sup A by
+A2;
+         hence a in S2 by A3;
+      end;
+      assume
+   A4:a in S2;
+      then reconsider a as R_eal;
+        ex A being non empty Subset of ExtREAL st A in F & a = sup A by A3,A4;
+      hence thesis by A2;
+   end;
+   hence thesis by TARSKI:2;
+end;
+end;
+
+definition
+   let F be bool_DOMAIN of ExtREAL;
+   cluster SUP(F) -> non empty;
+   coherence
+   proof
+A1:F is non empty Subset of bool ExtREAL &
+   for A being set holds A in F implies A is non empty set by Def18;
+   consider A being Element of F;
+   reconsider A as non empty Subset of ExtREAL by A1,TARSKI:def 3;
+     sup A = sup A;
+   hence thesis by A1,Def19;
+   end;
+end;
+
+canceled 3;
+
+theorem Th112:
+   for F being bool_DOMAIN of ExtREAL holds
+   for S being non empty Subset of ExtREAL holds
+   S = union F implies sup S is majorant of SUP(F)
+proof
+   let F be bool_DOMAIN of ExtREAL;
+   let S be non empty Subset of ExtREAL;
+   assume
+A1:S = union F;
+     for x being R_eal holds x in SUP(F) implies x <=' sup S
+   proof
+      let x be R_eal;
+      assume x in SUP(F);
+      then consider A being non empty Subset of ExtREAL such that
+   A2:A in F & x = sup A by Def19;
+        A c= S
+      proof
+         let a be set; assume a in A;
+         hence thesis by A1,A2,TARSKI:def 4;
+      end;
+      hence thesis by A2,Th91;
+   end;
+   hence thesis by Def9;
+end;
+
+theorem Th113:
+   for F being bool_DOMAIN of ExtREAL holds
+   for S being non empty Subset of ExtREAL holds
+   S = union F implies sup SUP(F) is majorant of S
+proof
+   let F be bool_DOMAIN of ExtREAL;
+   let S be non empty Subset of ExtREAL;
+   assume
+A1:S = union F;
+     for x being R_eal holds
+   x in S implies x <=' sup SUP(F)
+   proof
+      let x be R_eal;
+      assume
+     x in S;
+      then consider Z being set such that
+   A2:x in Z & Z in F by A1,TARSKI:def 4;
+        F is non empty Subset of bool ExtREAL by Def18;
+      then reconsider Z as non empty Subset of ExtREAL by A2;
+      consider a being set such that
+   A3:a = sup Z;
+      reconsider a as R_eal by A3;
+        sup Z is majorant of Z by Def16;
+   then A4:x <=' sup Z by A2,Def9;
+        a in SUP(F) by A2,A3,Def19;
+      hence thesis by A3,A4,Th97;
+   end;
+   hence thesis by Def9;
+end;
+
+theorem
+     for F being bool_DOMAIN of ExtREAL holds
+   for S being non empty Subset of ExtREAL holds
+   S = union F implies sup S = sup SUP(F)
+proof
+   let F be bool_DOMAIN of ExtREAL;
+   let S be non empty Subset of ExtREAL;
+   assume
+A1:S = union F;
+   set a = sup S;
+   set b = sup SUP(F);
+A2:sup SUP(F) is majorant of S by A1,Th113;
+     sup S is majorant of SUP(F) by A1,Th112;
+   then a <=' b & b <=' a by A2,Def16;
+   hence thesis by Th22;
+end;
+
+definition
+   let F be bool_DOMAIN of ExtREAL;
+   func INF(F) -> Subset of ExtREAL means
+:Def20:for a being R_eal holds
+        a in it iff ex A being non empty Subset of ExtREAL st A in
+ F & a = inf A;
+existence
+proof defpred P[R_eal] means
+   ex A being non empty Subset of ExtREAL st A in F & $1 = inf A;
+A1:ex S being Subset of REAL \/ {-infty,+infty} st
+   for a being R_eal holds a in S iff P[a] from SepR_eal;
+A2:F is non empty Subset of bool ExtREAL &
+   for A being set holds A in F implies A is non empty set by Def18;
+   consider A being Element of F;
+   reconsider A as non empty Subset of ExtREAL by A2,TARSKI:def 3;
+A3:inf A = inf A;
+   consider S being Subset of ExtREAL such that
+A4:for a being R_eal holds a in S iff
+   ex A being non empty Subset of ExtREAL st (A in F & a = inf A) by A1,Def6;
+   reconsider S as non empty set by A2,A3,A4;
+   reconsider S as non empty Subset of ExtREAL;
+   take S;
+   thus thesis by A4;
+end;
+uniqueness
+proof
+   let S1,S2 be Subset of ExtREAL such that
+A5:for a being R_eal holds a in S1 iff
+   ex A being non empty Subset of ExtREAL st (A in F & a = inf A) and
+A6:for a being R_eal holds a in S2 iff
+   ex A being non empty Subset of ExtREAL st (A in F & a = inf A);
+  for a being set holds a in S1 iff a in S2
+   proof
+      let a be set;
+      hereby assume
+      A7:a in S1;
+         then reconsider a' = a as R_eal;
+           ex A being non empty Subset of ExtREAL st A in
+ F & a' = inf A by A5,A7;
+         hence a in S2 by A6;
+      end;
+         assume
+      A8:a in S2;
+         then reconsider a as R_eal;
+           ex A being non empty Subset of ExtREAL st A in F & a = inf A by A6,
+A8
+;
+         hence thesis by A5;
+   end;
+   hence thesis by TARSKI:2;
+end;
+end;
+
+definition
+   let F be bool_DOMAIN of ExtREAL;
+   cluster INF(F) -> non empty;
+coherence
+proof
+A1:F is non empty Subset of bool ExtREAL &
+   for A being set holds A in F implies A is non empty set by Def18;
+   consider A being Element of F;
+   reconsider A as non empty Subset of ExtREAL by A1,TARSKI:def 3;
+     inf A = inf A;
+   hence thesis by A1,Def20;
+end;
+end;
+
+canceled 2;
+
+theorem Th117:
+   for F being bool_DOMAIN of ExtREAL holds
+   for S being non empty Subset of ExtREAL holds
+   S = union F implies inf S is minorant of INF(F)
+proof
+   let F be bool_DOMAIN of ExtREAL;
+   let S be non empty Subset of ExtREAL;
+   assume
+A1:S = union F;
+     for x being R_eal holds x in INF(F) implies inf S <=' x
+   proof
+      let x be R_eal;
+      assume x in INF(F);
+      then consider A being non empty Subset of ExtREAL such that
+   A2:A in F & x = inf A by Def20;
+     A c= S
+      proof
+         let a be set; assume a in A;
+         hence thesis by A1,A2,TARSKI:def 4;
+      end;
+      hence thesis by A2,Th94;
+   end;
+   hence thesis by Def10;
+end;
+
+theorem Th118:
+   for F being bool_DOMAIN of ExtREAL holds
+   for S being non empty Subset of ExtREAL holds
+   S = union F implies inf INF(F) is minorant of S
+proof
+   let F be bool_DOMAIN of ExtREAL;
+   let S be non empty Subset of ExtREAL;
+   assume
+A1:S = union F;
+     for x being R_eal holds
+   x in S implies inf INF(F) <=' x
+   proof
+      let x be R_eal;
+      assume
+     x in S;
+         then consider Z being set such that
+      A2:x in Z & Z in F by A1,TARSKI:def 4;
+           F is non empty Subset of bool ExtREAL by Def18;
+         then reconsider Z as non empty Subset of ExtREAL by A2;
+         consider a being set such that
+      A3:a = inf Z;
+         reconsider a as R_eal by A3;
+           inf Z is minorant of Z by Def17;
+      then A4:inf Z <=' x by A2,Def10;
+        a in INF(F) by A2,A3,Def20;
+         hence thesis by A3,A4,Th98;
+   end;
+   hence thesis by Def10;
+end;
+
+theorem
+     for F being bool_DOMAIN of ExtREAL holds
+   for S being non empty Subset of ExtREAL holds
+   S = union F implies inf S = inf INF(F)
+proof
+   let F be bool_DOMAIN of ExtREAL;
+   let S be non empty Subset of ExtREAL;
+   assume
+A1:S = union F;
+   set a = inf S;
+   set b = inf INF(F);
+A2:   inf INF(F) is minorant of S by A1,Th118;
+     inf S is minorant of INF(F) by A1,Th117;
+   then a <=' b & b <=' a by A2,Def17;
+   hence thesis by Th22;
+end;

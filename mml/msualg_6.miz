@@ -1,0 +1,2572 @@
+:: Translations, Endomorphisms, and Stable Equational Theories
+::  by Grzegorz Bancerek
+::
+:: Received February 9, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary MSUALG_1, FUNCT_1, PBOOLE, PRALG_1, MSUALG_3, RELAT_1, BOOLE,
+      AMI_1, CARD_3, QC_LANG1, ZF_REFLE, MOD_4, ALG_1, TDGROUP, FUNCT_4,
+      REWRITE1, FINSEQ_1, FUNCT_7, FUNCT_2, MSUALG_4, CIRCUIT2, EQREL_1,
+      MCART_1, MSUALG_5, MSUALG_6, FINSEQ_4, PARTFUN1, RELAT_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, NAT_1, MCART_1,
+      STRUCT_0, RELAT_1, RELAT_2, RELSET_1, EQREL_1, REWRITE1, FUNCT_1,
+      PARTFUN1, FUNCT_2, FINSEQ_1, CARD_3, FINSEQ_4, PBOOLE, PRALG_1, MSUALG_1,
+      MSUALG_3, MSUALG_4, MSUALG_5, FUNCT_7;
+ constructors NAT_1, MCART_1, REWRITE1, MSUALG_3, MSUALG_5, FUNCT_7, FINSEQ_4,
+      MEMBERED, EQREL_1, PARTFUN1;
+ clusters FUNCT_1, PBOOLE, PRALG_1, RELSET_1, STRUCT_0, MSUALG_1, REWRITE1,
+      MSUALG_3, MSUALG_4, MSUALG_5, ALTCAT_1, FUNCT_7, FINSEQ_1, XREAL_0,
+      ARYTM_3, FUNCT_2, NUMBERS, EQREL_1, PARTFUN1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, RELAT_1, REWRITE1, UNIALG_1, PRALG_1, PBOOLE, MSUALG_1,
+      MSUALG_3, MSUALG_4, FUNCT_7;
+ theorems TARSKI, AXIOMS, REAL_1, NAT_1, MCART_1, ZFMISC_1, RELAT_1, RELSET_1,
+      EQREL_1, FUNCT_1, FINSEQ_1, FINSEQ_3, FUNCT_2, CARD_3, FINSEQ_4, FUNCT_7,
+      REWRITE1, PBOOLE, MSUALG_1, PRALG_2, MSUALG_3, MSUALG_4, MSUALG_5,
+      FINSEQ_5, XBOOLE_0, XCMPLX_1, ORDERS_1, PARTFUN1, RELAT_2;
+ schemes NAT_1, RECDEF_1, RELSET_1, FUNCT_1, FINSEQ_1, CARD_3, ZFREFLE1,
+      MSUALG_1, PUA2MSS1;
+
+begin :: Endomorphisms and translations
+
+definition
+ let S be non empty ManySortedSign;
+ let A be MSAlgebra over S;
+ let s be SortSymbol of S;
+ mode Element of A,s is Element of (the Sorts of A).s;
+end;
+
+definition let I be set;
+ let A be ManySortedSet of I;
+ let h1,h2 be ManySortedFunction of A,A;
+ redefine func h2**h1 -> ManySortedFunction of A,A;
+ coherence
+  proof set h = h2**h1;
+      dom h1 = I & dom h2 = I by PBOOLE:def 3;
+then A1:  dom h = I /\ I by MSUALG_3:def 4 .= I;
+   then reconsider h as ManySortedSet of I by PBOOLE:def 3;
+      h is ManySortedFunction of A,A
+     proof let i be set; assume
+A2:     i in I;
+      then reconsider f = h1.i, g = h2.i as Function of A.i, A.i by MSUALG_1:
+def 2;
+         h.i = g*f by A1,A2,MSUALG_3:def 4;
+      hence thesis;
+     end;
+   hence thesis;
+  end;
+end;
+
+theorem Th1:
+ for S being non empty non void ManySortedSign
+ for A being MSAlgebra over S
+ for o being OperSymbol of S, a being set st a in Args(o,A)
+  holds a is Function
+  proof let S be non empty non void ManySortedSign;
+   let A be MSAlgebra over S; let o be OperSymbol of S;
+   let x be set; assume x in Args(o,A);
+    then x in product((the Sorts of A)*the_arity_of o) by PRALG_2:10;
+    then ex f being Function st x = f &
+     dom f = dom ((the Sorts of A)*the_arity_of o) &
+     for y be set st y in dom ((the Sorts of A)*the_arity_of o) holds
+      f.y in ((the Sorts of A)*the_arity_of o).y by CARD_3:def 5;
+   hence x is Function;
+  end;
+
+theorem Th2:
+ for S being non empty non void ManySortedSign
+ for A being MSAlgebra over S
+ for o being OperSymbol of S, a being Function st a in Args(o,A)
+  holds dom a = dom the_arity_of o &
+   for i being set st i in dom the_arity_of o
+    holds a.i in (the Sorts of A).((the_arity_of o)/.i)
+  proof let S be non empty non void ManySortedSign;
+   let A be MSAlgebra over S; let o be OperSymbol of S;
+   let x be Function; assume x in Args(o,A);
+    then x in product((the Sorts of A) * (the_arity_of o)) by PRALG_2:10;
+then A1:  ex f being Function st x = f &
+    dom f = dom ((the Sorts of A)*the_arity_of o) &
+    for y be set st y in dom ((the Sorts of A)*the_arity_of o) holds
+      f.y in ((the Sorts of A)*the_arity_of o).y by CARD_3:def 5;
+      rng the_arity_of o c= the carrier of S &
+    dom the Sorts of A = the carrier of S by FINSEQ_1:def 4,PBOOLE:def 3;
+   hence
+A2:  dom x = dom the_arity_of o by A1,RELAT_1:46;
+   let y be set; assume
+A3:  y in dom the_arity_of o;
+    then (the_arity_of o).y = (the_arity_of o)/.y &
+    x.y in ((the Sorts of A)*the_arity_of o).y by A1,A2,FINSEQ_4:def 4;
+   hence thesis by A3,FUNCT_1:23;
+end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be MSAlgebra over S;
+ attr A is feasible means:
+Def1:
+  for o being OperSymbol of S st Args(o,A) <> {} holds Result(o,A) <> {};
+end;
+
+theorem Th3:
+ for S being non empty non void ManySortedSign
+ for o being OperSymbol of S
+ for A being MSAlgebra over S holds
+  Args(o,A) <> {} iff for i being Nat st i in dom the_arity_of o
+    holds (the Sorts of A).((the_arity_of o)/.i) <> {}
+  proof let S be non empty non void ManySortedSign;
+   let o be OperSymbol of S;
+   let A be MSAlgebra over S;
+A1:  Args(o,A) = product ((the Sorts of A)*the_arity_of o) &
+    dom ((the Sorts of A)*the_arity_of o) = dom the_arity_of o by PRALG_2:10;
+   hereby assume
+A2:   Args(o,A) <> {};
+    let i be Nat; assume i in dom the_arity_of o;
+     then (the Sorts of A).((the_arity_of o).i)
+       = ((the Sorts of A)*the_arity_of o).i &
+     ((the Sorts of A)*the_arity_of o).i
+       in rng ((the Sorts of A)*the_arity_of o) &
+     (the_arity_of o)/.i = (the_arity_of o).i
+      by A1,FINSEQ_4:def 4,FUNCT_1:23,def 5;
+    hence (the Sorts of A).((the_arity_of o)/.i) <> {} by A1,A2,CARD_3:37;
+   end;
+   assume
+A3:  for i being Nat st i in dom the_arity_of o
+     holds (the Sorts of A).((the_arity_of o)/.i) <> {};
+   assume Args(o,A) = {};
+    then {} in rng ((the Sorts of A)*the_arity_of o) by A1,CARD_3:37;
+   then consider x being set such that
+A4:  x in dom the_arity_of o & {} = ((the Sorts of A)*the_arity_of o).x
+     by A1,FUNCT_1:def 5;
+   reconsider x as Nat by A4;
+      (the_arity_of o)/.x = (the_arity_of o).x &
+    (the Sorts of A).((the_arity_of o)/.x) <> {} by A3,A4,FINSEQ_4:def 4;
+   hence thesis by A4,FUNCT_1:23;
+  end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ cluster non-empty -> feasible MSAlgebra over S;
+ coherence
+  proof let A be MSAlgebra over S; assume A is non-empty;
+   then reconsider B = A as non-empty MSAlgebra over S;
+   let o be OperSymbol of S; Result(o,B) <> {};
+   hence thesis;
+  end;
+end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ cluster non-empty MSAlgebra over S;
+ existence
+  proof consider A being non-empty MSAlgebra over S;
+   take A; thus thesis;
+  end;
+end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be MSAlgebra over S;
+ mode Endomorphism of A -> ManySortedFunction of A,A means:
+Def2:
+  it is_homomorphism A,A;
+ existence
+  proof take id the Sorts of A;
+   thus thesis by MSUALG_3:9;
+  end;
+end;
+
+reserve S for non empty non void ManySortedSign,
+ A for MSAlgebra over S;
+
+theorem Th4:
+ id the Sorts of A is Endomorphism of A
+  proof thus id the Sorts of A is_homomorphism A,A by MSUALG_3:9; end;
+
+theorem Th5:
+ for h1,h2 being ManySortedFunction of A,A
+ for o being OperSymbol of S
+ for a being Element of Args(o,A) st a in Args(o,A)
+  holds h2#(h1#a) = (h2**h1)#a
+  proof let h1,h2 be ManySortedFunction of A,A; set h = h2**h1;
+   let o be OperSymbol of S; let a be Element of Args(o,A); assume
+A1:  a in Args(o,A);
+   then reconsider f = a, b = h1#a, c = h2#(h1#a) as Function by Th1;
+A2:  dom f = dom the_arity_of o by A1,Th2;
+      now let i be Nat; assume
+A3:    i in dom f;
+then A4:    (the_arity_of o)/.i = (the_arity_of o).i by A2,FINSEQ_4:def 4;
+     reconsider f1 = h1.((the_arity_of o)/.i), f2 = h2.((the_arity_of o)/.i)
+       as Function of (the Sorts of A).((the_arity_of o)/.i),
+                      (the Sorts of A).((the_arity_of o)/.i);
+A5:    h.((the_arity_of o)/.i) = f2*f1 by MSUALG_3:2;
+A6:    f1.(f.i) = b.i by A1,A3,MSUALG_3:24;
+        h1#a in Args(o,A) & dom b = dom the_arity_of o by A1,Th2;
+then A7:    f2.(b.i) = c.i by A2,A3,MSUALG_3:24;
+A8:    Args(o,A) = product ((the Sorts of A)*the_arity_of o) &
+      dom ((the Sorts of A)*the_arity_of o) = dom the_arity_of o by PRALG_2:10;
+        (the Sorts of A).((the_arity_of o).i)
+        = ((the Sorts of A)*the_arity_of o).i by A2,A3,FUNCT_1:23;
+     then f.i in (the Sorts of A).((the_arity_of o)/.i) by A1,A2,A3,A4,A8,
+CARD_3:18;
+     hence c.i = (h.((the_arity_of o)/.i)).(f.i) by A5,A6,A7,FUNCT_2:21;
+    end;
+   hence thesis by A1,MSUALG_3:24;
+  end;
+
+theorem Th6:
+ for h1,h2 being Endomorphism of A holds h2**h1 is Endomorphism of A
+  proof let h1,h2 be Endomorphism of A;
+A1:  h1 is_homomorphism A,A & h2 is_homomorphism A,A by Def2;
+   let o be OperSymbol of S such that A2: Args (o,A) <> {};
+   let x be Element of Args(o,A);
+A3:  Result(o,A) = (the Sorts of A).the_result_sort_of o by PRALG_2:10;
+   set h = h2**h1;
+   reconsider f1 = h1.the_result_sort_of o, f2 = h2.the_result_sort_of o,
+     f = h.the_result_sort_of o
+     as Function of (the Sorts of A).the_result_sort_of o,
+                    (the Sorts of A).the_result_sort_of o;
+   per cases; suppose (the Sorts of A).the_result_sort_of o = {};
+     then dom f = {} & Den(o,A) = {} by A2,A3,FUNCT_2:def 1;
+     then f.(Den(o,A).x) = {} & dom Den(o,A) = {} by FUNCT_1:def 4,RELAT_1:64;
+    hence thesis by FUNCT_1:def 4;
+   suppose
+    (the Sorts of A).the_result_sort_of o <> {};
+then A4:  Den(o,A).x in Result(o,A) by A2,A3,FUNCT_2:7;
+      h.the_result_sort_of o = f2*f1 by MSUALG_3:2;
+    then (h.(the_result_sort_of o)).(Den(o,A).x) = f2.(f1.(Den(o,A).x))
+       by A3,A4,FUNCT_2:21
+     .= (h2.(the_result_sort_of o)).(Den(o,A).(h1#x)) by A1,A2,MSUALG_3:def 9
+     .= Den(o,A).(h2#(h1#x)) by A1,A2,MSUALG_3:def 9;
+   hence (h.(the_result_sort_of o)).(Den(o,A).x) = Den(o,A).(h#x) by A2,Th5;
+  end;
+
+definition let S be non empty non void ManySortedSign;
+ let A be MSAlgebra over S;
+ let h1,h2 be Endomorphism of A;
+ redefine func h2**h1 -> Endomorphism of A;
+ coherence by Th6;
+end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ func TranslationRel S -> Relation of the carrier of S means:
+Def3:
+  for s1,s2 being SortSymbol of S holds [s1,s2] in it iff
+   ex o being OperSymbol of S st the_result_sort_of o = s2 &
+   ex i being Nat st i in dom the_arity_of o & (the_arity_of o)/.i = s1;
+ existence
+  proof
+    defpred P[set,set] means ex o being OperSymbol of S
+         st the_result_sort_of o = $2 &
+   ex i being Nat st i in dom the_arity_of o & (the_arity_of o)/.i = $1;
+ ex R being Relation of the carrier of S,the carrier of S st
+   for x being SortSymbol of S, y being SortSymbol of S holds
+      [x,y] in R iff P[x,y] from Rel_On_Dom_Ex;
+     hence thesis;
+  end;
+ correctness
+  proof
+    defpred P[set,set] means ex o being OperSymbol of S
+         st the_result_sort_of o = $2 &
+   ex i being Nat st i in dom the_arity_of o & (the_arity_of o)/.i = $1;
+ for R1, R2 being Relation of the carrier of S, the carrier of S st
+  (for x being SortSymbol of S, y being SortSymbol of S holds
+     [x,y] in R1 iff P[x,y]) &
+  (for x being SortSymbol of S, y being SortSymbol of S holds
+     [x,y] in R2 iff P[x,y])
+ holds R1 = R2  from RelationUniq;
+   hence thesis;
+  end;
+end;
+
+theorem Th7:
+ for S being non empty non void ManySortedSign, o being OperSymbol of S
+ for A being MSAlgebra over S, a being Function st a in Args(o,A)
+ for i being Nat, x being Element of A,(the_arity_of o)/.i holds
+  a+*(i,x) in Args(o,A)
+  proof let S be non empty non void ManySortedSign, o be OperSymbol of S;
+   let A be MSAlgebra over S;
+   let a be Function such that
+A1:  a in Args(o,A);
+   let i be Nat;
+   let x be Element of A,(the_arity_of o)/.i;
+A2:  Args(o,A) = product ((the Sorts of A)*the_arity_of o) &
+    dom ((the Sorts of A)*the_arity_of o) = dom the_arity_of o
+     by PRALG_2:10;
+A3:  dom a = dom the_arity_of o by A1,Th2;
+A4:  dom (a+*(i,x)) = dom a by FUNCT_7:32;
+      now let j be set; assume
+A5:   j in dom a;
+     then reconsider k = j as Nat by A3;
+A6:    (the_arity_of o)/.k = (the_arity_of o).k &
+      ((the Sorts of A)*the_arity_of o).k =
+       (the Sorts of A).((the_arity_of o).k)
+       by A3,A5,FINSEQ_4:def 4,FUNCT_1:23;
+then A7:    ((the Sorts of A)*the_arity_of o).j <> {} by A1,A3,A5,Th3;
+     per cases; suppose
+A8:    j = i;
+       then (a+*(i,x)).j = x by A5,FUNCT_7:33;
+      hence (a+*(i,x)).j in ((the Sorts of A)*the_arity_of o).j by A6,A7,A8;
+      suppose j <> i;
+       then (a+*(i,x)).j = a.j by FUNCT_7:34;
+      hence (a+*(i,x)).j in ((the Sorts of A)*the_arity_of o).j
+       by A1,A2,A3,A5,CARD_3:18;
+    end;
+   hence thesis by A2,A3,A4,CARD_3:18;
+  end;
+
+theorem Th8:
+ for A1,A2 being MSAlgebra over S, h being ManySortedFunction of A1,A2
+ for o being OperSymbol of S st Args(o,A1) <> {} & Args(o,A2) <> {}
+ for i being Nat st i in dom the_arity_of o
+ for x being Element of A1,(the_arity_of o)/.i holds
+  h.((the_arity_of o)/.i).x in (the Sorts of A2).((the_arity_of o)/.i)
+  proof let A1,A2 be MSAlgebra over S, h be ManySortedFunction of A1,A2;
+   let o be OperSymbol of S such that
+A1:  Args(o,A1) <> {} & Args(o,A2) <> {};
+   let i be Nat; assume i in dom the_arity_of o;
+  then (the Sorts of A1).((the_arity_of o)/.i) <> {} &
+    (the Sorts of A2).((the_arity_of o)/.i) <> {} by A1,Th3;
+   hence thesis by FUNCT_2:7;
+  end;
+
+theorem Th9:
+ for S being non empty non void ManySortedSign, o being OperSymbol of S
+ for i being Nat st i in dom the_arity_of o
+ for A1,A2 being MSAlgebra over S
+ for h being ManySortedFunction of A1,A2
+ for a,b being Element of Args(o,A1) st a in Args(o,A1) & h#a in Args(o,A2)
+ for f,g1,g2 being Function st f = a & g1 = h#a & g2 = h#b
+ for x being Element of A1,((the_arity_of o)/.i)
+  st b = f+*(i,x)
+  holds g2.i = h.((the_arity_of o)/.i).x & h#b = g1+*(i,g2.i)
+  proof let S be non empty non void ManySortedSign, o be OperSymbol of S;
+   let i be Nat such that
+A1:  i in dom the_arity_of o;
+   let A1,A2 be MSAlgebra over S;
+   let h be ManySortedFunction of A1,A2;
+   let a,b be Element of Args(o,A1) such that
+A2:  a in Args(o,A1) & h#a in Args(o,A2);
+   let f,g1,g2 be Function such that
+A3:  f = a & g1 = h#a & g2 = h#b;
+   let x be Element of A1,((the_arity_of o)/.i) such that
+A4:  b = f+*(i,x);
+   reconsider f2 = b as Function by A2,Th1;
+A5:  dom f = dom the_arity_of o & dom f2 = dom the_arity_of o &
+    dom g2 = dom the_arity_of o &
+    dom g1 = dom the_arity_of o by A2,A3,Th2;
+    then f2.i = x by A1,A4,FUNCT_7:33;
+   hence
+      g2.i = h.((the_arity_of o)/.i).x by A1,A2,A3,A5,MSUALG_3:24;
+    then g2.i in (the Sorts of A2).((the_arity_of o)/.i) by A1,A2,Th8;
+then A6:  g1+*(i,g2.i) in Args(o,A2) by A2,A3,Th7;
+   reconsider g3 = g1+*(i,g2.i) as Function;
+A7:  dom g3 = dom the_arity_of o by A6,Th2;
+A8:  now let z be set; assume
+A9:   z in dom the_arity_of o & z <> i;
+     then reconsider j = z as Nat;
+A10:   g2.j = h.((the_arity_of o)/.j).(f2.j) by A2,A3,A5,A9,MSUALG_3:24;
+        f2.j = f.j by A4,A9,FUNCT_7:34;
+     hence g2.z = g1.z by A2,A3,A5,A9,A10,MSUALG_3:24;
+    end;
+      now let z be set; assume
+A11:    z in dom the_arity_of o;
+     per cases; suppose z = i;
+      hence g2.z = (g1+*(i,g2.i)).z by A1,A5,FUNCT_7:33;
+     suppose
+A12:     z <> i;
+       then g2.z = g1.z by A8,A11;
+      hence g2.z = (g1+*(i,g2.i)).z by A12,FUNCT_7:34;
+    end;
+   hence thesis by A3,A5,A7,FUNCT_1:9;
+  end;
+
+definition
+ let S be non empty non void ManySortedSign, o be OperSymbol of S;
+ let i be Nat;
+ let A be MSAlgebra over S;
+ let a be Function;
+ func transl(o,i,a,A) -> Function means:
+Def4:
+  dom it = (the Sorts of A).((the_arity_of o)/.i) &
+  for x being set st x in (the Sorts of A).((the_arity_of o)/.i) holds
+   it.x = Den(o,A).(a+*(i,x));
+ existence
+  proof
+    deffunc F(set)= Den(o,A).(a+*(i,$1));
+    ex f being Function st dom f = (the Sorts of A).((the_arity_of o)/.i)
+    & for x be set st x in (the Sorts of A).((the_arity_of o)/.i)
+         holds f.x = F(x) from Lambda;
+     hence thesis;
+  end;
+ uniqueness
+  proof let f1,f2 be Function such that
+A1: dom f1 = (the Sorts of A).((the_arity_of o)/.i) and
+A2: for x being set st x in (the Sorts of A).((the_arity_of o)/.i) holds
+     f1.x = Den(o,A).(a+*(i,x)) and
+A3: dom f2 = (the Sorts of A).((the_arity_of o)/.i) and
+A4: for x being set st x in (the Sorts of A).((the_arity_of o)/.i) holds
+     f2.x = Den(o,A).(a+*(i,x));
+      now let x be set; assume x in (the Sorts of A).((the_arity_of o)/.i);
+      then f1.x = Den(o,A).(a+*(i,x)) & f2.x = Den(o,A).(a+*(i,x))
+       by A2,A4;
+     hence f1.x = f2.x;
+    end;
+   hence thesis by A1,A3,FUNCT_1:9;
+  end;
+end;
+
+theorem Th10:
+ for S being non empty non void ManySortedSign, o being OperSymbol of S
+ for i being Nat st i in dom the_arity_of o
+ for A being feasible MSAlgebra over S, a being Function
+  st a in Args(o,A) holds
+  transl(o,i,a,A) is Function of (the Sorts of A).((the_arity_of o)/.i),
+                                 (the Sorts of A).the_result_sort_of o
+  proof let S be non empty non void ManySortedSign, o be OperSymbol of S;
+   let i be Nat such that
+    i in dom the_arity_of o;
+   let A be feasible MSAlgebra over S;
+   let a be Function; assume
+A1:  a in Args(o,A);
+then A2:  Result(o,A) <> {} by Def1;
+A3:  Result(o,A) = (the Sorts of A).(the_result_sort_of o) by PRALG_2:10;
+A4:  dom transl(o,i,a,A) = (the Sorts of A).((the_arity_of o)/.i) by Def4;
+      rng transl(o,i,a,A) c= (the Sorts of A).the_result_sort_of o
+     proof let x be set; assume x in rng transl(o,i,a,A);
+      then consider y being set such that
+A5:     y in dom transl(o,i,a,A) & x = transl(o,i,a,A).y by FUNCT_1:def 5;
+      reconsider y as Element of A,((the_arity_of o)/.i) by A5,Def4;
+      set b = a+*(i,y);
+         b in Args(o,A) by A1,Th7;
+       then x = Den(o,A).b & Den(o,A).b in Result(o,A) by A2,A4,A5,Def4,FUNCT_2
+:7;
+      hence x in (the Sorts of A).the_result_sort_of o by PRALG_2:10;
+     end;
+   hence thesis by A2,A3,A4,FUNCT_2:def 1,RELSET_1:11;
+  end;
+
+definition
+ let S be non empty non void ManySortedSign, s1,s2 be SortSymbol of S;
+ let A be MSAlgebra over S;
+ let f be Function;
+ pred f is_e.translation_of A,s1,s2 means:
+Def5:
+  ex o being OperSymbol of S st the_result_sort_of o = s2 &
+  ex i being Nat st i in dom the_arity_of o & ((the_arity_of o)/.i) = s1 &
+  ex a being Function st a in Args(o,A) & f = transl(o,i,a,A);
+end;
+
+theorem Th11:
+ for S being non empty non void ManySortedSign, s1,s2 being SortSymbol of S
+ for A being feasible MSAlgebra over S, f being Function
+  st f is_e.translation_of A,s1,s2
+  holds f is Function of (the Sorts of A).s1, (the Sorts of A).s2 &
+   (the Sorts of A).s1 <> {} & (the Sorts of A).s2 <> {}
+  proof let S be non empty non void ManySortedSign, s1,s2 be SortSymbol of S;
+   let A be feasible MSAlgebra over S;
+   let f be Function; assume f is_e.translation_of A,s1,s2;
+   then consider o being OperSymbol of S such that
+A1:  the_result_sort_of o = s2 and
+A2:  ex i being Nat st i in dom the_arity_of o & ((the_arity_of o)/.i) = s1 &
+    ex a being Function st a in Args(o,A) & f = transl(o,i,a,A) by Def5;
+   consider i being Nat, a being Function such that
+A3:  i in dom the_arity_of o & ((the_arity_of o)/.i) = s1 and
+A4:  a in Args(o,A) & f = transl(o,i,a,A) by A2;
+      Result(o,A) = (the Sorts of A).the_result_sort_of o by PRALG_2:10;
+   hence thesis by A1,A3,A4,Def1,Th3,Th10;
+  end;
+
+theorem Th12:
+ for S being non empty non void ManySortedSign, s1,s2 being SortSymbol of S
+ for A being MSAlgebra over S, f being Function
+  st f is_e.translation_of A,s1,s2
+  holds [s1,s2] in TranslationRel S
+  proof let S be non empty non void ManySortedSign, s1,s2 be SortSymbol of S;
+   let A be MSAlgebra over S;
+   let f be Function; assume f is_e.translation_of A,s1,s2;
+    then ex o being OperSymbol of S st the_result_sort_of o = s2 &
+    ex i being Nat st i in dom the_arity_of o & ((the_arity_of o)/.i) = s1 &
+    ex a being Function st a in Args(o,A) & f = transl(o,i,a,A) by Def5;
+hence thesis by Def3;
+  end;
+
+theorem
+   for S being non empty non void ManySortedSign, s1,s2 being SortSymbol of S
+ for A being non-empty MSAlgebra over S st [s1,s2] in TranslationRel S
+ ex f being Function st f is_e.translation_of A,s1,s2
+  proof let S be non empty non void ManySortedSign, s1,s2 be SortSymbol of S;
+   let A be non-empty MSAlgebra over S; assume
+      [s1,s2] in TranslationRel S;
+   then consider o being OperSymbol of S such that
+A1:  the_result_sort_of o = s2 and
+A2:  ex i being Nat st i in dom the_arity_of o & (the_arity_of o)/.i = s1
+     by Def3;
+   consider i being Nat such that
+A3:  i in dom the_arity_of o & (the_arity_of o)/.i = s1 by A2;
+   consider a being Element of Args(o,A);
+   take transl(o,i,a,A), o;
+   thus thesis by A1,A3;
+  end;
+
+theorem Th14:
+ for S being non empty non void ManySortedSign
+ for A being feasible MSAlgebra over S
+ for s1,s2 being SortSymbol of S st TranslationRel S reduces s1,s2
+ for q being RedSequence of TranslationRel S,
+     p being Function-yielding FinSequence st
+   len q = len p+1 & s1 = q.1 & s2 = q.len q &
+   for i being Nat, f being Function, s1,s2 being SortSymbol of S st
+      i in dom p & f = p.i & s1 = q.i & s2 = q.(i+1)
+     holds f is_e.translation_of A,s1,s2
+ holds compose(p, (the Sorts of A).s1) is
+     Function of (the Sorts of A).s1, (the Sorts of A).s2 &
+     (p <> {} implies (the Sorts of A).s1 <> {} & (the Sorts of A).s2 <> {})
+  proof let S be non empty non void ManySortedSign;
+   let A be feasible MSAlgebra over S;
+   let s1,s2 be SortSymbol of S such that
+    TranslationRel S reduces s1,s2;
+   let q be RedSequence of TranslationRel S,
+       p be Function-yielding FinSequence such that
+A1:  len q = len p+1 & s1 = q.1 & s2 = q.len q and
+A2:  for i being Nat, f being Function, s1,s2 being SortSymbol of S st
+      i in dom p & f = p.i & s1 = q.i & s2 = q.(i+1)
+     holds f is_e.translation_of A,s1,s2;
+   per cases; suppose
+A3:  p = {};
+    then compose(p, (the Sorts of A).s1) = id ((the Sorts of A).s1) &
+    len p = 0 by FINSEQ_1:25,FUNCT_7:41;
+   hence thesis by A1,A3;
+   suppose p <> {}; then rng p <> {} by RELAT_1:64;
+then A4: 1 in dom p by FINSEQ_3:34;
+   reconsider f = p.1 as Function;
+   1 in dom q & 1+1 in dom q by A1,A4,FUNCT_7:24;
+    then [q.1,q.(1+1)] in TranslationRel S by REWRITE1:def 2;
+   then reconsider q1 = q.1, q2 = q.(1+1) as SortSymbol of S by ZFMISC_1:106;
+      f is_e.translation_of A,q1,q2 by A2,A4;
+then A5: (the Sorts of A).q1 <> {} & (the Sorts of A).q2 <> {} by Th11;
+A6:  dom q = Seg len q & dom p = Seg len p by FINSEQ_1:def 3;
+   deffunc F(set) = (the Sorts of A).(q.$1);
+   consider pp being FinSequence such that
+A7: len pp = len q and
+A8: for i being Nat st i in Seg len q holds pp.i = F(i)
+     from SeqLambda;
+A9: 1 in dom q & dom pp = Seg len q by A7,FINSEQ_1:def 3,FINSEQ_5:6;
+    defpred P[Nat] means $1 in dom pp implies pp.$1 is not empty;
+A10: P[0] by FINSEQ_3:27;
+A11: for i be Nat st P[i] holds P[(i+1)]
+  proof
+    let i be Nat such that i in dom pp implies pp.i is not empty and
+A12:   i+1 in dom pp;
+        i <= i+1 & i+1 <= len pp by A12,FINSEQ_3:27,NAT_1:29;
+then A13:   i <= len pp by AXIOMS:22;
+     per cases by NAT_1:19; suppose i = 0; hence pp.(i+1) is not empty by A5,A8
+,A9,A12;
+     suppose i > 0; then i >= 0+1 by NAT_1:38;
+then A14:    i in dom pp by A13,FINSEQ_3:27;
+then A15:    i in dom p by A1,A7,A12,FUNCT_7:24;
+      reconsider f = p.i as Function;
+         [q.i,q.(i+1)] in TranslationRel S by A6,A9,A12,A14,REWRITE1:def 2;
+      then reconsider s1 = q.i, s2 = q.(i+1) as SortSymbol of S by ZFMISC_1:106
+;
+         f is_e.translation_of A,s1,s2 & pp.(i+1) = (the Sorts of A).s2
+        by A2,A8,A9,A12,A15;
+      hence pp.(i+1) is not empty by Th11;
+    end;
+A16:  for i being Nat holds P[i] from Ind(A10,A11);
+A17:  pp is non-empty
+     proof let x be set; assume
+      x in dom pp;
+      hence pp.x is non empty by A16;
+     end;
+      [1,pp.1] in pp by A6,A9,FUNCT_1:def 4;
+   then reconsider pp as non empty non-empty FinSequence by A17;
+      p is FuncSequence of pp
+     proof thus len p+1 = len pp by A1,A7;
+      let j be Nat; assume
+A18:    j in dom p;
+      reconsider f = p.j as Function;
+A19:    j >= 1 & j <= len p by A6,A18,FINSEQ_1:3;
+       then j <= len q & j+1 <= len q & j+1 >= 1
+        by A1,AXIOMS:24,NAT_1:38;
+then A20:    j in Seg len q & j+1 in Seg len q by A19,FINSEQ_1:3;
+       then [q.j,q.(j+1)] in TranslationRel S by A6,REWRITE1:def 2;
+      then reconsider s1 = q.j, s2 = q.(j+1) as SortSymbol of S by ZFMISC_1:106
+;
+      set i = j;
+      p.j = f & i = j &
+       s1 = q.i & s2 = q.(i+1) & f is_e.translation_of A,s1,s2 by A2,A18;
+then A21:    p.j is Function of (the Sorts of A).s1,(the Sorts of A).s2 &
+       (the Sorts of A).s2 <> {} by Th11;
+         pp.j = (the Sorts of A).s1 & pp.(j+1) = (the Sorts of A).s2 by A8,A20;
+      hence p.j in Funcs(pp.j, pp.(j+1)) by A21,FUNCT_2:11;
+     end;
+   then reconsider p' = p as FuncSequence of pp;
+      1 in dom q & len q in dom q by FINSEQ_5:6;
+then A22:  pp.1 = (the Sorts of A).s1 & pp.len pp = (the Sorts of A).s2 &
+    pp.1 <> {} & pp.len pp <> {} by A1,A6,A7,A8,A9,A16;
+    then dom compose(p',(the Sorts of A).s1) = (the Sorts of A).s1 &
+    rng compose(p',(the Sorts of A).s1) c= (the Sorts of A).s2
+     by FUNCT_7:69;
+   hence compose(p, (the Sorts of A).s1) is
+     Function of (the Sorts of A).s1, (the Sorts of A).s2 by A22,FUNCT_2:def 1,
+RELSET_1:11;
+   thus thesis by A22;
+  end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ let s1,s2 be SortSymbol of S such that
+A1:   TranslationRel S reduces s1,s2;
+ mode Translation of A,s1,s2 ->
+    Function of (the Sorts of A).s1,(the Sorts of A).s2 means:
+Def6:
+  ex q being RedSequence of TranslationRel S,
+     p being Function-yielding FinSequence st
+   it = compose(p, (the Sorts of A).s1) &
+   len q = len p+1 & s1 = q.1 & s2 = q.len q &
+   for i being Nat, f being Function, s1,s2 being SortSymbol of S st
+      i in dom p & f = p.i & s1 = q.i & s2 = q.(i+1)
+     holds f is_e.translation_of A,s1,s2;
+ existence
+  proof consider q being RedSequence of TranslationRel S such that
+A2:  q.1 = s1 & q.len q = s2 by A1,REWRITE1:def 3;
+      len q > 0 by REWRITE1:def 2;
+    then len q >= 0+1 by NAT_1:38;
+   then consider n being Nat such that
+A3:  len q = 1+n by NAT_1:28;
+A4: dom q = Seg len q by FINSEQ_1:def 3;
+   defpred Z[set,set] means  ex f being Function, s1,s2 being SortSymbol of S,
+        i being Nat st $2 = f & i = $1 &
+      s1 = q.i & s2 = q.(i+1) & f is_e.translation_of A,s1,s2;
+
+A5: for x being set st x in Seg n
+     ex y being set st Z[x,y]
+     proof let x be set; assume
+A6:    x in Seg n; then reconsider i = x as Nat;
+A7:    i >= 1 & i <= n by A6,FINSEQ_1:3;
+       then i <= n+1 & i+1 <= len q & i+1 >= 1
+        by A3,AXIOMS:24,NAT_1:38;
+       then i in dom q & i+1 in dom q by A3,A4,A7,FINSEQ_1:3;
+then A8:    [q.i, q.(i+1)] in TranslationRel S by REWRITE1:def 2;
+      then reconsider s1 = q.i, s2 = q.(i+1) as SortSymbol of S by ZFMISC_1:106
+;
+      consider o being OperSymbol of S such that
+A9:    the_result_sort_of o = s2 and
+A10:    ex i being Nat st i in dom the_arity_of o & (the_arity_of o)/.i = s1
+        by A8,Def3;
+      consider j being Nat such that
+A11:    j in dom the_arity_of o & (the_arity_of o)/.j = s1 by A10;
+      consider a being Element of Args(o,A);
+      take transl(o,j,a,A); take transl(o,j,a,A), s1,s2,i;
+      thus thesis by A9,A11,Def5;
+     end;
+   consider p being Function such that
+A12:  dom p = Seg n & for x being set st x in Seg n holds Z[x,p.x]
+       from NonUniqFuncEx(A5);
+      p is Function-yielding
+     proof let j be set; assume
+         j in dom p;
+       then ex f being Function, s1,s2 being SortSymbol of S, i being Nat st
+        p.j = f & i = j &
+        s1 = q.i & s2 = q.(i+1) & f is_e.translation_of A,s1,s2 by A12;
+      hence thesis;
+     end;
+   then reconsider p as Function-yielding FinSequence by A12,FINSEQ_1:def 2;
+A13:  len p = n by A12,FINSEQ_1:def 3;
+A14:  now let i be Nat, f be Function, s1,s2 be SortSymbol of S;
+     assume i in dom p;
+      then ex f being Function, s1,s2 being SortSymbol of S,
+         j being Nat st p.i = f & j = i &
+      s1 = q.j & s2 = q.(j+1) & f is_e.translation_of A,s1,s2 by A12;
+     hence f = p.i & s1 = q.i & s2 = q.(i+1) implies
+       f is_e.translation_of A,s1,s2;
+    end;
+   then reconsider t = compose(p, (the Sorts of A).s1) as
+     Function of (the Sorts of A).s1, (the Sorts of A).s2 by A1,A2,A3,A13,Th14;
+   take t, q, p; thus thesis by A2,A3,A12,A14,FINSEQ_1:def 3;
+  end;
+end;
+
+theorem
+   for S being non empty non void ManySortedSign
+ for A being non-empty MSAlgebra over S
+ for s1,s2 being SortSymbol of S st TranslationRel S reduces s1,s2
+ for q being RedSequence of TranslationRel S,
+     p being Function-yielding FinSequence st
+   len q = len p+1 & s1 = q.1 & s2 = q.len q &
+   for i being Nat, f being Function, s1,s2 being SortSymbol of S st
+      i in dom p & f = p.i & s1 = q.i & s2 = q.(i+1)
+     holds f is_e.translation_of A,s1,s2
+ holds compose(p, (the Sorts of A).s1) is Translation of A,s1,s2
+  proof let S be non empty non void ManySortedSign;
+   let A be non-empty MSAlgebra over S;
+   let s1,s2 be SortSymbol of S such that
+A1:  TranslationRel S reduces s1,s2;
+   let q be RedSequence of TranslationRel S,
+       p be Function-yielding FinSequence such that
+A2:  len q = len p+1 & s1 = q.1 & s2 = q.len q and
+A3:  for i being Nat, f being Function, s1,s2 being SortSymbol of S st
+      i in dom p & f = p.i & s1 = q.i & s2 = q.(i+1)
+     holds f is_e.translation_of A,s1,s2;
+      compose(p, (the Sorts of A).s1) is
+     Function of (the Sorts of A).s1, (the Sorts of A).s2 by A1,A2,A3,Th14;
+   hence thesis by A1,A2,A3,Def6;
+  end;
+
+reserve A for non-empty MSAlgebra over S;
+
+theorem Th16:
+ for s being SortSymbol of S
+  holds id ((the Sorts of A).s) is Translation of A,s,s
+  proof let s be SortSymbol of S;
+   thus TranslationRel S reduces s,s by REWRITE1:13;
+A1:  id ((the Sorts of A).s) = compose({}, (the Sorts of A).s) by FUNCT_7:41;
+A2:  <*s*> is RedSequence of TranslationRel S by REWRITE1:7;
+A3:  len <*s*> = 0+1 & len {} = 0 & <*s*>.1 = s by FINSEQ_1:25,57;
+      for i being Nat, f being Function, s1,s2 being SortSymbol of S st
+      i in dom {} & f = {}.i & s1 = <*s*>.i & s2 = <*s*>.(i+1)
+     holds f is_e.translation_of A,s1,s2 by RELAT_1:60;
+   hence thesis by A1,A2,A3;
+  end;
+
+theorem Th17:
+ for s1,s2 being SortSymbol of S, f being Function
+  st f is_e.translation_of A,s1,s2 holds
+   TranslationRel S reduces s1,s2 & f is Translation of A,s1,s2
+  proof let s1,s2 be SortSymbol of S, f be Function; assume
+A1:  f is_e.translation_of A,s1,s2;
+then reconsider g = f as Function of (the Sorts of A).s1, (the Sorts of A).s2
+     by Th11;
+      dom g = (the Sorts of A).s1 by FUNCT_2:def 1;
+then A2:  g = compose(<*f*>, (the Sorts of A).s1) by FUNCT_7:48;
+A3:  [s1,s2] in TranslationRel S by A1,Th12;
+   hence
+A4:  TranslationRel S reduces s1,s2 by REWRITE1:16;
+A5:  <*s1,s2*> is RedSequence of TranslationRel S by A3,REWRITE1:8;
+A6:len <*s1,s2*> = 1+1 & len <*f*> = 1 & <*s1,s2*>.1 = s1 & <*s1,s2*>.2 = s2 &
+    <*f*>.1 = f by FINSEQ_1:57,61;
+      now let i be Nat, g be Function, w1,w2 be SortSymbol of S;
+     assume i in dom <*f*>; then i in {1} by FINSEQ_1:4,55;
+      then i = 1 by TARSKI:def 1;
+     hence g = <*f*>.i & w1 = <*s1,s2*>.i & w2 = <*s1,s2*>.(i+1)
+      implies g is_e.translation_of A,w1,w2 by A1,A6;
+    end;
+   hence thesis by A2,A4,A5,A6,Def6;
+  end;
+
+theorem Th18:
+ for s1,s2,s3 being SortSymbol of S st
+  TranslationRel S reduces s1,s2 & TranslationRel S reduces s2,s3
+ for t1 being Translation of A,s1,s2
+ for t2 being Translation of A,s2,s3
+  holds t2*t1 is Translation of A,s1,s3
+  proof let s1,s2,s3 be SortSymbol of S such that
+A1:  TranslationRel S reduces s1,s2 & TranslationRel S reduces s2,s3;
+   let t1 be Translation of A,s1,s2;
+   let t2 be Translation of A,s2,s3;
+   consider q1 being RedSequence of TranslationRel S,
+     p1 being Function-yielding FinSequence such that
+A2: t1 = compose(p1, (the Sorts of A).s1) and
+A3: len q1 = len p1+1 & s1 = q1.1 & s2 = q1.len q1 and
+A4: for i being Nat, f being Function, s1,s2 being SortSymbol of S st
+      i in dom p1 & f = p1.i & s1 = q1.i & s2 = q1.(i+1)
+     holds f is_e.translation_of A,s1,s2 by A1,Def6;
+   consider q2 being RedSequence of TranslationRel S,
+     p2 being Function-yielding FinSequence such that
+A5: t2 = compose(p2, (the Sorts of A).s2) and
+A6: len q2 = len p2+1 & s2 = q2.1 & s3 = q2.len q2 and
+A7: for i being Nat, f being Function, s1,s2 being SortSymbol of S st
+      i in dom p2 & f = p2.i & s1 = q2.i & s2 = q2.(i+1)
+     holds f is_e.translation_of A,s1,s2 by A1,Def6;
+   thus TranslationRel S reduces s1,s3 by A1,REWRITE1:17;
+   consider r1 being FinSequence, x1 being set such that
+A8: q1 = r1^<*x1*> by FINSEQ_1:63;
+   consider x2 being set, r2 being FinSequence such that
+A9: q2 = <*x2*>^r2 & len q2 = len r2+1 by REWRITE1:5;
+   reconsider q = q1$^q2 as RedSequence of TranslationRel S
+     by A3,A6,REWRITE1:9;
+   take q, p = p1^p2;
+      rng t1 c= (the Sorts of A).s2 by RELSET_1:12;
+   hence t2*t1 = compose(p, (the Sorts of A).s1) by A2,A5,FUNCT_7:50;
+      len <*x1*> = 1 by FINSEQ_1:57;
+    then A10: len q1 = len r1+1 by A8,FINSEQ_1:35;
+then A11: q = r1^q2 & len r1 = len p1 by A3,A8,REWRITE1:2,XCMPLX_1:2;
+then A12: len q = len p1+len q2 & len p = len p1+len p2 by FINSEQ_1:35;
+   hence len q = len p+1 by A6,XCMPLX_1:1;
+      x1 = s2 & x2 = s2 by A3,A6,A8,A9,A10,FINSEQ_1:58,59;
+then A13: q = q1^r2 by A8,A9,A11,FINSEQ_1:45;
+      1 <= len r1 or 0+1 > len r1;
+    then 1 in Seg len r1 & Seg len r1 = dom r1 or
+    0 <= len r1 & 0 >= len r1 by FINSEQ_1:3,def 3,NAT_1:18,38
+;
+    then q.1 = r1.1 & r1.1 = q1.1 or len r1 = 0 & {}^q2 = q2
+     by A8,A11,FINSEQ_1:47,def 7;
+   hence s1 = q.1 by A3,A6,A11,FINSEQ_1:25;
+      len q2 in dom q2 by FINSEQ_5:6;
+   hence s3 = q.len q by A6,A11,A12,FINSEQ_1:def 7;
+   let i be Nat, f be Function, s1,s2 be SortSymbol of S;
+   assume
+A14: i in dom p & f = p.i & s1 = q.i & s2 = q.(i+1);
+   per cases; suppose
+A15:  i in dom p1;
+     then i in dom q1 & i+1 in dom q1 by A3,FUNCT_7:24;
+     then s1 = q1.i & s2 = q1.(i+1) & f = p1.i by A13,A14,A15,FINSEQ_1:def 7;
+    hence f is_e.translation_of A,s1,s2 by A4,A15;
+   suppose
+       not i in dom p1;
+     then not (i <= len p1 & i >= 1) & i >= 1 by A14,FINSEQ_3:27;
+     then i >= len p1+1 by NAT_1:38;
+    then consider k being Nat such that
+A16:  i = len p1+1+k by NAT_1:28;
+A17:  i <= len p & i = len p1+(1+k) by A14,A16,FINSEQ_3:27,XCMPLX_1:1;
+     then k+1 >= 1 & k+1 <= len p2 by A12,NAT_1:29,REAL_1:53;
+then A18:  k+1 in dom p2 by FINSEQ_3:27;
+     then k+1 in dom q2 & k+1+1 in dom q2 & len p1+(k+1+1) = i+1
+      by A6,A17,FUNCT_7:24,XCMPLX_1:1;
+     then s1 = q2.(k+1) & s2 = q2.(k+1+1) & f = p2.(k+1)
+      by A11,A14,A17,A18,FINSEQ_1:def 7;
+    hence f is_e.translation_of A,s1,s2 by A7,A18;
+  end;
+
+theorem Th19:
+ for s1,s2,s3 being SortSymbol of S st TranslationRel S reduces s1,s2
+ for t being Translation of A,s1,s2
+ for f being Function st f is_e.translation_of A,s2,s3
+  holds f*t is Translation of A,s1,s3
+  proof let s1,s2,s3 be SortSymbol of S such that
+A1:  TranslationRel S reduces s1,s2;
+   let t be Translation of A,s1,s2;
+   let f be Function; assume
+      f is_e.translation_of A,s2,s3;
+    then TranslationRel S reduces s2,s3 & f is Translation of A,s2,s3 by Th17;
+   hence f*t is Translation of A,s1,s3 by A1,Th18;
+  end;
+
+theorem
+   for s1,s2,s3 being SortSymbol of S st TranslationRel S reduces s2,s3
+ for f being Function st f is_e.translation_of A,s1,s2
+ for t being Translation of A,s2,s3
+  holds t*f is Translation of A,s1,s3
+  proof let s1,s2,s3 be SortSymbol of S such that
+A1:  TranslationRel S reduces s2,s3;
+   let f be Function; assume
+      f is_e.translation_of A,s1,s2;
+    then TranslationRel S reduces s1,s2 & f is Translation of A,s1,s2 by Th17;
+   hence thesis by A1,Th18;
+  end;
+
+scheme TranslationInd
+ {S() -> non empty non void ManySortedSign,
+  A() -> non-empty MSAlgebra over S(),
+  P[set,set,set]}:
+ for s1,s2 being SortSymbol of S() st TranslationRel S() reduces s1,s2
+ for t being Translation of A(),s1,s2 holds P[t,s1,s2]
+  provided
+A1:  for s being SortSymbol of S() holds P[id ((the Sorts of A()).s),s,s]
+  and
+A2:  for s1,s2,s3 being SortSymbol of S() st TranslationRel S() reduces s1,s2
+     for t being Translation of A(),s1,s2 st P[t,s1,s2]
+     for f being Function st f is_e.translation_of A(),s2,s3
+      holds P[f*t,s1,s3]
+  proof set S = S(), A = A();
+   let s1,s2 be SortSymbol of S such that
+A3:  TranslationRel S reduces s1,s2;
+   let t be Translation of A,s1,s2;
+   consider q being RedSequence of TranslationRel S,
+            p being Function-yielding FinSequence such that
+A4:  t = compose(p, (the Sorts of A).s1) and
+A5:  len q = len p+1 & s1 = q.1 & s2 = q.len q and
+A6:  for i being Nat, f being Function, s1,s2 being SortSymbol of S st
+      i in dom p & f = p.i & s1 = q.i & s2 = q.(i+1)
+     holds f is_e.translation_of A,s1,s2 by A3,Def6;
+     defpred Q[Nat] means $1 in dom p implies
+     ex s being SortSymbol of S, t being Translation of A,s1,s,
+        p' being Function-yielding FinSequence st p' = p|Seg $1 &
+      s = q.($1+1) & TranslationRel S reduces s1,s &
+      t = compose(p', (the Sorts of A).s1) & P[t,s1,s];
+A7:  Q[0] by FINSEQ_3:27;
+A8:  for i being Nat st Q[i] holds Q[i+1]
+     proof let i be Nat such that
+A9:    i in dom p implies
+        ex s being SortSymbol of S, t being Translation of A,s1,s,
+         p' being Function-yielding FinSequence st p' = p|Seg i &
+          s = q.(i+1) & TranslationRel S reduces s1,s &
+          t = compose(p', (the Sorts of A).s1) & P[t,s1,s] and
+A10:    i+1 in dom p;
+      reconsider f = p.(i+1) as Function;
+         i+1 in dom q & i+1+1 in dom q by A5,A10,FUNCT_7:24;
+       then [q.(i+1),q.(i+1+1)] in TranslationRel S by REWRITE1:def 2;
+      then reconsider v1 = q.(i+1), v2 = q.(i+1+1) as SortSymbol of S by
+ZFMISC_1:106;
+A11:    f is_e.translation_of A,v1,v2 by A6,A10;
+      then reconsider t = f as Translation of A,v1,v2 by Th17;
+      per cases by NAT_1:19; suppose
+A12:     i = 0;
+       reconsider p' = p|Seg 1 as Function-yielding FinSequence by FINSEQ_1:19;
+       reconsider t as Translation of A,s1,v2 by A5,A12;
+A13:     dom t = (the Sorts of A).s1 by FUNCT_2:def 1;
+       take v2, t, p';
+       thus p' = p|Seg (i+1) & v2 = q.(i+1+1) by A12;
+       thus TranslationRel S reduces s1,v2 by A5,A11,A12,Th17;
+          0+1 <= len p & 1 in Seg 1
+         by A10,A12,FINSEQ_1:4,FINSEQ_3:27,TARSKI:def 1;
+        then len p' = 1 & p'.1 = t by A12,FINSEQ_1:21,FUNCT_1:72;
+        then p' = <*t*> by FINSEQ_1:57;
+       hence t = compose(p', (the Sorts of A).s1) by A13,FUNCT_7:48;
+          TranslationRel S reduces s1,s1 &
+        id ((the Sorts of A).s1) is Translation of A,s1,s1 &
+        t*id ((the Sorts of A).s1) = t & P[id ((the Sorts of A).s1),s1,s1]
+         by A1,Th16,FUNCT_2:23,REWRITE1:13;
+       hence P[t,s1,v2] by A2,A5,A11,A12;
+      suppose i > 0;
+        then A14: i <= i+1 & i+1 <= len p & i >= 0+1 by A10,FINSEQ_3:27,NAT_1:
+38;
+        then i <= len p & i >= 1 by AXIOMS:22;
+       then consider s being SortSymbol of S, t' being Translation of A,s1,s,
+           p' being Function-yielding FinSequence such that
+A15:     p' = p|Seg i & s = q.(i+1) & TranslationRel S reduces s1,s &
+        t' = compose(p', (the Sorts of A).s1) & P[t',s1,s] by A9,FINSEQ_3:27;
+       take v2;
+       reconsider T = t*t' as Translation of A,s1,v2 by A11,A15,Th19;
+       take T, y = p'^<*f*>;
+       reconsider pp = p|Seg (i+1) as FinSequence by FINSEQ_1:19;
+          len <*f*> = 1 & i <= len p & i+1 <= len p
+         by A14,AXIOMS:22,FINSEQ_1:57;
+then A16:      len y = len p'+1 & len p' = i & len pp = i+1 by A15,FINSEQ_1:21,
+35;
+then A17:      dom pp = Seg (i+1) & dom y = Seg (i+1) by FINSEQ_1:def 3;
+          now let k be Nat; assume
+A18:        k in Seg (i+1);
+          then k <= i+1 & k >= 1 by FINSEQ_1:3;
+          then k <= i & k >= 1 or k = i+1 by NAT_1:26;
+          then k in dom p' or k = i+1 by A16,FINSEQ_3:27;
+          then y.k = p'.k & p'.k = p.k or y.k = p.k
+           by A15,A16,FINSEQ_1:59,def 7,FUNCT_1:70;
+         hence y.k = pp.k by A17,A18,FUNCT_1:70;
+        end;
+       hence y = p|Seg (i+1) by A17,FINSEQ_1:17;
+       thus v2 = q.(i+1+1);
+          TranslationRel S reduces v1,v2 by A11,Th17;
+       hence TranslationRel S reduces s1,v2 by A15,REWRITE1:17;
+       thus T = compose(y, (the Sorts of A).s1) by A15,FUNCT_7:43;
+       thus P[T,s1,v2] by A2,A11,A15;
+     end;
+A19:  for i being Nat holds Q[i]  from Ind(A7,A8);
+   per cases; suppose p = {};
+     then t = id ((the Sorts of A).s1) & len p = 0 by A4,FINSEQ_1:25,FUNCT_7:41
+;
+    hence P[t,s1,s2] by A1,A5;
+   suppose p <> {}; then len p <> 0 by FINSEQ_1:25;
+     then len p > 0 by NAT_1:19;
+     then len p >= 0+1 by NAT_1:38;
+     then len p in dom p & dom p = Seg len p & p|dom p = p
+      by FINSEQ_1:def 3,FINSEQ_3:27,RELAT_1:98;
+     then ex s being SortSymbol of S, t being Translation of A,s1,s,
+        p' being Function-yielding FinSequence st p' = p &
+      s = q.(len p+1) & TranslationRel S reduces s1,s &
+      t = compose(p', (the Sorts of A).s1) & P[t,s1,s] by A19;
+    hence thesis by A4,A5;
+  end;
+
+theorem Th21:
+ for A1,A2 being non-empty MSAlgebra over S
+ for h being ManySortedFunction of A1,A2 st h is_homomorphism A1,A2
+ for o being OperSymbol of S, i being Nat st i in dom the_arity_of o
+ for a being Element of Args(o,A1) holds
+  (h.the_result_sort_of o)*transl(o,i,a,A1) =
+     transl(o,i,h#a,A2)*(h.((the_arity_of o)/.i))
+  proof let A1,A2 be non-empty MSAlgebra over S;
+   let h be ManySortedFunction of A1,A2 such that
+A1:  h is_homomorphism A1,A2;
+   let o be OperSymbol of S, i be Nat such that
+A2:  i in dom the_arity_of o;
+   set s1 = (the_arity_of o)/.i, s2 = the_result_sort_of o;
+   let a be Element of Args(o,A1);
+   reconsider t = transl(o,i,a,A1) as Function of
+     (the Sorts of A1).s1, (the Sorts of A1).s2 by A2,Th10;
+   reconsider T = transl(o,i,h#a,A2) as Function of
+     (the Sorts of A2).s1, (the Sorts of A2).s2 by A2,Th10;
+      now let x be Element of A1,s1;
+     reconsider b = a+*(i,x) as Element of Args(o,A1) by Th7;
+        a in Args(o,A1) & h#a in Args(o,A2);
+then A3:    (h#b).i = h.s1.x & h#b = (h#a)+*(i,(h#b).i) by A2,Th9;
+     thus ((h.s2)*t).x = h.s2.(t.x) by FUNCT_2:21
+      .= h.s2.(Den(o,A1).b) by Def4
+      .= Den(o,A2).(h#a+*(i,(h.s1.x))) by A1,A3,MSUALG_3:def 9
+      .= T.(h.s1.x) by Def4
+      .= (T*(h.s1)).x by FUNCT_2:21;
+    end;
+   hence (h.s2)*transl(o,i,a,A1) =
+     transl(o,i,h#a,A2)*(h.((the_arity_of o)/.i)) by FUNCT_2:113;
+  end;
+
+theorem
+   for h being Endomorphism of A
+ for o being OperSymbol of S, i being Nat st i in dom the_arity_of o
+ for a being Element of Args(o,A) holds
+  (h.the_result_sort_of o)*transl(o,i,a,A) =
+     transl(o,i,h#a,A)*(h.((the_arity_of o)/.i))
+  proof let h be Endomorphism of A;
+      h is_homomorphism A,A by Def2;
+   hence thesis by Th21;
+  end;
+
+theorem Th23:
+ for A1,A2 being non-empty MSAlgebra over S
+ for h being ManySortedFunction of A1,A2 st h is_homomorphism A1,A2
+ for s1,s2 being SortSymbol of S, t being Function st
+  t is_e.translation_of A1,s1,s2
+ ex T being Function of (the Sorts of A2).s1, (the Sorts of A2).s2 st
+  T is_e.translation_of A2,s1,s2 & T*(h.s1) = (h.s2)*t
+  proof let A1,A2 be non-empty MSAlgebra over S;
+   let h be ManySortedFunction of A1,A2 such that
+A1:  h is_homomorphism A1,A2;
+   let s1,s2 be SortSymbol of S, t be Function; assume
+    t is_e.translation_of A1,s1,s2;
+   then consider o being OperSymbol of S such that
+A2:  the_result_sort_of o = s2 and
+A3: ex i being Nat st i in dom the_arity_of o & (the_arity_of o)/.i = s1 &
+    ex a being Function st a in Args(o,A1) & t = transl(o,i,a,A1) by Def5;
+   consider i being Nat, a being Function such that
+A4:  i in dom the_arity_of o & (the_arity_of o)/.i = s1 and
+A5:  a in Args(o,A1) & t = transl(o,i,a,A1) by A3;
+   reconsider a as Element of Args(o,A1) by A5;
+   reconsider T = transl(o,i,h#a,A2) as
+     Function of (the Sorts of A2).s1, (the Sorts of A2).s2 by A2,A4,Th10;
+   take T; thus T is_e.translation_of A2,s1,s2 by A2,A4,Def5;
+   thus thesis by A1,A2,A4,A5,Th21;
+  end;
+
+theorem
+   for h being Endomorphism of A
+ for s1,s2 being SortSymbol of S, t being Function st
+  t is_e.translation_of A,s1,s2
+ ex T being Function of (the Sorts of A).s1, (the Sorts of A).s2 st
+  T is_e.translation_of A,s1,s2 & T*(h.s1) = (h.s2)*t
+  proof let h be Endomorphism of A;
+      h is_homomorphism A,A by Def2;
+   hence thesis by Th23;
+  end;
+
+theorem Th25:
+ for A1,A2 being non-empty MSAlgebra over S
+ for h being ManySortedFunction of A1,A2 st h is_homomorphism A1,A2
+ for s1,s2 being SortSymbol of S st TranslationRel S reduces s1,s2
+ for t being Translation of A1,s1,s2
+  ex T being Translation of A2,s1,s2 st T*(h.s1) = (h.s2)*t
+  proof let A1,A2 be non-empty MSAlgebra over S;
+   let h be ManySortedFunction of A1,A2 such that
+A1:  h is_homomorphism A1,A2;
+   defpred P[Function, SortSymbol of S, SortSymbol of S] means
+    ex T being Translation of A2,$2,$3 st T*(h.$2) = (h.$3)*$1;
+A2:  for s being SortSymbol of S holds P[id ((the Sorts of A1).s),s,s]
+    proof let s be SortSymbol of S;
+        id ((the Sorts of A2).s) is Translation of A2,s,s &
+      id ((the Sorts of A1).s) is Translation of A1,s,s &
+      (id ((the Sorts of A2).s))*(h.s) = h.s &
+      (h.s)*(id ((the Sorts of A1).s)) = h.s by Th16,FUNCT_2:23;
+     hence P[id ((the Sorts of A1).s),s,s];
+    end;
+A3:  for s1,s2,s3 being SortSymbol of S st TranslationRel S reduces s1,s2
+     for t being Translation of A1,s1,s2 st P[t,s1,s2]
+     for f being Function st f is_e.translation_of A1,s2,s3
+      holds P[f*t,s1,s3]
+   proof let s1,s2,s3 be SortSymbol of S such that
+A4:   TranslationRel S reduces s1,s2;
+     let t be Translation of A1,s1,s2;
+     given T being Translation of A2,s1,s2 such that
+A5:   T*(h.s1) = (h.s2)*t;
+     let f be Function; assume f is_e.translation_of A1,s2,s3;
+     then consider T1 being Function of (the Sorts of A2).s2, (the Sorts of A2)
+.s3
+     such that
+A6:   T1 is_e.translation_of A2,s2,s3 & T1*(h.s2) = (h.s3)*f by A1,Th23;
+     reconsider T2 = T1*T as Translation of A2,s1,s3 by A4,A6,Th19;
+     take T2;
+     thus T2*(h.s1) = T1*(T*(h.s1)) by RELAT_1:55
+           .= (h.s3)*f*t by A5,A6,RELAT_1:55
+           .= (h.s3)*(f*t) by RELAT_1:55;
+    end;
+   thus for s1,s2 being SortSymbol of S st TranslationRel S reduces s1,s2
+     for t being Translation of A1,s1,s2 holds P[t,s1,s2]
+      from TranslationInd(A2,A3);
+  end;
+
+theorem Th26:
+ for h being Endomorphism of A
+ for s1,s2 being SortSymbol of S st TranslationRel S reduces s1,s2
+ for t being Translation of A,s1,s2
+  ex T being Translation of A,s1,s2 st T*(h.s1) = (h.s2)*t
+  proof let h be Endomorphism of A;
+      h is_homomorphism A,A by Def2;
+   hence thesis by Th25;
+  end;
+
+
+begin :: Compatibility, invariantness, and stability
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be MSAlgebra over S;
+ let R be ManySortedRelation of A;
+
+ attr R is compatible means:
+Def7:
+  for o being OperSymbol of S, a,b being Function st
+   a in Args(o,A) & b in Args(o,A) &
+   (for n be Nat st n in dom the_arity_of o
+     holds [a.n,b.n] in R.((the_arity_of o)/.n))
+  holds [Den(o,A).a,Den(o,A).b] in R.(the_result_sort_of o);
+
+ attr R is invariant means:
+Def8:
+  for s1,s2 being SortSymbol of S
+  for t being Function st t is_e.translation_of A,s1,s2
+  for a,b being set st [a,b] in R.s1 holds [t.a, t.b] in R.s2;
+
+ attr R is stable means:
+Def9:
+  for h being Endomorphism of A
+  for s being SortSymbol of S
+  for a,b being set st [a,b] in R.s holds [(h.s).a, (h.s).b] in R.s;
+end;
+
+theorem
+   for R being MSEquivalence-like ManySortedRelation of A holds
+   R is compatible iff R is MSCongruence of A
+  proof let R be MSEquivalence-like ManySortedRelation of A;
+   hereby assume
+A1:   R is compatible;
+       now let o be OperSymbol of S, x,y be Element of Args(o,A) such that
+A2:     for n be Nat st n in dom x holds [x.n,y.n] in R.((the_arity_of o)/.n);
+         now let n be Nat; assume n in dom the_arity_of o;
+         then n in dom x by MSUALG_3:6;
+        hence [x.n,y.n] in R.((the_arity_of o)/.n) by A2;
+       end;
+      hence [Den(o,A).x,Den(o,A).y] in R.(the_result_sort_of o) by A1,Def7;
+     end; hence R is MSCongruence of A by MSUALG_4:def 6;
+   end;
+   assume
+A3:  R is MSCongruence of A;
+   let o be OperSymbol of S, x,y be Function such that
+A4:  x in Args(o,A) & y in Args(o,A) and
+A5:  for n be Nat st n in dom the_arity_of o
+     holds [x.n,y.n] in R.((the_arity_of o)/.n);
+   reconsider x, y as Element of Args(o,A) by A4;
+      now let n be Nat; assume n in dom x;
+      then n in dom the_arity_of o by MSUALG_3:6;
+     hence [x.n,y.n] in R.((the_arity_of o)/.n) by A5;
+    end;
+   hence thesis by A3,MSUALG_4:def 6;
+  end;
+
+theorem Th28:
+ for R being ManySortedRelation of A holds R is invariant iff
+  for s1,s2 being SortSymbol of S st TranslationRel S reduces s1,s2
+  for f being Translation of A,s1,s2
+  for a,b being set st [a,b] in R.s1 holds [f.a,f.b] in R.s2
+  proof let R be ManySortedRelation of A;
+   hereby assume A1: R is invariant;
+    deffunc i(SortSymbol of S) = id ((the Sorts of A).$1);
+    defpred P[Function,set,set] means for a,b being set st [a,b] in R.$2
+        holds [$1.a,$1.b] in R.$3;
+A2:   for s being SortSymbol of S
+      holds P[id ((the Sorts of A).s),s,s]
+      proof let s be SortSymbol of S;
+       let a,b be set; assume
+A3:     [a,b] in R.s;
+        then a in (the Sorts of A).s & b in (the Sorts of A).s
+         by ZFMISC_1:106;
+        then i(s).a = a & i(s).b = b by FUNCT_1:34;
+       hence thesis by A3;
+      end;
+A4:   for s1,s2,s3 being SortSymbol of S st TranslationRel S reduces s1,s2
+     for t being Translation of A,s1,s2 st P[t,s1,s2]
+      for f being Function st f is_e.translation_of A,s2,s3
+       holds P[f*t,s1,s3]
+      proof let s1,s2,s3 be SortSymbol of S such that
+          TranslationRel S reduces s1,s2;
+       let t be Translation of A,s1,s2 such that
+A5:      for a,b being set st [a,b] in R.s1 holds [t.a,t.b] in R.s2;
+       let f be Function such that
+A6:      f is_e.translation_of A,s2,s3;
+       let a,b be set; assume
+A7:     [a,b] in R.s1;
+       then reconsider a' = a, b' = b as Element of A,s1 by ZFMISC_1:106;
+          [t.a',t.b'] in R.s2 by A5,A7;
+then A8:      [f.(t.a'),f.(t.b')] in R.s3 by A1,A6,Def8;
+          f.(t.a') = (f*t).a' by FUNCT_2:21;
+       hence thesis by A8,FUNCT_2:21;
+      end;
+    thus for s1,s2 being SortSymbol of S st TranslationRel S reduces s1,s2
+     for t being Translation of A,s1,s2 holds P[t,s1,s2]
+        from TranslationInd(A2,A4);
+   end;
+   assume
+A9:  for s1,s2 being SortSymbol of S st TranslationRel S reduces s1,s2
+    for f being Translation of A,s1,s2
+    for a,b being set st [a,b] in R.s1 holds [f.a,f.b] in R.s2;
+    let s1,s2 be SortSymbol of S;
+    let t be Function; assume t is_e.translation_of A,s1,s2;
+     then TranslationRel S reduces s1,s2 & t is Translation of A,s1,s2 by Th17
+;
+    hence thesis by A9;
+  end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ cluster invariant -> compatible (MSEquivalence-like ManySortedRelation of A);
+ coherence
+  proof let R be MSEquivalence-like ManySortedRelation of A such that
+A1:  for s1,s2 being SortSymbol of S
+    for t being Function st t is_e.translation_of A,s1,s2
+    for a,b being set st [a,b] in R.s1 holds [t.a, t.b] in R.s2;
+   let o be OperSymbol of S, a,b be Function such that
+A2:  a in Args(o,A) & b in Args(o,A) and
+A3:  for n be Nat st n in dom the_arity_of o
+     holds [a.n,b.n] in R.((the_arity_of o)/.n);
+   reconsider a' = a as Element of Args(o,A) by A2;
+A4: dom the_arity_of o = Seg len the_arity_of o by FINSEQ_1:def 3;
+   defpred P[set,set,set] means
+      ex c being Element of Args(o,A) st c = $2 & $3 = c+*($1,b.$1);
+A5: for n being Nat st 1 <= n & n < (len the_arity_of o)+1
+     for x being Element of Args(o,A) ex y being Element of Args(o,A)
+     st P[n,x,y]
+     proof let n be Nat; assume
+         1 <= n & n < (len the_arity_of o)+1;
+       then 1 <= n & n <= (len the_arity_of o) by NAT_1:38;
+then A6:    n in dom the_arity_of o by FINSEQ_3:27;
+      let x be Element of Args(o,A);
+         b.n in (the Sorts of A).((the_arity_of o)/.n) by A2,A6,Th2;
+       then x+*(n,b.n) in Args(o,A) by Th7;
+      hence thesis;
+     end;
+   consider p being FinSequence of Args(o,A) such that
+A7: len p = (len the_arity_of o)+1 and
+A8: p.1 = a' or (len the_arity_of o)+1 = 0 and
+A9: for i being Nat st 1 <= i & i < (len the_arity_of o)+1
+      holds P[i,p.i,p.(i+1)] from FinRecExD(A5);
+    A10: len the_arity_of o >= 0 by NAT_1:18;
+    defpred P[Nat] means  $1 <= len the_arity_of o implies
+     ex c being Element of Args(o,A) st c = p.($1+1) &
+     (for j being Nat st j in dom the_arity_of o & j > $1 holds c.j = a.j) &
+     for j being Nat st j in Seg $1 holds c.j = b.j;
+A11: P[0]
+     proof assume 0 <= len the_arity_of o; take a';
+      thus thesis by A8,A10,FINSEQ_1:4,NAT_1:38;
+     end;
+A12:  for n being Nat st P[n] holds P[n+1]
+     proof let i be Nat such that
+A13:    i <= len the_arity_of o implies
+        ex c being Element of Args(o,A) st c = p.(i+1) &
+        (for j being Nat st j in dom the_arity_of o & j > i holds c.j = a.j) &
+        for j being Nat st j in Seg i holds c.j = b.j and
+A14:    i+1 <= len the_arity_of o;
+A15:    i+1 < (len the_arity_of o)+1 by A14,NAT_1:38;
+         i <= i+1 by NAT_1:29;
+      then consider ci being Element of Args(o,A) such that
+A16:    ci = p.(i+1) and
+A17:    for j being Nat st j in dom the_arity_of o & j > i holds ci.j = a.j and
+A18:    for j being Nat st j in Seg i holds ci.j = b.j by A13,A14,AXIOMS:22;
+A19:    i+1 >= 1 by NAT_1:29;
+      then consider c being Element of Args(o,A) such that
+A20:    c = p.(i+1) & p.(i+1+1) = c+*(i+1,b.(i+1)) by A9,A15;
+      i+1 in dom the_arity_of o by A14,A19,FINSEQ_3:27;
+       then b.(i+1) in (the Sorts of A).((the_arity_of o)/.(i+1)) by A2,Th2;
+      then reconsider d = p.(i+1+1) as Element of Args(o,A) by A20,Th7;
+      take d; thus d = p.(i+1+1);
+      hereby let j be Nat; assume
+A21:     j in dom the_arity_of o & j > i+1;
+        then j > i by NAT_1:38;
+then ci.j = a.j by A17,A21;
+        hence d.j = a.j by A16,A20,A21,FUNCT_7:34;
+      end;
+      let j be Nat; assume
+A22:    j in Seg (i+1);
+       then j in Seg i \/ {i+1} by FINSEQ_1:11;
+       then A23: j in Seg i or j in {i+1} by XBOOLE_0:def 2;
+         Seg (i+1) c= dom the_arity_of o by A4,A14,FINSEQ_1:7;
+       then A24: Seg (i+1) c= dom c by MSUALG_3:6;
+      per cases; suppose j = i+1;
+       hence d.j = b.j by A20,A22,A24,FUNCT_7:33;
+      suppose
+A25:     j <> i+1;
+        then d.j = c.j by A20,FUNCT_7:34;
+       hence d.j = b.j by A16,A18,A20,A23,A25,TARSKI:def 1;
+     end;
+A26:  for i being Nat holds P[i] from Ind(A11,A12);
+    defpred P[Nat] means $1 in dom p implies
+       [Den(o,A).a',Den(o,A).(p.$1)] in R.(the_result_sort_of o);
+A27:  P[0] by FINSEQ_3:27;
+A28: for k be Nat st P[k] holds P[k+1]
+ proof let i be Nat such that
+A29:   i in dom p implies
+       [Den(o,A).a',Den(o,A).(p.i)] in R.(the_result_sort_of o) and
+A30:   i+1 in dom p;
+A31:   Result(o,A) = (the Sorts of A).the_result_sort_of o &
+      R.(the_result_sort_of o) is Equivalence_Relation of
+       (the Sorts of A).(the_result_sort_of o) by PRALG_2:10;
+A32:   i <= i+1 & i+1 <= len p by A30,FINSEQ_3:27,NAT_1:29;
+then A33:   i <= len p by AXIOMS:22;
+     per cases by NAT_1:19; suppose i = 0;
+      hence [Den(o,A).a',Den(o,A).(p.(i+1))] in R.(the_result_sort_of o)
+       by A8,A10,A31,EQREL_1:11,NAT_1:38;
+     suppose i > 0;
+then A34:    i >= 0+1 by NAT_1:38;
+A35:    i <= len the_arity_of o by A7,A32,REAL_1:53;
+          i < (len the_arity_of o)+1 by A7,A32,NAT_1:38;
+      then consider c being Element of Args(o,A) such that
+A36:    c = p.i & p.(i+1) = c+*(i,b.i) by A9,A34;
+A37:    i in dom the_arity_of o by A34,A35,FINSEQ_3:27;
+      then reconsider bi = b.i, ci = c.i as Element of A,((the_arity_of o)/.i)
+        by A2,Th2;
+      reconsider d = c+*(i,bi) as Element of Args(o,A) by Th7;
+A38:    Den(o,A).d = transl(o,i,c,A).bi by Def4;
+      c = c+*(i,ci) by FUNCT_7:37;
+then A39:    Den(o,A).c = transl(o,i,c,A).ci by Def4;
+      consider j being Nat such that
+A40:    i = 1+j by A34,NAT_1:28;
+         j <= i by A40,NAT_1:29;
+       then j <= len the_arity_of o by A35,AXIOMS:22;
+then A41:    ex c being Element of Args(o,A) st c = p.(j+1) &
+       (for k being Nat st k in dom the_arity_of o & k > j holds c.k = a.k) &
+       for k being Nat st k in Seg j holds c.k = b.k by A26;
+         j < i by A40,NAT_1:38;
+       then c.i = a.i by A36,A37,A40,A41;
+then A42:    [ci,bi] in R.((the_arity_of o)/.i) by A3,A37;
+         transl(o,i,c,A) is_e.translation_of
+         A, (the_arity_of o)/.i, the_result_sort_of o by A37,Def5;
+       then [Den(o,A).c,Den(o,A).d] in R.(the_result_sort_of o) by A1,A38,A39,
+A42;
+      hence [Den(o,A).a',Den(o,A).(p.(i+1))] in R.(the_result_sort_of o)
+        by A29,A33,A34,A36,EQREL_1:13,FINSEQ_3:27;
+    end;
+A43:  for i being Nat holds P[i] from Ind(A27,A28);
+   consider c being Element of Args(o,A) such that
+A44: c = p.((len the_arity_of o)+1) and
+      for j being Nat st j in dom the_arity_of o & j > len the_arity_of o
+     holds c.j = a.j and
+A45: for j being Nat st j in Seg len the_arity_of o holds c.j = b.j by A26;
+A46: dom c = dom the_arity_of o & dom b = dom the_arity_of o &
+    dom the_arity_of o = Seg len the_arity_of o
+     by A2,FINSEQ_1:def 3,MSUALG_3:6;
+    then b is FinSequence & c is FinSequence by FINSEQ_1:def 2;
+then A47: c = b by A45,A46,FINSEQ_1:17;
+      (len the_arity_of o)+1 >= 1 by NAT_1:29;
+    then (len the_arity_of o)+1 in dom p by A7,FINSEQ_3:27;
+   hence [Den(o,A).a,Den(o,A).b] in R.(the_result_sort_of o) by A43,A44,A47;
+  end;
+
+ cluster compatible -> invariant (MSEquivalence-like ManySortedRelation of A);
+ coherence
+  proof let R be MSEquivalence-like ManySortedRelation of A such that
+A48:  for o be OperSymbol of S, a,b be Function st
+     a in Args(o,A) & b in Args(o,A) &
+     (for n be Nat st n in dom the_arity_of o
+       holds [a.n,b.n] in R.((the_arity_of o)/.n))
+    holds [Den(o,A).a,Den(o,A).b] in R.(the_result_sort_of o);
+   let s1,s2 be SortSymbol of S;
+   let f be Function;
+   given o being OperSymbol of S such that
+A49:  the_result_sort_of o = s2 and
+A50: ex i being Nat st i in dom the_arity_of o & ((the_arity_of o)/.i) = s1 &
+    ex a being Function st a in Args(o,A) & f = transl(o,i,a,A);
+   consider i being Nat, a being Function such that
+A51:  i in dom the_arity_of o & ((the_arity_of o)/.i) = s1 and
+A52:  a in Args(o,A) & f = transl(o,i,a,A) by A50;
+   let x,y be set; assume
+A53:  [x,y] in R.s1;
+then A54:  x in (the Sorts of A).s1 & y in (the Sorts of A).s1 by ZFMISC_1:106;
+   then reconsider ax = a+*(i,x), ay = a+*(i,y) as Element of Args(o,A)
+     by A51,A52,Th7;
+A55:  dom a = dom the_arity_of o & dom ax = dom the_arity_of o &
+    dom ay = dom the_arity_of o by A52,MSUALG_3:6;
+A56:  f.x = Den(o,A).ax & f.y = Den(o,A).ay by A51,A52,A54,Def4;
+      now let n be Nat; assume
+A57:    n in dom the_arity_of o;
+      A58:    dom ((the Sorts of A)*the_arity_of o) = dom the_arity_of o
+       by PBOOLE:def 3;
+        (the_arity_of o)/.n = (the_arity_of o).n by A57,FINSEQ_4:def 4;
+      then (the Sorts of A).((the_arity_of o)/.n)
+        = ((the Sorts of A)*the_arity_of o).n by A57,FUNCT_1:23;
+then A59:  a.n in (the Sorts of A).((the_arity_of o)/.n) by A52,A57,A58,
+MSUALG_3:6;
+        n = i or n <> i;
+      then ax.n = x & ay.n = y & n = i or ax.n = a.n & ay.n = a.n
+       by A55,A57,FUNCT_7:33,34;
+     hence [ax.n,ay.n] in R.((the_arity_of o)/.n) by A51,A53,A59,EQREL_1:11;
+    end;
+   hence [f.x, f.y] in R.s2 by A48,A49,A56;
+  end;
+end;
+
+definition
+ let X be non empty set;
+ cluster id X -> non empty;
+ coherence;
+end;
+
+scheme MSRExistence
+  {I() -> non empty set,
+   A() -> non-empty ManySortedSet of I(), P[set,set,set]}:
+ ex R being ManySortedRelation of A() st
+  for i being Element of I() for a,b being Element of A().i holds
+   [a,b] in R.i iff P[i,a,b]
+  proof
+    deffunc F(set)=[:A().$1,A().$1:];
+    defpred Q[set,set] means P[$1,$2`1,$2`2];
+    consider R being Function such that
+A1:  dom R = I() and
+A2:  for i being set st i in I() for a being set holds
+     a in R.i iff a in F(i) & Q[i,a] from FuncSeparation;
+   reconsider R as ManySortedSet of I() by A1,PBOOLE:def 3;
+      R is ManySortedRelation of A()
+     proof let i be set; assume A3: i in I();
+         R.i c= [:A().i,A().i:] proof let x be set; thus thesis by A2,A3; end;
+      hence thesis by RELSET_1:def 1;
+     end;
+   then reconsider R as ManySortedRelation of A();
+   take R; let i be Element of I(); let a,b be Element of A().i;
+      [a,b]`1 = a & [a,b]`2 = b & [a,b] in [:A().i,A().i:]
+     by MCART_1:7,ZFMISC_1:106;
+   hence thesis by A2;
+  end;
+
+scheme MSRLambdaU{I() -> set, A() -> ManySortedSet of I(), F(set) -> set}:
+ (ex R being ManySortedRelation of A() st
+   for i being set st i in I() holds R.i = F(i)) &
+ for R1,R2 being ManySortedRelation of A() st
+   (for i being set st i in I() holds R1.i = F(i)) &
+   (for i being set st i in I() holds R2.i = F(i))
+  holds R1 = R2
+ provided
+A1:   for i being set st i in I() holds F(i) is Relation of A().i, A().i
+  proof
+    deffunc G(set) = F($1);
+    consider R being ManySortedSet of I() such that
+A2:  for i being set st i in I() holds R.i = G(i) from MSSLambda;
+      R is ManySortedRelation of A()
+     proof let i be set; assume i in I();
+       then F(i) is Relation of A().i, A().i & R.i = F(i) by A1,A2;
+      hence thesis;
+     end;
+   hence ex R being ManySortedRelation of A() st
+     for i being set st i in I() holds R.i = F(i) by A2;
+   let R1,R2 be ManySortedRelation of A() such that
+A3:  for i being set st i in I() holds R1.i = F(i) and
+A4:  for i being set st i in I() holds R2.i = F(i);
+      now let i be set; assume i in I();
+      then R1.i = F(i) & R2.i = F(i) by A3,A4;
+     hence R1.i = R2.i;
+    end;
+   hence thesis by PBOOLE:3;
+  end;
+
+definition
+ let I be set, A be ManySortedSet of I;
+ func id(I,A) -> ManySortedRelation of A means:
+Def10:
+  for i being set st i in I holds it.i = id (A.i);
+ correctness
+  proof
+    deffunc F(set) = id (A.$1);
+A1:  for i being set st i in I holds F(i) is Relation of A.i, A.i;
+ (ex R being ManySortedRelation of A st
+    for i being set st i in I holds R.i = F(i)) &
+  for R1,R2 being ManySortedRelation of A st
+   (for i being set st i in I holds R1.i = F(i)) &
+   (for i being set st i in I holds R2.i = F(i))
+      holds R1 = R2 from MSRLambdaU(A1);
+    hence thesis;
+  end;
+end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ cluster MSEquivalence-like -> non-empty ManySortedRelation of A;
+ coherence
+  proof let R be ManySortedRelation of A; assume
+A1:  for i be set, P be Relation of (the Sorts of A).i
+     st i in the carrier of S & R.i = P
+     holds P is Equivalence_Relation of (the Sorts of A).i;
+   let i be set; assume i in the carrier of S;
+   then reconsider i as SortSymbol of S;
+   consider x being Element of A,i;
+      R.i is Equivalence_Relation of (the Sorts of A).i by A1;
+    then [x,x] in R.i by EQREL_1:11;
+   hence thesis;
+  end;
+end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ cluster invariant stable MSEquivalence-like ManySortedRelation of A;
+ existence
+  proof
+   reconsider R = id(the carrier of S, the Sorts of A)
+     as ManySortedRelation of A ;
+   take R;
+   thus R is invariant
+    proof let s1,s2 be SortSymbol of S;
+A1:    R.s1 = id ((the Sorts of A).s1) & R.s2 = id ((the Sorts of A).s2) by
+Def10;
+     let t be Function; assume
+        t is_e.translation_of A,s1,s2;
+     then reconsider f = t as Function of (the Sorts of A).s1, (the Sorts of A)
+.s2
+      by Th11;
+     let a,b be set; assume
+A2:    [a,b] in R.s1;
+      then a in (the Sorts of A).s1 by ZFMISC_1:106;
+      then a = b & f.a in (the Sorts of A).s2 by A1,A2,FUNCT_2:7,RELAT_1:def 10
+;
+     hence [t.a, t.b] in R.s2 by A1,RELAT_1:def 10;
+    end;
+   thus R is stable
+    proof let h be Endomorphism of A;
+     let s be SortSymbol of S;
+A3:    R.s = id ((the Sorts of A).s) by Def10;
+     let a,b be set;
+     assume [a,b] in R.s;
+then A4:    a = b & a in (the Sorts of A).s by A3,RELAT_1:def 10;
+      then h.s.a in (the Sorts of A).s by FUNCT_2:7;
+     hence [(h.s).a, (h.s).b] in R.s by A3,A4,RELAT_1:def 10;
+    end;
+   let i be set, P be Relation of (the Sorts of A).i;
+   assume i in the carrier of S; then reconsider s = i as SortSymbol of S;
+   assume R.i = P; then P = id ((the Sorts of A).s) by Def10;
+   hence P is Equivalence_Relation of (the Sorts of A).i;
+  end;
+end;
+
+begin :: Invariant, stable, and invariant stable closure
+
+reserve S for non empty non void ManySortedSign,
+ A for non-empty MSAlgebra over S,
+ R for ManySortedRelation of the Sorts of A;
+
+scheme MSRelCl {S() -> non empty non void ManySortedSign,
+                A() -> non-empty MSAlgebra over S(),
+                P[set,set,set], R[set],
+                R,Q() -> ManySortedRelation of A()}:
+  R[Q()] & R() c= Q() &
+  for P being ManySortedRelation of A() st R[P] & R() c= P holds Q() c= P
+ provided
+A1: for R being ManySortedRelation of A() holds R[R] iff
+    for s1,s2 being SortSymbol of S()
+    for f being Function of (the Sorts of A()).s1,(the Sorts of A()).s2
+     st P[f,s1,s2]
+    for a,b being set st [a,b] in R.s1 holds [f.a,f.b] in R.s2
+ and
+A2: for s1,s2,s3 being SortSymbol of S()
+    for f1 being Function of (the Sorts of A()).s1,(the Sorts of A()).s2
+    for f2 being Function of (the Sorts of A()).s2,(the Sorts of A()).s3
+     st P[f1,s1,s2] & P[f2,s2,s3]
+     holds P[f2*f1,s1,s3]
+ and
+A3: for s being SortSymbol of S() holds P[id ((the Sorts of A()).s),s,s]
+ and
+A4: for s being SortSymbol of S(), a,b being Element of A(),s holds
+     [a,b] in Q().s iff
+     ex s' being SortSymbol of S(),
+       f being Function of (the Sorts of A()).s',(the Sorts of A()).s,
+       x,y being Element of A(),s' st
+      P[f,s',s] & [x,y] in R().s' & a = f.x & b = f.y
+  proof
+      now set R = Q(); let s1,s2 be SortSymbol of S();
+     let f be Function of (the Sorts of A()).s1,(the Sorts of A()).s2;
+     assume
+A5:   P[f,s1,s2];
+     let a,b be set; assume
+A6:   [a,b] in R.s1;
+      then a in (the Sorts of A()).s1 & b in (the Sorts of A()).s1 by ZFMISC_1:
+106
+;
+     then consider s' being SortSymbol of S(),
+       f' being Function of (the Sorts of A()).s',(the Sorts of A()).s1,
+       x,y being Element of A(),s' such that
+A7:   P[f',s',s1] & [x,y] in R().s' & a = f'.x & b = f'.y by A4,A6;
+A8:   P[f*f',s',s2] by A2,A5,A7;
+        f.a = (f*f').x & f.b = (f*f').y by A7,FUNCT_2:21;
+     hence [f.a,f.b] in R.s2 by A4,A7,A8;
+    end;
+   hence R[Q()] by A1;
+   thus R() c= Q()
+     proof let i be set; assume i in the carrier of S();
+      then reconsider s = i as SortSymbol of S();
+         R().s c= Q().s
+        proof let x,y be set; assume
+A9:       [x,y] in R().s;
+         then reconsider a = x, b = y as Element of A(),s by ZFMISC_1:106;
+         set f = id ((the Sorts of A()).s);
+            P[f,s,s] & f.a = a & f.b = b by A3,FUNCT_1:34;
+         hence thesis by A4,A9;
+        end;
+      hence thesis;
+     end;
+   let P be ManySortedRelation of A(); assume
+A10:  R[P] & R() c= P;
+   let i be set; assume i in the carrier of S();
+   then reconsider s = i as SortSymbol of S();
+      Q().s c= P.s
+     proof let x,y be set; assume
+A11:    [x,y] in Q().s;
+      then reconsider a = x, b = y as Element of A(),s by ZFMISC_1:106;
+      consider s' being SortSymbol of S(),
+        f being Function of (the Sorts of A()).s',(the Sorts of A()).s,
+        u,v being Element of A(),s' such that
+A12:    P[f,s',s] & [u,v] in R().s' & a = f.u & b = f.v by A4,A11;
+         R().s' c= P.s' by A10,PBOOLE:def 5; hence [x,y] in P.s by A1,A10,A12
+;
+     end;
+   hence thesis;
+  end;
+
+Lm1:
+now
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ let R,Q be ManySortedRelation of A;
+ defpred R[ManySortedRelation of A] means $1 is invariant;
+ defpred P[Function, SortSymbol of S, SortSymbol of S] means
+  TranslationRel S reduces $2,$3 & $1 is Translation of A,$2,$3;
+ assume that
+A1: for s being SortSymbol of S, a,b being Element of A,s holds
+    [a,b] in Q.s iff
+    ex s' being SortSymbol of S,
+       f being Function of (the Sorts of A).s',(the Sorts of A).s,
+       x,y being Element of A,s' st
+     P[f,s',s] & [x,y] in R.s' & a = f.x & b = f.y;
+A2: now let R be ManySortedRelation of A;
+    thus R[R] implies
+     for s1,s2 being SortSymbol of S
+     for f being Function of (the Sorts of A).s1,(the Sorts of A).s2
+      st P[f,s1,s2]
+     for a,b being set st [a,b] in R.s1 holds [f.a,f.b] in R.s2
+      by Th28;
+    assume
+       for s1,s2 being SortSymbol of S
+     for f being Function of (the Sorts of A).s1,(the Sorts of A).s2
+      st P[f,s1,s2]
+     for a,b being set st [a,b] in R.s1 holds [f.a,f.b] in R.s2;
+    then for s1,s2 being SortSymbol of S st TranslationRel S reduces s1,s2
+     for f being Translation of A,s1,s2
+     for a,b being set st [a,b] in R.s1 holds [f.a,f.b] in R.s2;
+    hence R[R] by Th28;
+   end;
+A3: for s1,s2,s3 being SortSymbol of S
+   for f1 being Function of (the Sorts of A).s1,(the Sorts of A).s2
+   for f2 being Function of (the Sorts of A).s2,(the Sorts of A).s3
+    st P[f1,s1,s2] & P[f2,s2,s3]
+    holds P[f2*f1,s1,s3] by Th18,REWRITE1:17;
+A4: for s being SortSymbol of S holds P[id ((the Sorts of A).s),s,s]
+     by Th16,REWRITE1:13;
+ thus R[Q] & R c= Q &
+  for P being ManySortedRelation of A st R[P] & R c= P holds Q c= P
+   from MSRelCl(A2,A3,A4,A1);
+end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ let R be ManySortedRelation of the Sorts of A;
+
+ func InvCl R -> invariant ManySortedRelation of A means:
+Def11:
+  R c= it &
+  for Q being invariant ManySortedRelation of A st R c= Q holds it c= Q;
+ uniqueness
+  proof let Q1,Q2 be invariant ManySortedRelation of A such that
+A1: R c= Q1 and
+A2: for Q being invariant ManySortedRelation of A st R c= Q
+     holds Q1 c= Q
+   and
+A3: R c= Q2 and
+A4: for Q being invariant ManySortedRelation of A st R c= Q
+     holds Q2 c= Q;
+   thus Q1 c= Q2 & Q2 c= Q1 by A1,A2,A3,A4;
+  end;
+ existence
+  proof
+   defpred P[Function, SortSymbol of S, SortSymbol of S] means
+      TranslationRel S reduces $2,$3 & $1 is Translation of A,$2,$3;
+   defpred Z[SortSymbol of S,set,set] means
+    ex s' being SortSymbol of S,
+       f being Function of (the Sorts of A).s',(the Sorts of A).$1,
+       x,y being Element of A,s' st
+     P[f,s',$1] & [x,y] in R.s' & $2 = f.x & $3 = f.y;
+   consider Q being ManySortedRelation of the Sorts of A such that
+A5:  for s being SortSymbol of S, a,b being Element of A,s holds
+    [a,b] in Q.s iff Z[s,a,b] from MSRExistence;
+   reconsider R,Q as ManySortedRelation of A ;
+    A6: for s being SortSymbol of S, a,b being Element of A,s holds
+    [a,b] in Q.s iff
+    ex s' being SortSymbol of S,
+       f being Function of (the Sorts of A).s',(the Sorts of A).s,
+       x,y being Element of A,s' st
+     P[f,s',s] & [x,y] in R.s' & a = f.x & b = f.y by A5;
+   then reconsider Q as invariant ManySortedRelation of A by Lm1;
+   take Q; thus thesis by A6,Lm1;
+  end;
+end;
+
+theorem Th29:
+ for R being ManySortedRelation of the Sorts of A
+ for s being SortSymbol of S
+ for a,b being Element of A,s holds [a,b] in (InvCl R).s
+  iff
+   ex s' being SortSymbol of S, x,y being Element of A,s' st
+   ex t being Translation of A,s',s st
+    TranslationRel S reduces s',s & [x,y] in R.s' & a = t.x & b = t.y
+  proof let P be ManySortedRelation of the Sorts of A;
+   defpred Z[SortSymbol of S,set,set] means
+    ex s' being SortSymbol of S,
+       f being Function of (the Sorts of A).s',(the Sorts of A).$1,
+       x,y being Element of A,s' st
+     TranslationRel S reduces s',$1 & f is Translation of A,s',$1 &
+     [x,y] in P.s' & $2 = f.x & $3 = f.y;
+   consider Q being ManySortedRelation of the Sorts of A such that
+A1:  for s being SortSymbol of S, a,b being Element of A,s holds
+    [a,b] in Q.s iff Z[s,a,b] from MSRExistence;
+   reconsider R = P,Q as ManySortedRelation of A ;
+    A2: for s being SortSymbol of S, a,b being Element of A,s holds
+    [a,b] in Q.s iff
+    ex s' being SortSymbol of S,
+       f being Function of (the Sorts of A).s',(the Sorts of A).s,
+       x,y being Element of A,s' st
+     TranslationRel S reduces s',s & f is Translation of A,s',s &
+     [x,y] in R.s' & a = f.x & b = f.y by A1;
+then A3:  Q is invariant & R c= Q &
+    for P being ManySortedRelation of A st P is invariant & R c= P
+     holds Q c= P by Lm1;
+   reconsider Q as invariant ManySortedRelation of A by A2,Lm1;
+A4:  InvCl R = Q
+     proof R c= InvCl R by Def11;
+      hence InvCl R c= Q & Q c= InvCl R by A3,Def11;
+     end;
+   let s be SortSymbol of S;
+   let a,b be Element of A,s;
+   hereby assume [a,b] in (InvCl P).s;
+     then ex s' being SortSymbol of S,
+       f being Function of (the Sorts of A).s',(the Sorts of A).s,
+       x,y being Element of A,s' st
+      TranslationRel S reduces s',s & f is Translation of A,s',s &
+      [x,y] in P.s' & a = f.x & b = f.y by A1,A4;
+    hence ex s' being SortSymbol of S, x,y being Element of A,s' st
+     ex t being Translation of A,s',s st
+      TranslationRel S reduces s',s & [x,y] in P.s' & a = t.x & b = t.y;
+   end;
+   thus thesis by A1,A4;
+  end;
+
+theorem Th30:
+ for R being stable ManySortedRelation of A holds InvCl R is stable
+  proof let R be stable ManySortedRelation of A;
+   let h be Endomorphism of A;
+   let s be SortSymbol of S;
+   let a,b be set; assume
+A1:  [a,b] in (InvCl R).s;
+    then a in (the Sorts of A).s & b in (the Sorts of A).s by ZFMISC_1:106;
+   then consider s' being SortSymbol of S, x,y being Element of A,s',
+            t being Translation of A,s',s such that
+A2:  TranslationRel S reduces s',s & [x,y] in R.s' & a = t.x & b = t.y by A1,
+Th29;
+   consider T being Translation of A,s',s such that
+A3:  T*(h.s') = (h.s)*t by A2,Th26;
+      (T*(h.s')).x = T.(h.s'.x) & (T*(h.s')).y = T.(h.s'.y) by FUNCT_2:21;
+then A4:  T.(h.s'.x) = h.s.a & T.(h.s'.y) = h.s.b by A2,A3,FUNCT_2:21;
+      [h.s'.x,h.s'.y] in R.s' by A2,Def9;
+   hence [(h.s).a, (h.s).b] in (InvCl R).s by A2,A4,Th29;
+  end;
+
+Lm2:
+now
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ let R,Q be ManySortedRelation of A;
+ defpred R[ManySortedRelation of A] means $1 is stable;
+ defpred P[Function, SortSymbol of S, SortSymbol of S] means
+  $2 = $3 & ex h being Endomorphism of A st $1 = h.$2;
+ assume that
+A1: for s being SortSymbol of S, a,b being Element of A,s holds
+    [a,b] in Q.s iff
+    ex s' being SortSymbol of S,
+       f being Function of (the Sorts of A).s',(the Sorts of A).s,
+       x,y being Element of A,s' st
+     P[f,s',s] & [x,y] in R.s' & a = f.x & b = f.y;
+A2: for R being ManySortedRelation of A holds R[R] iff
+    for s1,s2 being SortSymbol of S
+    for f being Function of (the Sorts of A).s1,(the Sorts of A).s2
+     st P[f,s1,s2]
+    for a,b being set st [a,b] in R.s1 holds [f.a,f.b] in R.s2
+    proof let R be ManySortedRelation of A;
+     thus R is stable implies
+      for s1,s2 be SortSymbol of S
+      for f be Function of (the Sorts of A).s1,(the Sorts of A).s2 st
+       s1 = s2 &
+      (ex h being Endomorphism of A st f = h.s1) holds
+      for a,b being set st [a,b] in R.s1 holds [f.a,f.b] in R.s2 by Def9;
+     assume
+A3:   for s1,s2 being SortSymbol of S
+      for f being Function of (the Sorts of A).s1,(the Sorts of A).s2
+       st P[f,s1,s2]
+      for a,b being set st [a,b] in R.s1 holds [f.a,f.b] in R.s2;
+     thus R is stable
+      proof let h be Endomorphism of A;
+       let s be SortSymbol of S;
+       thus thesis by A3;
+      end;
+    end;
+A4: for s1,s2,s3 being SortSymbol of S
+   for f1 being Function of (the Sorts of A).s1,(the Sorts of A).s2
+   for f2 being Function of (the Sorts of A).s2,(the Sorts of A).s3
+    st P[f1,s1,s2] & P[f2,s2,s3]
+    holds P[f2*f1,s1,s3]
+    proof let s1,s2,s3 be SortSymbol of S;
+     let f1 be Function of (the Sorts of A).s1,(the Sorts of A).s2;
+     let f2 be Function of (the Sorts of A).s2,(the Sorts of A).s3;
+     assume
+A5:   s1 = s2;
+     given h1 being Endomorphism of A such that
+A6:   f1 = h1.s1;
+     assume
+A7:   s2 = s3;
+     given h2 being Endomorphism of A such that
+A8:   f2 = h2.s2;
+     thus s1 = s3 by A5,A7;
+     reconsider h = h2**h1 as Endomorphism of A;
+     take h; thus thesis by A5,A6,A8,MSUALG_3:2;
+    end;
+A9: for s being SortSymbol of S holds P[id ((the Sorts of A).s),s,s]
+    proof let s be SortSymbol of S; thus s = s;
+     reconsider h = id the Sorts of A as Endomorphism of A by Th4;
+     take h; thus thesis by MSUALG_3:def 1;
+    end;
+ thus R[Q] & R c= Q &
+  for P being ManySortedRelation of A st R[P] & R c= P holds Q c= P
+   from MSRelCl(A2,A4,A9,A1);
+end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ let R be ManySortedRelation of the Sorts of A;
+
+ func StabCl R -> stable ManySortedRelation of A means:
+Def12:
+  R c= it &
+  for Q being stable ManySortedRelation of A st R c= Q holds it c= Q;
+ uniqueness
+  proof let Q1,Q2 be stable ManySortedRelation of A such that
+A1: R c= Q1 and
+A2: for Q being stable ManySortedRelation of A st R c= Q
+     holds Q1 c= Q
+   and
+A3: R c= Q2 and
+A4: for Q being stable ManySortedRelation of A st R c= Q
+     holds Q2 c= Q;
+   thus Q1 c= Q2 & Q2 c= Q1 by A1,A2,A3,A4;
+  end;
+ existence
+  proof
+   defpred P[Function, SortSymbol of S, SortSymbol of S] means
+    $2 = $3 & ex h being Endomorphism of A st $1 = h.$2;
+   defpred Z[SortSymbol of S,set,set] means
+    ex s' being SortSymbol of S,
+       f being Function of (the Sorts of A).s',(the Sorts of A).$1,
+       x,y being Element of A,s' st
+     P[f,s',$1] & [x,y] in R.s' & $2 = f.x & $3 = f.y;
+   consider Q being ManySortedRelation of the Sorts of A such that
+A5:  for s being SortSymbol of S, a,b being Element of A,s holds
+    [a,b] in Q.s iff Z[s,a,b] from MSRExistence;
+   reconsider R,Q as ManySortedRelation of A ;
+    A6: for s being SortSymbol of S, a,b being Element of A,s holds
+    [a,b] in Q.s iff
+    ex s' being SortSymbol of S,
+       f being Function of (the Sorts of A).s',(the Sorts of A).s,
+       x,y being Element of A,s' st
+     P[f,s',s] & [x,y] in R.s' & a = f.x & b = f.y by A5;
+   then reconsider Q as stable ManySortedRelation of A by Lm2;
+   take Q; thus thesis by A6,Lm2;
+  end;
+end;
+
+theorem Th31:
+ for R being ManySortedRelation of the Sorts of A
+ for s being SortSymbol of S
+ for a,b being Element of A,s holds [a,b] in (StabCl R).s
+  iff
+   ex x,y being Element of A,s, h being Endomorphism of A st
+    [x,y] in R.s & a = h.s.x & b = h.s.y
+  proof let P be ManySortedRelation of the Sorts of A;
+   defpred Z[SortSymbol of S,set,set] means
+    ex s' being SortSymbol of S,
+       f being Function of (the Sorts of A).s',(the Sorts of A).$1,
+       x,y being Element of A,s' st
+     s' = $1 & (ex h being Endomorphism of A st f = h.s') &
+     [x,y] in P.s' & $2 = f.x & $3 = f.y;
+   consider Q being ManySortedRelation of the Sorts of A such that
+A1:  for s being SortSymbol of S, a,b being Element of A,s holds
+    [a,b] in Q.s iff Z[s,a,b] from MSRExistence;
+   reconsider R = P,Q as ManySortedRelation of A ;
+    A2: for s being SortSymbol of S, a,b being Element of A,s holds
+    [a,b] in Q.s iff
+    ex s' being SortSymbol of S,
+       f being Function of (the Sorts of A).s',(the Sorts of A).s,
+       x,y being Element of A,s' st
+     s' = s & (ex h being Endomorphism of A st f = h.s') &
+     [x,y] in R.s' & a = f.x & b = f.y by A1;
+then A3:  Q is stable & R c= Q &
+    for P being ManySortedRelation of A st P is stable & R c= P
+     holds Q c= P by Lm2;
+   reconsider Q as stable ManySortedRelation of A by A2,Lm2;
+A4:  StabCl R = Q
+     proof R c= StabCl R by Def12;
+      hence StabCl R c= Q & Q c= StabCl R by A3,Def12;
+     end;
+   let s be SortSymbol of S;
+   let a,b be Element of A,s;
+   hereby assume [a,b] in (StabCl P).s;
+     then ex s' being SortSymbol of S,
+       f being Function of (the Sorts of A).s',(the Sorts of A).s,
+       x,y being Element of A,s' st
+      s' = s & (ex h being Endomorphism of A st f = h.s') &
+      [x,y] in P.s' & a = f.x & b = f.y by A1,A4;
+    hence ex x,y being Element of A,s, h being Endomorphism of A st
+     [x,y] in P.s & a = h.s.x & b = h.s.y;
+   end;
+   thus thesis by A1,A4;
+  end;
+
+theorem
+   InvCl StabCl R is stable by Th30;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ let R be ManySortedRelation of the Sorts of A;
+ func TRS R -> invariant stable ManySortedRelation of A means:
+Def13:
+  R c= it &
+  for Q being invariant stable ManySortedRelation of A st R c= Q
+   holds it c= Q;
+ uniqueness
+  proof let Q1,Q2 be invariant stable ManySortedRelation of A such that
+A1: R c= Q1 and
+A2: for Q being invariant stable ManySortedRelation of A st R c= Q
+     holds Q1 c= Q
+   and
+A3: R c= Q2 and
+A4: for Q being invariant stable ManySortedRelation of A st R c= Q
+     holds Q2 c= Q;
+   thus Q1 c= Q2 & Q2 c= Q1 by A1,A2,A3,A4;
+  end;
+ existence
+  proof
+   reconsider Q = InvCl StabCl R as invariant stable ManySortedRelation of A
+     by Th30;
+   take Q; R c= StabCl R & StabCl R c= InvCl StabCl R by Def11,Def12;
+   hence R c= Q by PBOOLE:15;
+   let P be invariant stable ManySortedRelation of A; assume R c= P;
+    then StabCl R c= P by Def12;
+   hence thesis by Def11;
+  end;
+end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ let R be non-empty ManySortedRelation of A;
+ cluster InvCl R -> non-empty;
+ coherence
+  proof let i be set; assume i in the carrier of S;
+   then reconsider s = i as SortSymbol of S;
+   consider x being Element of R.s;
+      R c= InvCl R by Def11;
+    then x in R.s & R.s c= (InvCl R).s by PBOOLE:def 5;
+   hence thesis;
+  end;
+ cluster StabCl R -> non-empty;
+ coherence
+  proof let i be set; assume i in the carrier of S;
+   then reconsider s = i as SortSymbol of S;
+   consider x being Element of R.s;
+      R c= StabCl R by Def12;
+    then x in R.s & R.s c= (StabCl R).s by PBOOLE:def 5;
+   hence thesis;
+  end;
+ cluster TRS R -> non-empty;
+ coherence
+  proof let i be set; assume i in the carrier of S;
+   then reconsider s = i as SortSymbol of S;
+   consider x being Element of R.s;
+      R c= TRS R by Def13;
+    then x in R.s & R.s c= (TRS R).s by PBOOLE:def 5;
+   hence thesis;
+  end;
+end;
+
+theorem
+   for R being invariant ManySortedRelation of A holds InvCl R = R
+  proof let R be invariant ManySortedRelation of A;
+   thus InvCl R c= R & R c= InvCl R by Def11;
+  end;
+
+theorem
+   for R being stable ManySortedRelation of A holds StabCl R = R
+  proof let R be stable ManySortedRelation of A;
+   thus StabCl R c= R & R c= StabCl R by Def12;
+  end;
+
+theorem
+   for R being invariant stable ManySortedRelation of A holds TRS R = R
+  proof let R be invariant stable ManySortedRelation of A;
+   thus TRS R c= R & R c= TRS R by Def13;
+  end;
+
+theorem
+   StabCl R c= TRS R & InvCl R c= TRS R & StabCl InvCl R c= TRS R
+  proof R c= TRS R by Def13;
+   hence StabCl R c= TRS R & InvCl R c= TRS R by Def11,Def12;
+   hence thesis by Def12;
+  end;
+
+theorem Th37:
+ InvCl StabCl R = TRS R
+  proof R c= TRS R by Def13;
+    then StabCl R c= TRS R by Def12;
+   hence InvCl StabCl R c= TRS R by Def11;
+      R c= StabCl R & StabCl R c= InvCl StabCl R by Def11,Def12;
+    then InvCl StabCl R is invariant stable ManySortedRelation of A &
+    R c= InvCl StabCl R by Th30,PBOOLE:15;
+   hence thesis by Def13;
+  end;
+
+theorem
+   for R being ManySortedRelation of the Sorts of A
+ for s being SortSymbol of S, a,b being Element of A,s holds
+  [a,b] in (TRS R).s iff
+  ex s' being SortSymbol of S st TranslationRel S reduces s', s &
+  ex l,r being Element of A,s',
+     h being Endomorphism of A, t being Translation of A, s', s st
+       [l,r] in R.s' & a = t.(h.s'.l) & b = t.(h.s'.r)
+  proof let R be ManySortedRelation of the Sorts of A;
+   let s be SortSymbol of S, a,b be Element of A,s;
+A1:  InvCl StabCl R = TRS R by Th37;
+   hereby assume [a,b] in (TRS R).s;
+    then consider s' being SortSymbol of S, x,y being Element of A,s',
+             t being Translation of A,s',s such that
+A2:   TranslationRel S reduces s',s & [x,y] in
+ (StabCl R).s' & a = t.x & b = t.y
+      by A1,Th29;
+    take s'; thus TranslationRel S reduces s',s by A2;
+    consider u,v being Element of A,s', h being Endomorphism of A such that
+A3:   [u,v] in R.s' & x = h.s'.u & y = h.s'.v by A2,Th31;
+    take u,v,h; reconsider t as Translation of A,s',s;
+    take t;
+    thus [u,v] in R.s' & a = t.((h.s').u) & b = t.((h.s').v) by A2,A3;
+   end;
+   given s' being SortSymbol of S such that
+A4:  TranslationRel S reduces s', s and
+A5:  ex l,r being Element of A,s',
+     h being Endomorphism of A, t being Translation of A, s', s st
+      [l,r] in R.s' & a = t.((h.s').l) & b = t.((h.s').r);
+   consider l,r being Element of A,s',
+     h being Endomorphism of A, t being Translation of A, s', s such that
+A6:  [l,r] in R.s' & a = t.((h.s').l) & b = t.((h.s').r) by A5;
+      [h.s'.l,h.s'.r] in (StabCl R).s' by A6,Th31;
+   hence thesis by A1,A4,A6,Th29;
+  end;
+
+begin :: Equational theory
+
+theorem Th39:
+ for A being set for R,E being Relation of A st
+  for a,b being set st a in A & b in A holds
+   [a,b] in E iff a,b are_convertible_wrt R
+ holds E is total symmetric transitive
+  proof let A be set; let R,E be Relation of A; assume
+A1:  for a,b being set st a in A & b in A holds
+     [a,b] in E iff a,b are_convertible_wrt R;
+   set X = A;
+   now let x be set;
+       x,x are_convertible_wrt R by REWRITE1:27;
+    hence x in X implies [x,x] in E by A1;
+   end;
+   then E is_reflexive_in X by RELAT_2:def 1;
+   then
+A2: dom E = X & field E = X by ORDERS_1:98;
+   hence E is total by PARTFUN1:def 4;
+   now let x,y be set; assume
+A3:   x in X & y in X;
+    assume [x,y] in E;
+     then x,y are_convertible_wrt R by A1,A3;
+     then y,x are_convertible_wrt R by REWRITE1:32;
+    hence [y,x] in E by A1,A3;
+   end;
+   then E is_symmetric_in X by RELAT_2:def 3;
+   hence E is symmetric by A2,RELAT_2:def 11;
+ now let x,y,z be set; assume
+A4:  x in X & y in X & z in X;
+   assume [x,y] in E & [y,z] in E;
+    then x,y are_convertible_wrt R &
+    y,z are_convertible_wrt R by A1,A4;
+    then x,z are_convertible_wrt R by REWRITE1:31;
+   hence [x,z] in E by A1,A4;
+   end;
+   then E is_transitive_in X by RELAT_2:def 8;
+   hence E is transitive by A2,RELAT_2:def 16;
+  end;
+
+theorem Th40:
+ for A being set, R being Relation of A
+ for E being Equivalence_Relation of A st R c= E
+ for a,b being set st a in A & b in A & a,b are_convertible_wrt R
+  holds [a,b] in E
+  proof let A be set, R be Relation of A;
+   let E be Equivalence_Relation of A such that
+A1:  R c= E;
+   let a,b be set such that
+A2:  a in A & b in A;
+   assume R \/ R~ reduces a,b;
+   then consider p being RedSequence of R \/ R~ such that
+A3:  p.1 = a & p.len p = b by REWRITE1:def 3;
+   defpred Q[Nat] means $1 in dom p implies [a,p.$1] in E;
+A4:  Q[0] by FINSEQ_3:27;
+A5:  for k be Nat st Q[k] holds Q[k+1]
+  proof let i be Nat such that
+A6:    i in dom p implies [a,p.i] in E and
+A7:    i+1 in dom p;
+        i <= i+1 & i+1 <= len p by A7,FINSEQ_3:27,NAT_1:29;
+then A8:    i <= len p by AXIOMS:22;
+     per cases by NAT_1:19; suppose i = 0;
+      hence [a,p.(i+1)] in E by A2,A3,EQREL_1:11;
+     suppose i > 0;
+       then A9: i >= 0+1 by NAT_1:38;
+then i in dom p by A8,FINSEQ_3:27;
+       then A10: [p.i, p.(i+1)] in R \/ R~ by A7,REWRITE1:def 2;
+       then [p.i, p.(i+1)] in R or [p.i, p.(i+1)] in R~ by XBOOLE_0:def 2;
+then A11:     [p.i, p.(i+1)] in R or [p.(i+1), p.i] in R by RELAT_1:def 7;
+      reconsider ppi = p.i, pj = p.(i+1) as Element of A by A10,ZFMISC_1:106;
+         [ppi, pj] in E & [a, ppi] in E by A1,A6,A8,A9,A11,EQREL_1:12,FINSEQ_3:
+27;
+      hence [a,p.(i+1)] in E by EQREL_1:13;
+    end;
+A12:  for i being Nat holds Q[i] from Ind(A4,A5);
+      len p in dom p by FINSEQ_5:6;
+   hence [a,b] in E by A3,A12;
+  end;
+
+theorem Th41:
+ for A being non empty set, R being Relation of A
+ for a,b being Element of A holds
+  [a,b] in EqCl R iff a,b are_convertible_wrt R
+  proof let A be non empty set, R be Relation of A;
+   defpred Z[set,set] means $1,$2 are_convertible_wrt R;
+   consider Q being Relation of A such that
+A1:  for a,b being set holds [a,b] in Q iff
+     a in A & b in A & Z[a,b] from Rel_On_Set_Ex;
+      for a,b being set st a in A & b in A holds
+      [a,b] in Q iff a,b are_convertible_wrt R by A1;
+   then reconsider Q as Equivalence_Relation of A by Th39;
+A2:  R c= Q
+     proof let a,b be set; assume
+         [a,b] in R;
+       then a in A & b in A & a,b are_convertible_wrt R by REWRITE1:30,ZFMISC_1
+:106;
+      hence thesis by A1;
+     end;
+      now let E be Equivalence_Relation of A; assume
+A3:    R c= E;
+     thus Q c= E
+      proof let x,y be set; assume
+          [x,y] in Q;
+        then x in A & y in A & x,y are_convertible_wrt R by A1;
+       hence thesis by A3,Th40;
+      end;
+    end;
+    then Q = EqCl R by A2,MSUALG_5:def 1;
+   hence thesis by A1;
+  end;
+
+theorem Th42:
+ for S being non empty set, A being non-empty ManySortedSet of S
+ for R being ManySortedRelation of A
+ for s being Element of S for a,b being Element of A.s holds
+  [a,b] in (EqCl R).s iff a,b are_convertible_wrt R.s
+  proof let S be non empty set, A be non-empty ManySortedSet of S;
+   let R be ManySortedRelation of A;
+   let s be Element of S;
+      (EqCl R).s = EqCl (R.s) by MSUALG_5:def 3;
+   hence thesis by Th41;
+  end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ mode EquationalTheory of A is
+   stable invariant MSEquivalence-like ManySortedRelation of A;
+ let R be ManySortedRelation of A;
+ func EqCl(R,A) -> MSEquivalence-like ManySortedRelation of A equals:Def14:
+   EqCl R;
+ coherence by MSUALG_4:def 5;
+end;
+
+theorem Th43:
+ for R being ManySortedRelation of A holds R c= EqCl(R,A)
+  proof let R be ManySortedRelation of A;
+   let i be set; assume i in the carrier of S;
+   then reconsider s = i as SortSymbol of S;
+      EqCl R = EqCl(R,A) by Def14;
+    then EqCl(R,A).s = EqCl (R.s) by MSUALG_5:def 3;
+   hence thesis by MSUALG_5:def 1;
+  end;
+
+theorem Th44:
+ for R being ManySortedRelation of A
+ for E being MSEquivalence-like ManySortedRelation of A
+  st R c= E holds EqCl(R,A) c= E
+  proof let R be ManySortedRelation of A;
+   let E be MSEquivalence-like ManySortedRelation of A such that
+A1:  R c= E;
+   let i be set; assume i in the carrier of S;
+   then reconsider s = i as SortSymbol of S;
+      EqCl R = EqCl(R,A) by Def14;
+    then EqCl(R,A).s = EqCl (R.s) & R.s c= E.s &
+    E.s is Equivalence_Relation of (the Sorts of A).s
+     by A1,MSUALG_5:def 3,PBOOLE:def 5;
+   hence thesis by MSUALG_5:def 1;
+  end;
+
+theorem Th45:
+ for R being stable ManySortedRelation of A
+ for s being SortSymbol of S for a,b being Element of A,s
+  st a,b are_convertible_wrt R.s
+ for h being Endomorphism of A holds h.s.a, h.s.b are_convertible_wrt R.s
+  proof let R be stable ManySortedRelation of A;
+   let s be SortSymbol of S; let a,b be Element of A,s;
+   assume (R.s) \/ (R.s)~ reduces a,b;
+   then consider p being RedSequence of (R.s) \/ (R.s)~ such that
+A1:  p.1 = a & p.len p = b by REWRITE1:def 3;
+   let h be Endomorphism of A;
+   defpred P[Nat] means $1 in dom p
+           implies h.s.a, h.s.(p.$1) are_convertible_wrt R.s;
+A2:  P[0] by FINSEQ_3:27;
+A3: for i be Nat st P[i] holds P[i+1]
+   proof
+     let i be Nat such that
+A4:    i in dom p implies h.s.a, h.s.(p.i) are_convertible_wrt R.s and
+A5:    i+1 in dom p;
+        i <= i+1 & i+1 <= len p by A5,FINSEQ_3:27,NAT_1:29;
+then A6:    i <= len p by AXIOMS:22;
+     per cases by NAT_1:19; suppose i = 0;
+      hence h.s.a, h.s.(p.(i+1)) are_convertible_wrt R.s by A1,REWRITE1:27;
+     suppose i > 0;
+       then A7: i >= 0+1 by NAT_1:38;
+then i in dom p by A6,FINSEQ_3:27;
+       then A8: [p.i, p.(i+1)] in (R.s) \/ (R.s)~ by A5,REWRITE1:def 2;
+       then [p.i, p.(i+1)] in R.s or [p.i, p.(i+1)] in (R.s)~ by XBOOLE_0:def 2
+;
+then A9:     [p.i, p.(i+1)] in R.s or [p.(i+1), p.i] in R.s by RELAT_1:def 7;
+      reconsider ppi = p.i, pj = p.(i+1) as Element of A,s by A8,ZFMISC_1:106;
+         [h.s.ppi, h.s.pj] in R.s or [h.s.pj, h.s.ppi] in R.s by A9,Def9;
+       then h.s.ppi, h.s.pj are_convertible_wrt R.s or
+       h.s.pj, h.s.ppi are_convertible_wrt R.s by REWRITE1:30;
+       then h.s.ppi, h.s.pj are_convertible_wrt R.s &
+       h.s.a, h.s.(p.i) are_convertible_wrt R.s by A4,A6,A7,FINSEQ_3:27,
+REWRITE1:32;
+      hence h.s.a, h.s.(p.(i+1)) are_convertible_wrt R.s by REWRITE1:31;
+    end;
+A10:  for i being Nat holds P[i]
+     from Ind(A2,A3);
+      len p in dom p by FINSEQ_5:6;
+   hence thesis by A1,A10;
+  end;
+
+theorem Th46:
+ for R being stable ManySortedRelation of A holds EqCl(R,A) is stable
+  proof let R be stable ManySortedRelation of A;
+   let h be Endomorphism of A;
+   let s be SortSymbol of S;
+   let a,b be set; assume
+A1:  [a,b] in EqCl(R,A).s;
+   then reconsider a, b as Element of A,s by ZFMISC_1:106;
+A2:  EqCl R = EqCl(R,A) by Def14;
+    then a,b are_convertible_wrt R.s by A1,Th42;
+    then h.s.a, h.s.b are_convertible_wrt R.s by Th45;
+   hence thesis by A2,Th42;
+  end;
+
+definition
+ let S,A; let R be stable ManySortedRelation of A;
+ cluster EqCl(R,A) -> stable;
+ coherence by Th46;
+end;
+
+theorem Th47:
+ for R being invariant ManySortedRelation of A
+ for s1,s2 being SortSymbol of S for a,b being Element of A,s1
+  st a,b are_convertible_wrt R.s1
+ for t being Function st t is_e.translation_of A,s1,s2
+  holds t.a, t.b are_convertible_wrt R.s2
+  proof let R be invariant ManySortedRelation of A;
+   let s1,s2 be SortSymbol of S; let a,b be Element of A,s1;
+   assume (R.s1) \/ (R.s1)~ reduces a,b;
+   then consider p being RedSequence of (R.s1) \/ (R.s1)~ such that
+A1:  p.1 = a & p.len p = b by REWRITE1:def 3;
+   let t be Function such that
+A2:  t is_e.translation_of A,s1,s2;
+   defpred P[Nat] means $1 in dom p
+            implies t.a, t.(p.$1) are_convertible_wrt R.s2;
+A3:  P[0] by FINSEQ_3:27;
+A4:  for i be Nat st P[i] holds P[i+1]
+ proof
+  let i be Nat such that
+A5:    i in dom p implies t.a, t.(p.i) are_convertible_wrt R.s2 and
+A6:    i+1 in dom p;
+        i <= i+1 & i+1 <= len p by A6,FINSEQ_3:27,NAT_1:29;
+then A7:    i <= len p by AXIOMS:22;
+     per cases by NAT_1:19; suppose i = 0;
+      hence t.a, t.(p.(i+1)) are_convertible_wrt R.s2 by A1,REWRITE1:27;
+     suppose i > 0;
+       then A8: i >= 0+1 by NAT_1:38;
+then i in dom p by A7,FINSEQ_3:27;
+       then A9: [p.i, p.(i+1)] in (R.s1) \/ (R.s1)~ by A6,REWRITE1:def 2;
+       then [p.i, p.(i+1)] in R.s1 or [p.i, p.(i+1)] in (R.s1)~ by XBOOLE_0:def
+2
+;
+then A10:     [p.i, p.(i+1)] in R.s1 or [p.(i+1), p.i] in R.s1 by RELAT_1:def 7
+;
+      reconsider ppi = p.i, pj = p.(i+1) as Element of A,s1 by A9,ZFMISC_1:106;
+         [t.ppi, t.pj] in R.s2 or [t.pj, t.ppi] in R.s2 by A2,A10,Def8;
+       then t.ppi, t.pj are_convertible_wrt R.s2 or
+       t.pj, t.ppi are_convertible_wrt R.s2 by REWRITE1:30;
+       then t.ppi, t.pj are_convertible_wrt R.s2 &
+       t.a, t.(p.i) are_convertible_wrt R.s2 by A5,A7,A8,FINSEQ_3:27,REWRITE1:
+32;
+      hence t.a, t.(p.(i+1)) are_convertible_wrt R.s2 by REWRITE1:31;
+    end;
+A11:  for i being Nat holds P[i] from Ind(A3,A4);
+      len p in dom p by FINSEQ_5:6;
+   hence thesis by A1,A11;
+  end;
+
+theorem Th48:
+ for R being invariant ManySortedRelation of A holds EqCl(R,A) is invariant
+  proof let R be invariant ManySortedRelation of A;
+   let s1,s2 be SortSymbol of S;
+   let t be Function; assume
+A1:  t is_e.translation_of A,s1,s2;
+   then reconsider t as Function of (the Sorts of A).s1, (the Sorts of A).s2
+     by Th11;
+   let a,b be set; assume
+A2:  [a,b] in EqCl(R,A).s1;
+   then reconsider a, b as Element of A,s1 by ZFMISC_1:106;
+A3:  EqCl R = EqCl(R,A) by Def14;
+    then a,b are_convertible_wrt R.s1 by A2,Th42;
+    then t.a, t.b are_convertible_wrt R.s2 by A1,Th47;
+   hence thesis by A3,Th42;
+  end;
+
+definition
+ let S,A; let R be invariant ManySortedRelation of A;
+ cluster EqCl(R,A) -> invariant;
+ coherence by Th48;
+end;
+
+theorem Th49:
+ for S being non empty set, A being non-empty ManySortedSet of S
+ for R,E being ManySortedRelation of A st
+  for s being Element of S for a,b being Element of A.s
+   holds [a,b] in E.s iff a,b are_convertible_wrt R.s
+ holds E is MSEquivalence_Relation-like
+  proof let S be non empty set, A be non-empty ManySortedSet of S;
+   let R,E be ManySortedRelation of A; assume
+A1:  for s being Element of S for a,b being Element of A.s
+     holds [a,b] in E.s iff a,b are_convertible_wrt R.s;
+   let i be set, P be Relation of A.i;
+   assume i in S;
+   then reconsider s = i as Element of S;
+      for a,b being set st a in A.s & b in A.s holds [a,b] in
+ E.s iff a,b are_convertible_wrt R.s by A1; hence thesis by Th39;
+  end;
+
+theorem Th50:
+ for R,E being ManySortedRelation of A st
+  for s being SortSymbol of S, a,b being Element of A,s
+   holds [a,b] in E.s iff a,b are_convertible_wrt (TRS R).s
+ holds E is EquationalTheory of A
+  proof let R,E be ManySortedRelation of A; assume
+A1:  for s being SortSymbol of S, a,b being Element of A,s
+     holds [a,b] in E.s iff a,b are_convertible_wrt (TRS R).s;
+    then A2: E is MSEquivalence_Relation-like by Th49;
+A3:  E is stable
+     proof let h be Endomorphism of A;
+      let s be SortSymbol of S;
+      let a,b be set;
+      assume
+A4:     [a,b] in E.s;
+      then reconsider x = a, y = b as Element of A,s by ZFMISC_1:106;
+      reconsider a' = h.s.x, b' = h.s.y as Element of A,s;
+         x,y are_convertible_wrt (TRS R).s by A1,A4;
+       then a', b' are_convertible_wrt (TRS R).s by Th45;
+hence [h.s.a, h.s.b] in E.s by A1;
+     end;
+      E is invariant
+     proof let s1,s2 be SortSymbol of S;
+      let t be Function; assume
+A5:     t is_e.translation_of A,s1,s2;
+      then reconsider f = t as Function of (the Sorts of A).s1, (the Sorts of A
+).s2
+        by Th11;
+      let a,b be set; assume
+A6:     [a,b] in E.s1;
+      then reconsider x = a, y = b as Element of A,s1 by ZFMISC_1:106;
+         x,y are_convertible_wrt (TRS R).s1 by A1,A6;
+       then t.x = f.x & t.y = f.y & t.x,t.y are_convertible_wrt (TRS R).s2
+        by A5,Th47;
+      hence [t.a, t.b] in E.s2 by A1;
+     end;
+   hence thesis by A2,A3,MSUALG_4:def 5;
+  end;
+
+theorem Th51:
+ for S being non empty set, A being non-empty ManySortedSet of S
+ for R being ManySortedRelation of A
+ for E being MSEquivalence_Relation-like ManySortedRelation of A st R c= E
+ for s being Element of S for a,b being Element of A.s
+  st a,b are_convertible_wrt R.s
+  holds [a,b] in E.s
+  proof let S be non empty set, A be non-empty ManySortedSet of S;
+   let R be ManySortedRelation of A;
+   let E be MSEquivalence_Relation-like ManySortedRelation of A such that
+A1:  R c= E;
+   let s be Element of S;
+      R.s c= E.s & E.s is Equivalence_Relation of A.s
+     by A1,MSUALG_4:def 3,PBOOLE:def 5;
+   hence thesis by Th40;
+  end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ let R be ManySortedRelation of the Sorts of A;
+ func EqTh R -> EquationalTheory of A means:
+Def15:
+  R c= it &
+  for Q being EquationalTheory of A st R c= Q holds it c= Q;
+ uniqueness
+  proof let Q1,Q2 be EquationalTheory of A such that
+A1: R c= Q1 and
+A2: for Q being EquationalTheory of A st R c= Q holds Q1 c= Q and
+A3: R c= Q2 and
+A4: for Q being EquationalTheory of A st R c= Q holds Q2 c= Q;
+   thus Q1 c= Q2 & Q2 c= Q1 by A1,A2,A3,A4;
+  end;
+ existence
+  proof
+    defpred Z[SortSymbol of S,set,set] means
+    $2,$3 are_convertible_wrt (TRS R).$1;
+    consider P being ManySortedRelation of the Sorts of A such that
+A5:  for s being SortSymbol of S for a,b being Element of A,s
+     holds [a,b] in P.s iff Z[s,a,b]
+      from MSRExistence;
+   reconsider P,R1 = R as ManySortedRelation of A ;
+      for s being SortSymbol of S for a,b being Element of A,s
+     holds [a,b] in P.s iff a,b are_convertible_wrt (TRS R1).s by A5;
+   then reconsider P as EquationalTheory of A by Th50;
+   take P;
+   thus R c= P
+    proof let i be set; assume i in the carrier of S;
+     then reconsider s = i as SortSymbol of S;
+        R.s c= P.s
+       proof let x,y be set; assume
+A6:       [x,y] in R.s;
+        then reconsider a = x, b = y as Element of A,s by ZFMISC_1:106;
+           R c= TRS R by Def13;
+         then R.s c= (TRS R).s by PBOOLE:def 5;
+         then a,b are_convertible_wrt (TRS R).s by A6,REWRITE1:30;
+        hence thesis by A5;
+       end;
+     hence thesis;
+    end;
+   let Q be EquationalTheory of A; assume R c= Q;
+then A7:  TRS R c= Q by Def13;
+   let i be set; assume i in the carrier of S;
+   then reconsider s = i as SortSymbol of S;
+      P.s c= Q.s
+     proof let x,y be set; assume
+A8:     [x,y] in P.s;
+      then reconsider a = x, b = y as Element of A,s by ZFMISC_1:106;
+         Q is MSEquivalence_Relation-like &
+       a,b are_convertible_wrt (TRS R).s by A5,A8;
+      hence [x,y] in Q.s by A7,Th51;
+     end;
+   hence thesis;
+  end;
+end;
+
+theorem
+   for R being ManySortedRelation of A holds
+  EqCl(R,A) c= EqTh R & InvCl R c= EqTh R &
+   StabCl R c= EqTh R & TRS R c= EqTh R
+  proof let R be ManySortedRelation of A;
+A1:  R c= EqTh R by Def15;
+   hence EqCl(R,A) c= EqTh R by Th44;
+   thus thesis by A1,Def11,Def12,Def13;
+  end;
+
+theorem
+   for R being ManySortedRelation of A
+ for s being SortSymbol of S, a,b being Element of A,s
+  holds [a,b] in (EqTh R).s iff a,b are_convertible_wrt (TRS R).s
+  proof let R be ManySortedRelation of A;
+   let s be SortSymbol of S, a,b be Element of A,s;
+   defpred Z[SortSymbol of S,set,set] means
+           $2,$3 are_convertible_wrt (TRS R).$1;
+   consider P being ManySortedRelation of the Sorts of A such that
+A1:  for s being SortSymbol of S for a,b being Element of A,s
+     holds [a,b] in P.s iff Z[s,a,b]
+      from MSRExistence;
+   reconsider P as ManySortedRelation of A ;
+    reconsider P as EquationalTheory of A by A1,Th50;
+      R c= P
+     proof let i be set; assume i in the carrier of S;
+      then reconsider s = i as SortSymbol of S;
+         R.s c= P.s
+        proof let x,y be set; assume
+A2:        [x,y] in R.s;
+         then reconsider a = x, b = y as Element of A,s by ZFMISC_1:106;
+            R c= TRS R by Def13;
+          then R.s c= (TRS R).s by PBOOLE:def 5;
+          then a,b are_convertible_wrt (TRS R).s by A2,REWRITE1:30;
+         hence thesis by A1;
+        end;
+      hence thesis;
+     end;
+    then EqTh R c= P by Def15;
+then (EqTh R).s c= P.s by PBOOLE:def 5;
+   hence [a,b] in (EqTh R).s implies
+        a,b are_convertible_wrt (TRS R).s by A1;
+      R c= EqTh R by Def15;
+    then TRS R c= EqTh R by Def13;
+   hence thesis by Th51;
+  end;
+
+theorem
+   for R being ManySortedRelation of A holds EqTh R = EqCl(TRS R,A)
+  proof let R be ManySortedRelation of A;
+      R c= TRS R & TRS R c= EqCl(TRS R,A) by Def13,Th43;
+    then R c= EqCl(TRS R,A) by PBOOLE:15;
+   hence EqTh R c= EqCl(TRS R,A) by Def15;
+      R c= EqTh R by Def15;
+    then TRS R c= EqTh R by Def13;
+   hence thesis by Th44;
+  end;

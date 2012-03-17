@@ -1,0 +1,572 @@
+:: 2's Complement Circuit. Part I. Boolean Operators and 2's
+:: Complement Circuit Properties
+::  by Katsumi Wasaki and Pauline N. Kawamoto
+::
+:: Received October 25, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, CIRCCOMB, AMI_1, MSUALG_1, LATTICES, CIRCUIT1, MSAFREE2,
+      FUNCT_1, MARGREL1, RELAT_1, BOOLE, FINSEQ_2, ZF_LANG, BINARITH, FACIRC_1,
+      FUNCT_4, CIRCUIT2, TWOSCOMP;
+ notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, STRUCT_0,
+      MARGREL1, FINSEQ_2, BINARITH, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2,
+      CIRCCOMB, FACIRC_1;
+ constructors BINARITH, CIRCUIT1, CIRCUIT2, FACIRC_1;
+ clusters MSUALG_1, PRE_CIRC, CIRCCOMB, FACIRC_1, FINSEQ_1, RELSET_1, MARGREL1;
+ requirements NUMERALS, SUBSET;
+
+
+begin :: Boolean Operators
+
+::---------------------------------------------------------------------------
+:: Preliminaries
+::---------------------------------------------------------------------------
+
+definition let S be unsplit non void non empty ManySortedSign;
+ let A be Boolean Circuit of S;
+ let s be State of A;
+ let v be Vertex of S;
+ redefine func s.v -> Element of BOOLEAN;
+end;
+
+definition
+  func and2 -> Function of 2-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 1
+ for x,y being Element of BOOLEAN holds it.<*x,y*> = x '&' y;
+  func and2a -> Function of 2-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 2
+ for x,y being Element of BOOLEAN holds it.<*x,y*> = 'not' x '&' y;
+  func and2b -> Function of 2-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 3
+ for x,y being Element of BOOLEAN holds it.<*x,y*> = 'not' x '&' 'not' y;
+end;
+
+definition
+  func nand2 -> Function of 2-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 4
+ for x,y being Element of BOOLEAN holds it.<*x,y*> = 'not' (x '&' y);
+  func nand2a -> Function of 2-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 5
+ for x,y being Element of BOOLEAN holds
+  it.<*x,y*> = 'not' ('not' x '&' y);
+  func nand2b -> Function of 2-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 6
+ for x,y being Element of BOOLEAN holds
+  it.<*x,y*> = 'not' ('not' x '&' 'not' y);
+end;
+
+definition
+  func or2 -> Function of 2-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 7
+ for x,y being Element of BOOLEAN holds it.<*x,y*> = x 'or' y;
+  func or2a -> Function of 2-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 8
+ for x,y being Element of BOOLEAN holds it.<*x,y*> = 'not' x 'or' y;
+  func or2b -> Function of 2-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 9
+ for x,y being Element of BOOLEAN holds it.<*x,y*> = 'not' x 'or' 'not' y;
+end;
+
+definition
+  func nor2 -> Function of 2-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 10
+  for x,y being Element of BOOLEAN holds it.<*x,y*> = 'not' (x 'or' y);
+  func nor2a -> Function of 2-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 11
+  for x,y being Element of BOOLEAN holds
+    it.<*x,y*> = 'not' ('not' x 'or' y);
+  func nor2b -> Function of 2-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 12
+  for x,y being Element of BOOLEAN holds
+    it.<*x,y*> = 'not' ('not' x 'or' 'not' y);
+end;
+
+definition
+  func xor2 -> Function of 2-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 13
+ for x,y being Element of BOOLEAN holds it.<*x,y*> = x 'xor' y;
+  func xor2a -> Function of 2-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 14
+ for x,y being Element of BOOLEAN holds it.<*x,y*> = 'not' x 'xor' y;
+  func xor2b -> Function of 2-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 15
+ for x,y being Element of BOOLEAN holds
+  it.<*x,y*> = 'not' x 'xor' 'not' y;
+end;
+
+canceled 2;
+
+theorem :: TWOSCOMP:3
+    for x,y being Element of BOOLEAN holds and2.<*x,y*> = x '&' y &
+   and2a.<*x,y*> = 'not' x '&' y & and2b.<*x,y*> = 'not' x '&' 'not' y;
+
+theorem :: TWOSCOMP:4
+    for x,y being Element of BOOLEAN holds nand2.<*x,y*> = 'not' (x '&' y) &
+   nand2a.<*x,y*> = 'not' ('not' x '&' y) & nand2b.<*x,y*> = 'not' ('not' x '&'
+'not' y);
+
+theorem :: TWOSCOMP:5
+    for x,y being Element of BOOLEAN holds or2.<*x,y*> = x 'or' y &
+   or2a.<*x,y*> = 'not' x 'or' y & or2b.<*x,y*> = 'not' x 'or' 'not' y;
+
+theorem :: TWOSCOMP:6
+    for x,y being Element of BOOLEAN holds nor2.<*x,y*> = 'not' (x 'or' y) &
+   nor2a.<*x,y*> = 'not' ('not' x 'or' y) & nor2b.<*x,y*> = 'not' ('not' x 'or'
+'not' y);
+
+theorem :: TWOSCOMP:7
+    for x,y being Element of BOOLEAN holds xor2.<*x,y*> = x 'xor' y &
+   xor2a.<*x,y*> = 'not' x 'xor' y & xor2b.<*x,y*> = 'not' x 'xor' 'not' y;
+
+theorem :: TWOSCOMP:8
+    for x,y being Element of BOOLEAN holds and2.<*x,y*> = nor2b.<*x,y*> &
+   and2a.<*x,y*> = nor2a.<*y,x*> & and2b.<*x,y*> = nor2.<*x,y*>;
+
+theorem :: TWOSCOMP:9
+    for x,y being Element of BOOLEAN holds or2.<*x,y*> = nand2b.<*x,y*> &
+   or2a.<*x,y*> = nand2a.<*y,x*> & or2b.<*x,y*> = nand2.<*x,y*>;
+
+theorem :: TWOSCOMP:10
+    for x,y being Element of BOOLEAN holds xor2b.<*x,y*> = xor2.<*x,y*>;
+
+theorem :: TWOSCOMP:11
+      and2.<*0,0*>=0 & and2.<*0,1*>=0 & and2.<*1,0*>=0 & and2.<*1,1*>=1 &
+   and2a.<*0,0*>=0 & and2a.<*0,1*>=1 & and2a.<*1,0*>=0 & and2a.<*1,1*>=0 &
+   and2b.<*0,0*>=1 & and2b.<*0,1*>=0 & and2b.<*1,0*>=0 & and2b.<*1,1*>=0;
+
+theorem :: TWOSCOMP:12
+      or2.<*0,0*>=0 & or2.<*0,1*>=1 & or2.<*1,0*>=1 & or2.<*1,1*>=1 &
+   or2a.<*0,0*>=1 & or2a.<*0,1*>=1 & or2a.<*1,0*>=0 & or2a.<*1,1*>=1 &
+   or2b.<*0,0*>=1 & or2b.<*0,1*>=1 & or2b.<*1,0*>=1 & or2b.<*1,1*>=0;
+
+theorem :: TWOSCOMP:13
+      xor2.<*0,0*>=0 & xor2.<*0,1*>=1 & xor2.<*1,0*>=1 & xor2.<*1,1*>=0 &
+   xor2a.<*0,0*>=1 & xor2a.<*0,1*>=0 & xor2a.<*1,0*>=0 & xor2a.<*1,1*>=1;
+
+:: 3-Input Operators
+
+definition
+  func and3 -> Function of 3-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 16
+ for x,y,z being Element of BOOLEAN holds
+   it.<*x,y,z*> = x '&' y '&' z;
+  func and3a -> Function of 3-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 17
+ for x,y,z being Element of BOOLEAN holds
+   it.<*x,y,z*> = 'not' x '&' y '&' z;
+  func and3b -> Function of 3-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 18
+ for x,y,z being Element of BOOLEAN holds
+   it.<*x,y,z*> = 'not' x '&' 'not' y '&' z;
+  func and3c -> Function of 3-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 19
+ for x,y,z being Element of BOOLEAN holds
+   it.<*x,y,z*> = 'not' x '&' 'not' y '&' 'not' z;
+end;
+
+definition
+  func nand3 -> Function of 3-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 20
+ for x,y,z being Element of BOOLEAN holds
+   it.<*x,y,z*> = 'not' (x '&' y '&' z);
+  func nand3a -> Function of 3-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 21
+ for x,y,z being Element of BOOLEAN holds
+   it.<*x,y,z*> = 'not' ('not' x '&' y '&' z);
+  func nand3b -> Function of 3-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 22
+ for x,y,z being Element of BOOLEAN holds
+   it.<*x,y,z*> = 'not' ('not' x '&' 'not' y '&' z);
+  func nand3c -> Function of 3-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 23
+ for x,y,z being Element of BOOLEAN holds
+   it.<*x,y,z*> = 'not' ('not' x '&' 'not' y '&' 'not' z);
+end;
+
+definition
+  func or3 -> Function of 3-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 24
+ for x,y,z being Element of BOOLEAN holds
+   it.<*x,y,z*> = x 'or' y 'or' z;
+  func or3a -> Function of 3-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 25
+ for x,y,z being Element of BOOLEAN holds
+   it.<*x,y,z*> = 'not' x 'or' y 'or' z;
+  func or3b -> Function of 3-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 26
+ for x,y,z being Element of BOOLEAN holds
+   it.<*x,y,z*> = 'not' x 'or' 'not' y 'or' z;
+  func or3c -> Function of 3-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 27
+ for x,y,z being Element of BOOLEAN holds
+   it.<*x,y,z*> = 'not' x 'or' 'not' y 'or' 'not' z;
+end;
+
+definition
+  func nor3 -> Function of 3-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 28
+ for x,y,z being Element of BOOLEAN holds
+   it.<*x,y,z*> = 'not' (x 'or' y 'or' z);
+  func nor3a -> Function of 3-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 29
+ for x,y,z being Element of BOOLEAN holds
+   it.<*x,y,z*> = 'not' ('not' x 'or' y 'or' z);
+  func nor3b -> Function of 3-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 30
+ for x,y,z being Element of BOOLEAN holds
+   it.<*x,y,z*> = 'not' ('not' x 'or' 'not' y 'or' z);
+  func nor3c -> Function of 3-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 31
+ for x,y,z being Element of BOOLEAN holds
+   it.<*x,y,z*> = 'not' ('not' x 'or' 'not' y 'or' 'not' z);
+end;
+
+definition
+  func xor3 -> Function of 3-tuples_on BOOLEAN, BOOLEAN means
+:: TWOSCOMP:def 32
+ for x,y,z being Element of BOOLEAN holds
+   it.<*x,y,z*> = x 'xor' y 'xor' z;
+end;
+
+theorem :: TWOSCOMP:14
+    for x,y,z being Element of BOOLEAN holds and3.<*x,y,z*> = x '&' y '&' z &
+   and3a.<*x,y,z*> = 'not' x '&' y '&' z &
+   and3b.<*x,y,z*> = 'not' x '&' 'not' y '&' z &
+   and3c.<*x,y,z*> = 'not' x '&' 'not' y '&' 'not' z;
+
+theorem :: TWOSCOMP:15
+    for x,y,z being Element of BOOLEAN holds
+  nand3.<*x,y,z*>='not' (x '&' y '&' z) &
+   nand3a.<*x,y,z*>='not' ('not' x '&' y '&' z) &
+   nand3b.<*x,y,z*>='not' ('not' x '&' 'not' y '&' z) &
+   nand3c.<*x,y,z*>='not' ('not' x '&' 'not' y '&' 'not' z);
+
+theorem :: TWOSCOMP:16
+    for x,y,z being Element of BOOLEAN holds or3.<*x,y,z*> = x 'or' y 'or' z &
+   or3a.<*x,y,z*> = 'not' x 'or' y 'or' z & or3b.<*x,y,z*> = 'not' x 'or' 'not'
+y 'or' z &
+   or3c.<*x,y,z*> = 'not' x 'or' 'not' y 'or' 'not' z;
+
+theorem :: TWOSCOMP:17
+    for x,y,z being Element of BOOLEAN holds nor3.<*x,y,z*>='not'
+(x 'or' y 'or' z) &
+   nor3a.<*x,y,z*>='not' ('not' x 'or' y 'or' z) & nor3b.<*x,y,z*>='not' ('not'
+x 'or' 'not' y 'or' z) &
+   nor3c.<*x,y,z*>='not' ('not' x 'or' 'not' y 'or' 'not' z);
+
+canceled;
+
+theorem :: TWOSCOMP:19
+    for x,y,z being Element of BOOLEAN holds
+    and3.<*x,y,z*> = nor3c.<*x,y,z*> & and3a.<*x,y,z*> = nor3b.<*z,y,x*> &
+   and3b.<*x,y,z*> = nor3a.<*z,y,x*> & and3c.<*x,y,z*> = nor3.<*x,y,z*>;
+
+theorem :: TWOSCOMP:20
+    for x,y,z being Element of BOOLEAN holds
+    or3.<*x,y,z*> = nand3c.<*x,y,z*> & or3a.<*x,y,z*> = nand3b.<*z,y,x*> &
+   or3b.<*x,y,z*> = nand3a.<*z,y,x*> & or3c.<*x,y,z*> = nand3.<*x,y,z*>;
+
+theorem :: TWOSCOMP:21 ::ThCalAnd3:
+      and3.<*0,0,0*>=0 & and3.<*0,0,1*>=0 & and3.<*0,1,0*>=0 &
+    and3.<*0,1,1*>=0 & and3.<*1,0,0*>=0 & and3.<*1,0,1*>=0 &
+    and3.<*1,1,0*>=0 & and3.<*1,1,1*>=1;
+
+theorem :: TWOSCOMP:22
+      and3a.<*0,0,0*>=0 & and3a.<*0,0,1*>=0 & and3a.<*0,1,0*>=0 &
+    and3a.<*0,1,1*>=1 & and3a.<*1,0,0*>=0 & and3a.<*1,0,1*>=0 &
+    and3a.<*1,1,0*>=0 & and3a.<*1,1,1*>=0;
+
+theorem :: TWOSCOMP:23 ::ThCalAnd3_b:
+      and3b.<*0,0,0*>=0 & and3b.<*0,0,1*>=1 & and3b.<*0,1,0*>=0 &
+    and3b.<*0,1,1*>=0 & and3b.<*1,0,0*>=0 & and3b.<*1,0,1*>=0 &
+    and3b.<*1,1,0*>=0 & and3b.<*1,1,1*>=0;
+
+theorem :: TWOSCOMP:24 ::ThCalAnd3_c:
+      and3c.<*0,0,0*>=1 & and3c.<*0,0,1*>=0 & and3c.<*0,1,0*>=0 &
+    and3c.<*0,1,1*>=0 & and3c.<*1,0,0*>=0 & and3c.<*1,0,1*>=0 &
+    and3c.<*1,1,0*>=0 & and3c.<*1,1,1*>=0;
+
+theorem :: TWOSCOMP:25 ::ThCalOr3:
+      or3.<*0,0,0*> = 0 & or3.<*0,0,1*> = 1 & or3.<*0,1,0*> = 1 &
+    or3.<*0,1,1*> = 1 & or3.<*1,0,0*> = 1 & or3.<*1,0,1*> = 1 &
+    or3.<*1,1,0*> = 1 & or3.<*1,1,1*> = 1;
+
+theorem :: TWOSCOMP:26 ::ThCalOr3_a:
+      or3a.<*0,0,0*> = 1 & or3a.<*0,0,1*> = 1 & or3a.<*0,1,0*> = 1 &
+    or3a.<*0,1,1*> = 1 & or3a.<*1,0,0*> = 0 & or3a.<*1,0,1*> = 1 &
+    or3a.<*1,1,0*> = 1 & or3a.<*1,1,1*> = 1;
+
+theorem :: TWOSCOMP:27 ::ThCalOr3_b:
+      or3b.<*0,0,0*> = 1 & or3b.<*0,0,1*> = 1 & or3b.<*0,1,0*> = 1 &
+    or3b.<*0,1,1*> = 1 & or3b.<*1,0,0*> = 1 & or3b.<*1,0,1*> = 1 &
+    or3b.<*1,1,0*> = 0 & or3b.<*1,1,1*> = 1;
+
+theorem :: TWOSCOMP:28 ::ThCalOr3_c:
+      or3c.<*0,0,0*> = 1 & or3c.<*0,0,1*> = 1 & or3c.<*0,1,0*> = 1 &
+    or3c.<*0,1,1*> = 1 & or3c.<*1,0,0*> = 1 & or3c.<*1,0,1*> = 1 &
+    or3c.<*1,1,0*> = 1 & or3c.<*1,1,1*> = 0;
+
+theorem :: TWOSCOMP:29 ::ThCalXOr3:
+      xor3.<*0,0,0*> = 0 & xor3.<*0,0,1*> = 1 & xor3.<*0,1,0*> = 1 &
+    xor3.<*0,1,1*> = 0 & xor3.<*1,0,0*> = 1 & xor3.<*1,0,1*> = 0 &
+    xor3.<*1,1,0*> = 0 & xor3.<*1,1,1*> = 1;
+
+begin :: 2's Complement Circuit Properties
+
+
+::---------------------------------------------------------------------------
+:: 1bit 2's Complement Circuit (Complementor + Incrementor)
+::---------------------------------------------------------------------------
+
+:: Complementor
+
+definition
+ let x,b be set;
+ func CompStr(x,b) -> unsplit gate`1=arity gate`2isBoolean
+   non void strict non empty ManySortedSign equals
+:: TWOSCOMP:def 33
+    1GateCircStr(<*x,b*>,xor2a);
+end;
+
+definition
+ let x,b be set;
+ func CompCirc(x,b) ->
+   strict Boolean gate`2=den Circuit of CompStr(x,b) equals
+:: TWOSCOMP:def 34
+::COMPCIRC:
+     1GateCircuit(x,b,xor2a);
+end;
+
+definition
+ let x,b be set;
+ func CompOutput(x,b) -> Element of InnerVertices CompStr(x,b) equals
+:: TWOSCOMP:def 35
+
+   [<*x,b*>,xor2a];
+end;
+
+:: Incrementor
+
+definition
+ let x,b be set;
+ func IncrementStr(x,b) -> unsplit gate`1=arity gate`2isBoolean
+   non void strict non empty ManySortedSign equals
+:: TWOSCOMP:def 36
+
+   1GateCircStr(<*x,b*>,and2a);
+end;
+
+definition
+ let x,b be set;
+ func IncrementCirc(x,b) ->
+   strict Boolean gate`2=den Circuit of IncrementStr(x,b) equals
+:: TWOSCOMP:def 37
+      1GateCircuit(x,b,and2a);
+end;
+
+definition
+ let x,b be set;
+ func IncrementOutput(x,b) -> Element of InnerVertices IncrementStr(x,b) equals
+:: TWOSCOMP:def 38
+
+   [<*x,b*>,and2a];
+end;
+
+:: 2's-BitComplementor
+
+definition
+ let x,b be set;
+ func BitCompStr(x,b) -> unsplit gate`1=arity gate`2isBoolean
+   non void strict non empty ManySortedSign equals
+:: TWOSCOMP:def 39
+    CompStr(x,b) +* IncrementStr(x,b);
+end;
+
+definition
+ let x,b be set;
+ func BitCompCirc(x,b) ->
+   strict Boolean gate`2=den Circuit of BitCompStr(x,b) equals
+:: TWOSCOMP:def 40
+      CompCirc(x,b) +* IncrementCirc(x,b);
+end;
+
+:: Relation, carrier, InnerVertices, InputVertices and without_pair
+
+:: Complementor
+
+theorem :: TWOSCOMP:30
+ for x,b being non pair set holds InnerVertices CompStr(x,b) is Relation;
+
+theorem :: TWOSCOMP:31
+ for x,b being non pair set holds
+   x in the carrier of CompStr(x,b) &
+   b in the carrier of CompStr(x,b) &
+   [<*x,b*>,xor2a] in the carrier of CompStr(x,b);
+
+theorem :: TWOSCOMP:32
+ for x,b being non pair set holds
+  the carrier of CompStr(x,b) = {x,b} \/ {[<*x,b*>,xor2a]};
+
+theorem :: TWOSCOMP:33
+ for x,b being non pair set holds
+   InnerVertices CompStr(x,b) = {[<*x,b*>,xor2a]};
+
+theorem :: TWOSCOMP:34
+ for x,b being non pair set holds
+   [<*x,b*>,xor2a] in InnerVertices CompStr(x,b);
+
+theorem :: TWOSCOMP:35
+ for x,b being non pair set holds
+  InputVertices CompStr(x,b) = {x,b};
+
+theorem :: TWOSCOMP:36 ::ThCOMPF2':
+   for x,b being non pair set holds
+  x in InputVertices CompStr(x,b) &
+  b in InputVertices CompStr(x,b);
+
+theorem :: TWOSCOMP:37
+   for x,b being non pair set holds
+  InputVertices CompStr(x,b) is without_pairs;
+
+:: Incrementor
+
+theorem :: TWOSCOMP:38
+ for x,b being non pair set holds InnerVertices IncrementStr(x,b) is Relation;
+
+theorem :: TWOSCOMP:39
+ for x,b being non pair set holds
+   x in the carrier of IncrementStr(x,b) &
+   b in the carrier of IncrementStr(x,b) &
+   [<*x,b*>,and2a] in the carrier of IncrementStr(x,b);
+
+theorem :: TWOSCOMP:40
+ for x,b being non pair set holds
+  the carrier of IncrementStr(x,b) = {x,b} \/ {[<*x,b*>,and2a]};
+
+theorem :: TWOSCOMP:41
+ for x,b being non pair set holds
+   InnerVertices IncrementStr(x,b) = {[<*x,b*>,and2a]};
+
+theorem :: TWOSCOMP:42
+ for x,b being non pair set holds
+   [<*x,b*>,and2a] in InnerVertices IncrementStr(x,b);
+
+theorem :: TWOSCOMP:43
+ for x,b being non pair set holds
+  InputVertices IncrementStr(x,b) = {x,b};
+
+theorem :: TWOSCOMP:44 ::ThINCF2':
+   for x,b being non pair set holds
+  x in InputVertices IncrementStr(x,b) &
+  b in InputVertices IncrementStr(x,b);
+
+theorem :: TWOSCOMP:45
+   for x,b being non pair set holds
+  InputVertices IncrementStr(x,b) is without_pairs;
+
+:: 2's-BitComplementor
+
+theorem :: TWOSCOMP:46 ::ThBITCOMPIV:
+   for x,b being non pair set holds
+  InnerVertices BitCompStr(x,b) is Relation;
+
+theorem :: TWOSCOMP:47
+ for x,b being non pair set holds
+   x in the carrier of BitCompStr(x,b) &
+   b in the carrier of BitCompStr(x,b) &
+   [<*x,b*>,xor2a] in the carrier of BitCompStr(x,b) &
+   [<*x,b*>,and2a] in the carrier of BitCompStr(x,b);
+
+theorem :: TWOSCOMP:48
+ for x,b being non pair set holds the carrier of BitCompStr(x,b) =
+   {x,b} \/ {[<*x,b*>,xor2a],[<*x,b*>,and2a]};
+
+theorem :: TWOSCOMP:49
+ for x,b being non pair set holds
+   InnerVertices BitCompStr(x,b) = {[<*x,b*>,xor2a],[<*x,b*>,and2a]};
+
+theorem :: TWOSCOMP:50
+ for x,b being non pair set holds
+   [<*x,b*>,xor2a] in InnerVertices BitCompStr(x,b) &
+   [<*x,b*>,and2a] in InnerVertices BitCompStr(x,b);
+
+theorem :: TWOSCOMP:51
+ for x,b being non pair set holds
+  InputVertices BitCompStr(x,b) = {x,b};
+
+theorem :: TWOSCOMP:52
+ for x,b being non pair set holds
+  x in InputVertices BitCompStr(x,b) &
+  b in InputVertices BitCompStr(x,b);
+
+theorem :: TWOSCOMP:53 ::ThBITCOMPW:
+   for x,b being non pair set holds
+  InputVertices BitCompStr(x,b) is without_pairs;
+
+::------------------------------------------------------------------------
+:: for s being State of BitCompCirc(x,b) holds (Following s) is stable
+::------------------------------------------------------------------------
+
+theorem :: TWOSCOMP:54
+ for x,b being non pair set for s being State of CompCirc(x,b) holds
+  (Following s).CompOutput(x,b) = xor2a.<*s.x,s.b*> &
+  (Following s).x = s.x & (Following s).b = s.b;
+
+theorem :: TWOSCOMP:55 ::ThCOMPLem22':
+   for x,b being non pair set for s being State of CompCirc(x,b)
+  for a1,a2 being Element of BOOLEAN st a1 = s.x & a2 = s.b holds
+   (Following s).CompOutput(x,b) = 'not' a1 'xor' a2 &
+   (Following s).x = a1 & (Following s).b = a2;
+
+theorem :: TWOSCOMP:56
+ for x,b being non pair set for s being State of BitCompCirc(x,b) holds
+  (Following s).CompOutput(x,b) = xor2a.<*s.x,s.b*> &
+  (Following s).x = s.x & (Following s).b = s.b;
+
+theorem :: TWOSCOMP:57
+ for x,b being non pair set for s being State of BitCompCirc(x,b)
+  for a1,a2 being Element of BOOLEAN st a1 = s.x & a2 = s.b holds
+   (Following s).CompOutput(x,b) = 'not' a1 'xor' a2 &
+   (Following s).x = a1 & (Following s).b = a2;
+
+theorem :: TWOSCOMP:58
+ for x,b being non pair set for s being State of IncrementCirc(x,b) holds
+  (Following s).IncrementOutput(x,b) = and2a.<*s.x,s.b*> &
+  (Following s).x = s.x & (Following s).b = s.b;
+
+theorem :: TWOSCOMP:59 ::ThINCLem22':
+   for x,b being non pair set for s being State of IncrementCirc(x,b)
+  for a1,a2 being Element of BOOLEAN st a1 = s.x & a2 = s.b holds
+   (Following s).IncrementOutput(x,b) = 'not' a1 '&' a2 &
+   (Following s).x = a1 & (Following s).b = a2;
+
+theorem :: TWOSCOMP:60
+ for x,b being non pair set for s being State of BitCompCirc(x,b) holds
+  (Following s).IncrementOutput(x,b) = and2a.<*s.x,s.b*> &
+  (Following s).x = s.x & (Following s).b = s.b;
+
+theorem :: TWOSCOMP:61
+ for x,b being non pair set for s being State of BitCompCirc(x,b)
+  for a1,a2 being Element of BOOLEAN st a1 = s.x & a2 = s.b holds
+   (Following s).IncrementOutput(x,b) = 'not' a1 '&' a2 &
+   (Following s).x = a1 & (Following s).b = a2;
+
+theorem :: TWOSCOMP:62
+  for x,b being non pair set for s being State of BitCompCirc(x,b) holds
+  (Following s).CompOutput(x,b) = xor2a.<*s.x,s.b*> &
+  (Following s).IncrementOutput(x,b) = and2a.<*s.x,s.b*> &
+  (Following s).x = s.x & (Following s).b = s.b;
+
+theorem :: TWOSCOMP:63 ::ThBITCOMPLem22:
+   for x,b being non pair set for s being State of BitCompCirc(x,b)
+  for a1,a2 being Element of BOOLEAN st a1 = s.x & a2 = s.b holds
+  (Following s).CompOutput(x,b) = 'not' a1 'xor' a2 &
+  (Following s).IncrementOutput(x,b) = 'not' a1 '&' a2 &
+  (Following s).x = a1 & (Following s).b = a2;
+
+theorem :: TWOSCOMP:64 ::ThCLA2F3:
+   for x,b being non pair set for s being State of BitCompCirc(x,b) holds
+   (Following s) is stable;
+

@@ -1,0 +1,4125 @@
+:: J\'onsson Theorem about Representation of Modular Lattices
+::  by Mariusz {\L}api\'nski
+::
+:: Received June 29, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, ORDERS_1, EQREL_1, LATTICES, FINSEQ_1, LATTICE5, WAYBEL_0,
+      REALSET1, GROUP_6, FUNCT_1, FINSET_1, MATRIX_2, CAT_1, FILTER_2, BOOLE,
+      YELLOW_0, ORDINAL2, ORDINAL1, PRE_TOPC, WELLORD1, SEQM_3, LATTICE3,
+      WAYBEL_1, MCART_1, RELAT_2, TARSKI, ZFMISC_1, HAHNBAN, PARTFUN1, PRALG_1,
+      FUNCT_6, SGRAPH1, LATTICE8;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELSET_1, FUNCT_1,
+      FUNCT_2, FUNCT_6, NUMBERS, XREAL_0, NAT_1, ORDINAL1, ORDINAL2, MCART_1,
+      DOMAIN_1, PARTFUN1, PRALG_1, PRE_TOPC, STRUCT_0, GROUP_1, REALSET1,
+      ORDERS_1, EQREL_1, FINSEQ_1, LATTICE3, BINOP_1, YELLOW_0, YELLOW_2,
+      LATTICE5, YELLOW11, WAYBEL_1, WAYBEL_0, ABIAN;
+ constructors NAT_1, DOMAIN_1, RFUNCT_3, LATTICE5, YELLOW11, ORDERS_3,
+      YELLOW10, ABIAN, SCMPDS_1, MEMBERED, PRE_TOPC;
+ clusters SUBSET_1, RELSET_1, STRUCT_0, INT_1, YELLOW_0, YELLOW_2, YELLOW11,
+      CARD_1, ORDINAL1, PRALG_1, LATTICE3, LATTICE5, WAYBEL10, WAYBEL21,
+      REALSET1, EQREL_1, LATTICE7, FINSEQ_6, ABIAN, ARYTM_3, MEMBERED,
+      PARTFUN1, NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, LATTICE3, PRALG_1, WAYBEL_0, YELLOW_0, YELLOW11, LATTICE5,
+      RELAT_1, XBOOLE_0;
+ theorems EQREL_1, CQC_THE1, RELAT_1, RELAT_2, FINSEQ_1, FINSEQ_2, ORDERS_1,
+      TARSKI, ORDINAL1, ORDINAL3, HAHNBAN, PARTFUN1, GRFUNC_1, FUNCT_6,
+      EXTENS_1, MCART_1, NAT_1, BINOP_1, ZFMISC_1, FUNCT_1, FUNCT_2, LATTICE3,
+      YELLOW_0, YELLOW_2, YELLOW_3, YELLOW_5, WAYBEL_0, WAYBEL_1, WAYBEL_6,
+      RELSET_1, LATTICE5, YELLOW11, WAYBEL13, REALSET1, ORDERS_3, TEX_1,
+      SYSREL, XBOOLE_0, XBOOLE_1;
+ schemes LATTICE5, FUNCT_1, FUNCT_2, ORDINAL2, NAT_1, FINSEQ_1;
+
+begin :: Preliminaries
+
+definition
+ let A be non empty set;
+ let P,R be Relation of A;
+ redefine pred P c= R means
+     for a,b being Element of A st [a,b] in P holds [a,b] in R;
+ compatibility
+ proof
+  thus P c= R implies
+       (for a,b being Element of A st [a,b] in P holds [a,b] in R);
+  thus (for a,b being Element of A st [a,b] in P holds [a,b] in R) implies
+       P c= R
+   proof
+    assume
+A1:  for a,b being Element of A st [a,b] in P holds [a,b] in R;
+    let x,y be set;
+    assume
+A2:  [x,y] in P;
+    then ex x1,y1 being set st
+      [x,y] = [x1,y1] & x1 in A & y1 in A by RELSET_1:6;
+    hence [x,y] in R by A1,A2;
+   end;
+ end;
+end;
+
+definition
+ let L be RelStr;
+attr L is finitely_typed means :Def2:
+ ex A being non empty set
+  st (for e being set st e in the carrier of L
+   holds e is Equivalence_Relation of A) &
+ ex o being Nat
+  st for e1,e2 being Equivalence_Relation of A, x,y being set
+   st e1 in the carrier of L & e2 in the carrier of L & [x,y] in e1 "\/" e2
+    holds ex F being non empty FinSequence of A
+     st len F = o & x,y are_joint_by F,e1,e2;
+end;
+
+definition
+ let L be lower-bounded LATTICE;
+ let n be Nat;
+  pred L has_a_representation_of_type<= n means :Def3:
+   ex A being non trivial set, f be Homomorphism of L,EqRelLATT A
+    st f is one-to-one & Image f is finitely_typed &
+     (ex e being Equivalence_Relation of A
+      st e in the carrier of Image f & e <> id A) & type_of Image f <= n;
+end;
+
+definition
+ cluster lower-bounded distributive finite LATTICE;
+existence
+ proof
+  consider L being distributive finite LATTICE;
+  take L;
+  thus thesis;
+ end;
+end;
+
+Lm1:
+ 1 is odd
+  proof
+      2*0+1 = 1;
+    hence thesis;
+   end;
+
+Lm2:
+ 2 is even
+  proof
+     2*1 = 2;
+   hence thesis;
+  end;
+
+definition
+ let A be non trivial set;
+ cluster non trivial finitely_typed full (non empty Sublattice of EqRelLATT A);
+ existence
+  proof
+   consider a being Element of A;
+   consider b being Element of A\{a};
+     A\{a} is non empty set by REALSET1:32;
+then A1: b in A & a <> b by ZFMISC_1:64;
+A2:  id A in the carrier of EqRelLATT A by LATTICE5:4;
+   nabla A in the carrier of EqRelLATT A by LATTICE5:4;
+    then reconsider e1 = nabla A, e2 = id A as Element of EqRelLATT A
+     by A2;
+    set Y = subrelstr {e1,e2};
+A3: the carrier of Y = {e1,e2} by YELLOW_0:def 15;
+      e1 = [:A,A:] by EQREL_1:def 1;
+then A4:  e2 <= e1 by LATTICE5:6;
+A5: Y is meet-inheriting
+     proof
+     thus for x,y being Element of EqRelLATT A st
+           x in the carrier of Y & y in the carrier of Y &
+            ex_inf_of {x,y},EqRelLATT A
+      holds inf {x,y} in the carrier of Y
+       proof
+        let x,y be Element of EqRelLATT A;
+        assume
+A6:      x in the carrier of Y & y in the carrier of Y &
+         ex_inf_of {x,y},EqRelLATT A;
+         per cases by A3,A6,TARSKI:def 2;
+         suppose
+       x = e1 & y = e1;
+         then inf {x,y} = e1"/\"e1 by YELLOW_0:40
+                  .= e1 by YELLOW_5:2;
+         hence thesis by A3,TARSKI:def 2;
+         suppose
+       x = e1 & y = e2;
+         then inf {x,y} = e1"/\"e2 by YELLOW_0:40
+                  .= e2 by A4,YELLOW_5:10;
+         hence thesis by A3,TARSKI:def 2;
+         suppose
+       x = e2 & y = e1;
+        then inf {x,y} = e2"/\"e1 by YELLOW_0:40
+                  .= e2 by A4,YELLOW_5:10;
+         hence thesis by A3,TARSKI:def 2;
+         suppose
+       x = e2 & y = e2;
+         then inf {x,y} = e2"/\"e2 by YELLOW_0:40
+                  .= e2 by YELLOW_5:2;
+         hence thesis by A3,TARSKI:def 2;
+       end;
+     thus thesis;
+     end;
+A7: Y is join-inheriting
+     proof
+      thus for x,y being Element of EqRelLATT A st
+            x in the carrier of Y & y in the carrier of Y &
+             ex_sup_of {x,y},EqRelLATT A
+       holds sup {x,y} in the carrier of Y
+        proof
+        let x,y be Element of EqRelLATT A;
+        assume
+A8:      x in the carrier of Y & y in the carrier of Y &
+         ex_sup_of {x,y},EqRelLATT A;
+         per cases by A3,A8,TARSKI:def 2;
+         suppose
+       x = e1 & y = e1;
+         then sup {x,y} = e1"\/"e1 by YELLOW_0:41
+                  .= e1 by YELLOW_5:1;
+         hence thesis by A3,TARSKI:def 2;
+         suppose
+       x = e1 & y = e2;
+         then sup {x,y} = e1"\/"e2 by YELLOW_0:41
+                  .= e1 by A4,YELLOW_5:8;
+         hence thesis by A3,TARSKI:def 2;
+         suppose
+       x = e2 & y = e1;
+         then sup {x,y} = e2"\/"e1 by YELLOW_0:41
+                  .= e1 by A4,YELLOW_5:8;
+         hence thesis by A3,TARSKI:def 2;
+         suppose
+       x = e2 & y = e2;
+         then sup {x,y} = e2"\/"e2 by YELLOW_0:41
+                  .= e2 by YELLOW_5:1;
+         hence thesis by A3,TARSKI:def 2;
+       end;
+     thus thesis;
+     end;
+A9: Y is non trivial
+    proof
+     assume Y is trivial;
+     then consider s being Element of Y such that
+A10:  the carrier of Y = {s} by TEX_1:def 1;
+       nabla A = id A by A3,A10,ZFMISC_1:9;
+     then [:A,A:] = id A by EQREL_1:def 1;
+     then [a,b] in id A by A1,ZFMISC_1:def 2;
+     hence contradiction by A1,RELAT_1:def 10;
+    end;
+A11: Y is finitely_typed
+    proof
+     take A;
+     thus for e being set st e in the carrier of Y
+      holds e is Equivalence_Relation of A by A3,TARSKI:def 2;
+    take o = 3;
+    thus for eq1,eq2 being Equivalence_Relation of A, x1,y1 being set
+     st eq1 in the carrier of Y & eq2 in the carrier of Y &
+                     [x1,y1] in eq1 "\/" eq2 holds
+     ex F being non empty FinSequence of A st
+       len F = o & x1,y1 are_joint_by F,eq1,eq2
+      proof
+       let eq1,eq2 be Equivalence_Relation of A;
+       let x1,y1 be set;
+       assume
+A12:     eq1 in the carrier of Y & eq2 in the carrier of Y &
+                     [x1,y1] in eq1 "\/" eq2;
+       eq1 = e2 or eq1 <> e2;
+     then consider z being set such that
+A13:   eq1 = e2 & z = x1 or eq1 <> e2 & z = y1;
+      consider x2,y2 being set such that
+A14:    [x1,y1] = [x2,y2] & x2 in A & y2 in A by A12,RELSET_1:6;
+        x1 in A & y1 in A by A14,ZFMISC_1:33;
+      then reconsider F = <*x1,z,y1*> as non empty FinSequence of A
+       by A13,FINSEQ_2:16;
+      take F;
+    per cases by A13;
+     suppose
+      A15: eq1 = e2 & z = x1;
+then A16:   eq1 = e2 & len F = 3 & F.1 = x1 & F.2 = x1 & F.3 = y1 by FINSEQ_1:
+62;
+   for i being Nat st 1 <= i & i < len F holds
+         (i is odd implies [F.i,F.(i+1)] in eq1) &
+         (i is even implies [F.i,F.(i+1)] in eq2)
+      proof
+       let i be Nat;
+       assume
+        A17: 1 <= i & i < len F;
+       then i < 2+1 by FINSEQ_1:62;
+       then i <= 2 by NAT_1:38;
+       then A18: i = 0 or i = 1 or i = 2 by CQC_THE1:3;
+       per cases by A3,A12,A15,A17,A18,Lm1,Lm2,TARSKI:def 2;
+        suppose
+A19:      i = 1 & i is odd & eq1 = e2 & eq2 = e1;
+        consider x2,y2 being set such that
+A20:      [x1,y1] = [x2,y2] & x2 in A & y2 in A by A12,RELSET_1:6;
+          x1 in A by A20,ZFMISC_1:33;
+        hence thesis by A16,A19,EQREL_1:11;
+        suppose
+A21:      i = 1 & i is odd & eq1 = e2 & eq2 = e2;
+        consider x2,y2 being set such that
+A22:      [x1,y1] = [x2,y2] & x2 in A & y2 in A by A12,RELSET_1:6;
+          x1 in A by A22,ZFMISC_1:33;
+        hence thesis by A16,A21,EQREL_1:11;
+        suppose
+A23:      i = 2 & i is even & eq1 = e2 & eq2 = e1;
+         then eq1 "\/" eq2 = e2 "\/" e1 by LATTICE5:10
+                   .= eq2 by A4,A23,YELLOW_5:8;
+        hence thesis by A12,A16,A23;
+        suppose
+A24:      i = 2 & i is even & eq1 = e2 & eq2 = e2;
+         then eq1 "\/" eq2 = e2 "\/" e2 by LATTICE5:10
+                   .= eq2 by A24,YELLOW_5:1;
+        hence thesis by A12,A16,A24;
+      end;
+     hence len F = o & x1,y1 are_joint_by F,eq1,eq2 by A16,LATTICE5:def 3;
+     suppose
+      A25: eq1 <> e2 & z = y1;
+then A26:   eq1 <> e2 & len F = 3 & F.1 = x1 & F.2 = y1 & F.3 = y1 by FINSEQ_1:
+62;
+   for i being Nat st 1 <= i & i < len F holds
+         (i is odd implies [F.i,F.(i+1)] in eq1) &
+         (i is even implies [F.i,F.(i+1)] in eq2)
+      proof
+       let i be Nat;
+       assume
+        A27: 1 <= i & i < len F;
+       then i < 2+1 by FINSEQ_1:62;
+       then i <= 2 by NAT_1:38;
+       then A28: i = 0 or i = 1 or i = 2 by CQC_THE1:3;
+       per cases by A3,A12,A25,A27,A28,Lm1,Lm2,TARSKI:def 2;
+        suppose
+A29:      i = 1 & i is odd & eq1 = e1 & eq2 = e1;
+         then eq1 "\/" eq2 = e1 "\/" e1 by LATTICE5:10
+                   .= eq1 by A29,YELLOW_5:8;
+        hence
+             (i is odd implies [F.i,F.(i+1)] in eq1) &
+            (i is even implies [F.i,F.(i+1)] in eq2) by A12,A26,A29;
+        suppose
+A30:      i = 1 & i is odd & eq1 = e1 & eq2 = e2;
+         then eq1 "\/" eq2 = e1 "\/" e2 by LATTICE5:10
+                   .= eq1 by A4,A30,YELLOW_5:8;
+        hence
+             (i is odd implies [F.i,F.(i+1)] in eq1) &
+            (i is even implies [F.i,F.(i+1)] in eq2) by A12,A26,A30;
+        suppose
+A31:      i = 2 & i is even & eq1 = e1 & eq2 = e1;
+        consider x2,y2 being set such that
+A32:      [x1,y1] = [x2,y2] & x2 in A & y2 in A by A12,RELSET_1:6;
+          y1 in A by A32,ZFMISC_1:33;
+        hence
+             (i is odd implies [F.i,F.(i+1)] in eq1) &
+            (i is even implies [F.i,F.(i+1)] in eq2) by A26,A31,EQREL_1:11;
+        suppose
+A33:      i = 2 & i is even & eq1 = e1 & eq2 = e2;
+        consider x2,y2 being set such that
+A34:      [x1,y1] = [x2,y2] & x2 in A & y2 in A by A12,RELSET_1:6;
+          y1 in A by A34,ZFMISC_1:33;
+        hence
+             (i is odd implies [F.i,F.(i+1)] in eq1) &
+            (i is even implies [F.i,F.(i+1)] in eq2) by A26,A33,EQREL_1:11;
+      end;
+       hence len F = o & x1,y1 are_joint_by F,eq1,eq2 by A26,LATTICE5:def 3;
+     end;
+    end;
+   reconsider Y as full
+               (non empty Sublattice of EqRelLATT A) by A5,A7;
+   take Y; thus thesis by A9,A11;
+ end;
+end;
+
+theorem Th1:
+ for A be non empty set
+ for L be lower-bounded LATTICE
+ for d be distance_function of A,L
+     holds succ {} c= DistEsti(d)
+  proof
+   let A be non empty set;
+   let L be lower-bounded LATTICE;
+   let d be distance_function of A,L;
+     succ {} c= DistEsti(d) or DistEsti(d) in succ {} by ORDINAL1:26;
+   then succ {} c= DistEsti(d) or DistEsti(d) c= {} by ORDINAL1:34;
+   then succ {} c= DistEsti(d) or DistEsti(d) = {} by XBOOLE_1:3;
+   hence succ {} c= DistEsti(d) by LATTICE5:23;
+  end;
+
+theorem
+   for L being trivial Semilattice holds L is modular
+ proof
+   let L be trivial Semilattice;
+   let a,b,c be Element of L such that a <= c;
+   thus a"\/"(b"/\"c) = (a"\/"b)"/\"c by REALSET1:def 20;
+ end;
+
+theorem
+   for A being non empty set
+ for L being non empty Sublattice of EqRelLATT A
+     holds L is trivial or ex e being Equivalence_Relation of A
+            st e in the carrier of L & e <> id A
+ proof
+  let A be non empty set;
+  let L be non empty Sublattice of EqRelLATT A;
+     now
+    assume
+A1:   not ex e being Equivalence_Relation of A st
+                        e in the carrier of L & e <> id A;
+    thus L is trivial
+     proof
+       consider x be set such that
+A2:     x in the carrier of L by XBOOLE_0:def 1;
+         the carrier of L c= the carrier of EqRelLATT A by YELLOW_0:def 13;
+       then reconsider e=x as Equivalence_Relation of A by A2,LATTICE5:4;
+         the carrier of L = {x}
+        proof
+         thus the carrier of L c= {x}
+          proof
+           let a be set;
+           assume
+A3:         a in the carrier of L;
+             the carrier of L c= the carrier of EqRelLATT A by YELLOW_0:def 13;
+           then reconsider B=a as Equivalence_Relation of A by A3,LATTICE5:4;
+             B = id A by A1,A3
+            .= e by A1,A2;
+           hence a in {x} by TARSKI:def 1;
+          end;
+         let A be set;
+         assume A in {x};
+         hence A in the carrier of L by A2,TARSKI:def 1;
+        end;
+       then the carrier of L is trivial by REALSET1:def 12;
+       hence thesis by REALSET1:def 13;
+     end;
+   end;
+  hence thesis;
+ end;
+
+theorem Th4:
+ for L1,L2 be lower-bounded LATTICE
+ for f being map of L1,L2 st f is infs-preserving sups-preserving
+     holds f is meet-preserving join-preserving
+ proof
+  let L1,L2 be lower-bounded LATTICE;
+  let f be map of L1,L2;
+  assume
+A1:  f is infs-preserving sups-preserving;
+   thus f is meet-preserving
+    proof
+     let x,y be Element of L1;
+      thus f preserves_inf_of {x,y} by A1,WAYBEL_0:def 32;
+    end;
+   thus f is join-preserving
+   proof
+    let x,y be Element of L1;
+     thus f preserves_sup_of {x,y} by A1,WAYBEL_0:def 33;
+   end;
+ end;
+
+theorem Th5:
+ for L1,L2 be lower-bounded LATTICE
+  st L1,L2 are_isomorphic & L1 is modular holds L2 is modular
+  proof
+   let L1,L2 be lower-bounded LATTICE;
+   assume
+A1:  L1,L2 are_isomorphic & L1 is modular;
+   then consider f be map of L1,L2 such that
+A2: f is isomorphic by WAYBEL_1:def 8;
+      f is infs-preserving sups-preserving by A2,WAYBEL13:20;
+then A3:  f is meet-preserving join-preserving by Th4;
+    let a,b,c be Element of L2;
+    assume
+A4:  a <= c;
+    set A = f".a;
+    set B = f".b;
+    set C = f".c;
+    A5: f is one-to-one & rng f = the carrier of L2 by A2,WAYBEL_0:66;
+    then A6: f is one-to-one & a in rng f & b in rng f & c in rng f &
+    a = f.A & b = f.B & c = f.C by FUNCT_1:57;
+  A in dom f & B in dom f & C in dom f by A5,FUNCT_1:54;
+    then reconsider A,B,C as Element of L1;
+      A <= C by A2,A4,A6,WAYBEL_0:66;
+then A7:  A"\/"(B"/\"C) = (A"\/"B)"/\"C by A1,YELLOW11:def 3;
+    thus a"\/"(b"/\"c) = f.A "\/" f.(B"/\"C) by A3,A6,WAYBEL_6:1
+    .= f.((A"\/"B)"/\"C) by A3,A7,WAYBEL_6:2
+    .= (f.(A"\/"B)"/\"f.C) by A3,WAYBEL_6:1
+    .= (a"\/"b)"/\"c by A3,A6,WAYBEL_6:2;
+  end;
+
+theorem Th6:
+ for S being lower-bounded non empty Poset
+ for T being non empty Poset
+ for f being monotone map of S,T holds Image f is lower-bounded
+ proof
+  let S be lower-bounded non empty Poset;
+  let T be non empty Poset;
+  let f be monotone map of S,T;
+   thus Image f is lower-bounded
+    proof
+     consider x being Element of S such that
+A1:   x is_<=_than the carrier of S by YELLOW_0:def 4;
+        dom f = the carrier of S by FUNCT_2:def 1;
+      then x in dom f & f.x in rng f by FUNCT_1:def 5;
+      then f.x in the carrier of subrelstr (rng f) by YELLOW_0:def 15;
+      then f.x in the carrier of Image f by YELLOW_2:def 2;
+      then reconsider fx = f.x as Element of Image f;
+      take fx;
+      let b be Element of Image f;
+       assume
+A2:     b in the carrier of Image f;
+       then b in the carrier of subrelstr (rng f) by YELLOW_2:def 2;
+       then b in rng f by YELLOW_0:def 15;
+       then consider c be set such that
+A3:     c in dom f & f.c = b by FUNCT_1:def 5;
+       reconsider c as Element of S by A3;
+         the carrier of Image f c= the carrier of T by YELLOW_0:def 13;
+       then reconsider b1 = b as Element of T by A2;
+          x <= c by A1,LATTICE3:def 8;
+        then f.x <= b1 by A3,ORDERS_3:def 5;
+        hence fx <= b by YELLOW_0:61;
+    end;
+ end;
+
+theorem Th7:
+ for L being lower-bounded LATTICE
+ for x,y being Element of L
+ for A being non empty set
+ for f be Homomorphism of L,EqRelLATT A st f is one-to-one
+     holds (corestr f).x <= (corestr f).y implies x <= y
+ proof
+  let L be lower-bounded LATTICE;
+  let x,y be Element of L;
+  let A be non empty set;
+  let f be Homomorphism of L,EqRelLATT A;
+   assume that
+A1: f is one-to-one and
+A2: (corestr f).x <= (corestr f).y;
+    now
+   assume
+A3: not x <= y;
+A4: corestr f = f & corestr f is one-to-one by A1,WAYBEL_1:32;
+A5: Image f is Semilattice & L is Semilattice;
+A6:  Image f is strict full Sublattice of EqRelLATT A;
+    A7: for x,y being Element of L holds
+     (corestr f).(x "/\" y) = (corestr f).x "/\" (corestr f).y
+     proof
+      let x,y be Element of L;
+      thus (corestr f).(x "/\" y) = f.x "/\" f.y by A4,WAYBEL_6:1
+          .= (corestr f).x "/\" (corestr f).y by A4,A6,YELLOW_0:70;
+     end;
+  (corestr f).y "/\" (corestr f).x = (corestr f).x by A2,A5,YELLOW_5:10;
+   then (corestr f).x = (corestr f).(x "/\" y) by A7;
+   then x = x "/\" y by A4,WAYBEL_1:def 1;
+  hence contradiction by A3,YELLOW_0:25;
+  end;
+  hence thesis;
+ end;
+
+begin :: J\'onsson theorem
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  =>  ::   L has_a_representation_of_type<= 2 implies L is modular   ::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem Th8:
+ for A being non trivial set
+ for L being finitely_typed full (non empty Sublattice of EqRelLATT A)
+ for e being Equivalence_Relation of A st e in the carrier of L & e <> id A
+     holds type_of L <= 2 implies L is modular
+   proof
+    let A be non trivial set;
+    let L be finitely_typed full (non empty Sublattice of EqRelLATT A);
+    let e be Equivalence_Relation of A;
+    assume that
+A1: e in the carrier of L and
+A2: e <> id A;
+    assume
+A3:  type_of L <= 2;
+    let a,b,c be Element of L;
+    assume
+A4:  a <= c;
+A5:  the carrier of L c= the carrier of EqRelLATT A by YELLOW_0:def 13;
+     A6: a in the carrier of L;
+    then reconsider a' = a as Equivalence_Relation of A by A5,LATTICE5:4;
+    A7: b in the carrier of L;
+    then reconsider b' = b as Equivalence_Relation of A by A5,LATTICE5:4;
+    A8: c in the carrier of L;
+    then reconsider c' = c as Equivalence_Relation of A by A5,LATTICE5:4;
+    reconsider a'' = a' as Element of EqRelLATT A by A5,A6;
+    reconsider b'' = b' as Element of EqRelLATT A by A5,A7;
+    reconsider c'' = c' as Element of EqRelLATT A by A5,A8;
+A9:  a'' <= c'' by A4,YELLOW_0:60;
+then A10: a' c= c' by LATTICE5:6;
+A11:  b' /\ c' = b''"/\"c'' & b''"/\"c'' = b"/\"c by LATTICE5:8,YELLOW_0:70;
+A12:  a' "\/" b' = a''"\/"b'' & a''"\/"b'' = a"\/"b by LATTICE5:10,YELLOW_0:71;
+A13:  a'"\/"(b' /\ c') = a''"\/"(b''"/\"c'') by A11,LATTICE5:10;
+A14:  a''"\/"(b''"/\"c'') <= (a''"\/"b'')"/\"c'' by A9,YELLOW11:8;
+   (a''"\/"b'')"/\"c'' = (a''"\/"b'') /\ c' by LATTICE5:8
+                    .= (a'"\/"b') /\ c' by LATTICE5:10;
+then A15:  a'"\/"(b' /\ c') c= (a'"\/"b') /\ c' by A13,A14,LATTICE5:6;
+     consider AA being non empty set such that
+A16:   for e being set st e in the carrier of L
+       holds e is Equivalence_Relation of AA and
+A17:   ex i being Nat st
+     for e1,e2 being Equivalence_Relation of AA, x,y being set st
+     e1 in the carrier of L & e2 in the carrier of L &
+                     [x,y] in e1 "\/" e2
+    holds
+     ex F being non empty FinSequence of AA st
+      len F = i & x,y are_joint_by F,e1,e2 by Def2;
+       e is Equivalence_Relation of AA by A1,A16;
+     then A18: field e = A & field e = AA by EQREL_1:16;
+
+A19:  (a'"\/"b') /\ c' c= a'"\/"(b' /\ c')
+     proof
+       let x,y be Element of A;
+       assume
+      A20: [x,y] in (a' "\/" b') /\ c';
+then A21:    [x,y] in a' "\/" b' & [x,y] in c' by XBOOLE_0:def 3;
+    per cases by A3,CQC_THE1:3;
+     suppose
+    type_of L = 2;
+      then consider F being non empty FinSequence of A such that
+A22:    len F = 2+2 & x,y are_joint_by F,a',b' by A1,A2,A17,A18,A21,LATTICE5:
+def 4;
+       set z1 = F.2;
+       set z2 = F.3;
+A23:   F.1 = x & F.4 = y &
+     for i being Nat st 1 <= i & i < 4 holds
+       (i is odd implies [F.i,F.(i+1)] in a') &
+       (i is even implies [F.i,F.(i+1)] in b') by A22,LATTICE5:def 3;
+        consider j being Nat such that
+   A24: j = 0;
+         2*j+1 = 1 by A24;
+       then A25: 1 is odd & [F.1,F.(1+1)] in a' by A22,LATTICE5:def 3;
+        consider k being Nat such that
+   A26: k = 1;
+         2*k = 2 by A26;
+       then A27: 2 is even & [F.2,F.(2+1)] in b' by A22,LATTICE5:def 3;
+        consider l being Nat such that
+   A28: l = 1;
+         2*l+1 = 3 by A28;
+       then A29: 3 is odd & [F.3,F.(3+1)] in a' by A22,LATTICE5:def 3;
+then [x,z1] in a' & [z2,y] in a' & [z1,z2] in b' & [y,x] in c' &
+       [x,z1] in c' & [z2,y] in c' & [x,y] in c' by A10,A21,A23,A25,A27,EQREL_1
+:12;
+       then [z2,x] in c' by EQREL_1:13;
+       then [z2,z1] in c' by A10,A23,A25,EQREL_1:13;
+       then [z1,z2] in c' by EQREL_1:12;
+then A30:    [z1,z2] in b' /\ c' by A27,XBOOLE_0:def 3;
+       reconsider BC = b' /\ c' as Element of EqRelLATT A by A11;
+A31:    a'' <= a'' "\/" BC by YELLOW_0:22;
+A32:    a' "\/" (b' /\ c') = a''"\/" BC by LATTICE5:10;
+then A33:    a' c= a' "\/" (b' /\ c') by A31,LATTICE5:6;
+     BC <= BC "\/" a'' by YELLOW_0:22;
+then b' /\ c' c= a' "\/" (b' /\ c') by A32,LATTICE5:6;
+       then [x,z2] in a' "\/" (b' /\ c') by A23,A25,A30,A33,EQREL_1:13;
+      hence thesis by A23,A29,A33,EQREL_1:13;
+     suppose
+    type_of L = 1;
+      then consider F being non empty FinSequence of A such that
+A34:    len F = 1+2 & x,y are_joint_by F,a',b' by A1,A2,A17,A18,A21,LATTICE5:
+def 4;
+       set z1 = F.2;
+A35:   F.1 = x & F.3 = y &
+     for i being Nat st 1 <= i & i < 3 holds
+       (i is odd implies [F.i,F.(i+1)] in a') &
+       (i is even implies [F.i,F.(i+1)] in b') by A34,LATTICE5:def 3;
+        consider j being Nat such that
+   A36: j = 0;
+         2*j+1 = 1 by A36;
+       then A37: 1 is odd & [F.1,F.(1+1)] in a' by A34,LATTICE5:def 3;
+        consider k being Nat such that
+   A38: k = 1;
+       A39: 2*k = 2 by A38;
+       then A40: 2 is even & [F.2,F.(2+1)] in b' by A34,LATTICE5:def 3;
+     [x,z1] in a' & [x,z1] in c' & [x,y] in c' & [z1,y] in b' & [z1,x] in c'
+       by A10,A20,A34,A35,A37,A39,EQREL_1:12,XBOOLE_0:def 3;
+       then [z1,y] in c' by EQREL_1:13;
+then A41:    [z1,y] in b' /\ c' by A35,A40,XBOOLE_0:def 3;
+       reconsider BC = b' /\ c' as Element of EqRelLATT A by A11;
+A42:    a'' <= a'' "\/" BC by YELLOW_0:22;
+A43:    a' "\/" (b' /\ c') = a''"\/" BC by LATTICE5:10;
+then A44:    a' c= a' "\/" (b' /\ c') by A42,LATTICE5:6;
+     BC <= BC "\/" a'' by YELLOW_0:22;
+then b' /\ c' c= a' "\/" (b' /\ c') by A43,LATTICE5:6;
+      hence thesis by A35,A37,A41,A44,EQREL_1:13;
+     suppose
+    type_of L = 0;
+      then consider F being non empty FinSequence of A such that
+A45:    len F = 0+2 & x,y are_joint_by F,a',b' by A1,A2,A17,A18,A21,LATTICE5:
+def 4;
+A46:   F.1 = x & F.2 = y &
+     for i being Nat st 1 <= i & i < 2 holds
+       (i is odd implies [F.i,F.(i+1)] in a') &
+       (i is even implies [F.i,F.(i+1)] in b') by A45,LATTICE5:def 3;
+        consider j being Nat such that
+   A47: j = 0;
+         2*j+1 = 1 by A47;
+       then A48: 1 is odd & [F.1,F.(1+1)] in a' by A45,LATTICE5:def 3;
+       reconsider BC = b' /\ c' as Element of EqRelLATT A by A11;
+A49:    a'' <= a'' "\/" BC by YELLOW_0:22;
+         a' "\/" (b' /\ c') = a''"\/" BC by LATTICE5:10;
+then a' c= a' "\/" (b' /\ c') by A49,LATTICE5:6;
+      hence thesis by A46,A48;
+    end;
+A50:  a'"\/"(b' /\ c') = a''"\/"(b''"/\"c'') by A11,LATTICE5:10
+                  .= a"\/"(b"/\"c) by A11,YELLOW_0:71;
+   (a"\/"b)"/\"c = (a''"\/"b'')"/\"c'' by A12,YELLOW_0:70
+              .= (a''"\/"b'') /\ c' by LATTICE5:8
+              .= (a'"\/"b') /\ c' by LATTICE5:10;
+     hence thesis by A15,A19,A50,XBOOLE_0:def 10;
+   end;
+
+theorem Th9:
+ for L be lower-bounded LATTICE
+     holds L has_a_representation_of_type<= 2 implies L is modular
+   proof
+    let L be lower-bounded LATTICE;
+    assume
+       L has_a_representation_of_type<= 2;
+    then consider A being non trivial set,
+             f being Homomorphism of L,EqRelLATT A such that
+A1:          f is one-to-one & Image f is finitely_typed &
+             (ex e being Equivalence_Relation of A st
+             e in the carrier of Image f & e <> id A) &
+             type_of Image f <= 2 by Def3;
+A2:   Image f is modular by A1,Th8;
+A3:   Image f is lower-bounded LATTICE &
+              corestr f is one-to-one by A1,Th6,WAYBEL_1:32;
+A4:   rng (corestr f) = the carrier of Image f by FUNCT_2:def 3;
+A5:   for x,y being Element of L holds
+       x <= y implies (corestr f).x <= (corestr f).y by WAYBEL_1:def 2;
+        for x,y being Element of L holds
+       (corestr f).x <= (corestr f).y implies x <= y by A1,Th7;
+      then corestr f is isomorphic by A3,A4,A5,WAYBEL_0:66;
+      then L, Image f are_isomorphic by WAYBEL_1:def 8;
+     then Image f, L are_isomorphic by WAYBEL_1:7;
+     hence thesis by A2,A3,Th5;
+   end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  <=  ::   L is modular implies L has_a_representation_of_type<= 2   ::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+ let A be set;
+func new_set2 A equals :Def4:
+   A \/ {{A}, {{A}}};
+ correctness;
+end;
+
+definition
+ let A be set;
+cluster new_set2 A -> non empty;
+coherence
+  proof
+     {A} in {{A}, {{A}}} by TARSKI:def 2;
+   then {A} in A \/ {{A}, {{A}}} by XBOOLE_0:def 2;
+   hence new_set2 A is non empty by Def4;
+ end;
+end;
+
+definition
+ let A be non empty set;
+ let L be lower-bounded LATTICE;
+ let d be BiFunction of A,L;
+ let q be Element of [:A,A,the carrier of L,the carrier of L:];
+func new_bi_fun2(d,q) -> BiFunction of new_set2 A,L means :Def5:
+ (for u,v being Element of A
+      holds it.(u,v) = d.(u,v)) &
+            it.({A},{A}) = Bottom L &
+            it.({{A}},{{A}}) = Bottom L &
+            it.({A},{{A}}) = (d.(q`1,q`2)"\/"q`3)"/\"q`4 &
+            it.({{A}},{A}) = (d.(q`1,q`2)"\/"q`3)"/\"q`4 &
+             for u being Element of A
+                 holds (it.(u,{A}) = d.(u,q`1)"\/"q`3 &
+                       it.({A},u) = d.(u,q`1)"\/"q`3 &
+                       it.(u,{{A}}) = d.(u,q`2)"\/"q`3 &
+                       it.({{A}},u) = d.(u,q`2)"\/"q`3);
+ existence
+  proof
+   set x = q`1, y = q`2;
+   reconsider a = q`3, b = q`4 as Element of L;
+A1: {A} in new_set2 A & {{A}} in new_set2 A
+    proof
+       {A} in {{A}, {{A}} } by TARSKI:def 2;
+     then {A} in A \/ {{A}, {{A}}} by XBOOLE_0:def 2;
+     hence {A} in new_set2 A by Def4;
+       {{A}} in {{A}, {{A}} } by TARSKI:def 2;
+     then {{A}} in A \/ {{A}, {{A}}} by XBOOLE_0:def 2;
+     hence {{A}} in new_set2 A by Def4;
+    end;
+   defpred X[Element of new_set2 A,Element of new_set2 A,set] means
+    ($1 in A & $2 in A implies $3 = d.($1,$2)) &
+   ($1 = {A} & $2 = {{A}} or $2 = {A} & $1 = {{A}}
+                   implies $3 = (d.(x,y)"\/"a)"/\"b) &
+   (($1 = {A} or $1 = {{A}}) & $2 = $1 implies $3 = Bottom L) &
+   ($1 in A & $2 = {A} implies
+                ex p' being Element of A st p' = $1 & $3 = d.(p',x)"\/"a) &
+   ($1 in A & $2 = {{A}} implies
+                ex p' being Element of A st p' = $1 & $3 = d.(p',y)"\/"a) &
+   ($2 in A & $1 = {A} implies ex q' being Element of A st
+                               q' = $2 & $3 = d.(q',x)"\/"a) &
+   ($2 in A & $1 = {{A}} implies ex q' being Element of A st
+                                 q' = $2 & $3 = d.(q',y)"\/"a);
+A2:  for p,q being Element of new_set2 A
+       ex r being Element of L st X[p,q,r]
+ proof
+  let p,q be Element of new_set2 A;
+    p in new_set2 A & q in new_set2 A;
+  then p in A \/ {{A},{{A}}} & q in A \/ {{A},{{A}}} by Def4;
+then A3: (p in A or p in {{A},{{A}}}) &
+    (q in A or q in {{A},{{A}}}) by XBOOLE_0:def 2;
+A4:{A} <> {{A}}
+  proof
+   assume {A} = {{A}};
+   then {A} in {A} by TARSKI:def 1;
+   hence contradiction;
+  end;
+A5: not {A} in A by TARSKI:def 1;
+A6: not {{A}} in A
+   proof
+    assume
+A7:  {{A}} in A;
+      A in {A} & {A} in {{A}} by TARSKI:def 1;
+    hence contradiction by A7,ORDINAL1:3;
+   end;
+A8: (p = {A} or p = {{A}}) & p = q iff
+                              p = {A} & q = {A} or p = {{A}} & q = {{A}};
+  per cases by A3,A8,TARSKI:def 2;
+   suppose
+      p in A & q in A;
+    then reconsider p'=p,q'=q as Element of A;
+    take d.(p',q');
+    thus thesis by A5,A6;
+   suppose
+A9: p = {A} & q = {{A}} or q = {A} & p = {{A}};
+    take (d.(x,y)"\/"a)"/\"b;
+    thus thesis by A4,A6,A9,TARSKI:def 1;
+   suppose
+A10: (p = {A} or p = {{A}}) & q = p;
+    take Bottom L;
+    thus thesis by A4,A6,A10,TARSKI:def 1;
+   suppose
+A11: p in A & q = {A};
+    then reconsider p' = p as Element of A;
+    take d.(p',x)"\/"a;
+    thus thesis by A4,A6,A11,TARSKI:def 1;
+   suppose
+A12: p in A & q = {{A}};
+    then reconsider p' = p as Element of A;
+    take d.(p',y)"\/"a;
+    thus thesis by A4,A6,A12,TARSKI:def 1;
+   suppose
+A13: q in A & p = {A};
+    then reconsider q' = q as Element of A;
+    take d.(q',x)"\/"a;
+    thus thesis by A4,A6,A13,TARSKI:def 1;
+   suppose
+A14: q in A & p = {{A}};
+    then reconsider q' = q as Element of A;
+    take d.(q',y)"\/"a;
+    thus thesis by A4,A6,A14,TARSKI:def 1;
+  end;
+  consider f being Function of [:new_set2 A,new_set2 A:],the carrier of L
+  such that
+A15: for p,q being Element of new_set2 A holds X[p,q,f.[p,q]]
+                                                     from FuncEx2D(A2);
+  reconsider f as BiFunction of new_set2 A,L;
+  take f;
+A16: for u,v being Element of A holds f.(u,v) = d.(u,v)
+     proof
+      let u,v be Element of A;
+        u in A \/ {{A}, {{A}}} & v in A \/ {{A}, {{A}}} by XBOOLE_0:def 2;
+      then reconsider u' = u, v' = v as Element of new_set2 A by Def4;
+      thus f.(u,v) = f.[u',v'] by BINOP_1:def 1
+                  .= d.(u,v) by A15;
+     end;
+A17: f.({A},{{A}}) = f.[{A},{{A}}] by BINOP_1:def 1
+                 .= (d.(x,y)"\/"a)"/\"b by A1,A15;
+A18: f.({{A}},{A}) = f.[{{A}},{A}] by BINOP_1:def 1
+                 .= (d.(x,y)"\/"a)"/\"b by A1,A15;
+A19: f.({A},{A}) = f.[{A},{A}] by BINOP_1:def 1
+                .= Bottom L by A1,A15;
+A20: f.({{A}},{{A}}) = f.[{{A}},{{A}}] by BINOP_1:def 1
+                    .= Bottom L by A1,A15;
+A21: for u being Element of A
+                 holds (f.(u,{A}) = d.(u,x)"\/"a & f.(u,{{A}}) = d.(u,y)"\/"a)
+     proof
+      let u be Element of A;
+        u in A \/ {{A}, {{A}}} by XBOOLE_0:def 2;
+      then reconsider u' = u as Element of new_set2 A by Def4;
+      consider u1 being Element of A such that
+A22:    u1 = u' & f.[u',{A}] = d.(u1,x)"\/"a by A1,A15;
+      thus f.(u,{A}) = d.(u,x)"\/"a by A22,BINOP_1:def 1;
+      consider u2 being Element of A such that
+A23:    u2 = u' & f.[u',{{A}}] = d.(u2,y)"\/"a by A1,A15;
+      thus f.(u,{{A}}) = d.(u,y)"\/"a by A23,BINOP_1:def 1;
+     end;
+      for u being Element of A holds (f.({A},u) = d.(u,x)"\/"a &
+                                     f.({{A}},u) = d.(u,y)"\/"a)
+     proof
+      let u be Element of A;
+        u in A \/ {{A}, {{A}}} by XBOOLE_0:def 2;
+      then reconsider u' = u as Element of new_set2 A by Def4;
+      consider u1 being Element of A such that
+A24:    u1 = u' & f.[{A},u'] = d.(u1,x)"\/"a by A1,A15;
+      thus f.({A},u) = d.(u,x)"\/"a by A24,BINOP_1:def 1;
+      consider u2 being Element of A such that
+A25:    u2 = u' & f.[{{A}},u'] = d.(u2,y)"\/"a by A1,A15;
+      thus f.({{A}},u) = d.(u,y)"\/"a by A25,BINOP_1:def 1;
+     end;
+    hence thesis by A16,A17,A18,A19,A20,A21;
+  end;
+ uniqueness
+  proof
+   set x = q`1, y = q`2, a = q`3;
+   let f1,f2 be BiFunction of new_set2 A,L such that
+A26:(for u,v being Element of A holds
+    f1.(u,v) = d.(u,v)) &
+     f1.({A},{A}) = Bottom L &
+      f1.({{A}},{{A}}) = Bottom L &
+       f1.({A},{{A}}) = (d.(q`1,q`2)"\/"q`3)"/\"q`4 &
+        f1.({{A}},{A}) = (d.(q`1,q`2)"\/"q`3)"/\"q`4 &
+     for u being Element of A holds
+      (f1.(u,{A}) = d.(u,q`1)"\/"q`3 &
+       f1.({A},u) = d.(u,q`1)"\/"q`3 &
+        f1.(u,{{A}}) = d.(u,q`2)"\/"q`3 &
+         f1.({{A}},u) = d.(u,q`2)"\/"q`3)
+   and
+A27:(for u,v being Element of A holds
+    f2.(u,v) = d.(u,v)) &
+     f2.({A},{A}) = Bottom L &
+      f2.({{A}},{{A}}) = Bottom L &
+       f2.({A},{{A}}) = (d.(q`1,q`2)"\/"q`3)"/\"q`4 &
+        f2.({{A}},{A}) = (d.(q`1,q`2)"\/"q`3)"/\"q`4 &
+     for u being Element of A holds
+      (f2.(u,{A}) = d.(u,q`1)"\/"q`3 &
+       f2.({A},u) = d.(u,q`1)"\/"q`3 &
+        f2.(u,{{A}}) = d.(u,q`2)"\/"q`3 &
+         f2.({{A}},u) = d.(u,q`2)"\/"q`3);
+     now
+    let p,q be Element of new_set2 A;
+      p in new_set2 A & q in new_set2 A;
+    then p in A \/ {{A},{{A}}} & q in A \/ {{A},{{A}}} by Def4;
+then A28: (p in A or p in {{A},{{A}}}) &
+      (q in A or q in {{A},{{A}}}) by XBOOLE_0:def 2;
+    per cases by A28,TARSKI:def 2;
+     suppose
+A29:   p in A & q in A;
+      hence f1.(p,q) = d.(p,q) by A26
+                    .= f2.(p,q) by A27,A29;
+     suppose
+A30:   p in A & q = {A};
+      then reconsider p' = p as Element of A;
+      thus f1.(p,q) = d.(p',x)"\/"a by A26,A30
+                   .= f2.(p,q) by A27,A30;
+     suppose
+A31:   p in A & q = {{A}};
+      then reconsider p' = p as Element of A;
+      thus f1.(p,q) = d.(p',y)"\/"a by A26,A31
+                   .= f2.(p,q) by A27,A31;
+     suppose
+A32:   p = {A} & q in A;
+      then reconsider q' = q as Element of A;
+      thus f1.(p,q) = d.(q',x)"\/"a by A26,A32
+                   .= f2.(p,q) by A27,A32;
+     suppose p = {A} & q = {A};
+      hence f1.(p,q) = f2.(p,q) by A26,A27;
+     suppose p = {A} & q = {{A}};
+      hence f1.(p,q) = f2.(p,q) by A26,A27;
+     suppose
+A33:   p = {{A}} & q in A;
+      then reconsider q' = q as Element of A;
+      thus f1.(p,q) = d.(q',y)"\/"a by A26,A33
+                   .= f2.(p,q) by A27,A33;
+     suppose p = {{A}} & q = {A};
+      hence f1.(p,q) = f2.(p,q) by A26,A27;
+     suppose p = {{A}} & q = {{A}};
+      hence f1.(p,q) = f2.(p,q) by A26,A27;
+    end;
+   hence f1 = f2 by BINOP_1:2;
+  end;
+end;
+
+theorem Th10:
+ for A being non empty set
+ for L being lower-bounded LATTICE
+ for d being BiFunction of A,L st d is zeroed
+ for q being Element of [:A,A,the carrier of L,the carrier of L:]
+     holds new_bi_fun2(d,q) is zeroed
+  proof
+  let A be non empty set;
+  let L be lower-bounded LATTICE;
+  let d be BiFunction of A,L;
+  assume
+A1: d is zeroed;
+  let q be Element of [:A,A,the carrier of L,the carrier of L:];
+  set f = new_bi_fun2(d,q);
+    for u being Element of new_set2 A holds f.(u,u) = Bottom L
+    proof
+    let u be Element of new_set2 A;
+      u in new_set2 A;
+    then u in A \/ {{A},{{A}}} by Def4;
+then A2: u in A or u in {{A},{{A}}} by XBOOLE_0:def 2;
+   per cases by A2,TARSKI:def 2;
+    suppose u in A;
+     then reconsider u' = u as Element of A;
+     thus f.(u,u) = d.(u',u') by Def5 .= Bottom L by A1,LATTICE5:def 7;
+    suppose u = {A} or u = {{A}};
+     hence f.(u,u) = Bottom L by Def5;
+   end;
+  hence thesis by LATTICE5:def 7;
+ end;
+
+theorem Th11:
+ for A being non empty set
+ for L being lower-bounded LATTICE
+ for d being BiFunction of A,L st d is symmetric
+ for q being Element of [:A,A,the carrier of L,the carrier of L:]
+     holds new_bi_fun2(d,q) is symmetric
+  proof
+   let A be non empty set;
+   let L be lower-bounded LATTICE;
+   let d be BiFunction of A,L; assume
+A1:d is symmetric;
+   let q be Element of [:A,A,the carrier of L,the carrier of L:];
+   set f = new_bi_fun2(d,q), x = q`1, y = q`2, a = q`3, b = q`4;
+   let p,q be Element of new_set2 A;
+     p in new_set2 A & q in new_set2 A;
+   then p in A \/ {{A},{{A}}} & q in A \/ {{A},{{A}}} by Def4;
+then A2: (p in A or p in {{A},{{A}}}) & (q in A or q in {{A},{{A}}}) by
+XBOOLE_0:def 2;
+   per cases by A2,TARSKI:def 2;
+    suppose
+       p in A & q in A;
+     then reconsider p' = p, q' = q as Element of A;
+     thus f.(p,q) = d.(p',q') by Def5
+                 .= d.(q',p') by A1,LATTICE5:def 6
+                 .= f.(q,p) by Def5;
+    suppose
+A3:  p in A & q = {A};
+     then reconsider p' = p as Element of A;
+     thus f.(p,q) = d.(p',x)"\/"a by A3,Def5
+                 .= f.(q,p) by A3,Def5;
+    suppose
+A4:  p in A & q = {{A}};
+     then reconsider p' = p as Element of A;
+     thus f.(p,q) = d.(p',y)"\/"a by A4,Def5
+                 .= f.(q,p) by A4,Def5;
+    suppose
+A5:  p = {A} & q in A;
+     then reconsider q' = q as Element of A;
+     thus f.(p,q) = d.(q',x)"\/"a by A5,Def5
+                 .= f.(q,p) by A5,Def5;
+    suppose
+       p = {A} & q = {A};
+     hence f.(p,q) = f.(q,p);
+    suppose
+A6:  p = {A} & q = {{A}};
+     hence f.(p,q) = (d.(x,y)"\/"a)"/\"b by Def5
+                  .= f.(q,p) by A6,Def5;
+    suppose
+A7:  p = {{A}} & q in A;
+     then reconsider q' = q as Element of A;
+     thus f.(p,q) = d.(q',y)"\/"a by A7,Def5
+                 .= f.(q,p) by A7,Def5;
+    suppose
+A8:  p = {{A}} & q = {A};
+     hence f.(p,q) = (d.(x,y)"\/"a)"/\"b by Def5
+                  .= f.(q,p) by A8,Def5;
+    suppose
+       p = {{A}} & q = {{A}};
+     hence f.(p,q) = f.(q,p);
+ end;
+
+theorem Th12:
+ for A being non empty set
+ for L being lower-bounded LATTICE st L is modular
+ for d being BiFunction of A,L st d is symmetric & d is u.t.i.
+ for q being Element of [:A,A,the carrier of L,the carrier of L:]
+  st d.(q`1,q`2) <= q`3"\/"q`4 holds new_bi_fun2(d,q) is u.t.i.
+ proof
+  let A be non empty set;
+  let L be lower-bounded LATTICE;
+  assume
+A1: L is modular;
+  let d be BiFunction of A,L;
+  assume that
+A2: d is symmetric and
+A3: d is u.t.i.;
+  let q be Element of [:A,A,the carrier of L,the carrier of L:];
+  set x = q`1, y = q`2, a = q`3, b = q`4, f = new_bi_fun2(d,q);
+  assume
+A4: d.(q`1,q`2) <= q`3"\/"q`4;
+  reconsider B = {{A}, {{A}}} as non empty set;
+  reconsider a,b as Element of L;
+A5: for p,q,u being Element of new_set2 A st p in A & q in A & u in A
+      holds f.(p,u) <= f.(p,q) "\/" f.(q,u)
+  proof
+   let p,q,u be Element of new_set2 A;
+   assume
+      p in A & q in A & u in A;
+   then reconsider p' = p, q' = q, u' = u as Element of A;
+A6: f.(p,u) = d.(p',u') by Def5;
+A7: f.(p,q) = d.(p',q') by Def5;
+      f.(q,u) = d.(q',u') by Def5;
+   hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A3,A6,A7,LATTICE5:def 8;
+ end;
+A8: for p,q,u being Element of new_set2 A st p in A & q in A & u in B
+      holds f.(p,u) <= f.(p,q) "\/" f.(q,u)
+  proof
+   let p,q,u be Element of new_set2 A;
+   assume
+A9: p in A & q in A & u in B;
+  per cases by A9,TARSKI:def 2;
+   suppose
+A10: p in A & q in A & u = {A};
+   then reconsider p' = p, q' = q as Element of A;
+A11:f.(p,u) = d.(p',x)"\/"a by A10,Def5;
+A12:f.(q,u) = d.(q',x)"\/"a by A10,Def5;
+A13:f.(p,q) = d.(p',q') by Def5;
+     d.(p',x) <= d.(p',q') "\/" d.(q',x) by A3,LATTICE5:def 8;
+   then d.(p',x)"\/"a <= (d.(p',q') "\/" d.(q',x))"\/"a by WAYBEL_1:3;
+   hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A11,A12,A13,LATTICE3:14;
+   suppose
+A14: p in A & q in A & u = {{A}};
+   then reconsider p' = p, q' = q as Element of A;
+A15: f.(p,u) = d.(p',y)"\/"a by A14,Def5;
+A16: f.(q,u) = d.(q',y)"\/"a by A14,Def5;
+A17: f.(p,q) = d.(p',q') by Def5;
+     d.(p',y) <= d.(p',q') "\/" d.(q',y) by A3,LATTICE5:def 8;
+   then d.(p',y)"\/"a <= (d.(p',q') "\/" d.(q',y))"\/"a by WAYBEL_1:3;
+   hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A15,A16,A17,LATTICE3:14;
+  end;
+
+A18: for p,q,u being Element of new_set2 A st p in A & q in B & u in A
+      holds f.(p,u) <= f.(p,q) "\/" f.(q,u)
+ proof
+ let p,q,u be Element of new_set2 A;
+ assume
+A19: p in A & q in B & u in A;
+ per cases by A19,TARSKI:def 2;
+  suppose
+A20: p in A & u in A & q = {A};
+    then reconsider p' = p, u' = u as Element of A;
+A21: f.(p,q) = d.(p',x)"\/"a by A20,Def5;
+A22: f.(q,u) = d.(u',x)"\/"a by A20,Def5;
+A23: d.(p',x) "\/" d.(u',x) <= (d.(p',x) "\/" d.(u',x))"\/"a by YELLOW_0:22;
+A24: (d.(p',x)"\/"d.(u',x))"\/"a = d.(p',x)"\/"(d.(u',x)"\/"a) by LATTICE3:14
+    .= d.(p',x)"\/"(d.(u',x)"\/"(a"\/"a)) by YELLOW_5:1
+    .= d.(p',x)"\/"((d.(u',x)"\/"a)"\/"a) by LATTICE3:14
+    .= (d.(p',x)"\/"a) "\/" (d.(u',x)"\/"a) by LATTICE3:14;
+      d.(p',u') <= d.(p',x) "\/" d.(x,u') by A3,LATTICE5:def 8;
+    then d.(p',u') <= d.(p',x) "\/" d.(u',x) by A2,LATTICE5:def 6;
+    then d.(p',u') <= (d.(p',x)"\/"a) "\/" (d.(u',x)"\/"a) by A23,A24,ORDERS_1:
+26;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A21,A22,Def5;
+  suppose
+A25: p in A & u in A & q = {{A}};
+    then reconsider p' = p, u' = u as Element of A;
+A26: f.(p,q) = d.(p',y)"\/"a by A25,Def5;
+A27: f.(q,u) = d.(u',y)"\/"a by A25,Def5;
+A28: d.(p',y) "\/" d.(u',y) <= (d.(p',y) "\/" d.(u',y))"\/"a by YELLOW_0:22;
+A29: (d.(p',y)"\/"d.(u',y))"\/"a = d.(p',y)"\/"(d.(u',y)"\/"a) by LATTICE3:14
+     .= d.(p',y)"\/"(d.(u',y)"\/"(a"\/"a)) by YELLOW_5:1
+     .= d.(p',y)"\/"((d.(u',y)"\/"a)"\/"a) by LATTICE3:14
+     .= (d.(p',y)"\/"a)"\/"(d.(u',y)"\/"a) by LATTICE3:14;
+      d.(p',u') <= d.(p',y) "\/" d.(y,u') by A3,LATTICE5:def 8;
+    then d.(p',u') <= d.(p',y) "\/" d.(u',y) by A2,LATTICE5:def 6;
+    then d.(p',u') <= (d.(p',y)"\/"a) "\/" (d.(u',y)"\/"a) by A28,A29,ORDERS_1:
+26;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A26,A27,Def5;
+ end;
+A30: for p,q,u being Element of new_set2 A st p in A & q in B & u in B
+      holds f.(p,u) <= f.(p,q) "\/" f.(q,u)
+   proof
+    let p,q,u be Element of new_set2 A;
+    assume
+A31:  p in A & q in B & u in B;
+    per cases by A31,TARSKI:def 2;
+    suppose
+A32:  p in A & q = {A} & u = {A};
+    then f.(p,q) "\/" f.(q,u) = Bottom L"\/"f.(p,q) by Def5
+                      .= f.(p,q) by WAYBEL_1:4;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A32;
+    suppose
+A33:  p in A & q = {A} & u = {{A}};
+    then reconsider p' = p as Element of A;
+A34:  f.(p,q) = d.(p',x)"\/"a by A33,Def5;
+A35:  f.(q,u) = (d.(x,y)"\/"a)"/\"b by A33,Def5;
+   a <= a "\/" d.(x,y) by YELLOW_0:22;
+then A36:  a"\/"((d.(x,y)"\/"a)"/\"b) = (a"\/"b)"/\"(a"\/"
+d.(x,y)) by A1,YELLOW11:def 3;
+A37: d.(x,y)"\/"a = (d.(x,y)"\/"a)"/\"(d.(x,y)"\/"a) by YELLOW_5:2;
+      a <= a;
+    then d.(x,y)"\/"a <= (a"\/"b)"\/"a by A4,YELLOW_3:3;
+    then (d.(x,y)"\/"a)"/\"(d.(x,y)"\/"a)
+               <= (d.(x,y)"\/"a)"/\"((a"\/"b)"\/"a) by YELLOW_5:6;
+then A38: d.(p',x)"\/"((d.(x,y)"\/"a)"/\"(d.(x,y)"\/"a))
+               <= d.(p',x)"\/"((d.(x,y)"\/"a)"/\"((a"\/"b)"\/"
+a)) by WAYBEL_1:3;
+   f.(p,q) "\/" f.(q,u) = d.(p',x)"\/"((a"\/"b)"/\"(a"\/"
+d.(x,y))) by A34,A35,A36,LATTICE3:14
+               .= d.(p',x)"\/"((d.(x,y)"\/"a)"/\"((a"\/"a)"\/"b)) by YELLOW_5:1
+               .= d.(p',x)"\/"((d.(x,y)"\/"a)"/\"((a"\/"b)"\/"
+a)) by LATTICE3:14;
+then A39: (d.(p',x)"\/"d.(x,y))"\/"a <= f.(p,q) "\/" f.(q,u) by A37,A38,
+LATTICE3:14;
+      d.(p',y) <= d.(p',x)"\/"d.(x,y) by A3,LATTICE5:def 8;
+    then d.(p',y)"\/"a <= (d.(p',x)"\/"d.(x,y))"\/"a by YELLOW_5:7;
+then d.(p',y)"\/"a <= f.(p,q) "\/" f.(q,u) by A39,ORDERS_1:26;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A33,Def5;
+    suppose
+A40:  p in A & q = {{A}} & u = {A};
+    then reconsider p' = p as Element of A;
+A41:  f.(p,q) = d.(p',y)"\/"a by A40,Def5;
+A42:  f.(q,u) = (d.(x,y)"\/"a)"/\"b by A40,Def5;
+   a <= a "\/" d.(x,y) by YELLOW_0:22;
+then A43:  a"\/"((d.(x,y)"\/"a)"/\"b) = (a"\/"b)"/\"(a"\/"
+d.(x,y)) by A1,YELLOW11:def 3;
+A44: d.(x,y)"\/"a = (d.(x,y)"\/"a)"/\"(d.(x,y)"\/"a) by YELLOW_5:2;
+      a <= a;
+    then d.(x,y)"\/"a <= (a"\/"b)"\/"a by A4,YELLOW_3:3;
+    then (d.(x,y)"\/"a)"/\"(d.(x,y)"\/"a)
+               <= (d.(x,y)"\/"a)"/\"((a"\/"b)"\/"a) by YELLOW_5:6;
+then A45: d.(p',y)"\/"((d.(x,y)"\/"a)"/\"(d.(x,y)"\/"a))
+               <= d.(p',y)"\/"((d.(x,y)"\/"a)"/\"((a"\/"b)"\/"
+a)) by WAYBEL_1:3;
+   f.(p,q) "\/" f.(q,u) = d.(p',y)"\/"((a"\/"b)"/\"(a"\/"
+d.(x,y))) by A41,A42,A43,LATTICE3:14
+               .= d.(p',y)"\/"((d.(x,y)"\/"a)"/\"((a"\/"a)"\/"b)) by YELLOW_5:1
+               .= d.(p',y)"\/"((d.(x,y)"\/"a)"/\"((a"\/"b)"\/"
+a)) by LATTICE3:14;
+then A46: (d.(p',y)"\/"d.(x,y))"\/"a <= f.(p,q) "\/" f.(q,u) by A44,A45,
+LATTICE3:14;
+      d.(y,x) = d.(x,y) by A2,LATTICE5:def 6;
+    then d.(p',x) <= d.(p',y)"\/"d.(x,y) by A3,LATTICE5:def 8;
+    then d.(p',x)"\/"a <= (d.(p',y)"\/"d.(x,y))"\/"a by YELLOW_5:7;
+then d.(p',x)"\/"a <= f.(p,q) "\/" f.(q,u) by A46,ORDERS_1:26;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A40,Def5;
+    suppose
+A47:  p in A & q = {{A}} & u = {{A}};
+    then f.(p,q) "\/" f.(q,u) = Bottom L"\/"f.(p,q) by Def5
+                      .= f.(p,q) by WAYBEL_1:4;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A47;
+   end;
+A48: for p,q,u being Element of new_set2 A st p in B & q in A & u in A
+      holds f.(p,u) <= f.(p,q) "\/" f.(q,u)
+   proof
+    let p,q,u be Element of new_set2 A;
+    assume
+A49: p in B & q in A & u in A;
+    then reconsider q' = q, u' = u as Element of A;
+    per cases by A49,TARSKI:def 2;
+    suppose
+A50:  p = {A} & q in A & u in A;
+then A51:  f.(p,q) = d.(q',x)"\/"a by Def5;
+A52:  f.(q,u) = d.(q',u') by Def5;
+       d.(u',x) <= d.(u',q') "\/" d.(q',x) by A3,LATTICE5:def 8;
+     then d.(u',x) <= d.(q',u') "\/" d.(q',x) by A2,LATTICE5:def 6;
+     then d.(u',x)"\/"a <= (d.(q',x)"\/"d.(q',u'))"\/"a by WAYBEL_1:3;
+     then d.(u',x)"\/"a <= (d.(q',x)"\/"a)"\/"d.(q',u') by LATTICE3:14;
+     hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A50,A51,A52,Def5;
+    suppose
+A53:  p = {{A}} & q in A & u in A;
+then A54:  f.(p,q) = d.(q',y)"\/"a by Def5;
+A55:  f.(q,u) = d.(q',u') by Def5;
+       d.(u',y) <= d.(u',q') "\/" d.(q',y) by A3,LATTICE5:def 8;
+     then d.(u',y) <= d.(q',u') "\/" d.(q',y) by A2,LATTICE5:def 6;
+     then d.(u',y)"\/"a <= (d.(q',y)"\/"d.(q',u'))"\/"a by WAYBEL_1:3;
+     then d.(u',y)"\/"a <= (d.(q',y)"\/"a)"\/"d.(q',u') by LATTICE3:14;
+     hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A53,A54,A55,Def5;
+   end;
+A56: for p,q,u being Element of new_set2 A st p in B & q in A & u in B
+      holds f.(p,u) <= f.(p,q) "\/" f.(q,u)
+   proof
+    let p,q,u be Element of new_set2 A;
+    assume
+A57: p in B & q in A & u in B;
+    per cases by A57,TARSKI:def 2;
+    suppose
+   q in A & p = {A} & u = {A};
+    then f.(p,u) = Bottom L by Def5;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by YELLOW_0:44;
+    suppose
+A58:  q in A & p = {A} & u = {{A}};
+    then reconsider q' = q as Element of A;
+A59:  f.(p,u) = (d.(x,y)"\/"a)"/\"b by A58,Def5;
+   f.(p,q) = d.(q',x)"\/"a by A58,Def5;
+then A60:  f.(p,q) "\/" f.(q,u) = d.(q',x)"\/"a"\/"(d.(q',y)"\/"a) by A58,Def5
+                      .= d.(q',x)"\/"(d.(q',y)"\/"a)"\/"a by LATTICE3:14
+                      .= d.(q',x)"\/"d.(q',y)"\/"a"\/"a by LATTICE3:14
+                      .= d.(q',x)"\/"d.(q',y)"\/"(a"\/"a) by LATTICE3:14
+                      .= d.(q',x)"\/"d.(q',y)"\/"a by YELLOW_5:1;
+      d.(q',x) = d.(x,q') by A2,LATTICE5:def 6;
+    then d.(x,y) <= d.(q',x)"\/"d.(q',y) by A3,LATTICE5:def 8;
+then A61:  d.(x,y)"\/"a <= f.(p,q) "\/" f.(q,u) by A60,YELLOW_5:7;
+      (d.(x,y)"\/"a)"/\"b <= d.(x,y)"\/"a by YELLOW_0:23;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A59,A61,ORDERS_1:26;
+    suppose
+A62:  q in A & p = {{A}} & u = {A};
+    then reconsider q' = q as Element of A;
+A63:  f.(p,u) = (d.(x,y)"\/"a)"/\"b by A62,Def5;
+   f.(p,q) = d.(q',y)"\/"a by A62,Def5;
+then A64:  f.(p,q) "\/" f.(q,u) = d.(q',x)"\/"a"\/"(d.(q',y)"\/"a) by A62,Def5
+                      .= d.(q',x)"\/"(d.(q',y)"\/"a)"\/"a by LATTICE3:14
+                      .= d.(q',x)"\/"d.(q',y)"\/"a"\/"a by LATTICE3:14
+                      .= d.(q',x)"\/"d.(q',y)"\/"(a"\/"a) by LATTICE3:14
+                      .= d.(q',x)"\/"d.(q',y)"\/"a by YELLOW_5:1;
+      d.(q',x) = d.(x,q') by A2,LATTICE5:def 6;
+    then d.(x,y) <= d.(q',x)"\/"d.(q',y) by A3,LATTICE5:def 8;
+then A65:  d.(x,y)"\/"a <= f.(p,q) "\/" f.(q,u) by A64,YELLOW_5:7;
+      (d.(x,y)"\/"a)"/\"b <= d.(x,y)"\/"a by YELLOW_0:23;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A63,A65,ORDERS_1:26;
+    suppose
+   q in A & p = {{A}} & u = {{A}};
+    then f.(p,u) = Bottom L by Def5;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by YELLOW_0:44;
+   end;
+A66: for p,q,u being Element of new_set2 A st p in B & q in B & u in A
+      holds f.(p,u) <= f.(p,q) "\/" f.(q,u)
+   proof
+    let p,q,u be Element of new_set2 A;
+    assume
+A67: p in B & q in B & u in A;
+    per cases by A67,TARSKI:def 2;
+    suppose
+A68:  u in A & q = {A} & p = {A};
+    then f.(p,q)"\/"f.(q,u) = Bottom L"\/"f.(q,u) by Def5
+                    .= f.(p,u) by A68,WAYBEL_1:4;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u);
+    suppose
+A69:  u in A & q = {A} & p = {{A}};
+    then reconsider u' = u as Element of A;
+A70:  f.(p,q) = (d.(x,y)"\/"a)"/\"b by A69,Def5;
+A71:  f.(q,u) = d.(u',x)"\/"a by A69,Def5;
+   a <= a "\/" d.(x,y) by YELLOW_0:22;
+then A72:  a"\/"((d.(x,y)"\/"a)"/\"b) = (a"\/"b)"/\"(a"\/"
+d.(x,y)) by A1,YELLOW11:def 3;
+A73: d.(x,y)"\/"a = (d.(x,y)"\/"a)"/\"(d.(x,y)"\/"a) by YELLOW_5:2;
+      a <= a;
+    then d.(x,y)"\/"a <= (a"\/"b)"\/"a by A4,YELLOW_3:3;
+    then (d.(x,y)"\/"a)"/\"(d.(x,y)"\/"a)
+               <= (d.(x,y)"\/"a)"/\"((a"\/"b)"\/"a) by YELLOW_5:6;
+then A74: d.(u',x)"\/"((d.(x,y)"\/"a)"/\"(d.(x,y)"\/"a))
+               <= d.(u',x)"\/"((d.(x,y)"\/"a)"/\"((a"\/"b)"\/"
+a)) by WAYBEL_1:3;
+   f.(p,q) "\/" f.(q,u) = d.(u',x)"\/"((a"\/"b)"/\"(a"\/"
+d.(x,y))) by A70,A71,A72,LATTICE3:14
+               .= d.(u',x)"\/"((d.(x,y)"\/"a)"/\"((a"\/"a)"\/"b)) by YELLOW_5:1
+               .= d.(u',x)"\/"((d.(x,y)"\/"a)"/\"((a"\/"b)"\/"
+a)) by LATTICE3:14;
+then A75: (d.(u',x)"\/"d.(x,y))"\/"a <= f.(p,q) "\/" f.(q,u) by A73,A74,
+LATTICE3:14;
+      d.(u',y) <= d.(u',x)"\/"d.(x,y) by A3,LATTICE5:def 8;
+    then d.(u',y)"\/"a <= (d.(u',x)"\/"d.(x,y))"\/"a by YELLOW_5:7;
+then d.(u',y)"\/"a <= f.(p,q) "\/" f.(q,u) by A75,ORDERS_1:26;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A69,Def5;
+    suppose
+A76:  u in A & q = {{A}} & p = {A};
+    then reconsider u' = u as Element of A;
+A77:  f.(p,q) = (d.(x,y)"\/"a)"/\"b by A76,Def5;
+A78:  f.(q,u) = d.(u',y)"\/"a by A76,Def5;
+   a <= a "\/" d.(x,y) by YELLOW_0:22;
+then A79:  a"\/"((d.(x,y)"\/"a)"/\"b) = (a"\/"b)"/\"(a"\/"
+d.(x,y)) by A1,YELLOW11:def 3;
+A80: d.(x,y)"\/"a = (d.(x,y)"\/"a)"/\"(d.(x,y)"\/"a) by YELLOW_5:2;
+      a <= a;
+    then d.(x,y)"\/"a <= (a"\/"b)"\/"a by A4,YELLOW_3:3;
+    then (d.(x,y)"\/"a)"/\"(d.(x,y)"\/"a)
+               <= (d.(x,y)"\/"a)"/\"((a"\/"b)"\/"a) by YELLOW_5:6;
+then A81: d.(u',y)"\/"((d.(x,y)"\/"a)"/\"(d.(x,y)"\/"a))
+               <= d.(u',y)"\/"((d.(x,y)"\/"a)"/\"((a"\/"b)"\/"
+a)) by WAYBEL_1:3;
+   f.(p,q) "\/" f.(q,u) = d.(u',y)"\/"((a"\/"b)"/\"(a"\/"
+d.(x,y))) by A77,A78,A79,LATTICE3:14
+               .= d.(u',y)"\/"((d.(x,y)"\/"a)"/\"((a"\/"a)"\/"b)) by YELLOW_5:1
+               .= d.(u',y)"\/"((d.(x,y)"\/"a)"/\"((a"\/"b)"\/"
+a)) by LATTICE3:14;
+then A82: (d.(u',y)"\/"d.(x,y))"\/"a <= f.(p,q) "\/" f.(q,u) by A80,A81,
+LATTICE3:14;
+      d.(y,x) = d.(x,y) by A2,LATTICE5:def 6;
+    then d.(u',x) <= d.(u',y)"\/"d.(x,y) by A3,LATTICE5:def 8;
+    then d.(u',x)"\/"a <= (d.(u',y)"\/"d.(x,y))"\/"a by YELLOW_5:7;
+then d.(u',x)"\/"a <= f.(p,q) "\/" f.(q,u) by A82,ORDERS_1:26;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A76,Def5;
+    suppose
+A83:  u in A & q = {{A}} & p = {{A}};
+    then f.(p,q)"\/"f.(q,u) = Bottom L"\/"f.(q,u) by Def5
+                    .= f.(p,u) by A83,WAYBEL_1:4;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u);
+   end;
+A84: for p,q,u being Element of new_set2 A st p in B & q in B & u in B
+      holds f.(p,u) <= f.(p,q) "\/" f.(q,u)
+   proof
+   let p,q,u be Element of new_set2 A;
+   assume
+A85:p in B & q in B & u in B;
+   per cases by A85,TARSKI:def 2;
+    suppose
+A86:  p = {A} & q = {A} & u = {A};
+      Bottom L <= f.(p,q) "\/" f.(q,u) by YELLOW_0:44;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A86,Def5;
+    suppose
+A87:  p = {A} & q = {A} & u = {{A}};
+     then f.(p,q) "\/" f.(q,u) = Bottom L "\/" f.(p,u) by Def5
+                       .= Bottom L "\/" ((d.(x,y)"\/"a)"/\"b) by A87,Def5
+                       .= ((d.(x,y)"\/"a)"/\"b) by WAYBEL_1:4;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A87,Def5;
+    suppose
+A88:  p = {A} & q = {{A}} & u = {A};
+      Bottom L <= f.(p,q) "\/" f.(q,u) by YELLOW_0:44;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A88,Def5;
+    suppose
+A89:  p = {A} & q = {{A}} & u = {{A}};
+    then f.(p,q) "\/" f.(q,u) = ((d.(x,y)"\/"a)"/\"b)"\/"f.(q,u) by Def5
+                      .= Bottom L"\/"((d.(x,y)"\/"a)"/\"b) by A89,Def5
+                      .= ((d.(x,y)"\/"a)"/\"b) by WAYBEL_1:4;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A89,Def5;
+    suppose
+A90:  p = {{A}} & q = {A} & u = {A};
+    then f.(p,q) "\/" f.(q,u) = ((d.(x,y)"\/"a)"/\"b)"\/" f.(q,u) by Def5
+                      .= Bottom L"\/"((d.(x,y)"\/"a)"/\"b) by A90,Def5
+                      .= ((d.(x,y)"\/"a)"/\"b) by WAYBEL_1:4
+                      .= f.(p,q) by A90,Def5;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A90;
+    suppose
+A91:  p = {{A}} & q = {A} & u = {{A}};
+      Bottom L <= f.(p,q) "\/" f.(q,u) by YELLOW_0:44;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A91,Def5;
+    suppose
+A92:  p = {{A}} & q = {{A}} & u = {A};
+    then f.(p,q) "\/" f.(q,u) = Bottom L"\/" f.(p,u) by Def5
+                      .= Bottom L"\/"((d.(x,y)"\/"a)"/\"b) by A92,Def5
+                      .= ((d.(x,y)"\/"a)"/\"b) by WAYBEL_1:4;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A92,Def5;
+    suppose
+A93:  p = {{A}} & q = {{A}} & u = {{A}};
+      Bottom L <= f.(p,q) "\/" f.(q,u) by YELLOW_0:44;
+    hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A93,Def5;
+   end;
+    for p,q,u being Element of new_set2 A holds f.(p,u) <= f.(p,q) "\/" f.(q,u)
+   proof
+    let p,q,u be Element of new_set2 A;
+      p in new_set2 A & q in new_set2 A & u in new_set2 A;
+then A94:  p in A \/ B & q in A \/ B & u in A \/ B by Def4;
+per cases by A94,XBOOLE_0:def 2;
+ suppose p in A & q in A & u in A;
+  hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A5;
+ suppose p in A & q in A & u in B;
+  hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A8;
+ suppose p in A & q in B & u in A;
+  hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A18;
+ suppose p in A & q in B & u in B;
+  hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A30;
+ suppose p in B & q in A & u in A;
+  hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A48;
+ suppose p in B & q in A & u in B;
+  hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A56;
+ suppose p in B & q in B & u in A;
+  hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A66;
+ suppose p in B & q in B & u in B;
+  hence f.(p,u) <= f.(p,q) "\/" f.(q,u) by A84;
+ end;
+ hence f is u.t.i. by LATTICE5:def 8;
+end;
+
+theorem Th13:
+ for A be set holds A c= new_set2 A
+  proof
+   let A be set;
+     A c= A \/ {{A}, {{A}}} by XBOOLE_1:7;
+   hence thesis by Def4;
+  end;
+
+theorem Th14:
+ for A being non empty set
+ for L being lower-bounded LATTICE
+ for d be BiFunction of A,L
+ for q be Element of [:A,A,the carrier of L,the carrier of L:]
+     holds d c= new_bi_fun2(d,q)
+ proof
+  let A be non empty set;
+  let L be lower-bounded LATTICE;
+  let d be BiFunction of A,L;
+  let q be Element of [:A,A,the carrier of L,the carrier of L:];
+  set g = new_bi_fun2(d,q);
+A1: dom d = [:A,A:] & dom g = [:new_set2 A,new_set2 A:] by FUNCT_2:def 1;
+    A c= new_set2 A by Th13;
+then A2: dom d c= dom g by A1,ZFMISC_1:119;
+    for z being set st z in dom d holds d.z = g.z
+   proof
+    let z be set; assume
+A3:  z in dom d;
+     then consider x,y being set such that
+A4:  [x,y] = z by ZFMISC_1:102;
+     reconsider x' = x, y' = y as Element of A by A3,A4,ZFMISC_1:106;
+       d.[x,y] = d.(x',y') by BINOP_1:def 1
+            .= g.(x',y') by Def5
+            .= g.[x,y] by BINOP_1:def 1;
+     hence d.z = g.z by A4;
+    end;
+  hence d c= new_bi_fun2(d,q) by A2,GRFUNC_1:8;
+ end;
+
+reserve x,y for set, C for Ordinal, L0,L1 for T-Sequence;
+
+definition
+ let A be non empty set;
+ let O be Ordinal;
+func ConsecutiveSet2(A,O) means :Def6:
+  ex L0 being T-Sequence st it = last L0 & dom L0 = succ O & L0.{} = A &
+   (for C being Ordinal st succ C in succ O holds L0.succ C = new_set2(L0.C)) &
+     for C being Ordinal st C in succ O & C <> {} & C is_limit_ordinal
+       holds L0.C = union rng (L0|C);
+ correctness
+  proof
+    deffunc C(Ordinal,set) = new_set2 $2;
+    deffunc D(set,T-Sequence) = union rng $2;
+  thus (ex x,L0 st x = last L0 & dom L0 = succ O & L0.{} = A &
+     (for C st succ C in succ O holds L0.succ C = C(C,L0.C)) &
+      for C st C in succ O & C <> {} & C is_limit_ordinal
+             holds L0.C = D(C,L0|C) ) &
+   for x1,x2 being set st
+    (ex L0 st x1 = last L0 & dom L0 = succ O & L0.{} = A &
+      (for C st succ C in succ O holds L0.succ C = C(C,L0.C)) &
+       for C st C in succ O & C <> {} & C is_limit_ordinal
+              holds L0.C = D(C,L0|C) ) &
+    (ex L0 st x2 = last L0 & dom L0 = succ O & L0.{} = A &
+      (for C st succ C in succ O holds L0.succ C = C(C,L0.C)) &
+       for C st C in succ O & C <> {} & C is_limit_ordinal
+              holds L0.C = D(C,L0|C) )
+     holds x1 = x2 from TS_Def;
+  end;
+end;
+
+theorem Th15:
+ for A being non empty set holds ConsecutiveSet2(A,{}) = A
+ proof
+ let A be non empty set;
+  deffunc C(Ordinal,set) = new_set2 $2;
+  deffunc D(set,T-Sequence) = union rng $2;
+  deffunc F(Ordinal) = ConsecutiveSet2(A,$1);
+A1:for O being Ordinal, It being set holds It = F(O) iff
+  ex L0 being T-Sequence st It = last L0 & dom L0 = succ O &
+   L0.{} = A &
+   (for C being Ordinal st
+    succ C in succ O holds L0.succ C = C(C,L0.C)) &
+      for C being Ordinal st C in succ O & C <> {} & C is_limit_ordinal
+             holds L0.C = D(C,L0|C) by Def6;
+ thus F({}) = A from TS_Result0(A1);
+end;
+
+theorem Th16:
+ for A being non empty set
+ for O being Ordinal
+     holds ConsecutiveSet2(A,succ O) = new_set2 ConsecutiveSet2(A,O)
+ proof
+ let A be non empty set;
+ let O be Ordinal;
+  deffunc C(Ordinal,set) = new_set2 $2;
+  deffunc D(set,T-Sequence) = union rng $2;
+  deffunc F(Ordinal) = ConsecutiveSet2(A,$1);
+A1: for O being Ordinal, It being set holds It = F(O) iff
+  ex L0 being T-Sequence st It = last L0 & dom L0 = succ O &
+   L0.{} = A &
+   (for C being Ordinal st succ C in succ O holds L0.succ C = C(C,L0.C)) &
+      for C being Ordinal st C in succ O & C <> {} & C is_limit_ordinal
+             holds L0.C = D(C,L0|C) by Def6;
+   for O being Ordinal holds F(succ O) = C(O,F(O)) from TS_ResultS(A1);
+  hence thesis;
+end;
+
+theorem Th17:
+ for A being non empty set
+ for O being Ordinal
+ for T being T-Sequence
+     holds O <> {} & O is_limit_ordinal & dom T = O & (for O1 being Ordinal
+            st O1 in O holds T.O1 = ConsecutiveSet2(A,O1))
+             implies ConsecutiveSet2(A,O) = union rng T
+ proof
+ let A be non empty set;
+ let O be Ordinal;
+ let T be T-Sequence;
+  deffunc C(Ordinal,set) = new_set2 $2;
+  deffunc D(set,T-Sequence) = union rng $2;
+  deffunc F(Ordinal) = ConsecutiveSet2(A,$1);
+ assume that
+A1:  O <> {} & O is_limit_ordinal and
+A2:  dom T = O and
+A3:  for O1 being Ordinal st O1 in O holds T.O1 = F(O1);
+A4:  for O being Ordinal, It being set holds It = F(O) iff
+  ex L0 being T-Sequence st It = last L0 & dom L0 = succ O &
+   L0.{} = A &
+   (for C being Ordinal st succ C in succ O holds L0.succ C = C(C,L0.C)) &
+      for C being Ordinal st C in succ O & C <> {} & C is_limit_ordinal
+             holds L0.C = D(C,L0|C) by Def6;
+ thus F(O) = D(O,T) from TS_ResultL(A4,A1,A2,A3);
+end;
+
+reserve O1,O2 for Ordinal;
+
+definition
+ let A be non empty set;
+ let O be Ordinal;
+cluster ConsecutiveSet2(A,O) -> non empty;
+coherence
+ proof
+   defpred X[Ordinal] means ConsecutiveSet2(A,$1) is non empty;
+A1: X[{}] by Th15;
+A2: for O1 being Ordinal st X[O1] holds X[succ O1]
+     proof
+     let O1 be Ordinal;
+     assume ConsecutiveSet2(A,O1) is non empty;
+       ConsecutiveSet2(A,succ O1) = new_set2 ConsecutiveSet2(A,O1) by Th16;
+     hence ConsecutiveSet2(A,succ O1) is non empty;
+    end;
+A3: for O1 st O1 <> {} & O1 is_limit_ordinal & for O2 st O2 in O1 holds X[O2]
+       holds X[O1]
+    proof let O1 be Ordinal;
+     assume
+A4:   O1 <> {} & O1 is_limit_ordinal &
+     for O2 being Ordinal st O2 in O1
+     holds ConsecutiveSet2(A,O2) is non empty;
+     deffunc U(Ordinal) = ConsecutiveSet2(A,$1);
+     consider Ls being T-Sequence such that
+A5:   dom Ls = O1 & for O2 being Ordinal st O2 in O1 holds
+             Ls.O2 = U(O2) from TS_Lambda;
+A6:   ConsecutiveSet2(A,O1) = union rng Ls by A4,A5,Th17;
+A7:   {} in O1 by A4,ORDINAL3:10;
+     then Ls.{} = ConsecutiveSet2(A,{}) by A5
+         .= A by Th15;
+     then A in rng Ls by A5,A7,FUNCT_1:def 5;
+then A8:   A c= ConsecutiveSet2(A,O1) by A6,ZFMISC_1:92;
+     consider x being set such that A9:x in A by XBOOLE_0:def 1;
+     thus ConsecutiveSet2(A,O1) is non empty by A8,A9;
+    end;
+   for O being Ordinal holds X[O]
+   from Ordinal_Ind(A1,A2,A3);
+  hence thesis;
+ end;
+end;
+
+theorem Th18:
+ for A being non empty set
+ for O being Ordinal holds A c= ConsecutiveSet2(A,O)
+ proof
+ let A be non empty set;
+ let O be Ordinal;
+   defpred X[Ordinal] means A c= ConsecutiveSet2(A,$1);
+A1: X[{}]  by Th15;
+A2: for O1 being Ordinal st X[O1] holds X[succ O1]
+  proof
+   let O1 be Ordinal;
+   assume
+A3: A c= ConsecutiveSet2(A,O1);
+     ConsecutiveSet2(A,succ O1) = new_set2 ConsecutiveSet2(A,O1) by Th16;
+   then ConsecutiveSet2(A,O1) c= ConsecutiveSet2(A,succ O1) by Th13;
+   hence A c= ConsecutiveSet2(A,succ O1) by A3,XBOOLE_1:1;
+  end;
+A4: for O1 st O1 <> {} & O1 is_limit_ordinal & for O2 st O2 in O1 holds X[O2]
+       holds X[O1]
+       proof
+        let O2 be Ordinal;
+        assume
+A5:      O2 <> {} & O2 is_limit_ordinal &
+        for O1 be Ordinal st O1 in O2 holds A c= ConsecutiveSet2(A,O1);
+     deffunc U(Ordinal) = ConsecutiveSet2(A,$1);
+        consider Ls being T-Sequence such that
+A6:      dom Ls = O2 & for O1 being Ordinal st O1 in O2 holds
+                Ls.O1 = U(O1) from TS_Lambda;
+A7:      ConsecutiveSet2(A,O2) = union rng Ls by A5,A6,Th17;
+A8:      {} in O2 by A5,ORDINAL3:10;
+        then Ls.{} = ConsecutiveSet2(A,{}) by A6 .= A by Th15;
+        then A in rng Ls by A6,A8,FUNCT_1:def 5;
+        hence A c= ConsecutiveSet2(A,O2) by A7,ZFMISC_1:92;
+       end;
+   for O being Ordinal holds X[O]
+     from Ordinal_Ind(A1,A2,A4);
+   hence thesis;
+ end;
+
+definition
+ let A be non empty set;
+ let L be lower-bounded LATTICE;
+ let d be BiFunction of A,L;
+ let q be QuadrSeq of d;
+ let O be Ordinal;
+ assume A1: O in dom q;
+func Quadr2(q,O) -> Element of [:ConsecutiveSet2(A,O),ConsecutiveSet2(A,O),
+                     the carrier of L,the carrier of L:] equals :Def7:
+  q.O;
+ correctness
+  proof
+     q.O in rng q by A1,FUNCT_1:def 5;
+   then q.O in {[x,y,a,b] where x is Element of A, y is Element of A,
+         a is Element of L, b is Element of L: d.(x,y) <= a"\/"b}
+                                               by LATTICE5:def 14;
+   then consider x,y be Element of A, a,b be Element of L such that
+A2: q.O = [x,y,a,b] & d.(x,y) <= a"\/"b;
+A3: x in A & y in A;
+     A c= ConsecutiveSet2(A,O) by Th18;
+   then reconsider x,y as Element of ConsecutiveSet2(A,O) by A3;
+   reconsider a,b as Element of L;
+   reconsider z = [x,y,a,b] as Element of
+    [:ConsecutiveSet2(A,O),ConsecutiveSet2(A,O),
+             the carrier of L,the carrier of L:];
+     z = q.O by A2;
+   hence thesis;
+  end;
+end;
+
+definition
+ let A be non empty set;
+ let L be lower-bounded LATTICE;
+ let d be BiFunction of A,L;
+ let q be QuadrSeq of d;
+ let O be Ordinal;
+func ConsecutiveDelta2(q,O) means :Def8:
+ ex L0 being T-Sequence st it = last L0 & dom L0 = succ O & L0.{} = d &
+  (for C being Ordinal st succ C in succ O holds
+   L0.succ C = new_bi_fun2(BiFun(L0.C,ConsecutiveSet2(A,C),L),Quadr2(q,C))) &
+    for C being Ordinal st C in succ O & C <> {} &
+     C is_limit_ordinal holds L0.C = union rng(L0|C);
+ correctness
+  proof
+    deffunc C(Ordinal,set) =
+       new_bi_fun2(BiFun($2,ConsecutiveSet2(A,$1),L),Quadr2(q,$1));
+    deffunc D(set,T-Sequence) = union rng $2;
+   thus (ex x,L0 st x = last L0 & dom L0 = succ O & L0.{} = d &
+    (for C st succ C in succ O holds L0.succ C = C(C,L0.C)) &
+      for C st C in succ O & C <> {} & C is_limit_ordinal
+             holds L0.C = D(C,L0|C)) &
+   for x1,x2 being set st
+    (ex L0 st x1 = last L0 & dom L0 = succ O & L0.{} = d &
+      (for C st succ C in succ O holds L0.succ C = C(C,L0.C)) &
+       for C st C in succ O & C <> {} & C is_limit_ordinal
+              holds L0.C = D(C,L0|C) ) &
+    (ex L0 st x2 = last L0 & dom L0 = succ O & L0.{} = d &
+      (for C st succ C in succ O holds L0.succ C = C(C,L0.C)) &
+       for C st C in succ O & C <> {} & C is_limit_ordinal
+              holds L0.C = D(C,L0|C) )
+     holds x1 = x2 from TS_Def;
+  end;
+end;
+
+theorem Th19:
+ for A being non empty set
+ for L be lower-bounded LATTICE
+ for d being BiFunction of A,L
+ for q being QuadrSeq of d holds ConsecutiveDelta2(q,{}) = d
+proof
+ let A be non empty set;
+ let L be lower-bounded LATTICE;
+ let d be BiFunction of A,L;
+ let q be QuadrSeq of d;
+  deffunc C(Ordinal,set) =
+       new_bi_fun2(BiFun($2,ConsecutiveSet2(A,$1),L),Quadr2(q,$1));
+  deffunc D(set,T-Sequence) = union rng $2;
+  deffunc F(Ordinal) = ConsecutiveDelta2(q,$1);
+A1: for O being Ordinal, It being set holds It = F(O) iff
+  ex L0 being T-Sequence st It = last L0 & dom L0 = succ O &
+   L0.{} = d &
+   (for C being Ordinal st succ C in succ O holds L0.succ C = C(C,L0.C)) &
+      for C being Ordinal st C in succ O & C <> {} & C is_limit_ordinal
+             holds L0.C = D(C,L0|C) by Def8;
+ thus F({}) = d from TS_Result0(A1);
+end;
+
+theorem Th20:
+ for A being non empty set
+ for L be lower-bounded LATTICE
+ for d be BiFunction of A,L
+ for q being QuadrSeq of d
+ for O being Ordinal holds
+  ConsecutiveDelta2(q,succ O) = new_bi_fun2(BiFun(ConsecutiveDelta2(q,O),
+   ConsecutiveSet2(A,O),L),Quadr2(q,O))
+proof
+ let A be non empty set;
+ let L be lower-bounded LATTICE;
+ let d be BiFunction of A,L;
+ let q be QuadrSeq of d;
+ let O be Ordinal;
+  deffunc C(Ordinal,set) =
+       new_bi_fun2(BiFun($2,ConsecutiveSet2(A,$1),L),Quadr2(q,$1));
+  deffunc D(set,T-Sequence) = union rng $2;
+  deffunc F(Ordinal) = ConsecutiveDelta2(q,$1);
+A1: for O being Ordinal, It being set holds It = F(O) iff
+  ex L0 being T-Sequence st It = last L0 & dom L0 = succ O &
+   L0.{} = d &
+   (for C being Ordinal st succ C in succ O holds L0.succ C = C(C,L0.C)) &
+      for C being Ordinal st C in succ O & C <> {} & C is_limit_ordinal
+             holds L0.C = D(C,L0|C) by Def8;
+   for O being Ordinal holds F(succ O) = C(O,F(O)) from TS_ResultS(A1);
+  hence thesis;
+end;
+
+theorem Th21:
+ for A being non empty set
+ for L be lower-bounded LATTICE
+ for d be BiFunction of A,L
+ for q being QuadrSeq of d
+ for T being T-Sequence
+ for O being Ordinal holds O <> {} & O is_limit_ordinal & dom T = O &
+      (for O1 being Ordinal st O1 in O holds T.O1 = ConsecutiveDelta2(q,O1))
+       implies ConsecutiveDelta2(q,O) = union rng T
+   proof
+    let A be non empty set;
+    let L be lower-bounded LATTICE;
+    let d be BiFunction of A,L;
+    let q be QuadrSeq of d;
+    let T be T-Sequence;
+    let O be Ordinal;
+     deffunc C(Ordinal,set) =
+          new_bi_fun2(BiFun($2,ConsecutiveSet2(A,$1),L),Quadr2(q,$1));
+     deffunc D(set,T-Sequence) = union rng $2;
+     deffunc F(Ordinal) = ConsecutiveDelta2(q,$1);
+    assume that
+A1:  O <> {} & O is_limit_ordinal and
+A2:  dom T = O and
+A3:  for O1 being Ordinal st O1 in O holds T.O1 = F(O1);
+A4:  for O being Ordinal, It being set holds It = F(O) iff
+    ex L0 being T-Sequence st It = last L0 & dom L0 = succ O & L0.{} = d &
+     (for C being Ordinal st succ C in succ O holds L0.succ C = C(C,L0.C) ) &
+       for C being Ordinal st C in succ O & C <> {} & C is_limit_ordinal
+         holds L0.C = D(C,L0|C) by Def8;
+    thus F(O) = D(O,T) from TS_ResultL(A4,A1,A2,A3);
+   end;
+
+theorem Th22:
+ for A being non empty set
+ for O,O1,O2 being Ordinal
+     holds O1 c= O2 implies ConsecutiveSet2(A,O1) c= ConsecutiveSet2(A,O2)
+  proof
+   let A be non empty set;
+   let O,O1,02 be Ordinal;
+   defpred X[Ordinal] means O1 c= $1 implies
+   ConsecutiveSet2(A,O1) c= ConsecutiveSet2(A,$1);
+A1:  X[{}] by XBOOLE_1:3;
+A2:  for O1 being Ordinal st X[O1] holds X[succ O1]
+       proof
+        let O2 be Ordinal;
+        assume
+A3:      O1 c= O2 implies ConsecutiveSet2(A,O1) c= ConsecutiveSet2(A,O2);
+        assume
+A4:      O1 c= succ O2;
+        per cases;
+        suppose O1 = succ O2;
+        hence ConsecutiveSet2(A,O1) c= ConsecutiveSet2(A,succ O2);
+        suppose O1 <> succ O2;
+        then O1 c< succ O2 by A4,XBOOLE_0:def 8;
+then A5:     O1 in succ O2 by ORDINAL1:21;
+          ConsecutiveSet2(A,O2) c= new_set2 ConsecutiveSet2(A,O2) by Th13;
+        then ConsecutiveSet2(A,O1) c=
+               new_set2 ConsecutiveSet2(A,O2) by A3,A5,ORDINAL1:34,XBOOLE_1:1;
+        hence ConsecutiveSet2(A,O1) c= ConsecutiveSet2(A,succ O2) by Th16;
+       end;
+A6:   for O1 st O1 <> {} & O1 is_limit_ordinal & for O2 st O2 in O1 holds X[O2]
+       holds X[O1]
+        proof
+         let O2 be Ordinal;
+         assume
+A7:       O2 <> {} & O2 is_limit_ordinal &
+         for O3 being Ordinal st O3 in O2 holds O1 c= O3 implies
+                            ConsecutiveSet2(A,O1) c= ConsecutiveSet2(A,O3);
+         assume
+A8:       O1 c= O2;
+     deffunc U(Ordinal) = ConsecutiveSet2(A,$1);
+         consider L being T-Sequence such that
+A9:      dom L = O2 & for O3 being Ordinal st O3 in O2 holds
+          L.O3 = U(O3) from TS_Lambda;
+A10:     ConsecutiveSet2(A,O2) = union rng L by A7,A9,Th17;
+         per cases;
+         suppose O1 = O2;
+         hence ConsecutiveSet2(A,O1) c= ConsecutiveSet2(A,O2);
+         suppose O1 <> O2;
+          then O1 c< O2 by A8,XBOOLE_0:def 8;
+then A11:      O1 in O2 by ORDINAL1:21;
+then A12:      L.O1 = ConsecutiveSet2(A,O1) by A9;
+           L.O1 in rng L by A9,A11,FUNCT_1:def 5;
+        hence ConsecutiveSet2(A,O1) c= ConsecutiveSet2(A,O2)
+                                                      by A10,A12,ZFMISC_1:92;
+     end;
+   for O being Ordinal holds X[O]
+                                           from Ordinal_Ind(A1,A2,A6);
+   hence thesis;
+  end;
+
+theorem Th23:
+ for A being non empty set
+ for L be lower-bounded LATTICE
+ for d be BiFunction of A,L
+ for q being QuadrSeq of d
+ for O being Ordinal
+     holds ConsecutiveDelta2(q,O) is BiFunction of ConsecutiveSet2(A,O),L
+  proof
+   let A be non empty set;
+   let L be lower-bounded LATTICE;
+   let d be BiFunction of A,L;
+   let q be QuadrSeq of d;
+   let O be Ordinal;
+   defpred X[Ordinal] means
+    ConsecutiveDelta2(q,$1) is BiFunction of ConsecutiveSet2(A,$1),L;
+A1: X[{}]
+    proof
+       ConsecutiveDelta2(q,{}) = d & ConsecutiveSet2(A,{}) = A by Th15,Th19;
+     hence ConsecutiveDelta2(q,{}) is BiFunction of ConsecutiveSet2(A,{}),L;
+    end;
+A2:  for O1 being Ordinal st X[O1] holds X[succ O1]
+    proof
+     let O1 be Ordinal;
+     assume
+    ConsecutiveDelta2(q,O1) is BiFunction of ConsecutiveSet2(A,O1),L;
+     then reconsider CD = ConsecutiveDelta2(q,O1) as
+              BiFunction of ConsecutiveSet2(A,O1),L;
+X:  ConsecutiveSet2(A,succ O1) = new_set2 ConsecutiveSet2(A,O1) by Th16;
+       ConsecutiveDelta2(q,succ O1) = new_bi_fun2(BiFun(ConsecutiveDelta2(q,O1)
+,
+              ConsecutiveSet2(A,O1),L),Quadr2(q,O1)) by Th20
+        .= new_bi_fun2(CD,Quadr2(q,O1)) by LATTICE5:def 16;
+     hence ConsecutiveDelta2(q,succ O1) is
+                 BiFunction of ConsecutiveSet2(A,succ O1),L by X;
+    end;
+A3: for O1 st O1 <> {} & O1 is_limit_ordinal & for O2 st O2 in O1 holds X[O2]
+       holds X[O1]
+    proof
+     let O1 be Ordinal;
+     assume
+A4:   O1 <> {} & O1 is_limit_ordinal &
+     for O2 be Ordinal st O2 in O1 holds
+      ConsecutiveDelta2(q,O2) is BiFunction of ConsecutiveSet2(A,O2),L;
+     deffunc U(Ordinal) = ConsecutiveDelta2(q,$1);
+     consider Ls being T-Sequence such that
+A5:   dom Ls = O1 & for O2 being Ordinal st O2 in O1 holds
+                        Ls.O2 = U(O2) from TS_Lambda;
+A6:   ConsecutiveDelta2(q,O1) = union rng Ls by A4,A5,Th21;
+     deffunc U(Ordinal) = ConsecutiveSet2(A,$1);
+     consider Ts being T-Sequence such that
+A7:   dom Ts = O1 & for O2 being Ordinal st O2 in O1 holds
+                          Ts.O2 = U(O2) from TS_Lambda;
+     set CS = ConsecutiveSet2(A,O1),
+          Y = the carrier of L,
+          X = [:ConsecutiveSet2(A,O1),ConsecutiveSet2(A,O1):],
+          f = union rng Ls;
+A8:  for O,O2 being Ordinal st O c= O2 & O2 in dom Ls holds Ls.O c= Ls.O2
+      proof
+       let O be Ordinal;
+   defpred X[Ordinal] means O c= $1 & $1 in dom Ls implies Ls.O c= Ls.$1;
+A9:     X[{}] by XBOOLE_1:3;
+A10:     for O1 being Ordinal st X[O1] holds X[succ O1]
+          proof
+           let O2 be Ordinal;
+           assume
+A11:        O c= O2 & O2 in dom Ls implies Ls.O c= Ls.O2;
+           assume that
+A12:        O c= succ O2 and
+A13:        succ O2 in dom Ls;
+           per cases;
+           suppose O = succ O2;
+           hence Ls.O c= Ls.succ O2;
+           suppose O <> succ O2;
+           then O c< succ O2 by A12,XBOOLE_0:def 8;
+then A14:       O in succ O2 by ORDINAL1:21;
+A15:       O2 in succ O2 by ORDINAL1:10;
+then A16:       O2 in dom Ls by A13,ORDINAL1:19;
+           then reconsider Def8 = ConsecutiveDelta2(q,O2) as
+                            BiFunction of ConsecutiveSet2(A,O2),L by A4,A5;
+             Ls.succ O2 = ConsecutiveDelta2(q,succ O2) by A5,A13
+                     .= new_bi_fun2(BiFun(ConsecutiveDelta2(q,O2),
+                        ConsecutiveSet2(A,O2),L),Quadr2(q,O2)) by Th20
+                     .= new_bi_fun2(Def8,Quadr2(q,O2)) by LATTICE5:def 16;
+                     then ConsecutiveDelta2(q,O2) c= Ls.succ O2 by Th14;
+           then Ls.O2 c= Ls.succ O2 by A5,A16;
+           hence Ls.O c= Ls.succ O2 by A11,A13,A14,A15,ORDINAL1:19,34,XBOOLE_1:
+1;
+        end;
+A17:    for O1 st O1 <> {} & O1 is_limit_ordinal & for O2 st O2 in O1
+                holds X[O2]
+       holds X[O1]
+         proof
+          let O2 be Ordinal;
+          assume that
+A18:       O2 <> {} & O2 is_limit_ordinal and
+             for O3 be Ordinal st O3 in O2 holds O c= O3 & O3 in dom Ls
+                                                      implies Ls.O c= Ls.O3;
+          assume that
+A19:       O c= O2 and
+A20:       O2 in dom Ls;
+     deffunc U(Ordinal) = ConsecutiveDelta2(q,$1);
+          consider Lt being T-Sequence such that
+A21:       dom Lt = O2 & for O3 being Ordinal st O3 in O2 holds
+            Lt.O3 = U(O3) from TS_Lambda;
+A22:      Ls.O2 = ConsecutiveDelta2(q,O2) by A5,A20
+               .= union rng Lt by A18,A21,Th21;
+          per cases;
+          suppose O = O2;
+          hence Ls.O c= Ls.O2;
+          suppose O <> O2;
+          then O c< O2 by A19,XBOOLE_0:def 8;
+then A23:      O in O2 by ORDINAL1:21;
+          then O in O1 by A5,A20,ORDINAL1:19;
+          then Ls.O = ConsecutiveDelta2(q,O) by A5
+              .= Lt.O by A21,A23;
+          then Ls.O in rng Lt by A21,A23,FUNCT_1:def 5;
+          hence Ls.O c= Ls.O2 by A22,ZFMISC_1:92;
+         end;
+        thus for O being Ordinal holds X[O]
+        from Ordinal_Ind(A9,A10,A17);
+       end;
+    for x,y being set st x in rng Ls & y in rng Ls holds x,y are_c=-comparable
+        proof
+         let x,y be set;
+         assume
+A24:      x in rng Ls & y in rng Ls;
+         then consider o1 being set such that
+A25:      o1 in dom Ls & Ls.o1 = x by FUNCT_1:def 5;
+         consider o2 being set such that
+A26:      o2 in dom Ls & Ls.o2 = y by A24,FUNCT_1:def 5;
+         reconsider o1' = o1, o2' = o2 as Ordinal by A25,A26,ORDINAL1:23;
+           o1' c= o2' or o2' c= o1';
+         then x c= y or y c= x by A8,A25,A26;
+         hence thesis by XBOOLE_0:def 9;
+        end;
+then A27:    rng Ls is c=-linear by ORDINAL1:def 9;
+         rng Ls c= PFuncs(X,Y)
+        proof
+         let z be set;
+         assume z in rng Ls;
+         then consider o being set such that
+A28:      o in dom Ls & z = Ls.o by FUNCT_1:def 5;
+         reconsider o as Ordinal by A28,ORDINAL1:23;
+           Ls.o = ConsecutiveDelta2(q,o) by A5,A28;
+         then reconsider h = Ls.o as
+                        BiFunction of ConsecutiveSet2(A,o),L by A4,A5,A28;
+A29:      dom h = [:ConsecutiveSet2(A,o),ConsecutiveSet2(A,o):]
+                                                         by FUNCT_2:def 1;
+A30:      rng h c= Y;
+           o c= O1 by A5,A28,ORDINAL1:def 2;
+         then ConsecutiveSet2(A,o) c= ConsecutiveSet2(A,O1) by Th22;
+         then dom h c= X by A29,ZFMISC_1:119;
+         hence z in PFuncs(X,Y) by A28,A30,PARTFUN1:def 5;
+        end;
+       then f in PFuncs(X,Y) by A27,HAHNBAN:13;
+        then consider g being Function such that
+A31:    f = g & dom g c= X & rng g c= Y by PARTFUN1:def 5;
+        reconsider f as Function by A31;
+          Ls is Function-yielding
+         proof
+          let x be set;
+          assume
+A32:       x in dom Ls;
+          then reconsider o = x as Ordinal by ORDINAL1:23;
+            Ls.o = ConsecutiveDelta2(q,o) by A5,A32;
+          hence Ls.x is Function by A4,A5,A32;
+         end;
+        then reconsider LsF = Ls as Function-yielding Function;
+A33:    dom f = union rng doms LsF by LATTICE5:1;
+        reconsider o1 = O1 as non empty Ordinal by A4;
+        set YY = { [:ConsecutiveSet2(A,O2),ConsecutiveSet2(A,O2):]
+                   where O2 is Element of o1 : not contradiction };
+A34:    rng doms Ls = YY
+         proof
+          thus rng doms Ls c= YY
+           proof
+            let Z be set;
+            assume Z in rng doms Ls;
+            then consider o being set such that
+A35:        o in dom doms Ls & Z = (doms Ls).o by FUNCT_1:def 5;
+A36:        o in dom LsF by A35,EXTENS_1:3;
+            then reconsider o' = o as Element of o1 by A5;
+              Ls.o' = ConsecutiveDelta2(q,o') by A5;
+            then reconsider ls = Ls.o' as
+                   BiFunction of ConsecutiveSet2(A,o'),L by A4;
+              Z = dom ls by A35,A36,FUNCT_6:31
+             .= [:ConsecutiveSet2(A,o'),ConsecutiveSet2(A,o'):]
+                                                         by FUNCT_2:def 1;
+            hence Z in YY;
+           end;
+            let Z be set;
+            assume Z in YY;
+            then consider o being Element of o1 such that
+A37:        Z = [:ConsecutiveSet2(A,o),ConsecutiveSet2(A,o):];
+              o in dom LsF by A5;
+then A38:        o in dom doms LsF by EXTENS_1:3;
+              Ls.o = ConsecutiveDelta2(q,o) by A5;
+            then reconsider ls = Ls.o as
+                   BiFunction of ConsecutiveSet2(A,o),L by A4;
+              Z = dom ls by A37,FUNCT_2:def 1
+             .= (doms Ls).o by A5,FUNCT_6:31;
+            hence Z in rng doms Ls by A38,FUNCT_1:def 5;
+        end;
+          {} in O1 by A4,ORDINAL3:10;
+        then reconsider RTs = rng Ts as non empty set by A7,FUNCT_1:12;
+          for x,y being set st x in RTs & y in RTs holds x,y are_c=-comparable
+         proof
+          let x,y be set;
+          assume
+A39:       x in RTs & y in RTs;
+          then consider o1 being set such that
+A40:      o1 in dom Ts & Ts.o1 = x by FUNCT_1:def 5;
+          consider o2 being set such that
+A41:      o2 in dom Ts & Ts.o2 = y by A39,FUNCT_1:def 5;
+          reconsider o1' = o1, o2' = o2 as Ordinal by A40,A41,ORDINAL1:23;
+A42:      Ts.o1' = ConsecutiveSet2(A,o1') by A7,A40;
+A43:      Ts.o2' = ConsecutiveSet2(A,o2') by A7,A41;
+            o1' c= o2' or o2' c= o1';
+          then x c= y or y c= x by A40,A41,A42,A43,Th22;
+          hence thesis by XBOOLE_0:def 9;
+         end;
+then A44:    RTs is c=-linear by ORDINAL1:def 9;
+A45:    YY = { [:a,a:] where a is Element of RTs : a in RTs }
+         proof
+          set XX = { [:a,a:] where a is Element of RTs : a in RTs };
+          thus YY c= XX
+           proof
+            let Z be set;
+            assume Z in YY;
+            then consider o being Element of o1 such that
+A46:        Z = [:ConsecutiveSet2(A,o),ConsecutiveSet2(A,o):];
+              Ts.o = ConsecutiveSet2(A,o) by A7;
+            then reconsider CoS = ConsecutiveSet2(A,o)
+                                   as Element of RTs by A7,FUNCT_1:def 5;
+              Z = [:CoS,CoS:] by A46;
+           hence Z in XX;
+          end;
+           let Z be set; assume Z in XX;
+           then consider a being Element of RTs such that
+A47:       Z = [:a,a:] & a in RTs;
+           consider o being set such that
+A48:       o in dom Ts & a = Ts.o by FUNCT_1:def 5;
+           reconsider o' = o as Ordinal by A48,ORDINAL1:23;
+A49:       a = ConsecutiveSet2(A,o') by A7,A48;
+           consider O being Element of o1 such that
+A50:       O = o' by A7,A48;
+           thus Z in YY by A47,A49,A50;
+        end;
+          X = [:union rng Ts, ConsecutiveSet2(A,O1):] by A4,A7,Th17
+         .= [:union RTs, union RTs :] by A4,A7,Th17
+         .= dom f by A33,A34,A44,A45,LATTICE5:3;
+        then f is Function of X,Y by A31,FUNCT_2:def 1,RELSET_1:11;
+       hence ConsecutiveDelta2(q,O1) is BiFunction of CS,L by A6;
+   end;
+   for O being Ordinal holds X[O]
+     from Ordinal_Ind(A1,A2,A3);
+    hence thesis;
+  end;
+
+definition
+ let A be non empty set;
+ let L be lower-bounded LATTICE;
+ let d be BiFunction of A,L;
+ let q be QuadrSeq of d;
+ let O be Ordinal;
+  redefine func ConsecutiveDelta2(q,O) -> BiFunction of
+    ConsecutiveSet2(A,O),L;
+ coherence by Th23;
+end;
+
+theorem Th24:
+ for A being non empty set
+ for L be lower-bounded LATTICE
+ for d be BiFunction of A,L
+ for q being QuadrSeq of d
+ for O being Ordinal holds d c= ConsecutiveDelta2(q,O)
+  proof
+   let A be non empty set;
+   let L be lower-bounded LATTICE;
+   let d be BiFunction of A,L;
+   let q be QuadrSeq of d;
+   let O be Ordinal;
+   defpred X[Ordinal] means d c= ConsecutiveDelta2(q,$1);
+A1:  X[{}] by Th19;
+A2:  for O1 being Ordinal st X[O1] holds X[succ O1]
+    proof
+     let O1 be Ordinal;
+     assume
+A3:   d c= ConsecutiveDelta2(q,O1);
+       ConsecutiveDelta2(q,succ O1) = new_bi_fun2(BiFun(ConsecutiveDelta2(q,O1)
+,
+                    ConsecutiveSet2(A,O1),L),Quadr2(q,O1)) by Th20
+      .= new_bi_fun2(ConsecutiveDelta2(q,O1),Quadr2(q,O1))
+                                                    by LATTICE5:def 16;
+     then ConsecutiveDelta2(q,O1) c= ConsecutiveDelta2(q,succ O1) by Th14;
+    hence d c= ConsecutiveDelta2(q,succ O1) by A3,XBOOLE_1:1;
+   end;
+A4: for O1 st O1 <> {} & O1 is_limit_ordinal & for O2 st O2 in O1 holds X[O2]
+       holds X[O1]
+     proof
+      let O2 be Ordinal;
+      assume
+A5:    O2 <> {} & O2 is_limit_ordinal &
+      for O1 be Ordinal st O1 in O2 holds d c= ConsecutiveDelta2(q,O1);
+     deffunc U(Ordinal) = ConsecutiveDelta2(q,$1);
+      consider Ls being T-Sequence such that
+A6:    dom Ls = O2 & for O1 being Ordinal st O1 in O2 holds
+          Ls.O1 = U(O1) from TS_Lambda;
+A7:    ConsecutiveDelta2(q,O2) = union rng Ls by A5,A6,Th21;
+A8:    {} in O2 by A5,ORDINAL3:10;
+      then Ls.{} = ConsecutiveDelta2(q,{}) by A6
+          .= d by Th19;
+      then d in rng Ls by A6,A8,FUNCT_1:def 5;
+    hence d c= ConsecutiveDelta2(q,O2) by A7,ZFMISC_1:92;
+   end;
+   for O being Ordinal holds X[O]
+   from Ordinal_Ind(A1,A2,A4);
+  hence thesis;
+ end;
+
+theorem Th25:
+ for A being non empty set
+ for L be lower-bounded LATTICE
+ for d being BiFunction of A,L
+ for O1,O2 being Ordinal
+ for q being QuadrSeq of d st O1 c= O2
+     holds ConsecutiveDelta2(q,O1) c= ConsecutiveDelta2(q,O2)
+   proof
+    let A be non empty set;
+    let L be lower-bounded LATTICE;
+    let d be BiFunction of A,L;
+    let O1,O2 be Ordinal;
+    let q be QuadrSeq of d;
+   defpred X[Ordinal] means
+     O1 c= $1 implies ConsecutiveDelta2(q,O1) c= ConsecutiveDelta2(q,$1);
+A1:  X[{}] by XBOOLE_1:3;
+A2:  for O1 being Ordinal st X[O1] holds X[succ O1]
+      proof
+      let O2 be Ordinal;
+      assume
+A3:    O1 c= O2 implies ConsecutiveDelta2(q,O1) c= ConsecutiveDelta2(q,O2);
+       assume
+A4:    O1 c= succ O2;
+       per cases;
+        suppose O1 = succ O2;
+         hence ConsecutiveDelta2(q,O1) c= ConsecutiveDelta2(q,succ O2);
+        suppose O1 <> succ O2;
+          then O1 c< succ O2 by A4,XBOOLE_0:def 8;
+then A5:       O1 in succ O2 by ORDINAL1:21;
+            ConsecutiveDelta2(q,succ O2)
+           = new_bi_fun2(BiFun(ConsecutiveDelta2(q,O2),
+                ConsecutiveSet2(A,O2),L),Quadr2(q,O2)) by Th20
+          .= new_bi_fun2(ConsecutiveDelta2(q,O2),Quadr2(q,O2))
+                                                    by LATTICE5:def 16;
+        then ConsecutiveDelta2(q,O2) c= ConsecutiveDelta2(q,succ O2) by Th14;
+         hence ConsecutiveDelta2(q,O1) c=
+                   ConsecutiveDelta2(q,succ O2) by A3,A5,ORDINAL1:34,XBOOLE_1:1
+;
+     end;
+A6: for O1 st O1 <> {} & O1 is_limit_ordinal & for O2 st O2 in O1 holds X[O2]
+       holds X[O1]
+      proof
+      let O2 be Ordinal;
+      assume
+  A7:  O2 <> {} & O2 is_limit_ordinal &
+       for O3 be Ordinal st O3 in O2 holds O1 c= O3 implies
+                           ConsecutiveDelta2(q,O1) c= ConsecutiveDelta2(q,O3);
+      assume
+  A8:  O1 c= O2;
+     deffunc U(Ordinal) = ConsecutiveDelta2(q,$1);
+      consider L being T-Sequence such that
+  A9: dom L = O2 & for O3 being Ordinal st O3 in O2 holds
+         L.O3 = U(O3) from TS_Lambda;
+  A10: ConsecutiveDelta2(q,O2) = union rng L by A7,A9,Th21;
+       per cases;
+        suppose O1 = O2;
+         hence ConsecutiveDelta2(q,O1) c= ConsecutiveDelta2(q,O2);
+        suppose O1 <> O2;
+          then O1 c< O2 by A8,XBOOLE_0:def 8;
+  then A11:    O1 in O2 by ORDINAL1:21;
+  then A12:    L.O1 = ConsecutiveDelta2(q,O1) by A9;
+           L.O1 in rng L by A9,A11,FUNCT_1:def 5;
+        hence ConsecutiveDelta2(q,O1) c=
+                        ConsecutiveDelta2(q,O2) by A10,A12,ZFMISC_1:92;
+     end;
+   for O being Ordinal holds X[O]
+                       from Ordinal_Ind(A1,A2,A6);
+    hence thesis;
+  end;
+
+theorem Th26:
+ for A being non empty set
+ for L be lower-bounded LATTICE
+ for d be BiFunction of A,L st d is zeroed
+ for q being QuadrSeq of d
+ for O being Ordinal holds ConsecutiveDelta2(q,O) is zeroed
+  proof
+   let A be non empty set;
+   let L be lower-bounded LATTICE;
+   let d be BiFunction of A,L; assume
+A1:  d is zeroed;
+   let q be QuadrSeq of d;
+   let O be Ordinal;
+   defpred X[Ordinal] means ConsecutiveDelta2(q,$1) is zeroed;
+A2:  X[{}]
+   proof
+    let z be Element of ConsecutiveSet2(A,{});
+    reconsider z' = z as Element of A by Th15;
+    thus ConsecutiveDelta2(q,{}).(z,z) = d.(z',z') by Th19
+                                     .= Bottom L by A1,LATTICE5:def 7;
+   end;
+A3:  for O1 being Ordinal st X[O1] holds X[succ O1]
+   proof
+    let O1 be Ordinal;
+    assume ConsecutiveDelta2(q,O1) is zeroed;
+then A4:  new_bi_fun2(ConsecutiveDelta2(q,O1),Quadr2(q,O1)) is zeroed by Th10;
+    let z be Element of ConsecutiveSet2(A,succ O1);
+    reconsider z' = z as Element of new_set2 ConsecutiveSet2(A,O1) by Th16;
+      ConsecutiveDelta2(q,succ O1) = new_bi_fun2(BiFun(ConsecutiveDelta2(q,O1),
+     ConsecutiveSet2(A,O1),L),Quadr2(q,O1)) by Th20
+     .= new_bi_fun2(ConsecutiveDelta2(q,O1),Quadr2(q,O1)) by LATTICE5:def 16;
+   hence ConsecutiveDelta2(q,succ O1).(z,z) =
+     new_bi_fun2(ConsecutiveDelta2(q,O1),Quadr2(q,O1)).(z',z')
+        .= Bottom L by A4,LATTICE5:def 7;
+   end;
+A5: for O1 st O1 <> {} & O1 is_limit_ordinal & for O2 st O2 in O1 holds X[O2]
+       holds X[O1]
+     proof
+      let O2 be Ordinal;
+      assume
+A6:    O2 <> {} & O2 is_limit_ordinal &
+      for O1 be Ordinal st O1 in O2 holds ConsecutiveDelta2(q,O1) is zeroed;
+     deffunc U(Ordinal) = ConsecutiveDelta2(q,$1);
+      consider Ls being T-Sequence such that
+A7:   dom Ls = O2 & for O1 being Ordinal st O1 in O2 holds
+          Ls.O1 = U(O1) from TS_Lambda;
+A8:   ConsecutiveDelta2(q,O2) = union rng Ls by A6,A7,Th21;
+     deffunc U(Ordinal) = ConsecutiveSet2(A,$1);
+     consider Ts being T-Sequence such that
+A9:   dom Ts = O2 & for O1 being Ordinal st O1 in O2 holds
+          Ts.O1 = U(O1) from TS_Lambda;
+A10:  ConsecutiveSet2(A,O2) = union rng Ts by A6,A9,Th17;
+     set CS = ConsecutiveSet2(A,O2);
+     reconsider f = union rng Ls as BiFunction of CS,L by A8;
+   f is zeroed
+       proof
+        let x be Element of CS;
+        consider y being set such that
+A11:     x in y & y in rng Ts by A10,TARSKI:def 4;
+        consider o being set such that
+A12:     o in dom Ts & y = Ts.o by A11,FUNCT_1:def 5;
+        reconsider o as Ordinal by A12,ORDINAL1:23;
+A13:     x in ConsecutiveSet2(A,o) by A9,A11,A12;
+A14:     Ls.o = ConsecutiveDelta2(q,o) by A7,A9,A12;
+        then reconsider h = Ls.o as BiFunction of ConsecutiveSet2(A,o),L;
+A15:     h is zeroed
+          proof
+           let z be Element of ConsecutiveSet2(A,o);
+A16:        ConsecutiveDelta2(q,o) is zeroed by A6,A9,A12;
+           thus h.(z,z) = ConsecutiveDelta2(q,o).(z,z) by A7,A9,A12
+                       .= Bottom L by A16,LATTICE5:def 7;
+          end;
+           ConsecutiveDelta2(q,o) in rng Ls by A7,A9,A12,A14,FUNCT_1:def 5;
+then A17:      h c= f by A14,ZFMISC_1:92;
+         reconsider x' = x as Element of ConsecutiveSet2(A,o) by A9,A11,A12;
+           dom h = [:ConsecutiveSet2(A,o),ConsecutiveSet2(A,o):]
+                                                   by FUNCT_2:def 1;
+then A18:     [x,x] in dom h by A13,ZFMISC_1:106;
+         thus f.(x,x) = f.[x,x] by BINOP_1:def 1
+                     .= h.[x,x] by A17,A18,GRFUNC_1:8
+                     .= h.(x',x') by BINOP_1:def 1
+                     .= Bottom L by A15,LATTICE5:def 7;
+        end;
+      hence ConsecutiveDelta2(q,O2) is zeroed by A6,A7,Th21;
+    end;
+   for O being Ordinal holds X[O]
+  from Ordinal_Ind(A2,A3,A5);
+  hence thesis;
+ end;
+
+theorem Th27:
+ for A being non empty set
+ for L be lower-bounded LATTICE
+ for d be BiFunction of A,L st d is symmetric
+ for q being QuadrSeq of d
+ for O being Ordinal holds ConsecutiveDelta2(q,O) is symmetric
+  proof
+   let A be non empty set;
+   let L be lower-bounded LATTICE;
+   let d be BiFunction of A,L; assume
+A1:  d is symmetric;
+   let q be QuadrSeq of d;
+   let O be Ordinal;
+   defpred X[Ordinal] means ConsecutiveDelta2(q,$1) is symmetric;
+A2: X[{}]
+    proof
+     let x,y be Element of ConsecutiveSet2(A,{});
+     reconsider x' = x, y' = y as Element of A by Th15;
+     thus ConsecutiveDelta2(q,{}).(x,y) = d.(x',y') by Th19
+                                      .= d.(y',x') by A1,LATTICE5:def 6
+                                      .= ConsecutiveDelta2(q,{}).(y,x) by Th19;
+    end;
+A3:  for O1 being Ordinal st X[O1] holds X[succ O1]
+    proof
+    let O1 be Ordinal;
+    assume ConsecutiveDelta2(q,O1) is symmetric;
+then A4:  new_bi_fun2(ConsecutiveDelta2(q,O1),Quadr2(q,O1)) is symmetric by
+Th11;
+    let x,y be Element of ConsecutiveSet2(A,succ O1);
+    reconsider x'=x, y'=y as Element of new_set2 ConsecutiveSet2(A,O1)
+                                                                   by Th16;
+A5: ConsecutiveDelta2(q,succ O1) = new_bi_fun2(BiFun(ConsecutiveDelta2(q,O1),
+     ConsecutiveSet2(A,O1),L),Quadr2(q,O1)) by Th20
+     .= new_bi_fun2(ConsecutiveDelta2(q,O1),Quadr2(q,O1)) by LATTICE5:def 16;
+   hence ConsecutiveDelta2(q,succ O1).(x,y) =
+ new_bi_fun2(ConsecutiveDelta2(q,O1),Quadr2(q,O1)).(y',x')
+                                                     by A4,LATTICE5:def 6
+    .= ConsecutiveDelta2(q,succ O1).(y,x) by A5;
+  end;
+A6: for O1 st O1 <> {} & O1 is_limit_ordinal & for O2 st O2 in O1 holds X[O2]
+       holds X[O1]
+     proof
+      let O2 be Ordinal;
+      assume
+A7:    O2 <> {} & O2 is_limit_ordinal &
+      for O1 being Ordinal st O1 in O2
+      holds ConsecutiveDelta2(q,O1) is symmetric;
+     deffunc U(Ordinal) = ConsecutiveDelta2(q,$1);
+      consider Ls being T-Sequence such that
+A8:    dom Ls = O2 & for O1 being Ordinal st O1 in O2 holds
+           Ls.O1 = U(O1) from TS_Lambda;
+A9:   ConsecutiveDelta2(q,O2) = union rng Ls by A7,A8,Th21;
+     deffunc U(Ordinal) = ConsecutiveSet2(A,$1);
+      consider Ts being T-Sequence such that
+A10:   dom Ts = O2 & for O1 being Ordinal st O1 in O2 holds
+           Ts.O1 = U(O1) from TS_Lambda;
+A11:  ConsecutiveSet2(A,O2) = union rng Ts by A7,A10,Th17;
+     set CS = ConsecutiveSet2(A,O2);
+     reconsider f = union rng Ls as BiFunction of CS,L by A9;
+   f is symmetric
+       proof
+        let x,y be Element of CS;
+        consider x1 being set such that
+A12:     x in x1 & x1 in rng Ts by A11,TARSKI:def 4;
+        consider o1 being set such that
+A13:     o1 in dom Ts & x1 = Ts.o1 by A12,FUNCT_1:def 5;
+        consider y1 being set such that
+A14:     y in y1 & y1 in rng Ts by A11,TARSKI:def 4;
+        consider o2 being set such that
+A15:     o2 in dom Ts & y1 = Ts.o2 by A14,FUNCT_1:def 5;
+        reconsider o1,o2 as Ordinal by A13,A15,ORDINAL1:23;
+A16:     x in ConsecutiveSet2(A,o1) by A10,A12,A13;
+A17:     y in ConsecutiveSet2(A,o2) by A10,A14,A15;
+A18:     Ls.o1 = ConsecutiveDelta2(q,o1) by A8,A10,A13;
+        then reconsider h1 = Ls.o1 as BiFunction of ConsecutiveSet2(A,o1),L;
+A19:     h1 is symmetric
+          proof
+           let x,y be Element of ConsecutiveSet2(A,o1);
+A20:        ConsecutiveDelta2(q,o1) is symmetric by A7,A10,A13;
+           thus h1.(x,y) = ConsecutiveDelta2(q,o1).(x,y) by A8,A10,A13 .=
+            ConsecutiveDelta2(q,o1).(y,x) by A20,LATTICE5:def 6
+                        .= h1.(y,x) by A8,A10,A13;
+          end;
+A21:      dom h1 = [:ConsecutiveSet2(A,o1),ConsecutiveSet2(A,o1):]
+                                                      by FUNCT_2:def 1;
+A22:      Ls.o2 = ConsecutiveDelta2(q,o2) by A8,A10,A15;
+         then reconsider h2 = Ls.o2 as BiFunction of ConsecutiveSet2(A,o2),L;
+A23:      h2 is symmetric
+           proof
+            let x,y be Element of ConsecutiveSet2(A,o2);
+A24:         ConsecutiveDelta2(q,o2) is symmetric by A7,A10,A15;
+            thus h2.(x,y) = ConsecutiveDelta2(q,o2).(x,y) by A8,A10,A15
+                     .= ConsecutiveDelta2(q,o2).(y,x) by A24,LATTICE5:def 6
+                     .= h2.(y,x) by A8,A10,A15;
+           end;
+A25:       dom h2 = [:ConsecutiveSet2(A,o2),ConsecutiveSet2(A,o2):]
+                                                           by FUNCT_2:def 1;
+          per cases;
+          suppose o1 c= o2;
+then A26:       ConsecutiveSet2(A,o1) c= ConsecutiveSet2(A,o2) by Th22;
+          then reconsider x'=x, y'=y as Element of ConsecutiveSet2(A,o2)
+                                                         by A10,A14,A15,A16;
+            ConsecutiveDelta2(q,o2) in rng Ls by A8,A10,A15,A22,FUNCT_1:def 5
+;
+then A27:      h2 c= f by A22,ZFMISC_1:92;
+A28:      [x,y] in dom h2 & [y,x] in dom h2 by A16,A17,A25,A26,ZFMISC_1:106;
+          thus f.(x,y) = f.[x,y] by BINOP_1:def 1
+                      .= h2.[x,y] by A27,A28,GRFUNC_1:8
+                      .= h2.(x',y') by BINOP_1:def 1
+                      .= h2.(y',x') by A23,LATTICE5:def 6
+                      .= h2.[y,x] by BINOP_1:def 1
+                      .= f.[y,x] by A27,A28,GRFUNC_1:8
+                      .= f.(y,x) by BINOP_1:def 1;
+          suppose o2 c= o1;
+then A29:       ConsecutiveSet2(A,o2) c= ConsecutiveSet2(A,o1) by Th22;
+          then reconsider x'=x, y'=y as Element of ConsecutiveSet2(A,o1)
+                                                         by A10,A12,A13,A17;
+            ConsecutiveDelta2(q,o1) in rng Ls by A8,A10,A13,A18,FUNCT_1:def 5
+;
+then A30:       h1 c= f by A18,ZFMISC_1:92;
+A31:       [x,y] in dom h1 & [y,x] in dom h1 by A16,A17,A21,A29,ZFMISC_1:106;
+          thus f.(x,y) = f.[x,y] by BINOP_1:def 1
+                      .= h1.[x,y] by A30,A31,GRFUNC_1:8
+                      .= h1.(x',y') by BINOP_1:def 1
+                      .= h1.(y',x') by A19,LATTICE5:def 6
+                      .= h1.[y,x] by BINOP_1:def 1
+                      .= f.[y,x] by A30,A31,GRFUNC_1:8
+                      .= f.(y,x) by BINOP_1:def 1;
+        end;
+      hence ConsecutiveDelta2(q,O2) is symmetric by A7,A8,Th21;
+    end;
+   for O being Ordinal holds X[O]
+   from Ordinal_Ind(A2,A3,A6);
+  hence thesis;
+ end;
+
+theorem Th28:
+ for A being non empty set
+ for L being lower-bounded LATTICE st
+     L is modular
+ for d be BiFunction of A,L st d is symmetric u.t.i.
+ for O being Ordinal
+ for q being QuadrSeq of d st O c= DistEsti(d)
+     holds ConsecutiveDelta2(q,O) is u.t.i.
+  proof
+   let A be non empty set;
+   let L be lower-bounded LATTICE;
+   assume
+A1: L is modular;
+   let d be BiFunction of A,L;
+   assume that
+A2: d is symmetric and
+A3: d is u.t.i.;
+   let O be Ordinal;
+   let q be QuadrSeq of d;
+   defpred X[Ordinal] means
+     $1 c= DistEsti(d) implies ConsecutiveDelta2(q,$1) is u.t.i.;
+A4: X[{}]
+   proof
+    assume {} c= DistEsti(d);
+    let x,y,z be Element of ConsecutiveSet2(A,{});
+    reconsider x' = x, y' = y, z' = z as Element of A by Th15;
+A5:  ConsecutiveDelta2(q,{}) = d by Th19;
+      d.(x',z') <= d.(x',y') "\/" d.(y',z') by A3,LATTICE5:def 8;
+    hence ConsecutiveDelta2(q,{}).(x,z) <=
+    ConsecutiveDelta2(q,{}).(x,y) "\/" ConsecutiveDelta2(q,{}).(y,z) by A5;
+  end;
+A6:  for O1 being Ordinal st X[O1] holds X[succ O1]
+   proof
+    let O1 be Ordinal;
+    assume that
+A7:  O1 c= DistEsti(d) implies ConsecutiveDelta2(q,O1) is u.t.i. and
+A8:  succ O1 c= DistEsti(d);
+A9:  O1 in DistEsti(d) by A8,ORDINAL1:33;
+A10:  ConsecutiveDelta2(q,O1) is symmetric by A2,Th27;
+    let x,y,z be Element of ConsecutiveSet2(A,succ O1);
+    set f = new_bi_fun2(ConsecutiveDelta2(q,O1),Quadr2(q,O1));
+    reconsider x' = x, y' = y, z' = z as
+                          Element of new_set2 ConsecutiveSet2(A,O1) by Th16;
+A11: O1 in dom q by A9,LATTICE5:28;
+    then q.O1 in rng q by FUNCT_1:def 5;
+    then q.O1 in {[u,v,a',b'] where u is Element of A, v is Element of A,
+           a' is Element of L, b' is Element of L: d.(u,v) <=
+                                   a'"\/"b'} by LATTICE5:def 14;
+    then consider u,v be Element of A, a',b' be Element of L such that
+A12: q.O1 = [u,v,a',b'] & d.(u,v) <= a'"\/"b';
+    set X = Quadr2(q,O1)`1, Y = Quadr2(q,O1)`2;
+    reconsider a = Quadr2(q,O1)`3, b = Quadr2(q,O1)`4 as Element of L
+     ;
+A13: Quadr2(q,O1) = [u,v,a',b'] by A11,A12,Def7;
+    then A14: u = X by MCART_1:def 8;
+A15: v = Y by A13,MCART_1:def 9;
+A16: a' = a by A13,MCART_1:def 10;
+A17: b' = b by A13,MCART_1:def 11;
+A18: dom d = [:A,A:] by FUNCT_2:def 1;
+A19: d c= ConsecutiveDelta2(q,O1) by Th24;
+      d.(u,v) = d.[u,v] by BINOP_1:def 1
+           .= ConsecutiveDelta2(q,O1).[X,Y] by A14,A15,A18,A19,GRFUNC_1:8
+           .= ConsecutiveDelta2(q,O1).(X,Y) by BINOP_1:def 1;
+then A20: new_bi_fun2(ConsecutiveDelta2(q,O1),Quadr2(q,O1)) is u.t.i.
+                          by A1,A7,A9,A10,A12,A16,A17,Th12,ORDINAL1:def 2;
+A21: ConsecutiveDelta2(q,succ O1) =
+       new_bi_fun2(BiFun(ConsecutiveDelta2(q,O1),
+          ConsecutiveSet2(A,O1),L),Quadr2(q,O1)) by Th20
+      .= new_bi_fun2(ConsecutiveDelta2(q,O1),Quadr2(q,O1)) by LATTICE5:def 16;
+      f.(x',z') <= f.(x',y') "\/" f.(y',z') by A20,LATTICE5:def 8;
+    hence ConsecutiveDelta2(q,succ O1).(x,z) <=
+     ConsecutiveDelta2(q,succ O1).(x,y) "\/" ConsecutiveDelta2(q,succ O1).(y,z)
+                                                                      by A21;
+   end;
+A22: for O1 st O1 <> {} & O1 is_limit_ordinal & for O2 st O2 in O1 holds X[O2]
+       holds X[O1]
+     proof
+      let O2 be Ordinal;
+      assume that
+A23:   O2 <> {} & O2 is_limit_ordinal &
+      for O1 be Ordinal st O1 in O2 holds
+       (O1 c= DistEsti(d) implies ConsecutiveDelta2(q,O1) is u.t.i.) and
+A24:  O2 c= DistEsti(d);
+     deffunc U(Ordinal) = ConsecutiveDelta2(q,$1);
+      consider Ls being T-Sequence such that
+A25:  dom Ls = O2 & for O1 being Ordinal st O1 in O2 holds
+       Ls.O1 = U(O1) from TS_Lambda;
+A26:  ConsecutiveDelta2(q,O2) = union rng Ls by A23,A25,Th21;
+     deffunc U(Ordinal) = ConsecutiveSet2(A,$1);
+      consider Ts being T-Sequence such that
+A27:  dom Ts = O2 & for O1 being Ordinal st O1 in O2 holds
+          Ts.O1 = U(O1) from TS_Lambda;
+A28:  ConsecutiveSet2(A,O2) = union rng Ts by A23,A27,Th17;
+     set CS = ConsecutiveSet2(A,O2);
+     reconsider f = union rng Ls as BiFunction of CS,L by A26;
+   f is u.t.i.
+       proof
+        let x,y,z be Element of CS;
+        consider X being set such that
+A29:     x in X & X in rng Ts by A28,TARSKI:def 4;
+        consider o1 being set such that
+A30:     o1 in dom Ts & X = Ts.o1 by A29,FUNCT_1:def 5;
+        consider Y being set such that
+A31:     y in Y & Y in rng Ts by A28,TARSKI:def 4;
+        consider o2 being set such that
+A32:     o2 in dom Ts & Y = Ts.o2 by A31,FUNCT_1:def 5;
+        consider Z being set such that
+A33:     z in Z & Z in rng Ts by A28,TARSKI:def 4;
+        consider o3 being set such that
+A34:     o3 in dom Ts & Z = Ts.o3 by A33,FUNCT_1:def 5;
+        reconsider o1,o2,o3 as Ordinal by A30,A32,A34,ORDINAL1:23;
+A35:     x in ConsecutiveSet2(A,o1) by A27,A29,A30;
+A36:     y in ConsecutiveSet2(A,o2) by A27,A31,A32;
+A37:     z in ConsecutiveSet2(A,o3) by A27,A33,A34;
+A38:    Ls.o1 = ConsecutiveDelta2(q,o1) by A25,A27,A30;
+        then reconsider h1 = Ls.o1 as BiFunction of ConsecutiveSet2(A,o1),L;
+A39:    h1 is u.t.i.
+         proof
+          let x,y,z be Element of ConsecutiveSet2(A,o1);
+A40:       ConsecutiveDelta2(q,o1) = h1 by A25,A27,A30;
+            o1 c= DistEsti(d) by A24,A27,A30,ORDINAL1:def 2;
+          then ConsecutiveDelta2(q,o1) is u.t.i. by A23,A27,A30;
+          hence h1.(x,z) <= h1.(x,y) "\/" h1.(y,z) by A40,LATTICE5:def 8;
+         end;
+A41:     dom h1 = [:ConsecutiveSet2(A,o1),ConsecutiveSet2(A,o1):]
+                                                      by FUNCT_2:def 1;
+A42:     Ls.o2 = ConsecutiveDelta2(q,o2) by A25,A27,A32;
+        then reconsider h2 = Ls.o2 as BiFunction of ConsecutiveSet2(A,o2),L;
+A43:    h2 is u.t.i.
+         proof
+          let x,y,z be Element of ConsecutiveSet2(A,o2);
+A44:       ConsecutiveDelta2(q,o2) = h2 by A25,A27,A32;
+            o2 c= DistEsti(d) by A24,A27,A32,ORDINAL1:def 2;
+          then ConsecutiveDelta2(q,o2) is u.t.i. by A23,A27,A32;
+          hence h2.(x,z) <= h2.(x,y) "\/" h2.(y,z) by A44,LATTICE5:def 8;
+         end;
+A45:     dom h2 = [:ConsecutiveSet2(A,o2),ConsecutiveSet2(A,o2):]
+                                                      by FUNCT_2:def 1;
+A46:     Ls.o3 = ConsecutiveDelta2(q,o3) by A25,A27,A34;
+        then reconsider h3 = Ls.o3 as BiFunction of ConsecutiveSet2(A,o3),L;
+A47:    h3 is u.t.i.
+         proof
+          let x,y,z be Element of ConsecutiveSet2(A,o3);
+A48:       ConsecutiveDelta2(q,o3) = h3 by A25,A27,A34;
+            o3 c= DistEsti(d) by A24,A27,A34,ORDINAL1:def 2;
+          then ConsecutiveDelta2(q,o3) is u.t.i. by A23,A27,A34;
+          hence h3.(x,z) <= h3.(x,y) "\/" h3.(y,z) by A48,LATTICE5:def 8;
+         end;
+A49:     dom h3 = [:ConsecutiveSet2(A,o3),ConsecutiveSet2(A,o3):]
+                                                      by FUNCT_2:def 1;
+        per cases;
+        suppose
+A50:     o1 c= o3;
+then A51:     ConsecutiveSet2(A,o1) c= ConsecutiveSet2(A,o3) by Th22;
+        thus f.(x,y) "\/" f.(y,z) >= f.(x,z)
+         proof
+          per cases;
+          suppose o2 c= o3;
+then A52:      ConsecutiveSet2(A,o2) c= ConsecutiveSet2(A,o3) by Th22;
+          then reconsider y' = y as Element of ConsecutiveSet2(A,o3) by A36;
+          reconsider x' = x as Element of ConsecutiveSet2(A,o3) by A35,A51;
+          reconsider z' = z as Element of ConsecutiveSet2(A,o3) by A27,A33,A34;
+            ConsecutiveDelta2(q,o3) in rng Ls by A25,A27,A34,A46,FUNCT_1:def 5
+;
+then A53:      h3 c= f by A46,ZFMISC_1:92;
+A54:      [x,y] in dom h3 by A35,A36,A49,A51,A52,ZFMISC_1:106;
+A55:      [y,z] in dom h3 by A36,A37,A49,A52,ZFMISC_1:106;
+A56:      [x,z] in dom h3 by A35,A37,A49,A51,ZFMISC_1:106;
+A57:      f.(x,y) = f.[x,y] by BINOP_1:def 1
+                 .= h3.[x,y] by A53,A54,GRFUNC_1:8
+                 .= h3.(x',y') by BINOP_1:def 1;
+A58:      f.(y,z) = f.[y,z] by BINOP_1:def 1
+                 .= h3.[y,z] by A53,A55,GRFUNC_1:8
+                 .= h3.(y',z') by BINOP_1:def 1;
+            f.(x,z) = f.[x,z] by BINOP_1:def 1
+                 .= h3.[x,z] by A53,A56,GRFUNC_1:8
+                 .= h3.(x',z') by BINOP_1:def 1;
+         hence f.(x,y) "\/" f.(y,z) >= f.(x,z) by A47,A57,A58,LATTICE5:def 8;
+         suppose o3 c= o2;
+then A59:      ConsecutiveSet2(A,o3) c= ConsecutiveSet2(A,o2) by Th22;
+         then reconsider z' = z as Element of ConsecutiveSet2(A,o2) by A37;
+           ConsecutiveSet2(A,o1) c= ConsecutiveSet2(A,o3) by A50,Th22;
+then A60:      ConsecutiveSet2(A,o1) c= ConsecutiveSet2(A,o2) by A59,XBOOLE_1:1
+;
+         then reconsider x' = x as Element of ConsecutiveSet2(A,o2) by A35;
+         reconsider y' = y as Element of ConsecutiveSet2(A,o2) by A27,A31,A32;
+           ConsecutiveDelta2(q,o2) in rng Ls by A25,A27,A32,A42,FUNCT_1:def 5
+;
+then A61:      h2 c= f by A42,ZFMISC_1:92;
+A62:      [x,y] in dom h2 by A35,A36,A45,A60,ZFMISC_1:106;
+A63:      [y,z] in dom h2 by A36,A37,A45,A59,ZFMISC_1:106;
+A64:      [x,z] in dom h2 by A35,A37,A45,A59,A60,ZFMISC_1:106;
+A65:      f.(x,y) = f.[x,y] by BINOP_1:def 1
+                 .= h2.[x,y] by A61,A62,GRFUNC_1:8
+                 .= h2.(x',y') by BINOP_1:def 1;
+A66:      f.(y,z) = f.[y,z] by BINOP_1:def 1
+                 .= h2.[y,z] by A61,A63,GRFUNC_1:8
+                 .= h2.(y',z') by BINOP_1:def 1;
+            f.(x,z) = f.[x,z] by BINOP_1:def 1
+                 .= h2.[x,z] by A61,A64,GRFUNC_1:8
+                 .= h2.(x',z') by BINOP_1:def 1;
+         hence f.(x,y) "\/" f.(y,z) >= f.(x,z) by A43,A65,A66,LATTICE5:def 8;
+        end;
+       suppose A67: o3 c= o1;
+then A68:   ConsecutiveSet2(A,o3) c= ConsecutiveSet2(A,o1) by Th22;
+      thus f.(x,y) "\/" f.(y,z) >= f.(x,z)
+       proof
+        per cases;
+        suppose o1 c= o2;
+then A69:     ConsecutiveSet2(A,o1) c= ConsecutiveSet2(A,o2) by Th22;
+        then reconsider x' = x as Element of ConsecutiveSet2(A,o2) by A35;
+          ConsecutiveSet2(A,o3) c= ConsecutiveSet2(A,o1) by A67,Th22;
+then A70:     ConsecutiveSet2(A,o3) c= ConsecutiveSet2(A,o2) by A69,XBOOLE_1:1;
+        then reconsider z' = z as Element of ConsecutiveSet2(A,o2) by A37;
+        reconsider y' = y as Element of ConsecutiveSet2(A,o2) by A27,A31,A32;
+          ConsecutiveDelta2(q,o2) in rng Ls by A25,A27,A32,A42,FUNCT_1:def 5
+;
+then A71:     h2 c= f by A42,ZFMISC_1:92;
+A72:     [x,y] in dom h2 by A35,A36,A45,A69,ZFMISC_1:106;
+A73:     [y,z] in dom h2 by A36,A37,A45,A70,ZFMISC_1:106;
+A74:     [x,z] in dom h2 by A35,A37,A45,A69,A70,ZFMISC_1:106;
+A75:     f.(x,y) = f.[x,y] by BINOP_1:def 1
+                .= h2.[x,y] by A71,A72,GRFUNC_1:8
+                .= h2.(x',y') by BINOP_1:def 1;
+A76:     f.(y,z) = f.[y,z] by BINOP_1:def 1
+                .= h2.[y,z] by A71,A73,GRFUNC_1:8
+                .= h2.(y',z') by BINOP_1:def 1;
+           f.(x,z) = f.[x,z] by BINOP_1:def 1
+                .= h2.[x,z] by A71,A74,GRFUNC_1:8
+                .= h2.(x',z') by BINOP_1:def 1;
+        hence f.(x,y) "\/" f.(y,z) >= f.(x,z) by A43,A75,A76,LATTICE5:def 8;
+        suppose o2 c= o1;
+then A77:     ConsecutiveSet2(A,o2) c= ConsecutiveSet2(A,o1) by Th22;
+        then reconsider y' = y as Element of ConsecutiveSet2(A,o1) by A36;
+        reconsider z' = z as Element of ConsecutiveSet2(A,o1) by A37,A68;
+        reconsider x' = x as Element of ConsecutiveSet2(A,o1) by A27,A29,A30;
+          ConsecutiveDelta2(q,o1) in rng Ls by A25,A27,A30,A38,FUNCT_1:def 5
+;
+then A78:     h1 c= f by A38,ZFMISC_1:92;
+A79:     [x,y] in dom h1 by A35,A36,A41,A77,ZFMISC_1:106;
+A80:     [y,z] in dom h1 by A36,A37,A41,A68,A77,ZFMISC_1:106;
+A81:     [x,z] in dom h1 by A35,A37,A41,A68,ZFMISC_1:106;
+A82:     f.(x,y) = f.[x,y] by BINOP_1:def 1
+                .= h1.[x,y] by A78,A79,GRFUNC_1:8
+                .= h1.(x',y') by BINOP_1:def 1;
+A83:     f.(y,z) = f.[y,z] by BINOP_1:def 1
+                .= h1.[y,z] by A78,A80,GRFUNC_1:8
+                .= h1.(y',z') by BINOP_1:def 1;
+           f.(x,z) = f.[x,z] by BINOP_1:def 1
+                .= h1.[x,z] by A78,A81,GRFUNC_1:8
+                .= h1.(x',z') by BINOP_1:def 1;
+        hence f.(x,y) "\/" f.(y,z) >= f.(x,z) by A39,A82,A83,LATTICE5:def 8;
+       end;
+      end;
+     hence ConsecutiveDelta2(q,O2) is u.t.i. by A23,A25,Th21;
+    end;
+    for O being Ordinal holds X[O] from Ordinal_Ind(A4,A6,A22);
+   hence thesis;
+  end;
+
+theorem
+   for A being non empty set
+ for L being lower-bounded modular LATTICE
+ for d being distance_function of A,L
+ for O being Ordinal
+ for q being QuadrSeq of d st O c= DistEsti(d)
+  holds ConsecutiveDelta2(q,O) is distance_function of ConsecutiveSet2(A,O),L
+   by Th26,Th27,Th28;
+
+definition
+ let A be non empty set;
+ let L be lower-bounded LATTICE;
+ let d be BiFunction of A,L;
+func NextSet2(d) equals :Def9:
+ ConsecutiveSet2(A,DistEsti(d));
+ correctness;
+end;
+
+definition
+ let A be non empty set;
+ let L be lower-bounded LATTICE;
+ let d be BiFunction of A,L;
+cluster NextSet2(d) -> non empty;
+ coherence
+  proof
+    ConsecutiveSet2(A,DistEsti(d)) is non empty;
+  hence thesis by Def9;
+ end;
+end;
+
+definition
+ let A be non empty set;
+ let L be lower-bounded LATTICE;
+ let d be BiFunction of A,L;
+ let q be QuadrSeq of d;
+func NextDelta2(q) equals :Def10:
+ ConsecutiveDelta2(q,DistEsti(d));
+ correctness;
+end;
+
+definition
+ let A be non empty set;
+ let L be lower-bounded modular LATTICE;
+ let d be distance_function of A,L;
+ let q be QuadrSeq of d;
+ redefine func NextDelta2(q) -> distance_function of NextSet2(d),L;
+ coherence
+   proof
+A1:  ConsecutiveDelta2(q,DistEsti(d)) = NextDelta2(q) by Def10;
+       ConsecutiveSet2(A,DistEsti(d)) = NextSet2(d) by Def9;
+     hence thesis by A1,Th26,Th27,Th28;
+  end;
+end;
+
+definition
+ let A be non empty set;
+ let L be lower-bounded LATTICE;
+ let d be distance_function of A,L;
+ let Aq be non empty set;
+ let dq be distance_function of Aq,L;
+pred Aq, dq is_extension2_of A,d means :Def11:
+  ex q being QuadrSeq of d st Aq = NextSet2(d) & dq = NextDelta2(q);
+end;
+
+theorem Th30:
+ for A being non empty set
+ for L be lower-bounded LATTICE
+ for d be distance_function of A,L
+ for Aq be non empty set
+ for dq be distance_function of Aq,L st Aq, dq is_extension2_of A,d
+ for x,y being Element of A, a,b being Element of L st d.(x,y) <= a "\/" b
+     ex z1,z2 being Element of Aq
+      st dq.(x,z1) = a & dq.(z1,z2) = (d.(x,y) "\/" a) "/\" b & dq.(z2,y) = a
+ proof
+  let A be non empty set;
+  let L be lower-bounded LATTICE;
+  let d be distance_function of A,L;
+  let Aq be non empty set;
+  let dq be distance_function of Aq,L;
+  assume Aq, dq is_extension2_of A,d;
+  then consider q being QuadrSeq of d such that
+A1: Aq = NextSet2(d) and
+A2: dq = NextDelta2(q) by Def11;
+  let x,y be Element of A;
+  let a,b be Element of L; assume
+A3: d.(x,y) <= a "\/" b;
+     rng q = {[x',y',a',b'] where x' is Element of A, y' is Element of A,
+                a' is Element of L, b' is Element of L: d.(x',y')
+        <= a'"\/"b'} by LATTICE5:def 14;
+   then [x,y,a,b] in rng q by A3;
+   then consider o being set such that
+A4:  o in dom q & q.o = [x,y,a,b] by FUNCT_1:def 5;
+   reconsider o as Ordinal by A4,ORDINAL1:23;
+A5:  q.o = Quadr2(q,o) by A4,Def7;
+then A6:    x = Quadr2(q,o)`1 by A4,MCART_1:78;
+A7:    y = Quadr2(q,o)`2 by A4,A5,MCART_1:78;
+A8:    a = Quadr2(q,o)`3 by A4,A5,MCART_1:78;
+A9:    b = Quadr2(q,o)`4 by A4,A5,MCART_1:78;
+   reconsider B = ConsecutiveSet2(A,o) as non empty set;
+   reconsider Q = Quadr2(q,o)
+                    as Element of [:B,B,the carrier of L,the carrier of L:];
+   reconsider cd = ConsecutiveDelta2(q,o) as BiFunction of B,L;
+     x in A & y in A & A c= B by Th18;
+   then reconsider xo = x, yo = y as Element of B;
+       xo in B & yo in B & B c= new_set2 B by Th13;
+    then reconsider x1 = xo, y1 = yo as Element of new_set2 B;
+A10: ConsecutiveSet2(A,succ o) = new_set2 B by Th16;
+      o in DistEsti(d) by A4,LATTICE5:28;
+then A11: succ o c= DistEsti(d) by ORDINAL1:33;
+then A12: ConsecutiveDelta2(q,succ o) c= ConsecutiveDelta2(q,DistEsti(d)) by
+Th25;
+      ConsecutiveDelta2(q,succ o)
+        = new_bi_fun2(BiFun(ConsecutiveDelta2(q,o),
+          ConsecutiveSet2(A,o),L),Quadr2(q,o)) by Th20
+       .= new_bi_fun2(cd,Q) by LATTICE5:def 16;
+then A13:  new_bi_fun2(cd,Q) c= dq by A2,A12,Def10;
+      {B} in {{B}, {{B}} } by TARSKI:def 2;
+    then {B} in B \/ {{B}, {{B}} } by XBOOLE_0:def 2;
+then A14: {B} in new_set2 B by Def4;
+      {{B}} in {{B}, {{B}} } by TARSKI:def 2;
+    then {{B}} in B \/ {{B}, {{B}} } by XBOOLE_0:def 2;
+then A15: {{B}} in new_set2 B by Def4;
+A16: cd is zeroed by Th26;
+A17: dom new_bi_fun2(cd,Q) = [:new_set2 B,new_set2 B:] by FUNCT_2:def 1;
+then A18: [x1,{B}] in dom new_bi_fun2(cd,Q) by A14,ZFMISC_1:106;
+A19: [{B},{{B}}] in dom new_bi_fun2(cd,Q) by A14,A15,A17,ZFMISC_1:106;
+A20: [{{B}},y1] in dom new_bi_fun2(cd,Q) by A15,A17,ZFMISC_1:106;
+A21: d c= cd by Th24;
+  dom d = [:A,A:] by FUNCT_2:def 1;
+then A22: [xo,yo] in dom d by ZFMISC_1:106;
+A23: cd.(xo,yo) = cd.[xo,yo] by BINOP_1:def 1
+               .= d.[xo,yo] by A21,A22,GRFUNC_1:8
+               .= d.(x,y) by BINOP_1:def 1;
+     new_set2 B c= ConsecutiveSet2(A,DistEsti(d)) by A10,A11,Th22;
+   then reconsider z1={B},z2={{B}} as Element of Aq by A1,A14,A15,Def9;
+   take z1,z2;
+   thus dq.(x,z1) = dq.[x,z1] by BINOP_1:def 1
+     .= new_bi_fun2(cd,Q).[x1,{B}] by A13,A18,GRFUNC_1:8
+     .= new_bi_fun2(cd,Q).(x1,{B}) by BINOP_1:def 1
+     .= cd.(xo,xo)"\/"a by A6,A8,Def5
+     .= Bottom L"\/"a by A16,LATTICE5:def 7
+     .= a by WAYBEL_1:4;
+   thus dq.(z1,z2) = dq.[z1,z2] by BINOP_1:def 1
+     .= new_bi_fun2(cd,Q).[{B},{{B}}] by A13,A19,GRFUNC_1:8
+     .= new_bi_fun2(cd,Q).({B},{{B}}) by BINOP_1:def 1
+     .= (d.(x,y)"\/"a)"/\"b by A6,A7,A8,A9,A23,Def5;
+   thus dq.(z2,y) = dq.[z2,y] by BINOP_1:def 1
+      .= new_bi_fun2(cd,Q).[{{B}},y1] by A13,A20,GRFUNC_1:8
+      .= new_bi_fun2(cd,Q).({{B}},y1) by BINOP_1:def 1
+     .= cd.(yo,yo)"\/"a by A7,A8,Def5
+     .= Bottom L"\/"a by A16,LATTICE5:def 7
+     .= a by WAYBEL_1:4;
+end;
+
+definition
+ let A be non empty set;
+ let L be lower-bounded modular LATTICE;
+ let d be distance_function of A,L;
+mode ExtensionSeq2 of A,d -> Function means :Def12:
+  dom it = NAT & it.0 = [A,d] & for n being Nat holds
+   ex A' being non empty set, d' being distance_function of A',L,
+    Aq being non empty set, dq being distance_function of Aq,L
+     st Aq, dq is_extension2_of A',d' & it.n = [A',d'] & it.(n+1) = [Aq,dq];
+ existence
+   proof
+    defpred P[set,set,set] means
+       (ex A' being non empty set, d' being distance_function of A',L,
+           Aq being non empty set, dq being distance_function of Aq,L st
+        Aq, dq is_extension2_of A',d' & $2 = [A',d'] & $3 = [Aq,dq]) or
+       $3= 0 &
+       not ex A' being non empty set, d' being distance_function of A',L,
+              Aq being non empty set, dq being distance_function of Aq,L st
+              Aq, dq is_extension2_of A',d' & $2 = [A',d'];
+A1: for n being Nat for x being set ex y being set st P[n,x,y]
+  proof
+  let n be Nat; let x be set;
+   per cases;
+    suppose ex A' being non empty set, d' being distance_function of A',L,
+      Aq being non empty set, dq being distance_function of Aq,L st
+      Aq, dq is_extension2_of A',d' & x = [A',d'];
+     then consider A' being non empty set, d' being distance_function of A',L,
+         Aq being non empty set, dq being distance_function of Aq,L such that
+A2:   Aq, dq is_extension2_of A',d' and
+A3:   x = [A',d'];
+     take [Aq,dq];
+     thus thesis by A2,A3;
+    suppose
+A4: not ex A' being non empty set, d' being distance_function of A',L,
+     Aq being non empty set, dq being distance_function of Aq,L st
+      Aq, dq is_extension2_of A',d' & x = [A',d'];
+     take 0;
+     thus thesis by A4;
+ end;
+   consider f being Function such that
+A5:  dom f = NAT and
+A6:  f.0 = [A,d] and
+A7:  for n being Element of NAT holds P[n,f.n,f.(n+1)] from RecChoice(A1);
+   take f;
+   thus dom f = NAT by A5;
+   thus f.0 = [A,d] by A6;
+    defpred X[Nat] means
+       ex A' being non empty set, d' being distance_function of A',L,
+       Aq being non empty set, dq being distance_function of Aq,L st
+           Aq, dq is_extension2_of A',d' &
+           f.$1 = [A',d'] & f.($1+1) = [Aq,dq];
+       ex A' being non empty set, d' being distance_function of A',L,
+        Aq being non empty set, dq being distance_function of Aq,L st
+        Aq, dq is_extension2_of A',d' & f.0 = [A',d']
+       proof
+       take A,d;
+       consider q being QuadrSeq of d;
+       set Aq = NextSet2(d);
+       consider dq being distance_function of Aq,L such that
+A8:    dq = NextDelta2(q);
+       take Aq,dq;
+       thus Aq, dq is_extension2_of A,d by A8,Def11;
+       thus f.0 = [A,d] by A6;
+      end;
+then A9: X[0] by A7;
+A10: for k being Nat st X[k] holds X[k+1]
+  proof
+  let k be Nat; given
+    A' being non empty set, d' being distance_function of A',L,
+    Aq being non empty set, dq being distance_function of Aq,L such that
+       Aq, dq is_extension2_of A',d' and
+       f.k = [A',d'] and
+A11:  f.(k+1) = [Aq,dq];
+      ex A1 being non empty set, d1 being distance_function of A1,L,
+       AQ being non empty set, DQ being distance_function of AQ,L st
+       AQ, DQ is_extension2_of A1,d1 & f.(k+1) = [A1,d1]
+      proof
+      take Aq,dq;
+      set AQ = NextSet2(dq);
+      consider Q being QuadrSeq of dq;
+      set DQ = NextDelta2(Q);
+      take AQ,DQ;
+      thus AQ, DQ is_extension2_of Aq,dq by Def11;
+      thus f.(k+1) = [Aq,dq] by A11;
+     end;
+   hence thesis by A7;
+ end;
+   thus for k being Nat holds X[k] from Ind(A9,A10);
+  end;
+end;
+
+theorem Th31:
+ for A being non empty set
+ for L be lower-bounded modular LATTICE
+ for d be distance_function of A,L
+ for S being ExtensionSeq2 of A,d
+ for k,l being Nat st k <= l holds (S.k)`1 c= (S.l)`1
+ proof
+  let A be non empty set;
+  let L be lower-bounded modular LATTICE;
+  let d be distance_function of A,L;
+  let S be ExtensionSeq2 of A,d;
+  let k be Nat;
+   defpred X[Nat] means k <= $1 implies (S.k)`1 c= (S.$1)`1;
+A1: X[0] by NAT_1:19;
+A2: for i being Nat st X[i] holds X[i+1]
+   proof
+    let i be Nat;
+    assume that
+A3: k <= i implies (S.k)`1 c= (S.i)`1 and
+A4: k <= i+1;
+    per cases by A4,NAT_1:26;
+     suppose k = i+1;
+     hence (S.k)`1 c= (S.(i+1))`1;
+     suppose A5: k <= i;
+      consider A' being non empty set, d' being distance_function of A',L,
+        Aq being non empty set, dq being distance_function of Aq,L such that
+A6:  Aq, dq is_extension2_of A',d' and
+A7:  S.i = [A',d'] & S.(i+1) = [Aq,dq] by Def12;
+     consider q being QuadrSeq of d' such that
+A8:  Aq = NextSet2(d') and
+          dq = NextDelta2(q) by A6,Def11;
+A9:  (S.i)`1 = A' by A7,MCART_1:def 1;
+A10:  (S.(i+1))`1 = NextSet2(d') by A7,A8,MCART_1:def 1
+                  .= ConsecutiveSet2(A',DistEsti(d')) by Def9;
+         (S.i)`1 c= ConsecutiveSet2(A',DistEsti(d')) by A9,Th18;
+     hence (S.k)`1 c= (S.(i+1))`1 by A3,A5,A10,XBOOLE_1:1;
+  end;
+  thus for l being Nat holds X[l] from Ind(A1,A2);
+ end;
+
+theorem Th32:
+ for A being non empty set
+ for L be lower-bounded modular LATTICE
+ for d be distance_function of A,L
+ for S being ExtensionSeq2 of A,d
+ for k,l being Nat st k <= l holds (S.k)`2 c= (S.l)`2
+   proof
+    let A be non empty set;
+    let L be lower-bounded modular LATTICE;
+    let d be distance_function of A,L;
+    let S be ExtensionSeq2 of A,d;
+    let k be Nat;
+     defpred X[Nat] means k <= $1 implies (S.k)`2 c= (S.$1)`2;
+A1:  X[0] by NAT_1:19;
+A2:  for i being Nat st X[i] holds X[i+1]
+    proof
+     let i be Nat;
+     assume that
+A3:  k <= i implies (S.k)`2 c= (S.i)`2 and
+A4:  k <= i+1;
+     per cases by A4,NAT_1:26;
+     suppose k = i+1;
+     hence (S.k)`2 c= (S.(i+1))`2;
+     suppose A5: k <= i;
+     consider A' being non empty set, d' being distance_function of A',L,
+      Aq being non empty set, dq being distance_function of Aq,L such that
+A6:    Aq, dq is_extension2_of A',d' and
+A7:    S.i = [A',d'] & S.(i+1) = [Aq,dq] by Def12;
+     consider q being QuadrSeq of d' such that
+        Aq = NextSet2(d') and
+A8:   dq = NextDelta2(q) by A6,Def11;
+A9:   (S.i)`2 = d' by A7,MCART_1:def 2;
+A10:  (S.(i+1))`2 = NextDelta2(q) by A7,A8,MCART_1:def 2
+                 .= ConsecutiveDelta2(q,DistEsti(d')) by Def10;
+       (S.i)`2 c= ConsecutiveDelta2(q,DistEsti(d')) by A9,Th24;
+     hence (S.k)`2 c= (S.(i+1))`2 by A3,A5,A10,XBOOLE_1:1;
+   end;
+  thus for l being Nat holds X[l] from Ind(A1,A2);
+ end;
+
+theorem Th33:
+  for L be lower-bounded modular LATTICE
+  for S being ExtensionSeq2 of the carrier of L, BasicDF(L)
+  for FS being non empty set
+   st FS = union { (S.i)`1 where i is Nat: not contradiction}
+      holds union { (S.i)`2 where i is Nat: not contradiction}
+             is distance_function of FS,L
+ proof
+  let L be lower-bounded modular LATTICE;
+  let S be ExtensionSeq2 of the carrier of L, BasicDF(L);
+  let FS be non empty set;
+  assume
+A1: FS = union { (S.i)`1 where i is Nat: not contradiction};
+   set FD = union { (S.i)`2 where i is Nat: not contradiction};
+   set A = the carrier of L;
+  (S.0)`1 in { (S.i)`1 where i is Nat: not contradiction};
+   then reconsider X = { (S.i)`1 where i is Nat: not contradiction}
+      as non empty set;
+   reconsider FS as non empty set;
+A2: { (S.i)`2 where i is Nat: not contradiction} is c=-linear
+   proof
+      now
+     let x,y be set;
+     assume that
+A3:   x in { (S.i)`2 where i is Nat: not contradiction} and
+A4:   y in { (S.i)`2 where i is Nat: not contradiction};
+     consider k being Nat such that
+A5:  x = (S.k)`2 by A3;
+     consider l being Nat such that
+A6:  y = (S.l)`2 by A4;
+       k <= l or l <= k;
+     then x c= y or y c= x by A5,A6,Th32;
+     hence x,y are_c=-comparable by XBOOLE_0:def 9;
+    end;
+   hence thesis by ORDINAL1:def 9;
+  end;
+     { (S.i)`2 where i is Nat: not contradiction} c= PFuncs([:FS,FS:],A)
+    proof
+     let z be set;
+     assume z in { (S.i)`2 where i is Nat: not contradiction};
+     then consider j being Nat such that
+A7:  z = (S.j)`2;
+     consider A' being non empty set, d' being distance_function of A',L,
+        Aq being non empty set, dq being distance_function of Aq,L such that
+          Aq, dq is_extension2_of A',d' and
+A8:  S.j = [A',d'] & S.(j+1) = [Aq,dq] by Def12;
+A9:  z = d' by A7,A8,MCART_1:def 2;
+A10:  rng d' c= A;
+A11:  dom d' = [:A',A':] by FUNCT_2:def 1;
+       A' = (S.j)`1 by A8,MCART_1:def 1;
+     then A' in { (S.i)`1 where i is Nat: not contradiction};
+     then A' c= FS by A1,ZFMISC_1:92;
+     then dom d' c= [:FS,FS:] by A11,ZFMISC_1:119;
+     hence z in PFuncs([:FS,FS:],A) by A9,A10,PARTFUN1:def 5;
+    end;
+    then FD in PFuncs([:FS,FS:],A) by A2,HAHNBAN:13;
+    then consider g being Function such that
+A12: FD = g and
+      dom g c= [:FS,FS:] and
+A13: rng g c= A by PARTFUN1:def 5;
+    reconsider FD as Function by A12;
+A14: X is c=-linear
+     proof
+        now
+       let x,y be set;
+       assume that
+A15:    x in X and
+A16:    y in X;
+       consider k being Nat such that
+A17:    x = (S.k)`1 by A15;
+       consider l being Nat such that
+A18:    y = (S.l)`1 by A16;
+         k <= l or l <= k;
+       then x c= y or y c= x by A17,A18,Th31;
+       hence x,y are_c=-comparable by XBOOLE_0:def 9;
+      end;
+     hence thesis by ORDINAL1:def 9;
+    end;
+     defpred X[set,set] means $2 = (S.$1)`2;
+A19: for x,y1,y2 being set st x in NAT & X[x,y1] & X[x,y2]
+     holds y1 = y2;
+A20: for x being set st x in NAT ex y being set st X[x,y];
+    consider F being Function such that
+A21: dom F = NAT and
+A22: for x being set st x in NAT holds X[x,F.x] from FuncEx(A19,A20);
+A23: rng F = { (S.i)`2 where i is Nat: not contradiction}
+     proof
+      thus rng F c= { (S.i)`2 where i is Nat: not contradiction}
+       proof
+        let x be set;
+        assume x in rng F;
+        then consider j being set such that
+A24:     j in dom F & F.j = x by FUNCT_1:def 5;
+        reconsider j as Nat by A21,A24;
+          x = (S.j)`2 by A22,A24;
+        hence x in { (S.i)`2 where i is Nat: not contradiction};
+       end;
+      let x be set;
+      assume x in { (S.i)`2 where i is Nat: not contradiction};
+      then consider j being Nat such that
+A25:   x = (S.j)`2;
+        x = F.j by A22,A25;
+      hence x in rng F by A21,FUNCT_1:def 5;
+     end;
+      F is Function-yielding
+     proof
+      let x be set;
+      assume x in dom F;
+      then reconsider j = x as Nat by A21;
+      consider A1 being non empty set, d1 being distance_function of A1,L,
+         Aq1 being non empty set, dq1 being distance_function of Aq1,L
+         such that
+         Aq1, dq1 is_extension2_of A1,d1 and
+A26:   S.j = [A1,d1] & S.(j+1) = [Aq1,dq1] by Def12;
+        (S.j)`2 = d1 by A26,MCART_1:def 2;
+      hence F.x is Function by A22;
+     end;
+    then reconsider F as Function-yielding Function;
+    set LL = { [:I,I:] where I is Element of X : I in X },
+    PP = { [:(S.i)`1,(S.i)`1:] where i is Nat: not contradiction };
+A27: rng doms F = PP
+     proof
+      thus rng doms F c= PP
+       proof
+        let x be set;
+        assume x in rng doms F;
+        then consider j being set such that
+A28:     j in dom doms F & x = (doms F).j by FUNCT_1:def 5;
+A29:     j in dom F by A28,EXTENS_1:3;
+        reconsider j as Nat by A21,A28,EXTENS_1:3;
+        consider A1 being non empty set, d1 being distance_function of A1,L,
+           Aq1 being non empty set, dq1 being distance_function of Aq1,L
+           such that
+           Aq1, dq1 is_extension2_of A1,d1 and
+A30:     S.j = [A1,d1] & S.(j+1) = [Aq1,dq1] by Def12;
+A31:     (S.j)`2 = d1 by A30,MCART_1:def 2;
+A32:     (S.j)`1 = A1 by A30,MCART_1:def 1;
+          x = dom (F.j) by A28,A29,FUNCT_6:31
+         .= dom d1 by A22,A31
+         .= [:(S.j)`1,(S.j)`1:] by A32,FUNCT_2:def 1;
+        hence x in PP;
+       end;
+      let x be set; assume x in PP;
+      then consider j being Nat such that
+A33:   x = [:(S.j)`1,(S.j)`1:];
+      consider A1 being non empty set, d1 being distance_function of A1,L,
+       Aq1 being non empty set, dq1 being distance_function of Aq1,L such that
+         Aq1, dq1 is_extension2_of A1,d1 and
+A34:   S.j = [A1,d1] & S.(j+1) = [Aq1,dq1] by Def12;
+A35:   (S.j)`2 = d1 by A34,MCART_1:def 2;
+A36:   (S.j)`1 = A1 by A34,MCART_1:def 1;
+        j in NAT;
+then A37:   j in dom doms F by A21,EXTENS_1:3;
+        x = dom d1 by A33,A36,FUNCT_2:def 1
+       .= dom (F.j) by A22,A35
+       .= (doms F).j by A21,FUNCT_6:31;
+      hence x in rng doms F by A37,FUNCT_1:def 5;
+     end;
+  LL = PP
+      proof
+       thus LL c= PP
+        proof
+         let x be set; assume x in LL;
+         then consider J being Element of X such that
+A38:      x = [:J,J:] and
+A39:      J in X;
+         consider j being Nat such that
+A40:      J = (S.j)`1 by A39;
+         thus x in PP by A38,A40;
+        end;
+       let x be set;
+       assume x in PP;
+       then consider j being Nat such that
+A41:    x = [:(S.j)`1,(S.j)`1:];
+     (S.j)`1 in X;
+       hence x in LL by A41;
+      end;
+     then [:FS,FS:] = union rng doms F by A1,A14,A27,LATTICE5:3
+              .= dom FD by A23,LATTICE5:1;
+     then FD is Function of [:FS,FS:],A by A12,A13,FUNCT_2:def 1,RELSET_1:11;
+     then reconsider FD as BiFunction of FS,L;
+A42:  FD is zeroed
+      proof
+       let x be Element of FS;
+       consider y being set such that
+A43:    x in y & y in X by A1,TARSKI:def 4;
+       consider j being Nat such that
+A44:    y = (S.j)`1 by A43;
+       consider A1 being non empty set, d1 being distance_function of A1,L,
+        Aq1 being non empty set, dq1 being distance_function of Aq1,L
+         such that Aq1, dq1 is_extension2_of A1,d1 and
+A45:      S.j = [A1,d1] & S.(j+1) = [Aq1,dq1] by Def12;
+A46:   (S.j)`2 = d1 by A45,MCART_1:def 2;
+       reconsider x' = x as Element of A1 by A43,A44,A45,MCART_1:def 1;
+         d1 in { (S.i)`2 where i is Nat: not contradiction} by A46;
+then A47:    d1 c= FD by ZFMISC_1:92;
+A48:    dom d1 = [:A1,A1:] by FUNCT_2:def 1;
+       thus FD.(x,x) = FD.[x',x'] by BINOP_1:def 1
+                    .= d1.[x',x'] by A47,A48,GRFUNC_1:8
+                    .= d1.(x',x') by BINOP_1:def 1
+                    .= Bottom L by LATTICE5:def 7;
+     end;
+A49: FD is symmetric
+    proof
+     let x,y be Element of FS;
+     consider x1 being set such that
+A50:  x in x1 & x1 in X by A1,TARSKI:def 4;
+     consider k being Nat such that
+A51:  x1 = (S.k)`1 by A50;
+     consider A1 being non empty set, d1 being distance_function of A1,L,
+      Aq1 being non empty set, dq1 being distance_function of Aq1,L such that
+         Aq1, dq1 is_extension2_of A1,d1 and
+A52:    S.k = [A1,d1] & S.(k+1) = [Aq1,dq1] by Def12;
+A53: (S.k)`2 = d1 by A52,MCART_1:def 2;
+A54: (S.k)`1 = A1 by A52,MCART_1:def 1;
+       d1 in { (S.i)`2 where i is Nat: not contradiction} by A53;
+then A55: d1 c= FD by ZFMISC_1:92;
+A56: x in A1 by A50,A51,A52,MCART_1:def 1;
+    consider y1 being set such that
+A57: y in y1 & y1 in X by A1,TARSKI:def 4;
+    consider l being Nat such that
+A58: y1 = (S.l)`1 by A57;
+    consider A2 being non empty set, d2 being distance_function of A2,L,
+      Aq2 being non empty set, dq2 being distance_function of Aq2,L such that
+         Aq2, dq2 is_extension2_of A2,d2 and
+A59:    S.l = [A2,d2] & S.(l+1) = [Aq2,dq2] by Def12;
+A60: (S.l)`2 = d2 by A59,MCART_1:def 2;
+A61: (S.l)`1 = A2 by A59,MCART_1:def 1;
+       d2 in { (S.i)`2 where i is Nat: not contradiction} by A60;
+then A62: d2 c= FD by ZFMISC_1:92;
+A63: y in A2 by A57,A58,A59,MCART_1:def 1;
+     per cases;
+     suppose k <= l;
+     then A1 c= A2 by A54,A61,Th31;
+     then reconsider x'=x,y'=y as Element of A2 by A56,A57,A58,A59,MCART_1:def
+1;
+A64:  dom d2 = [:A2,A2:] by FUNCT_2:def 1;
+     thus FD.(x,y) = FD.[x',y'] by BINOP_1:def 1
+                  .= d2.[x',y'] by A62,A64,GRFUNC_1:8
+                  .= d2.(x',y') by BINOP_1:def 1
+                  .= d2.(y',x') by LATTICE5:def 6
+                  .= d2.[y',x'] by BINOP_1:def 1
+                  .= FD.[y',x'] by A62,A64,GRFUNC_1:8
+                  .= FD.(y,x) by BINOP_1:def 1;
+     suppose l <= k;
+     then A2 c= A1 by A54,A61,Th31;
+     then reconsider x'=x,y'=y as Element of A1 by A50,A51,A52,A63,MCART_1:def
+1;
+A65:  dom d1 = [:A1,A1:] by FUNCT_2:def 1;
+     thus FD.(x,y) = FD.[x',y'] by BINOP_1:def 1
+                  .= d1.[x',y'] by A55,A65,GRFUNC_1:8
+                  .= d1.(x',y') by BINOP_1:def 1
+                  .= d1.(y',x') by LATTICE5:def 6
+                  .= d1.[y',x'] by BINOP_1:def 1
+                  .= FD.[y',x'] by A55,A65,GRFUNC_1:8
+                  .= FD.(y,x) by BINOP_1:def 1;
+   end;
+    FD is u.t.i.
+   proof
+    let x,y,z be Element of FS;
+    consider x1 being set such that
+A66: x in x1 & x1 in X by A1,TARSKI:def 4;
+    consider k being Nat such that
+A67: x1 = (S.k)`1 by A66;
+    consider A1 being non empty set, d1 being distance_function of A1,L,
+     Aq1 being non empty set, dq1 being distance_function of Aq1,L such that
+        Aq1, dq1 is_extension2_of A1,d1 and
+A68:   S.k = [A1,d1] & S.(k+1) = [Aq1,dq1] by Def12;
+A69: (S.k)`2 = d1 by A68,MCART_1:def 2;
+A70: (S.k)`1 = A1 by A68,MCART_1:def 1;
+       d1 in { (S.i)`2 where i is Nat: not contradiction} by A69;
+then A71: d1 c= FD by ZFMISC_1:92;
+A72: x in A1 by A66,A67,A68,MCART_1:def 1;
+A73: dom d1 = [:A1,A1:] by FUNCT_2:def 1;
+    consider y1 being set such that
+A74: y in y1 & y1 in X by A1,TARSKI:def 4;
+    consider l being Nat such that
+A75: y1 = (S.l)`1 by A74;
+    consider A2 being non empty set, d2 being distance_function of A2,L,
+      Aq2 being non empty set, dq2 being distance_function of Aq2,L such that
+         Aq2, dq2 is_extension2_of A2,d2 and
+A76:   S.l = [A2,d2] & S.(l+1) = [Aq2,dq2] by Def12;
+A77: (S.l)`2 = d2 by A76,MCART_1:def 2;
+A78: (S.l)`1 = A2 by A76,MCART_1:def 1;
+       d2 in { (S.i)`2 where i is Nat: not contradiction} by A77;
+then A79: d2 c= FD by ZFMISC_1:92;
+A80: y in A2 by A74,A75,A76,MCART_1:def 1;
+A81: dom d2 = [:A2,A2:] by FUNCT_2:def 1;
+    consider z1 being set such that
+A82: z in z1 & z1 in X by A1,TARSKI:def 4;
+    consider n being Nat such that
+A83: z1 = (S.n)`1 by A82;
+    consider A3 being non empty set, d3 being distance_function of A3,L,
+      Aq3 being non empty set, dq3 being distance_function of Aq3,L such that
+         Aq3, dq3 is_extension2_of A3,d3 and
+A84:   S.n = [A3,d3] & S.(n+1) = [Aq3,dq3] by Def12;
+A85: (S.n)`2 = d3 by A84,MCART_1:def 2;
+A86: (S.n)`1 = A3 by A84,MCART_1:def 1;
+       d3 in { (S.i)`2 where i is Nat: not contradiction} by A85;
+then A87: d3 c= FD by ZFMISC_1:92;
+A88: z in A3 by A82,A83,A84,MCART_1:def 1;
+A89: dom d3 = [:A3,A3:] by FUNCT_2:def 1;
+     per cases;
+      suppose k <= l;
+then A90:  A1 c= A2 by A70,A78,Th31;
+       thus FD.(x,y) "\/" FD.(y,z) >= FD.(x,z)
+         proof
+         per cases;
+          suppose l <= n;
+then A91:   A2 c= A3 by A78,A86,Th31;
+            then A1 c= A3 by A90,XBOOLE_1:1;
+           then reconsider x' = x, y' = y, z' = z as Element of A3
+                                 by A72,A80,A82,A83,A84,A91,MCART_1:def 1;
+A92:   FD.(x,y) = FD.[x',y'] by BINOP_1:def 1
+              .= d3.[x',y'] by A87,A89,GRFUNC_1:8
+              .= d3.(x',y') by BINOP_1:def 1;
+A93:   FD.(y,z) = FD.[y',z'] by BINOP_1:def 1
+              .= d3.[y',z'] by A87,A89,GRFUNC_1:8
+              .= d3.(y',z') by BINOP_1:def 1;
+              FD.(x,z) = FD.[x',z'] by BINOP_1:def 1
+              .= d3.[x',z'] by A87,A89,GRFUNC_1:8
+              .= d3.(x',z') by BINOP_1:def 1;
+          hence FD.(x,y) "\/" FD.(y,z) >= FD.(x,z) by A92,A93,LATTICE5:def 8;
+          suppose n <= l;
+           then A3 c= A2 by A78,A86,Th31;
+           then reconsider x' = x, y' = y, z' = z as Element of A2
+                                by A72,A74,A75,A76,A88,A90,MCART_1:def 1;
+A94:   FD.(x,y) = FD.[x',y'] by BINOP_1:def 1
+                .= d2.[x',y'] by A79,A81,GRFUNC_1:8
+                .= d2.(x',y') by BINOP_1:def 1;
+A95:   FD.(y,z) = FD.[y',z'] by BINOP_1:def 1
+              .= d2.[y',z'] by A79,A81,GRFUNC_1:8
+              .= d2.(y',z') by BINOP_1:def 1;
+          FD.(x,z) = FD.[x',z'] by BINOP_1:def 1
+              .= d2.[x',z'] by A79,A81,GRFUNC_1:8
+              .= d2.(x',z') by BINOP_1:def 1;
+          hence FD.(x,y) "\/" FD.(y,z) >= FD.(x,z) by A94,A95,LATTICE5:def 8;
+        end;
+      suppose l <= k;
+then A96:  A2 c= A1 by A70,A78,Th31;
+       thus FD.(x,y) "\/" FD.(y,z) >= FD.(x,z)
+         proof
+         per cases;
+          suppose k <= n;
+then A97:  A1 c= A3 by A70,A86,Th31;
+           then A2 c= A3 by A96,XBOOLE_1:1;
+           then reconsider x' = x, y' = y, z' = z as Element of A3
+                                  by A72,A80,A82,A83,A84,A97,MCART_1:def 1;
+A98:   FD.(x,y) = FD.[x',y'] by BINOP_1:def 1
+                .= d3.[x',y'] by A87,A89,GRFUNC_1:8
+                .= d3.(x',y') by BINOP_1:def 1;
+A99:   FD.(y,z) = FD.[y',z'] by BINOP_1:def 1
+                .= d3.[y',z'] by A87,A89,GRFUNC_1:8
+                .= d3.(y',z') by BINOP_1:def 1;
+          FD.(x,z) = FD.[x',z'] by BINOP_1:def 1
+                .= d3.[x',z'] by A87,A89,GRFUNC_1:8
+                .= d3.(x',z') by BINOP_1:def 1;
+          hence FD.(x,y) "\/" FD.(y,z) >= FD.(x,z) by A98,A99,LATTICE5:def 8;
+          suppose n <= k;
+           then A3 c= A1 by A70,A86,Th31;
+           then reconsider x' = x, y' = y, z' = z as Element of A1
+                                by A66,A67,A68,A80,A88,A96,MCART_1:def 1;
+A100:   FD.(x,y) = FD.[x',y'] by BINOP_1:def 1
+                .= d1.[x',y'] by A71,A73,GRFUNC_1:8
+                .= d1.(x',y') by BINOP_1:def 1;
+A101:   FD.(y,z) = FD.[y',z'] by BINOP_1:def 1
+                .= d1.[y',z'] by A71,A73,GRFUNC_1:8
+                .= d1.(y',z') by BINOP_1:def 1;
+          FD.(x,z) = FD.[x',z'] by BINOP_1:def 1
+                .= d1.[x',z'] by A71,A73,GRFUNC_1:8
+                .= d1.(x',z') by BINOP_1:def 1;
+          hence FD.(x,y) "\/" FD.(y,z) >= FD.(x,z) by A100,A101,LATTICE5:def 8
+;
+        end;
+   end;
+  hence thesis by A42,A49;
+ end;
+
+theorem Th34:
+ for L be lower-bounded modular LATTICE
+ for S being ExtensionSeq2 of the carrier of L, BasicDF(L)
+ for FS being non empty set
+ for FD being distance_function of FS,L
+ for x,y being Element of FS for a,b being Element of L
+  st FS = union { (S.i)`1 where i is Nat: not contradiction} &
+     FD = union { (S.i)`2 where i is Nat: not contradiction} &
+     FD.(x,y) <= a"\/"b
+       ex z1,z2 being Element of FS st FD.(x,z1) = a &
+                FD.(z1,z2) = (FD.(x,y)"\/"a)"/\"b & FD.(z2,y) = a
+   proof
+    let L be lower-bounded modular LATTICE;
+    let S be ExtensionSeq2 of the carrier of L, BasicDF(L);
+    let FS be non empty set, FD be distance_function of FS,L;
+     let x,y be Element of FS; let a,b be Element of L; assume that
+A1:   FS = union { (S.i)`1 where i is Nat: not contradiction} &
+      FD = union { (S.i)`2 where i is Nat: not contradiction} and
+A2:  FD.(x,y) <= a"\/"b;
+  (S.0)`1 in { (S.i)`1 where i is Nat: not contradiction};
+    then reconsider X = { (S.i)`1 where i is Nat: not contradiction}
+        as non empty set;
+      consider x1 being set such that
+A3: x in x1 & x1 in X by A1,TARSKI:def 4;
+      consider k being Nat such that
+A4: x1 = (S.k)`1 by A3;
+      consider A1 being non empty set, d1 being distance_function of A1,L,
+       Aq1 being non empty set, dq1 being distance_function of Aq1,L such that
+A5:   Aq1, dq1 is_extension2_of A1,d1 and
+A6:   S.k = [A1,d1] & S.(k+1) = [Aq1,dq1] by Def12;
+A7: (S.k)`2 = d1 by A6,MCART_1:def 2;
+A8: (S.k)`1 = A1 by A6,MCART_1:def 1;
+A9: (S.(k+1))`1 = Aq1 by A6,MCART_1:def 1;
+A10: (S.(k+1))`2 = dq1 by A6,MCART_1:def 2;
+        d1 in { (S.i)`2 where i is Nat: not contradiction} by A7;
+then A11: d1 c= FD by A1,ZFMISC_1:92;
+        dq1 in { (S.i)`2 where i is Nat: not contradiction} by A10;
+then A12: dq1 c= FD by A1,ZFMISC_1:92;
+        Aq1 in { (S.i)`1 where i is Nat: not contradiction} by A9;
+then A13: Aq1 c= FS by A1,ZFMISC_1:92;
+A14: x in A1 by A3,A4,A6,MCART_1:def 1;
+      consider y1 being set such that
+A15: y in y1 & y1 in X by A1,TARSKI:def 4;
+      consider l being Nat such that
+A16: y1 = (S.l)`1 by A15;
+      consider A2 being non empty set, d2 being distance_function of A2,L,
+       Aq2 being non empty set, dq2 being distance_function of Aq2,L such that
+A17:   Aq2, dq2 is_extension2_of A2,d2 and
+A18:   S.l = [A2,d2] & S.(l+1) = [Aq2,dq2] by Def12;
+A19: (S.l)`2 = d2 by A18,MCART_1:def 2;
+A20: (S.l)`1 = A2 by A18,MCART_1:def 1;
+A21: (S.(l+1))`1 = Aq2 by A18,MCART_1:def 1;
+A22: (S.(l+1))`2 = dq2 by A18,MCART_1:def 2;
+         d2 in { (S.i)`2 where i is Nat: not contradiction} by A19;
+then A23: d2 c= FD by A1,ZFMISC_1:92;
+         dq2 in { (S.i)`2 where i is Nat: not contradiction} by A22;
+then A24: dq2 c= FD by A1,ZFMISC_1:92;
+         Aq2 in { (S.i)`1 where i is Nat: not contradiction} by A21;
+then A25: Aq2 c= FS by A1,ZFMISC_1:92;
+A26: y in A2 by A15,A16,A18,MCART_1:def 1;
+     per cases;
+       suppose k <= l;
+       then A1 c= A2 by A8,A20,Th31;
+  then reconsider x'=x,y'=y as Element of A2 by A14,A15,A16,A18,MCART_1:def 1;
+A27:  x' in A2 & y' in A2;
+A28:  dom d2 = [:A2,A2:] by FUNCT_2:def 1;
+A29:  FD.(x,y) = FD.[x',y'] by BINOP_1:def 1
+                .= d2.[x',y'] by A23,A28,GRFUNC_1:8
+                .= d2.(x',y') by BINOP_1:def 1;
+        then consider z1,z2 being Element of Aq2 such that
+A30:  dq2.(x,z1) = a and
+A31:  dq2.(z1,z2) = (d2.(x',y')"\/"a)"/\"b and
+A32:  dq2.(z2,y) = a by A2,A17,Th30;
+           z1 in Aq2 & z2 in Aq2;
+        then reconsider z1' = z1, z2' = z2 as Element of FS by A25;
+           l <= l+1 by NAT_1:29;
+         then A2 c= Aq2 by A20,A21,Th31;
+        then reconsider x'' = x',y'' = y' as Element of Aq2 by A27;
+A33:  dom dq2 = [:Aq2,Aq2:] by FUNCT_2:def 1;
+        take z1',z2';
+        thus FD.(x,z1') = FD.[x'',z1] by BINOP_1:def 1
+               .= dq2.[x'',z1] by A24,A33,GRFUNC_1:8
+               .= a by A30,BINOP_1:def 1;
+        thus FD.(z1',z2') = FD.[z1,z2] by BINOP_1:def 1
+               .= dq2.[z1,z2] by A24,A33,GRFUNC_1:8
+               .= (FD.(x,y)"\/"a)"/\"b by A29,A31,BINOP_1:def 1;
+        thus FD.(z2',y) = FD.[z2,y''] by BINOP_1:def 1
+               .= dq2.[z2,y''] by A24,A33,GRFUNC_1:8
+               .= a by A32,BINOP_1:def 1;
+       suppose l <= k;
+         then A2 c= A1 by A8,A20,Th31;
+  then reconsider x'=x,y'=y as Element of A1 by A3,A4,A6,A26,MCART_1:def 1;
+A34:  x' in A1 & y' in A1;
+A35:  dom d1 = [:A1,A1:] by FUNCT_2:def 1;
+A36:         FD.(x,y) = FD.[x',y'] by BINOP_1:def 1
+                 .= d1.[x',y'] by A11,A35,GRFUNC_1:8
+                 .= d1.(x',y') by BINOP_1:def 1;
+        then consider z1,z2 being Element of Aq1 such that
+A37:  dq1.(x,z1) = a and
+A38:  dq1.(z1,z2) = (d1.(x',y')"\/"a)"/\"b and
+A39:  dq1.(z2,y) = a by A2,A5,Th30;
+           z1 in Aq1 & z2 in Aq1;
+        then reconsider z1' = z1, z2' = z2 as Element of FS by A13;
+           k <= k+1 by NAT_1:29;
+         then A1 c= Aq1 by A8,A9,Th31;
+        then reconsider x'' = x',y'' = y' as Element of Aq1 by A34;
+A40:    dom dq1 = [:Aq1,Aq1:] by FUNCT_2:def 1;
+        take z1',z2';
+        thus FD.(x,z1') = FD.[x'',z1] by BINOP_1:def 1
+                       .= dq1.[x'',z1] by A12,A40,GRFUNC_1:8
+                       .= a by A37,BINOP_1:def 1;
+        thus FD.(z1',z2') = FD.[z1,z2] by BINOP_1:def 1
+                         .= dq1.[z1,z2] by A12,A40,GRFUNC_1:8
+                         .= (FD.(x,y)"\/"a)"/\"b by A36,A38,BINOP_1:def 1;
+        thus FD.(z2',y) = FD.[z2,y''] by BINOP_1:def 1
+                       .= dq1.[z2,y''] by A12,A40,GRFUNC_1:8
+                       .= a by A39,BINOP_1:def 1;
+   end;
+
+Lm3:
+ for m being Nat st m in Seg 4 holds (m = 1 or m = 2 or m = 3 or m = 4)
+  proof
+   let m be Nat;
+   assume
+A1: m in Seg 4;
+   then 1 <= m & m <= 4 by FINSEQ_1:3;
+   then m = 0 or m = 1 or m = 2 or m = 3 or m = 4 by CQC_THE1:5;
+   hence m = 1 or m = 2 or m = 3 or m = 4 by A1,FINSEQ_1:3;
+  end;
+
+Lm4:
+ for j being Nat st 1 <= j & j < 4 holds j = 1 or j = 2 or j = 3
+  proof
+   let j be Nat; assume
+   A1: 1 <= j & j < 4;
+       then j < 3+1;
+       then j <= 3 by NAT_1:38;
+       then j = 0 or j = 1 or j = 2 or j = 3 by CQC_THE1:4;
+   hence j = 1 or j = 2 or j = 3 by A1;
+  end;
+
+theorem Th35:
+  for L be lower-bounded modular LATTICE
+  for S being ExtensionSeq2 of the carrier of L, BasicDF(L)
+  for FS being non empty set
+  for FD being distance_function of FS,L
+  for f being Homomorphism of L,EqRelLATT FS
+  for e1,e2 being Equivalence_Relation of FS
+  for x,y being set st f = alpha FD &
+    FS = union { (S.i)`1 where i is Nat: not contradiction} &
+     FD = union { (S.i)`2 where i is Nat: not contradiction} &
+      e1 in the carrier of Image f & e2 in the carrier of Image f &
+       [x,y] in e1 "\/" e2
+    ex F being non empty FinSequence of FS
+        st len F = 2+2 & x,y are_joint_by F,e1,e2
+ proof
+  let L be lower-bounded modular LATTICE;
+  let S be ExtensionSeq2 of the carrier of L, BasicDF(L);
+  let FS be non empty set;
+  let FD be distance_function of FS,L;
+  let f be Homomorphism of L,EqRelLATT FS;
+  let e1,e2 be Equivalence_Relation of FS;
+  let x,y be set;
+  assume that
+A1: f = alpha FD and
+A2: FS = union { (S.i)`1 where i is Nat: not contradiction} &
+    FD = union { (S.i)`2 where i is Nat: not contradiction} and
+A3: e1 in the carrier of Image f & e2 in the carrier of Image f and
+A4: [x,y] in e1 "\/" e2;
+   Image f = subrelstr rng f by YELLOW_2:def 2;
+then A5:the carrier of Image f = rng f by YELLOW_0:def 15;
+   then consider a being set such that
+A6: a in dom f and
+A7: e1 = f.a by A3,FUNCT_1:def 5;
+   consider b being set such that
+A8: b in dom f and
+A9: e2 = f.b by A3,A5,FUNCT_1:def 5;
+   reconsider a,b as Element of L by A6,A8;
+      field (e1 "\/" e2) = FS by EQREL_1:15;
+   then reconsider u = x, v = y as Element of FS by A4,RELAT_1:30;
+   reconsider a,b as Element of L;
+   consider e1' being Equivalence_Relation of FS such that
+A10:  e1' = f.a and
+A11: for u,v being Element of FS holds [u,v] in e1' iff FD.(u,v) <= a
+   by A1,LATTICE5:def 9;
+   consider e2' being Equivalence_Relation of FS such that
+A12:  e2' = f.b and
+A13: for u,v being Element of FS holds [u,v] in e2' iff FD.(u,v) <= b
+   by A1,LATTICE5:def 9;
+   consider e being Equivalence_Relation of FS such that
+A14:  e = f.(a"\/"b) and
+A15: for u,v being Element of FS holds [u,v] in e iff
+            FD.(u,v) <= a"\/"b by A1,LATTICE5:def 9;
+     e = f.a"\/"f.b by A14,WAYBEL_6:2
+    .= e1 "\/" e2 by A7,A9,LATTICE5:10;
+then A16: FD.(u,v) <= a"\/"b by A4,A15;
+   then consider z1,z2 being Element of FS such that
+A17: FD.(u,z1) = a and
+A18: FD.(z1,z2) = (FD.(u,v)"\/"a)"/\"b and
+A19: FD.(z2,v) = a by A2,Th34;
+    defpred P[set,set] means
+        ($1 = 1 implies $2 = u) & ($1 = 2 implies $2 = z1) &
+        ($1 = 3 implies $2 = z2) & ($1 = 4 implies $2 = v);
+A20:   for m being Nat, w1,w2 being set st m in Seg 4 & P[m,w1] & P[m,w2]
+         holds w1 = w2 by Lm3;
+A21:   for m being Nat st m in Seg 4 ex w being set st P[m,w]
+     proof
+      let m be Nat;
+      assume
+A22:  m in Seg 4;
+      per cases by A22,Lm3;
+       suppose A23: m = 1; take w = x; thus P[m,w] by A23;
+       suppose A24: m = 2; take w = z1; thus P[m,w] by A24;
+       suppose A25: m = 3; take w = z2; thus P[m,w] by A25;
+       suppose A26: m = 4; take w = y; thus P[m,w] by A26;
+     end;
+   ex p being FinSequence st dom p = Seg 4
+     & for k being Nat st k in Seg 4 holds P[k,p.k] from SeqEx(A20,A21);
+   then consider h being FinSequence such that
+A27:  dom h = Seg 4 and
+A28:  for m being Nat st m in Seg 4 holds
+             (m = 1 implies h.m = u) & (m = 2 implies h.m = z1) &
+             (m = 3 implies h.m = z2) & (m = 4 implies h.m = v);
+        Seg 4 = { n where n is Nat: 1 <= n & n <= 4 } by FINSEQ_1:def 1;
+then A29: 1 in Seg 4 & 2 in Seg 4 & 3 in Seg 4 & 4 in Seg 4;
+A30: len h = 4 by A27,FINSEQ_1:def 3;
+     rng h c= FS
+    proof
+     let w be set;
+     assume w in rng h;
+      then consider j be set such that
+A31: j in dom h & w = h.j by FUNCT_1:def 5;
+      per cases by A27,A31,Lm3;
+       suppose j = 1; then h.j = u by A28,A29; hence w in FS by A31;
+       suppose j = 2; then h.j = z1 by A28,A29; hence w in FS by A31;
+       suppose j = 3; then h.j = z2 by A28,A29; hence w in FS by A31;
+       suppose j = 4; then h.j = v by A28,A29; hence w in FS by A31;
+     end;
+   then reconsider h as FinSequence of FS by FINSEQ_1:def 4;
+     len h <> 0 by A27,FINSEQ_1:def 3;
+   then reconsider h as non empty FinSequence of FS by FINSEQ_1:25;
+   take h;
+   thus len h = 2+2 by A27,FINSEQ_1:def 3;
+A32: h.1 = x by A28,A29;
+A33: h.(len h) = h.4 by A27,FINSEQ_1:def 3
+               .= y by A28,A29;
+
+      for j being Nat st 1 <= j & j < len h holds
+      (j is odd implies [h.j,h.(j+1)] in e1) &
+      (j is even implies [h.j,h.(j+1)] in e2)
+       proof
+       let j be Nat;
+       assume
+A34:   1 <= j & j < len h;
+       per cases by A30,A34,Lm4;
+        suppose
+A35:    j = 1;
+           [u,z1] in e1' by A11,A17;
+         then [h.1,z1] in e1' by A28,A29;
+         hence (j is odd implies [h.j,h.(j+1)] in e1) &
+               (j is even implies [h.j,h.(j+1)] in e2)
+                         by A7,A10,A28,A29,A35,Lm1;
+        suppose
+A36:    j = 2;
+         consider i being Nat such that
+A37:    i = 1;
+A38:    2*i = j by A36,A37;
+           FD.(u,v)"\/"a <= a"\/"b"\/"a by A16,WAYBEL_1:3;
+         then FD.(u,v)"\/"a <= b"\/"(a"\/"a) by LATTICE3:14;
+         then FD.(u,v)"\/"a <= b"\/"a by YELLOW_5:1;
+then (FD.(u,v)"\/"a)"/\"b <= b"/\"(b"\/"a) by WAYBEL_1:2;
+then (FD.(u,v)"\/"a)"/\"b <= b by LATTICE3:18;
+         then [z1,z2] in e2' by A13,A18;
+         then [h.2,z2] in e2' by A28,A29;
+         hence (j is odd implies [h.j,h.(j+1)] in e1) &
+               (j is even implies [h.j,h.(j+1)] in e2)
+                         by A9,A12,A28,A29,A36,A38;
+         suppose
+A39:     j = 3;
+         consider i being Nat such that
+A40:    i = 1;
+          A41: 2*i+1 = j by A39,A40;
+            [z2,v] in e1' by A11,A19;
+          then [h.3,v] in e1' by A28,A29;
+          hence (j is odd implies [h.j,h.(j+1)] in e1) &
+                (j is even implies [h.j,h.(j+1)] in e2)
+                         by A7,A10,A28,A29,A39,A41;
+        end;
+  hence thesis by A32,A33,LATTICE5:def 3;
+ end;
+
+theorem Th36:
+ for L be lower-bounded modular LATTICE
+     holds L has_a_representation_of_type<= 2
+   proof
+    let L be lower-bounded modular LATTICE;
+    set A = the carrier of L,
+        D = BasicDF(L);
+A1:  D is onto by LATTICE5:43;
+    consider S being ExtensionSeq2 of A,D;
+A2:  S.0 = [A,D] by Def12;
+then A3:  (S.0)`1 = A by MCART_1:def 1;
+    set FS = union { (S.i)`1 where i is Nat: not contradiction};
+    (S.0)`1 in { (S.i)`1 where i is Nat: not contradiction};
+then A4:  A c= FS by A3,ZFMISC_1:92;
+    consider xx being set such that
+A5:  xx in A by XBOOLE_0:def 1;
+    reconsider FS as non empty set by A4,A5;
+    reconsider FD = union { (S.i)`2 where i is Nat: not contradiction}
+      as distance_function of FS,L by Th33;
+A6: FD is onto
+     proof
+A7: rng D = A by A1,FUNCT_2:def 3;
+        for w being set st w in A ex z being set st z in [:FS,FS:] & w = FD.z
+       proof
+        let w be set;
+        assume w in A;
+        then consider z being set such that
+A8:    z in [:A,A:] and
+A9:    D.z = w by A7,FUNCT_2:17;
+        take z;
+A10:    S.0 = [A,D] by Def12;
+then A11:    A = (S.0)`1 by MCART_1:def 1;
+          (S.0)`1 in { (S.i)`1 where i is Nat: not contradiction};
+        then A c= FS by A11,ZFMISC_1:92;
+        then [:A,A:] c= [:FS,FS:] by ZFMISC_1:119;
+        hence z in [:FS,FS:] by A8;
+A12:    z in dom D by A8,FUNCT_2:def 1;
+A13:    D = (S.0)`2 by A10,MCART_1:def 2;
+          (S.0)`2 in { (S.i)`2 where i is Nat: not contradiction};
+then D c= FD by A13,ZFMISC_1:92;
+        hence w = FD.z by A9,A12,GRFUNC_1:8;
+       end;
+      then rng FD = A by FUNCT_2:16;
+      hence FD is onto by FUNCT_2:def 3;
+     end;
+      alpha FD is join-preserving
+     proof
+      let a,b be Element of L;
+      set f = alpha FD;
+A14:  ex_sup_of f.:{a,b},EqRelLATT FS by YELLOW_0:17;
+A15:  dom f = the carrier of L by FUNCT_2:def 1;
+      consider e1 being Equivalence_Relation of FS such that
+A16:  e1 = f.a and
+A17:  for x,y being Element of FS holds [x,y] in e1 iff FD.(x,y) <= a
+                                                       by LATTICE5:def 9;
+      consider e2 being Equivalence_Relation of FS such that
+A18:  e2 = f.b and
+A19:  for x,y being Element of FS holds [x,y] in e2 iff FD.(x,y) <= b
+                                                  by LATTICE5:def 9;
+      consider e3 being Equivalence_Relation of FS such that
+A20:  e3 = f.(a "\/" b) and
+A21:  for x,y being Element of FS holds [x,y] in e3 iff FD.(x,y) <= a"\/"b
+                                                       by LATTICE5:def 9;
+A22:  field e1 = FS by EQREL_1:15;
+A23:  field e2 = FS by EQREL_1:15;
+A24:  field e3 = FS by EQREL_1:15;
+A25:  e1 "\/" e2 c= e3
+        proof
+           now
+          let x,y be set;
+          assume
+A26:      [x,y] in e1;
+          then reconsider x' = x, y' = y as Element of FS by A22,RELAT_1:30;
+A27:     FD.(x',y') <= a by A17,A26;
+            a <= a "\/" b by YELLOW_0:22;
+          then FD.(x',y') <= a "\/" b by A27,ORDERS_1:26;
+          hence [x,y] in e3 by A21;
+         end;
+         then A28:     e1 c= e3 by RELAT_1:def 3;
+           now
+          let x,y be set;
+          assume
+A29:      [x,y] in e2;
+          then reconsider x' = x, y' = y as Element of FS by A23,RELAT_1:30;
+A30:     FD.(x',y') <= b by A19,A29;
+            b <= b "\/" a by YELLOW_0:22;
+          then FD.(x',y') <= b "\/" a by A30,ORDERS_1:26;
+          hence [x,y] in e3 by A21;
+         end;
+         then e2 c= e3 by RELAT_1:def 3;
+         then e1 \/ e2 c= e3 by A28,XBOOLE_1:8;
+         hence thesis by EQREL_1:def 3;
+        end;
+A31:  e3 c= e1 "\/" e2
+        proof
+           for u,v being set holds [u,v] in e3 implies [u,v] in e1 "\/" e2
+          proof
+           let u,v be set;
+           assume
+A32:       [u,v] in e3;
+           then reconsider x = u, y = v as Element of FS by A24,RELAT_1:30;
+A33:       u in FS by A24,A32,RELAT_1:30;
+A34:      FD.(x,y) <= a"\/"b by A21,A32;
+           then consider z1,z2 being Element of FS such that
+A35:       FD.(x,z1) = a and
+A36:       FD.(z1,z2) = (FD.(x,y)"\/"a)"/\"b and
+A37:       FD.(z2,y) = a by Th34;
+           defpred P[set,set] means
+           ($1 = 1 implies $2 = x) & ($1 = 2 implies $2 = z1) &
+           ($1 = 3 implies $2 = z2) & ($1 = 4 implies $2 = y);
+A38:      for m being Nat, w1,w2 being set st m in Seg 4 & P[m,w1] & P[m,w2]
+              holds w1 = w2 by Lm3;
+A39:      for m being Nat st m in Seg 4 ex w being set st P[m,w]
+            proof
+             let m be Nat;
+             assume
+A40:         m in Seg 4;
+             per cases by A40,Lm3;
+             suppose
+A41:         m = 1;
+             take w = x;
+             thus P[m,w] by A41;
+             suppose
+A42:         m = 2;
+             take w = z1;
+             thus P[m,w] by A42;
+             suppose
+A43:         m = 3;
+             take w = z2;
+             thus P[m,w] by A43;
+             suppose
+A44:         m = 4;
+             take w = y;
+             thus P[m,w] by A44;
+            end;
+           ex p being FinSequence  st dom p = Seg 4 &
+             for k being Nat st k in Seg 4 holds P[k,p.k] from SeqEx(A38,A39);
+           then consider h being FinSequence such that
+A45:       dom h = Seg 4 and
+A46:       for m being Nat st m in Seg 4 holds
+                  (m = 1 implies h.m = x) & (m = 2 implies h.m = z1) &
+                  (m = 3 implies h.m = z2) & (m = 4 implies h.m = y);
+             Seg 4 = { n where n is Nat: 1 <= n & n <= 4 } by FINSEQ_1:def 1
+;
+then A47:       1 in Seg 4 & 2 in Seg 4 & 3 in Seg 4 & 4 in Seg 4;
+A48:       len h = 4 by A45,FINSEQ_1:def 3;
+A49:       u = h.1 by A46,A47;
+A50:       v = h.4 by A46,A47
+             .= h.(len h) by A45,FINSEQ_1:def 3;
+              for j being Nat st 1 <= j & j < len h
+             holds [h.j,h.(j+1)] in e1 \/ e2
+              proof
+               let j be Nat;
+               assume
+A51:           1 <= j & j < len h;
+               per cases by A48,A51,Lm4;
+               suppose
+A52:           j = 1;
+                 [x,z1] in e1 by A17,A35;
+               then [h.1,z1] in e1 by A46,A47;
+               then [h.1,h.2] in e1 by A46,A47;
+               hence [h.j,h.(j+1)] in e1 \/ e2 by A52,XBOOLE_0:def 2;
+               suppose
+A53:           j = 2;
+                 FD.(x,y)"\/"a <= a"\/"b"\/"a by A34,WAYBEL_1:3;
+               then FD.(x,y)"\/"a <= b"\/"(a"\/"a) by LATTICE3:14;
+               then FD.(x,y)"\/"a <= b"\/"a by YELLOW_5:1;
+then (FD.(x,y)"\/"a)"/\"b <= b"/\"(b"\/"a) by WAYBEL_1:2;
+               then (FD.(x,y)"\/"a)"/\"b <= b by LATTICE3:18;
+               then [z1,z2] in e2 by A19,A36;
+               then [h.2,z2] in e2 by A46,A47;
+               then [h.2,h.3] in e2 by A46,A47;
+               hence [h.j,h.(j+1)] in e1 \/ e2 by A53,XBOOLE_0:def 2;
+               suppose
+A54:           j = 3;
+                 [z2,y] in e1 by A17,A37;
+               then [h.3,y] in e1 by A46,A47;
+               then [h.3,h.4] in e1 by A46,A47;
+               hence [h.j,h.(j+1)] in e1 \/ e2 by A54,XBOOLE_0:def 2;
+              end;
+             hence [u,v] in e1 "\/" e2 by A33,A48,A49,A50,EQREL_1:36;
+            end;
+           hence thesis by RELAT_1:def 3;
+          end;
+           sup (f.:{a,b}) = sup {f.a,f.b} by A15,FUNCT_1:118
+                      .= f.a "\/" f.b by YELLOW_0:41
+                      .= e1 "\/" e2 by A16,A18,LATTICE5:10
+                      .= f.(a "\/" b) by A20,A25,A31,XBOOLE_0:def 10
+                      .= f.sup {a,b} by YELLOW_0:41;
+         hence f preserves_sup_of {a,b} by A14,WAYBEL_0:def 31;
+        end;
+       then reconsider f = alpha FD as Homomorphism of L,EqRelLATT FS by
+LATTICE5:16;
+A55: Image f = subrelstr rng f by YELLOW_2:def 2;
+A56: dom f = the carrier of L by FUNCT_2:def 1;
+
+A57: ex e being Equivalence_Relation of FS st
+                                     e in the carrier of Image f & e <> id FS
+     proof
+      consider A' being non empty set, d' being distance_function of A',L,
+               Aq' being non empty set, dq' being distance_function of Aq',L
+               such that
+A58:           Aq', dq' is_extension2_of A',d' and
+A59:           S.0 = [A',d'] & S.(0+1) = [Aq',dq'] by Def12;
+         A' = A & d' = D by A2,A59,ZFMISC_1:33;
+        then consider q being QuadrSeq of D such that
+A60:    Aq' = NextSet2(D) and
+A61:    dq' = NextDelta2(q) by A58,Def11;
+A62:    (S.1)`2 = NextDelta2(q) by A59,A61,MCART_1:def 2;
+          (S.1)`2 in { (S.i)`2 where i is Nat: not contradiction};
+then A63:    NextDelta2(q) c= FD by A62,ZFMISC_1:92;
+A64:    (S.1)`1 = NextSet2(D) by A59,A60,MCART_1:def 1;
+           (S.1)`1 in { (S.i)`1 where i is Nat: not contradiction};
+then A65:    NextSet2(D) c= FS by A64,ZFMISC_1:92;
+          succ {} c= DistEsti(D) by Th1;
+        then {} in DistEsti(D) by ORDINAL1:33;
+then A66:    {} in dom q by LATTICE5:28;
+        then q.{} in rng q by FUNCT_1:def 5;
+        then q.{} in {[u,v,a',b'] where u is Element of A, v is Element of A,
+        a' is Element of L, b' is Element of L: D.(u,v) <= a'"\/"b'}
+                                                          by LATTICE5:def 14;
+        then consider u,v be Element of A, a,b be Element of L such that
+A67:    q.{} = [u,v,a,b] & D.(u,v) <= a"\/"b;
+          ConsecutiveSet2(A,{}) = A by Th15;
+        then reconsider Q = Quadr2(q,{}) as
+                       Element of [:A,A,the carrier of L,the carrier of L:];
+A68:   Quadr2(q,{}) = [u,v,a,b] by A66,A67,Def7;
+       consider e being Equivalence_Relation of FS such that
+A69:   e = f.b and
+A70:   for x,y being Element of FS holds [x,y] in e iff FD.(x,y) <= b
+                                                          by LATTICE5:def 9;
+       take e;
+         e in rng f by A56,A69,FUNCT_1:def 5;
+
+       hence e in the carrier of Image f by A55,YELLOW_0:def 15;
+A71:   new_set2 A = new_set2 ConsecutiveSet2(A,{}) by Th15
+                  .= ConsecutiveSet2(A,succ {}) by Th16;
+A72:   NextSet2(D) = ConsecutiveSet2(A,DistEsti(D)) by Def9;
+A73:   succ {} c= DistEsti(D) by Th1;
+then A74:   new_set2 A c= NextSet2(D) by A71,A72,Th22;
+A75:   ConsecutiveSet2(A,{}) = A & ConsecutiveDelta2(q,{}) = D by Th15,Th19;
+A76:   ConsecutiveDelta2(q,succ {}) =
+             new_bi_fun2(BiFun(ConsecutiveDelta2(q,{}),
+                   ConsecutiveSet2(A,{}),L),Quadr2(q,{})) by Th20
+        .= new_bi_fun2(D,Q) by A75,LATTICE5:def 16;
+          ConsecutiveDelta2(q,DistEsti(D)) = NextDelta2(q) by Def10;
+        then new_bi_fun2(D,Q) c= NextDelta2(q) by A73,A76,Th25;
+then A77:    new_bi_fun2(D,Q) c= FD by A63,XBOOLE_1:1;
+A78:    new_set2 A c= FS by A65,A74,XBOOLE_1:1;
+A79:    dom new_bi_fun2(D,Q) = [:new_set2 A,new_set2 A:] by FUNCT_2:def 1;
+          {A} in {{A}, {{A}} } by TARSKI:def 2;
+        then {A} in A \/ {{A}, {{A}} } by XBOOLE_0:def 2;
+then A80:    {A} in new_set2 A by Def4;
+           {{A}} in {{A}, {{A}} } by TARSKI:def 2;
+         then {{A}} in A \/ {{A}, {{A}} } by XBOOLE_0:def 2;
+then A81:    {{A}} in new_set2 A by Def4;
+then A82:    [{A},{{A}}] in dom new_bi_fun2(D,Q) by A79,A80,ZFMISC_1:106;
+A83:   b = Q`4 by A68,MCART_1:def 11;
+       reconsider W = {A}, V = {{A}} as Element of FS by A78,A80,A81;
+         FD.(W,V) = FD.[{A},{{A}}] by BINOP_1:def 1
+               .= new_bi_fun2(D,Q).[{A},{{A}}] by A77,A82,GRFUNC_1:8
+               .= new_bi_fun2(D,Q).({A},{{A}}) by BINOP_1:def 1
+               .= (D.(Q`1,Q`2)"\/"Q`3)"/\"Q`4 by Def5;
+       then FD.(W,V) <= b by A83,YELLOW_0:23;
+then A84:   [{A},{{A}}] in e by A70;
+         {A} <> {{A}}
+         proof
+          assume {A} = {{A}};
+          then {A} in {A} by TARSKI:def 1;
+          hence contradiction;
+         end;
+        hence e <> id FS by A84,RELAT_1:def 10;
+       end;
+     FS is non trivial set
+    proof
+       now
+      assume that
+A85:   FS is trivial;
+      consider x being set such that
+A86:   FS = {x} by A85,REALSET1:def 12;
+      consider e being Equivalence_Relation of FS such that
+A87:   e in the carrier of Image f & e <> id FS by A57;
+A88:  field e = {x} by A86,EQREL_1:16;
+A89:  id FS c= e by A86,A88,RELAT_2:17;
+A90:   [:{x},{x}:] = {[x,x]} by ZFMISC_1:35;
+    id({x}) = {[x,x]} by SYSREL:30;
+      hence contradiction by A86,A87,A89,A90,XBOOLE_0:def 10;
+     end;
+     hence thesis;
+    end;
+   then reconsider FS as non trivial set;
+    take FS;
+    reconsider f as Homomorphism of L,EqRelLATT FS;
+    take f;
+    thus f is one-to-one by A6,LATTICE5:17;
+    reconsider FD as distance_function of FS,L;
+     thus Image f is finitely_typed
+      proof
+       take FS;
+       thus for e being set st e in the carrier of Image f
+        holds e is Equivalence_Relation of FS
+         proof
+          let e be set;
+          assume
+         e in the carrier of Image f;
+           then e in rng f by YELLOW_2:11;
+           then consider x being set such that
+A91:        x in dom f and
+A92:        e = f.x by FUNCT_1:def 5;
+           reconsider x as Element of L by A91;
+           consider E being Equivalence_Relation of FS such that
+A93:        E = f.x and
+            for u,v being Element of FS holds [u,v] in E iff FD.(u,v) <= x
+                                                  by LATTICE5:def 9;
+          thus thesis by A92,A93;
+         end;
+       take 2+2;
+       thus thesis by Th35;
+      end;
+      thus ex e being Equivalence_Relation of FS st
+                                     e in the carrier of Image f & e <> id FS
+       proof
+        consider A' being non empty set, d' being distance_function of A',L,
+                 Aq' being non empty set, dq' being distance_function of Aq',L
+                 such that
+A94:             Aq', dq' is_extension2_of A',d' and
+A95:             S.0 = [A',d'] & S.(0+1) = [Aq',dq'] by Def12;
+         A' = A & d' = D by A2,A95,ZFMISC_1:33;
+        then consider q being QuadrSeq of D such that
+A96:    Aq' = NextSet2(D) and
+A97:    dq' = NextDelta2(q) by A94,Def11;
+A98:    (S.1)`2 = NextDelta2(q) by A95,A97,MCART_1:def 2;
+          (S.1)`2 in { (S.i)`2 where i is Nat: not contradiction};
+then A99:    NextDelta2(q) c= FD by A98,ZFMISC_1:92;
+A100:    (S.1)`1 = NextSet2(D) by A95,A96,MCART_1:def 1;
+           (S.1)`1 in { (S.i)`1 where i is Nat: not contradiction};
+then A101:    NextSet2(D) c= FS by A100,ZFMISC_1:92;
+          succ {} c= DistEsti(D) by Th1;
+        then {} in DistEsti(D) by ORDINAL1:33;
+then A102:    {} in dom q by LATTICE5:28;
+        then q.{} in rng q by FUNCT_1:def 5;
+        then q.{} in {[u,v,a',b'] where u is Element of A, v is Element of A,
+        a' is Element of L, b' is Element of L: D.(u,v) <= a'"\/"b'}
+                                                          by LATTICE5:def 14;
+        then consider u,v be Element of A, a,b be Element of L such that
+A103:    q.{} = [u,v,a,b] & D.(u,v) <= a"\/"b;
+          ConsecutiveSet2(A,{}) = A by Th15;
+        then reconsider Q = Quadr2(q,{}) as
+                       Element of [:A,A,the carrier of L,the carrier of L:];
+A104:   Quadr2(q,{}) = [u,v,a,b] by A102,A103,Def7;
+       consider e being Equivalence_Relation of FS such that
+A105:   e = f.b and
+A106:   for x,y being Element of FS holds [x,y] in e iff FD.(x,y) <= b
+                                                          by LATTICE5:def 9;
+       take e;
+         e in rng f by A56,A105,FUNCT_1:def 5;
+
+       hence e in the carrier of Image f by A55,YELLOW_0:def 15;
+A107:   new_set2 A = new_set2 ConsecutiveSet2(A,{}) by Th15
+                  .= ConsecutiveSet2(A,succ {}) by Th16;
+A108:   NextSet2(D) = ConsecutiveSet2(A,DistEsti(D)) by Def9;
+A109:   succ {} c= DistEsti(D) by Th1;
+then A110:   new_set2 A c= NextSet2(D) by A107,A108,Th22;
+A111:   ConsecutiveSet2(A,{}) = A & ConsecutiveDelta2(q,{}) = D by Th15,Th19;
+A112:   ConsecutiveDelta2(q,succ {}) =
+             new_bi_fun2(BiFun(ConsecutiveDelta2(q,{}),
+                   ConsecutiveSet2(A,{}),L),Quadr2(q,{})) by Th20
+        .= new_bi_fun2(D,Q) by A111,LATTICE5:def 16;
+          ConsecutiveDelta2(q,DistEsti(D)) = NextDelta2(q) by Def10;
+        then new_bi_fun2(D,Q) c= NextDelta2(q) by A109,A112,Th25;
+then A113:    new_bi_fun2(D,Q) c= FD by A99,XBOOLE_1:1;
+A114:    new_set2 A c= FS by A101,A110,XBOOLE_1:1;
+A115:    dom new_bi_fun2(D,Q) = [:new_set2 A,new_set2 A:] by FUNCT_2:def 1;
+          {A} in {{A}, {{A}} } by TARSKI:def 2;
+        then {A} in A \/ {{A}, {{A}} } by XBOOLE_0:def 2;
+then A116:    {A} in new_set2 A by Def4;
+           {{A}} in {{A}, {{A}} } by TARSKI:def 2;
+         then {{A}} in A \/ {{A}, {{A}} } by XBOOLE_0:def 2;
+then A117:    {{A}} in new_set2 A by Def4;
+then A118:    [{A},{{A}}] in dom new_bi_fun2(D,Q) by A115,A116,ZFMISC_1:106;
+A119:   b = Q`4 by A104,MCART_1:def 11;
+       reconsider W = {A}, V = {{A}} as Element of FS by A114,A116,A117;
+         FD.(W,V) = FD.[{A},{{A}}] by BINOP_1:def 1
+               .= new_bi_fun2(D,Q).[{A},{{A}}] by A113,A118,GRFUNC_1:8
+               .= new_bi_fun2(D,Q).({A},{{A}}) by BINOP_1:def 1
+               .= (D.(Q`1,Q`2)"\/"Q`3)"/\"Q`4 by Def5;
+       then FD.(W,V) <= b by A119,YELLOW_0:23;
+then A120:   [{A},{{A}}] in e by A106;
+         {A} <> {{A}}
+         proof
+          assume {A} = {{A}};
+          then {A} in {A} by TARSKI:def 1;
+          hence contradiction;
+         end;
+        hence e <> id FS by A120,RELAT_1:def 10;
+       end;
+      for e1,e2 being Equivalence_Relation of FS
+    for x,y being set st
+        e1 in the carrier of Image f & e2 in the carrier of Image f &
+        [x,y] in e1 "\/" e2
+      ex F being non empty FinSequence of FS st
+           len F = 2+2 & x,y are_joint_by F,e1,e2 by Th35;
+  hence type_of Image f <= 2 by A57,LATTICE5:15;
+   end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::  <=>  ::   L has_a_representation_of_type<= 2 iff L is modular      ::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem
+   for L be lower-bounded LATTICE
+     holds L has_a_representation_of_type<= 2 iff L is modular by Th9,Th36;

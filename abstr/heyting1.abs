@@ -1,0 +1,220 @@
+:: Algebra of Normal Forms Is a Heyting Algebra
+::  by Andrzej Trybulec
+::
+:: Received January 3, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, RELAT_1, FINSUB_1, FUNCT_3, NORMFORM, BOOLE, QC_LANG1,
+      FINSEQ_1, LATTICES, FINSET_1, SETWISEO, LATTICE2, BINOP_1, FUNCT_2,
+      ARYTM_1, MCART_1, TARSKI, FDIFF_1, FUNCOP_1, FILTER_0, ZF_LANG, HEYTING1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, RELAT_1, FUNCT_1,
+      FUNCT_2, FUNCT_3, MCART_1, BINOP_1, FUNCOP_1, FINSET_1, FINSUB_1,
+      DOMAIN_1, LATTICES, LATTICE2, FRAENKEL, SETWISEO, NORMFORM, FILTER_0;
+ constructors FUNCT_3, FUNCOP_1, FINSET_1, DOMAIN_1, LATTICE2, FRAENKEL,
+      SETWISEO, NORMFORM, FILTER_0, MEMBERED, XBOOLE_0;
+ clusters FINSUB_1, FINSET_1, STRUCT_0, NORMFORM, RELSET_1, SUBSET_1, MEMBERED,
+      ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin
+:: Preliminaries
+
+theorem :: HEYTING1:1
+  for A,B,C being non empty set, f being Function of A,B st
+        for x being Element of A holds f.x in C
+       holds f is Function of A,C;
+
+reserve A for non empty set,
+        a for Element of A;
+
+definition let A; let B,C be Element of Fin A;
+  redefine pred B c= C means
+:: HEYTING1:def 1
+     for a st a in B holds a in C;
+end;
+
+definition let A be non empty set; let B be non empty Subset of A;
+  redefine func incl B -> Function of B,A;
+end;
+
+reserve A for set;
+
+definition let A;
+ assume
+ A is non empty;
+ func [A] -> non empty set equals
+:: HEYTING1:def 2
+  A;
+end;
+
+reserve B,C for Element of Fin DISJOINT_PAIRS A,
+        x for Element of [:Fin A, Fin A:],
+        a,b,c,d,s,t,s',t',t1,t2,s1,s2 for Element of DISJOINT_PAIRS A,
+        u,v,w for Element of NormForm A;
+
+canceled;
+
+theorem :: HEYTING1:3
+  B = {} implies mi B = {};
+
+definition let A;
+ cluster non empty Element of Normal_forms_on A;
+end;
+
+definition let A,a;
+  redefine func { a } -> Element of Normal_forms_on A;
+end;
+
+definition let A; let u be Element of NormForm A;
+  func @u -> Element of Normal_forms_on A equals
+:: HEYTING1:def 3
+    u;
+end;
+
+reserve K,L for Element of Normal_forms_on A;
+
+canceled 3;
+
+theorem :: HEYTING1:7
+mi (K^K) = K;
+
+theorem :: HEYTING1:8
+  for X being set st X c= K holds X in Normal_forms_on A;
+
+canceled;
+
+theorem :: HEYTING1:10
+  for X being set st X c= u holds
+      X is Element of NormForm A;
+
+definition let A;
+ func Atom(A) -> Function of DISJOINT_PAIRS A, the carrier of NormForm A
+  means
+:: HEYTING1:def 4
+ it.a = { a };
+end;
+
+theorem :: HEYTING1:11
+  c in Atom(A).a implies c = a;
+
+theorem :: HEYTING1:12
+  a in Atom(A).a;
+
+theorem :: HEYTING1:13
+    Atom(A).a = singleton DISJOINT_PAIRS A .a;
+
+theorem :: HEYTING1:14
+  FinJoin(K, Atom(A)) = FinUnion(K, singleton DISJOINT_PAIRS A);
+
+theorem :: HEYTING1:15
+  u = FinJoin(@u, Atom(A));
+
+reserve f,f' for (Element of Funcs(DISJOINT_PAIRS A, [:Fin A,Fin A:])),
+        g,h for Element of Funcs(DISJOINT_PAIRS A, [A]);
+
+definition let A be set;
+  func pair_diff A -> BinOp of [:Fin A,Fin A:] means
+:: HEYTING1:def 5
+ for a,b being Element of [:Fin A, Fin A:] holds it.(a,b) = a \ b;
+end;
+
+definition let A,B;
+  func -B -> Element of Fin DISJOINT_PAIRS A equals
+:: HEYTING1:def 6
+  DISJOINT_PAIRS A /\
+    { [{ g.t1 : g.t1 in t1`2 & t1 in B }, { g.t2 : g.t2 in t2`1 & t2 in B }] :
+        s in B implies g.s in s`1 \/ s`2 };
+ let C;
+  func B =>> C -> Element of Fin DISJOINT_PAIRS A equals
+:: HEYTING1:def 7
+
+   DISJOINT_PAIRS A /\
+   { FinPairUnion(B,pair_diff A.:(f,incl DISJOINT_PAIRS A)) : f.:B c= C };
+end;
+
+theorem :: HEYTING1:16
+  c in -B implies
+   ex g st (for s st s in B holds g.s in s`1 \/ s`2) &
+    c = [{ g.t1 : g.t1 in t1`2 & t1 in B }, { g.t2 : g.t2 in t2`1 & t2 in B }];
+
+theorem :: HEYTING1:17
+  [{},{}] is Element of DISJOINT_PAIRS A;
+
+theorem :: HEYTING1:18
+  for K st K = {} holds -K = {[{},{}]};
+
+theorem :: HEYTING1:19
+  for K,L st K = {} & L = {} holds K =>> L = {[{},{}]};
+
+theorem :: HEYTING1:20
+  for a being Element of DISJOINT_PAIRS {} holds a = [{},{}];
+
+theorem :: HEYTING1:21
+  DISJOINT_PAIRS {} = {[{},{}]};
+
+theorem :: HEYTING1:22
+  {[{},{}]} is Element of Normal_forms_on A;
+
+theorem :: HEYTING1:23
+  c in B =>> C implies
+     ex f st f.:B c= C &
+      c = FinPairUnion(B,pair_diff A.:(f,incl DISJOINT_PAIRS A));
+
+theorem :: HEYTING1:24
+  K ^ { a } = {} implies ex b st b in -K & b c= a;
+
+theorem :: HEYTING1:25
+  (for b st b in u holds b \/ a in DISJOINT_PAIRS A) &
+    (for c st c in u ex b st b in v & b c= c \/ a)
+     implies ex b st b in @u =>> @v & b c= a;
+
+theorem :: HEYTING1:26
+  K ^ -K = {};
+
+definition let A;
+  func pseudo_compl(A) -> UnOp of the carrier of NormForm A means
+:: HEYTING1:def 8
+ it.u = mi(-@u);
+  func StrongImpl(A) -> BinOp of the carrier of NormForm A means
+:: HEYTING1:def 9
+ it.(u,v) = mi (@u =>> @v);
+ let u;
+  func SUB u -> Element of Fin the carrier of NormForm A equals
+:: HEYTING1:def 10
+  bool u;
+  func diff(u) -> UnOp of the carrier of NormForm A means
+:: HEYTING1:def 11
+ it.v = u \ v;
+end;
+
+theorem :: HEYTING1:27
+  (diff u).v [= u;
+
+theorem :: HEYTING1:28
+  u "/\" pseudo_compl(A).u = Bottom NormForm A;
+
+theorem :: HEYTING1:29
+  u "/\" StrongImpl(A).(u, v) [= v;
+
+theorem :: HEYTING1:30
+  @u ^ { a } = {} implies Atom(A).a [= pseudo_compl(A).u;
+
+theorem :: HEYTING1:31
+  (for b st b in u holds b \/ a in DISJOINT_PAIRS A ) & u "/\" Atom(A).a [= w
+      implies Atom(A).a [= StrongImpl(A).(u, w);
+
+definition let A;
+  cluster NormForm A -> implicative;
+end;
+
+canceled;
+
+theorem :: HEYTING1:33
+ u => v = FinJoin(SUB u,
+   (the L_meet of NormForm A).:(pseudo_compl(A), StrongImpl(A)[:](diff u, v)));
+
+theorem :: HEYTING1:34
+   Top NormForm A = {[{},{}]};

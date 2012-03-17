@@ -1,0 +1,2205 @@
+:: Graphs
+::  by Krzysztof Hryniewiecki
+::
+:: Received December 5, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, BOOLE, RELAT_1, PARTFUN1, RELAT_2, FINSET_1, ORDERS_1,
+      FINSEQ_1, CARD_1, FUNCT_2, MCART_1, GRAPH_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, RELAT_1, FUNCT_1,
+      FUNCT_2, FINSEQ_1, FINSET_1, PARTFUN1, CARD_1, NAT_1, MCART_1;
+ constructors FUNCT_2, FINSEQ_1, PARTFUN1, NAT_1, MCART_1, XREAL_0, MEMBERED,
+      XBOOLE_0;
+ clusters SUBSET_1, FINSEQ_1, FINSET_1, PARTFUN1, RELSET_1, ARYTM_3, MEMBERED,
+      ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions REAL_1, FUNCT_1, TARSKI;
+ theorems FUNCT_2, AXIOMS, FUNCT_1, PARTFUN1, FINSEQ_1, NAT_1, FINSET_1,
+      ZFMISC_1, MCART_1, TARSKI, RELAT_1, REAL_1, FINSEQ_3, RELSET_1, XBOOLE_0,
+      XBOOLE_1;
+ schemes FUNCT_2, TARSKI, XBOOLE_0;
+
+begin
+
+reserve x, y, z, v for set,
+        n, m, k for Nat;
+
+definition
+  struct MultiGraphStruct (# Vertices, Edges -> set,
+    Source, Target -> Function of the Edges, the Vertices #);
+end;
+
+set DomEx = {1, 2};
+reconsider _empty = {} as Function of {}, DomEx by FUNCT_2:55,RELAT_1:60;
+
+definition let IT be MultiGraphStruct;
+attr IT is Graph-like means :Def1:
+  the Vertices of IT is non empty set;
+end;
+
+definition
+ cluster strict Graph-like MultiGraphStruct;
+existence
+  proof
+      MultiGraphStruct(# DomEx, {}, _empty, _empty #) is Graph-like
+     by Def1;
+   hence thesis;
+  end;
+end;
+
+definition
+  mode Graph is Graph-like MultiGraphStruct;
+end;
+
+reserve G, G1, G2, G3 for Graph;
+
+Lm1: for G being Graph holds
+   dom(the Source of G) = the Edges of G &
+   dom(the Target of G) = the Edges of G &
+   rng(the Source of G) c= the Vertices of G &
+   rng(the Target of G) c= the Vertices of G
+proof let G be Graph;
+    the Vertices of G <> {} by Def1;
+  hence thesis by FUNCT_2:def 1,RELSET_1:12;
+end;
+
+Lm2: for G being Graph,
+   x being Element of the Vertices of G holds
+     x in the Vertices of G
+proof let G be Graph, x be Element of the Vertices of G;
+    the Vertices of G is non empty set by Def1;
+ hence x in the Vertices of G;
+end;
+
+definition let G1, G2;
+  assume A1: (the Source of G1) tolerates (the Source of G2) &
+            (the Target of G1) tolerates (the Target of G2);
+
+  func G1 \/ G2 -> strict Graph means :Def2:
+     the Vertices of it = (the Vertices of G1) \/ (the Vertices of G2) &
+     the Edges of it = (the Edges of G1) \/ (the Edges of G2) &
+     (for v st v in the Edges of G1 holds
+             (the Source of it).v = (the Source of G1).v &
+             (the Target of it).v = (the Target of G1).v) &
+     (for v st v in the Edges of G2 holds
+             (the Source of it).v = (the Source of G2).v &
+             (the Target of it).v = (the Target of G2).v);
+
+  existence
+  proof
+    set V = (the Vertices of G1) \/ (the Vertices of G2);
+    set E = (the Edges of G1) \/ (the Edges of G2);
+     ex S being Function of E, V st
+      (for v st v in the Edges of G1 holds S.v = (the Source of G1).v) &
+        (for v st v in the Edges of G2 holds S.v = (the Source of G2).v)
+    proof
+      defpred P[set,set] means
+        ($1 in the Edges of G1 implies $2 = (the Source of G1).$1) &
+        ($1 in the Edges of G2 implies $2 = (the Source of G2).$1);
+      A2: for x being set st x in E ex y being set st y in V & P[x,y]
+      proof let x be set;
+        assume A3: x in E;
+        A4: x in the Edges of G1 implies thesis
+        proof assume A5: x in the Edges of G1;
+           take y = (the Source of G1).x qua set;
+           thus y in V
+              proof
+                  the Vertices of G1 <> {} by Def1;
+                then y in the Vertices of G1 by A5,FUNCT_2:7;
+                hence y in V by XBOOLE_0:def 2;
+              end;
+              thus x in the Edges of G1 implies y = (the Source of G1).x;
+              assume x in the Edges of G2;
+          then A6: x in (the Edges of G1) /\ (the Edges of G2) by A5,XBOOLE_0:
+def 3;
+              thus y = (the Source of G2).x
+              proof
+                  dom (the Source of G1) = the Edges of G1 by Lm1;
+                       then x in dom(the Source of G1) /\ dom (the Source of
+G2) by A6,Lm1;
+  hence y = (the Source of G2).x by A1,PARTFUN1:def 6;
+                        end;
+                    end;
+                    not x in the Edges of G1 implies thesis
+                    proof assume A7: not x in the Edges of G1;
+                       then A8: x in the Edges of G2 by A3,XBOOLE_0:def 2;
+                      take y = (the Source of G2).x qua set;
+
+                      thus y in V
+                        proof
+                            the Vertices of G2 <> {} by Def1;
+                          then y in the Vertices of G2 by A8,FUNCT_2:7;
+                         hence y in V by XBOOLE_0:def 2;
+                        end;
+                      thus thesis by A7;
+                    end;
+                 hence thesis by A4;
+              end;
+          consider S being Function of E, V such that A9:
+            for x being set st x in E holds P[x,S.x] from FuncEx1(A2);
+          take S;
+          thus for v st v in the Edges of G1 holds S.v = (the Source of G1).v
+            proof let v; assume A10: v in the Edges of G1;
+              then v in E by XBOOLE_0:def 2;
+              hence thesis by A9,A10;
+            end;
+             let v;
+             assume A11: v in the Edges of G2;
+             then v in E by XBOOLE_0:def 2;
+           hence thesis by A9,A11;
+       end;
+       then consider S being Function of E, V such that A12:
+        (for v st v in the Edges of G1 holds S.v = (the Source of G1).v) &
+        (for v st v in the Edges of G2 holds S.v = (the Source of G2).v);
+
+         ex T being Function of E, V st
+         (for v st v in the Edges of G1 holds T.v = (the Target of G1).v) &
+         (for v st v in the Edges of G2 holds T.v = (the Target of G2).v)
+       proof
+         defpred P[set,set] means
+          ($1 in the Edges of G1 implies $2 = (the Target of G1).$1) &
+          ($1 in the Edges of G2 implies $2 = (the Target of G2).$1);
+          A13: for x being set st x in E ex y being set st y in V & P[x,y]
+              proof let x be set;
+                assume A14: x in E;
+                A15: x in the Edges of G1 implies thesis
+                    proof assume A16: x in the Edges of G1;
+                      take y = (the Target of G1).x qua set;
+
+                      thus y in V
+                        proof
+                            the Vertices of G1 <> {} by Def1;
+                          then y in the Vertices of G1 by A16,FUNCT_2:7;
+                         hence y in V by XBOOLE_0:def 2;
+                        end;
+                      thus
+                        x in the Edges of G1 implies y = (the Target of G1).x;
+                      assume x in the Edges of G2;
+                      then A17: x in (the Edges of G1) /\ (the Edges of G2)
+                         by A16,XBOOLE_0:def 3;
+                      thus y = (the Target of G2).x
+                        proof
+                          dom (the Target of G1) = the Edges of G1
+                             by Lm1;
+ then x in dom(the Target of G1) /\ dom (the Target of G2) by A17,Lm1;
+                          hence y = (the Target of G2).x by A1,PARTFUN1:def 6;
+                        end;
+                    end;
+
+                    not x in the Edges of G1 implies thesis
+                    proof assume A18: not x in the Edges of G1;
+                       then A19: x in the Edges of G2 by A14,XBOOLE_0:def 2;
+                      take y = (the Target of G2).x qua set;
+                      thus y in V
+                        proof
+                            the Vertices of G2 <> {} by Def1;
+                          then y in the Vertices of G2 by A19,FUNCT_2:7;
+                         hence y in V by XBOOLE_0:def 2;
+                        end;
+                      thus thesis by A18;
+                    end;
+                 hence thesis by A15;
+              end;
+          consider S being Function of E, V such that A20:
+            for x being set st x in E holds P[x,S.x] from FuncEx1(A13);
+          take S;
+          thus for v st v in the Edges of G1 holds S.v = (the Target of G1).v
+            proof let v; assume A21: v in the Edges of G1;
+              then v in E by XBOOLE_0:def 2;
+              hence thesis by A20,A21;
+            end;
+
+             let v;
+             assume A22: v in the Edges of G2;
+             then v in E by XBOOLE_0:def 2;
+           hence thesis by A20,A22;
+       end;
+       then consider T being Function of E, V such that A23:
+         (for v st v in the Edges of G1 holds T.v = (the Target of G1).v) &
+         (for v st v in the Edges of G2 holds T.v = (the Target of G2).v);
+
+         V is non empty set
+       proof consider x being Element of the Vertices of G1;
+           the Vertices of G1 is non empty set by Def1;
+           then x in the Vertices of G1;
+        hence V is non empty set by XBOOLE_0:def 2;
+       end;
+       then reconsider G = MultiGraphStruct(# V, E, S, T #)
+        as strict Graph by Def1;
+
+       take G;
+       thus the Vertices of G = V;
+       thus the Edges of G = E;
+      thus for v st v in the Edges of G1 holds
+             (the Source of G).v = (the Source of G1).v &
+             (the Target of G).v = (the Target of G1).v by A12,A23;
+
+      let v; assume A24: v in the Edges of G2;
+      hence (the Source of G).v = (the Source of G2).v by A12;
+      thus thesis by A23,A24;
+     end;
+
+  uniqueness
+     proof let G, G' be strict Graph such that
+     A25: the Vertices of G = (the Vertices of G1) \/ (the Vertices of G2) &
+     the Edges of G = (the Edges of G1) \/ (the Edges of G2) &
+     (for v st v in the Edges of G1 holds
+             (the Source of G).v = (the Source of G1).v &
+             (the Target of G).v = (the Target of G1).v) &
+     (for v st v in the Edges of G2 holds
+             (the Source of G).v = (the Source of G2).v &
+             (the Target of G).v = (the Target of G2).v) and
+
+     A26: the Vertices of G' = (the Vertices of G1) \/ (the Vertices of G2) &
+     the Edges of G' = (the Edges of G1) \/ (the Edges of G2) &
+     (for v st v in the Edges of G1 holds
+             (the Source of G').v = (the Source of G1).v &
+             (the Target of G').v = (the Target of G1).v) &
+     (for v st v in the Edges of G2 holds
+             (the Source of G').v = (the Source of G2).v &
+             (the Target of G').v = (the Target of G2).v);
+
+      A27: dom (the Source of G) = the Edges of G &
+          dom (the Source of G') = the Edges of G by A25,A26,Lm1;
+      A28: dom (the Target of G) = the Edges of G &
+          dom (the Target of G') = the Edges of G by A25,A26,Lm1;
+            for x being set st x in the Edges of G holds
+            (the Source of G).x = (the Source of G').x
+            proof let x be set such that A29: x in the Edges of G;
+               A30: now assume A31: x in the Edges of G1;
+                     hence (the Source of G).x = (the Source of G1).x by A25
+                       .= (the Source of G').x by A26,A31;
+                   end;
+                     now assume A32: x in the Edges of G2;
+                     hence (the Source of G).x = (the Source of G2).x by A25
+                       .= (the Source of G').x by A26,A32;
+                   end;
+               hence thesis by A25,A29,A30,XBOOLE_0:def 2;
+            end;
+      then A33: the Source of G = the Source of G' by A27,FUNCT_1:9;
+
+           for x being set st x in the Edges of G holds
+           (the Target of G).x = (the Target of G').x
+          proof let x be set such that A34: x in the Edges of G;
+
+               A35: now assume A36: x in the Edges of G1;
+                     hence (the Target of G).x = (the Target of G1).x by A25
+                       .= (the Target of G').x by A26,A36;
+                   end;
+
+                     now assume A37: x in the Edges of G2;
+                     hence (the Target of G).x = (the Target of G2).x by A25
+                       .= (the Target of G').x by A26,A37;
+                   end;
+               hence thesis by A25,A34,A35,XBOOLE_0:def 2;
+          end;
+     hence G = G' by A25,A26,A28,A33,FUNCT_1:9;
+     end;
+end;
+
+definition let G, G1, G2 be Graph;
+  pred G is_sum_of G1, G2 means :Def3:
+    (the Target of G1) tolerates (the Target of G2) &
+    (the Source of G1) tolerates (the Source of G2) &
+    the MultiGraphStruct of G = G1 \/ G2;
+end;
+
+definition let IT be Graph;
+  attr IT is oriented means :Def4:
+  for x,y st x in the Edges of IT & y in the Edges of IT &
+    (the Source of IT).x = (the Source of IT).y &
+    (the Target of IT).x = (the Target of IT).y
+  holds x = y;
+
+  attr IT is non-multi means :Def5:
+  for x,y st x in the Edges of IT & y in the Edges of IT &
+    (((the Source of IT).x = (the Source of IT).y &
+    (the Target of IT).x = (the Target of IT).y) or
+    ((the Source of IT).x = (the Target of IT).y &
+    (the Source of IT).y = (the Target of IT).x))
+  holds x = y;
+
+  attr IT is simple means :Def6:
+  not ex x st x in the Edges of IT &
+    (the Source of IT).x = (the Target of IT).x;
+
+  attr IT is connected means :Def7:
+    not ex G1, G2 being Graph st
+      the Vertices of G1 misses the Vertices of G2 &
+      IT is_sum_of G1, G2;
+end;
+
+definition let IT be MultiGraphStruct;
+  attr IT is finite means :Def8:
+     the Vertices of IT is finite & the Edges of IT is finite;
+end;
+
+definition
+  cluster finite MultiGraphStruct;
+existence
+  proof
+    take G = MultiGraphStruct(# DomEx, {}, _empty, _empty #);
+    thus the Vertices of G is finite;
+    thus the Edges of G is finite;
+  end;
+
+  cluster finite non-multi oriented simple connected Graph;
+existence
+  proof
+    set V = {1};
+    reconsider _empty = {} as Function of {}, V by FUNCT_2:55,RELAT_1:60;
+    reconsider G = MultiGraphStruct(# V, {}, _empty, _empty #)
+       as Graph by Def1;
+    take G;
+    thus G is finite by Def8;
+      for x,y st x in the Edges of G & y in the Edges of G &
+     (((the Source of G).x = (the Source of G).y &
+     (the Target of G).x = (the Target of G).y) or
+     ((the Source of G).x = (the Target of G).y &
+     (the Source of G).y = (the Target of G).x))
+     holds x = y;
+    hence G is non-multi by Def5;
+      for x,y st x in the Edges of G & y in the Edges of G &
+     (the Source of G).x = (the Source of G).y &
+     (the Target of G).x = (the Target of G).y
+     holds x = y;
+    hence G is oriented by Def4;
+      not ex x st x in the Edges of G &
+     (the Source of G).x = (the Target of G).x;
+    hence G is simple by Def6;
+
+      not ex G1, G2 being Graph st
+      (the Vertices of G1) misses (the Vertices of G2) &
+      G is_sum_of G1, G2
+    proof
+      given G1, G2 being Graph such that A1:
+       (the Vertices of G1) misses (the Vertices of G2) &
+      G is_sum_of G1, G2;
+A2:    (the Vertices of G1) /\ (the Vertices of G2) = {} by A1,XBOOLE_0:def 7;
+        (the Source of G1) tolerates (the Source of G2) &
+      (the Target of G1) tolerates (the Target of G2) &
+      G = G1 \/ G2 by A1,Def3;
+     then A3:  (the Vertices of G1) \/ (the Vertices of G2)
+       = V by Def2;
+      consider x being Element of the Vertices of G1;
+      A4: the Vertices of G1 is non empty set by Def1;
+then A5:   x in the Vertices of G1;
+        x in V by A3,A4,XBOOLE_0:def 2;
+     then A6: 1 in the Vertices of G1 by A5,TARSKI:def 1;
+      consider y being Element of the Vertices of G2;
+      A7: the Vertices of G2 is non empty set by Def1;
+then A8:   y in the Vertices of G2;
+        y in V by A3,A7,XBOOLE_0:def 2;
+      then 1 in the Vertices of G2 by A8,TARSKI:def 1;
+     hence contradiction by A2,A6,XBOOLE_0:def 3;
+    end;
+  hence G is connected by Def7;
+  end;
+end;
+
+reserve x, y for Element of (the Vertices of G);
+
+definition let G; let x, y; let v;
+   pred v joins x, y means
+         ((the Source of G).v = x & (the Target of G).v = y) or
+       ((the Source of G).v = y & (the Target of G).v = x);
+end;
+
+definition let G; let x,y be Element of (the Vertices of G);
+   pred x,y are_incydent means
+       ex v being set st v in the Edges of G & v joins x, y;
+end;
+
+definition let G be Graph;
+   mode Chain of G -> FinSequence means :Def11:
+     (for n st 1 <= n & n <= len it holds it.n in the Edges of G) &
+     ex p being FinSequence st
+       len p = len it + 1 &
+       (for n st 1 <= n & n <= len p holds p.n in the Vertices of G) &
+       for n st 1 <= n & n <= len it
+         ex x', y' being Element of the Vertices of G st
+           x' = p.n & y' = p.(n+1) & it.n joins x', y';
+existence
+  proof
+    take {};
+    thus (for n st 1 <= n & n <= len {} holds {}.n in the Edges of G)
+      proof let n; assume 1 <= n & n <= len {};
+        then 1 <= len {} by AXIOMS:22;
+        then 1 <= 0 by FINSEQ_1:25;
+       hence thesis;
+      end;
+    consider x being Element of the Vertices of G;
+      the Vertices of G is non empty set by Def1;
+then A1:  x in the Vertices of G;
+    take <*x*>;
+    thus len <*x*> = 0 + 1 by FINSEQ_1:56 .= len {} + 1 by FINSEQ_1:25;
+    thus (for n st 1 <= n & n <= len <*x*> holds <*x*>.n in the Vertices of G)
+      proof let n; assume 1 <= n & n <= len <*x*>;
+        then 1 <= n & n <= 1 by FINSEQ_1:56;
+       then n = 1 by AXIOMS:21;
+       hence <*x*>.n in the Vertices of G by A1,FINSEQ_1:57;
+      end;
+    let n; assume 1 <= n & n <= len {};
+      then 1 <= len {} by AXIOMS:22;
+      then 1 <= 0 by FINSEQ_1:25;
+     hence thesis;
+  end;
+end;
+
+Lm3: for G holds {} is Chain of G
+  proof let G;
+    thus (for n st 1 <= n & n <= len {} holds {}.n in the Edges of G)
+      proof let n; assume 1 <= n & n <= len {};
+        then 1 <= len {} by AXIOMS:22;
+        then 1 <= 0 by FINSEQ_1:25;
+       hence thesis;
+      end;
+    consider x being Element of the Vertices of G;
+      the Vertices of G is non empty set by Def1;
+then A1:  x in the Vertices of G;
+    take <*x*>;
+    thus len <*x*> = 0 + 1 by FINSEQ_1:56 .= len {} + 1 by FINSEQ_1:25;
+    thus (for n st 1 <= n & n <= len <*x*> holds <*x*>.n in the Vertices of G)
+      proof let n; assume 1 <= n & n <= len <*x*>;
+        then 1 <= n & n <= 1 by FINSEQ_1:56;
+       then n = 1 by AXIOMS:21;
+       hence <*x*>.n in the Vertices of G by A1,FINSEQ_1:57;
+      end;
+
+    let n; assume 1 <= n & n <= len {};
+      then 1 <= len {} by AXIOMS:22;
+      then 1 <= 0 by FINSEQ_1:25;
+     hence thesis;
+  end;
+
+definition let G be Graph;
+ redefine mode Chain of G -> FinSequence of the Edges of G;
+ coherence proof let c be Chain of G;
+     rng c c= the Edges of G proof let y be set; assume y in rng c;
+   then consider x being set such that
+A1: x in dom c & y=c.x by FUNCT_1:def 5;
+    reconsider x as Nat by A1;
+      1<=x & x<=len c by A1,FINSEQ_3:27;
+    hence y in the Edges of G by A1,Def11;
+   end;
+  hence c is FinSequence of the Edges of G by FINSEQ_1:def 4;
+ end;
+end;
+
+definition let G be Graph;
+  let IT be Chain of G;
+  attr IT is oriented means :Def12:
+     for n st 1 <= n & n < len IT holds
+       (the Source of G).(IT.(n+1)) = (the Target of G).(IT.n);
+end;
+
+definition let G be Graph;
+  cluster oriented Chain of G;
+existence
+  proof
+    reconsider p = {} as Chain of G by Lm3;
+    take p;
+    let n; assume 1 <= n & n <= len p;
+     then 1 <= len p by AXIOMS:22;
+     then 1 <= 0 by FINSEQ_1:25;
+    hence thesis;
+  end;
+end;
+
+Lm4: for G holds {} is oriented Chain of G
+  proof let G;
+    reconsider p = {} as Chain of G by Lm3;
+       for n st 1 <= n & n < len p holds
+       (the Source of G).(p.(n+1)) = (the Target of G).(p.n)
+    proof
+    let n; assume 1 <= n & n <= len p;
+     then 1 <= len p by AXIOMS:22;
+     then 1 <= 0 by FINSEQ_1:25;
+    hence thesis;
+   end;
+  hence thesis by Def12;
+  end;
+
+definition let G be Graph;
+  let IT be Chain of G;
+  redefine attr IT is one-to-one means
+      for n, m st 1 <= n & n < m & m <= len IT holds IT.n <> IT.m;
+  compatibility
+  proof
+    thus IT is one-to-one implies
+      for n, m st 1 <= n & n < m & m <= len IT holds IT.n <> IT.m
+    proof
+      assume A1: IT is one-to-one;
+      let n,m; assume A2: 1 <= n & n < m & m <= len IT;
+      then n <= len IT & 1 <= m by AXIOMS:22;
+      then n in dom IT & m in dom IT & n <> m by A2,FINSEQ_3:27;
+      hence thesis by A1,FUNCT_1:def 8;
+    end;
+    assume A3: for n, m st 1 <= n & n < m & m <= len IT holds IT.n <> IT.m;
+    let x1,x2 be set;
+    assume A4: x1 in dom IT & x2 in dom IT & IT.x1 = IT.x2;
+    then reconsider x' = x1, y' = x2 as Nat;
+A5:  1 <= x' & x' <= len IT & 1 <= y' & y' <= len IT by A4,FINSEQ_3:27;
+    per cases;
+    suppose A6: x' <> y';
+      now per cases by A6,AXIOMS:21;
+      suppose x' < y';
+      hence thesis by A3,A4,A5;
+      suppose y' < x';
+      hence thesis by A3,A4,A5;
+    end;
+    hence thesis;
+    suppose x' = y';
+    hence thesis;
+  end;
+end;
+
+definition let G be Graph;
+  cluster one-to-one Chain of G;
+existence
+  proof
+     reconsider p = {} as Chain of G by Lm3;
+     take p;
+     let n,m; assume 1 <= n & n < m & m <= len p;
+       then 1 < m & m <= len p by AXIOMS:22;
+       then 1 < len p by AXIOMS:22;
+       then 1 < 0 by FINSEQ_1:25;
+      hence thesis;
+  end;
+end;
+
+definition let G be Graph;
+  mode Path of G is one-to-one Chain of G;
+end;
+
+definition let G be Graph;
+  cluster one-to-one oriented Chain of G;
+existence
+   proof
+     reconsider p = {} as oriented Chain of G by Lm4;
+     take p;
+     thus thesis;
+   end;
+end;
+
+definition let G be Graph;
+  mode OrientedPath of G is one-to-one oriented Chain of G;
+end;
+
+definition let G be Graph;
+   let IT be Path of G;
+ canceled;
+
+   attr IT is cyclic means :Def15:
+     ex p being FinSequence st
+       len p = len IT + 1 &
+       (for n st 1 <= n & n <= len p holds p.n in the Vertices of G) &
+       (for n st 1 <= n & n <= len IT
+         ex x', y' being Element of the Vertices of G st
+           x' = p.n & y' = p.(n+1) & IT.n joins x', y') &
+       p.1 = p.(len p);
+end;
+
+definition let G be Graph;
+   cluster cyclic Path of G;
+existence
+   proof
+     reconsider p = {} as Path of G by Lm3;
+     take p;
+     consider x being Element of the Vertices of G;
+       the Vertices of G is non empty set by Def1;
+then A1:   x in the Vertices of G;
+     take <*x*>;
+     thus len <*x*> = 0 + 1 by FINSEQ_1:56 .= len p + 1 by FINSEQ_1:25;
+     thus for n st 1 <= n & n <= len <*x*> holds <*x*>.n in the Vertices of G
+       proof let n; assume 1 <= n & n <= len <*x*>;
+         then 1 <= n & n <= 1 by FINSEQ_1:56;
+          then n = 1 by AXIOMS:21;
+        hence <*x*>.n in the Vertices of G by A1,FINSEQ_1:57;
+       end;
+      thus for n st 1 <= n & n <= len p
+         ex x', y' being Element of the Vertices of G st
+           x' = <*x*>.n & y' = <*x*>.(n+1) & p.n joins x', y'
+      proof let n; assume 1 <= n & n <= len p;
+        then 1 <= len p by AXIOMS:22;
+        then 1 <= 0 by FINSEQ_1:25;
+       hence thesis;
+      end;
+     thus <*x*>.1 = <*x*>.(len <*x*>) by FINSEQ_1:56;
+   end;
+end;
+
+definition let G be Graph;
+   mode Cycle of G is cyclic Path of G;
+end;
+
+Lm5: for G holds {} is Cycle of G
+  proof let G;
+     reconsider p = {} as Path of G by Lm3;
+       ex q being FinSequence st
+       len q = len p + 1 &
+       (for n st 1 <= n & n <= len q holds q.n in the Vertices of G) &
+       (for n st 1 <= n & n <= len p
+         ex x', y' being Element of the Vertices of G st
+           x' = q.n & y' = q.(n+1) & p.n joins x', y') &
+       q.1 = q.(len q)
+    proof
+     consider x being Element of the Vertices of G;
+       the Vertices of G is non empty set by Def1;
+then A1:   x in the Vertices of G;
+     take <*x*>;
+     thus len <*x*> = 0 + 1 by FINSEQ_1:56 .= len p + 1 by FINSEQ_1:25;
+     thus for n st 1 <= n & n <= len <*x*> holds <*x*>.n in the Vertices of G
+       proof let n; assume 1 <= n & n <= len <*x*>;
+         then 1 <= n & n <= 1 by FINSEQ_1:56;
+          then n = 1 by AXIOMS:21;
+        hence <*x*>.n in the Vertices of G by A1,FINSEQ_1:57;
+       end;
+      thus for n st 1 <= n & n <= len p
+         ex x', y' being Element of the Vertices of G st
+           x' = <*x*>.n & y' = <*x*>.(n+1) & p.n joins x', y'
+      proof let n; assume 1 <= n & n <= len p;
+        then 1 <= len p by AXIOMS:22;
+        then 1 <= 0 by FINSEQ_1:25;
+       hence thesis;
+      end;
+     thus <*x*>.1 = <*x*>.(len <*x*>) by FINSEQ_1:56;
+    end;
+   hence thesis by Def15;
+  end;
+
+definition let G be Graph;
+   cluster cyclic OrientedPath of G;
+  existence
+    proof
+      reconsider p = {} as OrientedPath of G by Lm4;
+      take p;
+      thus p is cyclic by Lm5;
+    end;
+end;
+
+definition let G be Graph;
+   mode OrientedCycle of G is cyclic OrientedPath of G;
+end;
+
+Lm6:
+  for G being Graph holds
+    for v being set holds v in the Edges of G implies
+       (the Source of G).v in the Vertices of G &
+       (the Target of G).v in the Vertices of G
+proof let G be Graph; let v such that A1: v in the Edges of G;
+    the Vertices of G <> {} by Def1;
+ hence thesis by A1,FUNCT_2:7;
+end;
+
+definition let G be Graph;
+ canceled;
+
+  mode Subgraph of G -> Graph means :Def17:
+   the Vertices of it c= the Vertices of G &
+   the Edges of it c= the Edges of G &
+   for v st v in the Edges of it holds
+    (the Source of it).v = (the Source of G).v &
+    (the Target of it).v = (the Target of G).v &
+    (the Source of G).v in the Vertices of it &
+    (the Target of G).v in the Vertices of it;
+  existence
+    proof take G;
+      thus the Vertices of G c= the Vertices of G;
+      thus the Edges of G c= the Edges of G;
+      let v; assume v in the Edges of G;
+      hence thesis by Lm6;
+    end;
+end;
+
+definition let G be Graph;
+ cluster strict Subgraph of G;
+existence
+  proof the Vertices of G is non empty set by Def1;
+    then reconsider S =
+     MultiGraphStruct(# the Vertices of G, the Edges of G,
+                        the Source of G, the Target of G #) as Graph
+      by Def1;
+     for v st v in the Edges of S holds
+     (the Source of S).v = (the Source of G).v &
+     (the Target of S).v = (the Target of G).v &
+     (the Source of G).v in the Vertices of S &
+          (the Target of G).v in the Vertices of S by Lm6;
+    then S is Subgraph of G by Def17;
+   hence thesis;
+  end;
+end;
+
+definition let G be finite Graph;
+   func VerticesCount G -> Nat means
+     ex B being finite set st B = the Vertices of G & it = card B;
+existence
+ proof
+   reconsider B = the Vertices of G as finite set by Def8;
+  take card B, B;
+  thus thesis;
+ end;
+uniqueness;
+
+   func EdgesCount G -> Nat means
+     ex B being finite set st B = the Edges of G & it = card B;
+existence
+ proof
+   reconsider B = the Edges of G as finite set by Def8;
+  take card B, B;
+  thus thesis;
+ end;
+uniqueness;
+end;
+
+definition let G be finite Graph; let x be Element of the Vertices of G;
+   func EdgesIn x -> Nat means
+      ex X being finite set st
+      (for z being set holds
+          z in X iff z in the Edges of G & (the Target of G).z = x)
+     & it = card(X);
+  existence
+     proof
+       defpred P[set] means (the Target of G).$1 = x;
+       consider X being set such that A1:
+         for z being set holds z in X iff
+            z in the Edges of G & P[z] from Separation;
+         for z being set st z in X holds z in the Edges of G by A1;
+       then X c= the Edges of G & the Edges of G is finite
+        by Def8,TARSKI:def 3;
+       then reconsider X as finite set by FINSET_1:13;
+       take card(X);
+       take X;
+       thus thesis by A1;
+     end;
+  uniqueness
+     proof let n1, n2 be Nat such that
+       A2: ex X being finite set st
+      (for z being set holds
+          z in X iff z in the Edges of G & (the Target of G).z = x)
+         & n1 = card(X) and
+       A3: ex X being finite set st
+      (for z being set holds
+          z in X iff z in the Edges of G & (the Target of G).z = x)
+          & n2 = card(X);
+       consider X1 being finite set such that A4: (for z being set holds
+          z in X1 iff z in the Edges of G & (the Target of G).z = x)
+         & n1 = card(X1) by A2;
+       consider X2 being finite set such that A5: (for z being set holds
+          z in X2 iff z in the Edges of G & (the Target of G).z = x)
+          & n2 = card(X2) by A3;
+        for z being set holds z in X1 iff z in X2
+        proof let z;
+              z in X1 iff z in the Edges of G & (the Target of G).z = x by A4;
+           hence thesis by A5;
+        end;
+      hence n1 = n2 by A4,A5,TARSKI:2;
+     end;
+
+  func EdgesOut x -> Nat means
+      ex X being finite set st
+      (for z being set holds
+        z in X iff z in the Edges of G & (the Source of G).z = x)
+     & it = card(X);
+  existence
+    proof
+       defpred P[set] means (the Source of G).$1 = x;
+       consider X being set such that A6:
+         for z being set holds z in X iff
+            z in the Edges of G & P[z] from Separation;
+         for z being set st z in X holds z in the Edges of G by A6;
+       then X c= the Edges of G & the Edges of G is finite
+        by Def8,TARSKI:def 3;
+       then reconsider X as finite set by FINSET_1:13;
+       take card(X);
+       take X;
+       thus thesis by A6;
+    end;
+  uniqueness
+  proof let n1, n2 be Nat such that
+       A7: ex X being finite set st
+      (for z being set holds
+          z in X iff z in the Edges of G & (the Source of G).z = x)
+         & n1 = card(X) and
+       A8: ex X being finite set st
+      (for z being set holds
+          z in X iff z in the Edges of G & (the Source of G).z = x)
+          & n2 = card(X);
+       consider X1 being finite set such that A9: (for z being set holds
+          z in X1 iff z in the Edges of G & (the Source of G).z = x)
+         & n1 = card(X1) by A7;
+       consider X2 being finite set such that A10: (for z being set holds
+          z in X2 iff z in the Edges of G & (the Source of G).z = x)
+          & n2 = card(X2) by A8;
+        for z being set holds z in X1 iff z in X2
+        proof let z;
+             z in X1 iff z in the Edges of G & (the Source of G).z = x by A9;
+          hence thesis by A10;
+        end;
+      hence n1 = n2 by A9,A10,TARSKI:2;
+  end;
+end;
+
+definition let G be finite Graph; let x be Element of the Vertices of G;
+  func Degree x -> Nat equals
+       EdgesIn(x) + EdgesOut(x);
+correctness;
+end;
+
+Lm7:
+   for p being Chain of G holds p|Seg(n) is Chain of G
+proof let p be Chain of G;
+  reconsider q = p|Seg(n) as FinSequence by FINSEQ_1:19;
+
+  A1: for n st 1 <= n & n <= len q holds q.n in the Edges of G
+    proof let k be Nat; assume 1 <= k & k <= len q;
+     then A2: k in dom q by FINSEQ_3:27;
+        dom q c= dom p by FUNCT_1:76;
+      then 1 <= k & k <= len p by A2,FINSEQ_3:27;
+      then p.k in the Edges of G by Def11;
+     hence q.k in the Edges of G by A2,FUNCT_1:70;
+    end;
+      ex q1 being FinSequence st
+      len q1 = len q + 1 &
+      (for n st 1 <= n & n <= len q1 holds q1.n in the Vertices of G) &
+      for n st 1 <= n & n <= len q
+        ex x', y' being Element of the Vertices of G st
+          x' = q1.n & y' = q1.(n+1) & q.n joins x', y'
+   proof
+     consider q1 being FinSequence such that A3: len q1 = len p + 1 &
+      (for n st 1 <= n & n <= len q1 holds q1.n in the Vertices of G) &
+      for n st 1 <= n & n <= len p
+        ex x', y' being Element of the Vertices of G st
+          x' = q1.n & y' = q1.(n+1) & p.n joins x', y' by Def11;
+
+    reconsider q2 = q1|Seg(n+1) as FinSequence by FINSEQ_1:19;
+    take q2;
+
+    thus A4: len q2 = len q + 1
+      proof
+     A5:  dom q2 = dom q1 /\ Seg(n+1) by RELAT_1:90
+       .= Seg (len p + 1) /\ Seg (n+1) by A3,FINSEQ_1:def 3;
+
+     A6: dom q = dom p /\ Seg n by RELAT_1:90
+         .= Seg len p /\ Seg n by FINSEQ_1:def 3;
+
+     A7: now assume A8: len p + 1 <= n + 1;
+           then Seg(len p + 1) c= Seg(n + 1) by FINSEQ_1:7;
+           then dom q2 = Seg(len p + 1) by A5,XBOOLE_1:28;
+           then A9: len q2 = len p + 1 by FINSEQ_1:def 3;
+             len p <= n by A8,REAL_1:53;
+           then Seg len p c= Seg n by FINSEQ_1:7;
+           then dom q = Seg len p by A6,XBOOLE_1:28;
+          hence len q2 = len q + 1 by A9,FINSEQ_1:def 3;
+         end;
+
+           now assume A10: n + 1 <= len p + 1;
+           then Seg(n+1) c= Seg(len p + 1) by FINSEQ_1:7;
+           then dom q2 = Seg(n+1) by A5,XBOOLE_1:28;
+           then A11: len q2 = n+1 by FINSEQ_1:def 3;
+             n <= len p by A10,REAL_1:53;
+           then Seg n c= Seg len p by FINSEQ_1:7;
+           then dom q = Seg n by A6,XBOOLE_1:28;
+          hence len q2 = len q + 1 by A11,FINSEQ_1:def 3;
+         end;
+        hence thesis by A7;
+      end;
+
+    thus for n st 1 <= n & n <= len q2 holds q2.n in the Vertices of G
+      proof let n be Nat; assume 1 <= n & n <= len q2;
+        then A12: n in dom q2 by FINSEQ_3:27;
+            dom q2 c= dom q1 by FUNCT_1:76;
+        then 1 <= n & n <= len q1 by A12,FINSEQ_3:27;
+        then q1.n in the Vertices of G by A3;
+       hence q2.n in the Vertices of G by A12,FUNCT_1:70;
+      end;
+    let k; assume A13: 1 <= k & k <= len q;
+     then A14: k in dom q by FINSEQ_3:27;
+       dom q c= dom p by FUNCT_1:76;
+      then 1 <= k & k <= len p by A14,FINSEQ_3:27;
+     then consider x', y' being Element of the Vertices of G such that A15:
+       x' = q1.k & y' = q1.(k+1) & p.k joins x' ,y' by A3;
+     take x', y';
+
+       len q <= len q + 1 by NAT_1:29;
+     then 1 <= k & k <= len q2 by A4,A13,AXIOMS:22;
+      then k in dom q2 by FINSEQ_3:27;
+     hence x' = q2.k by A15,FUNCT_1:70;
+     A16: k + 1 <= len q2 by A4,A13,REAL_1:55;
+       1 + 1 <= k + 1 by A13,REAL_1:55;
+     then 1 <= k + 1 by AXIOMS:22;
+     then k+1 in dom q2 by A16,FINSEQ_3:27;
+     hence y' = q2.(k+1) by A15,FUNCT_1:70;
+    thus q.k joins x', y' by A14,A15,FUNCT_1:70;
+   end;
+ hence thesis by A1,Def11;
+end;
+
+Lm8: for H1, H2 being strict Subgraph of G st
+            the Vertices of H1 = the Vertices of H2 &
+            the Edges of H1 = the Edges of H2
+        holds H1 = H2
+proof let H1, H2 be strict Subgraph of G such that A1:
+  the Vertices of H1 = the Vertices of H2 &
+  the Edges of H1 = the Edges of H2;
+  A2: dom(the Source of H1) = the Edges of H1 by Lm1;
+  A3: dom(the Source of H2) = the Edges of H2 by Lm1;
+  A4: dom(the Target of H1) = the Edges of H1 by Lm1;
+  A5: dom(the Target of H2) = the Edges of H2 by Lm1;
+    for x being set st x in the Edges of H1 holds
+    (the Source of H1).x = (the Source of H2).x
+  proof let x be set; assume A6: x in the Edges of H1;
+    hence (the Source of H1).x = (the Source of G).x by Def17
+      .= (the Source of H2).x by A1,A6,Def17;
+  end;
+  then A7: the Source of H1 = the Source of H2 by A1,A2,A3,FUNCT_1:9;
+
+    for x being set st x in the Edges of H1 holds
+      (the Target of H1).x = (the Target of H2).x
+  proof let x be set; assume A8: x in the Edges of H1;
+
+    hence (the Target of H1).x = (the Target of G).x by Def17
+      .= (the Target of H2).x by A1,A8,Def17;
+  end;
+    hence H1 = H2 by A1,A4,A5,A7,FUNCT_1:9;
+end;
+
+definition let G1, G2 be Graph;
+  pred G1 c= G2 means :Def23:
+    G1 is Subgraph of G2;
+ reflexivity
+ proof let G;
+    for v st v in the Edges of G holds
+    (the Source of G).v = (the Source of G).v &
+    (the Target of G).v = (the Target of G).v &
+    (the Source of G).v in the Vertices of G &
+    (the Target of G).v in the Vertices of G by Lm6;
+   hence G is Subgraph of G by Def17;
+ end;
+end;
+
+Lm9:
+  for G being Graph, H being Subgraph of G holds
+    (the Source of H) in PFuncs(the Edges of G, the Vertices of G) &
+    (the Target of H) in PFuncs(the Edges of G, the Vertices of G)
+proof let G be Graph, H be Subgraph of G;
+  set EH = the Edges of H;
+  set VH = the Vertices of H;
+  set EG = the Edges of G;
+  set VG = the Vertices of G;
+    EH c= EG & VH c= VG by Def17;
+  then Funcs(EH, VH) c= PFuncs(EH, VH) &
+  PFuncs(EH, VH) c= PFuncs(EG, VG) by FUNCT_2:141,PARTFUN1:128;
+  then A1: Funcs(EH, VH) c= PFuncs(EG, VG) by XBOOLE_1:1;
+  A2: VH <> {} by Def1;
+  then (the Source of H) in Funcs(EH, VH) by FUNCT_2:11;
+  hence (the Source of H) in PFuncs(EG, VG) by A1;
+    (the Target of H) in Funcs(EH, VH) by A2,FUNCT_2:11;
+ hence (the Target of H) in PFuncs(EG, VG) by A1;
+end;
+
+definition let G be Graph;
+  func bool G -> set means :Def24:
+   for x being set holds
+    x in it iff x is strict Subgraph of G;
+  existence
+  proof
+    reconsider V = the Vertices of G as non empty set by Def1;
+    set E = the Edges of G;
+    set Prod = [: bool V, bool E, PFuncs(E, V), PFuncs(E, V) :];
+    defpred P[set] means
+          ex y being Element of Prod,
+             M being Graph,
+             v being non empty set,
+             e being set,
+             s being (Function of e, v),
+             t being (Function of e, v)
+          st y = $1 & v = y`1 & e = y`2 & s = y`3 & t = y`4 &
+           M = MultiGraphStruct(# v, e, s, t #) &
+           M is Subgraph of G;
+    consider X being set such that A1:
+      for x being set holds
+        x in X iff x in Prod & P[x] from Separation;
+
+    defpred P[set, set] means
+          ex y being Element of Prod,
+             M being strict Graph,
+             v being non empty set,
+             e being set,
+             s being Function of e, v,
+             t being Function of e, v
+          st y = $1 & v = y`1 & e = y`2 & s = y`3 & t = y`4 &
+           M = MultiGraphStruct(# v, e, s, t #) &
+           M is Subgraph of G &
+           $2 = M;
+
+    A2: for a, b, c being set st P[a,b] & P[a, c] holds b = c;
+
+    consider Y being set such that A3:
+      for z being set holds
+        z in Y iff
+        ex x being set st x in X & P[x, z] from Fraenkel(A2);
+
+   take Y;
+   let x be set;
+   thus x in Y implies x is strict Subgraph of G
+     proof assume x in Y;
+        then ex z being set st z in X & P[z, x] by A3;
+       hence x is strict Subgraph of G;
+     end;
+
+   assume x is strict Subgraph of G;
+   then reconsider H = x as strict Subgraph of G;
+
+     ex y being set st y in X & P[y, x]
+     proof
+       take y = [ the Vertices of H, the Edges of H,
+             the Source of H, the Target of H ];
+
+          y in Prod
+         proof
+           A4: (the Vertices of H) c= V by Def17;
+           A5: (the Edges of H) c= E by Def17;
+              (the Source of H) in PFuncs(E, V) &
+              (the Target of H) in PFuncs(E, V) by Lm9;
+          hence thesis by A4,A5,MCART_1:84;
+         end;
+       then reconsider y' = y as Element of Prod;
+       reconsider v = the Vertices of H as non empty set by Def1;
+       set e = the Edges of H;
+       reconsider s = the Source of H as Function of e, v;
+       reconsider t = the Target of H as Function of e, v;
+       A6: v = y'`1 & e = y'`2 & s = y'`3 & t = y'`4 by MCART_1:59;
+       hence y in X by A1;
+       thus P[y, x] by A6;
+     end;
+   hence thesis by A3;
+  end;
+
+  uniqueness
+    proof
+      defpred P[set] means $1 is strict Subgraph of G;
+      let X1, X2 be set such that
+      A7: for x being set holds x in X1 iff P[x] and
+      A8: for x being set holds x in X2 iff P[x];
+        thus X1 = X2 from Extensionality(A7,A8);
+    end;
+end;
+
+scheme GraphSeparation{G() -> Graph, P[set]}:
+  ex X being set st
+    for x being set holds
+      x in X iff x is strict Subgraph of G() & P[x]
+proof
+  defpred _P[set] means P[$1];
+  consider X being set such that A1:
+    for x being set holds
+      x in X iff x in bool G() & _P[x] from Separation;
+ take X;
+ let x be set;
+ thus x in X implies x is strict Subgraph of G() & P[x]
+   proof assume A2: x in X;
+     then x in bool G() by A1;
+    hence x is strict Subgraph of G() by Def24;
+    thus P[x] by A1,A2;
+   end;
+ assume A3: x is strict Subgraph of G() & P[x];
+  then x in bool G() by Def24;
+ hence thesis by A1,A3;
+end;
+
+               ::::::::::::::::::::::::::
+               :: Properties of graphs ::
+               ::::::::::::::::::::::::::
+
+theorem
+     for G being Graph holds
+     dom(the Source of G) = the Edges of G &
+     dom(the Target of G) = the Edges of G &
+     rng(the Source of G) c= the Vertices of G &
+     rng(the Target of G) c= the Vertices of G by Lm1;
+
+theorem
+     for x being Element of the Vertices of G holds
+     x in the Vertices of G by Lm2;
+
+theorem
+    for v being set holds v in the Edges of G implies
+      (the Source of G).v in the Vertices of G &
+      (the Target of G).v in the Vertices of G by Lm6;
+
+                  :::::::::::
+                  :: Chain ::
+                  :::::::::::
+
+theorem
+     for p being Chain of G holds p|Seg(n) is Chain of G by Lm7;
+
+             :::::::::::::::::::::::
+             :: Sum of two graphs ::
+             :::::::::::::::::::::::
+
+theorem Th5:
+  G1 c= G implies
+    (the Source of G1) c= (the Source of G) &
+    (the Target of G1) c= (the Target of G)
+proof assume G1 c= G;
+   then A1: G1 is Subgraph of G by Def23;
+    for v st v in (the Source of G1) holds v in (the Source of G)
+    proof let v;
+      assume A2: v in (the Source of G1);
+       then consider x, y being set such that A3: [x,y] = v by RELAT_1:def 1;
+   A4: x in dom (the Source of G1) &
+        y = (the Source of G1).x by A2,A3,FUNCT_1:8;
+   then A5: x in the Edges of G1 by Lm1;
+         (the Edges of G1) c= (the Edges of G) by A1,Def17;
+       then x in the Edges of G by A5;
+   then A6: x in dom (the Source of G) by Lm1;
+      x in the Edges of G1 by A4,Lm1;
+       then y = (the Source of G).x by A1,A4,Def17;
+       hence thesis by A3,A6,FUNCT_1:def 4;
+    end;
+  hence (the Source of G1) c= (the Source of G) by TARSKI:def 3;
+    for v st v in (the Target of G1) holds v in (the Target of G)
+    proof let v;
+      assume A7: v in (the Target of G1);
+       then consider x, y being set such that A8: [x,y] = v by RELAT_1:def 1;
+   A9: x in dom (the Target of G1) &
+        y = (the Target of G1).x by A7,A8,FUNCT_1:8;
+   then A10: x in the Edges of G1 by Lm1;
+         (the Edges of G1) c= (the Edges of G) by A1,Def17;
+       then x in the Edges of G by A10;
+   then A11: x in dom (the Target of G) by Lm1;
+      x in the Edges of G1 by A9,Lm1;
+       then y = (the Target of G).x by A1,A9,Def17;
+       hence thesis by A8,A11,FUNCT_1:def 4;
+    end;
+  hence (the Target of G1) c= (the Target of G) by TARSKI:def 3;
+end;
+
+theorem
+    (the Source of G1) tolerates (the Source of G2) &
+  (the Target of G1) tolerates (the Target of G2)
+    implies
+  (the Source of (G1 \/ G2)) =
+    (the Source of G1) \/ (the Source of G2) &
+  (the Target of (G1 \/ G2)) =
+    (the Target of G1) \/ (the Target of G2)
+proof assume A1: (the Source of G1) tolerates (the Source of G2) &
+    (the Target of G1) tolerates (the Target of G2);
+  set S12 = the Source of (G1 \/ G2);
+  set S1 = the Source of G1;
+  set S2 = the Source of G2;
+  set T12 = the Target of (G1 \/ G2);
+  set T1 = the Target of G1;
+  set T2 = the Target of G2;
+
+    for v holds v in S12 iff v in S1 \/ S2
+    proof let v;
+      thus v in S12 implies v in S1 \/ S2
+        proof assume A2: v in S12;
+          then consider x,y being set such that A3: [x,y] = v by RELAT_1:def 1;
+             x in dom S12 & y = S12.x by A2,A3,FUNCT_1:8;
+          then x in the Edges of (G1 \/ G2) by Lm1;
+then A4:          x in (the Edges of G1) \/ (the Edges of G2) by A1,Def2;
+         A5: now assume A6: x in the Edges of G1;
+               then A7: x in dom S1 by Lm1;
+                   S1.x = S12.x by A1,A6,Def2 .= y by A2,A3,FUNCT_1:8
+;
+                 then [x,y] in S1 or [x,y] in S2 by A7,FUNCT_1:def 4;
+               hence [x,y] in S1 \/ S2 by XBOOLE_0:def 2;
+             end;
+               now assume A8: x in the Edges of G2;
+               then A9: x in dom S2 by Lm1;
+                 S2.x = S12.x by A1,A8,Def2 .= y by A2,A3,FUNCT_1:8;
+                 then [x,y] in S1 or [x,y] in S2 by A9,FUNCT_1:def 4;
+                hence [x,y] in S1 \/ S2 by XBOOLE_0:def 2;
+             end;
+           hence thesis by A3,A4,A5,XBOOLE_0:def 2;
+        end;
+
+        assume A10: v in S1 \/ S2;
+        A11: now assume A12: v in S1;
+              then consider x,y being set such that A13: [x,y] = v by RELAT_1:
+def 1;
+             A14: x in dom S1 & y = S1.x by A12,A13,FUNCT_1:8;
+             then A15: x in the Edges of G1 by Lm1;
+                  x in the Edges of G1 or x in the Edges of G2 by A14,Lm1;
+                then x in (the Edges of G1) \/
+ (the Edges of G2) by XBOOLE_0:def 2;
+                then x in the Edges of (G1 \/ G2) by A1,Def2;
+             then A16: x in dom S12 by Lm1;
+                  S12.x = y by A1,A14,A15,Def2;
+              hence v in S12 by A13,A16,FUNCT_1:def 4;
+            end;
+              now assume A17: v in S2;
+              then consider x,y being set such that A18: [x,y] = v by RELAT_1:
+def 1;
+            A19: x in dom S2 & y = S2.x by A17,A18,FUNCT_1:8;
+            then A20: x in the Edges of G2 by Lm1;
+                x in the Edges of G1 or x in the Edges of G2 by A19,Lm1;
+              then x in (the Edges of G1) \/ (the Edges of G2) by XBOOLE_0:def
+2;
+              then x in the Edges of (G1 \/ G2) by A1,Def2;
+            then A21: x in dom S12 by Lm1;
+                S12.x = y by A1,A19,A20,Def2;
+             hence v in S12 by A18,A21,FUNCT_1:def 4;
+            end;
+          hence thesis by A10,A11,XBOOLE_0:def 2;
+    end;
+  hence S12 = S1 \/ S2 by TARSKI:2;
+
+    for v holds v in T12 iff v in T1 \/ T2
+    proof let v;
+      thus v in T12 implies v in T1 \/ T2
+        proof assume A22: v in T12;
+          then consider x,y being set such that A23: [x,y] = v by RELAT_1:def 1
+;
+             x in dom T12 & y = T12.x by A22,A23,FUNCT_1:8;
+          then x in the Edges of (G1 \/ G2) by Lm1;
+then A24:          x in (the Edges of G1) \/ (the Edges of G2) by A1,Def2;
+         A25: now assume A26: x in the Edges of G1;
+               then A27: x in dom T1 by Lm1;
+                   T1.x = T12.x by A1,A26,Def2 .= y by A22,A23,FUNCT_1:8
+;
+                 then [x,y] in T1 or [x,y] in T2 by A27,FUNCT_1:def 4;
+               hence [x,y] in T1 \/ T2 by XBOOLE_0:def 2;
+             end;
+               now assume A28: x in the Edges of G2;
+               then A29: x in dom T2 by Lm1;
+                 T2.x = T12.x by A1,A28,Def2 .= y by A22,A23,FUNCT_1:8;
+                 then [x,y] in T1 or [x,y] in T2 by A29,FUNCT_1:def 4;
+                hence [x,y] in T1 \/ T2 by XBOOLE_0:def 2;
+             end;
+           hence thesis by A23,A24,A25,XBOOLE_0:def 2;
+        end;
+
+        assume A30: v in T1 \/ T2;
+        A31: now assume A32: v in T1;
+              then consider x,y being set such that A33: [x,y] = v by RELAT_1:
+def 1;
+             A34: x in dom T1 & y = T1.x by A32,A33,FUNCT_1:8;
+             then A35: x in the Edges of G1 by Lm1;
+                  x in the Edges of G1 or x in the Edges of G2 by A34,Lm1
+;
+                then x in (the Edges of G1) \/
+ (the Edges of G2) by XBOOLE_0:def 2;
+                then x in the Edges of (G1 \/ G2) by A1,Def2;
+             then A36: x in dom T12 by Lm1;
+                  T12.x = y by A1,A34,A35,Def2;
+              hence v in T12 by A33,A36,FUNCT_1:def 4;
+            end;
+              now assume A37: v in T2;
+              then consider x,y being set such that A38: [x,y] = v by RELAT_1:
+def 1;
+            A39: x in dom T2 & y = T2.x by A37,A38,FUNCT_1:8;
+            then A40: x in the Edges of G2 by Lm1;
+                x in the Edges of G1 or x in the Edges of G2 by A39,Lm1
+;
+              then x in (the Edges of G1) \/ (the Edges of G2) by XBOOLE_0:def
+2
+;
+              then x in the Edges of (G1 \/ G2) by A1,Def2;
+            then A41: x in dom T12 by Lm1;
+                T12.x = y by A1,A39,A40,Def2;
+             hence v in T12 by A38,A41,FUNCT_1:def 4;
+            end;
+          hence thesis by A30,A31,XBOOLE_0:def 2;
+    end;
+  hence thesis by TARSKI:2;
+end;
+
+theorem Th7:
+ for G being strict Graph holds G = G \/ G
+proof let G be strict Graph;
+  A1: (the Vertices of (G \/ G))
+      = (the Vertices of G) \/ (the Vertices of G) by Def2
+     .= (the Vertices of G);
+  A2: (the Edges of (G \/ G))
+      = (the Edges of G) \/ (the Edges of G) by Def2
+     .= (the Edges of G);
+  then A3: dom (the Source of G) = the Edges of (G \/ G) by Lm1
+        .= dom (the Source of (G \/ G)) by Lm1;
+
+       for v st v in dom (the Source of G) holds
+       (the Source of G).v = (the Source of (G \/ G)).v
+     proof let v; assume v in dom(the Source of G);
+       then v in the Edges of G by Lm1;
+       hence thesis by Def2;
+     end;
+  then A4: (the Source of G) = (the Source of (G \/ G)) by A3,FUNCT_1:9;
+  A5: dom(the Target of G) = the Edges of (G \/ G) by A2,Lm1
+       .= dom (the Target of (G \/ G)) by Lm1;
+       for v st v in dom (the Target of G) holds
+       (the Target of G).v = (the Target of (G \/ G)).v
+     proof let v; assume v in dom (the Target of G);
+       then v in the Edges of G by Lm1;
+      hence thesis by Def2;
+     end;
+  hence G = G \/ G by A1,A2,A4,A5,FUNCT_1:9;
+end;
+
+theorem Th8:
+  (the Source of G1) tolerates (the Source of G2) &
+  (the Target of G1) tolerates (the Target of G2) implies
+  G1 \/ G2 = G2 \/ G1
+proof
+  assume A1: (the Source of G1) tolerates (the Source of G2) &
+            (the Target of G1) tolerates (the Target of G2);
+  then A2: (the Vertices of (G1 \/ G2)) = (the Vertices of G2) \/ (the Vertices
+of G1)
+ by Def2
+ .= (the Vertices of (G2 \/ G1)) by A1,Def2;
+  A3: (the Edges of (G1 \/ G2)) = (the Edges of G2) \/ (the Edges of G1) by A1,
+Def2
+ .= (the Edges of (G2 \/ G1)) by A1,Def2;
+  A4: the Vertices of (G1 \/ G2) <> {} by Def1;
+  A5: the Vertices of (G2 \/ G1) <> {} by Def1;
+  A6: dom (the Source of (G1 \/ G2)) = the Edges of (G2 \/
+ G1) by A3,A4,FUNCT_2:def 1
+     .= dom (the Source of (G2 \/ G1)) by A5,FUNCT_2:def 1;
+       for v st v in dom (the Source of (G1 \/ G2)) holds
+       (the Source of (G1 \/ G2)).v = (the Source of (G2 \/ G1)).v
+    proof let v; assume v in dom (the Source of (G1 \/ G2));
+      then v in the Edges of (G1 \/ G2) by A4,FUNCT_2:def 1;
+then A7:      v in (the Edges of G1) \/ (the Edges of G2) by A1,Def2;
+     A8: now assume A9: v in the Edges of G1;
+          hence (the Source of (G1 \/ G2)).v
+             = (the Source of G1).v by A1,Def2
+            .= (the Source of (G2 \/ G1)).v by A1,A9,Def2;
+         end;
+           now assume A10: v in the Edges of G2;
+           hence (the Source of (G1 \/ G2)).v
+             = (the Source of G2).v by A1,Def2
+            .= (the Source of (G2 \/ G1)).v by A1,A10,Def2;
+         end;
+      hence thesis by A7,A8,XBOOLE_0:def 2;
+    end;
+ then A11: the Source of (G1 \/ G2) = the Source of (G2 \/ G1) by A6,FUNCT_1:9;
+ A12: dom ( the Target of (G1 \/ G2))
+     = the Edges of (G2 \/ G1) by A3,A4,FUNCT_2:def 1
+    .= dom (the Target of (G2 \/ G1)) by A5,FUNCT_2:def 1;
+     for v st v in dom (the Target of (G1 \/ G2)) holds
+     (the Target of (G1 \/ G2)).v = (the Target of (G2 \/ G1)).v
+   proof let v; assume v in dom ( the Target of (G1 \/ G2));
+     then v in the Edges of (G1 \/ G2) by A4,FUNCT_2:def 1;
+then A13:     v in (the Edges of G1) \/ (the Edges of G2) by A1,Def2;
+    A14: now assume A15: v in the Edges of G1;
+          hence (the Target of (G1 \/ G2)).v
+            = (the Target of G1).v by A1,Def2
+            .= (the Target of (G2 \/ G1)).v by A1,A15,Def2;
+        end;
+          now assume A16: v in the Edges of G2;
+          hence (the Target of (G1 \/ G2)).v
+             = (the Target of G2).v by A1,Def2
+            .= (the Target of (G2 \/ G1)).v by A1,A16,Def2;
+        end;
+     hence thesis by A13,A14,XBOOLE_0:def 2;
+   end;
+ hence thesis by A2,A3,A11,A12,FUNCT_1:9;
+end;
+
+theorem Th9:
+  (the Source of G1) tolerates (the Source of G2) &
+  (the Target of G1) tolerates (the Target of G2) &
+  (the Source of G1) tolerates (the Source of G3) &
+  (the Target of G1) tolerates (the Target of G3) &
+  (the Source of G2) tolerates (the Source of G3) &
+  (the Target of G2) tolerates (the Target of G3)
+ implies
+  (G1 \/ G2) \/ G3 = G1 \/ (G2 \/ G3)
+proof assume A1:
+     (the Source of G1) tolerates (the Source of G2) &
+     (the Target of G1) tolerates (the Target of G2) &
+     (the Source of G1) tolerates (the Source of G3) &
+     (the Target of G1) tolerates (the Target of G3) &
+     (the Source of G2) tolerates (the Source of G3) &
+     (the Target of G2) tolerates (the Target of G3);
+A2:   for v st v in dom(the Source of (G1 \/ G2)) /\
+ dom(the Source of G3) holds
+      (the Source of (G1 \/ G2)).v = (the Source of G3).v
+   proof let v; assume A3: v in dom (the Source of (G1 \/ G2)) /\
+     dom (the Source of G3);
+     then A4: v in dom (the Source of (G1 \/ G2)) &
+         v in dom (the Source of G3) by XBOOLE_0:def 3;
+        v in dom (the Source of (G1 \/ G2)) by A3,XBOOLE_0:def 3;
+      then v in (the Edges of (G1 \/ G2)) by Lm1;
+then A5:      v in (the Edges of G1) \/ (the Edges of G2) by A1,Def2;
+     A6: now assume A7: v in (the Edges of G1);
+          then v in dom (the Source of G1) by Lm1;
+       then A8: v in
+ dom (the Source of G1) /\ dom (the Source of G3) by A4,XBOOLE_0:def 3;
+
+          thus (the Source of (G1 \/ G2)).v
+             = (the Source of G1).v by A1,A7,Def2
+            .= (the Source of G3).v by A1,A8,PARTFUN1:def 6;
+         end;
+           now assume A9: v in (the Edges of G2);
+          then v in dom (the Source of G2) by Lm1;
+       then A10: v in dom (the Source of G2) /\ dom (the Source of G3) by A4,
+XBOOLE_0:def 3;
+          thus (the Source of (G1 \/ G2)).v
+             = (the Source of G2).v by A1,A9,Def2
+            .= (the Source of G3).v by A1,A10,PARTFUN1:def 6;
+         end;
+      hence thesis by A5,A6,XBOOLE_0:def 2;
+   end;
+
+     for v st v in dom(the Target of (G1 \/ G2)) /\ dom(the Target of G3) holds
+      (the Target of (G1 \/ G2)).v = (the Target of G3).v
+   proof let v; assume A11: v in dom (the Target of (G1 \/ G2)) /\
+     dom (the Target of G3);
+     then A12: v in dom (the Target of (G1 \/ G2)) &
+         v in dom (the Target of G3) by XBOOLE_0:def 3;
+        v in dom (the Target of (G1 \/ G2)) by A11,XBOOLE_0:def 3;
+      then v in (the Edges of (G1 \/ G2)) by Lm1;
+then A13:      v in (the Edges of G1) \/ (the Edges of G2) by A1,Def2;
+     A14: now assume A15: v in (the Edges of G1);
+          then v in dom (the Target of G1) by Lm1;
+       then A16: v in dom (the Target of G1) /\ dom (the Target of G3) by A12,
+XBOOLE_0:def 3;
+
+          thus (the Target of (G1 \/ G2)).v
+             = (the Target of G1).v by A1,A15,Def2
+            .= (the Target of G3).v by A1,A16,PARTFUN1:def 6;
+         end;
+           now assume A17: v in (the Edges of G2);
+          then v in dom (the Target of G2) by Lm1;
+       then A18: v in dom (the Target of G2) /\ dom (the Target of G3) by A12,
+XBOOLE_0:def 3;
+
+          thus (the Target of (G1 \/ G2)).v
+             = (the Target of G2).v by A1,A17,Def2
+            .= (the Target of G3).v by A1,A18,PARTFUN1:def 6;
+         end;
+      hence thesis by A13,A14,XBOOLE_0:def 2;
+   end;
+  then A19: (the Source of (G1 \/ G2)) tolerates (the Source of G3) &
+     (the Target of (G1 \/ G2)) tolerates (the Target of G3)
+       by A2,PARTFUN1:def 6;
+A20:for v st v in dom (the Source of G1) /\ dom(the Source of (G2 \/ G3)) holds
+    (the Source of G1).v = (the Source of (G2 \/ G3)).v
+  proof let v;
+    assume A21: v in
+ dom (the Source of G1) /\ dom(the Source of (G2 \/ G3));
+    then A22: v in dom(the Source of G1) &
+        v in dom(the Source of (G2 \/ G3)) by XBOOLE_0:def 3;
+      v in dom(the Source of (G2 \/ G3)) by A21,XBOOLE_0:def 3;
+    then v in (the Edges of (G2 \/ G3)) by Lm1;
+    then v in (the Edges of G2) \/ (the Edges of G3) by A1,Def2;
+    then v in (the Edges of G2) \/ dom(the Source of G3) by Lm1;
+then A23:    v in dom(the Source of G2) \/ dom (the Source of G3) by Lm1;
+    A24: now assume A25: v in dom (the Source of G2);
+          then A26: v in (the Edges of G2) by Lm1;
+          A27: v in dom(the Source of G1) /\
+                  dom(the Source of G2) by A22,A25,XBOOLE_0:def 3;
+          thus (the Source of (G2 \/ G3)).v
+             = (the Source of G2).v by A1,A26,Def2
+            .= (the Source of G1).v by A1,A27,PARTFUN1:def 6;
+        end;
+          now assume A28: v in dom (the Source of G3);
+          then A29: v in (the Edges of G3) by Lm1;
+          A30: v in dom(the Source of G1) /\
+                  dom(the Source of G3) by A22,A28,XBOOLE_0:def 3;
+
+          thus (the Source of (G2 \/ G3)).v
+             = (the Source of G3).v by A1,A29,Def2
+            .= (the Source of G1).v by A1,A30,PARTFUN1:def 6;
+        end;
+     hence thesis by A23,A24,XBOOLE_0:def 2;
+  end;
+
+    for v st v in dom (the Target of G1) /\ dom (the Target of (G2 \/ G3))
+holds
+    (the Target of G1).v = (the Target of (G2 \/ G3)).v
+  proof let v;
+    assume A31: v in
+ dom (the Target of G1) /\ dom(the Target of (G2 \/ G3));
+    then A32: v in dom(the Target of G1) &
+        v in dom(the Target of (G2 \/ G3)) by XBOOLE_0:def 3;
+      v in dom(the Target of (G2 \/ G3)) by A31,XBOOLE_0:def 3;
+    then v in (the Edges of (G2 \/ G3)) by Lm1;
+    then v in (the Edges of G2) \/ (the Edges of G3) by A1,Def2;
+    then v in (the Edges of G2) \/ dom(the Target of G3) by Lm1;
+then A33:    v in dom(the Target of G2) \/ dom (the Target of G3) by Lm1;
+    A34: now assume A35: v in dom (the Target of G2);
+          then A36: v in (the Edges of G2) by Lm1;
+          A37: v in dom(the Target of G1) /\
+                  dom(the Target of G2) by A32,A35,XBOOLE_0:def 3;
+
+          thus (the Target of (G2 \/ G3)).v
+             = (the Target of G2).v by A1,A36,Def2
+            .= (the Target of G1).v by A1,A37,PARTFUN1:def 6;
+        end;
+          now assume A38: v in dom(the Target of G3);
+          then A39: v in (the Edges of G3) by Lm1;
+          A40: v in dom(the Target of G1) /\
+                  dom(the Target of G3) by A32,A38,XBOOLE_0:def 3;
+
+          thus (the Target of (G2 \/ G3)).v
+             = (the Target of G3).v by A1,A39,Def2
+            .= (the Target of G1).v by A1,A40,PARTFUN1:def 6;
+        end;
+     hence thesis by A33,A34,XBOOLE_0:def 2;
+  end;
+
+  then A41: (the Source of G1) tolerates (the Source of (G2 \/ G3)) &
+     (the Target of G1) tolerates (the Target of (G2 \/ G3))
+     by A20,PARTFUN1:def 6;
+  A42: the Edges of ((G1 \/ G2) \/ G3) =
+      (the Edges of (G1 \/ G2)) \/ (the Edges of G3) by A19,Def2
+    .= (the Edges of G1) \/ (the Edges of G2) \/ (the Edges of G3)
+           by A1,Def2
+    .= (the Edges of G1) \/ ((the Edges of G2) \/
+ (the Edges of G3)) by XBOOLE_1:4
+    .= (the Edges of G1) \/ (the Edges of (G2 \/ G3)) by A1,Def2
+    .= (the Edges of (G1 \/ (G2 \/ G3))) by A41,Def2;
+
+  A43: the Vertices of ((G1 \/ G2) \/ G3) =
+      (the Vertices of (G1 \/ G2)) \/ (the Vertices of G3) by A19,Def2
+    .= (the Vertices of G1) \/ (the Vertices of G2) \/ (the Vertices of G3)
+      by A1,Def2
+    .= (the Vertices of G1) \/
+           ((the Vertices of G2) \/ (the Vertices of G3)) by XBOOLE_1:4
+    .= (the Vertices of G1) \/ (the Vertices of (G2 \/ G3)) by A1,Def2
+    .= (the Vertices of (G1 \/ (G2 \/ G3))) by A41,Def2;
+
+  A44: dom (the Source of ((G1 \/ G2) \/ G3)) =the Edges of (G1 \/ (G2 \/
+ G3)) by A42,Lm1
+      .= dom (the Source of (G1 \/ (G2 \/ G3))) by Lm1;
+
+    for v st v in dom (the Source of ((G1 \/ G2) \/ G3)) holds
+   (the Source of ((G1 \/ G2) \/ G3)).v = (the Source of (G1 \/ (G2 \/ G3))).v
+  proof let v such that A45: v in dom (the Source of ((G1 \/ G2) \/ G3));
+        dom (the Source of ((G1 \/ G2) \/ G3)) =
+      the Edges of ((G1 \/ G2) \/ G3) by Lm1
+     .= (the Edges of (G1 \/ G2)) \/ (the Edges of G3) by A19,Def2
+     .= (the Edges of G1) \/ (the Edges of G2) \/ (the Edges of G3)
+            by A1,Def2;
+then A46:    v in (the Edges of G1) \/ (the Edges of G2) or
+     v in (the Edges of G3) by A45,XBOOLE_0:def 2;
+
+    A47: now assume A48: v in the Edges of G1;
+            (the Edges of G1) c= (the Edges of G1) \/ (the Edges of G2)
+             by XBOOLE_1:7;
+          then (the Edges of G1) c= the Edges of (G1 \/ G2) by A1,Def2;
+          hence (the Source of ((G1 \/ G2) \/ G3)).v =
+               (the Source of (G1 \/ G2)).v by A19,A48,Def2
+            .= (the Source of G1).v by A1,A48,Def2
+            .= (the Source of (G1 \/ (G2 \/ G3))).v by A41,A48,Def2;
+        end;
+
+    A49: now assume A50: v in the Edges of G2;
+            (the Edges of G2) c= (the Edges of G1) \/ (the Edges of G2)
+             by XBOOLE_1:7;
+          then A51: (the Edges of G2) c= the Edges of (G1 \/ G2) by A1,Def2;
+
+            (the Edges of G2) c= (the Edges of G2) \/ (the Edges of G3)
+             by XBOOLE_1:7;
+          then A52: (the Edges of G2) c= the Edges of (G2 \/ G3) by A1,Def2;
+           thus (the Source of ((G1 \/ G2) \/ G3)).v =
+                (the Source of (G1 \/ G2)).v by A19,A50,A51,Def2
+             .= (the Source of G2).v by A1,A50,Def2
+             .= (the Source of (G2 \/ G3)).v by A1,A50,Def2
+             .= (the Source of (G1 \/ (G2 \/ G3))).v by A41,A50,A52,Def2;
+        end;
+
+          now assume A53: v in the Edges of G3;
+            (the Edges of G3) c= (the Edges of G2) \/ (the Edges of G3)
+             by XBOOLE_1:7;
+          then A54: (the Edges of G3) c= the Edges of (G2 \/ G3) by A1,Def2;
+
+            thus (the Source of ((G1 \/ G2) \/ G3)).v =
+                 (the Source of G3).v by A19,A53,Def2
+              .= (the Source of (G2 \/ G3)).v by A1,A53,Def2
+              .= (the Source of (G1 \/ (G2 \/ G3))).v by A41,A53,A54,Def2;
+        end;
+     hence thesis by A46,A47,A49,XBOOLE_0:def 2;
+  end;
+ then A55: (the Source of ((G1 \/ G2) \/ G3)) = (the Source of (G1 \/ (G2 \/ G3
+)))
+        by A44,FUNCT_1:9;
+ A56: dom (the Target of ((G1 \/ G2) \/ G3)) =the Edges of (G1 \/ (G2 \/
+ G3)) by A42,Lm1
+      .= dom (the Target of (G1 \/ (G2 \/ G3))) by Lm1;
+    for v st v in dom (the Target of ((G1 \/ G2) \/ G3)) holds
+   (the Target of ((G1 \/ G2) \/ G3)).v = (the Target of (G1 \/ (G2 \/ G3))).v
+  proof let v such that A57: v in dom (the Target of ((G1 \/ G2) \/ G3));
+        dom (the Target of ((G1 \/ G2) \/ G3)) =
+      the Edges of ((G1 \/ G2) \/ G3) by Lm1
+     .= (the Edges of (G1 \/ G2)) \/ (the Edges of G3) by A19,Def2
+     .= (the Edges of G1) \/ (the Edges of G2) \/ (the Edges of G3)
+            by A1,Def2;
+then A58:    v in (the Edges of G1) \/ (the Edges of G2) or
+     v in (the Edges of G3) by A57,XBOOLE_0:def 2;
+
+    A59: now assume A60: v in the Edges of G1;
+            (the Edges of G1) c= (the Edges of G1) \/ (the Edges of G2)
+             by XBOOLE_1:7;
+          then (the Edges of G1) c= the Edges of (G1 \/ G2) by A1,Def2;
+          hence (the Target of ((G1 \/ G2) \/ G3)).v =
+               (the Target of (G1 \/ G2)).v by A19,A60,Def2
+            .= (the Target of G1).v by A1,A60,Def2
+            .= (the Target of (G1 \/ (G2 \/ G3))).v by A41,A60,Def2;
+        end;
+
+    A61: now assume A62: v in the Edges of G2;
+            (the Edges of G2) c= (the Edges of G1) \/ (the Edges of G2)
+             by XBOOLE_1:7;
+          then A63: (the Edges of G2) c= the Edges of (G1 \/ G2) by A1,Def2;
+
+            (the Edges of G2) c= (the Edges of G2) \/ (the Edges of G3)
+             by XBOOLE_1:7;
+          then A64: (the Edges of G2) c= the Edges of (G2 \/ G3) by A1,Def2;
+           thus (the Target of ((G1 \/ G2) \/ G3)).v =
+                (the Target of (G1 \/ G2)).v by A19,A62,A63,Def2
+             .= (the Target of G2).v by A1,A62,Def2
+             .= (the Target of (G2 \/ G3)).v by A1,A62,Def2
+             .= (the Target of (G1 \/ (G2 \/ G3))).v by A41,A62,A64,Def2;
+        end;
+
+          now assume A65: v in the Edges of G3;
+            (the Edges of G3) c= (the Edges of G2) \/ (the Edges of G3)
+             by XBOOLE_1:7;
+          then A66: (the Edges of G3) c= the Edges of (G2 \/ G3) by A1,Def2;
+
+            thus (the Target of ((G1 \/ G2) \/ G3)).v =
+                 (the Target of G3).v by A19,A65,Def2
+              .= (the Target of (G2 \/ G3)).v by A1,A65,Def2
+              .= (the Target of (G1 \/ (G2 \/ G3))).v by A41,A65,A66,Def2;
+        end;
+     hence thesis by A58,A59,A61,XBOOLE_0:def 2;
+  end;
+hence thesis by A42,A43,A55,A56,FUNCT_1:9;
+end;
+
+theorem Th10:
+  G is_sum_of G1, G2 implies G is_sum_of G2, G1
+proof assume G is_sum_of G1, G2;
+  then (the Source of G1) tolerates (the Source of G2) &
+  (the Target of G1) tolerates (the Target of G2) &
+  the MultiGraphStruct of G = G1 \/ G2 by Def3;
+  then (the Source of G2) tolerates (the Source of G1) &
+  (the Target of G2) tolerates (the Target of G1) &
+  the MultiGraphStruct of G = G2 \/ G1 by Th8;
+ hence thesis by Def3;
+end;
+
+theorem
+    for G being strict Graph holds G is_sum_of G, G
+proof let G be strict Graph;
+    (the Source of G) tolerates (the Source of G) &
+  (the Target of G) tolerates (the Target of G) &
+  G = G \/ G by Th7;
+ hence thesis by Def3;
+end;
+
+
+         :::::::::::::::::::::::
+         :: Graphs' inclusion ::
+         :::::::::::::::::::::::
+
+theorem Th12:
+ (ex G st G1 c= G & G2 c= G) implies G1 \/ G2 = G2 \/ G1
+proof
+  given G such that A1: G1 c= G & G2 c= G;
+    ( the Source of G1) c= (the Source of G) &
+  ( the Target of G1) c= (the Target of G) &
+  ( the Source of G2) c= (the Source of G) &
+  ( the Target of G2) c= (the Target of G) by A1,Th5;
+  then (the Source of G1) tolerates (the Source of G2) &
+  (the Target of G1) tolerates (the Target of G2) by PARTFUN1:131;
+ hence thesis by Th8;
+end;
+
+theorem
+   (ex G st G1 c= G & G2 c= G & G3 c= G) implies (G1 \/ G2) \/ G3 = G1 \/ (G2
+\/
+ G3)
+proof
+  given G such that A1: G1 c= G & G2 c= G & G3 c= G;
+    (the Source of G1) c= (the Source of G) &
+  (the Source of G2) c= (the Source of G) &
+  (the Source of G3) c= (the Source of G) &
+  (the Target of G1) c= (the Target of G) &
+  (the Target of G2) c= (the Target of G) &
+  (the Target of G3) c= (the Target of G) by A1,Th5;
+  then (the Source of G1) tolerates (the Source of G2) &
+  (the Source of G1) tolerates (the Source of G3) &
+  (the Source of G2) tolerates (the Source of G3) &
+  (the Target of G1) tolerates (the Target of G2) &
+  (the Target of G1) tolerates (the Target of G3) &
+  (the Target of G2) tolerates (the Target of G3) by PARTFUN1:139;
+  hence thesis by Th9;
+end;
+
+theorem
+    {} is cyclic oriented Path of G by Lm4,Lm5;
+
+theorem
+     for H1, H2 being strict Subgraph of G st
+     the Vertices of H1 = the Vertices of H2 &
+     the Edges of H1 = the Edges of H2
+   holds H1 = H2 by Lm8;
+
+theorem Th16:
+  for G1,G2 being strict Graph holds G1 c= G2 & G2 c= G1 implies G1 = G2
+proof let G1,G2 be strict Graph;
+ assume G1 c= G2 & G2 c= G1;
+ then A1: G1 is Subgraph of G2 & G2 is Subgraph of G1 by Def23;
+
+  then (the Vertices of G1) c= (the Vertices of G2) &
+  (the Vertices of G2) c= (the Vertices of G1) by Def17;
+ then A2: the Vertices of G1 = the Vertices of G2 by XBOOLE_0:def 10;
+
+     (the Edges of G1) c= (the Edges of G2) &
+   (the Edges of G2) c= (the Edges of G1) by A1,Def17;
+ then A3: the Edges of G1 = the Edges of G2 by XBOOLE_0:def 10;
+
+ then A4: dom(the Source of G1) = the Edges of G2 by Lm1
+      .= dom(the Source of G2) by Lm1;
+
+    for v st v in dom (the Source of G1) holds
+   (the Source of G1).v = (the Source of G2).v
+ proof let v; assume v in dom (the Source of G1);
+   then v in the Edges of G1 by Lm1;
+   hence thesis by A1,Def17;
+ end;
+ then A5: the Source of G1 = the Source of G2 by A4,FUNCT_1:9;
+
+ A6: dom (the Target of G1) = the Edges of G2 by A3,Lm1
+     .= dom (the Target of G2) by Lm1;
+    for v st v in dom (the Target of G1) holds
+   (the Target of G1).v = (the Target of G2).v
+ proof let v; assume v in dom (the Target of G1);
+   then v in the Edges of G1 by Lm1;
+  hence thesis by A1,Def17;
+ end;
+  hence G1 = G2 by A2,A3,A5,A6,FUNCT_1:9;
+end;
+
+theorem Th17:
+  G1 c= G2 & G2 c= G3 implies G1 c= G3
+proof assume G1 c= G2 & G2 c= G3;
+  then A1: G1 is Subgraph of G2 & G2 is Subgraph of G3 by Def23;
+
+  then (the Vertices of G1) c= (the Vertices of G2) &
+  (the Vertices of G2) c= (the Vertices of G3) by Def17;
+ then A2: (the Vertices of G1) c= (the Vertices of G3) by XBOOLE_1:1;
+
+ A3: (the Edges of G1) c= (the Edges of G2) &
+  (the Edges of G2) c= (the Edges of G3) by A1,Def17;
+ then A4: (the Edges of G1) c= (the Edges of G3) by XBOOLE_1:1;
+
+     for v st v in the Edges of G1 holds
+    (the Source of G1).v = (the Source of G3).v &
+    (the Target of G1).v = (the Target of G3).v &
+    (the Source of G3).v in the Vertices of G1 &
+    (the Target of G3).v in the Vertices of G1
+   proof let v; assume A5: v in the Edges of G1;
+
+   hence A6: (the Source of G1).v = (the Source of G2).v by A1,Def17
+       .= (the Source of G3).v by A1,A3,A5,Def17;
+
+   thus A7: (the Target of G1).v = (the Target of G2).v by A1,A5,Def17
+       .= (the Target of G3).v by A1,A3,A5,Def17;
+
+     A8: rng (the Source of G1) c= the Vertices of G1 by Lm1;
+        v in dom (the Source of G1) by A5,Lm1;
+      then (the Source of G1).v in rng(the Source of G1) by FUNCT_1:def 5;
+    hence (the Source of G3).v in the Vertices of G1 by A6,A8;
+
+     A9: rng (the Target of G1) c= the Vertices of G1 by Lm1;
+       v in dom(the Target of G1) by A5,Lm1;
+     then (the Target of G1).v in rng(the Target of G1) by FUNCT_1:def 5;
+    hence thesis by A7,A9;
+   end;
+ then G1 is Subgraph of G3 by A2,A4,Def17;
+ hence thesis by Def23;
+end;
+
+theorem Th18:
+  G is_sum_of G1, G2 implies G1 c= G & G2 c= G
+proof assume A1: G is_sum_of G1, G2;
+
+  A2:
+    for G, G1, G2 being Graph st G is_sum_of G1, G2 holds G1 c= G
+    proof let G, G1, G2 be Graph; assume A3: G is_sum_of G1, G2;
+      then A4: (the Source of G1) tolerates (the Source of G2) &
+          (the Target of G1) tolerates (the Target of G2) by Def3;
+      A5: the MultiGraphStruct of G = G1 \/ G2 by A3,Def3;
+
+      then the Vertices of G = (the Vertices of G1) \/ (the Vertices of G2)
+by A4,Def2;
+      then A6: (the Vertices of G1) c= (the Vertices of G) by XBOOLE_1:7;
+
+         the Edges of G = (the Edges of G1) \/ (the Edges of G2) by A4,A5,Def2;
+      then A7: (the Edges of G1) c= (the Edges of G) by XBOOLE_1:7;
+
+        for v st v in the Edges of G1 holds
+        (the Source of G1).v = (the Source of G).v &
+        (the Target of G1).v = (the Target of G).v &
+        (the Source of G).v in the Vertices of G1 &
+        (the Target of G).v in the Vertices of G1
+      proof let v; assume A8: v in the Edges of G1;
+        hence A9: (the Source of G1).v = (the Source of G).v by A4,A5,Def2;
+
+        thus A10: (the Target of G1).v = (the Target of G).v by A4,A5,A8,Def2;
+        thus (the Source of G).v in the Vertices of G1 by A8,A9,Lm6;
+        thus thesis by A8,A10,Lm6;
+      end;
+      then G1 is Subgraph of G by A6,A7,Def17;
+     hence thesis by Def23;
+    end;
+  hence G1 c= G by A1;
+      G is_sum_of G2, G1 by A1,Th10;
+  hence thesis by A2;
+end;
+
+theorem Th19:
+  (the Source of G1) tolerates (the Source of G2) &
+  (the Target of G1) tolerates (the Target of G2)
+ implies
+   G1 c= G1 \/ G2 & G2 c= G1 \/ G2
+proof assume (the Source of G1) tolerates (the Source of G2) &
+  (the Target of G1) tolerates (the Target of G2);
+  then (G1 \/ G2) is_sum_of G1, G2 by Def3;
+ hence thesis by Th18;
+end;
+
+theorem Th20:
+ (ex G st G1 c= G & G2 c= G) implies G1 c= G1 \/ G2 & G2 c= G1 \/ G2
+proof
+  given G such that A1: G1 c= G & G2 c= G;
+    (the Source of G1) c= (the Source of G) &
+  (the Target of G1) c= (the Target of G) &
+  (the Source of G2) c= (the Source of G) &
+  (the Target of G2) c= (the Target of G) by A1,Th5;
+  then (the Source of G1) tolerates (the Source of G2) &
+  (the Target of G1) tolerates (the Target of G2) by PARTFUN1:139;
+ hence thesis by Th19;
+end;
+
+theorem Th21:
+  G1 c= G3 & G2 c= G3 & G is_sum_of G1, G2 implies G c= G3
+proof assume A1: G1 c= G3 & G2 c= G3 & G is_sum_of G1, G2;
+  then A2: (the Source of G1) tolerates (the Source of G2) &
+     (the Target of G1) tolerates (the Target of G2) by Def3;
+  A3: the MultiGraphStruct of G = G1 \/ G2 by A1,Def3;
+  A4: G1 is Subgraph of G3 by A1,Def23;
+  A5: G2 is Subgraph of G3 by A1,Def23;
+
+  then (the Vertices of G1) c= (the Vertices of G3) &
+  (the Vertices of G2) c= (the Vertices of G3) by A4,Def17;
+then A6:  (the Vertices of G1) \/ (the Vertices of G2) c= (the Vertices of G3)
+     by XBOOLE_1:8;
+
+    (the Edges of G1) c= (the Edges of G3) &
+  (the Edges of G2) c= (the Edges of G3) by A4,A5,Def17;
+then A7:
+  (the Edges of G1) \/ (the Edges of G2) c= (the Edges of G3) by XBOOLE_1:8;
+
+    for v st v in the Edges of (G1 \/ G2) holds
+    (the Source of (G1 \/ G2)).v = (the Source of G3).v &
+    (the Target of (G1 \/ G2)).v = (the Target of G3).v &
+    (the Source of G3).v in the Vertices of (G1 \/ G2) &
+    (the Target of G3).v in the Vertices of (G1 \/ G2)
+  proof let v such that A8: v in the Edges of (G1 \/ G2);
+    thus A9: (the Source of (G1 \/ G2)).v = (the Source of G3).v &
+       (the Target of (G1 \/ G2)).v = (the Target of G3).v
+      proof
+A10:        v in (the Edges of G1) \/ (the Edges of G2) by A2,A8,Def2;
+      A11: now assume A12: v in the Edges of G1;
+         then A13: (the Source of G3).v = (the Source of G1).v by A4,Def17
+            .= (the Source of (G1 \/ G2)).v by A2,A12,Def2;
+              (the Target of G3).v = (the Target of G1).v by A4,A12,Def17
+            .= (the Target of (G1 \/ G2)).v by A2,A12,Def2;
+            hence thesis by A13;
+          end;
+            now assume A14: v in the Edges of G2;
+         then A15: (the Source of G3).v = (the Source of G2).v by A5,Def17
+             .= (the Source of (G1 \/ G2)).v by A2,A14,Def2;
+               (the Target of G3).v = (the Target of G2).v by A5,A14,Def17
+             .= (the Target of (G1 \/ G2)).v by A2,A14,Def2;
+            hence thesis by A15;
+          end;
+        hence thesis by A10,A11,XBOOLE_0:def 2;
+      end;
+    hence (the Source of G3).v in the Vertices of (G1 \/ G2) by A8,Lm6;
+    thus thesis by A8,A9,Lm6;
+  end;
+hence the Vertices of G c= the Vertices of G3 &
+   the Edges of G c= the Edges of G3 &
+   for v st v in the Edges of G holds
+    (the Source of G).v = (the Source of G3).v &
+    (the Target of G).v = (the Target of G3).v &
+    (the Source of G3).v in the Vertices of G &
+    (the Target of G3).v in the Vertices of G by A2,A3,A6,A7,Def2;
+end;
+
+theorem Th22:
+  G1 c= G & G2 c= G implies (G1 \/ G2) c= G
+proof assume A1: G1 c= G & G2 c= G;
+  then (the Source of G1) c= (the Source of G) &
+  (the Source of G2) c= (the Source of G) &
+  (the Target of G1) c= (the Target of G) &
+  (the Target of G2) c= (the Target of G) by Th5;
+
+  then (the Source of G1) tolerates (the Source of G2) &
+  (the Target of G1) tolerates (the Target of G2) by PARTFUN1:139;
+   then (G1 \/ G2) is_sum_of G1, G2 by Def3;
+ hence thesis by A1,Th21;
+end;
+
+theorem
+    for G1,G2 being strict Graph holds
+  G1 c= G2 implies G1 \/ G2 = G2 & G2 \/ G1 = G2
+proof let G1,G2 be strict Graph;
+ assume A1: G1 c= G2;
+  then A2: (G1 \/ G2) c= G2 by Th22;
+    G2 c= (G1 \/ G2) by A1,Th20;
+hence G1 \/ G2 = G2 by A2,Th16;
+hence thesis by A1,Th12;
+end;
+
+theorem Th24:
+  (the Source of G1) tolerates (the Source of G2) &
+  (the Target of G1) tolerates (the Target of G2) &
+  (G1 \/ G2 = G2 or G2 \/ G1 = G2)
+ implies G1 c= G2
+proof assume A1: (the Source of G1) tolerates (the Source of G2) &
+    (the Target of G1) tolerates (the Target of G2);
+  assume A2: (G1 \/ G2 = G2 or G2 \/ G1 = G2);
+
+  then the Vertices of G2 = (the Vertices of G1) \/ (the Vertices of G2) by A1,
+Def2;
+ then A3: (the Vertices of G1) c= the Vertices of G2 by XBOOLE_1:7;
+
+     the Edges of G2 = (the Edges of G1) \/ (the Edges of G2) by A1,A2,Def2;
+  then A4: (the Edges of G1) c= (the Edges of G2) by XBOOLE_1:7;
+
+     for v st v in the Edges of G1 holds
+    (the Source of G1).v = (the Source of G2).v &
+    (the Target of G1).v = (the Target of G2).v &
+    (the Source of G2).v in the Vertices of G1 &
+    (the Target of G2).v in the Vertices of G1
+   proof let v; assume A5: v in the Edges of G1;
+     hence A6: (the Source of G1).v
+        = (the Source of G2).v by A1,A2,Def2;
+     thus A7: (the Target of G1).v
+       = (the Target of G2).v by A1,A2,A5,Def2;
+    thus (the Source of G2).v in the Vertices of G1 by A5,A6,Lm6;
+    thus thesis by A5,A7,Lm6;
+   end;
+ then G1 is Subgraph of G2 by A3,A4,Def17;
+hence thesis by Def23;
+end;
+
+canceled 2;
+
+theorem
+    for G being oriented Graph st G1 c= G holds G1 is oriented
+proof let G be oriented Graph; assume G1 c= G;
+  then A1: G1 is Subgraph of G by Def23;
+
+    for x,y being set st x in the Edges of G1 & y in the Edges of G1 &
+    (the Source of G1).x = (the Source of G1).y &
+    (the Target of G1).x = (the Target of G1).y
+  holds x = y
+  proof let x, y be set;
+   assume A2: x in the Edges of G1 & y in the Edges of G1 &
+    (the Source of G1).x = (the Source of G1).y &
+    (the Target of G1).x = (the Target of G1).y;
+
+    A3: (the Edges of G1) c= (the Edges of G) by A1,Def17;
+
+    A4: (the Source of G).x = (the Source of G1).y by A1,A2,Def17
+      .= (the Source of G).y by A1,A2,Def17;
+
+          (the Target of G).x = (the Target of G1).y by A1,A2,Def17
+      .= (the Target of G).y by A1,A2,Def17;
+    hence x = y by A2,A3,A4,Def4;
+  end;
+ hence thesis by Def4;
+end;
+
+theorem
+    for G being non-multi Graph st G1 c= G holds G1 is non-multi
+proof let G be non-multi Graph; assume G1 c= G;
+  then A1: G1 is Subgraph of G by Def23;
+
+    for x,y being set st x in the Edges of G1 & y in the Edges of G1 &
+    (((the Source of G1).x = (the Source of G1).y &
+    (the Target of G1).x = (the Target of G1).y) or
+    ((the Source of G1).x = (the Target of G1).y &
+    (the Source of G1).y = (the Target of G1).x))
+  holds x = y
+ proof let x,y be set such that A2: x in the Edges of G1 & y in
+ the Edges of G1;
+   assume A3: ((the Source of G1).x = (the Source of G1).y &
+    (the Target of G1).x = (the Target of G1).y)
+        or
+    ((the Source of G1).x = (the Target of G1).y &
+    (the Source of G1).y = (the Target of G1).x);
+
+   A4: (the Edges of G1) c= (the Edges of G) by A1,Def17;
+
+      (the Source of G1).x = (the Source of G).x &
+    (the Source of G1).y = (the Source of G).y &
+    (the Target of G1).x = (the Target of G).x &
+    (the Target of G1).y = (the Target of G).y by A1,A2,Def17;
+   hence x = y by A2,A3,A4,Def5;
+ end;
+ hence G1 is non-multi by Def5;
+end;
+
+theorem
+    for G being simple Graph st G1 c= G holds G1 is simple
+proof let G be simple Graph; assume G1 c= G;
+  then A1: G1 is Subgraph of G by Def23;
+
+    not ex x being set st x in the Edges of G1 &
+    (the Source of G1).x = (the Target of G1).x
+  proof
+    given x being set such that A2: x in the Edges of G1 &
+       (the Source of G1).x = (the Target of G1).x;
+    A3: (the Edges of G1) c= (the Edges of G) by A1,Def17;
+      (the Source of G).x = (the Target of G1).x by A1,A2,Def17
+     .= (the Target of G).x by A1,A2,Def17;
+    hence contradiction by A2,A3,Def6;
+  end;
+ hence G1 is simple by Def6;
+end;
+
+
+                  ::::::::::::::::::::::::::
+                  :: Set of all subgraphs ::
+                  ::::::::::::::::::::::::::
+
+theorem
+    for G1 being strict Graph holds G1 in bool G iff G1 c= G
+proof let G1 be strict Graph;
+  thus G1 in bool G implies G1 c= G
+    proof assume G1 in bool G;
+      then G1 is Subgraph of G by Def24;
+     hence G1 c= G by Def23;
+    end;
+ assume G1 c= G;
+ then G1 is Subgraph of G by Def23;
+ hence G1 in bool G by Def24;
+end;
+
+theorem Th31:
+  for G being strict Graph holds G in bool G
+proof let G be strict Graph;
+    G is Subgraph of G by Def23;
+ hence thesis by Def24;
+end;
+
+theorem
+   for G1 being strict Graph holds G1 c= G2 iff bool G1 c= bool G2
+proof let G1 be strict Graph;
+ thus G1 c= G2 implies bool G1 c= bool G2
+ proof assume A1: G1 c= G2;
+     for x being set st x in bool G1 holds x in bool G2
+   proof let x be set; assume x in bool G1;
+     then reconsider G = x as strict Subgraph of G1 by Def24;
+       G c= G1 by Def23;
+     then G c= G2 by A1,Th17;
+     then G is strict Subgraph of G2 by Def23;
+    hence x in bool G2 by Def24;
+   end;
+  hence thesis by TARSKI:def 3;
+ end;
+
+ assume A2: bool G1 c= bool G2;
+   G1 in bool G1 by Th31;
+ then G1 is Subgraph of G2 by A2,Def24;
+hence G1 c= G2 by Def23;
+end;
+
+canceled;
+
+theorem
+   for G being strict Graph holds { G } c= bool G
+proof let G be strict Graph;
+    G in bool G by Th31;
+ hence { G } c= bool G by ZFMISC_1:37;
+end;
+
+theorem
+   for G1,G2 being strict Graph holds
+   (the Source of G1) tolerates (the Source of G2) &
+   (the Target of G1) tolerates (the Target of G2) &
+   bool (G1 \/ G2) c= (bool G1) \/ (bool G2)
+  implies
+    G1 c= G2 or G2 c= G1
+proof let G1,G2 be strict Graph;
+ assume A1: (the Source of G1) tolerates (the Source of G2) &
+    (the Target of G1) tolerates (the Target of G2);
+ assume A2: bool (G1 \/ G2) c= (bool G1) \/ (bool G2);
+ A3: G1 \/ G2 in bool (G1 \/ G2) by Th31;
+
+ A4: now assume G1 \/ G2 in bool G1;
+      then G1 \/ G2 is Subgraph of G1 by Def24;
+    then A5: G1 \/ G2 c= G1 by Def23;
+        G1 c= G1 \/ G2 by A1,Th19;
+      then G1 \/ G2 = G1 by A5,Th16;
+     hence G2 c= G1 by A1,Th24;
+    end;
+
+      now assume G1 \/ G2 in bool G2;
+      then G1 \/ G2 is Subgraph of G2 by Def24;
+    then A6: G1 \/ G2 c= G2 by Def23;
+        G2 c= G1 \/ G2 by A1,Th19;
+      then G1 \/ G2 = G2 by A6,Th16;
+     hence G1 c= G2 by A1,Th24;
+    end;
+ hence thesis by A2,A3,A4,XBOOLE_0:def 2;
+end;
+
+theorem
+     (the Source of G1) tolerates (the Source of G2) &
+   (the Target of G1) tolerates (the Target of G2)
+ implies
+   bool G1 \/ bool G2 c= bool (G1 \/ G2)
+proof assume A1: (the Source of G1) tolerates (the Source of G2) &
+   (the Target of G1) tolerates (the Target of G2);
+
+ A2: for v st v in bool G1 holds v in bool (G1 \/ G2)
+     proof let v; assume v in bool G1;
+       then reconsider G = v as strict Subgraph of G1 by Def24;
+         G c= G1 & G1 c= G1 \/ G2 by A1,Def23,Th19;
+       then G c= G1 \/ G2 by Th17;
+       then G is strict Subgraph of (G1 \/ G2) by Def23;
+      hence v in bool (G1 \/ G2) by Def24;
+     end;
+
+ A3: for v st v in bool G2 holds v in bool (G1 \/ G2)
+     proof let v; assume v in bool G2;
+       then reconsider G = v as strict Subgraph of G2 by Def24;
+         G c= G2 & G2 c= G1 \/ G2 by A1,Def23,Th19;
+       then G c= G1 \/ G2 by Th17;
+       then G is strict Subgraph of (G1 \/ G2) by Def23;
+      hence v in bool (G1 \/ G2) by Def24;
+     end;
+
+   for v st v in bool G1 \/ bool G2 holds v in bool (G1 \/ G2)
+  proof let v; assume v in bool G1 \/ bool G2;
+    then v in bool G1 or v in bool G2 by XBOOLE_0:def 2;
+   hence thesis by A2,A3;
+  end;
+ hence thesis by TARSKI:def 3;
+end;
+
+theorem
+    G1 in bool G & G2 in bool G implies (G1 \/ G2) in bool G
+proof assume G1 in bool G & G2 in bool G;
+  then G1 is Subgraph of G & G2 is Subgraph of G by Def24;
+  then G1 c= G & G2 c= G by Def23;
+  then (G1 \/ G2) c= G by Th22;
+  then (G1 \/ G2) is Subgraph of G by Def23;
+ hence (G1 \/ G2) in bool G by Def24;
+end;

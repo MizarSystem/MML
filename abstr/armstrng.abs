@@ -1,0 +1,723 @@
+:: Armstrong's Axioms
+::  by William W. Armstrong , Yatsuka Nakamura and Piotr Rudnicki
+::
+:: Received October 25, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary ARMSTRNG, BOOLE, RELAT_1, RELAT_2, FINSET_1, FUNCT_1, FUNCT_4,
+      CARD_3, PBOOLE, ZF_REFLE, MCART_1, ORDERS_1, SETFAM_1, INT_1, EQREL_1,
+      WAYBEL_4, SUBSET_1, CANTOR_1, CARD_1, FUNCOP_1, FINSEQ_1, FINSEQ_2,
+      MARGREL1, MATRLIN, BINARITH, BINARI_3, ZF_LANG, MIDSP_3, POWER, EUCLID,
+      ARYTM_1, FINSEQ_4, CONLAT_1, FINSUB_1, PARTFUN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSET_1, FINSUB_1, RELAT_1,
+      RELAT_2, RELSET_1, SETFAM_1, PARTFUN1, NUMBERS, XCMPLX_0, XREAL_0, NAT_1,
+      FUNCT_4, FUNCT_1, ORDERS_1, TOLER_1, MCART_1, CARD_3, PBOOLE, STRUCT_0,
+      WAYBEL_4, CANTOR_1, YELLOW_8, CARD_1, FINSEQ_1, PRE_CIRC, MARGREL1,
+      FUNCT_2, FINSEQ_2, MATRLIN, BINARITH, BINARI_3, MIDSP_3, FINSEQ_4,
+      SERIES_1, EUCLID;
+ constructors INT_1, WAYBEL_4, CANTOR_1, YELLOW_8, PRE_CIRC, MATRLIN, BINARITH,
+      BINARI_3, MIDSP_3, REAL_1, SERIES_1, EUCLID, FINSEQOP, PRALG_1;
+ clusters FINSET_1, SUBSET_1, ALTCAT_1, PBOOLE, FINSEQ_1, FINSEQ_2, GOBRD13,
+      FUNCT_1, ORDERS_1, CANTOR_1, RELSET_1, EQREL_1, WAYBEL_7, INT_1,
+      MARGREL1, BINARITH, XBOOLE_0, MATRLIN, PRALG_1, FRAENKEL, XREAL_0,
+      MEMBERED, NUMBERS, ORDINAL2;
+ requirements BOOLE, SUBSET, NUMERALS, REAL, ARITHM;
+
+
+begin
+
+theorem :: ARMSTRNG:1
+for B being set st B is cap-closed
+for X being set, S being finite Subset-Family of X
+ st X in B & S c= B holds Intersect S in B;
+
+definition
+  cluster reflexive antisymmetric transitive non empty Relation;
+end;
+
+theorem :: ARMSTRNG:2
+for R being antisymmetric transitive non empty Relation,
+    X being finite Subset of field R
+ st X <> {} ex x being Element of X st x is_maximal_wrt X, R;
+
+definition
+ let X be set, R be Relation;
+ func R Maximal_in X -> Subset of X means
+:: ARMSTRNG:def 1
+  for x being set holds x in it iff x is_maximal_wrt X, R;
+end;
+
+definition
+  let x, X be set;
+  pred x is_/\-irreducible_in X means
+:: ARMSTRNG:def 2
+   x in X &
+   for z, y being set st z in X & y in X & x = z /\ y holds x = z or x = y;
+  antonym x is_/\-reducible_in X;
+end;
+
+definition
+  let X be non empty set;
+  func /\-IRR X -> Subset of X means
+:: ARMSTRNG:def 3
+   for x being set holds x in it iff x is_/\-irreducible_in X;
+end;
+
+scheme FinIntersect {X() -> non empty finite set, P[set]} :
+  for x being set st x in X() holds P[x]
+provided
+ for x being set st x is_/\-irreducible_in X() holds P[x] and
+ for x, y being set st x in X() & y in X() & P[x] & P[y] holds P[x /\ y];
+
+theorem :: ARMSTRNG:3
+for X being non empty finite set, x being Element of X
+ ex A being non empty Subset of X
+  st x = meet A & for s being set st s in A holds s is_/\-irreducible_in X;
+
+definition
+  let X be set, B be Subset-Family of X;
+  attr B is (B1) means
+:: ARMSTRNG:def 4
+
+  X in B;
+end;
+
+definition
+  let B be set;
+  redefine attr B is cap-closed;
+  synonym B is (B2);
+end;
+
+definition
+  let X be set;
+  cluster (B1) (B2) Subset-Family of X;
+end;
+
+theorem :: ARMSTRNG:4
+for X being set, B being non empty Subset-Family of X st B is cap-closed
+for x being Element of B st x is_/\-irreducible_in B & x <> X
+for S being finite Subset-Family of X st S c= B & x = Intersect S holds x in S;
+
+definition
+  let X, D be non empty set, n be Nat;
+  cluster -> FinSequence-yielding Function of X, n-tuples_on D;
+end;
+
+definition
+ let f be FinSequence-yielding Function, x be set;
+ cluster f.x -> FinSequence-like;
+end;
+
+definition
+  :: cannot redefine from VALUAT for I need to use functions from
+  :: BINARI* and they are on Tuple of
+ let n be Nat, p, q be Tuple of n, BOOLEAN;
+ func p '&' q -> Tuple of n, BOOLEAN means
+:: ARMSTRNG:def 5
+ for i being set st i in Seg n holds it.i = (p/.i) '&' (q/.i);
+ commutativity;
+end;
+
+theorem :: ARMSTRNG:5
+for n being Nat, p being Tuple of n, BOOLEAN
+ holds (n-BinarySequence 0) '&' p = n-BinarySequence 0;
+
+theorem :: ARMSTRNG:6 :: band2:
+  for n being Nat, p being Tuple of n, BOOLEAN
+ holds 'not' (n-BinarySequence 0) '&' p = p;
+
+theorem :: ARMSTRNG:7  :: BINARI_3:29 generalized
+for i being Nat holds (i+1)-BinarySequence 2 to_power i= 0*i^<*1*>;
+
+theorem :: ARMSTRNG:8
+for n, i being Nat st i < n
+ holds (n-BinarySequence 2 to_power i).(i+1) = 1 &
+       for j being Nat st j in Seg n & j<>i+1
+        holds (n-BinarySequence 2 to_power i).j = 0;
+
+begin :: 2. The relational model of data
+
+definition
+ struct DB-Rel (#
+   Attributes -> finite non empty set,
+   Domains -> non-empty ManySortedSet of the Attributes,
+   Relationship -> Subset of product the Domains
+ #);
+end;
+
+begin :: 3. Dependency structures
+
+definition
+  let X be set;
+  mode Subset-Relation of X is Relation of bool X;
+  mode Dependency-set of X is Relation of bool X;
+  canceled;
+end;
+
+definition
+  let X be set;
+  cluster non empty finite Dependency-set of X;
+end;
+
+definition
+  let X be set;
+  func Dependencies(X) -> Dependency-set of X equals
+:: ARMSTRNG:def 7
+
+   [: bool X, bool X :];
+end;
+
+definition
+  let X be set;
+  cluster Dependencies X -> non empty;
+
+  mode Dependency of X is Element of Dependencies X;
+end;
+
+definition
+  let X be set, F be non empty Dependency-set of X;
+  redefine mode Element of F -> Dependency of X;
+end;
+
+theorem :: ARMSTRNG:9
+for X, x being set
+ holds x in Dependencies X iff ex a, b being Subset of X st x = [a,b];
+
+theorem :: ARMSTRNG:10
+for X, x being set, F being Dependency-set of X
+ holds x in F implies ex a, b being Subset of X st x = [a,b];
+
+theorem :: ARMSTRNG:11
+for X being set, F being Dependency-set of X, S being Subset of F
+ holds S is Dependency-set of X;
+
+definition
+  let R be DB-Rel, A, B be Subset of the Attributes of R;
+  pred A >|> B, R means
+:: ARMSTRNG:def 8
+  for f, g being Element of the Relationship of R st f|A = g|A holds f|B = g|B;
+  synonym A, B holds_in R;
+end;
+
+definition
+ let R be DB-Rel;
+ func Dependency-str R -> Dependency-set of the Attributes of R equals
+:: ARMSTRNG:def 9
+ { [A, B] where A, B is Subset of the Attributes of R: A >|> B, R };
+end;
+
+theorem :: ARMSTRNG:12
+for R being DB-Rel, A, B being Subset of the Attributes of R
+ holds [A, B] in Dependency-str R iff A >|> B, R;
+
+begin :: 4. Full families of dependencies
+
+definition
+  let X be set, P, Q be Dependency of X;
+  pred P >= Q means
+:: ARMSTRNG:def 10
+
+   P`1 c= Q`1 & Q`2 c= P`2;
+  reflexivity;
+  synonym Q <= P; synonym P is_at_least_as_informative_as Q;
+end;
+
+theorem :: ARMSTRNG:13  :: antisymmetry
+for X being set, P, Q being Dependency of X st P <= Q & Q <= P holds P = Q;
+
+theorem :: ARMSTRNG:14  :: transitivity
+for X being set, P, Q, S being Dependency of X st P <= Q & Q <= S holds P <= S;
+
+definition
+  let X be set, A, B be Subset of X;
+  redefine func [A, B] -> Dependency of X;
+end;
+
+theorem :: ARMSTRNG:15
+for X being set, A, B, A', B' being Subset of X
+ holds [A,B] >= [A',B'] iff A c= A' & B' c= B;
+
+definition
+  let X be set;
+  func Dependencies-Order X -> Relation of Dependencies X equals
+:: ARMSTRNG:def 11
+   { [P, Q] where P, Q is Dependency of X : P <= Q };
+end;
+
+theorem :: ARMSTRNG:16
+for X, x being set
+ holds x in Dependencies-Order X
+   iff ex P, Q being Dependency of X st x = [P, Q] & P <= Q;
+
+theorem :: ARMSTRNG:17
+for X being set holds dom Dependencies-Order X = [: bool X, bool X :];
+
+theorem :: ARMSTRNG:18
+for X being set holds rng Dependencies-Order X = [: bool X, bool X :];
+
+theorem :: ARMSTRNG:19
+for X being set holds field Dependencies-Order X = [: bool X, bool X :];
+
+definition
+  let X be set;
+  cluster Dependencies-Order X -> non empty;
+
+  cluster Dependencies-Order X
+      -> total reflexive antisymmetric transitive;
+end;
+
+definition
+  let X be set, F be Dependency-set of X;
+  attr F is (F1) means
+:: ARMSTRNG:def 12
+
+   for A being Subset of X holds [A, A] in F;
+  synonym F is (DC2);
+  redefine attr F is transitive;
+  synonym F is (F2); synonym F is (DC1);
+end;
+
+theorem :: ARMSTRNG:20
+for X being set, F being Dependency-set of X
+ holds F is (F2) iff
+   for A, B, C being Subset of X st [A, B] in F & [B, C] in F holds [A, C] in F
+;
+
+definition
+  let X be set, F be Dependency-set of X;
+  attr F is (F3) means
+:: ARMSTRNG:def 13
+
+  for A, B, A', B' being Subset of X
+   st [A, B] in F & [A, B] >= [A', B'] holds [A', B'] in F;
+  attr F is (F4) means
+:: ARMSTRNG:def 14
+
+  for A, B, A', B' being Subset of X
+   st [A, B] in F & [A', B'] in F holds [A\/A', B\/B'] in F;
+end;
+
+theorem :: ARMSTRNG:21
+for X being set holds Dependencies X is (F1) (F2) (F3) (F4);
+
+definition
+  let X be set;
+  cluster (F1) (F2) (F3) (F4) non empty Dependency-set of X;
+end;
+
+definition
+  let X be set, F be Dependency-set of X;
+  attr F is full_family means
+:: ARMSTRNG:def 15
+
+   F is (F1) (F2) (F3) (F4);
+end;
+
+definition
+  let X be set;
+  cluster full_family Dependency-set of X;
+end;
+
+definition
+  let X be set;
+  mode Full-family of X is full_family Dependency-set of X;
+end;
+
+theorem :: ARMSTRNG:22
+for X being finite set, F being Dependency-set of X holds F is finite;
+
+definition
+  let X be finite set;
+  cluster finite Full-family of X;
+
+  cluster -> finite Dependency-set of X;
+end;
+
+
+definition
+  let X be set;
+  cluster full_family -> (F1) (F2) (F3) (F4) Dependency-set of X;
+  cluster (F1) (F2) (F3) (F4) -> full_family Dependency-set of X;
+end;
+
+definition
+  let X be set, F be Dependency-set of X;
+  attr F is (DC3) means
+:: ARMSTRNG:def 16
+
+   for A, B being Subset of X st B c= A holds [A, B] in F;
+end;
+
+definition
+ let X be set;
+ cluster (F1) (F3) -> (DC3) Dependency-set of X;
+ cluster (DC3) (F2) -> (F1) (F3) Dependency-set of X;
+end;
+
+definition
+ let X be set;
+ cluster (DC3) (F2) (F4) non empty Dependency-set of X;
+end;
+
+theorem :: ARMSTRNG:23  ::  F13_2_1_3:
+for X being set, F being Dependency-set of X
+ st F is (DC3) (F2) holds F is (F1) (F3);
+
+theorem :: ARMSTRNG:24  ::  F1_3_13:
+for X being set, F being Dependency-set of X st F is (F1) (F3) holds F is (DC3)
+;
+
+definition
+  let X be set;
+  cluster (F1) -> non empty Dependency-set of X;
+end;
+
+theorem :: ARMSTRNG:25  ::  WWA1:
+for R being DB-Rel holds Dependency-str R is full_family;
+
+theorem :: ARMSTRNG:26  :: Ex1:
+  for X being set, K being Subset of X holds
+ { [A, B] where A, B is Subset of X : K c= A or B c= A } is Full-family of X;
+
+begin :: 5. Maximal elements of full families
+
+definition
+  let X be set, F be Dependency-set of X;
+  func Maximal_wrt F -> Dependency-set of X equals
+:: ARMSTRNG:def 17
+  Dependencies-Order X Maximal_in F;
+end;
+
+theorem :: ARMSTRNG:27
+for X being set, F being Dependency-set of X holds Maximal_wrt F c= F;
+
+definition
+  let X be set, F be Dependency-set of X, x, y be set;
+  pred x ^|^ y, F means
+:: ARMSTRNG:def 18
+   [x, y] in Maximal_wrt F;
+end;
+
+theorem :: ARMSTRNG:28
+for X being finite set, P being Dependency of X, F being Dependency-set of X
+ st P in F
+  ex A, B being Subset of X st [A, B] in Maximal_wrt F & [A, B] >= P;
+
+theorem :: ARMSTRNG:29
+for X being set, F being Dependency-set of X, A, B being Subset of X
+ holds A ^|^ B, F
+   iff [A, B] in F &
+       not ex A', B' being Subset of X
+            st [A', B'] in F & (A <> A' or B <> B') & [A, B] <= [A', B'];
+
+definition
+  let X be set, M be Dependency-set of X;
+ attr M is (M1) means
+:: ARMSTRNG:def 19
+
+ for A being Subset of X
+  ex A', B' being Subset of X st [A', B'] >= [A, A] & [A', B'] in M;
+ attr M is (M2) means
+:: ARMSTRNG:def 20
+
+ for A, B, A', B' being Subset of X
+  st [A, B] in M & [A', B'] in M & [A, B] >= [A', B'] holds A = A' & B = B';
+ attr M is (M3) means
+:: ARMSTRNG:def 21
+
+ for A, B, A', B' being Subset of X
+  st [A, B] in M & [A', B'] in M & A' c= B holds B' c= B;
+end;
+
+theorem :: ARMSTRNG:30  ::  WWA2:
+for X being finite non empty set, F being Full-family of X
+ holds Maximal_wrt F is (M1) (M2) (M3);
+
+theorem :: ARMSTRNG:31  :: WWA2a check this proof, WWA is sketchy
+for X being finite set, M, F being Dependency-set of X
+ st M is (M1) (M2) (M3) &
+    F = {[A, B] where A, B is Subset of X :
+            ex A', B' being Subset of X st [A', B'] >= [A, B] & [A', B'] in M}
+  holds M = Maximal_wrt F & F is full_family &
+   for G being Full-family of X st M = Maximal_wrt G holds G = F;
+
+definition
+  let X be non empty finite set, F be Full-family of X;
+  cluster Maximal_wrt F -> non empty;
+end;
+
+theorem :: ARMSTRNG:32  ::  Ex2:
+for X being finite set, F being Dependency-set of X, K being Subset of X
+ st F = { [A, B] where A, B is Subset of X : K c= A or B c= A }
+  holds {[K, X]}\/{[A, A] where A is Subset of X : not K c= A}
+      = Maximal_wrt F;
+
+begin :: 6. Saturated subsets of Attributes
+
+definition
+  let X be set, F be Dependency-set of X;
+  func saturated-subsets F -> Subset-Family of X equals
+:: ARMSTRNG:def 22
+
+  { B where B is Subset of X: ex A being Subset of X st A ^|^ B, F };
+ synonym closed_attribute_subset F;
+end;
+
+definition
+  let X be set, F be finite Dependency-set of X;
+  cluster saturated-subsets F -> finite;
+end;
+
+theorem :: ARMSTRNG:33
+for X, x being set, F being Dependency-set of X
+ holds x in saturated-subsets F
+   iff ex B, A being Subset of X st x = B & A ^|^ B, F;
+
+theorem :: ARMSTRNG:34  ::  WWA3:
+for X being finite non empty set, F being Full-family of X
+ holds saturated-subsets F is (B1) (B2);
+
+definition
+ let X be set, B be set;
+ func X deps_encl_by B -> Dependency-set of X equals
+:: ARMSTRNG:def 23
+  { [a, b] where a, b is Subset of X :
+                 for c being set st c in B & a c= c holds b c= c};
+end;
+
+theorem :: ARMSTRNG:35  ::  WWA3_0:
+for X being set, B being Subset-Family of X, F being Dependency-set of X
+  holds X deps_encl_by B is full_family;
+
+theorem :: ARMSTRNG:36  ::  WWA3_00:
+for X being finite non empty set, B being Subset-Family of X
+ holds B c= saturated-subsets (X deps_encl_by B);
+
+theorem :: ARMSTRNG:37  ::  WWA3a:
+for X being finite non empty set, B being Subset-Family of X
+ st B is (B1) (B2)
+  holds B = saturated-subsets (X deps_encl_by B) &
+        for G being Full-family of X
+         st B = saturated-subsets G holds G = X deps_encl_by B;
+
+definition
+  let X be set, F be Dependency-set of X;
+  func enclosure_of F -> Subset-Family of X equals
+:: ARMSTRNG:def 24
+
+   { b where b is Subset of X :
+           for A, B being Subset of X st [A, B] in F & A c= b holds B c= b };
+end;
+
+theorem :: ARMSTRNG:38  ::  WWA3c:
+for X being finite non empty set, F being Dependency-set of X
+  holds enclosure_of F is (B1) (B2);
+
+theorem :: ARMSTRNG:39   :: WWA3b
+:: Added for proving WWA7 where it is referenced but never
+:: stated.  This characterizes the smallest full family
+:: containing a given dependency set
+for X being finite non empty set, F being Dependency-set of X
+  holds F c= X deps_encl_by enclosure_of F &
+        for G being Dependency-set of X st F c= G & G is full_family
+         holds X deps_encl_by enclosure_of F c= G;
+
+definition
+ let X be finite non empty set, F be Dependency-set of X;
+ func Dependency-closure F -> Full-family of X means
+:: ARMSTRNG:def 25
+
+  F c= it &
+  for G being Dependency-set of X st F c= G & G is full_family holds it c= G;
+end;
+
+theorem :: ARMSTRNG:40  ::  WWA3d:
+for X being finite non empty set, F being Dependency-set of X
+ holds Dependency-closure F = X deps_encl_by enclosure_of F;
+
+theorem :: ARMSTRNG:41  ::  Ex3:
+for X being set, K being Subset of X, B being Subset-Family of X
+ st B = {X}\/{A where A is Subset of X : not K c= A} holds B is (B1) (B2);
+
+theorem :: ARMSTRNG:42  :: Ex3a:
+:: use WWA3* to prove what is the saturated subset for the example
+  for X being finite non empty set, F being Dependency-set of X,
+    K being Subset of X
+ st F = { [A, B] where A, B is Subset of X : K c= A or B c= A }
+  holds {X}\/{B where B is Subset of X : not K c= B} = saturated-subsets F;
+
+theorem :: ARMSTRNG:43  :: Ex3b:
+  for X being finite set, F being Dependency-set of X, K being Subset of X
+ st F = { [A, B] where A, B is Subset of X : K c= A or B c= A }
+  holds {X}\/{B where B is Subset of X : not K c= B} = saturated-subsets F;
+
+definition
+  let X, G be set, B be Subset-Family of X;
+  pred G is_generator-set_of B means
+:: ARMSTRNG:def 26
+
+  G c= B & B = { Intersect S where S is Subset-Family of X: S c= G };
+end;
+
+theorem :: ARMSTRNG:44  :: WWA4b:
+  for X be finite non empty set, G being Subset-Family of X
+ holds G is_generator-set_of saturated-subsets (X deps_encl_by G);
+
+theorem :: ARMSTRNG:45  ::  WWA4a:
+for X being finite non empty set, F being Full-family of X
+ ex G being Subset-Family of X
+  st G is_generator-set_of saturated-subsets F & F = X deps_encl_by G;
+
+:: WWA did not show what generators B are,
+:: they are the irreducible elements \ X
+
+theorem :: ARMSTRNG:46
+  for X being set, B being non empty finite Subset-Family of X
+ st B is (B1) (B2) holds /\-IRR B is_generator-set_of B;
+
+theorem :: ARMSTRNG:47
+  for X, G being set, B being non empty finite Subset-Family of X
+ st B is (B1) (B2) & G is_generator-set_of B holds /\-IRR B c= G\/{X};
+
+begin :: 7. Justification of the axioms
+
+theorem :: ARMSTRNG:48  :: WWA5:
+  for X being non empty finite set, F being Full-family of X
+ ex R being DB-Rel
+  st the Attributes of R = X &
+     (for a being Element of X holds (the Domains of R).a = INT) &
+     F = Dependency-str R;
+
+begin
+
+definition
+  let X be set, F be Dependency-set of X;
+  func candidate-keys F -> Subset-Family of X equals
+:: ARMSTRNG:def 27
+
+   { A where A is Subset of X : [A, X] in Maximal_wrt F };
+end;
+
+theorem :: ARMSTRNG:49  :: Ex8:
+  for X being finite set, F being Dependency-set of X, K being Subset of X
+ st F = { [A, B] where A, B is Subset of X : K c= A or B c= A }
+  holds candidate-keys F = {K};
+
+definition
+  let X be set;
+  redefine attr X is empty;
+  antonym X is (C1);
+end;
+
+definition
+  let X be set;
+  attr X is without_proper_subsets means
+:: ARMSTRNG:def 28
+
+   for x, y being set st x in X & y in X & x c= y holds x = y;
+  synonym X is (C2);
+end;
+
+theorem :: ARMSTRNG:50  :: WWA6:
+  for R being DB-Rel holds candidate-keys Dependency-str R is (C1) (C2);
+
+theorem :: ARMSTRNG:51  :: WWA6a:
+  for X being finite set, C being Subset-Family of X st C is (C1) (C2)
+  ex F being Full-family of X st C = candidate-keys F;
+
+theorem :: ARMSTRNG:52  :: WWA6a A more reasonable version
+  for X being finite set, C being Subset-Family of X, B being set
+ st C is (C1) (C2) &
+    B = {b where b is Subset of X :
+           for K being Subset of X st K in C holds not K c= b}
+  holds C = candidate-keys (X deps_encl_by B);
+
+theorem :: ARMSTRNG:53  :: WWA6a proof II
+  for X being non empty finite set, C being Subset-Family of X st C is (C1)
+(C2)
+ ex R being DB-Rel
+  st the Attributes of R = X & C = candidate-keys Dependency-str R;
+
+begin :: 9. Applications
+
+definition
+  let X be set, F be Dependency-set of X;
+  attr F is (DC4) means
+:: ARMSTRNG:def 29
+
+   for A, B, C being Subset of X st [A, B] in F & [A, C] in F
+    holds [A, B\/C] in F;
+  attr F is (DC5) means
+:: ARMSTRNG:def 30
+
+   for A, B, C, D being Subset of X st [A, B] in F & [B\/C, D] in F
+    holds [A\/C, D] in F;
+  attr F is (DC6) means
+:: ARMSTRNG:def 31
+
+   for A, B, C being Subset of X st [A, B] in F holds [A\/C, B] in F;
+end;
+
+theorem :: ARMSTRNG:54  :: APP0:
+  for X being set, F being Dependency-set of X
+ holds F is (F1) (F2) (F3) (F4) iff F is (F2) (DC3) (F4);
+
+theorem :: ARMSTRNG:55  :: APP1:
+  for X being set, F being Dependency-set of X
+ holds F is (F1) (F2) (F3) (F4) iff F is (DC1) (DC3) (DC4);
+
+theorem :: ARMSTRNG:56  :: APP2:
+  for X being set, F being Dependency-set of X
+ holds F is (F1) (F2) (F3) (F4) iff F is (DC2) (DC5) (DC6);
+
+definition
+  let X be set, F be Dependency-set of X;
+  func charact_set F equals
+:: ARMSTRNG:def 32
+
+   { A where A is Subset of X :
+       ex a, b being Subset of X st [a, b] in F & a c= A & not b c= A };
+end;
+
+theorem :: ARMSTRNG:57
+for X, A being set, F being Dependency-set of X st A in charact_set F
+ holds A is Subset of X &
+       ex a, b being Subset of X st [a, b] in F & a c= A & not b c= A;
+
+theorem :: ARMSTRNG:58
+for X being set, A being Subset of X, F being Dependency-set of X
+ st ex a, b being Subset of X st [a, b] in F & a c= A & not b c= A
+  holds A in charact_set F;
+
+theorem :: ARMSTRNG:59    ::  WWA7:
+for X being finite non empty set, F being Dependency-set of X
+ holds
+   (for A, B being Subset of X holds [A, B] in Dependency-closure F iff
+     for a being Subset of X st A c= a & not B c= a holds a in charact_set F)
+ & saturated-subsets Dependency-closure F = (bool X) \ charact_set F;
+
+theorem :: ARMSTRNG:60  :: WWACorA: :: Bill: Is this the right translation
+  for X being finite non empty set, F, G being Dependency-set of X
+ st charact_set F = charact_set G
+  holds Dependency-closure F = Dependency-closure G;
+
+theorem :: ARMSTRNG:61
+for X being non empty finite set, F being Dependency-set of X
+ holds charact_set F = charact_set (Dependency-closure F);
+
+definition
+  let A be set, K be set, F be Dependency-set of A;
+  pred K is_p_i_w_ncv_of F means
+:: ARMSTRNG:def 33
+
+  (for a being Subset of A st K c= a & a <> A holds a in charact_set F) &
+  for k being set st k c< K
+    ex a being Subset of A st k c= a & a <> A & not a in charact_set F;
+end;
+
+theorem :: ARMSTRNG:62  :: WWACorB:
+  for X being finite non empty set, F being Dependency-set of X,
+    K being Subset of X
+ holds K in candidate-keys Dependency-closure F iff K is_p_i_w_ncv_of F;

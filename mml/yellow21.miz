@@ -1,0 +1,1990 @@
+:: Categorial Background for Duality Theory
+::  by Grzegorz Bancerek
+::
+:: Received August 1, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary ORDERS_1, FUNCT_1, RELAT_1, PROB_1, AMI_1, ORDERS_3, BOOLE,
+      ALTCAT_1, YELLOW18, WAYBEL_0, BHSP_3, PBOOLE, FUNCT_2, PRE_TOPC, SEQM_3,
+      FILTER_0, CAT_1, QC_LANG1, FUNCTOR0, WELLORD1, ALTCAT_3, CAT_3, ISOCAT_1,
+      SUBSET_1, LATTICES, RELAT_2, ORDINAL1, TARSKI, WELLORD2, CARD_1,
+      LATTICE3, ORDINAL2, COMPTS_1, QUANTAL1, WAYBEL_8, WAYBEL_3, REALSET1,
+      TRIANG_1, ALTCAT_2, FUNCT_5, YELLOW21;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, RELSET_1,
+      FUNCT_1, REALSET1, FUNCT_2, PROB_1, BINOP_1, ORDINAL1, CARD_1, AMI_1,
+      TRIANG_1, STRUCT_0, ORDERS_1, LATTICE3, GRCAT_1, ORDERS_3, FUNCT_5,
+      WELLORD1, WELLORD2, YELLOW_0, WAYBEL_0, YELLOW_1, YELLOW_2, WAYBEL_3,
+      WAYBEL_8, PRE_TOPC, ALTCAT_1, ALTCAT_2, FUNCTOR0, ALTCAT_3, YELLOW18;
+ constructors GRCAT_1, TOPS_2, TRIANG_1, AMI_1, ORDERS_3, WAYBEL_1, WAYBEL_8,
+      YELLOW_9, QUANTAL1, WAYBEL18, ALTCAT_3, YELLOW18, PROB_1;
+ clusters SUBSET_1, RELSET_1, FUNCT_1, ORDINAL1, CARD_1, REALSET1, AMI_1,
+      STRUCT_0, ORDERS_1, LATTICE3, WAYBEL_0, WAYBEL_3, TRIANG_1, WAYBEL_8,
+      YELLOW_9, WAYBEL10, WAYBEL17, ALTCAT_2, FUNCTOR0, FUNCTOR2, ALTCAT_4,
+      YELLOW18;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, RELAT_2, WELLORD1, WELLORD2, ORDERS_1, LATTICE3, ORDERS_3,
+      ALTCAT_1, ALTCAT_3, YELLOW_0, WAYBEL_0, WAYBEL_3, YELLOW18, XBOOLE_0;
+ theorems ZFMISC_1, RELAT_1, FUNCT_1, PBOOLE, SETWISEO, STRUCT_0, PRE_TOPC,
+      WELLORD1, WELLORD2, ORDERS_1, ORDERS_2, FUNCT_2, GRCAT_1, BINOP_1,
+      TRIANG_1, ALTCAT_1, ALTCAT_2, ORDERS_3, ALTCAT_3, ORDINAL1, CARD_1,
+      CARD_5, WAYBEL_0, WAYBEL13, AMI_1, ORDINAL3, TARSKI, RELSET_1, RELAT_2,
+      TOPS_2, REALSET1, LATTICE3, YELLOW_0, YELLOW_2, WAYBEL_3, WAYBEL_8,
+      YELLOW18, WAYBEL20, YELLOW16, XBOOLE_0, XBOOLE_1, PARTFUN1;
+ schemes TARSKI, CARD_3, PRALG_2, ZFREFLE1, YELLOW18, YELLOW20, XBOOLE_0;
+
+begin :: Lattice-wise categories
+
+reserve x, y for set;
+
+definition
+ let a be set;
+ func a as_1-sorted -> 1-sorted equals:
+Def1:
+  a if a is 1-sorted otherwise 1-sorted(#a#);
+ coherence;
+ consistency;
+end;
+
+definition
+ let W be set;
+   defpred P[set] means
+     $1 is strict Poset & the carrier of $1 as_1-sorted in W;
+ func POSETS W means:
+Def2:
+  x in it iff x is strict Poset & the carrier of x as_1-sorted in W;
+  uniqueness
+   proof let A,B be set such that
+A1:  x in A iff P[x] and
+A2:  x in B iff P[x];
+    thus thesis from Extensionality(A1,A2);
+   end;
+  existence
+   proof deffunc F(set) = bool [:$1,$1:];
+     defpred P[set,set] means $2 is Order of $1;
+     consider F being Function such that
+A3:  dom F = W and
+A4:  for x st x in W for y holds y in F.x iff y in F(x) & P[x,y]
+      from FuncSeparation;
+     defpred Q[set,set] means
+      ex P being strict Poset st $2 = P & the InternalRel of P = $1;
+A5:  now let x,y,z be set;
+      assume Q[x,y]; then
+      consider P1 be strict Poset such that
+A6:    y = P1 & the InternalRel of P1 = x;
+      assume Q[x,z]; then
+      consider P2 being strict Poset such that
+A7:    z = P2 & the InternalRel of P2 = x;
+         dom the InternalRel of P1 = the carrier of P1 by ORDERS_2:1;
+      hence y = z by A6,A7,ORDERS_2:1;
+     end;
+    consider A being set such that
+A8:  x in A iff ex y st y in Union F & Q[y,x] from Fraenkel(A5);
+    take A; let x;
+    hereby assume x in A;
+     then consider y such that
+A9:   y in Union F and
+A10:   ex P being strict Poset st x = P & the InternalRel of P = y by A8;
+     consider P being strict Poset such that
+A11:   x = P & the InternalRel of P = y by A10;
+     consider z being set such that
+A12:   z in W & y in F.z by A3,A9,CARD_5:10;
+     reconsider y as Order of z by A4,A12;
+     thus x is strict Poset by A11;
+        dom y = z & dom y = the carrier of P &
+      x as_1-sorted = P by A11,Def1,ORDERS_2:1;
+     hence the carrier of x as_1-sorted in W by A12;
+    end;
+    assume
+A13:  x is strict Poset & the carrier of x as_1-sorted in W;
+    then reconsider P = x as strict Poset;
+A14:  x as_1-sorted = P by Def1;
+       the InternalRel of P in bool [:the carrier of P, the carrier of P:];
+     then the InternalRel of P in F.the carrier of P by A4,A13,A14;
+     then the InternalRel of P in Union F by A3,A13,A14,CARD_5:10;
+    hence thesis by A8;
+   end;
+end;
+
+definition
+ let W be non empty set;
+ cluster POSETS W -> non empty;
+ coherence
+  proof consider x being Element of W, y being Order of x;
+      RelStr(#x,y#) as_1-sorted = RelStr(#x,y#) by Def1;
+   hence thesis by Def2;
+  end;
+end;
+
+definition
+ let W be with_non-empty_elements set;
+ cluster POSETS W -> POSet_set-like;
+ coherence
+  proof let a be set; assume A1: a in POSETS W;
+then A2: a is strict Poset & the carrier of a as_1-sorted in W by Def2;
+   reconsider a as Poset by A1,Def2;
+      a = a as_1-sorted & the carrier of a as_1-sorted <> {}
+     by A2,Def1,AMI_1:def 1;
+   hence thesis by STRUCT_0:def 1;
+  end;
+end;
+
+definition
+ let C be category;
+ attr C is carrier-underlaid means:
+Def3:
+  for a being object of C
+   ex S being 1-sorted st a = S & the_carrier_of a = the carrier of S;
+end;
+
+definition
+ let C be category;
+ attr C is lattice-wise means:
+Def4:
+  C is semi-functional set-id-inheriting &
+  (for a being object of C holds a is LATTICE) &
+  (for a,b being object of C
+   for A,B being LATTICE st A = a & B = b holds <^a,b^> c= MonFuncs(A, B));
+end;
+
+definition
+ let C be category;
+ attr C is with_complete_lattices means:
+Def5:
+  C is lattice-wise &
+  for a being object of C holds a is complete LATTICE;
+end;
+
+definition
+ cluster with_complete_lattices -> lattice-wise category;
+ coherence by Def5;
+ cluster lattice-wise -> concrete carrier-underlaid category;
+ coherence
+  proof let C be category such that
+A1: C is semi-functional set-id-inheriting and
+A2: for a being object of C holds a is LATTICE and
+A3: for a,b being object of C
+     for A,B being LATTICE st A = a & B = b holds <^a,b^> c= MonFuncs(A, B);
+   deffunc F(set) = the carrier of $1 as_1-sorted;
+   consider F being ManySortedSet of C such that
+A4: for i being Element of C holds F.i = F(i) from LambdaDMS;
+      C is para-functional
+     proof take F; let a,b be object of C;
+      reconsider A = a, B = b as LATTICE by A2;
+         a as_1-sorted = A & b as_1-sorted = B by Def1;
+       then F.a = the carrier of A & F.b = the carrier of B by A4;
+       then <^a,b^> c= MonFuncs(A, B) & MonFuncs(A, B) c= Funcs(F.a, F.b)
+        by A3,ORDERS_3:11;
+      hence thesis by XBOOLE_1:1;
+     end;
+   hence C is concrete by A1,YELLOW18:def 11;
+   let a be object of C;
+   reconsider S = a as LATTICE by A2;
+   take S; thus a = S;
+      idm a in <^a,a^> & <^a,a^> c= MonFuncs(S, S) by A3;
+   then consider f being map of S,S such that
+A5: idm a = f and
+A6: f in Funcs(the carrier of S, the carrier of S) and f is monotone
+     by ORDERS_3:def 6;
+   thus the_carrier_of a = dom id the_carrier_of a by RELAT_1:71
+     .= dom f by A1,A5,YELLOW18:def 10
+     .= the carrier of S by A6,ALTCAT_1:6;
+  end;
+end;
+
+local_CLCatEx
+ { A() -> non empty set, P[set, set, set] }:
+ ex C being strict category st C is lattice-wise &
+  the carrier of C = A() &
+  for a,b being LATTICE, f being monotone map of a,b
+    holds f in (the Arrows of C).(a,b) iff a in A() & b in A() & P[a,b,f]
+ provided
+A1:  for a being Element of A() holds a is LATTICE
+ and
+A2:  for a,b,c being LATTICE st a in A() & b in A() & c in A()
+     for f being map of a,b, g being map of b,c st
+      P[a,b,f] & P[b,c,g] holds P[a,c,g*f]
+ and
+A3:  for a being LATTICE st a in A() holds P[a,a,id a]
+  proof set A = A();
+    defpred P[set,set] means
+     ex a,b being LATTICE
+      st $1 = [a,b] &
+      for f being set holds f in $2 iff f in MonFuncs(a, b) & P[a,b,f];
+A4:  now let x; assume x in [:A,A:];
+     then consider a,b being set such that
+A5:   a in A & b in A & x = [a,b] by ZFMISC_1:def 2;
+     reconsider a,b as LATTICE by A1,A5;
+     defpred Q[set] means P[a,b,$1];
+     consider y being set such that
+A6:   for f being set holds f in y iff f in MonFuncs(a, b) & Q[f]
+       from Separation;
+     take y;
+     thus P[x,y] by A5,A6;
+    end;
+   consider F being Function such that
+      dom F = [:A,A:] and
+A7: for x st x in [:A,A:] holds P[x, F.x] from NonUniqFuncEx(A4);
+A8: now let a,b be LATTICE; assume a in A & b in A;
+      then [a,b] in [:A,A:] by ZFMISC_1:106;
+     then consider a',b' being LATTICE such that
+A9:   [a,b] = [a',b'] and
+A10:   for f being set holds f in F.[a,b] iff
+       f in MonFuncs(a', b') & P[a',b',f] by A7;
+A11:   a = a' & b = b' by A9,ZFMISC_1:33;
+     let f be set;
+     hereby assume
+A12:    f in F.[a,b]; hence P[a,b,f] by A10,A11;
+      thus f in MonFuncs(a, b) by A10,A11,A12;
+       then ex g being map of a, b st f = g &
+         g in Funcs (the carrier of a, the carrier of b) & g is monotone
+        by ORDERS_3:def 6;
+      hence f in Funcs (the carrier of a, the carrier of b) &
+            f is monotone map of a, b;
+     end;
+     assume f is monotone map of a, b;
+     then reconsider g = f as monotone map of a, b;
+        the carrier of b <> {} implies dom g = the carrier of a &
+       rng g c= the carrier of b by FUNCT_2:def 1;
+      then g in Funcs(the carrier of a, the carrier of b) by FUNCT_2:def 2;
+      then f in MonFuncs(a, b) by ORDERS_3:def 6;
+     hence P[a,b,f] implies f in F.[a,b] by A10,A11;
+    end;
+    defpred P[set,set] means
+     for a being LATTICE st a = $1 holds $2 = the carrier of a;
+A13:  now let x; assume x in A;
+     then reconsider a = x as LATTICE by A1;
+     reconsider b = the carrier of a as set;
+     take b; thus P[x,b];
+    end;
+   consider D being Function such that
+      dom D = A and
+A14: for x st x in A holds P[x, D.x] from NonUniqFuncEx(A13);
+   deffunc D(set) = D.$1;
+   deffunc B(set,set) = F.[$1,$2];
+A15: for a,b,c being Element of A, f,g being Function
+     st f in B(a,b) & g in B(b,c) holds g*f in B(a,c)
+     proof let a,b,c be Element of A, f,g be Function such that
+A16:    f in F.[a,b] & g in F.[b,c];
+      reconsider x = a, y = b, z = c as LATTICE by A1;
+      reconsider f' = f as monotone map of x,y by A8,A16;
+      reconsider g' = g as monotone map of y,z by A8,A16;
+         P[x,y,f'] & P[y,z,g'] by A8,A16;
+       then P[a,c,g'*f'] by A2;
+       then g'*f' is monotone map of x,z implies g'*f' in F.[x,z] by A8;
+      hence thesis by YELLOW_2:14;
+     end;
+A17: for a,b being Element of A holds B(a,b) c= Funcs(D(a), D(b))
+     proof let a,b be Element of A, f be set;
+      reconsider x = a, y = b as LATTICE by A1;
+      assume f in F.[a,b];
+       then f in Funcs(the carrier of x, the carrier of y) by A8;
+       then f in Funcs(D.a, the carrier of y) by A14;
+      hence thesis by A14;
+     end;
+A18: now let a be Element of A;
+     reconsider x = a as LATTICE by A1;
+        D.a = the carrier of x by A14;
+      then id (D.a) = id x & P[x,x,id x] by A3,GRCAT_1:def 11;
+     hence id D(a) in B(a,a) by A8;
+    end;
+   consider C being concrete strict category such that
+A19: the carrier of C = A and
+     for a being object of C holds the_carrier_of a = D(a) and
+A20: for a,b being object of C holds <^a,b^> = B(a,b)
+     from ConcreteCategoryLambda(A15,A17,A18);
+   take C; thus C is semi-functional set-id-inheriting;
+   thus for a being object of C holds a is LATTICE by A1,A19;
+   thus for a,b being object of C
+     for A,B being LATTICE st A = a & B = b holds <^a,b^> c= MonFuncs(A, B)
+    proof let a, b be object of C;
+     let A, B be LATTICE; assume
+A21:   A = a & B = b;
+     let f be set;
+        <^a,b^> = F.[A,B] by A20,A21;
+     hence thesis by A8,A19,A21;
+    end;
+   thus the carrier of C = A() by A19;
+   let a,b be LATTICE, f be monotone map of a,b;
+A22:  (the Arrows of C).[a,b] = (the Arrows of C).(a,b) by BINOP_1:def 1;
+   hereby assume
+A23:   f in (the Arrows of C).(a,b);
+     then [a,b] in dom the Arrows of C by A22,FUNCT_1:def 4;
+     then [a,b] in [:A,A:] by A19,PBOOLE:def 3;
+    hence a in A & b in A by ZFMISC_1:106;
+    then reconsider x = a, y = b as object of C by A19;
+       (the Arrows of C).[a,b] = <^x,y^> by A22,ALTCAT_1:def 2
+        .= F.[x,y] by A20;
+    hence P[a,b,f] by A8,A19,A22,A23;
+   end;
+   assume
+A24:  a in A() & b in A();
+   then reconsider x = a, y = b as object of C by A19;
+      (the Arrows of C).[a,b] = <^x,y^> by A22,ALTCAT_1:def 2
+       .= F.[x,y] by A20;
+   hence thesis by A8,A22,A24;
+  end;
+
+definition
+ cluster strict with_complete_lattices category;
+ existence
+  proof consider L being complete LATTICE;
+    defpred P[set,set,set] means $3 = $3;
+A1: for a be Element of {L} holds a is LATTICE by TARSKI:def 1;
+A2: for a,b,c being LATTICE st a in {L} & b in {L} & c in {L}
+     for f being map of a,b, g being map of b,c st
+      P[a,b,f] & P[b,c,g] holds P[a,c,g*f];
+A3: for a being LATTICE st a in {L} holds P[a,a,id a];
+   consider C being strict category such that
+A4:  C is lattice-wise and
+A5:  the carrier of C = {L} and
+      for a,b being LATTICE, f being monotone map of a,b
+     holds f in (the Arrows of C).(a,b) iff a in {L} & b in {L} & P[a,b,f]
+      from local_CLCatEx(A1,A2,A3);
+   take C; thus C is strict;
+   thus C is lattice-wise by A4;
+   let a be object of C;
+   thus thesis by A5,TARSKI:def 1;
+  end;
+end;
+
+theorem
+   for C being carrier-underlaid category, a being object of C
+  holds the_carrier_of a = the carrier of a as_1-sorted
+  proof let C be carrier-underlaid category, a be object of C;
+      ex S being 1-sorted st a = S & the_carrier_of a = the carrier of S
+     by Def3;
+   hence thesis by Def1;
+  end;
+
+theorem Th2:
+ for C being set-id-inheriting carrier-underlaid category
+ for a being object of C holds idm a = id (a as_1-sorted)
+  proof let C be set-id-inheriting carrier-underlaid category;
+   let a be object of C;
+      ex S being 1-sorted st a = S & the_carrier_of a = the carrier of S
+     by Def3;
+    then the_carrier_of a = the carrier of (a as_1-sorted) by Def1;
+   hence idm a = id the carrier of (a as_1-sorted) by YELLOW18:def 10
+              .= id (a as_1-sorted) by GRCAT_1:def 11;
+  end;
+
+definition
+ let C be lattice-wise category;
+ let a be object of C;
+ redefine func a as_1-sorted -> LATTICE equals:
+Def6:
+  a;
+ coherence
+  proof a is LATTICE by Def4;
+   hence thesis by Def1;
+  end;
+ compatibility
+  proof a is LATTICE by Def4;
+   hence thesis by Def1;
+  end;
+ synonym latt a;
+end;
+
+definition
+ let C be with_complete_lattices category;
+ let a be object of C;
+ redefine func a as_1-sorted -> complete LATTICE;
+ coherence
+  proof a is complete LATTICE by Def5;
+   hence thesis by Def1;
+  end;
+ synonym latt a;
+end;
+
+definition
+ let C be lattice-wise category;
+ let a,b be object of C such that
+A1:  <^a,b^> <> {};
+ let f be Morphism of a,b;
+ func @f -> monotone map of latt a, latt b equals:
+Def7:
+  f;
+ coherence
+  proof
+      latt a = a & latt b = b by Def6;
+    then f in <^a,b^> & <^a,b^> c= MonFuncs(latt a, latt b) by A1,Def4;
+    then ex g being map of latt a, latt b st f = g &
+       g in Funcs (the carrier of latt a, the carrier of latt b) &
+       g is monotone by ORDERS_3:def 6;
+   hence thesis;
+  end;
+end;
+
+theorem Th3:
+ for C being lattice-wise category
+ for a,b,c being object of C st <^a,b^> <> {} & <^b,c^> <> {}
+ for f being Morphism of a,b, g being Morphism of b,c
+  holds g*f = @g*@f
+  proof let C be lattice-wise category;
+   let a,b,c be object of C such that
+A1:  <^a,b^> <> {} & <^b,c^> <> {};
+   let f be Morphism of a,b, g be Morphism of b,c;
+      f = @f & g = @g by A1,Def7;
+   hence g*f = @g*@f by A1,YELLOW18:38;
+  end;
+
+scheme CLCatEx1
+ { A() -> non empty set, P[set, set, set] }:
+ ex C being lattice-wise strict category st
+  the carrier of C = A() &
+  for a,b being object of C, f being monotone map of latt a, latt b
+    holds f in <^a,b^> iff P[latt a, latt b, f]
+ provided
+A1:  for a being Element of A() holds a is LATTICE
+ and
+A2:  for a,b,c being LATTICE st a in A() & b in A() & c in A()
+     for f being map of a,b, g being map of b,c st
+      P[a,b,f] & P[b,c,g] holds P[a,c,g*f]
+ and
+A3:  for a being LATTICE st a in A() holds P[a,a,id a]
+  proof defpred p[set, set, set] means P[$1,$2,$3];
+A4:  for a,b,c being LATTICE st a in A() & b in A() & c in A()
+     for f being map of a,b, g being map of b,c st
+      p[a,b,f] & p[b,c,g] holds p[a,c,g*f] by A2;
+A5:  for a being LATTICE st a in A() holds p[a,a,id a] by A3;
+   consider C being strict category such that
+A6: C is lattice-wise and
+A7: the carrier of C = A() and
+A8: for a,b being LATTICE, f being monotone map of a,b
+     holds f in (the Arrows of C).(a,b) iff a in A() & b in A() & p[a,b,f]
+      from local_CLCatEx(A1,A4,A5);
+   reconsider C as lattice-wise strict category by A6;
+   take C; thus the carrier of C = A() by A7;
+   let a,b be object of C;
+      latt a = a & latt b = b & <^a,b^> = (the Arrows of C).(a,b)
+     by Def6,ALTCAT_1:def 2;
+   hence thesis by A7,A8;
+  end;
+
+scheme CLCatEx2
+ { A() -> non empty set, L[set], P[set, set, set] }:
+ ex C being lattice-wise strict category st
+  (for x being LATTICE holds
+    x is object of C iff x is strict & L[x] & the carrier of x in A()) &
+  for a,b being object of C, f being monotone map of latt a, latt b
+    holds f in <^a,b^> iff P[latt a, latt b, f]
+ provided
+A1:  ex x being strict LATTICE st L[x] & the carrier of x in A()
+ and
+A2:  for a,b,c being LATTICE st L[a] & L[b] & L[c]
+     for f being map of a,b, g being map of b,c st
+      P[a,b,f] & P[b,c,g] holds P[a,c,g*f]
+ and
+A3:  for a being LATTICE st L[a] holds P[a,a,id a]
+  proof
+   defpred p[set] means $1 is LATTICE & L[$1];
+   consider A being set such that
+A4: x in A iff x in POSETS A() & p[x] from Separation;
+   consider x being strict LATTICE such that
+A5: L[x] & the carrier of x in A() by A1;
+      x as_1-sorted = x by Def1;
+    then x in POSETS A() by A5,Def2;
+   then reconsider A as non empty set by A4,A5;
+   defpred p[set, set, set] means P[$1,$2,$3];
+A6: for a being Element of A holds a is LATTICE by A4;
+A7: now let a,b,c be LATTICE; assume a in A & b in A & c in A;
+      then L[a] & L[b] & L[c] by A4;
+     hence for f being map of a,b, g being map of b,c st
+       p[a,b,f] & p[b,c,g] holds p[a,c,g*f] by A2;
+    end;
+A8: now let a be LATTICE; assume a in A;
+      then L[a] by A4;
+     hence p[a,a,id a] by A3;
+    end;
+   consider C being lattice-wise strict category such that
+A9: the carrier of C = A and
+A10: for a,b being object of C, f being monotone map of latt a, latt b
+      holds f in <^a,b^> iff p[latt a, latt b, f]
+       from CLCatEx1(A6,A7,A8);
+   take C;
+   hereby let x be LATTICE;
+       x as_1-sorted = x by Def1;
+     then x in POSETS A() iff x is strict Poset & the carrier of x in A()
+      by Def2;
+     then x in A iff x is strict & L[x] & the carrier of x in A() by A4;
+    hence x is object of C iff x is strict & L[x] & the carrier of x in A()
+      by A9;
+   end;
+   thus thesis by A10;
+  end;
+
+scheme CLCatUniq1
+ { A() -> non empty set, P[set, set, set] }:
+ for C1, C2 being lattice-wise category st
+  the carrier of C1 = A() &
+  (for a,b being object of C1, f being monotone map of latt a, latt b
+     holds f in <^a,b^> iff P[a,b,f]) &
+  the carrier of C2 = A() &
+  (for a,b being object of C2, f being monotone map of latt a, latt b
+     holds f in <^a,b^> iff P[a,b,f])
+ holds the AltCatStr of C1 = the AltCatStr of C2
+  proof let A1, A2 be lattice-wise category;
+    deffunc B(set,set) = (the Arrows of A1).($1,$2);
+A1: for C1, C2 being para-functional semi-functional category
+    st the carrier of C1 = A() &
+       (for a,b being object of C1 holds <^a,b^> = B(a,b)) &
+       the carrier of C2 = A() &
+       (for a,b being object of C2 holds <^a,b^> = B(a,b))
+    holds the AltCatStr of C1 = the AltCatStr of C2
+     from ConcreteCategoryUniq1;
+   assume that
+A2: the carrier of A1 = A() and
+A3: for a,b being object of A1, f being monotone map of latt a, latt b
+     holds f in <^a,b^> iff P[a,b,f] and
+A4: the carrier of A2 = A() and
+A5: for a,b being object of A2, f being monotone map of latt a, latt b
+     holds f in <^a,b^> iff P[a,b,f];
+A6: for a,b being object of A1 holds <^a,b^> = (the Arrows of A1).(a,b)
+     by ALTCAT_1:def 2;
+      now let a,b be object of A2;
+     reconsider a' = a, b' = b as object of A1 by A2,A4;
+A7:   latt a = a & latt b = b & latt a' = a & latt b' = b by Def6;
+A8:   <^a',b'^> = (the Arrows of A1).(a',b') by ALTCAT_1:def 2;
+     thus <^a,b^> = (the Arrows of A1).(a,b)
+       proof
+        hereby let x; assume
+A9:       x in <^a,b^>;
+         then reconsider f = x as Morphism of a,b ;
+A10:       @f = f by A9,Def7;
+          then P[latt a',latt b',@f] & @f is map of latt a',latt b'
+           by A5,A7,A9;
+         hence x in (the Arrows of A1).(a,b) by A3,A7,A8,A10;
+        end;
+        let x; assume
+A11:      x in (the Arrows of A1).(a,b);
+        then reconsider f = x as Morphism of a',b' by A8;
+           @f = f by A8,A11,Def7;
+         then P[latt a,latt b,@f] & f = @f by A3,A7,A8,A11;
+        hence x in <^a,b^> by A5,A7;
+       end;
+    end;
+   hence thesis by A1,A2,A4,A6;
+  end;
+
+scheme CLCatUniq2
+ { A() -> non empty set, L[set], P[set, set, set] }:
+ for C1, C2 being lattice-wise category st
+  (for x being LATTICE holds
+    x is object of C1 iff x is strict & L[x] & the carrier of x in A()) &
+  (for a,b being object of C1, f being monotone map of latt a, latt b
+     holds f in <^a,b^> iff P[a,b,f]) &
+  (for x being LATTICE holds
+    x is object of C2 iff x is strict & L[x] & the carrier of x in A()) &
+  (for a,b being object of C2, f being monotone map of latt a, latt b
+     holds f in <^a,b^> iff P[a,b,f])
+ holds the AltCatStr of C1 = the AltCatStr of C2
+  proof let A1, A2 be lattice-wise category;
+    defpred p[set, set, set] means P[$1,$2,$3];
+A1: for C1, C2 being lattice-wise category st
+     the carrier of C1 = the carrier of A1 &
+     (for a,b being object of C1, f being monotone map of latt a, latt b
+        holds f in <^a,b^> iff p[a,b,f]) &
+     the carrier of C2 = the carrier of A1 &
+     (for a,b being object of C2, f being monotone map of latt a, latt b
+        holds f in <^a,b^> iff p[a,b,f])
+    holds the AltCatStr of C1 = the AltCatStr of C2 from CLCatUniq1;
+   assume that
+A2: for x being LATTICE holds
+     x is object of A1 iff x is strict & L[x] & the carrier of x in A() and
+A3: for a,b being object of A1, f being monotone map of latt a, latt b
+     holds f in <^a,b^> iff P[a,b,f] and
+A4: for x being LATTICE holds
+     x is object of A2 iff x is strict & L[x] & the carrier of x in A();
+      the carrier of A2 = the carrier of A1
+     proof
+      hereby let x; assume x in the carrier of A2;
+then A5:     x is object of A2;
+then A6:     x is LATTICE by Def4;
+then A7:     x as_1-sorted = x by Def1;
+        then x is strict LATTICE & L[x] & the carrier of x as_1-sorted in A()
+         by A4,A5,A6;
+        then x is object of A1 by A2,A7;
+       hence x in the carrier of A1;
+      end;
+      let x; assume x in the carrier of A1;
+then A8:    x is object of A1;
+then A9:    x is LATTICE by Def4;
+then A10:   x as_1-sorted = x by Def1;
+       then x is strict LATTICE & L[x] & the carrier of x as_1-sorted in A()
+        by A2,A8,A9;
+       then x is object of A2 by A4,A10;
+      hence x in the carrier of A2;
+     end;
+   hence thesis by A1,A3;
+  end;
+
+scheme CLCovariantFunctorEx
+ { P, Q[set, set, set],
+   A,B() -> lattice-wise category,
+   O(set) -> LATTICE,
+   F(set,set,set) -> Function }:
+ ex F being covariant strict Functor of A(),B() st
+  (for a being object of A() holds F.a = O(latt a)) &
+  for a,b being object of A() st <^a,b^> <> {}
+   for f being Morphism of a,b holds F.f = F(latt a, latt b, @f)
+ provided
+A1:  for a,b being LATTICE, f being map of a,b
+    holds f in (the Arrows of A()).(a,b) iff
+     a in the carrier of A() & b in the carrier of A() & P[a,b,f]
+ and
+A2:  for a,b being LATTICE, f being map of a,b
+    holds f in (the Arrows of B()).(a,b) iff
+     a in the carrier of B() & b in the carrier of B() & Q[a,b,f]
+ and
+A3:  for a being LATTICE st a in the carrier of A()
+    holds O(a) in the carrier of B()
+ and
+A4:  for a,b being LATTICE, f being map of a,b st P[a,b,f]
+    holds F(a,b,f) is map of O(a),O(b) & Q[O(a),O(b),F(a,b,f)]
+ and
+A5:  for a being LATTICE st a in the carrier of A() holds F(a,a,id a) = id O(a)
+ and
+A6:  for a,b,c being LATTICE, f being map of a,b, g being map of b,c
+    st P[a,b,f] & P[b,c,g]
+    holds F(a,c,g*f) = F(b,c,g)*F(a,b,f)
+  proof
+    deffunc o(set) = O($1);
+    deffunc f(set,set,set) = F($1,$2,$3);
+A7: for a being object of A() holds o(a) is object of B()
+     proof let a be object of A();
+         a is LATTICE & a in the carrier of A() by Def4;
+       then O(a) in the carrier of B() by A3;
+      hence thesis;
+     end;
+A8: for a,b being object of A() st <^a,b^> <> {}
+     for f being Morphism of a,b
+      holds f(a,b,f) in (the Arrows of B()).(o(a), o(b))
+     proof let a,b be object of A() such that
+A9:    <^a,b^> <> {};
+      let f be Morphism of a,b;
+A10:    f = @f & a = latt a & b = latt b by A9,Def6,Def7;
+         <^a,b^> = (the Arrows of A()).(a,b) by ALTCAT_1:def 2;
+       then a in the carrier of A() & b in the carrier of A() & P[a,b,f]
+        by A1,A9,A10;
+       then O(a) in the carrier of B() & O(b) in the carrier of B() &
+       F(a,b,f) is map of O(a),O(b) & Q[O(a),O(b),F(a,b,f)] by A3,A4,A10;
+      hence thesis by A2;
+     end;
+A11: now let a,b,c be object of A() such that
+A12:   <^a,b^> <> {} & <^b,c^> <> {};
+     let f be Morphism of a,b, g be Morphism of b,c;
+     let a',b',c' be object of B() such that
+A13:   a' = o(a) & b' = o(b) & c' = o(c);
+     let f' be Morphism of a',b', g' be Morphism of b',c' such that
+A14:   f' = f(a,b,f) & g' = f(b,c,g);
+A15:   latt a = a & latt b = b & latt c = c by Def6;
+A16:   @f = f & @g = g by A12,Def7;
+        latt a' = a' & latt b' = b' & latt c' = c' &
+      F(a,b,f) in (the Arrows of B()).(O(a), O(b)) &
+      F(b,c,g) in (the Arrows of B()).(O(b), O(c)) by A8,A12,Def6;
+then A17:   F(a,b,f) in <^a',b'^> & F(b,c,g) in <^b',c'^> by A13,ALTCAT_1:def 2
+;
+then A18:   @f' = f' & @g' = g' by Def7;
+        <^a,b^> = (the Arrows of A()).(a,b) &
+      <^b,c^> = (the Arrows of A()).(b,c) by ALTCAT_1:def 2;
+      then P[a,b,f] & P[b,c,g] by A1,A12,A15,A16;
+      then F(a,c,@g*@f) = F(b,c,g)*F(a,b,f) by A6,A15,A16 .= g'*f' by A14,A17,
+A18,Th3;
+     hence f(a,c,g*f) = g'*f' by A12,Th3;
+    end;
+A19: now let a be object of A(), a' be object of B(); assume a' = o(a);
+      then a in the carrier of A() &
+      latt a' = O(a) & latt a = a & idm a = id latt a by Def6,Th2;
+     hence f(a,a,idm a) = id latt a' by A5 .= idm a' by Th2;
+    end;
+   consider F being covariant strict Functor of A(),B() such that
+A20: for a being object of A() holds F.a = o(a) and
+A21: for a,b being object of A() st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = f(a, b, f)
+      from CovariantFunctorLambda(A7,A8,A11,A19);
+   take F;
+   hereby let a be object of A(); a = latt a by Def6;
+    hence F.a = O(latt a) by A20;
+   end;
+   let a,b be object of A() such that
+A22: <^a, b^> <> {};
+   let f be Morphism of a,b;
+      a = latt a & b = latt b & f = @f by A22,Def6,Def7;
+   hence thesis by A21,A22;
+  end;
+
+scheme CLContravariantFunctorEx
+ { P, Q[set, set, set],
+   A,B() -> lattice-wise category,
+   O(set) -> LATTICE,
+   F(set,set,set) -> Function }:
+ ex F being contravariant strict Functor of A(),B() st
+  (for a being object of A() holds F.a = O(latt a)) &
+  for a,b being object of A() st <^a,b^> <> {}
+   for f being Morphism of a,b holds F.f = F(latt a, latt b, @f)
+ provided
+A1:  for a,b being LATTICE, f being map of a,b
+    holds f in (the Arrows of A()).(a,b) iff
+     a in the carrier of A() & b in the carrier of A() & P[a,b,f]
+ and
+A2:  for a,b being LATTICE, f being map of a,b
+    holds f in (the Arrows of B()).(a,b) iff
+     a in the carrier of B() & b in the carrier of B() & Q[a,b,f]
+ and
+A3:  for a being LATTICE st a in the carrier of A()
+    holds O(a) in the carrier of B()
+ and
+A4:  for a,b being LATTICE, f being map of a,b st P[a,b,f]
+    holds F(a,b,f) is map of O(b),O(a) & Q[O(b),O(a),F(a,b,f)]
+ and
+A5:  for a being LATTICE st a in the carrier of A() holds F(a,a,id a) = id O(a)
+ and
+A6:  for a,b,c being LATTICE, f being map of a,b, g being map of b,c
+    st P[a,b,f] & P[b,c,g]
+    holds F(a,c,g*f) = F(a,b,f)*F(b,c,g)
+  proof
+    deffunc o(set) = O($1);
+    deffunc f(set,set,set) = F($1,$2,$3);
+A7: for a being object of A() holds o(a) is object of B()
+     proof let a be object of A();
+         a is LATTICE & a in the carrier of A() by Def4;
+       then O(a) in the carrier of B() by A3;
+      hence thesis;
+     end;
+A8: for a,b being object of A() st <^a,b^> <> {}
+     for f being Morphism of a,b
+      holds f(a,b,f) in (the Arrows of B()).(o(b), o(a))
+     proof let a,b be object of A() such that
+A9:    <^a,b^> <> {};
+      let f be Morphism of a,b;
+A10:    f = @f & a = latt a & b = latt b by A9,Def6,Def7;
+         <^a,b^> = (the Arrows of A()).(a,b) by ALTCAT_1:def 2;
+       then a in the carrier of A() & b in the carrier of A() & P[a,b,f]
+        by A1,A9,A10;
+       then O(a) in the carrier of B() & O(b) in the carrier of B() &
+       F(a,b,f) is map of O(b),O(a) & Q[O(b),O(a),F(a,b,f)] by A3,A4,A10;
+      hence thesis by A2;
+     end;
+A11: now let a,b,c be object of A() such that
+A12:   <^a,b^> <> {} & <^b,c^> <> {};
+     let f be Morphism of a,b, g be Morphism of b,c;
+     let a',b',c' be object of B() such that
+A13:   a' = o(a) & b' = o(b) & c' = o(c);
+     let f' be Morphism of b',a', g' be Morphism of c',b' such that
+A14:   f' = f(a,b,f) & g' = f(b,c,g);
+A15:   latt a = a & latt b = b & latt c = c by Def6;
+A16:   @f = f & @g = g by A12,Def7;
+        latt a' = a' & latt b' = b' & latt c' = c' &
+      F(a,b,f) in (the Arrows of B()).(O(b), O(a)) &
+      F(b,c,g) in (the Arrows of B()).(O(c), O(b)) by A8,A12,Def6;
+then A17:   F(a,b,f) in <^b',a'^> & F(b,c,g) in <^c',b'^> by A13,ALTCAT_1:def 2
+;
+then A18:   @f' = f' & @g' = g' by Def7;
+        <^a,b^> = (the Arrows of A()).(a,b) &
+      <^b,c^> = (the Arrows of A()).(b,c) by ALTCAT_1:def 2;
+      then P[a,b,f] & P[b,c,g] by A1,A12,A15,A16;
+      then F(a,c,@g*@f) = F(a,b,f)*F(b,c,g) by A6,A15,A16 .= f'*g' by A14,A17,
+A18,Th3;
+     hence f(a,c,g*f) = f'*g' by A12,Th3;
+    end;
+A19: now let a be object of A(), a' be object of B(); assume a' = o(a);
+      then a in the carrier of A() &
+      latt a' = O(a) & latt a = a & idm a = id latt a by Def6,Th2;
+     hence f(a,a,idm a) = id latt a' by A5 .= idm a' by Th2;
+    end;
+   consider F being contravariant strict Functor of A(),B() such that
+A20: for a being object of A() holds F.a = o(a) and
+A21: for a,b being object of A() st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = f(a, b, f)
+      from ContravariantFunctorLambda(A7,A8,A11,A19);
+   take F;
+   hereby let a be object of A(); a = latt a by Def6;
+    hence F.a = O(latt a) by A20;
+   end;
+   let a,b be object of A() such that
+A22: <^a, b^> <> {};
+   let f be Morphism of a,b;
+      a = latt a & b = latt b & f = @f by A22,Def6,Def7;
+   hence thesis by A21,A22;
+  end;
+
+scheme CLCatIsomorphism
+ { P, Q[set, set, set],
+   A,B() -> lattice-wise category,
+   O(set) -> LATTICE,
+   F(set,set,set) -> Function }:
+  A(), B() are_isomorphic
+ provided
+A1:  for a,b being LATTICE, f being map of a,b
+    holds f in (the Arrows of A()).(a,b) iff
+     a in the carrier of A() & b in the carrier of A() & P[a,b,f]
+ and
+A2:  for a,b being LATTICE, f being map of a,b
+    holds f in (the Arrows of B()).(a,b) iff
+     a in the carrier of B() & b in the carrier of B() & Q[a,b,f]
+ and
+A3:  ex F being covariant Functor of A(),B() st
+    (for a being object of A() holds F.a = O(a)) &
+    for a,b being object of A() st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = F(a,b,f)
+ and
+A4:  for a,b being LATTICE st a in the carrier of A() & b in the carrier of A()
+    holds O(a) = O(b) implies a = b
+ and
+A5:  for a,b being LATTICE
+   for f,g being map of a,b st P[a,b,f] & P[a,b,g]
+    holds F(a,b,f) = F(a,b,g) implies f = g
+ and
+A6:  for a,b being LATTICE, f being map of a,b st Q[a,b,f]
+    ex c,d being LATTICE, g being map of c,d
+     st c in the carrier of A() & d in the carrier of A() & P[c,d,g] &
+        a = O(c) & b = O(d) & f = F(c,d,g)
+  proof
+    deffunc o(set) = O($1);
+    deffunc f(set,set,set) = F($1,$2,$3);
+A7:  ex F being covariant Functor of A(),B() st
+    (for a being object of A() holds F.a = o(a)) &
+    for a,b being object of A() st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = f(a,b,f) by A3;
+A8: for a,b being object of A() st o(a) = o(b) holds a = b
+     proof let a,b be object of A();
+         a in the carrier of A() & a = latt a & b = latt b by Def6;
+      hence thesis by A4;
+     end;
+A9: for a,b being object of A() st <^a,b^> <> {}
+     for f,g being Morphism of a,b st f(a,b,f) = f(a,b,g)
+      holds f = g
+     proof let a, b be object of A() such that
+A10:    <^a,b^> <> {};
+      let f,g be Morphism of a,b;
+A11:    latt a = a & latt b = b & @f = f & @g = g by A10,Def6,Def7;
+         <^a,b^> = (the Arrows of A()).(a,b) by ALTCAT_1:def 2;
+       then P[latt a, latt b, @f] & P[latt a, latt b, @g] by A1,A10,A11;
+      hence thesis by A5,A11;
+     end;
+A12: now let a,b be object of B() such that
+A13:   <^a,b^> <> {};
+     let f be Morphism of a,b;
+A14:   latt a = a & latt b = b & @f = f by A13,Def6,Def7;
+        <^a,b^> = (the Arrows of B()).(a,b) by ALTCAT_1:def 2;
+      then Q[latt a, latt b, @f] by A2,A13,A14;
+     then consider c,d being LATTICE, g being map of c,d such that
+A15:   c in the carrier of A() & d in the carrier of A() & P[c,d,g] &
+      latt a = O(c) & latt b = O(d) & @f = F(c,d,g) by A6;
+     reconsider c' = c, d' = d as object of A() by A15;
+        <^c',d'^> = (the Arrows of A()).(c,d) by ALTCAT_1:def 2;
+then g in <^c',d'^> by A1,A15;
+     hence ex c,d being object of A(), g being Morphism of c,d
+        st a = o(c) & b = o(d) & <^c,d^> <> {} & f = f(c,d,g) by A14,A15;
+    end;
+   thus thesis from CatIsomorphism(A7,A8,A9,A12);
+  end;
+
+scheme CLCatAntiIsomorphism
+ { P, Q[set, set, set],
+   A,B() -> lattice-wise category,
+   O(set) -> LATTICE,
+   F(set,set,set) -> Function }:
+  A(), B() are_anti-isomorphic
+ provided
+A1:  for a,b being LATTICE, f being map of a,b
+    holds f in (the Arrows of A()).(a,b) iff
+     a in the carrier of A() & b in the carrier of A() & P[a,b,f]
+ and
+A2:  for a,b being LATTICE, f being map of a,b
+    holds f in (the Arrows of B()).(a,b) iff
+     a in the carrier of B() & b in the carrier of B() & Q[a,b,f]
+ and
+A3:  ex F being contravariant Functor of A(),B() st
+    (for a being object of A() holds F.a = O(a)) &
+    for a,b being object of A() st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = F(a,b,f)
+ and
+A4:  for a,b being LATTICE st a in the carrier of A() & b in the carrier of A()
+    holds O(a) = O(b) implies a = b
+ and
+A5:  for a,b being LATTICE, f,g being map of a,b st F(a,b,f) = F(a,b,g)
+    holds f = g
+ and
+A6:  for a,b being LATTICE, f being map of a,b st Q[a,b,f]
+    ex c,d being LATTICE, g being map of c,d
+     st c in the carrier of A() & d in the carrier of A() & P[c,d,g] &
+        b = O(c) & a = O(d) & f = F(c,d,g)
+  proof
+    deffunc o(set) = O($1);
+    deffunc f(set,set,set) = F($1,$2,$3);
+A7:  ex F being contravariant Functor of A(),B() st
+    (for a being object of A() holds F.a = o(a)) &
+    for a,b being object of A() st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = f(a,b,f) by A3;
+A8: for a,b being object of A() st o(a) = o(b) holds a = b
+     proof let a,b be object of A();
+         a in the carrier of A() & a = latt a & b = latt b by Def6;
+      hence thesis by A4;
+     end;
+A9: for a,b being object of A() st <^a,b^> <> {}
+     for f,g being Morphism of a,b st f(a,b,f) = f(a,b,g)
+      holds f = g
+     proof let a, b be object of A() such that
+A10:    <^a,b^> <> {};
+      let f,g be Morphism of a,b;
+         latt a = a & latt b = b & @f = f & @g = g by A10,Def6,Def7;
+      hence thesis by A5;
+     end;
+A11: now let a,b be object of B() such that
+A12:   <^a,b^> <> {};
+     let f be Morphism of a,b;
+A13:   latt a = a & latt b = b & @f = f by A12,Def6,Def7;
+        <^a,b^> = (the Arrows of B()).(a,b) by ALTCAT_1:def 2;
+      then Q[latt a, latt b, @f] by A2,A12,A13;
+     then consider c,d being LATTICE, g being map of c,d such that
+A14:   c in the carrier of A() & d in the carrier of A() & P[c,d,g] &
+      latt b = O(c) & latt a = O(d) & @f = F(c,d,g) by A6;
+     reconsider c' = c, d' = d as object of A() by A14;
+        <^c',d'^> = (the Arrows of A()).(c,d) by ALTCAT_1:def 2;
+then g in <^c',d'^> by A1,A14;
+     hence ex c,d being object of A(), g being Morphism of c,d
+        st b = o(c) & a = o(d) & <^c,d^> <> {} & f = f(c,d,g) by A13,A14;
+    end;
+   thus thesis from CatAntiIsomorphism(A7,A8,A9,A11);
+  end;
+
+begin :: Equivalence of lattice-wise categories
+
+definition
+ let C be lattice-wise category;
+ attr C is with_all_isomorphisms means:
+Def8:
+  for a,b being object of C, f being map of latt a, latt b
+   st f is isomorphic
+   holds f in <^a,b^>;
+end;
+
+definition
+ cluster with_all_isomorphisms (strict lattice-wise category);
+ existence
+  proof consider L being LATTICE;
+    defpred P[set,set,set] means $3 = $3;
+A1: for a be Element of {L} holds a is LATTICE by TARSKI:def 1;
+A2: for a,b,c being LATTICE st a in {L} & b in {L} & c in {L}
+     for f being map of a,b, g being map of b,c st
+      P[a,b,f] & P[b,c,g] holds P[a,c,g*f];
+A3: for a being LATTICE st a in {L} holds P[a,a,id a];
+   consider C being strict category such that
+A4: C is lattice-wise and
+A5: the carrier of C = {L} and
+A6: for a,b being LATTICE, f being monotone map of a,b
+     holds f in (the Arrows of C).(a,b) iff a in {L} & b in {L} & P[a,b,f]
+      from local_CLCatEx(A1,A2,A3);
+   reconsider C as strict lattice-wise category by A4;
+   take C; let a,b be object of C, f be map of latt a, latt b;
+A7: latt a = a & latt b = b by Def6;
+    then (f is isomorphic implies f is monotone) &
+    (the Arrows of C).(latt a, latt b) = <^a,b^>
+     by ALTCAT_1:def 2,YELLOW16:17;
+   hence thesis by A5,A6,A7;
+  end;
+end;
+
+theorem
+   for C being with_all_isomorphisms (lattice-wise category)
+ for a,b being object of C
+ for f being Morphism of a,b
+  st @f is isomorphic
+  holds f is iso
+  proof let C be with_all_isomorphisms (lattice-wise category);
+   let a,b be object of C;
+   let f be Morphism of a,b; assume
+A1: @f is isomorphic;
+   then consider g being monotone map of latt b, latt a such that
+A2: @f*g = id latt b & g*@f = id latt a by YELLOW16:17;
+A3: idm a = id latt a & idm b = id latt b by Th2;
+      g is isomorphic by A2,YELLOW16:17;
+then A4: @f in <^a,b^> & g in <^b,a^> by A1,Def8;
+   then reconsider g as Morphism of b,a ;
+      @g = g by A4,Def7;
+then A5: f*g = idm b & g*f = idm a by A2,A3,A4,Th3;
+then A6: g is_left_inverse_of f & g is_right_inverse_of f by ALTCAT_3:def 1;
+    then f is retraction coretraction by ALTCAT_3:def 2,def 3;
+   hence f*f" = idm b & f"*f = idm a by A4,A5,A6,ALTCAT_3:def 4;
+  end;
+
+theorem
+   for C being lattice-wise category
+ for a,b being object of C st <^a,b^> <> {} & <^b,a^> <> {}
+ for f being Morphism of a,b
+  st f is iso
+  holds @f is isomorphic
+  proof let C be lattice-wise category;
+   let a,b be object of C; assume
+A1: <^a,b^> <> {} & <^b,a^> <> {};
+   let f be Morphism of a,b such that
+A2: f*f" = idm b & f"*f = idm a;
+A3: @f*@(f") = f*f" & @(f")*@f = f"*f by A1,Th3;
+      idm a = id latt a & idm b = id latt b by Th2;
+   hence thesis by A2,A3,YELLOW16:17;
+  end;
+
+scheme CLCatEquivalence
+ { P, Q[set, set, set],
+   A,B() -> lattice-wise category,
+   O1, O2(set) -> LATTICE,
+   F1, F2(set,set,set) -> Function,
+   A, B(set) -> Function }:
+  A(), B() are_equivalent
+ provided
+A1:  for a,b being object of A(), f being monotone map of latt a, latt b
+    holds f in <^a,b^> iff P[latt a, latt b, f]
+ and
+A2:  for a,b being object of B(), f being monotone map of latt a, latt b
+    holds f in <^a,b^> iff Q[latt a, latt b, f]
+ and
+A3:  ex F being covariant Functor of A(),B() st
+    (for a being object of A() holds F.a = O1(a)) &
+    for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b holds F.f = F1(a,b,f)
+ and
+A4:  ex G being covariant Functor of B(),A() st
+    (for a being object of B() holds G.a = O2(a)) &
+    for a,b being object of B() st <^a,b^> <> {}
+    for f being Morphism of a,b holds G.f = F2(a,b,f)
+ and
+A5:  for a being LATTICE st a in the carrier of A()
+    ex f being monotone map of O2(O1(a)), a
+     st f = A(a) & f is isomorphic & P[O2(O1(a)), a, f] & P[a, O2(O1(a)), f"]
+ and
+A6:  for a being LATTICE st a in the carrier of B()
+    ex f being monotone map of a, O1(O2(a))
+     st f = B(a) & f is isomorphic & Q[a, O1(O2(a)), f] & Q[O1(O2(a)), a, f"]
+ and
+A7:  for a,b being object of A() st <^a,b^> <> {}
+   for f being Morphism of a,b
+    holds A(b)*F2(O1(a),O1(b),F1(a,b,f)) = @f*A(a)
+ and
+A8:  for a,b being object of B() st <^a,b^> <> {}
+   for f being Morphism of a,b
+    holds F1(O2(a),O2(b),F2(a,b,f))*B(a) = B(b)*@f
+  proof
+    deffunc o1(set) = O1($1);
+    deffunc f1(set,set,set) = F1($1,$2,$3);
+    deffunc o2(set) = O2($1);
+    deffunc f2(set,set,set) = F2($1,$2,$3);
+    deffunc a(set) = A($1);
+    deffunc b(set) = B($1);
+A9:  ex F being covariant Functor of A(),B() st
+    (for a being object of A() holds F.a = o1(a)) &
+    for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b holds F.f = f1(a,b,f) by A3;
+A10:  ex G being covariant Functor of B(),A() st
+    (for a being object of B() holds G.a = o2(a)) &
+    for a,b being object of B() st <^a,b^> <> {}
+    for f being Morphism of a,b holds G.f = f2(a,b,f) by A4;
+A11: for a, b being object of A() st a = o2(o1(b))
+     holds a(b) in <^a, b^> & a(b)" in <^b,a^> & a(b) is one-to-one
+     proof let a, b be object of A() such that
+A12:    a = O2(O1(b));
+A13:    latt a = a & latt b = b by Def6;
+      then consider f being monotone map of O2(O1(b)), latt b such that
+A14:    f = A(b) & f is isomorphic & P[O2(O1(b)), latt b, f] &
+       P[latt b, O2(O1(b)), f"] by A5;
+      thus A(b) in <^a, b^> by A1,A12,A13,A14;
+      ex g being map of latt b, O2(O1(b)) st g = f" & g is monotone
+        by A14,WAYBEL_0:def 38;
+      hence A(b)" in <^b,a^> by A1,A12,A13,A14;
+      thus thesis by A14,WAYBEL_0:66;
+     end;
+A16: for a, b being object of B() st b = o1(o2(a))
+     holds b(a) in <^a, b^> & b(a)" in <^b,a^> & b(a) is one-to-one
+     proof let a, b be object of B() such that
+A17:    b = O1(O2(a));
+A18:    latt a = a & latt b = b by Def6;
+      then consider f being monotone map of latt a, O1(O2(a)) such that
+A19:    f = B(a) & f is isomorphic & Q[latt a, O1(O2(a)), f] &
+       Q[O1(O2(a)), latt a, f"] by A6;
+      thus B(a) in <^a, b^> by A2,A17,A18,A19;
+       ex g being map of O1(O2(a)), latt a st g = f" & g is monotone
+        by A19,WAYBEL_0:def 38;
+      hence B(a)" in <^b,a^> by A2,A17,A18,A19;
+      thus thesis by A19,WAYBEL_0:66;
+     end;
+A21: for a,b being object of A() st <^a,b^> <> {}
+     for f being Morphism of a,b
+      holds a(b)*f2(o1(a),o1(b),f1(a,b,f)) = f*a(a)
+     proof let a,b be object of A() such that
+A22:    <^a,b^> <> {};
+      let f be Morphism of a,b; @f = f by A22,Def7;
+      hence thesis by A7,A22;
+     end;
+A23: for a,b being object of B() st <^a,b^> <> {}
+     for f being Morphism of a,b
+      holds f1(o2(a),o2(b),f2(a,b,f))*b(a) = b(b)*f
+     proof let a,b be object of B() such that
+A24:    <^a,b^> <> {};
+      let f be Morphism of a,b; @f = f by A24,Def7;
+      hence thesis by A8,A24;
+     end;
+   thus thesis from ConcreteCatEquivalence(A9,A10, A11,A16,A21,A23);
+  end;
+
+begin :: UPS category
+
+definition
+ let R be Relation;
+ attr R is upper-bounded means:
+Def9:
+  ex x st for y st y in field R holds [y,x] in R;
+end;
+
+Lm1: for X being set holds x in X iff X = X \{x} \/ {x}
+  proof let X be set;
+      x in X iff {x} c= X by ZFMISC_1:37;
+   hence thesis by XBOOLE_1:7,45;
+  end;
+
+definition
+ cluster well-ordering ->
+     reflexive transitive antisymmetric connected well_founded Relation;
+ coherence by WELLORD1:def 4;
+end;
+
+definition
+ cluster well-ordering Relation;
+ existence
+  proof consider r being Relation such that
+A1: r well_orders 5 by WELLORD2:26;
+   take r|_2 5; thus thesis by A1,WELLORD2:25;
+  end;
+end;
+
+theorem Th6:
+ for f being one-to-one Function, R being Relation
+  holds [x,y] in f*R*(f") iff x in dom f & y in dom f & [f.x, f.y] in R
+  proof let f be one-to-one Function, R be Relation;
+A1: dom f = rng (f") & rng f = dom (f") by FUNCT_1:55;
+   hereby assume [x,y] in f*R*(f");
+    then consider a being set such that
+A2:  [x,a] in f*R & [a,y] in f" by RELAT_1:def 8;
+    consider b being set such that
+A3:  [x,b] in f & [b,a] in R by A2,RELAT_1:def 8;
+    thus x in dom f & y in dom f by A1,A2,A3,RELAT_1:def 4,def 5;
+       b = f.x & y = f".a & a in rng f by A1,A2,A3,FUNCT_1:8;
+    hence [f.x, f.y] in R by A3,FUNCT_1:57;
+   end;
+   assume
+A4: x in dom f & y in dom f & [f.x, f.y] in R;
+    then [x,f.x] in f & f".(f.y) = y & f.y in rng f by FUNCT_1:8,56,def 5;
+    then [x,f.y] in f*R & [f.y,y] in f" by A1,A4,FUNCT_1:8,RELAT_1:def 8;
+   hence [x,y] in f*R*(f") by RELAT_1:def 8;
+  end;
+
+definition
+ let f be one-to-one Function;
+ let R be reflexive Relation;
+ cluster f*R*(f") -> reflexive;
+ coherence
+  proof let x; assume x in field (f*R*(f"));
+then A1: x in dom (f*R*(f")) \/ rng (f*R*(f")) by RELAT_1:def 6;
+A2: R is_reflexive_in field R by RELAT_2:def 9;
+   per cases by A1,XBOOLE_0:def 2;
+   suppose x in dom (f*R*(f"));
+    then consider y being set such that
+A3:  [x,y] in (f*R*(f")) by RELAT_1:def 4;
+A4:  x in dom f & [f.x, f.y] in R by A3,Th6;
+     then f.x in field R by RELAT_1:30;
+     then [f.x, f.x] in R by A2,RELAT_2:def 1;
+    hence thesis by A4,Th6;
+   suppose x in rng (f*R*(f"));
+    then consider y being set such that
+A5:  [y,x] in (f*R*(f")) by RELAT_1:def 5;
+A6:  x in dom f & [f.y, f.x] in R by A5,Th6;
+     then f.x in field R by RELAT_1:30;
+     then [f.x, f.x] in R by A2,RELAT_2:def 1;
+    hence thesis by A6,Th6;
+  end;
+end;
+
+definition
+ let f be one-to-one Function;
+ let R be antisymmetric Relation;
+ cluster f*R*(f") -> antisymmetric;
+ coherence
+  proof let x,y be set; assume x in field (f*R*(f")) & y in field (f*R*(f"));
+   assume [x,y] in f*R*(f") & [y,x] in f*R*(f");
+then A1: x in dom f & y in dom f & [f.x, f.y] in R & [f.y, f.x] in R by Th6;
+    then f.x in field R & f.y in field R & R is_antisymmetric_in field R
+     by RELAT_1:30,RELAT_2:def 12;
+    then f.x = f.y by A1,RELAT_2:def 4;
+   hence thesis by A1,FUNCT_1:def 8;
+  end;
+end;
+
+definition
+ let f be one-to-one Function;
+ let R be transitive Relation;
+ cluster f*R*(f") -> transitive;
+ coherence
+  proof let x,y,z be set; assume
+      x in field (f*R*(f")) & y in field (f*R*(f")) & z in field (f*R*(f"));
+   assume [x,y] in f*R*(f") & [y,z] in f*R*(f");
+then A1: x in dom f & z in dom f & [f.x, f.y] in R & [f.y, f.z] in R by Th6;
+    then f.x in field R & f.y in field R & f.z in field R &
+    R is_transitive_in field R by RELAT_1:30,RELAT_2:def 16;
+    then [f.x, f.z] in R by A1,RELAT_2:def 8;
+   hence thesis by A1,Th6;
+  end;
+end;
+
+theorem Th7:
+ for X being set, A being Ordinal st X,A are_equipotent
+  ex R being Order of X st R well_orders X & order_type_of R = A
+  proof let X be set, A be Ordinal;
+   given f being Function such that
+A1: f is one-to-one & dom f = X & rng f = A;
+   reconsider f as Function of X,A by A1,FUNCT_2:4;
+   reconsider f' = f as one-to-one Function by A1;
+   reconsider g = f" as Function of A,X by A1,FUNCT_2:31;
+A2: dom g = A & rng g = X by A1,FUNCT_1:55;
+   set R = f*(RelIncl A)*g;
+      dom RelIncl A = A & rng RelIncl A = A by ORDERS_2:1;
+    then rng (f*(RelIncl A)) = A & dom (f*(RelIncl A)) = X
+     by A1,RELAT_1:46,47;
+    then
+A3:   dom R = X & rng R = X by A2,RELAT_1:46,47;
+then A4: field R = X \/ X by RELAT_1:def 6 .= X;
+    then
+A5:   f'*(RelIncl A)*(f'") is_reflexive_in X &
+    f'*(RelIncl A)*(f'") is_antisymmetric_in X &
+    f'*(RelIncl A)*(f'") is_transitive_in X
+     by RELAT_2:def 9,def 12,def 16;
+   reconsider R as Relation of X;
+   reconsider R as Order of X by A3,A5,PARTFUN1:def 4;
+A6: f is_isomorphism_of R, RelIncl A
+     proof
+      thus dom f = field R & rng f = field RelIncl A & f is one-to-one
+       by A1,A4,WELLORD2:def 1;
+      let a,b be set;
+      hereby assume
+A7:     [a,b] in R;
+       hence a in field R & b in field R by RELAT_1:30;
+       consider x being set such that
+A8:     [a,x] in f*RelIncl A & [x,b] in g by A7,RELAT_1:def 8;
+       consider y being set such that
+A9:     [a,y] in f & [y,x] in RelIncl A by A8,RELAT_1:def 8;
+          y = f.a & b = g.x & a in dom f & x in dom g by A8,A9,FUNCT_1:8;
+       hence [f.a,f.b] in RelIncl A by A1,A9,FUNCT_1:57;
+      end;
+      assume
+A10:    a in field R & b in field R & [f.a,f.b] in RelIncl A;
+       then f".(f.b) = b & f.b in A by A1,A4,FUNCT_1:56,def 5;
+then A11:    [a,f.a] in f & [f.b,b] in g by A1,A2,A4,A10,FUNCT_1:8;
+       then [a,f.b] in f*RelIncl A by A10,RELAT_1:def 8;
+      hence thesis by A11,RELAT_1:def 8;
+     end;
+then A12: f" is_isomorphism_of RelIncl A, R by WELLORD1:49;
+A13: R, RelIncl A are_isomorphic by A6,WELLORD1:def 8;
+   take R;
+   thus R well_orders X
+     proof
+      thus R is_reflexive_in X & R is_transitive_in X &
+           R is_antisymmetric_in X by A5;
+         RelIncl A is connected well_founded by WELLORD2:4,6;
+       then R is connected well_founded by A12,WELLORD1:53;
+      hence R is_connected_in X & R is_well_founded_in X
+        by A4,RELAT_2:def 14,WELLORD1:5;
+     end;
+    then R is well-ordering by A4,WELLORD1:8;
+   hence thesis by A13,WELLORD2:def 2;
+  end;
+
+definition
+ let X be non empty set;
+ cluster upper-bounded well-ordering Order of X;
+ existence
+  proof consider x being Element of X;
+A1: X\{x},Card (X\{x}) are_equipotent by CARD_1:def 5;
+A2: {x},{Card (X\{x})} are_equipotent by CARD_1:48;
+A3: {x} misses (X\{x}) by XBOOLE_1:79;
+      not Card (X\{x}) in Card (X\{x});
+then A4: {Card (X\{x})} misses Card (X\{x}) by ZFMISC_1:56;
+A5: succ Card (X\{x}) = Card (X\{x}) \/ {Card (X\{x})} &
+    X = (X\{x}) \/ {x} by Lm1,ORDINAL1:def 1;
+    then X,succ Card (X\{x}) are_equipotent by A1,A2,A3,A4,CARD_1:58;
+   then consider r being Order of X such that
+A6: r well_orders X and
+A7: order_type_of r = succ Card (X\{x}) by Th7;
+A8: field r = X by ORDERS_2:2;
+then r is well-ordering by A6,WELLORD1:8;
+    then r, RelIncl order_type_of r are_isomorphic by WELLORD2:def 2;
+    then RelIncl order_type_of r, r are_isomorphic by WELLORD1:50;
+   then consider f being Function such that
+A9:f is_isomorphism_of RelIncl order_type_of r, r by WELLORD1:def 8;
+      field RelIncl order_type_of r = order_type_of r by WELLORD2:def 1;
+then A10:f is one-to-one & dom f = order_type_of r & rng f = X
+     by A8,A9,WELLORD1:def 7;
+   take r;
+   thus r is upper-bounded
+     proof take a = f.Card (X\{x});
+      let y; assume
+A11:   y in field r;
+then A12:   f".y in order_type_of r by A8,A10,FUNCT_1:54;
+then A13:   f".y in Card (X\{x}) or f".y = Card (X\{x}) by A5,A7,SETWISEO:6;
+      reconsider b = f".y as Ordinal by A12,ORDINAL1:23;
+         b c= Card (X\{x}) & Card (X\{x}) in order_type_of r
+        by A5,A7,A13,ORDINAL1:def 2,SETWISEO:6;
+       then [b, Card (X\{x})] in RelIncl order_type_of r
+        by A12,WELLORD2:def 1;
+       then [f.b, a] in r by A9,WELLORD1:def 7;
+      hence thesis by A8,A10,A11,FUNCT_1:57;
+     end;
+   thus thesis by A6,A8,WELLORD1:8;
+  end;
+end;
+
+theorem Th8:
+ for P being reflexive non empty RelStr holds
+  P is upper-bounded iff the InternalRel of P is upper-bounded
+  proof let P be reflexive non empty RelStr;
+      (the carrier of P) \/ the carrier of P = the carrier of P;
+then A1: field the InternalRel of P c= the carrier of P by RELSET_1:19;
+   thus P is upper-bounded implies the InternalRel of P is upper-bounded
+     proof given x being Element of P such that
+A2:    x is_>=_than the carrier of P;
+      take x; let y; assume y in field the InternalRel of P;
+      then reconsider y as Element of P by A1;
+         x >= y by A2,LATTICE3:def 9;
+      hence thesis by ORDERS_1:def 9;
+     end;
+   given x such that
+A3: for y st y in field the InternalRel of P
+     holds [y,x] in the InternalRel of P;
+   consider y being Element of P;
+      y <= y;
+    then [y,y] in the InternalRel of P by ORDERS_1:def 9;
+    then y in field the InternalRel of P by RELAT_1:30;
+    then [y,x] in the InternalRel of P by A3;
+    then x in field the InternalRel of P by RELAT_1:30;
+   then reconsider x as Element of P by A1;
+   take x; let y be Element of P;
+      y <= y;
+    then [y,y] in the InternalRel of P by ORDERS_1:def 9;
+    then y in field the InternalRel of P by RELAT_1:30;
+    then [y,x] in the InternalRel of P by A3;
+   hence thesis by ORDERS_1:def 9;
+  end;
+
+theorem Th9:
+ for P being upper-bounded (non empty Poset)
+  st the InternalRel of P is well-ordering
+  holds P is connected complete continuous
+  proof let P be upper-bounded (non empty Poset) such that
+A1: the InternalRel of P is well-ordering;
+A2: field the InternalRel of P = the carrier of P by ORDERS_2:2;
+   thus
+A3: P is connected
+     proof let x,y being Element of P;
+         the InternalRel of P is connected reflexive by A1,WELLORD1:def 4;
+       then the InternalRel of P is_connected_in the carrier of P &
+       the InternalRel of P is_reflexive_in the carrier of P &
+       (x = y or x <> y) by A2,RELAT_2:def 9,def 14;
+       then [x,y] in the InternalRel of P or [y,x] in the InternalRel of P
+        by RELAT_2:def 1,def 6;
+      hence x <= y or y <= x by ORDERS_1:def 9;
+     end;
+   thus P is complete proof
+   let X be set; defpred P[set] means
+    for y being Element of P st y in X holds [y,$1] in the InternalRel of P;
+   consider Y being set such that
+A4: x in Y iff x in the carrier of P & P[x] from Separation;
+      the InternalRel of P is upper-bounded by Th8;
+   then consider x such that
+A5: for y st y in field the InternalRel of P
+     holds [y,x] in the InternalRel of P by Def9;
+   consider y being Element of P;
+      [y,x] in the InternalRel of P by A2,A5;
+    then x in field the InternalRel of P by RELAT_1:30;
+   then reconsider x as Element of P by A2;
+A6: Y c= the carrier of P proof let x; thus thesis by A4; end;
+      for y being Element of P st y in X
+     holds [y,x] in the InternalRel of P by A2,A5;
+    then x in Y by A4;
+   then consider a being set such that
+A7: a in Y & for b being set st b in Y holds [a,b] in the InternalRel of P
+     by A1,A2,A6,WELLORD1:10;
+   reconsider a as Element of P by A6,A7;
+   take a;
+   hereby let y be Element of P; assume y in X;
+     then [y,a] in the InternalRel of P by A4,A7;
+    hence y <= a by ORDERS_1:def 9;
+   end;
+   let b be Element of P; assume
+A8: for c being Element of P st c in X holds c <= b;
+      now let c being Element of P; assume c in X; then c <= b by A8;
+     hence [c,b] in the InternalRel of P by ORDERS_1:def 9;
+    end;
+    then b in Y by A4;
+    then [a,b] in the InternalRel of P by A7;
+   hence a <= b by ORDERS_1:def 9; end;
+    then P is complete Chain by A3;
+   hence thesis;
+  end;
+
+theorem Th10:
+ for P being upper-bounded (non empty Poset)
+  st the InternalRel of P is well-ordering
+ for x,y being Element of P st y < x
+  ex z being Element of P st z is compact & y <= z & z <= x
+  proof let P be upper-bounded (non empty Poset);
+   set R = the InternalRel of P, A = order_type_of R;
+   assume
+A1: R is well-ordering;
+    then R, RelIncl A are_isomorphic by WELLORD2:def 2;
+   then consider f being Function such that
+A2: f is_isomorphism_of R, RelIncl A by WELLORD1:def 8;
+   reconsider L = P as complete Chain by A1,Th9;
+   let x,y be Element of P; assume A3: y < x;
+then y <= x & y <> x by ORDERS_1:def 10;
+    then [y,x] in R by ORDERS_1:def 9;
+then A4: [f.y, f.x] in RelIncl A & f.x <> f.y by A2,A3,WELLORD1:45;
+A5: field RelIncl A = A by WELLORD2:def 1;
+then A6: f.x in A & f.y in A by A4,RELAT_1:30;
+   then reconsider a = f.x, b = f.y as Ordinal by ORDINAL1:23;
+      b c= a by A4,A6,WELLORD2:def 1;
+    then b c< a by A4,XBOOLE_0:def 8;
+    then b in a by ORDINAL1:21;
+then A7: succ b c= a & b c= succ b by ORDINAL1:33,ORDINAL3:1;
+then A8: succ b in A by A6,ORDINAL1:22;
+      rng f = A by A2,A5,WELLORD1:def 7;
+   then consider z being set such that
+A9: z in dom f & succ b = f.z by A8,FUNCT_1:def 5;
+A10: field R = the carrier of P by ORDERS_2:2;
+A11: dom f = field R by A2,WELLORD1:def 7;
+   then reconsider z as Element of P by A9,A10;
+   take z;
+   thus z is compact
+     proof let D be non empty directed Subset of P such that
+A12:    z <= sup D and
+A13:    for d being Element of P st d in D holds not z <= d;
+A14:    L is complete;
+         D is_<=_than y
+        proof let c be Element of P; assume A15: c in D;
+then not z <= c & z <= z by A13;
+          then z >= c by A14,WAYBEL_0:def 29;
+          then [c,z] in R by ORDERS_1:def 9;
+then A16:       [f.c, succ b] in RelIncl A by A2,A9,WELLORD1:def 7;
+then A17:       f.c in A by A5,RELAT_1:30;
+         then reconsider fc = f.c as Ordinal by ORDINAL1:23;
+            c <> z & f is one-to-one by A2,A13,A15,WELLORD1:def 7;
+          then fc c= succ b & fc <> succ b
+           by A8,A9,A10,A11,A16,A17,FUNCT_1:def 8,WELLORD2:def 1;
+          then fc c< succ b by XBOOLE_0:def 8;
+          then fc in succ b by ORDINAL1:21;
+          then fc c= b by ORDINAL1:34;
+          then [fc,b] in RelIncl A by A6,A17,WELLORD2:def 1;
+         hence [c,y] in R by A2,A10,WELLORD1:def 7;
+        end;
+       then sup D <= y by A14,YELLOW_0:32;
+       then z <= y by A12,YELLOW_0:def 2;
+       then [z,y] in R by ORDERS_1:def 9;
+       then [succ b, b] in RelIncl A by A2,A9,WELLORD1:def 7;
+       then succ b c= b by A6,A8,WELLORD2:def 1;
+       then b = succ b by A7,XBOOLE_0:def 10;
+      hence contradiction by ORDINAL1:14;
+     end;
+      [f.y, succ b] in RelIncl A & [succ b, f.x] in RelIncl A
+     by A6,A7,A8,WELLORD2:def 1;
+   hence [y,z] in R & [z,x] in R by A2,A9,A10,WELLORD1:def 7;
+  end;
+
+theorem Th11:
+ for P being upper-bounded (non empty Poset)
+  st the InternalRel of P is well-ordering
+  holds P is algebraic
+  proof let P be upper-bounded (non empty Poset); assume
+A1: the InternalRel of P is well-ordering;
+   then reconsider L = P as connected complete continuous (non empty Poset) by
+Th9;
+      now let x,y be Element of L; assume x << y;
+      then x is compact & x <= x & x <= y or x < y by WAYBEL_3:1,14;
+     then consider z being Element of L such that
+A2:   z is compact & x <= z & z <= y by A1,Th10;
+     take z; thus z in the carrier of CompactSublatt L by A2,WAYBEL_8:def 1;
+     thus x <= z & z <= y by A2;
+    end;
+   hence thesis by WAYBEL_8:7;
+  end;
+
+definition
+ let X be non empty set;
+ let R be upper-bounded well-ordering Order of X;
+ cluster RelStr(#X,R#) -> complete connected continuous algebraic;
+ coherence
+  proof RelStr(#X,R#) is upper-bounded by Th8;
+   hence thesis by Th9,Th11;
+  end;
+end;
+
+definition
+ cluster non trivial -> with_non-empty_element set;
+ coherence
+  proof let W be set; assume W is non trivial;
+   then reconsider W as non trivial set;
+   consider w1 being Element of W;
+   consider w2 being Element of W \ {w1};
+      W \ {w1} is non empty by REALSET1:32;
+    then w2 in W & w2 <> w1 & (w1 = {} or w1 <> {}) by ZFMISC_1:64;
+   hence thesis by TRIANG_1:def 1;
+  end;
+end;
+
+definition
+ let W be non empty set;
+ given w being Element of W such that
+A1:    w is non empty;
+     reconsider w as non empty set by A1;
+     defpred L[LATTICE] means $1 is complete;
+     defpred P[LATTICE,LATTICE, map of $1,$2] means
+      $3 is directed-sups-preserving;
+     consider r being upper-bounded well-ordering Order of w;
+       RelStr(#w,r#) is complete;
+
+then
+A2:  ex x being strict LATTICE st L[x] & the carrier of x in W;
+A3:  for a,b,c being LATTICE st L[a] & L[b] & L[c]
+     for f being map of a,b, g being map of b,c st
+      P[a,b,f] & P[b,c,g] holds P[a,c,g*f] by WAYBEL20:29;
+A4:  for a being LATTICE st L[a] holds P[a,a,id a];
+
+ func W-UPS_category -> lattice-wise strict category means:
+Def10:
+  (for x being LATTICE holds
+    x is object of it iff x is strict complete & the carrier of x in W) &
+  for a,b being object of it, f being monotone map of latt a, latt b
+    holds f in <^a,b^> iff f is directed-sups-preserving;
+ existence
+  proof
+    thus ex It being lattice-wise strict category st
+    (for x being LATTICE holds
+     x is object of It iff x is strict & L[x] & the carrier of x in W) &
+    for a,b being object of It, f being monotone map of latt a, latt b
+     holds f in <^a,b^> iff P[latt a, latt b, f] from CLCatEx2(A2,A3,A4);
+  end;
+ correctness
+  proof let C1, C2 be lattice-wise strict category such that
+A5: for x being LATTICE holds
+       x is object of C1 iff x is strict & L[x] & the carrier of x in W and
+A6: for a,b being object of C1, f being monotone map of latt a, latt b
+        holds f in <^a,b^> iff f is directed-sups-preserving and
+A7: for x being LATTICE holds
+       x is object of C2 iff x is strict & L[x] & the carrier of x in W and
+A8: for a,b being object of C2, f being monotone map of latt a, latt b
+        holds f in <^a,b^> iff f is directed-sups-preserving;
+    defpred Q[set, set, set] means
+      ex L1,L2 being LATTICE, f being map of L1,L2
+        st $1 = L1 & $2 = L2 & $3 = f & f is directed-sups-preserving;
+A9: now
+     let a,b be object of C1;
+     let f be monotone map of latt a, latt b;
+      latt a = a & latt b = b &
+      (f in <^a,b^> iff f is directed-sups-preserving) by A6,Def6;
+     hence f in <^a,b^> iff Q[a,b,f];
+    end;
+A10: now
+     let a,b be object of C2;
+     let f be monotone map of latt a, latt b;
+      latt a = a & latt b = b &
+      (f in <^a,b^> iff f is directed-sups-preserving) by A8,Def6;
+     hence f in <^a,b^> iff Q[a,b,f];
+    end;
+    for C1, C2 being lattice-wise category st
+     (for x being LATTICE holds
+       x is object of C1 iff x is strict & L[x] & the carrier of x in W) &
+     (for a,b being object of C1, f being monotone map of latt a, latt b
+        holds f in <^a,b^> iff Q[a,b,f]) &
+     (for x being LATTICE holds
+       x is object of C2 iff x is strict & L[x] & the carrier of x in W) &
+     (for a,b being object of C2, f being monotone map of latt a, latt b
+        holds f in <^a,b^> iff Q[a,b,f])
+    holds the AltCatStr of C1 = the AltCatStr of C2 from CLCatUniq2;
+   hence thesis by A5,A7,A9,A10;
+  end;
+end;
+
+definition
+ let W be with_non-empty_element set;
+ cluster W-UPS_category -> with_complete_lattices with_all_isomorphisms;
+ coherence
+  proof set C = W-UPS_category;
+A1: ex w being non empty set st w in W by TRIANG_1:def 1;
+   thus C is lattice-wise;
+   hereby let a be object of C; a = latt a by Def6;
+     hence a is complete LATTICE by A1,Def10;
+    end;
+   let a,b be object of C, f be map of latt a, latt b; assume
+A2: f is isomorphic;
+      a = latt a & b = latt b by Def6;
+   then reconsider S = latt a, T = latt b as complete LATTICE by A1,Def10;
+      f is sups-preserving map of S, T by A2,WAYBEL13:20;
+   hence f in <^a,b^> by A1,Def10;
+  end;
+end;
+
+theorem Th12:
+ for W being with_non-empty_element set holds
+   the carrier of W-UPS_category c= POSETS W
+  proof let W be with_non-empty_element set;
+A1: ex w being non empty set st w in W by TRIANG_1:def 1;
+   let x; assume x in the carrier of W-UPS_category;
+   then reconsider x as object of W-UPS_category;
+      latt x = x by Def6;
+    then the carrier of latt x in W & x is strict Poset by A1,Def10;
+   hence thesis by Def2;
+  end;
+
+theorem Th13:
+ for W being with_non-empty_element set
+ for x holds
+   x is object of W-UPS_category iff x is complete LATTICE & x in POSETS W
+  proof let W be with_non-empty_element set;
+A1: ex w being non empty set st w in W by TRIANG_1:def 1;
+   let x;
+   hereby assume x is object of W-UPS_category;
+     then reconsider a = x as object of W-UPS_category;
+        latt a = x by Def6;
+     hence x is complete LATTICE;
+        a in the carrier of W-UPS_category &
+      the carrier of W-UPS_category c= POSETS W by Th12;
+     hence x in POSETS W;
+    end;
+   assume x is complete LATTICE;
+   then reconsider L = x as complete LATTICE;
+   assume x in POSETS W;
+    then L as_1-sorted = L & the carrier of L as_1-sorted in W &
+    L is strict by Def1,Def2;
+   hence thesis by A1,Def10;
+  end;
+
+theorem Th14:
+ for W being with_non-empty_element set
+ for L being LATTICE st the carrier of L in W
+  holds L is object of W-UPS_category iff L is strict complete
+  proof let W be with_non-empty_element set;
+   let L be LATTICE;
+A1: L as_1-sorted = L by Def1;
+   assume the carrier of L in W;
+    then L in POSETS W iff L is strict by A1,Def2;
+   hence thesis by Th13;
+  end;
+
+theorem Th15:
+ for W being with_non-empty_element set
+ for a,b being object of W-UPS_category
+ for f being set holds
+   f in <^a,b^> iff f is directed-sups-preserving map of latt a, latt b
+  proof let W be with_non-empty_element set;
+A1: ex w being non empty set st w in W by TRIANG_1:def 1;
+   let a,b be object of W-UPS_category; let f be set;
+   hereby assume
+A2:   f in <^a,b^>;
+     then reconsider g = f as Morphism of a,b ;
+        f = @g by A2,Def7;
+     hence f is directed-sups-preserving map of latt a, latt b by A1,A2,Def10;
+    end;
+   thus thesis by A1,Def10;
+  end;
+
+definition
+ let W be with_non-empty_element set;
+ let a,b be object of W-UPS_category;
+ cluster <^a,b^> -> non empty;
+ coherence
+  proof consider f being directed-sups-preserving map of latt a, latt b;
+      f in <^a,b^> by Th15;
+   hence thesis;
+  end;
+end;
+
+begin :: Lattice-wise subcategories
+
+theorem Th16:
+ for A being category, B being non empty subcategory of A
+ for a being object of A, b being object of B st b = a
+  holds the_carrier_of b = the_carrier_of a
+  proof let A be category, B be non empty subcategory of A;
+   let a be object of A, b be object of B such that
+A1: b = a;
+   thus the_carrier_of b = proj1 idm b by YELLOW18:def 9
+     .= proj1 idm a by A1,ALTCAT_2:35 .= the_carrier_of a by YELLOW18:def 9;
+  end;
+
+definition
+ let A be set-id-inheriting category;
+ cluster -> set-id-inheriting (non empty subcategory of A);
+ coherence
+  proof let B be non empty subcategory of A;
+   let b be object of B;
+      b in the carrier of B &
+    the carrier of B c= the carrier of A by ALTCAT_2:def 11;
+   then reconsider a = b as object of A;
+   thus idm b = idm a by ALTCAT_2:35 .= id the_carrier_of a by YELLOW18:def 10
+             .= id the_carrier_of b by Th16;
+  end;
+end;
+
+definition
+ let A be para-functional category;
+ cluster -> para-functional (non empty subcategory of A);
+ coherence
+  proof let B be non empty subcategory of A;
+   consider F being ManySortedSet of A such that
+A1: for a1,a2 being object of A holds <^a1,a2^> c= Funcs(F.a1,F.a2)
+     by YELLOW18:def 7;
+   set G = F|the carrier of B;
+A2: dom F = the carrier of A & the carrier of B c= the carrier of A
+     by ALTCAT_2:def 11,PBOOLE:def 3;
+   then dom G = the carrier of B by RELAT_1:91;
+   then reconsider G as ManySortedSet of B by PBOOLE:def 3;
+   take G; let a1,a2 be object of B;
+      a1 in the carrier of B & a2 in the carrier of B;
+   then reconsider b1 = a1, b2 = a2 as object of A by A2;
+      F.a1 = G.a1 & F.a2 = G.a2 by FUNCT_1:72;
+    then <^a1,a2^> c= <^b1,b2^> & <^b1,b2^> c= Funcs(G.a1,G.a2) by A1,ALTCAT_2:
+32;
+   hence thesis by XBOOLE_1:1;
+  end;
+end;
+
+definition
+ let A be semi-functional category;
+ cluster -> semi-functional (non empty transitive SubCatStr of A);
+ coherence
+  proof let B be non empty transitive SubCatStr of A;
+   let b1,b2,b3 be object of B such that
+A1: <^b1,b2^> <> {} & <^b2,b3^> <> {} & <^b1,b3^> <> {};
+   let f1 be Morphism of b1,b2, f2 be Morphism of b2,b3;
+   let f', g' be Function such that
+A2: f1 = f' & f2 = g';
+   reconsider a1 = b1, a2 = b2, a3 = b3 as object of A by ALTCAT_2:30;
+   reconsider g1 = f1 as Morphism of a1,a2 by A1,ALTCAT_2:34;
+   reconsider g2 = f2 as Morphism of a2,a3 by A1,ALTCAT_2:34;
+      <^b1,b2^> c= <^a1,a2^> & <^b2,b3^> c= <^a2,a3^> & <^b1,b3^>c= <^a1,a3^>
+     by ALTCAT_2:32;
+    then <^a1,a2^> <> {} & <^a2,a3^> <> {} & <^a1,a3^> <> {} by A1,XBOOLE_1:3;
+    then g2*g1 = g'*f' by A2,ALTCAT_1:def 14;
+   hence thesis by A1,ALTCAT_2:33;
+  end;
+end;
+
+definition
+ let A be carrier-underlaid category;
+ cluster -> carrier-underlaid (non empty subcategory of A);
+ coherence
+  proof let B be non empty subcategory of A;
+   let b being object of B; reconsider a = b as object of A by ALTCAT_2:30;
+   consider S being 1-sorted such that
+A1: a = S & the_carrier_of a = the carrier of S by Def3;
+   take S; thus b = S by A1;
+   thus the_carrier_of b = proj1 idm b by YELLOW18:def 9
+     .= proj1 idm a by ALTCAT_2:35 .= the carrier of S by A1,YELLOW18:def 9;
+  end;
+end;
+
+definition
+ let A be lattice-wise category;
+ cluster -> lattice-wise (non empty subcategory of A);
+ coherence
+  proof let B be non empty subcategory of A;
+   thus B is semi-functional set-id-inheriting;
+   hereby let b be object of B; reconsider a = b as object of A by ALTCAT_2:30;
+        a is LATTICE by Def4;
+     hence b is LATTICE;
+    end;
+   let a,b be object of B;
+   reconsider a' = a, b' = b as object of A by ALTCAT_2:30;
+   let A,B be LATTICE; assume A = a & B = b;
+    then <^a,b^> c= <^a',b'^> & <^a',b'^> c= MonFuncs(A, B) by Def4,ALTCAT_2:32
+;
+   hence thesis by XBOOLE_1:1;
+  end;
+end;
+
+definition
+ let A be with_all_isomorphisms (lattice-wise category);
+ cluster full -> with_all_isomorphisms (non empty subcategory of A);
+ coherence
+  proof let B be non empty subcategory of A such that
+A1: B is full;
+   let a,b be object of B, f be map of latt a, latt b;
+   reconsider a' = a, b' = b as object of A by ALTCAT_2:30;
+   assume f is isomorphic;
+    then f in <^a', b'^> & <^a,b^> = <^a',b'^> by A1,Def8,ALTCAT_2:29;
+   hence f in <^a,b^>;
+  end;
+end;
+
+definition
+ let A be with_complete_lattices category;
+ cluster -> with_complete_lattices (non empty subcategory of A);
+ coherence
+  proof let B be non empty subcategory of A;
+   thus B is lattice-wise;
+   let b be object of B; reconsider a = b as object of A by ALTCAT_2:30;
+      a is complete LATTICE by Def5;
+   hence thesis;
+  end;
+end;
+
+definition
+ let W be with_non-empty_element set;
+     consider a being non empty set such that
+A1:   a in W by TRIANG_1:def 1;
+     consider r being upper-bounded well-ordering Order of a;
+     set b = RelStr(#a,r#);
+     reconsider b as object of W-UPS_category by A1,Def10;
+     defpred P[object of W-UPS_category] means latt $1 is continuous;
+        b = latt b by Def6;
+     then
+A2:   ex b being object of W-UPS_category st P[b];
+ func W-CONT_category -> strict full non empty subcategory of W-UPS_category
+    means:
+Def11:
+  for a being object of W-UPS_category holds
+    a is object of it iff latt a is continuous;
+ existence
+  proof
+    thus ex C being strict full non empty subcategory of W-UPS_category st
+     for a being object of W-UPS_category holds
+      a is object of C iff P[a] from FullSubcategoryEx(A2);
+  end;
+ correctness
+  proof let B1,B2 be strict full non empty subcategory of W-UPS_category
+   such that
+A3: for a being object of W-UPS_category holds
+     a is object of B1 iff P[a] and
+A4: for a being object of W-UPS_category holds
+     a is object of B2 iff P[a];
+      the AltCatStr of B1 = the AltCatStr of B2 from FullSubcategoryUniq(A3,A4)
+;
+   hence thesis;
+  end;
+end;
+
+definition
+ let W be with_non-empty_element set;
+     consider a being non empty set such that
+A1:   a in W by TRIANG_1:def 1;
+     consider r being upper-bounded well-ordering Order of a;
+     set b = RelStr(#a,r#);
+     reconsider b as object of W-UPS_category by A1,Def10;
+        b = latt b by Def6;
+     then reconsider b as object of W-CONT_category by Def11;
+     defpred P[object of W-CONT_category] means latt $1 is algebraic;
+        b = latt b by Def6;
+     then
+A2:   ex b being object of W-CONT_category st P[b];
+ func W-ALG_category -> strict full non empty subcategory of W-CONT_category
+    means:
+Def12:
+  for a being object of W-CONT_category holds
+    a is object of it iff latt a is algebraic;
+ existence
+  proof
+    thus ex C being strict full non empty subcategory of W-CONT_category st
+     for a being object of W-CONT_category holds
+      a is object of C iff P[a] from FullSubcategoryEx(A2);
+  end;
+ correctness
+  proof let B1,B2 be strict full non empty subcategory of W-CONT_category
+   such that
+A3: for a being object of W-CONT_category holds
+     a is object of B1 iff P[a] and
+A4: for a being object of W-CONT_category holds
+     a is object of B2 iff P[a];
+      the AltCatStr of B1 = the AltCatStr of B2 from FullSubcategoryUniq(A3,A4)
+;
+   hence thesis;
+  end;
+end;
+
+theorem Th17:
+ for W being with_non-empty_element set
+ for L being LATTICE st the carrier of L in W
+  holds L is object of W-CONT_category iff L is strict complete continuous
+  proof let W be with_non-empty_element set, L be LATTICE such that
+A1: the carrier of L in W;
+   hereby assume L is object of W-CONT_category;
+     then reconsider a = L as object of W-CONT_category;
+        L = latt a & a is object of W-UPS_category by Def6,ALTCAT_2:30;
+     hence L is strict complete continuous by A1,Def11,Th14;
+    end;
+   assume
+A2: L is strict complete continuous;
+   then reconsider a = L as object of W-UPS_category by A1,Th14;
+      latt a = L by Def6;
+   hence thesis by A2,Def11;
+  end;
+
+theorem
+   for W being with_non-empty_element set
+ for L being LATTICE st the carrier of L in W
+  holds L is object of W-ALG_category iff L is strict complete algebraic
+  proof let W be with_non-empty_element set, L be LATTICE such that
+A1: the carrier of L in W;
+   hereby assume L is object of W-ALG_category;
+     then reconsider a = L as object of W-ALG_category;
+        L = latt a & a is object of W-CONT_category by Def6,ALTCAT_2:30;
+     hence L is strict complete algebraic by A1,Def12,Th17;
+    end;
+   assume A2: L is strict complete algebraic;
+then L is strict complete algebraic LATTICE;
+   then reconsider a = L as object of W-CONT_category by A1,Th17;
+      latt a = L by Def6;
+   hence thesis by A2,Def12;
+  end;
+
+theorem Th19:
+ for W being with_non-empty_element set
+ for a,b being object of W-CONT_category
+ for f being set holds
+   f in <^a,b^> iff f is directed-sups-preserving map of latt a, latt b
+  proof let W be with_non-empty_element set;
+   let a,b be object of W-CONT_category, f be set;
+   reconsider a1 = a, b1 = b as object of W-UPS_category by ALTCAT_2:30;
+      <^a,b^> = <^a1,b1^> by ALTCAT_2:29;
+   hence thesis by Th15;
+  end;
+
+theorem Th20:
+ for W being with_non-empty_element set
+ for a,b being object of W-ALG_category
+ for f being set holds
+   f in <^a,b^> iff f is directed-sups-preserving map of latt a, latt b
+  proof let W be with_non-empty_element set;
+   let a,b be object of W-ALG_category, f be set;
+   reconsider a1 = a, b1 = b as object of W-CONT_category by ALTCAT_2:30;
+      <^a,b^> = <^a1,b1^> by ALTCAT_2:29;
+   hence thesis by Th19;
+  end;
+
+definition
+ let W be with_non-empty_element set;
+ let a,b be object of W-CONT_category;
+ cluster <^a,b^> -> non empty;
+ coherence
+  proof consider f being directed-sups-preserving map of latt a, latt b;
+      f in <^a,b^> by Th19;
+   hence thesis;
+  end;
+end;
+
+definition
+ let W be with_non-empty_element set;
+ let a,b be object of W-ALG_category;
+ cluster <^a,b^> -> non empty;
+ coherence
+  proof consider f being directed-sups-preserving map of latt a, latt b;
+      f in <^a,b^> by Th20;
+   hence thesis;
+  end;
+end;

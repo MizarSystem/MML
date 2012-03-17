@@ -1,0 +1,538 @@
+:: Comma Category
+::  by Grzegorz Bancerek and Agata Darmochwa\l
+::
+:: Received February 20, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary CAT_1, MCART_1, FUNCT_1, RELAT_1, PARTFUN1, CAT_2, FUNCOP_1,
+      FUNCT_3, COMMACAT;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, FUNCT_1,
+      PARTFUN1, FUNCT_2, FUNCT_4, CAT_1, CAT_2, DOMAIN_1;
+ constructors CAT_2, DOMAIN_1, MEMBERED, XBOOLE_0;
+ clusters CAT_1, CAT_2, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, XBOOLE_0;
+ theorems TARSKI, ZFMISC_1, MCART_1, FUNCT_1, FUNCT_2, CAT_1, CAT_2, GRFUNC_1,
+      RELSET_1;
+ schemes FUNCT_2, ZFREFLE1;
+
+begin
+
+ deffunc obj(CatStr) = the Objects of $1;
+ deffunc morph(CatStr) = the Morphisms of $1;
+
+definition let x be set;
+ func x`11 -> set equals:
+Def1:  x`1`1; correctness;
+ func x`12 -> set equals:
+Def2:  x`1`2; correctness;
+ func x`21 -> set equals:
+Def3:  x`2`1; correctness;
+ func x`22 -> set equals:
+Def4:  x`2`2; correctness;
+end;
+
+reserve x,x1,x2,y,y1,y2,z for set;
+
+theorem
+ Th1: [[x1,x2],y]`11 = x1 & [[x1,x2],y]`12 = x2 &
+   [x,[y1,y2]]`21 = y1 & [x,[y1,y2]]`22 = y2
+  proof
+      [[x1,x2],y]`1 = [x1,x2] & [x,[y1,y2]]`2 = [y1,y2] &
+    [x1,x2]`1 = x1 & [y1,y2]`1 = y1 & [x1,x2]`2 = x2 & [y1,y2]`2 = y2
+     by MCART_1:7;
+   hence thesis by Def1,Def2,Def3,Def4;
+  end;
+
+definition let D1,D2,D3 be non empty set, x be Element of [:[:D1,D2:],D3:];
+redefine
+ func x`11 -> Element of D1;
+  coherence
+   proof
+      x`11 = x`1`1 by Def1;
+    hence thesis;
+   end;
+ func x`12 -> Element of D2;
+  coherence
+   proof
+      x`12 = x`1`2 by Def2;
+    hence thesis;
+   end;
+end;
+
+definition let D1,D2,D3 be non empty set, x be Element of [:D1,[:D2,D3:]:];
+redefine
+ func x`21 -> Element of D2;
+  coherence
+   proof
+      x`21 = x`2`1 by Def3;
+    hence thesis;
+   end;
+ func x`22 -> Element of D3;
+  coherence
+   proof
+      x`22 = x`2`2 by Def4;
+    hence thesis;
+   end;
+end;
+
+
+ reserve C,D,E for Category, c,c1,c2 for Object of C, d,d1 for Object of D,
+   x for set, f,f1 for (Morphism of E),
+  g for (Morphism of C), h for (Morphism of D),
+  F for Functor of C,E, G for Functor of D,E;
+
+ definition let C,D,E;
+  let F be Functor of C,E, G be Functor of D,E;
+ given c1,d1,f1 such that A1: f1 in Hom(F.c1,G.d1);
+  func commaObjs(F,G) -> non empty Subset of
+      [:[:the Objects of C, the Objects of D:], the Morphisms of E:] equals:
+Def5:
+   {[[c,d],f] : f in Hom(F.c,G.d)};
+  coherence
+   proof
+A2:  [[c1,d1],f1] in {[[c,d],f] : f in Hom(F.c,G.d)} by A1;
+       {[[c,d],f] : f in Hom(F.c,G.d)} c=
+       [:[:the Objects of C, the Objects of D:], the Morphisms of E:]
+      proof
+       let x; assume x in {[[c,d],f] : f in Hom(F.c,G.d)};
+       then ex c,d,f st x = [[c,d],f] &
+        f in Hom(F.c,G.d);
+       hence thesis;
+      end;
+    hence thesis by A2;
+   end;
+ end;
+
+ reserve o,o1,o2 for Element of commaObjs(F,G);
+
+theorem
+ Th2: (ex c,d,f st f in Hom(F.c,G.d)) implies
+  o = [[o`11,o`12],o`2] & o`2 in Hom(F.o`11,G.o`12) &
+   dom o`2 = F.o`11 & cod o`2 = G.o`12
+  proof assume ex c,d,f st f in Hom(F.c,G.d);
+    then o in commaObjs(F,G) & commaObjs(F,G) = {[[c,d],f]: f in Hom(F.c,G.d)}
+     by Def5;
+   then consider c,d,f such that
+A1:  o = [[c,d],f] & f in Hom(F.c,G.d);
+      o`11 = c & o`12 = d & o`2 = f by A1,Th1,MCART_1:7;
+   hence thesis by A1,CAT_1:18;
+  end;
+
+ definition let C,D,E,F,G;
+ given c1,d1,f1 such that A1: f1 in Hom(F.c1,G.d1);
+  func commaMorphs(F,G) -> non empty Subset of
+      [:[:commaObjs(F,G), commaObjs(F,G):],
+      [:the Morphisms of C, the Morphisms of D:]:]
+    equals:
+Def6:
+    {[[o1,o2], [g,h]] : dom g = o1`11 & cod g = o2`11 &
+              dom h = o1`12 & cod h = o2`12 & (o2`2)*(F.g) = (G.h)*(o1`2)};
+ coherence
+   proof
+    set X = {[[o1,o2], [g,h]] : dom g = o1`11 & cod g = o2`11 &
+              dom h = o1`12 & cod h = o2`12 & (o2`2)*(F.g) = (G.h)*(o1`2)};
+       commaObjs(F,G) = {[[c,d],f] : f in Hom(F.c,G.d)} by A1,Def5;
+     then [[c1,d1],f1] in commaObjs(F,G) by A1;
+    then reconsider o = [[c1,d1],f1] as Element of commaObjs(F,G);
+       dom f1 = F.c1 & cod f1 = G.d1 by A1,CAT_1:18;
+     then dom id c1 = c1 & cod id c1 = c1 & dom id d1 = d1 & cod id d1 = d1 &
+     o`1`1 = o`11 & o`1`2 = o`12 & o`1 = [c1,d1] & [c1,d1]`1 = c1 &
+     [c1,d1]`2 = d1 & o`2 = f1 & f1*id(F.c1) = f1 & id(G.d1)*f1 = f1 &
+     F.id c1 = id(F.c1) & G.id d1 = id(G.d1)
+      by Def1,Def2,CAT_1:44,46,47,108,MCART_1:7;
+then A2:   [[o,o],[id c1,id d1]] in X;
+       X c= [:[:commaObjs(F,G), commaObjs(F,G):],
+          [:the Morphisms of C, the Morphisms of D:]:]
+      proof let x; assume x in X;
+       then ex g,h,o1,o2 st x = [[o1,o2], [g,h]] &
+        dom g = o1`11 & cod g = o2`11 & dom h = o1`12 & cod h = o2`12 &
+        (o2`2)*(F.g) = (G.h)*(o1`2);
+       hence thesis;
+      end;
+    hence thesis by A2;
+   end;
+ end;
+
+ reserve k,k1,k2,k' for Element of commaMorphs(F,G);
+
+ definition let C,D,E,F,G,k;
+ redefine
+  func k`11 -> Element of commaObjs(F,G);
+   coherence
+    proof
+     thus k`11 is Element of commaObjs(F,G);
+    end;
+  func k`12 -> Element of commaObjs(F,G);
+   coherence
+    proof
+     thus k`12 is Element of commaObjs(F,G);
+    end;
+ end;
+
+theorem
+ Th3: (ex c,d,f st f in Hom(F.c,G.d)) implies
+  k = [[k`11,k`12], [k`21,k`22]] & dom k`21 = k`11`11 &
+   cod k`21 = k`12`11 & dom k`22 = k`11`12 & cod k`22 = k`12`12 &
+    (k`12`2)*(F.k`21) = (G.k`22)*(k`11`2)
+  proof
+   assume ex c,d,f st f in Hom(F.c,G.d);
+    then commaMorphs(F,G) = {[[o1,o2], [g,h]] : dom g = o1`11 & cod g = o2`11
+&
+       dom h = o1`12 & cod h = o2`12 & (o2`2)*(F.g) = (G.h)*(o1`2)} &
+    k in commaMorphs(F,G) by Def6;
+   then consider g,h,o1,o2 such that
+A1:  k = [[o1,o2], [g,h]] & dom g = o1`11 & cod g = o2`11 &
+    dom h = o1`12 & cod h = o2`12 & (o2`2)*(F.g) = (G.h)*(o1`2);
+      k`11 = o1 & k`12 = o2 & k`21 = g & k`22 = h by A1,Th1;
+   hence thesis by A1;
+  end;
+
+ definition let C,D,E,F,G,k1,k2;
+  given c1,d1,f1 such that
+A1: f1 in Hom(F.c1,G.d1);
+  assume
+A2: k1`12 = k2`11;
+  func k2*k1 -> Element of commaMorphs(F,G) equals:
+Def7:
+    [[k1`11,k2`12],[k2`21*k1`21,k2`22*k1`22]];
+  coherence
+   proof set k21 = k2`21*k1`21;
+    set k22 = k2`22*k1`22;
+A3:  dom k1`21 = k1`11`11 & cod k1`21 = k1`12`11 & dom k1`22 = k1`11`12 &
+     cod k1`22 = k1`12`12 & (k1`12`2)*(F.k1`21) = (G.k1`22)*(k1`11`2)
+      by A1,Th3;
+A4:  dom k2`21 = k2`11`11 & cod k2`21 = k2`12`11 & dom k2`22 = k2`11`12 &
+     cod k2`22 = k2`12`12 & (k2`12`2)*(F.k2`21) = (G.k2`22)*(k2`11`2)
+      by A1,Th3;
+A5:  dom k1`11`2 = F.k1`11`11 & cod k1`11`2 = G.k1`11`12 &
+     dom k1`12`2 = F.k1`12`11 & cod k1`12`2 = G.k1`12`12 &
+     dom k2`11`2 = F.k2`11`11 & cod k2`11`2 = G.k2`11`12 &
+     dom k2`12`2 = F.k2`12`11 & cod k2`12`2 = G.k2`12`12 by A1,Th2;
+A6:  F.cod k2`21 = cod (F.k2`21) & dom (F.k2`21) = F.dom k2`21 &
+     cod (F.k1`21) = F.cod k1`21 & dom (G.k2`22) = G.dom k2`22 &
+     dom (G.k1`22) = G.dom k1`22 & cod (G.k1`22) = G.cod k1`22
+      by CAT_1:109;
+A7:   commaMorphs(F,G) = {[[o1,o2], [g,h]] : dom g = o1`11 & cod g = o2`11 &
+     dom h = o1`12 & cod h = o2`12 & (o2`2)*(F.g) = (G.h)*(o1`2)}
+      by A1,Def6;
+A8:   dom k21 = dom k1`21 & cod k21 = cod k2`21 & dom k22 = dom k1`22 &
+     cod k22 = cod k2`22 by A2,A3,A4,CAT_1:42;
+       ((k2`12)`2)*(F.k21) = (k2`12`2)*((F.k2`21)*(F.k1`21))
+          by A2,A3,A4,CAT_1:99
+        .= (G.k2`22)*(k2`11`2)*(F.k1`21) by A2,A3,A4,A5,A6,CAT_1:43
+        .= (G.k2`22)*((G.k1`22)*(k1`11`2)) by A2,A3,A4,A5,A6,CAT_1:43
+        .= (G.k2`22)*(G.k1`22)*(k1`11`2) by A2,A3,A4,A5,A6,CAT_1:43
+        .= (G.k22)*((k1`11)`2) by A2,A3,A4,CAT_1:99;
+     then ([[k1`11,k2`12],[k2`21*k1`21,k2`22*k1`22]])
+ in commaMorphs(F,G) by A3,A4,A7,A8;
+    hence thesis;
+   end;
+ end;
+
+ definition let C,D,E,F,G;
+  func commaComp(F,G) ->
+    PartFunc of [:commaMorphs(F,G),commaMorphs(F,G):],commaMorphs(F,G) means:
+Def8:
+   dom it = { [k1,k2]: k1`11 = k2`12 } &
+   for k,k' st [k,k'] in dom it holds it.[k,k'] = k*k';
+  existence
+   proof set X = {[k1,k2]: k1`11 = k2`12};
+     defpred P[set,set] means ex k1,k2 st $1 = [k1,k2] & $2 = k1*k2;
+A1:   for x st x in X ex y st P[x,y]
+      proof let x; assume x in X;
+       then consider k1,k2 such that
+A2:     x = [k1,k2] & k1`11 = k2`12;
+       reconsider y = k1*k2 as set;
+       take y,k1,k2; thus thesis by A2;
+      end;
+      consider f being Function such that
+A3:     dom f = X & for x st x in X holds P[x,f.x] from NonUniqFuncEx(A1);
+A4:   dom f c= [:commaMorphs(F,G),commaMorphs(F,G):]
+      proof let x; assume x in dom f;
+        then ex k1,k2 st x = [k1,k2] & k1`11 = k2`12 by A3;
+       hence x in [:commaMorphs(F,G),commaMorphs(F,G):];
+      end;
+       rng f c= commaMorphs(F,G)
+      proof let x; assume x in rng f;
+       then consider y such that
+A5:     y in dom f & x = f.y by FUNCT_1:def 5;
+          ex k1,k2 st y = [k1,k2] & f.y = k1*k2 by A3,A5;
+       hence thesis by A5;
+      end;
+    then reconsider f as PartFunc of [:commaMorphs(F,G),commaMorphs(F,G):],
+        commaMorphs(F,G) by A4,RELSET_1:11;
+    take f; thus dom f = X by A3;
+    let k1,k2; assume [k1,k2] in dom f;
+    then consider k,k' such that
+A6:   [k1,k2] = [k,k'] & f.[k1,k2] = k*k' by A3;
+       k1 = k & k2 = k' by A6,ZFMISC_1:33;
+    hence thesis by A6;
+   end;
+  uniqueness
+   proof let f1,f2 be PartFunc of [:commaMorphs(F,G),commaMorphs(F,G):],
+      commaMorphs(F,G) such that
+A7:  dom f1 = { [k1,k2]: k1`11 = k2`12 } &
+      for k,k' st [k,k'] in dom f1 holds f1.[k,k'] = k*k' and
+A8:  dom f2 = { [k1,k2]: k1`11 = k2`12 } &
+      for k,k' st [k,k'] in dom f2 holds f2.[k,k'] = k*k';
+       now let x; assume
+A9:    x in { [k1,k2]: k1`11 = k2`12 };
+      then consider k1,k2 such that
+A10:    x = [k1,k2] & k1`11 = k2`12;
+      thus f1.x = k1*k2 by A7,A9,A10 .= f2.x by A8,A9,A10;
+     end;
+    hence thesis by A7,A8,FUNCT_1:9;
+   end;
+ end;
+
+ definition let C,D,E,F,G;
+ given c1,d1,f1 such that
+A1: f1 in Hom(F.c1,G.d1);
+  func F comma G -> strict Category means
+      the Objects of it = commaObjs(F,G) &
+    the Morphisms of it = commaMorphs(F,G) &
+    (for k holds (the Dom of it).k = k`11) &
+    (for k holds (the Cod of it).k = k`12) &
+    (for o holds (the Id of it).o = [[o,o], [id o`11,id o`12]]) &
+    the Comp of it = commaComp(F,G);
+   existence
+    proof
+      deffunc F(Element of commaMorphs(F,G)) = $1`11;
+      deffunc G(Element of commaMorphs(F,G)) = $1`12;
+     consider D' being Function of commaMorphs(F,G),commaObjs(F,G) such that
+A2:    D'.k = F(k) from LambdaD;
+     consider C' being Function of commaMorphs(F,G),commaObjs(F,G) such that
+A3:    C'.k = G(k) from LambdaD;
+A4:    commaObjs(F,G) = {[[c,d],f] : f in Hom(F.c,G.d)} &
+      commaMorphs(F,G) = {[[o1,o2], [g,h]] : dom g = o1`11 & cod g = o2`11 &
+              dom h = o1`12 & cod h = o2`12 & (o2`2)*(F.g) = (G.h)*(o1`2)}
+       by A1,Def5,Def6;
+      defpred P[ Element of commaObjs(F,G),set] means
+        $2 = [[$1,$1],[id $1`11, id $1`12]];
+A5:   ex k st P[o,k]
+       proof
+A6:      dom o`2 = F.o`11 & cod o`2 = G.o`12 &
+         dom id o`11 = o`11 & cod id o`11 = o`11 & dom id o`12 = o`12 &
+         cod id o`12 = o`12 &
+         F.id o`11 = id (F.o`11) & G.id o`12 = id (G.o`12)
+          by A1,Th2,CAT_1:44,108;
+         then o`2*(F.id o`11) = o`2 & (G.id o`12)*o`2 = o`2 by CAT_1:46,47;
+         then [[o,o],[id o`11,id o`12]] in commaMorphs(F,G) by A4,A6;
+        hence thesis;
+       end;
+     consider I being Function of commaObjs(F,G),commaMorphs(F,G) such that
+A7:    P[o,I.o] from FuncExD(A5);
+     reconsider O = commaObjs(F,G), M = commaMorphs(F,G) as non empty set;
+     reconsider D', C' as Function of M,O;
+     reconsider ' = commaComp(F,G) as PartFunc of [:M,M:],M;
+     reconsider I as Function of O,M;
+     set FG = CatStr(#O, M, D', C', ', I#);
+A8:    dom the Comp of FG = { [k1,k2]: k1`11 = k2`12} by Def8;
+A9:    for f being Morphism of FG holds dom f = f`11 & cod f = f`12
+       proof let f be Morphism of FG;
+           dom f = D'.f & cod f = C'.f by CAT_1:def 2,def 3;
+        hence thesis by A2,A3;
+       end;
+A10:    for f,g being Morphism of FG for k1,k2 st f = k1 & g = k2 &
+        dom g = cod f holds g*f = [[k1`11,k2`12],[k2`21*k1`21,k2`22*k1`22]]
+       proof let f,g be Morphism of FG; let k1,k2; assume
+A11:      f = k1 & g = k2 & dom g = cod f;
+then A12:      dom g = k2`11 & cod f = k1`12 by A9;
+         then [k2,k1] in dom ' by A8,A11;
+         then g*f = '.[g,f] & '.[k2,k1] = k2*k1 &
+         k2*k1 = [[k1`11,k2`12],[k2`21*k1`21,k2`22*k1`22]]
+          by A1,A11,A12,Def7,Def8,CAT_1:def 4;
+        hence thesis by A11;
+       end;
+A13:   for f,g being Morphism of FG holds
+        [g,f] in dom the Comp of FG iff dom g = cod f
+       proof let f,g be Morphism of FG;
+        reconsider f1 = f, g1 = g as Element of commaMorphs(F,G);
+A14:      dom g = g1`11 & cod f = f1`12 by A9;
+        thus [g,f] in dom the Comp of FG implies dom g = cod f
+          proof assume [g,f] in dom the Comp of FG;
+           then consider k1,k2 such that
+A15:         [g,f] = [k1,k2] & k1`11 = k2`12 by A8;
+              g = k1 & f = k2 by A15,ZFMISC_1:33;
+           hence thesis by A14,A15;
+          end;
+        thus thesis by A8,A14;
+       end;
+A16:   for f,g being Morphism of FG st dom g = cod f holds
+        dom(g*f) = dom f & cod (g*f) = cod g
+       proof let f,g be Morphism of FG such that
+A17:      dom g = cod f;
+        reconsider f1 = f, g1 = g as Element of commaMorphs(F,G);
+A18:      dom g = g1`11 & cod f = f1`12 & dom (g*f) = (g*f)`11 &
+         cod (g*f) = (g*f)`12 & dom f = f`11 & cod g = g`12 by A9;
+         then [g1,f1] in dom ' by A8,A17;
+         then g*f = '.[g,f] & '.[g1,f1] = g1*f1 &
+         g1*f1 = [[f1`11,g1`12],[g1`21*f1`21,g1`22*f1`22]]
+          by A1,A17,A18,Def7,Def8,CAT_1:def 4;
+        hence thesis by A18,Th1;
+       end;
+A19:   for f,g,h being Morphism of FG st dom h = cod g & dom g = cod f holds
+        h*(g*f) = (h*g)*f
+       proof let f,g,h be Morphism of FG;
+        reconsider f1 = f, g1 = g, h1 = h, gf = g*f, hg = h*g as
+          Element of commaMorphs(F,G);
+        assume
+A20:      dom h = cod g & dom g = cod f;
+         then g*f = [[f`11,g`12],[g1`21*f1`21,g1`22*f1`22]] & dom g = g`11 &
+         h*g = [[g`11,h`12],[h1`21*g1`21,h1`22*g1`22]] & cod g = g`12 &
+         dom g1`21 = g1`11`11 & cod g1`21 = g1`12`11 & dom h = h`11 &
+         dom h1`21 = h1`11`11 & cod f1`21 = f1`12`11 & cod f = f`12 &
+         dom g1`22 = g1`11`12 & cod g1`22 = g1`12`12 &
+         dom h1`22 = h1`11`12 & cod f1`22 = f1`12`12 &
+         cod (g*f) = cod g & dom (h*g) = dom g by A1,A9,A10,A16,Th3;
+         then h*(g*f) = [[gf`11,h`12],[h1`21*gf`21,h1`22*gf`22]] &
+         (h*g)*f = [[f`11,hg`12],[hg`21*f1`21,hg`22*f1`22]] &
+         (g*f)`11 = f`11 & (h*g)`12 = h`12 & hg`21 = h1`21*g1`21 &
+         gf`21 = g1`21*f1`21 & hg`22 = h1`22*g1`22 & gf`22 = g1`22*f1`22 &
+         (h1`21*g1`21)*f1`21 = h1`21*(g1`21*f1`21) &
+         (h1`22*g1`22)*f1`22 = h1`22*(g1`22*f1`22)
+          by A10,A20,Th1,CAT_1:43;
+        hence thesis;
+       end;
+        for b being Object of FG holds dom id b = b & cod id b = b &
+       (for f being Morphism of FG st cod f = b holds (id b)*f = f) &
+        (for g being Morphism of FG st dom g = b holds g*(id b) = g)
+       proof let b be Object of FG;
+        reconsider b' = b as Element of commaObjs(F,G);
+        reconsider i = id b as Element of commaMorphs(F,G);
+           I.b' = [[b',b'],[id b'`11, id b'`12]] by A7;
+then A21:      (I.b')`11 = b' & (I.b')`12 = b' & (I.b')`21 = id b'`11 &
+         (I.b')`22 = id b'`12 & i = I.b by Th1,CAT_1:def 5;
+        hence dom id b = b & cod id b = b by A9;
+        thus for f being Morphism of FG st cod f = b holds (id b)*f = f
+          proof let f be Morphism of FG;
+           reconsider f' = f as Element of commaMorphs(F,G);
+           assume cod f = b;
+then A22:         cod f = dom id b & dom id b'`12 = b'`12 & dom id b'`11 = b'
+`11 &
+            b = f`12 & cod f'`21 = f'`12`11 & cod f'`22 = f'`12`12
+             by A1,A9,A21,Th3;
+then A23:         (id b'`11)*f'`21 = f'`21 & (id b'`12)*f'`22 = f'`22 by CAT_1:
+46;
+           thus (id b)*f = [[f'`11,i`12],[i`21*f'`21,i`22*f'`22]] by A10,A22
+                  .= f by A1,A21,A22,A23,Th3;
+          end;
+        let g be Morphism of FG;
+        reconsider g' = g as Element of commaMorphs(F,G);
+        assume dom g = b;
+then A24:      dom g = cod id b & dom id b'`12 = b'`12 & dom id b'`11 = b'`11 &
+         b = g`11 & dom g'`21 = g'`11`11 & dom g'`22 = g'`11`12
+          by A1,A9,A21,Th3;
+then A25:      g'`21*(id b'`11) = g'`21 & g'`22*(id b'`12) = g'`22 by CAT_1:47;
+        thus g*(id b) = [[i`11,g'`12],[g'`21*i`21,g'`22*i`22]] by A10,A24
+                  .= g by A1,A21,A24,A25,Th3;
+       end;
+     then reconsider FG as strict Category by A13,A16,A19,CAT_1:29;
+     take FG; thus thesis by A2,A3,A7;
+    end;
+   uniqueness
+    proof let E1,E2 be strict Category such that
+A26:   the Objects of E1 = commaObjs(F,G) &
+      the Morphisms of E1 = commaMorphs(F,G) &
+      (for k holds (the Dom of E1).k = k`11) &
+      (for k holds (the Cod of E1).k = k`12) &
+      (for o holds (the Id of E1).o = [[o,o], [id o`11,id o`12]]) &
+      the Comp of E1 = commaComp(F,G) and
+A27:   the Objects of E2 = commaObjs(F,G) &
+      the Morphisms of E2 = commaMorphs(F,G) &
+      (for k holds (the Dom of E2).k = k`11) &
+      (for k holds (the Cod of E2).k = k`12) &
+      (for o holds (the Id of E2).o = [[o,o], [id o`11,id o`12]]) &
+      the Comp of E2 = commaComp(F,G);
+        now let x be Element of morph(E1);
+        thus (the Dom of E1).x = x`11 by A26 .= (the Dom of E2).x by A26,A27;
+      end;
+then A28:    the Dom of E1 = the Dom of E2 by A26,A27,FUNCT_2:113;
+        now let x be Element of morph(E1);
+        thus (the Cod of E1).x = x`12 by A26 .= (the Cod of E2).x by A26,A27;
+      end;
+then A29:    the Cod of E1 = the Cod of E2 by A26,A27,FUNCT_2:113;
+        now let x be Object of E1;
+       reconsider o = x as Element of commaObjs(F,G) by A26;
+        thus (the Id of E1).x = [[o,o],[id o`11,id o`12]] by A26
+                .= (the Id of E2).x by A27;
+      end;
+     hence thesis by A26,A27,A28,A29,FUNCT_2:113;
+    end;
+ end;
+
+theorem
+ Th4: the Objects of 1Cat(x,y) = {x} & the Morphisms of 1Cat(x,y) = {y}
+  proof
+   thus obj(1Cat(x,y)) c= {x}
+     proof let z; assume z in obj(1Cat(x,y)); then z = x by CAT_1:34;
+      hence thesis by TARSKI:def 1;
+     end;
+      x is Object of 1Cat(x,y) by CAT_1:32;
+   hence {x} c= obj(1Cat(x,y)) by ZFMISC_1:37;
+   thus morph(1Cat(x,y)) c= {y}
+     proof let z; assume z in morph(1Cat(x,y)); then z = y by CAT_1:35;
+      hence thesis by TARSKI:def 1;
+     end;
+      y is Morphism of 1Cat(x,y) by CAT_1:33;
+   hence {y} c= morph(1Cat(x,y)) by ZFMISC_1:37;
+  end;
+
+theorem
+ Th5: for a,b being Object of 1Cat(x,y) holds Hom(a,b) = {y}
+  proof let a,b be Object of 1Cat(x,y);
+      morph(1Cat(x,y)) = {y} by Th4;
+   hence Hom(a,b) c= {y};
+      y is Morphism of 1Cat(x,y) by CAT_1:33;
+    then y in Hom(a,b) by CAT_1:36;
+   hence thesis by ZFMISC_1:37;
+  end;
+
+ definition let C, c;
+  func 1Cat c -> strict Subcategory of C equals
+      1Cat(c, id c);
+   coherence
+    proof
+      A1: obj(1Cat(c, id c)) = {c} by Th4;
+A2:    now let a,b be Object of 1Cat(c, id c);
+          a = c & b = c & id c in Hom(c,c) & Hom(a,a) = {id c}
+         by Th5,CAT_1:34,55;
+       hence for c1,c2 st a = c1 & b = c2 holds Hom(a,b) c= Hom(c1,c2)
+         by ZFMISC_1:37;
+      end;
+     set m = id c;
+     reconsider O = {c}, M = {id c} as non empty set;
+     reconsider d = M-->c as Function of M,O;
+     reconsider i = O-->m as Function of O,M;
+     reconsider s = (m,m).--> m as PartFunc of [:M,M:],M;
+A3:    1Cat(c,m) = CatStr(#O, M, d, d, s, i#) &
+      dom s = {[m,m]} & s.[m,m] = m by CAT_1:7,8,def 9;
+A4:    dom m = c & cod m = c by CAT_1:44;
+      then [m,m] in dom the Comp of C by CAT_1:40;
+then A5:    dom the Comp of 1Cat(c,m) c= dom the Comp of C by A3,ZFMISC_1:37;
+        now let x; assume A6: x in dom the Comp of 1Cat(c,m);
+then A7:      x = [m,m] by A3,TARSKI:def 1;
+       thus (the Comp of 1Cat(c,m)).x = m by A3,A6,TARSKI:def 1
+               .= m*(m qua Morphism of C) by A4,CAT_1:46
+               .= (the Comp of C).x by A4,A7,CAT_1:41;
+      end;
+then A8:    the Comp of 1Cat(c, id c) <= the Comp of C by A5,GRFUNC_1:8;
+        now let a be Object of 1Cat(c, id c);
+          id a = id c & a = c by CAT_1:34,35;
+       hence for c1 st a = c1 holds id a = id c1;
+      end; hence thesis by A1,A2,A8,CAT_2:def 4;
+    end;
+   correctness;
+ end;
+
+ definition let C, c;
+  func c comma C -> strict Category equals
+      (incl 1Cat c) comma (id C);
+   correctness;
+  func C comma c -> strict Category equals
+      (id C) comma (incl 1Cat c);
+   correctness;
+ end;

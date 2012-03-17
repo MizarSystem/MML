@@ -1,0 +1,288 @@
+:: Joining of Decorated Trees
+::  by Grzegorz Bancerek
+::
+:: Received October 8, 1993
+:: Copyright (c) 1993 Association of Mizar Users
+
+environ
+
+ vocabulary TREES_2, RELAT_1, FINSEQ_1, FUNCT_1, TREES_1, BOOLE, FUNCOP_1,
+      TREES_3, FINSEQ_2, FUNCT_6, FINSEQ_4, FINSET_1, MCART_1, FUNCT_3,
+      PARTFUN1, TREES_4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
+      RELAT_1, FUNCT_1, FINSET_1, DOMAIN_1, FUNCOP_1, FUNCT_3, FINSEQ_1,
+      FINSEQ_2, TREES_1, TREES_2, FUNCT_6, TREES_3;
+ constructors FINSEQ_2, NAT_1, DOMAIN_1, FUNCT_6, TREES_3, XREAL_0, MEMBERED,
+      XBOOLE_0;
+ clusters SUBSET_1, TREES_2, TREES_3, FINSEQ_1, RELSET_1, ARYTM_3, MEMBERED,
+      ZFMISC_1, XBOOLE_0, ORDINAL2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Joining of decorated trees
+
+definition let T be DecoratedTree;
+ mode Node of T is Element of dom T;
+end;
+
+reserve x, y, z for set, i, j, n for Nat, p, q, r for FinSequence,
+  v for FinSequence of NAT;
+
+definition let T1, T2 be DecoratedTree;
+ redefine pred T1 = T2 means
+:: TREES_4:def 1
+    dom T1 = dom T2 & for p being Node of T1 holds T1.p = T2.p;
+end;
+
+theorem :: TREES_4:1
+ for i,j being Nat st elementary_tree i c= elementary_tree j holds i <= j;
+
+theorem :: TREES_4:2
+ for i,j being Nat st elementary_tree i = elementary_tree j holds i = j;
+
+definition let x;
+ func root-tree x -> DecoratedTree equals
+:: TREES_4:def 2
+
+   (elementary_tree 0) --> x;
+end;
+
+definition let D be non empty set, d be Element of D;
+ redefine func root-tree d -> Element of FinTrees D;
+end;
+
+theorem :: TREES_4:3
+ dom root-tree x = elementary_tree 0 & (root-tree x).{} = x;
+
+theorem :: TREES_4:4
+   root-tree x = root-tree y implies x = y;
+
+theorem :: TREES_4:5
+ for T being DecoratedTree st dom T = elementary_tree 0 holds
+   T = root-tree (T.{});
+
+theorem :: TREES_4:6
+   root-tree x = {[{},x]};
+
+definition let x; let p be FinSequence;
+ func x-flat_tree(p) -> DecoratedTree means
+:: TREES_4:def 3
+
+  dom it = elementary_tree len p & it.{} = x &
+   for n st n < len p holds it.<*n*> = p.(n+1);
+end;
+
+theorem :: TREES_4:7
+   x-flat_tree p = y-flat_tree q implies x = y & p = q;
+
+theorem :: TREES_4:8
+ j < i implies (elementary_tree i)|<*j*> = elementary_tree 0;
+
+theorem :: TREES_4:9
+ i < len p implies (x-flat_tree p)|<*i*> = root-tree (p.(i+1));
+
+definition let x, p such that
+  p is DTree-yielding;
+ func x-tree(p) -> DecoratedTree means
+:: TREES_4:def 4
+
+  (ex q being DTree-yielding FinSequence st p = q & dom it = tree(doms q)) &
+   it.{} = x & for n st n < len p holds it|<*n*> = p.(n+1);
+end;
+
+definition let x; let T be DecoratedTree;
+ func x-tree T -> DecoratedTree equals
+:: TREES_4:def 5
+
+   x-tree <*T*>;
+end;
+
+definition let x; let T1, T2 be DecoratedTree;
+ func x-tree (T1,T2) -> DecoratedTree equals
+:: TREES_4:def 6
+
+   x-tree <*T1,T2*>;
+end;
+
+theorem :: TREES_4:10
+ for p being DTree-yielding FinSequence holds dom (x-tree(p)) = tree(doms p);
+
+theorem :: TREES_4:11
+ for p being DTree-yielding FinSequence holds
+  y in dom (x-tree(p)) iff y = {} or
+   ex i being Nat, T being DecoratedTree, q being Node of T st
+    i < len p & T = p.(i+1) & y = <*i*>^q;
+
+theorem :: TREES_4:12
+ for p being DTree-yielding FinSequence
+  for i being Nat, T being DecoratedTree, q being Node of T st i < len p &
+   T = p.(i+1) holds (x-tree p).(<*i*>^q) = T.q;
+
+theorem :: TREES_4:13
+   for T being DecoratedTree holds dom (x-tree T) = ^dom T;
+
+theorem :: TREES_4:14
+   for T1, T2 being DecoratedTree holds
+   dom (x-tree (T1,T2)) = tree(dom T1, dom T2);
+
+theorem :: TREES_4:15
+   for p,q being DTree-yielding FinSequence st x-tree p = y-tree q holds
+   x = y & p = q;
+
+theorem :: TREES_4:16
+   root-tree x = y-flat_tree p implies x = y & p = {};
+
+theorem :: TREES_4:17
+   root-tree x = y-tree p & p is DTree-yielding implies x = y & p = {};
+
+theorem :: TREES_4:18
+   x-flat_tree p = y-tree q & q is DTree-yielding implies x = y &
+  len p = len q & for i st i in dom p holds q.i = root-tree (p.i);
+
+theorem :: TREES_4:19
+   for p being DTree-yielding FinSequence, n being Nat,
+  q being FinSequence st <*n*>^q in dom (x-tree(p)) holds
+   (x-tree(p)).(<*n*>^q) = p..(n+1,q);
+
+theorem :: TREES_4:20
+   x-flat_tree({}) = root-tree x & x-tree({}) = root-tree x;
+
+theorem :: TREES_4:21
+   x-flat_tree(<*y*>) =
+   ((elementary_tree 1) --> x) with-replacement (<*0*>, root-tree y);
+
+theorem :: TREES_4:22
+   for T being DecoratedTree holds
+   x-tree(<*T*>) = ((elementary_tree 1) --> x) with-replacement (<*0*>, T);
+
+definition
+ let D be non empty set, d be Element of D, p be FinSequence of D;
+ redefine func d-flat_tree(p) -> DecoratedTree of D;
+end;
+
+definition
+ let D be non empty set, F be non empty DTree-set of D;
+ let d be Element of D, p be FinSequence of F;
+ redefine func d-tree(p) -> DecoratedTree of D;
+end;
+
+definition
+ let D be non empty set, d be Element of D, T be DecoratedTree of D;
+ redefine func d-tree T -> DecoratedTree of D;
+end;
+
+definition
+ let D be non empty set, d be Element of D, T1, T2 be DecoratedTree of D;
+ redefine func d-tree(T1, T2) -> DecoratedTree of D;
+end;
+
+definition let D be non empty set;
+ let p be FinSequence of FinTrees D;
+ redefine func doms p -> FinSequence of FinTrees;
+end;
+
+definition
+ let D be non empty set;
+ let d be Element of D, p be FinSequence of FinTrees D;
+ redefine func d-tree p -> Element of FinTrees D;
+end;
+
+definition let D be non empty set, x be Subset of D;
+ redefine mode FinSequence of x -> FinSequence of D;
+end;
+
+definition let D be non empty constituted-DTrees set;
+ let X be Subset of D;
+ cluster -> DTree-yielding FinSequence of X;
+end;
+
+begin :: Expanding of decoreted tree by substitution
+
+scheme ExpandTree{T1() -> Tree, T2() -> Tree, P[set]}:
+ ex T being Tree st
+  for p holds p in T iff p in T1() or
+   ex q being Element of T1(), r being Element of T2() st
+    P[q] & p = q^r;
+
+definition
+ let T,T' be DecoratedTree;
+ let x be set;
+ func (T,x) <- T' -> DecoratedTree means
+:: TREES_4:def 7
+
+  (for p holds p in dom it iff p in dom T or
+   ex q being Node of T, r being Node of T' st
+    q in Leaves dom T & T.q = x & p = q^r) &
+  (for p being Node of T st
+    not p in Leaves dom T or T.p <> x holds it.p = T.p) &
+  (for p being Node of T, q being Node of T' st
+    p in Leaves dom T & T.p = x holds it.(p^q) = T'.q);
+end;
+
+definition let D be non empty set;
+ let T,T' be DecoratedTree of D;
+ let x be set;
+ redefine func (T,x) <- T' -> DecoratedTree of D;
+end;
+
+reserve T,T' for DecoratedTree, x,y for set;
+
+theorem :: TREES_4:23
+   not x in rng T or not x in Leaves T implies (T,x) <- T' = T;
+
+begin :: Double decoreted trees
+
+reserve D1, D2 for non empty set,
+ T for DecoratedTree of D1,D2,
+ d1 for Element of D1, d2 for Element of D2,
+ F for non empty DTree-set of D1,D2,
+ F1 for non empty (DTree-set of D1),
+ F2 for non empty DTree-set of D2;
+
+theorem :: TREES_4:24
+ for D1, D2, T holds dom T`1 = dom T & dom T`2 = dom T;
+
+theorem :: TREES_4:25
+ (root-tree [d1,d2])`1 = root-tree d1 & (root-tree [d1,d2])`2 = root-tree d2;
+
+theorem :: TREES_4:26
+   <:root-tree x, root-tree y:> = root-tree [x,y];
+
+theorem :: TREES_4:27
+ for D1,D2, d1,d2, F,F1
+ for p being FinSequence of F, p1 being FinSequence of F1 st dom p1 = dom p &
+   for i st i in dom p for T st T = p.i holds p1.i = T`1
+ holds ([d1,d2]-tree p)`1 = d1-tree p1;
+
+theorem :: TREES_4:28
+ for D1,D2, d1,d2, F,F2
+ for p being FinSequence of F, p2 being FinSequence of F2 st dom p2 = dom p &
+   for i st i in dom p for T st T = p.i holds p2.i = T`2
+ holds ([d1,d2]-tree p)`2 = d2-tree p2;
+
+theorem :: TREES_4:29
+ for D1,D2, d1,d2, F for p being FinSequence of F
+  ex p1 being FinSequence of Trees D1 st dom p1 = dom p &
+   (for i st i in dom p ex T being Element of F st T = p.i & p1.i = T`1) &
+   ([d1,d2]-tree p)`1 = d1-tree p1;
+
+theorem :: TREES_4:30
+ for D1,D2, d1,d2, F for p being FinSequence of F
+  ex p2 being FinSequence of Trees D2 st dom p2 = dom p &
+   (for i st i in dom p ex T being Element of F st T = p.i & p2.i = T`2) &
+   ([d1,d2]-tree p)`2 = d2-tree p2;
+
+theorem :: TREES_4:31
+   for D1,D2, d1,d2 for p being FinSequence of FinTrees [:D1,D2:]
+  ex p1 being FinSequence of FinTrees D1 st dom p1 = dom p &
+   (for i st i in dom p ex T being Element of FinTrees [:D1,D2:] st
+     T = p.i & p1.i = T`1) &
+   ([d1,d2]-tree p)`1 = d1-tree p1;
+
+theorem :: TREES_4:32
+   for D1,D2, d1,d2 for p being FinSequence of FinTrees [:D1,D2:]
+  ex p2 being FinSequence of FinTrees D2 st dom p2 = dom p &
+   (for i st i in dom p ex T being Element of FinTrees [:D1,D2:] st
+     T = p.i & p2.i = T`2) &
+   ([d1,d2]-tree p)`2 = d2-tree p2;
+

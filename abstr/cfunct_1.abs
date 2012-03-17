@@ -1,0 +1,360 @@
+:: Property of Complex Functions
+::  by Takashi Mitsuishi , Katsumi Wasaki and Yasunari Shidama
+::
+:: Received December 7, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary PARTFUN1, COMPLEX1, ARYTM, ARYTM_3, RELAT_1, BOOLE, FINSEQ_4,
+      FINSEQ_1, FUNCT_1, ARYTM_1, SEQ_1, RFUNCT_1, ABSVALUE, PARTFUN2,
+      CFUNCT_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      FUNCT_1, ABSVALUE, RELSET_1, PARTFUN1, PARTFUN2, RFUNCT_1, SEQ_1,
+      COMPLEX1, COMSEQ_1, FINSEQ_4;
+ constructors REAL_1, ABSVALUE, PARTFUN1, PARTFUN2, RFUNCT_1, SEQ_1, COMSEQ_1,
+      FINSEQ_4, COMPLEX1, MEMBERED;
+ clusters XREAL_0, RELSET_1, COMPLEX1, MEMBERED;
+ requirements NUMERALS, SUBSET, BOOLE;
+
+
+begin
+
+ reserve x,X,Y for set;
+ reserve C for non empty set;
+ reserve c for Element of C;
+ reserve f,f1,f2,f3,g,g1 for PartFunc of C,COMPLEX;
+ reserve r1,r2,p1 for real number;
+ reserve r,q,cr1,cr2 for Element of COMPLEX;
+
+::
+::DEFINITIONS OF COMPLEX FUNCTIONS
+::
+
+definition
+  mode Complex is Element of COMPLEX;
+end;
+
+definition let C,f1,f2;
+func f1/f2 -> PartFunc of C,COMPLEX means
+:: CFUNCT_1:def 1
+dom it = dom f1 /\ (dom f2 \ f2"{0c}) &
+for c st c in dom it holds it/.c = f1/.c * (f2/.c)";
+end;
+
+definition let C,f;
+func f^ -> PartFunc of C,COMPLEX means
+:: CFUNCT_1:def 2
+dom it = dom f \ f"{0c} & for c st c in dom it holds it/.c = (f/.c)";
+
+end;
+
+canceled 2;
+
+theorem :: CFUNCT_1:3
+dom (f1+f2) = dom f1 /\ dom f2 &
+for c st c in dom(f1+f2) holds (f1+f2)/.c = (f1/.c) + (f2/.c);
+
+theorem :: CFUNCT_1:4
+dom (f1-f2) = dom f1 /\ dom f2 &
+for c st c in dom(f1-f2) holds (f1-f2)/.c = (f1/.c) - (f2/.c);
+
+theorem :: CFUNCT_1:5
+   dom(f1(#)f2)=dom f1 /\ dom f2
+   & for c st c in dom(f1(#)f2) holds (f1(#)f2)/.c =(f1/.c) * (f2/.c);
+
+canceled;
+
+theorem :: CFUNCT_1:7
+ dom (r(#)f) = dom f & for c st c in dom (r(#)f) holds (r(#)f)/.c = r * (f/.c);
+
+canceled;
+
+theorem :: CFUNCT_1:9
+ dom (-f) = dom f & for c st c in dom (-f) holds (-f)/.c = -f/.c;
+
+canceled 5;
+
+theorem :: CFUNCT_1:15
+dom (g^) c= dom g & dom g /\ (dom g \ g"{0c}) = dom g \ g"{0c};
+
+theorem :: CFUNCT_1:16
+dom (f1(#)f2) \ (f1(#)f2)"{0c} = (dom f1 \ (f1)"{0c}) /\ (dom f2 \ (f2)"{0c});
+
+theorem :: CFUNCT_1:17
+c in dom (f^) implies (f/.c) <> 0c;
+
+theorem :: CFUNCT_1:18
+(f^)"{0c} = {};
+
+theorem :: CFUNCT_1:19
+|.f.|"{0} = f"{0c} & (-f)"{0c} = f"{0c};
+
+theorem :: CFUNCT_1:20
+dom (f^^) = dom (f|(dom (f^)));
+
+theorem :: CFUNCT_1:21
+r<>0c implies (r(#)f)"{0c} = f"{0c};
+
+begin
+::
+:: BASIC PROPERTIES OF OPERATIONS
+::
+
+theorem :: CFUNCT_1:22
+  (f1 + f2) + f3 = f1 + (f2 + f3);
+
+theorem :: CFUNCT_1:23
+(f1 (#) f2) (#) f3 = f1 (#) (f2 (#) f3);
+
+theorem :: CFUNCT_1:24
+(f1 + f2) (#) f3=f1 (#) f3 + f2 (#) f3;
+
+theorem :: CFUNCT_1:25
+  f3 (#) (f1 + f2)=f3(#)f1 + f3(#)f2;
+
+theorem :: CFUNCT_1:26
+r(#)(f1(#)f2)=r(#)f1(#)f2;
+
+theorem :: CFUNCT_1:27
+r(#)(f1(#)f2)=f1(#)(r(#)f2);
+
+theorem :: CFUNCT_1:28
+(f1 - f2)(#)f3=f1(#)f3 - f2(#)f3;
+
+theorem :: CFUNCT_1:29
+  f3(#)f1 - f3(#)f2 = f3(#)(f1 - f2);
+
+theorem :: CFUNCT_1:30
+  r(#)(f1 + f2) = r(#)f1 + r(#)f2;
+
+theorem :: CFUNCT_1:31
+(r*q)(#)f = r(#)(q(#)f);
+
+theorem :: CFUNCT_1:32
+  r(#)(f1 - f2) = r(#)f1 - r(#)f2;
+
+theorem :: CFUNCT_1:33
+  f1-f2 = (-1r)(#)(f2-f1);
+
+theorem :: CFUNCT_1:34
+  f1 - (f2 + f3) = f1 - f2 - f3;
+
+theorem :: CFUNCT_1:35
+1r(#)f = f;
+
+theorem :: CFUNCT_1:36
+  f1 - (f2 - f3) = f1 - f2 + f3;
+
+theorem :: CFUNCT_1:37
+  f1 + (f2 - f3) =f1 + f2 - f3;
+
+theorem :: CFUNCT_1:38
+|.f1(#)f2.| = |.f1.|(#)|.f2.|;
+
+theorem :: CFUNCT_1:39
+|.r(#)f.| = |.r.|(#)|.f.|;
+
+theorem :: CFUNCT_1:40
+-f = (-1r)(#)f;
+
+theorem :: CFUNCT_1:41
+-(-f) = f;
+
+canceled;
+
+theorem :: CFUNCT_1:43
+  f1 - (-f2) = f1 + f2;
+
+theorem :: CFUNCT_1:44
+f^^ = f|(dom (f^));
+
+theorem :: CFUNCT_1:45
+(f1(#)f2)^ = (f1^)(#)(f2^);
+
+theorem :: CFUNCT_1:46
+r<>0c implies (r(#)f)^ = r" (#) (f^);
+
+theorem :: CFUNCT_1:47
+   1r<>0c;
+
+theorem :: CFUNCT_1:48
+(-1r)"=-1r;
+
+theorem :: CFUNCT_1:49
+(-f)^ = (-1r)(#)(f^);
+
+theorem :: CFUNCT_1:50
+(|.f.|)^ = |.(f^).|;
+
+theorem :: CFUNCT_1:51
+f/g = f(#) (g^);
+
+theorem :: CFUNCT_1:52
+r(#)(g/f) = (r(#)g)/f;
+
+theorem :: CFUNCT_1:53
+  (f/g)(#)g = (f|dom(g^));
+
+theorem :: CFUNCT_1:54
+(f/g)(#)(f1/g1) = (f(#)f1)/(g(#)g1);
+
+theorem :: CFUNCT_1:55
+(f1/f2)^ = (f2|dom(f2^))/f1;
+
+theorem :: CFUNCT_1:56
+g (#) (f1/f2) = (g (#) f1)/f2;
+
+theorem :: CFUNCT_1:57
+  g/(f1/f2) = (g(#)(f2|dom(f2^)))/f1;
+
+theorem :: CFUNCT_1:58
+  -f/g = (-f)/g & f/(-g) = -f/g;
+
+theorem :: CFUNCT_1:59
+  f1/f + f2/f = (f1 + f2)/f & f1/f - f2/f = (f1 - f2)/f;
+
+theorem :: CFUNCT_1:60
+f1/f + g1/g = (f1(#)g + g1(#)f)/(f(#)g);
+
+theorem :: CFUNCT_1:61
+  (f/g)/(f1/g1) = (f(#)(g1|dom(g1^)))/(g(#)f1);
+
+theorem :: CFUNCT_1:62
+  f1/f - g1/g = (f1(#)g - g1(#)f)/(f(#)g);
+
+theorem :: CFUNCT_1:63
+  |.f1/f2.| = |.f1.|/|.f2.|;
+
+theorem :: CFUNCT_1:64
+(f1+f2)|X = f1|X + f2|X & (f1+f2)|X = f1|X + f2 & (f1+f2)|X = f1 + f2|X;
+
+theorem :: CFUNCT_1:65
+(f1(#)f2)|X = f1|X (#) f2|X & (f1(#)f2)|X = f1|X (#) f2 & (f1(#)f2)|X = f1 (#)
+ f2|X;
+
+theorem :: CFUNCT_1:66
+(-f)|X = -(f|X) & (f^)|X = (f|X)^ & (|.f.|)|X = |.(f|X).|;
+
+theorem :: CFUNCT_1:67
+  (f1-f2)|X = f1|X - f2|X & (f1-f2)|X = f1|X - f2 &(f1-f2)|X = f1 - f2|X;
+
+theorem :: CFUNCT_1:68
+  (f1/f2)|X = f1|X / f2|X & (f1/f2)|X = f1|X / f2 &(f1/f2)|X = f1 / f2|X;
+
+theorem :: CFUNCT_1:69
+  (r(#)f)|X = r(#)(f|X);
+
+begin
+::
+:: TOTAL PARTIAL FUNCTIONS FROM A DOMAIN, TO COMPLEX
+::
+
+theorem :: CFUNCT_1:70
+(f1 is total & f2 is total iff f1+f2 is total) &
+(f1 is total & f2 is total iff f1-f2 is total) &
+(f1 is total & f2 is total iff f1(#)f2 is total);
+
+theorem :: CFUNCT_1:71
+f is total iff r(#)f is total;
+
+theorem :: CFUNCT_1:72
+f is total iff -f is total;
+
+theorem :: CFUNCT_1:73
+f is total iff |.f.| is total;
+
+theorem :: CFUNCT_1:74
+f^ is total iff f"{0c} = {} & f is total;
+
+theorem :: CFUNCT_1:75
+f1 is total & f2"{0c} = {} & f2 is total iff f1/f2 is total;
+
+theorem :: CFUNCT_1:76
+  f1 is total & f2 is total implies (f1+f2)/.c = ((f1/.c)) + ((f2/.c)) &
+        (f1-f2)/.c = ((f1/.c)) - ((f2/.c)) & (f1(#)
+f2)/.c = ((f1/.c)) * ((f2/.c));
+
+theorem :: CFUNCT_1:77
+  f is total implies (r(#)f)/.c = r * ((f/.c));
+
+theorem :: CFUNCT_1:78
+  f is total implies (-f)/.c = - (f/.c) & (|.f.|).c = |. (f/.c) .|;
+
+theorem :: CFUNCT_1:79
+  f^ is total implies (f^)/.c = ((f/.c))";
+
+theorem :: CFUNCT_1:80
+  f1 is total & f2^ is total implies (f1/f2)/.c = ((f1/.c)) *(((f2/.c)))";
+
+begin
+::
+:: BOUNDED AND CONSTANT PARTIAL FUNCTIONS FROM A DOMAIN, TO COMPLEX
+::
+
+definition let C,f,Y;
+pred f is_bounded_on Y means
+:: CFUNCT_1:def 3
+  |.f.| is_bounded_on Y;
+end;
+
+theorem :: CFUNCT_1:81
+  f is_bounded_on Y iff ex p be real number st
+       for c st c in Y /\ dom f holds |.(f/.c).|<= p;
+
+theorem :: CFUNCT_1:82
+  Y c= X & f is_bounded_on X implies f is_bounded_on Y;
+
+theorem :: CFUNCT_1:83
+  X misses dom f implies f is_bounded_on X;
+
+theorem :: CFUNCT_1:84
+f is_bounded_on Y implies r(#)f is_bounded_on Y;
+
+theorem :: CFUNCT_1:85
+  |.f.| is_bounded_below_on X;
+
+theorem :: CFUNCT_1:86
+f is_bounded_on Y implies |.f.| is_bounded_on Y & -f is_bounded_on Y;
+
+theorem :: CFUNCT_1:87
+(f1 is_bounded_on X & f2 is_bounded_on Y) implies
+f1+f2 is_bounded_on (X /\ Y);
+
+theorem :: CFUNCT_1:88
+f1 is_bounded_on X & f2 is_bounded_on Y implies
+ f1(#)f2 is_bounded_on (X /\ Y) & f1-f2 is_bounded_on X /\ Y;
+
+theorem :: CFUNCT_1:89
+  f is_bounded_on X & f is_bounded_on Y implies
+ f is_bounded_on X \/ Y;
+
+theorem :: CFUNCT_1:90
+  f1 is_constant_on X & f2 is_constant_on Y implies
+ (f1 + f2) is_constant_on (X /\ Y) &
+ (f1 - f2) is_constant_on (X /\ Y) &
+ (f1 (#) f2) is_constant_on (X /\ Y);
+
+theorem :: CFUNCT_1:91
+f is_constant_on Y implies q(#)f is_constant_on Y;
+
+theorem :: CFUNCT_1:92
+f is_constant_on Y implies |.f.| is_constant_on Y &
+                            -f is_constant_on Y;
+
+theorem :: CFUNCT_1:93
+f is_constant_on Y implies f is_bounded_on Y;
+
+theorem :: CFUNCT_1:94
+  f is_constant_on Y implies (for r holds r(#)f is_bounded_on Y) &
+                            (-f is_bounded_on Y) &
+                            |.f.| is_bounded_on Y;
+
+theorem :: CFUNCT_1:95
+(f1 is_bounded_on X & f2 is_constant_on Y implies
+       f1+f2 is_bounded_on (X /\ Y));
+
+theorem :: CFUNCT_1:96
+  (f1 is_bounded_on X & f2 is_constant_on Y implies
+          f1-f2 is_bounded_on X /\ Y &
+          f2-f1 is_bounded_on X /\ Y & f1(#)f2 is_bounded_on X /\ Y);

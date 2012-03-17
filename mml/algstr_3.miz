@@ -1,0 +1,420 @@
+:: Ternary Fields
+::  by Micha{\l} Muzalewski and Wojciech Skaba
+::
+:: Received October 15, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary VECTSP_1, MULTOP_1, FUNCT_1, ARYTM_1, RLVECT_1, ARYTM_3, ALGSTR_3;
+ notation XBOOLE_0, SUBSET_1, NUMBERS, STRUCT_0, RLVECT_1, REAL_1, MULTOP_1;
+ constructors RLVECT_1, REAL_1, MULTOP_1, MEMBERED, XBOOLE_0;
+ clusters STRUCT_0, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, SUBSET, ARITHM;
+ definitions STRUCT_0;
+ theorems MULTOP_1, RLVECT_1, XCMPLX_0, XCMPLX_1;
+ schemes MULTOP_1;
+
+begin
+
+:: TERNARY FIELDS
+
+:: This few lines define the basic algebraic structure (F, 0, 1, T)
+:: used in the whole article.
+
+definition
+  struct(ZeroStr) TernaryFieldStr (# carrier -> set,
+                      Zero, unity -> Element of the carrier,
+                          ternary -> TriOp of the carrier #);
+end;
+
+definition
+ cluster non empty TernaryFieldStr;
+ existence
+  proof
+    consider A being non empty set, Z,u being Element of A,
+             t being TriOp of A;
+   take TernaryFieldStr(#A,Z,u,t#);
+   thus the carrier of TernaryFieldStr(#A,Z,u,t#) is non empty;
+  end;
+end;
+
+reserve F for non empty TernaryFieldStr;
+
+:: The following definitions let us simplify the notation
+
+definition let F;
+  mode Scalar of F is Element of F;
+end;
+
+reserve a,b,c for Scalar of F;
+
+definition let F,a,b,c;
+  func Tern(a,b,c) -> Scalar of F equals :Def1:
+   (the ternary of F).(a,b,c);
+  correctness;
+end;
+
+definition let F;
+ canceled;
+  func 1_ F -> Scalar of F equals :Def3:
+   the unity of F;
+  correctness;
+end;
+
+:: The following definition specifies a ternary operation that
+:: will be used in the forthcoming example: TernaryFieldEx
+:: as its TriOp function.
+
+definition
+  func ternaryreal -> TriOp of REAL means :Def4:
+  for a,b,c being Real holds it.(a,b,c) = a*b + c;
+  existence
+  proof
+    deffunc F(Real,Real,Real) = $1*$2 + $3;
+    ex X being TriOp of REAL st
+    for a,b,c being Real holds X.(a,b,c) = F(a,b,c) from TriOpLambda;
+    hence thesis;
+  end;
+  uniqueness
+   proof
+    let o1,o2 be TriOp of REAL;
+    assume that
+      A1: for a,b,c being Real holds o1.(a,b,c) = a*b + c and
+      A2: for a,b,c being Real holds o2.(a,b,c) = a*b + c;
+      for a,b,c being Real holds o1.(a,b,c) = o2.(a,b,c)
+      proof
+        let a,b,c be Real;
+        thus o1.(a,b,c) = a*b + c by A1
+                       .= o2.(a,b,c) by A2;
+      end;
+    hence o1 = o2 by MULTOP_1:4;
+   end;
+end;
+
+:: Now comes the definition of example structure called: TernaryFieldEx.
+:: This example will be used to prove the existence of the Ternary-Field mode.
+
+definition
+  func TernaryFieldEx -> strict TernaryFieldStr equals :Def5:
+   TernaryFieldStr (# REAL, 0, 1, ternaryreal #);
+  correctness;
+end;
+
+definition
+ cluster TernaryFieldEx -> non empty;
+ coherence
+ proof
+   thus the carrier of TernaryFieldEx is non empty by Def5;
+ end;
+end;
+
+:: On the contrary to the Tern() (starting with uppercase), this definition
+:: allows for the use of the currently specified example ternary field.
+
+definition
+  let a,b,c be Scalar of TernaryFieldEx;
+  func tern(a,b,c) -> Scalar of TernaryFieldEx equals
+     (the ternary of TernaryFieldEx).(a,b,c);
+  correctness;
+end;
+
+Lm1: for a,b being Real holds a-(b+a) = -b
+  proof
+    let a,b be Real;
+    thus a-(b+a) = a-b-a by XCMPLX_1:36
+                .= a+-b-a by XCMPLX_0:def 8
+                .= -a+(a+-b) by XCMPLX_0:def 8
+                .= -a+a+-b by XCMPLX_1:1
+                .= 0+-b by XCMPLX_0:def 6
+                .=-b;
+  end;
+
+canceled 2;
+
+theorem
+Th3: for u,u',v,v' being Real holds
+  u <> u' implies ex x being Real st u*x+v = u'*x+v'
+   proof
+    let u,u',v,v' be Real;
+    assume A1: u <> u';
+    set x = (v' - v)/(u - u');
+      u - u' <> 0 by A1,XCMPLX_1:15;
+    then A2:  (u - u')*x = v' - v by XCMPLX_1:88;
+    reconsider x as Real;
+      u*x - u'*x = v' - v by A2,XCMPLX_1:40;
+    then u*x + -u'*x = v' - v by XCMPLX_0:def 8;
+    then u*x = v' - v - -u'*x by XCMPLX_1:26
+            .= v' - v + --u'*x by XCMPLX_0:def 8
+            .= u'*x + v' - v by XCMPLX_1:29
+            .= u'*x + v' + -v by XCMPLX_0:def 8;
+    then u*x - -v = u'*x + v' by XCMPLX_1:26;
+    then A3: u*x + --v = u'*x + v' by XCMPLX_0:def 8;
+    take x;
+    thus thesis by A3;
+   end;
+
+canceled;
+
+theorem
+Th5: for u,a,v being Scalar of TernaryFieldEx
+        for z,x,y being Real holds
+           u=z & a=x & v=y implies Tern(u,a,v) = z*x + y
+proof
+ let u,a,v be Scalar of TernaryFieldEx;
+ let z,x,y be Real;
+ assume u=z & a=x & v=y;
+    hence Tern(u, a, v) = ternaryreal.(z, x, y) by Def1,Def5
+     .= z*x + y by Def4;
+end;
+
+theorem
+Th6: 0 = 0.TernaryFieldEx by Def5,RLVECT_1:def 2;
+
+:: The 1 defined in TeranaryFieldEx structure is equal to
+:: the ordinary 1 of real numbers.
+
+theorem
+Th7: 1 = 1_ TernaryFieldEx by Def3,Def5;
+
+Lm2: for a being Scalar of TernaryFieldEx holds
+     Tern(a, 1_ TernaryFieldEx, 0.TernaryFieldEx) = a
+ proof
+   let a be Scalar of TernaryFieldEx;
+   reconsider x=a as Real by Def5;
+   thus Tern(a, 1_ TernaryFieldEx, 0.TernaryFieldEx)
+     = ternaryreal.(x, 1, 0) by Def1,Def5,Th6,Th7
+    .= x*1 + 0 by Def4
+    .= a;
+ end;
+
+Lm3: for a being Scalar of TernaryFieldEx holds
+     Tern(1_ TernaryFieldEx, a, 0.TernaryFieldEx) = a
+ proof
+   let a be Scalar of TernaryFieldEx;
+   reconsider x=a as Real by Def5;
+   thus Tern(1_ TernaryFieldEx, a, 0.TernaryFieldEx)
+     = ternaryreal.(1, x, 0) by Def1,Def5,Th6,Th7
+    .= x*1 + 0 by Def4
+    .= a;
+ end;
+
+Lm4: for a,b being Scalar of TernaryFieldEx holds
+     Tern(a, 0.TernaryFieldEx, b) = b
+ proof
+   let a,b be Scalar of TernaryFieldEx;
+   reconsider x=a, y=b as Real by Def5;
+   thus Tern(a, 0.TernaryFieldEx, b)
+     = ternaryreal.(x, 0, y) by Def1,Def5,Th6
+    .= x*0 + y by Def4
+    .= b;
+ end;
+
+Lm5: for a,b being Scalar of TernaryFieldEx holds
+     Tern(0.TernaryFieldEx, a, b) = b
+ proof
+   let a,b be Scalar of TernaryFieldEx;
+   reconsider x=a, y=b as Real by Def5;
+   thus Tern(0.TernaryFieldEx, a, b)
+     = ternaryreal.(0, x, y) by Def1,Def5,Th6
+    .= 0*x + y by Def4
+    .= b;
+ end;
+
+Lm6: for u,a,b being Scalar of TernaryFieldEx
+     ex v being Scalar of TernaryFieldEx st
+       Tern(u,a,v) = b
+ proof
+   let u,a,b be Scalar of TernaryFieldEx;
+   reconsider z=u, x=a, y=b as Real by Def5;
+   reconsider t = y - z*x as Real;
+A1: y = z*x + t by XCMPLX_1:27;
+   reconsider v=t as Scalar of TernaryFieldEx by Def5;
+   take v;
+   thus Tern(u, a, v) = ternaryreal.(z, x, t) by Def1,Def5
+    .= b by A1,Def4;
+ end;
+
+Lm7: for u,a,v,v' being Scalar of TernaryFieldEx holds
+       Tern(u,a,v) = Tern(u,a,v') implies v = v'
+ proof
+   let u,a,v,v' be Scalar of TernaryFieldEx;
+   reconsider z=u, x=a, y=v, y'=v' as Real by Def5;
+   A1: Tern(u, a, v) = z*x + y by Th5;
+      Tern(u, a, v') = z*x + y' by Th5;
+   hence thesis by A1,XCMPLX_1:2;
+ end;
+
+Lm8: for a,a'  being Scalar of TernaryFieldEx holds
+     a <> a' implies
+      for b,b' being Scalar of TernaryFieldEx
+        ex u,v being Scalar of TernaryFieldEx st
+               Tern(u,a,v) = b & Tern(u,a',v) = b'
+ proof
+   let a, a' be Scalar of TernaryFieldEx;
+   assume A1: a<>a';
+   let b, b' be Scalar of TernaryFieldEx;
+   reconsider x=a, x'=a', y=b, y'=b' as Real by Def5;
+   set s = (y'-y)/(x'-x);
+   set t = y - x*s;
+   reconsider u=s, v=t as Scalar of TernaryFieldEx by Def5;
+   take u,v;
+   thus Tern(u,a,v)
+        = ternaryreal.(s, x, t) by Def1,Def5
+       .= s*x + (y - s*x) by Def4
+       .= s*x + ((-s*x) + y) by XCMPLX_0:def 8
+       .= (s*x + (-s*x)) + y by XCMPLX_1:1
+       .= (s*x - s*x) + y by XCMPLX_0:def 8
+       .= y + 0 by XCMPLX_1:14
+       .= b;
+   A2: x'-x <> 0 by A1,XCMPLX_1:15;
+   thus Tern(u,a',v) = ternaryreal.(s, x', t) by Def1,Def5
+       .= s*x' + t by Def4
+       .= ((y'-y)/(x'-x))*x' + ((- x*((y'-y)/(x'-x))) + y) by XCMPLX_0:def 8
+       .= (((y'-y)/(x'-x))*x' + (- x*((y'-y)/(x'-x)))) + y by XCMPLX_1:1
+       .= (((y'-y)/(x'-x))*x' - ((y'-y)/(x'-x))*x) + y by XCMPLX_0:def 8
+       .= (((y'-y)/(x'-x))*(x'-x)) + y by XCMPLX_1:40
+       .= y'-y + y by A2,XCMPLX_1:88
+       .= b' by XCMPLX_1:27;
+ end;
+
+Lm9: for u,u' being Scalar of TernaryFieldEx holds
+     u <> u' implies
+      for v,v' being Scalar of TernaryFieldEx
+          ex a being Scalar of TernaryFieldEx st Tern(u,a,v) = Tern(u',a,v')
+ proof
+   let u,u' be Scalar of TernaryFieldEx;
+   assume A1: u <> u';
+   let v,v' be Scalar of TernaryFieldEx;
+   reconsider uu = u, uu' = u', vv = v, vv' = v' as Real by Def5;
+  consider aa being Real such that A2: uu*aa+vv = uu'*aa+vv' by A1,Th3;
+  reconsider a = aa as Scalar of TernaryFieldEx by Def5;
+    Tern(u,a,v) = uu*aa+vv & Tern(u',a,v') = uu'*aa+vv' by Th5;
+  hence thesis by A2;
+ end;
+
+Lm10: for a,a',u,u',v,v' being Scalar of TernaryFieldEx holds
+          Tern(u,a, v) = Tern(u',a, v')
+        & Tern(u,a',v) = Tern(u',a',v')
+     implies a = a' or u = u'
+ proof
+  let a,a',u,u',v,v' be Scalar of TernaryFieldEx;
+  assume that
+  A1:  Tern(u,a, v) = Tern(u',a, v')
+  and
+  A2: Tern(u,a',v) = Tern(u',a',v');
+  reconsider aa=a,aa'=a',uu=u,uu'=u',vv=v,vv'=v' as Real by Def5;
+    Tern(u,a, v) = uu*aa + vv & Tern(u',a, v') = uu'*aa + vv'
+  & Tern(u,a',v) = uu*aa' + vv & Tern(u',a',v') = uu'*aa' + vv' by Th5;
+  then uu*aa + (vv - (uu*aa' + vv)) = uu'*aa + vv' - (uu'*aa' + vv')
+                                                  by A1,A2,XCMPLX_1:29;
+  then uu*aa + (vv - (uu*aa' + vv)) = uu'*aa + (vv' - (uu'*aa' + vv'))
+                                                  by XCMPLX_1:29;
+  then uu*aa + - uu*aa' = uu'*aa + (vv' - (uu'*aa' + vv')) by Lm1;
+  then uu*aa + - uu*aa' = uu'*aa + -uu'*aa' by Lm1;
+  then uu*aa - uu*aa' = uu'*aa + -uu'*aa' by XCMPLX_0:def 8;
+  then uu*aa - uu*aa' = uu'*aa -uu'*aa' by XCMPLX_0:def 8;
+  then uu*(aa - aa') = uu'*aa -uu'*aa' by XCMPLX_1:40;
+  then uu*(aa - aa') = uu'*(aa - aa') by XCMPLX_1:40;
+  then uu = uu' or aa - aa' = 0 by XCMPLX_1:5;
+  hence thesis by XCMPLX_1:15;
+ end;
+
+definition let IT be non empty TernaryFieldStr;
+  attr IT is Ternary-Field-like means :Def7:
+    (0.IT <> 1_ IT)
+  & (for a        being Scalar of IT holds Tern(a, 1_ IT, 0.IT) = a)
+  & (for a        being Scalar of IT holds Tern(1_ IT, a, 0.IT) = a)
+  & (for a,b      being Scalar of IT holds Tern(a, 0.IT, b ) = b)
+  & (for a,b      being Scalar of IT holds Tern(0.IT, a, b ) = b)
+  & (for u,a,b    being Scalar of IT ex v being Scalar of IT st
+     Tern(u,a,v) = b)
+  & (for u,a,v,v' being Scalar of IT holds Tern(u,a,v) = Tern(u,a,v')
+     implies v = v')
+  & (for a,a'     being Scalar of IT holds
+     a <> a' implies
+       for b,b' being Scalar of IT
+         ex u,v being Scalar of IT st
+                Tern(u,a,v) = b & Tern(u,a',v) = b')
+  & (for u,u'     being Scalar of IT holds
+     u <> u' implies
+       for v,v' being Scalar of IT
+           ex a being Scalar of IT st
+                Tern(u,a,v) = Tern(u',a,v'))
+  & (for a,a',u,u',v,v' being Scalar of IT holds
+     Tern(u,a,v) = Tern(u',a,v') & Tern(u,a',v) = Tern(u',a',v')
+     implies a = a' or u = u');
+end;
+
+definition
+ cluster strict Ternary-Field-like (non empty TernaryFieldStr);
+  existence
+   proof
+      TernaryFieldEx is Ternary-Field-like
+     by Def7,Lm2,Lm3,Lm4,Lm5,Lm6,Lm7,Lm8,Lm9,Lm10,Th6,Th7;
+    hence thesis;
+   end;
+end;
+
+definition
+  mode Ternary-Field is Ternary-Field-like (non empty TernaryFieldStr);
+end;
+
+reserve F for Ternary-Field;
+reserve a,a',b,c,x,x',u,u',v,v',z for Scalar of F;
+
+theorem
+    a<>a' & Tern(u,a,v) = Tern(u',a,v')
+        & Tern(u,a',v) = Tern(u',a',v')
+  implies u=u' & v=v'
+    proof
+     assume that
+     A1: a<>a' and
+     A2: Tern(u,a,v) = Tern(u',a,v') and
+     A3: Tern(u,a',v) = Tern(u',a',v');
+        u = u' by A1,A2,A3,Def7;
+     hence thesis by A2,Def7;
+    end;
+
+canceled 2;
+
+theorem
+      a<>0.F implies for b,c ex x st Tern(a,x,b) = c
+     proof
+      assume A1: a <> 0.F;
+      let b,c;
+      consider x such that A2: Tern(a,x,b) = Tern(0.F,x,c) by A1,Def7;
+      take x;
+      thus thesis by A2,Def7;
+     end;
+
+theorem
+      a<>0.F & Tern(a,x,b) = Tern(a,x',b) implies x=x'
+     proof
+      assume that
+      A1: a<>0.F and
+      A2: Tern(a,x,b) = Tern(a,x',b);
+      set c = Tern(a,x,b);
+        Tern(a,x,b) = Tern(0.F,x,c) & Tern(a,x',b) = Tern(0.F,x',c)
+       by A2,Def7;
+      hence thesis by A1,Def7;
+     end;
+
+theorem
+      a<>0.F implies for b,c ex x st Tern(x,a,b) = c
+     proof
+      assume A1: a <> 0.F;
+      let b,c;
+      consider x,z such that
+      A2: Tern(x,a,z) = c & Tern(x,0.F,z) = b by A1,Def7;
+      take x;
+      thus thesis by A2,Def7;
+     end;
+
+theorem
+      a<>0.F & Tern(x,a,b) = Tern(x',a,b) implies x=x'
+    proof
+     assume A1: a<>0.F & Tern(x,a,b) = Tern(x',a,b);
+       Tern(x,0.F,b) = b & Tern(x',0.F,b) = b by Def7;
+     hence thesis by A1,Def7;
+    end;

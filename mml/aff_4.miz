@@ -1,0 +1,1223 @@
+:: Planes in Affine Spaces
+::  by Wojciech Leo\'nczuk, Henryk Oryszczyszyn and Krzysztof Pra\.zmowski
+::
+:: Received December 5, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary DIRAF, BOOLE, ANALOAF, AFF_1, INCSP_1, PARSP_1, AFF_2, AFF_4;
+ notation TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, ANALOAF, DIRAF, AFF_1,
+      PAPDESAF;
+ constructors AFF_1, AFF_2, MEMBERED, XBOOLE_0;
+ clusters STRUCT_0, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ theorems AFF_1, DIRAF, TARSKI, AFF_2, XBOOLE_0, XBOOLE_1;
+
+begin
+
+ reserve AS for AffinSpace;
+ reserve a,b,c,d,a',b',c',d',p,q,r,x,y for Element of AS;
+ reserve A,C,K,M,N,P,Q,X,Y,Z for Subset of AS;
+
+Lm1: for x being set st x in X holds x is Element of AS;
+
+theorem Th1: (LIN p,a,a' or LIN p,a',a) & p<>a implies ex b' st
+ LIN p,b,b' & a,b // a',b'
+proof assume that A1: LIN p,a,a' or LIN p,a',a and A2: p<>a;
+  a,p // p,a' proof LIN p,a,a' by A1,AFF_1:15; then p,a // p,a' by AFF_1:def 1
+;
+hence thesis by AFF_1:13; end; then consider b' such that A3: b,p // p,b' and
+A4: b,a // a',b' by A2,DIRAF:47; p,b // p,b' by A3,AFF_1:13; then LIN p,b,b'
+&
+a,b // a',b' by A4,AFF_1:13,def 1; hence thesis; end;
+
+theorem Th2: (a,b // A or b,a // A) & a in A implies b in A
+proof assume that A1: a,b // A or b,a // A and A2: a in A;
+  a,b // A & A is_line by A1,AFF_1:40,48; hence thesis by A2,AFF_1:37; end;
+
+theorem Th3: (a,b // A or b,a // A) & (A // K or K // A) implies
+(a,b // K & b,a // K) proof assume that A1: a,b // A or b,a // A and
+A2: A // K or K // A; a,b // A & A // K by A1,A2,AFF_1:48;
+hence a,b // K by AFF_1:57; hence b,a // K by AFF_1:48; end;
+
+theorem Th4: (a,b // A or b,a // A) & (a,b // c,d or c,d // a,b) & a<>b implies
+ c,d // A & d,c // A
+ proof assume that A1: a,b // A or b,a // A and A2: a,b // c,d or
+ c,d // a,b and A3: a<>b; a,b // A & a,b // c,d by A1,A2,AFF_1:13,48;
+ hence c,d // A by A3,AFF_1:46; hence d,c // A by AFF_1:48; end;
+
+theorem (a,b // M or b,a // M) & (a,b // N or b,a // N) & a<>b implies
+ M // N & N // M
+proof assume that A1: (a,b // M or b,a // M) & (a,b // N or b,a // N)
+and A2: a<>b;
+A3:a,b // M & a,b // N by A1,AFF_1:48; hence M // N by A2,AFF_1:67; thus
+  N // M by A2,A3,AFF_1:67; end;
+
+theorem (a,b // M or b,a // M) & (c,d // M or d,c // M) implies
+ a,b // c,d & a,b // d,c
+proof assume A1:
+ (a,b // M or b,a // M) & (c,d // M or d,c // M); then A2: a,b // M &
+c,d // M by AFF_1:48; M is_line by A1,AFF_1:40; hence a,b // c,d by A2,AFF_1:45
+; hence a,b // d,c by AFF_1:13; end;
+
+theorem Th7: (A // C or C // A) & a<>b & (a,b // c,d or c,d // a,b) &
+                          a in A & b in A & c in C implies d in C
+proof assume A1: (A // C or C // A) & a<>b & (a,b // c,d or c,d // a,b) &
+a in A & b in A & c in C; then A is_line & C is_line by AFF_1:50;
+then a,b // A by A1,AFF_1:66; then c,d // A by A1,Th4; then c,d // C by A1,Th3;
+hence thesis by A1,Th2; end;
+
+Lm2: A // K & a in A & a' in A & d in K implies
+ex d' st d' in K & a,d // a',d' proof assume
+A1:  A // K & a in A & a' in A & d in K; then A2: A is_line by AFF_1:50;
+A3: now assume A4: a<>a'; consider d' such that A5: a,a' // d,d' and
+ A6: a,d // a',d' by DIRAF:47; d,d' // a,a' by A5,AFF_1:13;
+ then d,d' // A by A1,A2,A4,AFF_1:41; then d,d' // K by A1,Th3; then d' in K
+ by A1,Th2; hence thesis by A6; end;
+   now assume A7: a=a'; take d'=d; thus d' in K by A1;
+ thus a,d // a',d' by A7,AFF_1:11; end; hence thesis by A3; end;
+
+theorem Th8: q in M & q in N & a in M & a' in M & b in N & b' in
+ N & q<>a & q<>b &
+M<>N & (a,b // a',b' or b,a // b',a') & M is_line & N is_line & q=a'
+implies q=b'
+proof assume that A1: q in M & q in N & a in M & a' in M & b in N & b' in N and
+A2: q<>a & q<>b & M<>N and A3: a,b // a',b' or b,a // b',a' and A4: M is_line &
+N is_line and A5: q=a'; A6: LIN q,a,a' & LIN q,b,b' by A1,A4,AFF_1:33;
+A7: not LIN q,a,b proof assume not thesis; then consider A such that
+ A8: A is_line & q in A & a in A & b in A by AFF_1:33;
+   M=A & N=A by A1,A2,A4,A8,AFF_1:30; hence contradiction by A2; end;
+  a,b // a',b' by A3,AFF_1:13; hence thesis by A5,A6,A7,AFF_1:69; end;
+
+theorem Th9: q in M & q in N & a in M & a' in M & b in N & b' in
+ N & q<>a & q<>b &
+M<>N & (a,b // a',b' or b,a // b',a') & M is_line & N is_line & a=a'
+implies b=b'
+proof assume that A1: q in M & q in N & a in M & a' in M & b in N & b' in N and
+A2: q<>a & q<>b & M<>N and A3: a,b // a',b' or b,a // b',a' and A4: M is_line &
+N is_line and A5: a=a'; A6: LIN q,a,a' & LIN q,b,b' by A1,A4,AFF_1:33;
+A7: not LIN q,a,b proof assume not thesis; then consider A such that
+ A8: A is_line & q in A & a in A & b in A by AFF_1:33;
+   M=A & N=A by A1,A2,A4,A8,AFF_1:30; hence contradiction by A2; end;
+ A9: LIN q,b,b & a,b // a',b by A5,AFF_1:11,16;
+  a,b // a',b' by A3,AFF_1:13; hence thesis by A6,A7,A9,AFF_1:70; end;
+
+theorem Th10: (M // N or N // M) & a in M & a' in M & b in N & b' in N & M<>N &
+ (a,b // a',b' or b,a // b',a') & a=a' implies b=b'
+proof assume that A1: M // N or N // M and A2: a in M & a' in M & b in N & b'
+in N
+and A3: M<>N and A4: a,b // a',b' or b,a // b',a' and A5: a=a';
+   a,b // a,b' by A4,A5,AFF_1:13;
+then LIN a,b,b' by AFF_1:def 1; then A6: LIN
+ b,b',a by AFF_1:15; assume A7: b<>b';
+  N is_line by A1,AFF_1:50; then a in N by A2,A6,A7,AFF_1:39;
+hence contradiction by A1,A2,A3,AFF_1:59; end;
+
+theorem Th11: ex A st a in A & b in A & A is_line
+ proof LIN a,b,b by AFF_1:16; then ex A st
+ A is_line & a in A & b in A & b in A by AFF_1:33;
+  hence thesis; end;
+
+theorem Th12: A is_line implies ex q st not q in A
+ proof assume A1: A is_line; then consider a,b such that
+  A2: a in A & b in A & a<>b by AFF_1:31;
+  consider q such that A3: not LIN a,b,q by A2,AFF_1:22;
+     not q in A by A1,A2,A3,AFF_1:33;
+  hence thesis; end;
+
+definition let AS,K,P; func Plane(K,P) -> Subset of AS equals
+:Def1: {a: ex b st a,b // K & b in P};
+coherence proof set X = {a: ex b st a,b // K & b in P};
+  now let x be set; assume x in X; then ex a st a=x &
+ ex b st a,b // K & b in P; hence
+   x in the carrier of AS; end;
+ hence X is Subset of AS by TARSKI:def 3;
+ end; end;
+
+definition let AS,X; attr X is being_plane means :Def2:
+ex K,P st K is_line & P is_line & not K // P & X = Plane(K,P);
+  synonym X is_plane;
+end;
+
+Lm3: for q holds (q in Plane(K,P) iff ex b st q,b // K & b in P)
+proof let q;
+A1: now assume q in Plane(K,P); then q in {a: ex b st a,b // K & b in
+ P} by Def1;
+ then ex a st a=q &
+ ex b st a,b // K & b in P;hence ex b st q,b // K & b in P; end;
+   now assume ex b st q,b // K & b in P;
+ then q in {a: ex b st a,b // K & b in P}; hence q in Plane(K,P) by Def1;end;
+hence thesis by A1; end;
+
+theorem not K is_line implies Plane(K,P) = {}
+proof assume A1: not K is_line;assume A2: Plane(K,P)<>{};
+consider x being Element of Plane(K,P);
+  x in Plane(K,P) by A2;
+then x in {a: ex b st a,b // K & b in P} by Def1;
+then ex a st x=a & ex b st a,b // K & b in P;hence contradiction by A1,AFF_1:40
+; end;
+
+theorem Th14: K is_line implies P c= Plane(K,P)
+proof assume A1: K is_line;
+  now let x be set; assume A2: x in P;
+then reconsider a=x as Element of AS;
+  a,a // K & a in P by A1,A2,AFF_1:47;
+then x in {a': ex b st a',b // K & b in P}; hence x in Plane(K,P) by Def1;
+end;
+hence thesis by TARSKI:def 3; end;
+
+theorem K // P implies Plane(K,P) = P
+proof assume A1: K // P; then A2: K is_line & P is_line by AFF_1:50;
+set X=Plane(K,P); A3: P c= X by A2,Th14;
+   X c= P proof now let x be set; assume x in X;
+then x in {a: ex b st a,b // K & b in P} by Def1;
+then consider a such that A4: x=a and A5: ex b st a,b // K & b in P;
+consider b such that A6: a,b // K and A7: b in P by A5;
+  a,b // P by A1,A6,AFF_1:57; then b,a // P by AFF_1:48;hence x in P
+by A2,A4,A7,AFF_1:37; end; hence thesis by TARSKI:def 3; end;
+hence thesis by A3,XBOOLE_0:def 10; end;
+
+theorem Th16: K // M implies Plane(K,P) = Plane(M,P)
+proof assume A1: K // M;
+  now let x be set; thus x in Plane(K,P) iff x in Plane(M,P)
+proof A2: now assume x in Plane(K,P); then x in {a: ex b st a,b // K & b in P
+}
+by Def1; then consider a such that A3: x=a and
+A4: ex b st a,b // K & b in P; consider b such that A5: a,b // K & b in
+ P by A4;
+  a,b // M by A1,A5,AFF_1:57; then x in {a': ex b st a',b // M & b in
+ P} by A3,A5;
+hence x in Plane(M,P) by Def1; end;
+   now assume x in Plane(M,P); then x in {a: ex b st a,b // M & b in P}
+by Def1; then consider a such that A6: x=a and A7: ex b st a,b // M & b in P;
+consider b such that A8: a,b // M & b in P by A7;
+  a,b // K by A1,A8,AFF_1:57;
+then x in {a': ex b st a',b // K & b in P} by A6,A8;
+hence x in Plane(K,P) by Def1; end;
+hence thesis by A2; end; end; hence thesis by TARSKI:2; end;
+
+theorem p in M & a in M & b in M & p in N & a' in N & b' in N & not p in P &
+not p in Q & M<>N & a in P & a' in P & b in Q & b' in Q & M is_line & N is_line
+ & P is_line & Q is_line implies (P // Q or ex q st q in P & q in Q)
+proof assume that A1: p in M & a in M & b in M & p in N & a' in N & b' in N and
+A2: not p in P & not p in Q & M<>N and A3: a in P & a' in P & b in Q & b' in
+ Q and
+A4: M is_line & N is_line & P is_line & Q is_line;
+A5: a<>a' by A1,A2,A3,A4,AFF_1:30;
+A6: b<>b' by A1,A2,A3,A4,AFF_1:30;
+  LIN p,a,b by A1,A4,AFF_1:33; then consider c such that
+A7: LIN p,a',c and A8:a,a' // b,c by A2,A3,Th1; A9: c in N by A1,A2,A3,A4,A7,
+AFF_1:39;
+then A10: b<>c by A1,A2,A3,A4,AFF_1:30;
+set D=Line(b,c); A11: D is_line by A10,AFF_1:def 3;
+A12: b in D & c in D by AFF_1:26;
+   now assume D<>Q;
+ then A13: c <>b' by A3,A4,A6,A11,A12,AFF_1:30;
+   LIN b',c,a' by A1,A4,A9,AFF_1:33; then consider q such that
+ A14: LIN b',b,q and A15: c,b // a',q by A13,Th1;
+ A16: q in Q by A3,A4,A6,A14,AFF_1:39; a',a // c,b by A8,AFF_1:13;
+ then a',a // a',q by A10,A15,AFF_1:14; then LIN a',a,q by AFF_1:def 1;
+then q in P
+ by A3,A4,A5,AFF_1:39; hence ex q st q in P & q in Q by A16; end;
+hence P // Q or ex q st q in P & q in Q by A3,A4,A5,A8,A10,A12,AFF_1:52; end;
+
+theorem Th18: a in M & b in M & a' in N & b' in N &
+  a in P & a' in P & b in Q & b' in Q & M<>N & M // N &
+  P is_line & Q is_line implies (P // Q or ex q st q in P & q in Q)
+proof assume that A1: a in M & b in M & a' in N & b' in N & a in P & a' in P &
+b in Q & b' in Q and A2: M<>N and A3: M // N and A4: P is_line & Q is_line;
+A5: M is_line & N is_line by A3,AFF_1:50;
+A6: a<>a' & b<>b' by A1,A2,A3,AFF_1:59;
+   now assume A7: a<>b;
+ consider c such that A8: a,b // a',c and A9: a,a' // b,c by DIRAF:47;
+   a,b // M by A1,A5,AFF_1:66; then a,b // N by A3,AFF_1:57; then a',c // N
+ by A7,A8,AFF_1:46; then A10: c in N by A1,A5,AFF_1:37;
+ then A11: b<>c by A1,A2,A3,AFF_1:59;
+ set D=Line(b,c); A12: D is_line by A11,AFF_1:def 3
+;A13: b in D & c in D by AFF_1:26;
+  now assume D<>Q;
+ then A14: c <>b' by A1,A4,A6,A12,A13,AFF_1:30;
+   LIN b',c,a' by A1,A5,A10,AFF_1:33; then consider q such that
+ A15: LIN b',b,q and A16: c,b // a',q by A14,Th1;
+ A17: q in Q by A1,A4,A6,A15,AFF_1:39; a',a // c,b by A9,AFF_1:13;
+  then a',a // a',q by A11,A16,AFF_1:14; then LIN a',a,q by AFF_1:def 1;
+then q in
+ P
+  by A1,A4,A6,AFF_1:39; hence ex q st q in P & q in Q by A17; end;
+hence thesis by A1,A4,A6,A9,A11,A13,AFF_1:52; end; hence thesis by A1; end;
+
+Lm4: K is_line & P is_line & a in Q & a in Plane(K,P) & K // Q implies
+ Q c= Plane(K,P)
+proof assume A1: K is_line & P is_line & a in Q & a in Plane(K,P) & K // Q;
+  now let x be set such that A2: x in Q; consider b such that A3: a,b // K & b
+in
+ P
+by A1,Lm3; A4: Plane(K,P) = Plane(Q,P) by A1,Th16; A5: Q is_line by A1,AFF_1:50
+;
+   a,b // Q by A1,A3,AFF_1:57; then A6: b in Q by A1,A5,AFF_1:37;
+reconsider c = x as Element of AS by A2;
+  c,b // Q by A2,A5,A6,AFF_1:37;
+hence x in Plane(K,P) by A3,A4,Lm3; end; hence thesis by TARSKI:def 3; end;
+
+Lm5: K is_line & P is_line & Q is_line & a in Plane(K,P) & b in Plane(K,P) &
+     a<>b & a in Q & b in Q implies Q c= Plane(K,P)
+proof assume A1: K is_line & P is_line & Q is_line & a in Plane(K,P) &
+b in Plane(K,P) & a<>b & a in Q & b in Q;
+  now let x be set; assume A2: x in Q;
+then reconsider c = x as Element of
+the carrier of AS;
+consider a' such that A3: a,a' // K &
+a' in P by A1,Lm3; consider b' such that A4: b,b' // K & b' in P by A1,Lm3;
+consider X such that A5: a in X & K // X by A1,AFF_1:63;
+consider Y such that A6: b in Y & K // Y by A1,AFF_1:63;
+A7: X // Y by A5,A6,AFF_1:58; A8: a,a' // X & b,b' // Y
+by A3,A4,A5,A6,AFF_1:57;
+then A9: a' in X & b' in Y by A5,A6,Th2;
+A10: X is_line & Y is_line by A8,AFF_1:40;
+A11: now assume X=Y;
+then Q = X by A1,A5,A6,A10,AFF_1:30;
+then Q c= Plane(K,P) by A1,A5,Lm4; hence x in Plane(K,P) by A2; end;
+   now assume X<>Y;
+then A12: P // Q or ex q st q in P & q in Q by A1,A3,A4,A5,A6,A7,A9,Th18;
+A13: now assume A14: P // Q;
+A15: now assume A16: P=Q; c,c // K by A1,AFF_1:47;
+hence x in Plane(K,P) by A2,A16,Lm3; end; now assume P<>Q;
+then A17: b<>b' by A1,A4,A14,AFF_1:59;
+   now assume A18: c <>b; consider c' such that A19: b,c // b',c' &
+b,b' // c,c' by DIRAF:47; b,c // Q by A1,A2,AFF_1:37; then b',c' // Q by A18,
+A19,AFF_1:46; then b',c' // P by A14,AFF_1:57; then A20: c' in P by A4,Th2
+;
+   c,c' // K by A4,A17,A19,AFF_1:46;
+hence x in Plane(K,P) by A20,Lm3; end;
+hence x in Plane(K,P) by A1; end;
+hence x in Plane(K,P) by A15; end;
+   now given q such that A21: q in P & q in Q and A22: not P // Q;
+A23: P<>Q by A1,A22,AFF_1:55;A24: now assume A25: q<>a;
+then A26: a<>a' by A1,A3,A21,A23,AFF_1:30;
+A27: now assume A28: q=a'; a,q // Q by A1,A21,AFF_1:37; then K // Q by A3,A25,
+A28,AFF_1:67;
+then Q c= Plane(K,P) by A1,Lm4; hence x in Plane(K,P) by A2; end;
+   now assume A29: q<>a';
+  LIN q,a,c by A1,A2,A21,AFF_1:33; then consider c' such that A30: LIN q,a',c'
+&
+a,a' // c,c' by A25,Th1; A31: q,a' // q,c' by A30,AFF_1:def 1;
+   q,a' // P by A1,A3,A21,AFF_1:37; then q,c' // P by A29,A31,AFF_1:46;
+then A32: c' in P by A21,Th2; c,c' // K by A3,A26,A30,AFF_1:46;
+hence x in Plane(K,P) by A32,Lm3; end;
+hence x in Plane(K,P) by A27; end;
+   now assume A33: q<>b; then A34: b<>b' by A1,A4,A21,A23,AFF_1:30;
+A35: now assume A36: q=b'; b,q // Q by A1,A21,AFF_1:37; then K // Q by A4,A33,
+A36,AFF_1:67;
+then Q c= Plane(K,P) by A1,Lm4; hence x in Plane(K,P) by A2; end;
+   now assume A37: q<>b';
+  LIN q,b,c by A1,A2,A21,AFF_1:33; then consider c' such that A38: LIN q,b',c'
+&
+b,b' // c,c' by A33,Th1; A39: q,b' // q,c' by A38,AFF_1:def 1;
+   q,b' // P by A1,A4,A21,AFF_1:37; then q,c' // P by A37,A39,AFF_1:46;
+then A40: c' in P by A21,Th2; c,c' // K by A4,A34,A38,AFF_1:46;
+hence x in Plane(K,P) by A40,Lm3; end;
+hence x in Plane(K,P) by A35; end; hence x in Plane(K,P) by A1,A24;
+end; hence x in Plane(K,P) by A12,A13; end;
+hence x in Plane(K,P) by A11; end; hence thesis by TARSKI:def 3; end;
+
+theorem Th19: X is_plane & a in X & b in X & a<>b implies Line(a,b) c= X
+proof assume that A1: X is_plane and A2: a in X & b in X and A3: a<>b;
+set Q = Line(a,b); A4: Q is_line by A3,AFF_1:def 3;
+A5: a in Q & b in Q by AFF_1:26;
+  ex K,P st K is_line & P is_line & not K // P & X=Plane(K,P) by A1,Def2;
+hence thesis by A2,A3,A4,A5,Lm5; end;
+
+Lm6: K is_line & P is_line & Q is_line & Q c= Plane(K,P) implies
+  Plane(K,Q) c= Plane(K,P)
+proof assume that A1: K is_line & P is_line & Q is_line and
+A2: Q c= Plane(K,P);
+  now let x be set; assume x in Plane(K,Q);
+ then x in {a: ex b st a,b // K & b in Q} by Def1; then consider a such that
+ A3: x=a and A4: ex b st a,b // K & b in Q; consider b such that
+ A5: a,b // K and A6: b in Q by A4;
+consider c such that A7: b,c // K and A8: c in P by A2,A6,Lm3;
+ consider M such that A9: b in M and A10: K // M by A1,AFF_1:63;
+ A11: M // K by A10;
+   a,b // M & b,c // M by A5,A7,A10,AFF_1:57; then a in M & c in M by A9,Th2;
+ then a,c // K by A11,AFF_1:54;
+hence x in Plane(K,P) by A3,A8,Lm3; end; hence thesis by TARSKI:def 3; end;
+
+theorem Th20: K is_line & P is_line & Q is_line & not K // P & not K // Q
+ & Q c= Plane(K,P) implies Plane(K,Q) = Plane(K,P)
+proof assume that A1: K is_line & P is_line & Q is_line and A2: not K // P &
+not K // Q and A3: Q c= Plane(K,P);
+A4: Plane(K,Q) c= Plane(K,P) by A1,A3,Lm6;
+consider a,b such that A5: a in Q & b in Q and A6: a<>b by A1,AFF_1:31;
+consider a' such that A7: a,a' // K and A8: a' in P by A3,A5,Lm3;
+consider b' such that A9: b,b' // K and A10: b' in P by A3,A5,Lm3;
+A11: a'<>b' proof assume A12: a'=b'; consider A such that A13: a' in A and
+ A14: K // A by A1,AFF_1:63; A15: A is_line by A14,AFF_1:50;
+   a',b // A & a',a // A by A7,A9,A12,A14,Th3;
+ then b in A & a in A by A13,Th2;hence contradiction by A1,A2,A5,A6,A14,A15,
+AFF_1:30
+; end;
+  a',a // K & b',b // K by A7,A9,AFF_1:48; then a' in Plane(K,Q) &
+b' in Plane(K,Q)
+by A5,Lm3; then P c= Plane(K,Q) by A1,A8,A10,A11,Lm5;
+ then Plane(K,P) c= Plane(K,Q) by A1,Lm6;
+hence thesis by A4,XBOOLE_0:def 10; end;
+
+theorem Th21: K is_line & P is_line & Q is_line & Q c= Plane(K,P)
+ implies P // Q or ex q st q in P & q in Q
+proof assume that A1: K is_line & P is_line & Q is_line and
+A2: Q c= Plane(K,P);
+consider a,b such that A3: a in Q & b in Q and A4: a<>b by A1,AFF_1:31;
+consider a' such that A5: a,a' // K and A6: a' in P by A2,A3,Lm3;
+consider b' such that A7: b,b' // K and A8: b' in P by A2,A3,Lm3;
+consider A such that A9: a' in A and A10: K // A by A1,AFF_1:63;
+consider M such that A11: b' in M and A12: K // M by A1,AFF_1:63;
+A13: a',a // A & b',b // M & A // M by A5,A7,A10,A12,Th3,AFF_1:58;
+then A14: a in A & b in M by A9,A11,Th2; A15: A is_line & M is_line by A10,A12,
+AFF_1:50;
+   now assume A=M;
+ then b in A & a in A by A9,A11,A13,Th2;
+ then a' in Q by A1,A3,A4,A9,A15,AFF_1:30; hence ex q st q in P & q in
+ Q by A6; end;
+hence thesis by A1,A3,A6,A8,A9,A11,A13,A14,Th18; end;
+
+theorem Th22: X is_plane & M is_line & N is_line & M c= X & N c= X implies
+ M // N or ex q st q in M & q in N
+proof assume that A1: X is_plane and A2: M is_line & N is_line and
+A3: M c= X & N c= X;
+consider K,P such that A4: K is_line & P is_line and A5: not K // P and
+A6: X = Plane(K,P) by A1,Def2;
+A7: now assume not K // M;
+ then N c= Plane(K,M) by A2,A3,A4,A5,A6,Th20
+; hence M // N or (ex q st q in M & q in N) by A2,A4,Th21; end;
+   now assume not K // N;
+ then M c= Plane(K,N) by A2,A3,A4,A5,A6,Th20;
+  then N // M or (ex q st q in N & q in M) by A2,A4,Th21;
+ hence M // N or (ex q st q in M & q in N); end;
+hence thesis by A7,AFF_1:58; end;
+
+theorem Th23: X is_plane & a in X & M c= X & a in N & (M // N or N // M)
+  implies N c= X
+proof assume that A1: X is_plane and A2: a in X & M c= X and A3: a in N and
+A4: M // N or N // M;
+ A5: M is_line & N is_line by A4,AFF_1:50;
+consider K,P such that A6: K is_line & P is_line and A7: not K // P and
+A8: X = Plane(K,P) by A1,Def2;
+A9: now assume K // M; then K // N by A4,AFF_1:58;hence N c= X
+by A2,A3,A6,A8,Lm4
+; end;
+   now assume A10: not K // M;
+ then A11: X = Plane(K,M) by A2,A5,A6,A7,A8,Th20; A12: a in Plane(K,M) by A2,A5
+,A6,A7,A8,A10,Th20;
+   now assume A13: M<>N; consider a' such that A14: a,a' // K and A15: a' in M
+ by A12,Lm3; consider b' such that A16: a'<>b' and A17: b' in M by A5,AFF_1:32;
+consider b such that A18: a',a // b',b & a',b' // a,b by DIRAF:47;
+ A19: a<>a' by A3,A4,A13,A15,AFF_1:59;
+ A20: a<>b proof assume a=b; then a,a' // a,b' by A18,AFF_1:13; then LIN a,
+a',b' by AFF_1:def 1; then LIN
+ a',b',a by AFF_1:15;
+  then a in M by A5,A15,A16,A17,AFF_1:39;
+  hence contradiction by A3,A4,A13,AFF_1:59; end;
+   a',b' // M by A5,A15,A17,AFF_1:66; then a,b // M by A16,A18,AFF_1:46;
+ then a,b // N by A4,Th3; then A21: b in N by A3,Th2;
+   b,b' // K by A14,A18,A19,Th4; then b in Plane(K,M) by A17,Lm3;
+hence N c= X by A2,A3,A5,A6,A11,A20,A21,Lm5; end;
+hence thesis by A2; end; hence thesis by A9; end;
+
+theorem Th24: X is_plane & Y is_plane & a in X & b in X & a in Y & b in Y &
+ X<>Y & a<>b implies X /\ Y is_line
+proof assume that A1: X is_plane & Y is_plane & a in X & b in X & a in Y & b in
+ Y
+and A2: X<>Y and A3: a<>b; set Q = Line(a,b); set Z = X /\ Y;
+A4: Q is_line & a in Q & b in Q by A3,AFF_1:26,def 3;
+A5: Q c= X & Q c= Y by A1,A3,Th19; then A6: Q c= Z by XBOOLE_1:19;
+   Z c= Q proof assume not Z c= Q; then consider x being set such that
+A7: x in Z and A8: not x in Q by TARSKI:def 3; A9: x in X & x in Y by A7,
+XBOOLE_0:def 3;
+reconsider a'=x as Element of AS by A7;
+   for y being set holds y in X iff y in Y proof let y be set;
+ A10: now assume A11: y in X;
+     now assume A12: y<>x; reconsider b'=y as Element of AS
+   by A11; set M = Line(a',b'); A13: M is_line & a' in M & b' in M
+   by A12,AFF_1:26,def 3; A14: M c= X by A1,A9,A11,A12,Th19;
+
+  A15: now assume M // Q; then M c= Y by A1,A5,A9,A13,Th23;hence y in Y by A13
+; end;
+     now assume not M // Q; then consider q such that
+   A16: q in M & q in Q by A1,A4,A5,A13,A14,Th22
+; M = Line(a',q) by A8,A13,A16,AFF_1:71; then M c= Y by A1,A5,A8,A9,A16,Th19
+; hence y in Y by A13; end;
+  hence y in Y by A15; end; hence y in Y by A7,XBOOLE_0:def 3; end;
+    now assume A17: y in Y;
+     now assume A18: y<>x; reconsider b'=y as Element of AS
+   by A17; set M = Line(a',b'); A19: M is_line & a' in M & b' in M
+   by A18,AFF_1:26,def 3; A20: M c= Y by A1,A9,A17,A18,Th19;
+
+  A21: now assume M // Q; then M c= X by A1,A5,A9,A19,Th23;hence y in X by A19
+; end;
+     now assume not M // Q; then consider q such that
+   A22: q in M & q in Q by A1,A4,A5,A19,A20,Th22
+; M = Line(a',q) by A8,A19,A22,AFF_1:71; then M c= X by A1,A5,A8,A9,A22,Th19
+; hence y in X by A19; end;
+  hence y in X by A21; end; hence y in X by A7,XBOOLE_0:def 3; end;
+hence thesis by A10; end; hence contradiction by A2,TARSKI:2; end;
+hence Z is_line by A4,A6,XBOOLE_0:def 10; end;
+
+theorem Th25:
+  X is_plane & Y is_plane & a in X & b in X & c in X & a in Y & b in Y &
+c in Y & not LIN a,b,c implies X = Y
+proof assume A1: X is_plane & Y is_plane & a in X & b in X & c in X & a in Y &
+b in Y & c in Y & not LIN a,b,c; then A2: a<>b & b<>c & c <>a by AFF_1:16;
+ assume not thesis;
+then A3: X /\ Y is_line by A1,A2,Th24;
+   a in X /\ Y & b in X /\ Y & c in X /\ Y by A1,XBOOLE_0:def 3;
+hence contradiction by A1,A3,AFF_1:33; end;
+
+Lm7: M is_line & a in M & b in M & a<>b & not c in M implies not LIN a,b,c
+proof assume A1: M is_line & a in M & b in M & a<>b & not c in M;
+assume not thesis; then ex N st N is_line & a in N & b in N &
+c in N by AFF_1:33; hence
+  contradiction by A1,AFF_1:30; end;
+
+theorem Th26: X is_plane & Y is_plane & M is_line & N is_line & M c= X &
+ N c= X & M c= Y & N c= Y & M<>N implies X = Y
+proof assume A1: X is_plane & Y is_plane & M is_line & N is_line & M c= X &
+N c= X & M c= Y & N c= Y & M<>N;
+ then consider a,b such that A2: a in M & b in M & a<>b by AFF_1:31;
+consider c,d such that A3: c in N & d in N & c <>d by A1,AFF_1:31;
+A4: now assume M // N; then not c in M by A1,A3,AFF_1:59; then not LIN a,b,c
+by A1,A2,Lm7;
+hence thesis by A1,A2,A3,Th25; end;
+  now given q such that A5: q in M & q in N; consider p such that
+A6: q<>p & p in N by A1,AFF_1:32; A7: not p in M by A1,A5,A6,AFF_1:30;
+A8: now assume a<>q; then not LIN a,q,p by A1,A2,A5,A7,Lm7;
+hence thesis by A1,A2,A5,A6,Th25; end;
+   now assume b<>q; then not LIN b,q,p by A1,A2,A5,A7,Lm7;
+hence thesis by A1,A2,A5,A6,Th25; end;
+hence thesis by A2,A8; end; hence thesis by A1,A4,Th22; end;
+
+definition let AS,a,K such that A1: K is_line;
+  func a*K -> Subset of AS means :Def3: a in it & K // it;
+  existence by A1,AFF_1:63;
+  uniqueness by AFF_1:64;
+end;
+
+theorem Th27: A is_line implies a*A is_line
+proof assume A1: A is_line; set M = a*A; a in M & A // M by A1,Def3;
+hence thesis by AFF_1:50; end;
+
+theorem Th28: X is_plane & M is_line & a in X & M c= X implies a*M c= X
+proof assume A1: X is_plane & M is_line & a in X & M c= X;
+set N = a*M; a in N & M // N by A1,Def3;
+hence thesis by A1,Th23; end;
+
+theorem Th29:
+  X is_plane & a in X & b in X & c in X & a,b // c,d & a<>b implies d in X
+proof assume that A1: X is_plane and A2: a in X & b in X & c in X and
+A3:a,b // c,d and A4: a<>b;
+  set M=Line(a,b), N=c*M;
+A5: M is_line by A4,AFF_1:def 3;
+  then a in M & b in M & c in N & M // N by Def3,AFF_1:26;
+then A6: d in N by A3,A4,Th7;
+    M c= X by A1,A2,A4,Th19; then N c= X by A1,A2,A5,Th28;
+  hence d in X by A6;
+end;
+
+theorem A is_line implies ( a in A iff a*A = A )
+proof assume A1: A is_line; now assume a in A; then a in A & A // A by A1,AFF_1
+:55; hence a*A = A by A1,Def3; end;hence thesis by A1,Def3; end;
+
+theorem Th31: A is_line implies a*A = a*(q*A)
+ proof assume A1: A is_line; then q*A is_line by Th27;
+  then A2: A // q*A & A // a*A & q*A // a*(q*A) & a in a*A & a in
+ a*(q*A) by A1,Def3;
+  then a*A // q*A by AFF_1:58; then a*A // a*(q*A) by A2,AFF_1:58;
+  hence thesis by A2,AFF_1:59; end;
+
+Lm8: A is_line & a in A implies a*A=A
+proof assume that A1: A is_line and A2: a in A; A // A by A1,AFF_1:55;
+hence thesis by A1,A2,Def3; end;
+
+theorem Th32: K // M implies a*K=a*M
+proof assume A1: K // M; then K is_line & M is_line by AFF_1:50;
+then A2: a in a*K
+& a in a*M & K // a*K & M // a*M by Def3; then a*K // M by A1,AFF_1:58;
+then a*K // a*M by A2,AFF_1:58; hence thesis by A2,AFF_1:59; end;
+
+definition let AS,X,Y;
+  pred X '||' Y means :Def4:
+  for a,A st a in Y & A is_line & A c= X holds a*A c= Y;
+end;
+
+theorem Th33: X c= Y & ((X is_line & Y is_line) or (X is_plane & Y is_plane))
+ implies X=Y
+proof assume that A1: X c= Y and A2: (X is_line & Y is_line) or
+(X is_plane & Y is_plane);
+A3: now assume that A4: X is_line and A5: Y is_line; consider a,b such that
+ A6: a<>b and A7: X=Line(a,b) by A4,AFF_1:def 3; a in X & b in
+ X by A7,AFF_1:26;
+ hence X=Y by A1,A5,A6,A7,AFF_1:71; end;
+   now assume that A8: X is_plane and A9: Y is_plane;
+ consider K,P such that A10: K is_line & P is_line & not K // P and
+ A11: X=Plane(K,P) by A8,Def2; consider a,b such that A12: a in P and b in P &
+ a<>b by A10,AFF_1:31; set M=a*K; A13: a in M & K // M by A10,Def3;
+ A14: M is_line by A10,Th27;
+ A15:P c= Plane(K,P) by A10,Th14;A16:P c= X by A10,A11,Th14; then A17:P c= Y
+by A1,XBOOLE_1:1; A18:M c= X by A10,A11,A12,A13,A15,Lm4
+; then M c= Y by A1,XBOOLE_1:1; hence X=Y by A8,A9,A10,A13,A14,A16,A17,A18,Th26
+; end; hence thesis by A2,A3; end;
+
+theorem Th34:
+  X is_plane implies ex a,b,c st a in X & b in X & c in X & not LIN a,b,c
+proof assume X is_plane; then consider K,P such that A1: K is_line
+ & P is_line & not K // P and A2: X = Plane(K,P) by Def2;
+consider a,b such that A3: a in P & b in P and A4: a<>b by A1,AFF_1:31;
+set Q = a*K; A5: K // Q & a in Q & Q is_line by A1,Def3,Th27;
+then consider c such that A6: a<>c and A7: c in Q by AFF_1:32;
+take a,b,c; A8:
+ P c= Plane(K,P) by A1,Th14;
+hence a in X & b in X by A2,A3;
+  Q c= Plane(K,P) by A1,A3,A5,A8,Lm4;
+hence c in X by A2,A7
+; thus not LIN a,b,c proof assume LIN a,b,c; then c in P by A1,A3,A4,AFF_1:39;
+hence contradiction by A1,A3,A5,A6,A7,AFF_1:30; end; end;
+
+Lm9: X is_plane implies ex b,c st b in X & c in X & not LIN a,b,c
+proof assume X is_plane;
+ then consider p,q,r such that
+A1: p in X & q in X & r in X and A2: not LIN p,q,r by Th34;
+   now assume A3: LIN a,r,p & LIN a,r,q; LIN a,r,r by AFF_1:16;
+ then A4:a=r by A2,A3,AFF_1:17; take b=p,c =q; thus b in X & c in X by A1;
+ thus not LIN a,b,c by A2,A4,AFF_1:15; end;
+hence thesis by A1; end;
+
+theorem M is_line & X is_plane implies ex q st q in X & not q in M
+proof assume that A1: M is_line and A2: X is_plane;
+assume A3: not ex q st q in X & not q in M;
+ consider a,b,c such that A4: a in X & b in X & c in X and A5: not LIN a,b,c
+by A2,Th34; a in M & b in M & c in M by A3,A4;
+hence contradiction by A1,A5,AFF_1:33; end;
+
+theorem Th36: for a,A st A is_line ex X st a in X & A c= X & X is_plane
+ proof let a,A; assume A1: A is_line; then consider p,q such that
+  A2: p in A & q in A & p<>q by AFF_1:31;
+  A3: now assume A4: not a in A;
+   consider P such that A5: a in P & p in P & P is_line by Th11;
+   set X=Plane(P,A); not P // A by A2,A4,A5,AFF_1:59;
+ then A6: X is_plane by A1,A5,Def2;
+   A7: A c= X by A5,Th14; P // P by A5,AFF_1:55;
+   then P c= X by A1,A2,A5,A7,Lm4; hence thesis by A5,A6,A7; end;
+     now assume A8: a in A; consider b such that A9: not b in A by A1,Th12;
+   consider P such that
+   A10: a in P & b in
+ P & P is_line by Th11; set X=Plane(P,A); not P // A by A8,A9,A10,AFF_1:59;
+   then A11: X is_plane by A1,A10,Def2; A c= X by A10,Th14;
+hence thesis by A8,A11; end;
+  hence thesis by A3; end;
+
+theorem Th37: ex X st a in X & b in X & c in X & X is_plane
+ proof consider A such that A1: a in A & b in A & A is_line by Th11;
+  consider X such that A2: c in X & A c= X & X is_plane by A1,Th36;
+  thus thesis by A1,A2; end;
+
+theorem Th38: q in M & q in N & M is_line & N is_line implies ex X st M c= X &
+ N c= X & X is_plane
+proof assume that A1: q in M & q in N and A2: M is_line & N is_line;
+consider a such that A3: a<>q and A4: a in N by A2,AFF_1:32;
+A5: N=Line(q,a) by A1,A2,A3,A4,AFF_1:38; consider X such that
+A6: a in X & M c= X & X is_plane by A2,Th36; N c= X by A1,A3,A5,A6,Th19;
+hence thesis by A6; end;
+
+theorem Th39: M // N implies ex X st M c= X & N c= X & X is_plane
+proof assume A1: M // N; then A2: M is_line & N is_line by AFF_1:50;
+then consider a,b such that A3: a in N and b in N & a<>b by AFF_1:31;
+consider X such that A4: a in X and A5: M c= X and A6: X is_plane by A2,Th36;
+   N=a*M by A1,A2,A3,Def3; then N c= X by A2,A4,A5,A6,Th28;
+hence thesis by A5,A6; end;
+
+theorem M is_line & N is_line implies (M // N iff M '||' N)
+proof assume A1: M is_line & N is_line;
+A2: now assume A3: M // N; now let a,A;assume that A4: a in N and A5: A
+is_line
+ & A c= M;
+   N=a*M by A1,A3,A4,Def3; hence a*A c= N by A1,A5,Th33;
+ end; hence M '||' N by Def4; end;
+   now assume A6: M '||' N; consider a,b such that
+ A7: a in N and b in N & a<>b by A1,AFF_1:31;A8: a*M c= N by A1,A6,A7,Def4;
+   a*M is_line by A1,Th27; then a*M=N by A1,A8,Th33; hence
+   M // N by A1,Def3; end; hence thesis by A2; end;
+
+theorem Th41: M is_line & X is_plane implies (M '||' X iff (ex N st N c= X &
+ (M // N or N // M)))
+proof assume that A1: M is_line and A2: X is_plane;
+A3: now assume A4: M '||' X; consider a,b,c such that A5: a in X and b in X &
+c
+in X
+ & not LIN a,b,c by A2,Th34; take N=a*M; thus N c= X
+ by A1,A4,A5,Def4; thus M // N or N // M by A1,Def3; end;
+   now given N such that A6: N c= X and A7: M // N or N // M;
+   now let a,A;assume that A8:a in X and A9:A is_line
+ & A c= M; A10: a in a*A by A9,Def3;
+    A=M by A1,A9,Th33; then M // a*A by A9,Def3;
+ then N // a*A by A7,AFF_1:58; hence a*A c= X by A2,A6,A8,A10,Th23; end;
+hence M '||' X by Def4; end; hence thesis by A3; end;
+
+theorem M is_line & X is_plane & M c= X implies M '||' X
+proof assume A1: M is_line & X is_plane & M c= X; then M // M by AFF_1:55;
+hence thesis by A1,Th41; end;
+
+theorem A is_line & X is_plane & a in A & a in X & A '||' X implies A c= X
+proof assume that A1: A is_line & X is_plane and A2: a in A & a in X and
+A3: A '||' X; consider N such that A4: N c= X and A5: A // N or N // A
+by A1,A3,Th41; A6: N is_line by A5,AFF_1:50;
+  A=a*A by A1,A2,Lm8 .= a*N by A5,Th32; hence thesis by A1,A2,A4,A6,Th28
+; end;
+
+definition let AS,K,M,N;
+  pred K,M,N is_coplanar means :Def5:
+  ex X st K c= X & M c= X & N c= X & X is_plane;
+end;
+
+theorem Th44: K,M,N is_coplanar implies K,N,M is_coplanar & M,K,N is_coplanar &
+ M,N,K is_coplanar & N,K,M is_coplanar & N,M,K is_coplanar
+proof assume K,M,N is_coplanar; then ex X st K c= X &
+M c= X & N c= X & X is_plane by Def5; hence thesis by Def5; end;
+
+theorem A is_line & K is_line & M is_line & N is_line & M,N,K is_coplanar
+ & M,N,A is_coplanar & M<>N implies M,K,A is_coplanar
+proof assume that A is_line and K is_line and A1: M is_line &
+N is_line and A2: M,N,K is_coplanar and A3: M,N,A is_coplanar and A4:M<>N;
+consider X such that A5: M c= X & N c= X and A6: K c= X and A7: X is_plane
+by A2,Def5;
+  ex Y st M c= Y & N c= Y & A c= Y & Y is_plane
+by A3,Def5; then A c= X by A1,A4,A5,A7,Th26;
+hence thesis by A5,A6,A7,Def5; end;
+
+theorem Th46: K is_line & M is_line & X is_plane & K c= X & M c= X &
+ K<>M implies (K,M,A is_coplanar iff A c= X)
+proof assume that A1: K is_line & M is_line & X is_plane and
+A2: K c= X & M c= X & K<>M;
+   now assume K,M,A is_coplanar; then ex Y st K c= Y & M c= Y & A c= Y &
+ Y is_plane by Def5;
+ hence A c= X by A1,A2,Th26; end;
+hence thesis by A1,A2,Def5; end;
+
+theorem Th47: q in K & q in M & K is_line & M is_line implies
+ K,M,M is_coplanar & M,K,M is_coplanar & M,M,K is_coplanar
+proof assume q in K & q in M & K is_line & M is_line; then ex X st
+ K c= X & M c= X & X is_plane by Th38; hence thesis by Def5; end;
+
+theorem Th48: AS is not AffinPlane & X is_plane implies ex q st not q in X
+proof assume that A1: AS is not AffinPlane and A2: X is_plane;
+assume A3: not ex q st not q in X;
+A4: the carrier of AS c= X proof
+   for x be set holds x in the carrier of AS implies x in X by A3;
+ hence thesis by TARSKI:def 3; end;
+   for a,b,c,d st not a,b // c,d ex q st a,b // a,q & c,d // c,q
+ proof let a,b,c,d; assume A5: not a,b // c,d;
+ then A6: a<>b & c <>d by AFF_1:12; set M=Line(a,b),N=Line(c,d);
+                         a in X & b in X & c in X & d in X
+ by A4,TARSKI:def 3; then A7: M c= X & N c= X by A2,A6,Th19;
+ A8: M is_line & N is_line by A6,AFF_1:def 3; then A9: M // N or ex q st q in M
+  & q in N by A2,A7,Th22; A10: a in M & b in M & c in N & d in N by AFF_1:26;
+ then consider q such that A11: q in M & q in N
+ by A5,A9,AFF_1:53
+; LIN a,b,q & LIN c,d,q by A8,A10,A11,AFF_1:33; then a,b // a,q & c,d // c,q
+ by AFF_1:def 1; hence thesis; end;
+hence contradiction by A1,DIRAF:def 8; end;
+
+Lm10: q in A & q in P & q in C & not A,P,C is_coplanar
+   & q<>a & q<>b & q<>c & a in A & a' in A & b in P & b' in P &
+   c in C & c' in C & A is_line & P is_line & C is_line &
+   A<>P & A<>C & a,b // a',b' & a,c // a',c' implies b,c // b',c'
+proof assume that A1: q in A & q in P & q in
+ C and A2: not A,P,C is_coplanar and
+A3: q<>a & q<>b & q<>c and A4: a in A & a' in A & b in P & b' in P &
+c in C & c' in C and A5: A is_line & P is_line & C is_line and
+A6: A<>P & A<>C and A7: a,b // a',b' & a,c // a',c';
+consider X such that A8: P c= X & C c= X and A9: X is_plane by A1,A5,Th38;
+consider Y such that A10: A c= Y & C c= Y and A11: Y is_plane by A1,A5,Th38;
+A12: P<>C by A1,A2,A5,Th47;
+then A13: a<>b & b<>c & c <>a by A1,A3,A4,A5,A6,AFF_1:30;
+A14: now assume A15: q=a'; then A16: q=b' by A1,A3,A4,A5,A6,A7,Th8; q=c' by A1,
+A3,A4,A5,A6,A7,A15,Th8; hence b,c // b',c' by A16,AFF_1:12; end;
+   now assume A17: q<>a';
+ then A18: q<>c' by A1,A3,A4,A5,A6,A7,Th8;
+A19: now assume A20: a=a'; then A21: b=b' by A1,A3,A4,A5,A6,A7,Th9;
+   c =c' by A1,A3,A4,A5,A6,A7,A20,Th9; hence b,c // b',c' by A21,AFF_1:11;end;
+   now assume A22: a<>a'; assume A23: not b,c // b',c';
+ A24: a'<>b' & a'<>c' & c'<>b' by A1,A4,A5,A6,A12,A17,A18,AFF_1:30;
+ set BC=Line(b,c),BC'=Line(b',c'),AB=Line(a,b),AB'=Line(a',b'),
+  AC=Line(a,c),AC'=Line(a',c');
+ A25: BC is_line & BC' is_line & AC is_line & AC' is_line & AB is_line &
+  AB' is_line by A13,A24,AFF_1:def 3;
+ A26: b in AB & a in AB & a in AC & c in AC & a' in AC' & c' in
+ AC' by AFF_1:26;
+ A27: b in BC & c in BC & b' in BC' & c' in BC' by AFF_1:26;
+ A28: AB // AB' & AC // AC' by A7,A13,A24,AFF_1:51;
+  A29: BC c= X & BC' c= X by A4,A8,A9,A13,A24,Th19;
+ A30: AC c= Y & AC' c= Y by A4,A10,A11,A13,A24,Th19;
+   not BC // BC' by A23,A27,AFF_1:53; then consider p such that
+ A31: p in BC & p in BC' by A9,A25,A29,Th22; set K = p*AB;
+ A32: K is_line & p in K & AB // K & AB' // K
+  proof thus K is_line by A25,Th27; thus p in K & AB // K by A25,Def3;
+  hence AB' // K by A28,AFF_1:58; end;
+ A33: LIN c,b,p & LIN c',b',p by A25,A27,A31,AFF_1:33;
+ then consider x such that A34: LIN c,a,x & b,a // p,x by A13,Th1;
+ consider y such that A35: LIN c',a',y & b',a' // p,y by A24,A33,Th1;
+ A36: x in K & y in K proof p,x // a,b by A34,AFF_1:13; then p,x // AB
+ by A13,AFF_1:def 4; then p,x // K by A32,Th3; hence x in K by A32,Th2; p,y
+// a',b'
+  by A35,AFF_1:13; then p,y // AB' by A24,AFF_1:def 4; then p,y // K by A32,Th3
+;
+  hence y in K by A32,Th2; end;
+ A37: x in AC & y in AC' by A13,A24,A25,A26,A34,A35,AFF_1:39;
+ A38: now assume x=y;
+   then a' in AC by A26,A28,A37,AFF_1:59; then c in A by A4,A5,A22,A25,A26,
+AFF_1:30;
+  hence contradiction by A1,A3,A4,A5,A6,AFF_1:30; end;
+    now assume A39: x<>y;
+  then K=Line(x,y) by A32,A36,AFF_1:71; then K c= Y by A11,A30,A37,A39,Th19;
+  then A40: AB c= Y by A4,A10,A11,A26,A32,Th23;
+    P=Line(q,b) by A1,A3,A4,A5,AFF_1:71; then P c= Y by A1,A3,A10,A11,A26,A40,
+Th19;
+  hence contradiction by A2,A10,A11,Def5; end;
+hence contradiction by A38; end;
+hence thesis by A19; end; hence thesis by A14; end;
+
+theorem Th49: AS is not AffinPlane & q in A & q in P & q in C &
+   q<>a & q<>b & q<>c & a in A & a' in A & b in P & b' in P &
+   c in C & c' in C & A is_line & P is_line & C is_line &
+   A<>P & A<>C & a,b // a',b' & a,c // a',c' implies b,c // b',c'
+proof assume that A1: AS is not AffinPlane and A2: q in A & q in P & q in C and
+A3: q<>a & q<>b & q<>c and A4: a in A & a' in A & b in P & b' in P &
+c in C & c' in C and A5: A is_line & P is_line & C is_line and A6: A<>P & A<>C
+and A7: a,b // a',b' & a,c // a',c';
+   now assume A,P,C is_coplanar; then consider X such that
+ A8: A c= X & P c= X & C c= X and A9: X is_plane by Def5; consider d such that
+ A10: not d in X by A1,A9,Th48; set K=Line(q,d); A11: q in K & d in
+ K by AFF_1:26;
+ A12: q<>d by A2,A8,A10;
+ then A13: K is_line by AFF_1:def 3;
+ A14: not K c= X by A10,A11; LIN q,a,a' by A2,A4,A5,AFF_1:33;
+ then consider d' such that A15: LIN q,d,d' and A16: a,d // a',d' by A3,Th1;
+ A17: d' in K by A11,A12,A13,A15,AFF_1:39;
+   now assume A18: P<>C;
+ A19: K<>A by A8,A10,A11; A20: K<>P by A8,A10,A11; A21: K<>C by A8,A10,A11;
+ A22: not A,K,C is_coplanar proof assume A,K,C is_coplanar;
+ then A,C,K is_coplanar by Th44; hence contradiction
+ by A5,A6,A8,A9,A14,Th46
+; end; A23: not A,K,P is_coplanar proof assume A,K,P is_coplanar;
+ then A,P,K is_coplanar by Th44; hence contradiction
+ by A5,A6,A8,A9,A14,Th46
+; end; A24: not K,P,C is_coplanar proof assume K,P,C is_coplanar;
+ then P,C,K is_coplanar by Th44; hence
+   contradiction by A5,A8,A9,A14,A18,Th46; end;
+ A25: d,c // d',c' by A2,A3,A4,A5,A6,A7,A11,A12,A13,A16,A17,A19,A22,Lm10;
+    d,b // d',b' by A2,A3,A4,A5,A6,A7,A11,A12,A13,A16,A17,A19,A23,Lm10;
+ hence b,c // b',c' by A2,A3,A4,A5,A11,A12,A13,A17,A20,A21,A24,A25,Lm10;
+ end; hence thesis by A4,A5,AFF_1:65; end; hence thesis by A2,A3,A4,A5,A6,A7,
+Lm10; end;
+
+theorem AS is not AffinPlane implies AS is Desarguesian
+proof assume AS is not AffinPlane;
+then for A,P,C,q,a,b,c,a',b',c' holds q in A & q in P & q in C &
+   q<>a & q<>b & q<>c & a in A & a' in A & b in P & b' in P &
+   c in C & c' in C & A is_line & P is_line & C is_line &
+   A<>P & A<>C & a,b // a',b' & a,c // a',c' implies b,c // b',c'
+ by Th49;
+hence thesis by AFF_2:def 4; end;
+
+Lm11: A // P & A // C & not A,P,C is_coplanar
+   & a in A & a' in A & b in P & b' in P &
+   c in C & c' in C & A is_line & P is_line & C is_line &
+   A<>P & A<>C & a,b // a',b' & a,c // a',c' implies b,c // b',c'
+proof assume that A1: A // P & A // C and A2: not A,P,C is_coplanar and
+A3: a in A & a' in A & b in P & b' in P &
+c in C & c' in C and A4: A is_line & P is_line & C is_line and
+A5: A<>P & A<>C and A6: a,b // a',b' & a,c // a',c';
+A7: P // C by A1,AFF_1:58;
+then consider X such that A8: P c= X & C c= X and A9: X is_plane by Th39;
+consider Y such that A10: A c= Y & C c= Y and A11: Y is_plane by A1,Th39;
+A12: P<>C by A2,A10,A11,Def5;
+then A13: a<>b & b<>c & c <>a by A1,A3,A5,A7,AFF_1:59;
+A14: now assume A15: a=a'; then A16: b=b' by A1,A3,A5,A6,Th10;
+    c =c' by A1,A3,A5,A6,A15,Th10; hence b,c // b',c' by A16,AFF_1:11; end;
+   now assume A17: a<>a'; assume A18: not b,c // b',c';
+ A19: a'<>b' & a'<>c' & c'<>b' by A1,A3,A5,A7,A12,AFF_1:59;
+ set BC=Line(b,c),BC'=Line(b',c'),AB=Line(a,b),AB'=Line(a',b'),
+  AC=Line(a,c),AC'=Line(a',c');
+ A20: BC is_line & BC' is_line & AC is_line & AC' is_line & AB is_line &
+  AB' is_line by A13,A19,AFF_1:def 3;
+ A21: b in AB & a in AB & a in AC & c in AC & a' in AC' & c' in
+ AC' by AFF_1:26;
+ A22: b in BC & c in BC & b' in BC' & c' in BC' by AFF_1:26;
+ A23: AB // AB' & AC // AC' by A6,A13,A19,AFF_1:51;
+  A24: BC c= X & BC' c= X by A3,A8,A9,A13,A19,Th19;
+ A25: AC c= Y & AC' c= Y by A3,A10,A11,A13,A19,Th19;
+   not BC // BC' by A18,A22,AFF_1:53; then consider p such that
+ A26: p in BC & p in BC' by A9,A20,A24,Th22; set K = p*AB;
+ A27: K is_line & p in K & AB // K & AB' // K
+  proof thus K is_line by A20,Th27; thus p in K & AB // K by A20,Def3;
+  hence AB' // K by A23,AFF_1:58; end;
+ A28: LIN c,b,p & LIN c',b',p by A20,A22,A26,AFF_1:33;
+ then consider x such that A29: LIN c,a,x & b,a // p,x by A13,Th1;
+ consider y such that A30: LIN c',a',y & b',a' // p,y by A19,A28,Th1;
+ A31: x in K & y in K proof p,x // a,b by A29,AFF_1:13; then p,x // AB
+ by A13,AFF_1:def 4; then p,x // K by A27,Th3; hence x in K by A27,Th2; p,y
+// a',b'
+  by A30,AFF_1:13; then p,y // AB' by A19,AFF_1:def 4; then p,y // K by A27,Th3
+;
+  hence y in K by A27,Th2; end;
+ A32: x in AC & y in AC' by A13,A19,A20,A21,A29,A30,AFF_1:39;
+ A33: now assume x=y;
+   then a' in AC by A21,A23,A32,AFF_1:59; then c in A by A3,A4,A17,A20,A21,
+AFF_1:30;
+  hence contradiction by A1,A3,A5,AFF_1:59; end;
+    now assume A34: x<>y;
+  then K=Line(x,y) by A27,A31,AFF_1:71; then K c= Y by A11,A25,A32,A34,Th19;
+  then A35: AB c= Y by A3,A10,A11,A21,A27,Th23;
+    P=b*A by A1,A3,A4,Def3; then P c= Y by A4,A10,A11,A21,A35,Th28;
+  hence contradiction by A2,A10,A11,Def5; end;
+hence contradiction by A33; end; hence thesis by A14; end;
+
+theorem Th51: AS is not AffinPlane & A // P & A // C &
+   a in A & a' in A & b in P & b' in P &
+   c in C & c' in C & A is_line & P is_line & C is_line &
+   A<>P & A<>C & a,b // a',b' & a,c // a',c' implies b,c // b',c'
+proof assume that A1: AS is not AffinPlane and A2: A // P & A // C and
+A3: a in A & a' in A & b in P & b' in P & c in C & c' in C and A4: A is_line &
+P is_line & C is_line and A5: A<>P & A<>C and A6: a,b // a',b' & a,c // a',c';
+   now assume A,P,C is_coplanar; then consider X such that
+ A7: A c= X & P c= X & C c= X and A8: X is_plane by Def5; consider d such that
+ A9: not d in X by A1,A8,Th48; set K=d*A; A10: d in K & A // K by A4,Def3;
+ then A11: K // P & K // C by A2,AFF_1:58; A12: K is_line by A4,Th27;
+ A13: not K c= X by A9,A10;
+  ex d' st d' in K & a,d // a',d' proof
+A14: now assume A15: a<>a'; consider d' such that A16: a,a' // d,d' and
+ A17: a,d // a',d' by DIRAF:47; d,d' // a,a' by A16,AFF_1:13;
+ then d,d' // A by A3,A4,A15,AFF_1:41; then d,d' // K by A10,Th3; then d' in
+K
+ by A10,Th2; hence thesis by A17; end;
+   now assume A18: a=a'; take d'=d; thus d' in K by A4,Def3;
+ thus a,d // a',d' by A18,AFF_1:11; end; hence thesis by A14; end;
+then consider d' such that A19: d' in K and A20: a,d // a',d';
+   now assume A21: P<>C;
+ A22: K<>A by A7,A9,A10; A23: K<>P by A7,A9,A10; A24: K<>C by A7,A9,A10;
+ A25: not A,K,C is_coplanar proof assume A,K,C is_coplanar;
+ then A,C,K is_coplanar by Th44; hence contradiction
+ by A4,A5,A7,A8,A13,Th46
+; end; A26: not A,K,P is_coplanar proof assume A,K,P is_coplanar;
+ then A,P,K is_coplanar by Th44; hence contradiction
+ by A4,A5,A7,A8,A13,Th46
+; end; A27: not K,P,C is_coplanar proof assume K,P,C is_coplanar;
+ then P,C,K is_coplanar by Th44; hence
+   contradiction by A4,A7,A8,A13,A21,Th46; end;
+ A28: d,c // d',c' by A2,A3,A4,A5,A6,A10,A12,A19,A20,A22,A25,Lm11;
+    d,b // d',b' by A2,A3,A4,A5,A6,A10,A12,A19,A20,A22,A26,Lm11;
+ hence b,c // b',c' by A3,A4,A10,A11,A12,A19,A23,A24,A27,A28,Lm11;
+ end; hence thesis by A3,A4,AFF_1:65; end; hence thesis by A2,A3,A4,A5,A6,Lm11
+; end;
+
+theorem AS is not AffinPlane implies AS is translational
+proof assume AS is not AffinPlane;
+then for A,P,C,a,b,c,a',b',c' holds A // P & A // C & a in A & a' in A &
+b in P & b' in P & c in C & c' in C & A is_line & P is_line &
+C is_line & A<>P & A<>C & a,b // a',b' & a,c // a',c' implies b,c // b',c' by
+Th51;
+hence thesis by AFF_2:def 11; end;
+
+theorem Th53: AS is AffinPlane & not LIN a,b,c implies
+                        ex c' st a,c // a',c' & b,c // b',c'
+ proof assume A1: AS is AffinPlane & not LIN a,b,c;
+  consider C such that A2: b in C & c in C & C is_line by Th11;
+  consider P such that A3: a in P & c in P & P is_line by Th11;
+  consider M such that A4: a' in M & P // M by A3,AFF_1:63;
+  consider N such that A5: b' in N & C // N by A2,AFF_1:63;
+  A6: M is_line & N is_line by A4,A5,AFF_1:50;
+    not M // N proof assume M // N; then N // P by A4,AFF_1:58;
+   then C // P by A5,AFF_1:58; then b in P by A2,A3,AFF_1:59;
+    hence contradiction by A1,A3,AFF_1:33; end;
+  then consider c' such that A7: c' in M & c' in N by A1,A6,AFF_1:72;
+    a,c // a',c' & b,c // b',c' by A2,A3,A4,A5,A7,AFF_1:53;
+  hence thesis; end;
+
+Lm12: not LIN a,b,c & a'<>b' & a,b // a',b' & a in X & b in X & c in X &
+ X is_plane & a' in X implies ex c' st a,c // a',c' & b,c // b',c'
+proof assume that A1: not LIN
+ a,b,c & a'<>b' & a,b // a',b' and A2: a in X & b in X
+ & c in X & X is_plane & a' in X; A3: a<>b & b<>c & c <>a by A1,AFF_1:16;
+ set C=Line(b,c),P=Line(a,c),P'=a'*P,C'=b'*C;
+A4: b' in X by A1,A2,A3,Th29;
+A5:a in P & c in P & b in C & c in
+ C & P is_line & C is_line by A3,AFF_1:26,def 3;
+then A6: a' in P' & b' in C' & P' is_line & C' is_line by Def3,Th27;
+A7: P // P' & C // C' by A5,Def3;
+A8: not C' // P' proof assume C' // P'; then C' // P by A7,AFF_1:58;
+then C // P by A7,AFF_1:58; then b in P by A5,AFF_1:59;hence contradiction
+by A1,A5,AFF_1:33
+; end;
+  C c= X & P c= X by A2,A3,Th19; then C' c= X & P' c= X by A2,A4,A5,Th28;
+then consider c' such that A9: c' in C' & c' in P' by A2,A6,A8,Th22;
+  a,c // a',c' & b,c // b',c' by A5,A6,A7,A9,AFF_1:53; hence thesis; end;
+
+theorem Th54: not LIN a,b,c & a'<>b' & a,b // a',b' implies ex c' st
+a,c // a',c' &
+ b,c // b',c' proof assume A1: not LIN a,b,c & a'<>b' & a,b // a',b';
+   now assume A2: AS is not AffinPlane; consider X such that
+ A3: a in X & b in X & c in X and A4: X is_plane by Th37;
+    now assume A5: not a' in X; A6: a<>b & a<>c by A1,AFF_1:16;
+  set AB=Line(a,b),AB'=Line(a',b');
+  A7: a in AB & b in AB & a' in AB' & b' in AB' & AB is_line & AB' is_line
+   & AB // AB' by A1,A6,AFF_1:26,51,def 3; A8: AB c= X by A3,A4,A6,Th19;
+  A9: not b' in X proof assume b' in X; then AB' c= X by A4,A7,A8,Th23;
+   hence contradiction by A5,A7; end;
+  consider Y such that A10: AB c= Y & AB' c= Y and A11: Y is_plane by A7,Th39;
+  set A=Line(a,a'),P=Line(b,b');
+  A12: a in Y & a' in Y & b in Y & b' in Y by A7,A10;
+  A13: A is_line & P is_line & a in A & a' in A & b in P & b' in P
+   by A3,A5,A9,AFF_1:26,def 3;
+A14: A c= Y & P c= Y by A3,A5,A7,A9,A10,A11,Th19;
+   A15: A<>P proof assume A=P; then A=AB by A6,A7,A13,AFF_1:30; hence
+ contradiction
+    by A5,A8,A13; end;
+  A16: now assume A17: A // P; set C=c*A;
+   A18: C is_line & c in
+ C & A // C by A13,Def3,Th27; then consider c' such that
+   A19: c' in C & a,c // a',c' by A13,Lm2;
+      A<>C proof assume A=C; then A=Line(a,c)
+    by A6,A13,A18,AFF_1:71; then A c= X by A3,A4,A6,Th19;hence contradiction
+by A5,A13; end;
+   then b,c // b',c' by A1,A2,A13,A15,A17,A18,A19,Th51;
+  hence thesis by A19; end;
+     now given q such that A20: q in A & q in P;
+   A21: q<>a proof assume q=a; then AB=P by A6,A7,A13,A20,AFF_1:30; hence
+ contradiction
+    by A8,A9,A13; end;
+   A22: q<>b proof assume q=b; then AB=A by A6,A7,A13,A20,AFF_1:30; hence
+ contradiction
+    by A5,A8,A13; end;
+   A23: q<>c by A1,A3,A4,A5,A11,A12,A14,A20,Th25
+; set C=Line(q,c); A24: q in C & c in C & C is_line by A23,AFF_1:26,def 3;
+LIN
+q,a,a' by A13,A20,AFF_1:33;
+   then consider c' such that A25: LIN q,c,c' and A26: a,c // a',c' by A21,Th1;
+   A27: c' in C by A23,A24,A25,AFF_1:39;
+      A<>C proof assume A=C; then A=Line(a,c)
+    by A6,A13,A24,AFF_1:71; then A c= X by A3,A4,A6,Th19;hence contradiction
+by A5,A13; end;
+   then b,c // b',c' by A1,A2,A13,A15,A20,A21,A22,A23,A24,A26,A27,Th49;
+  hence thesis by A26; end; hence thesis by A11,A13,A14,A16,Th22; end;
+hence thesis by A1,A3,A4,Lm12; end; hence thesis by A1,Th53; end;
+
+theorem Th55: X is_plane & Y is_plane implies (X '||' Y iff (ex A,P,M,N st
+ not A // P & A c= X & P c= X & M c= Y & N c= Y & (A // M or M // A) &
+ (P // N or N // P))) proof assume A1: X is_plane & Y is_plane;
+A2: now assume A3: X '||' Y;
+consider a,b,c such that A4: a in X & b in X & c in X and A5: not LIN a,b,c
+by A1,Th34; A6: a<>b & a<>c & b<>c by A5,AFF_1:16;
+set A=Line(a,b),P=Line(a,c);
+A7: a in A & b in A & a in P & c in P & A is_line & P is_line by A6,AFF_1:26,
+def 3;
+consider a',b',c' such that A8: a' in Y and b' in Y & c' in
+ Y & not LIN a',b',c'
+by A1,Th34; take A,P,M=a'*A,N=a'*P;
+A9: not A // P proof assume A // P; then A=P by A7,AFF_1:59;
+hence contradiction by A5,A7,AFF_1:33; end;
+   A c= X & P c= X by A1,A4,A6,Th19;
+hence not A // P & A c= X & P c= X & M c= Y & N c= Y &
+ (A // M or M // A) & (P // N or N // P) by A3,A7,A8,A9,Def3,Def4; end;
+   now given A,P,M,N such that A10: not A // P and A11: A c= X & P c= X & M c=
+Y
+ & N c= Y and A12: A // M or M // A and A13: P // N or N // P;
+ A14: A // M & P // N by A12,A13; A15: A is_line & P is_line &
+ M is_line & N is_line by A12,A13,AFF_1:50;
+then consider p such that A16: p in A & p in P by A1,A10,A11,Th22;
+  not M // N proof assume M // N; then P // M by A13,AFF_1:58;
+ hence contradiction by A10,A12,AFF_1:58; end;
+ then consider q such that A17: q in M & q in N by A1,A11,A15,Th22;
+   now let a,Z; assume A18: a in Y & Z is_line & Z c= X;
+  then A19: Z // a*Z & a in a*Z by Def3;
+  A20: now assume Z // A; then Z // M by A12,AFF_1:58; then a*Z // M by A19,
+AFF_1:58;
+   hence a*Z c= Y by A1,A11,A18,A19,Th23; end;
+  A21: now assume Z // P; then Z // N by A13,AFF_1:58; then a*Z // N by A19,
+AFF_1:58;
+   hence a*Z c= Y by A1,A11,A18,A19,Th23; end;
+     now assume A22: not Z // A & not Z // P;
+   consider b such that A23: p<>b & b in A by A15,AFF_1:32;
+   set Z1= b*Z;
+   A24: Z1 is_line & b in Z1 & Z // Z1 by A18,Def3,Th27;
+   A25: not Z1 // P proof assume Z1 // P; then b*Z // P & Z // b*Z by A18,Def3;
+    hence contradiction by A22,AFF_1:58; end;
+     Z1 c= X by A1,A11,A18,A23,Th28;
+   then consider c such that A26: c in Z1 & c in P by A1,A11,A15,A24,A25,Th22;
+   A27: p<>c by A15,A16,A22,A23,A24,A26,AFF_1:30;
+   consider b' such that A28: q<>b' & b' in M by A15,AFF_1:32;
+   A29: p,b // q,b' by A14,A16,A17,A23,A28,AFF_1:53;
+   A30: A<>P by A10,A15,AFF_1:55;
+   A31: not LIN p,b,c proof assume LIN
+ p,b,c; then c in A by A15,A16,A23,AFF_1:39;
+    hence contradiction by A15,A16,A26,A27,A30,AFF_1:30; end;
+   then consider c' such that
+   A32: p,c // q,c' & b,c // b',c' by A28,A29,Th54;
+   A33: b<>c & p<>b by A31,AFF_1:16;
+   A34: c' in N by A13,A16,A17,A26,A27,A32,Th7; set Z2=Line(b',c');
+   A35: b'<>c' proof assume b'=c';
+    then p,c // q,b' & q,b' // M by A15,A17,A28,A32,AFF_1:66;
+    then p,c // M by A28,Th4; then p,c // A by A12,Th3; then c in A by A16,Th2;
+    hence contradiction by A15,A16,A26,A27,A30,AFF_1:30; end;
+    then Z2 is_line & b' in Z2 & c' in Z2 by AFF_1:26,def 3;
+   then Z1 // Z2 by A24,A26,A32,A33,A35,AFF_1:52;
+   then A36: Z // Z2 by A24,AFF_1:58; A37: Z2 c= Y by A1,A11,A28,A34,A35,Th19
+; a*Z // Z2 by A19,A36,AFF_1:58;
+   hence a*Z c= Y by A1,A18,A19,A37,Th23; end; hence a*Z c= Y by A20,A21; end
+;
+hence X '||' Y by Def4; end; hence thesis by A2; end;
+
+theorem A // M & M '||' X implies A '||' X
+ proof assume A1: A // M & M '||' X;
+  then A2: A is_line & M is_line by AFF_1:50; now let a,C;
+   assume A3: a in X & C is_line & C c= A;
+   then A4: C = A by A2,Th33; consider q,p such that
+   A5: q in A & p in A & q<>p by A2,AFF_1:31;
+  a*A = a*(q*M) by A1,A2,A5,Def3 .= a*M by A2,Th31;
+hence a*C c= X by A1,A2,A3,A4,Def4; end; hence
+  thesis by Def4; end;
+
+theorem Th57: X is_plane implies X '||' X
+proof assume X is_plane; then for a,A holds a in X & A is_line & A c= X
+ implies a*A c= X by Th28; hence thesis by Def4;
+end;
+
+theorem Th58: X is_plane & Y is_plane & X '||' Y implies Y '||' X
+proof assume A1: X is_plane & Y is_plane & X '||' Y;
+ then consider A,P,M,N such that A2: not A // P & A c= X & P c= X & M c= Y &
+ N c= Y & (A // M or M // A) & (P // N or N // P) by Th55;
+   not M // N proof assume M // N; then A // N by A2,AFF_1:58; hence
+    contradiction by A2,AFF_1:58; end; hence thesis by A1,A2,Th55; end;
+
+theorem Th59: X is_plane implies X <> {}
+proof assume X is_plane; then ex a,b,c st
+  a in X & b in X & c in X & not LIN a,b,c by Th34;
+  hence thesis;
+end;
+
+theorem Th60: X '||' Y & Y '||' Z & Y <> {} implies X '||' Z
+proof assume that A1: X '||' Y and A2: Y '||' Z and A3: Y <> {};
+consider x being Element of Y;
+reconsider p=x as Element of AS by A3,Lm1;
+   now let a,A; assume A4: a in Z & A is_line & A c= X;
+then A5: p*A c= Y by A1,A3,Def4; p*A is_line by A4,Th27;
+ then a*(p*A) c= Z by A2,A4,A5,Def4;
+hence a*A c= Z by A4,Th31; end; hence thesis by Def4; end;
+
+Lm13: X is_plane & Y is_plane & Z is_plane & X '||' Y & Y '||' Z implies
+ X '||' Z
+proof assume A1: X is_plane & Y is_plane & Z is_plane & X '||' Y & Y '||' Z;
+then Y <> {} by Th59; hence thesis by A1,Th60; end;
+
+theorem Th61: X is_plane & Y is_plane & Z is_plane & ((X '||' Y & Y '||' Z) or
+  ( X '||' Y & Z '||' Y) or (Y '||' X & Y '||' Z) or (Y '||' X & Z '||' Y))
+                                         implies (X '||' Z & Z '||' X)
+ proof assume
+A1: X is_plane & Y is_plane & Z is_plane & ((X '||' Y & Y '||' Z) or
+  ( X '||' Y & Z '||' Y) or (Y '||' X & Y '||' Z) or (Y '||' X & Z '||' Y));
+  then X '||' Y & Y '||' Z by Th58; hence X '||' Z by A1,Lm13;
+  hence thesis by A1,Th58; end;
+
+Lm14: X is_plane & Y is_plane & X '||' Y & X<>Y implies
+                                 ( not ex a st a in X & a in Y )
+proof assume that A1: X is_plane & Y is_plane & X '||' Y and A2: X<>Y;
+assume not thesis; then consider a such that A3: a in X & a in Y;
+consider b,c such that A4: b in X & c in X and A5: not LIN a,b,c by A1,Lm9;
+A6: a<>b & a<>c by A5,AFF_1:16; set M=Line(a,b),N=Line(a,c);
+A7: a in M & a in N by AFF_1:26; A8: M is_line & N is_line by A6,AFF_1:def 3;
+A9: M c= X & N c= X by A1,A3,A4,A6,Th19;
+then a*M c= Y & a*N c= Y by A1,A3,A8,Def4;
+then A10: M c= Y & N c= Y by A7,A8,Lm8
+; M<>N proof assume M=N; then a in M & b in M & c in M
+by AFF_1:26; hence contradiction by A5,A8,AFF_1:33; end;
+hence contradiction by A1,A2,A8,A9,A10,Th26; end;
+
+theorem X is_plane & Y is_plane & a in X & a in Y & X '||' Y implies X=Y
+ by Lm14;
+
+theorem Th63: X is_plane & Y is_plane & Z is_plane & X '||' Y & X<>Y &
+  a in X /\ Z & b in X /\ Z & c in Y /\ Z & d in Y /\ Z implies a,b // c,d
+ proof assume A1: X is_plane & Y is_plane & Z is_plane & X '||' Y & X<>Y &
+  a in X /\ Z & b in X /\ Z & c in Y /\ Z & d in Y /\ Z;
+  then A2: a in X & a in Z & b in X & b in Z & c in Y & c in Z &
+                                        d in Y & d in Z by XBOOLE_0:def 3;
+  set A = X /\ Z, C = Y /\ Z;
+  A3: Z<>Y by A1,A2,Lm14;
+  A4: Z<>X by A1,A2,Lm14;
+     now assume a<>b & c <>d;
+   then A5: A is_line & C is_line by A1,A2,A3,A4,Th24; set K=c*A;
+   A6: K is_line & A // K by A5,Def3,Th27;
+   A7: A c= X & A c= Z by XBOOLE_1:17; A8: C c= Y & C c= Z by XBOOLE_1:17;
+     K c= Z & K c= Y by A1,A2,A5,A7,Def4,Th28;
+   then K=C by A1,A3,A5,A6,A8,Th26; hence a,b // c,d by A1,A6,AFF_1:53; end;
+ hence thesis by AFF_1:12; end;
+
+theorem X is_plane & Y is_plane & Z is_plane & X '||' Y & a in X /\ Z
+ & b in X /\ Z & c in Y /\ Z & d in
+ Y /\ Z & X<>Y & a<>b & c <>d implies X/\Z // Y/\Z
+proof assume that A1: X is_plane & Y is_plane & Z is_plane & X '||' Y &
+a in X /\ Z & b in X /\ Z & c in Y /\ Z & d in Y /\
+ Z & X<>Y and A2: a<>b & c <>d;
+A3: a,b // c,d by A1,Th63; A4: a in X & a in Z & b in X & b in Z & c in Y & c
+in Z & d in Y & d in Z by A1,XBOOLE_0:def 3;
+set A = X /\ Z, C = Y /\ Z;
+A5: Z<>Y by A1,A4,Lm14;
+   Z<>X by A1,A4,Lm14;
+ then A is_line & C is_line by A1,A2,A4,A5,Th24;
+hence A // C by A1,A2,A3,AFF_1:52; end;
+
+theorem Th65: for a,X st X is_plane ex Y st a in Y & X '||' Y & Y is_plane
+proof let a,X; assume A1: X is_plane; then consider p,q,r such that
+A2: p in X & q in X & r in X and A3: not LIN p,q,r by Th34;
+A4: p<>q & p<>r by A3,AFF_1:16; set M=Line(p,q),N=Line(p,r);
+A5: p in M & q in M & p in N & r in N by AFF_1:26;
+A6: M is_line & N is_line by A4,AFF_1:def 3; set M'=a*M,N'=a*N;
+A7:M' is_line & N' is_line & a in M' & a in N' & M // M' & N // N'
+by A6,Def3,Th27;
+then consider Y such that A8: M' c= Y & N' c= Y and A9: Y is_plane by Th38;
+A10: M c= X & N c= X by A1,A2,A4,Th19;
+  not M // N proof assume M // N; then r in M by A5,AFF_1:59;
+ hence contradiction by A3,A5,A6,AFF_1:33; end;
+then X '||' Y by A1,A7,A8,A9,A10,Th55; hence thesis by A7,A8,A9; end;
+
+definition let AS,a,X such that A1:X is_plane;
+  func a+X -> Subset of AS means :Def6:
+  a in it & X '||' it & it is_plane;
+  existence by A1,Th65;
+  uniqueness
+  proof let Y1,Y2 be Subset of AS such that
+A2: a in Y1 & X '||' Y1 & Y1 is_plane and A3: a in Y2 & X '||' Y2 &
+    Y2 is_plane; Y1 '||' Y2 by A1,A2,A3,Th61;
+    hence Y1=Y2 by A2,A3,Lm14;
+  end;
+end;
+
+theorem X is_plane implies ( a in X iff a+X = X )
+proof assume A1: X is_plane; now assume a in X; then a in X & X '||' X by A1,
+Th57; hence a+X = X by A1,Def6; end;hence thesis by A1,Def6; end;
+
+theorem X is_plane implies a+X = a+(q+X)
+proof assume A1: X is_plane; then A2: q+X is_plane by Def6;
+then A3: X '||' q+X & X '||' a+X & q+X '||' a+(q+X) & a in a+X & a in a+(q+X) &
+a+X is_plane & a+(q+X) is_plane by A1,Def6; then a+X '||' q+X by A1,A2,Th61;
+then a+X '||' a+(q+X) by A2,A3,Th61; hence thesis by A3,Lm14; end;
+
+theorem A is_line & X is_plane & A '||' X implies a*A c= a+X
+proof assume that A1: A is_line & X is_plane and A2: A '||' X;
+consider N such that A3: N c= X and A4: A // N or N // A by A1,A2,Th41;
+A5: a*A = a*N by A4,Th32; A6: N is_line by A4,AFF_1:50; X '||' a+X & a in a+X
+by A1,Def6; hence thesis by A3,A5,A6,Def4; end;
+
+theorem X is_plane & Y is_plane & X '||' Y implies a+X = a+Y
+proof assume that A1: X is_plane & Y is_plane and A2: X '||' Y;
+A3: a in a+X & a in a+Y & X '||' a+X & Y '||' a+Y & a+X is_plane & a+Y is_plane
+by A1,Def6; then a+X '||' Y by A1,A2,Th61; then a+X '||' a+Y by A1,A3,Th61;
+hence thesis by A3,Lm14; end;

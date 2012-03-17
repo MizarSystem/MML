@@ -1,0 +1,1642 @@
+:: On the Order-consistent Topology of Complete and Uncomplete
+:: Lattices
+::  by Ewa Gr\c{a}dzka
+::
+:: Received May 23, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary WAYBEL_9, WAYBEL_0, CANTOR_1, WAYBEL11, BHSP_3, PRELAMB, YELLOW_9,
+      PRE_TOPC, RELAT_2, ORDINAL2, CONNSP_2, REALSET1, SETFAM_1, BOOLE,
+      WAYBEL19, TARSKI, FINSET_1, SUBSET_1, YELLOW_2, RELAT_1, TOPS_1,
+      QUANTAL1, LATTICE3, YELLOW_0, FUNCT_1, ORDERS_1, LATTICES, SEQM_3,
+      YELLOW_6, PROB_1, T_0TOPSP, FUNCT_3, WAYBEL21, CAT_1, ARYTM_3, WAYBEL_7,
+      WAYBEL32, RLVECT_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FINSET_1,
+      STRUCT_0, REALSET1, FUNCT_2, ORDERS_1, LATTICE3, PRE_TOPC, TOPS_1,
+      TOPS_2, CONNSP_2, T_0TOPSP, GROUP_1, YELLOW_0, WAYBEL_0, CANTOR_1,
+      YELLOW_2, WAYBEL_2, YELLOW_6, WAYBEL_9, RELSET_1, WAYBEL11, WAYBEL19,
+      YELLOW_9, WAYBEL21;
+ constructors WAYBEL_1, CANTOR_1, TOPS_1, TOPS_2, WAYBEL_3, TSP_1, WAYBEL11,
+      YELLOW_9, GROUP_1, TOLER_1, WAYBEL_5, WAYBEL21, BORSUK_1, MEMBERED,
+      PARTFUN1;
+ clusters STRUCT_0, LATTICE3, WAYBEL_0, FINSET_1, YELLOW_6, WAYBEL_3, WAYBEL11,
+      WAYBEL21, YELLOW_9, RELSET_1, SUBSET_1, YELLOW14, WAYBEL29, MEMBERED,
+      ZFMISC_1, FUNCT_2, PARTFUN1;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, WAYBEL_0, WAYBEL11, LATTICE3, WAYBEL_9, XBOOLE_0;
+ theorems YELLOW_9, CANTOR_1, PRE_TOPC, WAYBEL_0, CONNSP_2, WAYBEL11, ZFMISC_1,
+      TARSKI, REALSET1, YELLOW_6, ORDERS_1, TOPS_2, TOPS_1, YELLOW_8, YELLOW_0,
+      RELAT_1, FUNCT_1, YELLOW_2, SUBSET_1, LATTICE3, FINSET_1, WAYBEL_2,
+      SETFAM_1, TSP_1, WAYBEL_9, WAYBEL21, WAYBEL_8, FUNCT_2, RELSET_1,
+      XBOOLE_0, XBOOLE_1;
+ schemes COMPLSP1, FRAENKEL, DOMAIN_1, COMPTS_1, FUNCT_2;
+
+begin
+
+definition
+ let T be non empty TopRelStr;
+ attr T is upper means
+  :Def1:
+  {(downarrow x)` where x is Element of T: not contradiction} is prebasis of T;
+end;
+
+definition
+ cluster Scott up-complete strict TopLattice;
+ existence
+  proof consider R being complete LATTICE;
+   consider T being strict Scott correct TopAugmentation of R;
+   take T; thus thesis;
+  end;
+end;
+
+definition
+ let T be TopSpace-like non empty reflexive TopRelStr;
+ attr T is order_consistent means
+  :Def2:
+  for x being Element of T holds downarrow x = Cl {x} &
+  for N being eventually-directed net of T st x = sup N
+  for V being a_neighborhood of x holds N is_eventually_in V;
+end;
+
+definition
+cluster trivial -> upper (non empty reflexive TopSpace-like TopRelStr);
+ coherence
+  proof let T be non empty reflexive TopSpace-like TopRelStr;
+   assume
+A1:  T is trivial;
+   set BB = {(downarrow x)` where x is Element of T: not contradiction};
+      BB c= bool the carrier of T
+     proof let a be set; assume a in BB;
+       then ex x being Element of T st a = (downarrow x)`;
+      hence thesis;
+     end;
+   then reconsider C = BB as Subset-Family of T by SETFAM_1:def
+7;
+   reconsider C as Subset-Family of T;
+A2: BB c= the topology of T
+     proof let a be set; assume a in BB;
+      then consider x being Element of T such that
+A3:    a = (downarrow x)`;
+         a c= {}
+        proof let y be set; assume
+A4:       y in a;
+          then y in the carrier of T & x <= x by A3;
+          then y = x & x in downarrow x by A1,REALSET1:def 20,WAYBEL_0:17;
+          then x in (downarrow x) /\ a & (downarrow x) misses a
+           by A3,A4,PRE_TOPC:26,XBOOLE_0:def 3;
+         hence thesis by XBOOLE_0:def 7;
+        end;
+       then a = {} by XBOOLE_1:3;
+      hence thesis by PRE_TOPC:5;
+     end;
+   reconsider F = {the carrier of T} as Basis of T by A1,YELLOW_9:10;
+      BB = {{}}
+     proof
+      thus BB c= {{}}
+       proof let a be set; assume a in BB;
+        then consider x being Element of T such that
+A5:      a = (downarrow x)`;
+           x <= x;
+         then the carrier of T = {x} & x in downarrow x
+          by A1,WAYBEL_0:17,YELLOW_9:9;
+         then a = {} or a = the carrier of T & not x in a
+          by A5,YELLOW_6:10,ZFMISC_1:39;
+        hence thesis by TARSKI:def 1;
+       end;
+      consider x being Element of T;
+         x <= x;
+       then the carrier of T = {x} & x in downarrow x by A1,WAYBEL_0:17,
+YELLOW_9:9;
+       then (downarrow x)` = {} or (downarrow x)` = the carrier of T &
+       not x in (downarrow x)` by YELLOW_6:10,ZFMISC_1:39;
+       then {} in BB;
+      hence thesis by ZFMISC_1:37;
+     end;
+    then FinMeetCl C = {{}, the carrier of T} by YELLOW_9:11;
+    then F c= FinMeetCl C by ZFMISC_1:12;
+   hence BB is prebasis of T by A2,CANTOR_1:def 5;
+ end;
+end;
+
+definition
+ cluster upper trivial up-complete strict TopLattice;
+  existence
+   proof
+    consider T being trivial up-complete strict TopLattice;
+     take T;
+    thus thesis;
+   end;
+  end;
+
+theorem Th1:
+ for T being upper up-complete (non empty TopPoset)
+ for A being Subset of T st A is open holds A is upper
+  proof let T be upper up-complete (non empty TopPoset);
+   let A be Subset of T such that
+A1: A is open;
+A2:  A in the topology of T by A1,PRE_TOPC:def 5;
+   reconsider BB = {(downarrow x)` where x is Element of T: not contradiction}
+     as prebasis of T by Def1;
+    consider F being Basis of T such that
+A3:  F c= FinMeetCl BB by CANTOR_1:def 5;
+       the topology of T c= UniCl F by CANTOR_1:def 2;
+    then consider Y being Subset-Family of T such that
+A4:  Y c= F & A = union Y by A2,CANTOR_1:def 1;
+   let x,y be Element of T; assume x in A;
+    then consider Z being set such that
+A5:  x in Z & Z in Y by A4,TARSKI:def 4;
+       Z in F by A4,A5;
+    then consider X being Subset-Family of T such that
+A6:  X c= BB & X is finite & Z = Intersect X by A3,CANTOR_1:def 4;
+    assume
+A7:  x <= y;
+        now let Q be set; assume
+A8:    Q in X;
+        then Q in BB by A6;
+        then consider z being Element of T such that
+A9:      Q = (downarrow z)`;
+            x in Q & (downarrow z) misses Q by A5,A6,A8,A9,CANTOR_1:10,PRE_TOPC
+:26;
+            then not x in downarrow z by XBOOLE_0:3;
+           then not x <= z by WAYBEL_0:17;
+          then not y <= z by A7,ORDERS_1:26;
+         then not y in downarrow z by WAYBEL_0:17;
+        then y in (the carrier of T) \ downarrow z & the carrier of T = [#]T
+         by PRE_TOPC:12,XBOOLE_0:def 4;
+       hence y in Q by A9,PRE_TOPC:17;
+      end;
+    then y in Z by A6,CANTOR_1:10;
+   hence thesis by A4,A5,TARSKI:def 4;
+  end;
+
+theorem
+   for T being up-complete (non empty TopPoset) holds
+ T is upper implies T is order_consistent
+  proof
+   let T be up-complete (non empty TopPoset);
+    assume
+A1:  T is upper;
+     then reconsider BB = {(downarrow x)` where x is Element of T: not
+contradiction}
+      as prebasis of T by Def1;
+
+  for x being Element of T holds downarrow x = Cl {x} &
+    for N being eventually-directed net of T st x = sup N
+    for V being a_neighborhood of x holds N is_eventually_in V
+     proof
+      let x be Element of T;
+
+     thus downarrow x = Cl {x}
+      proof
+       thus downarrow x c= Cl {x}
+        proof
+         let a be set;
+          assume A2:a in downarrow x;
+             then reconsider a' = a as Point of T;
+                for G being Subset of T st G is open holds
+               a' in G implies {x} meets G
+                proof
+                 let G be Subset of T such that
+A3:               G is open;assume
+A4:                a' in G;
+                    reconsider v = a' as Element of T;
+A5:                  v <= x by A2,WAYBEL_0:17;
+                       G is upper by A1,A3,Th1;
+then A6:                 x in G by A4,A5,WAYBEL_0:def 20;
+                     x in {x} by TARSKI:def 1;
+                 hence {x} meets G by A6,XBOOLE_0:3;
+                end;
+         hence a in Cl {x} by PRE_TOPC:54;
+        end;
+       thus Cl {x} c= downarrow x
+        proof
+         let a be set;assume
+A7:       a in Cl{x};
+              reconsider BB as Subset-Family of T;
+A8:             (downarrow x)` in BB;
+                 BB is open by YELLOW_9:28;
+then A9:           (downarrow x)` is open by A8,TOPS_2:def 1;
+               (downarrow x)` = [#]T\downarrow x by PRE_TOPC:17;
+then A10:         downarrow x is closed by A9,PRE_TOPC:def 6;
+            x <= x;
+          then x in downarrow x by WAYBEL_0:17;
+          then {x} c= downarrow x by ZFMISC_1:37;
+          hence a in downarrow x by A7,A10,PRE_TOPC:45;
+        end;
+      end;
+
+     thus for N being eventually-directed net of T st x = sup N
+          for V being a_neighborhood of x holds N is_eventually_in V
+      proof
+       let N be eventually-directed net of T such that
+A11:     x = sup N;
+A12:      x = Sup the mapping of N by A11,WAYBEL_2:def 1
+          .= sup rng the mapping of N by YELLOW_2:def 5
+          .= sup rng netmap (N,T) by WAYBEL_0:def 7;
+       let V be a_neighborhood of x;
+A13:      x in Int V by CONNSP_2:def 1;
+            FinMeetCl BB is Basis of T by YELLOW_9:23;
+then A14:        the topology of T = UniCl FinMeetCl BB by YELLOW_9:22;
+              Int V is open by TOPS_1:51;
+           then Int V in the topology of T by PRE_TOPC:def 5;
+          then consider Y being Subset-Family of T such that
+A15:        Y c= FinMeetCl BB & Int V = union Y by A14,CANTOR_1:def 1;
+          consider Y1 being set such that
+A16:        x in Y1 & Y1 in Y by A13,A15,TARSKI:def 4;
+          consider Z being Subset-Family of T such that
+A17:        Z c= BB & Z is finite & Y1 = Intersect Z by A15,A16,CANTOR_1:def 4;
+          reconsider rngN = rng netmap (N,T) as Subset of T;
+             rngN is directed by WAYBEL_2:18;
+            then ex a being Element of T st a is_>=_than rngN &
+             for b being Element of T st b is_>=_than rngN holds a <= b
+              by WAYBEL_0:def 39;
+then A18:         ex_sup_of rngN,T by YELLOW_0:15;
+A19:      rngN = rng the mapping of N by WAYBEL_0:def 7;
+         defpred P[set,set] means
+         for i,j being Element of N st i = $2 & j >= i holds N.j in $1;
+A20:     for Q being set st Q in Z ex b being set st b in the carrier of N &
+           P[Q,b]
+          proof let Q be set; assume
+A21:      Q in Z;
+            then Q in BB by A17;
+             then consider v1 being Element of T such that
+A22:          Q = (downarrow v1)`;
+                 x in (downarrow v1)` by A16,A17,A21,A22,CANTOR_1:10;
+                then x in [#]T\downarrow v1 by PRE_TOPC:17;
+                 then x in [#]T & not x in downarrow v1 by XBOOLE_0:def 4;
+then A23:             x in [#]T & not x <= v1 by WAYBEL_0:17;
+                   not (rngN c= downarrow v1)
+                  proof
+                   assume
+A24:               rngN c= downarrow v1;
+                       ex_sup_of downarrow v1,T by WAYBEL_0:34;
+                      then sup rngN <= sup downarrow v1 by A18,A24,YELLOW_0:34
+;
+                   hence contradiction by A12,A23,WAYBEL_0:34;
+                  end;
+                  then consider w be set such that
+A25:                w in rngN & not w in downarrow v1 by TARSKI:def 3;
+                  reconsider w' = w as Element of T by A25;
+                  w' in the carrier of T;
+               then w' in [#]T by PRE_TOPC:12;
+             then w' in [#]T\downarrow v1 by A25,XBOOLE_0:def 4;
+then A26:         w' in Q by A22,PRE_TOPC:17;
+           consider i being set such that
+A27:        i in dom the mapping of N and
+A28:       w' = (the mapping of N).i by A19,A25,FUNCT_1:def 5;
+         reconsider i as Element of N by A27;
+A29:   i in the carrier of N & N.i in Q by A26,A28,WAYBEL_0:def 8;
+      consider b being Element of N such that
+A30:    for l being Element of N st b <= l holds N.i <= N.l by WAYBEL_0:11;
+        take b;
+         thus b in the carrier of N;
+         thus for j,k being Element of N st j = b & k >= j holds N.k in Q
+          proof
+           let j,k be Element of N such that
+A31:         j = b & k >= j;
+A32:          N.i <= N.k by A30,A31;
+                  N.k in the carrier of T;
+then A33:              N.k in [#]T by PRE_TOPC:12;
+                   N.i in [#]T\downarrow v1 by A22,A29,PRE_TOPC:17;
+                then N.i in [#]T & not N.i in downarrow v1 by XBOOLE_0:def 4;
+               then N.i in [#]T & not N.i <= v1 by WAYBEL_0:17;
+              then not N.k <= v1 by A32,ORDERS_1:26;
+             then not N.k in downarrow v1 by WAYBEL_0:17;
+            then N.k in [#]T\downarrow v1 by A33,XBOOLE_0:def 4;
+           hence N.k in Q by A22,PRE_TOPC:17;
+          end;
+         end;
+       consider f be Function such that
+A34:    dom f = Z & rng f c= the carrier of N and
+A35:    for Q being set st Q in Z holds P[Q,f.Q] from NonUniqBoundFuncEx(A20);
+       reconsider rngf = rng f as finite Subset of [#]N by A17,A34,FINSET_1:26,
+PRE_TOPC:12;
+          [#]N is directed by WAYBEL_0:def 6;
+       then consider k being Element of N such that
+A36:     k in [#]N & k is_>=_than rngf by WAYBEL_0:1;
+       take k;
+        let k1 be Element of N such that
+A37:     k <= k1;
+            now let Q be set; assume
+A38:       Q in Z;
+then A39:        f.Q in rngf by A34,FUNCT_1:def 5;
+             then reconsider j = f.Q as Element of N by A34;
+               j <= k by A36,A39,LATTICE3:def 9;
+            then j <= k1 by A37,ORDERS_1:26;
+           hence N.k1 in Q by A35,A38;
+          end;
+         then N.k1 in Y1 & Y1 c= union Y by A16,A17,CANTOR_1:10,ZFMISC_1:92;
+         then N.k1 in Int V & Int V c= V by A15,TOPS_1:44;
+        hence N.k1 in V;
+      end;
+     end;
+   hence T is order_consistent by Def2;
+  end;
+
+canceled 4;
+
+theorem Th7:
+for R being up-complete (non empty reflexive transitive antisymmetric
+     RelStr)
+ ex T being TopAugmentation of R st T is Scott
+  proof let R be up-complete (non empty reflexive transitive antisymmetric
+     RelStr);
+   set To = {A where A is Subset of R:A is inaccessible upper};
+     To c= bool the carrier of R
+    proof
+     let a be set; assume a in To;
+      then ex y being Subset of R st a = y & y is inaccessible upper;
+     hence thesis;
+    end;
+   then reconsider top = To as Subset-Family of R
+     by SETFAM_1:def 7;
+   reconsider top as Subset-Family of R;
+     TopRelStr(#the carrier of R, the InternalRel of R, top#) is
+    TopAugmentation of R
+     proof
+         the RelStr of TopRelStr(#the carrier of R, the InternalRel of R, top#)
+         = the RelStr of R;
+      hence thesis by YELLOW_9:def 4;
+     end;
+   then reconsider T=TopRelStr(#the carrier of R, the InternalRel of R, top#)
+    as TopAugmentation of R;
+   take T;
+   thus T is Scott
+    proof
+     let S be Subset of T;
+    thus S is open implies S is inaccessible upper
+     proof
+      assume S is open;
+       then S in the topology of T by PRE_TOPC:def 5;
+        then consider Y being Subset of R such that
+A1:      S = Y & Y is inaccessible upper;
+          the RelStr of R = the RelStr of T;
+       hence S is inaccessible upper by A1,WAYBEL_0:25,YELLOW_9:47;
+      end;
+     assume A2: S is inaccessible upper;
+A3:   the RelStr of R = the RelStr of T;
+      reconsider S' = S as Subset of R;
+        S' is inaccessible
+       proof
+        let D be non empty directed Subset of R such that
+A4:      sup D in S';
+       reconsider E = D as Subset of T;
+          ex a being Element of R st a is_>=_than D &
+         for b being Element of R st b is_>=_than D holds a <= b
+          by WAYBEL_0:def 39;
+           then ex_sup_of D,R by YELLOW_0:15;
+         then E is directed & sup D = sup E by A3,WAYBEL_0:3,YELLOW_0:26;
+        hence D meets S' by A2,A4,WAYBEL11:def 1;
+       end;
+      then S' is inaccessible upper by A2,A3,WAYBEL_0:25;
+      then S' in top;
+     hence S is open by PRE_TOPC:def 5;
+    end;
+  end;
+
+theorem Th8:
+ for R being up-complete (non empty Poset)
+  for T being TopAugmentation of R holds T is Scott implies T is correct
+proof
+ let R be up-complete (non empty Poset),
+     T be TopAugmentation of R;
+  assume T is Scott;
+  then reconsider T as Scott TopAugmentation of R;
+    T is correct;
+  hence thesis;
+end;
+
+definition
+ let R be up-complete (non empty reflexive transitive antisymmetric
+     RelStr);
+ cluster Scott -> correct TopAugmentation of R;
+ coherence by Th8;
+end;
+
+definition
+ let R be up-complete (non empty reflexive transitive antisymmetric
+     RelStr);
+ cluster Scott correct TopAugmentation of R;
+ existence
+  proof
+   consider T being TopAugmentation of R such that A1: T is Scott by Th7;
+   take T;
+   thus thesis by A1,Th8;
+  end;
+end;
+
+theorem Th9:  :: Remark 1.4 (ii)
+ for T being Scott up-complete (non empty reflexive transitive antisymmetric
+     TopRelStr), x being Element of T
+  holds Cl {x} = downarrow x
+proof let T be Scott up-complete (non empty reflexive transitive
+             antisymmetric TopRelStr), x be Element of T;
+  reconsider T' = T as Scott TopAugmentation of T by YELLOW_9:44;
+  reconsider dx = downarrow x as Subset of T';
+  reconsider A = {x} as Subset of T';
+A1: downarrow x is closed by WAYBEL11:11;
+     x <= x;
+   then x in downarrow x by WAYBEL_0:17;
+then A2: {x} c= downarrow x by ZFMISC_1:37;
+     now let C be Subset of T' such that
+A3:  A c= C;
+     reconsider D = C as Subset of T';
+     assume C is closed;
+then A4:   D is lower by WAYBEL11:7;
+       x in C by A3,ZFMISC_1:37;
+    hence dx c= C by A4,WAYBEL11:6;
+   end;
+ hence Cl {x} = downarrow x by A1,A2,YELLOW_8:17;
+end;
+
+theorem Th10:
+ for T being up-complete Scott (non empty TopPoset) holds
+  T is order_consistent
+  proof let T be up-complete Scott (non empty TopPoset);
+      for x being Element of T holds downarrow x = Cl {x} &
+    for N being eventually-directed net of T st x = sup N
+    for V being a_neighborhood of x holds N is_eventually_in V
+    proof
+     let x be Element of T;
+        for N being eventually-directed net of T st x = sup N
+          for V being a_neighborhood of x holds N is_eventually_in V
+       proof
+        let N be eventually-directed net of T such that
+A1:      x = sup N;
+            x = Sup the mapping of N by A1,WAYBEL_2:def 1;
+          then x = sup rng the mapping of N by YELLOW_2:def 5;
+then A2:      x = sup rng netmap (N,T) by WAYBEL_0:def 7;
+        let V be a_neighborhood of x;
+A3:      x in Int V by CONNSP_2:def 1;
+A4:       Int V is open by TOPS_1:51;
+then A5:        Int V is inaccessible by WAYBEL11:def 4;
+A6:       Int V is upper Subset of T by A4,WAYBEL11:def 4;
+         reconsider rngN = rng netmap (N,T) as Subset of T;
+           rngN is directed by WAYBEL_2:18;
+         then Int V meets rngN by A2,A3,A5,WAYBEL11:def 1;
+        then consider z being set such that
+A7:      z in Int V & z in rngN by XBOOLE_0:3;
+        reconsider z' = z as Element of T by A7;
+            rngN = rng the mapping of N by WAYBEL_0:def 7;
+           then consider i being set such that
+A8:      i in dom the mapping of N and
+A9:     z' = (the mapping of N).i by A7,FUNCT_1:def 5;
+        reconsider i as Element of N by A8;
+A10:     z' = N.i by A9,WAYBEL_0:def 8;
+        consider j being Element of N such that
+A11:     for k being Element of N st j <= k holds N.i <= N.k by WAYBEL_0:11;
+       take j;
+        let l be Element of N such that A12: j <= l;
+           N.i <= N.l by A11,A12;
+then A13:      N.l in Int V by A6,A7,A10,WAYBEL_0:def 20;
+           Int V c= V by TOPS_1:44;
+        hence N.l in V by A13;
+       end;
+      hence thesis by Th9;
+    end;
+   hence T is order_consistent by Def2;
+  end;
+
+theorem Th11:
+ for R being /\-complete Semilattice, Z be net of R,
+     D be Subset of R st
+  D = {"/\"({Z.k where k is Element of Z: k >= j},R)
+            where j is Element of Z: not contradiction}
+  holds D is non empty directed
+proof let R be /\-complete Semilattice, Z be net of R, D be Subset of R;
+ assume
+A1: D = {"/\"({Z.k where k is Element of Z: k >= j},R)
+            where j is Element of Z: not contradiction};
+  consider j being Element of Z;
+    "/\"({Z.k where k is Element of Z: k >= j},R) in D by A1;
+ hence D is non empty;
+ let x,y be Element of R;
+ assume x in D;
+  then consider jx being Element of Z such that
+A2: x = "/\"({Z.k where k is Element of Z: k >= jx},R) by A1;
+ assume y in D;
+  then consider jy being Element of Z such that
+A3: y = "/\"({Z.k where k is Element of Z: k >= jy},R) by A1;
+  reconsider jx, jy as Element of Z;
+  consider j being Element of Z such that
+A4: j >= jx and
+A5: j >= jy by YELLOW_6:def 5;
+  consider j' being Element of Z such that
+A6:  j' >= j & j' >= j by YELLOW_6:def 5;
+  deffunc F(Element of Z) = Z.$1;
+  defpred Px[Element of Z] means $1 >= jx;
+  defpred Py[Element of Z] means $1 >= jy;
+  defpred P[Element of Z] means $1 >= j;
+  set Ex = {F(k) where k is Element of Z: Px[k]},
+      Ey = {F(k) where k is Element of Z: Py[k]},
+      E = {F(k) where k is Element of Z: P[k]};
+A7: Z.j in Ex by A4;
+A8: Z.j in Ey by A5;
+A9: Z.j' in E by A6;
+A10: Ex is Subset of R from SubsetFD;
+A11: Ey is Subset of R from SubsetFD;
+A12: E is Subset of R from SubsetFD;
+ take z = "/\"({Z.k where k is Element of Z: k >= j},R);
+ reconsider Ex'= Ex as non empty Subset of R by A7,A10;
+ reconsider Ey' = Ey as non empty Subset of R by A8,A11;
+ reconsider E' = E as non empty Subset of R by A9,A12;
+A13: ex_inf_of E',R & ex_inf_of Ex',R & ex_inf_of Ey',R by WAYBEL_0:76;
+ thus z in D by A1;
+    E' c= Ex'
+   proof let e be set;
+    assume e in E';
+     then consider k being Element of Z such that
+A14:   e = Z.k and
+A15:   k >= j;
+     reconsider k as Element of Z;
+       k >= jx by A4,A15,YELLOW_0:def 2;
+    hence e in Ex' by A14;
+   end;
+ hence x <= z by A2,A13,YELLOW_0:35;
+    E' c= Ey'
+   proof let e be set;
+    assume e in E';
+     then consider k being Element of Z such that
+A16:   e = Z.k and
+A17:   k >= j;
+     reconsider k as Element of Z;
+       k >= jy by A5,A17,YELLOW_0:def 2;
+    hence e in Ey' by A16;
+   end;
+ hence y <= z by A3,A13,YELLOW_0:35;
+end;
+
+theorem Th12:
+ for R being /\-complete Semilattice,
+     S being Subset of R,
+     a being Element of R holds
+  a in S implies "/\"(S,R) <= a
+ proof let R be /\-complete Semilattice, S be Subset of R;
+        let a be Element of R;
+  assume A1: a in S;
+then ex_inf_of S,R by WAYBEL_0:76;
+   then S is_>=_than "/\"(S, R) by YELLOW_0:31;
+  hence "/\"(S, R) <= a by A1,LATTICE3:def 8;
+ end;
+
+theorem Th13:
+ for R being /\-complete Semilattice,
+     N being monotone reflexive net of R
+ holds lim_inf N = sup N
+proof let R be /\-complete Semilattice, N be monotone reflexive net of R;
+  deffunc F(Element of N)
+   = "/\"({N.i where i is Element of N: i >= $1},R);
+  deffunc G(Element of N) = N.$1;
+  defpred P[set] means not contradiction;
+  set X = {F(j) where j is Element of N: P[j]};
+A1: for j being Element of N holds G(j) = F(j)
+   proof let j be Element of N;
+    defpred P[Element of N] means $1 >= j;
+    set Y = {G(i) where i is Element of N: P[i]};
+       j <= j;
+    then
+A2:  N.j in Y;
+     Y is Subset of R from SubsetFD;
+    then Y is non empty Subset of R by A2;
+    then
+A3:  ex_inf_of Y,R by WAYBEL_0:76;
+A4:  N.j is_<=_than Y
+      proof let y be Element of R;
+       assume y in Y;
+        then ex i being Element of N st
+          y = N.i & j <= i;
+       hence N.j <= y by WAYBEL11:def 9;
+      end;
+       for b being Element of R st b is_<=_than Y holds N.j >= b
+      proof let b be Element of R;
+       assume
+A5:      b is_<=_than Y;
+        reconsider j' = j as Element of N;
+          j' <= j';
+        then N.j' in Y;
+       hence N.j >= b by A5,LATTICE3:def 8;
+      end;
+    hence N.j = "/\"(Y,R) by A3,A4,YELLOW_0:def 10;
+   end;
+    rng the mapping of N =
+     {G(j) where j is Element of N: P[j]} by WAYBEL11:19
+         .= X from FraenkelF'(A1);
+ hence lim_inf N = "\/"(rng the mapping of N,R) by WAYBEL11:def 6
+       .= Sup the mapping of N by YELLOW_2:def 5
+       .= sup N by WAYBEL_2:def 1;
+end;
+
+theorem Th14:
+ for R being /\-complete Semilattice
+ for S being Subset of R
+  holds S in the topology of ConvergenceSpace Scott-Convergence R
+    iff S is inaccessible upper
+  proof let R be /\-complete Semilattice;
+    set SC = Scott-Convergence R, T = ConvergenceSpace SC;
+A1:  the topology of T = { V where V is Subset of R:
+      for p being Element of R st p in V
+       for N being net of R st [N,p] in SC holds N is_eventually_in V}
+         by YELLOW_6:def 27;
+   let S be Subset of R;
+   hereby assume S in the topology of T;
+     then consider V being Subset of R such that
+A2:   S = V and
+A3:   for p being Element of R st p in V
+       for N being net of R st [N,p] in SC holds N is_eventually_in V by A1;
+
+    thus S is inaccessible
+     proof let D be non empty directed Subset of R such that
+A4:    sup D in S;
+A5:     dom id D = D & rng id D = D by RELAT_1:71;
+       then reconsider f = id D as Function of D, the carrier of R
+                                       by FUNCT_2:def 1,RELSET_1:11;
+       reconsider N = Net-Str(D,f) as strict monotone reflexive net of R
+         by A5,WAYBEL11:20;
+A6:     N in NetUniv R by WAYBEL11:21;
+         lim_inf N = sup N by Th13
+          .= Sup the mapping of N by WAYBEL_2:def 1
+          .= "\/"(rng the mapping of N,R) by YELLOW_2:def 5
+          .= "\/"(rng f,R) by WAYBEL11:def 10
+          .= sup D by RELAT_1:71;
+       then sup D is_S-limit_of N by WAYBEL11:def 7;
+       then [N,sup D] in SC by A6,WAYBEL11:def 8;
+       then N is_eventually_in S by A2,A3,A4;
+       then consider i0 being Element of N such that
+A7:     for j being Element of N st i0 <= j holds N.j in S by WAYBEL_0:def 11;
+       consider j0 being Element of N such that
+A8:     j0 >= i0 and j0 >= i0 by YELLOW_6:def 5;
+A9:    N.j0 in S by A7,A8;
+A10:     D = the carrier of N by WAYBEL11:def 10;
+         N.j0 = (the mapping of N).j0 by WAYBEL_0:def 8
+           .= (id D).j0 by WAYBEL11:def 10
+           .= j0 by A10,FUNCT_1:35;
+      hence D meets S by A9,A10,XBOOLE_0:3;
+     end;
+    thus S is upper
+     proof let x,y be Element of R such that
+A11:    x in S and
+A12:    x <= y;
+A13:     Net-Str y in NetUniv R by WAYBEL11:29;
+         y = lim_inf Net-Str y by WAYBEL11:28;
+       then x is_S-limit_of Net-Str y by A12,WAYBEL11:def 7;
+       then [Net-Str y,x] in SC by A13,WAYBEL11:def 8;
+       then Net-Str y is_eventually_in S by A2,A3,A11;
+      hence y in S by WAYBEL11:27;
+     end;
+   end;
+   assume that
+A14: S is inaccessible and
+A15: S is upper;
+      for p being Element of R st p in S
+     for N being net of R st [N,p] in SC holds N is_eventually_in S
+     proof let p be Element of R such that
+A16:    p in S;
+      reconsider p' = p as Element of R;
+      let N be net of R;
+      assume
+A17:    [N,p] in SC;
+         SC c= [:NetUniv R, the carrier of R:] by YELLOW_6:def 21;
+       then A18:     N in NetUniv R by A17,ZFMISC_1:106;
+     then ex N' being strict net of R st N' = N &
+       the carrier of N' in the_universe_of the carrier of R by YELLOW_6:def 14
+;
+       then p is_S-limit_of N by A17,A18,WAYBEL11:def 8;
+       then A19:      p' <= lim_inf N by WAYBEL11:def 7;
+       deffunc F(Element of N)
+         = "/\"({N.i where i is Element of N: i >= $1},R);
+       defpred P[set] means not contradiction;
+       set X ={F(j) where j is Element of N: P[j]};
+         X is Subset of R from SubsetFD;
+       then reconsider D = X as Subset of R;
+       reconsider D as non empty directed Subset of R by Th11;
+         lim_inf N = sup D by WAYBEL11:def 6;
+       then sup D in S by A15,A16,A19,WAYBEL_0:def 20;
+       then D meets S by A14,WAYBEL11:def 1;
+       then D /\ S <> {} by XBOOLE_0:def 7;
+       then consider d being Element of R such that
+A20:     d in D /\ S by SUBSET_1:10;
+       reconsider d as Element of R;
+         d in D by A20,XBOOLE_0:def 3;
+       then consider j being Element of N such that
+A21:   d = "/\"({N.i where i is Element of N: i >= j},R);
+       defpred P[Element of N] means $1 >= j;
+       deffunc F(Element of N) = N.$1;
+         {F(i) where i is Element of N: P[i]}
+              is Subset of R from SubsetFD;
+       then reconsider Y = {N.i where i is Element of N: i >= j}
+as
+       Subset of R;
+       reconsider j as Element of N;
+      take j;
+      let i0 be Element of N;
+A22:    d in S by A20,XBOOLE_0:def 3;
+      assume j <= i0;
+       then N.i0 in Y;
+       then d <= N.i0 by A21,Th12;
+      hence N.i0 in S by A15,A22,WAYBEL_0:def 20;
+     end;
+   hence S in the topology of T by A1;
+  end;
+
+theorem Th15:
+ for R being /\-complete up-complete Semilattice,
+  T being TopAugmentation of R
+  st the topology of T = sigma R
+  holds T is Scott
+  proof let R be /\-complete up-complete Semilattice;
+  let T be TopAugmentation of R such that
+A1:  the topology of T = sigma R;
+A2:  the RelStr of T = the RelStr of R by YELLOW_9:def 4;
+A3:  sigma R = the topology of ConvergenceSpace Scott-Convergence R
+    by WAYBEL11:def 12;
+      T is Scott
+     proof let S be Subset of T;
+      reconsider A = S as Subset of R by A2;
+      thus S is open implies S is inaccessible upper
+        proof assume S is open;
+          then S in the topology of T by PRE_TOPC:def 5;
+          then A is inaccessible upper by A1,A3,Th14;
+         hence thesis by A2,WAYBEL_0:25,YELLOW_9:47;
+        end;
+      assume A4:S is inaccessible upper;
+         A is inaccessible
+        proof
+         let D be non empty directed Subset of R such that
+A5:       sup D in A;
+         reconsider E = D as Subset of T by A2;
+            ex a being Element of R st a is_>=_than D &
+           for b being Element of R st b is_>=_than D holds a <= b
+            by WAYBEL_0:def 39;
+            then ex_sup_of D,R by YELLOW_0:15;
+          then E is directed & sup D = sup E by A2,WAYBEL_0:3,YELLOW_0:26;
+         hence D meets A by A4,A5,WAYBEL11:def 1;
+        end;
+then A is inaccessible upper by A2,A4,WAYBEL_0:25;
+       then A in the topology of T by A1,A3,Th14;
+      hence S is open by PRE_TOPC:def 5;
+     end;
+   hence thesis;
+  end;
+
+definition
+ let R be /\-complete up-complete Semilattice;
+ cluster strict Scott correct TopAugmentation of R;
+  existence
+   proof
+    set T = TopRelStr(#the carrier of R, the InternalRel of R, sigma R#);
+       the RelStr of T = the RelStr of R;
+     then reconsider T as TopAugmentation of R by YELLOW_9:def 4;
+     take T;
+    thus thesis by Th15,YELLOW_9:48;
+  end;
+end;
+
+theorem
+  for S being up-complete /\-complete Semilattice,
+    T being Scott TopAugmentation of S holds
+  sigma S = the topology of T
+proof
+  let S be up-complete /\-complete Semilattice;
+  let T be Scott TopAugmentation of S;
+  set CSC = ConvergenceSpace Scott-Convergence S;
+  thus sigma S c= the topology of T
+   proof
+    let e be set;
+     assume A1: e in sigma S;
+then A2:   e in the topology of CSC by WAYBEL11:def 12;
+      reconsider A = e as Subset of S by A1;
+A3:  the RelStr of S = the RelStr of T by YELLOW_9:def 4;
+      then reconsider A' = A as Subset of T;
+        A is inaccessible upper by A2,Th14;
+      then A' is inaccessible upper by A3,WAYBEL_0:25,YELLOW_9:47;
+      then A' is open by WAYBEL11:def 4;
+     hence e in the topology of T by PRE_TOPC:def 5;
+   end;
+  let e be set;assume
+A4:   e in the topology of T;
+      then reconsider A = e as Subset of T;
+        A is open by A4,PRE_TOPC:def 5;
+then A5:   A is inaccessible upper by WAYBEL11:def 4;
+A6:   the RelStr of S = the RelStr of T by YELLOW_9:def 4;
+   then reconsider A' = A as Subset of S;
+        A' is inaccessible
+       proof
+        let D be non empty directed Subset of S such that
+A7:      sup D in A';
+       reconsider E = D as Subset of T by A6;
+          ex a being Element of S st a is_>=_than D &
+         for b being Element of S st b is_>=_than D holds a <= b
+          by WAYBEL_0:def 39;
+           then ex_sup_of D,S by YELLOW_0:15;
+         then E is directed & sup D = sup E by A6,WAYBEL_0:3,YELLOW_0:26;
+        hence D meets A' by A5,A7,WAYBEL11:def 1;
+       end;
+      then A' is inaccessible upper by A5,A6,WAYBEL_0:25;
+       then A' in the topology of CSC by Th14;
+    hence thesis by WAYBEL11:def 12;
+ end;
+
+theorem     :: Remark 1.4 (iii)
+   for T being Scott up-complete (non empty reflexive transitive antisymmetric
+     TopRelStr)
+ holds T is T_0-TopSpace
+proof let T be Scott up-complete
+      (non empty reflexive transitive antisymmetric TopRelStr);
+   reconsider T' = T as Scott TopAugmentation of T by YELLOW_9:44;
+    now let x,y be Point of T';
+     reconsider x' = x, y' = y as Element of T';
+A1:  Cl {x'} = downarrow x' & Cl {y'} = downarrow y' by Th9;
+    assume x <> y;
+    hence Cl {x} <> Cl {y} by A1,WAYBEL_0:19;
+  end;
+ hence thesis by TSP_1:def 5;
+end;
+
+definition
+let R be up-complete (non empty reflexive transitive antisymmetric RelStr);
+cluster -> up-complete TopAugmentation of R;
+coherence;
+end;
+
+theorem Th18:
+ for R being up-complete (non empty reflexive transitive antisymmetric
+     RelStr)
+  for T being Scott TopAugmentation of R,
+   x being Element of T,
+     A being upper Subset of T st not x in A
+  holds (downarrow x)` is a_neighborhood of A
+proof let R be up-complete (non empty reflexive transitive antisymmetric
+     RelStr),
+          T be Scott TopAugmentation of R, x be Element of T,
+          A be upper Subset of T such that
+A1: not x in A;
+      downarrow x is closed by WAYBEL11:11;
+   then (downarrow x)` is open by TOPS_1:29;
+then A2: Int (downarrow x)` = (downarrow x)` by TOPS_1:55;
+    A misses downarrow x by A1,WAYBEL11:5;
+  then A c= (downarrow x)` by PRE_TOPC:21;
+ hence (downarrow x)` is a_neighborhood of A by A2,CONNSP_2:def 2;
+end;
+
+theorem     ::Remark 1.4 (iv)
+   for R being up-complete (non empty reflexive transitive antisymmetric
+     TopRelStr)
+ for T being Scott TopAugmentation of R,
+     S being upper Subset of T
+  ex F being Subset-Family of T st S = meet F &
+   for X being Subset of T st X in F holds X is a_neighborhood of S
+proof let R be up-complete (non empty reflexive transitive antisymmetric
+                             TopRelStr),
+           T be Scott TopAugmentation of R,
+           S be upper Subset of T;
+  defpred P[set] means $1 is a_neighborhood of S;
+  set F = { X where X is Subset of T: P[X]};
+    F is Subset of bool the carrier of T from SubsetD;
+  then F is Subset-Family of T by SETFAM_1:def 7;
+  then reconsider F as Subset-Family of T;
+ take F;
+ thus S = meet F
+  proof
+     [#]T is a_neighborhood of S by YELLOW_6:7;
+   then A1: [#]T in F;
+      now let Z1 be set;
+     assume Z1 in F;
+      then ex X being Subset of T
+         st Z1 = X & X is a_neighborhood of S;
+     hence S c= Z1 by YELLOW_6:8;
+    end;
+   hence S c= meet F by A1,SETFAM_1:6;
+   let x be set such that
+A2: x in meet F and
+A3: not x in S;
+    reconsider p = x as Element of T by A2;
+      (downarrow p)` is a_neighborhood of S by A3,Th18;
+    then (downarrow p)` in F;
+    then A4:   meet F c= (downarrow p)` by SETFAM_1:4;
+       p <= p;
+     then p in downarrow p by WAYBEL_0:17;
+   hence contradiction by A2,A4,YELLOW_6:10;
+  end;
+ let X be Subset of T;
+ assume X in F;
+  then ex Y being Subset of T st X = Y & Y is a_neighborhood of
+S;
+ hence X is a_neighborhood of S;
+end;
+
+theorem    ::Remark 1.4 (v)
+  for T being Scott up-complete (non empty reflexive transitive antisymmetric
+     TopRelStr),
+     S being Subset of T
+  holds S is open iff S is upper property(S)
+proof let T be Scott up-complete (non empty reflexive transitive antisymmetric
+                                   TopRelStr),
+           S be Subset of T;
+ hereby assume
+A1: S is open;
+  hence
+A2: S is upper by WAYBEL11:def 4;
+  thus S has_the_property_(S)
+   proof
+    let D be non empty directed Subset of T such that
+A3:  sup D in S;
+       S is inaccessible by A1,WAYBEL11:def 4;
+     then S meets D by A3,WAYBEL11:def 1;
+     then consider y being set such that
+A4:   y in S and
+A5:   y in D by XBOOLE_0:3;
+     reconsider y as Element of T by A4;
+    take y;
+    thus thesis by A2,A4,A5,WAYBEL_0:def 20;
+   end;
+ end;
+ assume that
+A6: S is upper and
+A7: S has_the_property_(S);
+    S is inaccessible
+   proof let D be non empty directed Subset of T;
+    assume sup D in S;
+     then consider y being Element of T such that
+A8:    y in D and
+A9:    for x being Element of T st x in D & x >= y holds x in S by A7,WAYBEL11:
+def 3;
+       y >= y by YELLOW_0:def 1;
+     then y in S by A8,A9;
+    hence D meets S by A8,XBOOLE_0:3;
+   end;
+ hence S is open by A6,WAYBEL11:def 4;
+end;
+
+theorem Th21:
+ for R being up-complete (non empty reflexive transitive antisymmetric
+     TopRelStr),
+     S being non empty directed Subset of R,
+     a being Element of R holds
+  a in S implies a <= "\/"(S, R)
+   proof
+    let R be up-complete (non empty reflexive transitive antisymmetric
+     TopRelStr);
+    let S be non empty directed Subset of R, a be Element of R;
+    assume A1: a in S;
+       ex_sup_of S,R by WAYBEL_0:75;
+     then S is_<=_than "\/"(S, R) by YELLOW_0:30;
+    hence a <= "\/"(S, R) by A1,LATTICE3:def 9;
+   end;
+
+::Remark 1.4 (vi)
+definition let T be up-complete (non empty reflexive transitive antisymmetric
+     TopRelStr);
+ cluster lower -> property(S) Subset of T;
+ coherence
+  proof
+  let S be Subset of T;
+   assume
+A1: S is lower;
+   let D be non empty directed Subset of T such that
+A2:  sup D in S;
+   consider y being Element of T such that
+A3:  y in D by SUBSET_1:10;
+   take y;
+   thus y in D by A3;
+   let x be Element of T such that
+A4: x in D and x >= y;
+      x <= sup D by A4,Th21;
+   hence x in S by A1,A2,WAYBEL_0:def 19;
+  end;
+end;
+
+theorem
+   for T being finite up-complete (non empty Poset),
+     S being Subset of T holds S is inaccessible
+proof
+ let T be finite up-complete (non empty Poset),
+     S be Subset of T, D be non empty directed Subset of T such that
+A1: sup D in S;
+      sup D in D
+     proof
+      reconsider D' = D as finite Subset of T;
+        D' c= D';
+      then reconsider E = D' as finite Subset of D;
+      consider x being Element of T such that
+A2:   x in D and
+A3:   x is_>=_than E by WAYBEL_0:1;
+A4: for b being Element of T st D is_<=_than b holds b >= x by A2,LATTICE3:def
+9;
+       for c being Element of T st D is_<=_than c &
+     for b being Element of T st D is_<=_than b holds b >= c
+      holds c = x
+       proof let c be Element of T such that
+A5:      D is_<=_than c and
+A6:      for b being Element of T st D is_<=_than b holds b >= c;
+           x >= c & c >= x by A2,A3,A5,A6,LATTICE3:def 9;
+        hence c = x by ORDERS_1:25;
+       end;
+      then ex_sup_of D,T by A3,A4,YELLOW_0:def 7;
+      hence sup D in D by A2,A3,A4,YELLOW_0:def 9;
+    end;
+hence thesis by A1,XBOOLE_0:3;
+ end;
+
+theorem Th23:
+ for R being complete connected LATTICE,
+  T being Scott TopAugmentation of R, x being Element of T holds
+   (downarrow x)` is open
+proof
+ let R be complete connected LATTICE,
+  T be Scott TopAugmentation of R, x be Element of T;
+   reconsider S = downarrow x as directly_closed lower Subset of T by WAYBEL11:
+8;
+     S` is open;
+  hence thesis;
+end;
+
+theorem
+   for R being complete connected LATTICE,
+     T being Scott TopAugmentation of R, S being Subset of T holds
+     S is open iff S = the carrier of T or S in {(downarrow x)`
+                              where x is Element of T: not contradiction}
+proof
+ let R be complete connected LATTICE,
+     T be Scott TopAugmentation of R, S be Subset of T;
+ set DD = {(downarrow x)` where x is Element of T: not contradiction};
+ thus S is open implies S = the carrier of T or S in DD
+  proof
+   assume S is open;
+then A1: S is inaccessible upper by WAYBEL11:def 4;
+   assume
+A2:  S <> the carrier of T & not S in DD;
+A3:  the carrier of T = [#]T by PRE_TOPC:12;
+then A4:      [#]T\S <> {} by A2,PRE_TOPC:23;
+A5:  the RelStr of T = the RelStr of R by YELLOW_9:def 4;
+     then reconsider K = S` as Subset of R;
+     reconsider D = K as non empty directed Subset of T by A4,A5,PRE_TOPC:17,
+WAYBEL_0:3;
+      A6: D misses S by PRE_TOPC:21;
+     reconsider x = sup D as Element of T;
+       S` = downarrow x
+      proof
+       thus S` c= downarrow x
+        proof
+         let a be set; assume
+A7:       a in S`;
+           then reconsider A = a as Element of T;
+             x is_>=_than S` by YELLOW_0:32;
+          then A <= x by A7,LATTICE3:def 9;
+         hence thesis by WAYBEL_0:17;
+        end;
+       let a be set; assume
+A8:     a in downarrow x;
+         then reconsider A = a as Element of T;
+            A <= x & not x in S by A1,A6,A8,WAYBEL11:def 1,WAYBEL_0:17;
+          then not A in S by A1,WAYBEL_0:def 20;
+        then A in [#]T\S by A3,XBOOLE_0:def 4;
+       hence thesis by PRE_TOPC:17;
+      end;
+     then (downarrow x)` = ([#]T\S)` by PRE_TOPC:17
+                 .= [#]T\([#]T\S) by PRE_TOPC:17
+                 .= S by PRE_TOPC:22;
+   hence contradiction by A2;
+  end;
+ assume A9: S = the carrier of T or S in DD;
+  per cases by A9;
+   suppose A10: S = the carrier of T;
+A11:   the RelStr of T = the RelStr of R by YELLOW_9:def 4;
+     then S = [#]R by A10,PRE_TOPC:12;
+then A12:  S is inaccessible by A11,YELLOW_9:47;
+      S is upper
+     proof
+      let x,y be Element of T;
+      assume x in S & x <= y;
+      thus y in S by A10;
+     end;
+   hence S is open by A12,WAYBEL11:def 4;
+   suppose S in DD;
+     then consider x being Element of T such that
+A13:  S = (downarrow x)`;
+   thus S is open by A13,Th23;
+end;
+
+definition
+let R be up-complete (non empty Poset);
+cluster order_consistent (correct TopAugmentation of R);
+correctness
+ proof
+  consider T being Scott correct TopAugmentation of R;
+  take T;
+  thus T is order_consistent by Th10;
+ end;
+end;
+
+definition
+cluster order_consistent complete TopLattice;
+correctness
+proof
+ consider T being Scott complete TopLattice;
+ take T;
+ thus thesis by Th10;
+end;
+end;
+
+theorem Th25:
+for R being non empty TopRelStr
+for A being Subset of R holds
+ (for x being Element of R holds downarrow x = Cl {x}) implies
+  (A is open implies A is upper)
+proof
+ let R be non empty TopRelStr,
+     A be Subset of R;
+assume A1: for x being Element of R holds downarrow x = Cl {x};
+   assume A2: A is open;
+  let x,y be Element of R such that
+A3: x in A and
+A4: x <= y;
+      x in downarrow y by A4,WAYBEL_0:17;
+    then x in Cl {y} by A1;
+    then A meets {y} by A2,A3,PRE_TOPC:54;
+    then consider z be set such that
+A5:  z in A /\ {y} by XBOOLE_0:4;
+       z in A & z in {y} by A5,XBOOLE_0:def 3;
+ hence y in A by TARSKI:def 1;
+end;
+
+theorem
+  for R being non empty TopRelStr
+for A being Subset of R holds
+ (for x being Element of R holds downarrow x = Cl {x}) implies
+for A being Subset of R st A is closed holds A is lower
+proof
+ let R be non empty TopRelStr,
+     A be Subset of R;
+assume A1: for x being Element of R holds downarrow x = Cl {x};
+ let A be Subset of R such that
+A2: A is closed;
+  let x,y be Element of R such that
+A3: x in A and
+A4: y <= x;
+      y in downarrow x by A4,WAYBEL_0:17;
+then A5: y in Cl {x} by A1;
+      {x} c= A
+     proof
+      let a be set;
+      assume a in {x};
+      hence a in A by A3,TARSKI:def 1;
+     end;
+ hence y in A by A2,A5,PRE_TOPC:45;
+end;
+
+theorem Th27:
+ for T being up-complete /\-complete LATTICE, N being net of T
+ for i being Element of N holds lim_inf (N|i) = lim_inf N
+  proof let T be complete LATTICE, N be net of T;
+   let i be Element of N;
+   reconsider M = N|i as subnet of N;
+   reconsider e = incl(M,N) as Embedding of M, N by WAYBEL21:40;
+      M is full SubNetStr of N by WAYBEL_9:14;
+then A1: M is full SubRelStr of N by YELLOW_6:def 9;
+      the carrier of M c= the carrier of N by WAYBEL_9:13;
+then A2:  incl(M,N) = id the carrier of M by YELLOW_9:def 1;
+      now let k be Element of N, j be Element of M;
+     consider j' being Element of N such that
+A3:    j' = j & j' >= i by WAYBEL_9:def 7;
+     assume e.j <= k;
+then A4:    k >= j' by A2,A3,FUNCT_1:35;
+      then k >= i by A3,YELLOW_0:def 2;
+then     k in the carrier of M by WAYBEL_9:def 7;
+     then reconsider k' = k as Element of M;
+     take k'; thus k' >= j by A1,A3,A4,YELLOW_0:61;
+        M.k' = N.(e.k') & M.k' <= M.k' by WAYBEL21:36;
+     hence N.k >= M.k' by A2,FUNCT_1:35;
+    end;
+   hence lim_inf (N|i) = lim_inf N by WAYBEL21:38;
+  end;
+
+definition
+let S be non empty 1-sorted,
+    R be non empty RelStr,
+    f be Function of the carrier of R,the carrier of S;
+func R*'f -> strict non empty NetStr over S means
+:Def3:
+the RelStr of it = the RelStr of R &
+the mapping of it = f;
+ existence
+  proof
+   reconsider M = NetStr (# the carrier of R,the InternalRel of R, f #)
+   as strict non empty NetStr over S;
+   take M;
+   thus thesis;
+  end;
+ uniqueness;
+end;
+
+definition
+let S be non empty 1-sorted,
+    R be non empty transitive RelStr,
+    f be Function of the carrier of R,the carrier of S;
+cluster R*'f -> transitive;
+coherence
+ proof
+    the RelStr of R*'f = the RelStr of R & R is transitive by Def3;
+  hence R*'f is transitive by WAYBEL_8:13;
+ end;
+end;
+
+definition
+let S be non empty 1-sorted,
+    R be non empty directed RelStr,
+    f be Function of the carrier of R,the carrier of S;
+cluster R*'f -> directed;
+coherence
+proof
+A1:  the RelStr of R*'f = the RelStr of R & R is directed by Def3;
+  thus [#](R*'f) is directed
+   proof
+A2: [#]R is directed by WAYBEL_0:def 6;
+      [#](R*'f) = the carrier of R*'f by PRE_TOPC:12
+            .= [#]R by A1,PRE_TOPC:12;
+      hence thesis by A1,A2,WAYBEL_0:3;
+   end;
+end;
+end;
+
+definition
+ let R be non empty RelStr,
+     N be prenet of R;
+func inf_net N -> strict prenet of R means
+:Def4:
+ex f being map of N,R st
+ it = N*'f & for i being Element of N holds
+  f.i = "/\"({N.k where k is Element of N: k >= i},R);
+ existence
+  proof
+    deffunc F(Element of N)
+     = "/\"({N.k where k is Element of N: k >= $1},R);
+     consider g being Function of the carrier of N, the carrier of R
+       such that
+A1:   for i being Element of N holds g.i = F(i) from LambdaD;
+     reconsider f = g as map of N,R;
+     reconsider M = N*'f as strict prenet of R;
+    take M;
+   thus thesis by A1;
+  end;
+ uniqueness
+  proof
+   let M, P be strict prenet of R such that
+A2:  ex f being map of N,R st
+      M = N*'f & for i being Element of N holds
+      f.i = "/\"({N.k where k is Element of N: k >= i},R) and
+A3:  ex f being map of N,R st
+      P = N*'f & for i being Element of N holds
+      f.i = "/\"({N.k where k is Element of N: k >= i},R);
+    consider f1 being map of N,R such that
+A4:   M = N*'f1 & for i being Element of N holds
+      f1.i = "/\"
+({N.k where k is Element of N: k >= i},R) by A2;
+    consider f2 being map of N,R such that
+A5:   P = N*'f2 & for i being Element of N holds
+      f2.i = "/\"
+({N.k where k is Element of N: k >= i},R) by A3;
+  for i being set st i in the carrier of N holds f1.i = f2.i
+     proof
+      let i be set; assume i in the carrier of N;
+      then reconsider i as Element of N;
+         f1.i = "/\"
+({N.k where k is Element of N: k >= i},R) by A4
+           .= f2.i by A5;
+      hence thesis;
+     end;
+    hence M = P by A4,A5,FUNCT_2:18;
+  end;
+end;
+
+definition
+let R be non empty RelStr,
+    N be net of R;
+cluster inf_net N -> transitive;
+coherence
+ proof
+    ex f being map of N,R st inf_net N = N*'f &
+      for i being Element of N holds
+  f.i = "/\"({N.k where k is Element of N: k >= i},R) by Def4;
+  hence thesis;
+ end;
+end;
+
+definition
+let R be non empty RelStr,
+    N be net of R;
+cluster inf_net N -> directed;
+coherence;
+end;
+
+definition
+let R be /\-complete (non empty reflexive antisymmetric RelStr),
+    N be net of R;
+cluster inf_net N -> monotone;
+coherence
+proof
+ let i,j be Element of inf_net N such that A1: i <= j;
+ consider f being map of N,R such that A2: inf_net N = N*'f &
+      for i being Element of N holds
+       f.i = "/\"({N.k where k is Element of N: k >= i},R)
+        by Def4;
+A3:   the RelStr of inf_net N = the RelStr of N by A2,Def3;
+  then reconsider i'=i,j'=j as Element of N;
+  deffunc F(Element of N) = N.$1;
+  defpred P[Element of N] means $1 >= j';
+  defpred Q[Element of N] means $1 >= i';
+set J= {F(k) where k is Element of N: P[k]};
+set I= {F(k) where k is Element of N: Q[k]};
+A4:     J is Subset of R from SubsetFD;
+        consider j0 being Element of N such that
+A5:      j0 >= j' & j0 >= j' by YELLOW_6:def 5;
+           N.j0 in J by A5;
+        then reconsider J'= J as non empty Subset of R by A4;
+A6:     I is Subset of R from SubsetFD;
+        consider j1 being Element of N such that
+A7:      j1 >= i' & j1 >= i' by YELLOW_6:def 5;
+           N.j1 in I by A7;
+        then reconsider I'= I as non empty Subset of R by A6;
+A8: ex_inf_of J',R & ex_inf_of I',R by WAYBEL_0:76;
+A9:J' c= I'
+     proof
+      let a be set; assume A10: a in J';
+      then reconsider x = a as Element of R;
+       consider k being Element of N such that
+A11:     x = N.k and
+A12:     k >= j' by A10;
+       reconsider i0 = i,j0 = j as Element of inf_net N;
+       reconsider k' = k as Element of N;
+         i0 <= j0 & i' = i0 & j' = j0 by A1;
+       then i' <= j' & j' <= k' by A3,A12,YELLOW_0:1;
+       then i' <= k' by YELLOW_0:def 2;
+      hence a in I' by A11;
+     end;
+A13:  f.i' = "/\"(I,R) & f.j' = "/\"(J,R) by A2;
+    the mapping of (inf_net N) = f by A2,Def3;
+  then (inf_net N).i = f.i' & (inf_net N).j = f.j' by WAYBEL_0:def 8;
+ hence (inf_net N).i <= (inf_net N).j by A8,A9,A13,YELLOW_0:35;
+end;
+end;
+
+definition
+let R be /\-complete (non empty reflexive antisymmetric RelStr),
+    N be net of R;
+cluster inf_net N -> eventually-directed;
+coherence;
+end;
+
+theorem Th28:
+for R being non empty RelStr,
+    N being net of R
+    holds rng the mapping of (inf_net N) =
+    {"/\"({N.i where i is Element of N: i >= j},R) where
+         j is Element of N: not contradiction}
+proof
+let R be non empty RelStr, N be net of R;
+set X = {"/\"({N.i where i is Element of N: i >= j},R) where
+         j is Element of N: not contradiction};
+ consider f being map of N,R such that
+A1:  inf_net N = N*'f &
+     for i being Element of N holds
+      f.i = "/\"
+({N.k where k is Element of N: k >= i},R) by Def4;
+A2: the RelStr of inf_net N = the RelStr of N by A1,Def3;
+A3: the mapping of (inf_net N) = f by A1,Def3;
+then A4: the carrier of inf_net N = dom f by FUNCT_2:def 1;
+thus rng the mapping of inf_net N c=
+         {"/\"({N.i where i is Element of N: i >= j},R) where
+            j is Element of N: not contradiction}
+ proof
+  let e be set; assume e in rng the mapping of inf_net N;
+   then consider u being set such that
+A5: u in dom f and
+A6: e = f.u by A3,FUNCT_1:def 5;
+   reconsider u as Element of N by A5;
+     f.u = "/\"({N.k where k is Element of N: k >= u},R) by A1;
+  hence e in X by A6;
+ end;
+let e be set; assume
+     e in {"/\"({N.i where i is Element of N: i >= j},R) where
+            j is Element of N: not contradiction};
+    then consider j being Element of N such that
+A7:   e = "/\"({N.i where i is Element of N: i >= j},R);
+        e = (the mapping of inf_net N).j by A1,A3,A7;
+ hence e in rng the mapping of inf_net N by A2,A3,A4,FUNCT_1:def 5;
+end;
+
+theorem Th29:
+for R being up-complete /\-complete LATTICE,
+    N being net of R holds
+sup inf_net N = lim_inf N
+proof
+let R be up-complete /\-complete LATTICE,
+    N be net of R;
+ defpred P[set] means not contradiction;
+ deffunc F(Element of N)
+  = "/\"({N.l where l is Element of N: l >= $1},R);
+ set X = {F(j) where j is Element of N: P[j]};
+     X is Subset of R from SubsetFD;
+   then reconsider D = X as Subset of R;
+   reconsider D as non empty directed Subset of R by Th11;
+      sup inf_net N = Sup the mapping of (inf_net N) by WAYBEL_2:def 1
+              .= sup rng the mapping of (inf_net N) by YELLOW_2:def 5
+              .= sup D by Th28
+              .= lim_inf N by WAYBEL11:def 6;
+ hence thesis;
+end;
+
+theorem
+  for R being up-complete /\-complete LATTICE,
+    N being net of R,
+    i being Element of N holds
+sup inf_net N = lim_inf (N|i)
+proof
+let R be up-complete /\-complete LATTICE,
+    N be net of R,
+    i be Element of N;
+   sup inf_net N = lim_inf N by Th29;
+ hence thesis by Th27;
+end;
+
+theorem Th31:
+for R being /\-complete Semilattice,
+    N being net of R,
+    V being upper Subset of R holds
+inf_net N is_eventually_in V implies N is_eventually_in V
+proof
+ let R be /\-complete Semilattice, N be net of R,
+     V be upper Subset of R;
+  consider f being map of N,R such that
+A1:  inf_net N = N*'f &
+     for i being Element of N holds
+      f.i = "/\"
+({N.k where k is Element of N: k >= i},R) by Def4;
+A2: the RelStr of inf_net N = the RelStr of N by A1,Def3;
+ assume inf_net N is_eventually_in V;
+ then consider i being Element of inf_net N such that
+A3: for j being Element of inf_net N st i <= j holds (inf_net N).j in V
+      by WAYBEL_0:def 11;
+ consider j0 being Element of inf_net N such that
+A4: i <= j0 & i <= j0 by YELLOW_6:def 5;
+A5: (inf_net N).j0 in V by A3,A4;
+ reconsider j' = j0 as Element of N by A2;
+ take j';
+  let j be Element of N such that A6: j' <= j;
+  defpred P[Element of N] means $1 >= j';
+  deffunc F(Element of N) = N.$1;
+   set E = {F(k) where k is Element of N: P[k]};
+      E is Subset of R from SubsetFD;
+    then reconsider E as Subset of R;
+       the mapping of (inf_net N) = f by A1,Def3;
+then A7: (inf_net N).j0 = f.j' by WAYBEL_0:def 8
+                 .= "/\"(E,R) by A1;
+       N.j in E by A6;
+    then "/\"(E,R) <= N.j by Th12;
+   hence N.j in V by A5,A7,WAYBEL_0:def 20;
+end;
+
+theorem
+  for R being /\-complete Semilattice,
+    N being net of R,
+    V being lower Subset of R holds
+ N is_eventually_in V implies inf_net N is_eventually_in V
+proof
+let R be /\-complete Semilattice, N be net of R,
+    V be lower Subset of R;
+  consider f being map of N,R such that
+A1:  inf_net N = N*'f &
+     for i being Element of N holds
+      f.i = "/\"
+({N.k where k is Element of N: k >= i},R) by Def4;
+A2: the RelStr of inf_net N = the RelStr of N by A1,Def3;
+ assume N is_eventually_in V;
+ then consider i being Element of N such that
+A3: for j being Element of N st i <= j holds N.j in V by WAYBEL_0:def 11;
+ reconsider i' = i as Element of inf_net N by A2;
+ take i';
+   let j be Element of inf_net N such that A4: i' <= j;
+    reconsider j0 = j as Element of N by A2;
+    defpred P[Element of N] means $1 >= j0;
+    deffunc F(Element of N) = N.$1;
+     set E = {F(k) where k is Element of N: P[k]};
+    consider j1 being Element of N such that
+A5:  j1 >= j0 & j1 >= j0 by YELLOW_6:def 5;
+       E is Subset of R from SubsetFD;
+     then reconsider E as Subset of R;
+        i <= j0 & j0 <= j1 by A2,A4,A5,YELLOW_0:1;
+      then i <= j1 by YELLOW_0:def 2;
+then A6:   N.j1 in V by A3;
+        N.j1 in E by A5;
+then A7:   "/\"(E,R) <= N.j1 by Th12;
+       the mapping of (inf_net N) = f by A1,Def3;
+      then (inf_net N).j = f.j0 by WAYBEL_0:def 8
+                   .= "/\"(E,R) by A1;
+ hence (inf_net N).j in V by A6,A7,WAYBEL_0:def 19;
+end;
+
+theorem Th33:
+for R being order_consistent up-complete /\-complete (non empty TopLattice)
+for N being net of R,
+    x being Element of R holds
+    x <= lim_inf N implies x is_a_cluster_point_of N
+proof
+ let R be order_consistent up-complete /\-complete (non empty TopLattice),
+    N be net of R,
+    x be Element of R;
+ assume A1:    x <= lim_inf N;
+  defpred P[Element of N] means not contradiction;
+  deffunc F(Element of N) =
+    "/\"({N.i where i is Element of N:i >= $1}, R);
+  set X = {F(j) where j is Element of N: P[j]};
+    X is Subset of R from SubsetFD;
+  then reconsider D = X as Subset of R;
+   reconsider D as non empty directed Subset of R by Th11;
+A2:  sup D = lim_inf N by WAYBEL11:def 6;
+A3:  x <= sup D by A1,WAYBEL11:def 6;
+A4:  sup D = sup inf_net N by A2,Th29;
+  let V be a_neighborhood of x;
+A5: for a being Element of R holds downarrow a = Cl {a} by Def2;
+A6:  Int V is open by TOPS_1:51;
+then A7:   Int V is upper by A5,Th25;
+        x in Int V by CONNSP_2:def 1;
+      then sup D in Int V by A3,A7,WAYBEL_0:def 20;
+     then reconsider W = Int V as a_neighborhood of (sup D) by A6,CONNSP_2:5;
+A8:   Int V c= V by TOPS_1:44;
+       inf_net N is_eventually_in W by A4,Def2;
+    then N is_eventually_in W by A7,Th31;
+   then N is_eventually_in V by A8,WAYBEL_0:8;
+  hence N is_often_in V by YELLOW_6:28;
+end;
+
+theorem
+  for R being order_consistent up-complete /\-complete (non empty TopLattice)
+for N being eventually-directed net of R,
+    x being Element of R holds
+    x <= lim_inf N iff x is_a_cluster_point_of N
+ proof
+  let R be order_consistent up-complete /\-complete (non empty TopLattice),
+      N be eventually-directed net of R,
+      x be Element of R;
+  thus x <= lim_inf N implies x is_a_cluster_point_of N by Th33;
+  thus x is_a_cluster_point_of N implies x <= lim_inf N
+   proof
+    assume
+A1:  x is_a_cluster_point_of N;
+  defpred P[Element of N] means not contradiction;
+  deffunc F(Element of N) =
+    "/\"({N.i where i is Element of N:i >= $1}, R);
+set X = {F(j) where j is Element of N: P[j]};
+     X is Subset of R from SubsetFD;
+   then reconsider D = X as Subset of R;
+   reconsider D as non empty directed Subset of R by Th11;
+A2: lim_inf N = sup D by WAYBEL11:def 6;
+      for G being Subset of R st G is open holds
+    x in G implies {sup D} meets G
+     proof
+      let G be Subset of R such that A3: G is open;
+      assume x in G;
+      then reconsider G as a_neighborhood of x by A3,CONNSP_2:5;
+A4:   N is_often_in G by A1,WAYBEL_9:def 9;
+         now let i be Element of N;
+        consider j1 being Element of N such that A5: i <= j1 & N.j1 in G by A4,
+WAYBEL_0:def 12;
+        consider j2 being Element of N such that
+A6:      for k being Element of N st j2 <= k holds N.j1 <= N.k by WAYBEL_0:11;
+        defpred P[Element of N] means $1 >= j2;
+        deffunc F(Element of N) = N.$1;
+         set E = {F(k) where k is Element of N: P[k]};
+A7:      E is Subset of R from SubsetFD;
+        consider j' being Element of N such that
+A8:      j' >= j2 & j' >= j2 by YELLOW_6:def 5;
+           N.j' in E by A8;
+        then reconsider E' = E as non empty Subset of R by A7;
+A9:     ex_inf_of E',R by WAYBEL_0:76;
+       N.j1 is_<=_than E'
+      proof
+       let b be Element of R such that A10: b in E';
+       consider k being Element of N such that
+A11:     b = N.k and
+A12:     k >= j2 by A10;
+       reconsider k' = k as Element of N;
+          N.j1 <= N.k' by A6,A12;
+       hence N.j1 <= b by A11;
+      end;
+then A13:    N.j1 <= "/\"(E',R) by A9,YELLOW_0:31;
+         for a being Element of R holds downarrow a = Cl {a} by Def2;
+then A14:     G is upper by A3,Th25;
+then A15:     "/\"(E',R) in G by A5,A13,WAYBEL_0:def 20;
+           "/\"(E',R) in D;
+        then "/\"(E',R) <= sup D by Th21;
+       hence sup D in G by A14,A15,WAYBEL_0:def 20;
+      end;
+      then sup D in G & sup D in {sup D} by TARSKI:def 1;
+      hence thesis by XBOOLE_0:3;
+     end;
+    then x in Cl {sup D} by PRE_TOPC:54;
+     then x in downarrow sup D by Def2;
+    hence x <= lim_inf N by A2,WAYBEL_0:17;
+   end;
+ end;
+

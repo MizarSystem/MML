@@ -1,0 +1,1242 @@
+:: Real Normed Space
+::  by Jan Popio{\l}ek
+::
+:: Received September 20, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, BINOP_1, FUNCT_1, PRE_TOPC, RLSUB_1, ABSVALUE, ARYTM_1,
+      ARYTM_3, RELAT_1, SEQM_3, SEQ_2, SEQ_1, ORDINAL2, NORMSP_1, ARYTM;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0,
+      REAL_1, NAT_1, FUNCT_1, FUNCT_2, BINOP_1, RELAT_1, SEQ_1, SEQ_2, SEQM_3,
+      ABSVALUE, STRUCT_0, PRE_TOPC, RLVECT_1, RLSUB_1;
+ constructors REAL_1, NAT_1, DOMAIN_1, SEQ_2, SEQM_3, ABSVALUE, RLSUB_1,
+      MEMBERED, XBOOLE_0;
+ clusters STRUCT_0, XREAL_0, RELSET_1, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0,
+      NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions RLVECT_1, SEQM_3, STRUCT_0;
+ theorems TARSKI, AXIOMS, REAL_1, NAT_1, FUNCT_1, SQUARE_1, SEQ_2, ABSVALUE,
+      RLVECT_1, RLSUB_1, FUNCT_2, SEQM_3, STRUCT_0, RELSET_1, XREAL_0,
+      XBOOLE_0, XCMPLX_0, XCMPLX_1;
+ schemes FUNCT_1, FUNCT_2, SEQ_1, NAT_1;
+
+begin
+
+definition
+ struct(RLSStruct) NORMSTR (# carrier -> set,
+                 Zero -> Element of the carrier,
+                  add -> BinOp of the carrier,
+                 Mult -> Function of [:REAL, the carrier:], the carrier,
+                 norm -> Function of the carrier, REAL #);
+end;
+
+definition
+ cluster non empty NORMSTR;
+ existence
+  proof
+    consider A being non empty set, Z being Element of A,
+             a being BinOp of A, M being Function of [:REAL,A:],A,
+             n being Function of A,REAL;
+   take NORMSTR(#A,Z,a,M,n#);
+   thus the carrier of NORMSTR(#A,Z,a,M,n#) is non empty;
+  end;
+end;
+
+ reserve X for non empty NORMSTR;
+ reserve a, b for Real;
+ reserve x for Point of X;
+
+deffunc 0'(NORMSTR) = 0.$1;
+
+definition let X, x;
+          func ||.x.|| -> Real equals
+:Def1:   ( the norm of X ).x;
+coherence;
+end;
+     consider V being RealLinearSpace;
+Lm1:   the carrier of (0).V = {0.V} by RLSUB_1:def 3;
+  deffunc F(set) = 0;
+     consider nil_to_nil being Function
+     of the carrier of (0).V , REAL such that
+Lm2: for u being VECTOR of (0).V holds nil_to_nil.u = F(u) from LambdaD;
+
+Lm3:
+nil_to_nil.(0.V) = 0
+proof
+  0.V is VECTOR of (0).V by Lm1,TARSKI:def 1;
+hence thesis by Lm2;
+end;
+
+Lm4:
+for u being VECTOR of (0).V , a holds
+nil_to_nil.(a * u) = abs(a) * nil_to_nil.u
+proof
+let u be VECTOR of (0).V;
+let a;
+  nil_to_nil.u = 0 by Lm1,Lm3,TARSKI:def 1;
+hence thesis by Lm1,Lm3,TARSKI:def 1;
+end;
+
+Lm5:
+for u , v being VECTOR of (0).V holds
+nil_to_nil.(u + v) <= nil_to_nil.u + nil_to_nil.v
+proof
+let u, v be VECTOR of (0).V;
+     u = 0.V & v = 0.V by Lm1,TARSKI:def 1;
+hence thesis by Lm1,Lm3,TARSKI:def 1;
+end;
+reconsider X =
+ NORMSTR (# the carrier of (0).V, the Zero of (0).V, the add of (0).V,
+           the Mult of (0).V, nil_to_nil #)
+            as non empty NORMSTR by STRUCT_0:def 1;
+
+Lm6:
+now
+let x, y be Point of X;
+let a;
+A1:   ||.x.|| = nil_to_nil.x &
+||.y.|| = nil_to_nil.y &
+||.a * x.|| = nil_to_nil.(a * x) &
+||.x + y.|| = nil_to_nil.(x + y) by Def1;
+
+reconsider u = x, w = y as VECTOR of (0).V;
+
+thus ||.x.|| = 0 iff x = 0'(X)
+proof
+  0'(X) = the Zero of X by RLVECT_1:def 2
+     .= 0.(0).V by RLVECT_1:def 2
+     .= 0.V by RLSUB_1:19;
+hence thesis by Def1,Lm1,Lm3,TARSKI:def 1;
+end;
+
+   a * x = (the Mult of X).[a,u] by RLVECT_1:def 4
+         .= a * u by RLVECT_1:def 4;
+hence ||.a * x.|| = abs(a) * ||.x.|| by A1,Lm4;
+   x + y = (the add of X).[x,y] by RLVECT_1:def 3
+      .= u + w by RLVECT_1:def 3;
+hence ||.x + y.|| <= ||.x.|| + ||.y.|| by A1,Lm5;
+end;
+
+definition let IT be non empty NORMSTR;
+          attr IT is RealNormSpace-like means
+:Def2:   for x , y being Point of IT , a holds
+          ( ||.x.|| = 0 iff x = 0.IT ) &
+          ||.a * x.|| = abs(a) * ||.x.|| &
+          ||.x + y.|| <= ||.x.|| + ||.y.||;
+end;
+
+definition
+ cluster RealNormSpace-like RealLinearSpace-like Abelian
+    add-associative right_zeroed right_complementable strict
+      (non empty NORMSTR);
+  existence
+   proof
+    take X;
+    thus X is RealNormSpace-like by Def2,Lm6;
+A1: now
+      let x,y be VECTOR of X;
+      let x',y' be VECTOR of (0).V;
+      assume A2: x = x' & y = y';
+      hence x + y= (the add of X).[x',y'] by RLVECT_1:def 3 .=
+      x' + y' by RLVECT_1:def 3;
+      let a;
+      thus a * x = (the Mult of X).[a,x'] by A2,RLVECT_1:def 4 .=
+      a * x' by RLVECT_1:def 4;
+     end;
+A3:  0.X = the Zero of X by RLVECT_1:def 2 .=
+     0.(0).V by RLVECT_1:def 2;
+    thus X is RealLinearSpace-like
+    proof
+     thus for a for v,w being VECTOR of X holds a * (v + w) = a * v + a * w
+     proof
+      let a;
+      let v,w be VECTOR of X;
+      reconsider v'= v, w' = w as VECTOR of (0).V;
+A4:   a * v' = a * v by A1;
+A5:  a * w' = a * w by A1;
+    v + w = v'+ w' by A1;
+      hence a * (v + w) = a *( v' + w') by A1 .=
+      a * v' + a * w' by RLVECT_1:def 9 .= a * v + a * w by A1,A4,A5;
+     end;
+     thus for a,b for v being VECTOR of X holds (a + b) * v = a * v + b * v
+     proof
+      let a,b;
+      let v be VECTOR of X;
+      reconsider v'= v as VECTOR of (0).V;
+A6:   a * v' = a * v by A1;
+A7:  b * v' = b * v by A1;
+      thus (a + b) * v = (a + b) * v' by A1 .=
+      a * v' + b * v' by RLVECT_1:def 9 .= a * v + b * v by A1,A6,A7;
+     end;
+     thus for a,b for v being VECTOR of X holds (a * b) * v = a * (b * v)
+     proof
+      let a,b;
+      let v be VECTOR of X;
+      reconsider v'= v as VECTOR of (0).V;
+A8:   b * v' = b * v by A1;
+      thus (a * b) * v = (a * b) * v' by A1
+                .= a * (b * v') by RLVECT_1:def 9
+                .= a * (b * v) by A1,A8;
+     end;
+     let v be VECTOR of X;
+     reconsider v'= v as VECTOR of (0).V;
+     thus 1 * v = 1 * v' by A1 .= v by RLVECT_1:def 9;
+    end;
+    thus for v,w being VECTOR of X holds v + w = w + v
+    proof
+     let v,w be VECTOR of X;
+     reconsider v'= v , w'= w as VECTOR of (0).V;
+     thus v + w = w'+ v' by A1 .= w + v by A1;
+    end;
+     thus for u,v,w being VECTOR of X holds (u + v) + w = u + (v + w)
+     proof
+      let u,v,w be VECTOR of X;
+      reconsider u'= u, v'= v, w'= w as VECTOR of (0).V;
+      A9: u + v = u'+ v' by A1;
+      A10: v + w = v' + w' by A1;
+      thus (u + v) + w = (u' + v') + w' by A1,A9 .=
+      u' + (v' + w') by RLVECT_1:def 6 .= u + (v + w) by A1,A10;
+     end;
+     thus for v being VECTOR of X holds v + 0.X = v
+     proof
+      let v be VECTOR of X;
+      reconsider v'= v as VECTOR of (0).V;
+      thus v + 0.X = v'+ 0.(0).V by A1,A3 .=v by RLVECT_1:10;
+     end;
+     thus for v being VECTOR of X
+       ex w being VECTOR of X st v + w = 0.X
+       proof
+        let v be VECTOR of X;
+        reconsider v'= v as VECTOR of (0).V;
+        consider w' be VECTOR of (0).V such that
+        A11: v' + w' = 0.(0).V by RLVECT_1:def 8;
+        reconsider w = w' as VECTOR of X;
+        take w;
+        thus v + w = 0.X by A1,A3,A11;
+       end;
+    thus thesis;
+   end;
+end;
+
+definition
+ mode RealNormSpace is RealNormSpace-like RealLinearSpace-like
+      Abelian add-associative right_zeroed right_complementable
+          (non empty NORMSTR);
+end;
+
+ reserve RNS for RealNormSpace;
+ reserve x, y, z, g, g1, g2 for Point of RNS;
+
+canceled 4;
+
+theorem
+     ||.0.RNS.|| = 0 by Def2;
+
+theorem Th6:
+    ||.-x.|| = ||.x.||
+proof
+A1:   ||.-x.|| = ||.(-1) * x.|| by RLVECT_1:29
+           .= abs(-1 ) * ||.x.|| by Def2;
+       abs(-1 ) = -(-1) by ABSVALUE:def 1
+           .= 1;
+     hence thesis by A1;
+end;
+
+theorem Th7:
+    ||.x - y.|| <= ||.x.|| + ||.y.||
+proof
+       x - y = x + (-y) by RLVECT_1:def 11;
+     then ||.x - y.|| <= ||.x.|| + ||.(-y).|| by Def2;
+     hence thesis by Th6;
+end;
+
+theorem Th8:
+    0 <= ||.x.||
+proof
+       ||.x - x.|| = ||.0'(RNS).|| by RLVECT_1:28
+              .= 0 by Def2;
+   then 0 <= ||.x.|| + ||.x.|| by Th7;
+     then 0 <= (||.x.|| + ||.x.||)/2 by SQUARE_1:27;
+     hence thesis by XCMPLX_1:65;
+end;
+
+theorem
+      ||.a * x + b * y.|| <= abs(a) * ||.x.|| + abs(b) * ||.y.||
+proof
+       ||.a * x + b * y.|| <= ||.a * x.|| + ||.b * y.|| by Def2;
+     then ||.a * x + b * y.|| <= abs(a) * ||.x.|| + ||.b * y.|| by Def2;
+     hence thesis by Def2;
+end;
+
+theorem Th10:
+     ||.x - y.|| = 0 iff x = y
+proof
+     ||.x - y.|| = 0 iff x - y = 0'(RNS) by Def2;
+     hence thesis by RLVECT_1:28,35;
+end;
+
+theorem Th11:
+     ||.x - y.|| = ||.y - x.||
+proof
+       x - y = (-y) + x by RLVECT_1:def 11
+          .= - (y - x) by RLVECT_1:47;
+    hence thesis by Th6;
+end;
+
+theorem Th12:
+     ||.x.|| - ||.y.|| <= ||.x - y.||
+proof
+       (x - y) + y = x - (y - y) by RLVECT_1:43
+                .= x - 0'(RNS) by RLVECT_1:28
+                .= x by RLVECT_1:26;
+     then ||.x.|| <= ||.x - y.|| + ||.y.|| by Def2;
+     hence thesis by REAL_1:86;
+end;
+
+theorem Th13:
+     abs(||.x.|| - ||.y.||) <= ||.x - y.||
+proof
+A1:   ||.x.|| - ||.y.|| <= ||.x - y.|| by Th12;
+       (y - x) + x = y - (x - x) by RLVECT_1:43
+                .= y - 0'(RNS) by RLVECT_1:28
+                .= y by RLVECT_1:26;
+     then ||.y.|| <= ||.y - x.|| + ||.x.|| by Def2;
+     then ||.y.|| - ||.x.|| <= ||.y - x.|| by REAL_1:86;
+     then ||.y.|| - ||.x.|| <= ||.x - y.|| by Th11;
+     then -(||.x.|| - ||.y.||) <= ||.x - y.|| by XCMPLX_1:143;
+     then -||.x - y.|| <= -(-(||.x.|| - ||.y.||)) by REAL_1:50;
+     hence thesis by A1,ABSVALUE:12;
+end;
+
+theorem Th14:
+     ||.x - z.|| <= ||.x - y.|| + ||.y - z.||
+proof
+       x - z = x + (-z) by RLVECT_1:def 11
+          .= x + (0'(RNS) + (-z)) by RLVECT_1:10
+          .= x + (((-y) + y) + (-z)) by RLVECT_1:16
+          .= x + ((-y) + (y + (-z))) by RLVECT_1:def 6
+          .= (x + (-y)) + (y + (-z)) by RLVECT_1:def 6
+          .= (x - y) + (y + (-z)) by RLVECT_1:def 11
+          .= (x - y) + (y - z) by RLVECT_1:def 11;
+     hence thesis by Def2;
+end;
+
+theorem
+      x <> y implies ||.x - y.|| <> 0 by Th10;
+
+definition let RNS be 1-sorted;
+          mode sequence of RNS means
+:Def3:   it is Function of NAT, the carrier of RNS;
+existence
+         proof consider f being Function of NAT, the carrier of RNS;
+          take f;
+          thus thesis;
+         end;
+end;
+
+definition let RNS be 1-sorted;
+ cluster -> Function-like Relation-like sequence of RNS;
+ coherence by Def3;
+end;
+
+definition let RNS be non empty 1-sorted;
+ redefine mode sequence of RNS -> Function of NAT, the carrier of RNS;
+ coherence by Def3;
+end;
+
+reserve S, S1, S2 for sequence of RNS;
+reserve k, n, m, m1, m2 for Nat;
+reserve r for Real;
+reserve f for Function;
+reserve d, s, t for set;
+
+canceled;
+
+theorem Th17:
+ for RNS being non empty 1-sorted, x being Element of RNS
+   holds f is sequence of RNS iff ( dom f = NAT &
+    for d st d in NAT holds f.d is Element of RNS )
+proof
+ let RNS be non empty 1-sorted;
+     let x be Element of RNS;
+     thus f is sequence of RNS implies
+     ( dom f = NAT & for d st d in NAT holds f.d
+        is Element of RNS )
+     proof
+          assume
+      A1:  f is sequence of RNS;
+      then A2: dom f = NAT by FUNCT_2:def 1;
+      A3: rng f c= the carrier of RNS by A1,RELSET_1:12;
+            for d st d in NAT holds f.d is Element of RNS
+          proof
+               let d; assume
+              d in NAT;
+               then f.d in rng f by A2,FUNCT_1:def 5;
+               hence thesis by A3;
+          end;
+          hence thesis by A1,FUNCT_2:def 1;
+     end;
+     thus ( dom f = NAT & for d st d in NAT holds f.d
+             is Element of RNS )
+     implies f is sequence of RNS
+     proof
+          assume that
+     A4:  dom f = NAT and
+     A5:  for d st d in NAT holds f.d is Element of RNS;
+            for s st s in rng f holds
+          s in the carrier of RNS
+          proof
+               let s; assume
+              s in rng f;
+               then consider d such that
+          A6:  d in dom f and
+          A7:  s = f.d by FUNCT_1:def 5;
+                 f.d is Element of RNS by A4,A5,A6;
+               hence thesis by A7;
+          end;
+          then rng f c= the carrier of RNS by TARSKI:def 3;
+          then f is Function of NAT, the carrier of RNS by A4,FUNCT_2:def 1,
+RELSET_1:11;
+          hence thesis by Def3;
+     end;
+end;
+
+canceled;
+
+theorem Th19:
+ for RNS being non empty 1-sorted, x being Element of RNS
+       ex S being sequence of RNS st rng S = {x}
+proof
+ let RNS be non empty 1-sorted;
+     let x be Element of RNS;
+     consider f such that
+A1:   dom f = NAT and
+A2:   rng f = {x} by FUNCT_1:15;
+      f is Function of NAT, the carrier of RNS by A1,A2,FUNCT_2:def 1,RELSET_1:
+11
+;
+    then reconsider f as sequence of RNS by Def3;
+    take f;
+    thus thesis by A2;
+end;
+
+theorem Th20:
+ for RNS being non empty 1-sorted, S being sequence of RNS st
+     (ex x being Element of RNS st for n holds S.n = x)
+      ex x being Element of RNS st rng S={x}
+  proof
+ let RNS be non empty 1-sorted;
+ let S be sequence of RNS;
+       given z being Element of RNS such that
+   A1:  for n holds S.n = z;
+       take x = z;
+         now let t; assume t in rng S;
+       then consider d such that
+   A2: d in dom S and
+   A3: S.d = t by FUNCT_1:def 5;
+         d in NAT by A2,FUNCT_2:def 1;
+       then t = z by A1,A3;
+       hence t in {x} by TARSKI:def 1;
+       end;
+   then A4: rng S c= {x} by TARSKI:def 3;
+         now let s; assume
+      s in {x};
+   then A5:  s = x by TARSKI:def 1;
+         now assume
+   A6: not s in rng S;
+         now let n;
+         n in NAT;
+       then n in dom S by FUNCT_2:def 1;
+       then S.n <> x by A5,A6,FUNCT_1:def 5;
+       hence contradiction by A1;
+       end;
+       hence contradiction;
+       end;
+       hence s in rng S;
+       end;
+       then {x} c= rng S by TARSKI:def 3;
+       hence thesis by A4,XBOOLE_0:def 10;
+    end;
+
+theorem Th21:
+ for RNS being non empty 1-sorted, S being sequence of RNS st
+     ex x being Element of RNS
+      st rng S = {x} holds for n holds S.n = S.(n+1)
+proof
+ let RNS be non empty 1-sorted;
+ let S be sequence of RNS;
+     given z being Element of RNS such that
+ A1:  rng S = {z};
+     let n;
+       n in NAT & (n+1) in NAT;
+     then n in dom S & (n+1) in dom S by FUNCT_2:def 1;
+     then S.n in {z} & S.(n+1) in {z} by A1,FUNCT_1:def 5;
+     then S.n = z & S.(n+1) = z by TARSKI:def 1;
+     hence thesis;
+    end;
+
+theorem Th22:
+ for RNS being non empty 1-sorted, S being sequence of RNS st
+      for n holds S.n = S.(n+1)
+   holds for n , k holds S.n = S.(n+k)
+proof
+ let RNS be non empty 1-sorted;
+ let S be sequence of RNS;
+     assume
+       A1:  for n holds S.n = S.(n+1);
+           let n;
+           defpred P[Nat] means S.n = S.(n+$1);
+       A2:  P[0];
+       A3:  now let k such that
+       A4:  P[k];
+             S.(n+k) = S.(n+k+1) by A1;
+           hence P[k+1] by A4,XCMPLX_1:1;
+      end;
+    thus for k holds P[k] from Ind(A2,A3);
+end;
+
+theorem Th23:
+ for RNS being non empty 1-sorted, S being sequence of RNS st
+      for n , k holds S.n = S.(n+k)
+   holds for n , m holds S.n = S.m
+proof
+ let RNS be non empty 1-sorted;
+ let S be sequence of RNS;
+     assume
+      A1:   for n , k holds S.n = S.(n+k);
+           let n , m;
+      A2:   now assume n <= m;
+           then ex k st m = n + k by NAT_1:28;
+           hence S.n = S.m by A1;
+           end;
+             now assume m <= n;
+           then ex k st n = m + k by NAT_1:28;
+           hence S.n = S.m by A1;
+           end;
+     hence thesis by A2;
+end;
+
+theorem Th24:
+ for RNS being non empty 1-sorted, S being sequence of RNS st
+     for n , m holds S.n = S.m
+   ex x being Element of RNS st for n holds S.n = x
+proof
+ let RNS be non empty 1-sorted;
+ let S be sequence of RNS;
+      assume that
+ A1:   for n , m holds S.n = S.m and
+ A2:   for x being Element of RNS ex n st S.n <> x;
+        now let n;
+      consider z being Element of RNS such that
+ A3:   S.n = z;
+         ex k st S.k <> z by A2;
+      hence contradiction by A1,A3;
+      end;
+      hence thesis;
+end;
+
+theorem
+       ex S st rng S = {0.RNS} by Th19;
+
+definition let RNS be non empty 1-sorted;
+          let S be sequence of RNS;
+ redefine attr S is constant means :Def4:
+   ex x being Element of RNS st for n holds S.n = x;
+ compatibility
+  proof
+A1:   dom S = NAT by FUNCT_2:def 1;
+   hereby assume
+A2:   S is constant;
+    consider n0 being Nat;
+    take r = S.n0;
+    let n be Nat;
+    thus S.n = r by A1,A2,SEQM_3:def 5;
+   end;
+   given r being Element of RNS such that
+A3:  for n holds S.n=r;
+   let n1,n2 be set;
+   assume
+A4:  n1 in dom S & n2 in dom S;
+   hence S.n1 = r by A1,A3 .= S.n2 by A1,A3,A4;
+  end;
+end;
+
+canceled;
+
+theorem
+   for RNS being non empty 1-sorted, S being sequence of RNS holds
+     S is constant iff ex x being Element of RNS st rng S = {x}
+proof
+ let RNS be non empty 1-sorted;
+ let S be sequence of RNS;
+     thus S is constant implies
+      ex x being Element of RNS st rng S = {x}
+     proof
+          assume
+            S is constant;
+          then ex x being Element of RNS st for n holds S.n = x
+           by Def4;
+          hence thesis by Th20;
+     end;
+     assume ex x being Element of RNS st rng S = {x};
+          then ( for n holds S.n = S.(n+1) ) by Th21;
+          then ( for n , k holds S.n = S.(n+k) ) by Th22;
+          then ( for n , m holds S.n = S.m ) by Th23;
+          then ( ex x being Element of RNS st for n holds S.n =
+x )
+             by Th24;
+          hence thesis by Def4;
+end;
+
+Lm7:
+     for RNS being non empty 1-sorted
+     for S being sequence of RNS
+     for n holds S.n is Element of RNS;
+
+definition let RNS be non empty 1-sorted;
+          let S be sequence of RNS;
+          let n;
+redefine func S.n -> Element of RNS;
+coherence by Lm7;
+end;
+
+scheme ExRNSSeq{RNS()->RealNormSpace, F(Nat) -> ( Point of RNS() ) } :
+       ex S be sequence of RNS() st for n holds S.n = F(n)
+       proof
+       defpred P[set,set] means ex n st n =$1 & $2 = F(n);
+    A1: for d st d in NAT ex s st P[d,s]
+       proof
+            let d; assume d in NAT;
+            then consider n such that
+        A2: n = d;
+            reconsider z = F(n) as set;
+            take z;
+            thus thesis by A2;
+       end;
+    A3: for d , s , t st d in NAT & P[d,s] & P[d,t] holds s = t;
+       consider f such that
+    A4: dom f = NAT and
+    A5: for d st d in NAT holds P[d,f.d] from FuncEx(A3,A1);
+         for d st d in NAT holds f.d is Point of RNS()
+       proof
+            let d; assume d in NAT;
+            then ex n st n = d & f.d = F(n) by A5;
+            hence thesis;
+       end;
+       then reconsider f as sequence of RNS() by A4,Th17;
+       take S = f;
+         now let n;
+         P[n,S.n] by A5;
+       hence S.n = F(n);
+       end;
+   hence for n holds S.n = F(n);
+end;
+
+scheme ExRLSSeq{RNS()->RealLinearSpace,
+                F(Nat) -> Element of RNS() } :
+       ex S be sequence of RNS() st for n holds S.n = F(n)
+       proof
+       defpred P[set,set] means ex n st ( n =$1 & $2 = F(n));
+    A1: for d st d in NAT ex s st P[d,s]
+       proof
+            let d; assume d in NAT;
+            then consider n such that
+        A2: n = d;
+            reconsider z = F(n) as set;
+            take z;
+            thus thesis by A2;
+       end;
+    A3: for d , s , t st d in NAT & P[d,s] & P[d,t] holds s = t;
+       consider f such that
+    A4: dom f = NAT and
+    A5: for d st d in NAT holds P[d,f.d] from FuncEx(A3,A1);
+         for d st d in NAT holds f.d is Element of RNS()
+       proof
+            let d; assume d in NAT;
+            then ex n st n = d & f.d = F(n) by A5;
+            hence thesis;
+       end;
+       then reconsider f as sequence of RNS() by A4,Th17;
+       take S = f;
+         now let n;
+         P[n,S.n] by A5;
+       hence S.n = F(n);
+       end;
+   hence for n holds S.n = F(n);
+end;
+
+definition let RNS be RealLinearSpace;
+           let S1, S2 be sequence of RNS;
+           func S1 + S2 -> sequence of RNS means
+:Def5:     for n holds it.n = S1.n + S2.n;
+existence proof
+  deffunc F(Nat) = S1.$1 + S2.$1;
+  thus ex S being sequence of RNS st for n holds S.n = F(n) from ExRLSSeq;
+end;
+uniqueness
+          proof
+               let S, T be sequence of RNS;
+               assume that
+          A1:  ( for n holds S.n = S1.n + S2.n ) and
+          A2:  ( for n holds T.n = S1.n + S2.n );
+                 for n holds S.n = T.n
+               proof
+                    let n;
+                   S.n = S1.n + S2.n by A1;
+                    hence thesis by A2;
+               end;
+              hence thesis by FUNCT_2:113;
+          end;
+end;
+
+definition let RNS be RealLinearSpace;
+          let S1 , S2 be sequence of RNS;
+          func S1 - S2 -> sequence of RNS means
+:Def6:    for n holds it.n = S1.n - S2.n;
+existence proof
+  deffunc F(Nat) = S1.$1 - S2.$1;
+  thus ex S being sequence of RNS st for n holds S.n = F(n) from ExRLSSeq;
+end;
+uniqueness
+          proof
+               let S , T be sequence of RNS;
+               assume that
+          A1:  ( for n holds S.n = S1.n - S2.n ) and
+          A2:  ( for n holds T.n = S1.n - S2.n );
+                 for n holds S.n = T.n
+               proof
+                    let n;
+                   S.n = S1.n - S2.n by A1;
+                    hence thesis by A2;
+               end;
+              hence thesis by FUNCT_2:113;
+          end;
+end;
+
+definition let RNS be RealLinearSpace;
+          let S be sequence of RNS;
+          let x be Element of RNS;
+          func S - x -> sequence of RNS means
+:Def7:     for n holds it.n = S.n - x;
+existence proof
+  deffunc F(Nat) = S.$1 - x;
+  thus ex S being sequence of RNS st for n holds S.n = F(n) from ExRLSSeq;
+end;
+uniqueness
+          proof
+               let S1 , S2 be sequence of RNS;
+               assume that
+          A1:  ( for n holds S1.n = S.n - x ) and
+          A2:  ( for n holds S2.n = S.n - x );
+                 for n holds S1.n = S2.n
+               proof
+                    let n;
+                   S1.n = S.n - x by A1;
+                    hence thesis by A2;
+               end;
+              hence thesis by FUNCT_2:113;
+          end;
+end;
+
+definition let RNS be RealLinearSpace;
+          let S be sequence of RNS;
+          let a;
+          func a * S -> sequence of RNS means
+:Def8:     for n holds it.n = a * S.n;
+existence proof
+  deffunc F(Nat) = a * S.$1;
+  thus ex S being sequence of RNS st for n holds S.n = F(n) from ExRLSSeq;
+end;
+uniqueness
+          proof
+               let S1 , S2 be sequence of RNS;
+               assume that
+          A1:  ( for n holds S1.n = a * S.n ) and
+          A2:  ( for n holds S2.n = a * S.n );
+                 for n holds S1.n = S2.n
+               proof
+                    let n;
+                   S1.n = a * S.n by A1;
+                    hence thesis by A2;
+               end;
+              hence thesis by FUNCT_2:113;
+          end;
+end;
+
+definition let RNS;
+          let S;
+          attr S is convergent means
+:Def9:    ex g st for r st 0 < r ex m st for n st m <= n holds
+          ||.(S.n) - g.|| < r;
+end;
+
+canceled 6;
+
+theorem Th34:
+     S1 is convergent & S2 is convergent implies
+               S1 + S2 is convergent
+proof
+     assume that
+ A1:  S1 is convergent and
+ A2:  S2 is convergent;
+      consider g1 such that
+ A3:  for r st 0 < r ex m st for n st m <= n holds
+      ||.(S1.n) - g1.|| < r by A1,Def9;
+      consider g2 such that
+ A4:  for r st 0 < r ex m st for n st m <= n holds
+      ||.(S2.n) - g2.|| < r by A2,Def9;
+      take g = g1 + g2;
+      let r; assume 0 < r;
+ then A5:  0< r/2 by SEQ_2:3;
+      then consider m1 such that
+ A6:  for n st m1 <= n holds ||.(S1.n) - g1.|| < r/2 by A3;
+      consider m2 such that
+ A7:  for n st m2 <= n holds ||.(S2.n) - g2.|| < r/2 by A4,A5;
+      take k = m1 + m2;
+      let n such that
+  A8:  k <= n;
+        m1 <= m1 + m2 by NAT_1:37;
+      then m1 <= n by A8,AXIOMS:22;
+  then A9:  ||.(S1.n) - g1.|| < r/2 by A6;
+        m2 <= k by NAT_1:37;
+      then m2 <= n by A8,AXIOMS:22;
+      then ||.(S2.n) - g2.|| < r/2 by A7;
+      then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2
+      by A9,REAL_1:67;
+  then A10:  ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r by XCMPLX_1:66;
+  A11:  ||.(S1 + S2).n - g.|| = ||.(S1.n) + (S2.n) - (g1+g2).|| by Def5
+      .= ||.(S1.n) + ((S2.n) - (g1+g2)).|| by RLVECT_1:42
+      .= ||.(S1.n) + (-(g1+g2) + (S2.n)).|| by RLVECT_1:def 11
+      .= ||.-(g1+g2) + ((S1.n) + (S2.n)).|| by RLVECT_1:def 6
+      .= ||.((-g1)+(-g2)) + ((S1.n) + (S2.n)).|| by RLVECT_1:45
+      .= ||.(S1.n) + ((-g1)+(-g2)) + (S2.n).|| by RLVECT_1:def 6
+      .= ||.((S1.n) + (-g1)) + (-g2) + (S2.n).|| by RLVECT_1:def 6
+      .= ||.(S1.n) - g1 + (-g2) + (S2.n).|| by RLVECT_1:def 11
+      .= ||.(S1.n)- g1 + ((S2.n) + -g2).|| by RLVECT_1:def 6
+      .= ||.(S1.n) - g1 + ((S2.n) - g2).|| by RLVECT_1:def 11;
+        ||.(S1.n) - g1 + ((S2.n) - g2).|| <=
+      ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| by Def2;
+      hence ||.(S1 + S2).n - g.|| < r by A10,A11,AXIOMS:22;
+  end;
+
+theorem Th35:
+     S1 is convergent & S2 is convergent implies
+                 S1 - S2 is convergent
+proof
+     assume that
+ A1:  S1 is convergent and
+ A2:  S2 is convergent;
+      consider g1 such that
+ A3:  for r st 0 < r ex m st for n st m <= n holds
+      ||.(S1.n) - g1.|| < r by A1,Def9;
+      consider g2 such that
+ A4:  for r st 0 < r ex m st for n st m <= n holds
+      ||.(S2.n) - g2.|| < r by A2,Def9;
+      take g = g1 - g2;
+      let r; assume 0 < r;
+ then A5:  0< r/2 by SEQ_2:3;
+      then consider m1 such that
+ A6:  for n st m1 <= n holds ||.(S1.n) - g1.|| < r/2 by A3;
+      consider m2 such that
+ A7:  for n st m2 <= n holds ||.(S2.n) - g2.|| < r/2 by A4,A5;
+      take k = m1 + m2;
+      let n such that
+  A8:  k <= n;
+        m1 <= m1 + m2 by NAT_1:37;
+      then m1 <= n by A8,AXIOMS:22;
+  then A9:  ||.(S1.n) - g1.|| < r/2 by A6;
+        m2 <= k by NAT_1:37;
+      then m2 <= n by A8,AXIOMS:22;
+      then ||.(S2.n) - g2.|| < r/2 by A7;
+      then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2
+      by A9,REAL_1:67;
+  then A10:  ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r by XCMPLX_1:66;
+  A11:  ||.(S1 - S2).n - g.|| = ||.((S1.n) - (S2.n)) - (g1 - g2).|| by Def6
+      .= ||.(((S1.n) - (S2.n)) - g1) + g2.|| by RLVECT_1:43
+      .= ||. ((S1.n) - (g1 + (S2.n))) + g2.|| by RLVECT_1:41
+      .= ||. (((S1.n) - g1 ) - (S2.n)) + g2.|| by RLVECT_1:41
+      .= ||. ((S1.n) - g1 ) - ((S2.n) - g2).|| by RLVECT_1:43;
+        ||.((S1.n) - g1) - ((S2.n) - g2).|| <=
+      ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| by Th7;
+      hence ||.(S1 - S2).n - g.|| < r by A10,A11,AXIOMS:22;
+  end;
+
+theorem Th36:
+     S is convergent implies
+     S - x is convergent
+proof
+     assume S is convergent;
+           then consider g such that
+     A1:    for r st 0 < r ex m st for n
+           st m <= n holds ||.(S.n) - g.|| < r by Def9;
+           take h = g - x;
+           let r; assume 0 < r;
+           then consider m1 such that
+     A2:    for n st m1 <= n holds ||.(S.n) - g.|| < r by A1;
+           take k = m1;
+           let n; assume k <= n;
+     then A3:    ||.(S.n) - g.|| < r by A2;
+             ||.(S.n) - g.|| = ||.((S.n) - 0'(RNS)) - g.|| by RLVECT_1:26
+                        .= ||.((S.n) - (x - x)) - g.|| by RLVECT_1:28
+                        .= ||.(((S.n) - x) + x) - g.|| by RLVECT_1:43
+                        .= ||.((S.n) - x) + (x - g).|| by RLVECT_1:42
+                        .= ||.((S.n) - x) + ((-g) + x).|| by RLVECT_1:def 11
+                        .= ||.((S.n) - x) + -h.|| by RLVECT_1:47
+                        .= ||.((S.n) - x) - h.|| by RLVECT_1:def 11;
+           hence ||.(S - x).n - h.|| < r by A3,Def7;
+end;
+
+theorem Th37:
+     S is convergent implies
+     a * S is convergent
+proof
+     assume S is convergent;
+           then consider g such that
+     A1:    for r st 0 < r ex m st for n
+           st m <= n holds ||.(S.n) - g.|| < r by Def9;
+           take h = a * g;
+     A2:    now assume
+     A3:   a = 0;
+           let r; assume
+          0 < r;
+           then consider m1 such that
+     A4:   for n st m1 <= n holds ||.(S.n) - g.|| < r by A1;
+           take k = m1;
+           let n; assume k <= n;
+     then A5:   ||.(S.n) - g.|| < r by A4;
+          ||.a * (S.n) - a * g.|| = ||.0 * (S.n) - 0'(RNS).|| by A3,RLVECT_1:23
+                        .= ||.0'(RNS) - 0'(RNS).|| by RLVECT_1:23
+                        .= ||.0'(RNS).|| by RLVECT_1:26
+                        .= 0 by Def2;
+           then ||.a * (S.n) - h.|| < r by A5,Th8;
+           hence ||.(a * S).n - h.|| < r by Def8;
+           end;
+             now assume
+A6:        a <> 0;
+     then A7:   0 < abs(a) by ABSVALUE:6;
+           let r such that
+     A8:   0 < r;
+     A9:   0 <> abs(a) by A6,ABSVALUE:6;
+             0/abs(a) =0;
+           then 0 < r/abs(a) by A7,A8,REAL_1:73;
+           then consider m1 such that
+     A10:   for n st m1 <= n holds ||.(S.n) - g.|| < r/abs(a) by A1;
+           take k = m1;
+           let n; assume k <= n;
+     then A11:   ||.(S.n) - g.|| < r/abs(a) by A10;
+     A12:   ||.(a * (S.n)) - (a * g).|| = ||.a * ((S.n) - g).|| by RLVECT_1:48
+                                    .= abs(a) * ||.(S.n) - g.|| by Def2;
+             abs(a) * (r/abs(a)) = abs(a) * (abs(a)" * r) by XCMPLX_0:def 9
+                            .= abs(a) *abs(a)" * r by XCMPLX_1:4
+                            .= 1 * r by A9,XCMPLX_0:def 7
+                            .= r;
+           then ||.(a *(S.n)) - h.|| < r by A7,A11,A12,REAL_1:70;
+           hence ||.(a * S).n - h.|| < r by Def8;
+           end;
+     hence thesis by A2;
+end;
+
+definition let RNS;
+          let S;
+          func ||.S.|| -> Real_Sequence means
+:Def10:      for n holds it.n =||.(S.n).||;
+existence
+         proof
+           deffunc F(Nat) = ||.(S.$1).||;
+              consider s being Real_Sequence such that A1:
+              for n holds s.n = F(n) from ExRealSeq;
+              take s;
+              thus thesis by A1;
+         end;
+uniqueness
+          proof
+               let s,t be Real_Sequence;
+                    assume
+               A2:  ( for n holds s.n = ||.(S.n).|| ) &
+                    ( for n holds t.n = ||.(S.n).|| );
+                      now let n;
+                       s.n = ||.(S.n).|| by A2; hence
+                       s.n = t.n by A2;
+                    end;
+                    hence thesis by FUNCT_2:113;
+         end;
+end;
+
+canceled;
+
+theorem Th39:
+     S is convergent implies ||.S.|| is convergent
+proof
+     assume S is convergent;
+           then consider g such that
+     A1:    for r st 0 < r ex m st for n
+           st m <= n holds ||.(S.n) - g.|| < r by Def9;
+             now let r be real number;
+A2:        r is Real by XREAL_0:def 1;
+           assume 0 < r;
+           then consider m1 such that
+     A3:    for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,A2;
+           take k = m1;
+           now let n; assume
+           k <= n;
+     then A4:    ||.(S.n) - g.|| < r by A3;
+             abs(||.(S.n).|| - ||.g.||) <= ||.(S.n) - g.|| by Th13;
+           then abs(||.(S.n).|| - ||.g.||) < r by A4,AXIOMS:22;
+           hence abs(||.S.||.n - ||.g.||) < r by Def10;
+           end;
+           hence for n st k <= n holds abs(||.S.||.n - ||.g.||) < r;
+           end;
+     hence thesis by SEQ_2:def 6;
+end;
+
+definition let RNS;
+          let S;
+          assume
+       A1: S is convergent;
+          func lim S -> Point of RNS means
+:Def11:   for r st 0 < r ex m st for n st m <= n
+          holds ||.(S.n) - it.|| < r;
+existence by A1,Def9;
+uniqueness
+          proof
+                 for x , y st
+( for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - x.|| < r ) &
+( for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - y.|| < r )
+holds x = y
+          proof
+               given x , y such that
+A2: for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - x.|| < r and
+A3: for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - y.|| < r and
+A4: x <> y;
+A5: ||.x - y.|| <> 0 by A4,Th10;
+    A6: 0 <= ||.x - y.|| by Th8;
+   then A7: 0/4 < ||.x - y.||/4 by A5,REAL_1:73;
+   then consider m1 such that
+A8: for n st m1 <= n holds ||.(S.n) - x.|| < ||.x - y.||/4 by A2;
+   consider m2 such that
+A9: for n st m2 <= n holds ||.(S.n) - y.|| < ||.x - y.||/4 by A3,A7;
+A10: now assume
+   m1 <= m2;
+then A11: ||.(S.m2) - x.|| < ||.x - y.||/4 by A8;
+      ||.(S.m2) - y.|| < ||.x - y.||/4 by A9;
+    then ||.(S.m2) - x.|| + ||.(S.m2) - y.|| < ||.x - y.||/4 + ||.x - y.||/4
+    by A11,REAL_1:67;
+then A12: ||.(S.m2) - x.|| + ||.(S.m2) - y.|| <= ||.x - y.||/2 by XCMPLX_1:72;
+      ||.x - y.|| <= ||.x - (S.m2).|| + ||.(S.m2) - y.|| by Th14;
+    then ||.x - y.|| <= ||.(S.m2) - x.|| + ||.(S.m2) - y.|| by Th11;
+    then not ||.x - y.||/2 < ||.x - y.|| by A12,AXIOMS:22;
+    hence contradiction by A5,A6,SEQ_2:4;
+    end;
+     now assume m2 <= m1;
+then A13: ||.(S.m1) - y.|| < ||.x - y.||/4 by A9;
+      ||.(S.m1) - x.|| < ||.x - y.||/4 by A8;
+    then ||.(S.m1) - x.|| + ||.(S.m1) - y.|| < ||.x - y.||/4 + ||.x - y.||/4
+    by A13,REAL_1:67;
+then A14: ||.(S.m1) - x.|| + ||.(S.m1) - y.|| <= ||.x - y.||/2 by XCMPLX_1:72;
+      ||.x - y.|| <= ||.x - (S.m1).|| + ||.(S.m1) - y.|| by Th14;
+    then ||.x - y.|| <= ||.(S.m1) - x.|| + ||.(S.m1) - y.|| by Th11;
+    then not ||.x - y.||/2 < ||.x - y.|| by A14,AXIOMS:22;
+    hence contradiction by A5,A6,SEQ_2:4;
+    end;
+    hence contradiction by A10;
+    end;
+hence thesis;
+end;
+end;
+
+canceled;
+
+theorem
+       S is convergent & lim S = g implies
+     ( ||.S - g.|| is convergent & lim ||.S - g.|| = 0 )
+proof
+     assume that
+     A1:    S is convergent and
+     A2:    lim S = g;
+             S - g is convergent by A1,Th36;
+     then A3:    ||.S - g.|| is convergent by Th39;
+           now let r be real number;
+A4:        r is Real by XREAL_0:def 1;
+         assume 0 < r;
+           then consider m1 such that
+     A5:    for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,A2,A4,Def11;
+           take k = m1;
+           let n; assume
+           k <= n;
+     then ||.(S.n) - g.|| < r by A5;
+     then A6:    ||.((S.n) - g ) - 0'(RNS).|| < r by RLVECT_1:26;
+             abs(||.(S.n) - g.|| - ||.0'(RNS).||) <= ||.((S.n) - g ) - 0'(RNS)
+.||
+           by Th13;
+           then abs(||.(S.n) - g.|| - ||.0'(RNS).||) < r by A6,AXIOMS:22;
+           then abs((||.(S.n) - g.|| - 0)) < r by Def2;
+           then abs((||.(S - g).n.|| - 0)) < r by Def7;
+           hence abs((||.S - g.||.n - 0)) < r by Def10;
+           end;
+    hence thesis by A3,SEQ_2:def 7;
+end;
+
+theorem
+       S1 is convergent & S2 is convergent implies
+     lim (S1 + S2) = (lim S1) + (lim S2)
+proof
+     assume that
+ A1:  S1 is convergent and
+ A2:  S2 is convergent;
+ A3:   S1 + S2 is convergent by A1,A2,Th34;
+      set g1 = lim S1;
+      set g2 = lim S2;
+      set g = g1 + g2;
+        now let r; assume 0 < r;
+ then A4:  0< r/2 by SEQ_2:3;
+      then consider m1 such that
+ A5:  for n st m1 <= n holds ||.(S1.n) - g1.|| < r/2 by A1,Def11;
+      consider m2 such that
+ A6:  for n st m2 <= n holds ||.(S2.n) - g2.|| < r/2 by A2,A4,Def11;
+      take k = m1 + m2;
+      let n such that
+  A7:  k <= n;
+        m1 <= m1 + m2 by NAT_1:37;
+      then m1 <= n by A7,AXIOMS:22;
+  then A8:  ||.(S1.n) - g1.|| < r/2 by A5;
+        m2 <= k by NAT_1:37;
+      then m2 <= n by A7,AXIOMS:22;
+      then ||.(S2.n) - g2.|| < r/2 by A6;
+      then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2
+      by A8,REAL_1:67;
+  then A9:  ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r by XCMPLX_1:66;
+  A10:  ||.(S1 + S2).n - g.|| = ||.(S1.n) + (S2.n) - (g1+g2).|| by Def5
+      .= ||.(S1.n) + ((S2.n) - (g1+g2)).|| by RLVECT_1:42
+      .= ||.(S1.n) + (-(g1+g2) + (S2.n)).|| by RLVECT_1:def 11
+      .= ||.-(g1+g2) + ((S1.n) + (S2.n)).|| by RLVECT_1:def 6
+      .= ||.((-g1)+(-g2)) + ((S1.n) + (S2.n)).|| by RLVECT_1:45
+      .= ||.(S1.n) + ((-g1)+(-g2)) + (S2.n).|| by RLVECT_1:def 6
+      .= ||.((S1.n) + (-g1)) + (-g2) + (S2.n).|| by RLVECT_1:def 6
+      .= ||.(S1.n) - g1 + (-g2) + (S2.n).|| by RLVECT_1:def 11
+      .= ||.(S1.n)- g1 + ((S2.n) + -g2).|| by RLVECT_1:def 6
+      .= ||.(S1.n) - g1 + ((S2.n) - g2).|| by RLVECT_1:def 11;
+        ||.(S1.n) - g1 + ((S2.n) - g2).|| <=
+      ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| by Def2;
+      hence ||.(S1 + S2).n - g.|| < r by A9,A10,AXIOMS:22;
+      end;
+      hence thesis by A3,Def11;
+end;
+
+theorem
+       S1 is convergent & S2 is convergent implies
+     lim (S1 - S2) = (lim S1) - (lim S2)
+proof
+     assume that
+ A1:  S1 is convergent and
+ A2:  S2 is convergent;
+ A3:   S1 - S2 is convergent by A1,A2,Th35;
+      set g1 = lim S1;
+      set g2 = lim S2;
+      set g = g1 - g2;
+        now let r; assume 0 < r;
+ then A4:  0< r/2 by SEQ_2:3;
+      then consider m1 such that
+ A5:  for n st m1 <= n holds ||.(S1.n) - g1.|| < r/2 by A1,Def11;
+      consider m2 such that
+ A6:  for n st m2 <= n holds ||.(S2.n) - g2.|| < r/2 by A2,A4,Def11;
+      take k = m1 + m2;
+      let n such that
+  A7:  k <= n;
+        m1 <= m1 + m2 by NAT_1:37;
+      then m1 <= n by A7,AXIOMS:22;
+  then A8:  ||.(S1.n) - g1.|| < r/2 by A5;
+        m2 <= k by NAT_1:37;
+      then m2 <= n by A7,AXIOMS:22;
+      then ||.(S2.n) - g2.|| < r/2 by A6;
+      then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2
+      by A8,REAL_1:67;
+  then A9:  ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r by XCMPLX_1:66;
+  A10:  ||.(S1 - S2).n - g.|| = ||.((S1.n) - (S2.n)) - (g1 - g2).|| by Def6
+      .= ||.(((S1.n) - (S2.n)) - g1) + g2.|| by RLVECT_1:43
+      .= ||. ((S1.n) - (g1 + (S2.n))) + g2.|| by RLVECT_1:41
+      .= ||. (((S1.n) - g1 ) - (S2.n)) + g2.|| by RLVECT_1:41
+      .= ||. ((S1.n) - g1 ) - ((S2.n) - g2).|| by RLVECT_1:43;
+        ||.((S1.n) - g1) - ((S2.n) - g2).|| <=
+      ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| by Th7;
+      hence ||.(S1 - S2).n - g.|| < r by A9,A10,AXIOMS:22;
+      end;
+      hence thesis by A3,Def11;
+end;
+
+theorem
+       S is convergent implies
+     lim (S - x) = (lim S) - x
+proof
+     assume
+ A1:   S is convergent;
+ then A2:   S - x is convergent by Th36;
+      set g = lim S;
+      set h = g - x;
+        now let r; assume 0 < r;
+      then consider m1 such that
+ A3:   for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,Def11;
+      take k = m1;
+      let n; assume k <= n;
+ then A4:   ||.(S.n) - g.|| < r by A3;
+        ||.(S.n) - g.|| = ||.((S.n) - 0'(RNS)) - g.|| by RLVECT_1:26
+                   .= ||.((S.n) - (x - x)) - g.|| by RLVECT_1:28
+                   .= ||.(((S.n) - x) + x) - g.|| by RLVECT_1:43
+                   .= ||.((S.n) - x) + (x - g).|| by RLVECT_1:42
+                   .= ||.((S.n) - x) + ((-g) + x).|| by RLVECT_1:def 11
+                   .= ||.((S.n) - x) + -h.|| by RLVECT_1:47
+                   .= ||.((S.n) - x) - h.|| by RLVECT_1:def 11;
+      hence ||.(S - x).n - h.|| < r by A4,Def7;
+      end;
+      hence thesis by A2,Def11;
+end;
+
+theorem
+       S is convergent implies
+     lim (a * S) = a * (lim S)
+proof
+     assume
+ A1:   S is convergent;
+ then A2:   a * S is convergent by Th37;
+      set g = lim S;
+      set h = a * g;
+     A3:    now assume
+     A4:   a = 0;
+           let r; assume 0 < r;
+           then consider m1 such that
+     A5:   for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,Def11;
+           take k = m1;
+           let n; assume k <= n;
+     then A6:   ||.(S.n) - g.|| < r by A5;
+          ||.a * (S.n) - a * g.|| = ||.0 * (S.n) - 0'(RNS).|| by A4,RLVECT_1:23
+                        .= ||.0'(RNS) - 0'(RNS).|| by RLVECT_1:23
+                        .= ||.0'(RNS).|| by RLVECT_1:26
+                        .= 0 by Def2;
+           then ||.a * (S.n) - h.|| < r by A6,Th8;
+           hence ||.(a * S).n - h.|| < r by Def8;
+           end;
+             now assume
+A7:        a <> 0;
+     then A8:   0 < abs(a) by ABSVALUE:6;
+           let r such that
+      A9:   0 < r;
+     A10:   0 <> abs(a) by A7,ABSVALUE:6;
+             0/abs(a) =0;
+           then 0 < r/abs(a) by A8,A9,REAL_1:73;
+           then consider m1 such that
+     A11:   for n st m1 <= n holds ||.(S.n) - g.|| < r/abs(a) by A1,Def11;
+           take k = m1;
+           let n; assume k <= n;
+     then A12:   ||.(S.n) - g.|| < r/abs(a) by A11;
+     A13:   ||.(a * (S.n)) - (a * g).|| = ||.a * ((S.n) - g).|| by RLVECT_1:48
+                                    .= abs(a) * ||.(S.n) - g.|| by Def2;
+             abs(a) * (r/abs(a)) = abs(a) * (abs(a)" * r) by XCMPLX_0:def 9
+                            .= abs(a) *abs(a)" * r by XCMPLX_1:4
+                            .= 1 * r by A10,XCMPLX_0:def 7
+                            .= r;
+           then ||.(a *(S.n)) - h.|| < r by A8,A12,A13,REAL_1:70;
+           hence ||.(a * S).n - h.|| < r by Def8;
+           end;
+     hence thesis by A2,A3,Def11;
+end;

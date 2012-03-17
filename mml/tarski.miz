@@ -1,0 +1,108 @@
+:: Tarski Grothendieck Set Theory
+::  by Andrzej Trybulec
+::
+:: Received January 1, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary TARSKI;
+
+begin
+
+ reserve x,y,z,u,N,M,X,Y,Z for set;
+
+:: theorem  TARSKI:1       ---- everything is a set
+canceled; :: as obvious
+
+::      ---- extensionality
+
+theorem
+ (for x holds x in X iff x in Y) implies X = Y;
+
+:: singletons & unordered pairs
+
+ definition let y; func { y } means
+  x in it iff x = y;
+  correctness;
+  let z; func { y, z } means
+   x in it iff x = y or x = z;
+  correctness;
+  commutativity;
+ end;
+
+canceled 2;
+
+ definition let X,Y;
+  pred X c= Y means
+   x in X implies x in Y;
+  reflexivity;
+ end;
+
+ definition let X;
+   func union X means
+    x in it iff ex Y st x in Y & Y in X;
+  correctness;
+ end;
+
+canceled 2;
+
+::        ---- regularity
+
+theorem
+ x in X implies ex Y st Y in X & not ex x st x in X & x in Y;
+
+ scheme Fraenkel { A()-> set, P[set, set] }:
+  ex X st for x holds x in X iff ex y st y in A() & P[y,x]
+  provided for x,y,z st P[x,y] & P[x,z] holds y = z;
+
+:: ordered pairs
+
+ definition let x,y;
+  func [x,y] equals :Def5:
+   { { x,y }, { x } };
+  coherence;
+ end;
+
+canceled;
+
+ definition let X,Y;
+  pred X,Y are_equipotent means
+    ex Z st
+       (for x st x in X ex y st y in Y & [x,y] in Z) &
+       (for y st y in Y ex x st x in X & [x,y] in Z) &
+        for x,y,z,u st [x,y] in Z & [z,u] in Z holds x = z iff y = u;
+ end;
+
+:: Alfred Tarski
+:: Ueber unerreichbare Kardinalzahlen,
+:: Fundamenta Mathematicae, vol.30 (1938), pp.68-69
+
+:: Axiom A. (Axiom der unerreichbaren Mengen). Zu jeder Menge N gibt es
+:: eine Menge M mit folgenden Eigenschaften :
+:: A1. N in M;
+:: A2. ist X in M und Y c= X, so ist Y in M;
+:: A3. ist X in M und ist Z die Menge, die alle Mengen Y c= X und keine
+::     andere Dinge als Element enthaelt, so, ist z in M;
+:: A4. ist X c= M und sind dabei die Menge X und M nicht gleichmaechtig,
+::     so ist X in M.
+
+:: also
+
+:: Alfred Tarski
+:: On Well-ordered Subsets of any Set,
+:: Fundamenta Mathematicae, vol.32 (1939), pp.176-183
+
+:: A. For every set N there exists a system M of sets which satisfies
+::    the following conditions :
+:: (i)    N in M
+:: (ii)   if X in M and Y c= X, then Y in M
+:: (iii)  if X in M and Z is the system of all subsets of X, then Z in M
+:: (iv)   if X c= M and X and M do not have the same potency, then X in M.
+
+theorem
+   ex M st N in M &
+     (for X,Y holds X in M & Y c= X implies Y in M) &
+     (for X st X in M ex Z st Z in M & for Y st Y c= X holds Y in Z) &
+     (for X holds X c= M implies X,M are_equipotent or X in M);
+

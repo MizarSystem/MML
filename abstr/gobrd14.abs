@@ -1,0 +1,275 @@
+:: Properties of Left-, and Right Components
+::  by Artur Korni{\l}owicz
+::
+:: Received May 5, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary SEQM_3, GOBOARD5, SPRECT_2, PRE_TOPC, EUCLID, COMPTS_1, SPPOL_1,
+      GOBOARD1, METRIC_1, CONNSP_1, RELAT_2, RELAT_1, JORDAN2C, SUBSET_1,
+      LATTICES, BOOLE, TOPREAL1, TARSKI, COMPLEX1, ABSVALUE, SETFAM_1, ARYTM_1,
+      FINSEQ_1, SQUARE_1, MCART_1, TREES_1, CARD_3, FUNCOP_1, RCOMP_1, FUNCT_1,
+      MATRIX_1, JORDAN8, GROUP_1, ARYTM_3, PSCOMP_1, INT_1, POWER, GOBOARD9,
+      GOBOARD2, TOPS_1, JORDAN1, FINSEQ_6, SPRECT_1, ORDINAL2, FUNCT_5, SEQ_2,
+      FINSEQ_4, ARYTM;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
+      BINOP_1, ORDINAL1, XCMPLX_0, XREAL_0, REAL_1, SQUARE_1, NAT_1, ABSVALUE,
+      INT_1, POWER, MATRIX_1, BINARITH, FUNCT_4, SEQ_4, STRUCT_0, GROUP_1,
+      METRIC_1, LIMFUNC1, TBSP_1, FINSEQ_1, CARD_3, CARD_4, FINSEQ_4, FINSEQ_6,
+      RCOMP_1, PRE_TOPC, TOPS_1, TOPS_2, CONNSP_1, COMPTS_1, EUCLID, TOPREAL1,
+      GOBOARD1, GOBOARD2, GOBOARD5, GOBOARD9, PSCOMP_1, SPPOL_1, JGRAPH_1,
+      SPRECT_1, SPRECT_2, JORDAN2C, JORDAN8;
+ constructors BINARITH, CARD_4, COMPTS_1, CONNSP_1, FINSEQ_4, GOBOARD2,
+      GOBOARD9, JORDAN1, JORDAN2C, JORDAN8, LIMFUNC1, POWER, PSCOMP_1, RCOMP_1,
+      REAL_1, REALSET1, SPPOL_1, SPRECT_1, SPRECT_2, TBSP_1, TOPGRP_1,
+      TOPREAL2, TOPREAL4, TOPS_1, TOPS_2, WAYBEL_3, TOPRNS_1, MEMBERED,
+      PARTFUN1;
+ clusters SUBSET_1, XREAL_0, EUCLID, GOBOARD2, GOBRD11, PRE_TOPC, PSCOMP_1,
+      RELSET_1, SPRECT_1, SPRECT_3, TOPREAL6, TOPS_1, REVROT_1, INT_1,
+      JORDAN2C, MEMBERED, FUNCT_2, SEQM_3, RELAT_1, ZFMISC_1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin  :: Components
+
+reserve i, j, n for Nat,
+        f for non constant standard special_circular_sequence,
+        g for clockwise_oriented
+              non constant standard special_circular_sequence,
+        p, q for Point of TOP-REAL 2,
+        P, Q, R for Subset of TOP-REAL 2,
+        C for compact non vertical non horizontal Subset of TOP-REAL 2,
+        G for Go-board;
+
+theorem :: GOBRD14:1
+   for T being TopSpace,
+     A being Subset of T, B being Subset of T
+  st B is_a_component_of A holds B is connected;
+
+theorem :: GOBRD14:2
+   for A being Subset of TOP-REAL n, B being Subset of TOP-REAL
+n
+  st B is_inside_component_of A holds B is connected;
+
+theorem :: GOBRD14:3
+ for A being Subset of TOP-REAL n, B being Subset of TOP-REAL n
+  st B is_outside_component_of A holds B is connected;
+
+theorem :: GOBRD14:4
+   for A being Subset of TOP-REAL n, B being Subset of TOP-REAL
+n
+  st B is_a_component_of A` holds A misses B;
+
+theorem :: GOBRD14:5
+   P is_outside_component_of Q & R is_inside_component_of Q implies P misses R;
+
+theorem :: GOBRD14:6
+ for A, B being Subset of TOP-REAL 2 st
+  A is_outside_component_of L~f & B is_outside_component_of L~f holds
+ A = B;
+
+theorem :: GOBRD14:7
+   for p being Point of Euclid 2 st p = 0.REAL 2 & P is_outside_component_of L~
+f
+  ex r being Real st r > 0 & Ball(p,r)` c= P;
+
+definition let C be closed Subset of TOP-REAL 2;
+ cluster BDD C -> open;
+ cluster UBD C -> open;
+end;
+
+definition let C be compact Subset of TOP-REAL 2;
+ cluster UBD C -> connected;
+end;
+
+begin  :: Go-boards
+
+theorem :: GOBRD14:8  :: TOPREAL1:29
+   for f being FinSequence of TOP-REAL n st L~f <> {} holds 2 <= len f;
+
+definition let n be Nat, a, b be Point of TOP-REAL n;
+ func dist(a,b) -> Real means
+:: GOBRD14:def 1
+  ex p, q being Point of Euclid n st p = a & q = b & it = dist(p,q);
+commutativity;
+end;
+
+theorem :: GOBRD14:9
+ dist(p,q) = sqrt ((p`1-q`1)^2 + (p`2-q`2)^2);
+
+theorem :: GOBRD14:10
+ for p being Point of TOP-REAL n holds dist(p,p) = 0;
+
+theorem :: GOBRD14:11
+   for p, q, r being Point of TOP-REAL n holds
+  dist(p,r) <= dist (p,q) + dist(q,r);
+
+theorem :: GOBRD14:12
+   for x1, x2, y1, y2 being real number,
+     a, b being Point of TOP-REAL 2 st
+  x1 <= a`1 & a`1 <= x2 & y1 <= a`2 & a`2 <= y2 &
+  x1 <= b`1 & b`1 <= x2 & y1 <= b`2 & b`2 <= y2 holds
+ dist(a,b) <= (x2-x1) + (y2-y1);
+
+theorem :: GOBRD14:13
+ 1 <= i & i < len G & 1 <= j & j < width G implies
+  cell(G,i,j) =
+   product ((1,2) --> ([.G*(i,1)`1,G*(i+1,1)`1.],[.G*(1,j)`2,G*(1,j+1)`2.]));
+
+theorem :: GOBRD14:14
+   1 <= i & i < len G & 1 <= j & j < width G implies cell(G,i,j) is compact;
+
+theorem :: GOBRD14:15
+   [i,j] in Indices G & [i+n,j] in Indices G implies
+  dist(G*(i,j),G*(i+n,j)) = G*(i+n,j)`1 - G*(i,j)`1;
+
+theorem :: GOBRD14:16
+   [i,j] in Indices G & [i,j+n] in Indices G implies
+  dist(G*(i,j),G*(i,j+n)) = G*(i,j+n)`2 - G*(i,j)`2;
+
+theorem :: GOBRD14:17
+   3 <= len Gauge(C,n)-'1;
+
+theorem :: GOBRD14:18
+   i <= j implies
+  for a, b being Nat st 2 <= a & a <= len Gauge(C,i) - 1 &
+                        2 <= b & b <= len Gauge(C,i) - 1
+   ex c, d being Nat st 2 <= c & c <= len Gauge(C,j) - 1 &
+                        2 <= d & d <= len Gauge(C,j) - 1 &
+      [c,d] in Indices Gauge(C,j) & Gauge(C,i)*(a,b) = Gauge(C,j)*(c,d) &
+      c = 2 + 2|^(j-'i)*(a-'2) & d = 2 + 2|^(j-'i)*(b-'2);
+
+theorem :: GOBRD14:19
+ [i,j] in Indices Gauge(C,n) & [i,j+1] in Indices Gauge(C,n) implies
+  dist(Gauge(C,n)*(i,j),Gauge(C,n)*(i,j+1)) = (N-bound C - S-bound C)/2|^n;
+
+theorem :: GOBRD14:20
+ [i,j] in Indices Gauge(C,n) & [i+1,j] in Indices Gauge(C,n) implies
+  dist(Gauge(C,n)*(i,j),Gauge(C,n)*(i+1,j)) = (E-bound C - W-bound C)/2|^n;
+
+theorem :: GOBRD14:21
+   for r, t being real number holds r > 0 & t > 0 implies
+  ex n being Nat st 1 < n &
+   dist(Gauge(C,n)*(1,1),Gauge(C,n)*(1,2)) < r &
+   dist(Gauge(C,n)*(1,1),Gauge(C,n)*(2,1)) < t;
+
+begin  :: LeftComp and RightComp
+
+theorem :: GOBRD14:22
+ for P being Subset of (TOP-REAL 2)|(L~f)` st
+  P is_a_component_of (TOP-REAL 2)|(L~f)` holds
+ P = RightComp f or P = LeftComp f;
+
+theorem :: GOBRD14:23
+   for A1, A2 being Subset of TOP-REAL 2 st
+  (L~f)` = A1 \/ A2 & A1 misses A2 &
+  for C1, C2 being Subset of (TOP-REAL 2)|(L~f)`
+    st C1 = A1 & C2 = A2 holds
+     C1 is_a_component_of (TOP-REAL 2)|(L~f)` &
+     C2 is_a_component_of (TOP-REAL 2)|(L~f)`
+ holds A1 = RightComp f & A2 = LeftComp f or
+       A1 = LeftComp f & A2 = RightComp f;
+
+theorem :: GOBRD14:24
+ LeftComp f misses RightComp f;
+
+theorem :: GOBRD14:25
+ L~f \/ RightComp f \/ LeftComp f = the carrier of TOP-REAL 2;
+
+theorem :: GOBRD14:26
+ p in L~f iff not p in LeftComp f & not p in RightComp f;
+
+theorem :: GOBRD14:27
+ p in LeftComp f iff not p in L~f & not p in RightComp f;
+
+theorem :: GOBRD14:28
+   p in RightComp f iff not p in L~f & not p in LeftComp f;
+
+theorem :: GOBRD14:29
+ L~f = (Cl RightComp f) \ RightComp f;
+
+theorem :: GOBRD14:30
+ L~f = (Cl LeftComp f) \ LeftComp f;
+
+theorem :: GOBRD14:31
+ Cl RightComp f = (RightComp f) \/ L~f;
+
+theorem :: GOBRD14:32
+   Cl LeftComp f = (LeftComp f) \/ L~f;
+
+definition let f be non constant standard special_circular_sequence;
+ cluster L~f -> Jordan;
+end;
+
+ reserve f for clockwise_oriented
+              non constant standard special_circular_sequence;
+
+theorem :: GOBRD14:33
+ p in RightComp f implies W-bound L~f < p`1;
+
+theorem :: GOBRD14:34
+ p in RightComp f implies E-bound L~f > p`1;
+
+theorem :: GOBRD14:35
+ p in RightComp f implies N-bound L~f > p`2;
+
+theorem :: GOBRD14:36
+ p in RightComp f implies S-bound L~f < p`2;
+
+theorem :: GOBRD14:37
+ p in RightComp f & q in LeftComp f implies LSeg(p,q) meets L~f;
+
+theorem :: GOBRD14:38
+ Cl RightComp SpStSeq C =
+  product((1,2)-->([.W-bound L~SpStSeq C,E-bound L~SpStSeq C.],
+                   [.S-bound L~SpStSeq C,N-bound L~SpStSeq C.]));
+
+theorem :: GOBRD14:39
+ proj1.:(Cl RightComp f) = proj1.:(L~f);
+
+theorem :: GOBRD14:40
+  proj2.:(Cl RightComp f) = proj2.:(L~f);
+
+theorem :: GOBRD14:41
+ RightComp g c= RightComp SpStSeq L~g;
+
+theorem :: GOBRD14:42
+ Cl RightComp g is compact;
+
+theorem :: GOBRD14:43
+ LeftComp g is non Bounded;
+
+theorem :: GOBRD14:44
+ LeftComp g is_outside_component_of L~g;
+
+theorem :: GOBRD14:45
+   RightComp g is_inside_component_of L~g;
+
+theorem :: GOBRD14:46
+ UBD L~g = LeftComp g;
+
+theorem :: GOBRD14:47
+ BDD L~g = RightComp g;
+
+theorem :: GOBRD14:48
+   P is_outside_component_of L~g implies P = LeftComp g;
+
+theorem :: GOBRD14:49
+ P is_inside_component_of L~g implies P meets RightComp g;
+
+theorem :: GOBRD14:50
+   P is_inside_component_of L~g implies P = BDD L~g;
+
+theorem :: GOBRD14:51
+   W-bound L~g = W-bound RightComp g;
+
+theorem :: GOBRD14:52
+   E-bound L~g = E-bound RightComp g;
+
+theorem :: GOBRD14:53
+   N-bound L~g = N-bound RightComp g;
+
+theorem :: GOBRD14:54
+   S-bound L~g = S-bound RightComp g;
+

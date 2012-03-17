@@ -1,0 +1,1026 @@
+:: The Fundamental Properties of Natural Numbers
+::  by Grzegorz Bancerek
+::
+:: Received January 11, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL2, ARYTM, ARYTM_1, ARYTM_3, ORDINAL1, NAT_1, XREAL_0;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0,
+      XREAL_0, REAL_1;
+ constructors REAL_1, XREAL_0, XCMPLX_0, XBOOLE_0;
+ clusters REAL_1, NUMBERS, ORDINAL2, XREAL_0, ARYTM_3, ZFMISC_1, XBOOLE_0;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions REAL_1;
+ theorems AXIOMS, REAL_1, TARSKI, ORDINAL2, XCMPLX_0, XCMPLX_1;
+ schemes REAL_1;
+
+begin
+
+definition
+  mode Nat is Element of NAT;
+end;
+
+ reserve x for Real,
+         k,l,m,n for Nat,
+         h,i,j for natural number,
+         X for Subset of REAL;
+
+:: The results of axioms of natural numbers
+
+canceled;
+
+theorem                       :: axiom of induction
+ Th2: for X st 0 in X & for x st x in X holds x + 1 in X
+  for k holds k in X
+   proof let A be Subset of REAL such that
+A1:  0 in A;
+     assume x in A implies x + 1 in A;
+     then for x being real number st x in A holds x + 1 in A;
+then A2:  NAT c= A by A1,AXIOMS:29;
+    let k;
+    thus k in A by A2,TARSKI:def 3;
+   end;
+
+:: Addition and multiplication
+
+:: The natural numbers are real numbers therefore some theorems of real
+:: numbers are translated for natural numbers.
+
+ definition let n,k be Nat;
+ redefine func n + k -> Nat;
+   coherence
+    proof
+       defpred _P[Real] means ex k st $1 = k & n + k is Nat;
+     consider X such that
+A1:    x in X iff _P[x] from SepReal;
+        n + 0 = n;
+then A2:    0 in X by A1;
+        now let x; assume
+          x in X;
+       then consider k such that
+A3:      x = k & n + k is Nat by A1;
+A4:      (n + k) + 1 = n + (k + 1) by XCMPLX_1:1;
+          k + 1 is Nat & (n + k) + 1 is Nat by A3,AXIOMS:28;
+       hence x + 1 in X by A1,A3,A4;
+      end;
+      then k in X by A2,Th2;
+      then ex m st k = m & n + m is Nat by A1;
+     hence thesis;
+    end;
+ end;
+
+ definition let n,k be natural number;
+  cluster n + k -> natural;
+   coherence
+   proof
+     reconsider n,k as Nat by ORDINAL2:def 21;
+       n+k is Nat;
+     hence thesis;
+   end;
+ end;
+
+:: Now we can form and prove the scheme of induction.
+
+scheme Ind { P[Nat] } :
+ for k being Nat holds P[k]
+   provided
+A1:   P[0] and
+A2:   for k being Nat st P[k] holds P[k + 1]
+   proof let k;
+      defpred _P[Real] means ex k st P[k] & k = $1;
+    consider X such that
+A3:   x in X iff _P[x] from SepReal;
+A4:   0 in X by A1,A3;
+     for x st x in X holds x + 1 in X
+      proof let x; assume
+          x in X;
+       then consider k such that
+A5:      P[k] & k = x by A3;
+          P[k + 1] by A2,A5;
+       hence thesis by A3,A5;
+      end;
+     then k in X by A4,Th2;
+     then ex n st P[n] & n = k by A3;
+    hence P[k];
+   end;
+
+scheme Nat_Ind { P[natural number] } :
+ for k being natural number holds P[k]
+   provided
+A1:   P[0] and
+A2:   for k be natural number st P[k] holds P[k + 1]
+   proof
+      defpred _P[Nat] means P[$1];
+A3: _P[0] by A1;
+A4:   for k st _P[k] holds _P[k + 1] by A2;
+A5:   for k holds _P[k] from Ind(A3,A4);
+      let k be natural number;
+        k is Nat by ORDINAL2:def 21;
+      hence thesis by A5;
+   end;
+
+:: Like addition, the result of multiplication of two natural numbers is
+:: a natural number.
+
+ definition let n,k be Nat;
+ redefine func n * k -> Nat;
+   coherence
+    proof          defpred _P[Nat] means n*$1 is Nat;
+A1:    _P[0];
+A2:    _P[m] implies _P[m+1]
+       proof
+          assume _P[m];
+        then reconsider k = n * m as Nat;
+A3:       k + n is Nat;
+           n * (m + 1) = n * m + n * 1 by XCMPLX_1:8
+                    .= n * m + n;
+        hence n * (m + 1) is Nat by A3;
+       end;
+        _P[m] from Ind(A1,A2);
+     hence thesis;
+    end;
+ end;
+
+ definition let n,k be natural number;
+  cluster n * k -> natural;
+   coherence
+   proof
+     reconsider n,k as Nat by ORDINAL2:def 21;
+       n*k is Nat;
+     hence thesis;
+   end;
+ end;
+
+                ::::::::::::::::::::
+                :: Order relation ::
+                ::::::::::::::::::::
+
+:: Some theorems of not great relation "<=" in real numbers are translated
+:: to natural number easy and it is necessary to have them here.
+
+canceled 15;
+
+theorem
+ Th18: 0 <= i
+  proof
+     defpred _P[Nat] means 0 <= $1;
+A1:  _P[0];
+A2:  now let n; assume _P[n];
+      then 0 + 1 <= n + 1 by AXIOMS:24;
+      hence _P[n + 1] by AXIOMS:22;
+     end;
+A3:for k holds _P[k] from Ind(A1,A2);
+     i is Nat by ORDINAL2:def 21;
+   hence thesis by A3;
+  end;
+
+theorem
+  0 <> i implies 0 < i by Th18;
+
+theorem
+ Th20: i <= j implies i * h <= j * h
+  proof assume
+A1:  i <= j;
+      0 <= h by Th18;
+   hence thesis by A1,AXIOMS:25;
+  end;
+
+theorem 0 <> i + 1
+  proof assume
+A1:  0 = i + 1;
+      0 <= i by Th18;
+    then 0 + 1 <= 0 by A1,REAL_1:55;
+   hence contradiction;
+  end;
+
+theorem
+ Th22: i = 0 or ex k st i = k + 1
+  proof
+     defpred _P[natural number] means $1 = 0 or ex k st $1 = k + 1;
+A1:  _P[0];
+A2:  _P[h] implies _P[h + 1];
+      for i holds _P[i] from Nat_Ind(A1,A2);
+   hence thesis;
+  end;
+
+theorem
+ Th23: i + j = 0 implies i = 0 & j = 0
+  proof assume
+A1:  i + j = 0;
+  0 <= i & 0 <= j by Th18;
+    then 0 + i <= j + i & 0 + j <= i + j & 0 + i = i & 0 + j = j by REAL_1:55;
+   hence thesis by A1,Th18;
+  end;
+
+definition
+  cluster non zero (natural number);
+  existence
+  proof
+    take 1;
+    thus thesis;
+  end;
+end;
+
+definition let m be natural number, n be non zero (natural number);
+  cluster m + n -> non zero;
+  coherence by Th23;
+  cluster n + m -> non zero;
+  coherence by Th23;
+end;
+
+scheme Def_by_Ind { N()->Nat, F(Nat,Nat)->Nat, P[Nat,Nat] } :
+  (for k ex n st P[k,n] ) &
+    for k,n,m st P[k,n] & P[k,m] holds n = m
+     provided
+A1:    for k,n holds P[k,n] iff
+       k = 0 & n = N() or ex m,l st k = m + 1 & P[m,l] & n = F(k,l)
+   proof
+      defpred _P[Nat] means ex n st P[$1,n];
+       P[0,N()] by A1;
+then A2:   _P[0];
+A3:   _P[k] implies _P[k+1]
+      proof given n such that
+A4:      P[k,n];
+       take F(k+1,n);
+       thus P[k+1,F(k+1,n)] by A1,A4;
+      end;
+    thus for k holds _P[k] from Ind(A2,A3);
+    defpred _P[Nat] means for n,m st P[$1,n] & P[$1,m] holds n = m;
+A5:   _P[0]
+      proof let n,m such that
+A6:     P[0,n] & P[0,m];
+          (not ex m,l st 0 = m + 1 & P[m,l] & n = F(0,l) ) &
+        not ex n,l st 0 = n + 1 & P[n,l] & m = F(0,l);
+        then n = N() & m = N() by A1,A6;
+       hence n = m;
+      end;
+A7:   for k st _P[k] holds _P[k+1]
+      proof let k such that
+A8:      for n,m st P[k,n] & P[k,m] holds n = m;
+       let n,m such that
+A9:      P[k+1,n] & P[k+1,m];
+       consider l,u be Nat such that
+A10:      k + 1 = l + 1 & P[l,u] & n = F(k + 1,u) by A1,A9;
+       consider v,w be Nat such that
+A11:      k + 1 = v + 1 & P[v,w] & m = F(k + 1,w) by A1,A9;
+          l = k & v = k by A10,A11,XCMPLX_1:2;
+       hence n = m by A8,A10,A11;
+      end;
+    thus for k holds _P[k] from Ind(A5,A7);
+   end;
+
+canceled 2;
+
+theorem
+ Th26: for i,j st i <= j + 1 holds i <= j or i = j + 1
+  proof
+     defpred _P[natural number] means
+     for j holds $1 <= j + 1 implies $1 <= j or $1 = j+1;
+A1:  _P[0] by Th18;
+A2:  for i st _P[i] holds _P[i+1]
+     proof let i such that
+A3:     i <= j + 1 implies i <= j or i = j + 1;
+      let j such that
+A4:     i + 1 <= j + 1;
+A5:    1 + (-1) = 0;
+A6:     i + 1 + (-1) = i + (1 + (-1)) by XCMPLX_1:1 .= i;
+A7:     now assume
+A8:       j = 0;
+then A9:       i <= 0 by A4,A5,A6,AXIOMS:24;
+           0 <= i by Th18;
+        hence thesis by A8,A9,AXIOMS:21;
+       end;
+       now given k such that
+A10:       j = k + 1;
+           j + 1 + (-1) = j + (1 + (-1)) by XCMPLX_1:1 .= j;
+         then i <= k + 1 by A4,A6,A10,AXIOMS:24;
+         then i <= k or i = k + 1 by A3;
+        hence thesis by A10,AXIOMS:24;
+       end;
+     hence thesis by A7,Th22;
+    end;
+   thus for i holds _P[i] from Nat_Ind(A1,A2);
+  end;
+
+theorem
+    i <= j & j <= i + 1 implies i = j or j = i + 1
+   proof assume
+A1:   i <= j & j <= i + 1;
+     then j <= i or j = i + 1 by Th26;
+    hence thesis by A1,AXIOMS:21;
+   end;
+
+theorem
+ Th28: for i,j st i <= j ex k st j = i + k
+  proof let i;
+     defpred _P[natural number] means
+     i <= $1 implies ex k st $1 = i + k;
+A1: _P[0]
+     proof assume
+A2:   i <= 0;
+      take 0;
+      thus thesis by A2,Th18;
+     end;
+A3:  for j st _P[j] holds _P[j+1]
+     proof let j such that
+A4:   i <= j implies ex k st j = i + k;
+      assume
+A5:     i <= j + 1;
+A6:     now assume i <= j;
+        then consider k such that
+A7:     j = i + k by A4;
+          i + k + 1 = i + (k + 1) by XCMPLX_1:1;
+        hence thesis by A7;
+       end;
+         now assume i = j + 1; then j + 1 = i + 0;
+        hence thesis;
+       end;
+      hence thesis by A5,A6,Th26;
+     end;
+   thus for j holds _P[j] from Nat_Ind(A1,A3);
+  end;
+
+theorem
+ Th29: i <= i + j
+  proof
+A1:  0 + i = i;
+      0 <= j by Th18;
+   hence thesis by A1,REAL_1:55;
+  end;
+
+scheme Comp_Ind { P[Nat] } :
+ for k holds P[k]
+   provided
+A1:   for k st for n st n < k holds P[n] holds P[k]
+   proof
+      defpred _P[Nat] means for n st n < $1 holds P[n];
+A2:   _P[0] by Th18;
+A3:   _P[k] implies _P[k+1]
+      proof assume
+A4:   for n st n < k holds P[n];
+      let n; assume
+        n < k + 1;
+      then n <= k by Th26;
+      then n < k or n = k & n <= k by REAL_1:def 5;
+      hence thesis by A1,A4;
+    end;
+    let k;
+       for k holds _P[k] from Ind(A2,A3);
+     then for n st n < k holds P[n];
+    hence P[k] by A1;
+   end;
+
+:: Principle of minimum
+
+scheme Min { P[Nat] } :
+ ex k st P[k] & for n st P[n] holds k <= n
+  provided
+A1:  ex k st P[k]
+   proof assume A2: not thesis;
+      defpred _P[Nat] means not P[$1];
+A3:   for k st for n st n < k holds _P[n] holds _P[k]
+      proof let k;
+A4:    not (ex n st P[n] & not k <= n) implies not P[k] by A2;
+       assume for n st n < k holds not P[n];
+       hence thesis by A4;
+      end;
+       for k holds _P[k] from Comp_Ind(A3);
+    hence contradiction by A1;
+   end;
+
+:: Principle of maximum
+
+scheme Max { P[Nat],N()->Nat } :
+  ex k st P[k] & for n st P[n] holds n <= k
+   provided
+A1:   for k st P[k] holds k <= N() and
+A2:   ex k st P[k]
+   proof
+      defpred _P[Nat] means for n st P[n] holds n <= $1;
+A3:   ex k st _P[k] by A1;
+    consider k such that
+A4:   _P[k] &
+      for m st _P[m] holds k <= m from Min(A3);
+    take k;
+    thus P[k]
+      proof assume
+A5:      not P[k];
+       consider n such that
+A6:      P[n] by A2;
+       n <= k & n <> k by A4,A5,A6;
+       then k <> 0 by Th18;
+       then consider m such that
+A7:      k = m + 1 by Th22;
+          now let n; assume
+            P[n];
+          then n <= k & n <> k by A4,A5;
+         hence n <= m by A7,Th26;
+        end;
+then A8:    k <= m by A4;
+A9:    m + (- m) = 0 by XCMPLX_0:def 6;
+          (- m) + m + 1 = (- m) + (m + 1) & (- m) + m + 0 = (- m) + (m + 0)
+                              by XCMPLX_1:1;
+       hence contradiction by A7,A8,A9,AXIOMS:24;
+      end;
+    thus thesis by A4;
+   end;
+
+canceled 7;
+
+theorem
+ Th37: i <= j implies i <= j + h
+  proof assume
+A1:  i <= j;
+      0 <= h by Th18;
+    then i + 0 <= i + h & i + h <= j + h & i + 0 = i by A1,REAL_1:55;
+   hence i <= j + h by AXIOMS:22;
+  end;
+
+theorem
+ Th38: i < j + 1 iff i <= j
+  proof
+   thus i < j + 1 implies i <= j by Th26;
+   assume
+A1:  i <= j;
+   hence i <= j + 1 by Th37;
+   assume A2: i = j + 1;
+A3:  j + (- j) = 0 by XCMPLX_0:def 6;
+      j + 1 + (- j) = 1 + (j + (- j)) by XCMPLX_1:1
+              .= 1 by A3;
+   hence contradiction by A1,A2,A3,AXIOMS:24;
+  end;
+
+canceled;
+
+theorem
+ Th40: i * j = 1 implies i = 1 & j = 1
+  proof assume
+A1:  i * j = 1;
+    then i <> 0;
+   then consider m such that
+A2:  i = m + 1 by Th22;
+      j <> 0 by A1;
+   then consider l such that
+A3:  j = l + 1 by Th22;
+      (m + 1) * (l + 1) = m * (l + 1) + 1 * (l + 1) by XCMPLX_1:8
+     .= m * l + m * 1 + 1 * (l + 1) by XCMPLX_1:8
+     .= m * l + m + l + 1 by XCMPLX_1:1;
+    then m * l + m + l + 1 = 0 + 1 by A1,A2,A3;
+    then m * l + m + l = 0 by XCMPLX_1:2;
+    then m * l + m = 0 & l = 0 by Th23;
+   hence thesis by A2,A3;
+  end;
+
+scheme Regr { P[Nat] } :
+ P[0]
+  provided
+A1:  ex k st P[k] and
+A2:  for k st k <> 0 & P[k] ex n st n < k & P[n]
+  proof
+     defpred _P[Nat] means P[$1];
+A3: ex k st _P[k] by A1;
+   consider k such that
+A4:  _P[k] & for n st _P[n] holds k <= n from Min(A3);
+      now assume k <> 0;
+      then ex n st n < k & P[n] by A2,A4;
+     hence contradiction by A4;
+    end;
+   hence P[0] by A4;
+  end;
+
+:: Exact division and rest of division
+
+ reserve k1,t,t1 for Nat;
+
+canceled;
+
+theorem
+ Th42:  for m st 0 < m for n ex k,t st n = (m*k)+t & t < m
+   proof let m;
+    assume
+A1:   0 < m;
+     defpred _P[Nat] means ex k,t st $1 = (m*k)+t & t < m;
+       0 = m*0+0;
+then A2:   _P[0] by A1;
+A3:   for n st _P[n] holds _P[n+1]
+      proof let n;
+       given k1,t1 such that
+A4:     n = (m*k1)+t1 & t1 < m;
+A5:        t1+1 <= m by A4,Th38;
+A6:     t1+1 < m implies ex k,t st n+1 = (m*k)+t & t < m
+         proof assume
+A7:        t1+1 < m;
+          take k = k1 , t = t1+1;
+          thus n+1 = m*k+t by A4,XCMPLX_1:1;
+          thus t < m by A7;
+         end;
+          t1+1 = m implies ex k,t st n+1 = (m*k)+t & t < m
+         proof assume
+A8:        t1+1 = m;
+          take k = k1+1 , t = 0;
+          thus n+1 = m*k1+m*1 by A4,A8,XCMPLX_1:1
+              .= m*k+t by XCMPLX_1:8;
+          thus t < m by A1;
+         end;
+       hence ex k,t st n+1 = (m*k)+t & t < m by A5,A6,REAL_1:def 5;
+      end;
+    thus for n holds _P[n] from Ind(A2,A3);
+   end;
+
+theorem
+ Th43:for n,m,k,k1,t,t1 being natural number
+     st n = m*k+t & t < m & n = m*k1+t1 & t1 < m holds
+      k = k1 & t = t1
+   proof let n,m,k,k1,t,t1 be natural number;
+    assume
+A1:   n = m*k+t & t < m & n = m*k1+t1 & t1 < m;
+A2:   now assume k <= k1;
+      then consider u being Nat such that
+A3:     k1 = k + u by Th28;
+         m * (k + u) + t1 = m * k + m * u + t1 by XCMPLX_1:8
+                       .= m * k + (m * u + t1) by XCMPLX_1:1;
+then A4:     m * u + t1 = t by A1,A3,XCMPLX_1:2;
+         now given w being Nat such that
+A5:       u = w + 1;
+           m * 1 = m;
+         then m * u + t1 = m + m * w + t1 by A5,XCMPLX_1:8
+                   .= m + (m * w + t1) by XCMPLX_1:1;
+        hence contradiction by A1,A4,Th29;
+       end;
+then A6:     u = 0 by Th22;
+      hence k = k1 by A3;
+      thus t = t1 by A1,A3,A6,XCMPLX_1:2;
+     end;
+       now assume k1 <= k;
+      then consider u being Nat such that
+A7:     k = k1 + u by Th28;
+         m * (k1 + u) + t = m * k1 + m * u + t by XCMPLX_1:8
+                       .= m * k1 + (m * u + t) by XCMPLX_1:1;
+then A8:     m * u + t = t1 by A1,A7,XCMPLX_1:2;
+         now given w being Nat such that
+A9:       u = w + 1;
+           m * 1 = m;
+         then m * u + t = m + m * w + t by A9,XCMPLX_1:8
+                   .= m + (m * w + t) by XCMPLX_1:1;
+        hence contradiction by A1,A8,Th29;
+       end;
+then A10:     u = 0 by Th22;
+      hence k = k1 by A7;
+       thus t = t1 by A1,A7,A10,XCMPLX_1:2;
+     end;
+    hence thesis by A2;
+   end;
+
+definition let k,l be natural number;
+A1: k is Nat & l is Nat by ORDINAL2:def 21;
+  func k div l -> Nat means       :: the exact division
+:Def1:  ( ex t st k = l * it + t & t < l ) or it = 0 & l = 0;
+   existence
+    proof
+      now assume
+A2:      l <> 0;
+          0 <= l by Th18;
+       hence thesis by A1,A2,Th42;
+      end;
+     hence thesis;
+    end;
+   uniqueness
+    proof let t1,t2 be Nat such that
+A3:   ( ex t st k = l * t1 + t & t < l ) or t1 = 0 & l = 0 and
+A4:   ( ex t st k = l * t2 + t & t < l ) or t2 = 0 & l = 0;
+     now let t; assume
+A5:     t < 0;
+        then ex m st 0 = t + m by Th28;
+       hence contradiction by A5,Th23;
+      end;
+     hence thesis by A3,A4,Th43;
+    end;
+
+  func k mod l -> Nat means         :: the rest of division
+:Def2: ( ex t st k = l * t + it & it < l ) or it = 0 & l = 0;
+   existence
+    proof
+      now assume
+A6:      l <> 0;
+          0 <= l by Th18;
+       then ex n,t st k = l * n + t & t < l by A1,A6,Th42;
+       hence thesis;
+      end;
+     hence thesis;
+    end;
+   uniqueness
+    proof let t1,t2 be Nat such that
+A7:  ( ex t st k = l * t + t1 & t1 < l ) or t1 = 0 & l = 0 and
+A8:  ( ex t st k = l * t + t2 & t2 < l ) or t2 = 0 & l = 0;
+     now let t; assume
+A9:     t < 0;
+        then ex m st 0 = t + m by Th28;
+       hence contradiction by A9,Th23;
+      end;
+     hence thesis by A7,A8,Th43;
+    end;
+end;
+
+canceled 2;
+
+theorem
+ Th46: 0 < i implies j mod i < i
+   proof assume 0 < i;
+     then ex t st j = i * t + (j mod i) & j mod i < i by Def2;
+    hence j mod i < i;
+   end;
+
+theorem
+ Th47: 0 < i implies j = i * (j div i) + (j mod i)
+   proof assume 0 < i;
+     then ex k st j = i * k + (j mod i) & j mod i < i by Def2;
+    hence j = i * (j div i) + (j mod i) by Def1;
+   end;
+
+:: The divisibility relation
+
+definition let k,l be natural number;
+  pred k divides l means
+:Def3:  ex t st l = k * t;
+  reflexivity
+   proof let i;
+       i = i * 1;
+    hence thesis;
+   end;
+end;
+
+canceled;
+
+theorem
+ Th49: j divides i iff i = j * (i div j)
+   proof
+     thus j divides i implies i = j * (i div j)
+       proof assume j divides i;
+        then consider k such that
+A1:       i = j * k by Def3;
+A2:       i = j * k + 0 by A1;
+           now assume
+A3:        j <> 0;
+            A4: 0 <= j by Th18;
+then A5:        i = j * (i div j) + (i mod j) by A3,Th47;
+             i mod j < j by A3,A4,Th46;
+           hence i = j * (i div j) by A2,A3,A4,A5,Th43;
+         end;
+        hence i = j * (i div j) by A1;
+       end;
+     assume i = j * (i div j);
+     hence j divides i by Def3;
+   end;
+
+canceled;
+
+theorem
+   i divides j & j divides h implies i divides h
+   proof assume i divides j & j divides h;
+   then j = i * (j div i) & h = j * (h div j) by Th49;
+     then h = i * ((j div i)*(h div j)) by XCMPLX_1:4;
+    hence i divides h by Def3;
+   end;
+
+theorem
+ Th52: i divides j & j divides i implies i = j
+   proof
+    assume i divides j & j divides i;
+then A1:   j = i * (j div i) & i = j * (i div j) by Th49;
+then A2:     i * 1 = i * ((j div i) * (i div j)) by XCMPLX_1:4;
+A3:   i = 0 implies i = j by A1;
+       (j div i) * (i div j) = 1 implies i = j
+      proof assume (j div i) * (i div j) = 1;
+        then j div i = 1 by Th40;
+       hence i = j by A1;
+      end;
+    hence i = j by A2,A3,XCMPLX_1:5;
+   end;
+
+theorem
+ Th53: i divides 0 & 1 divides i
+  proof
+      0 = i * 0;
+   hence i divides 0 by Def3;
+A1: i is Nat by ORDINAL2:def 21;
+      i = i * 1;
+   hence thesis by A1,Def3;
+  end;
+
+theorem
+ Th54: 0 < j & i divides j implies i <= j
+   proof assume
+A1:   0 < j & i divides j;
+then A2:   j = i * (j div i) by Th49;
+     then j div i <> 0 by A1;
+    then consider m such that
+A3:   j div i = m + 1 by Th22;
+       i * (m + 1) = (i * m) + i * 1 by XCMPLX_1:8 .= i + i * m;
+    hence i <= j by A2,A3,Th29;
+   end;
+
+theorem
+ Th55: i divides j & i divides h implies i divides j+h
+   proof
+    assume i divides j & i divides h;
+   then j = i * (j div i) & h = i * (h div i) by Th49;
+     then j + h = i * ((j div i) + (h div i)) by XCMPLX_1:8;
+    hence i divides j + h by Def3;
+   end;
+
+theorem
+ Th56: i divides j implies i divides j * h
+  proof assume
+      i divides j;
+   then consider l such that
+A1:  j = i * l by Def3;
+A2:  l*h is Nat by ORDINAL2:def 21;
+      i * l * h = i * (l * h) by XCMPLX_1:4;
+   hence thesis by A1,A2,Def3;
+  end;
+
+theorem
+ Th57: i divides j & i divides j + h implies i divides h
+  proof assume
+A1:  i divides j & i divides j + h;
+   then consider t such that
+A2:  j + h = i * t by Def3;
+   consider u be Nat such that
+A3:  j = i * u by A1,Def3;
+      now assume i <> 0;
+      then A4: i <> 0 & 0 <= i by Th18;
+then A5:    h = i * (h div i) + (h mod i) by Th47;
+A6:    j + (i * (h div i) + (h mod i)) = j + i * (h div i) + (h mod i)
+         by XCMPLX_1:1
+        .= i * (u + (h div i)) + (h mod i) by A3,XCMPLX_1:8;
+A7:    h mod i < i by A4,Th46;
+        j + h = i * t + 0 by A2;
+      then h mod i = 0 by A4,A5,A6,A7,Th43;
+      hence thesis by A5,Th49;
+    end;
+   hence thesis by A2,Th23;
+  end;
+
+theorem
+ Th58: i divides j & i divides h implies i divides j mod h
+  proof assume
+A1:  i divides j & i divides h;
+A2:  now assume h = 0; then j mod h = 0 by Def2;
+     hence thesis by Th53;
+    end;
+      now assume
+A3:    h <> 0;
+        0 <= h by Th18;
+then A4:    j = h * (j div h) + (j mod h) by A3,Th47;
+        i divides h * (j div h) by A1,Th56;
+     hence thesis by A1,A4,Th57;
+    end;
+   hence thesis by A2;
+  end;
+
+:: The least common multiple and the greatest common divisor
+
+ definition let k,n be Nat;
+  func k lcm n -> Nat means
+:Def4:  k divides it & n divides it & for m st k divides m & n divides
+ m holds it divides m;
+   existence
+    proof
+A1:    now assume
+A2:      k = 0 or n = 0;
+       take w = 0;
+       thus k divides w & n divides w by Th53;
+       let m; assume k divides m & n divides m;
+       hence w divides m by A2;
+      end;
+        now assume
+A3:      k <> 0 & n <> 0;
+A4:      k divides k * n & n divides k * n by Def3;
+      defpred _P[Nat] means k divides $1 & n divides $1 & k <= $1;
+          0 <= n by Th18; then 0 + 1 <= n by A3,Th38;
+        then k * 1 <= k * n by Th20;
+then A5:  ex m st _P[m] by A4;
+       consider l such that
+A6:      _P[l] & for m st _P[m] holds l <= m
+          from Min(A5);
+       take l;
+       thus k divides l & n divides l by A6;
+       let m such that
+A7:      k divides m & n divides m;
+          now A8: 0 <= k by Th18;
+then A9:        m = l * (m div l) + (m mod l) by A3,A6,Th47;
+            l = k * (l div k) & l = n * (l div n) by A6,Th49;
+          then l * (m div l) = k * ((l div k) * (m div l)) &
+           l * (m div l) = n * ((l div n) * (m div l)) by XCMPLX_1:4;
+          then k divides l * (m div l) & n divides l * (m div l) by Def3;
+then A10:        k divides m mod l & n divides m mod l by A7,A9,Th57;
+            now assume
+A11:          m mod l <> 0;
+              0 <= m mod l by Th18;
+            then k <= m mod l by A10,A11,Th54;
+           then l <= m mod l by A6,A10;
+           hence contradiction by A3,A6,A8,Th46;
+          end; hence l divides m by A9,Th49;
+        end;
+       hence l divides m;
+      end;
+     hence thesis by A1;
+    end;
+   uniqueness
+    proof let m1,m2 be Nat such that
+A12:    k divides m1 & n divides m1 & for m st k divides m & n divides
+ m holds m1 divides m and
+A13:    k divides m2 & n divides m2 & for m st k divides m & n divides
+ m holds m2 divides m;
+        m1 divides m2 & m2 divides m1 by A12,A13;
+     hence m1 = m2 by Th52;
+    end;
+    idempotence;
+    commutativity;
+ end;
+
+ definition let k,n be Nat;
+  func k hcf n -> Nat means
+:Def5:  it divides k & it divides n & for m st m divides k & m divides
+ n holds m divides it;
+   existence
+    proof
+       defpred _P[Nat] means $1 divides k & $1 divides n;
+        1 divides k & 1 divides n by Th53;
+then A1:    ex m st _P[m];
+A2:    now assume
+A3:     k = 0;
+       take m = n;
+       thus m divides k & m divides n by A3,Th53;
+       let l; assume l divides k & l divides n;
+       hence l divides m;
+      end;
+        now assume
+A4:      k <> 0;
+          0 <= k by Th18;
+then A5:      for m st _P[m] holds m <= k by A4,Th54;
+       consider m such that
+A6:      _P[m] & for l st _P[l] holds l <= m from Max(A5,A1);
+       take m;
+       thus m divides k & m divides n by A6;
+       let l; assume l divides k & l divides n;
+then A7:      l lcm m divides k & l lcm m divides n by A6,Def4;
+then A8:      l lcm m <= m by A6;
+          m <= l lcm m
+         proof
+A9:        m divides l lcm m by Def4;
+A10:        now assume l lcm m = 0;
+             then k = 0 * (k div 0) by A7,Th49;
+            hence contradiction by A4;
+           end;
+             0 <= l lcm m by Th18;
+          hence thesis by A9,A10,Th54;
+         end;
+       then l lcm m = m by A8,AXIOMS:21;
+       hence l divides m by Def4;
+      end;
+     hence thesis by A2;
+    end;
+   uniqueness
+    proof let m1,m2 be Nat such that
+A11:    m1 divides k & m1 divides n & for m st m divides k & m divides
+ n holds m divides m1 and
+A12:    m2 divides k & m2 divides n & for m st m divides k & m divides
+ n holds m divides m2;
+        m1 divides m2 & m2 divides m1 by A11,A12;
+     hence m1 = m2 by Th52;
+    end;
+    idempotence;
+    commutativity;
+ end;
+
+scheme Euklides { Q(Nat)->Nat, a,b()->Nat } :
+  ex n st Q(n) = a() hcf b() & Q(n + 1) = 0
+   provided
+A1:   0 < b() & b() < a() and
+A2:   Q(0) = a() & Q(1) = b() and
+A3:   for n holds Q(n + 2) = Q(n) mod Q(n + 1)
+  proof
+     defpred _P[Nat] means ex n st $1 = Q(n);
+A4:  ex k st _P[k] by A2;
+A5:  for k st k <> 0 & _P[k] holds ex n st n < k & _P[n]
+     proof let k; assume
+A6:    k <> 0 & ex n st k = Q(n);
+      then consider n such that
+A7:    k = Q(n);
+      take Q(n + 1);
+A8:    (n = 0 implies Q(n + 1) < k) & ex m st m = n+1 & Q(n + 1) = Q(m)
+       by A1,A2,A7;
+         now given m such that
+A9:      n = m + 1;
+          A10: 0 <= Q(n) by Th18;
+A11:         Q(m + 2) = Q(m) mod Q(m + 1) by A3;
+           m + 1 + 1 = m + (1 + 1) by XCMPLX_1:1;
+        hence Q(n + 1) < k by A6,A7,A9,A10,A11,Th46;
+        take m = n + 1;
+        thus Q(n + 1) =Q(m);
+       end;
+      hence thesis by A8,Th22;
+     end;
+A12:  _P[0] from Regr(A4,A5);
+     defpred _Q[Nat] means 0 = Q($1);
+A13: ex n st _Q[n] by A12;
+   consider k such that
+A14:  _Q[k] & for n st _Q[n] holds k <= n from Min(A13);
+   consider n such that
+A15:  k = n + 1 by A1,A2,A14,Th22;
+   take n;
+   defpred _PP[Nat] means Q(n) divides Q($1) & Q(n) divides Q($1 + 1);
+      _PP[n] by A14,A15,Th53;
+then A16:  ex k st _PP[k];
+A17:  for k st k <> 0 & _PP[k] ex m st m < k & _PP[m]
+     proof let l; assume
+A18:    l <> 0 & Q(n) divides Q(l) & Q(n) divides Q(l + 1);
+      then consider m such that
+A19:    l = m + 1 by Th22;
+      take m;
+A20:    m <= m + 1 by Th29;
+         now assume m = m + 1; then m + 0 = m + 1;
+         hence contradiction by XCMPLX_1:2;
+       end;
+      hence m < l by A19,A20,REAL_1:def 5;
+A21:    now assume
+A22:      Q(m + 1) = 0;
+           now assume
+A23:        m + 1 <> k;
+             k <= m + 1 by A14,A22;
+           then k < m + 1 by A23,REAL_1:def 5;
+then A24:        k <= m by Th38;
+defpred _Q[Nat] means k <= $1 implies Q($1) = 0;
+A25: _Q[0]
+            proof assume A26: k <= 0; 0 <= k by Th18;
+             hence thesis by A14,A26,AXIOMS:21;
+            end;
+A27:  for m st _Q[m] holds _Q[m+1]
+     proof let m such that
+A28:           k <= m implies Q(m) = 0 and
+A29:           k <= m + 1;
+               now assume k <> m + 1; then A30: k < m + 1 by A29,REAL_1:def 5;
+               then consider l such that
+A31:             m = l + 1 by A1,A2,A28,Th22,Th38;
+A32:                Q(l + 2) = Q(l) mod Q(l + 1) by A3;
+                  l + 1 + 1 = l + (1 + 1) by XCMPLX_1:1;
+               hence Q(m + 1) = 0 by A28,A30,A31,A32,Def2,Th38;
+              end;
+             hence Q(m + 1) = 0 by A14;
+            end;
+             for m holds _Q[m] from Ind(A25,A27);
+           then Q(m) = 0 by A24;
+          hence Q(n) divides Q(m) by Th53;
+         end;
+        hence Q(n) divides Q(m) by A15,XCMPLX_1:2;
+       end;
+         now assume
+A33:      Q(m + 1) <> 0;
+          A34: 0 <= Q(m + 1) by Th18;
+           Q(m + 2) = Q(m) mod Q(m + 1) by A3;
+then A35:      Q(m) = Q(m + 1) * (Q(m) div Q(m + 1)) + Q(m + 2) by A33,A34,Th47
+;
+           m + 1 + 1 = m + (1 + 1) by XCMPLX_1:1;
+         then Q(n) divides Q(m + 1) * (Q(m) div Q(m + 1)) & Q(n) divides
+ Q(m + 2)
+          by A18,A19,Th56;
+        hence Q(n) divides Q(m) by A35,Th55;
+       end;
+      hence Q(n) divides Q(m) by A21;
+      thus Q(n) divides Q(m + 1) by A18,A19;
+     end;
+      now
+        _PP[0] from Regr(A16,A17);
+     hence Q(n) divides a() & Q(n) divides b() by A2;
+     let m;
+     defpred _P1[Nat] means m divides Q($1) & m divides Q($1 + 1);
+     assume
+        m divides a() & m divides b();
+then A36: _P1[0] by A2;
+A37:    for k st _P1[k] holds _P1[k+1]
+       proof let k; assume
+A38:       m divides Q(k) & m divides Q(k + 1);
+        hence m divides Q(k + 1);
+A39:       Q(k + 2) = Q(k) mod Q(k + 1) by A3;
+           k + 1 + 1 = k + (1 + 1) by XCMPLX_1:1;
+        hence m divides Q(k + 1 + 1) by A38,A39,Th58;
+       end;
+        for k holds _P1[k] from Ind(A36,A37);
+     hence m divides Q(n);
+    end;
+   hence Q(n) = a() hcf b() by Def5;
+   thus Q(n + 1) = 0 by A14,A15;
+  end;
+
+definition
+ cluster -> ordinal Nat;
+ coherence;
+end;
+
+definition
+ cluster non empty ordinal Subset of REAL;
+  existence proof take NAT; thus thesis; end;
+end;

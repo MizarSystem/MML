@@ -1,0 +1,255 @@
+:: Defining by structural induction in the positive propositional language
+::  by Andrzej Trybulec
+::
+:: Received April 23, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary PBOOLE, FUNCT_1, PROB_1, RELAT_1, TARSKI, FINSEQ_1, BOOLE,
+      HILBERT1, TREES_1, TREES_3, TREES_2, TREES_4, TREES_9, FUNCT_6, QC_LANG1,
+      ZF_LANG, GRAPH_1, ZFMISC_1, SETFAM_1, FRAENKEL, PARTFUN1, FUNCT_4, CAT_1,
+      HILBERT2, HAHNBAN;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
+      PROB_1, RELAT_1, ORDINAL1, FUNCT_1, PARTFUN1, SETFAM_1, FINSEQ_1,
+      FRAENKEL, CQC_LANG, FUNCT_4, FUNCT_6, PBOOLE, TREES_1, TREES_2, TREES_3,
+      TREES_4, TREES_9, HILBERT1;
+ constructors MSUALG_3, HILBERT1, FRAENKEL, CQC_LANG, NAT_1, TREES_9, PROB_1,
+      MEMBERED;
+ clusters SUBSET_1, RELSET_1, HILBERT1, FRAENKEL, TREES_2, TREES_3, FINSEQ_5,
+      FUNCT_7, PRVECT_1, NAT_1, MEMBERED, NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve X,x for set;
+
+theorem :: HILBERT2:1
+ for Z being set, M being ManySortedSet of Z st
+  for x being set st x in Z holds M.x is ManySortedSet of x
+ for f being Function st f = Union M holds dom f = union Z;
+
+theorem :: HILBERT2:2
+ for x,y being set, f,g being FinSequence st <*x*>^f = <*y*>^g
+  holds f = g;
+
+theorem :: HILBERT2:3
+ <*x*> is FinSequence of X implies x in X;
+
+theorem :: HILBERT2:4
+ for X for f being FinSequence of X st f <> {}
+  ex g being FinSequence of X, d being Element of X st f = g^<*d*>;
+
+reserve k,m,n for Nat,
+        p,q,r,s,r',s' for Element of HP-WFF,
+        T1,T2 for Tree;
+
+theorem :: HILBERT2:5
+ <*x*> in tree(T1,T2) iff x=0 or x=1;
+
+definition
+ cluster {} -> Tree-yielding;
+end;
+
+scheme InTreeInd{T() -> Tree, P[set] }:
+ for f being Element of T() holds P[f]
+ provided
+ P[<*>NAT] and
+ for f being Element of T() st P[f]
+     for n st f^<*n*> in T() holds P[f^<*n*>];
+
+reserve
+        T1,T2 for DecoratedTree;
+
+theorem :: HILBERT2:6
+ for x being set, T1, T2 holds (x-tree (T1,T2)).{} = x;
+
+theorem :: HILBERT2:7
+ x-tree(T1,T2).<*0*> = T1.{} & x-tree(T1,T2).<*1*> = T2.{};
+
+theorem :: HILBERT2:8
+ x-tree(T1,T2)|<*0*> = T1 & x-tree(T1,T2)|<*1*> = T2;
+
+definition let x; let p be DTree-yielding non empty FinSequence;
+ cluster x-tree p -> non root;
+end;
+
+definition let x; let T1 be DecoratedTree;
+ cluster x-tree T1 -> non root;
+ let T2 be DecoratedTree;
+ cluster x-tree (T1,T2) -> non root;
+end;
+
+begin :: About the language
+
+definition let n;
+ func prop n -> Element of HP-WFF equals
+:: HILBERT2:def 1
+ <*3+n*>;
+end;
+
+definition let D be set;
+ redefine attr D is with_VERUM means
+:: HILBERT2:def 2
+    VERUM in D;
+  attr D is with_propositional_variables means
+:: HILBERT2:def 3
+    for n holds prop n in D;
+end;
+
+definition let D be Subset of HP-WFF;
+ redefine attr D is with_implication means
+:: HILBERT2:def 4
+   for p, q st p in D & q in D holds p => q in D;
+  attr D is with_conjunction means
+:: HILBERT2:def 5
+   for p, q st p in D & q in D holds p '&' q in D;
+end;
+
+reserve t,t1 for FinSequence;
+
+definition let p;
+ attr p is conjunctive means
+:: HILBERT2:def 6
+ ex r,s st p = r '&' s;
+ attr p is conditional means
+:: HILBERT2:def 7
+ ex r,s st p = r => s;
+ attr p is simple means
+:: HILBERT2:def 8
+ ex n st p = prop n;
+end;
+
+scheme HP_Ind { P[set] }:
+    for r holds P[r]
+  provided
+ P[VERUM] and
+ for n holds P[prop n] and
+ for r,s st P[r] & P[s] holds P[r '&' s] & P[r => s];
+
+theorem :: HILBERT2:9
+  p is conjunctive or p is conditional or p is simple or p = VERUM;
+
+theorem :: HILBERT2:10
+len p >= 1;
+
+theorem :: HILBERT2:11
+ p.1 = 1 implies p is conditional;
+
+theorem :: HILBERT2:12
+ p.1 = 2 implies p is conjunctive;
+
+theorem :: HILBERT2:13
+   p.1 = 3+n implies p is simple;
+
+theorem :: HILBERT2:14
+   p.1 = 0 implies p = VERUM;
+
+theorem :: HILBERT2:15
+ len p < len(p '&' q) & len q < len(p '&' q);
+
+theorem :: HILBERT2:16
+ len p < len(p => q) & len q < len(p => q);
+
+theorem :: HILBERT2:17
+ p = q^t implies p = q;
+
+theorem :: HILBERT2:18
+ p^q = r^s implies p = r & q = s;
+
+theorem :: HILBERT2:19
+ p '&' q = r '&' s implies p = r & s = q;
+
+theorem :: HILBERT2:20
+ p => q = r => s implies p = r & s = q;
+
+theorem :: HILBERT2:21
+ prop n = prop m implies n = m;
+
+theorem :: HILBERT2:22
+ p '&' q <> r => s;
+
+theorem :: HILBERT2:23
+ p '&' q <> VERUM;
+
+theorem :: HILBERT2:24
+ p '&' q <> prop n;
+
+theorem :: HILBERT2:25
+ p => q <> VERUM;
+
+theorem :: HILBERT2:26
+ p => q <> prop n;
+
+theorem :: HILBERT2:27
+ p '&' q <> p & p '&' q <> q;
+
+theorem :: HILBERT2:28
+ p => q <> p & p => q <> q;
+
+theorem :: HILBERT2:29
+ VERUM <> prop n;
+
+begin :: Defining by structural induction
+
+scheme HP_MSSExL{V()->set,P(Nat)->set,
+          C,I[Element of HP-WFF,Element of HP-WFF,set,set,set]}:
+ ex M being ManySortedSet of HP-WFF st
+  M.VERUM = V() &
+  (for n holds M.prop n = P(n)) &
+  for p,q holds C[p,q,M.p,M.q,M.(p '&' q)] & I[p,q,M.p,M.q,M.(p => q)]
+  provided
+ for p,q for a,b being set ex c being set st C[p,q,a,b,c] and
+ for p,q for a,b being set ex d being set st I[p,q,a,b,d] and
+ for p,q for a,b,c,d being set st C[p,q,a,b,c] & C[p,q,a,b,d]
+        holds c = d and
+ for p,q for a,b,c,d being set st I[p,q,a,b,c] & I[p,q,a,b,d] holds c = d;
+
+scheme HP_MSSLambda{V()->set,P(Nat)->set,C,I(set,set)->set}:
+ ex M being ManySortedSet of HP-WFF st
+  M.VERUM = V() &
+  (for n holds M.prop n = P(n)) &
+  for p,q holds M.(p '&' q) = C(M.p,M.q) & M.(p => q) = I(M.p,M.q);
+
+begin :: The tree of the subformulae
+
+definition
+ func HP-Subformulae -> ManySortedSet of HP-WFF means
+:: HILBERT2:def 9
+ it.VERUM = root-tree VERUM &
+  (for n holds it.prop n = root-tree prop n) &
+  for p,q ex p',q' being DecoratedTree of HP-WFF st
+    p' = it.p & q' = it.q &
+    it.(p '&' q) = (p '&' q)-tree(p',q') &
+    it.(p => q) = (p => q)-tree(p',q');
+end;
+
+definition let p;
+ func Subformulae p -> DecoratedTree of HP-WFF equals
+:: HILBERT2:def 10
+ HP-Subformulae.p;
+end;
+
+theorem :: HILBERT2:30
+ Subformulae VERUM = root-tree VERUM;
+
+theorem :: HILBERT2:31
+ Subformulae prop n = root-tree prop n;
+
+theorem :: HILBERT2:32
+ Subformulae(p '&' q) = (p '&' q)-tree(Subformulae p,Subformulae q);
+
+theorem :: HILBERT2:33
+ Subformulae(p => q) = (p => q)-tree(Subformulae p,Subformulae q);
+
+theorem :: HILBERT2:34
+ (Subformulae p).{} = p;
+
+theorem :: HILBERT2:35
+ for f being Element of dom Subformulae p
+  holds (Subformulae p)|f = Subformulae((Subformulae p).f);
+
+theorem :: HILBERT2:36
+   p in Leaves Subformulae q implies p = VERUM or p is simple;
+

@@ -1,0 +1,221 @@
+:: Locally Connected Spaces
+::  by Beata Padlewska
+::
+:: Received September 5, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, TOPS_1, SUBSET_1, BOOLE, RELAT_1, CONNSP_1, RELAT_2,
+      SETFAM_1, TARSKI, COMPTS_1, CONNSP_2;
+ notation TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, PRE_TOPC, TOPS_1, CONNSP_1,
+      COMPTS_1;
+ constructors TOPS_1, CONNSP_1, COMPTS_1, MEMBERED;
+ clusters PRE_TOPC, STRUCT_0, SUBSET_1, MEMBERED, ZFMISC_1;
+ requirements SUBSET, BOOLE;
+
+
+begin
+::
+::            A NEIGHBORHOOD OF A POINT
+::
+definition let X be non empty TopSpace,x be Point of X;
+  mode a_neighborhood of x -> Subset of X means
+:: CONNSP_2:def 1
+ x in Int(it);
+end;
+
+::
+::               A NEIGHBORHOOD OF A SET
+::
+
+definition let X be non empty TopSpace,A be Subset of X;
+  mode a_neighborhood of A -> Subset of X means
+:: CONNSP_2:def 2
+ A c= Int(it);
+end;
+
+reserve X for non empty TopSpace;
+reserve x for Point of X;
+reserve U1 for Subset of X;
+
+canceled 2;
+
+theorem :: CONNSP_2:3
+  for A,B being Subset of X holds
+A is a_neighborhood of x & B is a_neighborhood of x implies
+A \/ B is a_neighborhood of x;
+
+theorem :: CONNSP_2:4
+  for A,B being Subset of X holds
+A is a_neighborhood of x & B is a_neighborhood of x iff
+A /\ B is a_neighborhood of x;
+
+theorem :: CONNSP_2:5
+ for U1 being Subset of X, x being Point of X st U1 is open & x in U1 holds
+ U1 is a_neighborhood of x;
+
+theorem :: CONNSP_2:6
+ for U1 being Subset of X, x being Point of X
+ st U1 is a_neighborhood of x
+ holds x in U1;
+
+theorem :: CONNSP_2:7
+ U1 is a_neighborhood of x implies
+ ex V being non empty Subset of X st
+  V is a_neighborhood of x & V is open & V c= U1;
+
+theorem :: CONNSP_2:8
+ U1 is a_neighborhood of x iff
+  ex V being Subset of X st V is open & V c= U1 & x in V;
+
+theorem :: CONNSP_2:9
+   for U1 being Subset of X holds
+  U1 is open iff for x st x in U1 ex A being Subset of X st
+ A is a_neighborhood of x & A c= U1;
+
+theorem :: CONNSP_2:10
+  for V being Subset of X holds
+V is a_neighborhood of {x} iff V is a_neighborhood of x;
+
+theorem :: CONNSP_2:11
+for B being non empty Subset of X, x being Point of X|B,
+    A being Subset of X|B,
+    A1 being Subset of X, x1 being Point of X
+ st B is open & A is a_neighborhood of x & A = A1 & x = x1 holds
+ A1 is a_neighborhood of x1;
+
+theorem :: CONNSP_2:12
+for B being non empty Subset of X, x being Point of X|B,
+    A being Subset of X|B,
+    A1 being Subset of X, x1 being Point of X
+ st A1 is a_neighborhood of x1 & A=A1 & x=x1 holds
+ A is a_neighborhood of x;
+
+theorem :: CONNSP_2:13
+for A being Subset of X, B being Subset of X st
+ A is_a_component_of X & A c= B holds A is_a_component_of B;
+
+theorem :: CONNSP_2:14
+   for X1 being non empty SubSpace of X, x being Point of X,
+     x1 being Point of X1 st
+ x = x1 holds skl x1 c= skl x;
+
+::
+::            LOCALLY CONNECTED TOPOLOGICAL SPACES
+::
+
+definition let X be non empty TopSpace, x be Point of X;
+   pred X is_locally_connected_in x means
+:: CONNSP_2:def 3
+         for U1 being Subset of X st
+           U1 is a_neighborhood of x ex V being Subset of X st
+           V is a_neighborhood of x & V is connected & V c= U1;
+end;
+
+definition let X be non empty TopSpace;
+  attr X is locally_connected means
+:: CONNSP_2:def 4
+     for x being Point of X holds X is_locally_connected_in x;
+end;
+
+definition
+ let X be non empty TopSpace,
+     A be Subset of X, x be Point of X;
+ pred A is_locally_connected_in x means
+:: CONNSP_2:def 5
+   for B being non empty Subset of X st A = B
+   ex x1 being Point of X|B st x1=x & X|B is_locally_connected_in x1;
+end;
+
+definition
+ let X be non empty TopSpace, A be non empty Subset of X;
+ attr A is locally_connected means
+:: CONNSP_2:def 6
+X|A is locally_connected;
+end;
+
+canceled 4;
+
+theorem :: CONNSP_2:19
+ for x holds X is_locally_connected_in x iff
+ for V,S being Subset of X st V is a_neighborhood of x &
+ S is_a_component_of V & x in S
+ holds S is a_neighborhood of x;
+
+theorem :: CONNSP_2:20
+ for x holds X is_locally_connected_in x iff
+ for U1 being non empty Subset of X st U1 is open & x in U1
+ ex x1 being Point of X|U1 st x1=x & x in Int(skl x1);
+
+theorem :: CONNSP_2:21
+  X is locally_connected implies
+  for S being Subset of X st S is_a_component_of X holds
+  S is open;
+
+theorem :: CONNSP_2:22
+ X is_locally_connected_in x implies
+ for A being non empty Subset of X st A is open & x in A holds
+  A is_locally_connected_in x;
+
+theorem :: CONNSP_2:23
+ X is locally_connected implies
+ for A being non empty Subset of X st A is open holds
+  A is locally_connected;
+
+theorem :: CONNSP_2:24
+ X is locally_connected iff
+ for A being non empty Subset of X, B being Subset of X st A is open &
+ B is_a_component_of A holds B is open;
+
+theorem :: CONNSP_2:25
+   X is locally_connected implies
+ for E being non empty Subset of X,
+ C being non empty Subset of X|E st
+ C is connected & C is open ex H being Subset of X st
+ H is open & H is connected & C = E /\ H;
+
+theorem :: CONNSP_2:26
+ X is_T4 iff for A,C being Subset of X
+ st A <> {} & C <> [#] X & A c= C & A is closed & C is open
+    ex G being Subset of X st G is open & A c= G & Cl G c= C;
+
+theorem :: CONNSP_2:27
+   X is locally_connected & X is_T4 implies
+ for A,B being Subset of X
+ st A <> {} & B <> {} & A is closed & B is closed & A misses B holds
+ (A is connected & B is connected implies
+ ex R,S being Subset of X st R is connected & S is connected &
+ R is open & S is open & A c= R & B c= S & R misses S);
+
+theorem :: CONNSP_2:28
+  for x being Point of X, F being Subset-Family of X
+  st for A being Subset of X holds A in F iff A is open closed
+  & x in A holds F <> {};
+
+::
+::             A QUASICOMPONENT OF A POINT
+::
+
+definition let X be non empty TopSpace, x be Point of X;
+  func qskl x -> Subset of X means
+:: CONNSP_2:def 7
+   ex F being Subset-Family of X st
+      (for A being Subset of X holds A in F iff
+      A is open closed & x in A) & meet F = it;
+end;
+
+canceled;
+
+theorem :: CONNSP_2:30
+    x in qskl x;
+
+theorem :: CONNSP_2:31
+   for A being Subset of X st A is open closed & x in A holds
+   A c= qskl x implies A = qskl x;
+
+theorem :: CONNSP_2:32
+   qskl x is closed;
+
+theorem :: CONNSP_2:33
+   skl x c= qskl x;

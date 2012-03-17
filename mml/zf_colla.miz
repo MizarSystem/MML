@@ -1,0 +1,836 @@
+:: The Contraction Lemma
+::  by Grzegorz Bancerek
+::
+:: Received April 14, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL1, FUNCT_1, RELAT_1, TARSKI, BOOLE, ZF_LANG, ZF_MODEL,
+      ZF_COLLA;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1, ZF_LANG,
+      FUNCT_2, ORDINAL1, ZF_MODEL;
+ constructors NAT_1, ZF_MODEL, MEMBERED, XBOOLE_0;
+ clusters FUNCT_1, ZF_LANG, ORDINAL1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, ORDINAL1, XBOOLE_0;
+ theorems TARSKI, FUNCT_1, ZF_LANG, ZF_MODEL, ORDINAL1, ZFMISC_1, RELAT_1,
+      XBOOLE_0, XBOOLE_1;
+ schemes TARSKI, FUNCT_1, ORDINAL1, XBOOLE_0;
+
+begin
+
+ reserve X,Y,Z for set,
+         v,x,y,z for set,
+         E for non empty set,
+         A,B,C for Ordinal,
+         L,L1 for T-Sequence,
+         f,f1,f2,h for Function,
+         d,d1,d2,d' for Element of E;
+
+ definition let E,A;
+  deffunc H(T-Sequence) = { d : for d1 st d1 in d ex C st C in dom($1) &
+                            d1 in union { $1.C } };
+  func Collapse (E,A) -> set means
+:Def1:
+   ex L st
+    it = { d : for d1 st d1 in d ex B st B in dom L & d1 in union { L.B } } &
+    dom L = A &
+    for B st B in A holds
+     L.B = { d1 : for d st d in d1 ex C st C in dom(L|B) & d in
+ union { L|B.C } };
+   existence
+    proof
+     consider L such that
+A1:   dom L = A and
+A2:   for B,L1 st B in A & L1 = L|B holds L.B = H(L1) from TS_Exist;
+     take x = { d : for d1 st d1 in d ex B st B in dom L & d1 in
+                union { L.B } }, L;
+     thus x = { d : for d1 st d1 in d ex B st B in dom L & d1 in
+                union { L.B } };
+     thus dom L = A by A1;
+     let B; assume B in A;
+     hence thesis by A2;
+    end;
+   uniqueness
+    proof let X1,X2 be set; given L such that
+A3:   X1 = { d : for d1 st d1 in d ex B st B in dom L & d1 in union { L.B } } &
+      dom L = A &
+      for B st B in A holds L.B =
+       { d1 : for d st d in d1 ex C st C in dom(L|B) & d in union { L|B.C } };
+     given L1 such that
+A4:   X2 = {d: for d1 st d1 in d ex B st B in dom L1 & d1 in union { L1.B }} &
+      dom L1 = A &
+      for B st B in A holds L1.B =
+       {d1: for d st d in d1 ex C st C in dom(L1|B) & d in union { L1|B.C }};
+A5:   dom L = A &
+      for B,L1 st B in A & L1 = L|B holds L.B = H(L1) by A3;
+A6:   dom L1 = A &
+      for B,L st B in A & L = L1|B holds L1.B = H(L) by A4;
+      L = L1 from TS_Uniq(A5,A6);
+     hence thesis by A3,A4;
+    end;
+ end;
+
+theorem
+ Th1:  Collapse (E,A) = { d : for d1 st d1 in d ex B st B in A & d1 in Collapse
+ (E,B) }
+  proof
+   defpred P[set,set] means ex B st B = $1 & $2 = Collapse (E,B);
+A1:for x st x in A ex y st P[x,y]
+     proof let x; assume x in A;
+      then reconsider B = x as Ordinal by ORDINAL1:23;
+      take y = Collapse (E,B) , B;
+      thus B = x & y = Collapse (E,B);
+     end;
+A2:for x,y,z st x in A & P[x,y] & P[x,z] holds y = z;
+   consider f such that
+A3:  dom f = A & for x st x in A holds P[x,f.x] from FuncEx(A2,A1);
+   reconsider L = f as T-Sequence by A3,ORDINAL1:def 7;
+   deffunc H(T-Sequence) = { d : for d1 st d1 in d ex C st C in dom($1) &
+                            d1 in union { $1.C } };
+   deffunc F(Ordinal) = Collapse(E,$1);
+A4:  now let A; assume A in dom L;
+      then ex B st B = A & L.A = Collapse (E,B) by A3;
+      hence L.A = F(A);
+     end;
+A5:  for A,x holds x = F(A) iff
+     ex L st  x = H(L) & dom L = A & for B st B in A holds L.B = H(L|B)
+       by Def1;
+      for B st B in dom L holds L.B = H(L|B) from Func_TS(A5,A4);
+then A6:  Collapse
+ (E,A) = { d : for d1 st d1 in d ex B st B in dom L & d1 in union { L.B } }
+     by A3,Def1;
+      now let x; assume
+        x in { d : for d1 st d1 in d ex B st B in dom L & d1 in union { L.B } }
+;
+     then consider d such that
+A7:   x = d & for d1 st d1 in d ex B st B in dom L & d1 in union { L.B };
+        for d1 st d1 in d ex B st B in A & d1 in Collapse (E,B)
+       proof let d1; assume
+           d1 in d;
+        then consider B such that
+A8:      B in dom L & d1 in union { L.B } by A7;
+        take B;
+        thus B in A by A3,A8;
+           L.B = Collapse (E,B) & union { L.B } = L.B by A4,A8,ZFMISC_1:31;
+        hence thesis by A8;
+       end;
+     hence x in { d1 : for d st d in d1 ex B st B in A & d in Collapse
+ (E,B) } by A7;
+    end;
+   hence Collapse (E,A) c= { d : for d1 st d1 in d ex B st B in A & d1 in
+ Collapse
+ (E,B) }
+     by A6,TARSKI:def 3;
+   let x; assume
+      x in { d1 : for d st d in d1 ex B st B in A & d in Collapse (E,B) };
+   then consider d1 such that
+A9:  x = d1 & for d st d in d1 ex B st B in A & d in Collapse (E,B);
+      for d st d in d1 ex B st B in dom L & d in union { L.B }
+     proof let d; assume
+         d in d1;
+      then consider B such that
+A10:     B in A & d in Collapse (E,B) by A9;
+      take B;
+      thus B in dom L by A3,A10;
+         L.B = Collapse (E,B) & union { L.B } = L.B by A3,A4,A10,ZFMISC_1:31;
+      hence d in union { L.B } by A10;
+     end;
+   hence x in Collapse (E,A) by A6,A9;
+  end;
+
+theorem
+   (not ex d1 st d1 in d) iff d in Collapse (E,{})
+  proof
+A1:  Collapse (E,{}) = { d' : for d1 st d1 in d' ex B st B in {} & d1 in
+ Collapse
+ (E,B) }
+     by Th1;
+   thus (not ex d1 st d1 in d) implies d in Collapse (E,{})
+     proof assume not ex d1 st d1 in d;
+       then for d1 st d1 in d ex B st B in {} & d1 in Collapse (E,B);
+      hence d in Collapse (E,{}) by A1;
+     end;
+   assume
+A2:  d in Collapse (E,{});
+   given d1 such that
+A3:  d1 in d;
+      ex d' st
+  d' = d & for d1 st d1 in d' ex B st B in {} & d1 in Collapse (E,B) by A1,A2;
+ then ex B st B in {} & d1 in Collapse (E,B) by A3;
+   hence contradiction;
+  end;
+
+theorem
+    d /\ E c= Collapse (E,A) iff d in Collapse (E,succ A)
+   proof
+A1:   Collapse (E,A) = { d' : for d1 st d1 in d' ex B st B in A & d1 in
+ Collapse
+ (E,B) }
+       by Th1;
+A2:   Collapse (E,succ A) =
+      { d' : for d1 st d1 in d' ex B st B in succ A & d1 in Collapse
+ (E,B) } by Th1;
+    thus d /\ E c= Collapse (E,A) implies d in Collapse (E,succ A)
+      proof assume
+A3:      for a being set st a in d /\ E holds a in Collapse (E,A);
+          now let d1; assume
+          d1 in d;
+          then d1 in d /\ E by XBOOLE_0:def 3;
+          then d1 in Collapse (E,A) & A in succ A by A3,ORDINAL1:10;
+         hence ex B st B in succ A & d1 in Collapse (E,B);
+        end;
+       hence thesis by A2;
+      end;
+    assume d in Collapse (E,succ A);
+ then A4:    ex e1 being Element of E st
+   e1 = d & for d1 st d1 in e1 ex B st B in succ A & d1 in
+ Collapse (E,B) by A2;
+    let a be set; assume A5: a in d /\ E;
+then A6:   a in d & a in E by XBOOLE_0:def 3;
+    reconsider e = a as Element of E by A5,XBOOLE_0:def 3;
+    consider B such that
+A7:   B in succ A & e in Collapse (E,B) by A4,A6;
+       now let d1 such that
+A8:     d1 in e;
+         Collapse (E,B) = { d' : for d1 st d1 in d' ex C st C in B & d1 in
+ Collapse
+ (E,C) }
+         by Th1;
+       then ex d' st
+     d' = e & for d1 st d1 in d' ex C st C in B & d1 in Collapse (E,C) by A7;
+      then consider C such that
+A9:     C in B & d1 in Collapse (E,C) by A8;
+      take C;
+         B c= A by A7,ORDINAL1:34;
+      hence C in A & d1 in Collapse (E,C) by A9;
+     end;
+    hence thesis by A1;
+   end;
+
+theorem
+ Th4: A c= B implies Collapse (E,A) c= Collapse (E,B)
+  proof assume
+A1:  A c= B;
+   let x; assume
+      x in Collapse (E,A);
+    then x in { d : for d1 st d1 in d ex B st B in A & d1 in Collapse
+ (E,B) } by Th1;
+   then consider d such that
+A2:  d = x & for d1 st d1 in d ex B st B in A & d1 in Collapse (E,B);
+      for d1 st d1 in d ex C st C in B & d1 in Collapse (E,C)
+     proof let d1; assume d1 in d;
+      then consider C such that
+A3:     C in A & d1 in Collapse (E,C) by A2;
+      take C;
+      thus thesis by A1,A3;
+     end;
+    then x in { d' : for d1 st d1 in d' ex C st C in B & d1 in
+ Collapse (E,C) } by A2;
+   hence thesis by Th1;
+  end;
+
+theorem
+ Th5: ex A st d in Collapse (E,A)
+  proof
+   defpred P[set] means not ex A st $1 in Collapse (E,A);
+   defpred R[set,set] means ex A st $2 = A & $1 in Collapse(E,A) &
+      for B st $1 in Collapse(E,B) holds A c= B;
+   consider X such that
+A1:  x in X iff x in E & P[x] from Separation;
+   assume
+A2:  not thesis;
+      now given x such that
+A3:    x in X;
+     consider m being set such that
+A4:    m in X & not ex x st x in X & x in m by A3,TARSKI:7;
+     reconsider m as Element of E by A1,A4;
+A5:  now let x,y,z such that x in m /\ E;
+       assume R[x,y]; then
+       consider A1 being Ordinal such that
+A6:     y = A1 & x in Collapse (E,A1) &
+        for B st x in Collapse(E,B) holds A1 c= B;
+       assume R[x,z]; then
+       consider A2 being Ordinal such that
+A7:     z = A2 & x in Collapse (E,A2) &
+        for B st x in Collapse(E,B) holds A2 c= B;
+        A1 c= A2 & A2 c= A1 by A6,A7;
+       hence y = z by A6,A7,XBOOLE_0:def 10;
+      end;
+A8:  now let x;
+      defpred Q[Ordinal] means x in Collapse(E,$1);
+       assume x in m /\ E; then
+A9:     x in m & x in E by XBOOLE_0:def 3; then
+        not x in X by A4; then
+A10:    ex A st Q[A] by A1,A9;
+        ex A st Q[A] & for B st Q[B] holds A c= B from Ordinal_Min(A10);
+       hence ex y st R[x,y];
+             end;
+     consider f such that
+A11: dom f = m /\ E & for x st x in m /\ E holds R[x,f.x]
+       from FuncEx(A5,A8);
+        y in rng f implies y is Ordinal
+       proof assume y in rng f;
+        then consider x such that
+A12:       x in dom f & y = f.x by FUNCT_1:def 5;
+           ex A st
+       f.x = A & x in Collapse (E,A) & for B st x in Collapse
+ (E,B) holds A c= B by A11,A12;
+        hence thesis by A12;
+       end;
+     then consider A such that
+A13:    rng f c= A by ORDINAL1:36;
+        for d st d in m ex B st B in A & d in Collapse (E,B)
+       proof let d; assume
+         d in m;
+then A14:       d in m /\ E by XBOOLE_0:def 3;
+        then consider B such that
+A15:       f.d = B & d in Collapse (E,B) & for C st d in Collapse
+ (E,C) holds B c= C by A11;
+        take B;
+           B in rng f by A11,A14,A15,FUNCT_1:def 5;
+        hence thesis by A13,A15;
+       end;
+      then m in { d' : for d st d in d' ex B st B in A & d in Collapse (E,B) }
+;
+      then m in Collapse (E,A) & not ex A st m in Collapse (E,A) by A1,A4,Th1;
+     hence contradiction;
+    end;
+    then not d in X;
+   hence contradiction by A1,A2;
+  end;
+
+theorem
+ Th6: d' in d & d in Collapse (E,A) implies d' in Collapse (E,A) &
+   ex B st B in A & d' in Collapse (E,B)
+  proof assume
+A1:  d' in d & d in Collapse (E,A);
+    then d in { d1 : for d st d in d1 ex B st B in A & d in Collapse
+ (E,B) } by Th1;
+    then ex d1 st d = d1 & for d st d in d1 ex B st B in A & d in Collapse (E
+,B);
+   then consider B such that
+A2:  B in A & d' in Collapse (E,B) by A1;
+      B c= A by A2,ORDINAL1:def 2;
+    then Collapse (E,B) c= Collapse (E,A) by Th4;
+   hence d' in Collapse (E,A) by A2;
+   thus thesis by A2;
+  end;
+
+theorem
+ Th7: Collapse (E,A) c= E
+  proof let x; assume x in Collapse (E,A);
+    then x in { d : for d1 st d1 in d ex B st B in A & d1 in Collapse
+ (E,B) } by Th1;
+    then ex d st x = d & for d1 st d1 in d ex B st B in A & d1 in Collapse (E
+,B);
+   hence thesis;
+  end;
+
+theorem
+ Th8: ex A st E = Collapse (E,A)
+  proof
+   defpred P[set] means not ex A st $1 in Collapse (E,A);
+   defpred R[set,set] means ex A st $2 = A & $1 in Collapse(E,A) &
+      for B st $1 in Collapse(E,B) holds A c= B;
+A1: now let x; assume x in E; then
+      reconsider d = x as Element of E;
+      defpred Q[Ordinal] means d in Collapse(E,$1);
+A2:    ex A st Q[A] by Th5;
+       ex A st Q[A] & for B st Q[B] holds A c= B from Ordinal_Min (A2);
+      hence ex y st R[x,y];
+    end;
+A3: now let x,y,z such that x in E;
+     assume R[x,y]; then
+     consider A such that
+A4:    y = A & x in Collapse (E,A) & for C st x in Collapse (E,C) holds A c= C;
+     assume R[x,z]; then
+     consider B such that
+A5:    z = B & x in Collapse (E,B) & for C st x in Collapse (E,C) holds B c= C;
+        A c= B & B c= A by A4,A5;
+     hence y = z by A4,A5,XBOOLE_0:def 10;
+    end;
+   consider f such that
+A6: dom f = E & for x st x in E holds R[x,f.x] from FuncEx(A3,A1);
+::     ex A st f.x = A & x in Collapse (E,A) &
+::     for C st x in Collapse (E,C) holds A c= C
+      x in rng f implies x is Ordinal
+     proof assume x in rng f;
+      then consider y such that
+A7:     y in dom f & x = f.y by FUNCT_1:def 5;
+         ex A st
+     f.y = A & y in Collapse (E,A) & for C st y in Collapse
+ (E,C) holds A c= C by A6,A7;
+      hence thesis by A7;
+     end;
+   then consider A such that
+A8: rng f c= A by ORDINAL1:36;
+   take A;
+   thus x in E implies x in Collapse (E,A)
+     proof assume
+A9:     x in E;
+      then consider B such that
+A10:     f.x = B & x in Collapse (E,B) & for C st x in Collapse
+ (E,C) holds B c= C by A6;
+         B in rng f by A6,A9,A10,FUNCT_1:def 5;
+       then B c= A by A8,ORDINAL1:def 2;
+       then Collapse (E,B) c= Collapse (E,A) by Th4;
+      hence thesis by A10;
+     end;
+   thus thesis by Th7;
+  end;
+
+theorem
+ Th9: ex f st dom f = E & for d holds f.d = f.:d
+  proof
+   defpred Q[Ordinal,Function,non empty set] means
+    dom $2 = Collapse ($3,$1) & for d st d in Collapse
+ ($3,$1) holds $2.d = $2.:d;
+A1: A c= B & Q[B,f,E] implies Q[A,f|Collapse (E,A),E]
+     proof assume
+A2:    A c= B & dom f = Collapse (E,B) &
+        for d st d in Collapse (E,B) holds f.d = f.:d;
+then A3:    Collapse (E,A) c= Collapse (E,B) by Th4;
+      hence dom(f|Collapse (E,A)) = Collapse (E,A) by A2,RELAT_1:91;
+      let d such that
+A4:    d in Collapse (E,A);
+A5:    f.:d = f|Collapse (E,A).:d
+        proof
+         thus x in f.:d implies x in f|Collapse (E,A).:d
+           proof assume x in f.:d;
+            then consider z such that
+A6:          z in dom f & z in d & x = f.z by FUNCT_1:def 12;
+               dom f c= E by A2,Th7;
+            then reconsider d1 = z as Element of E by A6;
+A7:          d1 in Collapse (E,A) by A4,A6,Th6;
+             then f|Collapse (E,A).z = f.z & dom(f|Collapse (E,A)) = Collapse
+(E,A)
+              by A2,A3,FUNCT_1:72,RELAT_1:91;
+            hence thesis by A6,A7,FUNCT_1:def 12;
+           end;
+         thus f|Collapse (E,A).:d c= f.:d by RELAT_1:161;
+        end;
+      thus f|Collapse (E,A).d = f.d by A4,FUNCT_1:72
+        .= f|Collapse (E,A).:d by A2,A3,A4,A5;
+     end;
+    defpred TI[Ordinal] means
+      for f1,f2 st Q[$1,f1,E] & Q[$1,f2,E] holds f1 = f2;
+A8: now let A such that
+A9:    for B st B in A holds TI[B];
+     thus TI[A] proof
+     let f1,f2 such that
+A10:    Q[A,f1,E] & Q[A,f2,E];
+
+        now let x such that
+A11:      x in Collapse (E,A);
+          Collapse (E,A) c= E by Th7;
+       then reconsider d = x as Element of E by A11;
+A12:      f1.d = f1.:d & f2.d = f2.:d by A10,A11;
+          f1.:d = f2.:d
+         proof
+          thus y in f1.:d implies y in f2.:d
+            proof assume y in f1.:d;
+             then consider z such that
+A13:            z in dom f1 & z in d & y = f1.z by FUNCT_1:def 12;
+                dom f1 c= E by A10,Th7;
+             then reconsider d1 = z as Element of E by A13;
+             consider B such that
+A14:            B in A & d1 in Collapse (E,B) by A11,A13,Th6;
+A15:            B c= A by A14,ORDINAL1:def 2;
+              then Q[B,f1|Collapse (E,B),E] & Q[B,f2|Collapse
+ (E,B),E] by A1,A10;
+then A16:            f1|Collapse (E,B) = f2|Collapse (E,B) & Collapse (E,B) c=
+Collapse (E,A) by A9,A14,A15,Th4;
+                f1.d1 = f1|Collapse (E,B).d1 by A14,FUNCT_1:72
+                   .= f2.d1 by A14,A16,FUNCT_1:72;
+             hence thesis by A10,A13,FUNCT_1:def 12;
+            end;
+          let y; assume y in f2.:d;
+           then consider z such that
+A17:          z in dom f2 & z in d & y = f2.z by FUNCT_1:def 12;
+              dom f2 c= E by A10,Th7;
+           then reconsider d1 = z as Element of E by A17;
+           consider B such that
+A18:          B in A & d1 in Collapse (E,B) by A11,A17,Th6;
+A19:          B c= A by A18,ORDINAL1:def 2;
+            then Q[B,f1|Collapse (E,B),E] & Q[B,f2|Collapse (E,B),E] by A1,A10
+;
+then A20:          f1|Collapse (E,B) = f2|Collapse (E,B) & Collapse (E,B) c=
+Collapse (E,A) by A9,A18,A19,Th4;
+              f1.d1 = f1|Collapse (E,B).d1 by A18,FUNCT_1:72
+                 .= f2.d1 by A18,A20,FUNCT_1:72;
+          hence thesis by A10,A17,FUNCT_1:def 12;
+         end;
+       hence f1.x = f2.x by A12;
+      end;
+     hence f1 = f2 by A10,FUNCT_1:9;
+     end;
+    end;
+A21: for A holds TI[A] from Transfinite_Ind(A8);
+    defpred MAIN[Ordinal] means ex f st Q[$1,f,E];
+A22:for A st for B st B in A holds MAIN[B] holds MAIN[A]
+     proof let A; assume
+       for B st B in A ex f st Q[B,f,E];
+      defpred P[set,set] means
+       ex X,d st X = $2 & d = $1 & for x holds x in X iff
+        ex d1,B,f st d1 in d & B in A & d1 in Collapse
+ (E,B) & Q[B,f,E] & x = f.d1;
+A23:   for x st x in Collapse (E,A) ex y st P[x,y]
+        proof let x such that
+A24:       x in Collapse (E,A);
+            Collapse (E,A) c= E by Th7;
+         then reconsider d = x as Element of E by A24;
+         defpred R[set,set] means
+           ex B,f st B in A & $1 in Collapse (E,B) & Q[B,f,E] & $2 = f.$1;
+A25:       for x,y,z st R[x,y] & R[x,z] holds y = z
+           proof let x,y,z;
+            given B1 being Ordinal, f1 such that
+A26:          B1 in A & x in Collapse (E,B1) & Q[B1,f1,E] & y = f1.x;
+            given B2 being Ordinal, f2 such that
+A27:          B2 in A & x in Collapse (E,B2) & Q[B2,f2,E] & z = f2.x;
+A28:          now assume B1 c= B2;
+               then Q[B1,f2|Collapse (E,B1),E] by A1,A27;
+             then f2|Collapse (E,B1) = f1 by A21,A26;
+              hence thesis by A26,A27,FUNCT_1:72;
+             end;
+            now assume B2 c= B1;
+               then Q[B2,f1|Collapse (E,B2),E] by A1,A26;
+             then f1|Collapse (E,B2) = f2 by A21,A27;
+              hence thesis by A26,A27,FUNCT_1:72;
+             end;
+            hence thesis by A28;
+           end;
+         consider X such that
+A29:      y in X iff ex x st x in d & R[x,y]
+::ex B,f st B in A & x in Collapse (E,B) & Q[B,f,E] & y = f.x
+          from Fraenkel(A25);
+         take y = X,X,d;
+         thus X = y & d = x;
+         let x;
+         thus x in X implies ex d1,B,f st d1 in d & B in A &
+            d1 in Collapse (E,B) & Q[B,f,E] & x = f.d1
+           proof assume x in X;
+            then consider y such that
+A30:          y in d & ex B,f st B in A & y in Collapse
+ (E,B) & Q[B,f,E] & x = f.y by A29;
+            consider B,f such that
+A31:          B in A & y in Collapse (E,B) & Q[B,f,E] & x = f.y by A30;
+               Collapse (E,B) c= E by Th7;
+            then reconsider d1 = y as Element of E by A31;
+            take d1,B,f;
+            thus thesis by A30,A31;
+           end;
+         given d1,B,f such that
+A32:       d1 in d & B in A & d1 in Collapse (E,B) & Q[B,f,E] & x = f.d1;
+         thus thesis by A29,A32;
+        end;
+A33:   for x,y,z st x in Collapse (E,A) & P[x,y] & P[x,z] holds y = z
+        proof let x,y,z such that
+         x in Collapse (E,A);
+         given X1 being set,e1 being Element of E such that
+A34:       X1 = y & e1 = x & for x holds x in X1 iff
+           ex d1,B,f st d1 in e1 & B in A & d1 in Collapse
+ (E,B) & Q[B,f,E] & x = f.d1;
+         given X2 being set,e2 being Element of E such that
+A35:       X2 = z & e2 = x & for x holds x in X2 iff
+           ex d1,B,f st d1 in e2 & B in A & d1 in Collapse
+ (E,B) & Q[B,f,E] & x = f.d1;
+            X1 = X2
+           proof
+            thus v in X1 implies v in X2
+              proof assume v in X1;
+                then ex d1,B,f st d1 in e1 & B in A & d1 in Collapse (E,B) &
+                 Q[B,f,E] & v = f.d1 by A34;
+               hence v in X2 by A34,A35;
+              end;
+            let v; assume v in X2;
+             then ex d1,B,f st d1 in e2 & B in A & d1 in Collapse (E,B) &
+              Q[B,f,E] & v = f.d1 by A35;
+            hence v in X1 by A34,A35;
+           end;
+         hence thesis by A34,A35;
+        end;
+      consider f such that
+A36:     dom f = Collapse (E,A) & for x st x in Collapse (E,A) holds P[x,f.x]
+        from FuncEx(A33,A23);
+      take f;
+      defpred TI[Ordinal] means $1 c= A implies Q[$1,f|Collapse(E,$1),E];
+A37:     for B st for C st C in B holds TI[C] holds TI[B]
+        proof let B such that
+A38:       for C st C in B holds TI[C];
+          assume
+A39:       B c= A;
+A40:       Collapse (E,B) c= Collapse (E,A) by A39,Th4;
+         hence
+A41:      dom(f|Collapse (E,B)) = Collapse (E,B) by A36,RELAT_1:91;
+         let d; assume
+A42:       d in Collapse (E,B);
+       then f|Collapse (E,B).d = f.d by FUNCT_1:72;
+         then consider X,d' such that
+A43:       X = f|Collapse (E,B).d & d' = d & for x holds x in X iff
+           ex d1,B,f st d1 in d' & B in A & d1 in Collapse
+ (E,B) & Q[B,f,E] & x = f.d1
+ by A36,A40,A42;
+A44:       X c= f|Collapse (E,B).:d
+           proof let x; assume x in X;
+            then consider d1,C,h such that
+A45:          d1 in d' & C in A & d1 in Collapse
+ (E,C) & Q[C,h,E] & x = h.d1 by A43;
+            consider C' being Ordinal such that
+A46:          C' in B & d1 in Collapse (E,C') by A42,A43,A45,Th6;
+A47:          for C,h st C c= C' & Q[C,h,E] & d1 in Collapse (E,C) & x = h.d1
+               holds thesis
+              proof let C,h; assume
+A48:             C c= C' & Q[C,h,E] & d1 in Collapse (E,C) & x = h.d1;
+then A49:             C in B by A46,ORDINAL1:22;
+                then C c= B by ORDINAL1:def 2;
+then A50:             C c= A & Collapse (E,C) c= Collapse
+ (E,B) by A39,Th4,XBOOLE_1:1;
+                then Q[C,f|Collapse (E,C),E] by A38,A49;
+then A51:             f|Collapse (E,C) = h by A21,A48;
+              f|Collapse (E,C) = f|Collapse (E,B)|Collapse (E,C) & d1 in
+Collapse (E,B)
+                 by A48,A50,FUNCT_1:82;
+                then h.d1 = f|Collapse (E,B).d1 by A48,A51,FUNCT_1:72;
+               hence thesis by A41,A43,A45,A48,A50,FUNCT_1:def 12;
+              end;
+               C' c= C implies thesis
+              proof assume C' c= C;
+then A52:             Q[C',h|Collapse (E,C'),E] & dom h = Collapse (E,C) by A1,
+A45;
+                  h.d1 = h|Collapse (E,C').d1 & C' c= C' by A46,FUNCT_1:72;
+               hence thesis by A45,A46,A47,A52;
+              end;
+            hence thesis by A45,A47;
+           end;
+            f|Collapse (E,B).:d c= X
+           proof let x; assume x in f|Collapse (E,B).:d;
+            then consider y such that
+A53:          y in dom(f|Collapse (E,B)) & y in d & x = f|Collapse
+ (E,B).y by FUNCT_1:def 12;
+               Collapse (E,B) c= E by Th7;
+            then reconsider d1 = y as Element of E by A41,A53;
+            consider C such that
+A54:          C in B & d1 in Collapse (E,C) by A42,A53,Th6;
+               C c= A by A39,A54,ORDINAL1:def 2;
+then A55:          Q[C,f|Collapse (E,C),E] by A38,A54;
+               C c= B by A54,ORDINAL1:def 2;
+             then Collapse (E,C) c= Collapse (E,B) by Th4;
+             then f|Collapse (E,B)|Collapse (E,C) = f|Collapse
+ (E,C) by FUNCT_1:82;
+             then f|Collapse (E,C).y = f|Collapse (E,B).y by A54,FUNCT_1:72;
+            hence x in X by A39,A43,A53,A54,A55;
+           end;
+         hence f|Collapse (E,B).d = f|Collapse (E,B).:d by A43,A44,XBOOLE_0:def
+10;
+        end;
+A56:     for B holds TI[B] from Transfinite_Ind(A37);
+         A c= A & f|dom f = f by RELAT_1:97;
+      hence thesis by A36,A56;
+     end;
+A57: MAIN[A] from Transfinite_Ind (A22);
+   consider A such that
+A58: E = Collapse (E,A) by Th8;
+   consider f such that
+A59: Q[A,f,E] by A57;
+   take f;
+   thus dom f = E by A58,A59;
+   let d;
+   thus f.d = f.:d by A58,A59;
+  end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::
+::   Definition of epsilon-isomorphism of two sets   ::
+:::::::::::::::::::::::::::::::::::::::::::::::::
+
+ definition let f,X,Y;
+  pred f is_epsilon-isomorphism_of X,Y means
+    dom f = X & rng f = Y & f is one-to-one &
+   for x,y st x in X & y in X holds
+    (ex Z st Z = y & x in Z) iff (ex Z st f.y = Z & f.x in Z);
+ end;
+
+ definition let X,Y;
+  pred X,Y are_epsilon-isomorphic means
+    ex f st f is_epsilon-isomorphism_of X,Y;
+ end;
+
+canceled 2;
+
+theorem
+ Th12: (dom f = E & for d holds f.d = f.:d) implies rng f is epsilon-transitive
+  proof assume
+A1:  dom f = E & for d holds f.d = f.:d;
+   let Y such that
+A2: Y in rng f;
+   let a be set such that
+A3: a in Y;
+   consider b being set such that
+A4: b in dom f & Y = f.b by A2,FUNCT_1:def 5;
+   reconsider d = b as Element of E by A1,A4;
+      f.d = f.:d by A1;
+    then ex c being set st c in dom f & c in d & a = f.c by A3,A4,FUNCT_1:def
+12;
+   hence a in rng f by FUNCT_1:def 5;
+  end;
+
+ reserve f,g,h for (Function of VAR,E),
+         u,v,w for (Element of E),
+         x for Variable,
+         a,b,c for set;
+
+theorem
+ Th13: E |= the_axiom_of_extensionality implies
+  for u,v st for w holds w in u iff w in v holds u = v
+   proof
+A1:   All(x.0,All(x.1,All(x.2,x.2 'in' x.0 <=> x.2 'in' x.1) => x.0 '=' x.1)) =
+      All(x.0,x.1,All(x.2,x.2 'in' x.0 <=> x.2 'in' x.1) => x.0 '=' x.1)
+       by ZF_LANG:23;
+    assume
+       E |= the_axiom_of_extensionality;
+     then E |= All(x.1,All(x.2,x.2 'in' x.0 <=> x.2 'in' x.1) => x.0 '=' x.1)
+      by A1,ZF_MODEL:25,def 6;
+then A2:     E |= All(x.2,x.2 'in' x.0 <=> x.2 'in'
+ x.1) => x.0 '=' x.1 by ZF_MODEL:25;
+
+A3:   for f st for g st for x st g.x <> f.x holds x.2 = x holds
+       g.x.2 in g.x.0 iff g.x.2 in g.x.1 holds f.x.0 = f.x.1
+      proof let f such that
+A4:      for g st for x st g.x <> f.x holds x.2 = x holds
+          g.x.2 in g.x.0 iff g.x.2 in g.x.1;
+          E,f |= All(x.2,x.2 'in' x.0 <=> x.2 'in' x.1) => x.0 '=' x.1 by A2,
+ZF_MODEL:def 5;
+then A5:      E,f |= All(x.2,x.2 'in' x.0 <=> x.2 'in' x.1) implies
+         E,f |= x.0 '=' x.1 by ZF_MODEL:18;
+          now let g such that
+A6:          for x st g.x <> f.x holds x.2 = x;
+            (g.x.2 in g.x.0 iff E,g |= x.2 'in' x.0) &
+           (g.x.2 in g.x.1 iff E,g |= x.2 'in' x.1) &
+            ((E,g |= x.2 'in' x.0 iff E,g |= x.2 'in' x.1) iff
+               E,g |= x.2 'in' x.0 <=> x.2 'in' x.1)
+           by ZF_MODEL:13,19;
+         hence E,g |= x.2 'in' x.0 <=> x.2 'in' x.1 by A4,A6;
+        end;
+       hence f.x.0 = f.x.1 by A5,ZF_MODEL:12,16;
+      end;
+     for X,Y being Element of E st
+        for Z being Element of E holds Z in X iff Z in Y
+       holds X = Y
+      proof let X,Y be Element of E such that
+A7:     for Z being Element of E holds Z in X iff Z in Y;
+       consider g;
+       consider g0 being Function of VAR,E such that
+A8:     g0.x.0 = X & for x st x <> x.0 holds g0.x = g.x by ZF_MODEL:21;
+       consider f such that
+A9:     f.x.1 = Y & for x st x <> x.1 holds f.x = g0.x by ZF_MODEL:21;
+        A10: x.0 = 5+0 & x.1 = 5+1 & x.2 = 5+2 by ZF_LANG:def 2;
+then A11:     x.0 <> x.2 & x.1 <> x.2 & f.x.0 = g0.x.0 by A9;
+          for h st for x st h.x <> f.x holds x.2 = x holds
+          h.x.2 in h.x.0 iff h.x.2 in h.x.1
+         proof let h; assume
+          for x st h.x <> f.x holds x.2 = x;
+then A12:        h.x.0 = f.x.0 & h.x.1 = f.x.1 by A10;
+          h.x.2 in X iff h.x.2 in Y by A7;
+          hence thesis by A8,A9,A12;
+         end;
+       hence X = Y by A3,A8,A9,A11;
+      end;
+    hence thesis;
+   end;
+
+:::::::::::::::::::::::::::::::
+::   The contraction lemma   ::
+:::::::::::::::::::::::::::::::
+
+theorem
+    E |= the_axiom_of_extensionality implies
+    ex X st X is epsilon-transitive & E,X are_epsilon-isomorphic
+   proof assume A1: E |= the_axiom_of_extensionality;
+    consider f being Function such that
+A2:   dom f = E & for d holds f.d = f.:d by Th9;
+    take X = rng f;
+    thus X is epsilon-transitive by A2,Th12;
+    take f;
+    thus dom f = E & rng f = X by A2;
+A3:   now given a,b such that
+A4:    a in dom f & b in dom f & f.a = f.b and
+A5:    a <> b;
+      reconsider d1 = a , d2 = b as Element of E by A2,A4;
+      defpred P[Ordinal] means
+       ex d1,d2 st d1 in Collapse(E,$1) & d2 in Collapse(E,$1) &
+         f.d1 = f.d2 & d1 <> d2;
+      consider A1 being Ordinal such that
+A6:    d1 in Collapse (E,A1) by Th5;
+      consider A2 being Ordinal such that
+A7:    d2 in Collapse (E,A2) by Th5;
+         A1 c= A2 or A2 c= A1; then
+       Collapse (E,A1) c= Collapse (E,A2) or Collapse (E,A2) c= Collapse (E,A1)
+        by Th4; then
+A8:    ex A st P[A] by A4,A5,A6,A7;
+      consider A such that
+A9:    P[A] & for B st P[B] holds A c= B from Ordinal_Min (A8);
+      consider d1,d2 such that
+A10:    d1 in Collapse (E,A) & d2 in Collapse
+ (E,A) & f.d1 = f.d2 & d1 <> d2 by A9;
+A11:    f.d1 = f.:d1 & f.d2 = f.:d2 by A2;
+      consider w such that
+A12:    not(w in d1 iff w in d2) by A1,A10,Th13;
+A13:    now assume
+A14:      w in d1 & not w in d2;
+         then f.w in f.:d1 by A2,FUNCT_1:def 12;
+        then consider a such that
+A15:      a in dom f & a in d2 & f.w = f.a by A10,A11,FUNCT_1:def 12;
+        reconsider v = a as Element of E by A2,A15;
+        consider A1 being Ordinal such that
+A16:      A1 in A & w in Collapse(E,A1) by A10,A14,Th6;
+        consider A2 being Ordinal such that
+A17:      A2 in A & v in Collapse(E,A2) by A10,A15,Th6;
+          A1 c= A2 or A2 c= A1; then
+          Collapse (E,A1) c= Collapse (E,A2) or
+          Collapse (E,A2) c= Collapse (E,A1) by Th4;
+        then consider B such that
+A18:      B in A & w in Collapse (E,B) & v in Collapse (E,B) by A16,A17;
+           not A c= B by A18,ORDINAL1:7;
+        hence contradiction by A9,A14,A15,A18;
+       end;
+      now assume
+A19:      w in d2 & not w in d1;
+         then f.w in f.:d2 by A2,FUNCT_1:def 12;
+        then consider a such that
+A20:      a in dom f & a in d1 & f.w = f.a by A10,A11,FUNCT_1:def 12;
+        reconsider v = a as Element of E by A2,A20;
+        consider A1 being Ordinal such that
+A21:      A1 in A & w in Collapse(E,A1) by A10,A19,Th6;
+        consider A2 being Ordinal such that
+A22:      A2 in A & v in Collapse(E,A2) by A10,A20,Th6;
+           A1 c= A2 or A2 c= A1;
+         then Collapse (E,A1) c= Collapse (E,A2) or Collapse (E,A2) c=
+Collapse
+ (E,A1) by Th4;
+        then consider B such that
+A23:      B in A & w in Collapse (E,B) & v in Collapse (E,B) by A21,A22;
+           not A c= B by A23,ORDINAL1:7;
+        hence contradiction by A9,A19,A20,A23;
+       end;
+      hence contradiction by A12,A13;
+     end;
+    hence f is one-to-one by FUNCT_1:def 8;
+    let a,b; assume
+A24:   a in E & b in E;
+    then reconsider d1 = a , d2 = b as Element of E;
+    thus (ex Z st Z = b & a in Z) implies (ex Z st Z = f.b & f.a in Z)
+      proof given Z such that
+A25:      Z = b & a in Z;
+          f.a in f.:d2 & f.d1 = f.:d1 & f.d2 = f.:
+d2 by A2,A24,A25,FUNCT_1:def 12;
+       hence thesis;
+      end;
+    given Z such that
+A26:   Z = f.b & f.a in Z;
+       f.d2 = f.:d2 by A2;
+    then consider c such that
+A27:   c in dom f & c in d2 & f.a = f.c by A26,FUNCT_1:def 12;
+       a = c by A2,A3,A24,A27;
+    hence thesis by A27;
+   end;

@@ -1,0 +1,439 @@
+:: Filters - Part I. Implicative Lattices
+::  by Grzegorz Bancerek
+::
+:: Received July 3, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary LATTICES, BOOLE, ZFMISC_1, TARSKI, SETFAM_1, SUBSET_1, ZF_LANG,
+      BINOP_1, RELAT_1, FUNCT_1, MCART_1, RELAT_2, EQREL_1, FILTER_0, HAHNBAN,
+      PARTFUN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SETFAM_1, FUNCT_1, MCART_1, ORDINAL1,
+      RELAT_2, PARTFUN1, FUNCT_2, BINOP_1, STRUCT_0, LATTICES, DOMAIN_1,
+      RELAT_1, RELSET_1, EQREL_1;
+ constructors BINOP_1, LATTICES, DOMAIN_1, RELAT_2, EQREL_1, PARTFUN1,
+      ORDINAL1, XBOOLE_0;
+ clusters LATTICES, RELSET_1, STRUCT_0, SUBSET_1, XBOOLE_0, ZFMISC_1;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+ reserve L for Lattice, p,p1,q,q1,r,r1 for Element of L;
+ reserve x,y,z,X,Y,Z,X1,X2 for set;
+
+theorem :: FILTER_0:1
+  p [= q implies
+   r "\/" p [= r "\/" q & p "\/" r [= q "\/" r & p "\/" r [= r "\/" q & r "\/"
+ p [= q "\/" r;
+
+theorem :: FILTER_0:2
+    p [= r implies p "/\" q [= r & q "/\" p [= r;
+
+theorem :: FILTER_0:3
+   p [= r implies p [= q"\/"r & p [= r"\/"q;
+
+theorem :: FILTER_0:4
+  p [= p1 & q [= q1 implies p "\/" q [= p1 "\/" q1 & p "\/" q [= q1 "\/" p1;
+
+theorem :: FILTER_0:5
+  p [= p1 & q [= q1 implies p "/\" q [= p1 "/\" q1 & p "/\" q [= q1 "/\" p1;
+
+theorem :: FILTER_0:6
+  p [= r & q [= r implies p "\/" q [= r;
+
+theorem :: FILTER_0:7
+    r [= p & r [= q implies r [= p "/\" q;
+
+ definition let L;
+  mode Filter of L -> non empty Subset of L means
+:: FILTER_0:def 1
+   p in it & q in it iff p "/\" q in it;
+ end;
+
+canceled;
+
+theorem :: FILTER_0:9
+ for D being non empty Subset of L holds D is Filter of L iff
+  (for p,q st p in D & q in D holds p "/\" q in D) &
+   for p,q st p in D & p [= q holds q in D;
+
+ reserve H,F for Filter of L;
+
+theorem :: FILTER_0:10
+  p in H implies p"\/"q in H & q"\/"p in H;
+
+theorem :: FILTER_0:11
+  ex p st p in H;
+
+theorem :: FILTER_0:12
+  L is 1_Lattice implies Top L in H;
+
+theorem :: FILTER_0:13
+   L is 1_Lattice implies {Top L} is Filter of L;
+
+theorem :: FILTER_0:14
+   {p} is Filter of L implies L is upper-bounded;
+
+theorem :: FILTER_0:15
+  the carrier of L is Filter of L;
+
+ definition let L;
+  func <.L.) -> Filter of L equals
+:: FILTER_0:def 2
+    the carrier of L;
+ end;
+
+ definition let L,p;
+  func <.p.) -> Filter of L equals
+:: FILTER_0:def 3
+    { q : p [= q };
+ end;
+
+canceled 2;
+
+theorem :: FILTER_0:18
+  q in <.p.) iff p [= q;
+
+theorem :: FILTER_0:19
+  p in <.p.) & p "\/" q in <.p.) & q "\/" p in <.p.);
+
+theorem :: FILTER_0:20
+  L is 0_Lattice implies <.L.) = <.Bottom L.);
+
+ definition let L,F;
+  attr F is being_ultrafilter means
+:: FILTER_0:def 4
+   F <> the carrier of L & for H st F c= H & H <> the carrier of L
+     holds F = H;
+  synonym F is_ultrafilter;
+ end;
+
+canceled;
+
+theorem :: FILTER_0:22
+  L is lower-bounded implies for F st F <> the carrier of L
+   ex H st F c= H & H is_ultrafilter;
+
+theorem :: FILTER_0:23
+  (ex r st p "/\" r <> p) implies <.p.) <> the carrier of L;
+
+theorem :: FILTER_0:24
+  L is 0_Lattice & p <> Bottom L implies ex H st p in H & H is_ultrafilter;
+
+ reserve D for non empty Subset of L;
+
+ definition let L,D;
+  func <.D.) -> Filter of L means
+:: FILTER_0:def 5
+   D c= it & for F st D c= F holds it c= F;
+ end;
+
+canceled;
+
+theorem :: FILTER_0:26
+  <.F.) = F;
+
+ reserve D1,D2 for non empty Subset of L;
+
+theorem :: FILTER_0:27
+  D1 c= D2 implies <.D1.) c= <.D2.);
+
+canceled;
+
+theorem :: FILTER_0:29
+  p in D implies <.p.) c= <.D.);
+
+theorem :: FILTER_0:30
+  D = {p} implies <.D.) = <.p.);
+
+theorem :: FILTER_0:31
+  L is 0_Lattice & Bottom L in
+ D implies <.D.) = <.L.) & <.D.) = the carrier of L;
+
+theorem :: FILTER_0:32
+  L is 0_Lattice & Bottom L in F implies F = <.L.) & F = the carrier of L;
+
+ definition let L,F;
+  attr F is prime means
+:: FILTER_0:def 6
+p "\/" q in F iff p in F or q in F;
+ end;
+
+canceled;
+
+theorem :: FILTER_0:34
+  L is B_Lattice implies for p,q holds p "/\" (p` "\/" q) [= q &
+   for r st p "/\" r [= q holds r [= p` "\/" q;
+
+ definition let IT be non empty LattStr;
+  attr IT is implicative means
+:: FILTER_0:def 7
+   for p,q being Element of IT
+    ex r being Element of IT st p "/\" r [= q &
+     for r1 being Element of IT st
+      p "/\" r1 [= q holds r1 [= r;
+ end;
+
+definition
+ cluster strict implicative Lattice;
+end;
+
+definition
+  mode I_Lattice is implicative Lattice;
+end;
+
+ definition let L,p,q;
+  assume  L is I_Lattice;
+  func p => q -> Element of L means
+:: FILTER_0:def 8
+   p "/\" it [= q & for r st p "/\" r [= q holds r [= it;
+ end;
+
+ reserve I for I_Lattice, i,j,k for Element of I;
+
+canceled 2;
+
+theorem :: FILTER_0:37
+  I is upper-bounded;
+
+theorem :: FILTER_0:38
+  i => i = Top I;
+
+theorem :: FILTER_0:39
+  I is distributive;
+
+ reserve B for B_Lattice,
+         FB,HB for Filter of B;
+
+theorem :: FILTER_0:40
+  B is implicative;
+
+ definition
+  cluster implicative -> distributive Lattice;
+
+ end;
+
+ reserve I for I_Lattice, i,j,k for Element of I,
+         DI for non empty Subset of I,
+         FI for Filter of I;
+
+theorem :: FILTER_0:41
+  i in FI & i => j in FI implies j in FI;
+
+theorem :: FILTER_0:42
+  j in FI implies i => j in FI;
+
+ definition let L,D1,D2;
+  func D1 "/\" D2 -> Subset of L equals
+:: FILTER_0:def 9
+    { p"/\"q : p in D1 & q in D2 };
+ end;
+
+ definition let L,D1,D2;
+  cluster D1 "/\" D2 -> non empty;
+ end;
+
+canceled;
+
+theorem :: FILTER_0:44
+  p in D1 & q in D2 implies p"/\"q in D1 "/\" D2 & q"/\"p in D1 "/\" D2;
+
+theorem :: FILTER_0:45
+  x in D1 "/\" D2 implies ex p,q st x = p"/\"q & p in D1 & q in D2;
+
+theorem :: FILTER_0:46
+  D1 "/\" D2 = D2 "/\" D1;
+
+ definition let L be D_Lattice; let F1,F2 be Filter of L;
+  redefine func F1 "/\" F2 -> Filter of L;
+ end;
+
+ definition let L be B_Lattice; let F1,F2 be Filter of L;
+  redefine func F1 "/\" F2 -> Filter of L;
+ end;
+
+theorem :: FILTER_0:47
+  <.D1 \/ D2.) = <.<.D1.) \/ D2.) & <.D1 \/ D2.) = <.D1 \/ <.D2.).);
+
+theorem :: FILTER_0:48
+    <.F \/ H.) = { r : ex p,q st p"/\"q [= r & p in F & q in H };
+
+theorem :: FILTER_0:49
+  F c= F "/\" H & H c= F "/\" H;
+
+theorem :: FILTER_0:50
+  <.F \/ H.) = <.F "/\" H.);
+
+ reserve F1,F2 for Filter of I;
+
+theorem :: FILTER_0:51
+  <.F1 \/ F2.) = F1 "/\" F2;
+
+theorem :: FILTER_0:52
+   <.FB \/ HB.) = FB "/\" HB;
+
+theorem :: FILTER_0:53
+  j in <.DI \/ {i}.) implies i => j in <.DI.);
+
+theorem :: FILTER_0:54
+  i => j in FI & j => k in FI implies i => k in FI;
+
+ reserve a,b,c for Element of B;
+
+theorem :: FILTER_0:55
+  a => b = a` "\/" b;
+
+theorem :: FILTER_0:56
+  a [= b iff a"/\"b` = Bottom B;
+
+theorem :: FILTER_0:57
+  FB is_ultrafilter iff
+   FB <> the carrier of B & for a holds a in FB or a` in FB;
+
+theorem :: FILTER_0:58
+    FB <> <.B.) & FB is prime iff FB is_ultrafilter;
+
+theorem :: FILTER_0:59
+  FB is_ultrafilter implies for a holds a in FB iff not a` in FB;
+
+theorem :: FILTER_0:60
+   a <> b implies ex FB st FB is_ultrafilter &
+   (a in FB & not b in FB or not a in FB & b in FB);
+
+ reserve o1,o2 for BinOp of F;
+
+ definition let L,F;
+  func latt F -> Lattice means
+:: FILTER_0:def 10
+   ex o1,o2 st o1 = (the L_join of L)|([:F,F:] qua set) &
+   o2 = (the L_meet of L)|([:F,F:] qua set) & it = LattStr (#F, o1, o2#);
+ end;
+
+ definition let L,F;
+  cluster latt F -> strict;
+ end;
+
+canceled;
+
+theorem :: FILTER_0:62
+   for L being strict Lattice holds latt <.L.) = L;
+
+theorem :: FILTER_0:63
+ the carrier of latt F = F &
+ the L_join of latt F = (the L_join of L)|([:F,F:] qua set) &
+ the L_meet of latt F = (the L_meet of L)|([:F,F:] qua set);
+
+theorem :: FILTER_0:64
+  for p',q' being Element of latt F st
+   p = p' & q = q' holds p"\/"q = p'"\/"q' & p"/\"q = p'"/\"q';
+
+theorem :: FILTER_0:65
+  for p',q' being Element of latt F st
+   p = p' & q = q' holds p [= q iff p' [= q';
+
+theorem :: FILTER_0:66
+  L is upper-bounded implies latt F is upper-bounded;
+
+theorem :: FILTER_0:67
+    L is modular implies latt F is modular;
+
+theorem :: FILTER_0:68
+  L is distributive implies latt F is distributive;
+
+theorem :: FILTER_0:69
+   L is I_Lattice implies latt F is implicative;
+
+theorem :: FILTER_0:70
+  latt <.p.) is lower-bounded;
+
+theorem :: FILTER_0:71
+  Bottom latt <.p.) = p;
+
+theorem :: FILTER_0:72
+  L is upper-bounded implies Top latt <.p.) = Top L;
+
+theorem :: FILTER_0:73
+  L is 1_Lattice implies latt <.p.) is bounded;
+
+theorem :: FILTER_0:74
+  L is C_Lattice & L is M_Lattice implies latt <.p.) is C_Lattice;
+
+theorem :: FILTER_0:75
+   L is B_Lattice implies latt <.p.) is B_Lattice;
+
+ definition let L,p,q;
+  func p <=> q -> Element of L equals
+:: FILTER_0:def 11
+    (p => q)"/\"(q => p);
+ end;
+
+canceled;
+
+theorem :: FILTER_0:77
+  p <=> q = q <=> p;
+
+theorem :: FILTER_0:78
+  i <=> j in FI & j <=> k in FI implies i <=> k in FI;
+
+definition let L,F;
+  func equivalence_wrt F -> Relation means
+:: FILTER_0:def 12
+   field it c= the carrier of L &
+    for p,q holds [p,q] in it iff p <=> q in F;
+ end;
+
+canceled;
+
+theorem :: FILTER_0:80
+  equivalence_wrt F is Relation of the carrier of L;
+
+theorem :: FILTER_0:81
+  L is I_Lattice implies
+   equivalence_wrt F is_reflexive_in the carrier of L;
+
+theorem :: FILTER_0:82
+  equivalence_wrt F is_symmetric_in the carrier of L;
+
+theorem :: FILTER_0:83
+  L is I_Lattice implies
+   equivalence_wrt F is_transitive_in the carrier of L;
+
+theorem :: FILTER_0:84
+  L is I_Lattice implies
+   equivalence_wrt F is Equivalence_Relation of the carrier of L;
+
+theorem :: FILTER_0:85
+   L is I_Lattice implies field equivalence_wrt F = the carrier of L;
+
+definition let I,FI;
+redefine func equivalence_wrt FI -> Equivalence_Relation of the carrier of I;
+end;
+
+definition let B,FB;
+redefine func equivalence_wrt FB -> Equivalence_Relation of the carrier of B;
+end;
+
+ definition let L,F,p,q;
+  pred p,q are_equivalence_wrt F means
+:: FILTER_0:def 13
+   p <=> q in F;
+ end;
+
+canceled;
+
+theorem :: FILTER_0:87
+   p,q are_equivalence_wrt F iff [p,q] in equivalence_wrt F;
+
+theorem :: FILTER_0:88
+   i,i are_equivalence_wrt FI & a,a are_equivalence_wrt FB;
+
+theorem :: FILTER_0:89
+   p,q are_equivalence_wrt F implies q,p are_equivalence_wrt F;
+
+theorem :: FILTER_0:90
+   (i,j are_equivalence_wrt FI & j,k are_equivalence_wrt FI implies
+   i,k are_equivalence_wrt FI) &
+ (a,b are_equivalence_wrt FB & b,c are_equivalence_wrt FB implies
+   a,c are_equivalence_wrt FB);

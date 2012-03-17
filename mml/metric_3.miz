@@ -1,0 +1,802 @@
+:: Metrics in Cartesian Product
+::  by Stanis{\l}awa Kanas and Jan Stankiewicz
+::
+:: Received September 27, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary METRIC_1, FUNCT_1, MCART_1, ARYTM_1, METRIC_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, REAL_1,
+      FUNCT_1, FUNCT_2, BINOP_1, STRUCT_0, METRIC_1, MCART_1;
+ constructors REAL_1, METRIC_1, DOMAIN_1, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, METRIC_1, STRUCT_0, XREAL_0, RELSET_1, MEMBERED, ZFMISC_1,
+      XBOOLE_0;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ theorems BINOP_1, DOMAIN_1, ZFMISC_1, METRIC_1, REAL_1, MCART_1, STRUCT_0,
+      XCMPLX_0, XCMPLX_1;
+ schemes FUNCT_2;
+
+begin
+
+ reserve
+
+         X, Y for non empty MetrSpace;
+ reserve x1, y1, z1 for Element of X,
+         x2, y2, z2 for Element of Y;
+
+scheme LambdaMCART
+   { X, Y, Z() -> non empty set, F(set,set,set,set) -> Element of Z()}:
+    ex f being Function of [:[:X(),Y():],[:X(),Y():]:],Z()
+    st for x1,y1 being Element of X()
+       for x2,y2 being Element of Y()
+       for x,y being Element of [:X(),Y():]
+         st x = [x1,x2] & y = [y1,y2]
+       holds f.[x,y] = F(x1,y1,x2,y2)
+    proof
+      deffunc G(Element of [:X(),Y():],Element of [:X(),Y():])
+                = F($1`1,$2`1,$1`2,$2`2);
+     consider f being Function of [:[:X(),Y():],[:X(),Y():]:],Z()
+     such that
+     A1: for x,y being Element of [:X(),Y():]
+       holds f.[x,y] = G(x,y) from Lambda2D;
+       take f;
+       let x1,y1 be Element of X(),
+           x2,y2 be Element of Y(),
+           x,y be Element of [:X(),Y():] such that
+ A2: x = [x1,x2] & y = [y1,y2];
+           x = [x`1,x`2] & y = [y`1,y`2] by MCART_1:23;
+         then x1 = x`1 & y1 = y`1 & x2 = x`2 & y2 = y`2 by A2,ZFMISC_1:33;
+         hence thesis by A1;
+
+    end;
+
+definition let X,Y;
+  func dist_cart2(X,Y) -> Function of [:[:the carrier of X,the carrier of Y:],
+         [:the carrier of X,the carrier of Y:]:], REAL means :Def1:
+    for x1, y1 being Element of X,
+        x2, y2 being Element of Y,
+        x, y being Element of [:the carrier of X,the carrier of Y:]
+              st ( x = [x1,x2] & y = [y1,y2] ) holds
+              it.(x,y) = dist(x1,y1) + dist(x2,y2);
+  existence
+    proof
+     deffunc G(Element of X,Element of X,
+               Element of Y,Element of Y)
+               = dist($1,$2) + dist($3,$4);
+     consider F being Function of [:[:the carrier of X,the carrier of Y:],
+              [:the carrier of X,the carrier of Y:]:],REAL
+              such that
+     A1:for x1,y1 being Element of X
+        for x2,y2 being Element of Y
+        for x,y being Element of [:the carrier of X,the carrier of Y:]
+        st ( x = [x1,x2] & y = [y1,y2] )
+        holds F.[x,y] = G(x1,y1,x2,y2)  from LambdaMCART;
+        take F;
+      let x1,y1 be Element of X,
+          x2,y2 be Element of Y,
+          x,y be Element of [:the carrier of X,the carrier of Y:] such that
+          A2: ( x = [x1,x2] & y = [y1,y2] );
+      thus F.(x,y) = F.[x,y] by BINOP_1:def 1
+                  .= dist(x1,y1) + dist(x2,y2) by A1,A2;
+     end;
+   uniqueness
+    proof
+    let f1,f2 be Function of [:[:the carrier of X,the carrier of Y:],
+                    [:the carrier of X,the carrier of Y:]:],REAL;
+    assume that
+    A3:for x1,y1 being Element of X
+       for x2,y2 being Element of Y
+       for x,y being Element of [:the carrier of X,the carrier of Y:]
+           st (x = [x1,x2] & y = [y1,y2])
+           holds
+           f1.(x,y) = dist(x1,y1) + dist(x2,y2) and
+    A4:for x1,y1 being Element of X
+       for x2,y2 being Element of Y
+       for x,y being Element of [:the carrier of X,the carrier of Y:]
+           st (x = [x1,x2] & y = [y1,y2])
+           holds
+           f2.(x,y) = dist(x1,y1) + dist(x2,y2);
+      for x,y being Element of [:the carrier of X,the carrier of Y:]
+        holds f1.(x,y) = f2.(x,y)
+       proof let x,y be Element of [:the carrier of X,the carrier of Y:];
+        consider x1 be Element of X,
+                      x2 be Element of Y
+        such that
+        A5: x = [x1,x2] by DOMAIN_1:9;
+        consider y1 be Element of X,
+                     y2 be Element of Y
+        such that
+        A6: y = [y1,y2] by DOMAIN_1:9;
+        thus f1.(x,y) =dist(x1,y1) + dist(x2,y2) by A3,A5,A6
+                     .= f2.(x,y) by A4,A5,A6;
+       end;
+     hence thesis by BINOP_1:2;
+    end;
+   end;
+
+canceled;
+
+theorem Th2:
+  for a,b being Element of REAL holds
+          (a + b = 0 & 0 <= a & 0 <= b) implies (a = 0 & b = 0)
+    proof
+     let a,b be Element of REAL;
+     assume that
+     A1: a + b = 0 and
+     A2: 0 <= a and
+     A3: 0 <= b;
+       b = -a by A1,XCMPLX_0:def 6;
+     hence thesis by A2,A3,REAL_1:26,50;
+    end;
+
+canceled 2;
+
+theorem Th5:
+  for x, y being Element of [:the carrier of X,the carrier of Y:]
+            st (x = [x1,x2] & y = [y1,y2]) holds
+    dist_cart2(X,Y).(x,y) = 0 iff x = y
+     proof
+      let x,y be Element of [:the carrier of X,the carrier of Y:] such that
+      A1:x = [x1,x2] & y = [y1,y2];
+      thus dist_cart2(X,Y).(x,y) = 0 implies x = y
+       proof
+        assume A2:dist_cart2(X,Y).(x,y) = 0;
+        set d1 = dist(x1,y1);
+        set d2 = dist(x2,y2);
+        A3: d1 + d2 = 0 by A1,A2,Def1;
+        A4: 0 <= d1 by METRIC_1:5;
+A5:         0 <= d2 by METRIC_1:5;
+        then A6:d1 = 0 & d2 = 0 by A3,A4,Th2;
+          d1 = 0 by A3,A4,A5,Th2;
+        then x1 = y1 by METRIC_1:2;
+        hence thesis by A1,A6,METRIC_1:2;
+        end;
+        assume x = y;
+        then A7:x1 = y1 & x2 = y2 by A1,ZFMISC_1:33;
+        then A8:dist(x2,y2) = 0 by METRIC_1:1;
+          dist_cart2(X,Y).(x,y) = dist(x1,y1) + dist(x2,y2) by A1,Def1
+                            .= 0 by A7,A8,METRIC_1:1;
+        hence thesis;
+        end;
+
+theorem Th6:
+  for x,y being Element of [:the carrier of X,the carrier of Y:] st
+   (x = [x1,x2] & y = [y1,y2]) holds
+ dist_cart2(X,Y).(x,y) = dist_cart2(X,Y).(y,x)
+  proof
+   let x,y be Element of [:the carrier of X,the carrier of Y:]; assume
+   A1:x = [x1,x2] & y = [y1,y2];
+   then dist_cart2(X,Y).(x,y) = dist(y1,x1) + dist(x2,y2) by Def1
+                       .= dist_cart2(X,Y).(y,x) by A1,Def1;
+   hence thesis;
+  end;
+
+theorem Th7:
+  for x,y,z being Element of [:the carrier of X,the carrier of Y:]
+         st (x = [x1,x2] & y = [y1,y2] & z = [z1,z2]) holds
+ dist_cart2(X,Y).(x,z) <= dist_cart2(X,Y).(x,y) + dist_cart2(X,Y).(y,z)
+  proof
+   let x,y,z be Element of [:the carrier of X,the carrier of Y:] such that
+   A1:x = [x1,x2] & y = [y1,y2] & z = [z1,z2];
+   set d1 = dist(x1,z1);
+   set d2 = dist(x1,y1);
+   set d3 = dist(y1,z1);
+   set d4 = dist(x2,z2);
+   set d5 = dist(x2,y2);
+   set d6 = dist(y2,z2);
+A2:      (d2 + d3) + (d5 + d6) = ((d2 + d3) + d5) + d6 by XCMPLX_1:1
+                       .= ((d2 + d5) + d3) + d6 by XCMPLX_1:1
+                       .= (d2 + d5) + (d3 + d6) by XCMPLX_1:1
+                       .= dist_cart2(X,Y).(x,y) + (d3 +d6) by A1,Def1
+                       .= dist_cart2(X,Y).(x,y) + dist_cart2(X,Y).(y,z)
+                           by A1,Def1;
+   A3: d1 <= d2 + d3 by METRIC_1:4;
+   A4: d4 <= d5 + d6 by METRIC_1:4;
+      dist_cart2(X,Y).(x,z) = d1 + d4 by A1,Def1;
+   hence thesis by A2,A3,A4,REAL_1:55;
+  end;
+
+definition let X,Y;
+  let x,y be Element of [:the carrier of X,the carrier of Y:];
+  func dist2(x,y) -> Real equals
+      dist_cart2(X,Y).(x,y);
+  coherence;
+  end;
+
+definition let A be non empty set, r be Function of [:A,A:], REAL;
+  cluster MetrStruct(#A,r#) -> non empty;
+ coherence by STRUCT_0:def 1;
+end;
+
+definition let X,Y;
+  func MetrSpaceCart2(X,Y) -> strict non empty MetrSpace equals :Def3:
+   MetrStruct (#[:the carrier of X,the carrier of Y:], dist_cart2(X,Y)#);
+ coherence
+  proof
+   set M =MetrStruct(#[:the carrier of X,the carrier of Y:],dist_cart2(X,Y)#);
+     M is MetrSpace
+    proof
+       now let x,y,z be Element of M;
+     reconsider x' = x,y' = y ,z' = z as Element of
+     [:the carrier of X,the carrier of Y:];
+     A1:ex x1,x2 st x' = [x1,x2] by DOMAIN_1:9;
+     A2:ex y1,y2 st y' = [y1,y2] by DOMAIN_1:9;
+     A3:ex z1,z2 st z' = [z1,z2] by DOMAIN_1:9;
+     A4: dist(x,y) = dist_cart2(X,Y).(x',y') by METRIC_1:def 1;
+     A5: dist(x,z) = dist_cart2(X,Y).(x',z') by METRIC_1:def 1;
+     A6: dist(y,z) = dist_cart2(X,Y).(y',z') by METRIC_1:def 1;
+     A7: dist(y,x) = dist_cart2(X,Y).(y',x') by METRIC_1:def 1;
+     thus dist(x,y) = 0 iff x = y by A1,A2,A4,Th5;
+     thus dist(x,y) = dist(y,x) by A1,A2,A4,A7,Th6;
+     thus dist(x,z) <= dist(x,y) + dist(y,z) by A1,A2,A3,A4,A5,A6,Th7;
+     end;
+     hence thesis by METRIC_1:6;
+     end;
+   hence thesis;
+   end;
+end;
+
+canceled;
+
+theorem
+    MetrStruct(# [:the carrier of X,the carrier of Y:],dist_cart2(X,Y)#)
+  is MetrSpace
+  proof
+    MetrStruct(# [:the carrier of X,the carrier of Y:],dist_cart2(X,Y)#) =
+  MetrSpaceCart2(X,Y) by Def3;
+  hence thesis;
+  end;
+
+:: Metrics in the Cartesian product of three sets
+
+ reserve Z for non empty MetrSpace;
+
+ reserve x3,y3,z3 for Element of Z;
+
+
+scheme LambdaMCART1
+   { X, Y, Z, T() -> non empty set,
+    F(set,set,set,set,set,set) ->Element of T()}:
+    ex f being Function of [:[:X(),Y(),Z():],[:X(),Y(),Z():]:],T()
+    st for x1,y1 being Element of X()
+       for x2,y2 being Element of Y()
+       for x3,y3 being Element of Z()
+       for x,y being Element of [:X(),Y(),Z():]
+       st ( x = [x1,x2,x3] & y = [y1,y2,y3] ) holds
+    f.[x,y] = F(x1,y1,x2,y2,x3,y3)
+    proof
+     deffunc G(Element of [:X(),Y(),Z():],Element of [:X(),Y(),Z():])
+               = F($1`1,$2`1,$1`2,$2`2,$1`3,$2`3);
+     consider f being Function of [:[:X(),Y(),Z():],[:X(),Y(),Z():]:],T()
+     such that
+     A1: for x,y being Element of [:X(),Y(),Z():]
+       holds f.[x,y] =G(x,y) from Lambda2D;
+       take f;
+       let x1,y1 be Element of X(),
+           x2,y2 be Element of Y(),
+           x3,y3 be Element of Z(),
+           x,y be Element of [:X(),Y(),Z():] such that
+ A2: x = [x1,x2,x3] & y = [y1,y2,y3];
+           x = [x`1,x`2,x`3] & y = [y`1,y`2,y`3] by MCART_1:48;
+         then x1 = x`1 & y1 = y`1 & x2 = x`2 & y2 = y`2 & x3 = x`3 & y3 = y`3
+         by A2,MCART_1:28;
+         hence thesis by A1;
+
+    end;
+
+definition let X,Y,Z;
+  func dist_cart3(X,Y,Z) -> Function of
+         [:[:the carrier of X,the carrier of Y,the carrier of Z:],
+         [:the carrier of X,the carrier of Y,the carrier of Z:]:],REAL means
+  :Def4:for x1,y1 being Element of X
+              for x2,y2 being Element of Y
+              for x3,y3 being Element of Z
+              for x,y being Element of
+                  [:the carrier of X,the carrier of Y,the carrier of Z:]
+              st ( x = [x1,x2,x3] & y = [y1,y2,y3] ) holds
+              it.(x,y) = (dist(x1,y1) + dist(x2,y2)) + dist(x3,y3);
+
+  existence
+    proof
+     deffunc G(Element of X,Element of X,
+               Element of Y,Element of Y,
+               Element of Z,Element of Z)
+               =(dist($1,$2) + dist($3,$4)) + dist($5,$6);
+     consider F being Function of
+              [:[:the carrier of X,the carrier of Y,the carrier of Z:],
+              [:the carrier of X,the carrier of Y,the carrier of Z:]:],REAL
+              such that
+     A1:for x1,y1 being Element of X
+        for x2,y2 being Element of Y
+        for x3,y3 being Element of Z
+        for x,y being Element of
+            [:the carrier of X,the carrier of Y,the carrier of Z:]
+        st ( x = [x1,x2,x3] & y = [y1,y2,y3] )
+        holds
+        F.[x,y] = G(x1,y1,x2,y2,x3,y3) from LambdaMCART1;
+        take F;
+      let x1,y1 be Element of X,
+          x2,y2 be Element of Y,
+          x3,y3 be Element of Z,
+          x,y be Element of
+          [:the carrier of X,the carrier of Y,the carrier of Z:] such that
+          A2: ( x = [x1,x2,x3] & y = [y1,y2,y3] );
+      thus F.(x,y) = F.[x,y] by BINOP_1:def 1
+                  .= (dist(x1,y1) + dist(x2,y2)) + dist(x3,y3) by A1,A2;
+     end;
+   uniqueness
+    proof
+    let f1,f2 be Function of
+              [:[:the carrier of X,the carrier of Y,the carrier of Z:],
+              [:the carrier of X,the carrier of Y,the carrier of Z:]:],REAL;
+    assume that
+    A3:for x1,y1 being Element of X
+       for x2,y2 being Element of Y
+       for x3,y3 being Element of Z
+       for x,y being Element of
+        [:the carrier of X,the carrier of Y,the carrier of Z:]
+           st (x = [x1,x2,x3] & y = [y1,y2,y3])
+           holds
+           f1.(x,y) = (dist(x1,y1) + dist(x2,y2)) + dist(x3,y3) and
+    A4:for x1,y1 being Element of X
+       for x2,y2 being Element of Y
+       for x3,y3 being Element of Z
+       for x,y being Element of
+        [:the carrier of X,the carrier of Y,the carrier of Z:]
+           st (x = [x1,x2,x3] & y = [y1,y2,y3])
+           holds
+           f2.(x,y) = (dist(x1,y1) + dist(x2,y2)) + dist(x3,y3);
+      for x,y being Element of
+            [:the carrier of X,the carrier of Y,the carrier of Z:]
+        holds
+        f1.(x,y) = f2.(x,y)
+       proof
+        let x,y be Element of
+            [:the carrier of X,the carrier of Y,the carrier of Z:];
+            consider x1 being Element of X,
+                     x2 being Element of Y,
+                     x3 being Element of Z
+            such that
+            A5: x = [x1,x2,x3] by DOMAIN_1:15;
+            consider y1 being Element of X,
+                     y2 being Element of Y,
+                     y3 being Element of Z
+            such that
+            A6: y = [y1,y2,y3] by DOMAIN_1:15;
+        thus f1.(x,y) = (dist(x1,y1) + dist(x2,y2)) +dist(x3,y3) by A3,A5,A6
+                     .= f2.(x,y) by A4,A5,A6;
+       end;
+   hence thesis by BINOP_1:2;
+    end;
+end;
+
+canceled 2;
+
+theorem Th12:
+  for x,y being Element of
+    [:the carrier of X,the carrier of Y,the carrier of Z:]
+       st (x = [x1,x2,x3] & y = [y1,y2,y3]) holds
+ dist_cart3(X,Y,Z).(x,y) = 0 iff x = y
+  proof
+   let x,y be Element of
+   [:the carrier of X,the carrier of Y,the carrier of Z:] such that
+   A1:x = [x1,x2,x3] & y = [y1,y2,y3];
+   thus dist_cart3(X,Y,Z).(x,y) = 0 implies x = y
+    proof
+     assume A2:dist_cart3(X,Y,Z).(x,y) = 0;
+     set d1 = dist(x1,y1);
+     set d2 = dist(x2,y2);
+     set d3 = dist(x3,y3);
+     set d4 = d1 + d2;
+     A3: d4 + d3 = 0 by A1,A2,Def4;
+     A4: 0 <= d3 by METRIC_1:5;
+     A5: 0 <= d1 by METRIC_1:5;
+     A6: 0 <= d2 by METRIC_1:5;
+     then 0 + 0 <= d1 + d2 by A5,REAL_1:55;
+     then A7:d4 = 0 & d3 = 0 by A3,A4,Th2;
+     then A8:d1 = 0 & d2 = 0 by A5,A6,Th2;
+     A9: x3 = y3 by A7,METRIC_1:2;
+        x1 = y1 by A8,METRIC_1:2;
+     hence thesis by A1,A8,A9,METRIC_1:2;
+     end;
+     assume A10: x = y;
+     then A11: (x1 = y1 & x2 = y2) & x3 = y3 by A1,MCART_1:28;
+     A12: x1 = y1 & (x2 = y2 & x3 = y3) by A1,A10,MCART_1:28;
+     A13: x1 = y1 & x2 = y2 by A1,A10,MCART_1:28;
+     A14:dist(x1,y1) = 0 by A11,METRIC_1:1;
+     A15:dist(x2,y2) = 0 by A13,METRIC_1:1;
+       dist_cart3(X,Y,Z).(x,y) =
+                (dist(x1,y1) + dist(x2,y2)) + dist(x3,y3) by A1,Def4
+                         .= 0 by A12,A14,A15,METRIC_1:1;
+     hence thesis;
+     end;
+
+theorem Th13:
+  for x,y being Element of
+    [:the carrier of X,the carrier of Y,the carrier of Z:]
+         st (x = [x1,x2,x3] & y = [y1,y2,y3]) holds
+ dist_cart3(X,Y,Z).(x,y) = dist_cart3(X,Y,Z).(y,x)
+  proof
+   let x,y be Element of
+     [:the carrier of X,the carrier of Y,the carrier of Z:]; assume
+   A1:x = [x1,x2,x3] & y = [y1,y2,y3];
+   then dist_cart3(X,Y,Z).(x,y) = (dist(y1,x1) + dist(y2,x2)) + dist(y3,x3)
+by Def4
+                 .= dist_cart3(X,Y,Z).(y,x) by A1,Def4;
+   hence thesis;
+  end;
+
+theorem Th14:
+  for x,y,z being Element of
+    [:the carrier of X,the carrier of Y,the carrier of Z:]
+         st (x = [x1,x2,x3] & y = [y1,y2,y3] & z = [z1,z2,z3]) holds
+ dist_cart3(X,Y,Z).(x,z) <= dist_cart3(X,Y,Z).(x,y) + dist_cart3(X,Y,Z).(y,z)
+  proof
+   let x,y,z be Element of
+    [:the carrier of X,the carrier of Y,the carrier of Z:] such that
+   A1:x = [x1,x2,x3] & y = [y1,y2,y3] & z = [z1,z2,z3];
+   set d1 = dist(x1,z1), d2 = dist(x1,y1), d3 = dist(y1,z1);
+   set d4 = dist(x2,z2), d5 = dist(x2,y2), d6 = dist(y2,z2);
+   set d7 = dist(x3,z3), d8 = dist(x3,y3), d9 = dist(y3,z3);
+A2:      ((d2 + d3) + (d5 + d6)) + (d8 + d9)
+                 = (((d2 + d3) + d5) + d6) + (d8 + d9) by XCMPLX_1:1
+                .= (((d2 + d5) + d3) + d6) + (d8 + d9) by XCMPLX_1:1
+                .= ((d2 + d5) + (d3 + d6)) + (d8 + d9) by XCMPLX_1:1
+                .= ((d2 + d5) + (d8 + d9)) + (d3 + d6) by XCMPLX_1:1
+                .= (((d2 + d5) + d8) + d9) + (d3 + d6) by XCMPLX_1:1
+                .= ((d2 + d5) + d8) + ((d3 + d6) + d9) by XCMPLX_1:1
+              .= dist_cart3(X,Y,Z).(x,y) + ((d3 +d6) + d9) by A1,Def4
+                 .= dist_cart3(X,Y,Z).(x,y) + dist_cart3(X,Y,Z).(y,z)
+                           by A1,Def4;
+   A3: d1 <= d2 + d3 by METRIC_1:4;
+   A4: d4 <= d5 + d6 by METRIC_1:4;
+   set d10 = d1 + d4;
+   A5: d10 <= (d2 + d3) + (d5 + d6) by A3,A4,REAL_1:55;
+     d7 <= d8 + d9 by METRIC_1:4;
+   then d10 + d7 <= ((d2 + d3) + (d5 + d6)) + (d8 + d9) by A5,REAL_1:55;
+   hence thesis by A1,A2,Def4;
+  end;
+
+definition let X,Y,Z;
+  func MetrSpaceCart3(X,Y,Z) -> strict non empty MetrSpace equals :Def5:
+    MetrStruct(#[:the carrier of X,the carrier of Y,the carrier of Z:],
+                   dist_cart3(X,Y,Z)#);
+ coherence
+  proof
+   set M =
+    MetrStruct(#[:the carrier of X,the carrier of Y,the carrier of Z:],
+                dist_cart3(X,Y,Z)#);
+     M is MetrSpace
+    proof
+       now let x,y,z be Element of M;
+     reconsider x' = x,y' = y ,z' = z as Element of
+      [:the carrier of X,the carrier of Y,the carrier of Z:];
+     A1:ex x1,x2,x3 st x' = [x1,x2,x3] by DOMAIN_1:15;
+     A2:ex y1,y2,y3 st y' = [y1,y2,y3] by DOMAIN_1:15;
+     A3:ex z1,z2,z3 st z' = [z1,z2,z3] by DOMAIN_1:15;
+     A4: dist(x,y) = dist_cart3(X,Y,Z).(x,y) by METRIC_1:def 1;
+     A5: dist(x,z) = dist_cart3(X,Y,Z).(x,z) by METRIC_1:def 1;
+     A6: dist(y,z) = dist_cart3(X,Y,Z).(y,z) by METRIC_1:def 1;
+     A7: dist(y,x) = dist_cart3(X,Y,Z).(y,x) by METRIC_1:def 1;
+     thus dist(x,y) = 0 iff x = y by A1,A2,A4,Th12;
+     thus dist(x,y) = dist(y,x) by A1,A2,A4,A7,Th13;
+     thus dist(x,z) <= dist(x,y) + dist(y,z) by A1,A2,A3,A4,A5,A6,Th14;
+     end;
+     hence thesis by METRIC_1:6;
+     end;
+   hence thesis;
+   end;
+end;
+
+definition let X,Y,Z;
+  let x,y be Element of [:the carrier of X,the carrier of Y,the carrier of Z:];
+  func dist3(x,y) -> Real equals
+      dist_cart3(X,Y,Z).(x,y);
+  coherence;
+end;
+
+canceled;
+
+theorem
+    MetrStruct(# [:the carrier of X,the carrier of Y,the carrier of Z:],
+    dist_cart3(X,Y,Z)#) is MetrSpace
+  proof
+    MetrStruct(# [:the carrier of X,the carrier of Y,the carrier of Z:],
+  dist_cart3(X,Y,Z)#) = MetrSpaceCart3(X,Y,Z) by Def5;
+  hence thesis;
+   end;
+
+:: Metrics in the Cartesian product of four sets
+
+ reserve W for non empty MetrSpace;
+
+ reserve x4,y4,z4 for Element of W;
+
+scheme LambdaMCART2
+   { X, Y, Z, W, T() -> non empty set,
+    F(set,set,set,set,set,set,set,set) ->Element of T()}:
+    ex f being Function of [:[:X(),Y(),Z(),W():],[:X(),Y(),Z(),W():]:],T()
+    st for x1,y1 being Element of X()
+       for x2,y2 being Element of Y()
+       for x3,y3 being Element of Z()
+       for x4,y4 being Element of W()
+       for x,y being Element of [:X(),Y(),Z(),W():]
+       st ( x = [x1,x2,x3,x4] & y = [y1,y2,y3,y4] )
+       holds
+    f.[x,y] = F(x1,y1,x2,y2,x3,y3,x4,y4)
+    proof
+     deffunc G(Element of [:X(),Y(),Z(),W():],Element of [:X(),Y(),Z(),W():])
+             = F($1`1,$2`1,$1`2,$2`2,$1`3,$2`3,$1`4,$2`4);
+     consider f being Function of
+     [:[:X(),Y(),Z(),W():],[:X(),Y(),Z(),W():]:],T()
+     such that
+     A1: for x,y being Element of [:X(),Y(),Z(),W():]
+       holds f.[x,y] = G(x,y) from Lambda2D;
+       take f;
+       let x1,y1 be Element of X(),
+           x2,y2 be Element of Y(),
+           x3,y3 be Element of Z(),
+           x4,y4 be Element of W(),
+           x,y be Element of [:X(),Y(),Z(),W():] such that
+ A2: x = [x1,x2,x3,x4] & y = [y1,y2,y3,y4];
+           x = [x`1,x`2,x`3,x`4] & y = [y`1,y`2,y`3,y`4] by MCART_1:60;
+         then x1 = x`1 & y1 = y`1 & x2 = x`2 & y2 = y`2 & x3 = x`3 & y3 = y`3
+         & x4 = x`4 & y4 = y`4 by A2,MCART_1:33;
+         hence thesis by A1;
+    end;
+
+definition let X,Y,Z,W;
+  func dist_cart4(X,Y,Z,W) -> Function of
+  [:[:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:],
+  [:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:]:],
+                                          REAL means
+  :Def7:for x1,y1 being Element of X
+              for x2,y2 being Element of Y
+              for x3,y3 being Element of Z
+              for x4,y4 being Element of W
+              for x,y being Element of
+        [:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:]
+              st ( x = [x1,x2,x3,x4] & y = [y1,y2,y3,y4] ) holds
+         it.(x,y) = (dist(x1,y1) + dist(x2,y2)) + (dist(x3,y3) + dist(x4,y4));
+  existence
+    proof
+     deffunc G(Element of X,Element of X,
+               Element of Y,Element of Y,
+               Element of Z,Element of Z,
+               Element of W,Element of W)
+               =  (dist($1,$2) + dist($3,$4)) + (dist($5,$6) + dist($7,$8));
+     consider F being Function of
+    [:[:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:],
+    [:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:]:],
+      REAL such that
+     A1:for x1,y1 being Element of X
+        for x2,y2 being Element of Y
+        for x3,y3 being Element of Z
+        for x4,y4 being Element of W
+        for x,y being Element of
+        [:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:]
+        st ( x = [x1,x2,x3,x4] & y = [y1,y2,y3,y4] )
+        holds
+        F.[x,y] = G(x1,y1,x2,y2,x3,y3,x4,y4) from LambdaMCART2;
+        take F;
+      let x1,y1 be Element of X,
+          x2,y2 be Element of Y,
+          x3,y3 be Element of Z,
+          x4,y4 be Element of W,
+          x,y be Element of
+      [:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:]
+ such that
+          A2: ( x = [x1,x2,x3,x4] & y = [y1,y2,y3,y4] );
+      thus F.(x,y) = F.[x,y] by BINOP_1:def 1
+       .= (dist(x1,y1) + dist(x2,y2)) + (dist(x3,y3) + dist(x4,y4)) by A1,A2;
+     end;
+   uniqueness
+    proof
+    let f1,f2 be Function of
+    [:[:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:],
+    [:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:]:],
+                           REAL;
+    assume that
+    A3:for x1,y1 being Element of X
+       for x2,y2 being Element of Y
+       for x3,y3 being Element of Z
+       for x4,y4 being Element of W
+       for x,y being Element of
+       [:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:]
+           st (x = [x1,x2,x3,x4] & y = [y1,y2,y3,y4])
+           holds
+      f1.(x,y) = (dist(x1,y1) + dist(x2,y2)) + (dist(x3,y3) + dist(x4,y4)) and
+    A4:for x1,y1 being Element of X
+       for x2,y2 being Element of Y
+       for x3,y3 being Element of Z
+       for x4,y4 being Element of W
+       for x,y being Element of
+        [:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:]
+           st (x = [x1,x2,x3,x4] & y = [y1,y2,y3,y4])
+           holds
+          f2.(x,y) = (dist(x1,y1) + dist(x2,y2)) + (dist(x3,y3) + dist(x4,y4));
+      for x,y being Element of
+       [:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:]
+        holds
+        f1.(x,y) = f2.(x,y)
+       proof
+        let x,y be Element of
+     [:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:];
+        consider x1 being Element of X,
+                 x2 being Element of Y,
+                 x3 being Element of Z,
+                 x4 being Element of W
+            such that
+        A5: x = [x1,x2,x3,x4] by DOMAIN_1:31;
+        consider y1 being Element of X,
+                 y2 being Element of Y,
+                 y3 being Element of Z,
+                 y4 being Element of W
+            such that
+        A6: y = [y1,y2,y3,y4] by DOMAIN_1:31;
+        thus f1.(x,y) = (dist(x1,y1) + dist(x2,y2)) +
+                                       (dist(x3,y3) + dist(x4,y4)) by A3,A5,A6
+                     .= f2.(x,y) by A4,A5,A6;
+       end;
+   hence thesis by BINOP_1:2;
+    end;
+end;
+
+canceled 2;
+
+theorem Th19:
+  for x,y being Element of
+   [:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:]
+     st (x = [x1,x2,x3,x4] & y = [y1,y2,y3,y4]) holds
+    dist_cart4(X,Y,Z,W).(x,y) = 0 iff x = y
+     proof
+      let x,y be Element of
+      [:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:]
+ such that
+      A1:x = [x1,x2,x3,x4] & y = [y1,y2,y3,y4];
+      thus dist_cart4(X,Y,Z,W).(x,y) = 0 implies x = y
+       proof
+        assume A2:dist_cart4(X,Y,Z,W).(x,y) = 0;
+        set d1 = dist(x1,y1), d2 = dist(x2,y2), d3 = dist(x3,y3);
+        set d5 = dist(x4,y4), d4 = d1 + d2, d6 = d3 + d5;
+        A3: d4 + d6 = 0 by A1,A2,Def7;
+        A4: 0 <= d1 by METRIC_1:5;
+        A5: 0 <= d2 by METRIC_1:5;
+        then A6: 0 + 0 <= d1 + d2 by A4,REAL_1:55;
+        A7: 0 <= d3 by METRIC_1:5;
+        A8: 0 <= d5 by METRIC_1:5;
+        then A9: 0 + 0 <= d3 + d5 by A7,REAL_1:55;
+        then A10: d4 = 0 & d6 = 0 by A3,A6,Th2;
+          d4 = 0 by A3,A6,A9,Th2;
+        then A11: d1 = 0 & d2 = 0 by A4,A5,Th2;
+        then A12: x2 = y2 by METRIC_1:2;
+           d3 = 0 & d5 = 0 by A7,A8,A10,Th2;
+        then x3 = y3 & x4 = y4 by METRIC_1:2;
+        hence thesis by A1,A11,A12,METRIC_1:2;
+        end;
+        assume A13: x = y;
+        then A14: ((x1 = y1 & x2 = y2) & (x3 = y3 & x4 = y4)) by A1,MCART_1:33;
+           (x1 = y1 & x2 = y2) by A1,A13,MCART_1:33;
+        then A15:dist(x2,y2) = 0 by METRIC_1:1;
+        A16:(x3 = y3 & x4 = y4) by A1,A13,MCART_1:33;
+        A17:dist(x3,y3) = 0 by A14,METRIC_1:1;
+        A18:dist(x4,y4) = 0 by A16,METRIC_1:1;
+          dist_cart4(X,Y,Z,W).(x,y) =
+         (dist(x1,y1) + dist(x2,y2)) + (dist(x3,y3) + dist(x4,y4)) by A1,Def7
+                                 .= 0 by A14,A15,A17,A18,METRIC_1:1;
+        hence thesis;
+        end;
+
+theorem Th20:
+  for x,y being Element of
+   [:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:]
+     st (x = [x1,x2,x3,x4] & y = [y1,y2,y3,y4]) holds
+    dist_cart4(X,Y,Z,W).(x,y) = dist_cart4(X,Y,Z,W).(y,x)
+     proof
+      let x,y be Element of
+      [:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:]
+    ; assume
+      A1:x = [x1,x2,x3,x4] & y = [y1,y2,y3,y4];
+      then dist_cart4(X,Y,Z,W).(x,y) =
+ (dist(y1,x1) + dist(y2,x2)) + (dist(y3,x3) + dist(x4,y4)) by Def7
+            .= dist_cart4(X,Y,Z,W).(y,x) by A1,Def7;
+      hence thesis;
+     end;
+
+theorem Th21:
+  for x,y,z being Element of
+    [:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:]
+      st (x = [x1,x2,x3,x4] & y = [y1,y2,y3,y4] & z = [z1,z2,z3,z4]) holds
+    dist_cart4(X,Y,Z,W).(x,z) <=
+                  dist_cart4(X,Y,Z,W).(x,y) + dist_cart4(X,Y,Z,W).(y,z)
+     proof
+      let x,y,z be Element of
+       [:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:]
+ such that
+      A1:x = [x1,x2,x3,x4] & y = [y1,y2,y3,y4] & z = [z1,z2,z3,z4];
+      set d1 = dist(x1,z1), d2 = dist(x1,y1), d3 = dist(y1,z1);
+      set d4 = dist(x2,z2), d5 = dist(x2,y2), d6 = dist(y2,z2);
+      set d7 = dist(x3,z3), d8 = dist(x3,y3), d9 = dist(y3,z3);
+      set d10 = dist(x4,z4), d11 = dist(x4,y4), d12 = dist(y4,z4);
+      set d17 = (d8 + d9) + (d11 + d12), d15 = (d2 + d3) + (d5 + d6);
+A2:      (d15 + d17)
+ = (((d2 + d3) + d5) + d6) + ((d8 + d9) + (d11 + d12)) by XCMPLX_1:1
+      .= (((d2 + d3) + d5) + d6) + (((d8 + d9) + d11) + d12) by XCMPLX_1:1
+      .= ((d2 + (d3 + d5)) + d6) + (((d8 + d9) + d11) + d12) by XCMPLX_1:1
+      .= ((d2 + (d5 + d3)) + d6) + ((d8 + (d11 + d9)) + d12) by XCMPLX_1:1
+      .= (((d2 + d5) + d3) + d6) + ((d8 + (d11 + d9)) + d12) by XCMPLX_1:1
+      .= (((d2 + d5) + d3) + d6) + (((d8 + d11) + d9) + d12) by XCMPLX_1:1
+      .= ((d2 + d5) + (d3 + d6)) + (((d8 + d11) + d9) + d12) by XCMPLX_1:1
+      .= ((d2 + d5) + (d3 + d6)) + ((d8 + d11) + (d9 + d12)) by XCMPLX_1:1
+      .= (((d2 + d5) + (d3 + d6)) + (d8 + d11)) + (d9 + d12) by XCMPLX_1:1
+      .= (((d2 + d5) + (d8 + d11)) + (d3 + d6)) + (d9 + d12) by XCMPLX_1:1
+      .= ((d2 + d5) + (d8 + d11)) + ((d3 + d6) + (d9 + d12)) by XCMPLX_1:1
+      .= dist_cart4(X,Y,Z,W).(x,y) + ((d3 +d6) + (d9 + d12))
+          by A1,Def7
+      .= dist_cart4(X,Y,Z,W).(x,y) + dist_cart4(X,Y,Z,W).(y,z)
+          by A1,Def7;
+      A3: d1 <= d2 + d3 by METRIC_1:4;
+      A4: d4 <= d5 + d6 by METRIC_1:4;
+      set d14 = d1 + d4;
+      A5: d14 <= d15 by A3,A4,REAL_1:55;
+      A6: d7 <= d8 + d9 by METRIC_1:4;
+      A7: d10 <= d11 + d12 by METRIC_1:4;
+      set d16 = d7 + d10;
+        d16 <= d17 by A6,A7,REAL_1:55;
+      then d14 + d16 <= d15 + d17 by A5,REAL_1:55;
+      hence thesis by A1,A2,Def7;
+     end;
+
+
+
+definition let X,Y,Z,W;
+  func MetrSpaceCart4(X,Y,Z,W) -> strict non empty MetrSpace equals :Def8:
+   MetrStruct(#[:the carrier of X, the carrier of Y,
+                the carrier of Z, the carrier of W:],dist_cart4(X,Y,Z,W)#);
+ coherence
+  proof
+   set M = MetrStruct(#[:the carrier of X,the carrier of Y,
+                the carrier of Z,the carrier of W:],dist_cart4(X,Y,Z,W)#);
+     M is MetrSpace
+    proof
+       now let x,y,z be Element of M;
+     reconsider x' = x,y' = y ,z' = z as Element of
+    [:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:];
+     A1: ex x1,x2,x3,x4 st x' = [x1,x2,x3,x4] by DOMAIN_1:31;
+     A2: ex y1,y2,y3,y4 st y' = [y1,y2,y3,y4] by DOMAIN_1:31;
+     A3: ex z1,z2,z3,z4 st z' = [z1,z2,z3,z4] by DOMAIN_1:31;
+     A4: dist(x,y) = dist_cart4(X,Y,Z,W).(x',y') by METRIC_1:def 1;
+     A5: dist(x,z) = dist_cart4(X,Y,Z,W).(x',z') by METRIC_1:def 1;
+     A6: dist(y,z) = dist_cart4(X,Y,Z,W).(y',z') by METRIC_1:def 1;
+     A7: dist(y,x) = dist_cart4(X,Y,Z,W).(y',x') by METRIC_1:def 1;
+     thus dist(x,y) = 0 iff x = y by A1,A2,A4,Th19;
+     thus dist(x,y) = dist(y,x) by A1,A2,A4,A7,Th20;
+     thus dist(x,z) <= dist(x,y) + dist(y,z) by A1,A2,A3,A4,A5,A6,Th21;
+     end;
+     hence thesis by METRIC_1:6;
+     end;
+   hence thesis;
+   end;
+ end;
+
+definition let X,Y,Z,W;
+  let x,y be Element of
+  [:the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:];
+  func dist4(x,y) -> Real equals
+      dist_cart4(X,Y,Z,W).(x,y);
+  coherence;
+end;
+
+canceled;
+
+theorem
+    MetrStruct(#
+  [:the carrier of X, the carrier of Y, the carrier of Z, the carrier of W:],
+    dist_cart4(X,Y,Z,W)#) is MetrSpace
+proof
+    MetrStruct(# [:the carrier of X,the carrier of Y,
+  the carrier of Z,the carrier of W:],
+  dist_cart4(X,Y,Z,W)#) = MetrSpaceCart4(X,Y,Z,W) by Def8;
+  hence thesis;
+end;

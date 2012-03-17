@@ -1,0 +1,1393 @@
+:: On the Minimal Distance Between Set in {E}uclidean Space
+::  by Andrzej Trybulec
+::
+:: Received August 19, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary JORDAN1K, JGRAPH_2, TARSKI, BOOLE, SUBSET_1, ARYTM, RELAT_2,
+      RELAT_1, ARYTM_1, PRE_TOPC, COMPTS_1, CONNSP_1, EUCLID, TOPREAL2,
+      SQUARE_1, GOBOARD5, JORDAN2C, JORDAN1H, JORDAN11, ABSVALUE, SEQ_2, SEQ_4,
+      TREES_1, JORDAN8, TOPREAL1, ORDINAL2, JORDAN6, JORDAN9, FINSEQ_1,
+      FUNCT_1, PSCOMP_1, MCART_1, ARYTM_3, JORDAN5C, PCOMPS_1, WEIERSTR,
+      LATTICES, METRIC_1, COMPLEX1, SGRAPH1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, REAL_1,
+      NAT_1, ABSVALUE, SQUARE_1, FUNCT_1, RELSET_1, BINARITH, PARTFUN1,
+      FUNCT_2, FINSEQ_1, MATRIX_1, SEQ_4, STRUCT_0, GRCAT_1, PRE_TOPC,
+      COMPTS_1, CONNSP_1, METRIC_1, METRIC_6, PSCOMP_1, PCOMPS_1, EUCLID,
+      TOPREAL1, TOPREAL2, WEIERSTR, GOBOARD5, JORDAN2C, JORDAN5C, JORDAN6,
+      JORDAN8, JORDAN9, GOBRD14, JGRAPH_1, JGRAPH_2, JORDAN1H, JORDAN11;
+ constructors JORDAN1, CONNSP_1, JORDAN2C, TOPS_1, JORDAN1H, JORDAN11, REAL_1,
+      REALSET1, PSCOMP_1, JORDAN8, JORDAN6, JORDAN9, JORDAN5C, TOPS_2,
+      T_0TOPSP, WEIERSTR, TBSP_1, TOPRNS_1, SQUARE_1, ABSVALUE, JGRAPH_2,
+      GOBRD14, GRCAT_1, BINARITH, CARD_4, MEMBERED, PARTFUN1;
+ clusters METRIC_1, PCOMPS_1, GOBRD14, TOPS_1, TOPMETR, FINSET_1, EUCLID,
+      JGRAPH_2, TOPREAL6, JORDAN8, RELSET_1, SUBSET_1, PRE_TOPC, JORDAN1A,
+      NAT_1, BORSUK_3, STRUCT_0, BORSUK_4, SPRECT_4, BORSUK_2, JORDAN1C,
+      XREAL_0, MEMBERED, ZFMISC_1, FUNCT_2, PARTFUN1;
+ requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
+ definitions XBOOLE_0, TARSKI, FUNCT_2, SEQ_4;
+ theorems XBOOLE_1, JORDAN6, XBOOLE_0, JORDAN5C, TOPS_1, PSCOMP_1, SPRECT_1,
+      JORDAN10, JORDAN2C, SUBSET_1, GOBOARD9, TSEP_1, CONNSP_1, PRE_TOPC,
+      STRUCT_0, ZFMISC_1, EUCLID, METRIC_6, WEIERSTR, TOPREAL3, TBSP_1,
+      JORDAN1C, AXIOMS, SQUARE_1, ABSVALUE, REAL_1, FUNCT_1, METRIC_1, FUNCT_2,
+      REAL_2, JGRAPH_2, JORDAN1A, GOBRD14, GRCAT_1, TOPREAL5, RELAT_1, TOPMETR,
+      PCOMPS_1, TARSKI, JORDAN11, JORDAN1H, XREAL_0, SUB_METR, JORDAN9,
+      TOPREAL1, SPPOL_1, TOPRNS_1, XCMPLX_0, XCMPLX_1;
+
+begin :: Preliminaries
+
+reserve X for set, Y for non empty set;
+
+theorem Th1:
+ for f being Function of X,Y st f is onto
+ for y being Element of Y ex x being set st x in X & y = f.x
+proof let f be Function of X,Y such that
+A1: f is onto;
+ let y be Element of Y;
+    rng f = Y by A1,FUNCT_2:def 3;
+ hence ex x being set st x in X & f.x = y by FUNCT_2:17;
+end;
+
+theorem
+   for f being Function of X,Y st f is onto
+ for y being Element of Y ex x being Element of X st y = f.x
+proof let f be Function of X,Y such that
+A1: f is onto;
+ let y be Element of Y;
+    ex x being set st x in X & f.x = y by A1,Th1;
+ hence ex x being Element of X st y = f.x;
+end;
+
+theorem Th3:
+ for f being Function of X,Y, A being Subset of X st f is onto
+  holds (f.:A)` c= f.:A`
+proof let f be Function of X,Y, A be Subset of X such that
+A1: f is onto;
+ let e be set;
+ assume
+A2: e in (f.:A)`;
+  then reconsider y = e as Element of Y;
+  consider u being set such that
+A3: u in X and
+A4: y = f.u by A1,Th1;
+  reconsider x=u as Element of X by A3;
+    now assume x in A;
+    then y in f.:A by A4,FUNCT_2:43;
+   hence contradiction by A2,SUBSET_1:54;
+  end;
+  then x in A` by A3,SUBSET_1:50;
+ hence e in f.:A` by A4,FUNCT_2:43;
+end;
+
+theorem Th4:
+ for f being Function of X,Y, A being Subset of X st f is one-to-one
+  holds f.:A` c= (f.:A)`
+proof let f be Function of X,Y, A be Subset of X such that
+A1: f is one-to-one;
+ let e be set;
+ assume
+A2: e in f.:A`;
+  then reconsider y = e as Element of Y;
+  consider x1 being set such that
+A3: x1 in X and
+A4: x1 in A` and
+A5: y = f.x1 by A2,FUNCT_2:115;
+ assume not e in (f.:A)`;
+  then y in f.:A by SUBSET_1:50;
+  then consider x2 being set such that
+      x2 in X and
+A6: x2 in A and
+A7: y = f.x2 by FUNCT_2:115;
+    not x1 in A by A4,SUBSET_1:54;
+ hence contradiction by A1,A3,A5,A6,A7,FUNCT_2:25;
+end;
+
+theorem Th5:
+ for f being Function of X,Y, A being Subset of X st f is bijective
+  holds (f.:A)` = f.:A`
+proof let f be Function of X,Y, A being Subset of X;
+ assume
+A1: f is bijective;
+  then f is onto by FUNCT_2:def 4;
+  then A2: (f.:A)` c= f.:A` by Th3;
+    f is one-to-one by A1,FUNCT_2:def 4;
+  then f.:A` c= (f.:A)` by Th4;
+ hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+begin :: Topological and metrizable spaces
+
+theorem Th6:
+ for T being TopSpace
+ for A be Subset of T
+ holds A is_a_component_of {}T iff A is empty
+ proof let T be TopSpace;
+  let A be Subset of T;
+  hereby assume A is_a_component_of {}T;
+    then A c= {}T by SPRECT_1:7;
+   hence A is empty by XBOOLE_1:3;
+  end;
+  assume
+A1:  A is empty;
+   then A c= the carrier of T|{}T by XBOOLE_1:2;
+   then reconsider B = A as Subset of T|{}T;
+A2: B = {}(T|{}T) by A1;
+      for C being Subset of T|{}T st C is connected holds
+       B c= C implies B = C
+    proof let C be Subset of T|{}T such that C is connected & B c= C;
+        the carrier of T|{}T is empty by STRUCT_0:def 1;
+     hence B = C by A1,XBOOLE_1:3;
+    end;
+   then B is_a_component_of T|{}T by A2,CONNSP_1:def 5;
+  hence A is_a_component_of {}T by CONNSP_1:def 6;
+ end;
+
+theorem Th7:
+ for T being non empty TopSpace
+ for A,B,C being Subset of T st A c= B &
+   A is_a_component_of C & B is_a_component_of C
+ holds A = B
+proof let T be non empty TopSpace;
+ let A,B,C be Subset of T such that
+A1: A c= B and
+A2: A is_a_component_of C and
+A3: B is_a_component_of C;
+ per cases;
+ suppose C = {};
+  then C = {}T;
+  then A = {} & B = {} by A2,A3,Th6;
+ hence thesis;
+ suppose C is non empty;
+  then A <> {} by A2,SPRECT_1:6;
+  then A meets B by A1,XBOOLE_1:69;
+ hence A = B by A2,A3,GOBOARD9:3;
+end;
+
+ reserve n for Nat;
+
+theorem Th8:
+ n >= 1 implies
+ for P being Subset of Euclid n holds
+  P is bounded implies P` is not bounded
+proof assume
+A1: n>=1;
+ let P be Subset of Euclid n;
+A2: the carrier of Euclid n
+        = the carrier of TOP-REAL n by TOPREAL3:13
+       .= REAL n by EUCLID:25;
+  then REAL n c= the carrier of Euclid n;
+  then reconsider W = REAL n as Subset of Euclid n;
+ assume
+A3: P is bounded & P` is bounded;
+     P \/ P` = [#]Euclid n by PRE_TOPC:18
+       .= W by A2,PRE_TOPC:12;
+   then W is bounded by A3,TBSP_1:20;
+  hence contradiction by A1,JORDAN2C:39;
+end;
+
+reserve r for Real,
+        M for non empty MetrSpace;
+
+theorem Th9:
+ for C being non empty Subset of TopSpaceMetr M,
+     p being Point of TopSpaceMetr M
+  holds (dist_min C).p >= 0
+proof
+ let C be non empty Subset of TopSpaceMetr M,
+     p be Point of TopSpaceMetr M;
+A1: TopSpaceMetr M =
+    TopStruct (#the carrier of M,Family_open_set M#)
+           by PCOMPS_1:def 6;
+  then reconsider x = p as Point of M;
+  set B = [#]((dist x).:C);
+A2: B = (dist x).:C by WEIERSTR:def 3;
+A3: for r being real number st r in B holds 0 <= r
+   proof let r be real number;
+    assume r in B;
+     then consider y being set such that
+        y in dom dist x and
+A4:   y in C and
+A5:   r = (dist x).y by A2,FUNCT_1:def 12;
+     reconsider y' = y as Point of M by A1,A4;
+       r = dist(x,y') by A5,WEIERSTR:def 6;
+    hence 0 <= r by METRIC_1:5;
+   end;
+    dom dist x = the carrier of TopSpaceMetr M by FUNCT_2:def 1;
+  then B is non empty by A2,RELAT_1:152;
+  then lower_bound B >= 0 by A3,PSCOMP_1:8;
+  then lower_bound((dist x).:C) >= 0 by WEIERSTR:def 5;
+ hence (dist_min C).p >= 0 by WEIERSTR:def 8;
+end;
+
+theorem Th10:
+ for C being non empty Subset of TopSpaceMetr M,
+     p being Point of M
+   st for q being Point of M st q in C holds dist(p,q) >= r
+  holds (dist_min C).p >= r
+proof
+ let C be non empty Subset of TopSpaceMetr M,
+     p be Point of M such that
+A1: for q being Point of M st q in C holds dist(p,q) >= r;
+A2: TopSpaceMetr M =
+    TopStruct (#the carrier of M,Family_open_set M#)
+           by PCOMPS_1:def 6;
+  set B = [#]((dist p).:C);
+A3: B = (dist p).:C by WEIERSTR:def 3;
+A4: for s being real number st s in B holds r <= s
+   proof let s be real number;
+    assume s in B;
+     then consider y being set such that
+        y in dom dist p and
+A5:   y in C and
+A6:   s = (dist p).y by A3,FUNCT_1:def 12;
+     reconsider y' = y as Point of M by A2,A5;
+       s = dist(p,y') by A6,WEIERSTR:def 6;
+    hence r <= s by A1,A5;
+   end;
+    dom dist p = the carrier of TopSpaceMetr M by FUNCT_2:def 1;
+  then B is non empty by A3,RELAT_1:152;
+  then lower_bound B >= r by A4,PSCOMP_1:8;
+  then lower_bound((dist p).:C) >= r by WEIERSTR:def 5;
+ hence (dist_min C).p >= r by WEIERSTR:def 8;
+end;
+
+theorem Th11:
+ for A,B being non empty Subset of TopSpaceMetr M
+  holds min_dist_min(A,B) >= 0
+proof let A,B be non empty Subset of TopSpaceMetr M;
+  set X = [#]((dist_min A).:B);
+A1: X = (dist_min A).:B by WEIERSTR:def 3;
+A2: for r being real number st r in X holds 0 <= r
+   proof let r be real number;
+    assume r in X;
+     then consider y being set such that
+        y in dom dist_min A and
+A3:   y in B and
+A4:   r = (dist_min A).y by A1,FUNCT_1:def 12;
+     reconsider y as Point of TopSpaceMetr M by A3;
+       (dist_min A).y >= 0 by Th9;
+    hence 0 <= r by A4;
+   end;
+    dom dist_min A = the carrier of TopSpaceMetr M by FUNCT_2:def 1;
+  then X is non empty by A1,RELAT_1:152;
+  then lower_bound X >= 0 by A2,PSCOMP_1:8;
+  then lower_bound((dist_min A).:B) >= 0 by WEIERSTR:def 5;
+ hence min_dist_min(A,B) >= 0 by WEIERSTR:def 9;
+end;
+
+theorem Th12:
+ for A,B being compact Subset of TopSpaceMetr M st A meets B
+  holds min_dist_min(A,B) = 0
+proof let A,B be compact Subset of TopSpaceMetr M;
+  assume A meets B;
+   then consider p being set such that
+A1:  p in A and
+A2:  p in B by XBOOLE_0:3;
+     TopSpaceMetr M =
+    TopStruct (#the carrier of M,Family_open_set M#)
+           by PCOMPS_1:def 6;
+   then reconsider p as Point of M by A1;
+A3: min_dist_min(A,B) >= 0 by A1,A2,Th11;
+    min_dist_min(A,B) <= dist(p,p) by A1,A2,WEIERSTR:40;
+ hence min_dist_min(A,B) = 0 by A3,METRIC_1:1;
+end;
+
+theorem Th13:
+ for A,B being non empty Subset of TopSpaceMetr M
+   st for p,q being Point of M st p in A & q in B
+        holds dist(p,q) >= r
+  holds min_dist_min(A,B) >= r
+proof let A,B be non empty Subset of TopSpaceMetr M such that
+A1: for p,q being Point of M st p in A & q in B
+      holds dist(p,q) >= r;
+  set X = [#]((dist_min A).:B);
+A2: X = (dist_min A).:B by WEIERSTR:def 3;
+A3: for s being real number st s in X holds r <= s
+   proof let s be real number;
+    assume s in X;
+     then consider y being set such that
+        y in dom dist_min A and
+A4:   y in B and
+A5:   s = (dist_min A).y by A2,FUNCT_1:def 12;
+     reconsider y as Point of TopSpaceMetr M by A4;
+     reconsider p = y as Point of M by TOPMETR:16;
+       for q being Point of M st q in A holds dist(p,q) >= r by A1,A4;
+    hence r <= s by A5,Th10;
+   end;
+    dom dist_min A = the carrier of TopSpaceMetr M by FUNCT_2:def 1;
+  then X is non empty by A2,RELAT_1:152;
+  then lower_bound X >= r by A3,PSCOMP_1:8;
+  then lower_bound((dist_min A).:B) >= r by WEIERSTR:def 5;
+ hence min_dist_min(A,B) >= r by WEIERSTR:def 9;
+end;
+
+begin :: Euclid topological spaces
+
+theorem Th14:
+ for P,Q being Subset of TOP-REAL n st P is_a_component_of Q`
+  holds P is_inside_component_of Q or P is_outside_component_of Q
+ proof let P,Q be Subset of TOP-REAL n;
+     P is Bounded or P is not Bounded;
+  hence thesis by JORDAN2C:def 3,def 4;
+ end;
+
+theorem
+   n>= 1 implies BDD {}TOP-REAL n = {}TOP-REAL n
+ proof assume n>= 1;
+   then A1: [#](TOP-REAL n) is not Bounded by JORDAN2C:41;
+   set X = {B where B is Subset of TOP-REAL n:
+            B is_inside_component_of {}(TOP-REAL n)};
+     now assume X <> {};
+     then consider x being set such that
+A2:   x in X by XBOOLE_0:def 1;
+     consider B being Subset of TOP-REAL n such that x = B and
+A3:  B is_inside_component_of {}(TOP-REAL n) by A2;
+A4:   B is_a_component_of ({}(TOP-REAL n))` by A3,JORDAN2C:def 3;
+A5:   [#]TOP-REAL n = ({}TOP-REAL n)` by PRE_TOPC:27;
+A6: [#](TOP-REAL n) is_a_component_of TOP-REAL n by JORDAN2C:23;
+     (TOP-REAL n)| [#]TOP-REAL n = TOP-REAL n by TSEP_1:3;
+   then A7:  [#]TOP-REAL n is_a_component_of [#]TOP-REAL n by A6,CONNSP_1:def 6
+;
+       B c= [#]TOP-REAL n by PRE_TOPC:14;
+     then B = [#]TOP-REAL n by A4,A5,A7,Th7;
+    hence contradiction by A1,A3,JORDAN2C:def 3;
+   end;
+  hence BDD {}TOP-REAL n = {}TOP-REAL n by JORDAN2C:def 5,ZFMISC_1:2;
+ end;
+
+theorem
+   BDD [#]TOP-REAL n = {}TOP-REAL n
+  proof
+     BDD [#]TOP-REAL n c= ([#]TOP-REAL n)` by JORDAN2C:29;
+   then BDD [#]TOP-REAL n c= ([#]TOP-REAL n)`;
+   then BDD [#]TOP-REAL n c= {}TOP-REAL n by TOPS_1:8;
+   hence BDD [#]TOP-REAL n = {}TOP-REAL n by XBOOLE_1:3;
+  end;
+
+theorem
+   n>= 1 implies UBD {}TOP-REAL n = [#]TOP-REAL n
+ proof assume n>= 1;
+   then A1: [#](TOP-REAL n) is not Bounded by JORDAN2C:41;
+     UBD {}TOP-REAL n c= the carrier of TOP-REAL n;
+  hence UBD {}TOP-REAL n c= [#]TOP-REAL n by PRE_TOPC:def 3;
+A2: [#](TOP-REAL n) is_a_component_of TOP-REAL n by JORDAN2C:23;
+     (TOP-REAL n)| [#]TOP-REAL n = TOP-REAL n by TSEP_1:3;
+   then A3:  [#]TOP-REAL n is_a_component_of [#]TOP-REAL n by A2,CONNSP_1:def 6
+;
+   set X =
+   {B where B is Subset of TOP-REAL n: B is_outside_component_of {}TOP-REAL n};
+     [#]TOP-REAL n = ({}TOP-REAL n)` by PRE_TOPC:27;
+   then [#]TOP-REAL n is_outside_component_of {}TOP-REAL n
+             by A1,A3,JORDAN2C:def 4;
+   then [#]TOP-REAL n in X;
+   then [#]TOP-REAL n c= union X by ZFMISC_1:92;
+  hence [#]TOP-REAL n c= UBD {}TOP-REAL n by JORDAN2C:def 6;
+ end;
+
+theorem
+   UBD [#]TOP-REAL n = {}TOP-REAL n
+  proof
+     UBD [#]TOP-REAL n c= ([#]TOP-REAL n)` by JORDAN2C:30;
+   then UBD [#]TOP-REAL n c= ([#]TOP-REAL n)`;
+   then UBD [#]TOP-REAL n c= {}TOP-REAL n by TOPS_1:8;
+   hence UBD [#]TOP-REAL n = {}TOP-REAL n by XBOOLE_1:3;
+  end;
+
+theorem Th19:
+ for P being connected Subset of TOP-REAL n,
+     Q being Subset of TOP-REAL n st P misses Q
+  holds P c= UBD Q or P c= BDD Q
+proof let P be connected Subset of TOP-REAL n,
+          Q being Subset of TOP-REAL n such that
+A1: P misses Q;
+  per cases;
+  suppose P is empty;
+   hence thesis by XBOOLE_1:2;
+  suppose
+A2:  Q = [#]TOP-REAL n;
+      P c= the carrier of TOP-REAL n;
+    then P c= Q by A2,PRE_TOPC:12;
+    then P = {} by A1,XBOOLE_1:67;
+   hence thesis by XBOOLE_1:2;
+  suppose that
+A3: P is not empty and
+A4: Q <> [#]TOP-REAL n;
+      Q`` <> [#]TOP-REAL n by A4;
+    then Q` <> {}TOP-REAL n by PRE_TOPC:27;
+    then A5:  Q` is non empty;
+    P c= Q` by A1,SUBSET_1:43;
+  then consider C being Subset of TOP-REAL n such that
+A6: C is_a_component_of Q` and
+A7: P c= C by A3,A5,GOBOARD9:5;
+    C is_inside_component_of Q or C is_outside_component_of Q by A6,Th14;
+  then C c= UBD Q or C c= BDD Q by JORDAN2C:26,27;
+ hence P c= UBD Q or P c= BDD Q by A7,XBOOLE_1:1;
+end;
+
+begin :: Euclid plane
+
+reserve C,D for Simple_closed_curve,
+        n for Nat,
+        p,q,q1,q2 for Point of TOP-REAL 2,
+        r,s1,s2,t1,t2 for Real,
+        x,y for Point of Euclid 2;
+
+theorem Th20:
+  dist(|[0,0]|,r*q) = abs(r)*dist(|[0,0]|,q)
+proof
+A1: r^2 >= 0 by SQUARE_1:72;
+A2: q`1^2 >=0 by SQUARE_1:72;
+     q`2^2 >=0 by SQUARE_1:72;
+   then A3: q`1^2 + q`2^2 >=0 by A2,JORDAN2C:5;
+A4: |[0,0]|`1 = 0 & |[0,0]|`2 = 0 by EUCLID:56;
+   then A5: dist(|[0,0]|,q) = sqrt((0-q`1)^2 + (0-q`2)^2) by GOBRD14:9
+     .= sqrt((-q`1)^2 + (0-q`2)^2) by XCMPLX_1:150
+     .= sqrt((-q`1)^2 + (-q`2)^2) by XCMPLX_1:150
+     .= sqrt((q`1)^2 + (-q`2)^2) by SQUARE_1:61
+     .= sqrt(q`1^2 + q`2^2) by SQUARE_1:61;
+ thus dist(|[0,0]|,r*q) = sqrt((0-(r*q)`1)^2 + (0-(r*q)`2)^2) by A4,GOBRD14:9
+     .= sqrt((-(r*q)`1)^2 + (0-(r*q)`2)^2) by XCMPLX_1:150
+     .= sqrt((-(r*q)`1)^2 + (-(r*q)`2)^2) by XCMPLX_1:150
+     .= sqrt(((r*q)`1)^2 + (-(r*q)`2)^2) by SQUARE_1:61
+     .= sqrt(((r*q)`1)^2 + ((r*q)`2)^2) by SQUARE_1:61
+     .= sqrt((r*q`1)^2 + ((r*q)`2)^2) by TOPREAL3:9
+     .= sqrt((r*q`1)^2 + (r*q`2)^2) by TOPREAL3:9
+     .= sqrt(r^2*q`1^2 + (r*q`2)^2) by SQUARE_1:68
+     .= sqrt(r^2*q`1^2 + r^2*q`2^2) by SQUARE_1:68
+     .= sqrt(r^2*(q`1^2 + q`2^2)) by XCMPLX_1:8
+     .= sqrt(r^2)*sqrt(q`1^2 + q`2^2) by A1,A3,SQUARE_1:97
+     .= abs(r)*dist(|[0,0]|,q) by A5,SQUARE_1:91;
+end;
+
+theorem Th21:
+ dist(q1+q,q2+q) = dist(q1,q2)
+proof
+A1: (q1+q)`1-(q2+q)`1 = q1`1+q`1-(q2+q)`1 by TOPREAL3:7
+     .= q1`1+q`1-(q2`1+q`1) by TOPREAL3:7
+     .= q1`1+q`1-q2`1-q`1 by XCMPLX_1:36
+     .= q1`1-q2`1+q`1-q`1 by XCMPLX_1:29
+     .= q1`1-q2`1+(q`1-q`1) by XCMPLX_1:29
+     .= q1`1-q2`1+0 by XCMPLX_1:14;
+A2: (q1+q)`2-(q2+q)`2 = q1`2+q`2-(q2+q)`2 by TOPREAL3:7
+     .= q1`2+q`2-(q2`2+q`2) by TOPREAL3:7
+     .= q1`2+q`2-q2`2-q`2 by XCMPLX_1:36
+     .= q1`2-q2`2+q`2-q`2 by XCMPLX_1:29
+     .= q1`2-q2`2+(q`2-q`2) by XCMPLX_1:29
+     .= q1`2-q2`2+0 by XCMPLX_1:14;
+ thus dist(q1+q,q2+q)
+         = sqrt (((q1+q)`1-(q2+q)`1)^2 + ((q1+q)`2-(q2+q)`2)^2) by GOBRD14:9
+        .= dist(q1,q2) by A1,A2,GOBRD14:9;
+end;
+
+theorem Th22:
+ p <> q implies dist(p,q) > 0
+ proof
+    ex p', q' being Point of Euclid 2
+   st p' = p & q' = q & dist(p,q) = dist(p',q') by GOBRD14:def 1;
+  hence thesis by SUB_METR:2;
+ end;
+
+theorem Th23:
+ dist(q1-q,q2-q) = dist(q1,q2)
+proof
+    q1-q = q1+-q & q2-q = q2+-q by EUCLID:45;
+ hence dist(q1-q,q2-q) = dist(q1,q2) by Th21;
+end;
+
+theorem Th24:
+ dist(p,q) = dist(-p,-q)
+proof
+ thus dist(p,q) = dist(q-q,p-q) by Th23
+     .= dist(q-q,p+-q) by EUCLID:45
+     .= dist(|[0,0]|,p+-q) by EUCLID:46,58
+     .= dist(p-p,p+-q) by EUCLID:46,58
+     .= dist(p+-p,p+-q) by EUCLID:45
+     .= dist(-p,-q) by Th21;
+end;
+
+theorem Th25:
+ dist(q-q1,q-q2) = dist(q1,q2)
+proof
+    -(q-q1)= q1-q & -(q-q2) = q2-q by EUCLID:48;
+ hence dist(q-q1,q-q2) = dist(q1-q,q2-q) by Th24
+    .= dist(q1,q2) by Th23;
+end;
+
+theorem Th26:
+  dist(r*p,r*q) = abs(r)*dist(p,q)
+proof
+ thus dist(r*p,r*q) = dist(r*p-r*p,r*p-r*q) by Th25
+     .= dist(|[0,0]|,r*p-r*q) by EUCLID:46,58
+     .= dist(|[0,0]|,r*(p-q)) by EUCLID:53
+     .= abs(r)*dist(|[0,0]|,p-q) by Th20
+     .= abs(r)*dist(p-p,p-q) by EUCLID:46,58
+     .= abs(r)*dist(p,q) by Th25;
+end;
+
+theorem Th27:
+ r <= 1 implies dist(p,r*p+(1-r)*q) = (1-r)*dist(p,q)
+proof assume
+  r <= 1;
+ then 1+ r <= 1 + 1 by AXIOMS:24;
+ then 1-r >= 1-1 by REAL_2:167;
+ then A1: abs(1-r) = 1-r by ABSVALUE:def 1;
+ thus dist(p,r*p+(1-r)*q) = dist(1 *p,r*p+(1-r)*q) by EUCLID:33
+        .= dist((r+(1-r))*p,r*p+(1-r)*q) by XCMPLX_1:27
+        .= dist(r*p+(1-r)*p,r*p+(1-r)*q) by EUCLID:37
+        .= dist((1-r)*p,(1-r)*q) by Th21
+        .= (1-r)*dist(p,q) by A1,Th26;
+end;
+
+theorem Th28:
+ 0 <= r implies dist(q,r*p+(1-r)*q) = r*dist(p,q)
+proof assume
+  0 <= r;
+then A1: abs r = r by ABSVALUE:def 1;
+ thus dist(q,r*p+(1-r)*q) = dist(1 *q,r*p+(1-r)*q) by EUCLID:33
+        .= dist(r*p+(1-r)*q,(r+(1-r))*q) by XCMPLX_1:27
+        .= dist(r*q+(1-r)*q,r*p+(1-r)*q) by EUCLID:37
+        .= dist(r*q,r*p) by Th21
+        .= r*dist(p,q) by A1,Th26;
+end;
+
+theorem Th29:
+ p in LSeg(q1,q2) implies dist(q1,p) + dist(p,q2) = dist(q1,q2)
+proof assume p in LSeg(q1,q2);
+  then consider r such that
+A1: 0<=r and
+A2: r<=1 and
+A3: p = (1-r)*q1+r*q2 by SPPOL_1:21;
+A4: dist(q1,p) = r*dist(q1,q2) by A1,A3,Th28;
+    dist(q2,p) = (1-r)*dist(q1,q2) by A2,A3,Th27;
+ hence dist(q1,p) + dist(p,q2) = (r+ (1-r))*dist(q1,q2) by A4,XCMPLX_1:8
+      .= 1 *dist(q1,q2) by XCMPLX_1:27
+      .= dist(q1,q2);
+end;
+
+theorem Th30:
+ q1 in LSeg(q2,p) & q1 <> q2 implies dist(q1,p) < dist(q2,p)
+ proof assume that
+A1: q1 in LSeg(q2,p) and
+A2: q1 <> q2;
+A3: dist(q2,q1) + dist(q1,p) = dist(q2,p) by A1,Th29;
+     dist(q2,q1) > 0 by A2,Th22;
+  hence dist(q1,p) < dist(q2,p) by A3,REAL_1:69;
+ end;
+
+theorem Th31:
+ y = |[0,0]| implies Ball(y,r) = {q : |.q.| < r }
+ proof assume
+A1: y = |[0,0]|;
+   set X = { q : |.|[0,0]|-q.| < r }, Y = {q : |.q.| < r };
+A2: X c= Y
+    proof let u be set;
+     assume u in X;
+      then consider q such that
+A3:     u = q & |.|[0,0]|-q.| < r;
+        |.|[0,0]|-q.| = |.q-|[0,0]|.| by TOPRNS_1:28
+           .= |.q.| by EUCLID:58,JORDAN2C:13;
+     hence u in Y by A3;
+    end;
+A4: Y c= X
+    proof let u be set;
+     assume u in Y;
+      then consider q such that
+A5:     u = q & |.q.| < r;
+        |.|[0,0]|-q.| = |.q-|[0,0]|.| by TOPRNS_1:28
+           .= |.q.| by EUCLID:58,JORDAN2C:13;
+     hence u in X by A5;
+    end;
+  thus Ball(y,r) = { q : |.|[0,0]|-q.| < r } by A1,JGRAPH_2:10
+      .= {q : |.q.| < r } by A2,A4,XBOOLE_0:def 10;
+ end;
+
+begin :: Affine maps
+
+theorem Th32:
+ AffineMap(r,s1,r,s2).p = r*p+|[s1,s2]|
+  proof
+   thus AffineMap(r,s1,r,s2).p
+        = |[r*(p`1)+s1,r*(p`2)+s2]| by JGRAPH_2:def 2
+       .= |[(r*p)`1+s1,r*(p`2)+s2]| by TOPREAL3:9
+       .= |[(r*p)`1+s1,(r*p)`2+s2]| by TOPREAL3:9
+       .= |[(r*p)`1,(r*p)`2]|+ |[s1,s2]| by EUCLID:60
+       .= r*p + |[s1,s2]| by EUCLID:57;
+  end;
+
+theorem Th33:
+  AffineMap(r,q`1,r,q`2).p = r*p+q
+  proof
+   thus AffineMap(r,q`1,r,q`2).p = r*p+|[q`1,q`2]| by Th32
+              .= r*p+q by EUCLID:57;
+  end;
+
+theorem Th34:
+ s1 > 0 & s2 > 0 implies
+ AffineMap(s1,t1,s2,t2)*AffineMap(1/s1,-t1/s1,1/s2,-t2/s2) = id REAL 2
+proof assume that
+A1: s1 > 0 and
+A2: s2 > 0;
+    the carrier of TOP-REAL 2 = REAL 2 by EUCLID:25;
+  then reconsider f = id REAL 2 as
+   Function of the carrier of TOP-REAL 2, the carrier of TOP-REAL 2;
+    now let p be Point of TOP-REAL 2;
+     p in the carrier of TOP-REAL 2;
+   then A3: p in REAL 2 by EUCLID:25;
+    set q = |[1/s1*(p`1)-t1/s1,1/s2*(p`2)-t2/s2]|;
+A4: q`2 = 1/s2*(p`2)-t2/s2 by EUCLID:56;
+A5: s1*(1/s1) = 1 by A1,XCMPLX_1:107;
+   thus (AffineMap(s1,t1,s2,t2)*AffineMap(1/s1,-t1/s1,1/s2,-t2/s2)).p
+      = AffineMap(s1,t1,s2,t2).(AffineMap(1/s1,-t1/s1,1/s2,-t2/s2).p)
+                     by FUNCT_2:70
+     .= AffineMap(s1,t1,s2,t2). |[1/s1*(p`1)+-t1/s1,1/s2*(p`2)+-t2/s2]|
+                     by JGRAPH_2:def 2
+     .= AffineMap(s1,t1,s2,t2). |[1/s1*(p`1)-t1/s1,1/s2*(p`2)+-t2/s2]|
+                               by XCMPLX_0:def 8
+     .= AffineMap(s1,t1,s2,t2).q by XCMPLX_0:def 8
+     .= |[s1*(q`1)+t1,s2*(q`2)+t2]| by JGRAPH_2:def 2
+     .= |[s1*(1/s1*(p`1)-t1/s1)+t1,s2*(q`2)+t2]| by EUCLID:56
+     .= |[s1*(1/s1*(p`1))-s1*(t1/s1)+t1,s2*(q`2)+t2]| by XCMPLX_1:40
+     .= |[s1*(1/s1*(p`1))-t1+t1,s2*(q`2)+t2]| by A1,XCMPLX_1:88
+     .= |[ 1 *(p`1)-1 *t1+t1,s2*(q`2)+t2]| by A5,XCMPLX_1:4
+     .= |[p`1,s2*(q`2)+t2]| by XCMPLX_1:27
+     .= |[p`1,s2*(1/s2*(p`2))-s2*(t2/s2)+t2]| by A4,XCMPLX_1:40
+     .= |[p`1,s2*(1/s2)*(p`2)-s2*(t2/s2)+t2]| by XCMPLX_1:4
+     .= |[p`1,s2*(1/s2)*(p`2)-t2+t2]| by A2,XCMPLX_1:88
+     .= |[p`1,1 *(p`2)-1 *t2+t2]| by A2,XCMPLX_1:107
+     .= |[p`1,p`2]| by XCMPLX_1:27
+     .= p by EUCLID:57
+     .= f.p by A3,FUNCT_1:35;
+  end;
+ hence AffineMap(s1,t1,s2,t2)*AffineMap(1/s1,-t1/s1,1/s2,-t2/s2) = id REAL 2
+               by FUNCT_2:113;
+end;
+
+theorem Th35:
+ y = |[0,0]| & x = q & r > 0 implies
+  AffineMap(r,q`1,r,q`2).:Ball(y,1) = Ball(x,r)
+proof assume that
+A1: y = |[0,0]| and
+A2: x = q and
+A3: r > 0;
+  reconsider A = Ball(y,1), B = Ball(x,r)
+      as Subset of TOP-REAL 2 by TOPREAL3:13;
+A4: AffineMap(r,q`1,r,q`2).:A c= B
+   proof let u be set;
+    assume
+A5:  u in AffineMap(r,q`1,r,q`2).:A;
+     then reconsider q1 = u as Point of TOP-REAL 2;
+     consider q2 such that
+A6:   q2 in A and
+A7:   q1 = AffineMap(r,q`1,r,q`2).q2 by A5,FUNCT_2:116;
+A8:   q1 = r*q2 + q by A7,Th33;
+     reconsider x1 = q1, x2 = q2 as Element of Euclid 2
+                 by TOPREAL3:13;
+A9:   dist(y,x2) < 1 by A6,METRIC_1:12;
+     consider z1,z2 being Point of Euclid 2 such that
+A10:   z1 = q & z2 = r*q2+q and
+A11:   dist(q,r*q2+q) = dist(z1,z2) by GOBRD14:def 1;
+     consider z3,z4 being Point of Euclid 2 such that
+A12:   z3 = |[0,0]| & z4 = q2 and
+A13:   dist(|[0,0]|,q2) = dist(z3,z4) by GOBRD14:def 1;
+       dist(x,x1) = dist(|[0,0]|+q,r*q2 + q) by A2,A8,A10,A11,EUCLID:31,58
+           .= dist(|[0,0]|,r*q2) by Th21
+           .= abs(r)*dist(|[0,0]|,q2) by Th20
+           .= r*dist(y,x2) by A1,A3,A12,A13,ABSVALUE:def 1;
+     then dist(x,x1) < r by A3,A9,REAL_2:145;
+    hence u in B by METRIC_1:12;
+   end;
+    B c= AffineMap(r,q`1,r,q`2).:A
+   proof let u be set;
+    assume
+A14:  u in B;
+     then reconsider q1 = u as Point of TOP-REAL 2;
+     set q2 = AffineMap(1/r,-q`1/r,1/r,-q`2/r).q1;
+     consider z1,z2 being Point of Euclid 2 such that
+A15:   z1 = q & z2 = r*q2+q and
+A16:   dist(q,r*q2+q) = dist(z1,z2) by GOBRD14:def 1;
+     consider z3,z4 being Point of Euclid 2 such that
+A17:   z3 = |[0,0]| & z4 = q2 and
+A18:   dist(|[0,0]|,q2) = dist(z3,z4) by GOBRD14:def 1;
+     reconsider x1 = q1 as Element of Euclid 2 by TOPREAL3:13;
+       q1 in the carrier of TOP-REAL2;
+     then A19:   q1 in REAL 2 by EUCLID:25;
+       z2 = AffineMap(r,q`1,r,q`2).q2 by A15,Th33
+       .= (AffineMap(r,q`1,r,q`2)*AffineMap(1/r,-q`1/r,1/r,-q`2/r)).q1
+                     by FUNCT_2:21
+       .= (id REAL 2).q1 by A3,Th34
+       .= x1 by A19,FUNCT_1:35;
+     then dist(x,x1) = dist(|[0,0]|+q,r*q2 + q) by A2,A15,A16,EUCLID:31,58
+           .= dist(|[0,0]|,r*q2) by Th21
+           .= abs(r)*dist(|[0,0]|,q2) by Th20
+           .= r*dist(y,z4) by A1,A3,A17,A18,ABSVALUE:def 1;
+     then r*dist(y,z4) < 1 *r by A14,METRIC_1:12;
+     then dist(y,z4) < 1 by A3,AXIOMS:25;
+     then A20:   q2 in A by A17,METRIC_1:12;
+       AffineMap(r,q`1,r,q`2).q2
+        = (AffineMap(r,q`1,r,q`2)*AffineMap(1/r,-q`1/r,1/r,-q`2/r)).q1
+                  by FUNCT_2:70
+       .= (id REAL 2).q1 by A3,Th34
+       .= (id the carrier of TOP-REAL 2).q1 by EUCLID:25
+       .= (id TOP-REAL 2).q1 by GRCAT_1:def 11
+       .= q1 by GRCAT_1:11;
+    hence u in AffineMap(r,q`1,r,q`2).:A by A20,FUNCT_2:43;
+   end;
+ hence thesis by A4,XBOOLE_0:def 10;
+end;
+
+theorem Th36:
+ for A,B,C,D being Real st A>0 & C>0
+  holds AffineMap(A,B,C,D) is onto
+proof let A,B,C,D be Real such that
+A1: A>0 and
+A2: C>0;
+ thus rng AffineMap(A,B,C,D) c= the carrier of TOP-REAL 2;
+ let e be set;
+ assume e in the carrier of TOP-REAL 2;
+  then reconsider q1 = e as Point of TOP-REAL 2;
+  set q2 = AffineMap(1/A,-B/A,1/C,-D/C).q1;
+A3: the carrier of TOP-REAL 2 = REAL 2 by EUCLID:25;
+     AffineMap(A,B,C,D).q2
+        = (AffineMap(A,B,C,D)*AffineMap(1/A,-B/A,1/C,-D/C)).q1
+                     by FUNCT_2:21
+       .= (id REAL 2).q1 by A1,A2,Th34
+       .= q1 by A3,FUNCT_1:35;
+ hence e in rng AffineMap(A,B,C,D) by FUNCT_2:6;
+end;
+
+theorem Th37:
+ Ball(x,r)` is connected Subset of TOP-REAL 2
+proof set C = Ball(x,r)`;
+ per cases;
+ suppose r <= 0;
+then Ball(x,r) = {} TOP-REAL 2 by TBSP_1:17;
+ then C = [#] Euclid 2 \ {} by PRE_TOPC:17
+  .= the carrier of Euclid 2 by PRE_TOPC:12
+  .= the carrier of TOP-REAL 2 by TOPREAL3:13
+  .= [#] TOP-REAL 2 by PRE_TOPC:12;
+ hence thesis by JORDAN2C:22;
+ suppose
+A1: r > 0;
+A2: the carrier of TOP-REAL 2 = the carrier of Euclid 2 by TOPREAL3:13;
+  then A3:  the carrier of Euclid 2 = REAL 2 by EUCLID:25;
+  reconsider y = |[0,0]| as Point of Euclid 2 by TOPREAL3:13;
+  reconsider q = x as Point of TOP-REAL 2 by TOPREAL3:13;
+  reconsider Q = Ball(x,r), J = Ball(y,1) as Subset of TOP-REAL 2
+            by A2;
+  reconsider P = Q`, K = J` as Subset of TOP-REAL 2;
+    K = Ball(y,1)` by TOPREAL3:13
+   .= (REAL 2)\ Ball(y,1) by A3,SUBSET_1:def 5
+   .= (REAL 2)\ {q1 : |.q1.| < 1 } by Th31;
+  then A4: K is connected by JORDAN2C:61;
+A5: AffineMap(r,q`1,r,q`2) is one-to-one by A1,JGRAPH_2:54;
+    AffineMap(r,q`1,r,q`2) is onto by A1,Th36;
+  then A6: AffineMap(r,q`1,r,q`2) is bijective by A5,FUNCT_2:def 4;
+    Q = AffineMap(r,q`1,r,q`2).:J by A1,Th35;
+  then P = AffineMap(r,q`1,r,q`2).:K by A6,Th5;
+ hence thesis by A2,A4,TOPREAL5:5;
+end;
+
+begin :: Minimal distance between subsets
+
+definition let n; let A,B be Subset of TOP-REAL n;
+ func dist_min(A,B) -> Real means
+:Def1: ex A',B' being Subset of TopSpaceMetr Euclid n
+   st A = A' & B = B' & it = min_dist_min(A',B');
+ existence
+  proof
+      TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+    then reconsider A'=A, B'=B as Subset of TopSpaceMetr Euclid n
+        ;
+   take min_dist_min(A',B'), A', B';
+   thus thesis;
+  end;
+ uniqueness;
+end;
+
+definition
+   let M be non empty MetrSpace;
+   let P,Q be non empty compact Subset of TopSpaceMetr M;
+ redefine func min_dist_min(P,Q);
+  commutativity
+   proof let P,Q be non empty compact Subset of TopSpaceMetr M;
+     consider y1,y2 being Point of M such that
+A1:   y1 in Q and
+A2:   y2 in P and
+A3:   dist(y1,y2) = min_dist_min(Q,P) by WEIERSTR:36;
+     consider x1,x2 being Point of M such that
+A4:   x1 in P and
+A5:   x2 in Q and
+A6:   dist(x1,x2) = min_dist_min(P,Q) by WEIERSTR:36;
+A7:   dist(x1,x2) <= dist(y1,y2) by A1,A2,A6,WEIERSTR:40;
+       dist(y1,y2) <= dist(x1,x2) by A3,A4,A5,WEIERSTR:40;
+    hence thesis by A3,A6,A7,AXIOMS:21;
+   end;
+   func max_dist_max(P,Q);
+  commutativity
+   proof let P,Q be non empty compact Subset of TopSpaceMetr M;
+     consider y1,y2 being Point of M such that
+A8:   y1 in Q and
+A9:   y2 in P and
+A10:   dist(y1,y2) = max_dist_max(Q,P) by WEIERSTR:39;
+     consider x1,x2 being Point of M such that
+A11:   x1 in P and
+A12:   x2 in Q and
+A13:   dist(x1,x2) = max_dist_max(P,Q) by WEIERSTR:39;
+A14:   dist(x1,x2) <= dist(y1,y2) by A10,A11,A12,WEIERSTR:40;
+       dist(y1,y2) <= dist(x1,x2) by A8,A9,A13,WEIERSTR:40;
+    hence thesis by A10,A13,A14,AXIOMS:21;
+   end;
+end;
+
+definition let n;
+ let A,B be non empty compact Subset of TOP-REAL n;
+ redefine func dist_min(A,B);
+ commutativity
+  proof let A,B be non empty compact Subset of TOP-REAL n;
+    consider A',B' being Subset of TopSpaceMetr Euclid n such that
+A1: A = A' & B = B' and
+A2: dist_min(A,B) = min_dist_min(A',B') by Def1;
+      TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+    then reconsider A',B' as non empty compact Subset of TopSpaceMetr Euclid n
+                        by A1;
+      dist_min(A,B) = min_dist_min(B',A') by A2;
+   hence thesis by A1,Def1;
+  end;
+end;
+
+theorem Th38:
+ for A,B being non empty Subset of TOP-REAL n
+  holds dist_min(A,B) >= 0
+proof let A,B be non empty Subset of TOP-REAL n;
+    ex A',B' be Subset of TopSpaceMetr Euclid n st A = A' & B = B'
+   & dist_min(A,B) = min_dist_min(A',B') by Def1;
+ hence dist_min(A,B) >= 0 by Th11;
+end;
+
+theorem Th39:
+ for A,B being compact Subset of TOP-REAL n st A meets B
+  holds dist_min(A,B) = 0
+proof let A,B be compact Subset of TOP-REAL n such that
+A1: A meets B;
+A2: TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+    ex A',B' be Subset of TopSpaceMetr Euclid n st A = A' & B = B'
+   & dist_min(A,B) = min_dist_min(A',B') by Def1;
+ hence dist_min(A,B) = 0 by A1,A2,Th12;
+end;
+
+theorem Th40:
+ for A,B being non empty Subset of TOP-REAL n
+  st for p,q being Point of TOP-REAL n st p in A & q in B
+        holds dist(p,q) >= r
+ holds dist_min(A,B) >= r
+proof let A,B be non empty Subset of TOP-REAL n such that
+A1: for p,q being Point of TOP-REAL n st p in A & q in B holds dist(p,q) >= r;
+A2: for p,q being Point of Euclid n st p in A & q in B
+       holds dist(p,q) >= r
+    proof let a,b being Point of Euclid n such that
+A3:   a in A & b in B;
+      reconsider p =a, q = b as Point of TOP-REAL n by TOPREAL3:13;
+        ex a, b being Point of Euclid n
+         st p = a & q = b & dist(p,q) = dist(a,b) by GOBRD14:def 1;
+     hence dist(a,b) >= r by A1,A3;
+    end;
+    ex A',B' be Subset of TopSpaceMetr Euclid n st A = A' & B = B'
+   & dist_min(A,B) = min_dist_min(A',B') by Def1;
+ hence dist_min(A,B) >= r by A2,Th13;
+end;
+
+theorem Th41:
+ for D being Subset of TOP-REAL n,
+     A,C being non empty Subset of TOP-REAL n st C c= D
+  holds dist_min(A,D) <= dist_min(A,C)
+proof let D be Subset of TOP-REAL n;
+ let A,C be non empty Subset of TOP-REAL n such that
+A1: C c= D;
+  consider A',D' be Subset of TopSpaceMetr Euclid n such that
+A2: A = A' and
+A3: D = D' and
+A4: dist_min(A,D) = min_dist_min(A',D') by Def1;
+  consider A'',C' be Subset of TopSpaceMetr Euclid n such that
+A5: A = A'' and
+A6: C = C' and
+A7: dist_min(A,C) = min_dist_min(A'',C') by Def1;
+  reconsider f = dist_min A' as
+    Function of the carrier of TopSpaceMetr Euclid n, REAL by TOPMETR:24;
+    dom f = the carrier of TopSpaceMetr Euclid n by FUNCT_2:def 1;
+  then reconsider X = f.:C' as non empty Subset of REAL by A6,RELAT_1:152;
+ reconsider Y = f.:D' as Subset of REAL;
+A8: inf Y = lower_bound([#]((dist_min A').:D')) by WEIERSTR:def 3
+        .= lower_bound((dist_min A').:D') by WEIERSTR:def 5
+        .= min_dist_min(A',D') by WEIERSTR:def 9;
+A9: inf X = lower_bound([#]((dist_min A').:C')) by WEIERSTR:def 3
+        .= lower_bound((dist_min A').:C') by WEIERSTR:def 5
+        .= min_dist_min(A',C') by WEIERSTR:def 9;
+A10: Y is bounded_below
+    proof
+     take 0;
+     let r be real number;
+     assume r in Y;
+      then ex c being Element of TopSpaceMetr Euclid n st
+       c in D' & r = f.c by FUNCT_2:116;
+     hence 0<=r by A2,Th9;
+    end;
+    f.:C c= f.:D by A1,RELAT_1:156;
+ hence dist_min(A,D) <= dist_min(A,C) by A2,A3,A4,A5,A6,A7,A8,A9,A10,PSCOMP_1:
+12;
+end;
+
+theorem Th42:
+ for A,B being non empty compact Subset of TOP-REAL n
+  ex p,q being Point of TOP-REAL n
+    st p in A & q in B & dist_min(A,B) = dist(p,q)
+proof let A,B be non empty compact Subset of TOP-REAL n;
+  consider A',B' being Subset of TopSpaceMetr Euclid n such that
+A1: A = A' and
+A2: B = B' and
+A3: dist_min(A,B) = min_dist_min(A',B') by Def1;
+     TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+   then consider x1,x2 being Point of Euclid n such that
+A4: x1 in A' and
+A5: x2 in B' and
+A6: dist(x1,x2) = min_dist_min(A',B') by A1,A2,WEIERSTR:36;
+  reconsider p = x1, q = x2 as Point of TOP-REAL n by TOPREAL3:13;
+ take p,q;
+ thus p in A & q in B by A1,A2,A4,A5;
+ thus dist_min(A,B) = dist(p,q) by A3,A6,GOBRD14:def 1;
+end;
+
+theorem Th43:
+ for p,q being Point of TOP-REAL n
+  holds dist_min({p},{q}) = dist(p,q)
+proof let p,q be Point of TOP-REAL n;
+  consider p',q' being Point of TOP-REAL n such that
+A1: p' in {p} & q' in {q} and
+A2: dist_min({p},{q}) = dist(p',q') by Th42;
+    p = p' & q = q' by A1,TARSKI:def 1;
+ hence dist_min({p},{q}) = dist(p,q) by A2;
+end;
+
+definition let n; let p be Point of TOP-REAL n;
+ let B be Subset of TOP-REAL n;
+ func dist(p,B) -> Real equals
+:Def2: dist_min({p},B);
+ coherence;
+end;
+
+theorem Th44:
+ for A being non empty Subset of TOP-REAL n,
+     p being Point of TOP-REAL n
+  holds dist(p,A) >= 0
+proof
+ let A be non empty Subset of TOP-REAL n,
+     p be Point of TOP-REAL n;
+    dist(p,A) = dist_min({p},A) by Def2;
+ hence dist(p,A) >= 0 by Th38;
+end;
+
+theorem Th45:
+ for A being compact Subset of TOP-REAL n,
+     p being Point of TOP-REAL n st p in A
+  holds dist(p,A) = 0
+proof
+ let A be compact Subset of TOP-REAL n,
+     p be Point of TOP-REAL n;
+ assume p in A;
+  then A1: {p} meets A by ZFMISC_1:54;
+    dist(p,A) = dist_min({p},A) by Def2;
+ hence dist(p,A) = 0 by A1,Th39;
+end;
+
+theorem Th46:
+ for A being non empty compact Subset of TOP-REAL n,
+     p being Point of TOP-REAL n
+  ex q being Point of TOP-REAL n
+    st q in A & dist(p,A) = dist(p,q)
+proof let A be non empty compact Subset of TOP-REAL n;
+ let p be Point of TOP-REAL n;
+  consider q,p' being Point of TOP-REAL n such that
+A1: q in A and
+A2: p' in {p} and
+A3: dist_min(A,{p}) = dist(q,p') by Th42;
+ take q;
+ thus q in A by A1;
+ thus dist(p,A) = dist_min({p},A) by Def2
+  .= dist(p,q) by A2,A3,TARSKI:def 1;
+end;
+
+theorem Th47:
+ for C being non empty Subset of TOP-REAL n
+ for D being Subset of TOP-REAL n st C c= D
+ for q being Point of TOP-REAL n
+  holds dist(q,D) <= dist(q,C)
+proof let C be non empty Subset of TOP-REAL n;
+ let D be Subset of TOP-REAL n such that
+A1: C c= D;
+ let q be Point of TOP-REAL n;
+     dist(q,D) = dist_min({q},D) & dist(q,C) = dist_min({q},C) by Def2;
+ hence dist(q,D) <= dist(q,C) by A1,Th41;
+end;
+
+theorem Th48:
+ for A being non empty Subset of TOP-REAL n, p being Point of TOP-REAL n
+  st for q being Point of TOP-REAL n st q in A holds dist(p,q) >= r
+ holds dist(p,A) >= r
+proof
+ let A be non empty Subset of TOP-REAL n,
+     p' be Point of TOP-REAL n such that
+A1: for q being Point of TOP-REAL n st q in A holds dist(p',q) >= r;
+A2: dist(p',A) = dist_min({p'},A) by Def2;
+    for p,q being Point of TOP-REAL n st p in {p'} & q in A
+        holds dist(p,q) >= r
+   proof let p,q be Point of TOP-REAL n such that
+A3:  p in {p'} and
+A4:  q in A;
+       p = p' by A3,TARSKI:def 1;
+    hence dist(p,q) >= r by A1,A4;
+   end;
+ hence thesis by A2,Th40;
+end;
+
+theorem Th49:
+ for p,q being Point of TOP-REAL n
+  holds dist(p,{q}) = dist(p,q)
+proof let p,q be Point of TOP-REAL n;
+   dist(p,{q}) = dist_min({p},{q}) by Def2;
+ hence thesis by Th43;
+end;
+
+theorem Th50:
+ for A being non empty Subset of TOP-REAL n,
+     p,q being Point of TOP-REAL n st q in A
+ holds dist(p,A) <= dist(p,q)
+proof let A be non empty Subset of TOP-REAL n;
+ let p,q be Point of TOP-REAL n;
+ assume q in A;
+  then {q} c= A by ZFMISC_1:37;
+  then dist(p,A) <= dist(p,{q}) by Th47;
+ hence dist(p,A) <= dist(p,q) by Th49;
+end;
+
+theorem Th51:
+  for A being compact non empty Subset of TOP-REAL 2,
+      B being open Subset of TOP-REAL 2 st A c= B
+ for p being Point of TOP-REAL 2 st not p in B
+  holds dist(p,B) < dist(p,A)
+proof
+ let A be compact non empty Subset of TOP-REAL 2,
+     B being open Subset of TOP-REAL 2 such that
+A1: A c= B;
+ let p be Point of TOP-REAL 2 such that
+A2: not p in B;
+A3: dist(p,B) <= dist(p,A) by A1,Th47;
+ assume dist(p,B) >= dist(p,A);
+  then A4: dist(p,B) = dist(p,A) by A3,AXIOMS:21;
+  consider q being Point of TOP-REAL 2 such that
+A5: q in A and
+A6: dist(p,A) = dist(p,q) by Th46;
+    TOP-REAL 2 = TopSpaceMetr Euclid 2 by EUCLID:def 8;
+  then reconsider P = B as open Subset of TopSpaceMetr Euclid 2;
+  reconsider a = q as Point of Euclid 2 by TOPREAL3:13;
+A7: a in P by A1,A5;
+  consider r being real number such that
+A8: r>0 and
+A9: Ball(a,r) c= P by A1,A5,TOPMETR:22;
+  reconsider r as Element of REAL by XREAL_0:def 1;
+  set s = r/(2*dist(p,q)), q' = (1-s)*q + s*p;
+A10: dist(p,q) > 0 by A2,A7,Th22;
+  then A11: 2*dist(p,q) > 0 by REAL_2:122;
+  then A12: 0 < s by A8,REAL_2:127;
+  then dist(q,q') = 1 *r/(2*dist(p,q))*dist(p,q) by Th28
+       .= r/2/(dist(p,q)/1)*dist(p,q) by XCMPLX_1:85
+       .= r/2 by A10,XCMPLX_1:88;
+  then A13: dist(q,q') < r/1 by A8,REAL_2:200;
+    ex p1, q1 being Point of Euclid 2
+      st p1 = q & q1 = q' & dist(q,q') = dist(p1,q1) by GOBRD14:def 1;
+  then A14: q' in Ball(a,r) by A13,METRIC_1:12;
+    now assume
+A15: r > dist(p,q);
+      ex p1, q1 being Point of Euclid 2
+      st p1 = p & q1 = q & dist(p,q) = dist(p1,q1) by GOBRD14:def 1;
+    then p in Ball(a,r) by A15,METRIC_1:12;
+   hence contradiction by A2,A9;
+  end;
+  then 1 *r < 2*dist(p,q) by A8,REAL_2:199;
+  then s < 1 by A11,REAL_2:118;
+  then A16: dist(p,q') = (1-s)*dist(p,q) by Th27;
+    1-s < 1-0 by A12,REAL_2:105;
+  then dist(p,q') < dist(p,q) by A10,A16,REAL_2:145;
+ hence contradiction by A4,A6,A9,A14,Th50;
+end;
+
+begin :: BDD & UBD
+
+theorem Th52:
+ UBD C meets UBD D
+proof
+    C is Bounded by JORDAN2C:73;
+  then consider A being Subset of Euclid 2 such that
+A1: C=A and
+A2: A is bounded by JORDAN2C:def 2;
+  consider r1 being Real, x1 being Point of Euclid 2 such that
+    0 < r1 and
+A3: A c= Ball(x1,r1) by A2,METRIC_6:def 10;
+    D is Bounded by JORDAN2C:73;
+  then consider B being Subset of Euclid 2 such that
+A4: D=B and
+A5: B is bounded by JORDAN2C:def 2;
+  consider r2 being Real, x2 being Point of Euclid 2 such that
+     0 < r2 and
+A6: B c= Ball(x2,r2) by A5,METRIC_6:def 10;
+  consider x3 being Point of Euclid 2, r3 being Real such that
+A7: Ball(x1,r1) \/ Ball(x2,r2) c= Ball(x3,r3) by WEIERSTR:1;
+     Ball(x3,r3)` c= (Ball(x1,r1) \/ Ball(x2,r2))` by A7,SUBSET_1:31;
+   then A8:  Ball(x3,r3)` c= Ball(x1,r1)` /\ Ball(x2,r2)` by SUBSET_1:29;
+   then A9:  Ball(x3,r3)` c= Ball(x1,r1)` by XBOOLE_1:18;
+A10: Ball(x3,r3)` c= Ball(x2,r2)` by A8,XBOOLE_1:18;
+   reconsider C' = Ball(x1,r1)`, D' = Ball(x2,r2)`
+       as connected Subset of TOP-REAL 2 by Th37;
+     Ball(x1,r1) is bounded by TBSP_1:19;
+   then A11:  Ball(x1,r1)` is not bounded by Th8;
+A12: now assume C' is Bounded;
+     then consider X being Subset of Euclid 2 such that
+A13:   X=C' and
+A14:   X is bounded by JORDAN2C:def 2;
+    thus contradiction by A11,A13,A14;
+   end;
+     Ball(x1,r1)` c= A` by A3,SUBSET_1:31;
+   then Ball(x1,r1)` misses A by SUBSET_1:43;
+   then C' c= UBD C by A1,A12,JORDAN1C:13;
+   then A15: Ball(x3,r3)` c= UBD C by A9,XBOOLE_1:1;
+     Ball(x2,r2) is bounded by TBSP_1:19;
+   then A16:  Ball(x2,r2)` is not bounded by Th8;
+A17: now assume D' is Bounded;
+     then consider X being Subset of Euclid 2 such that
+A18:   X=D' and
+A19:   X is bounded by JORDAN2C:def 2;
+    thus contradiction by A16,A18,A19;
+   end;
+     Ball(x2,r2)` c= B` by A6,SUBSET_1:31;
+   then Ball(x2,r2)` misses B by SUBSET_1:43;
+   then D' c= UBD D by A4,A17,JORDAN1C:13;
+   then A20: Ball(x3,r3)` c= UBD D by A10,XBOOLE_1:1;
+    Ball(x3,r3) is bounded by TBSP_1:19;
+  then Ball(x3,r3)` is not bounded by Th8;
+  then Ball(x3,r3)` <> {}Euclid 2 by TBSP_1:14;
+  then Ball(x3,r3)` is non empty;
+ hence thesis by A15,A20,XBOOLE_1:68;
+end;
+
+theorem Th53:
+ q in UBD C & p in BDD C implies dist(q,C) < dist(q,p)
+proof assume that
+A1: q in UBD C and
+A2: p in BDD C and
+A3: dist(q,C) >= dist(q,p);
+    now assume LSeg(p,q) meets C;
+    then consider x being set such that
+A4:  x in LSeg(p,q) and
+A5:  x in C by XBOOLE_0:3;
+    reconsider x as Point of TOP-REAL 2 by A4;
+A6:  dist(q,C) <= dist(q,x) by A5,Th50;
+      C misses BDD C by JORDAN1A:15;
+    then x <> p by A2,A5,XBOOLE_0:3;
+    then dist(q,x) < dist(q,p) by A4,Th30;
+   hence contradiction by A3,A6,AXIOMS:22;
+  end;
+  then A7: LSeg(p,q) c= C` by PRE_TOPC:21;
+A8: UBD C is_a_component_of C` by JORDAN1C:12;
+     q in LSeg(p,q) by TOPREAL1:6;
+   then A9: LSeg(p,q) meets UBD C by A1,XBOOLE_0:3;
+A10:
+  BDD C = union{B where B is Subset of TOP-REAL 2: B is_inside_component_of C}
+        by JORDAN2C:def 5;
+  then consider X being set such that
+A11: p in X and
+A12: X in {B where B is Subset of TOP-REAL 2: B is_inside_component_of C}
+         by A2,TARSKI:def 4;
+  consider B being Subset of TOP-REAL 2 such that
+A13: X = B and
+A14: B is_inside_component_of C by A12;
+A15: B is_a_component_of C` by A14,JORDAN2C:def 3;
+    p in LSeg(p,q) by TOPREAL1:6;
+  then LSeg(p,q) meets B by A11,A13,XBOOLE_0:3;
+  then A16:  UBD C = B by A7,A8,A9,A15,JORDAN9:3;
+A17: B c= BDD C by A10,A12,A13,ZFMISC_1:92;
+    BDD C misses UBD C by JORDAN2C:28;
+  then B misses UBD C by A17,XBOOLE_1:63;
+ hence contradiction by A16,XBOOLE_1:66;
+end;
+
+definition let C;
+ cluster BDD C -> non empty;
+ coherence
+  proof
+   set n = ApproxIndex C,
+       i = X-SpanStart(C,n)-'1, j = Y-SpanStart(C,n),
+       B = cell(Gauge(C,n),i,j);
+A1:  n is_sufficiently_large_for C by JORDAN11:def 1;
+    then A2:   B c= BDD C by JORDAN11:6;
+     i<=len Gauge(C,n) & j<=width Gauge(C,n) by A1,JORDAN11:def 3,JORDAN1H:59;
+   then B <> {} by JORDAN1A:45;
+   hence thesis by A2,XBOOLE_1:3;
+  end;
+end;
+
+theorem Th54:
+ not p in BDD C implies dist(p,C) <= dist(p,BDD C)
+ proof
+  per cases;
+  suppose p in C;
+    then dist(p,C) = 0 by Th45;
+   hence thesis by Th44;
+  suppose not p in C;
+   then p in C` by SUBSET_1:50;
+   then A1:  p in (BDD C) \/ (UBD C) by JORDAN2C:31;
+   assume that
+A2: not p in BDD C and
+A3: dist(p,C) > dist(p,BDD C);
+A4:  p in UBD C by A1,A2,XBOOLE_0:def 2;
+     ex q st q in BDD C & dist(p,q) < dist(p,C) by A3,Th48;
+  hence contradiction by A4,Th53;
+ end;
+
+theorem Th55:
+ not(C c= BDD D & D c= BDD C)
+ proof assume that
+A1: C c= BDD D and
+A2: D c= BDD C;
+     UBD C meets UBD D by Th52;
+   then consider e being set such that
+A3: e in UBD C and
+A4: e in UBD D by XBOOLE_0:3;
+   reconsider p = e as Point of TOP-REAL 2 by A3;
+     UBD C misses BDD C by JORDAN2C:28;
+   then A5:  not p in BDD C by A3,XBOOLE_0:3;
+   then A6:   dist(p,BDD C) < dist(p,D) by A2,Th51;
+     UBD D misses BDD D by JORDAN2C:28;
+   then A7:  not p in BDD D by A4,XBOOLE_0:3;
+   then A8:  dist(p,BDD D) < dist(p,C) by A1,Th51;
+     dist(p,C) <= dist(p, BDD C) by A5,Th54;
+   then dist(p, BDD D) < dist(p, BDD C) by A8,AXIOMS:22;
+   then dist(p, BDD D) < dist(p,D) by A6,AXIOMS:22;
+  hence contradiction by A7,Th54;
+ end;
+
+theorem Th56:
+ C c= BDD D implies D c= UBD C
+proof assume
+A1: C c= BDD D;
+    D misses BDD D by JORDAN1A:15;
+  then A2: C misses D by A1,XBOOLE_1:63;
+ assume not D c= UBD C;
+  then D c= BDD C by A2,Th19;
+ hence contradiction by A1,Th55;
+end;
+
+begin :: Main definitions
+
+theorem
+   L~Cage(C,n) c= UBD C
+proof
+    C c= BDD L~Cage(C,n) by JORDAN10:12;
+ hence thesis by Th56;
+end;
+
+definition let C;
+ func Lower_Middle_Point C -> Point of TOP-REAL 2 equals
+:Def3: First_Point(Lower_Arc C,W-min C,E-max C,
+                  Vertical_Line((W-bound C+E-bound C)/2));
+  coherence;
+ func Upper_Middle_Point C -> Point of TOP-REAL 2 equals
+:Def4: First_Point(Upper_Arc C,W-min C,E-max C,
+                  Vertical_Line((W-bound C+E-bound C)/2));
+  coherence;
+end;
+
+theorem Th58:
+  Lower_Arc C meets Vertical_Line((W-bound C+E-bound C)/2)
+proof
+A1: W-bound C <= E-bound C by SPRECT_1:23;
+    (W-min C)`1 = W-bound C by PSCOMP_1:84;
+  then A2: (W-min C)`1<=(W-bound C +E-bound C)/2 by A1,JORDAN6:2;
+    (E-max C)`1 = E-bound C by PSCOMP_1:104;
+  then A3: (W-bound C +E-bound C)/2<=(E-max C)`1 by A1,JORDAN6:2;
+    Lower_Arc C is_an_arc_of W-min C,E-max C by JORDAN6:65;
+ hence Lower_Arc C meets Vertical_Line((W-bound C +E-bound C)/2)
+     by A2,A3,JORDAN6:64;
+end;
+
+theorem Th59:
+  Upper_Arc C meets Vertical_Line((W-bound C+E-bound C)/2)
+proof
+A1: W-bound C <= E-bound C by SPRECT_1:23;
+    (W-min C)`1 = W-bound C by PSCOMP_1:84;
+  then A2: (W-min C)`1<=(W-bound C +E-bound C)/2 by A1,JORDAN6:2;
+    (E-max C)`1 = E-bound C by PSCOMP_1:104;
+  then A3: (W-bound C +E-bound C)/2<=(E-max C)`1 by A1,JORDAN6:2;
+    Upper_Arc C is_an_arc_of W-min C,E-max C by JORDAN6:65;
+ hence Upper_Arc C meets Vertical_Line((W-bound C +E-bound C)/2)
+     by A2,A3,JORDAN6:64;
+end;
+
+theorem
+   (Lower_Middle_Point C)`1 = (W-bound C+E-bound C)/2
+ proof
+  set L = Vertical_Line((W-bound C+E-bound C)/2),
+      p = First_Point(Lower_Arc C,W-min C,E-max C,L);
+A1: Lower_Arc C meets L by Th58;
+  L is closed by JORDAN6:33;
+then A2: Lower_Arc C /\ L is closed by TOPS_1:35;
+  Lower_Arc C is_an_arc_of W-min C, E-max C by JORDAN6:65;
+   then p in Lower_Arc C /\ L by A1,A2,JORDAN5C:def 1;
+   then p in L by XBOOLE_0:def 3;
+   then p`1 = (W-bound C+E-bound C)/2 by JORDAN6:34;
+  hence thesis by Def3;
+ end;
+
+theorem
+   (Upper_Middle_Point C)`1 = (W-bound C+E-bound C)/2
+ proof
+  set L = Vertical_Line((W-bound C+E-bound C)/2),
+      p = First_Point(Upper_Arc C,W-min C,E-max C,L);
+A1: Upper_Arc C meets L by Th59;
+  L is closed by JORDAN6:33;
+then A2: Upper_Arc C /\ L is closed by TOPS_1:35;
+  Upper_Arc C is_an_arc_of W-min C, E-max C by JORDAN6:65;
+   then p in Upper_Arc C /\ L by A1,A2,JORDAN5C:def 1;
+   then p in L by XBOOLE_0:def 3;
+   then p`1 = (W-bound C+E-bound C)/2 by JORDAN6:34;
+  hence thesis by Def4;
+ end;
+
+theorem
+    Lower_Middle_Point C in Lower_Arc C
+proof
+  set L = Vertical_Line((W-bound C+E-bound C)/2),
+      p = First_Point(Lower_Arc C,W-min C,E-max C,L);
+A1: Lower_Middle_Point C = p by Def3;
+A2: Lower_Arc C meets L by Th58;
+     L is closed by JORDAN6:33;
+   then A3: Lower_Arc C /\ L is closed by TOPS_1:35;
+     Lower_Arc C is_an_arc_of W-min C, E-max C by JORDAN6:65;
+  then p in L /\ Lower_Arc C by A2,A3,JORDAN5C:def 1;
+ hence Lower_Middle_Point C in Lower_Arc C by A1,XBOOLE_0:def 3;
+end;
+
+theorem
+    Upper_Middle_Point C in Upper_Arc C
+proof
+  set L = Vertical_Line((W-bound C+E-bound C)/2),
+      p = First_Point(Upper_Arc C,W-min C,E-max C,L);
+A1: Upper_Middle_Point C = p by Def4;
+A2: Upper_Arc C meets L by Th59;
+     L is closed by JORDAN6:33;
+   then A3: Upper_Arc C /\ L is closed by TOPS_1:35;
+A4: Upper_Arc C is_an_arc_of E-max C, W-min C by JORDAN6:65;
+  then p = Last_Point(Upper_Arc C,E-max C,W-min C,L) by A2,A3,JORDAN5C:18;
+  then p in L /\ Upper_Arc C by A2,A3,A4,JORDAN5C:def 2;
+ hence Upper_Middle_Point C in Upper_Arc C by A1,XBOOLE_0:def 3;
+end;
+

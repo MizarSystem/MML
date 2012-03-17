@@ -1,0 +1,1566 @@
+:: Models and Satisfiability. Defining by Structural Induction and
+:: Free Variables in ZF-formulae
+::  by Grzegorz Bancerek
+::
+:: Received April 14, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ZF_LANG, BOOLE, FUNCT_1, TARSKI, RELAT_1, ORDINAL1, ZF_MODEL;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
+      ZF_LANG, FUNCT_2, ORDINAL1;
+ constructors ENUMSET1, FUNCT_2, ZF_LANG, MEMBERED, XBOOLE_0;
+ clusters ZF_LANG, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, SUBSET, BOOLE;
+ definitions TARSKI, ZF_LANG;
+ theorems TARSKI, FUNCT_1, ZF_LANG, ZFMISC_1, FUNCT_2, RELSET_1, XBOOLE_0;
+ schemes FUNCT_1, ZF_LANG, XBOOLE_0;
+
+begin
+
+ reserve F,H,H' for ZF-formula,
+
+         x,y,z,t for Variable,
+         a,b,c,d for set,
+         A,X for set;
+
+ scheme ZFsch_ex
+     { F1(Variable,Variable)->set, F2(Variable,Variable)->set,
+       F3(set)->set, F4(set,set)->set, F5(Variable,set)->set,
+       H()->ZF-formula } :
+  ex a,A st
+   (for x,y holds [x '=' y,F1(x,y)] in A & [x 'in' y,F2(x,y)] in A) &
+   [H(),a] in A &
+   for H,a st [H,a] in A holds
+    (H is_equality implies a = F1(Var1 H,Var2 H) ) &
+    (H is_membership implies a = F2(Var1 H,Var2 H) ) &
+    (H is negative implies ex b st a = F3(b) & [the_argument_of H,b] in A) &
+    (H is conjunctive implies ex b,c st (a = F4(b,c) &
+      [the_left_argument_of H,b] in A) & [the_right_argument_of H,c] in A) &
+    (H is universal implies ex b st a = F5(bound_in H,b) &
+      [the_scope_of H,b] in A)
+  proof
+   defpred Graph[set,ZF-formula,set] means
+    (for x,y holds [x '=' y,F1(x,y)] in $1 & [x 'in' y,F2(x,y)] in $1) &
+    [$2,$3] in $1 &
+    for H,a st [H,a] in $1 holds
+     (H is_equality implies a = F1(Var1 H,Var2 H) ) &
+     (H is_membership implies a = F2(Var1 H,Var2 H) ) &
+     (H is negative implies ex b st a = F3(b) & [the_argument_of H,b] in $1) &
+     (H is conjunctive implies ex b,c st a = F4(b,c) &
+       ([the_left_argument_of H,b] in $1 & [the_right_argument_of H,c] in
+ $1)) &
+     (H is universal implies ex b st (a = F5(bound_in H,b) &
+       [the_scope_of H,b] in $1));
+    defpred Ind[ZF-formula] means ex a,A st Graph[A,$1,a];
+A1:  H is atomic implies Ind[H]
+     proof assume
+A2:    H is_equality or H is_membership;
+      then consider a such that
+A3:    H is_equality & a = F1(Var1 H,Var2 H) or
+        H is_membership & a = F2(Var1 H,Var2 H);
+      take a , X
+ = { [x '=' y,F1(x,y)] : x = x } \/ { [z 'in' t,F2(z,t)] : z = z };
+      thus for x,y holds [x '=' y,F1(x,y)] in X & [x 'in' y,F2(x,y)] in X
+        proof let x,y;
+            [x '=' y,F1(x,y)] in { [z '=' t,F1(z,t)] : z = z };
+         hence [x '=' y,F1(x,y)] in X by XBOOLE_0:def 2;
+            [x 'in' y,F2(x,y)] in { [z 'in' t,F2(z,t)] : z = z };
+         hence [x 'in' y,F2(x,y)] in X by XBOOLE_0:def 2;
+        end;
+A4:    now assume
+        H is_equality;
+         then H.1 = 0 by ZF_LANG:35;
+         then a = F1(Var1 H,Var2 H) & H = (Var1 H) '=' Var2 H
+          by A3,ZF_LANG:36,53;
+         then [H,a] in { [x '=' y,F1(x,y)] : x = x };
+        hence [H,a] in X by XBOOLE_0:def 2;
+       end;
+         now assume
+        H is_membership;
+         then H.1 = 1 by ZF_LANG:36;
+         then a = F2(Var1 H,Var2 H) & H = (Var1 H) 'in' Var2 H
+          by A3,ZF_LANG:35,54;
+         then [H,a] in { [x 'in' y,F2(x,y)] : x = x };
+        hence [H,a] in X by XBOOLE_0:def 2;
+       end;
+      hence [H,a] in X by A2,A4;
+      let H,a; assume
+A5:       [H,a] in X;
+then A6:    [H,a] in { [x '=' y,F1(x,y)] : x = x } or
+        [H,a] in { [z 'in' t,F2(z,t)] : z = z } by XBOOLE_0:def 2;
+      thus H is_equality implies a = F1(Var1 H,Var2 H)
+        proof assume
+A7:       H is_equality;
+          then A8: H.1 = 0 by ZF_LANG:35;
+            [H,a] <> [x 'in' y,F2(x,y)]
+           proof
+               H <> x 'in' y by A8,ZF_LANG:31;
+            hence thesis by ZFMISC_1:33;
+           end;
+          then not ex x,y st [H,a] = [x 'in' y,F2(x,y)] & x = x;
+         then consider x,y such that
+A9:       [H,a] = [x '=' y,F1(x,y)] & x = x by A6;
+A10:       H = x '=' y & a = F1(x,y) by A9,ZFMISC_1:33;
+            H = (Var1 H) '=' Var2 H by A7,ZF_LANG:53;
+          then Var1 H = x & Var2 H = y by A10,ZF_LANG:6;
+         hence thesis by A9,ZFMISC_1:33;
+        end;
+      thus H is_membership implies a = F2(Var1 H,Var2 H)
+        proof assume
+A11:       H is_membership;
+          then A12: H.1 = 1 by ZF_LANG:36;
+            [H,a] <> [x '=' y,F1(x,y)]
+           proof
+               H <> x '=' y by A12,ZF_LANG:31;
+            hence thesis by ZFMISC_1:33;
+           end;
+          then not ex x,y st [H,a] = [x '=' y,F1(x,y)] & x = x;
+         then consider x,y such that
+A13:       [H,a] = [x 'in' y,F2(x,y)] & x = x by A6;
+A14:       H = x 'in' y & a = F2(x,y) by A13,ZFMISC_1:33;
+            H = (Var1 H) 'in' Var2 H by A11,ZF_LANG:54;
+          then Var1 H = x & Var2 H = y by A14,ZF_LANG:7;
+         hence thesis by A13,ZFMISC_1:33;
+        end;
+A15:    now assume [H,a] in { [x '=' y,F1(x,y)] : x = x };
+        then consider x,y such that
+A16:      [H,a] = [x '=' y,F1(x,y)] & x = x;
+           H = x '=' y by A16,ZFMISC_1:33;
+        hence H.1 = 0 by ZF_LANG:31;
+       end;
+         now assume [H,a] in { [z 'in' t,F2(z,t)] : z = z };
+        then consider x,y such that
+A17:      [H,a] = [x 'in' y,F2(x,y)] & x = x;
+           H = x 'in' y by A17,ZFMISC_1:33;
+        hence H.1 = 1 by ZF_LANG:31;
+       end;
+      hence thesis by A5,A15,XBOOLE_0:def 2,ZF_LANG:37,38,39;
+     end;
+A18:  for H st H is negative & Ind[the_argument_of H] holds Ind[H]
+     proof let H such that
+A19:    H is negative;
+      given a,A such that
+A20:    Graph[A,the_argument_of H,a];
+      take b = F3(a) , X = A \/ { [H,b] };
+      thus for x,y holds [x '=' y,F1(x,y)] in X & [x 'in' y,F2(x,y)] in X
+        proof let x,y;
+            [x '=' y,F1(x,y)] in A & [x 'in' y,F2(x,y)] in A by A20;
+         hence thesis by XBOOLE_0:def 2;
+        end;
+         [H,b] in { [H,b] } by TARSKI:def 1;
+      hence [H,b] in X by XBOOLE_0:def 2;
+      let F,c; assume
+         [F,c] in X;
+then A21:       [F,c] in A or [F,c] in { [H,b] } by XBOOLE_0:def 2;
+A22:    [F,c] = [H,b] implies F = H & c = b by ZFMISC_1:33;
+       A23: H.1 = 2 by A19,ZF_LANG:37;
+      hence F is_equality implies c = F1(Var1 F,Var2 F) by A20,A21,A22,TARSKI:
+def 1,ZF_LANG:35;
+      thus F is_membership implies c = F2(Var1 F,Var2 F) by A20,A21,A22,A23,
+TARSKI:def 1,ZF_LANG:36;
+      thus F is negative implies ex b st c = F3(b) & [the_argument_of F,b] in
+X
+        proof assume
+A24:       F is negative;
+A25:       now assume [F,c] in A;
+           then consider d such that
+A26:         c = F3(d) & [the_argument_of F,d] in A by A20,A24;
+              [the_argument_of F,d] in X by A26,XBOOLE_0:def 2;
+           hence thesis by A26;
+          end;
+            now assume A27: [F,c] = [H,b];
+            then [the_argument_of F,a] in X by A20,A22,XBOOLE_0:def 2;
+           hence thesis by A22,A27;
+          end;
+         hence thesis by A21,A25,TARSKI:def 1;
+        end;
+      thus F is conjunctive implies ex b,d st c = F4(b,d) &
+         [the_left_argument_of F,b] in X & [the_right_argument_of F,d] in X
+        proof assume
+         F is conjunctive;
+         then consider b,d such that
+A28:       c = F4(b,d) & [the_left_argument_of F,b] in A &
+           [the_right_argument_of F,d] in A by A20,A21,A22,A23,TARSKI:def 1,
+ZF_LANG:38;
+         take b,d;
+         thus thesis by A28,XBOOLE_0:def 2;
+        end;
+      thus F is universal implies ex b st c = F5(bound_in F,b) &
+         [the_scope_of F,b] in X
+        proof assume
+         F is universal;
+         then consider b such that
+A29:       c = F5(bound_in F,b) & [the_scope_of F,b] in A by A20,A21,
+A22,A23,TARSKI:def 1,ZF_LANG:39;
+         take b;
+         thus thesis by A29,XBOOLE_0:def 2;
+        end;
+     end;
+A30:  for H st H is conjunctive & Ind[the_left_argument_of H] &
+           Ind[the_right_argument_of H] holds Ind[H]
+     proof let H such that
+A31:    H is conjunctive;
+      given a1 being set,A1 being set such that
+A32:    Graph[A1,the_left_argument_of H,a1];
+      given a2 being set,A2 being set such that
+A33:    Graph[A2,the_right_argument_of H,a2];
+      take a = F4(a1,a2) , X = A1 \/ A2 \/ { [H,a] };
+      thus for x,y holds [x '=' y,F1(x,y)] in X & [x 'in' y,F2(x,y)] in X
+        proof let x,y;
+            [x '=' y,F1(x,y)] in A1 & [x 'in' y,F2(x,y)] in A1 by A32;
+          then [x '=' y,F1(x,y)] in A1 \/ A2 & [x 'in' y,F2(x,y)] in A1 \/ A2
+           by XBOOLE_0:def 2;
+         hence thesis by XBOOLE_0:def 2;
+        end;
+         [H,a] in { [H,a] } by TARSKI:def 1;
+      hence [H,a] in X by XBOOLE_0:def 2;
+      let F,c; assume
+         [F,c] in X;
+then A34:       [F,c] in A1 \/ A2 or [F,c] in { [H,a] } by XBOOLE_0:def 2;
+then A35:    [F,c] in A1 or [F,c] in
+ A2 or [F,c] = [H,a] by TARSKI:def 1,XBOOLE_0:def 2;
+A36:    [F,c] = [H,a] implies F = H & c = a by ZFMISC_1:33;
+       A37: H.1 = 3 by A31,ZF_LANG:38;
+then A38:    not H is_equality & not H is_membership & not H is negative &
+        not H is universal by ZF_LANG:35,36,37,39;
+      thus F is_equality implies c = F1(Var1 F,Var2 F) by A32,A33,A35,A36,A37,
+ZF_LANG:35;
+      thus F is_membership implies c = F2(Var1 F,Var2 F) by A32,A33,A35,A38,
+ZFMISC_1:33;
+      thus F is negative implies ex b st c = F3(b) & [the_argument_of F,b] in
+X
+        proof assume
+A39:       F is negative;
+A40:       now assume [F,c] in A1;
+           then consider b such that
+A41:         c = F3(b) & [the_argument_of F,b] in A1 by A32,A39;
+              [the_argument_of F,b] in A1 \/ A2 by A41,XBOOLE_0:def 2;
+            then [the_argument_of F,b] in X by XBOOLE_0:def 2;
+           hence thesis by A41;
+          end;
+            now assume [F,c] in A2;
+           then consider b such that
+A42:         c = F3(b) & [the_argument_of F,b] in A2 by A33,A39;
+              [the_argument_of F,b] in A1 \/ A2 by A42,XBOOLE_0:def 2;
+            then [the_argument_of F,b] in X by XBOOLE_0:def 2;
+           hence thesis by A42;
+          end;
+         hence thesis by A34,A36,A37,A39,A40,TARSKI:def 1,XBOOLE_0:def 2,
+ZF_LANG:37;
+        end;
+      thus F is conjunctive implies ex b,d st c = F4(b,d) &
+         [the_left_argument_of F,b] in X & [the_right_argument_of F,d] in X
+        proof assume
+A43:       F is conjunctive;
+A44:       now assume A45: [F,c] = [H,a];
+            then [the_left_argument_of F,a1] in A1 \/ A2 &
+             [the_right_argument_of F,a2] in A1 \/ A2 by A32,A33,A36,XBOOLE_0:
+def 2;
+            then [the_left_argument_of F,a1] in X & [the_right_argument_of F,
+a2] in
+ X
+             by XBOOLE_0:def 2;
+           hence thesis by A36,A45;
+          end;
+A46:       now assume [F,c] in A1;
+           then consider b,d such that
+A47:         c = F4(b,d) & [the_left_argument_of F,b] in A1 &
+             [the_right_argument_of F,d] in A1 by A32,A43;
+              [the_left_argument_of F,b] in A1 \/ A2 &
+             [the_right_argument_of F,d] in A1 \/ A2 by A47,XBOOLE_0:def 2
+;
+            then [the_left_argument_of F,b] in X & [the_right_argument_of F,d]
+in X
+             by XBOOLE_0:def 2;
+           hence thesis by A47;
+          end;
+            now assume [F,c] in A2;
+           then consider b,d such that
+A48:         c = F4(b,d) & [the_left_argument_of F,b] in A2 &
+             [the_right_argument_of F,d] in A2 by A33,A43;
+              [the_left_argument_of F,b] in A1 \/ A2 &
+             [the_right_argument_of F,d] in A1 \/ A2 by A48,XBOOLE_0:def 2
+;
+            then [the_left_argument_of F,b] in X & [the_right_argument_of F,d]
+in X
+             by XBOOLE_0:def 2;
+           hence thesis by A48;
+          end;
+         hence thesis by A34,A44,A46,TARSKI:def 1,XBOOLE_0:def 2;
+        end;
+      thus F is universal implies ex b st c = F5(bound_in F,b) &
+         [the_scope_of F,b] in X
+        proof assume
+A49:       F is universal;
+A50:       now assume [F,c] in A1;
+           then consider b such that
+A51:         c = F5(bound_in F,b) & [the_scope_of F,b] in A1 by A32,A49;
+              [the_scope_of F,b] in A1 \/ A2 by A51,XBOOLE_0:def 2;
+            then [the_scope_of F,b] in X by XBOOLE_0:def 2;
+           hence thesis by A51;
+          end;
+            now assume [F,c] in A2;
+           then consider b such that
+A52:         c = F5(bound_in F,b) & [the_scope_of F,b] in A2 by A33,A49;
+              [the_scope_of F,b] in A1 \/ A2 by A52,XBOOLE_0:def 2;
+            then [the_scope_of F,b] in X by XBOOLE_0:def 2;
+           hence thesis by A52;
+          end;
+         hence thesis by A34,A36,A37,A49,A50,TARSKI:def 1,XBOOLE_0:def 2,
+ZF_LANG:39;
+        end;
+     end;
+A53:  for H st H is universal & Ind[the_scope_of H] holds Ind[H]
+     proof let H such that
+A54:    H is universal;
+      given a,A such that
+A55:    Graph[A,the_scope_of H,a];
+      take b = F5(bound_in H,a) , X = A \/ { [H,b] };
+      thus for x,y holds [x '=' y,F1(x,y)] in X & [x 'in' y,F2(x,y)] in X
+        proof let x,y;
+            [x '=' y,F1(x,y)] in A & [x 'in' y,F2(x,y)] in A by A55;
+         hence thesis by XBOOLE_0:def 2;
+        end;
+         [H,b] in { [H,b] } by TARSKI:def 1;
+      hence [H,b] in X by XBOOLE_0:def 2;
+      let F,c; assume
+         [F,c] in X;
+then A56:       [F,c] in A or [F,c] in { [H,b] } by XBOOLE_0:def 2;
+A57:    [F,c] = [H,b] implies F = H & c = b by ZFMISC_1:33;
+       A58: H.1 = 4 by A54,ZF_LANG:39;
+      hence F is_equality implies c = F1(Var1 F,Var2 F) by A55,A56,A57,TARSKI:
+def 1,ZF_LANG:35;
+      thus F is_membership implies c = F2(Var1 F,Var2 F) by A55,A56,A57,A58,
+TARSKI:def 1,ZF_LANG:36;
+      thus F is negative implies ex b st c = F3(b) & [the_argument_of F,b] in
+X
+        proof assume
+         F is negative;
+         then consider b such that
+A59:       c = F3(b) & [the_argument_of F,b] in A by A55,A56,A57,A58,TARSKI:def
+1,ZF_LANG:37;
+            [the_argument_of F,b] in X by A59,XBOOLE_0:def 2;
+         hence thesis by A59;
+        end;
+      thus F is conjunctive implies ex b,d st c = F4(b,d) &
+         [the_left_argument_of F,b] in X & [the_right_argument_of F,d] in X
+        proof assume
+         F is conjunctive;
+         then consider b,d such that
+A60:       c = F4(b,d) & [the_left_argument_of F,b] in A &
+           [the_right_argument_of F,d] in A by A55,A56,A57,A58,TARSKI:def 1,
+ZF_LANG:38;
+         take b,d;
+         thus thesis by A60,XBOOLE_0:def 2;
+        end;
+      thus F is universal implies ex b st c = F5(bound_in F,b) &
+         [the_scope_of F,b] in X
+        proof assume
+A61:       F is universal;
+A62:       now assume [F,c] in A;
+           then consider b such that
+A63:         c = F5(bound_in F,b) & [the_scope_of F,b] in A by A55,A61;
+              [the_scope_of F,b] in X by A63,XBOOLE_0:def 2;
+           hence thesis by A63;
+          end;
+            now assume A64: [F,c] = [H,b];
+            then [the_scope_of F,a] in X by A55,A57,XBOOLE_0:def 2;
+           hence thesis by A57,A64;
+          end;
+         hence thesis by A56,A62,TARSKI:def 1;
+        end;
+     end;
+      for H holds Ind[H] from ZF_Ind(A1,A18,A30,A53);
+   hence ex a,A st Graph[A,H(),a];
+  end;
+
+scheme ZFsch_uniq
+     { F1(Variable,Variable)->set, F2(Variable,Variable)->set,
+       F3(set)->set, F4(set,set)->set, F5(Variable,set)->set,
+       H()->ZF-formula, a()->set, b()->set } :
+
+  a() = b()
+    provided
+A1: ex A st
+    (for x,y holds [x '=' y,F1(x,y)] in A & [x 'in' y,F2(x,y)] in A) &
+    [H(),a()] in A &
+    for H,a st [H,a] in A holds
+     (H is_equality implies a = F1(Var1 H,Var2 H) ) &
+     (H is_membership implies a = F2(Var1 H,Var2 H) ) &
+     (H is negative implies ex b st a = F3(b) & [the_argument_of H,b] in A) &
+     (H is conjunctive implies ex b,c st a = F4(b,c) &
+       [the_left_argument_of H,b] in A & [the_right_argument_of H,c] in A) &
+     (H is universal implies ex b st a = F5(bound_in H,b) &
+       [the_scope_of H,b] in A)
+    and
+A2: ex A st
+    (for x,y holds [x '=' y,F1(x,y)] in A & [x 'in' y,F2(x,y)] in A) &
+    [H(),b()] in A &
+    for H,a st [H,a] in A holds
+     (H is_equality implies a = F1(Var1 H,Var2 H) ) &
+     (H is_membership implies a = F2(Var1 H,Var2 H) ) &
+     (H is negative implies ex b st a = F3(b) & [the_argument_of H,b] in A) &
+     (H is conjunctive implies ex b,c st a = F4(b,c) &
+       [the_left_argument_of H,b] in A & [the_right_argument_of H,c] in A) &
+     (H is universal implies ex b st a = F5(bound_in H,b) &
+       [the_scope_of H,b] in A)
+  proof
+   consider A1 being set such that
+   for x,y holds [x '=' y,F1(x,y)] in A1 & [x 'in' y,F2(x,y)] in A1 and
+A3: [H(),a()] in A1 and
+A4: for H,a st [H,a] in A1 holds
+     (H is_equality implies a = F1(Var1 H,Var2 H) ) &
+     (H is_membership implies a = F2(Var1 H,Var2 H) ) &
+     (H is negative implies ex b st a = F3(b) & [the_argument_of H,b] in A1) &
+     (H is conjunctive implies ex b,c st a = F4(b,c) &
+       [the_left_argument_of H,b] in A1 & [the_right_argument_of H,c] in A1) &
+     (H is universal implies ex b st a = F5(bound_in H,b) &
+       [the_scope_of H,b] in A1) by A1;
+   consider A2 being set such that
+   for x,y holds [x '=' y,F1(x,y)] in A2 & [x 'in' y,F2(x,y)] in A2 and
+A5: [H(),b()] in A2 and
+A6: for H,a st [H,a] in A2 holds
+     (H is_equality implies a = F1(Var1 H,Var2 H) ) &
+     (H is_membership implies a = F2(Var1 H,Var2 H) ) &
+     (H is negative implies ex b st a = F3(b) & [the_argument_of H,b] in A2) &
+     (H is conjunctive implies ex b,c st a = F4(b,c) &
+       [the_left_argument_of H,b] in A2 & [the_right_argument_of H,c] in A2) &
+     (H is universal implies ex b st a = F5(bound_in H,b) &
+       [the_scope_of H,b] in A2) by A2;
+     defpred P[ZF-formula] means
+      for a,b st [$1,a] in A1 & [$1,b] in A2 holds a = b;
+A7:  for H st H is atomic holds P[H]
+     proof let H such that
+A8:    H is_equality or H is_membership;
+      let a,b such that
+A9:    [H,a] in A1 & [H,b] in A2;
+A10:    now assume H is_equality;
+         then a = F1(Var1 H,Var2 H) & b = F1(Var1 H,Var2 H) by A4,A6,A9;
+        hence thesis;
+       end;
+         now assume H is_membership;
+         then a = F2(Var1 H,Var2 H) & b = F2(Var1 H,Var2 H) by A4,A6,A9;
+        hence thesis;
+       end;
+      hence thesis by A8,A10;
+     end;
+A11:  for H st H is negative & P[the_argument_of H] holds P[H]
+     proof let H such that
+A12:    H is negative and
+A13:    for a,b st [the_argument_of H,a] in A1 & [the_argument_of H,b] in A2
+        holds a = b;
+      let a,b; assume
+A14:    [H,a] in A1 & [H,b] in A2;
+ then A15:      ex a1 being set st
+    a = F3(a1) & [the_argument_of H,a1] in A1 by A4,A12;
+         ex b1 being set st
+    b = F3(b1) & [the_argument_of H,b1] in A2 by A6,A12,A14;
+      hence thesis by A13,A15;
+     end;
+A16:  for H st H is conjunctive & P[the_left_argument_of H] &
+          P[the_right_argument_of H] holds P[H]
+     proof let H such that
+A17:    H is conjunctive and
+A18:    for a,b st [the_left_argument_of H,a] in A1 &
+        [the_left_argument_of H,b] in A2 holds a = b and
+A19:    for a,b st [the_right_argument_of H,a] in A1 &
+        [the_right_argument_of H,b] in A2 holds a = b;
+      let a,b; assume
+A20:    [H,a] in A1 & [H,b] in A2;
+      then consider a1,a2 being set such that
+A21:    a = F4(a1,a2) & [the_left_argument_of H,a1] in A1 &
+        [the_right_argument_of H,a2] in A1 by A4,A17;
+      consider b1,b2 being set such that
+A22:    b = F4(b1,b2) & [the_left_argument_of H,b1] in A2 &
+        [the_right_argument_of H,b2] in A2 by A6,A17,A20;
+         a1 = b1 & a2 = b2 by A18,A19,A21,A22;
+      hence thesis by A21,A22;
+     end;
+A23:  for H st H is universal & P[the_scope_of H] holds P[H]
+     proof let H such that
+A24:    H is universal and
+A25:    for a,b st [the_scope_of H,a] in A1 & [the_scope_of H,b] in A2
+        holds a = b;
+      let a,b; assume
+A26:    [H,a] in A1 & [H,b] in A2;
+ then A27:      ex a1 being set st
+    a = F5(bound_in H,a1) & [the_scope_of H,a1] in A1 by A4,A24;
+         ex b1 being set st
+    b = F5(bound_in H,b1) & [the_scope_of H,b1] in A2 by A6,A24,A26;
+      hence thesis by A25,A27;
+     end;
+      for H holds P[H] from ZF_Ind (A7,A11,A16,A23);
+   hence thesis by A3,A5;
+  end;
+
+scheme ZFsch_result
+     { F1(Variable,Variable)->set, F2(Variable,Variable)->set,
+       F3(set)->set, F4(set,set)->set, F5(Variable,set)->set,
+       H()->ZF-formula, f(ZF-formula)->set } :
+
+ ( H() is_equality implies f(H()) = F1(Var1 H(),Var2 H()) ) &
+  ( H() is_membership implies f(H()) = F2(Var1 H(),Var2 H()) ) &
+   ( H() is negative implies f(H()) = F3(f(the_argument_of H())) ) &
+    ( H() is conjunctive implies for a,b st a = f(the_left_argument_of H()) &
+       b = f(the_right_argument_of H()) holds f(H()) = F4(a,b) ) &
+     ( H() is universal implies f(H()) = F5(bound_in H(),f(the_scope_of H())) )
+   provided
+A1:for H',a holds a = f(H') iff
+   ex A st
+    (for x,y holds [x '=' y,F1(x,y)] in A & [x 'in' y,F2(x,y)] in A) &
+    [H',a] in A &
+    for H,a st [H,a] in A holds
+     (H is_equality implies a = F1(Var1 H,Var2 H) ) &
+     (H is_membership implies a = F2(Var1 H,Var2 H) ) &
+     (H is negative implies ex b st a = F3(b) & [the_argument_of H,b] in A) &
+     (H is conjunctive implies ex b,c st a = F4(b,c) &
+       [the_left_argument_of H,b] in A & [the_right_argument_of H,c] in A) &
+     (H is universal implies ex b st a = F5(bound_in H,b) &
+       [the_scope_of H,b] in A)
+  proof
+   consider A such that
+A2: for x,y holds [x '=' y,F1(x,y)] in A & [x 'in' y,F2(x,y)] in A and
+A3: [H(),f(H())] in A and
+A4: for H,a st [H,a] in A holds
+     (H is_equality implies a = F1(Var1 H,Var2 H) ) &
+     (H is_membership implies a = F2(Var1 H,Var2 H) ) &
+     (H is negative implies ex b st a = F3(b) & [the_argument_of H,b] in A) &
+     (H is conjunctive implies ex b,c st a = F4(b,c) &
+       [the_left_argument_of H,b] in A & [the_right_argument_of H,c] in A) &
+     (H is universal implies ex b st a = F5(bound_in H,b) &
+       [the_scope_of H,b] in A) by A1;
+   thus H() is_equality implies f(H()) = F1(Var1 H(),Var2 H()) by A3,A4;
+   thus H() is_membership implies f(H()) = F2(Var1 H(),Var2 H()) by A3,A4;
+   thus H() is negative implies f(H()) = F3(f(the_argument_of H()))
+     proof assume H() is negative;
+       then ex b st f(H()) = F3(b) & [the_argument_of H(),b] in A by A3,A4
+;
+      hence thesis by A1,A2,A4;
+     end;
+   thus H() is conjunctive implies for a,b st a = f(the_left_argument_of H())
+&
+      b = f(the_right_argument_of H()) holds f(H()) = F4(a,b)
+     proof assume H() is conjunctive;
+      then consider b,c such that
+A5:     f(H()) = F4(b,c) & [the_left_argument_of H(),b] in A &
+        [the_right_argument_of H(),c] in A by A3,A4;
+      let a1,a2 be set such that
+A6:     a1 = f(the_left_argument_of H()) & a2 = f(the_right_argument_of H());
+         f(the_left_argument_of H()) = b & f(the_right_argument_of H()) = c
+        by A1,A2,A4,A5;
+      hence thesis by A5,A6;
+     end;
+   thus H() is universal implies f(H()) = F5(bound_in H(),f(the_scope_of H()))
+     proof assume H() is universal;
+       then ex b st
+      f(H()) = F5(bound_in H(),b) & [the_scope_of H(),b] in A by A3,A4;
+      hence thesis by A1,A2,A4;
+     end;
+  end;
+
+scheme ZFsch_property
+     { F1(Variable,Variable)->set, F2(Variable,Variable)->set,
+       F3(set)->set, F4(set,set)->set, F5(Variable,set)->set,
+       f(ZF-formula)->set, H()->ZF-formula, P[set] } :
+
+  P[f(H())]
+    provided
+A1: for H',a holds a = f(H') iff
+    ex A st
+     (for x,y holds [x '=' y,F1(x,y)] in A & [x 'in' y,F2(x,y)] in A) &
+     [H',a] in A &
+     for H,a st [H,a] in A holds
+      (H is_equality implies a = F1(Var1 H,Var2 H) ) &
+      (H is_membership implies a = F2(Var1 H,Var2 H) ) &
+      (H is negative implies ex b st a = F3(b) & [the_argument_of H,b] in A) &
+      (H is conjunctive implies ex b,c st a = F4(b,c) &
+        [the_left_argument_of H,b] in A & [the_right_argument_of H,c] in A) &
+      (H is universal implies ex b st a = F5(bound_in H,b) &
+        [the_scope_of H,b] in A) and
+A2: for x,y holds P[F1(x,y)] & P[F2(x,y)] and
+A3: for a st P[a] holds P[F3(a)] and
+A4: for a,b st P[a] & P[b] holds P[F4(a,b)] and
+A5: for a,x st P[a] holds P[F5(x,a)]
+  proof
+    deffunc f1(Variable,Variable) = F1($1,$2);
+    deffunc f2(Variable,Variable) = F2($1,$2);
+    deffunc f3(set) = F3($1);
+    deffunc f4(set,set) = F4($1,$2);
+    deffunc f5(Variable,set) = F5($1,$2);
+    deffunc g(ZF-formula) = f($1);
+A6:for H',a holds a = g(H') iff
+    ex A st
+     (for x,y holds [x '=' y,f1(x,y)] in A & [x 'in' y,f2(x,y)] in A) &
+     [H',a] in A &
+     for H,a st [H,a] in A holds
+      (H is_equality implies a = f1(Var1 H,Var2 H) ) &
+      (H is_membership implies a = f2(Var1 H,Var2 H) ) &
+      (H is negative implies ex b st a = f3(b) & [the_argument_of H,b] in A) &
+      (H is conjunctive implies ex b,c st a = f4(b,c) &
+        [the_left_argument_of H,b] in A & [the_right_argument_of H,c] in A) &
+      (H is universal implies ex b st a = f5(bound_in H,b) &
+        [the_scope_of H,b] in A) by A1;
+A7:  now let H;
+     thus ( H is_equality implies g(H) = f1(Var1 H,Var2 H) ) &
+       ( H is_membership implies g(H) = f2(Var1 H,Var2 H) ) &
+        ( H is negative implies g(H) = f3(g(the_argument_of H)) ) &
+         ( H is conjunctive implies for a,b st a = g(the_left_argument_of H) &
+            b = g(the_right_argument_of H) holds g(H) = f4(a,b) ) &
+          ( H is universal implies g(H) = f5(bound_in H,g(the_scope_of H)) )
+        from ZFsch_result (A6);
+    end;
+    defpred Pf[ZF-formula] means P[f($1)];
+A8:  for H st H is atomic holds Pf[(H)]
+     proof let H; assume
+         H is_equality or H is_membership;
+       then f(H) = F1(Var1 H,Var2 H) or f(H) = F2(Var1 H,Var2 H) by A7;
+      hence thesis by A2;
+     end;
+A9:  for H st H is negative & Pf[(the_argument_of H)] holds Pf[(H)]
+     proof let H; assume
+         H is negative;
+       then f(H) = F3(f(the_argument_of H)) by A7;
+      hence thesis by A3;
+     end;
+A10:  for H st H is conjunctive & Pf[(the_left_argument_of H)] &
+      Pf[(the_right_argument_of H)] holds Pf[(H)]
+     proof let H; assume H is conjunctive; then
+       f(H) = F4(f(the_left_argument_of H),f(the_right_argument_of H)) by A7;
+      hence thesis by A4;
+     end;
+A11:  for H st H is universal & Pf[(the_scope_of H)] holds Pf[(H)]
+     proof let H; assume
+         H is universal;
+       then f(H) = F5(bound_in H,f(the_scope_of H)) by A7;
+      hence thesis by A5;
+     end;
+      for H holds Pf[(H)] from ZF_Ind (A8,A9,A10,A11);
+   hence thesis;
+  end;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::                                                                    ::
+::  The set of variables which have free occurrences in a ZF-formula  ::
+::                                                                    ::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+    deffunc f1(Variable,Variable) = {$1,$2};
+    deffunc f2(Variable,Variable) = {$1,$2};
+    deffunc f3(set) = $1;
+    deffunc f4(set,set) = union {$1,$2};
+    deffunc f5(Variable,set) = (union {$2})\ {$1};
+ definition let H;
+  func Free H -> set means
+:Def1:
+   ex A st
+    (for x,y holds [x '=' y,{ x,y }] in A & [x 'in' y,{ x,y }] in A) &
+    [H,it] in A &
+    for H',a st [H',a] in A holds
+     (H' is_equality implies a = { Var1 H',Var2 H' }) &
+     (H' is_membership implies a = { Var1 H',Var2 H' }) &
+     (H' is negative implies ex b st a = b & [the_argument_of H',b] in A) &
+     (H' is conjunctive implies ex b,c st a = union { b,c } &
+       [the_left_argument_of H',b] in A & [the_right_argument_of H',c] in A) &
+     (H' is universal implies ex b st
+       a = (union { b }) \ { bound_in H' } & [the_scope_of H',b] in A);
+   existence
+    proof
+     thus ex a,A st
+      (for x,y holds [x '=' y,f1(x,y)] in A & [x 'in' y,f2(x,y)] in A) &
+      [H,a] in A &
+      for H',a st [H',a] in A holds
+       (H' is_equality implies a = f1(Var1 H',Var2 H')) &
+       (H' is_membership implies a = f2(Var1 H',Var2 H')) &
+       (H' is negative implies
+         ex b st a = f3(b) & [the_argument_of H',b] in A) &
+       (H' is conjunctive implies ex b,c st a = f4(b,c) &
+        [the_left_argument_of H',b] in A & [the_right_argument_of H',c] in A) &
+       (H' is universal implies ex b st
+         a = f5(bound_in H',b) & [the_scope_of H',b] in A)
+      from ZFsch_ex;
+    end;
+   uniqueness
+    proof let a1,a2 be set such that
+A1:    ex A st
+       (for x,y holds [x '=' y,f1(x,y)] in A & [x 'in' y,f2(x,y)] in A) &
+       [H,a1] in A &
+       for H',a st [H',a] in A holds
+        (H' is_equality implies a = f1(Var1 H',Var2 H')) &
+        (H' is_membership implies a = f2(Var1 H',Var2 H')) &
+        (H' is negative implies
+          ex b st a = f3(b) & [the_argument_of H',b] in A) &
+        (H' is conjunctive implies ex b,c st a = f4(b,c) &
+        [the_left_argument_of H',b] in A & [the_right_argument_of H',c] in A) &
+        (H' is universal implies ex b st
+          a = f5(bound_in H',b) & [the_scope_of H',b] in A) and
+A2:    ex A st
+       (for x,y holds [x '=' y,f1(x,y)] in A & [x 'in' y,f2(x,y)] in A) &
+       [H,a2] in A &
+       for H',a st [H',a] in A holds
+        (H' is_equality implies a = f1(Var1 H',Var2 H')) &
+        (H' is_membership implies a = f2(Var1 H',Var2 H')) &
+        (H' is negative implies
+          ex b st a = f3(b) & [the_argument_of H',b] in A) &
+        (H' is conjunctive implies ex b,c st a = f4(b,c) &
+        [the_left_argument_of H',b] in A & [the_right_argument_of H',c] in A) &
+        (H' is universal implies ex b st
+          a = f5(bound_in H',b) & [the_scope_of H',b] in A);
+     thus a1 = a2 from ZFsch_uniq(A1,A2);
+    end;
+ end;
+
+ deffunc f(ZF-formula) = Free $1;
+Lm1: for H for a1 being set holds a1 = f(H) iff ex A st
+       (for x,y holds [x '=' y,f1(x,y)] in A & [x 'in' y,f2(x,y)] in A) &
+       [H,a1] in A &
+       for H',a st [H',a] in A holds
+        (H' is_equality implies a = f1(Var1 H',Var2 H')) &
+        (H' is_membership implies a = f2(Var1 H',Var2 H')) &
+        (H' is negative implies
+          ex b st a = f3(b) & [the_argument_of H',b] in A) &
+        (H' is conjunctive implies ex b,c st a = f4(b,c) &
+        [the_left_argument_of H',b] in A & [the_right_argument_of H',c] in A) &
+        (H' is universal implies ex b st
+          a = f5(bound_in H',b) & [the_scope_of H',b] in A) by Def1;
+Lm2:
+  now let H;
+   thus
+     (H is_equality implies f(H) = f1(Var1 H,Var2 H)) &
+     (H is_membership implies f(H) = f2(Var1 H,Var2 H)) &
+      (H is negative implies f(H) = f3(f(the_argument_of H))) &
+       (H is conjunctive implies for a,b st a = f(the_left_argument_of H) &
+          b = f(the_right_argument_of H) holds f(H) = f4(a,b)) &
+        (H is universal implies f(H) = f5(bound_in H, f(the_scope_of H)))
+      from ZFsch_result(Lm1);
+  end;
+
+ definition let H;
+ redefine func Free H -> Subset of VAR;
+   coherence
+    proof
+      defpred P[set] means $1 is Subset of VAR;
+A1:    P[f1(x,y)] & P[f2(x,y)]
+       proof
+           { x,y } c= VAR
+          proof let a; assume a in { x,y };
+            then a = x or a = y by TARSKI:def 2;
+           hence a in VAR;
+          end;
+        hence thesis;
+       end;
+A2:    P[a] implies P[f3(a)];
+A3:    P[a] & P[b] implies P[f4(a,b)]
+       proof assume
+A4:      a is Subset of VAR & b is Subset of VAR;
+           union { a,b } c= VAR
+          proof let c; assume c in union { a,b }; then
+            consider X such that
+A5:         c in X & X in { a,b } by TARSKI:def 4;
+            X is Subset of VAR by A4,A5,TARSKI:def 2;
+           hence c in VAR by A5;
+          end;
+        hence thesis;
+       end;
+A6:    for a,x st P[a] holds P[f5(x,a)]
+       proof let a,x such that
+A7:      a is Subset of VAR;
+           (union { a }) \ { x } c= VAR
+          proof let b; assume b in (union { a }) \ { x };
+            then b in union { a } by XBOOLE_0:def 4;
+           then consider X such that
+A8:         b in X & X in { a } by TARSKI:def 4;
+              X = a by A8,TARSKI:def 1; hence b in VAR by A7,A8;
+          end;
+        hence thesis;
+       end;
+     thus P[f(H)] from ZFsch_property(Lm1,A1,A2,A3,A6);
+    end;
+ end;
+
+theorem
+    for H holds
+   (H is_equality implies Free H = { Var1 H,Var2 H }) &
+    (H is_membership implies Free H = { Var1 H,Var2 H }) &
+     (H is negative implies Free H = Free the_argument_of H) &
+      (H is conjunctive implies Free H =
+        Free the_left_argument_of H \/ Free the_right_argument_of H) &
+       (H is universal implies Free H = (Free the_scope_of H) \ { bound_in H })
+  proof let H;
+   thus (H is_equality implies Free H = { Var1 H,Var2 H } ) &
+     (H is_membership implies Free H = { Var1 H,Var2 H } ) &
+      (H is negative implies Free H = Free the_argument_of H ) by Lm2;
+   thus H is conjunctive implies Free H =
+      Free the_left_argument_of H \/ Free the_right_argument_of H
+     proof assume
+         H is conjunctive;
+      hence Free H =
+        union { Free the_left_argument_of H,Free the_right_argument_of H }
+         by Lm2
+          .= Free the_left_argument_of H \/ Free the_right_argument_of H
+         by ZFMISC_1:93;
+     end;
+   assume H is universal;
+    then Free H = (union { Free the_scope_of H }) \ { bound_in H } by Lm2;
+   hence thesis by ZFMISC_1:31;
+  end;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::                                                    ::
+:: The set of all valuations of variables in a model  ::
+::                                                    ::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+ definition let D be non empty set;
+  func VAL D -> set means
+:Def2:  a in it iff a is Function of VAR,D;
+   existence
+    proof
+     defpred X[set] means $1 is Function of VAR,D;
+     consider X such that
+A1:    a in X iff a in bool [:VAR,D:] & X[a] from Separation;
+     take X;
+     let a;
+     thus a in X implies a is Function of VAR,D by A1;
+     assume
+      a is Function of VAR,D;
+     then reconsider f = a as Function of VAR,D;
+        f in bool [:VAR,D:];
+     hence a in X by A1;
+    end;
+   uniqueness
+    proof let D1,D2 be set such that
+A2:   a in D1 iff a is Function of VAR,D and
+A3:   a in D2 iff a is Function of VAR,D;
+        now let a;
+       thus a in D1 implies a in D2
+         proof assume a in D1;
+           then a is Function of VAR,D by A2;
+          hence thesis by A3;
+         end;
+       assume a in D2;
+        then a is Function of VAR,D by A3;
+       hence a in D1 by A2;
+      end;
+     hence thesis by TARSKI:2;
+    end;
+ end;
+
+ definition let D be non empty set;
+  cluster VAL D -> non empty;
+  coherence
+  proof
+   consider f being Function of VAR,D;
+     f in VAL D by Def2;
+   hence thesis;
+  end;
+ end;
+
+ reserve E for non empty set,
+         f,g,h for Function of VAR,E,
+         v1,v2,v3,v4,v5,u1,u2,u3,u4,u5 for Element of VAL E;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::                                                                  ::
+:: The set of all valuations which satisfy a ZF-formula in a model  ::
+::                                                                  ::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+ definition let H,E;
+    deffunc f1(Variable,Variable) = {v3: for f st f = v3 holds f.$1 = f.$2};
+    deffunc f2(Variable,Variable) = {v3: for f st f = v3 holds f.$1 in f.$2};
+    deffunc f3(set) = (VAL E) \ union {$1};
+    deffunc f4(set,set) = (union {$1})/\(union {$2});
+    deffunc f5(Variable,set) =
+      {v5: for X,f st X = $2 & f = v5 holds f in X &
+        for g st for y st g.y <> f.y holds $1 = y holds g in X};
+  func St(H,E) -> set means :Def3:
+   ex A st
+    (for x,y holds [x '=' y,{ v1 : for f st f = v1 holds f.x = f.y }] in A &
+      [x 'in' y,{ v2 : for f st f = v2 holds f.x in f.y }] in A) &
+    [H,it] in A &
+    for H',a st [H',a] in A holds
+     (H' is_equality implies
+       a = { v3 : for f st f = v3 holds f.(Var1 H') = f.(Var2 H') }) &
+     (H' is_membership implies
+       a = { v4 : for f st f = v4 holds f.(Var1 H') in f.(Var2 H') }) &
+     (H' is negative implies ex b st a = (VAL E) \ union { b } &
+       [the_argument_of H',b] in A ) &
+     (H' is conjunctive implies ex b,c st a = (union { b }) /\ union { c } &
+       [the_left_argument_of H',b] in A & [the_right_argument_of H',c] in A) &
+     (H' is universal implies ex b st
+       a = { v5 : for X,f st X = b & f = v5 holds f in X &
+        for g st for y st g.y <> f.y holds bound_in H' = y holds g in X } &
+      [the_scope_of H',b] in A);
+   existence
+    proof
+     thus ex a,A st
+     (for x,y holds [x '=' y, f1(x,y)] in A & [x 'in' y, f2(x,y)] in A) &
+     [H,a] in A &
+     for H',a st [H',a] in A holds
+     (H' is_equality implies a = f1(Var1 H',Var2 H')) &
+     (H' is_membership implies a = f2(Var1 H', Var2 H')) &
+     (H' is negative implies ex b st a = f3(b) & [the_argument_of H',b] in A) &
+     (H' is conjunctive implies ex b,c st a = f4(b,c) &
+       [the_left_argument_of H',b] in A & [the_right_argument_of H',c] in A) &
+     (H' is universal implies ex b st a = f5(bound_in H',b) &
+      [the_scope_of H',b] in A) from ZFsch_ex;
+    end;
+   uniqueness
+    proof let a1,a2 be set such that
+A1:    ex A st
+       (for x,y holds [x '=' y, f1(x,y)] in A & [x 'in' y, f2(x,y)] in A) &
+       [H,a1] in A &
+       for H',a st [H',a] in A holds
+        (H' is_equality implies a = f1(Var1 H',Var2 H')) &
+        (H' is_membership implies a = f2(Var1 H', Var2 H')) &
+        (H' is negative implies ex b st a = f3(b) &
+          [the_argument_of H',b] in A) &
+        (H' is conjunctive implies ex b,c st a = f4(b,c) &
+          [the_left_argument_of H',b] in A &
+          [the_right_argument_of H',c] in A) &
+        (H' is universal implies ex b st a = f5(bound_in H',b) &
+          [the_scope_of H',b] in A)
+       and
+A2:    ex A st
+       (for x,y holds [x '=' y, f1(x,y)] in A & [x 'in' y, f2(x,y)] in A) &
+       [H,a2] in A &
+       for H',a st [H',a] in A holds
+        (H' is_equality implies a = f1(Var1 H',Var2 H')) &
+        (H' is_membership implies a = f2(Var1 H', Var2 H')) &
+        (H' is negative implies ex b st a = f3(b) &
+          [the_argument_of H',b] in A) &
+        (H' is conjunctive implies ex b,c st a = f4(b,c) &
+          [the_left_argument_of H',b] in A &
+          [the_right_argument_of H',c] in A) &
+        (H' is universal implies ex b st a = f5(bound_in H',b) &
+          [the_scope_of H',b] in A);
+     thus a1 = a2 from ZFsch_uniq(A1,A2);
+    end;
+ end;
+
+Lm3:now let H,E;
+    deffunc f1(Variable,Variable) = {v3: for f st f = v3 holds f.$1 = f.$2};
+    deffunc f2(Variable,Variable) = {v3: for f st f = v3 holds f.$1 in f.$2};
+    deffunc f3(set) = (VAL E) \ union {$1};
+    deffunc f4(set,set) = (union {$1})/\(union {$2});
+    deffunc f5(Variable,set) =
+      {v5: for X,f st X = $2 & f = v5 holds f in X &
+        for g st for y st g.y <> f.y holds $1 = y holds g in X};
+    deffunc f(ZF-formula) = St($1,E);
+A1:   for H,a holds a = f(H) iff
+      ex A st
+       (for x,y holds [x '=' y, f1(x,y)] in A & [x 'in' y, f2(x,y)] in A) &
+       [H,a] in A &
+       for H',a st [H',a] in A holds
+        (H' is_equality implies a = f1(Var1 H',Var2 H')) &
+        (H' is_membership implies a = f2(Var1 H', Var2 H')) &
+        (H' is negative implies ex b st a = f3(b) &
+          [the_argument_of H',b] in A) &
+        (H' is conjunctive implies ex b,c st a = f4(b,c) &
+          [the_left_argument_of H',b] in A &
+          [the_right_argument_of H',c] in A) &
+        (H' is universal implies ex b st a = f5(bound_in H',b) &
+          [the_scope_of H',b] in A) by Def3;
+    thus
+     (H is_equality implies f(H) = f1(Var1 H,Var2 H) ) &
+     (H is_membership implies f(H) = f2(Var1 H,Var2 H) ) &
+     (H is negative implies f(H) = f3(f(the_argument_of H)) ) &
+     (H is conjunctive implies for a,b st a = f(the_left_argument_of H) &
+       b = f(the_right_argument_of H) holds f(H) = f4(a,b) ) &
+     (H is universal implies f(H) = f5(bound_in H,f(the_scope_of H)))
+       from ZFsch_result(A1);
+   end;
+
+ definition let H,E;
+ redefine func St(H,E) -> Subset of VAL E;
+   coherence
+    proof
+    deffunc f1(Variable,Variable) = {v3: for f st f = v3 holds f.$1 = f.$2};
+    deffunc f2(Variable,Variable) = {v3: for f st f = v3 holds f.$1 in f.$2};
+    deffunc f3(set) = (VAL E) \ union {$1};
+    deffunc f4(set,set) = (union {$1})/\(union {$2});
+    deffunc f5(Variable,set) =
+      {v5: for X,f st X = $2 & f = v5 holds f in X &
+        for g st for y st g.y <> f.y holds $1 = y holds g in X};
+    deffunc f(ZF-formula) = St($1,E);
+    defpred P[set] means $1 is Subset of VAL E;
+A1:   for H,a holds a = f(H) iff
+      ex A st
+       (for x,y holds [x '=' y, f1(x,y)] in A & [x 'in' y, f2(x,y)] in A) &
+       [H,a] in A &
+       for H',a st [H',a] in A holds
+        (H' is_equality implies a = f1(Var1 H',Var2 H')) &
+        (H' is_membership implies a = f2(Var1 H', Var2 H')) &
+        (H' is negative implies ex b st a = f3(b) &
+          [the_argument_of H',b] in A) &
+        (H' is conjunctive implies ex b,c st a = f4(b,c) &
+          [the_left_argument_of H',b] in A &
+          [the_right_argument_of H',c] in A) &
+        (H' is universal implies ex b st a = f5(bound_in H',b) &
+          [the_scope_of H',b] in A) by Def3;
+        now let x,y;
+       set X1 = { v1 : for f st f = v1 holds f.x = f.y };
+          X1 c= VAL E
+         proof let a; assume
+             a in X1;
+           then ex v1 st a = v1 & for f st f = v1 holds f.x = f.y;
+          hence thesis;
+         end;
+       hence { v1 : for f st f = v1 holds f.x = f.y } is Subset of VAL E;
+       set X2 = { v1 : for f st f = v1 holds f.x in f.y };
+          X2 c= VAL E
+         proof let a; assume
+             a in X2;
+           then ex v1 st a = v1 & for f st f = v1 holds f.x in f.y;
+          hence thesis;
+         end;
+       hence { v1 : for f st f = v1 holds f.x in f.y } is Subset of VAL E;
+      end; then
+A2:   P[f1(x,y)] & P[f2(x,y)];
+A3:    now let b such that P[b];
+          (VAL E) \ union { b } c= VAL E
+         proof let a; assume a in (VAL E) \ union { b };
+          hence a in VAL E by XBOOLE_0:def 4;
+         end;
+       hence P[f3(b)];
+      end;
+A4:    for X,Y being set st P[X] & P[Y] holds P[f4(X,Y)]
+       proof let X,Y be set; assume
+        X is Subset of VAL E & Y is Subset of VAL E;
+        then reconsider X as Subset of VAL E;
+A5:      union { X } = X by ZFMISC_1:31;
+           (union { X }) /\ union { Y } c= VAL E
+          proof let a; assume a in (union { X }) /\ union { Y };
+            then a in X by A5,XBOOLE_0:def 3;
+           hence a in VAL E;
+          end;
+        hence thesis;
+       end;
+A6:    for a,x st P[a] holds P[f5(x,a)]
+       proof let a,x such that a is Subset of VAL E;
+        set Y = { u5 : for X,f st X = a & f = u5 holds f in X &
+                for g st for y st g.y <> f.y holds x = y holds g in X };
+           Y c= VAL E
+          proof let b; assume
+              b in Y;
+            then ex v1 st
+         b = v1 & for X,f st X = a & f = v1 holds f in X &
+               for g st for y st g.y <> f.y holds x = y holds g in X;
+           hence thesis;
+          end;
+        hence thesis;
+       end;
+     thus P[f(H)] from ZFsch_property(A1,A2,A3,A4,A6);
+    end;
+ end;
+
+theorem
+ Th2: for x,y,f holds f.x = f.y iff f in St(x '=' y,E)
+  proof let x,y,f;
+A1:  x '=' y is_equality by ZF_LANG:16;
+    then x '=' y = (Var1(x '=' y)) '=' Var2(x '=' y) by ZF_LANG:53;
+then A2:  x = Var1(x '=' y) & y = Var2(x '=' y) by ZF_LANG:6;
+A3:  St(x '=' y,E) =
+     { v1 : for f st f = v1 holds f.(Var1(x '=' y)) = f.(Var2(x '=' y)) }
+      by A1,Lm3;
+   thus f.x = f.y implies f in St(x '=' y,E)
+     proof assume
+A4:     f.x = f.y;
+      reconsider v = f as Element of VAL E by Def2;
+         for f st f = v holds f.(Var1(x '=' y)) = f.(Var2(x '=' y)) by A2,A4;
+      hence thesis by A3;
+     end;
+   assume f in St(x '=' y,E);
+    then ex v1 st
+  f = v1 & for f st f = v1 holds f.(Var1(x '=' y)) = f.(Var2(x '=' y)) by A3;
+   hence f.x = f.y by A2;
+  end;
+
+theorem
+ Th3: for x,y,f holds f.x in f.y iff f in St(x 'in' y,E)
+  proof let x,y,f;
+A1:  x 'in' y is_membership by ZF_LANG:16;
+    then x 'in' y = (Var1(x 'in' y)) 'in' Var2(x 'in' y) by ZF_LANG:54;
+then A2:  x = Var1(x 'in' y) & y = Var2(x 'in' y) by ZF_LANG:7;
+A3:  St(x 'in' y,E) =
+     { v1 : for f st f = v1 holds f.(Var1(x 'in' y)) in f.(Var2(x 'in' y)) }
+      by A1,Lm3;
+   thus f.x in f.y implies f in St(x 'in' y,E)
+     proof assume
+A4:     f.x in f.y;
+      reconsider v = f as Element of VAL E by Def2;
+         for f st f = v holds f.(Var1(x 'in' y)) in f.(Var2(x 'in' y)) by A2,A4
+;
+      hence thesis by A3;
+     end;
+   assume f in St(x 'in' y,E);
+    then ex v1 st
+  f = v1 & for f st f = v1 holds f.(Var1(x 'in' y)) in f.(Var2(x 'in'
+ y)) by A3;
+   hence f.x in f.y by A2;
+  end;
+
+theorem
+ Th4: for H,f holds not f in St(H,E) iff f in St('not' H,E)
+  proof let H,f;
+A1:  'not' H is negative by ZF_LANG:16;
+    then H = the_argument_of 'not' H & union { St(H,E) } = St(H,E)
+     by ZFMISC_1:31,ZF_LANG:def 30;
+then A2:  St('not' H,E) = (VAL E) \ St(H,E) by A1,Lm3;
+   thus not f in St(H,E) implies f in St('not' H,E)
+     proof
+         f in VAL E by Def2;
+      hence thesis by A2,XBOOLE_0:def 4;
+     end;
+   assume f in St('not' H,E);
+   hence not f in St(H,E) by A2,XBOOLE_0:def 4;
+  end;
+
+theorem
+ Th5: for H,H',f holds f in St(H,E) & f in St(H',E) iff f in St(H '&' H',E)
+  proof let H,H',f;
+A1:  H '&' H' is conjunctive by ZF_LANG:16;
+then A2:  St(H '&' H',E) = (union { St(the_left_argument_of(H '&' H'),E) }) /\
+                      union { St(the_right_argument_of(H '&' H'),E) } by Lm3;
+      H '&' H' = (the_left_argument_of(H '&' H')) '&'
+                the_right_argument_of(H '&' H') by A1,ZF_LANG:58;
+then A3:    H = the_left_argument_of(H '&' H') & union { St(H,E) } = St(H,E) &
+     H' = the_right_argument_of(H '&' H') & union { St(H',E) } = St(H',E)
+      by ZFMISC_1:31,ZF_LANG:47;
+   hence f in St(H,E) & f in St(H',E) implies f in
+ St(H '&' H',E) by A2,XBOOLE_0:def 3;
+   assume f in St(H '&' H',E);
+   hence f in St(H,E) & f in St(H',E) by A2,A3,XBOOLE_0:def 3;
+  end;
+
+theorem
+ Th6: for x,H,f holds
+  ( f in St(H,E) & for g st for y st g.y <> f.y holds x = y holds g in
+ St(H,E) )
+     iff f in St(All(x,H),E)
+  proof let x,H,f;
+A1:  All(x,H) is universal by ZF_LANG:16;
+then A2:  St(All(x,H),E) =
+      { v5 : for X,f st X = St(the_scope_of All(x,H),E) & f = v5 holds f in X &
+       for g st for y st g.y <> f.y holds bound_in All(x,H) = y holds g in X }
+        by Lm3;
+
+      All(x,H) = All(bound_in All(x,H),the_scope_of All(x,H)) by A1,ZF_LANG:62;
+   then A3:  x = bound_in All(x,H) & H = the_scope_of All(x,H) by ZF_LANG:12;
+   thus ( f in St(H,E) &
+     for g st for y st g.y <> f.y holds x = y holds g in St(H,E) )
+      implies f in St(All(x,H),E)
+     proof assume
+A4:     f in St(H,E) &
+        for g st for y st g.y <> f.y holds x = y holds g in St(H,E);
+      reconsider v = f as Element of VAL E by Def2;
+         for X,h holds X = St(the_scope_of All(x,H),E) & h = v implies
+ h in X & for g holds (
+       for y st g.y <> h.y holds bound_in All(x,H) = y ) implies g in X by A3,
+A4;
+      hence thesis by A2;
+     end;
+   assume f in St(All(x,H),E);
+ then A5:   ex v5 st
+  f = v5 & for X,f st X = St(the_scope_of All(x,H),E) & f = v5 holds f in X &
+     for g st for y st g.y <> f.y holds bound_in All(x,H) = y holds g in
+ X by A2
+;
+   hence f in St(H,E) by A3;
+   let g; assume
+      for y st g.y <> f.y holds x = y;
+   hence thesis by A3,A5;
+  end;
+
+theorem
+    H is_equality implies
+   for f holds f.(Var1 H) = f.(Var2 H) iff f in St(H,E)
+  proof assume H is_equality;
+    then H = (Var1 H) '=' Var2 H by ZF_LANG:53;
+   hence thesis by Th2;
+  end;
+
+theorem
+    H is_membership implies
+   for f holds f.(Var1 H) in f.(Var2 H) iff f in St(H,E)
+  proof assume H is_membership;
+    then H = (Var1 H) 'in' Var2 H by ZF_LANG:54;
+   hence thesis by Th3;
+  end;
+
+theorem
+    H is negative implies
+   for f holds not f in St(the_argument_of H,E) iff f in St(H,E)
+  proof assume H is negative;
+    then H = 'not' the_argument_of H by ZF_LANG:def 30;
+   hence thesis by Th4;
+  end;
+
+theorem
+    H is conjunctive implies
+  for f holds f in St(the_left_argument_of H,E) &
+   f in St(the_right_argument_of H,E) iff f in St(H,E)
+  proof assume H is conjunctive;
+    then H = (the_left_argument_of H) '&' the_right_argument_of H by ZF_LANG:58
+;
+   hence thesis by Th5;
+  end;
+
+theorem
+    H is universal implies
+  for f holds
+   (f in St(the_scope_of H,E) &
+     for g st for y st g.y <> f.y holds bound_in H = y
+           holds g in St(the_scope_of H,E) )
+   iff f in St(H,E)
+  proof assume H is universal;
+    then H = All(bound_in H,the_scope_of H) by ZF_LANG:62;
+   hence thesis by Th6;
+  end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::                                                             ::
+::  The satisfaction of a ZF-formula in a model by a valuation ::
+::                                                             ::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+ definition let D be non empty set; let f be Function of VAR,D; let H;
+  pred D,f |= H means
+:Def4:  f in St(H,D);
+ end;
+
+theorem
+    for E,f,x,y holds E,f |= x '=' y iff f.x = f.y
+  proof let E,f,x,y;
+      (E,f |= x '=' y iff f in St(x '=' y,E) ) &
+     ( f in St(x '=' y,E) iff f.x = f.y ) by Def4,Th2;
+   hence thesis;
+  end;
+
+theorem
+    for E,f,x,y holds E,f |= x 'in' y iff f.x in f.y
+  proof let E,f,x,y;
+      (E,f |= x 'in' y iff f in St(x 'in' y,E) ) &
+     ( f in St(x 'in' y,E) iff f.x in f.y ) by Def4,Th3;
+   hence thesis;
+  end;
+
+theorem
+ Th14: for E,f,H holds E,f |= H iff not E,f |= 'not' H
+  proof let E,f,H;
+      (E,f |= H iff f in St(H,E) ) &
+     (E,f |= 'not' H iff f in St('not' H,E) ) &
+      ( f in St(H,E) iff not f in St('not' H,E) ) by Def4,Th4;
+   hence thesis;
+  end;
+
+theorem
+ Th15: for E,f,H,H' holds E,f |= H '&' H' iff E,f |= H & E,f |= H'
+  proof let E,f,H,H';
+      (E,f |= H '&' H' iff f in St(H '&' H',E) ) &
+     (E,f |= H iff f in St(H,E) ) & (E,f |= H' iff f in St(H',E) ) &
+      ( f in St(H '&' H',E) iff f in St(H,E) & f in St(H',E) ) by Def4,Th5;
+   hence thesis;
+  end;
+
+
+theorem
+ Th16: for E,f,H,x holds E,f |= All(x,H) iff
+       for g st for y st g.y <> f.y holds x = y holds E,g |= H
+  proof let E,f,H,x;
+A1:  (E,f |= H iff f in St(H,E) ) &
+     (E,f |= All(x,H) iff f in St(All(x,H),E) ) &
+      (f in St(All(x,H),E) iff f in St(H,E) &
+        for g st for y st g.y <> f.y holds x = y holds g in St(H,E) )
+         by Def4,Th6;
+A2:  (for g st for y st g.y <> f.y holds x = y holds g in St(H,E)) implies
+      for g st for y st g.y <> f.y holds x = y holds E,g |= H
+     proof assume
+A3:     for g st for y st g.y <> f.y holds x = y holds g in St(H,E);
+      let g; assume for y st g.y <> f.y holds x = y;
+       then g in St(H,E) by A3;
+      hence thesis by Def4;
+     end;
+A4:  (for g st for y st g.y <> f.y holds x = y holds E,g |= H) implies
+      for g st for y st g.y <> f.y holds x = y holds g in St(H,E)
+     proof assume
+A5:     for g st for y st g.y <> f.y holds x = y holds E,g |= H;
+      let g; assume for y st g.y <> f.y holds x = y;
+       then E,g |= H by A5;
+      hence thesis by Def4;
+     end;
+      (for g st for y st g.y <> f.y holds x = y holds E,g |= H) implies E,f |=
+H
+     proof assume
+A6:     for g st for y st g.y <> f.y holds x = y holds E,g |= H;
+         for y st f.y <> f.y holds x = y;
+      hence thesis by A6;
+     end;
+   hence thesis by A1,A2,A4;
+  end;
+
+theorem
+    for E,f,H,H' holds E,f |= H 'or' H' iff E,f |= H or E,f |= H'
+  proof let E,f,H,H';
+      (E,f |= 'not' ('not' H '&' 'not' H') iff not E,f |= 'not' H '&' 'not' H')
+&
+     (E,f |= 'not' H '&' 'not' H' iff E,f |= 'not' H & E,f |= 'not' H') &
+      (E,f |= 'not' H iff not E,f |= H) & (E,f |= 'not' H' iff not E,f |= H')
+       by Th14,Th15;
+   hence thesis by ZF_LANG:def 16;
+  end;
+
+theorem
+ Th18: for E,f,H,H' holds E,f |= H => H' iff (E,f |= H implies E,f |= H')
+  proof let E,f,H,H';
+      (E,f |= 'not' (H '&' 'not' H') iff not E,f |= H '&' 'not' H') &
+     (E,f |= H '&' 'not' H' iff E,f |= H & E,f |= 'not' H') &
+      (E,f |= 'not' H' iff not E,f |= H')
+       by Th14,Th15;
+   hence thesis by ZF_LANG:def 17;
+  end;
+
+theorem
+    for E,f,H,H' holds E,f |= H <=> H' iff (E,f |= H iff E,f |= H')
+  proof let E,f,H,H';
+      (E,f |= (H => H') '&' (H' => H) iff E,f |= H => H' & E,f |= H' => H) &
+     (E,f |= H => H' iff (E,f |= H implies E,f |= H') ) &
+      (E,f |= H' => H iff (E,f |= H' implies E,f |= H) )
+       by Th15,Th18;
+   hence thesis by ZF_LANG:def 18;
+  end;
+
+theorem
+ Th20: for E,f,H,x holds E,f |= Ex(x,H) iff
+       ex g st (for y st g.y <> f.y holds x = y) & E,g |= H
+  proof let E,f,H,x;
+A1:  (E,f |= 'not' All(x,'not' H) iff not E,f |= All(x,'not' H) ) &
+     (E,f |= All(x,'not' H) iff
+       for g st for y st g.y <> f.y holds x = y holds E,g |= 'not' H) &
+      (E,f |= 'not' H iff not E,f |= H)
+       by Th14,Th16;
+   thus E,f |= Ex(x,H) implies
+      ex g st (for y st g.y <> f.y holds x = y) & E,g |= H
+     proof assume E,f |= Ex(x,H);
+      then consider g such that
+A2:     (for y st g.y <> f.y holds x = y) & not E,g |= 'not'
+ H by A1,ZF_LANG:def 19;
+         E,g |= H by A2,Th14;
+      hence thesis by A2;
+     end;
+   given g such that
+A3:  (for y st g.y <> f.y holds x = y) & E,g |= H;
+      not E,g |= 'not' H by A3,Th14;
+   hence thesis by A1,A3,ZF_LANG:def 19;
+  end;
+
+theorem
+ Th21: for E,f,x for e being Element of E ex g st g.x = e &
+    for z st z <> x holds g.z = f.z
+   proof let E,f,x; let e be Element of E;
+     defpred P[set,set] means
+      $1 = x & $2 = e or $1 <> x & $2 = f.$1;
+A1:  for a,b,c st a in VAR & P[a,b] & P[a,c] holds b = c;
+A2:  for a st a in VAR ex b st P[a,b]
+      proof let a such that a in VAR;
+         a = x or a <> x;
+       hence thesis;
+      end;
+    consider g being Function such that
+A3:   dom g = VAR & for a st a in VAR holds P[a,g.a] from FuncEx(A1,A2);
+    rng g c= E
+     proof let a; assume a in rng g;
+       then consider b such that
+A4:      b in dom g & a = g.b by FUNCT_1:def 5;
+       reconsider b as Variable by A3,A4;
+          g.b = e or g.b = f.b by A3;
+       hence a in E by A4;
+     end;
+     then reconsider g as Function of VAR,E by A3,FUNCT_2:def 1,RELSET_1:11;
+    take g;
+    thus g.x = e by A3;
+    let z;
+    thus z <> x implies g.z = f.z by A3;
+   end;
+
+theorem
+    E,f |= All(x,y,H) iff
+   for g st for z st g.z <> f.z holds x = z or y = z holds E,g |= H
+  proof
+A1:  (E,f |= All(x,All(y,H)) iff
+      for g st for z st g.z <> f.z holds x = z holds E,g |= All(y,H) ) &
+     (for g holds E,g |= All(y,H) iff
+       for h st for z st h.z <> g.z holds y = z holds E,h |= H )
+        by Th16;
+   thus E,f |= All(x,y,H) implies
+      for g st for z st g.z <> f.z holds x = z or y = z holds E,g |= H
+     proof assume
+A2:     E,f |= All(x,y,H);
+      let g such that
+A3:     for z st g.z <> f.z holds x = z or y = z;
+A4:       for g st for z st g.z <> f.z holds x = z
+         for h st for z st h.z <> g.z holds y = z holds E,h |= H
+        proof let g; assume
+            for z st g.z <> f.z holds x = z;
+          then E,g |= All(y,H) by A1,A2,ZF_LANG:23;
+         hence thesis by Th16;
+        end;
+      consider h such that
+A5:     h.y = f.y & for z st z <> y holds h.z = g.z by Th21;
+         for z st h.z <> f.z holds x = z
+        proof let z such that
+A6:       h.z <> f.z and
+A7:       x <> z;
+            y <> z by A5,A6;
+          then g.z = f.z & h.z = g.z by A3,A5,A7;
+         hence contradiction by A6;
+        end;
+       then (for z st g.z <> h.z holds y = z) implies E,g |= H by A4;
+      hence thesis by A5;
+     end;
+   assume
+A8:  for g st for z st g.z <> f.z holds x = z or y = z holds E,g |= H;
+      now let g such that
+A9:    for z st g.z <> f.z holds x = z;
+        now let h such that
+A10:      for z st h.z <> g.z holds y = z;
+          now let z; assume h.z <> f.z & x <> z & y <> z;
+          then h.z <> f.z & h.z = g.z & g.z = f.z by A9,A10;
+         hence contradiction;
+        end;
+       hence E,h |= H by A8;
+      end;
+     hence E,g |= All(y,H) by Th16;
+    end;
+   hence E,f |= All(x,y,H) by A1,ZF_LANG:23;
+  end;
+
+theorem
+    E,f |= Ex(x,y,H) iff
+   ex g st (for z st g.z <> f.z holds x = z or y = z) & E,g |= H
+  proof
+A1:  (E,f |= Ex(x,Ex(y,H)) iff
+      ex g st (for z st g.z <> f.z holds x = z) & E,g |= Ex(y,H) ) &
+     (for g holds E,g |= Ex(y,H) iff
+       ex h st (for z st h.z <> g.z holds y = z) & E,h |= H )
+        by Th20;
+   thus E,f |= Ex(x,y,H) implies
+     ex g st (for z st g.z <> f.z holds x = z or y = z) & E,g |= H
+    proof assume
+      E,f |= Ex(x,y,H);
+     then consider g such that
+A2:    (for z st g.z <> f.z holds x = z) & E,g |= Ex(y,H) by A1,ZF_LANG:23;
+     consider h such that
+A3:    (for z st h.z <> g.z holds y = z) & E,h |= H by A2,Th20;
+     take h;
+     thus for z st h.z <> f.z holds x = z or y = z
+       proof let z such that
+A4:       h.z <> f.z and
+A5:       x <> z & y <> z;
+           g.z = f.z & h.z = g.z by A2,A3,A5;
+        hence contradiction by A4;
+       end;
+     thus E,h |= H by A3;
+    end;
+   given g such that
+A6:  (for z st g.z <> f.z holds x = z or y = z) & E,g |= H;
+   consider h such that
+A7:  h.x = g.x & for z st z <> x holds h.z = f.z by Th21;
+      now let z; assume
+A8:   g.z <> h.z & y <> z;
+      then x <> z by A7;
+      then g.z = f.z & h.z = f.z by A6,A7,A8;
+     hence contradiction by A8;
+    end;
+then A9:  E,h |= Ex(y,H) by A6,Th20;
+      for z st h.z <> f.z holds x = z by A7;
+   hence E,f |= Ex(x,y,H) by A1,A9,ZF_LANG:23;
+  end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::
+::                                               ::
+::  The satisfaction of a ZF-formula in a model  ::
+::                                               ::
+:::::::::::::::::::::::::::::::::::::::::::::::::::
+
+ definition let E,H;
+  pred E |= H means
+:Def5:   for f holds E,f |= H;
+ end;
+
+canceled;
+
+theorem
+    E |= All(x,H) iff E |= H
+  proof
+   thus E |= All(x,H) implies E |= H
+     proof assume
+A1:     for f holds E,f |= All(x,H);
+      let f;
+A2:       E,f |= All(x,H) by A1;
+         for y st f.y <> f.y holds x = y;
+      hence E,f |= H by A2,Th16;
+     end;
+   assume
+A3:  E |= H;
+   let f;
+      for g st for y st g.y <> f.y holds x = y holds E,g |= H by A3,Def5;
+   hence E,f |= All(x,H) by Th16;
+  end;
+
+:::::::::::::::::::::::::::::::::
+::  The axioms of ZF-language  ::
+:::::::::::::::::::::::::::::::::
+
+ definition
+  func the_axiom_of_extensionality -> ZF-formula equals
+
+       All(x.0,x.1,All(x.2,x.2 'in' x.0 <=> x.2 'in' x.1) => x.0 '=' x.1);
+   correctness;
+  func the_axiom_of_pairs -> ZF-formula equals
+
+       All(x.0,x.1,Ex(x.2,All(x.3,
+           x.3 'in' x.2 <=> (x.3 '=' x.0 'or' x.3 '=' x.1) )));
+   correctness;
+  func the_axiom_of_unions -> ZF-formula equals
+
+       All(x.0,Ex(x.1,All(x.2,
+           x.2 'in' x.1 <=> Ex(x.3,x.2 'in' x.3 '&' x.3 'in' x.0) )));
+   correctness;
+  func the_axiom_of_infinity -> ZF-formula equals
+
+       Ex(x.0,x.1,x.1 'in' x.0 '&'
+          All(x.2,x.2 'in' x.0 => Ex(x.3,x.3 'in' x.0 '&' 'not' x.3 '=' x.2 '&'
+            All(x.4,x.4 'in' x.2 => x.4 'in' x.3) )));
+   correctness;
+  func the_axiom_of_power_sets -> ZF-formula equals
+
+       All(x.0,Ex(x.1,All(x.2,
+           x.2 'in' x.1 <=> All(x.3,x.3 'in' x.2 => x.3 'in' x.0) )));
+   correctness;
+ end;
+
+ definition let H be ZF-formula;
+  func the_axiom_of_substitution_for H -> ZF-formula equals
+
+       All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) =>
+          All(x.1,Ex(x.2,All(x.4,x.4 'in' x.2 <=> Ex(x.3,x.3 'in'
+ x.1 '&' H))));
+   correctness;
+ end;
+
+ definition let E;
+  attr E is being_a_model_of_ZF means
+
+     E is epsilon-transitive &
+   E |= the_axiom_of_pairs &
+   E |= the_axiom_of_unions &
+   E |= the_axiom_of_infinity &
+   E |= the_axiom_of_power_sets &
+   for H st { x.0,x.1,x.2 } misses Free H holds
+    E |= the_axiom_of_substitution_for H;
+  synonym E is_a_model_of_ZF;
+ end;

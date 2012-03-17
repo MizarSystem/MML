@@ -1,0 +1,668 @@
+:: Asymptotic notation. Part II: Examples and Problems
+::  by Richard Krueger, Piotr Rudnicki and Paul Shelley
+::
+:: Received November 4, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary ASYMPT_0, BOOLE, NEWTON, NAT_1, INT_1, POWER, SERIES_1, SQUARE_1,
+      ABSVALUE, SEQ_2, SEQ_1, FUNCT_1, ARYTM_1, FUNCT_2, ARYTM_3, RELAT_1,
+      ORDINAL2, RLVECT_1, FUNCOP_1, FRAENKEL, QC_LANG1, PROB_1, GROUP_1,
+      FINSEQ_1, FINSEQ_2, ZF_LANG, ASYMPT_1, FINSEQ_4, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, FUNCT_1, FUNCT_2, FRAENKEL, INT_1, NAT_1, SEQ_1, SEQ_2, RELAT_1,
+      NEWTON, POWER, SERIES_1, BHSP_4, PRE_CIRC, SQUARE_1, LIMFUNC1, ABSVALUE,
+      SEQM_3, DOMAIN_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, RVSUM_1, ASYMPT_0;
+ constructors SERIES_1, BHSP_4, DOMAIN_1, FINSEQ_4, ASYMPT_0, SETWISEO, SEQ_2,
+      PRE_CIRC, REAL_1, SFMASTR3, PARTFUN1, LIMFUNC1, PREPOWER, NAT_1, RVSUM_1;
+ clusters XREAL_0, INT_1, RELSET_1, FINSEQ_2, ASYMPT_0, SEQ_1, SUBSET_1,
+      MEMBERED, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Examples from the text
+
+definition
+  cluster -> non negative Element of NAT;
+end;
+
+reserve c, c1, c2, d, d1, d2, e for Real,
+        i, k, n, m, N, n1, n2, N0, N1, N2, N3, M for Nat,
+        x for set;
+
+theorem :: ASYMPT_1:1
+   for t,t1 being Real_Sequence st
+  (t.0 = 0 & (for n st n > 0 holds
+                  t.n = 12*(n to_power 3)*log(2,n) - 5*n^2 + (log(2,n))^2
++36)) &
+  (t1.0 = 0 & (for n st n > 0 holds t1.n = (n to_power 3)*log(2,n)))
+ ex s,s1 being eventually-positive Real_Sequence
+   st s = t & s1 = t1 & s in Big_Oh(s1);
+
+theorem :: ASYMPT_1:2
+   for a,b being logbase Real, f,g being Real_Sequence st a > 1 & b > 1 &
+  (f.0 = 0 & (for n st n > 0 holds f.n = log(a,n))) &
+  (g.0 = 0 & (for n st n > 0 holds g.n = log(b,n)))
+  holds ex s,s1 being eventually-positive Real_Sequence st
+   s = f & s1 = g & Big_Oh(s) = Big_Oh(s1);
+
+definition let a,b,c be Real;
+ func seq_a^(a,b,c) -> Real_Sequence means
+:: ASYMPT_1:def 1
+  it.n = a to_power (b*n+c);
+end;
+
+definition let a be positive Real, b,c be Real;
+ cluster seq_a^(a,b,c) -> eventually-positive;
+end;
+
+theorem :: ASYMPT_1:3
+   for a,b being positive Real st a < b
+  holds not seq_a^(b,1,0) in Big_Oh(seq_a^(a,1,0));
+
+:: Example p. 84
+
+definition
+ func seq_logn -> Real_Sequence means
+:: ASYMPT_1:def 2
+  it.0 = 0 & (for n st n > 0 holds it.n = log(2,n));
+end;
+
+definition let a be Real;
+ func seq_n^(a) -> Real_Sequence means
+:: ASYMPT_1:def 3
+  it.0 = 0 & (for n st n > 0 holds it.n = n to_power a);
+end;
+
+definition
+ cluster seq_logn -> eventually-positive;
+end;
+
+definition let a be Real;
+ cluster seq_n^(a) -> eventually-positive;
+end;
+
+theorem :: ASYMPT_1:4
+ for f,g being eventually-nonnegative Real_Sequence holds
+  Big_Oh(f) c= Big_Oh(g) & not Big_Oh(f) = Big_Oh(g) iff
+    f in Big_Oh(g) & not f in Big_Omega(g);
+
+theorem :: ASYMPT_1:5
+ Big_Oh(seq_logn) c= Big_Oh(seq_n^(1/2)) &
+  not Big_Oh(seq_logn) = Big_Oh(seq_n^(1/2));
+
+:: Example p. 86
+
+theorem :: ASYMPT_1:6
+   seq_n^(1/2) in Big_Omega(seq_logn) & not seq_logn in Big_Omega(seq_n^(1/2));
+
+theorem :: ASYMPT_1:7
+   for f being Real_Sequence, k being Nat st
+  (for n holds f.n = Sum(seq_n^(k), n))
+   holds f in Big_Theta(seq_n^(k+1));
+
+:: Example p. 89
+
+theorem :: ASYMPT_1:8
+   for f being Real_Sequence st
+  (f.0 = 0 & (for n st n > 0 holds f.n = (n to_power log(2,n))))
+   holds ex s being eventually-positive Real_Sequence st
+    s = f & not s is smooth;
+
+:: Example p. 92
+
+definition
+ let b be Real;
+  func seq_const(b) -> Real_Sequence equals
+:: ASYMPT_1:def 4
+   NAT --> b;
+end;
+
+definition
+ cluster seq_const(1) -> eventually-nonnegative;
+end;
+
+theorem :: ASYMPT_1:9
+ for f being eventually-nonnegative Real_Sequence
+  holds ex F being FUNCTION_DOMAIN of NAT,REAL st F = { seq_n^(1) } &
+   (f in F to_power Big_Oh(seq_const(1))
+    iff ex N,c,k st c>0 & for n st n >= N holds 1 <= f.n & f.n <=
+ c*(seq_n^(k)).n);
+
+begin :: Problem 3.1
+
+theorem :: ASYMPT_1:10
+   for f being Real_Sequence st
+  (for n holds f.n = 3*(10 to_power 6) - 18*(10 to_power 3)*n + 27*n^2)
+   holds f in Big_Oh(seq_n^(2));
+
+:: Problem 3.2 -- omitted
+
+:: Problem 3.3 -- omitted
+
+:: Problem 3.4 -- omitted
+
+begin :: Problem 3.5
+
+theorem :: ASYMPT_1:11 :: Part 1
+   seq_n^(2) in Big_Oh(seq_n^(3));
+
+theorem :: ASYMPT_1:12 :: Part 2
+   not seq_n^(2) in Big_Omega(seq_n^(3));
+
+theorem :: ASYMPT_1:13 :: Part 3
+   ex s being eventually-positive Real_Sequence
+  st s = seq_a^(2,1,1) & seq_a^(2,1,0) in Big_Theta(s);
+
+definition let a be Nat;
+ func seq_n!(a) -> Real_Sequence means
+:: ASYMPT_1:def 5
+  it.n = (n+a)!;
+end;
+
+definition let a be Nat;
+ cluster seq_n!(a) -> eventually-positive;
+end;
+
+theorem :: ASYMPT_1:14 :: Part 4
+   not seq_n!(0) in Big_Theta(seq_n!(1));
+
+begin
+
+theorem :: ASYMPT_1:15
+   for f being Real_Sequence
+  st f in Big_Oh(seq_n^(1)) holds f(#)f in Big_Oh(seq_n^(2));
+
+begin :: Problem 3.7
+
+theorem :: ASYMPT_1:16
+   ex s being eventually-positive Real_Sequence
+  st s = seq_a^(2,1,0) & 2(#)seq_n^(1) in Big_Oh( seq_n^(1) ) &
+   not seq_a^(2,2,0) in Big_Oh(s);
+
+begin :: Problem 3.8
+
+theorem :: ASYMPT_1:17
+   log(2,3) < 159/100 implies
+  seq_n^(log(2,3)) in Big_Oh(seq_n^(159/100)) &
+  not seq_n^(log(2,3)) in Big_Omega(seq_n^(159/100)) &
+  not seq_n^(log(2,3)) in Big_Theta(seq_n^(159/100));
+
+:: Problem 3.9 --  Proven in theorem ASYMPT_0:10
+
+:: Problem 3.10 --  Proven in theorem ASYMPT_0:12
+
+begin :: Problem 3.11
+
+theorem :: ASYMPT_1:18
+   for f,g being Real_Sequence st
+  (for n holds f.n = n mod 2) & (for n holds g.n = n+1 mod 2)
+   holds ex s,s1 being eventually-nonnegative Real_Sequence
+    st s = f & s1 = g & not s in Big_Oh(s1) & not s1 in Big_Oh(s);
+
+:: Problem 3.12 -- Proven in theorems ASYMPT_0:20, ASYMPT_0:21
+
+:: Problem 3.13 -- omitted (uses a notation that we do not support)
+
+:: Problem 3.14 -- omitted (cannot Mizar an incorrect proof)
+
+:: Problem 3.15 -- omitted (cannot Mizar an incorrect proof)
+
+:: Problem 3.16 -- omitted (maximum rule over multiple functions can be
+::                          reduced to repeated applications of the binary
+::                          maximum rule)
+
+:: Problem 3.17 -- omitted (cannot Mizar an incorrect proof)
+
+:: Problem 3.18 -- Proven in theorems ASYMPT_0:28, ASYMPT_0:29, ASYMPT_0:30
+
+begin :: Problem 3.19
+
+theorem :: ASYMPT_1:19 :: Part 1
+   for f,g being eventually-nonnegative Real_Sequence holds
+  Big_Oh(f) = Big_Oh(g) iff f in Big_Theta(g);
+
+theorem :: ASYMPT_1:20 :: Part 2
+   for f,g being eventually-nonnegative Real_Sequence holds
+  f in Big_Theta(g) iff Big_Theta(f) = Big_Theta(g);
+
+:: Problem 3.20 -- Proven above in theorem ASYMPT_1:?????
+
+begin
+
+theorem :: ASYMPT_1:21 :: (Part 1, O(nlogn) c O(n^(1+e))), slightly generalized
+   for e being Real, f being Real_Sequence
+  st 0 < e & (f.0 = 0 & (for n st n > 0 holds f.n = n*log(2,n)))
+   holds ex s being eventually-positive Real_Sequence st
+    s = f & Big_Oh(s) c= Big_Oh(seq_n^(1+e)) &
+            not Big_Oh(s) = Big_Oh(seq_n^(1+e));
+
+theorem :: ASYMPT_1:22 :: (Part 2, O(n^(1+e)) c O(n^2/logn))
+   for e being Real, g being Real_Sequence
+  st 0 < e & e < 1 &
+  (g.0 = 0 & g.1 = 0 & (for n st n > 1 holds g.n = (n to_power 2)/log(2,n)))
+   holds ex s being eventually-positive Real_Sequence st
+    s = g & Big_Oh(seq_n^(1+e)) c= Big_Oh(s) &
+            not Big_Oh(seq_n^(1+e)) = Big_Oh(s);
+
+theorem :: ASYMPT_1:23 :: (Part 3, O(n^2/logn) c O(n^8))
+   for f being Real_Sequence st
+  (f.0 = 0 & f.1 = 0 & (for n st n > 1 holds f.n = (n to_power 2)/log(2,n)))
+   holds ex s being eventually-positive Real_Sequence st
+    s = f & Big_Oh(s) c= Big_Oh(seq_n^(8)) &
+            not Big_Oh(s) = Big_Oh(seq_n^(8));
+
+theorem :: ASYMPT_1:24 :: (Part 4, O(n^8) = O((n^2-n+1)^4))
+   for g being Real_Sequence st (for n holds g.n = (n^2 - n + 1) to_power 4)
+  holds ex s being eventually-positive Real_Sequence st
+   s = g & Big_Oh(seq_n^(8)) = Big_Oh(s);
+
+theorem :: ASYMPT_1:25 :: (Part 5, O(n^8) c O((1+e)^n))
+   for e being Real st 0 < e & e < 1 holds
+  ex s being eventually-positive Real_Sequence st s = seq_a^(1+e,1,0) &
+   Big_Oh(seq_n^(8)) c= Big_Oh(s) & not Big_Oh(seq_n^(8)) = Big_Oh(s);
+
+begin
+
+theorem :: ASYMPT_1:26 :: (Part 1, O(n^logn) c O(n^sqrt n))
+   for f,g being Real_Sequence st
+  (f.0 = 0 & (for n st n > 0 holds f.n = (n to_power log(2,n)))) &
+  (g.0 = 0 & (for n st n > 0 holds g.n = (n to_power sqrt n)))
+   holds ex s,s1 being eventually-positive Real_Sequence st
+    s = f & s1 = g & Big_Oh(s) c= Big_Oh(s1) & not Big_Oh(s) = Big_Oh(s1);
+
+theorem :: ASYMPT_1:27 :: (Part 2, O(n^sqrt n) c O(2^n))
+   for f being Real_Sequence st
+  (f.0 = 0 & (for n st n > 0 holds f.n = (n to_power sqrt n)))
+   holds ex s,s1 being eventually-positive Real_Sequence st
+    s = f & s1 = seq_a^(2,1,0) &
+     Big_Oh(s) c= Big_Oh(s1) & not Big_Oh(s) = Big_Oh(s1);
+
+theorem :: ASYMPT_1:28 :: (Part 3, O(2^n+1) = O(2^n))
+   ex s, s1 being eventually-positive Real_Sequence
+  st s = seq_a^(2,1,0) & s1 = seq_a^(2,1,1) &
+   Big_Oh(s) = Big_Oh(s1);
+
+theorem :: ASYMPT_1:29 :: (Part 4, O(2^n) c O(2^2n))
+   ex s, s1 being eventually-positive Real_Sequence
+  st s = seq_a^(2,1,0) & s1 = seq_a^(2,2,0) &
+   Big_Oh(s) c= Big_Oh(s1) & not Big_Oh(s) = Big_Oh(s1);
+
+theorem :: ASYMPT_1:30 :: (Part 5, O(2^2n) c O(n!))
+   ex s being eventually-positive Real_Sequence
+  st s = seq_a^(2,2,0) &
+   Big_Oh(s) c= Big_Oh(seq_n!(0)) & not Big_Oh(s) = Big_Oh(seq_n!(0));
+
+theorem :: ASYMPT_1:31 :: (Part 6, O(n!) c O((n+1)!))
+   Big_Oh(seq_n!(0)) c= Big_Oh(seq_n!(1)) &
+  not Big_Oh(seq_n!(0)) = Big_Oh(seq_n!(1));
+
+theorem :: ASYMPT_1:32 :: (Part 7, O((n+1)!) c O(n^n))
+   for g being Real_Sequence st
+  (g.0 = 0 & (for n st n > 0 holds g.n = (n to_power n)))
+   holds ex s being eventually-positive Real_Sequence st
+    s = g & Big_Oh(seq_n!(1)) c= Big_Oh(s) & not Big_Oh(seq_n!(1)) = Big_Oh(s);
+
+begin
+
+theorem :: ASYMPT_1:33
+   for n st n >= 1 holds
+  for f being Real_Sequence, k being Nat
+   st (for n holds f.n = Sum(seq_n^(k), n))
+    holds f.n >= (n to_power (k+1)) / (k+1);
+
+begin
+
+theorem :: ASYMPT_1:34
+   for f,g being Real_Sequence st
+  (g.0 = 0 & (for n st n > 0 holds g.n = n*log(2,n))) &
+  (for n holds f.n = log(2,n!))
+   holds ex s being eventually-nonnegative Real_Sequence st
+    s = g & f in Big_Theta(s);
+
+:: Problem 3.25 -- Proven in theorem ASYMPT_0:1
+
+begin :: Problem 3.26
+
+:: For a "natural" example of an algorithm that would take time in
+:: O(t(n)), consider a naive algorithm that tries to find at least one
+:: factor of a given natural number. For all even numbers, the task is trivial,
+:: and for all odd numbers, the algorithm might try dividing the number by all
+:: numbers smaller than it, giving a running time of n.
+theorem :: ASYMPT_1:35
+   for f being eventually-nondecreasing eventually-nonnegative Real_Sequence,
+     t being Real_Sequence st
+  (for n holds (n mod 2 = 0 implies t.n = 1) & (n mod 2 = 1 implies t.n = n))
+    holds not t in Big_Theta(f);
+
+:: Problem 3.27 -- Proven as part of theorem ASYMPT_0:37
+
+begin :: Problem 3.28
+
+definition
+ let f be Function of NAT, REAL*, n be Nat;
+ redefine func f.n -> FinSequence of REAL;
+end;
+
+definition let n be Nat, a,b be positive Real;
+
+ func Prob28 (n,a,b) -> Real means
+:: ASYMPT_1:def 6
+  it = 0 if n = 0 otherwise
+   ex l being Nat, prob28 being Function of NAT, REAL* st
+    l+1 = n & it = (prob28.l)/.n &
+     prob28.0 = <*a*> &
+     for n being Nat holds ex n1 being Nat st n1 = [/((n+1)+1)/2\] &
+       prob28.(n+1) = prob28.n^<*4*((prob28.n)/.n1) + b*((n+1)+1)*>;
+end;
+
+definition let a,b be positive Real;
+ func seq_prob28(a,b) -> Real_Sequence means
+:: ASYMPT_1:def 7
+  it.n = Prob28(n,a,b);
+end;
+
+theorem :: ASYMPT_1:36
+ for a,b being positive Real holds seq_prob28(a,b) is eventually-nondecreasing;
+
+:: Problem 3.29 -- Proven in theorems ASYMPT_0:39
+
+begin :: Problem 3.30
+
+definition
+ func POWEROF2SET -> non empty Subset of NAT equals
+:: ASYMPT_1:def 8
+  { 2 to_power n where n is Nat : not contradiction };
+end;
+
+theorem :: ASYMPT_1:37 :: Part a)
+   for f being Real_Sequence st
+  (for n holds (n in POWEROF2SET implies f.n = n) &
+               (not n in POWEROF2SET implies f.n = 2 to_power n))
+   holds f in Big_Theta(seq_n^(1), POWEROF2SET) &
+         not f in Big_Theta(seq_n^(1)) &
+         seq_n^(1) is smooth &
+         not f is eventually-nondecreasing;
+
+theorem :: ASYMPT_1:38 :: Part b)
+   for f,g being Real_Sequence st
+  (f.0 = 0 & (for n st n > 0 holds f.n = (n to_power (2 to_power [\log(2,n)/]
+))))
+ &(g.0 = 0 & (for n st n > 0 holds g.n = (n to_power n)))
+  ex s being eventually-positive Real_Sequence st
+    s = g & f in Big_Theta(s, POWEROF2SET) &
+            not f in Big_Theta(s) &
+            f is eventually-nondecreasing &
+            s is eventually-nondecreasing &
+            not s is_smooth_wrt 2;
+
+theorem :: ASYMPT_1:39 :: Part c)
+   for g being Real_Sequence st
+  (for n holds (n in POWEROF2SET implies g.n = n) &
+               (not n in POWEROF2SET implies g.n = n to_power 2))
+   holds ex s being eventually-positive Real_Sequence st
+    s = g & seq_n^(1) in Big_Theta(s, POWEROF2SET) &
+            not seq_n^(1) in Big_Theta(s) &
+            s taken_every 2 in Big_Oh(s) &
+            seq_n^(1) is eventually-nondecreasing &
+            not s is eventually-nondecreasing;
+
+begin
+
+definition let x be Nat;
+ func Step1(x) -> Nat means
+:: ASYMPT_1:def 9
+  ex n st n! <= x & x < (n+1)! & it = n! if x <> 0
+   otherwise it = 0;
+end;
+
+theorem :: ASYMPT_1:40
+   for f being Real_Sequence st (for n holds f.n = Step1(n))
+  holds ex s being eventually-positive Real_Sequence st
+   s = f & f is eventually-nondecreasing &
+           (for n holds f.n <= (seq_n^(1)).n) & not s is smooth;
+
+:: Problem 3.32 -- omitted (corresponding theory section omitted)
+
+:: Problem 3.33 -- Proven in theorems ASYMPT_0:41, ASYMPT_0:42
+
+begin :: Problem 3.34
+
+definition
+ cluster (seq_n^(1) - seq_const(1)) -> eventually-positive;
+end;
+
+:: This is to show that Big_Theta(n-1) + Big_Theta(n) = Big_Theta(n).
+:: Note that it is not true that Big_Theta(n) = Big_Theta(n) - Big_Theta(n-1).
+:: Consider n and n. The function n - n = 0, which is not in Big_Theta(n).
+theorem :: ASYMPT_1:41
+   Big_Theta(seq_n^(1) - seq_const(1)) + Big_Theta(seq_n^(1))
+    = Big_Theta(seq_n^(1));
+
+begin :: Problem 3.35
+
+theorem :: ASYMPT_1:42
+   ex F being FUNCTION_DOMAIN of NAT,REAL st F = { seq_n^(1) } &
+  (for n holds (seq_n^(-1)).n <= (seq_n^(1)).n) &
+   not seq_n^(-1) in F to_power Big_Oh(seq_const(1));
+
+begin :: Addition
+
+:: In theorem ASYMPT_0:14, if we restrict our attentions to functions that
+:: do not have a subsequence that converges to 0, then the reverse implication
+:: is true.
+theorem :: ASYMPT_1:43
+   for c being non negative Real, x,f being eventually-nonnegative
+Real_Sequence
+  st ex e,N st e > 0 & for n st n >= N holds f.n >= e
+   holds x in Big_Oh(c+f) implies x in Big_Oh(f);
+
+begin :: Potentially Useful Facts
+
+theorem :: ASYMPT_1:44
+   2 to_power 2 = 4;
+
+theorem :: ASYMPT_1:45
+   2 to_power 3 = 8;
+
+theorem :: ASYMPT_1:46
+   2 to_power 4 = 16;
+
+theorem :: ASYMPT_1:47
+   2 to_power 5 = 32;
+
+theorem :: ASYMPT_1:48
+   2 to_power 6 = 64;
+
+theorem :: ASYMPT_1:49
+   2 to_power 12 = 4096;
+
+theorem :: ASYMPT_1:50
+   for n st n >= 3 holds n^2 > 2*n + 1;
+
+theorem :: ASYMPT_1:51
+   for n st n >= 10 holds 2 to_power (n-1) > (2*n)^2;
+
+theorem :: ASYMPT_1:52
+   for n st n >= 9 holds (n+1) to_power 6 < 2*(n to_power 6);
+
+theorem :: ASYMPT_1:53
+   for n st n >= 30 holds 2 to_power n > n to_power 6;
+
+theorem :: ASYMPT_1:54
+   for x being Real st x > 9 holds 2 to_power x > (2*x)^2;
+
+theorem :: ASYMPT_1:55
+   ex N st for n st n >= N holds sqrt n - log(2, n) > 1;
+
+theorem :: ASYMPT_1:56
+   for a,b,c being Real st a > 0 & c > 0 & c <> 1
+  holds a to_power b = c to_power (b*log(c,a));
+
+theorem :: ASYMPT_1:57
+   (4+1)! = 120;
+
+theorem :: ASYMPT_1:58
+   5 to_power 5 = 3125;
+
+theorem :: ASYMPT_1:59
+   4 to_power 4 = 256;
+
+theorem :: ASYMPT_1:60
+   for n holds (n^2 - n + 1) > 0;
+
+theorem :: ASYMPT_1:61
+   for n st n >= 2 holds n! > 1;
+
+theorem :: ASYMPT_1:62
+   for n1, n st n <= n1 holds n! <= n1!;
+
+theorem :: ASYMPT_1:63
+   for k st k >= 1 holds
+   ex n st (n! <= k & k < (n+1)! & for m st m! <= k & k < (m+1)! holds m = n);
+
+theorem :: ASYMPT_1:64
+   for n st n >= 2 holds [/n/2\] < n;
+
+theorem :: ASYMPT_1:65
+   for n st n >= 3 holds n! > n;
+
+canceled;
+
+theorem :: ASYMPT_1:67
+   for n st n >= 2 holds 2 to_power n > n+1;
+
+theorem :: ASYMPT_1:68
+   for a being logbase Real, f being Real_Sequence st a > 1 &
+  (f.0 = 0 & (for n st n > 0 holds f.n = log(a,n)))
+   holds f is eventually-positive;
+
+theorem :: ASYMPT_1:69
+   for f,g being eventually-nonnegative Real_Sequence holds
+  f in Big_Oh(g) & g in Big_Oh(f) iff Big_Oh(f) = Big_Oh(g);
+
+theorem :: ASYMPT_1:70
+   for a, b, c being Real st 0 < a & a <= b & c >= 0 holds
+  a to_power c <= b to_power c;
+
+theorem :: ASYMPT_1:71
+   for n st n >= 4 holds 2*n + 3 < 2 to_power n;
+
+theorem :: ASYMPT_1:72
+   for n st n >= 6 holds (n+1)^2 < 2 to_power n;
+
+theorem :: ASYMPT_1:73
+   for c being Real st c > 6 holds c^2 < 2 to_power c;
+
+theorem :: ASYMPT_1:74
+   for e being positive Real, f being Real_Sequence st
+  (f.0 = 0 & (for n st n > 0 holds f.n = log(2,n to_power e)))
+   holds (f /" seq_n^(e)) is convergent & lim (f /" seq_n^(e)) = 0;
+
+theorem :: ASYMPT_1:75
+   for e being Real st e > 0 holds
+  (seq_logn/"seq_n^(e)) is convergent & lim(seq_logn/"seq_n^(e)) = 0;
+
+theorem :: ASYMPT_1:76
+   for f being Real_Sequence holds
+  for N holds (for n st n <= N holds f.n >= 0) implies Sum(f,N) >=
+ 0;
+
+theorem :: ASYMPT_1:77
+   for f,g being Real_Sequence
+  holds for N holds (for n st n <= N holds f.n <= g.n) implies Sum(f,N) <= Sum
+(g,N);
+
+theorem :: ASYMPT_1:78
+   for f being Real_Sequence, b being Real st
+  (f.0 = 0 & (for n st n > 0 holds f.n = b))
+   holds for N being Nat holds Sum(f,N) = b*N;
+
+theorem :: ASYMPT_1:79
+   for f,g being Real_Sequence,
+     N,M being Nat holds Sum(f,N,M) + f.(N+1) = Sum(f,N+1,M);
+
+theorem :: ASYMPT_1:80
+   for f,g being Real_Sequence, M being Nat
+  holds for N st N >= M+1 holds
+    (for n st M+1 <= n & n <= N holds f.n <= g.n) implies Sum(f,N,M) <= Sum
+(g,N,M);
+
+theorem :: ASYMPT_1:81
+   for n holds [/n/2\] <= n;
+
+theorem :: ASYMPT_1:82
+   for f being Real_Sequence, b being Real, N being Nat st
+  (f.0 = 0 & (for n st n > 0 holds f.n = b))
+   holds for M being Nat holds Sum(f, N, M) = b*(N-M);
+
+theorem :: ASYMPT_1:83
+   for f,g being Real_Sequence, N being Nat, c being Real
+  st f is convergent & lim f = c & for n st n >= N holds f.n = g.n
+   holds g is convergent & lim g = c;
+
+theorem :: ASYMPT_1:84
+   for n st n >= 1 holds (n^2 -n + 1) <= n^2;
+
+theorem :: ASYMPT_1:85
+   for n st n >= 1 holds n^2 <= 2*(n^2 -n + 1);
+
+theorem :: ASYMPT_1:86
+   for e being Real st 0 < e & e < 1 holds
+  ex N st for n st n >= N holds n*log(2,1+e) - 8*log(2,n) > 8*log(2,n);
+
+theorem :: ASYMPT_1:87
+   for n st n >= 10 holds 2 to_power (2*n) / (n!) < 1/(2 to_power (n-9));
+
+theorem :: ASYMPT_1:88
+   for n st n >= 3 holds 2*(n-2) >= n-1;
+
+theorem :: ASYMPT_1:89
+   for c being Real st c >= 0 holds (c to_power (1/2)) = sqrt c;
+
+theorem :: ASYMPT_1:90
+   ex N st for n st n >= N holds n - sqrt n*log(2,n) > n/2;
+
+:: The proof of this theorem has been taken directly from the
+:: article POWER.miz (with very slight modifications to fit this new theorem).
+theorem :: ASYMPT_1:91
+   for s being Real_Sequence st for n holds s.n = (1 + 1/(n+1)) to_power (n+1)
+  holds s is non-decreasing;
+
+theorem :: ASYMPT_1:92 :: (1 + 1/n)^n is non-decreasing
+   for n st n >= 1 holds ((n+1)/n) to_power n <= ((n+2)/(n+1)) to_power (n+1);
+
+theorem :: ASYMPT_1:93
+   for k,n st k <= n holds n choose k >= ((n+1) choose k) / (n+1);
+
+theorem :: ASYMPT_1:94
+   for f being Real_Sequence st
+  (for n holds f.n = log(2,n!))
+   holds for n holds f.n = Sum(seq_logn, n);
+
+theorem :: ASYMPT_1:95
+   for n st n >= 4 holds n*log(2,n) >= 2*n;
+
+theorem :: ASYMPT_1:96
+   for a,b being positive Real holds
+  Prob28(0,a,b) = 0 & Prob28(1,a,b) = a &
+   for n st n >= 2 holds
+    ex n1 st n1 = [/n/2\] & Prob28(n,a,b) = 4*Prob28(n1,a,b) + b*n;
+
+theorem :: ASYMPT_1:97
+   for n st n >= 2 holds n^2 > n+1;
+
+theorem :: ASYMPT_1:98
+   for n st n >= 1 holds (2 to_power (n+1)) - (2 to_power n) > 1;
+
+theorem :: ASYMPT_1:99
+   for n st n >= 2 holds not ((2 to_power n) - 1) in POWEROF2SET;
+
+theorem :: ASYMPT_1:100
+   for n,k st k >= 1 & n! <= k & k < (n+1)! holds Step1(k) = n!;
+
+theorem :: ASYMPT_1:101
+   for a,b,c being Real holds
+  a>1 & b>=a & c>=1 implies log(a,c) >= log(b,c);
+

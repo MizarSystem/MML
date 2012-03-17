@@ -1,0 +1,1389 @@
+:: A Small Computer Model with Push-Down Stack
+::  by JingChao Chen
+::
+:: Received June 15, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary GR_CY_1, AMI_2, INT_1, FINSEQ_1, FUNCT_1, RELAT_1, TARSKI, BOOLE,
+      NAT_1, CARD_3, AMI_1, FUNCT_4, CAT_1, ABSVALUE, ARYTM_1, MCART_1,
+      CQC_LANG, FUNCT_2, FUNCT_5, SCMPDS_1, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
+      FUNCT_2, GR_CY_1, MCART_1, NUMBERS, XCMPLX_0, XREAL_0, CARD_3, INT_1,
+      NAT_1, FINSEQ_1, FRAENKEL, FINSEQ_4, CQC_LANG, FUNCT_4, CAT_2, AMI_2,
+      GROUP_1;
+ constructors AMI_1, AMI_2, CAT_2, DOMAIN_1, FINSEQ_4, NAT_1, MEMBERED;
+ clusters AMI_1, AMI_2, CQC_LANG, INT_1, FINSEQ_1, RELSET_1, XBOOLE_0, NAT_1,
+      FRAENKEL, MEMBERED, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, FINSEQ_1;
+ theorems AMI_1, AMI_2, CAT_2, CARD_3, CQC_LANG, ENUMSET1, FINSEQ_1, FINSEQ_3,
+      FINSEQ_4, FUNCT_1, FUNCT_2, FUNCT_4, GR_CY_1, MCART_1, NAT_1, SCHEME1,
+      TARSKI, ZFMISC_1, INT_1, ABSVALUE, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+ schemes FUNCT_2;
+
+begin :: Preliminaries
+
+reserve x1,x2,x3,x4,x5 for set,
+        i, j, k for Nat,
+        I,I2,I3,I4 for Element of Segm 14,
+        i1 for Element of SCM-Instr-Loc,
+        d1,d2,d3,d4,d5 for Element of SCM-Data-Loc,
+        k1,k2 for Integer;
+
+definition let x1,x2,x3,x4 be set;
+  func <*x1,x2,x3,x4*> -> set equals
+:Def1:  <*x1,x2,x3*>^<*x4*>;
+  correctness;
+
+  let x5 be set;
+  func <*x1,x2,x3,x4,x5*> -> set equals
+:Def2:   <*x1,x2,x3*>^<*x4,x5*>;
+  correctness;
+end;
+
+definition let x1,x2,x3,x4 be set;
+  cluster <*x1,x2,x3,x4*> -> Function-like Relation-like;
+  coherence
+  proof
+      <*x1,x2,x3*>^<*x4*> = <*x1,x2,x3,x4*> by Def1;
+    hence thesis;
+  end;
+
+  let x5 be set;
+  cluster <*x1,x2,x3,x4,x5*> -> Function-like Relation-like;
+  coherence
+  proof
+      <*x1,x2,x3*>^<*x4,x5*> = <*x1,x2,x3,x4,x5*> by Def2;
+    hence thesis;
+  end;
+end;
+
+definition let x1,x2,x3,x4 be set;
+  cluster <*x1,x2,x3,x4*> -> FinSequence-like;
+  coherence
+  proof
+      <*x1,x2,x3*>^<*x4*> = <*x1,x2,x3,x4*> by Def1;
+    hence thesis;
+  end;
+
+  let x5 be set;
+  cluster <*x1,x2,x3,x4,x5*> -> FinSequence-like;
+  coherence
+  proof
+      <*x1,x2,x3*>^<*x4,x5*> = <*x1,x2,x3,x4,x5*> by Def2;
+    hence thesis;
+  end;
+end;
+
+definition let D be non empty set,x1,x2,x3,x4 be Element of D;
+ redefine func <* x1,x2,x3,x4*> -> FinSequence of D;
+ coherence
+ proof
+      <*x1,x2,x3,x4*>=<* x1,x2,x3*>^<*x4*> by Def1;
+    hence thesis;
+ end;
+end;
+
+definition let D be non empty set,x1,x2,x3,x4,x5 be Element of D;
+ redefine func <*x1,x2,x3,x4,x5*> -> FinSequence of D;
+ coherence
+ proof
+      <*x1,x2,x3,x4,x5*>=<* x1,x2,x3*>^<*x4,x5*> by Def2;
+    hence thesis;
+ end;
+end;
+
+theorem Th1:
+  <*x1,x2,x3,x4*>=<*x1,x2,x3*>^<*x4*> &
+  <*x1,x2,x3,x4*>=<*x1,x2*>^<*x3,x4*> &
+  <*x1,x2,x3,x4*>=<*x1*>^<*x2,x3,x4*> &
+  <*x1,x2,x3,x4*>=<*x1*>^<*x2*>^<*x3*>^<*x4*>
+proof
+  thus A1:<*x1,x2,x3,x4*>=<*x1,x2,x3*>^<*x4*> by Def1;
+  hence <*x1,x2,x3,x4*>=<*x1,x2*>^<*x3*>^<*x4*> by FINSEQ_1:60
+       .=<*x1,x2*>^(<*x3*>^<*x4*>) by FINSEQ_1:45
+       .=<*x1,x2*>^<*x3,x4*> by FINSEQ_1:def 9;
+  hence <*x1,x2,x3,x4*>=<*x1*>^<*x2*>^<*x3,x4*> by FINSEQ_1:def 9
+        .=<*x1*>^(<*x2*>^<*x3,x4*>) by FINSEQ_1:45
+        .=<*x1*>^<*x2,x3,x4*> by FINSEQ_1:60;
+  thus <*x1,x2,x3,x4*>=<*x1*>^<*x2*>^<*x3*>^<*x4*> by A1,FINSEQ_1:def 10;
+end;
+
+theorem Th2:
+  <*x1,x2,x3,x4,x5*>=<*x1,x2,x3*>^<*x4,x5*> &
+  <*x1,x2,x3,x4,x5*>=<*x1,x2,x3,x4*>^<*x5*> &
+  <*x1,x2,x3,x4,x5*>=<*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*> &
+  <*x1,x2,x3,x4,x5*>=<*x1,x2*>^<*x3,x4,x5*> &
+  <*x1,x2,x3,x4,x5*>=<*x1*>^<*x2,x3,x4,x5*>
+proof
+ thus <*x1,x2,x3,x4,x5*>=<*x1,x2,x3*>^<*x4,x5*> by Def2;
+ hence <*x1,x2,x3,x4,x5*>=<*x1,x2,x3*>^(<*x4*>^<*x5*>) by FINSEQ_1:def 9
+      .=<*x1,x2,x3*>^<*x4*>^<*x5*> by FINSEQ_1:45
+      .=<*x1,x2,x3,x4*>^<*x5*> by Th1;
+ hence <*x1,x2,x3,x4,x5*>=<*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*> by Th1;
+ hence <*x1,x2,x3,x4,x5*>=<*x1,x2*>^<*x3*>^<*x4*>^<*x5*> by FINSEQ_1:def 9
+      .=<*x1,x2*>^(<*x3*>^<*x4*>)^<*x5*> by FINSEQ_1:45
+      .=<*x1,x2*>^(<*x3*>^<*x4*>^<*x5*>) by FINSEQ_1:45
+      .=<*x1,x2*>^<*x3,x4,x5*> by FINSEQ_1:def 10;
+ hence <*x1,x2,x3,x4,x5*>=<*x1*>^<*x2*>^<*x3,x4,x5*> by FINSEQ_1:def 9
+      .=<*x1*>^(<*x2*>^<*x3,x4,x5*>) by FINSEQ_1:45
+      .=<*x1*>^<*x2,x3,x4,x5*> by Th1;
+end;
+
+reserve ND for non empty set;
+reserve y1,y2,y3,y4,y5 for Element of ND;
+reserve p for FinSequence;
+
+theorem Th3:
+  p = <*x1,x2,x3,x4*> iff len p = 4 & p.1 = x1 & p.2 = x2
+  & p.3=x3 & p.4= x4
+proof
+   thus
+       p = <*x1,x2,x3,x4*> implies len p = 4 & p.1 = x1 & p.2 = x2 & p.3 = x3
+     & p.4 = x4
+      proof
+         assume A1: p =<*x1,x2,x3,x4*>;
+           hence
+              len p = len (<*x1,x2,x3*>^<*x4*>) by Def1
+            .=len <*x1,x2,x3*> + len <*x4*> by FINSEQ_1:35
+            .=3 + len <*x4*> by FINSEQ_1:62
+            .=3+1 by FINSEQ_1:57
+            .=4;
+            set p3=<*x1,x2,x3*>;
+         A2: dom p3 ={1,2,3} by FINSEQ_3:1,30;
+         A3: p = p3^<*x4*> by A1,Th1;
+            1 in dom p3 by A2,ENUMSET1:14;
+         hence p.1 = p3.1 by A3,FINSEQ_1:def 7
+            .=x1 by FINSEQ_1:62;
+
+            2 in dom p3 by A2,ENUMSET1:14;
+         hence p.2 = p3.2 by A3,FINSEQ_1:def 7
+            .=x2 by FINSEQ_1:62;
+
+            3 in dom p3 by A2,ENUMSET1:14;
+         hence p.3 = p3.3 by A3,FINSEQ_1:def 7
+            .=x3 by FINSEQ_1:62;
+
+          1 in {1} by TARSKI:def 1;
+        then A4: 1 in dom <*x4*> by FINSEQ_1:4,def 8;
+        thus p.4 = (p3^<*x4*>).(3+1) by A1,Th1
+          .=(p3^<*x4*>).(len p3 + 1) by FINSEQ_1:62
+          .= <*x4*>.1 by A4,FINSEQ_1:def 7
+          .= x4 by FINSEQ_1:def 8;
+      end;
+
+    assume A5: len p = 4 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4=x4;
+      then A6: dom p = Seg(3+1) by FINSEQ_1:def 3
+          .= Seg((len <*x1,x2,x3*>) + 1) by FINSEQ_1:62
+          .= Seg((len <*x1,x2,x3*>) + len <*x4*>) by FINSEQ_1:56;
+     A7: for k st k in dom <*x1,x2,x3*> holds p.k=<*x1,x2,x3*>.k
+           proof let k such that A8: k in dom <*x1,x2,x3*>;
+                  len <*x1,x2,x3*> = 3 by FINSEQ_1:62;
+                 then A9: k in {1,2,3} by A8,FINSEQ_1:def 3,FINSEQ_3:1;
+                per cases by A9,ENUMSET1:13;
+                suppose k=1;
+                   hence thesis by A5,FINSEQ_1:62;
+                suppose k=2;
+                   hence thesis by A5,FINSEQ_1:62;
+                suppose k=3;
+                   hence thesis by A5,FINSEQ_1:62;
+           end;
+        for k st k in dom <*x4*> holds p.( (len <*x1,x2,x3*>) + k) = <*x4*>.k
+         proof let k; assume k in dom <*x4*>;
+            then k in {1} by FINSEQ_1:4,def 8;
+       then A10:  k = 1 by TARSKI:def 1;
+          hence
+              p.( (len <*x1,x2,x3*>) + k) = p.(3+1) by FINSEQ_1:62
+            .=<*x4*>.k by A5,A10,FINSEQ_1:def 8;
+         end;
+     hence p=<*x1,x2,x3*>^<*x4*> by A6,A7,FINSEQ_1:def 7
+           .=<*x1,x2,x3,x4*> by Th1;
+end;
+
+theorem Th4:
+ dom<*x1,x2,x3,x4*> = Seg(4)
+proof len<*x1,x2,x3,x4*> = 4 by Th3;
+   hence dom<*x1,x2,x3,x4*> = Seg(4) by FINSEQ_1:def 3;
+end;
+
+theorem Th5:
+  p = <*x1,x2,x3,x4,x5*> iff len p = 5 & p.1 = x1 & p.2 = x2
+  & p.3=x3 & p.4= x4 & p.5= x5
+proof
+   thus
+       p = <*x1,x2,x3,x4,x5*> implies len p = 5 & p.1 = x1 & p.2 = x2 &
+     p.3 = x3 & p.4 = x4 & p.5 = x5
+      proof
+         assume A1: p =<*x1,x2,x3,x4,x5*>;
+           hence
+              len p = len (<*x1,x2,x3,x4*>^<*x5*>) by Th2
+            .=len <*x1,x2,x3,x4*> + len <*x5*> by FINSEQ_1:35
+            .=4 + len <*x5*> by Th3
+            .=4+1 by FINSEQ_1:57
+            .=5;
+            set p4=<*x1,x2,x3,x4*>;
+         A2: dom p4 ={1,2,3,4} by Th4,FINSEQ_3:2;
+         A3: p = (p4^<*x5*>) by A1,Th2;
+            1 in dom p4 by A2,ENUMSET1:19;
+         hence p.1 = p4.1 by A3,FINSEQ_1:def 7
+            .=x1 by Th3;
+
+            2 in dom p4 by A2,ENUMSET1:19;
+         hence p.2 = p4.2 by A3,FINSEQ_1:def 7
+            .=x2 by Th3;
+
+            3 in dom p4 by A2,ENUMSET1:19;
+         hence p.3 = p4.3 by A3,FINSEQ_1:def 7
+            .=x3 by Th3;
+
+            4 in dom p4 by A2,ENUMSET1:19;
+         hence p.4 = p4.4 by A3,FINSEQ_1:def 7
+            .=x4 by Th3;
+
+         1 in {1} by TARSKI:def 1;
+      then A4: 1 in dom <*x5*> by FINSEQ_1:4,def 8;
+        thus p.5 = (p4^<*x5*>).(4+1) by A1,Th2
+          .=(p4^<*x5*>).(len p4+ 1) by Th3
+          .= <*x5*>.1 by A4,FINSEQ_1:def 7
+          .= x5 by FINSEQ_1:def 8;
+      end;
+
+    assume A5: len p = 5 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4=x4 & p.5=x5;
+       set p4=<*x1,x2,x3,x4*>;
+       A6: dom p = Seg(4+1) by A5,FINSEQ_1:def 3
+          .= Seg(len p4 + 1) by Th3
+          .= Seg(len p4 + len <*x5*>) by FINSEQ_1:56;
+     A7: for k st k in dom p4 holds p.k=p4.k
+           proof let k such that A8: k in dom p4;
+                   len p4 = 4 by Th3;
+                 then A9: k in {1,2,3,4} by A8,FINSEQ_1:def 3,FINSEQ_3:2;
+                per cases by A9,ENUMSET1:18;
+                suppose k=1;
+                   hence thesis by A5,Th3;
+                suppose k=2;
+                   hence thesis by A5,Th3;
+                suppose k=3;
+                   hence thesis by A5,Th3;
+                suppose k=4;
+                   hence thesis by A5,Th3;
+           end;
+        for k st k in dom <*x5*> holds p.( len p4 + k) = <*x5*>.k
+         proof let k; assume k in dom <*x5*>;
+            then k in {1} by FINSEQ_1:4,def 8;
+       then A10:  k = 1 by TARSKI:def 1;
+          hence
+              p.( len p4 + k) = p.(4+1) by Th3
+            .=<*x5*>.k by A5,A10,FINSEQ_1:def 8;
+         end;
+     hence p=p4^<*x5*> by A6,A7,FINSEQ_1:def 7
+           .=<*x1,x2,x3,x4,x5*> by Th2;
+end;
+
+theorem Th6:
+ dom<*x1,x2,x3,x4,x5*> = Seg(5)
+proof len<*x1,x2,x3,x4,x5*> = 5 by Th5;
+   hence dom<*x1,x2,x3,x4,x5*> = Seg(5) by FINSEQ_1:def 3;
+end;
+
+theorem Th7:
+ <*y1,y2,y3,y4*>/.1 = y1 & <*y1,y2,y3,y4*>/.2 = y2
+ & <*y1,y2,y3,y4*>/.3 = y3 & <*y1,y2,y3,y4*>/.4=y4
+proof set s = <* y1,y2,y3,y4 *>;
+      dom s = {1,2,3,4} & s.1 = y1 & s.2 = y2 & s.3 = y3 & s.4 = y4
+    & 1 in {1,2,3,4} & 2 in {1,2,3,4} & 3 in {1,2,3,4} & 4 in {1,2,3,4}
+                      by Th3,Th4,ENUMSET1:19,FINSEQ_3:2;
+   hence thesis by FINSEQ_4:def 4;
+end;
+
+theorem
+   <*y1,y2,y3,y4,y5*>/.1 = y1 & <*y1,y2,y3,y4,y5*>/.2 = y2
+ & <*y1,y2,y3,y4,y5*>/.3 = y3 &
+ <*y1,y2,y3,y4,y5*>/.4=y4 & <*y1,y2,y3,y4,y5*>/.5=y5
+proof set s = <* y1,y2,y3,y4,y5 *>,
+          i5={1,2,3,4,5};
+      dom s =i5 & s.1 = y1 & s.2 = y2 & s.3 = y3 & s.4 = y4
+    & s.5=y5 & 1 in i5 & 2 in i5 & 3 in i5 & 4 in i5 & 5 in i5
+                      by Th5,Th6,ENUMSET1:24,FINSEQ_3:3;
+   hence thesis by FINSEQ_4:def 4;
+end;
+
+theorem Th9:
+ for k be Integer holds k in union {INT} \/ NAT
+proof
+   let k be Integer;
+A1: k in INT by INT_1:12;
+     union {INT} = INT by ZFMISC_1:31;
+   then INT c= union {INT} \/ NAT by XBOOLE_1:7;
+   hence thesis by A1;
+end;
+
+theorem Th10:
+ for k be Integer holds k in SCM-Data-Loc \/ INT
+proof
+   let k be Integer;
+A1: k in INT by INT_1:12;
+     INT c= SCM-Data-Loc \/ INT by XBOOLE_1:7;
+   hence thesis by A1;
+end;
+
+theorem Th11:
+ for d be Element of SCM-Data-Loc holds d in SCM-Data-Loc \/ INT
+proof
+   let d be Element of SCM-Data-Loc;
+     SCM-Data-Loc c= SCM-Data-Loc \/ INT by XBOOLE_1:7;
+   hence thesis by TARSKI:def 3;
+end;
+
+begin  :: The construction of SCM with Push-Down Stack
+:: [0,goto L]
+:: [1,return sp<-sp+0,count<-(sp)+2]
+:: [2,a:=c(constant)]
+:: [3,saveIC (a,k)]
+:: [4,if(a,k)<>0 goto L ]
+:: [5,if(a,k)<=0 goto L ]
+:: [6,if(a,k)>=0 goto L ]
+:: [7,(a,k):=c(constant) ]
+:: [8,(a,k1)+k2]
+:: [9, (a1,k1)+(a2,k2)]
+:: [10,(a1,k1)-(a2,k2)]
+:: [11,(a1,k1)*(a2,k2)]
+:: [12,(a1,k1)/(a2,k2)]
+:: [13,(a1,k1):=(a2,k2)]
+
+definition
+ func SCMPDS-Instr ->
+          Subset of [: Segm 14, (union {INT} \/ NAT)* :] equals
+:Def3:  { [0,<*l*>] where l is Element of INT: not contradiction} \/
+  { [1,<*sp*>] where sp is Element of SCM-Data-Loc:not contradiction} \/
+  { [I,<*v,c*>] where I is Element of Segm 14,v is Element of SCM-Data-Loc,
+         c is Element of INT: I in {2,3} } \/
+  { [I,<*v,c1,c2*>] where I is Element of Segm 14,
+                    v is Element of SCM-Data-Loc,
+                    c1,c2 is Element of INT: I in {4,5,6,7,8} } \/
+  { [I,<*v1,v2,c1,c2*>] where I is Element of Segm 14,
+                    v1,v2 is Element of SCM-Data-Loc,
+                    c1,c2 is Element of INT: I in {9,10,11,12,13} };
+coherence
+  proof
+   set U1=union {INT} \/ NAT;
+   set UU=[: Segm 14, U1* :];
+A1: NAT c= U1 by XBOOLE_1:7;
+A2: { [I1,<*d1,d2,k1,k2*>] where I1 is Element of Segm 14,
+                    d1,d2 is Element of SCM-Data-Loc,
+                    k1,k2 is Element of INT: I1 in {9,10,11,12,13}} c= UU
+     proof
+      let x be set;
+      assume x in { [I1,<*d1,d2,k1,k2*>] where I1 is Element of Segm 14,
+                    d1,d2 is Element of SCM-Data-Loc,
+                    k1,k2 is Element of INT: I1 in {9,10,11,12,13} };
+      then consider I1 being Element of Segm 14,
+               d1,d2 being Element of SCM-Data-Loc,
+               k1,k2 being Element of INT such that
+A3:     x = [I1,<*d1,d2,k1,k2*>] and I1 in {9,10,11,12,13};
+      reconsider d1,d2 as Element of U1 by A1,TARSKI:def 3;
+      reconsider k1,k2 as Element of U1 by Th9;
+        <*d1,d2,k1,k2*> in U1* by FINSEQ_1:def 11;
+      hence thesis by A3,ZFMISC_1:106;
+    end;
+
+A4: { [I2,<*d3,k3,k4*>] where I2 is Element of Segm 14,
+                    d3 is Element of SCM-Data-Loc,
+                    k3,k4 is Element of INT: I2 in {4,5,6,7,8}} c= UU
+    proof
+      let x be set;
+      assume x in { [I2,<*d3,k3,k4*>] where I2 is Element of Segm 14,
+                    d3 is Element of SCM-Data-Loc,
+                    k3,k4 is Element of INT : I2 in {4,5,6,7,8} };
+      then consider I2 being Element of Segm 14,
+               d3 being Element of SCM-Data-Loc,
+               k3,k4 being Element of INT such that
+A5:     x = [I2,<*d3,k3,k4*>] and I2 in {4,5,6,7,8};
+      reconsider d3 as Element of U1 by A1,TARSKI:def 3;
+      reconsider k3,k4 as Element of U1 by Th9;
+        <*d3,k3,k4*> in U1* by FINSEQ_1:def 11;
+      hence thesis by A5,ZFMISC_1:106;
+    end;
+
+A6: { [0,<*k5*>] where k5 is Element of INT: not contradiction } c= UU
+    proof
+      let x be set;
+      assume x in { [0,<*k5*>] where k5 is Element of INT: not contradiction }
+;
+      then consider k5 being Element of INT such that
+A7:     x = [0,<*k5*>] and not contradiction;
+      reconsider k5 as Element of U1 by Th9;
+A8:   0 in Segm 14 by GR_CY_1:10;
+        <*k5*> in U1* by FINSEQ_1:def 11;
+      hence thesis by A7,A8,ZFMISC_1:106;
+    end;
+
+A9: { [1,<*d4*>] : not contradiction } c= UU
+    proof
+      let x be set;
+      assume x in { [1,<*d4*>] : not contradiction };
+      then consider d4 such that
+A10:     x = [1,<*d4*>] and not contradiction;
+      reconsider d4 as Element of U1 by A1,TARSKI:def 3;
+A11:   1 in Segm 14 by GR_CY_1:10;
+        <*d4*> in U1* by FINSEQ_1:def 11;
+      hence thesis by A10,A11,ZFMISC_1:106;
+    end;
+
+A12: { [I4,<*d5,r*>] where I4 is Element of Segm 14,
+                    d5 is Element of SCM-Data-Loc,
+                    r is Element of INT : I4 in {2,3} } c=UU
+    proof
+      let x be set;
+      assume x in { [I4,<*d5,r*>] where I4 is Element of Segm 14,
+                    d5 is Element of SCM-Data-Loc,
+                    r is Element of INT : I4 in {2,3} };
+      then consider I4 being Element of Segm 14,
+               d5 being Element of SCM-Data-Loc,
+               r being Element of INT such that
+A13:    x = [I4,<*d5,r*>] and I4 in {2,3};
+      reconsider d5, r as Element of U1 by A1,Th9,TARSKI:def 3;
+        <*d5,r*> in U1* by FINSEQ_1:def 11;
+      hence thesis by A13,ZFMISC_1:106;
+    end;
+
+   set S1={ [0,<*k5*>] where k5 is Element of INT: not contradiction },
+       S2={ [1,<*d4*>] : not contradiction },
+       S3={ [I4,<*d5,r*>] where I4 is Element of Segm 14,
+                    d5 is Element of SCM-Data-Loc,
+                    r is Element of INT : I4 in {2,3} };
+     S1 \/ S2 c= UU by A6,A9,XBOOLE_1:8;
+   then S1 \/ S2 \/ S3 c= UU by A12,XBOOLE_1:8;
+   then S1 \/ S2 \/ S3 \/ { [I2,<*d3,k3,k4*>] where I2 is Element of Segm 14,
+                    d3 is Element of SCM-Data-Loc,
+                    k3,k4 is Element of INT: I2 in {4,5,6,7,8}} c= UU
+   by A4,XBOOLE_1:8;
+   hence thesis by A2,XBOOLE_1:8;
+  end;
+end;
+
+canceled;
+
+theorem Th13:
+ [0,<*0*>] in SCMPDS-Instr
+proof
+ set S1={ [0,<*k1*>] where k1 is Element of INT: not contradiction},
+     S2={ [1,<*d1*>] : not contradiction},
+     S3={ [I2,<*d2,k2*>] where I2 is Element of Segm 14,
+                    d2 is Element of SCM-Data-Loc,
+                    k2 is Element of INT : I2 in {2,3} };
+   0 is Element of INT by INT_1:def 2;
+ then [0,<*0*>] in S1;
+ then [0,<*0*>] in S1 \/ S2 by XBOOLE_0:def 2;
+ then [0,<*0*>] in S1 \/ S2 \/ S3 by XBOOLE_0:def 2;
+ then [0,<*0*>] in S1 \/ S2 \/ S3 \/ { [I3,<*d3,k3,k4*>]
+              where I3 is Element of Segm 14,
+                    d3 is Element of SCM-Data-Loc,
+                    k3,k4 is Element of INT: I3 in {4,5,6,7,8} }
+    by XBOOLE_0:def 2;
+ hence [0,<*0*>] in SCMPDS-Instr by Def3,XBOOLE_0:def 2;
+end;
+
+definition
+ cluster SCMPDS-Instr -> non empty;
+ coherence by Th13;
+end;
+
+theorem Th14:
+ k= 0 or (ex j st k = 2*j+1) or (ex j st k = 2*j+2)
+proof
+  consider i such that
+A1:   k = 2*i or k = 2*i+1 by SCHEME1:1;
+    now assume
+A2:  k = 2*i;
+A3:  i = 0 or ex j st i = j + 1 by NAT_1:22;
+      now given j such that
+A4:    i = j + 1;
+     take j;
+     thus k = 2*j + 2*1 by A2,A4,XCMPLX_1:8;
+    end;
+   hence k = 0 or ex j st k = 2*j+2 by A2,A3;
+  end;
+ hence thesis by A1;
+end;
+
+theorem
+    k = 0 implies not (ex j st k = 2*j+1) & not (ex j st k = 2*j+2);
+
+theorem Th16:
+  ((ex j st k = 2*j+1) implies k<>0 & not (ex j st k = 2*j+2)) &
+  ((ex j st k = 2*j+2) implies k<>0 & not (ex j st k = 2*j+1))
+proof
+ thus (ex j st k = 2*j+1) implies k<>0 & not (ex j st k = 2*j+2)
+  proof given j such that
+A1:  k = 2*j+1;
+   thus k<>0 by A1;
+   given i such that
+A2:  k = 2*i+2;
+A3:  (2*i+2*1) = 2*(i+1) + 0 by XCMPLX_1:8;
+      1 = (2*i+2) mod 2 by A1,A2,NAT_1:def 2
+          .= 0 by A3,NAT_1:def 2;
+   hence thesis;
+  end;
+  thus (ex j st k = 2*j+2) implies k<>0 & not (ex j st k = 2*j+1)
+  proof
+    given j such that
+A4:  k = 2*j+2;
+  thus k<>0 by A4;
+  given i such that
+A5:  k = 2*i+1;
+A6:  (2*j+2*1) = 2*(j+1) + 0 by XCMPLX_1:8;
+    1 = (2*j+2) mod 2 by A4,A5,NAT_1:def 2
+        .= 0 by A6,NAT_1:def 2;
+   hence contradiction;
+  end;
+end;
+
+definition
+ func SCMPDS-OK ->
+    Function of NAT, { INT } \/ { SCMPDS-Instr, SCM-Instr-Loc } means
+:Def4: it.0 = SCM-Instr-Loc &
+  for k being Nat holds
+    it.(2*k+1) = INT & it.(2*k+2) = SCMPDS-Instr;
+existence
+  proof
+   defpred P[set,set] means
+    ($1 = 0 & $2 = SCM-Instr-Loc) or
+    ((ex j st $1 = 2*j+1) & $2 = INT) or
+    ((ex j st $1 = 2*j+2) & $2 = SCMPDS-Instr);
+A1:  now let k be Nat;
+       {INT} \/ { SCMPDS-Instr, SCM-Instr-Loc }
+      = { INT, SCMPDS-Instr, SCM-Instr-Loc } by ENUMSET1:42;
+then A2:  INT in {INT} \/ { SCMPDS-Instr, SCM-Instr-Loc } &
+     SCMPDS-Instr in {INT} \/ { SCMPDS-Instr , SCM-Instr-Loc } &
+     SCM-Instr-Loc in {INT} \/ { SCMPDS-Instr, SCM-Instr-Loc }
+       by ENUMSET1:14;
+       P[k,SCM-Instr-Loc] or P[k,INT] or P[k,SCMPDS-Instr] by Th14;
+     hence ex b being Element of {INT} \/
+       { SCMPDS-Instr, SCM-Instr-Loc } st P[k,b] by A2;
+    end;
+    consider h being Function of NAT, {INT} \/
+     { SCMPDS-Instr, SCM-Instr-Loc } such that
+A3:   for a being Element of NAT holds P[a,h.a] from FuncExD(A1);
+   take h;
+      P[0,h.0] by A3;
+   hence h.0 = SCM-Instr-Loc;
+   let k be Nat;
+      P[2*k+1,h.(2*k+1)] & P[2*k+2,h.(2*k+2)] by A3;
+   hence h.(2*k+1) = INT & h.(2*k+2) = SCMPDS-Instr by Th16;
+  end;
+uniqueness
+  proof
+   let f, g be Function of NAT, {INT} \/
+     { SCMPDS-Instr, SCM-Instr-Loc } such that
+A4: f.0 = SCM-Instr-Loc &
+    for k being Nat holds f.(2*k+1) = INT &
+     f.(2*k+2) = SCMPDS-Instr and
+A5: g.0 = SCM-Instr-Loc &
+    for k being Nat holds g.(2*k+1) = INT &
+     g.(2*k+2) = SCMPDS-Instr;
+      now let k be Nat;
+        now per cases by Th14;
+       suppose k = 0;
+        hence f.k = g.k by A4,A5;
+       suppose A6: ex i st k = 2*i+1;
+        hence f.k = INT by A4
+                 .= g.k by A5,A6;
+       suppose A7:ex i st k = 2*i+2;
+        hence f.k = SCMPDS-Instr by A4
+                 .= g.k by A5,A7;
+      end;
+     hence f.k = g.k;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+end;
+
+definition
+ mode SCMPDS-State is Element of product SCMPDS-OK;
+end;
+
+theorem Th17:
+ SCM-Instr-Loc <> SCMPDS-Instr & SCMPDS-Instr <> INT
+ proof
+  set S1={ [0,<*k1*>] where k1 is Element of INT: not contradiction},
+      S2={ [1,<*d1*>] : not contradiction},
+      S3={ [I2,<*d2,k2*>] where I2 is Element of Segm 14,
+                    d2 is Element of SCM-Data-Loc,
+                    k2 is Element of INT : I2 in {2,3}},
+      S4={ [I3,<*d3,k3,k4*>] where I3 is Element of Segm 14,
+                    d3 is Element of SCM-Data-Loc,
+                    k3,k4 is Element of INT: I3 in {4,5,6,7,8} },
+      S5={ [I4,<*d4,d5,k5,k6*>] where I4 is Element of Segm 14,
+                    d4,d5 is Element of SCM-Data-Loc,
+                    k5,k6 is Element of INT: I4 in {9,10,11,12,13} };
+A1: 2 = 2*1;
+     now
+    assume 2 in SCMPDS-Instr;
+    then 2 in S1 \/ S2 \/ S3 \/ S4 or 2 in S5 by Def3,XBOOLE_0:def 2;
+    then 2 in S1 \/ S2 \/ S3 or 2 in S4 or 2 in S5 by XBOOLE_0:def 2;
+    then 2 in S1 \/ S2 or 2 in S3 or 2 in S4 or 2 in S5 by XBOOLE_0:def 2;
+    then 2 in S1 or 2 in S2 or 2 in S3 or 2 in S4 or 2 in S5 by XBOOLE_0:def 2
+;
+   then (ex k1 being Element of INT st 2= [0,<*k1*>] & not contradiction) or
+   (ex d1 st 2= [1,<*d1*>] & not contradiction) or
+   (ex I2,d2 st ex k2 being Element of INT st 2= [I2,<*d2,k2*>] & I2 in {2,3})
+     or
+   (ex I3,d3 st ex k1,k2 being Element of INT st 2 = [I3,<*d3,k1,k2*>] &
+       I3 in {4,5,6,7,8}) or
+   (ex I4,d4,d5 st ex k5,k6 being Element of INT st 2 = [I4,<*d4,d5,k5,k6*>] &
+     I4 in {9,10,11,12,13});
+   hence contradiction by AMI_1:3;
+   end;
+  hence thesis by A1,AMI_2:def 3,INT_1:12;
+end;
+
+theorem Th18:
+ SCMPDS-OK.i = SCM-Instr-Loc iff i = 0
+ proof
+  thus SCMPDS-OK.i = SCM-Instr-Loc implies i = 0
+   proof assume
+A1:  SCMPDS-OK.i = SCM-Instr-Loc;
+    assume i <> 0;
+     then (ex j st i = 2*j+1) or (ex j st i = 2*j+2) by Th14;
+    hence contradiction by A1,Def4,Th17,AMI_2:6;
+   end;
+  thus thesis by Def4;
+ end;
+
+theorem Th19:
+ SCMPDS-OK.i = INT iff ex k st i = 2*k+1
+ proof
+  thus SCMPDS-OK.i = INT implies ex k st i = 2*k+1
+   proof assume
+A1:   SCMPDS-OK.i = INT;
+    assume
+A2:   not ex k st i = 2*k+1;
+    per cases by A2,Th14;
+    suppose i = 0;
+    hence contradiction by A1,Def4,AMI_2:6;
+    suppose ex j st i = 2*j+2;
+    then consider j such that
+A3:   i = 2*j+2;
+    thus contradiction by A1,A3,Def4,Th17;
+   end;
+  thus thesis by Def4;
+ end;
+
+theorem Th20:
+ SCMPDS-OK.i = SCMPDS-Instr iff ex k st i = 2*k+2
+ proof
+  thus SCMPDS-OK.i = SCMPDS-Instr implies ex k st i = 2*k+2
+   proof assume
+A1:   SCMPDS-OK.i = SCMPDS-Instr;
+    assume
+A2:   not ex k st i = 2*k+2;
+    per cases by A2,Th14;
+    suppose i = 0;
+    hence contradiction by A1,Def4,Th17;
+    suppose ex j st i = 2*j+1;
+    then consider j such that
+A3:   i = 2*j+1;
+    thus contradiction by A1,A3,Def4,Th17;
+   end;
+  thus thesis by Def4;
+ end;
+
+theorem Th21:
+ SCMPDS-OK.d1 = INT
+ proof
+     d1 in { 2*k + 1 : not contradiction } by AMI_2:def 2;
+   then ex k st d1 = 2*k+1;
+   hence SCMPDS-OK.d1 = INT by Th19;
+ end;
+
+theorem Th22:
+ SCMPDS-OK.i1 = SCMPDS-Instr
+ proof
+      i1 in { 2*k : k > 0 } by AMI_2:def 3;
+    then consider k such that
+A1:   i1 = 2*k & k > 0;
+    consider j such that
+A2:  k = j+1 by A1,NAT_1:22;
+      i1 = 2*j + 2*1 by A1,A2,XCMPLX_1:8;
+  hence SCMPDS-OK.i1 = SCMPDS-Instr by Th20;
+ end;
+
+theorem Th23:
+ pi(product SCMPDS-OK,0) = SCM-Instr-Loc
+ proof
+    dom SCMPDS-OK = NAT by FUNCT_2:def 1;
+  hence pi(product SCMPDS-OK,0) = SCMPDS-OK.0 by CARD_3:22
+   .= SCM-Instr-Loc by Def4;
+ end;
+
+theorem Th24:
+ pi(product SCMPDS-OK,d1) = INT
+ proof
+    dom SCMPDS-OK = NAT by FUNCT_2:def 1;
+  hence pi(product SCMPDS-OK,d1) = SCMPDS-OK.d1 by CARD_3:22
+   .= INT by Th21;
+ end;
+
+theorem
+   pi(product SCMPDS-OK,i1) = SCMPDS-Instr
+ proof
+    dom SCMPDS-OK = NAT by FUNCT_2:def 1;
+  hence pi(product SCMPDS-OK,i1) = SCMPDS-OK.i1 by CARD_3:22
+   .= SCMPDS-Instr by Th22;
+ end;
+
+definition let s be SCMPDS-State;
+ func IC s -> Element of SCM-Instr-Loc equals
+    s.0;
+coherence by Th23,CARD_3:def 6;
+end;
+
+definition let s be SCMPDS-State,
+               u be Element of SCM-Instr-Loc;
+ func SCM-Chg(s,u) -> SCMPDS-State equals
+:Def6:  s +* (0 .--> u);
+coherence
+  proof
+A1:  dom SCMPDS-OK = NAT by FUNCT_2:def 1;
+  then dom s = NAT by CARD_3:18;
+then A2:  dom(s +* (0 .--> u)) = NAT \/ dom(0 .--> u) by FUNCT_4:def 1
+      .= NAT \/ {0} by CQC_LANG:5
+      .= dom SCMPDS-OK by A1,ZFMISC_1:46;
+      now let x be set;
+     assume
+A3:    x in dom SCMPDS-OK;
+       now per cases;
+      suppose
+A4:     x = 0;
+          {0} = dom(0 .--> u) by CQC_LANG:5;
+        then 0 in dom(0 .--> u) by TARSKI:def 1;
+       then (s +* (0 .--> u)).0 = (0 .--> u).0 by FUNCT_4:14
+          .= u by CQC_LANG:6;
+        then (s +* (0 .--> u)).0 in SCM-Instr-Loc;
+       hence (s +* (0 .--> u)).x in SCMPDS-OK.x by A4,Th18;
+      suppose
+A5:     x <> 0;
+          {0} = dom(0 .--> u) by CQC_LANG:5;
+        then not x in dom(0 .--> u) by A5,TARSKI:def 1;
+         then (s +* (0 .--> u)).x = s.x by FUNCT_4:12;
+       hence (s +* (0 .--> u)).x in SCMPDS-OK.x by A3,CARD_3:18;
+     end;
+     hence (s +* (0 .--> u)).x in SCMPDS-OK.x;
+    end;
+   hence thesis by A2,CARD_3:18;
+  end;
+end;
+
+theorem
+   for s being SCMPDS-State, u being Element of SCM-Instr-Loc
+  holds SCM-Chg(s,u).0 = u
+ proof
+   let s be SCMPDS-State, u be Element of SCM-Instr-Loc;
+    {0} = dom(0 .--> u) by CQC_LANG:5;
+then A1: 0 in dom(0 .--> u) by TARSKI:def 1;
+  thus SCM-Chg(s,u).0 = (s +* (0 .--> u)).0 by Def6
+    .= (0 .--> u).0 by A1,FUNCT_4:14
+    .= u by CQC_LANG:6;
+ end;
+
+theorem
+   for s being SCMPDS-State, u being Element of SCM-Instr-Loc,
+     mk being Element of SCM-Data-Loc
+  holds SCM-Chg(s,u).mk = s.mk
+ proof
+  let s be SCMPDS-State,
+      u be Element of SCM-Instr-Loc,
+      mk be Element of SCM-Data-Loc;
+A1:  SCMPDS-OK.0 = SCM-Instr-Loc & SCMPDS-OK.mk = INT
+     by Th18,Th21;
+    {0} = dom(0 .--> u) by CQC_LANG:5;
+then A2:  not mk in dom(0 .--> u) by A1,AMI_2:6,TARSKI:def 1;
+  thus SCM-Chg(s,u).mk = (s +* (0 .--> u)).mk by Def6
+  .= s.mk by A2,FUNCT_4:12;
+end;
+
+theorem
+   for s being SCMPDS-State,
+     u, v being Element of SCM-Instr-Loc
+  holds SCM-Chg(s,u).v = s.v
+ proof
+   let s be SCMPDS-State,
+       u, v be Element of SCM-Instr-Loc;
+A1:  SCMPDS-OK.0 = SCM-Instr-Loc & SCMPDS-OK.v = SCMPDS-Instr by Th18,Th22;
+    {0} = dom(0 .--> u) by CQC_LANG:5;
+then A2:  not v in dom(0 .--> u) by A1,Th17,TARSKI:def 1;
+  thus SCM-Chg(s,u).v = (s +* (0 .--> u)).v by Def6
+  .= s.v by A2,FUNCT_4:12;
+end;
+
+definition let s be SCMPDS-State,
+               t be Element of SCM-Data-Loc,
+               u be Integer;
+ func SCM-Chg(s,t,u) -> SCMPDS-State equals
+:Def7:   s +* (t .--> u);
+coherence
+  proof
+A1: dom SCMPDS-OK = NAT by FUNCT_2:def 1;
+ then dom s = NAT by CARD_3:18;
+then A2: dom(s +* (t .--> u)) = NAT \/ dom(t .--> u) by FUNCT_4:def 1
+      .= NAT \/ {t} by CQC_LANG:5
+      .= dom SCMPDS-OK by A1,ZFMISC_1:46;
+      now let x be set;
+     assume
+A3:    x in dom SCMPDS-OK;
+       now per cases;
+      suppose
+A4:     x = t;
+          {t} = dom(t .--> u) by CQC_LANG:5;
+        then t in dom(t .--> u) by TARSKI:def 1;
+       then (s +* (t .--> u)).t = (t .--> u).t by FUNCT_4:14
+          .= u by CQC_LANG:6;
+       then (s +* (t .--> u)).t in INT by INT_1:12;
+       hence (s +* (t .--> u)).x in SCMPDS-OK.x by A4,Th21;
+      suppose
+A5:     x <> t;
+         {t} = dom(t .--> u) by CQC_LANG:5;
+       then not x in dom(t .--> u) by A5,TARSKI:def 1;
+        then (s +* (t .--> u)).x = s.x by FUNCT_4:12;
+       hence (s +* (t .--> u)).x in SCMPDS-OK.x by A3,CARD_3:18;
+     end;
+     hence (s +* (t .--> u)).x in SCMPDS-OK.x;
+    end;
+   hence thesis by A2,CARD_3:18;
+  end;
+end;
+
+theorem
+   for s being SCMPDS-State, t being Element of SCM-Data-Loc,
+     u being Integer
+  holds SCM-Chg(s,t,u).0 = s.0
+ proof
+ let s be SCMPDS-State, t be Element of SCM-Data-Loc,
+    u be Integer;
+A1:  SCMPDS-OK.0 = SCM-Instr-Loc & SCMPDS-OK.t = INT
+    by Th18,Th21;
+    {t} = dom(t .--> u) by CQC_LANG:5;
+then A2:  not 0 in dom(t .--> u) by A1,AMI_2:6,TARSKI:def 1;
+ thus SCM-Chg(s,t,u).0 = (s +* (t .--> u)).0 by Def7
+         .= s.0 by A2,FUNCT_4:12;
+end;
+
+theorem
+   for s being SCMPDS-State, t being Element of SCM-Data-Loc,
+     u being Integer
+  holds SCM-Chg(s,t,u).t = u
+ proof
+ let s be SCMPDS-State, t be Element of SCM-Data-Loc,
+     u be Integer;
+   {t} = dom(t .--> u) by CQC_LANG:5;
+then A1: t in dom(t .--> u) by TARSKI:def 1;
+ thus SCM-Chg(s,t,u).t = (s +* (t .--> u)).t by Def7
+   .= (t .--> u).t by A1,FUNCT_4:14
+   .= u by CQC_LANG:6;
+end;
+
+theorem
+   for s being SCMPDS-State, t being Element of SCM-Data-Loc,
+     u being Integer,
+     mk being Element of SCM-Data-Loc st mk <> t
+  holds SCM-Chg(s,t,u).mk = s.mk
+ proof
+  let s be SCMPDS-State, t be Element of SCM-Data-Loc,
+      u be Integer,
+     mk be Element of SCM-Data-Loc such that
+A1:   mk <> t;
+    {t} = dom(t .--> u) by CQC_LANG:5;
+then A2:  not mk in dom(t .--> u) by A1,TARSKI:def 1;
+ thus SCM-Chg(s,t,u).mk = (s +* (t .--> u)).mk by Def7
+         .= s.mk by A2,FUNCT_4:12;
+end;
+
+theorem
+   for s being SCMPDS-State, t being Element of SCM-Data-Loc,
+     u being Integer,
+     v being Element of SCM-Instr-Loc
+  holds SCM-Chg(s,t,u).v = s.v
+ proof
+  let s be SCMPDS-State, t be Element of SCM-Data-Loc,
+      u be Integer,
+      v be Element of SCM-Instr-Loc;
+A1: SCMPDS-OK.v = SCMPDS-Instr & SCMPDS-OK.t = INT
+     by Th21,Th22;
+    {t} = dom(t .--> u) by CQC_LANG:5;
+then A2:  not v in dom(t .--> u) by A1,Th17,TARSKI:def 1;
+ thus SCM-Chg(s,t,u).v = (s +* (t .--> u)).v by Def7
+         .= s.v by A2,FUNCT_4:12;
+end;
+
+definition let s be SCMPDS-State,
+               a be Element of SCM-Data-Loc;
+ redefine func s.a -> Integer;
+coherence
+  proof
+      s.a in pi(product SCMPDS-OK,a) by CARD_3:def 6;
+    then s.a in INT by Th24;
+    hence s.a is Integer by INT_1:12;
+  end;
+end;
+
+definition let s be SCMPDS-State,
+               a be Element of SCM-Data-Loc,
+               n be Integer;
+ func Address_Add(s,a,n) -> Element of SCM-Data-Loc equals
+    2*abs(s.a+n)+1;
+coherence
+proof
+  reconsider m=abs(s.a+n) as Nat;
+    2*m+1 in SCM-Data-Loc by AMI_2:def 2;
+  hence thesis;
+  end;
+end;
+
+definition let s be SCMPDS-State,
+               n be Integer;
+ func jump_address(s,n) -> Element of SCM-Instr-Loc equals
+    abs(((IC s) qua Nat )-2+2*n)+2;
+coherence
+proof
+    reconsider n0=IC s as Nat;
+      IC s in { 2*k: k>0} by AMI_2:def 3;
+    then consider k such that
+A1: IC s = 2*k & k > 0;
+    consider j such that
+A2: k = j+1 by A1,NAT_1:22;
+   IC s = 2*j + 2*1 by A1,A2,XCMPLX_1:8;
+then A3: abs(n0-2+2*n)+2 =abs(2*j+2*n)+2 by XCMPLX_1:26
+    .=abs(2*(j+n))+2 by XCMPLX_1:8
+    .=abs (2)*abs(j+n)+2 by ABSVALUE:10
+    .=2*abs(j+n)+2*1 by ABSVALUE:def 1
+    .=2*(abs(j+n)+1) by XCMPLX_1:8;
+   reconsider m=abs(j+n)+1 as Nat;
+     m > 0 by NAT_1:19;
+   then 2*m in SCM-Instr-Loc by AMI_2:def 3;
+   hence thesis by A3;
+  end;
+end;
+
+definition let d be Element of SCM-Data-Loc,
+               s be Integer;
+ redefine func <*d,s*> -> FinSequence of SCM-Data-Loc \/ INT;
+coherence
+  proof
+    let y be set;
+    assume y in rng <*d,s*>;
+    then consider x being set such that
+A1:   x in dom <*d,s*> and
+A2:   <*d,s*>.x = y by FUNCT_1:def 5;
+A3: dom <*d,s*> = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
+    per cases by A1,A3,TARSKI:def 2;
+    suppose x = 1;
+    then y = d by A2,FINSEQ_1:61;
+    hence thesis by XBOOLE_0:def 2;
+    suppose x = 2;
+then A4: y = s by A2,FINSEQ_1:61;
+      s in INT by INT_1:12;
+    hence thesis by A4,XBOOLE_0:def 2;
+  end;
+end;
+
+definition let x be Element of SCMPDS-Instr;
+ given mk be Element of SCM-Data-Loc, I such that
+A1: x = [ I, <*mk*>];
+ func x address_1 -> Element of SCM-Data-Loc means
+:Def10:  ex f being FinSequence of SCM-Data-Loc st f = x`2 & it = f/.1;
+  existence
+  proof
+    take mk,<*mk*>;
+    thus thesis by A1,FINSEQ_4:25,MCART_1:7;
+  end;
+uniqueness;
+end;
+
+theorem
+    for x being Element of SCMPDS-Instr, mk being Element of SCM-Data-Loc
+  st x = [ I, <*mk*>] holds
+ x address_1 = mk
+proof
+  let x be Element of SCMPDS-Instr, mk be Element of SCM-Data-Loc;
+  assume
+A1: x = [ I, <*mk*>];
+   then consider f being FinSequence of SCM-Data-Loc such that
+A2:  f = x`2 & x address_1 = f/.1 by Def10;
+     f = <*mk*> by A1,A2,MCART_1:7;
+  hence x address_1 = mk by A2,FINSEQ_4:25;
+end;
+
+definition let x be Element of SCMPDS-Instr;
+ given r being Integer, I such that
+A1: x = [ I, <*r*>];
+ func x const_INT -> Integer means
+:Def11: ex f being FinSequence of INT st f = x`2 & it = f/.1;
+  existence
+  proof
+    reconsider mm=r as Element of INT by INT_1:12;
+    take r,<*mm*>;
+    thus thesis by A1,FINSEQ_4:25,MCART_1:7;
+  end;
+uniqueness;
+end;
+
+theorem
+    for x being Element of SCMPDS-Instr, k being Integer
+  st x = [ I, <*k*>] holds
+ x const_INT = k
+proof
+  let x be Element of SCMPDS-Instr, k be Integer;
+  assume
+A1: x = [ I, <*k*>];
+   then consider f being FinSequence of INT such that
+A2: f = x`2 & x const_INT = f/.1 by Def11;
+A3: k is Element of INT by INT_1:def 2;
+     f = <*k*> by A1,A2,MCART_1:7;
+  hence x const_INT = k by A2,A3,FINSEQ_4:25;
+end;
+
+definition let x be Element of SCMPDS-Instr;
+ given mk being Element of SCM-Data-Loc, r being Integer,
+       I such that
+A1: x = [ I, <*mk, r*>];
+ func x P21address -> Element of SCM-Data-Loc means
+:Def12: ex f being FinSequence of SCM-Data-Loc \/ INT
+   st f = x`2 & it = f/.1;
+  existence
+  proof
+    take mk,<*mk, r*>;
+   r in INT by INT_1:12;
+    then mk is Element of SCM-Data-Loc \/ INT &
+     r is Element of SCM-Data-Loc \/ INT by XBOOLE_0:def 2;
+    hence thesis by A1,FINSEQ_4:26,MCART_1:7;
+  end;
+uniqueness;
+
+ func x P22const -> Integer means
+:Def13: ex f being FinSequence of SCM-Data-Loc \/ INT
+  st f = x`2 & it = f/.2;
+  existence
+  proof
+    take r,<*mk, r*>;
+   r in INT by INT_1:12;
+    then mk is Element of SCM-Data-Loc \/ INT &
+     r is Element of SCM-Data-Loc \/ INT by XBOOLE_0:def 2;
+    hence thesis by A1,FINSEQ_4:26,MCART_1:7;
+  end;
+uniqueness;
+end;
+
+theorem
+   for x being Element of SCMPDS-Instr, mk being Element of SCM-Data-Loc,
+     r being Integer st x = [ I, <*mk, r*>] holds
+  x P21address = mk & x P22const = r
+ proof
+   let x be Element of SCMPDS-Instr,
+       mk be Element of SCM-Data-Loc,
+       r be Integer;
+  assume
+A1: x = [ I, <*mk,r*>];
+  then consider f being FinSequence of SCM-Data-Loc \/ INT such that
+A2:  f = x`2 & x P21address = f/.1 by Def12;
+A3: f = <*mk,r*> by A1,A2,MCART_1:7;
+   r in INT by INT_1:12;
+then A4: mk is Element of SCM-Data-Loc \/ INT &
+   r is Element of SCM-Data-Loc \/ INT by XBOOLE_0:def 2;
+  hence x P21address = mk by A2,A3,FINSEQ_4:26;
+   consider f being FinSequence of SCM-Data-Loc \/ INT such that
+A5:  f = x`2 & x P22const = f/.2 by A1,Def13;
+     f = <*mk,r*> by A1,A5,MCART_1:7;
+  hence x P22const = r by A4,A5,FINSEQ_4:26;
+ end;
+
+definition let x be Element of SCMPDS-Instr;
+ given m1 being Element of SCM-Data-Loc,k1,k2 be Integer,I such that
+A1: x = [I, <*m1,k1,k2*>];
+
+ func x P31address -> Element of SCM-Data-Loc means
+:Def14: ex f being FinSequence of (SCM-Data-Loc \/ INT) st
+       f = x`2 & it = f/.1;
+  existence
+  proof
+    reconsider mm=m1,k1,k2 as Element of (SCM-Data-Loc \/ INT)
+    by Th10,Th11;
+    take m1,f=<*mm,k1,k2*>;
+    thus f=x`2 by A1,MCART_1:7;
+    thus m1=f/.1 by FINSEQ_4:27;
+  end;
+uniqueness;
+
+  func x P32const -> Integer means
+:Def15: ex f being FinSequence of (SCM-Data-Loc \/ INT) st
+  f = x`2 & it = f/.2;
+  existence
+  proof
+    reconsider m1,mm=k1,k2 as Element of (SCM-Data-Loc \/ INT)
+    by Th10,Th11;
+    take k1,f=<*m1,mm,k2*>;
+    thus f=x`2 by A1,MCART_1:7;
+    thus k1=f/.2 by FINSEQ_4:27;
+  end;
+  uniqueness;
+
+  func x P33const -> Integer means
+:Def16:   ex f being FinSequence of (SCM-Data-Loc \/ INT) st
+   f = x`2 & it = f/.3;
+  existence
+  proof
+    reconsider m1,k1,mm=k2 as Element of (SCM-Data-Loc \/ INT)
+    by Th10,Th11;
+    take k2,f=<*m1,k1,mm*>;
+    thus f=x`2 by A1,MCART_1:7;
+    thus k2=f/.3 by FINSEQ_4:27;
+  end;
+  uniqueness;
+end;
+
+theorem
+   for x being Element of SCMPDS-Instr, d1 being Element of SCM-Data-Loc,
+     k1,k2 being Integer st x = [ I, <*d1,k1,k2*>] holds
+  x P31address = d1 & x P32const = k1 & x P33const = k2
+ proof
+   let x be Element of SCMPDS-Instr,
+       d1 be Element of SCM-Data-Loc, k1,k2 be Integer;
+  assume
+A1: x = [ I, <*d1,k1,k2*>];
+A2:  d1 is Element of SCM-Data-Loc \/ INT by XBOOLE_0:def 2;
+       k1 in INT by INT_1:12;
+then A3:  k1 is Element of SCM-Data-Loc \/ INT by XBOOLE_0:def 2;
+       k2 in INT by INT_1:12;
+then A4:  k2 is Element of SCM-Data-Loc \/ INT by XBOOLE_0:def 2;
+  consider f being FinSequence of SCM-Data-Loc \/ INT such that
+A5:  f = x`2 & x P31address = f/.1 by A1,Def14;
+       f = <*d1,k1,k2*> by A1,A5,MCART_1:7;
+  hence x P31address = d1 by A2,A3,A4,A5,FINSEQ_4:27;
+   consider f being FinSequence of SCM-Data-Loc \/ INT such that
+A6:  f = x`2 & x P32const = f/.2 by A1,Def15;
+       f = <*d1,k1,k2*> by A1,A6,MCART_1:7;
+  hence x P32const = k1 by A2,A3,A4,A6,FINSEQ_4:27;
+  consider f being FinSequence of SCM-Data-Loc \/ INT such that
+A7:  f = x`2 & x P33const = f/.3 by A1,Def16;
+       f = <*d1,k1,k2*> by A1,A7,MCART_1:7;
+  hence x P33const = k2 by A2,A3,A4,A7,FINSEQ_4:27;
+end;
+
+definition let x be Element of SCMPDS-Instr;
+ given m1,m2 being Element of SCM-Data-Loc,k1,k2 be Integer,I such that
+A1: x = [ I, <*m1,m2,k1,k2*>];
+
+ func x P41address -> Element of SCM-Data-Loc means
+:Def17: ex f being FinSequence of (SCM-Data-Loc \/ INT) st
+   f = x`2 & it = f/.1;
+  existence
+  proof
+    reconsider mm=m1,m2,k1,k2 as Element of (SCM-Data-Loc \/ INT)
+    by Th10,Th11;
+    take m1,f=<*mm,m2,k1,k2*>;
+    thus f=x`2 by A1,MCART_1:7;
+    thus m1=f/.1 by Th7;
+  end;
+uniqueness;
+
+   func x P42address -> Element of SCM-Data-Loc means
+:Def18:  ex f being FinSequence of (SCM-Data-Loc \/ INT) st
+  f = x`2 & it = f/.2;
+  existence
+  proof
+    reconsider m1,mm=m2,k1,k2 as Element of (SCM-Data-Loc \/ INT)
+    by Th10,Th11;
+    take m2,f=<*m1,mm,k1,k2*>;
+    thus f=x`2 by A1,MCART_1:7;
+    thus m2=f/.2 by Th7;
+  end;
+  uniqueness;
+
+  func x P43const -> Integer means
+:Def19:  ex f being FinSequence of (SCM-Data-Loc \/ INT) st
+  f = x`2 & it = f/.3;
+  existence
+  proof
+    reconsider m1,m2,mm=k1,k2 as Element of (SCM-Data-Loc \/ INT)
+    by Th10,Th11;
+    take k1,f=<*m1,m2,mm,k2*>;
+    thus f=x`2 by A1,MCART_1:7;
+    thus k1=f/.3 by Th7;
+  end;
+  uniqueness;
+
+  func x P44const -> Integer means
+:Def20:  ex f being FinSequence of (SCM-Data-Loc \/ INT) st
+  f = x`2 & it = f/.4;
+  existence
+  proof
+    reconsider m1,m2,k1,mm=k2 as Element of (SCM-Data-Loc \/ INT)
+    by Th10,Th11;
+    take k2,f=<*m1,m2,k1,mm*>;
+    thus f=x`2 by A1,MCART_1:7;
+    thus k2=f/.4 by Th7;
+  end;
+  uniqueness;
+end;
+
+theorem
+   for x being Element of SCMPDS-Instr, d1,d2 being Element of SCM-Data-Loc,
+     k1,k2 being Integer st x = [ I, <*d1,d2,k1,k2*>] holds
+  x P41address = d1 & x P42address = d2 & x P43const = k1 & x P44const = k2
+ proof
+   let x be Element of SCMPDS-Instr,
+       d1,d2 be Element of SCM-Data-Loc, k1,k2 be Integer;
+  assume
+A1: x = [ I, <*d1,d2,k1,k2*>];
+A2:  d1 is Element of SCM-Data-Loc \/ INT &
+     d2 is Element of SCM-Data-Loc \/ INT by XBOOLE_0:def 2;
+       k1 in INT by INT_1:12;
+then A3:  k1 is Element of SCM-Data-Loc \/ INT by XBOOLE_0:def 2;
+       k2 in INT by INT_1:12;
+then A4:  k2 is Element of SCM-Data-Loc \/ INT by XBOOLE_0:def 2;
+     consider f being FinSequence of SCM-Data-Loc \/ INT such that
+A5:  f = x`2 & x P41address = f/.1 by A1,Def17;
+       f = <*d1,d2,k1,k2*> by A1,A5,MCART_1:7;
+  hence x P41address = d1 by A2,A3,A4,A5,Th7;
+     consider f being FinSequence of SCM-Data-Loc \/ INT such that
+A6:  f = x`2 & x P42address = f/.2 by A1,Def18;
+       f = <*d1,d2,k1,k2*> by A1,A6,MCART_1:7;
+  hence x P42address = d2 by A2,A3,A4,A6,Th7;
+     consider f being FinSequence of SCM-Data-Loc \/ INT such that
+A7:  f = x`2 & x P43const = f/.3 by A1,Def19;
+       f = <*d1,d2,k1,k2*> by A1,A7,MCART_1:7;
+  hence x P43const = k1 by A2,A3,A4,A7,Th7;
+     consider f being FinSequence of SCM-Data-Loc \/ INT such that
+A8:  f = x`2 & x P44const = f/.4 by A1,Def20;
+       f = <*d1,d2,k1,k2*> by A1,A8,MCART_1:7;
+  hence x P44const = k2 by A2,A3,A4,A8,Th7;
+end;
+
+definition let s be SCMPDS-State,
+           a be Element of SCM-Data-Loc;
+ func PopInstrLoc(s,a) -> Element of SCM-Instr-Loc equals
+     2*(abs(s.a) div 2)+4;
+coherence
+proof set n=abs(s.a) div 2;
+A1: 2*n+2*2 =2*(n + 2) by XCMPLX_1:8;
+   reconsider m=n +2 as Nat;
+     m > 0 by NAT_1:19;
+   then 2*m in SCM-Instr-Loc by AMI_2:def 3;
+   hence thesis by A1;
+  end;
+end;
+
+:: RetSP: Return Stack Pointer
+:: RetIC: Return Instruction-Counter
+definition
+   func RetSP -> Nat equals
+      0;
+   coherence;
+   func RetIC -> Nat equals
+     1;
+   coherence;
+end;
+
+definition let x be Element of SCMPDS-Instr,
+               s be SCMPDS-State;
+ func SCM-Exec-Res (x,s) -> SCMPDS-State equals
+    SCM-Chg(s, jump_address(s,x const_INT ))
+        if ex k1 st x = [ 0, <*k1*>],
+  SCM-Chg(SCM-Chg(s, x P21address, x P22const), Next IC s)
+        if ex d1,k1 st x = [ 2, <*d1, k1*>],
+  SCM-Chg(SCM-Chg(s, Address_Add(s,x P21address,x P22const),
+  IC s qua Nat),Next IC s)
+        if ex d1,k1 st x = [ 3, <*d1, k1*>],
+  SCM-Chg(SCM-Chg(s, x address_1,s.Address_Add(s,x address_1,RetSP)),
+  PopInstrLoc(s,Address_Add(s,x address_1,RetIC)) )
+        if ex d1 st x = [ 1, <*d1*>],
+  SCM-Chg(s, IFEQ(s.Address_Add(s,x P31address,x P32const), 0,
+  Next IC s,jump_address(s,x P33const )))
+         if ex d1,k1,k2 st x = [ 4, <*d1,k1,k2*>],
+  SCM-Chg(s, IFGT(s.Address_Add(s,x P31address,x P32const), 0,
+  Next IC s,jump_address(s,x P33const )))
+        if ex d1,k1,k2 st x = [ 5, <*d1,k1,k2*>],
+  SCM-Chg(s, IFGT(0, s.Address_Add(s,x P31address,x P32const),
+  Next IC s,jump_address(s,x P33const )))
+        if ex d1,k1,k2 st x = [ 6, <*d1,k1,k2*>],
+  SCM-Chg(SCM-Chg(s, Address_Add(s,x P31address,x P32const),
+  x P33const), Next IC s)
+        if ex d1,k1,k2 st x = [ 7, <*d1,k1,k2*>],
+  SCM-Chg(SCM-Chg(s, Address_Add(s,x P31address,x P32const),
+  s.Address_Add(s,x P31address,x P32const)+ (x P33const)), Next IC s)
+        if ex d1,k1,k2 st x = [ 8, <*d1,k1,k2*>],
+  SCM-Chg(SCM-Chg(s, Address_Add(s,x P41address,x P43const),
+  s.Address_Add(s,x P41address,x P43const)+
+  s.Address_Add(s,x P42address,x P44const)),Next IC s)
+      if ex d1,d2,k1,k2 st x = [ 9, <*d1,d2,k1,k2*>],
+  SCM-Chg(SCM-Chg(s, Address_Add(s,x P41address,x P43const),
+  s.Address_Add(s,x P41address,x P43const) -
+  s.Address_Add(s,x P42address,x P44const)),Next IC s)
+      if ex d1,d2,k1,k2 st x = [ 10, <*d1,d2,k1,k2*>],
+  SCM-Chg(SCM-Chg(s, Address_Add(s,x P41address,x P43const),
+  s.Address_Add(s,x P41address,x P43const) *
+  s.Address_Add(s,x P42address,x P44const)),Next IC s)
+      if ex d1,d2,k1,k2 st x = [ 11, <*d1,d2,k1,k2*>],
+  SCM-Chg(SCM-Chg(s, Address_Add(s,x P41address,x P43const),
+  s.Address_Add(s,x P42address,x P44const)), Next IC s)
+      if ex d1,d2,k1,k2 st x = [13, <*d1,d2,k1,k2*>],
+  SCM-Chg(SCM-Chg(
+           SCM-Chg(s,Address_Add(s,x P41address,x P43const),
+     s.Address_Add(s,x P41address,x P43const) div
+     s.Address_Add(s,x P42address,x P44const)),
+           Address_Add(s,x P42address,x P44const),
+     s.Address_Add(s,x P41address,x P43const) mod
+     s.Address_Add(s,x P42address,x P44const)), Next IC s)
+     if ex d1,d2,k1,k2 st x = [12, <*d1,d2,k1,k2*>]
+  otherwise s;
+coherence;
+consistency by ZFMISC_1:33;
+end;
+
+definition
+ let f be Function of SCMPDS-Instr, Funcs(product SCMPDS-OK,
+ product SCMPDS-OK ), x be Element of SCMPDS-Instr;
+ cluster f.x -> Function-like Relation-like;
+coherence;
+end;
+
+definition
+ func SCMPDS-Exec ->
+      Function of SCMPDS-Instr, Funcs(product SCMPDS-OK, product SCMPDS-OK)
+     means
+    for x being Element of SCMPDS-Instr, y being SCMPDS-State holds
+   (it.x).y = SCM-Exec-Res (x,y);
+  existence
+  proof
+   deffunc U(Element of SCMPDS-Instr, SCMPDS-State) = SCM-Exec-Res($1,$2);
+   consider f being
+    Function of [:SCMPDS-Instr,product SCMPDS-OK:], product SCMPDS-OK
+     such that
+ A1:   for x being Element of SCMPDS-Instr, y being SCMPDS-State holds
+    f.[x,y] = U(x,y) from Lambda2D;
+   take curry f;
+   let x be Element of SCMPDS-Instr, y be SCMPDS-State;
+   thus (curry f).x.y = f.[x,y] by CAT_2:3
+     .= SCM-Exec-Res(x,y) by A1;
+  end;
+uniqueness
+  proof
+   let f, g be Function of SCMPDS-Instr,
+     Funcs(product SCMPDS-OK, product SCMPDS-OK) such that
+A2:   for x being Element of SCMPDS-Instr, y being SCMPDS-State holds
+      (f.x).y = SCM-Exec-Res(x,y) and
+A3:   for x being Element of SCMPDS-Instr, y being SCMPDS-State holds
+      (g.x).y = SCM-Exec-Res(x,y);
+      now let x be Element of SCMPDS-Instr;
+     reconsider gx = g.x, fx = f.x as
+      Function of product SCMPDS-OK, product SCMPDS-OK;
+       now let y be SCMPDS-State;
+      thus fx.y = SCM-Exec-Res(x,y) by A2
+               .= gx.y by A3;
+     end;
+     hence f.x = g.x by FUNCT_2:113;
+    end;
+   hence f = g by FUNCT_2:113;
+  end;
+end;

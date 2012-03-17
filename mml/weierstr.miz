@@ -1,0 +1,2180 @@
+:: The Theorem of Weierstrass
+::  by J\'ozef Bia\las and Yatsuka Nakamura
+::
+:: Received July 10, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary METRIC_1, PRE_TOPC, BOOLE, ABSVALUE, ARYTM_1, SETFAM_1, FINSEQ_1,
+      FINSET_1, TOPMETR, RELAT_1, TARSKI, FUNCT_1, SUBSET_1, ORDINAL2,
+      COMPTS_1, EUCLID, LATTICES, PCOMPS_1, SEQ_2, SEQ_1, SEQM_3, SEQ_4,
+      WEIERSTR, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, ORDINAL1,
+      NUMBERS, XREAL_0, REAL_1, NAT_1, TOPMETR, METRIC_1, COMPTS_1, SEQ_1,
+      SEQ_2, SEQM_3, SEQ_4, ABSVALUE, FINSEQ_1, FINSET_1, STRUCT_0, PRE_TOPC,
+      TOPS_2, RCOMP_1, EUCLID, PCOMPS_1;
+ constructors REAL_1, NAT_1, TOPMETR, COMPTS_1, SEQ_2, SEQM_3, SEQ_4, ABSVALUE,
+      TOPS_2, RCOMP_1, EUCLID;
+ clusters STRUCT_0, TOPMETR, PRE_TOPC, PCOMPS_1, EUCLID, XREAL_0, METRIC_1,
+      RELSET_1, ARYTM_3, FINSET_1, MEMBERED, NUMBERS, ORDINAL2;
+ requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
+ definitions STRUCT_0, TARSKI;
+ theorems TARSKI, AXIOMS, FUNCT_1, FUNCT_2, NAT_1, FINSEQ_1, ZFMISC_1, REAL_1,
+      SEQ_2, SEQ_4, ABSVALUE, COMPTS_1, PRE_TOPC, RELAT_1, TOPS_2, RCOMP_1,
+      TOPMETR, PCOMPS_1, METRIC_1, METRIC_6, SETFAM_1, XBOOLE_0, XBOOLE_1,
+      XREAL_0, XCMPLX_0, XCMPLX_1;
+ schemes NAT_1, PRE_TOPC, FUNCT_2;
+
+begin
+
+theorem Th1:
+   for M being MetrSpace,
+       x1,x2 being Point of M,
+       r1,r2 being Real
+   ex x being Point of M, r being Real st
+   Ball(x1,r1) \/ Ball(x2,r2) c= Ball(x,r)
+proof
+   let M be MetrSpace;
+   let x1,x2 be Point of M;
+   let r1,r2 be Real;
+   reconsider x = x1 as Point of M;
+   reconsider r = abs(r1) + abs(r2) + dist(x1,x2) as Real;
+   A1: for a being set holds
+   a in Ball(x1,r1) \/ Ball(x2,r2) implies a in Ball(x,r)
+   proof
+      let a be set;
+      assume A2: a in (Ball(x1,r1) \/ Ball(x2,r2));
+      then reconsider a as Point of M;
+        now per cases by A2,XBOOLE_0:def 2;
+      case
+      A3:a in Ball(x1,r1);
+      A4:M is non empty
+         proof
+           thus the carrier of M is non empty by A3;
+         end;
+      A5:dist(x,a) < r1 by A3,METRIC_1:12;
+          r1 <= abs(r1) & 0 <= abs(r2) by ABSVALUE:5,11;
+         then A6: r1 + 0 <= abs(r1) + abs(r2) by REAL_1:55;
+           0 <= dist(x1,x2) by METRIC_1:5;
+         then r1 + 0 <= abs(r1) + abs(r2) + dist(x1,x2)
+         by A6,REAL_1:55;
+         then dist(x,a) - r < r1 - r1 by A5,REAL_1:92;
+         then dist(x,a) - r < r1 + (-r1) by XCMPLX_0:def 8;
+         then dist(x,a) - r < 0 & r <= r by XCMPLX_0:def 6;
+         then dist(x,a) - r + r < 0 + r by REAL_1:67;
+         then dist(x,a) + (- r) + r < r by XCMPLX_0:def 8;
+         then dist(x,a) + ((- r) + r) < r by XCMPLX_1:1;
+         then dist(x,a) + 0 < r by XCMPLX_0:def 6;
+         hence thesis by A4,METRIC_1:12;
+      case
+      A7:a in Ball(x2,r2);
+      A8:M is non empty
+         proof
+           thus the carrier of M is non empty by A7;
+         end;
+      A9:dist(x,a) <= dist(x1,x2) + dist(x2,a) by METRIC_1:4;
+      A10:dist(x2,a) < r2 by A7,METRIC_1:12;
+           r2 <= abs(r2) by ABSVALUE:11;
+         then dist(x2,a) - abs(r2) < r2 - r2 by A10,REAL_1:92;
+         then dist(x2,a) - abs(r2) < r2 + (-r2) by XCMPLX_0:def 8;
+         then dist(x2,a) - abs(r2) < 0 & abs(r2) <= abs(r2) by XCMPLX_0:def 6;
+         then dist(x2,a) - abs(r2) + abs(r2) < 0 + abs(r2) by REAL_1:67;
+         then dist(x2,a) + (- abs(r2)) + abs(r2) < abs(r2) by XCMPLX_0:def 8;
+         then dist(x2,a) + ((- abs(r2)) + abs(r2)) < abs(r2) by XCMPLX_1:1;
+         then dist(x2,a) + 0 < abs(r2) by XCMPLX_0:def 6;
+         then dist(x,a) - abs(r2) < dist(x1,x2) + dist(x2,a) - dist(x2,a)
+         by A9,REAL_1:92;
+         then dist(x,a) - abs(r2) < dist(x1,x2) + dist(x2,a) + (-dist(x2,a))
+         by XCMPLX_0:def 8;
+         then dist(x,a) - abs(r2) < dist(x1,x2) + (dist(x2,a) + (-dist(x2,a)))
+         by XCMPLX_1:1;
+         then A11: dist(x,a) - abs(r2) < dist(x1,x2) + 0 by XCMPLX_0:def 6;
+           0 <= abs(r1) by ABSVALUE:5;
+         then dist(x,a) - abs(r2) - abs(r1) < dist(x1,x2) - 0 by A11,REAL_1:92
+;
+         then dist(x,a) - (abs(r1) + abs(r2)) < dist(x1,x2) by XCMPLX_1:36;
+         then dist(x,a) - (abs(r1) + abs(r2)) + (abs(r1) + abs(r2)) <
+         abs(r1) + abs(r2) + dist(x1,x2) by REAL_1:67;
+         then dist(x,a) + (-(abs(r1) + abs(r2))) + (abs(r1) + abs(r2)) <
+         abs(r1) + abs(r2) + dist(x1,x2) by XCMPLX_0:def 8;
+         then dist(x,a) + (-(abs(r1) + abs(r2)) + (abs(r1) + abs(r2))) <
+         abs(r1) + abs(r2) + dist(x1,x2) by XCMPLX_1:1;
+         then dist(x,a) + 0 < abs(r1) + abs(r2) + dist(x1,x2)
+         by XCMPLX_0:def 6;
+         hence thesis by A8,METRIC_1:12;
+      end;
+      hence thesis;
+   end;
+   take x;
+   take r;
+   thus thesis by A1,TARSKI:def 3;
+end;
+
+theorem Th2:
+   for M being MetrSpace,
+       n being Nat,
+       F being Subset-Family of M,
+       p being FinSequence st
+   (F is finite & F is_ball-family & rng p = F & dom p = Seg(n+1)) holds
+   ex G being Subset-Family of M st
+   (G is finite & G is_ball-family &
+   ex q being FinSequence st (rng q = G & dom q = Seg(n)) &
+   ex x being Point of M st
+   ex r being Real st
+   (union F c= union G \/ Ball(x,r)))
+proof
+   let M be MetrSpace;
+   let n be Nat;
+   let F be Subset-Family of M;
+   let p be FinSequence;
+   assume
+A1:F is finite & F is_ball-family & rng p = F & dom p = Seg(n+1);
+      reconsider q = p|(Seg(n)) as FinSequence by FINSEQ_1:19;
+        len p = n+1 by A1,FINSEQ_1:def 3;
+      then n <= len p by NAT_1:29;
+   then A2:len q = n & dom q = Seg(n) by FINSEQ_1:21;
+   then A3:dom q \/ {n+1} = dom p by A1,FINSEQ_1:11;
+   A4:dom q c= dom p & rng q c= rng p by FUNCT_1:76;
+      then rng q c= bool the carrier of M by A1,XBOOLE_1:1;
+      then reconsider G=rng q as Subset-Family of M
+        by SETFAM_1:def 7;
+      reconsider G as Subset-Family of M;
+   A5:G is_ball-family
+      proof
+            for x being set holds x in G implies
+          ex y being Point of M st
+          ex r being Real st x = Ball(y,r) by A1,A4,TOPMETR:def 4;
+          hence thesis by TOPMETR:def 4;
+      end;
+        n+1 in dom p by A1,FINSEQ_1:6;
+      then p.(n+1) in F by A1,FUNCT_1:def 5;
+      then consider x being Point of M such that
+   A6:ex r being Real st p.(n+1) = Ball(x,r) by A1,TOPMETR:def 4;
+      consider r being Real such that
+  A7:p.(n+1) = Ball(x,r) by A6;
+  A8:ex x being Point of M st
+      ex r being Real st
+      (union F c= union G \/ Ball(x,r))
+      proof
+     A9:union F c= union G \/ Ball(x,r)
+         proof
+            let t be set;
+            assume
+         t in union F;
+            then consider A being set such that
+        A10:t in A & A in F by TARSKI:def 4;
+            consider s being set such that
+        A11:s in dom p & A = p.s by A1,A10,FUNCT_1:def 5;
+              now per cases by A3,A11,XBOOLE_0:def 2;
+            case
+            A12:s in dom q;
+               then A13:q.s in G by FUNCT_1:def 5;
+                  q.s = A by A11,A12,FUNCT_1:70;
+            then A14:t in union G by A10,A13,TARSKI:def 4;
+                  union G c= union G \/ Ball(x,r)
+                by XBOOLE_1:7;
+                hence thesis by A14;
+            case s in {n+1};
+               then p.s = Ball(x,r) by A7,TARSKI:def 1;
+               hence thesis by A10,A11,XBOOLE_0:def 2;
+            end;
+            hence thesis;
+         end;
+         take x;
+         take r;
+         thus thesis by A9;
+      end;
+      take G;
+      thus thesis by A2,A5,A8,FINSEQ_1:73;
+end;
+
+theorem Th3:
+   for M being MetrSpace,
+       F being Subset-Family of M st
+   (F is finite & F is_ball-family) holds
+   ex x being Point of M, r being Real st
+   union F c= Ball(x,r)
+proof
+   let M be MetrSpace;
+   let F be Subset-Family of M;
+   assume
+A1:F is finite & F is_ball-family;
+   A2:for F being Subset-Family of M st
+      (F is finite & F is_ball-family) holds
+      for n being Nat holds
+      for p being FinSequence st (rng p = F & dom p = Seg n)
+      holds (ex x being Point of M , r being Real st
+      union F c= Ball(x,r))
+      proof
+         defpred P[Nat] means for F being Subset-Family of M st
+            (F is finite & F is_ball-family) holds
+            for n being Nat st n = $1 holds
+            for p being FinSequence st (rng p = F & dom p = Seg(n))
+            holds (ex x being Point of M st ex r being Real st
+            union F c= Ball(x,r));
+      A3: P[0]
+         proof
+            let F be Subset-Family of M;
+            assume F is finite & F is_ball-family;
+            let n be Nat;
+            assume
+         A4:n = 0;
+              for p being FinSequence st (rng p = F & dom p = Seg(n))
+            holds (ex x being Point of M st ex r being Real st
+            union F c= Ball(x,r))
+            proof
+               let p be FinSequence;
+               assume
+             rng p = F & dom p = Seg(n);
+            then A5:union F = {} by A4,FINSEQ_1:4,RELAT_1:65,ZFMISC_1:2;
+               consider x being Point of M;
+               consider r being Real;
+               take x;
+               take r;
+               thus thesis by A5,XBOOLE_1:2;
+            end;
+            hence thesis;
+         end;
+      A6:for k being Nat st P[k] holds P[k + 1]
+         proof
+            let k be Nat;
+            assume
+         A7:P[k];
+            let F be Subset-Family of M;
+            assume
+         A8:F is finite & F is_ball-family;
+            let n be Nat;
+            assume
+        A9:n = k+1;
+            let p be FinSequence;
+            assume
+         rng p = F & dom p = Seg(n);
+            then consider F1 being Subset-Family of M such that
+         A10:F1 is finite & F1 is_ball-family &
+            ex p1 being FinSequence st
+            (rng p1 = F1 & dom p1 = Seg(k)) &
+            ex x2 being Point of M st
+            ex r2 being Real st
+            (union F c= union F1 \/ Ball(x2,r2)) by A8,A9,Th2;
+            consider x2 being Point of M such that
+         A11:ex r2 being Real st
+            (union F c= union F1 \/ Ball(x2,r2)) by A10;
+            consider r2 being Real such that
+         A12:union F c= union F1 \/ Ball(x2,r2) by A11;
+            consider x1 being Point of M such that
+        A13:ex r being Real st union F1 c= Ball(x1,r) by A7,A10;
+            consider r1 being Real such that
+        A14:union F1 c= Ball(x1,r1) by A13;
+        A15:union F1 \/ Ball(x2,r2) c= Ball(x1,r1) \/ Ball(x2,r2)
+            by A14,XBOOLE_1:9;
+            consider x being Point of M such that
+        A16:ex r being Real st
+            Ball(x1,r1) \/ Ball(x2,r2) c= Ball(x,r) by Th1;
+            consider r being Real such that
+        A17:Ball(x1,r1) \/ Ball(x2,r2) c= Ball(x,r) by A16;
+            take x;
+            take r;
+              union F c= Ball(x1,r1) \/ Ball(x2,r2) by A12,A15,XBOOLE_1:1;
+            hence thesis by A17,XBOOLE_1:1;
+         end;
+           for n being Nat holds P[n] from Ind(A3,A6);
+         hence thesis;
+      end;
+      consider p being FinSequence such that
+   A18:rng p = F by A1,FINSEQ_1:73;
+      consider n being Nat such that
+   A19:dom p = Seg n by FINSEQ_1:def 2;
+      thus thesis by A1,A2,A18,A19;
+end;
+
+definition
+   let T,S be non empty TopSpace;
+   let f be map of T,S;
+   let G be Subset-Family of S;
+func f"G -> Subset-Family of T means
+:Def1:for A being Subset of T holds
+     A in it iff ex B being Subset of S st (B in G & A = f"B);
+existence
+proof
+  defpred P[Subset of T] means
+   ex B being Subset of S st B in G & $1 = f"B;
+    ex R being Subset-Family of T st
+  for A being Subset of T holds A in R iff P[A] from SubFamExS;
+  hence thesis;
+end;
+uniqueness
+proof
+   let R1,R2 be Subset-Family of T such that
+A1:for A being Subset of T holds A in R1 iff
+   ex B being Subset of S st (B in G & A = f"B)
+   and
+A2:for A being Subset of T holds A in R2 iff
+   ex B being Subset of S st (B in G & A = f"B);
+     for x being set holds (x in R1 iff x in R2)
+   proof
+      let x be set;
+      thus x in R1 implies x in R2
+      proof
+         assume
+      A3:x in R1;
+         then reconsider x as Subset of T;
+           ex B being Subset of S st (B in G & x = f"B)
+          by A1,A3;
+         hence thesis by A2;
+      end;
+      assume
+   A4:x in R2;
+      then reconsider x as Subset of T;
+        ex B being Subset of S st (B in G & x = f"B)
+       by A2,A4;
+      hence thesis by A1;
+   end;
+   hence thesis by TARSKI:2;
+end;
+end;
+
+theorem
+     for T,S being non empty TopSpace,
+       f being map of T,S,
+       A,B being Subset-Family of S st
+   A c= B holds f"A c= f"B
+proof
+   let T,S be non empty TopSpace;
+   let f be map of T,S;
+   let A,B be Subset-Family of S;
+   assume
+A1:A c= B;
+   let x be set;
+   assume
+A2:x in f"A;
+   then reconsider x as Subset of T;
+     ex C being Subset of S st C in B & x = f"C
+   proof
+      consider C being Subset of S such that
+   A3:C in A & x = f"C by A2,Def1;
+      take C;
+      thus thesis by A1,A3;
+   end;
+   hence thesis by Def1;
+end;
+
+theorem Th5:
+   for T,S being non empty TopSpace,
+       f being map of T,S,
+       B being Subset-Family of S st
+   f is continuous & B is open holds
+   f"B is open
+proof
+   let T,S be non empty TopSpace;
+   let f be map of T,S;
+   let B be Subset-Family of S;
+   assume
+A1:f is continuous & B is open;
+     for P being Subset of T holds P in f"B implies P is open
+   proof
+      let P be Subset of T;
+      assume
+   A2:P in f"(B);
+      thus P is open
+      proof
+         consider C being Subset of S such that
+      A3:C in B & P = f"C by A2,Def1;
+         reconsider C as Subset of S;
+           C is open by A1,A3,TOPS_2:def 1;
+         hence thesis by A1,A3,TOPS_2:55;
+      end;
+   end;
+   hence thesis by TOPS_2:def 1;
+end;
+
+definition
+   let T,S be non empty TopSpace;
+   let f be map of T,S;
+   let G be Subset-Family of T;
+func f.:G -> Subset-Family of S means
+:Def2:for A being Subset of S holds
+     A in it iff ex B being Subset of T st (B in G & A = f.:B);
+existence
+proof
+   thus
+     ex R being Subset-Family of S st
+   for A being Subset of S holds A in R iff
+   ex B being Subset of T st (B in G & A = f.:B)
+   proof
+     defpred P[Subset of S] means
+      ex B being Subset of T st B in G & $1 = f.:B;
+        ex R being Subset-Family of S st
+      for A being Subset of S holds A in R iff P[A]
+       from SubFamExS;
+      hence thesis;
+   end;
+end;
+uniqueness
+proof
+   let R1,R2 be Subset-Family of S such that
+A1:for A being Subset of S holds A in R1 iff
+   ex B being Subset of T st (B in G & A = f.:B)
+   and
+A2:for A being Subset of S holds A in R2 iff
+   ex B being Subset of T st (B in G & A = f.:B);
+     for x being set holds (x in R1 iff x in R2)
+   proof
+      let x be set;
+      thus x in R1 implies x in R2
+      proof
+         assume
+      A3:x in R1;
+         then reconsider x as Subset of S;
+           ex B being Subset of T st (B in G & x = f.:B)
+          by A1,A3;
+         hence thesis by A2;
+      end;
+      assume
+   A4:x in R2;
+      then reconsider x as Subset of S;
+        ex B being Subset of T st (B in G & x = f.:B) by A2,A4;
+      hence thesis by A1;
+   end;
+   hence thesis by TARSKI:2;
+end;
+end;
+
+theorem
+     for T,S being non empty TopSpace,
+       f being map of T,S,
+       A,B being Subset-Family of T holds
+   A c= B implies f.:A c= f.:B
+proof
+   let T,S be non empty TopSpace;
+   let f be map of T,S;
+   let A,B be Subset-Family of T;
+   assume
+A1:A c= B;
+   let x be set;
+   assume
+A2:x in f.:A;
+   then reconsider x as Subset of S;
+     ex C being Subset of T st (C in B & x = f.:C)
+   proof
+      consider C being Subset of T such that
+   A3:C in A & x = f.:C by A2,Def2;
+      take C;
+      thus thesis by A1,A3;
+   end;
+   hence thesis by Def2;
+end;
+
+theorem
+     for T,S being non empty TopSpace,
+       f being map of T,S,
+       B being Subset-Family of S,
+       P being Subset of S st
+   f.:(f"B) is_a_cover_of P holds
+   B is_a_cover_of P
+proof
+   let T,S be non empty TopSpace;
+   let f be map of T,S;
+   let B be Subset-Family of S;
+   let P be Subset of S;
+   assume f.:(f"B) is_a_cover_of P;
+then A1:P c= union (f.:(f"B)) by COMPTS_1:def 1;
+     P c= union B
+   proof
+      let x be set;
+      assume x in P;
+      then consider Y being set such that
+   A2:x in Y & Y in f.:(f"(B)) by A1,TARSKI:def 4;
+        ex Z being set st (x in Z & Z in B)
+      proof
+         reconsider Y as Subset of S by A2;
+         consider Y1 being Subset of T such that
+      A3:Y1 in f"(B) & Y = f.:Y1 by A2,Def2;
+         consider Y2 being Subset of S such that
+      A4:Y2 in B & Y1 = f"(Y2) by A3,Def1;
+         A5: f.:(f"Y2) c= Y2 by FUNCT_1:145;
+         reconsider Y2 as set;
+         take Y2;
+         thus thesis by A2,A3,A4,A5;
+      end;
+      hence thesis by TARSKI:def 4;
+   end;
+   hence thesis by COMPTS_1:def 1;
+end;
+
+theorem
+     for T,S being non empty TopSpace,
+       f being map of T,S,
+       B being Subset-Family of T,
+       P being Subset of T st
+   B is_a_cover_of P holds
+   f"(f.:B) is_a_cover_of P
+proof
+   let T,S be non empty TopSpace;
+   let f be map of T,S;
+   let B be Subset-Family of T;
+   let P be Subset of T;
+   assume B is_a_cover_of P;
+then A1:P c= union B by COMPTS_1:def 1;
+     P c= union(f"(f.:B))
+   proof
+     let x be set;
+     assume x in P;
+     then consider Y being set such that
+  A2:x in Y & Y in B by A1,TARSKI:def 4;
+       ex Z being set st (x in Z & Z in f"(f.:(B)))
+     proof
+        A3: B c= bool [#](T) by TOPS_2:1;
+        reconsider Y as Subset of T by A2;
+        set Z = f"(f.:Y);
+          dom f = [#](T) by TOPS_2:51;
+        then A4: Y c= f"(f.:Y) by A2,A3,FUNCT_1:146;
+        A5: f.:(Y) in f.:B & f"(f.:Y) = f"(f.:Y) by A2,Def2;
+        take Z;
+        thus thesis by A2,A4,A5,Def1;
+     end;
+     hence thesis by TARSKI:def 4;
+   end;
+   hence thesis by COMPTS_1:def 1;
+end;
+
+theorem
+     for T,S being non empty TopSpace,
+       f being map of T,S,
+       Q being Subset-Family of S holds
+   union(f.:(f"(Q))) c= union Q
+proof
+   let T,S be non empty TopSpace;
+   let f be map of T,S;
+   let Q be Subset-Family of S;
+   let x be set;
+   thus x in union(f.:(f"(Q))) implies x in union Q
+   proof
+      assume
+    x in union(f.:(f"Q));
+      then consider A being set such that
+   A1:x in A & A in f.:(f"Q) by TARSKI:def 4;
+      reconsider A as Subset of S by A1;
+      consider A1 being Subset of T such that
+   A2:A1 in f"Q & A = f.:A1 by A1,Def2;
+      consider A2 being Subset of S such that
+   A3:A2 in Q & A1 = f"A2 by A2,Def1;
+        f.:(f"A2) c= A2 by FUNCT_1:145;
+      hence thesis by A1,A2,A3,TARSKI:def 4;
+   end;
+end;
+
+theorem
+     for T,S being non empty TopSpace,
+       f being map of T,S,
+       P being Subset-Family of T holds
+   union P c= union(f"(f.:P))
+proof
+   let T,S be non empty TopSpace;
+   let f be map of T,S;
+   let P be Subset-Family of T;
+   let x be set;
+   assume
+ x in union P;
+   then consider A being set such that
+A1:x in A & A in P by TARSKI:def 4;
+     P c= bool [#](T) by TOPS_2:1;
+then A2:A c= [#](T) by A1;
+   reconsider A as Subset of T by A1;
+   reconsider A1 = f.:A as Subset of S;
+   reconsider A2 = f"A1 as Subset of T;
+     A c= dom f by A2,TOPS_2:51;
+   then A3: A c= A2 by FUNCT_1:146;
+     A1 in f.:P by A1,Def2;
+   then A2 in f"(f.:P) by Def1;
+   hence thesis by A1,A3,TARSKI:def 4;
+end;
+
+theorem
+     for T,S being non empty TopSpace holds
+   for f being map of T,S holds
+   for Q being Subset-Family of S holds
+   Q is finite implies f"Q is finite
+proof
+   let T,S be non empty TopSpace;
+   let f be map of T,S;
+   let Q be Subset-Family of S;
+   assume
+ Q is finite;
+      then consider s being FinSequence such that
+   A1:rng s = Q by FINSEQ_1:73;
+      defpred EF[Element of bool [#](S),Element of bool [#](T)] means
+      for s,t being set holds ($1 = s & $2 = t implies t = f"s);
+   A2:for x being Element of bool [#](S)
+      ex y being Element of bool [#](T) st EF[x,y]
+      proof
+         let x be Element of bool [#](S);
+         reconsider x as set;
+         set y = f"x;
+           for z being set holds z in f"x implies z in [#](T)
+         proof
+            let z be set;
+            assume z in f"x;
+            then z in dom f & f.z in x by FUNCT_1:def 13;
+            hence thesis by TOPS_2:51;
+         end;
+         then reconsider y as Element of bool [#](T) by TARSKI:def 3;
+         take y;
+         thus thesis;
+      end;
+      consider F being Function of bool [#](S),bool [#](T) such that
+   A3:for x being Element of bool [#](S) holds EF[x,F.x] from FuncExD(A2);
+        Q c= bool [#](S) & dom F = bool [#](S) by FUNCT_2:def 1,TOPS_2:1;
+      then reconsider q = F*s as FinSequence by A1,FINSEQ_1:20;
+      A4: F.:Q = f"Q
+      proof
+           for x being set holds x in F.:Q iff x in f"Q
+         proof
+            let x be set;
+            thus x in F.:Q implies x in f"Q
+            proof
+               assume
+             x in F.:Q;
+                  then consider y being set such that
+               A5:y in dom F & y in Q & x = F.y by FUNCT_1:def 12;
+               A6:dom F = bool [#](S) by FUNCT_2:def 1;
+                  reconsider y as Subset of S by A5;
+                    F.y = f"y by A3,A5,A6;
+                  hence thesis by A5,Def1;
+            end;
+            assume
+         A7:x in f"Q;
+            then reconsider x as Subset of T;
+            consider y being Subset of S such that
+         A8:y in Q & x = f"y by A7,Def1;
+            A9: Q c= bool [#](S) by TOPS_2:1;
+        then A10:x = F.y by A3,A8;
+              dom F = bool [#](S) by FUNCT_2:def 1;
+            hence thesis by A8,A9,A10,FUNCT_1:def 12;
+         end;
+         hence thesis by TARSKI:2;
+      end;
+        ex q being FinSequence st rng q = f"Q
+      proof
+         take q;
+         thus thesis by A1,A4,RELAT_1:160;
+      end;
+      hence thesis by FINSEQ_1:73;
+end;
+
+theorem
+     for T,S being non empty TopSpace holds
+   for f being map of T,S holds
+   for P being Subset-Family of T holds
+   P is finite implies f.:P is finite
+proof
+   let T,S be non empty TopSpace;
+   let f be map of T,S;
+   let P be Subset-Family of T;
+   assume
+ P is finite;
+      then consider s being FinSequence such that
+   A1:rng s = P by FINSEQ_1:73;
+      defpred EF[Element of bool [#](T),Element of bool [#](S)] means
+      for s,t being set holds ($1 = s & $2 = t implies t = f.:s);
+   A2:for x being Element of bool [#](T)
+      ex y being Element of bool [#](S) st EF[x,y]
+      proof
+         let x be Element of bool [#](T);
+         reconsider x as set;
+         set y = f.:x;
+           f.:x c= [#](S)
+         proof
+            let z be set;
+            assume z in f.:x;
+            then consider w being set such that
+         A3:w in dom f & w in x & z = f.w by FUNCT_1:def 12;
+              [#](T) = the carrier of T & [#](S) = the carrier of S
+            by PRE_TOPC:12;
+            then reconsider f as Function of [#](T),[#](S);
+              f.w in [#](S) by A3,FUNCT_2:7;
+            hence thesis by A3;
+         end;
+         then reconsider y as Element of bool [#](S);
+         take y;
+         thus thesis;
+      end;
+      consider F being Function of bool [#](T),bool [#](S) such that
+   A4:for x being Element of bool [#](T) holds EF[x,F.x] from FuncExD(A2);
+        P c= bool [#](T) & dom F = bool [#](T) by FUNCT_2:def 1,TOPS_2:1;
+      then reconsider q = F*s as FinSequence by A1,FINSEQ_1:20;
+      A5: F.:P = f.:P
+      proof
+           for x being set holds x in F.:P iff x in f.:P
+         proof
+            let x be set;
+            thus x in F.:P implies x in f.:P
+            proof
+               assume
+             x in F.:P;
+               then consider y being set such that
+            A6:y in dom F & y in P & x = F.y by FUNCT_1:def 12;
+            A7:dom F = bool [#](T) by FUNCT_2:def 1;
+               reconsider y as Subset of T by A6;
+                 F.y = f.:y by A4,A6,A7;
+               hence thesis by A6,Def2;
+            end;
+            thus x in f.:P implies x in F.:P
+            proof
+               assume
+           A8:x in f.:P;
+               then reconsider x as Subset of S;
+               consider y being Subset of T such that
+           A9:y in P & x = f.:y by A8,Def2;
+               A10: P c= bool [#](T) by TOPS_2:1;
+           then A11:x = F.y by A4,A9;
+                 dom F = bool [#](T) by FUNCT_2:def 1;
+               hence thesis by A9,A10,A11,FUNCT_1:def 12;
+            end;
+         end;
+         hence thesis by TARSKI:2;
+      end;
+        ex q being FinSequence st rng q = f.:P
+      proof
+         take q;
+         thus thesis by A1,A5,RELAT_1:160;
+      end;
+      hence thesis by FINSEQ_1:73;
+end;
+
+theorem Th13:
+   for T,S being non empty TopSpace holds
+   for f being map of T,S holds
+   for P being Subset of T holds
+   for F being Subset-Family of S holds
+   (ex B being Subset-Family of T st
+   (B c= f"F & B is_a_cover_of P & B is finite))
+   implies
+   (ex G being Subset-Family of S st
+   (G c= F & G is_a_cover_of f.:P & G is finite))
+proof
+   let T,S be non empty TopSpace;
+   let f be map of T,S;
+   let P be Subset of T;
+   let F be Subset-Family of S;
+   given B being Subset-Family of T such that
+A1:B c= f"F & B is_a_cover_of P & B is finite;
+A2:P c= union B by A1,COMPTS_1:def 1;
+     now per cases;
+   case
+   A3:P <> {};
+   thus ex G being Subset-Family of S st
+   (G c= F & G is_a_cover_of f.:P & G is finite)
+   proof
+    B <> {} by A2,A3,XBOOLE_1:3,ZFMISC_1:2;
+      then consider D being non empty set such that
+A4:    D = B;
+      defpred P0[Element of D,Element of (bool [#](S))] means
+           for x being Element of D st $1 = x holds
+           for y being Element of (bool [#](S)) st $2 = y holds
+           (y in F & x = f"y);
+   A5:for x being Element of D
+      ex y being Element of bool [#](S) st P0[x,y]
+      proof
+         let x be Element of D;
+      A6:x in B by A4;
+         then reconsider x as Subset of T;
+         consider y being Subset of S such that
+     A7:y in F & x = f"y by A1,A6,Def1;
+         reconsider y as Element of bool [#](S) by PRE_TOPC:12;
+         take y;
+         thus thesis by A7;
+      end;
+      consider F0 being Function of D,bool [#](S) such that
+  A8:for x being Element of D holds P0[x,F0.x] from FuncExD(A5);
+      A9: for x being Element of D holds (F0.x in F & x = f"(F0.x)) by A8;
+      reconsider F0 as Function of B,bool [#](S) by A4;
+      consider s being FinSequence such that
+  A10:rng s = B by A1,FINSEQ_1:73;
+  A11:dom F0 = B by FUNCT_2:def 1;
+      then reconsider q = F0*s as FinSequence by A10,FINSEQ_1:20;
+      set G = rng q;
+  A12:G c= F
+      proof
+          let x be set;
+          assume
+       x in G;
+          then consider y being set such that
+      A13:y in dom q & x = q.y by FUNCT_1:def 5;
+      A14:s.y in B by A11,A13,FUNCT_1:21;
+       x = F0.(s.y) by A13,FUNCT_1:22;
+          hence thesis by A4,A9,A14;
+      end;
+      then G c= bool the carrier of S by XBOOLE_1:1;
+      then reconsider G as Subset-Family of S by SETFAM_1:def 7;
+      reconsider G as Subset-Family of S;
+      take G;
+    G is_a_cover_of f.:P
+      proof
+           f.:P c= union G
+         proof
+              for x being set holds x in f.:P implies x in union G
+            proof
+               let x be set;
+               assume
+           A15:x in f.:P;
+                 ex A being set st x in A & A in G
+               proof
+                  consider y being set such that
+              A16:y in dom f & y in P & x = f.y
+                  by A15,FUNCT_1:def 12;
+                  consider C being set such that
+              A17:y in C & C in B by A2,A16,TARSKI:def 4;
+                F0.C in F & C = f"(F0.C) by A4,A9,A17;
+              then A18:x in f.:(f"(F0.C)) by A16,A17,FUNCT_1:def 12;
+                  A19: f.:(f"(F0.C)) c= F0.C by FUNCT_1:145;
+              A20:G = rng F0 by A10,A11,RELAT_1:47;
+                  set A = F0.C;
+                  take A;
+                  thus thesis by A17,A18,A19,A20,FUNCT_2:6;
+               end;
+               hence x in union G by TARSKI:def 4;
+            end;
+            hence thesis by TARSKI:def 3;
+         end;
+         hence thesis by COMPTS_1:def 1;
+      end;
+      hence thesis by A12,FINSEQ_1:73;
+   end;
+   hence thesis;
+   case
+   A21:P = {};
+        ex G being Subset-Family of S st
+      (G c= F & G is_a_cover_of f.:P & G is finite)
+      proof
+         set G = {};
+      A22:f.:P = {}
+         proof
+            assume f.:P <> {};
+            then consider x being set such that
+         A23:x in f.:P by XBOOLE_0:def 1;
+            consider z being set such that
+         A24:z in dom f & z in P & x = f.z by A23,FUNCT_1:def 12;
+            thus contradiction by A21,A24;
+         end;
+           G c= bool the carrier of S by XBOOLE_1:2;
+         then reconsider G as Subset-Family of S by SETFAM_1:def
+7;
+         reconsider G as Subset-Family of S;
+         take G;
+         thus thesis by A22,COMPTS_1:def 1,XBOOLE_1:2,ZFMISC_1:2;
+      end;
+      hence thesis;
+   end;
+   hence thesis;
+end;
+
+begin
+::
+::                       The Weierstrass` theorem
+::
+
+theorem Th14:
+   for T,S being non empty TopSpace holds
+   for f being map of T,S holds
+   for P being Subset of T holds
+   (P is compact & f is continuous) implies f.:P is compact
+proof
+   let T,S be non empty TopSpace;
+   let f be map of T,S;
+   let P be Subset of T;
+   assume
+A1:P is compact & f is continuous;
+     P is Subset of [#]T by PRE_TOPC:12;
+then P c= [#]T;
+then A2:P c= dom f by TOPS_2:51;
+     for F0 being Subset-Family of S st
+     (F0 is_a_cover_of f.:P & F0 is open)
+   ex G being Subset-Family of S st
+   (G c= F0 & G is_a_cover_of f.:P & G is finite)
+   proof
+      let F0 be Subset-Family of S;
+      assume
+   A3:F0 is_a_cover_of f.:P & F0 is open;
+then A4:f.:P c= union F0 by COMPTS_1:def 1;
+      set B0 = f"F0;
+   A5:B0 is open by A1,A3,Th5;
+        P c= union B0
+      proof
+         let x be set;
+         thus x in P implies x in union B0
+         proof
+            assume
+         A6:x in P;
+        then A7:f.x in f.:P by A2,FUNCT_1:def 12;
+            reconsider x as Point of T by A6;
+         A8:f.x in union F0 by A4,A7;
+         A9:f"{f.x} c= f"(union F0)
+            proof
+               let y be set;
+               assume y in f"{f.x};
+               then y in dom f & f.y in {f.x} by FUNCT_1:def 13;
+               then y in dom f & f.y in union F0 by A8,TARSKI:def 1;
+               hence thesis by FUNCT_1:def 13;
+            end;
+        A10:f"(union F0) c= union(f"F0)
+            proof
+               let y be set;
+               assume
+           A11:y in f"(union F0);
+               thus y in union(f"F0)
+               proof
+              A12:y in dom f & f.y in union F0 by A11,FUNCT_1:def 13;
+                  then consider Q being set such that
+              A13:f.y in Q & Q in F0 by TARSKI:def 4;
+                    ex Z being set st y in Z & Z in f"F0
+                  proof
+                     set Z = f"Q;
+                     take Z;
+                     thus thesis by A12,A13,Def1,FUNCT_1:def 13;
+                  end;
+                  hence thesis by TARSKI:def 4;
+               end;
+            end;
+              x in dom f & f.x in {f.x} by A2,A6,TARSKI:def 1;
+            then x in f"{f.x} by FUNCT_1:def 13;
+            then x in f"(union F0) by A9;
+            hence thesis by A10;
+         end;
+      end;
+      then B0 is_a_cover_of P by COMPTS_1:def 1;
+      then consider B being Subset-Family of T such that
+  A14:B c= B0 & B is_a_cover_of P & B is finite by A1,A5,COMPTS_1:def 7;
+      consider G being Subset-Family of S such that
+   A15:G c= F0 & G is_a_cover_of f.:P & G is finite by A14,Th13;
+      take G;
+      thus thesis by A15;
+   end;
+   hence thesis by COMPTS_1:def 7;
+end;
+
+theorem
+    for T being non empty TopSpace holds
+   for f being map of T,R^1 holds
+   for P being Subset of T holds
+   P is compact & f is continuous implies f.:P is compact by Th14;
+
+theorem
+     for f being map of TOP-REAL 2,R^1 holds
+   for P being Subset of TOP-REAL 2 holds
+   P is compact & f is continuous implies f.:P is compact by Th14;
+
+definition
+   let P be Subset of R^1;
+   func [#](P) -> Subset of REAL equals
+:Def3: P;
+correctness by TOPMETR:24;
+end;
+
+theorem Th17:
+   for P being Subset of R^1 holds
+   P is compact implies [#](P) is bounded
+proof
+   let P be Subset of R^1;
+   assume
+A1:P is compact;
+   thus [#](P) is bounded
+   proof
+        now per cases;
+      case [#](P) <> {};
+         set r0 = 1;
+         defpred P[Subset of R^1] means
+          ex x being Point of RealSpace st x in [#](P) & $1 = Ball(x,r0);
+         consider R being Subset-Family of R^1 such that
+      A2:for A being Subset of R^1 holds A in R iff P[A]
+         from SubFamExS;
+      A3:R is open
+         proof
+              for A being Subset of R^1 holds A in R implies A is open
+            proof
+               let A be Subset of R^1;
+               assume A in R;
+               then consider x being Point of RealSpace such that
+            A4:x in [#](P) & A = Ball(x,r0) by A2;
+               thus thesis by A4,TOPMETR:21,def 7;
+            end;
+            hence thesis by TOPS_2:def 1;
+         end;
+           [#](P) c= union R
+         proof
+              for x being set holds x in [#](P) implies x in union R
+            proof
+               let x be set;
+               assume
+            A5:x in [#](P);
+               then reconsider x as Point of RealSpace by METRIC_1:def 14;
+               consider A being Subset of RealSpace
+               such that
+            A6:A = Ball(x,r0);
+                 R^1 = TopStruct (#the carrier of RealSpace,
+               Family_open_set(RealSpace)#) by PCOMPS_1:def 6,TOPMETR:def 7;
+               then reconsider A as Subset of R^1;
+                 ex A being set st x in A & A in R
+               proof
+                  A7: dist(x,x) = 0 by METRIC_1:1;
+                  take A;
+                  thus thesis by A2,A5,A6,A7,METRIC_1:12;
+               end;
+               hence thesis by TARSKI:def 4;
+            end;
+            hence thesis by TARSKI:def 3;
+         end;
+         then P c= union R by Def3;
+         then R is_a_cover_of P by COMPTS_1:def 1;
+         then consider R0 being Subset-Family of R^1 such that
+     A8:R0 c= R & R0 is_a_cover_of P & R0 is finite
+         by A1,A3,COMPTS_1:def 7;
+           P c= union R0 by A8,COMPTS_1:def 1;
+      then A9:[#](P) c= union R0 by Def3;
+      A10:for A being set holds A in R0 implies
+         ex x being Point of RealSpace,r being Real st
+         A = Ball(x,r)
+         proof
+            let A be set;
+            assume A11: A in R0;
+            then reconsider A as Subset of R^1;
+            consider x being Point of RealSpace such that
+         A12:x in [#](P) & A = Ball(x,r0) by A2,A8,A11;
+            take x;
+            take r0;
+            thus thesis by A12;
+         end;
+           R^1 = TopStruct (#the carrier of RealSpace,
+         Family_open_set(RealSpace)#) by PCOMPS_1:def 6,TOPMETR:def 7;
+         then reconsider R0 as Subset-Family of RealSpace;
+           R0 is_ball-family by A10,TOPMETR:def 4;
+         then consider x1 being Point of RealSpace such that
+      A13:ex r1 being Real st union R0 c= Ball(x1,r1) by A8,Th3;
+         consider r1 being Real such that
+      A14:union R0 c= Ball(x1,r1) by A13;
+      A15:[#](P) c= Ball(x1,r1) by A9,A14,XBOOLE_1:1;
+         reconsider x1 as Real by METRIC_1:def 14;
+      A16:for p being Real holds
+         p in [#](P) implies (x1 - r1 <= p & p <= x1 + r1)
+         proof
+            let p be Real;
+            assume
+        A17:p in [#](P);
+            reconsider a=x1,b=p as Element of RealSpace by
+METRIC_1:def 14;
+              dist(a,b) < r1 by A15,A17,METRIC_1:12;
+            then abs(x1-p) < r1 by TOPMETR:15;
+            then -r1 <= x1 - p & x1 - p <= r1 by ABSVALUE:12;
+            then -r1 + p <= x1 & x1 <= p + r1 by REAL_1:84,86;
+            then p <= x1 -(-r1) & x1 - r1 <= p by REAL_1:84,86;
+            then p <= x1 + (-(-r1)) & x1 - r1 <= p by XCMPLX_0:def 8;
+            hence thesis;
+         end;
+      A18:[#](P) is bounded_above
+         proof
+              ex p being real number st for r being real number st r in [#](P)
+             holds r <= p
+            proof
+               take x1 + r1;
+               thus thesis by A16;
+            end;
+            hence thesis by SEQ_4:def 1;
+         end;
+           [#](P) is bounded_below
+         proof
+              ex p being real number st for r being real number st r in [#](P)
+             holds p <= r
+            proof
+               take x1 - r1;
+               thus thesis by A16;
+            end;
+            hence thesis by SEQ_4:def 2;
+         end;
+         hence thesis by A18,SEQ_4:def 3;
+      case
+      A19:[#](P) = {};
+      A20:[#](P) is bounded_above
+         proof
+              ex p being real number st for r being real number st r in [#](P)
+             holds r <= p
+            proof
+               take 0;
+               thus thesis by A19;
+            end;
+            hence thesis by SEQ_4:def 1;
+         end;
+           [#](P) is bounded_below
+         proof
+              ex p being real number st for r being real number st r in [#](P)
+            holds p <= r
+            proof
+               take 0;
+               thus thesis by A19;
+            end;
+            hence thesis by SEQ_4:def 2;
+         end;
+         hence thesis by A20,SEQ_4:def 3;
+      end;
+      hence thesis;
+   end;
+   thus thesis;
+end;
+
+theorem Th18:
+   for P being Subset of R^1 holds
+   P is compact implies [#](P) is closed
+proof
+   let P be Subset of R^1;
+   assume
+A1:P is compact;
+     now per cases;
+   case
+   A2:[#](P) <> {};
+   A3:R^1 is_T2 by PCOMPS_1:38,TOPMETR:def 7;
+        for s1 being Real_Sequence st
+      (rng s1) c= [#](P) & s1 is convergent holds
+      lim s1 in [#](P)
+      proof
+         let s1 be Real_Sequence;
+         assume A4: (rng s1) c= [#](P) & s1 is convergent;
+      then A5:(rng s1) c= P & s1 is convergent by Def3;
+         set x = lim s1;
+         reconsider x as Point of R^1 by TOPMETR:24;
+         thus lim s1 in [#](P)
+         proof
+            assume not lim s1 in [#](P);
+            then A6: not lim s1 in P by Def3;
+              P <> {} by A2,Def3;
+            then consider Otx,OtP being Subset of R^1 such that
+         A7:Otx is open & OtP is open &
+            x in Otx & P c= OtP & Otx misses OtP
+            by A1,A3,A6,COMPTS_1:15;
+              rng s1 c= OtP by A5,A7,XBOOLE_1:1;
+            then A8:         (rng s1) misses Otx by A7,XBOOLE_1:63;
+        A9: R^1 = TopStruct (#the carrier of RealSpace,
+                  Family_open_set(RealSpace)#) by PCOMPS_1:def 6,TOPMETR:def 7;
+            then reconsider x as Point of RealSpace;
+            consider r being real number such that
+        A10:r>0 & Ball(x,r) c= Otx by A7,TOPMETR:22,def 7;
+            reconsider r as Real by XREAL_0:def 1;
+            A11: Ball(x,r) misses (rng s1) by A8,A10,XBOOLE_1:63;
+        A12:Ball(x,r) =
+            {q where q is Element of RealSpace
+            :dist(x,q)<r} by METRIC_1:18;
+              not ex n being Nat st
+            for m being Nat st n<=m holds abs(s1.m-(lim s1)) < r
+            proof
+               given n being Nat such that
+           A13:for m being Nat st n<=m holds abs(s1.m-(lim s1)) < r;
+               set m = n + 1;
+                 n <= m by NAT_1:29;
+               then abs(s1.m-(lim s1)) < r by A13;
+               then real_dist.(s1.m,lim s1) < r by METRIC_1:def 13;
+           then A14:real_dist.(lim s1,s1.m) < r by METRIC_1:10;
+               reconsider y = s1.m as Element of RealSpace by A9
+,TOPMETR:24;
+                 dist(x,y) = (the distance of RealSpace).(x,y)
+               by METRIC_1:def 1;
+           then A15:y in Ball(x,r) by A12,A14,METRIC_1:def 14;
+                 s1.m in rng s1 by FUNCT_2:6;
+               then y in Ball(x,r) /\ (rng s1) by A15,XBOOLE_0:def 3;
+               hence thesis by A11,XBOOLE_0:def 7;
+            end;
+            hence thesis by A4,A10,SEQ_2:def 7;
+         end;
+      end;
+      hence thesis by RCOMP_1:def 4;
+   case
+   A16:[#](P) = {};
+        for s1 being Real_Sequence st
+      (rng s1) c= [#](P) & s1 is convergent holds lim s1 in [#](P)
+      proof
+         let s1 be Real_Sequence;
+         assume
+      A17:(rng s1) c= [#](P) & s1 is convergent;
+         consider x being set such that
+      A18:x in NAT by XBOOLE_0:def 1;
+           s1.x in rng s1 by A18,FUNCT_2:6;
+         hence thesis by A16,A17;
+      end;
+      hence thesis by RCOMP_1:def 4;
+   end;
+   hence thesis;
+end;
+
+theorem Th19:
+   for P being Subset of R^1 holds
+   P is compact implies [#](P) is compact
+proof
+   let P be Subset of R^1;
+   assume
+A1:P is compact;
+     now per cases;
+   case
+     [#](P) <> {};
+   A2:[#](P) is bounded by A1,Th17;
+        [#](P) is closed by A1,Th18;
+      hence thesis by A2,RCOMP_1:29;
+   case
+   A3:[#](P) = {};
+      assume
+        not [#](P) is compact;
+      then consider s1 being Real_Sequence such that
+   A4:(rng s1) c= [#](P) &
+      not (ex s2 being Real_Sequence st s2 is_subsequence_of s1 &
+      s2 is convergent & (lim s2) in [#](P)) by RCOMP_1:def 3;
+      consider x being set such that
+   A5:x in NAT by XBOOLE_0:def 1;
+        s1.x in rng s1 by A5,FUNCT_2:6;
+      hence thesis by A3,A4;
+   end;
+   hence thesis;
+end;
+
+Lm1:
+   for T being non empty TopSpace holds
+   for f being map of T,R^1 holds
+   for P being Subset of T holds
+   (P <> {} & P is compact & f is continuous) implies
+   ex x1,x2 being Point of T st
+   (x1 in P & x2 in P &
+   f.x1 = upper_bound [#](f.:P) & f.x2 = lower_bound [#](f.:P))
+proof
+   let T be non empty TopSpace;
+   let f be map of T,R^1;
+   let P be Subset of T;
+   assume
+A1:P <> {} & P is compact & f is continuous;
+A2:[#](f.:P) <> {}
+   proof
+   A3: dom f = the carrier of T by FUNCT_2:def 1;
+      consider x being set such that
+   A4:x in P by A1,XBOOLE_0:def 1;
+        f.x in f.:P by A3,A4,FUNCT_1:def 12;
+      hence thesis by Def3;
+   end;
+A5:f.:P is compact by A1,Th14;
+   consider y1,y2 being Real such that
+A6:y1 = upper_bound [#](f.:P) and
+A7:y2 = lower_bound [#](f.:P);
+     [#](f.:P) is compact by A5,Th19;
+then A8:y1 in [#](f.:P) & y2 in [#](f.:P) by A2,A6,A7,RCOMP_1:32;
+   A9: [#](f.:P) = f.:P by Def3;
+   then consider x1 being set such that
+A10:x1 in dom f & x1 in P & y1 = f.x1 by A8,FUNCT_1:def 12;
+   consider x2 being set such that
+A11:x2 in dom f & x2 in P & y2 = f.x2 by A8,A9,FUNCT_1:def 12;
+   reconsider x1,x2 as Point of T by A10,A11;
+   take x1;
+   take x2;
+   thus thesis by A6,A7,A10,A11;
+end;
+
+definition
+   let P be Subset of R^1;
+   func upper_bound(P) -> Real equals
+   :Def4: upper_bound([#](P));
+correctness;
+   func lower_bound(P) -> Real equals
+   :Def5: lower_bound([#](P));
+correctness;
+end;
+
+theorem Th20:
+   for T being non empty TopSpace holds
+   for f being map of T,R^1 holds
+   for P being Subset of T holds
+   (P <> {} & P is compact & f is continuous) implies
+   ex x1 being Point of T st
+   (x1 in P & f.x1 = upper_bound(f.:P))
+proof
+   let T be non empty TopSpace;
+   let f be map of T,R^1;
+   let P be Subset of T;
+   assume P <> {} & P is compact & f is continuous;
+   then consider x1,x2 being Point of T such that
+A1:x1 in P & x2 in P &
+   f.x1 = upper_bound [#](f.:P) & f.x2 = lower_bound [#](f.:P) by Lm1;
+   take x1;
+   thus thesis by A1,Def4;
+end;
+
+theorem Th21:
+   for T being non empty TopSpace holds
+   for f being map of T,R^1 holds
+   for P being Subset of T holds
+   (P <> {} & P is compact & f is continuous) implies
+   ex x2 being Point of T st
+   (x2 in P & f.x2 = lower_bound(f.:P))
+proof
+   let T be non empty TopSpace;
+   let f be map of T,R^1;
+   let P be Subset of T;
+   assume P <> {} & P is compact & f is continuous;
+   then consider x1,x2 being Point of T such that
+A1:x1 in P & x2 in P &
+   f.x1 = upper_bound [#](f.:P) & f.x2 = lower_bound [#](f.:P) by Lm1;
+   take x2;
+   thus thesis by A1,Def5;
+end;
+
+begin
+::
+::           The measure of the distance between compact sets
+::
+
+
+definition
+   let M be non empty MetrSpace;
+   let x be Point of M;
+   func dist(x) -> map of TopSpaceMetr(M),R^1 means
+:Def6:for y being Point of M holds
+           it.y = dist(y,x);
+existence
+proof
+   defpred EF[Element of M,Element of R^1] means
+      for s being Element of M holds
+      for t being Element of R^1 holds
+      ($1 = s & $2 = t implies t = dist(s,x));
+A1:for s being Element of M
+   ex t being Element of R^1 st EF[s,t]
+   proof
+      let s be Element of M;
+      consider t being Real such that
+   A2:t = dist(s,x);
+      reconsider t as Element of R^1 by TOPMETR:24;
+      take t;
+      thus thesis by A2;
+   end;
+   consider F being Function of the carrier of M,the carrier of R^1
+   such that
+A3:for x being Element of M holds EF[x,F.x]
+   from FuncExD(A1);
+A4:for y being Point of M holds F.y = dist(y,x) by A3;
+     TopSpaceMetr(M)=TopStruct (#the carrier of M,Family_open_set(M)#)
+   by PCOMPS_1:def 6;
+   then reconsider F as map of TopSpaceMetr(M),R^1;
+   take F;
+   thus thesis by A4;
+end;
+uniqueness
+proof
+   let F1,F2 be map of TopSpaceMetr(M),R^1;
+   assume
+A5:for y being Point of M holds F1.y = dist(y,x);
+   assume
+A6:for y being Point of M holds F2.y = dist(y,x);
+     F1 = F2
+   proof
+        for y being set st y in the carrier of TopSpaceMetr(M) holds
+      F1.y = F2.y
+      proof
+         let y be set;
+         assume
+      A7:y in the carrier of TopSpaceMetr(M);
+           TopSpaceMetr(M)=TopStruct (#the carrier of M,Family_open_set(M)#)
+         by PCOMPS_1:def 6;
+         then reconsider y as Point of M by A7;
+           F1.y = dist(y,x) by A5
+             .= F2.y by A6;
+         hence thesis;
+      end;
+      hence thesis by FUNCT_2:18;
+   end;
+   hence thesis;
+end;
+end;
+
+theorem Th22:
+   for M being non empty MetrSpace holds
+   for x being Point of M holds
+   dist(x) is continuous
+proof
+   let M be non empty MetrSpace;
+   let x be Point of M;
+     for P being Subset of R^1 st P is open holds
+   (dist(x))"P is open
+   proof
+      let P be Subset of R^1;
+      assume
+   A1:P is open;
+      thus (dist(x))"P is open
+      proof
+           for p being Point of M st p in (dist(x))"P
+         ex r being real number st r>0 & Ball(p,r) c= (dist(x))"P
+         proof
+            let p be Point of M;
+            assume
+          p in (dist(x))"P;
+            then A2: p in dom dist(x) & (dist(x)).p in P by FUNCT_1:def 13;
+            consider y being Point of RealSpace such that
+         A3:y = dist(p,x) by METRIC_1:def 14;
+            reconsider P as Subset of TopSpaceMetr(RealSpace)
+              by TOPMETR:def 7;
+              y in P by A2,A3,Def6;
+            then consider r being real number such that
+         A4:r>0 & Ball(y,r) c= P by A1,TOPMETR:22,def 7;
+            reconsider r as Real by XREAL_0:def 1;
+         A5:Ball(p,r) c= (dist(x))"P
+            proof
+               let z be set;
+               assume
+            A6:z in Ball(p,r);
+               then reconsider z as Point of M;
+            A7:dist(p,z) < r by A6,METRIC_1:12;
+                 abs(dist(p,x)-dist(z,x)) <= dist(p,z)
+               by METRIC_6:1;
+               then abs(dist(p,x)-dist(z,x))+dist(p,z) < r+dist(p,z)
+               by A7,REAL_1:67;
+           then A8:abs(dist(p,x)-dist(z,x)) < r by AXIOMS:24;
+               consider q being Point of RealSpace such that
+           A9:q = dist(z,x) by METRIC_1:def 14;
+                 dist(y,q) < r by A3,A8,A9,TOPMETR:15;
+               then q in Ball(y,r) by METRIC_1:12;
+           then q in P by A4;
+           then A10:(dist(x)).z in P by A9,Def6;
+                 dom (dist(x)) = the carrier of TopSpaceMetr(M)
+               by FUNCT_2:def 1;
+               then dom (dist(x)) = the carrier of M by TOPMETR:16;
+               hence thesis by A10,FUNCT_1:def 13;
+            end;
+            take r;
+            thus thesis by A4,A5;
+         end;
+         hence thesis by TOPMETR:22;
+      end;
+   end;
+   hence thesis by TOPS_2:55;
+end;
+
+theorem Th23:
+   for M being non empty MetrSpace holds
+   for x being Point of M holds
+   for P being Subset of TopSpaceMetr(M) holds
+   (P <> {} & P is compact) implies
+   ex x1 being Point of TopSpaceMetr(M) st
+   (x1 in P & (dist(x)).x1 = upper_bound((dist(x)).:P))
+proof
+   let M be non empty MetrSpace;
+   let x be Point of M;
+   let P be Subset of TopSpaceMetr(M);
+   assume
+A1:P <> {} & P is compact;
+     dist(x) is continuous by Th22;
+   hence thesis by A1,Th20;
+end;
+
+theorem Th24:
+   for M being non empty MetrSpace holds
+   for x being Point of M holds
+   for P being Subset of TopSpaceMetr(M) holds
+   (P <> {} & P is compact) implies
+   ex x2 being Point of TopSpaceMetr(M) st
+   (x2 in P & (dist(x)).x2 = lower_bound((dist(x)).:P))
+proof
+   let M be non empty MetrSpace;
+   let x be Point of M;
+   let P be Subset of TopSpaceMetr(M);
+   assume
+A1:P <> {} & P is compact;
+     dist(x) is continuous by Th22;
+   hence thesis by A1,Th21;
+end;
+
+definition
+   let M be non empty MetrSpace;
+   let P be Subset of TopSpaceMetr(M);
+   func dist_max(P) -> map of TopSpaceMetr(M),R^1 means
+:Def7:for x being Point of M holds
+         it.x = upper_bound((dist(x)).:P);
+existence
+proof
+   defpred EF[Element of M,Element of R^1] means
+      for s being Element of M holds
+      for t being Element of R^1 holds
+      ($1 = s & $2 = t implies t = upper_bound((dist(s)).:P));
+A1:for s being Element of M
+   ex t being Element of R^1 st EF[s,t]
+   proof
+      let s be Element of M;
+      consider t being Real such that
+   A2:t = upper_bound((dist(s)).:P);
+      reconsider t as Element of R^1 by TOPMETR:24;
+      take t;
+      thus thesis by A2;
+   end;
+   consider F being Function of the carrier of M,the carrier of R^1
+   such that
+A3:for x being Element of M holds EF[x,F.x]
+   from FuncExD(A1);
+A4:for y being Point of M holds
+   F.y = upper_bound((dist(y)).:P) by A3;
+     TopSpaceMetr(M)=TopStruct (#the carrier of M,Family_open_set(M)#)
+   by PCOMPS_1:def 6;
+   then reconsider F as map of TopSpaceMetr(M),R^1;
+   take F;
+   thus thesis by A4;
+end;
+uniqueness
+proof
+   let F1,F2 be map of TopSpaceMetr(M),R^1;
+   assume
+A5:for y being Point of M holds F1.y = upper_bound((dist(y)).:P);
+   assume
+A6:for y being Point of M holds F2.y = upper_bound((dist(y)).:P);
+     F1 = F2
+   proof
+        for y being set st y in the carrier of TopSpaceMetr(M) holds
+      F1.y = F2.y
+      proof
+         let y be set;
+         assume
+      A7:y in the carrier of TopSpaceMetr(M);
+           TopSpaceMetr(M)=TopStruct (#the carrier of M,Family_open_set(M)#)
+         by PCOMPS_1:def 6;
+         then reconsider y as Point of M by A7;
+           F1.y = upper_bound((dist(y)).:P) by A5
+             .= F2.y by A6;
+         hence thesis;
+      end;
+      hence thesis by FUNCT_2:18;
+   end;
+   hence thesis;
+end;
+
+   func dist_min(P) -> map of TopSpaceMetr(M),R^1 means
+:Def8:for x being Point of M holds
+         it.x = lower_bound((dist(x)).:P);
+existence
+proof
+   defpred EF[Element of M,Element of R^1] means
+      for s being Element of M holds
+      for t being Element of R^1 holds
+      ($1 = s & $2 = t implies t = lower_bound((dist(s)).:P));
+A8:for s being Element of M
+   ex t being Element of R^1 st EF[s,t]
+   proof
+      let s be Element of M;
+      consider t being Real such that
+   A9:t = lower_bound((dist(s)).:P);
+      reconsider t as Element of R^1 by TOPMETR:24;
+      take t;
+      thus thesis by A9;
+   end;
+   consider F being Function of the carrier of M,the carrier of R^1
+   such that
+A10:for x being Element of M holds EF[x,F.x]
+   from FuncExD(A8);
+A11:for y being Point of M holds
+   F.y = lower_bound((dist(y)).:P) by A10;
+     TopSpaceMetr(M)=TopStruct (#the carrier of M,Family_open_set(M)#)
+   by PCOMPS_1:def 6;
+   then reconsider F as map of TopSpaceMetr(M),R^1;
+   take F;
+   thus thesis by A11;
+end;
+uniqueness
+proof
+   let F1,F2 be map of TopSpaceMetr(M),R^1;
+   assume
+A12:for y being Point of M holds F1.y = lower_bound((dist(y)).:P);
+   assume
+A13:for y being Point of M holds F2.y = lower_bound((dist(y)).:P);
+     F1 = F2
+   proof
+        for y being set st y in the carrier of TopSpaceMetr(M) holds
+      F1.y = F2.y
+      proof
+         let y be set;
+         assume
+      A14:y in the carrier of TopSpaceMetr(M);
+           TopSpaceMetr(M)=TopStruct (#the carrier of M,Family_open_set(M)#)
+         by PCOMPS_1:def 6;
+         then reconsider y as Point of M by A14;
+           F1.y = lower_bound((dist(y)).:P) by A12
+             .= F2.y by A13;
+         hence thesis;
+      end;
+      hence thesis by FUNCT_2:18;
+   end;
+   hence thesis;
+end;
+end;
+
+theorem Th25:
+   for M being non empty MetrSpace holds
+   for P being Subset of TopSpaceMetr(M) st P is compact
+   for p1,p2 being Point of M holds
+   p1 in P implies dist(p1,p2) <= upper_bound((dist(p2)).:P) &
+   lower_bound((dist(p2)).:P) <= dist(p1,p2)
+proof
+   let M be non empty MetrSpace;
+   let P be Subset of TopSpaceMetr(M);
+   assume
+A1: P is compact;
+   let p1,p2 be Point of M;
+   assume
+A2:p1 in P;
+     dist(p2) is continuous by Th22;
+   then (dist(p2)).:P is compact by A1,Th14;
+then A3:[#]((dist(p2)).:P) is bounded by Th17;
+A4:dist(p1,p2) in [#]((dist(p2)).:P)
+   proof
+   A5:dist(p1,p2) = (dist(p2)).p1 by Def6;
+        dom (dist(p2)) = the carrier of TopSpaceMetr(M) by FUNCT_2:def 1;
+      then (dist(p2)).p1 in (dist(p2)).:P by A2,FUNCT_1:def 12;
+      hence thesis by A5,Def3;
+   end;
+A6:dist(p1,p2) <= upper_bound((dist(p2)).:P)
+   proof
+   A7:[#]((dist(p2)).:P) is bounded_above by A3,SEQ_4:def 3;
+    upper_bound((dist(p2)).:P) = upper_bound([#]((dist(p2)).:P))
+      by Def4;
+      hence thesis by A4,A7,SEQ_4:def 4;
+   end;
+     lower_bound((dist(p2)).:P) <= dist(p1,p2)
+   proof
+   A8:[#]((dist(p2)).:P) is bounded_below by A3,SEQ_4:def 3;
+    lower_bound((dist(p2)).:P) = lower_bound([#]((dist(p2)).:P))
+      by Def5;
+      hence thesis by A4,A8,SEQ_4:def 5;
+   end;
+   hence thesis by A6;
+end;
+
+theorem Th26:
+   for M being non empty MetrSpace holds
+   for P being Subset of TopSpaceMetr(M) st
+   (P <> {} & P is compact) holds
+   for p1,p2 being Point of M holds
+   abs(upper_bound((dist(p1)).:P) - upper_bound((dist(p2)).:P)) <= dist(p1,p2)
+proof
+   let M be non empty MetrSpace;
+   let P be Subset of TopSpaceMetr(M);
+   assume
+A1:P <> {} & P is compact;
+   let p1,p2 be Point of M;
+      consider x1 being Point of TopSpaceMetr(M) such that
+   A2:x1 in P & (dist(p1)).x1 = upper_bound((dist(p1)).:P) by A1,Th23;
+      consider x2 being Point of TopSpaceMetr(M) such that
+   A3:x2 in P & (dist(p2)).x2 = upper_bound((dist(p2)).:P) by A1,Th23;
+      A4: TopSpaceMetr(M)=TopStruct (#the carrier of M,Family_open_set(M)#)
+      by PCOMPS_1:def 6;
+      then reconsider x1 as Point of M;
+      reconsider x2 as Point of M by A4;
+      A5: (dist(p1)).x1 = dist(x1,p1) by Def6;
+   A6:dist(x1,p1) = upper_bound((dist(p1)).:P) by A2,Def6;
+      A7: (dist(p2)).x2 = dist(x2,p2) by Def6;
+   A8:dist(x2,p2) = upper_bound((dist(p2)).:P) by A3,Def6;
+      A9: dist(x1,p1) <= dist(x1,p2) + dist(p2,p1) &
+      dist(x2,p2) <= dist(x2,p1) + dist(p1,p2) by METRIC_1:4;
+   A10:dist(x1,p2) <= dist(x2,p2) by A1,A2,A3,A7,Th25;
+   A11:dist(x2,p1) <= dist(x1,p1) by A1,A2,A3,A5,Th25;
+        dist(x1,p1) - dist(x2,p2) <=
+      dist(x1,p2) + dist(p1,p2) - dist(x1,p2)
+      by A9,A10,REAL_1:92;
+   then A12:dist(x1,p1) - dist(x2,p2) <= dist(p1,p2) by XCMPLX_1:26;
+        dist(x2,p2) - dist(x1,p1) <=
+      dist(x2,p1) + dist(p1,p2) - dist(x2,p1)
+      by A9,A11,REAL_1:92;
+      then dist(x2,p2) - dist(x1,p1) <= dist(p1,p2) by XCMPLX_1:26;
+      then -(dist(x1,p1) - dist(x2,p2)) <= dist(p1,p2) by XCMPLX_1:143;
+      then -dist(p1,p2) <= -(-(dist(x1,p1) - dist(x2,p2))) by REAL_1:50;
+      hence thesis by A6,A8,A12,ABSVALUE:12;
+end;
+
+theorem
+     for M being non empty MetrSpace holds
+   for P being Subset of TopSpaceMetr(M) st
+   (P <> {} & P is compact) holds
+   for p1,p2 being Point of M holds
+   for x1,x2 being Real holds
+   x1 = (dist_max(P)).p1 & x2 = (dist_max(P)).p2 implies
+   abs(x1 - x2) <= dist(p1,p2)
+proof
+   let M be non empty MetrSpace;
+   let P be Subset of TopSpaceMetr(M);
+   assume
+A1:P <> {} & P is compact;
+   let p1,p2 be Point of M;
+   let x1,x2 be Real;
+   assume
+A2:x1 = (dist_max(P)).p1 & x2 = (dist_max(P)).p2;
+     (dist_max(P)).p1 = upper_bound((dist(p1)).:P) &
+   (dist_max(P)).p2 = upper_bound((dist(p2)).:P) by Def7;
+   hence thesis by A1,A2,Th26;
+end;
+
+theorem Th28:
+   for M being non empty MetrSpace holds
+   for P being Subset of TopSpaceMetr(M) st
+   (P <> {} & P is compact) holds
+   for p1,p2 being Point of M holds
+   abs(lower_bound((dist(p1)).:P) - lower_bound((dist(p2)).:P)) <= dist(p1,p2)
+proof
+   let M be non empty MetrSpace;
+   let P be Subset of TopSpaceMetr(M);
+   assume
+A1:P <> {} & P is compact;
+   let p1,p2 be Point of M;
+      consider x1 being Point of TopSpaceMetr(M) such that
+   A2:x1 in P & (dist(p1)).x1 = lower_bound((dist(p1)).:P) by A1,Th24;
+      consider x2 being Point of TopSpaceMetr(M) such that
+   A3:x2 in P & (dist(p2)).x2 = lower_bound((dist(p2)).:P) by A1,Th24;
+      A4: TopSpaceMetr(M)=TopStruct (#the carrier of M,Family_open_set(M)#)
+      by PCOMPS_1:def 6;
+      then reconsider x1 as Point of M;
+      reconsider x2 as Point of M by A4;
+      A5: (dist(p1)).x1 = dist(x1,p1) by Def6;
+   A6:dist(x1,p1) = lower_bound((dist(p1)).:P) by A2,Def6;
+      A7: (dist(p2)).x2 = dist(x2,p2) by Def6;
+   A8:dist(x2,p2) = lower_bound((dist(p2)).:P) by A3,Def6;
+      A9: dist(x1,p2) <= dist(x1,p1) + dist(p1,p2) &
+      dist(x2,p1) <= dist(x2,p2) + dist(p2,p1) by METRIC_1:4;
+   A10: dist(x2,p2) <= dist(x1,p2) by A1,A2,A3,A7,Th25;
+     dist(x1,p1) <= dist(x2,p1) by A1,A2,A3,A5,Th25;
+      then dist(x1,p1) <= dist(x2,p2) + dist(p1,p2)
+      by A9,AXIOMS:22;
+   then A11:dist(x1,p1) - dist(x2,p2) <= dist(p1,p2) by REAL_1:86;
+        dist(x2,p2) <= dist(x1,p1) + dist(p1,p2)
+      by A9,A10,AXIOMS:22;
+      then dist(x2,p2) - dist(x1,p1) <= dist(p1,p2) by REAL_1:86;
+      then -(dist(x1,p1) - dist(x2,p2)) <= dist(p1,p2) by XCMPLX_1:143;
+      then -dist(p1,p2) <= -(-(dist(x1,p1) - dist(x2,p2))) by REAL_1:50;
+      hence thesis by A6,A8,A11,ABSVALUE:12;
+end;
+
+theorem
+     for M being non empty MetrSpace holds
+   for P being Subset of TopSpaceMetr(M) st
+   (P <> {} & P is compact) holds
+   for p1,p2 being Point of M holds
+   for x1,x2 being Real holds
+   x1 = (dist_min(P)).p1 & x2 = (dist_min(P)).p2 implies
+   abs(x1 - x2) <= dist(p1,p2)
+proof
+   let M be non empty MetrSpace;
+   let P be Subset of TopSpaceMetr(M);
+   assume
+A1:P <> {} & P is compact;
+   let p1,p2 be Point of M;
+   let x1,x2 be Real;
+   assume
+A2:x1 = (dist_min(P)).p1 & x2 = (dist_min(P)).p2;
+     (dist_min(P)).p1 = lower_bound((dist(p1)).:P) &
+   (dist_min(P)).p2 = lower_bound((dist(p2)).:P) by Def8;
+   hence thesis by A1,A2,Th28;
+end;
+
+theorem Th30:
+   for M being non empty MetrSpace holds
+   for X being Subset of TopSpaceMetr(M) st
+   (X <> {} & X is compact) holds
+   dist_max(X) is continuous
+proof
+   let M be non empty MetrSpace;
+   let X be Subset of TopSpaceMetr(M);
+   assume
+A1:X <> {} & X is compact;
+    for P being Subset of R^1 st P is open holds
+  (dist_max(X))"P is open
+  proof
+     let P be Subset of R^1;
+     assume
+  A2:P is open;
+       for p being Point of M st p in (dist_max(X))"P
+     ex r being real number st r>0 & Ball(p,r) c= (dist_max(X))"P
+     proof
+        let p be Point of M;
+        assume
+      p in (dist_max(X))"P;
+        then A3: p in dom dist_max(X) & (dist_max(X)).p in P
+        by FUNCT_1:def 13;
+        consider y being Point of RealSpace such that
+     A4:y = upper_bound((dist(p)).:(X)) by METRIC_1:def 14;
+        reconsider P as Subset of TopSpaceMetr(RealSpace)
+          by TOPMETR:def 7;
+          y in P by A3,A4,Def7;
+        then consider r being real number such that
+     A5:r>0 & Ball(y,r) c= P by A2,TOPMETR:22,def 7;
+        reconsider r as Real by XREAL_0:def 1;
+     A6:Ball(p,r) c= (dist_max(X))"P
+        proof
+           let z be set;
+           assume
+        A7:z in Ball(p,r);
+           then reconsider z as Point of M;
+           A8:dist(p,z) < r by A7,METRIC_1:12;
+             abs(upper_bound((dist(p)).:(X)) -
+             upper_bound((dist(z)).:(X))) <= dist(p,z)
+           by A1,Th26;
+           then abs(upper_bound((dist(p)).:(X)) -
+             upper_bound((dist(z)).:(X)))+dist(p,z) <
+           r+dist(p,z) by A8,REAL_1:67;
+       then A9:abs(upper_bound((dist(p)).:(X)) -
+             upper_bound((dist(z)).:(X))) < r by AXIOMS:24;
+           consider q being Point of RealSpace such that
+       A10:q = upper_bound((dist(z)).:(X)) by METRIC_1:def 14;
+       A11:q = (dist_max(X)).z by A10,Def7;
+             dist(y,q) < r by A4,A9,A10,TOPMETR:15;
+           then A12: q in Ball(y,r) by METRIC_1:12;
+             dom (dist_max(X)) = the carrier of TopSpaceMetr(M)
+           by FUNCT_2:def 1;
+           then dom (dist_max(X)) = the carrier of M by TOPMETR:16;
+           hence thesis by A5,A11,A12,FUNCT_1:def 13;
+        end;
+        take r;
+        thus thesis by A5,A6;
+     end;
+     hence thesis by TOPMETR:22;
+  end;
+  hence thesis by TOPS_2:55;
+end;
+
+theorem Th31:
+   for M being non empty MetrSpace holds
+   for P,Q being Subset of TopSpaceMetr(M) holds
+   (P <> {} & P is compact & Q <> {} & Q is compact) implies
+   ex x1 being Point of TopSpaceMetr(M) st
+   (x1 in Q & (dist_max(P)).x1 = upper_bound((dist_max(P)).:Q))
+proof
+   let M be non empty MetrSpace;
+   let P,Q be Subset of TopSpaceMetr(M);
+   assume
+A1:P <> {} & P is compact & Q <> {} & Q is compact;
+   then dist_max(P) is continuous by Th30;
+   then consider x1 being Point of TopSpaceMetr(M) such that
+A2:x1 in Q & (dist_max(P)).x1 = upper_bound((dist_max(P)).:Q) by A1,Th20;
+   take x1;
+   thus thesis by A2;
+end;
+
+theorem Th32:
+   for M being non empty MetrSpace holds
+   for P,Q being Subset of TopSpaceMetr(M) holds
+   (P <> {} & P is compact & Q <> {} & Q is compact) implies
+   ex x2 being Point of TopSpaceMetr(M) st
+   (x2 in Q & (dist_max(P)).x2 = lower_bound((dist_max(P)).:Q))
+proof
+   let M be non empty MetrSpace;
+   let P,Q be Subset of TopSpaceMetr(M);
+   assume
+A1:P <> {} & P is compact & Q <> {} & Q is compact;
+then dist_max(P) is continuous by Th30;
+   then consider x2 being Point of TopSpaceMetr(M) such that
+A2:x2 in Q & (dist_max(P)).x2 = lower_bound((dist_max(P)).:Q) by A1,Th21;
+   take x2;
+   thus thesis by A2;
+end;
+
+theorem Th33:
+   for M being non empty MetrSpace holds
+   for X being Subset of TopSpaceMetr(M) st
+   X <> {} & X is compact holds
+   dist_min(X) is continuous
+proof
+   let M be non empty MetrSpace;
+   let X be Subset of TopSpaceMetr(M);
+   assume
+A1:X <> {} & X is compact;
+     for P being Subset of R^1 st P is open holds
+   (dist_min(X))"P is open
+   proof
+      let P be Subset of R^1;
+      assume
+   A2:P is open;
+      thus (dist_min(X))"P is open
+      proof
+           for p being Point of M st p in (dist_min(X))"P
+         ex r being real number st r>0 & Ball(p,r) c= (dist_min(X))"P
+         proof
+            let p be Point of M;
+            assume
+         A3:p in (dist_min(X))"P;
+              ex r being Real st r>0 & Ball(p,r) c= (dist_min(X))"P
+            proof
+               A4: p in dom dist_min(X) & (dist_min(X)).p in P
+               by A3,FUNCT_1:def 13;
+               consider y being Point of RealSpace such that
+            A5:y = lower_bound((dist(p)).:(X)) by METRIC_1:def 14;
+               reconsider P as Subset of TopSpaceMetr(RealSpace)
+                 by TOPMETR:def 7;
+                 y in P by A4,A5,Def8;
+               then consider r being real number such that
+            A6:r>0 & Ball(y,r) c= P by A2,TOPMETR:22,def 7;
+               reconsider r as Real by XREAL_0:def 1;
+            A7:Ball(p,r) c= (dist_min(X))"P
+               proof
+                  let z be set;
+                  assume
+               A8:z in Ball(p,r);
+                  then reconsider z as Point of M;
+                  A9:dist(p,z) < r by A8,METRIC_1:12;
+                    abs(lower_bound((dist(p)).:(X)) -
+                    lower_bound((dist(z)).:(X))) <= dist(p,z)
+                  by A1,Th28;
+                  then abs(lower_bound((dist(p)).:(X)) -
+                    lower_bound((dist(z)).:(X)))+dist(p,z) <
+                  r+dist(p,z) by A9,REAL_1:67;
+              then A10:abs(lower_bound((dist(p)).:(X)) -
+                    lower_bound((dist(z)).:(X))) < r by AXIOMS:24;
+                  consider q being Point of RealSpace such that
+              A11:q = lower_bound((dist(z)).:(X)) by METRIC_1:def 14;
+              A12:q = (dist_min(X)).z by A11,Def8;
+                    dist(y,q) < r by A5,A10,A11,TOPMETR:15;
+                  then A13: q in Ball(y,r) by METRIC_1:12;
+                    dom (dist_min(X)) = the carrier of TopSpaceMetr(M)
+                  by FUNCT_2:def 1;
+                  then dom (dist_min(X)) = the carrier of M by TOPMETR:16;
+                  hence thesis by A6,A12,A13,FUNCT_1:def 13;
+               end;
+               take r;
+               thus thesis by A6,A7;
+            end;
+            hence thesis;
+         end;
+         hence thesis by TOPMETR:22;
+      end;
+   end;
+   hence thesis by TOPS_2:55;
+end;
+
+theorem Th34:
+   for M being non empty MetrSpace holds
+   for P,Q being Subset of TopSpaceMetr(M) holds
+   (P <> {} & P is compact & Q <> {} & Q is compact) implies
+   ex x1 being Point of TopSpaceMetr(M) st
+   (x1 in Q & (dist_min(P)).x1 = upper_bound((dist_min(P)).:Q))
+proof
+   let M be non empty MetrSpace;
+   let P,Q be Subset of TopSpaceMetr(M);
+   assume
+A1:P <> {} & P is compact & Q <> {} & Q is compact;
+then dist_min(P) is continuous by Th33;
+   then consider x1 being Point of TopSpaceMetr(M) such that
+A2:x1 in Q & (dist_min(P)).x1 = upper_bound((dist_min(P)).:Q)
+   by A1,Th20;
+   take x1;
+   thus thesis by A2;
+end;
+
+theorem Th35:
+   for M being non empty MetrSpace holds
+   for P,Q being Subset of TopSpaceMetr(M) holds
+   (P <> {} & P is compact & Q <> {} & Q is compact) implies
+   ex x2 being Point of TopSpaceMetr(M) st
+   (x2 in Q & (dist_min(P)).x2 = lower_bound((dist_min(P)).:Q))
+proof
+   let M be non empty MetrSpace;
+   let P,Q be Subset of TopSpaceMetr(M);
+   assume
+A1:P <> {} & P is compact & Q <> {} & Q is compact;
+then dist_min(P) is continuous by Th33;
+   then consider x2 being Point of TopSpaceMetr(M) such that
+A2:x2 in Q &(dist_min(P)).x2 = lower_bound((dist_min(P)).:Q) by A1,Th21;
+   take x2;
+   thus thesis by A2;
+end;
+
+definition
+   let M be non empty MetrSpace;
+   let P,Q be Subset of TopSpaceMetr(M);
+   func min_dist_min(P,Q) -> Real equals
+:Def9: lower_bound((dist_min(P)).:Q);
+correctness;
+
+   func max_dist_min(P,Q) -> Real equals
+:Def10: upper_bound((dist_min(P)).:Q);
+correctness;
+
+   func min_dist_max(P,Q) -> Real equals
+:Def11: lower_bound((dist_max(P)).:Q);
+correctness;
+
+   func max_dist_max(P,Q) -> Real equals
+:Def12: upper_bound((dist_max(P)).:Q);
+correctness;
+end;
+
+theorem
+     for M being non empty MetrSpace holds
+   for P,Q being Subset of TopSpaceMetr(M) st
+   P <> {} & P is compact & Q <> {} & Q is compact holds
+   ex x1,x2 being Point of M st
+   x1 in P & x2 in Q &
+   dist(x1,x2) = min_dist_min(P,Q)
+proof
+   let M be non empty MetrSpace;
+   let P,Q be Subset of TopSpaceMetr(M);
+   assume
+A1:P <> {} & P is compact & Q <> {} & Q is compact;
+   then consider x2 being Point of TopSpaceMetr(M) such that
+A2:x2 in Q & (dist_min(P)).x2 = lower_bound((dist_min(P)).:Q) by Th35;
+   A3: TopSpaceMetr(M)=TopStruct (#the carrier of M,Family_open_set(M)#)
+   by PCOMPS_1:def 6;
+   then reconsider x2 as Point of M;
+   consider x1 being Point of TopSpaceMetr(M) such that
+A4:x1 in P & (dist(x2)).x1 = lower_bound((dist(x2)).:P) by A1,Th24;
+   reconsider x1 as Point of M by A3;
+   take x1;
+   take x2;
+     dist(x1,x2) = (dist(x2)).x1 by Def6
+              .= lower_bound((dist_min(P)).:Q) by A2,A4,Def8;
+   hence thesis by A2,A4,Def9;
+end;
+
+theorem
+     for M being non empty MetrSpace holds
+   for P,Q being Subset of TopSpaceMetr(M) st
+   P <> {} & P is compact & Q <> {} & Q is compact holds
+   ex x1,x2 being Point of M st
+   x1 in P & x2 in Q &
+   dist(x1,x2) = min_dist_max(P,Q)
+proof
+   let M be non empty MetrSpace;
+   let P,Q be Subset of TopSpaceMetr(M);
+   assume
+A1:P <> {} & P is compact & Q <> {} & Q is compact;
+   then consider x2 being Point of TopSpaceMetr(M) such that
+A2:x2 in Q & (dist_max(P)).x2 = lower_bound((dist_max(P)).:Q)
+   by Th32;
+   A3: TopSpaceMetr(M)=TopStruct (#the carrier of M,Family_open_set(M)#)
+   by PCOMPS_1:def 6;
+   then reconsider x2 as Point of M;
+   consider x1 being Point of TopSpaceMetr(M) such that
+A4:x1 in P & (dist(x2)).x1 = upper_bound((dist(x2)).:P) by A1,Th23;
+   reconsider x1 as Point of M by A3;
+   take x1;
+   take x2;
+     dist(x1,x2) = (dist(x2)).x1 by Def6
+              .= lower_bound((dist_max(P)).:Q) by A2,A4,Def7;
+   hence thesis by A2,A4,Def11;
+end;
+
+theorem
+     for M being non empty MetrSpace holds
+   for P,Q being Subset of TopSpaceMetr(M) st
+   P <> {} & P is compact & Q <> {} & Q is compact holds
+   ex x1,x2 being Point of M st
+   x1 in P & x2 in Q &
+   dist(x1,x2) = max_dist_min(P,Q)
+proof
+   let M be non empty MetrSpace;
+   let P,Q be Subset of TopSpaceMetr(M);
+   assume
+A1:P <> {} & P is compact & Q <> {} & Q is compact;
+   then consider x2 being Point of TopSpaceMetr(M) such that
+A2:x2 in Q & (dist_min(P)).x2 = upper_bound((dist_min(P)).:Q) by Th34;
+   A3: TopSpaceMetr(M)=TopStruct (#the carrier of M,Family_open_set(M)#)
+   by PCOMPS_1:def 6;
+   then reconsider x2 as Point of M;
+   consider x1 being Point of TopSpaceMetr(M) such that
+A4:x1 in P & (dist(x2)).x1 = lower_bound((dist(x2)).:P) by A1,Th24;
+   reconsider x1 as Point of M by A3;
+   take x1;
+   take x2;
+     dist(x1,x2) = (dist(x2)).x1 by Def6
+              .= upper_bound((dist_min(P)).:Q) by A2,A4,Def8;
+   hence thesis by A2,A4,Def10;
+end;
+
+theorem
+     for M being non empty MetrSpace holds
+   for P,Q being Subset of TopSpaceMetr(M) st
+   P <> {} & P is compact & Q <> {} & Q is compact holds
+   ex x1,x2 being Point of M st
+   x1 in P & x2 in Q &
+   dist(x1,x2) = max_dist_max(P,Q)
+proof
+   let M be non empty MetrSpace;
+   let P,Q be Subset of TopSpaceMetr(M);
+   assume
+A1:P <> {} & P is compact & Q <> {} & Q is compact;
+   then consider x2 being Point of TopSpaceMetr(M) such that
+A2:x2 in Q & (dist_max(P)).x2 = upper_bound((dist_max(P)).:Q) by Th31;
+   A3: TopSpaceMetr(M)=TopStruct (#the carrier of M,Family_open_set(M)#)
+   by PCOMPS_1:def 6;
+   then reconsider x2 as Point of M;
+   consider x1 being Point of TopSpaceMetr(M) such that
+A4:x1 in P & (dist(x2)).x1 = upper_bound((dist(x2)).:P) by A1,Th23;
+   reconsider x1 as Point of M by A3;
+   take x1;
+   take x2;
+     dist(x1,x2) = (dist(x2)).x1 by Def6
+              .= upper_bound((dist_max(P)).:Q) by A2,A4,Def7;
+   hence thesis by A2,A4,Def12;
+end;
+
+theorem
+     for M being non empty MetrSpace holds
+   for P,Q being Subset of TopSpaceMetr(M) st
+   P is compact & Q is compact holds
+   for x1,x2 being Point of M st
+   x1 in P & x2 in Q holds
+   min_dist_min(P,Q) <= dist(x1,x2) & dist(x1,x2) <= max_dist_max(P,Q)
+proof
+   let M be non empty MetrSpace;
+   let P,Q be Subset of TopSpaceMetr(M);
+   assume
+A1: P is compact & Q is compact;
+   let x1,x2 be Point of M;
+   assume
+A2:x1 in P & x2 in Q;
+   A3: dom (dist_max(P)) = the carrier of TopSpaceMetr(M) by FUNCT_2:def 1;
+     x2 in the carrier of M;
+   then x2 in the carrier of TopSpaceMetr(M) by TOPMETR:16;
+   then (dist_max(P)).x2 in the carrier of R^1 by FUNCT_2:7;
+   then consider y being Real such that
+A4:y = (dist_max(P)).x2 by TOPMETR:24;
+A5:dist(x1,x2) <= upper_bound((dist(x2)).:P) &
+   lower_bound((dist(x1)).:Q) <= dist(x2,x1) by A1,A2,Th25;
+   A6: upper_bound((dist(x2)).:P) = y by A4,Def7;
+     dist_max(P) is continuous by A1,A2,Th30;
+   then (dist_max(P)).:Q is compact by A1,Th14;
+then A7:[#]((dist_max(P)).:Q) is bounded by Th17;
+A8:y in [#]((dist_max(P)).:Q)
+   proof
+        (dist_max(P)).x2 in (dist_max(P)).:Q by A2,A3,FUNCT_1:def 12;
+      hence thesis by A4,Def3;
+   end;
+     y <= upper_bound((dist_max(P)).:Q)
+   proof
+   A9:[#]((dist_max(P)).:Q) is bounded_above by A7,SEQ_4:def 3;
+    upper_bound((dist_max(P)).:Q) = upper_bound([#]((dist_max(P)).:Q))
+      by Def4;
+      hence thesis by A8,A9,SEQ_4:def 4;
+   end;
+   then A10: dist(x1,x2) <= upper_bound((dist_max(P)).:Q) by A5,A6,AXIOMS:22;
+   A11: dom (dist_min(P)) = the carrier of TopSpaceMetr(M) by FUNCT_2:def 1;
+     x2 in the carrier of M;
+   then x2 in the carrier of TopSpaceMetr(M) by TOPMETR:16;
+   then (dist_min(P)).x2 in the carrier of R^1 by FUNCT_2:7;
+   then consider z being Real such that
+A12:z = (dist_min(P)).x2 by TOPMETR:24;
+A13:dist(x1,x2) <= upper_bound((dist(x2)).:P) &
+   lower_bound((dist(x2)).:P) <= dist(x1,x2) by A1,A2,Th25;
+   A14: lower_bound((dist(x2)).:P) = z by A12,Def8;
+     dist_min(P) is continuous by A1,A2,Th33;
+   then (dist_min(P)).:Q is compact by A1,Th14;
+then A15:[#]((dist_min(P)).:Q) is bounded by Th17;
+A16:z in [#]((dist_min(P)).:Q)
+   proof
+        (dist_min(P)).x2 in (dist_min(P)).:Q by A2,A11,FUNCT_1:def 12;
+      hence thesis by A12,Def3;
+   end;
+     lower_bound((dist_min(P)).:Q) <= z
+   proof
+   A17:[#]((dist_min(P)).:Q) is bounded_below by A15,SEQ_4:def 3;
+    lower_bound((dist_min(P)).:Q) = lower_bound([#]((dist_min(P)).:Q))
+      by Def5;
+      hence thesis by A16,A17,SEQ_4:def 5;
+   end;
+   then lower_bound((dist_min(P)).:Q) <= dist(x1,x2) by A13,A14,AXIOMS:22;
+   hence thesis by A10,Def9,Def12;
+end;
+
+::  B i b l i o g r a p h y
+
+::  J.Dieudonne, "Foundations of Modern Analysis",Academic Press, 1960.
+::  J.L.Kelley, "General Topology", von Nostnend, 1955.
+::  K.Yosida, "Functional Analysis", Springer Verlag, 1968.

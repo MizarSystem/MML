@@ -1,0 +1,293 @@
+:: Paracompact and Metrizable Spaces
+::  by Leszek Borys
+::
+:: Received June 8, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary METRIC_1, PRE_TOPC, BOOLE, SETFAM_1, TARSKI, SUBSET_1, COMPTS_1,
+      FINSET_1, FINSEQ_1, RELAT_1, FUNCT_1, ARYTM_1, SQUARE_1, ARYTM_3,
+      PCOMPS_1, ARYTM;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0,
+      REAL_1, TOPS_2, SETFAM_1, STRUCT_0, FINSET_1, COMPTS_1, PRE_TOPC,
+      SQUARE_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, NAT_1, METRIC_1;
+ constructors METRIC_1, REAL_1, TOPS_2, COMPTS_1, SQUARE_1, FINSEQ_1, NAT_1,
+      MEMBERED;
+ clusters SUBSET_1, METRIC_1, PRE_TOPC, FINSET_1, STRUCT_0, METRIC_3, COMPLSP1,
+      XREAL_0, RELSET_1, TOPS_1, ARYTM_3, SETFAM_1, MEMBERED, ZFMISC_1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+ reserve PM for MetrStruct;
+ reserve x,y for Element of PM;
+ reserve r,p,q,s,t for Real;
+
+theorem :: PCOMPS_1:1
+ r <= p implies Ball(x,r) c= Ball(x,p);
+
+ reserve T for TopSpace;
+ reserve A for Subset of T;
+
+theorem :: PCOMPS_1:2
+Cl(A) <> {} iff A <> {};
+
+theorem :: PCOMPS_1:3
+    Cl(A) = {} implies A = {};
+
+theorem :: PCOMPS_1:4
+  Cl(A) is closed;
+
+ reserve T for non empty TopSpace;
+ reserve x,y for Point of T;
+ reserve Z,X,V,W,Y,Q for Subset of T;
+ reserve FX for Subset-Family of T;
+
+theorem :: PCOMPS_1:5
+  FX is_a_cover_of T implies for x ex W st x in W & W in FX;
+
+definition let X be set;
+redefine func bool X -> non empty Subset-Family of X;
+end;
+
+definition let D be set;
+ func 1TopSp D -> TopStruct equals
+:: PCOMPS_1:def 1
+  TopStruct (# D, bool D #);
+end;
+
+definition let D be set;
+ cluster 1TopSp D -> strict TopSpace-like;
+end;
+
+definition let D be non empty set;
+ cluster 1TopSp D -> non empty;
+end;
+
+reserve a for set;
+
+canceled;
+
+theorem :: PCOMPS_1:7
+    the topology of 1TopSp a = bool a;
+
+theorem :: PCOMPS_1:8
+ the carrier of 1TopSp a = a;
+
+theorem :: PCOMPS_1:9
+  1TopSp {a} is compact;
+
+theorem :: PCOMPS_1:10
+  T is_T2 implies {x} is closed;
+
+::       Paracompact spaces
+
+ reserve x,y for Point of T;
+ reserve A,B for Subset of T;
+ reserve FX,GX for Subset-Family of T;
+
+ definition let T be TopStruct;
+  let IT be Subset-Family of T;
+  attr IT is locally_finite means
+:: PCOMPS_1:def 2
+
+  for x being Point of T ex W being Subset of T st x in W & W is open &
+   { V where V is Subset of T: V in
+ IT & V meets W } is finite;
+ end;
+
+theorem :: PCOMPS_1:11
+ for W holds { V : V in FX & V meets W} c= FX;
+
+theorem :: PCOMPS_1:12
+ FX c= GX & GX is locally_finite implies FX is locally_finite;
+
+theorem :: PCOMPS_1:13
+ FX is finite implies FX is locally_finite;
+
+definition let T be TopStruct, FX be Subset-Family of T;
+   func clf FX -> Subset-Family of T means
+:: PCOMPS_1:def 3
+   for Z being Subset of T holds
+  Z in it iff ex W being Subset of T st Z = Cl W & W in FX;
+end;
+
+theorem :: PCOMPS_1:14
+   clf FX is closed;
+
+theorem :: PCOMPS_1:15
+ FX = {} implies clf FX = {};
+
+theorem :: PCOMPS_1:16
+  FX = { V } implies clf FX = { Cl V };
+
+theorem :: PCOMPS_1:17
+ FX c= GX implies clf FX c= clf GX;
+
+theorem :: PCOMPS_1:18
+ clf(FX \/ GX) = (clf FX) \/ (clf GX);
+
+reserve k for Nat;
+
+theorem :: PCOMPS_1:19
+ FX is finite implies Cl(union FX) = union (clf FX);
+
+theorem :: PCOMPS_1:20
+  FX is_finer_than clf FX;
+
+scheme Lambda1top{T()->TopSpace,
+                  X()->Subset-Family of T(),
+                  Y()->Subset-Family of T(),
+                  F(set)->Subset of T()}:
+ ex f being Function of X(),Y() st for Z being Subset of T()
+               st Z in X() holds f.Z = F(Z)
+provided
+ for Z being Subset of T() st Z in X() holds F(Z) in Y();
+
+theorem :: PCOMPS_1:21
+    FX is locally_finite implies clf FX is locally_finite;
+
+theorem :: PCOMPS_1:22
+ union FX c= union(clf FX);
+
+theorem :: PCOMPS_1:23
+ FX is locally_finite implies Cl union FX = union clf FX;
+
+theorem :: PCOMPS_1:24
+    FX is locally_finite & FX is closed implies union FX is closed;
+
+ definition let IT be TopStruct;
+  attr IT is paracompact means
+:: PCOMPS_1:def 4
+
+     for FX being Subset-Family of IT
+        st FX is_a_cover_of IT & FX is open
+      ex GX being Subset-Family of IT
+         st GX is open & GX is_a_cover_of IT &
+               GX is_finer_than FX & GX is locally_finite;
+ end;
+
+ definition
+  cluster paracompact (non empty TopSpace);
+ end;
+
+theorem :: PCOMPS_1:25
+     T is compact implies T is paracompact;
+
+theorem :: PCOMPS_1:26
+  T is paracompact & A is closed & B is closed & A misses B &
+     (for x st x in B ex V,W being Subset of T st V is open & W is open &
+        A c= V & x in W & V misses W)
+          implies ex Y,Z being Subset of T st Y is open & Z is open &
+                  A c=Y & B c= Z & Y misses Z;
+
+theorem :: PCOMPS_1:27
+  T is_T2 & T is paracompact implies T is_T3;
+
+theorem :: PCOMPS_1:28
+    T is_T2 & T is paracompact implies T is_T4;
+
+::     Topological space of metric space
+
+ reserve x,y,z for Element of PM;
+ reserve V,W,Y for Subset of PM;
+
+scheme SubFamExM {A() -> MetrStruct, P[Subset of A()]}:
+   ex F being Subset-Family of A() st
+   for B being Subset of A() holds B in F iff P[B];
+
+  definition let PM;
+   func Family_open_set(PM) -> Subset-Family of PM means
+:: PCOMPS_1:def 5
+   for V holds V in it iff for x st x in V holds
+                         ex r st r>0 & Ball(x,r) c= V;
+ end;
+
+theorem :: PCOMPS_1:29
+ for x ex r st r>0 & Ball(x,r) c= the carrier of PM;
+
+theorem :: PCOMPS_1:30
+  for r being real number st PM is triangle & y in Ball(x,r) holds
+        ex p st p>0 & Ball(y,p) c= Ball(x,r);
+
+theorem :: PCOMPS_1:31
+   PM is triangle & y in Ball(x,r) /\ Ball(z,p) implies
+            ex q st Ball(y,q) c= Ball(x,r) & Ball(y,q) c= Ball(z,p);
+
+canceled;
+
+theorem :: PCOMPS_1:33
+  for r being real number st PM is triangle holds
+    Ball(x,r) in Family_open_set(PM);
+
+theorem :: PCOMPS_1:34
+ the carrier of PM in Family_open_set(PM);
+
+theorem :: PCOMPS_1:35
+ for V,W st V in Family_open_set(PM) &
+               W in Family_open_set(PM)
+               holds V /\ W in Family_open_set(PM);
+
+theorem :: PCOMPS_1:36
+ for A being Subset-Family of PM
+        st A c= Family_open_set(PM) holds union A in Family_open_set(PM);
+
+theorem :: PCOMPS_1:37
+ TopStruct (#the carrier of PM,Family_open_set(PM)#) is TopSpace;
+
+definition let PM;
+  func TopSpaceMetr PM -> TopStruct equals
+:: PCOMPS_1:def 6
+    TopStruct (#the carrier of PM,Family_open_set(PM)#);
+end;
+
+definition let PM;
+ cluster TopSpaceMetr PM -> strict TopSpace-like;
+end;
+
+definition let PM be non empty MetrStruct;
+ cluster TopSpaceMetr PM -> non empty;
+end;
+
+theorem :: PCOMPS_1:38
+   for PM being non empty MetrSpace holds TopSpaceMetr PM is_T2;
+
+::   Metric on a set
+
+definition let D be set,f be Function of [:D,D:],REAL;
+  pred f is_metric_of D means
+:: PCOMPS_1:def 7
+            for a,b,c be Element of D holds
+              (f.(a,b) = 0 iff a=b) &
+              f.(a,b) = f.(b,a) &
+              f.(a,c)<=f.(a,b)+f.(b,c);
+end;
+
+theorem :: PCOMPS_1:39
+ for D being set,f being Function of [:D,D:],REAL
+         holds f is_metric_of D iff
+               MetrStruct (#D,f#) is MetrSpace;
+
+definition let D be non empty set, f be Function of [:D,D:],REAL;
+ assume  f is_metric_of D;
+ func SpaceMetr(D,f) -> strict non empty MetrSpace equals
+:: PCOMPS_1:def 8
+    MetrStruct(#D,f#);
+end;
+
+::       Metrizable topological spaces
+
+ definition let IT be non empty TopStruct;
+   attr IT is metrizable means
+:: PCOMPS_1:def 9
+      ex f being Function of [:the carrier of IT,the carrier of IT:],REAL
+              st f is_metric_of (the carrier of IT) &
+              Family_open_set( SpaceMetr (the carrier of IT,f) ) =
+               the topology of IT;
+ end;
+
+ definition
+   cluster strict metrizable (non empty TopSpace);
+ end;

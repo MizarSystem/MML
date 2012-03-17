@@ -1,0 +1,4060 @@
+:: Concrete Categories
+::  by Grzegorz Bancerek
+::
+:: Received January 12, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_2, ALTCAT_1, BOOLE, CAT_1, PBOOLE, FUNCT_1, RELAT_1, PRALG_1,
+      BINOP_1, MCART_1, ALTCAT_2, FUNCTOR0, MSUALG_6, SGRAPH1, MSUALG_3,
+      WELLORD1, ISOCAT_1, NATTRA_1, QC_LANG1, ALTCAT_3, OPPCAT_1, CAT_3,
+      FUNCT_2, FUNCT_5, SEQ_1, COMMACAT, PROB_1, CARD_3, YELLOW18;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, RELSET_1,
+      FUNCT_1, PARTFUN1, FUNCT_2, PROB_1, MCART_1, ZF_FUND1, BINOP_1, MULTOP_1,
+      CARD_3, STRUCT_0, FUNCT_5, PBOOLE, PRALG_1, MSUALG_1, MSUALG_3, FUNCT_3,
+      COMMACAT, ALTCAT_1, ALTCAT_2, FUNCTOR0, ALTCAT_3, FUNCTOR2, FUNCTOR3;
+ constructors ZF_FUND1, WAYBEL_1, CAT_5, ALTCAT_3, FUNCTOR3, PROB_1, MEMBERED;
+ clusters SUBSET_1, RELSET_1, RELAT_1, FUNCT_1, PRALG_1, STRUCT_0, MSUALG_1,
+      ALTCAT_1, ALTCAT_2, FUNCTOR0, FUNCTOR2, ALTCAT_4, MEMBERED, ZFMISC_1,
+      FUNCT_2, NUMBERS, ORDINAL2;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, FUNCT_1, MSUALG_3, ALTCAT_2, ALTCAT_1, ALTCAT_3, FUNCTOR0,
+      FUNCTOR2, FUNCTOR3, FUNCT_2, XBOOLE_0;
+ theorems ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PBOOLE, RELSET_1, MSUALG_1,
+      FUNCT_2, FUNCT_3, BINOP_1, MULTOP_1, ALTCAT_1, FUNCT_5, CARD_3, MCART_1,
+      COMMACAT, TARSKI, YELLOW16, FUNCTOR0, FUNCT_4, FUNCTOR1, FUNCTOR2,
+      FUNCTOR3, MSUALG_3, ALTCAT_2, PRALG_3, ALTCAT_3, XBOOLE_1;
+ schemes FUNCT_1, CARD_3, ALTCAT_1, ZFREFLE1, PRALG_2, MSSUBFAM, COMPTS_1,
+      XBOOLE_0;
+
+begin
+:: <section1>Definability of categories and functors</section1>
+
+scheme AltCatStrLambda
+ { A() -> non empty set,
+   B(set,set) -> set,
+   C(set,set,set,set,set) -> set }:
+ ex C being strict non empty transitive AltCatStr st
+  the carrier of C = A() &
+  (for a,b being object of C holds <^a,b^> = B(a,b)) &
+  (for a,b,c being object of C st <^a,b^> <> {} & <^b,c^> <> {}
+   for f being Morphism of a,b, g being Morphism of b,c
+    holds g*f = C(a,b,c,f,g))
+ provided
+A1:  for a,b,c being Element of A(), f,g being set
+   st f in B(a,b) & g in B(b,c) holds C(a,b,c,f,g) in B(a,c)
+  proof deffunc b(set,set) = B($1,$2);
+    consider B being ManySortedSet of [:A(), A():] such that
+A2: for a,b being Element of A() holds B.(a,b) = b(a,b)
+     from MSSLambda2D;
+   defpred P[set,set] means
+     ex a,b,c being Element of A(),
+        F being Function of {|B,B|}.(a,b,c), {|B|}.(a,b,c)
+      st $1 = [a,b,c] & $2 = F &
+       for f,g being set st f in B(a,b) & g in B(b,c)
+        holds F.[g,f] = C(a,b,c,f,g);
+A3: for i being set st i in [:A(), A(), A():]
+    ex j being set st P[i,j]
+     proof let i be set; assume i in [:A(), A(), A():];
+      then consider a,b,c being set such that
+A4:    a in A() & b in A() & c in A() & i = [a,b,c] by MCART_1:72;
+      reconsider a,b,c as Element of A() by A4;
+      defpred P[set,set] means
+       ex f,g being set st $1 = [g,f] & $2 = C(a,b,c,f,g);
+A5:    for x being set st x in [:B(b,c), B(a,b):]
+        ex y being set st y in B(a,c) & P[x, y]
+        proof let x be set; assume x in [:B(b,c), B(a,b):];
+         then consider x1, x2 being set such that
+A6:       x1 in B(b,c) & x2 in B(a,b) & x = [x1,x2] by ZFMISC_1:def 2;
+         take y = C(a,b,c,x2,x1);
+         thus y in B(a,c) by A1,A6; thus thesis by A6;
+        end;
+      consider F being Function such that
+A7:    dom F = [:B(b,c), B(a,b):] & rng F c= B(a,c) and
+A8:    for x being set st x in [:B(b,c), B(a,b):] holds P[x, F.x]
+         from NonUniqBoundFuncEx(A5);
+         B.(a,b) = B(a,b) & B.(b,c) = B(b,c) & B.(a,c) = B(a,c) by A2;
+       then {|B,B|}.(a,b,c) = [:B(b,c), B(a,b):] &
+       {|B|}.(a,b,c) = B(a,c) by ALTCAT_1:def 5,def 6;
+      then reconsider F as Function of {|B,B|}.(a,b,c), {|B|}.(a,b,c)
+        by A7,FUNCT_2:4;
+      take j = F, a, b, c, F; thus i = [a,b,c] & j = F by A4;
+      let f,g be set; assume f in B(a,b) & g in B(b,c);
+       then [g,f] in [:B(b,c), B(a,b):] by ZFMISC_1:106;
+      then consider f',g' being set such that
+A9:    [g,f] = [g',f'] & F.[g,f] = C(a,b,c,f',g') by A8;
+         g = g' & f = f' by A9,ZFMISC_1:33;
+      hence thesis by A9;
+     end;
+   consider C being Function such that
+A10:  dom C = [:A(), A(), A():] and
+A11:  for i being set st i in [:A(), A(), A():] holds P[i, C.i]
+        from NonUniqFuncEx(A3);
+   reconsider C as ManySortedSet of [:A(), A(), A():] by A10,PBOOLE:def 3;
+      now let i be set; assume i in [:A(), A(), A():];
+      then consider a,b,c being Element of A(),
+         F being Function of {|B,B|}.(a,b,c), {|B|}.(a,b,c) such that
+A12:     i = [a,b,c] & C.i = F and
+         for f,g being set st f in B(a,b) & g in B(b,c)
+        holds F.[g,f] = C(a,b,c,f,g) by A11;
+        {|B|}.(a,b,c) = {|B|}.i & {|B,B|}.(a,b,c) = {|B,B|}.i
+       by A12,MULTOP_1:def 1;
+     hence C.i is Function of {|B,B|}.i, {|B|}.i by A12;
+    end;
+   then reconsider C as ManySortedFunction of {|B,B|}, {|B|} by MSUALG_1:def 2;
+   set alt = AltCatStr (# A(), B, C #);
+A13: now let a,b be object of alt;
+     thus <^a,b^> = B.(a,b) by ALTCAT_1:def 2 .= B(a,b) by A2;
+    end;
+      alt is transitive
+     proof let o1,o2,o3 be object of alt;
+      reconsider a = o1, b = o2, c = o3 as Element of A();
+      consider f being Element of <^o1,o2^>, g being Element of <^o2,o3^>;
+      assume <^o1,o2^> <> {} & <^o2,o3^> <> {};
+       then f in <^o1,o2^> & g in <^o2,o3^>;
+       then f in B(a,b) & g in B(b,c) by A13;
+       then C(a,b,c,f,g) in B(a,c) by A1;
+      hence <^o1,o3^> <> {} by A13;
+     end;
+   then reconsider alt as strict transitive non empty AltCatStr;
+   take alt; thus the carrier of alt = A();
+   thus for a,b being object of alt holds <^a,b^> = B(a,b) by A13;
+   let a,b,c be object of alt such that
+A14: <^a,b^> <> {} & <^b,c^> <> {};
+      [a,b,c] in [:A(), A(), A():] by MCART_1:73;
+   then consider a',b',c' being Element of A(),
+        F being Function of {|B,B|}.(a',b',c'), {|B|}.(a',b',c') such that
+A15: [a,b,c] = [a',b',c'] & C.[a,b,c] = F and
+A16: for f,g being set st f in B(a',b') & g in B(b',c')
+     holds F.[g,f] = C(a',b',c',f,g) by A11;
+A17: a = a' & b = b' & c = c' by A15,MCART_1:28;
+   let f be Morphism of a,b, g be Morphism of b,c;
+      <^a,b^> = B(a,b) & <^b,c^> = B(b,c) by A13;
+then A18: F.[g,f] = C(a,b,c,f,g) by A14,A16,A17;
+   thus g*f = (the Comp of alt).(a,b,c).(g,f) by A14,ALTCAT_1:def 10
+           .= F.(g,f) by A15,MULTOP_1:def 1
+           .= C(a,b,c,f,g) by A18,BINOP_1:def 1;
+  end;
+
+scheme CatAssocSch
+ { A() -> non empty transitive AltCatStr,
+   C(set,set,set,set,set) -> set }:
+ A() is associative
+ provided
+A1:  for a,b,c being object of A() st <^a,b^> <> {} & <^b,c^> <> {}
+   for f being Morphism of a,b, g being Morphism of b,c
+    holds g*f = C(a,b,c,f,g)
+ and
+A2:  for a,b,c,d being object of A(), f,g,h being set
+   st f in <^a,b^> & g in <^b,c^> & h in <^c,d^>
+   holds C(a,c,d,C(a,b,c,f,g),h) = C(a,b,d,f,C(b,c,d,g,h))
+  proof let i,j,k,l be Element of A();
+   set alt = A(), IT = the Comp of alt;
+   set B = the Arrows of alt;
+   reconsider i' = i, j' = j, k' = k, l' = l as object of alt
+    ;
+   let f,g,h be set such that
+A3: f in B.(i,j) and
+A4: g in B.(j,k) and
+A5: h in B.(k,l);
+A6: B.(i,j) = <^i',j'^> by ALTCAT_1:def 2;
+   then reconsider f' = f as Morphism of i', j' by A3;
+A7: B.(j,k) = <^j',k'^> by ALTCAT_1:def 2;
+   then reconsider g' = g as Morphism of j', k' by A4;
+A8: B.(k,l) = <^k',l'^> by ALTCAT_1:def 2;
+   then reconsider h' = h as Morphism of k', l' by A5;
+A9: <^i',k'^> <> {} & <^j',l'^> <> {} by A3,A4,A5,A6,A7,A8,ALTCAT_1:def 4;
+   thus IT.(i,k,l).(h,IT.(i,j,k).(g,f))
+      = IT.(i,k,l).(h,g'*f') by A3,A4,A6,A7,ALTCAT_1:def 10
+     .= h'*(g'*f') by A5,A8,A9,ALTCAT_1:def 10
+     .= C(i,k,l,g'*f',h') by A1,A5,A8,A9
+     .= C(i,k,l,C(i,j,k,f,g),h) by A1,A3,A4,A6,A7
+     .= C(i',j',l',f,C(j',k',l',g,h)) by A2,A3,A4,A5,A6,A7,A8
+     .= C(i',j',l',f,h'*g') by A1,A4,A5,A7,A8
+     .= (h'*g')*f' by A1,A3,A6,A9
+     .= IT.(i,j,l).(h'*g',f) by A3,A6,A9,ALTCAT_1:def 10
+     .= IT.(i,j,l).(IT.(j,k,l).(h,g),f) by A4,A5,A7,A8,ALTCAT_1:def 10;
+  end;
+
+scheme CatUnitsSch
+ { A() -> non empty transitive AltCatStr,
+   C(set,set,set,set,set) -> set }:
+ A() is with_units
+ provided
+A1:  for a,b,c being object of A() st <^a,b^> <> {} & <^b,c^> <> {}
+   for f being Morphism of a,b, g being Morphism of b,c
+    holds g*f = C(a,b,c,f,g)
+ and
+A2:  for a being object of A()
+   ex f being set st f in <^a,a^> &
+    for b being object of A(), g being set st g in <^a,b^>
+     holds C(a,a,b,f,g) = g
+ and
+A3:  for a being object of A()
+   ex f being set st f in <^a,a^> &
+    for b being object of A(), g being set st g in <^b,a^>
+     holds C(b,a,a,g,f) = g
+  proof set alt = A(), IT = the Comp of alt, I = the carrier of alt;
+   set G = the Arrows of alt;
+   hereby let j be Element of I;
+    reconsider j' = j as object of alt;
+    consider f be set such that
+A4:  f in <^j',j'^> and
+A5:  for b being Element of A(), g being set st g in <^b,j'^>
+      holds C(b,j',j',g,f) = g by A3;
+    take f; thus f in G.(j,j) by A4,ALTCAT_1:def 2;
+    let i be Element of I, g be set such that
+A6:  g in G.(i,j);
+    reconsider i' = i as object of alt;
+A7:  G.(i,j) = <^i',j'^> by ALTCAT_1:def 2;
+then A8:  C(i,j,j,g,f) = g by A5,A6;
+    reconsider f' = f as Morphism of j',j' by A4;
+    reconsider g' = g as Morphism of i',j' by A6,A7;
+    thus IT.(i,j,j).(f,g) = f'*g' by A4,A6,A7,ALTCAT_1:def 10
+      .= g by A1,A4,A6,A7,A8;
+   end;
+   let i be Element of I;
+   reconsider i' = i as object of alt;
+   consider e being set such that
+A9: e in <^i',i'^> and
+A10: for b being Element of A(), g being set st g in <^i',b^>
+     holds C(i,i,b,e,g) = g by A2;
+   take e; thus e in G.(i,i) by A9,ALTCAT_1:def 2;
+   reconsider e' = e as Morphism of i',i' by A9;
+   let j be Element of I, f be set such that
+A11: f in G.(i,j);
+   reconsider j' = j as object of alt;
+A12: G.(i,j) = <^i',j'^> by ALTCAT_1:def 2;
+then A13: C(i,i,j,e,f) = f by A10,A11;
+   reconsider f' = f as Morphism of i', j' by A11,A12;
+   thus IT.(i,i,j).(f,e) = f'*e' by A9,A11,A12,ALTCAT_1:def 10
+     .= f by A1,A9,A11,A12,A13;
+  end;
+
+
+scheme CategoryLambda
+ { A() -> non empty set,
+   B(set,set) -> set,
+   C(set,set,set,set,set) -> set }:
+ ex C being strict category st
+  the carrier of C = A() &
+  (for a,b being object of C holds <^a,b^> = B(a,b)) &
+  (for a,b,c being object of C st <^a,b^> <> {} & <^b,c^> <> {}
+   for f being Morphism of a,b, g being Morphism of b,c
+    holds g*f = C(a,b,c,f,g))
+ provided
+A1:  for a,b,c being Element of A(), f,g being set
+   st f in B(a,b) & g in B(b,c) holds C(a,b,c,f,g) in B(a,c)
+ and
+A2:  for a,b,c,d being Element of A(), f,g,h being set
+   st f in B(a,b) & g in B(b,c) & h in B(c,d)
+   holds C(a,c,d,C(a,b,c,f,g),h) = C(a,b,d,f,C(b,c,d,g,h))
+ and
+A3:  for a being Element of A()
+   ex f being set st f in B(a,a) &
+    for b being Element of A(), g being set st g in B(a,b)
+     holds C(a,a,b,f,g) = g
+ and
+A4:  for a being Element of A()
+   ex f being set st f in B(a,a) &
+    for b being Element of A(), g being set st g in B(b,a)
+     holds C(b,a,a,g,f) = g
+  proof
+    deffunc b(set,set) = B($1,$2);
+    deffunc c(set,set,set,set,set) = C($1,$2,$3,$4,$5);
+A5:  for a,b,c being Element of A(), f,g being set
+   st f in b(a,b) & g in b(b,c) holds c(a,b,c,f,g) in b(a,c) by A1;
+    consider C being strict non empty transitive AltCatStr such that
+A6:  the carrier of C = A() and
+A7:  for a,b being object of C holds <^a,b^> = b(a,b) and
+A8:  for a,b,c being object of C st <^a,b^> <> {} & <^b,c^> <> {}
+     for f being Morphism of a,b, g being Morphism of b,c
+      holds g*f = c(a,b,c,f,g) from AltCatStrLambda(A5);
+A9:  for a,b,c,d being object of C, f,g,h being set
+     st f in <^a,b^> & g in <^b,c^> & h in <^c,d^>
+     holds c(a,c,d,c(a,b,c,f,g),h) = c(a,b,d,f,c(b,c,d,g,h))
+     proof let a,b,c,d be object of C, f,g,h be set such that
+A10:    f in <^a,b^> & g in <^b,c^> & h in <^c,d^>;
+         <^a,b^> = B(a,b) & <^b,c^> = B(b,c) & <^c,d^> = B(c,d) by A7;
+      hence C(a,c,d,C(a,b,c,f,g),h) = C(a,b,d,f,C(b,c,d,g,h)) by A2,A6,A10;
+     end;
+A11:  for a being object of C
+     ex f being set st f in <^a,a^> &
+      for b being object of C, g being set st g in <^a,b^>
+       holds c(a,a,b,f,g) = g
+     proof let a be object of C;
+      consider f being set such that
+A12:    f in B(a,a) and
+A13:    for b being Element of A(), g being set st g in B(a,b)
+        holds C(a,a,b,f,g) = g by A3,A6;
+      take f; thus f in <^a,a^> by A7,A12;
+      let b be object of C;
+         <^a,b^> = B(a,b) by A7;
+      hence thesis by A6,A13;
+     end;
+A14:  for a being object of C
+     ex f being set st f in <^a,a^> &
+      for b being object of C, g being set st g in <^b,a^>
+       holds c(b,a,a,g,f) = g
+     proof let a be object of C;
+      consider f being set such that
+A15:    f in B(a,a) and
+A16:    for b being Element of A(), g being set st g in B(b,a)
+        holds C(b,a,a,g,f) = g by A4,A6;
+      take f; thus f in <^a,a^> by A7,A15;
+      let b be object of C;
+         <^b,a^> = B(b,a) by A7;
+      hence thesis by A6,A16;
+     end;
+A17:  C is associative from CatAssocSch(A8,A9);
+      C is with_units from CatUnitsSch(A8,A11,A14);
+   hence thesis by A6,A7,A8,A17;
+  end;
+
+scheme CategoryLambdaUniq
+ { A() -> non empty set,
+   B(set,set) -> set,
+   C(set,set,set,set,set) -> set }:
+ for C1,C2 being non empty transitive AltCatStr
+  st the carrier of C1 = A() &
+     (for a,b being object of C1 holds <^a,b^> = B(a,b)) &
+     (for a,b,c being object of C1 st <^a,b^> <> {} & <^b,c^> <> {}
+       for f being Morphism of a,b, g being Morphism of b,c
+        holds g*f = C(a,b,c,f,g)) &
+     the carrier of C2 = A() &
+     (for a,b being object of C2 holds <^a,b^> = B(a,b)) &
+     (for a,b,c being object of C2 st <^a,b^> <> {} & <^b,c^> <> {}
+       for f being Morphism of a,b, g being Morphism of b,c
+        holds g*f = C(a,b,c,f,g))
+  holds the AltCatStr of C1 = the AltCatStr of C2
+  proof let C1,C2 be non empty transitive AltCatStr such that
+A1: the carrier of C1 = A() and
+A2: for a,b being object of C1 holds <^a,b^> = B(a,b) and
+A3: for a,b,c being object of C1 st <^a,b^> <> {} & <^b,c^> <> {}
+     for f being Morphism of a,b, g being Morphism of b,c
+      holds g*f = C(a,b,c,f,g) and
+A4: the carrier of C2 = A() and
+A5: for a,b being object of C2 holds <^a,b^> = B(a,b) and
+A6: for a,b,c being object of C2 st <^a,b^> <> {} & <^b,c^> <> {}
+     for f being Morphism of a,b, g being Morphism of b,c
+      holds g*f = C(a,b,c,f,g);
+      now let i be set; assume i in [:A(),A():];
+     then consider a,b being set such that
+A7:   a in A() & b in A() & i = [a,b] by ZFMISC_1:def 2;
+     reconsider a1 = a, b1 = b as object of C1 by A1,A7;
+     reconsider a2 = a, b2 = b as object of C2 by A4,A7;
+     thus (the Arrows of C1).i
+        = (the Arrows of C1).(a1,b1) by A7,BINOP_1:def 1
+       .= <^a1,b1^> by ALTCAT_1:def 2
+       .= B(a1,b1) by A2 .= <^a2,b2^>by A5
+       .= (the Arrows of C2).(a2,b2) by ALTCAT_1:def 2
+       .= (the Arrows of C2).i by A7,BINOP_1:def 1;
+    end;
+then A8:  the Arrows of C1 = the Arrows of C2 by A1,A4,PBOOLE:3;
+      now let i be set; assume i in [:A(), A(), A():];
+     then consider a,b,c being set such that
+A9:   a in A() & b in A() & c in A() & i = [a,b,c] by MCART_1:72;
+     reconsider a1 = a, b1 = b, c1 = c as object of C1 by A1,A9;
+     reconsider a2 = a, b2 = b, c2 = c as object of C2 by A4,A9;
+A10:   (the Comp of C1).i = (the Comp of C1).(a1,b1,c1) &
+      (the Comp of C2).i = (the Comp of C2).(a2,b2,c2) by A9,MULTOP_1:def 1;
+A11:   <^a1,b1^> = (the Arrows of C1).(a1,b1) &
+      <^a2,b2^> = (the Arrows of C2).(a2,b2) by ALTCAT_1:def 2;
+A12:   <^b1,c1^> = (the Arrows of C1).(b1,c1) &
+      <^b2,c2^> = (the Arrows of C2).(b2,c2) by ALTCAT_1:def 2;
+A13:   <^a1,c1^> = (the Arrows of C1).(a1,c1) &
+      <^a2,c2^> = (the Arrows of C2).(a2,c2) by ALTCAT_1:def 2;
+        now assume [:<^b1,c1^>, <^a1,b1^>:] <> {};
+        then <^b1,c1^> <> {} & <^a1,b1^> <> {} by ZFMISC_1:113;
+       hence <^a1,c1^> <> {} by ALTCAT_1:def 4;
+      end;
+then A14:   dom ((the Comp of C1).(a1,b1,c1)) = [:<^b1,c1^>, <^a1,b1^>:] &
+      dom ((the Comp of C2).(a2,b2,c2)) = [:<^b1,c1^>, <^a1,b1^>:]
+       by A8,A11,A12,A13,FUNCT_2:def 1;
+        now let j be set; assume
+          j in [:<^b1,c1^>, <^a1,b1^>:];
+       then consider j1,j2 being set such that
+A15:     j1 in <^b1,c1^> & j2 in <^a1,b1^> and
+A16:     j = [j1,j2] by ZFMISC_1:def 2;
+       reconsider j1 as Morphism of b1,c1 by A15;
+       reconsider j2 as Morphism of a1,b1 by A15;
+       reconsider f1 = j1 as Morphism of b2,c2 by A8,A12;
+       reconsider f2 = j2 as Morphism of a2,b2 by A8,A11;
+       thus (the Comp of C1).(a1,b1,c1).j
+          = (the Comp of C1).(a1,b1,c1).(j1,j2) by A16,BINOP_1:def 1
+         .= j1*j2 by A15,ALTCAT_1:def 10
+         .= C(a1,b1,c1,j2,j1) by A3,A15
+         .= f1*f2 by A6,A8,A11,A12,A15
+         .= (the Comp of C2).(a2,b2,c2).(f1,f2) by A8,A11,A12,A15,ALTCAT_1:def
+10
+         .= (the Comp of C2).(a2,b2,c2).j by A16,BINOP_1:def 1;
+      end;
+     hence (the Comp of C1).i = (the Comp of C2).i by A10,A14,FUNCT_1:9;
+    end;
+   hence thesis by A1,A4,A8,PBOOLE:3;
+  end;
+
+scheme CategoryQuasiLambda
+ { A() -> non empty set, P[set,set,set],
+   B(set,set) -> set,
+   C(set,set,set,set,set) -> set }:
+ ex C being strict category st
+  the carrier of C = A() &
+  (for a,b being object of C
+   for f being set holds f in <^a,b^> iff f in B(a,b) & P[a,b,f]) &
+  (for a,b,c being object of C st <^a,b^> <> {} & <^b,c^> <> {}
+   for f being Morphism of a,b, g being Morphism of b,c
+    holds g*f = C(a,b,c,f,g))
+ provided
+A1:  for a,b,c being Element of A(), f,g being set
+   st f in B(a,b) & P[a,b,f] & g in B(b,c) & P[b,c,g]
+   holds C(a,b,c,f,g) in B(a,c) & P[a,c, C(a,b,c,f,g)]
+ and
+A2:  for a,b,c,d being Element of A(), f,g,h being set
+   st f in B(a,b) & P[a,b,f] & g in B(b,c) & P[b,c,g] & h in B(c,d) & P[c,d,h]
+   holds C(a,c,d,C(a,b,c,f,g),h) = C(a,b,d,f,C(b,c,d,g,h))
+ and
+A3:  for a being Element of A()
+   ex f being set st f in B(a,a) & P[a,a,f] &
+    for b being Element of A(), g being set st g in B(a,b) & P[a,b,g]
+     holds C(a,a,b,f,g) = g
+ and
+A4:  for a being Element of A()
+   ex f being set st f in B(a,a) & P[a,a,f] &
+    for b being Element of A(), g being set st g in B(b,a) & P[b,a,g]
+     holds C(b,a,a,g,f) = g
+  proof deffunc F(set) = B($1`1,$1`2);
+    defpred Q[set,set] means P[$1`1,$1`2,$2];
+    deffunc c(set,set,set,set,set) = C($1,$2,$3,$4,$5);
+    consider P being Function such that
+      dom P = [:A(),A():] and
+A5: for i being set st i in [:A(),A():]
+     for x being set holds x in P.i iff x in F(i) & Q[i,x] from FuncSeparation;
+    deffunc b(set,set) = P.($1,$2);
+A6: now let a,b be Element of A(); let x be set;
+        [a,b]`1 = a & [a,b]`2 = b & P.[a,b] = P.(a,b) & [a,b] in [:A(),A():]
+       by BINOP_1:def 1,MCART_1:7,ZFMISC_1:def 2;
+     hence x in P.(a,b) iff x in B(a,b) & P[a,b,x] by A5;
+    end;
+A7: now let a,b,c be Element of A(), f,g be set;
+     assume f in b(a,b) & g in b(b,c);
+      then f in B(a,b) & P[a,b,f] & g in B(b,c) & P[b,c,g] by A6;
+      then C(a,b,c,f,g) in B(a,c) & P[a,c, C(a,b,c,f,g)] by A1;
+     hence c(a,b,c,f,g) in b(a,c) by A6;
+    end;
+A8: now let a,b,c,d be Element of A(), f,g,h be set;
+     assume f in b(a,b) & g in b(b,c) & h in b(c,d); then
+      f in B(a,b) & P[a,b,f] & g in B(b,c) & P[b,c,g] & h in B(c,d) & P[c,d,h]
+       by A6;
+     hence c(a,c,d,c(a,b,c,f,g),h) = c(a,b,d,f,c(b,c,d,g,h)) by A2;
+    end;
+A9: now let a be Element of A();
+     consider f being set such that
+A10:   f in B(a,a) & P[a,a,f] and
+A11:   for b being Element of A(), g being set st g in B(a,b) & P[a,b,g]
+       holds C(a,a,b,f,g) = g by A3;
+     take f; thus f in b(a,a) by A6,A10;
+     let b be Element of A(), g be set; assume g in b(a,b);
+      then g in B(a,b) & P[a,b,g] by A6;
+     hence c(a,a,b,f,g) = g by A11;
+    end;
+A12: now let a be Element of A();
+     consider f being set such that
+A13:   f in B(a,a) & P[a,a,f] and
+A14:   for b being Element of A(), g being set st g in B(b,a) & P[b,a,g]
+       holds C(b,a,a,g,f) = g by A4;
+     take f; thus f in b(a,a) by A6,A13;
+     let b be Element of A(), g be set; assume g in b(b,a);
+      then g in B(b,a) & P[b,a,g] by A6;
+     hence c(b,a,a,g,f) = g by A14;
+    end;
+   consider C being strict category such that
+A15: the carrier of C = A() and
+A16: for a,b being object of C holds <^a,b^> = b(a,b) and
+A17: for a,b,c being object of C st <^a,b^> <> {} & <^b,c^> <> {}
+     for f being Morphism of a,b, g being Morphism of b,c
+      holds g*f = c(a,b,c,f,g) from CategoryLambda(A7,A8,A9,A12);
+   take C; thus the carrier of C = A() by A15;
+   hereby let a,b be object of C, f be set;
+       <^a,b^> = P.(a,b) by A16;
+    hence f in <^a,b^> iff f in B(a,b) & P[a,b,f] by A6,A15;
+   end;
+   thus thesis by A17;
+  end;
+
+definition
+ let f be Function-yielding Function;
+ let a,b,c be set;
+ cluster f.(a,b,c) -> Relation-like Function-like;
+ coherence
+  proof f.(a,b,c) = f.[a,b,c] by MULTOP_1:def 1;
+   hence thesis;
+  end;
+end;
+
+scheme SubcategoryEx
+ { A() -> category, P[set], Q[set,set,set]}:
+ ex B being strict non empty subcategory of A() st
+  (for a being object of A() holds a is object of B iff P[a]) &
+  (for a,b being object of A(), a',b' being object of B
+    st a' = a & b' = b & <^a,b^> <> {}
+   for f being Morphism of a,b holds f in <^a',b'^> iff Q[a,b,f])
+ provided
+A1:  ex a being object of A() st P[a]
+ and
+A2:  for a,b,c being object of A()
+    st P[a] & P[b] & P[c] & <^a,b^> <> {} & <^b,c^> <> {}
+   for f being Morphism of a,b, g being Morphism of b,c
+    st Q[a,b,f] & Q[b,c,g]
+    holds Q[a,c,g*f]
+ and
+A3:  for a being object of A() st P[a] holds Q[a,a, idm a]
+  proof defpred p[set] means P[$1];
+    defpred q[set,set,set] means Q[$1,$2,$3];
+    consider X being set such that
+A4: for x being set holds x in X iff x in the carrier of A() & p[x]
+     from Separation;
+   consider a0 being object of A() such that
+A5: P[a0] by A1;
+   reconsider X as non empty set by A4,A5;
+A6: X c= the carrier of A() proof let x be set; thus thesis by A4; end;
+   deffunc B(set,set) = (the Arrows of A()).($1,$2);
+   deffunc C(set,set,set,set,set) = (the Comp of A()).($1,$2,$3).($5,$4);
+A7: now let a,b,c be Element of X, f,g be set such that
+A8:   f in B(a,b) & q[a,b,f] and
+A9:   g in B(b,c) & q[b,c,g];
+        a in the carrier of A() & b in the carrier of A() &
+      c in the carrier of A() by A4;
+     then reconsider a' = a, b' = b, c' = c as object of A();
+A10:   B(a,b) = <^a',b'^> by ALTCAT_1:def 2;
+     then reconsider f' = f as Morphism of a', b' by A8;
+A11:   B(b,c) = <^b',c'^> by ALTCAT_1:def 2;
+     then reconsider g' = g as Morphism of b', c' by A9;
+A12:   C(a,b,c,f,g) = g'*f' & B(a,c) = <^a',c'^> & <^a',c'^> <> {}
+       by A8,A9,A10,A11,ALTCAT_1:def 2,def 4,def 10;
+     hence C(a,b,c,f,g) in B(a,c);
+        P[a'] & P[b'] & P[c'] by A4;
+     hence q[a,c, C(a,b,c,f,g)] by A2,A8,A9,A10,A11,A12;
+    end;
+A13: now let a,b,c,d be Element of X, f,g,h being set such that
+A14:   f in B(a,b) & q[a,b,f] and
+A15:   g in B(b,c) & q[b,c,g] and
+A16:   h in B(c,d) & q[c,d,h];
+        a in the carrier of A() & b in the carrier of A() &
+      c in the carrier of A() & d in the carrier of A() by A4;
+     then reconsider a' = a, b' = b, c' = c, d' = d as object of A()
+       ;
+A17:   B(a,b) = <^a',b'^> by ALTCAT_1:def 2;
+     then reconsider f' = f as Morphism of a', b' by A14;
+A18:   B(b,c) = <^b',c'^> by ALTCAT_1:def 2;
+     then reconsider g' = g as Morphism of b', c' by A15;
+A19:   B(c,d) = <^c',d'^> by ALTCAT_1:def 2;
+     then reconsider h' = h as Morphism of c', d' by A16;
+A20:   <^a',c'^> <> {} & <^b',d'^> <> {} by A14,A15,A16,A17,A18,A19,ALTCAT_1:
+def 4;
+     thus C(a,c,d,C(a,b,c,f,g),h)
+        = C(a',c',d',g'*f',h) by A14,A15,A17,A18,ALTCAT_1:def 10
+       .= h'*(g'*f') by A16,A19,A20,ALTCAT_1:def 10
+       .= h'*g'*f' by A14,A15,A16,A17,A18,A19,ALTCAT_1:25
+       .= C(a,b,d,f,h'*g') by A14,A17,A20,ALTCAT_1:def 10
+       .= C(a,b,d,f,C(b,c,d,g,h)) by A15,A16,A18,A19,ALTCAT_1:def 10;
+    end;
+A21: now let a be Element of X; a in the carrier of A() by A4;
+     then reconsider b = a as object of A();
+     reconsider f = idm b as set;
+     take f;
+     B(a,a) = <^b,b^> & P[b] by A4,ALTCAT_1:def 2;
+     hence f in B(a,a) & q[a,a,f] by A3;
+     let c be Element of X, g be set such that
+A23:   g in B(a,c) & q[a,c,g];
+        c in the carrier of A() by A4;
+     then reconsider d = c as object of A();
+A24:   B(a,c) = <^b,d^> by ALTCAT_1:def 2;
+     then reconsider g' = g as Morphism of b,d by A23;
+     thus C(a,a,c,f,g) = g'* idm b by A23,A24,ALTCAT_1:def 10
+                      .= g by A23,A24,ALTCAT_1:def 19;
+    end;
+A25: now let a be Element of X; a in the carrier of A() by A4;
+     then reconsider b = a as object of A();
+     reconsider f = idm b as set;
+     take f;
+     B(a,a) = <^b,b^> & P[b] by A4,ALTCAT_1:def 2;
+     hence f in B(a,a) & q[a,a,f] by A3;
+     let c be Element of X, g be set such that
+A27:   g in B(c,a) & q[c,a,g];
+        c in the carrier of A() by A4;
+     then reconsider d = c as object of A();
+A28:   B(c,a) = <^d,b^> by ALTCAT_1:def 2;
+     then reconsider g' = g as Morphism of d,b by A27;
+     thus C(c,a,a,g,f) = (idm b)*g' by A27,A28,ALTCAT_1:def 10
+                      .= g by A27,A28,ALTCAT_1:24;
+    end;
+   consider C being strict category such that
+A29: the carrier of C = X and
+A30: for a,b being object of C
+     for f being set holds f in <^a,b^> iff
+        f in B(a,b) & q[a,b,f] and
+A31: for a,b,c being object of C st <^a,b^> <> {} & <^b,c^> <> {}
+     for f being Morphism of a,b, g being Morphism of b,c
+      holds g*f =  C(a,b,c,f,g) from CategoryQuasiLambda(A7,A13,A21,A25);
+      C is SubCatStr of A()
+     proof thus the carrier of C c= the carrier of A() by A6,A29;
+      thus [:the carrier of C, the carrier of C:] c=
+            [:the carrier of A(), the carrier of A():] by A6,A29,ZFMISC_1:119;
+      hereby let i be set; assume
+          i in [:the carrier of C, the carrier of C:];
+       then consider a,b being set such that
+A32:     a in the carrier of C & b in the carrier of C & [a,b] = i
+         by ZFMISC_1:def 2;
+       reconsider a,b as object of C by A32;
+A33:     (the Arrows of C).i = (the Arrows of C).(a,b) by A32,BINOP_1:def 1
+                           .= <^a,b^> by ALTCAT_1:def 2;
+A34:     (the Arrows of A()).i = (the Arrows of A()).(a,b) by A32,BINOP_1:def 1
+;
+       thus (the Arrows of C).i c= (the Arrows of A()).i
+         proof let f be set; thus thesis by A30,A33,A34;
+         end;
+      end;
+      thus [:the carrier of C, the carrier of C, the carrier of C:] c=
+           [:the carrier of A(), the carrier of A(), the carrier of A():]
+             by A6,A29,MCART_1:77;
+      let i be set; assume
+         i in [:the carrier of C, the carrier of C, the carrier of C:];
+      then consider a,b,c being set such that
+A35:    a in the carrier of C & b in the carrier of C & c in the carrier of C &
+       [a,b,c] = i by MCART_1:72;
+      reconsider a,b,c as object of C by A35;
+         a in the carrier of A() & b in the carrier of A() &
+       c in the carrier of A() by A4,A29;
+      then reconsider a' = a, b' = b, c' = c as object of A();
+      let x be set; assume x in (the Comp of C).i;
+then A36:    x in (the Comp of C).(a,b,c) by A35,MULTOP_1:def 1;
+      then consider gf, h being set such that
+A37:    x = [gf,h] and
+A38:    gf in [:(the Arrows of C).(b,c), (the Arrows of C).(a,b):] and
+A39:    h in (the Arrows of C).(a,c) by RELSET_1:6;
+      consider g,f being set such that
+A40:    g in (the Arrows of C).(b,c) & f in
+ (the Arrows of C).(a,b) & [g,f] = gf
+        by A38,ZFMISC_1:def 2;
+A41:    <^b,c^> = (the Arrows of C).(b,c) &
+       <^a,b^> = (the Arrows of C).(a,b) &
+       <^a,c^> = (the Arrows of C).(a,c) by ALTCAT_1:def 2;
+      then reconsider f as Morphism of a,b by A40;
+      reconsider g as Morphism of b,c by A40,A41;
+      reconsider h as Morphism of a,c by A39,A41;
+A42:    (the Comp of A()).(a',b',c') = (the Comp of A()).i by A35,MULTOP_1:def
+1;
+A43:    g in (the Arrows of A()).(b',c') & f in (the Arrows of A()).(a',b')
+        by A30,A40,A41;
+A44:    h = (the Comp of C).(a,b,c).gf by A36,A37,FUNCT_1:8
+        .= (the Comp of C).(a,b,c).(g,f) by A40,BINOP_1:def 1
+        .= g*f by A40,A41,ALTCAT_1:def 10
+        .= (the Comp of A()).(a',b',c').(g,f) by A31,A40,A41;
+         h in (the Arrows of A()).(a',c') by A30,A39,A41;
+       then dom ((the Comp of A()).(a',b',c')) =
+         [:(the Arrows of A()).(b',c'), (the Arrows of A()).(a',b'):]
+          by FUNCT_2:def 1;
+       then gf in dom ((the Comp of A()).(a',b',c')) &
+       h = (the Comp of A()).(a',b',c').gf
+        by A40,A43,A44,BINOP_1:def 1,ZFMISC_1:def 2;
+      hence x in (the Comp of A()).i by A37,A42,FUNCT_1:def 4;
+     end;
+   then reconsider C as non empty SubCatStr of A();
+     for o being object of C, o' being object of A() st o = o'
+       holds idm o' in <^o,o^>
+    proof
+     let a be object of C, b be object of A(); assume
+A45:    a = b;
+       then idm b in <^b,b^> & P[b] by A4,A29;
+       then idm b in (the Arrows of A()).(b,b) & Q[b,b, idm b] by A3,ALTCAT_1:
+def 2;
+      hence thesis by A30,A45;
+     end;
+   then reconsider C as strict non empty subcategory of A() by ALTCAT_2:def 14;
+   take C;
+   thus for a be object of A()
+    holds a is object of C iff P[a] by A4,A29;
+   let a,b be object of A(), a',b' be object of C such that
+A46: a' = a & b' = b & <^a,b^> <> {};
+   let f be Morphism of a,b;
+      <^a,b^> = (the Arrows of A()).(a,b) by ALTCAT_1:def 2;
+   hence thesis by A30,A46;
+  end;
+
+scheme CovariantFunctorLambda
+ { A,B() -> category,
+   O(set) -> set,
+   F(set,set,set) -> set }:
+ ex F being covariant strict Functor of A(),B() st
+  (for a being object of A() holds F.a = O(a)) &
+  for a,b being object of A() st <^a,b^> <> {}
+   for f being Morphism of a,b holds F.f = F(a,b,f)
+  provided
+A1:   for a being object of A() holds O(a) is object of B()
+  and
+A2:   for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     holds F(a,b,f) in (the Arrows of B()).(O(a), O(b))
+  and
+A3:   for a,b,c being object of A() st <^a,b^> <> {} & <^b,c^> <> {}
+    for f being Morphism of a,b, g being Morphism of b,c
+    for a',b',c' being object of B() st a' = O(a) & b' = O(b) & c' = O(c)
+    for f' being Morphism of a',b', g' being Morphism of b',c'
+     st f' = F(a,b,f) & g' = F(b,c,g)
+     holds F(a,c,g*f) = g'*f'
+  and
+A4:   for a being object of A(), a' being object of B() st a' = O(a)
+     holds F(a,a,idm a) = idm a'
+  proof deffunc o(set) = O($1);
+   consider O being Function such that
+A5:  dom O = the carrier of A() and
+A6:  for x being set st x in the carrier of A() holds O.x = o(x) from Lambda;
+      rng O c= the carrier of B()
+     proof let y be set; assume y in rng O;
+      then consider x being set such that
+A7:     x in dom O & y = O.x by FUNCT_1:def 5;
+      reconsider x as object of A() by A5,A7;
+         y = O(x) & O(x) is object of B() by A1,A6,A7;
+      hence thesis;
+     end;
+   then reconsider O as Function of the carrier of A(), the carrier of B()
+     by A5,FUNCT_2:4;
+   reconsider OM = [:O,O:] as
+      bifunction of the carrier of A(), the carrier of B() ;
+   defpred P[set,set,set] means $1 = F($3`1,$3`2,$2);
+A8:  for i being set st i in [:the carrier of A(), the carrier of A():]
+     for x being set st x in (the Arrows of A()).i
+      ex y being set st y in ((the Arrows of B())*OM).i & P[y,x,i]
+     proof let i be set; assume
+A9:     i in [:the carrier of A(), the carrier of A():];
+      then consider a,b being set such that
+A10:     a in the carrier of A() & b in the carrier of A() & [a,b] = i
+        by ZFMISC_1:def 2;
+      reconsider a,b as object of A() by A10;
+      let x be set; assume x in (the Arrows of A()).i;
+       then x in (the Arrows of A()).(a,b) by A10,BINOP_1:def 1;
+then A11:     x in <^a,b^> by ALTCAT_1:def 2;
+      then reconsider f = x as Morphism of a,b ;
+      take y = F(a,b,f);
+A12:     y in (the Arrows of B()).(O(a), O(b)) & O(a) = O.a & O(b) = O.b
+        by A2,A6,A11;
+         i in dom OM by A5,A9,FUNCT_3:def 9;
+       then ((the Arrows of B())*OM).i = (the Arrows of B()).(OM.i) by FUNCT_1:
+23
+           .= (the Arrows of B()).[O.a,O.b] by A5,A10,FUNCT_3:def 9;
+      hence y in ((the Arrows of B())*OM).i by A12,BINOP_1:def 1;
+         i`1 = a & i`2 = b by A10,MCART_1:7;
+      hence thesis;
+     end;
+   consider M being ManySortedFunction of the Arrows of A(),
+      (the Arrows of B())*OM such that
+A13:  for i be set st i in [:the carrier of A(), the carrier of A():]
+     ex f be Function of (the Arrows of A()).i, ((the Arrows of B())*OM).i
+      st f = M.i &
+       for x be set st x in (the Arrows of A()).i holds P[f.x, x, i]
+     from MSFExFunc(A8);
+   reconsider M as MSUnTrans of OM, the Arrows of A(), the Arrows of B()
+     by FUNCTOR0:def 5;
+      FunctorStr(#OM, M#) is Covariant proof take O; thus thesis; end;
+   then reconsider F = FunctorStr(#OM, M#) as
+     Covariant FunctorStr over A(), B();
+A14:  now let a be object of A();
+     thus F.a = (OM.(a,a))`1 by FUNCTOR0:def 6
+             .= (OM.[a,a])`1 by BINOP_1:def 1
+             .= ([O.a,O.a])`1 by A5,FUNCT_3:def 9
+             .= O.a by MCART_1:7
+             .= O(a) by A6;
+    end;
+A15:  now let o1,o2 be object of A() such that
+A16:   <^o1,o2^> <> {};
+     let g be Morphism of o1,o2;
+        [o1,o2] in [:the carrier of A(), the carrier of A():]
+       by ZFMISC_1:def 2;
+     then consider f being Function of (the Arrows of A()).[o1,o2],
+        ((the Arrows of B())*OM).[o1,o2] such that
+A17:    f = M.[o1,o2] and
+A18:    for x being set st x in (the Arrows of A()).[o1,o2]
+       holds f.x = F([o1,o2]`1,[o1,o2]`2,x) by A13;
+        <^o1,o2^> = (the Arrows of A()).(o1,o2) by ALTCAT_1:def 2
+               .= (the Arrows of A()).[o1,o2] by BINOP_1:def 1;
+then A19:    f.g = F([o1,o2]`1,[o1,o2]`2,g) by A16,A18
+         .= F(o1,[o1,o2]`2,g) by MCART_1:7
+         .= F(o1,o2,g) by MCART_1:7;
+        f = M.(o1,o2) by A17,BINOP_1:def 1;
+     hence Morph-Map(F,o1,o2).g = F(o1,o2,g) by A19,FUNCTOR0:def 15;
+    end;
+A20:  F is feasible
+     proof let o1,o2 be object of A();
+      consider g being Morphism of o1,o2;
+      assume
+A21:     <^o1,o2^> <> {};
+       then Morph-Map(F,o1,o2).g = F(o1,o2,g) by A15;
+       then Morph-Map(F,o1,o2).g in (the Arrows of B()).(O(o1), O(o2)) by A2,
+A21
+;
+       then Morph-Map(F,o1,o2).g in (the Arrows of B()).(F.o1, O(o2)) by A14;
+       then Morph-Map(F,o1,o2).g in (the Arrows of B()).(F.o1, F.o2) by A14;
+      hence <^F.o1,F.o2^> <> {} by ALTCAT_1:def 2;
+     end;
+A22:  now let o1,o2 be object of A(); assume
+A23:   <^o1,o2^> <> {};
+     let g be Morphism of o1,o2;
+        Morph-Map(F,o1,o2).g = F(o1,o2,g) & <^F.o1, F.o2^> <> {}
+       by A15,A20,A23,FUNCTOR0:def 19;
+     hence F.g = F(o1,o2,g) by A23,FUNCTOR0:def 16;
+    end;
+A24:  F is comp-preserving
+     proof let o1,o2,o3 be object of A() such that
+A25:    <^o1,o2^> <> {} & <^o2,o3^> <> {};
+      let f be Morphism of o1,o2, g be Morphism of o2,o3;
+      set a = O.o1, b = O.o2, c = O.o3;
+A26:    a = O(o1) & b = O(o2) & c = O(o3) by A6;
+       then (the Arrows of B()).(O(o1), O(o2)) = <^a, b^> &
+       (the Arrows of B()).(O(o2), O(o3)) = <^b, c^> by ALTCAT_1:def 2;
+then A27:    F(o1,o2,f) in <^a, b^> & F(o2,o3,g) in <^b,c^> by A2,A25;
+      then reconsider f' = F(o1,o2,f) as Morphism of a,b ;
+      reconsider g' = F(o2,o3,g) as Morphism of b,c by A27;
+A28:    a = F.o1 & b = F.o2 & c = F.o3 by A14,A26;
+      then reconsider ff = f' as Morphism of F.o1, F.o2;
+      reconsider gg = g' as Morphism of F.o2, F.o3 by A28;
+      take ff, gg;
+A29:    <^o1, o3^> <> {} by A25,ALTCAT_1:def 4;
+         F(o1,o3,g*f) = gg*ff by A3,A25,A26,A28;
+      hence ff = Morph-Map(F,o1,o2).f & gg = Morph-Map(F,o2,o3).g &
+        Morph-Map(F,o1,o3).(g*f) = gg*ff by A15,A25,A29;
+     end;
+      F is Functor of A(), B()
+     proof thus F is feasible by A20;
+      hereby let o be object of A();
+A30:      F.o = O(o) by A14;
+       thus Morph-Map(F,o,o).idm o
+           = F(o,o,idm o) by A15
+          .= idm F.o by A4,A30;
+      end;
+      thus F is Covariant comp-preserving or
+           F is Contravariant comp-reversing by A24;
+     end;
+   then reconsider F as covariant strict Functor of A(), B()
+     by A24,FUNCTOR0:def 27;
+   take F; thus thesis by A14,A22;
+  end;
+
+theorem Th1:
+ for A,B being category, F,G being covariant Functor of A,B
+  st (for a being object of A holds F.a = G.a) &
+     (for a,b being object of A st <^a,b^> <> {}
+       for f being Morphism of a,b holds F.f = G.f)
+  holds the FunctorStr of F = the FunctorStr of G
+  proof let A,B be category, F,G be covariant Functor of A,B such that
+A1:  for a being object of A holds F.a = G.a and
+A2:  for a,b being object of A st <^a,b^> <> {}
+       for f being Morphism of a,b holds F.f = G.f;
+      the ObjectMap of F is Covariant by FUNCTOR0:def 13;
+   then consider ff being Function of the carrier of A, the carrier of B such
+that
+A3:  the ObjectMap of F = [:ff, ff:] by FUNCTOR0:def 2;
+      the ObjectMap of G is Covariant by FUNCTOR0:def 13;
+   then consider gg being Function of the carrier of A, the carrier of B such
+that
+A4:  the ObjectMap of G = [:gg, gg:] by FUNCTOR0:def 2;
+      now let a,b be Element of A;
+     reconsider x = a, y = b as object of A;
+A5:   dom ff = the carrier of A & dom gg = the carrier of A by FUNCT_2:def 1;
+        (the ObjectMap of F).(x,x) = (the ObjectMap of F).[x,x] &
+      (the ObjectMap of F).(y,y) = (the ObjectMap of F).[y,y] &
+      (the ObjectMap of G).(x,x) = (the ObjectMap of G).[x,x] &
+      (the ObjectMap of G).(y,y) = (the ObjectMap of G).[y,y]
+       by BINOP_1:def 1;
+      then (the ObjectMap of F).(x,x) = [ff.x, ff.x] &
+      (the ObjectMap of F).(y,y) = [ff.y, ff.y] &
+      (the ObjectMap of G).(x,x) = [gg.x, gg.x] &
+      (the ObjectMap of G).(y,y) = [gg.y, gg.y] by A3,A4,A5,FUNCT_3:def 9;
+      then F.x = [ff.x,ff.x]`1 & F.y = [ff.y,ff.y]`1 &
+      G.x = [gg.x,gg.x]`1 & G.y = [gg.y,gg.y]`1 by FUNCTOR0:def 6;
+then A6:   F.x = ff.x & F.y = ff.y & G.x = gg.x & G.y = gg.y by MCART_1:7;
+A7:   F.x = G.x & F.y = G.y by A1;
+     thus (the ObjectMap of F).(a,b)
+        = (the ObjectMap of F).[a,b] by BINOP_1:def 1
+       .= [ff.a,ff.b] by A3,A5,FUNCT_3:def 9
+       .= (the ObjectMap of G).[a,b] by A4,A5,A6,A7,FUNCT_3:def 9
+       .= (the ObjectMap of G).(a,b) by BINOP_1:def 1;
+    end;
+then A8:  the ObjectMap of F = the ObjectMap of G by BINOP_1:2;
+      now let i be set; assume
+        i in [:the carrier of A, the carrier of A:];
+     then consider a,b being set such that
+A9:   a in the carrier of A & b in the carrier of A & i = [a,b]
+       by ZFMISC_1:def 2;
+     reconsider x = a, y = b as object of A by A9;
+A10:   (<^x,y^> <> {} implies <^F.x,F.y^> <> {}) &
+      (<^x,y^> <> {} implies <^G.x,G.y^> <> {}) by FUNCTOR0:def 19;
+then A11:   dom Morph-Map(F,x,y) = <^x,y^> & dom Morph-Map(G,x,y) = <^x,y^>
+       by FUNCT_2:def 1;
+A12:   now let z be set; assume
+A13:     z in <^x,y^>;
+       then reconsider f = z as Morphism of x,y ;
+       thus Morph-Map(F,x,y).z = F.f by A10,A13,FUNCTOR0:def 16
+         .= G.f by A2,A13 .= Morph-Map(G,x,y).z by A10,A13,FUNCTOR0:def 16;
+      end;
+     thus (the MorphMap of F).i
+        = (the MorphMap of F).(a,b) by A9,BINOP_1:def 1
+       .= Morph-Map(F,x,y) by FUNCTOR0:def 15
+       .= Morph-Map(G,x,y) by A11,A12,FUNCT_1:9
+       .= (the MorphMap of G).(a,b) by FUNCTOR0:def 15
+       .= (the MorphMap of G).i by A9,BINOP_1:def 1;
+    end;
+   hence thesis by A8,PBOOLE:3;
+  end;
+
+scheme ContravariantFunctorLambda
+ { A,B() -> category,
+   O(set) -> set,
+   F(set,set,set) -> set }:
+ ex F being contravariant strict Functor of A(),B() st
+  (for a being object of A() holds F.a = O(a)) &
+  for a,b being object of A() st <^a,b^> <> {}
+   for f being Morphism of a,b holds F.f = F(a,b,f)
+  provided
+A1:   for a being object of A() holds O(a) is object of B()
+  and
+A2:   for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     holds F(a,b,f) in (the Arrows of B()).(O(b), O(a))
+  and
+A3:   for a,b,c being object of A() st <^a,b^> <> {} & <^b,c^> <> {}
+    for f being Morphism of a,b, g being Morphism of b,c
+    for a',b',c' being object of B() st a' = O(a) & b' = O(b) & c' = O(c)
+    for f' being Morphism of b',a', g' being Morphism of c',b'
+     st f' = F(a,b,f) & g' = F(b,c,g)
+     holds F(a,c,g*f) = f'*g'
+  and
+A4:   for a being object of A(), a' being object of B() st a' = O(a)
+     holds F(a,a,idm a) = idm a'
+  proof deffunc o(set) = O($1);
+   consider O being Function such that
+A5:  dom O = the carrier of A() and
+A6:  for x being set st x in the carrier of A() holds O.x = o(x) from Lambda;
+      rng O c= the carrier of B()
+     proof let y be set; assume y in rng O;
+      then consider x being set such that
+A7:     x in dom O & y = O.x by FUNCT_1:def 5;
+      reconsider x as object of A() by A5,A7;
+         y = O(x) & O(x) is object of B() by A1,A6,A7;
+      hence thesis;
+     end;
+   then reconsider O as Function of the carrier of A(), the carrier of B()
+     by A5,FUNCT_2:4;
+   reconsider OM = ~[:O,O:] as
+      bifunction of the carrier of A(), the carrier of B() ;
+      dom [:O,O:] = [:the carrier of A(), the carrier of A():]
+     by A5,FUNCT_3:def 9; then
+A8:  dom OM = [:the carrier of A(), the carrier of A():] by FUNCT_4:47;
+    defpred P[set,set,set] means $1 = F($3`1,$3`2,$2);
+A9:  for i being set st i in [:the carrier of A(), the carrier of A():]
+     for x being set st x in (the Arrows of A()).i
+      ex y being set st y in ((the Arrows of B())*OM).i & P[y,x,i]
+     proof let i be set; assume
+A10:     i in [:the carrier of A(), the carrier of A():];
+      then consider a,b being set such that
+A11:     a in the carrier of A() & b in the carrier of A() & [a,b] = i
+        by ZFMISC_1:def 2;
+      reconsider a,b as object of A() by A11;
+      let x be set; assume x in (the Arrows of A()).i;
+       then x in (the Arrows of A()).(a,b) by A11,BINOP_1:def 1;
+then A12:     x in <^a,b^> by ALTCAT_1:def 2;
+      then reconsider f = x as Morphism of a,b ;
+      take y = F(a,b,f);
+A13:     y in (the Arrows of B()).(O(b), O(a)) & O(a) = O.a & O(b) = O.b
+        by A2,A6,A12;
+         ((the Arrows of B())*OM).i
+            = (the Arrows of B()).(OM.i) by A8,A10,FUNCT_1:23
+           .= (the Arrows of B()).([:O,O:].[b,a]) by A8,A10,A11,FUNCT_4:44
+           .= (the Arrows of B()).[O.b,O.a] by A5,FUNCT_3:def 9;
+      hence y in ((the Arrows of B())*OM).i by A13,BINOP_1:def 1;
+         i`1 = a & i`2 = b by A11,MCART_1:7;
+      hence thesis;
+     end;
+   consider M being ManySortedFunction of the Arrows of A(),
+      (the Arrows of B())*OM such that
+A14:  for i be set st i in [:the carrier of A(), the carrier of A():]
+     ex f be Function of (the Arrows of A()).i, ((the Arrows of B())*OM).i
+      st f = M.i &
+       for x be set st x in (the Arrows of A()).i holds P[f.x,x,i]
+     from MSFExFunc(A9);
+   reconsider M as MSUnTrans of OM, the Arrows of A(), the Arrows of B()
+     by FUNCTOR0:def 5;
+      FunctorStr(#OM, M#) is Contravariant proof take O; thus thesis; end;
+   then reconsider F = FunctorStr(#OM, M#) as
+     Contravariant FunctorStr over A(), B();
+A15:  now let a be object of A();
+A16:    [a,a] in dom OM by A8,ZFMISC_1:def 2;
+     thus F.a = (OM.(a,a))`1 by FUNCTOR0:def 6
+             .= (OM.[a,a])`1 by BINOP_1:def 1
+             .= ([:O,O:].[a,a])`1 by A16,FUNCT_4:44
+             .= ([O.a,O.a])`1 by A5,FUNCT_3:def 9
+             .= O.a by MCART_1:7
+             .= O(a) by A6;
+    end;
+A17:  now let o1,o2 be object of A() such that
+A18:   <^o1,o2^> <> {};
+     let g be Morphism of o1,o2;
+        [o1,o2] in [:the carrier of A(), the carrier of A():]
+       by ZFMISC_1:def 2;
+     then consider f being Function of (the Arrows of A()).[o1,o2],
+        ((the Arrows of B())*OM).[o1,o2] such that
+A19:    f = M.[o1,o2] and
+A20:    for x being set st x in (the Arrows of A()).[o1,o2]
+       holds f.x = F([o1,o2]`1,[o1,o2]`2,x) by A14;
+        <^o1,o2^> = (the Arrows of A()).(o1,o2) by ALTCAT_1:def 2
+               .= (the Arrows of A()).[o1,o2] by BINOP_1:def 1;
+then A21:    f.g = F([o1,o2]`1,[o1,o2]`2,g) by A18,A20
+         .= F(o1,[o1,o2]`2,g) by MCART_1:7
+         .= F(o1,o2,g) by MCART_1:7;
+        f = M.(o1,o2) by A19,BINOP_1:def 1;
+     hence Morph-Map(F,o1,o2).g = F(o1,o2,g) by A21,FUNCTOR0:def 15;
+    end;
+A22:  F is feasible
+     proof let o1,o2 be object of A();
+      consider g being Morphism of o1,o2;
+      assume
+A23:     <^o1,o2^> <> {};
+       then Morph-Map(F,o1,o2).g = F(o1,o2,g) by A17;
+       then Morph-Map(F,o1,o2).g in (the Arrows of B()).(O(o2), O(o1)) by A2,
+A23
+;
+       then Morph-Map(F,o1,o2).g in (the Arrows of B()).(F.o2, O(o1)) by A15;
+       then Morph-Map(F,o1,o2).g in (the Arrows of B()).(F.o2, F.o1) by A15;
+      hence <^F.o2,F.o1^> <> {} by ALTCAT_1:def 2;
+     end;
+A24:  now let o1,o2 be object of A(); assume
+A25:   <^o1,o2^> <> {};
+     let g be Morphism of o1,o2;
+        Morph-Map(F,o1,o2).g = F(o1,o2,g) & <^F.o2, F.o1^> <> {}
+       by A17,A22,A25,FUNCTOR0:def 20;
+     hence F.g = F(o1,o2,g) by A25,FUNCTOR0:def 17;
+    end;
+A26:  F is comp-reversing
+     proof let o1,o2,o3 be object of A() such that
+A27:    <^o1,o2^> <> {} & <^o2,o3^> <> {};
+      let f be Morphism of o1,o2, g be Morphism of o2,o3;
+      set a = O.o1, b = O.o2, c = O.o3;
+A28:    a = O(o1) & b = O(o2) & c = O(o3) by A6;
+       then (the Arrows of B()).(O(o2), O(o1)) = <^b, a^> &
+       (the Arrows of B()).(O(o3), O(o2)) = <^c, b^> by ALTCAT_1:def 2;
+then A29:    F(o1,o2,f) in <^b, a^> & F(o2,o3,g) in <^c, b^> by A2,A27;
+      then reconsider f' = F(o1,o2,f) as Morphism of b, a ;
+      reconsider g' = F(o2,o3,g) as Morphism of c, b by A29;
+A30:    a = F.o1 & b = F.o2 & c = F.o3 by A15,A28;
+      then reconsider ff = f' as Morphism of F.o2, F.o1;
+      reconsider gg = g' as Morphism of F.o3, F.o2 by A30;
+      take ff, gg;
+A31:    <^o1, o3^> <> {} by A27,ALTCAT_1:def 4;
+         F(o1,o3,g*f) = ff*gg by A3,A27,A28,A30;
+      hence ff = Morph-Map(F,o1,o2).f & gg = Morph-Map(F,o2,o3).g &
+        Morph-Map(F,o1,o3).(g*f) = ff*gg by A17,A27,A31;
+     end;
+      F is Functor of A(), B()
+     proof thus F is feasible by A22;
+      hereby let o be object of A();
+A32:      F.o = O(o) by A15;
+       thus Morph-Map(F,o,o).idm o
+           = F(o,o,idm o) by A17
+          .= idm F.o by A4,A32;
+      end;
+      thus F is Covariant comp-preserving or
+           F is Contravariant comp-reversing by A26;
+     end;
+   then reconsider F as contravariant strict Functor of A(), B()
+     by A26,FUNCTOR0:def 28;
+   take F; thus thesis by A15,A24;
+  end;
+
+theorem Th2:
+ for A,B being category, F,G being contravariant Functor of A,B
+  st (for a being object of A holds F.a = G.a) &
+     (for a,b being object of A st <^a,b^> <> {}
+       for f being Morphism of a,b holds F.f = G.f)
+  holds the FunctorStr of F = the FunctorStr of G
+  proof let A,B be category, F,G be contravariant Functor of A,B such that
+A1:  for a being object of A holds F.a = G.a and
+A2:  for a,b being object of A st <^a,b^> <> {}
+       for f being Morphism of a,b holds F.f = G.f;
+      the ObjectMap of F is Contravariant by FUNCTOR0:def 14;
+   then consider ff being Function of the carrier of A, the carrier of B such
+that
+A3:  the ObjectMap of F = ~[:ff, ff:] by FUNCTOR0:def 3;
+      the ObjectMap of G is Contravariant by FUNCTOR0:def 14;
+   then consider gg being Function of the carrier of A, the carrier of B such
+that
+A4:  the ObjectMap of G = ~[:gg, gg:] by FUNCTOR0:def 3;
+      now let a,b be Element of A;
+     reconsider x = a, y = b as object of A;
+A5:   dom ff = the carrier of A & dom gg = the carrier of A by FUNCT_2:def 1;
+      A6: dom [:ff,ff:] = [:the carrier of A, the carrier of A:]
+       by FUNCT_2:def 1;
+then A7:   [b,a] in dom [:ff,ff:] & [a,a] in dom [:ff,ff:] & [b,b] in dom [:ff,
+ff:]
+       by ZFMISC_1:def 2;
+        dom [:gg,gg:] = [:the carrier of A, the carrier of A:]
+       by FUNCT_2:def 1;
+then A8:   [b,a] in dom [:gg,gg:] & [a,a] in dom [:gg,gg:] & [b,b] in dom [:gg,
+gg:]
+       by ZFMISC_1:def 2;
+        (the ObjectMap of F).(x,x) = (the ObjectMap of F).[x,x] &
+      (the ObjectMap of F).(y,y) = (the ObjectMap of F).[y,y] &
+      (the ObjectMap of G).(x,x) = (the ObjectMap of G).[x,x] &
+      (the ObjectMap of G).(y,y) = (the ObjectMap of G).[y,y]
+       by BINOP_1:def 1;
+      then (the ObjectMap of F).(x,x) = [:ff,ff:].[x,x] &
+      (the ObjectMap of F).(y,y) = [:ff,ff:].[y,y] &
+      (the ObjectMap of G).(x,x) = [:gg,gg:].[x,x] &
+      (the ObjectMap of G).(y,y) = [:gg,gg:].[y,y]
+       by A3,A4,A6,A8,FUNCT_4:def 2;
+      then (the ObjectMap of F).(x,x) = [ff.x, ff.x] &
+      (the ObjectMap of F).(y,y) = [ff.y, ff.y] &
+      (the ObjectMap of G).(x,x) = [gg.x, gg.x] &
+      (the ObjectMap of G).(y,y) = [gg.y, gg.y] by A5,FUNCT_3:def 9;
+      then F.x = [ff.x,ff.x]`1 & F.y = [ff.y,ff.y]`1 &
+      G.x = [gg.x,gg.x]`1 & G.y = [gg.y,gg.y]`1 by FUNCTOR0:def 6;
+then A9:   F.x = ff.x & F.y = ff.y & G.x = gg.x & G.y = gg.y by MCART_1:7;
+A10:   F.x = G.x & F.y = G.y by A1;
+     thus (the ObjectMap of F).(a,b)
+        = (the ObjectMap of F).[a,b] by BINOP_1:def 1
+       .= [:ff,ff:].[b,a] by A3,A7,FUNCT_4:def 2
+       .= [ff.b,ff.a] by A5,FUNCT_3:def 9
+       .= [:gg,gg:].[b,a] by A5,A9,A10,FUNCT_3:def 9
+       .= (the ObjectMap of G).[a,b] by A4,A8,FUNCT_4:def 2
+       .= (the ObjectMap of G).(a,b) by BINOP_1:def 1;
+    end;
+then A11:  the ObjectMap of F = the ObjectMap of G by BINOP_1:2;
+      now let i be set; assume
+        i in [:the carrier of A, the carrier of A:];
+     then consider a,b being set such that
+A12:   a in the carrier of A & b in the carrier of A & i = [a,b]
+       by ZFMISC_1:def 2;
+     reconsider x = a, y = b as object of A by A12;
+A13:   (<^x,y^> <> {} implies <^F.y,F.x^> <> {}) &
+      (<^x,y^> <> {} implies <^G.y,G.x^> <> {}) by FUNCTOR0:def 20;
+then A14:   dom Morph-Map(F,x,y) = <^x,y^> & dom Morph-Map(G,x,y) = <^x,y^>
+       by FUNCT_2:def 1;
+A15:   now let z be set; assume
+A16:     z in <^x,y^>;
+       then reconsider f = z as Morphism of x,y ;
+       thus Morph-Map(F,x,y).z = F.f by A13,A16,FUNCTOR0:def 17
+         .= G.f by A2,A16 .= Morph-Map(G,x,y).z by A13,A16,FUNCTOR0:def 17;
+      end;
+     thus (the MorphMap of F).i
+        = (the MorphMap of F).(a,b) by A12,BINOP_1:def 1
+       .= Morph-Map(F,x,y) by FUNCTOR0:def 15
+       .= Morph-Map(G,x,y) by A14,A15,FUNCT_1:9
+       .= (the MorphMap of G).(a,b) by FUNCTOR0:def 15
+       .= (the MorphMap of G).i by A12,BINOP_1:def 1;
+    end;
+   hence thesis by A11,PBOOLE:3;
+  end;
+
+begin
+:: <section2>Isomorphism and equivalence of categories</section2>
+
+definition
+ let A,B,C be non empty set;
+ let f be Function of [:A,B:], C;
+ redefine attr f is one-to-one means
+    for a1,a2 being Element of A, b1,b2 being Element of B
+   st f.(a1,b1) = f.(a2,b2) holds a1 = a2 & b1 = b2;
+  compatibility
+   proof
+A1:   dom f = [:A,B:] by FUNCT_2:def 1;
+    thus f is one-to-one implies
+      for a1,a2 being Element of A, b1,b2 being Element of B
+       st f.(a1,b1) = f.(a2,b2) holds a1 = a2 & b1 = b2
+      proof assume
+A2:      for x,y being set st x in dom f & y in dom f & f.x = f.y holds x = y;
+       let a1,a2 be Element of A, b1,b2 be Element of B;
+          f.(a1,b1) = f.[a1,b1] & f.(a2,b2) = f.[a2,b2] & [a1,b1] in [:A,B:] &
+        [a2,b2] in [:A,B:] by BINOP_1:def 1,ZFMISC_1:def 2;
+        then f.(a1,b1) = f.(a2,b2) implies [a1,b1] = [a2,b2] by A1,A2;
+       hence thesis by ZFMISC_1:33;
+      end;
+    assume
+A3:   for a1,a2 being Element of A, b1,b2 being Element of B
+      st f.(a1,b1) = f.(a2,b2) holds a1 = a2 & b1 = b2;
+    let x,y be set; assume x in dom f;
+    then consider a1,b1 being set such that
+A4:   a1 in A & b1 in B & x = [a1,b1] by ZFMISC_1:def 2;
+    assume y in dom f;
+    then consider a2,b2 being set such that
+A5:   a2 in A & b2 in B & y = [a2,b2] by ZFMISC_1:def 2;
+    reconsider a1, a2 as Element of A by A4,A5;
+    reconsider b1, b2 as Element of B by A4,A5;
+    assume f.x = f.y;
+     then f.(a1,b1) = f.y by A4,BINOP_1:def 1 .= f.(a2,b2) by A5,BINOP_1:def 1
+;
+     then a1 = a2 & b1 = b2 by A3;
+    hence thesis by A4,A5;
+   end;
+end;
+
+scheme CoBijectiveSch
+ { A,B() -> category, F() -> covariant Functor of A(), B(),
+   O(set) -> set,
+   F(set,set,set) -> set }:
+  F() is bijective
+ provided
+A1:  for a being object of A() holds F().a = O(a)
+ and
+A2:  for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b holds F().f = F(a,b,f)
+ and
+A3:  for a,b being object of A() st O(a) = O(b) holds a = b
+ and
+A4:  for a,b being object of A() st <^a,b^> <> {}
+    for f,g being Morphism of a,b st F(a,b,f) = F(a,b,g)
+     holds f = g
+ and
+A5:  for a,b being object of B() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     ex c,d being object of A(), g being Morphism of c,d
+      st a = O(c) & b = O(d) & <^c,d^> <> {} & f = F(c,d,g)
+  proof set F = F();
+   thus the ObjectMap of F is one-to-one
+     proof let x1,x2,y1,y2 be Element of A();
+      reconsider a1 = x1, a2 = x2, b1 = y1, b2 = y2 as object of A()
+       ;
+      assume (the ObjectMap of F).(x1,y1) = (the ObjectMap of F).(x2,y2);
+       then [F.a1,F.b1] = (the ObjectMap of F).(x2,y2) by FUNCTOR0:23
+                  .= [F.a2,F.b2] by FUNCTOR0:23;
+       then F.a1 = F.a2 & F.b1 = F.b2 by ZFMISC_1:33;
+       then O(a1) = F.a2 & O(b1) = F.b2 by A1;
+       then O(a1) = O(a2) & O(b1) = O(b2) by A1;
+      hence thesis by A3;
+     end;
+      now let i be set; assume
+        i in [:the carrier of A(), the carrier of A():];
+     then consider a,b being set such that
+A6:    a in the carrier of A() & b in the carrier of A() & i = [a,b]
+       by ZFMISC_1:def 2;
+     reconsider a, b as object of A() by A6;
+A7:    <^a,b^> <> {} implies <^F.a, F.b^> <> {} by FUNCTOR0:def 19;
+        Morph-Map(F,a,b) is one-to-one
+       proof let x,y be set; assume
+A8:       x in dom Morph-Map(F,a,b) & y in dom Morph-Map(F,a,b);
+        then reconsider f = x, g = y as Morphism of a,b ;
+           F.f = Morph-Map(F,a,b).x & F.g = Morph-Map(F,a,b).y
+          by A7,A8,FUNCTOR0:def 16;
+         then F(a,b,f) = Morph-Map(F,a,b).x & F(a,b,g) = Morph-Map(F,a,b).y
+          by A2,A8;
+        hence thesis by A4,A8;
+       end;
+      then (the MorphMap of F).(a,b) is one-to-one Function by FUNCTOR0:def 15
+;
+     hence (the MorphMap of F).i is one-to-one by A6,BINOP_1:def 1;
+    end;
+   hence the MorphMap of F is "1-1" by MSUALG_3:1;
+   reconsider G = the MorphMap of F as ManySortedFunction of
+     the Arrows of A(),
+     (the Arrows of B())*the ObjectMap of F by FUNCTOR0:def 5;
+   thus F is full
+     proof take G;
+      thus G = the MorphMap of F;
+      let i be set; assume
+         i in [:the carrier of A(), the carrier of A():];
+      then reconsider ab = i as
+         Element of [:the carrier of A(), the carrier of A():];
+         G.ab is Function of (the Arrows of A()).ab,
+                           ((the Arrows of B())*the ObjectMap of F).ab;
+      hence rng(G.i) c= ((the Arrows of B())*the ObjectMap of F).i
+        by RELSET_1:12;
+      consider a,b being set such that
+A9:     a in the carrier of A() & b in the carrier of A() & ab = [a,b]
+        by ZFMISC_1:def 2;
+      reconsider a, b as object of A() by A9;
+         (the ObjectMap of F).ab = (the ObjectMap of F).(a,b) by A9,BINOP_1:def
+1
+            .= [F.a, F.b] by FUNCTOR0:23;
+then A10:     ((the Arrows of B())*the ObjectMap of F).ab
+             = (the Arrows of B()).[F.a, F.b] by FUNCT_2:21
+            .= (the Arrows of B()).(F.a, F.b) by BINOP_1:def 1
+            .= <^F.a, F.b^> by ALTCAT_1:def 2;
+      let x be set; assume
+A11:     x in ((the Arrows of B())*the ObjectMap of F).i;
+      then reconsider f = x as Morphism of F.a, F.b by A10;
+      consider c,d being object of A(), g being Morphism of c,d such that
+A12:     F.a = O(c) & F.b = O(d) & <^c,d^> <> {} & f = F(c,d,g) by A5,A10,A11;
+         O(a) = O(c) & O(b) = O(d) by A1,A12;
+then A13:     a = c & b = d by A3;
+A14:     f = F.g by A2,A12 .= Morph-Map(F,c,d).g by A10,A11,A12,A13,FUNCTOR0:
+def 16;
+         G.ab = G.(a,b) by A9,BINOP_1:def 1;
+       then dom Morph-Map(F,a,b) = <^a, b^> & G.ab = Morph-Map(F,a,b)
+        by A10,A11,FUNCTOR0:def 15,FUNCT_2:def 1;
+      hence x in rng(G.i) by A12,A13,A14,FUNCT_1:def 5;
+     end;
+   thus rng the ObjectMap of F c= [:the carrier of B(), the carrier of B():]
+     by RELSET_1:12;
+   let x be set; assume
+      x in [:the carrier of B(), the carrier of B():];
+   then consider a, b being set such that
+A15:  a in the carrier of B() & b in the carrier of B() & x = [a,b]
+     by ZFMISC_1:def 2;
+   reconsider a, b as object of B() by A15;
+   consider c,c' being object of A(), g being Morphism of c,c' such that
+A16:  a = O(c) & a = O(c') & <^c,c'^> <> {} & idm a = F(c,c',g) by A5;
+   consider d,d' being object of A(), h being Morphism of d,d' such that
+A17:  b = O(d) & b = O(d') & <^d,d'^> <> {} & idm b = F(d,d',h) by A5;
+      [c,d] in [:the carrier of A(), the carrier of A():] by ZFMISC_1:def 2;
+then A18:  [c,d] in dom the ObjectMap of F by FUNCT_2:def 1;
+      (the ObjectMap of F).[c,d] = (the ObjectMap of F).(c,d) by BINOP_1:def 1
+      .= [F.c, F.d] by FUNCTOR0:23
+      .= [a, F.d] by A1,A16
+      .= x by A1,A15,A17;
+   hence thesis by A18,FUNCT_1:def 5;
+  end;
+
+scheme CatIsomorphism
+ { A,B() -> category,
+   O(set) -> set,
+   F(set,set,set) -> set }:
+  A(), B() are_isomorphic
+ provided
+A1:  ex F being covariant Functor of A(),B() st
+    (for a being object of A() holds F.a = O(a)) &
+    for a,b being object of A() st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = F(a,b,f)
+ and
+A2:  for a,b being object of A() st O(a) = O(b) holds a = b
+ and
+A3:  for a,b being object of A() st <^a,b^> <> {}
+    for f,g being Morphism of a,b st F(a,b,f) = F(a,b,g)
+     holds f = g
+ and
+A4:  for a,b being object of B() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     ex c,d being object of A(), g being Morphism of c,d
+      st a = O(c) & b = O(d) & <^c,d^> <> {} & f = F(c,d,g)
+  proof deffunc f(set,set,set) = F($1,$2,$3);
+    deffunc o(set) = O($1);
+A5: for a,b being object of A() st o(a) = o(b) holds a = b by A2;
+A6: for a,b being object of A() st <^a,b^> <> {}
+    for f,g being Morphism of a,b st f(a,b,f) = f(a,b,g)
+     holds f = g by A3;
+A7:  for a,b being object of B() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     ex c,d being object of A(), g being Morphism of c,d
+      st a = o(c) & b = o(d) & <^c,d^> <> {} & f = f(c,d,g) by A4;
+    consider F being covariant Functor of A(),B() such that
+A8:  for a being object of A() holds F.a = o(a) and
+A9:  for a,b being object of A() st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = f(a,b,f) by A1;
+   take F; thus F is bijective from CoBijectiveSch(A8,A9,A5,A6,A7);
+   thus thesis;
+  end;
+
+scheme ContraBijectiveSch
+ { A,B() -> category, F() -> contravariant Functor of A(), B(),
+   O(set) -> set,
+   F(set,set,set) -> set }:
+  F() is bijective
+ provided
+A1:  for a being object of A() holds F().a = O(a)
+ and
+A2:  for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b holds F().f = F(a,b,f)
+ and
+A3:  for a,b being object of A() st O(a) = O(b) holds a = b
+ and
+A4:  for a,b being object of A() st <^a,b^> <> {}
+    for f,g being Morphism of a,b st F(a,b,f) = F(a,b,g)
+     holds f = g
+ and
+A5:  for a,b being object of B() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     ex c,d being object of A(), g being Morphism of c,d
+      st b = O(c) & a = O(d) & <^c,d^> <> {} & f = F(c,d,g)
+  proof set F = F();
+   thus the ObjectMap of F is one-to-one
+     proof let x1,x2,y1,y2 be Element of A();
+      reconsider a1 = x1, a2 = x2, b1 = y1, b2 = y2 as object of A()
+       ;
+      assume (the ObjectMap of F).(x1,y1) = (the ObjectMap of F).(x2,y2);
+       then [F.b1,F.a1] = (the ObjectMap of F).(x2,y2) by FUNCTOR0:24
+                  .= [F.b2,F.a2] by FUNCTOR0:24;
+       then F.a1 = F.a2 & F.b1 = F.b2 by ZFMISC_1:33;
+       then O(a1) = F.a2 & O(b1) = F.b2 by A1;
+       then O(a1) = O(a2) & O(b1) = O(b2) by A1;
+      hence thesis by A3;
+     end;
+      now let i be set; assume
+        i in [:the carrier of A(), the carrier of A():];
+     then consider a,b being set such that
+A6:    a in the carrier of A() & b in the carrier of A() & i = [a,b]
+       by ZFMISC_1:def 2;
+     reconsider a, b as object of A() by A6;
+A7:    <^a,b^> <> {} implies <^F.b, F.a^> <> {} by FUNCTOR0:def 20;
+        Morph-Map(F,a,b) is one-to-one
+       proof let x,y be set; assume
+A8:       x in dom Morph-Map(F,a,b) & y in dom Morph-Map(F,a,b);
+        then reconsider f = x, g = y as Morphism of a,b ;
+           F.f = Morph-Map(F,a,b).x & F.g = Morph-Map(F,a,b).y
+          by A7,A8,FUNCTOR0:def 17;
+         then F(a,b,f) = Morph-Map(F,a,b).x & F(a,b,g) = Morph-Map(F,a,b).y
+          by A2,A8;
+        hence thesis by A4,A8;
+       end;
+      then (the MorphMap of F).(a,b) is one-to-one Function by FUNCTOR0:def 15
+;
+     hence (the MorphMap of F).i is one-to-one by A6,BINOP_1:def 1;
+    end;
+   hence the MorphMap of F is "1-1" by MSUALG_3:1;
+   reconsider G = the MorphMap of F as ManySortedFunction of
+     the Arrows of A(),
+     (the Arrows of B())*the ObjectMap of F by FUNCTOR0:def 5;
+   thus F is full
+     proof take G;
+      thus G = the MorphMap of F;
+      let i be set; assume
+         i in [:the carrier of A(), the carrier of A():];
+      then reconsider ab = i as
+         Element of [:the carrier of A(), the carrier of A():];
+         G.ab is Function of (the Arrows of A()).ab,
+                           ((the Arrows of B())*the ObjectMap of F).ab;
+      hence rng(G.i) c= ((the Arrows of B())*the ObjectMap of F).i
+        by RELSET_1:12;
+      consider a,b being set such that
+A9:     a in the carrier of A() & b in the carrier of A() & ab = [a,b]
+        by ZFMISC_1:def 2;
+      reconsider a, b as object of A() by A9;
+         (the ObjectMap of F).ab = (the ObjectMap of F).(a,b) by A9,BINOP_1:def
+1
+            .= [F.b, F.a] by FUNCTOR0:24;
+then A10:     ((the Arrows of B())*the ObjectMap of F).ab
+             = (the Arrows of B()).[F.b, F.a] by FUNCT_2:21
+            .= (the Arrows of B()).(F.b, F.a) by BINOP_1:def 1
+            .= <^F.b, F.a^> by ALTCAT_1:def 2;
+      let x be set; assume
+A11:     x in ((the Arrows of B())*the ObjectMap of F).i;
+      then reconsider f = x as Morphism of F.b, F.a by A10;
+      consider c,d being object of A(), g being Morphism of c,d such that
+A12:     F.a = O(c) & F.b = O(d) & <^c,d^> <> {} & f = F(c,d,g) by A5,A10,A11;
+         O(a) = O(c) & O(b) = O(d) by A1,A12;
+then A13:     a = c & b = d by A3;
+A14:     f = F.g by A2,A12 .= Morph-Map(F,c,d).g by A10,A11,A12,A13,FUNCTOR0:
+def 17;
+         G.ab = G.(a,b) by A9,BINOP_1:def 1;
+       then dom Morph-Map(F,a,b) = <^a, b^> & G.ab = Morph-Map(F,a,b)
+        by A10,A11,FUNCTOR0:def 15,FUNCT_2:def 1;
+      hence x in rng(G.i) by A12,A13,A14,FUNCT_1:def 5;
+     end;
+   thus rng the ObjectMap of F c= [:the carrier of B(), the carrier of B():]
+     by RELSET_1:12;
+   let x be set; assume
+      x in [:the carrier of B(), the carrier of B():];
+   then consider a, b being set such that
+A15:  a in the carrier of B() & b in the carrier of B() & x = [a,b]
+     by ZFMISC_1:def 2;
+   reconsider a, b as object of B() by A15;
+   consider c,c' being object of A(), g being Morphism of c,c' such that
+A16:  a = O(c) & a = O(c') & <^c,c'^> <> {} & idm a = F(c,c',g) by A5;
+   consider d,d' being object of A(), h being Morphism of d,d' such that
+A17:  b = O(d) & b = O(d') & <^d,d'^> <> {} & idm b = F(d,d',h) by A5;
+      [d,c] in [:the carrier of A(), the carrier of A():] by ZFMISC_1:def 2;
+then A18:  [d,c] in dom the ObjectMap of F by FUNCT_2:def 1;
+      (the ObjectMap of F).[d,c] = (the ObjectMap of F).(d,c) by BINOP_1:def 1
+      .= [F.c, F.d] by FUNCTOR0:24
+      .= [a, F.d] by A1,A16
+      .= x by A1,A15,A17;
+   hence thesis by A18,FUNCT_1:def 5;
+  end;
+
+scheme CatAntiIsomorphism
+ { A,B() -> category,
+   O(set) -> set,
+   F(set,set,set) -> set }:
+  A(), B() are_anti-isomorphic
+ provided
+A1:  ex F being contravariant Functor of A(),B() st
+    (for a being object of A() holds F.a = O(a)) &
+    for a,b being object of A() st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = F(a,b,f)
+ and
+A2:  for a,b being object of A() st O(a) = O(b) holds a = b
+ and
+A3:  for a,b being object of A() st <^a,b^> <> {}
+    for f,g being Morphism of a,b st F(a,b,f) = F(a,b,g)
+     holds f = g
+ and
+A4:  for a,b being object of B() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     ex c,d being object of A(), g being Morphism of c,d
+      st b = O(c) & a = O(d) & <^c,d^> <> {} & f = F(c,d,g)
+  proof
+    deffunc f(set,set,set) = F($1,$2,$3);
+    deffunc o(set) = O($1);
+    consider F being contravariant Functor of A(),B() such that
+A5:  for a being object of A() holds F.a = o(a) and
+A6:  for a,b being object of A() st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = f(a,b,f) by A1;
+A7:  for a,b being object of A() st o(a) = o(b) holds a = b by A2;
+A8:  for a,b being object of A() st <^a,b^> <> {}
+    for f,g being Morphism of a,b st f(a,b,f) = f(a,b,g)
+     holds f = g by A3;
+A9:  for a,b being object of B() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     ex c,d being object of A(), g being Morphism of c,d
+      st b = o(c) & a = o(d) & <^c,d^> <> {} & f = f(c,d,g) by A4;
+   take F; thus F is bijective from ContraBijectiveSch(A5,A6,A7,A8,A9);
+   thus thesis;
+  end;
+
+definition
+ let A,B be category;
+ pred A,B are_equivalent means
+    ex F being covariant Functor of A,B,
+     G being covariant Functor of B,A st
+   G*F, id A are_naturally_equivalent &
+   F*G, id B are_naturally_equivalent;
+ reflexivity
+  proof let A be category;
+   take id A, id A;
+   thus thesis by FUNCTOR3:4;
+  end;
+ symmetry;
+end;
+
+theorem Th3:
+ for A,B,C being non empty reflexive AltGraph
+ for F1,F2 being feasible FunctorStr over A,B
+ for G1,G2 being FunctorStr over B,C
+  st the FunctorStr of F1 = the FunctorStr of F2 &
+     the FunctorStr of G1 = the FunctorStr of G2
+  holds G1*F1 = G2*F2
+  proof let A,B,C be non empty reflexive AltGraph;
+   let F1,F2 be feasible FunctorStr over A,B;
+   let G1,G2 be FunctorStr over B,C such that
+A1: the FunctorStr of F1 = the FunctorStr of F2 &
+    the FunctorStr of G1 = the FunctorStr of G2;
+      the ObjectMap of (G1*F1) = (the ObjectMap of G1)*the ObjectMap of F1 &
+    the MorphMap of (G1*F1) =
+     ((the MorphMap of G1)*the ObjectMap of F1)**the MorphMap of F1
+     by FUNCTOR0:def 37;
+   hence thesis by A1,FUNCTOR0:def 37;
+  end;
+
+theorem Th4:
+ for A,B,C being category
+  st A,B are_equivalent & B,C are_equivalent
+  holds A,C are_equivalent
+  proof let A,B,C be category;
+   given F1 being covariant Functor of A,B,
+         G1 being covariant Functor of B,A such that
+A1: G1*F1, id A are_naturally_equivalent and
+A2: F1*G1, id B are_naturally_equivalent;
+   given F2 being covariant Functor of B,C,
+         G2 being covariant Functor of C,B such that
+A3: G2*F2, id B are_naturally_equivalent and
+A4: F2*G2, id C are_naturally_equivalent;
+   take F = F2*F1, G = G1*G2;
+      the FunctorStr of F1 = the FunctorStr of F1;
+then A5: (the FunctorStr of G1)*F1 = G1*F1 by Th3;
+      the FunctorStr of G2 = the FunctorStr of G2;
+then A6: (the FunctorStr of F2)*G2 = F2*G2 by Th3;
+A7: G1* id B = the FunctorStr of G1 & F2* id B = the FunctorStr of F2
+     by FUNCTOR3:5;
+A8: G*F2 = G1*(G2*F2) & F*G1 = F2*(F1*G1) & G*F2*F1 = G*F & F*G1*G2 = F*G
+     by FUNCTOR0:33;
+    then G*F2, G1* id B are_naturally_equivalent &
+    F*G1, F2* id B are_naturally_equivalent
+     by A2,A3,FUNCTOR3:35;
+    then G*F, G1*F1 are_naturally_equivalent &
+    F*G, F2*G2 are_naturally_equivalent
+     by A5,A6,A7,A8,FUNCTOR3:36;
+   hence
+      G*F, id A are_naturally_equivalent &
+    F*G, id C are_naturally_equivalent by A1,A4,FUNCTOR3:33;
+  end;
+
+theorem Th5:
+ for A,B being category st A,B are_isomorphic
+  holds A,B are_equivalent
+  proof let A,B be category such that
+A1:  A,B are_isomorphic;
+   consider F being Functor of A,B such that
+A2:  F is bijective covariant by A1,FUNCTOR0:def 40;
+   reconsider F as covariant Functor of A,B by A2;
+   consider G being Functor of B,A such that
+A3:  G = F" & G is bijective covariant by A2,FUNCTOR0:49;
+   reconsider G as covariant Functor of B,A by A3;
+   take F, G;
+   thus thesis by A2,A3,FUNCTOR1:21,22;
+  end;
+
+scheme NatTransLambda
+ { A, B() -> category,
+   F, G() -> covariant Functor of A(), B(),
+   T(set) -> set
+ }:
+ ex t being natural_transformation of F(), G() st
+  F() is_naturally_transformable_to G() &
+  for a being object of A() holds t!a = T(a)
+ provided
+A1:   for a being object of A() holds T(a) in <^F().a, G().a^>
+ and
+A2:   for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b
+    for g1 being Morphism of F().a, G().a st g1 = T(a)
+    for g2 being Morphism of F().b, G().b st g2 = T(b)
+     holds g2*F().f = G().f*g1
+  proof
+    deffunc t(set) =T($1);
+    consider t being ManySortedSet of the carrier of A() such that
+A3: for a being Element of A() holds t.a = t(a)
+     from LambdaDMS;
+A4: F() is_transformable_to G()
+     proof let a be object of A();
+      thus thesis by A1;
+     end;
+      now let a be object of A();
+        t.a = T(a) by A3;
+      then t.a in <^F().a, G().a^> by A1;
+     hence t.a is Morphism of F().a, G().a ;
+    end;
+   then reconsider t as transformation of F(), G() by A4,FUNCTOR2:def 2;
+A5: now let a be object of A();
+        t.a = T(a) by A3;
+     hence t!a = T(a) by A4,FUNCTOR2:def 4;
+    end;
+A6: F() is_naturally_transformable_to G()
+     proof thus F() is_transformable_to G() by A4;
+      take t; let a,b be object of A();
+         t!a = T(a) & t!b = T(b) by A5;
+      hence thesis by A2;
+     end;
+      now let a,b be object of A();
+        t!a = T(a) & t!b = T(b) by A5;
+     hence <^a,b^> <> {} implies
+       for f being Morphism of a,b holds t!b*F().f = G().f*(t!a) by A2;
+    end;
+    then t is natural_transformation of F(), G() by A6,FUNCTOR2:def 7;
+   hence thesis by A5,A6;
+  end;
+
+scheme NatEquivalenceLambda
+ { A, B() -> category,
+   F, G() -> covariant Functor of A(), B(),
+   T(set) -> set
+ }:
+ ex t being natural_equivalence of F(), G() st
+  F(), G() are_naturally_equivalent &
+  for a being object of A() holds t!a = T(a)
+ provided
+A1:   for a being object of A() holds
+     T(a) in <^F().a, G().a^> & <^G().a, F().a^> <> {} &
+     for f being Morphism of F().a, G().a st f = T(a) holds f is iso
+ and
+A2:   for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b
+    for g1 being Morphism of F().a, G().a st g1 = T(a)
+    for g2 being Morphism of F().b, G().b st g2 = T(b)
+     holds g2*F().f = G().f*g1
+  proof deffunc t(set) = T($1);
+A3:   for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b
+    for g1 being Morphism of F().a, G().a st g1 = t(a)
+    for g2 being Morphism of F().b, G().b st g2 = t(b)
+     holds g2*F().f = G().f*g1 by A2;
+A4: for a being object of A() holds t(a) in <^F().a, G().a^> by A1;
+   consider t being natural_transformation of F(), G() such that
+A5: F() is_naturally_transformable_to G() and
+A6: for a being object of A() holds t!a = t(a) from NatTransLambda(A4,A3);
+A7: G() is_transformable_to F()
+     proof let a be object of A();
+      thus thesis by A1;
+     end;
+A8: F(), G() are_naturally_equivalent
+     proof thus F() is_naturally_transformable_to G() by A5;
+      thus G() is_transformable_to F() by A7;
+      take t; let a be object of A();
+         t!a = T(a) by A6;
+      hence thesis by A1;
+     end;
+      now let a be object of A();
+        t!a = T(a) by A6;
+     hence t!a is iso by A1;
+    end;
+    then t is natural_equivalence of F(), G() by A8,FUNCTOR3:def 5;
+   hence thesis by A6,A8;
+  end;
+
+begin
+:: <section3>Dual categories</section3>
+
+definition
+ let C1,C2 be non empty AltCatStr;
+ pred C1, C2 are_opposite means:
+Def3:
+  the carrier of C2 = the carrier of C1 &
+  the Arrows of C2 = ~the Arrows of C1 &
+  for a,b,c being object of C1
+  for a',b',c' being object of C2 st a' = a & b' = b & c' = c
+   holds (the Comp of C2).(a',b',c') = ~((the Comp of C1).(c,b,a));
+ symmetry
+  proof let C1,C2 be non empty AltCatStr;
+   assume that
+A1:  the carrier of C2 = the carrier of C1 and
+A2:  the Arrows of C2 = ~the Arrows of C1 and
+A3:  for a,b,c being object of C1
+    for a',b',c' being object of C2 st a' = a & b' = b & c' = c
+     holds (the Comp of C2).(a',b',c') = ~((the Comp of C1).(c,b,a));
+   thus the carrier of C1 = the carrier of C2 by A1;
+      dom the Arrows of C1 = [:the carrier of C1, the carrier of C1:]
+     by PBOOLE:def 3;
+   hence the Arrows of C1 = ~the Arrows of C2 by A2,FUNCT_4:53;
+   let a,b,c be object of C2; let a',b',c' be object of C1;
+   assume a' = a & b' = b & c' = c;
+then A4:  (the Comp of C2).(c,b,a) = ~((the Comp of C1).(a',b',c')) by A3;
+      dom ((the Comp of C1).(a',b',c')) c=
+       [:(the Arrows of C1).(b',c'), (the Arrows of C1).(a',b'):];
+   hence (the Comp of C1).(a',b',c') = ~((the Comp of C2).(c,b,a))
+     by A4,FUNCT_4:53;
+  end;
+end;
+
+theorem Th6:
+ for A,B being non empty AltCatStr st A, B are_opposite
+ for a being object of A holds a is object of B
+  proof let A,B be non empty AltCatStr;
+   assume the carrier of A = the carrier of B;
+   hence thesis;
+  end;
+
+theorem Th7:
+ for A,B being non empty AltCatStr st A, B are_opposite
+ for a,b being object of A, a',b' being object of B st a' = a & b' = b
+  holds <^a,b^> = <^b',a'^>
+  proof let A,B be non empty AltCatStr such that
+      the carrier of B = the carrier of A and
+A1: the Arrows of B = ~the Arrows of A;
+   assume
+      for a,b,c being object of A
+     for a',b',c' being object of B st a' = a & b' = b & c' = c
+      holds (the Comp of B).(a',b',c') = ~((the Comp of A).(c,b,a));
+   let a,b be object of A, a',b' be object of B;
+      <^a,b^> = (the Arrows of A).(a,b) &
+    <^b',a'^> = (the Arrows of B).(b',a') by ALTCAT_1:def 2;
+   hence thesis by A1,ALTCAT_2:6;
+  end;
+
+theorem Th8:
+ for A,B being non empty AltCatStr st A, B are_opposite
+ for a,b being object of A, a',b' being object of B st a' = a & b' = b
+ for f being Morphism of a,b holds f is Morphism of b', a' by Th7;
+
+theorem Th9:
+ for C1,C2 being non empty transitive AltCatStr
+  holds C1, C2 are_opposite iff
+    the carrier of C2 = the carrier of C1 &
+    for a,b,c being object of C1
+     for a',b',c' being object of C2 st a' = a & b' = b & c' = c
+      holds
+       <^a,b^> = <^b',a'^> &
+       (<^a,b^> <> {} & <^b,c^> <> {} implies
+         for f being Morphism of a,b, g being Morphism of b,c
+          for f' being Morphism of b',a', g' being Morphism of c',b'
+           st f' = f & g' = g holds f'*g' = g*f)
+  proof let C1,C2 be non empty transitive AltCatStr;
+A1:  dom the Arrows of C1 = [:the carrier of C1, the carrier of C1:] &
+    dom the Arrows of C2 = [:the carrier of C2, the carrier of C2:]
+     by PBOOLE:def 3;
+   hereby assume
+A2:   C1, C2 are_opposite;
+    hence the carrier of C2 = the carrier of C1 by Def3;
+    let a,b,c be object of C1;
+    let a',b',c' be object of C2 such that
+A3:   a' = a & b' = b & c' = c;
+A4:   [a,b] in dom the Arrows of C1 & [b,c] in dom the Arrows of C1 &
+     [a,c] in dom the Arrows of C1 by A1,ZFMISC_1:def 2;
+A5:   <^a,b^> = (the Arrows of C1).(a,b) & <^b,c^> = (the Arrows of C1).(b,c) &
+     <^a,c^> = (the Arrows of C1).(a,c) by ALTCAT_1:def 2;
+    hence
+A6:   <^a,b^> = (the Arrows of C1).[a,b] by BINOP_1:def 1
+            .= (~the Arrows of C1).[b,a] by A4,FUNCT_4:def 2
+            .= (the Arrows of C2).[b',a'] by A2,A3,Def3
+            .= (the Arrows of C2).(b',a') by BINOP_1:def 1
+            .= <^b',a'^> by ALTCAT_1:def 2;
+A7:   <^b,c^> = (the Arrows of C1).[b,c] by A5,BINOP_1:def 1
+            .= (~the Arrows of C1).[c,b] by A4,FUNCT_4:def 2
+            .= (the Arrows of C2).[c',b'] by A2,A3,Def3
+            .= (the Arrows of C2).(c',b') by BINOP_1:def 1
+            .= <^c',b'^> by ALTCAT_1:def 2;
+A8:   (the Comp of C2).(c',b',a') = ~((the Comp of C1).(a,b,c)) by A2,A3,Def3;
+    assume
+A9:   <^a,b^> <> {} & <^b,c^> <> {};
+    let f be Morphism of a,b, g be Morphism of b,c;
+       <^a,c^> <> {} by A9,ALTCAT_1:def 4;
+     then dom ((the Comp of C1).(a,b,c)) =
+       [:(the Arrows of C1).(b,c), (the Arrows of C1).(a,b):]
+      by A5,FUNCT_2:def 1;
+then A10:   [g,f] in dom ((the Comp of C1).(a,b,c)) by A5,A9,ZFMISC_1:def 2;
+    let f' be Morphism of b',a', g' be Morphism of c',b';
+    assume f' = f & g' = g;
+    hence f'*g'
+       = (~((the Comp of C1).(a,b,c))).(f,g) by A6,A7,A8,A9,ALTCAT_1:def 10
+      .= (~((the Comp of C1).(a,b,c))).[f,g] by BINOP_1:def 1
+      .= ((the Comp of C1).(a,b,c)).[g,f] by A10,FUNCT_4:def 2
+      .= ((the Comp of C1).(a,b,c)).(g,f) by BINOP_1:def 1
+      .= g*f by A9,ALTCAT_1:def 10;
+   end;
+   assume that
+A11:  the carrier of C2 = the carrier of C1 and
+A12:  for a,b,c being object of C1
+     for a',b',c' being object of C2 st a' = a & b' = b & c' = c
+      holds <^a,b^> = <^b',a'^> &
+       (<^a,b^> <> {} & <^b,c^> <> {} implies
+         for f being Morphism of a,b, g being Morphism of b,c
+          for f' being Morphism of b',a', g' being Morphism of c',b'
+           st f' = f & g' = g holds f'*g' = g*f);
+   thus the carrier of C2 = the carrier of C1 by A11;
+A13:  now let x be set;
+     hereby assume x in dom the Arrows of C2;
+      then consider y,z being set such that
+A14:     y in the carrier of C1 & z in the carrier of C1 & [y,z] = x
+        by A1,A11,ZFMISC_1:def 2;
+      take z,y;
+      thus x = [y,z] & [z,y] in dom the Arrows of C1 by A1,A14,ZFMISC_1:def 2;
+     end;
+     given z,y being set such that
+A15:    x = [y,z] & [z,y] in dom the Arrows of C1;
+        z in the carrier of C1 & y in the carrier of C1 by A1,A15,ZFMISC_1:106;
+     hence x in dom the Arrows of C2 by A1,A11,A15,ZFMISC_1:def 2;
+    end;
+      now let y,z be set; assume [y,z] in dom the Arrows of C1;
+      then y in the carrier of C1 & z in the carrier of C1 by A1,ZFMISC_1:106;
+     then reconsider a = y, b = z as object of C1;
+     reconsider a' = a, b' = b as object of C2 by A11;
+     thus (the Arrows of C2).[z,y]
+        = (the Arrows of C2).(b',a') by BINOP_1:def 1
+       .= <^b',a'^> by ALTCAT_1:def 2
+       .= <^a,b^> by A12
+       .= (the Arrows of C1).(a,b) by ALTCAT_1:def 2
+       .= (the Arrows of C1).[y,z] by BINOP_1:def 1;
+    end;
+   hence the Arrows of C2 = ~the Arrows of C1 by A13,FUNCT_4:def 2;
+   let a,b,c be object of C1, a',b',c' be object of C2 such that
+A16:  a' = a & b' = b & c' = c;
+A17:  (the Arrows of C2).(a',b') = <^a',b'^> &
+    (the Arrows of C2).(b',c') = <^b',c'^> &
+    (the Arrows of C2).(a',c') = <^a',c'^> by ALTCAT_1:def 2;
+A18:  (the Arrows of C1).(c,b) = <^c,b^> &
+    (the Arrows of C1).(b,a) = <^b,a^> &
+    (the Arrows of C1).(c,a) = <^c,a^> by ALTCAT_1:def 2;
+A19:  <^a',b'^> = <^b,a^> & <^b',c'^> = <^c,b^> & <^a',c'^> = <^c,a^> by A12,
+A16;
+      [:<^b,a^>,<^c,b^>:] <> {} implies <^b,a^> <> {} & <^c,b^> <> {}
+     by ZFMISC_1:113;
+    then [:<^b,a^>,<^c,b^>:] <> {} implies <^c,a^> <> {} by ALTCAT_1:def 4;
+then A20: dom ((the Comp of C1).(c,b,a))
+     = [:(the Arrows of C1).(b,a), (the Arrows of C1).(c,b):]
+      by A18,FUNCT_2:def 1;
+      [:<^c,b^>,<^b,a^>:] <> {} implies <^b,a^> <> {} & <^c,b^> <> {}
+     by ZFMISC_1:113;
+    then [:<^c,b^>,<^b,a^>:] <> {} implies <^c,a^> <> {} by ALTCAT_1:def 4;
+then A21: dom ((the Comp of C2).(a',b',c'))
+     = [:(the Arrows of C2).(b',c'), (the Arrows of C2).(a',b'):]
+      by A17,A19,FUNCT_2:def 1;
+A22:  now let x be set;
+     hereby assume x in dom ((the Comp of C2).(a',b',c'));
+      then consider y,z being set such that
+A23:     y in <^b',c'^> & z in <^a',b'^> & [y,z] = x by A17,ZFMISC_1:def 2;
+      take z,y;
+      thus x = [y,z] & [z,y] in dom ((the Comp of C1).(c,b,a))
+        by A18,A19,A20,A23,ZFMISC_1:def 2;
+     end;
+     given z,y being set such that
+A24:    x = [y,z] & [z,y] in dom ((the Comp of C1).(c,b,a));
+        z in <^b,a^> & y in <^c,b^> by A18,A24,ZFMISC_1:106;
+     hence x in dom ((the Comp of C2).(a',b',c')) by A17,A19,A21,A24,ZFMISC_1:
+def 2;
+    end;
+      now let y,z be set; assume [y,z] in dom ((the Comp of C1).(c,b,a));
+then A25:    y in <^b,a^> & z in <^c,b^> by A18,ZFMISC_1:106;
+     then reconsider f = y as Morphism of b,a ;
+     reconsider g = z as Morphism of c,b by A25;
+     reconsider f' = y as Morphism of a',b' by A19,A25;
+     reconsider g' = z as Morphism of b',c' by A19,A25;
+     thus ((the Comp of C2).(a',b',c')).[z,y]
+        = ((the Comp of C2).(a',b',c')).(g',f') by BINOP_1:def 1
+       .= g'*f' by A19,A25,ALTCAT_1:def 10
+       .= f*g by A12,A16,A25
+       .= ((the Comp of C1).(c,b,a)).(f,g) by A25,ALTCAT_1:def 10
+       .= ((the Comp of C1).(c,b,a)).[y,z] by BINOP_1:def 1;
+    end;
+   hence (the Comp of C2).(a',b',c') = ~((the Comp of C1).(c,b,a))
+     by A22,FUNCT_4:def 2;
+  end;
+
+theorem Th10:
+ for A,B being category st A, B are_opposite
+ for a being object of A, b being object of B st a = b
+  holds idm a = idm b
+  proof let A,B be category such that
+A1:  A, B are_opposite;
+   let a be object of A, b be object of B such that
+A2:  a = b;
+   <^a,a^> = <^b,b^> by A1,A2,Th9;
+   then reconsider i = idm b as Morphism of a,a ;
+      now let c be object of A; assume
+A3:    <^a,c^> <> {};
+     let f be Morphism of a,c;
+        the carrier of A = the carrier of B by A1,Th9;
+     then reconsider d = c as object of B;
+A4:    <^a,c^> = <^d,b^> by A1,A2,Th9;
+     then reconsider g = f as Morphism of d,b ;
+     thus f*i = (idm b)*g by A1,A2,A3,Th9 .= f by A3,A4,ALTCAT_1:24;
+    end;
+   hence idm a = idm b by ALTCAT_1:def 19;
+  end;
+
+theorem Th11:
+ for C being transitive non empty AltCatStr
+ ex C' being strict transitive non empty AltCatStr st C, C' are_opposite
+  proof let C be transitive non empty AltCatStr;
+   deffunc B(set,set) = (the Arrows of C).($2,$1);
+   deffunc C(set,set,set,set,set) = ((the Comp of C).($3,$2,$1)).($4,$5);
+A1: now let a,b,c be Element of C, f,g be set;
+     reconsider a' = a, b' = b, c' = c as object of C;
+     assume f in B(a,b);
+then A2:   f in <^b',a'^> by ALTCAT_1:def 2;
+     then reconsider f' = f as Morphism of b',a' ;
+     assume g in B(b,c);
+then A3:   g in <^c',b'^> by ALTCAT_1:def 2;
+     then reconsider g' = g as Morphism of c',b' ;
+A4:   <^c',a'^> <> {} & B(a,c) = <^c',a'^> by A2,A3,ALTCAT_1:def 2,def 4;
+        C(a,b,c,f,g) = f'*g' by A2,A3,ALTCAT_1:def 10;
+     hence C(a,b,c,f,g) in B(a,c) by A4;
+    end;
+  ex C1 being strict non empty transitive AltCatStr st
+   the carrier of C1 = the carrier of C &
+   (for a,b being object of C1 holds <^a,b^> = B(a,b)) &
+   (for a,b,c being object of C1 st <^a,b^> <> {} & <^b,c^> <> {}
+    for f being Morphism of a,b, g being Morphism of b,c
+     holds g*f = C(a,b,c,f,g)) from AltCatStrLambda(A1);
+   then
+   consider C1 being strict transitive non empty AltCatStr such that
+A5: the carrier of C1 = the carrier of C and
+A6: for a,b being object of C1 holds <^a,b^> = (the Arrows of C).(b,a) and
+A7: for a,b,c being object of C1 st <^a,b^> <> {} & <^b,c^> <> {}
+     for f being Morphism of a,b, g being Morphism of b,c
+      holds g*f = ((the Comp of C).(c,b,a)).(f,g);
+   take C1;
+      now let a,b,c be object of C;
+     let a',b',c' be object of C1; assume
+A8:    a' = a & b' = b & c' = c;
+     hence
+A9:    <^a,b^> = (the Arrows of C).(a',b') by ALTCAT_1:def 2
+             .= <^b',a'^> by A6;
+A10:    <^b,c^> = (the Arrows of C).(b',c') by A8,ALTCAT_1:def 2
+             .= <^c',b'^> by A6;
+     assume
+A11:    <^a,b^> <> {} & <^b,c^> <> {};
+     let f be Morphism of a,b, g be Morphism of b,c;
+     let f' be Morphism of b',a', g' be Morphism of c',b';
+     assume f' = f & g' = g;
+     hence f'*g' = ((the Comp of C).(a,b,c)).(g,f) by A7,A8,A9,A10,A11
+                .= g*f by A11,ALTCAT_1:def 10;
+    end;
+   hence thesis by A5,Th9;
+  end;
+
+theorem Th12:
+ for A,B being transitive non empty AltCatStr st A,B are_opposite
+  holds A is associative implies B is associative
+  proof let A,B be transitive non empty AltCatStr such that
+A1: A,B are_opposite and
+A2: A is associative;
+A3: the carrier of A = the carrier of B by A1,Def3;
+   deffunc C(set,set,set,set,set) = ((the Comp of A).($3,$2,$1)).($4,$5);
+A4: now let a,b,c be object of B such that
+A5:   <^a,b^> <> {} & <^b,c^> <> {};
+     let f be Morphism of a,b, g be Morphism of b,c;
+     reconsider a' = a, b' = b, c' = c as object of A by A1,Th6;
+A6:   <^a,b^> = <^b',a'^> & <^b,c^> = <^c',b'^> by A1,Th7;
+     reconsider f' = f as Morphism of b', a' by A1,Th8;
+     reconsider g' = g as Morphism of c', b' by A1,Th8;
+     thus g*f = f'*g' by A1,A5,Th9
+             .= C(a,b,c,f,g) by A5,A6,ALTCAT_1:def 10;
+    end;
+A7: now let a,b,c,d be object of B, f,g,h be set;
+     reconsider a' = a, b' = b, c' = c, d' = d as object of A
+       by A3;
+     assume f in <^a,b^>;
+then A8:   f in <^b',a'^> by A1,Th9;
+     then reconsider f' = f as Morphism of b',a' ;
+     assume g in <^b,c^>;
+then A9:   g in <^c',b'^> by A1,Th9;
+     then reconsider g' = g as Morphism of c',b' ;
+     assume h in <^c,d^>;
+then A10:   h in <^d',c'^> by A1,Th9;
+     then reconsider h' = h as Morphism of d',c' ;
+A11:   <^c',a'^> <> {} & <^d',b'^> <> {} by A8,A9,A10,ALTCAT_1:def 4;
+     thus C(a,c,d,C(a,b,c,f,g),h)
+        = C(a,c,d,f'*g',h) by A8,A9,ALTCAT_1:def 10
+       .= (f'*g')*h' by A10,A11,ALTCAT_1:def 10
+       .= f'*(g'*h') by A2,A8,A9,A10,ALTCAT_1:25
+       .= C(a,b,d,f,g'*h') by A8,A11,ALTCAT_1:def 10
+       .= C(a,b,d,f,C(b,c,d,g,h)) by A9,A10,ALTCAT_1:def 10;
+    end;
+   thus thesis from CatAssocSch(A4,A7);
+  end;
+
+theorem Th13:
+ for A,B being transitive non empty AltCatStr st A,B are_opposite
+  holds A is with_units implies B is with_units
+  proof let A,B be transitive non empty AltCatStr such that
+A1: A,B are_opposite;
+   assume A is with_units;
+   then reconsider A as with_units (transitive non empty AltCatStr);
+   deffunc C(set,set,set,set,set) = ((the Comp of A).($3,$2,$1)).($4,$5);
+A2: now let a,b,c be object of B such that
+A3:   <^a,b^> <> {} & <^b,c^> <> {};
+     let f be Morphism of a,b, g be Morphism of b,c;
+     reconsider a' = a, b' = b, c' = c as object of A by A1,Th6;
+A4:   <^a,b^> = <^b',a'^> & <^b,c^> = <^c',b'^> by A1,Th7;
+     reconsider f' = f as Morphism of b', a' by A1,Th8;
+     reconsider g' = g as Morphism of c', b' by A1,Th8;
+     thus g*f = f'*g' by A1,A3,Th9
+             .= C(a,b,c,f,g) by A3,A4,ALTCAT_1:def 10;
+    end;
+A5: now let a be object of B;
+     reconsider a' = a as object of A by A1,Th6;
+     reconsider f = idm a' as set;
+     take f;
+     idm a' in <^a',a'^>;
+     hence f in <^a,a^> by A1,Th7;
+     let b be object of B, g be set;
+     reconsider b' = b as object of A by A1,Th6;
+     assume g in <^a,b^>;
+then A7:   g in <^b',a'^> by A1,Th7;
+     then reconsider g' = g as Morphism of b',a';
+     thus C(a,a,b,f,g) = (idm a')*g' by A7,ALTCAT_1:def 10
+       .= g by A7,ALTCAT_1:24;
+    end;
+A8: now let a be object of B;
+     reconsider a' = a as object of A by A1,Th6;
+     reconsider f = idm a' as set;
+     take f;
+     idm a' in <^a',a'^>;
+     hence f in <^a,a^> by A1,Th7;
+     let b be object of B, g be set;
+     reconsider b' = b as object of A by A1,Th6;
+     assume g in <^b,a^>;
+then A10:   g in <^a',b'^> by A1,Th7;
+     then reconsider g' = g as Morphism of a',b';
+     thus C(b,a,a,g,f) = g'*(idm a') by A10,ALTCAT_1:def 10
+       .= g by A10,ALTCAT_1:def 19;
+    end;
+   thus thesis from CatUnitsSch(A2,A5,A8);
+  end;
+
+theorem Th14:
+ for C,C1,C2 being non empty AltCatStr
+  st C, C1 are_opposite
+  holds C, C2 are_opposite iff the AltCatStr of C1 = the AltCatStr of C2
+  proof let C, C1, C2 be non empty AltCatStr such that
+A1:  the carrier of C1 = the carrier of C and
+A2:  the Arrows of C1 = ~the Arrows of C and
+A3:  for a,b,c being object of C
+     for a',b',c' being object of C1 st a' = a & b' = b & c' = c
+      holds (the Comp of C1).(a',b',c') = ~((the Comp of C).(c,b,a));
+   thus C, C2 are_opposite implies the AltCatStr of C1 = the AltCatStr of C2
+     proof assume that
+A4:    the carrier of C2 = the carrier of C and
+A5:    the Arrows of C2 = ~the Arrows of C and
+A6:    for a,b,c being object of C
+        for a',b',c' being object of C2 st a' = a & b' = b & c' = c
+         holds (the Comp of C2).(a',b',c') = ~((the Comp of C).(c,b,a));
+A7:     dom the Comp of C1 = [:the carrier of C1, the carrier of C1,
+          the carrier of C1:] by PBOOLE:def 3;
+A8:     dom the Comp of C2 = [:the carrier of C2, the carrier of C2,
+          the carrier of C2:] by PBOOLE:def 3;
+         now let x be set; assume
+           x in [:the carrier of C, the carrier of C, the carrier of C:];
+        then consider a,b,c being set such that
+A9:       a in the carrier of C & b in the carrier of C &
+         c in the carrier of C & x = [a,b,c] by MCART_1:72;
+        reconsider a, b, c as object of C by A9;
+        reconsider a1 = a, b1 = b, c1 = c as object of C1 by A1;
+        reconsider a2 = a, b2 = b, c2 = c as object of C2 by A4;
+           (the Comp of C1).(a1,b1,c1) = ~((the Comp of C).(c,b,a)) &
+         (the Comp of C2).(a2,b2,c2) = ~((the Comp of C).(c,b,a)) by A3,A6;
+        hence (the Comp of C1).x = (the Comp of C2).(a2,b2,c2)
+            by A9,MULTOP_1:def 1
+         .= (the Comp of C2).x by A9,MULTOP_1:def 1;
+       end;
+      hence thesis by A1,A2,A4,A5,A7,A8,FUNCT_1:9;
+     end;
+   assume
+A10:  the AltCatStr of C1 = the AltCatStr of C2;
+   hence the carrier of C2 = the carrier of C &
+    the Arrows of C2 = ~the Arrows of C by A1,A2;
+   let a,b,c be object of C, a',b',c' be object of C2;
+   thus thesis by A3,A10;
+  end;
+
+definition
+ let C be transitive non empty AltCatStr;
+ func C opp -> strict transitive non empty AltCatStr means:
+Def4:
+  C, it are_opposite;
+ uniqueness by Th14;
+ existence by Th11;
+end;
+
+definition
+ let C be associative (transitive non empty AltCatStr);
+ cluster C opp -> associative;
+ coherence
+  proof C, C opp are_opposite by Def4;
+   hence thesis by Th12;
+  end;
+end;
+
+definition
+ let C be with_units (transitive non empty AltCatStr);
+ cluster C opp -> with_units;
+ coherence
+  proof C, C opp are_opposite by Def4;
+   hence thesis by Th13;
+  end;
+end;
+
+definition
+ let A,B be category such that A1: A, B are_opposite;
+    deffunc O(set) = $1;
+    deffunc F(set,set,set) = $3;
+A2: the carrier of B = the carrier of A by A1,Def3;then
+A3: for a being object of A holds O(a) is object of B;
+A4: now let a,b be object of A such that
+A5:   <^a,b^> <> {};
+     let f be Morphism of a,b;
+     reconsider a' = a, b' = b as object of B by A2;
+        <^a,b^> = <^b',a'^> by A1,Th9
+             .= (the Arrows of B).(b, a) by ALTCAT_1:def 2;
+     hence F(a,b,f) in (the Arrows of B).(O(b), O(a)) by A5;
+    end;
+A6: for a,b,c being object of A st <^a,b^> <> {} & <^b,c^> <> {}
+    for f being Morphism of a,b, g being Morphism of b,c
+    for a',b',c' being object of B st a' = O(a) & b' = O(b) & c' = O(c)
+    for f' being Morphism of b',a', g' being Morphism of c',b'
+     st f' = F(a,b,f) & g' = F(b,c,g)
+     holds F(a,c,g*f) = f'*g' by A1,Th9;
+A7: for a being object of A, a' being object of B st a' = O(a)
+     holds F(a,a,idm a) = idm a' by A1,Th10;
+ func dualizing-func(A,B) -> contravariant strict Functor of A,B
+ means:
+Def5:
+  (for a being object of A holds it.a = a) &
+  for a,b being object of A st <^a,b^> <> {}
+   for f being Morphism of a,b holds it.f = f;
+ existence
+  proof
+    thus ex F being contravariant strict Functor of A,B st
+    (for a being object of A holds F.a = O(a)) &
+    for a,b being object of A st <^a,b^> <> {}
+    for f being Morphism of a,b holds F.f = F(a,b,f)
+    from ContravariantFunctorLambda(A3,A4,A6,A7);
+  end;
+ uniqueness
+  proof let F,G be contravariant strict Functor of A,B such that
+A8: for a being object of A holds F.a = a and
+A9: for a,b being object of A st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = f and
+A10: for a being object of A holds G.a = a and
+A11: for a,b being object of A st <^a,b^> <> {}
+     for f being Morphism of a,b holds G.f = f;
+A12: now let a be object of A;
+     thus F.a = a by A8 .= G.a by A10;
+    end;
+      now let a,b be object of A such that
+A13:   <^a,b^> <> {};
+     let f be Morphism of a,b;
+     thus F.f = f by A9,A13 .= G.f by A11,A13;
+    end;
+   hence thesis by A12,Th2;
+  end;
+end;
+
+theorem Th15:
+ for A,B being category st A,B are_opposite
+  holds dualizing-func(A,B)*dualizing-func(B,A) = id B
+  proof let A,B be category such that
+A1:  A, B are_opposite;
+A2:  now let a be object of B;
+     thus (dualizing-func(A,B)*dualizing-func(B,A)).a
+        = dualizing-func(A,B).(dualizing-func(B,A).a) by FUNCTOR0:34
+       .= dualizing-func(B,A).a by A1,Def5
+       .= a by A1,Def5
+       .= (id B).a by FUNCTOR0:30;
+    end;
+      now let a,b be object of B;
+     assume
+A3:    <^a,b^> <> {};
+then A4:    <^dualizing-func(B,A).b,dualizing-func(B,A).a^> <> {} by FUNCTOR0:
+def 20;
+     let f be Morphism of a,b;
+     thus (dualizing-func(A,B)*dualizing-func(B,A)).f
+        = dualizing-func(A,B).(dualizing-func(B,A).f) by A3,FUNCTOR3:7
+       .= dualizing-func(B,A).f by A1,A4,Def5
+       .= f by A1,A3,Def5
+       .= (id B).f by A3,FUNCTOR0:32;
+    end;
+   hence thesis by A2,Th1;
+  end;
+
+theorem Th16:
+ for A, B being category st A, B are_opposite
+  holds dualizing-func(A,B) is bijective
+  proof let A, B be category such that
+A1:  A, B are_opposite;
+   set F = dualizing-func(A,B);
+   deffunc O(set) = $1;
+   deffunc F(set,set,set) = $3;
+A2: for a being object of A holds F.a = O(a) by A1,Def5;
+A3: for a,b being object of A st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = F(a,b,f) by A1,Def5;
+A4: for a,b being object of A st O(a) = O(b) holds a = b;
+A5: for a,b being object of A st <^a,b^> <> {}
+     for f,g being Morphism of a,b st F(a,b,f) = F(a,b,g) holds f = g;
+A6: now let a,b be object of B;
+        the carrier of A = the carrier of B by A1,Def3;
+     then reconsider a' = a, b' = b as object of A;
+A7:   <^a,b^> = <^b',a'^> by A1,Th9;
+     assume
+A8:   <^a,b^> <> {};
+     let f be Morphism of a,b;
+     thus ex c,d being object of A, g being Morphism of c,d
+       st b = O(c) & a = O(d) & <^c,d^> <> {} & f = F(c,d,g) by A7,A8;
+    end;
+      F is bijective from ContraBijectiveSch(A2,A3,A4,A5,A6);
+   hence thesis;
+  end;
+
+definition
+ let A be category;
+ cluster dualizing-func(A, A opp) -> bijective;
+ coherence
+  proof A, A opp are_opposite by Def4;
+   hence thesis by Th16;
+  end;
+ cluster dualizing-func(A opp, A) -> bijective;
+ coherence
+  proof A, A opp are_opposite by Def4;
+   hence thesis by Th16;
+  end;
+end;
+
+theorem
+   for A, B being category st A, B are_opposite
+  holds A, B are_anti-isomorphic
+  proof let A, B be category; assume A, B are_opposite;
+    then dualizing-func(A,B) is bijective by Th16;
+   hence thesis by FUNCTOR0:def 41;
+  end;
+
+theorem Th18:
+ for A, B, C being category st A, B are_opposite
+  holds A, C are_isomorphic iff B, C are_anti-isomorphic
+  proof let A,B,C be category; assume
+      A, B are_opposite;
+then A1:  dualizing-func(A,B) is bijective by Th16;
+    hereby assume A, C are_isomorphic;
+     then consider F being Functor of C,A such that
+A2:    F is bijective covariant by FUNCTOR0:def 40;
+     reconsider F as covariant Functor of C,A by A2;
+        dualizing-func(A,B)*F is bijective contravariant
+       by A1,A2,FUNCTOR1:13;
+     hence B, C are_anti-isomorphic by FUNCTOR0:def 41;
+    end;
+   assume B, C are_anti-isomorphic;
+   then consider F being Functor of B,C such that
+A3:  F is bijective contravariant by FUNCTOR0:def 41;
+   reconsider F as contravariant Functor of B,C by A3;
+      F*dualizing-func(A,B) is bijective covariant
+     by A1,A3,FUNCTOR1:13;
+   hence A, C are_isomorphic by FUNCTOR0:def 40;
+  end;
+
+theorem
+   for A, B, C, D being category st A, B are_opposite & C, D are_opposite
+  holds A, C are_isomorphic implies B, D are_isomorphic
+  proof let A, B, C, D be category; assume
+A1: A, B are_opposite & C, D are_opposite;
+    then A, C are_isomorphic implies B, C are_anti-isomorphic by Th18;
+   hence thesis by A1,Th18;
+  end;
+
+theorem
+   for A, B, C, D being category st A, B are_opposite & C, D are_opposite
+  holds A, C are_anti-isomorphic implies B, D are_anti-isomorphic
+  proof let A, B, C, D be category; assume
+A1: A, B are_opposite & C, D are_opposite;
+    then A, C are_anti-isomorphic implies B, C are_isomorphic by Th18;
+   hence thesis by A1,Th18;
+  end;
+
+Lm1:
+    now let A, B be category such that
+A1:   A, B are_opposite;
+     let a, b be object of A such that
+A2:   <^a,b^> <> {} & <^b,a^> <> {};
+     let a', b' be object of B such that
+A3:   a' = a & b' = b;
+     let f be Morphism of a,b, f' be Morphism of b',a' such that
+A4:   f' = f;
+     thus f is retraction implies f' is coretraction
+       proof given g being Morphism of b,a such that
+A5:      g is_right_inverse_of f;
+        reconsider g' = g as Morphism of a', b' by A1,A3,Th8;
+        take g';
+           f*g = idm b by A5,ALTCAT_3:def 1 .= idm b' by A1,A3,Th10;
+        hence g'*f' = idm b' by A1,A2,A3,A4,Th9;
+       end;
+     thus f is coretraction implies f' is retraction
+       proof given g being Morphism of b,a such that
+A6:      g is_left_inverse_of f;
+        reconsider g' = g as Morphism of a', b' by A1,A3,Th8;
+        take g';
+           g*f = idm a by A6,ALTCAT_3:def 1 .= idm a' by A1,A3,Th10;
+        hence f'*g' = idm a' by A1,A2,A3,A4,Th9;
+       end;
+    end;
+
+theorem
+   for A, B being category st A, B are_opposite
+ for a, b being object of A st <^a,b^> <> {} & <^b,a^> <> {}
+ for a', b' being object of B st a' = a & b' = b
+ for f being Morphism of a,b, f' being Morphism of b',a' st f' = f
+   holds f is retraction iff f' is coretraction
+  proof let A, B be category such that
+A1: A, B are_opposite;
+   let a, b be object of A such that
+A2: <^a,b^> <> {} & <^b,a^> <> {};
+   let a', b' be object of B such that
+A3: a' = a & b' = b;
+      <^b',a'^> = <^a,b^> & <^a',b'^> = <^b,a^> by A1,A3,Th9;
+   hence thesis by A1,A2,A3,Lm1;
+  end;
+
+theorem
+   for A, B being category st A, B are_opposite
+ for a, b being object of A st <^a,b^> <> {} & <^b,a^> <> {}
+ for a', b' being object of B st a' = a & b' = b
+ for f being Morphism of a,b, f' being Morphism of b',a' st f' = f
+   holds f is coretraction iff f' is retraction
+  proof let A, B be category such that
+A1: A, B are_opposite;
+   let a, b be object of A such that
+A2: <^a,b^> <> {} & <^b,a^> <> {};
+   let a', b' be object of B such that
+A3: a' = a & b' = b;
+      <^b',a'^> = <^a,b^> & <^a',b'^> = <^b,a^> by A1,A3,Th9;
+   hence thesis by A1,A2,A3,Lm1;
+  end;
+
+theorem Th23:
+ for A, B being category st A, B are_opposite
+ for a, b being object of A st <^a,b^> <> {} & <^b,a^> <> {}
+ for a', b' being object of B st a' = a & b' = b
+ for f being Morphism of a,b, f' being Morphism of b',a'
+   st f' = f & f is retraction coretraction
+   holds f'" = f"
+  proof let A, B be category such that
+A1: A, B are_opposite;
+   let a, b be object of A such that
+A2: <^a,b^> <> {} & <^b,a^> <> {};
+   let a', b' be object of B such that
+A3: a' = a & b' = b;
+A4: <^b',a'^> = <^a,b^> & <^a',b'^> = <^b,a^> by A1,A3,Th9;
+   let f be Morphism of a,b, f' be Morphism of b',a' such that
+A5: f' = f & f is retraction coretraction;
+   reconsider g = f" as Morphism of a', b' by A1,A3,Th8;
+      f"*f = idm a & f*f" = idm b by A2,A5,ALTCAT_3:2;
+    then f'*g = idm a & g*f' = idm b by A1,A2,A3,A5,Th9;
+    then f'*g = idm a' & g*f' = idm b' by A1,A3,Th10;
+    then f' is retraction coretraction &
+    g is_left_inverse_of f' & g is_right_inverse_of f'
+     by A1,A2,A3,A5,Lm1,ALTCAT_3:def 1;
+   hence thesis by A2,A4,ALTCAT_3:def 4;
+  end;
+
+theorem Th24:
+ for A, B being category st A, B are_opposite
+ for a, b being object of A st <^a,b^> <> {} & <^b,a^> <> {}
+ for a', b' being object of B st a' = a & b' = b
+ for f being Morphism of a,b, f' being Morphism of b',a' st f' = f
+  holds f is iso iff f' is iso
+  proof let A, B be category such that
+A1: A, B are_opposite;
+   let a, b be object of A such that
+A2: <^a,b^> <> {} & <^b,a^> <> {};
+   let a', b' be object of B such that
+A3: a' = a & b' = b;
+A4: <^b',a'^> = <^a,b^> & <^a',b'^> = <^b,a^> by A1,A3,Th9;
+      now let A, B be category such that
+A5:   A, B are_opposite;
+     let a, b be object of A such that
+A6:   <^a,b^> <> {} & <^b,a^> <> {};
+     let a', b' be object of B such that
+A7:   a' = a & b' = b;
+     let f be Morphism of a,b, f' be Morphism of b',a' such that
+A8:   f' = f;
+     assume f is iso;
+then A9:   f*f" = idm b & f"*f = idm a & f is retraction coretraction
+       by ALTCAT_3:5,def 5;
+      then f'" = f" & idm a = idm a' & idm b = idm b'
+       by A5,A6,A7,A8,Th10,Th23;
+      then f'*f'" = idm a' & f'"*f' = idm b' by A5,A6,A7,A8,A9,Th9;
+     hence f' is iso by ALTCAT_3:def 5;
+    end;
+   hence thesis by A1,A2,A3,A4;
+  end;
+
+theorem Th25:
+ for A, B, C, D being category st A, B are_opposite & C, D are_opposite
+ for F, G being covariant Functor of B, C
+  st F, G are_naturally_equivalent
+  holds dualizing-func(C,D)*G*dualizing-func(A,B),
+        dualizing-func(C,D)*F*dualizing-func(A,B) are_naturally_equivalent
+  proof let A, B, C, D be category such that
+A1: A, B are_opposite & C, D are_opposite;
+   let F, G be covariant Functor of B, C such that
+A2: F is_naturally_transformable_to G and
+A3: G is_transformable_to F;
+   given t being natural_transformation of F, G such that
+A4: for a being object of B holds t!a is iso;
+   set dAB = dualizing-func(A,B), dCD = dualizing-func(C,D),
+       dF = dCD*F*dAB, dG = dCD*G*dAB;
+A5: F is_transformable_to G by A2,FUNCTOR2:def 6;
+A6: now let a be object of A;
+        dG.a = (dCD*G).(dAB.a) & dF.a = (dCD*F).(dAB.a) by FUNCTOR0:34;
+     hence dG.a = dCD.(G.(dAB.a)) & dF.a = dCD.(F.(dAB.a)) by FUNCTOR0:34;
+     hence dG.a = G.(dAB.a) & dF.a = F.(dAB.a) by A1,Def5;
+     hence <^dG.a, dF.a^> = <^F.(dAB.a), G.(dAB.a)^> by A1,Th9;
+    end;
+A7: dG is_transformable_to dF
+     proof let a be object of A;
+         <^dG.a, dF.a^> = <^F.(dAB.a), G.(dAB.a)^> by A6;
+      hence <^dG.a, dF.a^> <> {} by A5,FUNCTOR2:def 1;
+     end;
+   reconsider dt = t as ManySortedSet of the carrier of A by A1,Def3;
+      dt is transformation of dG, dF
+     proof thus dG is_transformable_to dF by A7;
+      let a be object of A;
+      set b = dAB.a;
+         b = a & t.b = t!b & <^dG.a, dF.a^> = <^F.b, G.b^>
+        by A1,A5,A6,Def5,FUNCTOR2:def 4;
+      hence dt.a is Morphism of dG.a, dF.a ;
+     end;
+   then reconsider dt as transformation of dG, dF;
+A8: now let a,b be object of A such that
+A9:   <^a,b^> <> {};
+     let f be Morphism of a,b;
+     set b' = dAB.b, a' = dAB.a, f' = dAB.f;
+A10:   a' = a & b' = b by A1,Def5;
+then A11:   <^b', a'^> = <^a,b^> by A1,Th9;
+A12:   t!a' = t.a & t!b' = t.b & dt!a = t.a & dt!b = t.b
+       by A5,A7,A10,FUNCTOR2:def 4;
+A13:   <^F.b', F.a'^> <> {} & <^G.b', G.a'^> <> {} by A9,A11,FUNCTOR0:def 19;
+        dF.f = (dCD*F).f' & dG.f = (dCD*G).f' by A9,FUNCTOR3:7;
+      then dF.f = dCD.(F.f') & dG.f = dCD.(G.f') by A9,A11,FUNCTOR3:8;
+then A14:   dF.f = F.f' & dG.f = G.f' by A1,A13,Def5;
+A15:   <^F.b', G.b'^> <> {} & <^F.a', G.a'^> <> {} by A5,FUNCTOR2:def 1;
+A16:   dG.a = G.a' & dF.a = F.a' & dG.b = G.b' & dF.b = F.b' by A6;
+     hence dt!b*dG.f
+        = G.f'*(t!b') by A1,A12,A13,A14,A15,Th9
+       .= t!a'*F.f' by A2,A9,A11,FUNCTOR2:def 7
+       .= dF.f*(dt!a) by A1,A12,A13,A14,A15,A16,Th9;
+    end;
+   thus
+A17: dG is_naturally_transformable_to dF
+     proof thus dG is_transformable_to dF by A7;
+      take dt; thus thesis by A8;
+     end;
+      dt is natural_transformation of dG, dF
+     proof thus dG is_naturally_transformable_to dF by A17;
+      thus thesis by A8;
+     end;
+   then reconsider dt as natural_transformation of dG, dF;
+   thus dF is_transformable_to dG
+     proof let a be object of A;
+         dF.a = F.(dAB.a) & dG.a = G.(dAB.a) by A6;
+       then <^dF.a, dG.a^> = <^G.(dAB.a), F.(dAB.a)^> by A1,Th9;
+      hence <^dF.a, dG.a^> <> {} by A3,FUNCTOR2:def 1;
+     end;
+   take dt; let a be object of A;
+A18: dG.a = G.(dAB.a) & dF.a = F.(dAB.a) by A6;
+      dAB.a = a by A1,Def5;
+then A19: dt!a = t.a & t!(dAB.a) = t.a by A5,A7,FUNCTOR2:def 4;
+A20: t!(dAB.a) is iso by A4;
+      <^F.(dAB.a), G.(dAB.a)^> <> {} & <^G.(dAB.a), F.(dAB.a)^> <> {}
+     by A3,A5,FUNCTOR2:def 1;
+   hence dt!a is iso by A1,A18,A19,A20,Th24;
+  end;
+
+theorem Th26:
+ for A, B, C, D being category st A, B are_opposite & C, D are_opposite
+  holds A, C are_equivalent implies B, D are_equivalent
+  proof let A, B, C, D be category; assume
+A1: A, B are_opposite & C, D are_opposite;
+   given F being covariant Functor of A,C,
+         G being covariant Functor of C,A such that
+A2: G*F, id A are_naturally_equivalent and
+A3: F*G, id C are_naturally_equivalent;
+   take dF = dualizing-func(C,D)*F*dualizing-func(B,A),
+        dG = dualizing-func(A,B)*G*dualizing-func(D,C);
+A4: G* id C = the FunctorStr of G &
+    dualizing-func(A,B)*(id A) = dualizing-func(A,B) by FUNCTOR3:5;
+A5: id C = dualizing-func(D,C)*dualizing-func(C,D) by A1,Th15;
+A6: dualizing-func(A,B)*(G*F)*dualizing-func(B,A)
+      = dualizing-func(A,B)*G*F*dualizing-func(B,A) by FUNCTOR0:33
+     .= dualizing-func(A,B)*G*(F*dualizing-func(B,A)) by FUNCTOR0:33
+     .= dualizing-func(A,B)*(G*(id C))*(F*dualizing-func(B,A)) by A4,Th3
+     .= dualizing-func(A,B)*G*(id C)*(F*dualizing-func(B,A)) by FUNCTOR0:33
+     .= dG*dualizing-func(C,D)*(F*dualizing-func(B,A)) by A5,FUNCTOR0:33
+     .= dG*(dualizing-func(C,D)*(F*dualizing-func(B,A))) by FUNCTOR0:33
+     .= dG*dF by FUNCTOR0:33;
+      dualizing-func(A,B)*(id A)*dualizing-func(B,A) = id B by A1,A4,Th15;
+   hence dG*dF, id B are_naturally_equivalent by A1,A2,A6,Th25;
+A7: F* id A = the FunctorStr of F &
+    dualizing-func(C,D)*(id C) = dualizing-func(C,D) by FUNCTOR3:5;
+A8: id A = dualizing-func(B,A)*dualizing-func(A,B) by A1,Th15;
+A9: dualizing-func(C,D)*(F*G)*dualizing-func(D,C)
+      = dualizing-func(C,D)*F*G*dualizing-func(D,C) by FUNCTOR0:33
+     .= dualizing-func(C,D)*F*(G*dualizing-func(D,C)) by FUNCTOR0:33
+     .= dualizing-func(C,D)*(F*(id A))*(G*dualizing-func(D,C)) by A7,Th3
+     .= dualizing-func(C,D)*F*(id A)*(G*dualizing-func(D,C)) by FUNCTOR0:33
+     .= dF*dualizing-func(A,B)*(G*dualizing-func(D,C)) by A8,FUNCTOR0:33
+     .= dF*(dualizing-func(A,B)*(G*dualizing-func(D,C))) by FUNCTOR0:33
+     .= dF*dG by FUNCTOR0:33;
+      dualizing-func(C,D)*(id C)*dualizing-func(D,C) = id D by A1,A7,Th15;
+   hence dF*dG, id D are_naturally_equivalent by A1,A3,A9,Th25;
+  end;
+
+definition
+ let A,B be category;
+ pred A,B are_dual means:
+Def6:
+  A, B opp are_equivalent;
+  symmetry
+   proof let A,B be category;
+       A, A opp are_opposite & B, B opp are_opposite by Def4;
+    hence thesis by Th26;
+   end;
+end;
+
+theorem
+   for A, B being category st A, B are_anti-isomorphic
+  holds A, B are_dual
+  proof let A, B be category;
+A1: B, B opp are_opposite by Def4;
+   assume A, B are_anti-isomorphic;
+    then A, B opp are_isomorphic by A1,Th18;
+   hence A, B opp are_equivalent by Th5;
+  end;
+
+theorem
+   for A, B, C being category st A, B are_opposite
+  holds A, C are_equivalent iff B, C are_dual
+  proof let A, B, C be category such that
+A1: A, B are_opposite;
+A2: B, C are_dual iff B, C opp are_equivalent by Def6;
+      C, C opp are_opposite by Def4;
+   hence thesis by A1,A2,Th26;
+  end;
+
+theorem
+   for A, B, C being category st A, B are_dual & B, C are_equivalent
+  holds A, C are_dual
+  proof let A, B, C be category such that
+A1: A, B opp are_equivalent and
+A2: B, C are_equivalent;
+      B, B opp are_opposite & C, C opp are_opposite by Def4;
+    then B opp, C opp are_equivalent by A2,Th26;
+   hence A, C opp are_equivalent by A1,Th4;
+  end;
+
+theorem
+   for A, B, C being category st A, B are_dual & B, C are_dual
+  holds A, C are_equivalent
+  proof let A, B, C be category such that
+A1: A, B opp are_equivalent and
+A2: B, C are_dual;
+      C, B opp are_equivalent by A2,Def6;
+   hence thesis by A1,Th4;
+  end;
+
+begin
+:: <section4>Concrete categories</section4>
+
+theorem Th31:
+ for X,Y,x being set
+   holds x in Funcs(X,Y) iff x is Function & proj1 x = X & proj2 x c= Y
+  proof let X,Y,x be set;
+   hereby assume x in Funcs(X,Y);
+     then ex f being Function st x = f & dom f = X & rng f c= Y by FUNCT_2:def
+2;
+    hence x is Function & proj1 x = X & proj2 x c= Y by FUNCT_5:21;
+   end;
+   assume x is Function;
+   then reconsider x as Function;
+      dom x = proj1 x & rng x = proj2 x by FUNCT_5:21;
+   hence thesis by FUNCT_2:def 2;
+  end;
+
+definition
+ let C be 1-sorted;
+ mode ManySortedSet of C is ManySortedSet of the carrier of C;
+end;
+
+definition
+ let C be category;
+ attr C is para-functional means
+    ex F being ManySortedSet of C st
+   for a1,a2 being object of C holds <^a1,a2^> c= Funcs(F.a1,F.a2);
+end;
+
+definition
+ cluster quasi-functional -> para-functional category;
+ coherence
+  proof let C be category such that
+A1:  for a1,a2 being object of C holds <^a1,a2^> c= Funcs(a1,a2);
+      dom id the carrier of C = the carrier of C by RELAT_1:71;
+   then reconsider F = id the carrier of C as ManySortedSet of C by PBOOLE:def
+3;
+   take F; let a1,a2 be object of C;
+      F.a1 = a1 & F.a2 = a2 by FUNCT_1:35;
+   hence thesis by A1;
+  end;
+end;
+
+definition
+ let C be category;
+ let a be set;
+ func C-carrier_of a means:
+Def8:
+  ex b being object of C st b = a & it = proj1 idm b if a is object of C
+  otherwise it = {};
+ consistency;
+ existence
+  proof
+   hereby assume a is object of C;
+    then reconsider b = a as object of C;
+    take x = proj1 idm b, b; thus b = a & x = proj1 idm b;
+   end;
+   thus thesis;
+  end;
+ uniqueness;
+end;
+
+definition
+ let C be category;
+ let a be object of C;
+ redefine func C-carrier_of a equals:
+Def9:
+   proj1 idm a;
+ compatibility by Def8;
+ synonym the_carrier_of a;
+end;
+
+theorem Th32:
+ for A being non empty set, a being object of EnsCat A
+  holds idm a = id a
+  proof let A be non empty set, a be object of EnsCat A;
+     <^a,a^> = Funcs(a, a) by ALTCAT_1:def 16;
+then id a in <^a, a^> by ALTCAT_1:2;
+   then reconsider e = id a as Morphism of a,a ;
+      now let b being object of EnsCat A such that
+A2:    <^a,b^> <> {};
+     let f be Morphism of a,b;
+      A3: <^a,b^> = Funcs(a, b) by ALTCAT_1:def 16;
+     then reconsider g = f as Function by A2,Th31;
+A4:    dom g = proj1 f by FUNCT_5:21 .= a by A2,A3,Th31;
+     thus f*e = g* id a by A2,ALTCAT_1:def 14 .= f by A4,FUNCT_1:42;
+    end;
+   hence thesis by ALTCAT_1:def 19;
+  end;
+
+theorem Th33:
+ for A being non empty set for a being object of EnsCat A
+  holds the_carrier_of a = a
+  proof let A be non empty set;
+   let a be object of EnsCat A;
+   thus the_carrier_of a = proj1 (idm a) by Def9
+     .= proj1 id a by Th32
+     .= dom id a by FUNCT_5:21
+     .= a by RELAT_1:71;
+  end;
+
+definition
+ let C be category;
+ attr C is set-id-inheriting means:
+Def10:
+  for a being object of C holds idm a = id the_carrier_of a;
+end;
+
+definition
+ let A be non empty set;
+ cluster EnsCat A -> set-id-inheriting;
+ coherence
+  proof let a be object of EnsCat A;
+   thus idm a = id a by Th32
+             .= id the_carrier_of a by Th33;
+  end;
+end;
+
+definition
+ let C be category;
+ attr C is concrete means:
+Def11:
+  C is para-functional semi-functional set-id-inheriting;
+end;
+
+definition
+ cluster concrete -> para-functional semi-functional set-id-inheriting
+   category;
+ coherence by Def11;
+ cluster para-functional semi-functional set-id-inheriting -> concrete
+   category;
+ coherence by Def11;
+end;
+
+definition
+ cluster concrete quasi-functional strict category;
+ existence
+  proof take EnsCat NAT;
+   thus thesis;
+  end;
+end;
+
+theorem Th34:
+ for C being category holds
+   C is para-functional iff
+    for a1,a2 being object of C
+     holds <^a1,a2^> c= Funcs(the_carrier_of a1, the_carrier_of a2)
+  proof let C be category;
+   thus C is para-functional implies
+      for a1,a2 being object of C
+       holds <^a1,a2^> c= Funcs(the_carrier_of a1, the_carrier_of a2)
+     proof given F being ManySortedSet of C such that
+A1:     for a1,a2 being object of C holds <^a1,a2^> c= Funcs(F.a1,F.a2);
+      let a1,a2 be object of C;
+A2:    idm a1 in <^a1,a1^> & <^a1,a1^> c= Funcs(F.a1, F.a1) &
+       <^a2,a2^> c= Funcs(F.a2, F.a2) & idm a2 in <^a2,a2^> by A1;
+      then consider f1 being Function such that
+A3:     idm a1 = f1 & dom f1 = F.a1 & rng f1 c= F.a1 by FUNCT_2:def 2;
+      consider f2 being Function such that
+A4:     idm a2 = f2 & dom f2 = F.a2 & rng f2 c= F.a2 by A2,FUNCT_2:def 2;
+         the_carrier_of a1 = proj1 idm a1 & the_carrier_of a2 = proj1 idm a2
+        by Def8;
+       then the_carrier_of a1 = F.a1 & the_carrier_of a2 = F.a2 by A3,A4,
+FUNCT_5:21;
+      hence thesis by A1;
+     end;
+   assume
+A5:  for a1,a2 being object of C
+     holds <^a1,a2^> c= Funcs(the_carrier_of a1, the_carrier_of a2);
+   deffunc O(set) = C-carrier_of $1;
+   consider F being ManySortedSet of the carrier of C such that
+A6:  for a being Element of C holds F.a = O(a)
+     from LambdaDMS;
+   take F; let a, b be object of C;
+      F.a = the_carrier_of a & F.b = the_carrier_of b by A6;
+   hence thesis by A5;
+  end;
+
+theorem Th35:
+ for C being para-functional category
+ for a,b being object of C st <^a,b^> <> {}
+ for f being Morphism of a,b
+  holds f is Function of the_carrier_of a, the_carrier_of b
+  proof let C be para-functional category;
+   let a,b be object of C such that
+A1: <^a,b^> <> {};
+   let f be Morphism of a,b;
+      <^a,b^> c= Funcs(the_carrier_of a, the_carrier_of b) &
+    f in <^a,b^> by A1,Th34;
+   hence thesis by FUNCT_2:121;
+  end;
+
+definition
+ let A be para-functional category;
+ let a,b be object of A;
+ cluster -> Function-like Relation-like Morphism of a,b;
+ coherence
+  proof let f be Morphism of a,b;
+   per cases; suppose <^a,b^> <> {};
+   hence thesis by Th35;
+   suppose <^a,b^> = {};
+   hence thesis by SUBSET_1:def 2;
+  end;
+end;
+
+theorem Th36:
+ for C being para-functional category
+ for a,b being object of C st <^a,b^> <> {}
+ for f being Morphism of a,b
+  holds dom f = the_carrier_of a & rng f c= the_carrier_of b
+  proof let C be para-functional category;
+   let a,b be object of C such that
+A1:  <^a,b^> <> {};
+   let f be Morphism of a,b;
+      <^a,b^> c= Funcs(the_carrier_of a, the_carrier_of b) &
+    f in <^a,b^> by A1,Th34;
+   hence thesis by PRALG_3:4;
+  end;
+
+theorem
+   for C being para-functional semi-functional category
+ for a being object of C
+  holds the_carrier_of a = dom idm a
+  proof let C be para-functional semi-functional category;
+   let a be object of C;
+   thus the_carrier_of a = proj1 idm a by Def9 .= dom idm a by FUNCT_5:21;
+  end;
+
+theorem Th38:
+ for C being para-functional semi-functional category
+ for a,b,c being object of C st <^a,b^> <> {} & <^b,c^> <> {}
+ for f being Morphism of a,b, g being Morphism of b,c
+  holds g*f = (g qua Function)*(f qua Function)
+  proof let C be para-functional semi-functional category;
+   let a,b,c be object of C such that
+A1:  <^a,b^> <> {} & <^b,c^> <> {};
+   let f be Morphism of a,b, g be Morphism of b,c;
+      <^a,c^> <> {} by A1,ALTCAT_1:def 4;
+   hence thesis by A1,ALTCAT_1:def 14;
+  end;
+
+theorem Th39:
+ for C being para-functional semi-functional category
+ for a being object of C st id the_carrier_of a in <^a,a^>
+  holds idm a = id the_carrier_of a
+  proof let C be para-functional semi-functional category;
+   let a be object of C; assume
+    id the_carrier_of a in <^a,a^>;
+   then reconsider f = id the_carrier_of a as Morphism of a,a;
+      now let b be object of C such that
+A2:   <^a,b^> <> {};
+     let g being Morphism of a,b;
+A3:   dom g = the_carrier_of a by A2,Th36;
+     thus g*f = g* id the_carrier_of a by A2,Th38 .= g by A3,FUNCT_1:42;
+    end;
+   hence thesis by ALTCAT_1:def 19;
+  end;
+
+scheme ConcreteCategoryLambda
+ { A() -> non empty set,
+   B(set,set) -> set,
+   D(set) -> set }:
+ ex C being concrete strict category
+  st the carrier of C = A() &
+     (for a being object of C holds the_carrier_of a = D(a)) &
+     for a,b being object of C holds <^a,b^> = B(a,b)
+ provided
+A1: for a,b,c being Element of A(), f,g being Function
+      st f in B(a,b) & g in B(b,c) holds g*f in B(a,c)
+ and
+A2:  for a,b being Element of A() holds B(a,b) c= Funcs(D(a), D(b))
+ and
+A3:  for a being Element of A() holds id D(a) in B(a,a)
+  proof
+    deffunc b(set,set) = B($1,$2);
+    deffunc O(set) = D($1);
+    deffunc C(set,set,set,set,set) = $4(#)$5;
+A4: now let a,b be Element of A(), f be set such that
+A5:    f in B(a,b);
+        B(a,b) c= Funcs(D(a), D(b)) by A2;
+      then ex f' being Function st f = f' & dom f' = D(a) & rng f' c= D(b)
+       by A5,FUNCT_2:def 2;
+     hence f is Function;
+    end;
+A6: for a,b,c being Element of A(), f,g being set
+      st f in b(a,b) & g in b(b,c) holds C(a,b,c,f,g) in b(a,c)
+     proof let a,b,c be Element of A(), f,g be set; assume
+A7:     f in B(a,b) & g in B(b,c);
+      then reconsider f, g as Function by A4;
+         g*f = f(#)g by YELLOW16:1;
+      hence thesis by A1,A7;
+     end;
+A8: for a,b,c,d being Element of A(), f,g,h being set
+     st f in b(a,b) & g in b(b,c) & h in b(c,d)
+     holds C(a,c,d,C(a,b,c,f,g),h) = C(a,b,d,f,C(b,c,d,g,h))
+     proof let a,b,c,d be Element of A();
+      let f,g,h be set; assume
+         f in B(a,b) & g in B(b,c) & h in B(c,d);
+      then reconsider f, g, h as Function by A4;
+         (f(#)g)(#)h = (g*f)(#)h by YELLOW16:1 .= h*(g*f) by YELLOW16:1
+              .= (h*g)*f by RELAT_1:55
+              .= f(#)(h*g) by YELLOW16:1;
+      hence thesis by YELLOW16:1;
+     end;
+A9: for a being Element of A()
+     ex f being set st f in b(a,a) &
+      for b being Element of A(), g being set st g in b(a,b)
+       holds C(a,a,b,f,g) = g
+     proof let a be Element of A();
+      take f = id D(a); thus f in B(a,a) by A3;
+      let b be Element of A(), g be set such that
+A10:    g in B(a,b);
+         B(a,b) c= Funcs(D(a), D(b)) by A2;
+      then consider h being Function such that
+A11:    g = h & dom h = D(a) & rng h c= D(b) by A10,FUNCT_2:def 2;
+      thus f(#)g = h*f by A11,YELLOW16:1 .= g by A11,FUNCT_1:42;
+     end;
+A12: for a being Element of A()
+     ex f being set st f in b(a,a) &
+      for b being Element of A(), g being set st g in b(b,a)
+       holds C(b,a,a,g,f) = g
+     proof let a be Element of A();
+      take f = id D(a); thus f in B(a,a) by A3;
+      let b be Element of A(), g be set such that
+A13:    g in B(b,a);
+         B(b,a) c= Funcs(D(b), D(a)) by A2;
+      then consider h being Function such that
+A14:    g = h & dom h = D(b) & rng h c= D(a) by A13,FUNCT_2:def 2;
+      thus g(#)f = f*h by A14,YELLOW16:1 .= g by A14,RELAT_1:79;
+     end;
+   consider C being strict category such that
+A15: the carrier of C = A() and
+A16: for a,b being object of C holds <^a,b^> = b(a,b) and
+A17: for a,b,c being object of C st <^a,b^> <> {} & <^b,c^> <> {}
+     for f being Morphism of a,b, g being Morphism of b,c
+      holds g*f = C(a,b,c,f,g) from CategoryLambda(A6,A8,A9,A12);
+   consider D being ManySortedSet of C such that
+A18:  for x being Element of C holds D.x = O(x) from LambdaDMS;
+A19: C is para-functional
+     proof take D;
+      let a1,a2 be object of C;
+         <^a1,a2^> = B(a1,a2) & D(a1) = D.a1 & D(a2) = D.a2 by A16,A18;
+      hence <^a1,a2^> c= Funcs(D.a1,D.a2) by A2,A15;
+     end;
+A20: C is semi-functional
+     proof let a1,a2,a3 be object of C such that
+A21:     <^a1,a2^> <> {} & <^a2,a3^> <> {} & <^a1,a3^> <> {};
+      let f be Morphism of a1,a2, g be Morphism of a2,a3, f',g' be Function;
+      assume f = f' & g = g';
+      hence g*f = f'(#)g' by A17,A21 .= g'*f' by YELLOW16:1;
+     end;
+A22:  now let a be object of C;
+     id D(a) in B(a,a) & <^a,a^> = B(a,a) by A3,A15,A16;
+     then reconsider e = id D(a) as Morphism of a,a;
+        now let b be object of C such that
+A24:     <^a,b^> <> {};
+       let f be Morphism of a,b;
+A25:     <^a,b^> = B(a,b) & B(a,b) c= Funcs(D(a), D(b)) by A2,A15,A16;
+          f in <^a,b^> by A24;
+       then consider h being Function such that
+A26:     f = h & dom h = D(a) & rng h c= D(b) by A25,FUNCT_2:def 2;
+       thus f*e = h* id D(a) by A20,A24,A26,ALTCAT_1:def 14
+               .= f by A26,FUNCT_1:42;
+      end;
+     hence idm a = id D(a) by ALTCAT_1:def 19;
+    end;
+A27:  now let i be set; assume i in the carrier of C;
+     then reconsider a = i as object of C;
+     thus C-carrier_of i = proj1 idm a by Def8 .= proj1 id D(a) by A22
+       .= dom id D(a) by FUNCT_5:21
+       .= D(a) by RELAT_1:71 .= D.i by A18;
+    end;
+      C is set-id-inheriting
+     proof let a be object of C;
+      thus idm a = id D(a) by A22 .= id (D.a) by A18
+ .= id (the_carrier_of a) by A27;
+     end;
+   then reconsider C as para-functional semi-functional set-id-inheriting
+strict
+     category by A19,A20;
+   take C;
+   thus the carrier of C = A() by A15;
+   hereby let a be object of C;
+    thus the_carrier_of a = D.a by A27 .= D(a) by A18;
+   end;
+   thus thesis by A16;
+  end;
+
+scheme ConcreteCategoryQuasiLambda
+ { A() -> non empty set,
+   P[set,set,set],
+   D(set) -> set }:
+ ex C being concrete strict category
+  st the carrier of C = A() &
+     (for a being object of C holds the_carrier_of a = D(a)) &
+     for a,b being Element of A(), f being Function
+      holds f in (the Arrows of C).(a,b) iff f in Funcs(D(a), D(b)) & P[a,b,f]
+ provided
+A1: for a,b,c being Element of A(), f,g being Function
+      st P[a,b,f] & P[b,c,g] holds P[a,c,g*f]
+ and
+A2: for a being Element of A() holds P[a,a,id D(a)]
+  proof set A = A();
+    defpred P[set,set] means
+     ex a,b being set st $1 = [a,b] &
+      for f being set holds f in $2 iff
+       f in Funcs(D(a), D(b)) & P[a,b,f];
+A3:  now let x be set; assume x in [:A,A:];
+     then consider a,b being set such that
+A4:   a in A & b in A & x = [a,b] by ZFMISC_1:def 2;
+     defpred Q[set] means P[a,b,$1];
+     consider y being set such that
+A5:   for f being set holds f in y iff f in Funcs(D(a), D(b)) & Q[f]
+       from Separation;
+     take y;
+     thus P[x,y] by A4,A5;
+    end;
+   consider F being Function such that
+      dom F = [:A,A:] and
+A6: for x being set st x in [:A,A:] holds P[x, F.x] from NonUniqFuncEx(A3);
+A7: now let a,b be set; assume a in A & b in A;
+      then [a,b] in [:A,A:] by ZFMISC_1:106;
+     then consider a',b' being set such that
+A8:   [a,b] = [a',b'] and
+A9:   for f being set holds f in F.[a,b] iff
+       f in Funcs(D(a'), D(b')) & P[a',b',f] by A6;
+A10:   a = a' & b = b' by A8,ZFMISC_1:33;
+     let f be set;
+     thus f in F.[a,b] iff P[a,b,f] & f in Funcs(D(a), D(b)) by A9,A10;
+    end;
+    deffunc B(set,set) = F.[$1,$2];
+    deffunc O(set) = D($1);
+A11: now let a,b,c be Element of A, f,g be Function;
+     assume f in B(a,b) & g in B(b,c); then
+A12:   P[a,b,f] & f in Funcs(D(a), D(b)) & P[b,c,g] & g in Funcs(D(b), D(c))
+       by A7;
+      then proj1 f = D(a) & proj2 f c= D(b) & proj1 g = D(b) & proj2 g c= D(c)
+       by Th31;
+      then dom f = D(a) & rng f c= D(b) & dom g = D(b) & rng g c= D(c) &
+      rng (g*f) c= rng g by FUNCT_5:21,RELAT_1:45;
+      then dom (g*f) = D(a) & rng (g*f) c= D(c) by RELAT_1:46,XBOOLE_1:1;
+      then g*f in Funcs(D(a), D(c)) & P[a,c,g*f] by A1,A12,FUNCT_2:def 2;
+     hence g*f in B(a,c) by A7;
+    end;
+A13: now let a,b be Element of A;
+     thus B(a,b) c= Funcs(O(a), O(b))
+       proof let x be set; thus thesis by A7;
+       end;
+    end;
+A14: for a being Element of A() holds id O(a) in B(a,a)
+     proof let a be Element of A();
+         dom id D(a) = D(a) & rng id D(a) = D(a) by RELAT_1:71;
+       then P[a,a, id D(a)] & id D(a) in Funcs(D(a), D(a)) by A2,FUNCT_2:def 2
+;
+      hence thesis by A7;
+     end;
+   consider C being para-functional semi-functional set-id-inheriting
+     strict category such that
+A15: the carrier of C = A() and
+A16: for a being object of C holds the_carrier_of a = O(a) and
+A17: for a,b being object of C holds <^a,b^> = B(a,b)
+     from ConcreteCategoryLambda(A11,A13,A14);
+   take C; thus the carrier of C = A() by A15;
+   thus for a being object of C holds the_carrier_of a = D(a) by A16;
+   let a,b be Element of A(), f being Function;
+   reconsider a,b as object of C by A15;
+      (the Arrows of C).(a,b) = <^a,b^> by ALTCAT_1:def 2 .= F.[a,b] by A17;
+   hence thesis by A7;
+  end;
+
+
+scheme ConcreteCategoryEx
+ { A() -> non empty set, B(set) -> set,
+   D[set, set],
+   P[set,set,set] }:
+ ex C being concrete strict category
+  st the carrier of C = A() &
+     (for a being object of C
+       for x being set holds x in the_carrier_of a iff x in B(a) & D[a,x]) &
+     for a,b being Element of A(), f being Function
+      holds f in (the Arrows of C).(a,b) iff
+          f in Funcs(C-carrier_of a, C-carrier_of b) & P[a,b,f]
+ provided
+A1: for a,b,c being Element of A(), f,g being Function
+      st P[a,b,f] & P[b,c,g] holds P[a,c,g*f]
+ and
+A2: for a being Element of A(), X being set
+     st for x being set holds x in X iff x in B(a) & D[a,x]
+     holds P[a,a,id X]
+  proof deffunc b(set) = B($1);
+   defpred d[set,set] means D[$1,$2];
+   defpred p[set,set,set] means P[$1,$2,$3];
+A3: for a,b,c being Element of A(), f,g being Function
+      st p[a,b,f] & p[b,c,g] holds p[a,c,g*f] by A1;
+   consider D being Function such that
+    dom D = A() and
+A4: for a being set st a in A()
+     for y being set holds y in D.a iff y in b(a) & d[a,y] from FuncSeparation;
+   deffunc D(set) = D.$1;
+A5: now let a be Element of A();
+      for y being set holds y in D.a iff y in B(a) & D[a,y] by A4;
+     hence p[a,a,id D(a)] by A2;
+    end;
+   consider C being
+      para-functional semi-functional set-id-inheriting strict category
+   such that
+A6:  the carrier of C = A() and
+A7:  for a being object of C holds the_carrier_of a = D(a) and
+A8:  for a,b being Element of A(), f being Function
+     holds f in (the Arrows of C).(a,b) iff f in Funcs(D(a), D(b)) & p[a,b,f]
+      from ConcreteCategoryQuasiLambda(A3, A5);
+   take C; thus the carrier of C = A() by A6;
+   hereby let a be object of C;
+       the_carrier_of a = D.a by A7;
+    hence for x being set holds x in the_carrier_of a iff x in B(a) & D[a,x]
+      by A4,A6;
+   end;
+   let a,b be Element of A();
+      a is object of C & b is object of C by A6;
+    then D.a = C-carrier_of a & D.b = C-carrier_of b by A7;
+   hence thesis by A8;
+  end;
+
+scheme ConcreteCategoryUniq1
+ { A() -> non empty set,
+   B(set,set) -> set }:
+ for C1, C2 being para-functional semi-functional category
+  st the carrier of C1 = A() &
+     (for a,b being object of C1 holds <^a,b^> = B(a,b)) &
+     the carrier of C2 = A() &
+     (for a,b being object of C2 holds <^a,b^> = B(a,b))
+  holds the AltCatStr of C1 = the AltCatStr of C2
+  proof
+    deffunc b(set,set) = B($1,$2);
+    deffunc C(set,set,set,set,set) = $4(#)$5;
+A1:  for C1,C2 being non empty transitive AltCatStr
+     st the carrier of C1 = A() &
+      (for a,b being object of C1 holds <^a,b^> = b(a,b)) &
+      (for a,b,c being object of C1 st <^a,b^> <> {} & <^b,c^> <> {}
+        for f being Morphism of a,b, g being Morphism of b,c
+         holds g*f = C(a,b,c,f,g)) &
+      the carrier of C2 = A() &
+      (for a,b being object of C2 holds <^a,b^> = b(a,b)) &
+      (for a,b,c being object of C2 st <^a,b^> <> {} & <^b,c^> <> {}
+        for f being Morphism of a,b, g being Morphism of b,c
+         holds g*f = C(a,b,c,f,g))
+     holds the AltCatStr of C1 = the AltCatStr of C2 from CategoryLambdaUniq;
+   let C1,C2 be para-functional semi-functional category;
+      now let C1 be para-functional semi-functional category;
+     let a,b,c be object of C1 such that
+A2:   <^a,b^> <> {} & <^b,c^> <> {};
+     let f be Morphism of a,b, g be Morphism of b,c;
+     thus g*f = g qua Function*f by A2,Th38 .= f(#)g by YELLOW16:1;
+    end;
+    then (for a,b,c being object of C1 st <^a,b^> <> {} & <^b,c^> <> {}
+      for f being Morphism of a,b, g being Morphism of b,c
+       holds g*f = f(#)g) &
+    (for a,b,c being object of C2 st <^a,b^> <> {} & <^b,c^> <> {}
+      for f being Morphism of a,b, g being Morphism of b,c
+       holds g*f = f(#)g);
+   hence thesis by A1;
+  end;
+
+scheme ConcreteCategoryUniq2
+ { A() -> non empty set,
+   P[set,set,set],
+   D(set) -> set }:
+ for C1,C2 being para-functional semi-functional category st
+   the carrier of C1 = A() &
+   (for a,b being Element of A(), f being Function
+    holds f in (the Arrows of C1).(a,b) iff f in
+ Funcs(D(a), D(b)) & P[a,b,f]) &
+   the carrier of C2 = A() &
+   (for a,b being Element of A(), f being Function
+    holds f in (the Arrows of C2).(a,b) iff f in Funcs(D(a), D(b)) & P[a,b,f])
+  holds the AltCatStr of C1 = the AltCatStr of C2
+  proof let C1,C2 be para-functional semi-functional category such that
+A1: the carrier of C1 = A() and
+A2: for a,b being Element of A(), f being Function
+     holds f in (the Arrows of C1).(a,b) iff f in Funcs(D(a), D(b)) & P[a,b,f]
+   and
+A3: the carrier of C2 = A() and
+A4: for a,b being Element of A(), f being Function
+     holds f in (the Arrows of C2).(a,b) iff f in Funcs(D(a), D(b)) & P[a,b,f];
+   deffunc B(set,set) = (the Arrows of C1).($1,$2);
+A5: for C1, C2 being para-functional semi-functional category
+     st the carrier of C1 = A() &
+        (for a,b being object of C1 holds <^a,b^> = B(a,b)) &
+        the carrier of C2 = A() &
+        (for a,b being object of C2 holds <^a,b^> = B(a,b))
+     holds the AltCatStr of C1 = the AltCatStr of C2
+      from ConcreteCategoryUniq1;
+A6: for a,b being object of C1 holds <^a,b^> = B(a,b) by ALTCAT_1:def 2;
+      now let a,b be object of C2;
+     reconsider x = a, y = b as Element of A() by A3;
+     reconsider a' = x, b' = y as object of C1 by A1;
+A7:   <^a,b^> = (the Arrows of C2).(a,b) by ALTCAT_1:def 2;
+A8:   <^a',b'^> = (the Arrows of C1).(a',b') by ALTCAT_1:def 2;
+     thus <^a,b^> = B(a,b)
+       proof
+        hereby let z be set; assume
+A9:       z in <^a,b^>;
+          then A10: z is Morphism of a,b ;
+          then z in Funcs(D(x), D(y)) & P[x,y,z] by A4,A7,A9;
+         hence z in B(a,b) by A2,A10;
+        end;
+        let z be set; assume
+A11:     z in B(a,b);
+         then A12: z is Morphism of a',b' by A8;
+         then z in Funcs(D(x), D(y)) & P[x,y,z] by A2,A11;
+        hence z in <^a,b^> by A4,A7,A12;
+      end;
+    end;
+   hence thesis by A1,A3,A5,A6;
+  end;
+
+scheme ConcreteCategoryUniq3
+ { A() -> non empty set, B(set) -> set,
+   D[set, set],
+   P[set,set,set] }:
+ for C1,C2 being para-functional semi-functional category st
+   the carrier of C1 = A() &
+   (for a being object of C1
+     for x being set holds x in the_carrier_of a iff x in B(a) & D[a,x]) &
+   (for a,b being Element of A(), f being Function
+     holds f in (the Arrows of C1).(a,b) iff
+          f in Funcs(C1-carrier_of a, C1-carrier_of b) & P[a,b,f]) &
+   the carrier of C2 = A() &
+   (for a being object of C2
+     for x being set holds x in the_carrier_of a iff x in B(a) & D[a,x]) &
+   (for a,b being Element of A(), f being Function
+     holds f in (the Arrows of C2).(a,b) iff
+          f in Funcs(C2-carrier_of a, C2-carrier_of b) & P[a,b,f])
+  holds the AltCatStr of C1 = the AltCatStr of C2
+   proof let C1,C2 be para-functional semi-functional category such that
+A1:  the carrier of C1 = A() and
+A2:  for a being object of C1
+      for x being set holds x in the_carrier_of a iff x in B(a) & D[a,x] and
+A3:  for a,b being Element of A(), f being Function
+      holds f in (the Arrows of C1).(a,b) iff
+          f in Funcs(C1-carrier_of a, C1-carrier_of b) & P[a,b,f] and
+A4:  the carrier of C2 = A() and
+A5:  for a being object of C2
+      for x being set holds x in the_carrier_of a iff x in B(a) & D[a,x] and
+A6:  for a,b being Element of A(), f being Function
+      holds f in (the Arrows of C2).(a,b) iff
+          f in Funcs(C2-carrier_of a, C2-carrier_of b) & P[a,b,f];
+    deffunc D(set) = C1-carrier_of $1;
+    defpred p[set,set,set] means P[$1,$2,$3];
+A7:  for C1,C2 being para-functional semi-functional category st
+      the carrier of C1 = A() &
+      (for a,b being Element of A(), f being Function
+       holds f in (the Arrows of C1).(a,b) iff
+             f in Funcs(D(a), D(b)) & p[a,b,f]) &
+      the carrier of C2 = A() &
+      (for a,b being Element of A(), f being Function
+       holds f in (the Arrows of C2).(a,b) iff
+             f in Funcs(D(a), D(b)) & p[a,b,f])
+      holds the AltCatStr of C1 = the AltCatStr of C2
+       from ConcreteCategoryUniq2;
+A8:  now let a be Element of A();
+      reconsider a1 = a as object of C1 by A1;
+      reconsider a2 = a as object of C2 by A4;
+         now let x be set;
+           x in the_carrier_of a1 iff x in B(a) & D[a,x] by A2;
+        hence x in the_carrier_of a1 iff x in the_carrier_of a2 by A5;
+       end;
+      hence C1-carrier_of a = C2-carrier_of a by TARSKI:2;
+     end;
+       now let a,b be Element of A(), f be Function;
+         D(a) = C2-carrier_of a & D(b) = C2-carrier_of b by A8;
+      hence f in (the Arrows of C2).(a,b) iff f in Funcs(D(a), D(b)) & P[a,b,f
+]
+        by A6;
+     end;
+    hence thesis by A1,A3,A4,A7;
+   end;
+
+begin
+:: <section5>Equivalence between concrete categories</section5>
+
+theorem Th40:
+ for C being concrete category
+ for a,b being object of C st <^a,b^> <> {} & <^b,a^> <> {}
+ for f being Morphism of a,b
+  st f is retraction
+  holds rng f = the_carrier_of b
+  proof let C be concrete category;
+   let a,b be object of C; assume
+A1: <^a,b^> <> {} & <^b,a^> <> {};
+   let f be Morphism of a,b;
+   given g being Morphism of b,a such that
+A2: g is_right_inverse_of f;
+A3: f*g = idm b by A2,ALTCAT_3:def 1;
+A4: f qua Function*g = f*g by A1,Th38;
+A5: f is Function of the_carrier_of a, the_carrier_of b &
+    g is Function of the_carrier_of b, the_carrier_of a by A1,Th35;
+      idm b = id the_carrier_of b by Def10;
+   hence thesis by A3,A4,A5,FUNCT_2:24;
+  end;
+
+theorem Th41:
+ for C being concrete category
+ for a,b being object of C st <^a,b^> <> {} & <^b,a^> <> {}
+ for f being Morphism of a,b
+  st f is coretraction
+  holds f is one-to-one
+  proof let C be concrete category;
+   let a,b be object of C; assume
+A1: <^a,b^> <> {} & <^b,a^> <> {};
+   let f be Morphism of a,b;
+   given g being Morphism of b,a such that
+A2: g is_left_inverse_of f;
+A3: g*f = idm a by A2,ALTCAT_3:def 1;
+A4: g qua Function*f = g*f by A1,Th38;
+A5: dom f = the_carrier_of a by A1,Th36;
+      idm a = id the_carrier_of a by Def10;
+   hence thesis by A3,A4,A5,FUNCT_1:53;
+  end;
+
+theorem Th42:
+ for C being concrete category
+ for a,b being object of C st <^a,b^> <> {} & <^b,a^> <> {}
+ for f being Morphism of a,b
+  st f is iso
+  holds f is one-to-one & rng f = the_carrier_of b
+  proof let C be concrete category;
+   let a,b be object of C; assume
+A1: <^a,b^> <> {} & <^b,a^> <> {};
+   let f be Morphism of a,b; assume f is iso;
+    then f is retraction coretraction by ALTCAT_3:5;
+   hence thesis by A1,Th40,Th41;
+  end;
+
+theorem Th43:
+ for C being para-functional semi-functional category
+ for a,b being object of C st <^a,b^> <> {}
+ for f being Morphism of a,b
+  st f is one-to-one & (f qua Function)" in <^b,a^>
+  holds f is iso
+  proof let C be para-functional semi-functional category;
+   let a,b be object of C such that
+A1: <^a,b^> <> {};
+   let f be Morphism of a,b; assume
+A2: f is one-to-one;
+   assume
+A3: f qua Function" in <^b,a^>;
+   then reconsider g = f qua Function" as Morphism of b,a ;
+      dom g = the_carrier_of b by A3,Th36;
+then A4: rng f = the_carrier_of b by A2,FUNCT_1:55;
+A5: f qua Function"*f = id dom f & f*(f qua Function") = id rng f
+     by A2,FUNCT_1:61;
+   dom f = the_carrier_of a by A1,Th36;
+then A6: f*g = id the_carrier_of b & g*f = id the_carrier_of a
+     by A1,A3,A4,A5,Th38;
+A7: idm b = f*g & idm a = g*f by A6,Th39;
+then A8: g is_left_inverse_of f & g is_right_inverse_of f by ALTCAT_3:def 1;
+    then f is retraction coretraction by ALTCAT_3:def 2,def 3;
+   hence f*f" = idm b & f"*f = idm a by A1,A3,A7,A8,ALTCAT_3:def 4;
+  end;
+
+theorem
+   for C being concrete category
+ for a,b being object of C st <^a,b^> <> {} & <^b,a^> <> {}
+ for f being Morphism of a,b
+  st f is iso
+  holds f" = (f qua Function)"
+  proof let C be concrete category;
+   let a,b be object of C; assume
+A1: <^a,b^> <> {} & <^b,a^> <> {};
+   let f be Morphism of a,b; assume
+A2: f is iso;
+then A3: f"*f = idm a by ALTCAT_3:def 5;
+A4: f"*(f qua Function) = f"*f by A1,Th38;
+A5: dom (f") = the_carrier_of b & dom f = the_carrier_of a by A1,Th36;
+A6: f is one-to-one & rng f = the_carrier_of b by A1,A2,Th42;
+      idm a = id the_carrier_of a by Def10;
+   hence thesis by A3,A4,A5,A6,FUNCT_1:63;
+  end;
+
+scheme ConcreteCatEquivalence
+ { A,B() -> para-functional semi-functional category,
+   O1, O2(set) -> set,
+   F1, F2(set,set,set) -> Function,
+   A, B(set) -> Function }:
+  A(), B() are_equivalent
+ provided
+A1:  ex F being covariant Functor of A(),B() st
+    (for a being object of A() holds F.a = O1(a)) &
+    for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b holds F.f = F1(a,b,f)
+ and
+A2:  ex G being covariant Functor of B(),A() st
+    (for a being object of B() holds G.a = O2(a)) &
+    for a,b being object of B() st <^a,b^> <> {}
+    for f being Morphism of a,b holds G.f = F2(a,b,f)
+ and
+A3:  for a, b being object of A() st a = O2(O1(b))
+    holds A(b) in <^a, b^> & A(b)" in <^b,a^> & A(b) is one-to-one
+ and
+A4:  for a, b being object of B() st b = O1(O2(a))
+    holds B(a) in <^a, b^> & B(a)" in <^b,a^> & B(a) is one-to-one
+ and
+A5:  for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     holds A(b)*F2(O1(a),O1(b),F1(a,b,f)) = f*A(a)
+ and
+A6:  for a,b being object of B() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     holds F1(O2(a),O2(b),F2(a,b,f))*B(a) = B(b)*f
+  proof consider F being covariant Functor of A(), B() such that
+A7: for a being object of A() holds F.a = O1(a) and
+A8: for a,b being object of A() st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = F1(a,b,f) by A1;
+   consider G being covariant Functor of B(),A() such that
+A9: for a being object of B() holds G.a = O2(a) and
+A10: for a,b being object of B() st <^a,b^> <> {}
+     for f being Morphism of a,b holds G.f = F2(a,b,f) by A2;
+   take F, G; set GF = G*F, I = id A();
+   deffunc a(set) = A($1);
+A11: for a being object of A() holds
+     a(a) in <^GF.a, I.a^> & <^I.a, GF.a^> <> {} &
+      for f being Morphism of GF.a, I.a st f = a(a) holds f is iso
+     proof let a be object of A();
+A12:    GF.a = G.(F.a) by FUNCTOR0:34 .= O2(F.a) by A9 .= O2(O1(a)) by A7;
+         I.a = a by FUNCTOR0:30;
+       then A(a) in <^GF.a, I.a^> & A(a)" in <^I.a, GF.a^> & A(a) is
+one-to-one
+        by A3,A12;
+      hence thesis by Th43;
+     end;
+A13: for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b
+    for g1 being Morphism of GF.a, I.a st g1 = a(a)
+    for g2 being Morphism of GF.b, I.b st g2 = a(b)
+     holds g2*GF.f = I.f*g1
+     proof let a,b be object of A() such that
+A14:    <^a,b^> <> {};
+A15:    A(a) in <^GF.a, I.a^> by A11;
+A16:    A(b) in <^GF.b, I.b^> by A11;
+      then reconsider g2 = A(b) as Morphism of GF.b, I.b ;
+A17:    <^GF.a, GF.b^> <> {} & <^I.a, I.b^> <> {} by A14,FUNCTOR0:def 19;
+      let f be Morphism of a,b;
+A18:    GF.f = G.(F.f) by A14,FUNCTOR3:6;
+         O1(a) = F.a & O1(b) = F.b & F1(a,b,f) = F.f & <^F.a, F.b^> <> {}
+        by A7,A8,A14,FUNCTOR0:def 19;
+       then F2(O1(a),O1(b),F1(a,b,f)) = GF.f by A10,A18;
+       then g2*GF.f = A(b)*F2(O1(a),O1(b),F1(a,b,f)) by A16,A17,Th38
+         .= f*A(a) by A5,A14
+         .= I.f*A(a) by A14,FUNCTOR0:32;
+      hence thesis by A15,A17,Th38;
+     end;
+      ex t being natural_equivalence of G*F, id A() st
+     G*F, id A() are_naturally_equivalent &
+     for a being object of A() holds t!a = a(a)
+      from NatEquivalenceLambda(A11,A13);
+   hence G*F, id A() are_naturally_equivalent;
+   set I = id B(), FG = F*G;
+   deffunc b(set) = B($1);
+A19: for a being object of B() holds
+     b(a) in <^I.a, FG.a^> & <^FG.a, I.a^> <> {} &
+      for f being Morphism of I.a, FG.a st f = b(a) holds f is iso
+     proof let a be object of B();
+A20:    FG.a = F.(G.a) by FUNCTOR0:34 .= O1(G.a) by A7 .= O1(O2(a)) by A9;
+         I.a = a by FUNCTOR0:30;
+       then B(a) in <^I.a, FG.a^> & B(a)" in <^FG.a, I.a^> & B(a) is
+one-to-one
+        by A4,A20;
+      hence thesis by Th43;
+     end;
+A21: for a,b being object of B() st <^a,b^> <> {}
+    for f being Morphism of a,b
+    for g1 being Morphism of I.a, FG.a st g1 = b(a)
+    for g2 being Morphism of I.b, FG.b st g2 = b(b)
+     holds g2*I.f = FG.f*g1
+     proof let a,b be object of B() such that
+A22:    <^a,b^> <> {};
+A23:    B(a) in <^I.a, FG.a^> by A19;
+      then reconsider g1 = B(a) as Morphism of I.a, FG.a ;
+A24:    B(b) in <^I.b, FG.b^> by A19;
+A25:    <^FG.a, FG.b^> <> {} & <^I.a, I.b^> <> {} by A22,FUNCTOR0:def 19;
+      let f be Morphism of a,b;
+A26:    FG.f = F.(G.f) by A22,FUNCTOR3:6;
+         O2(a) = G.a & O2(b) = G.b & F2(a,b,f) = G.f & <^G.a, G.b^> <> {}
+        by A9,A10,A22,FUNCTOR0:def 19;
+       then F1(O2(a),O2(b),F2(a,b,f)) = FG.f by A8,A26;
+       then FG.f*g1 = F1(O2(a),O2(b),F2(a,b,f))*B(a) by A23,A25,Th38
+         .= B(b)*f by A6,A22
+         .= B(b)*I.f by A22,FUNCTOR0:32;
+      hence thesis by A24,A25,Th38;
+     end;
+      ex t being natural_equivalence of I, FG st
+     I, FG are_naturally_equivalent &
+     for a being object of B() holds t!a = b(a)
+      from NatEquivalenceLambda(A19,A21);
+   hence thesis;
+  end;
+
+begin
+:: <section6>Concretization of categories</section6>
+
+definition
+ let C be category;
+
+      defpred D[set, set] means $1 = $2`22;
+      defpred P[set, set, Function] means
+       ex fa,fb being object of C, g being Morphism of fa, fb
+        st fa = $1 & fb = $2 & <^fa, fb^> <> {} &
+         for o being object of C st <^o, fa^> <> {}
+         for h being Morphism of o,fa holds $3.[h,[o,fa]] = [g*h,[o,fb]];
+      deffunc B(set) = Union disjoin the Arrows of C;
+   A1: for a,b,c being Element of C, f,g being Function
+         st P[a,b,f] & P[b,c,g] holds P[a,c,g*f]
+        proof let a,b,c be Element of C, f,g be Function;
+         given fa,fb being object of C, ff being Morphism of fa, fb such that
+   A2:    fa = a & fb = b & <^fa, fb^> <> {} and
+   A3:    for o being object of C st <^o, fa^> <> {}
+          for h being Morphism of o,fa holds f.[h,[o,fa]] = [ff*h,[o,fb]];
+         given ga,gb being object of C, gf being Morphism of ga, gb such that
+   A4:    ga = b & gb = c & <^ga, gb^> <> {} and
+   A5:    for o being object of C st <^o, ga^> <> {}
+          for h being Morphism of o,ga holds g.[h,[o,ga]] = [gf*h,[o,gb]];
+         reconsider gf as Morphism of fb,gb by A2,A4;
+         take fa, gb, k = gf*ff;
+         thus fa = a & gb = c & <^fa, gb^> <> {} by A2,A4,ALTCAT_1:def 4;
+         let o be object of C such that
+   A6:    <^o, fa^> <> {};
+   A7:    <^o, fb^> <> {} by A2,A6,ALTCAT_1:def 4;
+         let h be Morphism of o,fa;
+   A8:    f.[h,[o,fa]] = [ff*h,[o,fb]] by A3,A6;
+          then [h,[o,fa]] in dom f by FUNCT_1:def 4;
+         hence (g*f).[h,[o,fa]]
+             = g.[ff*h,[o,fb]] by A8,FUNCT_1:23
+            .= [gf*(ff*h),[o,gb]] by A2,A4,A5,A7
+            .= [k*h, [o,gb]] by A2,A4,A6,ALTCAT_1:25;
+        end;
+   A9: for a being Element of C, X being set
+        st for x being set holds x in X iff x in B(a) & D[a,x]
+        holds P[a,a,id X]
+        proof let a be Element of C, X being set such that
+   A10:    for x being set holds x in X iff
+                 x in Union disjoin the Arrows of C & D[a,x];
+         reconsider fa = a as object of C;
+         take fa, fa, g = idm fa;
+         thus fa = a & fa = a & <^fa, fa^> <> {};
+         let o be object of C such that
+   A11:    <^o, fa^> <> {};
+         let h be Morphism of o,fa;
+   A12:    [h,[o,fa]]`1 = h & [h,[o,fa]]`2 = [o,fa] by MCART_1:7;
+   A13:    [h,[o,fa]]`22 = fa by COMMACAT:1;
+   A14:    dom the Arrows of C = [:the carrier of C, the carrier of C:]
+           by PBOOLE:def 3;
+            (the Arrows of C).[o,fa] = (the Arrows of C).(o,fa) by BINOP_1:def
+1
+               .= <^o, fa^> by ALTCAT_1:def 2;
+          then [o,fa] in dom the Arrows of C & h in (the Arrows of C).[o,fa]
+           by A11,A14,ZFMISC_1:def 2;
+          then [h,[o,fa]] in Union disjoin the Arrows of C by A12,CARD_3:33;
+          then [h,[o,fa]] in X by A10,A13;
+         hence (id X).[h,[o,fa]] = [h,[o,fa]] by FUNCT_1:35
+            .= [g*h,[o,fa]] by A11,ALTCAT_1:24;
+        end;
+
+ func Concretized C -> concrete strict category means:
+Def12:
+  the carrier of it = the carrier of C &
+  (for a being object of it
+    for x being set holds x in the_carrier_of a iff
+      x in Union disjoin the Arrows of C & a = x`22) &
+  for a,b being Element of C, f being Function
+   holds f in (the Arrows of it).(a,b) iff
+    f in Funcs(it-carrier_of a, it-carrier_of b) &
+    ex fa,fb being object of C, g being Morphism of fa, fb
+     st fa = a & fb = b & <^fa, fb^> <> {} &
+      for o being object of C st <^o, fa^> <> {}
+      for h being Morphism of o,fa holds f.[h,[o,fa]] = [g*h,[o,fb]];
+ uniqueness
+  proof
+      for C1,C2 being para-functional semi-functional category st
+      the carrier of C1 = the carrier of C &
+      (for a being object of C1
+        for x being set holds x in the_carrier_of a iff x in B(a) & D[a,x]) &
+      (for a,b being Element of C, f being Function
+        holds f in (the Arrows of C1).(a,b) iff
+             f in Funcs(C1-carrier_of a, C1-carrier_of b) & P[a,b,f]) &
+      the carrier of C2 = the carrier of C &
+      (for a being object of C2
+        for x being set holds x in the_carrier_of a iff x in B(a) & D[a,x]) &
+      (for a,b being Element of C, f being Function
+        holds f in (the Arrows of C2).(a,b) iff
+             f in Funcs(C2-carrier_of a, C2-carrier_of b) & P[a,b,f])
+     holds the AltCatStr of C1 = the AltCatStr of C2
+      from ConcreteCategoryUniq3;
+   hence thesis;
+  end;
+ existence
+ proof
+  thus ex C' being concrete strict category
+    st the carrier of C' = the carrier of C &
+     (for a being object of C'
+       for x being set holds x in the_carrier_of a iff x in B(a) & D[a,x]) &
+     for a,b being Element of C, f being Function
+      holds f in (the Arrows of C').(a,b) iff
+          f in Funcs(C'-carrier_of a, C'-carrier_of b) & P[a,b,f]
+     from ConcreteCategoryEx(A1,A9);
+ end;
+end;
+
+theorem Th45:
+ for A being category, a being object of A, x being set
+  holds x in (Concretized A)-carrier_of a iff
+    ex b being object of A, f being Morphism of b,a
+     st <^b,a^> <> {} & x = [f,[b,a]]
+  proof let A be category, a be object of A, x be set;
+   set B = Concretized A;
+      the carrier of B = the carrier of A by Def12;
+   then reconsider ac = a as object of B;
+A1: x in the_carrier_of ac iff
+      x in Union disjoin the Arrows of A & ac = x`22 by Def12;
+A2: dom the Arrows of A = [:the carrier of A, the carrier of A:]
+     by PBOOLE:def 3;
+    hereby assume A3: x in B-carrier_of a;
+then A4:   x`2 in dom the Arrows of A & x`1 in (the Arrows of A).(x`2) &
+      x = [x`1,x`2] by A1,CARD_3:33;
+     then consider b,c being set such that
+A5:   b in the carrier of A & c in the carrier of A & x`2 = [b,c]
+       by A2,ZFMISC_1:def 2;
+     reconsider b as object of A by A5;
+     take b;
+    a = c by A1,A3,A4,A5,COMMACAT:1;
+then A6:   <^b,a^> = (the Arrows of A).(b,c) by ALTCAT_1:def 2
+             .= (the Arrows of A).x`2 by A5,BINOP_1:def 1;
+     then reconsider f = x`1 as Morphism of b,a by A4;
+     take f; thus <^b,a^> <> {} & x = [f,[b,a]] by A1,A3,A4,A5,A6,COMMACAT:1;
+    end;
+   given b being object of A, f being Morphism of b,a such that
+A7: <^b,a^> <> {} & x = [f,[b,a]];
+A8:x`1 = f & x`2 = [b,a] by A7,MCART_1:7;
+      <^b,a^> = (the Arrows of A).(b,a) by ALTCAT_1:def 2
+           .= (the Arrows of A).x`2 by A8,BINOP_1:def 1;
+    then f in (the Arrows of A).x`2 & [b,a] in dom the Arrows of A
+     by A2,A7,ZFMISC_1:def 2;
+   hence thesis by A1,A7,A8,CARD_3:33,COMMACAT:1;
+  end;
+
+definition
+ let A be category;
+ let a be object of A;
+ cluster (Concretized A)-carrier_of a -> non empty;
+ coherence
+  proof
+   [idm a, [a,a]] in (Concretized A)-carrier_of a by Th45;
+   hence thesis;
+  end;
+end;
+
+theorem Th46:
+ for A being category, a, b being object of A st <^a,b^> <> {}
+ for f being Morphism of a,b
+ ex F being Function of
+      (Concretized A)-carrier_of a, (Concretized A)-carrier_of b
+  st F in (the Arrows of Concretized A).(a,b) &
+::     F.[idm a, [a,a]] = [f, [a,b]] &
+     for c being object of A, g being Morphism of c,a st <^c,a^> <> {}
+      holds F.[g, [c,a]] = [f*g, [c,b]]
+  proof let A be category, a, b be object of A such that
+A1: <^a,b^> <> {};
+   set B = Concretized A;
+   let f be Morphism of a,b;
+   defpred P[set,set] means
+     ex o being object of A, g being Morphism of o, a st
+      <^o,a^> <> {} & $1 = [g,[o,a]] & $2 = [f*g, [o,b]];
+A2: for x being set st x in B-carrier_of a
+     ex y being set st y in B-carrier_of b & P[x, y]
+     proof let x be set; assume x in B-carrier_of a;
+      then consider o being object of A, g being Morphism of o,a such that
+A3:    <^o,a^> <> {} & x = [g,[o,a]] by Th45;
+      take [f*g, [o,b]];
+         <^o,b^> <> {} by A1,A3,ALTCAT_1:def 4;
+      hence thesis by A3,Th45;
+     end;
+   consider F being Function such that
+A4: dom F = B-carrier_of a & rng F c= B-carrier_of b and
+A5: for x being set st x in B-carrier_of a holds P[x, F.x]
+       from NonUniqBoundFuncEx(A2);
+A6: F in Funcs(B-carrier_of a, B-carrier_of b) by A4,FUNCT_2:def 2;
+   then reconsider F as Function of B-carrier_of a, B-carrier_of b by FUNCT_2:
+121;
+   take F;
+      ex fa,fb being object of A, g being Morphism of fa, fb
+     st fa = a & fb = b & <^fa, fb^> <> {} &
+      for o being object of A st <^o, fa^> <> {}
+      for h being Morphism of o,fa holds F.[h,[o,fa]] = [g*h,[o,fb]]
+     proof take fa = a, fb = b;
+      reconsider g = f as Morphism of fa,fb;
+      take g; thus fa = a & fb = b & <^fa, fb^> <> {} by A1;
+      let o be object of A such that
+A7:    <^o, fa^> <> {};
+      let h be Morphism of o,fa;
+         [h,[o,fa]] in B-carrier_of fa by A7,Th45;
+      then consider c being object of A, k being Morphism of c, fa such that
+A8:    <^c,fa^> <> {} & [h,[o,fa]] = [k,[c,fa]] & F.[h,[o,fa]] = [g*k, [c,fb]]
+        by A5;
+         [o,fa] = [c,fa] by A8,ZFMISC_1:33;
+       then o = c & h = k by A8,ZFMISC_1:33;
+      hence thesis by A8;
+     end;
+   hence F in (the Arrows of B).(a,b) by A6,Def12;
+   let c be object of A, g be Morphism of c,a such that
+A9: <^c,a^> <> {};
+      [g, [c,a]] in B-carrier_of a by A9,Th45;
+   then consider o being object of A, h being Morphism of o, a such that
+A10: <^o,a^> <> {} & [g,[c,a]] = [h,[o,a]] & F.[g,[c,a]] = [f*h, [o,b]] by A5;
+      [c,a] = [o,a] by A10,ZFMISC_1:33;
+    then c = o & g = h by A10,ZFMISC_1:33;
+   hence thesis by A10;
+  end;
+
+theorem Th47:
+ for A being category, a, b being object of A st <^a,b^> <> {}
+ for F1,F2 being Function
+  st F1 in (the Arrows of Concretized A).(a,b) &
+     F2 in (the Arrows of Concretized A).(a,b) &
+     F1.[idm a, [a,a]] = F2.[idm a, [a,a]]
+  holds F1 = F2
+  proof let A be category, a, b be object of A such that
+      <^a,b^> <> {};
+   set B = Concretized A;
+   let F1,F2 be Function such that
+A1: F1 in (the Arrows of Concretized A).(a,b) and
+A2: F2 in (the Arrows of Concretized A).(a,b) and
+A3: F1.[idm a, [a,a]] = F2.[idm a, [a,a]];
+      F1 in Funcs(B-carrier_of a, B-carrier_of b) &
+    F2 in Funcs(B-carrier_of a, B-carrier_of b) by A1,A2,Def12;
+then A4: dom F1 = B-carrier_of a & dom F2 = B-carrier_of a by ALTCAT_1:6;
+   consider fa,fb being object of A, f being Morphism of fa, fb such that
+A5: fa = a & fb = b & <^fa, fb^> <> {} and
+A6: for o being object of A st <^o, fa^> <> {}
+     for h being Morphism of o,fa holds F1.[h,[o,fa]] = [f*h,[o,fb]]
+      by A1,Def12;
+   consider ga,gb being object of A, g being Morphism of ga, gb such that
+A7: ga = a & gb = b & <^ga, gb^> <> {} and
+A8: for o being object of A st <^o, ga^> <> {}
+     for h being Morphism of o,ga holds F2.[h,[o,ga]] = [g*h,[o,gb]]
+      by A2,Def12;
+   reconsider f, g as Morphism of a, b by A5,A7;
+   F1.[idm a, [a,a]] = [f* idm a, [a,b]] & f* idm a = f & g* idm a = g &
+    F2.[idm a, [a,a]] = [g* idm a, [a,b]] by A5,A6,A7,A8,ALTCAT_1:def 19;
+then A9: f = g by A3,ZFMISC_1:33;
+      now let x be set; assume x in B-carrier_of a;
+     then consider bb being object of A, ff being Morphism of bb,a such that
+A10:   <^bb,a^> <> {} & x = [ff,[bb,a]] by Th45;
+     thus F1.x = [f*ff, [bb,b]] by A5,A6,A10 .= F2.x by A7,A8,A9,A10;
+    end;
+   hence F1 = F2 by A4,FUNCT_1:9;
+  end;
+
+scheme NonUniqMSFunctionEx
+ {I() -> set,
+  A, B() -> ManySortedSet of I(),
+  P[set,set,set]}:
+ ex F being ManySortedFunction of A(), B() st
+  for i,x being set st i in I() & x in A().i
+   holds F.i.x in B().i & P[i,x,F.i.x]
+ provided
+A1:  for i,x being set st i in I() & x in A().i
+   ex y being set st y in B().i & P[i,x,y]
+  proof
+    defpred P[set,set] means
+     ex f being Function of A().$1, B().$1 st $2 = f &
+      for x being set st x in A().$1 holds f.x in B().$1 & P[$1,x,f.x];
+A2: for i being set st i in I()
+     ex y being set st P[i,y]
+     proof let i be set such that
+A3:    i in I();
+       defpred Q[set,set] means $2 in B().i & P[i,$1,$2];
+A4:    now let x be set; assume x in A().i;
+         then ex y being set st y in B().i & P[i,x,y] by A1,A3;
+        hence ex y being set st y in B().i & Q[x,y];
+       end;
+      consider f being Function such that
+A5:    dom f = A().i & rng f c= B().i and
+A6:    for x being set st x in A().i holds Q[x, f.x]
+        from NonUniqBoundFuncEx(A4);
+      reconsider f as Function of A().i, B().i by A5,FUNCT_2:4;
+      take f, f; thus thesis by A6;
+     end;
+   consider F being Function such that
+A7: dom F = I() and
+A8: for i being set st i in I() holds P[i, F.i]
+       from NonUniqFuncEx(A2);
+   reconsider F as ManySortedSet of I() by A7,PBOOLE:def 3;
+      now let i be set; assume i in I();
+      then ex f being Function of A().i, B().i st F.i = f &
+       for x being set st x in A().i holds f.x in B().i & P[i,x,f.x] by A8;
+     hence F.i is Function of A().i, B().i;
+    end;
+   then reconsider F as ManySortedFunction of A(), B() by MSUALG_1:def 2;
+   take F; let i,x be set; assume
+      i in I();
+    then ex f being Function of A().i, B().i st F.i = f &
+     for x being set st x in A().i holds f.x in B().i & P[i,x,f.x] by A8;
+   hence thesis;
+  end;
+
+definition
+ let A be category;
+ set B = Concretized A;
+ func Concretization A -> covariant strict Functor of A, Concretized A means:
+Def13:
+  (for a being object of A holds it.a = a) &
+  (for a, b being object of A st <^a,b^> <> {}
+   for f being Morphism of a,b holds it.f.[idm a, [a,a]] = [f, [a,b]]);
+ uniqueness
+  proof let F,G be covariant strict Functor of A,B such that
+A1: for a being object of A holds F.a = a and
+A2: for a, b being object of A st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f.[idm a, [a,a]] = [f, [a,b]] and
+A3: for a being object of A holds G.a = a and
+A4: for a, b being object of A st <^a,b^> <> {}
+     for f being Morphism of a,b holds G.f.[idm a, [a,a]] = [f, [a,b]];
+A5: now let a be object of A;
+     thus F.a = a by A1 .= G.a by A3;
+    end;
+      now let a,b be object of A; assume
+A6:   <^a,b^> <> {};
+     let f be Morphism of a,b;
+A7:   F.f.[idm a, [a,a]] = [f, [a,b]] by A2,A6;
+A8:   G.f.[idm a, [a,a]] = [f, [a,b]] by A4,A6;
+A9:   <^F.a, F.b^> <> {} & F.a = a & F.b = b & G.a = a & G.b = b
+       by A1,A3,A6,FUNCTOR0:def 19;
+      then <^F.a, F.b^> = (the Arrows of B).(a,b) & F.f in <^F.a, F.b^> &
+      G.f in <^G.a, G.b^> by ALTCAT_1:def 2;
+     hence F.f = G.f by A6,A7,A8,A9,Th47;
+    end;
+   hence thesis by A5,Th1;
+  end;
+ existence
+  proof
+   deffunc O(set) = $1;
+A10: the carrier of B = the carrier of A by Def12; then
+A11: for a being object of A holds O(a) is object of B;
+   reconsider AA = the Arrows of B as
+       ManySortedSet of [:the carrier of A, the carrier of A:] by A10;
+   defpred P[set,set,set] means
+    ex a, b being object of A, f being Morphism of a,b,
+       G being Function of B-carrier_of a, B-carrier_of b
+     st $1 = [a,b] & $2 = f & $3 = G &
+        for c being object of A, g being Morphism of c,a st <^c,a^> <> {}
+         holds G.[g, [c,a]] = [f*g, [c,b]];
+A12: for i,x being set
+     st i in [:the carrier of A, the carrier of A:] & x in (the Arrows of A).i
+     ex y being set st y in AA.i & P[i,x,y]
+     proof let i,x be set; assume
+         i in [:the carrier of A, the carrier of A:];
+      then consider a,b being set such that
+A13:    a in the carrier of A & b in the carrier of A & i = [a,b]
+        by ZFMISC_1:def 2;
+      reconsider a, b as object of A by A13;
+      assume x in (the Arrows of A).i;
+       then x in (the Arrows of A).(a,b) by A13,BINOP_1:def 1; then
+A14:    x in <^a,b^> by ALTCAT_1:def 2;
+      then reconsider f = x as Morphism of a,b ;
+      consider G being Function of B-carrier_of a, B-carrier_of b such that
+A15:    G in AA.(a,b) and
+A16:    for c being object of A, g being Morphism of c,a st <^c,a^> <> {}
+        holds G.[g, [c,a]] = [f*g, [c,b]] by A14,Th46;
+      take G; thus thesis by A13,A15,A16,BINOP_1:def 1;
+     end;
+   consider F being ManySortedFunction of the Arrows of A, AA such that
+A17: for i,x being set
+     st i in [:the carrier of A, the carrier of A:] & x in (the Arrows of A).i
+    holds F.i.x in AA.i & P[i,x,F.i.x] from NonUniqMSFunctionEx(A12);
+   deffunc F(set,set,set) = F.[$1,$2].$3;
+A18: for a,b being object of A st <^a,b^> <> {}
+    for f being Morphism of a,b
+     holds F(a,b,f) in (the Arrows of B).(O(a), O(b))
+     proof let a,b be object of A such that
+A19:    <^a,b^> <> {};
+      let f be Morphism of a,b;
+A20:    [a,b] in [:the carrier of A, the carrier of A:] by ZFMISC_1:def 2;
+A21:    <^a,b^> = (the Arrows of A).(a,b) by ALTCAT_1:def 2;
+         (the Arrows of A).(a,b) = (the Arrows of A).[a,b] &
+       (the Arrows of B).(a,b) = (the Arrows of B).[a,b] by BINOP_1:def 1;
+      hence thesis by A17,A19,A20,A21;
+     end;
+A22: for a,b,c being object of A st <^a,b^> <> {} & <^b,c^> <> {}
+    for f being Morphism of a,b, g being Morphism of b,c
+    for a',b',c' being object of B st a' = O(a) & b' = O(b) & c' = O(c)
+    for f' being Morphism of a',b', g' being Morphism of b',c'
+     st f' = F(a,b,f) & g' = F(b,c,g)
+     holds F(a,c,g*f) = g'*f'
+     proof let a,b,c be object of A such that
+A23:    <^a,b^> <> {} & <^b,c^> <> {};
+      let f be Morphism of a,b, g be Morphism of b,c;
+      let a',b',c' be object of B such that
+A24:    a' = a & b' = b & c' = c;
+      let f' be Morphism of a',b', g' be Morphism of b',c' such that
+A25:    f' = F.[a,b].f & g' = F.[b,c].g;
+         <^a,b^> = (the Arrows of A).(a,b) by ALTCAT_1:def 2
+              .= (the Arrows of A).[a,b] by BINOP_1:def 1; then
+A26:    f in (the Arrows of A).[a,b] &
+       [a,b] in [:the carrier of A, the carrier of A:]
+        by A23,ZFMISC_1:def 2;
+      then consider a1, b1 being object of A, f1 being Morphism of a1,b1,
+        G1 being Function of B-carrier_of a1, B-carrier_of b1 such that
+A27:    [a,b] = [a1,b1] & f = f1 & F.[a,b].f = G1 and
+A28:    for c being object of A, g being Morphism of c,a1 st <^c,a1^> <> {}
+        holds G1.[g, [c,a1]] = [f1*g, [c,b1]] by A17;
+         <^b,c^> = (the Arrows of A).(b,c) by ALTCAT_1:def 2
+              .= (the Arrows of A).[b,c] by BINOP_1:def 1; then
+A29:    g in (the Arrows of A).[b,c] &
+       [b,c] in [:the carrier of A, the carrier of A:]
+        by A23,ZFMISC_1:def 2;
+      then consider b2, c2 being object of A, g2 being Morphism of b2,c2,
+        G2 being Function of B-carrier_of b2, B-carrier_of c2 such that
+A30:    [b,c] = [b2,c2] & g = g2 & F.[b,c].g = G2 and
+A31:    for c being object of A, g being Morphism of c,b2 st <^c,b2^> <> {}
+        holds G2.[g, [c,b2]] = [g2*g, [c,c2]] by A17;
+A32:    <^a,c^> <> {} by A23,ALTCAT_1:def 4;
+         <^a,c^> = (the Arrows of A).(a,c) by ALTCAT_1:def 2
+              .= (the Arrows of A).[a,c] by BINOP_1:def 1;
+       then g*f in (the Arrows of A).[a,c] &
+       [a,c] in [:the carrier of A, the carrier of A:]
+        by A32,ZFMISC_1:def 2;
+      then consider a3, c3 being object of A, h3 being Morphism of a3,c3,
+        G3 being Function of B-carrier_of a3, B-carrier_of c3 such that
+A33:    [a,c] = [a3,c3] & g*f = h3 & F.[a,c].(g*f) = G3 and
+A34:    for c being object of A, g being Morphism of c,a3 st <^c,a3^> <> {}
+        holds G3.[g, [c,a3]] = [h3*g, [c,c3]] by A17;
+         <^a',b'^> = AA.(a',b') & <^b',c'^> = AA.(b',c') by ALTCAT_1:def 2;
+       then <^a',b'^> = AA.[a',b'] & <^b',c'^> = AA.[b',c']
+         by BINOP_1:def 1; then
+A35:    F.[a,b].f in <^a',b'^> & F.[b,c].g in <^b',c'^> by A17,A24,A26,A29;
+A36:    a = a1 & b = b1 & b = b2 & c = c2 & a = a3 & c = c3
+        by A27,A30,A33,ZFMISC_1:33;
+      then reconsider G1 as Function of B-carrier_of a, B-carrier_of b;
+      reconsider G2 as Function of B-carrier_of b, B-carrier_of c by A36;
+      reconsider G3 as Function of B-carrier_of a, B-carrier_of c by A36;
+       now
+        let x be Element of B-carrier_of a;
+        consider bb being object of A, ff being Morphism of bb,a such that
+A37:      <^bb,a^> <> {} & x = [ff,[bb,a]] by Th45;
+A38:      <^bb,b^> <> {} by A23,A37,ALTCAT_1:def 4;
+        thus G3.x = [g*f*ff, [bb,c]] by A33,A34,A36,A37
+                 .= [g*(f*ff), [bb,c]] by A23,A37,ALTCAT_1:25
+                 .= G2.[f*ff, [bb,b]] by A30,A31,A36,A38
+                 .= G2.(G1.x) by A27,A28,A36,A37
+                 .= (G2*G1).x by FUNCT_2:21;
+       end;
+       then G3 = G2*G1 by FUNCT_2:113;
+      hence F.[a,c].(g*f) = g'*f' by A25,A27,A30,A33,A35,Th38;
+     end;
+A39: for a being object of A, a' being object of B st a' = O(a)
+     holds F(a,a,idm a) = idm a'
+     proof let a be object of A, a' be object of B such that
+A40:    a' = a;
+         idm a in <^a,a^>;
+       then idm a in (the Arrows of A).(a,a) by ALTCAT_1:def 2;
+       then idm a in (the Arrows of A).[a,a] &
+       [a,a] in [:the carrier of A, the carrier of A:]
+        by BINOP_1:def 1,ZFMISC_1:def 2;
+      then consider c, b being object of A, f being Morphism of c,b,
+        G being Function of B-carrier_of c, B-carrier_of b such that
+A41:    [a,a] = [c,b] & idm a = f & F.[a,a].idm a = G and
+A42:    for d being object of A, g being Morphism of d,c st <^d,c^> <> {}
+         holds G.[g, [d,c]] = [f*g, [d,b]] by A17;
+A43:    idm a' = id the_carrier_of a' by Def10;
+A44:    a = c & a = b by A41,ZFMISC_1:33;
+         now let x be Element of the_carrier_of a';
+A45:      the_carrier_of a' = B-carrier_of a by A40;
+        then consider bb being object of A, ff being Morphism of bb,a such that
+A46:      <^bb,a^> <> {} & x = [ff,[bb,a]] by Th45;
+        thus G.x = [(idm a)*ff, [bb,a]] by A41,A42,A44,A46
+                .= x by A46,ALTCAT_1:24
+                .= (id the_carrier_of a').x by A45,FUNCT_1:35;
+       end;
+      hence thesis by A40,A41,A43,A44,FUNCT_2:113;
+     end;
+   consider FF being covariant strict Functor of A,B such that
+A47: for a being object of A holds FF.a = O(a) and
+A48: for a,b being object of A st <^a,b^> <> {}
+     for f being Morphism of a,b holds FF.f = F(a,b,f)
+      from CovariantFunctorLambda(A11,A18,A22,A39);
+   take FF;
+   thus for a being object of A holds FF.a = a by A47;
+   let a, b be object of A such that
+A49: <^a,b^> <> {};
+   let f be Morphism of a,b;
+      (the Arrows of A).[a,b] = (the Arrows of A).(a,b) by BINOP_1:def 1
+                           .= <^a,b^> by ALTCAT_1:def 2;
+    then [a,b] in [:the carrier of A, the carrier of A:] &
+    f in (the Arrows of A).[a,b] by A49,ZFMISC_1:def 2;
+   then consider a', b' being object of A, f' being Morphism of a',b',
+       G being Function of B-carrier_of a', B-carrier_of b' such that
+A50: [a,b] = [a',b'] & f = f' & F.[a,b].f = G and
+A51: for c being object of A, g being Morphism of c,a' st <^c,a'^> <> {}
+     holds G.[g, [c,a']] = [f'*g, [c,b']] by A17;
+A52: G = FF.f by A48,A49,A50;
+      a = a' & b = b' & <^a,a^> <> {} by A50,ZFMISC_1:33;
+   hence FF.f.[idm a, [a,a]] = [f* idm a, [a,b]] by A50,A51,A52
+      .= [f, [a,b]] by A49,ALTCAT_1:def 19;
+  end;
+end;
+
+definition
+ let A be category;
+ cluster Concretization A -> bijective;
+ coherence
+  proof set B = Concretized A;
+   set FF = Concretization A;
+A1: the carrier of B = the carrier of A by Def12;
+   deffunc O(set) = $1;
+A2: for a being object of A holds FF.a = O(a) by Def13;
+   deffunc F(object of A, object of A, Morphism of $1,$2) = FF.$3;
+A3: for a,b being object of A st <^a,b^> <> {}
+     for f being Morphism of a,b holds FF.f = F(a,b,f);
+A4: for a,b being object of A st O(a) = O(b) holds a = b;
+A5: for a,b being object of A st <^a,b^> <> {}
+    for f,g being Morphism of a,b st F(a,b,f) = F(a,b,g)
+     holds f = g
+     proof let a,b be object of A such that
+A6:    <^a,b^> <> {};
+      let f,g be Morphism of a,b;
+         FF.f.[idm a, [a,a]] = [f, [a,b]] &
+       FF.g.[idm a, [a,a]] = [g, [a,b]] by A6,Def13;
+      hence thesis by ZFMISC_1:33;
+     end;
+A7: for a,b being object of B st <^a,b^> <> {}
+    for f being Morphism of a,b
+     ex c,d being object of A, g being Morphism of c,d
+      st a = O(c) & b = O(d) & <^c,d^> <> {} & f = F(c,d,g)
+     proof let a,b be object of B such that
+A8:    <^a,b^> <> {};
+      reconsider c = a, d = b as object of A by A1;
+      let f be Morphism of a,b;
+      take c,d;
+A9:    (the Arrows of B).(c,d) = <^a,b^> by ALTCAT_1:def 2;
+      then consider fa,fb being object of A, g being Morphism of fa, fb such
+that
+A10:    fa = c & fb = d & <^fa, fb^> <> {} and
+A11:    for o being object of A st <^o, fa^> <> {}
+        for h being Morphism of o,fa holds f.[h,[o,fa]] = [g*h,[o,fb]]
+         by A8,Def12;
+      reconsider g as Morphism of c,d by A10;
+      take g;
+         <^c,c^> <> {} & FF.g.[idm c, [c,c]] = [g, [c,d]] & g* idm c = g
+        by A10,Def13,ALTCAT_1:def 19;
+then A12:    FF.g.[idm c, [c,c]] = f.[idm c, [c,c]] by A10,A11;
+         FF.c = a & FF.d = b by Def13;
+      hence thesis by A8,A9,A10,A12,Th47;
+     end;
+   thus thesis from CoBijectiveSch(A2,A3,A4,A5,A7);
+  end;
+end;
+
+theorem
+   for A being category
+  holds A, Concretized A are_isomorphic
+  proof let A be category;
+   take Concretization A; thus thesis;
+  end;
+

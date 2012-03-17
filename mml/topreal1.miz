@@ -1,0 +1,1930 @@
+:: The Topological Space ${\calE}^2_{\rm T}$.
+:: Arcs, Line Segments and Special Polygonal Arcs
+::  by Agata Darmochwa{\l} and Yatsuka Nakamura
+::
+:: Received November 21, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary EUCLID, METRIC_1, PCOMPS_1, BOOLE, FINSEQ_1, RELAT_1, FUNCT_1,
+      PRE_TOPC, BORSUK_1, TOPS_2, RCOMP_1, SUBSET_1, MCART_1, ARYTM_1, ARYTM_3,
+      CONNSP_2, TOPS_1, TOPMETR, COMPLEX1, ABSVALUE, ORDINAL2, COMPTS_1,
+      TARSKI, SETFAM_1, TOPREAL1, FINSEQ_4, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XREAL_0,
+      REAL_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, ABSVALUE, STRUCT_0, TOPS_1,
+      TOPS_2, CONNSP_2, COMPTS_1, RCOMP_1, FINSEQ_1, FINSEQ_4, METRIC_1,
+      TOPMETR, PCOMPS_1, EUCLID, PRE_TOPC;
+ constructors REAL_1, NAT_1, ABSVALUE, TOPS_1, TOPS_2, COMPTS_1, RCOMP_1,
+      EUCLID, TOPMETR, FINSEQ_4, INT_1, MEMBERED, XBOOLE_0, PRE_TOPC;
+ clusters SUBSET_1, FUNCT_1, PRE_TOPC, RELSET_1, STRUCT_0, EUCLID, BORSUK_1,
+      XREAL_0, METRIC_1, INT_1, TOPMETR, XBOOLE_0, NAT_1, MEMBERED, ZFMISC_1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, XBOOLE_0;
+ theorems ABSVALUE, AXIOMS, BORSUK_1, COMPTS_1, CONNSP_2, ENUMSET1, EUCLID,
+      FINSEQ_1, FUNCT_1, FUNCT_2, HEINE, METRIC_1, NAT_1, PCOMPS_1, PRE_TOPC,
+      RCOMP_1, REAL_1, REAL_2, TARSKI, TOPMETR, TOPMETR2, TOPS_1, TOPS_2,
+      ZFMISC_1, FINSEQ_3, FINSEQ_4, TBSP_1, PARTFUN2, SQUARE_1, RELSET_1,
+      RELAT_1, INT_1, SETFAM_1, XBOOLE_0, XBOOLE_1, XREAL_0, XCMPLX_0,
+      XCMPLX_1, ORDINAL2;
+ schemes NAT_1, ZFREFLE1, FRAENKEL;
+
+begin
+
+reserve r,y1,y2,lambda for Real, i,j,n for Nat;
+reserve a,m for natural number;
+
+Lm1: the carrier of Euclid n = REAL n & the carrier of TOP-REAL n = REAL n
+ proof
+   Euclid n = MetrStruct(#REAL n,Pitag_dist n#) &
+   TOP-REAL n = TopSpaceMetr(Euclid n) by EUCLID:def 7,def 8;
+   hence thesis by TOPMETR:16;
+end;
+
+:: PRELIMINARIES
+
+scheme Fraenkel_Alt {A() -> non empty set, P[set], Q[set]}:
+ {v where v is Element of A(): P[v] or Q[v]} =
+  {v1 where v1 is Element of A(): P[v1]} \/
+   {v2 where v2 is Element of A(): Q[v2]}
+ proof
+ set X = {v where v is Element of A(): P[v] or Q[v]},
+     Y = {v1 where v1 is Element of A(): P[v1]},
+     Z = {v2 where v2 is Element of A(): Q[v2]};
+     now let x be set;
+    thus x in X implies x in Y \/ Z
+     proof
+      assume x in X;
+      then consider v being Element of A() such that
+     A1: x = v and A2: P[v] or Q[v];
+         now per cases by A2;
+        suppose P[v];
+         then x in Y by A1;
+         hence x in Y \/ Z by XBOOLE_0:def 2;
+        suppose Q[v];
+         then x in Z by A1;
+         hence x in Y \/ Z by XBOOLE_0:def 2;
+       end;
+      hence x in Y \/ Z;
+     end;
+    assume A3: x in Y \/ Z;
+       now per cases by A3,XBOOLE_0:def 2;
+      suppose x in Y;
+       then ex v being Element of A() st x = v & P[v];
+       hence x in X;
+      suppose x in Z;
+       then ex v being Element of A() st x = v & Q[v];
+       hence x in X;
+     end;
+    hence x in X;
+   end;
+  hence thesis by TARSKI:2;
+ end;
+
+reserve D for set, p for FinSequence of D;
+
+definition let D, p, m;
+ func p|m -> FinSequence of D equals
+  :Def1: p|Seg m;
+ coherence by FINSEQ_1:23;
+end;
+
+definition let D be set, f be FinSequence of D;
+ cluster f|0 -> empty;
+  coherence
+ proof f|0 = f|(Seg 0) by Def1;
+  hence f|0 is empty by FINSEQ_1:4,RELAT_1:110;
+ end;
+end;
+
+theorem Th1:
+ a in dom(p|m) implies (p|m)/.a = p/.a
+ proof
+  assume
+A1: a in dom(p|m);
+then A2: a in dom(p|Seg m) by Def1;
+   then a in dom p /\ (Seg m) by RELAT_1:90;
+then A3: a in dom p by XBOOLE_0:def 3;
+  thus (p|m)/.a = (p|m).a by A1,FINSEQ_4:def 4
+   .= (p|Seg m).a by Def1
+   .= p.a by A2,FUNCT_1:70
+   .= p/.a by A3,FINSEQ_4:def 4;
+ end;
+
+theorem
+  len p <= m implies p|m = p
+ proof 
+  assume len p <= m;
+  then Seg len p c= Seg m by FINSEQ_1:7;
+  then dom p c= Seg m by FINSEQ_1:def 3;
+  then p|Seg m = p by RELAT_1:97;
+  hence thesis by Def1;
+ end;
+
+theorem Th3:
+ m <= len p implies len(p|m) = m
+proof
+a1:  m is Nat by ORDINAL2:def 21;
+ assume m <= len p;
+ then Seg m c= Seg(len p) by FINSEQ_1:7;
+ then Seg m c= dom p by FINSEQ_1:def 3;
+ then Seg m = dom(p|(Seg m)) by RELAT_1:91 .= dom(p|m) by Def1;
+ hence m = len(p|m) by a1,FINSEQ_1:def 3;
+end;
+
+definition let T be 1-sorted;
+ mode FinSequence of T is FinSequence of the carrier of T;
+end;
+
+:: PROPER TEXT
+
+reserve p,p1,p2,q1,q2 for Point of TOP-REAL 2,
+        P, P1 for Subset of TOP-REAL 2;
+
+ definition let n;
+    let p1, p2 be Point of TOP-REAL n,
+        P be Subset of TOP-REAL n;
+  pred P is_an_arc_of p1,p2 means
+   :Def2: ex f being map of I[01], (TOP-REAL n)|P st
+                     f is_homeomorphism & f.0 = p1 & f.1 = p2;
+ end;
+
+theorem Th4:
+  for P being Subset of TOP-REAL n,
+      p1,p2 being Point of TOP-REAL n
+    st P is_an_arc_of p1,p2 holds p1 in P & p2 in P
+ proof let P be Subset of TOP-REAL n,
+ p1,p2 be Point of TOP-REAL n;
+  assume P is_an_arc_of p1,p2;
+  then consider f being map of I[01], (TOP-REAL n)|P such that
+   A1: f is_homeomorphism and A2: f.0 = p1 & f.1 = p2 by Def2;
+A3:  dom f = [#]I[01] by A1,TOPS_2:def 5
+  .= the carrier of I[01] by PRE_TOPC:12;
+     1 in [.0,1.] & 0 in [.0,1.] by RCOMP_1:15;
+  then A4: p1 in rng f & p2 in rng f by A2,A3,BORSUK_1:83,FUNCT_1:def 5;
+    rng f = [#]((TOP-REAL n)|P) by A1,TOPS_2:def 5;
+  hence thesis by A4,PRE_TOPC:def 10;
+ end;
+
+theorem Th5:
+  for P,Q being Subset of TOP-REAL n,
+  p1,p2,q1 being Point of TOP-REAL n
+   st P is_an_arc_of p1,p2 & Q is_an_arc_of p2,q1 & P /\ Q = {p2}
+   holds P \/ Q is_an_arc_of p1,q1
+ proof let P,Q be Subset of TOP-REAL n,
+ p1,p2,q1 be Point of TOP-REAL n;
+  assume that A1:P is_an_arc_of p1,p2 and A2:Q is_an_arc_of p2,q1
+        and A3: P /\ Q = {p2};
+   consider f1 being map of I[01], (TOP-REAL n)|P such that
+A4:      f1 is_homeomorphism & f1.0 = p1 & f1.1 = p2 by A1,Def2;
+   consider f2 being map of I[01], (TOP-REAL n)|Q such that
+A5:     f2 is_homeomorphism & f2.0 = p2 & f2.1 = q1 by A2,Def2;
+   consider h being map of I[01], (TOP-REAL n)|(P \/ Q) such that
+A6:   h is_homeomorphism & h.0 = f1.0 & h.1 = f2.1 by A3,A4,A5,TOPMETR2:6;
+     take h;
+   thus thesis by A4,A5,A6;
+ end;
+
+ definition
+  func R^2-unit_square -> Subset of TOP-REAL 2 equals
+   :Def3: { p : p`1 = 0 & p`2 <= 1 & p`2 >= 0 or
+                        p`1 <= 1 & p`1 >= 0 & p`2 = 1 or
+                        p`1 <= 1 & p`1 >= 0 & p`2 = 0 or
+                        p`1 = 1 & p`2 <= 1 & p`2 >= 0};
+  coherence
+   proof defpred X[Point of TOP-REAL 2] means
+          $1`1 = 0 & $1`2 <= 1 & $1`2 >= 0 or
+          $1`1 <= 1 & $1`1 >= 0 & $1`2 = 1 or
+          $1`1 <= 1 & $1`1 >= 0 & $1`2 = 0 or
+          $1`1 = 1 & $1`2 <= 1 & $1`2 >= 0;
+      { p : X[p]} c= the carrier of TOP-REAL 2 from Fr_Set0;
+    hence thesis;
+   end;
+ end;
+
+ definition let n; let p1,p2 be Point of TOP-REAL n;
+   func LSeg(p1,p2) -> Subset of TOP-REAL n equals
+:Def4: { (1-lambda)*p1 + lambda*p2 : 0 <= lambda & lambda <= 1 };
+  coherence
+   proof
+    set A = { (1-lambda)*p1 + lambda*p2 : 0 <= lambda & lambda <= 1 };
+      A c= the carrier of TOP-REAL n
+     proof let x be set;
+      assume x in A;
+       then ex lambda st x = (1-lambda)*p1 + lambda*p2 &
+                0 <= lambda & lambda <= 1;
+      hence thesis;
+     end;
+    hence thesis;
+   end;
+ end;
+
+definition let n; let p1,p2 be Point of TOP-REAL n;
+ cluster LSeg(p1,p2) -> non empty;
+ coherence
+  proof
+A1: LSeg(p1,p2) = { (1-lambda)*p1 + lambda*p2 : 0 <= lambda & lambda <= 1 }
+       by Def4;
+      1 - 0 = 1 & 1 * p1 = p1 & 0 * p2 = 0.REAL n & p1 + 0.REAL n = p1
+      by EUCLID:31,33;
+    then p1 in LSeg(p1,p2) by A1;
+    hence thesis;
+  end;
+end;
+
+theorem Th6:
+  for p1,p2 being Point of TOP-REAL n holds p1 in LSeg(p1,p2) & p2 in
+ LSeg(p1,p2)
+ proof let p1,p2 be Point of TOP-REAL n;
+    1 - 0 = 1 & 1 - 1 = 0 & 1*p1 = p1 & 0 * p1 = 0.REAL n & 0 * p2 = 0.REAL n
+   & p1 + 0.REAL n = p1 & 0.REAL n + p2 = p2 &
+   1*p2 = p2 by EUCLID:31,33;
+  then p1 in { (1-y1)*p1 + y1*p2 : 0 <= y1 & y1 <= 1 } &
+       p2 in { (1-y2)*p1 + y2*p2 : 0 <= y2 & y2 <= 1 };
+  hence p1 in LSeg(p1,p2) & p2 in LSeg(p1,p2) by Def4;
+ end;
+
+theorem Th7:
+  for p being Point of TOP-REAL n holds LSeg(p,p) = {p}
+ proof let p be Point of TOP-REAL n;
+    p in LSeg(p,p) by Th6;
+  then A1: {p} c= LSeg(p,p) by ZFMISC_1:37;
+    LSeg(p,p) c= {p}
+   proof
+    let a be set; assume a in LSeg(p,p);
+     then a in { (1-lambda)*p + lambda*p : 0 <= lambda & lambda <= 1 } by Def4
+;
+     then consider lambda such that
+      A2: a = (1-lambda)*p + lambda*p and 0 <= lambda & lambda <= 1;
+        a = ((1-lambda)+lambda)*p by A2,EUCLID:37 .= 1*p by XCMPLX_1:27
+        .= p by EUCLID:33;
+    hence a in {p} by TARSKI:def 1;
+   end;
+  hence thesis by A1,XBOOLE_0:def 10;
+ end;
+
+theorem Th8:
+  for p1,p2 being Point of TOP-REAL n holds LSeg(p1,p2) = LSeg(p2,p1)
+ proof let p1,p2 be Point of TOP-REAL n;
+     for a being set holds a in LSeg(p1,p2) iff a in LSeg(p2,p1)
+    proof let a be set;
+     thus a in LSeg(p1,p2) implies a in LSeg(p2,p1)
+      proof
+       assume a in LSeg(p1,p2);
+       then a in { (1-lambda)*p1 + lambda*p2 : 0 <= lambda & lambda <= 1 }
+          by Def4;
+       then consider lambda such that
+           A1: a = (1-lambda)*p1 + lambda*p2 and
+           A2: 0 <= lambda and
+           A3: lambda <= 1;
+              0 <= 1-lambda & 1-lambda <= 1-0 & 1-0=1 &
+            a = lambda*p2 + (1-lambda)*p1 &
+            1-(1-lambda)=lambda by A1,A2,A3,REAL_2:106,SQUARE_1:12,XCMPLX_1:18;
+          then a in { (1-r)*p2 + r*p1 :  0 <= r & r <= 1 };
+          hence a in LSeg(p2,p1) by Def4;
+      end;
+     assume a in LSeg(p2,p1);
+      then a in { (1-lambda)*p2 + lambda*p1 : 0 <= lambda & lambda <= 1 }
+       by Def4;
+      then consider lambda such that
+       A4: a = (1-lambda)*p2 + lambda*p1 and
+       A5:0 <= lambda and A6: lambda <= 1;
+        0 <= 1-lambda & 1-lambda <= 1-0 & 1-0=1 & a = lambda*p1 + (1-lambda)*p2
+&
+       1-(1-lambda)=lambda by A4,A5,A6,REAL_2:106,SQUARE_1:12,XCMPLX_1:18;
+     then a in { (1-r)*p1 + r*p2 : 0 <= r & r <= 1 };
+     hence a in LSeg(p1,p2) by Def4;
+    end;
+   hence thesis by TARSKI:2;
+ end;
+
+ definition let n; let p1,p2 be Point of TOP-REAL n;
+  redefine func LSeg(p1,p2); commutativity by Th8;
+ end;
+
+Lm2: for p,p1,p2 being Point of TOP-REAL n st p in LSeg(p1,p2)
+        holds LSeg(p1,p) c= LSeg(p1,p2)
+proof let p,p1,p2 be Point of TOP-REAL n;
+assume p in LSeg(p1,p2);
+ then p in { (1-r)*p1 + r*p2 : 0 <= r & r <= 1 } by Def4;
+ then consider r such that
+                      A1: p = (1-r)*p1 + r*p2 and
+                      A2: 0 <= r and A3: r <= 1;
+ let q be set;
+ assume q in LSeg(p1,p);
+        then q in { (1-lambda)*p1 + lambda*p : 0 <= lambda & lambda <= 1 }
+                     by Def4;
+        then consider b being Real such that
+             A4: q = (1-b)*p1 + b*p and
+             A5: 0 <= b & b <= 1;
+             A6: q = (1-b)*p1 + (b*((1-r)*p1) + b*(r*p2))
+                     by A1,A4,EUCLID:36
+                   .= (1-b)*p1 + b*((1-r)*p1) + b*(r*p2) by EUCLID:30
+                   .= (1-b)*p1 + b*(1-r)*p1 + b*(r*p2) by EUCLID:34
+                   .= (1-b + b*(1-r))*p1 + b*(r*p2) by EUCLID:37
+                   .= (1-b + b*(1-r))*p1 + b*r*p2 by EUCLID:34
+                   .= (1-b + (b*1-b*r))*p1 + b*r*p2 by XCMPLX_1:40
+                   .= (1-b + b-b*r)*p1 + b*r*p2 by XCMPLX_1:29
+                   .= (1-b*r)*p1 + b*r*p2 by XCMPLX_1:27;
+                  0 <= b*r & b*r <= 1 by A2,A3,A5,REAL_2:121,140;
+        then q in { (1-lambda)*p1 + lambda*p2 : 0 <= lambda & lambda <= 1 }
+         by A6;
+ hence q in LSeg(p1,p2) by Def4;
+end;
+
+theorem Th9:
+ p1`1 <= p2`1 & p in LSeg(p1,p2) implies p1`1 <= p`1 & p`1 <= p2`1
+ proof
+  assume that A1: p1`1 <= p2`1 and A2: p in LSeg(p1,p2);
+    p in { (1-lambda)*p1 + lambda*p2 : 0 <= lambda & lambda <= 1 } by A2,Def4;
+  then consider lambda such that
+   A3: p = (1-lambda)*p1 + lambda*p2 and
+   A4: 0 <= lambda & lambda <= 1;
+  A5: ((1-lambda)*p1)`1 = |[(1-lambda)*p1`1, (1-lambda)*p1`2]|`1 by EUCLID:61
+      .= (1-lambda)*p1`1 by EUCLID:56;
+  A6: (lambda*p2)`1 = |[lambda*p2`1, lambda*p2`2]|`1 by EUCLID:61
+      .= lambda*p2`1 by EUCLID:56;
+  A7: p`1 = |[((1-lambda)*p1)`1 + (lambda*p2)`1,
+         ((1-lambda)*p1)`2 + (lambda*p2)`2]|`1 by A3,EUCLID:59
+    .= (1-lambda)*p1`1 + lambda*p2`1 by A5,A6,EUCLID:56;
+      lambda*p1`1 <= lambda*p2`1 by A1,A4,AXIOMS:25;
+    then (1-lambda)*p1`1 + lambda*p1`1 <= p`1 by A7,REAL_1:55;
+    then ((1-lambda)+lambda)*p1`1 <= p`1 by XCMPLX_1:8;
+    then 1*p1`1 <= p`1 by XCMPLX_1:27;
+    hence p1`1 <= p`1;
+      0 <= 1-lambda by A4,SQUARE_1:12;
+    then (1-lambda)*p1`1 <= (1-lambda)*p2`1 by A1,AXIOMS:25;
+    then p`1 <= (1-lambda)*p2`1 + lambda*p2`1 by A7,AXIOMS:24;
+    then p`1 <= ((1-lambda)+lambda)*p2`1 by XCMPLX_1:8;
+    then p`1 <= 1*p2`1 by XCMPLX_1:27;
+    hence p`1 <= p2`1;
+ end;
+
+theorem Th10:
+ p1`2 <= p2`2 & p in LSeg(p1,p2) implies p1`2 <= p`2 & p`2 <= p2`2
+ proof
+  assume that A1: p1`2 <= p2`2 and A2: p in LSeg(p1,p2);
+    p in { (1-lambda)*p1 + lambda*p2 : 0 <= lambda & lambda <= 1 } by A2,Def4;
+  then consider lambda such that
+   A3: p = (1-lambda)*p1 + lambda*p2 and
+   A4: 0 <= lambda & lambda <= 1;
+  A5: ((1-lambda)*p1)`2 = |[(1-lambda)*p1`1, (1-lambda)*p1`2]|`2 by EUCLID:61
+      .= (1-lambda)*p1`2 by EUCLID:56;
+  A6: (lambda*p2)`2 = |[lambda*p2`1, lambda*p2`2]|`2 by EUCLID:61
+      .= lambda*p2`2 by EUCLID:56;
+  A7: p`2 = |[((1-lambda)*p1)`1 + (lambda*p2)`1,
+         ((1-lambda)*p1)`2 + (lambda*p2)`2]|`2 by A3,EUCLID:59
+    .= (1-lambda)*p1`2 + lambda*p2`2 by A5,A6,EUCLID:56;
+      lambda*p1`2 <= lambda*p2`2 by A1,A4,AXIOMS:25;
+    then (1-lambda)*p1`2 + lambda*p1`2 <= p`2 by A7,REAL_1:55;
+    then ((1-lambda)+lambda)*p1`2 <= p`2 by XCMPLX_1:8;
+    then 1*p1`2 <= p`2 by XCMPLX_1:27;
+    hence p1`2 <= p`2;
+      0 <= 1-lambda by A4,SQUARE_1:12;
+    then (1-lambda)*p1`2 <= (1-lambda)*p2`2 by A1,AXIOMS:25;
+    then p`2 <= (1-lambda)*p2`2 + lambda*p2`2 by A7,AXIOMS:24;
+    then p`2 <= ((1-lambda)+lambda)*p2`2 by XCMPLX_1:8;
+    then p`2 <= 1*p2`2 by XCMPLX_1:27;
+    hence p`2 <= p2`2;
+ end;
+
+theorem Th11:
+ for p,p1,p2 being Point of TOP-REAL n st p in LSeg(p1,p2)
+   holds LSeg(p1,p2) = LSeg(p1,p) \/ LSeg(p,p2)
+proof let p,p1,p2 be Point of TOP-REAL n;
+    now assume A1: p in LSeg(p1,p2);
+   then p in { (1-r)*p1 + r*p2 : 0 <= r & r <= 1 } by Def4;
+   then consider r such that
+    A2: p = (1-r)*p1 + r*p2 and
+    A3: 0 <= r and A4: r <= 1;
+     now per cases;
+   suppose A5: 0 <> r & r <> 1;
+      LSeg(p1,p) c= LSeg(p1,p2) & LSeg(p,p2) c= LSeg(p1,p2) by A1,Lm2;
+    then A6: LSeg(p1,p) \/ LSeg(p,p2) c= LSeg(p1,p2) by XBOOLE_1:8;
+      LSeg(p1,p2) c= LSeg(p1,p) \/ LSeg(p,p2)
+       proof
+          now let q be set;
+        assume q in LSeg(p1,p2);
+        then q in { (1-lambda)*p1 + lambda*p2 : 0 <= lambda & lambda <= 1 }
+         by Def4;
+        then consider b being Real such that
+         A7: q = (1-b)*p1 + b*p2 and
+         A8: 0 <= b & b <= 1;
+            now per cases;
+          suppose A9: b <= r;
+           A10: 1/r >= 0 by A3,REAL_2:125;
+           set x = b*(1/r);
+A11:       b*0 <= x by A8,A10,AXIOMS:25;
+             x <= r*(1/r) by A9,A10,AXIOMS:25;
+           then A12: x <= 1 by A5,XCMPLX_1:107;
+             (1-x)*p1 + x*p
+             = (1-x)*p1 + (x*((1-r)*p1) + x*(r*p2)) by A2,EUCLID:36
+            .= (1-x)*p1 + x*((1-r)*p1) + x*(r*p2) by EUCLID:30
+            .= (1-x)*p1 + x*(1-r)*p1 + x*(r*p2) by EUCLID:34
+            .= (1-x)*p1 + x*(1-r)*p1 + x*r*p2 by EUCLID:34
+            .= ((1-x) + x*(1-r))*p1 + x*r*p2 by EUCLID:37
+            .= ((1-x) + x*(1-r))*p1 + b*p2 by A5,XCMPLX_1:110
+            .= (1-x + (x*1-x*r))*p1 + b*p2 by XCMPLX_1:40
+            .= (1-x + x -x*r)*p1 + b*p2 by XCMPLX_1:29
+            .= (1 -x*r)*p1 + b*p2 by XCMPLX_1:27
+           .= q by A5,A7,XCMPLX_1:110;
+          then q in { (1-lambda)*p1 + lambda*p : 0 <= lambda & lambda <= 1 }
+           by A11,A12;
+          then q in LSeg(p1,p) by Def4;
+          hence q in LSeg(p1,p) \/ LSeg(p,p2) by XBOOLE_0:def 2;
+          suppose A13: not (b <= r);
+         set bp =1-b ,rp=1-r;
+           A14: 0 <= bp by A8,SQUARE_1:12;
+           A15: bp <= rp by A13,REAL_2:105;
+             1-0=1;
+           then A16:  0 <> rp & rp<>1 by A5,XCMPLX_1:15,20;
+             r-r=0 by XCMPLX_1:14;
+           then 0 <= rp by A4,REAL_1:49;
+           then A17: 1/rp >= 0 by REAL_2:125;
+         set x=bp*(1/rp);
+A18:       bp*0 <= x by A14,A17,AXIOMS:25;
+             x <= rp*(1/rp) by A15,A17,AXIOMS:25;
+           then A19: x <= 1 by A16,XCMPLX_1:107;
+              p = (1-rp)*p2 + rp*p1 by A2,XCMPLX_1:18;
+           then (1-x)*p2 + x*p = (1-x)*p2 + (x*((1-rp)*p2) + x*(rp*p1))
+             by EUCLID:36
+                         .= (1-x)*p2 + x*((1-rp)*p2) + x*(rp*p1) by EUCLID:30
+                         .= (1-x)*p2 + x*(1-rp)*p2 + x*(rp*p1) by EUCLID:34
+                         .= (1-x)*p2 + x*(1-rp)*p2 + x*rp*p1 by EUCLID:34
+                         .= ((1-x) + x*(1-rp))*p2 + x*rp*p1 by EUCLID:37
+                         .= ((1-x) + x*(1-rp))*p2 + bp*p1 by A16,XCMPLX_1:110
+                         .= (1-x + (x*1-x*rp))*p2 + bp*p1 by XCMPLX_1:40
+                         .= (1-x + x -x*rp)*p2 + bp*p1 by XCMPLX_1:29
+                         .= (1 -x*rp)*p2 + bp*p1 by XCMPLX_1:27
+                         .= (1-bp)*p2 + bp*p1 by A16,XCMPLX_1:110
+                         .= q by A7,XCMPLX_1:18;
+          then q in { (1-lambda)*p2 + lambda*p: 0 <= lambda & lambda <= 1 }
+           by A18,A19;
+          then q in LSeg(p,p2) by Def4;
+          hence q in LSeg(p1,p) \/ LSeg(p,p2) by XBOOLE_0:def 2;
+         end;
+        hence q in LSeg(p1,p) \/ LSeg(p,p2);
+       end;
+      hence thesis by TARSKI:def 3;
+     end;
+    hence thesis by A6,XBOOLE_0:def 10;
+   suppose A20: not (0<>r & r<>1);
+      now per cases by A20;
+     suppose r = 0;
+      then A21: p = 1*p1 + 0.REAL n by A2,EUCLID:33
+                 .= p1 + 0.REAL n by EUCLID:33
+                 .= p1 by EUCLID:31;
+      then LSeg(p1,p) = {p} & p in LSeg(p,p2) by Th6,Th7;
+      then LSeg(p1,p) c= LSeg(p,p2) by ZFMISC_1:37;
+      hence LSeg(p1,p2) = LSeg(p1,p) \/ LSeg(p,p2) by A21,XBOOLE_1:12;
+     suppose r = 1;
+      then A22: p = 0.REAL n + 1*p2 by A2,EUCLID:33
+                 .= 0.REAL n + p2 by EUCLID:33
+                 .= p2 by EUCLID:31;
+      then LSeg(p,p2) = {p} & p in LSeg(p1,p) by Th6,Th7;
+      then LSeg(p,p2) c= LSeg(p1,p) by ZFMISC_1:37;
+      hence LSeg(p1,p2) = LSeg(p1,p) \/ LSeg(p,p2) by A22,XBOOLE_1:12;
+     end;
+    hence thesis;
+   end;
+   hence thesis;
+  end;
+ hence thesis;
+end;
+
+theorem Th12:
+ for p1,p2,q1,q2 being Point of TOP-REAL n
+    st q1 in LSeg(p1,p2) & q2 in LSeg(p1,p2) holds LSeg(q1,q2) c= LSeg(p1,p2)
+ proof let p1,p2,q1,q2 be Point of TOP-REAL n;
+  assume A1: q1 in LSeg(p1,p2) & q2 in LSeg(p1,p2);
+   then A2: LSeg(p1,p2) = LSeg(p1,q1) \/ LSeg(q1,p2) by Th11;
+     now per cases by A1,A2,XBOOLE_0:def 2;
+   suppose q2 in LSeg(p1,q1);
+     then A3: LSeg(q2,q1) c= LSeg(p1,q1) by Lm2;
+       LSeg(p1,q1) c= LSeg(p1,p2) by A1,Lm2;
+     hence thesis by A3,XBOOLE_1:1;
+   suppose q2 in LSeg(q1,p2);
+     then A4: LSeg(q1,q2) c= LSeg(q1,p2) by Lm2;
+       LSeg(q1,p2) c= LSeg(p1,p2) by A1,Lm2;
+     hence thesis by A4,XBOOLE_1:1;
+   end;
+  hence thesis;
+ end;
+
+theorem
+   for p,q,p1,p2 being Point of TOP-REAL n st p in LSeg(p1,p2) & q in LSeg(p1,
+p2
+)
+  holds LSeg(p1,p2) = LSeg(p1,p) \/ LSeg(p,q) \/ LSeg(q,p2)
+proof let p,q,p1,p2 be Point of TOP-REAL n;
+ assume A1: p in LSeg(p1,p2) & q in LSeg(p1,p2);
+   p1 in LSeg(p1,p2) & p2 in LSeg(p1,p2) by Th6;
+ then LSeg(p1,p) c= LSeg(p1,p2) & LSeg(p,q) c= LSeg(p1,p2) &
+  LSeg(q,p2) c= LSeg(p1,p2) by A1,Th12;
+ then LSeg(p1,p) \/ LSeg(p,q) c= LSeg(p1,p2) & LSeg(q,p2) c= LSeg(p1,p2)
+  by XBOOLE_1:8;
+then A2: LSeg(p1,p) \/ LSeg(p,q) \/ LSeg(q,p2) c= LSeg(p1,p2) by XBOOLE_1:8;
+ A3: LSeg(p1,p2) = LSeg(p1,q) \/ LSeg(q,p2) by A1,Th11;
+   now per cases;
+  suppose p in LSeg(p1,q);
+   hence LSeg(p1,p2) c= LSeg(p1,p) \/ LSeg(p,q) \/ LSeg(q,p2) by A3,Th11;
+  suppose not p in LSeg(p1,q);
+   then p in LSeg(q,p2) by A1,A3,XBOOLE_0:def 2;
+   then LSeg(q,p2) = LSeg(q,p) \/ LSeg(p,p2) by Th11;
+   then A4: LSeg(p,p2) c= LSeg(q,p2) by XBOOLE_1:7;
+     LSeg(p1,p2) = LSeg(p1,p) \/ LSeg(p,p2) by A1,Th11;
+   then A5: LSeg(p1,p2) c= LSeg(p1,p) \/ LSeg(q,p2) by A4,XBOOLE_1:9;
+   A6: LSeg(p1,p) \/ LSeg(q,p2) c= LSeg(p1,p) \/ LSeg(q,p2) \/ LSeg(p,q)
+     by XBOOLE_1:7;
+     LSeg(p1,p) \/ LSeg(q,p2) \/ LSeg(p,q)
+     = LSeg(p1,p) \/ LSeg(p,q) \/ LSeg(q,p2) by XBOOLE_1:4;
+   hence LSeg(p1,p2) c= LSeg(p1,p) \/ LSeg(p,q) \/
+ LSeg(q,p2) by A5,A6,XBOOLE_1:1;
+   end;
+  hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+theorem
+   p in LSeg(p1,p2) implies LSeg(p1,p) /\ LSeg(p,p2) = {p}
+proof
+ assume A1: p in LSeg(p1,p2);
+    p in LSeg(p1,p) & p in LSeg(p,p2) by Th6;
+  then p in LSeg(p1,p) /\ LSeg(p,p2) by XBOOLE_0:def 3;
+  then A2: {p} c= LSeg(p1,p) /\ LSeg(p,p2) by ZFMISC_1:37;
+     LSeg(p1,p) /\ LSeg(p,p2) c= {p}
+    proof
+     let a be set;
+      assume A3: a in LSeg(p1,p) /\ LSeg(p,p2);
+      then reconsider q=a as Point of TOP-REAL 2;
+      A4: q in LSeg(p1,p) & q in LSeg(p,p2) by A3,XBOOLE_0:def 3;
+        now per cases;
+      suppose p1`1 <= p2`1;
+       then p1`1 <= p`1 & p`1 <= p2`1 by A1,Th9;
+       then p`1 <= q`1 & q`1 <= p`1 by A4,Th9;
+       then A5: p`1 = q`1 by AXIOMS:21;
+         now per cases;
+       suppose p1`2 <= p2`2;
+        then p1`2 <= p`2 & p`2 <= p2`2 by A1,Th10;
+        then p`2 <= q`2 & q`2 <= p`2 by A4,Th10;
+        then A6: p`2 = q`2 by AXIOMS:21;
+        thus q = |[q`1,q`2]| by EUCLID:57
+                .= p by A5,A6,EUCLID:57;
+       suppose p2`2 <= p1`2;
+        then p2`2 <= p`2 & p`2 <= p1`2 by A1,Th10;
+        then p`2 <= q`2 & q`2 <= p`2 by A4,Th10;
+        then A7: p`2 = q`2 by AXIOMS:21;
+        thus q = |[q`1,q`2]| by EUCLID:57
+                .= p by A5,A7,EUCLID:57;
+       end;
+      hence q = p;
+      suppose p2`1 <= p1`1;
+       then p2`1 <= p`1 & p`1 <= p1`1 by A1,Th9;
+       then p`1 <= q`1 & q`1 <= p`1 by A4,Th9;
+       then A8: p`1 = q`1 by AXIOMS:21;
+         now per cases;
+       suppose p1`2 <= p2`2;
+        then p1`2 <= p`2 & p`2 <= p2`2 by A1,Th10;
+        then p`2 <= q`2 & q`2 <= p`2 by A4,Th10;
+        then A9: p`2 = q`2 by AXIOMS:21;
+        thus q = |[q`1,q`2]| by EUCLID:57
+                .= p by A8,A9,EUCLID:57;
+       suppose p2`2 <= p1`2;
+        then p2`2 <= p`2 & p`2 <= p1`2 by A1,Th10;
+        then p`2 <= q`2 & q`2 <= p`2 by A4,Th10;
+        then A10: p`2 = q`2 by AXIOMS:21;
+        thus q = |[q`1,q`2]| by EUCLID:57
+                .= p by A8,A10,EUCLID:57;
+       end;
+      hence q = p;
+      end;
+     hence a in {p} by TARSKI:def 1;
+    end;
+  hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+theorem Th15:
+  for p1,p2 being Point of TOP-REAL n
+   st p1 <> p2 holds LSeg(p1,p2) is_an_arc_of p1,p2
+ proof let p1,p2 be Point of TOP-REAL n;
+  assume A1: p1 <> p2;
+  set P = LSeg(p1,p2);
+A2: the carrier of Euclid n = REAL n & the carrier of TOP-REAL n = REAL n
+     by Lm1;
+   reconsider p1' = p1, p2' = p2 as Element of REAL n by Lm1;
+   defpred X[set,set] means
+     for x being Real st x = $1 holds $2 = (1-x)*p1 + x*p2;
+ A3: for a being set st a in [.0,1.] ex u being set st X[a,u]
+   proof
+    let a be set; assume a in [.0,1.];
+     then reconsider x = a as Real;
+     take (1-x)*p1 + x*p2; thus thesis;
+   end;
+  consider f being Function such that
+ A4: dom f = [.0,1.] and
+ A5: for a being set st a in [.0,1.] holds X[a,f.a] from NonUniqFuncEx(A3);
+A6:  rng f c= the carrier of (TOP-REAL n)|P
+   proof
+    let y be set; assume y in rng f;
+    then consider x being set such that A7: x in dom f & y = f.x
+     by FUNCT_1:def 5;
+      x in {r: 0 <= r & r <= 1} by A4,A7,RCOMP_1:def 1;
+    then consider r such that A8: r = x & 0 <= r & r <= 1;
+      y = (1-r)*p1 + r*p2 by A4,A5,A7,A8;
+    then y in { (1-lambda)*p1 + lambda*p2: 0 <= lambda & lambda <= 1 } by A8;
+    then y in P by Def4;
+    then y in [#]((TOP-REAL n)|P) by PRE_TOPC:def 10;
+    hence y in the carrier of (TOP-REAL n)|P;
+   end;
+     then f is Function of the carrier of I[01], the carrier of (TOP-REAL n)|
+P
+        by A4,BORSUK_1:83,FUNCT_2:def 1,RELSET_1:11;
+    then reconsider f as map of I[01], (TOP-REAL n)|P;
+A9: rng f c= [#]((TOP-REAL n)|P) by A6,PRE_TOPC:12;
+A10: [#]((TOP-REAL n)|P) c= rng f
+    proof
+     let a be set; assume a in [#]((TOP-REAL n)|P);
+     then a in P by PRE_TOPC:def 10;
+     then a in { (1-lambda)*p1 + lambda*p2 : 0 <= lambda & lambda <= 1 }
+      by Def4;
+     then consider lambda such that
+    A11: a = (1-lambda)*p1 + lambda*p2 & 0 <= lambda & lambda <= 1;
+          lambda in { r: 0 <= r & r <= 1} by A11;
+    then A12: lambda in dom f by A4,RCOMP_1:def 1;
+      then a = f.lambda by A4,A5,A11;
+      hence a in rng f by A12,FUNCT_1:def 5;
+    end;
+A13: [#]I[01] = [.0,1.] by BORSUK_1:83,PRE_TOPC:12;
+A14: rng f = [#]((TOP-REAL n)|P) by A9,A10,XBOOLE_0:def 10;
+     now let x1,x2 be set; assume
+   A15: x1 in dom f & x2 in dom f & f.x1 = f.x2;
+     then x1 in {r: 0 <= r & r <= 1} by A4,RCOMP_1:def 1;
+     then consider r1 being Real such that
+   A16: r1 = x1 & 0 <= r1 & r1 <= 1;
+       x2 in {r: 0 <= r & r <= 1} by A4,A15,RCOMP_1:def 1;
+     then consider r2 being Real such that
+   A17: r2 = x2 & 0 <= r2 & r2 <= 1;
+       f.x1 = (1-r1)*p1 + r1*p2 & f.x2 = (1-r2)*p1 + r2*p2 by A4,A5,A15,A16,A17
+;
+     then (1-r1)*p1 + r1*p2 + (-r1)*p2 = (1-r2)*p1 + (r2*p2 + (-r1)*p2)
+       by A15,EUCLID:30;
+     then (1-r1)*p1 + r1*p2 + (-r1)*p2 = (1-r2)*p1 + (r2+(-r1))*p2
+      by EUCLID:37;
+     then (1-r1)*p1 + r1*p2 + (-r1)*p2 = (1-r2)*p1 + (r2-r1)*p2
+       by XCMPLX_0:def 8;
+     then (1-r1)*p1 + (r1*p2 + (-r1)*p2) = (1-r2)*p1 + (r2-r1)*p2 by EUCLID:30
+;
+     then (1-r1)*p1 + (r1+(-r1))*p2 = (1-r2)*p1 + (r2-r1)*p2 by EUCLID:37;
+     then (1-r1)*p1 + (r1-r1)*p2 = (1-r2)*p1 + (r2-r1)*p2 by XCMPLX_0:def 8;
+     then (1-r1)*p1 + 0 * p2 = (1-r2)*p1 + (r2-r1)*p2 by XCMPLX_1:14;
+     then (1-r1)*p1 + 0.REAL n = (1-r2)*p1 + (r2-r1)*p2 by EUCLID:33;
+     then (-(1-r2))*p1 + (1-r1)*p1 = (-(1-r2))*p1 + ((1-r2)*p1 + (r2-r1)*p2)
+ by EUCLID:31;
+     then (-(1-r2))*p1 + (1-r1)*p1 = ((-(1-r2))*p1 + (1-r2)*p1) + (r2-r1)*p2
+       by EUCLID:30;
+     then (-(1-r2))*p1 + (1-r1)*p1 = (-(1-r2)+ (1-r2))*p1 + (r2-r1)*p2
+      by EUCLID:37;
+     then (-(1-r2))*p1 + (1-r1)*p1 = 0 * p1 + (r2-r1)*p2 by XCMPLX_0:def 6;
+     then (-(1-r2))*p1 + (1-r1)*p1 = 0.REAL n + (r2-r1)*p2 by EUCLID:33;
+     then (-(1-r2))*p1 + (1-r1)*p1 = (r2-r1)*p2 by EUCLID:31;
+     then (-(1-r2)+(1-r1))*p1 = (r2-r1)*p2 by EUCLID:37;
+     then ((r2-1)+(1-r1))*p1 = (r2-r1)*p2 by XCMPLX_1:143;
+     then (r2-r1)*p1 = (r2-r1)*p2 by XCMPLX_1:39;
+     then r2-r1 = 0 by A1,EUCLID:38;
+     hence x1 = x2 by A16,A17,XCMPLX_1:15;
+    end;
+then A18: f is one-to-one by FUNCT_1:def 8;
+   reconsider PP = P as Subset of Euclid n by A2;
+     PP is non empty;
+   then reconsider PP = P as non empty Subset of Euclid n;
+A19: (TOP-REAL n)|P = TopSpaceMetr((Euclid n)|PP) by TOPMETR:20;
+     for W being Point of I[01], G being a_neighborhood of f.W
+    ex H being a_neighborhood of W st f.:H c= G
+    proof
+     let W be Point of I[01], G be a_neighborhood of f.W;
+       f.W in Int G by CONNSP_2:def 1;
+     then consider Q being Subset of (TOP-REAL n)|P such that
+   A20: Q is open & Q c= G & f.W in Q by TOPS_1:54;
+       [#]((TOP-REAL n)|P) = P by PRE_TOPC:def 10;
+     then the carrier of (TOP-REAL n)|P = P &
+      the carrier of (Euclid n)|PP = P by PRE_TOPC:12,TOPMETR:def 2;
+     then reconsider Y = f.W as Point of (Euclid n)|PP;
+     consider r being real number such that
+   A21: r > 0 & Ball(Y,r) c= Q by A19,A20,TOPMETR:22;
+     reconsider r as Element of REAL by XREAL_0:def 1;
+     set delta = r/(Pitag_dist n).(p1',p2');
+     reconsider W' = W as Point of Closed-Interval-MSpace(0,1)
+      by BORSUK_1:83,TOPMETR:14;
+       Ball(W',delta) is Subset of I[01]
+      by BORSUK_1:83,TOPMETR:14;
+     then reconsider H = Ball(W',delta) as Subset of I[01];
+       I[01] = Closed-Interval-TSpace(0,1) & Closed-Interval-TSpace(0,1) =
+      TopSpaceMetr(Closed-Interval-MSpace(0,1)) by TOPMETR:27,def 8;
+     then A22: H is open by TOPMETR:21;
+     reconsider p11=p1 ,p22=p2 as Point of Euclid n by A2;
+       Euclid n = MetrStruct(#REAL n,Pitag_dist n#) by EUCLID:def 7;
+  then A23: (Pitag_dist n).(p1',p2') = dist(p11,p22) by METRIC_1:def 1;
+      A24: dist(p11,p22) >= 0 & dist(p11,p22) <> 0 by A1,METRIC_1:2,5;
+  then A25: delta > 0 by A21,A23,REAL_2:127;
+     then W in H by TBSP_1:16;
+     then W in Int H by A22,TOPS_1:55;
+     then reconsider H as a_neighborhood of W by CONNSP_2:def 1;
+     take H;
+     reconsider W1 = W as Real by BORSUK_1:83,TARSKI:def 3;
+       P = the carrier of (Euclid n)|PP & P c= the carrier of TOP-REAL n &
+      the carrier of TOP-REAL n =
+      the carrier of Euclid n by A2,TOPMETR:def 2;
+     then reconsider WW' = Y as Point of Euclid n by TARSKI:def 3;
+       f.:H c= Ball(Y,r)
+      proof
+       let a be set; assume a in f.:H;
+       then consider u being set such that
+      A26: u in dom f & u in H & a = f.u by FUNCT_1:def 12;
+       reconsider u1 = u as Real by A4,A26;
+       reconsider u' = u as Point of Closed-Interval-MSpace(0,1)
+        by A26;
+         f.u in rng f & rng f c= the carrier of (TOP-REAL n)|P &
+        [#]
+((TOP-REAL n)|P) = P by A26,FUNCT_1:def 5,PRE_TOPC:def 10,RELSET_1:12;
+       then the carrier of (TOP-REAL n)|P = P &
+        the carrier of (Euclid n)|PP = P &
+        f.u in the carrier of (TOP-REAL n)|P
+        by PRE_TOPC:12,TOPMETR:def 2;
+       then reconsider aa = a as Point of (Euclid n)|PP by A26;
+         P = the carrier of (Euclid n)|PP & P c= the carrier of TOP-REAL n &
+        the carrier of TOP-REAL n =
+        the carrier of Euclid n by A2,TOPMETR:def 2;
+       then reconsider aa' = aa as Point of Euclid n by TARSKI:def 3;
+       reconsider aa1 = aa' as Element of REAL n by Lm1;
+       reconsider WW1 = WW' as Element of REAL n by Lm1;
+      A27: f.W = (1-W1)*p1 + W1*p2 by A5,BORSUK_1:83;
+         [#]((TOP-REAL n)|P) c= [#](TOP-REAL n) by PRE_TOPC:def 9;
+       then [#]((TOP-REAL n)|P) c= the carrier of TOP-REAL n &
+        a in rng f & rng f c= the carrier of (TOP-REAL n)|P
+         by A26,FUNCT_1:def 5,PRE_TOPC:12,RELSET_1:12;
+       then the carrier of (TOP-REAL n)|P c= the carrier of TOP-REAL n &
+        a in the carrier of (TOP-REAL n)|P by PRE_TOPC:12;
+       then reconsider a'=a, fW=f.W as Point of TOP-REAL n by TARSKI:def 3;
+       reconsider p12 = p1 - p2 as Element of REAL n by Lm1;
+         WW1 - aa1 = fW - a' by EUCLID:def 13
+         .= (1-W1)*p1 + W1*p2 - ((1-u1)*p1 + u1*p2) by A4,A5,A26,A27
+         .= W1*p2 + (1-W1)*p1 - (1-u1)*p1 - u1*p2 by EUCLID:50
+         .= W1*p2 + ((1-W1)*p1 - (1-u1)*p1) - u1*p2 by EUCLID:49
+         .= W1*p2 + ((1-W1)-(1-u1))*p1 - u1*p2 by EUCLID:54
+         .= W1*p2 + ((1-W1)+-(1-u1))*p1 - u1*p2 by XCMPLX_0:def 8
+         .= W1*p2 + (-W1+1+-(1-u1))*p1 - u1*p2 by XCMPLX_0:def 8
+         .= W1*p2 + (-W1+1-(1-u1))*p1 - u1*p2 by XCMPLX_0:def 8
+         .= W1*p2 + (-W1+u1)*p1 - u1*p2 by XCMPLX_1:31
+         .= (u1-W1)*p1 + W1*p2 - u1*p2 by XCMPLX_0:def 8
+         .= (u1-W1)*p1 + (W1*p2 - u1*p2) by EUCLID:49
+         .= (u1-W1)*p1 + (W1-u1)*p2 by EUCLID:54
+         .= (u1-W1)*p1 + (-(u1-W1))*p2 by XCMPLX_1:143
+         .= (u1-W1)*p1 + -(u1-W1)*p2 by EUCLID:44
+         .= (u1-W1)*p1 - (u1-W1)*p2 by EUCLID:45
+         .= (u1-W1)*(p1 - p2) by EUCLID:53
+         .= (u1-W1)*(p12) by EUCLID:def 11
+         .= (u1-W1)*(p1' - p2') by EUCLID:def 13;
+   then A28: |. WW1 -aa1 .| = abs(u1-W1)*|.p1' - p2'.| by EUCLID:14;
+   A29: dist(W',u') < delta by A26,METRIC_1:12;
+       reconsider W'' = W', u'' = u' as Point of RealSpace by TOPMETR:12;
+         dist(W',u') = (the distance of Closed-Interval-MSpace(0,1)).(W',u')
+        by METRIC_1:def 1 .= (the distance of RealSpace).(W'',u'')
+        by TOPMETR:def 1 .= dist(W'',u'') by METRIC_1:def 1;
+       then abs(W1-u1) < delta by A29,TOPMETR:15; then abs(-(u1-W1)) < delta
+       by XCMPLX_1:143;
+   then A30: abs(u1-W1) < delta by ABSVALUE:17;
+   A31: delta <> 0 & (Pitag_dist n).(p1',p2') <> 0 by A21,A23,A24,REAL_2:127;
+       then (Pitag_dist n).(p1',p2') = r/delta by XCMPLX_1:54;
+   then A32: |.p1' - p2'.| = r/delta by EUCLID:def 6;
+   A33:  Euclid n = MetrStruct(#REAL n,Pitag_dist n#) by EUCLID:def 7;
+         r/delta > 0 by A21,A25,REAL_2:127;
+       then |. WW1 - aa1.| < delta*(r/delta) by A28,A30,A32,REAL_1:70;
+       then |. WW1 - aa1 .| < r by A31,XCMPLX_1:88;
+       then (the distance of Euclid n).(WW',aa') < r by A33,EUCLID:def 6;
+       then (the distance of (Euclid n)|PP).(Y,aa) < r by TOPMETR:def 1;
+       then dist(Y,aa) < r by METRIC_1:def 1;
+       hence a in Ball(Y,r) by METRIC_1:12;
+      end;
+     then f.:H c= Q by A21,XBOOLE_1:1;
+     hence f.:H c= G by A20,XBOOLE_1:1;
+    end;
+then A34: f is continuous by BORSUK_1:def 2;
+  take f;
+A35: I[01] is compact by HEINE:11,TOPMETR:27;
+    TopSpaceMetr(Euclid n) is_T2 by PCOMPS_1:38;
+  then TOP-REAL n is_T2 by EUCLID:def 8;
+  then (TOP-REAL n)|P is_T2 by TOPMETR:3;
+  hence f is_homeomorphism by A4,A13,A14,A18,A34,A35,COMPTS_1:26;
+     0 in [.0,1.] by RCOMP_1:15;
+  hence f.0 = (1-0)*p1 + 0 * p2 by A5 .= p1 + 0 * p2
+   by EUCLID:33 .= p1 + 0.REAL n by EUCLID:33 .= p1 by EUCLID:31;
+   1 in [.0,1.] by RCOMP_1:15;
+  hence f.1 = (1-1)*p1 + 1*p2 by A5 .=
+ 0.REAL n + 1*p2 by EUCLID:33 .= 1*p2 by EUCLID:31
+    .= p2 by EUCLID:33;
+ end;
+
+theorem Th16:
+  for P being Subset of TOP-REAL n,
+      p1,p2,q1 being Point of TOP-REAL n
+   st P is_an_arc_of p1,p2 & P /\ LSeg(p2,q1) = {p2}
+    holds P \/ LSeg(p2,q1) is_an_arc_of p1,q1
+ proof let P be Subset of TOP-REAL n,
+   p1,p2,q1 be Point of TOP-REAL n;
+  assume that A1: P is_an_arc_of p1,p2 and
+              A2: P /\ LSeg(p2,q1) = {p2};
+    now per cases;
+   suppose p2 <> q1;
+   then LSeg(p2,q1) is_an_arc_of p2,q1 by Th15;
+   hence P \/ LSeg(p2,q1) is_an_arc_of p1,q1 by A1,A2,Th5;
+   suppose A3: p2 = q1;
+    then LSeg(p2,q1) = {q1} & q1 in P by A1,Th4,Th7;
+   hence P \/ LSeg(p2,q1) is_an_arc_of p1,q1 by A1,A3,ZFMISC_1:46;
+  end;
+  hence thesis;
+ end;
+
+theorem Th17:
+  for P being Subset of TOP-REAL n,
+      p1,p2,q1 being Point of TOP-REAL n
+   st P is_an_arc_of p2,p1 & LSeg(q1,p2) /\ P = {p2}
+    holds LSeg(q1,p2) \/ P is_an_arc_of q1,p1
+ proof let P be Subset of TOP-REAL n,
+ p1,p2,q1 be Point of TOP-REAL n;
+  assume that A1: P is_an_arc_of p2,p1 and
+              A2: LSeg(q1,p2) /\ P = {p2};
+    now per cases;
+   suppose p2 <> q1;
+   then LSeg(q1,p2) is_an_arc_of q1,p2 by Th15;
+   hence LSeg(q1,p2) \/ P is_an_arc_of q1,p1 by A1,A2,Th5;
+   suppose A3: p2 = q1;
+    then LSeg(q1,p2) = {q1} & q1 in P by A1,Th4,Th7;
+   hence LSeg(q1,p2) \/ P is_an_arc_of q1,p1 by A1,A3,ZFMISC_1:46;
+  end;
+  hence thesis;
+ end;
+
+theorem
+    for p1,p2,q1 being Point of TOP-REAL n
+  st (p1 <> p2 or p2 <> q1) & LSeg(p1,p2) /\ LSeg(p2,q1) = {p2}
+   holds LSeg(p1,p2) \/ LSeg(p2,q1) is_an_arc_of p1,q1
+ proof let p1,p2,q1 be Point of TOP-REAL n;
+  assume that A1: p1 <> p2 or p2 <> q1 and
+              A2: LSeg(p1,p2) /\ LSeg(p2,q1) = {p2};
+    now per cases by A1;
+   suppose p1 <> p2;
+    then LSeg(p1,p2) is_an_arc_of p1,p2 by Th15;
+   hence LSeg(p1,p2) \/ LSeg(p2,q1) is_an_arc_of p1,q1 by A2,Th16;
+   suppose p2 <> q1;
+    then LSeg(p2,q1) is_an_arc_of p2,q1 by Th15;
+   hence LSeg(p1,p2) \/ LSeg(p2,q1) is_an_arc_of p1,q1 by A2,Th17;
+  end;
+  hence thesis;
+ end;
+
+theorem Th19:
+   LSeg(|[ 0,0 ]|, |[ 0,1 ]|) = { p1 : p1`1 = 0 & p1`2 <= 1 & p1`2 >= 0}
+ & LSeg(|[ 0,1 ]|, |[ 1,1 ]|) = { p2 : p2`1 <= 1 & p2`1 >= 0 & p2`2 = 1}
+ & LSeg(|[ 0,0 ]|, |[ 1,0 ]|) = { q1 : q1`1 <= 1 & q1`1 >= 0 & q1`2 = 0}
+ & LSeg(|[ 1,0 ]|, |[ 1,1 ]|) = { q2 : q2`1 = 1 & q2`2 <= 1 & q2`2 >= 0}
+proof
+  set L1 = { p : p`1 = 0 & p`2 <= 1 & p`2 >= 0},
+      L2 = { p : p`1 <= 1 & p`1 >= 0 & p`2 = 1},
+      L3 = { p : p`1 <= 1 & p`1 >= 0 & p`2 = 0},
+      L4 = { p : p`1 = 1 & p`2 <= 1 & p`2 >= 0};
+  set p0 = |[ 0,0 ]|, p01 = |[ 0,1 ]|, p10 = |[ 1,0 ]|, p1 = |[ 1,1 ]|;
+ A1: p01`1 = 0 & p01`2 = 1 by EUCLID:56;
+ A2: p1`1 = 1 & p1`2 = 1 by EUCLID:56;
+ A3: p10`1 = 1 & p10`2 = 0 by EUCLID:56;
+  thus L1 = LSeg(p0,p01)
+   proof
+    A4: L1 c= LSeg(p0,p01)
+     proof
+      let a be set; assume a in L1;
+      then consider p such that A5: a = p and A6: p`1 = 0 & p`2 <= 1 & p`2 >=
+ 0;
+      set lambda = p`2;
+        (1-lambda)*p0 + lambda*p01 = 0.REAL 2 + lambda*p01 by EUCLID:32,58
+        .= lambda*p01 by EUCLID:31
+        .= |[lambda*p01`1, lambda*p01`2 ]| by EUCLID:61
+        .= p by A1,A6,EUCLID:57;
+      then a in {(1-r)*p0 + r*p01: 0 <= r & r <= 1 } by A5,A6;
+      hence a in LSeg(p0,p01) by Def4;
+     end;
+      LSeg(p0,p01) c= L1
+     proof
+      let a be set; assume a in LSeg(p0,p01);
+      then a in {(1-lambda)*p0 + lambda*p01: 0 <= lambda & lambda <= 1 }
+       by Def4;
+      then consider lambda such that
+       A7: a = (1-lambda)*p0 + lambda*p01 & 0 <= lambda & lambda <= 1;
+      set q = (1-lambda)*p0 + lambda*p01;
+         (1-lambda)*p0 + lambda*p01 = 0.REAL 2 + lambda*p01 by EUCLID:32,58
+        .= lambda*p01 by EUCLID:31
+        .= |[lambda*(p01`1), lambda*(p01`2) ]| by EUCLID:61
+        .= |[ 0, lambda ]| by A1;
+      then q`1 = 0 & q`2 <= 1 & q`2 >= 0 by A7,EUCLID:56;
+      hence a in L1 by A7;
+     end;
+    hence thesis by A4,XBOOLE_0:def 10;
+   end;
+  thus L2 = LSeg(p01,p1)
+   proof
+    A8: L2 c= LSeg(p01,p1)
+     proof
+      let a be set; assume a in L2;
+      then consider p such that A9: a = p and A10: p`1 <= 1 & p`1 >=
+ 0 & p`2 = 1;
+      set lambda = p`1;
+        (1-lambda)*p01 + lambda*p1
+         = |[(1-lambda)*0, (1-lambda)*p01`2]| + lambda*p1 by A1,EUCLID:61
+        .= |[0, 1-lambda]| + |[lambda*1, lambda]| by A1,A2,EUCLID:61
+        .= |[0+lambda, 1-lambda+lambda]| by EUCLID:60
+        .= |[ p`1, p`2 ]| by A10,XCMPLX_1:27 .= p by EUCLID:57;
+      then a in {(1-r)*p01 + r*p1: 0 <= r & r <= 1 } by A9,A10;
+      hence a in LSeg(p01,p1) by Def4;
+     end;
+      LSeg(p01,p1) c= L2
+     proof
+      let a be set; assume a in LSeg(p01,p1);
+      then a in {(1-lambda)*p01 + lambda*p1: 0 <= lambda & lambda <= 1 }
+       by Def4;
+      then consider lambda such that
+       A11: a = (1-lambda)*p01 + lambda*p1 & 0 <= lambda & lambda <= 1;
+      set q = (1-lambda)*p01 + lambda*p1;
+        (1-lambda)*p01 + lambda*p1
+         = |[(1-lambda)*0, (1-lambda)*p01`2]| + lambda*p1 by A1,EUCLID:61
+        .= |[0, 1-lambda]| + |[lambda, lambda*1]| by A1,A2,EUCLID:61
+        .= |[0+lambda, 1-lambda+lambda]| by EUCLID:60
+        .= |[lambda, 1]| by XCMPLX_1:27;
+      then q`1 <= 1 & q`1 >= 0 & q`2 = 1 by A11,EUCLID:56;
+      hence a in L2 by A11;
+     end;
+    hence thesis by A8,XBOOLE_0:def 10;
+   end;
+ thus L3 = LSeg(p0,p10)
+   proof
+    A12: L3 c= LSeg(p0,p10)
+     proof
+      let a be set; assume a in L3;
+      then consider p such that A13: a = p and A14: p`1 <= 1 & p`1 >= 0 & p`2 =
+0;
+      set lambda = p`1;
+        (1-lambda)*p0 + lambda*p10 = 0.REAL 2 + lambda*p10 by EUCLID:32,58
+        .= lambda*p10 by EUCLID:31
+        .= |[lambda*p10`1, lambda*p10`2 ]| by EUCLID:61
+        .= p by A3,A14,EUCLID:57;
+      then a in {(1-r)*p0 + r*p10: 0 <= r & r <= 1 } by A13,A14;
+      hence a in LSeg(p0,p10) by Def4;
+     end;
+      LSeg(p0,p10) c= L3
+     proof
+      let a be set; assume a in LSeg(p0,p10);
+      then a in {(1-lambda)*p0 + lambda*p10: 0 <= lambda & lambda <= 1 }
+       by Def4;
+      then consider lambda such that
+       A15: a = (1-lambda)*p0 + lambda*p10 & 0 <= lambda & lambda <= 1;
+       set q =(1-lambda)*p0 + lambda*p10;
+         (1-lambda)*p0 + lambda*p10 = 0.REAL 2 + lambda*p10 by EUCLID:32,58
+        .= lambda*p10 by EUCLID:31
+        .= |[ lambda*(p10`1), lambda*(p10`2) ]| by EUCLID:61
+        .= |[ lambda, 0 ]| by A3;
+      then q`1 <= 1 & q`1 >= 0 & q`2 = 0 by A15,EUCLID:56;
+      hence a in L3 by A15;
+     end;
+    hence thesis by A12,XBOOLE_0:def 10;
+   end;
+ thus L4 = LSeg(p10,p1)
+   proof
+    A16: L4 c= LSeg(p10,p1)
+     proof
+      let a be set; assume a in L4;
+      then consider p such that A17: a = p and A18: p`1 = 1 & p`2 <= 1 & p`2 >=
+0;
+      set lambda = p`2;
+        (1-lambda)*p10 + lambda*p1
+         = |[(1-lambda)*1, (1-lambda)*p10`2]| + lambda*p1 by A3,EUCLID:61
+        .= |[(1-lambda), 0]| + |[lambda*1, lambda]| by A2,A3,EUCLID:61
+        .= |[1-lambda+lambda, 0+lambda]| by EUCLID:60
+        .= |[ p`1, p`2 ]| by A18,XCMPLX_1:27 .= p by EUCLID:57;
+      then a in { (1-r)*p10 + r*p1: 0 <= r & r <= 1 } by A17,A18;
+      hence a in LSeg(p10,p1) by Def4;
+     end;
+      LSeg(p10,p1) c= L4
+     proof
+      let a be set; assume a in LSeg(p10,p1);
+      then a in {(1-lambda)*p10 + lambda*p1: 0 <= lambda & lambda <= 1 }
+       by Def4;
+      then consider lambda such that
+       A19: a = (1-lambda)*p10 + lambda*p1 & 0 <= lambda & lambda <= 1;
+       set q = (1-lambda)*p10 + lambda*p1;
+        (1-lambda)*p10 + lambda*p1
+         = |[(1-lambda)*1, (1-lambda)*p10`2]| + lambda*p1 by A3,EUCLID:61
+        .= |[(1-lambda), 0]| + |[lambda, lambda*1]| by A2,A3,EUCLID:61
+        .= |[1-lambda+lambda, 0+lambda]| by EUCLID:60
+        .= |[1, lambda]| by XCMPLX_1:27;
+      then q`1 = 1 & q`2 <= 1 & q`2 >= 0 by A19,EUCLID:56;
+      hence a in L4 by A19;
+     end;
+    hence thesis by A16,XBOOLE_0:def 10;
+   end;
+ end;
+
+theorem Th20:
+ R^2-unit_square = (LSeg(|[ 0,0 ]|, |[ 0,1 ]|) \/ LSeg(|[ 0,1 ]|, |[ 1,1 ]|))
+ \/ (LSeg(|[ 0,0 ]|, |[ 1,0 ]|) \/ LSeg(|[ 1,0 ]|, |[ 1,1 ]|))
+proof
+   defpred X12[Point of TOP-REAL 2] means
+       $1`1 = 0 & $1`2 <= 1 & $1`2 >= 0 or
+       $1`1 <= 1 & $1`1 >= 0 & $1`2 = 1;
+   defpred X34[Point of TOP-REAL 2] means
+       $1`1 <= 1 & $1`1 >= 0 & $1`2 = 0 or
+       $1`1 = 1 & $1`2 <= 1 & $1`2 >= 0;
+A1: { p2 : X12[p2] or X34[p2] } = { p : X12[p] } \/ { q1: X34[q1] }
+             from Fraenkel_Alt;
+   defpred X1[Point of TOP-REAL 2] means
+       $1`1 = 0 & $1`2 <= 1 & $1`2 >= 0;
+   defpred X2[Point of TOP-REAL 2] means
+       $1`1 <= 1 & $1`1 >= 0 & $1`2 = 1;
+   defpred X3[Point of TOP-REAL 2] means
+       $1`1 <= 1 & $1`1 >= 0 & $1`2 = 0;
+   defpred X4[Point of TOP-REAL 2] means
+       $1`1 = 1 & $1`2 <= 1 & $1`2 >= 0;
+  set L1 = { p : X1[p]}, L2 = { p : X2[p]},
+      L3 = { p : X3[p]}, L4 = { p : X4[p]};
+A2:   { p : X1[p] or X2[p] } = L1 \/ L2 from Fraenkel_Alt
+     .= LSeg(|[0,0]|,|[0,1]|) \/ LSeg(|[ 0,1 ]|, |[ 1,1 ]|) by Th19;
+        { q1: X3[q1] or X4[q1] } = L3 \/ L4 from Fraenkel_Alt
+     .= LSeg(|[ 0,0 ]|, |[ 1,0 ]|) \/ LSeg(|[ 1,0 ]|, |[ 1,1 ]|) by Th19;
+ hence thesis by A1,A2,Def3;
+end;
+
+definition
+ cluster R^2-unit_square -> non empty;
+coherence by Th20;
+end;
+
+theorem
+   LSeg(|[0,0]|,|[0,1]|) /\ LSeg(|[0,1]|,|[1,1]|) = {|[0,1]|}
+ proof
+    for a being set
+   holds a in LSeg(|[0,0]|,|[0,1]|) /\ LSeg(|[0,1]|,|[1,1]|) iff a = |[0,1]|
+  proof let a be set;
+  set p00 = |[0,0]|, p01 = |[0,1]|, p11 = |[1,1]|;
+  thus a in LSeg(p00,p01) /\ LSeg(p01,p11) implies a = p01
+   proof
+    assume a in LSeg(p00,p01) /\ LSeg(p01,p11);
+    then A1: a in {p : p`1 = 0 & p`2 <= 1 & p`2 >= 0} &
+      a in {p2 : p2`1 <= 1 & p2`1 >= 0 & p2`2 = 1} by Th19,XBOOLE_0:def 3;
+    then A2: ex p st p = a & p`1 = 0 & p`2 <= 1 & p`2 >= 0;
+      ex p2 st p2=a & p2`1<=1 & p2`1>=0 & p2`2=1 by A1;
+    hence a = p01 by A2,EUCLID:57;
+   end;
+   assume a = p01;
+    then a in LSeg(p00,p01) & a in LSeg(p01,p11) by Th6;
+    hence a in LSeg(p00,p01) /\ LSeg(p01,p11) by XBOOLE_0:def 3;
+   end;
+  hence thesis by TARSKI:def 1;
+ end;
+
+theorem
+   LSeg(|[0,0]|,|[1,0]|) /\ LSeg(|[1,0]|,|[1,1]|) = {|[1,0]|}
+ proof
+    for a being set
+   holds a in LSeg(|[0,0]|,|[1,0]|) /\ LSeg(|[1,0]|,|[1,1]|) iff a = |[1,0]|
+  proof let a be set;
+  set p00 = |[0,0]|, p10 = |[1,0]|, p11 = |[1,1]|;
+  thus a in LSeg(p00,p10) /\ LSeg(p10,p11) implies a = p10
+   proof
+    assume A1: a in LSeg(p00,p10) /\ LSeg(p10,p11);
+    then A2: a in LSeg(p10,p11) by XBOOLE_0:def 3;
+      a in { p : p`1 <= 1 & p`1 >= 0 & p`2 = 0} by A1,Th19,XBOOLE_0:def 3;
+    then A3: ex p st p = a & p`1 <= 1 & p`1 >= 0 & p`2 = 0;
+      ex p2 st p2=a & p2`1 = 1 & p2`2 <= 1 & p2`2 >= 0 by A2,Th19;
+    hence a = |[1,0]| by A3,EUCLID:57;
+   end;
+   assume a = |[1,0]|;
+    then a in LSeg(p00,p10) & a in LSeg(p10,p11) by Th6;
+    hence a in LSeg(p00,p10) /\ LSeg(p10,p11) by XBOOLE_0:def 3;
+   end;
+  hence thesis by TARSKI:def 1;
+ end;
+
+theorem Th23:
+ LSeg(|[0,0]|,|[0,1]|) /\ LSeg(|[0,0]|,|[1,0]|) = {|[0,0]|}
+proof
+    for a being set
+   holds a in LSeg(|[0,0]|,|[0,1]|) /\ LSeg(|[0,0]|,|[1,0]|) iff a = |[0,0]|
+  proof let a be set;
+   thus a in LSeg(|[0,0]|,|[0,1]|) /\ LSeg(|[0,0]|,|[1,0]|) implies a = |[0,0
+]|
+    proof
+     assume A1: a in LSeg(|[0,0]|,|[0,1]|) /\ LSeg(|[0,0]|,|[1,0]|);
+     then A2: a in LSeg(|[0,0]|,|[0,1]|)
+      by XBOOLE_0:def 3;
+       a in { p2 : p2`1 <= 1 & p2`1 >= 0 & p2`2 = 0 } by A1,Th19,XBOOLE_0:def 3
+;
+     then A3: ex p2 st p2 = a & p2`1 <= 1 & p2`1 >= 0 & p2`2 = 0;
+       ex p st p = a & p`1 = 0 & p`2 <= 1 & p`2 >= 0 by A2,Th19;
+     hence a = |[0,0]| by A3,EUCLID:57;
+    end;
+   assume a = |[0,0]|;
+   then a in LSeg(|[0,0]|,|[0,1]|) & a in LSeg(|[0,0]|,|[1,0]|) by Th6;
+   hence a in LSeg(|[0,0]|,|[0,1]|) /\ LSeg(|[0,0]|,|[1,0]|) by XBOOLE_0:def 3
+;
+  end;
+ hence thesis by TARSKI:def 1;
+end;
+
+theorem Th24:
+ LSeg(|[0,1]|,|[1,1]|) /\ LSeg(|[1,0]|,|[1,1]|) = {|[1,1]|}
+ proof
+    for a being set
+   holds a in LSeg(|[0,1]|,|[1,1]|) /\ LSeg(|[1,0]|,|[1,1]|) iff a = |[1,1]|
+  proof let a be set;
+   thus a in LSeg(|[0,1]|,|[1,1]|) /\ LSeg(|[1,0]|,|[1,1]|) implies a = |[1,1
+]|
+    proof
+     assume A1: a in LSeg(|[0,1]|,|[1,1]|) /\ LSeg(|[1,0]|,|[1,1]|);
+     then A2: a in LSeg(|[1,0]|,|[1,1]|)
+      by XBOOLE_0:def 3;
+       a in { p : p`1 <= 1 & p`1 >= 0 & p`2 = 1} by A1,Th19,XBOOLE_0:def 3;
+     then A3: ex p st p = a & p`1 <= 1 & p`1 >= 0 & p`2 = 1;
+       ex p2 st p2 = a & p2`1 = 1 & p2`2 <= 1 & p2`2 >= 0 by A2,Th19;
+     hence a = |[1,1]| by A3,EUCLID:57;
+    end;
+   assume a = |[1,1]|;
+   then a in LSeg(|[0,1]|,|[1,1]|) & a in LSeg(|[1,0]|,|[1,1]|) by Th6;
+   hence a in LSeg(|[0,1]|,|[1,1]|) /\ LSeg(|[1,0]|,|[1,1]|) by XBOOLE_0:def 3
+;
+  end;
+  hence thesis by TARSKI:def 1;
+ end;
+
+theorem
+   LSeg(|[0,0]|,|[1,0]|) misses LSeg(|[0,1]|,|[1,1]|)
+  proof
+    consider x being Element of
+      LSeg(|[0,0]|,|[1,0]|) /\ LSeg(|[0,1]|,|[1,1]|);
+   assume LSeg(|[0,0]|,|[1,0]|) /\ LSeg(|[0,1]|,|[1,1]|) <> {};
+   then A1: x in LSeg(|[0,0]|,|[1,0]|) & x in LSeg(|[0,1]|,|[1,1]|) by XBOOLE_0
+:def 3;
+     then A2: ex p st p = x & p`1 <= 1 & p`1 >= 0 & p`2 = 1 by Th19;
+       ex p2 st p2 = x & p2`1 <= 1 & p2`1 >= 0 & p2`2 = 0 by A1,Th19;
+     hence contradiction by A2;
+  end;
+
+theorem Th26:
+ LSeg(|[0,0]|,|[0,1]|) misses LSeg(|[1,0]|,|[1,1]|)
+  proof
+    consider x being Element of
+      LSeg(|[0,0]|,|[0,1]|) /\ LSeg(|[1,0]|,|[1,1]|);
+   assume LSeg(|[0,0]|,|[0,1]|) /\ LSeg(|[1,0]|,|[1,1]|) <> {};
+   then A1: x in LSeg(|[1,0]|,|[1,1]|) & x in LSeg(|[0,0]|,|[0,1]|) by XBOOLE_0
+:def 3;
+     then A2: ex p st p = x & p`1 = 0 & p`2 <= 1 & p`2 >= 0 by Th19;
+       ex p2 st p2 = x & p2`1 = 1 & p2`2 <= 1 & p2`2 >= 0 by A1,Th19;
+     hence contradiction by A2;
+  end;
+
+definition let n; let f be FinSequence of TOP-REAL n; let i;
+ func LSeg(f,i) -> Subset of TOP-REAL n equals
+:Def5: LSeg(f/.i,f/.(i+1)) if 1 <= i & i+1 <= len f
+         otherwise {};
+ coherence
+  proof
+   thus 1 <= i & i+1 <= len f implies
+    LSeg(f/.i,f/.(i+1)) is Subset of TOP-REAL n;
+   assume i < 1 or len f < i+1;
+      {}(TOP-REAL n) is Subset of TOP-REAL n;
+   hence thesis;
+  end;
+ correctness;
+end;
+
+theorem Th27:
+ for f being FinSequence of TOP-REAL n st 1 <= i & i+1 <= len f
+  holds f/.i in LSeg(f,i) & f/.(i+1) in LSeg(f,i)
+ proof let f be FinSequence of TOP-REAL n;
+  assume 1 <= i & i+1 <= len f;
+   then LSeg(f,i) = LSeg(f/.i,f/.(i+1)) by Def5;
+  hence thesis by Th6;
+ end;
+
+definition let n; let f be FinSequence of TOP-REAL n;
+ func L~f -> Subset of TOP-REAL n equals
+  :Def6: union { LSeg(f,i) : 1 <= i & i+1 <= len f };
+ coherence
+  proof
+   set F = { LSeg(f,i) : 1 <= i & i+1 <= len f };
+     F c= bool the carrier of TOP-REAL n
+    proof let a be set; assume a in F;
+     then ex i st a = LSeg(f,i) & 1 <= i & i+1 <= len f;
+     hence a in bool the carrier of TOP-REAL n;
+    end;
+    then F is Subset-Family of TOP-REAL n by SETFAM_1:def 7;
+    then reconsider F as Subset-Family of TOP-REAL n;
+      union F is Subset of TOP-REAL n;
+   hence thesis;
+  end;
+end;
+
+theorem Th28:
+ for f being FinSequence of TOP-REAL n
+  holds (len f = 0 or len f = 1) iff L~f = {}
+ proof let f be FinSequence of TOP-REAL n;
+ thus (len f = 0 or len f = 1) implies L~f = {}
+  proof
+  set L = { LSeg(f,i) : 1 <= i & i+1 <= len f };
+  assume A1: len f = 0 or len f = 1;
+   consider x being Element of L;
+    now per cases by A1;
+   suppose A2: len f = 0;
+     now
+    assume L <> {};
+    then x in L;
+    then consider i such that x = LSeg(f,i) and A3: 1 <= i & i+1 <= len f;
+    thus contradiction by A2,A3,NAT_1:19;
+   end;
+   hence L~f = {} by Def6,ZFMISC_1:2;
+   suppose A4: len f = 0+1;
+     now assume L <> {};
+    then x in L;
+    then consider i such that x = LSeg(f,i) and A5: 1 <= i & i+1 <= len f;
+      i <= 0 by A4,A5,REAL_1:53;
+    hence contradiction by A5,AXIOMS:22;
+   end;
+   hence L~f = {} by Def6,ZFMISC_1:2;
+   end;
+   hence thesis;
+   end;
+  set L = { LSeg(f,i) : 1 <= i & i+1 <= len f };
+  assume A6: L~f = {};
+  assume A7: len f <> 0 & len f <> 1;
+    now assume len f <= 1;
+   then len f < 0+1 by A7,REAL_1:def 5;
+   then len f <= 0 by NAT_1:38;
+   hence contradiction by A7,NAT_1:18;
+  end;
+  then A8: len f >= 1+1 by NAT_1:38;
+  then LSeg(f,1) in L;
+  then LSeg(f,1) c= union L by ZFMISC_1:92;
+  then LSeg(f,1) c= {} by A6,Def6;
+  then LSeg(f,1) = {} by XBOOLE_1:3;
+  hence contradiction by A8,Th27;
+ end;
+
+theorem Th29:
+ for f being FinSequence of TOP-REAL n holds len f >= 2 implies L~f <> {}
+ proof let f be FinSequence of TOP-REAL n;
+  assume len f >= 2;
+  then not len f = 0 & not len f = 1;
+  hence thesis by Th28;
+ end;
+
+definition let IT be FinSequence of TOP-REAL 2;
+ attr IT is special means
+    for i st 1 <= i & i+1 <= len IT holds
+    (IT/.i)`1 = (IT/.(i+1))`1 or (IT/.i)`2 = (IT/.(i+1))`2;
+ attr IT is unfolded means
+:Def8:  for i st 1 <= i & i + 2 <= len IT
+       holds LSeg(IT,i) /\ LSeg(IT,i+1) = {IT/.(i+1)};
+ attr IT is s.n.c. means
+:Def9: for i,j st i+1 < j holds LSeg(IT,i) misses LSeg(IT,j);
+end;
+
+reserve f,f1,f2,h for FinSequence of TOP-REAL 2;
+
+definition let f;
+ attr f is being_S-Seq means :Def10:
+  f is one-to-one & len f >= 2 & f is unfolded s.n.c. special;
+  synonym f is_S-Seq;
+end;
+
+theorem Th30:
+ ex f1,f2 st f1 is_S-Seq & f2 is_S-Seq & R^2-unit_square = L~f1 \/ L~f2 &
+  L~f1 /\ L~f2 = {|[ 0,0 ]|, |[ 1,1 ]|} & f1/.1 = |[0,0]| &
+  f1/.len f1=|[1,1]| & f2/.1 = |[0,0]| & f2/.len f2 = |[1,1]|
+ proof
+  set L1 = { p : p`1 = 0 & p`2 <= 1 & p`2 >= 0};
+  set L2 = { p : p`1 <= 1 & p`1 >= 0 & p`2 = 1};
+  set L3 = { p : p`1 <= 1 & p`1 >= 0 & p`2 = 0};
+  set L4 = { p : p`1 = 1 & p`2 <= 1 & p`2 >= 0};
+  set p0 = |[ 0,0 ]|, p01 = |[ 0,1 ]|, p10 = |[ 1,0 ]|, p1 = |[ 1,1 ]|;
+ A1: p1`1 = 1 & p1`2 = 1 by EUCLID:56;
+ A2: p10`1 = 1 & p10`2 = 0 by EUCLID:56;
+ A3: p0`1 = 0 & p0`2 = 0 by EUCLID:56;
+  reconsider f1 = <* p0,p01,p1 *> as FinSequence of TOP-REAL 2;
+  reconsider f2 = <* p0,p10,p1 *> as FinSequence of TOP-REAL 2;
+ take f1,f2;
+A4: len f1 = 1 + 2 by FINSEQ_1:62;
+A5: f1/.1 = p0 & f1/.2 = p01 & f1/.3 = p1 by FINSEQ_4:27;
+thus f1 is_S-Seq
+    proof
+       p0 <> p01 & p01 <> p1 & p0 <> p1 by A1,A3,EUCLID:56;
+     hence f1 is one-to-one by FINSEQ_3:104;
+     thus len f1 >= 2 by A4;
+     thus f1 is unfolded
+      proof
+       let i; assume A6: 1 <= i & i + 2 <= len f1;
+       then i <= 1 by A4,REAL_1:53;
+       then A7: i = 1 by A6,AXIOMS:21;
+         1+1 in Seg len f1
+        by A4,FINSEQ_1:3;
+       then A8: LSeg(f1,1) = LSeg(p0,p01) & LSeg(f1,1+1) = LSeg(p01,p1)
+        by A4,A5,Def5;
+         for x being set holds x in LSeg(p0,p01) /\ LSeg(p01,p1) iff x = p01
+        proof
+         let x be set;
+         thus x in LSeg(p0,p01) /\ LSeg(p01,p1) implies x = p01
+          proof
+           assume x in LSeg(p0,p01) /\ LSeg(p01,p1);
+           then A9: x in {p : p`1 = 0 & p`2 <= 1 & p`2 >= 0} &
+             x in {p2 : p2`1 <= 1 & p2`1 >= 0 & p2`2 = 1} by Th19,XBOOLE_0:def
+3;
+           then A10: ex p st p = x & p`1 = 0 & p`2 <= 1 & p`2 >= 0;
+             ex p2 st p2=x & p2`1<=1 & p2`1>=0 & p2`2=1 by A9;
+           hence x = p01 by A10,EUCLID:57;
+          end;
+          assume x = p01;
+          then x in LSeg(p0,p01) & x in LSeg(p01,p1) by Th6;
+         hence x in LSeg(p0,p01) /\ LSeg(p01,p1) by XBOOLE_0:def 3;
+        end;
+       hence thesis by A5,A7,A8,TARSKI:def 1;
+      end;
+     thus f1 is s.n.c.
+      proof
+       let i,j such that A11: i+1 < j;
+         now per cases;
+        suppose 1 <= i;
+         then A12:      1+1 <= i+1 by AXIOMS:24;
+           now per cases;
+          case 1 <= j & j+1 <= len f1;
+          then j <= 2 by A4,REAL_1:53;
+          hence contradiction by A11,A12,AXIOMS:22;
+          case not (1 <= j & j+1 <= len f1);
+          then LSeg(f1,j) = {} by Def5;
+          hence LSeg(f1,i) /\ LSeg(f1,j) = {};
+         end;
+        hence LSeg(f1,i) /\ LSeg(f1,j) = {};
+        suppose not (1 <= i & i+1 <= len f1);
+        then LSeg(f1,i) = {} by Def5;
+        hence LSeg(f1,i) /\ LSeg(f1,j) = {};
+       end;
+       hence LSeg(f1,i) /\ LSeg(f1,j) = {};
+      end;
+     let i; assume A13: 1 <= i & i + 1 <= len f1;
+      then A14: i <= 1 + 1 by A4,REAL_1:53;
+        now per cases by A13,A14,NAT_1:27;
+       suppose A15: i = 1;
+        then (f1/.i)`1 = p0`1 by FINSEQ_4:27 .= 0 by EUCLID:56
+                 .= (f1/.(i+1))`1 by A5,A15,EUCLID:56;
+        hence (f1/.i)`1 = (f1/.(i+1))`1 or (f1/.i)`2 = (f1/.(i+1))`2;
+       suppose A16: i = 2;
+        then (f1/.i)`2 = p01`2 by FINSEQ_4:27 .= 1 by EUCLID:56
+                 .= (f1/.(i+1))`2 by A5,A16,EUCLID:56;
+        hence (f1/.i)`1 = (f1/.(i+1))`1 or (f1/.i)`2 = (f1/.(i+1))`2;
+       end;
+      hence thesis;
+    end;
+A17:   L~f1 = union {LSeg(p0,p01),LSeg(p01,p1)}
+    proof
+       len f1 = 2+1 & 1+1 in Seg len f1
+      by A4,FINSEQ_1:3;
+     then 1+1 <= len f1 & LSeg(p0,p01) = LSeg(f1,1)
+      by A5,Def5;
+     then A18: LSeg(p0,p01) in {LSeg(f1,i): 1 <= i & i+1 <= len f1};
+       2+1 <= len f1 & LSeg(p01,p1) = LSeg(f1,2)
+      by A4,A5,Def5;
+     then LSeg(p01,p1) in {LSeg(f1,i): 1 <= i & i+1 <= len f1};
+     then A19: {LSeg(p0,p01),LSeg(p01,p1)} c= {LSeg(f1,i):1<=i & i+1<=len f1}
+      by A18,ZFMISC_1:38;
+       {LSeg(f1,i): 1 <= i & i+1 <= len f1} c= {LSeg(p0,p01),LSeg(p01,p1)}
+      proof
+       let a be set; assume a in {LSeg(f1,i): 1 <= i & i+1 <= len f1};
+       then consider i such that A20: a = LSeg(f1,i) & 1<=i & i+1<=len f1;
+         i+1 <= 2 + 1 by A20,FINSEQ_1:62; then i <= 1 + 1 by REAL_1:53;
+       then i = 1 or i = 2 by A20,NAT_1:27;
+       then a = LSeg(p0,p01) or a = LSeg(p01,p1) by A5,A20,Def5;
+       hence a in {LSeg(p0,p01),LSeg(p01,p1)} by TARSKI:def 2;
+      end;
+    hence union {LSeg(p0,p01),LSeg(p01,p1)} =
+     union {LSeg(f1,i): 1 <= i & i+1 <= len f1} by A19,XBOOLE_0:def 10
+ .= L~f1 by Def6;
+    end;
+   then A21: L~f1 = (LSeg(p0,p01) \/ LSeg(p01,p1)) by ZFMISC_1:93;
+A22: len f2 = 1 + 2 by FINSEQ_1:62;
+A23: f2/.1 = p0 & f2/.2 = p10 & f2/.3 = p1 by FINSEQ_4:27;
+thus f2 is_S-Seq
+    proof
+     thus f2 is one-to-one by A1,A2,A3,FINSEQ_3:104;
+     thus len f2 >= 2 by A22;
+     thus f2 is unfolded
+      proof
+       let i; assume A24: 1 <= i & i + 2 <= len f2;
+       then i <= 1 by A22,REAL_1:53;
+       then A25: i = 1 by A24,AXIOMS:21;
+         1+1 in Seg len f2
+        by A22,FINSEQ_1:3;
+       then A26: LSeg(f2,1) = LSeg(p0,p10) & LSeg(f2,1+1) = LSeg(p10,p1)
+        by A22,A23,Def5;
+         for x being set holds x in LSeg(p0,p10) /\ LSeg(p10,p1) iff x = p10
+        proof
+         let x be set;
+         thus x in LSeg(p0,p10) /\ LSeg(p10,p1) implies x = p10
+          proof
+           assume x in LSeg(p0,p10) /\ LSeg(p10,p1);
+           then A27: x in { p : p`1 <= 1 & p`1 >= 0 & p`2 = 0} &
+             x in { p2 : p2`1 = 1 & p2`2 <= 1 & p2`2 >= 0} by Th19,XBOOLE_0:def
+3;
+           then A28: ex p st p = x & p`1 <= 1 & p`1 >= 0 & p`2 = 0;
+             ex p2 st p2=x & p2`1=1 & p2`2<=1 & p2`2>=0 by A27;
+           hence x = p10 by A28,EUCLID:57;
+          end;
+          assume x = p10;
+          then x in LSeg(p0,p10) & x in LSeg(p10,p1) by Th6;
+         hence x in LSeg(p0,p10) /\ LSeg(p10,p1) by XBOOLE_0:def 3;
+        end;
+       hence thesis by A23,A25,A26,TARSKI:def 1;
+      end;
+     thus f2 is s.n.c.
+      proof
+       let i,j such that A29: i+1 < j;
+         now per cases;
+        suppose 1 <= i;
+         then A30:      1+1 <= i+1 by AXIOMS:24;
+           now per cases;
+          case 1 <= j & j+1 <= len f2;
+          then j <= 2 by A22,REAL_1:53;
+          hence contradiction by A29,A30,AXIOMS:22;
+          case not (1 <= j & j+1 <= len f2);
+          then LSeg(f2,j) = {} by Def5;
+          hence LSeg(f2,i) /\ LSeg(f2,j) = {};
+         end;
+        hence LSeg(f2,i) /\ LSeg(f2,j) = {};
+        suppose not (1 <= i & i+1 <= len f2);
+        then LSeg(f2,i) = {} by Def5;
+        hence LSeg(f2,i) /\ LSeg(f2,j) = {};
+       end;
+       hence LSeg(f2,i) /\ LSeg(f2,j) = {};
+      end;
+     let i; assume A31: 1 <= i & i + 1 <= len f2;
+      then A32: i <= 1 + 1 by A22,REAL_1:53;
+       per cases by A31,A32,NAT_1:27;
+       suppose A33: i = 1;
+        then (f2/.i)`2 = p0`2 by FINSEQ_4:27 .= 0 by EUCLID:56
+                 .= (f2/.(i+1))`2 by A23,A33,EUCLID:56;
+        hence (f2/.i)`1 = (f2/.(i+1))`1 or (f2/.i)`2 = (f2/.(i+1))`2;
+       suppose A34: i = 2;
+        then (f2/.i)`1 = p10`1 by FINSEQ_4:27 .= 1 by EUCLID:56
+                 .= (f2/.(i+1))`1 by A23,A34,EUCLID:56;
+        hence (f2/.i)`1 = (f2/.(i+1))`1 or (f2/.i)`2 = (f2/.(i+1))`2;
+    end;
+A35:   L~f2 = union {LSeg(p0,p10),LSeg(p10,p1)}
+    proof
+       len f2 = 2+1 & 1+1 in Seg len f2
+      by A22,FINSEQ_1:3;
+     then 1+1 <= len f2 & LSeg(p0,p10) = LSeg(f2,1)
+      by A23,Def5;
+     then A36: LSeg(p0,p10) in {LSeg(f2,i): 1 <= i & i+1 <= len f2};
+       2+1 <= len f2 & LSeg(p10,p1) = LSeg(f2,2)
+      by A22,A23,Def5;
+     then LSeg(p10,p1) in {LSeg(f2,i): 1 <= i & i+1 <= len f2};
+     then A37: {LSeg(p0,p10),LSeg(p10,p1)} c= {LSeg(f2,i):1<=i & i+1<=len f2}
+      by A36,ZFMISC_1:38;
+       {LSeg(f2,i): 1 <= i & i+1 <= len f2} c= {LSeg(p0,p10),LSeg(p10,p1)}
+      proof
+       let a be set; assume a in {LSeg(f2,i): 1 <= i & i+1 <= len f2};
+       then consider i such that A38: a = LSeg(f2,i) & 1<=i & i+1<=len f2;
+         i+1 <= 2 + 1 by A38,FINSEQ_1:62; then i <= 1 + 1 by REAL_1:53;
+       then i = 1 or i = 2 by A38,NAT_1:27;
+       then a = LSeg(p0,p10) or a = LSeg(p10,p1) by A23,A38,Def5;
+       hence a in {LSeg(p0,p10),LSeg(p10,p1)} by TARSKI:def 2;
+      end;
+    hence union {LSeg(p0,p10),LSeg(p10,p1)} =
+     union {LSeg(f2,i): 1 <= i & i+1 <= len f2} by A37,XBOOLE_0:def 10
+ .= L~f2 by Def6;
+    end;
+   then A39: L~f2 = (LSeg(p0,p10) \/ LSeg(p10,p1)) by ZFMISC_1:93;
+   thus R^2-unit_square = L~f1 \/ L~f2 by A21,A35,Th20,ZFMISC_1:93;
+   now assume L2 meets L3;
+     then consider x being set such that
+     A40: x in L2 & x in L3 by XBOOLE_0:3;
+     A41: ex p st p = x & p`1 <= 1 & p`1 >= 0 & p`2 = 1 by A40;
+       ex p2 st p2 = x & p2`1 <= 1 & p2`1 >= 0 & p2`2 = 0 by A40;
+     hence contradiction by A41;
+    end;
+then A42: L2 /\ L3 = {} by XBOOLE_0:def 7;
+A43: LSeg(|[0,0]|,|[0,1]|) /\ LSeg(|[1,0]|,|[1,1]|) = {} by Th26,XBOOLE_0:def 7
+;
+   thus L~f1 /\ L~f2 = (L1 \/ L2) /\ (L3 \/ L4) by A17,A39,Th19,ZFMISC_1:93
+      .= (L1 \/ L2) /\ L3 \/ (L1 \/ L2) /\ L4 by XBOOLE_1:23
+      .= L1 /\ L3 \/ L2 /\ L3 \/ (L1 \/ L2) /\ L4 by XBOOLE_1:23
+      .= L1 /\ L3 \/ L2 /\ L3 \/ (L1 /\ L4 \/ L2 /\ L4) by XBOOLE_1:23
+      .= {|[ 0,0 ]|, |[ 1,1 ]|} by A42,A43,Th19,Th23,Th24,ENUMSET1:41;
+  thus f1/.1 = |[0,0]| & f1/.len f1=|[1,1]| & f2/.1 = |[0,0]| &
+       f2/.len f2 = |[1,1]| by A4,A22,FINSEQ_4:27;
+ end;
+
+theorem Th31:
+ h is_S-Seq implies L~h is_an_arc_of h/.1,h/.len h
+ proof
+  assume A1: h is_S-Seq; set P = L~h;
+ set p1 = h/.1;
+ A2: h is one-to-one by A1,Def10;
+ A3: len h >= 1+1 by A1,Def10;
+  deffunc Q(Nat) = L~(h|($1+2));
+
+  defpred ARC[Nat] means
+   1 <= $1 + 2 & $1 + 2 <= len h implies
+   ex NE be non empty Subset of TOP-REAL 2 st NE = Q($1) &
+    ex f being map of I[01], (TOP-REAL 2)|NE st
+      f is_homeomorphism & f.0 = p1 & f.1 = h/.($1+2);
+       1 <= len h by A3,AXIOMS:22;
+  then A4: 1 in Seg len h by FINSEQ_1:3;
+  A5: 1+1 in Seg len h by A3,FINSEQ_1:3;
+  set p2 = h/.(1+1);
+A6: Q(0) = union { LSeg(h|2,i) : 1 <= i & i+1 <= len (h|2) } by Def6;
+   h|2 = h|(Seg 2) by Def1;
+then A7: dom (h|2) = dom h /\ Seg 2 by RELAT_1:90
+             .= Seg len h /\ Seg 2 by FINSEQ_1:def 3
+             .= Seg 2 by A3,FINSEQ_1:9;
+then A8: len(h|2) = 1+1 by FINSEQ_1:def 3;
+then A9: 1 in Seg len (h|2) & 2 in Seg len (h|2) by FINSEQ_1:3;
+     {LSeg(h|2,i) : 1 <= i & i+1 <= len(h|2) } = {LSeg(h,1)}
+    proof
+       now let x be set;
+     thus x in {LSeg(h|2,i) : 1 <= i & i+1 <= len(h|2) } implies
+      x = LSeg(h,1)
+      proof
+       assume x in {LSeg(h|2,i) : 1 <= i & i+1 <= len(h|2) };
+       then consider i being Nat such that
+      A10: x = LSeg(h|2,i) and
+      A11: 1 <= i & i+1 <= len(h|2);
+         1 <= i & i+1 <= (1 + 1) by A7,A11,FINSEQ_1:def 3;
+       then 1 <= i & i <= 1 by REAL_1:53;
+       then A12: 1 = i by AXIOMS:21;
+         (h|2)/.1 = h/.1 & (h|2)/.(1+1) = h/.(1+1) by A7,A8,A9,Th1;
+       hence x = LSeg(p1,p2) by A8,A10,A12,Def5
+              .= LSeg(h,1) by A3,Def5;
+      end;
+     assume x = LSeg(h,1);
+      then A13: x = LSeg(p1,p2) by A3,Def5;
+        p1 = (h|2)/.1 & p2 = (h|2)/.2 by A7,A8,A9,Th1;
+      then x = LSeg(h|2,1) by A8,A13,Def5;
+     hence x in {LSeg(h|2,i) : 1 <= i & i+1 <= len(h|2)} by A8;
+    end;
+    hence thesis by TARSKI:def 1;
+    end;
+   then A14: Q(0) = LSeg(h,1) by A6,ZFMISC_1:31
+                .= LSeg(p1,p2) by A3,Def5;
+     1 <= 0 + 2 & 0 + 2 <= len h implies
+    ex f being map of I[01], (TOP-REAL 2)|(LSeg(p1,p2)) st
+      f is_homeomorphism & f.0 = p1 & f.1 = h/.(0+2)
+    proof assume 1 <= 0 + 2 & 0 + 2 <= len h;
+        1 <> 2 & 1 in dom h & 2 in dom h by A4,A5,FINSEQ_1:def 3;
+      then p1 <> p2 by A2,PARTFUN2:17;
+      then LSeg(p1,p2) is_an_arc_of p1,p2 by Th15;
+      hence thesis by Def2;
+    end;
+then A15: ARC[0] by A14;
+A16: for n st ARC[n] holds ARC[n+1]
+    proof
+     let n;
+     assume A17: ARC[n];
+     assume
+A18:    1 <= n + 1 + 2 & n + 1 + 2 <= len h;
+   A19: n + 1 + 2 = n + 2 + 1 by XCMPLX_1:1;
+      then A20: 1 <= n + 1 + 1 & n + 1 + 1 <= n + 2 + 1 & n + 2 + 1 <= len h
+      by A18,AXIOMS:24,NAT_1:29;
+     then A21: 1 <= n + 1 + 1 & n + 1 + 1 <= len h by AXIOMS:22;
+A22:  n + 1 + 1 = n + (1 + 1) by XCMPLX_1:1;
+     then consider NE being non empty Subset of TOP-REAL 2 such
+that
+A23:    NE = Q(n) &
+       ex f being map of I[01], (TOP-REAL 2)|NE st
+        f is_homeomorphism & f.0 = p1 & f.1 = h/.(n+2) by A17,A20,AXIOMS:22;
+     consider f being map of I[01], (TOP-REAL 2)|NE such that
+   A24: f is_homeomorphism & f.0 = p1 & f.1 = h/.(n+2) by A23;
+     set pn = h/.(n+2), pn1 = h/.(n+2+1);
+       n + 1 <> n + 2 by XCMPLX_1:2;
+then A25:    n + 1 +1 <> n + 2 + 1 by XCMPLX_1:2;
+       n + 1 +1 in dom h & n + 2 + 1 in dom h by A18,A19,A21,FINSEQ_3:27;
+     then pn <> pn1 by A2,A22,A25,PARTFUN2:17;
+     then LSeg(pn,pn1) is_an_arc_of pn,pn1 by Th15;
+     then consider f1 being map of I[01], (TOP-REAL 2)|LSeg(pn,pn1) such that
+   A26: f1 is_homeomorphism & f1.0 = pn & f1.1 = pn1 by Def2;
+A27:  n + 1 + 2 = n + (2 + 1) by XCMPLX_1:1;
+A28:  n + 2 + 1 = n + (2 + 1) by XCMPLX_1:1;
+ A29: Q(n+1) = Q(n) \/ LSeg(h,n+2)
+    proof
+       now let x be set; assume x in Q(n+1);
+      then x in union {LSeg(h|(n+1+2),i) : 1 <= i & i+1 <= len(h|(n+1+2))}
+        by Def6;
+      then consider X being set such that
+     A30: x in X and
+     A31: X in {LSeg(h|(n+1+2),i) : 1 <= i & i+1 <= len(h|(n+1+2))}
+      by TARSKI:def 4;
+      consider i being Nat such that
+     A32: X = LSeg(h|(n+1+2),i) and
+     A33: 1 <= i & i+1 <= len(h|(n+1+2)) by A31;
+        i + 1 - 1 = i by XCMPLX_1:26;
+then A34:   i <= len(h|(n+1+2)) - 1 by A33,REAL_1:49;
+      A35: len(h|(n+1+2))-1 = n+1+2-1 by A18,Th3.= n+1+(1+1-1) by XCMPLX_1:29
+       .= n+(1+1) by XCMPLX_1:1;
+A36:      n+(1+1) = n+1+1 by XCMPLX_1:1;
+        now per cases by A34,A35,A36,NAT_1:26;
+       suppose A37: i = n+2;
+        A38: len(h|(n+1+2)) = n+1+2 by A18,Th3;
+          n+1+2 = n+2+1 by XCMPLX_1:1;
+        then A39:     1 <= n+2 & n+2<=n+1+2 & n+2+1 <= n+1+2 & 1<=n+2+1 by A22,
+NAT_1:29;
+        then n + 2 in Seg len(h|(n+1+2)) & n + 2 + 1 in Seg len(h|(n+1+2))
+         by A38,FINSEQ_1:3;
+        then A40: n + 2 in dom(h|(n+1+2)) & n + 2 + 1 in dom(h|(n+1+2))
+         by FINSEQ_1:def 3;
+       then A41: (h|(n+1+2))/.(n+2) = h/.(n+2) by Th1;
+          (h|(n+1+2))/.(n+2+1) = h/.(n+2+1) by A40,Th1
+           .= h/.(n+(2+1)) by XCMPLX_1:1;
+        then LSeg(h|(n+1+2),n+2) = LSeg(pn,pn1) by A28,A38,A39,A41,Def5
+                    .= LSeg(h,n+2) by A20,A22,Def5;
+        hence x in Q(n) \/ LSeg(h,n+2) by A30,A32,A37,XBOOLE_0:def 2;
+       suppose A42: i <= n+1;
+       A43: len(h|(n+2)) = n + (1 + 1) by A21,A22,Th3;
+          i+1 <= n+1+1 by A42,AXIOMS:24;
+        then i+1 <= len(h|(n+2)) by A21,A22,Th3;
+        then A44: LSeg(h|(n+2),i) in {LSeg(h|(n+2),j) : 1 <= j &
+          j+1 <= len(h|(n+2))} by A33;
+        A45: 1 <= 1+i & n+1 <= n+1+1 & n+1+1 = n+(1+1) & i+1 <= n+1+1
+         by A42,NAT_1:29,REAL_1:55,XCMPLX_1:1;
+        then A46: 1 <= i+1 & i <= n+2 & i+1 <= n+2 by A42,AXIOMS:22;
+        then A47: i in Seg len (h|(n+2)) & i+1 in Seg len(h|(n+2)) by A33,A43,
+FINSEQ_1:3;
+        set p1' = (h|(n+2))/.i, p2' = (h|(n+2))/.(i+1);
+        A48: i in dom(h|(n+2)) & i+1 in dom(h|(n+2)) by A47,FINSEQ_1:def 3;
+          n+2 <= n+2+1 & n+2+1 = n+1+2 by NAT_1:29,XCMPLX_1:1;
+      then i <= n+1+2 & i+1 <= n+1+2 by A46,AXIOMS:22;
+      then i in Seg(n+1+2) & i+1 in Seg(n+1+2) & n+1+2 <= len h
+         by A18,A33,A45,FINSEQ_1:3;
+         then i in Seg len(h|(n+1+2)) & i+1 in Seg len(h|(n+1+2)) by Th3;
+        then A49: i in dom(h|(n+1+2)) & i+1 in
+ dom(h|(n+1+2)) by FINSEQ_1:def 3;
+        then A50: (h|(n+1+2))/.i = h/.i by Th1
+             .= p1' by A48,Th1;
+        A51: (h|(n+1+2))/.(i+1) = h/.(i+1) by A49,Th1
+             .= p2' by A48,Th1;
+          LSeg(h|(n+2),i) = LSeg(p1',p2') by A33,A43,A45,Def5
+               .= LSeg(h|(n+1+2),i) by A33,A50,A51,Def5;
+        then x in union {LSeg(h|(n+2),j) : 1 <= j & j+1 <= len(h|(n+2))}
+          by A30,A32,A44,TARSKI:def 4;
+        then x in Q(n) by Def6;
+        hence x in Q(n) \/ LSeg(h,n+2) by XBOOLE_0:def 2;
+      end;
+      hence x in Q(n) \/ LSeg(h,n+2);
+     end; then A52: Q(n+1) c= Q(n) \/ LSeg(h,n+2) by TARSKI:def 3;
+       now let x be set such that A53: x in Q(n) \/ LSeg(h,n+2);
+        now per cases by A53,XBOOLE_0:def 2;
+       suppose x in Q(n);
+        then x in union {LSeg(h|(n+2),i) : 1 <= i & i+1 <= len(h|(n+2))}
+         by Def6;
+        then consider X being set such that
+       A54: x in X and
+       A55: X in {LSeg(h|(n+2),i) : 1 <= i & i+1 <= len(h|(n+2))}
+            by TARSKI:def 4;
+        consider i being Nat such that
+       A56: X = LSeg(h|(n+2),i) and
+       A57: 1 <= i & i+1 <= len(h|(n+2)) by A55;
+        A58: n + 1 + 2 <= len h & n + 2 <= len h by A18,A20,A22,AXIOMS:22;
+        then A59:         i+1 <= n + (1 + 1) & len(h|(n+1+2)) = n+(1+2) by A27,
+A57,Th3;
+        then i+1 <= n + 1 + 1 by XCMPLX_1:1;
+        then A60: i <= n + 1 & n+1 <= n+(1+1) by REAL_1:53;
+          n+2 <= n + 3 by AXIOMS:24;
+        then A61: 1 <= i & i+1 <= len(h|(n+1+2)) by A57,A59,AXIOMS:22;
+       A62: len(h|(n+2)) = n + 2 by A21,A22,Th3;
+        A63: 1 <= 1+i & n+1+1 = n+(1+1) & i+1 <= n+1+1
+         by A59,NAT_1:29,XCMPLX_1:1;
+        A64: 1 <= i+1 & i <= n+2 & i+1 <= n+2 by A57,A58,A60,Th3,AXIOMS:22,
+NAT_1:29;
+        then A65: i in Seg len(h|(n+2)) & i+1 in
+ Seg len(h|(n+2)) by A57,A62,FINSEQ_1:3;
+        set p1' = (h|(n+2))/.i, p2' = (h|(n+2))/.(i+1);
+        A66: i in dom(h|(n+2)) & i+1 in dom(h|(n+2)) by A65,FINSEQ_1:def 3;
+          n+2 <= n+2+1 & n+2+1 = n+1+2 by NAT_1:29,XCMPLX_1:1;
+then A67:    i <= n+1+2 & i+1 <= n+1+2 by A64,AXIOMS:22;
+        then i in Seg(n+1+2) & i+1 in Seg(n+1+2) & n+1+2 <= len h
+         by A18,A57,A63,FINSEQ_1:3;
+        then A68: i in Seg len(h|(n+1+2)) & i+1 in Seg len(h|(n+1+2)) &
+           len(h|(n+1+2)) = n+1+2 by Th3;
+   then A69: i in dom(h|(n+1+2)) & i+1 in dom(h|(n+1+2)) by FINSEQ_1:def 3;
+        then A70: (h|(n+1+2))/.i = h/.i by Th1
+             .= p1' by A66,Th1;
+        A71: (h|(n+1+2))/.(i+1) = h/.(i+1) by A69,Th1
+             .= p2' by A66,Th1;
+          X = LSeg(p1',p2') by A56,A57,Def5
+         .= LSeg(h|(n+1+2),i) by A57,A67,A68,A70,A71,Def5;
+        then X in {LSeg(h|(n+1+2),j): 1 <= j & j+1 <= len(h|(n+1+2))} by A61;
+        then x in union {LSeg(h|(n+1+2),j): 1 <= j & j+1 <= len(h|(n+1+2))}
+         by A54,TARSKI:def 4;
+        hence x in Q(n+1) by Def6;
+       suppose A72: x in LSeg(h,n+2);
+A73:      len(h|(n+1+2)) = n+1+2 & 1 <= n+1+2 & n+2 <= n+2+1 &
+          1 <= n+2 & n+1+2 = n+2+1
+          by A18,A22,Th3,NAT_1:29,XCMPLX_1:1;
+        then n + 2 in Seg len(h|(n+1+2)) & n + 2 + 1 in Seg len(h|(n+1+2))
+         by FINSEQ_1:3;
+        then A74: n + 2 in dom(h|(n+1+2)) & n + 2 + 1 in dom(h|(n+1+2))
+          by FINSEQ_1:def 3;
+then A75:    1 <= n+2 & n+2+1 <= len(h|(n+1+2)) by FINSEQ_3:27;
+        A76: pn = (h|(n+1+2))/.(n+2) by A74,Th1;
+        A77: pn1 = (h|(n+1+2))/.(n+2+1) by A74,Th1;
+          LSeg(h,n+2) = LSeg(pn,pn1) by A18,A73,Def5
+                   .= LSeg(h|(n+1+2),n+2) by A73,A76,A77,Def5;
+        then LSeg(h,n+2) in {LSeg(h|(n+1+2),i) : 1 <= i &
+         i+1 <= len(h|(n+1+2))} by A75;
+        then x in union {LSeg(h|(n+1+2),i) : 1 <= i & i+1 <= len(h|(n+1+2))}
+         by A72,TARSKI:def 4;
+        hence x in Q(n+1) by Def6;
+      end;
+      hence x in Q(n+1);
+     end; then Q(n) \/ LSeg(h,n+2) c= Q(n+1) by TARSKI:def 3;
+     hence thesis by A52,XBOOLE_0:def 10;
+    end;
+         for x being set holds x in Q(n) /\ LSeg(pn,pn1) iff x = pn
+        proof
+         let x be set;
+         thus x in Q(n) /\ LSeg(pn,pn1) implies x = pn
+          proof
+           assume x in Q(n) /\ LSeg(pn,pn1);
+           then A78: x in LSeg(pn,pn1) & x in Q(n) by XBOOLE_0:def 3;
+           then x in union {LSeg(h|(n+2),i) : 1 <= i & i+1 <= len(h|(n+2))}
+            by Def6;
+           then consider X being set such that
+          A79: x in X and
+          A80: X in {LSeg(h|(n+2),i) : 1 <= i & i+1 <= len(h|(n+2))}
+             by TARSKI:def 4;
+           consider i such that
+          A81: X = LSeg(h|(n+2),i) and
+          A82: 1 <= i & i+1 <= len(h|(n+2)) by A80;
+         A83: len(h|(n+2)) = n+(1+1) by A21,A22,Th3;
+         A84: len(h|(n+2)) = n+1+1 by A21,A22,Th3;
+then A85:     i <= n+1 by A82,REAL_1:53;
+A86:    h is s.n.c. by A1,Def10;
+A87:    h is unfolded by A1,Def10;
+           now assume
+A88:          i < n+1;
+         A89: 1 <= 1+i & i+1 <= n+(1+1) by A21,A22,A82,Th3,NAT_1:29;
+A90:      i+1 <= len h by A21,A82,A84,AXIOMS:22;
+           i+1 < n+1+1 by A88,REAL_1:53;
+then A91:      i+1 < n+(1+1) by XCMPLX_1:1;
+         set p1' = h/.i, p2' = h/.(i+1);
+           n+1 <= n+1+1 & n+1+1 = n+(1+1) by NAT_1:29,XCMPLX_1:1;
+         then i <= n+2 by A88,AXIOMS:22;
+         then i in Seg len(h|(n+2)) & i+1 in Seg len(h|(n+2))
+          by A82,A83,A89,FINSEQ_1:3;
+         then A92: i in dom(h|(n+2)) & i+1 in dom(h|(n+2)) by FINSEQ_1:def 3;
+         then A93: (h|(n+2))/.i = p1' by Th1;
+         A94: (h|(n+2))/.(i+1) = p2' by A92,Th1;
+         A95: LSeg(h,i) = LSeg(p1',p2') by A82,A90,Def5
+                      .= LSeg(h|(n+2),i) by A82,A93,A94,Def5;
+           LSeg(h,n+2) = LSeg(pn,pn1) by A20,A22,Def5;
+         then LSeg(h|(n+2),i) misses LSeg(pn,pn1) by A86,A91,A95,Def9;
+         hence contradiction by A78,A79,A81,XBOOLE_0:3;
+         end;
+         then A96: i = n + 1 by A85,REAL_1:def 5;
+A97:      1 <= n+1 & 1 <= n+1+1 & n+1+1 <= len h
+          by A20,A82,A85,AXIOMS:22;
+         set p1' = h/.(n+1), p2' = h/.(n+1+1);
+A98:         n+1 <= n+1+1 & n+1+1 = n+(1+1) & 1 <= 1+n & 1 <= 1+(n+1)
+          by NAT_1:29,XCMPLX_1:1;
+         then n+1 in Seg len(h|(n+2)) & n+1+1 in Seg len(h|(n+2))
+          by A83,FINSEQ_1:3;
+         then A99: n+1 in dom(h|(n+2)) & n+1+1 in dom(h|(n+2))
+           by FINSEQ_1:def 3;
+         then A100: (h|(n+2))/.(n+1) = p1' by Th1;
+         A101: (h|(n+2))/.(n+1+1) = p2' by A99,Th1;
+         A102: LSeg(h,n+1) = LSeg(p1',p2') by A97,Def5
+                        .= LSeg(h|(n+2),n+1) by A83,A98,A100,A101,Def5;
+           n+1+1 = n+(1+1) & n+1+2 = n+(1+2) by XCMPLX_1:1;
+         then LSeg(pn,pn1) = LSeg(h,n+1+1) by A20,Def5;
+         then A103: x in LSeg(h,n+1) /\ LSeg(h,n+1+1)
+           by A78,A79,A81,A96,A102,XBOOLE_0:def 3;
+           1 <= n+1 by NAT_1:29;
+         then LSeg(h,n+1) /\ LSeg(h,n+1+1) = {h/.(n+1+1)} by A18,A87,Def8;
+         hence x = h/.(n+1+1) by A103,TARSKI:def 1 .= h/.(n+(1+1))
+               by XCMPLX_1:1
+           .= pn;
+          end;
+         assume A104: x = pn;
+          then A105: x in LSeg(pn,pn1) by Th6;
+          A106: len(h|(n+2)) = n+2 by A21,A22,Th3;
+            then dom(h|(n+2)) = Seg(n+2) & n + 2 in Seg(n+2)
+             by A20,A22,FINSEQ_1:3,def 3;
+            then A107: x = (h|(n+2))/.(n+(1+1)) by A104,Th1
+                      .= (h|(n+2))/.(n+1+1) by XCMPLX_1:1;
+A108:         1 <= n+1 by NAT_1:29;
+              n+1+1 = n+(1+1) by XCMPLX_1:1;
+          then A109: x in LSeg(h|(n+2),n+1) by A106,A107,A108,Th27;
+             1 <= 1 + n & n + 1 + 1 <= n + (1 + 1) & n+2 <= len h
+              by A20,A22,AXIOMS:22,NAT_1:29;
+            then 1 <= n+1 & n+1+1 <= len(h|(n+2)) by Th3;
+            then LSeg(h|(n+2),n+1) in {LSeg(h|(n+2),i): 1 <= i & i+1 <=
+ len(h|(n+2))};
+          then x in union {LSeg(h|(n+2),i) : 1 <= i & i+1 <= len(h|(n+2))}
+           by A109,TARSKI:def 4;
+          then x in Q(n) by Def6;
+         hence x in Q(n) /\ LSeg(pn,pn1) by A105,XBOOLE_0:def 3;
+        end;
+then A110:   Q(n) /\ LSeg(pn,pn1) = {pn} by TARSKI:def 1;
+      reconsider NE1 = Q(n) \/ LSeg(pn,pn1) as
+       non empty Subset of TOP-REAL 2;
+      consider hh being map of I[01], (TOP-REAL 2)|NE1 such that
+A111:     hh is_homeomorphism & hh.0 = f.0 & hh.1 = f1.1
+         by A23,A24,A26,A110,TOPMETR2:6;
+     take NE1;
+     thus NE1 = Q(n+1) by A20,A22,A29,Def5;
+     take hh;
+     thus hh is_homeomorphism & hh.0 = p1 & hh.1 = h/.(n+1+2)
+       by A24,A26,A111,XCMPLX_1:1;
+   end;
+A112: for n holds ARC[n] from Ind(A15,A16);
+  reconsider h1 = len h - 2 as Nat by A3,INT_1:18;
+A113: 1 <= h1 + 2 by NAT_1:37;
+      len h - 2 + 2 = len h + -2 + 2 by XCMPLX_0:def 8
+                 .= len h + (-2+2) by XCMPLX_1:1
+                 .= len h;
+   then consider NE being non empty Subset of TOP-REAL 2 such
+that
+A114:  NE = Q(h1) &
+     ex f being map of I[01], (TOP-REAL 2)|NE st
+      f is_homeomorphism & f.0 = p1 & f.1 = h/.(h1+2) by A112,A113;
+   consider f being map of I[01], (TOP-REAL 2)|NE such that
+A115: f is_homeomorphism & f.0 = p1 & f.1 = h/.(h1+2) by A114;
+A116: h|(len h) = h|(Seg len h) by Def1
+             .= h|(dom h) by FINSEQ_1:def 3
+             .= h by RELAT_1:97;
+then A117: Q(h1) = P by XCMPLX_1:27;
+  NE = P by A114,A116,XCMPLX_1:27;
+  then reconsider f as map of I[01], (TOP-REAL 2)|P;
+  take f;
+  thus f is_homeomorphism by A114,A115,A117;
+  thus thesis by A115,XCMPLX_1:27;
+ end;
+
+ definition let P be Subset of TOP-REAL 2;
+  attr P is being_S-P_arc means
+:Def11:
+   ex f st f is_S-Seq & P = L~f;
+  synonym P is_S-P_arc;
+ end;
+
+theorem Th32:
+P1 is_S-P_arc implies P1 <> {}
+ proof
+  assume P1 is_S-P_arc;
+  then consider f such that A1: f is_S-Seq & P1 = L~f by Def11;
+    len f >= 2 by A1,Def10;
+  hence thesis by A1,Th29;
+ end;
+
+ definition
+  cluster being_S-P_arc -> non empty Subset of TOP-REAL 2;
+ coherence by Th32;
+ end;
+
+canceled;
+
+theorem
+   ex P1, P2 being non empty Subset of TOP-REAL 2
+  st P1 is_S-P_arc & P2 is_S-P_arc & R^2-unit_square = P1 \/ P2 &
+   P1 /\ P2 = {|[ 0,0 ]|, |[ 1,1 ]|}
+ proof
+  consider f1,f2 such that
+ A1: f1 is_S-Seq & f2 is_S-Seq & R^2-unit_square = L~f1 \/ L~f2 &
+    L~f1 /\ L~f2 = {|[ 0,0 ]|, |[ 1,1 ]|} and
+      f1/.1=|[0,0]| & f1/.len f1=|[1,1]| &
+    f2/.1=|[0,0]| & f2/.len f2=|[1,1]| by Th30;
+  reconsider P1 = L~f1, P2 = L~f2 as
+   non empty Subset of TOP-REAL 2 by A1;
+  take P1, P2;
+  thus thesis by A1,Def11;
+ end;
+
+theorem Th35:
+P is_S-P_arc implies ex p1,p2 st P is_an_arc_of p1,p2
+ proof
+  assume P is_S-P_arc;
+  then consider h such that A1: h is_S-Seq & P = L~h by Def11;
+  take p1 = h/.1, p2 = h/.len h;
+  thus P is_an_arc_of p1,p2 by A1,Th31;
+ end;
+
+theorem
+   P is_S-P_arc implies
+  ex f being map of I[01], (TOP-REAL 2)|P st f is_homeomorphism
+ proof
+  assume P is_S-P_arc;
+   then consider p1,p2 such that A1: P is_an_arc_of p1,p2 by Th35;
+     ex f being map of I[01], (TOP-REAL 2)|P st f is_homeomorphism &
+    f.0 = p1 & f.1 = p2 by A1,Def2;
+   hence thesis;
+ end;

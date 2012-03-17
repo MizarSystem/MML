@@ -1,0 +1,1955 @@
+:: Product of Family of Universal Algebras
+::  by Beata Madras
+::
+:: Received October 12, 1993
+:: Copyright (c) 1993 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_2, FINSEQ_1, UNIALG_1, FUNCT_3, RELAT_1, FUNCT_1, MCART_1,
+      FUNCT_2, PARTFUN1, TARSKI, CQC_SIM1, UNIALG_2, BOOLE, ZF_REFLE, FINSEQ_4,
+      ORDINAL2, PBOOLE, FUNCOP_1, RLVECT_2, CARD_3, FUNCT_5, PRALG_1, ARYTM;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS,
+      NAT_1, STRUCT_0, RELAT_1, FUNCT_1, FINSEQ_1, FUNCT_2, FUNCOP_1, MCART_1,
+      DOMAIN_1, PARTFUN1, FINSEQ_2, FUNCT_4, FUNCT_5, CARD_3, DTCONSTR,
+      UNIALG_1, UNIALG_2, PBOOLE;
+ constructors DOMAIN_1, FRAENKEL, FUNCT_4, FUNCT_5, CARD_3, DTCONSTR, UNIALG_2,
+      PBOOLE, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, UNIALG_1, PRVECT_1, PBOOLE, FUNCT_1, RELAT_1, RELSET_1,
+      STRUCT_0, FINSEQ_2, PARTFUN1, FUNCOP_1, ARYTM_3, MEMBERED, ZFMISC_1,
+      XBOOLE_0, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET;
+ definitions TARSKI, UNIALG_1, UNIALG_2, FUNCT_1, PBOOLE, XBOOLE_0;
+ theorems TARSKI, FUNCT_1, PARTFUN1, FINSEQ_1, FINSEQ_2, FUNCOP_1, UNIALG_1,
+      DOMAIN_1, ZFMISC_1, MCART_1, UNIALG_2, FUNCT_2, PBOOLE, FUNCT_5, CARD_3,
+      FUNCT_4, FINSEQ_3, RELAT_1, RELSET_1, DTCONSTR, STRUCT_0, ORDINAL2,
+      XBOOLE_0, XBOOLE_1;
+ schemes MATRIX_2, PARTFUN1, FUNCT_2, FUNCT_1, ZFREFLE1, COMPTS_1;
+
+begin
+
+theorem Th1:
+for D1,D2 be non empty set,n,m be Nat st n-tuples_on D1 = m-tuples_on D2
+holds n = m
+ proof
+  let D1,D2 be non empty set,n,m be Nat; assume
+  A1: n-tuples_on D1 = m-tuples_on D2;
+  consider p be Element of n-tuples_on D1;
+    p in m-tuples_on D2 by A1;
+  then p in {w where w is Element of D2* : len w = m} by FINSEQ_2:def 4;
+  then consider w be Element of D2* such that
+  A2: p = w & len w = m;
+  thus m = n by A2,FINSEQ_2:109;
+ end;
+
+::
+:: Product of Two Algebras
+::
+
+reserve U1,U2,U3 for Universal_Algebra,
+        k,n,m,i for Nat,
+        x,y,z for set,
+        A,B for non empty set,
+        h1 for FinSequence of [:A,B:];
+
+definition let A,B; let h1;
+ redefine func pr1 h1 -> FinSequence of A means :Def1:
+ len it = len h1 & for n st n in dom it holds it.n = (h1.n)`1;
+ compatibility
+  proof let f1 be FinSequence of A;
+   hereby assume
+A1:   f1 = pr1 h1;
+then A2:     dom f1 = dom h1 by DTCONSTR:def 2;
+    hence len f1 = len h1 by FINSEQ_3:31;
+    let n;
+    thus n in dom f1 implies f1.n = (h1.n)`1 by A1,A2,DTCONSTR:def 2;
+   end;
+   assume that
+A3: len f1 = len h1 and
+A4: for n st n in dom f1 holds f1.n = (h1.n)`1;
+      dom f1 = dom h1 & for n being set st n in dom f1 holds f1.n = (h1.n)`1
+       by A3,A4,FINSEQ_3:31;
+   hence thesis by DTCONSTR:def 2;
+  end;
+ coherence
+  proof
+   thus pr1 h1 is FinSequence of A;
+  end;
+ func pr2 h1 -> FinSequence of B means :Def2:
+ len it = len h1 & for n st n in dom it holds it.n = (h1.n)`2;
+ compatibility
+  proof let f1 be FinSequence of B;
+   hereby assume
+A5:   f1 = pr2 h1;
+then A6:    dom f1 = dom h1 by DTCONSTR:def 3;
+    hence len f1 = len h1 by FINSEQ_3:31;
+    let n;
+    thus n in dom f1 implies f1.n = (h1.n)`2 by A5,A6,DTCONSTR:def 3;
+   end;
+   assume that
+A7: len f1 = len h1 and
+A8: for n st n in dom f1 holds f1.n = (h1.n)`2;
+      dom f1 = dom h1 & for n being set st n in dom f1 holds f1.n = (h1.n)`2
+      by A7,A8,FINSEQ_3:31;
+   hence thesis by DTCONSTR:def 3;
+  end;
+ coherence
+  proof
+   thus pr2 h1 is FinSequence of B;
+  end;
+end;
+
+definition let A,B;
+ let f1 be homogeneous quasi_total non empty PartFunc of A*,A;
+ let f2 be homogeneous quasi_total non empty PartFunc of B*,B;
+ assume A1: arity (f1) = arity (f2);
+ func [[:f1,f2:]] -> homogeneous quasi_total non empty
+                   PartFunc of ([:A,B:])*,[:A,B:] means :Def3:
+  dom it = (arity(f1))-tuples_on [:A,B:] &
+  for h be FinSequence of [:A,B:] st h in dom it holds
+    it.h = [f1.(pr1 h),f2.(pr2 h)];
+ existence
+  proof
+   defpred P[set,set] means
+   for h be FinSequence of [:A,B:] st $1 = h holds
+    $2 = [f1.(pr1 h),f2.(pr2 h)];
+    set ar = (arity(f1))-tuples_on [:A,B:],
+   ab = {s where s is Element of [:A,B:]* : len s = arity(f1)};
+  A2: dom f1 = (arity(f1))-tuples_on A by UNIALG_2:2;
+  A3: dom f2 = (arity(f2))-tuples_on B by UNIALG_2:2;
+  A4: rng f1 c= A by RELSET_1:12;
+  A5: rng f2 c= B by RELSET_1:12;
+   A6: for x,y st x in ar & P[x,y] holds y in [:A,B:]
+    proof
+     let x,y; assume
+     A7: x in ar & P[x,y];
+     then x in ab by FINSEQ_2:def 4;
+     then consider s being Element of [:A,B:]* such that
+     A8: x = s & len s = arity(f1);
+     A9: y = [f1.(pr1 s),f2.(pr2 s)] by A7,A8;
+     A10: len pr1 s = len s & len pr2 s = len s by Def1,Def2;
+     reconsider s1 = pr1 s as Element of A* by FINSEQ_1:def 11;
+     reconsider s2 = pr2 s as Element of B* by FINSEQ_1:def 11;
+       s1 in {s3 where s3 is Element of A* : len s3 = arity(f1)} by A8,A10;
+     then s1 in dom f1 by A2,FINSEQ_2:def 4;
+then A11: f1.s1 in rng f1 by FUNCT_1:def 5;
+       s2 in {s3 where s3 is Element of B* : len s3 = arity(f2)} by A1,A8,A10;
+     then s2 in dom f2 by A3,FINSEQ_2:def 4;
+     then f2.s2 in rng f2 by FUNCT_1:def 5
+; hence thesis by A4,A5,A9,A11,ZFMISC_1:106;
+    end;
+   A12: for x,y,z st x in ar & P[x,y] & P[x,z] holds y = z
+    proof
+     let x,y,z; assume A13: x in ar & P[x,y] & P[x,z];
+     then x in ab by FINSEQ_2:def 4;
+     then consider s being Element of [:A,B:]* such that
+     A14: x = s & len s = arity(f1);
+       y = [f1.(pr1 s),f2.(pr2 s)] & z = [f1.(pr1 s),f2.(pr2 s)] by A13,A14;
+     hence thesis;
+    end;
+   consider f being PartFunc of ar,[:A,B:] such that
+   A15: for x holds x in dom f iff x in ar & ex y st P[x,y] and
+   A16: for x st x in dom f holds P[x,f.x] from PartFuncEx(A6,A12);
+   A17: dom f = ar
+    proof
+     thus dom f c= ar
+      proof
+       let x; assume x in dom f;
+       hence thesis by A15;
+      end;
+    let x; assume A18: x in ar;
+    then x in ab by FINSEQ_2:def 4;
+    then consider s being Element of [:A,B:]* such that
+     A19: x = s & len s = arity f1;
+       now take y = [f1.(pr1 s),f2.(pr2 s)];
+      let h be FinSequence of [:A,B:]; assume h = x;
+      hence y = [f1.(pr1 h),f2.(pr2 h)] by A19;
+     end;
+     hence thesis by A15,A18;
+    end;
+     ar in {i-tuples_on [:A,B:]: not contradiction};
+   then ar c= union{i-tuples_on [:A,B:]: not contradiction} by ZFMISC_1:92;
+   then ar c= [:A,B:]* by FINSEQ_2:128;
+   then reconsider f as PartFunc of [:A,B:]*,[:A,B:] by PARTFUN1:30;
+   A20: f is homogeneous
+    proof
+     let x,y be FinSequence of [:A,B:]; assume x in dom f & y in dom f;
+     then A21: x in ab & y in ab by A17,FINSEQ_2:def 4;
+     then consider s1 being Element of [:A,B:]* such that
+     A22: s1 = x & len s1 = arity(f1);
+     consider s2 being Element of [:A,B:]* such that
+     A23: s2 = y & len s2 = arity(f1) by A21;
+     thus thesis by A22,A23;
+    end;
+     f is quasi_total
+    proof
+     let x,y be FinSequence of [:A,B:];
+     assume A24: len x = len y & x in dom f;
+     then x in ab by A17,FINSEQ_2:def 4;
+     then consider s1 being Element of [:A,B:]* such that
+     A25: s1 = x & len s1 = arity(f1);
+     reconsider y' = y as Element of [:A,B:]* by FINSEQ_1:def 11;
+       y' in ab by A24,A25;
+     hence thesis by A17,FINSEQ_2:def 4;
+    end;
+   then reconsider f as homogeneous quasi_total non empty
+                 PartFunc of ([:A,B:])*,[:A,B:] by A17,A20,UNIALG_1:1;
+   take f;
+   thus dom f = ar by A17;
+   let h be FinSequence of [:A,B:]; assume h in dom f;
+   hence thesis by A16;
+  end;
+ uniqueness
+  proof
+   let x,y be homogeneous quasi_total non empty PartFunc of ([:A,B:])*
+,[:A,B:];
+   assume that
+    A26: dom x = (arity(f1))-tuples_on [:A,B:] and
+    A27: for h be FinSequence of [:A,B:] st h in dom x holds
+                     x.h = [f1.(pr1 h),f2.(pr2 h)] and
+    A28: dom y = (arity(f1))-tuples_on [:A,B:] and
+    A29: for h be FinSequence of [:A,B:] st h in dom y holds
+                     y.h = [f1.(pr1 h),f2.(pr2 h)];
+      now let c be Element of [:A,B:]*;
+     reconsider c' = c as FinSequence of [:A,B:];
+     assume c in dom x;
+     then x.c' = [f1.(pr1 c'),f2.(pr2 c')] & y.c' = [f1.(pr1 c'),f2.(pr2 c')]
+                                                       by A26,A27,A28,A29;
+     hence x.c = y.c;
+    end;
+   hence thesis by A26,A28,PARTFUN1:34;
+  end;
+end;
+
+ reserve h1 for homogeneous quasi_total non empty PartFunc of
+              (the carrier of U1)*,the carrier of U1,
+         h2 for homogeneous quasi_total non empty PartFunc of
+               (the carrier of U2)*,the carrier of U2;
+
+  definition let U1,U2;
+  assume A1: U1,U2 are_similar;
+  func Opers(U1,U2) ->
+        PFuncFinSequence of [:the carrier of U1,the carrier of U2:]
+  means :Def4:
+  len it = len the charact of(U1) &
+  for n st n in dom it holds
+   for h1,h2 st h1=(the charact of(U1)).n & h2=(the charact of(U2)).n
+  holds it.n = [[:h1,h2:]];
+  existence
+   proof
+   set l = len the charact of(U1),
+       c = [:the carrier of U1,the carrier of U2:];
+    A2: Seg l = dom the charact of(U1) &
+      dom the charact of(U2) = Seg len the charact of(U2)
+                                                     by FINSEQ_1:def 3;
+    defpred P[Nat,set] means
+    for h1,h2 st h1=(the charact of(U1)).$1 & h2=(the charact of(U2)).$1
+     holds $2 = [[:h1,h2:]];
+    A3: for m st m in Seg l ex x being Element of PFuncs(c*,c) st P[m,x]
+     proof
+      let m; assume A4: m in Seg l;
+      then reconsider f1 = (the charact of(U1)).m
+                     as homogeneous quasi_total non empty
+          PartFunc of (the carrier of U1)*,the carrier of U1
+                     by A2,UNIALG_1:5,def 4,def 5,def 6;
+        len the charact of(U1) = len the charact of(U2) by A1,UNIALG_2:3;
+      then reconsider f2 = (the charact of(U2)).m
+       as homogeneous quasi_total non empty
+         PartFunc of (the carrier of U2)*,the carrier of U2
+                     by A2,A4,UNIALG_1:5,def 4,def 5,def 6;
+      reconsider F = [[:f1,f2:]] as Element of PFuncs(c*,c) by PARTFUN1:119;
+      take F;
+      let h1,h2; assume h1=(the charact of(U1)).m & h2=(the charact of(U2)).m;
+      hence F = [[:h1,h2:]];
+     end;
+    consider p be FinSequence of PFuncs(c*,c) such that
+    A5: dom p = Seg l and
+    A6: for m st m in Seg l holds P[m,p.m] from SeqDEx(A3);
+     reconsider p as PFuncFinSequence of c;
+    take p;
+    thus len p = len the charact of(U1) by A5,FINSEQ_1:def 3;
+    let n; assume n in dom p;
+    hence thesis by A5,A6;
+   end;
+  uniqueness
+   proof
+    let x,y be PFuncFinSequence of [:the carrier of U1,the carrier of U2:];
+    assume that A7: len x = len the charact of(U1) and
+    A8:for n st n in dom x holds for h1,h2
+     st h1=(the charact of(U1)).n & h2=(the charact of(U2)).n
+                holds x.n = [[:h1,h2:]] and
+    A9: len y = len the charact of(U1) and
+    A10:for n st n in dom y holds for h1,h2
+     st h1=(the charact of(U1)).n & h2=(the charact of(U2)).n
+                holds y.n = [[:h1,h2:]];
+      now let m; assume A11: m in Seg len the charact of(U1);
+        Seg len the charact of(U2) = Seg len the charact of(U1)
+                                  by A1,UNIALG_2:3;
+then A12: m in dom the charact of(U1) & m in dom the charact of(U2) &
+            m in dom x & m in dom y by A7,A9,A11,FINSEQ_1:def 3;
+     then reconsider h1=(the charact of(U1)).m
+        as homogeneous quasi_total non empty PartFunc
+                  of (the carrier of U1)*,the carrier of U1
+                   by UNIALG_1:5,def 4,def 5,def 6;
+     reconsider h2=(the charact of(U2)).m
+      as homogeneous quasi_total non empty PartFunc
+                  of (the carrier of U2)*,the carrier of U2
+                   by A12,UNIALG_1:5,def 4,def 5,def 6;
+       x.m = [[:h1,h2:]] & y.m = [[:h1,h2:]] by A8,A10,A12;
+     hence x.m = y.m;
+    end;
+    hence thesis by A7,A9,FINSEQ_2:10;
+   end;
+  end;
+
+theorem Th2:
+U1,U2 are_similar implies
+ UAStr (# [:the carrier of U1,the carrier of U2:], Opers(U1,U2) #)
+  is strict Universal_Algebra
+  proof
+   assume A1: U1,U2 are_similar;
+   set C = UAStr(# [:the carrier of U1,the carrier of U2:], Opers(U1,U2) #);
+   A2: dom Opers(U1,U2) = Seg len Opers(U1,U2) &
+       dom the charact of(U1) = Seg len the charact of(U1) &
+       dom the charact of(U2) = Seg len the charact of(U2) by FINSEQ_1:def 3;
+   A3: len Opers(U1,U2) = len the charact of(U1) &
+       len the charact of(U2) = len the charact of(U1) by A1,Def4,UNIALG_2:3;
+A4:   the charact of(C) is quasi_total
+    proof
+     let n; let h be PartFunc of (the carrier of C)*,(the carrier of C);
+     assume A5: n in dom the charact of(C) & h = (the charact of(C)).n;
+     then reconsider h1=(the charact of U1).n
+      as homogeneous quasi_total non empty PartFunc
+                  of (the carrier of U1)*,the carrier of U1
+                   by A2,A3,UNIALG_1:5,def 4,def 5,def 6;
+     reconsider h2=(the charact of(U2)).n
+      as homogeneous quasi_total non empty PartFunc
+                  of (the carrier of U2)*,the carrier of U2
+                   by A2,A3,A5,UNIALG_1:5,def 4,def 5,def 6;
+       h = [[:h1,h2:]] by A1,A5,Def4;
+     hence h is quasi_total;
+    end;
+A6:   the charact of(C) is homogeneous
+    proof
+     let n; let h be PartFunc of (the carrier of C)*,the carrier of C;
+     assume A7: n in dom the charact of(C) & h = (the charact of(C)).n;
+     then reconsider h1=(the charact of(U1)).n
+      as homogeneous quasi_total non empty PartFunc
+                  of (the carrier of U1)*,the carrier of U1
+                   by A2,A3,UNIALG_1:5,def 4,def 5,def 6;
+     reconsider h2=(the charact of(U2)).n
+      as homogeneous quasi_total non empty PartFunc
+                  of (the carrier of U2)*,the carrier of U2
+                   by A2,A3,A7,UNIALG_1:5,def 4,def 5,def 6;
+       h = [[:h1,h2:]] by A1,A7,Def4;
+     hence h is homogeneous;
+    end;
+   A8: the charact of(C) <> {}
+    proof
+     assume the charact of(C) = {};
+      then len the charact of(C) = 0 by FINSEQ_1:25;
+     hence contradiction by A3,FINSEQ_1:25;
+    end;
+     the charact of(C) is non-empty
+    proof
+     let n be set;
+     set h = (the charact of(C)).n;
+     assume A9: n in dom the charact of(C);
+     then reconsider m = n as Nat;
+     reconsider h1=(the charact of(U1)).m
+      as homogeneous quasi_total non empty PartFunc
+             of (the carrier of U1)*,the carrier of U1
+              by A2,A3,A9,UNIALG_1:5,def 4,def 5,def 6;
+     reconsider h2=(the charact of(U2)).m
+      as homogeneous quasi_total non empty PartFunc
+                  of (the carrier of U2)*,the carrier of U2
+              by A2,A3,A9,UNIALG_1:5,def 4,def 5,def 6;
+       h = [[:h1,h2:]] by A1,A9,Def4;
+     hence h is non empty;
+    end;
+   hence thesis by A4,A6,A8,UNIALG_1:def 7,def 8,def 9;
+  end;
+
+  definition let U1,U2;
+  assume A1: U1,U2 are_similar;
+  func [:U1,U2:] -> strict Universal_Algebra equals :Def5:
+   UAStr (# [:the carrier of U1,the carrier of U2:], Opers(U1,U2) #);
+  coherence by A1,Th2;
+  end;
+
+definition let A,B be non empty set;
+func Inv (A,B) -> Function of [:A,B:],[:B,A:] means :Def6:
+for a be Element of [:A,B:] holds it.a = [a`2,a`1];
+existence
+proof
+ deffunc F(Element of [:A,B:]) = [$1`2,$1`1];
+ thus ex I be Function of [:A,B:],[:B,A:] st
+  for a be Element of [:A,B:] holds I.a = F(a) from LambdaD;
+end;
+uniqueness
+ proof
+  let f,g be Function of [:A,B:],[:B,A:];
+  assume A1: (for a be Element of [:A,B:] holds f.a = [a`2,a`1]) &
+            (for a be Element of [:A,B:] holds g.a = [a`2,a`1]);
+    now let a be Element of [:A,B:];
+     f.a = [a`2,a`1] & g.a = [a`2,a`1] by A1;
+   hence f.a = g.a;
+  end;
+ hence thesis by FUNCT_2:113;
+ end;
+end;
+
+theorem
+  for A,B be non empty set holds rng (Inv (A,B)) = [:B,A:]
+proof
+ let A,B be non empty set;
+ thus rng Inv(A,B) c= [:B,A:];
+ let x; assume x in [:B,A:];
+ then reconsider y = x as Element of [:B,A:];
+A1: [y`2,y`1] in [:A,B:] & dom Inv (A,B) = [:A,B:] by FUNCT_2:def 1;
+   Inv(A,B).[y`2,y`1] = [[y`2,y`1]`2,[y`2,y`1]`1] by Def6
+ .= [y`1,[y`2,y`1]`1] by MCART_1:7
+ .= [y`1,y`2] by MCART_1:7
+ .= y by MCART_1:23;
+ hence thesis by A1,FUNCT_1:def 5;
+end;
+
+theorem
+  for A,B be non empty set holds Inv (A,B) is one-to-one
+proof
+ let A,B be non empty set;
+ let x,y; assume
+  A1: x in dom Inv(A,B) & y in dom Inv(A,B) & Inv(A,B).x = Inv(A,B).y;
+  then reconsider x1 = x,y1 = y as Element of [:A,B:] by FUNCT_2:def 1;
+    Inv(A,B).x1 = [x1`2,x1`1] & Inv(A,B).y1 = [y1`2,y1`1] by Def6;
+  then x1`1 =y1`1 & x1`2 = y1`2 by A1,ZFMISC_1:33;
+  hence thesis by DOMAIN_1:12;
+end;
+
+theorem
+  U1,U2 are_similar implies
+Inv (the carrier of U1,the carrier of U2) is
+   Function of the carrier of [:U1,U2:], the carrier of [:U2,U1:]
+proof
+ assume U1,U2 are_similar;
+  then [:U1,U2:] = UAStr (# [:the carrier of U1,the carrier of U2:], Opers(U1,
+U2) #)
+ &
+  [:U2,U1:] = UAStr (# [:the carrier of U2,the carrier of U1:], Opers(U2,U1) #)
+                                                             by Def5;
+ hence thesis;
+end;
+
+theorem Th6:
+U1,U2 are_similar implies
+for o1 be operation of U1,o2 be operation of U2,o be operation of [:U1,U2:],
+n be Nat st o1 = (the charact of U1).n & o2 = (the charact of U2).n &
+            o = (the charact of [:U1,U2:]).n &
+n in dom the charact of(U1) holds arity o = arity o1 &
+             arity o = arity o2 & o = [[:o1,o2:]]
+ proof
+  assume A1: U1,U2 are_similar;
+  let o1 be operation of U1,o2 be operation of U2,o be operation of [:U1,U2:],
+   n be Nat; assume
+  A2: o1 = (the charact of U1).n & o2 = (the charact of U2).n
+     & o = (the charact of [:U1,U2:]).n &
+      n in dom the charact of(U1);
+A3: [:U1,U2:]
+      = UAStr (# [:the carrier of U1,the carrier of U2:], Opers(U1,U2) #)
+                                                     by A1,Def5;
+  A4: dom the charact of(U1) = Seg len the charact of(U1) &
+  dom the charact of(U2) = Seg len the charact of(U2) &
+  dom Opers(U1,U2) = Seg len Opers(U1,U2) &
+  dom (signature U1) = Seg len (signature U1) &
+  dom (signature U2) = Seg len (signature U2) by FINSEQ_1:def 3;
+  A5: len the charact of(U1) = len Opers(U1,U2) by A1,Def4;
+  then A6: o = [[:o1,o2:]] by A1,A2,A3,A4,Def4;
+  A7: signature U1 = signature U2 by A1,UNIALG_2:def 2;
+    len signature U1 = len the charact of (U1) &
+  len signature U2 = len the charact of(U2)
+                             by UNIALG_1:def 11;
+  then A8: (signature U1).n = arity o1 & (signature U2).n = arity o2
+                                          by A2,A4,A7,UNIALG_1:def 11;
+  then A9: dom o = (arity o1)-tuples_on [:the carrier of U1,the carrier of U2:]
+                                         by A6,A7,Def3;
+    for x be FinSequence of the carrier of [:U1,U2:] st x in dom o
+    holds len x = arity o1
+   proof
+    let x be FinSequence of the carrier of [:U1,U2:];
+    assume x in dom o;
+    then x in {s where s is Element of ([:the carrier of U1,the carrier of U2
+:])*:
+         len s = arity o1} by A9,FINSEQ_2:def 4;
+    then consider s be Element of ([:the carrier of U1,the carrier of U2:])*
+    such that A10: s = x & len s = arity o1;
+    thus thesis by A10;
+   end;
+  hence thesis by A1,A2,A3,A4,A5,A7,A8,Def4,UNIALG_1:def 10;
+ end;
+
+theorem
+  U1,U2 are_similar implies [:U1,U2:],U1 are_similar
+ proof
+  assume A1: U1,U2 are_similar;
+  then [:U1,U2:] = UAStr (# [:the carrier of U1,the carrier of U2:], Opers(U1,
+U2) #)
+   by Def5;
+  then len the charact of([:U1,U2:]) = len the charact of(U1) by A1,Def4;
+  then A2: len signature ([:U1,U2:]) = len the charact of(U1) by UNIALG_1:def
+11
+  .= len signature(U1) by UNIALG_1:def 11;
+  A3: dom signature(U1) = Seg len signature(U1) &
+  dom signature([:U1,U2:]) = Seg len signature([:U1,U2:]) &
+  dom the charact of(U1) = Seg len the charact of(U1) &
+  dom the charact of(U2) = Seg len the charact of(U2) &
+  dom the charact of([:U1,U2:]) = Seg len the charact of([:U1,U2:])
+   by FINSEQ_1:def 3;
+    now let n; assume A4: n in Seg len signature(U1);
+   then A5: n in Seg len the charact of(U1) by UNIALG_1:def 11;
+   then n in dom the charact of (U1) by FINSEQ_1:def 3;
+   then reconsider o1 = (the charact of U1).n as operation of U1 by UNIALG_2:6;
+   A6: (signature(U1)).n = arity(o1) by A3,A4,UNIALG_1:def 11;
+     n in dom the charact of([:U1,U2:]) by A2,A3,A4,UNIALG_1:def 11;
+   then reconsider o12 = (the charact of [:U1,U2:]).n as operation of [:U1,U2:]
+                                                     by UNIALG_2:6;
+   A7: (signature([:U1,U2:])).n = arity(o12) by A2,A3,A4,UNIALG_1:def 11;
+     len signature(U1) = len signature(U2) by A1,UNIALG_2:def 2
+   .= len the charact of(U2) by UNIALG_1:def 11;
+   then reconsider o2 = (the charact of U2).n as operation of U2
+    by A3,A4,UNIALG_2:6;
+     o1 = (the charact of U1).n & o2 = (the charact of U2).n;
+   hence (signature(U1)).n = (signature([:U1,U2:])).n by A1,A3,A5,A6,A7,Th6;
+  end;
+  then signature(U1) = signature([:U1,U2:]) by A2,FINSEQ_2:10;
+  hence thesis by UNIALG_2:def 2;
+ end;
+
+theorem
+  for U1,U2,U3,U4 be Universal_Algebra st U1 is SubAlgebra of U2 &
+U3 is SubAlgebra of U4 & U2,U4 are_similar holds
+[:U1,U3:] is SubAlgebra of [:U2,U4:]
+ proof
+  let U1,U2,U3,U4 be Universal_Algebra; assume
+  A1: U1 is SubAlgebra of U2 & U3 is SubAlgebra of U4 & U2,U4 are_similar;
+  then A2: U1,U2 are_similar & U3,U4 are_similar by UNIALG_2:16;
+  then U1,U4 are_similar by A1,UNIALG_2:4;
+  then A3: U1,U3 are_similar by A2,UNIALG_2:4;
+then A4:
+  [:U1,U3:] = UAStr (# [:the carrier of U1,the carrier of U3:], Opers(U1,U3) #)
+ &
+  [:U2,U4:] = UAStr (# [:the carrier of U2,the carrier of U4:], Opers(U2,U4) #)
+                                                              by A1,Def5;
+  A5: the carrier of U1 is Subset of U2 &
+  the carrier of U3 is Subset of U4
+                                                 by A1,UNIALG_2:def 8;
+  then A6: [:the carrier of U1,the carrier of U3:] c=
+             [:the carrier of U2,the carrier of U4:] by ZFMISC_1:119;
+  thus the carrier of [:U1,U3:] is Subset of [:U2,U4:] by A4,A5,
+ZFMISC_1:119;
+  let B be non empty Subset of [:U2,U4:];
+  assume A7: B = the carrier of [:U1,U3:];
+  reconsider B1 = the carrier of U1 as non empty Subset of U2
+                                                       by A1,UNIALG_2:def 8;
+  reconsider B3 = the carrier of U3 as non empty Subset of U4
+                                                       by A1,UNIALG_2:def 8;
+  A8: B1 is opers_closed & B3 is opers_closed by A1,UNIALG_2:def 8;
+A9:  for o be operation of [:U2,U4:] holds B is_closed_on o
+   proof
+    let o be operation of [:U2,U4:];
+    let s be FinSequence of B; assume A10: len s = arity o;
+    reconsider s0 = s as Element of ([:the carrier of U1,the carrier of U3:])*
+                                                    by A4,A7,FINSEQ_1:def 11;
+      Operations([:U2,U4:]) = rng the charact of([:U2,U4:]) by UNIALG_2:def 3;
+     then consider n be Nat such that
+    A11: n in dom the charact of([:U2,U4:]) &
+      (the charact of [:U2,U4:]).n = o by FINSEQ_2:11;
+    A12: n in Seg len the charact of ([:U2,U4:]) &
+         (the charact of [:U2,U4:]).n = o by A11,FINSEQ_1:def 3;
+    A13: len the charact of([:U2,U4:]) = len the charact of(U2) by A1,A4,Def4;
+     then A14: n in dom the charact of(U2) by A12,FINSEQ_1:def 3;
+    then reconsider o2 = (the charact of U2).n as operation of U2 by UNIALG_2:6
+;
+      len the charact of(U4) = len the charact of(U2) by A1,UNIALG_2:3;
+    then n in dom the charact of(U4) by A12,A13,FINSEQ_1:def 3;
+    then reconsider o4 = (the charact of U4).n as operation of U4 by UNIALG_2:6
+;
+      o2 = (the charact of U2).n & o4 = (the charact of U4).n;
+    then A15: arity o = arity o2 & arity o = arity o4 & o = [[:o2,o4:]]
+        by A1,A11,A14,Th6;
+    then A16:dom [[:o2,o4:]]=(arity(o2))-tuples_on
+                         [:the carrier of U2,the carrier of U4:] by Def3;
+      rng s0 c= [:the carrier of U1,the carrier of U3:] by FINSEQ_1:def 4;
+    then rng s0 c= [:the carrier of U2,the carrier of U4:] by A6,XBOOLE_1:1;
+    then s0 is FinSequence of [:the carrier of U2,the carrier of U4:]
+                                                     by FINSEQ_1:def 4;
+   then reconsider ss = s0 as Element of ([:the carrier of U2,the carrier of U4
+:])*
+                                 by FINSEQ_1:def 11;
+      ss in {w where w is Element of ([:the carrier of U2,the carrier of U4:])*
+ :
+                        len w = arity o2 } by A10,A15;
+    then A17: ss in dom [[:o2,o4:]] by A16,FINSEQ_2:def 4;
+    reconsider s1 = pr1 s0 as Element of B1* by FINSEQ_1:def 11;
+    reconsider s3 = pr2 s0 as Element of B3* by FINSEQ_1:def 11;
+    A18: B1 is_closed_on o2 & B3 is_closed_on o4 by A8,UNIALG_2:def 5;
+      len s1 = len s0 & len s3 = len s0 by Def1,Def2;
+then A19:    o2.s1 in B1 & o4.s3 in B3 by A10,A15,A18,UNIALG_2:def 4;
+      o.s = [o2.(pr1 ss),o4.(pr2 ss)] by A15,A17,Def3;
+    hence thesis by A4,A7,A19,ZFMISC_1:106;
+   end;
+A20:  dom the charact of([:U2,U4:]) = dom Opers([:U2,U4:],B)
+                                       by UNIALG_2:def 7;
+   then len the charact of([:U2,U4:]) = len Opers([:U2,U4:],B) by FINSEQ_3:31;
+   then A21: len the charact of(U2) = len Opers([:U2,U4:],B) by A1,A4,Def4;
+  A22: len the charact of([:U1,U3:]) = len the charact of(U1) by A3,A4,Def4;
+    signature (U1) = signature (U2) by A2,UNIALG_2:def 2;
+  then len the charact of(U1) = len signature(U2) by UNIALG_1:def 11;
+  then A23: len the charact of([:U1,U3:]) = len Opers([:U2,U4:],B)
+                by A21,A22,UNIALG_1:def 11;
+  A24: dom the charact of(U1) = Seg len the charact of(U1) &
+      dom the charact of(U2) = Seg len the charact of(U2) &
+      dom the charact of(U3) = Seg len the charact of(U3) &
+      dom the charact of(U4) = Seg len the charact of(U4) &
+      dom the charact of([:U1,U3:]) = Seg len the charact of([:U1,U3:]) &
+      dom the charact of([:U2,U4:]) = Seg len the charact of([:U2,U4:]) &
+      dom Opers([:U2,U4:],B) = Seg len Opers([:U2,U4:],B) &
+      dom Opers(U2,B1) = Seg len Opers(U2,B1) &
+      dom Opers(U4,B3) = Seg len Opers(U4,B3) by FINSEQ_1:def 3;
+    signature (U4) = signature (U2) by A1,UNIALG_2:def 2;
+  then len the charact of(U4) = len signature(U2) by UNIALG_1:def 11;
+  then A25: len the charact of(U4) = len the charact of(U2) by UNIALG_1:def 11;
+    signature (U1) = signature (U3) by A3,UNIALG_2:def 2;
+  then len the charact of(U1) = len signature(U3) by UNIALG_1:def 11;
+  then A26: len the charact of(U1) = len the charact of(U3) by UNIALG_1:def 11;
+A27:  dom the charact of(U2) = dom Opers(U2,B1) by UNIALG_2:def 7;
+A28:  dom the charact of(U4) = dom Opers(U4,B3) by UNIALG_2:def 7;
+    for n st n in Seg len the charact of([:U1,U3:]) holds
+   (the charact of [:U1,U3:]).n = Opers([:U2,U4:],B).n
+   proof
+    let n; assume A29: n in Seg len the charact of([:U1,U3:]);
+    then reconsider o2 = (the charact of U2).n as operation of U2
+     by A21,A23,A24,UNIALG_2:6;
+    reconsider o4 = (the charact of U4).n as operation of U4
+     by A21,A23,A24,A25,A29,UNIALG_2:6;
+    reconsider o24 = (the charact of [:U2,U4:]).n as operation of [:U2,U4:]
+                                                by A20,A23,A24,A29,UNIALG_2:6;
+    reconsider o1 = (the charact of U1).n as operation of U1
+     by A22,A24,A29,UNIALG_2:6;
+    reconsider o3 = (the charact of U3).n as operation of U3
+     by A22,A24,A26,A29,UNIALG_2:6;
+      o2 = (the charact of U2).n & o4 = (the charact of U4).n;
+    then A30: o24 = [[:o2,o4:]] & arity o24 = arity o4 & arity o24 = arity o2
+                                                   by A1,A21,A23,A24,A29,Th6;
+    A31: Opers(U2,B1).n = o2/. B1 by A21,A23,A24,A27,A29,UNIALG_2:def 7;
+    A32: Opers(U4,B3).n = o4/.B3 by A21,A23,A24,A25,A28,A29,UNIALG_2:def 7;
+    A33: o1 = o2/.B1 by A1,A31,UNIALG_2:def 8;
+    A34: o3 = o4/.B3 by A1,A32,UNIALG_2:def 8;
+    A35: B is_closed_on o24 & B1 is_closed_on o2 & B3 is_closed_on o4
+                                        by A8,A9,UNIALG_2:def 5;
+    then A36: arity (o2/.B1) = arity o2 & arity (o4/.B3) = arity o4
+                                                      by UNIALG_2:8;
+    then A37: dom ([[:o2/.B1,o4/.B3:]]) = (arity o2)-tuples_on B by A4,A7,A30,
+Def3;
+    A38: dom ([[:o2,o4:]]|((arity o24)-tuples_on B)) = dom ([[:o2,o4:]]) /\
+    ((arity o2)-tuples_on B) by A30,FUNCT_1:68
+    .= (arity o2)-tuples_on (the carrier of [:U2,U4:]) /\
+       ((arity o2)-tuples_on B) by A4,A30,Def3
+    .= ((arity o2)-tuples_on B) by UNIALG_2:1;
+A39:    now let x; assume A40: x in ((arity o2)-tuples_on B);
+     then x in
+ {s where s is Element of B*: len s = arity o2} by FINSEQ_2:def 4;
+     then consider s be Element of B* such that
+      A41: s = x & len s = arity o2;
+       B c= [:the carrier of U2,the carrier of U4:] & rng s c= B
+                                   by A4,FINSEQ_1:def 4;
+     then rng s c= [:the carrier of U2,the carrier of U4:] by XBOOLE_1:1;
+     then reconsider s0 = s as FinSequence of
+           [:the carrier of U2,the carrier of U4:] by FINSEQ_1:def 4;
+A42: dom ([[:o2,o4:]]|((arity o24)-tuples_on B)) c= dom [[:o2,o4:]]
+ by FUNCT_1:76;
+     A43: ([[:o2,o4:]]|((arity o24)-tuples_on B)).x = [[:o2,o4:]].s0
+                                                        by A38,A40,A41,FUNCT_1:
+68
+     .= [o2.(pr1 s0),o4.(pr2 s0)] by A30,A38,A40,A41,A42,Def3;
+     reconsider s1 = s as FinSequence of
+        [:B1 qua non empty set,B3 qua non empty set:] by A4,A7;
+     reconsider s11 = pr1 s1 as Element of B1* by FINSEQ_1:def 11;
+     reconsider s12 = pr2 s1 as Element of B3* by FINSEQ_1:def 11;
+        len (pr1 s1) = len s1 & len (pr1 s0) = len s0 by Def1;
+     then s11 in {a where a is Element of B1 *: len a = arity o2} by A41;
+     then A44: s11 in (arity o2)-tuples_on B1 by FINSEQ_2:def 4;
+     A45: dom (o2|(arity o2)-tuples_on B1)
+      = dom o2 /\ (arity o2)-tuples_on B1 by FUNCT_1:68
+     .= ((arity o2)-tuples_on the carrier of U2) /\ (arity o2)-tuples_on B1
+                                                         by UNIALG_2:2
+     .= (arity o2)-tuples_on B1 by UNIALG_2:1;
+        len (pr2 s1) = len s1 & len (pr2 s0) = len s0 by Def2;
+     then s12 in {b where b is Element of B3*: len b = arity o4} by A30,A41;
+     then A46: s12 in (arity o4)-tuples_on B3 by FINSEQ_2:def 4;
+     A47: dom (o4|(arity o4)-tuples_on B3)
+      = dom o4 /\ (arity o4)-tuples_on B3 by FUNCT_1:68
+     .= ((arity o4)-tuples_on the carrier of U4) /\ (arity o4)-tuples_on B3
+                                                         by UNIALG_2:2
+     .= (arity o4)-tuples_on B3 by UNIALG_2:1;
+       [[:o2/.B1,o4/.B3:]].x = [(o2/.B1).(pr1 s1),(o4/.B3).(pr2 s1)]
+                                                 by A30,A36,A37,A40,A41,Def3
+     .= [(o2|((arity o2)-tuples_on B1)).s11,(o4/.B3).(pr2 s1)]
+                                                       by A35,UNIALG_2:def 6
+     .= [o2.(pr1 s1),(o4/.B3).(pr2 s1)] by A44,A45,FUNCT_1:68
+     .= [o2.(pr1 s1),(o4|((arity o4)-tuples_on B3)).(pr2 s1)]
+                                                         by A35,UNIALG_2:def 6
+     .= [o2.(pr1 s1),o4.(pr2 s1)] by A46,A47,FUNCT_1:68;
+     hence [[:o2/.B1,o4/.B3:]].x = ([[:o2,o4:]]|((arity o24)-tuples_on B)).x
+                                                              by A43;
+    end;
+    thus Opers([:U2,U4:],B).n = o24/.B by A23,A24,A29,UNIALG_2:def 7
+    .= [[:o2,o4:]]|((arity o24)-tuples_on B) by A30,A35,UNIALG_2:def 6
+    .= [[:o2/.B1,o4/.B3:]] by A37,A38,A39,FUNCT_1:9
+    .= (the charact of [:U1,U3:]).n by A3,A4,A24,A29,A33,A34,Def4;
+   end;
+  hence thesis by A9,A23,FINSEQ_2:10,UNIALG_2:def 5;
+ end;
+
+begin
+::
+:: Trivial Algebra
+::
+
+definition
+let k be natural number;
+func TrivialOp(k) -> PartFunc of {{}}*,{{}}
+means :Def7:
+dom it = { k |-> {}} & rng it = {{}};
+existence
+ proof
+  consider f be Function such that
+  A1: dom f = {k |-> {}} & rng f = {{}} by FUNCT_1:15;
+    dom f c= {{}}*
+   proof
+    let x; assume A2: x in dom f;
+    reconsider a = {} as Element of {{}} by TARSKI:def 1;
+      x = k |-> a by A1,A2,TARSKI:def 1;
+    then x is FinSequence of {{}} by FINSEQ_2:77;
+    hence thesis by FINSEQ_1:def 11;
+   end;
+  then reconsider f as PartFunc of {{}}*,{{}} by A1,RELSET_1:11;
+  take f;
+  thus thesis by A1;
+ end;
+uniqueness by FUNCT_1:17;
+end;
+
+definition
+let k be natural number;
+ cluster TrivialOp k -> homogeneous quasi_total non empty;
+ coherence
+  proof set f = TrivialOp k;
+A1: dom f = {k |-> {}} & rng f = {{}} by Def7;
+    thus f is homogeneous
+     proof let x,y be FinSequence of {{}}; assume x in dom f & y in dom f;
+       then x = k |-> {} & y = k |-> {} by A1,TARSKI:def 1;
+      hence len x = len y;
+     end;
+      now let x,y be FinSequence of {{}}; assume A2: len x = len y & x in dom f
+;
+     then A3: x = k |-> {} by A1,TARSKI:def 1;
+     then A4: len x = k by FINSEQ_2:69;
+       now let n; assume A5: n in Seg len x;
+       then A6: x.n = {} by A3,A4,FINSEQ_2:70;
+        n in dom y by A2,A5,FINSEQ_1:def 3;
+      then y.n in {{}} by FINSEQ_2:13;
+      hence x.n = y.n by A6,TARSKI:def 1;
+     end;
+     hence y in dom f by A2,FINSEQ_2:10;
+    end;
+   hence f is quasi_total non empty by A1,UNIALG_1:1,def 2;
+  end;
+end;
+
+theorem
+  for k being natural number holds arity TrivialOp(k) = k
+ proof
+  let k be natural number;
+A1:k is Nat by ORDINAL2:def 21;
+    now let x be FinSequence of {{}}; assume x in dom TrivialOp(k);
+  then x in {k |-> {}} by Def7;
+  then x = k |-> {} by TARSKI:def 1;
+  hence len x = k by FINSEQ_2:69;
+  end;
+  hence thesis by A1,UNIALG_1:def 10;
+ end;
+
+definition
+let f be FinSequence of NAT;
+func TrivialOps(f) -> PFuncFinSequence of {{}} means :Def8:
+len it = len f & for n st n in
+ dom it for m st m = f.n holds it.n=TrivialOp(m);
+existence
+ proof
+ defpred P[set,set] means for m st m = f.$1 holds $2 = TrivialOp(m);
+ A1: for k st k in Seg len f ex x being Element of PFuncs({{}}*
+,{{}}) st P[k,x]
+  proof
+  let k; assume k in Seg len f;
+  then k in dom f by FINSEQ_1:def 3;
+  then reconsider k1 = f.k as Nat by FINSEQ_2:13;
+  reconsider A = TrivialOp(k1) as Element of PFuncs({{}}*,{{}
+}) by PARTFUN1:119;
+  take A;
+  let m; assume m = f.k;
+  hence thesis;
+  end;
+ consider p being FinSequence of PFuncs({{}}*,{{}}) such that
+ A2: dom p = Seg len f & for k st k in
+ Seg len f holds P[k,p.k] from SeqDEx(A1);
+  reconsider p as PFuncFinSequence of {{}};
+ take p;
+ thus len p = len f by A2,FINSEQ_1:def 3;
+ let n; assume n in dom p;
+ hence thesis by A2;
+ end;
+uniqueness
+ proof
+  let x,y be PFuncFinSequence of {{}}; assume
+  A3: (len x=len f & for n st n in dom x for m st m = f.n
+      holds x.n=TrivialOp(m)) &
+      (len y=len f & for n st n in dom y for m st m = f.n
+      holds y.n=TrivialOp(m));
+    now let n; assume n in Seg len f;
+   then A4: n in dom f & n in dom x & n in dom y by A3,FINSEQ_1:def 3;
+   then reconsider m = f.n as Nat by FINSEQ_2:13;
+     x.n=TrivialOp(m) & y.n=TrivialOp(m) by A3,A4;
+   hence x.n = y.n;
+  end;
+  hence thesis by A3,FINSEQ_2:10;
+ end;
+end;
+
+theorem Th10:
+for f be FinSequence of NAT holds TrivialOps(f) is homogeneous quasi_total
+non-empty
+ proof
+  let f be FinSequence of NAT;
+A1:  for n be Nat,h be PartFunc of {{}}*,{{}} st n in dom TrivialOps(f) &
+  h = (TrivialOps(f)).n holds h is homogeneous
+   proof
+    let n be Nat,h be PartFunc of {{}}*,{{}}; assume
+    A2: n in dom TrivialOps(f) & (TrivialOps(f)).n = h;
+      dom TrivialOps(f) = Seg len TrivialOps(f) by FINSEQ_1:def 3
+                     .= Seg len f by Def8
+                     .= dom f by FINSEQ_1:def 3;
+    then reconsider m = f.n as Nat by A2,FINSEQ_2:13;
+      (TrivialOps(f)).n = TrivialOp(m) by A2,Def8;
+    hence h is homogeneous by A2;
+   end;
+A3:  for n be Nat,h be PartFunc of {{}}*,{{}} st n in dom TrivialOps(f) &
+  h = (TrivialOps(f)).n holds h is quasi_total
+   proof
+    let n be Nat,h be PartFunc of {{}}*,{{}}; assume
+    A4: n in dom TrivialOps(f) & (TrivialOps(f)).n = h;
+      dom TrivialOps(f) = Seg len TrivialOps(f) by FINSEQ_1:def 3
+                     .= Seg len f by Def8
+                     .= dom f by FINSEQ_1:def 3;
+    then reconsider m = f.n as Nat by A4,FINSEQ_2:13;
+      (TrivialOps(f)).n = TrivialOp(m) by A4,Def8;
+    hence h is quasi_total by A4;
+   end;
+    for n be set st n in dom TrivialOps(f) holds (TrivialOps(f)).n is non empty
+   proof
+    let n be set; assume
+    A5: n in dom TrivialOps(f);
+    then reconsider k = n as Nat;
+      dom TrivialOps(f) = Seg len TrivialOps(f) by FINSEQ_1:def 3
+                     .= Seg len f by Def8
+                     .= dom f by FINSEQ_1:def 3;
+    then reconsider m = f.k as Nat by A5,FINSEQ_2:13;
+      (TrivialOps(f)).k = TrivialOp(m) by A5,Def8;
+    hence (TrivialOps(f)).n is non empty;
+   end;
+  hence thesis by A1,A3,UNIALG_1:def 4,def 5,def 6;
+ end;
+
+theorem Th11:
+for f be FinSequence of NAT st f <> {} holds UAStr (#{{}},TrivialOps(f)#) is
+strict Universal_Algebra
+ proof
+  let f be FinSequence of NAT; assume A1: f <> {};
+  set U0 = UAStr (#{{}},TrivialOps(f)#);
+  A2: the charact of U0 is homogeneous quasi_total non-empty by Th10;
+    len (the charact of U0) = len f by Def8;
+  then len (the charact of U0) <> 0 by A1,FINSEQ_1:25;
+  then the charact of U0 <> {} by FINSEQ_1:25;
+  hence thesis by A2,UNIALG_1:def 7,def 8,def 9;
+ end;
+
+definition let D be non empty set;
+ cluster non empty FinSequence of D;
+  existence
+   proof consider d being Element of D;
+    take <*d*>;
+       <*d*> = { [1,d] } by FINSEQ_1:52;
+    hence thesis;
+   end;
+ cluster non empty Element of D*;
+  existence
+   proof consider d being Element of D;
+    reconsider e = <*d*> as Element of D* by FINSEQ_1:def 11;
+    take e;
+       e = { [1,d] } by FINSEQ_1:52;
+    hence thesis;
+   end;
+end;
+
+definition
+let f be non empty FinSequence of NAT;
+func Trivial_Algebra(f) -> strict Universal_Algebra equals
+    UAStr (#{{}},TrivialOps(f)#);
+coherence by Th11;
+end;
+
+begin
+::
+:: Product of Universal Algebras
+::
+
+definition let IT be Function;
+attr IT is Univ_Alg-yielding means :Def10:
+for x st x in dom IT holds IT.x is Universal_Algebra;
+end;
+
+definition let IT be Function;
+attr IT is 1-sorted-yielding means :Def11:
+for x st x in dom IT holds IT.x is 1-sorted;
+end;
+
+definition
+cluster Univ_Alg-yielding Function;
+existence
+ proof
+  reconsider f = {} as Function;
+  take f;
+  let x;
+  thus thesis by RELAT_1:60;
+ end;
+end;
+
+definition
+ cluster Univ_Alg-yielding -> 1-sorted-yielding Function;
+ coherence
+  proof let F be Function;
+   assume F is Univ_Alg-yielding;
+   then for x st x in dom F holds F.x is 1-sorted by Def10;
+   hence F is 1-sorted-yielding by Def11;
+  end;
+end;
+
+definition
+ let I be set;
+ cluster 1-sorted-yielding ManySortedSet of I;
+ existence
+  proof
+   consider A be 1-sorted;
+   set f = I --> A;
+   A1: dom f = I by FUNCOP_1:19;
+   then reconsider f as ManySortedSet of I by PBOOLE:def 3;
+   take f;
+     for i be set st i in dom f holds f.i is 1-sorted by A1,FUNCOP_1:13;
+   hence thesis by Def11;
+  end;
+end;
+
+definition let IT be Function;
+attr IT is equal-signature means :Def12:
+for x,y st x in dom IT & y in dom IT holds
+for U1,U2 st U1 = IT.x & U2 = IT.y holds
+signature U1 = signature U2;
+end;
+
+definition
+let J be non empty set;
+cluster equal-signature Univ_Alg-yielding ManySortedSet of J;
+existence
+ proof
+  consider U1;
+  set f = J --> U1;
+  A1: dom f = J by FUNCOP_1:19;
+  then reconsider f as ManySortedSet of J by PBOOLE:def 3;
+  take f;
+    for x,y st x in dom f & y in dom f holds
+  for U1,U2 st U1 = f.x & U2 = f.y holds signature U1 = signature U2
+   proof
+    let x,y; assume x in dom f & y in dom f;
+    then A2: f.x = U1 & f.y = U1 by A1,FUNCOP_1:13;
+    let U2,U3; assume U2 = f.x & U3 = f.y;
+    hence thesis by A2;
+   end;
+   hence f is equal-signature by Def12;
+     for x st x in dom f holds f.x is Universal_Algebra by A1,FUNCOP_1:13;
+   hence f is Univ_Alg-yielding by Def10;
+ end;
+end;
+
+definition
+ let J be non empty set,
+     A be 1-sorted-yielding ManySortedSet of J,
+     j be Element of J;
+redefine func A.j -> 1-sorted;
+ coherence
+  proof
+     dom A = J by PBOOLE:def 3;
+   hence thesis by Def11;
+  end;
+end;
+
+definition
+ let J be non empty set,
+     A be Univ_Alg-yielding ManySortedSet of J,
+     j be Element of J;
+redefine func A.j -> Universal_Algebra;
+ coherence
+  proof
+     dom A = J by PBOOLE:def 3;
+   hence thesis by Def10;
+  end;
+end;
+
+definition
+ let J be set, A be 1-sorted-yielding ManySortedSet of J;
+func Carrier A -> ManySortedSet of J means :Def13:
+ for j be set st j in J
+  ex R being 1-sorted st R = A.j & it.j = the carrier of R;
+existence
+ proof
+defpred P[set,set] means
+ ex R being 1-sorted st R = A.$1 & $2 = the carrier of R;
+A1: for i be set st i in J ex j be set st P[i,j]
+ proof
+    let i be set;
+    assume
+A2:    i in J;
+     then reconsider J as non empty set;
+     reconsider B = A as 1-sorted-yielding ManySortedSet of J;
+     reconsider i' = i as Element of J by A2;
+    take j = the carrier of B.i', R = B.i';
+    thus R = A.i & j = the carrier of R;
+   end;
+   consider M being Function such that
+A3:  dom M = J and
+A4:  for i being set st i in J holds P[i,M.i] from NonUniqFuncEx(A1);
+   reconsider M as ManySortedSet of J by A3,PBOOLE:def 3;
+  take M; thus thesis by A4;
+ end;
+uniqueness
+ proof
+  let X,Y be ManySortedSet of J; assume that
+A5: for j be set st j in J
+    ex R being 1-sorted st R = A.j & X.j = the carrier of R and
+A6: for j be set st j in J
+    ex R being 1-sorted st R = A.j & Y.j = the carrier of R;
+    for i be set st i in J holds X.i = Y.i
+   proof
+    let i be set;
+    assume i in J;
+     then (ex R being 1-sorted st R = A.i & X.i = the carrier of R) &
+      ex R being 1-sorted st R = A.i & Y.i = the carrier of R by A5,A6;
+    hence thesis;
+   end;
+  hence thesis by PBOOLE:3;
+ end;
+end;
+
+definition
+ let J be non empty set,
+     A be Univ_Alg-yielding ManySortedSet of J;
+ cluster Carrier A -> non-empty;
+ coherence
+  proof
+   let i be set; assume
+A1:   i in J;
+    then consider R being 1-sorted such that
+A2:  R = A.i and
+A3:  (Carrier A).i = the carrier of R by Def13;
+      dom A = J by PBOOLE:def 3;
+    then R is Universal_Algebra by A1,A2,Def10;
+    hence thesis by A3,STRUCT_0:def 1;
+  end;
+end;
+
+definition
+ let J be non empty set,
+     A be equal-signature Univ_Alg-yielding ManySortedSet of J;
+func ComSign A -> FinSequence of NAT means :Def14:
+for j be Element of J holds it = signature (A.j);
+existence
+ proof
+  consider j be Element of J;
+  A1:dom A = J by PBOOLE:def 3;
+  reconsider U0 = A.j as Universal_Algebra;
+  take signature U0;
+  let j1 be Element of J;
+  thus thesis by A1,Def12;
+ end;
+uniqueness
+ proof
+  let X,Y be FinSequence of NAT; assume that
+  A2: for j be Element of J holds X = signature (A.j) and
+  A3: for j be Element of J holds Y = signature (A.j);
+  consider j be Element of J;
+  reconsider U0 = A.j as Universal_Algebra;
+    X = signature U0 & Y = signature U0 by A2,A3;
+  hence thesis;
+ end;
+end;
+
+definition let IT be Function;
+attr IT is Function-yielding means :Def15:
+for x st x in dom IT holds IT.x is Function;
+end;
+
+definition
+cluster Function-yielding Function;
+ existence
+  proof consider f being Function,I be set;
+   A1: dom (I --> f) = I by FUNCOP_1:19;
+   take F = I --> f;
+   let x;
+   assume x in dom F;
+   hence thesis by A1,FUNCOP_1:13;
+  end;
+end;
+
+definition
+ let I be set;
+ cluster Function-yielding ManySortedSet of I;
+ existence
+   proof consider f being Function;
+     A1: dom (I --> f) = I by FUNCOP_1:19;
+     then reconsider F = I --> f as ManySortedSet of I by PBOOLE:def 3;
+    take F; let x;
+     assume x in dom F;
+     hence thesis by A1,FUNCOP_1:13;
+   end;
+ end;
+
+definition
+ let I be set;
+mode ManySortedFunction of I is Function-yielding ManySortedSet of I;
+end;
+
+definition
+ let B be Function-yielding Function, j be set;
+  cluster B.j -> Function-like Relation-like;
+ coherence
+  proof
+   per cases;
+   suppose j in dom B;
+   hence thesis by Def15;
+   suppose not j in dom B;
+    hence thesis by FUNCT_1:def 4;
+  end;
+end;
+
+definition
+let J be non empty set,
+    B be non-empty ManySortedSet of J,
+    j be Element of J;
+ cluster B.j -> non empty;
+coherence by PBOOLE:def 16;
+end;
+
+definition
+  let F be Function-yielding Function, f be Function;
+  cluster F * f -> Function-yielding;
+  coherence
+    proof
+      thus F * f is Function-yielding
+        proof
+          let x be set;
+          assume
+            x in dom (F*f);
+          then (F*f).x = F.(f.x) by FUNCT_1:22;
+          hence (F*f).x is Function;
+        end;
+    end;
+end;
+
+definition
+ let J be non empty set,
+     B be non-empty ManySortedSet of J;
+cluster product B -> non empty;
+coherence;
+end;
+
+definition
+ let J be non empty set,
+     B be non-empty ManySortedSet of J;
+mode ManySortedOperation of B -> ManySortedFunction of J means :Def16:
+for j be Element of J holds it.j is homogeneous quasi_total non empty
+   PartFunc of (B.j)*,B.j;
+existence
+proof
+  defpred P[set,set] means $2 in B.$1;
+  A1: for x st x in J ex y st P[x,y]
+   proof
+    let x; assume x in J;
+    then B.x <> {} by PBOOLE:def 16;
+    hence thesis by XBOOLE_0:def 1;
+   end;
+  consider f be Function such that
+  A2: dom f = J & for x st x in J holds P[x,f.x] from NonUniqFuncEx(A1);
+  deffunc G(set) = {<*>(B.$1)} --> f.$1;
+  consider F being Function such that
+  A3: dom F = J & for x st x in J holds F.x = G(x) from Lambda;
+  reconsider F as ManySortedSet of J by A3,PBOOLE:def 3;
+    for x st x in dom F holds F.x is Function
+   proof
+    let x; assume x in dom F; then F.x = {<*>(B.x)} --> f.x by A3;
+    hence thesis;
+   end;
+  then reconsider F as ManySortedFunction of J by Def15;
+  take F;
+  let j be Element of J;
+  reconsider b = f.j as Element of (B.j) by A2;
+     F.j = {<*>(B.j)} --> b by A3;
+  hence thesis by UNIALG_1:2;
+ end;
+end;
+
+definition
+ let J be non empty set,
+     B be non-empty ManySortedSet of J,
+     O be ManySortedOperation of B,
+     j be Element of J;
+ redefine func O.j ->homogeneous quasi_total non empty PartFunc of (B.j)*,B.j;
+ coherence by Def16;
+end;
+
+definition let IT be Function;
+attr IT is equal-arity means :Def17:
+for x,y be set st x in dom IT & y in dom IT
+  for f,g be Function st IT.x = f & IT.y = g holds
+    for n,m be Nat
+    for X,Y be non empty set st
+      dom f = n-tuples_on X & dom g = m-tuples_on Y holds
+  for o1 be homogeneous quasi_total non empty PartFunc of X*,X,
+      o2 be homogeneous quasi_total non empty PartFunc of Y*,Y
+         st f = o1 & g = o2 holds arity o1 = arity o2;
+end;
+
+definition
+ let J be non empty set,
+     B be non-empty ManySortedSet of J;
+cluster equal-arity ManySortedOperation of B;
+ existence
+  proof
+  defpred P[set,set] means $2 in B.$1;
+  A1: for x st x in J ex y st P[x,y]
+   proof
+    let x; assume x in J;
+    then B.x <> {} by PBOOLE:def 16;
+    hence thesis by XBOOLE_0:def 1;
+   end;
+  consider f be Function such that
+  A2: dom f = J & for x st x in J holds P[x,f.x] from NonUniqFuncEx(A1);
+  deffunc G(set) = {<*>(B.$1)} --> f.$1;
+  consider F being Function such that
+  A3: dom F = J & for x st x in J holds F.x = G(x) from Lambda;
+  reconsider F as ManySortedSet of J by A3,PBOOLE:def 3;
+    for x st x in dom F holds F.x is Function
+   proof
+    let x; assume x in dom F; then F.x = {<*>(B.x)} --> f.x by A3;
+    hence thesis;
+   end;
+  then reconsider F as ManySortedFunction of J by Def15;
+    now let j be Element of J;
+   reconsider b = f.j as Element of (B.j) by A2;
+      F.j = {<*>(B.j)} --> b by A3;
+   hence F.j is homogeneous quasi_total non empty PartFunc of (B.j)*,B.j
+             by UNIALG_1:2;
+  end;
+ then reconsider F as ManySortedOperation of B by Def16;
+ take F;
+  for x,y be set st x in dom F & y in dom F
+  for f,g be Function st F.x = f & F.y = g holds
+    for n,m be Nat
+    for X,Y be non empty set
+      st dom f = n-tuples_on X & dom g = m-tuples_on Y holds
+  for o1 be homogeneous quasi_total non empty PartFunc of X*,X,
+      o2 be homogeneous quasi_total non empty PartFunc of Y*,Y
+         st f = o1 & g = o2 holds arity o1 = arity o2
+    proof
+     let x,y; assume A4: x in dom F & y in dom F;
+     then reconsider x1 = x, y1 = y as Element of J by A3;
+     let g,h be Function;
+     assume A5: F.x = g & F.y = h;
+     let n,m be Nat;
+     let X,Y be non empty set;
+     assume dom g = n-tuples_on X & dom h = m-tuples_on Y;
+     let o1 be homogeneous quasi_total non empty PartFunc of X*,X,
+         o2 be homogeneous quasi_total non empty PartFunc of Y*,Y;
+     assume g = o1 & h = o2;
+     then A6: o1 = {<*>(B.x)} --> f.x & o2 = {<*>(B.y)} --> f.y by A3,A4,A5;
+     reconsider fx = f.x1 as Element of B.x1 by A2;
+     reconsider fy = f.y1 as Element of B.y1 by A2;
+     reconsider o1x = {<*>(B.x1)} --> fx as
+     homogeneous quasi_total non empty PartFunc of (B.x1)*,B.x1 by UNIALG_1:2;
+     reconsider o2y = {<*>(B.y1)} --> fy as
+     homogeneous quasi_total non empty PartFunc of (B.y1)*,B.y1 by UNIALG_1:2;
+     A7: dom o1x = {{}(B.x1)} & dom o2y = {{}(B.y1)} by FUNCOP_1:19;
+     consider p1 be set such that
+     A8: p1 in dom o1 by XBOOLE_0:def 1;
+       dom o1 c= X* by RELSET_1:12;
+     then reconsider p1 as Element of X* by A8;
+       p1 = <*>(B.x1) by A6,A7,A8,TARSKI:def 1;
+     then len p1 = 0 by FINSEQ_1:32;
+     then A9: arity o1 = 0 by A8,UNIALG_1:def 10;
+     consider p2 be set such that
+     A10: p2 in dom o2 by XBOOLE_0:def 1;
+       dom o2 c= Y* by RELSET_1:12;
+     then reconsider p2 as Element of Y* by A10;
+       p2 = <*>(B.y1) by A6,A7,A10,TARSKI:def 1;
+     then len p2 = 0 by FINSEQ_1:32;
+     hence thesis by A9,A10,UNIALG_1:def 10;
+    end;
+   hence F is equal-arity by Def17;
+  end;
+end;
+
+theorem Th12:
+for J be non empty set,
+    B be non-empty ManySortedSet of J,
+    O be ManySortedOperation of B holds
+ O is equal-arity iff for i,j be Element of J holds arity (O.i) = arity (O.j)
+  proof
+   let J be non empty set,
+       B be non-empty ManySortedSet of J,
+       O be ManySortedOperation of B;
+   thus O is equal-arity implies for i,j be Element of J holds
+                 arity (O.i) = arity (O.j)
+   proof
+    assume A1: O is equal-arity;
+    let i,j be Element of J;
+A2:    dom O = J by PBOOLE:def 3;
+      dom (O.i) = arity(O.i)-tuples_on (B.i) &
+     dom (O.j) = arity(O.j)-tuples_on (B.j) by UNIALG_2:2;
+    hence thesis by A1,A2,Def17;
+   end;
+   assume
+   A3: for i,j be Element of J holds arity (O.i) = arity (O.j);
+   let x,y be set; assume
+   A4: x in dom O & y in dom O;
+   let f,g be Function; assume
+   A5: O.x = f & O.y = g;
+   let n,m be Nat;
+   let X,Y be non empty set; assume
+   A6: dom f = n-tuples_on X & dom g = m-tuples_on Y;
+   let o1 be homogeneous quasi_total non empty PartFunc of X*,X,
+       o2 be homogeneous quasi_total non empty PartFunc of Y*,Y; assume
+   A7: f = o1 & g = o2;
+   reconsider x1 = x, y1 = y as Element of J by A4,PBOOLE:def 3;
+      arity (O.x1) = arity (O.y1) by A3;
+   then dom f = (arity (O.x1))-tuples_on (B.x1) &
+    dom g = (arity (O.x1))-tuples_on (B.y1) by A5,UNIALG_2:2;
+   then A8: n = arity (O.x1) & m = arity (O.x1) by A6,Th1;
+   consider p be Element of n-tuples_on X;
+   A9: arity o1 = len p by A6,A7,UNIALG_1:def 10
+   .= n by FINSEQ_2:109;
+   consider q be Element of m-tuples_on Y;
+     arity o2 = len q by A6,A7,UNIALG_1:def 10
+   .= m by FINSEQ_2:109;
+   hence arity o1 = arity o2 by A8,A9;
+  end;
+
+definition
+let F be Function-yielding Function,
+    f be Function;
+func F..f -> Function means :Def18:
+dom it = dom F &
+for x be set st x in dom F holds it.x = (F.x).(f.x);
+existence
+proof
+ defpred P[set,set] means $2 = (F.$1).(f.$1);
+ set I = dom F;
+A1: for i be set st i in I ex y be set st P[i,y];
+ consider F be Function such that
+ A2: dom F = I & for i be set st i in I holds P[i,F.i]
+                                          from NonUniqFuncEx(A1);
+ take F;
+ thus thesis by A2;
+ end;
+ uniqueness
+  proof
+   let m,n be Function; assume that
+   A3: dom m = dom F &
+   for x be set st x in dom F holds m.x = (F.x).(f.x) and
+   A4: dom n = dom F &
+   for x be set st x in dom F holds n.x = (F.x).(f.x);
+     for x be set st x in dom m holds m.x = n.x
+    proof
+     let x; assume A5: x in dom m;
+     consider g be set such that A6: g = F.x;
+     reconsider g as Function by A6;
+       m.x = g.(f.x) & n.x = g.(f.x) by A3,A4,A5,A6;
+     hence thesis;
+    end;
+   hence thesis by A3,A4,FUNCT_1:9;
+  end;
+end;
+
+definition
+ let I be set,
+     f be ManySortedFunction of I,
+     x be ManySortedSet of I;
+redefine func f..x -> ManySortedSet of I means :Def19:
+for i be set st i in I holds for g be Function st g = f.i holds it.i = g.(x.i);
+coherence
+ proof dom(f..x) = dom f by Def18 .= I by PBOOLE:def 3;
+  hence thesis by PBOOLE:def 3;
+ end;
+compatibility
+ proof let M be ManySortedSet of I;
+  hereby assume M = f..x;
+    then A1:  dom M = dom f &
+    for i be set st i in dom f holds M.i = (f.i).(x.i) by Def18;
+      dom M = I by PBOOLE:def 3;
+   hence for i be set st i in I holds for g be Function st g = f.i
+    holds M.i = g.(x.i) by A1;
+  end;
+  assume
+A2: for i be set st i in I holds for g be Function st g = f.i
+       holds M.i = g.(x.i);
+A3: dom M = I by PBOOLE:def 3;
+A4: dom f = I by PBOOLE:def 3;
+   then for i be set st i in dom f holds M.i = (f.i).(x.i) by A2;
+  hence M = f..x by A3,A4,Def18;
+ end;
+end;
+
+definition
+ let J be non empty set,
+     B be non-empty ManySortedSet of J,
+     p be FinSequence of product B;
+ redefine func uncurry p -> ManySortedSet of [:dom p, J:];
+ coherence
+  proof
+     now
+   consider j be Element of J;
+     dom B = J by PBOOLE:def 3;
+   then B.j in rng B by FUNCT_1:def 5;
+   then B.j c= union rng B by ZFMISC_1:92;
+   then reconsider S = union rng B as non empty set by XBOOLE_1:3;
+     rng p c= Funcs(J,S)
+    proof let x;
+     assume A1: x in rng p;
+       rng p c= product B by FINSEQ_1:def 4;
+     then consider f be Function such that
+     A2: x = f & dom f = dom B & for y st y in dom B holds f.y in B.y
+                                                     by A1,CARD_3:def 5;
+     A3: dom B = J by PBOOLE:def 3;
+       rng f c= S
+      proof
+       let z; assume z in rng f;
+       then consider y such that
+       A4: y in dom f & z = f.y by FUNCT_1:def 5;
+       A5: z in B.y by A2,A4;
+         B.y in rng B by A2,A4,FUNCT_1:def 5;
+       then B.y c= union rng B by ZFMISC_1:92;
+       hence thesis by A5;
+      end;
+     hence thesis by A2,A3,FUNCT_2:def 2;
+    end;
+   then dom (uncurry p) = [:dom p,J:] by FUNCT_5:33;
+   hence thesis by PBOOLE:def 3;
+   end;
+  hence thesis;
+ end;
+end;
+
+definition
+ let I,J be set,
+     X be ManySortedSet of [:I,J:];
+ redefine func ~X -> ManySortedSet of [:J,I:];
+ coherence
+  proof
+     dom X = [:I,J:] by PBOOLE:def 3;
+   then dom ~X = [:J,I:] by FUNCT_4:47;
+   hence thesis by PBOOLE:def 3;
+  end;
+end;
+
+definition
+ let X be set,
+     Y be non empty set,
+     f be ManySortedSet of [:X,Y:];
+ redefine func curry f -> ManySortedSet of X;
+ coherence
+  proof
+   set a = curry f;
+   A1: dom f = [:X,Y:] by PBOOLE:def 3;
+     dom a = proj1 dom f by FUNCT_5:def 3;
+   then dom a = X by A1,FUNCT_5:11;
+   hence thesis by PBOOLE:def 3;
+  end;
+end;
+
+definition
+ let J be non empty set,
+     B be non-empty ManySortedSet of J,
+     O be equal-arity ManySortedOperation of B;
+func ComAr(O) -> Nat means :Def20:
+ for j be Element of J holds it = arity (O.j);
+ existence
+  proof
+   consider i be Element of J;
+   take arity (O.i);
+   let j be Element of J;
+   thus thesis by Th12;
+  end;
+ uniqueness
+  proof
+   let n,m be Nat; assume
+   A1: (for j be Element of J holds n = arity (O.j)) &
+       for j be Element of J holds m = arity (O.j);
+    consider j be Element of J;
+      n = arity (O.j) & m = arity (O.j) by A1;
+    hence thesis;
+  end;
+end;
+
+definition
+ let I be set,
+     A be ManySortedSet of I;
+func EmptySeq(A) -> ManySortedSet of I means :Def21:
+for i be set st i in I holds it.i = {}(A.i);
+ existence
+  proof
+   deffunc F(set) = {}(A.$1);
+   consider f being Function such that
+   A1: dom f = I & for x st x in I holds f.x = F(x) from Lambda;
+   reconsider f as ManySortedSet of I by A1,PBOOLE:def 3;
+   take f;
+   thus thesis by A1;
+  end;
+ uniqueness
+  proof
+   let X,Y be ManySortedSet of I; assume
+   A2: (for i be set st i in I holds X.i = {}(A.i)) &
+       for i be set st i in I holds Y.i = {}(A.i);
+     for i be set st i in I holds X.i = Y.i
+    proof
+     let i be set; assume i in I;
+     then X.i = {}(A.i) & Y.i = {}(A.i) by A2;
+     hence thesis;
+    end;
+   hence thesis by PBOOLE:3;
+  end;
+end;
+
+definition
+ let J be non empty set,
+     B be non-empty ManySortedSet of J,
+     O be equal-arity ManySortedOperation of B;
+func [[: O :]] -> homogeneous quasi_total non empty
+              PartFunc of (product B)*,(product B) means
+  dom it = (ComAr O)-tuples_on (product B) &
+for p being Element of (product B)* st p in dom it holds
+ ( dom p = {} implies it.p = O..(EmptySeq B) ) &
+ ( dom p <> {} implies
+     for Z be non empty set, w be ManySortedSet of [:J,Z:]
+        st Z = dom p & w = ~uncurry p holds
+   it.p = O..(curry w));
+existence
+ proof
+  set pr = product B,
+      ca = ComAr O,
+      ct = ca-tuples_on pr;
+  defpred P[set,set] means
+  for p being Element of pr* st p = $1 holds
+   ( dom p = {} implies $2 = O..(EmptySeq B) ) &
+   ( dom p <> {} implies
+   for Z be non empty set, w be ManySortedSet of [:J,Z:]
+   st Z = dom p & w = ~uncurry p holds $2 = O..(curry w));
+  set aa = {q where q is Element of pr* : len q = ca};
+  A1: ct = aa by FINSEQ_2:def 4;
+  A2: for x st x in ct ex y st y in pr & P[x,y]
+   proof
+    let x; assume x in ct;
+    then consider w be Element of pr* such that
+    A3: x = w & len w = ca by A1;
+      now per cases;
+     case A4: dom w = {};
+      take y = O..(EmptySeq B);
+      A5: dom (O..(EmptySeq B)) = J by PBOOLE:def 3
+      .= dom B by PBOOLE:def 3;
+        for z st z in dom B holds (O..(EmptySeq B)).z in B.z
+       proof
+        let z; assume z in dom B;
+        then reconsider j = z as Element of J by PBOOLE:def 3;
+        A6: (O..(EmptySeq B)).z = (O.j).((EmptySeq B).j) by Def19
+        .= (O.j).({}(B.j)) by Def21;
+          w = {} by A4,FINSEQ_1:26;
+        then len w = 0 by FINSEQ_1:25;
+         then arity (O.j) = 0 by A3,Def20;
+        then dom (O.j) = 0-tuples_on (B.j) by UNIALG_2:2
+        .= {<*>(B.j)} by FINSEQ_2:112;
+        then {}(B.j) in dom (O.j) by TARSKI:def 1;
+        then (O.j).({}(B.j)) in rng (O.j) & rng (O.j) c= B.j
+                                          by FUNCT_1:def 5,RELSET_1:12;
+        hence thesis by A6;
+       end;
+      hence y in pr by A5,CARD_3:def 5;
+      let p be Element of pr*; assume p = x;
+      hence (dom p = {} implies y = O..(EmptySeq B)) &
+      (dom p <> {} implies
+      for Z be non empty set, w be ManySortedSet of [:J,Z:]
+      st Z = dom p & w = ~uncurry p holds y = O..(curry w)) by A3,A4;
+     case dom w <> {};
+      then reconsider Z = dom w as non empty set;
+      reconsider p = ~uncurry w as ManySortedSet of [:J,Z:];
+      take y = O..(curry p);
+      A7: dom (O..(curry p)) = J by PBOOLE:def 3
+      .= dom B by PBOOLE:def 3;
+        for z st z in dom B holds (O..(curry p)).z in B.z
+       proof
+        let z; assume z in dom B;
+        then reconsider j = z as Element of J by PBOOLE:def 3;
+        A8: (O..(curry p)).z = (O.j).((curry p).j) by Def19;
+        A9: dom p = [:J,Z:] by PBOOLE:def 3;
+        then A10: proj1 dom p = J & proj2 dom p = Z by FUNCT_5:11;
+        then consider g be Function such that
+        A11: (curry p).j = g & dom g = proj2 (dom p /\ [:{j},proj2 dom p:]) &
+            for y st y in dom g holds g.y = p.[j,y] by FUNCT_5:def 3;
+        A12: dom g = proj2 [:J /\ {j},Z /\ Z:] by A9,A10,A11,ZFMISC_1:123
+        .= proj2 [:{j},Z:] by ZFMISC_1:52
+        .= dom w by FUNCT_5:11
+        .= Seg len w by FINSEQ_1:def 3;
+        then reconsider g as FinSequence by FINSEQ_1:def 2;
+          rng g c= B.j
+         proof
+          let y; assume y in rng g;
+          then consider x such that
+          A13: x in dom g & g.x = y by FUNCT_1:def 5;
+          A14: y = (~uncurry w).[j,x] by A11,A13;
+          A15: dom (uncurry w) = [:dom w,J:] by PBOOLE:def 3;
+            dom g = dom w by A12,FINSEQ_1:def 3;
+          then A16: [x,j] in dom (uncurry w) by A13,A15,ZFMISC_1:106;
+          then A17: y = (uncurry w).[x,j] by A14,FUNCT_4:def 2;
+          consider a be set,f be Function, b be set such that
+          A18: [x,j] = [a,b] & a in dom w & f = w.a & b in dom f
+                                                      by A16,FUNCT_5:def 4;
+          A19: x = a & j = b by A18,ZFMISC_1:33;
+          A20: rng w c= pr by FINSEQ_1:def 4;
+            w.a in rng w by A18,FUNCT_1:def 5;
+          then A21: dom f = dom B & for e be set st e in dom B holds f.e in B.e
+                                        by A18,A20,CARD_3:18;
+            [a,b]`1 = a & [a,b]`2 = j by A18,MCART_1:7;
+          then y = f.j by A16,A17,A18,FUNCT_5:def 4;
+          hence y in B.j by A18,A19,A21;
+         end;
+        then reconsider g as FinSequence of B.j by FINSEQ_1:def 4;
+        reconsider g as Element of (B.j)* by FINSEQ_1:def 11;
+        A22: len g = len w by A12,FINSEQ_1:def 3;
+          arity (O.j) = ca by Def20;
+        then dom (O.j) = ca-tuples_on (B.j) by UNIALG_2:2
+        .= {s where s is Element of (B.j)*
+ : len s = ca} by FINSEQ_2:def 4;
+        then g in dom (O.j) by A3,A22;
+        then (O.j).g in rng (O.j) & rng (O.j) c= B.j
+                                          by FUNCT_1:def 5,RELSET_1:12;
+        hence thesis by A8,A11;
+       end;
+      hence y in pr by A7,CARD_3:def 5;
+      let l be Element of pr*; assume l = x;
+      hence (dom l = {} implies y = O..(EmptySeq B)) &
+      (dom l <> {} implies
+      for Z be non empty set, w be ManySortedSet of [:J,Z:]
+      st Z = dom l & w = ~uncurry l holds y = O..(curry w)) by A3;
+    end;
+    hence thesis;
+   end;
+  consider f being Function such that
+  A23: dom f = ct & rng f c= pr & for x st x in ct holds P[x,f.x] from
+                                                 NonUniqBoundFuncEx(A2);
+    ct in {n-tuples_on pr : not contradiction};
+  then ct c= union {m-tuples_on pr : not contradiction} by ZFMISC_1:92;
+  then dom f c= pr* by A23,FINSEQ_2:128;
+  then reconsider f as PartFunc of pr*,pr by A23,RELSET_1:11;
+  A24: f is homogeneous
+   proof
+    let x,y be FinSequence of pr; assume
+    A25:x in dom f & y in dom f;
+    reconsider x1 = x, y1 = y as Element of pr* by FINSEQ_1:def 11;
+      (ex w be Element of pr* st x1 = w & len w = ca) &
+    ex w be Element of pr* st y1 = w & len w = ca by A1,A23,A25;
+    hence thesis;
+   end;
+    f is quasi_total
+   proof
+    let x,y be FinSequence of pr; assume
+    A26:len x = len y & x in dom f;
+    reconsider x1 = x, y1 = y as Element of pr* by FINSEQ_1:def 11;
+      ex w be Element of pr* st x1 = w & len w = ca by A1,A23,A26;
+    then y1 in aa by A26;
+    hence thesis by A23,FINSEQ_2:def 4;
+   end;
+  then reconsider f as homogeneous quasi_total non empty PartFunc of pr*,pr by
+A23,A24,UNIALG_1:1;
+  take f;
+  thus dom f = ct by A23;
+  let p be Element of pr*; assume p in dom f;
+  hence thesis by A23;
+ end;
+uniqueness
+ proof
+  set pr = product B,
+      ca = ComAr O;
+  let f,g be homogeneous quasi_total non empty PartFunc of pr*,pr; assume that
+  A27: dom f = ca-tuples_on pr &
+      for p being Element of pr* st p in dom f holds
+      (dom p = {} implies f.p = O..(EmptySeq B) ) &
+      (dom p <> {} implies
+      for Z be non empty set, w be ManySortedSet of [:J,Z:]
+        st Z = dom p & w = ~uncurry p holds
+      f.p = O..(curry w)) and
+  A28: dom g = ca-tuples_on pr &
+      for p being Element of pr* st p in dom g holds
+      (dom p = {} implies g.p = O..(EmptySeq B) ) &
+      (dom p <> {} implies
+      for Z be non empty set, w be ManySortedSet of [:J,Z:]
+        st Z = dom p & w = ~uncurry p holds
+      g.p = O..(curry w));
+        for x st x in ca-tuples_on pr holds f.x = g.x
+       proof
+        let x; assume A29: x in ca-tuples_on pr;
+        then x in
+ { s where s is Element of pr* : len s = ca} by FINSEQ_2:def 4;
+        then consider s be Element of pr* such that
+        A30: x = s & len s = ca;
+          now per cases;
+         case dom s = {};
+          then f.s = O..(EmptySeq B) & g.s = O..(EmptySeq B) by A27,A28,A29,A30
+;
+          hence thesis by A30;
+         case dom s <> {};
+          then reconsider Z = dom s as non empty set;
+          reconsider w = ~uncurry s as ManySortedSet of [:J,Z:];
+            f.s = O..(curry w) & g.s = O..(curry w) by A27,A28,A29,A30;
+          hence thesis by A30;
+        end;
+        hence thesis;
+       end;
+      hence thesis by A27,A28,FUNCT_1:9;
+ end;
+end;
+
+definition
+ let J be non empty set,
+     A be equal-signature Univ_Alg-yielding ManySortedSet of J,
+     n be natural number;
+ assume A1: n in dom (ComSign A);
+ func ProdOp(A,n) -> equal-arity ManySortedOperation of (Carrier A) means
+   for j be Element of J holds
+  for o be operation of A.j st (the charact of A.j).n = o holds it.j = o;
+ existence
+  proof
+   defpred P[set,set] means
+   for j be Element of J st $1 = j holds
+   for o be operation of A.j st (the charact of A.j).n = o holds $2 = o;
+   A2: for x st x in J ex y st P[x,y]
+    proof
+     let x; assume x in J;
+     then reconsider x1 = x as Element of J;
+       n in dom (signature (A.x1)) by A1,Def14;
+     then n in Seg len (signature (A.x1)) by FINSEQ_1:def 3;
+     then n in Seg len (the charact of(A.x1)) by UNIALG_1:def 11;
+     then n in dom (the charact of(A.x1)) by FINSEQ_1:def 3;
+     then reconsider o = (the charact of A.x1).n as operation of A.x1 by
+UNIALG_2:6;
+     take o;
+     let j be Element of J; assume A3: x = j;
+     let o1 be operation of A.j; assume (the charact of A.j).n = o1;
+     hence thesis by A3;
+    end;
+   consider f be Function such that
+   A4: dom f = J & for x st x in J holds P[x,f.x] from NonUniqFuncEx(A2);
+   reconsider f as ManySortedSet of J by A4,PBOOLE:def 3;
+     for x st x in dom f holds f.x is Function
+    proof
+     let x; assume x in dom f;
+     then reconsider x1 = x as Element of J by A4;
+       n in dom (signature (A.x1)) by A1,Def14;
+     then n in Seg len (signature (A.x1)) by FINSEQ_1:def 3;
+     then n in Seg len (the charact of(A.x1)) by UNIALG_1:def 11;
+     then n in dom (the charact of(A.x1)) by FINSEQ_1:def 3;
+     then reconsider o = (the charact of A.x1).n as operation of A.x1 by
+UNIALG_2:6;
+       f.x = o by A4;
+     hence thesis;
+    end;
+   then reconsider f as ManySortedFunction of J by Def15;
+     for j be Element of J holds f.j is homogeneous quasi_total non empty
+     PartFunc of ((Carrier A).j)*,(Carrier A).j
+     proof
+      let j be Element of J;
+        n in dom (signature (A.j)) by A1,Def14;
+      then n in Seg len (signature (A.j)) by FINSEQ_1:def 3;
+      then n in Seg len (the charact of(A.j)) by UNIALG_1:def 11;
+      then n in dom (the charact of(A.j)) by FINSEQ_1:def 3;
+      then reconsider o = (the charact of A.j).n as operation of A.j by
+UNIALG_2:6;
+        ex R being 1-sorted st R = A.j & (Carrier A).j = the carrier of R
+          by Def13;
+
+      then f.j = o & (Carrier A).j = the carrier of A.j by A4;
+      hence thesis;
+     end;
+   then reconsider f as ManySortedOperation of (Carrier A) by Def16;
+     for i,j be Element of J holds arity (f.i) = arity (f.j)
+    proof
+     let i,j be Element of J;
+       dom A = J by PBOOLE:def 3;
+     then A5: signature A.i = signature A.j by Def12;
+     A6: n in dom (signature (A.j)) by A1,Def14;
+     then A7: n in Seg len (signature (A.j)) by FINSEQ_1:def 3;
+     then n in Seg len (the charact of(A.j)) by UNIALG_1:def 11;
+     then n in dom (the charact of(A.j)) by FINSEQ_1:def 3;
+     then reconsider o = (the charact of A.j).n as operation of A.j by UNIALG_2
+:6;
+     A8: f.j = o by A4;
+     A9: (signature A.j).n = arity (o) by A6,UNIALG_1:def 11;
+       dom (f.j) = (arity (f.j))-tuples_on ((Carrier A).j) &
+     dom o = (arity o)-tuples_on (the carrier of (A.j)) by UNIALG_2:2;
+     then A10: arity (f.j) = arity o by A8,Th1;
+       n in Seg len (the charact of(A.i)) by A5,A7,UNIALG_1:def 11;
+     then n in dom (the charact of(A.i)) by FINSEQ_1:def 3;
+     then reconsider o1 = (the charact of A.i).n as operation of A.i by
+UNIALG_2:6;
+     A11: f.i = o1 by A4;
+     A12: (signature A.i).n = arity (o1) by A5,A6,UNIALG_1:def 11;
+       dom (f.i) = (arity (f.i))-tuples_on ((Carrier A).i) &
+     dom o1 = (arity o1)-tuples_on (the carrier of A.i) by UNIALG_2:2;
+     hence thesis by A5,A9,A10,A11,A12,Th1;
+    end;
+   then reconsider f as equal-arity ManySortedOperation of (Carrier A) by Th12;
+   take f;
+   let j be Element of J;
+   let o be operation of A.j; assume
+      (the charact of A.j).n = o;
+    hence thesis by A4;
+  end;
+ uniqueness
+  proof
+   let O1,O2 be equal-arity ManySortedOperation of (Carrier A); assume
+   A13: (for j be Element of J holds
+       for o be operation of A.j st (the charact of A.j).n = o holds O1.j = o)
+       & for j be Element of J holds
+       for o be operation of A.j st (the charact of A.j).n = o holds O2.j = o;
+     for x st x in J holds O1.x = O2.x
+    proof
+     let x; assume x in J;
+     then reconsider x1 = x as Element of J;
+       n in dom (signature (A.x1)) by A1,Def14;
+     then n in Seg len (signature (A.x1)) by FINSEQ_1:def 3;
+     then n in Seg len (the charact of(A.x1)) by UNIALG_1:def 11;
+     then n in dom (the charact of(A.x1)) by FINSEQ_1:def 3;
+     then reconsider o = (the charact of A.x1).n as operation of A.x1 by
+UNIALG_2:6;
+       O1.x1 = o & O2.x1 = o by A13;
+     hence thesis;
+    end;
+   hence thesis by PBOOLE:3;
+  end;
+end;
+
+definition
+ let J be non empty set,
+     A be equal-signature Univ_Alg-yielding ManySortedSet of J;
+func ProdOpSeq(A) -> PFuncFinSequence of product Carrier A means :Def24:
+ len it = len (ComSign A) &
+ for n st n in dom it holds it.n = [[: ProdOp(A,n) :]];
+existence
+ proof
+  defpred P[Nat,set] means $2 = [[: ProdOp(A,$1) :]];
+  set f = ComSign A;
+ A1: for k st k in Seg len f ex x being Element of
+        PFuncs((product Carrier A)*,product Carrier A) st P[k,x]
+ proof
+  let k; assume k in Seg len f;
+  reconsider a = [[: ProdOp(A,k) :]] as Element of
+             PFuncs((product Carrier A)*,product Carrier A) by PARTFUN1:119;
+  take a;
+  thus thesis;
+ end;
+  consider p being FinSequence of
+  PFuncs((product Carrier A)*,product Carrier A) such that
+A2: dom p = Seg len f & for k st k in Seg len f holds P[k,p.k] from SeqDEx(A1);
+   reconsider p as PFuncFinSequence of product Carrier A;
+  take p;
+  thus len p = len f by A2,FINSEQ_1:def 3;
+  let n; assume n in dom p;
+  hence thesis by A2;
+ end;
+uniqueness
+ proof
+  let x,y be PFuncFinSequence of product Carrier A;
+  assume
+A3:(len x = len (ComSign A) & for n st n in dom x holds x.n = [[: ProdOp(A,n)
+:]])
+  & len y = len (ComSign A) & for n st n in dom y holds y.n = [[: ProdOp(A,n)
+:]];
+     now let n; assume n in Seg len (ComSign A);
+    then n in dom (ComSign A) & n in dom x & n in dom y
+                                                    by A3,FINSEQ_1:def 3;
+    then x.n = [[: ProdOp(A,n) :]] & y.n = [[: ProdOp(A,n) :]] by A3;
+    hence x.n = y.n;
+   end;
+   hence thesis by A3,FINSEQ_2:10;
+ end;
+end;
+
+definition
+ let J be non empty set,
+     A be equal-signature Univ_Alg-yielding ManySortedSet of J;
+func ProdUnivAlg A -> strict Universal_Algebra equals
+   UAStr (# product Carrier A, ProdOpSeq(A) #);
+coherence
+ proof set ua = UAStr (# product Carrier A, ProdOpSeq(A) #),
+           pr = product Carrier A;
+    for n be Nat,h be PartFunc of pr*,pr st n in dom (the charact of ua) &
+   h = (the charact of ua).n holds h is quasi_total
+   proof
+    let n be Nat,h be PartFunc of pr*,pr; assume
+    A1: n in dom (the charact of ua) & (the charact of ua).n = h;
+    then (the charact of ua).n = [[: ProdOp(A,n) :]] by Def24;
+    hence h is quasi_total by A1;
+   end;
+then A2: the charact of(ua) is quasi_total by UNIALG_1:def 5;
+    for n be Nat,h be PartFunc of pr*,pr st n in dom (the charact of ua) &
+   h = (the charact of ua).n holds h is homogeneous
+   proof
+    let n be Nat,h be PartFunc of pr*,pr; assume
+    A3: n in dom (the charact of ua) & (the charact of ua).n = h;
+    then (the charact of ua).n = [[: ProdOp(A,n) :]] by Def24;
+    hence h is homogeneous by A3;
+   end;
+then A4: the charact of(ua) is homogeneous by UNIALG_1:def 4;
+    for n be set st n in dom (the charact of ua)
+   holds (the charact of ua).n is non empty
+   proof
+    let n be set; assume
+    A5: n in dom (the charact of ua);
+    then reconsider n' = n as Nat;
+      (the charact of ua).n = [[: ProdOp(A,n') :]] by A5,Def24;
+    hence (the charact of ua).n is non empty;
+   end;
+then A6: the charact of(ua) is non-empty by UNIALG_1:def 6;
+   consider j be Element of J;
+   A7: len the charact of(A.j) <> 0 by FINSEQ_1:25;
+     len the charact of(ua) = len ComSign A by Def24
+   .= len(signature A.j) by Def14
+   .= len the charact of(A.j) by UNIALG_1:def 11;
+   then the charact of(ua) <> {} by A7,FINSEQ_1:25;
+   hence thesis by A2,A4,A6,UNIALG_1:def 7,def 8,def 9;
+ end;
+end;
+

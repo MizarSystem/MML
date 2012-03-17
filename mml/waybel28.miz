@@ -1,0 +1,1183 @@
+:: Lim-inf Convergence
+::  by Bart{\l}omiej Skorulski
+::
+:: Received January 6, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary BHSP_3, WAYBEL_0, ORDINAL2, YELLOW_0, FUNCT_1, RELAT_1, LATTICES,
+      YELLOW_2, LATTICE3, YELLOW_6, ORDERS_1, PRE_TOPC, RELAT_2, QUANTAL1,
+      SUBSET_1, SEQM_3, SETFAM_1, WAYBEL11, CLASSES1, CAT_1, PROB_1, YELLOW_9,
+      BOOLE, WAYBEL28;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, RELAT_1, RELSET_1,
+      FUNCT_1, FUNCT_2, CLASSES1, SEQM_3, GRCAT_1, PRE_TOPC, ORDERS_1,
+      LATTICE3, YELLOW_0, WAYBEL_0, YELLOW_2, WAYBEL_3, YELLOW_6, YELLOW_9,
+      WAYBEL_9, WAYBEL11, WAYBEL17;
+ constructors SEQM_3, GRCAT_1, TOPS_2, CLASSES1, YELLOW_2, WAYBEL_3, YELLOW_9,
+      WAYBEL17, MEMBERED, PARTFUN1;
+ clusters STRUCT_0, SUBSET_1, RELSET_1, LATTICE3, WAYBEL_0, WAYBEL_3, YELLOW_6,
+      YELLOW_9, WAYBEL11, WAYBEL17, CLASSES2, MEMBERED, ZFMISC_1, PARTFUN1;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, XBOOLE_0, RELAT_1, YELLOW_6, WAYBEL11;
+ theorems ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_2, SEQM_3, GRCAT_1, PRE_TOPC,
+      TOPS_1, ORDERS_1, CLASSES1, WAYBEL_0, YELLOW_0, LATTICE3, YELLOW_2,
+      YELLOW_4, YELLOW_6, WAYBEL_8, YELLOW_9, WAYBEL_9, WAYBEL11, YELLOW12,
+      WAYBEL17, WAYBEL21, XBOOLE_1;
+ schemes RELSET_1, COMPTS_1;
+
+begin
+
+theorem Th1:
+for L being complete LATTICE, N being net of L holds
+  inf N <= lim_inf N
+proof
+  let L be complete LATTICE, N be net of L;
+  consider j being Element of N;
+A1:
+  ex_inf_of {N.i where i is Element of N:i >= j},L &
+    ex_inf_of rng the mapping of N,L by YELLOW_0:17;
+    {N.i where i is Element of N:i >= j} c= rng the mapping of N
+  proof
+    let x be set;
+    assume x in {N.i where i is Element of N:i >= j};
+    then consider i being Element of N such that
+A2:   x = N.i and
+        i >= j;
+A3: x = (the mapping of N).i by A2,WAYBEL_0:def 8;
+      dom(the mapping of N) = the carrier of N by FUNCT_2:def 1;
+    hence x in rng(the mapping of N) by A3,FUNCT_1:def 5;
+  end;
+  then A4: "/\"({N.i where i is Element of N:i >= j},L) >=
+      "/\"(rng the mapping of N,L) by A1,YELLOW_0:35;
+  set x = "/\"({N.i where i is Element of N:i >= j},L);
+    x >= Inf(the mapping of N) by A4,YELLOW_2:def 6;
+  then A5: inf N <= x by WAYBEL_9:def 2;
+  set X = {"/\"({N.i where i is Element of N :i >= j1},L)
+    where j1 is Element of N: not contradiction};
+    X c= the carrier of L
+  proof
+    let x be set;
+    assume x in X;
+    then consider j1 being Element of N such that
+A6:   x = "/\"({N.i where i is Element of N :i >= j1},L);
+    thus x in the carrier of L by A6;
+  end;
+  then reconsider X as Subset of L;
+  reconsider X as Subset of L;
+A7:
+  x in X;
+    ex_sup_of X,L by YELLOW_0:17;
+  then X is_<=_than "\/"(X,L) by YELLOW_0:def 9;
+  then x <= "\/"(X,L) by A7,LATTICE3:def 9;
+  then inf N <= "\/"(X,L) by A5,YELLOW_0:def 2;
+  hence inf N <= lim_inf N by WAYBEL11:def 6;
+end;
+
+theorem ::3.1 Proposition (1)=>(2)
+  for L being complete LATTICE, N being net of L, x being Element of L holds
+  (for M being subnet of N holds x = lim_inf M) implies
+    (x=lim_inf N & for M being subnet of N holds x >= inf M)
+proof
+  let L be complete LATTICE, N be net of L, x be Element of L;
+  assume
+A1:  for M being subnet of N holds x = lim_inf M;
+    N is subnet of N by YELLOW_6:23;
+  hence x=lim_inf N by A1;
+  let M be subnet of N;
+    x = lim_inf M by A1;
+  hence x >= inf M by Th1;
+end;
+
+theorem ::3.1 Proposition (1b)=>(2b)
+Th3:
+for L being complete LATTICE, N being net of L, x being Element of L
+    st N in NetUniv L
+holds
+  (for M being subnet of N st M in NetUniv L holds x = lim_inf M) implies
+    (x=lim_inf N & for M being subnet of N st M in NetUniv L holds x >= inf M)
+proof
+  let L be complete LATTICE, N be net of L, x be Element of L;
+  assume
+A1:
+  N in NetUniv L;
+  assume
+A2:  for M being subnet of N st M in NetUniv L holds x = lim_inf M;
+    N is subnet of N by YELLOW_6:23;
+  hence x=lim_inf N by A1,A2;
+  let M be subnet of N;
+  assume
+      M in NetUniv L;
+  then x = lim_inf M by A2;
+  hence x >= inf M by Th1;
+end;
+
+definition
+  let N be non empty RelStr;
+  let f be map of N,N;
+  attr f is greater_or_equal_to_id means :Def1:
+    for j being Element of N holds j <= f.j;
+end;
+
+theorem Th4:
+for N being reflexive non empty RelStr holds id N is greater_or_equal_to_id
+proof
+  let N be reflexive non empty RelStr;
+  let j be Element of N;
+  reconsider n=j as Element of N;
+    n = (id (the carrier of N)).n by FUNCT_1:35;
+  then n <= (id N).n by GRCAT_1:def 11;
+  hence thesis;
+end;
+
+theorem Th5:
+for N being directed non empty RelStr, x,y being Element of N
+  ex z being Element of N st x <= z & y <= z
+proof
+  let N be directed non empty RelStr, x,y be Element of N;
+A1:
+  [#]N is directed by WAYBEL_0:def 6;
+    x in the carrier of N;
+  then A2:  x in [#]N by PRE_TOPC:12;
+    y in the carrier of N;
+  then y in [#]N by PRE_TOPC:12;
+  then ex z being Element of N st z in [#]N & x <= z & y <= z
+        by A1,A2,WAYBEL_0:def 1;
+  hence thesis;
+end;
+
+theorem Th6:
+for N being directed non empty RelStr holds
+  ex p being map of N,N st p is greater_or_equal_to_id
+proof
+  let N be directed non empty RelStr;
+  defpred P[set,set] means
+       for n,m being Element of N st $1=n & $2=m holds n <= m;
+A1:
+  for e being set st e in the carrier of N
+    ex u being set st u in the carrier of N & P[e,u]
+  proof
+    let e be set;
+    assume e in the carrier of N;
+    then reconsider e'=e as Element of N;
+    consider u' being Element of N such that
+A2:    e'<= u' & e' <= u' by Th5;
+    take u';
+    thus u' in the carrier of N;
+    let n,m be Element of N;
+    assume
+        e=n & u'=m;
+    hence n <= m by A2;
+  end;
+  consider p being Function such that
+A3:  dom p = the carrier of N and
+A4:  rng p c= the carrier of N and
+A5:  for e being set st e in the carrier of N holds P[e,p.e]
+         from NonUniqBoundFuncEx(A1);
+    p is Function of the carrier of N, the carrier of N
+    by A3,A4,FUNCT_2:4;
+  then reconsider p as map of N,N;
+  take p;
+  let j be Element of N;
+  reconsider j'=j as Element of N;
+    for n,m being Element of N st j'=n & p.j'=m holds n <= m by A5;
+  hence j <= p.j;
+end;
+
+definition
+  let N be directed non empty RelStr;
+  cluster greater_or_equal_to_id map of N,N;
+  existence by Th6;
+end;
+
+definition
+  let N be reflexive non empty RelStr;
+  cluster greater_or_equal_to_id map of N,N;
+existence
+proof
+  take id N;
+  thus id N is greater_or_equal_to_id by Th4;
+end;
+end;
+
+definition
+  let L be non empty 1-sorted;
+  let N be non empty NetStr over L;
+  let f be map of N,N;
+  func N * f -> strict non empty NetStr over L means :Def2:
+    the RelStr of it = the RelStr of N &
+    the mapping of it = (the mapping of N) * f;
+existence
+proof
+ take NetStr (# the carrier of N,the InternalRel of N,(the mapping of N)*f #);
+ thus thesis;
+end;
+uniqueness;
+end;
+
+theorem Th7:
+for L being non empty 1-sorted, N being non empty NetStr over L,
+    f being map of N, N holds
+  the carrier of N * f = the carrier of N
+proof
+  let L be non empty 1-sorted, N be non empty NetStr over L, f be map of N, N;
+    the RelStr of N * f = the RelStr of N by Def2;
+  hence the carrier of N * f = the carrier of N;
+end;
+
+theorem Th8:
+for L being non empty 1-sorted, N being non empty NetStr over L,
+    f being map of N,N holds
+  N * f = NetStr(#the carrier of N,the InternalRel of N,(the mapping of N)*f#)
+proof
+  let L be non empty 1-sorted, N be non empty NetStr over L,
+      f be map of N,N;
+    the RelStr of N*f=the RelStr of N by Def2;
+  hence
+    N * f=NetStr(#the carrier of N,the InternalRel of N,(the mapping of N)*f#)
+      by Def2;
+end;
+
+theorem Th9:
+for L being non empty 1-sorted,
+    N being transitive directed non empty RelStr,
+    f being Function of the carrier of N,the carrier of L
+holds NetStr (#the carrier of N,the InternalRel of N,f#) is net of L
+proof
+  let L be non empty 1-sorted,
+      N be transitive directed non empty RelStr,
+      f be Function of the carrier of N,the carrier of L;
+  set N2 = NetStr(#the carrier of N,the InternalRel of N,f#);
+A1: the RelStr of N = the RelStr of N2;
+A2: [#]N = the carrier of N by PRE_TOPC:12
+    .= [#]N2 by PRE_TOPC:12;
+    [#]N is directed by WAYBEL_0:def 6;
+  then [#]N2 is directed by A1,A2,WAYBEL_0:3;
+  hence NetStr (#the carrier of N,the InternalRel of N,f#) is net of L
+     by A1,WAYBEL_0:def 6,WAYBEL_8:13;
+end;
+
+definition
+let L be non empty 1-sorted,
+    N be transitive directed non empty RelStr,
+    f be Function of the carrier of N,the carrier of L;
+  cluster NetStr (#the carrier of N,the InternalRel of N,f#) ->
+    transitive directed non empty;
+correctness by Th9;
+end;
+
+theorem Th10:
+for L being non empty 1-sorted, N being net of L, p being map of N,N holds
+  N * p is net of L
+proof
+  let L be non empty 1-sorted, N be net of L, p be map of N,N;
+    N * p = NetStr(#the carrier of N,the InternalRel of N,(the mapping of N)*p
+#)
+    by Th8;
+  hence N * p is net of L;
+end;
+
+definition
+  let L be non empty 1-sorted, N be net of L;
+  let p be map of N,N;
+  cluster N * p -> transitive directed;
+  correctness by Th10;
+end;
+
+theorem Th11:
+for L being non empty 1-sorted, N being net of L, p being map of N,N
+st N in NetUniv L holds
+  N * p in NetUniv L
+proof
+  let L be non empty 1-sorted, N be net of L, p be map of N,N;
+  assume N in NetUniv L;
+  then consider N1 being strict net of L such that
+A1:  N1 = N and
+A2:  the carrier of N1 in the_universe_of the carrier of L by YELLOW_6:def 14;
+    the carrier of N * p = the carrier of N by Th7;
+  hence N * p in NetUniv L by A1,A2,YELLOW_6:def 14;
+end;
+
+theorem Th12:
+for L being non empty 1-sorted, N,M being net of L
+  st the NetStr of N = the NetStr of M holds
+    M is subnet of N
+proof
+  let L be non empty 1-sorted, N,M be net of L;
+  assume
+A1: the NetStr of N = the NetStr of M;
+A2:
+  N is subnet of N by YELLOW_6:23;
+    ex f being map of M, N st
+    the mapping of M = (the mapping of N)*f &
+    for m being Element of N ex n being Element of M st
+      for p being Element of M st n <= p holds m <= f.p
+  proof
+    consider f being map of N, N such that
+A3:   the mapping of N = (the mapping of N)*f and
+A4:    for m being Element of N ex n being Element of N st
+        for p being Element of N st n <= p holds m <= f.p
+          by A2,YELLOW_6:def 12;
+    reconsider f2=f as map of M,N by A1;
+    take f2;
+    thus the mapping of M = (the mapping of N)*f2 by A1,A3;
+    let m be Element of N;
+    consider n being Element of N such that
+A5:    for p being Element of N st n <= p holds m <= f.p by A4;
+    reconsider n2=n as Element of M by A1;
+    take n2;
+    let p be Element of M;
+    reconsider p1=p as Element of N by A1;
+    assume n2 <= p;
+    then [n2,p] in the InternalRel of M by ORDERS_1:def 9;
+    then n <= p1 by A1,ORDERS_1:def 9;
+    hence m <= f2.p by A5;
+  end;
+  hence M is subnet of N by YELLOW_6:def 12;
+end;
+
+definition
+  let L be non empty 1-sorted, N be net of L;
+  cluster strict subnet of N;
+existence
+proof
+  reconsider
+    N2= NetStr (#the carrier of N,the InternalRel of N,the mapping of N#)
+      as subnet of N by Th12;
+  take N2;
+  thus N2 is strict;
+end;
+end;
+
+theorem Th13:
+for L being non empty 1-sorted, N being net of L,
+    p being greater_or_equal_to_id map of N,N holds N * p is subnet of N
+proof
+  let L be non empty 1-sorted;
+  let N be net of L;
+  let p be greater_or_equal_to_id map of N,N;
+    ex f being map of (N * p), N st
+   the mapping of (N * p) = (the mapping of N)*f &
+   for m being Element of N ex n being Element of (N * p) st
+    for k being Element of (N * p) st n <= k holds m <= f.k
+  proof
+      the carrier of N * p = the carrier of N by Th7;
+    then reconsider f=p as map of (N * p), N;
+    take f;
+    thus the mapping of (N * p) = (the mapping of N)*f by Def2;
+    let m be Element of N;
+      m in the carrier of N;
+    then m in the carrier of N*p by Th7;
+    then reconsider n=m as Element of (N * p);
+    take n;
+    let k be Element of (N * p);
+    assume
+A1:    n <= k;
+      k in the carrier of N*p;
+    then k in the carrier of N by Th7;
+    then reconsider k1 = k as Element of N;
+      the RelStr of N*p = the RelStr of N by Def2;
+    then A2:    m <= k1 by A1,YELLOW_0:1;
+      k1 <= p.k1 by Def1;
+    hence m <= f.k by A2,YELLOW_0:def 2;
+  end;
+  hence N * p is subnet of N by YELLOW_6:def 12;
+end;
+
+definition
+::3.1 Proposition (2)=>(3)
+  let L be non empty 1-sorted;
+  let N be net of L;
+  let p be greater_or_equal_to_id map of N,N;
+  redefine func N * p -> strict subnet of N;
+  correctness by Th13;
+end;
+
+theorem ::3.1 Proposition (2b)=>(3)
+Th14:
+for L being complete LATTICE, N being net of L, x being Element of L st
+  N in NetUniv L
+holds
+    (x=lim_inf N &
+     for M being subnet of N st M in NetUniv L holds x >= inf M)
+implies
+      x=lim_inf N &
+      for p being greater_or_equal_to_id map of N,N holds x >= inf (N * p)
+proof
+  let L be complete LATTICE, N be net of L, x be Element of L;
+  assume
+A1:  N in NetUniv L;
+  assume that
+A2: x=lim_inf N and
+A3: for M being subnet of N st M in NetUniv L
+      holds x >= inf M;
+  thus x=lim_inf N by A2;
+  let p be greater_or_equal_to_id map of N,N;
+    N * p in NetUniv L by A1,Th11;
+  hence x >= inf (N * p) by A3;
+end;
+
+theorem ::3.1 Proposition (3)=>(1)
+Th15:
+for L being complete LATTICE, N being net of L, x being Element of L holds
+  (x=lim_inf N &
+   for p being greater_or_equal_to_id map of N,N holds x >= inf (N * p) )
+     implies for M being subnet of N holds x = lim_inf M
+proof
+  let L be complete LATTICE, N be net of L, x be Element of L;
+  assume that
+A1: x=lim_inf N and
+A2: for p being greater_or_equal_to_id map of N,N holds x >= inf (N * p);
+  let M be subnet of N;
+  consider f being map of M, N such that
+A3: the mapping of M = (the mapping of N)*f and
+A4: for j being Element of N ex k being Element of M st
+      for m being Element of M st k <= m holds j <= f.m by YELLOW_6:def 12;
+A5:
+  x <= lim_inf M by A1,WAYBEL21:37;
+A6:
+  for k0 being Element of M holds
+    "/\"({M.k where k is Element of M:k >= k0},L)<=x
+  proof
+    let k0 be Element of M;
+A7:  for j being Element of N ex v being Element of M
+      st v >= k0 & for v' being Element of M st v'>= v
+        holds f.(v')>=j & f.v >= j
+    proof
+      let j be Element of N;
+      consider w being Element of M such that
+A8:      for w' being Element of M st w <= w' holds j <= f.(w') by A4;
+      consider v being Element of M such that
+A9:     v >= k0 and
+A10:     v >= w by Th5;
+      take v;
+      thus v >= k0 by A9;
+      let v' be Element of M;
+      assume v'>= v;
+      then v' >= w by A10,YELLOW_0:def 2;
+      hence f.(v')>=j by A8;
+      thus f.v >= j by A8,A10;
+    end;
+    defpred P[set,set] means
+       for j being Element of N, v,v' being Element of M
+             st $1=j & $2=v & v'>= v holds v >= k0 & f.(v')>=j & f.v >= j;
+A11:  for e being set st e in the carrier of N
+      ex u being set st u in the carrier of M & P[e,u]
+    proof
+      let e be set;
+      assume e in the carrier of N;
+      then reconsider e'=e as Element of N;
+      consider u being Element of M such that
+A12:     u >= k0 and
+A13:     for v' being Element of M st v'>= u holds f.(v')>=e' & f.u >= e' by A7
+;
+      take u;
+      thus u in the carrier of M;
+      let j be Element of N, v,v' be Element of M;
+      assume that
+A14:     e=j and
+A15:     u=v and
+A16:     v'>= v;
+      thus v >= k0 by A12,A15;
+      thus f.(v')>=j by A13,A14,A15,A16;
+      thus f.v >= j by A13,A14,A15,A16;
+    end;
+    consider g being Function such that
+A17:   dom g = the carrier of N and
+A18:   rng g c= the carrier of M and
+A19:   for e being set st e in the carrier of N holds P[e,g.e]
+           from NonUniqBoundFuncEx(A11);
+    reconsider g as Function of the carrier of N,the carrier of M by A17,A18,
+FUNCT_2:4;
+A20:
+    for j being Element of N holds g.j >= k0
+    proof
+      let j be Element of N;
+      reconsider v=g.j as Element of M;
+        ex v' being Element of M st v'>= v & v'>= v by Th5;
+      then consider v' being Element of M such that
+A21:    v'>= v;
+      thus g.j >= k0 by A19,A21;
+    end;
+    reconsider g as map of N,M;
+    reconsider p=f*g as map of N,N;
+      for j being Element of N holds j <= p.j
+    proof
+      let j be Element of N;
+      reconsider j1=j as Element of N;
+A22:   for v,v' being Element of M
+         st j=j1 & g.j=v & v'>= v holds v >= k0 & f.(v')>=j & f.v >= j by A19;
+      reconsider v=g.j as Element of M;
+A23:  [#]M is directed by WAYBEL_0:def 6;
+        v in the carrier of M;
+      then v in [#]M by PRE_TOPC:12;
+      then consider v' being Element of M such that
+A24:     v' in [#]M & v <= v' & v <=v' by A23,WAYBEL_0:def 1;
+        j <= f.(g.j) by A22,A24;
+      hence j <= p.j by A17,FUNCT_1:23;
+    end;
+    then reconsider p as greater_or_equal_to_id map of N,N by Def1;
+A25: ex_inf_of {(N*p).j where j is Element of (N*p):
+                 not contradiction},L by YELLOW_0:17;
+A26: ex_inf_of {M.k where k is Element of M:k >= k0},L
+          by YELLOW_0:17;
+A27:
+    {(N*p).j where j is Element of (N*p):not contradiction} c=
+      {M.k where k is Element of M:k >= k0}
+    proof
+      let y be set;
+      assume
+          y in {(N*p).j where j is Element of (N*p):
+         not contradiction};
+      then consider j being Element of (N*p) such that
+A28:    y = (N*p).j;
+A29:  the carrier of (N*p)= the carrier of N by Th7;
+A30:  y = (the mapping of (N*p)).j by A28,WAYBEL_0:def 8
+       .= ((the mapping of N)*(f*g)).j by Def2
+       .= ((the mapping of M)*g).j by A3,RELAT_1:55
+       .= (the mapping of M).(g.j) by A17,A29,FUNCT_1:23;
+      reconsider j'=j as Element of N by A29;
+A31:  y = M.(g.j') by A30,WAYBEL_0:def 8;
+        g.j' >= k0 by A20;
+      hence y in {M.k where k is Element of M:k >= k0} by A31;
+    end;
+A32:
+    dom (the mapping of (N*p)) = the carrier of (N*p) by FUNCT_2:def 1;
+A33: rng the mapping of (N*p) =
+      {(N*p).j where j is Element of (N*p): not contradiction}
+    proof
+      thus rng the mapping of (N*p) c=
+        {(N*p).j where j is Element of (N*p):
+         not contradiction}
+      proof
+        let y be set;
+        assume y in rng the mapping of (N*p);
+        then consider j1 being set such that
+A34:      j1 in dom (the mapping of (N*p)) and
+A35:      (the mapping of (N*p)).j1 = y by FUNCT_1:def 5;
+        reconsider j1 as Element of (N*p) by A34;
+          y = (N*p).j1 by A35,WAYBEL_0:def 8;
+        hence y in {(N*p).j where j is Element of (N*p):
+         not contradiction};
+      end;
+      let y be set;
+      assume
+          y in {(N*p).j where j is Element of (N*p):
+        not contradiction};
+      then consider j being Element of (N*p) such that
+A36:    y = (N*p).j;
+        y = (the mapping of (N*p)).j by A36,WAYBEL_0:def 8;
+      hence y in rng the mapping of (N*p) by A32,FUNCT_1:def 5;
+    end;
+      inf (N*p) = Inf the mapping of (N*p) by WAYBEL_9:def 2
+             .= "/\"({(N*p).j where j is Element of (N*p):
+                     not contradiction},L) by A33,YELLOW_2:def 6;
+    then A37:   "/\"({M.k where k is Element of M:k >= k0},L)<=
+inf (N*p)
+             by A25,A26,A27,YELLOW_0:35;
+      inf (N * p) <= x by A2;
+    hence "/\"({M.k where k is Element of M:k >= k0},L)<=x
+      by A37,YELLOW_0:def 2;
+  end;
+    for b being Element of L
+    st b in { "/\"({M.k where k is Element of M:k >= k0},L)
+            where k0 is Element of M: not contradiction}
+  holds b <= x
+  proof
+    let b be Element of L;
+    assume b in { "/\"({M.k where k is Element of M:k >= k0},L)
+                where k0 is Element of M: not contradiction};
+    then consider k0 being Element of M such that
+A38:    b = "/\"({M.k where k is Element of M:k >= k0},L);
+    reconsider k0 as Element of M;
+      "/\"({M.k where k is Element of M:k >= k0},L)<=x by A6;
+    hence b <= x by A38;
+  end;
+  then A39:  x is_>=_than { "/\"
+({M.k where k is Element of M:k >= k0},L)
+                 where k0 is Element of M: not contradiction}
+                   by LATTICE3:def 9;
+    ex_sup_of
+   { "/\"({M.k where k is Element of M:k >= k0},L)
+    where k0 is Element of M: not contradiction},L
+      by YELLOW_0:17;
+  then "\/"({ "/\"({M.k where k is Element of M:k >= k0},L)
+           where k0 is Element of M: not contradiction},L)<=x
+             by A39,YELLOW_0:def 9;
+  then x >= lim_inf M by WAYBEL11:def 6;
+  hence x = lim_inf M by A5,ORDERS_1:25;
+end;
+
+definition
+let L be non empty RelStr;
+func lim_inf-Convergence L -> Convergence-Class of L means :Def3:
+ for N being net of L st N in NetUniv L
+ for x being Element of L
+  holds [N,x] in it iff for M being subnet of N holds x = lim_inf M;
+existence
+proof
+  defpred P[set,set] means
+    ex N being strict net of L st
+      $1=N & for M being subnet of N holds $2 = lim_inf M;
+  consider C being Relation of NetUniv L,the carrier of L such that
+A1:  for N' being Element of NetUniv L, x being Element of L
+    holds [N',x] in C iff P[N', x] from Rel_On_Dom_Ex;
+  reconsider C as Convergence-Class of L by YELLOW_6:def 21;
+  take C;
+  let N be net of L;
+  assume N in NetUniv L;
+  then reconsider N1=N as Element of NetUniv L;
+  let x be Element of L;
+  thus [N,x] in C implies for M being subnet of N holds x = lim_inf M
+  proof
+    assume
+A2:    [N,x] in C;
+    let M be subnet of N;
+    consider N2 being strict net of L such that
+A3:   N1=N2 and
+A4:   for M being subnet of N2 holds x = lim_inf M by A1,A2;
+    thus x = lim_inf M by A3,A4;
+  end;
+  assume
+A5:  for M being subnet of N holds x = lim_inf M;
+  consider N2 being strict net of L such that
+A6:  N2=N1 and
+      the carrier of N2 in the_universe_of the carrier of L by YELLOW_6:def 14;
+  thus [N,x] in C by A1,A5,A6;
+end;
+uniqueness
+proof
+  let C1,C2 be Convergence-Class of L such that
+A7:  for N being net of L st N in NetUniv L
+       for x being Element of L
+       holds [N,x] in C1 iff for M being subnet of N holds x = lim_inf M and
+A8:  for N being net of L st N in NetUniv L
+       for x being Element of L
+       holds [N,x] in C2 iff for M being subnet of N holds x = lim_inf M;
+A9:
+  C1 c= [:NetUniv L,the carrier of L:] by YELLOW_6:def 21;
+A10:
+  C2 c= [:NetUniv L,the carrier of L:] by YELLOW_6:def 21;
+  let Ns,xs be set;
+  thus [Ns,xs] in C1 implies [Ns,xs] in C2
+  proof
+    assume
+A11:   [Ns,xs] in C1;
+    then Ns in NetUniv L by A9,ZFMISC_1:106;
+    then consider N being strict net of L such that
+A12:    N = Ns and
+        the carrier of N in the_universe_of the carrier of L
+               by YELLOW_6:def 14;
+A13: N in NetUniv L by A9,A11,A12,ZFMISC_1:106;
+    reconsider x=xs as Element of L by A9,A11,ZFMISC_1:106;
+      for M being subnet of N holds x = lim_inf M by A7,A11,A12,A13;
+    hence [Ns,xs] in C2 by A8,A12,A13;
+  end;
+  assume
+A14: [Ns,xs] in C2;
+  then Ns in NetUniv L by A10,ZFMISC_1:106;
+  then consider N being strict net of L such that
+A15:  N = Ns and
+      the carrier of N in the_universe_of the carrier of L by YELLOW_6:def 14;
+A16:
+  N in NetUniv L by A10,A14,A15,ZFMISC_1:106;
+  reconsider x=xs as Element of L by A10,A14,ZFMISC_1:106;
+    for M being subnet of N holds x = lim_inf M by A8,A14,A15,A16;
+  hence [Ns,xs] in C1 by A7,A15,A16;
+end;
+end;
+
+theorem
+  for L being complete LATTICE,
+    N being net of L,
+    x being Element of L
+st N in NetUniv L
+holds [N,x] in lim_inf-Convergence L iff
+  for M being subnet of N st M in NetUniv L holds x = lim_inf M
+proof
+  let L be complete LATTICE;
+  let N be net of L;
+  let x be Element of L;
+  assume
+A1:  N in NetUniv L;
+  hence [N,x] in lim_inf-Convergence L implies
+     for M being subnet of N st M in NetUniv L holds x = lim_inf M by Def3;
+  assume for M being subnet of N st M in NetUniv L holds x = lim_inf M;
+  then x=lim_inf N &
+       for M being subnet of N st M in NetUniv L holds x >= inf M
+           by A1,Th3;
+  then x=lim_inf N &
+      for p being greater_or_equal_to_id map of N,N holds x >= inf (N * p)
+         by A1,Th14;
+  then for M being subnet of N holds x = lim_inf M by Th15;
+  hence [N,x] in lim_inf-Convergence L by A1,Def3;
+end;
+
+theorem Th17:
+for L being non empty RelStr,
+    N being constant net of L,
+    M being subnet of N
+holds M is constant & the_value_of N = the_value_of M
+proof
+  let L be non empty RelStr,
+      N be constant net of L,
+      M be subnet of N;
+  consider f being map of M, N such that
+A1: the mapping of M = (the mapping of N)*f and
+      for m being Element of N ex n being Element of M st
+      for p being Element of M st n <= p holds m <= f.p
+          by YELLOW_6:def 12;
+A2:
+  dom (the mapping of M)=the carrier of M by FUNCT_2:def 1;
+A3:
+  dom f = the carrier of M by FUNCT_2:def 1;
+A4:
+  dom (the mapping of N) = the carrier of N by FUNCT_2:def 1;
+    for n1,n2 being set st n1 in dom (the mapping of M) &
+                         n2 in dom (the mapping of M) holds
+     (the mapping of M).n1=(the mapping of M).n2
+  proof
+    let n1,n2 be set;
+    assume that
+A5:   n1 in dom (the mapping of M) and
+A6:   n2 in dom (the mapping of M);
+A7:
+    f.n1 in rng f by A3,A5,FUNCT_1:def 5;
+A8:
+    f.n2 in rng f by A3,A6,FUNCT_1:def 5;
+    thus (the mapping of M).n1= (the mapping of N).(f.n1) by A1,A3,A5,FUNCT_1:
+23
+      .= (the mapping of N).(f.n2) by A4,A7,A8,SEQM_3:def 5
+      .= (the mapping of M).n2 by A1,A3,A6,FUNCT_1:23;
+  end;
+  then A9: the mapping of M is constant by SEQM_3:def 5;
+  hence
+A10:  M is constant by YELLOW_6:def 6;
+  consider x being set such that
+A11: x in dom (the mapping of N) and
+A12: the_value_of the mapping of N = (the mapping of N).x by YELLOW_6:def 1;
+  consider y being Element of dom (the mapping of M);
+
+   f.y in rng f by A2,A3,FUNCT_1:def 5;
+then A13:
+  the_value_of the mapping of N= (the mapping of N).(f.y) by A4,A11,A12,SEQM_3:
+def 5
+          .= (the mapping of M).y by A1,A2,FUNCT_1:22;
+  thus the_value_of N = the_value_of the mapping of N by YELLOW_6:def 10
+         .= the_value_of the mapping of M by A2,A9,A13,YELLOW_6:def 1
+         .= the_value_of M by A10,YELLOW_6:def 10;
+end;
+
+definition let L be non empty RelStr;
+func xi L -> Subset-Family of L equals :Def4:
+  the topology of ConvergenceSpace lim_inf-Convergence L;
+correctness by YELLOW_6:def 27;
+end;
+
+theorem
+  for L being complete LATTICE
+holds lim_inf-Convergence L is (CONSTANTS)
+proof
+  let L be complete LATTICE;
+  let N be constant net of L;
+  assume
+A1:  N in NetUniv L;
+    for M being subnet of N holds the_value_of N = lim_inf M
+  proof
+    let M be subnet of N;
+A2:  M is constant by Th17;
+    thus the_value_of N = the_value_of M by Th17
+                        .= lim_inf M by A2,WAYBEL11:23;
+  end;
+  hence [N,the_value_of N] in lim_inf-Convergence L by A1,Def3;
+end;
+
+theorem
+  for L being non empty RelStr holds
+  lim_inf-Convergence L is (SUBNETS)
+proof
+  let L be non empty RelStr;
+  let N be net of L, M be subnet of N;
+  assume
+A1:  M in NetUniv L;
+  let x be Element of L;
+  assume
+A2:  [N,x] in lim_inf-Convergence L;
+    lim_inf-Convergence L c= [:NetUniv L,the carrier of L:] by YELLOW_6:def 21;
+  then A3:  N in NetUniv L by A2,ZFMISC_1:106;
+    for M1 being subnet of M holds x = lim_inf M1
+  proof
+    let M1 be subnet of M;
+    reconsider M1'=M1 as subnet of N by YELLOW_6:24;
+      x = lim_inf M1' by A2,A3,Def3;
+    hence x = lim_inf M1;
+  end;
+  hence [M,x] in lim_inf-Convergence L by A1,Def3;
+end;
+
+theorem
+  for L being continuous complete LATTICE holds
+  lim_inf-Convergence L is (DIVERGENCE)
+proof
+  let L be continuous complete LATTICE;
+  let N be net of L, x be Element of L;
+  assume
+A1:  N in NetUniv L & not [N,x] in lim_inf-Convergence L;
+  then not for M being subnet of N holds x = lim_inf M by Def3;
+  then A2:
+    not (x=lim_inf N &
+    for p being greater_or_equal_to_id map of N,N holds x >= inf (N * p))
+      by Th15;
+A3:
+  lim_inf-Convergence L c= [:NetUniv L,the carrier of L:] by YELLOW_6:def 21;
+  consider N1 being strict net of L such that
+A4: N1=N and
+      the carrier of N1 in
+ the_universe_of the carrier of L by A1,YELLOW_6:def 14;
+  per cases by A1,A2,Th14;
+  suppose
+A5: not (x=lim_inf N) & x<=lim_inf N;
+  reconsider N'=N as subnet of N by YELLOW_6:23;
+  take N';
+  thus N' in NetUniv L by A1;
+  given M2 being subnet of N' such that
+A6:  [M2,x] in lim_inf-Convergence L;
+A7:
+  M2 in NetUniv L by A3,A6,ZFMISC_1:106;
+    M2 is subnet of M2 by YELLOW_6:23;
+  then A8: lim_inf M2 =x by A6,A7,Def3;
+    lim_inf N <= lim_inf M2 by WAYBEL21:37;
+  hence contradiction by A5,A8,YELLOW_0:def 3;
+  suppose not (x=lim_inf N) & not (x<=lim_inf N);
+  then not x is_S-limit_of N by WAYBEL11:def 7;
+  then not [N,x] in Scott-Convergence L by A1,A4,WAYBEL11:def 8;
+  then consider M being subnet of N such that
+A9:  M in NetUniv L and
+A10:  not ex M1 being subnet of M st [M1,x] in Scott-Convergence L
+               by A1,YELLOW_6:def 25;
+  take M;
+  thus M in NetUniv L by A9;
+    for M1 being subnet of M holds not [M1,x] in lim_inf-Convergence L
+  proof
+    let M1 be subnet of M;
+    assume
+A11:   [M1,x] in lim_inf-Convergence L;
+    then A12:   M1 in NetUniv L by A3,ZFMISC_1:106;
+    then consider M11 being strict net of L such that
+A13:   M11=M1 and
+        the carrier of M11 in
+ the_universe_of the carrier of L by YELLOW_6:def 14;
+      M1 is subnet of M1 by YELLOW_6:23;
+    then A14: x = lim_inf M1 by A11,A12,Def3;
+      not [M1,x] in Scott-Convergence L by A10;
+    then not x is_S-limit_of M1 by A12,A13,WAYBEL11:def 8;
+    hence contradiction by A14,WAYBEL11:def 7;
+  end;
+  hence not ex M1 being subnet of M st [M1,x] in lim_inf-Convergence L;
+  suppose not (for M being subnet of N st M in NetUniv L holds x >= inf M);
+  then consider M being subnet of N such that
+A15: M in NetUniv L and
+A16:  not x >= inf M;
+  take M;
+  thus M in NetUniv L by A15;
+    for M1 being subnet of M holds not [M1,x] in lim_inf-Convergence L
+  proof
+    let M1 be subnet of M;
+    assume
+A17:    [M1,x] in lim_inf-Convergence L;
+    then A18: M1 in NetUniv L by A3,ZFMISC_1:106;
+      M1 is subnet of M1 by YELLOW_6:23;
+    then A19:   x = lim_inf M1 by A17,A18,Def3;
+A20:  lim_inf M1 >= lim_inf M by WAYBEL21:37;
+      lim_inf M >= inf M by Th1;
+    hence contradiction by A16,A19,A20,YELLOW_0:def 2;
+  end;
+  hence not ex M1 being subnet of M st [M1,x] in lim_inf-Convergence L;
+end;
+
+theorem
+  for L being non empty RelStr, N,x being set holds
+  [N,x] in lim_inf-Convergence L implies N in NetUniv L
+proof
+  let L be non empty RelStr, N,x be set;
+  assume
+A1:  [N,x] in lim_inf-Convergence L;
+    lim_inf-Convergence L c= [:NetUniv L,the carrier of L:] by YELLOW_6:def 21;
+  hence N in NetUniv L by A1,ZFMISC_1:106;
+end;
+
+theorem Th22:
+for L being non empty 1-sorted, C1,C2 being Convergence-Class of L holds
+  C1 c= C2 implies
+   the topology of ConvergenceSpace C2 c= the topology of ConvergenceSpace C1
+proof
+  let L be non empty 1-sorted, C1,C2 be Convergence-Class of L;
+  assume
+A1: C1 c= C2;
+  let A be set;
+  assume A in the topology of ConvergenceSpace C2;
+  then A in { V where V is Subset of L:
+   for p being Element of L st p in V
+    for N being net of L st [N,p] in C2 holds N is_eventually_in V}
+      by YELLOW_6:def 27;
+  then consider V1 being Subset of L such that
+A2: A=V1 and
+A3: for p being Element of L st p in V1
+      for N being net of L st [N,p] in C2 holds N is_eventually_in V1;
+    ex V being Subset of L st
+    A=V &
+    for p being Element of L st p in V
+      for N being net of L st [N,p] in C1 holds N is_eventually_in V
+  proof
+    take V1;
+    thus A=V1 by A2;
+    let p be Element of L;
+    assume
+A4:   p in V1;
+    let N be net of L;
+    assume [N,p] in C1;
+    hence N is_eventually_in V1 by A1,A3,A4;
+  end;
+  then A in { V where V is Subset of L:
+   for p being Element of L st p in V
+    for N being net of L st [N,p] in C1 holds N is_eventually_in V};
+  hence A in the topology of ConvergenceSpace C1 by YELLOW_6:def 27;
+end;
+
+theorem Th23:
+for L being non empty reflexive RelStr holds
+  lim_inf-Convergence L c= Scott-Convergence L
+proof
+  let L be non empty reflexive RelStr;
+  let Ns,xs be set;
+A1:
+  lim_inf-Convergence L c= [:NetUniv L,the carrier of L:] by YELLOW_6:def 21;
+  assume
+A2:  [Ns,xs] in lim_inf-Convergence L;
+  then Ns in NetUniv L by A1,ZFMISC_1:106;
+  then consider N being strict net of L such that
+A3:  N = Ns and
+      the carrier of N in the_universe_of the carrier of L by YELLOW_6:def 14;
+A4:
+  N in NetUniv L by A1,A2,A3,ZFMISC_1:106;
+  reconsider x=xs as Element of L by A1,A2,ZFMISC_1:106;
+    N is subnet of N by YELLOW_6:23;
+  then x = lim_inf N by A2,A3,A4,Def3;
+  then x is_S-limit_of N by WAYBEL11:def 7;
+  hence [Ns,xs] in Scott-Convergence L by A3,A4,WAYBEL11:def 8;
+end;
+
+theorem Th24:
+for X,Y being set holds
+  X c= Y implies X in the_universe_of Y
+proof
+  let X,Y be set;
+  assume
+A1:  X c= Y;
+    Tarski-Class the_transitive-closure_of Y
+    is_Tarski-Class_of the_transitive-closure_of Y by CLASSES1:def 4;
+  then A2:  the_transitive-closure_of Y in Tarski-Class
+the_transitive-closure_of Y
+      by CLASSES1:def 3;
+    Y c= the_transitive-closure_of Y by CLASSES1:59;
+  then X c= the_transitive-closure_of Y by A1,XBOOLE_1:1;
+  then X in Tarski-Class the_transitive-closure_of Y by A2,CLASSES1:def 1;
+  hence X in the_universe_of Y by YELLOW_6:def 3;
+end;
+
+theorem Th25:
+for L being non empty transitive reflexive RelStr,
+    D being directed non empty Subset of L holds
+Net-Str D in NetUniv L
+proof
+  let L be non empty transitive reflexive RelStr;
+  let D be directed non empty Subset of L;
+A1:
+  D in the_universe_of the carrier of L by Th24;
+    the carrier of Net-Str D = D by WAYBEL21:32;
+  hence Net-Str D in NetUniv L by A1,YELLOW_6:def 14;
+end;
+
+
+theorem Th26:
+for L being complete LATTICE,
+    D being directed non empty Subset of L holds
+for M being subnet of Net-Str D holds
+        lim_inf M = sup D
+proof
+  let L be complete LATTICE;
+  let D be directed non empty Subset of L;
+
+   for M being subnet of Net-Str D holds sup D >= inf M
+  proof
+    let M be subnet of Net-Str D;
+    consider i being Element of M;
+    set f=the mapping of M;
+    consider g being map of M, Net-Str D such that
+A1:   the mapping of M = (the mapping of Net-Str D)*g and
+        for m being Element of Net-Str D ex n being Element of M st
+        for p being Element of M st n <= p holds m <= g.p by YELLOW_6:def 12;
+A2:
+    dom f = the carrier of M by FUNCT_2:def 1;
+      g.i in the carrier of Net-Str D;
+    then A3:    g.i in D by WAYBEL21:32;
+    then g.i = (id D).(g.i) by FUNCT_1:35
+            .= (the mapping of Net-Str D).(g.i) by WAYBEL21:32
+            .= f.i by A1,A2,FUNCT_1:22;
+    then A4:    f.i <= sup D by A3,YELLOW_2:24;
+A5: ex_inf_of rng f,L by YELLOW_0:17;
+     f.i in rng f by A2,FUNCT_1:def 5;
+    then "/\"(rng f,L) <= f.i by A5,YELLOW_4:2;
+    then sup D >= "/\"(rng f,L) by A4,YELLOW_0:def 2;
+    then sup D >= Inf the mapping of M by YELLOW_2:def 6;
+    hence sup D >= inf M by WAYBEL_9:def 2;
+  end;
+  then lim_inf Net-Str D =sup D &
+   for p being greater_or_equal_to_id map of Net-Str(D),Net-Str(D) holds
+        sup D >= inf (Net-Str(D)*p) by WAYBEL17:10;
+  hence for M being subnet of Net-Str D holds
+        lim_inf M = sup D by Th15;
+end;
+
+theorem Th27:
+for L being non empty complete LATTICE,
+    D being directed non empty Subset of L holds
+[Net-Str D,sup D] in lim_inf-Convergence L
+proof
+  let L be non empty complete LATTICE;
+  let D be directed non empty Subset of L;
+A1:
+  Net-Str D in NetUniv L by Th25;
+    for M being subnet of Net-Str D holds lim_inf M = sup D by Th26;
+  hence [Net-Str D,sup D] in lim_inf-Convergence L by A1,Def3;
+end;
+
+theorem Th28:
+for L being complete LATTICE, U1 being Subset of L holds
+U1 in xi(L) implies U1 is property(S)
+proof
+  let L be complete LATTICE;
+  let U1 be Subset of L;
+  assume U1 in xi(L);
+  then U1 in the topology of ConvergenceSpace lim_inf-Convergence L by Def4;
+  then U1 in { V where V is Subset of L:
+    for p being Element of L st p in V
+    for N being net of L st [N,p] in lim_inf-Convergence L holds
+         N is_eventually_in V} by YELLOW_6:def 27;
+  then consider V being Subset of L such that
+A1: U1=V and
+A2: for p being Element of L st p in V
+    for N being net of L st [N,p] in lim_inf-Convergence L holds
+         N is_eventually_in V;
+  let D be non empty directed Subset of L;
+  assume
+A3:  sup D in U1;
+    [Net-Str D,sup D] in lim_inf-Convergence L by Th27;
+  then (Net-Str D) is_eventually_in U1 by A1,A2,A3;
+  then consider y being Element of (Net-Str D) such that
+A4:  for x being Element of (Net-Str D) st y <= x holds
+      (Net-Str D).x in U1 by WAYBEL_0:def 11;
+A5:
+  y in the carrier of Net-Str D;
+  then y in D by WAYBEL21:32;
+  then reconsider y1=y as Element of L;
+  reconsider y1 as Element of L;
+  take y1;
+  thus y1 in D by A5,WAYBEL21:32;
+  let x1 be Element of L;
+  assume that
+A6: x1 in D and
+A7: x1 >= y1;
+  reconsider x=x1 as Element of Net-Str D by A6,WAYBEL21:32;
+  reconsider x as Element of Net-Str D;
+    Net-Str D is full SubRelStr of L by WAYBEL21:32;
+  then A8:  y <= x by A7,YELLOW_0:61;
+    (Net-Str D).x = (the mapping of Net-Str D).x by WAYBEL_0:def 8
+               .= (id D).x by WAYBEL21:32
+               .= x by A6,FUNCT_1:35;
+  hence x1 in U1 by A4,A8;
+end;
+
+theorem Th29:
+for L being non empty reflexive RelStr, A being Subset of L holds
+  A in sigma L implies A in xi L
+proof
+  let L be non empty reflexive RelStr, A be Subset of L;
+    lim_inf-Convergence L c= Scott-Convergence L by Th23;
+  then A1:  the topology of ConvergenceSpace Scott-Convergence L c=
+    the topology of ConvergenceSpace lim_inf-Convergence L by Th22;
+  assume A in sigma L;
+  then A in the topology of ConvergenceSpace Scott-Convergence L
+           by WAYBEL11:def 12;
+  then A in the topology of ConvergenceSpace lim_inf-Convergence L
+    by A1;
+  hence A in xi L by Def4;
+end;
+
+theorem Th30:
+for L being complete LATTICE, A being Subset of L
+st A is upper holds A in xi L implies A in sigma L
+proof
+  let L be complete LATTICE, A be Subset of L;
+  assume
+A1: A is upper;
+  assume A in xi L;
+  then A2: A is property(S) by Th28;
+  consider T being Scott TopAugmentation of L;
+A3:
+  the RelStr of T = the RelStr of L by YELLOW_9:def 4;
+  then reconsider A'=A as Subset of T;
+  reconsider A' as Subset of T;
+A4:
+  A' is property(S) by A2,A3,YELLOW12:19;
+
+    A' is upper by A1,A3,WAYBEL_0:25;
+  then A' is open by A4,WAYBEL11:15;
+  then A' in the topology of T by PRE_TOPC:def 5;
+  hence A in sigma L by YELLOW_9:51;
+end;
+
+theorem ::3.3 Proposition (ii)
+  for L being complete LATTICE , A being Subset of L
+st A is lower holds A` in xi L iff A is closed_under_directed_sups
+proof
+  let L be complete LATTICE, A be Subset of L;
+  assume
+A1:  A is lower;
+  then reconsider A1=A as lower Subset of L;
+A2:
+  A1` is upper;
+  consider T being Scott TopAugmentation of L;
+A3:
+  the RelStr of L = the RelStr of T by YELLOW_9:def 4;
+  then reconsider A'=A as Subset of T;
+  reconsider A' as Subset of T;
+
+   [#]L = the carrier of T by A3,PRE_TOPC:12
+    .= [#]T by PRE_TOPC:12;
+then A4:
+  A` = [#]T \ A' by PRE_TOPC:17
+    .= A'` by PRE_TOPC:17;
+  thus A` in xi L implies A is closed_under_directed_sups
+  proof
+    assume
+      A` in xi L;
+    then A'` in sigma L by A2,A4,Th30;
+    then A'` in the topology of T by YELLOW_9:51;
+    then A'` is open by PRE_TOPC:def 5;
+    then A' is closed by TOPS_1:29;
+    then A' is directly_closed by WAYBEL11:7;
+    hence A is closed_under_directed_sups by A3,YELLOW12:20;
+  end;
+  assume
+    A is closed_under_directed_sups;
+then A5:
+  A' is directly_closed by A3,YELLOW12:20;
+
+    A' is lower by A1,A3,WAYBEL_0:25;
+  then A' is closed by A5,WAYBEL11:7;
+  then A'` is open by TOPS_1:29;
+  then A'` in the topology of T by PRE_TOPC:def 5;
+  then A` in sigma L by A4,YELLOW_9:51;
+  hence A` in xi L by Th29;
+end;

@@ -1,0 +1,585 @@
+:: Banach Space of Bounded Linear Operators
+::  by Yasunari Shidama
+:: 
+:: Received December 22, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, NORMSP_1, RLVECT_1, QC_LANG1, FUNCT_1, ARYTM, ARYTM_1,
+      ARYTM_3, RELAT_1, ABSVALUE, ORDINAL2, BINOP_1, GRCAT_1, UNIALG_1,
+      LATTICES, FUNCOP_1, FUNCSDOM, FUNCT_2, RLSUB_1, SEQ_1, SEQ_2, SEQM_3,
+      BHSP_3, RSSPACE, RSSPACE3, PARTFUN1, LOPBAN_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, ENUMSET1, SUBSET_1, MCART_1, RELSET_1,
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, PRE_TOPC, DOMAIN_1,
+      FUNCOP_1, BINOP_1, STRUCT_0, XCMPLX_0, XREAL_0, RAT_1, INT_1, ORDINAL1,
+      ORDINAL2, NUMBERS, MEMBERED, REAL_1, NAT_1, PSCOMP_1, ALG_1, RLVECT_1,
+      VECTSP_1, FRAENKEL, ABSVALUE, RLSUB_1, NORMSP_1, BHSP_1, BHSP_2, BHSP_3,
+      RSSPACE, RSSPACE3, SEQ_1, SEQ_2, SEQM_3, SEQ_4, SERIES_1, FUNCSDOM;
+ constructors MCART_1, FUNCT_3, BINOP_1, ARYTM_0, REAL_1, XREAL_0, NAT_1,
+      SQUARE_1, FUNCT_2, XCMPLX_0, SUBSET_1, MEMBERED, DOMAIN_1, SEQ_1, SEQ_2,
+      SERIES_1, SEQ_4, PSCOMP_1, FUNCOP_1, FUNCSDOM, PREPOWER, RLVECT_1,
+      VECTSP_1, FRAENKEL, PARTFUN1, RLSUB_1, NORMSP_1, BHSP_2, BHSP_3, RSSPACE,
+      RSSPACE3;
+ clusters SUBSET_1, RELSET_1, FINSEQ_1, STRUCT_0, ARYTM_3, RELAT_1, REAL_1,
+      NUMBERS, ORDINAL2, XBOOLE_0, FUNCT_1, FUNCT_2, BINOP_1, FUNCOP_1,
+      FUNCSDOM, RLVECT_1, NORMSP_1, XREAL_0, MEMBERED, VECTSP_1, FRAENKEL,
+      INT_1, SEQ_1, RSSPACE3, BHSP_1;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: Real Vector Space of Operators
+
+definition
+  let X be set;
+  let Y be non empty set;
+  let F be Function of [:REAL, Y:], Y;
+  let a be real number, f be Function of X, Y;
+  redefine func F[;](a,f) -> Element of Funcs(X, Y);
+end;
+
+theorem :: LOPBAN_1:1
+for X be non empty set for Y be non empty LoopStr
+ex ADD be BinOp of Funcs(X,the carrier of Y) st
+  (for f,g being Element of Funcs(X,the carrier of Y)
+    holds ADD.(f,g)=(the add of Y).:(f,g));
+
+theorem :: LOPBAN_1:2
+for X be non empty set, Y be RealLinearSpace
+ ex MULT be Function of
+  [:REAL, Funcs(X,the carrier of Y):], Funcs(X,the carrier of Y) st
+    ( for r be Real, f be Element of Funcs(X,the carrier of Y) holds
+     ( for s be Element of X holds (MULT.[r,f]).s=r*(f.s) ) );
+
+definition
+  let X be non empty set;
+  let Y be non empty LoopStr;
+  func FuncAdd(X,Y) -> BinOp of Funcs(X,the carrier of Y) means
+:: LOPBAN_1:def 1
+    for f,g being Element of Funcs(X,the carrier of Y) holds
+    it.(f,g) = (the add of Y).:(f,g);
+end;
+
+definition
+  let X be non empty set;
+  let Y be RealLinearSpace;
+  func FuncExtMult(X,Y) -> Function of [:REAL,Funcs(X,the carrier of Y):],
+     Funcs(X,the carrier of Y) means
+:: LOPBAN_1:def 2
+     for a being Real,
+    f being Element of Funcs(X,the carrier of Y),
+      x being Element of X holds
+      (it.[a,f]).x = a*(f.x);
+end;
+
+definition
+  let X be set;
+  let Y be non empty ZeroStr;
+  func FuncZero(X,Y) -> Element of Funcs (X,the carrier of Y) equals
+:: LOPBAN_1:def 3
+   X --> 0.Y;
+end;
+
+ reserve X,A,B for non empty set;
+ reserve Y for RealLinearSpace;
+ reserve f,g,h for Element of Funcs(X,the carrier of Y);
+
+theorem :: LOPBAN_1:3
+   for Y being non empty LoopStr,
+         f,g,h being Element of Funcs(X,the carrier of Y) holds
+   h = (FuncAdd(X,Y)).(f,g) iff
+           for x being Element of X holds h.x = f.x + g.x;
+
+theorem :: LOPBAN_1:4
+    for x being Element of X holds (FuncZero(X,Y)).x = 0.Y;
+
+reserve a,b for Real;
+
+theorem :: LOPBAN_1:5
+  h = (FuncExtMult(X,Y)).[a,f] iff
+  for x being Element of X holds h.x = a*(f.x);
+
+reserve u,v,w for VECTOR of RLSStruct(#Funcs(X,the carrier of Y),
+            (FuncZero(X,Y)),FuncAdd(X,Y),FuncExtMult(X,Y)#);
+
+theorem :: LOPBAN_1:6
+ (FuncAdd(X,Y)).(f,g) = (FuncAdd(X,Y)).(g,f);
+
+theorem :: LOPBAN_1:7
+ (FuncAdd(X,Y)).(f,(FuncAdd(X,Y)).(g,h)) =
+                    (FuncAdd(X,Y)).((FuncAdd(X,Y)).(f,g),h);
+
+theorem :: LOPBAN_1:8
+ (FuncAdd(X,Y)).(FuncZero(X,Y),f) = f;
+
+theorem :: LOPBAN_1:9
+ (FuncAdd(X,Y)).(f,(FuncExtMult(X,Y)).[-1,f]) = FuncZero(X,Y);
+
+theorem :: LOPBAN_1:10
+ (FuncExtMult(X,Y)).[1,f] = f;
+
+theorem :: LOPBAN_1:11
+ (FuncExtMult(X,Y)).[a,(FuncExtMult(X,Y)).[b,f]] =
+  (FuncExtMult(X,Y)).[a*b,f];
+
+theorem :: LOPBAN_1:12
+ (FuncAdd(X,Y)).
+      ((FuncExtMult(X,Y)).[a,f],(FuncExtMult(X,Y)).[b,f])
+                                = (FuncExtMult(X,Y)).[a+b,f];
+
+theorem :: LOPBAN_1:13
+ RLSStruct(#Funcs(X,the carrier of Y),
+     (FuncZero(X,Y)),FuncAdd(X,Y),FuncExtMult(X,Y)#)
+     is RealLinearSpace;
+
+definition
+  let X be non empty set;
+  let Y be RealLinearSpace;
+  func RealVectSpace(X,Y) -> RealLinearSpace equals
+:: LOPBAN_1:def 4
+   RLSStruct(#Funcs(X,the carrier of Y),
+              (FuncZero(X,Y)),FuncAdd(X,Y),FuncExtMult(X,Y)#);
+end;
+
+definition
+  let X be non empty set;
+  let Y be RealLinearSpace;
+  cluster RealVectSpace(X,Y) -> strict;
+end;
+
+theorem :: LOPBAN_1:14
+     for X be non empty set
+     for Y be RealLinearSpace
+     for f,g,h be VECTOR of RealVectSpace(X,Y)
+     for f',g',h' be Element of Funcs(X, the carrier of Y)
+        st f'=f & g'=g & h'=h holds
+      h = f+g iff for x be Element of X holds h'.x = f'.x + g'.x;
+
+theorem :: LOPBAN_1:15
+     for X be non empty set
+     for Y be RealLinearSpace
+     for f,h be VECTOR of RealVectSpace(X,Y)
+     for f',h' be Element of Funcs(X, the carrier of Y)
+         st f'=f & h'=h
+     for a be Real holds
+      h = a*f iff for x be Element of X holds h'.x = a*f'.x;
+
+theorem :: LOPBAN_1:16
+     for X be non empty set
+     for Y be RealLinearSpace holds
+          0.RealVectSpace(X,Y) = (X --> 0.Y);
+
+begin :: Real Vector Space of Linear Operators
+
+definition
+  let X be non empty RLSStruct;
+  let Y be non empty LoopStr;
+  let IT be Function of X, Y;
+  attr IT is additive means
+:: LOPBAN_1:def 5
+  for x,y being VECTOR of X holds IT.(x+y) = IT.x+IT.y;
+end;
+
+definition
+  let X, Y be non empty RLSStruct;
+  let IT be Function of X,Y;
+  attr IT is homogeneous means
+:: LOPBAN_1:def 6
+   for x being VECTOR of X, r being Real holds IT.(r*x) = r*IT.x;
+end;
+
+definition
+  let X be non empty RLSStruct;
+  let Y be RealLinearSpace;
+  cluster additive homogeneous Function of X,Y;
+end;
+
+definition
+  let X, Y be RealLinearSpace;
+  mode LinearOperator of X,Y is additive homogeneous Function of X,Y;
+end;
+
+definition
+  let X, Y be RealLinearSpace;
+  func LinearOperators(X,Y) -> Subset of
+     RealVectSpace(the carrier of X, Y) means
+:: LOPBAN_1:def 7
+   for x being set holds x in it
+     iff
+   x is LinearOperator of X,Y;
+end;
+
+definition
+  let X, Y be RealLinearSpace;
+  cluster LinearOperators(X,Y)  -> non empty;
+end;
+
+theorem :: LOPBAN_1:17
+  for X, Y be RealLinearSpace holds LinearOperators(X,Y) is lineary-closed;
+
+theorem :: LOPBAN_1:18
+  for X, Y be RealLinearSpace holds
+RLSStruct (# LinearOperators(X,Y),
+        Zero_(LinearOperators(X,Y),RealVectSpace(the carrier of X,Y)),
+        Add_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)),
+        Mult_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)) #)
+is Subspace of RealVectSpace(the carrier of X,Y);
+
+definition
+  let X, Y be RealLinearSpace;
+  cluster RLSStruct (# LinearOperators(X,Y),
+        Zero_(LinearOperators(X,Y),RealVectSpace(the carrier of X,Y)),
+        Add_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)),
+        Mult_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)) #)
+ -> Abelian add-associative right_zeroed right_complementable
+        RealLinearSpace-like;
+end;
+
+theorem :: LOPBAN_1:19
+  for X, Y be RealLinearSpace holds
+  RLSStruct (# LinearOperators(X,Y),
+             Zero_(LinearOperators(X,Y),RealVectSpace(the carrier of X,Y)),
+           Add_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)),
+           Mult_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)) #)
+  is RealLinearSpace;
+
+definition
+  let X, Y be RealLinearSpace;
+  func R_VectorSpace_of_LinearOperators(X,Y) -> RealLinearSpace equals
+:: LOPBAN_1:def 8
+  RLSStruct (# LinearOperators(X,Y),
+             Zero_(LinearOperators(X,Y),RealVectSpace(the carrier of X,Y)),
+           Add_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)),
+           Mult_(LinearOperators(X,Y), RealVectSpace(the carrier of X,Y)) #);
+end;
+
+definition
+  let X, Y be RealLinearSpace;
+  cluster R_VectorSpace_of_LinearOperators(X,Y) -> strict;
+end;
+
+theorem :: LOPBAN_1:20
+     for X, Y be RealLinearSpace
+     for f,g,h be VECTOR of R_VectorSpace_of_LinearOperators(X,Y)
+    for f',g',h' be LinearOperator of X,Y
+        st f'=f & g'=g & h'=h holds
+    (h = f+g iff (for x be VECTOR of X holds h'.x = f'.x + g'.x) );
+
+theorem :: LOPBAN_1:21
+     for X, Y be RealLinearSpace
+     for f,h be VECTOR of R_VectorSpace_of_LinearOperators(X,Y)
+     for f',h' be LinearOperator of X,Y
+         st f'=f & h'=h
+     for a be Real holds
+      h = a*f iff
+             for x be VECTOR of X holds h'.x = a*f'.x;
+
+theorem :: LOPBAN_1:22
+     for X, Y be RealLinearSpace holds
+          0.R_VectorSpace_of_LinearOperators(X,Y) =((the carrier of X) -->0.Y);
+
+theorem :: LOPBAN_1:23
+  for X,Y be RealLinearSpace holds
+       (the carrier of X) --> 0.Y is LinearOperator of X,Y;
+
+begin :: Real Normed Linear Space of Bounded Linear Operators
+
+theorem :: LOPBAN_1:24
+  for X be RealNormSpace
+   for seq be sequence of X
+    for g be Point of X holds
+  ( seq is convergent & lim seq = g implies
+      ||.seq.|| is convergent & lim ||.seq.|| = ||.g.|| );
+
+definition
+  let X, Y be RealNormSpace;
+  let IT be LinearOperator of X,Y;
+  attr IT is bounded means
+:: LOPBAN_1:def 9
+  ex K being Real st 0 <= K &
+   for x being VECTOR of X holds
+       ||. IT.x .|| <= K*||. x .||;
+end;
+
+theorem :: LOPBAN_1:25
+  for X, Y be RealNormSpace holds
+      for f be LinearOperator of X,Y
+         st (for x be VECTOR of X holds f.x=0.Y)
+        holds f is bounded;
+
+definition
+  let X, Y be RealNormSpace;
+  cluster bounded LinearOperator of X,Y;
+end;
+
+definition
+  let X, Y be RealNormSpace;
+  func BoundedLinearOperators(X,Y) ->
+    Subset of R_VectorSpace_of_LinearOperators(X,Y) means
+:: LOPBAN_1:def 10
+   for x being set holds x in it
+     iff
+   x is bounded LinearOperator of X,Y;
+end;
+
+definition
+  let X, Y be RealNormSpace;
+  cluster BoundedLinearOperators(X,Y) -> non empty;
+end;
+
+theorem :: LOPBAN_1:26
+  for X, Y be RealNormSpace holds
+  BoundedLinearOperators(X,Y) is lineary-closed;
+
+theorem :: LOPBAN_1:27
+  for X, Y be RealNormSpace holds
+RLSStruct (# BoundedLinearOperators(X,Y),
+        Zero_(BoundedLinearOperators(X,Y),
+        R_VectorSpace_of_LinearOperators(X,Y)),
+         Add_(BoundedLinearOperators(X,Y),
+         R_VectorSpace_of_LinearOperators(X,Y)),
+        Mult_(BoundedLinearOperators(X,Y),
+        R_VectorSpace_of_LinearOperators(X,Y)) #)
+is Subspace of R_VectorSpace_of_LinearOperators(X,Y);
+
+definition
+  let X, Y be RealNormSpace;
+  cluster RLSStruct (# BoundedLinearOperators(X,Y),
+        Zero_(BoundedLinearOperators(X,Y),
+        R_VectorSpace_of_LinearOperators(X,Y)),
+         Add_(BoundedLinearOperators(X,Y),
+         R_VectorSpace_of_LinearOperators(X,Y)),
+        Mult_(BoundedLinearOperators(X,Y),
+        R_VectorSpace_of_LinearOperators(X,Y)) #)
+ -> Abelian add-associative right_zeroed right_complementable
+        RealLinearSpace-like;
+end;
+
+theorem :: LOPBAN_1:28
+  for X, Y be RealNormSpace holds
+  RLSStruct (# BoundedLinearOperators(X,Y),
+        Zero_(BoundedLinearOperators(X,Y),
+        R_VectorSpace_of_LinearOperators(X,Y)),
+         Add_(BoundedLinearOperators(X,Y),
+         R_VectorSpace_of_LinearOperators(X,Y)),
+        Mult_(BoundedLinearOperators(X,Y),
+        R_VectorSpace_of_LinearOperators(X,Y)) #)
+  is RealLinearSpace;
+
+definition
+  let X, Y be RealNormSpace;
+  func R_VectorSpace_of_BoundedLinearOperators(X,Y) -> RealLinearSpace equals
+:: LOPBAN_1:def 11
+
+  RLSStruct (# BoundedLinearOperators(X,Y),
+        Zero_(BoundedLinearOperators(X,Y),
+        R_VectorSpace_of_LinearOperators(X,Y)),
+         Add_(BoundedLinearOperators(X,Y),
+         R_VectorSpace_of_LinearOperators(X,Y)),
+        Mult_(BoundedLinearOperators(X,Y),
+        R_VectorSpace_of_LinearOperators(X,Y)) #);
+end;
+
+definition
+  let X, Y be RealNormSpace;
+  cluster R_VectorSpace_of_BoundedLinearOperators(X,Y) -> strict;
+end;
+
+theorem :: LOPBAN_1:29
+     for X, Y be RealNormSpace
+     for f,g,h be VECTOR of R_VectorSpace_of_BoundedLinearOperators(X,Y)
+       for f',g',h' be bounded LinearOperator of X,Y
+        st f'=f & g'=g & h'=h holds
+      (h = f+g iff (for x be VECTOR of X holds (h'.x = f'.x + g'.x)) );
+
+theorem :: LOPBAN_1:30
+     for X, Y be RealNormSpace
+     for f,h be VECTOR of R_VectorSpace_of_BoundedLinearOperators(X,Y)
+     for f',h' be bounded LinearOperator of X,Y
+         st f'=f & h'=h
+     for a be Real holds
+      h = a*f iff for x be VECTOR of X holds h'.x = a*f'.x;
+
+theorem :: LOPBAN_1:31
+     for X, Y be RealNormSpace holds
+          0.R_VectorSpace_of_BoundedLinearOperators(X,Y)
+          =((the carrier of X) -->0.Y);
+
+definition
+  let X, Y be RealNormSpace;
+  let f be set such that
+   f in BoundedLinearOperators(X,Y);
+  func modetrans(f,X,Y) -> bounded LinearOperator of X,Y equals
+:: LOPBAN_1:def 12
+    f;
+end;
+
+definition
+   let X, Y be RealNormSpace;
+   let u be LinearOperator of X,Y;
+   func PreNorms(u) -> non empty Subset of REAL equals
+:: LOPBAN_1:def 13
+  {||.u.t.|| where t is VECTOR of X : ||.t.|| <= 1 };
+end;
+
+theorem :: LOPBAN_1:32
+    for X, Y be RealNormSpace
+    for g be bounded LinearOperator of X,Y
+      holds PreNorms(g) is non empty bounded_above;
+
+theorem :: LOPBAN_1:33
+    for X, Y be RealNormSpace
+    for g be LinearOperator of X,Y
+      holds g is bounded iff PreNorms(g) is bounded_above;
+
+theorem :: LOPBAN_1:34
+   for X, Y be RealNormSpace
+    ex NORM be Function of BoundedLinearOperators(X,Y),REAL st
+          for f be set st f in BoundedLinearOperators(X,Y) holds
+        NORM.f = sup PreNorms(modetrans(f,X,Y));
+
+definition
+   let X, Y be RealNormSpace;
+   func BoundedLinearOperatorsNorm(X,Y)
+     -> Function of BoundedLinearOperators(X,Y), REAL means
+:: LOPBAN_1:def 14
+  for x be set st x in BoundedLinearOperators(X,Y) holds
+    it.x = sup PreNorms(modetrans(x,X,Y));
+end;
+
+theorem :: LOPBAN_1:35
+   for X, Y be RealNormSpace
+   for f be bounded LinearOperator of X,Y holds modetrans(f,X,Y)=f;
+
+theorem :: LOPBAN_1:36
+   for X, Y be RealNormSpace
+   for f be bounded LinearOperator of X,Y holds
+   BoundedLinearOperatorsNorm(X,Y).f = sup PreNorms(f);
+
+definition let X, Y be RealNormSpace;
+ func R_NormSpace_of_BoundedLinearOperators(X,Y) -> non empty NORMSTR equals
+:: LOPBAN_1:def 15
+  NORMSTR (# BoundedLinearOperators(X,Y),
+        Zero_(BoundedLinearOperators(X,Y),
+        R_VectorSpace_of_LinearOperators(X,Y)),
+         Add_(BoundedLinearOperators(X,Y),
+         R_VectorSpace_of_LinearOperators(X,Y)),
+          Mult_(BoundedLinearOperators(X,Y),
+          R_VectorSpace_of_LinearOperators(X,Y)),
+          BoundedLinearOperatorsNorm(X,Y) #);
+end;
+
+theorem :: LOPBAN_1:37
+    for X, Y be RealNormSpace
+       holds ((the carrier of X) --> 0.Y) =
+        0.R_NormSpace_of_BoundedLinearOperators(X,Y);
+
+theorem :: LOPBAN_1:38
+    for X, Y be RealNormSpace
+    for f being Point of
+       R_NormSpace_of_BoundedLinearOperators(X,Y)
+    for g be bounded LinearOperator of X,Y st g=f holds
+      for t be VECTOR of X holds ||.g.t.|| <= ||.f.||*||.t.||;
+
+theorem :: LOPBAN_1:39
+    for X, Y be RealNormSpace
+    for f being Point of
+       R_NormSpace_of_BoundedLinearOperators(X,Y)
+    holds 0 <= ||.f.||;
+
+theorem :: LOPBAN_1:40
+    for X, Y be RealNormSpace
+    for f being Point of
+       R_NormSpace_of_BoundedLinearOperators(X,Y)
+       st f = 0.R_NormSpace_of_BoundedLinearOperators(X,Y)
+    holds 0 = ||.f.||;
+
+theorem :: LOPBAN_1:41
+     for X, Y be RealNormSpace
+     for f,g,h be Point of R_NormSpace_of_BoundedLinearOperators(X,Y)
+       for f',g',h' be bounded LinearOperator of X,Y
+        st f'=f & g'=g & h'=h holds
+      (h = f+g iff
+          (for x be VECTOR of X holds (h'.x = f'.x + g'.x)) );
+
+theorem :: LOPBAN_1:42
+     for X, Y be RealNormSpace
+     for f,h be Point of R_NormSpace_of_BoundedLinearOperators(X,Y)
+     for f',h' be bounded LinearOperator of X,Y st f'=f & h'=h
+     for a be Real holds
+      h = a*f iff for x be VECTOR of X holds h'.x = a*f'.x;
+
+theorem :: LOPBAN_1:43
+    for X be RealNormSpace
+    for Y be RealNormSpace
+    for f, g being Point of
+       R_NormSpace_of_BoundedLinearOperators(X,Y)
+       for a be Real holds
+  ( ||.f.|| = 0 iff
+  f = 0.R_NormSpace_of_BoundedLinearOperators(X,Y) ) &
+  ||.a*f.|| = abs(a) * ||.f.|| &
+  ||.f+g.|| <= ||.f.|| + ||.g.||;
+
+theorem :: LOPBAN_1:44
+  for X,Y be RealNormSpace holds
+  R_NormSpace_of_BoundedLinearOperators(X,Y) is RealNormSpace-like;
+
+theorem :: LOPBAN_1:45
+  for X, Y be RealNormSpace holds
+    R_NormSpace_of_BoundedLinearOperators(X,Y) is RealNormSpace;
+
+definition
+   let X, Y be RealNormSpace;
+   cluster R_NormSpace_of_BoundedLinearOperators(X,Y) ->
+               RealNormSpace-like RealLinearSpace-like
+               Abelian add-associative right_zeroed right_complementable;
+end;
+
+theorem :: LOPBAN_1:46
+     for X, Y be RealNormSpace
+     for f,g,h be Point of R_NormSpace_of_BoundedLinearOperators(X,Y)
+       for f',g',h' be bounded LinearOperator of X,Y
+        st f'=f & g'=g & h'=h holds
+      (h = f-g iff
+          (for x be VECTOR of X holds (h'.x = f'.x - g'.x)) );
+
+begin :: Real Banach Space of Bounded Linear Operators
+
+definition let X be RealNormSpace;
+  attr X is complete means
+:: LOPBAN_1:def 16
+    for seq be sequence of X holds
+    seq is Cauchy_sequence_by_Norm implies seq is convergent;
+end;
+
+definition
+  cluster complete RealNormSpace;
+end;
+
+definition
+  mode RealBanachSpace is complete RealNormSpace;
+end;
+
+theorem :: LOPBAN_1:47
+    for X be RealNormSpace
+      for seq be sequence of X
+        st seq is convergent
+       holds ||.seq.|| is convergent & lim ||.seq.|| = ||.lim seq.||;
+
+theorem :: LOPBAN_1:48
+    for X, Y be RealNormSpace st Y is complete
+      for seq be sequence of R_NormSpace_of_BoundedLinearOperators(X,Y)
+               st seq is Cauchy_sequence_by_Norm
+ holds seq is convergent;
+
+theorem :: LOPBAN_1:49
+  for X be RealNormSpace
+  for Y be RealBanachSpace holds
+     R_NormSpace_of_BoundedLinearOperators(X,Y) is RealBanachSpace;
+
+definition
+  let X be RealNormSpace;
+  let Y be RealBanachSpace;
+  cluster R_NormSpace_of_BoundedLinearOperators (X,Y) -> complete;
+end;
+

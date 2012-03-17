@@ -1,0 +1,276 @@
+:: Dyadic Numbers and $T_4$ Topological Spaces
+::  by J\'ozef Bia\las and Yatsuka Nakamura
+::
+:: Received July 29, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary GROUP_1, ARYTM_3, PRALG_2, BOOLE, PRE_TOPC, FUNCT_1, FINSEQ_1,
+      RELAT_1, ARYTM_1, CONNSP_2, TOPS_1, SUBSET_1, SETFAM_1, TARSKI, TOPMETR,
+      COMPTS_1, URYSOHN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, DOMAIN_1,
+      FUNCT_1, FUNCT_2, REAL_1, FINSEQ_1, NAT_1, TOPMETR, COMPTS_1, STRUCT_0,
+      PRE_TOPC, CARD_4, TOPS_1, CONNSP_2;
+ constructors DOMAIN_1, REAL_1, NAT_1, TOPMETR, COMPTS_1, CARD_4, TOPS_1,
+      MEMBERED;
+ clusters SUBSET_1, STRUCT_0, PRE_TOPC, RELSET_1, TOPS_1, ARYTM_3, XREAL_0,
+      MEMBERED, ZFMISC_1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+definition
+   func R<0 ->Subset of REAL means
+:: URYSOHN1:def 1
+  for x being Real holds x in it iff x < 0;
+end;
+
+definition
+   func R>1 ->Subset of REAL means
+:: URYSOHN1:def 2
+  for x being Real holds x in it iff 1 < x;
+end;
+
+definition
+   let n be Nat;
+   func dyadic(n) -> Subset of REAL means
+:: URYSOHN1:def 3
+for x being Real holds
+        x in it iff ex i being Nat st (0 <= i & i <= (2|^n) & x = i/(2|^n));
+end;
+
+definition
+   func DYADIC -> Subset of REAL means
+:: URYSOHN1:def 4
+for a being Real holds a in it iff
+     ex n being Nat st a in dyadic(n);
+end;
+
+definition
+   func DOM -> Subset of REAL equals
+:: URYSOHN1:def 5
+ R<0 \/ DYADIC \/ R>1;
+end;
+
+definition
+   let T be TopSpace;
+   let A be non empty Subset of REAL;
+   let F be Function of A,bool the carrier of T;
+   let r be Element of A;
+   redefine func F.r -> Subset of T;
+end;
+
+canceled 4;
+
+theorem :: URYSOHN1:5
+   for n being Nat holds
+   for x being Real st x in dyadic(n) holds
+   0 <= x & x <= 1;
+
+theorem :: URYSOHN1:6
+   dyadic(0) = {0,1};
+
+theorem :: URYSOHN1:7
+     dyadic(1) = {0,1/2,1};
+
+definition let n be Nat;
+   cluster dyadic(n) -> non empty;
+end;
+
+theorem :: URYSOHN1:8
+     for x, n being Nat holds x|^n is Nat;
+
+theorem :: URYSOHN1:9
+   for n being Nat holds
+   ex FS being FinSequence st (dom FS = Seg ((2|^n)+1) &
+   for i being Nat st i in dom FS holds FS.i = (i-1)/(2|^n));
+
+definition
+   let n be Nat;
+   func dyad(n) -> FinSequence means
+:: URYSOHN1:def 6
+dom it = Seg((2|^n)+1) &
+    for i being Nat st i in dom it holds it.i = (i-1)/(2|^n);
+end;
+
+theorem :: URYSOHN1:10
+     for n being Nat holds
+   dom dyad(n) = Seg((2|^n)+1) & rng dyad(n) = dyadic(n);
+
+definition
+   cluster DYADIC -> non empty;
+end;
+
+definition
+   cluster DOM -> non empty;
+end;
+
+theorem :: URYSOHN1:11
+   for n being Nat holds dyadic(n) c= dyadic(n+1);
+
+theorem :: URYSOHN1:12
+   for n being Nat holds
+   0 in dyadic(n) & 1 in dyadic(n);
+
+theorem :: URYSOHN1:13
+   for n,i being Nat st 0 < i & i <= 2|^n holds
+   (i*2-1)/(2|^(n+1)) in dyadic(n+1) \ dyadic(n);
+
+theorem :: URYSOHN1:14
+   for n,i being Nat st 0 <= i & i < 2|^n holds
+   (i*2+1)/(2|^(n+1)) in dyadic(n+1) \ dyadic(n);
+
+theorem :: URYSOHN1:15
+   for n being Nat holds 1/(2|^(n+1)) in dyadic(n+1) \ dyadic(n);
+
+definition
+   let n be Nat;
+   let x be Element of dyadic(n);
+   func axis(x,n) -> Nat means
+:: URYSOHN1:def 7
+x = it/(2|^n);
+end;
+
+theorem :: URYSOHN1:16
+   for n being Nat holds
+   for x being Element of dyadic(n) holds
+   x = axis(x,n)/(2|^n) & 0 <= axis(x,n) & axis(x,n) <= (2|^n);
+
+theorem :: URYSOHN1:17
+     for n being Nat holds
+   for x being Element of dyadic(n) holds
+   (axis(x,n)-1)/(2|^n) < x & x < (axis(x,n)+1)/(2|^n);
+
+theorem :: URYSOHN1:18
+   for n being Nat holds
+   for x being Element of dyadic(n) holds
+   ((axis(x,n)-1)/(2|^n) < (axis(x,n)+1)/(2|^n));
+
+canceled;
+
+theorem :: URYSOHN1:20
+   for n being Nat holds
+   for x being Element of dyadic(n+1) holds
+   (not x in dyadic(n) implies
+   ((axis(x,n+1)-1)/(2|^(n+1)) in dyadic(n) &
+   (axis(x,n+1)+1)/(2|^(n+1)) in dyadic(n)));
+
+theorem :: URYSOHN1:21
+   for n being Nat holds
+   for x1,x2 being Element of dyadic(n) st x1 < x2 holds
+   axis(x1,n) < axis(x2,n);
+
+theorem :: URYSOHN1:22
+   for n being Nat holds
+   for x1,x2 being Element of dyadic(n) st x1 < x2 holds
+   x1 <= (axis(x2,n)-1)/(2|^n) & (axis(x1,n)+1)/(2|^n) <= x2;
+
+theorem :: URYSOHN1:23
+   for n being Nat holds
+   for x1,x2 being Element of dyadic(n+1) st
+   x1 < x2 & not x1 in dyadic(n) & not x2 in dyadic(n) holds
+   (axis(x1,n+1)+1)/(2|^(n+1)) <= (axis(x2,n+1)-1)/(2|^(n+1));
+
+begin
+::
+::                             Normal TopSpaces
+::
+
+definition
+   let T be non empty TopSpace;
+   let x be Point of T;
+   redefine mode a_neighborhood of x means
+:: URYSOHN1:def 8
+       ex A being Subset of T st A is open & x in A & A c= it;
+  synonym Nbhd of x,T;
+end;
+
+theorem :: URYSOHN1:24
+   for T being non empty TopSpace
+   for A being Subset of T holds
+   A is open iff
+   (for x being Point of T holds
+   x in A implies ex B being Nbhd of x,T st B c= A);
+
+canceled;
+
+theorem :: URYSOHN1:26
+     for T being non empty TopSpace holds
+   for A being Subset of T holds
+   (for x being Point of T st x in A holds A is Nbhd of x,T)
+   implies A is open;
+
+definition
+   let T be TopStruct;
+   attr T is being_T1 means
+:: URYSOHN1:def 9
+for p,q being Point of T st not p = q
+   ex W,V being Subset of T st W is open & V is open &
+       p in W & not q in W & q in V & not p in V;
+   synonym T is_T1;
+end;
+
+theorem :: URYSOHN1:27
+   for T being non empty TopSpace holds
+   T is_T1 iff for p being Point of T holds {p} is closed;
+
+definition
+   let T be non empty TopSpace;
+   let F be map of T,R^1;
+   let x be Point of T;
+   redefine func F.x -> Real;
+end;
+
+theorem :: URYSOHN1:28
+   for T being non empty TopSpace st T is_T4 holds
+   for A,B being open Subset of T st
+   A <> {} & Cl(A) c=B holds
+   ex C being Subset of T st
+   C <> {} & C is open & Cl(A) c= C & Cl(C) c= B;
+
+theorem :: URYSOHN1:29
+     for T being non empty TopSpace holds T is_T3 iff
+   for A being open Subset of T
+   for p being Point of T st p in A holds
+   ex B being open Subset of T st p in B & Cl(B) c= A;
+
+theorem :: URYSOHN1:30
+     for T being non empty TopSpace st T is_T4 & T is_T1 holds
+   for A being open Subset of T st A <> {} holds
+   ex B being Subset of T st B <> {} & Cl(B) c= A;
+
+theorem :: URYSOHN1:31
+     for T being non empty TopSpace st T is_T4
+   for A,B being Subset of T st A is open & B is closed & B <> {} & B c= A
+   ex C being Subset of T st C is open & B c= C & Cl(C) c= A;
+
+begin
+::
+::              Some increasing family of sets in normal space
+::
+
+definition
+   let T be non empty TopSpace;
+   let A,B be Subset of T;
+   assume
+T is_T4 & A <> {} & A is open & B is open & Cl(A) c= B;
+   mode Between of A,B -> Subset of T means
+:: URYSOHN1:def 10
+ it <> {} & it is open & Cl(A) c= it & Cl(it) c= B;
+end;
+
+theorem :: URYSOHN1:32
+   for T being non empty TopSpace st T is_T4
+ for A,B being closed Subset of T st A <> {} & A misses B
+ for n being Nat
+ for G being Function of dyadic(n),bool the carrier of T st
+   A c= G.0 & B = [#](T) \ G.1 &
+   for r1,r2 being Element of dyadic(n) st r1 < r2 holds
+    G.r1 is open & G.r2 is open & Cl(G.r1) c= G.r2
+ ex F being Function of dyadic(n+1),bool the carrier of T st
+  A c= F.0 & B = [#](T) \ F.1 &
+  for r1,r2,r being Element of dyadic(n+1) st r1 < r2 holds
+   F.r1 is open & F.r2 is open & Cl(F.r1) c= F.r2 &
+   (r in dyadic(n) implies F.r = G.r);

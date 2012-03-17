@@ -1,0 +1,1243 @@
+:: Boolean Properties of Lattices
+::  by Agnieszka Julia Marasik
+::
+:: Received March 28, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary LATTICES, BOOLE, SUBSET_1;
+ notation STRUCT_0, LATTICES;
+ constructors LATTICES, XBOOLE_0;
+ clusters LATTICES, ZFMISC_1, XBOOLE_0;
+ theorems LATTICES, FILTER_0, LATTICE4;
+
+begin :: General Lattices
+
+  reserve L for Lattice;
+  reserve X,Y,Z,V for Element of L;
+
+definition let L,X,Y;
+ func X \ Y -> Element of L equals :Def1:
+   X "/\" Y`;
+  correctness;
+end;
+
+definition let L,X,Y;
+ func X \+\ Y -> Element of L equals
+ :Def2:  (X \ Y) "\/" (Y \ X);
+ correctness;
+end;
+
+definition let L,X,Y;
+ redefine pred X = Y means :Def3:
+   X [= Y & Y [= X;
+  compatibility by LATTICES:26;
+end;
+
+definition let L,X,Y;
+ pred X meets Y means
+ :Def4: X "/\" Y <> Bottom L;
+ antonym X misses Y;
+end;
+
+Lm1:  X [= Z & Y [= Z implies X "\/" Y [= Z
+proof
+   assume that A1: X [= Z and
+                A2: Y [= Z;
+      A3:  X "\/" Y [= Z "\/" Y by A1,FILTER_0:1;
+        Z "\/" Y [= Z "\/" Z by A2,FILTER_0:1;
+      then Z "\/" Y [= Z by LATTICES:17;
+      hence thesis by A3,LATTICES:25;
+end;
+
+canceled 2;
+
+theorem
+    X "\/" Y [= Z implies X [= Z & Y [= Z
+proof
+  assume A1: X "\/" Y [= Z;
+  then X "/\" (X "\/" Y) [= X "/\" Z by LATTICES:27;
+  then A2:  X [= X "/\" Z by LATTICES:def 9;
+A3:X "/\" Z [= Z by LATTICES:23;
+    Y "/\" (Y "\/" X) [= Y "/\" Z by A1,LATTICES:27;
+  then A4:  Y [= Y "/\" Z by LATTICES:def 9;
+    Y "/\" Z [= Z by LATTICES:23;
+  hence thesis by A2,A3,A4,LATTICES:25;
+end;
+
+theorem
+    X "/\" Y [= X "\/" Z
+proof
+    X "/\" Y [= X & X [= X "\/" Z by LATTICES:22,23;
+  hence thesis by LATTICES:25;
+end;
+
+canceled;
+
+theorem
+    X [= Z implies X \ Y [= Z
+proof
+  assume X [= Z;
+  then A1: X "/\" Y` [= Z "/\" Y` by LATTICES:27;
+    Z "/\" Y` [= Z by LATTICES:23;
+  then X "/\" Y` [= Z by A1,LATTICES:25;
+  hence thesis by Def1;
+end;
+
+theorem
+Th7: X [= Y implies X \ Z [= Y \ Z
+proof
+  assume A1: X [= Y;
+    X "/\" Z` = X \ Z & Y "/\" Z` = Y \ Z by Def1;
+  hence thesis by A1,LATTICES:27;
+end;
+
+theorem
+Th8: X \ Y [= X
+proof
+     X "/\" Y` [= X by LATTICES:23;
+   hence thesis by Def1;
+end;
+
+theorem
+    X \ Y [= X \+\ Y
+proof X \+\ Y = (X \ Y) "\/" (Y \ X) by Def2;
+   hence thesis by LATTICES:22;
+end;
+
+theorem
+    X \ Y [= Z & Y \ X [= Z implies X \+\ Y [= Z
+proof
+  assume that A1: X \ Y [= Z and
+              A2: Y \ X [= Z;
+            (X \ Y) "\/" (Y \ X) [= Z by A1,A2,Lm1;
+  hence thesis by Def2;
+end;
+
+theorem
+    X = Y "\/" Z iff Y [= X & Z [= X & for V st Y [= V & Z [= V
+            holds X [= V
+proof
+  thus X = Y "\/" Z implies
+       Y [= X & Z [= X & for V st Y [= V & Z [= V holds X [= V
+ by Lm1,LATTICES:22;
+  assume that A1: Y [= X and
+                A2: Z [= X and
+                A3: for V st Y [= V & Z [= V holds X [= V;
+    Y [= Y "\/" Z & Z [= Y "\/" Z by LATTICES:22;
+  then A4:  X [= Y "\/" Z by A3;
+    Y "\/" Z [= X by A1,A2,Lm1;
+  hence thesis by A4,LATTICES:26;
+end;
+
+theorem
+    X = Y "/\" Z iff X [= Y & X [= Z & for V st V [= Y & V [= Z
+            holds V [= X
+proof
+  thus X = Y "/\" Z implies
+        X [= Y & X [= Z & for V st V [= Y & V [= Z holds V [= X by FILTER_0:7,
+LATTICES:23;
+    assume that A1: X [= Y & X [= Z and
+                A2: for V st V [= Y & V [= Z holds V [= X;
+    A3:  X [= Y "/\" Z by A1,FILTER_0:7;
+      Y "/\" Z [= Y & Y "/\" Z [= Z by LATTICES:23;
+    then Y "/\" Z [= X by A2;
+    hence X = Y "/\" Z by A3,Def3;
+end;
+
+canceled;
+
+theorem
+Th14: X "/\" (Y \ Z) = (X "/\" Y) \ Z
+proof
+    X "/\" (Y \ Z)
+    = X "/\" (Y "/\" Z`) by Def1
+   .= (X "/\" Y) "/\" Z` by LATTICES:def 7
+   .= (X "/\" Y) \ Z by Def1;
+  hence thesis;
+end;
+
+theorem Th15:
+  X meets Y implies Y meets X
+proof
+  assume X meets Y;
+  then X "/\" Y <> Bottom L by Def4;
+  hence thesis by Def4;
+end;
+
+theorem
+    X meets X iff X <> Bottom L
+proof
+  hereby assume X meets X;
+    then X "/\" X <> Bottom L by Def4;
+    hence X <> Bottom L by LATTICES:18;
+  end;
+  assume A1: X <> Bottom L;
+    X "/\" X = X by LATTICES:18;
+  hence thesis by A1,Def4;
+end;
+
+theorem Th17:
+  X \+\ Y = Y \+\ X
+proof
+  thus X \+\ Y = (X \ Y) "\/" (Y \ X) by Def2
+            .= Y \+\ X by Def2;
+end;
+
+definition let L, X, Y;
+  redefine pred X meets Y;
+  symmetry by Th15;
+  redefine func X \+\ Y;
+  commutativity by Th17;
+end;
+
+begin :: Modular Lattices
+
+  reserve L for M_Lattice;
+  reserve X,Y for Element of L;
+
+canceled 3;
+
+theorem
+    X misses Y implies Y misses X
+proof
+  assume X misses Y;
+  then Y "/\" X = Bottom L by Def4;
+  hence thesis by Def4;
+end;
+
+begin   ::Distributive Lattices
+
+  reserve L for D_Lattice;
+  reserve X,Y,Z for Element of L;
+
+theorem
+    (X "/\" Y) "\/" (X "/\" Z) = X implies X [= Y "\/" Z
+proof
+  assume (X "/\" Y) "\/" (X "/\" Z) = X;
+  then X "/\" (Y "\/" Z) = X by LATTICES:def 11;
+  hence thesis by LATTICES:21;
+end;
+
+canceled;
+
+theorem
+Th24: (X "\/" Y) \ Z = (X \ Z) "\/" (Y \ Z)
+proof
+  thus (X "\/" Y) \ Z
+    = (X "\/" Y) "/\" Z` by Def1
+    .=(X "/\" Z`) "\/" (Y "/\" Z`) by LATTICES:def 11
+    .= (X \ Z) "\/" (Y "/\" Z`) by Def1
+    .= (X \ Z) "\/" (Y \ Z) by Def1;
+end;
+
+begin   ::Distributive bounded Lattices
+
+  reserve L for 0_Lattice;
+  reserve X,Y,Z for Element of L;
+
+theorem
+Th25: X [= Bottom L implies X = Bottom L
+proof
+  assume A1: X [= Bottom L;
+     Bottom L [= X by LATTICES:41;
+  hence thesis by A1,LATTICES:26;
+end;
+
+theorem
+    X [= Y & X [= Z & Y "/\" Z = Bottom L implies X = Bottom L
+proof
+  assume that A1: X [= Y and
+              A2: X [= Z and
+              A3: Y "/\" Z = Bottom L;
+    X [= Bottom L by A1,A2,A3,FILTER_0:7;
+  hence X = Bottom L by Th25;
+end;
+
+theorem
+Th27: X "\/" Y = Bottom L iff X = Bottom L & Y = Bottom L
+proof
+  thus X "\/" Y = Bottom L implies X = Bottom L & Y = Bottom L
+  proof
+    assume A1: X "\/" Y = Bottom L;
+    then A2: X [= Bottom L & Bottom L [= X by LATTICES:22,41;
+      Y [= Bottom L & Bottom L [= Y by A1,LATTICES:22,41;
+    hence thesis by A2,Def3;
+  end;
+  thus X = Bottom L & Y = Bottom L implies X "\/" Y = Bottom L by LATTICES:39
+;
+end;
+
+theorem
+    X [= Y & Y "/\" Z = Bottom L implies X "/\" Z = Bottom L
+proof
+  assume X [= Y;
+  then X "/\" Z [= Y "/\" Z by LATTICES:27;
+  hence thesis by Th25;
+end;
+
+theorem
+Th29:  Bottom L \ X = Bottom L
+proof
+    Bottom L \ X = Bottom L "/\" X` by Def1
+    .= Bottom L by LATTICES:40;
+  hence thesis;
+end;
+
+theorem
+Th30:  X meets Y & Y [= Z implies X meets Z
+proof
+  assume that A1: X meets Y and
+              A2: Y [= Z;
+  A3: X "/\" Y <> Bottom L by A1,Def4;
+      X "/\" Y [= X "/\" Z by A2,LATTICES:27;
+  then X "/\" Z <> Bottom L by A3,Th25;
+  hence thesis by Def4;
+end;
+
+theorem
+Th31:  X meets Y "/\" Z implies X meets Y & X meets Z
+proof
+  assume X meets Y "/\" Z;
+  then A1: X "/\" (Y "/\" Z) <> Bottom L by Def4;
+  then A2:  X "/\" Y "/\" Z <> Bottom L by LATTICES:def 7;
+    X "/\" Z "/\" Y <> Bottom L by A1,LATTICES:def 7;
+  then X "/\" Y <> Bottom L & X "/\" Z <> Bottom L by A2,LATTICES:40;
+  hence thesis by Def4;
+end;
+
+theorem
+    X meets Y \ Z implies X meets Y
+proof
+  assume X meets Y \ Z;
+  then X "/\" (Y \ Z) <> Bottom L by Def4;
+  then X "/\" (Y "/\" Z`) <> Bottom L by Def1;
+  then X "/\" Y "/\" Z` <> Bottom L by LATTICES:def 7;
+  then X "/\" Y <> Bottom L by LATTICES:40;
+  hence thesis by Def4;
+end;
+
+theorem
+    X misses Bottom L
+proof
+  assume X meets Bottom L;
+  then X "/\" Bottom L <> Bottom L by Def4;
+  hence contradiction by LATTICES:40;
+end;
+
+theorem
+    X misses Z & Y [= Z implies X misses Y by Th30;
+
+theorem
+    X misses Y or X misses Z implies X misses Y "/\" Z by Th31;
+
+theorem
+    X [= Y & X [= Z & Y misses Z implies X = Bottom L
+proof
+  assume X [= Y & X [= Z & Y misses Z;
+  then X [= Y "/\" Z & Y "/\" Z = Bottom L by Def4,FILTER_0:7;
+  hence thesis by Th25;
+end;
+
+theorem
+    X misses Y implies (Z "/\" X) misses (Z "/\" Y)
+            & (X "/\" Z) misses (Y "/\" Z)
+proof
+  assume A1: X misses Y;
+  thus (Z "/\" X) misses (Z "/\" Y)
+  proof
+      (Z "/\" X) "/\" (Z "/\" Y) = Z "/\" (X "/\" (Y "/\" Z)) by LATTICES:def 7
+       .= Z "/\" ((X "/\" Y) "/\" Z) by LATTICES:def 7
+       .= Z "/\" (Bottom L "/\" Z) by A1,Def4
+       .= Z "/\" Bottom L by LATTICES:40
+       .= Bottom L by LATTICES:40;
+    hence thesis by Def4;
+  end;
+  hence thesis;
+end;
+
+begin   ::Boolean Lattices
+
+ reserve L for B_Lattice;
+ reserve X,Y,Z,V for Element of L;
+
+theorem
+    X \ Y [= Z implies X [= Y "\/" Z
+proof
+  assume X \ Y [= Z;
+  then X "/\" Y` [= Z by Def1;
+  then Y "\/" (X "/\" Y`) [= Y "\/" Z by FILTER_0:1;
+  then (Y "\/" X) "/\" (Y "\/" Y`) [= Y "\/" Z by LATTICES:31;
+  then (Y "\/" X) "/\" Top L [= Y "\/" Z by LATTICES:48;
+  then A1: X "\/" Y [= Y "\/" Z by LATTICES:43;
+    X [= X "\/" Y by LATTICES:22;
+  hence thesis by A1,LATTICES:25;
+end;
+
+theorem
+Th39: X [= Y implies Z \ Y [= Z \ X
+proof
+  assume X [= Y;
+  then A1: Y` [= X` by LATTICES:53;
+       Z \ Y = Z "/\" Y` & Z "/\" X` = Z \ X by Def1;
+  hence thesis by A1,LATTICES:27;
+end;
+
+theorem
+    X [= Y & Z [= V implies X \ V [= Y \ Z
+proof
+  assume that A1: X [= Y and
+              A2: Z [= V;
+  A3: X \ V [= Y \ V by A1,Th7;
+    Y \ V [= Y \ Z by A2,Th39;
+  hence thesis by A3,LATTICES:25;
+end;
+
+theorem
+    X [= Y "\/" Z implies X \ Y [= Z & X \ Z [= Y
+proof
+  assume A1: X [= Y "\/" Z;
+  thus X \ Y [= Z
+  proof
+      X "/\" Y` [= (Y "\/" Z) "/\" Y` by A1,LATTICES:27;
+    then X "/\" Y` [= (Y "/\" Y`) "\/" (Z "/\" Y`) by LATTICES:def 11;
+    then X \ Y [= (Y "/\" Y` ) "\/" (Z "/\" Y`) by Def1;
+    then X \ Y [= Bottom L "\/" (Z "/\" Y`) by LATTICES:47;
+    then A2: X \ Y [= Z "/\" Y` by LATTICES:39;
+         Z "/\" Y` [= Z by LATTICES:23;
+    hence thesis by A2,LATTICES:25;
+  end;
+    X "/\" Z` [= (Y "\/" Z) "/\" Z` by A1,LATTICES:27;
+  then X "/\" Z` [= (Y "/\" Z`) "\/" (Z "/\" Z`) by LATTICES:def 11;
+  then X \ Z [= (Y "/\" Z`) "\/" (Z "/\" Z`) by Def1;
+  then X \ Z [= (Y "/\" Z`) "\/" Bottom L by LATTICES:47;
+  then A3: X \ Z [= Y "/\" Z` by LATTICES:39;
+    Y "/\" Z` [= Y by LATTICES:23;
+  hence X \ Z [= Y by A3,LATTICES:25;
+end;
+
+theorem
+    X` [= (X "/\" Y)` & Y` [= (X "/\" Y)`
+proof
+A1:X` [= X` "\/" Y` by LATTICES:22;
+    Y` [= X` "\/" Y` by LATTICES:22;
+  hence thesis by A1,LATTICES:50;
+end;
+
+theorem
+    (X "\/" Y)` [= X` & (X "\/" Y)` [= Y`
+proof
+  thus (X "\/" Y)` [= X`
+  proof
+      (X "\/" Y)` = X` "/\" Y` by LATTICES:51;
+    hence thesis by LATTICES:23;
+  end;
+    (X "\/" Y)` = Y` "/\" X` by LATTICES:51;
+  hence thesis by LATTICES:23;
+end;
+
+theorem
+    X [= Y \ X implies X = Bottom L
+proof
+  assume X [= Y \ X;
+  then A1: X [= Y "/\" X` by Def1;
+    X "/\" (Y "/\" X`)
+         = Y "/\" (X` "/\" X) by LATTICES:def 7
+        .= Y "/\" Bottom L by LATTICES:47
+        .= Bottom L by LATTICES:40;
+  hence thesis by A1,LATTICES:21;
+end;
+
+theorem
+    X [= Y implies Y = X "\/" (Y \ X)
+proof
+  assume A1: X [= Y;
+    Y = Y "/\" Top L by LATTICES:43
+    .= Y "/\" ( X "\/" X`) by LATTICES:48
+    .= (Y "/\" X) "\/" ( Y "/\" X`) by LATTICES:def 11
+    .= X "\/" (Y "/\" X`) by A1,LATTICES:21
+    .= X "\/" (Y \ X) by Def1;
+  hence thesis;
+end;
+
+theorem
+Th46: X \ Y = Bottom L iff X [= Y
+proof
+  thus X \ Y = Bottom L implies X [= Y
+   proof
+     assume
+     A1: X \ Y = Bottom L;
+       X "/\" Y` = Bottom L implies X [= Y`` by LATTICES:52;
+     hence thesis by A1,Def1,LATTICES:49;
+   end;
+     assume X [= Y;
+     then X "/\" Y` [= Y` "/\" Y by LATTICES:27;
+     then X "/\" Y` [= Bottom L by LATTICES:47;
+     then A2:  X \ Y [= Bottom L by Def1;
+       Bottom L [= X \ Y by LATTICES:41;
+     hence thesis by A2,Def3;
+ end;
+
+theorem
+  X [= (Y "\/" Z) & X "/\" Z = Bottom L implies X [= Y
+proof
+  assume that A1: X [= (Y "\/" Z) and
+              A2: X "/\" Z = Bottom L;
+    X "/\" (Y "\/" Z) = X by A1,LATTICES:21;
+  then (X "/\" Y) "\/" Bottom L = X by A2,LATTICES:def 11;
+  then X "/\" Y = X by LATTICES:39;
+  hence thesis by LATTICES:21;
+end;
+
+theorem
+    X "\/" Y = (X \ Y) "\/" Y
+proof
+  thus X "\/" Y = (X "\/" Y) "/\" Top L by LATTICES:43
+           .= (X "\/" Y) "/\" (Y` "\/" Y) by LATTICES:48
+           .= (X "/\" Y`) "\/" Y by LATTICES:31
+           .= (X \ Y) "\/" Y by Def1;
+end;
+
+theorem
+    X \ (X "\/" Y) = Bottom L
+proof
+    X [= X "\/" Y & X [= Y "\/" X by LATTICES:22;
+  hence thesis by Th46;
+ end;
+
+theorem
+Th50: X \ X "/\" Y = X \ Y & X \ Y "/\" X = X \ Y
+proof
+   thus X \ X "/\" Y = X \ Y
+    proof
+       X \ X "/\" Y = X "/\" (X "/\" Y)` by Def1
+       .= X "/\" (X` "\/" Y`) by LATTICES:50
+       .= (X "/\" X`) "\/" (X "/\" Y`) by LATTICES:def 11
+       .= Bottom L "\/" (X "/\" Y`) by LATTICES:47
+       .= X "/\" Y` by LATTICES:39;
+      hence thesis by Def1;
+     end;
+       X \ Y "/\" X = X "/\" (Y "/\" X)` by Def1
+       .= X "/\" (Y` "\/" X`) by LATTICES:50
+       .= (X "/\" Y`) "\/" (X "/\" X`) by LATTICES:def 11
+       .= (X "/\" Y`) "\/" Bottom L by LATTICES:47
+       .= X "/\" Y` by LATTICES:39;
+     hence thesis by Def1;
+ end;
+
+theorem
+    (X \ Y) "/\" Y = Bottom L
+proof
+    (X \ Y) "/\" Y = (X "/\" Y`) "/\" Y by Def1
+   .= X "/\" (Y`"/\" Y) by LATTICES:def 7
+   .= X "/\" Bottom L by LATTICES:47;
+  hence thesis by LATTICES:40;
+end;
+
+theorem
+Th52: X "\/" (Y \ X) = X "\/" Y & (Y \ X) "\/" X = Y "\/" X
+proof
+  thus X "\/" (Y \ X) = X "\/" Y
+    proof
+        X "\/" (Y \ X)
+       = X "\/" (Y "/\" X`) by Def1
+      .= (X "\/" Y) "/\" (X "\/" X`) by LATTICES:31
+      .= (X "\/" Y) "/\" Top L by LATTICES:48;
+     hence thesis by LATTICES:43;
+     end;
+        (Y \ X) "\/" X = (Y "/\" X`) "\/" X by Def1
+      .= (Y "\/" X) "/\" (X` "\/" X) by LATTICES:31
+      .= (Y "\/" X) "/\" Top L by LATTICES:48;
+     hence thesis by LATTICES:43;
+ end;
+
+theorem
+Th53: (X "/\" Y) "\/" (X \ Y) = X
+proof
+    (X "/\" Y) "\/" (X \ Y) = (X "/\" Y) "\/" (X "/\" Y`) by Def1
+        .=((X "/\" Y) "\/" X) "/\" ((X "/\" Y) "\/" Y`) by LATTICES:31
+        .= X "/\" ((X "/\" Y) "\/" Y`) by LATTICES:def 8
+        .= X "/\" ((X "\/" Y`) "/\" (Y "\/" Y`)) by LATTICES:31
+        .= X "/\" ((X "\/" Y`) "/\" Top L) by LATTICES:48
+        .= X "/\" (X "\/" Y`) by LATTICES:43
+        .= X by LATTICES:def 9;
+  hence thesis;
+end;
+
+theorem
+Th54: X \ (Y \ Z) = (X \ Y) "\/" (X "/\" Z)
+proof
+    X \ (Y \ Z) = X \ (Y "/\" Z`) by Def1
+      .= X "/\" (Y "/\" Z`)` by Def1
+      .= X "/\" (Y`"\/" Z``) by LATTICES:50
+      .= X "/\" (Y`"\/" Z) by LATTICES:49
+      .= (X "/\" Y`) "\/" (X "/\" Z) by LATTICES:def 11;
+  hence thesis by Def1;
+end;
+
+theorem
+    X \ (X \ Y) = X "/\" Y
+proof
+    X \ (X \ Y) = X "/\" (X \ Y)` by Def1
+  .= X "/\" ( X "/\" Y`)` by Def1
+  .= X "/\" (X` "\/" Y``) by LATTICES:50
+  .= X "/\" (X` "\/" Y) by LATTICES:49
+  .= (X "/\" X`) "\/" (X "/\" Y) by LATTICES:def 11
+  .= Bottom L "\/" (X "/\" Y) by LATTICES:47;
+  hence thesis by LATTICES:39;
+ end;
+
+theorem
+    (X "\/" Y) \ Y = X \ Y
+ proof
+     (X "\/" Y) \ Y = (X "\/" Y) "/\" Y` by Def1
+   .= (X "/\" Y`) "\/" (Y "/\" Y`) by LATTICES:def 11
+   .= (X "/\" Y`) "\/" Bottom L by LATTICES:47
+   .= X "/\" Y` by LATTICES:39;
+   hence thesis by Def1;
+ end;
+
+theorem
+    X "/\" Y = Bottom L iff X \ Y = X
+proof
+   thus X "/\" Y = Bottom L implies X \ Y = X
+     proof
+      assume X "/\" Y = Bottom L;
+        then X [= Y` by LATTICES:52;
+        then X "/\" X [= X "/\" Y` by LATTICES:27;
+        then X [= X "/\" Y` by LATTICES:18;
+        then A1: X [= X \ Y by Def1;
+           X \ Y [= X by Th8;
+      hence thesis by A1,Def3;
+     end;
+  assume X \ Y = X;
+    then X "/\" Y` = X by Def1;
+    then X` "\/" Y`` = X` by LATTICES:50;
+    then X "/\" (X` "\/" Y) [= X "/\" X` by LATTICES:49;
+    then (X "/\" X`) "\/" (X "/\" Y) [= X "/\" X` by LATTICES:def 11;
+    then Bottom L "\/" (X "/\" Y) [= X "/\" X` by LATTICES:47;
+    then Bottom L "\/" (X "/\" Y) [= Bottom L by LATTICES:47;
+    then A2: X "/\" Y [= Bottom L by LATTICES:39;
+      Bottom L [= X "/\" Y by LATTICES:41;
+    hence thesis by A2,Def3;
+end;
+
+theorem
+    X \ (Y "\/" Z) = (X \ Y) "/\" (X \ Z)
+proof
+ thus X \ (Y "\/" Z) = X "/\" (Y "\/" Z)` by Def1
+    .= X "/\" (Y` "/\" Z`) by LATTICES:51
+    .= (X "/\" X) "/\" (Y` "/\" Z`) by LATTICES:18
+    .= (X "/\" X "/\" Y`) "/\" Z` by LATTICES:def 7
+    .= (X "/\" (X "/\" Y`)) "/\" Z` by LATTICES:def 7
+    .= (X "/\" Y`) "/\" (X "/\" Z`) by LATTICES:def 7
+    .= (X \ Y) "/\" (X "/\" Z`) by Def1
+    .= (X \ Y) "/\" (X \ Z) by Def1;
+end;
+
+theorem
+Th59: X \ (Y "/\" Z) = (X \ Y) "\/" (X \ Z)
+proof
+   thus X \ (Y "/\" Z)
+       = X "/\" (Y "/\" Z)` by Def1
+       .= X "/\" (Y` "\/" Z`) by LATTICES:50
+       .=(X "/\" Y`) "\/" (X "/\" Z`) by LATTICES:def 11
+       .=(X \ Y) "\/" (X "/\" Z`) by Def1
+       .=(X \ Y) "\/" (X \ Z) by Def1;
+end;
+
+theorem
+    X "/\" (Y \ Z) = X "/\" Y \ X "/\" Z & (Y \ Z) "/\" X = Y "/\" X \ Z "/\" X
+proof
+A1: X "/\" Y [= X by LATTICES:23;
+A2: X "/\" Y \ X "/\" Z = ((X "/\" Y) \ X) "\/" ((X "/\" Y) \ Z) by Th59
+                  .= Bottom L "\/" ((X "/\" Y) \ Z) by A1,Th46
+                  .= (X "/\" Y) \ Z by LATTICES:39;
+   hence X "/\" (Y \ Z) = X "/\" Y \ X "/\" Z by Th14;
+   thus (Y \ Z) "/\" X = Y "/\" X \ Z "/\" X by A2,Th14;
+end;
+
+theorem
+Th61: (X "\/" Y) \ (X "/\" Y) = (X \ Y) "\/" (Y \ X)
+proof
+     (X "\/" Y) \ (X "/\" Y)
+      = (X "\/" Y) "/\" (X "/\" Y)` by Def1
+     .= (X "\/" Y) "/\" (X` "\/" Y`) by LATTICES:50
+     .= ((X "\/" Y) "/\" X`) "\/" ((X "\/" Y) "/\" Y`) by LATTICES:def 11
+     .= ((X "/\" X`) "\/" (Y "/\" X`)) "\/" ((X "\/" Y) "/\"
+ Y`) by LATTICES:def 11
+     .= ((X "/\" X`) "\/" (Y "/\" X`)) "\/" ((X "/\" Y`) "\/" (Y "/\"
+ Y`)) by LATTICES:def 11
+     .= (Bottom L "\/" (Y "/\" X`)) "\/" ((X "/\" Y`) "\/" (Y "/\"
+ Y`)) by LATTICES:47
+     .= (Bottom L "\/" (Y "/\" X`)) "\/" ((X "/\" Y`) "\/" Bottom
+L) by LATTICES:47
+     .= (Y "/\" X`) "\/" ((X "/\" Y`) "\/" Bottom L) by LATTICES:39
+     .= (Y "/\" X`) "\/" (X "/\" Y`) by LATTICES:39
+     .= (Y \ X) "\/" (X "/\" Y`) by Def1
+     .= (X \ Y) "\/" (Y \ X) by Def1;
+  hence thesis;
+end;
+
+theorem
+Th62: (X \ Y) \ Z = X \ (Y "\/" Z)
+proof
+  thus (X \ Y) \ Z = (X "/\" Y`) \ Z by Def1
+    .= (X "/\" Y`) "/\" Z` by Def1
+    .= X "/\" (Y` "/\" Z`) by LATTICES:def 7
+    .= X "/\" (Y "\/" Z)` by LATTICES:51
+    .= X \ (Y "\/" Z) by Def1;
+end;
+
+theorem
+    X \ Y = Y \ X implies X = Y
+proof
+   assume A1: X \ Y = Y \ X;
+       X \ Y = X "/\" Y` by Def1;
+     then A2: X "/\" Y` = Y "/\" X` by A1,Def1;
+     then (X "/\" Y`) "/\" X = Y "/\" (X` "/\" X) by LATTICES:def 7
+                         .= Y "/\" Bottom L by LATTICES:47;
+     then X "/\" (X "/\" Y`) = Bottom L by LATTICES:40;
+     then (X "/\" X) "/\" Y` = Bottom L by LATTICES:def 7;
+     then X "/\" Y` = Bottom L by LATTICES:18;
+     then (X "/\" Y`) "\/" X`= (X "/\" X`) "\/" X` by LATTICES:47;
+     then (X "/\" Y`) "\/" X`= X` by LATTICES:def 8;
+     then (X "\/" X`) "/\" (Y` "\/" X`) = X` by LATTICES:31;
+     then Top L "/\" (Y` "\/" X`) = X` by LATTICES:48;
+     then Y` "\/" X` = X` by LATTICES:43;
+     then Y` "/\" X` = Y` by LATTICES:def 9;
+     then Y` [= X` by LATTICES:21;
+     then X`` [= Y`` by LATTICES:53;
+     then X [= Y`` by LATTICES:49;
+     then A3: X [= Y by LATTICES:49;
+       X "/\" (Y` "/\" Y) = (Y "/\" X`) "/\" Y by A2,LATTICES:def 7;
+     then X "/\" Bottom L = (Y "/\" X`) "/\" Y by LATTICES:47;
+     then Bottom L = (X` "/\" Y) "/\" Y by LATTICES:40
+             .= X` "/\" (Y "/\" Y) by LATTICES:def 7
+             .= X` "/\" Y by LATTICES:18;
+     then X` [= Y` by LATTICES:52;
+     then Y`` [= X`` by LATTICES:53;
+     then Y [= X`` by LATTICES:49;
+     then Y [= X by LATTICES:49;
+  hence thesis by A3,Def3;
+end;
+
+canceled 2;
+
+theorem
+Th66: X \ X = Bottom L
+proof
+      X \ X = X "/\" X` by Def1
+     .= Bottom L by LATTICES:47;
+    hence thesis;
+ end;
+
+theorem
+Th67: X \ Bottom L = X
+proof
+    X \ Bottom L = X "/\" (Bottom L)` by Def1
+        .= X "/\" Top L by LATTICE4:37
+        .= X by LATTICES:43;
+  hence thesis;
+end;
+
+theorem
+    (X \ Y)` = X` "\/" Y
+proof
+    (X \ Y)` = (X "/\" Y`)` by Def1
+  .= X` "\/" Y`` by LATTICES:50;
+  hence thesis by LATTICES:49;
+ end;
+
+theorem
+Th69: X meets Y "\/" Z iff X meets Y or X meets Z
+proof
+  thus X meets Y "\/" Z implies X meets Y or X meets Z
+  proof
+    assume X meets Y "\/" Z;
+    then X "/\" (Y "\/" Z) <> Bottom L by Def4;
+    then (X "/\" Y) "\/" (X "/\" Z) <> Bottom L by LATTICES:def 11;
+    then (X "/\" Y) <> Bottom L or (X "/\" Z) <> Bottom L by LATTICES:39;
+    hence thesis by Def4;
+  end;
+  assume A1: X meets Y or X meets Z;
+  A2: X meets Y implies X meets Y "\/" Z
+  proof
+    assume A3: X "/\" Y <> Bottom L;
+      X "/\" Y [= (X "/\" Y) "\/" (X "/\" Z) by LATTICES:22;
+    then X "/\" Y [= X "/\" (Y "\/" Z) by LATTICES:def 11;
+    then X "/\" (Y "\/" Z) <> Bottom L by A3,Th25;
+    hence thesis by Def4;
+  end;
+    X meets Z implies X meets Y "\/" Z
+  proof
+    assume A4: X "/\" Z <> Bottom L;
+      (X "/\" Z) "\/" (X "/\" Y) = X "/\" (Y "\/" Z) by LATTICES:def 11;
+    then X "/\" (Y "\/" Z) <> Bottom L by A4,Th27;
+    hence thesis by Def4;
+  end;
+  hence thesis by A1,A2;
+end;
+
+theorem
+Th70: X "/\" Y misses X \ Y
+proof
+    (X "/\" Y) "/\" (X \ Y) = (X "/\" Y) "/\" (X "/\" Y`) by Def1
+   .= (X "/\" Y "/\" Y`) "/\" X by LATTICES:def 7
+   .= (X "/\" (Y "/\" Y`)) "/\" X by LATTICES:def 7
+   .= (X "/\" Bottom L) "/\" X by LATTICES:47
+   .= Bottom L "/\" X by LATTICES:40
+   .= Bottom L by LATTICES:40;
+  hence thesis by Def4;
+end;
+
+theorem
+    X misses Y "\/" Z iff X misses Y & X misses Z by Th69;
+
+theorem
+    (X \ Y) misses Y
+proof
+     (X \ Y) "/\" Y = (X "/\" Y`) "/\" Y by Def1
+       .= X "/\" (Y` "/\" Y) by LATTICES:def 7
+       .= X "/\" Bottom L by LATTICES:47
+       .= Bottom L by LATTICES:40;
+  hence thesis by Def4;
+end;
+
+theorem
+    X misses Y implies (X "\/" Y) \ Y = X & (X "\/" Y) \ X = Y
+proof
+   assume A1: X "/\" Y = Bottom L;
+   thus (X "\/" Y) \ Y = X
+   proof
+     A2:  (X "\/" Y) \ Y = (X "\/" Y) "/\" Y` by Def1
+       .= (X "/\" Y`) "\/" (Y "/\" Y`) by LATTICES:def 11
+       .= (X "/\" Y`) "\/" Bottom L by LATTICES:47
+       .= X "/\" Y` by LATTICES:39;
+       X` "\/" (X "/\" Y) = X` by A1,LATTICES:39;
+     then (X` "\/" X) "/\" (X` "\/" Y) = X` by LATTICES:31;
+     then Top L "/\" (X` "\/" Y) = X` by LATTICES:48;
+     then (X` "\/" Y)` = X`` by LATTICES:43;
+     then (X` "\/" Y)` = X by LATTICES:49;
+     then X`` "/\" Y` = X by LATTICES:51;
+     hence thesis by A2,LATTICES:49;
+   end;
+     A3:  (X "\/" Y) \ X = (X "\/" Y) "/\" X` by Def1
+        .= (X "/\" X`) "\/" (Y "/\" X`) by LATTICES:def 11
+        .= Bottom L "\/" (Y"/\" X`) by LATTICES:47
+        .= Y "/\" X` by LATTICES:39;
+       Y` "\/" (X "/\" Y) = Y` by A1,LATTICES:39;
+     then (Y` "\/" X) "/\" (Y` "\/" Y) = Y` by LATTICES:31;
+     then (Y` "\/" X) "/\" Top L = Y` by LATTICES:48;
+     then (Y` "\/" X)` = Y`` by LATTICES:43;
+     then (Y` "\/" X)` = Y by LATTICES:49;
+     then Y`` "/\" X` = Y by LATTICES:51;
+     hence thesis by A3,LATTICES:49;
+end;
+
+theorem
+    X` "\/" Y` = X "\/" Y & X misses X` & Y misses Y` implies
+               X = Y` & Y = X`
+proof
+  assume that A1: X` "\/" Y` = X "\/" Y and
+         A2: X misses X` and
+         A3: Y misses Y`;
+   A4: X "/\" X`= Bottom L by A2,Def4;
+   A5: Y "/\" Y` = Bottom L by A3,Def4;
+     (X "/\" X`) "\/" (X "/\" Y`) = X "/\" (X "\/" Y) by A1,LATTICES:def 11;
+   then X "/\" Y` = X "/\" (X "\/" Y) by A4,LATTICES:39;
+   then A6: X "/\" Y` = X by LATTICES:def 9;
+     X` "/\" (X` "\/" Y`) = Bottom L "\/" (X` "/\" Y) by A1,A4,LATTICES:def 11;
+   then A7: X` "/\" (X` "\/" Y`) = X` "/\" Y by LATTICES:39;
+     (Y "/\" X`) "\/" (Y "/\" Y`) = Y "/\" (X "\/" Y) by A1,LATTICES:def 11;
+   then Y "/\" X` = Y "/\" (X "\/" Y) by A5,LATTICES:39;
+   then A8: Y "/\" X` = Y by LATTICES:def 9;
+     Y` "/\" (X` "\/" Y`) = (Y` "/\" X) "\/" Bottom L by A1,A5,LATTICES:def 11;
+   then Y` "/\" (X` "\/" Y`) = Y` "/\" X by LATTICES:39;
+   hence X = Y` by A6,LATTICES:def 9;
+   thus Y = X` by A7,A8,LATTICES:def 9;
+   thus thesis;
+end;
+
+theorem
+    X` "\/" Y` = X "\/" Y & Y misses X` & X misses Y`
+            implies X = X` & Y = Y`
+proof
+  assume that A1:  X` "\/" Y` = X "\/" Y and
+              A2:  Y misses X` and
+              A3:  X misses Y`;
+  A4: Y "/\" X` = Bottom L by A2,Def4;
+  A5: X "/\" Y` = Bottom L by A3,Def4;
+    (X "\/" Y) "/\" (X "\/" X`) = X "\/" Bottom L by A4,LATTICES:31;
+  then (X "\/" Y) "/\" Top L = X "\/" Bottom L by LATTICES:48;
+  then (X "\/" Y) "/\" Top L = X by LATTICES:39;
+  then Y "\/" X = X by LATTICES:43;
+  then (Y "/\" X)` [= Y` by LATTICES:def 9;
+  then A6: X "\/" Y [= Y` by A1,LATTICES:50;
+    Y [= X "\/" Y by LATTICES:22;
+  then A7: Y [= Y` by A6,LATTICES:25;
+    (X` "\/" X) "/\" (X` "\/" Y`) = X` "\/" Bottom L by A5,LATTICES:31;
+  then Top L "/\" (X` "\/" Y`) = X` "\/" Bottom L by LATTICES:48;
+  then Top L "/\" (X` "\/" Y`) = X` by LATTICES:39;
+  then Y` "\/" X` = X` by LATTICES:43;
+  then (Y` "/\" X`)` [= Y`` by LATTICES:def 9;
+  then Y`` "\/" X`` [= Y`` by LATTICES:50;
+  then Y`` "\/" X`` [= Y by LATTICES:49;
+  then Y`` "\/" X [= Y by LATTICES:49;
+  then A8: X` "\/" Y` [= Y by A1,LATTICES:49;
+    Y` [= X` "\/" Y` by LATTICES:22;
+  then A9: Y` [= Y by A8,LATTICES:25;
+    (Y` "\/" Y) "/\" (Y` "\/" X`) = Y` "\/" Bottom L by A4,LATTICES:31;
+  then Top L "/\" (Y` "\/" X`) = Y` "\/" Bottom L by LATTICES:48;
+  then Top L "/\" (Y` "\/" X`) = Y` by LATTICES:39;
+  then X` "\/" Y` = Y` by LATTICES:43;
+  then (X` "/\" Y`)` [= X`` by LATTICES:def 9;
+  then (X` "/\" Y`)` [= X by LATTICES:49;
+  then X`` "\/" Y`` [= X by LATTICES:50;
+  then X "\/" Y`` [= X by LATTICES:49;
+  then A10: X` "\/" Y` [= X by A1,LATTICES:49;
+      X` [= X` "\/" Y` by LATTICES:22;
+  then A11: X` [= X by A10,LATTICES:25;
+    (Y "\/" X) "/\" (Y "\/" Y`) = Y "\/" Bottom L by A5,LATTICES:31;
+  then (Y "\/" X) "/\" Top L = Y "\/" Bottom L by LATTICES:48
+   .= Y by LATTICES:39;
+  then X "\/" Y = Y by LATTICES:43;
+  then (X "/\" Y)` [= X` by LATTICES:def 9;
+  then A12: X "\/" Y [= X` by A1,LATTICES:50;
+    X [= X "\/" Y by LATTICES:22;
+  then X [= X` by A12,LATTICES:25;
+  hence thesis by A7,A9,A11,Def3;
+end;
+
+theorem
+    X \+\ Bottom L = X
+proof
+  thus X \+\ Bottom L = (X \ Bottom L) "\/" (Bottom L \ X) by Def2
+             .= X "\/" (Bottom L \ X) by Th67
+             .= X "\/" Bottom L by Th29
+             .= X by LATTICES:39;
+end;
+
+theorem
+    X \+\ X = Bottom L
+proof
+  thus X \+\ X = (X \ X) "\/" (X \ X) by Def2
+            .= X \ X by LATTICES:17
+            .= Bottom L by Th66;
+end;
+
+theorem
+    X "/\" Y misses X \+\ Y
+proof
+    X "/\" Y misses X \ Y & X "/\" Y misses Y \ X by Th70;
+  then X "/\" Y misses (X \ Y) "\/" (Y \ X) by Th69;
+  hence thesis by Def2;
+end;
+
+theorem
+    X "\/" Y = X \+\ (Y \ X)
+proof
+    X "\/" Y = (X "\/" Y) "/\" Top L by LATTICES:43
+  .= (X "\/" Y) "/\" (X "\/" X`) by LATTICES:48
+  .= X "\/" (Y "/\" X`) by LATTICES:31
+  .= ((Y` "/\" X) "\/" X) "\/" (Y "/\" X`) by LATTICES:def 8
+  .= ((X "/\" Y`) "\/" (X "/\" X)) "\/" (Y "/\" X`) by LATTICES:18
+  .= ((X "/\" Y`) "\/" (X "/\" X)) "\/" (Y "/\" (X` "/\" X`)) by LATTICES:18
+  .= ((X "/\" Y`) "\/" (X "/\" X``)) "\/" (Y "/\" (X` "/\" X`)) by LATTICES:49
+  .= (X "/\" (Y` "\/" X``)) "\/" (Y "/\" (X` "/\" X`)) by LATTICES:def 11
+  .= (X "/\" (Y "/\" X`)`) "\/" (Y "/\" (X` "/\" X`)) by LATTICES:50
+  .= (X "/\" (Y "/\" X`)`) "\/" ((Y "/\" X`) "/\" X`) by LATTICES:def 7
+  .= (X \ (Y "/\" X`)) "\/" ((Y "/\" X`) "/\" X`) by Def1
+  .= (X \ (Y "/\" X`)) "\/" ((Y "/\" X`) \ X) by Def1
+  .= X \+\ (Y "/\" X`) by Def2
+  .= X \+\ (Y \ X) by Def1;
+ hence thesis;
+end;
+
+theorem
+    X \+\ (X "/\" Y) = X \ Y
+proof
+     X \+\ (X "/\" Y) = (X \ (X "/\" Y)) "\/" ((X "/\" Y) \ X) by Def2
+   .= (X "/\" (X "/\" Y)`) "\/" ((X "/\" Y) \ X) by Def1
+   .= (X "/\" (X "/\" Y)`) "\/" ((X "/\" Y) "/\" X`) by Def1
+   .= (X "/\" (X "/\" Y)`) "\/" (Y "/\" (X "/\" X`)) by LATTICES:def 7
+   .= (X "/\" (X "/\" Y)`) "\/" (Y "/\" Bottom L) by LATTICES:47
+   .= (X "/\" (X "/\" Y)`) "\/" Bottom L by LATTICES:40
+   .= X "/\" (X "/\" Y)` by LATTICES:39
+   .= X "/\" (X` "\/" Y`) by LATTICES:50
+   .= (X "/\" X`) "\/" (X "/\" Y`) by LATTICES:def 11
+   .= Bottom L "\/" (X "/\" Y`) by LATTICES:47
+   .= X "/\" Y` by LATTICES:39;
+  hence thesis by Def1;
+end;
+
+theorem
+    X "\/" Y = (X \+\ Y) "\/" (X "/\" Y)
+proof
+   thus X "\/" Y = (Y \ X) "\/" X by Th52
+             .= (Y \ X) "\/" ((X \ Y) "\/" (X "/\" Y)) by Th53
+             .= ((Y \ X) "\/" (X \ Y)) "\/" (X "/\" Y) by LATTICES:def 5
+             .= (X \+\ Y) "\/" (X "/\" Y) by Def2;
+end;
+
+Lm2: (X "\/" Y) \ (X \+\ Y) = X "/\" Y
+proof
+  set XY = X "\/" Y;
+  thus XY \ (X \+\ Y) = (X "\/" Y) \ ((X \ Y) "\/" (Y \ X)) by Def2
+   .= XY \ ((X "/\" Y`) "\/" (Y \ X)) by Def1
+   .= XY \ ((X "/\" Y`) "\/" (Y "/\" X`)) by Def1
+   .= XY "/\" ((X "/\" Y`) "\/" (Y "/\" X`))` by Def1
+   .= XY "/\" ((X "/\" Y`)` "/\" (Y "/\" X`)`) by LATTICES:51
+   .= XY "/\" ((X "/\" Y`)` "/\" (Y` "\/" X``)) by LATTICES:50
+   .= XY "/\" ((X` "\/" Y``) "/\" (Y` "\/" X``)) by LATTICES:50
+   .= XY "/\" ((X` "\/" Y``) "/\" (Y` "\/" X)) by LATTICES:49
+   .= XY "/\" ((X` "\/" Y) "/\" (Y` "\/" X)) by LATTICES:49
+   .= (XY "/\" (X` "\/" Y)) "/\" (Y` "\/" X) by LATTICES:def 7
+   .= ( (XY "/\" X`) "\/" ((X "\/" Y) "/\" Y) ) "/\" (Y` "\/"
+ X) by LATTICES:def 11
+   .= ( (XY "/\" X`) "\/" Y ) "/\" (Y` "\/" X) by LATTICES:def 9
+   .= ( ((X "/\" X`) "\/" (Y "/\" X`)) "\/" Y ) "/\" (Y` "\/"
+ X) by LATTICES:def 11
+   .= ( (Bottom L "\/" (Y "/\" X`)) "\/" Y ) "/\" (Y` "\/" X) by LATTICES:47
+   .= ( (Y "/\" X`) "\/" Y ) "/\" (Y` "\/" X) by LATTICES:39
+   .= Y "/\" (Y` "\/" X) by LATTICES:def 8
+   .= (Y "/\" Y`) "\/" (Y "/\" X) by LATTICES:def 11
+   .= Bottom L "\/" (Y "/\" X) by LATTICES:47
+   .= X "/\" Y by LATTICES:39;
+end;
+
+theorem
+    (X \+\ Y) \+\ (X "/\" Y) = X "\/" Y
+proof
+  set XY = X \+\ Y, A = Y "/\" X`;
+    XY \+\ (X "/\" Y) = (XY \ (X "/\" Y)) "\/" ((X "/\" Y) \ XY) by Def2
+     .= (XY "/\" (X "/\" Y)`) "\/" ((X "/\" Y) \ XY) by Def1
+     .= (XY "/\" (X "/\" Y)`) "\/" ((X "/\" Y) "/\" XY`) by Def1
+     .= (XY "/\" (X` "\/" Y`)) "\/" ((X "/\" Y) "/\" XY`) by LATTICES:50
+     .= ( (XY "/\" X`) "\/" (XY "/\" Y`) ) "\/" ((X "/\" Y) "/\"
+ XY`) by LATTICES:def 11
+     .= ( (XY \ X) "\/" (XY "/\" Y`) ) "\/" ((X "/\" Y) "/\" XY`) by Def1
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/" ((X "/\" Y) "/\" XY`) by Def1
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/" ((X "/\" Y)
+                      "/\" ((X \ Y) "\/" (Y \ X))` ) by Def2
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/" ((X "/\" Y)
+                      "/\" ((X "/\" Y`) "\/" (Y \ X))` ) by Def1
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/" ((X "/\" Y)
+                      "/\" ((X "/\" Y`) "\/" A)` ) by Def1
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/" ((X "/\" Y)
+                      "/\" ((X "/\" Y`)` "/\" A`) ) by LATTICES:51
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/" ((X "/\" Y)
+                      "/\" ((X` "\/" Y``) "/\" A`) ) by LATTICES:50
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/" ((X "/\" Y)
+                      "/\" ((X` "\/" Y``) "/\" (Y` "\/" X``)) ) by LATTICES:50
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/" ((X "/\" Y)
+                      "/\" ((X` "\/" Y) "/\" (Y` "\/" X``)) ) by LATTICES:49
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/" ((X "/\" Y)
+                      "/\" ((X` "\/" Y) "/\" (Y` "\/" X)) ) by LATTICES:49
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/"
+               (((X "/\" Y) "/\" (X` "\/" Y)) "/\" (Y` "\/"
+ X)) by LATTICES:def 7
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/"
+      ( (((X "/\" Y) "/\" X`) "\/" ((X "/\" Y) "/\" Y)) "/\" (Y` "\/"
+ X)) by LATTICES:def 11
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/"
+      ( ((Y "/\" (X "/\" X`)) "\/" ((X "/\" Y) "/\" Y)) "/\" (Y` "\/"
+ X)) by LATTICES:def 7
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/"
+      ( ((Y "/\" Bottom L) "\/" ((X "/\" Y) "/\" Y)) "/\" (Y` "\/"
+ X)) by LATTICES:47
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/"
+      ( (Bottom L "\/" ((X "/\" Y) "/\" Y)) "/\" (Y` "\/" X)) by LATTICES:40
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/"
+         (((X "/\" Y) "/\" Y) "/\" (Y` "\/" X)) by LATTICES:39
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/"
+         ((X "/\" (Y "/\" Y)) "/\" (Y` "\/" X)) by LATTICES:def 7
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/" ((X "/\" Y) "/\" (Y` "\/"
+ X)) by LATTICES:18
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/"
+         (((X "/\" Y) "/\" Y`) "\/" ((X "/\" Y) "/\" X)) by LATTICES:def 11
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/"
+         ((X "/\" (Y "/\" Y`)) "\/" ((X "/\" Y) "/\" X)) by LATTICES:def 7
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/"
+         ((X "/\" Bottom L) "\/" ((X "/\" Y) "/\" X)) by LATTICES:47
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/"
+         ( Bottom L "\/" ((X "/\" Y) "/\" X)) by LATTICES:40
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/" ((X "/\" Y) "/\" X) by LATTICES:39
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/" (Y "/\" (X "/\" X)) by LATTICES:def 7
+     .= ( (XY \ X) "\/" (XY \ Y) ) "\/" (Y "/\" X) by LATTICES:18
+     .= ( (XY "/\" X`) "\/" (XY \ Y) ) "\/" (Y "/\" X) by Def1
+     .= ( (XY "/\" X`) "\/" (XY "/\" Y`) ) "\/" (Y "/\" X) by Def1
+     .= ( (((X \ Y) "\/" (Y \ X)) "/\" X`) "\/" (XY "/\" Y`) ) "\/" (Y "/\"
+ X) by Def2
+     .= ( (((X \ Y) "\/" (Y \ X)) "/\" X`) "\/"
+                   (((X \ Y) "\/" (Y \ X)) "/\" Y`) ) "\/" (Y "/\" X) by Def2
+     .= ( (((X "/\" Y`) "\/" (Y \ X)) "/\" X`) "\/"
+                   (((X \ Y) "\/" (Y \ X)) "/\" Y`) ) "\/" (Y "/\" X) by Def1
+     .= ( (((X "/\" Y`) "\/" A) "/\" X`) "\/"
+                   (((X \ Y) "\/" (Y \ X)) "/\" Y`) ) "\/" (Y "/\" X) by Def1
+     .= ( (((X "/\" Y`) "/\" X`) "\/" (A "/\" X`)) "\/"
+         (((X \ Y) "\/" (Y \ X)) "/\" Y`) ) "\/" (Y "/\" X) by LATTICES:def 11
+     .= ( ((Y` "/\" (X "/\" X`)) "\/" (A "/\" X`)) "\/"
+            (((X \ Y) "\/" (Y \ X)) "/\" Y`) ) "\/" (Y "/\"
+ X) by LATTICES:def 7
+     .= ( ((Y` "/\" (X "/\" X`)) "\/" (Y "/\" (X` "/\" X`))) "\/"
+            (((X \ Y) "\/" (Y \ X)) "/\" Y`) ) "\/" (Y "/\"
+ X) by LATTICES:def 7
+     .= ( ((Y` "/\" Bottom L) "\/" (Y "/\" (X` "/\" X`))) "\/"
+                   (((X \ Y) "\/" (Y \ X)) "/\" Y`) ) "\/" (Y "/\"
+ X) by LATTICES:47
+     .= ( ((Y` "/\" Bottom L) "\/" A) "\/"
+                   (((X \ Y) "\/" (Y \ X)) "/\" Y`) ) "\/" (Y "/\"
+ X) by LATTICES:18
+     .= ( (Bottom L "\/" A) "\/"
+                   (((X \ Y) "\/" (Y \ X)) "/\" Y`) ) "\/" (Y "/\"
+ X) by LATTICES:40
+     .= ( A "\/" (((X \ Y) "\/" (Y \ X)) "/\" Y`) ) "\/" (Y "/\"
+ X) by LATTICES:39
+     .= ( A "\/" (((X "/\" Y`) "\/" (Y \ X)) "/\" Y`) ) "\/" (Y "/\" X) by Def1
+     .= ( A "\/" (((X "/\" Y`) "\/" A) "/\" Y`) ) "\/" (Y "/\" X) by Def1
+     .= ( A "\/" (((X "/\" Y`) "/\" Y`) "\/" (A "/\" Y`)) )
+                                          "\/" (Y "/\" X) by LATTICES:def 11
+     .= ( A "\/" ( (X "/\" (Y` "/\" Y`)) "\/" (A "/\" Y`)) )
+                                          "\/" (Y "/\" X) by LATTICES:def 7
+     .= ( A "\/" ((X "/\" Y`) "\/" (A "/\" Y`)) ) "\/" (Y "/\"
+ X) by LATTICES:18
+     .= ( A "\/" ( (X "/\" Y`) "\/" (X` "/\" (Y "/\" Y`))) )
+                                           "\/" (Y "/\" X) by LATTICES:def 7
+     .= ( A "\/" ((X "/\" Y`) "\/" (X` "/\" Bottom L) )) "\/" (Y "/\"
+ X) by LATTICES:47
+     .= ( A "\/" ((X "/\" Y`) "\/" Bottom L )) "\/" (Y "/\" X) by LATTICES:40
+     .= ( A "\/" (X "/\" Y`) ) "\/" (Y "/\" X) by LATTICES:39
+     .= A "\/" ( (X "/\" Y`) "\/" (Y "/\" X) ) by LATTICES:def 5
+     .= A "\/" (X "/\" (Y` "\/" Y) ) by LATTICES:def 11
+     .= A "\/" (X "/\" Top L) by LATTICES:48
+     .= A "\/" X by LATTICES:43
+     .= (Y "\/" X) "/\" (X` "\/" X ) by LATTICES:31
+     .= (Y "\/" X) "/\" Top L by LATTICES:48
+     .= Y "\/" X by LATTICES:43;
+  hence thesis;
+end;
+
+theorem
+    (X \+\ Y) \+\ (X "\/" Y) = X "/\" Y
+proof
+    (X \+\ Y) \+\ (X "\/" Y) = ((X \+\ Y) \ (X "\/" Y)) "\/" ((X "\/" Y) \ (X
+\+\
+ Y)) by Def2
+   .= ((X \+\ Y) "/\" (X "\/" Y)`) "\/" ((X "\/" Y) \ (X \+\ Y)) by Def1
+   .= ((X \+\ Y) "/\" (X` "/\" Y`)) "\/" ((X "\/"
+ Y) \ (X \+\ Y)) by LATTICES:51
+   .= ( ((X \ Y) "\/" (Y \ X)) "/\" (X` "/\" Y`)) "\/" ((X "\/"
+ Y) \ (X \+\ Y)) by Def2
+   .= ( ((X "/\" Y`) "\/" (Y \ X)) "/\" (X` "/\" Y`)) "\/" ((X "\/"
+ Y) \ (X \+\ Y)) by Def1
+   .= ( ((X "/\" Y`) "\/" (Y "/\" X`)) "/\" (X` "/\" Y`))
+                                             "\/" ((X "\/"
+ Y) \ (X \+\ Y)) by Def1
+   .= ( ((X "/\" Y`) "/\" (X` "/\" Y`)) "\/" ((Y "/\" X`) "/\" (X` "/\" Y`)) )
+                              "\/" ((X "\/" Y) \ (X \+\ Y)) by LATTICES:def 11
+   .= ( (X "/\" (Y` "/\" (Y` "/\" X`))) "\/" ((Y "/\" X`) "/\" (X` "/\" Y`)) )
+                              "\/" ((X "\/" Y) \ (X \+\ Y)) by LATTICES:def 7
+   .= ( (X "/\" ((Y` "/\" Y`) "/\" X`)) "\/" ((Y "/\" X`) "/\" (X` "/\" Y`)) )
+                              "\/" ((X "\/" Y) \ (X \+\ Y)) by LATTICES:def 7
+   .= ( (X "/\" (Y` "/\" X`)) "\/" ((Y "/\" X`) "/\" (X` "/\" Y`)) )
+                              "\/" ((X "\/" Y) \ (X \+\ Y)) by LATTICES:18
+   .= ( ((X "/\" X`) "/\" Y`) "\/" ((Y "/\" X`) "/\" (X` "/\" Y`)) )
+                              "\/" ((X "\/" Y) \ (X \+\ Y)) by LATTICES:def 7
+   .= ( (Bottom L "/\" Y`) "\/" ((Y "/\" X`) "/\" (X` "/\" Y`)) )
+                              "\/" ((X "\/" Y) \ (X \+\ Y)) by LATTICES:47
+   .= ( Bottom L "\/" ((Y "/\" X`) "/\" (X` "/\" Y`)) )
+                              "\/" ((X "\/" Y) \ (X \+\ Y)) by LATTICES:40
+   .= ((Y "/\" X`) "/\" (X` "/\" Y`)) "\/" ((X "\/"
+ Y) \ (X \+\ Y)) by LATTICES:39
+   .= (Y "/\" (X` "/\" (X` "/\" Y`))) "\/" ((X "\/"
+ Y) \ (X \+\ Y)) by LATTICES:def 7
+   .= (Y "/\" ((X` "/\" X`) "/\" Y`)) "\/" ((X "\/"
+ Y) \ (X \+\ Y)) by LATTICES:def 7
+   .= (Y "/\" (X` "/\" Y`)) "\/" ((X "\/" Y) \ (X \+\ Y)) by LATTICES:18
+   .= ((Y "/\" Y`) "/\" X`) "\/" ((X "\/" Y) \ (X \+\ Y)) by LATTICES:def 7
+   .= (Bottom L "/\" X`) "\/" ((X "\/" Y) \ (X \+\ Y)) by LATTICES:47
+   .= Bottom L "\/" ((X "\/" Y) \ (X \+\ Y)) by LATTICES:40
+   .= (X "\/" Y) \ (X \+\ Y) by LATTICES:39
+   .= Y "/\" X by Lm2;
+  hence thesis;
+end;
+
+theorem
+Th84:  X \+\ Y = (X "\/" Y) \ (X "/\" Y)
+proof
+  thus X \+\ Y = (X \ Y) "\/" (Y \ X) by Def2
+            .= (X \ X "/\" Y) "\/" (Y \ X) by Th50
+            .= (X \ X "/\" Y) "\/" (Y \ X "/\" Y) by Th50
+            .= (X "\/" Y) \ (X "/\" Y) by Th24;
+end;
+
+theorem
+    (X \+\ Y) \ Z = (X \ (Y "\/" Z)) "\/" (Y \ (X "\/" Z))
+proof
+  thus (X \+\ Y) \ Z = ((X \ Y) "\/" (Y \ X)) \ Z by Def2
+                   .= (X \ Y \ Z) "\/" (Y \ X \ Z) by Th24
+                   .= (X \ (Y "\/" Z)) "\/" (Y \ X \ Z) by Th62
+                   .= (X \ (Y "\/" Z)) "\/" (Y \ (X "\/" Z)) by Th62;
+end;
+
+theorem
+    X \ (Y \+\ Z) = (X \ (Y "\/" Z)) "\/" (X "/\" Y "/\" Z)
+proof
+    X \ (Y \+\ Z) = X \ ((Y "\/" Z) \ (Y "/\" Z)) by Th84
+  .= (X \ (Y "\/" Z)) "\/" (X "/\" (Y "/\" Z)) by Th54
+  .= (X \ (Y "\/" Z)) "\/" (X "/\" Y "/\" Z) by LATTICES:def 7;
+  hence thesis;
+end;
+
+theorem
+    (X \+\ Y) \+\ Z = X \+\ (Y \+\ Z)
+proof
+  set S1 = X \ (Y "\/" Z), S2 = Y \ (X "\/" Z),
+      S3 = Z \ (X "\/" Y), S4 = X "/\" Y "/\" Z;
+  thus (X \+\ Y) \+\ Z = ((X \ Y) "\/" (Y \ X)) \+\ Z by Def2
+     .= (((X \ Y) "\/" (Y \ X)) \ Z) "\/" (Z \ ((X \ Y) "\/" (Y \ X))) by Def2
+     .= (((X \ Y) \ Z) "\/" ((Y \ X) \ Z)) "\/" (Z \ ((X \ Y) "\/" (Y \ X)))
+ by Th24
+     .= ( S1 "\/" ((Y \ X) \ Z)) "\/" (Z \ ((X \ Y) "\/" (Y \ X))) by Th62
+     .= ( S1 "\/" S2) "\/" (Z \ ((X \ Y) "\/" (Y \ X))) by Th62
+     .= ( S1 "\/" S2) "\/" (Z \ ((X "\/" Y) \ (X "/\" Y))) by Th61
+     .= ( S1 "\/" S2) "\/" (S3 "\/" (X "/\" Y "/\" Z )) by Th54
+     .= (S1 "\/" S2 "\/" S4) "\/" S3 by LATTICES:def 5
+     .= (S1 "\/" S4 "\/" S2) "\/" S3 by LATTICES:def 5
+     .= (S1 "\/" S4) "\/" (S2 "\/" S3) by LATTICES:def 5
+     .= (S1 "\/" (X "/\" (Y "/\" Z))) "\/" (S2 "\/" S3) by LATTICES:def 7
+     .= (X \ ((Y "\/" Z) \ (Y "/\" Z))) "\/" (S2 "\/" S3) by Th54
+     .= (X \ ((Y \ Z) "\/" (Z \ Y))) "\/" (S2 "\/" S3) by Th61
+     .= (X \ ((Y \ Z) "\/" (Z \ Y))) "\/" (S2 "\/" (Z \ Y \ X)) by Th62
+     .= (X \ ((Y \ Z) "\/" (Z \ Y))) "\/" ((Y \ Z \ X) "\/"
+ (Z \ Y \ X)) by Th62
+     .= (X \ ((Y \ Z) "\/" (Z \ Y))) "\/" (((Y \ Z) "\/" (Z \ Y)) \ X) by Th24
+     .= X \+\ ((Y \ Z) "\/" (Z \ Y)) by Def2
+     .= X \+\ (Y \+\ Z) by Def2;
+end;
+
+theorem
+    (X \+\ Y)` = (X "/\" Y) "\/" (X` "/\" Y`)
+proof
+thus (X \+\ Y)` = ((X \ Y) "\/" (Y \ X))` by Def2
+        .=(X \ Y)` "/\" (Y \ X)` by LATTICES:51
+        .=(X "/\" Y`)` "/\" (Y \ X)` by Def1
+        .=(X "/\" Y`)` "/\" (Y "/\" X`)` by Def1
+        .=(X` "\/" Y``) "/\" (Y "/\" X`)` by LATTICES:50
+        .=(X` "\/" Y``) "/\" (Y` "\/" X``) by LATTICES:50
+        .=(X` "\/" Y) "/\" (Y` "\/" X``) by LATTICES:49
+        .=(X` "\/" Y) "/\" (Y` "\/" X) by LATTICES:49
+        .=(X` "/\" (Y` "\/" X)) "\/" (Y "/\" (Y` "\/" X)) by LATTICES:def 11
+        .=((X` "/\" Y`) "\/" (X` "/\" X)) "\/" (Y "/\" (Y` "\/"
+ X)) by LATTICES:def 11
+        .=((X` "/\" Y`) "\/" (X` "/\" X)) "\/" ((Y "/\" Y`) "\/" (Y "/\"
+ X)) by LATTICES:def 11
+        .=((X` "/\" Y`) "\/" Bottom L) "\/" ((Y "/\" Y`) "\/" (Y "/\"
+ X)) by LATTICES:47
+        .=((X` "/\" Y`) "\/" Bottom L) "\/" (Bottom
+L "\/" (Y "/\" X)) by LATTICES:47
+        .=(X` "/\" Y`) "\/" (Bottom L "\/" (Y "/\" X)) by LATTICES:39
+        .=(X "/\" Y) "\/" (X` "/\" Y`) by LATTICES:39;
+  end;

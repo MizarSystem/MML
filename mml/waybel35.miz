@@ -1,0 +1,1787 @@
+:: Morphisms Into Chains, Part {I}
+::  by Artur Korni{\l}owicz
+::
+:: Received February 6, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_2, ORDERS_1, RELAT_1, LATTICES, LATTICE3, WAYBEL_0, BOOLE,
+      YELLOW_1, YELLOW_0, PRE_TOPC, FUNCT_1, SEQM_3, ORDINAL2, TARSKI,
+      WAYBEL_4, REALSET1, WAYBEL35, LATTICE7, GROUP_4, WAYBEL_1, ORDERS_2,
+      WELLORD1, WELLORD2, BHSP_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, REALSET1,
+      STRUCT_0, WELLORD1, ORDERS_1, ORDERS_2, PRE_TOPC, LATTICE3, RELAT_1,
+      RELAT_2, RELSET_1, FUNCT_1, FUNCT_2, YELLOW_0, YELLOW_1, ALG_1, YELLOW_2,
+      WAYBEL_0, WAYBEL_1, WAYBEL_4, LATTICE7;
+ constructors ORDERS_3, TOLER_1, WAYBEL_1, WAYBEL_4, LATTICE7, NAT_1, ORDERS_2,
+      DOMAIN_1, MEMBERED;
+ clusters LATTICE3, RELSET_1, STRUCT_0, WAYBEL_0, YELLOW_1, YELLOW_2, SUBSET_1,
+      TEX_2, WAYBEL_4, YELLOW_0, FINSEQ_5, MEMBERED, NUMBERS, ORDINAL2;
+ requirements SUBSET, BOOLE, NUMERALS;
+ definitions TARSKI, XBOOLE_0, ORDERS_2, LATTICE3, WAYBEL_1, WAYBEL_4;
+ theorems WAYBEL_4, YELLOW_8, STRUCT_0, FUNCT_2, YELLOW_1, TARSKI, ORDERS_1,
+      YELLOW_0, LATTICE3, YELLOW_4, WAYBEL_0, XBOOLE_0, LATTICE7, WAYBEL_1,
+      XBOOLE_1, REALSET1, RELAT_1, WELLORD2, ORDERS_2, RELAT_2, ZFMISC_1,
+      TEX_2, FUNCT_1;
+ schemes XBOOLE_0, YELLOW_2, RECDEF_1, NAT_1;
+
+begin :: Preliminaries
+
+Lm1:
+for x,y,X being set st y in {x} \/ X holds y = x or y in X
+proof
+  let x,y,X be set;
+  assume y in {x} \/ X;
+  then y in {x} or y in X by XBOOLE_0:def 2;
+  hence thesis by TARSKI:def 1;
+end;
+
+Lm2:
+  for L be RelStr,
+      R be Relation of L st R is auxiliary(i)
+  for x, y be Element of L st [x,y] in R
+  holds x <= y by WAYBEL_4:def 4;
+
+Lm3:
+  for L be RelStr,
+      R be Relation of L st R is auxiliary(ii)
+  for x, y, z, u being Element of L st
+    u <= x & [x,y] in R & y <= z holds
+  [u,z] in R by WAYBEL_4:def 5;
+
+definition
+  let X be set;
+  cluster trivial Subset of X;
+existence
+  proof
+    take {};
+    thus thesis by XBOOLE_1:2;
+  end;
+end;
+
+Lm4:
+  for Y being trivial set,
+      A being Subset of Y holds A is trivial
+  proof
+    let Y be trivial set,
+        A be Subset of Y;
+    per cases;
+    suppose A is empty;
+    hence A is trivial by REALSET1:def 12;
+    suppose A is non empty;
+    then consider a being set such that
+A1:   a in A by XBOOLE_0:def 1;
+    consider y being Element of Y such that
+A2:   Y = {y} by A1,TEX_2:def 1;
+A3: a = y by A1,A2,TARSKI:def 1;
+      A = {a}
+    proof
+      thus for c be set holds c in A implies c in {a} by A2,A3;
+      let c be set;
+      thus thesis by A1,TARSKI:def 1;
+    end;
+    hence A is trivial;
+  end;
+
+definition
+  let X be trivial set;
+  cluster -> trivial Subset of X;
+coherence by Lm4;
+end;
+
+definition
+  let L be 1-sorted;
+  cluster trivial Subset of L;
+existence
+  proof
+    take {};
+      {} c= the carrier of L by XBOOLE_1:2;
+    hence thesis;
+  end;
+end;
+
+definition
+  let L be RelStr;
+  cluster trivial Subset of L;
+existence
+  proof
+    take {};
+      {} c= the carrier of L by XBOOLE_1:2;
+    hence thesis;
+  end;
+end;
+
+definition
+  let L be non empty 1-sorted;
+  cluster non empty trivial Subset of L;
+existence
+  proof
+    consider a being Element of L;
+    take {a};
+    thus thesis;
+  end;
+end;
+
+definition
+  let L be non empty RelStr;
+  cluster non empty trivial Subset of L;
+existence
+  proof
+    consider a being Element of L;
+    take {a};
+    thus thesis;
+  end;
+end;
+
+theorem Th1:
+  for X being set holds RelIncl X is_reflexive_in X
+  proof
+    let X be set;
+      field RelIncl X = X by WELLORD2:def 1;
+    hence thesis by RELAT_2:def 9;
+  end;
+
+theorem Th2:
+  for X being set holds RelIncl X is_transitive_in X
+  proof
+    let X be set;
+      field RelIncl X = X by WELLORD2:def 1;
+    hence thesis by RELAT_2:def 16;
+  end;
+
+theorem Th3:
+  for X being set holds RelIncl X is_antisymmetric_in X
+  proof
+    let X be set;
+      field RelIncl X = X by WELLORD2:def 1;
+    hence thesis by RELAT_2:def 12;
+  end;
+
+begin :: Main part
+
+definition
+  let L be RelStr;
+  cluster auxiliary(i) Relation of L;
+existence
+  proof
+    take IntRel L;
+    thus thesis;
+  end;
+end;
+
+definition
+  let L be transitive RelStr;
+  cluster auxiliary(i) auxiliary(ii) Relation of L;
+existence
+  proof
+    take IntRel L;
+    thus thesis;
+  end;
+end;
+
+definition
+  let L be with_suprema antisymmetric RelStr;
+  cluster auxiliary(iii) Relation of L;
+existence
+  proof
+    take IntRel L;
+    thus thesis;
+  end;
+end;
+
+definition
+  let L be non empty lower-bounded antisymmetric RelStr;
+  cluster auxiliary(iv) Relation of L;
+existence
+  proof
+    take IntRel L;
+    thus thesis;
+  end;
+end;
+
+:: Definition 2.1, p. 203
+definition
+  let L be non empty RelStr,
+      R be Relation of L;
+  attr R is extra-order means
+:Def1:
+  R is auxiliary(i) auxiliary(ii) auxiliary(iv);
+end;
+
+definition
+  let L be non empty RelStr;
+  cluster extra-order ->
+    auxiliary(i) auxiliary(ii) auxiliary(iv) Relation of L;
+coherence by Def1;
+  cluster auxiliary(i) auxiliary(ii) auxiliary(iv) ->
+    extra-order Relation of L;
+coherence by Def1;
+end;
+
+definition
+  let L be non empty RelStr;
+  cluster extra-order auxiliary(iii) -> auxiliary Relation of L;
+coherence
+  proof
+    let R be Relation of L;
+    assume R is extra-order auxiliary(iii);
+    hence R is auxiliary(i) auxiliary(ii) auxiliary(iii) auxiliary(iv) by Def1
+;
+  end;
+  cluster auxiliary -> extra-order Relation of L;
+coherence
+  proof
+    let R be Relation of L;
+    assume R is auxiliary;
+    hence R is auxiliary(i) auxiliary(ii) auxiliary(iv) by WAYBEL_4:def 8;
+  end;
+end;
+
+definition
+  let L be lower-bounded antisymmetric transitive non empty RelStr;
+  cluster extra-order Relation of L;
+existence
+  proof
+    take IntRel L;
+    thus thesis;
+  end;
+end;
+
+definition
+  let L be lower-bounded with_suprema Poset,
+      R be auxiliary(ii) Relation of L;
+  func R-LowerMap -> map of L, InclPoset LOWER L means
+:Def2:
+  for x being Element of L holds it.x = R-below x;
+existence
+  proof
+    deffunc F(Element of L) = R-below $1;
+A1: for x being Element of L holds F(x) is Element of InclPoset LOWER L
+    proof
+      let x be Element of L;
+      reconsider I = F(x) as lower Subset of L;
+        LOWER L = {X where X is Subset of L: X is lower} by LATTICE7:def 7;
+      then I in LOWER L;
+      then I in the carrier of InclPoset LOWER L by YELLOW_1:1;
+      hence thesis;
+    end;
+    consider f being map of L, InclPoset LOWER L such that
+A2:   for x being Element of L holds f.x = F(x) from KappaMD(A1);
+    take f;
+    let x be Element of L;
+    thus thesis by A2;
+  end;
+uniqueness
+  proof
+    let M1, M2 be map of L, InclPoset LOWER L;
+    assume
+A3:   for x be Element of L holds M1.x = R-below x;
+    assume
+A4:   for x be Element of L holds M2.x = R-below x;
+      for x be set st x in the carrier of L holds M1.x = M2.x
+    proof
+      let x be set;
+      assume x in the carrier of L;
+      then reconsider x' = x as Element of L;
+      thus M1.x = R-below x' by A3
+               .= M2.x by A4;
+    end;
+    hence thesis by FUNCT_2:18;
+  end;
+end;
+
+definition
+  let L be lower-bounded with_suprema Poset,
+      R be auxiliary(ii) Relation of L;
+  cluster R-LowerMap -> monotone;
+coherence
+  proof
+    set s = R-LowerMap;
+    let x, y be Element of L;
+A1: s.x = R-below x & s.y = R-below y by Def2;
+    assume x <= y;
+    then R-below x c= R-below y by WAYBEL_4:17;
+    hence thesis by A1,YELLOW_1:3;
+  end;
+end;
+
+definition
+  let L be 1-sorted,
+      R be Relation of the carrier of L;
+  mode strict_chain of R -> Subset of L means
+:Def3:
+  for x, y being set st x in it & y in it holds
+   [x,y] in R or x = y or [y,x] in R;
+existence
+  proof
+    consider C be trivial Subset of L;
+    take C;
+    thus thesis by YELLOW_8:def 1;
+  end;
+end;
+
+theorem Th4:
+ for L being 1-sorted,
+     C being trivial Subset of L,
+     R being Relation of the carrier of L holds
+  C is strict_chain of R
+  proof
+    let L be 1-sorted,
+        C be trivial Subset of L,
+        R be Relation of the carrier of L;
+    let x, y be set;
+    thus thesis by YELLOW_8:def 1;
+  end;
+
+definition
+  let L be non empty 1-sorted,
+      R be Relation of the carrier of L;
+  cluster non empty trivial strict_chain of R;
+existence
+  proof
+    consider C being non empty trivial Subset of L;
+    reconsider C as strict_chain of R by Th4;
+    take C;
+    thus thesis;
+  end;
+end;
+
+theorem Th5:
+ for L being antisymmetric RelStr,
+     R being auxiliary(i) (Relation of L),
+     C being strict_chain of R,
+     x, y being Element of L st x in C & y in C & x < y
+   holds [x,y] in R
+  proof
+    let L be antisymmetric RelStr,
+        R be auxiliary(i) (Relation of L),
+        C be strict_chain of R,
+        x, y be Element of L;
+    assume that
+A1:   x in C & y in C and
+A2:   x < y;
+      [x,y] in R or [y,x] in R by A1,A2,Def3;
+    then [x,y] in R or y <= x by Lm2;
+    hence thesis by A2,ORDERS_1:30;
+  end;
+
+theorem
+   for L being antisymmetric RelStr,
+     R being auxiliary(i) (Relation of L),
+     x, y being Element of L st
+   [x,y] in R & [y,x] in R holds
+   x = y
+  proof
+    let L be antisymmetric RelStr,
+        R be auxiliary(i) (Relation of L),
+        x, y be Element of L;
+    assume [x,y] in R & [y,x] in R;
+    then x <= y & y <= x by Lm2;
+    hence x = y by ORDERS_1:25;
+  end;
+
+theorem
+   for L being non empty lower-bounded antisymmetric RelStr,
+     x being Element of L,
+     R being auxiliary(iv) Relation of L holds
+  {Bottom L, x} is strict_chain of R
+  proof
+    let L be non empty lower-bounded antisymmetric RelStr,
+        x be Element of L,
+        R be auxiliary(iv) Relation of L;
+    let a, y be set;
+    assume a in {Bottom L, x} & y in {Bottom L, x};
+    then (a = Bottom L or a = x) & (y = Bottom L or y = x) by TARSKI:def 2;
+    hence thesis by WAYBEL_4:def 7;
+  end;
+
+theorem Th8:
+  for L being non empty lower-bounded antisymmetric RelStr,
+      R being auxiliary(iv) (Relation of L),
+      C being strict_chain of R holds
+   C \/ {Bottom L} is strict_chain of R
+   proof
+     let L be non empty lower-bounded antisymmetric RelStr,
+         R be auxiliary(iv) (Relation of L),
+         C be strict_chain of R;
+     set A = C \/ {Bottom L};
+     let x, y be set;
+     assume
+A1:    x in A & y in A;
+     then reconsider x, y as Element of L;
+     per cases by A1,Lm1;
+     suppose x in C & y in C;
+     hence thesis by Def3;
+     suppose x in C & y = Bottom L;
+     hence thesis by WAYBEL_4:def 7;
+     suppose x = Bottom L & y in C;
+     hence thesis by WAYBEL_4:def 7;
+     suppose x = Bottom L & y = Bottom L;
+     hence thesis;
+   end;
+
+definition
+  let L be 1-sorted,
+      R be (Relation of the carrier of L),
+      C be strict_chain of R;
+  attr C is maximal means
+:Def4:
+  for D being strict_chain of R st C c= D holds C = D;
+end;
+
+definition
+  let L be 1-sorted,
+      R be (Relation of the carrier of L),
+      C be set;
+  func Strict_Chains (R,C) means
+:Def5:
+  for x being set holds x in it iff x is strict_chain of R & C c= x;
+existence
+  proof
+    defpred P[set] means $1 is strict_chain of R & C c= $1;
+    consider X being set such that
+A1:   for x being set holds x in X iff x in bool the carrier of L & P[x]
+        from Separation;
+    take X;
+    thus thesis by A1;
+  end;
+uniqueness
+  proof defpred P[set] means $1 is strict_chain of R & C c= $1;
+    thus for X1,X2 being set st
+      (for x being set holds x in X1 iff P[x]) &
+      (for x being set holds x in X2 iff P[x]) holds X1 = X2 from SetEq;
+  end;
+end;
+
+definition
+  let L be 1-sorted,
+      R be (Relation of the carrier of L),
+      C be strict_chain of R;
+  cluster Strict_Chains (R,C) -> non empty;
+coherence by Def5;
+end;
+
+definition
+  let R be Relation, X be set;
+  redefine pred X has_upper_Zorn_property_wrt R;
+  synonym X is_inductive_wrt R;
+end;
+
+:: Lemma 2.2, p. 203
+theorem
+    for L being 1-sorted,
+      R being (Relation of the carrier of L),
+      C being strict_chain of R holds
+   Strict_Chains (R,C) is_inductive_wrt RelIncl Strict_Chains (R,C) &
+   ex D being set st D is_maximal_in RelIncl Strict_Chains (R,C) & C c= D
+  proof
+    let L be 1-sorted,
+        R be (Relation of the carrier of L),
+        C be strict_chain of R;
+    set X = Strict_Chains (R,C);
+A1: field RelIncl X = X by WELLORD2:def 1;
+    thus
+A2:   X is_inductive_wrt RelIncl X
+    proof
+      let Y be set such that
+A3:     Y c= X and
+A4:     RelIncl X |_2 Y is_linear-order;
+      per cases;
+      suppose
+A5:     Y is empty;
+      take C;
+      thus thesis by A5,Def5;
+      suppose
+A6:     Y is non empty;
+      take Z = union Y;
+        Z c= the carrier of L
+      proof
+        let z be set;
+        assume z in Z;
+        then consider A being set such that
+A7:       z in A and
+A8:       A in Y by TARSKI:def 4;
+          A is strict_chain of R by A3,A8,Def5;
+        hence thesis by A7;
+      end;
+      then reconsider S = Z as Subset of L;
+A9:   S is strict_chain of R
+      proof
+        let x, y be set;
+        assume x in S;
+        then consider A being set such that
+A10:       x in A and
+A11:       A in Y by TARSKI:def 4;
+        assume y in S;
+        then consider B being set such that
+A12:       y in B and
+A13:       B in Y by TARSKI:def 4;
+          RelIncl X |_2 Y is connected by A4,ORDERS_2:def 3;
+        then A14:     RelIncl X |_2 Y is_connected_in field (RelIncl X |_2 Y)
+          by RELAT_2:def 14;
+A15:     (RelIncl X |_2 Y) = RelIncl Y by A3,WELLORD2:8;
+A16:     field RelIncl Y = Y by WELLORD2:def 1;
+A17:     A is strict_chain of R by A3,A11,Def5;
+A18:     B is strict_chain of R by A3,A13,Def5;
+        per cases;
+        suppose A <> B;
+        then [A,B] in RelIncl Y or [B,A] in RelIncl Y
+          by A11,A13,A14,A15,A16,RELAT_2:def 6;
+        then A c= B or B c= A by A11,A13,WELLORD2:def 1;
+        hence thesis by A10,A12,A17,A18,Def3;
+        suppose A = B;
+        hence thesis by A10,A12,A17,Def3;
+      end;
+        C c= Z
+      proof
+        let c be set;
+        assume
+A19:       c in C;
+        consider y being set such that
+A20:       y in Y by A6,XBOOLE_0:def 1;
+          C c= y by A3,A20,Def5;
+        hence c in Z by A19,A20,TARSKI:def 4;
+      end;
+      hence
+A21:     Z in X by A9,Def5;
+      let y be set;
+      assume
+A22:     y in Y;
+      then y c= Z by ZFMISC_1:92;
+      hence [y,Z] in RelIncl X by A3,A21,A22,WELLORD2:def 1;
+    end;
+      RelIncl X partially_orders X
+    proof
+      thus RelIncl X is_reflexive_in X by Th1;
+      thus RelIncl X is_transitive_in X by Th2;
+      thus RelIncl X is_antisymmetric_in X by Th3;
+    end;
+    then consider D being set such that
+A23:   D is_maximal_in RelIncl X by A1,A2,ORDERS_2:75;
+    take D;
+    thus D is_maximal_in RelIncl X by A23;
+      D in field RelIncl X by A23,ORDERS_2:def 9;
+    hence C c= D by A1,Def5;
+  end;
+
+:: Lemma 2.3 (ii), p. 203
+:: It is a trivial consequence of YELLOW_0:65
+:: Maybe to cancel
+theorem Th10:
+ for L being non empty transitive RelStr,
+     C being non empty Subset of L,
+     X being Subset of C st
+   ex_sup_of X,L & "\/"(X,L) in C
+  holds ex_sup_of X,subrelstr C & "\/"(X,L) = "\/"(X,subrelstr C)
+  proof
+    let L be non empty transitive RelStr,
+        C be non empty Subset of L,
+        X be Subset of C such that
+A1:   ex_sup_of X,L & "\/"(X,L) in C;
+ the carrier of subrelstr C = C by YELLOW_0:def 15;
+    hence thesis by A1,YELLOW_0:65;
+  end;
+
+Lm5:
+ for L being non empty Poset,
+     R being auxiliary(i) auxiliary(ii) (Relation of L),
+     C being non empty strict_chain of R,
+     X being Subset of C st ex_sup_of X,L & C is maximal & not "\/"(X,L) in C
+  ex cs being Element of L st cs in C & "\/"(X,L) < cs &
+   not ["\/"(X,L),cs] in R &
+   ex cs1 being Element of subrelstr C st cs = cs1 & X is_<=_than cs1 &
+    for a being Element of subrelstr C st X is_<=_than a holds cs1 <= a
+  proof
+    let L be non empty Poset,
+        R be auxiliary(i) auxiliary(ii) (Relation of L),
+        C be non empty strict_chain of R,
+        X be Subset of C such that
+A1:   ex_sup_of X,L and
+A2:   C is maximal;
+    set s = "\/"(X,L);
+    assume
+A3:   not s in C;
+    then A4: not C \/ {s} c= C by ZFMISC_1:45;
+      C c= C \/ {s} by XBOOLE_1:7;
+    then A5: not C \/ {s} is strict_chain of R by A2,A4,Def4;
+      ex cs being Element of L st cs in C & s < cs & not [s,cs] in R
+    proof
+      consider a, b being set such that
+A6:     a in C \/ {s} and
+A7:     b in C \/ {s} and
+A8:     not [a,b] in R and
+A9:     a <> b and
+A10:     not [b,a] in R by A5,Def3;
+      reconsider a, b as Element of L by A6,A7;
+A11:   for a being Element of L st a in C & not [a,s] in R & not [s,a] in R
+       ex cs being Element of L st cs in C & s < cs & not [s,cs] in R
+      proof
+        let a be Element of L;
+        assume that
+A12:       a in C and
+A13:       not [a,s] in R and
+A14:       not [s,a] in R;
+        take a;
+        thus a in C by A12;
+          a is_>=_than X
+        proof
+          let x be Element of L;
+          assume
+A15:         x in X;
+          per cases by A12,A15,Def3;
+          suppose
+A16:         [a,x] in R;
+            a <= a & x <= s by A1,A15,YELLOW_4:1;
+          hence x <= a by A13,A16,Lm3;
+          suppose [x,a] in R or a = x;
+          hence x <= a by Lm2;
+        end;
+        then s <= a by A1,YELLOW_0:def 9;
+        hence s < a by A3,A12,ORDERS_1:def 10;
+        thus not [s,a] in R by A14;
+      end;
+      per cases by A6,A7,Lm1;
+      suppose a in C & b in C;
+      hence thesis by A8,A9,A10,Def3;
+      suppose a in C & b = s;
+      hence thesis by A8,A10,A11;
+      suppose a = s & b in C;
+      hence thesis by A8,A10,A11;
+      suppose a = s & b = s;
+      hence thesis by A9;
+    end;
+    then consider cs being Element of L such that
+A17:   cs in C and
+A18:   s < cs and
+A19:   not [s,cs] in R;
+    take cs;
+    thus cs in C & s < cs & not [s,cs] in R by A17,A18,A19;
+A20: the carrier of subrelstr C = C by YELLOW_0:def 15;
+    then reconsider cs1 = cs as Element of subrelstr C by A17;
+    take cs1;
+    thus cs = cs1;
+A21: s <= cs by A18,ORDERS_1:def 10;
+    thus X is_<=_than cs1
+    proof
+      let b be Element of subrelstr C;
+      assume
+A22:     b in X;
+      reconsider b0 = b as Element of L by YELLOW_0:59;
+        b0 <= s by A1,A22,YELLOW_4:1;
+      then b0 <= cs by A21,ORDERS_1:26;
+      hence b <= cs1 by YELLOW_0:61;
+    end;
+    let a be Element of subrelstr C;
+    reconsider a0 = a as Element of L by YELLOW_0:59;
+A23: X is Subset of subrelstr C by A20;
+    assume X is_<=_than a;
+    then X is_<=_than a0 by A23,YELLOW_0:63;
+    then A24: s <= a0 by A1,YELLOW_0:def 9;
+A25: cs <= cs;
+      [cs1,a] in R or a = cs1 or [a,cs1] in R by A20,Def3;
+    then cs <= a0 by A19,A24,A25,Lm2,Lm3;
+    hence cs1 <= a by YELLOW_0:61;
+  end;
+
+:: Lemma 2.3, p. 203
+theorem Th11:
+ for L being non empty Poset,
+     R being auxiliary(i) auxiliary(ii) (Relation of L),
+     C being non empty strict_chain of R,
+     X being Subset of C st ex_sup_of X,L & C is maximal
+   holds ex_sup_of X,subrelstr C
+  proof
+    let L be non empty Poset,
+        R be auxiliary(i) auxiliary(ii) (Relation of L),
+        C be non empty strict_chain of R,
+        X be Subset of C;
+    assume that
+A1:   ex_sup_of X,L and
+A2:   C is maximal;
+    set s = "\/"(X,L);
+    per cases;
+    suppose s in C;
+    hence thesis by A1,Th10;
+    suppose not s in C;
+    then ex cs being Element of L st cs in C & s < cs & not [s,cs] in R &
+      ex cs1 being Element of subrelstr C st cs = cs1 & X is_<=_than cs1 &
+       for a being Element of subrelstr C st X is_<=_than a holds cs1 <= a
+        by A1,A2,Lm5;
+    hence ex_sup_of X,subrelstr C by YELLOW_0:15;
+  end;
+
+:: Lemma 2.3 (i), (iii), p. 203
+theorem
+   for L being non empty Poset,
+     R being auxiliary(i) auxiliary(ii) (Relation of L),
+     C being non empty strict_chain of R,
+     X being Subset of C st
+   ex_inf_of (uparrow "\/"(X,L)) /\ C,L & ex_sup_of X,L & C is maximal
+   holds
+   "\/"(X,subrelstr C) = "/\"((uparrow "\/"(X,L)) /\ C,L) &
+   (not "\/"(X,L) in C implies "\/"(X,L) < "/\"((uparrow "\/"(X,L)) /\ C,L))
+  proof
+    let L be non empty Poset,
+        R be auxiliary(i) auxiliary(ii) (Relation of L),
+        C be non empty strict_chain of R,
+        X be Subset of C;
+    set s = "\/"(X,L),
+        x = "\/"(X,subrelstr C),
+        U = uparrow s;
+    assume that
+A1:   ex_inf_of U /\ C,L and
+A2:   ex_sup_of X,L and
+A3:   C is maximal;
+A4: the carrier of subrelstr C = C by YELLOW_0:def 15;
+A5: s <= s;
+    reconsider x1 = x as Element of L by YELLOW_0:59;
+    per cases;
+    suppose
+A6:   s in C;
+    then A7: s = x by A2,A4,YELLOW_0:65;
+A8: U /\ C is_>=_than x1
+    proof
+      let b be Element of L;
+      assume b in U /\ C;
+      then b in U by XBOOLE_0:def 3;
+      hence x1 <= b by A7,WAYBEL_0:18;
+    end;
+      for a being Element of L st U /\ C is_>=_than a holds a <= x1
+    proof
+      let a be Element of L such that
+A9:     U /\ C is_>=_than a;
+        s in U by A5,WAYBEL_0:18;
+      then x1 in U /\ C by A6,A7,XBOOLE_0:def 3;
+      hence a <= x1 by A9,LATTICE3:def 8;
+    end;
+    hence thesis by A1,A6,A8,YELLOW_0:def 10;
+
+    suppose not s in C;
+    then consider cs being Element of L such that
+A10:   cs in C and
+A11:   s < cs and
+A12:   not [s,cs] in R and
+A13:   ex cs1 being Element of subrelstr C st cs = cs1 & X is_<=_than cs1 &
+       for a being Element of subrelstr C st X is_<=_than a holds cs1 <= a
+        by A2,A3,Lm5;
+A14: cs <= cs;
+A15: s <= cs by A11,ORDERS_1:def 10;
+      ex_sup_of X,subrelstr C by A2,A3,Th11;
+    then A16: cs = x by A13,YELLOW_0:def 9;
+A17: U /\ C is_>=_than cs
+    proof
+      let b be Element of L;
+      assume
+A18:     b in U /\ C;
+      then b in U by XBOOLE_0:def 3;
+      then A19:   s <= b by WAYBEL_0:18;
+        b in C by A18,XBOOLE_0:def 3;
+      then [b,cs] in R or b = cs or [cs,b] in R by A10,Def3;
+      hence cs <= b by A12,A14,A19,Lm2,Lm3;
+    end;
+      for a being Element of L st U /\ C is_>=_than a holds a <= cs
+    proof
+      let a be Element of L such that
+A20:     U /\ C is_>=_than a;
+        cs in U by A15,WAYBEL_0:18;
+      then cs in U /\ C by A10,XBOOLE_0:def 3;
+      hence a <= cs by A20,LATTICE3:def 8;
+    end;
+    hence thesis by A1,A11,A16,A17,YELLOW_0:def 10;
+  end;
+
+:: Proposition 2.4, p. 204
+theorem
+    for L being complete non empty Poset,
+      R being auxiliary(i) auxiliary(ii) (Relation of L),
+      C being non empty strict_chain of R st C is maximal holds
+    subrelstr C is complete
+  proof
+    let L be complete non empty Poset,
+        R be auxiliary(i) auxiliary(ii) (Relation of L),
+        C be non empty strict_chain of R;
+    assume
+A1:   C is maximal;
+      for X being Subset of subrelstr C holds ex_sup_of X,subrelstr C
+    proof
+      let X be Subset of subrelstr C;
+        X is Subset of C & ex_sup_of X,L by YELLOW_0:17,def 15;
+      hence ex_sup_of X,subrelstr C by A1,Th11;
+    end;
+    hence subrelstr C is complete by YELLOW_0:53;
+  end;
+
+:: Proposition 2.5 (i), p. 204
+theorem
+    for L being non empty lower-bounded antisymmetric RelStr,
+      R being auxiliary(iv) (Relation of L),
+      C being strict_chain of R st C is maximal holds
+    Bottom L in C
+  proof
+    let L be non empty lower-bounded antisymmetric RelStr,
+        R be auxiliary(iv) (Relation of L),
+        C be strict_chain of R such that
+A1:   for D being strict_chain of R st C c= D holds C = D;
+    assume
+A2:   not Bottom L in C;
+A3: C c= C \/ {Bottom L} by XBOOLE_1:7;
+      C \/ {Bottom L} is strict_chain of R by Th8;
+    then C \/ {Bottom L} = C by A1,A3;
+    then not Bottom L in {Bottom L} by A2,XBOOLE_0:def 2;
+    hence thesis by TARSKI:def 1;
+  end;
+
+:: Proposition 2.5 (ii), p. 204
+theorem
+    for L being non empty upper-bounded Poset,
+      R being auxiliary(ii) (Relation of L),
+      C being strict_chain of R,
+      m being Element of L
+   st C is maximal & m is_maximum_of C & [m,Top L] in R
+   holds [Top L,Top L] in R & m = Top L
+  proof
+    let L be non empty upper-bounded Poset,
+        R be auxiliary(ii) (Relation of L),
+        C be strict_chain of R,
+        m be Element of L such that
+A1:  C is maximal and
+A2:  m is_maximum_of C and
+A3:  [m,Top L] in R;
+A4: C c= C \/ {Top L} by XBOOLE_1:7;
+      now
+      assume
+A5:     m <> Top L;
+A6:   m <= Top L by YELLOW_0:45;
+A7:   sup C = m by A2,WAYBEL_1:def 7;
+A8:   ex_sup_of C,L by A2,WAYBEL_1:def 7;
+        C \/ {Top L} is strict_chain of R
+      proof
+        let a, b be set;
+        assume
+A9:       a in C \/ {Top L} & b in C \/ {Top L};
+A10:     Top L <= Top L;
+        per cases by A9,Lm1;
+        suppose a in C & b in C;
+        hence thesis by Def3;
+        suppose that
+A11:       a = Top L and
+A12:       b in C;
+        reconsider b as Element of L by A12;
+          b <= sup C by A8,A12,YELLOW_4:1;
+        hence thesis by A3,A7,A10,A11,Lm3;
+        suppose that
+A13:       a in C and
+A14:       b = Top L;
+        reconsider a as Element of L by A13;
+          a <= sup C by A8,A13,YELLOW_4:1;
+        hence thesis by A3,A7,A10,A14,Lm3;
+        suppose a = Top L & b = Top L;
+        hence thesis;
+      end;
+      then A15:   C \/ {Top L} = C by A1,A4,Def4;
+A16:   Top L in {Top L} by TARSKI:def 1;
+        {Top L} c= C \/ {Top L} by XBOOLE_1:7;
+      then Top L <= sup C by A8,A15,A16,YELLOW_4:1;
+      hence contradiction by A5,A6,A7,ORDERS_1:25;
+    end;
+    hence thesis by A3;
+  end;
+
+:: Definition (SI_C) p. 204
+definition
+  let L be RelStr,
+      C be set,
+      R be Relation of the carrier of L;
+  pred R satisfies_SIC_on C means
+:Def6:
+   for x, z being Element of L holds
+    x in C & z in C & [x,z] in R & x <> z implies
+     ex y being Element of L st y in C & [x,y] in R & [y,z] in R & x <> y;
+end;
+
+definition
+  let L be RelStr,
+      R be (Relation of the carrier of L),
+      C be strict_chain of R;
+  attr C is satisfying_SIC means
+:Def7:
+    R satisfies_SIC_on C;
+  synonym C is satisfying_the_interpolation_property;
+  synonym C satisfies_the_interpolation_property;
+end;
+
+theorem Th16:
+  for L being RelStr,
+      C being set,
+      R being auxiliary(i) (Relation of L) st
+  R satisfies_SIC_on C holds
+   for x, z being Element of L holds
+    x in C & z in C & [x,z] in R & x <> z implies
+     ex y being Element of L st y in C & [x,y] in R & [y,z] in R & x < y
+  proof
+    let L be RelStr,
+        C be set,
+        R be auxiliary(i) Relation of L such that
+A1:   R satisfies_SIC_on C;
+    let x, z be Element of L;
+    assume x in C & z in C & [x,z] in R & x <> z;
+    then consider y being Element of L such that
+A2:   y in C and
+A3:   [x,y] in R and
+A4:   [y,z] in R and
+A5:   x <> y by A1,Def6;
+    take y;
+    thus y in C & [x,y] in R & [y,z] in R by A2,A3,A4;
+      x <= y by A3,Lm2;
+    hence x < y by A5,ORDERS_1:def 10;
+  end;
+
+definition
+  let L be RelStr,
+      R be Relation of the carrier of L;
+  cluster trivial -> satisfying_SIC strict_chain of R;
+coherence
+  proof
+    let C be strict_chain of R;
+    assume
+A1:   C is trivial;
+    let x, z be Element of L;
+    assume x in C & z in C & [x,z] in R & x <> z;
+    hence thesis by A1,YELLOW_8:def 1;
+  end;
+end;
+
+definition
+  let L be non empty RelStr,
+      R be Relation of the carrier of L;
+  cluster non empty trivial strict_chain of R;
+existence
+  proof
+    consider C being non empty trivial Subset of L;
+    reconsider C as strict_chain of R by Th4;
+    take C;
+    thus thesis;
+  end;
+end;
+
+:: Proposition 2.5 (iii), p. 204
+theorem
+    for L being lower-bounded with_suprema Poset,
+      R being auxiliary(i) auxiliary(ii) (Relation of L),
+      C being strict_chain of R st C is maximal & R is satisfying_SI holds
+    R satisfies_SIC_on C
+  proof
+    let L be lower-bounded with_suprema Poset,
+        R be auxiliary(i) auxiliary(ii) (Relation of L),
+        C be strict_chain of R such that
+A1:   C is maximal and
+A2:   R is satisfying_SI;
+    let x, z be Element of L;
+    assume that
+A3:   x in C and
+A4:   z in C and
+A5:   [x,z] in R and
+A6:   x <> z;
+    assume
+A7:   not thesis;
+    consider y being Element of L such that
+A8:   [x,y] in R and
+A9:   [y,z] in R and
+A10:   x <> y by A2,A5,A6,WAYBEL_4:def 21;
+A11: x <= y by A8,Lm2;
+A12: y <= z by A9,Lm2;
+A13: C c= C \/ {y} by XBOOLE_1:7;
+      C \/ {y} is strict_chain of R
+    proof
+      let a, b be set such that
+A14:     a in C \/ {y} & b in C \/ {y};
+      per cases by A14,Lm1;
+      suppose a in C & b in C;
+      hence [a,b] in R or a = b or [b,a] in R by Def3;
+      suppose that
+A15:     a in C and
+A16:     b = y;
+        now
+        reconsider a as Element of L by A15;
+A17:     a <= a;
+        per cases by A7,A15;
+        suppose x = a;
+        hence thesis by A8,A16;
+        suppose a = z;
+        hence thesis by A9,A16;
+        suppose not [x,a] in R & a <> x;
+        then [a,x] in R by A3,A15,Def3;
+        hence thesis by A11,A16,A17,Lm3;
+        suppose not [a,z] in R & a <> z;
+        then [z,a] in R by A4,A15,Def3;
+        hence thesis by A12,A16,A17,Lm3;
+      end;
+      hence thesis;
+      suppose that
+A18:     a = y and
+A19:     b in C;
+        now
+        reconsider b as Element of L by A19;
+A20:     b <= b;
+        per cases by A7,A19;
+        suppose x = b;
+        hence thesis by A8,A18;
+        suppose b = z;
+        hence thesis by A9,A18;
+        suppose not [x,b] in R & b <> x;
+        then [b,x] in R by A3,A19,Def3;
+        hence thesis by A11,A18,A20,Lm3;
+        suppose not [b,z] in R & b <> z;
+        then [z,b] in R by A4,A19,Def3;
+        hence thesis by A12,A18,A20,Lm3;
+      end;
+      hence thesis;
+      suppose a = y & b = y;
+      hence [a,b] in R or a = b or [b,a] in R;
+    end;
+    then C \/ {y} = C by A1,A13,Def4;
+    then y in C by ZFMISC_1:45;
+    hence thesis by A7,A8,A9,A10;
+  end;
+
+definition
+  let R be Relation,
+      C, y be set;
+  func SetBelow (R,C,y) equals
+:Def8:
+    ( R"{y} ) /\ C;
+coherence;
+end;
+
+theorem Th18:
+  for R being Relation,
+      C, x, y being set holds
+   x in SetBelow (R,C,y) iff [x,y] in R & x in C
+  proof
+    let R be Relation,
+        C, x, y be set;
+    hereby
+      assume x in SetBelow (R,C,y);
+      then A1:   x in ( R"{y} ) /\ C by Def8;
+      then x in R"{y} by XBOOLE_0:def 3;
+      then ex a being set st [x,a] in R & a in {y} by RELAT_1:def 14;
+      hence [x,y] in R by TARSKI:def 1;
+      thus x in C by A1,XBOOLE_0:def 3;
+    end;
+    assume that
+A2:   [x,y] in R and
+A3:   x in C;
+      y in {y} by TARSKI:def 1;
+    then x in R"{y} by A2,RELAT_1:def 14;
+    then x in R"{y} /\ C by A3,XBOOLE_0:def 3;
+    hence thesis by Def8;
+  end;
+
+definition
+  let L be 1-sorted,
+      R be (Relation of the carrier of L),
+      C, y be set;
+  redefine func SetBelow (R,C,y) -> Subset of L;
+coherence
+  proof
+A1: SetBelow (R,C,y) = ( R"{y} ) /\ C by Def8;
+      ( R"{y} ) /\ C c= the carrier of L
+    proof
+      let x be set;
+      assume x in ( R"{y} ) /\ C;
+      then x in R"{y} by XBOOLE_0:def 3;
+      hence x in the carrier of L;
+    end;
+    hence thesis by A1;
+  end;
+end;
+
+theorem Th19:
+  for L being RelStr,
+      R being auxiliary(i) (Relation of L),
+      C being set,
+      y being Element of L holds
+   SetBelow (R,C,y) is_<=_than y
+  proof
+    let L be RelStr,
+        R be auxiliary(i) (Relation of L),
+        C be set,
+        y be Element of L;
+    let b be Element of L;
+    assume b in SetBelow (R,C,y);
+    then [b,y] in R by Th18;
+    hence thesis by Lm2;
+  end;
+
+theorem Th20:
+  for L being reflexive transitive RelStr,
+      R being auxiliary(ii) (Relation of L),
+      C being Subset of L,
+      x, y being Element of L st x <= y
+    holds SetBelow (R,C,x) c= SetBelow (R,C,y)
+  proof
+    let L be reflexive transitive RelStr,
+        R be auxiliary(ii) (Relation of L),
+        C be Subset of L,
+        x, y be Element of L such that
+A1:   x <= y;
+    let a be set;
+    assume
+A2:   a in SetBelow (R,C,x);
+    then reconsider L as non empty reflexive RelStr by STRUCT_0:def 1;
+    reconsider a as Element of L by A2;
+A3: [a,x] in R by A2,Th18;
+A4: a in C by A2,Th18;
+      a <= a;
+    then [a,y] in R by A1,A3,Lm3;
+    hence thesis by A4,Th18;
+  end;
+
+theorem Th21:
+  for L being RelStr,
+      R being auxiliary(i) (Relation of L),
+      C being set,
+      x being Element of L st x in C & [x,x] in R &
+      ex_sup_of SetBelow (R,C,x),L
+    holds x = sup SetBelow (R,C,x)
+  proof
+    let L be RelStr,
+        R be auxiliary(i) (Relation of L),
+        C be set,
+        x be Element of L;
+    assume that
+A1:   x in C & [x,x] in R and
+A2:   ex_sup_of SetBelow (R,C,x),L;
+A3: SetBelow (R,C,x) is_<=_than x by Th19;
+      for a being Element of L st SetBelow (R,C,x) is_<=_than a holds x <= a
+    proof
+      let a be Element of L;
+      assume
+A4:     SetBelow (R,C,x) is_<=_than a;
+        x in SetBelow (R,C,x) by A1,Th18;
+      hence thesis by A4,LATTICE3:def 9;
+    end;
+    hence x = sup SetBelow (R,C,x) by A2,A3,YELLOW_0:def 9;
+  end;
+
+definition
+  let L be RelStr,
+      C be Subset of L;
+  attr C is sup-closed means
+:Def9:
+   for X being Subset of C st ex_sup_of X,L
+    holds "\/"(X,L) = "\/"(X,subrelstr C);
+end;
+
+:: Lemma 2.6, p. 205
+theorem Th22:
+  for L being complete non empty Poset,
+      R being extra-order (Relation of L),
+      C being satisfying_SIC strict_chain of R,
+      p, q being Element of L st p in C & q in C & p < q
+   ex y being Element of L st p < y & [y,q] in R & y = sup SetBelow (R,C,y)
+  proof
+    let L be complete non empty Poset,
+        R be extra-order (Relation of L),
+        C be satisfying_SIC strict_chain of R,
+        p, q be Element of L such that
+A1:   p in C and
+A2:   q in C and
+A3:   p < q;
+A4: R satisfies_SIC_on C by Def7;
+      not q <= p by A3,ORDERS_1:30;
+    then not [q,p] in R by Lm2;
+    then [p,q] in R by A1,A2,A3,Def3;
+    then consider w being Element of L such that
+A5:   w in C and
+A6:   [p,w] in R and
+A7:   [w,q] in R and
+A8:   p < w by A1,A2,A3,A4,Th16;
+    consider x1 being Element of L such that
+A9:   x1 in C and
+        [p,x1] in R and
+A10:   [x1,w] in R and
+A11:   p < x1 by A1,A4,A5,A6,A8,Th16;
+    reconsider D = SetBelow(R,C,w) as non empty set by A9,A10,Th18;
+    defpred P[set,set,set] means
+     ex a, b being Element of L st
+      $2 = a & $3 = b & $3 in C & [$2,$3] in R & b <= w;
+A12:  for n being Nat,
+         x being Element of D
+      ex y being Element of D st P[n,x,y]
+    proof
+      let n be Nat;
+      let x be Element of D;
+        x in D;
+      then reconsider t = x as Element of L;
+A13:   x in C & [x,w] in R by Th18;
+      per cases;
+      suppose x <> w;
+      then consider b being Element of L such that
+A14:     b in C and
+A15:     [x,b] in R and
+A16:     [b,w] in R and
+          t < b by A4,A5,A13,Th16;
+      reconsider y = b as Element of D by A14,A16,Th18;
+      take y, t, b;
+      thus thesis by A14,A15,A16,Lm2;
+      suppose
+A17:     x = w;
+      take x, t, t;
+      thus thesis by A17,Th18;
+    end;
+    reconsider g = x1 as Element of D by A9,A10,Th18;
+    consider f being Function of NAT, D such that
+A18:   f.0 = g and
+A19:   for n being Element of NAT holds P[n,f.n,f.(n+1)] from RecExD(A12);
+    reconsider f as Function of NAT, the carrier of L by FUNCT_2:9;
+    take y = sup rng f;
+A20: ex_sup_of rng f,L by YELLOW_0:17;
+A21: dom f = NAT by FUNCT_2:def 1;
+    then x1 in rng f by A18,FUNCT_1:12;
+    then x1 <= y by A20,YELLOW_4:1;
+    hence p < y by A11,ORDERS_1:32;
+A22: q <= q;
+      rng f is_<=_than w
+    proof
+      let x be Element of L;
+      assume x in rng f;
+      then consider n being set such that
+A23:     n in dom f and
+A24:     f.n = x by FUNCT_1:def 5;
+      reconsider n as Element of NAT by A23;
+A25:   ex a, b being Element of L st
+       f.n = a & f.(n+1) = b & f.(n+1) in C &
+        [f.n,f.(n+1)] in R & b <= w by A19;
+      then x <= f.(n+1) by A24,Lm2;
+      hence x <= w by A25,ORDERS_1:26;
+    end;
+    then y <= w by A20,YELLOW_0:def 9;
+    hence [y,q] in R by A7,A22,Lm3;
+A26: ex_sup_of SetBelow (R,C,y),L by YELLOW_0:17;
+A27: SetBelow (R,C,y) is_<=_than y by Th19;
+      for x being Element of L st SetBelow (R,C,y) is_<=_than x holds y <= x
+    proof
+      let x be Element of L such that
+A28:     SetBelow (R,C,y) is_<=_than x;
+        rng f is_<=_than x
+      proof
+        let m be Element of L;
+        assume m in rng f;
+        then consider n being set such that
+A29:       n in dom f and
+A30:       f.n = m by FUNCT_1:def 5;
+        reconsider n as Element of NAT by A29;
+A31:     ex a, b being Element of L st
+         f.n = a & f.(n+1) = b & f.(n+1) in C &
+          [f.n,f.(n+1)] in R & b <= w by A19;
+        defpred P[Nat] means f.$1 in C;
+          for n being Element of NAT holds P[n]
+        proof
+A32:       P[0] by A9,A18;
+A33:       for k being Element of NAT st P[k] holds P[k+1]
+          proof
+            let k be Element of NAT;
+              ex a, b being Element of L st
+             f.k = a & f.(k+1) = b & f.(k+1) in C &
+              [f.k,f.(k+1)] in R & b <= w by A19;
+            hence thesis;
+         end;
+         thus thesis from Ind(A32,A33);
+        end;
+        then A34:     f.n in C;
+A35:     f.n <= f.n;
+          f.(n+1) in rng f by A21,FUNCT_1:12;
+        then f.(n+1) <= y by A20,YELLOW_4:1;
+        then [m,y] in R by A30,A31,A35,Lm3;
+        then m in SetBelow (R,C,y) by A30,A34,Th18;
+        hence m <= x by A28,LATTICE3:def 9;
+      end;
+      hence y <= x by A20,YELLOW_0:def 9;
+    end;
+    hence y = sup SetBelow (R,C,y) by A26,A27,YELLOW_0:def 9;
+  end;
+
+:: Lemma 2.7, p. 205,  1 => 2
+theorem
+    for L being lower-bounded non empty Poset,
+      R being extra-order (Relation of L),
+      C being non empty strict_chain of R st
+   C is sup-closed &
+   (for c being Element of L st c in C holds
+     ex_sup_of SetBelow (R,C,c),L)
+   &
+   R satisfies_SIC_on C holds
+   for c being Element of L st c in C holds
+    c = sup SetBelow (R,C,c)
+  proof
+    let L be lower-bounded non empty Poset,
+        R be extra-order (Relation of L),
+        C be non empty strict_chain of R;
+    assume that
+A1:   C is sup-closed and
+A2:   for c being Element of L st c in C holds
+        ex_sup_of SetBelow (R,C,c),L;
+    assume
+A3:   R satisfies_SIC_on C;
+    let c be Element of L such that
+A4:   c in C;
+    set d = sup SetBelow (R,C,c);
+A5: ex_sup_of SetBelow (R,C,c),L by A2,A4;
+      SetBelow (R,C,c) = ( R"{c} ) /\ C by Def8;
+    then SetBelow (R,C,c) c= C by XBOOLE_1:17;
+    then d = "\/"(SetBelow (R,C,c),subrelstr C) by A1,A5,Def9;
+    then d in the carrier of subrelstr C;
+    then A6: d in C by YELLOW_0:def 15;
+    per cases;
+    suppose c = d;
+    hence c = sup SetBelow (R,C,c);
+    suppose
+A7:   c <> d;
+      [c,d] in R or [d,c] in R by A4,A6,A7,Def3;
+    then A8: c <= d or [d,c] in R by Lm2;
+      now
+      assume
+A9:     c < d;
+A10:   SetBelow (R,C,c) is_<=_than c by Th19;
+        for a being Element of L st SetBelow (R,C,c) is_<=_than a holds c <= a
+      proof
+        let a be Element of L;
+        assume SetBelow (R,C,c) is_<=_than a;
+        then A11:     d <= a by A5,YELLOW_0:def 9;
+          c <= d by A9,ORDERS_1:def 10;
+        hence c <= a by A11,ORDERS_1:26;
+      end;
+      hence c = sup SetBelow (R,C,c) by A5,A10,YELLOW_0:def 9;
+    end;
+    then consider y being Element of L such that
+A12:   y in C and
+        [d,y] in R and
+A13:   [y,c] in R and
+A14:   d < y by A3,A4,A6,A7,A8,Th16,ORDERS_1:def 10;
+      y in SetBelow (R,C,c) by A12,A13,Th18;
+    then y <= d by A5,YELLOW_4:1;
+    hence c = sup SetBelow (R,C,c) by A14,ORDERS_1:30;
+  end;
+
+:: Lemma 2.7, p. 205, 2 => 1
+theorem
+    for L being non empty reflexive antisymmetric RelStr,
+      R being auxiliary(i) (Relation of L),
+      C being strict_chain of R st
+   (for c being Element of L st c in C holds
+     ex_sup_of SetBelow (R,C,c),L & c = sup SetBelow (R,C,c))
+   holds
+   R satisfies_SIC_on C
+  proof
+    let L be non empty reflexive antisymmetric RelStr,
+        R be auxiliary(i) (Relation of L),
+        C be strict_chain of R;
+    assume
+A1:   for c being Element of L st c in C holds
+        ex_sup_of SetBelow (R,C,c),L & c = sup SetBelow (R,C,c);
+    let x, z be Element of L;
+    assume that
+A2:   x in C and
+A3:   z in C and
+A4:   [x,z] in R and
+A5:   x <> z;
+A6: z = sup SetBelow (R,C,z) by A1,A3;
+    per cases;
+    suppose
+A7:   not ex y being Element of L st y in SetBelow (R,C,z) & x < y;
+    reconsider x as Element of L;
+A8: ex_sup_of SetBelow (R,C,z),L by A1,A3;
+A9: SetBelow (R,C,z) is_<=_than x
+    proof
+      let b be Element of L;
+      assume
+A10:     b in SetBelow (R,C,z);
+      then A11:   not x < b by A7;
+      per cases;
+      suppose x <> b;
+      then A12:   not x <= b by A11,ORDERS_1:def 10;
+        b in C by A10,Th18;
+      then [x,b] in R or x = b or [b,x] in R by A2,Def3;
+      hence b <= x by A12,Lm2;
+      suppose x = b;
+      hence b <= x;
+    end;
+      for a being Element of L st SetBelow (R,C,z) is_<=_than a holds x <= a
+    proof
+      let a be Element of L such that
+A13:     SetBelow (R,C,z) is_<=_than a;
+        x in SetBelow (R,C,z) by A2,A4,Th18;
+      hence x <= a by A13,LATTICE3:def 9;
+    end;
+    hence thesis by A5,A6,A8,A9,YELLOW_0:def 9;
+    suppose ex y being Element of L st y in SetBelow (R,C,z) & x < y;
+    then consider y being Element of L such that
+A14:   y in SetBelow (R,C,z) and
+A15:   x < y;
+    take y;
+    thus y in C by A14,Th18;
+    hence [x,y] in R by A2,A15,Th5;
+    thus [y,z] in R by A14,Th18;
+    thus x <> y by A15;
+  end;
+
+definition
+  let L be non empty RelStr,
+      R be (Relation of the carrier of L),
+      C be set;
+  func SupBelow (R,C) means
+:Def10:
+   for y being set holds y in it iff y = sup SetBelow (R,C,y);
+existence
+  proof
+    defpred P[set] means $1 = sup SetBelow (R,C,$1);
+    consider X being set such that
+A1:   for x being set holds x in X iff x in the carrier of L & P[x]
+        from Separation;
+    take X;
+    thus thesis by A1;
+  end;
+uniqueness
+  proof defpred P[set] means $1 = sup SetBelow (R,C,$1);
+    thus for X1,X2 being set st
+     (for x being set holds x in X1 iff P[x]) &
+     (for x being set holds x in X2 iff P[x]) holds X1 = X2 from SetEq;
+  end;
+end;
+
+definition
+  let L be non empty RelStr,
+      R be (Relation of the carrier of L),
+      C be set;
+  redefine func SupBelow (R,C) -> Subset of L;
+coherence
+  proof
+      SupBelow (R,C) c= the carrier of L
+    proof
+      let x be set;
+      assume x in SupBelow (R,C);
+      then x = sup SetBelow (R,C,x) by Def10;
+      hence x in the carrier of L;
+    end;
+    hence thesis;
+  end;
+end;
+
+:: Lemma 2.8, (i) a), p. 205
+theorem Th25:
+  for L being non empty reflexive transitive RelStr,
+      R being auxiliary(i) auxiliary(ii) (Relation of L),
+      C being strict_chain of R st
+    (for c being Element of L holds ex_sup_of SetBelow (R,C,c),L) holds
+    SupBelow (R,C) is strict_chain of R
+  proof
+    let L be non empty reflexive transitive RelStr,
+        R be auxiliary(i) auxiliary(ii) (Relation of L),
+        C be strict_chain of R;
+    assume
+A1:   for c being Element of L holds ex_sup_of SetBelow (R,C,c),L;
+    thus SupBelow (R,C) is strict_chain of R
+    proof
+      let a, b be set;
+      assume
+A2:     a in SupBelow (R,C);
+      then A3:   a = sup SetBelow (R,C,a) by Def10;
+      then reconsider a as Element of L;
+      assume b in SupBelow (R,C);
+      then A4:   b = sup SetBelow (R,C,b) by Def10;
+      then reconsider b as Element of L;
+A5:   a <= a;
+A6:   b <= b;
+A7:   ex_sup_of SetBelow (R,C,a),L by A1;
+A8:   ex_sup_of SetBelow (R,C,b),L by A1;
+      per cases;
+      suppose a = b;
+      hence thesis;
+      suppose
+A9:     a <> b;
+        (for x being Element of L st x in C holds [x,a] in R iff [x,b] in R)
+       implies a = b
+      proof
+        assume
+A10:       for x being Element of L st x in C holds [x,a] in R iff [x,b] in R;
+          SetBelow (R,C,a) = SetBelow (R,C,b)
+        proof
+          thus SetBelow (R,C,a) c= SetBelow (R,C,b)
+          proof
+            let x be set;
+            assume
+A11:           x in SetBelow (R,C,a);
+            then reconsider x as Element of L;
+              [x,a] in R & x in C by A11,Th18;
+            then [x,b] in R & x in C by A10;
+            hence thesis by Th18;
+          end;
+          let x be set;
+          assume
+A12:         x in SetBelow (R,C,b);
+          then reconsider x as Element of L;
+            [x,b] in R & x in C by A12,Th18;
+          then [x,a] in R & x in C by A10;
+          hence thesis by Th18;
+        end;
+        hence thesis by A2,A4,Def10;
+      end;
+      then consider x being Element of L such that
+A13:     x in C and
+A14:     ( [x,a] in R & not [x,b] in R or
+          not [x,a] in R & [x,b] in R ) by A9;
+A15:   x <= x;
+      thus thesis
+      proof
+        per cases by A14;
+        suppose that
+A16:       [x,a] in R and
+A17:       not [x,b] in R;
+          SetBelow (R,C,b) is_<=_than x
+        proof
+          let y be Element of L;
+          assume
+A18:       y in SetBelow (R,C,b);
+          then [y,b] in R by Th18;
+          then A19:       y <= b by Lm2;
+            y in C by A18,Th18;
+          then [y,x] in R or x = y or [x,y] in R by A13,Def3;
+          hence y <= x by A15,A17,A19,Lm2,Lm3;
+        end;
+        then b <= x by A4,A8,YELLOW_0:def 9;
+        hence thesis by A5,A16,Lm3;
+        suppose that
+A20:       not [x,a] in R and
+A21:       [x,b] in R;
+          SetBelow (R,C,a) is_<=_than x
+        proof
+          let y be Element of L;
+          assume
+A22:       y in SetBelow (R,C,a);
+          then [y,a] in R by Th18;
+          then A23:       y <= a by Lm2;
+            y in C by A22,Th18;
+          then [y,x] in R or x = y or [x,y] in R by A13,Def3;
+          hence y <= x by A15,A20,A23,Lm2,Lm3;
+        end;
+        then a <= x by A3,A7,YELLOW_0:def 9;
+        hence thesis by A6,A21,Lm3;
+      end;
+    end;
+  end;
+
+:: Lemma 2.8, (i) b), p. 205
+theorem
+    for L being non empty Poset,
+      R being auxiliary(i) auxiliary(ii) (Relation of L),
+      C being Subset of L st
+    (for c being Element of L holds ex_sup_of SetBelow (R,C,c),L) holds
+   SupBelow (R,C) is sup-closed
+  proof
+    let L be non empty Poset,
+        R be auxiliary(i) auxiliary(ii) (Relation of L),
+        C be Subset of L;
+    assume
+A1:   for c being Element of L holds ex_sup_of SetBelow (R,C,c),L;
+    let X be Subset of SupBelow (R,C);
+    set s = "\/"(X,L);
+A2: the carrier of subrelstr SupBelow (R,C) = SupBelow (R,C)
+      by YELLOW_0:def 15;
+    assume
+A3:   ex_sup_of X,L;
+A4: ex_sup_of SetBelow (R,C,s),L by A1;
+      SetBelow (R,C,s) is_<=_than s by Th19;
+    then A5: sup SetBelow (R,C,s) <= s by A4,YELLOW_0:def 9;
+      X is_<=_than sup SetBelow (R,C,s)
+    proof
+      let x be Element of L;
+      assume
+A6:     x in X;
+      then A7:   x = sup SetBelow (R,C,x) by Def10;
+A8:   ex_sup_of SetBelow (R,C,x),L by A1;
+        x <= s by A3,A6,YELLOW_4:1;
+      then SetBelow (R,C,x) c= SetBelow (R,C,s) by Th20;
+      hence x <= sup SetBelow (R,C,s) by A4,A7,A8,YELLOW_0:34;
+    end;
+    then s <= sup SetBelow (R,C,s) by A3,YELLOW_0:def 9;
+    then s = sup SetBelow (R,C,s) by A5,ORDERS_1:25;
+    then A9: s in SupBelow (R,C) by Def10;
+    then subrelstr SupBelow (R,C) is non empty by A2,STRUCT_0:def 1;
+    hence thesis by A2,A3,A9,YELLOW_0:65;
+  end;
+
+theorem Th27:
+  for L being complete non empty Poset,
+      R being extra-order (Relation of L),
+      C being satisfying_SIC strict_chain of R,
+      d being Element of L st d in SupBelow (R,C)
+    holds
+   d = "\/"({b where b is Element of L:
+       b in SupBelow(R,C) & [b,d] in R},L)
+  proof
+    let L be complete non empty Poset,
+        R be extra-order (Relation of L),
+        C be satisfying_SIC strict_chain of R,
+        d be Element of L;
+    assume d in SupBelow (R,C);
+    then A1: d = sup SetBelow(R,C,d) by Def10;
+    deffunc F(Element of L) =
+      {b where b is Element of L:
+        b in SupBelow(R,C) & [b,$1] in R};
+    set p = "\/"(F(d),L);
+A2: ex_sup_of F(d),L by YELLOW_0:17;
+A3: ex_sup_of SetBelow (R,C,d),L by YELLOW_0:17;
+    assume
+A4:   p <> d;
+      F(d) is_<=_than d
+    proof
+      let a be Element of L;
+      assume a in F(d);
+      then ex b being Element of L st
+        a = b & b in SupBelow(R,C) & [b,d] in R;
+      hence a <= d by Lm2;
+    end;
+    then p <= d by A2,YELLOW_0:def 9;
+    then A5: p < d by A4,ORDERS_1:def 10;
+      now
+      per cases by A1,A3,A4,YELLOW_0:def 9;
+      suppose not SetBelow(R,C,d) is_<=_than p;
+      then consider a being Element of L such that
+A6:     a in SetBelow(R,C,d) and
+A7:     not a <= p by LATTICE3:def 9;
+        a in C & [a,d] in R by A6,Th18;
+      hence ex a being Element of L st a in C & [a,d] in R & not a <= p
+        by A7;
+      suppose ex a being Element of L st SetBelow(R,C,d) is_<=_than a &
+        not p <= a;
+      then consider a being Element of L such that
+A8:     SetBelow(R,C,d) is_<=_than a and
+A9:     not p <= a;
+        d <= a by A1,A3,A8,YELLOW_0:def 9;
+      then p < a by A5,ORDERS_1:32;
+      hence ex a being Element of L st a in C & [a,d] in R & not a <= p
+        by A9,ORDERS_1:def 10;
+    end;
+    then consider cc being Element of L such that
+A10:   cc in C and
+A11:   [cc,d] in R and
+A12:   not cc <= p;
+A13: ex_sup_of SetBelow (R,C,cc),L by YELLOW_0:17;
+    per cases;
+    suppose [cc,cc] in R;
+    then cc = sup SetBelow (R,C,cc) by A10,A13,Th21;
+    then cc in SupBelow (R,C) by Def10;
+    then cc in F(d) by A11;
+    hence contradiction by A2,A12,YELLOW_4:1;
+    suppose
+A14:   not [cc,cc] in R;
+      ex cs being Element of L st cs in C & cc < cs & [cs,d] in R
+    proof
+      per cases by A1,A3,A11,A14,YELLOW_0:def 9;
+      suppose not SetBelow(R,C,d) is_<=_than cc;
+      then consider cs being Element of L such that
+A15:     cs in SetBelow(R,C,d) and
+A16:     not cs <= cc by LATTICE3:def 9;
+      take cs;
+      thus
+A17:     cs in C by A15,Th18;
+        not [cs,cc] in R by A16,Lm2;
+      then [cc,cs] in R by A10,A16,A17,Def3;
+      then cc <= cs by Lm2;
+      hence cc < cs by A16,ORDERS_1:def 10;
+      thus [cs,d] in R by A15,Th18;
+      suppose
+A18:     ex a being Element of L st SetBelow(R,C,d) is_<=_than a & not cc <= a;
+        cc in SetBelow(R,C,d) by A10,A11,Th18;
+      hence thesis by A18,LATTICE3:def 9;
+    end;
+    then consider cs being Element of L such that
+A19:   cs in C and
+A20:   cc < cs and
+A21:   [cs,d] in R;
+    consider y being Element of L such that
+A22:   cc < y and
+A23:   [y,cs] in R and
+A24:   y = sup SetBelow (R,C,y) by A10,A19,A20,Th22;
+A25: y in SupBelow (R,C) by A24,Def10;
+A26: d <= d;
+      y <= cs by A23,Lm2;
+    then [y,d] in R by A21,A26,Lm3;
+    then y in F(d) by A25;
+    then y <= p by A2,YELLOW_4:1;
+    then cc < p by A22,ORDERS_1:32;
+    hence contradiction by A12,ORDERS_1:def 10;
+  end;
+
+:: Lemma 2.8, (ii), p. 205
+theorem
+    for L being complete non empty Poset,
+      R being extra-order (Relation of L),
+      C being satisfying_SIC strict_chain of R holds
+   R satisfies_SIC_on SupBelow (R,C)
+  proof
+    let L be complete non empty Poset,
+        R be extra-order (Relation of L),
+        C be satisfying_SIC strict_chain of R;
+    let c, d be Element of L;
+    assume that
+A1:   c in SupBelow (R,C) and
+A2:   d in SupBelow (R,C) and
+A3:   [c,d] in R and
+A4:   c <> d;
+    deffunc F(Element of L) =
+     {b where b is Element of L:
+       b in SupBelow(R,C) & [b,$1] in R};
+A5: d = "\/"(F(d),L) by A2,Th27;
+A6: ex_sup_of F(d),L by YELLOW_0:17;
+A7: c <= d by A3,Lm2;
+    per cases by A4,A5,A6,YELLOW_0:def 9;
+    suppose not F(d) is_<=_than c;
+    then consider g being Element of L such that
+A8:   g in F(d) and
+A9:   not g <= c by LATTICE3:def 9;
+    consider y being Element of L such that
+A10:   g = y and
+A11:   y in SupBelow(R,C) and
+A12:   [y,d] in R by A8;
+    reconsider y as Element of L;
+    take y;
+    thus y in SupBelow(R,C) by A11;
+      for c being Element of L holds ex_sup_of SetBelow (R,C,c),L by YELLOW_0:
+17
+;
+    then SupBelow (R,C) is strict_chain of R by Th25;
+    then [c,y] in R or c = y or [y,c] in R by A1,A11,Def3;
+    hence [c,y] in R by A9,A10,Lm2;
+    thus [y,d] in R by A12;
+    thus c <> y by A9,A10;
+    suppose ex g being Element of L st F(d) is_<=_than g & not c <= g;
+    then consider g being Element of L such that
+A13:   F(d) is_<=_than g and
+A14:   not c <= g;
+      d <= g by A5,A6,A13,YELLOW_0:def 9;
+    hence thesis by A7,A14,ORDERS_1:26;
+  end;
+
+:: Lemma 2.8, (iii), p. 205
+theorem
+    for L being complete non empty Poset,
+      R being extra-order (Relation of L),
+      C being satisfying_SIC strict_chain of R,
+      a, b being Element of L st
+    a in C & b in C & a < b
+   ex d being Element of L st d in SupBelow (R,C) & a < d & [d,b] in R
+  proof
+    let L be complete non empty Poset,
+        R be extra-order (Relation of L),
+        C be satisfying_SIC strict_chain of R,
+        a, b be Element of L;
+     assume a in C & b in C & a < b;
+     then consider d being Element of L such that
+A1:    a < d & [d,b] in R & d = sup SetBelow (R,C,d) by Th22;
+     take d;
+     thus d in SupBelow (R,C) & a < d & [d,b] in R by A1,Def10;
+  end;
+

@@ -1,0 +1,154 @@
+:: Replacement of Subtrees in a Tree
+::  by Oleg Okhotnikov
+::
+:: Received October 1, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary TREES_1, FINSEQ_1, ZFMISC_1, BOOLE, TREES_3, RELAT_1, TREES_2,
+      FUNCT_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XREAL_0, NAT_1, RELAT_1,
+      FUNCT_1, FINSEQ_1, TREES_1, TREES_2;
+ constructors NAT_1, TREES_2, XREAL_0, MEMBERED;
+ clusters SUBSET_1, TREES_2, RELSET_1, ARYTM_3, XBOOLE_0, MEMBERED;
+ requirements NUMERALS, BOOLE, SUBSET;
+
+
+begin
+
+reserve T, T1 for Tree,
+        P for AntiChain_of_Prefixes of T,
+        p1 for FinSequence,
+        p, q, r, s, p' for FinSequence of NAT,
+        x, Z for set,
+        t for Element of T,
+        k, n for Nat;
+
+theorem :: TREES_A:1
+ for p,q,r,s being FinSequence st p^q = s^r holds p,s are_c=-comparable;
+
+definition let T,T1;
+  let P such that
+  P<>{};
+  func tree(T,P,T1) -> Tree means
+:: TREES_A:def 1
+    q in it iff
+      (q in T & for p st p in P holds not p is_a_proper_prefix_of q)
+      or ex p,r st p in P & r in T1 & q = p^r;
+end;
+
+theorem :: TREES_A:2
+  P <> {} implies tree(T,P,T1) =
+    {t1 where t1 is Element of T :
+      for p st p in P holds not p is_a_proper_prefix_of t1}
+    \/ { p^s where p is Element of T, s is Element of T1 : p in P };
+
+theorem :: TREES_A:3
+  {t1 where t1 is Element of T :
+    for p st p in P holds not p is_a_prefix_of t1} c=
+  {t1 where t1 is Element of T :
+    for p st p in P holds not p is_a_proper_prefix_of t1};
+
+theorem :: TREES_A:4
+  P c= {t1 where t1 is Element of T :
+    for p st p in P holds not p is_a_proper_prefix_of t1};
+
+theorem :: TREES_A:5
+  {t1 where t1 is Element of T :
+    for p st p in P holds not p is_a_proper_prefix_of t1} \
+  {t1 where t1 is Element of T :
+    for p st p in P holds not p is_a_prefix_of t1} = P;
+
+theorem :: TREES_A:6
+  for T, T1, P holds
+    P c= { p^s where p is Element of T, s is Element of T1 : p in P };
+
+theorem :: TREES_A:7
+  P <> {} implies tree(T,P,T1) =
+    {t1 where t1 is Element of T :
+      for p st p in P holds not p is_a_prefix_of t1}
+    \/ { p^s where p is Element of T, s is Element of T1 : p in P };
+
+canceled;
+
+theorem :: TREES_A:9
+     p in P implies T1 = tree(T,P,T1)|p;
+
+definition let T;
+  cluster non empty AntiChain_of_Prefixes of T;
+end;
+
+definition let T; let t be Element of T;
+  redefine func {t} -> non empty AntiChain_of_Prefixes of T;
+end;
+
+theorem :: TREES_A:10
+  tree(T,{t},T1) = T with-replacement (t,T1);
+
+reserve T,T1 for DecoratedTree,
+        P for AntiChain_of_Prefixes of dom T,
+        t for Element of dom T,
+        p1, p2, r1, r2 for FinSequence of NAT;
+
+definition let T,P,T1;
+  assume
+  P<>{};
+ func tree(T,P,T1) -> DecoratedTree means
+:: TREES_A:def 2
+  dom it = tree(dom T, P, dom T1) &
+   for q st q in tree(dom T, P, dom T1) holds
+    (for p st p in P holds not p is_a_prefix_of q & it.q = T.q)
+    or ex p,r st p in P & r in dom T1 & q = p^r & it.q = T1.r;
+end;
+
+canceled 2;
+
+theorem :: TREES_A:13
+  P<>{} implies for q st q in dom tree(T,P,T1) holds
+    (for p st p in P holds not p is_a_prefix_of q & tree(T,P,T1).q = T.q)
+    or ex p,r st p in P & r in dom T1 & q = p^r & tree(T,P,T1).q = T1.r;
+
+theorem :: TREES_A:14
+  p in dom T implies for q st q in dom (T with-replacement (p,T1)) holds
+    (not p is_a_prefix_of q & T with-replacement (p,T1).q = T.q)
+    or ex r st r in dom T1 & q = p^r & T with-replacement (p,T1).q = T1.r;
+
+theorem :: TREES_A:15
+  P<>{} implies for q st q in dom tree(T,P,T1) &
+    q in {t1 where t1 is Element of dom T :
+      for p st p in P holds not p is_a_prefix_of t1}
+        holds tree(T,P,T1).q = T.q;
+
+theorem :: TREES_A:16
+  p in dom T implies for q st q in dom (T with-replacement (p,T1)) &
+    q in {t1 where t1 is Element of dom T : not p is_a_prefix_of t1}
+      holds T with-replacement (p,T1).q = T.q;
+
+theorem :: TREES_A:17
+  for q st q in dom tree(T,P,T1) &
+    q in {p^s where p is Element of dom T, s is Element of dom T1 : p in P}
+        holds ex p' being Element of dom T, r being Element of dom T1 st
+          q = p'^r & p' in P & tree(T,P,T1).q = T1.r;
+
+theorem :: TREES_A:18
+  p in dom T implies for q st q in dom (T with-replacement (p,T1)) &
+    q in {p^s where s is Element of dom T1 : s = s}
+      holds ex r being Element of dom T1 st
+        q = p^r & T with-replacement (p,T1).q = T1.r;
+
+theorem :: TREES_A:19
+    tree(T,{t},T1) = T with-replacement (t,T1);
+
+reserve D for non empty set,
+        T,T1 for DecoratedTree of D,
+        P for AntiChain_of_Prefixes of dom T;
+
+definition let D,T,P,T1;
+  assume
+  P<>{};
+  func tree(T,P,T1) -> DecoratedTree of D equals
+:: TREES_A:def 3
+      tree(T,P,T1);
+end;
+

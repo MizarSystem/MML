@@ -1,0 +1,309 @@
+:: Planes in Affine Spaces
+::  by Wojciech Leo\'nczuk, Henryk Oryszczyszyn and Krzysztof Pra\.zmowski
+::
+:: Received December 5, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary DIRAF, BOOLE, ANALOAF, AFF_1, INCSP_1, PARSP_1, AFF_2, AFF_4;
+ notation TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, ANALOAF, DIRAF, AFF_1,
+      PAPDESAF;
+ constructors AFF_1, AFF_2, MEMBERED, XBOOLE_0;
+ clusters STRUCT_0, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+ reserve AS for AffinSpace;
+ reserve a,b,c,d,a',b',c',d',p,q,r,x,y for Element of AS;
+ reserve A,C,K,M,N,P,Q,X,Y,Z for Subset of AS;
+
+theorem :: AFF_4:1
+(LIN p,a,a' or LIN p,a',a) & p<>a implies ex b' st
+ LIN p,b,b' & a,b // a',b';
+
+theorem :: AFF_4:2
+(a,b // A or b,a // A) & a in A implies b in A;
+
+theorem :: AFF_4:3
+(a,b // A or b,a // A) & (A // K or K // A) implies
+(a,b // K & b,a // K);
+
+theorem :: AFF_4:4
+(a,b // A or b,a // A) & (a,b // c,d or c,d // a,b) & a<>b implies
+ c,d // A & d,c // A;
+
+theorem :: AFF_4:5
+(a,b // M or b,a // M) & (a,b // N or b,a // N) & a<>b implies
+ M // N & N // M;
+
+theorem :: AFF_4:6
+(a,b // M or b,a // M) & (c,d // M or d,c // M) implies
+ a,b // c,d & a,b // d,c;
+
+theorem :: AFF_4:7
+(A // C or C // A) & a<>b & (a,b // c,d or c,d // a,b) &
+                          a in A & b in A & c in C implies d in C;
+
+theorem :: AFF_4:8
+q in M & q in N & a in M & a' in M & b in N & b' in
+ N & q<>a & q<>b &
+M<>N & (a,b // a',b' or b,a // b',a') & M is_line & N is_line & q=a'
+implies q=b';
+
+theorem :: AFF_4:9
+q in M & q in N & a in M & a' in M & b in N & b' in
+ N & q<>a & q<>b &
+M<>N & (a,b // a',b' or b,a // b',a') & M is_line & N is_line & a=a'
+implies b=b';
+
+theorem :: AFF_4:10
+(M // N or N // M) & a in M & a' in M & b in N & b' in N & M<>N &
+ (a,b // a',b' or b,a // b',a') & a=a' implies b=b';
+
+theorem :: AFF_4:11
+ex A st a in A & b in A & A is_line;
+
+theorem :: AFF_4:12
+A is_line implies ex q st not q in A;
+
+definition let AS,K,P; func Plane(K,P) -> Subset of AS equals
+:: AFF_4:def 1
+ {a: ex b st a,b // K & b in P}; end;
+
+definition let AS,X; attr X is being_plane means
+:: AFF_4:def 2
+ex K,P st K is_line & P is_line & not K // P & X = Plane(K,P);
+  synonym X is_plane;
+end;
+
+theorem :: AFF_4:13
+not K is_line implies Plane(K,P) = {};
+
+theorem :: AFF_4:14
+K is_line implies P c= Plane(K,P);
+
+theorem :: AFF_4:15
+K // P implies Plane(K,P) = P;
+
+theorem :: AFF_4:16
+K // M implies Plane(K,P) = Plane(M,P);
+
+theorem :: AFF_4:17
+p in M & a in M & b in M & p in N & a' in N & b' in N & not p in P &
+not p in Q & M<>N & a in P & a' in P & b in Q & b' in Q & M is_line & N is_line
+ & P is_line & Q is_line implies (P // Q or ex q st q in P & q in Q);
+
+theorem :: AFF_4:18
+a in M & b in M & a' in N & b' in N &
+  a in P & a' in P & b in Q & b' in Q & M<>N & M // N &
+  P is_line & Q is_line implies (P // Q or ex q st q in P & q in Q);
+
+theorem :: AFF_4:19
+X is_plane & a in X & b in X & a<>b implies Line(a,b) c= X;
+
+theorem :: AFF_4:20
+K is_line & P is_line & Q is_line & not K // P & not K // Q
+ & Q c= Plane(K,P) implies Plane(K,Q) = Plane(K,P);
+
+theorem :: AFF_4:21
+K is_line & P is_line & Q is_line & Q c= Plane(K,P)
+ implies P // Q or ex q st q in P & q in Q;
+
+theorem :: AFF_4:22
+X is_plane & M is_line & N is_line & M c= X & N c= X implies
+ M // N or ex q st q in M & q in N;
+
+theorem :: AFF_4:23
+X is_plane & a in X & M c= X & a in N & (M // N or N // M)
+  implies N c= X;
+
+theorem :: AFF_4:24
+X is_plane & Y is_plane & a in X & b in X & a in Y & b in Y &
+ X<>Y & a<>b implies X /\ Y is_line;
+
+theorem :: AFF_4:25
+  X is_plane & Y is_plane & a in X & b in X & c in X & a in Y & b in Y &
+c in Y & not LIN a,b,c implies X = Y;
+
+theorem :: AFF_4:26
+X is_plane & Y is_plane & M is_line & N is_line & M c= X &
+ N c= X & M c= Y & N c= Y & M<>N implies X = Y;
+
+definition let AS,a,K such that  K is_line;
+  func a*K -> Subset of AS means
+:: AFF_4:def 3
+a in it & K // it;
+end;
+
+theorem :: AFF_4:27
+A is_line implies a*A is_line;
+
+theorem :: AFF_4:28
+X is_plane & M is_line & a in X & M c= X implies a*M c= X;
+
+theorem :: AFF_4:29
+  X is_plane & a in X & b in X & c in X & a,b // c,d & a<>b implies d in X;
+
+theorem :: AFF_4:30
+A is_line implies ( a in A iff a*A = A );
+
+theorem :: AFF_4:31
+A is_line implies a*A = a*(q*A);
+
+theorem :: AFF_4:32
+K // M implies a*K=a*M;
+
+definition let AS,X,Y;
+  pred X '||' Y means
+:: AFF_4:def 4
+  for a,A st a in Y & A is_line & A c= X holds a*A c= Y;
+end;
+
+theorem :: AFF_4:33
+X c= Y & ((X is_line & Y is_line) or (X is_plane & Y is_plane))
+ implies X=Y;
+
+theorem :: AFF_4:34
+  X is_plane implies ex a,b,c st a in X & b in X & c in X & not LIN a,b,c;
+
+theorem :: AFF_4:35
+M is_line & X is_plane implies ex q st q in X & not q in M;
+
+theorem :: AFF_4:36
+for a,A st A is_line ex X st a in X & A c= X & X is_plane;
+
+theorem :: AFF_4:37
+ex X st a in X & b in X & c in X & X is_plane;
+
+theorem :: AFF_4:38
+q in M & q in N & M is_line & N is_line implies ex X st M c= X &
+ N c= X & X is_plane;
+
+theorem :: AFF_4:39
+M // N implies ex X st M c= X & N c= X & X is_plane;
+
+theorem :: AFF_4:40
+M is_line & N is_line implies (M // N iff M '||' N);
+
+theorem :: AFF_4:41
+M is_line & X is_plane implies (M '||' X iff (ex N st N c= X &
+ (M // N or N // M)));
+
+theorem :: AFF_4:42
+M is_line & X is_plane & M c= X implies M '||' X;
+
+theorem :: AFF_4:43
+A is_line & X is_plane & a in A & a in X & A '||' X implies A c= X;
+
+definition let AS,K,M,N;
+  pred K,M,N is_coplanar means
+:: AFF_4:def 5
+  ex X st K c= X & M c= X & N c= X & X is_plane;
+end;
+
+theorem :: AFF_4:44
+K,M,N is_coplanar implies K,N,M is_coplanar & M,K,N is_coplanar &
+ M,N,K is_coplanar & N,K,M is_coplanar & N,M,K is_coplanar;
+
+theorem :: AFF_4:45
+A is_line & K is_line & M is_line & N is_line & M,N,K is_coplanar
+ & M,N,A is_coplanar & M<>N implies M,K,A is_coplanar;
+
+theorem :: AFF_4:46
+K is_line & M is_line & X is_plane & K c= X & M c= X &
+ K<>M implies (K,M,A is_coplanar iff A c= X);
+
+theorem :: AFF_4:47
+q in K & q in M & K is_line & M is_line implies
+ K,M,M is_coplanar & M,K,M is_coplanar & M,M,K is_coplanar;
+
+theorem :: AFF_4:48
+AS is not AffinPlane & X is_plane implies ex q st not q in X;
+
+theorem :: AFF_4:49
+AS is not AffinPlane & q in A & q in P & q in C &
+   q<>a & q<>b & q<>c & a in A & a' in A & b in P & b' in P &
+   c in C & c' in C & A is_line & P is_line & C is_line &
+   A<>P & A<>C & a,b // a',b' & a,c // a',c' implies b,c // b',c';
+
+theorem :: AFF_4:50
+AS is not AffinPlane implies AS is Desarguesian;
+
+theorem :: AFF_4:51
+AS is not AffinPlane & A // P & A // C &
+   a in A & a' in A & b in P & b' in P &
+   c in C & c' in C & A is_line & P is_line & C is_line &
+   A<>P & A<>C & a,b // a',b' & a,c // a',c' implies b,c // b',c';
+
+theorem :: AFF_4:52
+AS is not AffinPlane implies AS is translational;
+
+theorem :: AFF_4:53
+AS is AffinPlane & not LIN a,b,c implies
+                        ex c' st a,c // a',c' & b,c // b',c';
+
+theorem :: AFF_4:54
+not LIN a,b,c & a'<>b' & a,b // a',b' implies ex c' st
+a,c // a',c' &
+ b,c // b',c';
+
+theorem :: AFF_4:55
+X is_plane & Y is_plane implies (X '||' Y iff (ex A,P,M,N st
+ not A // P & A c= X & P c= X & M c= Y & N c= Y & (A // M or M // A) &
+ (P // N or N // P)));
+
+theorem :: AFF_4:56
+A // M & M '||' X implies A '||' X;
+
+theorem :: AFF_4:57
+X is_plane implies X '||' X;
+
+theorem :: AFF_4:58
+X is_plane & Y is_plane & X '||' Y implies Y '||' X;
+
+theorem :: AFF_4:59
+X is_plane implies X <> {};
+
+theorem :: AFF_4:60
+X '||' Y & Y '||' Z & Y <> {} implies X '||' Z;
+
+theorem :: AFF_4:61
+X is_plane & Y is_plane & Z is_plane & ((X '||' Y & Y '||' Z) or
+  ( X '||' Y & Z '||' Y) or (Y '||' X & Y '||' Z) or (Y '||' X & Z '||' Y))
+                                         implies (X '||' Z & Z '||' X);
+
+theorem :: AFF_4:62
+X is_plane & Y is_plane & a in X & a in Y & X '||' Y implies X=Y;
+
+theorem :: AFF_4:63
+X is_plane & Y is_plane & Z is_plane & X '||' Y & X<>Y &
+  a in X /\ Z & b in X /\ Z & c in Y /\ Z & d in Y /\ Z implies a,b // c,d;
+
+theorem :: AFF_4:64
+X is_plane & Y is_plane & Z is_plane & X '||' Y & a in X /\ Z
+ & b in X /\ Z & c in Y /\ Z & d in
+ Y /\ Z & X<>Y & a<>b & c <>d implies X/\Z // Y/\Z;
+
+theorem :: AFF_4:65
+for a,X st X is_plane ex Y st a in Y & X '||' Y & Y is_plane;
+
+definition let AS,a,X such that X is_plane;
+  func a+X -> Subset of AS means
+:: AFF_4:def 6
+  a in it & X '||' it & it is_plane;
+end;
+
+theorem :: AFF_4:66
+X is_plane implies ( a in X iff a+X = X );
+
+theorem :: AFF_4:67
+X is_plane implies a+X = a+(q+X);
+
+theorem :: AFF_4:68
+A is_line & X is_plane & A '||' X implies a*A c= a+X;
+
+theorem :: AFF_4:69
+X is_plane & Y is_plane & X '||' Y implies a+X = a+Y;

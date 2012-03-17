@@ -1,0 +1,887 @@
+:: The Lattice of Real Numbers. The Lattice of Real Functions
+::  by Marek Chmur
+::
+:: Received May 22, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary BINOP_1, FUNCT_1, SQUARE_1, LATTICES, ARYTM, FUNCT_2, RELAT_1,
+      QC_LANG1, REAL_LAT;
+ notation XBOOLE_0, SUBSET_1, NUMBERS, XREAL_0, REAL_1, SQUARE_1, STRUCT_0,
+      LATTICES, BINOP_1, FUNCSDOM, RELAT_1, FUNCT_2, FRAENKEL;
+ constructors SQUARE_1, LATTICES, FUNCSDOM, MEMBERED, XBOOLE_0;
+ clusters LATTICES, RLSUB_2, RELSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions LATTICES;
+ theorems SQUARE_1, LATTICES, BINOP_1, FUNCT_2, FUNCOP_1, XREAL_0;
+ schemes BINOP_1;
+
+begin :: LATTICE of REAL NUMBERS
+
+reserve x,y for Real;
+
+definition
+ func minreal-> BinOp of REAL means
+ :Def1: it.(x,y)=min(x,y);
+ existence
+  proof
+    deffunc O(Element of REAL,Element of REAL)=min($1,$2);
+    ex o being BinOp of REAL st
+    for a,b being Element of REAL holds o.(a,b) = O(a,b) from BinOpLambda;
+    hence thesis;
+  end;
+ uniqueness
+  proof
+  let f1,f2 be BinOp of REAL;
+  assume that
+  A1: f1.(x,y)=min(x,y) and
+  A2: f2.(x,y)=min(x,y);
+    for x,y being Element of REAL holds f1.(x,y)=f2.(x,y)
+    proof
+    let x,y be Element of REAL;
+      f1.(x,y)=min(x,y) & f2.(x,y)=min(x,y) by A1,A2;
+    hence thesis;
+   end;
+  hence thesis by BINOP_1:2;
+  end;
+
+ func maxreal-> BinOp of REAL means
+ :Def2: it.(x,y)=max(x,y);
+ existence
+  proof
+    deffunc O(Element of REAL,Element of REAL)=max($1,$2);
+    ex o being BinOp of REAL st
+    for a,b being Element of REAL holds o.(a,b) = O(a,b) from BinOpLambda;
+    hence thesis;
+  end;
+ uniqueness
+  proof
+  let f1,f2 be BinOp of REAL;
+  assume that
+  A3: f1.(x,y)=max(x,y) and
+  A4: f2.(x,y)=max(x,y);
+    for x,y being Element of REAL holds f1.(x,y)=f2.(x,y)
+    proof
+    let x,y be Element of REAL;
+      f1.(x,y)=max(x,y) & f2.(x,y)=max(x,y) by A3,A4;
+    hence thesis;
+   end;
+  hence thesis by BINOP_1:2;
+  end;
+end;
+
+definition
+ canceled;
+
+ func Real_Lattice -> strict LattStr equals
+ :Def4: LattStr (# REAL, maxreal, minreal #);
+ coherence;
+end;
+
+definition
+ cluster -> real Element of Real_Lattice;
+ coherence by Def4,XREAL_0:def 1;
+end;
+
+definition
+ cluster Real_Lattice -> non empty;
+ coherence by Def4;
+end;
+
+reserve p,q,a,b,c for Element of Real_Lattice;
+
+Lm1: p"\/"q = max(p,q)
+ proof
+    p"\/"q = maxreal.(p,q) by Def4,LATTICES:def 1;
+  hence p"\/"q=max(p,q) by Def2,Def4;
+ end;
+
+Lm2: p"/\"q = min(p,q)
+ proof
+     p"/\"q = minreal.(p,q) by Def4,LATTICES:def 2;
+  hence p"/\"q=min(p,q) by Def1,Def4;
+ end;
+
+Lm3: a"\/"b = b"\/"a
+ proof
+  thus a"\/"b = max(a,b) by Lm1
+           .= b"\/"a by Lm1;
+ end;
+
+Lm4: a"\/"(b"\/"c) = (a"\/"b)"\/"c
+ proof
+ set l=b"\/"c;
+ A1: a"\/"(b"\/"c) =max(a,l) by Lm1;
+   max(b,c)=l by Lm1;
+ then A2: a"\/"(b"\/"c)=max(max(a,b),c) by A1,SQUARE_1:51;
+    max(a,b)=a"\/"b by Lm1;
+ hence thesis by A2,Lm1;
+ end;
+
+Lm5: (a"/\"b)"\/"b = b
+ proof
+  set k=a"/\"b;
+    min(a,b)=k by Lm2;
+ hence (a"/\"b)"\/"b = max(min(a,b),b) by Lm1
+               .= b by SQUARE_1:54;
+ end;
+
+Lm6: a"/\"b = b"/\"a
+ proof
+  thus a"/\"b = min(a,b) by Lm2
+           .= b"/\"a by Lm2;
+ end;
+
+Lm7: a"/\"(b"/\"c) = (a"/\"b)"/\"c
+ proof
+  set l=b"/\"c;
+  set k=a"/\"b;
+  A1:min(b,c)=l by Lm2;
+  A2:min(a,b)=k by Lm2;
+  thus a"/\"(b"/\"c) = min(a,min(b,c)) by A1,Lm2
+                .= min(k,c) by A2,SQUARE_1:40
+                .= (a"/\"b)"/\"c by Lm2;
+ end;
+
+Lm8: a"/\"(a"\/"b) = a
+ proof
+  set l=a"\/"b;
+    max(a,b)=l by Lm1;
+  hence a"/\"(a"\/"b) = min(a,max(a,b)) by Lm2
+                .= a by SQUARE_1:55;
+ end;
+
+definition
+ cluster Real_Lattice -> Lattice-like;
+ coherence
+  proof
+        Real_Lattice is join-commutative join-associative meet-absorbing
+         meet-commutative meet-associative join-absorbing
+         by Lm3,Lm4,Lm5,Lm6,Lm7,Lm8,LATTICES:def 4,def 5,def 6,def 7,def 8,def
+9;
+      hence thesis by LATTICES:def 10;
+  end;
+end;
+
+Lm9: a"/\"(b"\/"c) = (a"/\"b)"\/"(a"/\"c)
+  proof
+  set l=a"/\"c;
+  set k=a"/\"b;
+  set m=b"\/"c;
+  A1:min(a,c)=l by Lm2;
+  A2:min(a,b)=k by Lm2;
+    max(b,c)=m by Lm1;
+  hence a"/\"(b"\/"c) = min(a,max(b,c)) by Lm2
+                .= max(k,l) by A1,A2,SQUARE_1:56
+                .= (a"/\"b)"\/"(a"/\"c) by Lm1;
+ end;
+
+reserve p,q,r for Element of Real_Lattice;
+
+canceled 7;
+
+theorem Th8:
+ maxreal.(p,q) = maxreal.(q,p)
+ proof
+ thus maxreal.(p,q) = q"\/"p by Def4,LATTICES:def 1
+                   .= maxreal.(q,p) by Def4,LATTICES:def 1;
+ end;
+
+theorem Th9:
+ minreal.(p,q) = minreal.(q,p)
+ proof
+ thus minreal.(p,q) = q"/\"p by Def4,LATTICES:def 2
+                   .= minreal.(q,p) by Def4,LATTICES:def 2;
+ end;
+
+theorem Th10:
+ maxreal.(p,(maxreal.(q,r)))=maxreal.((maxreal.(q,r)),p) &
+ maxreal.(p,(maxreal.(q,r)))=maxreal.((maxreal.(p,q)),r) &
+ maxreal.(p,(maxreal.(q,r)))=maxreal.((maxreal.(q,p)),r) &
+ maxreal.(p,(maxreal.(q,r)))=maxreal.((maxreal.(r,p)),q) &
+ maxreal.(p,(maxreal.(q,r)))=maxreal.((maxreal.(r,q)),p) &
+ maxreal.(p,(maxreal.(q,r)))=maxreal.((maxreal.(p,r)),q)
+ proof
+ set s=q"\/"r;
+ thus A1:maxreal.(p,(maxreal.(q,r)))=maxreal.(p,s) by Def4,LATTICES:def 1
+                   .= s"\/"p by Def4,LATTICES:def 1
+                   .= maxreal.(s,p) by Def4,LATTICES:def 1
+                   .= maxreal.((maxreal.(q,r)),p) by Def4,LATTICES:def 1;
+ thus maxreal.(p,(maxreal.(q,r)))=maxreal.(p,s) by Def4,LATTICES:def 1
+                   .= p"\/"s by Def4,LATTICES:def 1
+                   .= (p"\/"q)"\/"r by Lm4
+                   .= maxreal.(p"\/"q,r) by Def4,LATTICES:def 1
+                   .= maxreal.(maxreal.(p,q),r) by Def4,LATTICES:def 1;
+ thus maxreal.(p,(maxreal.(q,r)))=maxreal.(p,s) by Def4,LATTICES:def 1
+                   .= p"\/"s by Def4,LATTICES:def 1
+                   .= (q"\/"p)"\/"r by Lm4
+                   .= maxreal.(q"\/"p,r) by Def4,LATTICES:def 1
+                   .= maxreal.(maxreal.(q,p),r) by Def4,LATTICES:def 1;
+ thus A2:maxreal.(p,(maxreal.(q,r)))=maxreal.(p,s) by Def4,LATTICES:def 1
+                   .= p"\/"(r"\/"q) by Def4,LATTICES:def 1
+                   .= (r"\/"p)"\/"q by Lm4
+                   .= maxreal.(r"\/"p,q) by Def4,LATTICES:def 1
+                   .= maxreal.(maxreal.(r,p),q) by Def4,LATTICES:def 1;
+ thus maxreal.(p,(maxreal.(q,r)))=maxreal.((maxreal.(r,q)),p) by A1,Th8;
+ thus maxreal.(p,(maxreal.(q,r)))=maxreal.((maxreal.(p,r)),q) by A2,Th8;
+end;
+
+theorem Th11:
+ minreal.(p,(minreal.(q,r)))=minreal.((minreal.(q,r)),p) &
+ minreal.(p,(minreal.(q,r)))=minreal.((minreal.(p,q)),r) &
+ minreal.(p,(minreal.(q,r)))=minreal.((minreal.(q,p)),r) &
+ minreal.(p,(minreal.(q,r)))=minreal.((minreal.(r,p)),q) &
+ minreal.(p,(minreal.(q,r)))=minreal.((minreal.(r,q)),p) &
+ minreal.(p,(minreal.(q,r)))=minreal.((minreal.(p,r)),q)
+ proof
+ set s=q"/\"r;
+ thus A1:minreal.(p,(minreal.(q,r)))=minreal.(p,s) by Def4,LATTICES:def 2
+                   .= s"/\"p by Def4,LATTICES:def 2
+                   .= minreal.(s,p) by Def4,LATTICES:def 2
+                   .= minreal.((minreal.(q,r)),p) by Def4,LATTICES:def 2;
+ thus minreal.(p,(minreal.(q,r)))=minreal.(p,s) by Def4,LATTICES:def 2
+                   .= p"/\"s by Def4,LATTICES:def 2
+                   .= (p"/\"q)"/\"r by Lm7
+                   .= minreal.(p"/\"q,r) by Def4,LATTICES:def 2
+                   .= minreal.(minreal.(p,q),r) by Def4,LATTICES:def 2;
+ thus minreal.(p,(minreal.(q,r)))=minreal.(p,s) by Def4,LATTICES:def 2
+                   .= p"/\"s by Def4,LATTICES:def 2
+                   .= (q"/\"p)"/\"r by Lm7
+                   .= minreal.(q"/\"p,r) by Def4,LATTICES:def 2
+                   .= minreal.(minreal.(q,p),r) by Def4,LATTICES:def 2;
+ thus A2:minreal.(p,(minreal.(q,r)))=minreal.(p,s) by Def4,LATTICES:def 2
+                   .= p"/\"(r"/\"q) by Def4,LATTICES:def 2
+                   .= (r"/\"p)"/\"q by Lm7
+                   .= minreal.(r"/\"p,q) by Def4,LATTICES:def 2
+                   .= minreal.(minreal.(r,p),q) by Def4,LATTICES:def 2;
+ thus minreal.(p,(minreal.(q,r)))=minreal.((minreal.(r,q)),p) by A1,Th9;
+ thus minreal.(p,(minreal.(q,r)))=minreal.((minreal.(p,r)),q) by A2,Th9;
+end;
+
+theorem Th12:
+ maxreal.(minreal.(p,q),q)=q & maxreal.(q,minreal.(p,q))=q &
+  maxreal.(q,minreal.(q,p))=q & maxreal.(minreal.(q,p),q)=q
+ proof
+ set s=p"/\"q;
+ thus A1:maxreal.(minreal.(p,q),q)=maxreal.(s,q) by Def4,LATTICES:def 2
+                              .=s"\/"q by Def4,LATTICES:def 1
+                              .=q by Lm5;
+ thus maxreal.(q,minreal.(p,q))=maxreal.(q,s) by Def4,LATTICES:def 2
+                              .=(p"/\"q)"\/"q by Def4,LATTICES:def 1
+                              .=q by Lm5;
+ thus maxreal.(q,minreal.(q,p))=maxreal.(q,q"/\"p) by Def4,LATTICES:def 2
+                              .=(p"/\"q)"\/"q by Def4,LATTICES:def 1
+                              .=q by Lm5;
+ thus maxreal.(minreal.(q,p),q)=q by A1,Th9;
+ end;
+
+theorem Th13:
+ minreal.(q,maxreal.(q,p))=q & minreal.(maxreal.(p,q),q)=q &
+ minreal.(q,maxreal.(p,q))=q & minreal.(maxreal.(q,p),q)=q
+ proof
+ set s=q"\/"p;
+ thus A1:minreal.(q,maxreal.(q,p))=minreal.(q,s) by Def4,LATTICES:def 1
+                              .=q"/\"s by Def4,LATTICES:def 2
+                              .=q by Lm8;
+ thus A2:minreal.(maxreal.(p,q),q)=minreal.(p"\/"q,q) by Def4,LATTICES:def 1
+                              .=q"/\"(q"\/"p) by Def4,LATTICES:def 2
+                              .=q by Lm8;
+ thus minreal.(q,maxreal.(p,q))=q by A1,Th8;
+ thus minreal.(maxreal.(q,p),q)=q by A2,Th8;
+end;
+
+theorem Th14:
+ minreal.(q,maxreal.(p,r))=maxreal.(minreal.(q,p),minreal.(q,r))
+ proof
+ set s=p"\/"r;
+ set w=q"/\"r;
+ thus minreal.(q,maxreal.(p,r))=minreal.(q,s) by Def4,LATTICES:def 1
+              .=q"/\"s by Def4,LATTICES:def 2
+              .=(q"/\"p)"\/"(q"/\"r) by Lm9
+              .=maxreal.(q"/\"p,w) by Def4,LATTICES:def 1
+              .=maxreal.(minreal.(q,p),w) by Def4,LATTICES:def 2
+              .=maxreal.(minreal.(q,p),minreal.(q,r)) by Def4,LATTICES:def 2;
+end;
+
+
+definition
+  cluster Real_Lattice -> distributive;
+  coherence by Lm9,LATTICES:def 11;
+end;
+
+ reserve A,B for non empty set;
+ reserve f,g,h for Element of Funcs(A,REAL);
+
+definition let A;
+ func maxfuncreal(A) -> BinOp of Funcs(A,REAL) means
+ :Def5: it.(f,g) = maxreal.:(f,g);
+ existence
+  proof
+    deffunc O(Element of Funcs(A,REAL),Element of Funcs(A,REAL))
+             = maxreal.:($1,$2);
+    ex o being BinOp of Funcs(A,REAL) st
+    for a,b being Element of Funcs(A,REAL) holds
+         o.(a,b) = O(a,b) from BinOpLambda;
+    hence thesis;
+  end;
+ uniqueness
+  proof
+   let F1,F2 be BinOp of Funcs(A,REAL) such that
+   A1: for f,g being Element of Funcs(A,REAL)
+       holds F1.(f,g) = maxreal.:(f,g) and
+   A2: for f,g being Element of Funcs(A,REAL)
+       holds F2.(f,g) = maxreal.:(f,g);
+     now
+     let f,g be Element of Funcs(A,REAL);
+     thus F1.(f,g) = maxreal.:(f,g) by A1
+                  .= F2.(f,g) by A2;
+   end;
+   hence thesis by BINOP_1:2;
+  end;
+
+ func minfuncreal(A) -> BinOp of Funcs(A,REAL) means
+ :Def6: it.(f,g) = minreal.:(f,g);
+ existence
+  proof
+    deffunc O(Element of Funcs(A,REAL),Element of Funcs(A,REAL))
+             = minreal.:($1,$2);
+    ex o being BinOp of Funcs(A,REAL) st
+    for a,b being Element of Funcs(A,REAL) holds
+         o.(a,b) = O(a,b) from BinOpLambda;
+    hence thesis;
+  end;
+ uniqueness
+  proof
+   let F1,F2 be BinOp of Funcs(A,REAL) such that
+   A3: for f,g being Element of Funcs(A,REAL)
+       holds F1.(f,g) = minreal.:(f,g) and
+   A4: for f,g being Element of Funcs(A,REAL)
+       holds F2.(f,g) = minreal.:(f,g);
+     now
+     let f,g be Element of Funcs(A,REAL);
+     thus F1.(f,g) = minreal.:(f,g) by A3
+                  .= F2.(f,g) by A4;
+   end;
+   hence thesis by BINOP_1:2;
+  end;
+end;
+
+Lm10: for x being Element of A,
+        f being Function of A,B holds x in dom f
+  proof
+  let x be Element of A,f be Function of A,B;
+     x in A;
+   hence x in dom f by FUNCT_2:def 1;
+  end;
+
+canceled 5;
+
+theorem Th20:
+ (maxfuncreal(A)).(f,g) = (maxfuncreal(A)).(g,f)
+ proof
+    now let x be Element of A;
+ A1: x in dom (maxreal.:(f,g)) by Lm10;
+ A2: x in dom (maxreal.:(g,f)) by Lm10;
+ thus
+    ((maxfuncreal(A)).(f,g)).x = (maxreal.:(f,g)).x by Def5
+                            .= maxreal.(f.x,g.x) by A1,FUNCOP_1:28
+                            .= maxreal.(g.x,f.x) by Def4,Th8
+                            .= (maxreal.:(g,f)).x by A2,FUNCOP_1:28
+                            .= ((maxfuncreal(A)).(g,f)).x by Def5;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem Th21:
+ (minfuncreal(A)).(f,g) = (minfuncreal(A)).(g,f)
+ proof
+    now let x be Element of A;
+ A1: x in dom (minreal.:(f,g)) by Lm10;
+ A2: x in dom (minreal.:(g,f)) by Lm10;
+ thus
+    ((minfuncreal(A)).(f,g)).x = (minreal.:(f,g)).x by Def6
+                            .= minreal.(f.x,g.x) by A1,FUNCOP_1:28
+                            .= minreal.(g.x,f.x) by Def4,Th9
+                            .= (minreal.:(g,f)).x by A2,FUNCOP_1:28
+                            .= ((minfuncreal(A)).(g,f)).x by Def6;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem Th22:
+ (maxfuncreal(A)).((maxfuncreal(A)).(f,g),h)
+                       =(maxfuncreal(A)).(f,(maxfuncreal(A)).(g,h))
+ proof
+    now let x be Element of A;
+ A1: x in dom (maxreal.:(f,g)) by Lm10;
+ A2: x in dom (maxreal.:(g,h)) by Lm10;
+ A3: x in dom (maxreal.:(f,(maxreal.:(g,h)))) by Lm10;
+ A4: x in dom (maxreal.:((maxreal.:(f,g)),h)) by Lm10;
+ thus ((maxfuncreal(A)).((maxfuncreal(A)).(f,g),h)).x
+           =((maxfuncreal(A)).(maxreal.:(f,g),h)).x by Def5
+          .=(maxreal.:(maxreal.:(f,g),h)).x by Def5
+          .=maxreal.((maxreal.:(f,g)).x,h.x) by A4,FUNCOP_1:28
+          .=maxreal.(maxreal.(f.x,g.x),h.x) by A1,FUNCOP_1:28
+          .=maxreal.(f.x,maxreal.(g.x,h.x)) by Def4,Th10
+          .=maxreal.(f.x,((maxreal.:(g,h)).x)) by A2,FUNCOP_1:28
+          .=(maxreal.:(f,(maxreal.:(g,h)))).x by A3,FUNCOP_1:28
+          .=((maxfuncreal(A)).(f,(maxreal.:(g,h)))).x by Def5
+          .=((maxfuncreal(A)).(f,((maxfuncreal(A)).(g,h)))).x by Def5;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem Th23:
+ (minfuncreal(A)).((minfuncreal(A)).(f,g),h)
+                       =(minfuncreal(A)).(f,(minfuncreal(A)).(g,h))
+ proof
+    now let x be Element of A;
+ A1: x in dom (minreal.:(f,g)) by Lm10;
+ A2: x in dom (minreal.:(g,h)) by Lm10;
+ A3: x in dom (minreal.:(f,(minreal.:(g,h)))) by Lm10;
+ A4: x in dom (minreal.:((minreal.:(f,g)),h)) by Lm10;
+ thus ((minfuncreal(A)).((minfuncreal(A)).(f,g),h)).x
+           =((minfuncreal(A)).(minreal.:(f,g),h)).x by Def6
+          .=(minreal.:(minreal.:(f,g),h)).x by Def6
+          .=minreal.((minreal.:(f,g)).x,h.x) by A4,FUNCOP_1:28
+          .=minreal.(minreal.(f.x,g.x),h.x) by A1,FUNCOP_1:28
+          .=minreal.(f.x,minreal.(g.x,h.x)) by Def4,Th11
+          .=minreal.(f.x,((minreal.:(g,h)).x)) by A2,FUNCOP_1:28
+          .=(minreal.:(f,(minreal.:(g,h)))).x by A3,FUNCOP_1:28
+          .=((minfuncreal(A)).(f,(minreal.:(g,h)))).x by Def6
+          .=((minfuncreal(A)).(f,((minfuncreal(A)).(g,h)))).x by Def6;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem Th24:
+ (maxfuncreal(A)).(f,(minfuncreal(A)).(f,g))=f
+proof
+    now let x be Element of A;
+ A1: x in dom (minreal.:(f,g)) by Lm10;
+ A2: x in dom (maxreal.:(f,(minreal.:(f,g)))) by Lm10;
+ thus (maxfuncreal(A)).(f,(minfuncreal(A)).(f,g)).x
+           =((maxfuncreal(A)).(f,minreal.:(f,g))).x by Def6
+          .=(maxreal.:(f,minreal.:(f,g))).x by Def5
+          .=maxreal.(f.x,(minreal.:(f,g)).x) by A2,FUNCOP_1:28
+          .=maxreal.(f.x,(minreal.(f.x,g.x))) by A1,FUNCOP_1:28
+          .=f.x by Def4,Th12;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem Th25:
+ (maxfuncreal(A)).((minfuncreal(A)).(f,g),f)=f
+proof
+  thus (maxfuncreal(A)).((minfuncreal(A)).(f,g),f)
+           =(maxfuncreal(A)).(f,(minfuncreal(A)).(f,g)) by Th20
+          .=f by Th24;
+end;
+
+theorem Th26:
+ (maxfuncreal(A)).((minfuncreal(A)).(g,f),f)=f
+proof
+  thus (maxfuncreal(A)).((minfuncreal(A)).(g,f),f)
+           =(maxfuncreal(A)).((minfuncreal(A)).(f,g),f) by Th21
+          .=f by Th25;
+end;
+
+theorem
+   (maxfuncreal(A)).(f,(minfuncreal(A)).(g,f))=f
+proof
+  thus (maxfuncreal(A)).(f,(minfuncreal(A)).(g,f))
+           =(maxfuncreal(A)).(f,(minfuncreal(A)).(f,g)) by Th21
+          .=f by Th24;
+end;
+
+theorem Th28:
+ (minfuncreal(A)).(f,(maxfuncreal(A)).(f,g))=f
+proof
+    now let x be Element of A;
+ A1: x in dom (maxreal.:(f,g)) by Lm10;
+ A2: x in dom (minreal.:(f,(maxreal.:(f,g)))) by Lm10;
+ thus (minfuncreal(A)).(f,(maxfuncreal(A)).(f,g)).x
+           =((minfuncreal(A)).(f,maxreal.:(f,g))).x by Def5
+          .=(minreal.:(f,maxreal.:(f,g))).x by Def6
+          .=minreal.(f.x,(maxreal.:(f,g)).x) by A2,FUNCOP_1:28
+          .=minreal.(f.x,(maxreal.(f.x,g.x))) by A1,FUNCOP_1:28
+          .=f.x by Def4,Th13;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem Th29:
+ (minfuncreal(A)).(f,(maxfuncreal(A)).(g,f))=f
+proof
+ thus (minfuncreal(A)).(f,(maxfuncreal(A)).(g,f))
+          =(minfuncreal(A)).(f,(maxfuncreal(A)).(f,g)) by Th20
+         .=f by Th28;
+end;
+
+theorem Th30:
+ (minfuncreal(A)).((maxfuncreal(A)).(g,f),f)=f
+proof
+ thus (minfuncreal(A)).((maxfuncreal(A)).(g,f),f)
+          =(minfuncreal(A)).(f,(maxfuncreal(A)).(g,f)) by Th21
+         .=f by Th29;
+end;
+
+theorem
+   (minfuncreal(A)).((maxfuncreal(A)).(f,g),f)=f
+proof
+ thus (minfuncreal(A)).((maxfuncreal(A)).(f,g),f)
+          =(minfuncreal(A)).((maxfuncreal(A)).(g,f),f) by Th20
+         .=f by Th30;
+end;
+
+theorem Th32:
+ (minfuncreal(A)).(f,(maxfuncreal(A)).(g,h)) =
+ (maxfuncreal(A)).((minfuncreal(A)).(f,g),(minfuncreal(A)).(f,h))
+proof
+    now let x be Element of A;
+ A1: x in dom (minreal.:(f,g)) by Lm10;
+ A2: x in dom (minreal.:(f,h)) by Lm10;
+ A3: x in dom (maxreal.:(g,h)) by Lm10;
+ A4: x in dom (maxreal.:(minreal.:(f,g),minreal.:(f,h))) by Lm10;
+ A5: x in dom (minreal.:(f,(maxreal.:(g,h)))) by Lm10;
+ thus (minfuncreal(A)).(f,(maxfuncreal(A)).(g,h)).x
+     =((minfuncreal(A)).(f,maxreal.:(g,h))).x by Def5
+    .=(minreal.:(f,maxreal.:(g,h))).x by Def6
+    .=minreal.(f.x,(maxreal.:(g,h)).x) by A5,FUNCOP_1:28
+    .=minreal.(f.x,(maxreal.(g.x,h.x))) by A3,FUNCOP_1:28
+    .=maxreal.(minreal.(f.x,g.x),minreal.(f.x,h.x)) by Def4,Th14
+    .=maxreal.(minreal.:(f,g).x,minreal.(f.x,h.x)) by A1,FUNCOP_1:28
+    .=maxreal.(minreal.:(f,g).x,minreal.:(f,h).x) by A2,FUNCOP_1:28
+    .=maxreal.:(minreal.:(f,g),minreal.:(f,h)).x by A4,FUNCOP_1:28
+    .=(maxfuncreal(A)).(minreal.:(f,g),minreal.:(f,h)).x by Def5
+    .=(maxfuncreal(A)).((minfuncreal(A)).(f,g),minreal.:(f,h)).x by Def6
+    .=(maxfuncreal(A)).((minfuncreal(A)).(f,g),(minfuncreal(A)).(f,h)).x
+    by Def6;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+ reserve p,q,r for Element of
+        LattStr(# Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #);
+
+definition let A;
+ let x be Element of
+  LattStr(# Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #);
+ canceled 2;
+
+ func @x->Element of Funcs(A,REAL) equals
+    x;
+ coherence;
+end;
+
+Lm11:
+ for a,b being Element of
+  LattStr(# Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #)
+       holds a"\/"b = b"\/"a
+ proof
+  let a,b be Element of
+  LattStr(# Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #);
+  thus a"\/"b = (maxfuncreal(A)).(a,b) by LATTICES:def 1
+           .= (maxfuncreal(A)).(b,a) by Th20
+           .= b"\/"a by LATTICES:def 1;
+ end;
+
+Lm12:
+ for a,b being Element of
+  LattStr(# Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #)
+       holds a"/\"b = b"/\"a
+ proof
+  let a,b be Element of
+   LattStr(# Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #);
+  thus a"/\"b = (minfuncreal(A)).(a,b) by LATTICES:def 2
+           .= (minfuncreal(A)).(b,a) by Th21
+           .= b"/\"a by LATTICES:def 2;
+ end;
+
+Lm13:
+for a,b,c being Element of
+ LattStr(# Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #)
+      holds a"\/"(b"\/"c) = (a"\/"b)"\/"c
+ proof
+  let a,b,c be Element of
+  LattStr(# Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #);
+  thus a"\/"(b"\/"c) = (maxfuncreal(A)).(a,b"\/"c) by LATTICES:def 1
+                .= (maxfuncreal(A)).(a,(maxfuncreal(A)).(b,c)) by LATTICES:def
+1
+                .= (maxfuncreal(A)).((maxfuncreal(A)).(a,b),c) by Th22
+                .= (maxfuncreal(A)).(a"\/"b,c) by LATTICES:def 1
+                .= (a"\/"b)"\/"c by LATTICES:def 1;
+end;
+
+Lm14:
+for a,b,c being Element of
+LattStr(# Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #)
+      holds a"/\"(b"/\"c) = (a"/\"b)"/\"c
+ proof
+  let a,b,c be Element of
+  LattStr(# Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #);
+  thus a"/\"(b"/\"c) = (minfuncreal(A)).(a,b"/\"c) by LATTICES:def 2
+                .= (minfuncreal(A)).(a,(minfuncreal(A)).(b,c)) by LATTICES:def
+2
+                .= (minfuncreal(A)).((minfuncreal(A)).(a,b),c) by Th23
+                .= (minfuncreal(A)).(a"/\"b,c) by LATTICES:def 2
+                .= (a"/\"b)"/\"c by LATTICES:def 2;
+end;
+
+Lm15:
+for a,b,c being Element of
+LattStr(# Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #)
+      holds (a"/\"b)"\/"b = b
+ proof
+  let a,b,c be Element of
+  LattStr(# Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #);
+  thus (a"/\"b)"\/"b = (maxfuncreal(A)).(a"/\"b,b) by LATTICES:def 1
+                .= (maxfuncreal(A)).((minfuncreal(A)).(a,b),b) by LATTICES:def
+2
+                .= b by Th26;
+end;
+
+Lm16:
+for a,b,c being Element of
+LattStr(# Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #)
+      holds a"/\"(a"\/"b) = a
+ proof
+  let a,b,c be Element of
+  LattStr(# Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #);
+  thus a"/\"(a"\/"b) = (minfuncreal(A)).(a,a"\/"b) by LATTICES:def 2
+                .= (minfuncreal(A)).(a,(maxfuncreal(A)).(a,b)) by LATTICES:def
+1
+                .= a by Th28;
+end;
+
+definition let A;
+ func RealFunc_Lattice(A) -> strict Lattice equals
+ :Def10: LattStr (# Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #);
+ coherence
+  proof
+     LattStr (# Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #) is
+Lattice-like
+     proof
+      thus (for p,q holds p"\/"q = q"\/"p) &
+      (for p,q,r holds p"\/"(q"\/"r) = (p"\/"q)"\/"r) &
+      (for p,q holds (p"/\"q)"\/"q = q) &
+      (for p,q holds p"/\"q = q"/\"p) &
+      (for p,q,r holds p"/\"(q"/\"r) = (p"/\"q)"/\"r) &
+      (for p,q holds p"/\"(p"\/"q) = p) by Lm11,Lm12,Lm13,Lm14,Lm15,Lm16;
+     end;
+   hence thesis;
+  end;
+end;
+
+Lm17:
+for a,b,c being Element of RealFunc_Lattice(A)
+ holds a"/\"(b"\/"c) = (a"/\"b)"\/"(a"/\"c)
+ proof
+  let a',b',c' be Element of RealFunc_Lattice(A);
+  A1:RealFunc_Lattice(A)=
+  LattStr (#Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #) by Def10;
+  reconsider a=a',b=b',c =c' as Element of
+  LattStr (#Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #) by Def10;
+  set l=a"/\"c;
+  thus a'"/\"(b'"\/"c') = (minfuncreal(A)).(a,b"\/"c) by A1,LATTICES:def 2
+    .= (minfuncreal(A)).(a,(maxfuncreal(A)).(b,c)) by LATTICES:def 1
+    .=(maxfuncreal(A)).((minfuncreal(A)).(a,b),(minfuncreal(A)).(a,c))
+    by Th32
+    .= (maxfuncreal(A)).((minfuncreal(A)).(a,b),l) by LATTICES:def 2
+    .= (maxfuncreal(A)).(a"/\"b,l) by LATTICES:def 2
+    .= (a'"/\"b')"\/"(a'"/\"c') by A1,LATTICES:def 1;
+ end;
+
+reserve p,q,r for Element of RealFunc_Lattice(A);
+
+canceled 7;
+
+theorem Th40:
+(maxfuncreal(A)).(p,q) = (maxfuncreal(A)).(q,p)
+ proof
+ A1:RealFunc_Lattice(A)=
+  LattStr (#Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #) by Def10;
+ hence (maxfuncreal(A)).(p,q) = q"\/"p by LATTICES:def 1
+                   .= (maxfuncreal(A)).(q,p) by A1,LATTICES:def 1;
+ end;
+
+theorem Th41:
+(minfuncreal(A)).(p,q) = (minfuncreal(A)).(q,p)
+ proof
+ A1:RealFunc_Lattice(A)=
+  LattStr (#Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #) by Def10;
+ hence (minfuncreal(A)).(p,q) = q"/\"p by LATTICES:def 2
+                   .= (minfuncreal(A)).(q,p) by A1,LATTICES:def 2;
+ end;
+
+theorem
+   (maxfuncreal(A)).(p,((maxfuncreal(A)).(q,r)))
+              =(maxfuncreal(A)).(((maxfuncreal(A)).(q,r)),p) &
+ (maxfuncreal(A)).(p,((maxfuncreal(A)).(q,r)))
+              =(maxfuncreal(A)).(((maxfuncreal(A)).(p,q)),r) &
+ (maxfuncreal(A)).(p,((maxfuncreal(A)).(q,r)))
+              =(maxfuncreal(A)).(((maxfuncreal(A)).(q,p)),r) &
+ (maxfuncreal(A)).(p,((maxfuncreal(A)).(q,r)))
+              =(maxfuncreal(A)).(((maxfuncreal(A)).(r,p)),q) &
+ (maxfuncreal(A)).(p,((maxfuncreal(A)).(q,r)))
+              =(maxfuncreal(A)).(((maxfuncreal(A)).(r,q)),p) &
+ (maxfuncreal(A)).(p,((maxfuncreal(A)).(q,r)))
+              =(maxfuncreal(A)).(((maxfuncreal(A)).(p,r)),q)
+ proof
+ set s=q"\/"r;
+ A1:RealFunc_Lattice(A)=
+  LattStr (#Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #) by Def10;
+ hence A2:(maxfuncreal(A)).(p,((maxfuncreal(A)).(q,r)))
+                    =(maxfuncreal(A)).(p,s) by LATTICES:def 1
+                   .= s"\/"p by A1,LATTICES:def 1
+                   .= (maxfuncreal(A)).(s,p) by A1,LATTICES:def 1
+                   .= (maxfuncreal(A)).(((maxfuncreal(A)).(q,r)),p) by A1,
+LATTICES:def 1;
+ thus (maxfuncreal(A)).(p,((maxfuncreal(A)).(q,r)))
+                    =(maxfuncreal(A)).(p,s) by A1,LATTICES:def 1
+                   .= p"\/"s by A1,LATTICES:def 1
+                   .= (p"\/"q)"\/"r by A1,Lm13
+                   .= (maxfuncreal(A)).(p"\/"q,r) by A1,LATTICES:def 1
+                   .= (maxfuncreal(A)).((maxfuncreal(A)).(p,q),r) by A1,
+LATTICES:def 1;
+ thus (maxfuncreal(A)).(p,((maxfuncreal(A)).(q,r)))
+                    =(maxfuncreal(A)).(p,s) by A1,LATTICES:def 1
+                   .= p"\/"s by A1,LATTICES:def 1
+                   .= (q"\/"p)"\/"r by A1,Lm13
+                   .= (maxfuncreal(A)).(q"\/"p,r) by A1,LATTICES:def 1
+                   .= (maxfuncreal(A)).((maxfuncreal(A)).(q,p),r) by A1,
+LATTICES:def 1;
+ thus A3:(maxfuncreal(A)).(p,((maxfuncreal(A)).(q,r)))
+                    =(maxfuncreal(A)).(p,s) by A1,LATTICES:def 1
+                   .= p"\/"(r"\/"q) by A1,LATTICES:def 1
+                   .= (r"\/"p)"\/"q by A1,Lm13
+                   .= (maxfuncreal(A)).(r"\/"p,q) by A1,LATTICES:def 1
+                   .= (maxfuncreal(A)).((maxfuncreal(A)).(r,p),q) by A1,
+LATTICES:def 1;
+ thus (maxfuncreal(A)).(p,((maxfuncreal(A)).(q,r)))=
+        (maxfuncreal(A)).(((maxfuncreal(A)).(r,q)),p) by A2,Th40;
+ thus (maxfuncreal(A)).(p,((maxfuncreal(A)).(q,r)))=
+        (maxfuncreal(A)).(((maxfuncreal(A)).(p,r)),q) by A3,Th40;
+end;
+
+theorem
+   (minfuncreal(A)).(p,((minfuncreal(A)).(q,r)))
+            =(minfuncreal(A)).(((minfuncreal(A)).(q,r)),p) &
+ (minfuncreal(A)).(p,((minfuncreal(A)).(q,r)))
+            =(minfuncreal(A)).(((minfuncreal(A)).(p,q)),r) &
+ (minfuncreal(A)).(p,((minfuncreal(A)).(q,r)))
+            =(minfuncreal(A)).(((minfuncreal(A)).(q,p)),r) &
+ (minfuncreal(A)).(p,((minfuncreal(A)).(q,r)))
+            =(minfuncreal(A)).(((minfuncreal(A)).(r,p)),q) &
+ (minfuncreal(A)).(p,((minfuncreal(A)).(q,r)))
+            =(minfuncreal(A)).(((minfuncreal(A)).(r,q)),p) &
+ (minfuncreal(A)).(p,((minfuncreal(A)).(q,r)))
+            =(minfuncreal(A)).(((minfuncreal(A)).(p,r)),q)
+ proof
+ set s=q"/\"r;
+ A1:RealFunc_Lattice(A)=
+  LattStr (#Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #) by Def10;
+ hence A2:(minfuncreal(A)).(p,((minfuncreal(A)).(q,r)))
+                    =(minfuncreal(A)).(p,s) by LATTICES:def 2
+                   .= s"/\"p by A1,LATTICES:def 2
+                   .= (minfuncreal(A)).(s,p) by A1,LATTICES:def 2
+                   .= (minfuncreal(A)).(((minfuncreal(A)).(q,r)),p) by A1,
+LATTICES:def 2;
+ thus (minfuncreal(A)).(p,((minfuncreal(A)).(q,r)))
+                    =(minfuncreal(A)).(p,s) by A1,LATTICES:def 2
+                   .= p"/\"s by A1,LATTICES:def 2
+                   .= (p"/\"q)"/\"r by A1,Lm14
+                   .= (minfuncreal(A)).(p"/\"q,r) by A1,LATTICES:def 2
+                   .= (minfuncreal(A)).((minfuncreal(A)).(p,q),r) by A1,
+LATTICES:def 2;
+ thus (minfuncreal(A)).(p,((minfuncreal(A)).(q,r)))
+                    =(minfuncreal(A)).(p,s) by A1,LATTICES:def 2
+                   .= p"/\"s by A1,LATTICES:def 2
+                   .= (q"/\"p)"/\"r by A1,Lm14
+                   .= (minfuncreal(A)).(q"/\"p,r) by A1,LATTICES:def 2
+                   .= (minfuncreal(A)).((minfuncreal(A)).(q,p),r) by A1,
+LATTICES:def 2;
+ thus A3:(minfuncreal(A)).(p,((minfuncreal(A)).(q,r)))
+                    =(minfuncreal(A)).(p,s) by A1,LATTICES:def 2
+                   .= p"/\"(r"/\"q) by A1,LATTICES:def 2
+                   .= (r"/\"p)"/\"q by A1,Lm14
+                   .= (minfuncreal(A)).(r"/\"p,q) by A1,LATTICES:def 2
+                   .= (minfuncreal(A)).((minfuncreal(A)).(r,p),q) by A1,
+LATTICES:def 2;
+ thus (minfuncreal(A)).(p,((minfuncreal(A)).(q,r)))
+         =(minfuncreal(A)).(((minfuncreal(A)).(r,q)),p) by A2,Th41;
+ thus (minfuncreal(A)).(p,((minfuncreal(A)).(q,r)))
+         =(minfuncreal(A)).(((minfuncreal(A)).(p,r)),q) by A3,Th41;
+end;
+
+theorem
+   (maxfuncreal(A)).((minfuncreal(A)).(p,q),q)=q &
+ (maxfuncreal(A)).(q,(minfuncreal(A)).(p,q))=q &
+ (maxfuncreal(A)).(q,(minfuncreal(A)).(q,p))=q &
+ (maxfuncreal(A)).((minfuncreal(A)).(q,p),q)=q
+ proof
+ set s=p"/\"q;
+ A1:RealFunc_Lattice(A)=
+  LattStr (#Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #) by Def10;
+ hence A2:(maxfuncreal(A)).((minfuncreal(A)).(p,q),q)
+                   =(maxfuncreal(A)).(s,q) by LATTICES:def 2
+                              .=s"\/"q by A1,LATTICES:def 1
+                              .=q by A1,Lm15;
+ thus (maxfuncreal(A)).(q,(minfuncreal(A)).(p,q))
+                   =(maxfuncreal(A)).(q,s) by A1,LATTICES:def 2
+                              .=(p"/\"q)"\/"q by A1,LATTICES:def 1
+                              .=q by A1,Lm15;
+ thus (maxfuncreal(A)).(q,(minfuncreal(A)).(q,p))
+                  =(maxfuncreal(A)).(q,q"/\"p) by A1,LATTICES:def 2
+                              .=(p"/\"q)"\/"q by A1,LATTICES:def 1
+                              .=q by A1,Lm15;
+ thus (maxfuncreal(A)).((minfuncreal(A)).(q,p),q)=q by A2,Th41;
+ end;
+
+theorem
+   (minfuncreal(A)).(q,(maxfuncreal(A)).(q,p))=q &
+ (minfuncreal(A)).((maxfuncreal(A)).(p,q),q)=q &
+ (minfuncreal(A)).(q,(maxfuncreal(A)).(p,q))=q &
+ (minfuncreal(A)).((maxfuncreal(A)).(q,p),q)=q
+ proof
+ set s=q"\/"p;
+ A1:RealFunc_Lattice(A)=
+  LattStr (#Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #) by Def10;
+ hence A2:(minfuncreal(A)).(q,(maxfuncreal(A)).(q,p))
+                    =(minfuncreal(A)).(q,s) by LATTICES:def 1
+                              .=q"/\"s by A1,LATTICES:def 2
+                              .=q by A1,Lm16;
+ thus A3:(minfuncreal(A)).((maxfuncreal(A)).(p,q),q)
+                      =(minfuncreal(A)).(p"\/"q,q) by A1,LATTICES:def 1
+                              .=q"/\"(q"\/"p) by A1,LATTICES:def 2
+                              .=q by A1,Lm16;
+ thus (minfuncreal(A)).(q,(maxfuncreal(A)).(p,q))=q by A2,Th40;
+ thus (minfuncreal(A)).((maxfuncreal(A)).(q,p),q)=q by A3,Th40;
+end;
+
+theorem
+   (minfuncreal(A)).(q,(maxfuncreal(A)).(p,r))
+      =(maxfuncreal(A)).((minfuncreal(A)).(q,p),(minfuncreal(A)).(q,r))
+ proof
+ set s=p"\/"r;
+ A1:RealFunc_Lattice(A)=
+  LattStr (#Funcs(A,REAL), maxfuncreal(A), minfuncreal(A) #) by Def10;
+ set w=q"/\"r;
+ thus (minfuncreal(A)).(q,(maxfuncreal(A)).(p,r))
+                  =(minfuncreal(A)).(q,s) by A1,LATTICES:def 1
+                 .=q"/\"s by A1,LATTICES:def 2
+                 .=(q"/\"p)"\/"(q"/\"r) by Lm17
+                 .=(maxfuncreal(A)).(q"/\"p,w) by A1,LATTICES:def 1
+                 .=(maxfuncreal(A)).((minfuncreal(A)).(q,p),w) by A1,LATTICES:
+def 2
+ .=(maxfuncreal(A)).((minfuncreal(A)).(q,p),(minfuncreal(A)).(q,r)) by A1,
+LATTICES:def 2;
+end;
+
+theorem
+   RealFunc_Lattice(A) is D_Lattice
+ proof
+     p"/\"(q"\/"r) = (p"/\"q)"\/"(p"/\"r) by Lm17;
+  hence RealFunc_Lattice(A) is D_Lattice by LATTICES:def 11;
+ end;

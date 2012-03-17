@@ -1,0 +1,820 @@
+:: Parallelity and Lines in Affine Spaces
+::  by Henryk Oryszczyszyn and Krzysztof Pra\.zmowski
+::
+:: Received May 4, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary DIRAF, ANALOAF, INCSP_1, AFF_1;
+ notation TARSKI, STRUCT_0, ANALOAF, DIRAF;
+ constructors DIRAF, XBOOLE_0;
+ clusters STRUCT_0, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ theorems DIRAF, TARSKI, XBOOLE_0;
+ schemes SUBSET_1;
+
+begin
+  reserve AS for AffinSpace;
+  reserve a,a',b,b',c,d,o,p,q,r,s,x,y,z,t,u,w
+                             for Element of AS;
+
+definition let AS; let a,b,c;
+ pred LIN a,b,c means
+  :Def1: a,b // a,c;
+end;
+
+canceled 9;
+
+theorem Th10:
+  for a ex b st a<>b
+   proof let a; consider x,y such that A1: x<>y by DIRAF:47;
+        a=x implies a<>y by A1;
+    hence thesis;
+   end;
+
+theorem Th11:
+ x,y // y,x & x,y // x,y
+ proof thus x,y // y,x by DIRAF:47;
+    y,x // y,y by DIRAF:47; hence x,y // x,y by DIRAF:47;
+ end;
+
+ Lm1:
+ x,y // z,t implies z,t // x,y
+  proof assume A1: x,y // z,t;
+      now assume x<>y;
+    then x<>y & x,y // x,y by Th11;
+    hence thesis by A1,DIRAF:47; end;
+   hence thesis by DIRAF:47;
+  end;
+
+theorem Th12:
+ x,y // z,z & z,z // x,y
+ proof thus x,y // z,z by DIRAF:47;
+  hence z,z // x,y by Lm1;
+ end;
+
+Lm2:
+ x,y // z,t implies y,x // z,t
+ proof assume x,y // z,t; then x,y // z,t & x,y // y,x by Th11;
+  then y,x // z,t or x=y by DIRAF:47;
+  hence thesis by Th12;
+ end;
+
+Lm3:
+ x,y // z,t implies x,y // t,z
+  proof assume x,y // z,t; then z,t // x,y by Lm1;
+   then t,z // x,y by Lm2;
+   hence thesis by Lm1;
+  end;
+
+theorem Th13:
+  x,y // z,t implies x,y // t,z & y,x // z,t & y,x // t,z &
+        z,t // x,y & z,t // y,x & t,z // x,y & t,z // y,x
+  proof assume A1: x,y // z,t;
+   hence x,y // t,z & y,x // z,t by Lm2,Lm3;
+   hence y,x // t,z by Lm2;
+   thus z,t // x,y by A1,Lm1;
+   hence z,t // y,x & t,z // x,y by Lm2,Lm3;
+   hence t,z // y,x by Lm3;
+  end;
+
+theorem Th14:
+  a<>b & ((a,b // x,y & a,b // z,t) or (a,b // x,y & z,t // a,b) or
+        (x,y // a,b & z,t // a,b) or (x,y // a,b & a,b // z,t))
+        implies x,y // z,t
+   proof assume a<>b &
+       ((a,b // x,y & a,b // z,t) or (a,b // x,y & z,t // a,b) or
+        (x,y // a,b & z,t // a,b) or (x,y // a,b & a,b // z,t));
+    then a<>b & a,b // x,y & a,b // z,t by Th13;
+    hence thesis by DIRAF:47;
+   end;
+
+Lm4: LIN x,y,z implies LIN x,z,y & LIN y,x,z
+ proof assume LIN x,y,z; then x,y // x,z by Def1;
+  then x,z // x,y & y,x // y,z by Th13,DIRAF:47; hence thesis by Def1; end;
+
+theorem Th15:
+  LIN x,y,z implies LIN x,z,y & LIN y,x,z & LIN y,z,x & LIN z,x,y & LIN z,y,x
+   proof assume LIN x,y,z;
+    hence LIN x,z,y & LIN y,x,z by Lm4;
+    hence LIN y,z,x & LIN z,x,y by Lm4;
+    hence LIN z,y,x by Lm4;
+   end;
+
+theorem Th16:
+ LIN x,x,y & LIN x,y,y & LIN x,y,x
+  proof x,x // x,y & x,y // x,y & x,y // x,x by Th11,Th12;
+   hence thesis by Def1;
+  end;
+
+theorem Th17:
+ x<>y & LIN x,y,z & LIN x,y,t & LIN x,y,u implies LIN z,t,u
+  proof assume A1: x<>y & LIN x,y,z & LIN x,y,t & LIN x,y,u;
+   A2: now assume x=z;
+     then z<>y & z,y // z,t & z,y // z,u by A1,Def1;
+     then z,t // z,u by Th14; hence thesis by Def1; end;
+      now assume A3: x<>z;
+      x,y // x,z & x,y // x,t & x,y // x,u by A1,Def1;
+    then x,z // x,t & x,z // x,u by A1,Th14;
+    then z,x // z,t & z,x // z,u by DIRAF:47;
+    then z,t // z,u by A3,Th14;
+    hence thesis by Def1; end;
+   hence thesis by A2;
+  end;
+
+theorem Th18:
+ x<>y & LIN x,y,z & x,y // z,t implies LIN x,y,t
+  proof assume A1: x<>y & LIN x,y,z & x,y // z,t;
+
+      now assume A2: z<>x; x,y // x,z by A1,Def1;
+    then x,z // z,t by A1,Th14; then z,x // z,t by Th13;
+    then LIN z,x,t by Def1;
+    then LIN x,z,t & LIN x,z,y & LIN x,z,x by A1,Th15,Th16;
+    hence thesis by A2,Th17; end;
+   hence thesis by A1,Def1;
+  end;
+
+theorem Th19:
+  LIN x,y,z & LIN x,y,t implies x,y // z,t
+   proof assume A1: LIN x,y,z & LIN x,y,t;
+       now assume A2: x<>y;
+        now A3: x,y // x,z & x,y // x,t by A1,Def1;
+      then x,z // x,t by A2,Th14; then z,x // z,t by DIRAF:47;
+      then x,z // z,t by Th13; hence thesis by A3,Th14; end;
+     hence thesis; end;
+    hence thesis by Th12;
+   end;
+
+theorem Th20:
+ u<>z & LIN x,y,u & LIN x,y,z & LIN u,z,w implies LIN x,y,w
+  proof assume A1: u<>z & LIN x,y,u & LIN x,y,z & LIN u,z,w;
+      now assume A2: x<>y;
+      LIN x,y,y & LIN x,y,x by Th16;
+    then LIN z,u,y & LIN z,u,x & LIN z,u,w by A1,A2,Th15,Th17;
+    hence thesis by A1,Th17; end;
+   hence thesis by Th16;
+  end;
+
+theorem Th21:
+  ex x,y,z st not LIN x,y,z
+  proof consider x,y,z such that A1: not x,y // x,z by DIRAF:47;
+     not LIN x,y,z by A1,Def1;
+   hence thesis;
+  end;
+
+theorem
+    x<>y implies ex z st not LIN x,y,z
+ proof assume A1: x<>y; assume A2: not thesis;
+  consider a,b,c such that A3: not LIN a,b,c by Th21;
+    LIN x,y,a & LIN x,y,b & LIN x,y,c by A2; hence contradiction by A1,A3,Th17
+;
+ end;
+
+theorem
+   not LIN o,a,b & LIN o,b,b' & a,b // a,b' implies b=b'
+  proof assume A1: not LIN o,a,b & LIN o,b,b' & a,b // a,b';
+   assume A2: b<>b';
+     LIN a,b,b' by A1,Def1;
+   then LIN b,b',a & LIN b,b',o & LIN b,b',b by A1,Th15,Th16;
+   hence contradiction by A1,A2,Th17;
+  end;
+
+::
+:: Definition of the Line joining two points
+::
+
+definition
+ let AS,a,b;
+ func Line(a,b) -> Subset of AS means
+:Def2: for x holds x in it iff LIN a,b,x;
+ existence
+  proof
+    defpred P[set] means for y st y = $1 holds LIN a,b,y;
+    consider X being Subset of AS such that
+A1:  for x being set holds x in X iff x in the carrier of AS &
+       P[x] from Subset_Ex;
+    take X;
+    let x;
+    thus x in X implies LIN a,b,x by A1;
+    assume LIN a,b,x;
+    then x in the carrier of AS & for y st y = x holds LIN a,b,y;
+    hence thesis by A1;
+  end;
+ uniqueness
+  proof
+     let X1,X2 be Subset of AS such that
+A2:    for x holds x in X1 iff LIN a,b,x and
+A3:    for x holds x in X2 iff LIN a,b,x;
+     for x being set holds x in X1 iff x in X2
+    proof let x be set;
+     thus x in X1 implies x in X2
+      proof assume
+A4:      x in X1;
+       then reconsider x' = x as Element of AS;
+         LIN a,b,x' by A2,A4;
+       hence thesis by A3;
+      end;
+     assume
+A5:     x in X2;
+     then reconsider x' = x as Element of AS;
+       LIN a,b,x' by A3,A5;
+     hence thesis by A2;
+    end;
+   hence thesis by TARSKI:2;
+  end;
+end;
+
+reserve A,C,D,K for Subset of AS;
+
+Lm5: Line(a,b) c= Line(b,a)
+  proof
+      now let x be set; assume A1: x in Line(a,b);
+      then reconsider x'=x as Element of AS;
+        LIN a,b,x' by A1,Def2;
+      then LIN b,a,x' by Th15;
+     hence x in Line(b,a) by Def2;
+    end;
+   hence thesis by TARSKI:def 3;
+  end;
+
+canceled;
+
+theorem Th25:
+Line(a,b)=Line(b,a)
+  proof Line(a,b) c= Line(b,a) & Line(b,a) c= Line(a,b) by Lm5;
+   hence thesis by XBOOLE_0:def 10;
+  end;
+
+definition let AS,a,b;
+ redefine func Line(a,b);
+ commutativity by Th25;
+end;
+
+theorem Th26:
+ a in Line(a,b) & b in Line(a,b)
+  proof LIN a,b,a & LIN a,b,b by Th16;
+   hence thesis by Def2;
+  end;
+
+theorem Th27:
+ c in Line(a,b) & d in Line(a,b) & c <>d implies Line(c,d) c= Line(a,b)
+  proof assume A1: c in Line(a,b) & d in Line(a,b) & c <>d;
+    then A2: LIN a,b,c & LIN a,b,d by Def2;
+      now let x be set; assume A3: x in Line(c,d);
+     then reconsider x'=x as Element of AS;
+       LIN c,d,x' by A3,Def2;
+     then LIN a,b,x' by A1,A2,Th20; hence x in Line(a,b) by Def2;
+    end;
+  hence thesis by TARSKI:def 3;
+end;
+
+theorem Th28:
+  c in Line(a,b) & d in Line(a,b) & a<>b implies Line(a,b) c= Line(c,d)
+  proof assume A1: c in Line(a,b) & d in Line(a,b) & a<>b;
+    then A2: LIN a,b,c & LIN a,b,d by Def2;
+      now let x be set; assume A3: x in Line(a,b);
+     then reconsider x'=x as Element of AS;
+       LIN a,b,x' by A3,Def2; then LIN c,d,x' by A1,A2,Th17;
+     hence x in Line(c,d) by Def2;
+    end;
+  hence thesis by TARSKI:def 3;
+end;
+
+::
+::                   Definition of the Line
+::
+
+definition let AS; let A;
+ attr A is being_line means
+  :Def3: ex a,b st a<>b & A=Line(a,b);
+  synonym A is_line;
+end;
+
+Lm6: for a,b,A holds A is_line & a in A & b in A & a<>b
+                                           implies A=Line(a,b)
+  proof let a,b,A; assume that A1: A is_line and
+    A2: a in A & b in A & a<>b;
+ A3:    ex p,q st p<>q & A=Line(p,q) by A1,Def3;
+    then A4: Line(a,b) c= A by A2,Th27;
+      A c= Line(a,b) by A2,A3,Th28;
+   hence thesis by A4,XBOOLE_0:def 10;
+  end;
+
+:: Otrzymujemy stad zasadnicze stwierdzenie, ze kazda prosta
+:: jest jednoznacznie wyznaczona przez swoje dowolne dwa
+:: punkty.
+
+canceled;
+
+theorem Th30:
+  for a,b,A,C holds A is_line & C is_line &
+          a in A & b in A & a in C & b in C implies a=b or A=C
+  proof let a,b,A,C; assume A1: A is_line & C is_line &
+    a in A & b in A & a in C & b in C;
+    assume a<>b; then A=Line(a,b) & C=Line(a,b) by A1,Lm6;
+   hence thesis;
+  end;
+
+theorem Th31:
+ A is_line implies ex a,b st a in A & b in A & a<>b
+  proof assume A is_line; then consider a,b such that
+    A1: a<>b & A=Line(a,b) by Def3;
+      a in A & b in A by A1,Th26;
+   hence thesis by A1;
+  end;
+
+theorem Th32:
+ A is_line implies ex b st a<>b & b in A
+  proof assume A is_line;
+   then consider p,q such that
+   A1: p in A & q in A & p<>q by Th31;
+     a=p implies a<>q & q in A by A1;
+   hence thesis by A1; end;
+
+theorem Th33:
+ LIN a,b,c iff ex A st A is_line & a in A & b in A & c in A
+  proof A1: LIN a,b,c implies ex A st A is_line & a in A & b in A & c in A
+    proof assume A2: LIN a,b,c;
+           A3:now assume A4: a=b & a=c;
+       consider x such that A5: a<>x by Th10;
+       set A=Line(a,x);
+         A is_line & a in A & b in A & c in A by A4,A5,Def3,Th26;
+       hence ex A st A is_line & a in A & b in A & c in A; end;
+           A6:now assume A7:a<>b;
+       set A=Line(a,b);
+         A is_line & a in A & b in A & c in A by A2,A7,Def2,Def3,Th26;
+       hence ex A st A is_line & a in A & b in A & c in A; end;
+             now assume A8:a<>c; A9: LIN a,c,b by A2,Th15;
+       set A=Line(a,c);
+         A is_line & a in A & b in A & c in A by A8,A9,Def2,Def3,Th26;
+       hence ex A st A is_line & a in A & b in A & c in A; end;
+       hence thesis by A3,A6; end;
+            (ex A st A is_line & a in A & b in A & c in A)
+                                                  implies LIN a,b,c
+       proof given A such that
+              A10: A is_line and
+              A11: a in A & b in A & c in A;
+       consider p,q such that A12: p<>q & A=Line(p,q) by A10,Def3;
+          LIN p,q,a & LIN p,q,b & LIN p,q,c by A11,A12,Def2;
+        hence thesis by A12,Th17; end;
+   hence thesis by A1; end;
+
+::
+::   Definition of the parallelity between segments and lines
+::
+
+definition let AS; let a,b; let A;
+   pred a,b // A means
+                :Def4: ex c,d st c <>d & A=Line(c,d) & a,b // c,d;
+end;
+
+definition let AS,A,C;
+   pred A // C means
+                  :Def5: ex a,b st A=Line(a,b) & a<>b & a,b // C;
+end;
+
+canceled 2;
+
+theorem Th36:
+  (c in Line(a,b) & a<>b) implies (d in Line(a,b) iff a,b // c,d)
+ proof assume A1: c in Line(a,b) & a<>b;
+                              then A2: LIN a,b,c by Def2;
+ A3: d in Line(a,b) implies a,b // c,d
+  proof assume d in Line(a,b); then LIN a,b,d by Def2;
+        hence thesis by A2,Th19; end;
+    a,b // c,d implies d in Line(a,b)
+  proof assume a,b // c,d; then LIN a,b,d by A1,A2,Th18;
+        hence thesis by Def2; end;
+ hence thesis by A3; end;
+
+theorem Th37:
+ A is_line & a in A implies (b in A iff a,b // A )
+ proof assume A1: A is_line & a in A;
+   A2: now assume A3: b in A; consider p,q such that
+                A4: p<>q & A=Line(p,q) by A1,Def3;
+           p,q // a,b by A1,A3,A4,Th36; then a,b // p,q by Th13;
+        hence a,b // A by A4,Def4; end;
+      now assume a,b // A; then consider p,q such that
+                A5: p<>q & A=Line(p,q) & a,b // p,q by Def4;
+           p,q // a,b by A5,Th13;
+        hence b in A by A1,A5,Th36; end;
+  hence thesis by A2;
+ end;
+
+theorem
+  (a<>b & A=Line(a,b)) iff
+                  (A is_line & a in A & b in A & a<>b) by Def3,Lm6,Th26;
+
+theorem Th39:
+ A is_line & a in A & b in A & a<>b & LIN a,b,x implies x in A
+ proof assume that A1: A is_line & a in A & b in A & a<>b and
+                   A2: LIN a,b,x;
+    A=Line(a,b) by A1,Lm6; hence thesis by A2,Def2; end;
+
+theorem Th40:
+ (ex a,b st a,b // A) implies A is_line
+  proof given a,b such that A1: a,b // A;
+          ex p,q st p<>q & A=Line(p,q) & a,b // p,q by A1,Def4;
+       hence A is_line by Def3; end;
+
+theorem Th41:
+ (c in A & d in A & A is_line & c <>d) implies
+                                     (a,b // A iff a,b // c,d)
+ proof assume that A1: c in A & d in A and A2: A is_line
+                                                and A3: c <>d;
+  A4: a,b // A implies a,b // c,d
+   proof assume a,b // A;
+        then consider p,q such that
+                  A5: p<>q & A=Line(p,q) & a,b // p,q by Def4;
+          p,q // c,d by A1,A5,Th36;
+        hence thesis by A5,Th14; end;
+     a,b // c,d implies a,b // A
+   proof assume A6: a,b // c,d;
+          A=Line(c,d) by A1,A2,A3,Lm6;
+        hence thesis by A3,A6,Def4; end;
+  hence thesis by A4; end;
+
+canceled;
+
+theorem Th43:
+  a<>b implies a,b // Line(a,b)
+ proof assume A1: a<>b; a,b // a,b by Th11;
+       hence thesis by A1,Def4; end;
+
+theorem Th44:
+  A is_line implies (a,b // A iff
+                (ex c,d st c <>d & c in A & d in A & a,b // c,d))
+ proof assume A1: A is_line;
+  A2: a,b // A implies
+                (ex c,d st c <>d & c in A & d in A & a,b // c,d)
+   proof assume a,b // A;
+         then consider c,d such that
+                      A3: c <>d & A=Line(c,d) & a,b // c,d by Def4;
+           c <>d & c in A & d in A & a,b // c,d by A3,Th26;
+         hence thesis; end;
+     (ex c,d st c <>d & c in A & d in A & a,b // c,d) implies
+                                                        a,b // A
+   proof assume (ex c,d st c <>d & c in A & d in A & a,b // c,d);
+         then consider c,d such that
+                         A4: c <>d & c in A & d in A & a,b // c,d;
+           A=Line(c,d) by A1,A4,Lm6;
+         hence thesis by A4,Def4; end;
+  hence thesis by A2; end;
+
+theorem
+   (A is_line & a,b // A & c,d // A) implies a,b // c,d
+ proof assume that A1: A is_line and A2: a,b // A & c,d // A;
+       consider p,q such that
+                 A3: p<>q & A=Line(p,q) & a,b // p,q by A2,Def4;
+         p in A & q in A by A3,Th26;
+       then c,d // p,q by A1,A2,A3,Th41;
+       hence thesis by A3,Th14; end;
+
+theorem Th46:
+ (a,b // A & a,b // p,q & a<>b) implies p,q // A
+ proof assume A1: a,b // A & a,b // p,q & a<>b;
+                                  then A2:A is_line by Th40;
+       then consider c,d such that
+         A3: c <>d & c in A & d in A & a,b // c,d by A1,Th44;
+         c <>d & c in A & d in A & p,q // c,d by A1,A3,Th14;
+       hence thesis by A2,Th44; end;
+
+theorem Th47:
+  A is_line implies a,a // A
+ proof assume A is_line; then consider p,q such that
+          A1: p<>q & A=Line(p,q) by Def3;
+      a,a // p,q by Th12;
+  hence thesis by A1,Def4;
+ end;
+
+theorem Th48:
+ a,b // A implies b,a // A
+ proof assume A1: a,b // A;
+
+      now assume A2: a<>b; a,b // b,a by Th11;
+        hence thesis by A1,A2,Th46; end;
+  hence thesis by A1;
+ end;
+
+theorem
+   a,b // A & not a in A implies not b in A
+ proof assume A1: a,b // A & not a in A & b in A;
+   then A2: A is_line by Th40; b,a // A by A1,Th48;
+  hence contradiction by A1,A2,Th37;
+ end;
+
+theorem Th50:
+ A // C implies (A is_line & C is_line)
+  proof assume A // C; then ex a,b st A=Line(a,b) & a<>b & a,b // C by Def5;
+   hence thesis by Def3,Th40; end;
+
+theorem Th51:
+ A // C iff (ex a,b,c,d st
+               a<>b & c <>d & a,b // c,d & A=Line(a,b) & C=Line(c,d))
+ proof A1: A // C implies (ex a,b,c,d st
+                a<>b & c <>d & a,b // c,d & A=Line(a,b) & C=Line(c,d))
+    proof assume A // C; then consider a,b such that
+                       A2: A=Line(a,b) & a<>b & a,b // C by Def5;
+             ex c,d st c <>d & C=Line(c,d) & a,b // c,d by A2,Def4;
+          hence thesis by A2; end;
+      (ex a,b,c,d st
+       a<>b & c <>d & a,b // c,d & A=Line(a,b) & C=Line(c,d)) implies
+                                                        A // C
+    proof assume (ex a,b,c,d st
+              a<>b & c <>d & a,b // c,d & A=Line(a,b) & C=Line(c,d));
+          then consider a,b,c,d such that
+             A3: a<>b & c <>d & a,b // c,d & A=Line(a,b) & C=Line(c,d);
+            a,b // C by A3,Def4;
+          hence thesis by A3,Def5; end;
+ hence thesis by A1; end;
+
+theorem Th52:
+ (A is_line & C is_line & a in A & b in A & c in C
+       & d in C & a<>b & c <>d) implies
+                                      (A // C iff a,b // c,d)
+ proof assume A1: A is_line & C is_line & a in A & b in A &
+                               c in C & d in C & a<>b & c <>d;
+    A2: A // C implies a,b // c,d
+     proof assume A // C;
+     then consider p,q,r,s such that
+             A3: p<>q & r<>s & p,q // r,s & A=Line(p,q) & C=Line(r,s)
+                                                      by Th51;
+       p,q // a,b by A1,A3,Th36;
+     then a,b // r,s & r,s // c,d by A1,A3,Th14,Th36;
+     hence thesis by A3,Th14; end;
+       a,b // c,d implies A // C
+     proof assume A4: a,b // c,d;
+        A=Line(a,b) & C=Line(c,d) by A1,Lm6;
+      hence thesis by A1,A4,Th51; end;
+ hence thesis by A2; end;
+
+theorem Th53:
+ a in A & b in A & c in C & d in C & A // C implies
+                                                  a,b // c,d
+ proof assume that A1: a in A & b in A & c in C & d in C and
+                   A2: A // C;
+     now assume A3: a<>b & c <>d;
+          A is_line & C is_line by A2,Th50;
+        hence thesis by A1,A2,A3,Th52; end;
+  hence thesis by Th12; end;
+
+theorem
+   a in A & b in A & A // C implies a,b // C
+  proof assume A1: a in A & b in A & A // C;
+    then A2: A is_line & C is_line by Th50;
+       now consider p,q such that
+          A3: p in C & q in C & p<>q by A2,Th31;
+          A4: C=Line(p,q) by A2,A3,Lm6;
+            a,b // p,q by A1,A3,Th53;
+         hence thesis by A3,A4,Def4;
+        end;
+   hence thesis;
+  end;
+
+theorem Th55:
+ A is_line implies A // A
+ proof assume A is_line;
+       then consider a,b such that A1: a<>b & A=Line(a,b) by Def3;
+         a,b // a,b by Th11;
+   hence thesis by A1,Th51; end;
+
+theorem Th56:
+  A // C implies C // A
+   proof assume A // C; then consider a,b,c,d such that
+  A1: a<>b & c <>d & a,b // c,d & A=Line(a,b) & C=Line(c,d) by Th51;
+     c,d // a,b by A1,Th13;
+  hence thesis by A1,Th51;
+ end;
+
+definition let AS,A,C;
+ redefine pred A // C;
+ symmetry by Th56;
+end;
+
+theorem Th57:
+ a,b // A & A // C implies a,b // C
+  proof assume A1: a,b // A & A // C;
+       then consider p,q,c,d such that
+            A2: p<>q & c <>d & p,q // c,d & A=Line(p,q) & C=Line(c,d)
+                                                     by Th51;
+       A3: p in A & q in A by A2,Th26;
+         A is_line by A1,Th50;
+       then a,b // p,q by A1,A2,A3,Th41;
+       then a,b // c,d by A2,Th14;
+   hence thesis by A2,Def4; end;
+
+Lm7:
+ A // C & C // D implies A // D
+ proof assume that A1: A // C and A2: C // D;
+       consider a,b,c,d such that
+       A3: a<>b & c <>d & a,b // c,d & A=Line(a,b) & C=Line(c,d) by A1,Th51;
+       A4: C is_line & D is_line by A2,Th50;
+       then consider p,q such that
+                                  A5: p<>q & D=Line(p,q) by Def3;
+       A6: p in D & q in D by A5,Th26;
+         c in C & d in C by A3,Th26;
+       then c,d // p,q by A2,A3,A4,A5,A6,Th52;
+       then a<>b & p<>q & a,b // p,q & A=Line(a,b) & D=Line(p,q)
+                                                      by A3,A5,Th14;
+       hence thesis by Th51; end;
+
+theorem
+    ((A // C & C // D) or (A // C & D // C) or
+   (C // A & C // D) or (C // A & D // C)) implies A // D by Lm7;
+
+theorem Th59:
+  A // C & p in A & p in C implies A=C
+ proof assume A1: A // C & p in A & p in C;
+         for A,C,p holds
+                  A // C & p in A & p in C implies A c= C
+        proof let A,C,p;
+              assume A2: A // C & p in A & p in C;
+              then A3: A is_line & C is_line by Th50;
+           now let x be set; assume A4: x in A;
+          then reconsider x'=x as Element of AS;
+                now assume A5: x'<>p;
+         then A=Line(p,x') by A2,A3,A4,Lm6;
+         then p,x' // A by A5,Th43;
+         then A6: p,x' // C by A2,Th57;
+         consider q such that
+                           A7: p<>q & q in C by A3,Th32;
+         A8: C=Line(p,q) by A2,A3,A7,Lm6;
+           p,x' // p,q by A2,A3,A6,A7,Th41;
+         then p,q // p,x' by Th13;
+         then LIN p,q,x' by Def1;
+         hence x in C by A8,Def2; end;
+         hence x in C by A2; end;
+         hence A c= C by TARSKI:def 3; end;
+         then A c= C & C c= A by A1;
+    hence thesis by XBOOLE_0:def 10; end;
+
+theorem
+   x in K & not a in K & a,b // K implies (a=b or not LIN x,a,b)
+ proof assume A1: x in K & not a in K & a,b // K;
+       assume that A2: a<>b and A3: LIN x,a,b; set A=Line(a,b);
+         LIN a,b,x by A3,Th15; then A4: x in A by Def2;
+       A5: a in A by Th26;
+         A // K by A1,A2,Def5;
+ hence contradiction by A1,A4,A5,Th59; end;
+
+theorem
+   a,b // K & a',b' // K & LIN p,a,a' & LIN p,b,b' & p in K &
+                            not a in K & a=b implies a'=b'
+ proof assume A1: a,b // K & a',b' // K & LIN p,a,a' & LIN p,b,b' &
+                 p in K & not a in K & a=b;
+       set A=Line(p,a); A2: A is_line by A1,Def3;
+       A3: a' in A & b' in A by A1,Def2;
+       assume A4: a'<>b'; then A=Line(a',b') by A2,A3,Lm6;
+       then A5: A // K by A1,A4,Def5; p in A by Th26;
+       then A=K by A1,A5,Th59;
+ hence contradiction by A1,Th26; end;
+
+theorem
+   A is_line & a in A & b in A & c in A & a<>b & a,b // c,d implies d in A
+ proof assume A1: A is_line & a in A & b in A & c in A &
+                                    a<>b & a,b // c,d;
+
+    now assume A2: c <>d; set C=Line(c,d);
+   A3: C is_line & c in C & d in C by A2,Def3,Th26;
+   then A // C by A1,A2,Th52;
+   hence thesis by A1,A3,Th59; end;
+  hence thesis by A1; end;
+
+theorem
+   for a, A st A is_line ex C st a in C & A // C
+ proof let a,A; assume A is_line;
+       then consider p,q such that A1: p<>q & A=Line(p,q) by Def3;
+       consider b such that A2: p,q // a,b & a<>b by DIRAF:47;
+       set C=Line(a,b);
+       A3: A // C by A1,A2,Th51;
+         a in C by Th26;
+  hence thesis by A3; end;
+
+theorem
+    A // C & A // D & p in C & p in D implies C=D
+ proof assume A1: A // C & A // D & p in C & p in D;
+       then C // D by Lm7;
+      hence thesis by A1,Th59;
+end;
+
+::
+::                     Additional theorems
+::
+
+theorem
+   A is_line & a in A & b in A & c in A & d in A implies a,b // c,d
+  proof assume A1: A is_line & a in A & b in A & c in A & d in A;
+   then A // A by Th55; hence thesis by A1,Th53;
+  end;
+
+theorem
+    A is_line & a in A & b in A implies a,b // A by Th37;
+
+theorem
+   a,b // A & a,b // C & a<>b implies A // C
+  proof assume A1: a,b // A & a,b // C & a<>b;
+   then A2: A is_line & C is_line by Th40;
+   then consider c,d such that
+   A3: c <>d & c in A & d in A & a,b // c,d by A1,Th44;
+   consider p,q such that
+   A4: p<>q & p in C & q in C & a,b // p,q by A1,A2,Th44;
+     c,d // p,q by A1,A3,A4,Th14;
+   hence thesis by A2,A3,A4,Th52;
+  end;
+
+theorem Th68:
+ not LIN o,a,b & LIN o,a,a' & LIN o,b,b' & a,b // a',b' & a'=b'
+                                            implies a'=o & b'=o
+  proof assume A1:  not LIN o,a,b & LIN o,a,a' & LIN o,b,b' &
+                                       a,b // a',b' & a'=b';
+   then A2: o<>a & o<>b & a<>b by Th16;
+   set A=Line(o,a), C=Line(o,b);
+   A3: A is_line & C is_line &
+     o in A & a in A & o in C & b in C by A2,Def3,Th26;
+   then A4: A<>C by A1,Th33;
+     b' in C & a' in A & b' in A & a' in C by A1,A2,A3,Th39;
+   hence thesis by A3,A4,Th30;
+  end;
+
+theorem Th69:
+ not LIN o,a,b & LIN o,a,a' & LIN o,b,b' & a,b // a',b' & a'=o implies b'=o
+  proof assume A1:  not LIN o,a,b & LIN o,a,a' & LIN o,b,b' &
+                                                a,b // a',b' & a'=o;
+   then A2: a',b // a',b' by Def1;
+     now assume a,b // a',b; then b,a // b,a' by Th13;
+    then LIN b,a,a' by Def1; hence contradiction by A1,Th15; end;
+   hence thesis by A1,A2,Th14;
+  end;
+
+theorem
+   not LIN o,a,b & LIN o,a,a' & LIN o,b,b' & LIN o,b,x &
+   a,b // a',b' & a,b // a',x implies b'=x
+  proof assume A1: not LIN o,a,b & LIN o,a,a' & LIN o,b,b' & LIN o,b,x &
+                                        a,b // a',b' & a,b // a',x;
+   then A2: o<>a & o<>b & a<>b by Th16;
+   assume A3: b'<>x;
+   A4: a'<>b' proof assume a'=b'; then a'=o & b'=o by A1,Th68;
+    hence contradiction by A1,A3,Th69; end;
+   A5: a'<>o proof assume a'=o; then b'=o & x=o by A1,Th69;
+    hence contradiction by A3; end;
+     a',b' // a',x by A1,A2,Th14;
+   then A6: LIN a',b',x by Def1;
+   set A=Line(o,a), C=Line(o,b), P=Line(a',b');
+   A7: A is_line & C is_line & P is_line & o in A & a in A & o in C &
+    b in C & a' in P & b' in P by A2,A4,Def3,Th26;
+   then A8: a' in A & b' in C & x in C & x in P by A1,A2,A4,A6,Th39;
+   then a' in C by A3,A7,Th30;
+   then b in A by A5,A7,A8,Th30;
+   hence contradiction by A1,A7,Th33;
+  end;
+
+theorem
+   for a,b,A holds A is_line & a in A & b in A & a<>b
+                                           implies A=Line(a,b) by Lm6;
+
+::
+::                 Facts about Affine Plane
+::
+
+reserve AP for AffinPlane;
+reserve a,b,c,d,x,p,q for Element of AP;
+reserve A,C for Subset of AP;
+
+theorem Th72:
+ A is_line & C is_line & not A // C implies
+                          ex x st x in A & x in C
+ proof assume A1: A is_line & C is_line & not A // C;
+  then consider a,b such that A2: a<>b & A=Line(a,b) by Def3;
+  consider c,d such that A3: c <>d & C=Line(c,d) by A1,Def3;
+    not a,b // c,d by A1,A2,A3,Th51;
+  then consider x such that A4: a,b // a,x & c,d // c,x by DIRAF:54;
+    LIN a,b,x & LIN c,d,x by A4,Def1;
+  then x in A & x in C by A2,A3,Def2;
+  hence thesis;
+ end;
+
+theorem
+   A is_line & not a,b // A implies ex x st x in A & LIN a,b,x
+  proof assume that A1: A is_line and A2: not a,b // A;
+   A3: a<>b by A1,A2,Th47;
+   set C=Line(a,b); A4: C is_line by A3,Def3;
+     not C // A
+    proof assume C // A; then consider p,q such that
+     A5: C=Line(p,q) & p<>q & p,q // A by Def5;
+       a in C & b in C by Th26;
+     then p,q // a,b by A5,Th36;
+     hence contradiction by A2,A5,Th46;
+    end;
+   then consider x such that A6: x in C & x in A by A1,A4,Th72;
+     LIN a,b,x by A6,Def2;
+   hence thesis by A6;
+  end;
+
+theorem
+   not a,b // c,d implies ex p st LIN a,b,p & LIN c,d,p
+  proof assume not a,b // c,d; then consider p such that
+   A1: a,b // a,p & c,d // c,p by DIRAF:54;
+     LIN a,b,p & LIN c,d,p by A1,Def1;
+   hence thesis;
+ end;

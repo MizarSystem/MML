@@ -1,0 +1,246 @@
+:: Definitions of Radix-2k Signed-Digit number and its adder algorithm
+::  by Yoshinori Fujisawa and Yasushi Fuwa
+::
+:: Received September 7, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary INT_1, NAT_1, ARYTM_1, ARYTM_3, POWER, MIDSP_3, FINSEQ_1, FUNCT_1,
+      RELAT_1, RLVECT_1, RADIX_1, FINSEQ_4, GROUP_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, XREAL_0, INT_1, NAT_1, FUNCT_1,
+      POWER, FINSEQ_1, FINSEQ_4, BINARITH, TREES_4, WSIERP_1, MIDSP_3;
+ constructors REAL_1, POWER, BINARITH, FINSEQ_4, EULER_2, WSIERP_1, MEMBERED,
+      INT_1;
+ clusters INT_1, RELSET_1, GROUP_2, NAT_1, XREAL_0, MEMBERED;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Some Useful Theorems
+
+reserve i,k,m,n,p,x,y for Nat,
+        i1,i2,i3 for Integer,
+        e for set;
+
+canceled;
+
+theorem :: RADIX_1:2
+n mod k = k - 1 implies (n+1) mod k = 0;
+
+theorem :: RADIX_1:3
+  k <> 0 & n mod k < k - 1 implies (n+1) mod k = (n mod k) + 1;
+
+theorem :: RADIX_1:4
+  m <> 0 implies (k mod (m*n)) mod n = k mod n;
+
+theorem :: RADIX_1:5
+    k <> 0 implies (n+1) mod k = 0 or (n+1) mod k = (n mod k) + 1;
+
+theorem :: RADIX_1:6
+  i <> 0 & k <> 0 implies (n mod (i |^ k)) div (i |^ (k -'1)) < i;
+
+theorem :: RADIX_1:7
+  k <= n implies m |^ k divides m |^ n;
+
+theorem :: RADIX_1:8
+    i2 > 0 & i3 >= 0 implies (i1 mod (i2*i3)) mod i3 = i1 mod i3;
+
+begin :: Definition for Radix-2^k, k-SD
+
+definition let n;
+  func Radix(n) -> Nat equals
+:: RADIX_1:def 1
+
+    2 to_power n;
+end;
+
+definition let k;
+  func k-SD -> set equals
+:: RADIX_1:def 2
+
+    {e where e is Element of INT:e <= Radix(k)-1 & e >= -Radix(k)+1};
+end;
+
+theorem :: RADIX_1:9
+  Radix(n) <> 0;
+
+theorem :: RADIX_1:10
+  for e holds e in 0-SD iff e = 0;
+
+theorem :: RADIX_1:11
+    0-SD = {0};
+
+theorem :: RADIX_1:12
+  k-SD c= (k+1)-SD;
+
+theorem :: RADIX_1:13
+  e in k-SD implies e is Integer;
+
+theorem :: RADIX_1:14
+  k-SD c= INT;
+
+theorem :: RADIX_1:15
+  i1 in k-SD implies i1 <= Radix(k)-1 & i1 >= -Radix(k)+1;
+
+theorem :: RADIX_1:16
+  0 in k-SD;
+
+definition let k;
+  cluster k-SD -> non empty;
+end;
+
+definition let k;
+  redefine func k-SD -> non empty Subset of INT;
+end;
+
+begin :: Functions for generating Radix-2^k SD numbers from natural numbers
+      :: and natural numbers from Radix-2^k SD numbers
+
+reserve a for Tuple of n,(k-SD);
+
+canceled;
+
+theorem :: RADIX_1:18
+  i in Seg n implies a.i is Element of k-SD;
+
+definition let i,k,n be Nat, x be Tuple of n,(k-SD);
+  func DigA(x,i) -> Integer equals
+:: RADIX_1:def 3
+
+    x.i if i in Seg n,
+    0 if i = 0;
+end;
+
+definition let i,k,n be Nat, x be Tuple of n,(k-SD);
+  func DigB(x,i) -> Element of INT equals
+:: RADIX_1:def 4
+
+    DigA(x,i);
+end;
+
+theorem :: RADIX_1:19
+  i in Seg n implies DigA(a,i) is Element of k-SD;
+
+theorem :: RADIX_1:20
+  for x be Tuple of 1,INT st x/.1 = m holds x = <*m*>;
+
+definition let i,k,n be Nat, x be Tuple of n,(k-SD);
+  func SubDigit(x,i,k) -> Element of INT equals
+:: RADIX_1:def 5
+
+    (Radix(k) |^ (i -'1))*DigB(x,i);
+end;
+
+definition let n,k be Nat, x be Tuple of n,(k-SD);
+  func DigitSD(x) -> Tuple of n,INT means
+:: RADIX_1:def 6
+
+    for i be Nat st i in Seg n holds it/.i = SubDigit(x,i,k);
+end;
+
+definition let n,k be Nat, x be Tuple of n,(k-SD);
+  func SDDec(x) -> Integer equals
+:: RADIX_1:def 7
+
+    Sum DigitSD(x);
+end;
+
+definition let i,k,x be Nat;
+  func DigitDC(x,i,k) -> Element of k-SD equals
+:: RADIX_1:def 8
+
+    (x mod (Radix(k) |^ i)) div (Radix(k) |^ (i -'1));
+end;
+
+definition let k,n,x be Nat;
+  func DecSD(x,n,k) -> Tuple of n,(k-SD) means
+:: RADIX_1:def 9
+
+    for i be Nat st i in Seg n holds DigA(it,i) = DigitDC(x,i,k);
+end;
+
+begin :: Definition for carry & data components of Addition
+
+definition let x be Integer;
+  func SD_Add_Carry(x) -> Integer equals
+:: RADIX_1:def 10
+
+    1 if x > 2,
+    -1 if x < -2
+    otherwise 0;
+end;
+
+theorem :: RADIX_1:21
+  SD_Add_Carry(0) = 0;
+
+definition let x be Integer, k be Nat;
+  func SD_Add_Data(x,k) -> Integer equals
+:: RADIX_1:def 11
+
+    x - SD_Add_Carry(x)*Radix(k);
+end;
+
+theorem :: RADIX_1:22
+    SD_Add_Data(0,k) = 0;
+
+theorem :: RADIX_1:23
+  k >= 2 & i1 in k-SD & i2 in k-SD implies
+    -Radix(k)+2 <= SD_Add_Data(i1+i2,k) & SD_Add_Data(i1+i2,k) <= Radix(k)-2;
+
+begin :: Definition for checking whether or not a natural number can be
+      :: expressed as n digits Radix-2^k SD number
+
+definition let n,x,k be Nat;
+  pred x is_represented_by n,k means
+:: RADIX_1:def 12
+
+    x < (Radix(k) |^ n);
+end;
+
+theorem :: RADIX_1:24
+  m is_represented_by 1,k implies DigA(DecSD(m,1,k),1) = m;
+
+theorem :: RADIX_1:25
+    for n st n >= 1 holds
+    for m st m is_represented_by n,k holds m = SDDec(DecSD(m,n,k));
+
+theorem :: RADIX_1:26
+  k >= 2 & m is_represented_by 1,k & n is_represented_by 1,k implies
+    SD_Add_Carry(DigA(DecSD(m,1,k),1)+DigA(DecSD(n,1,k),1)) = SD_Add_Carry(m+n)
+;
+
+theorem :: RADIX_1:27
+  m is_represented_by (n+1),k implies
+    DigA(DecSD(m,(n+1),k),n+1) = m div (Radix(k) |^ n);
+
+begin :: Definition for Addition operation for a high-speed adder algorithm
+      :: on Radix-2^k SD number
+
+definition let k,i,n be Nat, x,y be Tuple of n,(k-SD);
+  assume i in Seg n & k >= 2;
+  func Add(x,y,i,k) -> Element of k-SD equals
+:: RADIX_1:def 13
+
+    SD_Add_Data(DigA(x,i)+DigA(y,i),k)
+      + SD_Add_Carry(DigA(x,i -'1)+DigA(y,i -'1));
+end;
+
+definition let n,k be Nat,x,y be Tuple of n,(k-SD);
+  func x '+' y -> Tuple of n,(k-SD) means
+:: RADIX_1:def 14
+
+    for i st i in Seg n holds DigA(it,i) = Add(x,y,i,k);
+end;
+
+theorem :: RADIX_1:28
+  k >= 2 & m is_represented_by 1,k & n is_represented_by 1,k implies
+    SDDec(DecSD(m,1,k)'+'DecSD(n,1,k)) = SD_Add_Data(m+n,k);
+
+theorem :: RADIX_1:29
+    for n st n >= 1 holds
+    for k,x,y st
+      k >= 2 & x is_represented_by n,k & y is_represented_by n,k holds
+        x + y = (SDDec(DecSD(x,n,k) '+' DecSD(y,n,k)))
+          + (Radix(k) |^ n)*
+            SD_Add_Carry(DigA(DecSD(x,n,k),n)+DigA(DecSD(y,n,k),n));
+

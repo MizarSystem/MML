@@ -1,0 +1,1392 @@
+:: Definitions of Petri Net - Part II
+::  by Waldemar Korczy\'nski
+::
+:: Received January 31, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, BOOLE, SYSREL, E_SIEC, FUNCT_1, S_SIEC;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1, SYSREL, STRUCT_0;
+ constructors SYSREL, STRUCT_0, XBOOLE_0;
+ clusters RELAT_1, SYSREL, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ theorems ZFMISC_1, RELAT_1, SYSREL, RELSET_1, TARSKI, XBOOLE_0, XBOOLE_1;
+
+begin
+
+ reserve x,y,z,X,Y for set;
+
+:: D E F I N I T I O N S
+
+definition
+ struct (1-sorted) G_Net (# carrier -> set,
+                           entrance, escape -> Relation #);
+end;
+
+definition let N be 1-sorted;
+ func echaos N -> set equals
+:Def1: (the carrier of N) \/ {the carrier of N};
+correctness;
+end;
+
+definition let IT be G_Net;
+ attr IT is GG means :Def2:
+  the entrance of IT c= [:the carrier of IT,the carrier of IT:] &
+   the escape of IT c= [:the carrier of IT,the carrier of IT:] &
+    (the entrance of IT) * (the entrance of IT) = the entrance of IT &
+     (the entrance of IT) * (the escape of IT) = the entrance of IT &
+      (the escape of IT) * (the escape of IT) = the escape of IT &
+       (the escape of IT) * (the entrance of IT) = the escape of IT;
+end;
+
+definition
+ cluster GG G_Net;
+  existence
+   proof
+    take N = G_Net (# {}, {}, {} #);
+  A1:the escape of N c= [:the carrier of N,the carrier of N:] by XBOOLE_1:2;
+     (the entrance of N) * (the entrance of N) = {} by RELAT_1:62;
+  hence thesis by A1,Def2;
+ end;
+end;
+
+definition
+ mode gg_net is GG G_Net;
+end;
+
+definition let IT be G_Net;
+ attr IT is EE means :Def3:
+ (the entrance of IT) * ((the entrance of IT) \
+   id(the carrier of IT)) = {} &
+ (the escape of IT) * ((the escape of IT) \ id(the carrier of IT)) = {};
+end;
+
+definition
+ cluster EE G_Net;
+  existence
+   proof
+    take N = G_Net (# {}, {}, {} #);
+      (the entrance of N) * ((the entrance of N) \
+      id(the carrier of N)) = {} &
+      (the escape of N) *
+       ((the escape of N) \ id(the carrier of N)) = {} by RELAT_1:62;
+   hence thesis by Def3;
+ end;
+end;
+
+definition
+ cluster strict GG EE G_Net;
+  existence
+   proof
+    take N = G_Net (# {} , {} , {} #);
+  A1:the entrance of N c= [:the carrier of N,the carrier of N:] &
+   the escape of N c= [:the carrier of N,the carrier of N:] &
+    (the entrance of N) * (the entrance of N) = {} &
+     (the entrance of N) * (the escape of N) = {} &
+      (the escape of N) * (the entrance of N) = {} &
+       (the escape of N) * (the escape of N) = {} by RELAT_1:62,XBOOLE_1:2;
+     (the escape of N) *
+          ((the escape of N) \ id(the carrier of N)) = {} by RELAT_1:62;
+   hence thesis by A1,Def2,Def3;
+ end;
+end;
+
+definition
+ mode e_net is EE GG G_Net;
+end;
+
+ reserve N for e_net;
+
+theorem
+   for R, S being Relation holds
+  G_Net (# X, R, S #) is e_net iff
+   R c= [:X,X:] & S c= [:X,X:] &
+    R * R = R & R * S = R & S * S = S & S * R = S &
+     R * (R \ id(X)) = {} &
+      S * (S \ id(X)) = {} by Def2,Def3;
+
+theorem Th2:
+ G_Net (# X, {}, {} #) is e_net
+proof
+A1: {} c= [:X, X:] by XBOOLE_1:2;
+    {} * ({} \ id(X)) = {};
+  hence thesis by A1,Def2,Def3;
+ end;
+
+theorem Th3:
+ G_Net (# X, id X, id X #) is e_net
+proof
+ A1: id(X) c= [:X , X:] by RELSET_1:28;
+ A2: id(X) * id(X) = id(X) by SYSREL:29;
+      id(X) * (id(X) \ id(X)) = id(X) * {} by XBOOLE_1:37
+                                             .= {};
+  hence thesis by A1,A2,Def2,Def3;
+ end;
+
+theorem
+   G_Net (# {}, {}, {} #) is e_net by Th2;
+
+canceled 3;
+
+theorem
+   G_Net (# X, id(X \ Y), id(X \ Y) #) is e_net
+proof
+ A1: id(X \ Y) c= [:X , X:]
+   proof
+      X \ Y c= X by XBOOLE_1:36;
+    then A2:[:X \ Y , X \ Y:] c= [:X , X:] by ZFMISC_1:119;
+      id(X \ Y) c= [:X \ Y, X \ Y:] by RELSET_1:28;
+    hence thesis by A2,XBOOLE_1:1;
+   end;
+ A3: id(X \ Y) * id(X \ Y) = id(X \ Y) by SYSREL:29;
+      id(X \ Y) * (id(X \ Y) \ id(X)) =
+                        id(X \ Y) * {} by SYSREL:34
+                     .= {};
+   hence thesis by A1,A3,Def2,Def3;
+ end;
+
+theorem
+   echaos N <> {}
+proof
+ A1:echaos N = (the carrier of N) \/ {the carrier of N} by Def1;
+   the carrier of N in {the carrier of N} by TARSKI:def 1;
+ hence thesis by A1,XBOOLE_0:def 2;
+end;
+
+definition
+ func empty_e_net -> strict e_net equals
+    G_Net (# {}, {}, {} #);
+ correctness by Th2;
+end;
+
+definition let X;
+ func Tempty_e_net X -> strict e_net equals
+ :Def5: G_Net (# X, id X, id X #);
+ coherence by Th3;
+ func Pempty_e_net(X) -> strict e_net equals
+ :Def6: G_Net (# X, {}, {} #);
+ coherence by Th2;
+end;
+
+canceled;
+
+theorem
+   the carrier of Tempty_e_net(X) = X &
+  the entrance of Tempty_e_net(X) = id X &
+   the escape of Tempty_e_net(X) = id X
+proof
+   Tempty_e_net(X) = G_Net (# X, id(X), id(X) #) by Def5;
+ hence thesis;
+end;
+
+theorem
+   the carrier of Pempty_e_net(X) = X &
+  the entrance of Pempty_e_net(X) = {} &
+   the escape of Pempty_e_net(X) = {}
+proof
+   Pempty_e_net(X) = G_Net (# X, {}, {} #) by Def6;
+ hence thesis;
+end;
+
+definition let x;
+ func Psingle_e_net(x) -> strict e_net equals
+ :Def7: G_Net (#{x}, id{x}, id{x}#);
+ coherence by Th3;
+ func Tsingle_e_net(x) -> strict e_net equals
+ :Def8: G_Net (# {x}, {}, {} #);
+ coherence by Th2;
+end;
+
+theorem
+   the carrier of Psingle_e_net(x) = {x} &
+  the entrance of Psingle_e_net(x) = id{x} &
+   the escape of Psingle_e_net(x) = id{x}
+proof
+   Psingle_e_net(x) = G_Net (# {x}, id{x}, id{x} #) by Def7;
+ hence thesis;
+end;
+
+theorem
+   the carrier of Tsingle_e_net(x) = {x} &
+  the entrance of Tsingle_e_net(x) = {} &
+   the escape of Tsingle_e_net(x) = {}
+proof
+   Tsingle_e_net(x) = G_Net (# {x}, {}, {}#) by Def8;
+ hence thesis;
+end;
+
+theorem Th15:
+ G_Net (# X \/ Y, id X, id X #) is e_net
+proof
+ A1: id(X) c= [:X , X:] by RELSET_1:28;
+      X c= X \/ Y by XBOOLE_1:7;
+    then [:X , X:] c= [:X \/ Y , X \/ Y:] by ZFMISC_1:119;
+    then A2:id(X) c= [:X \/ Y , X \/ Y:] by A1,XBOOLE_1:1;
+ A3: id(X) * id(X) = id(X) by SYSREL:29;
+    id(X) c= id(X) \/ id(Y) by XBOOLE_1:7;
+    then id(X) c= id(X \/ Y) by SYSREL:32;
+    then id(X) * (id(X) \ id(X \/ Y)) = id(X) * {} by XBOOLE_1:37
+                                        .= {};
+  hence thesis by A2,A3,Def2,Def3;
+ end;
+
+definition let X,Y;
+ func PTempty_e_net(X,Y) -> strict e_net equals
+     G_Net (#X \/ Y, id(X), id(X)#);
+ coherence by Th15;
+end;
+
+theorem Th16:
+ (the entrance of N) \ id(dom(the entrance of N)) =
+                 (the entrance of N) \ id(the carrier of N) &
+  (the escape of N) \ id(dom(the escape of N)) =
+                 (the escape of N) \ id(the carrier of N) &
+   (the entrance of N) \ id(rng(the entrance of N)) =
+                 (the entrance of N) \ id(the carrier of N) &
+    (the escape of N) \ id(rng(the escape of N)) =
+                 (the escape of N) \ id(the carrier of N)
+proof
+A1: the entrance of N c= [:the carrier of N,the carrier of N:] by Def2;
+   the escape of N c= [:the carrier of N,the carrier of N:] by Def2;
+ hence thesis by A1,SYSREL:38;
+end;
+
+theorem
+Th17:CL(the entrance of N) = CL(the escape of N)
+proof
+    (the entrance of N) * (the escape of N) = the entrance of N &
+ (the escape of N) * ((the escape of N) \ id(the carrier of N)) = {} &
+      (the escape of N) * (the entrance of N) = the escape of N &
+ (the entrance of N) * ((the entrance of N) \ id(the carrier of N)) = {}
+   by Def2,Def3;
+ then (the entrance of N) * (the escape of N) = the entrance of N &
+ (the escape of N) * ((the escape of N) \
+   id(dom (the escape of N))) = {} &
+      (the escape of N) * (the entrance of N) = the escape of N &
+ (the entrance of N) *
+   ((the entrance of N) \ id(dom (the entrance of N))) = {} by Th16;
+ hence thesis by SYSREL:59;
+end;
+
+theorem Th18:
+ rng (the entrance of N) = rng (CL(the entrance of N)) &
+  rng (the entrance of N) = dom (CL(the entrance of N)) &
+   rng (the escape of N) = rng (CL(the escape of N)) &
+    rng (the escape of N) = dom (CL(the escape of N)) &
+     rng (the entrance of N) = rng (the escape of N)
+proof
+A1:rng (the entrance of N) = rng (CL(the entrance of N)) &
+         rng (the entrance of N) = dom (CL(the entrance of N))
+ proof
+    (the entrance of N) * (the entrance of N) = the entrance of N &
+    (the entrance of N) *
+     ((the entrance of N) \ id(the carrier of N)) = {} by Def2,Def3;
+  then (the entrance of N) * (the entrance of N) = the entrance of N &
+    (the entrance of N) *
+     ((the entrance of N) \ id(dom (the entrance of N))) = {} by Th16;
+  hence thesis by SYSREL:50;
+ end;
+   rng (the escape of N) = rng (CL(the escape of N)) &
+         rng (the escape of N) = dom (CL(the escape of N))
+ proof
+    (the escape of N) * (the escape of N) = the escape of N &
+    (the escape of N) *
+     ((the escape of N) \ id(the carrier of N)) = {} by Def2,Def3;
+  then (the escape of N) * (the escape of N) = the escape of N &
+    (the escape of N) *
+     ((the escape of N) \ id(dom(the escape of N))) = {} by Th16;
+  hence thesis by SYSREL:50;
+ end;
+ hence thesis by A1,Th17;
+end;
+
+theorem Th19:
+ dom (the entrance of N) c= the carrier of N &
+  rng (the entrance of N) c= the carrier of N &
+   dom (the escape of N) c= the carrier of N &
+    rng (the escape of N) c= the carrier of N
+proof
+ A1:dom (the entrance of N) c= the carrier of N
+ proof
+    the entrance of N c= [:the carrier of N,the carrier of N:] by Def2;
+  hence thesis by SYSREL:15;
+ end;
+ A2:rng (the entrance of N) c= the carrier of N
+ proof
+    the entrance of N c= [:the carrier of N,the carrier of N:] by Def2;
+  hence thesis by SYSREL:15;
+ end;
+ A3:dom (the escape of N) c= the carrier of N
+ proof
+    the escape of N c= [:the carrier of N,the carrier of N:] by Def2;
+  hence thesis by SYSREL:15;
+ end;
+   rng (the escape of N) c= the carrier of N
+ proof
+    the escape of N c= [:the carrier of N,the carrier of N:] by Def2;
+  hence thesis by SYSREL:15;
+ end;
+ hence thesis by A1,A2,A3;
+end;
+
+theorem Th20:
+ (the entrance of N) * ((the escape of N) \ id(the carrier of N)) = {} &
+  (the escape of N) * ((the entrance of N) \ id(the carrier of N)) = {}
+proof
+ set R = the entrance of N;
+ set S = the escape of N;
+ set T = id(the carrier of N);
+ A1:R * (S \ T) = R * (S \ id(dom S)) by Th16
+                   .= (R * S) * (S \ id(dom S)) by Def2
+                   .= R * (S * (S \ id(dom S))) by RELAT_1:55
+                   .= R * (S * (S \ T)) by Th16
+                   .= R * {} by Def3
+                   .= {};
+   S * (R \ T) = S * (R \ id(dom R)) by Th16
+                   .= (S * R) * (R \ id(dom R)) by Def2
+                   .= S * (R * (R \ id(dom R))) by RELAT_1:55
+                   .= S * (R * (R \ T)) by Th16
+                   .= S * {} by Def3
+                   .= {};
+ hence thesis by A1;
+end;
+
+theorem
+   ((the entrance of N) \ id(the carrier of N)) *
+          ((the entrance of N) \ id(the carrier of N)) = {} &
+          ((the escape of N) \ id(the carrier of N)) *
+          ((the escape of N) \ id(the carrier of N)) = {} &
+      ((the entrance of N) \ id(the carrier of N)) *
+          ((the escape of N) \ id(the carrier of N)) = {} &
+          ((the escape of N) \ id(the carrier of N)) *
+          ((the entrance of N) \ id(the carrier of N)) = {}
+proof
+ set R = the entrance of N;
+ set S = the escape of N;
+ set T = id(the carrier of N);
+   R \ T c= R by XBOOLE_1:36;
+ then (R \ T) * (R \ T) c= R * (R \ T) by RELAT_1:49;
+ then A1: ((R \ T) * (R \ T)) c= {} by Def3;
+   R \ T c= R by XBOOLE_1:36;
+ then (R \ T) * (S \ T) c= R * (S \ T) by RELAT_1:49;
+ then A2: ((R \ T) * (S \ T)) c= {} by Th20;
+   S \ T c= S by XBOOLE_1:36;
+ then (S \ T) * (S \ T) c= S * (S \ T) by RELAT_1:49;
+ then A3: (S \ T) * (S \ T) c= {} by Def3;
+   S \ T c= S by XBOOLE_1:36;
+ then (S \ T) * (R \ T) c= S * (R \ T) by RELAT_1:49;
+ then (S \ T) * (R \ T) c= {} by Th20;
+ hence thesis by A1,A2,A3,XBOOLE_1:3;
+end;
+
+definition let N;
+ func e_Places(N) -> set equals
+:Def10: rng (the entrance of N);
+ correctness;
+end;
+
+definition let N;
+ func e_Transitions(N) -> set equals
+ :Def11: (the carrier of N) \ e_Places(N);
+ correctness;
+end;
+
+theorem
+   e_Places(N) misses e_Transitions(N)
+proof
+   e_Places(N) misses ((the carrier of N) \ e_Places(N)) by XBOOLE_1:79;
+ hence thesis by Def11;
+end;
+
+theorem
+Th23:([x,y] in the entrance of N or [x,y] in the escape of N) & x <> y
+             implies x in e_Transitions(N) & y in e_Places(N)
+proof
+ A1: [x,y] in the entrance of N & x <> y implies
+                     x in e_Transitions(N) & y in e_Places(N)
+ proof
+  assume [x,y] in the entrance of N & x <> y;
+  then (the entrance of N) * (the entrance of N) = (the entrance of N) &
+  (the entrance of N) *
+    ((the entrance of N) \ id(the carrier of N)) = {} &
+     [x,y] in the entrance of N & x <> y by Def2,Def3;
+  then A2: (the entrance of N) * (the entrance of N) = (the entrance of N) &
+   (the entrance of N) *
+    ((the entrance of N) \ id(dom (the entrance of N))) = {} &
+     [x,y] in the entrance of N & x <> y by Th16;
+    dom (the entrance of N) c= the carrier of N by Th19;
+  then x in dom (the entrance of N) \ dom (CL(the entrance of N)) &
+         dom (the entrance of N) \ dom (CL(the entrance of N)) c=
+  (the carrier of N) \ dom (CL(the entrance of N)) by A2,SYSREL:49,XBOOLE_1:33;
+  then x in (the carrier of N) \ dom (CL(the entrance of N)) &
+                                         y in dom(CL(the entrance of N))
+ by A2,SYSREL:49;
+  then x in ((the carrier of N) \ rng (the entrance of N)) &
+                               y in rng (the entrance of N) by Th18;
+  then x in ((the carrier of N) \ e_Places(N)) &
+                               y in e_Places(N) by Def10;
+  hence thesis by Def11;
+ end;
+   [x,y] in the escape of N & x <> y implies
+                     x in e_Transitions(N) & y in e_Places(N)
+ proof
+  assume [x,y] in the escape of N & x <> y;
+  then (the escape of N) * (the escape of N) = (the escape of N) &
+  (the escape of N) *
+    ((the escape of N) \ id(the carrier of N)) = {} &
+     [x,y] in the escape of N & x <> y by Def2,Def3;
+  then A3: (the escape of N) * (the escape of N) = (the escape of N) &
+   (the escape of N) *
+    ((the escape of N) \ id(dom (the escape of N))) = {} &
+     [x,y] in the escape of N & x <> y by Th16;
+
+    dom (the escape of N) c= the carrier of N by Th19;
+  then x in dom (the escape of N) \ dom (CL(the escape of N)) &
+         dom (the escape of N) \ dom (CL(the escape of N)) c=
+      (the carrier of N) \ dom (CL(the escape of N)) by A3,SYSREL:49,XBOOLE_1:
+33;
+  then x in (the carrier of N) \ dom (CL(the escape of N)) &
+                      y in dom(CL(the escape of N)) by A3,SYSREL:49;
+  then x in ((the carrier of N) \ rng (the escape of N)) &
+                               y in rng (the escape of N) by Th18;
+  then x in ((the carrier of N) \ rng (the entrance of N)) &
+                               y in rng (the entrance of N) by Th18;
+  then x in ((the carrier of N) \ e_Places(N)) & y in e_Places(N) by Def10;
+  hence thesis by Def11;
+ end;
+ hence thesis by A1;
+end;
+
+theorem
+Th24:(the entrance of N) \ id(the carrier of N) c=
+                             [:e_Transitions(N),e_Places(N):] &
+        (the escape of N) \ id(the carrier of N) c=
+                             [:e_Transitions(N),e_Places(N):]
+proof
+A1: for x,y holds
+  [x,y] in (the entrance of N) \ id(the carrier of N) implies
+                              [x,y] in [:e_Transitions(N),e_Places(N):]
+  proof
+   let x,y;
+   assume [x,y] in (the entrance of N) \ id(the carrier of N);
+   then A2:
+ [x,y] in (the entrance of N) & not [x,y] in id(the carrier of N)
+ by XBOOLE_0:def 4;
+   then A3:[x,y] in (the entrance of N) & (not x in
+ (the carrier of N) or x <> y)
+ by RELAT_1:def 10;
+     x in the carrier of N
+   proof
+      x in dom (the entrance of N) &
+        dom (the entrance of N) c= the carrier of N by A2,Th19,RELAT_1:20;
+    hence thesis;
+   end;
+   then x in e_Transitions(N) & y in e_Places(N) by A3,Th23;
+   hence thesis by ZFMISC_1:106;
+  end;
+   for x,y holds
+  [x,y] in (the escape of N) \ id(the carrier of N) implies
+                              [x,y] in [:e_Transitions(N),e_Places(N):]
+  proof
+   let x,y;
+   assume [x,y] in (the escape of N) \ id(the carrier of N);
+   then A4:
+ [x,y] in (the escape of N) & not [x,y] in id(the carrier of N)
+ by XBOOLE_0:def 4;
+   then A5:[x,y] in (the escape of N) & (not x in (the carrier of N) or x <> y)
+ by RELAT_1:def 10;
+     x in the carrier of N
+   proof
+      x in dom (the escape of N) &
+        dom (the escape of N) c= the carrier of N by A4,Th19,RELAT_1:20;
+    hence thesis;
+   end;
+   then x in e_Transitions(N) & y in e_Places(N) by A5,Th23;
+   hence thesis by ZFMISC_1:106;
+  end;
+   hence thesis by A1,RELAT_1:def 3;
+  end;
+
+ definition let N;
+  func e_Flow N -> Relation equals :Def12:
+   ((the entrance of N)~ \/ (the escape of N)) \ id(the carrier of N);
+  correctness;
+ end;
+
+theorem
+   e_Flow N c= [:e_Places(N) , e_Transitions(N):] \/
+                         [:e_Transitions(N) , e_Places(N):]
+proof
+ A1:e_Flow(N) = ((the entrance of N)~ \/ (the escape of N)) \
+                       id(the carrier of N) by Def12
+             .= ((the entrance of N)~ \ id(the carrier of N)) \/
+                        ((the escape of N) \ id(the carrier of N))
+ by XBOOLE_1:42;
+ A2:(the entrance of N)~ \ id(the carrier of N) =
+       (the entrance of N)~ \ (id(the carrier of N))~ by RELAT_1:72
+    .= ((the entrance of N) \ id(the carrier of N))~ by RELAT_1:41;
+   (the entrance of N) \ id(the carrier of N) c=
+              [:e_Transitions(N) , e_Places(N):] by Th24;
+ then A3:(the entrance of N)~ \ id(the carrier of N) c=
+                    [:e_Places(N) , e_Transitions(N):] by A2,SYSREL:16;
+   (the escape of N) \ id(the carrier of N) c=
+              [:e_Transitions(N) , e_Places(N):] by Th24;
+ hence thesis by A1,A3,XBOOLE_1:13;
+end;
+
+definition let N;
+ redefine func e_Places(N);
+  synonym e_places(N);
+ redefine func e_Transitions(N);
+  synonym e_transitions(N);
+end;
+
+ definition let N;
+ canceled 2;
+
+  func e_pre(N) -> Relation equals
+  :Def15: (the entrance of N) \ id(the carrier of N);
+  correctness;
+  func e_post(N) -> Relation equals
+  :Def16: (the escape of N) \ id(the carrier of N);
+  correctness;
+ end;
+
+canceled 2;
+
+theorem
+   e_pre(N) c= [:e_transitions(N),e_places(N):] &
+         e_post(N) c= [:e_transitions(N),e_places(N):]
+proof
+   (the entrance of N) \ id(the carrier of N) c=
+                             [:e_transitions(N),e_places(N):] &
+        (the escape of N) \ id(the carrier of N) c=
+                             [:e_transitions(N),e_places(N):] by Th24;
+ hence thesis by Def15,Def16;
+end;
+
+ definition let N;
+  func e_shore(N) -> set equals
+  :Def17: the carrier of N;
+  correctness;
+  func e_prox(N) -> Relation equals
+  :Def18: ((the entrance of N) \/ (the escape of N))~;
+  correctness;
+  func e_flow(N) -> Relation equals
+  :Def19: ((the entrance of N)~ \/ (the escape of N)) \/
+                                            id(the carrier of N);
+  correctness;
+ end;
+
+theorem
+   e_prox(N) c= [:e_shore(N),e_shore(N):] &
+         e_flow(N) c= [:e_shore(N),e_shore(N):]
+proof
+ A1:the entrance of N c= [:the carrier of N,the carrier of N:] &
+       the escape of N c= [:the carrier of N,the carrier of N:] by Def2;
+ then (the entrance of N) \/ (the escape of N) c=
+                       [:the carrier of N,the carrier of N:] by XBOOLE_1:8;
+ then A2: ((the entrance of N) \/ (the escape of N))~ c=
+                      [:the carrier of N,the carrier of N:] by SYSREL:16;
+ A3:[:the carrier of N,the carrier of N:] = [:e_shore(N),the carrier of N:]
+ by Def17
+                .= [:e_shore(N),e_shore(N):] by Def17;
+   (the entrance of N)~ c= [:the carrier of N,the carrier of N:] by A1,SYSREL:
+16;
+ then A4: (the entrance of N)~ \/ (the escape of N) c=
+              [:the carrier of N,the carrier of N:] by A1,XBOOLE_1:8;
+   id(the carrier of N) c= [:the carrier of N,the carrier of N:]
+ by RELSET_1:28;
+  then ((the entrance of N)~ \/ (the escape of N)) \/ id(the carrier of
+N) c=
+                                 [:e_shore(N),e_shore(N):] by A3,A4,XBOOLE_1:8;
+ hence thesis by A2,A3,Def18,Def19;
+end;
+
+theorem
+   (e_prox(N)) * (e_prox(N)) = e_prox(N) &
+          (e_prox(N) \ id(e_shore(N))) * e_prox(N) = {} &
+            (e_prox(N) \/ (e_prox(N))~) \/ id(e_shore(N)) =
+              e_flow(N) \/ (e_flow(N))~
+proof
+ set R = the entrance of N;
+ set S = the escape of N;
+ set T = id(the carrier of N);
+ A1:(e_prox(N)) * (e_prox(N)) = e_prox(N)
+ proof
+    (e_prox(N)) * (e_prox(N)) = (e_prox(N)) * (R \/ S)~ by Def18
+              .= ((R \/ S)~) * ((R \/ S)~) by Def18
+              .= ((R \/ S) * (R \/ S))~ by RELAT_1:54
+              .= (((R \/ S) * R) \/ ((R \/ S) * S))~ by SYSREL:20
+              .= (((R * R) \/ (S * R)) \/ ((R \/ S) * S))~ by SYSREL:20
+              .= (((R * R) \/ (S * R)) \/ ((R * S) \/ (S * S)))~ by SYSREL:20
+              .= ((R \/ (S * R)) \/ ((R * S) \/ (S * S) ) )~ by Def2
+              .= ((R \/ S) \/ ((R * S) \/ (S * S)))~ by Def2
+              .= ((R \/ S) \/ (R \/ (S * S)))~ by Def2
+              .= ((R \/ S) \/ (R \/ S))~ by Def2
+              .= e_prox(N) by Def18;
+  hence thesis;
+ end;
+ A2:(e_prox(N) \ id(e_shore(N))) * e_prox(N) = {}
+ proof
+   (e_prox(N) \ id(e_shore(N))) * e_prox(N) =
+          (e_prox(N) \ T) * e_prox(N) by Def17
+       .= (((R \/ S)~) \ T) * e_prox(N) by Def18
+       .= (((R \/ S)~) \ T) * ((R \/ S)~) by Def18
+       .= ((R~ \/ S~) \ T) * ((R \/ S)~) by RELAT_1:40
+       .= ((R~ \ T) \/ (S~ \ T)) * ((R \/ S)~) by XBOOLE_1:42
+       .= ((R~ \ T) \/ (S~ \ T)) * (R~ \/ S~) by RELAT_1:40
+       .= (((R~ \ T) \/ (S~ \ T)) * R~) \/
+             (((R~ \ T) \/ (S~ \ T)) * S~) by SYSREL:20
+       .= (((R~ \ T) * R~) \/ ((S~ \ T) * R~)) \/
+             (((R~ \ T) \/ (S~ \ T)) * S~) by SYSREL:20
+       .= (((R~ \ T) * R~) \/ ((S~ \ T) * R~)) \/
+            (((R~ \ T) * S~) \/ ((S~ \ T) * S~)) by SYSREL:20
+       .= (((R~ \ T~) * R~) \/ ((S~ \ T) * R~)) \/
+            (((R~ \ T) * S~) \/ ((S~ \ T) * S~)) by RELAT_1:72
+       .= (((R~ \ T~) * R~) \/ ((S~ \ T~) * R~)) \/
+            (((R~ \ T) * S~) \/ ((S~ \ T) * S~)) by RELAT_1:72
+       .= (((R~ \ T~) * R~) \/ ((S~ \ T~) * R~)) \/
+            (((R~ \ T~) * S~) \/ ((S~ \ T) * S~)) by RELAT_1:72
+       .= (((R~ \ T~) * R~) \/ ((S~ \ T~) * R~)) \/
+            (((R~ \ T~) * S~) \/ ((S~ \ T~) * S~)) by RELAT_1:72
+       .= (((R \ T)~ * R~) \/ ((S~ \ T~) * R~)) \/
+            (((R~ \ T~) * S~) \/ ((S~ \ T~) * S~)) by RELAT_1:41
+       .= (((R \ T)~ * R~) \/ ((S \ T)~ * R~)) \/
+           (((R~ \ T~) * S~) \/ ((S~ \ T~) * S~)) by RELAT_1:41
+       .= (((R \ T)~ * R~) \/ ((S \ T)~ * R~)) \/
+            (((R \ T)~ * S~) \/ ((S~ \ T~) * S~)) by RELAT_1:41
+       .= (((R \ T)~ * R~) \/ ((S \ T)~ * R~)) \/
+           (((R \ T)~ * S~) \/ ((S \ T)~ * S~)) by RELAT_1:41
+       .= ((R * (R \ T))~ \/ ((S \ T)~ * R~)) \/
+           (((R \ T)~ * S~) \/ ((S \ T)~ * S~)) by RELAT_1:54
+       .= ((R * (R \ T))~ \/ (R * (S \ T))~) \/
+           (((R \ T)~ * S~) \/ ((S \ T)~ * S~)) by RELAT_1:54
+       .= ((R * (R \ T))~ \/ (R * (S \ T))~) \/
+           ((S *(R \ T))~ \/ ((S \ T)~ * S~)) by RELAT_1:54
+       .= ((R * (R \ T))~ \/ (R * (S \ T))~) \/
+            ((S * (R \ T))~ \/ (S * (S \ T))~) by RELAT_1:54
+       .= ((({})~) \/ (R * (S \ T))~) \/
+            ((S * (R \ T))~ \/ (S * (S \ T))~) by Def3
+       .= ((({})~) \/ (R * (S \ T))~) \/
+           ((S * (R \ T))~ \/ ({})~) by Def3
+       .= (({})~ \/ ({})~) \/ ((S * (R \ T))~ \/ ({})~) by Th20
+       .= {} by Th20;
+  hence thesis;
+ end;
+   (e_prox(N) \/ (e_prox(N))~) \/ id(e_shore(N)) = e_flow(N) \/
+ (e_flow(N))~
+ proof
+    (e_prox(N) \/ (e_prox(N))~) \/ id(e_shore(N)) =
+            ((R \/ S)~ \/ (e_prox(N))~) \/ id(e_shore(N)) by Def18
+         .= ((R \/ S)~ \/ ((R \/ S)~)~) \/ id(e_shore(N)) by Def18
+         .= ((R \/ S)~ \/ (R \/ S)) \/ T by Def17
+         .= ((R~ \/ S~) \/ (S \/ R)) \/ T by RELAT_1:40
+         .= (((R~ \/ S~) \/ S) \/ R) \/ T by XBOOLE_1:4
+         .= ((R~ \/ (S~ \/ S)) \/ R) \/ T by XBOOLE_1:4
+         .= (R~ \/ ((S \/ S~) \/ R)) \/ T by XBOOLE_1:4
+         .= (R~ \/ (S \/ (S~ \/ R))) \/ T by XBOOLE_1:4
+         .= ((R~ \/ S) \/ (S~ \/ R)) \/ T by XBOOLE_1:4
+         .= ((R~ \/ S) \/ T) \/ ((S~ \/ R) \/ T) by XBOOLE_1:5
+         .= e_flow(N) \/ ((S~ \/ (R~)~) \/ T) by Def19
+         .= e_flow(N) \/ ((R~ \/ S)~ \/ T) by RELAT_1:40
+         .= e_flow(N) \/ ((R~ \/ S)~ \/ T~) by RELAT_1:72
+         .= e_flow(N) \/ ((R~ \/ S) \/ T)~ by RELAT_1:40
+         .= e_flow(N) \/ (e_flow(N))~ by Def19;
+  hence thesis;
+ end;
+ hence thesis by A1,A2;
+end;
+
+theorem Th31:
+ id((the carrier of N) \ rng(the escape of N)) *
+               ((the escape of N) \ id(the carrier of N)) =
+                    ((the escape of N) \ id(the carrier of N)) &
+     id((the carrier of N) \ rng(the entrance of N)) *
+               ((the entrance of N) \ id(the carrier of N)) =
+                    ((the entrance of N) \ id(the carrier of N))
+proof
+ A1:id((the carrier of N) \ rng(the escape of N)) *
+     ((the escape of N) \ id(the carrier of N)) c=
+         ((the escape of N) \ id(the carrier of N)) by RELAT_1:76;
+A2: ((the escape of N) \ id(the carrier of N)) c=
+      id((the carrier of N) \ rng(the escape of N)) *
+          ((the escape of N) \ id(the carrier of N))
+ proof
+    for x,y holds [x,y] in ((the escape of N) \ id(the carrier of N))
+   implies [x,y] in (id((the carrier of N) \ rng(the escape of N)) *
+                         ((the escape of N) \ id(the carrier of N)))
+  proof
+   let x,y;
+   assume A3:[x,y] in ((the escape of N) \ id(the carrier of N));
+   then [x,y] in the escape of N by XBOOLE_0:def 4;
+   then A4:x in dom(the escape of N) & dom(the escape of N) c= the carrier of N
+ by Th19,RELAT_1:def 4;
+     not x in rng(the escape of N)
+   proof
+    assume x in rng(the escape of N);
+    then consider z such that A5:[z,x] in the escape of N by RELAT_1:def 5;
+      (the escape of N) *
+    ((the escape of N) \ id(the carrier of N)) <> {} by A3,A5,RELAT_1:def 8;
+    hence thesis by Def3;
+   end;
+   then x in ((the carrier of N) \ rng(the escape of N)) by A4,XBOOLE_0:def 4;
+   then [x,x] in id((the carrier of N) \ rng(the escape of N))
+ by RELAT_1:def 10;
+   hence thesis by A3,RELAT_1:def 8;
+  end;
+  hence thesis by RELAT_1:def 3;
+ end;
+
+ A6:id((the carrier of N) \ rng(the entrance of N)) *
+     ((the entrance of N) \ id(the carrier of N)) c=
+         ((the entrance of N) \ id(the carrier of N)) by RELAT_1:76;
+   ((the entrance of N) \ id(the carrier of N)) c=
+      id((the carrier of N) \ rng(the entrance of N)) *
+          ((the entrance of N) \ id(the carrier of N))
+ proof
+    for x,y holds [x,y] in ((the entrance of N) \ id(the carrier of N))
+   implies [x,y] in (id((the carrier of N) \ rng(the entrance of N)) *
+                         ((the entrance of N) \ id(the carrier of N)))
+  proof
+   let x,y;
+   assume A7:[x,y] in ((the entrance of N) \ id(the carrier of N));
+   then [x,y] in the entrance of N by XBOOLE_0:def 4;
+   then A8:x in dom(the entrance of N) & dom(the entrance of N) c= the carrier
+of N
+ by Th19,RELAT_1:def 4;
+     not x in rng(the entrance of N)
+   proof
+    assume x in rng(the entrance of N);
+    then consider z such that A9:[z,x] in the entrance of N by RELAT_1:def 5;
+      (the entrance of N) *
+    ((the entrance of N) \ id(the carrier of N)) <> {}
+      by A7,A9,RELAT_1:def 8;
+    hence thesis by Def3;
+   end;
+   then x in ((the carrier of N) \ rng(the entrance of N)) by A8,XBOOLE_0:def 4
+;
+   then [x,x] in id((the carrier of N) \ rng(the entrance of N))
+ by RELAT_1:def 10;
+   hence thesis by A7,RELAT_1:def 8;
+  end;
+  hence thesis by RELAT_1:def 3;
+ end;
+ hence thesis by A1,A2,A6,XBOOLE_0:def 10;
+end;
+
+theorem
+Th32:((the escape of N) \ id(the carrier of N)) *
+      ((the escape of N) \ id(the carrier of N)) = {} &
+     ((the entrance of N) \ id(the carrier of N)) *
+      ((the entrance of N) \ id(the carrier of N)) = {} &
+     ((the escape of N) \ id(the carrier of N)) *
+      ((the entrance of N) \ id(the carrier of N)) = {} &
+     ((the entrance of N) \ id(the carrier of N)) *
+      ((the escape of N) \ id(the carrier of N)) = {}
+proof
+   ((the escape of N) \ id(the carrier of N)) c= the escape of N
+ by XBOOLE_1:36;
+ then ((the escape of N) \ id(the carrier of N)) *
+   ((the escape of N) \ id(the carrier of N)) c=
+ (the escape of N) * ((the escape of N) \ id(the carrier of N))
+ by RELAT_1:49;
+ then A1: ((the escape of N) \ id(the carrier of N)) *
+   ((the escape of N) \ id(the carrier of N)) c= {} by Def3;
+   ((the entrance of N) \ id(the carrier of N)) c= the entrance of N
+ by XBOOLE_1:36;
+ then ((the entrance of N) \ id(the carrier of N)) *
+   ((the entrance of N) \ id(the carrier of N)) c=
+ (the entrance of N) * ((the entrance of N) \ id(the carrier of N))
+ by RELAT_1:49;
+ then A2: ((the entrance of N) \ id(the carrier of N)) *
+   ((the entrance of N) \ id(the carrier of N)) c= {} by Def3;
+   ((the escape of N) \ id(the carrier of N)) c= the escape of N
+ by XBOOLE_1:36;
+ then ((the escape of N) \ id(the carrier of N)) *
+   ((the entrance of N) \ id(the carrier of N)) c=
+ (the escape of N) * ((the entrance of N) \ id(the carrier of N))
+ by RELAT_1:49;
+ then A3: ((the escape of N) \ id(the carrier of N)) *
+   ((the entrance of N) \ id(the carrier of N)) c= {} by Th20;
+
+   ((the entrance of N) \ id(the carrier of N)) c= the entrance of N
+ by XBOOLE_1:36;
+ then ((the entrance of N) \ id(the carrier of N)) *
+   ((the escape of N) \ id(the carrier of N)) c=
+ (the entrance of N) * ((the escape of N) \ id(the carrier of N))
+ by RELAT_1:49;
+ then ((the entrance of N) \ id(the carrier of N)) *
+   ((the escape of N) \ id(the carrier of N)) c= {} by Th20;
+ hence thesis by A1,A2,A3,XBOOLE_1:3;
+end;
+
+theorem
+Th33:((the escape of N) \ id(the carrier of N))~ *
+      ((the escape of N) \ id(the carrier of N))~ = {} &
+     ((the entrance of N) \ id(the carrier of N))~ *
+      ((the entrance of N) \ id(the carrier of N))~ = {}
+proof
+ A1:((the escape of N) \ id(the carrier of N))~ *
+      ((the escape of N) \ id(the carrier of N))~ =
+ (((the escape of N) \ id(the carrier of N)) *
+      ((the escape of N) \ id(the carrier of N)))~ by RELAT_1:54
+                                                 .= {} by Th32,RELAT_1:66;
+   ((the entrance of N) \ id(the carrier of N))~ *
+      ((the entrance of N) \ id(the carrier of N))~ =
+ (((the entrance of N) \ id(the carrier of N)) *
+      ((the entrance of N) \ id(the carrier of N)))~ by RELAT_1:54
+                                                 .= {} by Th32,RELAT_1:66;
+ hence thesis by A1;
+end;
+
+theorem
+   ((the escape of N) \ id(the carrier of N))~ *
+      id((the carrier of N) \ rng(the escape of N))~ =
+               ((the escape of N) \ id(the carrier of N))~ &
+     ((the entrance of N) \ id(the carrier of N))~ *
+      id((the carrier of N) \ rng(the entrance of N))~ =
+               ((the entrance of N) \ id(the carrier of N))~
+proof
+ A1:((the escape of N) \ id(the carrier of N))~ *
+      id((the carrier of N) \ rng(the escape of N))~ =
+ ((id((the carrier of N) \ rng(the escape of N))) *
+      ((the escape of N) \ id(the carrier of N)))~ by RELAT_1:54
+      .= ((the escape of N) \ id(the carrier of N))~ by Th31;
+   ((the entrance of N) \ id(the carrier of N))~ *
+      id((the carrier of N) \ rng(the entrance of N))~ =
+ ((id((the carrier of N) \ rng(the entrance of N))) *
+      ((the entrance of N) \ id(the carrier of N)))~ by RELAT_1:54
+      .= ((the entrance of N) \ id(the carrier of N))~ by Th31;
+ hence thesis by A1;
+end;
+
+theorem
+Th35:((the escape of N) \ id(the carrier of N)) *
+      (id((the carrier of N) \ rng(the escape of N))) = {} &
+     ((the entrance of N) \ id(the carrier of N)) *
+      (id((the carrier of N) \ rng(the entrance of N))) = {}
+proof
+A1: for x,y holds not [x,y] in ((the escape of N) \
+  id(the carrier of N)) *
+                         (id((the carrier of N) \ rng(the escape of N)))
+ proof
+  let x,y;
+  assume [x,y] in ((the escape of N) \ id(the carrier of N)) *
+                       (id((the carrier of N) \ rng(the escape of N)));
+  then consider z such that A2:
+   [x,z] in ((the escape of N) \ id(the carrier of N)) &
+    [z,y] in (id((the carrier of N) \ rng(the escape of N)))
+      by RELAT_1:def 8;
+    [x,z] in the escape of N & z in (the carrier of N) \ rng(the escape of N)
+ by A2,RELAT_1:def 10,XBOOLE_0:def 4;
+  then [x,z] in the escape of N & not z in rng(the escape of N) by XBOOLE_0:def
+4;
+  hence thesis by RELAT_1:def 5;
+ end;
+
+   for x,y holds not [x,y] in
+ ((the entrance of N) \ id(the carrier of N)) *
+                   (id((the carrier of N) \ rng(the entrance of N)))
+ proof
+  let x,y;
+  assume [x,y] in ((the entrance of N) \ id(the carrier of N)) *
+                       (id((the carrier of N) \ rng(the entrance of N)));
+  then consider z such that A3:
+   [x,z] in ((the entrance of N) \ id(the carrier of N)) &
+ [z,y] in
+ (id((the carrier of N) \ rng(the entrance of N))) by RELAT_1:def 8;
+    [x,z] in the entrance of N & z in (the carrier of N) \ rng(the entrance of
+N)
+ by A3,RELAT_1:def 10,XBOOLE_0:def 4;
+ then [x,z] in the entrance of N & not z in rng(the entrance of N) by XBOOLE_0:
+def 4;
+  hence thesis by RELAT_1:def 5;
+ end;
+ hence thesis by A1,RELAT_1:56;
+end;
+
+theorem
+Th36:id((the carrier of N) \ rng(the escape of N)) *
+               ((the escape of N) \ id(the carrier of N))~ = {} &
+     id((the carrier of N) \ rng(the entrance of N)) *
+               ((the entrance of N) \ id(the carrier of N))~ = {}
+proof
+ A1:id((the carrier of N) \ rng(the escape of N)) *
+   ((the escape of N) \ id(the carrier of N))~ =
+ (id((the carrier of N) \ rng(the escape of N)))~ *
+   ((the escape of N) \ id(the carrier of N))~ by RELAT_1:72
+ .= (((the escape of N) \ id(the carrier of N)) *
+      (id((the carrier of N) \ rng(the escape of N))))~ by RELAT_1:54
+ .= {} by Th35,RELAT_1:66;
+   id((the carrier of N) \ rng(the entrance of N)) *
+   ((the entrance of N) \ id(the carrier of N))~ =
+ (id((the carrier of N) \ rng(the entrance of N)))~ *
+   ((the entrance of N) \ id(the carrier of N))~ by RELAT_1:72
+ .= (((the entrance of N) \ id(the carrier of N)) *
+      (id((the carrier of N) \ rng(the entrance of N))))~ by RELAT_1:54
+ .= {} by Th35,RELAT_1:66;
+ hence thesis by A1;
+end;
+
+ definition let N;
+  redefine func e_shore(N);
+   synonym e_support(N);
+ end;
+
+ definition let N;
+ canceled;
+
+  func e_entrance(N) -> Relation equals
+  :Def21: (((the escape of N) \ id(the carrier of N))~) \/
+                id((the carrier of N) \ rng(the escape of N));
+  correctness;
+
+  func e_escape(N) -> Relation equals
+  :Def22: (((the entrance of N) \ id(the carrier of N))~) \/
+                id((the carrier of N) \ rng(the entrance of N));
+  correctness;
+ end;
+
+theorem
+   e_entrance(N) * e_entrance(N) = e_entrance(N) &
+      e_entrance(N) * e_escape(N) = e_entrance(N) &
+       e_escape(N) * e_entrance(N) = e_escape(N) &
+        e_escape(N) * e_escape(N) = e_escape(N)
+proof
+ set P = ((the escape of N) \ id(the carrier of N));
+ set Q = ((the entrance of N) \ id(the carrier of N));
+ set S = id((the carrier of N) \ rng(the entrance of N));
+ set T = id((the carrier of N) \ rng(the escape of N));
+ A1:e_entrance(N) * e_entrance(N) =
+    e_entrance(N) * ((((the escape of N) \ id(the carrier of N))~) \/
+               id((the carrier of N) \ rng(the escape of N))) by Def21
+   .= ((P~) \/ T) * ((P~) \/ T) by Def21
+   .= ((P~) * ((P~) \/ T)) \/ (T * ((P~) \/ T)) by SYSREL:20
+   .= (((P~) * (P~)) \/ ((P~) * T)) \/ (T * ((P~) \/ T)) by SYSREL:20
+   .= (((P~) * (P~)) \/ ((P~) * T)) \/ ((T * (P~)) \/ (T * T)) by SYSREL:20
+   .= (((P * P)~) \/ ((P~) * T)) \/ ((T * (P~)) \/ (T * T)) by RELAT_1:54
+   .= (((P * P)~) \/ ((P~) * (T~))) \/ ((T * (P~)) \/ (T * T)) by RELAT_1:72
+   .= (((P * P)~) \/ ((P~) * (T~))) \/ (((T~) * (P~)) \/ (T * T)) by RELAT_1:72
+   .= (((P * P)~) \/ ((P~) * (T~))) \/ (((T~) * (P~)) \/ T) by SYSREL:29
+   .= (((P * P)~) \/ ((T * P)~)) \/ (((T~) * (P~)) \/ T) by RELAT_1:54
+   .= (((P * P)~) \/ ((T * P)~)) \/ (((P * T)~) \/ T) by RELAT_1:54
+   .= (({}~) \/ ((T * P)~)) \/ (((P * T)~) \/ T) by Th32
+   .= (({}~) \/ (P~)) \/ (((P * T)~) \/ T) by Th31
+   .= ({} \/ (P~)) \/ ({} \/ T) by Th35
+   .= e_entrance(N) by Def21;
+ A2:e_entrance(N) * e_escape(N) =
+    e_entrance(N) * ((((the entrance of N) \ id(the carrier of N))~) \/
+              id((the carrier of N) \ rng(the entrance of N))) by Def22
+   .= ((P~) \/ T) * ((Q~) \/ S) by Def21
+   .= ((P~) * ((Q~) \/ S)) \/ (T * ((Q~) \/ S)) by SYSREL:20
+   .= (((P~) * (Q~)) \/ ((P~) * S)) \/ (T * ((Q~) \/ S)) by SYSREL:20
+   .= (((P~) * (Q~)) \/ ((P~) * S)) \/ ((T * (Q~)) \/ (T * S)) by SYSREL:20
+   .= (((Q * P)~) \/ ((P~) * S)) \/ ((T * (Q~)) \/ (T * S)) by RELAT_1:54
+   .= (((Q * P)~) \/ ((P~) * (S~))) \/ ((T * (Q~)) \/ (T * S)) by RELAT_1:72
+   .= (((Q * P)~) \/ ((P~) * (S~))) \/ (((T~) * (Q~)) \/ (T * S)) by RELAT_1:72
+   .= (((Q * P)~) \/ ((P~) * (S~))) \/ (((T~) * (Q~)) \/ (T * T)) by Th18
+   .= (((Q * P)~) \/ ((P~) * (S~))) \/ (((T~) * (Q~)) \/ T) by SYSREL:29
+   .= (((Q * P)~) \/ ((S * P)~)) \/ (((T~) * (Q~)) \/ T) by RELAT_1:54
+   .= (((Q * P)~) \/ ((S * P)~)) \/ (((Q * T)~) \/ T) by RELAT_1:54
+   .= (((Q * P)~) \/ ((T * P)~)) \/ (((Q * T)~) \/ T) by Th18
+   .= (((Q * P)~) \/ ((T * P)~)) \/ (((Q * S)~) \/ T) by Th18
+   .= (({}~) \/ ((T * P)~)) \/ (((Q * S)~) \/ T) by Th32
+   .= (({}~) \/ (P~)) \/ (((Q * S)~) \/ T) by Th31
+   .= ({} \/ (P~)) \/ ({} \/ T) by Th35
+   .= e_entrance(N) by Def21;
+ A3:e_escape(N) * e_entrance(N) =
+    e_escape(N) * ((((the escape of N) \ id(the carrier of N))~) \/
+                       id((the carrier of N) \ rng(the escape of N)))
+ by Def21
+   .= ((Q~) \/ S) * ((P~) \/ T) by Def22
+   .= ((Q~) * ((P~) \/ T)) \/ (S * ((P~) \/ T)) by SYSREL:20
+   .= (((Q~) * (P~)) \/ ((Q~) * T)) \/ (S * ((P~) \/ T)) by SYSREL:20
+   .= (((Q~) * (P~)) \/ ((Q~) * T)) \/ ((S * (P~)) \/ (S * T)) by SYSREL:20
+   .= (((P * Q)~) \/ ((Q~) * T)) \/ ((S * (P~)) \/ (S * T)) by RELAT_1:54
+   .= (((P * Q)~) \/ ((Q~) * (T~))) \/ ((S * (P~)) \/ (S * T)) by RELAT_1:72
+   .= (((P * Q)~) \/ ((Q~) * (T~))) \/ (((S~) * (P~)) \/ (S * T)) by RELAT_1:72
+   .= (((P * Q)~) \/ ((Q~) * (T~))) \/ (((S~) * (P~)) \/ (S * S)) by Th18
+   .= (((P * Q)~) \/ ((Q~) * (T~))) \/ (((S~) * (P~)) \/ S) by SYSREL:29
+   .= (((P * Q)~) \/ ((T * Q)~)) \/ (((S~) * (P~)) \/ S) by RELAT_1:54
+   .= (((P * Q)~) \/ ((T * Q)~)) \/ (((P * S)~) \/ S) by RELAT_1:54
+   .= (((P * Q)~) \/ ((S * Q)~)) \/ (((P * S)~) \/ S) by Th18
+   .= (((P * Q)~) \/ ((S * Q)~)) \/ (((P * T)~) \/ S) by Th18
+   .= (({}~) \/ ((S * Q)~)) \/ (((P * T)~) \/ S) by Th32
+   .= (({}~) \/ (Q~)) \/ (((P * T)~) \/ S) by Th31
+   .= ({} \/ (Q~)) \/ ({} \/ S) by Th35
+   .= e_escape(N) by Def22;
+     e_escape(N) * e_escape(N) =
+    e_escape(N) * ((((the entrance of N) \ id(the carrier of N))~) \/
+               id((the carrier of N) \ rng(the entrance of N))) by Def22
+   .= ((Q~) \/ S) * ((Q~) \/ S) by Def22
+   .= ((Q~) * ((Q~) \/ S)) \/ (S * ((Q~) \/ S)) by SYSREL:20
+   .= (((Q~) * (Q~)) \/ ((Q~) * S)) \/ (S * ((Q~) \/ S)) by SYSREL:20
+   .= (((Q~) * (Q~)) \/ ((Q~) * S)) \/ ((S * (Q~)) \/ (S * S)) by SYSREL:20
+   .= (((Q * Q)~) \/ ((Q~) * S)) \/ ((S * (Q~)) \/ (S * S)) by RELAT_1:54
+   .= (((Q * Q)~) \/ ((Q~) * (S~))) \/ ((S * (Q~)) \/ (S * S)) by RELAT_1:72
+   .= (((Q * Q)~) \/ ((Q~) * (S~))) \/ (((S~) * (Q~)) \/ (S * S)) by RELAT_1:72
+   .= (((Q * Q)~) \/ ((Q~) * (S~))) \/ (((S~) * (Q~)) \/ S) by SYSREL:29
+   .= (((Q * Q)~) \/ ((S * Q)~)) \/ (((S~) * (Q~)) \/ S) by RELAT_1:54
+   .= (((Q * Q)~) \/ ((S * Q)~)) \/ (((Q * S)~) \/ S) by RELAT_1:54
+   .= (({}~) \/ ((S * Q)~)) \/ (((Q * S)~) \/ S) by Th32
+   .= (({}~) \/ (Q~)) \/ (((Q * S)~) \/ S) by Th31
+   .= ({} \/ (Q~)) \/ ({} \/ S) by Th35
+   .= e_escape(N) by Def22;
+ hence thesis by A1,A2,A3;
+end;
+
+theorem
+   e_entrance(N) * (e_entrance(N) \ id(e_support(N))) = {} &
+      e_escape(N) * (e_escape(N) \ id(e_support(N))) = {}
+proof
+ set P = ((the escape of N) \ id(the carrier of N));
+ set Q = ((the entrance of N) \ id(the carrier of N));
+ set S = id((the carrier of N) \ rng(the entrance of N));
+ set T = id((the carrier of N) \ rng(the escape of N));
+ set R = id(the carrier of N);
+ A1:S c= R & T c= R
+ proof
+A2:  (the carrier of N) \ rng(the entrance of N) c= the carrier of N
+    by XBOOLE_1:36;
+    (the carrier of N) \ rng(the escape of N) c= the carrier of N by XBOOLE_1:
+36;
+  hence thesis by A2,SYSREL:33;
+ end;
+ A3:(P~) * ((P~) \ R) = {} & (Q~) * ((Q~) \ R) = {} &
+         T * ((P~) \ R) = {} & S * ((Q~) \ R) = {}
+ proof
+    (P~) \ R c= P~ by XBOOLE_1:36;
+  then (P~) * ((P~) \ R) c= (P~) * (P~) by RELAT_1:48;
+  then A4: (P~) * ((P~) \ R) c= {} by Th33;
+    (Q~) \ R c= Q~ by XBOOLE_1:36;
+  then (Q~) * ((Q~) \ R) c= (Q~) * (Q~) by RELAT_1:48;
+  then A5: (Q~) * ((Q~) \ R) c= {} by Th33;
+    (P~) \ R c= P~ by XBOOLE_1:36;
+  then T * ((P~) \ R) c= T * (P~) by RELAT_1:48;
+  then A6: T * ((P~) \ R) c= {} by Th36;
+    (Q~) \ R c= Q~ by XBOOLE_1:36;
+  then S * ((Q~) \ R) c= S * (Q~) by RELAT_1:48;
+  then S * ((Q~) \ R) c= {} by Th36;
+  hence thesis by A4,A5,A6,XBOOLE_1:3;
+ end;
+
+A7:e_entrance(N) * (e_entrance(N) \ id(e_support(N))) =
+   ((((the escape of N) \ id(the carrier of N))~) \/
+          id((the carrier of N) \ rng(the escape of N))) *
+            (e_entrance(N) \ id(e_support(N))) by Def21
+
+   .= ((((the escape of N) \ id(the carrier of N))~) \/
+          id((the carrier of N) \ rng(the escape of N))) *
+   (((((the escape of N) \ id(the carrier of N))~) \/
+          id((the carrier of N) \ rng(the escape of N))) \
+                             id(e_support(N))) by Def21
+   .= ((P~) \/ T) * (((P~) \/ T) \ R) by Def17
+  .= ((P~) \/ T) * (((P~) \ R) \/ (T \ R)) by XBOOLE_1:42
+  .= ((P~) \/ T) * (((P~) \ R) \/ {}) by A1,XBOOLE_1:37
+  .= {} \/ {} by A3,SYSREL:20
+  .= {};
+    e_escape(N) * (e_escape(N) \ id(e_support(N))) =
+   ((((the entrance of N) \ id(the carrier of N))~) \/
+          id((the carrier of N) \ rng(the entrance of N))) *
+            (e_escape N \ id(e_support N)) by Def22
+   .= ((((the entrance of N) \ id(the carrier of N))~) \/
+          id((the carrier of N) \ rng(the entrance of N))) *
+   (((((the entrance of N) \ id(the carrier of N))~) \/
+          id((the carrier of N) \ rng(the entrance of N))) \
+                             id(e_support N)) by Def22
+   .= ((Q~) \/ S) * (((Q~) \/ S) \ R) by Def17
+  .= ((Q~) \/ S) * (((Q~) \ R) \/ (S \ R)) by XBOOLE_1:42
+  .= ((Q~) \/ S) * (((Q~) \ R) \/ {}) by A1,XBOOLE_1:37
+  .= {} \/ {} by A3,SYSREL:20
+  .= {};
+ hence thesis by A7;
+end;
+
+ definition let N;
+  redefine func e_shore(N);
+   synonym e_stanchion(N);
+ end;
+
+ definition let N;
+ canceled;
+
+  func e_adjac(N) -> Relation equals
+  :Def24: (((the entrance of N) \/ (the escape of N)) \
+              id(the carrier of N)) \/
+               id((the carrier of N) \ rng(the entrance of N));
+  correctness;
+
+  redefine func e_flow(N);
+   synonym e_circulation(N);
+ end;
+
+theorem
+   e_adjac(N) c= [:e_stanchion(N),e_stanchion(N):] &
+         e_circulation(N) c= [:e_stanchion(N),e_stanchion(N):]
+proof
+ A1:the entrance of N c= [:the carrier of N,the carrier of N:] &
+       the escape of N c= [:the carrier of N,the carrier of N:] by Def2;
+ then A2:(the entrance of N) \/ (the escape of N) c=
+                               [:the carrier of N,the carrier of N:]
+ by XBOOLE_1:8;
+   ((the entrance of N) \/ (the escape of N)) \
+        id(the carrier of N) c= ((the entrance of N) \/
+ (the escape of N))
+ by XBOOLE_1:36;
+ then A3:((the entrance of N) \/ (the escape of N)) \
+   id(the carrier of N) c= [:the carrier of N,the carrier of N:]
+ by A2,XBOOLE_1:1;
+   (the carrier of N) \ rng(the entrance of N) c= the carrier of N by XBOOLE_1:
+36;
+ then id((the carrier of N) \ rng(the entrance of N)) c=
+   id(the carrier of N) &
+       id(the carrier of N) c= [:the carrier of N,the carrier of N:]
+ by RELSET_1:28,SYSREL:33;
+ then id((the carrier of N) \ rng(the entrance of N)) c=
+                    [:the carrier of N,the carrier of N:] by XBOOLE_1:1;
+ then A4: (((the entrance of N) \/ (the escape of N)) \
+       id(the carrier of N)) \/
+        id((the carrier of N) \ rng(the entrance of N)) c=
+           [:the carrier of N,the carrier of N:] by A3,XBOOLE_1:8;
+
+ A5:[:the carrier of N,the carrier of N:] = [:e_stanchion(N),the carrier of N:]
+ by Def17
+                            .= [:e_stanchion(N),e_stanchion(N):] by Def17;
+ A6:id(the carrier of N) c= [:the carrier of N,the carrier of N:]
+ by RELSET_1:28;
+   (the entrance of N)~ c= [:the carrier of N,the carrier of N:] by A1,SYSREL:
+16;
+ then (the entrance of N)~ \/ (the escape of N) c=
+                  [:the carrier of N,the carrier of N:] by A1,XBOOLE_1:8;
+ then ((the entrance of N)~ \/ (the escape of N)) \/ id(the carrier of N
+) c=
+                   [:e_stanchion(N),e_stanchion(N):] by A5,A6,XBOOLE_1:8;
+ hence thesis by A4,A5,Def19,Def24;
+end;
+
+theorem
+   (e_adjac(N)) * (e_adjac(N)) = e_adjac(N) &
+  (e_adjac(N) \ id(e_stanchion(N))) * e_adjac(N) = {} &
+   (e_adjac(N) \/ (e_adjac(N))~) \/ id(e_stanchion(N)) =
+     e_circulation(N) \/ (e_circulation(N))~
+proof
+ set P = the entrance of N;
+ set Q = the escape of N;
+ set R = id(the carrier of N);
+ set S = id((the carrier of N) \ rng(the entrance of N));
+ set T = id((the carrier of N) \ rng(the escape of N));
+ A1:S \ R = {}
+ proof
+    (the carrier of N) \ rng(the entrance of N) c= the carrier of N by XBOOLE_1
+:36;
+  then S c= R by SYSREL:33;
+  hence thesis by XBOOLE_1:37;
+ end;
+ A2: (P \ R) * (P \ R) = {} & (P \ R) * (Q \ R) = {} &
+     (Q \ R) * (P \ R) = {} & (Q \ R) * (Q \ R) = {}
+ proof
+    P \ R c= P by XBOOLE_1:36;
+  then (P \ R) * (P \ R) c= P * (P \ R) by RELAT_1:49;
+  then A3: (P \ R) * (P \ R) c= {} by Def3;
+
+    P \ R c= P by XBOOLE_1:36;
+  then (P \ R) * (Q \ R) c= P * (Q \ R) by RELAT_1:49;
+  then A4: (P \ R) * (Q \ R) c= {} by Th20;
+    Q \ R c= Q by XBOOLE_1:36;
+  then (Q \ R) * (Q \ R) c= Q * (Q \ R) by RELAT_1:49;
+  then A5: (Q \ R) * (Q \ R) c= {} by Def3;
+    Q \ R c= Q by XBOOLE_1:36;
+  then (Q \ R) * (P \ R) c= Q * (P \ R) by RELAT_1:49;
+  then (Q \ R) * (P \ R) c= {} by Th20;
+  hence thesis by A3,A4,A5,XBOOLE_1:3;
+ end;
+ A6:S c= R
+ proof
+    (the carrier of N) \ rng(the entrance of N) c= the carrier of N by XBOOLE_1
+:36;
+  hence thesis by SYSREL:33;
+ end;
+ A7:e_adjac(N) * e_adjac(N) =
+    e_adjac(N) * ((((the entrance of N) \/ (the escape of N)) \
+                         id(the carrier of N)) \/
+                id((the carrier of N) \ rng(the entrance of N))) by Def24
+    .= (((P \/ Q) \ R) \/ S) * (((P \/ Q) \ R) \/ S) by Def24
+   .= ((((P \/ Q) \ R) * (((P \/ Q) \ R) \/ S)) \/
+       (S * (((P \/ Q) \ R) \/ S))) by SYSREL:20
+   .= ((((P \/ Q) \ R) * ((P \/ Q) \ R)) \/
+         (((P \/ Q) \ R) * S)) \/
+           (S * (((P \/ Q) \ R) \/ S)) by SYSREL:20
+   .= ((((P \/ Q) \ R) * ((P \/ Q) \ R)) \/
+         (((P \/ Q) \ R) * S)) \/
+           ((S * ((P \/ Q) \ R)) \/ (S * S)) by SYSREL:20
+   .= ((((P \ R) \/ (Q \ R)) * ((P \/ Q) \ R)) \/
+         (((P \/ Q) \ R) * S)) \/
+           ((S * ((P \/ Q) \ R)) \/ (S * S)) by XBOOLE_1:42
+   .= ((((P \ R) \/ (Q \ R)) * ((P \ R) \/ (Q \ R))) \/
+         (((P \/ Q) \ R) * S)) \/
+           ((S * ((P \/ Q) \ R)) \/ (S * S)) by XBOOLE_1:42
+   .= ((((P \ R) \/ (Q \ R)) * ((P \ R) \/ (Q \ R))) \/
+         (((P \ R) \/ (Q \ R)) * S)) \/
+           ((S * ((P \/ Q) \ R)) \/ (S * S)) by XBOOLE_1:42
+   .= ((((P \ R) \/ (Q \ R)) * ((P \ R) \/ (Q \ R))) \/
+         (((P \ R) \/ (Q \ R)) * S)) \/
+           ((S * ((P \ R) \/ (Q \ R))) \/ (S * S)) by XBOOLE_1:42
+   .= ((((P \ R) \/ (Q \ R)) * ((P \ R)) \/
+        (((P \ R) \/ (Q \ R)) * (Q \ R))) \/
+         (((P \ R) \/ (Q \ R)) * S)) \/
+           ((S * ((P \ R) \/ (Q \ R))) \/ (S * S)) by SYSREL:20
+   .= ((({} \/ {}) \/ (((P \ R) \/ (Q \ R)) * (Q \ R))) \/
+         (((P \ R) \/ (Q \ R)) * S)) \/
+           ((S * ((P \ R) \/ (Q \ R))) \/ (S * S)) by A2,SYSREL:20
+   .= {} \/ (((P \ R) \/ (Q \ R)) * S) \/
+           ((S * ((P \ R) \/ (Q \ R))) \/ (S * S)) by A2,SYSREL:20
+   .= (((P \ R) \/ (Q \ R)) * S) \/
+           ((S * ((P \ R) \/ (Q \ R))) \/ S) by SYSREL:29
+   .= (((P \ R) * S) \/ ((Q \ R) * S)) \/
+           ((S * ((P \ R) \/ (Q \ R))) \/ S) by SYSREL:20
+   .= (((P \ R) * S) \/ ((Q \ R) * S)) \/
+           ((S * (P \ R)) \/ (S * (Q \ R)) \/ S) by SYSREL:20
+   .= ({} \/ ((Q \ R) * S)) \/ ((S * (P \ R)) \/ (S * (Q \ R)) \/ S) by Th35
+   .= ((Q \ R) * T) \/ ((S * (P \ R)) \/ (S * (Q \ R)) \/ S) by Th18
+   .= {} \/ ((S * (P \ R)) \/ (S * (Q \ R)) \/ S) by Th35
+   .= ((P \ R) \/ (S * (Q \ R)) \/ S) by Th31
+   .= ((P \ R) \/ (T * (Q \ R)) \/ S) by Th18
+   .= ((P \ R) \/ (Q \ R)) \/ S by Th31
+   .= ((P \/ Q) \ R) \/ S by XBOOLE_1:42
+   .= e_adjac N by Def24;
+A8:(e_adjac(N) \ id(e_stanchion(N))) * e_adjac(N) =
+    ((((the entrance of N) \/ (the escape of N)) \
+     id(the carrier of N)) \/
+      id((the carrier of N) \ rng(the entrance of N)) \
+        id(e_stanchion(N))) * e_adjac(N) by Def24
+ .= ((((the entrance of N) \/ (the escape of N)) \
+     id(the carrier of N)) \/
+      id((the carrier of N) \ rng(the entrance of N)) \
+        id(e_stanchion(N))) *
+     ((((the entrance of N) \/ (the escape of N)) \
+      id(the carrier of N)) \/
+       id((the carrier of N) \ rng(the entrance of N))) by Def24
+ .= (((((P \/ Q) \ R) \/ S) \ R) * (((P \/ Q) \ R) \/ S)) by Def17
+   .= (((((P \/ Q) \ R) \/ S) \ R) * ((P \/ Q) \ R)) \/
+       (((((P \/ Q) \ R) \/ S) \ R) * S) by SYSREL:20
+   .= (((((P \ R) \/ (Q \ R)) \/ S) \ R) * ((P \/ Q) \ R)) \/
+       (((((P \/ Q) \ R) \/ S) \ R) * S) by XBOOLE_1:42
+   .= ((( (((P \ R) \/ (Q \ R)) \ R) \/ (S \ R)) *
+       ((P \/ Q) \ R)) \/ ((((P \/ Q) \ R) \/ S) \ R) * S) by XBOOLE_1:42
+   .= (((( ( ((P \ R) \ R) \/ ((Q \ R) \ R)) ) \/ (S \ R)) *
+       ((P \/ Q) \ R)) \/ ((((P \/ Q) \ R) \/ S) \ R) * S) by XBOOLE_1:42
+   .= (((((((P \ (R \/ R)) \/ ((Q \ R) \ R))) \/ (S \ R)) *
+       ((P \/ Q) \ R)) \/ ((((P \/ Q) \ R) \/ S) \ R) * S)) by XBOOLE_1:41
+   .= ((((((P \ R) \/ ((Q \ (R \/ R))) \/ (S \ R)) *
+       ((P \/ Q) \ R)) \/ ((((P \/ Q) \ R) \/ S) \ R) * S))) by XBOOLE_1:41
+   .= (((((P \ R) \/ (Q \ R)) \/ (S \ R)) *
+       ((P \ R) \/ (Q \ R)) \/
+           ((((P \/ Q) \ R) \/ S) \ R) * S)) by XBOOLE_1:42
+   .= (((((P \ R) \/ (Q \ R) \/ (S \ R)) *
+       ((P \ R) \/ (Q \ R))) \/
+           ((((P \ R) \/ (Q \ R)) \/ S) \ R) * S)) by XBOOLE_1:42
+   .= ((( ( ( ((P \ R) \/ (Q \ R)) \/ (S \ R) ) * (P \ R) ) \/
+          ( ( ((P \ R) \/ (Q \ R)) \/ (S \ R) ) * (Q \ R))) \/
+           ((((P \ R) \/ (Q \ R)) \/ S) \ R) * S)) by SYSREL:20
+   .= ((( ( ( ((P \ R) \/ (Q \ R)) \/ (S \ R) ) * (P \ R) ) \/
+       ( ( ((P \ R) \/ (Q \ R)) * (Q \ R) ) \/ ((S \ R) * (Q \ R)) ) ) \/
+           ((((P \ R) \/ (Q \ R)) \/ S) \ R) * S)) by SYSREL:20
+   .= ((( ( ( ((P \ R) \/ (Q \ R)) * (P \ R)) \/
+       ((S \ R) ) * (P \ R)) ) \/
+        ( ( ((P \ R) \/ (Q \ R)) * (Q \ R)) \/ ((S \ R) * (Q \ R)) ) ) \/
+           ((((P \ R) \/ (Q \ R)) \/ S) \ R) * S) by SYSREL:20
+   .= ((( ( ({} \/ {}) \/
+          ((S \ R) ) * (P \ R)) ) \/
+       ( ( ((P \ R) \/ (Q \ R)) * (Q \ R)) \/ ((S \ R) * (Q \ R)) ) ) \/
+           ((((P \ R) \/ (Q \ R)) \/ S) \ R) * S) by A2,SYSREL:20
+   .= ((( {} * (P \ R)) \/ ({}
+ * (Q \ R))) \/ ((((P \ R) \/ (Q \ R)) \/ S) \ R) * S)
+         by A1,A2,SYSREL:20
+   .= ( ( ((P \ R) \/ (Q \ R)) \ R) \/ (S \ R) ) * S by XBOOLE_1:42
+   .= ( ( ((P \ R) \ R) \/ ((Q \ R) \ R)) \/ (S \ R) ) * S by XBOOLE_1:42
+   .= ( ((P \ (R \/ R)) \/ ((Q \ R) \ R)) \/ (S \ R) ) * S by XBOOLE_1:41
+   .= ( ((P \ R) \/ (Q \ (R \/ R)) ) \/ (S \ R) ) * S by XBOOLE_1:41
+   .= ((P \ R) * S) \/ ((Q \ R) * S) by A1,SYSREL:20
+   .= {} \/ ((Q \ R) * S) by Th35
+   .= {} \/ ((Q \ R) * T) by Th18
+   .= {} by Th35;
+    (e_adjac N \/ (e_adjac N)~) =
+    e_adjac N \/ (((((the entrance of N) \/ (the escape of N)) \
+      id(the carrier of N)) \/
+        id((the carrier of N) \ rng(the entrance of N)))~) by Def24
+    .= (((P \/ Q) \ R) \/ S) \/ ((((P \/ Q) \ R) \/ S)~) by Def24
+   .= (((P \/ Q) \ R) \/ S) \/ ( (((P \/ Q) \ R)~) \/ (S~)) by RELAT_1:40
+   .= (((P \/ Q) \ R) \/ S) \/ ( ( ((P \/ Q) \ R)~) \/ S) by RELAT_1:72
+   .= (((P \/ Q) \ R) \/ ( ((P \/ Q) \ R)~ ) ) \/ S by XBOOLE_1:5
+   .= (((P \/ Q) \ R) \/ ( ((P \/ Q)~) \ (R~) )) \/ S by RELAT_1:41
+   .= (((P \/ Q) \ R) \/ (((P \/ Q)~) \ R)) \/ S by RELAT_1:72
+   .= (((P \/ Q) \/ ((P \/ Q)~)) \ R) \/ S by XBOOLE_1:42;
+   then (e_adjac(N) \/ (e_adjac(N))~) \/ id(e_stanchion(N)) =
+((((P \/ Q) \/ ((P \/ Q)~)) \ R) \/ S) \/ R by Def17
+   .= (((P \/ Q) \/ ((P \/ Q)~)) \ R) \/ (S \/ R) by XBOOLE_1:4
+   .= (((P \/ Q) \/ ((P \/ Q)~)) \ R) \/ R by A6,XBOOLE_1:12
+   .= (((P~ \/ (Q~)) \/ (P \/ Q)) \ R) \/ R by RELAT_1:40
+   .= (P~ \/ ((Q \/ P) \/ (Q~)) \ R) \/ R by XBOOLE_1:4
+   .= (P~ \/ (Q \/ (P \/ (Q~))) \ R) \/ R by XBOOLE_1:4
+   .= ( ( (P~ \/ Q) \/ (P \/ (Q~)) ) \ R) \/ R by XBOOLE_1:4
+   .= ( (P~ \/ Q) \/ (P \/ (Q~)) ) \/ R by XBOOLE_1:39
+   .= ( (P~ \/ Q) \/ R) \/ ((P \/ (Q~)) \/ R) by XBOOLE_1:5
+   .= e_circulation N \/ ((((P \/ (Q~))~)~) \/ R) by Def19
+   .= e_circulation N \/ (((P~ \/ ((Q~)~))~) \/ R) by RELAT_1:40
+   .= e_circulation N \/ (((P~ \/ Q)~) \/ (R~)) by RELAT_1:72
+   .= e_circulation N \/ ( ( (P~ \/ Q) \/ R)~) by RELAT_1:40
+   .= e_circulation N \/ (e_circulation N)~ by Def19;
+  hence thesis by A7,A8;
+ end;
+
+definition let N be e_net;
+ redefine func e_Places N;
+  synonym s_transitions N;
+ redefine func e_Transitions N;
+  synonym s_places N;
+ redefine func e_shore N;
+  synonym s_carrier N;
+ redefine func e_entrance N;
+  synonym s_enter N;
+ redefine func e_escape N;
+  synonym s_exit N;
+ redefine func e_adjac N;
+  synonym s_prox N;
+end;
+
+ reserve N for e_net;
+
+theorem
+Th41:((the entrance of N) \ id(the carrier of N))~ c=
+                             [:e_Places(N),e_Transitions(N):] &
+        ((the escape of N) \ id(the carrier of N))~ c=
+                             [:e_Places(N),e_Transitions(N):]
+proof
+   (the entrance of N) \ id(the carrier of N) c=
+                    [:e_Transitions(N),e_Places(N):] &
+        (the escape of N) \ id(the carrier of N) c=
+                             [:e_Transitions(N),e_Places(N):] by Th24;
+ hence thesis by SYSREL:16;
+end;
+
+ definition let N be G_Net;
+  func s_pre(N) -> Relation equals
+  :Def28: ((the escape of N) \ id(the carrier of N))~;
+  coherence;
+  func s_post(N) -> Relation equals
+  :Def29: ((the entrance of N) \ id(the carrier of N))~;
+  coherence;
+ end;
+
+theorem
+   s_post(N) c= [:s_transitions(N),s_places(N):] &
+         s_pre(N) c= [:s_transitions(N),s_places(N):]
+proof
+   ((the entrance of N) \ id(the carrier of N))~ c=
+      [:s_transitions(N),s_places(N):] &
+ ((the escape of N) \ id(the carrier of N))~ c=
+        [:s_transitions(N),s_places(N):] by Th41;
+ hence thesis by Def28,Def29;
+end;

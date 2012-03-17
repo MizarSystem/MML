@@ -1,0 +1,625 @@
+:: Homomorphisms of Order Sorted Algebras
+::  by Josef Urban
+::
+:: Received September 19, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_1, MSUALG_1, PBOOLE, PRALG_1, FUNCT_1, RELAT_1, BOOLE,
+      ZF_REFLE, CARD_3, QC_LANG1, TDGROUP, FINSEQ_1, FINSEQ_4, ALG_1, SEQM_3,
+      GROUP_6, MSUALG_2, UNIALG_2, MSUALG_3, OSALG_1, ORDERS_1, OSALG_2,
+      OSALG_3;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NAT_1, RELAT_1, RELSET_1, FUNCT_1,
+      FUNCT_2, FINSEQ_1, CARD_3, FINSEQ_4, STRUCT_0, ORDERS_1, PRALG_1,
+      MSUALG_1, MSUALG_2, YELLOW18, OSALG_1, OSALG_2, MSUALG_3;
+ constructors ORDERS_3, FINSEQ_4, OSALG_2, MSUALG_3, YELLOW18, MEMBERED;
+ clusters DTCONSTR, FINSEQ_1, MSAFREE, MSUALG_1, ORDERS_3, OSALG_1, PRALG_1,
+      RELSET_1, STRUCT_0, MSUALG_9, PARTFUN1;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, OSALG_1;
+ theorems XBOOLE_1, FUNCT_1, FUNCT_2, FINSEQ_1, PBOOLE, CARD_3, MSUALG_1,
+      ZFMISC_1, MSUALG_9, FINSEQ_3, FINSEQ_4, MSUALG_2, TARSKI, RELAT_1,
+      RELSET_1, OSALG_1, OSALG_2, MSUALG_3, MSAFREE3;
+
+begin
+
+reserve R for non empty Poset,
+        S1 for OrderSortedSign;
+
+definition let R;
+  let F be ManySortedFunction of the carrier of R;
+  attr F is order-sorted means :Def1:
+  for s1,s2 being Element of R st s1 <= s2 holds
+    for a1 being set st a1 in dom (F.s1) holds
+    a1 in dom (F.s2) &
+    (F.s1).a1 = (F.s2).a1;
+end;
+
+:: maybe later cluster 1-1 order-sorted (when clusterable)
+:: REVISE the prf of cluster in MSUALG_3
+canceled;
+
+theorem Th2:
+  for F being ManySortedFunction of the carrier of R st
+  F is order-sorted
+  for s1,s2 being Element of R st s1 <= s2 holds
+  dom (F.s1) c= dom (F.s2) & F.s1 c= F.s2
+proof
+  let F be ManySortedFunction of the carrier of R such that A1:
+  F is order-sorted;
+  let s1,s2 be Element of R such that A2: s1 <= s2;
+  thus dom (F.s1) c= dom (F.s2)
+  proof
+    let x be set such that A3: x in dom(F.s1);
+    thus x in dom (F.s2) by A1,A2,A3,Def1;
+  end;
+    for a,b being set holds [a,b] in F.s1 implies [a,b] in F.s2
+  proof
+    let y,z be set such that A4: [y,z] in F.s1;
+      y in dom (F.s1) by A4,RELAT_1:def 4;
+    then A5: y in dom (F.s2) & (F.s1).y = (F.s2).y by A1,A2,Def1;
+      (F.s1).y = z by A4,FUNCT_1:8;
+    hence [y,z] in F.s2 by A5,FUNCT_1:8;
+  end;
+  hence thesis by RELAT_1:def 3;
+end;
+
+theorem Th3:
+  for A be OrderSortedSet of R,
+  B be non-empty OrderSortedSet of R,
+  F be ManySortedFunction of A,B
+  holds F is order-sorted iff
+  for s1,s2 being Element of R st s1 <= s2 holds
+    for a1 being set st a1 in A.s1 holds
+    (F.s1).a1 = (F.s2).a1
+proof
+  let A be OrderSortedSet of R,
+      B be non-empty OrderSortedSet of R,
+      F be ManySortedFunction of A,B;
+  hereby
+    assume A1: F is order-sorted;
+    let s1,s2 be Element of R such that A2:s1 <= s2;
+    let a1 be set such that A3: a1 in A.s1;
+      a1 in dom (F.s1) by A3,FUNCT_2:def 1;
+    hence (F.s1).a1 = (F.s2).a1 by A1,A2,Def1;
+  end;
+  assume A4:
+    for s1,s2 being Element of R st s1 <= s2 holds
+    for a1 being set st a1 in A.s1 holds
+    (F.s1).a1 = (F.s2).a1;
+  let s1,s2 be Element of R such that A5:s1 <= s2;
+  let a1 be set such that A6: a1 in dom (F.s1);
+  A7: A.s1 c= A.s2 by A5,OSALG_1:def 18;
+    dom (F.s1) = A.s1 & dom (F.s2) = A.s2 by FUNCT_2:def 1;
+  hence a1 in dom (F.s2) by A6,A7;
+  thus (F.s1).a1 = (F.s2).a1 by A4,A5,A6;
+end;
+
+theorem
+    for F being ManySortedFunction of the carrier of R st
+  F is order-sorted
+  for w1,w2 being Element of (the carrier of R)* st w1 <= w2 holds
+  F#.w1 c= F#.w2
+proof
+  let F be ManySortedFunction of the carrier of R such that A1:
+  F is order-sorted;
+  let w1,w2 be Element of (the carrier of R)* such that A2: w1 <= w2;
+  A3: len w1 = len w2 &
+       for i being set st i in dom w1
+       for s1,s2 being Element of R st s1 = w1.i & s2 = w2.i
+       holds s1 <= s2 by A2,OSALG_1:def 7;
+  then A4: dom w1 = dom w2 by FINSEQ_3:31;
+  thus F#.w1 c= F#.w2
+  proof
+    let x be set such that A5: x in F#.w1;
+    set a = F#.w1, b = F#.w2;
+    A6: a = product(F*w1) & b = product(F*w2) by MSUALG_1:def 3;
+    then consider g being Function such that
+    A7: x = g & dom g = dom (F*w1) and
+    A8: for y being set st y in dom (F*w1)
+         holds g.y in (F*w1).y by A5,CARD_3:def 5;
+      w1 is FinSequence of the carrier of R &
+          w2 is FinSequence of the carrier of R by FINSEQ_1:def 11;
+    then A9: rng w1 c= the carrier of R &
+         rng w2 c= the carrier of R by RELSET_1:12;
+      dom F = the carrier of R by PBOOLE:def 3;
+    then A10: dom (F*w1) = dom w1 & dom (F*w2) = dom w2 by A9,RELAT_1:46;
+      for z being set st z in dom (F*w2) holds g.z in (F*w2).z
+    proof let z be set such that A11: z in dom (F*w2);
+      A12: z in dom (F*w1) by A3,A10,A11,FINSEQ_3:31;
+      A13: g.z in (F*w1).z by A4,A8,A10,A11;
+        w1.z in rng w1 & w2.z in rng w2 by A4,A10,A11,FUNCT_1:12;
+      then reconsider s1 = w1.z, s2 = w2.z as Element of R by A9
+;
+      A14: (F*w1).z = F.(w1.z) & (F*w2).z = F.(w2.z) by A4,A10,A11,FUNCT_1:22;
+        s1 <= s2 by A2,A10,A12,OSALG_1:def 7;
+      then F.s1 c= F.s2 by A1,Th2;
+      hence g.z in (F*w2).z by A13,A14;
+    end;
+    hence x in F#.w2 by A4,A6,A7,A10,CARD_3:def 5;
+  end;
+end;
+
+theorem Th5:
+  for A being OrderSortedSet of R holds
+  id A is order-sorted
+proof
+  let A be OrderSortedSet of R;
+  set F = id A;
+  let s1,s2 be Element of R such that A1:s1 <= s2;
+  let a1 be set such that A2: a1 in dom (F.s1);
+  A3: (A.s1 = {} implies A.s1 = {}) &
+         (A.s2 = {} implies A.s2 = {});
+  then A4: dom (F.s1) = A.s1 by FUNCT_2:def 1;
+  A5: dom (F.s2) = A.s2 by A3,FUNCT_2:def 1;
+  A6: A.s1 c= A.s2 by A1,OSALG_1:def 18;
+  hence a1 in dom (F.s2) by A2,A4,A5;
+    (F.s1).a1 = (id (A.s1)).a1 by MSUALG_3:def 1 .= a1
+  by A2,FUNCT_1:35 .= (id (A.s2)).a1 by A2,A4,A6,FUNCT_1:35 .=
+  (F.s2).a1 by MSUALG_3:def 1;
+  hence thesis;
+end;
+
+definition let R; let A be OrderSortedSet of R;
+  cluster id A -> order-sorted;
+  coherence by Th5;
+end;
+
+theorem Th6:
+ for A be OrderSortedSet of R
+ for B,C be non-empty OrderSortedSet of R,
+  F be ManySortedFunction of A,B, G be ManySortedFunction of B,C holds
+  F is order-sorted & G is order-sorted implies
+  G**F is order-sorted
+proof
+  let A be OrderSortedSet of R,
+      B,C be non-empty OrderSortedSet of R,
+      F be ManySortedFunction of A,B, G be ManySortedFunction of B,C;
+  assume A1: F is order-sorted & G is order-sorted;
+    for s1,s2 being Element of R st s1 <= s2 holds
+    for a1 being set st a1 in A.s1 holds
+    ((G**F).s1).a1 = ((G**F).s2).a1
+  proof
+  let s1,s2 be Element of R such that A2: s1 <= s2;
+  let a1 be set such that A3: a1 in A.s1;
+  A4: A.s1 c= A.s2 by A2,OSALG_1:def 18;
+  A5: (F.s1).a1 = (F.s2).a1 by A1,A2,A3,Th3;
+    (F.s1).a1 in B.s1 by A3,FUNCT_2:7;
+  then A6: (G.s1).((F.s2).a1) = (G.s2).((F.s2).a1)
+  by A1,A2,A5,Th3;
+    ((G**F).s1).a1 = ((G.s1)*(F.s1)).a1 by MSUALG_3:2 .= (G.s1).((F.s2).a1) by
+A3,A5,FUNCT_2:21 .= ((G.s2)*(F.s2)).a1
+  by A3,A4,A6,FUNCT_2:21 .= ((G**F).s2).a1 by MSUALG_3:2;
+  hence thesis;
+  end;
+  hence thesis by Th3;
+end;
+
+theorem Th7:
+  for A,B being OrderSortedSet of R,
+  F being ManySortedFunction of A,B st F is "1-1" & F is "onto"
+  & F is order-sorted holds F"" is order-sorted
+proof
+  let A,B be OrderSortedSet of R;
+  let F be ManySortedFunction of A,B such that
+  A1: F is "1-1" & F is "onto" & F is order-sorted;
+  let s1,s2 be Element of R such that A2: s1 <= s2;
+  A3: B.s1 c= B.s2 & A.s1 c= A.s2 by A2,OSALG_1:def 18;
+    s1 in the carrier of R & s2 in the carrier of R;
+  then A4: s1 in dom F & s2 in dom F by PBOOLE:def 3;
+  let a1 be set such that A5:  a1 in dom (F"".s1);
+  A6: rng(F.s1) = B.s1 & rng (F.s2) = B.s2 by A1,MSUALG_3:def 3;
+  A7: F.s1 is one-to-one & F.s2 is one-to-one
+  by A1,A4,MSUALG_3:def 2;
+  then A8: (F.s1)" is Function of B.s1,A.s1 &
+       (F.s2)" is Function of B.s2,A.s2 by A6,FUNCT_2:31;
+  A9: F"".s1 = (F.s1)" & F"".s2 = (F.s2)" by A1,MSUALG_3:def 5;
+  A10: a1 in B.s1 by A5;
+  then A11: a1 in B.s2 & B.s2 <> {} by A3;
+  A12: ((F.s1)").a1 in rng ((F.s1)") by A5,A9,FUNCT_1:12;
+  A13: rng ((F.s1)") c= A.s1 by A8,RELSET_1:12;
+  then A14: ((F.s1)").a1 in A.s1 & A.s1 <> {} by A12;
+  hence a1 in dom (F"".s2) by A3,A11,FUNCT_2:def 1;
+  A15: dom (F.s1) = A.s1 & dom (F.s2) = A.s2 by A3,A10,FUNCT_2:def 1;
+  set c1 = ((F.s1)").a1, c2 = ((F.s2)").a1;
+  A16: c2 in dom (F.s2) & c1 in dom (F.s2) by A3,A8,A10,A14,A15,FUNCT_2:7;
+    (F.s2).c2 =
+  a1 by A3,A6,A7,A10,FUNCT_1:57 .= (F.s1).c1 by A5,A6,A7,FUNCT_1:57 .= (F.s2).
+c1
+  by A1,A2,A12,A13,A15,Def1;
+  hence thesis by A7,A9,A16,FUNCT_1:def 8;
+end;
+
+:: this could be done via by cluster, when non clusterable attrs removed
+theorem Th8:
+  for A being OrderSortedSet of R,
+  F being ManySortedFunction of the carrier of R st
+  F is order-sorted holds F.:.:A is OrderSortedSet of R
+proof
+  let A be OrderSortedSet of R;
+  let F be ManySortedFunction of the carrier of R such that
+  A1: F is order-sorted;
+  set C = F.:.:A;
+  reconsider C1 = C as ManySortedSet of R;
+    C1 is order-sorted
+  proof
+    let s1,s2 be Element of R such that A2: s1 <= s2;
+    A3: C1.s1 = (F.s1).:(A.s1) & C1.s2 = (F.s2).:(A.s2)
+    by MSUALG_3:def 6;
+      A.s1 c= A.s2 & F.s1 c= F.s2 by A1,A2,Th2,OSALG_1:def 18;
+    hence C1.s1 c= C1.s2 by A3,RELAT_1:158;
+  end;
+  hence thesis;
+end;
+
+definition let S1; let U1,U2 be OSAlgebra of S1;
+  pred U1,U2 are_os_isomorphic means :Def2:
+   ex F be ManySortedFunction of U1,U2 st
+   F is_isomorphism U1,U2 & F is order-sorted;
+end;
+
+theorem Th9:
+  for U1 being OSAlgebra of S1 holds U1,U1 are_os_isomorphic
+proof let U1 be OSAlgebra of S1;
+  take id (the Sorts of U1);
+    the Sorts of U1 is OrderSortedSet of S1 by OSALG_1:17;
+  hence thesis by Th5,MSUALG_3:16;
+ end;
+
+theorem Th10:
+ for U1,U2 being non-empty OSAlgebra of S1 holds
+ U1,U2 are_os_isomorphic implies U2,U1 are_os_isomorphic
+  proof let U1,U2 be non-empty OSAlgebra of S1;
+   assume U1,U2 are_os_isomorphic;
+   then consider F be ManySortedFunction of U1,U2 such that
+            A1: F is_isomorphism U1,U2 & F is order-sorted by Def2;
+   reconsider G = F"" as ManySortedFunction of U2,U1;
+   A2: G is_isomorphism U2,U1 by A1,MSUALG_3:14;
+   A3: the Sorts of U1 is OrderSortedSet of S1 &
+   the Sorts of U2 is OrderSortedSet of S1 by OSALG_1:17;
+     F is "onto" & F is "1-1" by A1,MSUALG_3:13;
+   then F"" is order-sorted by A1,A3,Th7;
+   hence thesis by A2,Def2;
+  end;
+
+definition let S1; let U1, U2 be OSAlgebra of S1;
+ redefine pred U1, U2 are_os_isomorphic;
+ reflexivity by Th9;
+end;
+
+definition let S1; let U1, U2 be non-empty OSAlgebra of S1;
+ redefine pred U1, U2 are_os_isomorphic;
+ symmetry by Th10;
+end;
+
+:: prove for order-sorted
+theorem
+  for U1,U2,U3 being non-empty OSAlgebra of S1 holds
+ U1,U2 are_os_isomorphic & U2,U3 are_os_isomorphic implies
+ U1,U3 are_os_isomorphic
+  proof let U1,U2,U3 be non-empty OSAlgebra of S1;
+   assume A1: U1,U2 are_os_isomorphic & U2,U3 are_os_isomorphic;
+   then consider F be ManySortedFunction of U1,U2 such that
+          A2: F is_isomorphism U1,U2 & F is order-sorted by Def2;
+   consider G be ManySortedFunction of U2,U3 such that
+          A3: G is_isomorphism U2,U3 & G is order-sorted by A1,Def2;
+   reconsider H = G**F as ManySortedFunction of U1,U3;
+   A4: the Sorts of U1 is non-empty OrderSortedSet of S1 &
+       the Sorts of U2 is non-empty OrderSortedSet of S1 &
+      the Sorts of U3 is non-empty OrderSortedSet of S1 by OSALG_1:17;
+   A5: H is_isomorphism U1,U3 by A2,A3,MSUALG_3:15;
+     H is order-sorted by A2,A3,A4,Th6;
+   hence thesis by A5,Def2;
+  end;
+
+:: again, should be done as cluster or redefine
+theorem Th12:
+  for U1,U2 being non-empty OSAlgebra of S1
+  for F being ManySortedFunction of U1,U2 st
+  F is order-sorted & F is_homomorphism U1,U2 holds
+  Image F is order-sorted
+proof
+  let U1,U2 be non-empty OSAlgebra of S1;
+  let F be ManySortedFunction of U1,U2 such that
+  A1: F is order-sorted & F is_homomorphism U1,U2;
+  reconsider O1 = the Sorts of U1
+  as OrderSortedSet of S1 by OSALG_1:17;
+    F.:.:O1 is OrderSortedSet of S1 by A1,Th8;
+  then the Sorts of Image F is OrderSortedSet of S1
+  by A1,MSUALG_3:def 14;
+  hence Image F is order-sorted by OSALG_1:17;
+end;
+
+theorem Th13:
+  for U1,U2 being non-empty OSAlgebra of S1
+  for F being ManySortedFunction of U1,U2 st F is order-sorted
+  for o1,o2 being OperSymbol of S1 st o1 <= o2
+  for x being Element of Args(o1,U1), x1 be Element of Args(o2,U1) st
+  x = x1 holds F # x = F # x1
+proof
+  let U1,U2 be non-empty OSAlgebra of S1;
+  let F be ManySortedFunction of U1,U2 such that A1: F is order-sorted;
+  let o1,o2 be OperSymbol of S1 such that A2:  o1 <= o2;
+  let x be Element of Args(o1,U1), x1 be Element of Args(o2,U1) such that
+  A3: x = x1;
+  A4: dom x = dom (the_arity_of o1) &
+         dom x1 = dom (the_arity_of o2) by MSUALG_3:6;
+  then A5: dom (F # x) = dom x by MSUALG_3:6;
+  A6: dom (F # x1) = dom x1 by A4,MSUALG_3:6;
+    for n being set st n in dom x holds (F # x).n = (F # x1).n
+  proof let n1 be set such that A7: n1 in dom x;
+    reconsider n2 = n1 as Nat by A7;
+    reconsider pi1 = (the_arity_of o1)/.n2,
+      pi2 = (the_arity_of o2)/.n2 as Element of S1;
+      rng (the_arity_of o1) c= the carrier of S1 by RELSET_1:12;
+    then rng (the_arity_of o1) c= dom (the Sorts of U1) by PBOOLE:def 3;
+    then A8: n2 in dom ((the Sorts of U1) * (the_arity_of o1))
+    by A4,A7,RELAT_1:46;
+      dom (F.pi1) = (the Sorts of U1).pi1 by FUNCT_2:def 1
+    .= (the Sorts of U1).((the_arity_of o1).n2) by A4,A7,FINSEQ_4:def 4
+    .= ((the Sorts of U1) * (the_arity_of o1)).n2 by A4,A7,FUNCT_1:23;
+    then A9: x1.n2 in dom (F.pi1) by A3,A8,MSUALG_3:6;
+    A10: the_arity_of o1 <= the_arity_of o2 &
+    the_result_sort_of o1 <= the_result_sort_of o2 by A2,OSALG_1:def 22;
+    then len (the_arity_of o1) = len (the_arity_of o2) by OSALG_1:def 7;
+    then dom (the_arity_of o1) = dom (the_arity_of o2) by FINSEQ_3:31;
+    then (the_arity_of o1)/.n2 = (the_arity_of o1).n2 &
+    (the_arity_of o2)/.n2 = (the_arity_of o2).n2 by A4,A7,FINSEQ_4:def 4;
+    then A11: pi1 <= pi2 by A4,A7,A10,OSALG_1:def 7;
+      (F # x).n2 = (F.((the_arity_of o1)/.n2)).(x1.n2) by A3,A7,MSUALG_3:def 8
+    .= (F.pi2).(x1.n2) by A1,A9,A11,Def1
+    .= (F # x1).n2 by A3,A7,MSUALG_3:def 8;
+    hence thesis;
+    end;
+  hence F # x = F # x1 by A3,A5,A6,FUNCT_1:9;
+end;
+
+theorem Th14:
+  for U1 being monotone non-empty OSAlgebra of S1,
+      U2 being non-empty OSAlgebra of S1
+  for F being ManySortedFunction of U1,U2 st
+  F is order-sorted & F is_homomorphism U1,U2 holds
+  Image F is order-sorted & Image F is monotone OSAlgebra of S1
+proof
+  let U1 be monotone non-empty OSAlgebra of S1,
+      U2 be non-empty OSAlgebra of S1;
+  let F be ManySortedFunction of U1,U2 such that
+  A1: F is order-sorted & F is_homomorphism U1,U2;
+  reconsider O1 = the Sorts of U1 as OrderSortedSet of S1 by OSALG_1:17;
+    F.:.:O1 is OrderSortedSet of S1 by A1,Th8;
+  then A2: the Sorts of Image F is OrderSortedSet of S1 by A1,MSUALG_3:def 14;
+  hence Image F is order-sorted by OSALG_1:17;
+  reconsider I = Image F as non-empty OSAlgebra of S1 by A2,OSALG_1:17;
+  consider G being ManySortedFunction of U1,I such that
+  A3: F = G & G is_epimorphism U1,I by A1,MSUALG_3:21;
+  A4: G is "onto" & G is order-sorted & G is_homomorphism U1,I
+  by A1,A3,MSUALG_3:def 10;
+    for o1,o2 being OperSymbol of S1 st o1 <= o2 holds Den(o1,I) c= Den(o2,I)
+  proof
+    let o1,o2 be OperSymbol of S1 such that A5:  o1 <= o2;
+    A6: (the_arity_of o1) <= (the_arity_of o2) &
+       the_result_sort_of o1 <= the_result_sort_of o2 by A5,OSALG_1:def 22;
+    A7: Args(o1,I) c= Args(o2,I) & Result(o1,I) c= Result(o2,I)
+    by A5,OSALG_1:26;
+    A8: Args(o1,U1) c= Args(o2,U1) & Result(o1,U1) c= Result(o2,U1)
+    by A5,OSALG_1:26;
+    A9: dom Den(o1,I) = Args(o1,I) &
+         dom Den(o2,I) = Args(o2,I) by FUNCT_2:def 1;
+    A10: Den(o2,U1)|Args(o1,U1) = Den(o1,U1) by A5,OSALG_1:def 23;
+      for a,b being set holds [a,b] in Den(o1,I) implies [a,b] in Den(o2,I)
+    proof
+      set s1 = the_result_sort_of o1, s2 = the_result_sort_of o2;
+      let a,b be set such that A11: [a,b] in Den(o1,I);
+      A12: a in Args(o1,I) & b in Result(o1,I) by A11,ZFMISC_1:106;
+      then consider y being Element of Args(o1,U1) such that
+      A13: G # y = a by A4,MSUALG_9:18;
+      set x = Den(o1,U1).y;
+        o1 in the OperSymbols of S1;
+      then A14: o1 in dom the ResultSort of S1 by FUNCT_2:def 1;
+      A15: Result(o1,U1)
+           = (O1 * (the ResultSort of S1)).o1 by MSUALG_1:def 10
+           .= O1.((the ResultSort of S1).o1) by A14,FUNCT_1:23
+           .= O1.s1 by MSUALG_1:def 7 .= dom (G.s1) by FUNCT_2:def 1;
+        (G.s1).x = Den(o1,I).a by A4,A13,MSUALG_3:def 9;
+      then A16: b = (G.s1).x by A11,FUNCT_1:8;
+      A17: x in dom (G.s2) & (G.s1).x = (G.s2).x by A1,A3,A6,A15,Def1;
+      reconsider y1 = y as Element of Args(o2,U1) by A8,TARSKI:def 3;
+      A18: G # y1 = G # y by A1,A3,A5,Th13;
+        Den(o2,U1).y = Den(o1,U1).y by A10,FUNCT_1:72;
+      then b = Den(o2,I).a by A4,A13,A16,A17,A18,MSUALG_3:def 9;
+      hence [a,b] in Den(o2,I) by A7,A9,A12,FUNCT_1:8;
+    end;
+    hence Den(o1,I) c= Den(o2,I) by RELAT_1:def 3;
+  end;
+  hence thesis by OSALG_1:27;
+end;
+
+theorem Th15:
+  for U1 being monotone OSAlgebra of S1,
+      U2 being OSSubAlgebra of U1 holds
+  U2 is monotone
+proof
+  let U1 be monotone OSAlgebra of S1,
+      U2 be OSSubAlgebra of U1;
+  let o1,o2 be OperSymbol of S1 such that A1: o1 <= o2;
+  A2: Den(o2,U1)|Args(o1,U1) = Den(o1,U1) by A1,OSALG_1:def 23;
+  A3: the Sorts of U2 is MSSubset of U1 &
+       for B be MSSubset of U1 st B = the Sorts of U2 holds
+  B is opers_closed & the Charact of U2 = Opers(U1,B) by MSUALG_2:def 10;
+    the Sorts of U2 is OrderSortedSet of S1 by OSALG_1:17;
+  then reconsider B = the Sorts of U2 as OSSubset of U1 by A3,OSALG_2:def 2;
+    B is opers_closed by MSUALG_2:def 10;
+  then A4: B is_closed_on o1 & B is_closed_on o2 by MSUALG_2:def 7;
+  A5: Den(o1,U2) = (the Charact of U2).o1 by MSUALG_1:def 11
+       .= Opers(U1,B).o1 by MSUALG_2:def 10 .= o1/.B by MSUALG_2:def 9
+       .= (Den(o1,U1)) | ((B# * the Arity of S1).o1) by A4,MSUALG_2:def 8
+       .= (Den(o1,U1)) | Args(o1,U2) by MSUALG_1:def 9;
+  A6: Den(o2,U2) = (the Charact of U2).o2 by MSUALG_1:def 11
+       .= Opers(U1,B).o2 by MSUALG_2:def 10 .= o2/.B by MSUALG_2:def 9
+       .= (Den(o2,U1)) | ((B# * the Arity of S1).o2) by A4,MSUALG_2:def 8
+       .= (Den(o2,U1)) | Args(o2,U2) by MSUALG_1:def 9;
+  A7: Args(o1,U2) c= Args(o2,U2) by A1,OSALG_1:26;
+  A8: Args(o1,U2) c= Args(o1,U1) by MSAFREE3:38;
+    Den(o1,U2) = Den(o2,U1)| ( Args(o1,U1) /\ Args(o1,U2)) by A2,A5,RELAT_1:100
+  .= Den(o2,U1) | Args(o1,U2) by A8,XBOOLE_1:28
+  .= Den(o2,U1) | ( Args(o2,U2) /\ Args(o1,U2) ) by A7,XBOOLE_1:28
+  .= Den(o2,U2) | Args(o1,U2) by A6,RELAT_1:100;
+  hence thesis;
+end;
+
+definition let S1;
+  let U1 be monotone OSAlgebra of S1;
+  cluster monotone OSSubAlgebra of U1;
+  existence
+  proof consider U2 being OSSubAlgebra of U1;
+    take U2;
+    thus thesis by Th15;
+  end;
+end;
+
+definition let S1;
+  let U1 be monotone OSAlgebra of S1;
+  cluster -> monotone OSSubAlgebra of U1;
+  coherence by Th15;
+end;
+
+theorem Th16:
+  for U1,U2 being non-empty OSAlgebra of S1
+  for F be ManySortedFunction of U1,U2 st
+  F is_homomorphism U1,U2 & F is order-sorted
+  ex G be ManySortedFunction of U1,Image F
+  st F = G & G is order-sorted & G is_epimorphism U1,Image F
+proof let U1,U2 be non-empty OSAlgebra of S1;
+   let F be ManySortedFunction of U1,U2;
+   assume A1: F is_homomorphism U1,U2 & F is order-sorted;
+   then consider G being ManySortedFunction of U1,Image F
+   such that A2: F = G & G is_epimorphism U1,Image F
+   by MSUALG_3:21;
+   take G;
+   thus thesis by A1,A2;
+end;
+
+theorem
+    for U1,U2 being non-empty OSAlgebra of S1
+  for F be ManySortedFunction of U1,U2 st
+  F is_homomorphism U1,U2 & F is order-sorted
+  ex F1 be ManySortedFunction of U1,Image F,
+    F2 be ManySortedFunction of Image F,U2 st
+     F1 is_epimorphism U1,Image F & F2 is_monomorphism Image F,U2 &
+     F = F2**F1 & F1 is order-sorted & F2 is order-sorted
+proof let U1,U2 be non-empty OSAlgebra of S1;
+  let F be ManySortedFunction of U1,U2;
+  assume A1: F is_homomorphism U1,U2 & F is order-sorted;
+  then consider F1 being ManySortedFunction of U1,Image F such that
+  A2: F1 = F & F1 is order-sorted & F1 is_epimorphism U1,Image F
+  by Th16;
+    for H be ManySortedFunction of Image F,Image F
+  holds H is ManySortedFunction of Image F,U2
+   proof
+    let H be ManySortedFunction of Image F,Image F;
+      for i be set st i in the carrier of S1 holds
+     H.i is Function of (the Sorts of Image F).i,(the Sorts of U2).i
+     proof
+      let i be set;
+      assume A3: i in the carrier of S1;
+      then reconsider h = H.i as
+      Function of (the Sorts of Image F).i,(the Sorts of Image F).i
+        by MSUALG_1:def 2;
+      reconsider f = F.i as
+      Function of (the Sorts of U1).i,(the Sorts of U2).i
+        by A3,MSUALG_1:def 2;
+        (the Sorts of U2).i = {} implies (the Sorts of U1).i = {}
+          by A3,PBOOLE:def 16;
+      then A4: dom f = (the Sorts of U1).i & rng f c= (the Sorts of U2).i
+          by FUNCT_2:def 1,RELSET_1:12;
+      A5: (the Sorts of Image F).i = {} implies (the Sorts of Image F).i = {};
+        the Sorts of Image F = F.:.:(the Sorts of U1) by A1,MSUALG_3:def 14;
+       then (the Sorts of Image F).i = f.:((the Sorts of U1).i) by A3,MSUALG_3:
+def 6
+                                  .= rng f by A4,RELAT_1:146;
+      then h is Function of (the Sorts of Image F).i,(the Sorts of U2).i
+          by A4,A5,FUNCT_2:9;
+      hence thesis;
+     end;
+    hence thesis by MSUALG_1:def 2;
+   end;
+  then reconsider F2 = id (the Sorts of Image F) as
+  ManySortedFunction of Image F,U2;
+  take F1,F2;
+  thus F1 is_epimorphism U1,Image F by A2;
+  thus F2 is_monomorphism Image F,U2 by MSUALG_3:22;
+  thus F = F2**F1 & F1 is order-sorted by A2,MSUALG_3:4;
+    Image F is order-sorted by A1,Th12;
+  then (the Sorts of Image F) is OrderSortedSet of S1 by OSALG_1:17;
+  hence F2 is order-sorted by Th5;
+ end;
+
+definition let S1;
+  let U1 be OSAlgebra of S1;
+  cluster MSAlgebra(# the Sorts of U1, the Charact of U1 #) -> order-sorted;
+  coherence
+  proof the Sorts of U1 is OrderSortedSet of S1 by OSALG_1:17;
+    hence thesis by OSALG_1:17;
+  end;
+end;
+
+:: very strange, the "strict" attribute is quite unfriendly
+:: could Grzegorz's suggestion for struct implementation fix this?
+:: hard to generalize to some useful scheme
+theorem
+    for U1 being OSAlgebra of S1 holds (U1 is monotone
+  iff MSAlgebra(# the Sorts of U1, the Charact of U1 #) is monotone)
+proof
+  let U1 be OSAlgebra of S1;
+  set U2 = MSAlgebra(# the Sorts of U1, the Charact of U1 #);
+  A1: now let o1 being OperSymbol of S1;
+    thus Den(o1,U1) = (the Charact of U2).o1 by MSUALG_1:def 11
+    .= Den(o1,U2) by MSUALG_1:def 11;
+    thus Args(o1,U1)
+    = ((the Sorts of U2)# * the Arity of S1).o1 by MSUALG_1:def 9
+    .= Args(o1,U2) by MSUALG_1:def 9;
+  end;
+  thus U1 is monotone implies U2 is monotone
+  proof assume A2: U1 is monotone;
+    let o1,o2 be OperSymbol of S1 such that A3: o1 <= o2;
+    A4: Den(o2,U1)|Args(o1,U1) = Den(o1,U1) by A2,A3,OSALG_1:def 23;
+    thus Den(o2,U2)|Args(o1,U2) = Den(o2,U1)|Args(o1,U2) by A1
+    .= Den(o1,U1) by A1,A4 .= Den(o1,U2) by A1;
+  end;
+  assume A5: U2 is monotone;
+  let o1,o2 be OperSymbol of S1 such that A6: o1 <= o2;
+    A7: Den(o2,U2)|Args(o1,U2) = Den(o1,U2) by A5,A6,OSALG_1:def 23;
+    thus Den(o2,U1)|Args(o1,U1) = Den(o2,U2)|Args(o1,U1) by A1
+    .= Den(o1,U2) by A1,A7 .= Den(o1,U1) by A1;
+end;
+
+:: proving the non strict version is painful, I'll do it only
+:: if it is necessary, see TWiki.StructureImplementation for some suggestions
+theorem
+    for U1,U2 being strict non-empty OSAlgebra of S1 st
+  U1,U2 are_os_isomorphic holds
+  U1 is monotone iff U2 is monotone
+proof
+  let U1,U2 be strict non-empty OSAlgebra of S1 such that
+  A1: U1,U2 are_os_isomorphic;
+  consider F be ManySortedFunction of U1,U2 such that
+  A2: F is_isomorphism U1,U2 & F is order-sorted by A1,Def2;
+  A3: F is "onto" & F is "1-1" by A2,MSUALG_3:13;
+  A4: F"" is_isomorphism U2,U1 by A2,MSUALG_3:14;
+  reconsider O1 = the Sorts of U1, O2 = the Sorts of U2 as
+  OrderSortedSet of S1 by OSALG_1:17;
+  reconsider F1 = F as ManySortedFunction of O1,O2;
+  A5: F1"" is order-sorted by A2,A3,Th7;
+  A6: F is_epimorphism U1,U2 by A2,MSUALG_3:def 12;
+  then A7: F is_homomorphism U1,U2 by MSUALG_3:def 10;
+  then A8: Image F = U2 by A6,MSUALG_3:19;
+  reconsider F2 = F1"" as ManySortedFunction of U2,U1;
+  A9: F2 is_epimorphism U2,U1 by A4,MSUALG_3:def 12;
+  then A10: F2 is_homomorphism U2,U1 by MSUALG_3:def 10;
+  then A11: Image F2 = U1 by A9,MSUALG_3:19;
+  thus U1 is monotone implies U2 is monotone by A2,A7,A8,Th14;
+  assume U2 is monotone;
+  hence U1 is monotone by A5,A10,A11,Th14;
+end; 
+

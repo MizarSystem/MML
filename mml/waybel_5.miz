@@ -1,0 +1,3445 @@
+:: The Equational Characterization of Continuous Lattices
+::  by Mariusz \.Zynel
+::
+:: Received October 25, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary WAYBEL_0, ORDINAL2, WAYBEL_3, FILTER_2, QUANTAL1, YELLOW_0,
+      LATTICE3, LATTICES, YELLOW_2, WAYBEL_1, YELLOW_1, PRE_TOPC, FUNCT_1,
+      RELAT_1, BHSP_3, PBOOLE, PRALG_1, FUNCOP_1, ZF_REFLE, FUNCT_6, CARD_3,
+      FINSEQ_4, BOOLE, ORDERS_1, TARSKI, YELLOW_6, CLASSES1, ZF_LANG, FUNCT_5,
+      FUNCT_2, FINSUB_1, FINSET_1, REALSET1, RELAT_2, LATTICE2, CAT_1, SGRAPH1,
+      MSUALG_3, SEQM_3, WAYBEL_5;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FINSET_1, FINSUB_1,
+      FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, FUNCT_5, FUNCT_6, FUNCOP_1,
+      STRUCT_0, ORDERS_1, LATTICE3, CARD_3, REALSET1, PBOOLE, PRALG_1, PRALG_2,
+      MSUALG_1, MSUALG_3, PRE_TOPC, PRE_CIRC, BORSUK_1, CLASSES1, CLASSES2,
+      GRCAT_1, YELLOW_0, YELLOW_1, YELLOW_2, WAYBEL_1, WAYBEL_0, WAYBEL_3,
+      YELLOW_6;
+ constructors FINSUB_1, LATTICE3, TOPS_2, PRE_CIRC, BORSUK_1, PRALG_2,
+      MSUALG_3, ORDERS_3, WAYBEL_1, WAYBEL_3, YELLOW_6, CLASSES1, GRCAT_1;
+ clusters STRUCT_0, FINSET_1, LATTICE3, ORDERS_1, PBOOLE, MSUALG_1, CIRCCOMB,
+      PRVECT_1, FRAENKEL, PRALG_1, YELLOW_0, YELLOW_2, WAYBEL_0, WAYBEL_3,
+      CLASSES2, YELLOW_6, CANTOR_1, FUNCT_2, FUNCOP_1, RELSET_1, SUBSET_1,
+      FUNCT_4, PARTFUN1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, LATTICE3;
+ theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, FUNCT_5, CARD_3, ORDERS_1,
+      LATTICE3, FUNCT_6, FUNCOP_1, FINSET_1, PBOOLE, PRALG_1, PRALG_2,
+      MSUALG_1, MSUALG_3, EXTENS_1, AUTALG_1, RELAT_1, UNIALG_1, REALSET1,
+      FINSUB_1, COMPTS_1, YELLOW_0, YELLOW_1, YELLOW_2, WAYBEL_1, WAYBEL_0,
+      WAYBEL_3, CLASSES2, YELLOW_6, CLASSES1, GRCAT_1, RELSET_1, XBOOLE_0,
+      XBOOLE_1, FUNCT_4;
+ schemes FUNCT_1, FUNCT_2, MSSUBFAM, YELLOW_2, COMPTS_1;
+
+begin  :: The Continuity of Lattices
+
+reserve x, y, i for set,
+        L for up-complete Semilattice;
+
+Lm1:  ::Theorem 2.1 (1) implies (2)
+  for L being continuous Semilattice
+  for x being Element of L
+    holds
+   waybelow x is Ideal of L & x <= sup waybelow x &
+     for I being Ideal of L st x <= sup I holds waybelow x c= I
+proof
+  let L be continuous Semilattice;
+  let x be Element of L;
+
+  thus waybelow x is Ideal of L;
+  thus x <= sup waybelow x by WAYBEL_3:def 5;
+
+  thus for I being Ideal of L st x <= sup I holds waybelow x c= I
+  proof
+    let I be Ideal of L;
+    assume
+  A1: x <= sup I;
+      waybelow x c= I
+    proof
+      let y be set;
+      assume y in waybelow x;
+      then y in {y' where y' is Element of L: y' << x} by WAYBEL_3:def 3;
+      then consider y' being Element of L such that
+    A2:  y = y' & y' << x;
+      thus y in I by A1,A2,WAYBEL_3:20;
+   end;
+   hence thesis;
+ end;
+end;
+
+Lm2:  ::Theorem 2.1 (2) implies (1)
+  (for x being Element of L holds
+    waybelow x is Ideal of L & x <= sup waybelow x &
+      for I being Ideal of L st x <= sup I holds waybelow x c= I)
+        implies
+       L is continuous
+proof
+  assume
+A1: for x being Element of L holds
+      waybelow x is Ideal of L & x <= sup waybelow x &
+        for I being Ideal of L st x <= sup I holds waybelow x c= I;
+
+    now
+    let x be Element of L;
+  A2:  x <= sup waybelow x by A1;
+      waybelow x is non empty directed by A1;
+  then A3:  ex_sup_of waybelow x,L by WAYBEL_0:75;
+      waybelow x is_<=_than x by WAYBEL_3:9;
+    then sup waybelow x <= x by A3,YELLOW_0:def 9;
+    hence x = sup waybelow x by A2,YELLOW_0:def 3;
+  end;
+then A4: L is satisfying_axiom_of_approximation by WAYBEL_3:def 5;
+
+    for x being Element of L holds waybelow x is non empty directed by A1;
+  hence L is continuous by A4,WAYBEL_3:def 6;
+end;
+
+theorem  ::Theorem 2.1 (1) iff (2)
+   L is continuous iff for x being Element of L holds
+    waybelow x is Ideal of L & x <= sup waybelow x &
+      for I being Ideal of L st x <= sup I holds waybelow x c= I
+by Lm1,Lm2;
+
+Lm3:  ::Theorem 2.1 (1) implies (3)
+  L is continuous implies
+    for x being Element of L ex I being Ideal of L st x <= sup I &
+      for J being Ideal of L st x <= sup J holds I c= J
+proof
+  assume
+A1: L is continuous;
+  let x be Element of L;
+  reconsider I = waybelow x as Ideal of L by A1,WAYBEL_3:def 6;
+  take I;
+  thus x <= sup I & for J being Ideal of L st x <= sup J holds
+    I c= J by A1,Lm1;
+end;
+
+Lm4:  ::Theorem 2.1 (3) implies (1)
+  (for x being Element of L ex I being Ideal of L st x <= sup I &
+   for J being Ideal of L st x <= sup J holds I c= J)
+     implies
+    L is continuous
+proof
+  assume
+A1: for x being Element of L ex I being Ideal of L st x <= sup I &
+      for J being Ideal of L st x <= sup J holds I c= J;
+
+    now
+    let x be Element of L;
+    consider I being Ideal of L such that
+  A2: x <= sup I and
+  A3: for J being Ideal of L st x <= sup J holds I c= J by A1;
+
+      now
+      let y be set;
+      assume
+    A4: y in I;
+      then reconsider y'= y as Element of L;
+        for J being Ideal of L st x <= sup J holds y in J
+      proof
+        let J be Ideal of L;
+        assume x <= sup J;
+        then I c= J by A3;
+        hence y in J by A4;
+      end;
+      then y' << x by WAYBEL_3:21;
+      hence y in waybelow x by WAYBEL_3:7;
+    end;
+  then A5: I c= waybelow x by TARSKI:def 3;
+
+      now
+      let y be set;
+      assume
+    A6: y in waybelow x;
+      then reconsider y'= y as Element of L;
+        y' << x by A6,WAYBEL_3:7;
+      hence y in I by A2,WAYBEL_3:20;
+    end;
+    then waybelow x c= I by TARSKI:def 3;
+    then waybelow x = I by A5,XBOOLE_0:def 10;
+    hence waybelow x is Ideal of L & x <= sup waybelow x &
+      for I being Ideal of L st x <= sup I holds waybelow x c= I by A2,A3;
+  end;
+  hence L is continuous by Lm2;
+end;
+
+theorem ::Theorem 2.1 (1) iff (3)
+    L is continuous iff for x being Element of L
+   ex I being Ideal of L st x <= sup I &
+     for J being Ideal of L st x <= sup J holds I c= J
+by Lm3,Lm4;
+
+theorem ::Theorem 2.1 (1) implies (4)
+    for L being continuous lower-bounded sup-Semilattice
+    holds
+   SupMap L has_a_lower_adjoint
+proof
+  let L be continuous lower-bounded sup-Semilattice;
+
+  set P = InclPoset(Ids L);
+  set r = SupMap L;
+  deffunc F(Element of L) = inf(r"(uparrow {$1}));
+    ex d being map of L, InclPoset(Ids L) st
+    for t being Element of L holds d.t = F(t) from LambdaMD;
+    then consider d being map of L, InclPoset(Ids L) such that
+A1: for t being Element of L holds d.t = inf(r"(uparrow {t}));
+
+    for t being Element of L holds d.t is_minimum_of r"(uparrow t)
+  proof
+    let t be Element of L;
+    set I = inf(r"(uparrow t));
+
+  A2: ex_inf_of r"(uparrow t),InclPoset(Ids L) by YELLOW_0:17;
+
+  A3: d.t = inf(r"(uparrow {t})) by A1
+         .= I by WAYBEL_0:def 18;
+
+      I in the carrier of P;
+    then I in Ids L by YELLOW_1:1;
+  then A4: I in dom r by YELLOW_2:51;
+
+    reconsider I'= I as Ideal of L by YELLOW_2:43;
+
+    consider J being Ideal of L such that
+  A5: t <= sup J and
+  A6: for K being Ideal of L st t <= sup K holds J c= K by Lm3;
+
+    reconsider J'= J as Element of P by YELLOW_2:43;
+
+  A7: r"(uparrow t) is_>=_than J'
+    proof
+      let K be Element of P;
+      reconsider K'= K as Ideal of L by YELLOW_2:43;
+      assume K in r"(uparrow t);
+      then K in dom r & r.K in uparrow t by FUNCT_1:def 13;
+      then t <= r.K by WAYBEL_0:18;
+      then t <= sup K' by YELLOW_2:def 3;
+      then J' c= K' by A6;
+      hence J' <= K by YELLOW_1:3;
+    end;
+
+      for K being Element of P st r"(uparrow t) is_>=_than K holds K <= J'
+    proof
+      let K be Element of P;
+      assume
+    A8: r"(uparrow t) is_>=_than K;
+        J' in the carrier of P;
+      then J' in Ids L by YELLOW_1:1;
+    then A9: J in dom r by YELLOW_2:51;
+        t <= r.J' by A5,YELLOW_2:def 3;
+      then r.J in uparrow t by WAYBEL_0:18;
+      then J in r"(uparrow t) by A9,FUNCT_1:def 13;
+      hence K <= J' by A8,LATTICE3:def 8;
+    end;
+    then t <= sup I' by A5,A7,YELLOW_0:31;
+    then t <= r.I by YELLOW_2:def 3;
+    then r.I in uparrow t by WAYBEL_0:18;
+    then I in r"(uparrow t) by A4,FUNCT_1:def 13;
+    hence thesis by A2,A3,WAYBEL_1:def 6;
+  end;
+  then [r, d] is Galois by WAYBEL_1:11;
+  hence r is upper_adjoint by WAYBEL_1:def 11;
+end;
+
+theorem ::Theorem 2.1 (4) implies (1)
+    for L being up-complete lower-bounded LATTICE
+    holds
+   SupMap L is upper_adjoint implies L is continuous
+proof
+  let L be up-complete lower-bounded LATTICE;
+  assume
+A1: SupMap L is upper_adjoint;
+  set P = InclPoset(Ids L);
+
+    for x being Element of L ex I being Ideal of L st x <= sup I &
+     for J being Ideal of L st x <= sup J holds I c= J
+  proof
+    let x be Element of L;
+    set r = SupMap L;
+    set I' = inf(r"(uparrow x));
+    reconsider I = I' as Ideal of L by YELLOW_2:43;
+
+    consider d being map of L, P such that
+  A2: [r,d] is Galois by A1,WAYBEL_1:def 11;
+      d.x is_minimum_of r"(uparrow x) by A2,WAYBEL_1:11;
+    then ex_inf_of r"(uparrow x),P & d.x = I & I in r"(uparrow x)
+      by WAYBEL_1:def 6;
+    then r.I in uparrow x by FUNCT_1:def 13;
+    then x <= r.I' by WAYBEL_0:18;
+  then A3: x <= sup I by YELLOW_2:def 3;
+
+      for J being Ideal of L st x <= sup J holds I c= J
+    proof
+      let J be Ideal of L;
+      reconsider J'= J as Element of P by YELLOW_2:43;
+    A4: J in dom r by YELLOW_2:52;
+      assume x <= sup J;
+      then x <= r.J' by YELLOW_2:def 3;
+      then r.J' in uparrow x by WAYBEL_0:18;
+      then J' in r"(uparrow x) by A4,FUNCT_1:def 13;
+      then I' <= J' by YELLOW_2:24;
+      hence I c= J by YELLOW_1:3;
+    end;
+    hence thesis by A3;
+  end;
+  hence L is continuous by Lm4;
+end;
+
+theorem  ::Theorem 2.1 (5) implies (4)
+    for L being complete Semilattice
+    holds
+   SupMap L is infs-preserving sups-preserving implies
+     SupMap L has_a_lower_adjoint
+proof
+  let L be complete Semilattice;
+  set r = SupMap L;
+  assume r is infs-preserving sups-preserving;
+  then ex d being map of L, InclPoset(Ids L) st [r, d] is Galois &
+    for t being Element of L holds d.t is_minimum_of r"(uparrow t)
+      by WAYBEL_1:15;
+  hence r is upper_adjoint by WAYBEL_1:def 11;
+end;
+
+:: Corollary 2.2 can be found in WAYBEL_4.
+
+definition
+  let J, D be set, K be ManySortedSet of J;
+  mode DoubleIndexedSet of K, D is ManySortedFunction of K, (J --> D);
+end;
+
+definition
+  let J be set, K be ManySortedSet of J, S be 1-sorted;
+  mode DoubleIndexedSet of K, S is DoubleIndexedSet of K, the carrier of S;
+end;
+
+theorem Th6:
+  for J, D being set, K being ManySortedSet of J
+  for F being DoubleIndexedSet of K, D
+  for j being set st j in J
+    holds
+   F.j is Function of K.j, D
+proof
+  let J, D be set, K be ManySortedSet of J;
+  let F be DoubleIndexedSet of K, D;
+  let j be set;
+  assume
+A1: j in J;
+   then (J --> D).j = D by FUNCOP_1:13;
+  hence F.j is Function of K.j, D by A1,MSUALG_1:def 2;
+end;
+
+definition
+  let J, D be non empty set, K be ManySortedSet of J;
+  let F be DoubleIndexedSet of K, D;
+  let j be Element of J;
+  redefine func F.j -> Function of K.j, D;
+  coherence by Th6;
+end;
+
+definition
+  let J, D be non empty set, K be non-empty ManySortedSet of J;
+  let F be DoubleIndexedSet of K, D;
+  let j be Element of J;
+  cluster rng(F.j) -> non empty;
+  correctness
+  proof
+      dom(F.j) = K.j by FUNCT_2:def 1;
+    hence rng(F.j) is non empty by RELAT_1:65;
+  end;
+end;
+
+definition
+  let J be set, D be non empty set;
+  let K be non-empty ManySortedSet of J;
+  cluster -> non-empty DoubleIndexedSet of K, D;
+  correctness
+  proof
+    let F be DoubleIndexedSet of K, D;
+      for j being set st j in dom F holds F.j is non empty
+    proof
+      let j be set;
+      assume j in dom F;
+    then A1: j in J by PBOOLE:def 3;
+    then A2: K.j is non empty by PBOOLE:def 16;
+      consider k being Element of K.j;
+        F.j is Function of K.j, D by A1,Th6;
+      then dom(F.j) = K.j by FUNCT_2:def 1;
+      then [k, (F.j).k] in F.j by A2,FUNCT_1:def 4;
+      hence thesis;
+    end;
+    hence thesis by UNIALG_1:def 6;
+  end;
+end;
+
+theorem Th7:
+  for F being Function-yielding Function
+  for f being set
+    holds
+   f in dom(Frege F) implies f is Function
+proof
+  let F be Function-yielding Function;
+  let f be set;
+  assume f in dom(Frege F);
+  then f in product doms F by PBOOLE:def 3;
+  then ex g being Function st g = f & dom g = dom(doms F) &
+    for x st x in dom(doms F) holds g.x in (doms F).x by CARD_3:def 5;
+  hence thesis;
+end;
+
+theorem Th8:
+  for F being Function-yielding Function
+  for f being Function st f in dom Frege F
+    holds
+   dom f = dom F & dom F = dom((Frege F).f)
+proof
+  let F be Function-yielding Function;
+  let f be Function;
+  assume f in dom(Frege F);
+then A1: f in product doms F by PBOOLE:def 3;
+  then consider g being Function such that
+A2: g = f and
+A3: dom g = dom(doms F) and
+      for x st x in dom(doms F) holds g.x in (doms F).x by CARD_3:def 5;
+  thus dom f = dom F by A2,A3,EXTENS_1:3;
+
+  thus dom ((Frege F).f) = dom(F..f) by A1,PRALG_2:def 8
+             .= dom F by PRALG_1:def 18;
+end;
+
+theorem Th9:
+  for F being Function-yielding Function
+  for f being Function st f in dom Frege F
+  for i being set st i in dom F
+    holds
+  f.i in dom(F.i) & ((Frege F).f).i = (F.i).(f.i) &
+    (F.i).(f.i) in rng((Frege F).f)
+proof
+  let F be Function-yielding Function;
+  let f be Function such that
+A1: f in dom Frege F;
+  set G = (Frege F).f;
+  let i be set such that
+A2: i in dom F;
+A3: f in product doms F by A1,PBOOLE:def 3;
+then A4: G = F..f by PRALG_2:def 8;
+    i in dom(doms F) by A2,EXTENS_1:3;
+  then f.i in (doms F).i by A3,CARD_3:18;
+  hence f.i in dom(F.i) by A2,FUNCT_6:31;
+
+  thus
+A5: G.i = (F.i).(f.i) by A2,A4,PRALG_1:def 18;
+
+    dom G = dom F by A1,Th8;
+  hence (F.i).(f.i) in rng((Frege F).f) by A2,A5,FUNCT_1:def 5;
+end;
+
+theorem Th10:
+  for J, D being set, K being ManySortedSet of J
+  for F being DoubleIndexedSet of K, D
+  for f being Function st f in dom(Frege F)
+    holds
+   (Frege F).f is Function of J, D
+proof
+  let J, D be set, K be ManySortedSet of J;
+  let F be DoubleIndexedSet of K, D;
+  let f be Function such that
+A1: f in dom(Frege F);
+
+A2: dom F = J by PBOOLE:def 3;
+  set G = (Frege F).f;
+A3: dom G = dom F by A1,Th8;
+
+    rng G c= D
+  proof
+    let y be set;
+    assume y in rng G;
+    then consider x such that
+  A4: x in dom G and
+  A5: y = G.x by FUNCT_1:def 5;
+  A6: G.x = (F.x).(f.x) by A1,A3,A4,Th9;
+
+      f.x in dom(F.x) by A1,A3,A4,Th9;
+  then A7: y in rng(F.x) by A5,A6,FUNCT_1:def 5;
+      F.x is Function of K.x, D by A2,A3,A4,Th6;
+    then rng(F.x) c= D by RELSET_1:12;
+    hence y in D by A7;
+  end;
+  hence G is Function of J, D by A2,A3,FUNCT_2:4;
+end;
+
+
+Lm5:
+  for J, D being set, K being ManySortedSet of J
+  for F being DoubleIndexedSet of K, D
+  for f being Function st f in dom(Frege F)
+  for j being set st j in J
+    holds
+   ((Frege F).f).j = (F.j).(f.j) & (F.j).(f.j) in rng((Frege F).f)
+proof
+  let J, D be set, K be ManySortedSet of J;
+  let F be DoubleIndexedSet of K, D;
+  let f be Function such that
+A1: f in dom(Frege F);
+  let j be set; assume
+   j in J;
+
+then A2: j in dom F by PBOOLE:def 3;
+  hence
+  ((Frege F).f).j = (F.j).(f.j) by A1,Th9;
+  thus (F.j).(f.j) in rng((Frege F).f) by A1,A2,Th9;
+end;
+
+
+Lm6:
+  for J being set, K being ManySortedSet of J, D being non empty set
+  for F being DoubleIndexedSet of K, D
+  for f being Function st f in dom(Frege F)
+  for j being set st j in J
+    holds
+   f.j in K.j
+proof
+  let J be set, K be ManySortedSet of J, D be non empty set;
+  let F be DoubleIndexedSet of K, D;
+  let f be Function such that
+A1: f in dom(Frege F);
+  let j be set such that
+A2: j in J;
+
+      dom F = J by PBOOLE:def 3;
+then A3: f.j in dom(F.j) by A1,A2,Th9;
+    F.j is Function of K.j, D by A2,Th6;
+  hence f.j in K.j by A3,FUNCT_2:def 1;
+end;
+
+definition
+  let f be non-empty Function;
+  cluster doms f -> non-empty;
+  correctness
+  proof
+      for j being set st j in dom doms f holds (doms f).j is non empty
+    proof
+      let j be set;
+      assume that
+    A1: j in dom doms f and
+    A2: (doms f).j is empty;
+      A3: j in f"SubFuncs rng f by A1,FUNCT_6:def 2;
+    then A4: j in dom f & f.j is Function by FUNCT_6:28;
+      reconsider fj = f.j as Function by A3,FUNCT_6:28;
+        {} = dom fj by A2,A4,FUNCT_6:31;
+      then f.j = {} by RELAT_1:64;
+      hence contradiction by A4,UNIALG_1:def 6;
+    end;
+    hence thesis by UNIALG_1:def 6;
+  end;
+end;
+
+definition
+  let J, D be set, K be ManySortedSet of J;
+  let F be DoubleIndexedSet of K, D;
+  redefine func Frege F -> DoubleIndexedSet of (product doms F --> J), D;
+  coherence
+  proof
+    set PD = product doms F;
+    set A = (PD --> J), B = (PD --> D);
+    set G = Frege F;
+
+      for i st i in PD holds G.i is Function of A.i, B.i
+    proof
+      let i;
+      assume
+    A1: i in PD;
+    then A2: i in dom G by PBOOLE:def 3;
+      then reconsider f = i as Function by Th7;
+        A.i = J & B.i = D by A1,FUNCOP_1:13;
+      then G.f is Function of A.i, B.i by A2,Th10;
+      hence G.i is Function of A.i, B.i;
+    end;
+    hence thesis by MSUALG_1:def 2;
+  end;
+end;
+
+definition
+  let J, D be non empty set, K be non-empty ManySortedSet of J;
+  let F be DoubleIndexedSet of K, D;
+  let G be DoubleIndexedSet of (product doms F --> J), D;
+  let f be Element of product doms F;
+  redefine func G.f -> Function of J, D;
+  coherence
+  proof
+       (product doms F --> J).f = J by FUNCOP_1:13;
+    hence G.f is Function of J, D;
+  end;
+end;
+
+definition
+  let L be non empty RelStr;
+  let F be Function-yielding Function;
+  func \//(F, L) -> Function of dom F, the carrier of L means
+:Def1:
+  for x st x in dom F holds it.x = \\/(F.x, L);
+  existence
+  proof deffunc F(set) = \\/(F.$1, L);
+      ex f being Function st dom f = dom F &
+      for x st x in dom F holds f.x = F(x) from Lambda;
+    then consider f being Function such that
+  A1: dom f = dom F and
+  A2: for x st x in dom F holds f.x = \\/(F.x, L);
+      rng f c= the carrier of L
+    proof
+      let y;
+      assume y in rng f;
+      then consider x such that
+    A3: x in dom f and
+    A4: y = f.x by FUNCT_1:def 5;
+        y = \\/(F.x, L) by A1,A2,A3,A4;
+      hence y in the carrier of L;
+    end;
+    then reconsider f as Function of dom F, the carrier of L by A1,FUNCT_2:4;
+    take f;
+    thus thesis by A2;
+  end;
+  uniqueness
+  proof
+    let f, g be Function of dom F, the carrier of L such that
+  A5: for x st x in dom F holds f.x = \\/(F.x, L) and
+  A6: for x st x in dom F holds g.x = \\/(F.x, L);
+  A7: dom f = dom F & dom g = dom F by FUNCT_2:def 1;
+      now
+      let x;
+      assume
+    A8: x in dom F;
+      hence f.x = \\/(F.x, L) by A5
+               .= g.x by A6,A8;
+    end;
+    hence thesis by A7,FUNCT_1:9;
+  end;
+
+  func /\\(F, L) -> Function of dom F, the carrier of L means
+:Def2:
+  for x st x in dom F holds it.x = //\(F.x, L);
+  existence
+  proof deffunc F(set) = //\(F.$1, L);
+      ex f being Function st dom f = dom F &
+      for x st x in dom F holds f.x = F(x) from Lambda;
+    then consider f being Function such that
+  A9: dom f = dom F and
+  A10: for x st x in dom F holds f.x = //\(F.x, L);
+      rng f c= the carrier of L
+    proof
+      let y;
+      assume y in rng f;
+      then consider x such that
+    A11: x in dom f and
+    A12: y = f.x by FUNCT_1:def 5;
+        y = //\(F.x, L) by A9,A10,A11,A12;
+      hence y in the carrier of L;
+    end;
+    then reconsider f as Function of dom F, the carrier of L by A9,FUNCT_2:4;
+    take f;
+    thus thesis by A10;
+  end;
+  uniqueness
+  proof
+    let f, g be Function of dom F, the carrier of L such that
+  A13: for x st x in dom F holds f.x = //\(F.x, L) and
+  A14: for x st x in dom F holds g.x = //\(F.x, L);
+  A15: dom f = dom F & dom g = dom F by FUNCT_2:def 1;
+      now
+      let x;
+      assume
+    A16: x in dom F;
+      hence f.x = //\(F.x, L) by A13
+               .= g.x by A14,A16;
+    end;
+    hence thesis by A15,FUNCT_1:9;
+  end;
+end;
+
+definition
+  let J be set, K be ManySortedSet of J, L be non empty RelStr;
+  let F be DoubleIndexedSet of K, L;
+  redefine func \//(F, L);
+  synonym Sups F;
+
+  redefine func /\\(F, L);
+  synonym Infs F;
+end;
+
+definition
+  let I, J be set, L be non empty RelStr;
+  let F be DoubleIndexedSet of (I --> J), L;
+  redefine func \//(F, L);
+  synonym Sups F;
+
+  redefine func /\\(F, L);
+  synonym Infs F;
+end;
+
+theorem Th11:
+  for L being non empty RelStr
+  for F, G being Function-yielding Function st dom F = dom G &
+    (for x st x in dom F holds \\/(F.x, L) = \\/(G.x, L))
+      holds
+     \//(F, L) = \//(G, L)
+proof
+  let L be non empty RelStr;
+  let F, G be Function-yielding Function such that
+A1: dom F = dom G and
+A2: for x st x in dom F holds \\/(F.x, L) = \\/(G.x, L);
+A3: dom \//(F, L) = dom F & dom \//(G, L) = dom G by FUNCT_2:def 1;
+
+    for x st x in dom F holds \//(F, L).x = \//(G, L).x
+  proof
+    let x;
+    assume
+  A4: x in dom F;
+    hence
+      \//(F, L).x = \\/(F.x, L) by Def1
+               .= \\/(G.x, L) by A2,A4
+               .= \//(G, L).x by A1,A4,Def1;
+  end;
+  hence thesis by A1,A3,FUNCT_1:9;
+end;
+
+theorem Th12:
+  for L being non empty RelStr
+  for F, G being Function-yielding Function st dom F = dom G &
+    (for x st x in dom F holds //\(F.x, L) = //\(G.x, L))
+      holds
+     /\\(F, L) = /\\(G, L)
+proof
+  let L be non empty RelStr;
+  let F, G be Function-yielding Function such that
+A1: dom F = dom G and
+A2: for x st x in dom F holds //\(F.x, L) = //\(G.x, L);
+A3: dom /\\(F, L) = dom F & dom /\\(G, L) = dom G by FUNCT_2:def 1;
+
+    for x st x in dom F holds /\\(F, L).x = /\\(G, L).x
+  proof
+    let x;
+    assume
+  A4: x in dom F;
+    hence
+      /\\(F, L).x = //\(F.x, L) by Def2
+               .= //\(G.x, L) by A2,A4
+               .= /\\(G, L).x by A1,A4,Def2;
+  end;
+  hence thesis by A1,A3,FUNCT_1:9;
+end;
+
+theorem Th13:
+  for L being non empty RelStr
+  for F being Function-yielding Function
+    holds
+   (y in rng \//(F, L) iff ex x st x in dom F & y = \\/(F.x, L)) &
+   (y in rng /\\(F, L) iff ex x st x in dom F & y = //\(F.x, L))
+proof
+  let L be non empty RelStr;
+  let F be Function-yielding Function;
+
+  thus y in rng \//(F, L) iff ex x st x in dom F & y = \\/(F.x, L)
+  proof
+    hereby
+      assume y in rng \//(F, L);
+      then consider x such that
+    A1: x in dom \//(F, L) and
+    A2: y = \//(F, L).x by FUNCT_1:def 5;
+      take x;
+          x in dom F by A1,FUNCT_2:def 1;
+      hence x in dom F & y = \\/(F.x, L) by A2,Def1;
+    end;
+    given x such that
+  A3: x in dom F and
+  A4: y = \\/(F.x, L);
+      x in dom \//(F, L) & y = \//(F, L).x by A3,A4,Def1,FUNCT_2:def 1;
+    hence y in rng \//(F, L) by FUNCT_1:def 5;
+  end;
+
+  thus y in rng /\\(F, L) iff ex x st x in dom F & y = //\(F.x, L)
+  proof
+    hereby
+      assume y in rng /\\(F, L);
+      then consider x such that
+    A5: x in dom /\\(F, L) and
+    A6: y = /\\(F, L).x by FUNCT_1:def 5;
+      take x;
+          x in dom F by A5,FUNCT_2:def 1;
+      hence x in dom F & y = //\(F.x, L) by A6,Def2;
+    end;
+    given x such that
+  A7: x in dom F and
+  A8: y = //\(F.x, L);
+      x in dom /\\(F, L) & y = /\\(F, L).x by A7,A8,Def2,FUNCT_2:def 1;
+    hence y in rng /\\(F, L) by FUNCT_1:def 5;
+  end;
+end;
+
+theorem Th14:
+  for L being non empty RelStr
+  for J being non empty set, K being ManySortedSet of J
+  for F being DoubleIndexedSet of K, L
+    holds
+   (x in rng Sups F iff ex j being Element of J st x = Sup(F.j)) &
+   (x in rng Infs F iff ex j being Element of J st x = Inf(F.j))
+proof
+  let L be non empty RelStr;
+  let J be non empty set, K be ManySortedSet of J;
+  let F be DoubleIndexedSet of K, L;
+A1: dom F = J by PBOOLE:def 3;
+
+  thus x in rng Sups F iff ex j being Element of J st x = Sup(F.j)
+  proof
+    hereby
+      assume x in rng Sups F;
+      then consider j being set such that
+    A2: j in dom F and
+    A3: x = \\/(F.j, L) by Th13;
+      reconsider j as Element of J by A2,PBOOLE:def 3;
+      take j;
+      thus x = Sup(F.j) by A3;
+    end;
+    thus thesis by A1,Th13;
+  end;
+
+    hereby
+      assume x in rng Infs F;
+      then consider j being set such that
+    A4: j in dom F and
+    A5: x = //\(F.j, L) by Th13;
+      reconsider j as Element of J by A4,PBOOLE:def 3;
+      take j;
+      thus x = Inf(F.j) by A5;
+    end;
+    thus thesis by A1,Th13;
+end;
+
+definition
+  let J be non empty set, K be ManySortedSet of J, L be non empty RelStr;
+  let F be DoubleIndexedSet of K, L;
+  cluster rng Sups F -> non empty;
+  correctness
+  proof
+    consider j being Element of J;
+      Sup(F.j) in rng Sups F by Th14;
+    hence thesis;
+  end;
+
+  cluster rng Infs F -> non empty;
+  correctness
+  proof
+    consider j being Element of J;
+      Inf(F.j) in rng Infs F by Th14;
+    hence thesis;
+  end;
+end;
+
+reserve L for complete LATTICE,
+        a, b, c for Element of L,
+        J for non empty set,
+
+        K for non-empty ManySortedSet of J;
+
+Lm7:
+  for F being DoubleIndexedSet of K, L
+  for f being set
+    holds
+   f is Element of product doms F iff f in dom(Frege F)
+proof
+  let F be DoubleIndexedSet of K, L;
+  let f be set;
+  hereby
+    assume f is Element of product doms F;
+    then f in product doms F;
+    hence f in dom(Frege F) by PBOOLE:def 3;
+  end;
+  thus thesis by PBOOLE:def 3;
+end;
+
+theorem Th15:
+  for F being Function-yielding Function
+    holds
+   ((for f being Function st f in dom Frege F holds //\((Frege F).f, L) <= a))
+     implies Sup /\\(Frege F, L) <= a
+proof
+  let F be Function-yielding Function;
+  assume
+A1: for f being Function st f in dom(Frege F) holds //\((Frege F).f, L) <= a;
+
+    rng /\\(Frege F, L) is_<=_than a
+  proof
+    let c;
+    assume c in rng /\\(Frege F, L);
+    then consider f being set such that
+  A2: f in dom(Frege F) and
+  A3: c = //\((Frege F).f, L) by Th13;
+    reconsider f as Function by A2,Th7;
+      f in dom(Frege F) by A2;
+    hence c <= a by A1,A3;
+  end;
+  then sup rng /\\(Frege F, L) <= a by YELLOW_0:32;
+  hence Sup /\\(Frege F, L) <= a by YELLOW_2:def 5;
+end;
+
+theorem Th16:
+  for F being DoubleIndexedSet of K, L
+    holds
+   Inf Sups F >= Sup Infs Frege F
+proof
+  let F be DoubleIndexedSet of K, L;
+
+A1:
+  for j being Element of J
+  for f being Element of product doms F
+    holds
+   Sup(F.j) >= Inf((Frege F).f)
+  proof
+    let j be Element of J;
+    let f be Element of product doms F;
+  A2: f in dom(Frege F) by Lm7;
+    then reconsider k = f.j as Element of K.j by Lm6;
+      (F.j).k = ((Frege F).f).j by A2,Lm5;
+  then A3: Inf((Frege F).f) <= (F.j).k by YELLOW_2:55;
+      (F.j).k <= Sup(F.j) by YELLOW_2:55;
+    hence Sup(F.j) >= Inf((Frege F).f) by A3,ORDERS_1:26;
+  end;
+
+  set a = Sup Infs Frege F;
+
+    a is_<=_than rng Sups F
+  proof
+    let c;
+    assume c in rng Sups F;
+    then consider j being Element of J such that
+  A4: c = Sup(F.j) by Th14;
+      for f being Function st f in dom(Frege F) holds //\((Frege F).f, L) <= c
+    proof
+      let f be Function;
+      assume f in dom(Frege F);
+      then reconsider f'= f as Element of product doms F by Lm7;
+        Sup(F.j) >= Inf((Frege F).f') by A1;
+      hence //\((Frege F).f, L) <= c by A4;
+    end;
+    hence a <= c by Th15;
+  end;
+  then a <= inf rng Sups F by YELLOW_0:33;
+  hence Inf Sups F >= Sup Infs Frege F by YELLOW_2:def 6;
+end;
+
+theorem Th17:
+  (L is continuous & for c st c << a holds c <= b) implies a <= b
+proof
+  assume that
+A1: L is continuous and
+A2: for c st c << a holds c <= b;
+A3: L is complete satisfying_axiom_of_approximation by A1,WAYBEL_3:def 6;
+    now
+    let c;
+    assume c in waybelow a;
+    then c << a by WAYBEL_3:7;
+    hence c <= b by A2;
+  end;
+  then waybelow a is_<=_than b by LATTICE3:def 9;
+  then sup waybelow a <= b by YELLOW_0:32;
+  hence a <= b by A3,WAYBEL_3:def 5;
+end;
+
+
+Lm8:    ::Theorem 2.3 (1) implies (2)
+  L is continuous implies
+    for J, K for F being DoubleIndexedSet of K, L st
+      for j being Element of J holds rng(F.j) is directed
+        holds
+       Inf Sups F = Sup Infs Frege F
+proof
+  assume
+A1: L is continuous;
+  let J, K;
+  let F be DoubleIndexedSet of K, L such that
+A2: for j being Element of J holds rng(F.j) is directed;
+
+    now
+    let c;
+    assume
+  A3: c << Inf Sups F;
+
+  A4:
+    for j being Element of J holds c << Sup(F.j)
+    proof
+      let j be Element of J;
+        Sup(F.j) in rng Sups F by Th14;
+      then inf rng Sups F <= Sup(F.j) by YELLOW_2:24;
+      then Inf Sups F <= Sup(F.j) by YELLOW_2:def 6;
+      hence c << Sup(F.j) by A3,WAYBEL_3:2;
+    end;
+
+
+     ex f being Function st f in dom(Frege F) &
+      for j being Element of J ex b st b = (F.j).(f.j) & c <= b
+    proof
+
+    A5:
+      for j being Element of J ex k being Element of K.j st c <= (F.j).k
+      proof
+        let j be Element of J;
+      A6: rng(F.j) is non empty directed Subset of L by A2;
+      A7: c << Sup(F.j) by A4;
+          Sup(F.j) <= sup(rng(F.j)) by YELLOW_2:def 5;
+        then consider d being Element of L such that
+      A8: d in rng(F.j) and
+      A9: c <= d by A6,A7,WAYBEL_3:def 1;
+        consider k being set such that
+      A10: k in dom(F.j) and
+      A11: d = (F.j).k by A8,FUNCT_1:def 5;
+        reconsider k as Element of K.j by A10,FUNCT_2:def 1;
+        take k;
+        thus thesis by A9,A11;
+      end;
+
+      defpred P[set, set] means
+        $1 in J & $2 in K.$1 & ex b st b = (F.$1).$2 & c <= b;
+
+    A12:
+      for j being set st j in J ex k being set st k in union rng K & P[j, k]
+      proof
+        let j be set;
+        assume j in J;
+        then reconsider j'= j as Element of J;
+        consider k being Element of K.j' such that
+      A13: c <= (F.j').k by A5;
+        take k;
+          j' in J;
+        then j' in dom K by PBOOLE:def 3;
+        then k in K.j' & K.j' in rng K by FUNCT_1:def 5;
+        hence k in union rng K by TARSKI:def 4;
+
+        thus P[j, k] by A13;
+      end;
+
+      consider f being Function such that
+    A14: dom f = J and rng f c= union rng K and
+    A15: for j being set st j in J holds P[j, f.j]
+     from NonUniqBoundFuncEx(A12);
+
+    A16: for j being Element of J holds
+           f.j in K.j & ex b st b = (F.j).(f.j) & c <= b by A15;
+
+    A17: dom f = dom F by A14,PBOOLE:def 3
+             .= dom doms F by EXTENS_1:3;
+        now
+        let x be set;
+        assume x in dom doms F;
+      then A18: x in dom F by EXTENS_1:3;
+        then reconsider j = x as Element of J by PBOOLE:def 3;
+
+          (doms F).x = dom(F.j) by A18,FUNCT_6:31
+                    .= K.j by FUNCT_2:def 1;
+        hence f.x in (doms F).x by A15;
+      end;
+      then f in product doms F by A17,CARD_3:18;
+      then f in dom(Frege F) by PBOOLE:def 3;
+      hence thesis by A16;
+    end;
+
+    then consider f being Function such that
+  A19: f in dom(Frege F) and
+  A20: for j being Element of J ex b st b = (F.j).(f.j) & c <= b;
+    reconsider f as Element of product doms F by A19,Lm7;
+    reconsider G = (Frege F).f as Function of J, the carrier of L;
+
+      now
+      let j be Element of J;
+        j in J;
+    then A21: j in dom F by PBOOLE:def 3;
+        ex b st b = (F.j).(f.j) & c <= b by A20;
+     hence c <= G.j by A19,A21,Th9;
+    end;
+  then A22: c <= Inf((Frege F).f) by YELLOW_2:57;
+
+    set a = Inf((Frege F).f);
+      a in rng Infs Frege F by Th14;
+    then a <= sup rng Infs Frege F by YELLOW_2:24;
+    then a <= Sup Infs Frege F by YELLOW_2:def 5;
+    hence c <= Sup Infs Frege F by A22,YELLOW_0:def 2;
+  end;
+then A23: Inf Sups F <= Sup Infs Frege F by A1,Th17;
+
+    Inf Sups F >= Sup Infs Frege F by Th16;
+  hence thesis by A23,YELLOW_0:def 3;
+end;
+
+
+theorem Th18:    ::Theorem 2.3 (2) implies (1)
+  (for J being non empty set st J in the_universe_of the carrier of L
+   for K being non-empty ManySortedSet of J st
+    for j being Element of J holds K.j in the_universe_of the carrier of L
+   for F being DoubleIndexedSet of K, L st
+    for j being Element of J holds rng(F.j) is directed
+      holds Inf Sups F = Sup Infs Frege F)
+    implies
+   L is continuous
+proof
+  assume
+A1: for J being non empty set st J in the_universe_of the carrier of L
+    for K being non-empty ManySortedSet of J st
+     for j being Element of J holds K.j in the_universe_of the carrier of L
+    for F being DoubleIndexedSet of K, L st
+      (for j being Element of J holds rng(F.j) is directed)
+        holds
+      Inf Sups F = Sup Infs Frege F;
+
+    now
+    let x be Element of L;
+    set J = {j where j is directed non empty Subset of L : x <= sup j};
+    set UN = the_universe_of the carrier of L;
+A2: UN = Tarski-Class the_transitive-closure_of the carrier of L by YELLOW_6:
+def 3;
+    reconsider UN as universal set;
+A3:the carrier of L c= the_transitive-closure_of the carrier of L
+     by CLASSES1:59;
+      the_transitive-closure_of the carrier of L in UN by A2,CLASSES1:5;
+then A4: the carrier of L in UN by A3,CLASSES1:def 1;
+then A5: bool the carrier of L in UN by CLASSES2:65;
+A6: J c= bool the carrier of L
+      proof let u be set;
+       assume u in J;
+        then ex j being directed non empty Subset of L st u = j & x <= sup j;
+       hence u in bool the carrier of L;
+      end;
+then A7: J in UN by A5,CLASSES1:def 1;
+  A8: {x} is directed non empty Subset of L by WAYBEL_0:5;
+      x <= sup {x} by YELLOW_0:39;
+  then A9: {x} in J by A8;
+    then reconsider J as non empty set;
+
+  A10:
+    for j being Element of J holds j is directed non empty Subset of L
+    proof
+      let j be Element of J;
+        j in J;
+      then consider j' being directed non empty Subset of L such that
+    A11: j'= j and
+          x <= sup j';
+      thus thesis by A11;
+    end;
+
+    set K = id J;
+      dom K = J by FUNCT_1:34;
+    then reconsider K as ManySortedSet of J by PBOOLE:def 3;
+A12: for j being Element of J holds K.j in UN
+     proof let j be Element of J;
+         K.j = j by FUNCT_1:35;
+       then K.j in J;
+       hence K.j in UN by A4,A6,CLASSES1:def 1;
+     end;
+      for i st i in J holds K.i is non empty
+    proof
+      let i;
+      assume i in J;
+      then reconsider i'= i as Element of J;
+        K.i = i' by FUNCT_1:35;
+      hence K.i is non empty by A10;
+    end;
+    then reconsider K as non-empty ManySortedSet of J by PBOOLE:def 16;
+    deffunc F(set) = id(K.$1);
+      ex F being Function st dom F = J &
+      for j being set st j in J holds F.j = F(j) from Lambda;
+    then consider F being Function such that
+  A13: dom F = J and
+  A14: for j being set st j in J holds F.j = id(K.j);
+
+    reconsider F as ManySortedSet of J by A13,PBOOLE:def 3;
+
+      for j being set st j in dom F holds F.j is Function
+    proof
+      let j be set;
+      assume j in dom F;
+      then F.j = id(K.j) by A13,A14;
+      hence F.j is Function;
+    end;
+    then reconsider F as ManySortedFunction of J by PRALG_1:def 15;
+
+      for j being set st j in J holds
+      F.j is Function of K.j, (J --> the carrier of L).j
+    proof
+      let j be set;
+      assume j in J;
+      then reconsider j as Element of J;
+    A15:  F.j = id(K.j) by A14;
+    then A16: dom(F.j) = K.j by FUNCT_2:def 1;
+    A17: rng(F.j) c= K.j by A15,RELSET_1:12;
+        K.j = j by FUNCT_1:35;
+      then K.j is Subset of L by A10;
+      then rng(F.j) c= the carrier of L by A17,XBOOLE_1:1;
+      then rng(F.j) c= (J --> the carrier of L).j by FUNCOP_1:13;
+      hence thesis by A16,FUNCT_2:4;
+    end;
+    then reconsider F as DoubleIndexedSet of K, L by MSUALG_1:def 2;
+
+  A18: for j being Element of J, k being Element of K.j holds (F.j).k = k
+    proof
+      let j be Element of J;
+      let k be Element of K.j;
+        F.j = id(K.j) by A14;
+      hence thesis by FUNCT_1:35;
+    end;
+
+  A19:
+    for j being Element of J holds rng(F.j) = j
+    proof
+      let j be Element of J;
+        now
+        let y;
+        assume y in rng(F.j);
+        then consider x such that
+      A20: x in dom(F.j) and
+      A21: y = (F.j).x by FUNCT_1:def 5;
+      A22: x in K.j by A20,FUNCT_2:def 1;
+        then x in j by FUNCT_1:35;
+        hence y in j by A18,A21,A22;
+      end;
+    then A23: rng(F.j) c= j by TARSKI:def 3;
+
+        now
+        let x;
+        assume x in j;
+      then A24: x in K.j by FUNCT_1:35;
+      then A25: (F.j).x = x by A18;
+          x in dom(F.j) by A24,FUNCT_2:def 1;
+        hence x in rng(F.j) by A25,FUNCT_1:def 5;
+      end;
+      then j c= rng(F.j) by TARSKI:def 3;
+      hence rng(F.j) = j by A23,XBOOLE_0:def 10;
+    end;
+
+  A26:
+    for j being Element of J holds rng(F.j) is directed
+    proof
+      let j be Element of J;
+        rng(F.j) = j by A19;
+      hence thesis by A10;
+    end;
+
+      for f being Function st f in dom(Frege F)
+      holds
+     //\((Frege F).f, L) <= sup waybelow x
+    proof
+      let f be Function such that
+    A27: f in dom(Frege F);
+      set a = //\((Frege F).f, L);
+
+        for D being non empty directed Subset of L st x <= sup D
+        ex d being Element of L st d in D & a <= d
+      proof
+        let D be non empty directed Subset of L;
+        assume x <= sup D;
+        then D in J;
+        then reconsider D'= D as Element of J;
+
+      A28: for j being Element of J holds f.j in K.j
+        proof
+          let j be Element of J;
+            j in J;
+          then j in dom F by PBOOLE:def 3;
+          then f.j in dom(F.j) by A27,Th9;
+          hence thesis by FUNCT_2:def 1;
+        end;
+
+      A29: dom f = dom F by A27,Th8
+               .= J by PBOOLE:def 3;
+
+          now
+          let y be set;
+          assume y in rng f;
+          then consider j being set such that
+        A30: j in dom f and
+        A31: y = f.j by FUNCT_1:def 5;
+          reconsider j as Element of J by A29,A30;
+            y in K.j by A28,A31;
+        then A32: y in j by FUNCT_1:35;
+            j is Subset of L by A10;
+          hence y in the carrier of L by A32;
+        end;
+        then rng f c= the carrier of L by TARSKI:def 3;
+        then reconsider f as Function of J, the carrier of L by A29,FUNCT_2:4;
+
+      A33: Inf f <= f.D' by YELLOW_2:55;
+
+      A34: dom f = dom F by A27,Th8
+               .= dom((Frege F).f) by A27,Th8;
+
+          now
+          let j be set;
+          assume j in dom f;
+        then A35: j in dom F by A27,Th8;
+          then reconsider j'= j as Element of J by PBOOLE:def 3;
+        A36: f.j' is Element of K.j' by A28;
+          thus ((Frege F).f).j = (F.j').(f.j') by A27,A35,Th9
+                              .= f.j by A18,A36;
+        end;
+      then A37: a <= f.D' by A33,A34,FUNCT_1:9;
+
+          f.D' in K.D' by A28;
+        then f.D' in D' by FUNCT_1:35;
+        hence ex d being Element of L st d in D & a <= d by A37;
+      end;
+      then a << x by WAYBEL_3:def 1;
+      then a in waybelow x by WAYBEL_3:7;
+      hence //\((Frege F).f, L) <= sup waybelow x by YELLOW_2:24;
+    end;
+  then A38: Sup Infs Frege F <= sup waybelow x by Th15;
+
+      x is_<=_than rng Sups F
+    proof
+      let b be Element of L;
+      assume b in rng Sups F;
+      then consider j being Element of J such that
+    A39: b = Sup(F.j) by Th14;
+        j in J;
+      then consider j' being directed non empty Subset of L such that
+    A40: j'= j and
+    A41: x <= sup j';
+        b = sup rng(F.j) by A39,YELLOW_2:def 5
+       .= sup j' by A19,A40;
+      hence x <= b by A41;
+    end;
+    then x <= inf rng Sups F by YELLOW_0:33;
+  then A42: x <= Inf Sups F by YELLOW_2:def 6;
+
+    reconsider j = {x} as Element of J by A9;
+      Sup(F.j) = sup rng(F.j) by YELLOW_2:def 5
+            .= sup {x} by A19
+            .= x by YELLOW_0:39;
+    then x in rng Sups F by Th14;
+    then inf rng Sups F <= x by YELLOW_2:24;
+    then Inf Sups F <= x by YELLOW_2:def 6;
+  then A43:  x = Inf Sups F by A42,ORDERS_1:25
+     .= Sup Infs Frege F by A1,A7,A12,A26;
+      x is_>=_than waybelow x by WAYBEL_3:9;
+    then x >= sup waybelow x by YELLOW_0:32;
+    hence x = sup waybelow x by A38,A43,ORDERS_1:25;
+  end;
+then A44: L is up-complete satisfying_axiom_of_approximation by WAYBEL_3:def 5;
+    for x being Element of L holds waybelow x is non empty directed;
+  hence L is continuous by A44,WAYBEL_3:def 6;
+end;
+
+Lm9:    ::Theorem 2.3 (2) implies (1)
+  (for J, K for F being DoubleIndexedSet of K, L st
+    for j being Element of J holds rng(F.j) is directed
+      holds Inf Sups F = Sup Infs Frege F)
+    implies
+   L is continuous
+proof assume
+   for J, K for F being DoubleIndexedSet of K, L st
+    for j being Element of J holds rng(F.j) is directed
+      holds Inf Sups F = Sup Infs Frege F;
+ then for J being non empty set st J in the_universe_of the carrier of L
+    for K being non-empty ManySortedSet of J st
+     for j being Element of J holds K.j in the_universe_of the carrier of L
+    for F being DoubleIndexedSet of K, L st
+      (for j being Element of J holds rng(F.j) is directed)
+        holds
+      Inf Sups F = Sup Infs Frege F;
+ hence thesis by Th18;
+end;
+
+theorem ::Theorem 2.3 (1) iff (2)
+    L is continuous iff for J, K for F being DoubleIndexedSet of K, L st
+      for j being Element of J holds rng(F.j) is directed
+        holds
+       Inf Sups F = Sup Infs Frege F
+by Lm8,Lm9;
+
+definition
+  let J, K, D be non empty set;
+  let F be Function of [:J, K:], D;
+  redefine func curry F -> DoubleIndexedSet of (J --> K), D;
+  coherence
+  proof
+  A1: dom F = [:J, K:] by FUNCT_2:def 1;
+    then reconsider F'= F as ManySortedSet of [:J, K:] by PBOOLE:def 3;
+
+      for j being set st j in J holds
+     (curry F').j is Function of (J --> K).j, (J --> D).j
+    proof
+      let j be set;
+      assume
+    A2: j in J;
+    then A3: (J --> K).j = K & (J --> D).j = D by FUNCOP_1:13;
+        J = dom curry F by A1,FUNCT_5:31;
+      then reconsider G = (curry F').j as Function by A2,FUNCT_5:37;
+
+      consider g being Function such that
+    A4: (curry F').j = g and
+    A5: dom g = K and
+    A6: rng g c= rng F' and
+          for k being set st k in K holds g.k = F'.[j, k]
+        by A1,A2,FUNCT_5:36;
+
+        rng F c= D by RELSET_1:12;
+      then rng g c= D by A6,XBOOLE_1:1;
+      then reconsider g as Function of K, D by A5,FUNCT_2:def 1,RELSET_1:11;
+        G = g by A4;
+      hence (curry F').j is Function of (J --> K).j, (J --> D).j by A3;
+    end;
+    hence thesis by MSUALG_1:def 2;
+  end;
+end;
+
+reserve J, K, D for non empty set,
+        j for Element of J,
+        k for Element of K;
+
+theorem Th20:
+  for F being Function of [:J, K:], D
+    holds
+   dom curry F = J & dom((curry F).j) = K & F.[j, k] = ((curry F).j).k
+proof
+  let F be Function of [:J, K:], D;
+
+  thus dom curry F = proj1 dom F by FUNCT_5:def 3
+                  .= proj1 [:J, K:] by FUNCT_2:def 1
+                  .= J by FUNCT_5:11;
+
+    [:J, K:] <> {} & dom F = [:J, K:] & j in J by FUNCT_2:def 1;
+  then ex g being Function st (curry F).j = g & dom g = K &
+    rng g c= rng F & for i being set st i in K holds g.i = F.[j, i]
+      by FUNCT_5:36;
+  hence dom((curry F).j) = K;
+
+    [j, k] in [:J, K:] by ZFMISC_1:106;
+  then [j, k] in dom F by FUNCT_2:def 1;
+  hence F.[j, k] = ((curry F).j).k by FUNCT_5:27;
+end;
+
+Lm10:    ::Theorem 2.3 (2') implies (1)
+  (for J, K for F being Function of [:J, K:], the carrier of L st
+    for j being Element of J holds rng((curry F).j) is directed
+      holds Inf Sups curry F = Sup Infs Frege curry F)
+    implies
+   L is continuous
+proof
+  assume
+A1: for J, K for F being Function of [:J, K:], the carrier of L st
+       for j being Element of J holds rng((curry F).j) is directed
+         holds
+        Inf Sups (curry F) = Sup Infs (Frege curry F);
+
+    for J for K being non-empty ManySortedSet of J
+  for F being DoubleIndexedSet of K, L st
+    for j being Element of J holds rng(F.j) is directed
+      holds Inf Sups F = Sup Infs(Frege F)
+  proof
+    let J;
+    let K be non-empty ManySortedSet of J;
+    let F be DoubleIndexedSet of K, L;
+    assume
+  A2: for j being Element of J holds rng(F.j) is directed;
+
+    consider j being Element of J;
+    consider k being Element of K.j;
+      j in J;
+    then j in dom K by PBOOLE:def 3;
+    then k in K.j & K.j in rng K by FUNCT_1:def 5;
+    then reconsider K'= union rng K as non empty set by TARSKI:def 4;
+
+    defpred P[set, set, set] means
+      $1 in J & (($2 in K.$1 & $3 = (F.$1).$2) or (not $2 in K.$1 & $3 =
+Bottom L));
+
+  A3:
+    for j being Element of J for k' being Element of K'
+      ex z being Element of L st P[j, k', z]
+    proof
+      let j be Element of J;
+      let k' be Element of K';
+      per cases;
+      suppose k' in K.j;
+      then reconsider k = k' as Element of K.j;
+      take (F.j).k;
+      thus thesis;
+
+      suppose
+    A4: not k' in K.j;
+      take Bottom L;
+      thus thesis by A4;
+    end;
+
+      ex G being Function of [:J, K':], the carrier of L st
+      for j being Element of J
+      for k being Element of K' holds P[j, k, G.[j, k]] from FuncEx2D(A3);
+    then consider G being Function of [:J, K':], the carrier of L such that
+  A5: for j being Element of J for k being Element of K' holds
+      P[j, k, G.[j, k]];
+  A6: for j being Element of J holds K.j c= K'
+    proof
+      let j be Element of J;
+      hereby
+        let k be set;
+        assume
+      A7: k in K.j;
+          j in J;
+       then j in dom K by PBOOLE:def 3;
+        then K.j in rng K by FUNCT_1:def 5;
+        hence k in K' by A7,TARSKI:def 4;
+      end;
+      thus thesis;
+    end;
+
+  A8: for j being Element of J holds rng(F.j) c= rng((curry G).j)
+    proof
+      let j be Element of J;
+      hereby
+        let y be set;
+        assume y in rng(F.j);
+        then consider k being set such that
+      A9: k in dom(F.j) and
+      A10: y = (F.j).k by FUNCT_1:def 5;
+      A11: k in K.j & K.j c= K' by A6,A9,FUNCT_2:def 1;
+        then reconsider k as Element of K';
+          [j, k] in [:J, K':] by ZFMISC_1:106;
+      then A12: [j, k] in dom G by FUNCT_2:def 1;
+          k in K' & dom((curry G).j) = (J --> K').j by FUNCT_2:def 1;
+      then A13: k in dom((curry G).j) by FUNCOP_1:13;
+          y = G.[j, k] by A5,A10,A11
+         .= ((curry G).j).k by A12,FUNCT_5:27;
+        hence y in rng((curry G).j) by A13,FUNCT_1:def 5;
+      end;
+      thus thesis;
+    end;
+
+  A14: for j being Element of J holds rng((curry G).j) is directed
+    proof
+      let j be Element of J;
+      set X = rng((curry G).j);
+
+        for x, y being Element of L st x in X & y in X
+        ex z being Element of L st z in X & x <= z & y <= z
+      proof
+        let x, y be Element of L;
+      A15: rng(F.j) is directed by A2;
+
+        assume
+      A16: x in X & y in X;
+        then consider a being set such that
+      A17: a in dom((curry G).j) and
+      A18: ((curry G).j).a = x by FUNCT_1:def 5;
+        consider b being set such that
+      A19: b in dom((curry G).j) and
+      A20: ((curry G).j).b = y by A16,FUNCT_1:def 5;
+        reconsider a'= a, b'= b as Element of K' by A17,A19,Th20;
+
+      A21: x = G.[j, a'] & y = G.[j, b'] by A18,A20,Th20;
+
+        per cases;
+        suppose
+      A22: a in K.j & b in K.j;
+      then A23: a in dom(F.j) & b in dom(F.j) by FUNCT_2:def 1;
+          x = (F.j).a' & y = (F.j).b' by A5,A21,A22;
+        then x in rng(F.j) & y in rng(F.j) by A23,FUNCT_1:def 5;
+        then consider z being Element of L such that
+      A24: z in rng(F.j) and
+      A25: x <= z & y <= z by A15,WAYBEL_0:def 1;
+        take z;
+          rng(F.j) c= X by A8;
+        hence thesis by A24,A25;
+
+        suppose a in K.j & not b in K.j;
+      then A26: y = Bottom L by A5,A21;
+        take x;
+        thus thesis by A16,A26,YELLOW_0:44;
+
+        suppose not a in K.j & b in K.j;
+      then A27: x = Bottom L by A5,A21;
+        take y;
+        thus thesis by A16,A27,YELLOW_0:44;
+
+        suppose not a in K.j & not b in K.j;
+      then A28: x = Bottom L & y = Bottom L by A5,A21;
+        take x;
+        thus thesis by A16,A28;
+      end;
+      hence rng((curry G).j) is directed by WAYBEL_0:def 1;
+    end;
+
+  A29: dom doms F = dom F by EXTENS_1:3;
+  A30: dom F = J by PBOOLE:def 3;
+  A31: dom doms curry G = dom curry G by EXTENS_1:3;
+  A32: dom curry G = J by Th20;
+
+      product doms F c= product doms curry G
+    proof
+      let x be set;
+      assume x in product doms F;
+      then consider g being Function such that
+    A33: x = g and
+    A34: dom g = dom doms F and
+    A35: for j being set st j in dom doms F holds g.j in (doms F).j
+        by CARD_3:def 5;
+
+    A36: dom g = dom doms curry G by A29,A30,A31,A34,Th20;
+        for j being set st j in dom doms curry G holds g.j in (doms curry G).j
+      proof
+        let j be set;
+        assume A37: j in dom doms curry G;
+      then A38: j in J by A31,Th20;
+        reconsider j' = j as Element of J by A31,A37,Th20;
+      A39: g.j in (doms F).j by A29,A30,A35,A38;
+
+      A40: (doms F).j = dom(F.j') by A30,FUNCT_6:31
+                    .= K.j' by FUNCT_2:def 1;
+
+      A41: K.j' c= K' by A6;
+
+          (doms curry G).j = dom((curry G).j') by A32,FUNCT_6:31
+                        .= K' by Th20;
+        hence g.j in (doms curry G).j by A39,A40,A41;
+      end;
+      hence x in product doms curry G by A33,A36,CARD_3:def 5;
+    end;
+    then dom(Frege F) c= product doms curry G by PBOOLE:def 3;
+  then A42: dom(Frege F) c= dom(Frege curry G) by PBOOLE:def 3;
+
+  A43:
+    for f being set st f in dom(Frege F)
+      holds //\((Frege F).f, L) = //\((Frege curry G).f, L)
+    proof
+      let f' be set;
+      assume
+    A44: f' in dom(Frege F);
+      then reconsider f= f' as Element of product doms F by PBOOLE:def 3;
+
+    A45: dom((Frege F).f) = dom F by A44,Th8
+                        .= J by PBOOLE:def 3;
+
+    A46: dom((Frege curry G).f) = dom(curry G) by A42,A44,Th8
+                              .= proj1 dom G by FUNCT_5:def 3
+                              .= proj1 [:J, K':] by FUNCT_2:def 1
+                              .= J by FUNCT_5:11;
+
+        for j being set st j in J holds ((Frege F).f).j = ((Frege curry G).f).j
+      proof
+        let j' be set;
+        assume j' in J;
+        then reconsider j = j' as Element of J;
+
+      A47: f.j in K.j & K.j c= K' by A6,A44,Lm6;
+        then reconsider fj = f.j as Element of K';
+
+          ((Frege F).f).j = (F.j).fj by A44,Lm5
+                       .= G.[j, fj] by A5,A47
+                       .= ((curry G).j).(f.j) by Th20
+                       .= ((Frege curry G).f).j by A42,A44,Lm5;
+        hence thesis;
+      end;
+      hence //\((Frege F).f', L) = //\((Frege curry G).f', L)
+                    by A45,A46,FUNCT_1:9;
+    end;
+
+:: Unfortunately there are two cases: K = J --> K' or not.
+
+  A48: Sup Infs(Frege curry G) = Sup Infs(Frege F)
+    proof
+      per cases;
+:: case I
+      suppose
+    A49: for j being Element of J holds K.j = K';
+
+        for j being set st j in J holds (doms F).j = (doms curry G).j
+      proof
+        let j be set;
+        assume j in J;
+        then reconsider j' = j as Element of J;
+      A50: (doms F).j = dom(F.j') by A30,FUNCT_6:31
+                    .= K.j' by FUNCT_2:def 1;
+          (doms curry G).j = dom((curry G).j') by A32,FUNCT_6:31
+                        .= K' by Th20;
+        hence (doms F).j = (doms curry G).j by A49,A50;
+      end;
+      then doms F = doms curry G by A29,A30,A31,A32,FUNCT_1:9;
+      then dom(Frege F) = product doms curry G by PBOOLE:def 3;
+      then dom(Frege F) = dom(Frege curry G) by PBOOLE:def 3;
+      hence thesis by A43,Th12;
+
+:: case II
+      suppose ex j being Element of J st K.j <> K';
+      then consider j being Element of J such that
+    A51: K.j <> K';
+        K.j c= K' by A6;
+      then not K' c= K.j by A51,XBOOLE_0:def 10;
+      then consider k being set such that
+    A52: k in K' & not k in K.j by TARSKI:def 3;
+      reconsider k as Element of K' by A52;
+
+    A53: rng Infs(Frege curry G) c= rng Infs(Frege F) \/ {Bottom L}
+      proof
+        let x be set;
+        assume x in rng Infs(Frege curry G);
+        then consider f being set such that
+      A54: f in dom Frege curry G and
+      A55: x = //\((Frege curry G).f, L) by Th13;
+        reconsider f as Function by A54,Th7;
+
+        per cases;
+        suppose
+      A56: for j being Element of J holds f.j in K.j;
+
+      A57: dom f = dom curry G by A54,Th8
+               .= dom doms F by A29,A30,Th20;
+
+          for x st x in dom doms F holds f.x in (doms F).x
+        proof
+          let x;
+          assume x in dom doms F;
+          then reconsider j = x as Element of J by A30,EXTENS_1:3;
+            (doms F).j = dom(F.j) by A30,FUNCT_6:31
+                    .= K.j by FUNCT_2:def 1;
+          hence thesis by A56;
+        end;
+        then f in product doms F by A57,CARD_3:18;
+      then A58: f in dom Frege F by PBOOLE:def 3;
+        then x = //\((Frege F).f, L) by A43,A55;
+        then x in rng Infs(Frege F) by A58,Th13;
+        hence thesis by XBOOLE_0:def 2;
+
+        suppose ex j being Element of J st not f.j in K.j;
+        then consider j being Element of J such that
+      A59: not f.j in K.j;
+          j in J;
+        then j in dom curry G by Th20;
+        then f.j in dom((curry G).j) by A54,Th9;
+        then reconsider k = f.j as Element of K' by Th20;
+
+          Bottom L = G.[j, k] by A5,A59
+          .= ((curry G).j).(f.j) by Th20;
+        then Bottom L in rng((Frege curry G).f) by A54,Lm5;
+        then Bottom L >= "/\"(rng((Frege curry G).f), L) by YELLOW_2:24;
+      then A60: Bottom L >= //\((Frege curry G).f, L) by YELLOW_2:def 6;
+          Bottom L <= //\((Frege curry G).f, L) by YELLOW_0:44;
+        then x = Bottom L by A55,A60,ORDERS_1:25;
+        then x in {Bottom L} by TARSKI:def 1;
+        hence thesis by XBOOLE_0:def 2;
+      end;
+
+A61:   rng Infs(Frege F) \/ {Bottom L} c= rng Infs(Frege curry G)
+      proof
+        let x be set;
+        assume
+      A62: x in rng Infs(Frege F) \/ {Bottom L};
+        per cases by A62,XBOOLE_0:def 2;
+        suppose x in rng Infs(Frege F);
+        then consider f being set such that
+      A63: f in dom Frege F and
+      A64: x = //\((Frege F).f, L) by Th13;
+          x = //\((Frege curry G).f, L) by A43,A63,A64;
+        hence x in rng Infs(Frege curry G) by A42,A63,Th13;
+
+        suppose A65: x in {Bottom L};
+      then A66: x = Bottom L by TARSKI:def 1;
+        reconsider x' = x as Element of L by A65;
+        set f = J --> k;
+
+      A67: dom f = J by FUNCOP_1:19
+               .= dom doms curry G by A31,Th20;
+
+          for x st x in dom doms curry G holds f.x in (doms curry G).x
+        proof
+          let x;
+          assume x in dom doms curry G;
+          then reconsider j = x as Element of J by A31,Th20;
+        A68: f.j = k by FUNCOP_1:13;
+            (doms curry G).j = dom((curry G).j) by A32,FUNCT_6:31
+                          .= K' by Th20;
+          hence thesis by A68;
+        end;
+        then f in product doms curry G by A67,CARD_3:18;
+      then A69: f in dom Frege curry G by PBOOLE:def 3;
+         x = G.[j, k] by A5,A52,A66
+            .= ((curry G).j).k by Th20
+            .= ((curry G).j).(f.j) by FUNCOP_1:13;
+        then x in rng((Frege curry G).f) by A69,Lm5;
+        then x' >= "/\"(rng((Frege curry G).f), L) by YELLOW_2:24;
+      then A70: x' >= //\((Frege curry G).f, L) by YELLOW_2:def 6;
+          x' <= //\((Frege curry G).f, L) by A66,YELLOW_0:44;
+        then x' = //\((Frege curry G).f, L) by A70,ORDERS_1:25;
+        hence x in rng Infs(Frege curry G) by A69,Th13;
+      end;
+    A71: ex_sup_of rng Infs(Frege F), L & ex_sup_of {Bottom
+L}, L by YELLOW_0:17;
+    A72: Bottom L <= Sup Infs(Frege F) by YELLOW_0:44;
+
+        Sup Infs Frege curry G = sup rng Infs Frege curry G by YELLOW_2:def 5
+              .= sup(rng Infs(Frege F) \/ {Bottom L}) by A53,A61,XBOOLE_0:def
+10
+              .= sup rng Infs(Frege F) "\/" sup{Bottom L} by A71,YELLOW_2:3
+              .= sup rng Infs(Frege F) "\/" Bottom L by YELLOW_0:39
+              .= Sup Infs(Frege F) "\/" Bottom L by YELLOW_2:def 5
+              .= Sup Infs(Frege F) by A72,YELLOW_0:24;
+      hence thesis;
+    end;
+
+
+  A73: dom F = J by PBOOLE:def 3
+           .= dom curry G by PBOOLE:def 3;
+
+      for j being set st j in dom F holds \\/(F.j, L) = \\/((curry G).j, L)
+    proof
+      let j' be set;
+      assume
+       j' in dom F;
+      then reconsider j = j' as Element of J by PBOOLE:def 3;
+      reconsider H = (curry G).j as Function of (J --> K').j, the carrier of L;
+        (J --> K').j = K' by FUNCOP_1:13;
+      then reconsider H as Function of K', the carrier of L;
+
+    A74: ex_sup_of rng(F.j),L & ex_sup_of rng((curry G).j), L by YELLOW_0:17;
+        rng(F.j) c= rng((curry G).j) by A8;
+      then sup rng(F.j) <= sup rng((curry G).j) by A74,YELLOW_0:34;
+      then Sup(F.j) <= sup(rng H) by YELLOW_2:def 5;
+    then A75: Sup(F.j) <= Sup H by YELLOW_2:def 5;
+
+        for k being Element of K' holds H.k <= Sup(F.j)
+      proof
+        let k be Element of K';
+        per cases;
+        suppose
+      A76: k in K.j;
+      then A77: (F.j).k = G.[j, k] by A5
+                 .= H.k by Th20;
+          k in dom(F.j) by A76,FUNCT_2:def 1;
+        then H.k in rng(F.j) by A77,FUNCT_1:def 5;
+        then H.k <= sup rng(F.j) by YELLOW_2:24;
+        hence H.k <= Sup(F.j) by YELLOW_2:def 5;
+
+        suppose not k in K.j;
+        then Bottom L = G.[j, k] by A5
+          .= H.k by Th20;
+        hence H.k <= Sup(F.j) by YELLOW_0:44;
+      end;
+      then Sup H <= Sup(F.j) by YELLOW_2:56;
+      hence \\/(F.j', L) = \\/((curry G).j', L) by A75,ORDERS_1:25;
+    end;
+    hence Inf Sups F = Inf Sups(curry G) by A73,Th11
+                   .= Sup Infs(Frege F) by A1,A14,A48;
+  end;
+  hence thesis by Lm9;
+end;
+
+theorem ::Theorem 2.3 (1) iff (2')
+    L is continuous iff
+    for J, K being non empty set
+    for F being Function of [:J, K:], the carrier of L st
+      for j being Element of J holds rng((curry F).j) is directed
+        holds
+       Inf Sups curry F = Sup Infs Frege curry F
+by Lm8,Lm10;
+
+
+Lm11:
+  for f being Function st f in Funcs(J, Fin K)
+    holds
+   for j holds f.j is finite Subset of K
+proof
+  let f be Function;
+  assume f in Funcs(J, Fin K);
+  then consider f' being Function such that
+A1: f' = f and
+A2: dom f' = J and
+A3: rng f' c= Fin K by FUNCT_2:def 2;
+
+    for j holds f.j is finite Subset of K
+  proof
+    let j;
+      f.j in rng f by A1,A2,FUNCT_1:def 5;
+    hence f.j is finite Subset of K by A1,A3,FINSUB_1:def 5;
+  end;
+  hence thesis;
+end;
+
+
+Lm12:
+  for F being Function of [:J, K:], D
+  for f being non-empty ManySortedSet of J st f in Funcs(J, Fin K)
+  for G being DoubleIndexedSet of f, L st
+    for j, x st x in f.j holds (G.j).x = F.[j, x]
+    holds
+   rng(G.j) is finite Subset of rng((curry F).j)
+proof
+  let F be Function of [:J, K:], D;
+  let f be non-empty ManySortedSet of J such that
+A1: f in Funcs(J, Fin K);
+  let G be DoubleIndexedSet of f, L such that
+A2: for j, x st x in f.j holds (G.j).x = F.[j, x];
+A3: f.j is finite Subset of K by A1,Lm11;
+A4:
+  rng(G.j) c= rng((curry F).j)
+  proof
+    let y be set;
+    assume y in rng(G.j);
+    then consider k being set such that
+  A5: k in dom(G.j) and
+  A6: y = (G.j).k by FUNCT_1:def 5;
+  A7: k in f.j by A5,FUNCT_2:def 1;
+  then A8: k in K by A3;
+    reconsider k as Element of K by A3,A7;
+  A9: k in dom((curry F).j) by A8,Th20;
+      y = F.[j, k] by A2,A6,A7
+     .= ((curry F).j).k by Th20;
+    hence y in rng((curry F).j) by A9,FUNCT_1:def 5;
+  end;
+
+    dom(G.j) is finite by A3,FUNCT_2:def 1;
+then A10: (G.j).:(dom(G.j)) is finite by FINSET_1:17;
+
+    rng(G.j) c= (G.j).:(dom(G.j))
+  proof
+    let y be set;
+    assume y in rng(G.j);
+    then consider k being set such that
+  A11: k in dom(G.j) and
+  A12: y = (G.j).k by FUNCT_1:def 5;
+    thus y in (G.j).:(dom(G.j)) by A11,A12,FUNCT_1:def 12;
+  end;
+  hence thesis by A4,A10,FINSET_1:13;
+end;
+
+theorem Th22:
+  for F being Function of [:J, K:], the carrier of L
+  for X being Subset of L st X = {a where a is Element of L:
+    ex f being non-empty ManySortedSet of J st f in Funcs(J, Fin K) &
+    ex G being DoubleIndexedSet of f, L st
+      (for j, x st x in f.j holds (G.j).x = F.[j, x]) & a = Inf Sups G}
+    holds
+   Inf Sups curry F >= sup X
+proof
+  let F be Function of [:J, K:], the carrier of L;
+  let X be Subset of L;
+  assume
+A1: X = {a where a is Element of L:
+    ex f being non-empty ManySortedSet of J st f in Funcs(J, Fin K) &
+    ex G being DoubleIndexedSet of f, L st
+      (for j, x st x in f.j holds (G.j).x = F.[j, x]) & a = Inf Sups G};
+
+A2:
+  for f being non-empty ManySortedSet of J st f in Funcs(J, Fin K)
+  for G being DoubleIndexedSet of f, L st
+    for j, x st x in f.j holds (G.j).x = F.[j, x]
+  for j
+    holds
+   Sup((curry F).j) >= Sup(G.j)
+  proof
+    let f be non-empty ManySortedSet of J such that
+  A3: f in Funcs(J, Fin K);
+    let G be DoubleIndexedSet of f, L such that
+  A4: for j, x st x in f.j holds (G.j).x = F.[j, x];
+    let j;
+  A5: ex_sup_of rng((curry F).j), L & ex_sup_of rng(G.j),L by YELLOW_0:17;
+
+      rng(G.j) is Subset of rng((curry F).j) by A3,A4,Lm12;
+    then sup rng((curry F).j) >= sup rng(G.j) by A5,YELLOW_0:34;
+    then Sup((curry F).j) >= sup rng(G.j) by YELLOW_2:def 5;
+    hence Sup((curry F).j) >= Sup(G.j) by YELLOW_2:def 5;
+  end;
+
+A6:
+  for f being non-empty ManySortedSet of J st f in Funcs(J, Fin K)
+  for G being DoubleIndexedSet of f, L st
+    for j, x st x in f.j holds (G.j).x = F.[j, x]
+    holds
+   Inf Sups curry F >= Inf Sups G
+  proof
+    let f be non-empty ManySortedSet of J such that
+  A7: f in Funcs(J, Fin K);
+    let G be DoubleIndexedSet of f, L such that
+  A8: for j, x st x in f.j holds (G.j).x = F.[j, x];
+
+      rng Sups curry F is_>=_than Inf Sups G
+    proof
+      let a;
+      assume a in rng Sups curry F;
+      then consider j being Element of J such that
+    A9: a = Sup((curry F).j) by Th14;
+
+    A10: Sup((curry F).j) >= Sup(G.j) by A2,A7,A8;
+        Sup(G.j) in rng Sups G by Th14;
+      then Sup(G.j) >= inf rng Sups G by YELLOW_2:24;
+      then Sup(G.j) >= Inf Sups G by YELLOW_2:def 6;
+      hence a >= Inf Sups G by A9,A10,ORDERS_1:26;
+    end;
+    then inf rng Sups curry F >= Inf Sups G by YELLOW_0:33;
+    hence Inf Sups curry F >= Inf Sups G by YELLOW_2:def 6;
+  end;
+
+    Inf Sups curry F is_>=_than X
+  proof
+    let a;
+    assume a in X;
+    then consider a' being Element of L such that
+  A11: a' = a and
+  A12: ex f being non-empty ManySortedSet of J st f in Funcs(J, Fin K) &
+      ex G being DoubleIndexedSet of f, L st
+        (for j, x st x in
+ f.j holds (G.j).x = F.[j, x]) & a' = Inf Sups G by A1;
+    consider f being non-empty ManySortedSet of J such that
+  A13: f in Funcs(J, Fin K) and
+  A14: ex G being DoubleIndexedSet of f, L st
+      (for j, x st x in f.j holds (G.j).x = F.[j, x]) & a' = Inf Sups G by A12;
+    consider G being DoubleIndexedSet of f, L such that
+  A15: for j, x st x in f.j holds (G.j).x = F.[j, x] and
+  A16: a' = Inf Sups G by A14;
+    thus Inf Sups curry F >= a by A6,A11,A13,A15,A16;
+  end;
+  hence thesis by YELLOW_0:32;
+end;
+
+
+Lm13:   ::Theorem 2.3 (1) implies (3)
+  L is continuous implies
+    for J, K for F being Function of [:J, K:], the carrier of L
+    for X being Subset of L st X = {a where a is Element of L:
+      ex f being non-empty ManySortedSet of J st f in Funcs(J, Fin K) &
+      ex G being DoubleIndexedSet of f, L st
+        (for j, x st x in f.j holds (G.j).x = F.[j, x]) & a = Inf Sups G}
+      holds
+     Inf Sups curry F = sup X
+proof
+  assume
+A1: L is continuous;
+
+  hereby
+    let J, K;
+    let F be Function of [:J, K:], the carrier of L;
+    let X be Subset of L;
+    assume
+  A2: X = {a where a is Element of L:
+    ex f being non-empty ManySortedSet of J st f in Funcs(J, Fin K) &
+    ex G being DoubleIndexedSet of f, L st
+      (for j, x st x in f.j holds (G.j).x = F.[j, x]) & a = Inf Sups G};
+
+    set FIK = {A where A is Subset of K: A is finite & A <> {}};
+    consider k being Element of K;
+      {k} c= K & {k} <> {} by ZFMISC_1:37;
+    then {k} in FIK;
+    then reconsider FIK as non empty set;
+
+  A3: FIK c= Fin K
+    proof
+      let x be set;
+      assume x in FIK;
+      then consider A being Subset of K such that
+    A4: x = A & A is finite & A <> {};
+      thus x in Fin K by A4,FINSUB_1:def 5;
+    end;
+
+    set N = Funcs(J, FIK);
+    deffunc F(Element of J, Element of N) = sup(((curry F).$1).:($2.$1));
+      ex H being Function of [:J, N:], the carrier of L st
+      for j being Element of J for g being Element of N holds
+      H.[j, g] = F(j,g) from Lambda2D;
+    then consider H being Function of [:J, N:], the carrier of L such that
+  A5: for j for g being Element of N holds
+      H.[j, g] = sup(((curry F).j).:(g.j));
+
+     set cF = curry F, cH = curry H;
+
+  A6: for j holds
+    (for Y being finite Subset of rng(cF.j) st Y <> {} holds ex_sup_of Y,L) &
+    (for x being Element of L st x in rng(cH.j)
+      ex Y being finite Subset of rng(cF.j) st ex_sup_of Y,L & x = "\/"(Y,L)) &
+    for Y being finite Subset of rng(cF.j) st Y <> {} holds "\/"(Y,L) in
+ rng(cH.j)
+    proof
+      let j;
+      set D = rng((curry H).j), R = rng((curry F).j);
+      set Hj = (curry H).j, Fj = (curry F).j;
+
+      thus for Y being finite Subset of R st Y <> {} holds ex_sup_of Y,L
+        by YELLOW_0:17;
+      thus for x being Element of L st x in D
+        ex Y being finite Subset of R st ex_sup_of Y,L & x = "\/"(Y,L)
+      proof
+        let x be Element of L;
+        assume x in D;
+        then consider g being set such that
+      A7: g in dom Hj and
+      A8: Hj.g = x by FUNCT_1:def 5;
+        reconsider g as Element of N by A7,Th20;
+      A9: x = H.[j, g] by A8,Th20
+           .= sup(Fj.:(g.j)) by A5;
+        consider g' being Function such that
+      A10: g' = g and
+      A11: dom g' = J and
+      A12: rng g' c= FIK by FUNCT_2:def 2;
+          g.j in rng g by A10,A11,FUNCT_1:def 5;
+        then g.j in FIK by A10,A12;
+        then consider A being Subset of K such that
+      A13: A = g.j & A is finite & A <> {};
+        reconsider Y = Fj.:(g.j) as finite Subset of R
+           by A13,FINSET_1:17,RELAT_1:144;
+        take Y;
+        thus thesis by A9,YELLOW_0:17;
+      end;
+
+      thus for Y being finite Subset of R st Y <> {} holds "\/"(Y,L) in D
+      proof
+        let Y be finite Subset of R;
+        assume
+      A14: Y <> {};
+        consider Z being set such that
+      A15: Z c= dom Fj and
+      A16: Z is finite and
+      A17: Fj.:Z = Y by COMPTS_1:1;
+      A18: Z <> {} by A14,A17,RELAT_1:149;
+          Z c= K by A15,Th20;
+        then Z in FIK by A16,A18;
+      then A19: {Z} c= FIK by ZFMISC_1:37;
+      A20: dom(J --> Z) = J by FUNCOP_1:19;
+          rng(J --> Z) = {Z} by FUNCOP_1:14;
+        then reconsider g = J --> Z as Element of N by A19,A20,FUNCT_2:def 2;
+          g in N;
+      then A21: g in dom Hj by Th20;
+      A22: g.j = Z by FUNCOP_1:13;
+          Hj.g = H.[j, g] by Th20
+            .= "\/"(Y, L) by A5,A17,A22;
+        hence "\/"(Y, L) in D by A21,FUNCT_1:def 5;
+      end;
+    end;
+
+
+      for j holds rng((curry H).j) is directed
+    proof
+      let j;
+        (for Y being finite Subset of rng(cF.j) st
+        Y <> {} holds ex_sup_of Y,L) &
+      (for x being Element of L st x in rng(cH.j)
+        ex Y being finite Subset of rng(cF.j) st
+          ex_sup_of Y,L & x = "\/"(Y,L)) &
+      for Y being finite Subset of rng(cF.j) st
+        Y <> {} holds "\/"(Y,L) in rng(cH.j) by A6;
+      hence rng(cH.j) is directed by WAYBEL_0:51;
+    end;
+  then A23: Inf Sups curry H = Sup Infs Frege curry H by A1,Lm8;
+
+  A24: dom curry F = J by Th20
+                 .= dom curry H by Th20;
+
+      for j being set st j in dom curry F holds
+      \\/((curry F).j, L) = \\/((curry H).j, L)
+    proof
+      let j' be set;
+      assume j' in dom curry F;
+      then reconsider j = j' as Element of J by Th20;
+    A25: ex_sup_of rng(cF.j),L by YELLOW_0:17;
+        (for Y being finite Subset of rng(cF.j) st
+        Y <> {} holds ex_sup_of Y,L) &
+      (for x being Element of L st x in rng(cH.j)
+        ex Y being finite Subset of rng(cF.j) st
+          ex_sup_of Y,L & x = "\/"(Y,L)) &
+      for Y being finite Subset of rng(cF.j) st
+        Y <> {} holds "\/"(Y,L) in rng(cH.j) by A6;
+      then sup(rng(cF.j)) = sup(rng(cH.j)) by A25,WAYBEL_0:54;
+      then Sup(cF.j) = sup(rng(cH.j)) by YELLOW_2:def 5;
+      hence thesis by YELLOW_2:def 5;
+    end;
+  then A26: Inf Sups curry F = Inf Sups curry H by A24,Th11;
+
+
+  A27: for h being Function-yielding Function st h in product doms curry H
+    holds
+      (for j holds ((Frege h).(id J)).j = (h.j).j & h.j in N &
+        ((Frege h).(id J)).j is finite non empty Subset of K) &
+      (Frege h).(id J) is non-empty ManySortedSet of J &
+      (Frege h).(id J) in Funcs(J, FIK) & (Frege h).(id J) in Funcs(J, Fin K)
+    proof
+      let h be Function-yielding Function;
+      set f = (Frege h).(id J);
+      assume h in product doms curry H;
+    then A28: h in dom Frege curry H by PBOOLE:def 3;
+
+    A29: dom id J = J by FUNCT_1:34;
+    A30: dom doms h = dom h by EXTENS_1:3;
+    A31: dom h = dom curry H by A28,Th8
+             .= J by Th20;
+
+        for x st x in dom doms h holds (id J).x in (doms h).x
+      proof
+        let x;
+        assume x in dom doms h;
+        then reconsider j = x as Element of J by A31,EXTENS_1:3;
+      A32: (id J).j = j by FUNCT_1:35;
+          h.j in (J --> N).j by A28,Lm6;
+        then h.j in N by FUNCOP_1:13;
+        then consider g being Function such that
+      A33: g = h.j and
+      A34: dom g = J and
+             rng g c= FIK by FUNCT_2:def 2;
+          (doms h).j = J by A31,A33,A34,FUNCT_6:31;
+        hence thesis by A32;
+      end;
+      then id J in product doms h by A29,A30,A31,CARD_3:18;
+    then A35: id J in dom Frege h by PBOOLE:def 3;
+
+      thus
+    A36: for j holds ((Frege h).(id J)).j = (h.j).j & h.j in N &
+        ((Frege h).(id J)).j is finite non empty Subset of K
+      proof
+        let j;
+        thus
+      A37: ((Frege h).(id J)).j = (h.j).((id J).j) by A31,A35,Th9
+                              .= (h.j).j by FUNCT_1:35;
+
+          h.j in (J --> N).j by A28,Lm6;
+        hence
+          h.j in N by FUNCOP_1:13;
+        then consider g being Function such that
+      A38: g = h.j and
+      A39: dom g = J and
+      A40: rng g c= FIK by FUNCT_2:def 2;
+          f.j in rng g by A37,A38,A39,FUNCT_1:def 5;
+        then f.j in FIK by A40;
+        then consider A being Subset of K such that
+      A41: f.j = A & A is finite & A <> {};
+        thus f.j is finite non empty Subset of K by A41;
+      end;
+
+    A42: dom f = J by A31,A35,Th8;
+      then reconsider f'= f as ManySortedSet of J by PBOOLE:def 3;
+
+        for j being set st j in J holds f'.j is non empty by A36;
+      hence f is non-empty ManySortedSet of J by PBOOLE:def 16;
+
+    A43: rng f c= FIK
+      proof
+        let y be set;
+        assume y in rng f;
+        then consider j being set such that
+      A44: j in dom f and
+      A45: y = f.j by FUNCT_1:def 5;
+          f.j is finite non empty Subset of K by A36,A42,A44;
+        hence y in FIK by A45;
+      end;
+      hence f in Funcs(J, FIK) by A42,FUNCT_2:def 2;
+        rng f c= Fin K by A3,A43,XBOOLE_1:1;
+      hence f in Funcs(J, Fin K) by A42,FUNCT_2:def 2;
+    end;
+
+  A46: for h being Element of product doms curry H holds
+        Inf((Frege curry H).h) <= sup X
+    proof
+      let h be Element of product doms curry H;
+        h in product doms curry H;
+    then A47: h in dom Frege curry H by PBOOLE:def 3;
+        for x st x in dom h holds h.x is Function
+      proof
+        let x;
+        assume
+      A48: x in dom h;
+          dom h = dom curry H by A47,Th8
+             .= J by Th20;
+        then reconsider j = x as Element of J by A48;
+          h.j in (J --> N).j by A47,Lm6;
+        then h.j in N by FUNCOP_1:13;
+        then ex f being Function st h.j = f & dom f = J & rng f c= FIK
+          by FUNCT_2:def 2;
+        hence thesis;
+      end;
+      then reconsider h'= h as Function-yielding Function by PRALG_1:def 15;
+      reconsider f = (Frege h').(id J) as non-empty ManySortedSet of J by A27;
+    A49: f in Funcs(J, Fin K) by A27;
+
+      defpred P[set,set,set] means $1 = F.[$3, $2];
+    A50: for j being set st j in J holds
+      for x st x in f.j ex y st y in (J --> the carrier of L).j & P[y,x,j]
+      proof
+        let i;
+        assume i in J;
+        then reconsider j = i as Element of J;
+        let x;
+        assume
+      A51: x in f.i;
+          f.j is Subset of K by A27;
+        then reconsider k = x as Element of K by A51;
+        take y = F.[j, k];
+          [j, k] in [:J, K:] by ZFMISC_1:106;
+        then y in the carrier of L by FUNCT_2:7;
+        hence thesis by FUNCOP_1:13;
+      end;
+
+        ex G being ManySortedFunction of f, (J --> the carrier of L) st
+        for j being set st j in J holds
+          ex g being Function of f.j, (J --> the carrier of L).j st g = G.j &
+          for x st x in f.j holds P[g.x,x,j] from MSFExFunc(A50);
+      then consider G being ManySortedFunction of f, (J --> the carrier of L)
+        such that
+    A52: for j being set st j in J holds
+          ex g being Function of f.j, (J --> the carrier of L).j st g = G.j &
+          for x st x in f.j holds g.x = F.[j, x];
+      reconsider G as DoubleIndexedSet of f, L;
+
+    A53: for j, x st x in f.j holds (G.j).x = F.[j, x]
+      proof
+        let j, x;
+        assume
+      A54: x in f.j;
+        consider g being Function of f.j, (J --> the carrier of L).j such that
+       A55: g = G.j and
+       A56: for x st x in f.j holds g.x = F.[j, x] by A52;
+        thus thesis by A54,A55,A56;
+      end;
+
+        Inf((Frege curry H).h) is_<=_than rng Sups G
+      proof
+        let y be Element of L;
+        assume y in rng Sups G;
+        then consider j such that
+      A57: y = Sup(G.j) by Th14;
+
+      A58: ex_sup_of ((curry F.j).:(f.j)),L & ex_sup_of rng(G.j),L
+          by YELLOW_0:17;
+
+          (curry F.j).:(f.j) c= rng(G.j)
+        proof
+          let y be set;
+          assume y in (curry F.j).:(f.j);
+          then consider x being set such that
+        A59: x in dom((curry F).j) and
+        A60: x in f.j and
+        A61: y = ((curry F).j).x by FUNCT_1:def 12;
+          reconsider k = x as Element of K by A59,Th20;
+        A62: y = F.[j, k] by A61,Th20
+              .= (G.j).k by A53,A60;
+            k in dom(G.j) by A60,FUNCT_2:def 1;
+          hence y in rng(G.j) by A62,FUNCT_1:def 5;
+        end;
+        then sup((curry F.j).:(f.j)) <= sup rng(G.j) by A58,YELLOW_0:34;
+      then A63: sup((curry F.j).:(f.j)) <= Sup(G.j) by YELLOW_2:def 5;
+
+          j in J;
+      then A64: j in dom curry H by Th20;
+          h.j in (J --> N).j by A47,Lm6;
+        then reconsider hj = h.j as Element of N by FUNCOP_1:13;
+
+        A65: sup((curry F.j).:(f.j)) = sup((curry F.j).:(hj.j)) by A27
+                              .= H.[j, hj] by A5
+                              .= ((curry H).j).(h.j) by Th20
+                              .= ((Frege curry H).h).j by A47,A64,Th9;
+          Inf((Frege curry H).h) <= ((Frege curry H).h).j by YELLOW_2:55;
+        hence Inf((Frege curry H).h) <= y by A57,A63,A65,ORDERS_1:26;
+      end;
+      then Inf((Frege curry H).h) <= inf rng Sups G by YELLOW_0:33;
+    then A66: Inf((Frege curry H).h) <= Inf Sups G by YELLOW_2:def 6;
+
+        Inf Sups G in X by A2,A49,A53;
+      then Inf Sups G <= sup X by YELLOW_2:24;
+      hence Inf((Frege curry H).h) <= sup X by A66,ORDERS_1:26;
+    end;
+
+      rng Infs Frege curry H is_<=_than sup X
+    proof
+      let x be Element of L;
+      assume x in rng Infs Frege curry H;
+      then consider h being set such that
+    A67: h in dom Frege curry H and
+    A68: x = //\((Frege curry H).h, L) by Th13;
+      reconsider h as Element of product doms curry H by A67,PBOOLE:def 3;
+        Inf((Frege curry H).h) <= sup X by A46;
+      hence thesis by A68;
+    end;
+    then sup rng Infs Frege curry H <= sup X by YELLOW_0:32;
+  then A69: Inf Sups curry F <= sup X by A23,A26,YELLOW_2:def 5;
+      Inf Sups curry F >= sup X by A2,Th22;
+    hence Inf Sups curry F = sup X by A69,ORDERS_1:25;
+  end;
+  thus thesis;
+end;
+
+
+Lm14:    ::Theorem 2.3 (3) implies (1)
+  (for J, K for F being Function of [:J, K:], the carrier of L
+  for X being Subset of L st X = {a where a is Element of L:
+    ex f being non-empty ManySortedSet of J st f in Funcs(J, Fin K) &
+    ex G being DoubleIndexedSet of f, L st
+      (for j, x st x in f.j holds (G.j).x = F.[j, x]) & a = Inf Sups G}
+    holds Inf Sups curry F = sup X)
+      implies
+     L is continuous
+proof
+  assume
+A1:
+  for J, K for F being Function of [:J, K:], the carrier of L
+  for X being Subset of L st X = {a where a is Element of L:
+    ex f being non-empty ManySortedSet of J st f in Funcs(J, Fin K) &
+    ex G being DoubleIndexedSet of f, L st
+      (for j, x st x in f.j holds (G.j).x = F.[j, x]) & a = Inf Sups G}
+    holds Inf Sups curry F = sup X;
+
+    for J, K for F being Function of [:J, K:], the carrier of L st
+    for j being Element of J holds rng((curry F).j) is directed
+      holds Inf Sups curry F = Sup Infs Frege curry F
+  proof
+    let J, K;
+    let F be Function of [:J, K:], the carrier of L such that
+  A2: for j being Element of J holds rng((curry F).j) is directed;
+
+    defpred P[Element of L] means
+      ex f being non-empty ManySortedSet of J st f in Funcs(J, Fin K) &
+      ex G being DoubleIndexedSet of f, L st
+        (for j, x st x in f.j holds (G.j).x = F.[j, x]) & $1 = Inf Sups G;
+    reconsider X = {a where a is Element of L: P[a]}
+     as Subset of L from RelStrSubset;
+
+      X is_<=_than Sup Infs Frege curry F
+    proof
+      let a' be Element of L;
+      assume a' in X;
+      then consider a being Element of L such that
+    A3: a' = a and
+    A4: ex f being non-empty ManySortedSet of J st f in Funcs(J, Fin K) &
+        ex G being DoubleIndexedSet of f, L st
+         (for j, x st x in f.j holds (G.j).x = F.[j, x]) & a = Inf Sups G;
+      consider f being non-empty ManySortedSet of J such that
+    A5: f in Funcs(J, Fin K) and
+    A6: ex G being DoubleIndexedSet of f, L st
+        (for j, x st x in f.j holds (G.j).x = F.[j, x]) & a = Inf Sups G by A4;
+      consider G being DoubleIndexedSet of f, L such that
+    A7: for j, x st x in f.j holds (G.j).x = F.[j, x] and
+    A8: a = Inf Sups G by A6;
+
+      defpred P[set, set] means
+        $1 in J & $2 in K & ex b st b = ((curry F).$1).$2 & a <= b;
+
+    A9: for x st x in J ex y st y in K & P[x, y]
+      proof
+        let x;
+        assume
+            x in J;
+        then reconsider j = x as Element of J;
+      A10: rng((curry F).j) is non empty directed by A2;
+          rng(G.j) is finite Subset of rng((curry F).j) by A5,A7,Lm12;
+        then consider y being Element of L such that
+      A11: y in rng((curry F).j) and
+      A12: rng(G.j) is_<=_than y by A10,WAYBEL_0:1;
+        consider k being set such that
+      A13: k in dom((curry F).j) and
+      A14: y = ((curry F).j).k by A11,FUNCT_1:def 5;
+        reconsider k as Element of K by A13,Th20;
+        take k;
+          sup rng(G.j) <= y by A12,YELLOW_0:32;
+      then A15: Sup(G.j) <= y by YELLOW_2:def 5;
+          Sup(G.j) in rng Sups G by Th14;
+        then inf rng Sups G <= Sup(G.j) by YELLOW_2:24;
+        then Inf Sups G <= Sup(G.j) by YELLOW_2:def 6;
+        then a <= y by A8,A15,ORDERS_1:26;
+        hence thesis by A14;
+      end;
+
+      consider g being Function such that
+    A16: dom g = J and rng g c= K and
+    A17: for x st x in J holds P[x, g.x] from NonUniqBoundFuncEx(A9);
+
+    A18: dom doms curry F = dom curry F by EXTENS_1:3;
+    then A19: dom g = dom doms curry F by A16,Th20;
+
+        for x st x in dom doms curry F holds g.x in (doms curry F).x
+      proof
+        let x;
+        assume x in dom doms curry F;
+        then reconsider j = x as Element of J by A18,Th20;
+          dom curry F = J by Th20;
+        then (doms curry F).j = dom((curry F).j) by FUNCT_6:31
+                        .= K by Th20;
+        hence thesis by A17;
+      end;
+      then reconsider g as Element of product doms curry F by A19,CARD_3:18;
+        for j holds a <= ((Frege curry F).g).j
+      proof
+        let j;
+      A20: dom Frege curry F = product doms curry F by PBOOLE:def 3;
+        A21: J = dom curry F by Th20;
+        consider b such that
+      A22: b = ((curry F).j).(g.j) & a <= b by A17;
+        thus thesis by A20,A21,A22,Th9;
+      end;
+    then A23: a <= Inf((Frege curry F).g) by YELLOW_2:57;
+        Inf((Frege curry F).g) in rng Infs Frege curry F by Th14;
+      then Inf((Frege curry F).g) <= sup rng Infs Frege curry F by YELLOW_2:24
+;
+      then Inf((Frege curry F).g) <= Sup Infs Frege curry F by YELLOW_2:def 5;
+      hence a' <= Sup Infs Frege curry F by A3,A23,ORDERS_1:26;
+    end;
+    then sup X <= Sup Infs Frege curry F by YELLOW_0:32;
+  then A24: Inf Sups curry F <= Sup Infs Frege curry F by A1;
+      Inf Sups curry F >= Sup Infs Frege curry F by Th16;
+    hence Inf Sups curry F = Sup Infs Frege curry F by A24,ORDERS_1:25;
+  end;
+  hence L is continuous by Lm10;
+end;
+
+theorem ::Theorem 2.3 (1) iff (3)
+    L is continuous iff
+   (for J, K for F being Function of [:J, K:], the carrier of L
+   for X being Subset of L st X = {a where a is Element of L:
+     ex f being non-empty ManySortedSet of J st f in Funcs(J, Fin K) &
+     ex G being DoubleIndexedSet of f, L st
+       (for j, x st x in f.j holds (G.j).x = F.[j, x]) & a = Inf Sups G}
+     holds Inf Sups curry F = sup X)
+by Lm13,Lm14;
+
+
+begin  :: Completely-Distributive Lattices
+
+definition ::Definition 2.4
+  let L be non empty RelStr;
+  attr L is completely-distributive means
+:Def3:
+  L is complete &
+    for J being non empty set, K being non-empty ManySortedSet of J
+    for F being DoubleIndexedSet of K, L
+      holds
+     Inf Sups F = Sup Infs Frege F;
+end;
+
+reserve J for non empty set,
+
+        K for non-empty ManySortedSet of J;
+
+
+definition
+  cluster trivial -> completely-distributive (non empty Poset);
+  coherence
+  proof
+    let L be non empty Poset;
+    assume
+  A1: L is trivial;
+    consider x being Element of L;
+
+    thus L is complete
+    proof
+      let X be set;
+      take x;
+      thus X is_<=_than x
+      proof
+        let y be Element of L;
+        thus y in X implies y <= x by A1,REALSET1:def 20;
+      end;
+      let y be Element of L;
+        y = x by A1,REALSET1:def 20;
+      hence thesis by ORDERS_1:24;
+    end;
+    then L is complete (non empty Poset);
+    then reconsider L'= L as complete LATTICE;
+
+      for x being Element of L' holds x = sup waybelow x
+       by A1,REALSET1:def 20;
+  then A2: L' is satisfying_axiom_of_approximation by WAYBEL_3:def 5;
+      for x being Element of L' holds waybelow x is non empty directed;
+    then reconsider L' as continuous LATTICE by A2,WAYBEL_3:def 6;
+
+      for J being non empty set, K being non-empty ManySortedSet of J
+    for F being DoubleIndexedSet of K, L'
+      holds
+     Inf Sups F = Sup Infs(Frege F)
+    proof
+      let J be non empty set, K be non-empty ManySortedSet of J;
+      let F be DoubleIndexedSet of K, L';
+
+        for j being Element of J holds rng(F.j) is directed
+      proof
+        let j be Element of J;
+          for x, y being Element of L st x in rng(F.j) & y in rng(F.j)
+          ex z being Element of L st z in rng(F.j) & x <= z & y <= z
+        proof
+          let x, y be Element of L;
+          assume x in rng(F.j) & y in rng(F.j);
+          consider z being Element of rng(F.j);
+          reconsider z as Element of L;
+          take z;
+          thus thesis by A1,REALSET1:def 20;
+        end;
+        hence rng(F.j) is directed by WAYBEL_0:def 1;
+      end;
+      hence Inf Sups F = Sup Infs(Frege F) by Lm8;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition
+  cluster completely-distributive LATTICE;
+  existence
+  proof
+    consider x being set, R be Order of {x};
+      RelStr(#{x},R#) is trivial non empty RelStr;
+    hence thesis;
+  end;
+end;
+
+theorem Th24: ::Corollary 2.5
+  for L being completely-distributive LATTICE holds L is continuous
+proof
+  let L be completely-distributive LATTICE;
+    L is complete & (for F being DoubleIndexedSet of K, L st
+    for j being Element of J holds rng(F.j) is directed
+      holds Inf Sups F = Sup Infs Frege F) by Def3;
+  hence L is continuous by Lm9;
+end;
+
+definition
+  cluster completely-distributive -> complete continuous LATTICE;
+  correctness by Def3,Th24;
+end;
+
+theorem Th25:
+  for L being non empty antisymmetric transitive with_infima RelStr
+  for x being Element of L
+  for X, Y being Subset of L st ex_sup_of X,L & ex_sup_of Y,L &
+    Y = {x"/\"y where y is Element of L: y in X}
+    holds
+   x "/\" sup X >= sup Y
+proof
+  let L be non empty antisymmetric transitive with_infima RelStr;
+  let x be Element of L;
+  let X, Y be Subset of L such that
+A1: ex_sup_of X,L and
+A2: ex_sup_of Y,L and
+A3: Y = {x"/\"y where y is Element of L: y in X};
+
+    Y is_<=_than (x "/\" sup X)
+  proof
+    let y be Element of L;
+    assume y in Y;
+    then consider z being Element of L such that
+  A4:  y = x "/\" z and
+  A5:  z in X by A3;
+      X is_<=_than sup X by A1,YELLOW_0:30;
+    then y <= z & z <= sup X by A4,A5,LATTICE3:def 9,YELLOW_0:23;
+    then y <= x & y <= sup X by A4,YELLOW_0:23,def 2;
+    hence y <= x "/\" sup X by YELLOW_0:23;
+  end;
+  hence sup Y <= x "/\" sup X by A2,YELLOW_0:30;
+end;
+
+Lm15:
+  for L being completely-distributive LATTICE
+  for X being non empty Subset of L
+  for x being Element of L
+    holds
+   x "/\" sup X = "\/"({x"/\"y where y is Element of L: y in X}, L)
+proof
+  let L be completely-distributive LATTICE;
+  let X be non empty Subset of L;
+  let x be Element of L;
+  set A = {x"/\"y where y is Element of L: y in X};
+  set J = {1, 2}, K = (1, 2) --> ({1}, X);
+  set F = (1, 2) --> ({1} --> x, id X);
+A1: F.1 = {1} --> x & F.2 = id X by FUNCT_4:66;
+A2: K.1 = {1} & K.2 = X by FUNCT_4:66;
+
+  reconsider j1 = 1, j2 = 2 as Element of J by TARSKI:def 2;
+
+    dom K = J by FUNCT_4:65;
+  then reconsider K as ManySortedSet of J by PBOOLE:def 3;
+
+    i in J implies K.i is non empty by A2,TARSKI:def 2;
+  then reconsider K as non-empty ManySortedSet of J by PBOOLE:def 16;
+
+      dom F = J by FUNCT_4:65;
+  then reconsider F as ManySortedSet of J by PBOOLE:def 3;
+
+    for j being set st j in J holds F.j is
+    Function of K.j, (J --> the carrier of L).j
+  proof
+    let j be set;
+    assume
+  A3: j in J;
+  then A4: (J --> the carrier of L).j = the carrier of L by FUNCOP_1:13;
+    per cases by A3,TARSKI:def 2;
+    suppose j = 1;
+hence F.j is Function of K.j, (J --> the carrier of L).j
+         by A2,A4,FUNCT_4:66;
+
+    suppose j = 2;
+    hence F.j is Function of K.j, (J --> the carrier of L).j
+       by A1,A2,A4,FUNCT_2:9;
+  end;
+  then reconsider F as DoubleIndexedSet of K, L by MSUALG_1:def 2;
+
+    x "/\" sup X is_<=_than rng Sups F
+  proof
+    let y be Element of L;
+    assume y in rng Sups F;
+    then consider j being Element of J such that
+  A5: y = Sup(F.j) by Th14;
+    per cases by TARSKI:def 2;
+    suppose j = 1;
+    then rng(F.j) = {x} by A1,FUNCOP_1:14;
+    then Sup(F.j) = sup{x} by YELLOW_2:def 5;
+    then y = x by A5,YELLOW_0:39;
+    hence x "/\" sup X <= y by YELLOW_0:23;
+
+    suppose j = 2;
+    then rng(F.j) = X by A1,RELAT_1:71;
+    then y = sup X by A5,YELLOW_2:def 5;
+    hence x "/\" sup X <= y by YELLOW_0:23;
+  end;
+  then x "/\" sup X <= inf rng Sups F by YELLOW_0:33;
+  then x "/\" sup X <= Inf Sups F by YELLOW_2:def 6;
+then A6: x "/\" sup X <= Sup Infs Frege F by Def3;
+
+    rng Infs Frege F is_<=_than "\/"({x"/\"y where y is Element of L: y in X},
+L
+)
+  proof
+    let y be Element of L;
+    assume y in rng Infs Frege F;
+    then consider f being set such that
+  A7: f in dom Frege F and
+  A8: y = //\(((Frege F).f), L) by Th13;
+    reconsider f as Function by A7,Th7;
+  A9: f.j1 in K.j1 & f.j2 in K.j2 by A7,Lm6;
+    then reconsider f2 = f.2 as Element of X by FUNCT_4:66;
+  A10: y = "/\"(rng((Frege F).f), L) by A8,YELLOW_2:def 6;
+  A11: ex_inf_of rng((Frege F).f),L & ex_inf_of {x, f.2},L by YELLOW_0:17;
+
+      {x, f2} c= rng((Frege F).f)
+    proof
+      let z be set;
+      assume z in {x, f2};
+      then z = x or z = f.2 by TARSKI:def 2;
+      then z = (F.j1).(f.j1) or z = (F.j2).(f.j2)
+          by A1,A2,A9,FUNCOP_1:13,FUNCT_1:35;
+      hence z in rng((Frege F).f) by A7,Lm5;
+    end;
+    then y <= inf{x, f2} by A10,A11,YELLOW_0:35;
+  then A12: y <= x"/\"f2 by YELLOW_0:40;
+      x"/\"f2 in A;
+    then x"/\"f2 <= "\/"(A, L) by YELLOW_2:24;
+    hence thesis by A12,YELLOW_0:def 2;
+  end;
+  then sup rng Infs Frege F <= "\/"({x"/\"y where y is Element of L: y in X},
+L) by YELLOW_0:32;
+  then Sup Infs Frege F <= "\/"({x"/\"y where y is Element of L: y in X}, L)
+by YELLOW_2:def 5;
+then A13: x "/\" sup X <= "\/"({x"/\"y where y is Element of L: y in X}, L) by
+A6,YELLOW_0:def 2;
+
+    (x "/\").:X = A by WAYBEL_1:64;
+  then reconsider A'= A as Subset of L;
+    ex_sup_of X,L & ex_sup_of A',L by YELLOW_0:17;
+  then x "/\" sup X >= sup A' by Th25;
+  hence thesis by A13,YELLOW_0:def 3;
+end;
+
+theorem Th26:
+  for L being completely-distributive LATTICE
+  for X being Subset of L
+  for x being Element of L
+    holds
+   x "/\" sup X = "\/"({x"/\"y where y is Element of L: y in X}, L)
+proof
+  let L be completely-distributive LATTICE;
+  let X be Subset of L;
+  let x be Element of L;
+  set A = {x"/\"y where y is Element of L: y in X};
+  per cases;
+  suppose
+A1: X is empty;
+    now
+    assume
+  A2: A <> {};
+    consider z being Element of A;
+      z in A by A2;
+    then consider y being Element of L such that
+  A3: z = x"/\"y & y in X;
+    thus contradiction by A1,A3;
+  end;
+  then sup X = Bottom L & "\/"(A, L) = Bottom
+L by A1,YELLOW_0:def 11; hence thesis by WAYBEL_1:4;
+
+  suppose X is non empty;
+  hence thesis by Lm15;
+end;
+
+definition
+  cluster completely-distributive -> Heyting LATTICE;
+  correctness
+  proof
+    let L be LATTICE;
+    assume L is completely-distributive;
+    then reconsider L as completely-distributive LATTICE;
+      for X being Subset of L
+    for x being Element of L
+      holds
+     x"/\" sup X = "\/"({x"/\"
+y where y is Element of L: y in X}, L) by Th26;
+     then for x being Element of L holds x "/\" has_an_upper_adjoint by
+WAYBEL_1:67;
+     hence thesis by WAYBEL_1:def 19;
+  end;
+end;
+
+:: For distributivity confer WAYBEL_1.
+
+
+begin  :: SubFrames of Continuous Lattices
+
+definition ::Definition 2.6
+  let L be non empty RelStr;
+  mode CLSubFrame of L is infs-inheriting directed-sups-inheriting
+    (non empty full SubRelStr of L);
+end;
+
+theorem Th27:
+  for F being DoubleIndexedSet of K, L st
+    for j being Element of J holds rng(F.j) is directed
+      holds
+     rng Infs Frege F is directed
+proof
+  let F be DoubleIndexedSet of K, L;
+  assume
+A1: for j being Element of J holds rng(F.j) is directed;
+
+  set X = rng Infs Frege F;
+
+    for x, y being Element of L st x in X & y in X
+    ex z being Element of L st z in X & x <= z & y <= z
+  proof
+    let x, y be Element of L;
+    assume that
+  A2: x in X and
+  A3: y in X;
+    consider g being set such that
+  A4: g in dom(Frege F) and
+  A5: x = //\((Frege F).g, L) by A2,Th13;
+    reconsider g as Function by A4,Th7;
+    reconsider G = (Frege F).g as Function of J, the carrier of L
+      by A4,Th10;
+  A6: x = "/\"(rng((Frege F).g), L) by A5,YELLOW_2:def 6;
+  A7: ex_inf_of rng((Frege F).g),L by YELLOW_0:17;
+
+    consider h being set such that
+  A8: h in dom(Frege F) and
+  A9: y = //\((Frege F).h, L) by A3,Th13;
+    reconsider h as Function by A8,Th7;
+    reconsider H = (Frege F).h as Function of J, the carrier of L
+      by A8,Th10;
+  A10: y = "/\"(rng((Frege F).h), L) by A9,YELLOW_2:def 6;
+  A11: ex_inf_of rng((Frege F).h),L by YELLOW_0:17;
+
+  A12:
+    for j being Element of J
+      ex k being Element of K.j st G.j <= (F.j).k & H.j <= (F.j).k
+    proof
+      let j be Element of J;
+        j in J;
+      then j in dom F by PBOOLE:def 3;
+    then A13: G.j = (F.j).(g.j) & H.j = (F.j).(h.j) by A4,A8,Th9;
+    A14: rng(F.j) is directed Subset of L by A1;
+        j in J;
+      then j in dom F by PBOOLE:def 3;
+      then g.j in dom(F.j) & h.j in dom(F.j) by A4,A8,Th9;
+      then G.j in rng(F.j) & H.j in rng(F.j) by A13,FUNCT_1:def 5;
+      then consider c being Element of L such that
+    A15: c in rng(F.j) and
+    A16: G.j <= c & H.j <= c by A14,WAYBEL_0:def 1;
+      consider k being set such that
+    A17: k in dom(F.j) and
+    A18: c = (F.j).k by A15,FUNCT_1:def 5;
+      reconsider k as Element of K.j by A17,FUNCT_2:def 1;
+      take k;
+      thus G.j <= (F.j).k & H.j <= (F.j).k by A16,A18;
+    end;
+
+    defpred P[set, set] means
+      $1 in J & $2 in K.$1 & for c being Element of L st c = (F.$1).$2
+        holds
+       (for a being Element of L st a = G.$1 holds a <= c) &
+       (for b being Element of L st b = H.$1 holds b <= c);
+
+   A19:
+    for j being set st j in J ex k being set st k in union rng K & P[j, k]
+    proof
+      let j' be set;
+      assume j' in J;
+      then reconsider j = j' as Element of J;
+      consider k being Element of K.j such that
+    A20: G.j <= (F.j).k and
+    A21: H.j <= (F.j).k by A12;
+      take k;
+        j in J;
+      then j in dom K by PBOOLE:def 3;
+      then k in K.j & K.j in rng K by FUNCT_1:def 5;
+      hence k in union rng K by TARSKI:def 4;
+
+      thus P[j', k] by A20,A21;
+    end;
+
+    consider f being Function such that
+  A22: dom f = J and rng f c= union rng K and
+  A23: for j being set st j in J holds P[j, f.j] from NonUniqBoundFuncEx(A19);
+  A24: dom f = dom F by A22,PBOOLE:def 3
+           .= dom doms F by EXTENS_1:3;
+      now
+      let x be set;
+      assume x in dom doms F;
+    then A25: x in dom F by EXTENS_1:3;
+      then reconsider j = x as Element of J by PBOOLE:def 3;
+
+        (doms F).x = dom(F.j) by A25,FUNCT_6:31
+                  .= K.j by FUNCT_2:def 1;
+      hence f.x in (doms F).x by A23;
+    end;
+    then f in product doms F by A24,CARD_3:18;
+  then A26: f in dom(Frege F) by PBOOLE:def 3;
+
+    then reconsider Ff = (Frege F).f as Function of J, the carrier of L
+      by Th10;
+    take z = Inf Ff;
+
+    thus z in X by A26,Th13;
+
+      now
+      let j be Element of J;
+    A27: j in J;
+      then j in dom G by FUNCT_2:def 1;
+    then A28: G.j in rng G by FUNCT_1:def 5;
+
+        x is_<=_than rng G by A6,A7,YELLOW_0:def 10;
+    then A29: x <= G.j by A28,LATTICE3:def 8;
+        j in dom F by A27,PBOOLE:def 3;
+      then (F.j).(f.j) = ((Frege F).f).j by A26,Th9;
+      then G.j <= Ff.j by A23;
+      hence x <= Ff.j by A29,ORDERS_1:26;
+    end;
+    hence x <= z by YELLOW_2:57;
+
+      now
+      let j be Element of J;
+    A30: j in J;
+      then j in dom H by FUNCT_2:def 1;
+    then A31: H.j in rng H by FUNCT_1:def 5;
+
+        y is_<=_than rng H by A10,A11,YELLOW_0:def 10;
+    then A32: y <= H.j by A31,LATTICE3:def 8;
+        j in dom F by A30,PBOOLE:def 3;
+      then (F.j).(f.j) = ((Frege F).f).j by A26,Th9;
+      then H.j <= Ff.j by A23;
+      hence y <= Ff.j by A32,ORDERS_1:26;
+    end;
+    hence y <= z by YELLOW_2:57;
+  end;
+  hence X is directed by WAYBEL_0:def 1;
+end;
+
+theorem ::Theorem 2.7 (ii)
+    L is continuous implies
+    for S being CLSubFrame of L holds S is continuous LATTICE
+proof
+  assume
+A1: L is continuous;
+  reconsider L'= L as complete LATTICE;
+
+  let S be CLSubFrame of L;
+A2: S is complete LATTICE by YELLOW_2:32;
+
+    for J, K for F being DoubleIndexedSet of K, S st
+    for j being Element of J holds rng(F.j) is directed
+      holds Inf Sups F = Sup Infs Frege F
+  proof
+    let J, K;
+    let F be DoubleIndexedSet of K, S such that
+  A3: for j being Element of J holds rng(F.j) is directed;
+
+      now
+      let j be set;
+      assume
+    A4: j in J;
+      then reconsider j'= j as Element of J;
+    A5: F.j' is Function of K.j', the carrier of S;
+      A6: the carrier of S c= the carrier of L by YELLOW_0:def 13;
+         (J --> the carrier of L).j = the carrier of L by A4,FUNCOP_1:13;
+      hence F.j is Function of K.j, (J --> the carrier of L).j by A5,A6,FUNCT_2
+:9;
+    end;
+    then reconsider F'= F as DoubleIndexedSet of K, L by MSUALG_1:def 2;
+
+      for j being Element of J holds rng(F'.j) is directed
+    proof
+      let j be Element of J;
+        rng(F.j) is directed by A3;
+      hence rng(F'.j) is directed by YELLOW_2:7;
+    end;
+  then A7: Inf Sups F' = Sup Infs Frege F' by A1,Lm8;
+
+  A8: ex_inf_of (rng Sups F'),L' by YELLOW_0:17;
+
+      now
+      let x;
+      assume x in rng Sups F;
+      then consider j being Element of J such that
+    A9: x = Sup(F.j) by Th14;
+    A10: ex_sup_of rng(F.j),L' by YELLOW_0:17;
+    A11: rng(F.j) is directed Subset of S by A3;
+        x = sup rng(F.j) by A9,YELLOW_2:def 5
+       .= sup rng(F'.j) by A10,A11,WAYBEL_0:7
+       .= Sup(F'.j) by YELLOW_2:def 5;
+      hence x in rng Sups F' by Th14;
+    end;
+  then A12: rng Sups F c= rng Sups F' by TARSKI:def 3;
+
+      now
+      let x;
+      assume x in rng Sups F';
+      then consider j being Element of J such that
+    A13: x = Sup(F'.j) by Th14;
+    A14: ex_sup_of rng(F.j),L' by YELLOW_0:17;
+    A15: rng(F.j) is directed Subset of S by A3;
+        x = sup rng(F'.j) by A13,YELLOW_2:def 5
+       .= sup rng(F.j) by A14,A15,WAYBEL_0:7
+       .= Sup(F.j) by YELLOW_2:def 5;
+      hence x in rng Sups F by Th14;
+    end;
+    then rng Sups F' c= rng Sups F by TARSKI:def 3;
+then A16: rng Sups F' = rng Sups F by A12,XBOOLE_0:def 10;
+      ex_inf_of rng Sups F,L by YELLOW_0:17;
+    then "/\"(rng Sups F,L) in the carrier of S by YELLOW_0:def 18;
+    then inf rng Sups F' = inf rng Sups F by A8,A16,YELLOW_0:64;
+  then A17: Inf Sups F' = inf rng Sups F by YELLOW_2:def 6;
+  A18: ex_sup_of rng /\\(Frege F', L),L' by YELLOW_0:17;
+
+  A19: rng Infs Frege F is non empty directed Subset of S by A2,A3,Th27;
+
+      now
+      let x;
+      assume x in rng /\\(Frege F', L);
+      then consider f being set such that
+    A20: f in dom(Frege F') and
+    A21: x = //\((Frege F').f, L) by Th13;
+      reconsider f as Element of product doms F' by A20,Lm7;
+        (Frege F).f is Function of J, the carrier of S by A20,Th10;
+      then rng((Frege F).f) c= the carrier of S by RELSET_1:12;
+    then A22: rng((Frege F).f) is Subset of S;
+    A23: ex_inf_of rng((Frege F).f),L' by YELLOW_0:17;
+then A24: "/\"(rng((Frege F).f), L) in the carrier of S by A22,YELLOW_0:def 18;
+        x = "/\"(rng((Frege F').f), L) by A21,YELLOW_2:def 6
+       .= "/\"(rng((Frege F).f), S) by A22,A23,A24,YELLOW_0:64
+       .= //\((Frege F).f, S) by YELLOW_2:def 6;
+      hence x in rng Infs Frege F by A20,Th13;
+    end;
+  then A25: rng /\\(Frege F', L) c= rng /\\(Frege F, S) by TARSKI:def 3;
+
+      now
+      let x;
+      assume x in rng Infs Frege F;
+      then consider f being set such that
+    A26: f in dom(Frege F) and
+    A27: x = //\((Frege F).f, S) by Th13;
+      reconsider f as Function by A26,Th7;
+        (Frege F).f is Function of J, the carrier of S by A26,Th10;
+      then rng((Frege F).f) c= the carrier of S by RELSET_1:12;
+    then A28: rng((Frege F).f) is Subset of S;
+    A29: ex_inf_of rng((Frege F).f),L' by YELLOW_0:17;
+then A30: "/\"(rng((Frege F).f), L) in the carrier of S by A28,YELLOW_0:def 18;
+        x = "/\"(rng((Frege F).f), S) by A27,YELLOW_2:def 6
+       .= "/\"(rng((Frege F').f), L) by A28,A29,A30,YELLOW_0:64
+       .= //\((Frege F').f, L) by YELLOW_2:def 6;
+      hence x in rng Infs Frege F' by A26,Th13;
+    end;
+    then rng Infs Frege F c= rng Infs Frege F' by TARSKI:def 3;
+    then rng Infs Frege F' = rng Infs Frege F by A25,XBOOLE_0:def 10;
+    then sup rng Infs Frege F' = sup rng Infs Frege F by A18,A19,WAYBEL_0:7;
+    then Sup Infs Frege F' = sup rng Infs Frege F by YELLOW_2:def 5
+                     .= Sup Infs Frege F by YELLOW_2:def 5;
+    hence Inf Sups F = Sup Infs Frege F by A7,A17,YELLOW_2:def 6;
+  end;
+  hence S is continuous LATTICE by A2,Lm9;
+end;
+
+theorem Th29:
+  for S being non empty Poset st ex g being map of L, S st
+    g is infs-preserving onto
+      holds
+     S is complete LATTICE
+proof
+  let S be non empty Poset;
+  given g being map of L, S such that
+A1: g is infs-preserving and
+A2: g is onto;
+
+    for A being Subset of S holds ex_inf_of A,S
+  proof
+    let A be Subset of S;
+    set Y = g"A;
+      rng g = the carrier of S by A2,FUNCT_2:def 3;
+  then A3: A = g.:Y by FUNCT_1:147;
+  A4: ex_inf_of Y,L by YELLOW_0:17;
+      g preserves_inf_of Y by A1,WAYBEL_0:def 32;
+    hence thesis by A3,A4,WAYBEL_0:def 30;
+  end;
+  then S is complete (non empty Poset) by YELLOW_2:30;
+  hence S is complete LATTICE;
+end;
+
+definition
+  let J be set, y be set;
+  redefine func J --> y;
+  synonym J => y;
+end;
+
+definition
+  let J be set, y be set;
+  redefine func J --> y -> ManySortedSet of J;
+  coherence
+  proof
+      dom (J --> y) = J by FUNCOP_1:19;
+    hence thesis by PBOOLE:def 3;
+  end;
+
+  synonym J => y;
+end;
+
+definition
+  let A, B, J be set, f be Function of A, B;
+  redefine func J => f -> ManySortedFunction of (J --> A), (J --> B);
+  coherence
+  proof
+    set JA = J --> A, JB = J --> B;
+
+      for j being set st j in J holds (J => f).j is Function of JA.j, JB.j
+    proof
+      let j be set;
+      assume j in J;
+      then (J => f).j = f & JA.j = A & JB.j = B by FUNCOP_1:13;
+      hence (J => f).j is Function of JA.j, JB.j;
+    end;
+    hence thesis by MSUALG_1:def 2;
+  end;
+end;
+
+theorem Th30:
+  for A, B being set
+  for f being Function of A, B, g being Function of B, A st g*f = id A
+    holds
+   (J => g)**(J => f) = id (J --> A)
+proof
+  let A, B be set;
+  let f be Function of A, B;
+  let g be Function of B, A;
+  assume
+A1: g*f = id A;
+  set F = (J => g)**(J => f);
+    dom F = J by MSUALG_3:2;
+  then reconsider F as ManySortedSet of J by PBOOLE:def 3;
+
+A2:
+  for j being set st j in J holds F.j = id ((J --> A).j)
+  proof
+    let j be set;
+    assume
+  A3: j in J;
+      then (J => g).j = g & (J => f).j = f & (J --> A).j = A by FUNCOP_1:13;
+    hence F.j = id ((J --> A).j) by A1,A3,MSUALG_3:2;
+  end;
+
+    now
+    let j be set;
+    assume j in J;
+    then F.j = id ((J --> A).j) by A2;
+    hence F.j is Function of (J --> A).j, (J --> A).j;
+  end;
+  then reconsider F as ManySortedFunction of (J --> A), (J --> A) by MSUALG_1:
+def 2;
+
+    for j being set st j in J holds F.j = id ((J --> A).j) by A2;
+  hence (J => g)**(J => f) = id (J --> A) by MSUALG_3:def 1;
+end;
+
+theorem Th31:
+  for J, A being non empty set, B being set, K being ManySortedSet of J
+  for F being DoubleIndexedSet of K, A
+  for f being Function of A, B
+    holds
+   (J => f)**F is DoubleIndexedSet of K, B
+proof
+  let J, A be non empty set;
+  let B be set;
+  let K be ManySortedSet of J;
+  let F be DoubleIndexedSet of K, A;
+  let f be Function of A, B;
+  set fF = (J => f)**F;
+
+    dom fF = J by MSUALG_3:2;
+  then reconsider fF as ManySortedSet of J by PBOOLE:def 3;
+
+    for j being set st j in J holds fF.j is Function of K.j, (J --> B).j
+  proof
+    let j be set;
+    assume
+  A1: j in J;
+    then reconsider j'= j as Element of J;
+    reconsider Fj = F.j' as Function of K.j, A;
+A2: (J --> B).j = B by A1,FUNCOP_1:13;
+      fF.j = ((J => f).j)*(F.j) by A1,MSUALG_3:2
+        .= f*Fj by FUNCOP_1:13;
+    hence fF.j is Function of K.j, (J --> B).j by A2;
+  end;
+  hence (J --> f)**F is DoubleIndexedSet of K, B by MSUALG_1:def 2;
+end;
+
+theorem Th32:
+  for J, A, B being non empty set, K being ManySortedSet of J
+  for F being DoubleIndexedSet of K, A
+  for f being Function of A, B
+    holds
+   doms((J => f)**F) = doms F
+proof
+  let J, A, B be non empty set;
+  let K be ManySortedSet of J;
+  let F be DoubleIndexedSet of K, A;
+  let f be Function of A, B;
+
+A1:
+  dom doms((J => f)**F) = dom((J => f)**F) by EXTENS_1:3
+                        .= J by MSUALG_3:2;
+A2:
+  dom doms F = dom F by EXTENS_1:3
+            .= J by PBOOLE:def 3;
+
+    now
+    let x be set;
+    assume
+  A3: x in J;
+    then reconsider j = x as Element of J;
+
+  A4: rng(F.j) c= A & dom f = A by FUNCT_2:def 1,RELSET_1:12;
+  A5: j in dom F by A3,PBOOLE:def 3;
+      j in dom((J => f)**F) by A1,A3,EXTENS_1:3;
+    then (doms((J => f)**F)).j = dom(((J => f)**F).j) by FUNCT_6:31
+                          .= dom(((J => f).j)*(F.j)) by MSUALG_3:2
+                          .= dom(f*(F.j)) by FUNCOP_1:13
+                          .= dom(F.j) by A4,RELAT_1:46
+                          .= (doms F).j by A5,FUNCT_6:31;
+    hence (doms((J => f)**F)).x = (doms F).x;
+  end;
+  hence thesis by A1,A2,FUNCT_1:9;
+end;
+
+theorem ::Theorem 2.7 (iii)
+    L is continuous implies
+    for S being non empty Poset st ex g being map of L, S st
+      g is infs-preserving directed-sups-preserving & g is onto
+        holds
+       S is continuous LATTICE
+proof
+  assume
+A1: L is continuous;
+  let S be non empty Poset;
+  given g being map of L, S such that
+A2: g is infs-preserving directed-sups-preserving and
+A3: g is onto;
+
+  reconsider S'= S as complete LATTICE by A2,A3,Th29;
+
+    for J, K for F being DoubleIndexedSet of K, S' st
+    for j being Element of J holds rng(F.j) is directed
+      holds Inf Sups F = Sup Infs(Frege F)
+  proof
+    let J, K;
+    let F be DoubleIndexedSet of K, S' such that
+  A4: for j being Element of J holds rng(F.j) is directed;
+
+    consider d being map of S, L such that
+  A5: [g, d] is Galois and
+        for t being Element of S holds d.t is_minimum_of g"(uparrow t)
+      by A2,WAYBEL_1:15;
+
+      for t being Element of S holds d.t is_minimum_of g"{t}
+      by A3,A5,WAYBEL_1:23;
+    then g*d = id S by WAYBEL_1:24;
+  then A6: g*d = id the carrier of S by GRCAT_1:def 11;
+  A7: d is monotone by A5,WAYBEL_1:9;
+    reconsider dF = (J => d)**F as DoubleIndexedSet of K, L by Th31;
+  A8: for j being Element of J holds rng(dF.j) is directed
+    proof
+      let j be Element of J;
+        (J => d).j = d by FUNCOP_1:13;
+    then A9: rng(dF.j) = rng(d*(F.j)) by MSUALG_3:2
+                 .= d.:(rng(F.j)) by RELAT_1:160;
+
+        rng(F.j) is directed by A4;
+      hence rng(dF.j) is directed by A7,A9,YELLOW_2:17;
+    end;
+    reconsider gdF = (J => g)**dF as DoubleIndexedSet of K, S;
+
+  A10:
+    F = (id (J --> the carrier of S))**F by MSUALG_3:4
+     .= ((J --> g)**(J --> d))**F by A6,Th30
+     .= gdF by AUTALG_1:13;
+
+  A11: rng Sups gdF c= g.:(rng Sups dF)
+    proof
+      let y be set;
+      assume y in rng Sups gdF;
+      then consider j being Element of J such that
+    A12: y = Sup(gdF.j) by Th14;
+        gdF.j = ((J => g).j)*(dF.j) by MSUALG_3:2
+           .= g*(dF.j) by FUNCOP_1:13;
+      then rng(gdF.j) = g.:(rng(dF.j)) by RELAT_1:160;
+    then A13: y = sup(g.:(rng(dF.j))) by A12,YELLOW_2:def 5;
+
+        rng(dF.j) is directed by A8;
+    then A14: g preserves_sup_of rng(dF.j) by A2,WAYBEL_0:def 37;
+        ex_sup_of rng(dF.j),L by YELLOW_0:17;
+      then sup(g.:(rng(dF.j))) = g.sup(rng(dF.j)) by A14,WAYBEL_0:def 31;
+    then A15: y = g.Sup(dF.j) by A13,YELLOW_2:def 5;
+
+        Sup(dF.j) in the carrier of L & Sup(dF.j) in rng Sups dF by Th14;
+      hence y in g.:(rng Sups dF) by A15,FUNCT_2:43;
+    end;
+
+  A16: g.:(rng Sups dF) c= rng Sups gdF
+    proof
+      let y be set;
+      assume y in g.:(rng Sups dF);
+      then consider x being set such that
+          x in the carrier of L and
+    A17: x in rng Sups dF and
+    A18: y = g.x by FUNCT_2:115;
+      consider j being Element of J such that
+    A19: x = Sup(dF.j) by A17,Th14;
+        rng(dF.j) is directed by A8;
+    then A20: g preserves_sup_of rng(dF.j) by A2,WAYBEL_0:def 37;
+        ex_sup_of rng(dF.j),L by YELLOW_0:17;
+      then sup(g.:(rng(dF.j))) = g.sup(rng(dF.j)) by A20,WAYBEL_0:def 31;
+    then A21: y = sup(g.:(rng(dF.j))) by A18,A19,YELLOW_2:def 5;
+        gdF.j = ((J => g).j)*(dF.j) by MSUALG_3:2
+           .= g*(dF.j) by FUNCOP_1:13;
+      then rng(gdF.j) = g.:(rng(dF.j)) by RELAT_1:160;
+      then y = Sup(gdF.j) by A21,YELLOW_2:def 5;
+      hence y in rng Sups gdF by Th14;
+    end;
+  A22: ex_inf_of (rng Sups dF),L by YELLOW_0:17;
+  A23: g preserves_inf_of (rng Sups dF) by A2,WAYBEL_0:def 32;
+
+      rng Infs Frege dF is directed non empty by A8,Th27;
+  then A24: g preserves_sup_of rng Infs Frege dF by A2,WAYBEL_0:def 37;
+  A25: ex_sup_of rng Infs Frege dF,L by YELLOW_0:17;
+  A26: for f being set st f in dom(Frege dF) holds
+      rng((Frege F).f) = g.:(rng((Frege dF).f))
+    proof
+      let f be set;
+      assume
+    A27: f in dom(Frege dF);
+      then reconsider f as Element of product doms dF by PBOOLE:def 3;
+    A28: dom(Frege dF) = product(doms dF) by PBOOLE:def 3
+                     .= product(doms F) by Th32
+                     .= dom(Frege F) by PBOOLE:def 3;
+    A29: dom((Frege dF).f) = dom dF by A27,Th8
+                         .= J by PBOOLE:def 3;
+    A30: dom((Frege F).f) = dom F by A27,A28,Th8
+                        .= J by PBOOLE:def 3;
+        dom g = the carrier of L by FUNCT_2:def 1;
+      then rng((Frege dF).f) c= dom g;
+    then A31: dom(g*((Frege dF).f)) = dom((Frege dF).f) by RELAT_1:46;
+
+        now
+        let i be set;
+        assume
+      A32: i in J;
+        then reconsider j = i as Element of J;
+      A33: j in dom dF by A32,PBOOLE:def 3;
+        then f.j in dom(dF.j) by A27,Th9;
+          then f.j in dom(((J => d).j)*(F.j)) by MSUALG_3:2;
+      then A34: f.j in dom(d*(F.j)) by FUNCOP_1:13;
+      A35: j in dom F by A32,PBOOLE:def 3;
+          (g*((Frege dF).f)).j = g.(((Frege dF).f).j) by A29,FUNCT_1:23
+                            .= g.((dF.j).(f.j)) by A27,A33,Th9
+                            .= g.((((J => d).j)*(F.j)).(f.j)) by MSUALG_3:2
+                            .= g.((d*(F.j)).(f.j)) by FUNCOP_1:13
+                            .= (g*(d*(F.j))).(f.j) by A34,FUNCT_1:23
+                            .= ((id the carrier of S)*(F.j)).(f.j) by A6,
+RELAT_1:55
+                            .= (F.j).(f.j) by FUNCT_2:23
+                            .= ((Frege F).f).j by A27,A28,A35,Th9;
+        hence (g*((Frege dF).f)).i = ((Frege F).f).i;
+      end;
+      then rng((Frege F).f) = rng(g*((Frege dF).f)) by A29,A30,A31,FUNCT_1:9
+                .= g.:(rng((Frege dF).f)) by RELAT_1:160;
+      hence thesis;
+    end;
+
+
+  A36: g.:(rng Infs Frege dF) c= rng Infs Frege F
+    proof
+      let y be set;
+      assume y in g.:(rng Infs Frege dF);
+      then consider x being set such that
+          x in the carrier of L and
+    A37: x in rng Infs Frege dF and
+    A38: y = g.x by FUNCT_2:115;
+      consider f being set such that
+    A39: f in dom(Frege dF) and
+    A40: x = //\((Frege dF).f, L) by A37,Th13;
+
+      reconsider f as Element of product doms dF by A39,PBOOLE:def 3;
+      reconsider f'= f as Element of product doms F by Th32;
+      set X = rng((Frege dF).f);
+
+    A41: g preserves_inf_of X by A2,WAYBEL_0:def 32;
+        ex_inf_of X,L by YELLOW_0:17;
+      then inf(g.:X) = g.inf X by A41,WAYBEL_0:def 30;
+    then A42: y = inf(g.:X) by A38,A40,YELLOW_2:def 6;
+
+    A43: dom(Frege dF) = product(doms dF) by PBOOLE:def 3
+                     .= product(doms F) by Th32
+                     .= dom(Frege F) by PBOOLE:def 3;
+
+        rng((Frege F).f) = g.:(rng((Frege dF).f)) by A26,A39;
+      then y = Inf((Frege F).f') by A42,YELLOW_2:def 6;
+      hence y in rng Infs Frege F by A39,A43,Th13;
+    end;
+
+   A44: rng Infs Frege F c= g.:(rng Infs Frege dF)
+    proof
+      let y be set;
+      assume y in rng Infs Frege F;
+      then consider f being set such that
+    A45: f in dom(Frege F) and
+    A46: y = //\((Frege F).f, S) by Th13;
+
+      reconsider f as Element of product doms F by A45,PBOOLE:def 3;
+      reconsider f'= f as Element of product doms dF by Th32;
+
+
+    A47: dom(Frege dF) = product(doms dF) by PBOOLE:def 3
+                     .= product(doms F) by Th32
+                     .= dom(Frege F) by PBOOLE:def 3;
+      then rng((Frege F).f) = g.:(rng((Frege dF).f)) by A26,A45;
+    then A48: y = "/\"(g.:(rng((Frege dF).f)), S) by A46,YELLOW_2:def 6;
+
+      set X = rng((Frege dF).f');
+
+    A49: g preserves_inf_of X by A2,WAYBEL_0:def 32;
+        ex_inf_of X,L by YELLOW_0:17;
+    then A50: y = g.inf X by A48,A49,WAYBEL_0:def 30
+          .= g.Inf((Frege dF).f') by YELLOW_2:def 6;
+        Inf((Frege dF).f') in rng Infs Frege dF by A45,A47,Th13;
+      hence y in g.:(rng Infs Frege dF) by A50,FUNCT_2:43;
+    end;
+      Inf Sups F = inf rng Sups gdF by A10,YELLOW_2:def 6
+              .= inf (g.:(rng Sups dF)) by A11,A16,XBOOLE_0:def 10
+              .= g.(inf rng Sups dF) by A22,A23,WAYBEL_0:def 30
+              .= g.(Inf Sups dF) by YELLOW_2:def 6
+              .= g.(Sup Infs Frege dF) by A1,A8,Lm8
+              .= g.(sup rng Infs Frege dF) by YELLOW_2:def 5
+              .= sup(g.:(rng Infs Frege dF)) by A24,A25,WAYBEL_0:def 31
+              .= sup rng Infs Frege F by A36,A44,XBOOLE_0:def 10
+              .= Sup Infs Frege F by YELLOW_2:def 5;
+    hence thesis;
+  end;
+  hence S is continuous LATTICE by Lm9;
+end;
+

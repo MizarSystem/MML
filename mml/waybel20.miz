@@ -1,0 +1,1906 @@
+:: Kernel Projections and Quotient Lattices
+::  by Piotr Rudnicki
+::
+:: Received July 6, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, FUNCT_5, FUNCT_1, EQREL_1, RELAT_2, ORDERS_1, PRE_TOPC,
+      YELLOW_0, BOOLE, LATTICES, LATTICE3, ORDINAL2, WAYBEL_0, QUANTAL1,
+      WELLORD1, CAT_1, BHSP_3, WAYBEL_1, GROUP_6, SEQM_3, YELLOW_1, WAYBEL_3,
+      PBOOLE, CARD_3, FUNCT_4, FINSET_1, WAYBEL16, WAYBEL_5, BINOP_1, SETFAM_1,
+      WAYBEL20, PARTFUN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELSET_1, SETFAM_1,
+      RELAT_2, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1, DOMAIN_1, EQREL_1, PBOOLE,
+      FUNCT_3, FUNCT_5, FUNCT_7, STRUCT_0, ORDERS_1, LATTICE3, GRCAT_1,
+      PRE_TOPC, QUANTAL1, YELLOW_0, YELLOW_1, YELLOW_2, YELLOW_3, WAYBEL_0,
+      WAYBEL_1, WAYBEL_3, WAYBEL_5, WAYBEL16;
+ constructors DOMAIN_1, FUNCT_7, GRCAT_1, QUANTAL1, ORDERS_3, TOPS_2, YELLOW_3,
+      WAYBEL_1, WAYBEL16;
+ clusters STRUCT_0, FINSET_1, LATTICE3, RELSET_1, YELLOW_0, YELLOW_2, YELLOW_3,
+      YELLOW_9, WAYBEL_0, WAYBEL_1, WAYBEL_3, WAYBEL10, SUBSET_1, RELAT_1,
+      FUNCT_2, PARTFUN1;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, RELAT_2, LATTICE3, LATTICE5, YELLOW_0, WAYBEL_0, WAYBEL_1,
+      WAYBEL_3;
+ theorems TARSKI, ZFMISC_1, RELAT_1, RELSET_1, RELAT_2, FUNCT_1, FUNCT_2,
+      FUNCT_3, FUNCT_5, FUNCT_7, CARD_3, PBOOLE, ORDERS_1, LATTICE3, LATTICE5,
+      QUANTAL1, GRCAT_1, EQREL_1, EXTENS_1, YELLOW_0, YELLOW_2, YELLOW_3,
+      YELLOW10, WAYBEL_0, WAYBEL_1, WAYBEL_3, WAYBEL_5, WAYBEL_8, WAYBEL13,
+      WAYBEL15, WAYBEL16, WAYBEL17, XBOOLE_0, XBOOLE_1, PARTFUN1;
+ schemes YELLOW_0, FUNCT_2, PRALG_2;
+
+begin :: Preliminaries
+
+theorem Th1:
+ for X being set, S being Subset of id X holds proj1 S = proj2 S
+proof let X be set, S be Subset of id X;
+    now let x be set;
+   hereby assume x in proj1 S; then consider y being set such that
+ A1: [x, y] in S by FUNCT_5:def 1;
+       x in X & x = y by A1,RELAT_1:def 10;
+    hence x in proj2 S by A1,FUNCT_5:def 2;
+   end;
+   assume x in proj2 S; then consider y being set such that
+ A2: [y, x] in S by FUNCT_5:def 2;
+       y in X & x = y by A2,RELAT_1:def 10;
+    hence x in proj1 S by A2,FUNCT_5:def 1;
+  end;
+ hence proj1 S = proj2 S by TARSKI:2;
+end;
+
+theorem Th2:
+ for X, Y being non empty set, f being Function of X, Y
+  holds [:f, f:]"(id Y) is Equivalence_Relation of X
+proof let X, Y be non empty set, f be Function of X, Y;
+  set ff = [:f, f:]"(id Y);
+A1: dom [:f, f:] = [:dom f, dom f:] by FUNCT_3:def 9;
+A2: dom f = X by FUNCT_2:def 1;
+  reconsider R' = ff as Relation of X by RELSET_1:def 1;
+    R' is total symmetric transitive proof
+     R' is_reflexive_in X
+      proof let x be set; assume
+    A3: x in X;
+       then reconsider x' = x as Element of X;
+    A4: [x, x] in dom [:f, f:] by A1,A2,A3,ZFMISC_1:def 2;
+    A5: [f.x', f.x'] in id Y by RELAT_1:def 10;
+          [f.x, f.x] = [:f, f:].[x,x] by A2,A3,FUNCT_3:def 9;
+     hence [x, x] in R' by A4,A5,FUNCT_1:def 13;
+    end;
+    then
+A6:  dom R' = X & field R' = X by ORDERS_1:98;
+    hence R' is total by PARTFUN1:def 4;
+     R' is_symmetric_in X
+     proof let x, y be set; assume
+    A7: x in X & y in X & [x,y] in R';
+       then reconsider x' = x, y' = y as Element of X;
+    A8: [x, y] in dom [:f, f:] & [:f, f:].[x,y] in id Y
+           by A7,FUNCT_1:def 13;
+    A9: [f.x, f.y] = [:f, f:].[x, y] by A2,A7,FUNCT_3:def 9;
+    then A10: f.x' = f.y' by A8,RELAT_1:def 10;
+    A11: [y, x] in dom [:f, f:] by A1,A2,A7,ZFMISC_1:def 2;
+          [f.y, f.x] = [:f, f:].[y, x] by A2,A7,FUNCT_3:def 9;
+     hence [y,x] in R' by A8,A9,A10,A11,FUNCT_1:def 13;
+    end;
+    hence R' is symmetric by A6,RELAT_2:def 11;
+     R' is_transitive_in X
+     proof let x, y, z be set such that
+    A12:   x in X & y in X & z in X and
+    A13:  [x,y] in R' & [y,z] in R';
+       reconsider y'=y, z'=z as Element of X by A12;
+    A14: [x, y] in dom [:f, f:] & [:f, f:].[x,y] in id Y
+                  by A13,FUNCT_1:def 13;
+    A15: [y, z] in dom [:f, f:] & [:f, f:].[y, z] in id Y
+                  by A13,FUNCT_1:def 13;
+    A16: [f.x, f.y] = [:f, f:].[x, y] by A2,A12,FUNCT_3:def 9;
+      [f.y, f.z] = [:f, f:].[y, z] by A2,A12,FUNCT_3:def 9;
+    then A17: f.y' = f.z' by A15,RELAT_1:def 10;
+    A18: [x, z] in dom [:f, f:] by A1,A2,A12,ZFMISC_1:def 2;
+            [f.x, f.z] = [:f, f:].[x, z] by A2,A12,FUNCT_3:def 9;
+     hence [x,z] in R' by A14,A16,A17,A18,FUNCT_1:def 13;
+    end;
+   hence R' is transitive by A6,RELAT_2:def 16;
+  end;
+ hence ff is Equivalence_Relation of X;
+end;
+
+definition
+ let L1, L2, T1, T2 be RelStr, f be map of L1, T1, g be map of L2, T2;
+ redefine func [:f, g:] -> map of [:L1, L2:], [:T1, T2:];
+  coherence proof
+    the carrier of [:L1, L2:] = [:the carrier of L1, the carrier of L2:] &
+  the carrier of [:T1, T2:] = [:the carrier of T1, the carrier of T2:]
+     by YELLOW_3:def 2;
+  hence [:f, g:] is map of [:L1, L2:], [:T1, T2:];
+ end;
+end;
+
+theorem Th3:
+ for f, g being Function, X being set holds
+  proj1 ([:f, g:].:X) c= f.:proj1 X & proj2 ([:f, g:].:X) c= g.:proj2 X
+proof let f, g be Function, X be set;
+A1: dom [:f, g:] = [:dom f, dom g:] by FUNCT_3:def 9;
+  hereby let x be set;
+      assume x in proj1 ([:f, g:].:X);
+     then consider y being set such that
+  A2: [x, y] in [:f, g:].:X by FUNCT_5:def 1;
+     consider xy being set such that
+  A3: xy in dom [:f, g:] and
+  A4: xy in X and
+  A5: [x, y] = [:f, g:].xy by A2,FUNCT_1:def 12;
+      consider x',y' being set such that
+  A6: x' in dom f & y' in dom g & xy = [x',y'] by A1,A3,ZFMISC_1:def 2;
+     [x, y] = [f.x', g.y'] by A5,A6,FUNCT_3:def 9;
+  then A7: x = f.x' by ZFMISC_1:33;
+        x' in proj1 X by A4,A6,FUNCT_5:def 1;
+    hence x in f.:proj1 X by A6,A7,FUNCT_1:def 12;
+   end;
+   let y be set;
+      assume y in proj2 ([:f, g:].:X);
+     then consider x being set such that
+  A8: [x, y] in [:f, g:].:X by FUNCT_5:def 2;
+     consider xy being set such that
+  A9: xy in dom [:f, g:] and
+  A10: xy in X and
+  A11: [x, y] = [:f, g:].xy by A8,FUNCT_1:def 12;
+      consider x',y' being set such that
+  A12: x' in dom f & y' in dom g & xy = [x',y'] by A1,A9,ZFMISC_1:def 2;
+     [x, y] = [f.x', g.y'] by A11,A12,FUNCT_3:def 9;
+  then A13: y = g.y' by ZFMISC_1:33;
+        y' in proj2 X by A10,A12,FUNCT_5:def 2;
+    hence y in g.:proj2 X by A12,A13,FUNCT_1:def 12;
+end;
+
+theorem Th4:
+ for f, g being Function, X being set
+  st X c= [:dom f, dom g:]
+   holds proj1 ([:f, g:].:X) = f.:proj1 X & proj2 ([:f, g:].:X) = g.:proj2 X
+proof let f, g be Function, X be set such that
+A1: X c= [:dom f, dom g:];
+A2: dom [:f, g:] = [:dom f, dom g:] by FUNCT_3:def 9;
+A3: proj1 ([:f, g:].:X) c= f.:proj1 X by Th3;
+A4: proj2 ([:f, g:].:X) c= g.:proj2 X by Th3;
+    now let x be set;
+   thus x in proj1 ([:f, g:].:X) implies x in f.:proj1 X by A3;
+   assume x in f.:proj1 X; then consider x' being set such that
+  A5: x' in dom f and
+  A6: x' in proj1 X and
+  A7: x = f.x' by FUNCT_1:def 12;
+      consider y' being set such that
+  A8: [x', y'] in X by A6,FUNCT_5:def 1;
+        y' in dom g by A1,A8,ZFMISC_1:106;
+      then [:f, g:].[x', y'] = [f.x', g.y'] by A5,FUNCT_3:def 9;
+      then [x, g.y'] in [:f, g:].:X by A1,A2,A7,A8,FUNCT_1:def 12;
+   hence x in proj1 ([:f, g:].:X) by FUNCT_5:def 1;
+  end;
+ hence proj1 ([:f, g:].:X) = f.:proj1 X by TARSKI:2;
+    now let x be set;
+   thus x in proj2 ([:f, g:].:X) implies x in g.:proj2 X by A4;
+   assume x in g.:proj2 X; then consider x' being set such that
+  A9: x' in dom g and
+  A10: x' in proj2 X and
+  A11: x = g.x' by FUNCT_1:def 12;
+      consider y' being set such that
+  A12: [y', x'] in X by A10,FUNCT_5:def 2;
+        y' in dom f by A1,A12,ZFMISC_1:106;
+      then [:f, g:].[y', x'] = [f.y', g.x'] by A9,FUNCT_3:def 9;
+      then [f.y', x] in [:f, g:].:X by A1,A2,A11,A12,FUNCT_1:def 12;
+   hence x in proj2 ([:f, g:].:X) by FUNCT_5:def 2;
+  end;
+ hence proj2 ([:f, g:].:X) = g.:proj2 X by TARSKI:2;
+end;
+
+theorem Th5: :: Grzesiek
+ for S being non empty antisymmetric RelStr st ex_inf_of {},S
+  holds S is upper-bounded
+  proof let S be non empty antisymmetric RelStr; assume
+A1:  ex_inf_of {},S;
+   take Top S; let x be Element of S;
+      {} is_>=_than x & "/\"({},S) = Top S by YELLOW_0:6,def 12;
+   hence thesis by A1,YELLOW_0:31;
+  end;
+
+theorem Th6:
+ for S being non empty antisymmetric RelStr st ex_sup_of {},S
+  holds S is lower-bounded
+ proof let S be non empty antisymmetric RelStr; assume
+A1:  ex_sup_of {},S;
+   take Bottom S; let x be Element of S;
+      {} is_<=_than x & "\/"({},S) = Bottom S by YELLOW_0:6,def 11;
+   hence thesis by A1,YELLOW_0:30;
+  end;
+
+theorem Th7: :: generealized YELLOW_3:47, YELLOW10:6
+for L1,L2 being antisymmetric (non empty RelStr), D being Subset of [:L1,L2:]
+  st ex_inf_of D,[:L1,L2:] holds inf D = [inf proj1 D,inf proj2 D]
+proof let L1,L2 be antisymmetric (non empty RelStr), D be Subset of [:L1,L2:]
+ such that
+A1: ex_inf_of D,[:L1,L2:];
+ per cases;
+ suppose D <> {};
+  hence inf D = [inf proj1 D,inf proj2 D] by A1,YELLOW_3:47;
+ suppose D = {};
+   then ex_inf_of {},L1 & ex_inf_of {},L2 by A1,FUNCT_5:10,YELLOW_3:42;
+   then L1 is upper-bounded & L2 is upper-bounded by Th5;
+  hence inf D = [inf proj1 D,inf proj2 D] by A1,YELLOW10:6;
+end;
+
+theorem Th8: :: generealized YELLOW_3:46, YELLOW10:5
+for L1,L2 being antisymmetric (non empty RelStr), D being Subset of [:L1,L2:]
+ st ex_sup_of D,[:L1,L2:] holds sup D = [sup proj1 D,sup proj2 D]
+proof let L1,L2 be antisymmetric (non empty RelStr), D be Subset of [:L1,L2:]
+ such that
+A1: ex_sup_of D,[:L1,L2:];
+ per cases;
+ suppose D <> {};
+  hence sup D = [sup proj1 D,sup proj2 D] by A1,YELLOW_3:46;
+ suppose D = {};
+   then ex_sup_of {},L1 & ex_sup_of {},L2 by A1,FUNCT_5:10,YELLOW_3:41;
+   then L1 is lower-bounded & L2 is lower-bounded by Th6;
+  hence sup D = [sup proj1 D,sup proj2 D] by A1,YELLOW10:5;
+end;
+
+theorem Th9:
+ for L1, L2, T1, T2 being antisymmetric non empty RelStr,
+     f being map of L1, T1, g being map of L2, T2
+  st f is infs-preserving & g is infs-preserving
+   holds [:f, g:] is infs-preserving
+proof let L1, L2, T1, T2 be antisymmetric non empty RelStr,
+          f be map of L1, T1, g be map of L2, T2 such that
+A1: f is infs-preserving & g is infs-preserving;
+ let X be Subset of [:L1, L2:];
+A2: f preserves_inf_of proj1 X & g preserves_inf_of proj2 X
+      by A1,WAYBEL_0:def 32;
+ assume
+A3: ex_inf_of X, [:L1, L2:];
+then A4: ex_inf_of proj1 X, L1 & ex_inf_of proj2 X, L2 by YELLOW_3:42;
+  set iX = [:f, g:].:X;
+A5: dom f = the carrier of L1 & dom g = the carrier of L2 by FUNCT_2:def 1;
+     X c= the carrier of [:L1, L2:];
+   then X c= [:the carrier of L1, the carrier of L2:] by YELLOW_3:def 2;
+then A6: proj1 iX = f.:proj1 X & proj2 iX = g.:proj2 X by A5,Th4;
+  then ex_inf_of proj1 iX, T1 & ex_inf_of proj2 iX, T2 by A2,A4,WAYBEL_0:def 30
+;
+ hence
+      ex_inf_of ([:f, g:].:X), [:T1, T2:] by YELLOW_3:42;
+ hence inf ([:f, g:].:X)
+    = [inf (f.:proj1 X), inf (g.:proj2 X)] by A6,Th7
+   .= [f.inf proj1 X, inf (g.:proj2 X)] by A2,A4,WAYBEL_0:def 30
+   .= [f.inf proj1 X, g.inf proj2 X] by A2,A4,WAYBEL_0:def 30
+   .= [:f, g:].[inf proj1 X, inf proj2 X] by A5,FUNCT_3:def 9
+   .= [:f, g:].inf X by A3,Th7;
+end;
+
+theorem
+   for L1, L2, T1, T2 being antisymmetric reflexive non empty RelStr,
+     f being map of L1, T1, g being map of L2, T2
+  st f is filtered-infs-preserving & g is filtered-infs-preserving
+   holds [:f, g:] is filtered-infs-preserving
+proof let L1, L2, T1, T2 be antisymmetric reflexive non empty RelStr,
+          f be map of L1, T1, g be map of L2, T2 such that
+A1: f is filtered-infs-preserving & g is filtered-infs-preserving;
+ let X be Subset of [:L1, L2:]; assume
+   X is non empty filtered;
+    then proj1 X is non empty filtered & proj2 X is non empty filtered
+     by YELLOW_3:21,24;
+then A2: f preserves_inf_of proj1 X & g preserves_inf_of proj2 X
+      by A1,WAYBEL_0:def 36;
+ assume
+A3: ex_inf_of X, [:L1, L2:];
+then A4: ex_inf_of proj1 X, L1 & ex_inf_of proj2 X, L2 by YELLOW_3:42;
+  set iX = [:f, g:].:X;
+A5: dom f = the carrier of L1 & dom g = the carrier of L2 by FUNCT_2:def 1;
+     X c= the carrier of [:L1, L2:];
+   then X c= [:the carrier of L1, the carrier of L2:] by YELLOW_3:def 2;
+then A6: proj1 iX = f.:proj1 X & proj2 iX = g.:proj2 X by A5,Th4;
+  then ex_inf_of proj1 iX, T1 & ex_inf_of proj2 iX, T2 by A2,A4,WAYBEL_0:def 30
+;
+ hence
+      ex_inf_of ([:f, g:].:X), [:T1, T2:] by YELLOW_3:42;
+ hence inf ([:f, g:].:X)
+    = [inf (f.:proj1 X), inf (g.:proj2 X)] by A6,Th7
+   .= [f.inf proj1 X, inf (g.:proj2 X)] by A2,A4,WAYBEL_0:def 30
+   .= [f.inf proj1 X, g.inf proj2 X] by A2,A4,WAYBEL_0:def 30
+   .= [:f, g:].[inf proj1 X, inf proj2 X] by A5,FUNCT_3:def 9
+   .= [:f, g:].inf X by A3,Th7;
+end;
+
+theorem
+   for L1, L2, T1, T2 being antisymmetric non empty RelStr,
+     f being map of L1, T1, g being map of L2, T2
+  st f is sups-preserving & g is sups-preserving
+   holds [:f, g:] is sups-preserving
+proof let L1, L2, T1, T2 be antisymmetric non empty RelStr,
+          f be map of L1, T1, g be map of L2, T2 such that
+A1: f is sups-preserving & g is sups-preserving;
+ let X be Subset of [:L1, L2:];
+A2: f preserves_sup_of proj1 X & g preserves_sup_of proj2 X
+      by A1,WAYBEL_0:def 33;
+ assume
+A3: ex_sup_of X, [:L1, L2:];
+then A4: ex_sup_of proj1 X, L1 & ex_sup_of proj2 X, L2 by YELLOW_3:41;
+  set iX = [:f, g:].:X;
+A5: dom f = the carrier of L1 & dom g = the carrier of L2 by FUNCT_2:def 1;
+     X c= the carrier of [:L1, L2:];
+   then X c= [:the carrier of L1, the carrier of L2:] by YELLOW_3:def 2;
+then A6: proj1 iX = f.:proj1 X & proj2 iX = g.:proj2 X by A5,Th4;
+  then ex_sup_of proj1 iX, T1 & ex_sup_of proj2 iX, T2 by A2,A4,WAYBEL_0:def 31
+;
+ hence
+      ex_sup_of ([:f, g:].:X), [:T1, T2:] by YELLOW_3:41;
+ hence sup ([:f, g:].:X)
+    = [sup (f.:proj1 X), sup (g.:proj2 X)] by A6,Th8
+   .= [f.sup proj1 X, sup (g.:proj2 X)] by A2,A4,WAYBEL_0:def 31
+   .= [f.sup proj1 X, g.sup proj2 X] by A2,A4,WAYBEL_0:def 31
+   .= [:f, g:].[sup proj1 X, sup proj2 X] by A5,FUNCT_3:def 9
+   .= [:f, g:].sup X by A3,Th8;
+end;
+
+theorem Th12:
+ for L1, L2, T1, T2 being antisymmetric reflexive non empty RelStr,
+     f being map of L1, T1, g being map of L2, T2
+  st f is directed-sups-preserving & g is directed-sups-preserving
+   holds [:f, g:] is directed-sups-preserving
+proof let L1, L2, T1, T2 be antisymmetric reflexive non empty RelStr,
+          f be map of L1, T1, g be map of L2, T2 such that
+A1: f is directed-sups-preserving & g is directed-sups-preserving;
+ let X be Subset of [:L1, L2:]; assume
+   X is non empty directed;
+    then proj1 X is non empty directed & proj2 X is non empty directed
+     by YELLOW_3:21,22;
+then A2: f preserves_sup_of proj1 X & g preserves_sup_of proj2 X
+      by A1,WAYBEL_0:def 37;
+ assume
+A3: ex_sup_of X, [:L1, L2:];
+then A4: ex_sup_of proj1 X, L1 & ex_sup_of proj2 X, L2 by YELLOW_3:41;
+  set iX = [:f, g:].:X;
+A5: dom f = the carrier of L1 & dom g = the carrier of L2 by FUNCT_2:def 1;
+     X c= the carrier of [:L1, L2:];
+   then X c= [:the carrier of L1, the carrier of L2:] by YELLOW_3:def 2;
+then A6: proj1 iX = f.:proj1 X & proj2 iX = g.:proj2 X by A5,Th4;
+  then ex_sup_of proj1 iX, T1 & ex_sup_of proj2 iX, T2 by A2,A4,WAYBEL_0:def 31
+;
+ hence
+      ex_sup_of ([:f, g:].:X), [:T1, T2:] by YELLOW_3:41;
+ hence sup ([:f, g:].:X)
+    = [sup (f.:proj1 X), sup (g.:proj2 X)] by A6,Th8
+   .= [f.sup proj1 X, sup (g.:proj2 X)] by A2,A4,WAYBEL_0:def 31
+   .= [f.sup proj1 X, g.sup proj2 X] by A2,A4,WAYBEL_0:def 31
+   .= [:f, g:].[sup proj1 X, sup proj2 X] by A5,FUNCT_3:def 9
+   .= [:f, g:].sup X by A3,Th8;
+end;
+
+theorem Th13:
+ for L being antisymmetric non empty RelStr, X being Subset of [:L, L:]
+  st X c= id the carrier of L & ex_inf_of X, [:L, L:]
+   holds inf X in id the carrier of L
+proof let L be antisymmetric non empty RelStr,
+          X be Subset of [:L, L:] such that
+A1: X c= id the carrier of L and
+A2: ex_inf_of X, [:L, L:];
+A3: inf X = [inf proj1 X, inf proj2 X] by A2,Th7;
+     inf proj1 X = inf proj2 X by A1,Th1;
+ hence inf X in id the carrier of L by A3,RELAT_1:def 10;
+end;
+
+theorem Th14:
+ for L being antisymmetric non empty RelStr, X being Subset of [:L, L:]
+  st X c= id the carrier of L & ex_sup_of X, [:L, L:]
+   holds sup X in id the carrier of L
+proof let L be antisymmetric non empty RelStr,
+          X be Subset of [:L, L:] such that
+A1: X c= id the carrier of L and
+A2: ex_sup_of X, [:L, L:];
+A3: sup X = [sup proj1 X, sup proj2 X] by A2,Th8;
+     sup proj1 X = sup proj2 X by A1,Th1;
+ hence sup X in id the carrier of L by A3,RELAT_1:def 10;
+end;
+
+theorem Th15:
+ for L, M being non empty RelStr
+  st L, M are_isomorphic & L is reflexive holds M is reflexive
+proof let L, M be non empty RelStr such that
+A1: L, M are_isomorphic and
+A2: L is reflexive;
+     M, L are_isomorphic by A1,WAYBEL_1:7;
+   then consider f being map of M, L such that
+A3: f is isomorphic by WAYBEL_1:def 8;
+ let x be Element of M;
+   reconsider fx = f.x as Element of L;
+     fx <= fx by A2,YELLOW_0:def 1;
+ hence x <= x by A3,WAYBEL_0:66;
+end;
+
+theorem Th16:
+ for L, M being non empty RelStr
+  st L, M are_isomorphic & L is transitive holds M is transitive
+proof let L, M be non empty RelStr such that
+A1: L, M are_isomorphic and
+A2: L is transitive;
+     M, L are_isomorphic by A1,WAYBEL_1:7;
+   then consider f being map of M, L such that
+A3: f is isomorphic by WAYBEL_1:def 8;
+ let x, y, z be Element of M such that
+A4: x <= y & y <= z;
+   reconsider fx = f.x as Element of L;
+   reconsider fy = f.y as Element of L;
+   reconsider fz = f.z as Element of L;
+     fx <= fy & fy <= fz by A3,A4,WAYBEL_0:66;
+   then fx <= fz by A2,YELLOW_0:def 2;
+ hence x <= z by A3,WAYBEL_0:66;
+end;
+
+theorem Th17:
+ for L, M being non empty RelStr
+  st L, M are_isomorphic & L is antisymmetric holds M is antisymmetric
+proof let L, M be non empty RelStr such that
+A1: L, M are_isomorphic and
+A2: L is antisymmetric;
+     M, L are_isomorphic by A1,WAYBEL_1:7;
+   then consider f being map of M, L such that
+A3: f is isomorphic by WAYBEL_1:def 8;
+A4: f is one-to-one by A3,WAYBEL_0:66;
+ let x, y be Element of M such that
+A5: x <= y & y <= x;
+   reconsider fx = f.x as Element of L;
+   reconsider fy = f.y as Element of L;
+   A6: dom f = the carrier of M by FUNCT_2:def 1;
+     fx <= fy & fy <= fx by A3,A5,WAYBEL_0:66;
+   then fx = fy by A2,YELLOW_0:def 3;
+ hence x = y by A4,A6,FUNCT_1:def 8;
+end;
+
+theorem Th18:  :: stolen from WAYBEL13:30
+ for L, M being non empty RelStr
+  st L, M are_isomorphic & L is complete holds M is complete
+proof let L, M be non empty RelStr such that
+A1: L, M are_isomorphic and
+A2: L is complete; :: thus M is complete LATTICE5
+     M, L are_isomorphic by A1,WAYBEL_1:7;
+   then consider f being map of M, L such that
+A3: f is isomorphic by WAYBEL_1:def 8;
+A4: f is one-to-one by A3,WAYBEL_0:66;
+A5: rng f = the carrier of L by A3,WAYBEL_0:66;
+A6: dom f = the carrier of M by FUNCT_2:def 1;
+ let X be Subset of M;
+  reconsider fX = f.:X as Subset of L;
+  consider fa being Element of L such that
+A7: fa is_<=_than fX and
+A8: for fb being Element of L st fb is_<=_than fX holds fb <= fa
+     by A2,LATTICE5:def 2;
+   set a = (f qua Function)".fa;
+     a in dom f by A4,A5,FUNCT_1:54;
+   then reconsider a as Element of M;
+A9: fa = f.a by A4,A5,FUNCT_1:57;
+  take a;
+  hereby let b be Element of M such that
+ A10: b in X;
+     reconsider fb = f.b as Element of L;
+       fb in fX by A6,A10,FUNCT_1:def 12;
+     then fa <= fb by A7,LATTICE3:def 8;
+   hence a <= b by A3,A9,WAYBEL_0:66;
+  end;
+  let b be Element of M such that
+A11: b is_<=_than X;
+     reconsider fb = f.b as Element of L;
+     fb is_<=_than fX proof let fc be Element of L; assume
+     fc in fX;
+      then consider c being set such that
+  A12: c in dom f & c in X & fc = f.c by FUNCT_1:def 12;
+      reconsider c as Element of M by A12;
+        b <= c by A11,A12,LATTICE3:def 8;
+    hence fb <= fc by A3,A12,WAYBEL_0:66;
+   end;
+   then fb <= fa by A8;
+ hence b <= a by A3,A9,WAYBEL_0:66;
+end;
+
+theorem Th19:
+ for L being non empty transitive RelStr, k being map of L, L
+  st k is infs-preserving holds corestr k is infs-preserving
+proof let L be non empty transitive RelStr,
+          k be map of L, L such that
+A1: k is infs-preserving;
+ let X be Subset of L;
+A2: k preserves_inf_of X by A1,WAYBEL_0:def 32;
+    set f = corestr k;
+A3: k = corestr k by WAYBEL_1:32;
+ assume
+A4: ex_inf_of X,L;
+then A5: ex_inf_of k.:X, L by A2,WAYBEL_0:def 30;
+A6: inf (k.:X) = k.inf X by A2,A4,WAYBEL_0:def 30;
+A7: dom k = the carrier of L by FUNCT_2:def 1;
+A8: rng k = the carrier of Image k by YELLOW_2:11; k.inf X in rng k by A7,
+FUNCT_1:def 5;
+then A9: k.inf X is Element of Image k by A8;
+   reconsider fX = f.:X as Subset of Image k;
+     "/\"(fX, L) is Element of Image k by A2,A3,A4,A9,WAYBEL_0:def 30;
+ hence ex_inf_of f.:X, Image k by A3,A5,WAYBEL_8:20;
+ thus inf (f.:X) = f.inf X by A3,A5,A6,WAYBEL_8:20;
+end;
+
+theorem
+   for L being non empty transitive RelStr, k being map of L, L
+  st k is filtered-infs-preserving
+   holds corestr k is filtered-infs-preserving
+proof let L be non empty transitive RelStr, k be map of L, L such that
+A1: k is filtered-infs-preserving;
+ let X be Subset of L; assume
+   X is non empty filtered;
+then A2: k preserves_inf_of X by A1,WAYBEL_0:def 36;
+    set f = corestr k;
+A3: k = corestr k by WAYBEL_1:32;
+ assume
+A4: ex_inf_of X,L;
+then A5: ex_inf_of k.:X, L by A2,WAYBEL_0:def 30;
+A6: inf (k.:X) = k.inf X by A2,A4,WAYBEL_0:def 30;
+A7: dom k = the carrier of L by FUNCT_2:def 1;
+A8: rng k = the carrier of Image k by YELLOW_2:11; k.inf X in rng k by A7,
+FUNCT_1:def 5;
+then A9: k.inf X is Element of Image k by A8;
+   reconsider fX = f.:X as Subset of Image k;
+     "/\"(fX, L) is Element of Image k by A2,A3,A4,A9,WAYBEL_0:def 30;
+ hence ex_inf_of f.:X, Image k by A3,A5,WAYBEL_8:20;
+ thus inf (f.:X) = f.inf X by A3,A5,A6,WAYBEL_8:20;
+end;
+
+theorem
+   for L being non empty transitive RelStr, k being map of L, L
+  st k is sups-preserving holds corestr k is sups-preserving
+proof let L be non empty transitive RelStr, k be map of L, L such that
+A1: k is sups-preserving;
+ let X be Subset of L;
+A2: k preserves_sup_of X by A1,WAYBEL_0:def 33;
+    set f = corestr k;
+A3: k = corestr k by WAYBEL_1:32;
+ assume
+A4: ex_sup_of X,L;
+then A5: ex_sup_of k.:X, L by A2,WAYBEL_0:def 31;
+A6: sup (k.:X) = k.sup X by A2,A4,WAYBEL_0:def 31;
+A7: dom k = the carrier of L by FUNCT_2:def 1;
+A8: rng k = the carrier of Image k by YELLOW_2:11; k.sup X in rng k by A7,
+FUNCT_1:def 5;
+then A9: k.sup X is Element of Image k by A8;
+   reconsider fX = f.:X as Subset of Image k;
+     "\/"(fX, L) is Element of Image k by A2,A3,A4,A9,WAYBEL_0:def 31;
+ hence ex_sup_of f.:X, Image k by A3,A5,WAYBEL_8:19;
+ thus sup (f.:X) = f.sup X by A3,A5,A6,WAYBEL_8:19;
+end;
+
+theorem Th22:
+ for L being non empty transitive RelStr, k being map of L, L
+  st k is directed-sups-preserving
+   holds corestr k is directed-sups-preserving
+proof let L be non empty transitive RelStr,
+          k be map of L, L such that
+A1: k is directed-sups-preserving;
+ let X be Subset of L; assume
+   X is non empty directed;
+then A2: k preserves_sup_of X by A1,WAYBEL_0:def 37;
+ set f = corestr k;
+A3: k = corestr k by WAYBEL_1:32;
+ assume
+A4: ex_sup_of X,L;
+then A5: ex_sup_of k.:X, L by A2,WAYBEL_0:def 31;
+A6: sup (k.:X) = k.sup X by A2,A4,WAYBEL_0:def 31;
+A7: dom k = the carrier of L by FUNCT_2:def 1;
+A8: rng k = the carrier of Image k by YELLOW_2:11; k.sup X in rng k by A7,
+FUNCT_1:def 5;
+then A9: k.sup X is Element of Image k by A8;
+   reconsider fX = f.:X as Subset of Image k;
+     "\/"(fX, L) is Element of Image k by A2,A3,A4,A9,WAYBEL_0:def 31;
+ hence ex_sup_of f.:X, Image k by A3,A5,WAYBEL_8:19;
+ thus sup (f.:X) = f.sup X by A3,A5,A6,WAYBEL_8:19;
+end;
+
+canceled;
+
+theorem Th24: :: Generalized YELLOW_2:19
+for S, T being reflexive antisymmetric non empty RelStr,
+    f being map of S, T
+  st f is filtered-infs-preserving holds f is monotone
+proof let S, T be reflexive antisymmetric non empty RelStr,
+          f be map of S, T; assume
+A1: f is filtered-infs-preserving;
+  let x, y be Element of S such that
+A2: x <= y;
+A3:  x <= y & x <= x by A2;
+then A4: {x, y} is_>=_than x by YELLOW_0:8;
+    for b being Element of S st {x, y} is_>=_than b holds x >= b by YELLOW_0:8;
+  then A5: x = inf {x, y} & ex_inf_of {x, y},S by A4,YELLOW_0:31;
+    for a, b being Element of S st a in {x, y} & b in {x, y}
+    ex z being Element of S st z in {x, y} & a >= z & b >= z
+  proof
+    let a, b be Element of S such that
+  A6: a in {x, y} & b in {x, y};
+    take x;
+    thus x in {x, y} by TARSKI:def 2;
+    thus a >= x & b >= x by A3,A6,TARSKI:def 2;
+  end;
+  then {x, y} is filtered non empty by WAYBEL_0:def 2;
+then A7:  f preserves_inf_of {x, y} by A1,WAYBEL_0:def 36;
+then A8: inf(f.:{x, y}) = f.x by A5,WAYBEL_0:def 30;
+A9:  dom f = the carrier of S by FUNCT_2:def 1;
+then A10: f.x = inf{f.x, f.y} by A8,FUNCT_1:118;
+      f.:{x, y} = {f.x, f.y} by A9,FUNCT_1:118;
+    then ex_inf_of {f.x, f.y}, T by A5,A7,WAYBEL_0:def 30;
+    then {f.x, f.y} is_>=_than f.x by A10,YELLOW_0:def 10;
+  hence f.x <= f.y by YELLOW_0:8;
+end;
+
+theorem Th25: ::  see YELLOW_2:17, for directed
+ for S,T being non empty RelStr, f being map of S,T
+  st f is monotone
+   for X being Subset of S holds
+    (X is filtered implies f.:X is filtered)
+  proof let S,T be non empty RelStr, f be map of S,T;
+  assume
+A1: f is monotone;
+   let X be Subset of S such that
+A2: X is filtered;
+   let x,y be Element of T; assume x in f.:X;
+   then consider a being set such that
+A3: a in the carrier of S & a in X & x = f.a by FUNCT_2:115;
+   assume y in f.:X;
+   then consider b being set such that
+A4: b in the carrier of S & b in X & y = f.b by FUNCT_2:115;
+   reconsider a,b as Element of S by A3,A4;
+   consider c being Element of S such that
+A5: c in X & c <= a & c <= b by A2,A3,A4,WAYBEL_0:def 2;
+   take z = f.c;
+   thus z in f.:X by A5,FUNCT_2:43;
+   thus thesis by A1,A3,A4,A5,WAYBEL_1:def 2;
+  end;
+
+theorem Th26:
+ for L1, L2, L3 being non empty RelStr, f be map of L1,L2, g be map of L2,L3
+  st f is infs-preserving & g is infs-preserving
+   holds g*f is infs-preserving
+proof let L1, L2, L3 be non empty RelStr,
+          f be map of L1,L2, g be map of L2,L3 such that
+A1: f is infs-preserving and
+A2: g is infs-preserving;
+  set gf = g*f;
+ let X be Subset of L1 such that
+A3: ex_inf_of X, L1;
+A4: dom f = the carrier of L1 by FUNCT_2:def 1;
+  set gfX = gf.:X;
+  set fX = f.:X;
+A5: f preserves_inf_of X by A1,WAYBEL_0:def 32;
+A6: g preserves_inf_of fX by A2,WAYBEL_0:def 32;
+A7: gfX = g.:(f.:X) by RELAT_1:159;
+A8: ex_inf_of fX, L2 by A3,A5,WAYBEL_0:def 30;
+ hence ex_inf_of gfX, L3 by A6,A7,WAYBEL_0:def 30;
+ thus inf gfX = g.inf fX by A6,A7,A8,WAYBEL_0:def 30
+   .= g.(f.inf X) by A3,A5,WAYBEL_0:def 30
+   .= gf.inf X by A4,FUNCT_1:23;
+end;
+
+theorem
+   for L1, L2, L3 being non empty reflexive antisymmetric RelStr,
+     f be map of L1,L2, g be map of L2,L3
+  st f is filtered-infs-preserving & g is filtered-infs-preserving
+   holds g*f is filtered-infs-preserving
+proof let L1, L2, L3 be non empty reflexive antisymmetric RelStr,
+          f be map of L1,L2, g be map of L2,L3 such that
+A1: f is filtered-infs-preserving and
+A2: g is filtered-infs-preserving;
+  set gf = g*f;
+ let X be Subset of L1 such that
+A3: X is non empty filtered and
+A4: ex_inf_of X, L1;
+A5: dom f = the carrier of L1 by FUNCT_2:def 1;
+  set gfX = gf.:X;
+  set fX = f.:X;
+A6: f preserves_inf_of X by A1,A3,WAYBEL_0:def 36;
+    consider xx being Element of X;
+      xx in X & X c= the carrier of L1 by A3;
+then A7: f.xx in fX by FUNCT_2:43;
+      f is monotone by A1,Th24;
+    then fX is non empty filtered by A3,A7,Th25;
+then A8: g preserves_inf_of fX by A2,WAYBEL_0:def 36;
+A9: gfX = g.:(f.:X) by RELAT_1:159;
+A10: ex_inf_of fX, L2 by A4,A6,WAYBEL_0:def 30;
+ hence ex_inf_of gfX, L3 by A8,A9,WAYBEL_0:def 30;
+ thus inf gfX = g.inf fX by A8,A9,A10,WAYBEL_0:def 30
+   .= g.(f.inf X) by A4,A6,WAYBEL_0:def 30
+   .= gf.inf X by A5,FUNCT_1:23;
+end;
+
+theorem
+   for L1, L2, L3 being non empty RelStr, f be map of L1,L2, g be map of L2,L3
+  st f is sups-preserving & g is sups-preserving
+   holds g*f is sups-preserving
+proof let L1, L2, L3 be non empty RelStr,
+          f be map of L1,L2, g be map of L2,L3 such that
+A1: f is sups-preserving and
+A2: g is sups-preserving;
+  set gf = g*f;
+ let X be Subset of L1 such that
+A3: ex_sup_of X, L1;
+A4: dom f = the carrier of L1 by FUNCT_2:def 1;
+  set gfX = gf.:X;
+  set fX = f.:X;
+A5: f preserves_sup_of X by A1,WAYBEL_0:def 33;
+A6: g preserves_sup_of fX by A2,WAYBEL_0:def 33;
+A7: gfX = g.:(f.:X) by RELAT_1:159;
+A8: ex_sup_of fX, L2 by A3,A5,WAYBEL_0:def 31;
+ hence ex_sup_of gfX, L3 by A6,A7,WAYBEL_0:def 31;
+ thus sup gfX = g.sup fX by A6,A7,A8,WAYBEL_0:def 31
+   .= g.(f.sup X) by A3,A5,WAYBEL_0:def 31
+   .= gf.sup X by A4,FUNCT_1:23;
+end;
+
+theorem   :: see also WAYBEL15:13
+   for L1, L2, L3 being non empty reflexive antisymmetric RelStr,
+     f be map of L1,L2, g be map of L2,L3
+  st f is directed-sups-preserving & g is directed-sups-preserving
+   holds g*f is directed-sups-preserving
+proof let L1, L2, L3 be non empty reflexive antisymmetric RelStr,
+          f be map of L1,L2, g be map of L2,L3 such that
+A1: f is directed-sups-preserving and
+A2: g is directed-sups-preserving;
+  set gf = g*f;
+ let X be Subset of L1 such that
+A3: X is non empty directed and
+A4: ex_sup_of X, L1;
+A5: dom f = the carrier of L1 by FUNCT_2:def 1;
+  set gfX = gf.:X;
+  set fX = f.:X;
+A6: f preserves_sup_of X by A1,A3,WAYBEL_0:def 37;
+    consider xx being Element of X;
+      xx in X & X c= the carrier of L1 by A3;
+then A7: f.xx in fX by FUNCT_2:43;
+      f is monotone by A1,WAYBEL17:3;
+    then fX is non empty directed by A3,A7,YELLOW_2:17;
+then A8: g preserves_sup_of fX by A2,WAYBEL_0:def 37;
+A9: gfX = g.:(f.:X) by RELAT_1:159;
+A10: ex_sup_of fX, L2 by A4,A6,WAYBEL_0:def 31;
+ hence ex_sup_of gfX, L3 by A8,A9,WAYBEL_0:def 31;
+ thus sup gfX = g.sup fX by A8,A9,A10,WAYBEL_0:def 31
+   .= g.(f.sup X) by A4,A6,WAYBEL_0:def 31
+   .= gf.sup X by A5,FUNCT_1:23;
+end;
+
+begin :: Some remarks on lattice product
+
+theorem
+   for I being non empty set
+ for J being RelStr-yielding non-Empty ManySortedSet of I
+  st for i being Element of I holds J.i is lower-bounded antisymmetric RelStr
+   holds product J is lower-bounded
+proof let I be non empty set,
+          J be RelStr-yielding non-Empty ManySortedSet of I such that
+A1: for i being Element of I holds J.i is lower-bounded antisymmetric RelStr;
+   deffunc F(Element of I) = Bottom (J.$1);
+   consider f being ManySortedSet of I such that
+A2: for i being Element of I holds f.i = F(i) from LambdaDMS;
+A3: dom f = I by PBOOLE:def 3;
+      now let i be Element of I; f.i = Bottom (J.i) by A2;
+     hence f.i is Element of J.i;
+    end;
+   then reconsider f as Element of product J by A3,WAYBEL_3:27;
+  take f;
+  let b be Element of product J such that b in the carrier of product J;
+     now let i be Element of I;
+   A4:  f.i = Bottom (J.i) by A2;
+          J.i is lower-bounded antisymmetric non empty RelStr by A1;
+    hence f.i <= b.i by A4,YELLOW_0:44;
+   end;
+  hence f <= b by WAYBEL_3:28;
+end;
+
+theorem
+   for I being non empty set
+ for J being RelStr-yielding non-Empty ManySortedSet of I
+  st for i being Element of I holds J.i is upper-bounded antisymmetric RelStr
+   holds product J is upper-bounded
+proof let I be non empty set,
+          J be RelStr-yielding non-Empty ManySortedSet of I such that
+A1: for i being Element of I holds J.i is upper-bounded antisymmetric RelStr;
+   deffunc F(Element of I) = Top (J.$1);
+   consider f being ManySortedSet of I such that
+A2: for i being Element of I holds f.i = F(i) from LambdaDMS;
+A3: dom f = I by PBOOLE:def 3;
+      now let i be Element of I; f.i = Top (J.i) by A2;
+     hence f.i is Element of J.i;
+    end;
+   then reconsider f as Element of product J by A3,WAYBEL_3:27;
+  take f;
+  let b be Element of product J such that b in the carrier of product J;
+     now let i be Element of I;
+   A4:  f.i = Top (J.i) by A2;
+          J.i is upper-bounded antisymmetric non empty RelStr by A1;
+    hence f.i >= b.i by A4,YELLOW_0:45;
+   end;
+  hence f >= b by WAYBEL_3:28;
+end;
+
+theorem
+   for I being non empty set
+ for J being RelStr-yielding non-Empty ManySortedSet of I
+  st for i being Element of I holds J.i is lower-bounded antisymmetric RelStr
+   holds for i being Element of I holds Bottom (product J).i = Bottom (J.i)
+proof let I be non empty set,
+          J be RelStr-yielding non-Empty ManySortedSet of I such that
+A1: for i being Element of I holds J.i is lower-bounded antisymmetric RelStr;
+   deffunc F(Element of I) = Bottom (J.$1);
+   consider f being ManySortedSet of I such that
+A2: for i being Element of I holds f.i = F(i) from LambdaDMS;
+A3: dom f = I by PBOOLE:def 3;
+      now let i be Element of I; f.i = Bottom (J.i) by A2;
+     hence f.i is Element of J.i;
+    end;
+   then reconsider f as Element of product J by A3,WAYBEL_3:27;
+A4: {} is_<=_than f by YELLOW_0:6;
+A5: now let b be Element of product J such that {} is_<=_than b;
+         now let i be Element of I;
+     A6:  f.i = Bottom (J.i) by A2;
+            J.i is lower-bounded antisymmetric non empty RelStr by A1;
+      hence f.i <= b.i by A6,YELLOW_0:44;
+     end;
+     hence f <= b by WAYBEL_3:28;
+    end;
+      now let c be Element of product J such that {} is_<=_than c and
+  A7: for b being Element of product J st {} is_<=_than b holds b >= c;
+  A8: c <= f by A4,A7;
+        for i being Element of I holds J.i is antisymmetric by A1;
+  then A9: product J is antisymmetric by WAYBEL_3:30;
+         now let i be Element of I;
+     A10:  f.i = Bottom (J.i) by A2;
+            J.i is lower-bounded antisymmetric non empty RelStr by A1;
+      hence f.i <= c.i by A10,YELLOW_0:44;
+     end;
+     then f <= c by WAYBEL_3:28;
+     hence c = f by A8,A9,YELLOW_0:def 3;
+    end;
+then A11: ex_sup_of {}, product J by A4,A5,YELLOW_0:def 7;
+     now let a be Element of product J such that {} is_<=_than a;
+       now let i be Element of I;
+   A12:  f.i = Bottom (J.i) by A2;
+          J.i is lower-bounded antisymmetric non empty RelStr by A1;
+      hence f.i <= a.i by A12,YELLOW_0:44;
+     end;
+    hence f <= a by WAYBEL_3:28;
+   end;
+   then f = "\/"({}, product J) by A4,A11,YELLOW_0:def 9;
+then A13: Bottom (product J) = f by YELLOW_0:def 11;
+ let i be Element of I;
+ thus Bottom (product J).i = Bottom (J.i) by A2,A13;
+end;
+
+theorem
+   for I being non empty set
+ for J being RelStr-yielding non-Empty ManySortedSet of I
+  st for i being Element of I holds J.i is upper-bounded antisymmetric RelStr
+   holds for i being Element of I holds Top (product J).i = Top (J.i)
+proof let I be non empty set,
+          J be RelStr-yielding non-Empty ManySortedSet of I such that
+A1: for i being Element of I holds J.i is upper-bounded antisymmetric RelStr;
+   deffunc F(Element of I) = Top (J.$1);
+   consider f being ManySortedSet of I such that
+A2: for i being Element of I holds f.i = F(i) from LambdaDMS;
+A3: dom f = I by PBOOLE:def 3;
+      now let i be Element of I; f.i = Top (J.i) by A2;
+     hence f.i is Element of J.i;
+    end;
+   then reconsider f as Element of product J by A3,WAYBEL_3:27;
+A4: {} is_>=_than f by YELLOW_0:6;
+A5: now let b be Element of product J such that {} is_>=_than b;
+         now let i be Element of I;
+     A6:  f.i = Top (J.i) by A2;
+            J.i is upper-bounded antisymmetric non empty RelStr by A1;
+      hence f.i >= b.i by A6,YELLOW_0:45;
+     end;
+     hence f >= b by WAYBEL_3:28;
+    end;
+      now let c be Element of product J such that {} is_>=_than c and
+  A7: for b being Element of product J st {} is_>=_than b holds b <= c;
+  A8: c >= f by A4,A7;
+        for i being Element of I holds J.i is antisymmetric by A1;
+  then A9: product J is antisymmetric by WAYBEL_3:30;
+         now let i be Element of I;
+     A10:  f.i = Top (J.i) by A2;
+            J.i is upper-bounded antisymmetric non empty RelStr by A1;
+      hence f.i >= c.i by A10,YELLOW_0:45;
+     end;
+     then f >= c by WAYBEL_3:28;
+     hence c = f by A8,A9,YELLOW_0:def 3;
+    end;
+then A11: ex_inf_of {}, product J by A4,A5,YELLOW_0:def 8;
+     now let a be Element of product J such that {} is_>=_than a;
+       now let i be Element of I;
+   A12:  f.i = Top (J.i) by A2;
+          J.i is upper-bounded antisymmetric non empty RelStr by A1;
+      hence f.i >= a.i by A12,YELLOW_0:45;
+     end;
+    hence f >= a by WAYBEL_3:28;
+   end;
+   then f = "/\"({}, product J) by A4,A11,YELLOW_0:def 10;
+then A13: Top (product J) = f by YELLOW_0:def 12;
+ let i be Element of I;
+ thus Top (product J).i = Top (J.i) by A2,A13;
+end;
+
+theorem :: Theorem 2.7, p. 60, (i)
+   :: The hint in CCL suggest employing the distributivity equations.
+   :: However, we prove it directly from the definition of continuity;
+   :: it seems easier to do so.
+
+  for I being non empty set,
+    J being RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I
+ st for i being Element of I holds J.i is continuous complete LATTICE
+  holds product J is continuous
+proof let I be non empty set,
+      J be RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I
+  such that
+A1: for i being Element of I holds J.i is continuous complete LATTICE;
+  set pJ = product J;
+
+A2: for i being Element of I holds J.i is complete LATTICE by A1;
+  then reconsider pJ' = pJ as complete LATTICE by WAYBEL_3:31;
+
+  hereby let x be Element of pJ;
+     reconsider x' = x as Element of pJ';
+       waybelow x' is non empty;
+   hence waybelow x is non empty;
+       waybelow x' is directed;
+   hence waybelow x is directed;
+  end;
+     pJ' is up-complete;
+  hence pJ is up-complete;
+  let x be Element of pJ;
+ set swx = sup waybelow x;
+     now
+    thus dom x = I by WAYBEL_3:27;
+    thus dom swx = I by WAYBEL_3:27;
+    let i be set; assume
+     i in I;
+      then reconsider i' = i as Element of I;
+  A3: swx.i' = sup pi(waybelow x, i') by A2,WAYBEL_3:32;
+        now let a be set;
+       hereby assume a in pi(waybelow x, i');
+         then consider f being Function such that
+     A4: f in waybelow x and
+     A5: a = f.i by CARD_3:def 6;
+         reconsider f as Element of pJ by A4;
+           f << x by A4,WAYBEL_3:7;
+         then f.i' << x.i' by A2,WAYBEL_3:33;
+        hence a in waybelow x.i' by A5,WAYBEL_3:7;
+       end;
+       assume
+     A6: a in waybelow x.i';
+       deffunc F(Element of I) = Bottom (J.$1);
+       consider g being ManySortedSet of I such that
+     A7: for i being Element of I holds g.i = F(i) from LambdaDMS;
+     A8: dom g = I by PBOOLE:def 3;
+       set f = g+*(i, a);
+     A9: dom f = I by A8,FUNCT_7:32;
+       now let j be Element of I;
+          per cases;
+          suppose A10: i' = j;
+              f.i' = a by A8,FUNCT_7:33;
+           hence f.j is Element of J.j by A6,A10;
+          suppose i' <> j; then f.j = g.j by FUNCT_7:34 .= Bottom (J.j) by A7
+;
+           hence f.j is Element of J.j;
+         end;
+       then reconsider f as Element of pJ by A9,WAYBEL_3:27;
+     A11: now let j be Element of I;
+          per cases;
+          suppose A12: i' = j;
+        f.i' = a by A8,FUNCT_7:33;
+           hence f.j << x.j by A6,A12,WAYBEL_3:7;
+          suppose A13: i' <> j;
+      A14: J.j is complete LATTICE by A1;
+              f.j = g.j by A13,FUNCT_7:34 .= Bottom (J.j) by A7;
+           hence f.j << x.j by A14,WAYBEL_3:4;
+         end;
+         reconsider K = {i'} as finite Subset of I;
+       now let j be Element of I; assume not j in K;
+           then j <> i' by TARSKI:def 1;
+          hence f.j = g.j by FUNCT_7:34 .= Bottom (J.j) by A7;
+         end;
+         then f << x by A2,A11,WAYBEL_3:33;
+     then A15: f in waybelow x by WAYBEL_3:7;
+        a = f.i' by A8,FUNCT_7:33;
+       hence a in pi(waybelow x, i') by A15,CARD_3:def 6;
+      end;
+  then A16: pi(waybelow x, i') = waybelow (x.i') by TARSKI:2;
+        J.i' is satisfying_axiom_of_approximation by A1;
+    hence x.i = swx.i by A3,A16,WAYBEL_3:def 5;
+   end;
+  hence x = sup waybelow x by FUNCT_1:9;
+end;
+
+begin :: Kernel projections and quotient lattices
+
+theorem Th35: :: Proposition 2.8 p. 61
+for L, T being continuous complete LATTICE, g being CLHomomorphism of L, T,
+    S being Subset of [:L, L:]
+ st S = [:g, g:]"(id the carrier of T)
+  holds subrelstr S is CLSubFrame of [:L, L:]
+proof let L, T be continuous complete LATTICE,
+          g be CLHomomorphism of L, T,
+          SL be Subset of [:L, L:] such that
+A1: SL = [:g, g:]"(id the carrier of T);
+A2: g is infs-preserving directed-sups-preserving by WAYBEL16:def 1;
+   set pL = [:L, L:], pg = [:g, g:], pT = [:T, T:];
+   consider x being Element of L;
+A3: dom g = the carrier of L by FUNCT_2:def 1;
+ then A4: [x, x] in [:dom g, dom g:] by ZFMISC_1:106;
+ A5: dom [:g, g:] = [: dom g, dom g :] by FUNCT_3:def 9;
+       [g.x, g.x] in id the carrier of T by RELAT_1:def 10;
+     then [:g, g:].[x, x] in id the carrier of T by A3,FUNCT_3:def 9;
+   then reconsider nSL = SL as non empty Subset of [:L, L:] by
+A1,A4,A5,FUNCT_1:def 13;
+A6: subrelstr nSL is non empty;
+
+A7: the carrier of pL=[:the carrier of L,the carrier of L:] by YELLOW_3:def 2;
+
+A8: subrelstr SL is infs-inheriting proof
+    let X be Subset of subrelstr SL such that
+ A9: ex_inf_of X, pL;
+       X c= the carrier of subrelstr SL;
+ then A10: X c= SL by YELLOW_0:def 15;
+      then X c= the carrier of pL by XBOOLE_1:1;
+    then reconsider X' = X as Subset of pL;
+    consider x, y being set such that
+ A11: x in the carrier of L & y in the carrier of L and
+ A12: inf X' = [x, y] by A7,ZFMISC_1:def 2;
+       pg is infs-preserving by A2,Th9;
+     then pg preserves_inf_of X' by WAYBEL_0:def 32;
+ then A13: ex_inf_of pg.:X', pT & inf (pg.:X')=pg.inf X' by A9,WAYBEL_0:def 30;
+ A14: pg.:X c= pg.:SL by A10,RELAT_1:156;
+        pg.:SL c= id the carrier of T by A1,FUNCT_1:145;
+ then A15: pg.:X' c= id the carrier of T by A14,XBOOLE_1:1;
+       ex_inf_of pg.:X', [:T, T:] by YELLOW_0:17;
+ then A16: inf (pg.:X') in id the carrier of T by A15,Th13;
+       [x, y] in [:dom g, dom g:] by A3,A11,ZFMISC_1:106;
+ then [x, y] in dom [:g, g:] by FUNCT_3:def 9;
+     then [x, y] in [:g, g:]"(id the carrier of T) by A12,A13,A16,FUNCT_1:def
+13;
+    hence "/\"
+(X, pL) in the carrier of subrelstr SL by A1,A12,YELLOW_0:def 15;
+   end;
+
+  subrelstr SL is directed-sups-inheriting proof
+    let X be directed Subset of subrelstr SL such that
+ A17: X <> {} and
+ A18: ex_sup_of X, pL;
+       X c= the carrier of subrelstr SL;
+ then A19: X c= SL by YELLOW_0:def 15;
+   reconsider X' = X as directed non empty Subset of pL by A6,A17,YELLOW_2:7;
+   consider x, y being set such that
+ A20: x in the carrier of L & y in the carrier of L and
+ A21: sup X' = [x, y] by A7,ZFMISC_1:def 2;
+       pg is directed-sups-preserving by A2,Th12;
+     then pg preserves_sup_of X' by WAYBEL_0:def 37;
+ then A22: ex_sup_of pg.:X', pT & sup (pg.:X')=pg.sup X' by A18,WAYBEL_0:def 31
+;
+ A23: pg.:X c= pg.:SL by A19,RELAT_1:156;
+        pg.:SL c= id the carrier of T by A1,FUNCT_1:145;
+ then A24: pg.:X' c= id the carrier of T by A23,XBOOLE_1:1;
+       ex_sup_of pg.:X', [:T, T:] by YELLOW_0:17;
+ then A25: sup (pg.:X') in id the carrier of T by A24,Th14;
+       [x, y] in [:dom g, dom g:] by A3,A20,ZFMISC_1:106;
+ then [x, y] in dom [:g, g:] by FUNCT_3:def 9;
+     then [x, y] in [:g, g:]"(id the carrier of T) by A21,A22,A25,FUNCT_1:def
+13;
+    hence "\/"
+(X, pL) in the carrier of subrelstr SL by A1,A21,YELLOW_0:def 15;
+   end;
+ hence subrelstr SL is CLSubFrame of [:L, L:] by A6,A8;
+end;
+
+:: Proposition 2.9, p. 61, see WAYBEL10
+
+:: Lemma 2.10, p. 61, see WAYBEL15:16
+
+definition
+ let L be RelStr, R be Subset of [:L, L:] such that
+A1: R is Equivalence_Relation of the carrier of L;
+ func EqRel R -> Equivalence_Relation of the carrier of L equals
+:Def1:   R;
+ correctness by A1;
+end;
+
+definition :: Definition 2.12, p. 62, part I (congruence)
+ let L be non empty RelStr, R be Subset of [:L, L:];
+ attr R is CLCongruence means :Def2:
+  R is Equivalence_Relation of the carrier of L &
+  subrelstr R is CLSubFrame of [:L, L:];
+end;
+
+theorem Th36:
+ for L being complete LATTICE, R being non empty Subset of [:L, L:]
+  st R is CLCongruence
+   for x be Element of L holds [inf Class(EqRel R, x), x] in R
+proof let L be complete LATTICE,
+     R be non empty Subset of [:L, L:]; assume
+A1: R is CLCongruence;
+then A2: R is Equivalence_Relation of the carrier of L by Def2;
+ A3: subrelstr R is CLSubFrame of [:L, L:] by A1,Def2;
+A4: R = EqRel R by A2,Def1;
+
+   let x be Element of L;
+       set CRx = Class(EqRel R, x);
+       reconsider SR = [:CRx, {x}:] as Subset of [:L, L:];
+         SR c= the carrier of subrelstr R proof let a be set; assume
+            a in SR; then consider a1, a2 being set such that
+       A5: a1 in CRx & a2 in {x} & a = [a1, a2] by ZFMISC_1:def 2;
+             a2 = x by A5,TARSKI:def 1;
+          then a in R by A4,A5,EQREL_1:27;
+        hence a in the carrier of subrelstr R by YELLOW_0:def 15;
+       end;
+       then reconsider SR' = SR as Subset of subrelstr R;
+   A6: x in CRx by EQREL_1:28;
+   A7:  ex_inf_of SR, [:L, L:] by YELLOW_0:17;
+   then A8:  inf SR = [inf proj1 SR, inf proj2 SR] by Th7
+       .= [inf CRx, inf proj2 SR] by FUNCT_5:11
+       .= [inf CRx, inf {x}] by A6,FUNCT_5:11
+       .= [inf CRx, x] by YELLOW_0:39;
+         "/\"(SR', [:L, L:]) in the carrier of subrelstr R
+              by A3,A7,YELLOW_0:def 18;
+     hence [inf CRx, x] in R by A8,YELLOW_0:def 15;
+   end;
+
+definition :: Theorem 2.11, p. 61-62, (1) implies (3) (part a)
+ let L be complete LATTICE, R be non empty Subset of [:L, L:] such that
+A1: R is CLCongruence;
+ func kernel_op R -> kernel map of L, L means
+:Def3: for x being Element of L holds it.x = inf Class(EqRel R, x);
+ existence proof
+A2: R is Equivalence_Relation of the carrier of L by A1,Def2;
+ A3: subrelstr R is CLSubFrame of [:L, L:] by A1,Def2;
+  deffunc F(Element of L) = inf Class(EqRel R, $1);
+  consider k being Function of the carrier of L, the carrier of L such that
+A4: for x being Element of L holds k.x = F(x)
+      from LambdaD;
+A5: R = EqRel R by A2,Def1;
+  reconsider k as map of L, L;
+A6: k is projection proof
+       now let x be Element of L;
+       set CRx = Class(EqRel R, x);
+   A7: k.x = inf CRx by A4;
+   then A8: k.(k.x) = inf Class(EqRel R, inf CRx) by A4;
+         [inf CRx, x] in R by A1,Th36;
+       then inf CRx in CRx by A5,EQREL_1:27;
+   then Class(EqRel R, inf CRx) = CRx by EQREL_1:31;
+      hence (k*k).x
+          = k.x by A7,A8,FUNCT_2:21;
+     end;
+     then k*k = k by FUNCT_2:113;
+    hence k is idempotent by QUANTAL1:def 9;
+    thus k is monotone proof :: WAYBEL_1:def 2
+     let x, y be Element of L such that
+   A9: x <= y;
+   A10: inf {x, y} = x"/\"y by YELLOW_0:40 .= x by A9,YELLOW_0:25;
+       set CRx = Class(EqRel R, x);
+       set CRy = Class(EqRel R, y);
+       reconsider SR = {[inf CRx, x], [inf CRy, y]} as Subset of [:L, L:];
+         [inf CRx, x] in R & [inf CRy, y] in R by A1,Th36;
+       then SR c= R by ZFMISC_1:38;
+       then SR c= the carrier of subrelstr R by YELLOW_0:def 15;
+       then reconsider SR' = SR as Subset of subrelstr R;
+   A11: ex_inf_of SR, [:L, L:] by YELLOW_0:17;
+   then A12: inf SR = [inf proj1 SR, inf proj2 SR] by Th7
+        .= [inf {inf CRx, inf CRy}, inf proj2 SR] by FUNCT_5:16
+        .= [inf {inf CRx, inf CRy}, inf {x, y}] by FUNCT_5:16;
+         "/\"(SR', [:L, L:]) in the carrier of subrelstr R
+            by A3,A11,YELLOW_0:def 18;
+       then [inf {inf CRx, inf CRy}, x] in R by A10,A12,YELLOW_0:def 15;
+       then inf {inf CRx, inf CRy} in CRx by A5,EQREL_1:27;
+   then A13: inf CRx <= inf {inf CRx, inf CRy} by YELLOW_2:24;
+         inf CRy in {inf CRx, inf CRy} by TARSKI:def 2;
+   then A14: inf {inf CRx, inf CRy} <= inf CRy by YELLOW_2:24;
+      k.x = inf CRx & k.y = inf CRy by A4;
+      hence k.x <= k.y by A13,A14,YELLOW_0:def 2;
+    end;
+   end;
+     now let x be Element of L;
+   A15: k.x = inf Class(EqRel R, x) by A4;
+       set CRx = Class(EqRel R, x);
+   A16: x in CRx by EQREL_1:28;
+        inf CRx is_<=_than CRx by YELLOW_0:33;
+      then inf CRx <= x by A16,LATTICE3:def 8;
+    hence k.x <= id(L).x by A15,GRCAT_1:11;
+   end;
+   then k <= id (L) by YELLOW_2:10;
+  then reconsider k as kernel map of L, L by A6,WAYBEL_1:def 15;
+  take k;
+  thus thesis by A4;
+end;
+ uniqueness proof let it1, it2 be kernel map of L, L such that
+A17: for x being Element of L holds it1.x = inf Class(EqRel R, x) and
+A18: for x being Element of L holds it2.x = inf Class(EqRel R, x);
+     now let x be set; assume x in the carrier of L;
+     then reconsider x' = x as Element of L;
+    thus it1.x = inf Class(EqRel R, x') by A17 .= it2.x by A18;
+   end;
+  hence it1 = it2 by FUNCT_2:18;
+ end;
+end;
+
+theorem Th37: :: Theorem 2.11, p. 61-62, (1) implies (3) (part b)
+ for L being complete LATTICE, R be non empty Subset of [:L, L:]
+  st R is CLCongruence
+   holds kernel_op R is directed-sups-preserving &
+         R = [:kernel_op R, kernel_op R:]"(id the carrier of L)
+proof let L be complete LATTICE,
+          R be non empty Subset of [:L, L:]; assume
+A1: R is CLCongruence;
+then A2: R is Equivalence_Relation of the carrier of L by Def2;
+then A3: EqRel R = R by Def1;
+A4: subrelstr R is CLSubFrame of [:L, L:] by A1,Def2;
+   set k = kernel_op R; set cL = the carrier of L;
+A5: dom k = cL by FUNCT_2:def 1;
+ thus k is directed-sups-preserving proof
+  let D be Subset of L such that
+ A6: D is non empty directed and ex_sup_of D, L;
+  thus ex_sup_of k.:D, L by YELLOW_0:17;
+   set d = sup D; set ds = sup (k.:D);
+     k.:D is_<=_than k.d proof let b be Element of L; assume
+     b in k.:D;
+      then consider a being set such that
+  A7: a in dom k & a in D & b = k.a by FUNCT_1:def 12;
+      reconsider a as Element of L by A7;
+        D is_<=_than d by YELLOW_0:32;
+      then a <= d by A7,LATTICE3:def 9;
+    hence b <= k.d by A7,WAYBEL_1:def 2;
+   end;
+ then A8: ds <= k.d by YELLOW_0:32;
+   set S = {[k.x, x] where x is Element of L : x in D};
+ A9: the carrier of subrelstr R = R by YELLOW_0:def 15;
+ A10: S c= R proof let x be set; assume x in S;
+        then consider a being Element of L such that
+    A11: x = [k.a, a] & a in D;
+          k.a = inf Class(EqRel R, a) by A1,Def3;
+       hence x in R by A1,A11,Th36;
+      end;
+   then reconsider S' = S as Subset of subrelstr R by A9;
+        S c= the carrier of [:L, L:] by A10,XBOOLE_1:1;
+   then reconsider S as Subset of [:L, L:];
+ A12: ex_sup_of S, [:L, L:] by YELLOW_0:17;
+     consider e being set such that
+ A13: e in D by A6,XBOOLE_0:def 1;
+     reconsider e as Element of L by A13;
+  A14: [k.e, e] in S by A13;
+ A15: S' is directed proof let x, y be Element of subrelstr R; assume
+    A16: x in S' & y in S';
+        then consider a being Element of L such that
+    A17: x = [k.a, a] & a in D;
+        consider b being Element of L such that
+    A18: y = [k.b, b] & b in D by A16;
+        consider c being Element of L such that
+    A19: c in D & a <= c & b <= c by A6,A17,A18,WAYBEL_0:def 1;
+        set z = [k.c, c];
+          z in S' by A19;
+        then reconsider z as Element of subrelstr R;
+       take z;
+       thus z in S' by A19;
+          k.a <= k.c by A19,WAYBEL_1:def 2;
+        then [k.a, a] <= [k.c, c] by A19,YELLOW_3:11;
+       hence x <= z by A17,YELLOW_0:61;
+          k.b <= k.c by A19,WAYBEL_1:def 2;
+        then [k.b, b] <= [k.c, c] by A19,YELLOW_3:11;
+       hence y <= z by A18,YELLOW_0:61;
+      end;
+        now let x be set;
+       hereby assume x in proj1 S; then consider y being set such that
+      A20: [x, y] in S by FUNCT_5:def 1;
+          consider a being Element of L such that
+      A21: [x, y] = [k.a, a] & a in D by A20;
+            x = k.a by A21,ZFMISC_1:33;
+        hence x in k.:D by A5,A21,FUNCT_1:def 12;
+       end;
+       assume x in k.:D; then consider y being set such that
+      A22: y in dom k & y in D & x = k.y by FUNCT_1:def 12;
+          reconsider y as Element of L by A22;
+            [k.y, y] in S by A22;
+       hence x in proj1 S by A22,FUNCT_5:def 1;
+      end;
+ then A23: proj1 S = k.:D by TARSKI:2;
+        now let x be set;
+       hereby assume x in proj2 S; then consider y being set such that
+      A24: [y, x] in S by FUNCT_5:def 2;
+          consider a being Element of L such that
+      A25: [y, x] = [k.a, a] & a in D by A24;
+        thus x in D by A25,ZFMISC_1:33;
+       end;
+       assume
+      A26: x in D;
+        then reconsider x' = x as Element of L;
+          [k.x', x'] in S by A26;
+       hence x in proj2 S by FUNCT_5:def 2;
+      end;
+ then proj2 S = D by TARSKI:2;
+  then sup S = [ds, d] by A12,A23,Th8;
+   then [ds, d] in R by A4,A9,A12,A14,A15,WAYBEL_0:def 4;
+ then A27: ds in Class(EqRel R, d) by A3,EQREL_1:27;
+      k.d = inf Class(EqRel R, d) by A1,Def3;
+    then k.d <= ds by A27,YELLOW_2:24;
+  hence sup (k.:D) = k.sup D by A8,YELLOW_0:def 3;
+ end;
+    now let x be set;
+   hereby assume
+  A28: x in R; then x in the carrier of [:L, L:];
+     then x in [:cL, cL:] by YELLOW_3:def 2;
+     then consider x1, x2 being set such that
+  A29: x1 in cL & x2 in cL & x = [x1, x2] by ZFMISC_1:def 2;
+    reconsider x1, x2 as Element of L by A29;
+  A30: k.x1=inf Class(EqRel R, x1) & k.x2 = inf Class(EqRel R, x2) by A1,Def3;
+        x1 in Class(EqRel R, x2) by A3,A28,A29,EQREL_1:27;
+      then k.x1 = k.x2 by A30,EQREL_1:31;
+  then A31: [k.x1, k.x2] in id cL by RELAT_1:def 10;
+  A32: [:k, k:].[x1, x2] = [k.x1, k.x2] by A5,FUNCT_3:def 9;
+        dom [:k, k:] = [:dom k, dom k:] by FUNCT_3:def 9;
+      then [x1, x2] in dom [:k, k:] by A5,ZFMISC_1:106;
+    hence x in [:k, k:]"(id cL) by A29,A31,A32,FUNCT_1:def 13;
+   end;
+   assume x in [:k, k:]"(id cL);
+  then A33: x in dom [:k, k:] & [:k, k:].x in id cL by FUNCT_1:def 13;
+      then x in [:dom k, dom k:] by FUNCT_3:def 9;
+      then consider x1, x2 being set such that
+  A34: x1 in dom k & x2 in dom k & x = [x1, x2] by ZFMISC_1:def 2;
+      reconsider x1, x2 as Element of L by A34;
+        [:k, k:].[x1, x2] = [k.x1, k.x2] by A34,FUNCT_3:def 9;
+  then A35: k.x1 = k.x2 by A33,A34,RELAT_1:def 10;
+     k.x1=inf Class(EqRel R, x1) & k.x2 = inf Class(EqRel R, x2) by A1,Def3;
+  then A36: [k.x1, x1] in R & [k.x2, x2] in R by A1,Th36;
+      then [x1, k.x1] in R by A2,EQREL_1:12;
+   hence x in R by A2,A34,A35,A36,EQREL_1:13;
+  end;
+ hence R = [:k, k:]"(id cL) by TARSKI:2;
+end;
+
+theorem Th38: :: Theorem 2.11, p. 61-62, (3) implies (2)
+ for L being continuous complete LATTICE, R be Subset of [:L, L:],
+     k being kernel map of L, L
+  st k is directed-sups-preserving & R = [:k, k:]"(id the carrier of L)
+   ex LR being continuous complete strict LATTICE st
+     the carrier of LR = Class EqRel R &
+     the InternalRel of LR = {[Class(EqRel R, x), Class(EqRel R, y)]
+                                where x, y is Element of L : k.x <= k.y } &
+     for g being map of L, LR
+      st for x being Element of L holds g.x = Class(EqRel R, x)
+       holds g is CLHomomorphism of L, LR
+proof let L be continuous complete LATTICE,
+          R be Subset of [:L, L:], k be kernel map of L, L such that
+A1: k is directed-sups-preserving and
+A2: R = [:k, k:]"(id the carrier of L);
+A3: R is Equivalence_Relation of the carrier of L by A2,Th2;
+   set ER = EqRel R;
+A4: ER = R by A3,Def1;
+   set cL = the carrier of L;
+A5: dom k = cL by FUNCT_2:def 1;
+then A6: dom [:k, k:] = [:cL, cL:] by FUNCT_3:def 9;
+   consider xx being Element of L;
+     Class(ER, xx) in Class ER by EQREL_1:def 5;
+   then reconsider CER = Class ER as non empty Subset-Family of cL;
+
+   defpred P[set,set] means
+     ex x, y being Element of L st
+      $1 = Class(ER, x) & $2 = Class(ER, y) & k.x <= k.y;
+   consider LR being non empty strict RelStr such that
+A7: the carrier of LR = CER and
+A8: for a, b being Element of LR holds a <= b iff P[a,b] from RelStrEx;
+A9: for a, b being Element of cL holds
+       Class(ER, a) = Class(ER, b) iff k.a = k.b proof
+      let a, b be Element of cL;
+      hereby assume
+        Class(ER, a) = Class(ER, b);
+         then a in Class(ER, b) by EQREL_1:31;
+         then [a, b] in R by A4,EQREL_1:27;
+         then [:k, k:].[a, b] in id cL by A2,FUNCT_1:def 13;
+         then [k.a, k.b] in id cL by A5,FUNCT_3:def 9;
+       hence k.a = k.b by RELAT_1:def 10;
+      end;
+     A10: [a, b] in [:cL, cL:] by ZFMISC_1:def 2;
+      assume k.a = k.b;
+         then [k.a, k.b] in id cL by RELAT_1:def 10;
+         then [:k, k:].[a, b] in id cL by A5,FUNCT_3:def 9;
+         then [a, b] in ER by A2,A4,A6,A10,FUNCT_1:def 13;
+         then a in Class(ER, b) by EQREL_1:27;
+      hence Class(ER, a) = Class(ER, b) by EQREL_1:31;
+     end;
+    reconsider rngk = rng k as non empty set;
+    defpred P[set, set] means
+     ex a being Element of cL st $1 = Class(ER, a) & $2 = k.a;
+A11: for x being Element of CER ex y being Element of rngk st P[x, y] proof
+      let x be Element of CER;
+       consider y being set such that
+    A12: y in cL & x = Class(ER, y) by EQREL_1:def 5;
+       reconsider y as Element of L by A12;
+       reconsider ky = k.y as Element of rngk by A5,FUNCT_1:def 5;
+       take ky;
+       thus P[x, ky] by A12;
+    end;
+    consider f being Function of CER, rngk such that
+A13: for x being Element of CER holds P[x, f.x] from FuncExD(A11);
+A14: dom f = CER by FUNCT_2:def 1;
+
+A15: for x being Element of L holds f.Class(ER, x) = k.x proof
+      let x be Element of L;
+      reconsider CERx = Class(ER, x) as Element of CER by EQREL_1:def 5;
+      consider a being Element of cL such that
+     A16: CERx = Class(ER, a) & f.CERx = k.a by A13;
+      thus f.Class(ER, x) = k.x by A9,A16;
+     end;
+
+    set tIR = the InternalRel of LR;
+    set IR = {[Class(ER, x), Class(ER, y)]
+                  where x, y is Element of L : k.x <= k.y };
+
+A17: for x being Element of LR ex a being Element of L st x = Class(ER, a)
+     proof let x be Element of LR;
+           x in CER by A7; then consider a being set such that
+     A18: a in cL & x = Class(ER, a) by EQREL_1:def 5;
+       reconsider a as Element of L by A18;
+      take a;
+      thus x = Class(ER, a) by A18;
+     end;
+
+       now let x1, x2 be set; assume
+   A19: x1 in CER & x2 in CER & f.x1 = f.x2;
+       then reconsider x1' = x1 as Element of LR by A7;
+       reconsider x2' = x2 as Element of LR by A7,A19;
+       consider a being Element of L such that
+   A20: x1' = Class(ER, a) by A17;
+       consider b being Element of L such that
+   A21: x2' = Class(ER, b) by A17;
+         f.x1' = k.a & f.x2' = k.b by A15,A20,A21;
+      hence x1 = x2 by A9,A19,A20,A21;
+     end;
+then A22:  f is one-to-one by FUNCT_2:25;
+
+A23:  the carrier of Image k = rngk by YELLOW_2:11;
+     then reconsider f as map of LR, Image k by A7;
+
+       now let y be set;
+      hereby assume y in rng f; then consider x being set such that
+     A24: x in dom f & y = f.x by FUNCT_1:def 5;
+         reconsider x as Element of LR by A24;
+         consider a being Element of L such that
+     A25: x = Class(ER, a) by A17;
+           f.x = k.a by A15,A25;
+       hence y in rngk by A5,A24,FUNCT_1:def 5;
+      end;
+      assume y in rngk; then consider x being set such that
+     A26: x in dom k & y = k.x by FUNCT_1:def 5;
+         reconsider x as Element of L by A26;
+     A27: Class(ER, x) in CER by EQREL_1:def 5;
+           f.Class(ER, x) = k.x by A15;
+      hence y in rng f by A14,A26,A27,FUNCT_1:def 5;
+     end;
+then A28:  rng f = rngk by TARSKI:2;
+
+       for x, y being Element of LR holds x <= y iff f.x <= f.y proof
+      let x, y be Element of LR;
+         x in CER by A7; then consider a being set such that
+    A29: a in cL & x = Class(ER, a) by EQREL_1:def 5;
+       reconsider a as Element of L by A29;
+         y in CER by A7; then consider b being set such that
+    A30: b in cL & y = Class(ER, b) by EQREL_1:def 5;
+       reconsider b as Element of L by A30;
+    A31: f.x = k.a & f.y = k.b by A15,A29,A30;
+      hereby assume x <= y;
+         then consider c, d being Element of L such that
+      A32: x = Class(ER, c) & y = Class(ER, d) & k.c <= k.d by A8;
+        f.x = k.c & f.y = k.d by A15,A32;
+       hence f.x <= f.y by A32,YELLOW_0:61;
+      end;
+      assume f.x <= f.y;
+       then k.a <= k.b by A31,YELLOW_0:60;
+      hence x <= y by A8,A29,A30;
+     end;
+then A33: f is isomorphic by A22,A23,A28,WAYBEL_0:66;
+      then LR, Image k are_isomorphic by WAYBEL_1:def 8;
+then A34: Image k, LR are_isomorphic by WAYBEL_1:7;
+A35: Image k is continuous LATTICE by A1,WAYBEL15:16;
+
+    reconsider LR as non empty strict Poset by A34,Th15,Th16,Th17;
+      Image k is complete by WAYBEL_1:57;
+    then reconsider LR as complete (non empty strict Poset) by A34,Th18;
+    reconsider LR as complete strict LATTICE;
+
+    reconsider LR as continuous complete strict LATTICE by A34,A35,WAYBEL15:11;
+   take LR;
+   thus the carrier of LR = Class ER by A7;
+      now let z be set;
+     hereby assume
+    A36: z in tIR; then consider a, b being set such that
+    A37: a in CER & b in CER & z = [a, b] by A7,ZFMISC_1:def 2;
+        reconsider a, b as Element of LR by A7,A37;
+          a <= b by A36,A37,ORDERS_1:def 9;
+        then consider x, y being Element of L such that
+    A38: a = Class(ER, x) & b = Class(ER, y) & k.x <= k.y by A8;
+      thus z in IR by A37,A38;
+     end;
+     assume z in IR; then consider x, y being Element of L such that
+    A39: z = [Class(ER, x), Class(ER, y)] & k.x <= k.y;
+           Class(ER, x) in CER by EQREL_1:def 5;
+        then reconsider a = Class(ER, x) as Element of LR by A7;
+           Class(ER, y) in CER by EQREL_1:def 5;
+        then reconsider b = Class(ER, y) as Element of LR by A7;
+          a <= b by A8,A39;
+     hence z in tIR by A39,ORDERS_1:def 9;
+    end;
+   hence the InternalRel of LR = {[Class(ER, x), Class(ER, y)]
+                  where x, y is Element of L : k.x <= k.y } by TARSKI:2;
+   let g be map of L, LR such that
+A40:  for x being Element of L holds g.x = Class(ER, x);
+      (f qua Function)" is Function of the carrier of Image k, the carrier of
+LR
+       by A22,A23,A28,FUNCT_2:31;
+    then reconsider f' = ((f qua Function)") as map of Image k, LR;
+A41: f' is isomorphic by A33,WAYBEL_0:68;
+      now let x be set; assume
+    A42: x in cL;
+        then reconsider x' = x as Element of L;
+        A43: dom corestr k = cL by FUNCT_2:def 1;
+    A44: f.Class(ER, x') = k.x' by A15;
+        A45: Class(ER, x') in CER by EQREL_1:def 5;
+     thus (f'*corestr k).x
+        = f'.((corestr k).x) by A42,A43,FUNCT_1:23
+       .= f'.(k.x) by WAYBEL_1:32
+       .= Class(ER, x') by A14,A22,A44,A45,FUNCT_1:54
+       .= g.x by A40;
+    end;
+then A46: g = f'*corestr k by FUNCT_2:18;
+A47: corestr k is infs-preserving by WAYBEL_1:59;
+A48: corestr k is directed-sups-preserving by A1,Th22;
+A49: f' is infs-preserving by A41,WAYBEL13:20;
+    reconsider f' as sups-preserving map of Image k, LR by A41,WAYBEL13:20;
+A50: f' is directed-sups-preserving;
+A51: g is infs-preserving by A46,A47,A49,Th26;
+      g is directed-sups-preserving by A46,A48,A50,WAYBEL15:13;
+  hence g is CLHomomorphism of L, LR by A51,WAYBEL16:def 1;
+end;
+
+theorem Th39: :: Theorem 2.11, p. 61-62, (2) implies (1)
+    :: CCL: Immediate from 2.8. (?)  One has to construct a homomorphism.
+ for L being continuous complete LATTICE, R being Subset of [:L, L:]
+  st R is Equivalence_Relation of the carrier of L &
+     ex LR being continuous complete LATTICE st
+          the carrier of LR = Class EqRel R &
+          for g being map of L, LR
+           st for x being Element of L holds g.x = Class(EqRel R, x)
+            holds g is CLHomomorphism of L, LR
+   holds subrelstr R is CLSubFrame of [:L, L:]
+proof let L be continuous complete LATTICE, R be Subset of [:L, L:] such that
+A1: R is Equivalence_Relation of the carrier of L;
+   given LR being continuous complete LATTICE such that
+A2: the carrier of LR = Class EqRel R and
+A3: for g being map of L, LR
+    st for x being Element of L holds g.x = Class(EqRel R, x)
+     holds g is CLHomomorphism of L, LR;
+A4: EqRel R = R by A1,Def1;
+   set cL = the carrier of L, cLR = the carrier of LR;
+   set ER = EqRel R; set CER = Class ER;
+   deffunc F(set) = Class(ER, $1);
+A5: for x be set st x in cL holds F(x) in CER by EQREL_1:def 5;
+   consider g being Function of cL, CER such that
+A6: for x being set st x in cL holds g.x = F(x) from Lambda1(A5);
+   reconsider g as map of L, LR by A2;
+A7: for x being Element of L holds g.x = Class(EqRel R, x) by A6;
+A8: dom g = cL by FUNCT_2:def 1;
+A9: g is CLHomomorphism of L, LR by A3,A7;
+   set k = g;
+    now let x be set;
+   hereby assume
+  A10: x in R; then x in the carrier of [:L, L:];
+      then x in [:cL, cL:] by YELLOW_3:def 2;
+      then consider x1, x2 being set such that
+  A11: x1 in cL & x2 in cL & x = [x1, x2] by ZFMISC_1:def 2;
+      reconsider x1, x2 as Element of L by A11;
+  A12: k.x1 = Class(EqRel R, x1) & k.x2 = Class(EqRel R, x2) by A6;
+        x1 in Class(EqRel R, x2) by A4,A10,A11,EQREL_1:27;
+      then k.x1 = k.x2 by A12,EQREL_1:31;
+  then A13: [k.x1, k.x2] in id cLR by RELAT_1:def 10;
+  A14: [:k, k:].[x1, x2] = [k.x1, k.x2] by A8,FUNCT_3:def 9;
+        dom [:k, k:] = [:dom k, dom k:] by FUNCT_3:def 9;
+      then [x1, x2] in dom [:k, k:] by A8,ZFMISC_1:106;
+    hence x in [:k, k:]"(id cLR) by A11,A13,A14,FUNCT_1:def 13;
+   end;
+   assume x in [:k, k:]"(id cLR);
+  then A15: x in dom [:k, k:] & [:k, k:].x in id cLR by FUNCT_1:def 13;
+      then x in [:dom k, dom k:] by FUNCT_3:def 9;
+      then consider x1, x2 being set such that
+  A16: x1 in dom k & x2 in dom k & x = [x1, x2] by ZFMISC_1:def 2;
+      reconsider x1, x2 as Element of L by A16;
+        [:k, k:].[x1, x2] = [k.x1, k.x2] by A16,FUNCT_3:def 9;
+  then A17: k.x1 = k.x2 by A15,A16,RELAT_1:def 10;
+        k.x1=Class(EqRel R, x1) & k.x2 = Class(EqRel R, x2) by A6;
+      then x1 in Class(ER, x2) by A17,EQREL_1:31;
+   hence x in R by A4,A16,EQREL_1:27;
+  end;
+ then R = [:g, g:]"(id the carrier of LR) by TARSKI:2;
+ hence subrelstr R is CLSubFrame of [:L, L:] by A9,Th35;
+end;
+
+definition
+ let L be non empty reflexive RelStr;
+ cluster directed-sups-preserving kernel map of L, L;
+ existence proof
+  reconsider k = id L as directed-sups-preserving kernel map of L, L;
+  take k;
+  thus thesis;
+ end;
+end;
+
+definition
+ let L be non empty reflexive RelStr, k be kernel map of L, L;
+ func kernel_congruence k -> non empty Subset of [:L, L:] equals
+:Def4: [:k, k:]"(id the carrier of L);
+ coherence proof
+  set cL = the carrier of L;
+A1: dom k = cL by FUNCT_2:def 1;
+   consider x being Element of cL;
+   dom [:k, k:] = [:dom k, dom k:] by FUNCT_3:def 9;
+then A2: [x, x] in dom [:k, k:] by A1,ZFMISC_1:def 2;
+A3: [k.x, k.x] in id cL by RELAT_1:def 10;
+     [:k, k:].[x,x] = [k.x, k.x] by A1,FUNCT_3:def 9;
+  hence thesis by A2,A3,FUNCT_1:def 13;
+ end;
+end;
+
+theorem Th40:
+ for L being non empty reflexive RelStr, k being kernel map of L, L
+  holds kernel_congruence k is Equivalence_Relation of the carrier of L
+proof
+ let L be non empty reflexive RelStr, k be kernel map of L, L;
+ set R = kernel_congruence k;
+   R = [:k, k:]"(id the carrier of L) by Def4;
+ hence R is Equivalence_Relation of the carrier of L by Th2;
+end;
+
+theorem Th41: :: Theorem 2.11, p. 61-62 (3) implies (1)
+               :: Not in CCL, consequence of other implications.
+ for L being continuous complete LATTICE,
+     k being directed-sups-preserving kernel map of L, L
+  holds kernel_congruence k is CLCongruence
+proof let L be continuous complete LATTICE,
+          k be directed-sups-preserving kernel map of L, L;
+ set R = kernel_congruence k;
+ thus
+A1: R is Equivalence_Relation of the carrier of L by Th40;
+   R = [:k, k:]"(id the carrier of L) by Def4;
+   then consider LR being continuous complete strict LATTICE such that
+A2: the carrier of LR = Class EqRel R and
+       the InternalRel of LR = {[Class(EqRel R, x), Class(EqRel R, y)]
+                             where x, y is Element of L : k.x <= k.y } and
+A3: for g being map of L, LR
+      st for x being Element of L holds g.x = Class(EqRel R, x)
+       holds g is CLHomomorphism of L, LR by Th38;
+ thus subrelstr R is CLSubFrame of [:L, L:] by A1,A2,A3,Th39;
+end;
+
+definition :: Definition 2.12, p. 62, part II (lattice quotient)
+ let L be continuous complete LATTICE,
+     R be non empty Subset of [:L, L:] such that
+A1: R is CLCongruence;
+ func L ./. R -> continuous complete strict LATTICE means :Def5:
+  the carrier of it = Class EqRel R &
+  for x, y being Element of it holds x <= y iff "/\"(x, L) <= "/\"(y, L);
+ existence proof set k = kernel_op R;
+    k is directed-sups-preserving &
+  R = [:k, k:]"(id the carrier of L) by A1,Th37;
+  then consider LR being continuous complete strict LATTICE such that
+A2: the carrier of LR = Class EqRel R and
+A3: the InternalRel of LR = {[Class(EqRel R, x), Class(EqRel R, y)]
+                            where x, y is Element of L : k.x <= k.y } and
+     for g being map of L, LR
+     st for x being Element of L holds g.x = Class(EqRel R, x)
+    holds g is CLHomomorphism of L, LR by Th38;
+   take LR;
+   thus the carrier of LR = Class EqRel R by A2;
+   let x, y be Element of LR;
+A4: x in the carrier of LR & y in the carrier of LR;
+   then consider u being set such that
+A5: u in the carrier of L & x = Class(EqRel R, u) by A2,EQREL_1:def 5;
+   consider v being set such that
+A6: v in the carrier of L & y = Class(EqRel R, v) by A2,A4,EQREL_1:def 5;
+   reconsider u, v as Element of L by A5,A6;
+A7: k.u = inf Class(EqRel R, u) & k.v = inf Class(EqRel R, v) by A1,Def3;
+   hereby assume x <= y;
+     then [x, y] in the InternalRel of LR by ORDERS_1:def 9;
+     then consider u', v' being Element of L such that
+A8:   [x, y] = [Class(EqRel R, u'), Class(EqRel R, v')] & k.u' <= k.v' by A3;
+A9:   x = Class(EqRel R, u') & y = Class(EqRel R, v') by A8,ZFMISC_1:33;
+       k.u' = inf Class(EqRel R, u') & k.v' = inf Class(EqRel R, v') by A1,Def3
+;
+    hence "/\"(x, L) <= "/\"(y, L) by A8,A9;
+   end;
+   assume "/\"(x, L) <= "/\"(y, L);
+    then [x, y] in the InternalRel of LR by A3,A5,A6,A7;
+   hence x <= y by ORDERS_1:def 9;
+ end;
+ uniqueness proof
+   let LR1, LR2 be continuous complete strict LATTICE such that
+A10: the carrier of LR1 = Class EqRel R and
+A11: for x, y being Element of LR1 holds x <= y iff "/\"(x, L) <= "/\"(y, L)and
+A12: the carrier of LR2 = Class EqRel R and
+A13: for x, y being Element of LR2 holds x <= y iff "/\"(x, L) <= "/\"(y, L);
+    set cLR1 = the carrier of LR1; set cLR2 = the carrier of LR2;
+      now let z be set;
+     hereby assume
+     A14: z in the InternalRel of LR1;
+       then consider x, y being set such that
+     A15: x in cLR1 & y in cLR1 & z = [x, y] by ZFMISC_1:def 2;
+       reconsider x, y as Element of LR1 by A15;
+       reconsider x' = x, y' = y as Element of LR2 by A10,A12;
+         x <= y by A14,A15,ORDERS_1:def 9;
+       then "/\"(x, L) <= "/\"(y, L) by A11;
+       then x' <= y' by A13;
+      hence z in the InternalRel of LR2 by A15,ORDERS_1:def 9;
+     end;
+     assume
+     A16: z in the InternalRel of LR2;
+       then consider x, y being set such that
+     A17: x in cLR2 & y in cLR2 & z = [x, y] by ZFMISC_1:def 2;
+       reconsider x, y as Element of LR2 by A17;
+       reconsider x' = x, y' = y as Element of LR1 by A10,A12;
+         x <= y by A16,A17,ORDERS_1:def 9;
+       then "/\"(x, L) <= "/\"(y, L) by A13;
+       then x' <= y' by A11;
+      hence z in the InternalRel of LR1 by A17,ORDERS_1:def 9;
+    end;
+   hence LR1 = LR2 by A10,A12,TARSKI:2;
+ end;
+end;
+
+theorem
+  for L being continuous complete LATTICE, R being non empty Subset of [:L, L:]
+ st R is CLCongruence
+  for x being set holds
+    x is Element of L./.R iff ex y being Element of L st x = Class(EqRel R, y)
+proof let L be continuous complete LATTICE,
+          R be non empty Subset of [:L, L:]; assume
+   R is CLCongruence;
+then A1: the carrier of (L./.R) = Class EqRel R by Def5;
+ let x be set;
+ hereby assume x is Element of L./.R;
+   then x in Class EqRel R by A1;
+   then consider y being set such that
+ A2: y in the carrier of L & x = Class(EqRel R, y) by EQREL_1:def 5;
+   reconsider y as Element of L by A2;
+   take y;
+   thus x = Class(EqRel R, y) by A2;
+ end;
+ given y being Element of L such that
+A3: x = Class(EqRel R, y);
+     x in Class EqRel R by A3,EQREL_1:def 5;
+ hence x is Element of L./.R by A1;
+end;
+
+theorem :: Corollary 2.13, p. 62, (congruence --> kernel --> congruence)
+   for L being continuous complete LATTICE,
+     R being non empty Subset of [:L, L:]
+  st R is CLCongruence
+   holds R = kernel_congruence kernel_op R
+proof let L be continuous complete LATTICE,
+      R be non empty Subset of [:L, L:] such that
+A1: R is CLCongruence;
+    set cL = the carrier of L, km = kernel_op R;
+  R = [:km, km:]"(id cL) by A1,Th37;
+ hence R = kernel_congruence kernel_op R by Def4;
+end;
+
+theorem :: Corollary 2.13, p. 62, (kernel --> congruence --> kernel)
+   for L being continuous complete LATTICE,
+     k being directed-sups-preserving kernel map of L, L
+   holds k = kernel_op kernel_congruence k
+proof let L be continuous complete LATTICE,
+          k be directed-sups-preserving kernel map of L, L;
+ set kc = kernel_congruence k, cL = the carrier of L,
+     km = kernel_op kc;
+A1: kc is CLCongruence by Th41;
+then A2: kc = [:km, km:]"(id cL) by Th37;
+A3: kc = [:k, k:]"(id cL) by Def4;
+A4: dom k = cL & dom km = cL by FUNCT_2:def 1;
+A5: dom [:k, k:] = [:dom k, dom k:] by FUNCT_3:def 9;
+A6: dom [:km, km:] = [:dom km, dom km:] by FUNCT_3:def 9;
+A7: k <= id L & km <= id L by WAYBEL_1:def 15;
+    reconsider kc' = kc as Equivalence_Relation of cL by A1,Def2;
+    field kc' = cL by ORDERS_1:97;
+    then
+A8: kc' is_transitive_in cL by RELAT_2:def 16;
+    now let x be set; assume
+    x in cL;
+     then reconsider x' = x as Element of L;
+ A9: k.(k.x') = (k*k).x' by A4,FUNCT_1:23
+              .= k.x' by QUANTAL1:def 9;
+ A10: [k.x', k.x'] in id cL by RELAT_1:def 10;
+ A11: [:k, k:].[k.x', x'] = [k.(k.x'), k.x'] by A4,FUNCT_3:def 9;
+       [k.x', x'] in dom [:k, k:] by A4,A5,ZFMISC_1:def 2;
+ then A12: [k.x', x'] in kc by A3,A9,A10,A11,FUNCT_1:def 13;
+ A13: km.(km.x') = (km*km).x' by A4,FUNCT_1:23
+                .= km.x' by QUANTAL1:def 9;
+ A14: [km.x', km.x'] in id cL by RELAT_1:def 10;
+ A15: [:km, km:].[x', km.x'] = [km.x', km.(km.x')] by A4,FUNCT_3:def 9;
+        [x', km.x'] in dom [:km, km:] by A4,A6,ZFMISC_1:def 2;
+      then [x', km.x'] in kc by A2,A13,A14,A15,FUNCT_1:def 13;
+ then A16: [k.x', km.x'] in kc by A8,A12,RELAT_2:def 8;
+     then [k.x', km.x'] in dom [:k, k:] &
+     [:k, k:].[k.x', km.x'] in id cL by A3,FUNCT_1:def 13;
+     then [k.(k.x'), k.(km.x')] in id cL by A4,FUNCT_3:def 9;
+ then A17: k.(km.x') = k.(k.x') by RELAT_1:def 10
+              .= (k*k).x' by A4,FUNCT_1:23
+              .= k.x' by QUANTAL1:def 9;
+       k.(km.x') <= (id L).(km.x') by A7,YELLOW_2:10;
+ then A18: k.(km.x') <= km.x' by GRCAT_1:11;
+       [k.x', km.x'] in dom [:km, km:] &
+     [:km, km:].[k.x', km.x'] in id cL by A2,A16,FUNCT_1:def 13;
+     then [km.(k.x'), km.(km.x')] in id cL by A4,FUNCT_3:def 9;
+ then A19: km.(k.x') = km.(km.x') by RELAT_1:def 10
+              .= (km*km).x' by A4,FUNCT_1:23
+              .= km.x' by QUANTAL1:def 9;
+       km.(k.x') <= (id L).(k.x') by A7,YELLOW_2:10;
+     then km.(k.x') <= k.x' by GRCAT_1:11;
+   hence k.x = km.x by A17,A18,A19,YELLOW_0:def 3;
+  end;
+ hence k = kernel_op kernel_congruence k by FUNCT_2:18;
+end;
+
+:: Theorem 2.14, p. 63, see WAYBEL15:17
+
+theorem :: Proposition 2.15, p. 63
+        :: That Image p is infs-inheriting follows from O-3.11 (iii)
+   for L being continuous complete LATTICE,
+     p being projection map of L, L
+  st p is infs-preserving
+   holds Image p is continuous LATTICE & Image p is infs-inheriting
+proof let L be continuous complete LATTICE,
+          p be projection map of L, L such that
+A1: p is infs-preserving;
+   reconsider Lc = {c where c is Element of L: c <= p.c}
+                                  as non empty Subset of L by WAYBEL_1:46;
+A2: subrelstr Lc is sups-inheriting SubRelStr of L by WAYBEL_1:52;
+A3: subrelstr Lc is infs-inheriting by A1,WAYBEL_1:54;
+then A4: subrelstr Lc is continuous LATTICE by A2,WAYBEL_5:28;
+A5: subrelstr Lc is complete by A3,YELLOW_2:32;
+   reconsider pc = p|Lc as map of subrelstr Lc, subrelstr Lc by WAYBEL_1:48;
+A6: pc is closure by WAYBEL_1:50;
+A7: subrelstr rng pc is full SubRelStr of L by WAYBEL15:1;
+A8: the carrier of subrelstr rng p = rng p by YELLOW_0:def 15
+       .= rng pc by WAYBEL_1:47
+       .= the carrier of subrelstr rng pc by YELLOW_0:def 15;
+A9: Image p = subrelstr rng p by YELLOW_2:def 2
+          .= subrelstr rng pc by A7,A8,YELLOW_0:58
+          .= Image pc by YELLOW_2:def 2;
+   reconsider cpc = corestr pc as map of subrelstr Lc, Image pc;
+     pc is infs-preserving proof
+    let X be Subset of subrelstr Lc; assume ex_inf_of X, subrelstr Lc;
+    thus ex_inf_of pc.:X, subrelstr Lc by A5,YELLOW_0:17;
+        the carrier of subrelstr Lc = Lc by YELLOW_0:def 15;
+      then X c= the carrier of L by XBOOLE_1:1;
+     then reconsider X' = X as Subset of L;
+   A10: dom pc = the carrier of subrelstr Lc by FUNCT_2:def 1;
+   A11: ex_inf_of X, L by YELLOW_0:17;
+       then "/\"(X',L) in the carrier of subrelstr Lc by A3,YELLOW_0:def 18;
+   then A12: inf X' = inf X by A11,YELLOW_0:64;
+   A13: ex_inf_of X', L by YELLOW_0:17;
+   A14: p preserves_inf_of X' by A1,WAYBEL_0:def 32;
+   A15: ex_inf_of p.:X, L by YELLOW_0:17;
+     ex_inf_of pc.:X,L by YELLOW_0:17;
+   then A16: "/\"(pc.:X,L) in the carrier of subrelstr Lc by A3,YELLOW_0:def 18
+;
+         X c= the carrier of subrelstr Lc;
+       then X c= Lc by YELLOW_0:def 15;
+       then pc.:X = p.:X by EXTENS_1:1;
+   hence inf (pc.:X)
+       = inf (p.:X) by A15,A16,YELLOW_0:64
+      .= p.inf X' by A13,A14,WAYBEL_0:def 30
+      .= pc.inf X by A10,A12,FUNCT_1:70;
+   end;
+then A17: cpc is infs-preserving by Th19;
+A18: cpc is sups-preserving by A6,WAYBEL_1:58;
+  cpc is directed-sups-preserving proof
+    let X be Subset of subrelstr Lc such that X is non empty directed;
+    thus cpc preserves_sup_of X by A18,WAYBEL_0:def 33;
+   end;
+ hence Image p is continuous LATTICE by A4,A5,A9,A17,WAYBEL_5:33;
+ thus Image p is infs-inheriting by A1,A3,WAYBEL_1:54;
+end;

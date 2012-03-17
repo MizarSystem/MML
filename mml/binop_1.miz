@@ -1,0 +1,430 @@
+:: Binary Operations
+::  by Czes{\l}aw Byli\'nski
+::
+:: Received April 14, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, BOOLE, RELAT_1, BINOP_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2;
+ constructors TARSKI, FUNCT_2, XBOOLE_0;
+ clusters RELSET_1, SUBSET_1, XBOOLE_0, ZFMISC_1;
+ requirements SUBSET, BOOLE;
+ theorems RELAT_1, FUNCT_1, FUNCT_2, ZFMISC_1, RELSET_1, XBOOLE_1;
+ schemes FUNCT_2;
+
+begin
+
+definition let f be Function; let a,b be set;
+  func f.(a,b) -> set equals
+:Def1:  f.[a,b];
+  correctness;
+end;
+
+reserve A for set;
+
+definition let A,B be non empty set, C be set, f be Function of [:A,B:],C;
+  let a be Element of A; let b be Element of B;
+redefine func f.(a,b) -> Element of C;
+ coherence
+  proof
+   reconsider ab = [a,b] as Element of [:A,B:] by ZFMISC_1:def 2;
+     f.ab is Element of C;
+   hence thesis by Def1;
+  end;
+end;
+
+canceled;
+
+theorem
+   for A,B,C be non empty set
+  for f1,f2 being Function of [:A,B:],C st
+    for a being Element of A for b being Element of B holds f1.(a,b) = f2.(a,b)
+   holds f1 = f2
+ proof let A,B,C be non empty set;
+   let f1,f2 be Function of [:A,B:],C such that
+A1:   for a being Element of A for b being Element of B
+        holds f1.(a,b) = f2.(a,b);
+      for a being Element of A for b being Element of B holds f1.[a,b] = f2.[a,
+b
+]
+     proof let a be Element of A; let b be Element of B;
+         f1.(a,b) = f1.[a,b] & f2.(a,b) = f2.[a,b] by Def1;
+       hence thesis by A1;
+     end;
+    hence f1 = f2 by FUNCT_2:120;
+ end;
+
+definition let A be set;
+ mode UnOp of A is Function of A,A;
+ mode BinOp of A is Function of [:A,A:],A;
+end;
+
+reserve u for UnOp of A,
+        o,o' for BinOp of A,
+        a,b,c,e,e1,e2 for Element of A;
+
+scheme BinOpEx{A()->non empty set,
+               P[Element of A(),Element of A(),Element of A()]}:
+ ex o being BinOp of A() st
+    for a,b being Element of A() holds P[a,b,o.(a,b)]
+provided
+A1: for x,y being Element of A() ex z being Element of A() st P[x,y,z]
+ proof
+    defpred _P[Element of A(), Element of A(),set] means
+    for r being Element of A() st r = $3 holds P[$1,$2,r];
+A2: for x,y being Element of A() ex z being Element of A() st _P[x,y,z]
+     proof let x,y be Element of A();
+       consider z being Element of A() such that
+A3:      P[x,y,z] by A1;
+       take z;
+       thus thesis by A3;
+     end;
+  consider f being Function of [:A(),A():],A() such that
+A4:  for a,b being Element of A() holds _P[a,b,f.[a,b]] from FuncEx2D(A2);
+ take o = f;
+ let a,b be Element of A();
+   o.(a,b) = o.[a,b] by Def1;
+ hence thesis by A4;
+end;
+
+scheme BinOpLambda{A()->non empty set,
+                   O(Element of A(),Element of A())->Element of A()}:
+ ex o being BinOp of A() st
+    for a,b being Element of A() holds o.(a,b) = O(a,b)
+ proof
+    deffunc _F(Element of A(), Element of A()) = O($1,$2);
+    consider f being Function of [:A(),A():],A() such that
+A1: for a,b being Element of A() holds f.[a,b] = _F(a,b) from Lambda2D;
+  take o = f;
+  let a,b be Element of A();
+    o.(a,b) = o.[a,b] by Def1;
+  hence thesis by A1;
+ end;
+
+definition let A,o;
+  attr o is commutative means
+:Def2:
+   for a,b holds o.(a,b) = o.(b,a);
+  attr o is associative means
+:Def3:
+   for a,b,c holds o.(a,o.(b,c)) = o.(o.(a,b),c);
+  attr o is idempotent means
+:Def4:
+   for a holds o.(a,a) = a;
+end;
+
+definition
+ cluster -> empty associative commutative BinOp of {};
+ coherence
+  proof
+   let f be BinOp of {};
+A1:  [:{},{}:] = {} by ZFMISC_1:113;
+then A2:  f c= [:dom f, rng f:] & dom f = {} & rng f c= {}
+     by FUNCT_2:def 1,RELAT_1:21,RELSET_1:12;
+   thus f is empty by A1,XBOOLE_1:3;
+   hereby let a,b,c be Element of {};
+    thus f.(a,f.(b,c)) = f.[a,f.(b,c)] by Def1 .= {} by A2,FUNCT_1:def 4
+                      .= f.[f.(a,b),c] by A2,FUNCT_1:def 4
+                      .= f.(f.(a,b),c) by Def1;
+   end;
+   let a,b be Element of {};
+   thus f.(a,b) = f.[a,b] by Def1 .= {} by A2,FUNCT_1:def 4
+               .= f.[b,a] by A2,FUNCT_1:def 4
+               .= f.(b,a) by Def1;
+  end;
+end;
+
+definition let A,e,o;
+  pred e is_a_left_unity_wrt o means
+:Def5:
+   for a holds o.(e,a) = a;
+  pred e is_a_right_unity_wrt o means
+:Def6:
+   for a holds o.(a,e) = a;
+end;
+
+definition let A,e,o;
+  pred e is_a_unity_wrt o means
+     e is_a_left_unity_wrt o & e is_a_right_unity_wrt o;
+end;
+
+canceled 8;
+
+theorem Th11:
+   e is_a_unity_wrt o iff for a holds o.(e,a) = a & o.(a,e) = a
+ proof
+  thus e is_a_unity_wrt o implies for a holds o.(e,a) = a & o.(a,e) = a
+   proof assume e is_a_left_unity_wrt o & e is_a_right_unity_wrt o;
+    hence thesis by Def5,Def6;
+   end;
+  assume for a holds o.(e,a) = a & o.(a,e) = a;
+  hence (for a holds o.(e,a) = a) & (for a holds o.(a,e) = a);
+ end;
+
+theorem Th12:
+   o is commutative implies
+    (e is_a_unity_wrt o iff for a holds o.(e,a) = a)
+ proof assume
+A1:  o is commutative;
+     now
+    thus (for a holds o.(e,a) = a & o.(a,e) = a)
+           implies (for a holds o.(e,a) = a);
+    assume
+A2:    for a holds o.(e,a) = a;
+    let a;
+    thus o.(e,a) = a by A2;
+    thus o.(a,e) = o.(e,a) by A1,Def2
+                .= a by A2;
+   end;
+   hence thesis by Th11;
+ end;
+
+theorem Th13:
+   o is commutative implies
+    (e is_a_unity_wrt o iff for a holds o.(a,e) = a)
+ proof assume
+A1:  o is commutative;
+     now
+    thus (for a holds o.(e,a) = a & o.(a,e) = a)
+           implies (for a holds o.(a,e) = a);
+    assume
+A2:    for a holds o.(a,e) = a;
+    let a;
+    thus o.(e,a) = o.(a,e) by A1,Def2
+                .= a by A2;
+    thus o.(a,e) = a by A2;
+   end;
+   hence thesis by Th11;
+ end;
+
+theorem Th14:
+   o is commutative implies
+    (e is_a_unity_wrt o iff e is_a_left_unity_wrt o)
+ proof e is_a_left_unity_wrt o iff for a holds o.(e,a) = a by Def5;
+  hence thesis by Th12;
+ end;
+
+theorem Th15:
+   o is commutative implies
+    (e is_a_unity_wrt o iff e is_a_right_unity_wrt o)
+ proof e is_a_right_unity_wrt o iff for a holds o.(a,e) = a by Def6;
+  hence thesis by Th13;
+ end;
+
+theorem
+     o is commutative implies
+    (e is_a_left_unity_wrt o iff e is_a_right_unity_wrt o)
+ proof assume
+A1:  o is commutative;
+  then e is_a_unity_wrt o iff e is_a_left_unity_wrt o by Th14;
+  hence thesis by A1,Th15;
+ end;
+
+theorem Th17:
+   e1 is_a_left_unity_wrt o & e2 is_a_right_unity_wrt o implies e1 = e2
+ proof assume that
+A1:  e1 is_a_left_unity_wrt o and
+A2:  e2 is_a_right_unity_wrt o;
+   thus e1 = o.(e1,e2) by A2,Def6 .= e2 by A1,Def5;
+ end;
+
+theorem Th18:
+   e1 is_a_unity_wrt o & e2 is_a_unity_wrt o implies e1 = e2
+ proof assume e1 is_a_left_unity_wrt o & e1 is_a_right_unity_wrt o &
+              e2 is_a_left_unity_wrt o & e2 is_a_right_unity_wrt o;
+  hence thesis by Th17;
+ end;
+
+definition let A,o;
+ assume
+A1:  ex e st e is_a_unity_wrt o;
+  func the_unity_wrt o -> Element of A means
+   it is_a_unity_wrt o;
+ existence by A1;
+ uniqueness by Th18;
+end;
+
+definition let A,o',o;
+  pred o' is_left_distributive_wrt o means
+:Def9:
+    for a,b,c holds o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c));
+  pred o' is_right_distributive_wrt o means
+:Def10:
+    for a,b,c holds o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c));
+end;
+
+definition
+  let A,o',o;
+  pred o' is_distributive_wrt o means
+      o' is_left_distributive_wrt o & o' is_right_distributive_wrt o;
+end;
+
+canceled 4;
+
+theorem Th23:
+   o' is_distributive_wrt o iff
+    for a,b,c holds
+     o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c)) &
+       o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c))
+ proof
+  thus o' is_distributive_wrt o implies
+   for a,b,c holds
+     o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c)) &
+     o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c))
+    proof
+      assume o' is_left_distributive_wrt o & o' is_right_distributive_wrt o;
+      hence thesis by Def9,Def10;
+    end;
+  assume
+      for a,b,c holds
+     o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c)) &
+     o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c));
+   hence
+      (for a,b,c holds o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c))) &
+    ( for a,b,c holds o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c)));
+ end;
+
+theorem Th24:
+ for A being non empty set, o,o' being BinOp of A holds
+   o' is commutative implies
+    (o' is_distributive_wrt o iff
+     for a,b,c being Element of A holds o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c)))
+ proof let A be non empty set, o,o' be BinOp of A; assume
+A1:   o' is commutative;
+      (for a,b,c being Element of A holds
+      o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c)) &
+       o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c))) iff
+     (for a,b,c being Element of A holds
+       o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c)))
+      proof
+       thus (for a,b,c being Element of A holds
+             o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c)) &
+              o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c))) implies
+            (for a,b,c being Element of A holds
+              o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c)));
+       assume
+A2:       for a,b,c being Element of A holds
+           o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c));
+       let a,b,c be Element of A;
+       thus o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c)) by A2;
+       thus o'.(o.(a,b),c) = o'.(c,o.(a,b)) by A1,Def2
+                          .= o.(o'.(c,a),o'.(c,b)) by A2
+                          .= o.(o'.(a,c),o'.(c,b)) by A1,Def2
+                          .= o.(o'.(a,c),o'.(b,c)) by A1,Def2;
+      end;
+    hence thesis by Th23;
+ end;
+
+theorem Th25:
+ for A being non empty set, o,o' being BinOp of A holds
+   o' is commutative implies
+    (o' is_distributive_wrt o iff
+     for a,b,c being Element of A holds o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c)))
+ proof let A be non empty set, o,o' be BinOp of A; assume
+A1:   o' is commutative;
+      (for a,b,c being Element of A holds
+      o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c)) &
+       o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c))) iff
+     (for a,b,c being Element of A holds
+       o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c)))
+      proof
+       thus (for a,b,c being Element of A holds
+              o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c)) &
+               o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c))) implies
+            (for a,b,c being Element of A holds
+              o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c)));
+       assume
+A2:      for a,b,c being Element of A holds
+          o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c));
+       let a,b,c be Element of A;
+       thus o'.(a,o.(b,c)) = o'.(o.(b,c),a) by A1,Def2
+                          .= o.(o'.(b,a),o'.(c,a)) by A2
+                          .= o.(o'.(a,b),o'.(c,a)) by A1,Def2
+                          .= o.(o'.(a,b),o'.(a,c)) by A1,Def2;
+       thus o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c)) by A2;
+      end;
+    hence thesis by Th23;
+ end;
+
+theorem Th26:
+ for A being non empty set, o,o' being BinOp of A holds
+   o' is commutative implies
+    (o' is_distributive_wrt o iff o' is_left_distributive_wrt o)
+ proof let A be non empty set, o,o' be BinOp of A;
+     o' is_left_distributive_wrt o iff
+    for a,b,c being Element of A holds o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c))
+     by Def9;
+   hence thesis by Th24;
+ end;
+
+theorem Th27:
+ for A being non empty set, o,o' being BinOp of A holds
+   o' is commutative implies
+    (o' is_distributive_wrt o iff o' is_right_distributive_wrt o)
+ proof let A be non empty set, o,o' be BinOp of A;
+     o' is_right_distributive_wrt o iff
+    for a,b,c being Element of A holds o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c))
+     by Def10;
+   hence thesis by Th25;
+ end;
+
+theorem
+   for A being non empty set, o,o' being BinOp of A holds
+   o' is commutative implies
+    (o' is_right_distributive_wrt o iff o' is_left_distributive_wrt o)
+ proof let A be non empty set, o,o' be BinOp of A; assume
+A1:   o' is commutative;
+  then o' is_distributive_wrt o iff o' is_left_distributive_wrt o by Th26;
+  hence thesis by A1,Th27;
+ end;
+
+definition let A,u,o;
+  pred u is_distributive_wrt o means
+:Def12:
+    for a,b holds u.(o.(a,b)) = o.((u.a),(u.b));
+end;
+
+definition let A be non empty set, o be BinOp of A;
+ redefine
+  attr o is commutative means
+     for a,b being Element of A holds o.(a,b) = o.(b,a);
+  correctness by Def2;
+  attr o is associative means
+     for a,b,c being Element of A holds o.(a,o.(b,c)) = o.(o.(a,b),c);
+  correctness by Def3;
+  attr o is idempotent means
+     for a being Element of A holds o.(a,a) = a;
+  correctness by Def4;
+end;
+
+definition let A be non empty set, e be Element of A, o be BinOp of A;
+ redefine
+  pred e is_a_left_unity_wrt o means
+     for a being Element of A holds o.(e,a) = a;
+  correctness by Def5;
+  pred e is_a_right_unity_wrt o means
+     for a being Element of A holds o.(a,e) = a;
+  correctness by Def6;
+end;
+
+definition let A be non empty set, o',o be BinOp of A;
+ redefine
+  pred o' is_left_distributive_wrt o means
+      for a,b,c being Element of A holds o'.(a,o.(b,c)) = o.(o'.(a,b),o'.(a,c))
+;
+  correctness by Def9;
+  pred o' is_right_distributive_wrt o means
+      for a,b,c being Element of A holds o'.(o.(a,b),c) = o.(o'.(a,c),o'.(b,c))
+;
+  correctness by Def10;
+end;
+
+definition let A be non empty set, u be UnOp of A, o be BinOp of A;
+ redefine
+  pred u is_distributive_wrt o means
+      for a,b being Element of A holds u.(o.(a,b)) = o.((u.a),(u.b));
+  correctness by Def12;
+end;
+

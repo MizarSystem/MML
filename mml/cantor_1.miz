@@ -1,0 +1,739 @@
+:: The Cantor Set
+::  by Alexander Yu. Shibakov and Andrzej Trybulec
+::
+:: Received January 9, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCOP_1, ZF_REFLE, BOOLE, RELAT_1, SETFAM_1, TARSKI, PRE_TOPC,
+      FINSET_1, SETWISEO, FINSUB_1, FUNCT_1, SUBSET_1, CARD_3, CANTOR_1,
+      RLVECT_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, SETFAM_1,
+      RELAT_1, FUNCT_1, FUNCT_2, FINSET_1, FINSUB_1, SETWISEO, STRUCT_0,
+      PRE_TOPC, TOPS_2, CARD_3, FUNCOP_1;
+ constructors SETWISEO, TOPS_2, PRVECT_1, MEMBERED, XBOOLE_0;
+ clusters PRE_TOPC, PRVECT_1, FINSET_1, COMPLSP1, FUNCOP_1, RELSET_1, SUBSET_1,
+      SETFAM_1, FRAENKEL, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements BOOLE, SUBSET;
+ definitions PRE_TOPC, TARSKI, TOPS_2, XBOOLE_0;
+ theorems ZFMISC_1, PRE_TOPC, SUBSET_1, SETFAM_1, BORSUK_1, FINSET_1, FUNCT_2,
+      FUNCT_1, TARSKI, LATTICE4, FUNCOP_1, FINSUB_1, RELAT_1, RELSET_1,
+      XBOOLE_0, XBOOLE_1;
+ schemes SETFAM_1, FUNCT_2, SETWISEO;
+
+begin
+
+definition let Y be set; let x be non empty set;
+ cluster Y --> x -> non-empty;
+ coherence
+  proof
+       now assume
+       A1: {} in rng (Y --> x); rng (Y --> x) c= {x} by FUNCOP_1:19;
+       hence contradiction by A1,TARSKI:def 1;
+     end;
+     hence thesis by RELAT_1:def 9;
+  end;
+end;
+
+definition
+  let X be set; let A be Subset-Family of X;
+  func UniCl(A) -> Subset-Family of X means :Def1:
+  for x being Subset of X holds
+    x in it iff ex Y being Subset-Family of X st Y c=A & x = union Y;
+  existence
+  proof
+    defpred P[set] means
+      ex Y being Subset-Family of X st Y c= A & $1 = union Y;
+    ex Z being Subset-Family of X st
+    for x being Subset of X holds x in Z iff P[x] from SubFamEx;
+    hence thesis;
+  end;
+  uniqueness
+   proof let F1,F2 be Subset-Family of X such that
+A1:   for x being Subset of X holds
+      x in F1 iff ex Y being Subset-Family of X st Y c=A & x = union Y and
+A2:   for x being Subset of X holds
+      x in F2 iff ex Y being Subset-Family of X st Y c=A & x = union Y;
+        now let x be Subset of X;
+        x in F1 iff ex Y being Subset-Family of X st Y c=A & x = union Y by A1;
+      hence x in F1 iff x in F2 by A2;
+      end;
+      hence thesis by SUBSET_1:8;
+   end;
+end;
+
+definition
+  let X be TopStruct;
+  mode Basis of X -> Subset-Family of X means
+   :Def2: it c= the topology of X & the topology of X c= UniCl it;
+      existence
+    proof
+    reconsider T = the topology of X as Subset-Family of X;
+    take T;
+    thus T c= the topology of X;
+      now let A be Subset of X;
+      {A} is Subset of bool the carrier of X by SUBSET_1:63;
+    then {A} is Subset-Family of X by SETFAM_1:def 7;
+    then reconsider B = {A} as Subset-Family of X;
+     assume A in the topology of X;
+     then A1: B c= T by ZFMISC_1:37;
+       A = union B by ZFMISC_1:31;
+    hence A in UniCl T by A1,Def1;
+    end;
+    hence thesis by SUBSET_1:7;
+  end;
+end;
+
+theorem Th1:
+  for X being set for A being Subset-Family of X holds A c= UniCl A
+proof
+  let X be set; let A be Subset-Family of X;
+    let x be set; assume A1: x in A; then reconsider x'=x as
+    Subset of X;
+    reconsider s = {x'} as Subset of bool X by SUBSET_1:63;
+    reconsider s as Subset-Family of X by SETFAM_1:def 7;
+      s c= A & x = union s by A1,ZFMISC_1:31,37;
+    hence x in UniCl A by Def1;
+end;
+
+theorem Th2:
+  for S being TopStruct holds the topology of S is Basis of S
+   proof
+   let S be TopStruct;
+     the topology of S c= UniCl the topology of S by Th1;
+   hence thesis by Def2;
+   end;
+
+theorem
+    for S being TopStruct holds the topology of S is open
+proof
+  let S be TopStruct;
+  let P be Subset of S; assume P in the topology of S;
+  hence P is open by PRE_TOPC:def 5;
+end;
+
+definition
+   let M be set; let B be Subset-Family of M;
+   func Intersect(B) -> Subset of M equals :Def3:
+    meet B if B <> {} otherwise
+    M;
+   coherence
+   proof
+       M c= M;hence thesis;
+    end;
+   consistency;
+end;
+
+definition
+  let X be set; let A be Subset-Family of X;
+  func FinMeetCl(A) -> Subset-Family of X means :Def4:
+  for x being Subset of X holds
+    x in it iff ex Y being Subset-Family of X st Y c=A &
+    Y is finite & x = Intersect Y;
+  existence
+  proof
+    defpred P[set] means
+      ex Y being Subset-Family of X st Y c=A &
+        Y is finite & $1 = Intersect Y;
+    ex Z being Subset-Family of X st
+    for x being Subset of X holds x in Z iff P[x] from SubFamEx;
+    hence thesis;
+  end;
+  uniqueness
+   proof
+     let B1, B2 be Subset-Family of X such that
+  A1: for x being Subset of X holds
+       x in B1 iff ex Y being Subset-Family of X st Y c=A &
+       Y is finite & x = Intersect Y and
+  A2: for x being Subset of X holds
+       x in B2 iff ex Y being Subset-Family of X st Y c=A &
+       Y is finite & x = Intersect Y;
+         now let x be Subset of X;
+         x in B2 iff ex Y being Subset-Family of X st Y c=A &
+       Y is finite & x = Intersect Y by A2;
+       hence x in B2 iff x in B1 by A1;
+       end;
+       hence B1 = B2 by SUBSET_1:8;
+   end;
+end;
+
+theorem Th4:
+  for X being set for A being Subset-Family of X holds A c= FinMeetCl A
+  proof
+  let X be set; let A be Subset-Family of X;
+    let x be set; assume A1: x in A; then reconsider x'=x as
+    Subset of X;
+    reconsider s = {x'} as Subset of bool X by SUBSET_1:63;
+    reconsider s as Subset-Family of X by SETFAM_1:def 7;
+   A2: s is finite & s c= A & x = meet s by A1,SETFAM_1:11,ZFMISC_1:37;
+    then x = Intersect s by Def3;
+    hence x in FinMeetCl A by A2,Def4;
+  end;
+
+definition let T be non empty TopSpace;
+  cluster the topology of T -> non empty;
+  coherence by PRE_TOPC:def 1;
+end;
+
+theorem Th5:
+  for T being non empty TopSpace holds
+    the topology of T = FinMeetCl the topology of T
+  proof
+    let T be non empty TopSpace;
+    thus the topology of T c= FinMeetCl the topology of T by Th4;
+    set X = the topology of T;
+    defpred P[set] means meet $1 in the topology of T;
+    A1: P[{}.X] by PRE_TOPC:5,SETFAM_1:2;
+    A2: for B' being Element of Fin X, b being Element of X
+      holds P[B'] implies P[B' \/ {b}]
+      proof
+       let B' be Element of Fin X, b be Element of X;
+       A3: meet {b} = b by SETFAM_1:11;
+       assume
+       A4: meet B' in X;
+       per cases;
+       suppose B' <> {};
+       then meet (B' \/ {b}) = meet B' /\ meet {b} by SETFAM_1:10;
+       hence meet (B' \/ {b}) in X by A3,A4,PRE_TOPC:def 1;
+       suppose B' = {};
+       hence meet (B' \/ {b}) in X by A3;
+      end;
+     A5: for B being Element of Fin X holds P[B]
+     from FinSubInd3(A1,A2);
+       now let x be Subset of T; assume x in FinMeetCl X;
+     then consider y being Subset-Family of T such that
+     A6: y c=X & y is finite & x = Intersect y by Def4;
+     reconsider y as Subset-Family of T;
+     per cases;
+     suppose y <> {};
+     then A7: x = meet y by A6,Def3; y in Fin X by A6,FINSUB_1:def 5;
+     hence x in X by A5,A7;
+     suppose
+     A8: y = {};
+     reconsider aa = {} bool the carrier of T as Subset-Family of
+       the carrier of T by SETFAM_1:def 7;
+       Intersect aa = the carrier of T by Def3;
+     hence x in X by A6,A8,PRE_TOPC:def 1;
+     end;
+     hence thesis by SUBSET_1:7;
+  end;
+
+theorem Th6:
+  for T being TopSpace holds
+    the topology of T = UniCl the topology of T
+  proof
+   let T be TopSpace;
+   thus the topology of T c= UniCl the topology of T by Th1;
+   let a be set; assume
+   A1: a in UniCl the topology of T;
+   then reconsider a' = a as Subset of T;
+     ex b being Subset-Family of T st
+   b c= the topology of T & a' = union b by A1,Def1;
+   hence a in the topology of T by PRE_TOPC:def 1;
+  end;
+
+theorem Th7:
+  for T being non empty TopSpace holds
+    the topology of T = UniCl FinMeetCl the topology of T
+  proof
+    let T be non empty TopSpace;
+      the topology of T = FinMeetCl the topology of T by Th5;
+    hence the topology of T = UniCl FinMeetCl the topology of T by Th6;
+  end;
+
+theorem Th8:
+  for X being set, A being Subset-Family of X holds
+    X in FinMeetCl A
+  proof
+  let X be set, A be Subset-Family of X;
+    {} is Subset of bool X by XBOOLE_1:2;
+  then {} is Subset-Family of X by SETFAM_1:def 7;
+  then consider y being Subset-Family of X such that A1: y = {};
+     y c= A & y is finite & Intersect y = X by A1,Def3,XBOOLE_1:2;
+  hence thesis by Def4;
+  end;
+
+theorem Th9:
+  for X being set for A, B being Subset-Family of X holds
+    A c= B implies UniCl A c= UniCl B
+  proof
+     let X be set; let A, B be Subset-Family of X such that
+     A1: A c= B; let x be set; assume
+     A2: x in UniCl A;
+     then reconsider x' = x as Subset of X;
+     consider T being Subset-Family of X such that
+     A3:  T c= A & x' = union T by A2,Def1;
+       T c=B by A1,A3,XBOOLE_1:1;
+     hence thesis by A3,Def1;
+  end;
+
+theorem Th10:
+  for X being set for R being Subset-Family of X for x being
+    set st x in X holds x in Intersect R iff for Y being set st Y in R holds
+       x in Y
+    proof
+      let X be set, R be Subset-Family of X; let x be set;
+      assume A1: x in X;
+      hereby assume A2: x in Intersect R;
+      let Y be set; assume A3: Y in R;
+      then Intersect R = meet R by Def3;
+      hence x in Y by A2,A3,SETFAM_1:def 1;
+      end;
+      assume A4: for Y being set st Y in R holds x in Y;
+        now per cases;
+      case A5: R <> {}; then x in meet R by A4,SETFAM_1:def 1;
+      hence x in Intersect R by A5,Def3;
+      case R = {}; hence thesis by A1,Def3;
+      end;
+      hence thesis;
+      end;
+
+theorem Th11:
+  for X being set for H, J being Subset-Family of X st H c= J holds
+    Intersect J c= Intersect H
+    proof
+    let X be set; let H, J be Subset-Family of X such that A1: H c= J;
+    let x be set;
+    assume A2: x in Intersect J;
+     then for Y be set st Y in H holds x in Y by A1,Th10;
+     hence x in Intersect H by A2,Th10;
+    end;
+
+definition let X be set, R be Subset-Family of bool X;
+  redefine mode Element of R -> Subset-Family of X;
+  coherence
+  proof
+    let E be Element of R;
+    per cases;
+    suppose R = {};
+    then E = {} by SUBSET_1:def 2;
+    then E c= bool X by XBOOLE_1:2;
+    hence thesis by SETFAM_1:def 7;
+    suppose R <> {};
+    then E in R;
+    hence thesis by SETFAM_1:def 7;
+  end;
+  redefine func union R -> Subset-Family of X;
+  coherence
+  proof
+      union R c= bool X;
+    hence thesis by SETFAM_1:def 7;
+  end;
+end;
+
+theorem Th12:
+  for X being set for R being non empty Subset-Family of bool X,
+    F being Subset-Family of X st
+      F = { Intersect x where x is Element of R: not contradiction} holds
+        Intersect F = Intersect union R
+    proof
+      let X be set; let R be
+      non empty Subset-Family of bool X,
+      F be Subset-Family of X such that A1: F = { Intersect x where x is
+      Element of R: not contradiction};
+      hereby let c be set; assume A2: c in Intersect F;
+        for Y being set st Y in union R holds c in Y
+        proof
+         let Y be set;
+         assume Y in union R; then consider d being set
+         such that A3: Y in d and A4: d in R by TARSKI:def 4;
+         reconsider d as Subset of bool X by A4;
+         reconsider d as Subset-Family of X by SETFAM_1:def 7;
+           Intersect d in F by A1,A4;
+         then c in Intersect d by A2,Th10;
+         hence c in Y by A3,Th10;
+        end;
+      hence c in Intersect union R by A2,Th10;
+      end;
+      let c be set; assume A5: c in Intersect union R;
+           for Y be set st Y in F holds c in Y
+         proof
+          let Y be set; assume Y in F; then consider x
+          being Element of R such that A6: Y = Intersect x by A1;
+            x c= union R by ZFMISC_1:92;
+          then Intersect union R c= Intersect x by Th11;
+          hence c in Y by A5,A6;
+         end;
+      hence c in Intersect F by A5,Th10;
+    end;
+
+definition let X, Y be set; let A be Subset-Family of X;
+           let F be Function of Y, bool A;
+           let x be set;
+  redefine func F.x -> Subset-Family of X;
+coherence
+   proof
+    per cases;
+    suppose x in dom F;
+    then F.x in rng F & rng F c= bool A by FUNCT_1:def 5,RELSET_1:12;
+    then A1: F.x in bool A;
+      bool A c= bool bool X by ZFMISC_1:79;
+    hence F.x is Subset-Family of X by A1,SETFAM_1:def 7;
+    suppose not x in dom F;
+    then F.x = {} by FUNCT_1:def 4;
+     then F.x is Subset of bool X by XBOOLE_1:2;
+     hence F.x is Subset-Family of X by SETFAM_1:def 7;
+   end;
+end;
+
+theorem Th13:
+  for X be set, A be Subset-Family of X holds
+    FinMeetCl A = FinMeetCl FinMeetCl A
+proof
+ let X be set, A be Subset-Family of X;
+ thus FinMeetCl A c= FinMeetCl FinMeetCl A by Th4;
+    let x be set; assume A1: x in FinMeetCl FinMeetCl A;
+    then reconsider x' = x as Subset of X;
+    consider Y being Subset-Family of X such that
+    A2: Y c= FinMeetCl A & Y is finite & x' = Intersect Y by A1,Def4;
+     defpred P[set,set]
+     means ex A being Subset-Family of X st
+      $1 = Intersect A & A = $2 & $2 is finite;
+     A3: for e being set
+          st e in Y ex u being set st u in bool A & P[e,u]
+     proof
+      let e be set; assume A4: e in Y;
+      then reconsider e' = e as Subset of X;
+      consider Y being Subset-Family of X such that A5: Y c=A &
+      Y is finite & e' = Intersect Y by A2,A4,Def4; take Y;
+      thus thesis by A5;
+     end;
+    consider f being Function of Y, bool A such that
+    A6: for e being set st e in Y holds P[e,f.e] from FuncEx1(A3);
+      dom f is finite by A2,FUNCT_2:def 1;
+    then A7: rng f is finite by FINSET_1:26;
+      for V being set st V in rng f holds V is finite
+     proof
+      let V be set; assume V in rng f; then consider
+      x being set such
+      that A8: x in dom f & V = f.x by FUNCT_1:def 5;
+        x in Y by A8,FUNCT_2:def 1;
+      then reconsider x as Subset of X;
+      reconsider G = f.x as Subset-Family of X;
+        x in Y by A8,FUNCT_2:def 1;
+      then P[x,G] by A6;
+      hence thesis by A8;
+     end;
+     then A9: union rng f is finite by A7,FINSET_1:25;
+      rng f c= bool A by RELSET_1:12; then union rng f c= union bool A by
+ZFMISC_1:95;
+    then A10: union rng f c= A by ZFMISC_1:99;
+    then reconsider y = union rng f as Subset of bool X by XBOOLE_1:1;
+    reconsider y as Subset-Family of X by SETFAM_1:def 7;
+    set fz = { Intersect s where s is Subset-Family of X: s in rng f};
+A11:    Y = fz
+     proof
+      A12: Y c= fz
+      proof
+       let l be set; assume A13: l in Y;
+        then consider C being Subset-Family of X such that
+A14:       l = Intersect C & C = f.l & f.l is finite by A6;
+           l in dom f by A13,FUNCT_2:def 1;
+         then C in rng f by A14,FUNCT_1:def 5;
+       hence thesis by A14;
+       end;
+        fz c= Y
+       proof
+       let l be set; assume l in fz; then consider s being Subset-Family
+       of X such that A15: l = Intersect s and A16: s in rng f;
+       consider v being set
+       such that A17: v in dom f & s = f.v by A16,FUNCT_1:def 5;
+          v in Y by A17,FUNCT_2:def 1;
+       then P[v, f.v] by A6;
+       hence l in Y by A15,A17,FUNCT_2:def 1;
+       end;
+       hence thesis by A12,XBOOLE_0:def 10;
+     end;
+       x = Intersect y
+      proof
+       per cases;
+        suppose A18: rng f <> {};
+         A19: rng f c= bool A by RELSET_1:12;
+           bool A c= bool bool X by ZFMISC_1:79;
+         then reconsider GGG = rng f as
+         non empty Subset of bool bool X by A18,A19,XBOOLE_1:1;
+         reconsider GGG as
+         non empty Subset-Family of bool X by SETFAM_1:def 7;
+           fz = { Intersect b where b is Element of GGG:
+         not contradiction}
+         proof
+         hereby let x be set; assume x in fz; then ex s
+         being Subset-Family of X st x = Intersect s & s in rng f;
+         hence x in { Intersect b where b is Element of GGG:
+         not contradiction};
+         end;
+         let x be set; assume x in { Intersect b where b is Element of GGG:
+         not contradiction}; then ex s being Element of GGG st
+         x =Intersect s;
+         hence thesis;
+         end;
+        hence thesis by A2,A11,Th12;
+        suppose A20: rng f = {};
+            Y = dom f by FUNCT_2:def 1; hence
+  thesis by A2,A20,RELAT_1:60,64,ZFMISC_1:2;
+      end;
+    hence x in FinMeetCl A by A9,A10,Def4;
+end;
+
+theorem
+    for X being set, A being Subset-Family of X, a, b being set
+    st a in FinMeetCl A & b in FinMeetCl A holds a /\ b in FinMeetCl A
+ proof
+    let X be set, A be Subset-Family of X, a, b be set;
+    assume A1: a in FinMeetCl A & b in FinMeetCl A;
+    then reconsider M = {a,b} as Subset of bool X by ZFMISC_1:38;
+    reconsider M as Subset-Family of X by SETFAM_1:def 7;
+      a /\ b = meet M by SETFAM_1:12;
+    then A2: a /\ b = Intersect M by Def3;
+      M is non empty Subset-Family of X & M c= FinMeetCl A
+    by A1,ZFMISC_1:38;
+    then Intersect M in FinMeetCl FinMeetCl A by Def4;
+    hence a /\ b in FinMeetCl A by A2,Th13;
+ end;
+
+theorem Th15:
+  for X being set, A being Subset-Family of X, a, b being set
+    st a c= FinMeetCl A & b c= FinMeetCl A holds
+      INTERSECTION(a,b) c= FinMeetCl A
+ proof
+  let X be set; let A be Subset-Family of X;
+  let a, b be set
+  such that
+  A1: a c= FinMeetCl A & b c= FinMeetCl A;
+  let Z be set; assume Z in INTERSECTION(a,b);
+  then consider V, B being set such that
+  A2: V in a and
+  A3: B in b and
+  A4: Z = V /\ B by SETFAM_1:def 5;
+    V in FinMeetCl A &
+  B in FinMeetCl A by A1,A2,A3;
+  then reconsider M = {V,B} as Subset of bool X by ZFMISC_1:38;
+  reconsider M as Subset-Family of X by SETFAM_1:def 7;
+    V /\ B = meet M by SETFAM_1:12;
+  then A5: V /\ B = Intersect M by Def3;
+    M is non empty Subset-Family of X & M c= FinMeetCl A
+  by A1,A2,A3,ZFMISC_1:38;
+  then Intersect M in FinMeetCl FinMeetCl A by Def4;
+  hence Z in FinMeetCl A by A4,A5,Th13;
+ end;
+
+theorem Th16:
+  for X being set, A,B being Subset-Family of X holds
+    A c= B implies FinMeetCl A c= FinMeetCl B
+ proof
+ let X be set, A,B be Subset-Family of X such that A1: A c= B;
+ let x be set; assume A2: x in FinMeetCl A; then reconsider x
+ as Subset of X; consider y being Subset-Family of X
+ such that A3: y c= A & y is finite & x = Intersect y by A2,Def4;
+   y c= B by A1,A3,XBOOLE_1:1;
+ hence thesis by A3,Def4;
+ end;
+
+definition
+  let X be set; let A be Subset-Family of X;
+  cluster FinMeetCl(A) -> non empty;
+  coherence by Th8;
+end;
+
+theorem Th17:
+  for X be non empty set, A be Subset-Family of X holds
+    TopStruct (#X,UniCl FinMeetCl A#) is TopSpace-like
+proof
+  let X be non empty set, A be Subset-Family of X;
+  set T = TopStruct (#X,UniCl FinMeetCl A#);
+  A1: [#]T = X by PRE_TOPC:12;
+  then A2: [#]T in FinMeetCl A by Th8;
+    now
+  reconsider Y = {[#]T} as Subset of bool X by A1,ZFMISC_1:80;
+  reconsider Y as Subset-Family of X by SETFAM_1:def 7;
+  take Y; thus Y c= FinMeetCl A by A2,ZFMISC_1:37;
+  thus [#]T = union Y by ZFMISC_1:31;
+  end;
+  hence the carrier of T in the topology of T by A1,Def1;
+  thus for a being Subset-Family of T
+    st a c= the topology of T
+    holds union a in the topology of T
+  proof
+    let a be Subset-Family of T
+    such that A3: a c= the topology of T;
+    defpred P[set] means ex c being Subset of T st c in
+     a & c = union $1;
+    consider b being Subset-Family of FinMeetCl A such that
+    A4: for B being Subset of FinMeetCl A holds B in b iff P[B] from SubFamEx;
+    A5: union union b = union { union B where B is Subset of FinMeetCl A:
+    B in b } by BORSUK_1:17;
+    A6: a = { union B where B is Subset of FinMeetCl A: B in b }
+    proof
+     set gh = { union B where B is Subset of FinMeetCl A: B in b };
+     hereby let x be set; assume A7: x in a;
+     then reconsider x' = x as Subset of X;
+     consider V being Subset-Family of X
+     such that
+     A8: V c= FinMeetCl A
+     and
+     A9: x' = union V by A3,A7,Def1;
+       V in b by A4,A7,A8,A9;
+     hence x in gh by A9;
+     end;
+     let x be set; assume x in gh;
+     then consider B being Subset of FinMeetCl A such that
+     A10: x = union B and A11: B in b;
+     consider c being Subset of T such that
+     A12: c in a and
+     A13: c = union B by A4,A11;
+     thus thesis by A10,A12,A13;
+    end;
+     union b c= bool X by XBOOLE_1:1;
+     then union b is Subset-Family of T by SETFAM_1:def 7;
+     hence union a in the topology of T by A5,A6,Def1;
+  end;
+  let a,b be Subset of T;
+  assume a in the topology of T;
+  then consider F being Subset-Family of X
+  such that
+  A14: F c= FinMeetCl A and
+  A15: a = union F by Def1;
+  assume b in the topology of T;
+  then consider G being Subset-Family of X
+  such that
+  A16: G c= FinMeetCl A and
+  A17: b = union G by Def1;
+  A18: INTERSECTION(F,G) c= FinMeetCl A by A14,A16,Th15;
+  then INTERSECTION(F,G) is Subset of bool X by XBOOLE_1:1;
+  then A19: INTERSECTION(F,G) is Subset-Family of X by SETFAM_1:def 7;
+    union INTERSECTION(F,G) = a /\ b by A15,A17,LATTICE4:2;
+  hence a /\ b in the topology of T by A18,A19,Def1;
+end;
+
+definition
+  let X be TopStruct;
+  mode prebasis of X -> Subset-Family of X means :Def5:
+  it c= the topology of X &
+  ex F being Basis of X st F c= FinMeetCl it;
+existence
+  proof
+    reconsider T = the topology of X as Subset-Family of X;
+    take T;
+    thus T c= the topology of X;
+    reconsider F = the topology of X as Basis of X by Th2;
+    take F;
+    thus F c= FinMeetCl T by Th4;
+  end;
+end;
+
+theorem Th18:
+  for X being non empty set, Y being Subset-Family of X
+    holds Y is Basis of TopStruct (#X, UniCl Y#)
+ proof
+   let X be non empty set, Y be Subset-Family of X;
+     Y c= UniCl Y by Th1;
+   hence thesis by Def2;
+ end;
+
+theorem Th19:
+  for T1, T2 being strict non empty TopSpace, P being prebasis of T1 st
+    the carrier of T1 = the carrier of T2 & P is prebasis of T2 holds T1 = T2
+proof
+let T1, T2 be strict non empty TopSpace, P be prebasis of T1 such that
+A1: the carrier of T1 = the carrier of T2
+and
+A2: P is prebasis of T2;
+     consider B1 being Basis of T1 such that
+A3: B1 c= FinMeetCl P by Def5;
+A4: the topology of T1 c= UniCl B1 by Def2;
+       UniCl B1 c= UniCl FinMeetCl P by A3,Th9;
+     then A5:the topology of T1 c= UniCl FinMeetCl P by A4,XBOOLE_1:1;
+     reconsider P' = P as prebasis of T2 by A2;
+     consider B2 being Basis of T2 such that
+A6: B2 c= FinMeetCl P' by Def5;
+A7: the topology of T2 c= UniCl B2 by Def2;
+A8: the topology of T2 = UniCl FinMeetCl the topology of T2 by Th7;
+A9: the topology of T1 = UniCl FinMeetCl the topology of T1 by Th7;
+       UniCl B2 c= UniCl FinMeetCl P' by A6,Th9;
+     then A10: the topology of T2 c= UniCl FinMeetCl P' by A7,XBOOLE_1:1;
+       P' c= the topology of T2 by Def5;
+     then FinMeetCl P' c= FinMeetCl the topology of T2 by Th16;
+     then UniCl FinMeetCl P' c= UniCl FinMeetCl the topology of T2 by Th9;
+     then A11:UniCl FinMeetCl P' = the topology of T2 by A8,A10,XBOOLE_0:def 10
+;
+       P c= the topology of T1 by Def5;
+     then FinMeetCl P c= FinMeetCl the topology of T1 by Th16;
+     then UniCl FinMeetCl P c= UniCl FinMeetCl the topology of T1 by Th9;
+     hence thesis by A1,A5,A9,A11,XBOOLE_0:def 10;
+end;
+
+theorem Th20:
+  for X being non empty set, Y being Subset-Family of X
+    holds Y is prebasis of TopStruct (#X, UniCl FinMeetCl Y#)
+ proof
+  let X be non empty set, A be Subset-Family of X;
+  set T = TopStruct (#X, UniCl FinMeetCl A#);
+  reconsider A' = A as Subset-Family of T;
+    A' is prebasis of T
+  proof
+    A' c= FinMeetCl A & FinMeetCl A c= the topology of T by Th1,Th4;
+  hence A' c= the topology of T by XBOOLE_1:1;
+  reconsider B = FinMeetCl A' as Basis of T by Th18;
+  take B;
+  thus B c= FinMeetCl A';
+  end;
+  hence thesis;
+ end;
+
+definition
+  func the_Cantor_set -> strict non empty TopSpace means
+      the carrier of it = product (NAT-->{0,1}) &
+    ex P being prebasis of it st
+      for X being Subset of product (NAT-->{0,1}) holds
+        X in P iff ex N,n being Nat st
+        for F being Element of product (NAT-->{0,1}) holds F in X iff F.N=n;
+  existence
+    proof
+      defpred P[set] means ex N,n being Nat st for F being Element of
+        product (NAT-->{0,1}) holds F in $1 iff F.N=n;
+      consider Y being Subset-Family of product(NAT-->{0,1})
+      such that A1: for y being Subset of product(NAT-->{0,1}) holds y in Y
+        iff P[y] from SubFamEx;
+      reconsider T = TopStruct (#product (NAT-->{0,1}),UniCl FinMeetCl Y#)
+      as strict non empty TopSpace by Th17;
+      take T;
+      thus the carrier of T = product (NAT-->{0,1});
+      reconsider Y as prebasis of T by Th20;
+      take Y; thus thesis by A1;
+    end;
+uniqueness
+proof
+  let T1, T2 be strict non empty TopSpace such that
+  A2: the carrier of T1 = product (NAT-->{0,1}) &
+  ex P being prebasis of T1 st
+  for X being Subset of product (NAT-->{0,1})
+  holds X in P iff ex N,n being Nat st for F being Element of
+  product (NAT-->{0,1}) holds F in X iff F.N=n
+  and
+  A3: the carrier of T2 = product (NAT-->{0,1}) &
+  ex P being prebasis of T2 st
+  for X being Subset of product (NAT-->{0,1})
+  holds X in P iff ex N,n being Nat st for F being Element of
+  product (NAT-->{0,1}) holds F in X iff F.N=n;
+  consider P1 being prebasis of T1 such that
+  A4: for X being Subset of product (NAT-->{0,1})
+  holds X in P1 iff ex N,n being Nat st for F being Element of
+  product (NAT-->{0,1}) holds F in X iff F.N=n by A2;
+
+  consider P2 being prebasis of T2 such that
+  A5: for X being Subset of product (NAT-->{0,1})
+  holds X in P2 iff ex N,n being Nat st for F being Element of
+  product (NAT-->{0,1}) holds F in X iff F.N=n by A3;
+    now let x be Subset of product (NAT-->{0,1});
+    x in P1 iff ex N,n being Nat st for F being Element of
+  product (NAT-->{0,1}) holds F in x iff F.N=n by A4;
+  hence x in P1 iff x in P2 by A5;
+  end;
+  then P1 = P2 by A2,A3,SUBSET_1:8;
+  hence thesis by A2,A3,Th19;
+end;
+end;
+
+:: the aim is to prove: theorem the_Cantor_set is compact
+

@@ -1,0 +1,427 @@
+:: Basic facts about inaccessible and measurable cardinals
+::  by Josef Urban
+::
+:: Received April 14, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL1, ORDINAL2, BOOLE, FINSET_1, CARD_1, CARD_5, SETFAM_1,
+      FILTER_0, SUBSET_1, FILTER_2, TARSKI, WAYBEL_0, ZFMISC_1, CARD_2,
+      FUNCT_1, RELAT_1, WAYBEL11, FUNCT_2, CARD_3, PRALG_1, FUNCT_5, CARD_FIL,
+      HAHNBAN;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PRALG_1,
+      BINOP_1, FUNCT_5, SETFAM_1, FINSET_1, ORDINAL1, FUNCT_2, ORDINAL2,
+      CARD_1, CARD_2, CARD_3, CARD_5;
+ constructors XREAL_0, WELLORD2, BINOP_1, PRALG_1, CARD_2, CARD_5, ZFREFLE1,
+      XCMPLX_0, MEMBERED;
+ clusters FUNCT_1, ORDINAL1, CARD_1, CARD_5, RELSET_1, FINSET_1, SUBSET_1,
+      PRALG_1, SETFAM_1, MEMBERED, NUMBERS, ORDINAL2;
+ requirements NUMERALS, SUBSET, BOOLE;
+
+
+begin
+
+:: this should be in ordinal2
+definition
+  cluster being_limit_ordinal Ordinal;
+end;
+
+definition let X,Y be set;
+  redefine func X \ Y -> Subset of X;
+end;
+
+theorem :: CARD_FIL:1
+  for x being set for X being infinite set holds Card {x} <` Card X;
+
+definition let X be infinite set;
+  cluster Card X -> infinite;
+end;
+
+scheme ElemProp{D()-> non empty set,x()->set,P[set]}:
+  P[x()]
+provided  x() in {y where y is Element of D(): P[y]};
+
+::::::::::::::::::::::   Initial reservations   :::::::::::::::::::::
+
+reserve N for Cardinal;
+reserve M for Aleph;
+reserve X for non empty set;
+reserve Y,Z,Z1,Z2,Y1,Y2,Y3,Y4 for Subset of X;
+reserve S for Subset-Family of X;
+reserve x for set;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::                                                                 ::
+::         Necessary facts about filters and ideals on sets        ::
+::                                                                 ::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem :: CARD_FIL:2
+  { X } is non empty Subset-Family of X & not {} in { X } &
+  for Y1,Y2 holds (Y1 in { X } & Y2 in { X } implies Y1 /\ Y2 in { X }) &
+  ((Y1 in { X } & Y1 c= Y2) implies Y2 in { X });
+
+definition let X;
+  mode Filter of X -> non empty Subset-Family of X means
+:: CARD_FIL:def 1
+  (not {} in it) &
+  for Y1,Y2 holds (Y1 in it & Y2 in it implies Y1 /\ Y2 in it) &
+  ((Y1 in it & Y1 c= Y2) implies Y2 in it);
+end;
+
+theorem :: CARD_FIL:3
+   for F being set holds F is Filter of X iff
+  (F is non empty Subset-Family of X &
+  not {} in F &
+  for Y1,Y2 holds (Y1 in F & Y2 in F implies Y1 /\ Y2 in F) &
+  ((Y1 in F & Y1 c= Y2) implies Y2 in F));
+
+theorem :: CARD_FIL:4
+  { X } is Filter of X;
+
+reserve F,Uf for Filter of X;
+
+theorem :: CARD_FIL:5
+  X in F;
+
+theorem :: CARD_FIL:6
+  Y in F implies not (X \ Y) in F;
+
+theorem :: CARD_FIL:7
+  for I being non empty Subset of bool X st (for Y holds Y in I iff Y` in F)
+  holds (not X in I) &
+  for Y1,Y2 holds (Y1 in I & Y2 in I implies Y1 \/ Y2 in I) &
+  ((Y1 in I & Y2 c= Y1) implies Y2 in I);
+
+definition
+  let X,S;
+  redefine func COMPLEMENT S;
+  synonym dual S;
+end;
+
+reserve S for non empty Subset-Family of X;
+
+definition let X,S;
+  cluster COMPLEMENT S -> non empty;
+end;
+
+theorem :: CARD_FIL:8
+    dual S = {Y:Y` in S};
+
+theorem :: CARD_FIL:9
+  dual S = {Y`:Y in S};
+
+definition let X;
+  mode Ideal of X -> non empty Subset-Family of X means
+:: CARD_FIL:def 2
+  (not X in it) &
+  for Y1,Y2 holds (Y1 in it & Y2 in it implies Y1 \/ Y2 in it) &
+  ((Y1 in it & Y2 c= Y1) implies Y2 in it);
+end;
+
+definition let X,F;
+  redefine func dual F -> Ideal of X;
+end;
+
+reserve I for Ideal of X;
+
+theorem :: CARD_FIL:10
+  (for Y holds not (Y in F & Y in dual F)) &
+  (for Y holds not (Y in I & Y in dual I));
+
+theorem :: CARD_FIL:11
+  {} in I;
+
+definition let X,N,S;
+  pred S is_multiplicative_with N means
+:: CARD_FIL:def 3
+  for S1 being non empty set st
+  (S1 c= S & Card S1 <` N) holds meet S1 in S;
+end;
+
+definition let X,N,S;
+  pred S is_additive_with N means
+:: CARD_FIL:def 4
+  for S1 being non empty set st
+  (S1 c= S & Card S1 <` N) holds union S1 in S;
+end;
+
+definition let X,N,F;
+  redefine pred F is_multiplicative_with N;
+  synonym F is_complete_with N;
+end;
+
+definition let X,N,I;
+  redefine pred I is_additive_with N;
+  synonym I is_complete_with N;
+end;
+
+theorem :: CARD_FIL:12
+  S is_multiplicative_with N implies dual S is_additive_with N;
+
+definition let X,F;
+  attr F is uniform means
+:: CARD_FIL:def 5
+  for Y holds Y in F implies Card Y = Card X;
+  attr F is principal means
+:: CARD_FIL:def 6
+  ex Y st Y in F & ( for Z holds Z in F implies Y c= Z);
+  attr F is being_ultrafilter means
+:: CARD_FIL:def 7
+  for Y holds Y in F or (X \ Y) in F;
+end;
+
+definition let X,F,Z;
+  func Extend_Filter(F,Z) -> non empty Subset-Family of X equals
+:: CARD_FIL:def 8
+  {Y: ex Y2 st (Y2 in {Y1 /\ Z : Y1 in F} & Y2 c= Y)};
+end;
+
+theorem :: CARD_FIL:13
+  for Z1 holds ( Z1 in Extend_Filter(F,Z) iff ex Z2 st Z2 in F & Z2 /\ Z c= Z1)
+;
+
+theorem :: CARD_FIL:14
+  (for Y1 st Y1 in F holds Y1 meets Z) implies ( Z in Extend_Filter(F,Z) &
+  Extend_Filter(F,Z) is Filter of X & F c= Extend_Filter(F,Z) );
+
+reserve S,S1 for Subset of bool X;
+
+definition let X;
+  func Filters(X) -> non empty Subset-Family of bool X equals
+:: CARD_FIL:def 9
+  {S where S is Subset of bool X : S is Filter of X};
+end;
+
+theorem :: CARD_FIL:15
+  for S being set holds S in Filters(X) iff S is Filter of X;
+
+reserve FS for non empty Subset of Filters(X);
+
+theorem :: CARD_FIL:16
+  FS is c=-linear implies union FS is Filter of X;
+
+theorem :: CARD_FIL:17
+  for F ex Uf st F c= Uf & Uf is being_ultrafilter;
+
+reserve X for infinite set;
+reserve Y,Y1,Y2,Z for Subset of X;
+reserve F,Uf for Filter of X;
+
+definition let X;
+  func Frechet_Filter(X) -> Filter of X equals
+:: CARD_FIL:def 10
+  { Y :  Card (X \ Y) <` Card X};
+end;
+
+definition let X;
+  func Frechet_Ideal(X) -> Ideal of X equals
+:: CARD_FIL:def 11
+  dual Frechet_Filter(X);
+end;
+
+theorem :: CARD_FIL:18
+  Y in Frechet_Filter(X) iff Card (X \ Y) <` Card X;
+
+theorem :: CARD_FIL:19
+  Y in Frechet_Ideal(X) iff Card Y <` Card X;
+
+theorem :: CARD_FIL:20
+  Frechet_Filter(X) c= F implies F is uniform;
+
+theorem :: CARD_FIL:21
+    Uf is uniform being_ultrafilter implies Frechet_Filter(X) c= Uf;
+
+definition let X;
+  cluster non principal being_ultrafilter Filter of X;
+end;
+
+definition let X;
+  cluster uniform being_ultrafilter -> non principal Filter of X;
+end;
+
+theorem :: CARD_FIL:22
+  for F being being_ultrafilter Filter of X for Y holds
+  Y in F iff not Y in dual F;
+
+reserve x for Element of X;
+
+theorem :: CARD_FIL:23
+  F is non principal being_ultrafilter & F is_complete_with Card X
+  implies F is uniform;
+
+
+begin
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::                                                                       ::
+::            Inaccessible and measurable cardinals, Ulam matrix         ::
+::                                                                       ::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem :: CARD_FIL:24
+  nextcard N <=` exp(2,N);
+
+definition
+  pred GCH means
+:: CARD_FIL:def 12
+  for N being Aleph holds nextcard N = exp(2,N);
+end;
+
+definition let IT be Aleph;
+  attr IT is inaccessible means
+:: CARD_FIL:def 13
+  IT is regular limit;
+  synonym IT is_inaccessible_cardinal;
+end;
+
+definition
+  cluster inaccessible -> regular limit Aleph;
+end;
+
+theorem :: CARD_FIL:25
+    alef 0 is inaccessible;
+
+definition let IT be Aleph;
+  attr IT is strong_limit means
+:: CARD_FIL:def 14
+  for N st N <` IT holds exp(2,N) <` IT;
+  synonym IT is_strong_limit_cardinal;
+end;
+
+theorem :: CARD_FIL:26
+  alef 0 is strong_limit;
+
+theorem :: CARD_FIL:27
+  M is strong_limit implies M is limit;
+
+definition
+  cluster strong_limit -> limit Aleph;
+end;
+
+theorem :: CARD_FIL:28
+  GCH implies (M is limit implies M is strong_limit);
+
+definition let IT be Aleph;
+  attr IT is strongly_inaccessible means
+:: CARD_FIL:def 15
+  IT is regular strong_limit;
+  synonym IT is_strongly_inaccessible_cardinal;
+end;
+
+definition
+  cluster strongly_inaccessible -> regular strong_limit Aleph;
+end;
+
+theorem :: CARD_FIL:29
+    alef 0 is strongly_inaccessible;
+
+theorem :: CARD_FIL:30
+  M is strongly_inaccessible implies M is inaccessible;
+
+definition
+  cluster strongly_inaccessible -> inaccessible Aleph;
+end;
+
+theorem :: CARD_FIL:31
+    GCH implies ( M is inaccessible implies M is strongly_inaccessible);
+
+definition let M;
+  attr M is measurable means
+:: CARD_FIL:def 16
+  ex Uf being Filter of M st Uf is_complete_with M
+  & Uf is non principal being_ultrafilter;
+  synonym M is_measurable_cardinal;
+end;
+
+theorem :: CARD_FIL:32
+  for A being being_limit_ordinal Ordinal for X being set st
+  X c= A holds sup X = A implies union X = A;
+
+theorem :: CARD_FIL:33
+  M is measurable implies M is regular;
+
+definition let M;
+  cluster nextcard M -> non limit;
+end;
+
+definition
+  cluster non limit infinite Cardinal;
+end;
+
+definition
+  cluster non limit -> regular Aleph;
+end;
+
+definition
+  let M be non limit Cardinal;
+  func predecessor M -> Cardinal means
+:: CARD_FIL:def 17
+  M = nextcard it;
+end;
+
+definition
+  let M be non limit Aleph;
+  cluster predecessor M -> infinite;
+end;
+
+definition  :: infinite matrix
+  let X be set;
+  let N,N1 be Cardinal;
+  mode Inf_Matrix of N,N1,X is Function of [:N,N1:],X;
+end;
+
+reserve X for set;
+reserve M for non limit Aleph;
+reserve F for Filter of M;
+reserve N1,N2,N3 for Element of predecessor M;
+reserve K1,K2 for Element of M;
+reserve T for Inf_Matrix of predecessor M , M, bool M;
+
+definition   :: Ulam matrix on nextcard N;
+  let M,T;
+  pred T is_Ulam_Matrix_of M means
+:: CARD_FIL:def 18
+
+  (for N1,K1,K2 holds K1<>K2 implies T.(N1,K1) /\ T.(N1,K2) is empty ) &
+  (for K1,N1,N2 holds N1<>N2 implies T.(N1,K1) /\ T.(N2,K1) is empty ) &
+  (for N1 holds Card (M \ union {T.(N1,K1): K1 in M}) <=` predecessor M ) &
+  (for K1 holds Card (M \ union {T.(N1,K1): N1 in predecessor M}) <=`
+  predecessor M );
+end;
+
+:: this is pretty long
+theorem :: CARD_FIL:34
+  ex T st T is_Ulam_Matrix_of M;
+
+:: also a little longer
+theorem :: CARD_FIL:35
+  for M for I being Ideal of M st
+  (I is_complete_with M & Frechet_Ideal(M) c= I)
+  ex S being Subset-Family of M st
+  Card S = M &
+  ( for X1 being set st X1 in S holds not X1 in I ) &
+  for X1,X2 being set st (X1 in S & X2 in S & X1 <> X2) holds X1 misses X2;
+
+theorem :: CARD_FIL:36
+  for X for N being Cardinal st N <=` Card X
+  ex Y being set st Y c= X & Card Y = N;
+
+theorem :: CARD_FIL:37
+  for M holds not ex F st
+  ( F is uniform being_ultrafilter & F is_complete_with M );
+
+reserve M for Aleph;
+
+theorem :: CARD_FIL:38
+  M is measurable implies M is limit;
+
+theorem :: CARD_FIL:39
+    M is measurable implies M is inaccessible;
+
+theorem :: CARD_FIL:40
+  M is measurable implies M is strong_limit;
+
+theorem :: CARD_FIL:41
+  M is measurable implies M is strongly_inaccessible;
+

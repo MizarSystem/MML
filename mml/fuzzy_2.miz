@@ -1,0 +1,2172 @@
+:: Basic Properties of Fuzzy Set Operation and Membership Function
+::  by Takashi Mitsuishi , Katsumi Wasaki and Yasunari Shidama
+::
+:: Received May 22, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary FUZZY_1, FUNCT_1, FUNCT_3, BOOLE, SQUARE_1, RELAT_1, SUBSET_1,
+      ARYTM_1, PARTFUN1, RCOMP_1, INTEGRA1, ORDINAL2, FUZZY_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, SQUARE_1,
+      REAL_1, RELSET_1, PARTFUN1, RFUNCT_1, INTEGRA1, SEQ_1, RCOMP_1, PSCOMP_1,
+      FUZZY_1;
+ constructors FUZZY_1, SQUARE_1, INTEGRA2, RFUNCT_1, REAL_1, PSCOMP_1;
+ clusters RELSET_1, INTEGRA1, MEMBERED;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ theorems TARSKI, AXIOMS, FUNCT_1, FUNCT_3, REAL_1, REAL_2, SQUARE_1, PARTFUN1,
+      RFUNCT_3, INTEGRA1, INTEGRA2, FUZZY_1, XBOOLE_0, XCMPLX_0, XCMPLX_1;
+ schemes PARTFUN1;
+
+begin
+
+reserve x,y,y1,y2 for set;
+reserve C for non empty set;
+reserve c for Element of C;
+reserve f,h,g,h1 for Membership_Func of C;
+reserve A for FuzzySet of C,f;
+reserve B for FuzzySet of C,g;
+reserve D for FuzzySet of C,h;
+reserve D1 for FuzzySet of C,h1;
+reserve X for Universal_FuzzySet of C;
+reserve E for Empty_FuzzySet of C;
+
+:::::Basic Properties of Membership Function and Difference Set:::::
+
+theorem Th1:
+for x be Element of C,h be Membership_Func of C holds
+0 <= h.x & h.x <= 1
+proof
+ let x be Element of C,h be Membership_Func of C;
+A1:0 <= h.x
+ proof
+    chi({},C) = EMF(C) by FUZZY_1:def 13;
+  then (EMF(C)).x = 0 by FUNCT_3:def 3;
+  hence thesis by FUZZY_1:31;
+ end;
+   h.x <= 1
+ proof
+    chi(C,C) = UMF(C) by FUZZY_1:def 14;
+  then (UMF(C)).x = 1 by FUNCT_3:def 3;
+  hence thesis by FUZZY_1:31;
+ end;
+ hence thesis by A1;
+end;
+
+theorem Th2:
+for x be Element of C holds (EMF(C)).x = 0 & (UMF(C)).x = 1
+proof
+ let x be Element of C;
+   chi({},C) = EMF(C) & chi(C,C) = UMF(C) by FUZZY_1:def 13,def 14;
+ hence thesis by FUNCT_3:def 3;
+end;
+
+theorem Th3:
+for c holds f.c <= h.c implies max(f,min(g,h)).c = min(max(f,g),h).c
+proof
+ let c;
+ assume A1:f.c <= h.c;
+      max(f,min(g,h)).c = min(max(f,g),max(f,h)).c by FUZZY_1:16
+ .= min(max(f,g).c,max(f,h).c) by FUZZY_1:6
+ .= min(max(f,g).c,max(f.c,h.c)) by FUZZY_1:6
+ .= min(max(f,g).c,h.c) by A1,SQUARE_1:def 2;
+ hence thesis by FUZZY_1:6;
+end;
+
+theorem
+  A c= D implies A \/ (B /\ D) = (A \/ B) /\ D
+proof
+ assume A1:A c= D;
+   A \/ (B /\ D) = (A \/ B) /\ D
+ proof
+    max(f,min(g,h)) = min(max(f,g),h)
+  proof
+A2:C = dom max(f,min(g,h)) & C = dom min(max(f,g),h) by FUZZY_1:def 1;
+     for x being Element of C st x in C holds
+              max(f,min(g,h)).x = min(max(f,g),h).x
+   proof
+    let x be Element of C;
+      f.x <= h.x by A1,FUZZY_1:def 4;
+    hence thesis by Th3;
+   end;
+   hence thesis by A2,PARTFUN1:34;
+  end;
+  hence thesis by FUZZY_1:def 3;
+ end;
+ hence thesis;
+end;
+
+
+definition
+let C be non empty set;
+let f,g be Membership_Func of C;
+let A be FuzzySet of C,f;
+let B be FuzzySet of C,g;
+func A\B ->
+FuzzySet of C,min(f,1_minus g) equals
+   [:C,min(f,1_minus g).:C:];
+ correctness by FUZZY_1:def 2;
+end;
+
+canceled;
+
+theorem Th6:
+1_minus min(f,1_minus g) = max(1_minus f,g)
+proof
+   1_minus min(f,1_minus g) = max(1_minus f,1_minus(1_minus g)) by FUZZY_1:20;
+ hence thesis by FUZZY_1:18;
+end;
+
+theorem
+  (A\B)` = A` \/ B
+proof
+   1_minus min(f,1_minus g) = max(1_minus f,g) by Th6;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th8:
+for c holds f.c <= g.c implies
+min(f,1_minus h).c <= min(g,1_minus h).c
+proof
+ let c;
+ assume f.c <= g.c;
+ then min(f.c,(1_minus h).c) <= min(g.c,(1_minus h).c) by FUZZY_1:45;
+ then min(f,1_minus h).c <= min(g.c,(1_minus h).c) by FUZZY_1:6;
+ hence thesis by FUZZY_1:6;
+end;
+
+theorem
+  A c= B implies A\D c= B\D
+proof
+ assume A1:A c= B;
+   A\D c= B\D
+ proof
+    for c holds min(f,1_minus h).c <= min(g,1_minus h).c
+  proof
+   let c;
+     f.c <= g.c by A1,FUZZY_1:def 4;
+   hence thesis by Th8;
+  end;
+  hence thesis by FUZZY_1:def 4;
+ end;
+ hence thesis;
+end;
+
+theorem Th10:
+for c holds f.c <= g.c implies
+min(h,1_minus g).c <= min(h,1_minus f).c
+proof
+ let c;
+ assume f.c <= g.c;
+ then 1 - f.c >= 1 - g.c by REAL_2:106;
+ then (1_minus g).c <= 1- f.c by FUZZY_1:def 7;
+ then (1_minus g).c <= (1_minus f).c by FUZZY_1:def 7;
+ then min((1_minus g).c,h.c) <= min((1_minus f).c,h.c) by FUZZY_1:45;
+ then min(h,1_minus g).c <= min((1_minus f).c,h.c) by FUZZY_1:6;
+ hence thesis by FUZZY_1:6;
+end;
+
+theorem
+  A c= B implies D\B c= D\A
+proof
+ assume A1:A c= B;
+   D\B c= D\A
+ proof
+    for c holds min(h,1_minus g).c <= min(h,1_minus f).c
+  proof
+   let c;
+     f.c <= g.c by A1,FUZZY_1:def 4;
+   hence thesis by Th10;
+  end;
+  hence thesis by FUZZY_1:def 4;
+ end;
+ hence thesis;
+end;
+
+theorem Th12:
+for c holds f.c <= g.c & h.c <= h1.c implies
+min(f,1_minus h1).c <= min(g,1_minus h).c
+proof
+ let c;
+ assume f.c <= g.c & h.c <= h1.c;
+ then f.c <= g.c & 1-h.c >= 1-h1.c by REAL_2:106;
+ then min(f.c,1-h1.c) <= min(g.c,1- h.c) by FUZZY_1:44;
+ then min(f.c,(1_minus h1).c) <= min(g.c,1- h.c) by FUZZY_1:def 7;
+ then min(f.c,(1_minus h1).c) <= min(g.c,(1_minus h).c) by FUZZY_1:def 7;
+ then min(f,1_minus h1).c <= min(g.c,(1_minus h).c) by FUZZY_1:6;
+ hence thesis by FUZZY_1:6;
+end;
+
+theorem
+  A c= B & D c= D1 implies A\D1 c= B\D
+proof
+ assume A1:A c= B & D c= D1;
+   A\D1 c= B\D
+ proof
+    for c holds min(f,1_minus h1).c <= min(g,1_minus h).c
+  proof
+   let c;
+     f.c <= g.c & h.c <= h1.c by A1,FUZZY_1:def 4;
+   hence thesis by Th12;
+  end;
+  hence thesis by FUZZY_1:def 4;
+ end;
+ hence thesis;
+end;
+
+theorem Th14:
+for c holds min(f,1_minus g).c <= f.c
+proof
+ let c;
+   min(f.c,(1_minus g).c) <= f.c by SQUARE_1:35;
+ hence thesis by FUZZY_1:6;
+end;
+
+theorem
+  A\B c= A
+proof
+   for c holds min(f,1_minus g).c <= f.c by Th14;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem Th16:
+for c holds min(f,1_minus g).c <= max(min(f,1_minus(g)),min(1_minus(f),g)).c
+proof
+ let c;
+   max(min(f,1_minus(g)),min(1_minus(f),g)).c
+ =max(min(f,1_minus(g)).c,min(1_minus(f),g).c) by FUZZY_1:6;
+ hence thesis by SQUARE_1:46;
+end;
+
+theorem
+  A\B c= A \+\ B
+proof
+   for c holds min(f,1_minus g).c <= max(min(f,1_minus(g)),min(1_minus(f),g)).c
+    by Th16;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem
+  A\E = A
+proof
+   min(f,1_minus EMF(C)) = min(f,UMF(C)) by FUZZY_1:62
+ .= f by FUZZY_1:32;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem
+  E\A = E
+proof
+   min(EMF(C),1_minus f) = min(1_minus f,EMF(C)) by FUZZY_1:7
+ .= EMF(C) by FUZZY_1:32;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th20:
+for c holds min(f,1_minus g).c <= min(f,1_minus min(f,g)).c
+proof
+ let c;
+   min(f,1_minus min(f,g)).c = min(f,max(1_minus f,1_minus g)).c by FUZZY_1:20
+ .=max(min(f,1_minus f),min(f,1_minus g)).c by FUZZY_1:16
+ .=max(min(f,1_minus f).c,min(f,1_minus g).c) by FUZZY_1:6;
+ hence thesis by SQUARE_1:46;
+end;
+
+theorem
+  A\B c= A\(A /\ B)
+proof
+   for c holds min(f,1_minus g).c <= min(f,1_minus min(f,g)).c by Th20;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem Th22:
+for c holds max(min(f,g),min(f,1_minus g)).c <= f.c
+proof
+ let c;
+     max(min(f,g),min(f,1_minus g)).c
+  =min(max(min(f,g),f),max(min(f,g),1_minus g)).c by FUZZY_1:16
+ .=min(max(f,min(f,g)),max(min(f,g),1_minus g)).c by FUZZY_1:7
+ .=min(f,max(min(f,g),1_minus g)).c by FUZZY_1:14
+ .=min(f.c,max(min(f,g),1_minus g).c) by FUZZY_1:6;
+ hence thesis by SQUARE_1:35;
+end;
+
+theorem Th23:
+for c holds max(f,min(g,1_minus f)).c <= max(f,g).c
+proof
+ let c;
+   max(f,min(g,1_minus f)).c = min(max(f,g),max(f,1_minus f)).c by FUZZY_1:16
+ .= min(max(f,g).c,max(f,1_minus f).c) by FUZZY_1:6;
+ hence thesis by SQUARE_1:35;
+end;
+
+theorem
+  A \/ (B\A) c= A \/ B
+proof
+   for c holds max(f,min(g,1_minus f)).c <= max(f,g).c by Th23;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem
+  (A /\ B) \/ (A\B) c= A
+proof
+   for c holds max(min(f,g),min(f,1_minus g)).c <= f.c by Th22;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem Th26:
+min(f,1_minus min(g,1_minus h)) = max(min(f,1_minus g),min(f,h))
+proof
+      min(f,1_minus min(g,1_minus h))
+  = min(f,max(1_minus g,1_minus(1_minus h))) by FUZZY_1:20
+ .= min(f,max(1_minus g,h)) by FUZZY_1:18;
+ hence thesis by FUZZY_1:16;
+end;
+
+theorem
+  A\(B\D) = (A\B) \/ (A /\ D)
+proof
+   min(f,1_minus min(g,1_minus h)) = max(min(f,1_minus g),min(f,h)) by Th26;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th28:
+for c holds min(f,g).c <= min(f,1_minus(min(f,1_minus g))).c
+proof
+ let c;
+      min(f,1_minus(min(f,1_minus g))).c
+  = min(f,max(1_minus f,1_minus(1_minus g))).c by FUZZY_1:20
+ .= min(f,max(1_minus f,g)).c by FUZZY_1:18
+ .= max(min(f,1_minus f),min(f,g)).c by FUZZY_1:16
+ .= max(min(f,1_minus f).c,min(f,g).c) by FUZZY_1:6;
+ hence thesis by SQUARE_1:46;
+end;
+
+theorem
+  A /\ B c= A\(A\B)
+proof
+   for c holds min(f,g).c <= min(f,1_minus(min(f,1_minus g))).c by Th28;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem Th30:
+for c holds min(f,1_minus g).c <= min(max(f,g),1_minus g).c
+proof
+ let c;
+      min(max(f,g),1_minus g).c = min(1_minus g,max(f,g)).c by FUZZY_1:7
+ .= max(min(1_minus g,f),min(1_minus g,g)).c by FUZZY_1:16
+ .= max(min(f,1_minus g),min(1_minus g,g)).c by FUZZY_1:7
+ .= max(min(f,1_minus g).c,min(1_minus g,g).c) by FUZZY_1:6;
+ hence thesis by SQUARE_1:46;
+end;
+
+theorem
+  A\B c= (A \/ B)\B
+proof
+   for c holds min(f,1_minus g).c <= min(max(f,g),1_minus g).c by Th30;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem Th32:
+min(f,1_minus max(g,h)) = min(min(f,1_minus g),min(f,1_minus h))
+proof
+     min(f,1_minus max(g,h)) = min(f,min(1_minus g,1_minus h)) by FUZZY_1:20
+ .=min(min(f,f),min(1_minus g,1_minus h)) by FUZZY_1:7
+ .=min(f,min(f,min(1_minus g,1_minus h))) by FUZZY_1:11
+ .=min(f,min(min(f,1_minus g),1_minus h)) by FUZZY_1:11
+ .=min(f,min(1_minus h,min(f,1_minus g))) by FUZZY_1:7
+ .=min(min(f,1_minus h),min(f,1_minus g)) by FUZZY_1:11
+ .=min(min(f,1_minus g),min(f,1_minus h)) by FUZZY_1:7;
+ hence thesis;
+end;
+
+theorem
+  A\(B \/ D) = (A\B) /\ (A\D)
+proof
+   min(f,1_minus max(g,h)) = min(min(f,1_minus g),min(f,1_minus h)) by Th32;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th34:
+min(f,1_minus min(g,h)) = max(min(f,1_minus g),min(f,1_minus h))
+proof
+   min(f,1_minus min(g,h)) = min(f,max(1_minus g,1_minus h)) by FUZZY_1:20;
+ hence thesis by FUZZY_1:16;
+end;
+
+theorem
+  A\(B /\ D) = (A\B) \/ (A\D)
+proof
+   min(f,1_minus min(g,h)) = max(min(f,1_minus g),min(f,1_minus h)) by Th34;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th36:
+min(min(f,1_minus g),1_minus h) = min(f,1_minus max(g,h))
+proof
+     min(min(f,1_minus g),1_minus h)
+ = min(f,min(1_minus g,1_minus h)) by FUZZY_1:11;
+ hence thesis by FUZZY_1:20;
+end;
+
+theorem
+  (A\B)\D = A\(B \/ D)
+proof
+   min(min(f,1_minus g),1_minus h) = min(f,1_minus max(g,h)) by Th36;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th38:
+for c holds
+min(max(f,g),1_minus min(f,g)).c >= max(min(f,1_minus g),min(g,1_minus f)).c
+proof
+ let c;
+      min(max(f,g),1_minus min(f,g)).c
+  = min(max(f,g),max(1_minus(f),1_minus(g))).c by FUZZY_1:20
+ .= max(min(max(f,g),1_minus f),min(max(f,g),1_minus g)).c by FUZZY_1:16
+ .= max(min(1_minus f,max(f,g)),min(max(f,g),1_minus g)).c by FUZZY_1:7
+ .= max(min(1_minus f,max(f,g)),min(1_minus g,max(f,g))).c by FUZZY_1:7
+ .= max(max(min(1_minus f,f),min(1_minus f,g)),min(1_minus g,max(f,g))).c
+                 by FUZZY_1:16
+ .= max(max(min(1_minus f,f),min(1_minus f,g))
+       ,max(min(1_minus g,f),min(1_minus g,g))).c by FUZZY_1:16
+ .= max(max(max(min(1_minus f,f),min(1_minus f,g)),min(1_minus g,f)),
+            min(1_minus g,g)).c by FUZZY_1:11
+ .= max(max(min(1_minus f,f),max(min(1_minus f,g),min(1_minus g,f))),
+               min(1_minus g,g)).c by FUZZY_1:11
+ .= max(max(max(min(1_minus f,g),min(1_minus g,f)),min(1_minus f,f)),
+               min(1_minus g,g)).c by FUZZY_1:7
+ .= max(max(min(1_minus f,g),min(1_minus g,f)),
+       max(min(1_minus f,f),min(1_minus g,g))).c by FUZZY_1:11
+ .= max(max(min(1_minus g,f),min(1_minus f,g)),
+       max(min(1_minus f,f),min(1_minus g,g))).c by FUZZY_1:7
+ .= max(max(min(f,1_minus g),min(1_minus f,g)),
+       max(min(1_minus f,f),min(1_minus g,g))).c by FUZZY_1:7
+ .= max(max(min(f,1_minus g),min(g,1_minus f)),
+       max(min(1_minus f,f),min(1_minus g,g))).c by FUZZY_1:7
+ .= max(max(min(f,1_minus g),min(g,1_minus f)).c,
+       max(min(1_minus f,f),min(1_minus g,g)).c) by FUZZY_1:6;
+ hence thesis by SQUARE_1:46;
+end;
+
+theorem
+  (A\B) \/ (B\A) c= (A \/ B)\(A /\ B)
+proof
+   for c holds
+ min(max(f,g),1_minus min(f,g)).c
+ >= max(min(f,1_minus g),min(g,1_minus f)).c by Th38;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem Th40:
+min(max(f,g),1_minus h) = max(min(f,1_minus h),min(g,1_minus h))
+proof
+   min(max(f,g),1_minus h) = min(1_minus h,max(f,g)) by FUZZY_1:7
+ .=max(min(1_minus h,f),min(1_minus h,g)) by FUZZY_1:16
+ .=max(min(f,1_minus h),min(1_minus h,g)) by FUZZY_1:7;
+ hence thesis by FUZZY_1:7;
+end;
+
+theorem
+  (A \/ B)\D = (A\D) \/ (B\D)
+proof
+   min(max(f,g),1_minus h) = max(min(f,1_minus h),min(g,1_minus h)) by Th40;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th42:
+for c holds min(f,1_minus g).c <= h.c & min(g,1_minus f).c <= h.c
+implies max(min(f,1_minus g),min(1_minus f,g)).c <= h.c
+proof
+ let c;
+ assume min(f,1_minus g).c <= h.c & min(g,1_minus f).c <= h.c;
+ then max(min(f,1_minus g).c,min(g,1_minus f).c) <= max(h.c,h.c) by RFUNCT_3:7
+;
+ then max(min(f,1_minus g).c,min(1_minus f,g).c) <= max(h.c,h.c) by FUZZY_1:7;
+ hence thesis by FUZZY_1:6;
+end;
+
+theorem
+  A\B c= D & B\A c= D implies A \+\ B c= D
+proof
+ assume A1:A\B c= D & B\A c= D;
+   A \+\ B c= D
+ proof
+    for c holds max(min(f,1_minus g),min(1_minus f,g)).c <= h.c
+  proof
+   let c;
+     min(f,1_minus g).c <= h.c & min(g,1_minus f).c <= h.c by A1,FUZZY_1:def 4;
+   hence thesis by Th42;
+  end;
+  hence thesis by FUZZY_1:def 4;
+ end;
+ hence thesis;
+end;
+
+theorem
+  A /\ (B\D) = (A /\ B)\D
+proof
+   min(f,min(g,1_minus h)) = min(min(f,g),1_minus h) by FUZZY_1:11;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th45:
+for c holds min(f,min(g,1_minus h)).c <= min(min(f,g),1_minus min(f,h)).c
+proof
+ let c;
+A1: min(f,min(g,1_minus h)).c = min(min(f,g),1_minus h).c by FUZZY_1:11
+ .= min(min(f,g).c,(1_minus h).c) by FUZZY_1:6;
+   (1_minus h).c <= max((1_minus f).c,(1_minus h).c) by SQUARE_1:46;
+ then min(min(f,g).c,(1_minus h).c)
+ <= min(min(f,g).c,max((1_minus f).c,(1_minus h).c)) by FUZZY_1:44;
+ then min(min(f,g).c,(1_minus h).c)
+ <= min(min(f,g).c,max(1_minus f,1_minus h).c) by FUZZY_1:6;
+ then min(min(f,g).c,(1_minus h).c)
+ <= min(min(f,g),max(1_minus f,1_minus h)).c by FUZZY_1:6;
+ hence thesis by A1,FUZZY_1:20;
+end;
+
+theorem
+  A /\ (B\D) c= (A /\ B)\(A /\ D)
+proof
+   for c holds
+ min(f,min(g,1_minus h)).c <= min(min(f,g),1_minus min(f,h)).c by Th45;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem Th47:
+for c holds
+min(max(f,g),1_minus min(f,g)).c >= max(min(f,1_minus g),min(1_minus f,g)).c
+proof
+ let c;
+      min(max(f,g),1_minus min(f,g)).c
+  = min(max(f,g),max(1_minus f,1_minus g)).c by FUZZY_1:20
+ .= max(min(max(f,g),1_minus f),min(max(f,g),1_minus g)).c by FUZZY_1:16
+ .= max(min(1_minus f,max(f,g)),min(max(f,g),1_minus g)).c by FUZZY_1:7
+ .= max(min(1_minus f,max(f,g)),min(1_minus g,max(f,g))).c by FUZZY_1:7
+ .= max(max(min(1_minus f,f),min(1_minus f,g)),min(1_minus g,max(f,g))).c
+         by FUZZY_1:16
+ .= max(max(min(1_minus f,f),min(1_minus f,g)),
+        max(min(1_minus g,f),min(1_minus g,g))).c by FUZZY_1:16
+ .= max(max(min(1_minus f,f),min(1_minus f,g)),
+         max(min(1_minus g,g),min(1_minus g,f))).c by FUZZY_1:7
+  .= max(max(max(min(1_minus f,f),min(1_minus f,g)),min(1_minus g,g))
+                ,min(1_minus g,f)).c by FUZZY_1:11
+ .= max(max(min(1_minus f,f),max(min(1_minus f,g),min(1_minus g,g)))
+                ,min(1_minus g,f)).c by FUZZY_1:11
+ .= max(max(min(1_minus f,f),max(min(1_minus g,g),min(1_minus f,g)))
+                ,min(1_minus g,f)).c by FUZZY_1:7
+ .= max(max(max(min(1_minus f,f),min(1_minus g,g)),min(1_minus f,g))
+                ,min(1_minus g,f)).c by FUZZY_1:11
+ .= max(max(min(1_minus f,f),min(1_minus g,g)),max(min(1_minus f,g)
+                 ,min(1_minus g,f))).c by FUZZY_1:11
+ .= max(max(min(1_minus f,f),min(1_minus g,g)),max(min(1_minus g,f)
+                 ,min(1_minus f,g))).c by FUZZY_1:7
+ .= max(max(min(1_minus f,f),min(1_minus g,g)),max(min(f,1_minus g)
+                ,min(1_minus f,g))).c by FUZZY_1:7
+ .= max(max(min(1_minus f,f),min(1_minus g,g)).c,
+        max(min(f,1_minus g),min(1_minus f,g)).c) by FUZZY_1:6;
+ hence thesis by SQUARE_1:46;
+end;
+
+theorem
+  A \+\ B c= (A \/ B)\(A /\ B)
+proof
+   for c holds
+ min(max(f,g),1_minus min(f,g)).c >= max(min(f,1_minus g),min(1_minus f,g)).c
+  by Th47;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem Th49:
+for c holds
+max(min(f,g),1_minus max(f,g)).c
+<= (1_minus max(min(f,1_minus g),min(1_minus f,g))).c
+proof
+ let c;
+      min(max(f,g),1_minus min(f,g)).c
+ >= max(min(f,1_minus g),min(1_minus f,g)).c by Th47;
+ then 1-min(max(f,g),1_minus min(f,g)).c
+ <= 1-max(min(f,1_minus g),min(1_minus f,g)).c by REAL_2:106;
+ then (1_minus min(max(f,g),1_minus min(f,g))).c
+ <= 1-max(min(f,1_minus g),min(1_minus f,g)).c by FUZZY_1:def 7;
+ then (1_minus min(max(f,g),1_minus min(f,g))).c
+ <= (1_minus max(min(f,1_minus g),min(1_minus f,g))).c by FUZZY_1:def 7;
+ then (max(1_minus max(f,g),1_minus(1_minus min(f,g)))).c
+ <= (1_minus max(min(f,1_minus g),min(1_minus f,g))).c by FUZZY_1:20;
+ then (max(1_minus max(f,g),min(f,g))).c
+ <= (1_minus max(min(f,1_minus g),min(1_minus f,g))).c by FUZZY_1:18;
+ hence thesis by FUZZY_1:7;
+end;
+
+theorem
+  (A /\ B) \/ (A \/ B)` c= (A \+\ B)`
+proof
+  for c holds
+max(min(f,g),1_minus max(f,g)).c
+<= (1_minus max(min(f,1_minus g),min(1_minus f,g))).c by Th49;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem Th51:
+min(max(min(f,1_minus g),min(1_minus f,g)),1_minus h)
+=max(min(f,1_minus max(g,h)),min(g,1_minus max(f,h)))
+proof
+ set f1 = 1_minus f, g1 = 1_minus g, h1 = 1_minus h;
+      min(max(min(f,g1),min(f1,g)),h1)
+  = min(h1,max(min(f,g1),min(f1,g))) by FUZZY_1:7
+ .= max(min(h1,min(f,g1)),min(h1,min(f1,g))) by FUZZY_1:16
+ .= max(min(h1,min(g1,f)),min(h1,min(f1,g))) by FUZZY_1:7
+ .= max(min(min(h1,g1),f),min(h1,min(f1,g))) by FUZZY_1:11
+ .= max(min(min(h1,g1),f),min(min(h1,f1),g)) by FUZZY_1:11
+ .= max(min(f,min(h1,g1)),min(min(h1,f1),g)) by FUZZY_1:7
+ .= max(min(f,min(h1,g1)),min(g,min(h1,f1))) by FUZZY_1:7
+ .= max(min(f,1_minus max(h,g)),min(g,min(h1,f1))) by FUZZY_1:20
+ .= max(min(f,1_minus max(h,g)),min(g,1_minus max(h,f))) by FUZZY_1:20
+ .= max(min(f,1_minus max(h,g)),min(g,1_minus max(f,h))) by FUZZY_1:7;
+ hence thesis by FUZZY_1:7;
+end;
+
+theorem
+  (A \+\ B)\D = (A\(B \/ D)) \/ (B\(A \/ D))
+proof
+   min(max(min(f,1_minus g),min(1_minus f,g)),1_minus h)
+ =max(min(f,1_minus max(g,h)),min(g,1_minus max(f,h))) by Th51;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th53:
+for c holds
+min(f,1_minus max(min(g,1_minus h),min(1_minus g,h))).c
+>= max(min(f,1_minus max(g,h)),min(min(f,g),h)).c
+proof
+ let c;
+A1: max(min(f,1_minus max(g,h)),min(min(f,g),h)).c
+  = max(min(f,1_minus max(g,h)),min(f,min(g,h))).c by FUZZY_1:11
+ .= min(f,max(1_minus max(g,h),min(g,h))).c by FUZZY_1:16
+ .= min(f,max(min(g,h),1_minus max(g,h))).c by FUZZY_1:7
+ .= min(f.c,max(min(g,h),1_minus max(g,h)).c) by FUZZY_1:6;
+      max(min(g,h),1_minus max(g,h)).c
+ <= (1_minus max(min(g,1_minus h),min(1_minus g,h))).c by Th49;
+ then min(f.c,max(min(g,h),1_minus max(g,h)).c)
+ <= min(f.c,(1_minus max(min(g,1_minus h),min(1_minus g,h))).c) by FUZZY_1:44;
+ hence thesis by A1,FUZZY_1:6;
+end;
+
+theorem
+  (A\(B \/ D)) \/ ((A /\ B) /\ D) c= A\(B \+\ D)
+proof
+   for c holds
+ min(f,1_minus max(min(g,1_minus h),min(1_minus g,h))).c
+ >= max(min(f,1_minus max(g,h)),min(min(f,g),h)).c by Th53;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem Th55:
+for c holds f.c <= g.c implies g.c >= max(f,min(g,1_minus f)).c
+proof
+ let c;
+ assume A1:f.c <= g.c;
+      max(f,min(g,1_minus f)).c = min(max(f,g),max(f,1_minus f)).c by FUZZY_1:
+16
+ .= min(max(f,g).c,max(f,1_minus f).c) by FUZZY_1:6
+ .= min(max(f.c,g.c),max(f,1_minus f).c) by FUZZY_1:6
+ .= min(g.c,max(f,1_minus f).c) by A1,SQUARE_1:def 2;
+ hence thesis by SQUARE_1:35;
+end;
+
+theorem
+  A c= B implies A \/ (B\A) c= B
+proof
+ assume A1:A c= B;
+   A \/ (B\A) c= B
+ proof
+    for c holds g.c >= max(f,min(g,1_minus f)).c
+  proof
+   let c;
+     f.c <= g.c by A1,FUZZY_1:def 4;
+   hence thesis by Th55;
+  end;
+  hence thesis by FUZZY_1:def 4;
+ end;
+ hence thesis;
+end;
+
+theorem
+  for c holds
+max(f,g).c >= max(max(min(f,1_minus g),min(1_minus f,g)),min(f,g)).c
+proof
+ set f1 = 1_minus f, g1 = 1_minus g;
+ let c;
+      max(max(min(f,1_minus g),min(1_minus f,g)),min(f,g)).c
+  = max(min(f,g1),max(min(f1,g),min(f,g))).c by FUZZY_1:11
+ .= max(min(f,g1),min(max(min(f1,g),f),max(min(f1,g),g))).c by FUZZY_1:16
+ .= max(min(f,g1),min(max(min(f1,g),f),max(g,min(f1,g)))).c by FUZZY_1:7
+ .= max(min(f,g1),min(max(min(f1,g),f),max(g,min(g,f1)))).c by FUZZY_1:7
+ .= max(min(f,g1),min(max(min(f1,g),f),g)).c by FUZZY_1:14
+ .= min(max(min(f,g1),max(min(f1,g),f)),max(min(f,g1),g)).c by FUZZY_1:16
+ .= min(max(min(f,g1),max(min(f1,g),f)).c,max(min(f,g1),g).c) by FUZZY_1:6;
+ then A1:max(max(min(f,1_minus g),min(1_minus f,g)),min(f,g)).c <= max(min(f,g1
+),g).c
+            by SQUARE_1:35;
+      max(min(f,g1),g).c = max(g,min(f,g1)).c by FUZZY_1:7
+ .= min(max(g,f),max(g,g1)).c by FUZZY_1:16
+ .= min(max(f,g),max(g,g1)).c by FUZZY_1:7
+ .= min(max(f,g).c,max(g,g1).c) by FUZZY_1:6;
+ then max(min(f,g1),g).c <= max(f,g).c by SQUARE_1:35;
+ hence thesis by A1,AXIOMS:22;
+end;
+
+canceled;
+
+theorem Th59:
+min(f,1_minus g) = EMF(C) implies for c holds f.c <= g.c
+proof
+ assume A1:min(f,1_minus g) = EMF(C);
+   for c holds f.c <= g.c
+ proof
+  let c;
+A2:min(f.c,(1_minus g).c) = (EMF(C)).c by A1,FUZZY_1:6;
+    now per cases by A2,SQUARE_1:38;
+   suppose f.c = (EMF(C)).c;
+   hence f.c <= g.c by FUZZY_1:31;
+   suppose A3:(1_minus g).c = (EMF(C)).c;
+     f.c <= g.c
+   proof
+      g.c = (1_minus (1_minus g)).c by FUZZY_1:18
+       .= 1 - (1_minus g).c by FUZZY_1:def 7
+       .= (1_minus EMF(C)).c by A3,FUZZY_1:def 7
+       .= (UMF(C)).c by FUZZY_1:62;
+    hence thesis by FUZZY_1:31;
+   end;
+   hence thesis;
+  end;
+  hence thesis;
+ end;
+ hence thesis;
+end;
+
+theorem
+  A\B = E implies A c= B
+proof
+ assume A1:A\B = E;
+   A c= B
+ proof
+    for c holds f . c <= g . c
+  proof
+   let c;
+     min(f,1_minus g) = EMF(C) by A1,FUZZY_1:def 3;
+   hence thesis by Th59;
+  end;
+  hence thesis by FUZZY_1:def 4;
+ end;
+ hence thesis;
+end;
+
+theorem Th61:
+min(f,g) = EMF(C) implies min(f,1_minus g) = f
+proof
+ assume A1:min(f,g) = EMF(C);
+   min(f,1_minus g) = f
+ proof
+A2:C = dom min(f,1_minus g) & C = dom f by FUZZY_1:def 1;
+    for x being Element of C st x in C holds min(f,1_minus g).x = f.x
+  proof
+   let x be Element of C;
+A3:(EMF(C)).x = min(f.x,g.x) by A1,FUZZY_1:6;
+     now per cases by A3,SQUARE_1:38;
+    suppose A4:f.x = (EMF(C)).x;
+      min(f,1_minus g).x = f.x
+    proof
+       min(f,1_minus g).x = min(f.x,(1_minus g).x) by FUZZY_1:6
+                       .= min(1_minus g,EMF(C)).x by A4,FUZZY_1:6
+                       .= (EMF(C)).x by FUZZY_1:32;
+     hence thesis by A4;
+    end;
+    hence thesis;
+    suppose A5:g.x = (EMF(C)).x;
+      min(f,1_minus g).x = f.x
+    proof
+       min(f,1_minus g).x = min(f.x,(1_minus g).x) by FUZZY_1:6
+                       .= min(f.x,1 - (EMF(C)).x) by A5,FUZZY_1:def 7
+                       .= min(f.x,(1_minus EMF(C)).x) by FUZZY_1:def 7
+                       .= min(f.x,(UMF(C)).x) by FUZZY_1:62
+                       .= min(f,UMF(C)).x by FUZZY_1:6;
+     hence thesis by FUZZY_1:32;
+    end;
+    hence thesis;
+   end;
+   hence thesis;
+   end;
+  hence thesis by A2,PARTFUN1:34;
+ end;
+ hence thesis;
+end;
+
+theorem
+  A /\ B = E implies A\B = A
+proof
+ assume A /\ B = E;
+ then min(f,g) = EMF(C) by FUZZY_1:def 3;
+ then min(f,1_minus g) = f by Th61;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+begin
+:::::Algebraic Product and Algebraic Sum:::::
+
+definition
+let C be non empty set;
+let h,g be Membership_Func of C;
+func h*g -> Membership_Func of C means :Def2:
+for c being Element of C holds it.c = (h.c)*(g.c);
+existence
+proof
+ defpred P[set,set] means $2 = (h.$1)*(g.$1);
+ A1:for x,y st x in C & P[x,y] holds y in REAL;
+ A2:for x,y1,y2 st x in C & P[x,y1] & P[x,y2] holds y1=y2;
+  consider IT being PartFunc of C,REAL such that
+ A3:(for x holds x in dom IT iff x in C & ex y st P[x,y]) &
+    (for x st x in dom IT holds P[x,IT.x]) from PartFuncEx(A1,A2);
+ A4:dom IT = C & rng IT c= [.0,1.]
+  proof
+  A5:dom IT = C
+   proof
+     C c= dom IT
+    proof
+       for x being set st x in C holds x in dom IT
+     proof
+      let x be set;
+      assume A6:x in C;
+        ex y st y = (h.x)*(g.x);
+      hence thesis by A3,A6;
+     end;
+     hence thesis by TARSKI:def 3;
+    end;
+    hence thesis by XBOOLE_0:def 10;::a7,
+   end;
+    rng IT c= [.0,1.]
+  proof
+A7:rng h c= [.0,1.] & rng g c= [.0,1.] by FUZZY_1:def 1;
+     for y being set st y in rng IT holds y in [.0,1.]
+   proof
+    let y be set; assume y in rng IT;
+    then consider x being Element of C such that
+A8:x in dom IT & y = IT.x by PARTFUN1:26;
+    reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
+      A = [. inf A, sup A .] by INTEGRA1:5;
+then A9:0=inf A & 1=sup A by INTEGRA1:6;
+      x in C;
+    then x in dom h & x in dom g by FUZZY_1:def 1;
+    then h.x in rng h & g.x in rng g by FUNCT_1:def 5;
+    then 0 <= h.x & h.x <= 1 & 0 <= g.x & g.x <= 1 by A7,A9,INTEGRA2:1;
+    then 0 <= (h.x)*(g.x) & (h.x)*(g.x) <= 1 by REAL_2:140,SQUARE_1:19;
+    then 0 <= IT.x & IT.x <= 1 by A3,A8;
+    hence thesis by A8,A9,INTEGRA2:1;
+   end;
+   hence thesis by TARSKI:def 3;
+  end;
+  hence thesis by A5;
+  end;
+ then A10:IT is Membership_Func of C by FUZZY_1:def 1;
+   for c being Element of C holds IT.c = (h.c)*(g.c) by A3,A4;
+ hence thesis by A10;
+ end;
+uniqueness
+proof
+  let F,G be Membership_Func of C;
+  assume that
+A11:for c being Element of C holds F.c = (h.c)*(g.c)
+  and
+A12:for c being Element of C holds G.c = (h.c)*(g.c);
+A13:C = dom F & C = dom G by FUZZY_1:def 1;
+    for c being Element of C st c in C holds F.c = G.c
+  proof
+   let c be Element of C;
+     F.c = (h.c)*(g.c) & G.c = (h.c)*(g.c) by A11,A12;
+   hence thesis;
+  end;
+ hence thesis by A13,PARTFUN1:34;
+ end;
+end;
+
+definition
+let C be non empty set;
+let h,g be Membership_Func of C;
+func h ++ g -> Membership_Func of C means :Def3:
+for c being Element of C holds it.c = h.c + g.c -(h.c)*(g.c);
+existence
+proof
+ defpred P[set,set] means $2 = h.$1 + g.$1 -(h.$1)*(g.$1);
+ A1:for x,y st x in C & P[x,y] holds y in REAL;
+ A2:for x,y1,y2 st x in C & P[x,y1] & P[x,y2] holds y1=y2;
+  consider IT being PartFunc of C,REAL such that
+ A3:(for x holds x in dom IT iff x in C & ex y st P[x,y]) &
+    (for x st x in dom IT holds P[x,IT.x]) from PartFuncEx(A1,A2);
+ A4:dom IT = C & rng IT c= [.0,1.]
+  proof
+  A5:dom IT = C
+   proof
+     C c= dom IT
+    proof
+       for x being set st x in C holds x in dom IT
+     proof
+      let x be set;
+      assume A6:x in C;
+        ex y st y = h.x + g.x -(h.x)*(g.x);
+      hence thesis by A3,A6;
+     end;
+     hence thesis by TARSKI:def 3;
+    end;
+    hence thesis by XBOOLE_0:def 10;
+   end;
+    rng IT c= [.0,1.]
+  proof
+     for y being set st y in rng IT holds y in [.0,1.]
+   proof
+    let y be set; assume y in rng IT;
+    then consider x being Element of C such that
+A7:x in dom IT & y = IT.x by PARTFUN1:26;
+    reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
+      A = [. inf A, sup A .] by INTEGRA1:5;
+then A8:0=inf A & 1=sup A by INTEGRA1:6;
+      0 <= h.x + g.x -(h.x)*(g.x) & h.x + g.x -(h.x)*(g.x) <= 1
+    proof
+       0 <= (1_minus h).x & (1_minus h).x <= 1 &
+     0 <= (1_minus g).x & (1_minus g).x <= 1 by Th1;
+     then 0 <= 1-h.x & 1-h.x <= 1 & 0 <= 1- g.x & 1-g.x <= 1 by FUZZY_1:def 7;
+     then 0 <= (1-h.x)*(1-g.x) & (1-h.x)*(1-g.x) <= 1 by REAL_2:140,SQUARE_1:19
+;
+     then A9: 1 - (1-h.x)*(1-g.x) >= 1 - 1 & 1-0 >= 1 -(1-h.x)*(1-g.x) by
+REAL_2:106;
+          1 - (1-h.x)*(1-g.x) = 1-(1*1-1*g.x-h.x*1+ (h.x)*(g.x)) by XCMPLX_1:47
+     .= 1-(1-g.x-h.x) - (h.x)*(g.x) by XCMPLX_1:36
+     .= 1-(1-g.x) + h.x - (h.x)*(g.x) by XCMPLX_1:37
+     .= 1-1 + g.x + h.x - (h.x)*(g.x) by XCMPLX_1:37
+     .= h.x + g.x -(h.x)*(g.x);
+     hence thesis by A9;
+    end;
+    then 0 <= IT.x & IT.x <= 1 by A3,A7;
+    hence thesis by A7,A8,INTEGRA2:1;::
+   end;
+   hence thesis by TARSKI:def 3;
+  end;
+  hence thesis by A5;
+  end;
+ then A10:IT is Membership_Func of C by FUZZY_1:def 1;
+   for c being Element of C holds IT.c = h.c + g.c -(h.c)*(g.c) by A3,A4;
+ hence thesis by A10;
+ end;
+uniqueness
+proof
+  let F,G be Membership_Func of C;
+  assume that
+A11:for c being Element of C holds F.c = h.c + g.c -(h.c)*(g.c)
+  and
+A12:for c being Element of C holds G.c = h.c + g.c -(h.c)*(g.c);
+A13:C = dom F & C = dom G by FUZZY_1:def 1;
+    for c being Element of C st c in C holds F.c = G.c
+  proof
+   let c be Element of C;
+     F.c = h.c + g.c -(h.c)*(g.c) & G.c = h.c + g.c -(h.c)*(g.c) by A11,A12;
+   hence thesis;
+  end;
+ hence thesis by A13,PARTFUN1:34;
+ end;
+end;
+
+
+definition
+let C be non empty set;
+let h,g be Membership_Func of C;
+let A be FuzzySet of C,h;
+let B be FuzzySet of C,g;
+func A * B -> FuzzySet of C,h*g equals
+   [:C,(h*g).:C:];
+ correctness by FUZZY_1:def 2;
+end;
+
+
+definition
+let C be non empty set;
+let h,g be Membership_Func of C;
+let A be FuzzySet of C,h;
+let B be FuzzySet of C,g;
+func A ++ B -> FuzzySet of C,(h ++ g) equals
+   [:C,(h ++ g).:C:];
+ correctness by FUZZY_1:def 2;
+end;
+
+theorem Th63:
+for c holds (f*f).c <= f.c & (f ++ f).c >= f.c
+proof
+ let c;
+A1:(f*f).c <= f.c
+ proof
+    f.c <= 1 & 0 <= f.c by Th1;
+  then (f.c)*(f.c) <= 1*(f.c) by AXIOMS:25;
+  hence thesis by Def2;
+ end;
+   (f ++ f).c >= f.c
+ proof
+    0 <= (1_minus f).c & 0 <= f.c by Th1;
+  then 0*(f.c) <= (f.c)*((1_minus f).c) by AXIOMS:25;
+  then 0 <= (f.c)*(1 - f.c) by FUZZY_1:def 7;
+  then 0 <= (f.c)*1 - (f.c)*(f.c) by XCMPLX_1:40;
+  then 0 + f.c <= f.c - (f.c)*(f.c) + f.c by AXIOMS:24;
+  then f.c <= f.c + f.c - (f.c)*(f.c) by XCMPLX_1:29;
+  hence thesis by Def3;
+ end;
+ hence thesis by A1;
+end;
+
+theorem
+  A*A c= A & A c= A ++ A
+proof
+   for c holds (f*f).c <= f.c & (f ++ f).c >= f.c by Th63;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem Th65:
+f*g = g*f & f ++ g = g ++ f
+proof
+A1: C = dom (f*g) & C = dom (g*f) &
+ C = dom (f ++ g) & C = dom (g ++ f) by FUZZY_1:def 1;
+A2:f*g = g*f
+ proof
+    for c being Element of C st c in C holds
+  (f*g).c = (g*f).c
+  proof
+   let c be Element of C;
+     (f*g).c = (g.c)*(f.c) by Def2;
+   hence thesis by Def2;
+  end;
+  hence thesis by A1,PARTFUN1:34;
+ end;
+   f ++ g = g ++ f
+ proof
+    for c being Element of C st c in C holds (f ++ g).c = (g ++ f).c
+  proof
+   let c be Element of C;
+     (f ++ g).c = g.c + f.c - (g.c)*(f.c) by Def3;
+   hence thesis by Def3;
+  end;
+  hence thesis by A1,PARTFUN1:34;
+ end;
+ hence thesis by A2;
+end;
+
+theorem
+  A*B = B*A & A ++ B = B ++ A
+proof
+   f*g = g*f & f ++ g = g ++ f by Th65;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th67:
+(f*g)*h = f*(g*h)
+proof
+A1:C = dom ((f*g)*h) & C = dom (f*(g*h)) by FUZZY_1:def 1;
+   for c being Element of C st c in C holds ((f*g)*h).c = (f*(g*h)).c
+ proof
+  let c;
+    ((f*g)*h).c = ((f*g).c)*(h.c) by Def2
+             .= ((f.c)*(g.c))*(h.c) by Def2
+             .= (f.c)*((g.c)*(h.c)) by XCMPLX_1:4
+             .= (f.c)*((g*h).c) by Def2;
+  hence thesis by Def2;
+ end;
+ hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem
+  (A*B)*D = A*(B*D)
+proof
+   (f*g)*h = f*(g*h) by Th67;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th69:
+(f ++ g) ++ h = f ++ (g ++ h)
+proof
+A1:C = dom((f ++ g) ++ h) & C = dom(f ++ (g ++ h)) by FUZZY_1:def 1;
+   for c being Element of C st c in C holds ((f ++ g) ++ h).c = (f ++ (g ++ h))
+.
+c
+ proof
+  let c;
+  set x = f.c, y = g.c, z = h.c;
+A2:  ((f ++ g) ++ h).c = (f ++ g).c + h.c - ((f ++ g).c)*(h.c) by Def3
+  .= f.c + g.c -(f.c)*(g.c) + h.c - ((f ++ g).c)*(h.c) by Def3
+  .= ((f.c + g.c) -(f.c)*(g.c) + h.c) - (f.c + g.c -(f.c)*(g.c))*(h.c) by Def3
+  .= (-x*y + (x + y)) + z - (x + y -x*y)*z by XCMPLX_0:def 8
+  .= -x*y + ((x + y) + z) - (x + y -x*y)*z by XCMPLX_1:1
+  .= -x*y - (x + y -x*y)*z + (x + y + z) by XCMPLX_1:29
+  .= -x*y - (x*z + y*z -x*y*z) + (x + y + z) by XCMPLX_1:43
+  .= -x*y - (x*z + y*z) +x*y*z + (x + y + z) by XCMPLX_1:37
+  .= -x*y - x*z - y*z +x*y*z + (x + y + z) by XCMPLX_1:36;
+       (f ++ (g ++ h)).c = x + (g ++ h).c -x*((g ++ h).c) by Def3
+  .= x + (y + z -y*z) -x*((g ++ h).c) by Def3
+  .= x + (y + z -y*z) -x*(y + z -y*z) by Def3
+  .= x + (y + z) -y*z -x*(y + z -y*z) by XCMPLX_1:29
+  .= -y*z -x*(y + z -y*z) + (x + (y + z)) by XCMPLX_1:158
+  .= -y*z -(y*x + z*x -y*z*x) + (x + (y + z)) by XCMPLX_1:43
+  .= -y*z -(x*y + x*z) +x*(y*z) + (x + (y + z)) by XCMPLX_1:37
+  .= -y*z -x*y - x*z +x*(y*z) + (x + (y + z)) by XCMPLX_1:36
+  .= -y*z -x*y - x*z +x*(y*z) + (x + y + z) by XCMPLX_1:1
+  .= -y*z -x*y - x*z +x*y*z + (x + y + z) by XCMPLX_1:4;
+  hence thesis by A2,XCMPLX_1:147;
+ end;
+ hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem
+  (A ++ B) ++ D = A ++ (B ++ D)
+proof
+   (f ++ g) ++ h = f ++ (g ++ h) by Th69;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th71:
+for c holds (f*(f ++ g)).c <= f.c & (f ++ (f*g)).c >= f.c
+proof
+ let c;
+A1:(f*(f ++ g)).c <= f.c
+ proof
+    0 <= f.c & (f ++ g).c <= 1 by Th1;
+  then ((f ++ g).c)*(f.c) <= 1*(f.c) by AXIOMS:25;
+  hence thesis by Def2;
+ end;
+   (f ++ (f*g)).c >= f.c
+ proof
+    (f*g).c >= 0 & (1_minus f).c >= 0 by Th1;
+  then 0*((f*g).c) <= ((1_minus f).c)*((f*g).c) by AXIOMS:25;
+  then 0 <= (1 - f.c)*((f*g).c) by FUZZY_1:def 7;
+  then 0 <= 1*((f*g).c) - (f.c)*((f*g).c) by XCMPLX_1:40;
+  then 0+f.c <= (f*g).c - (f.c)*((f*g).c) + f.c by AXIOMS:24;
+  then f.c <= f.c + (f*g).c - (f.c)*((f*g).c) by XCMPLX_1:29;
+  hence thesis by Def3;
+ end;
+ hence thesis by A1;
+end;
+
+theorem
+  A*(A ++ B) c= A & A c= A ++ (A*B)
+proof
+   for c holds (f*(f ++ g)).c <= f.c & (f ++ (f*g)).c >= f.c by Th71;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem Th73:
+for c holds (f*(g ++ h)).c <= ((f*g) ++ (f*h)).c
+proof
+ let c;
+ set x = f.c, y = g.c, z = h.c;
+   (f*f).c <= f.c & (g*h).c >= 0 by Th1,Th63;
+ then ((f*f).c)*((g*h).c) <= (f.c)*((g*h).c) by AXIOMS:25;
+ then ((f*g).c + (f*h).c ) - ((f*f).c)*((g*h).c) >=
+ ((f*g).c + (f*h).c) - (f.c)*((g*h).c) by REAL_2:106;
+ then ((f*g).c + (f*h).c ) - ((f*f)*(g*h)).c >=
+ ((f*g).c + (f*h).c) - (f.c)*((g*h).c) by Def2;
+ then ((f*g).c + (f*h).c ) - ((f*f)*(g*h)).c >=
+ (x*y + (f*h).c) - (f.c)*((g*h).c) by Def2;
+ then ((f*g).c + (f*h).c ) - ((f*f)*(g*h)).c >= x*y+x*z - (f.c)*((g*h).c) by
+Def2;
+ then (f*g).c + (f*h).c - ((f* (f*(g*h)))).c >= x*y+x*z - (f.c)*((g*h).c) by
+Th67;
+ then (f*g).c + (f*h).c - ((f*((f*g)*h))).c >= x*y + x*z - x*((g*h).c) by Th67
+;
+ then (f*g).c + (f*h).c - ((f*((f*g)*h))).c >= (y + z - (g*h).c)*x by XCMPLX_1:
+43;
+ then (f*g).c + (f*h).c - ((f*((g*f)*h))).c >= (y + z - (g*h).c)*x by Th65;
+ then (f*g).c + (f*h).c - ((f*(g*(f*h)))).c >= (y + z - (g*h).c)*x by Th67;
+ then (f*g).c + (f*h).c - (((f*g)*(f*h))).c >= (y + z - (g*h).c)*x by Th67;
+ then (f*g).c + (f*h).c - (((f*g)*(f*h))).c >= x*(y + z - y*z) by Def2;
+ then (f*g).c + (f*h).c - ((f*g).c)*((f*h).c) >= x*(y + z - y*z) by Def2;
+ then ((f*g) ++(f*h)).c >= x*(y + z - y*z) by Def3;
+ then ((f*g) ++(f*h)).c >= x*((g ++ h).c) by Def3;
+ hence thesis by Def2;
+end;
+
+theorem
+  A*(B ++ D) c= (A*B) ++ (A*D)
+proof
+   for c holds (f*(g ++ h)).c <= ((f*g) ++ (f*h)).c by Th73;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem Th75:
+for c holds ((f ++ g)*(f ++ h)).c <= (f ++ (g*h)).c
+proof
+ let c;
+ set x = f.c, y = g.c, z = h.c;
+A1: ((f ++ g)*(f ++ h)).c - (f ++ (g*h)).c
+  = ((f ++ g).c)*((f ++ h).c) - (f ++ (g*h)).c by Def2
+ .= (x + y - x*y)*((f ++ h).c) - (f ++ (g*h)).c by Def3
+ .= (x + y - x*y)*(x + z - x*z) - (f ++ (g*h)).c by Def3
+ .= (x + y - x*y)*(x + z - x*z) - (x + (g*h).c - x*((g*h).c)) by Def3
+ .= (x + y - x*y)*(x + z - x*z) - (x + y*z - x*((g*h).c)) by Def2
+ .= (x + y - x*y)*(x + z - x*z) - (x + y*z - x*(y*z)) by Def2
+ .= (x - x*y + y)*(x + z - x*z) - (x + y*z - (y*z)*x) by XCMPLX_1:29
+ .= (x - x*y + y)*(x + z - x*z) - (x + y*z - y*(z*x)) by XCMPLX_1:4
+ .= (x - x*y + y)*(x + (z - x*z)) - (x + y*z - y*(x*z)) by XCMPLX_1:29
+ .= (x - x*y + y)*(x + (z - x*z)) - (x + (y*z - y*(x*z))) by XCMPLX_1:29
+ .= (x - x*y + y)*(x + (z - x*z)) - (x + y*(z - x*z)) by XCMPLX_1:40
+ .= (x-x*y)*x+(x-x*y)*(z-x*z)+y*x+y*(z-x*z)- (x + y*(z - x*z)) by XCMPLX_1:10
+
+ .= (x - x*y)*x+(x-x*y)*(z-x*z)+y*x+y*(z - x*z) - x - y*(z - x*z) by XCMPLX_1:
+36
+ .= -y*(z-x*z)+(y*(z-x*z)+((x-x*y)*x+(x-x*y)*(z - x*z) + y*x))-x by XCMPLX_1:
+159
+ .= -y*(z-x*z)+y*(z-x*z)+((x-x*y)*x+ (x - x*y)*(z - x*z) + y*x)-x by XCMPLX_1:1
+ .= 0 + ((x - x*y)*x + (x - x*y)*(z - x*z) + y*x)-x by XCMPLX_0:def 6
+ .= (x - x*y)*x + (-x*y + x)*(z - x*z) + x*y-x*1 by XCMPLX_0:def 8
+ .= (x - x*y)*x + ((z - x*z)*(-x*y) + (z - x*z)*x) + x*y-x*1 by XCMPLX_1:8
+ .= (x*1 - x*y)*x + (z - x*z)*(-(x*y)) + (z - x*z)*x + x*y-x*1 by XCMPLX_1:1
+ .= x*(1 - y)*x + ((z - x*z)*(-(x*y))) + (z - x*z)*x + x*y-x*1 by XCMPLX_1:40
+ .= x*(1 - y)*x + -((z - x*z)*(x*y)) + (z - x*z)*x + x*y-x*1 by XCMPLX_1:175
+
+ .= x*(1 - y)*x + -((z - x*z)*(x*y)) + (z*x - x*z*x) + x*y-x*1 by XCMPLX_1:40
+ .= x*(1 - y)*x + -(z*(x*y) - x*z*(x*y)) + (z*x - x*z*x) + x*y-x*1 by XCMPLX_1:
+40
+ .= x*(1 - y)*x -(z*(x*y) - x*z*(x*y)) + (z*x - x*z*x) + x*y-x*1 by XCMPLX_0:
+def 8
+ .= (x*(1 - y)*x-(z*(x*y))+ (x*z*(x*y))) + (z*x - x*z*x) + x*y-x*1 by XCMPLX_1:
+37
+ .= ((1 - y)*x*x -(z*(x*y)) +(z*x*(x*y))) +z*x -x*z*x + x*y-x*1 by XCMPLX_1:29
+ .= ((1 - y)*x*x -(z*(x*y)) +(z*x*(x*y))) -x*z*x +z*x+ x*y-x*1 by XCMPLX_1:29
+
+ .= (-(z*(x*y))+(1 - y)*x*x +(z*x*(x*y))) -x*z*x+z*x+x*y-x*1 by XCMPLX_0:def 8
+ .= (-(z*(x*y))+((1 - y)*x*x +(z*x*(x*y)))) -x*z*x +z*x+ x*y-x*1 by XCMPLX_1:1
+ .= (-(z*(x*y))+((1 - y)*(x*x) +(z*x*(x*y)))) -x*z*x+z*x+ x*y-x*1 by XCMPLX_1:4
+ .= (-(z*(x*y))+((1 - y)*(x*x) +z*x*x*y )) -x*z*x +z*x+ x*y-x*1 by XCMPLX_1:4
+ .= (-(z*(x*y))+((1 - y)*(x*x)+y*(z*(x*x)))) -x*z*x+z*x+ x*y-x*1 by XCMPLX_1:4
+ .= (-(z*(x*y))+((1 - y)*(x*x)+y*z*(x*x))) -x*z*x+z*x+ x*y-x*1 by XCMPLX_1:4
+ .= (-(z*(x*y))+(1 - y+y*z)*(x*x) ) -x*z*x +z*x+ x*y-x*1 by XCMPLX_1:8
+ .= (1 - y+y*z)*(x*x) -(z*x*x) -(x*y*z) +(z*x)+ (x*y)-x*1 by XCMPLX_1:159
+
+ .= (1 - y+y*z)*(x*x) -z*(x*x) -(x*y*z) +(z*x)+ (x*y)-x*1 by XCMPLX_1:4
+ .= (1 - y+y*z -z)*(x*x) -(x*y*z) +(z*x)+ (x*y)-x*1 by XCMPLX_1:40
+ .= (z*x) -(x*y*z) +(1 - y+y*z -z)*(x*x)+ (x*y)-x*1 by XCMPLX_1:30
+ .= (z*x) -x*(y*z) +(1 - y+y*z -z)*(x*x)+ (x*y)-x*1 by XCMPLX_1:4
+ .= (z -y*z)*x +(1 - y+y*z -z)*(x*x)+ (x*y)-x*1 by XCMPLX_1:40
+ .= x*(z -y*z) +(x*y)+(1 - y+y*z -z)*(x*x) -x*1 by XCMPLX_1:1
+ .= x*(z -y*z +y)+(1 - y+y*z -z)*(x*x) -x*1 by XCMPLX_1:8
+ .= x*(z -y*z +y)-x*1+(1 - y+y*z -z)*(x*x) by XCMPLX_1:29
+ .= x*(z -y*z +y-1)+(1 - y+y*z -z)*(x*x) by XCMPLX_1:40
+ .= x*(z -y*z +y-1)+( - y+y*z +1-z)*(x*x) by XCMPLX_1:156
+ .= x*(z -y*z +y-1)+( - y+y*z -z +1)*(x*x) by XCMPLX_1:29
+ .= x*(y +z -y*z -1)+( - y+y*z -z +1)*(x*x) by XCMPLX_1:29
+ .= x*((g++h).c -1)+( - y+y*z -z +1)*(x*x) by Def3
+ .= x*((g++h).c -1)+( - (y-y*z+z) +1)*(x*x) by XCMPLX_1:169
+ .= x*((g++h).c -1)+( - (y+z-y*z) +1)*(x*x) by XCMPLX_1:29
+ .= x*((g++h).c -1)+( - (g++h).c +1)*(x*x) by Def3
+ .= x*(-(-(g++h).c +1))+( - (g++h).c +1)*(x*x) by XCMPLX_1:163
+ .= (-(g++h).c +1)*(-x)+( - (g++h).c +1)*(x*x) by XCMPLX_1:176
+ .= (-(g++h).c +1)*(-x+ x*x) by XCMPLX_1:8
+ .= (1-(g++h).c)*(-x+ x*x) by XCMPLX_0:def 8
+ .=((1_minus (g++h)).c)*(-x+ x*x) by FUZZY_1:def 7;
+   (f*f).c <= f.c by Th63;
+ then x*x <= x by Def2;
+then A2:-x+ x*x <= 0 by REAL_2:106;
+   0<=(1_minus (g++h)).c by Th1;
+ then ((1_minus (g++h)).c)*(-x+ x*x) <= 0*(-x+ x*x) by A2,REAL_1:52;
+ hence thesis by A1,SQUARE_1:11;
+end;
+
+theorem
+  (A ++ B)*(A ++ D) c= A ++ (B*D)
+proof
+   for c holds ((f ++ g)*(f ++ h)).c <= (f ++ (g*h)).c by Th75;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem Th77:
+1_minus (f*g) = (1_minus f) ++ (1_minus g)
+proof
+A1:C = dom 1_minus (f*g) &
+   C = dom ((1_minus f) ++ (1_minus g)) by FUZZY_1:def 1;
+   for c being Element of C st c in C holds
+ (1_minus (f*g)).c = ((1_minus f) ++ (1_minus g)).c
+ proof
+  let c;
+       ((1_minus f) ++ (1_minus g)).c
+   = (1_minus f).c + (1_minus g).c - ((1_minus f).c)*((1_minus g).c) by Def3
+  .= 1 - f.c + (1_minus g).c - ((1_minus f).c)*((1_minus g).c) by FUZZY_1:def 7
+  .= 1 - f.c + (1- g.c) - ((1_minus f).c)*((1_minus g).c) by FUZZY_1:def 7
+  .= 1 - f.c + (1- g.c) - (1 - f.c)*((1_minus g).c) by FUZZY_1:def 7
+  .= 1 - f.c + (1- g.c) - (1 - f.c)*(1- g.c) by FUZZY_1:def 7
+  .= 1 - f.c - (1- g.c)*(1 - f.c)+ (1- g.c) by XCMPLX_1:29
+  .= 1 - f.c - ((1- f.c)*1 - (1- f.c)*g.c)+ (1- g.c) by XCMPLX_1:40
+  .= (1- f.c)*g.c+ (1- g.c) by XCMPLX_1:18
+  .= 1*g.c- f.c*g.c+ (1- g.c) by XCMPLX_1:40
+  .= 1- g.c + g.c - f.c*g.c by XCMPLX_1:29
+  .= g.c- g.c + 1 - f.c*g.c by XCMPLX_1:30
+  .= 0 + 1 - f.c*g.c by XCMPLX_1:14
+  .= 1 - (f*g).c by Def2;
+  hence thesis by FUZZY_1:def 7;
+ end;
+ hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem
+  (A*B)` = A` ++ B`
+proof
+   1_minus (f*g) = (1_minus f) ++ (1_minus g) by Th77;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th79:
+1_minus(f ++ g) = (1_minus f)*(1_minus g)
+proof
+A1:C = dom 1_minus(f ++ g) &
+   C = dom ((1_minus f)*(1_minus g)) by FUZZY_1:def 1;
+   for c being Element of C st c in C holds
+ (1_minus(f ++ g)).c = ((1_minus f)*(1_minus g)).c
+ proof
+  let c;
+       ((1_minus f)*(1_minus g)).c
+   = ((1_minus f).c)*((1_minus g).c) by Def2
+  .= (1 - f.c)*((1_minus g).c) by FUZZY_1:def 7
+  .= (1 - f.c)*(1- g.c) by FUZZY_1:def 7
+  .= (1 - f.c)*1- (1 - f.c)*g.c by XCMPLX_1:40
+  .= 1 - f.c- (1*g.c - f.c*g.c) by XCMPLX_1:40
+  .= 1 - (f.c+ (1*g.c - f.c*g.c)) by XCMPLX_1:36
+  .= 1 - (f.c+ g.c - f.c*g.c) by XCMPLX_1:29
+  .= 1 - (f ++ g).c by Def3;
+  hence thesis by FUZZY_1:def 7;
+ end;
+ hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem
+  (A ++B)` = (A`)*(B`)
+proof
+   1_minus(f ++ g) = (1_minus f)*(1_minus g) by Th79;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th81:
+f ++ g = 1_minus((1_minus f)*(1_minus g))
+proof
+A1:C = dom (f ++ g) &
+   C = dom 1_minus((1_minus f)*(1_minus g)) by FUZZY_1:def 1;
+   for c being Element of C st c in C holds
+ (f ++ g).c = (1_minus((1_minus f)*(1_minus g))).c
+ proof
+  let c;
+       (1_minus((1_minus f)*(1_minus g))).c
+   = 1 - ((1_minus f)*(1_minus g)).c by FUZZY_1:def 7
+  .= 1 - ((1_minus f).c)*((1_minus g).c) by Def2
+  .= 1 - (1 - f.c)*((1_minus g).c) by FUZZY_1:def 7
+  .= 1 - (1 - f.c)*(1 - g.c) by FUZZY_1:def 7
+  .= 1 - ((1 - f.c)*1 - (1 - f.c)*g.c) by XCMPLX_1:40
+  .= 1 - ((1 - f.c) - (1*g.c - f.c*g.c)) by XCMPLX_1:40
+  .= 1 - (1 - f.c) + (1*g.c - f.c*g.c) by XCMPLX_1:37
+  .= 1 - 1 + f.c + (1*g.c - f.c*g.c) by XCMPLX_1:37
+  .= f.c + g.c - f.c*g.c by XCMPLX_1:29;
+  hence thesis by Def3;
+ end;
+ hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem
+  A ++ B = (A`*B`)`
+proof
+   f ++ g = 1_minus((1_minus f)*(1_minus g)) by Th81;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th83:
+f*(EMF(C)) = EMF(C) & f*(UMF(C)) = f
+proof
+A1:f*(EMF(C)) = EMF(C)
+ proof
+  A2:C = dom EMF(C) & C = dom (f*EMF(C)) by FUZZY_1:def 1;
+    for c being Element of C st c in C holds (f*(EMF(C))).c = (EMF(C)).c
+  proof
+   let c;
+     (f*EMF(C)).c = (f.c)*((EMF(C)).c) by Def2
+               .= (f.c)*0 by Th2;
+   hence thesis by Th2;
+  end;
+ hence thesis by A2,PARTFUN1:34;
+ end;
+   f*(UMF(C)) = f
+ proof
+A3:C = dom f & C = dom (f*UMF(C)) by FUZZY_1:def 1;
+    for c being Element of C st c in C holds (f*(UMF(C))).c = f.c
+  proof
+   let c;
+     (f*(UMF(C))).c = (f.c)*((UMF(C)).c) by Def2
+                 .= (f.c)*1 by Th2;
+   hence thesis;
+  end;
+  hence thesis by A3,PARTFUN1:34;
+ end;
+ hence thesis by A1;
+end;
+
+theorem
+  A*E = E & A*X = A
+proof
+   f*(EMF(C)) = EMF(C) & f*(UMF(C)) = f by Th83;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th85:
+f ++ EMF(C) = f & f ++ UMF(C) = UMF(C)
+proof
+A1:f ++ EMF(C) = f
+ proof
+  A2:C = dom f & C = dom (f ++ EMF(C)) by FUZZY_1:def 1;
+    for c being Element of C st c in C holds (f ++ EMF(C)).c = f.c
+  proof
+   let c;
+     (f ++ EMF(C)).c = f.c + (EMF(C)).c - (f.c)*((EMF(C)).c) by Def3
+                  .= f.c + 0 - (f.c)*((EMF(C)).c) by Th2
+                  .= f.c - (f.c)*0 by Th2;
+   hence thesis;
+  end;
+ hence thesis by A2,PARTFUN1:34;
+ end;
+   f ++ UMF(C) = UMF(C)
+ proof
+A3:C = dom UMF(C) & C = dom (f ++ UMF(C)) by FUZZY_1:def 1;
+    for c being Element of C st c in C holds (f ++ UMF(C)).c = (UMF(C)).c
+  proof
+   let c;
+     (f ++ UMF(C)).c = f.c + (UMF(C)).c - (f.c)*((UMF(C)).c) by Def3
+                  .= (UMF(C)).c+f.c - (f.c)*1 by Th2
+                  .= (UMF(C)).c + (f.c - f.c) by XCMPLX_1:29;
+   hence thesis by XCMPLX_1:25;
+  end;
+  hence thesis by A3,PARTFUN1:34;
+ end;
+ hence thesis by A1;
+end;
+
+theorem
+  A ++ E = A & A ++ X = X
+proof
+   f ++ EMF(C) = f & f ++ UMF(C) = UMF(C) by Th85;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+canceled 2;
+
+theorem
+  E c= A*A` & A ++ A` c= X
+proof
+   (for c holds (EMF(C)).c <= (f*(1_minus f)).c) &
+ (for c holds (UMF(C)).c >= (f ++ (1_minus f)).c) by FUZZY_1:31;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem Th90:
+for c holds (f*g).c <= min(f,g).c
+proof
+ let c;
+A1:min(f,g).c = min(f.c,g.c) by FUZZY_1:6;
+   now per cases by A1,SQUARE_1:38;
+  suppose A2:min(f,g).c = f.c;
+    (f*g).c <= min(f,g).c
+  proof
+     g.c <= 1 & f.c >= 0 by Th1;
+   then (g.c)*(f.c) <= 1*(f.c) by AXIOMS:25;
+   hence thesis by A2,Def2;
+  end;
+  hence thesis;
+  suppose A3:min(f,g).c = g.c;
+    (f*g).c <= min(f,g).c
+  proof
+     f.c <= 1 & g.c >= 0 by Th1;
+   then (f.c)*(g.c) <= 1*(g.c) by AXIOMS:25;
+   hence thesis by A3,Def2;
+  end;
+  hence thesis;
+ end;
+ hence thesis;
+end;
+
+theorem
+  A*B c= A /\ B
+proof
+   for c holds (f*g).c <= min(f,g).c by Th90;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem Th92:
+for c holds max(f,g).c <= (f ++ g).c
+proof
+ let c;
+A1:max(f,g).c = max(f.c,g.c) by FUZZY_1:6;
+   now per cases by A1,SQUARE_1:49;
+  suppose A2:max(f,g).c = f.c;
+    (f ++ g).c >= max(f,g).c
+  proof
+     g.c >= 0 & (1_minus f).c >= 0 by Th1;
+   then 0*(g.c) <= (g.c)*((1_minus f).c) by AXIOMS:25;
+   then 0 <= (g.c)*(1 - f.c) by FUZZY_1:def 7;
+   then 0 <= (g.c)*1 - (g.c)*(f.c) by XCMPLX_1:40;
+   then 0 + f.c <= g.c - (f.c)*(g.c) + f.c by AXIOMS:24;
+   then f.c <= f.c + g.c - (f.c)*(g.c) by XCMPLX_1:29;
+   hence thesis by A2,Def3;
+  end;
+  hence thesis;
+  suppose A3:max(f,g).c = g.c;
+    (f ++ g).c >= max(f,g).c
+  proof
+     f.c >= 0 & (1_minus g).c >= 0 by Th1;
+   then 0*(f.c) <= (f.c)*((1_minus g).c) by AXIOMS:25;
+   then 0 <= (f.c)*(1 - g.c) by FUZZY_1:def 7;
+   then 0 <= (f.c)*1 - (f.c)*(g.c) by XCMPLX_1:40;
+   then 0 + g.c <= f.c - (f.c)*(g.c) + g.c by AXIOMS:24;
+   then g.c <= f.c + g.c - (f.c)*(g.c) by XCMPLX_1:29;
+   hence thesis by A3,Def3;
+  end;
+  hence thesis;
+ end;
+ hence thesis;
+end;
+
+theorem
+  A \/ B c= A ++ B
+proof
+   for c holds max(f,g).c <= (f ++ g).c by Th92;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+Lm1:
+for a,b,c be Real st 0 <= c holds c*min(a,b) = min(c*a,c*b)
+proof
+ let a,b,c be Element of REAL;
+ assume A1:0 <= c;
+   now per cases by SQUARE_1:38;
+  suppose A2:min(a,b) = a;
+    c*min(a,b) = min(c*a,c*b)
+  proof
+     a <= b by A2,SQUARE_1:def 1;
+   then a*c <= b*c by A1,AXIOMS:25;
+   hence thesis by A2,SQUARE_1:def 1;
+  end;
+  hence thesis;
+  suppose A3:min(a,b) = b;
+    c*min(a,b) = min(c*a,c*b)
+  proof
+     a >= b by A3,SQUARE_1:def 1;
+   then a*c >= b*c by A1,AXIOMS:25;
+   hence thesis by A3,SQUARE_1:def 1;
+  end;
+  hence thesis;
+ end;
+ hence thesis;
+end;
+
+Lm2:
+for a,b,c be Real st 0 <= c holds c*max(a,b) = max(c*a,c*b)
+proof
+ let a,b,c be Element of REAL;
+ assume A1:0 <= c;
+   now per cases by SQUARE_1:49;
+  suppose A2:max(a,b) = b;
+    c*max(a,b) = max(c*a,c*b)
+  proof
+     a <= b by A2,SQUARE_1:def 2;
+   then a*c <= c*b by A1,AXIOMS:25;
+   hence thesis by A2,SQUARE_1:def 2;
+  end;
+  hence thesis;
+  suppose A3:max(a,b) = a;
+    c*max(a,b) = max(c*a,c*b)
+  proof
+     a >= b by A3,SQUARE_1:def 2;
+   then a*c >= b*c by A1,AXIOMS:25;
+   hence thesis by A3,SQUARE_1:def 2;
+  end;
+  hence thesis;
+ end;
+ hence thesis;
+end;
+
+theorem
+  for a,b,c be Real st 0 <= c holds
+c*max(a,b) = max(c*a,c*b) & c*min(a,b) = min(c*a,c*b) by Lm1,Lm2;
+
+theorem
+  for a,b,c be Real holds
+c + max(a,b) = max(c+a,c+b) & c + min(a,b) = min(c+a,c+b)
+proof
+ let a,b,c be Element of REAL;
+A1: c + max(a,b) = max(c+a,c+b)
+ proof
+    now per cases by SQUARE_1:49;
+   suppose A2:max(a,b) = b;
+     c + max(a,b) = max(c+a,c+b)
+   proof
+      a <= b by A2,SQUARE_1:def 2;
+    then c+a <= c+b by AXIOMS:24;
+    hence thesis by A2,SQUARE_1:def 2;
+   end;
+   hence thesis;
+   suppose A3:max(a,b) = a;
+     c + max(a,b) = max(c+a,c+b)
+   proof
+      a >= b by A3,SQUARE_1:def 2;
+    then a+c >= b+c by AXIOMS:24;
+    hence thesis by A3,SQUARE_1:def 2;
+   end;
+   hence thesis;
+  end;
+  hence thesis;
+ end;
+   c + min(a,b) = min(c+a,c+b)
+ proof
+    now per cases by SQUARE_1:38;
+   suppose A4:min(a,b) = a;
+     c + min(a,b) = min(c+a,c+b)
+   proof
+      a <= b by A4,SQUARE_1:def 1;
+    then a+c <= c+b by AXIOMS:24;
+    hence thesis by A4,SQUARE_1:def 1;
+   end;
+   hence thesis;
+   suppose A5:min(a,b) = b;
+     c + min(a,b) = min(c+a,c+b)
+   proof
+      a >= b by A5,SQUARE_1:def 1;
+    then a+c >= b+c by AXIOMS:24;
+    hence thesis by A5,SQUARE_1:def 1;
+   end;
+   hence thesis;
+  end;
+  hence thesis;
+ end;
+ hence thesis by A1;
+end;
+
+theorem Th96:
+f*max(g,h) = max(f*g,f*h)
+proof
+A1:C = dom (f*max(g,h)) & C = dom max(f*g,f*h) by FUZZY_1:def 1;
+   for c being Element of C st c in C holds (f*max(g,h)).c = max(f*g,f*h).c
+ proof
+  let c;
+A2:f.c >= 0 by Th1;
+    (f*max(g,h)).c = (f.c)*(max(g,h).c) by Def2
+                .= (f.c)*max(g.c,h.c) by FUZZY_1:6
+                .= max((f.c)*g.c,(f.c)*(h.c)) by A2,Lm2
+                .= max((f*g).c,(f.c)*(h.c)) by Def2
+                .= max((f*g).c,(f*h).c) by Def2;
+  hence thesis by FUZZY_1:6;
+ end;
+ hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem Th97:
+f*min(g,h) = min(f*g,f*h)
+proof
+A1:C = dom (f*min(g,h)) & C = dom min(f*g,f*h) by FUZZY_1:def 1;
+   for c being Element of C st c in C holds (f*min(g,h)).c = min(f*g,f*h).c
+ proof
+  let c;
+A2:f.c >= 0 by Th1;
+    (f*min(g,h)).c = (f.c)*(min(g,h).c) by Def2
+                .= (f.c)*min(g.c,h.c) by FUZZY_1:6
+                .= min((f.c)*g.c,(f.c)*(h.c)) by A2,Lm1
+                .= min((f*g).c,(f.c)*(h.c)) by Def2
+                .= min((f*g).c,(f*h).c) by Def2;
+  hence thesis by FUZZY_1:6;
+ end;
+ hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem
+  A*(B /\ D) = (A*B) /\ (A*D) & A*(B \/ D) = (A*B) \/ (A*D)
+proof
+   f*max(g,h) = max(f*g,f*h) & f*min(g,h) = min(f*g,f*h) by Th96,Th97;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th99:
+f ++ max(g,h) = max((f ++ g),(f ++ h))
+proof
+A1:C = dom (f ++ max(g,h)) & C = dom max((f ++ g),(f ++ h)) by FUZZY_1:def 1;
+   for c being Element of C st c in C holds
+ (f ++ max(g,h)).c = (max((f ++ g),(f ++ h))).c
+ proof
+  let c;
+A2:(f ++ max(g,h)).c = f.c + max(g,h).c - (f.c)*(max(g,h).c) by Def3
+                    .= f.c + max(g.c,h.c) - (f.c)*(max(g,h).c) by FUZZY_1:6;
+    now per cases by SQUARE_1:49;
+   suppose A3:max(g.c,h.c) = g.c;
+     (f ++ max(g,h)).c = (max((f ++ g),(f ++ h))).c
+   proof
+      g.c >= h.c & (1_minus f).c >= 0 by A3,Th1,SQUARE_1:def 2;
+    then (g.c)*((1_minus f).c) >= (h.c)*((1_minus f).c) by AXIOMS:25;
+    then (g.c)*(1- f.c) >= (h.c)*((1_minus f).c) by FUZZY_1:def 7;
+    then (g.c)*(1- f.c) >= (h.c)*(1- f.c) by FUZZY_1:def 7;
+    then (g.c)*(1- f.c) + f.c >= (h.c)*(1- f.c) + f.c by AXIOMS:24;
+    then (g.c)*1- (g.c)*f.c + f.c >= (h.c)*(1- f.c) + f.c by XCMPLX_1:40;
+    then (g.c)- (g.c)*f.c + f.c >= (h.c)*1- (h.c)*(f.c) + f.c by XCMPLX_1:40;
+    then f.c + g.c - (g.c)*f.c >= (h.c)*1- (h.c)*(f.c) + f.c by XCMPLX_1:29
+;
+then A4: f.c + g.c - (g.c)*f.c >= f.c + h.c - (h.c)*(f.c) by XCMPLX_1:29;
+A5: (f ++ max(g,h)).c = f.c + g.c - (f.c)*g.c by A2,A3,FUZZY_1:6;
+
+         f.c + g.c - (f.c)*g.c
+     = max((f.c + g.c - (f.c)*g.c),(f.c + h.c - (f.c)*(h.c)))
+                                                       by A4,SQUARE_1:def 2
+    .= max((f ++ g).c,(f.c + h.c - (f.c)*(h.c))) by Def3
+    .= max((f ++ g).c,(f ++ h).c) by Def3;
+    hence thesis by A5,FUZZY_1:6;
+   end;
+   hence thesis;
+   suppose A6:max(g.c,h.c) = h.c;
+     (f ++ max(g,h)).c = (max((f ++ g),(f ++ h))).c
+   proof
+      h.c >= g.c & (1_minus f).c >= 0 by A6,Th1,SQUARE_1:def 2;
+    then (h.c)*((1_minus f).c) >= (g.c)*((1_minus f).c) by AXIOMS:25;
+    then (h.c)*(1- f.c) >= (g.c)*((1_minus f).c) by FUZZY_1:def 7;
+    then (h.c)*(1- f.c) >= (g.c)*(1- f.c) by FUZZY_1:def 7;
+    then (h.c)*(1- f.c) + f.c >= (g.c)*(1- f.c) + f.c by AXIOMS:24;
+    then (h.c)*1- (h.c)*f.c + f.c >= (g.c)*(1- f.c) + f.c by XCMPLX_1:40;
+    then (h.c)- (h.c)*f.c + f.c >= (g.c)*1- (g.c)*(f.c) + f.c by XCMPLX_1:40;
+    then f.c + h.c - (h.c)*f.c >= (g.c)*1- (g.c)*(f.c) + f.c by XCMPLX_1:29
+;
+then A7: f.c + h.c - (h.c)*f.c >= f.c + g.c - (g.c)*(f.c) by XCMPLX_1:29;
+A8: (f ++ max(g,h)).c = f.c + h.c - (f.c)*h.c by A2,A6,FUZZY_1:6;
+         f.c + h.c - (f.c)*h.c
+     = max((f.c + g.c - (f.c)*g.c),(f.c + h.c - (f.c)*(h.c)))
+                                                       by A7,SQUARE_1:def 2
+    .= max((f ++ g).c,(f.c + h.c - (f.c)*(h.c))) by Def3
+    .= max((f ++ g).c,(f ++ h).c) by Def3;
+    hence thesis by A8,FUZZY_1:6;
+   end;
+   hence thesis;
+  end;
+  hence thesis;
+ end;
+ hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem Th100:
+f ++ min(g,h) = min((f ++ g),(f ++ h))
+proof
+A1:C = dom (f ++ min(g,h)) & C = dom min((f ++ g),(f ++ h)) by FUZZY_1:def 1;
+   for c being Element of C st c in C holds
+ (f ++ min(g,h)).c = (min((f ++ g),(f ++ h))).c
+ proof
+  let c;
+A2:(f ++ min(g,h)).c = f.c + min(g,h).c - (f.c)*(min(g,h).c) by Def3
+                    .= f.c + min(g.c,h.c) - (f.c)*(min(g,h).c) by FUZZY_1:6;
+    now per cases by SQUARE_1:38;
+   suppose A3:min(g.c,h.c) = g.c;
+     (f ++ min(g,h)).c = (min((f ++ g),(f ++ h))).c
+   proof
+      g.c <= h.c & (1_minus f).c >= 0 by A3,Th1,SQUARE_1:def 1;
+    then (g.c)*((1_minus f).c) <= (h.c)*((1_minus f).c) by AXIOMS:25;
+    then (g.c)*(1- f.c) <= (h.c)*((1_minus f).c) by FUZZY_1:def 7;
+    then (g.c)*(1- f.c) <= (h.c)*(1- f.c) by FUZZY_1:def 7;
+    then (g.c)*(1- f.c) + f.c <= (h.c)*(1- f.c) + f.c by AXIOMS:24;
+    then (g.c)*1- (g.c)*f.c + f.c <= (h.c)*(1- f.c) + f.c by XCMPLX_1:40;
+    then (g.c)- (g.c)*f.c + f.c <= (h.c)*1- (h.c)*(f.c) + f.c by XCMPLX_1:40;
+    then f.c + g.c - (g.c)*f.c <= (h.c)*1- (h.c)*(f.c) + f.c by XCMPLX_1:29
+;
+then A4:f.c + g.c - (g.c)*f.c <= f.c + h.c - (h.c)*(f.c) by XCMPLX_1:29;
+A5:(f ++ min(g,h)).c = f.c + g.c - (f.c)*g.c by A2,A3,FUZZY_1:6;
+         f.c + g.c - (f.c)*g.c
+    = min((f.c + g.c - (f.c)*g.c),(f.c + h.c - (f.c)*(h.c)))
+                                                       by A4,SQUARE_1:def 1
+    .= min((f ++ g).c,(f.c + h.c - (f.c)*(h.c))) by Def3
+    .= min((f ++ g).c,(f ++ h).c) by Def3;
+    hence thesis by A5,FUZZY_1:6;
+   end;
+   hence thesis;
+   suppose A6:min(g.c,h.c) = h.c;
+     (f ++ min(g,h)).c = (min((f ++ g),(f ++ h))).c
+   proof
+      h.c <= g.c & (1_minus f).c >= 0 by A6,Th1,SQUARE_1:def 1;
+    then (h.c)*((1_minus f).c) <= (g.c)*((1_minus f).c) by AXIOMS:25;
+    then (h.c)*(1- f.c) <= (g.c)*((1_minus f).c) by FUZZY_1:def 7;
+    then (h.c)*(1- f.c) <= (g.c)*(1- f.c) by FUZZY_1:def 7;
+    then (h.c)*(1- f.c) + f.c <= (g.c)*(1- f.c) + f.c by AXIOMS:24;
+    then (h.c)*1- (h.c)*f.c + f.c <= (g.c)*(1- f.c) + f.c by XCMPLX_1:40;
+    then (h.c)- (h.c)*f.c + f.c <= (g.c)*1- (g.c)*(f.c) + f.c by XCMPLX_1:40;
+    then f.c + h.c - (h.c)*f.c <= (g.c)*1- (g.c)*(f.c) + f.c by XCMPLX_1:29
+;
+then A7:f.c + h.c - (h.c)*f.c <= f.c + g.c - (g.c)*(f.c) by XCMPLX_1:29;
+A8:(f ++ min(g,h)).c = f.c + h.c - (f.c)*h.c by A2,A6,FUZZY_1:6;
+         f.c + h.c - (f.c)*h.c
+     = min((f.c + g.c - (f.c)*g.c),(f.c + h.c - (f.c)*(h.c)))
+                                                       by A7,SQUARE_1:def 1
+    .= min((f ++ g).c,(f.c + h.c - (f.c)*(h.c))) by Def3
+    .= min((f ++ g).c,(f ++ h).c) by Def3;
+    hence thesis by A8,FUZZY_1:6;
+   end;
+   hence thesis;
+  end;
+  hence thesis;
+ end;
+ hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem
+  A ++ (B \/ D) = (A ++ B) \/ (A ++ D) & A ++ (B /\ D) = (A ++ B) /\ (A ++ D)
+proof
+   f ++ max(g,h) = max((f ++ g),(f ++ h)) &
+ f ++ min(g,h) = min((f ++ g),(f ++ h)) by Th99,Th100;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th102:
+for c holds (max(f,g)*max(f,h)).c <= max(f,(g*h)).c
+proof
+ let c;
+A1:(max(f,g)*max(f,h)).c = (max(f,g).c)*(max(f,h).c) by Def2
+                      .= max(f.c,g.c)*(max(f,h).c) by FUZZY_1:6
+                      .= max(f.c,g.c)*max(f.c,h.c) by FUZZY_1:6;
+   max(f.c,g.c)*max(f.c,h.c) <= max(f,(g*h)).c
+ proof
+   now per cases by SQUARE_1:49;
+  suppose A2:max(f.c,g.c) = f.c;
+    max(f.c,g.c)*max(f.c,h.c) <= max(f,(g*h)).c
+  proof
+     now per cases by SQUARE_1:49;
+    suppose A3:max(f.c,h.c) = f.c;
+      max(f.c,g.c)*max(f.c,h.c) <= max(f,(g*h)).c
+    proof
+       max(f,(g*h)).c = max(f.c,(g*h).c) by FUZZY_1:6;
+then A4:  max(f,(g*h)).c >= f.c by SQUARE_1:46;
+       (f*f).c <= f.c by Th63;
+     then (f*f).c <= max(f,(g*h)).c by A4,AXIOMS:22;
+     hence thesis by A2,A3,Def2;
+    end;
+    hence thesis;
+    suppose A5:max(f.c,h.c) = h.c;
+      max(f.c,g.c)*max(f.c,h.c) <= max(f,(g*h)).c
+    proof
+       f.c >= 0 & 1 >= h.c by Th1;
+then A6:  (f.c)*(h.c) <= (f.c)*1 by AXIOMS:25;
+       f.c <= max(f.c,(g*h).c) by SQUARE_1:46;
+     then f.c <= max(f,(g*h)).c by FUZZY_1:6;
+     hence thesis by A2,A5,A6,AXIOMS:22;
+    end;
+    hence thesis;
+   end;
+   hence thesis;
+  end;
+  hence thesis;
+  suppose A7:max(f.c,g.c) = g.c;
+    max(f.c,g.c)*max(f.c,h.c) <= max(f,(g*h)).c
+  proof
+     now per cases by SQUARE_1:49;
+    suppose A8:max(f.c,h.c) = f.c;
+      max(f.c,g.c)*max(f.c,h.c) <= max(f,(g*h)).c
+    proof
+       f.c >= 0 & 1 >= g.c by Th1;
+then A9:  (f.c)*(g.c) <= (f.c)*1 by AXIOMS:25;
+       f.c <= max(f.c,(g*h).c) by SQUARE_1:46;
+     then f.c <= max(f,(g*h)).c by FUZZY_1:6;
+     hence thesis by A7,A8,A9,AXIOMS:22;
+    end;
+    hence thesis;
+    suppose A10:max(f.c,h.c) = h.c;
+      max(f.c,g.c)*max(f.c,h.c) <= max(f,(g*h)).c
+    proof
+       max(f,(g*h)).c = max(f.c,(g*h).c) by FUZZY_1:6;
+     then max(f,(g*h)).c >= (g*h).c by SQUARE_1:46;
+     hence thesis by A7,A10,Def2;
+    end;
+    hence thesis;
+   end;
+   hence thesis;
+  end;
+  hence thesis;
+ end;
+ hence thesis;
+ end;
+ hence thesis by A1;
+end;
+
+theorem Th103:
+for c holds (min(f,g)*min(f,h)).c <= min(f,(g*h)).c
+proof
+ let c;
+A1:(min(f,g)*min(f,h)).c = (min(f,g).c)*(min(f,h).c) by Def2
+                      .= min(f.c,g.c)*(min(f,h).c) by FUZZY_1:6
+                      .= min(f.c,g.c)*min(f.c,h.c) by FUZZY_1:6;
+   min(f.c,g.c)*min(f.c,h.c) <= min(f,(g*h)).c
+ proof
+   now per cases by SQUARE_1:38;
+  suppose A2:min(f.c,g.c) = f.c;
+    min(f.c,g.c)*min(f.c,h.c) <= min(f,(g*h)).c
+  proof
+     now per cases by SQUARE_1:38;
+    suppose A3:min(f.c,h.c) = f.c;
+      min(f.c,g.c)*min(f.c,h.c) <= min(f,(g*h)).c
+    proof
+A4:  f.c <= g.c & f.c <= h.c by A2,A3,SQUARE_1:def 1;
+       0 <= g.c & 0 <= f.c by Th1;
+     then (f.c)*(f.c) <= (g.c)*(f.c) & (g.c)*(f.c) <= (h.c)*(g.c) by A4,AXIOMS:
+25;
+     then A5:(f.c)*(f.c) <= (g.c)*(h.c) by AXIOMS:22;
+       (f*f).c <= f.c by Th63;
+     then min((f*f).c,(f.c)*(f.c)) <= min(f.c,(g.c)*(h.c)) by A5,FUZZY_1:44;
+     then min((f.c)*(f.c),(f.c)*(f.c)) <= min(f.c,(g.c)*(h.c)) by Def2;
+     then (f.c)*(f.c) <= min(f.c,(g*h).c) by Def2;
+     hence thesis by A2,A3,FUZZY_1:6;
+    end;
+    hence thesis;
+    suppose A6:min(f.c,h.c) = h.c;
+      min(f.c,g.c)*min(f.c,h.c) <= min(f,(g*h)).c
+    proof
+       f.c >= 0 & 1 >= h.c & f.c <= g.c & h.c >= 0 by A2,Th1,SQUARE_1:def 1;
+     then (f.c)*(h.c) <= (f.c)*1 & (f.c)*(h.c) <= (g.c)*(h.c) by AXIOMS:25;
+     then (f.c)*(h.c) <= min((f.c),(g.c)*(h.c)) by SQUARE_1:39;
+     then (f.c)*(h.c) <= min(f.c,(g*h).c) by Def2;
+     hence thesis by A2,A6,FUZZY_1:6;
+    end;
+    hence thesis;
+   end;
+   hence thesis;
+  end;
+  hence thesis;
+  suppose A7:min(f.c,g.c) = g.c;
+    min(f.c,g.c)*min(f.c,h.c) <= min(f,(g*h)).c
+  proof
+     now per cases by SQUARE_1:38;
+    suppose A8:min(f.c,h.c) = f.c;
+      min(f.c,g.c)*min(f.c,h.c) <= min(f,(g*h)).c
+    proof
+       f.c >= 0 & 1 >= g.c & f.c <= h.c & g.c >= 0 by A8,Th1,SQUARE_1:def 1;
+     then (g.c)*(f.c) <= (f.c)*1 & (f.c)*(g.c) <= (h.c)*(g.c) by AXIOMS:25;
+     then (f.c)*(g.c) <= min((f.c),(h.c)*(g.c)) by SQUARE_1:39;
+     then (f.c)*(g.c) <= min(f.c,(g*h).c) by Def2;
+     hence thesis by A7,A8,FUZZY_1:6;
+    end;
+    hence thesis;
+    suppose A9:min(f.c,h.c) = h.c;
+      min(f.c,g.c)*min(f.c,h.c) <= min(f,(g*h)).c
+    proof
+       g.c >= 0 & h.c <= f.c & f.c >= 0 & g.c <= f.c & (f*f).c <= f.c
+                                        by A7,A9,Th1,Th63,SQUARE_1:def 1;
+     then (h.c)*(g.c) <= (f.c)*(g.c) & (g.c)*(f.c) <= (f.c)*(f.c) &
+     (f.c)*(f.c) <= f.c by Def2,AXIOMS:25;
+     then (h.c)*(g.c) <= (f.c)*(f.c) & (f.c)*(f.c) <= f.c by AXIOMS:22;
+     then (h.c)*(g.c) <= f.c by AXIOMS:22;
+     then (h.c)*(g.c) <= min(f.c,(h.c)*(g.c)) by SQUARE_1:39;
+     then (g.c)*(h.c) <= min(f.c,(g*h).c) by Def2;
+     hence thesis by A7,A9,FUZZY_1:6;
+    end;
+    hence thesis;
+   end;
+   hence thesis;
+  end;
+  hence thesis;
+ end;
+ hence thesis;
+ end;
+ hence thesis by A1;
+end;
+
+theorem
+  (A \/ B)*(A \/ D) c= A \/ (B*D) & (A /\ B)*(A /\ D) c= A /\ (B*D)
+proof
+   (for c holds (min(f,g)*min(f,h)).c <= min(f,(g*h)).c) &
+ (for c holds (max(f,g)*max(f,h)).c <= max(f,(g*h)).c) by Th102,Th103;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem Th105:
+for c be Element of C,f,g be Membership_Func of C holds
+(f ++ g).c = 1 - ((1 - f.c)*(1 - g.c))
+proof
+ let c;
+ let g,h be Membership_Func of C;
+      (g ++ h).c = (1_minus((1_minus g)*(1_minus h))).c by Th81
+ .= 1-((1_minus g)*(1_minus h)).c by FUZZY_1:def 7
+ .= 1-((1_minus g).c)*((1_minus h).c) by Def2
+ .= 1-((1-g.c)*((1_minus h).c)) by FUZZY_1:def 7;
+ hence thesis by FUZZY_1:def 7;
+end;
+
+theorem Th106:
+for c holds max(f,g ++ h).c <= (max(f,g) ++ max(f,h)).c
+proof
+ let c;
+A1: max(f,g ++ h).c = max(f.c,(g ++ h).c) by FUZZY_1:6
+ .= max(f.c,1 - ((1 - g.c)*(1 - h.c))) by Th105;
+A2: (max(f,g) ++ max(f,h)).c
+  = max(f,g).c + max(f,h).c - (max(f,g).c)*(max(f,h).c) by Def3
+ .= max(f.c,g.c) + max(f,h).c - (max(f,g).c)*(max(f,h).c) by FUZZY_1:6
+ .= max(f.c,g.c) + max(f.c,h.c) - (max(f,g).c)*(max(f,h).c) by FUZZY_1:6
+ .= max(f.c,g.c) + max(f.c,h.c) - (max(f.c,g.c))*(max(f,h).c) by FUZZY_1:6
+ .= max(f.c,g.c) + max(f.c,h.c) - (max(f.c,g.c))*(max(f.c,h.c)) by FUZZY_1:6;
+   max(f.c,1 - ((1 - g.c)*(1 - h.c))) <=
+ max(f.c,g.c) + max(f.c,h.c) - (max(f.c,g.c))*(max(f.c,h.c))
+ proof
+    now per cases by SQUARE_1:49;
+   suppose A3:max(f.c,g.c) = f.c & max(f.c,h.c) = f.c;
+     max(f.c,1 - ((1 - g.c)*(1 - h.c))) <=
+   max(f.c,g.c) + max(f.c,h.c) - (max(f.c,g.c))*(max(f.c,h.c))
+   proof
+      g.c <= f.c & h.c <= f.c &
+    (1_minus f).c >= 0 & (1_minus g).c >= 0 by A3,Th1,SQUARE_1:def 2;
+    then 1 - g.c >= 1 - f.c & 1 - h.c >= 1 - f.c &
+    1-f.c >= 0 & 1-g.c >= 0 by FUZZY_1:def 7,REAL_2:106;
+    then (1 - f.c)*(1 - f.c) <= (1 - g.c)*(1 - f.c) &
+    (1 - g.c)*(1 - f.c) <= (1 - g.c)*(1 - h.c) by AXIOMS:25;
+    then (1 - f.c)*(1 - f.c) <= (1 - g.c)*(1 - h.c) by AXIOMS:22;
+    then 1 - (1 - f.c)*(1 - f.c) >= 1 - (1 - g.c)*(1 - h.c) by REAL_2:106;
+    then (f ++ f).c >= 1 - (1 - g.c)*(1 - h.c) by Th105;
+then A4:f.c + f.c - (f.c)*(f.c) >= 1 - (1 - g.c)*(1 - h.c) by Def3;
+      (f ++ f).c >= f.c by Th63;
+    then f.c + f.c - (f.c)*(f.c) >= f.c by Def3;
+    hence thesis by A3,A4,SQUARE_1:50;
+   end;
+   hence thesis;
+   suppose A5:max(f.c,g.c) = f.c & max(f.c,h.c) = h.c;
+     max(f.c,1 - ((1 - g.c)*(1 - h.c))) <=
+   max(f.c,g.c) + max(f.c,h.c) - (max(f.c,g.c))*(max(f.c,h.c))
+   proof
+      g.c <= f.c & (1_minus h).c >= 0 & (1_minus f).c >= 0 & h.c >= 0
+                                         by A5,Th1,SQUARE_1:def 2;
+    then 1 - f.c <= 1 - g.c & 1 - h.c >= 0 & 1 - f.c >= 0 & h.c >= 0
+    by FUZZY_1:def 7,REAL_2:106;
+    then (1 - f.c)*(1 -h.c) <= (1 - g.c)*(1 -h.c) & 0*(h.c) <= (h.c)*(1-f.c)
+    by AXIOMS:25;
+    then 1-(1 - f.c)*(1 -h.c) >= 1-(1 - g.c)*(1 -h.c) &
+    0 + f.c <= (h.c)*(1-f.c) + f.c by AXIOMS:24,REAL_2:106;
+    then (f ++ h).c >= 1-(1 - g.c)*(1 -h.c) & f.c <= (h.c)*1-(h.c)*(f.c) + f.c
+    by Th105,XCMPLX_1:40;
+    then f.c + h.c -(f.c)*(h.c) >= 1-(1 - g.c)*(1 -h.c) &
+    f.c <= f.c + h.c -(h.c)*(f.c) by Def3,XCMPLX_1:29;
+    hence thesis by A5,SQUARE_1:50;
+   end;
+   hence thesis;
+   suppose A6:max(f.c,g.c) = g.c & max(f.c,h.c) = f.c;
+     max(f.c,1 - ((1 - g.c)*(1 - h.c))) <=
+   max(f.c,g.c) + max(f.c,h.c) - (max(f.c,g.c))*(max(f.c,h.c))
+   proof
+      h.c <= f.c & (1_minus g).c >= 0 & (1_minus f).c >= 0 & g.c >= 0
+                                         by A6,Th1,SQUARE_1:def 2;
+    then 1 - f.c <= 1 - h.c & 1 - g.c >= 0 & 1 - f.c >= 0 & g.c >= 0
+    by FUZZY_1:def 7,REAL_2:106;
+    then (1 - f.c)*(1 -g.c) <= (1 - h.c)*(1 -g.c) & 0*(g.c) <= (g.c)*(1-f.c)
+    by AXIOMS:25;
+    then 1-(1 - f.c)*(1 -g.c) >= 1-(1 - h.c)*(1 - g.c) &
+    0 + f.c <= (g.c)*(1-f.c) + f.c by AXIOMS:24,REAL_2:106;
+    then (f ++ g).c >= 1-(1 - h.c)*(1 -g.c) & f.c <= (g.c)*1-(g.c)*(f.c) + f.c
+    by Th105,XCMPLX_1:40;
+    then f.c + g.c -(f.c)*(g.c) >= 1-(1 - h.c)*(1 -g.c) &
+    f.c <= f.c + g.c -(g.c)*(f.c) by Def3,XCMPLX_1:29;
+    hence thesis by A6,SQUARE_1:50;
+   end;
+   hence thesis;
+   suppose A7:max(f.c,g.c) = g.c & max(f.c,h.c) = h.c;
+     max(f.c,1 - ((1 - g.c)*(1 - h.c))) <=
+   max(f.c,g.c) + max(f.c,h.c) - (max(f.c,g.c))*(max(f.c,h.c))
+   proof
+      g.c >= f.c & h.c >= f.c &
+    (1_minus f).c >= 0 & (1_minus g).c >= 0 by A7,Th1,SQUARE_1:def 2;
+    then 1 - g.c <= 1 - f.c & 1 - h.c <= 1 - f.c &
+    1-f.c >= 0 & 1-g.c >= 0 by FUZZY_1:def 7,REAL_2:106;
+    then (1 - f.c)*(1 - f.c) >= (1 - g.c)*(1 - f.c) &
+    (1 - g.c)*(1 - f.c) >= (1 - g.c)*(1 - h.c) by AXIOMS:25;
+    then (1 - f.c)*(1 - f.c) >= (1 - g.c)*(1 - h.c) by AXIOMS:22;
+    then 1 - ((1 - f.c)*(1 - f.c)) <= 1 - (1 - g.c)*(1 - h.c) by REAL_2:106;
+then A8:(f ++ f).c <= 1 - (1 - g.c)*(1 - h.c) by Th105;
+      (f ++ f).c >= f.c by Th63;
+    then f.c <= 1 - (1 - g.c)*(1 - h.c) by A8,AXIOMS:22;
+    then f.c <= (g ++ h).c by Th105;
+then A9:f.c <= g.c + h.c - (g.c)*(h.c) by Def3;
+      1 - ((1 - g.c)*(1 - h.c)) = (g ++ h).c by Th105;
+    then 1 - ((1 - g.c)*(1 - h.c)) <= g.c + h.c - (g.c)*(h.c) by Def3;
+    hence thesis by A7,A9,SQUARE_1:50;
+   end;
+   hence thesis;
+  end;
+  hence thesis;
+ end;
+ hence thesis by A1,A2;
+end;
+
+theorem Th107:
+for c holds min(f,g ++ h).c <= (min(f,g) ++ min(f,h)).c
+proof
+ let c;
+A1: min(f,g ++ h).c = min(f.c,(g ++ h).c) by FUZZY_1:6
+ .= min(f.c,1 - ((1 - g.c)*(1 - h.c))) by Th105;
+A2: (min(f,g) ++ min(f,h)).c
+  = min(f,g).c + min(f,h).c - (min(f,g).c)*(min(f,h).c) by Def3
+ .= min(f.c,g.c) + min(f,h).c - (min(f,g).c)*(min(f,h).c) by FUZZY_1:6
+ .= min(f.c,g.c) + min(f.c,h.c) - (min(f,g).c)*(min(f,h).c) by FUZZY_1:6
+ .= min(f.c,g.c) + min(f.c,h.c) - (min(f.c,g.c))*(min(f,h).c) by FUZZY_1:6
+ .= min(f.c,g.c) + min(f.c,h.c) - (min(f.c,g.c))*(min(f.c,h.c)) by FUZZY_1:6;
+   min(f.c,1 - ((1 - g.c)*(1 - h.c))) <=
+ min(f.c,g.c) + min(f.c,h.c) - (min(f.c,g.c))*(min(f.c,h.c))
+ proof
+    now per cases by SQUARE_1:38;
+   suppose A3:min(f.c,g.c) = f.c & min(f.c,h.c) = f.c;
+     min(f.c,1 - ((1 - g.c)*(1 - h.c))) <=
+   min(f.c,g.c) + min(f.c,h.c) - (min(f.c,g.c))*(min(f.c,h.c))
+   proof
+      min(f.c,1 - ((1 - g.c)*(1 - h.c))) <= f.c & (f ++ f).c >= f.c
+    by Th63,SQUARE_1:35;
+    then min(f.c,1 - ((1 - g.c)*(1 - h.c))) <= (f ++ f).c by AXIOMS:22;
+    hence thesis by A3,Def3;
+   end;
+   hence thesis;
+   suppose A4:min(f.c,g.c) = f.c & min(f.c,h.c) = h.c;
+     min(f.c,1 - ((1 - g.c)*(1 - h.c))) <=
+   min(f.c,g.c) + min(f.c,h.c) - (min(f.c,g.c))*(min(f.c,h.c))
+   proof
+      (1_minus f).c >= 0 & h.c >= 0 by Th1;
+    then 1 - f.c >= 0 & h.c >= 0 by FUZZY_1:def 7;
+    then 0*(h.c) <= (h.c)*(1-f.c) by AXIOMS:25;
+    then 0 + f.c <= (h.c)*(1-f.c) + f.c by AXIOMS:24;
+    then f.c <= (h.c)*1-(h.c)*(f.c) + f.c by XCMPLX_1:40;
+    then f.c <= f.c + h.c -(h.c)*(f.c) & min(f.c,1 - ((1 - g.c)*(1 - h.c))) <=
+f.c
+    by SQUARE_1:35,XCMPLX_1:29;
+    hence thesis by A4,AXIOMS:22;
+   end;
+   hence thesis;
+   suppose A5:min(f.c,g.c) = g.c & min(f.c,h.c) = f.c;
+     min(f.c,1 - ((1 - g.c)*(1 - h.c))) <=
+   min(f.c,g.c) + min(f.c,h.c) - (min(f.c,g.c))*(min(f.c,h.c))
+   proof
+      (1_minus f).c >= 0 & g.c >= 0 by Th1;
+    then 1 - f.c >= 0 & g.c >= 0 by FUZZY_1:def 7;
+    then 0*(g.c) <= (g.c)*(1-f.c) by AXIOMS:25;
+    then 0 + f.c <= (g.c)*(1-f.c) + f.c by AXIOMS:24;
+    then f.c <= (g.c)*1-(g.c)*(f.c) + f.c by XCMPLX_1:40;
+    then f.c <= f.c + g.c -(g.c)*(f.c) & min(f.c,1 - ((1 - g.c)*(1 - h.c))) <=
+f.c
+    by SQUARE_1:35,XCMPLX_1:29;
+    hence thesis by A5,AXIOMS:22;
+   end;
+   hence thesis;
+   suppose A6:min(f.c,g.c) = g.c & min(f.c,h.c) = h.c;
+     min(f.c,1 - ((1 - g.c)*(1 - h.c))) <=
+   min(f.c,g.c) + min(f.c,h.c) - (min(f.c,g.c))*(min(f.c,h.c))
+   proof
+      min(f.c,1-((1-g.c)*(1-h.c))) <= 1-((1 - g.c)*(1 - h.c)) by SQUARE_1:35;
+    then min(f.c,1-((1-g.c)*(1-h.c))) <= (g ++ h).c by Th105;
+    hence thesis by A6,Def3;
+   end;
+   hence thesis;
+  end;
+  hence thesis;
+ end;
+ hence thesis by A1,A2;
+end;
+
+theorem
+  A \/ (B ++ D) c= (A \/ B) ++ (A \/ D) & A /\ (B ++ D) c= (A /\ B) ++ (A /\ D)
+proof
+   (for c holds min(f,g ++ h).c <= (min(f,g) ++ min(f,h)).c) &
+ (for c holds max(f,g ++ h).c <= (max(f,g) ++ max(f,h)).c) by Th106,Th107;
+ hence thesis by FUZZY_1:def 4;
+end;

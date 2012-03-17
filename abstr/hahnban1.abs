@@ -1,0 +1,663 @@
+:: Hahn Banach Theorem in the Vector Space over the Field of
+:: Complex Numbers
+::  by Anna Justyna Milewska
+::
+:: Received May 23, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, VECTSP_1, ARYTM_1, COMPLEX1, ABSVALUE, ARYTM_3, SQUARE_1,
+      COMPLFLD, HAHNBAN, FUNCT_1, SUBSET_1, FUNCOP_1, GRCAT_1, UNIALG_1,
+      BINOP_1, LATTICES, ALGSTR_2, RLSUB_1, RELAT_1, BOOLE, HAHNBAN1, XCMPLX_0;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, ARYTM_0, XREAL_0,
+      STRUCT_0, REAL_1, ABSVALUE, SQUARE_1, PRE_TOPC, RLVECT_1, VECTSP_1,
+      RLSUB_1, VECTSP_4, FUNCT_1, FUNCT_2, BINOP_1, RELSET_1, NATTRA_1,
+      BORSUK_1, COMPLEX1, HAHNBAN, COMPLFLD;
+ constructors REAL_1, SQUARE_1, RLSUB_1, VECTSP_4, NATTRA_1, BORSUK_1, HAHNBAN,
+      COMPLFLD, DOMAIN_1, COMPLSP1, MONOID_0, COMPLEX1, MEMBERED, ARYTM_0,
+      ARYTM_3, FUNCT_4;
+ clusters STRUCT_0, VECTSP_1, RELSET_1, FUNCT_1, SUBSET_1, COMPLFLD, RLVECT_1,
+      HAHNBAN, MEMBERED;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+  theorem :: HAHNBAN1:1
+   for z be Element of COMPLEX holds
+    abs |.z.| = |.z.|;
+
+  theorem :: HAHNBAN1:2
+   for x1,y1,x2,y2 be Real holds
+    [*x1,y1*] * [*x2,y2*] = [*x1*x2 - y1*y2,x1*y2+x2*y1*];
+
+  theorem :: HAHNBAN1:3
+   for r be Real holds [*r,0*]*<i> = [*0,r*];
+
+  theorem :: HAHNBAN1:4
+   for r be Real holds |.[*r,0*].| = abs r;
+
+  theorem :: HAHNBAN1:5
+   for z be Element of COMPLEX st |.z.| <> 0 holds
+    [*|.z.|,0*] = (z*'/[*|.z.|,0*])*z;
+
+begin :: Some Facts on the Field of Complex Numbers
+
+  definition
+   let x,y be Real;
+   func [**x,y**] -> Element of F_Complex equals
+:: HAHNBAN1:def 1
+    [*x,y*];
+  end;
+
+  definition
+   func i_FC -> Element of F_Complex equals
+:: HAHNBAN1:def 2
+    <i>;
+  end;
+
+  theorem :: HAHNBAN1:6
+     i_FC = [*0,1*] & i_FC = [**0,1**];
+
+  theorem :: HAHNBAN1:7
+     |.i_FC.| = 1;
+
+  theorem :: HAHNBAN1:8
+   i_FC * i_FC = -1_ F_Complex;
+
+  theorem :: HAHNBAN1:9
+   (-1_ F_Complex) * (-1_ F_Complex) = 1_ F_Complex;
+
+  theorem :: HAHNBAN1:10
+   for x1,y1,x2,y2 be Real holds
+    [**x1,y1**] + [**x2,y2**] = [**x1 + x2,y1 + y2**];
+
+  theorem :: HAHNBAN1:11
+   for x1,y1,x2,y2 be Real holds
+    [**x1,y1**] * [**x2,y2**] = [**x1*x2 - y1*y2,x1*y2+x2*y1**];
+
+  theorem :: HAHNBAN1:12
+     for z be Element of F_Complex holds
+    abs(|.z.|) = |.z.|;
+
+  theorem :: HAHNBAN1:13
+   for r be Real holds |.[**r,0**].| = abs r;
+
+  theorem :: HAHNBAN1:14
+   for r be Real holds [**r,0**]*i_FC = [**0,r**];
+
+  definition
+   let z be Element of F_Complex;
+   func Re z -> Real means
+:: HAHNBAN1:def 3
+    ex z' be Element of COMPLEX st z = z' & it = Re z';
+  end;
+
+  definition
+   let z be Element of F_Complex;
+   func Im z -> Real means
+:: HAHNBAN1:def 4
+    ex z' be Element of COMPLEX st z = z' & it = Im z';
+  end;
+
+  theorem :: HAHNBAN1:15
+   for x,y be Real holds
+    Re [**x,y**] = x & Im [**x,y**] = y;
+
+  theorem :: HAHNBAN1:16
+   for x,y be Element of F_Complex holds
+    Re (x+y) = Re x + Re y &
+    Im (x+y) = Im x + Im y;
+
+  theorem :: HAHNBAN1:17
+   for x,y be Element of F_Complex holds
+    Re (x*y) = Re x * Re y - Im x * Im y &
+    Im (x*y) = Re x * Im y + Re y * Im x;
+
+  theorem :: HAHNBAN1:18
+   for z be Element of F_Complex holds
+    Re z <= |.z.|;
+
+  theorem :: HAHNBAN1:19
+     for z be Element of F_Complex holds
+    Im z <= |.z.|;
+
+begin :: Functionals of Vector Space
+
+  definition
+   let K be 1-sorted;
+   let V be VectSpStr over K;
+   mode Functional of V is Function of the carrier of V, the carrier of K;
+   canceled;
+  end;
+
+  definition
+   let K be non empty LoopStr;
+   let V be non empty VectSpStr over K;
+   let f,g be Functional of V;
+   func f+g -> Functional of V means
+:: HAHNBAN1:def 6
+    for x be Element of V holds it.x = f.x + g.x;
+  end;
+
+  definition
+   let K be non empty LoopStr;
+   let V be non empty VectSpStr over K;
+   let f be Functional of V;
+   func -f -> Functional of V means
+:: HAHNBAN1:def 7
+    for x be Element of V holds it.x = -(f.x);
+  end;
+
+  definition
+   let K be non empty LoopStr;
+   let V be non empty VectSpStr over K;
+   let f,g be Functional of V;
+   func f-g -> Functional of V equals
+:: HAHNBAN1:def 8
+    f+-g;
+  end;
+
+  definition
+   let K be non empty HGrStr;
+   let V be non empty VectSpStr over K;
+   let v be Element of K;
+   let f be Functional of V;
+   func v*f -> Functional of V means
+:: HAHNBAN1:def 9
+    for x be Element of V holds it.x = v*(f.x);
+  end;
+
+  definition
+   let K be non empty ZeroStr;
+   let V be VectSpStr over K;
+   func 0Functional(V) -> Functional of V equals
+:: HAHNBAN1:def 10
+    [#]V --> 0.K;
+  end;
+
+  definition
+   let K be non empty LoopStr;
+   let V be non empty VectSpStr over K;
+   let F be Functional of V;
+   attr F is additive means
+:: HAHNBAN1:def 11
+    for x,y be Vector of V holds F.(x+y) = F.x+F.y;
+  end;
+
+  definition
+   let K be non empty HGrStr;
+   let V be non empty VectSpStr over K;
+   let F be Functional of V;
+   attr F is homogeneous means
+:: HAHNBAN1:def 12
+    for x be Vector of V, r be Scalar of V holds F.(r*x) = r*F.x;
+  end;
+
+  definition
+   let K be non empty ZeroStr;
+   let V be non empty VectSpStr over K;
+   let F be Functional of V;
+   attr F is 0-preserving means
+:: HAHNBAN1:def 13
+      F.(0.V) = 0.K;
+  end;
+
+  definition
+   let K be add-associative right_zeroed right_complementable Abelian
+    associative left_unital distributive (non empty doubleLoopStr);
+   let V be VectSp of K;
+   cluster homogeneous -> 0-preserving Functional of V;
+  end;
+
+  definition
+   let K be right_zeroed (non empty LoopStr);
+   let V be non empty VectSpStr over K;
+   cluster 0Functional(V) -> additive;
+  end;
+
+  definition
+   let K be add-associative right_zeroed right_complementable
+                 right-distributive (non empty doubleLoopStr);
+   let V be non empty VectSpStr over K;
+   cluster 0Functional(V) -> homogeneous;
+  end;
+
+  definition
+   let K be non empty ZeroStr;
+   let V be non empty VectSpStr over K;
+   cluster 0Functional(V) -> 0-preserving;
+  end;
+
+  definition
+   let K be add-associative right_zeroed right_complementable
+                 right-distributive (non empty doubleLoopStr);
+   let V be non empty VectSpStr over K;
+   cluster additive homogeneous 0-preserving Functional of V;
+  end;
+
+  theorem :: HAHNBAN1:20
+   for K be Abelian (non empty LoopStr)
+   for V be non empty VectSpStr over K
+   for f,g be Functional of V holds
+    f+g = g+f;
+
+  theorem :: HAHNBAN1:21
+   for K be add-associative (non empty LoopStr)
+   for V be non empty VectSpStr over K
+   for f,g,h be Functional of V holds
+    f+g+h = f+(g+h);
+
+  theorem :: HAHNBAN1:22
+   for K be non empty ZeroStr
+   for V be non empty VectSpStr over K
+   for x be Element of V holds
+    (0Functional(V)).x = 0.K;
+
+  theorem :: HAHNBAN1:23
+   for K be right_zeroed (non empty LoopStr)
+   for V be non empty VectSpStr over K
+   for f be Functional of V holds
+    f + 0Functional(V) = f;
+
+  theorem :: HAHNBAN1:24
+   for K be add-associative right_zeroed right_complementable
+            (non empty LoopStr)
+   for V be non empty VectSpStr over K
+   for f be Functional of V holds
+    f-f = 0Functional(V);
+
+  theorem :: HAHNBAN1:25
+   for K be right-distributive (non empty doubleLoopStr)
+   for V be non empty VectSpStr over K
+   for r be Element of K
+   for f,g be Functional of V holds
+    r*(f+g) = r*f+r*g;
+
+  theorem :: HAHNBAN1:26
+   for K be left-distributive (non empty doubleLoopStr)
+   for V be non empty VectSpStr over K
+   for r,s be Element of K
+   for f be Functional of V holds
+    (r+s)*f = r*f+s*f;
+
+  theorem :: HAHNBAN1:27
+   for K be associative (non empty HGrStr)
+   for V be non empty VectSpStr over K
+   for r,s be Element of K
+   for f be Functional of V holds
+    (r*s)*f = r*(s*f);
+
+  theorem :: HAHNBAN1:28
+   for K be left_unital (non empty doubleLoopStr)
+   for V be non empty VectSpStr over K
+   for f be Functional of V holds
+    (1_ K)*f = f;
+
+  definition
+   let K be Abelian add-associative right_zeroed right_complementable
+                 right-distributive (non empty doubleLoopStr);
+   let V be non empty VectSpStr over K;
+   let f,g be additive Functional of V;
+   cluster f+g -> additive;
+  end;
+
+  definition
+   let K be Abelian add-associative right_zeroed right_complementable
+                 right-distributive (non empty doubleLoopStr);
+   let V be non empty VectSpStr over K;
+   let f be additive Functional of V;
+   cluster -f -> additive;
+  end;
+
+  definition
+   let K be add-associative right_zeroed right_complementable
+                 right-distributive (non empty doubleLoopStr);
+   let V be non empty VectSpStr over K;
+   let v be Element of K;
+   let f be additive Functional of V;
+   cluster v*f -> additive;
+  end;
+
+  definition
+   let K be add-associative right_zeroed right_complementable
+                 right-distributive (non empty doubleLoopStr);
+   let V be non empty VectSpStr over K;
+   let f,g be homogeneous Functional of V;
+   cluster f+g -> homogeneous;
+  end;
+
+  definition
+   let K be Abelian add-associative right_zeroed right_complementable
+                 right-distributive (non empty doubleLoopStr);
+   let V be non empty VectSpStr over K;
+   let f be homogeneous Functional of V;
+   cluster -f -> homogeneous;
+  end;
+
+  definition
+   let K be add-associative right_zeroed right_complementable
+        right-distributive associative commutative (non empty doubleLoopStr);
+   let V be non empty VectSpStr over K;
+   let v be Element of K;
+   let f be homogeneous Functional of V;
+   cluster v*f -> homogeneous;
+  end;
+
+  definition
+   let K be add-associative right_zeroed right_complementable
+            right-distributive (non empty doubleLoopStr);
+   let V be non empty VectSpStr over K;
+   mode linear-Functional of V is additive homogeneous Functional of V;
+  end;
+
+begin :: The Vector Space of linear Functionals
+
+  definition
+   let K be Abelian add-associative right_zeroed right_complementable
+        right-distributive associative commutative (non empty doubleLoopStr);
+   let V be non empty VectSpStr over K;
+   func V*' -> non empty strict VectSpStr over K means
+:: HAHNBAN1:def 14
+    (for x be set holds x in the carrier of it iff
+                       x is linear-Functional of V) &
+    (for f,g be linear-Functional of V holds (the add of it).(f,g) = f+g) &
+    (the Zero of it = 0Functional(V)) &
+    for f be linear-Functional of V for x be Element of K holds
+     (the lmult of it).(x,f) = x*f;
+  end;
+
+  definition
+   let K be Abelian add-associative right_zeroed right_complementable
+        right-distributive associative commutative (non empty doubleLoopStr);
+   let V be non empty VectSpStr over K;
+   cluster V*' -> Abelian;
+  end;
+
+  definition
+   let K be Abelian add-associative right_zeroed right_complementable
+        right-distributive associative commutative (non empty doubleLoopStr);
+   let V be non empty VectSpStr over K;
+   cluster V*' -> add-associative;
+
+   cluster V*' -> right_zeroed;
+
+   cluster V*' -> right_complementable;
+  end;
+
+  definition
+   let K be Abelian add-associative right_zeroed right_complementable
+   left_unital distributive associative commutative (non empty doubleLoopStr);
+   let V be non empty VectSpStr over K;
+   cluster V*' -> VectSp-like;
+  end;
+
+begin :: Semi Norm of Vector Space
+
+  definition
+   let K be 1-sorted;
+   let V be VectSpStr over K;
+   mode RFunctional of V is Function of the carrier of V,REAL;
+   canceled;
+  end;
+
+  definition
+   let K be 1-sorted;
+   let V be non empty VectSpStr over K;
+   let F be RFunctional of V;
+   attr F is subadditive means
+:: HAHNBAN1:def 16
+    for x,y be Vector of V holds F.(x+y) <= F.x+F.y;
+  end;
+
+  definition
+   let K be 1-sorted;
+   let V be non empty VectSpStr over K;
+   let F be RFunctional of V;
+   attr F is additive means
+:: HAHNBAN1:def 17
+    for x,y be Vector of V holds F.(x+y) = F.x+F.y;
+  end;
+
+  definition
+   let V be non empty VectSpStr over F_Complex;
+   let F be RFunctional of V;
+   attr F is Real_homogeneous means
+:: HAHNBAN1:def 18
+    for v be Vector of V
+    for r be Real holds
+     F.([**r,0**]*v) = r*F.v;
+  end;
+
+  theorem :: HAHNBAN1:29
+   for V be VectSp-like (non empty VectSpStr over F_Complex)
+   for F be RFunctional of V st F is Real_homogeneous
+   for v be Vector of V
+   for r be Real holds
+    F.([**0,r**]*v) = r*F.(i_FC*v);
+
+  definition
+   let V be non empty VectSpStr over F_Complex;
+   let F be RFunctional of V;
+   attr F is homogeneous means
+:: HAHNBAN1:def 19
+    for v be Vector of V
+    for r be Scalar of V holds F.(r*v) = |.r.|*F.v;
+  end;
+
+  definition
+   let K be 1-sorted;
+   let V be VectSpStr over K;
+   let F be RFunctional of V;
+   attr F is 0-preserving means
+:: HAHNBAN1:def 20
+      F.(0.V) = 0;
+  end;
+
+  definition
+   let K be 1-sorted;
+   let V be non empty VectSpStr over K;
+   cluster additive -> subadditive RFunctional of V;
+  end;
+
+  definition
+   let V be VectSp of F_Complex;
+   cluster Real_homogeneous -> 0-preserving RFunctional of V;
+  end;
+
+  definition
+   let K be 1-sorted;
+   let V be VectSpStr over K;
+   func 0RFunctional(V) -> RFunctional of V equals
+:: HAHNBAN1:def 21
+    [#]V --> 0;
+  end;
+
+  definition
+   let K be 1-sorted;
+   let V be non empty VectSpStr over K;
+   cluster 0RFunctional(V) -> additive;
+
+   cluster 0RFunctional(V) -> 0-preserving;
+  end;
+
+  definition
+   let V be non empty VectSpStr over F_Complex;
+   cluster 0RFunctional(V) -> Real_homogeneous;
+
+   cluster 0RFunctional(V) -> homogeneous;
+  end;
+
+  definition
+   let K be 1-sorted;
+   let V be non empty VectSpStr over K;
+   cluster additive 0-preserving RFunctional of V;
+  end;
+
+  definition
+   let V be non empty VectSpStr over F_Complex;
+   cluster additive Real_homogeneous homogeneous RFunctional of V;
+  end;
+
+  definition
+   let V be non empty VectSpStr over F_Complex;
+   mode Semi-Norm of V is subadditive homogeneous RFunctional of V;
+  end;
+
+begin :: Hahn Banach Theorem
+
+  definition
+   let V be non empty VectSpStr over F_Complex;
+   func RealVS(V) -> strict RLSStruct means
+:: HAHNBAN1:def 22
+    the LoopStr of it = the LoopStr of V &
+    for r be Real, v be Vector of V holds
+     (the Mult of it).(r,v)=[**r,0**]*v;
+  end;
+
+  definition
+   let V be non empty VectSpStr over F_Complex;
+   cluster RealVS(V) -> non empty;
+  end;
+
+  definition
+   let V be Abelian (non empty VectSpStr over F_Complex);
+   cluster RealVS(V) -> Abelian;
+  end;
+
+  definition
+   let V be add-associative (non empty VectSpStr over F_Complex);
+   cluster RealVS(V) -> add-associative;
+  end;
+
+  definition
+   let V be right_zeroed (non empty VectSpStr over F_Complex);
+   cluster RealVS(V) -> right_zeroed;
+  end;
+
+  definition
+   let V be right_complementable (non empty VectSpStr over F_Complex);
+   cluster RealVS(V) -> right_complementable;
+  end;
+
+  definition
+   let V be VectSp-like (non empty VectSpStr over F_Complex);
+   cluster RealVS(V) -> RealLinearSpace-like;
+  end;
+
+  theorem :: HAHNBAN1:30
+   for V be non empty VectSp of F_Complex
+   for M be Subspace of V holds
+    RealVS(M) is Subspace of RealVS(V);
+
+  theorem :: HAHNBAN1:31
+   for V be non empty VectSpStr over F_Complex
+   for p be RFunctional of V holds
+    p is Functional of RealVS(V);
+
+  theorem :: HAHNBAN1:32
+   for V be non empty VectSp of F_Complex
+   for p be Semi-Norm of V holds
+    p is Banach-Functional of RealVS(V);
+
+  definition
+   let V be non empty VectSpStr over F_Complex;
+   let l be Functional of V;
+   func projRe(l) -> Functional of RealVS(V) means
+:: HAHNBAN1:def 23
+    for i be Element of V holds
+     it.i = Re(l.i);
+  end;
+
+  definition
+   let V be non empty VectSpStr over F_Complex;
+   let l be Functional of V;
+   func projIm(l) -> Functional of RealVS(V) means
+:: HAHNBAN1:def 24
+    for i be Element of V holds
+     it.i = Im(l.i);
+  end;
+
+  definition
+   let V be non empty VectSpStr over F_Complex;
+   let l be Functional of RealVS(V);
+   func RtoC(l) -> RFunctional of V equals
+:: HAHNBAN1:def 25
+    l;
+  end;
+
+  definition
+   let V be non empty VectSpStr over F_Complex;
+   let l be RFunctional of V;
+   func CtoR(l) -> Functional of RealVS(V) equals
+:: HAHNBAN1:def 26
+    l;
+  end;
+
+  definition
+   let V be non empty VectSp of F_Complex;
+   let l be additive Functional of RealVS(V);
+   cluster RtoC(l) -> additive;
+  end;
+
+  definition
+   let V be non empty VectSp of F_Complex;
+   let l be additive RFunctional of V;
+   cluster CtoR(l) -> additive;
+  end;
+
+  definition
+   let V be non empty VectSp of F_Complex;
+   let l be homogeneous Functional of RealVS(V);
+   cluster RtoC(l) -> Real_homogeneous;
+  end;
+
+  definition
+   let V be non empty VectSp of F_Complex;
+   let l be Real_homogeneous RFunctional of V;
+   cluster CtoR(l) -> homogeneous;
+  end;
+
+  definition
+   let V be non empty VectSpStr over F_Complex;
+   let l be RFunctional of V;
+   func i-shift(l) -> RFunctional of V means
+:: HAHNBAN1:def 27
+    for v be Element of V holds
+     it.v = l.(i_FC*v);
+  end;
+
+  definition
+   let V be non empty VectSpStr over F_Complex;
+   let l be Functional of RealVS(V);
+   func prodReIm(l) -> Functional of V means
+:: HAHNBAN1:def 28
+    for v be Element of V holds
+     it.v = [**(RtoC l).v,-(i-shift(RtoC l)).v**];
+  end;
+
+  theorem :: HAHNBAN1:33
+   for V be non empty VectSp of F_Complex
+   for l be linear-Functional of V holds
+    projRe(l) is linear-Functional of RealVS(V);
+
+  theorem :: HAHNBAN1:34
+     for V be non empty VectSp of F_Complex
+   for l be linear-Functional of V holds
+    projIm(l) is linear-Functional of RealVS(V);
+
+  theorem :: HAHNBAN1:35
+   for V be non empty VectSp of F_Complex
+   for l be linear-Functional of RealVS(V) holds
+    prodReIm(l) is linear-Functional of V;
+
+  theorem :: HAHNBAN1:36 :: Hahn Banach Theorem
+     for V be non empty VectSp of F_Complex
+   for p be Semi-Norm of V
+   for M be Subspace of V
+   for l be linear-Functional of M st
+    for e be Vector of M for v be Vector of V st v=e holds |.l.e.| <= p.v
+   ex L be linear-Functional of V st
+    L|the carrier of M = l &
+    for e be Vector of V holds |.L.e.| <= p.e;

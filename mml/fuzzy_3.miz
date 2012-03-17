@@ -1,0 +1,124 @@
+:: Concept of Fuzzy Relation and Basic Properties of Its Operation
+::  by Takashi Mitsuishi , Katsumi Wasaki and Yasunari Shidama
+::
+:: Received September 15, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, FUNCT_3, FUNCT_1, SQUARE_1, FUZZY_1, BOOLE, FUZZY_3,
+      FUNCT_2;
+ notation XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, RELSET_1, FUNCT_2, RFUNCT_1,
+      FUZZY_1;
+ constructors SEQ_1, RFUNCT_1, FUZZY_2, RCOMP_1, XCMPLX_0, MEMBERED;
+ clusters SUBSET_1, MEMBERED;
+ theorems FUZZY_1, FUNCT_2, FUZZY_2;
+
+begin
+
+ reserve C1,C2 for non empty set;
+
+definition let C be non empty set;
+ cluster -> quasi_total Membership_Func of C;
+ coherence
+  proof let f be Membership_Func of C;
+      dom f = C by FUZZY_1:def 1;
+   hence thesis by FUNCT_2:def 1;
+  end;
+end;
+
+definition let C1,C2 be non empty set;
+  mode RMembership_Func of C1,C2 is Membership_Func of [:C1,C2:];
+end;
+
+definition let C1,C2 be non empty set;
+           let h be RMembership_Func of C1,C2;
+  mode FuzzyRelation of C1,C2,h is FuzzySet of [:C1,C2:],h;
+end;
+
+ reserve f,g for RMembership_Func of C1,C2;
+
+begin :: Empty Fuzzy Set and Universal Fuzzy Set
+
+definition let C1,C2 be non empty set;
+  mode Zero_Relation of C1,C2 is Empty_FuzzySet of [:C1,C2:];
+  mode Universe_Relation of C1,C2 is Universal_FuzzySet of [:C1,C2:];
+end;
+
+ reserve X for Universe_Relation of C1,C2;
+ reserve O for Zero_Relation of C1,C2;
+
+definition
+  let C1,C2 be non empty set;
+  func Zmf(C1,C2) -> RMembership_Func of C1,C2 equals :Def1:
+  chi({},[:C1,C2:]);
+  correctness by FUZZY_1:23;
+
+  func Umf(C1,C2) -> RMembership_Func of C1,C2 equals :Def2:
+  chi([:C1,C2:],[:C1,C2:]);
+  correctness by FUZZY_1:2;
+end;
+
+canceled 44;
+
+theorem Th45: Zmf(C1,C2) = EMF [:C1,C2:]
+ proof
+  thus Zmf(C1,C2) = chi({},[:C1,C2:]) by Def1
+    .= EMF [:C1,C2:] by FUZZY_1:def 13;
+ end;
+
+theorem Th46: Umf(C1,C2) = UMF [:C1,C2:]
+ proof
+  thus Umf(C1,C2) = chi([:C1,C2:],[:C1,C2:]) by Def2
+    .= UMF [:C1,C2:] by FUZZY_1:def 14;
+ end;
+
+theorem
+  O is FuzzyRelation of C1,C2,Zmf(C1,C2) by Th45;
+
+theorem
+  X is FuzzyRelation of C1,C2,Umf(C1,C2) by Th46;
+
+canceled 3;
+
+theorem
+  for x be Element of [:C1,C2:],h be RMembership_Func of C1,C2 holds
+(Zmf(C1,C2)).x <= h.x & h.x <= (Umf(C1,C2)).x
+proof
+    Zmf(C1,C2) = EMF [:C1,C2:] & Umf(C1,C2) = UMF [:C1,C2:] by Th45,Th46;
+ hence thesis by FUZZY_1:31;
+end;
+
+theorem
+  max(f,Umf(C1,C2)) = Umf(C1,C2) & min(f,Umf(C1,C2)) = f &
+max(f,Zmf(C1,C2)) = f & min(f,Zmf(C1,C2)) = Zmf(C1,C2)
+proof
+    Zmf(C1,C2) = EMF [:C1,C2:] & Umf(C1,C2) = UMF [:C1,C2:] by Th45,Th46;
+ hence thesis by FUZZY_1:32;
+end;
+
+canceled 7;
+
+theorem
+  1_minus(Zmf(C1,C2)) = Umf(C1,C2) & 1_minus(Umf(C1,C2)) = Zmf(C1,C2)
+proof
+    Zmf(C1,C2) = EMF [:C1,C2:] & Umf(C1,C2) = UMF [:C1,C2:] by Th45,Th46;
+ hence thesis by FUZZY_1:62;
+end;
+
+canceled 59;
+
+theorem
+  min(f,1_minus g) = Zmf(C1,C2) implies
+for c being Element of [:C1,C2:] holds f.c <= g.c
+ proof Zmf(C1,C2) = EMF [:C1,C2:] by Th45;
+  hence thesis by FUZZY_2:59;
+ end;
+
+canceled;
+
+theorem
+  min(f,g) = Zmf(C1,C2) implies min(f,1_minus g) = f
+proof Zmf(C1,C2) = EMF [:C1,C2:] by Th45;
+  hence thesis by FUZZY_2:61;
+end;

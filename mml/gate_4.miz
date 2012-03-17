@@ -1,0 +1,981 @@
+:: Correctness of a Cyclic Redundancy Check Code Generator
+::  by Yuguang Yang , Katsumi Wasaki , Yasushi Fuwa and Yatsuka Nakamura
+::
+:: Received April 16, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary GATE_1;
+ notation GATE_1;
+ constructors GATE_1, XBOOLE_0;
+ theorems GATE_1;
+
+begin
+
+::g0,g1,g2,g3:
+
+:: Correctness of Division Circuits with 12-bit Register and 16-bit Register
+::
+:: Assumptions:
+:: g0,g1,g2,...,g12: the coefficients of divident polynomial;
+:: a0,a1,a2,...,a11: the present state of register;
+:: p: input;
+:: b0,b1,b2,...,b11: the state of register with input p;
+:: A=(a11, a10, ..., a1, a0), B=(b11, b10, ..., b1,b0);
+:: G=(g12,g11,g10,...,g1,g0);
+:: A + B = (a11+b11, a10+b10, ..., a1+b1, a0+b0);
+:: note: the operator + here means exclusive or.
+::
+:: In a division circuit, a shift is expected to complete one step division by
+:: divident polynomial. So we can derive the relation of A, B, G and p as following:
+::   A*2+p=G*a11+B
+:: here, A*2=(a11, a10, ..., a1, a0)*2=(a11, a10, ..., a1, a0,0),
+::       G*a11=(g12 & a11, g11 & a11, g10 & a11,...,g1 & a11, g0 & a11).
+
+theorem
+  for g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,g10,g11,g12,
+        a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,
+        b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,
+        p being set holds
+  $g0 & $g12 &
+  ($b0 iff $XOR2(p,AND2(g0,a11)))&
+  ($b1 iff $XOR2(a0,AND2(g1,a11)))&
+  ($b2 iff $XOR2(a1,AND2(g2,a11)))&
+  ($b3 iff $XOR2(a2,AND2(g3,a11)))&
+  ($b4 iff $XOR2(a3,AND2(g4,a11)))&
+  ($b5 iff $XOR2(a4,AND2(g5,a11)))&
+  ($b6 iff $XOR2(a5,AND2(g6,a11)))&
+  ($b7 iff $XOR2(a6,AND2(g7,a11)))&
+  ($b8 iff $XOR2(a7,AND2(g8,a11)))&
+  ($b9 iff $XOR2(a8,AND2(g9,a11)))&
+  ($b10 iff $XOR2(a9,AND2(g10,a11)))&
+  ($b11 iff $XOR2(a10,AND2(g11,a11)))
+implies
+  ($a11 iff $AND2(g12,a11)) &
+  ($a10 iff $XOR2(b11,AND2(g11,a11)))&
+  ($a9 iff $XOR2(b10,AND2(g10,a11)))&
+  ($a8 iff $XOR2(b9,AND2(g9,a11)))&
+  ($a7 iff $XOR2(b8,AND2(g8,a11)))&
+  ($a6 iff $XOR2(b7,AND2(g7,a11)))&
+  ($a5 iff $XOR2(b6,AND2(g6,a11)))&
+  ($a4 iff $XOR2(b5,AND2(g5,a11)))&
+  ($a3 iff $XOR2(b4,AND2(g4,a11)))&
+  ($a2 iff $XOR2(b3,AND2(g3,a11)))&
+  ($a1 iff $XOR2(b2,AND2(g2,a11)))&
+  ($a0 iff $XOR2(b1,AND2(g1,a11)))&
+  ($p iff $XOR2(b0,AND2(g0,a11)))
+proof
+ let g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,g10,g11,g12,
+        a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,
+        b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,
+        p be set;
+ assume that
+  A1: ($g0 & $g12 ) and
+  A2: ($b0 iff $XOR2(p,AND2(g0,a11)))and
+  A3: ($b1 iff $XOR2(a0,AND2(g1,a11)))and
+  A4: ($b2 iff $XOR2(a1,AND2(g2,a11)))and
+  A5: ($b3 iff $XOR2(a2,AND2(g3,a11)))and
+  A6: ($b4 iff $XOR2(a3,AND2(g4,a11)))and
+  A7: ($b5 iff $XOR2(a4,AND2(g5,a11)))and
+  A8: ($b6 iff $XOR2(a5,AND2(g6,a11)))and
+  A9: ($b7 iff $XOR2(a6,AND2(g7,a11)))and
+  A10: ($b8 iff $XOR2(a7,AND2(g8,a11)))and
+  A11:($b9 iff $XOR2(a8,AND2(g9,a11)))and
+  A12:($b10 iff $XOR2(a9,AND2(g10,a11)))and
+  A13:($b11 iff $XOR2(a10,AND2(g11,a11)));
+
+
+  thus $a11 iff $AND2(g12,a11) by A1,GATE_1:6;
+
+    $XOR2(b11,AND2(g11,a11)) iff
+   ($b11 & not $AND2(g11,a11)) or (not $b11 & $AND2(g11,a11)) by GATE_1:8;
+  hence $a10 iff $XOR2(b11,AND2(g11,a11)) by A13,GATE_1:8;
+
+    $XOR2(b10,AND2(g10,a11)) iff
+  ($b10 & not $AND2(g10,a11)) or (not $b10 & $AND2(g10,a11)) by GATE_1:8;
+  hence $a9 iff $XOR2(b10,AND2(g10,a11)) by A12,GATE_1:8;
+
+    $XOR2(b9,AND2(g9,a11)) iff
+  ($b9 & not $AND2(g9,a11)) or (not $b9 & $AND2(g9,a11)) by GATE_1:8;
+  hence $a8 iff $XOR2(b9,AND2(g9,a11)) by A11,GATE_1:8;
+
+    $XOR2(b8,AND2(g8,a11)) iff
+    ($b8 & not $AND2(g8,a11)) or (not $b8 & $AND2(g8,a11)) by GATE_1:8;
+  hence $a7 iff $XOR2(b8,AND2(g8,a11)) by A10,GATE_1:8;
+
+    $XOR2(b7,AND2(g7,a11)) iff
+     ($b7 & not $AND2(g7,a11)) or (not $b7 & $AND2(g7,a11)) by GATE_1:8;
+  hence $a6 iff $XOR2(b7,AND2(g7,a11)) by A9,GATE_1:8;
+
+    $XOR2(b6,AND2(g6,a11)) iff
+     ($b6 & not $AND2(g6,a11)) or (not $b6 & $AND2(g6,a11)) by GATE_1:8;
+  hence $a5 iff $XOR2(b6,AND2(g6,a11)) by A8,GATE_1:8;
+
+    $XOR2(b5,AND2(g5,a11)) iff
+     ($b5 & not $AND2(g5,a11)) or (not $b5 & $AND2(g5,a11)) by GATE_1:8;
+  hence $a4 iff $XOR2(b5,AND2(g5,a11)) by A7,GATE_1:8;
+
+    $XOR2(b4,AND2(g4,a11)) iff
+     ($b4 & not $AND2(g4,a11)) or (not $b4 & $AND2(g4,a11)) by GATE_1:8;
+  hence $a3 iff $XOR2(b4,AND2(g4,a11)) by A6,GATE_1:8;
+
+    $XOR2(b3,AND2(g3,a11)) iff
+     ($b3 & not $AND2(g3,a11)) or (not $b3 & $AND2(g3,a11)) by GATE_1:8;
+  hence $a2 iff $XOR2(b3,AND2(g3,a11)) by A5,GATE_1:8;
+
+
+  $XOR2(b2,AND2(g2,a11)) iff
+     ($b2 & not $AND2(g2,a11)) or (not $b2 & $AND2(g2,a11)) by GATE_1:8;
+hence $a1 iff $XOR2(b2,AND2(g2,a11)) by A4,GATE_1:8;
+
+  $XOR2(b1,AND2(g1,a11)) iff
+     ($b1 & not $AND2(g1,a11)) or (not $b1 & $AND2(g1,a11)) by GATE_1:8;
+hence $a0 iff $XOR2(b1,AND2(g1,a11)) by A3,GATE_1:8;
+
+  $XOR2(b0,AND2(g0,a11)) iff
+  ($b0 & not $AND2(g0,a11)) or (not $b0 & $AND2(g0,a11)) by GATE_1:8;
+hence $p iff $XOR2(b0, AND2(g0,a11)) by A2,GATE_1:8;
+
+end;
+
+:: Assumptions:
+:: g0,g1,g2,...,g16: the coefficients of divident polynomial;
+:: a0,a1,a2,...,a15: the present state of register;
+:: p: input;
+:: b0,b1,b2,...,b15: the state of register with input p;
+:: A=(a15, a14, ..., a1, a0), B=(b15, b14, ..., b1,b0);
+:: G=(g16,g15,g14,...,g1,g0);
+:: A + B = (a15+b15, a14+b14, ..., a1+b1, a0+b0);
+:: note: the operator + here means exclusive or.
+::
+:: In a division circuit, a shift is expected to complete one step division by
+:: divident polynomial. So we can derive the relation of A, B, G and p as following:
+::   A*2+p=G*a15+B
+:: here, A*2=(a15, a14, ..., a1, a0)*2=(a15, a14, ..., a1, a0,0),
+::       G*a15=(g16 & a15, g15 & a15, g14 & a15,...,g1 & a15, g0 & a15).
+
+theorem
+  for g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,g10,g11,g12,g13,g14,g15,g16,
+        a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,
+        b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14,b15,
+        p
+being set holds
+  $g0 & $g16 &
+  ($b0 iff $XOR2(p,AND2(g0,a15)))&
+  ($b1 iff $XOR2(a0,AND2(g1,a15)))&
+  ($b2 iff $XOR2(a1,AND2(g2,a15)))&
+  ($b3 iff $XOR2(a2,AND2(g3,a15)))&
+  ($b4 iff $XOR2(a3,AND2(g4,a15)))&
+  ($b5 iff $XOR2(a4,AND2(g5,a15)))&
+  ($b6 iff $XOR2(a5,AND2(g6,a15)))&
+  ($b7 iff $XOR2(a6,AND2(g7,a15)))&
+  ($b8 iff $XOR2(a7,AND2(g8,a15)))&
+  ($b9 iff $XOR2(a8,AND2(g9,a15)))&
+  ($b10 iff $XOR2(a9,AND2(g10,a15)))&
+  ($b11 iff $XOR2(a10,AND2(g11,a15)))&
+  ($b12 iff $XOR2(a11,AND2(g12,a15)))&
+  ($b13 iff $XOR2(a12,AND2(g13,a15)))&
+  ($b14 iff $XOR2(a13,AND2(g14,a15)))&
+  ($b15 iff $XOR2(a14,AND2(g15,a15)))
+
+implies
+  ($a15 iff $AND2(g16,a15)) &
+  ($a14 iff $XOR2(b15,AND2(g15,a15)))&
+  ($a13 iff $XOR2(b14,AND2(g14,a15)))&
+  ($a12 iff $XOR2(b13,AND2(g13,a15)))&
+  ($a11 iff $XOR2(b12,AND2(g12,a15)))&
+  ($a10 iff $XOR2(b11,AND2(g11,a15)))&
+  ($a9 iff $XOR2(b10,AND2(g10,a15)))&
+  ($a8 iff $XOR2(b9,AND2(g9,a15)))&
+  ($a7 iff $XOR2(b8,AND2(g8,a15)))&
+  ($a6 iff $XOR2(b7,AND2(g7,a15)))&
+  ($a5 iff $XOR2(b6,AND2(g6,a15)))&
+  ($a4 iff $XOR2(b5,AND2(g5,a15)))&
+  ($a3 iff $XOR2(b4,AND2(g4,a15)))&
+  ($a2 iff $XOR2(b3,AND2(g3,a15)))&
+  ($a1 iff $XOR2(b2,AND2(g2,a15)))&
+  ($a0 iff $XOR2(b1,AND2(g1,a15)))&
+  ($p iff $XOR2(b0,AND2(g0,a15)))
+proof
+ let g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,g10,g11,g12,g13,g14,g15,g16,
+        a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,
+        b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14,b15,
+        p be set;
+ assume that
+  A1: ($g0 & $g16 ) and
+  A2: ($b0 iff $XOR2(p,AND2(g0,a15)))and
+  A3: ($b1 iff $XOR2(a0,AND2(g1,a15)))and
+  A4: ($b2 iff $XOR2(a1,AND2(g2,a15)))and
+  A5: ($b3 iff $XOR2(a2,AND2(g3,a15)))and
+  A6: ($b4 iff $XOR2(a3,AND2(g4,a15)))and
+  A7: ($b5 iff $XOR2(a4,AND2(g5,a15)))and
+  A8: ($b6 iff $XOR2(a5,AND2(g6,a15)))and
+  A9: ($b7 iff $XOR2(a6,AND2(g7,a15)))and
+  A10: ($b8 iff $XOR2(a7,AND2(g8,a15)))and
+  A11:($b9 iff $XOR2(a8,AND2(g9,a15)))and
+  A12:($b10 iff $XOR2(a9,AND2(g10,a15)))and
+  A13:($b11 iff $XOR2(a10,AND2(g11,a15))) and
+  A14:($b12 iff $XOR2(a11,AND2(g12,a15)))and
+  A15:($b13 iff $XOR2(a12,AND2(g13,a15)))and
+  A16:($b14 iff $XOR2(a13,AND2(g14,a15)))and
+  A17:($b15 iff $XOR2(a14,AND2(g15,a15)));
+
+
+  thus $a15 iff $AND2(g16,a15) by A1,GATE_1:6;
+
+    $XOR2(b15,AND2(g15,a15)) iff
+        ($b15 & not $AND2(g15,a15)) or (not $b15 & $AND2(g15,a15)) by GATE_1:8;
+  hence $a14 iff $XOR2(b15,AND2(g15,a15)) by A17,GATE_1:8;
+
+    $XOR2(b14,AND2(g14,a15)) iff
+       ($b14 & not $AND2(g14,a15)) or (not $b14 & $AND2(g14,a15)) by GATE_1:8;
+  hence $a13 iff $XOR2(b14,AND2(g14,a15)) by A16,GATE_1:8;
+
+    $XOR2(b13,AND2(g13,a15)) iff
+       ($b13 & not $AND2(g13,a15)) or (not $b13 & $AND2(g13,a15)) by GATE_1:8;
+  hence $a12 iff $XOR2(b13,AND2(g13,a15)) by A15,GATE_1:8;
+
+    $XOR2(b12,AND2(g12,a15)) iff
+     ($b12 & not $AND2(g12,a15)) or (not $b12 & $AND2(g12,a15)) by GATE_1:8;
+  hence $a11 iff $XOR2(b12,AND2(g12,a15)) by A14,GATE_1:8;
+
+    $XOR2(b11,AND2(g11,a15)) iff
+   ($b11 & not $AND2(g11,a15)) or (not $b11 & $AND2(g11,a15)) by GATE_1:8;
+  hence $a10 iff $XOR2(b11,AND2(g11,a15)) by A13,GATE_1:8;
+
+    $XOR2(b10,AND2(g10,a15)) iff
+  ($b10 & not $AND2(g10,a15)) or (not $b10 & $AND2(g10,a15)) by GATE_1:8;
+  hence $a9 iff $XOR2(b10,AND2(g10,a15)) by A12,GATE_1:8;
+
+    $XOR2(b9,AND2(g9,a15)) iff
+  ($b9 & not $AND2(g9,a15)) or (not $b9 & $AND2(g9,a15)) by GATE_1:8;
+  hence $a8 iff $XOR2(b9,AND2(g9,a15)) by A11,GATE_1:8;
+
+    $XOR2(b8,AND2(g8,a15)) iff
+    ($b8 & not $AND2(g8,a15)) or (not $b8 & $AND2(g8,a15)) by GATE_1:8;
+  hence $a7 iff $XOR2(b8,AND2(g8,a15)) by A10,GATE_1:8;
+
+    $XOR2(b7,AND2(g7,a15)) iff
+     ($b7 & not $AND2(g7,a15)) or (not $b7 & $AND2(g7,a15)) by GATE_1:8;
+  hence $a6 iff $XOR2(b7,AND2(g7,a15)) by A9,GATE_1:8;
+
+    $XOR2(b6,AND2(g6,a15)) iff
+     ($b6 & not $AND2(g6,a15)) or (not $b6 & $AND2(g6,a15)) by GATE_1:8;
+  hence $a5 iff $XOR2(b6,AND2(g6,a15)) by A8,GATE_1:8;
+
+    $XOR2(b5,AND2(g5,a15)) iff
+     ($b5 & not $AND2(g5,a15)) or (not $b5 & $AND2(g5,a15)) by GATE_1:8;
+  hence $a4 iff $XOR2(b5,AND2(g5,a15)) by A7,GATE_1:8;
+
+    $XOR2(b4,AND2(g4,a15)) iff
+     ($b4 & not $AND2(g4,a15)) or (not $b4 & $AND2(g4,a15)) by GATE_1:8;
+  hence $a3 iff $XOR2(b4,AND2(g4,a15)) by A6,GATE_1:8;
+
+    $XOR2(b3,AND2(g3,a15)) iff
+     ($b3 & not $AND2(g3,a15)) or (not $b3 & $AND2(g3,a15)) by GATE_1:8;
+  hence $a2 iff $XOR2(b3,AND2(g3,a15)) by A5,GATE_1:8;
+
+
+  $XOR2(b2,AND2(g2,a15)) iff
+     ($b2 & not $AND2(g2,a15)) or (not $b2 & $AND2(g2,a15)) by GATE_1:8;
+hence $a1 iff $XOR2(b2,AND2(g2,a15)) by A4,GATE_1:8;
+
+  $XOR2(b1,AND2(g1,a15)) iff
+     ($b1 & not $AND2(g1,a15)) or (not $b1 & $AND2(g1,a15)) by GATE_1:8;
+hence $a0 iff $XOR2(b1,AND2(g1,a15)) by A3,GATE_1:8;
+
+  $XOR2(b0,AND2(g0,a15)) iff
+  ($b0 & not $AND2(g0,a15)) or (not $b0 & $AND2(g0,a15)) by GATE_1:8;
+hence $p iff $XOR2(b0, AND2(g0,a15)) by A2,GATE_1:8;
+
+end;
+
+begin:: Correctness of CRC Circuits with Generator Polynomial of
+     :: Degree 12 and 16
+
+:: Assumptions:
+:: g0,g1,g2,...,g12: the coefficients of generator polynomial;
+:: a0,a1,a2,...,a11: the present state of register;
+:: p: input;
+:: b0,b1,b2,...,b11: the state of register after a shift with input p;
+:: A=(a11, a10, ..., a1, a0), B=(b11, b10, ..., b1,b0);
+:: G=(g12,g11,g10,...,g1,g0)
+:: A + B=(a11+b11, a10+b10, ..., a1+b1, a0+b0);
+:: note: the operator + here means exclusive or;
+:: A*2=(a11, a10, ..., a1, a0)*2=(a11, a10, ..., a1, a0,0);
+:: G*a11=(g12 & a11, g11 & a11, g10 & a11,...,g1 & a11, g0 & a11);
+:: 2^11 means 2 to the 11th power.
+::
+::
+:: In a CRC circuit, with assumption that A is the remainder of message M*2^11
+:: divided by G, B which is the contents of register after one shift is expected
+:: to be the remainder of (M*2 + p)*2^11 divided by G. That means
+:: B= mod((M*2 + p)*2^11,G)
+::  = mod(M*2^12+ p*2^11,G)
+::  = mod(M*2^12,G) + mod(p*2^11,G)
+::  = mod(A*2,G) + mod(p*2^11,G)
+::  = (A*2+G*a11)+(p*2^11 + G*p);
+::
+:: Note: The initial state of register can be regarded as M=0.
+
+theorem
+  for g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,g10,g11,g12,
+        a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,
+        b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,
+        z,p
+being set holds
+  $g0 & $g12 & not $z &
+  ($b0 iff $XOR2(p,a11))&
+  ($b1 iff $XOR2(a0,AND2(g1,b0)))&
+  ($b2 iff $XOR2(a1,AND2(g2,b0)))&
+  ($b3 iff $XOR2(a2,AND2(g3,b0)))&
+  ($b4 iff $XOR2(a3,AND2(g4,b0)))&
+  ($b5 iff $XOR2(a4,AND2(g5,b0)))&
+  ($b6 iff $XOR2(a5,AND2(g6,b0)))&
+  ($b7 iff $XOR2(a6,AND2(g7,b0)))&
+  ($b8 iff $XOR2(a7,AND2(g8,b0)))&
+  ($b9 iff $XOR2(a8,AND2(g9,b0)))&
+  ($b10 iff $XOR2(a9,AND2(g10,b0)))&
+  ($b11 iff $XOR2(a10,AND2(g11,b0)))
+implies
+  ($b11 iff $XOR2(XOR2(a10,AND2(g11,a11)),XOR2(z,AND2(g11,p)))) &
+  ($b10 iff $XOR2(XOR2(a9,AND2(g10,a11)),XOR2(z,AND2(g10,p)))) &
+  ($b9 iff $XOR2(XOR2(a8,AND2(g9,a11)),XOR2(z,AND2(g9,p)))) &
+  ($b8 iff $XOR2(XOR2(a7,AND2(g8,a11)),XOR2(z,AND2(g8,p)))) &
+  ($b7 iff $XOR2(XOR2(a6,AND2(g7,a11)),XOR2(z,AND2(g7,p)))) &
+  ($b6 iff $XOR2(XOR2(a5,AND2(g6,a11)),XOR2(z,AND2(g6,p)))) &
+  ($b5 iff $XOR2(XOR2(a4,AND2(g5,a11)),XOR2(z,AND2(g5,p)))) &
+  ($b4 iff $XOR2(XOR2(a3,AND2(g4,a11)),XOR2(z,AND2(g4,p)))) &
+  ($b3 iff $XOR2(XOR2(a2,AND2(g3,a11)),XOR2(z,AND2(g3,p)))) &
+  ($b2 iff $XOR2(XOR2(a1,AND2(g2,a11)),XOR2(z,AND2(g2,p)))) &
+  ($b1 iff $XOR2(XOR2(a0,AND2(g1,a11)),XOR2(z,AND2(g1,p)))) &
+  ($b0 iff $XOR2(XOR2(z, AND2(g0,a11)),XOR2(z,AND2(g0,p))))
+proof
+  let g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,g10,g11,g12,
+          a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,
+          b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,
+          z,p be set;
+   assume that
+  A1: ($g0 & $g12 & not $z )and
+  A2: ($b0 iff $XOR2(p,a11))and
+  A3: ($b1 iff $XOR2(a0,AND2(g1,b0)))and
+  A4: ($b2 iff $XOR2(a1,AND2(g2,b0)))and
+  A5: ($b3 iff $XOR2(a2,AND2(g3,b0)))and
+  A6: ($b4 iff $XOR2(a3,AND2(g4,b0)))and
+  A7: ($b5 iff $XOR2(a4,AND2(g5,b0)))and
+  A8: ($b6 iff $XOR2(a5,AND2(g6,b0)))and
+  A9: ($b7 iff $XOR2(a6,AND2(g7,b0)))and
+  A10: ($b8 iff $XOR2(a7,AND2(g8,b0)))and
+  A11:($b9 iff $XOR2(a8,AND2(g9,b0)))and
+  A12:($b10 iff $XOR2(a9,AND2(g10,b0)))and
+  A13:($b11 iff $XOR2(a10,AND2(g11,b0)));
+
+  $XOR2(XOR2(a10,AND2(g11,a11)),XOR2(z,AND2(g11,p))) iff
+ $XOR2(a10,AND2(g11,a11)) & not $XOR2(z,AND2(g11,p)) or
+ not $XOR2(a10,AND2(g11,a11)) & $XOR2(z,AND2(g11,p)) by GATE_1:8;
+then $XOR2(XOR2(a10,AND2(g11,a11)),XOR2(z,AND2(g11,p))) iff
+ (($a10 & not $AND2(g11,a11)) or (not $a10 & $AND2(g11,a11)))
+      & not $AND2(g11,p) or
+ not (($a10 & not $AND2(g11,a11)) or (not $a10 & $AND2(g11,a11)))& $AND2(g11,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a10,AND2(g11,a11)),XOR2(z,AND2(g11,p))) iff
+  (($a10 & (not $g11 or not $a11) & (not $g11 or not $p)) or
+    (not $a10 & $g11 & $a11 & (not $g11 or not $p))) or
+  (((not $a10 or ($g11 & $a11)) & ($a10 or not ($g11 & $a11)))
+   & $g11 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a10,AND2(g11,a11)),XOR2(z,AND2(g11,p))) iff
+  ($a10 & not $AND2(g11,b0)) or (not $a10 & $AND2(g11,b0)) by A2,GATE_1:6,8;
+hence $b11 iff $XOR2(XOR2(a10,AND2(g11,a11)),XOR2(z,AND2(g11,p)))
+  by A13,GATE_1:8;
+
+  $XOR2(XOR2(a9,AND2(g10,a11)),XOR2(z,AND2(g10,p))) iff
+ $XOR2(a9,AND2(g10,a11)) & not $XOR2(z,AND2(g10,p)) or
+ not $XOR2(a9,AND2(g10,a11)) & $XOR2(z,AND2(g10,p)) by GATE_1:8;
+then $XOR2(XOR2(a9,AND2(g10,a11)),XOR2(z,AND2(g10,p))) iff
+ (($a9 & not $AND2(g10,a11)) or (not $a9 & $AND2(g10,a11)))
+      & not $AND2(g10,p) or
+ not (($a9 & not $AND2(g10,a11)) or (not $a9 & $AND2(g10,a11)))& $AND2(g10,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a9,AND2(g10,a11)),XOR2(z,AND2(g10,p))) iff
+  (($a9 & (not $g10 or not $a11) & (not $g10 or not $p)) or
+    (not $a9 & $g10 & $a11 & (not $g10 or not $p))) or
+  (((not $a9 or ($g10 & $a11)) & ($a9 or not ($g10 & $a11)))
+   & $g10 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a9,AND2(g10,a11)),XOR2(z,AND2(g10,p))) iff
+  ($a9 & not $AND2(g10,b0)) or (not $a9 & $AND2(g10,b0)) by A2,GATE_1:6,8;
+hence $b10 iff $XOR2(XOR2(a9,AND2(g10,a11)),XOR2(z,AND2(g10,p)))
+  by A12,GATE_1:8;
+
+  $XOR2(XOR2(a8,AND2(g9,a11)),XOR2(z,AND2(g9,p))) iff
+ $XOR2(a8,AND2(g9,a11)) & not $XOR2(z,AND2(g9,p)) or
+ not $XOR2(a8,AND2(g9,a11)) & $XOR2(z,AND2(g9,p)) by GATE_1:8;
+then $XOR2(XOR2(a8,AND2(g9,a11)),XOR2(z,AND2(g9,p))) iff
+ (($a8 & not $AND2(g9,a11)) or (not $a8 & $AND2(g9,a11)))
+      & not $AND2(g9,p) or
+ not (($a8 & not $AND2(g9,a11)) or (not $a8 & $AND2(g9,a11)))& $AND2(g9,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a8,AND2(g9,a11)),XOR2(z,AND2(g9,p))) iff
+  (($a8 & (not $g9 or not $a11) & (not $g9 or not $p)) or
+    (not $a8 & $g9 & $a11 & (not $g9 or not $p))) or
+  (((not $a8 or ($g9 & $a11)) & ($a8 or not ($g9 & $a11)))
+   & $g9 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a8,AND2(g9,a11)),XOR2(z,AND2(g9,p))) iff
+  ($a8 & not $AND2(g9,b0)) or (not $a8 & $AND2(g9,b0)) by A2,GATE_1:6,8;
+hence $b9 iff $XOR2(XOR2(a8,AND2(g9,a11)),XOR2(z,AND2(g9,p)))
+  by A11,GATE_1:8;
+
+  $XOR2(XOR2(a7,AND2(g8,a11)),XOR2(z,AND2(g8,p))) iff
+ $XOR2(a7,AND2(g8,a11)) & not $XOR2(z,AND2(g8,p)) or
+ not $XOR2(a7,AND2(g8,a11)) & $XOR2(z,AND2(g8,p)) by GATE_1:8;
+then $XOR2(XOR2(a7,AND2(g8,a11)),XOR2(z,AND2(g8,p))) iff
+ (($a7 & not $AND2(g8,a11)) or (not $a7 & $AND2(g8,a11)))
+      & not $AND2(g8,p) or
+ not (($a7 & not $AND2(g8,a11)) or (not $a7 & $AND2(g8,a11)))& $AND2(g8,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a7,AND2(g8,a11)),XOR2(z,AND2(g8,p))) iff
+  (($a7 & (not $g8 or not $a11) & (not $g8 or not $p)) or
+    (not $a7 & $g8 & $a11 & (not $g8 or not $p))) or
+  (((not $a7 or ($g8 & $a11)) & ($a7 or not ($g8 & $a11)))
+   & $g8 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a7,AND2(g8,a11)),XOR2(z,AND2(g8,p))) iff
+  ($a7 & not $AND2(g8,b0)) or (not $a7 & $AND2(g8,b0)) by A2,GATE_1:6,8;
+hence $b8 iff $XOR2(XOR2(a7,AND2(g8,a11)),XOR2(z,AND2(g8,p)))
+  by A10,GATE_1:8;
+
+
+
+  $XOR2(XOR2(a6,AND2(g7,a11)),XOR2(z,AND2(g7,p))) iff
+ $XOR2(a6,AND2(g7,a11)) & not $XOR2(z,AND2(g7,p)) or
+ not $XOR2(a6,AND2(g7,a11)) & $XOR2(z,AND2(g7,p)) by GATE_1:8;
+then $XOR2(XOR2(a6,AND2(g7,a11)),XOR2(z,AND2(g7,p))) iff
+ (($a6 & not $AND2(g7,a11)) or (not $a6 & $AND2(g7,a11)))
+      & not $AND2(g7,p) or
+ not (($a6 & not $AND2(g7,a11)) or (not $a6 & $AND2(g7,a11)))& $AND2(g7,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a6,AND2(g7,a11)),XOR2(z,AND2(g7,p))) iff
+  (($a6 & (not $g7 or not $a11) & (not $g7 or not $p)) or
+    (not $a6 & $g7 & $a11 & (not $g7 or not $p))) or
+  (((not $a6 or ($g7 & $a11)) & ($a6 or not ($g7 & $a11)))
+   & $g7 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a6,AND2(g7,a11)),XOR2(z,AND2(g7,p))) iff
+  ($a6 & not $AND2(g7,b0)) or (not $a6 & $AND2(g7,b0)) by A2,GATE_1:6,8;
+hence $b7 iff $XOR2(XOR2(a6,AND2(g7,a11)),XOR2(z,AND2(g7,p)))
+  by A9,GATE_1:8;
+
+
+  $XOR2(XOR2(a5,AND2(g6,a11)),XOR2(z,AND2(g6,p))) iff
+ $XOR2(a5,AND2(g6,a11)) & not $XOR2(z,AND2(g6,p)) or
+ not $XOR2(a5,AND2(g6,a11)) & $XOR2(z,AND2(g6,p)) by GATE_1:8;
+then $XOR2(XOR2(a5,AND2(g6,a11)),XOR2(z,AND2(g6,p))) iff
+ (($a5 & not $AND2(g6,a11) & not $AND2(g6,p)) or
+   (not $a5 & $AND2(g6,a11) & not $AND2(g6,p))) or
+ ((not ($a5 & not $AND2(g6,a11)) & not (not $a5 & $AND2(g6,a11)))
+   & $AND2(g6,p)) by A1,GATE_1:8;
+then $XOR2(XOR2(a5,AND2(g6,a11)),XOR2(z,AND2(g6,p))) iff
+  (($a5 & (not $g6 or not $a11) & (not $g6 or not $p)) or
+    (not $a5 & $g6 & $a11 & (not $g6 or not $p))) or
+  (((not $a5 or ($g6 & $a11)) & ($a5 or not ($g6 & $a11)))
+   & $g6 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a5,AND2(g6,a11)),XOR2(z,AND2(g6,p))) iff
+  ($a5 & not $AND2(g6,b0)) or (not $a5 & $AND2(g6,b0)) by A2,GATE_1:6,8;
+hence $b6 iff $XOR2(XOR2(a5,AND2(g6,a11)),XOR2(z,AND2(g6,p)))
+  by A8,GATE_1:8;
+
+
+  $XOR2(XOR2(a4,AND2(g5,a11)),XOR2(z,AND2(g5,p))) iff
+ $XOR2(a4,AND2(g5,a11)) & not $XOR2(z,AND2(g5,p)) or
+ not $XOR2(a4,AND2(g5,a11)) & $XOR2(z,AND2(g5,p)) by GATE_1:8;
+then $XOR2(XOR2(a4,AND2(g5,a11)),XOR2(z,AND2(g5,p))) iff
+ (($a4 & not $AND2(g5,a11)) or (not $a4 & $AND2(g5,a11)))
+      & not $AND2(g5,p) or
+ not (($a4 & not $AND2(g5,a11)) or (not $a4 & $AND2(g5,a11)))& $AND2(g5,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a4,AND2(g5,a11)),XOR2(z,AND2(g5,p))) iff
+  (($a4 & (not $g5 or not $a11) & (not $g5 or not $p)) or
+    (not $a4 & $g5 & $a11 & (not $g5 or not $p))) or
+  (((not $a4 or ($g5 & $a11)) & ($a4 or not ($g5 & $a11)))
+   & $g5 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a4,AND2(g5,a11)),XOR2(z,AND2(g5,p))) iff
+  ($a4 & not $AND2(g5,b0)) or (not $a4 & $AND2(g5,b0)) by A2,GATE_1:6,8;
+hence $b5 iff $XOR2(XOR2(a4,AND2(g5,a11)),XOR2(z,AND2(g5,p)))
+  by A7,GATE_1:8;
+
+
+  $XOR2(XOR2(a3,AND2(g4,a11)),XOR2(z,AND2(g4,p))) iff
+ $XOR2(a3,AND2(g4,a11)) & not $XOR2(z,AND2(g4,p)) or
+ not $XOR2(a3,AND2(g4,a11)) & $XOR2(z,AND2(g4,p)) by GATE_1:8;
+then $XOR2(XOR2(a3,AND2(g4,a11)),XOR2(z,AND2(g4,p))) iff
+ (($a3 & not $AND2(g4,a11) & not $AND2(g4,p)) or
+   (not $a3 & $AND2(g4,a11) & not $AND2(g4,p))) or
+ ((not ($a3 & not $AND2(g4,a11)) & not (not $a3 & $AND2(g4,a11)))
+   & $AND2(g4,p)) by A1,GATE_1:8;
+then $XOR2(XOR2(a3,AND2(g4,a11)),XOR2(z,AND2(g4,p))) iff
+  (($a3 & (not $g4 or not $a11) & (not $g4 or not $p)) or
+    (not $a3 & $g4 & $a11 & (not $g4 or not $p))) or
+  (((not $a3 or ($g4 & $a11)) & ($a3 or not ($g4 & $a11)))
+   & $g4 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a3,AND2(g4,a11)),XOR2(z,AND2(g4,p))) iff
+  ($a3 & not $AND2(g4,b0)) or (not $a3 & $AND2(g4,b0)) by A2,GATE_1:6,8;
+hence $b4 iff $XOR2(XOR2(a3,AND2(g4,a11)),XOR2(z,AND2(g4,p)))
+  by A6,GATE_1:8;
+
+  $XOR2(XOR2(a2,AND2(g3,a11)),XOR2(z,AND2(g3,p))) iff
+ $XOR2(a2,AND2(g3,a11)) & not $XOR2(z,AND2(g3,p)) or
+ not $XOR2(a2,AND2(g3,a11)) & $XOR2(z,AND2(g3,p)) by GATE_1:8;
+then $XOR2(XOR2(a2,AND2(g3,a11)),XOR2(z,AND2(g3,p))) iff
+ (($a2 & not $AND2(g3,a11) & not $AND2(g3,p)) or
+   (not $a2 & $AND2(g3,a11) & not $AND2(g3,p))) or
+ ((not ($a2 & not $AND2(g3,a11)) & not (not $a2 & $AND2(g3,a11)))
+   & $AND2(g3,p)) by A1,GATE_1:8;
+then $XOR2(XOR2(a2,AND2(g3,a11)),XOR2(z,AND2(g3,p))) iff
+  (($a2 & (not $g3 or not $a11) & (not $g3 or not $p)) or
+    (not $a2 & $g3 & $a11 & (not $g3 or not $p))) or
+  (((not $a2 or ($g3 & $a11)) & ($a2 or not ($g3 & $a11)))
+   & $g3 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a2,AND2(g3,a11)),XOR2(z,AND2(g3,p))) iff
+  ($a2 & not $AND2(g3,b0)) or (not $a2 & $AND2(g3,b0)) by A2,GATE_1:6,8;
+hence $b3 iff $XOR2(XOR2(a2,AND2(g3,a11)),XOR2(z,AND2(g3,p)))
+  by A5,GATE_1:8;
+
+
+  $XOR2(XOR2(a1,AND2(g2,a11)),XOR2(z,AND2(g2,p))) iff
+ $XOR2(a1,AND2(g2,a11)) & not $XOR2(z,AND2(g2,p)) or
+ not $XOR2(a1,AND2(g2,a11)) & $XOR2(z,AND2(g2,p)) by GATE_1:8;
+then $XOR2(XOR2(a1,AND2(g2,a11)),XOR2(z,AND2(g2,p))) iff
+ (($a1 & not $AND2(g2,a11)) or (not $a1 & $AND2(g2,a11)))
+      & not $AND2(g2,p) or
+ not (($a1 & not $AND2(g2,a11)) or (not $a1 & $AND2(g2,a11)))& $AND2(g2,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a1,AND2(g2,a11)),XOR2(z,AND2(g2,p))) iff
+  (($a1 & (not $g2 or not $a11) & (not $g2 or not $p)) or
+    (not $a1 & $g2 & $a11 & (not $g2 or not $p))) or
+  (((not $a1 or ($g2 & $a11)) & ($a1 or not ($g2 & $a11)))
+   & $g2 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a1,AND2(g2,a11)),XOR2(z,AND2(g2,p))) iff
+  ($a1 & not $AND2(g2,b0)) or (not $a1 & $AND2(g2,b0)) by A2,GATE_1:6,8;
+hence $b2 iff $XOR2(XOR2(a1,AND2(g2,a11)),XOR2(z,AND2(g2,p)))
+  by A4,GATE_1:8;
+
+
+  $XOR2(XOR2(a0,AND2(g1,a11)),XOR2(z,AND2(g1,p))) iff
+ $XOR2(a0,AND2(g1,a11)) & not $XOR2(z,AND2(g1,p)) or
+ not $XOR2(a0,AND2(g1,a11)) & $XOR2(z,AND2(g1,p)) by GATE_1:8;
+then $XOR2(XOR2(a0,AND2(g1,a11)),XOR2(z,AND2(g1,p))) iff
+ (($a0 & not $AND2(g1,a11)) or (not $a0 & $AND2(g1,a11)))
+      & not $AND2(g1,p) or
+ not (($a0 & not $AND2(g1,a11)) or (not $a0 & $AND2(g1,a11)))& $AND2(g1,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a0,AND2(g1,a11)),XOR2(z,AND2(g1,p))) iff
+  (($a0 & (not $g1 or not $a11) & (not $g1 or not $p)) or
+    (not $a0 & $g1 & $a11 & (not $g1 or not $p))) or
+  (((not $a0 or ($g1 & $a11)) & ($a0 or not ($g1 & $a11)))
+   & $g1 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a0,AND2(g1,a11)),XOR2(z,AND2(g1,p))) iff
+  ($a0 & not $AND2(g1,b0)) or (not $a0 & $AND2(g1,b0)) by A2,GATE_1:6,8;
+hence $b1 iff $XOR2(XOR2(a0,AND2(g1,a11)),XOR2(z,AND2(g1,p)))
+  by A3,GATE_1:8;
+
+  $XOR2(XOR2(z,AND2(g0,a11)),XOR2(z,AND2(g0,p))) iff
+ $XOR2(z,AND2(g0,a11)) & not $XOR2(z,AND2(g0,p)) or
+ not $XOR2(z,AND2(g0,a11)) & $XOR2(z,AND2(g0,p)) by GATE_1:8;
+then $XOR2(XOR2(z,AND2(g0,a11)),XOR2(z,AND2(g0,p))) iff
+ (($z & not $AND2(g0,a11) & not $AND2(g0,p)) or
+   (not $z & $AND2(g0,a11) & not $AND2(g0,p))) or
+ ((not ($z & not $AND2(g0,a11)) & not (not $z & $AND2(g0,a11)))
+   & $AND2(g0,p)) by A1,GATE_1:8;
+then $XOR2(XOR2(z,AND2(g0,a11)),XOR2(z,AND2(g0,p))) iff
+  (($z & (not $g0 or not $a11) & (not $g0 or not $p)) or
+    (not $z & $g0 & $a11 & (not $g0 or not $p))) or
+  (((not $z or ($g0 & $a11)) & ($z or not ($g0 & $a11)))
+   & $g0 & $p ) by GATE_1:6;
+hence $b0 iff $XOR2(XOR2(z,AND2(g0,a11)),XOR2(z,AND2(g0,p)))
+  by A1,A2,GATE_1:8;
+end;
+
+
+:: Assumptions:
+:: g0,g1,g2,...,g16: the coefficients of generator polynomial;
+:: a0,a1,a2,...,a15: the present state of register;
+:: p: input;
+:: b0,b1,b2,...,b15: the state of register with input p;
+:: A=(a15, a10, ..., a1, a0), B=(b11, b10, ..., b1,b0);
+:: G=(g16,g15,g14,...,g1,g0)
+:: A + B=(a15+b15, a14+b14, ..., a1+b1, a0+b0);
+:: note: the operator + here means exclusive or;
+:: A*2= (a15, a14, ..., a1, a0)*2=(a15, a14, ..., a1, a0,0);
+:: G*a15=(g16 & a15, g15 & a15, g14 & a15,...,g1 & a15, g0 & a15);
+:: 2^15 means 2 to the 15th power.
+::
+:: In a CRC circuit, with assumption that A is the remainder of message M*2^15
+:: divided by G, B which is the contents of register after one shift is expected
+:: to be the remainder of (M*2 + p)*2^15 divided by G. That means
+:: B= mod((M*2 + p)*2^15,G)
+::  = mod(M*2^16+ p*2^15,G)
+::  = mod(M*2^16,G) + mod(p*2^15,G)
+::  = mod(A*2,G) + mod(p*2^15,G)
+::  = (A*2+G*a15)+(p*2^15 + G*p);
+::
+:: Note: The initial state of register can be regarded as M=0.
+
+theorem
+  for g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,g10,g11,g12,g13,g14,g15,g16,
+        a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,
+        b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14,b15,
+        z,p
+being set holds
+  $g0 & $g16 & not $z &
+  ($b0 iff $XOR2(p,a15))&
+  ($b1 iff $XOR2(a0,AND2(g1,b0)))&
+  ($b2 iff $XOR2(a1,AND2(g2,b0)))&
+  ($b3 iff $XOR2(a2,AND2(g3,b0)))&
+  ($b4 iff $XOR2(a3,AND2(g4,b0)))&
+  ($b5 iff $XOR2(a4,AND2(g5,b0)))&
+  ($b6 iff $XOR2(a5,AND2(g6,b0)))&
+  ($b7 iff $XOR2(a6,AND2(g7,b0)))&
+  ($b8 iff $XOR2(a7,AND2(g8,b0)))&
+  ($b9 iff $XOR2(a8,AND2(g9,b0)))&
+  ($b10 iff $XOR2(a9,AND2(g10,b0)))&
+  ($b11 iff $XOR2(a10,AND2(g11,b0)))&
+  ($b12 iff $XOR2(a11,AND2(g12,b0)))&
+  ($b13 iff $XOR2(a12,AND2(g13,b0)))&
+  ($b14 iff $XOR2(a13,AND2(g14,b0)))&
+  ($b15 iff $XOR2(a14,AND2(g15,b0)))
+implies
+  ($b15 iff $XOR2(XOR2(a14,AND2(g15,a15)),XOR2(z,AND2(g15,p)))) &
+  ($b14 iff $XOR2(XOR2(a13,AND2(g14,a15)),XOR2(z,AND2(g14,p)))) &
+  ($b13 iff $XOR2(XOR2(a12,AND2(g13,a15)),XOR2(z,AND2(g13,p)))) &
+  ($b12 iff $XOR2(XOR2(a11,AND2(g12,a15)),XOR2(z,AND2(g12,p)))) &
+  ($b11 iff $XOR2(XOR2(a10,AND2(g11,a15)),XOR2(z,AND2(g11,p)))) &
+  ($b10 iff $XOR2(XOR2(a9,AND2(g10,a15)),XOR2(z,AND2(g10,p)))) &
+  ($b9 iff $XOR2(XOR2(a8,AND2(g9,a15)),XOR2(z,AND2(g9,p)))) &
+  ($b8 iff $XOR2(XOR2(a7,AND2(g8,a15)),XOR2(z,AND2(g8,p)))) &
+  ($b7 iff $XOR2(XOR2(a6,AND2(g7,a15)),XOR2(z,AND2(g7,p)))) &
+  ($b6 iff $XOR2(XOR2(a5,AND2(g6,a15)),XOR2(z,AND2(g6,p)))) &
+  ($b5 iff $XOR2(XOR2(a4,AND2(g5,a15)),XOR2(z,AND2(g5,p)))) &
+  ($b4 iff $XOR2(XOR2(a3,AND2(g4,a15)),XOR2(z,AND2(g4,p)))) &
+  ($b3 iff $XOR2(XOR2(a2,AND2(g3,a15)),XOR2(z,AND2(g3,p)))) &
+  ($b2 iff $XOR2(XOR2(a1,AND2(g2,a15)),XOR2(z,AND2(g2,p)))) &
+  ($b1 iff $XOR2(XOR2(a0,AND2(g1,a15)),XOR2(z,AND2(g1,p)))) &
+  ($b0 iff $XOR2(XOR2(z, AND2(g0,a15)),XOR2(z,AND2(g0,p))))
+proof
+  let g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,g10,g11,g12,g13,g14,g15,g16,
+          a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,
+          b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14,b15,
+          z,p be set;
+   assume that
+  A1: ($g0 & $g16 & not $z )and
+  A2: ($b0 iff $XOR2(p,a15))and
+  A3: ($b1 iff $XOR2(a0,AND2(g1,b0)))and
+  A4: ($b2 iff $XOR2(a1,AND2(g2,b0)))and
+  A5: ($b3 iff $XOR2(a2,AND2(g3,b0)))and
+  A6: ($b4 iff $XOR2(a3,AND2(g4,b0)))and
+  A7: ($b5 iff $XOR2(a4,AND2(g5,b0)))and
+  A8: ($b6 iff $XOR2(a5,AND2(g6,b0)))and
+  A9: ($b7 iff $XOR2(a6,AND2(g7,b0)))and
+  A10: ($b8 iff $XOR2(a7,AND2(g8,b0)))and
+  A11:($b9 iff $XOR2(a8,AND2(g9,b0)))and
+  A12:($b10 iff $XOR2(a9,AND2(g10,b0)))and
+  A13:($b11 iff $XOR2(a10,AND2(g11,b0))) and
+  A14:($b12 iff $XOR2(a11,AND2(g12,b0)))and
+  A15:($b13 iff $XOR2(a12,AND2(g13,b0)))and
+  A16:($b14 iff $XOR2(a13,AND2(g14,b0)))and
+  A17:($b15 iff $XOR2(a14,AND2(g15,b0)));
+
+  $XOR2(XOR2(a14,AND2(g15,a15)),XOR2(z,AND2(g15,p))) iff
+ $XOR2(a14,AND2(g15,a15)) & not $XOR2(z,AND2(g15,p)) or
+ not $XOR2(a14,AND2(g15,a15)) & $XOR2(z,AND2(g15,p)) by GATE_1:8;
+then $XOR2(XOR2(a14,AND2(g15,a15)),XOR2(z,AND2(g15,p))) iff
+ (($a14 & not $AND2(g15,a15)) or (not $a14 & $AND2(g15,a15)))
+      & not $AND2(g15,p) or
+ not (($a14 & not $AND2(g15,a15)) or (not $a14 & $AND2(g15,a15)))& $AND2(g15,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a14,AND2(g15,a15)),XOR2(z,AND2(g15,p))) iff
+  (($a14 & (not $g15 or not $a15) & (not $g15 or not $p)) or
+    (not $a14 & $g15 & $a15 & (not $g15 or not $p))) or
+  (((not $a14 or ($g15 & $a15)) & ($a14 or not ($g15 & $a15)))
+   & $g15 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a14,AND2(g15,a15)),XOR2(z,AND2(g15,p))) iff
+  ($a14 & not $AND2(g15,b0)) or (not $a14 & $AND2(g15,b0)) by A2,GATE_1:6,8;
+hence $b15 iff $XOR2(XOR2(a14,AND2(g15,a15)),XOR2(z,AND2(g15,p)))
+  by A17,GATE_1:8;
+
+
+  $XOR2(XOR2(a13,AND2(g14,a15)),XOR2(z,AND2(g14,p))) iff
+ $XOR2(a13,AND2(g14,a15)) & not $XOR2(z,AND2(g14,p)) or
+ not $XOR2(a13,AND2(g14,a15)) & $XOR2(z,AND2(g14,p)) by GATE_1:8;
+then $XOR2(XOR2(a13,AND2(g14,a15)),XOR2(z,AND2(g14,p))) iff
+ (($a13 & not $AND2(g14,a15)) or (not $a13 & $AND2(g14,a15)))
+      & not $AND2(g14,p) or
+ not (($a13 & not $AND2(g14,a15)) or (not $a13 & $AND2(g14,a15)))& $AND2(g14,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a13,AND2(g14,a15)),XOR2(z,AND2(g14,p))) iff
+  (($a13 & (not $g14 or not $a15) & (not $g14 or not $p)) or
+    (not $a13 & $g14 & $a15 & (not $g14 or not $p))) or
+  (((not $a13 or ($g14 & $a15)) & ($a13 or not ($g14 & $a15)))
+   & $g14 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a13,AND2(g14,a15)),XOR2(z,AND2(g14,p))) iff
+  ($a13 & not $AND2(g14,b0)) or (not $a13 & $AND2(g14,b0)) by A2,GATE_1:6,8;
+hence $b14 iff $XOR2(XOR2(a13,AND2(g14,a15)),XOR2(z,AND2(g14,p)))
+  by A16,GATE_1:8;
+
+  $XOR2(XOR2(a12,AND2(g13,a15)),XOR2(z,AND2(g13,p))) iff
+ $XOR2(a12,AND2(g13,a15)) & not $XOR2(z,AND2(g13,p)) or
+ not $XOR2(a12,AND2(g13,a15)) & $XOR2(z,AND2(g13,p)) by GATE_1:8;
+then $XOR2(XOR2(a12,AND2(g13,a15)),XOR2(z,AND2(g13,p))) iff
+ (($a12 & not $AND2(g13,a15)) or (not $a12 & $AND2(g13,a15)))
+      & not $AND2(g13,p) or
+ not (($a12 & not $AND2(g13,a15)) or (not $a12 & $AND2(g13,a15)))& $AND2(g13,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a12,AND2(g13,a15)),XOR2(z,AND2(g13,p))) iff
+  (($a12 & (not $g13 or not $a15) & (not $g13 or not $p)) or
+    (not $a12 & $g13 & $a15 & (not $g13 or not $p))) or
+  (((not $a12 or ($g13 & $a15)) & ($a12 or not ($g13 & $a15)))
+   & $g13 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a12,AND2(g13,a15)),XOR2(z,AND2(g13,p))) iff
+  ($a12 & not $AND2(g13,b0)) or (not $a12 & $AND2(g13,b0)) by A2,GATE_1:6,8;
+hence $b13 iff $XOR2(XOR2(a12,AND2(g13,a15)),XOR2(z,AND2(g13,p)))
+  by A15,GATE_1:8;
+
+  $XOR2(XOR2(a11,AND2(g12,a15)),XOR2(z,AND2(g12,p))) iff
+ $XOR2(a11,AND2(g12,a15)) & not $XOR2(z,AND2(g12,p)) or
+ not $XOR2(a11,AND2(g12,a15)) & $XOR2(z,AND2(g12,p)) by GATE_1:8;
+then $XOR2(XOR2(a11,AND2(g12,a15)),XOR2(z,AND2(g12,p))) iff
+ (($a11 & not $AND2(g12,a15)) or (not $a11 & $AND2(g12,a15)))
+      & not $AND2(g12,p) or
+ not (($a11 & not $AND2(g12,a15)) or (not $a11 & $AND2(g12,a15)))& $AND2(g12,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a11,AND2(g12,a15)),XOR2(z,AND2(g12,p))) iff
+  (($a11 & (not $g12 or not $a15) & (not $g12 or not $p)) or
+    (not $a11 & $g12 & $a15 & (not $g12 or not $p))) or
+  (((not $a11 or ($g12 & $a15)) & ($a11 or not ($g12 & $a15)))
+   & $g12 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a11,AND2(g12,a15)),XOR2(z,AND2(g12,p))) iff
+  ($a11 & not $AND2(g12,b0)) or (not $a11 & $AND2(g12,b0)) by A2,GATE_1:6,8;
+hence $b12 iff $XOR2(XOR2(a11,AND2(g12,a15)),XOR2(z,AND2(g12,p)))
+  by A14,GATE_1:8;
+
+  $XOR2(XOR2(a10,AND2(g11,a15)),XOR2(z,AND2(g11,p))) iff
+ $XOR2(a10,AND2(g11,a15)) & not $XOR2(z,AND2(g11,p)) or
+ not $XOR2(a10,AND2(g11,a15)) & $XOR2(z,AND2(g11,p)) by GATE_1:8;
+then $XOR2(XOR2(a10,AND2(g11,a15)),XOR2(z,AND2(g11,p))) iff
+ (($a10 & not $AND2(g11,a15)) or (not $a10 & $AND2(g11,a15)))
+      & not $AND2(g11,p) or
+ not (($a10 & not $AND2(g11,a15)) or (not $a10 & $AND2(g11,a15)))& $AND2(g11,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a10,AND2(g11,a15)),XOR2(z,AND2(g11,p))) iff
+  (($a10 & (not $g11 or not $a15) & (not $g11 or not $p)) or
+    (not $a10 & $g11 & $a15 & (not $g11 or not $p))) or
+  (((not $a10 or ($g11 & $a15)) & ($a10 or not ($g11 & $a15)))
+   & $g11 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a10,AND2(g11,a15)),XOR2(z,AND2(g11,p))) iff
+  ($a10 & not $AND2(g11,b0)) or (not $a10 & $AND2(g11,b0)) by A2,GATE_1:6,8;
+hence $b11 iff $XOR2(XOR2(a10,AND2(g11,a15)),XOR2(z,AND2(g11,p)))
+  by A13,GATE_1:8;
+
+
+  $XOR2(XOR2(a9,AND2(g10,a15)),XOR2(z,AND2(g10,p))) iff
+ $XOR2(a9,AND2(g10,a15)) & not $XOR2(z,AND2(g10,p)) or
+ not $XOR2(a9,AND2(g10,a15)) & $XOR2(z,AND2(g10,p)) by GATE_1:8;
+then $XOR2(XOR2(a9,AND2(g10,a15)),XOR2(z,AND2(g10,p))) iff
+ (($a9 & not $AND2(g10,a15)) or (not $a9 & $AND2(g10,a15)))
+      & not $AND2(g10,p) or
+ not (($a9 & not $AND2(g10,a15)) or (not $a9 & $AND2(g10,a15)))& $AND2(g10,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a9,AND2(g10,a15)),XOR2(z,AND2(g10,p))) iff
+  (($a9 & (not $g10 or not $a15) & (not $g10 or not $p)) or
+    (not $a9 & $g10 & $a15 & (not $g10 or not $p))) or
+  (((not $a9 or ($g10 & $a15)) & ($a9 or not ($g10 & $a15)))
+   & $g10 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a9,AND2(g10,a15)),XOR2(z,AND2(g10,p))) iff
+  ($a9 & not $AND2(g10,b0)) or (not $a9 & $AND2(g10,b0)) by A2,GATE_1:6,8;
+hence $b10 iff $XOR2(XOR2(a9,AND2(g10,a15)),XOR2(z,AND2(g10,p)))
+  by A12,GATE_1:8;
+
+  $XOR2(XOR2(a8,AND2(g9,a15)),XOR2(z,AND2(g9,p))) iff
+ $XOR2(a8,AND2(g9,a15)) & not $XOR2(z,AND2(g9,p)) or
+ not $XOR2(a8,AND2(g9,a15)) & $XOR2(z,AND2(g9,p)) by GATE_1:8;
+then $XOR2(XOR2(a8,AND2(g9,a15)),XOR2(z,AND2(g9,p))) iff
+ (($a8 & not $AND2(g9,a15)) or (not $a8 & $AND2(g9,a15)))
+      & not $AND2(g9,p) or
+ not (($a8 & not $AND2(g9,a15)) or (not $a8 & $AND2(g9,a15)))& $AND2(g9,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a8,AND2(g9,a15)),XOR2(z,AND2(g9,p))) iff
+  (($a8 & (not $g9 or not $a15) & (not $g9 or not $p)) or
+    (not $a8 & $g9 & $a15 & (not $g9 or not $p))) or
+  (((not $a8 or ($g9 & $a15)) & ($a8 or not ($g9 & $a15)))
+   & $g9 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a8,AND2(g9,a15)),XOR2(z,AND2(g9,p))) iff
+  ($a8 & not $AND2(g9,b0)) or (not $a8 & $AND2(g9,b0)) by A2,GATE_1:6,8;
+hence $b9 iff $XOR2(XOR2(a8,AND2(g9,a15)),XOR2(z,AND2(g9,p)))
+  by A11,GATE_1:8;
+
+  $XOR2(XOR2(a7,AND2(g8,a15)),XOR2(z,AND2(g8,p))) iff
+ $XOR2(a7,AND2(g8,a15)) & not $XOR2(z,AND2(g8,p)) or
+ not $XOR2(a7,AND2(g8,a15)) & $XOR2(z,AND2(g8,p)) by GATE_1:8;
+then $XOR2(XOR2(a7,AND2(g8,a15)),XOR2(z,AND2(g8,p))) iff
+ (($a7 & not $AND2(g8,a15)) or (not $a7 & $AND2(g8,a15)))
+      & not $AND2(g8,p) or
+ not (($a7 & not $AND2(g8,a15)) or (not $a7 & $AND2(g8,a15)))& $AND2(g8,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a7,AND2(g8,a15)),XOR2(z,AND2(g8,p))) iff
+  (($a7 & (not $g8 or not $a15) & (not $g8 or not $p)) or
+    (not $a7 & $g8 & $a15 & (not $g8 or not $p))) or
+  (((not $a7 or ($g8 & $a15)) & ($a7 or not ($g8 & $a15)))
+   & $g8 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a7,AND2(g8,a15)),XOR2(z,AND2(g8,p))) iff
+  ($a7 & not $AND2(g8,b0)) or (not $a7 & $AND2(g8,b0)) by A2,GATE_1:6,8;
+hence $b8 iff $XOR2(XOR2(a7,AND2(g8,a15)),XOR2(z,AND2(g8,p)))
+  by A10,GATE_1:8;
+
+  $XOR2(XOR2(a6,AND2(g7,a15)),XOR2(z,AND2(g7,p))) iff
+ $XOR2(a6,AND2(g7,a15)) & not $XOR2(z,AND2(g7,p)) or
+ not $XOR2(a6,AND2(g7,a15)) & $XOR2(z,AND2(g7,p)) by GATE_1:8;
+then $XOR2(XOR2(a6,AND2(g7,a15)),XOR2(z,AND2(g7,p))) iff
+ (($a6 & not $AND2(g7,a15)) or (not $a6 & $AND2(g7,a15)))
+      & not $AND2(g7,p) or
+ not (($a6 & not $AND2(g7,a15)) or (not $a6 & $AND2(g7,a15)))& $AND2(g7,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a6,AND2(g7,a15)),XOR2(z,AND2(g7,p))) iff
+  (($a6 & (not $g7 or not $a15) & (not $g7 or not $p)) or
+    (not $a6 & $g7 & $a15 & (not $g7 or not $p))) or
+  (((not $a6 or ($g7 & $a15)) & ($a6 or not ($g7 & $a15)))
+   & $g7 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a6,AND2(g7,a15)),XOR2(z,AND2(g7,p))) iff
+  ($a6 & not $AND2(g7,b0)) or (not $a6 & $AND2(g7,b0)) by A2,GATE_1:6,8;
+hence $b7 iff $XOR2(XOR2(a6,AND2(g7,a15)),XOR2(z,AND2(g7,p)))
+  by A9,GATE_1:8;
+
+
+  $XOR2(XOR2(a5,AND2(g6,a15)),XOR2(z,AND2(g6,p))) iff
+ $XOR2(a5,AND2(g6,a15)) & not $XOR2(z,AND2(g6,p)) or
+ not $XOR2(a5,AND2(g6,a15)) & $XOR2(z,AND2(g6,p)) by GATE_1:8;
+then $XOR2(XOR2(a5,AND2(g6,a15)),XOR2(z,AND2(g6,p))) iff
+ (($a5 & not $AND2(g6,a15) & not $AND2(g6,p)) or
+   (not $a5 & $AND2(g6,a15) & not $AND2(g6,p))) or
+ ((not ($a5 & not $AND2(g6,a15)) & not (not $a5 & $AND2(g6,a15)))
+   & $AND2(g6,p)) by A1,GATE_1:8;
+then $XOR2(XOR2(a5,AND2(g6,a15)),XOR2(z,AND2(g6,p))) iff
+  (($a5 & (not $g6 or not $a15) & (not $g6 or not $p)) or
+    (not $a5 & $g6 & $a15 & (not $g6 or not $p))) or
+  (((not $a5 or ($g6 & $a15)) & ($a5 or not ($g6 & $a15)))
+   & $g6 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a5,AND2(g6,a15)),XOR2(z,AND2(g6,p))) iff
+  ($a5 & not $AND2(g6,b0)) or (not $a5 & $AND2(g6,b0)) by A2,GATE_1:6,8;
+hence $b6 iff $XOR2(XOR2(a5,AND2(g6,a15)),XOR2(z,AND2(g6,p)))
+  by A8,GATE_1:8;
+
+
+  $XOR2(XOR2(a4,AND2(g5,a15)),XOR2(z,AND2(g5,p))) iff
+ $XOR2(a4,AND2(g5,a15)) & not $XOR2(z,AND2(g5,p)) or
+ not $XOR2(a4,AND2(g5,a15)) & $XOR2(z,AND2(g5,p)) by GATE_1:8;
+then $XOR2(XOR2(a4,AND2(g5,a15)),XOR2(z,AND2(g5,p))) iff
+ (($a4 & not $AND2(g5,a15)) or (not $a4 & $AND2(g5,a15)))
+      & not $AND2(g5,p) or
+ not (($a4 & not $AND2(g5,a15)) or (not $a4 & $AND2(g5,a15)))& $AND2(g5,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a4,AND2(g5,a15)),XOR2(z,AND2(g5,p))) iff
+  (($a4 & (not $g5 or not $a15) & (not $g5 or not $p)) or
+    (not $a4 & $g5 & $a15 & (not $g5 or not $p))) or
+  (((not $a4 or ($g5 & $a15)) & ($a4 or not ($g5 & $a15)))
+   & $g5 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a4,AND2(g5,a15)),XOR2(z,AND2(g5,p))) iff
+  ($a4 & not $AND2(g5,b0)) or (not $a4 & $AND2(g5,b0)) by A2,GATE_1:6,8;
+hence $b5 iff $XOR2(XOR2(a4,AND2(g5,a15)),XOR2(z,AND2(g5,p)))
+  by A7,GATE_1:8;
+
+
+  $XOR2(XOR2(a3,AND2(g4,a15)),XOR2(z,AND2(g4,p))) iff
+ $XOR2(a3,AND2(g4,a15)) & not $XOR2(z,AND2(g4,p)) or
+ not $XOR2(a3,AND2(g4,a15)) & $XOR2(z,AND2(g4,p)) by GATE_1:8;
+then $XOR2(XOR2(a3,AND2(g4,a15)),XOR2(z,AND2(g4,p))) iff
+ (($a3 & not $AND2(g4,a15) & not $AND2(g4,p)) or
+   (not $a3 & $AND2(g4,a15) & not $AND2(g4,p))) or
+ ((not ($a3 & not $AND2(g4,a15)) & not (not $a3 & $AND2(g4,a15)))
+   & $AND2(g4,p)) by A1,GATE_1:8;
+then $XOR2(XOR2(a3,AND2(g4,a15)),XOR2(z,AND2(g4,p))) iff
+  (($a3 & (not $g4 or not $a15) & (not $g4 or not $p)) or
+    (not $a3 & $g4 & $a15 & (not $g4 or not $p))) or
+  (((not $a3 or ($g4 & $a15)) & ($a3 or not ($g4 & $a15)))
+   & $g4 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a3,AND2(g4,a15)),XOR2(z,AND2(g4,p))) iff
+  ($a3 & not $AND2(g4,b0)) or (not $a3 & $AND2(g4,b0)) by A2,GATE_1:6,8;
+hence $b4 iff $XOR2(XOR2(a3,AND2(g4,a15)),XOR2(z,AND2(g4,p)))
+  by A6,GATE_1:8;
+
+  $XOR2(XOR2(a2,AND2(g3,a15)),XOR2(z,AND2(g3,p))) iff
+ $XOR2(a2,AND2(g3,a15)) & not $XOR2(z,AND2(g3,p)) or
+ not $XOR2(a2,AND2(g3,a15)) & $XOR2(z,AND2(g3,p)) by GATE_1:8;
+then $XOR2(XOR2(a2,AND2(g3,a15)),XOR2(z,AND2(g3,p))) iff
+ (($a2 & not $AND2(g3,a15) & not $AND2(g3,p)) or
+   (not $a2 & $AND2(g3,a15) & not $AND2(g3,p))) or
+ ((not ($a2 & not $AND2(g3,a15)) & not (not $a2 & $AND2(g3,a15)))
+   & $AND2(g3,p)) by A1,GATE_1:8;
+then $XOR2(XOR2(a2,AND2(g3,a15)),XOR2(z,AND2(g3,p))) iff
+  (($a2 & (not $g3 or not $a15) & (not $g3 or not $p)) or
+    (not $a2 & $g3 & $a15 & (not $g3 or not $p))) or
+  (((not $a2 or ($g3 & $a15)) & ($a2 or not ($g3 & $a15)))
+   & $g3 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a2,AND2(g3,a15)),XOR2(z,AND2(g3,p))) iff
+  ($a2 & not $AND2(g3,b0)) or (not $a2 & $AND2(g3,b0)) by A2,GATE_1:6,8;
+hence $b3 iff $XOR2(XOR2(a2,AND2(g3,a15)),XOR2(z,AND2(g3,p)))
+  by A5,GATE_1:8;
+
+
+  $XOR2(XOR2(a1,AND2(g2,a15)),XOR2(z,AND2(g2,p))) iff
+ $XOR2(a1,AND2(g2,a15)) & not $XOR2(z,AND2(g2,p)) or
+ not $XOR2(a1,AND2(g2,a15)) & $XOR2(z,AND2(g2,p)) by GATE_1:8;
+then $XOR2(XOR2(a1,AND2(g2,a15)),XOR2(z,AND2(g2,p))) iff
+ (($a1 & not $AND2(g2,a15)) or (not $a1 & $AND2(g2,a15)))
+      & not $AND2(g2,p) or
+ not (($a1 & not $AND2(g2,a15)) or (not $a1 & $AND2(g2,a15)))& $AND2(g2,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a1,AND2(g2,a15)),XOR2(z,AND2(g2,p))) iff
+  (($a1 & (not $g2 or not $a15) & (not $g2 or not $p)) or
+    (not $a1 & $g2 & $a15 & (not $g2 or not $p))) or
+  (((not $a1 or ($g2 & $a15)) & ($a1 or not ($g2 & $a15)))
+   & $g2 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a1,AND2(g2,a15)),XOR2(z,AND2(g2,p))) iff
+  ($a1 & not $AND2(g2,b0)) or (not $a1 & $AND2(g2,b0)) by A2,GATE_1:6,8;
+hence $b2 iff $XOR2(XOR2(a1,AND2(g2,a15)),XOR2(z,AND2(g2,p)))
+  by A4,GATE_1:8;
+
+
+  $XOR2(XOR2(a0,AND2(g1,a15)),XOR2(z,AND2(g1,p))) iff
+ $XOR2(a0,AND2(g1,a15)) & not $XOR2(z,AND2(g1,p)) or
+ not $XOR2(a0,AND2(g1,a15)) & $XOR2(z,AND2(g1,p)) by GATE_1:8;
+then $XOR2(XOR2(a0,AND2(g1,a15)),XOR2(z,AND2(g1,p))) iff
+ (($a0 & not $AND2(g1,a15)) or (not $a0 & $AND2(g1,a15)))
+      & not $AND2(g1,p) or
+ not (($a0 & not $AND2(g1,a15)) or (not $a0 & $AND2(g1,a15)))& $AND2(g1,p)
+ by A1,GATE_1:8;
+then $XOR2(XOR2(a0,AND2(g1,a15)),XOR2(z,AND2(g1,p))) iff
+  (($a0 & (not $g1 or not $a15) & (not $g1 or not $p)) or
+    (not $a0 & $g1 & $a15 & (not $g1 or not $p))) or
+  (((not $a0 or ($g1 & $a15)) & ($a0 or not ($g1 & $a15)))
+   & $g1 & $p ) by GATE_1:6;
+then $XOR2(XOR2(a0,AND2(g1,a15)),XOR2(z,AND2(g1,p))) iff
+  ($a0 & not $AND2(g1,b0)) or (not $a0 & $AND2(g1,b0)) by A2,GATE_1:6,8;
+hence $b1 iff $XOR2(XOR2(a0,AND2(g1,a15)),XOR2(z,AND2(g1,p)))
+  by A3,GATE_1:8;
+
+  $XOR2(XOR2(z,AND2(g0,a15)),XOR2(z,AND2(g0,p))) iff
+ $XOR2(z,AND2(g0,a15)) & not $XOR2(z,AND2(g0,p)) or
+ not $XOR2(z,AND2(g0,a15)) & $XOR2(z,AND2(g0,p)) by GATE_1:8;
+then $XOR2(XOR2(z,AND2(g0,a15)),XOR2(z,AND2(g0,p))) iff
+ (($z & not $AND2(g0,a15) & not $AND2(g0,p)) or
+   (not $z & $AND2(g0,a15) & not $AND2(g0,p))) or
+ ((not ($z & not $AND2(g0,a15)) & not (not $z & $AND2(g0,a15)))
+   & $AND2(g0,p)) by A1,GATE_1:8;
+then $XOR2(XOR2(z,AND2(g0,a15)),XOR2(z,AND2(g0,p))) iff
+  (($z & (not $g0 or not $a15) & (not $g0 or not $p)) or
+    (not $z & $g0 & $a15 & (not $g0 or not $p))) or
+  (((not $z or ($g0 & $a15)) & ($z or not ($g0 & $a15)))
+   & $g0 & $p ) by GATE_1:6;
+hence $b0 iff $XOR2(XOR2(z,AND2(g0,a15)),XOR2(z,AND2(g0,p)))
+  by A1,A2,GATE_1:8;
+end;
+
+
+
+

@@ -1,0 +1,3401 @@
+:: Preliminaries to Automatic Generation of Mizar Documentation for Circuits
+::  by Grzegorz Bancerek and Adam Naumowicz
+::
+:: Received July 26, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, CIRCCMB3, MSUALG_1, CIRCCOMB, FUNCT_1, FINSEQ_2, AMI_1,
+      CIRCUIT1, MSAFREE2, NET_1, TARSKI, ZF_REFLE, PRE_CIRC, FINSET_1, RELAT_1,
+      FINSEQ_1, FUNCOP_1, PBOOLE, SEQM_3, CIRCUIT2, PARTFUN1, FUNCT_4,
+      SQUARE_1, REWRITE1, CLASSES1, ORDINAL2, CATALG_1, YELLOW_6, FUNCT_5,
+      MCART_1, TDGROUP, QC_LANG1, FACIRC_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XREAL_0, ENUMSET1, SCMPDS_1,
+      ZFMISC_1, RELAT_1, FUNCT_1, FINSET_1, ORDINAL2, CLASSES1, FUNCT_2, NAT_1,
+      PARTFUN1, LIMFUNC1, REWRITE1, STRUCT_0, FINSEQ_1, FINSEQ_2, FINSEQOP,
+      PBOOLE, GROUP_1, MSUALG_1, FACIRC_1, MSAFREE2, CIRCUIT1, CIRCUIT2,
+      CIRCCOMB, PRE_CIRC, MCART_1, BINARITH, FUNCT_5, SEQM_3, YELLOW_6;
+ constructors CIRCUIT1, CIRCUIT2, FACIRC_1, REWRITE1, CLASSES1, FINSEQOP,
+      PRALG_1, SCMPDS_1, LIMFUNC1, BINARITH, YELLOW_6, SEQM_3, DOMAIN_1;
+ clusters MSUALG_1, CIRCCOMB, PRE_CIRC, FINSET_1, CIRCTRM1, RELSET_1, FINSEQ_1,
+      FINSEQ_2, PRALG_1, STRUCT_0, SCMPDS_1, FSM_1, XBOOLE_0, ORDINAL1,
+      YELLOW_6, MSAFREE, FACIRC_1, MEMBERED, SEQM_3, NUMBERS, ORDINAL2;
+ requirements BOOLE, SUBSET, NUMERALS, REAL;
+ definitions TARSKI, XBOOLE_0, RELAT_1, SEQM_3, REWRITE1, PRE_CIRC, MSAFREE2,
+      CIRCUIT2, CIRCCOMB, FACIRC_1;
+ theorems CIRCCOMB, ZFMISC_1, TARSKI, XBOOLE_0, FINSEQ_1, FUNCT_1, FINSEQ_2,
+      CIRCUIT1, CARD_3, CIRCCMB2, FUNCOP_1, PBOOLE, FINSEQ_3, SCMPDS_1,
+      ENUMSET1, FACIRC_1, ORDINAL2, MCART_1, GROUP_1, FUNCT_4, FINSET_1, ALG_1,
+      AXIOMS, NAT_1, SQUARE_1, RELAT_1, YELLOW_6, SEQM_3, MSUALG_1, MSAFREE2,
+      FUNCT_2, RELSET_1, CLASSES1, ORDINAL1, FUNCT_5, CIRCUIT2, PRE_CIRC,
+      FRECHET2, XBOOLE_1;
+ schemes TARSKI, XBOOLE_0, FUNCT_2, NAT_1, REWRITE1, ZFREFLE1, RELAT_1;
+
+begin :: Stabilizing circuits
+
+theorem Th1:
+ for S being non void Circuit-like (non empty ManySortedSign)
+ for A being non-empty Circuit of S
+ for s being State of A, x being set st x in InputVertices S
+ for n being Nat holds Following(s,n).x = s.x
+  proof let S be non void Circuit-like (non empty ManySortedSign);
+   let A be non-empty Circuit of S;
+   let s be State of A, x be set such that
+A1: x in InputVertices S;
+defpred P[Nat] means Following(s,$1).x = s.x;
+A2: P[0] by FACIRC_1:11;
+A3: now let n be Nat; assume
+A4:   P[n];
+      Following(s,n+1).x
+        = (Following Following(s,n)).x by FACIRC_1:12
+       .= s.x by A1,A4,CIRCUIT2:def 5;
+      hence P[n+1];
+    end;
+   thus for n be Nat holds P[n] from Ind(A2,A3);
+  end;
+
+definition
+ let S be non void Circuit-like (non empty ManySortedSign);
+ let A be non-empty Circuit of S;
+ let s be State of A;
+ attr s is stabilizing means :Def1:
+ ex n being Nat st Following(s,n) is stable;
+end;
+
+definition
+ let S be non void Circuit-like (non empty ManySortedSign);
+ let A be non-empty Circuit of S;
+ attr A is stabilizing means :Def2:
+ for s being State of A holds s is stabilizing;
+ attr A is with_stabilization-limit means
+   ex n being Nat st
+ for s being State of A holds Following(s,n) is stable;
+end;
+
+definition
+ let S be non void Circuit-like (non empty ManySortedSign);
+ cluster with_stabilization-limit -> stabilizing (non-empty Circuit of S);
+ coherence
+  proof let A be non-empty Circuit of S;
+   given n being Nat such that
+A1: for s being State of A holds Following(s,n) is stable;
+   let s be State of A; take n; thus thesis by A1;
+  end;
+end;
+
+definition
+ let S be non void Circuit-like (non empty ManySortedSign);
+ let A be non-empty Circuit of S;
+ let s be State of A such that A1: s is stabilizing;
+ func Result s -> State of A means :Def4:
+ it is stable & ex n being Nat st it = Following(s,n);
+ existence
+  proof
+   consider n being Nat such that
+A2: Following(s,n) is stable by A1,Def1;
+   take Following(s,n);
+   thus thesis by A2;
+  end;
+ uniqueness
+  proof
+   let s1,s2 be State of A; assume that
+A3: s1 is stable & ex n being Nat st s1 = Following(s,n) and
+A4: s2 is stable & ex n being Nat st s2 = Following(s,n);
+   consider n1 being Nat such that
+A5: s1 = Following(s,n1) by A3;
+   consider n2 being Nat such that
+A6: s2 = Following(s,n2) by A4;
+   per cases;
+   suppose n1<=n2;
+   hence s1=s2 by A3,A5,A6,CIRCCMB2:4;
+   suppose n2<=n1;
+   hence s1=s2 by A4,A5,A6,CIRCCMB2:4;
+  end;
+end;
+
+definition
+ let S be non void Circuit-like (non empty ManySortedSign);
+ let A be non-empty Circuit of S;
+ let s be State of A such that A1: s is stabilizing;
+ func stabilization-time s -> Nat means :Def5:
+ Following(s,it) is stable & for n being Nat st n < it holds
+ not Following(s,n) is stable;
+ existence
+  proof
+    defpred P[Nat] means Following(s,$1) is stable;
+A2: ex k being Nat st P[k] by A1,Def1;
+   consider m being Nat such that
+A3: P[m] &
+   for n being Nat st P[n] holds m <= n from Min(A2);
+   take m;
+   thus thesis by A3;
+  end;
+ uniqueness
+  proof
+   let n1,n2 be Nat such that
+A4: Following(s,n1) is stable & for n being Nat st n < n1 holds
+   not Following(s,n) is stable and
+A5: Following(s,n2) is stable & for n being Nat st n < n2 holds
+   not Following(s,n) is stable;
+   assume A6: n1<>n2;
+   per cases by A6,AXIOMS:21;
+   suppose n1 < n2;
+   hence contradiction by A4,A5;
+   suppose n2 < n1;
+   hence contradiction by A4,A5;
+  end;
+end;
+
+theorem Th2:
+ for S being non void Circuit-like (non empty ManySortedSign)
+ for A being non-empty Circuit of S
+ for s being State of A st s is stabilizing holds
+   Result s = Following(s,stabilization-time s)
+  proof
+   let S be non void Circuit-like (non empty ManySortedSign);
+   let A be non-empty Circuit of S;
+   let s be State of A such that A1: s is stabilizing;
+     Following(s,stabilization-time s) is stable by A1,Def5;
+   hence Result s = Following(s,stabilization-time s) by A1,Def4;
+  end;
+
+theorem
+   for S being non void Circuit-like (non empty ManySortedSign)
+ for A being non-empty Circuit of S
+ for s being State of A, n being Nat st Following(s,n) is stable
+  holds stabilization-time s <= n
+  proof
+   let S be non void Circuit-like (non empty ManySortedSign);
+   let A be non-empty Circuit of S;
+   let s be State of A, n be Nat; assume
+A1: Following(s,n) is stable;
+    then s is stabilizing by Def1;
+   hence thesis by A1,Def5;
+  end;
+
+theorem Th4:
+ for S being non void Circuit-like (non empty ManySortedSign)
+ for A being non-empty Circuit of S
+ for s being State of A, n being Nat st Following(s,n) is stable
+  holds Result s = Following(s, n)
+  proof
+   let S be non void Circuit-like (non empty ManySortedSign);
+   let A be non-empty Circuit of S;
+   let s be State of A, n be Nat; assume
+A1: Following(s,n) is stable;
+    then s is stabilizing by Def1;
+   hence thesis by A1,Def4;
+  end;
+
+theorem Th5:
+ for S being non void Circuit-like (non empty ManySortedSign)
+ for A being non-empty Circuit of S
+ for s being State of A, n being Nat
+  st s is stabilizing & n >= stabilization-time s
+  holds Result s = Following(s, n)
+  proof
+   let S be non void Circuit-like (non empty ManySortedSign);
+   let A be non-empty Circuit of S;
+   let s be State of A, n be Nat; assume
+A1: s is stabilizing & n >= stabilization-time s;
+    then Result s is stable by Def4;
+    then Following(s, stabilization-time s) is stable by A1,Th2;
+    then Following(s,n) is stable by A1,CIRCCMB2:4;
+   hence thesis by Th4;
+  end;
+
+theorem
+   for S being non void Circuit-like (non empty ManySortedSign)
+ for A being non-empty Circuit of S
+ for s being State of A st s is stabilizing
+ for x being set st x in InputVertices S
+  holds (Result s).x = s.x
+  proof
+   let S be non void Circuit-like (non empty ManySortedSign);
+   let A be non-empty Circuit of S;
+   let s be State of A; assume s is stabilizing;
+    then Result s = Following(s,stabilization-time s) by Th2;
+   hence thesis by Th1;
+  end;
+
+theorem
+   for S1,S being non void Circuit-like (non empty ManySortedSign)
+ for A1 being non-empty Circuit of S1
+ for A being non-empty Circuit of S
+ for s being State of A
+ for s1 being State of A1 st s1 = s|the carrier of S1
+ for v1 being Vertex of S1 holds s1.v1 = s.v1
+  proof
+   let S1,S be non void Circuit-like (non empty ManySortedSign);
+   let A1 be non-empty Circuit of S1;
+   thus thesis by FUNCT_1:72;
+  end;
+
+theorem Th8:
+ for S1,S2 being non void Circuit-like (non empty ManySortedSign) st
+ InputVertices S1 misses InnerVertices S2 &
+ InputVertices S2 misses InnerVertices S1
+ for S being non void Circuit-like (non empty ManySortedSign) st S=S1 +* S2
+ for A1 being non-empty Circuit of S1
+ for A2 being non-empty Circuit of S2 st
+ A1 tolerates A2
+ for A being non-empty Circuit of S st A = A1 +* A2
+ for s being State of A
+ for s1 being State of A1
+ for s2 being State of A2 st
+ s1=s|the carrier of S1 & s2=s|the carrier of S2 &
+ s1 is stabilizing & s2 is stabilizing holds s is stabilizing
+  proof
+   let S1,S2 be non void Circuit-like (non empty ManySortedSign) such that
+A1: InputVertices S1 misses InnerVertices S2 &
+   InputVertices S2 misses InnerVertices S1;
+   let S be non void Circuit-like (non empty ManySortedSign) such that
+A2: S=S1 +* S2;
+   let A1 be non-empty Circuit of S1;
+   let A2 be non-empty Circuit of S2;
+   assume
+A3: A1 tolerates A2;
+   let A be non-empty Circuit of S such that
+A4: A = A1 +* A2;
+   let s be State of A;
+   let s1 be State of A1;
+   let s2 be State of A2;
+   assume
+A5: s1=s|the carrier of S1 & s2=s|the carrier of S2 &
+   s1 is stabilizing & s2 is stabilizing;
+   then consider n1 being Nat such that
+A6: Following(s1,n1) is stable by Def1;
+   consider n2 being Nat such that
+A7: Following(s2,n2) is stable by A5,Def1;
+     Following(s,max(n1,n2)) is stable by A1,A2,A3,A4,A5,A6,A7,CIRCCMB2:23;
+   hence s is stabilizing by Def1;
+  end;
+
+theorem
+   for S1,S2 being non void Circuit-like (non empty ManySortedSign) st
+ InputVertices S1 misses InnerVertices S2 &
+ InputVertices S2 misses InnerVertices S1
+ for S being non void Circuit-like (non empty ManySortedSign) st S=S1 +* S2
+ for A1 being non-empty Circuit of S1
+ for A2 being non-empty Circuit of S2 st
+ A1 tolerates A2
+ for A being non-empty Circuit of S st A = A1 +* A2
+ for s being State of A
+ for s1 being State of A1 st s1=s|the carrier of S1 & s1 is stabilizing
+ for s2 being State of A2 st s2=s|the carrier of S2 & s2 is stabilizing holds
+ stabilization-time(s) = max (stabilization-time s1,stabilization-time s2)
+  proof
+   let S1,S2 be non void Circuit-like (non empty ManySortedSign) such that
+A1: InputVertices S1 misses InnerVertices S2 &
+   InputVertices S2 misses InnerVertices S1;
+   let S be non void Circuit-like (non empty ManySortedSign) such that
+A2: S=S1 +* S2;
+   let A1 be non-empty Circuit of S1;
+   let A2 be non-empty Circuit of S2;
+   assume
+A3: A1 tolerates A2;
+   let A be non-empty Circuit of S such that
+A4: A = A1 +* A2;
+   let s be State of A;
+   let s1 be State of A1 such that
+A5: s1=s|the carrier of S1 & s1 is stabilizing;
+   let s2 be State of A2 such that
+A6: s2=s|the carrier of S2 & s2 is stabilizing;
+A7: s is stabilizing by A1,A2,A3,A4,A5,A6,Th8;
+   set st1=stabilization-time(s1);
+   set st2=stabilization-time(s2);
+     Following(s1,st1) is stable & Following(s2,st2) is stable by A5,A6,Def5;
+   then A8: Following(s,max(st1,st2)) is stable by A1,A2,A3,A4,A5,A6,CIRCCMB2:
+23;
+     now
+    let n be Nat such that
+A9:  n < max(st1,st2);
+    per cases;
+    suppose st1<=st2;
+    then n < st2 by A9,SQUARE_1:def 2;
+    then not Following(s2,n) is stable by A6,Def5;
+    hence not Following(s,n) is stable by A1,A2,A3,A4,A5,A6,CIRCCMB2:24;
+    suppose st2<=st1;
+    then n < st1 by A9,SQUARE_1:def 2;
+    then not Following(s1,n) is stable by A5,Def5;
+    hence not Following(s,n) is stable by A1,A2,A3,A4,A5,A6,CIRCCMB2:24;
+   end;
+   hence thesis by A7,A8,Def5;
+  end;
+
+theorem Th10:
+ for S1,S2 being non void Circuit-like (non empty ManySortedSign) st
+ InputVertices S1 misses InnerVertices S2
+ for S being non void Circuit-like (non empty ManySortedSign) st S=S1 +* S2
+ for A1 being non-empty Circuit of S1
+ for A2 being non-empty Circuit of S2 st
+ A1 tolerates A2
+ for A being non-empty Circuit of S st A = A1 +* A2
+ for s being State of A
+ for s1 being State of A1 st s1 = s|the carrier of S1 & s1 is stabilizing
+ for s2 being State of A2
+  st s2 = Following(s, stabilization-time s1)|the carrier of S2 &
+     s2 is stabilizing
+  holds s is stabilizing
+  proof
+   let S1,S2 be non void Circuit-like (non empty ManySortedSign) such that
+A1: InputVertices S1 misses InnerVertices S2;
+   let S be non void Circuit-like (non empty ManySortedSign) such that
+A2: S = S1 +* S2;
+   let A1 be non-empty Circuit of S1;
+   let A2 be non-empty Circuit of S2;
+   assume
+A3: A1 tolerates A2;
+   let A be non-empty Circuit of S such that
+A4: A = A1 +* A2;
+   let s be State of A;
+   let s1 be State of A1 such that
+A5: s1 = s|the carrier of S1 & s1 is stabilizing;
+   set n1 = stabilization-time s1;
+A6: Following(s1,n1) is stable by A5,Def5;
+   let s2 be State of A2 such that
+A7:  s2 = Following(s, n1)|the carrier of S2 & s2 is stabilizing;
+   set n2 = stabilization-time s2;
+      Following(s2,n2) is stable by A7,Def5;
+    then Following(s,n1+n2) is stable by A1,A2,A3,A4,A5,A6,A7,CIRCCMB2:20;
+   hence s is stabilizing by Def1;
+  end;
+
+theorem Th11:
+ for S1,S2 being non void Circuit-like (non empty ManySortedSign) st
+ InputVertices S1 misses InnerVertices S2
+ for S being non void Circuit-like (non empty ManySortedSign) st S = S1+*S2
+ for A1 being non-empty Circuit of S1
+ for A2 being non-empty Circuit of S2 st
+ A1 tolerates A2
+ for A being non-empty Circuit of S st A = A1 +* A2
+ for s being State of A
+ for s1 being State of A1 st s1 = s|the carrier of S1 & s1 is stabilizing
+ for s2 being State of A2
+  st s2 = Following(s, stabilization-time s1)|the carrier of S2 &
+     s2 is stabilizing
+  holds stabilization-time(s) = (stabilization-time s1)+(stabilization-time s2)
+  proof
+   let S1,S2 be non void Circuit-like (non empty ManySortedSign) such that
+A1: InputVertices S1 misses InnerVertices S2;
+   let S be non void Circuit-like (non empty ManySortedSign) such that
+A2: S=S1 +* S2;
+   let A1 be non-empty Circuit of S1;
+   let A2 be non-empty Circuit of S2;
+   assume
+A3: A1 tolerates A2;
+   let A be non-empty Circuit of S such that
+A4: A = A1 +* A2;
+   let s be State of A;
+   let s1 be State of A1 such that
+A5: s1=s|the carrier of S1 & s1 is stabilizing;
+   set st1=stabilization-time(s1);
+   let s2 be State of A2 such that
+A6: s2=Following(s,st1)|the carrier of S2 & s2 is stabilizing;
+A7: s is stabilizing by A1,A2,A3,A4,A5,A6,Th10;
+   set st2=stabilization-time(s2);
+A8: Following(s1,st1) is stable & Following(s2,st2) is stable by A5,A6,Def5;
+   then A9: Following(s,st1+st2) is stable by A1,A2,A3,A4,A5,A6,CIRCCMB2:20;
+     now
+    let n be Nat such that
+A10:  n < st1+st2;
+    per cases;
+    suppose st1 <= n;
+     then consider m being Nat such that
+A11:   n = st1+m by NAT_1:28;
+        m < st2 by A10,A11,AXIOMS:24;
+then A12:   Following(s2,m) is not stable by A6,Def5;
+        Following(s1,st1) = Following(s,st1)|the carrier of S1
+       by A1,A2,A3,A4,A5,CIRCCMB2:14;
+      then Following(s2,m) = Following(Following(s,st1),m)|the carrier of S2
+       by A1,A2,A3,A4,A6,A8,CIRCCMB2:19
+       .= Following(s,n)|the carrier of S2 by A11,FACIRC_1:13;
+     hence Following(s,n) is not stable by A2,A3,A4,A12,CIRCCMB2:18;
+    suppose n < st1;
+then A13:   Following(s1,n) is not stable by A5,Def5;
+        Following(s,n)|the carrier of S1 = Following(s1,n)
+       by A1,A2,A3,A4,A5,CIRCCMB2:14;
+     hence Following(s,n) is not stable by A2,A3,A4,A13,CIRCCMB2:18;
+   end;
+   hence thesis by A7,A9,Def5;
+  end;
+
+theorem
+   for S1,S2,S being non void Circuit-like (non empty ManySortedSign)
+  st InputVertices S1 misses InnerVertices S2 & S = S1+*S2
+ for A1 being non-empty Circuit of S1, A2 being non-empty Circuit of S2
+ for A being non-empty Circuit of S
+  st A1 tolerates A2 & A = A1+*A2
+ for s being State of A, s1 be State of A1
+  st s1 = s|the carrier of S1 & s1 is stabilizing
+ for s2 being State of A2
+  st s2 = Following(s, stabilization-time s1)|the carrier of S2 &
+     s2 is stabilizing
+  holds (Result s)|the carrier of S1 = Result s1
+  proof let S1,S2,S be non void Circuit-like (non empty ManySortedSign)
+   such that
+A1: InputVertices S1 misses InnerVertices S2 & S = S1+*S2;
+   let A1 be non-empty Circuit of S1, A2 be non-empty Circuit of S2;
+   let A be non-empty Circuit of S such that
+A2: A1 tolerates A2 & A = A1+*A2;
+   let s be State of A, s1 be State of A1 such that
+A3: s1 = s|the carrier of S1 & s1 is stabilizing;
+   let s2 be State of A2 such that
+A4: s2 = Following(s, stabilization-time s1)|the carrier of S2 and
+A5: s2 is stabilizing;
+      stabilization-time s = (stabilization-time s1)+stabilization-time s2
+     by A1,A2,A3,A4,A5,Th11;
+then A6: stabilization-time s1 <= stabilization-time s by NAT_1:29;
+      s is stabilizing by A1,A2,A3,A4,A5,Th10;
+   hence (Result s)|the carrier of S1
+       = Following(s, stabilization-time s)|the carrier of S1 by Th2
+      .= Following(s1, stabilization-time s) by A1,A2,A3,CIRCCMB2:14
+      .= Result s1 by A3,A6,Th5;
+  end;
+
+begin :: One-gate circuits
+
+theorem Th13:
+ for x being set, X being non empty finite set
+ for n being Nat
+ for p being FinSeqLen of n
+ for g being Function of n-tuples_on X, X
+ for s being State of 1GateCircuit(p,g) holds
+ s*p is Element of n-tuples_on X
+  proof
+   let x be set, X be non empty finite set;
+   let n being Nat;
+   let p being FinSeqLen of n;
+   let g be Function of n-tuples_on X, X;
+   let s be State of 1GateCircuit(p,g);
+   set S = 1GateCircStr(p,g), A=1GateCircuit(p,g);
+A1: rng p c= dom s
+    proof
+     let o be set;
+     assume o in rng p;
+     then o in rng p \/ {[p,g]} by XBOOLE_0:def 2;
+     then o in the carrier of S by CIRCCOMB:def 6;
+     hence o in dom s by CIRCUIT1:4;
+    end;
+then A2: s*p is FinSequence by FINSEQ_1:20;
+     rng (s*p) c= X
+    proof
+     let o be set; assume o in rng (s*p);
+then A3:   o in rng s by FUNCT_1:25;
+       rng s c= X
+      proof
+       let z be set; assume z in rng s; then consider a being set such that
+A4:     a in dom s & z = s.a by FUNCT_1:def 5;
+       reconsider a as Vertex of S by A4,CIRCUIT1:4;
+       reconsider tc = the carrier of S as non empty set;
+       reconsider tS = the Sorts of A as non-empty ManySortedSet of tc;
+         dom s = dom tS by CARD_3:18;
+       then s.a in (the Sorts of A).a by A4,CARD_3:18;
+       hence z in X by A4,CIRCCOMB:62;
+      end;
+     hence thesis by A3;
+    end;
+   then reconsider sx=s*p as FinSequence of X by A2,FINSEQ_1:def 4;
+     len sx = len p by A1,FINSEQ_2:33
+         .= n by CIRCCOMB:def 12;
+   hence s*p is Element of n-tuples_on X by FINSEQ_2:110;
+end;
+
+theorem Th14:
+ for x1,x2,x3,x4 being set holds
+ rng <*x1,x2,x3,x4*> = {x1,x2,x3,x4}
+  proof
+   let x1,x2,x3,x4 be set;
+     for y being set holds y in {x1,x2,x3,x4} iff
+   ex x being set st x in dom <*x1,x2,x3,x4*> & y = <*x1,x2,x3,x4*>.x
+    proof
+     let y be set;
+     thus y in {x1,x2,x3,x4} implies
+     ex x being set st x in dom <*x1,x2,x3,x4*> & y = <*x1,x2,x3,x4*>.x
+      proof
+A1:     dom <*x1,x2,x3,x4*> = {1,2,3,4} by FINSEQ_3:2,SCMPDS_1:4;
+       assume A2: y in {x1,x2,x3,x4};
+       per cases by A2,ENUMSET1:18;
+       suppose A3: y=x1; take 1;
+       thus 1 in dom <*x1,x2,x3,x4*> by A1,ENUMSET1:19;
+       thus thesis by A3,SCMPDS_1:3;
+       suppose A4: y=x2; take 2;
+       thus 2 in dom <*x1,x2,x3,x4*> by A1,ENUMSET1:19;
+       thus thesis by A4,SCMPDS_1:3;
+       suppose A5: y=x3; take 3;
+       thus 3 in dom <*x1,x2,x3,x4*> by A1,ENUMSET1:19;
+       thus thesis by A5,SCMPDS_1:3;
+       suppose A6: y=x4; take 4;
+       thus 4 in dom <*x1,x2,x3,x4*> by A1,ENUMSET1:19;
+       thus thesis by A6,SCMPDS_1:3;
+      end;
+     given x being set such that
+A7:   x in dom <*x1,x2,x3,x4*> & y = <*x1,x2,x3,x4*>.x;
+       x in Seg 4 by A7,SCMPDS_1:4;
+     then x=1 or x=2 or x=3 or x=4 by ENUMSET1:18,FINSEQ_3:2;
+     then <*x1,x2,x3,x4*>.x = x1 or
+     <*x1,x2,x3,x4*>.x = x2 or
+     <*x1,x2,x3,x4*>.x = x3 or
+     <*x1,x2,x3,x4*>.x = x4 by SCMPDS_1:3;
+     hence y in {x1,x2,x3,x4} by A7,ENUMSET1:19;
+    end;
+   hence thesis by FUNCT_1:def 5;
+  end;
+
+theorem Th15:
+ for x1,x2,x3,x4,x5 being set holds
+ rng <*x1,x2,x3,x4,x5*> = {x1,x2,x3,x4,x5}
+  proof
+   let x1,x2,x3,x4,x5 be set;
+     for y being set holds y in {x1,x2,x3,x4,x5} iff
+   ex x being set st x in dom <*x1,x2,x3,x4,x5*> & y = <*x1,x2,x3,x4,x5*>.x
+    proof
+     let y be set;
+     thus y in {x1,x2,x3,x4,x5} implies
+     ex x being set st x in dom <*x1,x2,x3,x4,x5*> & y = <*x1,x2,x3,x4,x5*>.x
+      proof
+A1:     dom <*x1,x2,x3,x4,x5*> = {1,2,3,4,5} by FINSEQ_3:3,SCMPDS_1:6;
+       assume A2: y in {x1,x2,x3,x4,x5};
+       per cases by A2,ENUMSET1:23;
+       suppose A3: y=x1; take 1;
+       thus 1 in dom <*x1,x2,x3,x4,x5*> by A1,ENUMSET1:24;
+       thus thesis by A3,SCMPDS_1:5;
+       suppose A4: y=x2; take 2;
+       thus 2 in dom <*x1,x2,x3,x4,x5*> by A1,ENUMSET1:24;
+       thus thesis by A4,SCMPDS_1:5;
+       suppose A5: y=x3; take 3;
+       thus 3 in dom <*x1,x2,x3,x4,x5*> by A1,ENUMSET1:24;
+       thus thesis by A5,SCMPDS_1:5;
+       suppose A6: y=x4; take 4;
+       thus 4 in dom <*x1,x2,x3,x4,x5*> by A1,ENUMSET1:24;
+       thus thesis by A6,SCMPDS_1:5;
+       suppose A7: y=x5; take 5;
+       thus 5 in dom <*x1,x2,x3,x4,x5*> by A1,ENUMSET1:24;
+       thus thesis by A7,SCMPDS_1:5;
+      end;
+     given x being set such that
+A8:   x in dom <*x1,x2,x3,x4,x5*> & y = <*x1,x2,x3,x4,x5*>.x;
+       x in Seg 5 by A8,SCMPDS_1:6;
+     then x=1 or x=2 or x=3 or x=4 or x=5 by ENUMSET1:23,FINSEQ_3:3;
+     then <*x1,x2,x3,x4,x5*>.x = x1 or
+     <*x1,x2,x3,x4,x5*>.x = x2 or
+     <*x1,x2,x3,x4,x5*>.x = x3 or
+     <*x1,x2,x3,x4,x5*>.x = x4 or
+     <*x1,x2,x3,x4,x5*>.x = x5 by SCMPDS_1:5;
+     hence y in {x1,x2,x3,x4,x5} by A8,ENUMSET1:24;
+    end;
+   hence thesis by FUNCT_1:def 5;
+  end;
+
+definition
+ let x1,x2,x3,x4 be set;
+ redefine func <*x1,x2,x3,x4*> -> FinSeqLen of 4;
+ coherence proof thus len <*x1,x2,x3,x4*>=4 by SCMPDS_1:3; end;
+ let x5 be set;
+ redefine func <*x1,x2,x3,x4,x5*> -> FinSeqLen of 5;
+ coherence proof thus len <*x1,x2,x3,x4,x5*>=5 by SCMPDS_1:5; end;
+end;
+
+definition
+ let S be ManySortedSign;
+ attr S is one-gate means :Def6:
+  ex X being non empty finite set, n being Nat, p being FinSeqLen of n,
+  f being Function of n-tuples_on X,X st
+  S = 1GateCircStr(p,f);
+end;
+
+definition
+ let S be non empty ManySortedSign;
+ let A be MSAlgebra over S;
+ attr A is one-gate means :Def7:
+  ex X being non empty finite set, n being Nat, p being FinSeqLen of n,
+  f being Function of n-tuples_on X,X st
+  S = 1GateCircStr(p,f) & A = 1GateCircuit(p,f);
+end;
+
+definition
+ let p being FinSequence, x be set;
+ cluster 1GateCircStr(p,x) -> finite;
+ coherence
+  proof
+      the carrier of 1GateCircStr(p,x) = (rng p) \/ {[p,x]} by CIRCCOMB:def 6;
+   hence thesis by GROUP_1:def 13;
+  end;
+end;
+
+definition
+ cluster one-gate -> strict non void non empty unsplit gate`1=arity
+ finite ManySortedSign;
+ coherence
+  proof
+   let S be ManySortedSign;
+   assume S is one-gate;
+   then ex X being non empty finite set, n being Nat, p being FinSeqLen of n,
+   f being Function of n-tuples_on X,X st S = 1GateCircStr(p,f) by Def6;
+   hence thesis;
+  end;
+end;
+
+definition
+ cluster one-gate -> gate`2=den (non empty ManySortedSign);
+ coherence
+  proof
+   let S be non empty ManySortedSign;
+   assume S is one-gate;
+   then ex X being non empty finite set, n being Nat, p being FinSeqLen of n,
+   f being Function of n-tuples_on X,X st S = 1GateCircStr(p,f) by Def6;
+   hence thesis;
+  end;
+end;
+
+definition
+ let X be non empty finite set,
+     n be Nat, p be FinSeqLen of n,
+     f be Function of n-tuples_on X,X;
+ cluster 1GateCircStr(p,f) -> one-gate;
+ coherence by Def6;
+end;
+
+definition
+ cluster one-gate ManySortedSign;
+ existence
+  proof
+   consider X being non empty finite set, n being Nat, p being FinSeqLen of n,
+   f being Function of n-tuples_on X,X;
+   take 1GateCircStr(p,f);
+   thus thesis;
+  end;
+end;
+
+definition
+ let S be one-gate ManySortedSign;
+ cluster one-gate -> strict non-empty Circuit of S;
+ coherence
+  proof
+   let A be Circuit of S;
+   assume A is one-gate;
+   then ex X being non empty finite set, n being Nat, p being FinSeqLen of n,
+   f being Function of n-tuples_on X,X st
+   S = 1GateCircStr(p,f) & A = 1GateCircuit(p,f) by Def7;
+   hence thesis;
+  end;
+end;
+
+definition
+ let X be non empty finite set,
+     n be Nat, p be FinSeqLen of n,
+     f be Function of n-tuples_on X,X;
+ cluster 1GateCircuit(p,f) -> one-gate;
+ coherence by Def7;
+end;
+
+definition
+ let S be one-gate ManySortedSign;
+ cluster one-gate non-empty Circuit of S;
+ existence
+  proof
+   consider X being non empty finite set, n being Nat, p being FinSeqLen of n,
+   f being Function of n-tuples_on X,X such that
+ A1: S = 1GateCircStr(p,f) by Def6;
+   reconsider A = 1GateCircuit(p,f) as locally-finite MSAlgebra over S by A1;
+   take A;
+   thus thesis by A1;
+  end;
+end;
+
+definition
+ let S be one-gate ManySortedSign;
+ func Output S -> Vertex of S equals :Def8: union the OperSymbols of S;
+ coherence
+  proof
+   consider X being non empty finite set, n being Nat, p being FinSeqLen of n,
+   f being Function of n-tuples_on X,X such that
+ A1: S = 1GateCircStr(p,f) by Def6;
+     the OperSymbols of S = {[p,f]} by A1,CIRCCOMB:def 6;
+ then A2: union the OperSymbols of S = [p,f] by ZFMISC_1:31;
+     [p,f] in {[p,f]} by TARSKI:def 1;
+   then [p,f] in (rng p) \/ {[p,f]} by XBOOLE_0:def 2;
+   hence thesis by A1,A2,CIRCCOMB:def 6;
+  end;
+end;
+
+definition
+ let S be one-gate ManySortedSign;
+ cluster Output S -> pair;
+ coherence
+  proof
+   consider X being non empty finite set, n being Nat, p being FinSeqLen of n,
+   f being Function of n-tuples_on X,X such that
+A1: S = 1GateCircStr(p,f) by Def6;
+A2: the OperSymbols of S = {[p,f]} by A1,CIRCCOMB:def 6;
+     Output S = union the OperSymbols of S by Def8 .= [p,f] by A2,ZFMISC_1:31;
+   hence thesis;
+  end;
+end;
+
+theorem Th16:
+ for S being one-gate ManySortedSign,
+ p being FinSequence, x being set st S = 1GateCircStr(p,x) holds
+ Output S = [p,x]
+  proof
+   let S be one-gate ManySortedSign,
+   p be FinSequence, x be set such that A1: S = 1GateCircStr(p,x);
+   thus Output S = union the OperSymbols of S by Def8
+    .= union {[p,x]} by A1,CIRCCOMB:def 6
+    .= [p,x] by ZFMISC_1:31;
+  end;
+
+theorem Th17:
+ for S being one-gate ManySortedSign holds InnerVertices S = {Output S}
+  proof
+   let S be one-gate ManySortedSign;
+   consider X being non empty finite set, n being Nat, p being FinSeqLen of n,
+   f being Function of n-tuples_on X,X such that
+A1: S = 1GateCircStr(p,f) by Def6;
+     Output S = [p,f] by A1,Th16;
+   hence thesis by A1,CIRCCOMB:49;
+  end;
+
+theorem
+   for S being one-gate ManySortedSign
+ for A being one-gate Circuit of S
+ for n being Nat
+ for X being finite non empty set
+ for f being Function of n-tuples_on X, X, p being FinSeqLen of n st
+ A = 1GateCircuit(p,f) holds S = 1GateCircStr(p,f)
+  proof
+   let S be one-gate ManySortedSign;
+   let A be one-gate Circuit of S;
+   let n be Nat;
+   let X be finite non empty set;
+   let f be Function of n-tuples_on X, X, p be FinSeqLen of n such that
+A1: A = 1GateCircuit(p,f);
+   consider X1 being non empty finite set, n1 being Nat,
+   p1 being FinSeqLen of n1,
+   f1 being Function of n1-tuples_on X1,X1 such that
+A2: S = 1GateCircStr(p1,f1) & A = 1GateCircuit(p1,f1) by Def7;
+     {[p,f]} = the OperSymbols of 1GateCircStr(p,f) by CIRCCOMB:def 6
+
+   .= dom the Charact of 1GateCircuit(p1,f1) by A1,A2,PBOOLE:def 3
+   .= the OperSymbols of 1GateCircStr(p1,f1) by PBOOLE:def 3
+   .= {[p1,f1]} by CIRCCOMB:def 6;
+   then [p,f] = [p1,f1] by ZFMISC_1:6;
+   then p = p1 & f = f1 by ZFMISC_1:33;
+   hence thesis by A2;
+  end;
+
+theorem
+   for n being Nat
+ for X being finite non empty set
+ for f being Function of n-tuples_on X, X, p being FinSeqLen of n
+ for s being State of 1GateCircuit(p,f) holds
+ (Following s).Output 1GateCircStr(p,f) = f.(s*p)
+  proof
+   let n be Nat;
+   let X be finite non empty set;
+   let f be Function of n-tuples_on X, X, p be FinSeqLen of n;
+   let s be State of 1GateCircuit(p,f);
+     Output 1GateCircStr(p,f) = [p,f] by Th16;
+   hence (Following s).Output 1GateCircStr(p,f) = f.(s*p) by CIRCCOMB:64;
+  end;
+
+theorem Th20:
+ for S being one-gate ManySortedSign
+ for A being one-gate Circuit of S
+ for s being State of A holds Following s is stable
+  proof
+   let S be one-gate ManySortedSign;
+   let A be one-gate Circuit of S;
+   let s be State of A;
+     ex X being non empty finite set, n being Nat,
+   p being FinSeqLen of n, f being Function of n-tuples_on X,X st
+   S = 1GateCircStr(p,f) & A = 1GateCircuit(p,f) by Def7;
+   hence Following s is stable by CIRCCMB2:2;
+  end;
+
+definition
+ let S be non void Circuit-like (non empty ManySortedSign);
+ cluster one-gate -> with_stabilization-limit (non-empty Circuit of S);
+ coherence
+  proof
+   let A be non-empty Circuit of S;
+   assume A1: A is one-gate;
+   then consider X being non empty finite set, n being Nat, p being FinSeqLen
+of n,
+   f being Function of n-tuples_on X,X such that
+A2: S = 1GateCircStr(p,f) & A = 1GateCircuit(p,f) by Def7;
+   reconsider S1=S as one-gate ManySortedSign by A2;
+   reconsider A1=A as one-gate Circuit of S1 by A1;
+   take 1; let s be State of A;
+   reconsider s1=s as State of A1;
+     Following s1 is stable by Th20;
+   hence thesis by FACIRC_1:14;
+  end;
+end;
+
+theorem Th21:
+ for S being one-gate ManySortedSign
+ for A being one-gate Circuit of S
+ for s being State of A holds
+ Result s = Following s
+  proof
+   let S be one-gate ManySortedSign;
+   let A be one-gate Circuit of S;
+   let s be State of A;
+A1: s is stabilizing by Def2;
+A2: Following s is stable by Th20;
+     Following s = Following(s,1) by FACIRC_1:14;
+   hence Result s = Following s by A1,A2,Def4;
+  end;
+
+theorem Th22:
+ for S being one-gate ManySortedSign
+ for A being one-gate Circuit of S
+ for s being State of A holds
+ stabilization-time s <= 1
+  proof
+   let S be one-gate ManySortedSign;
+   let A be one-gate Circuit of S;
+   let s be State of A;
+A1: s is stabilizing by Def2;
+   per cases;
+   suppose A2: s is stable;
+then A3: Following(s,0) = s by CIRCCMB2:3;
+     for n being Nat st n < 0 holds not Following(s,n) is stable by NAT_1:18;
+   then stabilization-time s = 0 by A1,A2,A3,Def5;
+   hence stabilization-time s <= 1;
+   suppose not s is stable;
+     Following s is stable by Th20;
+then Following(s,1) is stable by FACIRC_1:14;
+   hence stabilization-time s <= 1 by A1,Def5;
+  end;
+
+scheme OneGate1Ex {x()->set,X()->non empty finite set,f(set)->Element of X()}:
+ ex S being one-gate ManySortedSign,
+ A being one-gate Circuit of S st
+ InputVertices S = {x()} & for s being State of A holds
+ (Result s).(Output S) = f(s.x())
+  proof
+   deffunc F(Element of 1-tuples_on X()) = f($1.1);
+   consider g being Function of 1-tuples_on X(), X() such that
+A1: for a being Element of 1-tuples_on X() holds g.a = F(a) from LambdaD;
+   reconsider S = 1GateCircStr(<*x()*>,g) as one-gate ManySortedSign;
+   take S;
+   reconsider A = 1GateCircuit(<*x()*>,g) as one-gate Circuit of S;
+   take A;
+     rng <*x()*> = {x()} by FINSEQ_1:55;
+   hence InputVertices S = {x()} by CIRCCOMB:49;
+   let s be State of A;
+   reconsider sx = s*<*x()*> as Element of 1-tuples_on X() by Th13;
+     dom <*x()*> = Seg 1 by FINSEQ_1:55;
+then A2: 1 in dom <*x()*> by FINSEQ_1:3;
+   thus (Result s).Output S = (Following s).(Output S) by Th21
+   .= (Following s).[<*x()*>,g] by Th16
+   .= g.(s*<*x()*>) by CIRCCOMB:64
+   .= f(sx.1) by A1
+   .= f(s.(<*x()*>.1)) by A2,FUNCT_1:23
+   .= f(s.x()) by FINSEQ_1:def 8;
+  end;
+
+scheme OneGate2Ex {x1,x2()->set,X()->non empty finite set,
+                   f(set,set)->Element of X()}:
+ ex S being one-gate ManySortedSign,
+ A being one-gate Circuit of S st
+ InputVertices S = {x1(),x2()} & for s being State of A holds
+ (Result s).(Output S) = f(s.x1(),s.x2())
+  proof
+   deffunc F(Element of 2-tuples_on X()) = f($1.1,$1.2);
+   consider g being Function of 2-tuples_on X(), X() such that
+A1: for a being Element of 2-tuples_on X() holds g.a = F(a) from LambdaD;
+   reconsider S = 1GateCircStr(<*x1(),x2()*>,g) as one-gate ManySortedSign;
+   take S;
+   reconsider A = 1GateCircuit(<*x1(),x2()*>,g) as one-gate Circuit of S;
+   take A;
+     rng <*x1(),x2()*> = {x1(),x2()} by FINSEQ_2:147;
+   hence InputVertices S = {x1(),x2()} by CIRCCOMB:49;
+   let s be State of A;
+   reconsider sx = s*<*x1(),x2()*> as Element of 2-tuples_on X() by Th13;
+     dom <*x1(),x2()*> = Seg 2 by FINSEQ_3:29;
+then A2: 1 in dom <*x1(),x2()*> & 2 in dom <*x1(),x2()*> by FINSEQ_1:3;
+     Result s = Following s by Th21;
+   hence (Result s).(Output S) = (Following s).[<*x1(),x2()*>,g] by Th16
+   .= g.(s*<*x1(),x2()*>) by CIRCCOMB:64
+   .= f(sx.1,sx.2) by A1
+   .= f(s.(<*x1(),x2()*>.1),sx.2) by A2,FUNCT_1:23
+   .= f(s.(<*x1(),x2()*>.1),s.(<*x1(),x2()*>.2)) by A2,FUNCT_1:23
+   .= f(s.x1(),s.(<*x1(),x2()*>.2)) by FINSEQ_1:61
+   .= f(s.x1(),s.x2()) by FINSEQ_1:61;
+  end;
+
+scheme OneGate3Ex {x1,x2,x3()->set,X()->non empty finite set,
+                   f(set,set,set)->Element of X()}:
+ ex S being one-gate ManySortedSign,
+ A being one-gate Circuit of S st
+ InputVertices S = {x1(),x2(),x3()} & for s being State of A holds
+ (Result s).(Output S) = f(s.x1(),s.x2(),s.x3())
+  proof
+   deffunc F(Element of 3-tuples_on X()) = f($1.1,$1.2,$1.3);
+   consider g being Function of 3-tuples_on X(), X() such that
+A1: for a being Element of 3-tuples_on X() holds g.a = F(a) from LambdaD;
+   reconsider
+   S = 1GateCircStr(<*x1(),x2(),x3()*>,g) as one-gate ManySortedSign;
+   take S;
+   reconsider A = 1GateCircuit(<*x1(),x2(),x3()*>,g) as one-gate Circuit of S;
+   take A;
+     rng <*x1(),x2(),x3()*> = {x1(),x2(),x3()} by FINSEQ_2:148;
+   hence InputVertices S = {x1(),x2(),x3()} by CIRCCOMB:49;
+   let s be State of A;
+   reconsider sx = s*<*x1(),x2(),x3()*> as
+   Element of 3-tuples_on X() by Th13;
+     dom <*x1(),x2(),x3()*> = Seg 3 by FINSEQ_3:30;
+then A2: 1 in dom <*x1(),x2(),x3()*> & 2 in dom <*x1(),x2(),x3()*> &
+   3 in dom <*x1(),x2(),x3()*> by FINSEQ_1:3;
+     Result s = Following s by Th21;
+   hence (Result s).(Output S) = (Following s).[<*x1(),x2(),x3()*>,g] by Th16
+   .= g.(s*<*x1(),x2(),x3()*>) by CIRCCOMB:64
+   .= f(sx.1,sx.2,sx.3) by A1
+   .= f(s.(<*x1(),x2(),x3()*>.1),sx.2,sx.3) by A2,FUNCT_1:23
+   .= f(s.x1(),sx.2,sx.3) by FINSEQ_1:62
+   .= f(s.x1(),s.(<*x1(),x2(),x3()*>.2),sx.3) by A2,FUNCT_1:23
+   .= f(s.x1(),s.x2(),sx.3) by FINSEQ_1:62
+   .= f(s.x1(),s.x2(),s.(<*x1(),x2(),x3()*>.3)) by A2,FUNCT_1:23
+   .= f(s.x1(),s.x2(),s.x3()) by FINSEQ_1:62;
+  end;
+
+scheme OneGate4Ex {x1,x2,x3,x4()->set,X()->non empty finite set,
+                   f(set,set,set,set)->Element of X()}:
+ ex S being one-gate ManySortedSign,
+ A being one-gate Circuit of S st
+ InputVertices S = {x1(),x2(),x3(),x4()} & for s being State of A holds
+ (Result s).(Output S) = f(s.x1(),s.x2(),s.x3(),s.x4())
+  proof
+   deffunc F(Element of 4-tuples_on X()) = f($1.1,$1.2,$1.3,$1.4);
+   consider g being Function of 4-tuples_on X(), X() such that
+A1: for a being Element of 4-tuples_on X() holds g.a = F(a) from LambdaD;
+   reconsider
+   S = 1GateCircStr(<*x1(),x2(),x3(),x4()*>,g) as one-gate ManySortedSign;
+   take S;
+   reconsider
+   A = 1GateCircuit(<*x1(),x2(),x3(),x4()*>,g) as one-gate Circuit of S;
+   take A;
+     rng <*x1(),x2(),x3(),x4()*> = {x1(),x2(),x3(),x4()} by Th14;
+   hence InputVertices S = {x1(),x2(),x3(),x4()} by CIRCCOMB:49;
+   let s be State of A;
+   reconsider sx = s*<*x1(),x2(),x3(),x4()*> as
+   Element of 4-tuples_on X() by Th13;
+     dom <*x1(),x2(),x3(),x4()*> = Seg 4 by SCMPDS_1:4;
+then A2: 1 in dom <*x1(),x2(),x3(),x4()*> & 2 in dom <*x1(),x2(),x3(),x4()*> &
+   3 in dom <*x1(),x2(),x3(),x4()*> & 4 in dom <*x1(),x2(),x3(),x4()*>
+   by FINSEQ_1:3;
+     Result s = Following s by Th21;
+   hence (Result s).(Output S) =
+   (Following s).[<*x1(),x2(),x3(),x4()*>,g] by Th16
+   .= g.(s*<*x1(),x2(),x3(),x4()*>) by CIRCCOMB:64
+   .= f(sx.1,sx.2,sx.3,sx.4) by A1
+   .= f(s.(<*x1(),x2(),x3(),x4()*>.1),sx.2,sx.3,sx.4) by A2,FUNCT_1:23
+   .= f(s.x1(),sx.2,sx.3,sx.4) by SCMPDS_1:3
+   .= f(s.x1(),s.(<*x1(),x2(),x3(),x4()*>.2),sx.3,sx.4) by A2,FUNCT_1:23
+   .= f(s.x1(),s.x2(),sx.3,sx.4) by SCMPDS_1:3
+   .= f(s.x1(),s.x2(),s.(<*x1(),x2(),x3(),x4()*>.3),sx.4) by A2,FUNCT_1:23
+   .= f(s.x1(),s.x2(),s.x3(),sx.4) by SCMPDS_1:3
+   .= f(s.x1(),s.x2(),s.x3(),s.(<*x1(),x2(),x3(),x4()*>.4)) by A2,FUNCT_1:23
+   .= f(s.x1(),s.x2(),s.x3(),s.x4()) by SCMPDS_1:3;
+  end;
+
+scheme OneGate5Ex {x1,x2,x3,x4,x5()->set,X()->non empty finite set,
+                   f(set,set,set,set,set)->Element of X()}:
+ ex S being one-gate ManySortedSign,
+ A being one-gate Circuit of S st
+ InputVertices S = {x1(),x2(),x3(),x4(),x5()} & for s being State of A holds
+ (Result s).(Output S) = f(s.x1(),s.x2(),s.x3(),s.x4(),s.x5())
+  proof
+   deffunc F(Element of 5-tuples_on X()) = f($1.1,$1.2,$1.3,$1.4,$1.5);
+   consider g being Function of 5-tuples_on X(), X() such that
+A1: for a being Element of 5-tuples_on X() holds g.a = F(a) from LambdaD;
+   reconsider
+   S = 1GateCircStr(<*x1(),x2(),x3(),x4(),x5()*>,g) as one-gate ManySortedSign;
+   take S;
+   reconsider
+   A = 1GateCircuit(<*x1(),x2(),x3(),x4(),x5()*>,g) as one-gate Circuit of S;
+   take A;
+     rng <*x1(),x2(),x3(),x4(),x5()*> = {x1(),x2(),x3(),x4(),x5()} by Th15;
+   hence InputVertices S = {x1(),x2(),x3(),x4(),x5()} by CIRCCOMB:49;
+   let s be State of A;
+   reconsider sx = s*<*x1(),x2(),x3(),x4(),x5()*> as
+   Element of 5-tuples_on X() by Th13;
+     dom <*x1(),x2(),x3(),x4(),x5()*> = Seg 5 by SCMPDS_1:6;
+then A2: 1 in dom <*x1(),x2(),x3(),x4(),x5()*> &
+   2 in dom <*x1(),x2(),x3(),x4(),x5()*> &
+   3 in dom <*x1(),x2(),x3(),x4(),x5()*> &
+   4 in dom <*x1(),x2(),x3(),x4(),x5()*> &
+   5 in dom <*x1(),x2(),x3(),x4(),x5()*> by FINSEQ_1:3;
+     Result s = Following s by Th21;
+   hence (Result s).(Output S) =
+   (Following s).[<*x1(),x2(),x3(),x4(),x5()*>,g] by Th16
+   .= g.(s*<*x1(),x2(),x3(),x4(),x5()*>) by CIRCCOMB:64
+   .= f(sx.1,sx.2,sx.3,sx.4,sx.5) by A1
+   .= f(s.(<*x1(),x2(),x3(),x4(),x5()*>.1),sx.2,sx.3,sx.4,sx.5) by A2,FUNCT_1:
+23
+   .= f(s.x1(),sx.2,sx.3,sx.4,sx.5) by SCMPDS_1:5
+   .= f(s.x1(),s.(<*x1(),x2(),x3(),x4(),x5()*>.2),sx.3,sx.4,sx.5)
+      by A2,FUNCT_1:23
+   .= f(s.x1(),s.x2(),sx.3,sx.4,sx.5) by SCMPDS_1:5
+   .= f(s.x1(),s.x2(),s.(<*x1(),x2(),x3(),x4(),x5()*>.3),sx.4,sx.5)
+      by A2,FUNCT_1:23
+   .= f(s.x1(),s.x2(),s.x3(),sx.4,sx.5) by SCMPDS_1:5
+   .= f(s.x1(),s.x2(),s.x3(),s.(<*x1(),x2(),x3(),x4(),x5()*>.4),sx.5)
+      by A2,FUNCT_1:23
+   .= f(s.x1(),s.x2(),s.x3(),s.x4(),sx.5) by SCMPDS_1:5
+   .= f(s.x1(),s.x2(),s.x3(),s.x4(),s.(<*x1(),x2(),x3(),x4(),x5()*>.5))
+      by A2,FUNCT_1:23
+   .= f(s.x1(),s.x2(),s.x3(),s.x4(),s.x5()) by SCMPDS_1:5;
+  end;
+
+begin :: Mono-sorted circuits
+
+theorem Th23:
+ for f being constant Function
+ holds f = (dom f) --> the_value_of f
+  proof
+   let f be constant Function;
+   per cases;
+   suppose
+A1:  f = {};
+     then dom f = {} & dom ({} --> the_value_of f) = {} by FUNCOP_1:19,RELAT_1:
+60;
+    hence thesis by A1,RELAT_1:64;
+   suppose
+A2:  f <> {};
+A3:  dom ((dom f) --> the_value_of f) = dom f by FUNCOP_1:19;
+       now let x be set;
+      assume
+A4:    x in dom f;
+then ((dom f) --> the_value_of f).x = the_value_of f by FUNCOP_1:13;
+      hence f.x = ((dom f) --> the_value_of f).x by A2,A4,YELLOW_6:def 1;
+     end;
+    hence f = (dom f) --> the_value_of f by A3,FUNCT_1:9;
+  end;
+
+theorem Th24:
+ for X,Y being non empty set, n,m being Nat st
+ n<>0 & n-tuples_on X = m-tuples_on Y
+ holds X=Y & n=m
+  proof
+   let X,Y be non empty set;
+   let n,m be Nat;
+   assume
+A1: n<>0 & n-tuples_on X = m-tuples_on Y;
+then A2: Seg n <> {} by FINSEQ_1:5;
+   thus X=Y
+    proof
+     thus X c= Y
+      proof
+       let a be set; assume a in X;
+       then n |-> a is Element of n-tuples_on X by FINSEQ_2:132;
+       then n |-> a in m-tuples_on Y by A1;
+       then n |-> a in { s where s is Element of Y*: len s = m } by FINSEQ_2:
+def 4;
+       then consider s being Element of Y* such that
+A3:     s = n |-> a & len s = m;
+A4:     rng (n |-> a) c= Y by A3,FINSEQ_1:def 4;
+         n |-> a = (Seg n) --> a by FINSEQ_2:def 2;
+       then rng (n |-> a) = {a} by A2,FUNCOP_1:14;
+       then a in rng (n |-> a) by TARSKI:def 1;
+       hence a in Y by A4;
+      end;
+     let a be set; assume a in Y;
+     then m |-> a is Element of m-tuples_on Y by FINSEQ_2:132;
+     then m |-> a in n-tuples_on X by A1;
+     then m |-> a in { s where s is Element of X*: len s = n } by FINSEQ_2:def
+4;
+     then consider s being Element of X* such that
+A5:     s = m |-> a & len s = n;
+A6:  m=n by A5,FINSEQ_2:69;
+A7:     rng (m |-> a) c= X by A5,FINSEQ_1:def 4;
+       m |-> a = (Seg m) --> a by FINSEQ_2:def 2;
+     then rng (m |-> a) = {a} by A2,A6,FUNCOP_1:14;
+     then a in rng (m |-> a) by TARSKI:def 1;
+     hence a in X by A7;
+    end;
+   hence n=m by A1,FINSEQ_2:130;
+  end;
+
+theorem
+   for S1,S2 being non empty ManySortedSign
+ for v being Vertex of S1 holds v is Vertex of S1+*S2
+  proof
+   let S1,S2 be non empty ManySortedSign;
+   let v be Vertex of S1;
+     v in (the carrier of S1) \/ (the carrier of S2) by XBOOLE_0:def 2;
+   hence thesis by CIRCCOMB:def 2;
+  end;
+
+theorem
+   for S1,S2 being non empty ManySortedSign
+ for v being Vertex of S2 holds v is Vertex of S1+*S2
+  proof
+   let S1,S2 be non empty ManySortedSign;
+   let v be Vertex of S2;
+     v in (the carrier of S1) \/ (the carrier of S2) by XBOOLE_0:def 2;
+   hence thesis by CIRCCOMB:def 2;
+  end;
+
+definition
+ let X be non empty finite set;
+ mode Signature of X ->
+ gate`2=den (non void non empty unsplit gate`1=arity ManySortedSign) means:
+Def9:
+ ex A being Circuit of it st the Sorts of A is constant &
+ the_value_of the Sorts of A = X & A is gate`2=den;
+ existence
+  proof
+   consider f being Function of 1-tuples_on X, X;
+   consider p being FinSeqLen of 1;
+   take 1GateCircStr(p,f);
+   set A = 1GateCircuit(p,f);
+     the Sorts of A = (the carrier of 1GateCircStr(p,f))-->X by CIRCCOMB:def 14
+;
+   then the Sorts of A is constant &
+   the_value_of the Sorts of A = X by YELLOW_6:2;
+   hence thesis;
+  end;
+end;
+
+theorem Th27:
+ for n being Nat, X being non empty finite set
+ for f being Function of n-tuples_on X, X
+ for p being FinSeqLen of n
+  holds 1GateCircStr(p,f) is Signature of X
+  proof let n be Nat, X be non empty finite set;
+   let f be Function of n-tuples_on X, X;
+   let p being FinSeqLen of n;
+   take A = 1GateCircuit(p,f);
+      the Sorts of A = (the carrier of 1GateCircStr(p,f))-->X
+     by CIRCCOMB:def 14;
+   hence thesis by YELLOW_6:2;
+  end;
+
+definition
+ let X be non empty finite set;
+ cluster strict one-gate Signature of X;
+ existence
+  proof
+   consider f being Function of 1-tuples_on X, X;
+   consider p being FinSeqLen of 1;
+      1GateCircStr(p,f) is Signature of X by Th27;
+   hence thesis;
+  end;
+end;
+
+definition let n be Nat; let X be non empty finite set;
+ let f be Function of n-tuples_on X, X;
+ let p be FinSeqLen of n;
+ redefine func 1GateCircStr(p,f) -> strict Signature of X;
+ coherence by Th27;
+end;
+
+definition
+ let X be non empty finite set;
+ let S be Signature of X;
+ mode Circuit of X,S -> Circuit of S means :Def10:
+ it is gate`2=den &
+ the Sorts of it is constant & the_value_of the Sorts of it = X;
+ existence
+  proof
+     ex A being Circuit of S st the Sorts of A is constant &
+   the_value_of the Sorts of A = X & A is gate`2=den by Def9;
+   hence thesis;
+  end;
+end;
+
+definition
+ let X be non empty finite set;
+ let S be Signature of X;
+ cluster -> gate`2=den non-empty Circuit of X,S;
+ coherence
+  proof
+   let A be Circuit of X,S;
+   thus A is gate`2=den by Def10;
+A1: dom the Sorts of A = the carrier of S by PBOOLE:def 3;
+  the Sorts of A is non empty constant &
+   the_value_of the Sorts of A = X by Def10,PBOOLE:def 3,RELAT_1:60;
+   then for i being set st i in dom the Sorts of A holds
+    (the Sorts of A).i is non empty by YELLOW_6:def 1;
+   then the Sorts of A is non-empty by A1,PBOOLE:def 16;
+   hence A is non-empty by MSUALG_1:def 8;
+  end;
+end;
+
+theorem Th28:
+ for n being Nat, X being non empty finite set
+ for f being Function of n-tuples_on X, X
+ for p being FinSeqLen of n
+  holds 1GateCircuit(p,f) is Circuit of X, 1GateCircStr(p,f)
+  proof let n be Nat, X be non empty finite set;
+   let f be Function of n-tuples_on X, X;
+   let p being FinSeqLen of n;
+   set A = 1GateCircuit(p,f);
+   thus A is gate`2=den;
+      the Sorts of A = (the carrier of 1GateCircStr(p,f))-->X
+     by CIRCCOMB:def 14;
+   hence the Sorts of A is constant &
+    the_value_of the Sorts of A = X by YELLOW_6:2;
+  end;
+
+definition
+ let X be non empty finite set;
+ let S be one-gate Signature of X;
+ cluster strict one-gate Circuit of X,S;
+ existence
+  proof
+   consider A being Circuit of S such that
+A1: the Sorts of A is constant &
+   the_value_of the Sorts of A = X & A is gate`2=den by Def9;
+   A2: dom the Sorts of A = the carrier of S by PBOOLE:def 3;
+   set B=the MSAlgebra of A;
+     the Sorts of A is locally-finite by MSAFREE2:def 11;
+   then reconsider B as Circuit of S by MSAFREE2:def 11;
+     for g being set st g in the OperSymbols of S holds
+   g = [g`1, (the Charact of B).g] by A1,CIRCCOMB:def 10;
+then B is gate`2=den &
+   the Sorts of B is non empty constant & the_value_of the Sorts of B = X
+   by A1,CIRCCOMB:def 10,PBOOLE:def 3,RELAT_1:60;
+   then reconsider B as Circuit of X,S by Def10;
+   take B;
+   consider Y being non empty finite set, n being Nat, p being FinSeqLen of n,
+   f being Function of n-tuples_on Y,Y such that
+A3: S = 1GateCircStr(p,f) by Def6;
+   set C = 1GateCircuit(p,f);
+   set g=[p,f];
+     g in {g} by TARSKI:def 1;
+then A4: g in the OperSymbols of S by A3,CIRCCOMB:def 6;
+then A5: g = [g`1, (the Charact of B).g] by CIRCCOMB:def 10;
+A6: g = [g`1, (the Charact of C).g] by A3,A4,CIRCCOMB:def 10;
+     dom ((the Charact of B).g) = dom f by A5,ZFMISC_1:33;
+then A7: dom ((the Charact of B).g) = n-tuples_on Y by FUNCT_2:def 1;
+     dom (the ResultSort of S) = the OperSymbols of S by FUNCT_2:def 1;
+then A8: ((the Sorts of B)*the ResultSort of S).g =
+   (the Sorts of B).((the ResultSort of S).g) by A4,FUNCT_1:23;
+   consider b being set such that
+A9: b in dom the Sorts of B & X = (the Sorts of B).b by A1,A2,RELAT_1:60,
+YELLOW_6:def 1;
+A10: the Sorts of B = (the carrier of S) --> X by A1,A2,Th23;
+     (the ResultSort of S).g in the carrier of S by A4,FUNCT_2:7;
+   then (the ResultSort of S).g in dom the Sorts of B by PBOOLE:def 3;
+then A11: (the Sorts of B).((the ResultSort of S).g) = X by A1,A9,SEQM_3:def 5;
+     (the Charact of B).g is Function of
+   (((the Sorts of B)# )*the Arity of S).g,
+   ((the Sorts of B)*the ResultSort of S).g
+   by A4,MSUALG_1:def 2;
+then A12: dom ((the Charact of B).g) = (((the Sorts of B)# )*the Arity of S).g
+                        by A8,A11,FUNCT_2:def 1;
+A13: dom the Arity of S = the OperSymbols of S by FUNCT_2:def 1;
+     (the Arity of S).g in (the carrier of S)* by A4,FUNCT_2:7;
+   then reconsider Ag = (the Arity of S).g as FinSequence of the carrier of S
+   by FINSEQ_1:def 11;
+A14: dom ((the Charact of B).g) = ((the Sorts of B)# ).Ag by A4,A12,A13,FUNCT_1
+:23
+   .= (len Ag)-tuples_on X by A10,CIRCCOMB:6;
+   per cases;
+   suppose n <> 0;
+   then X = Y by A7,A14,Th24;
+then A15: the Sorts of B = the Sorts of 1GateCircuit(p,f) by A3,A10,CIRCCOMB:
+def 14;
+     now let i be set;
+    assume i in the OperSymbols of S;
+    then i in {g} by A3,CIRCCOMB:def 6;
+    then i = g by TARSKI:def 1;
+    hence (the Charact of B).i = (the Charact of C).i by A5,A6,ZFMISC_1:33;
+   end;
+   hence B is strict one-gate by A3,A15,PBOOLE:3;
+   suppose A16: n = 0;
+     (the Charact of B).g is Function of
+   (((the Sorts of B)# )*the Arity of S).g,
+   ((the Sorts of B)*the ResultSort of S).g
+   by A4,MSUALG_1:def 2;
+then A17: rng ((the Charact of B).g) c= ((the Sorts of B)*the ResultSort of S).
+g
+   by RELSET_1:12;
+     n-tuples_on X = {<*>X} by A16,FINSEQ_2:112
+    .= {<*>Y}
+    .= n-tuples_on Y by A16,FINSEQ_2:112;
+then A18: dom f = n-tuples_on X by FUNCT_2:def 1;
+     (the Charact of B).g = f by A5,ZFMISC_1:33;
+   then reconsider h=f as Function of n-tuples_on X,X by A8,A11,A17,A18,FUNCT_2
+:4;
+   set D = 1GateCircuit(p,h);
+A19: g = [g`1, (the Charact of D).g] by A3,A4,CIRCCOMB:def 10;
+A20: the Sorts of B = the Sorts of D by A3,A10,CIRCCOMB:def 14;
+     now let i be set;
+    assume i in the OperSymbols of S;
+    then i in {g} by A3,CIRCCOMB:def 6;
+    then i = g by TARSKI:def 1;
+    hence (the Charact of B).i = (the Charact of D).i by A5,A19,ZFMISC_1:33;
+   end;
+   hence B is strict one-gate by A3,A20,PBOOLE:3;
+  end;
+end;
+
+definition
+ let X be non empty finite set;
+ let S be Signature of X;
+ cluster strict Circuit of X,S;
+ existence
+  proof
+   consider A being Circuit of S such that
+A1: the Sorts of A is constant &
+   the_value_of the Sorts of A = X & A is gate`2=den by Def9;
+   set B=the MSAlgebra of A;
+     the Sorts of A is locally-finite by MSAFREE2:def 11;
+   then reconsider B as Circuit of S by MSAFREE2:def 11;
+     for g being set st g in the OperSymbols of S holds
+   g = [g`1, (the Charact of B).g] by A1,CIRCCOMB:def 10;
+   then B is gate`2=den &
+   the Sorts of B is constant & the_value_of the Sorts of B = X
+   by A1,CIRCCOMB:def 10;
+   then reconsider B as Circuit of X,S by Def10;
+   take B;
+   thus thesis;
+  end;
+end;
+
+definition let n be Nat; let X be non empty finite set;
+ let f be Function of n-tuples_on X, X;
+ let p be FinSeqLen of n;
+ redefine func 1GateCircuit(p,f) -> strict Circuit of X,1GateCircStr(p,f);
+ coherence by Th28;
+end;
+
+canceled;
+
+theorem Th30:
+ for X being non empty finite set
+ for S1, S2 being Signature of X
+ for A1 being Circuit of X,S1
+ for A2 being Circuit of X,S2
+  holds A1 tolerates A2
+  proof let X be non empty finite set;
+   let S1,S2 be Signature of X;
+   let A1 be Circuit of X,S1;
+   let A2 be Circuit of X,S2;
+   thus S1 tolerates S2 by CIRCCOMB:55;
+      the Sorts of A1 is constant & the_value_of the Sorts of A1 = X &
+    the Sorts of A2 is constant & the_value_of the Sorts of A2 = X
+     by Def10;
+    then the Sorts of A1 = (dom the Sorts of A1)-->X &
+    the Sorts of A2 = (dom the Sorts of A2)-->X by Th23;
+   hence the Sorts of A1 tolerates the Sorts of A2 by CIRCCOMB:4;
+   thus thesis by CIRCCOMB:56;
+  end;
+
+theorem Th31:
+ for X being non empty finite set
+ for S1, S2 being Signature of X
+ for A1 being Circuit of X,S1
+ for A2 being Circuit of X,S2
+  holds A1+*A2 is Circuit of S1+*S2
+  proof let X be non empty finite set;
+   let S1,S2 be Signature of X;
+A1: the carrier of S1+*S2 = (the carrier of S1) \/ the carrier of S2
+     by CIRCCOMB:def 2;
+   let A1 be Circuit of X,S1;
+   let A2 be Circuit of X,S2;
+      A1 tolerates A2 by Th30;
+then A2: the Sorts of A1 tolerates the Sorts of A2 by CIRCCOMB:def 3;
+then A3: the Sorts of A1+*A2 = (the Sorts of A1)+*the Sorts of A2 by CIRCCOMB:
+def 4;
+A4: dom the Sorts of A1 = the carrier of S1 &
+    dom the Sorts of A2 = the carrier of S2 by PBOOLE:def 3;
+A5: the Sorts of A1 is locally-finite & the Sorts of A2 is locally-finite
+     by MSAFREE2:def 11;
+      A1+*A2 is locally-finite
+     proof let i be set; assume
+         i in the carrier of S1+*S2;
+       then i in the carrier of S1 or i in the carrier of S2 by A1,XBOOLE_0:def
+2;
+       then i in the carrier of S1 & (the Sorts of A1+*A2).i = (the Sorts of
+A1).i
+       or
+       i in the carrier of S2 & (the Sorts of A1+*A2).i = (the Sorts of A2).i
+        by A2,A3,A4,FUNCT_4:14,16;
+      hence thesis by A5,PRE_CIRC:def 3;
+     end;
+   hence thesis;
+  end;
+
+theorem Th32:
+ for X being non empty finite set
+ for S1, S2 being Signature of X
+ for A1 being Circuit of X,S1
+ for A2 being Circuit of X,S2
+  holds A1+*A2 is gate`2=den
+  proof let X be non empty finite set;
+   let S1,S2 be Signature of X;
+A1: the OperSymbols of S1+*S2 = (the OperSymbols of S1)\/ the OperSymbols of S2
+     by CIRCCOMB:def 2;
+   let A1 be Circuit of X,S1;
+   let A2 be Circuit of X,S2;
+      A1 tolerates A2 by Th30;
+then A2: the Charact of A1 tolerates the Charact of A2 &
+    the Sorts of A1 tolerates the Sorts of A2 by CIRCCOMB:def 3;
+then A3: the Charact of A1+*A2 = (the Charact of A1)+*the Charact of A2
+     by CIRCCOMB:def 4;
+A4: dom the Charact of A1 = the OperSymbols of S1 &
+    dom the Charact of A2 = the OperSymbols of S2 by PBOOLE:def 3;
+      A1+*A2 is gate`2=den
+     proof let i be set; assume
+         i in the OperSymbols of S1+*S2;
+       then i in the OperSymbols of S1 or
+       i in the OperSymbols of S2 by A1,XBOOLE_0:def 2;
+       then i in the OperSymbols of S1 &
+        (the Charact of A1+*A2).i = (the Charact of A1).i
+       or
+       i in the OperSymbols of S2 &
+        (the Charact of A1+*A2).i = (the Charact of A2).i
+         by A2,A3,A4,FUNCT_4:14,16;
+      hence thesis by CIRCCOMB:def 10;
+     end;
+   hence thesis;
+  end;
+
+theorem Th33:
+ for X being non empty finite set
+ for S1, S2 being Signature of X
+ for A1 being Circuit of X,S1
+ for A2 being Circuit of X,S2
+  holds the Sorts of A1+*A2 is constant &
+        the_value_of the Sorts of A1+*A2 = X
+  proof let X be non empty finite set;
+   let S1,S2 be Signature of X;
+   let A1 be Circuit of X,S1;
+   let A2 be Circuit of X,S2;
+   reconsider A = A1+*A2 as Circuit of S1+*S2 by Th31;
+      A1 tolerates A2 by Th30;
+then A1: the Sorts of A1 tolerates the Sorts of A2 by CIRCCOMB:def 3;
+      the Sorts of A1 is constant & the_value_of the Sorts of A1 = X &
+    the Sorts of A2 is constant & the_value_of the Sorts of A2 = X
+     by Def10;
+    then the Sorts of A1 = (dom the Sorts of A1)-->X &
+    the Sorts of A2 = (dom the Sorts of A2)-->X by Th23;
+then A2: the Sorts of A1 = [:dom the Sorts of A1,{X}:] &
+    the Sorts of A2 = [:dom the Sorts of A2,{X}:] by FUNCOP_1:def 2;
+A3: dom the Sorts of A1 = the carrier of S1 by PBOOLE:def 3;
+      the Sorts of A
+         = (the Sorts of A1)+*(the Sorts of A2) by A1,CIRCCOMB:def 4
+        .= (the Sorts of A1)\/(the Sorts of A2) by A1,FUNCT_4:31
+        .= [:(dom the Sorts of A1) \/ dom the Sorts of A2, {X}:]
+          by A2,ZFMISC_1:120
+        .= ((the carrier of S1) \/ dom the Sorts of A2) --> X
+          by A3,FUNCOP_1:def 2;
+   hence the Sorts of A1+*A2 is constant &
+         the_value_of the Sorts of A1+*A2 = X by YELLOW_6:2;
+  end;
+
+definition
+ let S1,S2 be finite non empty ManySortedSign;
+ cluster S1+*S2 -> finite;
+ coherence
+  proof
+      the carrier of S1+*S2 = (the carrier of S1) \/ the carrier of S2
+     by CIRCCOMB:def 2;
+   hence thesis by GROUP_1:def 13;
+  end;
+end;
+
+definition let X be non empty finite set;
+ let S1,S2 be Signature of X;
+ cluster S1+*S2 -> gate`2=den;
+ coherence
+  proof consider A1 be Circuit of S1 such that
+A1: the Sorts of A1 is constant &
+    the_value_of the Sorts of A1 = X & A1 is gate`2=den by Def9;
+   reconsider A1 as Circuit of X,S1 by A1,Def10;
+   consider A2 be Circuit of S2 such that
+A2: the Sorts of A2 is constant &
+    the_value_of the Sorts of A2 = X & A2 is gate`2=den by Def9;
+   reconsider A2 as Circuit of X,S2 by A2,Def10;
+      A1+*A2 is gate`2=den by Th32;
+   hence thesis by CIRCCOMB:def 11;
+  end;
+end;
+
+definition let X be non empty finite set;
+ let S1,S2 be Signature of X;
+ redefine func S1+*S2 -> strict Signature of X;
+ coherence
+  proof consider A1 being Circuit of S1 such that
+A1: the Sorts of A1 is constant & the_value_of the Sorts of A1 = X &
+    A1 is gate`2=den by Def9;
+   consider A2 being Circuit of S2 such that
+A2: the Sorts of A2 is constant & the_value_of the Sorts of A2 = X &
+    A2 is gate`2=den by Def9;
+   reconsider A1 as Circuit of X,S1 by A1,Def10;
+   reconsider A2 as Circuit of X,S2 by A2,Def10;
+   reconsider A = A1+*A2 as Circuit of S1+*S2 by Th31;
+      S1+*S2 is Signature of X
+     proof take A;
+      thus the Sorts of A is constant &
+           the_value_of the Sorts of A = X by Th33;
+      thus A is gate`2=den by Th32;
+     end;
+   hence thesis;
+  end;
+end;
+
+definition let X be non empty finite set;
+ let S1,S2 be Signature of X;
+ let A1 be Circuit of X,S1;
+ let A2 be Circuit of X,S2;
+ redefine func A1+*A2 -> strict Circuit of X,S1+*S2;
+ coherence
+  proof
+A1: A1+*A2 is gate`2=den & A1+*A2 is Circuit of S1+*S2 by Th31,Th32;
+      the Sorts of A1+*A2 is constant &
+    the_value_of the Sorts of A1+*A2 = X by Th33;
+   hence thesis by A1,Def10;
+  end;
+end;
+
+theorem Th34:
+for x,y being set holds
+the_rank_of x in the_rank_of [x,y] & the_rank_of y in the_rank_of [x,y]
+ proof
+  let x,y be set;
+    x in {x} by TARSKI:def 1;
+then A1: the_rank_of x in the_rank_of {x} by CLASSES1:76;
+    {x} in { { x,y }, { x } } by TARSKI:def 2;
+then A2: the_rank_of {x} in the_rank_of { { x,y }, { x } } by CLASSES1:76;
+    [x,y] = { { x,y }, { x } } by TARSKI:def 5;
+  hence the_rank_of x in the_rank_of [x,y] by A1,A2,ORDINAL1:19;
+    y in {x,y} by TARSKI:def 2;
+then A3: the_rank_of y in the_rank_of {x,y} by CLASSES1:76;
+    {x,y} in { { x,y }, { x } } by TARSKI:def 2;
+then A4: the_rank_of {x,y} in the_rank_of { { x,y }, { x } } by CLASSES1:76;
+    [x,y] = { { x,y }, { x } } by TARSKI:def 5;
+  hence the_rank_of y in the_rank_of [x,y] by A3,A4,ORDINAL1:19;
+ end;
+
+theorem Th35:
+ for S being gate`2=den finite
+ (non void non empty unsplit gate`1=arity ManySortedSign)
+ for A being non-empty Circuit of S st A is gate`2=den holds
+ A is with_stabilization-limit
+  proof
+   let S be gate`2=den finite
+   (non void non empty unsplit gate`1=arity ManySortedSign);
+   let A be non-empty Circuit of S such that
+A1: A is gate`2=den;
+defpred P[set,set] means $1 = $2 or $1 in the OperSymbols of S &
+ $2 in proj2 $1`1;
+   consider R being Relation such that
+A2: for a,b being set holds [a,b] in R iff
+      a in the carrier of S & b in the carrier of S & P[a,b]
+       from Rel_Existence;
+   defpred P[set] means
+    $1 in the carrier of S implies ex n being Nat st
+     for s being State of A, m being Nat st m >= n
+       holds Following(s,m).$1 = Following(s,n).$1;
+A3: R is co-well_founded
+     proof let Y be set; assume
+A4:    Y c= field R & Y <> {};
+       defpred P[set,set] means $2 = the_rank_of $1;
+A5:    for x,y,z being set st P[x,y] & P[x,z] holds y = z;
+      consider B being set such that
+A6:    for x being set holds x in B iff
+        ex y being set st y in Y & P[y,x] from Fraenkel(A5);
+      consider y being Element of Y;
+         the_rank_of y in B by A4,A6;
+       then inf B in B by ORDINAL2:25;
+      then consider y being set such that
+A7:    y in Y & inf B = the_rank_of y by A6;
+      take y; thus y in Y by A7;
+      let b be set; assume
+A8:    b in Y & y <> b & [y,b] in R;
+then A9:    y in the OperSymbols of S & b in the carrier of S & b in proj2 y`1
+        by A2;
+      then consider c being set such that
+A10:    [c,b] in y`1 by FUNCT_5:def 2;
+A11:    the_rank_of [c,b] in the_rank_of y`1 by A10,CLASSES1:76;
+       A12: the_rank_of b in the_rank_of [c,b] by Th34;
+         y = [y`1, (the Charact of A).y] by A1,A9,CIRCCOMB:def 10;
+       then A13: the_rank_of y`1 in the_rank_of y by Th34;
+         the_rank_of b in B by A6,A8;
+       then inf B c= the_rank_of b by ORDINAL2:22;
+      hence contradiction by A7,A11,A12,A13,ORDINAL1:19;
+     end;
+A14: dom R c= the carrier of S
+    proof
+     let o be set; assume o in dom R; then consider q being set such that
+A15:   [o,q] in R by RELAT_1:def 4;
+     thus thesis by A2,A15;
+    end;
+     rng R c= the carrier of S
+    proof
+     let o be set; assume o in rng R; then consider q being set such that
+A16:   [q,o] in R by RELAT_1:def 5;
+     thus thesis by A2,A16;
+    end;
+   then dom R \/ rng R c= (the carrier of S) \/ the carrier of S
+   by A14,XBOOLE_1:13;
+then A17: field R c= the carrier of S by RELAT_1:def 6;
+   A18: the carrier of S c= field R
+    proof
+     let o be set; assume o in the carrier of S;
+     then [o,o] in R by A2;
+     hence thesis by RELAT_1:30;
+    end;
+then A19: the carrier of S = field R by A17,XBOOLE_0:def 10;
+A20: for a being set st for b being set st [a,b] in R & a <> b holds P[b]
+    holds P[a]
+     proof
+      let a be set; assume
+A21:  for b being set st [a,b] in R & a <> b holds P[b];
+      defpred S[set] means a <> $1 & [a,$1] in R;
+      consider RS being set such that
+A22:   for b being set holds b in RS iff b in field R & S[b] from Separation;
+      assume
+A23:   a in the carrier of S;
+A24:  RS c= the carrier of S
+       proof let o be set; assume o in RS; hence thesis by A19,A22; end;
+then A25:  RS is finite by FINSET_1:13;
+       defpred P[set,set] means
+       ex n being Nat st $2 = n &
+       for s being State of A, m being Nat st m >= n
+       holds Following(s,m).$1 = Following(s,n).$1;
+A26:  for b being set st b in RS ex z being set st P[b,z]
+       proof
+        let b be set; assume A27: b in RS;
+        then b in field R & a <> b & [a,b] in R by A22;
+        then ex n being Nat st
+        for s being State of A, m being Nat st m >= n
+        holds Following(s,m).b = Following(s,n).b by A21,A24,A27;
+        hence thesis;
+       end;
+      consider f being Function such that
+A28:  dom f = RS and
+A29:  for x being set st x in RS holds P[x,f.x] from NonUniqFuncEx(A26);
+      per cases;
+      suppose A30: RS <> {};
+        rng f c= NAT
+       proof
+        let o be set; assume o in rng f;
+        then consider l being set such that
+A31:      l in dom f & o = f.l by FUNCT_1:def 5;
+        consider n being Nat such that
+A32:      f.l = n & for s being State of A, m being Nat st m >= n
+        holds Following(s,m).l = Following(s,n).l by A28,A29,A31;
+        thus thesis by A31,A32;
+       end;
+      then reconsider C = rng f as finite non empty Subset of NAT by A25,A28,
+A30,FINSET_1:26,RELAT_1:60,64;
+      reconsider mC = max C as Nat by ORDINAL2:def 21;
+      take n = mC + 1;
+      let s be State of A;
+      let m be Nat;
+      assume m >= n; then consider k being Nat such that
+A33:    m = n + k by NAT_1:28;
+      consider b being Element of RS;
+        b in field R & a <> b & [a,b] in R by A22,A30;
+      then reconsider a1=a as Gate of S by A2;
+A34:   the_result_sort_of a1 = (the ResultSort of S).a1 by MSUALG_1:def 7
+                          .= a by CIRCCOMB:52;
+        for x being set st x in rng the_arity_of a1 holds
+      Following(s,mC) is_stable_at x
+       proof
+        let x be set; assume A35: x in rng the_arity_of a1;
+then A36:     x in proj2 the_arity_of a1 by FUNCT_5:21;
+          a1 = [(the Arity of S).a1, a1`2] by CIRCCOMB:def 8;
+then A37:     a1 = [the_arity_of a1, a1`2] by MSUALG_1:def 6;
+        then the_rank_of x in the_rank_of a1 by A35,CIRCCOMB:50;
+then A38:     x <> a;
+          rng the_arity_of a1 c= the carrier of S by FINSEQ_1:def 4;
+        then x in the carrier of S & x in proj2 a`1 by A35,A36,A37,MCART_1:7;
+        then [a1,x] in R by A2,A23;
+        then x in field R & [a,x] in R by RELAT_1:30;
+then A39:    x in RS by A22,A38;
+        then consider l being Nat such that
+A40:      f.x = l &
+        for s being State of A, m being Nat st m >= l
+        holds Following(s,m).x = Following(s,l).x by A29;
+          l in rng f by A28,A39,A40,FUNCT_1:12;
+then A41:     max C >= l by FRECHET2:51;
+          now
+         let k be Nat;
+           mC + k >= max C by NAT_1:29;
+then A42:      mC + k >= l by A41,AXIOMS:22;
+         thus (Following(Following(s,mC),k)).x =
+          Following(s,mC+k).x by FACIRC_1:13 .=
+          Following(s,l).x by A40,A42 .= Following(s,mC).x by A40,A41;
+        end;
+        hence Following(s,mC) is_stable_at x by FACIRC_1:def 9;
+       end;
+      then Following Following(s,mC) is_stable_at a by A34,FACIRC_1:19;
+      then Following(s,n) is_stable_at a by FACIRC_1:12;
+      then Following(Following(s,n),k).a = Following(s,n).a by FACIRC_1:def 9;
+      hence Following(s,m).a = Following(s,n).a by A33,FACIRC_1:13;
+      suppose A43: RS = {};
+      take n=1;
+      let s be State of A;
+      let m be Nat;
+      assume m >= n; then consider k being Nat such that
+A44:    m = n + k by NAT_1:28;
+      A45: the carrier of S = InputVertices S \/ InnerVertices S
+      by MSAFREE2:3;
+A46:   now assume a in InputVertices S;
+then A47:    s is_stable_at a by FACIRC_1:18;
+       hence Following(s,m).a = s.a by FACIRC_1:def 9
+        .= Following(s,n).a by A47,FACIRC_1:def 9;
+      end;
+        now assume a in InnerVertices S;
+       then a in rng the ResultSort of S by MSAFREE2:def 3;
+       then a in rng id the OperSymbols of S by CIRCCOMB:def 7;
+       then reconsider a1=a as Gate of S by RELAT_1:71;
+A48:   the_result_sort_of a1 = (the ResultSort of S).a1 by MSUALG_1:def 7
+                          .= a1 by CIRCCOMB:52;
+         for x being set st x in rng the_arity_of a1 holds s is_stable_at x
+        proof
+         let x be set; assume A49: x in rng the_arity_of a1;
+then A50:      x in proj2 the_arity_of a1 by FUNCT_5:21;
+           a1 = [(the Arity of S).a1, a1`2] by CIRCCOMB:def 8;
+then A51:      a1 = [the_arity_of a1, a1`2] by MSUALG_1:def 6;
+         then the_rank_of x in the_rank_of a1 by A49,CIRCCOMB:50;
+then A52:      x <> a;
+           rng the_arity_of a1 c= the carrier of S by FINSEQ_1:def 4;
+         then x in the carrier of S & x in proj2 a`1 by A49,A50,A51,MCART_1:7;
+         then [a1,x] in R by A2,A23;
+         then x in field R & [a,x] in R by RELAT_1:30;
+         hence thesis by A22,A43,A52;
+        end;
+       then Following s is_stable_at the_result_sort_of a1 by FACIRC_1:19;
+       then Following(s,n) is_stable_at a1 by A48,FACIRC_1:14;
+       then Following(Following(s,n),k).a = Following(s,n).a by FACIRC_1:def 9;
+       hence Following(s,m).a = Following(s,n).a by A44,FACIRC_1:13;
+      end;
+      hence thesis by A23,A45,A46,XBOOLE_0:def 2;
+     end;
+A53: for a being set st a in field R holds P[a]
+     from coNoetherianInduction(A3,A20);
+        defpred A[set,set] means
+     ex n being Nat st $2 = n &
+     for s being State of A, m being Nat st m >= n
+       holds Following(s,m).$1 = Following(s,n).$1;
+A54: for a being set st a in field R ex b being set st A[a,b]
+        proof
+         let a be set; assume a in field R;
+         then ex n being Nat st
+         for s being State of A, m being Nat st m >= n
+         holds Following(s,m).a = Following(s,n).a by A17,A53;
+         hence thesis;
+        end;
+   consider f being Function such that
+A55: dom f = field R and
+A56: for x being set st x in field R holds A[x,f.x] from NonUniqFuncEx(A54);
+     rng f c= NAT
+    proof
+     let o be set; assume o in rng f;
+     then consider l being set such that
+A57:   l in dom f & o = f.l by FUNCT_1:def 5;
+     consider n being Nat such that
+A58:   f.l = n & for s being State of A, m being Nat st m >= n
+     holds Following(s,m).l = Following(s,n).l by A55,A56,A57;
+     thus thesis by A57,A58;
+    end;
+   then reconsider C = rng f as finite non empty Subset of NAT by A19,A55,
+FINSET_1:26,RELAT_1:60,64;
+   reconsider N = max C as Nat by ORDINAL2:def 21;
+   take N;
+   let s be State of A;
+A59: dom Following(s,N) = the carrier of S &
+    dom Following Following(s,N) = the carrier of S by CIRCUIT1:4;
+      now let x be set; assume A60: x in the carrier of S;
+     then consider n being Nat such that
+A61:  f.x = n &
+     for s being State of A, m being Nat st m >= n
+     holds Following(s,m).x = Following(s,n).x by A18,A56;
+       n in C by A18,A55,A60,A61,FUNCT_1:12;
+then A62:  N >= n by FRECHET2:51;
+then A63:  N+1 >= n by NAT_1:38;
+     thus Following(s,N).x = Following(s,n).x by A61,A62
+     .= Following(s,N+1).x by A61,A63
+     .= (Following Following(s,N)).x by FACIRC_1:12;
+    end;
+   hence Following(s,N) = Following Following(s,N) by A59,FUNCT_1:9;
+  end;
+
+definition
+ let X be non empty finite set;
+ let S be finite Signature of X;
+ cluster -> with_stabilization-limit Circuit of X,S;
+ coherence by Th35;
+end;
+
+scheme 1AryDef {X()-> non empty set,F(set) -> Element of X()}:
+ (ex f being Function of 1-tuples_on X(), X() st
+  for x being Element of X() holds f.<*x*> = F(x)) &
+ for f1,f2 being Function of 1-tuples_on X(), X() st
+  (for x being Element of X() holds f1.<*x*> = F(x)) &
+  (for x being Element of X() holds f2.<*x*> = F(x))
+ holds f1 = f2
+  proof
+    deffunc f(Element of 1-tuples_on X()) = F($1.1);
+    consider f being Function of 1-tuples_on X(), X() such that
+A1: for a being Element of 1-tuples_on X() holds f.a = f(a) from LambdaD;
+   hereby take f; let x be Element of X();
+    reconsider a = <*x*> as Element of 1-tuples_on X();
+    thus f.<*x*> = F(a.1) by A1
+       .= F(x) by FINSEQ_1:57;
+   end;
+   let f1,f2 be Function of 1-tuples_on X(), X() such that
+A2: for x being Element of X() holds f1.<*x*> = F(x) and
+A3: for x being Element of X() holds f2.<*x*> = F(x);
+      now let a be Element of 1-tuples_on X();
+     consider x being Element of X() such that
+A4:   a = <*x*> by FINSEQ_2:117;
+     thus f1.a = F(x) by A2,A4 .= f2.a by A3,A4;
+    end;
+   hence f1 = f2 by FUNCT_2:113;
+  end;
+
+scheme 2AryDef {X()-> non empty set,F(set,set) -> Element of X()}:
+ (ex f being Function of 2-tuples_on X(), X() st
+  for x,y being Element of X() holds f.<*x,y*> = F(x,y)) &
+ for f1,f2 being Function of 2-tuples_on X(), X() st
+  (for x,y being Element of X() holds f1.<*x,y*> = F(x,y)) &
+  (for x,y being Element of X() holds f2.<*x,y*> = F(x,y))
+ holds f1 = f2
+  proof
+    deffunc f(Element of 2-tuples_on X()) = F($1.1,$1.2);
+    consider f being Function of 2-tuples_on X(), X() such that
+A1: for a being Element of 2-tuples_on X() holds f.a = f(a) from LambdaD;
+   hereby take f; let x,y be Element of X();
+    reconsider a = <*x,y*> as Element of 2-tuples_on X() by FINSEQ_2:121;
+    thus f.<*x,y*> = F(a.1,a.2) by A1
+       .= F(x,a.2) by FINSEQ_1:61
+       .= F(x,y) by FINSEQ_1:61;
+   end;
+   let f1,f2 be Function of 2-tuples_on X(), X() such that
+A2: for x,y being Element of X() holds f1.<*x,y*> = F(x,y) and
+A3: for x,y being Element of X() holds f2.<*x,y*> = F(x,y);
+      now let a be Element of 2-tuples_on X();
+     consider x,y being Element of X() such that
+A4:   a = <*x,y*> by FINSEQ_2:120;
+     thus f1.a = F(x,y) by A2,A4 .= f2.a by A3,A4;
+    end;
+   hence f1 = f2 by FUNCT_2:113;
+  end;
+
+scheme 3AryDef {X()-> non empty set,F(set,set,set) -> Element of X()}:
+ (ex f being Function of 3-tuples_on X(), X() st
+  for x,y,z being Element of X() holds f.<*x,y,z*> = F(x,y,z)) &
+ for f1,f2 being Function of 3-tuples_on X(), X() st
+  (for x,y,z being Element of X() holds f1.<*x,y,z*> = F(x,y,z)) &
+  (for x,y,z being Element of X() holds f2.<*x,y,z*> = F(x,y,z))
+ holds f1 = f2
+  proof
+    deffunc f(Element of 3-tuples_on X()) = F($1.1,$1.2,$1.3);
+    consider f being Function of 3-tuples_on X(), X() such that
+A1: for a being Element of 3-tuples_on X() holds f.a = f(a) from LambdaD;
+   hereby take f; let x,y,z be Element of X();
+    reconsider a = <*x,y,z*> as Element of 3-tuples_on X() by FINSEQ_2:124;
+    thus f.<*x,y,z*> = F(a.1,a.2,a.3) by A1
+       .= F(x,a.2,a.3) by FINSEQ_1:62
+       .= F(x,y,a.3) by FINSEQ_1:62
+       .= F(x,y,z) by FINSEQ_1:62;
+   end;
+   let f1,f2 be Function of 3-tuples_on X(), X() such that
+A2: for x,y,z being Element of X() holds f1.<*x,y,z*> = F(x,y,z) and
+A3: for x,y,z being Element of X() holds f2.<*x,y,z*> = F(x,y,z);
+      now let a be Element of 3-tuples_on X();
+     consider x,y,z being Element of X() such that
+A4:   a = <*x,y,z*> by FINSEQ_2:123;
+     thus f1.a = F(x,y,z) by A2,A4 .= f2.a by A3,A4;
+    end;
+   hence f1 = f2 by FUNCT_2:113;
+  end;
+
+theorem Th36:
+ for f being Function, x being set st x in dom f
+  holds f*<*x*> = <*f.x*>
+  proof let f be Function; let x be set; assume
+A1: x in dom f;
+   then reconsider D = dom f, E = rng f as non empty set by FUNCT_1:12;
+   reconsider g = f as Function of D,E by FUNCT_2:def 1,RELSET_1:11;
+      rng <*x*> = {x} by FINSEQ_1:55;
+    then rng <*x*> c= D by A1,ZFMISC_1:37;
+   then reconsider p = <*x*> as FinSequence of D by FINSEQ_1:def 4;
+   thus f*<*x*> = g*p .= <*f.x*> by FINSEQ_2:39;
+  end;
+
+theorem Th37:
+ for f being Function for x1,x2,x3,x4 being set st
+  x1 in dom f & x2 in dom f & x3 in dom f & x4 in dom f holds
+   f*<*x1,x2,x3,x4*> = <*f.x1,f.x2,f.x3,f.x4*>
+ proof
+  let f be Function;
+  let x1,x2,x3,x4 be set; assume
+A1: x1 in dom f & x2 in dom f & x3 in dom f & x4 in dom f;
+   then reconsider D = dom f, E = rng f as non empty set by FUNCT_1:12;
+   reconsider g = f as Function of D,E by FUNCT_2:def 1,RELSET_1:11;
+     rng <*x1,x2,x3,x4*> c= D
+    proof
+     let a be set; assume a in rng <*x1,x2,x3,x4*>;
+     then a in {x1,x2,x3,x4} by Th14;
+     hence a in D by A1,ENUMSET1:18;
+    end;
+   then reconsider p=<*x1,x2,x3,x4*> as FinSequence of D by FINSEQ_1:def 4;
+A2: dom(g*p) = dom p & len (g*p) = len p &
+  for n being Nat st n in dom (g*p) holds (g*p).n = g.(p.n) by ALG_1:1;
+then A3: dom (g*p) = Seg 4 by SCMPDS_1:4
+            .= dom <*f.x1,f.x2,f.x3,f.x4*> by SCMPDS_1:4;
+    now let k be Nat;
+   assume A4: k in dom (g*p);
+   then A5: k in Seg 4 by A2,SCMPDS_1:4;
+   per cases by A5,ENUMSET1:18,FINSEQ_3:2;
+   suppose A6: k=1; then p.k=x1 by SCMPDS_1:3; then (g*p).k = g.x1 by A4,ALG_1:
+1;
+   hence (g*p).k = <*f.x1,f.x2,f.x3,f.x4*>.k by A6,SCMPDS_1:3;
+   suppose A7: k=2; then p.k=x2 by SCMPDS_1:3; then (g*p).k = g.x2 by A4,ALG_1:
+1;
+   hence (g*p).k = <*f.x1,f.x2,f.x3,f.x4*>.k by A7,SCMPDS_1:3;
+   suppose A8: k=3; then p.k=x3 by SCMPDS_1:3; then (g*p).k = g.x3 by A4,ALG_1:
+1;
+   hence (g*p).k = <*f.x1,f.x2,f.x3,f.x4*>.k by A8,SCMPDS_1:3;
+   suppose A9: k=4; then p.k=x4 by SCMPDS_1:3; then (g*p).k = g.x4 by A4,ALG_1:
+1;
+   hence (g*p).k = <*f.x1,f.x2,f.x3,f.x4*>.k by A9,SCMPDS_1:3;
+  end;
+  hence thesis by A3,FINSEQ_1:17;
+ end;
+
+theorem Th38:
+ for f being Function for x1,x2,x3,x4,x5 being set st
+  x1 in dom f & x2 in dom f & x3 in dom f & x4 in dom f & x5 in dom f holds
+   f*<*x1,x2,x3,x4,x5*> = <*f.x1,f.x2,f.x3,f.x4,f.x5*>
+ proof
+  let f be Function;
+  let x1,x2,x3,x4,x5 be set; assume
+A1: x1 in dom f & x2 in dom f & x3 in dom f & x4 in dom f & x5 in dom f;
+   then reconsider D = dom f, E = rng f as non empty set by FUNCT_1:12;
+   reconsider g = f as Function of D,E by FUNCT_2:def 1,RELSET_1:11;
+     rng <*x1,x2,x3,x4,x5*> c= D
+    proof
+     let a be set; assume a in rng <*x1,x2,x3,x4,x5*>;
+     then a in {x1,x2,x3,x4,x5} by Th15;
+     hence a in D by A1,ENUMSET1:23;
+    end;
+   then reconsider p=<*x1,x2,x3,x4,x5*> as FinSequence of D by FINSEQ_1:def 4;
+A2: dom(g*p) = dom p & len (g*p) = len p &
+  for n being Nat st n in dom (g*p) holds (g*p).n = g.(p.n) by ALG_1:1;
+then A3: dom (g*p) = Seg 5 by SCMPDS_1:6
+            .= dom <*f.x1,f.x2,f.x3,f.x4,f.x5*> by SCMPDS_1:6;
+    now let k be Nat;
+   assume A4: k in dom (g*p);
+   then A5: k in Seg 5 by A2,SCMPDS_1:6;
+   per cases by A5,ENUMSET1:23,FINSEQ_3:3;
+   suppose A6: k=1; then p.k=x1 by SCMPDS_1:5; then (g*p).k = g.x1 by A4,ALG_1:
+1;
+   hence (g*p).k = <*f.x1,f.x2,f.x3,f.x4,f.x5*>.k by A6,SCMPDS_1:5;
+   suppose A7: k=2; then p.k=x2 by SCMPDS_1:5; then (g*p).k = g.x2 by A4,ALG_1:
+1;
+   hence (g*p).k = <*f.x1,f.x2,f.x3,f.x4,f.x5*>.k by A7,SCMPDS_1:5;
+   suppose A8: k=3; then p.k=x3 by SCMPDS_1:5; then (g*p).k = g.x3 by A4,ALG_1:
+1;
+   hence (g*p).k = <*f.x1,f.x2,f.x3,f.x4,f.x5*>.k by A8,SCMPDS_1:5;
+   suppose A9: k=4; then p.k=x4 by SCMPDS_1:5; then (g*p).k = g.x4 by A4,ALG_1:
+1;
+   hence (g*p).k = <*f.x1,f.x2,f.x3,f.x4,f.x5*>.k by A9,SCMPDS_1:5;
+   suppose A10: k=5; then p.k=x5 by SCMPDS_1:5; then (g*p).k = g.x5 by A4,ALG_1
+:1;
+   hence (g*p).k = <*f.x1,f.x2,f.x3,f.x4,f.x5*>.k by A10,SCMPDS_1:5;
+  end;
+  hence thesis by A3,FINSEQ_1:17;
+ end;
+
+scheme OneGate1Result
+ {x1()-> set, B()-> non empty finite set, F(set)->Element of B(),
+  f() -> Function of 1-tuples_on B(), B()}:
+ for s being State of 1GateCircuit(<*x1()*>,f())
+ for a1 being Element of B() st a1 = s.x1()
+  holds
+   (Result s).Output(1GateCircStr(<*x1()*>,f())) = F(a1)
+provided
+A1: for g being Function of 1-tuples_on B(), B() holds
+   g = f() iff for a1 being Element of B() holds g.<*a1*> = F(a1)
+  proof let s be State of 1GateCircuit(<*x1()*>,f());
+   let a1 be Element of B() such that
+A2: a1 = s.x1();
+   set S = 1GateCircStr(<*x1()*>,f());
+      dom s = the carrier of S by CIRCUIT1:4
+         .= (rng <*x1()*>) \/ {[<*x1()*>,f()]} by CIRCCOMB:def 6
+         .= {x1()} \/ {[<*x1()*>,f()]} by FINSEQ_1:55
+         .= {x1(),[<*x1()*>,f()]} by ENUMSET1:41;
+    then x1() in dom s by TARSKI:def 2;
+then A3: s*<*x1()*> = <*a1*> by A2,Th36;
+   thus (Result s).Output S = (Following s).(Output S) by Th21
+     .= (Following s).[<*x1()*>,f()] by Th16
+     .= f().(s*<*x1()*>) by CIRCCOMB:64
+     .= F(a1) by A1,A3;
+  end;
+
+scheme OneGate2Result
+ {x1,x2()-> set, B()-> non empty finite set, F(set,set)->Element of B(),
+  f() -> Function of 2-tuples_on B(), B()}:
+ for s being State of 1GateCircuit(<*x1(),x2()*>,f())
+ for a1, a2 being Element of B() st a1 = s.x1() & a2 = s.x2()
+  holds
+   (Result s).Output(1GateCircStr(<*x1(),x2()*>,f())) = F(a1,a2)
+provided
+A1: for g being Function of 2-tuples_on B(), B() holds
+   g = f() iff for a1,a2 being Element of B() holds g.<*a1,a2*> = F(a1,a2)
+  proof let s be State of 1GateCircuit(<*x1(),x2()*>,f());
+   let a1,a2 be Element of B() such that
+A2: a1 = s.x1() & a2 = s.x2();
+   set S = 1GateCircStr(<*x1(),x2()*>,f());
+      dom s = the carrier of S by CIRCUIT1:4
+         .= (rng <*x1(),x2()*>) \/ {[<*x1(),x2()*>,f()]} by CIRCCOMB:def 6
+         .= {x1(),x2()} \/ {[<*x1(),x2()*>,f()]} by FINSEQ_2:147
+         .= {x1(),x2(),[<*x1(),x2()*>,f()]} by ENUMSET1:43;
+    then x1() in dom s & x2() in dom s by ENUMSET1:14;
+then A3: s*<*x1(),x2()*> = <*a1,a2*> by A2,FINSEQ_2:145;
+   thus (Result s).Output S = (Following s).(Output S) by Th21
+     .= (Following s).[<*x1(),x2()*>,f()] by Th16
+     .= f().(s*<*x1(),x2()*>) by CIRCCOMB:64
+     .= F(a1,a2) by A1,A3;
+  end;
+
+scheme OneGate3Result
+ {x1,x2,x3()-> set, B()-> non empty finite set,
+  F(set,set,set)->Element of B(),
+  f() -> Function of 3-tuples_on B(), B()}:
+ for s being State of 1GateCircuit(<*x1(),x2(),x3()*>,f())
+ for a1, a2, a3 being Element of B() st a1 = s.x1() & a2 = s.x2() & a3 = s.x3()
+  holds
+   (Result s).Output(1GateCircStr(<*x1(),x2(),x3()*>,f())) = F(a1,a2,a3)
+provided
+A1: for g being Function of 3-tuples_on B(), B() holds g = f() iff
+   for a1,a2,a3 being Element of B() holds g.<*a1,a2,a3*> = F(a1,a2,a3)
+  proof let s be State of 1GateCircuit(<*x1(),x2(),x3()*>,f());
+   let a1,a2,a3 be Element of B() such that
+A2: a1 = s.x1() & a2 = s.x2() & a3 = s.x3();
+   set S = 1GateCircStr(<*x1(),x2(),x3()*>,f());
+      dom s = the carrier of S by CIRCUIT1:4
+         .= (rng <*x1(),x2(),x3()*>) \/ {[<*x1(),x2(),x3()*>,f()]}
+           by CIRCCOMB:def 6
+         .= {x1(),x2(),x3()} \/ {[<*x1(),x2(),x3()*>,f()]} by FINSEQ_2:148
+         .= {x1(),x2(),x3(),[<*x1(),x2(),x3()*>,f()]} by ENUMSET1:46;
+    then x1() in dom s & x2() in dom s & x3() in dom s by ENUMSET1:19;
+then A3: s*<*x1(),x2(),x3()*> = <*a1,a2,a3*> by A2,FINSEQ_2:146;
+   thus (Result s).Output S = (Following s).(Output S) by Th21
+     .= (Following s).[<*x1(),x2(),x3()*>,f()] by Th16
+     .= f().(s*<*x1(),x2(),x3()*>) by CIRCCOMB:64
+     .= F(a1,a2,a3) by A1,A3;
+  end;
+
+scheme OneGate4Result
+ {x1,x2,x3,x4()-> set, B()-> non empty finite set,
+  F(set,set,set,set)->Element of B(),
+  f() -> Function of 4-tuples_on B(), B()}:
+ for s being State of 1GateCircuit(<*x1(),x2(),x3(),x4()*>,f())
+ for a1, a2, a3, a4 being Element of B()
+  st a1 = s.x1() & a2 = s.x2() & a3 = s.x3() & a4 = s.x4()
+  holds
+  (Result s).Output(1GateCircStr(<*x1(),x2(),x3(),x4()*>,f())) = F(a1,a2,a3,a4)
+provided
+A1: for g being Function of 4-tuples_on B(), B() holds g = f() iff
+   for a1,a2,a3,a4 being Element of B()
+    holds g.<*a1,a2,a3,a4*> = F(a1,a2,a3,a4)
+  proof let s be State of 1GateCircuit(<*x1(),x2(),x3(),x4()*>,f());
+   let a1,a2,a3,a4 be Element of B() such that
+A2: a1 = s.x1() & a2 = s.x2() & a3 = s.x3() & a4 = s.x4();
+   set S = 1GateCircStr(<*x1(),x2(),x3(),x4()*>,f());
+      dom s = the carrier of S by CIRCUIT1:4
+         .= (rng <*x1(),x2(),x3(),x4()*>) \/ {[<*x1(),x2(),x3(),x4()*>,f()]}
+           by CIRCCOMB:def 6
+         .= {x1(),x2(),x3(),x4()} \/ {[<*x1(),x2(),x3(),x4()*>,f()]} by Th14
+         .= {[<*x1(),x2(),x3(),x4()*>,f()],x1(),x2(),x3(),x4()} by ENUMSET1:47;
+         then x1() in dom s & x2() in dom s & x3() in dom s & x4() in dom s
+    by ENUMSET1:24;
+then A3: s*<*x1(),x2(),x3(),x4()*> = <*a1,a2,a3,a4*> by A2,Th37;
+   thus (Result s).Output S = (Following s).(Output S) by Th21
+     .= (Following s).[<*x1(),x2(),x3(),x4()*>,f()] by Th16
+     .= f().(s*<*x1(),x2(),x3(),x4()*>) by CIRCCOMB:64
+     .= F(a1,a2,a3,a4) by A1,A3;
+  end;
+
+scheme OneGate5Result
+ {x1,x2,x3,x4,x5()-> set, B()-> non empty finite set,
+  F(set,set,set,set,set)->Element of B(),
+  f() -> Function of 5-tuples_on B(), B()}:
+ for s being State of 1GateCircuit(<*x1(),x2(),x3(),x4(),x5()*>,f())
+ for a1, a2, a3, a4, a5 being Element of B()
+  st a1 = s.x1() & a2 = s.x2() & a3 = s.x3() & a4 = s.x4() & a5 = s.x5()
+  holds
+   (Result s).Output(1GateCircStr(<*x1(),x2(),x3(),x4(),x5()*>,f()))
+     = F(a1,a2,a3,a4,a5)
+provided
+A1: for g being Function of 5-tuples_on B(), B() holds g = f() iff
+   for a1,a2,a3,a4,a5 being Element of B()
+    holds g.<*a1,a2,a3,a4,a5*> = F(a1,a2,a3,a4,a5)
+  proof let s be State of 1GateCircuit(<*x1(),x2(),x3(),x4(),x5()*>,f());
+   let a1,a2,a3,a4,a5 be Element of B() such that
+A2: a1 = s.x1() & a2 = s.x2() & a3 = s.x3() & a4 = s.x4() & a5 = s.x5();
+   set S = 1GateCircStr(<*x1(),x2(),x3(),x4(),x5()*>,f());
+      dom s = the carrier of S by CIRCUIT1:4
+         .= (rng <*x1(),x2(),x3(),x4(),x5()*>) \/
+         {[<*x1(),x2(),x3(),x4(),x5()*>,f()]}
+           by CIRCCOMB:def 6
+         .= {x1(),x2(),x3(),x4(),x5()} \/
+         {[<*x1(),x2(),x3(),x4(),x5()*>,f()]} by Th15
+         .= {x1(),x2(),x3(),x4(),x5(),[<*x1(),x2(),x3(),x4(),x5()*>,f()]}
+         by ENUMSET1:55;
+    then x1() in dom s & x2() in dom s & x3() in dom s
+    & x4() in dom s & x5() in dom s by ENUMSET1:29;
+then A3: s*<*x1(),x2(),x3(),x4(),x5()*> = <*a1,a2,a3,a4,a5*> by A2,Th38;
+   thus (Result s).Output S = (Following s).(Output S) by Th21
+     .= (Following s).[<*x1(),x2(),x3(),x4(),x5()*>,f()] by Th16
+     .= f().(s*<*x1(),x2(),x3(),x4(),x5()*>) by CIRCCOMB:64
+     .= F(a1,a2,a3,a4,a5) by A1,A3;
+  end;
+
+begin :: Input of a compound circuit
+
+theorem Th39:
+ for n being Nat, X being non empty finite set
+ for f being Function of n-tuples_on X, X
+ for p being FinSeqLen of n
+ for S being Signature of X
+  st rng p c= the carrier of S &
+     not Output 1GateCircStr(p,f) in InputVertices S
+  holds
+   InputVertices (S +* 1GateCircStr(p,f)) = InputVertices S
+  proof let n be Nat, X be non empty finite set;
+   let f be Function of n-tuples_on X, X;
+   let p be FinSeqLen of n;
+   let S be Signature of X such that
+A1: rng p c= the carrier of S and
+A2: not Output 1GateCircStr(p,f) in InputVertices S;
+      the carrier of S = (InputVertices S) \/ InnerVertices S by MSAFREE2:3;
+then A3: (rng p)\InnerVertices S c= InputVertices S by A1,XBOOLE_1:43;
+      S tolerates 1GateCircStr(p,f) by CIRCCOMB:55;
+   hence
+      InputVertices (S +* 1GateCircStr(p,f)) =
+     ((InputVertices S)\(InnerVertices 1GateCircStr(p,f))) \/
+     ((InputVertices 1GateCircStr(p,f))\(InnerVertices S))
+      by CIRCCMB2:6
+    .= ((InputVertices S)\(InnerVertices 1GateCircStr(p,f))) \/
+       ((rng p)\(InnerVertices S)) by CIRCCOMB:49
+    .= ((InputVertices S) \ {Output 1GateCircStr(p,f)}) \/
+       ((rng p)\(InnerVertices S)) by Th17
+    .= (InputVertices S) \/ ((rng p)\(InnerVertices S)) by A2,ZFMISC_1:65
+    .= InputVertices S by A3,XBOOLE_1:12;
+  end;
+
+theorem Th40:
+ for X1,X2 being set, X being non empty finite set, n be Nat
+ for f being Function of n-tuples_on X, X
+ for p being FinSeqLen of n
+ for S being Signature of X
+  st rng p = X1 \/ X2 & X1 c= the carrier of S & X2 misses InnerVertices S &
+     not Output 1GateCircStr(p,f) in InputVertices S
+  holds
+   InputVertices (S +* 1GateCircStr(p,f)) = (InputVertices S) \/ X2
+  proof let x1,x2 be set, X be non empty finite set, n be Nat;
+   let f be Function of n-tuples_on X, X;
+   let p be FinSeqLen of n;
+   let S be Signature of X such that
+A1: rng p = x1 \/ x2 and
+A2: x1 c= the carrier of S & x2 misses InnerVertices S and
+A3: not Output 1GateCircStr(p,f) in InputVertices S;
+      the carrier of S = (InputVertices S) \/ InnerVertices S by MSAFREE2:3;
+then A4: x1\InnerVertices S c= InputVertices S by A2,XBOOLE_1:43;
+      S tolerates 1GateCircStr(p,f) by CIRCCOMB:55;
+   hence
+      InputVertices (S +* 1GateCircStr(p,f)) =
+     ((InputVertices S)\(InnerVertices 1GateCircStr(p,f))) \/
+     ((InputVertices 1GateCircStr(p,f))\(InnerVertices S)) by CIRCCMB2:6
+    .= ((InputVertices S)\(InnerVertices 1GateCircStr(p,f))) \/
+       ((rng p)\(InnerVertices S)) by CIRCCOMB:49
+    .= ((InputVertices S)\(InnerVertices 1GateCircStr(p,f))) \/
+       ((x1\(InnerVertices S)) \/ x2) by A1,A2,XBOOLE_1:87
+    .= ((InputVertices S)\(InnerVertices 1GateCircStr(p,f))) \/
+       (x1\(InnerVertices S)) \/ x2 by XBOOLE_1:4
+    .= ((InputVertices S) \ {Output 1GateCircStr(p,f)}) \/
+       (x1\(InnerVertices S)) \/ x2 by Th17
+    .= (InputVertices S) \/ (x1\(InnerVertices S)) \/ x2 by A3,ZFMISC_1:65
+    .= (InputVertices S) \/ x2 by A4,XBOOLE_1:12;
+  end;
+
+theorem Th41:
+ for x1 being set, X being non empty finite set
+ for f being Function of 1-tuples_on X, X
+ for S being Signature of X
+  st x1 in the carrier of S &
+     not Output 1GateCircStr(<*x1*>,f) in InputVertices S
+  holds
+   InputVertices (S +* 1GateCircStr(<*x1*>,f)) = InputVertices S
+  proof let x1 be set, X be non empty finite set;
+   set p = <*x1*>;
+   let f be Function of 1-tuples_on X, X;
+   let S be Signature of X; assume x1 in the carrier of S;
+    then {x1} c= the carrier of S by ZFMISC_1:37;
+    then rng p c= the carrier of S by FINSEQ_1:55;
+   hence thesis by Th39;
+  end;
+
+theorem Th42:
+ for x1,x2 being set, X being non empty finite set
+ for f being Function of 2-tuples_on X, X
+ for S being Signature of X
+  st x1 in the carrier of S & not x2 in InnerVertices S &
+     not Output 1GateCircStr(<*x1,x2*>,f) in InputVertices S
+  holds
+   InputVertices (S +* 1GateCircStr(<*x1,x2*>,f)) = (InputVertices S) \/ {x2}
+  proof let x1,x2 be set, X be non empty finite set;
+   set p = <*x1,x2*>;
+   let f be Function of 2-tuples_on X, X;
+   let S be Signature of X such that
+A1: x1 in the carrier of S & not x2 in InnerVertices S;
+A2: {x1} c= the carrier of S by A1,ZFMISC_1:37;
+A3: {x2} misses InnerVertices S by A1,ZFMISC_1:56;
+      rng p = {x1,x2} by FINSEQ_2:147 .= {x1} \/ {x2} by ENUMSET1:41;
+   hence thesis by A2,A3,Th40;
+  end;
+
+theorem Th43:
+ for x1,x2 being set, X being non empty finite set
+ for f being Function of 2-tuples_on X, X
+ for S being Signature of X
+  st x2 in the carrier of S & not x1 in InnerVertices S &
+     not Output 1GateCircStr(<*x1,x2*>,f) in InputVertices S
+  holds
+   InputVertices (S +* 1GateCircStr(<*x1,x2*>,f)) = (InputVertices S) \/ {x1}
+  proof let x1,x2 be set, X be non empty finite set;
+   set p = <*x1,x2*>;
+   let f be Function of 2-tuples_on X, X;
+   let S be Signature of X such that
+A1: x2 in the carrier of S & not x1 in InnerVertices S;
+A2: {x2} c= the carrier of S by A1,ZFMISC_1:37;
+A3: {x1} misses InnerVertices S by A1,ZFMISC_1:56;
+      rng p = {x1,x2} by FINSEQ_2:147 .= {x1} \/ {x2} by ENUMSET1:41;
+   hence thesis by A2,A3,Th40;
+  end;
+
+theorem Th44:
+ for x1,x2 being set, X being non empty finite set
+ for f being Function of 2-tuples_on X, X
+ for S being Signature of X
+  st x1 in the carrier of S & x2 in the carrier of S &
+     not Output 1GateCircStr(<*x1,x2*>,f) in InputVertices S
+  holds
+   InputVertices (S +* 1GateCircStr(<*x1,x2*>,f)) = InputVertices S
+  proof let x1,x2 be set, X be non empty finite set;
+   let f be Function of 2-tuples_on X, X;
+   let S be Signature of X such that
+A1: x1 in the carrier of S & x2 in the carrier of S;
+      rng <*x1,x2*> = {x1,x2} by FINSEQ_2:147;
+    then rng <*x1,x2*> c= the carrier of S by A1,ZFMISC_1:38;
+   hence thesis by Th39;
+  end;
+
+theorem Th45:
+ for x1,x2,x3 being set, X being non empty finite set
+ for f being Function of 3-tuples_on X, X
+ for S being Signature of X
+  st x1 in the carrier of S & not x2 in InnerVertices S &
+     not x3 in InnerVertices S &
+     not Output 1GateCircStr(<*x1,x2,x3*>,f) in InputVertices S
+  holds
+   InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>,f)) =
+     (InputVertices S) \/ {x2,x3}
+  proof let x1,x2,x3 be set, X be non empty finite set;
+   set p = <*x1,x2,x3*>;
+   let f be Function of 3-tuples_on X, X;
+   let S be Signature of X such that
+A1: x1 in the carrier of S & not x2 in InnerVertices S &
+    not x3 in InnerVertices S;
+A2: {x1} c= the carrier of S by A1,ZFMISC_1:37;
+A3: {x2,x3} misses InnerVertices S by A1,ZFMISC_1:57;
+      rng p = {x1,x2,x3} by FINSEQ_2:148 .= {x1} \/ {x2,x3} by ENUMSET1:42;
+   hence thesis by A2,A3,Th40;
+  end;
+
+theorem Th46:
+ for x1,x2,x3 being set, X being non empty finite set
+ for f being Function of 3-tuples_on X, X
+ for S being Signature of X
+  st x2 in the carrier of S & not x1 in InnerVertices S &
+     not x3 in InnerVertices S &
+     not Output 1GateCircStr(<*x1,x2,x3*>,f) in InputVertices S
+  holds
+   InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>,f)) =
+     (InputVertices S) \/ {x1,x3}
+  proof let x1,x2,x3 be set, X be non empty finite set;
+   set p = <*x1,x2,x3*>;
+   let f be Function of 3-tuples_on X, X;
+   let S be Signature of X such that
+A1: x2 in the carrier of S & not x1 in InnerVertices S &
+    not x3 in InnerVertices S;
+A2: {x2} c= the carrier of S by A1,ZFMISC_1:37;
+A3: {x1,x3} misses InnerVertices S by A1,ZFMISC_1:57;
+      rng p = {x1,x2,x3} by FINSEQ_2:148
+         .= {x2,x1,x3} by ENUMSET1:99
+         .= {x2} \/ {x1,x3} by ENUMSET1:42;
+   hence thesis by A2,A3,Th40;
+  end;
+
+theorem Th47:
+ for x1,x2,x3 being set, X being non empty finite set
+ for f being Function of 3-tuples_on X, X
+ for S being Signature of X
+  st x3 in the carrier of S & not x1 in InnerVertices S &
+     not x2 in InnerVertices S &
+     not Output 1GateCircStr(<*x1,x2,x3*>,f) in InputVertices S
+  holds
+   InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>,f)) =
+     (InputVertices S) \/ {x1,x2}
+  proof let x1,x2,x3 be set, X be non empty finite set;
+   set p = <*x1,x2,x3*>;
+   let f be Function of 3-tuples_on X, X;
+   let S be Signature of X such that
+A1: x3 in the carrier of S & not x1 in InnerVertices S &
+    not x2 in InnerVertices S;
+A2: {x3} c= the carrier of S by A1,ZFMISC_1:37;
+A3: {x1,x2} misses InnerVertices S by A1,ZFMISC_1:57;
+      rng p = {x1,x2,x3} by FINSEQ_2:148 .= {x1,x2} \/ {x3} by ENUMSET1:43;
+   hence thesis by A2,A3,Th40;
+  end;
+
+theorem Th48:
+ for x1,x2,x3 being set, X being non empty finite set
+ for f being Function of 3-tuples_on X, X
+ for S being Signature of X
+  st x1 in the carrier of S & x2 in the carrier of S &
+     not x3 in InnerVertices S &
+     not Output 1GateCircStr(<*x1,x2,x3*>,f) in InputVertices S
+  holds
+   InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>,f)) =
+     (InputVertices S) \/ {x3}
+  proof let x1,x2,x3 be set, X be non empty finite set;
+   set p = <*x1,x2,x3*>;
+   let f be Function of 3-tuples_on X, X;
+   let S be Signature of X such that
+A1: x1 in the carrier of S & x2 in the carrier of S &
+    not x3 in InnerVertices S;
+A2: {x1,x2} c= the carrier of S by A1,ZFMISC_1:38;
+A3: {x3} misses InnerVertices S by A1,ZFMISC_1:56;
+      rng p = {x1,x2,x3} by FINSEQ_2:148 .= {x1,x2} \/ {x3} by ENUMSET1:43;
+   hence thesis by A2,A3,Th40;
+  end;
+
+theorem Th49:
+ for x1,x2,x3 being set, X being non empty finite set
+ for f being Function of 3-tuples_on X, X
+ for S being Signature of X
+  st x1 in the carrier of S & x3 in the carrier of S &
+     not x2 in InnerVertices S &
+     not Output 1GateCircStr(<*x1,x2,x3*>,f) in InputVertices S
+  holds
+   InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>,f)) =
+     (InputVertices S) \/ {x2}
+  proof let x1,x2,x3 be set, X be non empty finite set;
+   set p = <*x1,x2,x3*>;
+   let f be Function of 3-tuples_on X, X;
+   let S be Signature of X such that
+A1: x1 in the carrier of S & x3 in the carrier of S &
+    not x2 in InnerVertices S;
+A2: {x1,x3} c= the carrier of S by A1,ZFMISC_1:38;
+A3: {x2} misses InnerVertices S by A1,ZFMISC_1:56;
+      rng p = {x1,x2,x3} by FINSEQ_2:148
+         .= {x2,x1,x3} by ENUMSET1:99
+         .= {x2} \/ {x1,x3} by ENUMSET1:42;
+   hence thesis by A2,A3,Th40;
+  end;
+
+theorem Th50:
+ for x1,x2,x3 being set, X being non empty finite set
+ for f being Function of 3-tuples_on X, X
+ for S being Signature of X
+  st x2 in the carrier of S & x3 in the carrier of S &
+     not x1 in InnerVertices S &
+     not Output 1GateCircStr(<*x1,x2,x3*>,f) in InputVertices S
+  holds
+   InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>,f)) =
+     (InputVertices S) \/ {x1}
+  proof let x1,x2,x3 be set, X be non empty finite set;
+   set p = <*x1,x2,x3*>;
+   let f be Function of 3-tuples_on X, X;
+   let S be Signature of X such that
+A1: x2 in the carrier of S & x3 in the carrier of S &
+    not x1 in InnerVertices S;
+A2: {x2,x3} c= the carrier of S by A1,ZFMISC_1:38;
+A3: {x1} misses InnerVertices S by A1,ZFMISC_1:56;
+      rng p = {x1,x2,x3} by FINSEQ_2:148 .= {x1} \/ {x2,x3} by ENUMSET1:42;
+   hence thesis by A2,A3,Th40;
+  end;
+
+theorem Th51:
+ for x1,x2,x3 being set, X being non empty finite set
+ for f being Function of 3-tuples_on X, X
+ for S being Signature of X
+  st x1 in the carrier of S & x2 in the carrier of S &
+     x3 in the carrier of S &
+     not Output 1GateCircStr(<*x1,x2,x3*>,f) in InputVertices S
+  holds
+   InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>,f)) = InputVertices S
+  proof let x1,x2,x3 be set, X be non empty finite set;
+   let f be Function of 3-tuples_on X, X;
+   let S be Signature of X; assume
+      x1 in the carrier of S & x2 in the carrier of S &
+    x3 in the carrier of S;
+then A1: {x1,x2} c= the carrier of S & {x3} c= the carrier of S by ZFMISC_1:37,
+38;
+      rng <*x1,x2,x3*> = {x1,x2,x3} by FINSEQ_2:148
+      .= {x1,x2} \/ {x3} by ENUMSET1:43;
+    then rng <*x1,x2,x3*> c= the carrier of S by A1,XBOOLE_1:8;
+   hence thesis by Th39;
+  end;
+
+begin :: Result of a compound circuit
+
+theorem Th52:
+ for X being non empty finite set
+ for S being finite Signature of X
+ for A being Circuit of X,S
+ for n being Nat, f being Function of n-tuples_on X, X
+ for p being FinSeqLen of n
+  st not Output 1GateCircStr(p,f) in InputVertices S
+ for s being State of A +* 1GateCircuit(p,f)
+ for s' being State of A st s' = s|the carrier of S
+  holds stabilization-time s <= 1+stabilization-time s'
+  proof let X be non empty finite set;
+   let S be finite Signature of X;
+   let A be Circuit of X,S;
+   let n be Nat, f be Function of n-tuples_on X, X;
+   let p be FinSeqLen of n such that
+A1: not Output 1GateCircStr(p,f) in InputVertices S;
+   let s be State of A +* 1GateCircuit(p,f);
+   let s' be State of A such that
+A2: s' = s|the carrier of S;
+A3: A tolerates 1GateCircuit(p,f) by Th30;
+    then the Sorts of A tolerates the Sorts of 1GateCircuit(p,f)
+     by CIRCCOMB:def 3;
+   then reconsider
+     s1 = Following(s, stabilization-time s')|the carrier of 1GateCircStr(p,f)
+     as State of 1GateCircuit(p,f) by CIRCCOMB:33;
+A4: stabilization-time s1 <= 1 by Th22;
+A5: s' is stabilizing & s1 is stabilizing by Def2;
+      InnerVertices 1GateCircStr(p,f) = {Output 1GateCircStr(p,f)} by Th17;
+    then InputVertices S misses InnerVertices 1GateCircStr(p,f)
+     by A1,ZFMISC_1:56;
+    then stabilization-time s = (stabilization-time s')+stabilization-time s1
+     by A2,A3,A5,Th11;
+   hence stabilization-time s <= 1+stabilization-time s' by A4,AXIOMS:24;
+  end;
+
+scheme Comb1CircResult
+ {x1()-> set, B()-> non empty finite set, F(set)->Element of B(),
+  S() -> finite Signature of B(),
+  C() -> Circuit of B(), S(),
+  f() -> Function of 1-tuples_on B(), B()}:
+ for s being State of C() +* 1GateCircuit(<*x1()*>,f())
+ for s' being State of C() st s' = s|the carrier of S()
+ for a1 being Element of B()
+  st (x1() in InnerVertices S() implies a1 = (Result s').x1()) &
+     (not x1() in InnerVertices S() implies a1 = s.x1())
+  holds
+   (Result s).Output 1GateCircStr(<*x1()*>,f()) = F(a1)
+provided
+A1: for g being Function of 1-tuples_on B(), B() holds
+  g = f() iff for a1 being Element of B() holds g.<*a1*> = F(a1)
+and
+A2: not Output 1GateCircStr(<*x1()*>,f()) in InputVertices S()
+  proof
+   let s be State of C() +* 1GateCircuit(<*x1()*>,f());
+   let s' be State of C() such that
+A3: s' = s|the carrier of S();
+   let a1 be Element of B() such that
+A4: (x1() in InnerVertices S() implies a1 = (Result s').x1()) &
+    (not x1() in InnerVertices S() implies a1 = s.x1());
+   set S = 1GateCircStr(<*x1()*>,f());
+      rng <*x1()*> = {x1()} by FINSEQ_1:55;
+then A5: the carrier of S = (rng <*x1()*>) \/ {[<*x1()*>,f()]} &
+    InputVertices S = rng <*x1()*> &
+    x1() in rng <*x1()*>
+     by CIRCCOMB:49,def 6,TARSKI:def 1;
+    then x1() in the carrier of S &
+    the carrier of S()+*S = (the carrier of S()) \/ the carrier of S
+     by CIRCCOMB:def 2;
+then A6: x1() in the carrier of S()+*S by XBOOLE_0:def 2;
+      InnerVertices S = {Output S} by Th17;
+then A7: InputVertices S() misses InnerVertices S by A2,ZFMISC_1:56;
+A8: C() tolerates 1GateCircuit(<*x1()*>,f()) by Th30;
+    then the Sorts of C() tolerates the Sorts of 1GateCircuit(<*x1()*>,f())
+     by CIRCCOMB:def 3;
+   then reconsider s1 = Following(s, stabilization-time s')|the carrier of S
+      as State of 1GateCircuit(<*x1()*>,f()) by CIRCCOMB:33;
+A9: s is stabilizing & s' is stabilizing & s1 is stabilizing
+     by Def2;
+      S() tolerates S by CIRCCOMB:55;
+then A10: InputVertices (S()+*S) =
+     (InputVertices S()) \/ (InputVertices S \ InnerVertices S())
+      by A7,FACIRC_1:4;
+      x1() in InnerVertices S() or x1() in InputVertices S \ InnerVertices S()
+     by A5,XBOOLE_0:def 4;
+then A11: x1() in InnerVertices S() or x1() in InputVertices (S()+*S)
+     by A10,XBOOLE_0:def 2;
+      Following(s, stabilization-time s')|the carrier of S()
+     = Following(s', stabilization-time s') by A3,A7,A8,CIRCCMB2:14
+    .= Result s' by A9,Th2;
+then A12: a1 = Following(s, stabilization-time s').x1() by A4,A11,Th1,FUNCT_1:
+72;
+      dom Following(s, stabilization-time s') = the carrier of S()+*S
+     by CIRCUIT1:4;
+then A13: Following(s, stabilization-time s')*<*x1()*> = <*a1*> by A6,A12,Th36;
+A14: [<*x1()*>,f()] = Output S by Th16;
+      the OperSymbols of S = {[<*x1()*>,f()]} by CIRCCOMB:def 6;
+    then [<*x1()*>,f()] in {[<*x1()*>,f()]} &
+    the OperSymbols of S()+*S = (the OperSymbols of S())\/{[<*x1()*>,f()]}
+     by CIRCCOMB:def 2,TARSKI:def 1;
+   then reconsider g = [<*x1()*>,f()] as Gate of S()+*S by XBOOLE_0:def 2;
+A15: the_result_sort_of g = (the ResultSort of S()+*S).g by MSUALG_1:def 7
+     .= g by CIRCCOMB:52;
+      g = [(the Arity of S()+*S).g, g`2] by CIRCCOMB:def 8;
+then A16: <*x1()*> =(the Arity of S()+*S).g by ZFMISC_1:33 .= the_arity_of g
+     by MSUALG_1:def 6;
+A17: g`2 = f() by MCART_1:7;
+      stabilization-time s <= 1+stabilization-time s' by A2,A3,Th52;
+   hence (Result s).Output S
+      = (Following(s, 1+stabilization-time s')).Output S by A9,Th5
+     .= (Following Following(s, stabilization-time s')).g by A14,FACIRC_1:12
+     .= f().(Following(s, stabilization-time s')*<*x1()*>)
+        by A15,A16,A17,FACIRC_1:34
+     .= F(a1) by A1,A13;
+  end;
+
+scheme Comb2CircResult
+ {x1,x2()-> set, B()-> non empty finite set,
+  F(set,set)->Element of B(),
+  S() -> finite Signature of B(),
+  C() -> Circuit of B(), S(),
+  f() -> Function of 2-tuples_on B(), B()}:
+ for s being State of C() +* 1GateCircuit(<*x1(),x2()*>,f())
+ for s' being State of C() st s' = s|the carrier of S()
+ for a1, a2 being Element of B()
+  st (x1() in InnerVertices S() implies a1 = (Result s').x1()) &
+     (not x1() in InnerVertices S() implies a1 = s.x1()) &
+     (x2() in InnerVertices S() implies a2 = (Result s').x2()) &
+     (not x2() in InnerVertices S() implies a2 = s.x2())
+  holds
+   (Result s).Output(1GateCircStr(<*x1(),x2()*>,f())) = F(a1,a2)
+provided
+A1: for g being Function of 2-tuples_on B(), B() holds g = f() iff
+   for a1,a2 being Element of B() holds g.<*a1,a2*> = F(a1,a2)
+and
+A2: not Output 1GateCircStr(<*x1(),x2()*>,f()) in InputVertices S()
+  proof
+   let s be State of C() +* 1GateCircuit(<*x1(),x2()*>,f());
+   let s' be State of C() such that
+A3: s' = s|the carrier of S();
+   let a1, a2 be Element of B() such that
+A4: (x1() in InnerVertices S() implies a1 = (Result s').x1()) &
+    (not x1() in InnerVertices S() implies a1 = s.x1()) &
+    (x2() in InnerVertices S() implies a2 = (Result s').x2()) &
+    (not x2() in InnerVertices S() implies a2 = s.x2());
+   set S = 1GateCircStr(<*x1(),x2()*>,f());
+      rng <*x1(),x2()*> = {x1(),x2()} by FINSEQ_2:147;
+then A5: the carrier of S = (rng <*x1(),x2()*>) \/ {[<*x1(),x2()*>,f()]} &
+    InputVertices S = rng <*x1(),x2()*> &
+    x2() in rng <*x1(),x2()*> & x1() in rng <*x1(),x2()*>
+     by CIRCCOMB:49,def 6,TARSKI:def 2;
+    then x2() in the carrier of S & x1() in the carrier of S &
+    the carrier of S()+*S = (the carrier of S()) \/ the carrier of S
+     by CIRCCOMB:def 2;
+then A6: x1() in the carrier of S()+*S & x2() in the carrier of S()+*S
+     by XBOOLE_0:def 2;
+      InnerVertices S = {Output S} by Th17;
+then A7: InputVertices S() misses InnerVertices S by A2,ZFMISC_1:56;
+A8: C() tolerates 1GateCircuit(<*x1(),x2()*>,f()) by Th30;
+    then the Sorts of C() tolerates the Sorts of 1GateCircuit(<*x1(),x2()*>,f(
+))
+     by CIRCCOMB:def 3;
+   then reconsider s1 = Following(s, stabilization-time s')|the carrier of S
+      as State of 1GateCircuit(<*x1(),x2()*>,f()) by CIRCCOMB:33;
+A9: s is stabilizing & s' is stabilizing & s1 is stabilizing by Def2;
+      S() tolerates S by CIRCCOMB:55;
+then A10: InputVertices (S()+*S) =
+     (InputVertices S()) \/ (InputVertices S \ InnerVertices S())
+      by A7,FACIRC_1:4;
+      x1() in InnerVertices S() or x1() in InputVertices S \ InnerVertices S()
+     by A5,XBOOLE_0:def 4;
+then A11: x1() in InnerVertices S() or x1() in InputVertices (S()+*S)
+     by A10,XBOOLE_0:def 2;
+      x2() in InnerVertices S() or x2() in InputVertices S \ InnerVertices S()
+     by A5,XBOOLE_0:def 4;
+then A12: x2() in InnerVertices S() or x2() in InputVertices (S()+*S)
+     by A10,XBOOLE_0:def 2;
+      Following(s, stabilization-time s')|the carrier of S()
+     = Following(s', stabilization-time s') by A3,A7,A8,CIRCCMB2:14
+    .= Result s' by A9,Th2;
+then A13: a1 = Following(s, stabilization-time s').x1() &
+    a2 = Following(s, stabilization-time s').x2() by A4,A11,A12,Th1,FUNCT_1:72;
+      dom Following(s, stabilization-time s') = the carrier of S()+*S
+     by CIRCUIT1:4;
+then A14: Following(s, stabilization-time s')*<*x1(),x2()*> = <*a1,a2*>
+     by A6,A13,FINSEQ_2:145;
+A15: [<*x1(),x2()*>,f()] = Output S by Th16;
+      the OperSymbols of S = {[<*x1(),x2()*>,f()]} by CIRCCOMB:def 6;
+    then [<*x1(),x2()*>,f()] in {[<*x1(),x2()*>,f()]} &
+    the OperSymbols of S()+*S = (the OperSymbols of S())\/{[<*x1(),x2()*>,f()]}
+     by CIRCCOMB:def 2,TARSKI:def 1;
+   then reconsider g = [<*x1(),x2()*>,f()] as Gate of S()+*S by XBOOLE_0:def 2;
+A16: the_result_sort_of g = (the ResultSort of S()+*S).g by MSUALG_1:def 7
+     .= g by CIRCCOMB:52;
+      g = [(the Arity of S()+*S).g, g`2] by CIRCCOMB:def 8;
+then A17: <*x1(),x2()*> =(the Arity of S()+*S).g by ZFMISC_1:33 .= the_arity_of
+g
+     by MSUALG_1:def 6;
+A18: g`2 = f() by MCART_1:7;
+      stabilization-time s <= 1+stabilization-time s' by A2,A3,Th52;
+   hence (Result s).Output S
+      = (Following(s, 1+stabilization-time s')).Output S by A9,Th5
+     .= (Following Following(s, stabilization-time s')).g by A15,FACIRC_1:12
+     .= f().(Following(s, stabilization-time s')*<*x1(),x2()*>)
+        by A16,A17,A18,FACIRC_1:34
+     .= F(a1,a2) by A1,A14;
+  end;
+
+scheme Comb3CircResult
+ {x1,x2,x3()-> set, B()-> non empty finite set,
+  F(set,set,set)->Element of B(),
+  S() -> finite Signature of B(),
+  C() -> Circuit of B(), S(),
+  f() -> Function of 3-tuples_on B(), B()}:
+ for s being State of C() +* 1GateCircuit(<*x1(),x2(),x3()*>,f())
+ for s' being State of C() st s' = s|the carrier of S()
+ for a1, a2, a3 being Element of B()
+  st (x1() in InnerVertices S() implies a1 = (Result s').x1()) &
+     (not x1() in InnerVertices S() implies a1 = s.x1()) &
+     (x2() in InnerVertices S() implies a2 = (Result s').x2()) &
+     (not x2() in InnerVertices S() implies a2 = s.x2()) &
+     (x3() in InnerVertices S() implies a3 = (Result s').x3()) &
+     (not x3() in InnerVertices S() implies a3 = s.x3())
+  holds
+   (Result s).Output(1GateCircStr(<*x1(),x2(),x3()*>,f())) = F(a1,a2,a3)
+provided
+A1: for g being Function of 3-tuples_on B(), B() holds g = f() iff
+   for a1,a2,a3 being Element of B() holds g.<*a1,a2,a3*> = F(a1,a2,a3)
+and
+A2: not Output 1GateCircStr(<*x1(),x2(),x3()*>,f()) in InputVertices S()
+  proof
+   let s be State of C() +* 1GateCircuit(<*x1(),x2(),x3()*>,f());
+   let s' be State of C() such that
+A3: s' = s|the carrier of S();
+   let a1, a2, a3 be Element of B() such that
+A4: (x1() in InnerVertices S() implies a1 = (Result s').x1()) &
+    (not x1() in InnerVertices S() implies a1 = s.x1()) &
+    (x2() in InnerVertices S() implies a2 = (Result s').x2()) &
+    (not x2() in InnerVertices S() implies a2 = s.x2()) &
+    (x3() in InnerVertices S() implies a3 = (Result s').x3()) &
+    (not x3() in InnerVertices S() implies a3 = s.x3());
+   set S = 1GateCircStr(<*x1(),x2(),x3()*>,f());
+      rng <*x1(),x2(),x3()*> = {x1(),x2(),x3()} by FINSEQ_2:148;
+then A5: the carrier of S = (rng <*x1(),x2(),x3()*>) \/ {[<*x1(),x2(),x3()*>,f(
+)]} &
+    InputVertices S = rng <*x1(),x2(),x3()*> &
+    x3() in rng <*x1(),x2(),x3()*> & x2() in rng <*x1(),x2(),x3()*> &
+    x1() in rng <*x1(),x2(),x3()*>
+     by CIRCCOMB:49,def 6,ENUMSET1:14;
+    then x3() in the carrier of S & x2() in the carrier of S &
+    x1() in the carrier of S &
+    the carrier of S()+*S = (the carrier of S()) \/ the carrier of S
+     by CIRCCOMB:def 2;
+then A6: x1() in the carrier of S()+*S & x2() in the carrier of S()+*S &
+    x3() in the carrier of S()+*S by XBOOLE_0:def 2;
+      InnerVertices S = {Output S} by Th17;
+then A7: InputVertices S() misses InnerVertices S by A2,ZFMISC_1:56;
+A8: C() tolerates 1GateCircuit(<*x1(),x2(),x3()*>,f()) by Th30;
+    then the Sorts of C() tolerates
+      the Sorts of 1GateCircuit(<*x1(),x2(),x3()*>,f())
+     by CIRCCOMB:def 3;
+   then reconsider s1 = Following(s, stabilization-time s')|the carrier of S
+      as State of 1GateCircuit(<*x1(),x2(),x3()*>,f()) by CIRCCOMB:33;
+A9: s is stabilizing & s' is stabilizing & s1 is stabilizing by Def2;
+      S() tolerates S by CIRCCOMB:55;
+then A10: InputVertices (S()+*S) =
+     (InputVertices S()) \/ (InputVertices S \ InnerVertices S())
+      by A7,FACIRC_1:4;
+      x1() in InnerVertices S() or x1() in InputVertices S \ InnerVertices S()
+     by A5,XBOOLE_0:def 4;
+then A11: x1() in InnerVertices S() or x1() in InputVertices (S()+*S)
+     by A10,XBOOLE_0:def 2;
+      x2() in InnerVertices S() or x2() in InputVertices S \ InnerVertices S()
+     by A5,XBOOLE_0:def 4;
+then A12: x2() in InnerVertices S() or x2() in InputVertices (S()+*S)
+     by A10,XBOOLE_0:def 2;
+      x3() in InnerVertices S() or x3() in InputVertices S \ InnerVertices S()
+     by A5,XBOOLE_0:def 4;
+then A13: x3() in InnerVertices S() or x3() in InputVertices (S()+*S)
+     by A10,XBOOLE_0:def 2;
+      Following(s, stabilization-time s')|the carrier of S()
+     = Following(s', stabilization-time s') by A3,A7,A8,CIRCCMB2:14
+    .= Result s' by A9,Th2;
+then A14: a1 = Following(s, stabilization-time s').x1() &
+    a2 = Following(s, stabilization-time s').x2() &
+    a3 = Following(s, stabilization-time s').x3()
+     by A4,A11,A12,A13,Th1,FUNCT_1:72;
+      dom Following(s, stabilization-time s') = the carrier of S()+*S
+     by CIRCUIT1:4;
+then A15: Following(s, stabilization-time s')*<*x1(),x2(),x3()*> = <*a1,a2,a3*>
+     by A6,A14,FINSEQ_2:146;
+A16: [<*x1(),x2(),x3()*>,f()] = Output S by Th16;
+      the OperSymbols of S = {[<*x1(),x2(),x3()*>,f()]} by CIRCCOMB:def 6;
+    then [<*x1(),x2(),x3()*>,f()] in {[<*x1(),x2(),x3()*>,f()]} &
+    the OperSymbols of S()+*S =
+      (the OperSymbols of S())\/{[<*x1(),x2(),x3()*>,f()]}
+     by CIRCCOMB:def 2,TARSKI:def 1;
+    then reconsider g = [<*x1(),x2(),x3()*>,f()] as Gate of S()+*S by XBOOLE_0:
+def 2;
+A17: the_result_sort_of g = (the ResultSort of S()+*S).g by MSUALG_1:def 7
+     .= g by CIRCCOMB:52;
+      g = [(the Arity of S()+*S).g, g`2] by CIRCCOMB:def 8;
+then A18: <*x1(),x2(),x3()*> = (the Arity of S()+*S).g by ZFMISC_1:33
+       .= the_arity_of g by MSUALG_1:def 6;
+A19: g`2 = f() by MCART_1:7;
+      stabilization-time s <= 1+stabilization-time s' by A2,A3,Th52;
+   hence (Result s).Output S
+      = (Following(s, 1+stabilization-time s')).Output S by A9,Th5
+     .= (Following Following(s, stabilization-time s')).g by A16,FACIRC_1:12
+     .= f().(Following(s, stabilization-time s')*<*x1(),x2(),x3()*>)
+        by A17,A18,A19,FACIRC_1:34
+     .= F(a1,a2,a3) by A1,A15;
+  end;
+
+scheme Comb4CircResult
+ {x1,x2,x3,x4()-> set, B()-> non empty finite set,
+  F(set,set,set,set)->Element of B(),
+  S() -> finite Signature of B(),
+  C() -> Circuit of B(), S(),
+  f() -> Function of 4-tuples_on B(), B()}:
+ for s being State of C() +* 1GateCircuit(<*x1(),x2(),x3(),x4()*>,f())
+ for s' being State of C() st s' = s|the carrier of S()
+ for a1, a2, a3, a4 being Element of B()
+  st (x1() in InnerVertices S() implies a1 = (Result s').x1()) &
+     (not x1() in InnerVertices S() implies a1 = s.x1()) &
+     (x2() in InnerVertices S() implies a2 = (Result s').x2()) &
+     (not x2() in InnerVertices S() implies a2 = s.x2()) &
+     (x3() in InnerVertices S() implies a3 = (Result s').x3()) &
+     (not x3() in InnerVertices S() implies a3 = s.x3()) &
+     (x4() in InnerVertices S() implies a4 = (Result s').x4()) &
+     (not x4() in InnerVertices S() implies a4 = s.x4())
+  holds
+   (Result s).Output(1GateCircStr(<*x1(),x2(),x3(),x4()*>,f()))
+     = F(a1,a2,a3,a4)
+provided
+A1: for g being Function of 4-tuples_on B(), B() holds g = f() iff
+   for a1,a2,a3,a4 being Element of B()
+    holds g.<*a1,a2,a3,a4*> = F(a1,a2,a3,a4)
+and
+A2: not Output 1GateCircStr(<*x1(),x2(),x3(),x4()*>,f()) in InputVertices S()
+  proof
+   let s be State of C() +* 1GateCircuit(<*x1(),x2(),x3(),x4()*>,f());
+   let s' be State of C() such that
+A3: s' = s|the carrier of S();
+   let a1, a2, a3, a4 be Element of B() such that
+A4: (x1() in InnerVertices S() implies a1 = (Result s').x1()) &
+    (not x1() in InnerVertices S() implies a1 = s.x1()) &
+    (x2() in InnerVertices S() implies a2 = (Result s').x2()) &
+    (not x2() in InnerVertices S() implies a2 = s.x2()) &
+    (x3() in InnerVertices S() implies a3 = (Result s').x3()) &
+    (not x3() in InnerVertices S() implies a3 = s.x3()) &
+    (x4() in InnerVertices S() implies a4 = (Result s').x4()) &
+    (not x4() in InnerVertices S() implies a4 = s.x4());
+   set S = 1GateCircStr(<*x1(),x2(),x3(),x4()*>,f());
+      rng <*x1(),x2(),x3(),x4()*> = {x1(),x2(),x3(),x4()} by Th14;
+then A5: the carrier of S = (rng <*x1(),x2(),x3(),x4()*>) \/
+    {[<*x1(),x2(),x3(),x4()*>,f()]} &
+    InputVertices S = rng <*x1(),x2(),x3(),x4()*> &
+    x3() in rng <*x1(),x2(),x3(),x4()*> & x2() in rng <*x1(),x2(),x3(),x4()*>
+  & x1() in rng <*x1(),x2(),x3(),x4()*> & x4() in rng <*x1(),x2(),x3(),x4()*>
+     by CIRCCOMB:49,def 6,ENUMSET1:19;
+    then x3() in the carrier of S & x2() in the carrier of S &
+    x1() in the carrier of S & x4() in the carrier of S &
+    the carrier of S()+*S = (the carrier of S()) \/ the carrier of S
+     by CIRCCOMB:def 2;
+then A6: x1() in the carrier of S()+*S & x2() in the carrier of S()+*S &
+    x3() in the carrier of S()+*S & x4() in the carrier of S()+*S
+    by XBOOLE_0:def 2;
+      InnerVertices S = {Output S} by Th17;
+then A7: InputVertices S() misses InnerVertices S by A2,ZFMISC_1:56;
+A8: C() tolerates 1GateCircuit(<*x1(),x2(),x3(),x4()*>,f()) by Th30;
+    then the Sorts of C() tolerates
+      the Sorts of 1GateCircuit(<*x1(),x2(),x3(),x4()*>,f())
+     by CIRCCOMB:def 3;
+   then reconsider s1 = Following(s, stabilization-time s')|the carrier of S
+      as State of 1GateCircuit(<*x1(),x2(),x3(),x4()*>,f()) by CIRCCOMB:33;
+A9: s is stabilizing & s' is stabilizing & s1 is stabilizing
+     by Def2;
+      S() tolerates S by CIRCCOMB:55;
+then A10: InputVertices (S()+*S) =
+     (InputVertices S()) \/ (InputVertices S \ InnerVertices S())
+      by A7,FACIRC_1:4;
+      x1() in InnerVertices S() or x1() in InputVertices S \ InnerVertices S()
+     by A5,XBOOLE_0:def 4;
+then A11: x1() in InnerVertices S() or x1() in InputVertices (S()+*S)
+     by A10,XBOOLE_0:def 2;
+      x2() in InnerVertices S() or x2() in InputVertices S \ InnerVertices S()
+     by A5,XBOOLE_0:def 4;
+then A12: x2() in InnerVertices S() or x2() in InputVertices (S()+*S)
+     by A10,XBOOLE_0:def 2;
+      x3() in InnerVertices S() or x3() in InputVertices S \ InnerVertices S()
+     by A5,XBOOLE_0:def 4;
+then A13: x3() in InnerVertices S() or x3() in InputVertices (S()+*S)
+     by A10,XBOOLE_0:def 2;
+      x4() in InnerVertices S() or x4() in InputVertices S \ InnerVertices S()
+     by A5,XBOOLE_0:def 4;
+then A14: x4() in InnerVertices S() or x4() in InputVertices (S()+*S)
+     by A10,XBOOLE_0:def 2;
+      Following(s, stabilization-time s')|the carrier of S()
+     = Following(s', stabilization-time s') by A3,A7,A8,CIRCCMB2:14
+    .= Result s' by A9,Th2;
+then A15: a1 = Following(s, stabilization-time s').x1() &
+    a2 = Following(s, stabilization-time s').x2() &
+    a3 = Following(s, stabilization-time s').x3() &
+    a4 = Following(s, stabilization-time s').x4()
+     by A4,A11,A12,A13,A14,Th1,FUNCT_1:72;
+      dom Following(s, stabilization-time s') = the carrier of S()+*S
+     by CIRCUIT1:4;
+then A16: Following(s, stabilization-time s')*<*x1(),x2(),x3(),x4()*> =
+   <*a1,a2,a3,a4*> by A6,A15,Th37;
+A17: [<*x1(),x2(),x3(),x4()*>,f()] = Output S by Th16;
+      the OperSymbols of S = {[<*x1(),x2(),x3(),x4()*>,f()]} by CIRCCOMB:def 6;
+    then [<*x1(),x2(),x3(),x4()*>,f()] in {[<*x1(),x2(),x3(),x4()*>,f()]} &
+    the OperSymbols of S()+*S =
+      (the OperSymbols of S())\/{[<*x1(),x2(),x3(),x4()*>,f()]}
+     by CIRCCOMB:def 2,TARSKI:def 1;
+    then reconsider g = [<*x1(),x2(),x3(),x4()*>,f()] as Gate of S()+*S by
+XBOOLE_0:def 2;
+A18: the_result_sort_of g = (the ResultSort of S()+*S).g by MSUALG_1:def 7
+     .= g by CIRCCOMB:52;
+      g = [(the Arity of S()+*S).g, g`2] by CIRCCOMB:def 8;
+then A19: <*x1(),x2(),x3(),x4()*> = (the Arity of S()+*S).g by ZFMISC_1:33
+       .= the_arity_of g by MSUALG_1:def 6;
+A20: g`2 = f() by MCART_1:7;
+      stabilization-time s <= 1+stabilization-time s' by A2,A3,Th52;
+   hence (Result s).Output S
+      = (Following(s, 1+stabilization-time s')).Output S by A9,Th5
+     .= (Following Following(s, stabilization-time s')).g by A17,FACIRC_1:12
+     .= f().(Following(s, stabilization-time s')*<*x1(),x2(),x3(),x4()*>)
+        by A18,A19,A20,FACIRC_1:34
+     .= F(a1,a2,a3,a4) by A1,A16;
+  end;
+
+scheme Comb5CircResult
+ {x1,x2,x3,x4,x5()-> set, B()-> non empty finite set,
+  F(set,set,set,set,set)->Element of B(),
+  S() -> finite Signature of B(),
+  C() -> Circuit of B(), S(),
+  f() -> Function of 5-tuples_on B(), B()}:
+ for s being State of C() +* 1GateCircuit(<*x1(),x2(),x3(),x4(),x5()*>,f())
+ for s' being State of C() st s' = s|the carrier of S()
+ for a1, a2, a3, a4, a5 being Element of B()
+  st (x1() in InnerVertices S() implies a1 = (Result s').x1()) &
+     (not x1() in InnerVertices S() implies a1 = s.x1()) &
+     (x2() in InnerVertices S() implies a2 = (Result s').x2()) &
+     (not x2() in InnerVertices S() implies a2 = s.x2()) &
+     (x3() in InnerVertices S() implies a3 = (Result s').x3()) &
+     (not x3() in InnerVertices S() implies a3 = s.x3()) &
+     (x4() in InnerVertices S() implies a4 = (Result s').x4()) &
+     (not x4() in InnerVertices S() implies a4 = s.x4()) &
+     (x5() in InnerVertices S() implies a5 = (Result s').x5()) &
+     (not x5() in InnerVertices S() implies a5 = s.x5())
+  holds
+   (Result s).Output(1GateCircStr(<*x1(),x2(),x3(),x4(),x5()*>,f()))
+     = F(a1,a2,a3,a4,a5)
+provided
+A1: for g being Function of 5-tuples_on B(), B() holds g = f() iff
+   for a1,a2,a3,a4,a5 being Element of B()
+    holds g.<*a1,a2,a3,a4,a5*> = F(a1,a2,a3,a4,a5)
+and
+A2: not Output 1GateCircStr(<*x1(),x2(),x3(),x4(),x5()*>,f())
+      in InputVertices S()
+  proof
+   let s be State of C() +* 1GateCircuit(<*x1(),x2(),x3(),x4(),x5()*>,f());
+   let s' be State of C() such that
+A3: s' = s|the carrier of S();
+   let a1, a2, a3, a4, a5 be Element of B() such that
+A4: (x1() in InnerVertices S() implies a1 = (Result s').x1()) &
+    (not x1() in InnerVertices S() implies a1 = s.x1()) &
+    (x2() in InnerVertices S() implies a2 = (Result s').x2()) &
+    (not x2() in InnerVertices S() implies a2 = s.x2()) &
+    (x3() in InnerVertices S() implies a3 = (Result s').x3()) &
+    (not x3() in InnerVertices S() implies a3 = s.x3()) &
+    (x4() in InnerVertices S() implies a4 = (Result s').x4()) &
+    (not x4() in InnerVertices S() implies a4 = s.x4()) &
+    (x5() in InnerVertices S() implies a5 = (Result s').x5()) &
+    (not x5() in InnerVertices S() implies a5 = s.x5());
+   set S = 1GateCircStr(<*x1(),x2(),x3(),x4(),x5()*>,f());
+      rng <*x1(),x2(),x3(),x4(),x5()*> = {x1(),x2(),x3(),x4(),x5()} by Th15;
+then A5: the carrier of S = (rng <*x1(),x2(),x3(),x4(),x5()*>) \/
+    {[<*x1(),x2(),x3(),x4(),x5()*>,f()]} &
+    InputVertices S = rng <*x1(),x2(),x3(),x4(),x5()*> &
+    x1() in rng <*x1(),x2(),x3(),x4(),x5()*> &
+    x2() in rng <*x1(),x2(),x3(),x4(),x5()*> &
+    x3() in rng <*x1(),x2(),x3(),x4(),x5()*> &
+    x4() in rng <*x1(),x2(),x3(),x4(),x5()*> &
+    x5() in rng <*x1(),x2(),x3(),x4(),x5()*>
+     by CIRCCOMB:49,def 6,ENUMSET1:24;
+    then x1() in the carrier of S & x2() in the carrier of S &
+    x3() in the carrier of S & x4() in the carrier of S &
+    x5() in the carrier of S &
+    the carrier of S()+*S = (the carrier of S()) \/ the carrier of S
+     by CIRCCOMB:def 2;
+then A6: x1() in the carrier of S()+*S & x2() in the carrier of S()+*S &
+    x3() in the carrier of S()+*S & x4() in the carrier of S()+*S &
+    x5() in the carrier of S()+*S by XBOOLE_0:def 2;
+      InnerVertices S = {Output S} by Th17;
+then A7: InputVertices S() misses InnerVertices S by A2,ZFMISC_1:56;
+A8: C() tolerates 1GateCircuit(<*x1(),x2(),x3(),x4(),x5()*>,f()) by Th30;
+    then the Sorts of C() tolerates
+      the Sorts of 1GateCircuit(<*x1(),x2(),x3(),x4(),x5()*>,f())
+     by CIRCCOMB:def 3;
+   then reconsider s1 = Following(s, stabilization-time s')|the carrier of S
+    as State of 1GateCircuit(<*x1(),x2(),x3(),x4(),x5()*>,f()) by CIRCCOMB:33;
+A9: s is stabilizing & s' is stabilizing & s1 is stabilizing by Def2;
+      S() tolerates S by CIRCCOMB:55;
+then A10: InputVertices (S()+*S) =
+     (InputVertices S()) \/ (InputVertices S \ InnerVertices S())
+      by A7,FACIRC_1:4;
+      x1() in InnerVertices S() or x1() in InputVertices S \ InnerVertices S()
+     by A5,XBOOLE_0:def 4;
+then A11: x1() in InnerVertices S() or x1() in InputVertices (S()+*S)
+     by A10,XBOOLE_0:def 2;
+      x2() in InnerVertices S() or x2() in InputVertices S \ InnerVertices S()
+     by A5,XBOOLE_0:def 4;
+then A12: x2() in InnerVertices S() or x2() in InputVertices (S()+*S)
+     by A10,XBOOLE_0:def 2;
+      x3() in InnerVertices S() or x3() in InputVertices S \ InnerVertices S()
+     by A5,XBOOLE_0:def 4;
+then A13: x3() in InnerVertices S() or x3() in InputVertices (S()+*S)
+     by A10,XBOOLE_0:def 2;
+      x4() in InnerVertices S() or x4() in InputVertices S \ InnerVertices S()
+     by A5,XBOOLE_0:def 4;
+then A14: x4() in InnerVertices S() or x4() in InputVertices (S()+*S)
+     by A10,XBOOLE_0:def 2;
+      x5() in InnerVertices S() or x5() in InputVertices S \ InnerVertices S()
+     by A5,XBOOLE_0:def 4;
+then A15: x5() in InnerVertices S() or x5() in InputVertices (S()+*S)
+     by A10,XBOOLE_0:def 2;
+      Following(s, stabilization-time s')|the carrier of S()
+     = Following(s', stabilization-time s') by A3,A7,A8,CIRCCMB2:14
+    .= Result s' by A9,Th2;
+then A16: a1 = Following(s, stabilization-time s').x1() &
+    a2 = Following(s, stabilization-time s').x2() &
+    a3 = Following(s, stabilization-time s').x3() &
+    a4 = Following(s, stabilization-time s').x4() &
+    a5 = Following(s, stabilization-time s').x5()
+     by A4,A11,A12,A13,A14,A15,Th1,FUNCT_1:72;
+      dom Following(s, stabilization-time s') = the carrier of S()+*S
+     by CIRCUIT1:4;
+then A17: Following(s, stabilization-time s')*<*x1(),x2(),x3(),x4(),x5()*> =
+   <*a1,a2,a3,a4,a5*> by A6,A16,Th38;
+A18: [<*x1(),x2(),x3(),x4(),x5()*>,f()] = Output S by Th16;
+      the OperSymbols of S = {[<*x1(),x2(),x3(),x4(),x5()*>,f()]}
+    by CIRCCOMB:def 6;
+    then [<*x1(),x2(),x3(),x4(),x5()*>,f()] in {[<*x1(),x2(),x3(),x4(),x5()*>,
+f()]}
+    & the OperSymbols of S()+*S =
+      (the OperSymbols of S())\/{[<*x1(),x2(),x3(),x4(),x5()*>,f()]}
+     by CIRCCOMB:def 2,TARSKI:def 1;
+    then reconsider g = [<*x1(),x2(),x3(),x4(),x5()*>,f()] as Gate of S()+*S
+by XBOOLE_0:def 2;
+A19: the_result_sort_of g = (the ResultSort of S()+*S).g by MSUALG_1:def 7
+     .= g by CIRCCOMB:52;
+      g = [(the Arity of S()+*S).g, g`2] by CIRCCOMB:def 8;
+then A20: <*x1(),x2(),x3(),x4(),x5()*> = (the Arity of S()+*S).g by ZFMISC_1:33
+       .= the_arity_of g by MSUALG_1:def 6;
+A21: g`2 = f() by MCART_1:7;
+      stabilization-time s <= 1+stabilization-time s' by A2,A3,Th52;
+   hence (Result s).Output S
+      = (Following(s, 1+stabilization-time s')).Output S by A9,Th5
+     .= (Following Following(s, stabilization-time s')).g by A18,FACIRC_1:12
+     .= f().(Following(s, stabilization-time s')*<*x1(),x2(),x3(),x4(),x5()*>)
+        by A19,A20,A21,FACIRC_1:34
+     .= F(a1,a2,a3,a4,a5) by A1,A17;
+  end;
+
+begin :: Inputs without pairs
+
+definition
+ let S be non empty ManySortedSign;
+ attr S is with_nonpair_inputs means:
+Def11:
+  InputVertices S is without_pairs;
+end;
+
+definition
+ cluster NAT -> without_pairs;
+ coherence
+  proof let x be pair set; assume x in NAT;
+    then x is Nat;
+   hence thesis;
+  end;
+ let X be without_pairs set;
+ cluster -> without_pairs Subset of X;
+ coherence
+  proof let Y be Subset of X;
+   let x be pair set; assume x in Y;
+   hence thesis by FACIRC_1:def 2;
+  end;
+end;
+
+definition
+ cluster natural-yielding -> nonpair-yielding Function;
+ coherence
+  proof let f be Function such that
+A1: rng f c= NAT;
+   let x be set; assume x in dom f;
+    then f.x in rng f by FUNCT_1:def 5;
+    then f.x is Nat by A1;
+   hence thesis;
+  end;
+end;
+
+definition
+ cluster -> natural-yielding FinSequence of NAT;
+ coherence
+  proof let p be FinSequence of NAT;
+   thus rng p c= NAT by FINSEQ_1:def 4;
+  end;
+end;
+
+definition
+ cluster one-to-one natural-yielding FinSequence;
+ existence
+  proof consider p being one-to-one FinSequence of NAT;
+   take p; thus thesis;
+  end;
+end;
+
+definition
+ let n be Nat;
+ cluster one-to-one natural-yielding FinSeqLen of n;
+ existence
+  proof set p = id Seg n;
+A1: dom p = Seg n & rng p = Seg n by RELAT_1:71;
+    then p is FinSequence by FINSEQ_1:def 2;
+   then reconsider p as one-to-one FinSequence of NAT by A1,FINSEQ_1:def 4;
+      len p = n by A1,FINSEQ_1:def 3;
+   then reconsider p as FinSeqLen of n by CIRCCOMB:def 12;
+   take p; thus thesis;
+  end;
+end;
+
+definition
+ let p be nonpair-yielding FinSequence;
+ let f be set;
+ cluster 1GateCircStr(p,f) -> with_nonpair_inputs;
+ coherence
+  proof
+      InputVertices 1GateCircStr(p,f) = rng p by CIRCCOMB:49;
+   hence InputVertices 1GateCircStr(p,f) is without_pairs;
+  end;
+end;
+
+definition
+ cluster with_nonpair_inputs (one-gate ManySortedSign);
+ existence
+  proof consider n being Nat, X being non empty finite set;
+   consider f being Function of n-tuples_on X, X;
+   consider p being natural-yielding FinSeqLen of n;
+   take 1GateCircStr(p,f); thus thesis;
+  end;
+ let X be non empty finite set;
+ cluster with_nonpair_inputs (one-gate Signature of X);
+ existence
+  proof consider n being Nat;
+   consider f being Function of n-tuples_on X, X;
+   consider p being natural-yielding FinSeqLen of n;
+   take 1GateCircStr(p,f); thus thesis;
+  end;
+end;
+
+definition
+ let S be with_nonpair_inputs (non empty ManySortedSign);
+ cluster InputVertices S -> without_pairs;
+ coherence by Def11;
+end;
+
+theorem
+   for S being with_nonpair_inputs (non empty ManySortedSign)
+ for x being Vertex of S st x is pair
+  holds x in InnerVertices S
+  proof let S be with_nonpair_inputs (non empty ManySortedSign);
+   let x be Vertex of S;
+      the carrier of S = (InputVertices S) \/ InnerVertices S by MSAFREE2:3;
+    then x in InputVertices S or x in InnerVertices S by XBOOLE_0:def 2;
+   hence thesis by FACIRC_1:def 2;
+  end;
+
+definition
+ let S be unsplit gate`1=arity (non empty ManySortedSign);
+ cluster InnerVertices S -> Relation-like;
+ coherence
+  proof
+A1: InnerVertices S = the OperSymbols of S by FACIRC_1:37;
+   let x be set; assume x in InnerVertices S;
+    then x = [(the Arity of S).x, x`2] by A1,CIRCCOMB:def 8;
+   hence thesis;
+  end;
+end;
+
+definition
+ let S be unsplit gate`2=den (non empty non void ManySortedSign);
+ cluster InnerVertices S -> Relation-like;
+ coherence
+  proof consider A being MSAlgebra over S such that
+A1: A is gate`2=den by CIRCCOMB:def 11;
+   let x be set; assume x in InnerVertices S;
+   then reconsider g = x as Gate of S by FACIRC_1:37;
+      g = [g`1, (the Charact of A).g] by A1,CIRCCOMB:def 10;
+   hence thesis;
+  end;
+end;
+
+definition
+ let S1,S2 be with_nonpair_inputs
+   (unsplit gate`1=arity non empty ManySortedSign);
+ cluster S1+*S2 -> with_nonpair_inputs;
+ coherence
+  proof
+      S1 tolerates S2 by CIRCCOMB:55;
+    then InputVertices (S1+*S2) is Subset of (InputVertices S1) \/
+InputVertices S2 by CIRCCOMB:15;
+   hence InputVertices (S1+*S2) is without_pairs;
+  end;
+end;
+
+theorem
+   for x being non pair set, R being Relation holds not x in R
+  proof let x be non pair set;
+      not ex a,b being set st x = [a,b];
+   hence thesis by RELAT_1:def 1;
+  end;
+
+theorem Th55:
+ for x1 being set, X being non empty finite set
+ for f being Function of 1-tuples_on X, X
+ for S being with_nonpair_inputs Signature of X
+  st x1 in the carrier of S or x1 is non pair
+  holds S +* 1GateCircStr(<*x1*>, f) is with_nonpair_inputs
+  proof
+   let x1 be set, X be non empty finite set;
+   let f be Function of 1-tuples_on X, X;
+   let S be with_nonpair_inputs Signature of X such that
+A1: x1 in the carrier of S or x1 is non pair;
+A2: not Output 1GateCircStr(<*x1*>, f) in InputVertices S
+     by FACIRC_1:def 2;
+   per cases by A1;
+   suppose x1 in the carrier of S;
+    hence InputVertices (S +* 1GateCircStr(<*x1*>, f)) is without_pairs by A2,
+Th41;
+   suppose x1 is non pair;
+    then reconsider a = x1 as non pair set;
+       rng <*x1*> = {a} & {a} = {} \/ {a} & {} c= the carrier of S &
+     {a} misses InnerVertices S by FACIRC_1:5,FINSEQ_1:55,XBOOLE_1:2;
+     then InputVertices (S +* 1GateCircStr(<*x1*>, f)) = (InputVertices S) \/
+{a}
+      by A2,Th40;
+    hence InputVertices (S +* 1GateCircStr(<*x1*>, f)) is without_pairs;
+  end;
+
+definition
+ let X be non empty finite set;
+ let S be with_nonpair_inputs Signature of X;
+ let x1 be Vertex of S;
+ let f be Function of 1-tuples_on X, X;
+ cluster S +* 1GateCircStr(<*x1*>, f) -> with_nonpair_inputs;
+ coherence by Th55;
+end;
+
+definition
+ let X be non empty finite set;
+ let S be with_nonpair_inputs Signature of X;
+ let x1 be non pair set;
+ let f be Function of 1-tuples_on X, X;
+ cluster S +* 1GateCircStr(<*x1*>, f) -> with_nonpair_inputs;
+ coherence;
+end;
+
+Lm1:
+ for x being non pair set holds {x} is without_pairs;
+
+Lm2:
+ for x,y being without_pairs set holds x \/ y is without_pairs;
+
+theorem Th56:
+ for x1,x2 being set, X being non empty finite set
+ for f being Function of 2-tuples_on X, X
+ for S being with_nonpair_inputs Signature of X
+  st (x1 in the carrier of S or x1 is non pair) &
+     (x2 in the carrier of S or x2 is non pair)
+  holds S +* 1GateCircStr(<*x1,x2*>, f) is with_nonpair_inputs
+  proof
+   let x1,x2 be set, X be non empty finite set;
+   let f be Function of 2-tuples_on X, X;
+   let S be with_nonpair_inputs Signature of X such that
+A1: (x1 in the carrier of S or x1 is non pair) &
+    (x2 in the carrier of S or x2 is non pair);
+A2: not Output 1GateCircStr(<*x1,x2*>, f) in InputVertices S
+     by FACIRC_1:def 2;
+   per cases by A1;
+   suppose
+       x1 in the carrier of S & x2 in the carrier of S or
+     x1 in the carrier of S & not x2 in InnerVertices S or
+     x2 in the carrier of S & not x1 in InnerVertices S;
+     then InputVertices (S +* 1GateCircStr(<*x1,x2*>, f)) = InputVertices S or
+     {x2} is without_pairs &
+     InputVertices (S +* 1GateCircStr(<*x1,x2*>, f)) = {x2} \/ InputVertices S
+     or
+     {x1} is without_pairs &
+     InputVertices (S +* 1GateCircStr(<*x1,x2*>, f)) = {x1} \/ InputVertices S
+      by A1,A2,Lm1,Th42,Th43,Th44;
+    hence InputVertices (S +* 1GateCircStr(<*x1,x2*>, f)) is without_pairs
+      by Lm2;
+   suppose x1 is non pair & x2 is non pair;
+    then reconsider a = x1, b = x2 as non pair set;
+       rng <*x1,x2*> = {a,b} & {a,b} = {} \/ {a,b} & {} c= the carrier of S &
+     {a,b} misses InnerVertices S by FACIRC_1:5,FINSEQ_2:147,XBOOLE_1:2;
+     then InputVertices (S +* 1GateCircStr(<*x1,x2*>, f))
+       = (InputVertices S) \/ {a,b} by A2,Th40;
+    hence InputVertices (S +* 1GateCircStr(<*x1,x2*>, f)) is without_pairs;
+  end;
+
+definition
+ let X be non empty finite set;
+ let S be with_nonpair_inputs Signature of X;
+ let x1 be Vertex of S, n2 be non pair set;
+ let f be Function of 2-tuples_on X, X;
+ cluster S +* 1GateCircStr(<*x1,n2*>, f) -> with_nonpair_inputs;
+ coherence by Th56;
+ cluster S +* 1GateCircStr(<*n2,x1*>, f) -> with_nonpair_inputs;
+ coherence by Th56;
+end;
+
+definition
+ let X be non empty finite set;
+ let S be with_nonpair_inputs Signature of X;
+ let x1,x2 be Vertex of S;
+ let f be Function of 2-tuples_on X, X;
+ cluster S +* 1GateCircStr(<*x1,x2*>, f) -> with_nonpair_inputs;
+ coherence by Th56;
+end;
+
+Lm3:
+ for x,y being non pair set holds {x,y} is without_pairs;
+
+theorem Th57:
+ for x1,x2,x3 being set, X being non empty finite set
+ for f being Function of 3-tuples_on X, X
+ for S being with_nonpair_inputs Signature of X
+  st (x1 in the carrier of S or x1 is non pair) &
+     (x2 in the carrier of S or x2 is non pair) &
+     (x3 in the carrier of S or x3 is non pair)
+  holds S +* 1GateCircStr(<*x1,x2,x3*>, f) is with_nonpair_inputs
+  proof
+   let x1,x2,x3 be set, X be non empty finite set;
+   let f be Function of 3-tuples_on X, X;
+   let S be with_nonpair_inputs Signature of X such that
+A1: (x1 in the carrier of S or x1 is non pair) &
+    (x2 in the carrier of S or x2 is non pair) &
+    (x3 in the carrier of S or x3 is non pair);
+A2: not Output 1GateCircStr(<*x1,x2,x3*>, f) in InputVertices S
+     by FACIRC_1:def 2;
+   per cases by A1;
+   suppose
+       x1 in the carrier of S & x2 in the carrier of S &
+       x3 in the carrier of S or
+     x1 in the carrier of S & not x2 in InnerVertices S &
+       x3 in the carrier of S or
+     x2 in the carrier of S & not x1 in InnerVertices S &
+       x3 in the carrier of S or
+     x1 in the carrier of S & x2 in the carrier of S &
+       not x3 in InnerVertices S or
+     x1 in the carrier of S & not x2 in InnerVertices S &
+       not x3 in InnerVertices S or
+     x2 in the carrier of S & not x1 in InnerVertices S &
+       not x3 in InnerVertices S or
+     not x1 in InnerVertices S & not x2 in InnerVertices S &
+       x3 in the carrier of S;
+     then InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>, f)) = InputVertices S
+or
+     {x2} is without_pairs &
+     InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>, f)) =
+       {x2} \/ InputVertices S
+     or
+     {x1} is without_pairs &
+     InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>, f)) =
+       {x1} \/ InputVertices S
+     or
+     {x3} is without_pairs &
+     InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>, f)) =
+       {x3} \/ InputVertices S
+     or
+     {x1,x2} is without_pairs &
+     InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>, f)) =
+       {x1,x2} \/ InputVertices S
+     or
+     {x2,x3} is without_pairs &
+     InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>, f)) =
+       {x2,x3} \/ InputVertices S
+     or
+     {x1,x3} is without_pairs &
+     InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>, f)) =
+       {x1,x3} \/ InputVertices S
+      by A1,A2,Lm1,Lm3,Th45,Th46,Th47,Th48,Th49,Th50,Th51;
+    hence InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>, f)) is without_pairs
+      by Lm2;
+   suppose x1 is non pair & x2 is non pair & x3 is non pair;
+    then reconsider a = x1, b = x2, c = x3 as non pair set;
+       rng <*x1,x2,x3*> = {a,b,c} & {a,b,c} = {} \/ {a,b,c} &
+     {} c= the carrier of S &
+     {a,b,c} misses InnerVertices S by FACIRC_1:5,FINSEQ_2:148,XBOOLE_1:2;
+     then InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>, f))
+       = (InputVertices S) \/ {a,b,c} by A2,Th40;
+    hence InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>, f)) is without_pairs;
+  end;
+
+definition
+ let X be non empty finite set;
+ let S be with_nonpair_inputs Signature of X;
+ let x1,x2 be Vertex of S, n be non pair set;
+ let f be Function of 3-tuples_on X, X;
+ cluster S +* 1GateCircStr(<*x1,x2,n*>, f) -> with_nonpair_inputs;
+ coherence by Th57;
+ cluster S +* 1GateCircStr(<*x1,n,x2*>, f) -> with_nonpair_inputs;
+ coherence by Th57;
+ cluster S +* 1GateCircStr(<*n,x1,x2*>, f) -> with_nonpair_inputs;
+ coherence by Th57;
+end;
+
+definition
+ let X be non empty finite set;
+ let S be with_nonpair_inputs Signature of X;
+ let x be Vertex of S, n1,n2 be non pair set;
+ let f be Function of 3-tuples_on X, X;
+ cluster S +* 1GateCircStr(<*x,n1,n2*>, f) -> with_nonpair_inputs;
+ coherence by Th57;
+ cluster S +* 1GateCircStr(<*n1,x,n2*>, f) -> with_nonpair_inputs;
+ coherence by Th57;
+ cluster S +* 1GateCircStr(<*n1,n2,x*>, f) -> with_nonpair_inputs;
+ coherence by Th57;
+end;
+
+definition
+ let X be non empty finite set;
+ let S be with_nonpair_inputs Signature of X;
+ let x1,x2,x3 be Vertex of S;
+ let f be Function of 3-tuples_on X, X;
+ cluster S +* 1GateCircStr(<*x1,x2,x3*>, f) -> with_nonpair_inputs;
+ coherence by Th57;
+end;

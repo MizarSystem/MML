@@ -1,0 +1,2537 @@
+:: Cartesian Products of Relations and Relational Structures
+::  by Artur Korni{\l}owicz
+::
+:: Received September 25, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, FUNCT_5, ORDERS_1, WAYBEL_0, MCART_1, LATTICE3, RELAT_2,
+      LATTICES, YELLOW_0, BHSP_3, ORDINAL2, PRE_TOPC, FUNCT_1, TARSKI,
+      QUANTAL1, AMI_1, YELLOW_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, RELSET_1,
+      FUNCT_1, MCART_1, DOMAIN_1, FUNCT_2, PRE_TOPC, FUNCT_5, STRUCT_0,
+      ORDERS_1, LATTICE3, YELLOW_0, WAYBEL_0;
+ constructors LATTICE3, DOMAIN_1, ORDERS_3, YELLOW_2, PRE_TOPC;
+ clusters LATTICE3, STRUCT_0, ORDERS_3, RELSET_1, WAYBEL_0, YELLOW_0, SUBSET_1,
+      XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions LATTICE3, RELAT_2, TARSKI, WAYBEL_0, ORDERS_1, XBOOLE_0;
+ theorems FUNCT_1, FUNCT_2, FUNCT_5, LATTICE3, MCART_1, ORDERS_1, RELAT_1,
+      RELAT_2, RELSET_1, STRUCT_0, TARSKI, WAYBEL_0, YELLOW_0, YELLOW_2,
+      ZFMISC_1, XBOOLE_0;
+ schemes FUNCT_7, RELAT_1;
+
+begin :: Preliminaries
+
+scheme FraenkelA2 {A() -> non empty set,
+                   F(set, set) -> set,
+                   P[set, set], Q[set, set] } :
+ { F(s,t) where s is Element of A(), t is Element of A() : P[s,t] }
+  is Subset of A()
+provided
+A1: for s being Element of A(), t being Element of A() holds F(s,t) in A()
+  proof
+      { F(s,t) where s is Element of A(), t is Element of A() : P[s,t] } c= A()
+    proof
+      let q be set;
+      assume q in { F(s,t) where s is Element of A(), t is Element of A() :
+        P[s,t] };
+      then consider s, t being Element of A() such that
+A2:     q = F(s,t) & P[s,t];
+      thus q in A() by A1,A2;
+    end;
+    hence thesis;
+  end;
+
+scheme ExtensionalityR { A, B() -> Relation,
+                         P[set,set] }:
+ A() = B()
+provided
+A1: for a, b being set holds [a,b] in A() iff P[a,b] and
+A2: for a, b being set holds [a,b] in B() iff P[a,b]
+  proof
+    thus A() c= B()
+    proof
+      let q be set; assume
+A3:     q in A();
+      then consider y, z being set such that
+A4:     q = [y,z] by RELAT_1:def 1;
+        P[y,z] by A1,A3,A4;
+      hence q in B() by A2,A4;
+    end;
+    let q be set; assume
+A5:   q in B();
+    then consider y, z being set such that
+A6:   q = [y,z] by RELAT_1:def 1;
+      P[y,z] by A2,A5,A6;
+    hence q in A() by A1,A6;
+  end;
+
+definition let X be empty set;
+ cluster proj1 X -> empty;
+coherence by FUNCT_5:10;
+ cluster proj2 X -> empty;
+coherence by FUNCT_5:10;
+end;
+
+definition let X, Y be non empty set,
+               D be non empty Subset of [:X,Y:];
+ cluster proj1 D -> non empty;
+coherence
+  proof
+    consider a being Element of D;
+    consider x,y being set such that
+A1:   x in X & y in Y & a = [x,y] by ZFMISC_1:def 2;
+    assume proj1 D is empty;
+    hence contradiction by A1,FUNCT_5:18;
+  end;
+ cluster proj2 D -> non empty;
+coherence
+  proof
+    consider a being Element of D;
+    consider x,y being set such that
+A2:   x in X & y in Y & a = [x,y] by ZFMISC_1:def 2;
+    assume proj2 D is empty;
+    hence contradiction by A2,FUNCT_5:18;
+  end;
+end;
+
+definition let L be RelStr,
+               X be empty Subset of L;
+ cluster downarrow X -> empty;
+coherence
+  proof
+    assume downarrow X is non empty;
+    then consider x being set such that
+A1:   x in downarrow X by XBOOLE_0:def 1;
+    reconsider x as Element of L by A1;
+      ex z being Element of L st x <= z & z in X by A1,WAYBEL_0:def 15;
+    hence contradiction;
+  end;
+
+ cluster uparrow X -> empty;
+coherence
+  proof
+    assume uparrow X is non empty;
+    then consider x being set such that
+A2:   x in uparrow X by XBOOLE_0:def 1;
+    reconsider x as Element of L by A2;
+      ex z being Element of L st z <= x & z in X by A2,WAYBEL_0:def 16;
+    hence contradiction;
+  end;
+end;
+
+theorem Th1:
+for X, Y being set, D being Subset of [:X,Y:] holds D c= [:proj1 D, proj2 D:]
+  proof
+    let X, Y be set,
+        D be Subset of [:X,Y:];
+    let q be set; assume
+A1:   q in D;
+    then consider x, y being set such that
+A2:   x in X & y in Y & q = [x,y] by ZFMISC_1:def 2;
+      x in proj1 D & y in proj2 D by A1,A2,FUNCT_5:4;
+    hence q in [:proj1 D, proj2 D:] by A2,ZFMISC_1:def 2;
+  end;
+
+Lm1:
+for x, a1, a2, b1, b2 being set st x = [[a1,a2],[b1,b2]] holds
+ x`1`1 = a1 & x`1`2 = a2 & x`2`1 = b1 & x`2`2 = b2
+  proof
+    let x, a1, a2, b1, b2 be set;
+    assume x = [[a1,a2],[b1,b2]];
+    then x`1 = [a1,a2] & x`2 = [b1,b2] by MCART_1:7;
+    hence thesis by MCART_1:7;
+  end;
+
+theorem
+  for L being with_infima transitive antisymmetric RelStr
+ for a, b, c, d being Element of L st a <= c & b <= d holds a "/\" b <= c "/\"
+ d
+  proof
+    let L be with_infima transitive antisymmetric RelStr,
+        a, b, c, d be Element of L such that
+A1:   a <= c & b <= d;
+A2: ex x being Element of L st c >= x & d >= x &
+     for z being Element of L st c >= z & d >= z holds x >=
+ z by LATTICE3:def 11;
+      ex_inf_of {a,b},L by YELLOW_0:21;
+    then a "/\" b <= a & a "/\" b <= b by YELLOW_0:19;
+    then a "/\" b <= c & a "/\" b <= d by A1,ORDERS_1:26;
+    hence a "/\" b <= c "/\" d by A2,LATTICE3:def 14;
+  end;
+
+theorem
+  for L being with_suprema transitive antisymmetric RelStr
+ for a, b, c, d being Element of L st a <= c & b <= d holds a "\/" b <= c "\/"
+ d
+  proof
+    let L be with_suprema transitive antisymmetric RelStr,
+        a, b, c, d be Element of L such that
+A1:   a <= c & b <= d;
+A2: ex x being Element of L st a <= x & b <= x &
+     for z being Element of L st a <= z & b <= z holds x <=
+ z by LATTICE3:def 10;
+      ex_sup_of {c,d},L by YELLOW_0:20;
+    then c <= c "\/" d & d <= c "\/" d by YELLOW_0:18;
+    then a <= c "\/" d & b <= c "\/" d by A1,ORDERS_1:26;
+    hence a "\/" b <= c "\/" d by A2,LATTICE3:def 13;
+  end;
+
+theorem
+  for L being complete reflexive antisymmetric (non empty RelStr)
+ for D being Subset of L, x being Element of L st x in D
+  holds (sup D) "/\" x = x
+  proof
+    let L be complete reflexive antisymmetric (non empty RelStr),
+        D be Subset of L,
+        x be Element of L such that
+A1:   x in D;
+      D is_<=_than sup D by YELLOW_0:32;
+then x <= sup D by A1,LATTICE3:def 9;
+    hence (sup D) "/\" x
+       = x by YELLOW_0:25;
+ end;
+
+theorem
+  for L being complete reflexive antisymmetric (non empty RelStr)
+ for D being Subset of L, x being Element of L st x in D
+  holds (inf D) "\/" x = x
+  proof
+    let L be complete reflexive antisymmetric (non empty RelStr),
+        D be Subset of L,
+        x be Element of L such that
+A1:   x in D;
+      D is_>=_than inf D by YELLOW_0:33;
+then inf D <= x by A1,LATTICE3:def 8;
+    hence (inf D) "\/" x
+       = x by YELLOW_0:24;
+ end;
+
+theorem
+  for L being RelStr, X, Y being Subset of L st X c= Y holds
+ downarrow X c= downarrow Y
+  proof
+    let L be RelStr,
+        X, Y be Subset of L such that
+A1:   X c= Y;
+    let q be set; assume
+A2:   q in downarrow X;
+    then reconsider x = q as Element of L;
+      ex z being Element of L st x <= z & z in X by A2,WAYBEL_0:def 15;
+    hence q in downarrow Y by A1,WAYBEL_0:def 15;
+  end;
+
+theorem
+  for L being RelStr, X, Y being Subset of L st X c= Y holds
+ uparrow X c= uparrow Y
+  proof
+    let L be RelStr,
+        X, Y be Subset of L such that
+A1:   X c= Y;
+    let q be set; assume
+A2:   q in uparrow X;
+    then reconsider x = q as Element of L;
+      ex z being Element of L st z <= x & z in X by A2,WAYBEL_0:def 16;
+    hence q in uparrow Y by A1,WAYBEL_0:def 16;
+  end;
+
+theorem
+  for S, T being with_infima Poset, f being map of S, T
+ for x, y being Element of S holds
+  f preserves_inf_of {x,y} iff f.(x "/\" y) = f.x "/\" f.y
+  proof
+    let S, T be with_infima Poset,
+        f be map of S, T,
+        x, y be Element of S;
+A1:   dom f = the carrier of S by FUNCT_2:def 1;
+    hereby assume
+A2:    f preserves_inf_of {x,y};
+A3:   ex_inf_of {x,y},S by YELLOW_0:21;
+      thus f.(x "/\" y)
+          = f.inf {x,y} by YELLOW_0:40
+         .= inf (f.:{x,y}) by A2,A3,WAYBEL_0:def 30
+         .= inf {f.x,f.y} by A1,FUNCT_1:118
+         .= f.x "/\" f.y by YELLOW_0:40;
+    end;
+    assume
+A4:   f.(x "/\" y) = f.x "/\" f.y;
+    assume ex_inf_of {x,y},S;
+      f.:{x,y} = {f.x,f.y} by A1,FUNCT_1:118;
+    hence ex_inf_of f.:{x,y},T by YELLOW_0:21;
+    thus inf (f.:{x,y})
+          = inf {f.x,f.y} by A1,FUNCT_1:118
+         .= f.x "/\" f.y by YELLOW_0:40
+         .= f.inf {x,y} by A4,YELLOW_0:40;
+  end;
+
+theorem
+  for S, T being with_suprema Poset, f being map of S, T
+ for x, y being Element of S holds
+  f preserves_sup_of {x,y} iff f.(x "\/" y) = f.x "\/" f.y
+  proof
+    let S, T be with_suprema Poset,
+        f be map of S, T,
+        x, y be Element of S;
+A1:   dom f = the carrier of S by FUNCT_2:def 1;
+    hereby assume
+A2:    f preserves_sup_of {x,y};
+A3:   ex_sup_of {x,y},S by YELLOW_0:20;
+      thus f.(x "\/" y)
+          = f.sup {x,y} by YELLOW_0:41
+         .= sup (f.:{x,y}) by A2,A3,WAYBEL_0:def 31
+         .= sup {f.x,f.y} by A1,FUNCT_1:118
+         .= f.x "\/" f.y by YELLOW_0:41;
+    end;
+    assume
+A4:   f.(x "\/" y) = f.x "\/" f.y;
+    assume ex_sup_of {x,y},S;
+      f.:{x,y} = {f.x,f.y} by A1,FUNCT_1:118;
+    hence ex_sup_of f.:{x,y},T by YELLOW_0:20;
+    thus sup (f.:{x,y})
+          = sup {f.x,f.y} by A1,FUNCT_1:118
+         .= f.x "\/" f.y by YELLOW_0:41
+         .= f.sup {x,y} by A4,YELLOW_0:41;
+  end;
+
+scheme Inf_Union { L() -> complete antisymmetric (non empty RelStr),
+                   P[set] } :
+ "/\" ({ "/\"(X,L()) where X is Subset of L(): P[X] },L())
+  >= "/\" (union {X where X is Subset of L(): P[X]},L())
+  proof
+      "/\"(union {X where X is Subset of L(): P[X]},L())
+     is_<=_than { "/\"(X,L()) where X is Subset of L(): P[X] }
+    proof
+      let a be Element of L();
+      assume a in { "/\"(X,L()) where X is Subset of L(): P[X] };
+      then consider q being Subset of L() such that
+A1:     a = "/\"(q,L()) & P[q];
+A2:    ex_inf_of q,L() &
+        ex_inf_of union {X where X is Subset of L(): P[X]},L() by YELLOW_0:17;
+        q in {X where X is Subset of L(): P[X]} by A1;
+      then q c= union {X where X is Subset of L(): P[X]} by ZFMISC_1:92;
+      hence a >= "/\"(union {X where X is Subset of L(): P[X]},L())
+        by A1,A2,YELLOW_0:35;
+    end;
+    hence thesis by YELLOW_0:33;
+  end;
+
+scheme Inf_of_Infs { L() -> complete LATTICE,
+                     P[set] } :
+ "/\" ({ "/\"(X,L()) where X is Subset of L(): P[X] },L())
+  = "/\" (union {X where X is Subset of L(): P[X]},L())
+  proof defpred p[set] means P[$1];
+A1: "/\" ({ "/\"(X,L()) where X is Subset of L(): p[X] },L())
+      >= "/\"(union {X where X is Subset of L(): p[X]},L())
+       from Inf_Union;
+
+      union {X where X is Subset of L(): P[X]}
+     is_>=_than "/\" ({ "/\"(X,L()) where X is Subset of L(): P[X] },L())
+    proof
+      let a be Element of L();
+      assume a in union {X where X is Subset of L(): P[X]};
+      then consider b being set such that
+A2:     a in b & b in {X where X is Subset of L(): P[X]} by TARSKI:def 4;
+      consider c being Subset of L() such that
+A3:     b = c & P[c] by A2;
+A4:   "/\"(c,L()) <= a by A2,A3,YELLOW_2:24;
+        "/\"(c,L()) in { "/\"
+(X,L()) where X is Subset of L(): P[X] } by A3;
+      then "/\"(c,L()) >= "/\" ({ "/\"(X,L()) where X is Subset of L(): P[X] }
+,L())
+        by YELLOW_2:24;
+      hence a >= "/\" ({ "/\"(X,L()) where X is Subset of L(): P[X] },L())
+        by A4,YELLOW_0:def 2;
+    end;
+    then "/\"(union {X where X is Subset of L(): P[X]},L())
+      >= "/\" ({ "/\"(X,L()) where X is Subset of L(): P[X] },L())
+       by YELLOW_0:33;
+    hence thesis by A1,ORDERS_1:25;
+  end;
+
+scheme Sup_Union { L() -> complete antisymmetric (non empty RelStr),
+                   P[set] } :
+ "\/" ({ "\/"(X,L()) where X is Subset of L(): P[X] },L())
+  <= "\/" (union {X where X is Subset of L(): P[X]},L())
+  proof
+A1: ex_sup_of { "\/"
+(X,L()) where X is Subset of L(): P[X] },L() by YELLOW_0:17;
+      "\/"(union {X where X is Subset of L(): P[X]},L())
+     is_>=_than { "\/"(X,L()) where X is Subset of L(): P[X] }
+    proof
+      let a be Element of L();
+      assume a in { "\/"(X,L()) where X is Subset of L(): P[X] };
+      then consider q being Subset of L() such that
+A2:     a = "\/"(q,L()) & P[q];
+A3:    ex_sup_of q,L() &
+        ex_sup_of union {X where X is Subset of L(): P[X]},L() by YELLOW_0:17;
+        q in {X where X is Subset of L(): P[X]} by A2;
+      then q c= union {X where X is Subset of L(): P[X]} by ZFMISC_1:92;
+      hence a <= "\/"(union {X where X is Subset of L(): P[X]},L())
+        by A2,A3,YELLOW_0:34;
+    end;
+    hence thesis by A1,YELLOW_0:def 9;
+  end;
+
+scheme Sup_of_Sups { L() -> complete LATTICE,
+                     P[set] } :
+ "\/" ({ "\/"(X,L()) where X is Subset of L(): P[X] },L())
+  = "\/" (union {X where X is Subset of L(): P[X]},L())
+  proof defpred p[set] means P[$1];
+A1: "\/" ({ "\/"(X,L()) where X is Subset of L(): p[X] },L())
+      <= "\/"(union {X where X is Subset of L(): p[X]},L())
+       from Sup_Union;
+
+A2: ex_sup_of union {X where X is Subset of L(): P[X]},L() by YELLOW_0:17;
+      union {X where X is Subset of L(): P[X]}
+     is_<=_than "\/" ({ "\/"(X,L()) where X is Subset of L(): P[X] },L())
+    proof
+      let a be Element of L();
+      assume a in union {X where X is Subset of L(): P[X]};
+      then consider b being set such that
+A3:     a in b & b in {X where X is Subset of L(): P[X]} by TARSKI:def 4;
+      consider c being Subset of L() such that
+A4:     b = c & P[c] by A3;
+A5:   a <= "\/"(c,L()) by A3,A4,YELLOW_2:24;
+        "\/"(c,L()) in { "\/"
+(X,L()) where X is Subset of L(): P[X] } by A4;
+      then "\/"(c,L()) <= "\/" ({ "\/"(X,L()) where X is Subset of L(): P[X] }
+,L())
+        by YELLOW_2:24;
+      hence a <= "\/" ({ "\/"(X,L()) where X is Subset of L(): P[X] },L())
+        by A5,YELLOW_0:def 2;
+    end;
+    then "\/"(union {X where X is Subset of L(): P[X]},L())
+      <= "\/" ({ "\/"(X,L()) where X is Subset of L(): P[X] },L())
+       by A2,YELLOW_0:def 9;
+    hence thesis by A1,ORDERS_1:25;
+  end;
+
+begin :: Properties of Cartesian Products of Relational Structures
+
+definition let P, R be Relation;
+ func ["P,R"] -> Relation means :Def1:
+  for x, y being set holds [x,y] in it iff
+   ex p,q,s,t being set st x = [p,q] & y = [s,t] & [p,s] in P & [q,t] in R;
+existence
+  proof
+defpred P[set,set] means
+ ex p, s, q, t being set st $1 = [p,q] & $2 = [s,t] & [p,s] in P & [q,t] in R;
+    consider Q being Relation such that
+A1:  for x, y being set holds [x,y] in Q iff x in [:dom P,dom R:] &
+      y in [:rng P,rng R:] & P[x,y] from Rel_Existence;
+    take Q;
+    let x, y be set;
+    hereby assume
+        [x,y] in Q;
+      then consider p, s, q, t being set such that
+A2:     x = [p,q] & y = [s,t] & [p,s] in P & [q,t] in R by A1;
+      take p, q, s, t;
+      thus x = [p,q] & y = [s,t] & [p,s] in P & [q,t] in R by A2;
+    end;
+    given p,q,s,t being set such that
+A3:   x = [p,q] & y = [s,t] & [p,s] in P & [q,t] in R;
+      p in dom P & q in dom R & s in rng P & t in rng R by A3,RELAT_1:20;
+    then x in [:dom P,dom R:] & y in [:rng P,rng R:] by A3,ZFMISC_1:106;
+    hence [x,y] in Q by A1,A3;
+  end;
+uniqueness
+  proof
+    defpred P[set,set] means ex p,q,s,t being set st
+      $1 = [p,q] & $2 = [s,t] & [p,s] in P & [q,t] in R;
+    let A, B be Relation such that
+A4:  for x, y being set holds [x,y] in A iff P[x,y]and
+A5:  for x, y being set holds [x,y] in B iff P[x,y];
+    thus A = B from ExtensionalityR(A4,A5);
+  end;
+end;
+
+theorem Th10:
+for P, R being Relation, x being set holds
+ x in ["P,R"] iff
+  [x`1`1,x`2`1] in P & [x`1`2,x`2`2] in R &
+   (ex a, b being set st x = [a,b]) & (ex c, d being set st x`1 = [c,d]) &
+    ex e, f being set st x`2 = [e,f]
+  proof
+    let P, R be Relation,
+        x be set;
+    hereby assume
+A1:      x in ["P,R"];
+      then consider y, z being set such that
+A2:     x = [y,z] by RELAT_1:def 1;
+      consider p,q,s,t being set such that
+A3:     y = [p,q] & z = [s,t] & [p,s] in P & [q,t] in R by A1,A2,Def1;
+        x`1`1 = p & x`1`2 = q & x`2`1 = s & x`2`2 = t by A2,A3,Lm1;
+      hence [x`1`1,x`2`1] in P & [x`1`2,x`2`2] in R by A3;
+      thus ex a, b being set st x = [a,b] by A2;
+        x`1 = [p,q] by A2,A3,MCART_1:7;
+      hence ex c, d being set st x`1 = [c,d];
+        x`2 = [s,t] by A2,A3,MCART_1:7;
+      hence ex e, f being set st x`2 = [e,f];
+    end;
+    assume that
+A4:  [x`1`1,x`2`1] in P & [x`1`2,x`2`2] in R and
+A5:  (ex a, b being set st x = [a,b]) & (ex c, d being set st x`1 = [c,d]) &
+       ex e, f being set st x`2 = [e,f];
+    consider a, b being set such that
+A6:   x = [a,b] by A5;
+    consider c, d being set such that
+A7:   x`1 = [c,d] by A5;
+    consider e, f being set such that
+A8:   x`2 = [e,f] by A5;
+A9: a = [c,d] & b = [e,f] by A6,A7,A8,MCART_1:7;
+      [c,x`2`1] in P & [d,x`2`2] in R by A4,A7,MCART_1:7;
+    then [c,e] in P & [d,f] in R by A8,MCART_1:7;
+    hence x in ["P,R"] by A6,A9,Def1;
+  end;
+
+definition let A, B, X, Y be set;
+           let P be Relation of A, B;
+           let R be Relation of X, Y;
+ redefine func ["P,R"] -> Relation of [:A,X:],[:B,Y:];
+coherence
+  proof
+      ["P,R"] c= [:[:A,X:],[:B,Y:]:]
+    proof
+      let q be set; assume
+A1:     q in ["P,R"];
+      then [q`1`1,q`2`1] in P by Th10;
+      then consider x, y being set such that
+A2:     [q`1`1,q`2`1] = [x,y] & x in A & y in B by RELSET_1:6;
+        [q`1`2,q`2`2] in R by A1,Th10;
+      then consider s, t being set such that
+A3:     [q`1`2,q`2`2] = [s,t] & s in X & t in Y by RELSET_1:6;
+      consider a, b being set such that
+A4:     q = [a,b] by A1,Th10;
+      consider a1, b1 being set such that
+A5:     q`1 = [a1,b1] by A1,Th10;
+      consider a2, b2 being set such that
+A6:     q`2 = [a2,b2] by A1,Th10;
+A7:   a = [a1,b1] & b = [a2,b2] by A4,A5,A6,MCART_1:7;
+then A8:   a`1 = x by A2,A5,ZFMISC_1:33;
+A9:   a`2 = s by A3,A5,A7,ZFMISC_1:33;
+A10:   b`1 = y by A2,A6,A7,ZFMISC_1:33;
+        b`2 = t by A3,A6,A7,ZFMISC_1:33;
+      then a in [:A,X:] & b in [:B,Y:] by A2,A3,A7,A8,A9,A10,MCART_1:11;
+      hence q in [:[:A,X:],[:B,Y:]:] by A4,ZFMISC_1:def 2;
+    end;
+    hence thesis by RELSET_1:def 1;
+  end;
+end;
+
+definition let X, Y be RelStr;
+ func [:X,Y:] -> strict RelStr means :Def2:
+  the carrier of it = [:the carrier of X, the carrier of Y:] &
+  the InternalRel of it = ["the InternalRel of X, the InternalRel of Y"];
+existence
+  proof
+    take RelStr (#[:the carrier of X, the carrier of Y:],
+                 ["the InternalRel of X, the InternalRel of Y"]#);
+    thus thesis;
+  end;
+uniqueness;
+end;
+
+definition let L1, L2 be RelStr,
+               D be Subset of [:L1,L2:];
+ redefine func proj1 D -> Subset of L1;
+coherence
+  proof
+      proj1 D c= the carrier of L1
+    proof
+      let x be set;
+      assume x in proj1 D;
+      then consider y being set such that
+A1:     [x,y] in D by FUNCT_5:def 1;
+        the carrier of [:L1,L2:] = [:the carrier of L1, the carrier of L2:]
+        by Def2;
+      hence x in the carrier of L1 by A1,ZFMISC_1:106;
+    end;
+    hence thesis;
+  end;
+ redefine func proj2 D -> Subset of L2;
+coherence
+  proof
+      proj2 D c= the carrier of L2
+    proof
+      let y be set;
+      assume y in proj2 D;
+      then consider x being set such that
+A2:     [x,y] in D by FUNCT_5:def 2;
+        the carrier of [:L1,L2:] = [:the carrier of L1, the carrier of L2:]
+        by Def2;
+      hence y in the carrier of L2 by A2,ZFMISC_1:106;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition let S1, S2 be RelStr,
+               D1 be Subset of S1,
+               D2 be Subset of S2;
+ redefine func [:D1,D2:] -> Subset of [:S1,S2:];
+coherence
+  proof
+      [:D1,D2:] c= [:the carrier of S1,the carrier of S2:];
+    then [:D1,D2:] c= the carrier of [:S1,S2:] by Def2;
+    hence thesis;
+  end;
+end;
+
+definition let S1, S2 be non empty RelStr,
+               x be Element of S1,
+               y be Element of S2;
+ redefine func [x,y] -> Element of [:S1,S2:];
+coherence
+  proof
+    reconsider x1 = x as Element of S1;
+    reconsider y1 = y as Element of S2;
+      [x1,y1] is Element of [:S1,S2:] by Def2;
+    hence thesis;
+  end;
+end;
+
+definition let L1, L2 be non empty RelStr,
+               x be Element of [:L1,L2:];
+ redefine func x`1 -> Element of L1;
+coherence
+  proof
+      the carrier of [:L1,L2:] = [:the carrier of L1, the carrier of L2:]
+      by Def2;
+    then x`1 in the carrier of L1 by MCART_1:10;
+    hence thesis;
+  end;
+ redefine func x`2 -> Element of L2;
+coherence
+  proof
+      the carrier of [:L1,L2:] = [:the carrier of L1, the carrier of L2:]
+      by Def2;
+    then x`2 in the carrier of L2 by MCART_1:10;
+    hence thesis;
+  end;
+end;
+
+theorem Th11:
+for S1, S2 being non empty RelStr
+ for a, c being Element of S1, b, d being Element of S2 holds
+  a <= c & b <= d iff [a,b] <= [c,d]
+  proof
+    let S1, S2 be non empty RelStr,
+        a, c be Element of S1,
+        b, d be Element of S2;
+    set I1 = the InternalRel of S1,
+        I2 = the InternalRel of S2,
+        x = [[a,b],[c,d]];
+A1: x`1`1 = a & x`1`2 = b & x`2`1 = c & x`2`2 = d by Lm1;
+A2: x`1 = [a,b] & x`2 = [c,d] by MCART_1:7;
+    thus a <= c & b <= d implies [a,b] <= [c,d]
+    proof
+      assume a <= c & b <= d;
+      then [x`1`1,x`2`1] in I1 & [x`1`2,x`2`2] in I2 by A1,ORDERS_1:def 9;
+      then x in ["I1,I2"] by A2,Th10;
+      hence [[a,b],[c,d]] in the InternalRel of [:S1,S2:] by Def2;
+    end;
+    assume [a,b] <= [c,d];
+    then x in the InternalRel of [:S1,S2:] by ORDERS_1:def 9;
+    then x in ["I1,I2"] by Def2;
+    hence [a,c] in the InternalRel of S1 & [b,d] in the InternalRel of S2
+      by A1,Th10;
+  end;
+
+theorem Th12:
+for S1, S2 being non empty RelStr, x, y being Element of [:S1,S2:] holds
+ x <= y iff x`1 <= y`1 & x`2 <= y`2
+  proof
+    let S1, S2 be non empty RelStr,
+        x, y be Element of [:S1,S2:];
+A1: the carrier of [:S1,S2:] = [:the carrier of S1, the carrier of S2:]
+      by Def2;
+    then consider a, b being set such that
+A2:  a in the carrier of S1 & b in the carrier of S2 & x = [a,b]
+      by ZFMISC_1:def 2;
+    consider c, d being set such that
+A3:  c in the carrier of S1 & d in the carrier of S2 & y = [c,d]
+      by A1,ZFMISC_1:def 2;
+      x = [x`1,x`2] & y = [y`1,y`2] by A2,A3,MCART_1:8;
+    hence thesis by Th11;
+  end;
+
+theorem
+  for A, B being RelStr, C being non empty RelStr
+ for f, g being map of [:A,B:],C
+  st for x being Element of A, y being Element of B holds f.[x,y] = g.[x,y]
+   holds f = g
+  proof
+    let A, B be RelStr,
+        C be non empty RelStr,
+        f, g be map of [:A,B:],C such that
+A1:   for x being Element of A, y being Element of B holds f.[x,y] = g.[x,y];
+    A2: the carrier of [:A,B:] = [:the carrier of A,the carrier of B:] by Def2;
+      for x, y being set st x in the carrier of A & y in the carrier of B
+      holds f.[x,y] = g.[x,y] by A1;
+    hence f = g by A2,FUNCT_2:118;
+  end;
+
+definition let X, Y be non empty RelStr;
+ cluster [:X,Y:] -> non empty;
+coherence
+  proof
+    consider x being Element of X;
+    consider y being Element of Y;
+      [x,y] in [:the carrier of X,the carrier of Y:] by ZFMISC_1:106;
+    then the carrier of [:X,Y:] is non empty by Def2;
+    hence [:X,Y:] is non empty by STRUCT_0:def 1;
+  end;
+end;
+
+definition let X, Y be reflexive RelStr;
+ cluster [:X,Y:] -> reflexive;
+coherence
+  proof
+    let x be set;
+    assume x in the carrier of [:X,Y:];
+    then x in [:the carrier of X,the carrier of Y:] by Def2;
+    then consider x1, x2 being set such that
+A1:   x1 in the carrier of X & x2 in the carrier of Y & x = [x1,x2]
+        by ZFMISC_1:def 2;
+    set a = [[x1,x2],[x1,x2]];
+      the InternalRel of X is_reflexive_in the carrier of X &
+      the InternalRel of Y is_reflexive_in the carrier of Y by ORDERS_1:def 4;
+    then A2: [x1,x1] in the InternalRel of X & [x2,x2] in the InternalRel of Y
+      by A1,RELAT_2:def 1;
+A3: a`1 = [x1,x2] & a`2 = [x1,x2] by MCART_1:7;
+      a`1`1 = x1 & a`1`2 = x2 & a`2`1 = x1 & a`2`2 = x2 by Lm1;
+    then [x,x] in ["the InternalRel of X,the InternalRel of Y"] by A1,A2,A3,
+Th10;
+    hence [x,x] in the InternalRel of [:X,Y:] by Def2;
+  end;
+end;
+
+definition let X, Y be antisymmetric RelStr;
+ cluster [:X,Y:] -> antisymmetric;
+coherence
+  proof
+    let x, y be set such that
+A1:   x in the carrier of [:X,Y:] and
+A2:   y in the carrier of [:X,Y:] and
+A3:   [x,y] in the InternalRel of [:X,Y:] & [y,x] in
+ the InternalRel of [:X,Y:];
+      x in [:the carrier of X,the carrier of Y:] by A1,Def2;
+    then consider x1, x2 being set such that
+A4:   x1 in the carrier of X & x2 in the carrier of Y & x = [x1,x2]
+        by ZFMISC_1:def 2;
+      y in [:the carrier of X,the carrier of Y:] by A2,Def2;
+    then consider y1, y2 being set such that
+A5:   y1 in the carrier of X & y2 in the carrier of Y & y = [y1,y2]
+        by ZFMISC_1:def 2;
+      [x,y] in ["the InternalRel of X,the InternalRel of Y"] by A3,Def2;
+    then [[x,y]`1`1,[x,y]`2`1] in the InternalRel of X
+      & [[x,y]`1`2,[x,y]`2`2] in the InternalRel of Y by Th10;
+    then [x`1,[x,y]`2`1] in the InternalRel of X
+      & [x`2,[x,y]`2`2] in the InternalRel of Y by MCART_1:7;
+    then [x`1,y`1] in the InternalRel of X
+      & [x`2,y`2] in the InternalRel of Y by MCART_1:7;
+    then [x1,[y1,y2]`1] in the InternalRel of X
+      & [x2,[y1,y2]`2] in the InternalRel of Y by A4,A5,MCART_1:7;
+then A6: [x1,y1] in the InternalRel of X & [x2,y2] in the InternalRel of Y
+      by MCART_1:7;
+      [y,x] in ["the InternalRel of X,the InternalRel of Y"] by A3,Def2;
+    then [[y,x]`1`1,[y,x]`2`1] in the InternalRel of X
+      & [[y,x]`1`2,[y,x]`2`2] in the InternalRel of Y by Th10;
+    then [y`1,[y,x]`2`1] in the InternalRel of X
+      & [y`2,[y,x]`2`2] in the InternalRel of Y by MCART_1:7;
+    then [y`1,x`1] in the InternalRel of X
+      & [y`2,x`2] in the InternalRel of Y by MCART_1:7;
+    then [y1,[x1,x2]`1] in the InternalRel of X
+      & [y2,[x1,x2]`2] in the InternalRel of Y by A4,A5,MCART_1:7;
+then A7: [y1,x1] in the InternalRel of X & [y2,x2] in the InternalRel of Y
+      by MCART_1:7;
+      the InternalRel of X is_antisymmetric_in the carrier of X &
+     the InternalRel of Y is_antisymmetric_in the carrier of Y
+      by ORDERS_1:def 6;
+    then x1 = y1 & x2 = y2 by A4,A5,A6,A7,RELAT_2:def 4;
+    hence x = y by A4,A5;
+  end;
+end;
+
+definition let X, Y be transitive RelStr;
+ cluster [:X,Y:] -> transitive;
+coherence
+  proof
+    let x, y, z be set such that
+A1:   x in the carrier of [:X,Y:] and
+A2:   y in the carrier of [:X,Y:] and
+A3:   z in the carrier of [:X,Y:] and
+A4:   [x,y] in the InternalRel of [:X,Y:] and
+A5:   [y,z] in the InternalRel of [:X,Y:];
+      x in [:the carrier of X,the carrier of Y:] by A1,Def2;
+    then consider x1, x2 being set such that
+A6:   x1 in the carrier of X & x2 in the carrier of Y & x = [x1,x2]
+        by ZFMISC_1:def 2;
+      y in [:the carrier of X,the carrier of Y:] by A2,Def2;
+    then consider y1, y2 being set such that
+A7:   y1 in the carrier of X & y2 in the carrier of Y & y = [y1,y2]
+        by ZFMISC_1:def 2;
+      z in [:the carrier of X,the carrier of Y:] by A3,Def2;
+    then consider z1, z2 being set such that
+A8:   z1 in the carrier of X & z2 in the carrier of Y & z = [z1,z2]
+        by ZFMISC_1:def 2;
+    set P = the InternalRel of X,
+        R = the InternalRel of Y;
+A9: P is_transitive_in the carrier of X &
+     R is_transitive_in the carrier of Y by ORDERS_1:def 5;
+      [x,y] in ["P,R"] by A4,Def2;
+    then [[x,y]`1`1,[x,y]`2`1] in P & [[x,y]`1`2,[x,y]`2`2] in R by Th10;
+    then [x`1,[x,y]`2`1] in P & [x`2,[x,y]`2`2] in R by MCART_1:7;
+    then [x`1,y`1] in P & [x`2,y`2] in R by MCART_1:7;
+    then [x1,y`1] in P & [x2,y`2] in R by A6,MCART_1:7;
+then A10: [x1,y1] in P & [x2,y2] in R by A7,MCART_1:7;
+      [y,z] in ["P,R"] by A5,Def2;
+    then [[y,z]`1`1,[y,z]`2`1] in P & [[y,z]`1`2,[y,z]`2`2] in R by Th10;
+    then [y`1,[y,z]`2`1] in P & [y`2,[y,z]`2`2] in R by MCART_1:7;
+    then [y`1,z`1] in P & [y`2,z`2] in R by MCART_1:7;
+    then [y1,z`1] in P & [y2,z`2] in R by A7,MCART_1:7;
+    then [y1,z1] in P & [y2,z2] in R by A8,MCART_1:7;
+    then [x1,z1] in P & [x2,z2] in R by A6,A7,A8,A9,A10,RELAT_2:def 8;
+    then [x1,z`1] in P & [x2,z`2] in R by A8,MCART_1:7;
+then A11: [x`1,z`1] in P & [x`2,z`2] in R by A6,MCART_1:7;
+      [x,z]`1 = x & [x,z]`2 = z by MCART_1:7;
+    then [x,z] in ["P,R"] by A6,A8,A11,Th10;
+    hence [x,z] in the InternalRel of [:X,Y:] by Def2;
+  end;
+end;
+
+definition let X, Y be with_suprema RelStr;
+ cluster [:X,Y:] -> with_suprema;
+coherence
+  proof
+    set IT = [:X,Y:];
+    let x, y be Element of IT;
+    consider zx being Element of X such that
+A1:   x`1 <= zx & y`1 <= zx and
+A2:   for z' being Element of X st x`1 <= z' & y`1 <= z' holds zx <= z'
+        by LATTICE3:def 10;
+    consider zy being Element of Y such that
+A3:   x`2 <= zy & y`2 <= zy and
+A4:   for z' being Element of Y st x`2 <= z' & y`2 <= z' holds zy <= z'
+        by LATTICE3:def 10;
+A5: the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:]
+      by Def2;
+    then consider a, b being set such that
+A6:  a in the carrier of X & b in the carrier of Y & x = [a,b]
+      by ZFMISC_1:def 2;
+    consider c, d being set such that
+A7:  c in the carrier of X & d in the carrier of Y & y = [c,d]
+      by A5,ZFMISC_1:def 2;
+    take z = [zx,zy];
+      [x`1,x`2] <= [zx,zy] & [y`1,y`2] <= [zx,zy] by A1,A3,Th11;
+    hence x <= z & y <= z by A6,A7,MCART_1:8;
+    let z' be Element of IT;
+    consider a, b being set such that
+A8:  a in the carrier of X & b in the carrier of Y & z' = [a,b]
+      by A5,ZFMISC_1:def 2;
+    assume x <= z' & y <= z';
+    then x`1 <= z'`1 & x`2 <= z'`2 & y`1 <= z'`1 & y`2 <= z'`2 by Th12;
+    then zx <= z'`1 & zy <= z'`2 by A2,A4;
+    then [zx,zy] <= [z'`1,z'`2] by Th11;
+    hence z <= z' by A8,MCART_1:8;
+  end;
+end;
+
+definition let X, Y be with_infima RelStr;
+ cluster [:X,Y:] -> with_infima;
+coherence
+  proof
+    set IT = [:X,Y:];
+    let x, y be Element of IT;
+    consider zx being Element of X such that
+A1:   x`1 >= zx & y`1 >= zx and
+A2:   for z' being Element of X st x`1 >= z' & y`1 >= z' holds zx >= z'
+        by LATTICE3:def 11;
+    consider zy being Element of Y such that
+A3:   x`2 >= zy & y`2 >= zy and
+A4:   for z' being Element of Y st x`2 >= z' & y`2 >= z' holds zy >= z'
+        by LATTICE3:def 11;
+A5: the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:]
+      by Def2;
+    then consider a, b being set such that
+A6:  a in the carrier of X & b in the carrier of Y & x = [a,b]
+      by ZFMISC_1:def 2;
+    consider c, d being set such that
+A7:  c in the carrier of X & d in the carrier of Y & y = [c,d]
+      by A5,ZFMISC_1:def 2;
+    take z = [zx,zy];
+      [x`1,x`2] >= [zx,zy] & [y`1,y`2] >= [zx,zy] by A1,A3,Th11;
+    hence x >= z & y >= z by A6,A7,MCART_1:8;
+    let z' be Element of IT;
+    consider a, b being set such that
+A8:  a in the carrier of X & b in the carrier of Y & z' = [a,b]
+      by A5,ZFMISC_1:def 2;
+    assume x >= z' & y >= z';
+    then x`1 >= z'`1 & x`2 >= z'`2 & y`1 >= z'`1 & y`2 >= z'`2 by Th12;
+    then zx >= z'`1 & zy >= z'`2 by A2,A4;
+    then [zx,zy] >= [z'`1,z'`2] by Th11;
+    hence z >= z' by A8,MCART_1:8;
+  end;
+end;
+
+theorem
+  for X, Y being RelStr st [:X,Y:] is non empty
+ holds X is non empty & Y is non empty
+  proof
+    let X, Y be RelStr such that
+A1:   [:X,Y:] is non empty;
+A2: the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def2;
+      the carrier of [:X,Y:] is non empty by A1,STRUCT_0:def 1;
+    then consider x being set such that
+A3:   x in the carrier of [:X,Y:] by XBOOLE_0:def 1;
+      x`1 in the carrier of X & x`2 in the carrier of Y by A2,A3,MCART_1:10;
+    hence X is non empty & Y is non empty by STRUCT_0:def 1;
+  end;
+
+theorem
+  for X, Y being non empty RelStr st [:X,Y:] is reflexive
+ holds X is reflexive & Y is reflexive
+  proof
+    let X, Y be non empty RelStr such that
+A1:   [:X,Y:] is reflexive;
+      for x being Element of X holds x <= x
+    proof
+      let x be Element of X;
+      consider y being Element of Y;
+        [x,y] <= [x,y] by A1,YELLOW_0:def 1;
+      hence x <= x by Th11;
+    end;
+    hence X is reflexive by YELLOW_0:def 1;
+      for y being Element of Y holds y <= y
+    proof
+      let y be Element of Y;
+      consider x being Element of X;
+        [x,y] <= [x,y] by A1,YELLOW_0:def 1;
+      hence y <= y by Th11;
+    end;
+    hence Y is reflexive by YELLOW_0:def 1;
+  end;
+
+theorem
+  for X, Y being non empty reflexive RelStr st [:X,Y:] is antisymmetric
+ holds X is antisymmetric & Y is antisymmetric
+  proof
+    let X, Y be non empty reflexive RelStr such that
+A1:   [:X,Y:] is antisymmetric;
+      for x,y being Element of X st x <= y & y <= x holds x = y
+    proof
+      consider z being Element of Y;
+      let x, y be Element of X such that
+A2:     x <= y & y <= x;
+        z <= z;
+      then [x,z] <= [y,z] & [y,z] <= [x,z] by A2,Th11;
+      then [x,z] = [y,z] by A1,YELLOW_0:def 3;
+      hence x = y by ZFMISC_1:33;
+    end;
+    hence X is antisymmetric by YELLOW_0:def 3;
+      for x,y being Element of Y st x <= y & y <= x holds x = y
+    proof
+      consider z being Element of X;
+      let x, y be Element of Y such that
+A3:     x <= y & y <= x;
+        z <= z;
+      then [z,x] <= [z,y] & [z,y] <= [z,x] by A3,Th11;
+      then [z,x] = [z,y] by A1,YELLOW_0:def 3;
+      hence x = y by ZFMISC_1:33;
+    end;
+    hence Y is antisymmetric by YELLOW_0:def 3;
+  end;
+
+theorem
+  for X, Y being non empty reflexive RelStr st [:X,Y:] is transitive
+ holds X is transitive & Y is transitive
+  proof
+    let X, Y be non empty reflexive RelStr such that
+A1:   [:X,Y:] is transitive;
+      for x,y,z being Element of X st x <= y & y <= z holds x <= z
+    proof
+      consider a being Element of Y;
+      let x, y, z be Element of X such that
+A2:     x <= y & y <= z;
+        a <= a;
+      then [x,a] <= [y,a] & [y,a] <= [z,a] by A2,Th11;
+      then [x,a] <= [z,a] by A1,YELLOW_0:def 2;
+      hence x <= z by Th11;
+    end;
+    hence X is transitive by YELLOW_0:def 2;
+      for x,y,z being Element of Y st x <= y & y <= z holds x <= z
+    proof
+      consider a being Element of X;
+      let x, y, z be Element of Y such that
+A3:     x <= y & y <= z;
+        a <= a;
+      then [a,x] <= [a,y] & [a,y] <= [a,z] by A3,Th11;
+      then [a,x] <= [a,z] by A1,YELLOW_0:def 2;
+      hence x <= z by Th11;
+    end;
+    hence Y is transitive by YELLOW_0:def 2;
+  end;
+
+theorem
+  for X, Y being non empty reflexive RelStr st [:X,Y:] is with_suprema
+ holds X is with_suprema & Y is with_suprema
+  proof
+    let X, Y be non empty reflexive RelStr such that
+A1:   [:X,Y:] is with_suprema;
+A2: the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def2;
+    thus X is with_suprema
+    proof
+      consider a being Element of Y;
+      let x, y be Element of X;
+      consider z being Element of [:X,Y:] such that
+A3:     [x,a] <= z & [y,a] <= z and
+A4:     for z' being Element of [:X,Y:] st [x,a] <= z' & [y,a] <= z'
+          holds z <= z' by A1,LATTICE3:def 10;
+      take z`1;
+A5:   z = [z`1,z`2] by A2,MCART_1:23;
+      hence x <= z`1 & y <= z`1 by A3,Th11;
+      let z' be Element of X such that
+A6:     x <= z' & y <= z';
+        a <= a;
+      then [x,a] <= [z',a] & [y,a] <= [z',a] by A6,Th11;
+      then z <= [z',a] by A4;
+      hence z`1 <= z' by A5,Th11;
+    end;
+    consider a being Element of X;
+    let x, y be Element of Y;
+    consider z being Element of [:X,Y:] such that
+A7:   [a,x] <= z & [a,y] <= z and
+A8:   for z' being Element of [:X,Y:] st [a,x] <= z' & [a,y] <= z'
+        holds z <= z' by A1,LATTICE3:def 10;
+    take z`2;
+A9: z = [z`1,z`2] by A2,MCART_1:23;
+    hence x <= z`2 & y <= z`2 by A7,Th11;
+    let z' be Element of Y such that
+A10:   x <= z' & y <= z';
+      a <= a;
+    then [a,x] <= [a,z'] & [a,y] <= [a,z'] by A10,Th11;
+    then z <= [a,z'] by A8;
+    hence z`2 <= z' by A9,Th11;
+  end;
+
+theorem
+  for X, Y being non empty reflexive RelStr st [:X,Y:] is with_infima
+ holds X is with_infima & Y is with_infima
+  proof
+    let X, Y be non empty reflexive RelStr such that
+A1:   [:X,Y:] is with_infima;
+A2: the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def2;
+    thus X is with_infima
+    proof
+      consider a being Element of Y;
+      let x, y be Element of X;
+      consider z being Element of [:X,Y:] such that
+A3:     [x,a] >= z & [y,a] >= z and
+A4:     for z' being Element of [:X,Y:] st [x,a] >= z' & [y,a] >= z'
+          holds z >= z' by A1,LATTICE3:def 11;
+      take z`1;
+A5:   z = [z`1,z`2] by A2,MCART_1:23;
+      hence x >= z`1 & y >= z`1 by A3,Th11;
+      let z' be Element of X such that
+A6:     x >= z' & y >= z';
+        a <= a;
+      then [x,a] >= [z',a] & [y,a] >= [z',a] by A6,Th11;
+      then z >= [z',a] by A4;
+      hence z`1 >= z' by A5,Th11;
+    end;
+    consider a being Element of X;
+    let x, y be Element of Y;
+    consider z being Element of [:X,Y:] such that
+A7:   [a,x] >= z & [a,y] >= z and
+A8:   for z' being Element of [:X,Y:] st [a,x] >= z' & [a,y] >= z'
+        holds z >= z' by A1,LATTICE3:def 11;
+    take z`2;
+A9: z = [z`1,z`2] by A2,MCART_1:23;
+    hence x >= z`2 & y >= z`2 by A7,Th11;
+    let z' be Element of Y such that
+A10:   x >= z' & y >= z';
+      a <= a;
+    then [a,x] >= [a,z'] & [a,y] >= [a,z'] by A10,Th11;
+    then z >= [a,z'] by A8;
+    hence z`2 >= z' by A9,Th11;
+  end;
+
+definition let S1, S2 be RelStr,
+               D1 be directed Subset of S1,
+               D2 be directed Subset of S2;
+ redefine func [:D1,D2:] -> directed Subset of [:S1,S2:];
+coherence
+  proof
+    set X = [:D1,D2:];
+      X is directed
+    proof
+      let x, y be Element of [:S1,S2:]; assume
+A1:     x in X & y in X;
+      then consider x1, x2 being set such that
+A2:     x1 in D1 & x2 in D2 & x = [x1,x2] by ZFMISC_1:def 2;
+      consider y1, y2 being set such that
+A3:     y1 in D1 & y2 in D2 & y = [y1,y2] by A1,ZFMISC_1:def 2;
+      reconsider x1, y1 as Element of S1 by A2,A3;
+      reconsider x2, y2 as Element of S2 by A2,A3;
+      consider xy1 being Element of S1 such that
+A4:     xy1 in D1 & x1 <= xy1 & y1 <= xy1 by A2,A3,WAYBEL_0:def 1;
+      consider xy2 being Element of S2 such that
+A5:     xy2 in D2 & x2 <= xy2 & y2 <= xy2 by A2,A3,WAYBEL_0:def 1;
+      reconsider S1' = S1 as non empty RelStr by A2,STRUCT_0:def 1;
+      reconsider S2' = S2 as non empty RelStr by A2,STRUCT_0:def 1;
+      reconsider xy1' = xy1 as Element of S1';
+      reconsider xy2' = xy2 as Element of S2';
+        [xy1',xy2'] is Element of [:S1',S2':];
+      then reconsider z = [xy1,xy2] as Element of [:S1,S2:];
+      take z;
+      thus z in X by A4,A5,ZFMISC_1:106;
+        S1 is non empty & S2 is non empty by A2,STRUCT_0:def 1;
+      hence x <= z & y <= z by A2,A3,A4,A5,Th11;
+    end;
+    hence [:D1,D2:] is directed Subset of [:S1,S2:];
+  end;
+end;
+
+theorem
+  for S1, S2 being non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  st [:D1,D2:] is directed holds D1 is directed & D2 is directed
+  proof
+    let S1, S2 be non empty RelStr,
+        D1 be non empty Subset of S1,
+        D2 be non empty Subset of S2 such that
+A1:   [:D1,D2:] is directed;
+    thus D1 is directed
+    proof
+      let x, y be Element of S1; assume
+A2:     x in D1 & y in D1;
+      consider q1 being Element of D2;
+        [x,q1] in [:D1,D2:] & [y,q1] in [:D1,D2:] by A2,ZFMISC_1:106;
+      then consider z being Element of [:S1,S2:] such that
+A3:     z in [:D1,D2:] & [x,q1] <= z & [y,q1] <= z by A1,WAYBEL_0:def 1;
+      reconsider zz = z`1 as Element of D1 by A3,MCART_1:10;
+      reconsider z2 = z`2 as Element of D2 by A3,MCART_1:10;
+      take zz;
+      thus zz in D1;
+        ex x,y being set st x in D1 & y in D2 & z = [x,y] by A3,ZFMISC_1:def 2;
+      then [x,q1] <= [zz,z2] & [y,q1] <= [zz,z2] by A3,MCART_1:8;
+      hence x <= zz & y <= zz by Th11;
+    end;
+    let x, y be Element of S2; assume
+A4:   x in D2 & y in D2;
+    consider q1 being Element of D1;
+      [q1,x] in [:D1,D2:] & [q1,y] in [:D1,D2:] by A4,ZFMISC_1:106;
+    then consider z being Element of [:S1,S2:] such that
+A5:   z in [:D1,D2:] & [q1,x] <= z & [q1,y] <= z by A1,WAYBEL_0:def 1;
+    reconsider zz = z`2 as Element of D2 by A5,MCART_1:10;
+    reconsider z2 = z`1 as Element of D1 by A5,MCART_1:10;
+    take zz;
+    thus zz in D2;
+      ex x,y being set st x in D1 & y in D2 & z = [x,y] by A5,ZFMISC_1:def 2;
+    then [q1,x] <= [z2,zz] & [q1,y] <= [z2,zz] by A5,MCART_1:8;
+    hence x <= zz & y <= zz by Th11;
+  end;
+
+theorem Th21:
+for S1, S2 being non empty RelStr
+ for D being non empty Subset of [:S1,S2:]
+  holds proj1 D is non empty & proj2 D is non empty
+  proof
+    let S1, S2 be non empty RelStr,
+        D be non empty Subset of [:S1,S2:];
+    D c= the carrier of [:S1,S2:]; then
+    D c= [:the carrier of S1,the carrier of S2:] by Def2; then
+    reconsider D1 = D as
+     non empty Subset of [:the carrier of S1,the carrier of S2:];
+      proj1 D1 is non empty & proj2 D1 is non empty;
+    hence proj1 D is non empty & proj2 D is non empty;
+  end;
+
+theorem
+  for S1, S2 being non empty reflexive RelStr
+ for D being non empty directed Subset of [:S1,S2:]
+  holds proj1 D is directed & proj2 D is directed
+  proof
+    let S1, S2 be non empty reflexive RelStr,
+        D be non empty directed Subset of [:S1,S2:];
+    set D1 = proj1 D,
+        D2 = proj2 D;
+      the carrier of [:S1,S2:] = [:the carrier of S1, the carrier of S2:]
+      by Def2;
+then A1: D c= [:proj1 D, proj2 D:] by Th1;
+    thus D1 is directed
+    proof
+      let x, y be Element of S1; assume
+A2:     x in D1 & y in D1;
+      then reconsider D1' = D1 as non empty Subset of S1;
+      reconsider D2' = D2 as non empty Subset of S2 by A2,FUNCT_5:19;
+      consider q1 being set such that
+A3:     [x,q1] in D by A2,FUNCT_5:def 1;
+      reconsider q1 as Element of D2' by A3,FUNCT_5:def 2;
+      consider q2 being set such that
+A4:     [y,q2] in D by A2,FUNCT_5:def 1;
+      reconsider q2 as Element of D2' by A4,FUNCT_5:def 2;
+      consider z being Element of [:S1,S2:] such that
+A5:     z in D & [x,q1] <= z & [y,q2] <= z by A3,A4,WAYBEL_0:def 1;
+      reconsider zz = z`1 as Element of D1' by A1,A5,MCART_1:10;
+      reconsider z2 = z`2 as Element of D2' by A1,A5,MCART_1:10;
+      take zz;
+      thus zz in D1;
+        ex x,y being set st x in D1' & y in D2' & z = [x,y]
+        by A1,A5,ZFMISC_1:def 2;
+      then z = [zz,z2] by MCART_1:8;
+      hence x <= zz & y <= zz by A5,Th11;
+    end;
+    let x, y be Element of S2; assume
+A6:   x in D2 & y in D2;
+    then reconsider D1' = D1 as non empty Subset of S1 by FUNCT_5:19;
+    reconsider D2' = D2 as non empty Subset of S2 by A6;
+    consider q1 being set such that
+A7:   [q1,x] in D by A6,FUNCT_5:def 2;
+    reconsider q1 as Element of D1' by A7,FUNCT_5:def 1;
+    consider q2 being set such that
+A8:   [q2,y] in D by A6,FUNCT_5:def 2;
+    reconsider q2 as Element of D1' by A8,FUNCT_5:def 1;
+    consider z being Element of [:S1,S2:] such that
+A9:   z in D & [q1,x] <= z & [q2,y] <= z by A7,A8,WAYBEL_0:def 1;
+    reconsider zz = z`2 as Element of D2' by A1,A9,MCART_1:10;
+    reconsider z2 = z`1 as Element of D1' by A1,A9,MCART_1:10;
+    take zz;
+    thus zz in D2;
+      ex x,y being set st x in D1' & y in D2' & z = [x,y]
+      by A1,A9,ZFMISC_1:def 2;
+    then z = [z2,zz] by MCART_1:8;
+    hence x <= zz & y <= zz by A9,Th11;
+  end;
+
+definition let S1, S2 be RelStr,
+               D1 be filtered Subset of S1,
+               D2 be filtered Subset of S2;
+ redefine func [:D1,D2:] -> filtered Subset of [:S1,S2:];
+coherence
+  proof
+    set X = [:D1,D2:];
+      X is filtered
+    proof
+      let x, y be Element of [:S1,S2:]; assume
+A1:     x in X & y in X;
+      then consider x1, x2 being set such that
+A2:     x1 in D1 & x2 in D2 & x = [x1,x2] by ZFMISC_1:def 2;
+      consider y1, y2 being set such that
+A3:     y1 in D1 & y2 in D2 & y = [y1,y2] by A1,ZFMISC_1:def 2;
+      reconsider x1, y1 as Element of S1 by A2,A3;
+      reconsider x2, y2 as Element of S2 by A2,A3;
+      consider xy1 being Element of S1 such that
+A4:     xy1 in D1 & x1 >= xy1 & y1 >= xy1 by A2,A3,WAYBEL_0:def 2;
+      consider xy2 being Element of S2 such that
+A5:     xy2 in D2 & x2 >= xy2 & y2 >= xy2 by A2,A3,WAYBEL_0:def 2;
+      reconsider S1' = S1 as non empty RelStr by A2,STRUCT_0:def 1;
+      reconsider S2' = S2 as non empty RelStr by A2,STRUCT_0:def 1;
+      reconsider xy1' = xy1 as Element of S1';
+      reconsider xy2' = xy2 as Element of S2';
+        [xy1',xy2'] is Element of [:S1',S2':];
+      then reconsider z = [xy1,xy2] as Element of [:S1,S2:];
+      take z;
+      thus z in X by A4,A5,ZFMISC_1:106;
+        S1 is non empty & S2 is non empty by A2,STRUCT_0:def 1;
+      hence x >= z & y >= z by A2,A3,A4,A5,Th11;
+    end;
+    hence [:D1,D2:] is filtered Subset of [:S1,S2:];
+  end;
+end;
+
+theorem
+  for S1, S2 being non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  st [:D1,D2:] is filtered holds D1 is filtered & D2 is filtered
+  proof
+    let S1, S2 be non empty RelStr,
+        D1 be non empty Subset of S1,
+        D2 be non empty Subset of S2 such that
+A1:   [:D1,D2:] is filtered;
+    thus D1 is filtered
+    proof
+      let x, y be Element of S1; assume
+A2:     x in D1 & y in D1;
+      consider q1 being Element of D2;
+        [x,q1] in [:D1,D2:] & [y,q1] in [:D1,D2:] by A2,ZFMISC_1:106;
+      then consider z being Element of [:S1,S2:] such that
+A3:     z in [:D1,D2:] & [x,q1] >= z & [y,q1] >= z by A1,WAYBEL_0:def 2;
+      reconsider zz = z`1 as Element of D1 by A3,MCART_1:10;
+      reconsider z2 = z`2 as Element of D2 by A3,MCART_1:10;
+      take zz;
+      thus zz in D1;
+        ex x,y being set st x in D1 & y in D2 & z = [x,y] by A3,ZFMISC_1:def 2;
+      then [x,q1] >= [zz,z2] & [y,q1] >= [zz,z2] by A3,MCART_1:8;
+      hence x >= zz & y >= zz by Th11;
+    end;
+    let x, y be Element of S2; assume
+A4:   x in D2 & y in D2;
+    consider q1 being Element of D1;
+      [q1,x] in [:D1,D2:] & [q1,y] in [:D1,D2:] by A4,ZFMISC_1:106;
+    then consider z being Element of [:S1,S2:] such that
+A5:   z in [:D1,D2:] & [q1,x] >= z & [q1,y] >= z by A1,WAYBEL_0:def 2;
+    reconsider zz = z`2 as Element of D2 by A5,MCART_1:10;
+    reconsider z2 = z`1 as Element of D1 by A5,MCART_1:10;
+    take zz;
+    thus zz in D2;
+      ex x,y being set st x in D1 & y in D2 & z = [x,y] by A5,ZFMISC_1:def 2;
+    then [q1,x] >= [z2,zz] & [q1,y] >= [z2,zz] by A5,MCART_1:8;
+    hence x >= zz & y >= zz by Th11;
+  end;
+
+theorem
+  for S1, S2 being non empty reflexive RelStr
+ for D being non empty filtered Subset of [:S1,S2:]
+  holds proj1 D is filtered & proj2 D is filtered
+  proof
+    let S1, S2 be non empty reflexive RelStr,
+        D be non empty filtered Subset of [:S1,S2:];
+    set D1 = proj1 D,
+        D2 = proj2 D;
+      the carrier of [:S1,S2:] = [:the carrier of S1, the carrier of S2:]
+      by Def2;
+then A1: D c= [:proj1 D, proj2 D:] by Th1;
+    thus D1 is filtered
+    proof
+      let x, y be Element of S1; assume
+A2:     x in D1 & y in D1;
+      then reconsider D1' = D1 as non empty Subset of S1;
+      reconsider D2' = D2 as non empty Subset of S2 by A2,FUNCT_5:19;
+      consider q1 being set such that
+A3:     [x,q1] in D by A2,FUNCT_5:def 1;
+      reconsider q1 as Element of D2' by A3,FUNCT_5:def 2;
+      consider q2 being set such that
+A4:     [y,q2] in D by A2,FUNCT_5:def 1;
+      reconsider q2 as Element of D2' by A4,FUNCT_5:def 2;
+      consider z being Element of [:S1,S2:] such that
+A5:     z in D & [x,q1] >= z & [y,q2] >= z by A3,A4,WAYBEL_0:def 2;
+      reconsider zz = z`1 as Element of D1' by A1,A5,MCART_1:10;
+      reconsider z2 = z`2 as Element of D2' by A1,A5,MCART_1:10;
+      take zz;
+      thus zz in D1;
+        ex x,y being set st x in D1' & y in D2' & z = [x,y]
+        by A1,A5,ZFMISC_1:def 2;
+      then z = [zz,z2] by MCART_1:8;
+      hence x >= zz & y >= zz by A5,Th11;
+    end;
+    let x, y be Element of S2; assume
+A6:   x in D2 & y in D2;
+    then reconsider D1' = D1 as non empty Subset of S1 by FUNCT_5:19;
+    reconsider D2' = D2 as non empty Subset of S2 by A6;
+    consider q1 being set such that
+A7:   [q1,x] in D by A6,FUNCT_5:def 2;
+    reconsider q1 as Element of D1' by A7,FUNCT_5:def 1;
+    consider q2 being set such that
+A8:   [q2,y] in D by A6,FUNCT_5:def 2;
+    reconsider q2 as Element of D1' by A8,FUNCT_5:def 1;
+    consider z being Element of [:S1,S2:] such that
+A9:   z in D & [q1,x] >= z & [q2,y] >= z by A7,A8,WAYBEL_0:def 2;
+    reconsider zz = z`2 as Element of D2' by A1,A9,MCART_1:10;
+    reconsider z2 = z`1 as Element of D1' by A1,A9,MCART_1:10;
+    take zz;
+    thus zz in D2;
+      ex x,y being set st x in D1' & y in D2' & z = [x,y]
+      by A1,A9,ZFMISC_1:def 2;
+    then z = [z2,zz] by MCART_1:8;
+    hence x >= zz & y >= zz by A9,Th11;
+  end;
+
+definition let S1, S2 be RelStr,
+               D1 be upper Subset of S1,
+               D2 be upper Subset of S2;
+ redefine func [:D1,D2:] -> upper Subset of [:S1,S2:];
+coherence
+  proof
+    set X = [:D1,D2:];
+      X is upper
+    proof
+      let x, y be Element of [:S1,S2:]; assume
+A1:     x in X & x <= y;
+      then consider x1, x2 being set such that
+A2:     x1 in D1 & x2 in D2 & x = [x1,x2] by ZFMISC_1:def 2;
+      reconsider s1 = S1, s2 = S2 as non empty RelStr by A2,STRUCT_0:def 1;
+      set C1 = the carrier of s1,
+          C2 = the carrier of s2;
+        the carrier of [:S1,S2:] = [:C1,C2:] by Def2;
+      then consider y1, y2 being set such that
+A3:     y1 in C1 & y2 in C2 & y = [y1,y2] by ZFMISC_1:def 2;
+      reconsider x1, y1 as Element of s1 by A2,A3;
+      reconsider x2, y2 as Element of s2 by A2,A3;
+        [x1,x2] <= [y1,y2] by A1,A2,A3;
+      then x1 <= y1 & x2 <= y2 by Th11;
+      then y1 in D1 & y2 in D2 by A2,WAYBEL_0:def 20;
+      hence y in X by A3,ZFMISC_1:106;
+    end;
+    hence [:D1,D2:] is upper Subset of [:S1,S2:];
+  end;
+end;
+
+theorem
+  for S1, S2 being non empty reflexive RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  st [:D1,D2:] is upper holds D1 is upper & D2 is upper
+  proof
+    let S1, S2 be non empty reflexive RelStr,
+        D1 be non empty Subset of S1,
+        D2 be non empty Subset of S2 such that
+A1:   [:D1,D2:] is upper;
+    thus D1 is upper
+    proof
+      let x, y be Element of S1; assume
+A2:     x in D1 & x <= y;
+      consider q1 being Element of D2;
+A3:     [x,q1] in [:D1,D2:] by A2,ZFMISC_1:106;
+        q1 <= q1;
+      then [x,q1] <= [y,q1] by A2,Th11;
+      then [y,q1] in [:D1,D2:] by A1,A3,WAYBEL_0:def 20;
+      hence y in D1 by ZFMISC_1:106;
+    end;
+    let x, y be Element of S2; assume
+A4:   x in D2 & x <= y;
+    consider q1 being Element of D1;
+A5: [q1,x] in [:D1,D2:] by A4,ZFMISC_1:106;
+      q1 <= q1;
+    then [q1,x] <= [q1,y] by A4,Th11;
+    then [q1,y] in [:D1,D2:] by A1,A5,WAYBEL_0:def 20;
+    hence y in D2 by ZFMISC_1:106;
+  end;
+
+theorem
+  for S1, S2 being non empty reflexive RelStr
+ for D being non empty upper Subset of [:S1,S2:]
+  holds proj1 D is upper & proj2 D is upper
+  proof
+    let S1, S2 be non empty reflexive RelStr,
+        D be non empty upper Subset of [:S1,S2:];
+    set D1 = proj1 D,
+        D2 = proj2 D;
+      the carrier of [:S1,S2:] = [:the carrier of S1, the carrier of S2:]
+      by Def2;
+then A1: D c= [:D1,D2:] by Th1;
+    thus D1 is upper
+    proof
+      let x, y be Element of S1 such that
+A2:     x in D1 & x <= y;
+      reconsider d2 = D2 as non empty Subset of S2 by Th21;
+      consider q1 being set such that
+A3:     [x,q1] in D by A2,FUNCT_5:def 1;
+      reconsider q1 as Element of d2 by A1,A3,ZFMISC_1:106;
+        q1 <= q1;
+      then [x,q1] <= [y,q1] by A2,Th11;
+      then [y,q1] in D by A3,WAYBEL_0:def 20;
+      hence y in D1 by A1,ZFMISC_1:106;
+    end;
+    let x, y be Element of S2 such that
+A4:  x in D2 & x <= y;
+    reconsider d1 = D1 as non empty Subset of S1 by Th21;
+    consider q1 being set such that
+A5:  [q1,x] in D by A4,FUNCT_5:def 2;
+    reconsider q1 as Element of d1 by A1,A5,ZFMISC_1:106;
+      q1 <= q1;
+    then [q1,x] <= [q1,y] by A4,Th11;
+    then [q1,y] in D by A5,WAYBEL_0:def 20;
+    hence y in D2 by A1,ZFMISC_1:106;
+  end;
+
+definition let S1, S2 be RelStr,
+               D1 be lower Subset of S1,
+               D2 be lower Subset of S2;
+ redefine func [:D1,D2:] -> lower Subset of [:S1,S2:];
+coherence
+  proof
+    set X = [:D1,D2:];
+      X is lower
+    proof
+      let x, y be Element of [:S1,S2:]; assume
+A1:     x in X & x >= y;
+      then consider x1, x2 being set such that
+A2:     x1 in D1 & x2 in D2 & x = [x1,x2] by ZFMISC_1:def 2;
+      reconsider s1 = S1, s2 = S2 as non empty RelStr by A2,STRUCT_0:def 1;
+      set C1 = the carrier of s1,
+          C2 = the carrier of s2;
+        the carrier of [:S1,S2:] = [:C1,C2:] by Def2;
+      then consider y1, y2 being set such that
+A3:     y1 in C1 & y2 in C2 & y = [y1,y2] by ZFMISC_1:def 2;
+      reconsider x1, y1 as Element of s1 by A2,A3;
+      reconsider x2, y2 as Element of s2 by A2,A3;
+        [x1,x2] >= [y1,y2] by A1,A2,A3;
+      then x1 >= y1 & x2 >= y2 by Th11;
+      then y1 in D1 & y2 in D2 by A2,WAYBEL_0:def 19;
+      hence y in X by A3,ZFMISC_1:106;
+    end;
+    hence [:D1,D2:] is lower Subset of [:S1,S2:];
+  end;
+end;
+
+theorem
+  for S1, S2 being non empty reflexive RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  st [:D1,D2:] is lower holds D1 is lower & D2 is lower
+  proof
+    let S1, S2 be non empty reflexive RelStr,
+        D1 be non empty Subset of S1,
+        D2 be non empty Subset of S2 such that
+A1:   [:D1,D2:] is lower;
+    thus D1 is lower
+    proof
+      let x, y be Element of S1; assume
+A2:     x in D1 & x >= y;
+      consider q1 being Element of D2;
+A3:     [x,q1] in [:D1,D2:] by A2,ZFMISC_1:106;
+        q1 <= q1;
+      then [x,q1] >= [y,q1] by A2,Th11;
+      then [y,q1] in [:D1,D2:] by A1,A3,WAYBEL_0:def 19;
+      hence y in D1 by ZFMISC_1:106;
+    end;
+    let x, y be Element of S2; assume
+A4:   x in D2 & x >= y;
+    consider q1 being Element of D1;
+A5: [q1,x] in [:D1,D2:] by A4,ZFMISC_1:106;
+      q1 <= q1;
+    then [q1,x] >= [q1,y] by A4,Th11;
+    then [q1,y] in [:D1,D2:] by A1,A5,WAYBEL_0:def 19;
+    hence y in D2 by ZFMISC_1:106;
+  end;
+
+theorem
+  for S1, S2 being non empty reflexive RelStr
+ for D being non empty lower Subset of [:S1,S2:]
+  holds proj1 D is lower & proj2 D is lower
+  proof
+    let S1, S2 be non empty reflexive RelStr,
+        D be non empty lower Subset of [:S1,S2:];
+    set D1 = proj1 D,
+        D2 = proj2 D;
+      the carrier of [:S1,S2:] = [:the carrier of S1, the carrier of S2:]
+      by Def2;
+then A1: D c= [:D1,D2:] by Th1;
+    thus D1 is lower
+    proof
+      let x, y be Element of S1 such that
+A2:     x in D1 & x >= y;
+      reconsider d2 = D2 as non empty Subset of S2 by Th21;
+      consider q1 being set such that
+A3:     [x,q1] in D by A2,FUNCT_5:def 1;
+      reconsider q1 as Element of d2 by A1,A3,ZFMISC_1:106;
+        q1 <= q1;
+      then [x,q1] >= [y,q1] by A2,Th11;
+      then [y,q1] in D by A3,WAYBEL_0:def 19;
+      hence y in D1 by A1,ZFMISC_1:106;
+    end;
+    let x, y be Element of S2 such that
+A4:  x in D2 & x >= y;
+    reconsider d1 = D1 as non empty Subset of S1 by Th21;
+    consider q1 being set such that
+A5:  [q1,x] in D by A4,FUNCT_5:def 2;
+    reconsider q1 as Element of d1 by A1,A5,ZFMISC_1:106;
+      q1 <= q1;
+    then [q1,x] >= [q1,y] by A4,Th11;
+    then [q1,y] in D by A5,WAYBEL_0:def 19;
+    hence y in D2 by A1,ZFMISC_1:106;
+  end;
+
+definition let R be RelStr;
+ attr R is void means :Def3:
+  the InternalRel of R is empty;
+end;
+
+definition
+ cluster empty -> void RelStr;
+coherence
+  proof
+    let R be RelStr;
+    assume R is empty;
+    then reconsider R1 = R as empty RelStr;
+      the InternalRel of R1 is empty;
+    hence the InternalRel of R is empty;
+  end;
+end;
+
+definition
+ cluster non void non empty strict Poset;
+existence
+  proof
+    consider R being non empty strict Poset;
+    consider x being set such that
+A1:   x in the carrier of R by XBOOLE_0:def 1;
+    take R;
+      the InternalRel of R is_reflexive_in the carrier of R by ORDERS_1:def 4;
+    hence the InternalRel of R is non empty by A1,RELAT_2:def 1;
+    thus R is non empty strict;
+  end;
+end;
+
+definition
+ cluster non void -> non empty RelStr;
+coherence
+  proof
+    let R be RelStr;
+    assume R is non void;
+    then the InternalRel of R is non empty by Def3;
+    then consider a being set such that
+A1:   a in the InternalRel of R by XBOOLE_0:def 1;
+    consider x,y being set such that
+A2:   a = [x,y] & x in the carrier of R & y in the carrier of R
+        by A1,RELSET_1:6;
+    thus R is non empty by A2,STRUCT_0:def 1;
+  end;
+end;
+
+definition
+ cluster non empty reflexive -> non void RelStr;
+coherence
+  proof
+    let R be RelStr; assume
+     R is non empty reflexive;
+    then reconsider R1 = R as non empty reflexive RelStr;
+    consider x being set such that
+A1:   x in the carrier of R1 by XBOOLE_0:def 1;
+      the InternalRel of R1 is_reflexive_in the carrier of R1 by ORDERS_1:def 4
+;
+    hence the InternalRel of R is non empty by A1,RELAT_2:def 1;
+  end;
+end;
+
+definition let R be non void RelStr;
+ cluster the InternalRel of R -> non empty;
+coherence by Def3;
+end;
+
+theorem Th29:
+for S1, S2 being non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  for x being Element of S1, y being Element of S2 st
+ [x,y] is_>=_than [:D1,D2:] holds x is_>=_than D1 & y is_>=_than D2
+  proof
+    let S1, S2 be non empty RelStr,
+        D1 be non empty Subset of S1,
+        D2 be non empty Subset of S2,
+        x be Element of S1,
+        y be Element of S2 such that
+A1:     [x,y] is_>=_than [:D1,D2:];
+    thus x is_>=_than D1
+    proof
+      let b be Element of S1 such that
+A2:     b in D1;
+      consider a being Element of D2;
+        [b,a] in [:D1,D2:] by A2,ZFMISC_1:106;
+      then [b,a] <= [x,y] by A1,LATTICE3:def 9;
+      hence b <= x by Th11;
+    end;
+    let a be Element of S2 such that
+A3:   a in D2;
+    consider b being Element of D1;
+      [b,a] in [:D1,D2:] by A3,ZFMISC_1:106;
+    then [b,a] <= [x,y] by A1,LATTICE3:def 9;
+    hence a <= y by Th11;
+  end;
+
+theorem Th30:
+for S1, S2 being non empty RelStr
+ for D1 being Subset of S1, D2 being Subset of S2
+  for x being Element of S1, y being Element of S2 st
+ x is_>=_than D1 & y is_>=_than D2 holds [x,y] is_>=_than [:D1,D2:]
+  proof
+    let S1, S2 be non empty RelStr,
+        D1 be Subset of S1,
+        D2 be Subset of S2,
+        x be Element of S1,
+        y be Element of S2 such that
+A1:   x is_>=_than D1 and
+A2:   y is_>=_than D2;
+    let b be Element of [:S1,S2:];
+    assume b in [:D1,D2:];
+    then consider b1, b2 being set such that
+A3:   b1 in D1 & b2 in D2 & b = [b1,b2] by ZFMISC_1:def 2;
+    reconsider b1 as Element of S1 by A3;
+    reconsider b2 as Element of S2 by A3;
+      b1 <= x & b2 <= y by A1,A2,A3,LATTICE3:def 9;
+    hence b <= [x,y] by A3,Th11;
+  end;
+
+theorem Th31:
+for S1, S2 being non empty RelStr
+ for D being Subset of [:S1,S2:]
+  for x being Element of S1, y being Element of S2 holds
+ [x,y] is_>=_than D iff x is_>=_than proj1 D & y is_>=_than proj2 D
+  proof
+    let S1, S2 be non empty RelStr,
+        D be Subset of [:S1,S2:],
+        x be Element of S1,
+        y be Element of S2;
+    set D1 = proj1 D,
+        D2 = proj2 D;
+    hereby assume
+A1:   [x,y] is_>=_than D;
+      thus x is_>=_than D1
+      proof
+        let q be Element of S1;
+        assume q in D1;
+        then consider z being set such that
+A2:       [q,z] in D by FUNCT_5:def 1;
+        reconsider d2 = D2 as non empty Subset of S2 by A2,FUNCT_5:4;
+        reconsider z as Element of d2 by A2,FUNCT_5:4;
+          [x,y] >= [q,z] by A1,A2,LATTICE3:def 9;
+        hence x >= q by Th11;
+      end;
+      thus y is_>=_than D2
+      proof
+        let q be Element of S2;
+        assume q in D2;
+        then consider z being set such that
+A3:       [z,q] in D by FUNCT_5:def 2;
+        reconsider d1 = D1 as non empty Subset of S1 by A3,FUNCT_5:4;
+        reconsider z as Element of d1 by A3,FUNCT_5:4;
+          [x,y] >= [z,q] by A1,A3,LATTICE3:def 9;
+        hence y >= q by Th11;
+      end;
+    end;
+    assume x is_>=_than proj1 D & y is_>=_than proj2 D;
+then A4: [x,y] is_>=_than [:D1,D2:] by Th30;
+      the carrier of [:S1,S2:] = [:the carrier of S1, the carrier of S2:]
+      by Def2;
+    then D c= [:D1,D2:] by Th1;
+    hence [x,y] is_>=_than D by A4,YELLOW_0:9;
+  end;
+
+theorem Th32:
+for S1, S2 being non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  for x being Element of S1, y being Element of S2 st
+ [x,y] is_<=_than [:D1,D2:] holds x is_<=_than D1 & y is_<=_than D2
+  proof
+    let S1, S2 be non empty RelStr,
+        D1 be non empty Subset of S1,
+        D2 be non empty Subset of S2,
+        x be Element of S1,
+        y be Element of S2 such that
+A1:   [x,y] is_<=_than [:D1,D2:];
+    thus x is_<=_than D1
+    proof
+      let b be Element of S1 such that
+A2:     b in D1;
+      consider a being Element of D2;
+        [b,a] in [:D1,D2:] by A2,ZFMISC_1:106;
+      then [b,a] >= [x,y] by A1,LATTICE3:def 8;
+      hence b >= x by Th11;
+    end;
+    let a be Element of S2 such that
+A3:   a in D2;
+    consider b being Element of D1;
+      [b,a] in [:D1,D2:] by A3,ZFMISC_1:106;
+    then [b,a] >= [x,y] by A1,LATTICE3:def 8;
+    hence a >= y by Th11;
+  end;
+
+theorem Th33:
+for S1, S2 being non empty RelStr
+ for D1 being Subset of S1, D2 being Subset of S2
+  for x being Element of S1, y being Element of S2 st
+ x is_<=_than D1 & y is_<=_than D2 holds [x,y] is_<=_than [:D1,D2:]
+  proof
+    let S1, S2 be non empty RelStr,
+        D1 be Subset of S1,
+        D2 be Subset of S2,
+        x be Element of S1,
+        y be Element of S2 such that
+A1:   x is_<=_than D1 and
+A2:   y is_<=_than D2;
+    let b be Element of [:S1,S2:];
+    assume b in [:D1,D2:];
+    then consider b1, b2 being set such that
+A3:   b1 in D1 & b2 in D2 & b = [b1,b2] by ZFMISC_1:def 2;
+    reconsider b1 as Element of S1 by A3;
+    reconsider b2 as Element of S2 by A3;
+      b1 >= x & b2 >= y by A1,A2,A3,LATTICE3:def 8;
+    hence b >= [x,y] by A3,Th11;
+  end;
+
+theorem Th34:
+for S1, S2 being non empty RelStr
+ for D being Subset of [:S1,S2:]
+  for x being Element of S1, y being Element of S2 holds
+ [x,y] is_<=_than D iff x is_<=_than proj1 D & y is_<=_than proj2 D
+  proof
+    let S1, S2 be non empty RelStr,
+        D be Subset of [:S1,S2:],
+        x be Element of S1,
+        y be Element of S2;
+    set D1 = proj1 D,
+        D2 = proj2 D;
+    hereby assume
+A1:   [x,y] is_<=_than D;
+      thus x is_<=_than D1
+      proof
+        let q be Element of S1;
+        assume q in D1;
+        then consider z being set such that
+A2:       [q,z] in D by FUNCT_5:def 1;
+        reconsider d2 = D2 as non empty Subset of S2 by A2,FUNCT_5:4;
+        reconsider z as Element of d2 by A2,FUNCT_5:4;
+          [x,y] <= [q,z] by A1,A2,LATTICE3:def 8;
+        hence x <= q by Th11;
+      end;
+      thus y is_<=_than D2
+      proof
+        let q be Element of S2;
+        assume q in D2;
+        then consider z being set such that
+A3:       [z,q] in D by FUNCT_5:def 2;
+        reconsider d1 = D1 as non empty Subset of S1 by A3,FUNCT_5:4;
+        reconsider z as Element of d1 by A3,FUNCT_5:4;
+          [x,y] <= [z,q] by A1,A3,LATTICE3:def 8;
+        hence y <= q by Th11;
+      end;
+    end;
+    assume x is_<=_than proj1 D & y is_<=_than proj2 D;
+then A4: [x,y] is_<=_than [:D1,D2:] by Th33;
+      the carrier of [:S1,S2:] = [:the carrier of S1, the carrier of S2:]
+      by Def2;
+    then D c= [:D1,D2:] by Th1;
+    hence [x,y] is_<=_than D by A4,YELLOW_0:9;
+  end;
+
+theorem Th35:
+for S1, S2 being antisymmetric non empty RelStr
+ for D1 being Subset of S1, D2 being Subset of S2
+  for x being Element of S1, y being Element of S2 st
+   ex_sup_of D1,S1 & ex_sup_of D2,S2 &
+  for b being Element of [:S1,S2:] st b is_>=_than [:D1,D2:] holds [x,y] <= b
+ holds
+  (for c being Element of S1 st c is_>=_than D1 holds x <= c) &
+   for d being Element of S2 st d is_>=_than D2 holds y <= d
+  proof
+    let S1, S2 be antisymmetric non empty RelStr,
+        D1 be Subset of S1,
+        D2 be Subset of S2,
+        x be Element of S1,
+        y be Element of S2 such that
+A1:  ex_sup_of D1,S1 & ex_sup_of D2,S2 and
+A2:  for b being Element of [:S1,S2:] st b is_>=_than
+ [:D1,D2:] holds [x,y] <= b;
+    thus for c being Element of S1 st c is_>=_than D1 holds x <= c
+    proof
+      let b be Element of S1 such that
+A3:     b is_>=_than D1;
+        sup D2 is_>=_than D2 by A1,YELLOW_0:30;
+      then [b,sup D2] is_>=_than [:D1,D2:] by A3,Th30;
+      then [x,y] <= [b,sup D2] by A2;
+      hence x <= b by Th11;
+    end;
+    let b be Element of S2 such that
+A4:     b is_>=_than D2;
+      sup D1 is_>=_than D1 by A1,YELLOW_0:30;
+    then [sup D1,b] is_>=_than [:D1,D2:] by A4,Th30;
+    then [x,y] <= [sup D1,b] by A2;
+    hence y <= b by Th11;
+  end;
+
+theorem Th36:
+for S1, S2 being antisymmetric non empty RelStr
+ for D1 being Subset of S1, D2 being Subset of S2
+  for x being Element of S1, y being Element of S2 st
+   ex_inf_of D1,S1 & ex_inf_of D2,S2 &
+  for b being Element of [:S1,S2:] st b is_<=_than [:D1,D2:] holds [x,y] >= b
+ holds
+  (for c being Element of S1 st c is_<=_than D1 holds x >= c) &
+   for d being Element of S2 st d is_<=_than D2 holds y >= d
+  proof
+    let S1, S2 be antisymmetric non empty RelStr,
+        D1 be Subset of S1,
+        D2 be Subset of S2,
+        x be Element of S1,
+        y be Element of S2 such that
+A1:  ex_inf_of D1,S1 & ex_inf_of D2,S2 and
+A2:  for b being Element of [:S1,S2:] st b is_<=_than
+ [:D1,D2:] holds [x,y] >= b;
+    thus for c being Element of S1 st c is_<=_than D1 holds x >= c
+    proof
+      let b be Element of S1 such that
+A3:     b is_<=_than D1;
+        inf D2 is_<=_than D2 by A1,YELLOW_0:31;
+      then [b,inf D2] is_<=_than [:D1,D2:] by A3,Th33;
+      then [x,y] >= [b,inf D2] by A2;
+      hence x >= b by Th11;
+    end;
+    let b be Element of S2 such that
+A4:   b is_<=_than D2;
+      inf D1 is_<=_than D1 by A1,YELLOW_0:31;
+    then [inf D1,b] is_<=_than [:D1,D2:] by A4,Th33;
+    then [x,y] >= [inf D1,b] by A2;
+    hence y >= b by Th11;
+  end;
+
+theorem
+  for S1, S2 being antisymmetric non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  for x being Element of S1, y being Element of S2 st
+   (for c being Element of S1 st c is_>=_than D1 holds x <= c) &
+    for d being Element of S2 st d is_>=_than D2 holds y <= d holds
+  for b being Element of [:S1,S2:] st b is_>=_than [:D1,D2:] holds [x,y] <= b
+  proof
+    let S1, S2 be antisymmetric non empty RelStr,
+        D1 be non empty Subset of S1,
+        D2 be non empty Subset of S2,
+        x be Element of S1,
+        y be Element of S2 such that
+A1:   for c being Element of S1 st c is_>=_than D1 holds x <= c and
+A2:   for d being Element of S2 st d is_>=_than D2 holds y <= d;
+    let b be Element of [:S1,S2:] such that
+A3:   b is_>=_than [:D1,D2:];
+      the carrier of [:S1,S2:] = [:the carrier of S1, the carrier of S2:]
+      by Def2;
+    then consider c, d being set such that
+A4:  c in the carrier of S1 & d in the carrier of S2 & b = [c,d]
+      by ZFMISC_1:def 2;
+A5: b = [b`1,b`2] by A4,MCART_1:8;
+    then b`1 is_>=_than D1 & b`2 is_>=_than D2 by A3,Th29;
+    then x <= b`1 & y <= b`2 by A1,A2;
+    hence [x,y] <= b by A5,Th11;
+  end;
+
+theorem
+  for S1, S2 being antisymmetric non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  for x being Element of S1, y being Element of S2 st
+   (for c being Element of S1 st c is_>=_than D1 holds x >= c) &
+    for d being Element of S2 st d is_>=_than D2 holds y >= d holds
+  for b being Element of [:S1,S2:] st b is_>=_than [:D1,D2:] holds [x,y] >= b
+  proof
+    let S1, S2 be antisymmetric non empty RelStr,
+        D1 be non empty Subset of S1,
+        D2 be non empty Subset of S2,
+        x be Element of S1,
+        y be Element of S2 such that
+A1:   for c being Element of S1 st c is_>=_than D1 holds x >= c and
+A2:   for d being Element of S2 st d is_>=_than D2 holds y >= d;
+    let b be Element of [:S1,S2:] such that
+A3:   b is_>=_than [:D1,D2:];
+      the carrier of [:S1,S2:] = [:the carrier of S1, the carrier of S2:]
+      by Def2;
+    then consider c, d being set such that
+A4:  c in the carrier of S1 & d in the carrier of S2 & b = [c,d]
+      by ZFMISC_1:def 2;
+A5: b = [b`1,b`2] by A4,MCART_1:8;
+    then b`1 is_>=_than D1 & b`2 is_>=_than D2 by A3,Th29;
+    then x >= b`1 & y >= b`2 by A1,A2;
+    hence [x,y] >= b by A5,Th11;
+  end;
+
+theorem Th39:
+for S1, S2 being antisymmetric non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  holds ex_sup_of D1,S1 & ex_sup_of D2,S2 iff ex_sup_of [:D1,D2:],[:S1,S2:]
+  proof
+    let S1, S2 be antisymmetric non empty RelStr,
+        D1 be non empty Subset of S1,
+        D2 be non empty Subset of S2;
+    hereby assume
+A1:     ex_sup_of D1,S1 & ex_sup_of D2,S2;
+      then consider a1 being Element of S1 such that
+A2:     D1 is_<=_than a1 and
+A3:     for b being Element of S1 st D1 is_<=_than b holds a1 <= b
+          by YELLOW_0:15;
+      consider a2 being Element of S2 such that
+A4:     D2 is_<=_than a2 and
+A5:     for b being Element of S2 st D2 is_<=_than b holds a2 <= b
+        by A1,YELLOW_0:15;
+        ex a being Element of [:S1,S2:] st [:D1,D2:] is_<=_than a &
+        for b being Element of [:S1,S2:] st [:D1,D2:] is_<=_than b holds a <= b
+      proof
+        take a = [a1,a2];
+        thus [:D1,D2:] is_<=_than a by A2,A4,Th30;
+        let b be Element of [:S1,S2:] such that
+A6:       [:D1,D2:] is_<=_than b;
+          the carrier of [:S1,S2:] = [:the carrier of S1, the carrier of S2:]
+          by Def2;
+then A7:     b = [b`1,b`2] by MCART_1:23;
+        then D1 is_<=_than b`1 & D2 is_<=_than b`2 by A6,Th29;
+        then a1 <= b`1 & a2 <= b`2 by A3,A5;
+        hence a <= b by A7,Th11;
+      end;
+      hence ex_sup_of [:D1,D2:],[:S1,S2:] by YELLOW_0:15;
+    end;
+    assume ex_sup_of [:D1,D2:],[:S1,S2:];
+    then consider x being Element of [:S1,S2:] such that
+A8:   [:D1,D2:] is_<=_than x and
+A9:   for b being Element of [:S1,S2:] st [:D1,D2:] is_<=_than b holds x <= b
+        by YELLOW_0:15;
+      the carrier of [:S1,S2:] = [:the carrier of S1,the carrier of S2:]
+      by Def2;
+then A10: x = [x`1,x`2] by MCART_1:23;
+then A11: D1 is_<=_than x`1 by A8,Th29;
+A12: D2 is_<=_than x`2 by A8,A10,Th29;
+      for b being Element of S1 st D1 is_<=_than b holds x`1 <= b
+    proof
+      let b be Element of S1;
+      assume D1 is_<=_than b;
+      then [:D1,D2:] is_<=_than [b,x`2] by A12,Th30;
+      then x <= [b,x`2] by A9;
+      hence x`1 <= b by A10,Th11;
+    end;
+    hence ex_sup_of D1,S1 by A11,YELLOW_0:15;
+      for b being Element of S2 st D2 is_<=_than b holds x`2 <= b
+    proof
+      let b be Element of S2;
+      assume D2 is_<=_than b;
+      then [:D1,D2:] is_<=_than [x`1,b] by A11,Th30;
+      then x <= [x`1,b] by A9;
+      hence x`2 <= b by A10,Th11;
+    end;
+    hence ex_sup_of D2,S2 by A12,YELLOW_0:15;
+  end;
+
+theorem Th40:
+for S1, S2 being antisymmetric non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  holds ex_inf_of D1,S1 & ex_inf_of D2,S2 iff ex_inf_of [:D1,D2:],[:S1,S2:]
+  proof
+    let S1, S2 be antisymmetric non empty RelStr,
+        D1 be non empty Subset of S1,
+        D2 be non empty Subset of S2;
+    hereby assume
+A1:     ex_inf_of D1,S1 & ex_inf_of D2,S2;
+      then consider a1 being Element of S1 such that
+A2:     D1 is_>=_than a1 and
+A3:     for b being Element of S1 st D1 is_>=_than b holds a1 >= b
+          by YELLOW_0:16;
+      consider a2 being Element of S2 such that
+A4:     D2 is_>=_than a2 and
+A5:     for b being Element of S2 st D2 is_>=_than b holds a2 >= b
+        by A1,YELLOW_0:16;
+        ex a being Element of [:S1,S2:] st [:D1,D2:] is_>=_than a &
+        for b being Element of [:S1,S2:] st [:D1,D2:] is_>=_than b holds a >= b
+      proof
+        take a = [a1,a2];
+        thus [:D1,D2:] is_>=_than a by A2,A4,Th33;
+        let b be Element of [:S1,S2:] such that
+A6:       [:D1,D2:] is_>=_than b;
+          the carrier of [:S1,S2:] = [:the carrier of S1, the carrier of S2:]
+          by Def2;
+then A7:     b = [b`1,b`2] by MCART_1:23;
+        then D1 is_>=_than b`1 & D2 is_>=_than b`2 by A6,Th32;
+        then a1 >= b`1 & a2 >= b`2 by A3,A5;
+        hence a >= b by A7,Th11;
+      end;
+      hence ex_inf_of [:D1,D2:],[:S1,S2:] by YELLOW_0:16;
+    end;
+    assume ex_inf_of [:D1,D2:],[:S1,S2:];
+    then consider x being Element of [:S1,S2:] such that
+A8:   [:D1,D2:] is_>=_than x and
+A9:   for b being Element of [:S1,S2:] st [:D1,D2:] is_>=_than b holds x >= b
+        by YELLOW_0:16;
+      the carrier of [:S1,S2:] = [:the carrier of S1,the carrier of S2:]
+      by Def2;
+then A10: x = [x`1,x`2] by MCART_1:23;
+then A11: D1 is_>=_than x`1 by A8,Th32;
+A12: D2 is_>=_than x`2 by A8,A10,Th32;
+      for b being Element of S1 st D1 is_>=_than b holds x`1 >= b
+    proof
+      let b be Element of S1;
+      assume D1 is_>=_than b;
+      then [:D1,D2:] is_>=_than [b,x`2] by A12,Th33;
+      then x >= [b,x`2] by A9;
+      hence x`1 >= b by A10,Th11;
+    end;
+    hence ex_inf_of D1,S1 by A11,YELLOW_0:16;
+      for b being Element of S2 st D2 is_>=_than b holds x`2 >= b
+    proof
+      let b be Element of S2;
+      assume D2 is_>=_than b;
+      then [:D1,D2:] is_>=_than [x`1,b] by A11,Th33;
+      then x >= [x`1,b] by A9;
+      hence x`2 >= b by A10,Th11;
+    end;
+    hence ex_inf_of D2,S2 by A12,YELLOW_0:16;
+  end;
+
+theorem Th41:
+for S1, S2 being antisymmetric non empty RelStr
+ for D being Subset of [:S1,S2:] holds
+  ex_sup_of proj1 D,S1 & ex_sup_of proj2 D,S2 iff ex_sup_of D,[:S1,S2:]
+  proof
+    let S1, S2 be antisymmetric non empty RelStr,
+        D be Subset of [:S1,S2:];
+A1: the carrier of [:S1,S2:] = [:the carrier of S1, the carrier of S2:]
+      by Def2;
+then A2: D c= [:proj1 D,proj2 D:] by Th1;
+    hereby assume that
+A3:     ex_sup_of proj1 D,S1 and
+A4:     ex_sup_of proj2 D,S2;
+        ex a being Element of [:S1,S2:] st D is_<=_than a &
+        for b being Element of [:S1,S2:] st D is_<=_than b holds a <= b
+      proof
+        consider x1 being Element of S1 such that
+A5:       proj1 D is_<=_than x1 and
+A6:       for b being Element of S1 st proj1 D is_<=_than b holds x1 <= b
+            by A3,YELLOW_0:15;
+        consider x2 being Element of S2 such that
+A7:       proj2 D is_<=_than x2 and
+A8:       for b being Element of S2 st proj2 D is_<=_than b holds x2 <= b
+            by A4,YELLOW_0:15;
+        take a = [x1,x2];
+        thus D is_<=_than a
+        proof
+          let q be Element of [:S1,S2:];
+          assume q in D;
+          then consider q1, q2 being set such that
+A9:         q1 in proj1 D & q2 in proj2 D & q = [q1,q2] by A2,ZFMISC_1:def 2;
+          reconsider q1 as Element of S1 by A9;
+          reconsider q2 as Element of S2 by A9;
+            q1 <= x1 & q2 <= x2 by A5,A7,A9,LATTICE3:def 9;
+          hence q <= a by A9,Th11;
+        end;
+        let b be Element of [:S1,S2:] such that
+A10:       D is_<=_than b;
+A11:     b = [b`1,b`2] by A1,MCART_1:23;
+        then proj1 D is_<=_than b`1 & proj2 D is_<=_than b`2 by A10,Th31;
+        then x1 <= b`1 & x2 <= b`2 by A6,A8;
+        hence a <= b by A11,Th11;
+      end;
+      hence ex_sup_of D,[:S1,S2:] by YELLOW_0:15;
+    end;
+    assume ex_sup_of D,[:S1,S2:];
+    then consider x being Element of [:S1,S2:] such that
+A12:   D is_<=_than x and
+A13:   for b being Element of [:S1,S2:] st D is_<=_than b holds x <= b
+        by YELLOW_0:15;
+A14: x = [x`1,x`2] by A1,MCART_1:23;
+then A15: proj1 D is_<=_than x`1 by A12,Th31;
+A16: proj2 D is_<=_than x`2 by A12,A14,Th31;
+      for b being Element of S1 st proj1 D is_<=_than b holds x`1 <= b
+    proof
+      let b be Element of S1;
+      assume proj1 D is_<=_than b;
+      then D is_<=_than [b,x`2] by A16,Th31;
+      then x <= [b,x`2] by A13;
+      hence x`1 <= b by A14,Th11;
+    end;
+    hence ex_sup_of proj1 D,S1 by A15,YELLOW_0:15;
+      for b being Element of S2 st proj2 D is_<=_than b holds x`2 <= b
+    proof
+      let b be Element of S2;
+      assume proj2 D is_<=_than b;
+      then D is_<=_than [x`1,b] by A15,Th31;
+      then x <= [x`1,b] by A13;
+      hence x`2 <= b by A14,Th11;
+    end;
+    hence ex_sup_of proj2 D,S2 by A16,YELLOW_0:15;
+  end;
+
+theorem Th42:
+for S1, S2 being antisymmetric non empty RelStr
+ for D being Subset of [:S1,S2:] holds
+  ex_inf_of proj1 D,S1 & ex_inf_of proj2 D,S2 iff ex_inf_of D,[:S1,S2:]
+  proof
+    let S1, S2 be antisymmetric non empty RelStr,
+        D be Subset of [:S1,S2:];
+A1: the carrier of [:S1,S2:] = [:the carrier of S1, the carrier of S2:]
+      by Def2;
+then A2: D c= [:proj1 D,proj2 D:] by Th1;
+    hereby assume that
+A3:     ex_inf_of proj1 D,S1 and
+A4:     ex_inf_of proj2 D,S2;
+        ex a being Element of [:S1,S2:] st D is_>=_than a &
+        for b being Element of [:S1,S2:] st D is_>=_than b holds a >= b
+      proof
+        consider x1 being Element of S1 such that
+A5:       proj1 D is_>=_than x1 and
+A6:       for b being Element of S1 st proj1 D is_>=_than b holds x1 >= b
+            by A3,YELLOW_0:16;
+        consider x2 being Element of S2 such that
+A7:       proj2 D is_>=_than x2 and
+A8:       for b being Element of S2 st proj2 D is_>=_than b holds x2 >= b
+            by A4,YELLOW_0:16;
+        take a = [x1,x2];
+        thus D is_>=_than a
+        proof
+          let q be Element of [:S1,S2:];
+          assume q in D;
+          then consider q1, q2 being set such that
+A9:         q1 in proj1 D & q2 in proj2 D & q = [q1,q2] by A2,ZFMISC_1:def 2;
+          reconsider q1 as Element of S1 by A9;
+          reconsider q2 as Element of S2 by A9;
+            q1 >= x1 & q2 >= x2 by A5,A7,A9,LATTICE3:def 8;
+          hence q >= a by A9,Th11;
+        end;
+        let b be Element of [:S1,S2:] such that
+A10:       D is_>=_than b;
+A11:     b = [b`1,b`2] by A1,MCART_1:23;
+        then proj1 D is_>=_than b`1 & proj2 D is_>=_than b`2 by A10,Th34;
+        then x1 >= b`1 & x2 >= b`2 by A6,A8;
+        hence a >= b by A11,Th11;
+      end;
+      hence ex_inf_of D,[:S1,S2:] by YELLOW_0:16;
+    end;
+    assume ex_inf_of D,[:S1,S2:];
+    then consider x being Element of [:S1,S2:] such that
+A12:   D is_>=_than x and
+A13:   for b being Element of [:S1,S2:] st D is_>=_than b holds x >= b
+        by YELLOW_0:16;
+A14: x = [x`1,x`2] by A1,MCART_1:23;
+then A15: proj1 D is_>=_than x`1 by A12,Th34;
+A16: proj2 D is_>=_than x`2 by A12,A14,Th34;
+      for b being Element of S1 st proj1 D is_>=_than b holds x`1 >= b
+    proof
+      let b be Element of S1;
+      assume proj1 D is_>=_than b;
+      then D is_>=_than [b,x`2] by A16,Th34;
+      then x >= [b,x`2] by A13;
+      hence x`1 >= b by A14,Th11;
+    end;
+    hence ex_inf_of proj1 D,S1 by A15,YELLOW_0:16;
+      for b being Element of S2 st proj2 D is_>=_than b holds x`2 >= b
+    proof
+      let b be Element of S2;
+      assume proj2 D is_>=_than b;
+      then D is_>=_than [x`1,b] by A15,Th34;
+      then x >= [x`1,b] by A13;
+      hence x`2 >= b by A14,Th11;
+    end;
+    hence ex_inf_of proj2 D,S2 by A16,YELLOW_0:16;
+  end;
+
+theorem Th43:
+for S1, S2 being antisymmetric non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  st ex_sup_of D1,S1 & ex_sup_of D2,S2 holds sup [:D1,D2:] = [sup D1,sup D2]
+  proof
+    let S1, S2 be antisymmetric non empty RelStr,
+        D1 be non empty Subset of S1,
+        D2 be non empty Subset of S2 such that
+A1:   ex_sup_of D1,S1 & ex_sup_of D2,S2;
+    set s = sup [:D1,D2:];
+      s is Element of [:the carrier of S1,the carrier of S2:] by Def2;
+    then consider s1, s2 being set such that
+A2:   s1 in the carrier of S1 & s2 in the carrier of S2 & s = [s1,s2]
+        by ZFMISC_1:def 2;
+    reconsider s1 as Element of S1 by A2;
+    reconsider s2 as Element of S2 by A2;
+A3: ex_sup_of [:D1,D2:],[:S1,S2:] by A1,Th39;
+then A4: [s1,s2] is_>=_than [:D1,D2:] by A2,YELLOW_0:30;
+then A5: s1 is_>=_than D1 by Th29;
+A6: for b being Element of [:S1,S2:] st b is_>=_than [:D1,D2:]
+      holds [s1,s2] <= b by A2,A3,YELLOW_0:30;
+    then for b being Element of S1 st b is_>=_than D1 holds s1 <= b
+      by A1,Th35;
+then A7: s1 = sup D1 by A5,YELLOW_0:30;
+A8: s2 is_>=_than D2 by A4,Th29;
+      for b being Element of S2 st b is_>=_than D2 holds s2 <= b
+      by A1,A6,Th35;
+    hence sup [:D1,D2:] = [sup D1,sup D2] by A2,A7,A8,YELLOW_0:30;
+  end;
+
+theorem Th44:
+for S1, S2 being antisymmetric non empty RelStr
+ for D1 being non empty Subset of S1, D2 being non empty Subset of S2
+  st ex_inf_of D1,S1 & ex_inf_of D2,S2 holds inf [:D1,D2:] = [inf D1,inf D2]
+  proof
+    let S1, S2 be antisymmetric non empty RelStr,
+        D1 be non empty Subset of S1,
+        D2 be non empty Subset of S2 such that
+A1:   ex_inf_of D1,S1 & ex_inf_of D2,S2;
+    set s = inf [:D1,D2:];
+      s is Element of [:the carrier of S1,the carrier of S2:] by Def2;
+    then consider s1, s2 being set such that
+A2:   s1 in the carrier of S1 & s2 in the carrier of S2 & s = [s1,s2]
+        by ZFMISC_1:def 2;
+    reconsider s1 as Element of S1 by A2;
+    reconsider s2 as Element of S2 by A2;
+A3: ex_inf_of [:D1,D2:],[:S1,S2:] by A1,Th40;
+then A4: [s1,s2] is_<=_than [:D1,D2:] by A2,YELLOW_0:31;
+then A5: s1 is_<=_than D1 by Th32;
+A6: for b being Element of [:S1,S2:] st b is_<=_than [:D1,D2:]
+      holds [s1,s2] >= b by A2,A3,YELLOW_0:31;
+    then for b being Element of S1 st b is_<=_than D1 holds s1 >= b
+      by A1,Th36;
+then A7: s1 = inf D1 by A5,YELLOW_0:31;
+A8: s2 is_<=_than D2 by A4,Th32;
+      for b being Element of S2 st b is_<=_than D2 holds s2 >= b
+      by A1,A6,Th36;
+    hence inf [:D1,D2:] = [inf D1,inf D2] by A2,A7,A8,YELLOW_0:31;
+  end;
+
+definition let X, Y be complete antisymmetric (non empty RelStr);
+ cluster [:X,Y:] -> complete;
+coherence
+  proof
+    set IT = [:X,Y:];
+      for D being Subset of IT holds ex_sup_of D, IT
+    proof
+      let D be Subset of IT;
+        ex_sup_of proj1 D,X & ex_sup_of proj2 D,Y by YELLOW_0:17;
+      hence thesis by Th41;
+    end;
+    hence IT is complete by YELLOW_0:53;
+  end;
+end;
+
+theorem
+  for X, Y being non empty lower-bounded antisymmetric RelStr
+ st [:X,Y:] is complete holds X is complete & Y is complete
+  proof
+    let X, Y be non empty lower-bounded antisymmetric RelStr such that
+A1:   [:X,Y:] is complete;
+      for A being Subset of X holds ex_sup_of A,X
+    proof
+      let A be Subset of X;
+      per cases;
+      suppose
+A2:       A is non empty;
+        consider B being non empty Subset of Y;
+          ex_sup_of [:A,B:],[:X,Y:] by A1,YELLOW_0:17;
+        hence ex_sup_of A,X by A2,Th39;
+      suppose A is empty;
+        hence ex_sup_of A,X by YELLOW_0:42;
+    end;
+    hence X is complete by YELLOW_0:53;
+      for B being Subset of Y holds ex_sup_of B,Y
+    proof
+        let B be Subset of Y;
+      per cases;
+      suppose
+A3:       B is non empty;
+        consider A being non empty Subset of X;
+          ex_sup_of [:A,B:],[:X,Y:] by A1,YELLOW_0:17;
+        hence ex_sup_of B,Y by A3,Th39;
+      suppose B is empty;
+        hence ex_sup_of B,Y by YELLOW_0:42;
+    end;
+    hence Y is complete by YELLOW_0:53;
+  end;
+
+theorem
+  for L1,L2 being antisymmetric non empty RelStr
+ for D being non empty Subset of [:L1,L2:]
+  st [:L1,L2:] is complete or ex_sup_of D,[:L1,L2:]
+  holds sup D = [sup proj1 D,sup proj2 D]
+  proof
+    let L1,L2 be antisymmetric non empty RelStr,
+        D be non empty Subset of [:L1,L2:];
+    reconsider C1 = the carrier of L1, C2 = the carrier of L2
+     as non empty set;
+    D c= the carrier of [:L1,L2:]; then
+    D c= [:the carrier of L1,the carrier of L2:] by Def2; then
+    reconsider D' = D as non empty Subset of [:C1,C2:];
+      proj1 D' is non empty;
+    then reconsider D1=proj1 D as non empty Subset of L1;
+      proj2 D' is non empty;
+    then reconsider D2=proj2 D as non empty Subset of L2;
+    assume [:L1,L2:] is complete or ex_sup_of D,[:L1,L2:];
+then A1: ex_sup_of D,[:L1,L2:] by YELLOW_0:17;
+then A2: ex_sup_of D1,L1 & ex_sup_of D2,L2 by Th41;
+then A3: ex_sup_of [:D1,D2:],[:L1,L2:] by Th39;
+      the carrier of [:L1,L2:] = [:C1,C2:] by Def2;
+    then consider d1, d2 being set such that
+A4:   d1 in C1 & d2 in C2 & sup D = [d1,d2] by ZFMISC_1:def 2;
+    reconsider d1 as Element of L1 by A4;
+    reconsider d2 as Element of L2 by A4;
+A5: D1 is_<=_than d1
+    proof
+      let b be Element of L1; assume
+       b in D1;
+      then consider x being set such that
+A6:     [b,x] in D by FUNCT_5:def 1;
+      reconsider x as Element of D2 by A6,FUNCT_5:4;
+      reconsider x as Element of L2;
+        D is_<=_than [d1,d2] by A1,A4,YELLOW_0:def 9;
+      then [b,x] <= [d1,d2] by A6,LATTICE3:def 9;
+      hence b <= d1 by Th11;
+    end;
+      D2 is_<=_than d2
+    proof
+      let b be Element of L2; assume
+       b in D2;
+      then consider x being set such that
+A7:     [x,b] in D by FUNCT_5:def 2;
+      reconsider x as Element of D1 by A7,FUNCT_5:4;
+      reconsider x as Element of L1;
+        D is_<=_than [d1,d2] by A1,A4,YELLOW_0:def 9;
+      then [x,b] <= [d1,d2] by A7,LATTICE3:def 9;
+      hence b <= d2 by Th11;
+    end;
+    then sup D1 <= d1 & sup D2 <= d2 by A2,A5,YELLOW_0:def 9;
+then A8: [sup D1,sup D2] <= sup D by A4,Th11;
+      D' c= [:D1,D2:] by Th1;
+    then sup D <= sup [:D1,D2:] by A1,A3,YELLOW_0:34;
+    then sup D <= [sup proj1 D,sup proj2 D] by A2,Th43;
+    hence [sup proj1 D,sup proj2 D] = sup D by A8,ORDERS_1:25;
+  end;
+
+theorem
+  for L1,L2 being antisymmetric non empty RelStr
+ for D being non empty Subset of [:L1,L2:]
+  st [:L1,L2:] is complete or ex_inf_of D,[:L1,L2:]
+  holds inf D = [inf proj1 D,inf proj2 D]
+  proof
+    let L1,L2 be antisymmetric non empty RelStr,
+        D be non empty Subset of [:L1,L2:];
+    reconsider C1 = the carrier of L1, C2 = the carrier of L2
+     as non empty set;
+    D c= the carrier of [:L1,L2:]; then
+    D c= [:the carrier of L1,the carrier of L2:] by Def2; then
+    reconsider D' = D as non empty Subset of [:C1,C2:];
+      proj1 D' is non empty;
+    then reconsider D1 = proj1 D as non empty Subset of L1;
+      proj2 D' is non empty;
+    then reconsider D2 = proj2 D as non empty Subset of L2;
+    assume [:L1,L2:] is complete or ex_inf_of D,[:L1,L2:];
+then A1: ex_inf_of D,[:L1,L2:] by YELLOW_0:17;
+then A2: ex_inf_of D1,L1 & ex_inf_of D2,L2 by Th42;
+then A3: ex_inf_of [:D1,D2:],[:L1,L2:] by Th40;
+      the carrier of [:L1,L2:] = [:C1,C2:] by Def2;
+    then consider d1, d2 being set such that
+A4:   d1 in C1 & d2 in C2 & inf D = [d1,d2] by ZFMISC_1:def 2;
+    reconsider d1 as Element of L1 by A4;
+    reconsider d2 as Element of L2 by A4;
+A5: D1 is_>=_than d1
+    proof
+      let b be Element of L1; assume
+       b in D1;
+      then consider x being set such that
+A6:     [b,x] in D by FUNCT_5:def 1;
+      reconsider x as Element of D2 by A6,FUNCT_5:4;
+      reconsider x as Element of L2;
+        D is_>=_than [d1,d2] by A1,A4,YELLOW_0:def 10;
+      then [b,x] >= [d1,d2] by A6,LATTICE3:def 8;
+      hence b >= d1 by Th11;
+    end;
+      D2 is_>=_than d2
+    proof
+      let b be Element of L2; assume
+       b in D2;
+      then consider x being set such that
+A7:     [x,b] in D by FUNCT_5:def 2;
+      reconsider x as Element of D1 by A7,FUNCT_5:4;
+      reconsider x as Element of L1;
+        D is_>=_than [d1,d2] by A1,A4,YELLOW_0:def 10;
+      then [x,b] >= [d1,d2] by A7,LATTICE3:def 8;
+      hence b >= d2 by Th11;
+    end;
+    then inf D1 >= d1 & inf D2 >= d2 by A2,A5,YELLOW_0:def 10;
+then A8: [inf D1,inf D2] >= inf D by A4,Th11;
+      D' c= [:D1,D2:] by Th1;
+    then inf D >= inf [:D1,D2:] by A1,A3,YELLOW_0:35;
+    then inf D >= [inf proj1 D,inf proj2 D] by A2,Th44;
+    hence [inf proj1 D,inf proj2 D] = inf D by A8,ORDERS_1:25;
+  end;
+
+theorem
+  for S1,S2 being non empty reflexive RelStr
+ for D being non empty directed Subset of [:S1,S2:]
+  holds [:proj1 D,proj2 D:] c= downarrow D
+  proof
+    let S1,S2 be non empty reflexive RelStr,
+        D be non empty directed Subset of [:S1,S2:];
+    set D1 = proj1 D,
+        D2 = proj2 D;
+    reconsider C1 = the carrier of S1, C2 = the carrier of S2
+      as non empty set;
+    D c= the carrier of [:S1,S2:]; then
+    D c= [:the carrier of S1,the carrier of S2:] by Def2; then
+    reconsider D' = D as non empty Subset of [:C1,C2:];
+A1: D' c= [:D1,D2:] by Th1;
+      proj1 D' is non empty;
+    then reconsider D1 as non empty Subset of S1;
+      proj2 D' is non empty;
+    then reconsider D2 as non empty Subset of S2;
+    let q be set; assume
+     q in [:proj1 D,proj2 D:];
+    then consider d, e being set such that
+A2:   d in D1 & e in D2 & q = [d,e] by ZFMISC_1:def 2;
+A3: downarrow D = {x where x is Element of [:S1,S2:] :
+        ex y being Element of [:S1,S2:] st x <= y & y in D} by WAYBEL_0:14;
+    consider y being set such that
+A4:   [d,y] in D by A2,FUNCT_5:def 1;
+    consider x being set such that
+A5:   [x,e] in D by A2,FUNCT_5:def 2;
+    reconsider x, d as Element of D1 by A4,A5,FUNCT_5:4;
+    reconsider y, e as Element of D2 by A4,A5,FUNCT_5:4;
+    consider z being Element of [:S1,S2:] such that
+A6:   z in D & [d,y] <= z & [x,e] <= z by A4,A5,WAYBEL_0:def 1;
+    consider z1, z2 being set such that
+A7:   z1 in D1 & z2 in D2 & z = [z1,z2] by A1,A6,ZFMISC_1:def 2;
+    reconsider z1 as Element of D1 by A7;
+    reconsider z2 as Element of D2 by A7;
+      [d,y] <= [z1,z2] & [x,e] <= [z1,z2] by A6,A7;
+    then d <= z1 & e <= z2 by Th11;
+    then [d,e] <= [z1,z2] by Th11;
+    hence q in downarrow D by A2,A3,A6,A7;
+  end;
+
+theorem
+  for S1,S2 being non empty reflexive RelStr
+ for D being non empty filtered Subset of [:S1,S2:]
+  holds [:proj1 D,proj2 D:] c= uparrow D
+  proof
+    let S1,S2 be non empty reflexive RelStr,
+        D be non empty filtered Subset of [:S1,S2:];
+    set D1 = proj1 D,
+        D2 = proj2 D;
+    reconsider C1 = the carrier of S1, C2 = the carrier of S2
+      as non empty set;
+    D c= the carrier of [:S1,S2:]; then
+    D c= [:the carrier of S1,the carrier of S2:] by Def2; then
+    reconsider D' = D as non empty Subset of [:C1,C2:];
+A1: D' c= [:D1,D2:] by Th1;
+      proj1 D' is non empty;
+    then reconsider D1 as non empty Subset of S1;
+      proj2 D' is non empty;
+    then reconsider D2 as non empty Subset of S2;
+    let q be set; assume
+     q in [:proj1 D,proj2 D:];
+    then consider d, e being set such that
+A2:   d in D1 & e in D2 & q = [d,e] by ZFMISC_1:def 2;
+A3: uparrow D = {x where x is Element of [:S1,S2:] :
+        ex y being Element of [:S1,S2:] st x >= y & y in D} by WAYBEL_0:15;
+    consider y being set such that
+A4:   [d,y] in D by A2,FUNCT_5:def 1;
+    consider x being set such that
+A5:   [x,e] in D by A2,FUNCT_5:def 2;
+    reconsider x, d as Element of D1 by A4,A5,FUNCT_5:4;
+    reconsider y, e as Element of D2 by A4,A5,FUNCT_5:4;
+    consider z being Element of [:S1,S2:] such that
+A6:   z in D & [d,y] >= z & [x,e] >= z by A4,A5,WAYBEL_0:def 2;
+    consider z1, z2 being set such that
+A7:   z1 in D1 & z2 in D2 & z = [z1,z2] by A1,A6,ZFMISC_1:def 2;
+    reconsider z1 as Element of D1 by A7;
+    reconsider z2 as Element of D2 by A7;
+      [d,y] >= [z1,z2] & [x,e] >= [z1,z2] by A6,A7;
+    then d >= z1 & e >= z2 by Th11;
+    then [d,e] >= [z1,z2] by Th11;
+    hence q in uparrow D by A2,A3,A6,A7;
+  end;
+
+scheme Kappa2DS { X,Y,Z() -> non empty RelStr,
+                   F(set,set) -> set }:
+ ex f being map of [:X(),Y():], Z()
+  st for x being Element of X(), y being Element of Y() holds f.[x,y]=F(x,y)
+provided
+A1: for x being Element of X(), y being Element of Y() holds
+  F(x,y) is Element of Z()
+  proof deffunc f(set,set) = F($1,$2);
+A2:  for x being Element of X(),
+         y being Element of Y()
+       holds f(x,y) in the carrier of Z()
+    proof
+      let x be Element of X(),
+          y be Element of Y();
+      reconsider x1 = x as Element of X();
+      reconsider y1 = y as Element of Y();
+        F(x1,y1) is Element of Z() by A1;
+      hence F(x,y) in the carrier of Z();
+    end;
+    consider f being Function of [:the carrier of X(),the carrier of Y():],
+     the carrier of Z() such that
+A3:   for x being Element of X(),
+          y being Element of Y() holds f.[x,y]=f(x,y)
+       from Kappa2D(A2);
+      the carrier of [:X(),Y():] = [:the carrier of X(), the carrier of Y():]
+      by Def2;
+    then reconsider f as map of [:X(),Y():], Z();
+    take f;
+    thus thesis by A3;
+  end;

@@ -1,0 +1,511 @@
+:: The $\sigma$-additive Measure Theory
+::  by J\'ozef Bia{\l}as
+::
+:: Received October 15, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary TARSKI, BOOLE, SUPINF_1, RLVECT_1, ARYTM_3, ARYTM_1, SETFAM_1,
+      PROB_1, SUBSET_1, FINSUB_1, FUNCT_1, SUPINF_2, RELAT_1, FUNCOP_1, CARD_4,
+      PROB_2, MEASURE1;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0,
+      REAL_1, RELAT_1, FINSUB_1, FUNCT_1, FUNCT_2, NAT_1, SETFAM_1, FUNCOP_1,
+      PROB_1, PROB_2, SUPINF_1, SUPINF_2;
+ constructors ENUMSET1, NAT_1, REAL_1, SUPINF_2, FUNCOP_1, FINSUB_1, PROB_2,
+      MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, SUPINF_1, RELSET_1, ARYTM_3, PROB_1, MEMBERED, ZFMISC_1,
+      XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Some useful theorems about sets and R_eal numbers
+
+ reserve X for set;
+
+theorem :: MEASURE1:1
+  for X,Y being set holds union {X,Y,{}} = union {X,Y};
+
+canceled 2;
+
+theorem :: MEASURE1:4
+   for x,y,s,t being R_eal holds
+   0.<=' x & 0.<=' s & x <=' y & s <=' t implies
+   x + s <=' y + t;
+
+theorem :: MEASURE1:5
+   for x,y,z being R_eal holds
+   0.<=' y & 0.<=' z & x = y + z & y <' +infty implies z = x - y;
+
+theorem :: MEASURE1:6
+     for A being Subset of X holds
+   {A} is Subset-Family of X;
+
+theorem :: MEASURE1:7
+   for A,B being Subset of X holds
+   {A,B} is Subset-Family of X;
+
+theorem :: MEASURE1:8
+   for A,B,C being Subset of X holds
+   {A,B,C} is non empty Subset-Family of X;
+
+theorem :: MEASURE1:9
+   {{}} is Subset-Family of X;
+
+scheme DomsetFamEx {A() -> set,P[set]}:
+   ex F being non empty Subset-Family of A() st
+   for B being set holds B in F iff (B c= A() & P[B])
+   provided  ex B being set st B c= A() & P[B];
+
+definition let X be set;
+   let S be non empty Subset-Family of X;
+ canceled;
+
+   func X\S -> Subset-Family of X means
+:: MEASURE1:def 2
+     for A being set holds
+      A in it iff ex B being set st B in S & A = X \ B;
+end;
+
+definition let X be set;
+   let S be non empty Subset-Family of X;
+   cluster X\S -> non empty;
+end;
+
+canceled 4;
+
+theorem :: MEASURE1:14
+   for S being non empty Subset-Family of X holds
+   S = X \ (X \ S);
+
+theorem :: MEASURE1:15
+   for S being non empty Subset-Family of X holds
+   meet S = X \ union (X \ S) & union S = X \ meet (X \ S);
+
+::
+::        Field Subset of X and nonnegative measure
+::
+
+definition
+   let X be set;
+   let IT be Subset-Family of X;
+   redefine attr IT is compl-closed means
+:: MEASURE1:def 3
+    for A being set holds A in IT implies X\A in IT;
+end;
+
+theorem :: MEASURE1:16
+  for X being set,
+      F being Subset-Family of X st
+    F is cup-closed compl-closed holds F is cap-closed;
+
+definition let X be set;
+  cluster cup-closed compl-closed -> cap-closed Subset-Family of X;
+  cluster cap-closed compl-closed -> cup-closed Subset-Family of X;
+end;
+
+theorem :: MEASURE1:17
+   for S being Field_Subset of X holds S = X \ S;
+
+theorem :: MEASURE1:18
+     for M being set holds
+   M is Field_Subset of X iff
+   ex S being non empty Subset-Family of X st M = S &
+   for A being set st A in S holds X\A in S &
+   for A,B being set st A in S & B in S holds A \/ B in S;
+
+theorem :: MEASURE1:19
+   for S being non empty Subset-Family of X holds
+   S is Field_Subset of X iff
+   for A being set st A in S holds X\A in S &
+   for A,B being set st A in S & B in S holds A /\ B in S;
+
+theorem :: MEASURE1:20
+   for S being Field_Subset of X holds
+   for A,B being set st A in S & B in S holds A \ B in S;
+
+theorem :: MEASURE1:21
+     for S being Field_Subset of X holds {} in S & X in S;
+
+definition
+   let S be non empty set;
+   let F be Function of S,ExtREAL;
+   let A be Element of S;
+   redefine func F.A -> R_eal;
+end;
+
+definition
+   let X be non empty set,
+       F be Function of X,ExtREAL;
+   redefine attr F is nonnegative means
+:: MEASURE1:def 4
+for A being Element of X holds
+         0. <=' F.A;
+end;
+
+canceled;
+
+theorem :: MEASURE1:23
+   for S being Field_Subset of X holds
+   ex M being Function of S,ExtREAL st
+   M is nonnegative & M.{} = 0.&
+   for A,B being Element of S st A misses B holds M.(A \/ B) = M.A + M.B;
+
+definition
+   let X be set,
+       S be Field_Subset of X;
+   mode Measure of S -> Function of S,ExtREAL means
+:: MEASURE1:def 5
+it is nonnegative & it.{} = 0. &
+         for A,B being Element of S st A misses B holds
+          it.(A \/ B) = it.A + it.B;
+end;
+
+canceled;
+
+theorem :: MEASURE1:25
+   for S being Field_Subset of X,
+       M being Measure of S,
+       A,B being Element of S holds
+   A c= B implies M.A <=' M.B;
+
+theorem :: MEASURE1:26
+   for S being Field_Subset of X,
+       M being Measure of S,
+       A,B being Element of S holds
+   A c= B & M.A <' +infty implies M.(B \ A) = M.B - M.A;
+
+definition let X be set;
+   cluster non empty compl-closed cap-closed Subset-Family of X;
+end;
+
+definition
+   let X be set,
+       S be non empty cup-closed Subset-Family of X,
+       A,B be Element of S;
+  redefine func A \/ B -> Element of S;
+end;
+
+definition
+   let X be set,
+       S be Field_Subset of X,
+       A,B be Element of S;
+  redefine func A /\ B -> Element of S;
+  redefine func A \ B -> Element of S;
+end;
+
+theorem :: MEASURE1:27
+   for S being Field_Subset of X,
+       M being Measure of S,
+       A,B being Element of S holds
+   M.(A \/ B) <=' M.A + M.B;
+
+definition
+   let X be set,
+       S be Field_Subset of X,
+       M be Measure of S,
+       A be set;
+pred A is_measurable M means
+:: MEASURE1:def 6
+A in S;
+end;
+
+canceled;
+
+theorem :: MEASURE1:29
+     for S being Field_Subset of X,
+       M being Measure of S holds
+   {} is_measurable M & X is_measurable M &
+   for A,B being set st
+   A is_measurable M & B is_measurable M holds
+   X \ A is_measurable M & A \/ B is_measurable M & A /\ B is_measurable M;
+
+definition
+   let X be set,
+       S be Field_Subset of X,
+       M be Measure of S;
+   mode measure_zero of M -> Element of S means
+:: MEASURE1:def 7
+M.it = 0.;
+end;
+
+canceled;
+
+theorem :: MEASURE1:31
+     for S being Field_Subset of X,
+       M being Measure of S,
+       A being Element of S,
+       B being measure_zero of M st
+   A c= B holds A is measure_zero of M;
+
+theorem :: MEASURE1:32
+     for S being Field_Subset of X,
+       M being Measure of S,
+       A,B being measure_zero of M holds
+   A \/ B is measure_zero of M & A /\ B is measure_zero of M &
+    A \ B is measure_zero of M;
+
+theorem :: MEASURE1:33
+     for S being Field_Subset of X,
+       M being Measure of S,
+       A being Element of S,
+       B being measure_zero of M holds
+   M.(A \/ B) = M.A & M.(A /\ B) = 0.& M.(A \ B) = M.A;
+
+::
+::       sigma_Field Subset of X and sigma_additive nonnegative measure
+::
+
+theorem :: MEASURE1:34
+   for A being Subset of X
+   ex F being Function of NAT,bool X st rng F = {A};
+
+theorem :: MEASURE1:35
+   for A being set
+   ex F being Function of NAT,{A} st
+   for n being Nat holds F.n = A;
+
+definition let X be set;
+   cluster non empty countable Subset-Family of X;
+end;
+
+definition let X be set;
+   mode N_Sub_set_fam of X is non empty countable Subset-Family of X;
+end;
+
+canceled 2;
+
+theorem :: MEASURE1:38
+   for A,B,C being Subset of X
+   ex F being Function of NAT,bool X st rng F = {A,B,C} &
+   F.0 = A & F.1 = B & for n being Nat st 1 < n holds F.n = C;
+
+theorem :: MEASURE1:39
+     for A,B being Subset of X holds
+   {A,B,{}} is N_Sub_set_fam of X;
+
+theorem :: MEASURE1:40
+   for A,B being Subset of X
+   ex F being Function of NAT,bool X st rng F = {A,B} &
+   F.0 = A & for n being Nat st 0 < n holds F.n = B;
+
+theorem :: MEASURE1:41
+   for A,B being Subset of X holds
+   {A,B} is N_Sub_set_fam of X;
+
+theorem :: MEASURE1:42
+   for S being N_Sub_set_fam of X holds
+   X \ S is N_Sub_set_fam of X;
+
+definition
+   let X be set;
+   let IT be Subset-Family of X;
+ canceled;
+
+   attr IT is sigma_Field_Subset-like means
+:: MEASURE1:def 9
+    for M being N_Sub_set_fam of X st M c= IT holds union M in IT;
+end;
+
+definition let X be set;
+   cluster non empty compl-closed sigma_Field_Subset-like Subset-Family of X;
+end;
+
+definition let X be set;
+   mode sigma_Field_Subset of X is
+     compl-closed sigma_Field_Subset-like (non empty Subset-Family of X);
+end;
+
+canceled 2;
+
+theorem :: MEASURE1:45
+   for S being sigma_Field_Subset of X holds {} in S & X in S;
+
+definition let X be set;
+ cluster -> non empty sigma_Field_Subset of X;
+end;
+
+theorem :: MEASURE1:46
+   for S being sigma_Field_Subset of X,
+       A,B being set st A in S & B in S holds A \/ B in S & A /\ B in S;
+
+theorem :: MEASURE1:47
+   for S being sigma_Field_Subset of X,
+       A,B being set st A in S & B in S holds A \ B in S;
+
+theorem :: MEASURE1:48
+     for S being sigma_Field_Subset of X holds S = X \ S;
+
+theorem :: MEASURE1:49
+   for S being non empty Subset-Family of X holds
+   ((for A being set holds A in S implies X\A in S) &
+   (for M being N_Sub_set_fam of X st M c= S holds meet M in S)) iff
+   S is sigma_Field_Subset of X;
+
+definition
+   let X be set;
+   let S be sigma_Field_Subset of X;
+   cluster disjoint_valued Function of NAT, S;
+end;
+
+definition
+   let X be set;
+   let S be sigma_Field_Subset of X;
+   mode Sep_Sequence of S is disjoint_valued Function of NAT, S;
+end;
+
+definition
+   let X be set;
+   let S be sigma_Field_Subset of X;
+   let F be Function of NAT,S;
+   redefine func rng F -> non empty Subset-Family of X;
+end;
+
+canceled 2;
+
+theorem :: MEASURE1:52
+   for S being sigma_Field_Subset of X,
+       F being Function of NAT,S holds
+   rng F is N_Sub_set_fam of X;
+
+theorem :: MEASURE1:53
+   for S being sigma_Field_Subset of X,
+       F being Function of NAT,S holds
+   union rng F is Element of S;
+
+theorem :: MEASURE1:54
+   for Y,S being non empty set,
+       F being Function of Y,S,
+       M being Function of S,ExtREAL st
+   M is nonnegative holds M*F is nonnegative;
+
+theorem :: MEASURE1:55
+   for S being sigma_Field_Subset of X,
+       a,b being R_eal holds
+   ex M being Function of S,ExtREAL st
+   for A being Element of S holds
+   (A = {} implies M.A = a) & (A <> {} implies M.A = b);
+
+theorem :: MEASURE1:56
+     for S being sigma_Field_Subset of X
+   ex M being Function of S,ExtREAL st
+   for A being Element of S holds
+   (A = {} implies M.A = 0.) & (A <> {} implies M.A = +infty);
+
+theorem :: MEASURE1:57
+   for S being sigma_Field_Subset of X
+   ex M being Function of S,ExtREAL st
+   for A being Element of S holds M.A = 0.;
+
+theorem :: MEASURE1:58
+   for S being sigma_Field_Subset of X
+   ex M being Function of S,ExtREAL st
+   M is nonnegative & M.{} = 0. &
+   for F being Sep_Sequence of S holds
+   SUM(M*F) = M.(union rng F);
+
+definition
+   let X be set;
+   let S be sigma_Field_Subset of X;
+ canceled;
+
+   mode sigma_Measure of S -> Function of S,ExtREAL means
+:: MEASURE1:def 11
+it is nonnegative &
+         it.{} = 0.&
+         for F being Sep_Sequence of S holds
+         SUM(it*F) = it.(union rng F);
+end;
+
+definition let X be set;
+   cluster sigma_Field_Subset-like compl-closed -> cup-closed
+     (non empty Subset-Family of X);
+end;
+
+canceled;
+
+theorem :: MEASURE1:60
+   for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S holds M is Measure of S;
+
+theorem :: MEASURE1:61
+     for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S,
+       A,B being Element of S st
+   A misses B holds M.(A \/ B) = M.A + M.B;
+
+theorem :: MEASURE1:62
+   for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S,
+       A,B being Element of S st A c= B holds M.A <=' M.B;
+
+theorem :: MEASURE1:63
+     for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S,
+       A,B being Element of S st
+   A c= B & M.A <' +infty holds M.(B \ A) = M.B - M.A;
+
+theorem :: MEASURE1:64
+   for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S,
+       A,B being Element of S holds
+   M.(A \/ B) <=' M.A + M.B;
+
+definition
+   let X be set,
+       S be sigma_Field_Subset of X,
+       M be sigma_Measure of S,
+       A be set;
+   pred A is_measurable M means
+:: MEASURE1:def 12
+A in S;
+end;
+
+canceled;
+
+theorem :: MEASURE1:66
+     for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S holds
+   {} is_measurable M & X is_measurable M &
+   for A,B being set st A is_measurable M & B is_measurable M holds
+   X \ A is_measurable M & A \/ B is_measurable M &
+   A /\ B is_measurable M;
+
+theorem :: MEASURE1:67
+     for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S,
+       T being N_Sub_set_fam of X st
+   (for A being set st A in T holds A is_measurable M) holds
+   union T is_measurable M & meet T is_measurable M;
+
+definition
+   let X be set,
+       S be sigma_Field_Subset of X,
+       M be sigma_Measure of S;
+   mode measure_zero of M -> Element of S means
+:: MEASURE1:def 13
+M.it = 0.;
+end;
+
+canceled;
+
+theorem :: MEASURE1:69
+     for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S,
+       A being Element of S,
+       B being measure_zero of M st
+   A c= B holds A is measure_zero of M;
+
+theorem :: MEASURE1:70
+     for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S,
+       A,B being measure_zero of M holds
+   A \/ B is measure_zero of M & A /\ B is measure_zero of M &
+   A \ B is measure_zero of M;
+
+theorem :: MEASURE1:71
+     for S being sigma_Field_Subset of X,
+       M being sigma_Measure of S,
+       A being Element of S,
+       B being measure_zero of M holds
+   M.(A \/ B) = M.A & M.(A /\ B) = 0.& M.(A \ B) = M.A;

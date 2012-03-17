@@ -1,0 +1,1294 @@
+:: Lebesgue's Covering Lemma, Uniform Continuity and Segmentation of Arcs
+::  by Yatsuka Nakamura and Andrzej Trybulec
+::
+:: Received November 13, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM_1, ARYTM_3, METRIC_1, PRE_TOPC, FINSEQ_4, PCOMPS_1, ORDINAL2,
+      RELAT_1, FUNCT_1, BOOLE, SETFAM_1, COMPTS_1, FINSET_1, TARSKI, SUBSET_1,
+      TOPMETR, BORSUK_1, EUCLID, INT_1, FINSEQ_1, ABSVALUE, RCOMP_1, SEQM_3,
+      TBSP_1, SQUARE_1, LATTICES, UNIFORM1, HAHNBAN, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, SETFAM_1,
+      REAL_1, NAT_1, ORDINAL1, INT_1, BINARITH, RCOMP_1, STRUCT_0, ABSVALUE,
+      RELAT_1, FINSEQ_1, FUNCT_1, FUNCT_2, FINSEQ_4, TOPMETR, PRE_TOPC, TOPS_2,
+      COMPTS_1, EUCLID, FINSET_1, TBSP_1, PSCOMP_1, METRIC_1, PCOMPS_1,
+      GOBOARD1, SQUARE_1;
+ constructors RCOMP_1, ABSVALUE, TOPS_2, REAL_1, TOPMETR, INT_1, SQUARE_1,
+      PSCOMP_1, BINARITH, TBSP_1, GOBOARD1, T_0TOPSP, YELLOW_8, FINSEQ_4,
+      COMPTS_1;
+ clusters SUBSET_1, STRUCT_0, RELSET_1, EUCLID, METRIC_1, PCOMPS_1, BORSUK_2,
+      XREAL_0, FINSEQ_1, TOPMETR, INT_1, NAT_1, MEMBERED, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, ORDINAL1;
+ theorems TARSKI, AXIOMS, RCOMP_1, EUCLID, CAT_3, TOPMETR, TOPS_1, METRIC_1,
+      FUNCT_1, FUNCT_2, TBSP_1, NAT_1, FINSEQ_3, SEQ_2, FINSEQ_1, REAL_1,
+      ABSVALUE, SCMFSA_7, REAL_2, SQUARE_1, PRE_TOPC, TOPS_2, FINSEQ_4,
+      GOBOARD6, PCOMPS_1, ALI2, SETFAM_1, SUBSET_1, COMPTS_1, SEQ_4, HEINE,
+      INT_1, JORDAN2B, GOBOARD1, XBOOLE_0, XBOOLE_1, XREAL_0, FINSEQ_2,
+      XCMPLX_0, XCMPLX_1;
+ schemes FUNCT_2, DOMAIN_1, SETFAM_1, FINSEQ_1, NAT_1;
+
+begin :: 1.   LEBESGUE'S COVERING LEMMA
+
+reserve x,y for set;
+reserve s,s1,s2,s4,t,r,r1,r2 for Real;
+reserve n,m,i,j for Nat;
+
+theorem Th1: t-r-(t-s)=-r+s & t-r-(t-s)=s-r
+proof thus t-r-(t-s)=t-r-t+s by XCMPLX_1:37 .=-r+s by XCMPLX_1:232;
+ hence thesis by XCMPLX_0:def 8;
+end;
+
+theorem Th2: for r st r>0 ex n being Nat st n>0 & 1/n < r
+proof let r such that A1: r>0;
+   consider n being Nat such that A2: 1/r < n by SEQ_4:10;
+        1/r>0 by A1,REAL_2:127;
+   then A3:n>0 by A2,AXIOMS:22;
+        1/r*r<n*r by A1,A2,REAL_1:70;
+      then 1<n*r by A1,XCMPLX_1:88;
+      then 1/n<r by A3,REAL_2:178;
+ hence ex n1 being Nat st n1>0 & 1/n1 < r by A3;
+end;
+
+definition let X,Y be non empty MetrStruct,f be map of X,Y;
+ attr f is uniformly_continuous means :Def1:
+ for r st 0<r ex s st 0<s & for u1,u2 being Element of X
+    st dist(u1,u2) < s holds dist(f/.u1,f/.u2) < r;
+end;
+
+theorem Th3: for X being non empty TopSpace, M being non empty MetrSpace,
+f being map of X,TopSpaceMetr(M)
+ st f is continuous holds (for r being Real,u being Element of
+ the carrier of M,P being Subset of TopSpaceMetr(M)
+  st P=Ball(u,r) holds f"P is open)
+ proof let X be non empty TopSpace, M be non empty MetrSpace,
+   f be map of X,TopSpaceMetr(M);
+   assume A1:f is continuous;
+   thus for r being Real,u being Element of
+    the carrier of M,P being Subset of TopSpaceMetr(M)
+    st P=Ball(u,r) holds f"P is open
+    proof let r be Real,u be Element of
+      the carrier of M,P be Subset of TopSpaceMetr(M);
+      reconsider P'=P as Subset of TopSpaceMetr(M);
+      assume P=Ball(u,r);
+      then P' is open by TOPMETR:21;
+      hence f"P is open by A1,TOPS_2:55;
+    end;
+ end;
+
+theorem Th4: for N, M being non empty MetrSpace,
+ f being map of TopSpaceMetr(N),TopSpaceMetr(M) holds
+ (for r being real number,u being Element of
+ the carrier of N,u1 being Element of M st
+ r>0 & u1=f.u ex s being real number st s>0 &
+ for w being Element of N,
+ w1 being Element of M st w1=f.w &
+ dist(u,w)<s holds dist(u1,w1)<r)
+  implies f is continuous
+ proof let N,M be non empty MetrSpace,f be map of TopSpaceMetr(N),
+  TopSpaceMetr(M);
+    dom f = the carrier of TopSpaceMetr(N) by FUNCT_2:def 1;
+  then A1:dom f=the carrier of N by TOPMETR:16;
+   now assume A2:
+  (for r being real number,u being Element of
+  the carrier of N,u1 being Element of M st
+  r>0 & u1=f.u ex s be real number st s>0 &
+  for w being Element of N,
+  w1 being Element of M st w1=f.w &
+  dist(u,w)<s holds dist(u1,w1)<r);
+     for r being real number,u being Element of
+   the carrier of M,P being Subset of TopSpaceMetr(M)
+   st r>0 & P=Ball(u,r) holds f"P is open
+    proof let r be real number,u be Element of
+      the carrier of M,P be Subset of TopSpaceMetr(M);
+     reconsider P'=P as Subset of TopSpaceMetr(M);
+     assume A3: r>0 & P=Ball(u,r);
+        for p being Point of N st p in f"P
+      ex s being real number st s>0 & Ball(p,s) c= f"P
+       proof let p be Point of N;
+         assume p in f"P;
+           then A4:f.p in Ball(u,r) by A3,FUNCT_1:def 13;
+           then reconsider wf=f.p as Element of M;
+             P' is open by A3,TOPMETR:21;
+           then consider r1 being real number such that
+           A5: r1>0 & Ball(wf,r1) c= P by A3,A4,TOPMETR:22;
+           reconsider r1 as Real by XREAL_0:def 1;
+           consider s be real number such that
+           A6:s>0 and
+           A7: for w being Element of N,
+           w1 being Element of M st w1=f.w &
+           dist(p,w)<s holds dist(wf,w1)<r1 by A2,A5;
+           reconsider s as Real by XREAL_0:def 1;
+             Ball(p,s) c= f"P
+           proof let x;assume A8:x in Ball(p,s);
+             then reconsider wx=x as Element of N;
+             A9:dist (p,wx)<s by A8,METRIC_1:12;
+               f.wx in rng f by A1,FUNCT_1:def 5;
+             then reconsider wfx=f.wx as Element of M
+                                by TOPMETR:16;
+               dist(wf,wfx)<r1 by A7,A9;
+             then wfx in Ball(wf,r1) by METRIC_1:12;
+            hence x in f"P by A1,A5,FUNCT_1:def 13;
+           end;
+         hence ex s2 being real number st s2>0 & Ball(p,s2) c= f"P by A6;
+       end;
+     hence f"P is open by TOPMETR:22;
+    end;
+  hence f is continuous by JORDAN2B:20;
+  end;
+ hence thesis;
+ end;
+
+theorem Th5: for N, M being non empty MetrSpace,
+  f being map of TopSpaceMetr(N),TopSpaceMetr(M) st f is continuous holds
+ (for r being Real,u being Element of
+ the carrier of N,u1 being Element of M st
+ r>0 & u1=f.u ex s st s>0 & for w being Element of N,
+ w1 being Element of M st w1=f.w &
+ dist(u,w)<s holds dist(u1,w1)<r)
+ proof let N, M be non empty MetrSpace,
+   f be map of TopSpaceMetr(N),
+   TopSpaceMetr(M);assume A1: f is continuous;
+   let r be Real,u be Element of
+     the carrier of N,u1 be Element of M;
+     assume A2:r>0 & u1=f.u;
+      reconsider P=Ball(u1,r) as Subset of TopSpaceMetr(M)
+                                    by TOPMETR:16;
+      A3:the carrier of N=the carrier of TopSpaceMetr(N) by TOPMETR:16;
+      A4:f"P is open by A1,Th3;
+          dom f=the carrier of TopSpaceMetr(N) by FUNCT_2:def 1;
+        then u in dom f & f.u in P by A2,A3,GOBOARD6:4;
+        then u in f"P by FUNCT_1:def 13;
+        then consider s1 be real number such that
+        A5: s1>0 & Ball(u,s1) c= f"P by A4,TOPMETR:22;
+        reconsider s1 as Real by XREAL_0:def 1;
+          for w being Element of N,
+         w1 being Element of M st w1=f.w &
+         dist(u,w)<s1 holds dist(u1,w1)<r
+         proof let w be Element of N,
+           w1 be Element of M;
+           assume A6:w1=f.w & dist(u,w)<s1;
+           then w in Ball(u,s1) by METRIC_1:12;
+           then w in dom f & f.w in P by A5,FUNCT_1:def 13;
+          hence dist(u1,w1)<r by A6,METRIC_1:12;
+         end;
+    hence thesis by A5;
+ end;
+
+theorem for N,M being non empty MetrSpace,
+ f being map of N,M,
+ g being map of TopSpaceMetr(N),TopSpaceMetr(M) st
+ f=g & f is uniformly_continuous holds
+ g is continuous
+proof let N,M be non empty MetrSpace,
+  f be map of N,M,
+  g be map of TopSpaceMetr(N),TopSpaceMetr(M);
+   assume A1:f=g & f is uniformly_continuous;
+     for r being real number,u being Element of
+   the carrier of N,u1 being Element of M st
+   r>0 & u1=g.u ex s be real number st s>0 &
+   for w being Element of N,
+   w1 being Element of M st w1=g.w &
+   dist(u,w)<s holds dist(u1,w1)<r
+   proof let r be real number, u be Element of
+     the carrier of N,u1 be Element of M;
+     reconsider r'=r as Real by XREAL_0:def 1;
+     assume A2: r>0 & u1=g.u;
+      then consider s be Real such that
+      A3:0<s & for wu1,wu2 being Element of N
+           st dist(wu1,wu2) < s holds dist((f/.wu1),(f/.wu2)) < r'
+                                    by A1,Def1;
+        for w being Element of N,
+       w1 being Element of M st w1=g.w &
+       dist(u,w)<s holds dist(u1,w1)<r
+       proof let w be Element of N,
+         w1 be Element of M;
+         assume A4: w1=g.w & dist(u,w)<s;
+         A5:u1=f/.u by A1,A2,CAT_3:def 1;
+           w1=f/.w by A1,A4,CAT_3:def 1;
+        hence dist(u1,w1)<r by A3,A4,A5;
+       end;
+     hence ex s be real number st s>0 &
+     for w being Element of N,
+     w1 being Element of M st w1=g.w &
+     dist(u,w)<s holds dist(u1,w1)<r by A3;
+   end;
+  hence g is continuous by Th4;
+end;
+
+reserve p for Nat;
+
+theorem Th7: :: Lebesgue's Covering Lemma
+  for N being non empty MetrSpace,
+      G being Subset-Family of TopSpaceMetr(N) st
+   G is_a_cover_of TopSpaceMetr(N) & G is open & TopSpaceMetr(N) is compact
+ex r st r>0 &
+for w1,w2 being Element of N st dist(w1,w2)<r
+holds ex Ga being Subset of TopSpaceMetr(N)
+st w1 in Ga & w2 in Ga & Ga in G
+proof let N be non empty MetrSpace, G be Subset-Family of TopSpaceMetr(N);
+  assume A1: G is_a_cover_of TopSpaceMetr(N)
+   & G is open & TopSpaceMetr(N) is compact;
+     now assume A2: not
+     ex r st r>0 &
+     for w1,w2 being Element of N st dist(w1,w2)<r
+     holds ex Ga being Subset of TopSpaceMetr(N)
+     st w1 in Ga & w2 in Ga & Ga in G;
+     defpred P[set,set] means
+       (for n being Nat,w1 being Element of N
+       st n=$1 & w1=$2 ex w2 being Element of N
+       st dist(w1,w2)<1/(n+1)
+       & for Ga being Subset of TopSpaceMetr(N)
+          holds not(w1 in Ga & w2 in Ga & Ga in G ) );
+     A3:for e being set st e in NAT ex u being set
+     st u in the carrier of N & P[e,u]
+      proof let e be set;
+        assume e in NAT;
+         then reconsider m=e as Nat;
+         set r=1/(m+1);
+           m+1>0 by NAT_1:19;
+         then (m+1)">0 by REAL_1:72; then r>0 by XCMPLX_1:217;
+         then consider w1,w2 being Element of N such that
+         A4: dist(w1,w2)<r
+         & (for Ga being Subset of TopSpaceMetr(N)
+         holds not(w1 in Ga & w2 in Ga & Ga in G)) by A2;
+           for n being Nat,w4 being Element of N
+         st n=e & w4=w1 ex w5 being Element of N
+         st dist(w4,w5)<1/(n+1)
+         & for Ga being Subset of TopSpaceMetr(N)
+         holds not(w4 in Ga & w5 in Ga & Ga in G ) by A4;
+         hence thesis;
+      end;
+        ex f being Function of NAT,the carrier of N st
+     for e being set st e in NAT holds P[e,f.e] from FuncEx1(A3);
+      then consider f being Function of NAT,the carrier of N
+      such that
+      A5:for e being set st e in NAT holds
+       (for n being Nat,w1 being Element of N
+       st n=e & w1=f.e ex w2 being Element of N
+       st dist(w1,w2)<1/(n+1)
+       & for Ga being Subset of TopSpaceMetr(N)
+        holds not(w1 in Ga & w2 in Ga & Ga in G ) );
+  set TM = TopSpaceMetr(N);
+  A6: TM = TopStruct (# the carrier of N,Family_open_set(N) #)
+          by PCOMPS_1:def 6;
+    defpred P[Subset of TopSpaceMetr(N)] means
+       ex p st $1 = {x where x is Point of N : ex n st p<=n & x = f.n};
+    consider F being Subset-Family of TopSpaceMetr(N) such that
+    A7: for B being Subset of TopSpaceMetr(N) holds
+        B in F iff P[B]  from SubFamEx;
+    A8: for p holds
+       {x where x is Point of N : ex n st p<=n & x = f.n} <> {}
+       proof
+        let p be Nat;
+          (f.p) in {x where x is Point of N : ex n st p<=n & x = f.n};
+        hence thesis;
+       end;
+    defpred P[set] means ex n st 0<=n & $1 = f.n;
+    set B0 = {x where x is Point of N : P[x]};
+A9:    B0 is Subset of N from SubsetD;
+    then A10: B0 in F by A6,A7;
+    reconsider F as Subset-Family of TopSpaceMetr(N);
+    set G1 = clf F;
+    reconsider B0 as Subset of TopSpaceMetr(N) by A6,A9;
+A11:    Cl B0 in G1 by A10,PCOMPS_1:def 3;
+   A12: G1 is closed by PCOMPS_1:14;
+      G1 <> {} &
+   for Gd being set st Gd <> {} & Gd c= G1 & Gd is finite holds meet Gd <> {}
+   proof
+    thus G1<>{} by A11;
+    let H be set such that
+    A13: H <> {} and
+    A14: H c= G1 and
+    A15: H is finite;
+    reconsider H as Subset-Family of TM by A14,TOPS_2:3;
+      H is c=-linear
+     proof
+     let B,C be set; assume
+A16:      B in H & C in H;
+     then reconsider B as Subset of TM;
+     reconsider C as Subset of TM by A16;
+     consider V being Subset of TM such that
+     A17: B = Cl V & V in F by A14,A16,PCOMPS_1:def 3;
+     consider W being Subset of TM such that
+     A18:  C = Cl W & W in F by A14,A16,PCOMPS_1:def 3;
+     consider p such that
+A19: V = {x where x is Point of N : ex n st p<=n & x = f.n} by A7,A17;
+        consider q being Nat such that
+A20: W = {x where x is Point of N : ex n st q<=n & x = f.n} by A7,A18;
+          V c= W or W c= V
+         proof
+            now per cases;
+           case A21: q<=p;
+           thus V c= W
+            proof
+             let y be set;
+             assume y in V; then consider x being Point of N such that
+             A22: y = x & ex n st p<=n & x = f.n by A19;
+             consider n such that
+             A23: p<=n & x = f.n by A22;
+               q<=n & x = f.n by A21,A23,AXIOMS:22;
+             hence y in W by A20,A22;
+            end;
+            case A24: p<=q;
+            thus W c= V
+             proof
+              let y be set;
+              assume y in W; then consider x being Point of N such that
+              A25: y = x & ex n st q<=n & x = f.n by A20;
+              consider n such that
+              A26: q<=n & x = f.n by A25;
+                p<=n & x = f.n by A24,A26,AXIOMS:22;
+             hence y in V by A19,A25;
+            end;
+           end;
+          hence thesis;
+         end;
+        then B c= C or C c= B by A17,A18,PRE_TOPC:49;
+        hence thesis by XBOOLE_0:def 9;
+       end;
+      then consider m being set such that
+      A27: m in H and
+      A28: for C being set st C in H holds m c= C by A13,A15,ALI2:1;
+      A29: m c= meet H by A13,A28,SETFAM_1:6;
+      reconsider m as Subset of TM by A27;
+      consider A being Subset of TM such that
+      A30: m = Cl A & A in F by A14,A27,PCOMPS_1:def 3;
+      A31: A <> {} by A7,A8,A30;
+        A c= m by A30,PRE_TOPC:48;
+      then m <> {} by A31,XBOOLE_1:3;
+      hence thesis by A29,XBOOLE_1:3;
+     end;
+    then G1 is centered by COMPTS_1:def 2;
+    then meet G1 <> {} by A1,A12,COMPTS_1:13;
+    then consider c being Point of TM such that
+    A32: c in meet G1 by SUBSET_1:10;
+    reconsider c as Point of N by A6;
+    consider Ge being Subset of TM
+     such that A33:c in Ge & Ge in G by A1,PCOMPS_1:5;
+     reconsider Ge as Subset of TM;
+       Ge is open by A1,A33,TOPS_2:def 1;
+     then consider r be real number such that
+     A34: r>0 & Ball(c,r) c= Ge by A33,TOPMETR:22;
+     reconsider r as Real by XREAL_0:def 1;
+     A35:r/2>0 by A34,SEQ_2:3;
+     then consider n being Nat such that A36: n>0 & 1/n < r/2 by Th2;
+       n<=n+1 by NAT_1:29;
+     then 1/n>=1/(n+1) by A36,REAL_2:152;
+     then A37: 1/(n+1) <r/2 by A36,AXIOMS:22;
+     defpred Q[set] means ex n2 being Nat st n<=n2 & $1 = f.n2;
+     reconsider B2 = {x where x is Point of TopSpaceMetr(N) : Q[x]}
+       as Subset of TopSpaceMetr(N) from SubsetD;
+     A38:the carrier of TopSpaceMetr(N) = the carrier of N
+                                by TOPMETR:16;
+     then B2 in F by A7;
+     then Cl B2 in clf F by PCOMPS_1:def 3;
+     then A39:c in Cl B2 by A32,SETFAM_1:def 1;
+     reconsider Q1=Ball(c,r/2) as
+      Subset of TopSpaceMetr(N) by A38;
+     A40:c in Q1 by A35,GOBOARD6:4;
+         Q1 is open by TOPMETR:21;
+       then B2 meets Q1 by A39,A40,TOPS_1:39;
+       then consider x being set such that
+       A41:x in B2 & x in Q1 by XBOOLE_0:3;
+       consider y being Point of N such that A42: x=y &
+       ex n2 being Nat st n<=n2 & y=f.n2
+                      by A38,A41;
+       A43:dist(c,y)<r/2 by A41,A42,METRIC_1:12;
+         r/1>r/2 by A34,REAL_2:200;
+       then dist(c,y)<r by A43,AXIOMS:22;
+       then A44: y in Ball(c,r) by METRIC_1:12;
+       consider n2 being Nat such that A45:n<=n2 & y=f.n2 by A42;
+       consider w2 being Element of N
+       such that
+       A46: dist(y,w2)<1/(n2+1)
+       & for Ga being Subset of TopSpaceMetr(N)
+        holds not(y in Ga & w2 in Ga & Ga in G ) by A5,A45;
+       A47:n+1<=n2+1 by A45,REAL_1:55;
+         n+1>0 by NAT_1:19;
+       then 1/(n+1)>=1/(n2+1) by A47,REAL_2:201;
+       then dist(y,w2)<1/(n+1) by A46,AXIOMS:22;
+       then A48:dist(y,w2)<r/2 by A37,AXIOMS:22;
+       A49:dist(c,w2)<=dist(c,y)+dist(y,w2) by METRIC_1:4;
+       A50:dist(c,y)+dist(y,w2)<r/2+dist(y,w2) by A43,REAL_1:53;
+       A51:r/2+dist(y,w2)<r/2+r/2 by A48,REAL_1:53;
+         dist(c,w2)<r/2+dist(y,w2) by A49,A50,AXIOMS:22;
+       then A52:dist(c,w2)<r/2+r/2 by A51,AXIOMS:22;
+  r/2+r/2=(r+r)/2 by XCMPLX_1:63 .=r by XCMPLX_1:65;
+       then w2 in Ball(c,r) by A52,METRIC_1:12;
+    hence contradiction by A33,A34,A44,A46;
+   end;
+ hence
+    ex r st r>0 &
+  for w1,w2 being Element of N st dist(w1,w2)<r
+  holds ex Ga being Subset of TopSpaceMetr(N)
+  st w1 in Ga & w2 in Ga & Ga in G;
+end;
+
+begin ::2.   UNIFORMITY OF CONTINUOUS FUNCTIONS ON COMPACT SPACES
+theorem Th8: for N,M being non empty MetrSpace,f being map of N,M,
+ g being map of TopSpaceMetr(N),TopSpaceMetr(M)
+ st g=f & TopSpaceMetr(N) is compact & g is continuous
+ holds f is uniformly_continuous
+proof let N,M be non empty MetrSpace,f be map of N,M,
+  g be map of TopSpaceMetr(N),TopSpaceMetr(M);
+  assume A1: g=f & TopSpaceMetr(N) is compact
+  & g is continuous;
+   for r st 0<r ex s st 0<s & for u1,u2 being Element of N
+    st dist(u1,u2) < s holds dist((f/.u1),(f/.u2)) < r
+  proof let r;assume 0<r; then A2:0<r/2 by SEQ_2:3;
+    set G={P where P is Subset of TopSpaceMetr(N):
+         ex w being Element of N,s st P=Ball(w,s) &
+         (for w1 being Element of N,w2,w3 being
+         Element of M st w2=f.w & w3=f.w1 &
+         dist(w,w1)<s holds dist(w2,w3)<r/2)};
+     A3:the carrier of TopSpaceMetr(N)=the carrier of N by TOPMETR:16;
+       G c= bool the carrier of N
+     proof let x;assume x in G;
+       then consider P being Subset of TopSpaceMetr(N) such that
+       A4:x=P &( ex w being Element of N,s st P=Ball(w,s) &
+         (for w1 being Element of N,w2,w3 being
+         Element of M st w2=f.w & w3=f.w1 &
+         dist(w,w1)<s holds dist(w2,w3)< r/2));
+      thus x in bool the carrier of N by A4;
+     end;
+     then G is Subset-Family of TopSpaceMetr N
+       by A3,SETFAM_1:def 7;
+     then reconsider G1=G as Subset-Family of TopSpaceMetr(N);
+       the carrier of N c= union G1
+      proof let x;assume x in the carrier of N;
+        then reconsider w0=x as Element of N;
+          g.w0=(f/.w0) by A1,CAT_3:def 1;
+        then reconsider w4=g.w0 as Element of M;
+        consider s4 such that
+        A5:s4>0 and
+        A6:for u5 being Element of N,
+        w5 being Element of M st w5=g.u5 &
+        dist(w0,u5)<s4 holds dist(w4,w5)<r/2 by A1,A2,Th5;
+        A7:x in Ball(w0,s4) by A5,GOBOARD6:4;
+        reconsider P2=Ball(w0,s4) as
+        Subset of TopSpaceMetr(N) by TOPMETR:16;
+           for w1 being Element of N,w2,w3 being
+         Element of M st w2=f.w0 & w3=f.w1 &
+         dist(w0,w1)<s4 holds dist(w2,w3)<r/2 by A1,A6;
+         then (ex w being Element of N,s st P2=Ball(w,s) &
+         (for w1 being Element of N,w2,w3 being
+         Element of M st w2=f.w & w3=f.w1 &
+         dist(w,w1)<s holds dist(w2,w3)<r/2));
+        then Ball(w0,s4) in G1;
+       hence x in union G1 by A7,TARSKI:def 4;
+      end;
+     then A8:the carrier of N=union G1 by A3,XBOOLE_0:def 10;
+       the carrier of TopSpaceMetr(N)=the carrier of N by TOPMETR:16;
+     then [#](TopSpaceMetr(N)) = union G1 by A8,PRE_TOPC:12;
+     then A9:G1 is_a_cover_of TopSpaceMetr(N) by PRE_TOPC:def 8;
+       for P3 being Subset of TopSpaceMetr(N)
+        holds P3 in G1 implies P3 is open
+     proof let P3 be Subset of TopSpaceMetr(N);
+        assume P3 in G1;
+         then consider P being Subset of TopSpaceMetr(N) such
+that
+         A10: P3=P and
+         A11:ex w being Element of N,s st P=Ball(w,s) &
+         (for w1 being Element of N,w2,w3 being
+         Element of M st w2=f.w & w3=f.w1 &
+         dist(w,w1)<s holds dist(w2,w3)<r/2);
+         consider w being Element of N,s such that
+         A12: P=Ball(w,s) and
+           (for w1 being Element of N,w2,w3 being
+         Element of M st w2=f.w & w3=f.w1 &
+         dist(w,w1)<s holds dist(w2,w3)<r/2) by A11;
+       thus P3 is open by A10,A12,TOPMETR:21;
+     end;
+     then G1 is open by TOPS_2:def 1;
+     then consider s1 such that
+     A13:s1>0 and
+     A14:for w1,w2 being Element of N st dist(w1,w2)<s1
+     holds ex Ga being Subset of TopSpaceMetr(N)
+     st w1 in Ga & w2 in Ga & Ga in G1 by A1,A9,Th7;
+       for u1,u2 being Element of N
+     st dist(u1,u2) < s1 holds dist((f/.u1),(f/.u2)) < r
+      proof let u1,u2 be Element of N;
+        assume dist(u1,u2) < s1;
+         then consider Ga being Subset of TopSpaceMetr(N)
+         such that
+         A15: u1 in Ga & u2 in Ga & Ga in G1 by A14;
+         consider P being Subset of TopSpaceMetr(N) such that
+         A16: Ga=P &( ex w being Element of N,s2 st
+         P=Ball(w,s2) &
+         (for w1 being Element of N,w2,w3 being
+         Element of M st w2=f.w & w3=f.w1 &
+         dist(w,w1)<s2 holds dist(w2,w3)< r/2)) by A15;
+         consider w being Element of N,s2 such that
+         A17: P=Ball(w,s2) &
+         (for w1 being Element of N,w2,w3 being
+         Element of M st w2=f.w & w3=f.w1 &
+         dist(w,w1)<s2 holds dist(w2,w3)< r/2) by A16;
+         A18:dist(w,u1)<s2 by A15,A16,A17,METRIC_1:12;
+         A19:dist(w,u2)<s2 by A15,A16,A17,METRIC_1:12;
+         A20:(f/.w)=f.w by CAT_3:def 1;
+         A21:(f/.u1)=f.u1 by CAT_3:def 1;
+         A22:(f/.u2)=f.u2 by CAT_3:def 1;
+         A23:dist((f/.w),(f/.u1))<r/2 by A17,A18,A20,A21;
+         A24:dist((f/.w),(f/.u2))<r/2 by A17,A19,A20,A22;
+         A25:dist((f/.u1),(f/.u2)) <=dist((f/.u1),(f/.w))+dist((f/.w),(f/.u2))
+                                     by METRIC_1:4;
+         A26:dist((f/.w),(f/.u1))+dist((f/.w),(f/.u2))
+         <r/2+r/2 by A23,A24,REAL_1:67;
+           r/2+r/2=r by XCMPLX_1:66;
+       hence dist((f/.u1),(f/.u2)) < r by A25,A26,AXIOMS:22;
+      end;
+    hence ex s st 0<s & for u1,u2 being Element of N
+     st dist(u1,u2) < s holds dist((f/.u1),(f/.u2)) < r by A13;
+  end;
+ hence f is uniformly_continuous by Def1;
+end;
+
+Lm1: Closed-Interval-TSpace(0,1)=TopSpaceMetr(Closed-Interval-MSpace(0,1))
+                        by TOPMETR:def 8;
+Lm2: I[01]=TopSpaceMetr(Closed-Interval-MSpace(0,1)) by TOPMETR:27,def 8;
+Lm3:the carrier of I[01]=the carrier of Closed-Interval-MSpace(0,1)
+                      by Lm1,TOPMETR:16,27;
+
+theorem Th9: for g being map of I[01],TOP-REAL n, f being map of
+ Closed-Interval-MSpace(0,1),Euclid n
+ st g is continuous & f=g holds f is uniformly_continuous
+proof let g be map of I[01],TOP-REAL n, f be map of
+ Closed-Interval-MSpace(0,1),Euclid n;
+ assume A1:  g is continuous & f=g;
+    TOP-REAL n=TopSpaceMetr(Euclid n) by EUCLID:def 8;
+ hence f is uniformly_continuous by A1,Lm1,Th8,TOPMETR:27;
+end;
+
+theorem for P being Subset of TOP-REAL n,
+  Q being non empty Subset of Euclid n,
+  g being map of I[01],(TOP-REAL n)|P, f being map of
+ Closed-Interval-MSpace(0,1),((Euclid n)|Q)
+ st P=Q & g is continuous & f=g holds f is uniformly_continuous
+proof
+ let P be Subset of TOP-REAL n,
+  Q be non empty Subset of Euclid n,
+  g be map of I[01],(TOP-REAL n)|P, f be map of
+ Closed-Interval-MSpace(0,1),((Euclid n)|Q);
+ assume A1:  P=Q & g is continuous & f=g;
+  then (TOP-REAL n)|P = TopSpaceMetr((Euclid n)|Q) by TOPMETR:20;
+ hence f is uniformly_continuous by A1,Lm1,Th8,TOPMETR:27;
+end;
+
+begin ::3.   SEGMENTATION OF ARCS
+theorem Th11: for g being map of I[01],(TOP-REAL n)
+  ex f being map of Closed-Interval-MSpace(0,1),Euclid n st f=g
+proof let g be map of I[01], TOP-REAL n;
+     the carrier of Euclid n = the carrier of TopSpaceMetr Euclid n by TOPMETR:
+16
+        .= the carrier of TOP-REAL n by EUCLID:def 8;
+   then g is map of Closed-Interval-MSpace(0,1), Euclid n by Lm3;
+ hence thesis;
+end;
+
+theorem Th12:for r being real number st r>=0 holds
+[/ r \]>=0 & [\ r /]>=0 & [/ r \] is Nat & [\ r /] is Nat
+proof let r be real number;assume A1:r>=0;
+    r-1<[\ r /] by INT_1:def 4; then r-1+1<[\ r /]+1 by REAL_1:53;
+  then r<[\ r /]+1 by XCMPLX_1:27;
+  then 0-1<[\ r /]+1-1 by A1,REAL_1:54; then 0-1<[\ r /] by XCMPLX_1:26;
+  then A2:[\ r /]>=0 by INT_1:21;
+    r<=[/ r \] by INT_1:def 5;
+ hence thesis by A1,A2,INT_1:16;
+end;
+
+Lm4:for x being set,f being FinSequence holds
+ len (f^<*x*>)=len f +1 &
+ len (<*x*>^f)=len f +1 & (f^<*x*>).(len f +1)=x & (<*x*>^f).1=x
+proof let x be set,f be FinSequence;
+ A1: len (<*x*>^f)=len <*x*> + len f by FINSEQ_1:35
+ .=len f+1 by FINSEQ_1:56;
+   1<=1 & 1<=len <*x*> by FINSEQ_1:56;
+ then A2:1 in dom <*x*> by FINSEQ_3:27;
+ then A3:(f^<*x*>).(len f +1)=<*x*>.1 by FINSEQ_1:def 7 .=x by FINSEQ_1:def 8;
+   (<*x*>^f).1=<*x*>.1 by A2,FINSEQ_1:def 7.=x by FINSEQ_1:def 8;
+ hence thesis by A1,A3,FINSEQ_2:19;
+end;
+
+Lm5:for x being set,f being FinSequence st 1<=len f holds
+ (f^<*x*>).1=f.1 & (<*x*>^f).(len f +1)=f.len f
+proof let x be set,f be FinSequence;assume A1:1<=len f;
+ then A2:1 in dom f by FINSEQ_3:27;
+ A3:len f in dom f by A1,FINSEQ_3:27;
+   (<*x*>^f).(len f +1)=(<*x*>^f).(len <*x*>+len f) by FINSEQ_1:56
+ .=f.len f by A3,FINSEQ_1:def 7;
+ hence thesis by A2,FINSEQ_1:def 7;
+end;
+
+theorem Th13: for r,s holds abs(r-s)=abs(s-r)
+proof let r,s;
+   now per cases by REAL_1:def 5;
+ case r>s;
+   then s-r<0 by REAL_2:105;
+   then abs(s-r)=-(s-r) by ABSVALUE:def 1 .=r-s by XCMPLX_1:143;
+  hence thesis;
+ case r=s;
+  hence thesis;
+ case r<s;
+   then r-s<0 by REAL_2:105;
+   then abs(r-s)=-(r-s) by ABSVALUE:def 1 .=s-r by XCMPLX_1:143;
+  hence thesis;
+ end;
+ hence thesis;
+end;
+
+Lm6: for r,s1,s2 holds r in [.s1,s2.] iff s1<=r & r<=s2
+proof let r,s1,s2;
+  A1: now assume r in [.s1,s2.];
+    then r in {r1:s1<=r1 & r1<=s2} by RCOMP_1:def 1;
+    then consider r1 such that A2: r1=r & (s1<=r1 & r1<=s2);
+   thus s1<=r & r<=s2 by A2;
+  end;
+    now assume s1<=r & r<=s2;
+    then r in {r1:s1<=r1 & r1<=s2};
+   hence r in [.s1,s2.] by RCOMP_1:def 1;
+  end;
+ hence thesis by A1;
+end;
+
+theorem Th14: for r1,r2,s1,s2 st r1 in [.s1,s2.] & r2 in [.s1,s2.]
+  holds abs(r1-r2)<=s2-s1
+proof let r1,r2,s1,s2;assume A1: r1 in [.s1,s2.] & r2 in [.s1,s2.];
+  then A2:s1<=r1 & r1<=s2 by Lm6;
+   A3:s1<=r2 & r2<=s2 by A1,Lm6;
+     now per cases;
+   case r1<=r2;
+     then A4:r2-r1>=0 by SQUARE_1:12;
+       r2-r1<=s2-s1 by A2,A3,REAL_1:92;
+     then abs(r2-r1)<=s2-s1 by A4,ABSVALUE:def 1;
+    hence abs(r1-r2)<=s2-s1 by Th13;
+   case A5:r1>r2;
+     A6:r1-r2<=s2-s1 by A2,A3,REAL_1:92;
+       r1-r2>=0 by A5,SQUARE_1:12;
+    hence abs(r1-r2)<=s2-s1 by A6,ABSVALUE:def 1;
+   end;
+ hence abs(r1-r2)<=s2-s1;
+end;
+
+definition let IT be FinSequence of REAL;
+ attr IT is decreasing means :Def2:
+  for n,m st n in dom IT & m in dom IT & n<m holds IT.n > IT.m;
+end;
+
+Lm7:for f being FinSequence of REAL st
+ (for k being Nat st 1<=k & k<len f holds f/.k<f/.(k+1)) holds
+ f is increasing
+proof let f be FinSequence of REAL;
+ assume A1:(for k being Nat st 1<=k & k<len f holds f/.k<f/.(k+1));
+    now let i,j;
+     now assume A2:i in dom f & j in dom f & i<j;
+    then A3:1<=i & i<=len f by FINSEQ_3:27;
+    defpred P[Nat] means i+(1+$1)<=len f implies f/.i<f/.(i+(1+$1));
+    A4:1<=j & j<=len f by A2,FINSEQ_3:27;
+    then i<len f by A2,AXIOMS:22;
+    then A5: P[0] by A1,A3;
+    A6:for k being Nat st P[k] holds P[(k+1)]
+    proof let k be Nat;assume
+     A7: i+(1+k)<=len f implies f/.i<f/.(i+(1+k));
+       now assume A8:i+(1+(k+1))<=len f;
+       A9:1<=i+1 by NAT_1:29; i+1<=i+1+k by NAT_1:29;
+       then 1<=i+1+k by A9,AXIOMS:22;
+       then A10:1<=i+(1+k) by XCMPLX_1:1;
+         1+k<1+(k+1) by NAT_1:38;
+       then A11: i+(1+k)<i+(1+(k+1)) by REAL_1:53;
+       then A12:i+(1+k)<len f by A8,AXIOMS:22;
+         i+(1+(k+1))=i+(1+k)+1 by XCMPLX_1:1;
+       then f/.(i+(1+k))<f/.(i+(1+(k+1))) by A1,A10,A12;
+      hence f/.i<f/.(i+(1+(k+1))) by A7,A8,A11,AXIOMS:22;
+     end;
+    hence i+(1+(k+1))<=len f implies f/.i<f/.(i+(1+(k+1)));
+   end;
+  A13:for k being Nat holds P[k]
+                          from Ind(A5,A6);
+    i+1<=j by A2,NAT_1:38;
+  then j-'(i+1)=j-(i+1) by SCMFSA_7:3;
+  then i+(1+(j-'(i+1))) =i+(1+j-(i+1)) by XCMPLX_1:29
+  .=i+(j+1-i-1) by XCMPLX_1:36
+  .=i+(j-i) by XCMPLX_1:228
+  .= j by XCMPLX_1:27;
+ then A14:f/.i<f/.j by A4,A13;
+   f/.i=f.i by A2,FINSEQ_4:def 4;
+ hence f.i<f.j by A2,A14,FINSEQ_4:def 4;
+ end;
+ hence i in dom f & j in dom f & i<j implies f.i<f.j;
+ end;
+hence thesis by GOBOARD1:def 1;
+end;
+
+Lm8:for f being FinSequence of REAL st
+ (for k being Nat st 1<=k & k<len f holds f/.k>f/.(k+1)) holds
+ f is decreasing
+proof let f be FinSequence of REAL;
+ assume A1:(for k being Nat st 1<=k & k<len f holds f/.k>f/.(k+1));
+    now let i,j;
+     now assume A2:i in dom f & j in dom f & i<j;
+    then A3:1<=i & i<=len f by FINSEQ_3:27;
+    defpred P[Nat] means i+(1+$1)<=len f implies f/.i>f/.(i+(1+$1));
+    A4:1<=j & j<=len f by A2,FINSEQ_3:27;
+    then i<len f by A2,AXIOMS:22;
+    then A5: P[0] by A1,A3;
+    A6:for k being Nat st P[k] holds P[(k+1)]
+    proof let k be Nat;assume
+     A7: i+(1+k)<=len f implies f/.i>f/.(i+(1+k));
+       now assume A8:i+(1+(k+1))<=len f;
+       A9:1<=i+1 by NAT_1:29; i+1<=i+1+k by NAT_1:29;
+       then 1<=i+1+k by A9,AXIOMS:22;
+       then A10:1<=i+(1+k) by XCMPLX_1:1;
+         1+k<1+(k+1) by NAT_1:38;
+       then A11: i+(1+k)<i+(1+(k+1)) by REAL_1:53;
+       then A12:i+(1+k)<len f by A8,AXIOMS:22;
+         i+(1+(k+1)) =i+(1+k)+1 by XCMPLX_1:1;
+       then f/.(i+(1+k))>f/.(i+(1+(k+1))) by A1,A10,A12;
+      hence f/.i>f/.(i+(1+(k+1))) by A7,A8,A11,AXIOMS:22;
+     end;
+    hence i+(1+(k+1))<=len f implies f/.i>f/.(i+(1+(k+1)));
+   end;
+  A13:for k being Nat holds P[k] from Ind(A5,A6);
+    i+1<=j by A2,NAT_1:38;
+  then j-'(i+1)=j-(i+1) by SCMFSA_7:3;
+  then i+(1+(j-'(i+1)))=i+(1+j-(i+1)) by XCMPLX_1:29
+  .=i+(j+1-i-1) by XCMPLX_1:36
+  .=i+(j-i) by XCMPLX_1:228
+  .= j by XCMPLX_1:27;
+ then A14:f/.i>f/.j by A4,A13;
+   f/.i=f.i by A2,FINSEQ_4:def 4;
+ hence f.i>f.j by A2,A14,FINSEQ_4:def 4;
+ end;
+ hence i in dom f & j in dom f & i<j implies f.i>f.j;
+ end;
+hence thesis by Def2;
+end;
+
+theorem
+   for e being Real,g being map of I[01],TOP-REAL n,
+   p1,p2 being Element of TOP-REAL n
+    st e>0 & g is continuous & g is one-to-one
+   & g.0 = p1 & g.1 = p2
+   ex h being FinSequence of REAL
+   st h.1=0 & h.len h=1 & 5<=len h & rng h c=the carrier of I[01]
+   & h is increasing
+   &(for i being Nat,Q being Subset of I[01],
+    W being Subset of Euclid n
+    st 1<=i & i<len h & Q=[.h/.i,h/.(i+1).] & W=g.:(Q) holds diameter(W)<e)
+proof let e be Real,g be map of I[01],TOP-REAL n,
+   p1,p2 be Element of TOP-REAL n;
+    assume A1: e>0 & g is continuous & g is one-to-one
+     & g.0 = p1 & g.1 = p2;
+     A2:dom g=the carrier of I[01] by FUNCT_2:def 1;
+     consider f being map of
+      Closed-Interval-MSpace(0,1),Euclid n such that A3: f=g by Th11;
+     A4:f is uniformly_continuous by A1,A3,Th9;
+     A5:e/2<e by A1,SEQ_2:4;
+     A6:e/2>0 by A1,SEQ_2:3;
+     then consider s1 being Real such that
+     A7: 0<s1 and
+     A8: for u1,u2 being Element of
+     (Closed-Interval-MSpace(0,1))
+      st dist(u1,u2) < s1 holds dist((f/.u1),(f/.u2)) < e/2 by A4,Def1;
+      set s=min(s1,1/2);
+      A9:0<=s by A7,SQUARE_1:39;
+      A10: s<>0 by A7,SQUARE_1:38;
+      then A11:0<s by A7,SQUARE_1:39;
+      A12:s<=s1 by SQUARE_1:35;
+     A13: for u1,u2 being Element of
+     (Closed-Interval-MSpace(0,1))
+      st dist(u1,u2) < s holds dist((f/.u1),(f/.u2)) < e/2
+      proof let u1,u2 be Element of
+     (Closed-Interval-MSpace(0,1));
+      assume dist(u1,u2) < s;
+       then dist(u1,u2) < s1 by A12,AXIOMS:22;
+      hence dist((f/.u1),(f/.u2)) < e/2 by A8;
+      end;
+        s<=1/2 by SQUARE_1:35;
+      then A14:2/s>=2/(1/2) by A9,A10,REAL_2:201;
+      A15:s/2>0 by A9,A10,SEQ_2:3;
+      2/s>0 by A9,A10,REAL_2:127;
+      then reconsider j= [/ (2/s) \] as Nat by Th12;
+      A16: 2/s<=[/ (2/s) \] by INT_1:def 5;
+      A17:2/s<=j by INT_1:def 5;
+        0<j by A11,A16,REAL_2:127;
+      then A18: 0+1<=j by NAT_1:38;
+      then A19:1 in Seg j by FINSEQ_1:3;
+      A20:4<=j by A14,A17,AXIOMS:22;
+        2/s-j<=0 by A16,REAL_2:106;
+      then 1+(2/s-j)<=1+0 by AXIOMS:24;
+      then A21: s/2*(1+(2/s-j))<=s/2*1 by A15,AXIOMS:25;
+    defpred P[Nat,set] means $2=s/2*($1-1);
+    A22:for k being Nat,y1,y2 being set st
+    k in Seg j &  P[k,y1]& P[k,y2] holds y1=y2;
+    A23:for k being Nat st k in Seg j ex x st P[k,x];
+    consider p being FinSequence such that
+     A24: dom p = Seg j & for k being Nat st k in Seg j holds
+     P[k,p.k] from SeqEx(A22,A23);
+    A25:p.1=s/2*(1-1) by A19,A24 .=0;
+    A26: Seg len p=Seg j by A24,FINSEQ_1:def 3;
+    A27:len p=j by A24,FINSEQ_1:def 3;
+      [/ (2/s) \]<2/s+1 by INT_1:def 5;
+    then [/ (2/s) \]-1<2/s+1-1 by REAL_1:54;
+    then [/ (2/s) \]-1<2/s by XCMPLX_1:26;
+    then A28:s/2*(j-1)<s/2*(2/s) by A15,REAL_1:70;
+    A29:s/2*(2/s)=(2*s)/(2*s) by XCMPLX_1:77;
+      2*s<>0 by A10,XCMPLX_1:6;
+    then A30:(2*s)/(2*s)=1 by XCMPLX_1:60;
+    then A31: 1-s/2*(j-1)=s/2*(2/s-(j-1)) by A29,XCMPLX_1:40
+    .=s/2*(1+(2/s-[/ (2/s) \])) by XCMPLX_1:37;
+    A32:for i being Nat,r1,r2 st 1<=i & i<len p & r1=p.i & r2=p.(i+1)
+      holds r1<r2 & r2-r1=s/2
+    proof let i be Nat,r1,r2;assume
+      A33: 1<=i & i<len p & r1=p.i & r2=p.(i+1);
+      then A34:i in Seg j by A26,FINSEQ_1:3;
+      A35:i<i+1 by NAT_1:38;
+        1<i+1 & i+1<=len p by A33,NAT_1:38;
+      then A36:(i+1) in Seg j by A26,FINSEQ_1:3;
+      A37:r1=s/2*(i-1) by A24,A33,A34;
+      A38:r2=s/2*(i+1-1) by A24,A33,A36;
+        i-1<i+1-1 by A35,REAL_1:54;
+      hence r1<r2 by A15,A37,A38,REAL_1:70;
+        r2-r1=s/2*(i)-s/2*(i-1) by A37,A38,XCMPLX_1:26
+       .=s/2*(i-(i-1)) by XCMPLX_1:40
+       .=s/2*1 by XCMPLX_1:18
+       .=s/2;
+     hence thesis;
+    end;
+    A39:for i being Nat,r1 st 1<=i & i<=len p & r1=p.i
+      holds r1<1
+    proof let i be Nat,r1;assume
+      A40: 1<=i & i<=len p & r1=p.i;
+      then i in Seg j by A26,FINSEQ_1:3;
+      then A41:r1=s/2*(i-1) by A24,A40;
+        i-1<=j-1 by A27,A40,REAL_1:49;
+      then (s/2)*(i-1)<=(s/2)*(j-1) by A15,AXIOMS:25;
+     hence thesis by A28,A29,A30,A41,AXIOMS:22;
+    end;
+    A42:for r1 st r1=p.len p holds 1-r1<=s/2
+    proof let r1;assume
+      A43: r1=p.len p;
+       len p in Seg j by A18,A27,FINSEQ_1:3;
+     hence thesis by A21,A24,A27,A31,A43;
+    end;
+      rng (p^<*1*>) c= REAL
+     proof let y;assume y in rng (p^<*1*>);
+       then consider x such that
+       A44: x in dom (p^<*1*>) & y=(p^<*1*>).x by FUNCT_1:def 5;
+       A45:dom (p^<*1*>)=Seg len (p^<*1*>) by FINSEQ_1:def 3;
+       reconsider nx=x as Nat by A44;
+       A46:1<=nx & nx<=len (p^<*1*>) by A44,A45,FINSEQ_1:3;
+       A47: len (p^<*1*>)=len p + len <*1*> by FINSEQ_1:35
+       .=len p+1 by FINSEQ_1:57;
+       then A48:1<=nx & nx<=len p+1 by A44,A45,FINSEQ_1:3;
+         now per cases;
+       case nx<len p+1;
+         then A49:nx<=len p by NAT_1:38;
+         then nx in Seg j by A26,A48,FINSEQ_1:3;
+         then A50: p.nx=s/2*(nx-1) by A24;
+           y=p.nx by A44,A46,A49,SCMFSA_7:9;
+        hence y in REAL by A50;
+       case nx>=len p+1;
+         then nx=len p+1 by A46,A47,AXIOMS:21;
+         then y=1 by A44,Lm4;
+        hence y in REAL;
+       end;
+      hence y in REAL;
+     end;
+    then reconsider h1=p^<*1*> as FinSequence of REAL by FINSEQ_1:def 4;
+    A51:len h1=len p+len <*1*> by FINSEQ_1:35 .=len p+1 by FINSEQ_1:57;
+    A52: 4+1<=len p+1 by A20,A27,AXIOMS:24;
+    A53:h1.1=0 by A18,A25,A27,Lm5;
+    A54:h1.len h1=1 by A51,Lm4;
+    A55:rng p c=[.0,1.]
+     proof let y be set;assume y in rng p;
+       then consider x being set such that
+       A56: x in dom p & y=p.x by FUNCT_1:def 5;
+       A57:x in Seg len p by A56,FINSEQ_1:def 3;
+       reconsider nx=x as Nat by A56;
+       A58:1<=nx & nx<=len p by A57,FINSEQ_1:3;
+       A59:p.nx=s/2*(nx-1) by A24,A56;
+       then reconsider ry=p.nx as Real;
+       A60:ry<1 by A39,A58;
+       A61:s/2>=0 by A9,REAL_2:125;
+         nx-1>=1-1 by A58,REAL_1:49;
+       then ry>=0 by A59,A61,REAL_2:121;
+       then y in {rs where rs is Real:0<=rs & rs<=1} by A56,A60;
+      hence y in [.0,1.] by RCOMP_1:def 1;
+     end;
+    A62:rng <*1*> ={1} by FINSEQ_1:55;
+      1 in {r where r is Real:0<=r & r<=1};
+    then A63:1 in [.0,1.] by RCOMP_1:def 1;
+      {1} c= [.0,1.]
+     proof let x be set;assume x in {1};
+      hence
+          x in [.0,1.] by A63,TARSKI:def 1;
+     end;
+    then A64:[.0,1.] \/ {1} =[.0,1.] by XBOOLE_1:12;
+      rng h1 =rng p \/ {1} by A62,FINSEQ_1:44;
+    then A65: rng h1 c=[.0,1.] \/ {1} by A55,XBOOLE_1:13;
+      Closed-Interval-TSpace(0,1)
+        =TopSpaceMetr(Closed-Interval-MSpace(0,1)) by TOPMETR:def 8;
+    then A66: the carrier of I[01] =the carrier of Closed-Interval-MSpace(0,1)
+                      by TOPMETR:16,27
+       .= [.0 qua Real,1 qua Real.] by TOPMETR:14;
+    A67:for i being Nat st 1<=i & i<len h1 holds h1/.i<h1/.(i+1)
+     proof let i be Nat;assume
+       A68: 1<=i & i<len h1;
+       then A69:i<=len p by A51,NAT_1:38;
+       A70:i+1<=len h1 by A68,NAT_1:38;
+       A71:1<i+1 by A68,NAT_1:38;
+         now per cases;
+       case A72:i<len p;
+         A73:h1.i=h1/.i by A68,FINSEQ_4:24;
+         A74:h1.i=p.i by A68,A72,SCMFSA_7:9;
+         A75:i+1<=len p by A72,NAT_1:38;
+         A76:h1.(i+1)=h1/.(i+1) by A70,A71,FINSEQ_4:24;
+           h1.(i+1)=p.(i+1) by A71,A75,SCMFSA_7:9;
+        hence h1/.i<h1/.(i+1) by A32,A68,A72,A73,A74,A76;
+       case i>=len p;
+         then A77:i=len p by A69,AXIOMS:21;
+         A78:h1/.(i+1)=h1.(i+1) by A70,A71,FINSEQ_4:24
+                  .=1 by A77,Lm4;
+           h1/.i=h1.i by A68,FINSEQ_4:24.=p.i by A68,A69,SCMFSA_7:9;
+        hence h1/.i<h1/.(i+1) by A39,A68,A69,A78;
+       end;
+      hence h1/.i<h1/.(i+1);
+     end;
+    then A79:h1 is increasing by Lm7;
+    A80:for i being Nat st 1<=i & i<len h1 holds h1/.(i+1)-h1/.i<=s/2
+     proof let i be Nat;assume
+       A81: 1<=i & i<len h1;
+       then A82:i<=len p by A51,NAT_1:38;
+       A83:i+1<=len h1 by A81,NAT_1:38;
+       A84:1<i+1 by A81,NAT_1:38;
+         now per cases;
+       case A85:i<len p;
+         A86:h1.i=h1/.i by A81,FINSEQ_4:24;
+         A87:h1.i=p.i by A81,A85,SCMFSA_7:9;
+         A88:i+1<=len p by A85,NAT_1:38;
+         A89:h1.(i+1)=h1/.(i+1) by A83,A84,FINSEQ_4:24;
+           h1.(i+1)=p.(i+1) by A84,A88,SCMFSA_7:9;
+        hence h1/.(i+1)-h1/.i<=s/2 by A32,A81,A85,A86,A87,A89;
+       case i>=len p;
+         then A90:i=len p by A82,AXIOMS:21;
+         A91:h1/.(i+1)=h1.(i+1) by A83,A84,FINSEQ_4:24
+                  .=1 by A90,Lm4;
+           h1/.i=h1.i by A81,FINSEQ_4:24.=p.i by A81,A82,SCMFSA_7:9;
+        hence h1/.(i+1)-h1/.i<=s/2 by A42,A90,A91;
+       end;
+      hence h1/.(i+1)-h1/.i<=s/2;
+     end;
+       for i being Nat,Q being Subset of I[01],
+      W being Subset of Euclid n
+      st 1<=i & i<len h1 & Q=[.h1/.i,h1/.(i+1).] & W=g.:(Q) holds
+      diameter(W)<e
+     proof let i be Nat,Q be Subset of I[01],
+       W be Subset of Euclid n;
+       assume A92:1<=i & i<len h1 & Q=[.h1/.i,h1/.(i+1).] & W=g.:(Q);
+        then h1/.i<h1/.(i+1) by A67;
+        then A93:Q<>{} by A92,RCOMP_1:15;
+        consider x1 being Element of Q;
+          x1 in Q by A93;
+        then A94: g.x1 in W by A2,A92,FUNCT_1:def 12;
+        A95:for x,y being Point of Euclid n st
+        x in W & y in W holds dist(x,y)<=e/2
+         proof let x,y be Point of Euclid n;
+           assume A96: x in W & y in W;
+            then consider x3 being set such that
+                A97:x3 in dom g & x3 in Q & x=g.x3 by A92,FUNCT_1:def 12;
+            reconsider x3 as Element of
+                   Closed-Interval-MSpace(0,1) by A97,Lm2,TOPMETR:16;
+            consider y3 being set such that
+                A98:y3 in dom g & y3 in Q & y=g.y3 by A92,A96,FUNCT_1:def 12;
+            reconsider y3 as Element of
+                   Closed-Interval-MSpace(0,1) by A98,Lm2,TOPMETR:16;
+           A99:f.x3=(f/.x3) by CAT_3:def 1;
+           A100:f.y3=(f/.y3) by CAT_3:def 1;
+           reconsider r3=x3 as Real by A92,A97;
+           reconsider s3=y3 as Real by A92,A98;
+           A101:abs(r3-s3)<=h1/.(i+1)-h1/.i by A92,A97,A98,Th14;
+             h1/.(i+1)-h1/.i<=s/2 by A80,A92;
+           then abs(r3-s3)<=s/2 by A101,AXIOMS:22;
+           then A102:dist(x3,y3)<=s/2 by HEINE:1;
+             s/2<s by A9,A10,SEQ_2:4;
+           then dist(x3,y3)<s by A102,AXIOMS:22;
+          hence dist(x,y)<=e/2 by A3,A13,A97,A98,A99,A100;
+         end;
+        then W is bounded by A6,TBSP_1:def 9;
+        then diameter(W)<=e/2 by A94,A95,TBSP_1:def 10;
+      hence diameter(W)<e by A5,AXIOMS:22;
+     end;
+   hence thesis by A51,A52,A53,A54,A64,A65,A66,A79;
+  end;
+
+theorem
+   for e being Real,g being map of I[01], (TOP-REAL n),
+   p1,p2 being Element of TOP-REAL n
+    st e>0 & g is continuous & g is one-to-one
+   & g.0 = p1 & g.1 = p2
+   ex h being FinSequence of REAL
+   st h.1=1 & h.len h=0 & 5<=len h & rng h c= the carrier of I[01]
+   & h is decreasing
+   &(for i being Nat,Q being Subset of I[01],
+    W being Subset of Euclid n
+    st 1<=i & i<len h & Q=[.h/.(i+1),h/.i.] & W=g.:(Q) holds
+   diameter(W)<e)
+proof let e be Real,g be map of I[01], (TOP-REAL n),
+   p1,p2 be Element of TOP-REAL n;
+    assume A1: e>0 & g is continuous & g is one-to-one
+     & g.0 = p1 & g.1 = p2;
+     A2:dom g=the carrier of I[01] by FUNCT_2:def 1;
+     consider f being map of
+      Closed-Interval-MSpace(0,1),(Euclid n) such that A3: f=g by Th11;
+     A4:f is uniformly_continuous by A1,A3,Th9;
+     A5:e/2<e by A1,SEQ_2:4;
+     A6:e/2>0 by A1,SEQ_2:3;
+     then consider s1 being Real such that
+     A7: 0<s1 and
+     A8: for u1,u2 being Element of
+     (Closed-Interval-MSpace(0,1))
+      st dist(u1,u2) < s1 holds dist((f/.u1),(f/.u2)) < e/2 by A4,Def1;
+      set s=min(s1,1/2);
+      A9:0<=s by A7,SQUARE_1:39;
+      A10: s<>0 by A7,SQUARE_1:38;
+      then A11:0<s by A7,SQUARE_1:39;
+      A12:s<=s1 by SQUARE_1:35;
+     A13: for u1,u2 being Element of
+     (Closed-Interval-MSpace(0,1))
+      st dist(u1,u2) < s holds dist((f/.u1),(f/.u2)) < e/2
+      proof let u1,u2 be Element of
+     (Closed-Interval-MSpace(0,1));
+      assume dist(u1,u2) < s;
+       then dist(u1,u2) < s1 by A12,AXIOMS:22;
+      hence dist((f/.u1),(f/.u2)) < e/2 by A8;
+      end;
+        s<=1/2 by SQUARE_1:35;
+      then A14:2/s>=2/(1/2) by A9,A10,REAL_2:201;
+      A15:s/2>0 by A9,A10,SEQ_2:3;
+      2/s>0 by A9,A10,REAL_2:127;
+      then reconsider j = [/ (2/s) \] as Nat by Th12;
+      A16: 2/s<=[/ (2/s) \] by INT_1:def 5;
+      A17:2/s<=j by INT_1:def 5;
+        0<j by A11,A16,REAL_2:127;
+      then A18: 0+1<=j by NAT_1:38;
+      then A19:1 in Seg j by FINSEQ_1:3;
+      A20:4<=j by A14,A17,AXIOMS:22;
+        2/s-j<=0 by A16,REAL_2:106;
+      then 1+(2/s-j)<=1+0 by AXIOMS:24;
+      then A21: s/2*(1+(2/s-j))<=s/2*1 by A15,AXIOMS:25;
+    defpred P[Nat,set] means $2=1-s/2*($1-1);
+    A22:for k being Nat,y1,y2 being set st
+    k in Seg j & P[k,y1] & P[k,y2]  holds y1=y2;
+    A23:for k being Nat st k in Seg j
+    ex x st P[k,x];
+    consider p being FinSequence such that
+     A24: dom p = Seg j & for k being Nat st k in Seg j holds
+      P[k,p.k] from SeqEx(A22,A23);
+    A25:p.1=1-s/2*(1-1) by A19,A24 .=1;
+    A26: Seg len p=Seg j by A24,FINSEQ_1:def 3;
+    A27:len p=j by A24,FINSEQ_1:def 3;
+      [/ (2/s) \]<2/s+1 by INT_1:def 5;
+    then [/ (2/s) \]-1<2/s+1-1 by REAL_1:54;
+    then [/ (2/s) \]-1<2/s by XCMPLX_1:26;
+    then A28:s/2*(j-1)<s/2*(2/s) by A15,REAL_1:70;
+    A29:s/2*(2/s)=(2*s)/(2*s) by XCMPLX_1:77;
+      2*s<>0 by A10,XCMPLX_1:6;
+    then A30:(2*s)/(2*s)=1 by XCMPLX_1:60;
+    then A31: 1-s/2*(j-1)=s/2*(2/s-(j-1)) by A29,XCMPLX_1:40
+    .=s/2*(1+(2/s-[/ (2/s) \])) by XCMPLX_1:37;
+    A32:for i being Nat,r1,r2 st 1<=i & i<len p & r1=p.i & r2=p.(i+1)
+      holds r1>r2 & r1-r2=s/2
+    proof let i be Nat,r1,r2;assume
+      A33: 1<=i & i<len p & r1=p.i & r2=p.(i+1);
+      then A34:i in Seg j by A26,FINSEQ_1:3;
+      A35:i<i+1 by NAT_1:38;
+        1<i+1 & i+1<=len p by A33,NAT_1:38;
+      then A36:(i+1) in Seg j by A26,FINSEQ_1:3;
+      A37:r1=1-s/2*(i-1) by A24,A33,A34;
+      A38:r2=1-s/2*(i+1-1) by A24,A33,A36;
+        i-1<i+1-1 by A35,REAL_1:54;
+      then (s/2)*(i-1)<(s/2)*(i+1-1) by A15,REAL_1:70;
+      hence r1>r2 by A37,A38,REAL_1:92;
+        r1-r2
+       =s/2*(i+1-1)-s/2*(i-1) by A37,A38,Th1
+       .=s/2*i-s/2*(i-1) by XCMPLX_1:26
+       .=s/2*(i-(i-1)) by XCMPLX_1:40
+       .=s/2*1 by XCMPLX_1:18
+       .=s/2;
+     hence thesis;
+    end;
+    A39:for i being Nat,r1 st 1<=i & i<=len p & r1=p.i holds 0<r1
+    proof let i be Nat,r1;assume
+      A40: 1<=i & i<=len p & r1=p.i;
+      then A41:i in Seg j by A26,FINSEQ_1:3;
+        i-1<=j-1 by A27,A40,REAL_1:49;
+      then (s/2)*(i-1)<=(s/2)*(j-1) by A15,AXIOMS:25;
+      then (s/2)*(i-1)<1 by A28,A29,A30,AXIOMS:22;
+      then 1-(s/2)*(i-1)>1-1 by REAL_2:105;
+     hence thesis by A24,A40,A41;
+    end;
+    A42:for r1 st r1=p.len p holds r1-0<=s/2
+    proof let r1;assume
+      A43: r1=p.len p;
+       len p in Seg j by A18,A27,FINSEQ_1:3;
+      then r1=1-s/2*(len p-1) by A24,A43;
+     hence thesis by A21,A24,A31,FINSEQ_1:def 3;
+    end;
+      rng (p^<*0 qua Real*>) c= REAL
+     proof let y;assume y in rng (p^<*0 qua Real*>);
+       then consider x such that
+       A44: x in dom (p^<*0 qua Real*>) & y=(p^<*0 qua Real*>).x by FUNCT_1:def
+5;
+       A45:dom (p^<*0 qua Real*>)=Seg len (p^<*0 qua Real*>) by FINSEQ_1:def 3;
+       reconsider nx=x as Nat by A44;
+       A46:1<=nx & nx<=len (p^<*0 qua Real*>) by A44,A45,FINSEQ_1:3;
+       A47: len (p^<*0 qua Real*>)=len p + len <*0 qua Real*> by FINSEQ_1:35
+       .=len p+1 by FINSEQ_1:57;
+       then A48:1<=nx & nx<=len p+1 by A44,A45,FINSEQ_1:3;
+         now per cases;
+       case nx<len p+1;
+         then A49:nx<=len p by NAT_1:38;
+         then nx in Seg j by A26,A48,FINSEQ_1:3;
+         then A50: p.nx=1-s/2*(nx-1) by A24;
+           y=p.nx by A44,A46,A49,SCMFSA_7:9;
+        hence y in REAL by A50;
+       case nx>=len p+1;
+         then nx=len p+1 by A46,A47,AXIOMS:21;
+         then y=0 by A44,Lm4;
+        hence y in REAL;
+       end;
+      hence y in REAL;
+     end;
+    then reconsider h1=p^<*0 qua Real*> as FinSequence of REAL by FINSEQ_1:def
+4;
+    A51:len h1=len p+len <*0 qua Real*> by FINSEQ_1:35 .=len p+1
+                                      by FINSEQ_1:57;
+    A52: 4+1<=len p+1 by A20,A27,AXIOMS:24;
+    A53:h1.1=1 by A18,A25,A27,Lm5;
+    A54:h1.len h1=0 by A51,Lm4;
+    A55:rng p c=[.0,1.]
+     proof let y be set;assume y in rng p;
+       then consider x being set such that
+       A56: x in dom p & y=p.x by FUNCT_1:def 5;
+       A57:x in Seg len p by A56,FINSEQ_1:def 3;
+       reconsider nx=x as Nat by A56;
+       A58:1<=nx & nx<=len p by A57,FINSEQ_1:3;
+       A59:p.nx=1-s/2*(nx-1) by A24,A56;
+       then reconsider ry=p.nx as Real;
+       A60:0<ry by A39,A58;
+       A61:s/2>=0 by A9,REAL_2:125;
+         nx-1>=1-1 by A58,REAL_1:49;
+       then s/2*(nx-1)>=0 by A61,REAL_2:121;
+       then 1-s/2*(nx-1)<=1-0 by REAL_2:106;
+       then y in {rs where rs is Real:0<=rs & rs<=1} by A56,A59,A60;
+      hence y in [.0,1.] by RCOMP_1:def 1;
+     end;
+    A62:rng <*0 qua Real*> ={0} by FINSEQ_1:55;
+      0 in {r where r is Real:0<=r & r<=1};
+    then A63:0 in [.0,1.] by RCOMP_1:def 1;
+      {0} c= [.0,1.]
+     proof let x be set;assume x in {0};
+      hence
+          x in [.0,1.] by A63,TARSKI:def 1;
+     end;
+    then A64:[.0,1.] \/ {0} =[.0,1.] by XBOOLE_1:12;
+      rng h1 =rng p \/ {0} by A62,FINSEQ_1:44;
+    then A65: rng h1 c=[.0,1.] \/ {0} by A55,XBOOLE_1:13;
+      Closed-Interval-TSpace(0,1)
+        =TopSpaceMetr(Closed-Interval-MSpace(0,1)) by TOPMETR:def 8;
+    then A66: the carrier of I[01] =the carrier of Closed-Interval-MSpace(0,1)
+                      by TOPMETR:16,27
+       .= [.0 qua Real,1 qua Real.] by TOPMETR:14;
+    A67:for i being Nat st 1<=i & i<len h1 holds h1/.i>h1/.(i+1)
+     proof let i be Nat;assume
+       A68: 1<=i & i<len h1;
+       then A69:i<=len p by A51,NAT_1:38;
+       A70:i+1<=len h1 by A68,NAT_1:38;
+       A71:1<i+1 by A68,NAT_1:38;
+         now per cases;
+       case A72:i<len p;
+         A73:h1.i=h1/.i by A68,FINSEQ_4:24;
+         A74:h1.i=p.i by A68,A72,SCMFSA_7:9;
+         A75:i+1<=len p by A72,NAT_1:38;
+         A76:h1.(i+1)=h1/.(i+1) by A70,A71,FINSEQ_4:24;
+           h1.(i+1)=p.(i+1) by A71,A75,SCMFSA_7:9;
+        hence h1/.i>h1/.(i+1) by A32,A68,A72,A73,A74,A76;
+       case i>=len p;
+         then A77:i=len p by A69,AXIOMS:21;
+         A78:h1/.(i+1)=h1.(i+1) by A70,A71,FINSEQ_4:24
+                  .=0 by A77,Lm4;
+           h1/.i=h1.i by A68,FINSEQ_4:24.=p.i by A68,A69,SCMFSA_7:9;
+        hence h1/.i>h1/.(i+1) by A39,A68,A69,A78;
+       end;
+      hence h1/.i>h1/.(i+1);
+     end;
+    then A79:h1 is decreasing by Lm8;
+    A80:for i being Nat st 1<=i & i<len h1 holds h1/.i-h1/.(i+1)<=s/2
+     proof let i be Nat;assume
+       A81: 1<=i & i<len h1;
+       then A82:i<=len p by A51,NAT_1:38;
+       A83:i+1<=len h1 by A81,NAT_1:38;
+       A84:1<i+1 by A81,NAT_1:38;
+         now per cases;
+       case A85:i<len p;
+         A86:h1.i=h1/.i by A81,FINSEQ_4:24;
+         A87:h1.i=p.i by A81,A85,SCMFSA_7:9;
+         A88:i+1<=len p by A85,NAT_1:38;
+         A89:h1.(i+1)=h1/.(i+1) by A83,A84,FINSEQ_4:24;
+           h1.(i+1)=p.(i+1) by A84,A88,SCMFSA_7:9;
+        hence h1/.i-h1/.(i+1)<=s/2 by A32,A81,A85,A86,A87,A89;
+       case i>=len p;
+         then A90:i=len p by A82,AXIOMS:21;
+         A91:h1/.(i+1)=h1.(i+1) by A83,A84,FINSEQ_4:24
+                  .=0 by A90,Lm4;
+           h1/.i=h1.i by A81,FINSEQ_4:24.=p.i by A81,A82,SCMFSA_7:9;
+        hence h1/.i-h1/.(i+1)<=s/2 by A42,A90,A91;
+       end;
+      hence h1/.i-h1/.(i+1)<=s/2;
+     end;
+       for i being Nat,Q being Subset of I[01],
+      W being Subset of Euclid n
+      st 1<=i & i<len h1 & Q=[.h1/.(i+1),h1/.i.] & W=g.:(Q) holds
+      diameter(W)<e
+     proof let i be Nat,Q be Subset of I[01],
+       W be Subset of Euclid n;
+       assume A92:1<=i & i<len h1 & Q=[.h1/.(i+1),h1/.i.] & W=g.:(Q);
+        then h1/.i>h1/.(i+1) by A67;
+        then A93:Q<>{} by A92,RCOMP_1:15;
+        consider x1 being Element of Q;
+         x1 in Q by A93;
+        then A94: g.x1 in W by A2,A92,FUNCT_1:def 12;
+        A95:for x,y being Point of Euclid n st
+        x in W & y in W holds dist(x,y)<=e/2
+         proof let x,y be Point of Euclid n;
+           assume A96: x in W & y in W;
+            then consider x3 being set such that
+                A97:x3 in dom g & x3 in Q & x=g.x3 by A92,FUNCT_1:def 12;
+            reconsider x3 as Element of
+                   Closed-Interval-MSpace(0,1) by A97,Lm2,TOPMETR:16;
+            consider y3 being set such that
+                A98:y3 in dom g & y3 in Q & y=g.y3 by A92,A96,FUNCT_1:def 12;
+            reconsider y3 as Element of
+                   Closed-Interval-MSpace(0,1) by A98,Lm2,TOPMETR:16;
+           A99:f.y3=(f/.y3) by CAT_3:def 1;
+           reconsider r3=x3 as Real by A92,A97;
+           reconsider s3=y3 as Real by A92,A98;
+           A100:abs(r3-s3)<=h1/.i-h1/.(i+1) by A92,A97,A98,Th14;
+             h1/.i-h1/.(i+1)<=s/2 by A80,A92;
+           then A101:abs(r3-s3)<=s/2 by A100,AXIOMS:22;
+           A102: dist(x3,y3)=abs(r3-s3) by HEINE:1;
+             s/2<s by A9,A10,SEQ_2:4;
+           then A103:dist(x3,y3)<s by A101,A102,AXIOMS:22;
+            x=(f/.x3) by A3,A97,CAT_3:def 1;
+          hence dist(x,y)<=e/2 by A3,A13,A98,A99,A103;
+         end;
+        then W is bounded by A6,TBSP_1:def 9;
+        then diameter(W)<=e/2 by A94,A95,TBSP_1:def 10;
+      hence diameter(W)<e by A5,AXIOMS:22;
+     end;
+   hence thesis by A51,A52,A53,A54,A64,A65,A66,A79;
+  end;
+

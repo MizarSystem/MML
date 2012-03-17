@@ -1,0 +1,290 @@
+:: Hahn Banach Theorem
+::  by Bogdan Nowak and Andrzej Trybulec
+::
+:: Received July 8, 1993
+:: Copyright (c) 1993 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, RELAT_1, BOOLE, PARTFUN1, FRAENKEL, TARSKI, SUPINF_1,
+      ARYTM_3, ORDINAL2, RLVECT_1, RLSUB_1, RLSUB_2, MCART_1, RLVECT_3,
+      GRCAT_1, UNIALG_1, ABSVALUE, FUNCOP_1, ARYTM_1, SEQ_2, NORMSP_1, HAHNBAN,
+      ARYTM;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, XREAL_0, STRUCT_0,
+      REAL_1, ABSVALUE, RELAT_1, FUNCT_1, FUNCT_2, RLVECT_1, RLSUB_1, RLSUB_2,
+      NORMSP_1, PARTFUN1, FUNCOP_1, RFUNCT_3, RLVECT_3, FRAENKEL, DOMAIN_1,
+      SUPINF_1;
+ constructors REAL_1, ABSVALUE, RLSUB_2, NORMSP_1, RFUNCT_3, RLVECT_2,
+      RLVECT_3, DOMAIN_1, MEASURE5, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, FRAENKEL, RLVECT_1, RLSUB_1, SUPINF_1, RELSET_1, STRUCT_0,
+      XREAL_0, PARTFUN1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+canceled;
+
+theorem :: HAHNBAN:2
+ for X being set, f,g being Function st X c= dom f & f c= g
+  holds f|X = g|X;
+
+theorem :: HAHNBAN:3
+ for A being non empty set, b being set st A <> {b}
+  ex a being Element of A st a <> b;
+
+theorem :: HAHNBAN:4
+ for X,Y being set, B being non empty Subset of PFuncs(X,Y)
+  holds B is non empty functional set;
+
+theorem :: HAHNBAN:5
+ for B being non empty functional set, f being Function st f = union B holds
+  dom f = union { dom g where g is Element of B: not contradiction } &
+  rng f = union { rng g where g is Element of B: not contradiction };
+
+theorem :: HAHNBAN:6
+   for A being non empty Subset of ExtREAL st
+  for r being R_eal st r in A holds r <=' -infty
+ holds A = {-infty};
+
+theorem :: HAHNBAN:7
+   for A being non empty Subset of ExtREAL st
+  for r being R_eal st r in A holds +infty <=' r
+ holds A = {+infty};
+
+theorem :: HAHNBAN:8
+ for A being non empty Subset of ExtREAL, r being R_eal
+  st r <' sup A
+  ex s being R_eal st s in A & r <' s;
+
+theorem :: HAHNBAN:9
+ for A being non empty Subset of ExtREAL, r being R_eal
+  st inf A <' r
+  ex s being R_eal st s in A & s <' r;
+
+theorem :: HAHNBAN:10
+ for A,B being non empty Subset of ExtREAL st
+  for r,s being R_eal st r in A & s in B holds r <=' s
+  holds sup A <=' inf B;
+
+canceled;
+
+theorem :: HAHNBAN:12
+   for x,y being R_eal, p,q being real number st
+   x = p & y = q holds (p <= q iff x <=' y);
+
+begin :: Chains of Functions
+
+definition let A be non empty set;
+ cluster c=-linear non empty Subset of A;
+end;
+
+theorem :: HAHNBAN:13
+ for X,Y being set
+  for B being c=-linear Subset of PFuncs(X,Y)
+   holds union B in PFuncs(X,Y);
+
+begin :: Some Facts on Real Vector Spaces
+
+reserve V for RealLinearSpace;
+
+theorem :: HAHNBAN:14
+ for W1,W2 being Subspace of V
+  holds the carrier of W1 c= the carrier of W1 + W2;
+
+theorem :: HAHNBAN:15
+ for W1,W2 being Subspace of V
+  st V is_the_direct_sum_of W1,W2
+ for v,v1,v2 being VECTOR of V st v1 in W1 & v2 in W2 & v = v1 + v2
+  holds v |-- (W1,W2) = [v1,v2];
+
+theorem :: HAHNBAN:16
+ for W1,W2 being Subspace of V
+  st V is_the_direct_sum_of W1,W2
+ for v,v1,v2 being VECTOR of V st v |-- (W1,W2) = [v1,v2]
+  holds v = v1 + v2;
+
+theorem :: HAHNBAN:17
+ for W1,W2 being Subspace of V
+  st V is_the_direct_sum_of W1,W2
+ for v,v1,v2 being VECTOR of V st v |-- (W1,W2) = [v1,v2]
+  holds v1 in W1 & v2 in W2;
+
+theorem :: HAHNBAN:18
+ for W1,W2 being Subspace of V
+  st V is_the_direct_sum_of W1,W2
+ for v,v1,v2 being VECTOR of V st v |-- (W1,W2) = [v1,v2]
+  holds v |-- (W2,W1) = [v2,v1];
+
+theorem :: HAHNBAN:19
+ for W1,W2 being Subspace of V
+  st V is_the_direct_sum_of W1,W2
+ for v being VECTOR of V st v in W1 holds v |-- (W1,W2) = [v,0.V];
+
+theorem :: HAHNBAN:20
+ for W1,W2 being Subspace of V
+  st V is_the_direct_sum_of W1,W2
+ for v being VECTOR of V st v in W2 holds v |-- (W1,W2) = [0.V,v];
+
+theorem :: HAHNBAN:21
+ for V1 being Subspace of V, W1 being Subspace of V1,
+  v being VECTOR of V st v in W1 holds v is VECTOR of V1;
+
+theorem :: HAHNBAN:22
+ for V1,V2,W being Subspace of V, W1,W2 being Subspace of W
+  st W1 = V1 & W2 = V2
+ holds W1 + W2 = V1 + V2;
+
+theorem :: HAHNBAN:23
+ for W being Subspace of V
+ for v being VECTOR of V, w being VECTOR of W st v = w
+ holds Lin{w} = Lin{v};
+
+theorem :: HAHNBAN:24
+ for v being VECTOR of V, X being Subspace of V st not v in X
+ for y being VECTOR of X + Lin{v}, W being Subspace of X + Lin{v}
+  st v = y & W = X
+ holds X + Lin{v} is_the_direct_sum_of W,Lin{y};
+
+theorem :: HAHNBAN:25
+ for v being VECTOR of V, X being Subspace of V,
+   y being VECTOR of X + Lin{v}, W being Subspace of X + Lin{v}
+   st v = y & X = W & not v in X
+ holds y |-- (W,Lin{y}) = [0.W,y];
+
+theorem :: HAHNBAN:26
+ for v being VECTOR of V, X being Subspace of V,
+   y being VECTOR of X + Lin{v}, W being Subspace of X + Lin{v}
+   st v = y & X = W & not v in X
+ for w being VECTOR of X + Lin{v} st w in X
+  holds w |-- (W,Lin{y}) = [w,0.V];
+
+theorem :: HAHNBAN:27
+ for v being VECTOR of V, W1,W2 being Subspace of V
+ ex v1,v2 being VECTOR of V st v |-- (W1,W2) = [v1,v2];
+
+theorem :: HAHNBAN:28
+ for v being VECTOR of V, X being Subspace of V,
+   y being VECTOR of X + Lin{v}, W being Subspace of X + Lin{v}
+   st v = y & X = W & not v in X
+ for w being VECTOR of X + Lin{v}
+  ex x being VECTOR of X, r being Real st w |-- (W,Lin{y}) = [x,r*v];
+
+theorem :: HAHNBAN:29
+ for v being VECTOR of V, X being Subspace of V,
+   y being VECTOR of X + Lin{v}, W being Subspace of X + Lin{v}
+   st v = y & X = W & not v in X
+ for w1,w2 being VECTOR of X + Lin{v}, x1,x2 being VECTOR of X,
+     r1,r2 being Real
+  st w1 |-- (W,Lin{y}) = [x1,r1*v] & w2 |-- (W,Lin{y}) = [x2,r2*v]
+  holds w1 + w2 |-- (W,Lin{y}) = [x1 + x2, (r1+r2)*v];
+
+theorem :: HAHNBAN:30
+ for v being VECTOR of V, X being Subspace of V,
+   y being VECTOR of X + Lin{v}, W being Subspace of X + Lin{v}
+   st v = y & X = W & not v in X
+ for w being VECTOR of X + Lin{v}, x being VECTOR of X, t,r being Real
+  st w |-- (W,Lin{y}) = [x,r*v]
+  holds t*w |-- (W,Lin{y}) = [t*x, t*r*v];
+
+begin :: Functionals in Real Linear Space
+
+definition
+  let V be RLSStruct;
+ canceled 2;
+
+  mode Functional of V is Function of the carrier of V,REAL;
+end;
+
+definition
+let V; let IT be Functional of V;
+attr IT is subadditive means
+:: HAHNBAN:def 3
+  for x,y being VECTOR of V holds IT.(x+y) <= IT.x+IT.y;
+attr IT is additive means
+:: HAHNBAN:def 4
+  for x,y being VECTOR of V holds IT.(x+y) = IT.x+IT.y;
+attr IT is homogeneous means
+:: HAHNBAN:def 5
+   for x being VECTOR of V, r being Real
+    holds IT.(r*x) = r*IT.x;
+attr IT is positively_homogeneous means
+:: HAHNBAN:def 6
+   for x being VECTOR of V, r being Real st r > 0
+    holds IT.(r*x) = r*IT.x;
+attr IT is semi-homogeneous means
+:: HAHNBAN:def 7
+   for x being VECTOR of V, r being Real st r >= 0
+    holds IT.(r*x) = r*IT.x;
+attr IT is absolutely_homogeneous means
+:: HAHNBAN:def 8
+   for x being VECTOR of V, r being Real
+    holds IT.(r*x) = abs(r)*IT.x;
+attr IT is 0-preserving means
+:: HAHNBAN:def 9
+ IT.(0.V) = 0;
+end;
+
+definition
+let V;
+cluster additive -> subadditive Functional of V;
+cluster homogeneous -> positively_homogeneous Functional of V;
+cluster semi-homogeneous -> positively_homogeneous Functional of V;
+cluster semi-homogeneous -> 0-preserving Functional of V;
+cluster absolutely_homogeneous -> semi-homogeneous Functional of V;
+ cluster
+  0-preserving positively_homogeneous -> semi-homogeneous Functional of V;
+end;
+
+definition
+let V;
+cluster additive absolutely_homogeneous homogeneous Functional of V;
+end;
+
+definition
+let V;
+mode Banach-Functional of V is
+subadditive positively_homogeneous Functional of V;
+mode linear-Functional of V is
+additive homogeneous Functional of V;
+end;
+
+theorem :: HAHNBAN:31
+ for L being homogeneous Functional of V, v being VECTOR of V
+  holds L.(-v) = - L.v;
+
+theorem :: HAHNBAN:32
+ for L being linear-Functional of V, v1,v2 being VECTOR of V
+  holds L.(v1 - v2) = L.v1 - L.v2;
+
+theorem :: HAHNBAN:33
+ for L being additive Functional of V holds L.(0.V) = 0;
+
+theorem :: HAHNBAN:34
+ for X being Subspace of V, fi being linear-Functional of X,
+     v being VECTOR of V, y being VECTOR of X + Lin{v} st v = y & not v in X
+     for r being Real
+      ex psi being linear-Functional of X + Lin{v} st
+       psi|the carrier of X=fi & psi.y = r;
+
+begin
+
+theorem :: HAHNBAN:35
+ for V being RealLinearSpace, X being Subspace of V,
+  q being Banach-Functional of V, fi being linear-Functional of X
+  st for x being VECTOR of X, v being VECTOR of V st x=v holds fi.x <= q.v
+  ex psi being linear-Functional of V st
+  psi|the carrier of X=fi &
+  for x being VECTOR of V holds psi.x <= q.x;
+
+theorem :: HAHNBAN:36
+ for V being RealNormSpace holds
+  the norm of V is absolutely_homogeneous subadditive Functional of V;
+
+theorem :: HAHNBAN:37
+   for V being RealNormSpace, X being Subspace of V,
+  fi being linear-Functional of X
+  st for x being VECTOR of X, v being VECTOR of V st x=v holds fi.x <= ||.v.||
+  ex psi being linear-Functional of V st
+  psi|the carrier of X=fi &
+  for x being VECTOR of V holds psi.x <= ||.x.||;

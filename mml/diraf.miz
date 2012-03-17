@@ -1,0 +1,807 @@
+:: Ordered Affine Spaces Defined in Terms of Directed Parallelity - part I
+::  by Henryk Oryszczyszyn and Krzysztof Pra\.zmowski
+::
+:: Received May 4, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, ANALOAF, PARSP_1, INCSP_1, REALSET1, DIRAF;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, RELSET_1, STRUCT_0,
+      ANALOAF, REALSET1;
+ constructors DOMAIN_1, ANALOAF, MEMBERED, XBOOLE_0;
+ clusters ANALOAF, RELSET_1, STRUCT_0, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions ANALOAF, STRUCT_0;
+ theorems ANALOAF, RELAT_1, ZFMISC_1, DOMAIN_1, REALSET1;
+ schemes RELSET_1;
+
+begin
+
+ reserve x,y for set;
+ reserve X for non empty set;
+ reserve a,b,c,d for Element of X;
+
+definition let X;
+ let R be Relation of [:X,X:];
+  func lambda(R) -> Relation of [:X,X:] means
+:Def1: for a,b,c,d being Element of X
+   holds [[a,b],[c,d]] in it iff ([[a,b],[c,d]] in R or [[a,b],[d,c]] in R);
+existence
+ proof set XX = [:X,X:];
+   defpred P[set,set] means ex a,b,c,d being Element of X
+      st $1=[a,b] & $2=[c,d] & ([[a,b],[c,d]] in R or [[a,b],[d,c]] in R);
+  consider P being Relation of XX,XX such that
+A1: for x,y holds [x,y] in P iff
+      x in XX & y in XX & P[x,y] from Rel_On_Set_Ex;
+  take P;
+  let a,b,c,d be Element of X;
+      [[a,b],[c,d]] in P implies
+       ([[a,b],[c,d]] in R or [[a,b],[d,c]] in R)
+       proof assume [[a,b],[c,d]] in P;
+        then consider a',b',c',d' being Element of X such that
+        A2: [a,b]=[a',b'] & [c,d]=[c',d'] and
+        A3:  ([[a',b'],[c',d']] in R or [[a',b'],[d',c']] in R) by A1;
+          a=a' & b=b' & c = c' & d=d' by A2,ZFMISC_1:33;
+        hence thesis by A3;
+       end;
+    hence thesis by A1; end;
+uniqueness
+ proof set XX = [:X,X:];
+ let P,Q be Relation of [:X,X:]
+   such that
+ A4:  for a,b,c,d being Element of X holds
+ [[a,b],[c,d]] in P iff ([[a,b],[c,d]] in R or [[a,b],[d,c]] in R) and
+ A5: for a,b,c,d being Element of X holds
+ [[a,b],[c,d]] in Q iff ([[a,b],[c,d]] in R or [[a,b],[d,c]] in R);
+   for x,y holds [x,y] in P iff [x,y] in Q
+  proof let x,y;
+   A6: now assume A7: [x,y] in P; then A8: x in XX & y in XX by ZFMISC_1:106;
+    then A9: ex a,b st x=[a,b] by DOMAIN_1:9;
+    consider c,d such that A10: y=[c,d] by A8,DOMAIN_1:9;
+      [x,y] in P iff [x,y] in R or [x,[d,c]] in R by A4,A9,A10;
+    hence [x,y] in Q by A5,A7,A9,A10;
+    end;
+      now assume A11: [x,y] in Q; then A12: x in XX & y in XX by ZFMISC_1:106;
+    then A13: ex a,b st x=[a,b] by DOMAIN_1:9;
+    consider c,d such that A14: y=[c,d] by A12,DOMAIN_1:9;
+      [x,y] in Q iff [x,y] in R or [x,[d,c]] in R by A5,A13,A14;
+    hence [x,y] in P by A4,A11,A13,A14;
+    end;
+   hence thesis by A6;
+   end;
+  hence thesis by RELAT_1:def 2;
+ end;
+end;
+
+definition let S be non empty AffinStruct;
+ func Lambda(S) -> strict AffinStruct equals
+ :Def2:  AffinStruct (# the carrier of S, lambda(the CONGR of S) #);
+ correctness;
+ end;
+
+definition let S be non empty AffinStruct;
+ cluster Lambda S -> non empty;
+ coherence
+  proof
+      Lambda S = AffinStruct (# the carrier of S, lambda(the CONGR of S) #)
+                      by Def2;
+   hence the carrier of Lambda S is non empty;
+  end;
+end;
+
+reserve S for OAffinSpace;
+reserve a,b,c,d,p,q,r,x,y,z,t,u,w for Element of S;
+
+canceled 3;
+
+theorem Th4:
+ x,y // x,y
+  proof x,y // y,y by ANALOAF:def 5; hence x,y // x,y by ANALOAF:def 5;
+  end;
+ Lm1: x,y // z,t implies z,t // x,y
+  proof assume A1: x,y // z,t;
+      now assume A2: x<>y; x,y // x,y & x,y // z,t by A1,Th4;
+     hence z,t // x,y by A2,ANALOAF:def 5; end;
+   hence thesis by ANALOAF:def 5;
+  end;
+
+theorem Th5:
+ x,y // z,t implies y,x // t,z & z,t // x,y & t,z // y,x
+  proof assume x,y // z,t;
+   hence y,x // t,z & z,t // x,y by Lm1,ANALOAF:def 5;
+   hence t,z // y,x by ANALOAF:def 5;
+  end;
+
+theorem Th6:
+ z<>t & x,y // z,t & z,t // u,w implies x,y // u,w
+  proof assume A1: z<>t; assume x,y // z,t & z,t // u,w;
+    then z,t // x,y & z,t // u,w by Th5;
+   hence thesis by A1,ANALOAF:def 5;
+  end;
+
+theorem Th7:
+ x,x // y,z & y,z // x,x
+  proof y,z // x,x by ANALOAF:def 5; hence thesis by Th5;
+  end;
+
+theorem Th8:
+ x,y // z,t & x,y // t,z implies x=y or z=t
+  proof assume that A1: x,y // z,t & x,y // t,z and
+            A2: x<>y and A3: z<>t;
+      z,t // t,z by A1,A2,ANALOAF:def 5;
+   hence contradiction by A3,ANALOAF:def 5;
+  end;
+
+theorem Th9:
+ x,y // x,z iff x,y // y,z or x,z // z,y
+  proof
+      now assume x,y // y,z or x,z // z,y;
+      then x,y // x,z or x,z // x,y by ANALOAF:def 5;
+     hence x,y // x,z by Th5; end;
+   hence thesis by ANALOAF:def 5;
+  end;
+
+definition let S be non empty AffinStruct;
+           let a,b,c be Element of S;
+ pred Mid a,b,c means
+  :Def3: a,b // b,c;
+end;
+
+canceled;
+
+theorem Th11:
+ x,y // x,z iff Mid x,y,z or Mid x,z,y
+  proof x,y // x,z iff x,y // y,z or x,z // z,y by Th9;
+   hence thesis by Def3;
+  end;
+
+theorem Th12:
+ Mid a,b,a implies a=b
+  proof assume Mid a,b,a;
+    then a,b // b,a by Def3;
+    hence a=b by ANALOAF:def 5;
+  end;
+
+theorem
+   Mid a,b,c implies Mid c,b,a
+  proof assume Mid a,b,c;
+    then a,b // b,c by Def3;
+    then c,b // b,a by Th5;
+   hence Mid c,b,a by Def3;
+  end;
+
+theorem
+   Mid x,x,y & Mid x,y,y
+  proof
+      x,x // x,y & x,y // y,y by Th7;
+   hence Mid x,x,y & Mid x,y,y by Def3;
+  end;
+
+theorem
+   Mid a,b,c & Mid a,c,d implies Mid b,c,d
+  proof assume A1: Mid a,b,c & Mid a,c,d;
+      now assume a<>c;
+      then a<>c & a,b // b,c & a,c // c,d by A1,Def3;
+      then a<>c & a,b // b,c & a,b // a,c & a,c // c,d by ANALOAF:def 5;
+      then a<>c & (b,c // a,c or a=b) & a,c // c,d by ANALOAF:def 5;
+      then b,c // c,d by Th6;
+     hence Mid b,c,d by Def3;
+    end;
+   hence thesis by A1,Th12;
+ end;
+
+theorem
+   b<>c & Mid a,b,c & Mid b,c,d implies Mid a,c,d
+  proof assume that
+    A1: b<>c and
+    A2: Mid a,b,c and A3: Mid b,c,d;
+       now assume A4: a<>b;
+          A5: a,b // b,c & b,c // c,d by A2,A3,Def3;
+          then A6: a,b // c,d by A1,Th6; a,b // a,c by A5,ANALOAF:def 5;
+          then a,c // c,d by A4,A6,ANALOAF:def 5;
+         hence Mid a,c,d by Def3;
+        end;
+   hence Mid a,c,d by A3;
+  end;
+
+theorem Th17:
+ ex z st Mid x,y,z & y<>z
+  proof consider z such that
+    A1: x,y // y,z and x,y // y,z and A2: y<>z by ANALOAF:def 5;
+      Mid x,y,z by A1,Def3;
+   hence thesis by A2;
+  end;
+
+theorem
+   Mid x,y,z & Mid y,x,z implies x=y
+  proof assume A1: Mid x,y,z & Mid y,x,z;
+    then x,y // y,z & y,x // x,z by Def3;
+    then A2: x,y // x,z & x,y // z,x by ANALOAF:def 5;
+      x=z implies x=y by A1,Th12;
+   hence x=y by A2,Th8;
+end;
+
+theorem
+   x<>y & Mid x,y,z & Mid x,y,t implies Mid y,z,t or Mid y,t,z
+  proof assume A1: x<>y; assume Mid x,y,z & Mid x,y,t;
+    then x,y // y,z & x,y // y,t by Def3;
+    then y,z // y,t by A1,ANALOAF:def 5;
+   hence thesis by Th11;
+  end;
+
+theorem
+   x<>y & Mid x,y,z & Mid x,y,t implies Mid x,z,t or Mid x,t,z
+  proof assume A1: x<>y; assume Mid x,y,z & Mid x,y,t;
+    then x,y // y,z & x,y // y,t by Def3;
+    then x,y // x,z & x,y // x,t by ANALOAF:def 5;
+    then x,z // x,t by A1,ANALOAF:def 5;
+   hence thesis by Th11;
+  end;
+
+theorem
+   Mid x,y,t & Mid x,z,t implies Mid x,y,z or Mid x,z,y
+  proof assume A1: Mid x,y,t & Mid x,z,t;
+    then A2: x,y // y,t & x,z // z,t by Def3;
+      now assume A3: x<>t; x,y // x,t & x,z // x,t by A2,ANALOAF:def 5;
+      then x,y // x,t & x,t // x,z by Th5;
+      then x,y // x,z by A3,Th6;
+     hence thesis by Th11;
+    end;
+   hence thesis by A1,Th12;
+  end;
+
+definition let S be non empty AffinStruct;
+           let a,b,c,d be Element of S;
+ pred a,b '||' c,d means
+  :Def4: a,b // c,d or a,b // d,c;
+end;
+
+canceled;
+
+theorem
+    a,b '||' c,d iff [[a,b],[c,d]] in lambda(the CONGR of S)
+  proof
+   thus a,b '||' c,d implies [[a,b],[c,d]] in lambda(the CONGR of S)
+    proof assume a,b // c,d or a,b // d,c;
+     then [[a,b],[c,d]] in the CONGR of S or
+            [[a,b],[d,c]] in the CONGR of S by ANALOAF:def 2;
+     hence thesis by Def1; end;
+   assume [[a,b],[c,d]] in lambda(the CONGR of S);
+   then [[a,b],[c,d]] in the CONGR of S or [[a,b],[d,c]] in the CONGR of S by
+Def1;
+   hence a,b // c,d or a,b // d,c by ANALOAF:def 2;
+  end;
+
+theorem Th24:
+ x,y '||' y,x & x,y '||' x,y
+  proof x,y // x,y by Th4;
+    hence thesis by Def4;
+  end;
+
+theorem Th25:
+ x,y '||' z,z & z,z '||' x,y
+  proof
+      x,y // z,z & z,z // x,y by Th7;
+    hence thesis by Def4;
+  end;
+
+Lm2: x<>y & x,y '||' z,t & x,y '||' u,w implies z,t '||' u,w
+  proof assume that
+    A1: x<>y and
+    A2: x,y '||' z,t & x,y '||' u,w;
+    A3: x,y // u,w or x,y // w,u by A2,Def4;
+    A4: now assume x,y // z,t;
+          then z,t // u,w or z,t // w,u by A1,A3,ANALOAF:def 5;
+         hence z,t '||' u,w by Def4;
+        end;
+      now assume x,y // t,z;
+      then t,z // u,w or t,z // w,u by A1,A3,ANALOAF:def 5;
+      then z,t // w,u or z,t // u,w by ANALOAF:def 5;
+     hence z,t '||' u,w by Def4;
+    end;
+   hence thesis by A2,A4,Def4;
+  end;
+
+theorem Th26:
+ x,y '||' x,z implies y,x '||' y,z
+  proof assume A1: x,y '||' x,z;
+    A2: now assume A3: x,y // x,z;
+          A4: now assume x,y // y,z; then y,x // z,y by ANALOAF:def 5;
+               hence y,x '||' y,z by Def4;
+              end;
+            now assume x,z // z,y;
+            then y,z // z,x by Th5;
+            then y,z // y,x by ANALOAF:def 5;
+            then y,x // y,z by Th5;
+           hence y,x '||' y,z by Def4;
+          end;
+         hence y,x '||' y,z by A3,A4,ANALOAF:def 5;
+        end;
+      now assume x,y // z,x; then y,x // x,z by ANALOAF:def 5;
+      then y,x // y,z by ANALOAF:def 5;
+     hence y,x '||' y,z by Def4; end;
+   hence thesis by A1,A2,Def4;
+  end;
+
+theorem Th27:
+  x,y '||' z,t implies x,y '||' t,z & y,x '||' z,t & y,x '||' t,z &
+        z,t '||' x,y & z,t '||' y,x & t,z '||' x,y & t,z '||' y,x
+  proof assume x,y '||' z,t;
+    then A1: x,y // z,t or x,y // t,z by Def4;
+    hence x,y '||' t,z by Def4;
+      y,x // t,z or y,x // z,t by A1,ANALOAF:def 5;
+    hence y,x '||' z,t & y,x '||' t,z by Def4;
+      z,t // x,y or z,t // y,x by A1,Th5;
+    hence z,t '||' x,y & z,t '||' y,x by Def4;
+      t,z // y,x or t,z // x,y by A1,Th5;
+    hence t,z '||' x,y & t,z '||' y,x by Def4;
+  end;
+
+theorem Th28:
+  a<>b & ((a,b '||' x,y & a,b '||' z,t) or (a,b '||' x,y & z,t '||' a,b) or
+        (x,y '||' a,b & z,t '||' a,b) or (x,y '||' a,b & a,b '||' z,t))
+        implies x,y '||' z,t
+  proof assume a<>b & ((a,b '||' x,y & a,b '||' z,t) or
+                        (a,b '||' x,y & z,t '||' a,b) or
+                       (x,y '||' a,b & z,t '||' a,b) or
+                       (x,y '||' a,b & a,b '||' z,t));
+    then a<>b & a,b '||' x,y & a,b '||' z,t by Th27;
+   hence thesis by Lm2;
+  end;
+
+theorem Th29:
+  ex x,y,z st not x,y '||' x,z
+    proof consider x,y,z,t such that
+     A1: not x,y // z,t & not x,y // t,z by ANALOAF:def 5;
+     A2: x<>y & z<>t by A1,Th7;
+       now assume A3: x,y '||' x,z;
+      thus not x,y '||' x,t
+       proof assume A4: x,y '||' x,t; then x,z '||' x,t by A2,A3,Th28;
+        then z,x '||' z,t by Th26; then x,z '||' z,t by Th27;
+        then x,y '||' z,t or x=z by A3,Th28;
+        hence contradiction by A1,A4,Def4; end;
+     end;
+     hence thesis;
+    end;
+
+theorem Th30:
+ ex t st x,z '||' y,t & y<>t
+  proof consider t such that
+   A1: x,y // z,t & x,z // y,t & y<>t by ANALOAF:def 5;
+     x,z '||' y,t by A1,Def4;
+   hence thesis by A1;
+  end;
+
+theorem Th31:
+ ex t st x,y '||' z,t & x,z '||' y,t
+  proof consider t such that
+    A1: x,y // z,t & x,z // y,t & y<>t by ANALOAF:def 5;
+      x,y '||' z,t & x,z '||' y,t by A1,Def4;
+   hence thesis;
+  end;
+
+theorem Th32:
+  z,x '||' x,t & x<>z implies ex u st y,x '||' x,u & y,z '||' t,u
+   proof assume A1: z,x '||' x,t & x<>z;
+    A2: now assume z,x // x,t; then consider u such that
+     A3: y,x // x,u & y,z // t,u by A1,ANALOAF:def 5;
+       y,x '||' x,u & y,z '||' t,u by A3,Def4;
+     hence thesis; end;
+       now assume A4: z,x // t,x;
+     consider p such that A5: Mid z,x,p & x<>p by Th17;
+     A6: z,x // x,p by A5,Def3; then consider q such that
+     A7: y,x // x,q & y,z // p,q by A1,ANALOAF:def 5;
+       x,p // t,x by A1,A4,A6,ANALOAF:def 5;
+     then p,x // x,t by Th5; then consider r such that
+     A8: q,x // x,r & q,p // t,r by A5,ANALOAF:def 5;
+     A9: now assume q=p; then x,p // z,x & x,p // y,x by A6,A7,Th5;
+      then z,x // y,x by A5,ANALOAF:def 5;
+      then y,x // t,x & y,z // t,t by A1,A4,ANALOAF:def 5;
+      then y,x '||' x,t & y,z '||' t,t by Def4;
+      hence thesis; end;
+     A10: now assume q=x; then y,z // p,x & p,x // x,z by A6,A7,Th5;
+      then y,z // x,z & x,z // x,t by A4,A5,Th5,Th6;
+      then y,z // x,t & y,x // x,x by A1,Th6,Th7;
+      then y,z '||' t,x & y,x '||' x,x by Def4;
+      hence thesis; end;
+        now assume A11: q<>p & q<>x;
+        p,q // y,z & p,q // r,t & x,q // r,x by A7,A8,Th5;
+       then y,z // r,t & y,x // r,x by A7,A11,Th6;
+      then y,z '||' t,r & y,x '||' x,r by Def4;
+      hence thesis; end;
+     hence thesis by A9,A10; end;
+    hence thesis by A1,A2,Def4;
+   end;
+
+definition let S be non empty AffinStruct;
+           let a,b,c be Element of S;
+ pred LIN a,b,c means
+ :Def5: a,b '||' a,c;
+ synonym a,b,c is_collinear;
+end;
+
+canceled;
+
+theorem
+   Mid a,b,c implies a,b,c is_collinear
+  proof assume Mid a,b,c;
+    then a,b // b,c by Def3; then a,b // a,c by ANALOAF:def 5;
+    then a,b '||' a,c by Def4;
+   hence thesis by Def5;
+  end;
+
+theorem
+   a,b,c is_collinear implies Mid a,b,c or Mid b,a,c or Mid a,c,b
+  proof assume a,b,c is_collinear;
+    then A1: a,b '||' a,c by Def5;
+    A2:  a,b // a,c implies ( Mid a,b,c or Mid a,c,b) by Th11;
+      now assume a,b // c,a; then b,a // a,c by ANALOAF:def 5;
+     hence Mid b,a,c by Def3; end;
+   hence thesis by A1,A2,Def4;
+  end;
+
+Lm3: x,y,z is_collinear implies x,z,y is_collinear & y,x,z is_collinear
+ proof assume x,y,z is_collinear; then x,y '||' x,z by Def5;
+  then x,z '||' x,y & y,x '||' y,z by Th26,Th27; hence thesis by Def5; end;
+
+theorem Th36:
+  x,y,z is_collinear implies x,z,y is_collinear & y,x,z is_collinear &
+   y,z,x is_collinear & z,x,y is_collinear & z,y,x is_collinear
+   proof assume x,y,z is_collinear;
+    hence x,z,y is_collinear & y,x,z is_collinear by Lm3;
+    hence y,z,x is_collinear & z,x,y is_collinear by Lm3;
+    hence z,y,x is_collinear by Lm3;
+   end;
+
+theorem Th37:
+ x,x,y is_collinear & x,y,y is_collinear & x,y,x is_collinear
+  proof x,x '||' x,y & x,y '||' x,y & x,y '||' x,x by Th24,Th25;
+   hence thesis by Def5;
+  end;
+
+theorem Th38:
+ x<>y & x,y,z is_collinear & x,y,t is_collinear & x,y,u is_collinear implies
+  z,t,u is_collinear
+  proof assume A1: x<>y & x,y,z is_collinear & x,y,t is_collinear &
+   x,y,u is_collinear;
+   A2: now assume x=z;
+     then z<>y & z,y '||' z,t & z,y '||' z,u by A1,Def5;
+     then z,t '||' z,u by Th28; hence thesis by Def5; end;
+      now assume A3: x<>z;
+      x,y '||' x,z & x,y '||' x,t & x,y '||' x,u by A1,Def5;
+    then x,z '||' x,t & x,z '||' x,u by A1,Th28;
+    then z,x '||' z,t & z,x '||' z,u by Th26;
+    then z,t '||' z,u by A3,Th28;
+    hence thesis by Def5; end;
+   hence thesis by A2;
+  end;
+
+theorem
+   x<>y & x,y,z is_collinear & x,y '||' z,t implies x,y,t is_collinear
+  proof assume A1: x<>y & x,y,z is_collinear & x,y '||' z,t;
+      now assume A2: z<>x; x,y '||' x,z by A1,Def5;
+    then x,z '||' z,t by A1,Th28; then z,x '||' z,t by Th27;
+    then z,x,t is_collinear by Def5;
+    then x,z,t is_collinear & x,z,y is_collinear & x,z,x is_collinear
+     by A1,Th36,Th37;
+    hence thesis by A2,Th38; end;
+   hence thesis by A1,Def5;
+  end;
+
+theorem
+    x,y,z is_collinear & x,y,t is_collinear implies x,y '||' z,t
+   proof assume A1: x,y,z is_collinear & x,y,t is_collinear;
+       now assume A2: x<>y;
+        now A3: x,y '||' x,z & x,y '||' x,t by A1,Def5;
+      then x,z '||' x,t by A2,Th28; then z,x '||' z,t by Th26;
+      then x,z '||' z,t by Th27; hence thesis by A3,Th28; end;
+     hence thesis; end;
+    hence thesis by Th25;
+   end;
+
+theorem
+   u<>z & x,y,u is_collinear & x,y,z is_collinear & u,z,w is_collinear implies
+  x,y,w is_collinear
+  proof assume A1: u<>z & x,y,u is_collinear & x,y,z is_collinear &
+    u,z,w is_collinear;
+      now assume A2: x<>y;
+      x,y,y is_collinear & x,y,x is_collinear by Th37;
+    then z,u,y is_collinear & z,u,x is_collinear & z,u,w is_collinear
+      by A1,A2,Th36,Th38;
+    hence thesis by A1,Th38; end;
+   hence thesis by Th37;
+  end;
+
+theorem Th42:
+  ex x,y,z st not x,y,z is_collinear
+  proof consider x,y,z such that A1: not x,y '||' x,z by Th29;
+     not x,y,z is_collinear by A1,Def5;
+   hence thesis;
+  end;
+
+theorem
+   x<>y implies ex z st not x,y,z is_collinear
+ proof assume A1: x<>y; assume A2: not thesis;
+  consider a,b,c such that A3: not a,b,c is_collinear by Th42;
+    x,y,a is_collinear & x,y,b is_collinear & x,y,c is_collinear by A2;
+  hence contradiction by A1,A3,Th38;
+ end;
+
+reserve AS for non empty AffinStruct;
+
+canceled;
+
+theorem Th45:
+ AS=Lambda(S) implies for a,b,c,d being Element of S,
+              a',b',c',d' being Element of AS st
+     a=a' & b=b' & c =c' & d=d' holds
+     a',b' // c',d' iff a,b '||' c,d
+ proof
+assume AS=Lambda(S);
+ then A1: AS = AffinStruct (#the carrier of S, lambda(the CONGR of S)#) by Def2
+;
+   let a,b,c,d be Element of S;
+   let a',b',c',d' be Element of AS;
+   assume A2: a=a' & b=b' & c =c' & d=d';
+   thus a',b' // c',d' implies a,b '||' c,d
+    proof assume A3: [[a',b'],[c',d']] in the CONGR of AS;
+     assume not [[a,b],[c,d]] in the CONGR of S;
+     hence [[a,b],[d,c]] in the CONGR of S by A1,A2,A3,Def1;
+    end;
+   assume a,b '||' c,d;
+    then a,b // c,d or a,b // d,c by Def4;
+    then [[a,b],[c,d]] in the CONGR of S or
+                [[a,b],[d,c]] in the CONGR of S by ANALOAF:def 2;
+   hence [[a',b'],[c',d']] in the CONGR of AS by A1,A2,Def1;
+ end;
+
+theorem Th46:
+ AS = Lambda(S) implies
+  (ex x,y being Element of AS st x<>y) &
+  (for x,y,z,t,u,w being Element of AS
+   holds x,y // y,x & x,y // z,z &
+     (x<>y & x,y // z,t & x,y // u,w implies z,t // u,w) &
+     (x,y // x,z implies y,x // y,z)) &
+  (ex x,y,z being Element of AS st not x,y // x,z) &
+  (for x,y,z being Element of AS
+    ex t being Element of AS st x,z // y,t & y<>t) &
+  (for x,y,z being Element of AS
+    ex t being Element of AS st x,y // z,t & x,z // y,t) &
+ (for x,y,z,t being Element of AS st z,x // x,t & x<>z
+    ex u being Element of AS st y,x // x,u & y,z // t,u)
+ proof assume A1: AS = Lambda(S);
+then A2:  AS = AffinStruct (#the carrier of S, lambda(the CONGR of S)#) by Def2
+;
+  hence ex x,y being Element of AS st x<>y by REALSET1:def 20;
+  thus for x,y,z,t,u,w being Element of AS
+   holds x,y // y,x & x,y // z,z &
+     (x<>y & x,y // z,t & x,y // u,w implies z,t // u,w) &
+     (x,y // x,z implies y,x // y,z)
+   proof let x,y,z,t,u,w be Element of AS;
+    reconsider x'=x, y'=y, z'=z, t'=t, u'=u, w'=w as
+                                Element of S by A2;
+      x',y' '||' y',x' & x',y' '||' z',z' by Th24,Th25;
+    hence x,y // y,x & x,y // z,z by A1,Th45;
+      x'<>y' & x',y' '||' z',t' & x',y' '||' u',w' implies
+                                     z',t' '||' u',w' by Lm2;
+    hence x<>y & x,y // z,t & x,y // u,w implies z,t // u,w by A1,Th45;
+      x',y' '||' x',z' implies y',x' '||' y',z' by Th26;
+    hence x,y // x,z implies y,x // y,z by A1,Th45;
+   end;
+   thus ex x,y,z being Element of AS st not x,y // x,z
+    proof consider x',y',z' being Element of S
+     such that A3: not x',y' '||' x',z' by Th29;
+     reconsider x=x', y=y', z=z' as Element of AS by A2;
+       not x,y // x,z by A1,A3,Th45;
+     hence thesis;
+    end;
+   thus for x,y,z being Element of AS
+     ex t being Element of AS st x,z // y,t & y<>t
+    proof let x,y,z be Element of AS;
+     reconsider x'=x, y'=y, z'=z as Element of S by A2;
+     consider t' being Element of S such that
+     A4: x',z' '||' y',t' & y'<>t' by Th30;
+     reconsider t=t' as Element of AS by A2;
+       x,z // y,t & y<>t by A1,A4,Th45;
+     hence thesis;
+    end;
+   thus for x,y,z being Element of AS
+    ex t being Element of AS st x,y // z,t & x,z // y,t
+    proof let x,y,z be Element of AS;
+     reconsider x'=x, y'=y, z'=z as Element of S by A2;
+     consider t' being Element of S such that
+     A5: x',y' '||' z',t' & x',z' '||' y',t' by Th31;
+     reconsider t=t' as Element of AS by A2;
+       x,y // z,t & x,z // y,t by A1,A5,Th45;
+     hence thesis;
+    end;
+   thus for x,y,z,t being Element of AS st
+     z,x // x,t & x<>z ex u being Element of AS st
+                                             y,x // x,u & y,z // t,u
+    proof let x,y,z,t be Element of AS such that
+     A6: z,x // x,t & x<>z;
+     reconsider x'=x, y'=y, z'=z, t'=t as Element of S by A2;
+       z',x' '||' x',t' & x'<>z' by A1,A6,Th45;
+     then consider u' being Element of S such that
+     A7: y',x' '||' x',u' & y',z' '||' t',u' by Th32;
+     reconsider u=u' as Element of AS by A2;
+       y,x // x,u & y,z // t,u by A1,A7,Th45;
+     hence thesis;
+    end;
+ end;
+
+definition let IT be non empty AffinStruct;
+ canceled;
+
+ attr IT is AffinSpace-like means :Def7:
+  (for x,y,z,t,u,w being Element of IT
+   holds x,y // y,x & x,y // z,z &
+     (x<>y & x,y // z,t & x,y // u,w implies z,t // u,w) &
+     (x,y // x,z implies y,x // y,z)) &
+  (ex x,y,z being Element of IT st not x,y // x,z) &
+  (for x,y,z being Element of IT
+    ex t being Element of IT st x,z // y,t & y<>t) &
+  (for x,y,z being Element of IT
+    ex t being Element of IT st x,y // z,t & x,z // y,t) &
+  (for x,y,z,t being Element of IT st z,x // x,t & x<>z
+    ex u being Element of IT st y,x // x,u & y,z // t,u);
+end;
+
+definition
+ cluster strict non trivial AffinSpace-like (non empty AffinStruct);
+  existence
+   proof
+    consider S;
+      (ex x,y being Element of Lambda(S) st x<>y) &
+    (for x,y,z,t,u,w being Element of Lambda(S)
+     holds x,y // y,x & x,y // z,z &
+       (x<>y & x,y // z,t & x,y // u,w implies z,t // u,w) &
+       (x,y // x,z implies y,x // y,z)) &
+    (ex x,y,z being Element of Lambda(S) st not x,y // x,z) &
+    (for x,y,z being Element of Lambda(S)
+      ex t being Element of Lambda(S) st x,z // y,t & y<>t) &
+    (for x,y,z being Element of Lambda(S)
+     ex t being Element of Lambda(S) st
+       x,y // z,t & x,z // y,t) &
+    (for x,y,z,t being Element of Lambda(S)
+      st z,x // x,t & x<>z
+      ex u being Element of Lambda(S) st y,x // x,u &
+      y,z // t,u) by Th46;
+     then Lambda(S) is non trivial AffinSpace-like by Def7,REALSET1:def 20;
+    hence thesis;
+   end;
+end;
+
+definition
+ mode AffinSpace is non trivial AffinSpace-like (non empty AffinStruct);
+end;
+
+theorem for AS being AffinSpace holds
+ (ex x,y being Element of AS st x<>y) &
+  (for x,y,z,t,u,w being Element of AS holds
+   (x,y // y,x & x,y // z,z) &
+   (x<>y & x,y // z,t & x,y // u,w implies z,t // u,w) &
+   (x,y // x,z implies y,x // y,z)) &
+  (ex x,y,z being Element of AS st not x,y // x,z) &
+  (for x,y,z being Element of AS
+    ex t being Element of AS st x,z // y,t & y<>t) &
+  (for x,y,z being Element of AS
+    ex t being Element of AS st x,y // z,t & x,z // y,t) &
+  (for x,y,z,t being Element of AS st z,x // x,t & x<>z
+    ex u being Element of AS st y,x // x,u & y,z // t,u)
+                                           by Def7,REALSET1:def 20;
+
+theorem Th48:
+ Lambda(S) is AffinSpace
+ proof set AS=Lambda(S);
+    (ex x,y being Element of AS st x<>y) &
+  (for x,y,z,t,u,w being Element of AS
+   holds x,y // y,x & x,y // z,z &
+     (x<>y & x,y // z,t & x,y // u,w implies z,t // u,w) &
+     (x,y // x,z implies y,x // y,z)) &
+  (ex x,y,z being Element of AS st not x,y // x,z) &
+  (for x,y,z being Element of AS
+    ex t being Element of AS st x,z // y,t & y<>t) &
+  (for x,y,z being Element of AS
+    ex t being Element of AS st x,y // z,t & x,z // y,t) &
+ (for x,y,z,t being Element of AS st z,x // x,t & x<>z
+    ex u being Element of AS st y,x // x,u & y,z // t,u)
+      by Th46;
+ hence thesis by Def7,REALSET1:def 20;
+ end;
+
+ theorem
+  ((ex x,y being Element of AS st x<>y) &
+  (for x,y,z,t,u,w being Element of AS
+   holds x,y // y,x & x,y // z,z &
+     (x<>y & x,y // z,t & x,y // u,w implies z,t // u,w) &
+     (x,y // x,z implies y,x // y,z)) &
+  (ex x,y,z being Element of AS st not x,y // x,z) &
+  (for x,y,z being Element of AS
+    ex t being Element of AS st x,z // y,t & y<>t) &
+  (for x,y,z being Element of AS
+    ex t being Element of AS st x,y // z,t & x,z // y,t) &
+ (for x,y,z,t being Element of AS st z,x // x,t & x<>z
+    ex u being Element of AS st y,x // x,u & y,z // t,u))
+    iff AS is AffinSpace by Def7,REALSET1:def 20;
+
+ reserve S for OAffinPlane;
+ reserve x,y,z,t,u for Element of S;
+
+theorem Th50:
+ not x,y '||' z,t implies ex u st x,y '||' x,u & z,t '||' z,u
+ proof assume not x,y '||' z,t;
+  then not x,y // z,t & not x,y // t,z by Def4; then consider u such that
+  A1: (x,y // x,u or x,y // u,x) & (z,t // z,u or z,t // u,z) by ANALOAF:def 6;
+    x,y '||' x,u & z,t '||' z,u by A1,Def4; hence thesis;
+ end;
+
+ theorem Th51:
+  AS = Lambda(S) implies
+   for x,y,z,t being Element of AS st
+     not x,y // z,t ex u being Element of AS
+                   st x,y // x,u & z,t // z,u
+  proof assume A1: AS = Lambda(S);
+   let x,y,z,t be Element of AS;
+   assume A2: not x,y // z,t;
+A3: AS = AffinStruct (#the carrier of S, lambda(the CONGR of S)#) by A1,Def2;
+  then reconsider x'=x, y'=y, z'=z, t'=t as Element of S;
+    not x',y' '||' z',t' by A1,A2,Th45;
+     then consider u' being Element of S such that
+     A4: x',y' '||' x',u' & z',t' '||' z',u' by Th50;
+     reconsider u=u' as Element of AS by A3;
+       x,y // x,u & z,t // z,u by A1,A4,Th45;
+     hence thesis;
+  end;
+
+definition let IT be non empty AffinStruct;
+ attr IT is 2-dimensional means
+ :Def8: for x,y,z,t
+   being Element of IT st not x,y // z,t
+    ex u being Element of IT st x,y // x,u & z,t // z,u;
+end;
+
+definition
+ cluster strict 2-dimensional AffinSpace;
+  existence
+   proof consider S;
+     reconsider AS = Lambda(S) as AffinSpace by Th48;
+       for x,y,z,t  being Element of AS st not x,y // z,t
+     ex u being Element of AS st x,y // x,u & z,t // z,u
+     by Th51;
+     then AS is 2-dimensional by Def8;
+    hence thesis;
+   end;
+end;
+
+definition
+ mode AffinPlane is 2-dimensional AffinSpace;
+end;
+
+canceled;
+
+theorem
+    Lambda(S) is AffinPlane
+  proof set AS = Lambda(S);
+     for x,y,z,t being Element of AS st
+     not x,y // z,t ex u being Element of AS
+                   st x,y // x,u & z,t // z,u by Th51;
+  hence thesis by Def8,Th48; end;
+
+theorem AS is AffinPlane iff
+ ((ex x,y being Element of AS st x<>y) &
+  (for x,y,z,t,u,w being Element of AS
+   holds x,y // y,x & x,y // z,z &
+     (x<>y & x,y // z,t & x,y // u,w implies z,t // u,w) &
+     (x,y // x,z implies y,x // y,z)) &
+  (ex x,y,z being Element of AS st not x,y // x,z) &
+  (for x,y,z being Element of AS
+    ex t being Element of AS st x,z // y,t & y<>t) &
+  (for x,y,z being Element of AS
+    ex t being Element of AS st x,y // z,t & x,z // y,t) &
+ (for x,y,z,t being Element of AS st z,x // x,t & x<>z
+  ex u being Element of AS st y,x // x,u & y,z // t,u) &
+  (for x,y,z,t being Element of AS st not x,y // z,t
+ ex u being Element of AS st x,y // x,u & z,t // z,u)) by Def7,
+Def8,REALSET1:def 20;

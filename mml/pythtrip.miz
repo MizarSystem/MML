@@ -1,0 +1,1060 @@
+:: Pythagorean triples
+::  by Freek Wiedijk
+::
+:: Received August 26, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary INT_1, ARYTM_3, FILTER_0, ARYTM, SQUARE_1, ORDINAL2, MATRIX_2,
+      NAT_1, ARYTM_1, FINSET_1, FUNCT_1, RELAT_1, ORDINAL1, BOOLE, ABSVALUE,
+      INT_2, TARSKI, PYTHTRIP;
+ notation TARSKI, XBOOLE_0, SUBSET_1, FINSET_1, ORDINAL2, NUMBERS, XCMPLX_0,
+      XREAL_0, REAL_1, INT_1, INT_2, NAT_1, SQUARE_1, ABIAN, PEPIN, DOMAIN_1,
+      GROUP_1, RELAT_1, FUNCT_1, LIMFUNC1, ORDINAL1;
+ constructors REAL_1, INT_2, NAT_1, ABIAN, PEPIN, DOMAIN_1, GROUP_1, LIMFUNC1,
+      MEMBERED;
+ clusters FINSET_1, SUBSET_1, NAT_LAT, ABIAN, INT_1, NAT_1, XREAL_0, MEMBERED,
+      NUMBERS, ORDINAL2;
+ requirements SUBSET, BOOLE, NUMERALS, REAL, ARITHM;
+ definitions INT_2;
+ theorems SQUARE_1, CQC_THE1, NAT_1, REAL_1, NAT_LAT, INT_2, WSIERP_1, AXIOMS,
+      REAL_2, EULER_2, GR_CY_1, ORDINAL2, ABIAN, EULER_1, PEPIN, INT_1,
+      SCPINVAR, ENUMSET1, SCMFSA_7, ABSVALUE, FINSET_1, TARSKI, RELAT_1,
+      CARD_1, FUNCT_1, ORDINAL1, ZFMISC_1, JGRAPH_3, SCMFSA9A, XBOOLE_0,
+      XCMPLX_0, XCMPLX_1;
+ schemes NAT_1;
+
+begin :: relative primeness
+
+reserve a,a',b,b',c,c',k,k',m,m',m'',m''',n,n',n'',n''',mn,mn',mn'',p,p'
+ for Nat;
+reserve i,i' for Integer;
+
+
+definition
+ let m,n;
+ redefine pred m,n are_relative_prime means :Def1:
+  for k st k divides m & k divides n holds k = 1;
+ compatibility
+ proof
+  hereby
+   assume m,n are_relative_prime;
+   then A1: m hcf n = 1 by INT_2:def 6;
+   let k;
+   assume k divides m & k divides n;
+   then k divides 1 by A1,NAT_1:def 5;
+   hence k = 1 by WSIERP_1:20;
+  end;
+  assume
+  for k st k divides m & k divides n holds k = 1;
+  then 1 divides m & 1 divides n & for k st k divides m & k divides n holds k
+ divides 1 by NAT_1:53;
+  hence m hcf n = 1 by NAT_1:def 5;
+ end;
+end;
+
+definition
+ let m,n;
+ redefine pred m,n are_relative_prime means :Def2:
+  for p being prime Nat holds not (p divides m & p divides n);
+ compatibility
+ proof
+  hereby
+   assume
+A1: m,n are_relative_prime;
+   let p be prime Nat;
+   assume p divides m & p divides n;
+   then p = 1 by A1,Def1;
+   hence contradiction by INT_2:def 5;
+  end;
+  assume
+A2: for p being prime Nat holds not (p divides m & p divides n);
+  let k;
+  assume
+A3: k divides m & k divides n;
+  per cases by CQC_THE1:2;
+  suppose k = 0;
+   then m = 0 & n = 0 by A3,INT_2:3;
+   then 2 divides m & 2 divides n by NAT_1:53;
+   hence k = 1 by A2,INT_2:44;
+  suppose k = 1;
+   hence k = 1;
+  suppose k > 1;
+   then k >= 1+1 by NAT_1:38;
+   then consider p such that
+A4: p is prime & p divides k by INT_2:48;
+   reconsider p' = p as prime Nat by A4;
+     p' divides m & p' divides n by A3,A4,NAT_1:51;
+   hence k = 1 by A2;
+ end;
+end;
+
+begin :: squares
+
+definition
+ let n be number;
+ attr n is square means :Def3:
+  ex m st n = m^2;
+end;
+
+definition
+ cluster square -> natural number;
+ coherence
+ proof
+  let n be number;
+  assume n is square;
+  then ex m st n = m^2 by Def3;
+  hence n is natural;
+ end;
+end;
+
+definition
+ let n be Nat;
+ cluster n^2 -> square;
+ coherence by Def3;
+end;
+
+definition
+ cluster even square Nat;
+ existence
+ proof
+  take 0;
+    0 = 2*0;
+  hence thesis by SQUARE_1:60;
+ end;
+end;
+
+definition
+ cluster odd square Nat;
+ existence
+ proof
+  take 1;
+    1 = 2*0 + 1;
+  hence thesis by SQUARE_1:59;
+ end;
+end;
+
+definition
+ cluster even square number;
+ existence
+ proof
+  consider n being even square Nat;
+  take n;
+  thus thesis;
+ end;
+end;
+
+definition
+ cluster odd square number;
+ existence
+ proof
+  consider n being odd square Nat;
+  take n;
+  thus thesis;
+ end;
+end;
+
+definition
+ let m,n be square number;
+ cluster m*n -> square;
+ coherence
+ proof
+  consider m' such that
+A1: m = m'^2 by Def3;
+  consider n' such that
+A2: n = n'^2 by Def3;
+    m*n = (m'*n')^2 by A1,A2,SQUARE_1:68;
+  hence thesis;
+ end;
+end;
+
+theorem Th1:
+ m*n is square & m,n are_relative_prime implies m is square & n is square
+proof
+  defpred P[Nat] means for m,n st m*n = $1 & m*n is square &
+   m,n are_relative_prime holds m is square & n is square;
+A1: for mn st for k st k < mn holds P[k] holds P[mn]
+proof
+  let mn;
+  assume
+A2: for k st k < mn for m,n
+   st m*n = k & m*n is square & m,n are_relative_prime
+   holds m is square & n is square;
+  let m,n;
+  assume
+A3: m*n = mn;
+  assume m*n is square;
+  then consider mn' such that
+A4: mn = mn'^2 by A3,Def3;
+  assume
+A5: m,n are_relative_prime;
+  then A6: m hcf n = 1 by INT_2:def 6;
+  per cases by A3,CQC_THE1:2;
+  suppose
+A7: m*n = 0;
+   hereby
+    per cases by A7,XCMPLX_1:6;
+    suppose m = 0;
+     hence m is square & n is square
+      by A6,NAT_LAT:36,SQUARE_1:59,60;
+    suppose n = 0;
+     hence m is square & n is square
+      by A6,NAT_LAT:36,SQUARE_1:59,60;
+   end;
+  suppose m*n = 1;
+   hence m is square & n is square by NAT_1:40,SQUARE_1:59;
+  suppose
+A8: mn > 1;
+   then m <> 0 & n <> 0 by A3;
+   then A9: m > 0 & n > 0 by NAT_1:19;
+     mn >= 1 + 1 by A8,NAT_1:38;
+   then consider p' such that
+A10: p' is prime & p' divides mn by INT_2:48;
+   reconsider p = p' as prime Nat by A10;
+A11: p > 1 by INT_2:def 5;
+   then p > 1 & p > 0 by AXIOMS:22;
+   then p*p > p by REAL_2:144;
+   then A12: p*p > 1 by A11,AXIOMS:22;
+A13: p <> 0 by INT_2:def 5;
+     p divides mn'*mn' by A4,A10,SQUARE_1:def 3;
+   then p divides mn' by NAT_LAT:95;
+   then consider mn'' such that
+A14: mn' = p*mn'' by NAT_1:def 3;
+A15: m*n = (p*mn'')*(p*mn'') by A3,A4,A14,SQUARE_1:def 3
+    .= p*(mn''*(p*mn'')) by XCMPLX_1:4
+    .= p*(p*(mn''*mn'')) by XCMPLX_1:4;
+   hereby
+    per cases by A3,A10,NAT_LAT:95;
+    suppose
+A16:  p divides m;
+     then A17:  not p divides n by A5,Def2;
+     consider m' such that
+A18:  m = p*m' by A16,NAT_1:def 3;
+       p*(m'*n) = p*(p*(mn''*mn'')) by A15,A18,XCMPLX_1:4;
+     then m'*n = p*(mn''*mn'') by A13,XCMPLX_1:5;
+     then p divides m'*n by NAT_1:def 3;
+     then p divides m' by A17,NAT_LAT:95;
+     then consider m'' such that
+A19:  m' = p*m'' by NAT_1:def 3;
+A20: m = (p*p)*m'' by A18,A19,XCMPLX_1:4;
+       m'' <> 0 by A3,A8,A18,A19;
+     then A21:  m'' > 0 by NAT_1:19;
+     then 1*m'' < m by A12,A20,REAL_2:199;
+     then A22:  m''*n < mn by A3,A9,A21,REAL_2:199;
+       p*(p*(m''*n)) = p*(m'*n) by A19,XCMPLX_1:4
+      .= p*(p*(mn''*mn'')) by A15,A18,XCMPLX_1:4;
+     then p*(m''*n) = p*(mn''*mn'') by A13,XCMPLX_1:5;
+     then m''*n = mn''*mn'' by A13,XCMPLX_1:5;
+     then A23:  m''*n = mn''^2 by SQUARE_1:def 3;
+       m = (p*p)*m'' by A18,A19,XCMPLX_1:4;
+     then m'' divides m by NAT_1:def 3;
+     then m'' hcf n = 1 by A6,WSIERP_1:21;
+     then A24:  m'',n are_relative_prime by INT_2:def 6;
+     then m'' is square by A2,A22,A23;
+     then consider m''' such that
+A25:  m'' = m'''^2 by Def3;
+       m = p*(p*(m'''*m''')) by A18,A19,A25,SQUARE_1:def 3
+      .= p*((p*m''')*m''') by XCMPLX_1:4
+      .= (p*m''')*(p*m''') by XCMPLX_1:4
+      .= (p*m''')^2 by SQUARE_1:def 3;
+     hence m is square & n is square by A2,A22,A23,A24;
+    suppose
+A26:  p divides n;
+     then A27:  not p divides m by A5,Def2;
+     consider n' such that
+A28:  n = p*n' by A26,NAT_1:def 3;
+       p*(m*n') = p*(p*(mn''*mn'')) by A15,A28,XCMPLX_1:4;
+     then m*n' = p*(mn''*mn'') by A13,XCMPLX_1:5;
+     then p divides m*n' by NAT_1:def 3;
+     then p divides n' by A27,NAT_LAT:95;
+     then consider n'' such that
+A29:  n' = p*n'' by NAT_1:def 3;
+A30: n = (p*p)*n'' by A28,A29,XCMPLX_1:4;
+       n'' <> 0 by A3,A8,A28,A29;
+     then A31:  n'' > 0 by NAT_1:19;
+     then 1*n'' < n by A12,A30,REAL_2:199;
+     then A32:  m*n'' < mn by A3,A9,A31,REAL_2:199;
+       p*(p*(m*n'')) = p*(m*n') by A29,XCMPLX_1:4
+      .= p*(p*(mn''*mn'')) by A15,A28,XCMPLX_1:4;
+     then p*(m*n'') = p*(mn''*mn'') by A13,XCMPLX_1:5;
+     then m*n'' = mn''*mn'' by A13,XCMPLX_1:5;
+     then A33:  m*n'' = mn''^2 by SQUARE_1:def 3;
+       n = (p*p)*n'' by A28,A29,XCMPLX_1:4;
+     then n'' divides n by NAT_1:def 3;
+     then m hcf n'' = 1 by A6,WSIERP_1:21;
+     then A34:  m,n'' are_relative_prime by INT_2:def 6;
+     then n'' is square by A2,A32,A33;
+     then consider n''' such that
+A35:  n'' = n'''^2 by Def3;
+       n = p*(p*(n'''*n''')) by A28,A29,A35,SQUARE_1:def 3
+      .= p*((p*n''')*n''') by XCMPLX_1:4
+      .= (p*n''')*(p*n''') by XCMPLX_1:4
+      .= (p*n''')^2 by SQUARE_1:def 3;
+     hence m is square & n is square by A2,A32,A33,A34;
+   end;
+ end;
+ for mn holds P[mn] from Comp_Ind(A1);
+ hence thesis;
+end;
+
+definition
+ let i be even Integer;
+ cluster i^2 -> even;
+ coherence
+ proof
+    i^2 = i*i by SQUARE_1:def 3;
+  hence thesis;
+ end;
+end;
+
+definition
+ let i be odd Integer;
+ cluster i^2 -> odd;
+ coherence
+ proof
+    i^2 = i*i by SQUARE_1:def 3;
+  hence thesis;
+ end;
+end;
+
+theorem Th2:
+ i is even iff i^2 is even
+proof
+ hereby
+  assume i is even;
+  then reconsider i' = i as even Integer;
+    i'^2 is even;
+  hence i^2 is even;
+ end;
+ assume
+A1: i^2 is even;
+ assume i is odd;
+ then reconsider i' = i as odd Integer;
+   i'^2 is odd;
+ hence contradiction by A1;
+end;
+
+theorem Th3:
+ i is even implies i^2 mod 4 = 0
+proof
+ assume i is even;
+ then consider i' such that
+A1: i = 2*i' by ABIAN:def 1;
+A2: i^2 = (2^2)*(i'^2) by A1,SQUARE_1:68
+  .= (2*2)*(i'^2) by SQUARE_1:def 3
+  .= 4*(i'^2) + 0;
+ thus i^2 mod 4 = (i^2 qua Integer) mod 4 by SCMFSA9A:5
+  .= (0 qua Integer) mod 4 by A2,EULER_1:13
+  .= 0 mod 4 by SCMFSA9A:5
+  .= 0 by GR_CY_1:4;
+end;
+
+theorem Th4:
+ i is odd implies i^2 mod 4 = 1
+proof
+ assume i is odd;
+ then consider i' such that
+A1: i = 2*i' + 1 by ABIAN:1;
+A2: i^2 = (2*i')^2 + 2*(2*i')*1 + 1^2 by A1,SQUARE_1:63
+  .= (2^2)*(i'^2) + 2*(2*i')*1 + 1^2 by SQUARE_1:68
+  .= (2*2)*(i'^2) + 2*(2*i')*1 + 1^2 by SQUARE_1:def 3
+  .= 4*(i'^2) + (2*2)*i' + 1^2 by XCMPLX_1:4
+  .= 4*(i'^2) + 4*i' + 1*1 by SQUARE_1:def 3
+  .= 4*(i'^2 + i') + 1 by XCMPLX_1:8;
+ thus i^2 mod 4 = (i^2 qua Integer) mod 4 by SCMFSA9A:5
+  .= (1 qua Integer) mod 4 by A2,EULER_1:13
+  .= 1 mod 4 by SCMFSA9A:5
+  .= 1 by GR_CY_1:4;
+end;
+
+definition
+ let m,n be odd square number;
+ cluster m + n -> non square;
+ coherence
+ proof
+  consider m' such that
+A1: m = m'^2 by Def3;
+A2: m' is odd by A1,Th2;
+  consider n' such that
+A3: n = n'^2 by Def3;
+A4: n' is odd by A3,Th2;
+  reconsider m'' = m as Nat by ORDINAL2:def 21;
+  reconsider n'' = n as Nat by ORDINAL2:def 21;
+A5: (m'' + n'') mod 4 = ((m'' mod 4) + (n'' mod 4)) mod 4 by EULER_2:8
+   .= (1 + (n'' mod 4)) mod 4 by A1,A2,Th4
+   .= (1 + 1) mod 4 by A3,A4,Th4
+   .= 2 by GR_CY_1:4;
+  hereby
+   assume m + n is square;
+   then consider mn' such that
+A6: m + n = mn'^2 by Def3;
+     mn' is even by A6,Th2;
+   hence contradiction by A5,A6,Th3;
+  end;
+ end;
+end;
+
+theorem Th5:
+ m^2 = n^2 implies m = n
+proof
+ assume
+A1: m^2 = n^2;
+ per cases by A1,JGRAPH_3:1;
+ suppose m = n;
+  hence thesis;
+ suppose
+A2: m = -n;
+    m >= 0 & n >= 0 by NAT_1:18;
+  then m = 0 by A2,REAL_1:26,50;
+  hence thesis by A2,REAL_1:26;
+end;
+
+theorem Th6:
+ m divides n iff m^2 divides n^2
+proof
+defpred P[Nat] means for n holds $1 divides n iff $1^2 divides n^2;
+A1: for m st for k st k < m holds P[k] holds P[m]
+ proof
+  let m;
+  assume
+A2: for k st k < m for n holds k divides n iff k^2 divides n^2;
+  let n;
+  hereby
+   assume m divides n;
+   then consider k' such that
+A3: n = m*k' by NAT_1:def 3;
+     n^2 = (m^2)*(k'^2) by A3,SQUARE_1:68;
+   hence m^2 divides n^2 by NAT_1:def 3;
+  end;
+  assume
+A4: m^2 divides n^2;
+  per cases by CQC_THE1:2;
+  suppose m = 0;
+   then m^2 = 0*0 by SQUARE_1:def 3
+    .= 0;
+   then n^2 = 0 by A4,INT_2:3;
+   then n = 0 by SQUARE_1:73;
+   hence thesis by NAT_1:53;
+  suppose m = 1;
+   hence thesis by NAT_1:53;
+  suppose
+A5: m > 1;
+   then m >= 1 + 1 by NAT_1:38;
+   then consider p' such that
+A6: p' is prime & p' divides m by INT_2:48;
+   reconsider p = p' as prime Nat by A6;
+   consider m' such that
+A7: m = p*m' by A6,NAT_1:def 3;
+     m^2 = m*m by SQUARE_1:def 3
+    .= (m*m')*p by A7,XCMPLX_1:4;
+   then p divides m^2 by NAT_1:def 3;
+   then p divides n^2 by A4,NAT_1:51;
+   then p divides n*n by SQUARE_1:def 3;
+   then p divides n by NAT_LAT:95;
+   then consider n' such that
+A8: n = p*n' by NAT_1:def 3;
+     m' <> 0 by A5,A7;
+   then A9: m' > 0 by NAT_1:19;
+A10: p > 1 by INT_2:def 5;
+   then A11: p*m' > 1*m' by A9,REAL_2:199;
+   consider k' such that
+A12: n^2 = (m^2)*k' by A4,NAT_1:def 3;
+A13: (p^2)*(n'^2) = n^2 by A8,SQUARE_1:68
+    .= (p^2)*(m'^2)*k' by A7,A12,SQUARE_1:68
+    .= (p^2)*((m'^2)*k') by XCMPLX_1:4;
+     p > 0 by A10,AXIOMS:22;
+   then p^2 > 0 by SQUARE_1:74;
+   then n'^2 = (m'^2)*k' by A13,XCMPLX_1:5;
+   then m'^2 divides n'^2 by NAT_1:def 3;
+   then m' divides n' by A2,A7,A11;
+   then consider k such that
+A14: n' = m'*k by NAT_1:def 3;
+     n = m*k by A7,A8,A14,XCMPLX_1:4;
+   hence thesis by NAT_1:def 3;
+ end;
+ for m holds P[m] from Comp_Ind(A1);
+ hence thesis;
+end;
+
+begin :: distributive law for hcf
+
+theorem Th7:
+ m divides n or k = 0 iff k*m divides k*n
+proof
+ hereby
+  assume
+A1: m divides n or k = 0;
+  per cases by A1;
+  suppose m divides n;
+   then consider k' such that
+A2: n = m*k' by NAT_1:def 3;
+     k*n = (k*m)*k' by A2,XCMPLX_1:4;
+   hence k*m divides k*n by NAT_1:def 3;
+  suppose k = 0;
+   hence k*m divides k*n;
+ end;
+ assume
+A3: k*m divides k*n;
+   now
+  assume
+A4: k <> 0;
+  consider k' such that
+A5: k*n = k*m*k' by A3,NAT_1:def 3;
+    k*n = k*(m*k') by A5,XCMPLX_1:4;
+  then n = m*k' by A4,XCMPLX_1:5;
+  hence m divides n by NAT_1:def 3;
+ end;
+ hence thesis;
+end;
+
+theorem Th8:
+ (k*m) hcf (k*n) = k*(m hcf n)
+proof
+ per cases;
+ suppose
+A1: k <> 0;
+    k divides k*m & k divides k*n by NAT_1:56;
+  then k divides (k*m) hcf (k*n) by NAT_1:def 5;
+  then consider k' such that
+A2: (k*m) hcf (k*n) = k*k' by NAT_1:def 3;
+    now
+     k*k' divides k*m by A2,NAT_1:def 5;
+   hence k' divides m by A1,Th7;
+     k*k' divides k*n by A2,NAT_1:def 5;
+   hence k' divides n by A1,Th7;
+   let p;
+   assume p divides m & p divides n;
+   then k*p divides k*m & k*p divides k*n by Th7;
+   then k*p divides k*k' by A2,NAT_1:def 5;
+   hence p divides k' by A1,Th7;
+  end;
+  hence thesis by A2,NAT_1:def 5;
+ suppose k = 0;
+  hence (k*m) hcf (k*n) = k*(m hcf n);
+end;
+
+begin :: unbounded sets are infinite
+
+theorem Th9:
+ for X being set st for m ex n st n >= m & n in X holds X is infinite
+proof
+A1: now
+  let f be Function;
+  defpred P[Nat] means ex m st for n st n >= m holds not n in f.:$1;
+A2: P[0]
+  proof
+   take 0;
+   let n such that n >= 0;
+   thus not n in f.:0 by RELAT_1:149;
+  end;
+A3: for k st P[k] holds P[k+1]
+  proof
+   let k;
+   assume ex m st for n st n >= m holds not n in f.:k;
+   then consider m such that
+A4: for n st n >= m holds not n in f.:k;
+     k + 1 = succ k by CARD_1:52
+    .= k \/ { k } by ORDINAL1:def 1;
+   then A5: f.:(k + 1) = f.:k \/ f.:{ k } by RELAT_1:153;
+   per cases;
+   suppose
+A6:  k in dom f & f.k in NAT;
+    then reconsider m' = f.k as Nat;
+A7: f.:(k + 1) = f.:k \/ { m' } by A5,A6,FUNCT_1:117;
+    take max(m,m' + 1);
+    let n;
+    assume n >= max(m,m' + 1);
+    then n >= m & n >= m' + 1 by SQUARE_1:50;
+    then n >= m & n <> m' by NAT_1:38;
+    then not n in f.:k & not n in { m' } by A4,TARSKI:def 1;
+    hence not n in f.:(k + 1) by A7,XBOOLE_0:def 2;
+   suppose
+A8:  k in dom f & not f.k in NAT;
+    set m' = f.k;
+A9: f.:(k + 1) = f.:k \/ { m' } by A5,A8,FUNCT_1:117;
+    take m;
+    let n;
+    assume n >= m;
+    then n >= m & n <> m' by A8;
+    then not n in f.:k & not n in { m' } by A4,TARSKI:def 1;
+    hence not n in f.:(k + 1) by A9,XBOOLE_0:def 2;
+   suppose
+   not k in dom f;
+then A10:   dom f misses { k } by ZFMISC_1:56;
+A11: f.:{ k } = f.:(dom f /\ { k }) by RELAT_1:145
+     .= f.:{} by A10,XBOOLE_0:def 7
+     .= {} by RELAT_1:149;
+    take m;
+    let n;
+    assume n >= m;
+    hence not n in f.:(k + 1) by A4,A5,A11;
+  end;
+  thus for k holds P[k] from Ind(A2,A3);
+ end;
+ let X be set;
+   now
+  assume X is finite;
+  then consider f being Function such that
+A12: rng f = X & dom f in omega by FINSET_1:def 1;
+  reconsider k = dom f as Nat by A12;
+    f.:k = X by A12,RELAT_1:146;
+  hence ex m st for n st n >= m holds not n in X by A1;
+ end;
+ hence thesis;
+end;
+
+begin :: Pythagorean triples
+
+theorem Th10:
+ a,b are_relative_prime implies a is odd or b is odd
+proof
+ assume
+A1: a,b are_relative_prime;
+ assume a is even;
+ then A2: 2 divides a by PEPIN:22;
+ assume b is even;
+ then 2 divides b by PEPIN:22;
+ hence contradiction by A1,A2,Def1;
+end;
+
+theorem Th11:
+ a^2 + b^2 = c^2 & a,b are_relative_prime & a is odd implies
+  ex m,n st m <= n & a = n^2 - m^2 & b = 2*m*n & c = n^2 + m^2
+proof
+ assume
+A1: a^2 + b^2 = c^2;
+ assume
+A2: a,b are_relative_prime;
+ assume a is odd;
+ then reconsider a' = a as odd Nat;
+   b is even
+ proof
+  assume b is odd;
+  then reconsider b' = b as odd Nat;
+    a'^2 + b'^2 = c^2 by A1;
+  hence contradiction;
+ end;
+ then reconsider b' = b as even Nat;
+   a'^2 + b'^2 = c^2 by A1;
+ then reconsider c' = c as odd Nat by Th2;
+ consider n' such that
+A3: c' + a' = 2*n' by ABIAN:def 2;
+A4: n' = (c + a)/2 by A3,XCMPLX_1:90;
+ consider i such that
+A5: c' - a' = 2*i by ABIAN:def 1;
+   b^2 >= 0 by NAT_1:18;
+ then A6: c^2 >= a^2 + 0 by A1,AXIOMS:24;
+   c >= 0 by NAT_1:18;
+ then c >= a by A6,SQUARE_1:78;
+ then 2*i >= 2*0 by A5,SQUARE_1:12;
+ then i >= 0 by REAL_1:70;
+ then reconsider m' = i as Nat by INT_1:16;
+A7: m' = (c - a)/2 by A5,XCMPLX_1:90;
+ consider k' such that
+A8: b' = 2*k' by ABIAN:def 2;
+A9: n' - m' = ((c + a) - (c - a))/2 by A4,A7,XCMPLX_1:121
+  .= (c + a - c + a)/2 by XCMPLX_1:37
+  .= (c - c + a + a)/2 by XCMPLX_1:29
+  .= (0 + a + a)/2 by XCMPLX_1:14
+  .= (2*a)/2 by XCMPLX_1:11
+  .= a by XCMPLX_1:90;
+A10: n' + m' = ((c + a) + (c - a))/2 by A4,A7,XCMPLX_1:63
+  .= (c + a + c - a)/2 by XCMPLX_1:29
+  .= (c + c + a - a)/2 by XCMPLX_1:1
+  .= (c + c)/2 by XCMPLX_1:26
+  .= (2*c)/2 by XCMPLX_1:11
+  .= c by XCMPLX_1:90;
+A11: n',m' are_relative_prime
+ proof
+  let p be prime Nat;
+  assume
+A12: p divides n' & p divides m';
+  then A13: p divides (n' qua Integer) by SCPINVAR:2;
+    p divides (m' qua Integer) by A12,SCPINVAR:2;
+  then p divides -m' by INT_2:14;
+  then p divides (n' + -m') by A13,WSIERP_1:9;
+  then p divides (a qua Integer) by A9,XCMPLX_0:def 8;
+  then A14: p divides a by SCPINVAR:2;
+  then p divides a*a by NAT_1:56;
+  then p divides (a*a qua Integer) by SCPINVAR:2;
+  then A15: p divides -(a*a) by INT_2:14;
+    p divides c by A10,A12,NAT_1:55;
+  then p divides c*c by NAT_1:56;
+  then A16: p divides (c*c qua Integer) by SCPINVAR:2;
+    b*b = b^2 by SQUARE_1:def 3
+   .= c^2 - a^2 by A1,XCMPLX_1:26
+   .= c*c - a^2 by SQUARE_1:def 3
+   .= c*c - a*a by SQUARE_1:def 3
+   .= c*c + -(a*a) by XCMPLX_0:def 8;
+  then p divides (b*b qua Integer) by A15,A16,WSIERP_1:9;
+  then p divides b*b by SCPINVAR:2;
+  then p divides b by NAT_LAT:95;
+  hence contradiction by A2,A14,Def2;
+ end;
+A17: n'*m' = ((c + a)/2)*m' by A3,XCMPLX_1:90
+  .= ((c + a)/2)*((c - a)/2) by A5,XCMPLX_1:90
+  .= ((c + a)*(c - a))/(2*2) by XCMPLX_1:77
+  .= (c^2 - a^2)/(2*2) by SQUARE_1:67
+  .= (b^2)/(2*2) by A1,XCMPLX_1:26
+  .= (b^2)/(2^2) by SQUARE_1:def 3
+  .= (b/2)^2 by SQUARE_1:69
+  .= k'^2 by A8,XCMPLX_1:90;
+ then A18: n' is square & m' is square by A11,Th1;
+ then consider n such that
+A19: n' = n^2 by Def3;
+ consider m such that
+A20: m' = m^2 by A18,Def3;
+ take m,n;
+   n' - m' >= 0 by A9,NAT_1:18;
+ then n >= 0 & m^2 <= n^2 by A19,A20,NAT_1:18,REAL_2:105;
+ hence m <= n by SQUARE_1:78;
+ thus a = n^2 - m^2 by A9,A19,A20;
+   b^2 = (2^2)*(n'*m') by A8,A17,SQUARE_1:68
+  .= (2^2)*(n*m)^2 by A19,A20,SQUARE_1:68
+  .= (2*(n*m))^2 by SQUARE_1:68
+  .= (2*m*n)^2 by XCMPLX_1:4;
+ hence b = 2*m*n by Th5;
+ thus c = n^2 + m^2 by A10,A19,A20;
+end;
+
+theorem Th12:
+ a = n^2 - m^2 & b = 2*m*n & c = n^2 + m^2 implies a^2 + b^2 = c^2
+proof
+ assume
+A1: a = n^2 - m^2 & b = 2*m*n & c = n^2 + m^2;
+ hence a^2 + b^2 = (n^2 - m^2)^2 + (2*n*m)^2 by XCMPLX_1:4
+  .= (n^2)^2 - 2*(n^2)*(m^2) + (m^2)^2 + (2*n*m)^2 by SQUARE_1:64
+  .= (n^2)^2 - 2*(n^2)*(m^2) + (m^2)^2 + (2*n)^2*(m^2) by SQUARE_1:68
+  .= (n^2)^2 - 2*(n^2)*(m^2) + (m^2)^2 + (2^2)*(n^2)*(m^2) by SQUARE_1:68
+  .= (n^2)^2 - 2*(n^2)*(m^2) + (m^2)^2 + (2*2)*(n^2)*(m^2) by SQUARE_1:def 3
+  .= (n^2)^2 - 2*(n^2)*(m^2) + (m^2)^2 + (2 + 2)*(n^2)*(m^2)
+  .= (n^2)^2 - 2*(n^2)*(m^2) + (m^2)^2 + (2*(n^2) + 2*(n^2))*(m^2)
+       by XCMPLX_1:8
+  .= (n^2)^2 - 2*(n^2)*(m^2) + (m^2)^2 + (2*(n^2)*(m^2) + 2*(n^2)*(m^2))
+      by XCMPLX_1:8
+  .= (n^2)^2 - 2*(n^2)*(m^2) + (m^2)^2 + 2*(n^2)*(m^2) + 2*(n^2)*(m^2)
+      by XCMPLX_1:1
+  .= (n^2)^2 - 2*(n^2)*(m^2) + 2*(n^2)*(m^2) + (m^2)^2 + 2*(n^2)*(m^2)
+      by XCMPLX_1:1
+  .= (n^2)^2 + (m^2)^2 + 2*(n^2)*(m^2) by XCMPLX_1:27
+  .= (n^2)^2 + 2*(n^2)*(m^2) + (m^2)^2 by XCMPLX_1:1
+  .= c^2 by A1,SQUARE_1:63;
+end;
+
+definition
+ mode Pythagorean_triple -> Subset of NAT means :Def4:
+  ex a,b,c st a^2 + b^2 = c^2 & it = { a,b,c };
+ existence
+ proof
+  take { 0,0,0 };
+  take 0,0,0;
+  thus 0^2 + 0^2 = 0^2 by SQUARE_1:60;
+  thus thesis;
+ end;
+end;
+
+reserve X for Pythagorean_triple;
+
+definition
+ cluster -> finite Pythagorean_triple;
+ coherence
+ proof
+  let X;
+    ex a,b,c st a^2 + b^2 = c^2 & X = { a,b,c } by Def4;
+  hence thesis;
+ end;
+end;
+
+definition
+ redefine mode Pythagorean_triple means :Def5:
+  ex k,m,n st m <= n & it = { k*(n^2 - m^2), k*(2*m*n), k*(n^2 + m^2) };
+ compatibility
+ proof
+  let X be Subset of NAT;
+  hereby
+   assume X is Pythagorean_triple;
+   then consider a,b,c such that
+A1: a^2 + b^2 = c^2 & X = { a,b,c } by Def4;
+   set k = a hcf b;
+A2: k divides a & k divides b by NAT_1:def 5;
+   per cases;
+   suppose k = 0;
+    then A3:  a = 0 & b = 0 by A2,INT_2:3;
+A4: c*c = a^2 + b^2 by A1,SQUARE_1:def 3
+     .= 0*0 + 0^2 by A3,SQUARE_1:def 3
+     .= 0 by SQUARE_1:def 3;
+    thus ex k,m,n st m <= n & X = { k*(n^2 - m^2), k*(2*m*n), k*(n^2 + m^2) }
+    proof
+     take 0,0,0;
+     thus thesis by A1,A3,A4,XCMPLX_1:6;
+    end;
+   suppose
+A5:  k <> 0;
+    then k*k <> 0 by XCMPLX_1:6;
+    then A6:  k^2 <> 0 by SQUARE_1:def 3;
+    consider a' such that
+A7:  a = k*a' by A2,NAT_1:def 3;
+    consider b' such that
+A8:  b = k*b' by A2,NAT_1:def 3;
+A9: c^2 = (k^2)*(a'^2) + (k*b')^2 by A1,A7,A8,SQUARE_1:68
+     .= (k^2)*(a'^2) + (k^2)*(b'^2) by SQUARE_1:68
+     .= (k^2)*(a'^2 + b'^2) by XCMPLX_1:8;
+    then k^2 divides c^2 by NAT_1:def 3;
+    then k divides c by Th6;
+    then consider c' such that
+A10: c = k*c' by NAT_1:def 3;
+      k^2*(a'^2 + b'^2) = k^2*c'^2 by A9,A10,SQUARE_1:68;
+    then A11: a'^2 + b'^2 = c'^2 by A6,XCMPLX_1:5;
+      k*(a' hcf b') = k*1 by A7,A8,Th8;
+    then a' hcf b' = 1 by A5,XCMPLX_1:5;
+    then A12: a',b' are_relative_prime & b',a' are_relative_prime by INT_2:def
+6;
+    thus ex k,m,n st m <= n & X = { k*(n^2 - m^2), k*(2*m*n), k*(n^2 + m^2) }
+    proof
+     per cases by A12,Th10;
+     suppose a' is odd;
+      then consider m,n such that
+A13:   m <= n & a' = n^2 - m^2 & b' = 2*m*n & c' = n^2 + m^2 by A11,A12,Th11;
+      take k,m,n;
+      thus m <= n & X = { k*(n^2 - m^2), k*(2*m*n), k*(n^2 + m^2) }
+       by A1,A7,A8,A10,A13;
+     suppose b' is odd;
+      then consider m,n such that
+A14:   m <= n & b' = n^2 - m^2 & a' = 2*m*n & c' = n^2 + m^2 by A11,A12,Th11;
+      take k,m,n;
+      thus m <= n & X = { k*(n^2 - m^2), k*(2*m*n), k*(n^2 + m^2) }
+       by A1,A7,A8,A10,A14,ENUMSET1:99;
+    end;
+  end;
+  assume
+     ex k,m,n st m <= n & X = { k*(n^2 - m^2), k*(2*m*n), k*(n^2 + m^2) };
+  then consider k,m,n such that
+A15: m <= n & X = { k*(n^2 - m^2), k*(2*m*n), k*(n^2 + m^2) };
+    m >= 0 by NAT_1:18;
+  then m^2 <= n^2 by A15,SQUARE_1:77;
+  then n^2 - m^2 >= 0 by SQUARE_1:12;
+  then reconsider a' = n^2 - m^2 as Nat by INT_1:16;
+  set b' = 2*m*n;
+  set c' = n^2 + m^2;
+  set a = k*a';
+  set b = k*b';
+  set c = k*c';
+    a^2 + b^2 = (k^2)*(a'^2) + (k*b')^2 by SQUARE_1:68
+   .= (k^2)*(a'^2) + (k^2)*(b'^2) by SQUARE_1:68
+   .= (k^2)*(a'^2 + b'^2) by XCMPLX_1:8
+   .= (k^2)*(c'^2) by Th12
+   .= c^2 by SQUARE_1:68;
+  hence X is Pythagorean_triple by A15,Def4;
+ end;
+end;
+
+definition
+ let X;
+ attr X is degenerate means :Def6:
+  0 in X;
+end;
+
+theorem
+   n > 2 implies ex X st X is non degenerate & n in X
+proof
+ assume
+A1: n > 2;
+ per cases;
+ suppose n is even;
+  then consider m such that
+A2: n = 2*m by ABIAN:def 2;
+    2*m > 2*1 by A1,A2;
+  then A3: m > 1 by AXIOMS:25;
+  then A4: m^2 > 1^2 by SQUARE_1:78;
+  then m^2 - 1^2 > 0 by SQUARE_1:11;
+  then reconsider a = 1*(m^2 - 1^2) as Nat by INT_1:16;
+  set b = 1*(2*1*m);
+  set c = 1*(m^2 + 1^2);
+  reconsider X = { a,b,c } as Pythagorean_triple by A3,Def5;
+  take X;
+A5: c = m^2 + 1*1 by SQUARE_1:def 3
+   .= m^2 + 1;
+A6: a <> 0 by A4,SQUARE_1:11;
+  b <> 0 by A1,A2;
+  hence not 0 in X by A5,A6,ENUMSET1:13;
+  thus n in X by A2,ENUMSET1:14;
+ suppose n is odd;
+  then consider i such that
+A7: n = 2*i + 1 by ABIAN:1;
+    2*i >= 2*1 by A1,A7,INT_1:20;
+  then i >= 1 by REAL_1:70;
+  then A8: i > 0 by AXIOMS:22;
+  then reconsider m = i as Nat by INT_1:16;
+A9: 1*((m + 1)^2 - m^2) = 2*m + m^2 + 1 - m^2 by SQUARE_1:65
+   .= 2*m + 1 + m^2 - m^2 by XCMPLX_1:1
+   .= n by A7,XCMPLX_1:26;
+  then reconsider a = 1*((m + 1)^2 - m^2) as Nat;
+  set b = 1*(2*m*(m + 1));
+  set c = 1*((m + 1)^2 + m^2);
+    m <= m + 1 by NAT_1:29;
+  then reconsider X = { a,b,c } as Pythagorean_triple by Def5;
+  take X;
+A10: a = 2*m + 1 by A7,A9;
+A11: c = (m^2 + 2*m + 1) + m^2 by SQUARE_1:65
+   .= m^2 + 2*m + m^2 + 1 by XCMPLX_1:1;
+    2*m <> 0 & m + 1 <> 0 by A8,XCMPLX_1:6;
+  then b <> 0 by XCMPLX_1:6;
+  hence not 0 in X by A10,A11,ENUMSET1:13;
+  thus n in X by A9,ENUMSET1:14;
+end;
+
+definition
+ let X;
+ attr X is simplified means :Def7:
+  for k st for n st n in X holds k divides n holds k = 1;
+end;
+
+definition
+ let X;
+ redefine attr X is simplified means :Def8:
+  ex m,n st m in X & n in X & m,n are_relative_prime;
+ compatibility
+ proof
+  hereby
+   assume
+A1: X is simplified;
+   consider a,b,c such that
+A2: a^2 + b^2 = c^2 & X = { a,b,c } by Def4;
+   take a,b;
+   thus a in X by A2,ENUMSET1:14;
+   thus b in X by A2,ENUMSET1:14;
+     now
+    let k;
+    assume
+A3:  k divides a & k divides b;
+    then k^2 divides a^2 & k^2 divides b^2 by Th6;
+    then k^2 divides c^2 by A2,NAT_1:55;
+    then k divides c by Th6;
+    then for n st n in X holds k divides n by A2,A3,ENUMSET1:13;
+    hence k = 1 by A1,Def7;
+   end;
+   hence a,b are_relative_prime by Def1;
+  end;
+  assume ex m,n st m in X & n in X & m,n are_relative_prime;
+  then consider m,n such that
+A4: m in X & n in X & m,n are_relative_prime;
+A5: m hcf n = 1 by A4,INT_2:def 6;
+  let k;
+  assume for n st n in X holds k divides n;
+  then k divides m & k divides n by A4;
+  then k divides 1 by A5,NAT_1:def 5;
+  hence k = 1 by WSIERP_1:20;
+ end;
+end;
+
+theorem Th14:
+ n > 0 implies ex X st X is non degenerate & X is simplified & 4*n in X
+proof
+ assume
+A1: n > 0;
+ then n > 0 & n >= 0 + 1 by NAT_1:38;
+ then n + n > 0 + 1 by REAL_1:67;
+ then A2: 2*n > 1 by XCMPLX_1:11;
+ then A3: (2*n)^2 > 1^2 by SQUARE_1:78;
+ then (2*n)^2 - 1^2 > 0 by SQUARE_1:11;
+ then reconsider a = 1*((2*n)^2 - 1^2) as Nat by INT_1:16;
+ set b = 1*(2*1*(2*n));
+ set c = 1*((2*n)^2 + 1^2);
+ reconsider X = { a,b,c } as Pythagorean_triple by A2,Def5;
+ take X;
+A4: a = (2*n)^2 - 1*1 by SQUARE_1:def 3
+  .= (2*n)^2 - 1;
+A5: b = (2*2)*n by XCMPLX_1:4
+  .= 4*n;
+A6: c = (2*n)^2 + 1*1 by SQUARE_1:def 3
+  .= (2*n)^2 + 1;
+A7: a <> 0 by A3,SQUARE_1:11;
+  b <> 0 by A1,A5,XCMPLX_1:6;
+ hence not 0 in X by A6,A7,ENUMSET1:13;
+A8: a in X by ENUMSET1:14;
+A9: c in X by ENUMSET1:14;
+A10: a - c = (2*n)^2 - 1 - (2*n)^2 - 1 by A4,A6,XCMPLX_1:36
+  .= (2*n)^2 - (2*n)^2 - 1 - 1 by XCMPLX_1:21
+  .= 0 - 1 - 1 by XCMPLX_1:14
+  .= -2;
+A11: a >= 0 & c >= 0 by NAT_1:18;
+A12: c = (2^2)*(n^2) + 1 by A6,SQUARE_1:68
+  .= (2*2)*(n^2) + 1 by SQUARE_1:def 3
+  .= 2*(2*n^2) + 1 by XCMPLX_1:4;
+   a hcf c = abs(a) hcf c by SCMFSA_7:1
+  .= abs(a) hcf abs(c) by SCMFSA_7:1
+  .= a gcd c by INT_2:def 3
+  .= c gcd -2 by A10,A11,SCPINVAR:4
+  .= abs(c) hcf abs(-2) by INT_2:def 3
+  .= abs(c) hcf abs(2) by ABSVALUE:17
+  .= (2*(2*n^2) + 1) gcd 2 by A12,INT_2:def 3
+  .= 1 gcd 2 by EULER_1:17
+  .= 1 by WSIERP_1:13;
+ then a,c are_relative_prime by INT_2:def 6;
+ hence X is simplified by A8,A9,Def8;
+ thus 4*n in X by A5,ENUMSET1:14;
+end;
+
+definition
+ cluster non degenerate simplified Pythagorean_triple;
+ existence
+ proof
+  consider X such that
+A1: X is non degenerate & X is simplified & 4*1 in X by Th14;
+  take X;
+  thus thesis by A1;
+ end;
+end;
+
+theorem
+   { 3,4,5 } is non degenerate simplified Pythagorean_triple
+proof
+   3^2 + 4^2 = 3*3 + 4^2 by SQUARE_1:def 3
+  .= 3*3 + 4*4 by SQUARE_1:def 3
+  .= 5*5
+  .= 5^2 by SQUARE_1:def 3;
+ then reconsider X = { 3,4,5 } as Pythagorean_triple by Def4;
+A1: not 0 in X by ENUMSET1:13;
+   3 hcf 4 = abs(3) hcf 4 by SCMFSA_7:1
+  .= abs(3) hcf abs(4) by SCMFSA_7:1
+  .= 3 gcd 4 by INT_2:def 3
+  .= 3 gcd (4 - 3) by SCPINVAR:4
+  .= 1 by WSIERP_1:13;
+ then 3 in X & 4 in X & 3,4 are_relative_prime by ENUMSET1:14,INT_2:def 6;
+ hence thesis by A1,Def6,Def8;
+end;
+
+theorem
+   { X: X is non degenerate & X is simplified } is infinite
+proof
+ set T = { X: X is non degenerate & X is simplified };
+   for m ex n st n >= m & n in union T
+ proof
+  let m;
+  set m' = m + 1;
+   m' > 0 by NAT_1:18;
+  then consider X such that
+A1: X is non degenerate & X is simplified & 4*m' in X by Th14;
+  set n = 4*m';
+  take n;
+A2: n + 0 = (1 + 3)*m'
+   .= 1*m' + 3*m' by XCMPLX_1:8;
+    3*m' >= 0 by NAT_1:18;
+  then A3: n >= m' + 0 by A2,AXIOMS:24;
+    m' >= m by NAT_1:29;
+  hence n >= m by A3,AXIOMS:22;
+    n in X & X in T by A1;
+  hence n in union T by TARSKI:def 4;
+ end;
+ then A4: union T is infinite by Th9;
+   now
+  let X be set;
+  assume X in T;
+  then ex X' being Pythagorean_triple
+   st X = X' & X' is non degenerate & X' is simplified;
+  hence X is finite;
+ end;
+ hence T is infinite by A4,FINSET_1:25;
+end;
+

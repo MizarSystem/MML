@@ -1,0 +1,292 @@
+:: The Lattice of Domains_of of a Topological Space
+::  by Toshihiko Watanabe
+::
+:: Received June 12, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, BOOLE, SUBSET_1, TOPS_1, SETFAM_1, BINOP_1, FUNCT_1,
+      MCART_1, LATTICES, RELAT_1, NAT_LAT, TDLAT_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, PRE_TOPC, LATTICES,
+      BINOP_1, TOPS_1, RELAT_1, FUNCT_1, DOMAIN_1, FUNCT_2, NAT_LAT;
+ constructors BINOP_1, TOPS_1, DOMAIN_1, NAT_LAT, PARTFUN1, MEMBERED;
+ clusters PRE_TOPC, FUNCT_1, RLSUB_2, RELSET_1, SUBSET_1, TOPS_1, LATTICES,
+      MEMBERED, ZFMISC_1;
+ requirements BOOLE, SUBSET;
+
+
+begin
+:: 1. Preliminary Theorems on Subsets of Topological Spaces.
+reserve T for non empty TopSpace;
+
+theorem :: TDLAT_1:1
+ for A,B being Subset of T holds A \/ B = [#] T iff A` c= B;
+
+theorem :: TDLAT_1:2
+ for A,B being Subset of T holds A misses B iff B c= A`;
+
+theorem :: TDLAT_1:3
+ for A being Subset of T holds Cl Int Cl A c= Cl A;
+
+theorem :: TDLAT_1:4
+ for A being Subset of T holds Int A c= Int Cl Int A;
+
+theorem :: TDLAT_1:5
+ for A being Subset of T holds Int Cl A = Int Cl Int Cl A;
+
+theorem :: TDLAT_1:6
+ for A,B being Subset of T st
+  A is closed or B is closed holds Cl Int A \/ Cl Int B = Cl Int(A \/ B);
+
+theorem :: TDLAT_1:7
+ for A,B being Subset of T st
+  A is open or B is open holds Int Cl A /\ Int Cl B = Int Cl(A /\ B);
+
+theorem :: TDLAT_1:8
+ for A being Subset of T holds Int(A /\ Cl A`) = {} T;
+
+theorem :: TDLAT_1:9
+ for A being Subset of T holds Cl(A \/ Int A`) = [#] T;
+
+theorem :: TDLAT_1:10
+ for A,B being Subset of T holds
+  Int(Cl(A \/ (Int(Cl B) \/ B))) \/ (A \/ (Int(Cl B) \/ B)) =
+   Int Cl(A \/ B) \/ (A \/ B);
+
+theorem :: TDLAT_1:11
+  for A,C being Subset of T holds
+  Int(Cl((Int(Cl A) \/ A) \/ C)) \/ ((Int(Cl A) \/ A) \/ C) =
+   Int Cl(A \/ C) \/ (A \/ C);
+
+theorem :: TDLAT_1:12
+ for A,B being Subset of T holds
+  Cl(Int(A /\ (Cl(Int B) /\ B))) /\ (A /\ (Cl(Int B) /\ B)) =
+   Cl Int(A /\ B) /\ (A /\ B);
+
+theorem :: TDLAT_1:13
+  for A,C being Subset of T holds
+  Cl(Int((Cl(Int A) /\ A) /\ C)) /\ ((Cl(Int A) /\ A) /\ C) =
+   Cl Int(A /\ C) /\ (A /\ C);
+
+begin
+:: 2. Properties of Domains_of of Topological Spaces.
+reserve T for non empty TopSpace;
+
+theorem :: TDLAT_1:14
+ {}T is condensed;
+
+theorem :: TDLAT_1:15
+ [#] T is condensed;
+
+theorem :: TDLAT_1:16
+ for A being Subset of T st A is condensed holds A` is condensed;
+
+theorem :: TDLAT_1:17
+ for A,B being Subset of T st A is condensed & B is condensed holds
+  Int(Cl(A \/ B)) \/ (A \/ B) is condensed & Cl(Int(A /\ B)) /\ (A /\
+ B) is condensed;
+
+theorem :: TDLAT_1:18
+ {} T is closed_condensed;
+
+theorem :: TDLAT_1:19
+ [#] T is closed_condensed;
+
+theorem :: TDLAT_1:20
+ {} T is open_condensed;
+
+theorem :: TDLAT_1:21
+ [#] T is open_condensed;
+
+theorem :: TDLAT_1:22
+ for A being Subset of T holds Cl(Int A) is closed_condensed;
+
+theorem :: TDLAT_1:23
+ for A being Subset of T holds Int(Cl A) is open_condensed;
+
+theorem :: TDLAT_1:24
+ for A being Subset of T st A is condensed holds Cl A is closed_condensed;
+
+theorem :: TDLAT_1:25
+ for A being Subset of T st A is condensed holds Int A is open_condensed;
+
+theorem :: TDLAT_1:26
+ for A being Subset of T st A is condensed holds Cl A` is closed_condensed;
+
+theorem :: TDLAT_1:27
+ for A being Subset of T st A is condensed holds Int A` is open_condensed;
+
+theorem :: TDLAT_1:28
+ for A,B,C being Subset of T st
+  A is closed_condensed & B is closed_condensed & C is closed_condensed holds
+   Cl(Int(A /\ (Cl(Int(B /\ C))))) = Cl(Int((Cl(Int(A /\ B)) /\ C)));
+
+theorem :: TDLAT_1:29
+ for A,B,C being Subset of T st
+  A is open_condensed & B is open_condensed & C is open_condensed holds
+   Int(Cl(A \/ (Int(Cl(B \/ C))))) = Int(Cl((Int(Cl(A \/ B)) \/ C)));
+
+begin
+:: 3. The Lattice of Domains.
+
+definition let T be TopStruct;
+ func Domains_of T -> Subset-Family of T equals
+:: TDLAT_1:def 1
+ { A where A is Subset of T : A is condensed };
+end;
+
+definition let T be non empty TopSpace;
+ cluster Domains_of T -> non empty;
+end;
+
+definition let T be non empty TopSpace;
+ func Domains_Union T -> BinOp of Domains_of T means
+:: TDLAT_1:def 2
+ for A,B being Element of Domains_of T holds
+              it.(A,B) = Int(Cl(A \/ B)) \/ (A \/ B);
+synonym D-Union T;
+end;
+
+definition let T be non empty TopSpace;
+ func Domains_Meet T -> BinOp of Domains_of T means
+:: TDLAT_1:def 3
+ for A,B being Element of Domains_of T holds
+      it.(A,B) = Cl(Int(A /\ B)) /\ (A /\ B);
+synonym D-Meet T;
+end;
+
+theorem :: TDLAT_1:30
+ for T being non empty TopSpace holds
+  LattStr(#Domains_of T,D-Union T,D-Meet T#) is C_Lattice;
+
+definition let T be non empty TopSpace;
+ func Domains_Lattice T-> C_Lattice equals
+:: TDLAT_1:def 4
+ LattStr(#Domains_of T,Domains_Union T,Domains_Meet T#);
+end;
+
+
+begin
+:: 4. The Lattice of Closed Domains.
+
+definition let T be TopStruct;
+ func Closed_Domains_of T -> Subset-Family of T equals
+:: TDLAT_1:def 5
+  { A where A is Subset of T : A is closed_condensed };
+end;
+
+definition let T be non empty TopSpace;
+ cluster Closed_Domains_of T -> non empty;
+end;
+
+theorem :: TDLAT_1:31
+ for T being non empty TopSpace holds Closed_Domains_of T c= Domains_of T;
+
+definition let T be non empty TopSpace;
+ func Closed_Domains_Union T -> BinOp of Closed_Domains_of T means
+:: TDLAT_1:def 6
+ for A,B being Element of Closed_Domains_of T holds
+   it.(A,B) = A \/ B;
+synonym CLD-Union T;
+end;
+
+theorem :: TDLAT_1:32
+ for A,B being Element of Closed_Domains_of T holds
+  (CLD-Union T).(A,B) = (D-Union T).(A,B);
+
+definition let T be non empty TopSpace;
+ func Closed_Domains_Meet T -> BinOp of Closed_Domains_of T means
+:: TDLAT_1:def 7
+ for A,B being Element of Closed_Domains_of T holds
+       it.(A,B) = Cl(Int(A /\ B));
+synonym CLD-Meet T;
+end;
+
+theorem :: TDLAT_1:33
+ for A,B being Element of Closed_Domains_of T holds
+  (CLD-Meet T).(A,B) = (D-Meet T).(A,B);
+
+theorem :: TDLAT_1:34
+ for T being non empty TopSpace holds
+  LattStr(#Closed_Domains_of T,CLD-Union T,CLD-Meet T#) is B_Lattice;
+
+definition let T be non empty TopSpace;
+ func Closed_Domains_Lattice T-> B_Lattice equals
+:: TDLAT_1:def 8
+
+   LattStr(#Closed_Domains_of T,Closed_Domains_Union T,Closed_Domains_Meet T#);
+end;
+
+begin
+:: 5. The Lattice of Open Domains.
+
+definition let T be TopStruct;
+ func Open_Domains_of T -> Subset-Family of T equals
+:: TDLAT_1:def 9
+ { A where A is Subset of T : A is open_condensed };
+end;
+
+definition let T be non empty TopSpace;
+ cluster Open_Domains_of T -> non empty;
+end;
+
+theorem :: TDLAT_1:35
+ for T being non empty TopSpace holds Open_Domains_of T c= Domains_of T;
+
+definition let T be non empty TopSpace;
+ func Open_Domains_Union T -> BinOp of Open_Domains_of T means
+:: TDLAT_1:def 10
+ for A,B being Element of Open_Domains_of T holds
+  it.(A,B) = Int(Cl(A \/ B));
+synonym OPD-Union T;
+end;
+
+theorem :: TDLAT_1:36
+ for A,B being Element of Open_Domains_of T holds
+  (OPD-Union T).(A,B) = (D-Union T).(A,B);
+
+definition let T be non empty TopSpace;
+ func Open_Domains_Meet T -> BinOp of Open_Domains_of T means
+:: TDLAT_1:def 11
+ for A,B being Element of Open_Domains_of T holds
+       it.(A,B) = A /\ B;
+synonym OPD-Meet T;
+end;
+
+theorem :: TDLAT_1:37
+ for A,B being Element of Open_Domains_of T holds
+  (OPD-Meet T).(A,B) = (D-Meet T).(A,B);
+
+theorem :: TDLAT_1:38
+ for T being non empty TopSpace holds
+  LattStr(#Open_Domains_of T,OPD-Union T,OPD-Meet T#) is B_Lattice;
+
+definition let T be non empty TopSpace;
+ func Open_Domains_Lattice T-> B_Lattice equals
+:: TDLAT_1:def 12
+    LattStr(#Open_Domains_of T,Open_Domains_Union T,Open_Domains_Meet T#);
+end;
+
+begin
+:: 6. Connections between Lattices of Domains.
+reserve T for non empty TopSpace;
+
+theorem :: TDLAT_1:39
+ CLD-Union T = (D-Union T)|[:Closed_Domains_of T,Closed_Domains_of T:];
+
+theorem :: TDLAT_1:40
+ CLD-Meet T = (D-Meet T)|[:Closed_Domains_of T,Closed_Domains_of T:];
+
+theorem :: TDLAT_1:41
+   Closed_Domains_Lattice T is SubLattice of Domains_Lattice T;
+
+theorem :: TDLAT_1:42
+ OPD-Union T = (D-Union T)|[:Open_Domains_of T,Open_Domains_of T:];
+
+theorem :: TDLAT_1:43
+ OPD-Meet T = (D-Meet T)|[:Open_Domains_of T,Open_Domains_of T:];
+
+theorem :: TDLAT_1:44
+   Open_Domains_Lattice T is SubLattice of Domains_Lattice T;
+

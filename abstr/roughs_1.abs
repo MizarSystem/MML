@@ -1,0 +1,474 @@
+:: Basic Properties of Rough Sets and Rough Membership Function
+::  by Adam Grabowski
+:: 
+:: Received November 23, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary ROUGHS_1, ARYTM_3, RCOMP_1, SQUARE_1, ARYTM_1, FUNCT_1, BOOLE,
+      TARSKI, RELAT_1, RELAT_2, SUBSET_1, ORDERS_1, PARTFUN1, EQREL_1, CARD_1,
+      FINSET_1, TOLER_1, NATTRA_1, REALSET1, FUNCT_3, PROB_2, FINSEQ_1, PROB_1,
+      RLVECT_1, FINSEQ_2, FUNCOP_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, CARD_1, XREAL_0,
+      REAL_1, NAT_1, SQUARE_1, FINSET_1, FUNCOP_1, RELAT_1, RELAT_2, FUNCT_1,
+      FINSEQ_1, RVSUM_1, FINSEQ_2, RELSET_1, PARTFUN1, REALSET1, PROB_1,
+      PROB_2, FUNCT_2, FUNCT_3, STRUCT_0, PRE_TOPC, GROUP_1, ORDERS_1, EQREL_1,
+      RCOMP_1, TOLER_1, ORDERS_3;
+ constructors RELAT_2, MCART_1, WELLORD1, PRE_TOPC, PARTFUN1, MEMBERED,
+      XBOOLE_0, ORDERS_1, EQREL_1, SUBSET_1, CARD_1, CARD_2, XCMPLX_0, NUMBERS,
+      XREAL_0, FINSET_1, SQUARE_1, RCOMP_1, TOLER_1, NAT_1, GROUP_1, ORDINAL2,
+      ORDINAL1, REAL_1, FSM_1, REALSET1, ORDERS_3, PROB_1, FUNCT_3, PROB_2,
+      FINSEQ_1, RVSUM_1, FUNCOP_1, FINSEQ_2, TAXONOM2;
+ clusters RELSET_1, STRUCT_0, PRE_TOPC, SUBSET_1, MEMBERED, ZFMISC_1, PARTFUN1,
+      XBOOLE_0, XREAL_0, FINSET_1, ORDINAL2, ARYTM_3, FSM_1, ORDERS_1, EQREL_1,
+      TAXONOM2, REALSET1, FINSEQ_1, FUNCOP_1;
+ requirements BOOLE, SUBSET, ARITHM, NUMERALS, REAL;
+
+
+begin :: Preliminaries
+
+definition let A be set;
+  cluster RelStr (# A, id A #) -> discrete;
+end;
+
+theorem :: ROUGHS_1:1
+  for X being set st Total X c= id X holds X is trivial;
+
+definition let A be RelStr;
+  attr A is diagonal means
+:: ROUGHS_1:def 1
+    the InternalRel of A c= id the carrier of A;
+end;
+
+definition let A be non trivial set;
+  cluster RelStr (# A, Total A #) -> non diagonal;
+end;
+
+theorem :: ROUGHS_1:2
+  for L being reflexive RelStr holds
+    id the carrier of L c= the InternalRel of L;
+
+definition
+  cluster non discrete -> non trivial (reflexive RelStr);
+  cluster reflexive trivial -> discrete RelStr;
+end;
+
+theorem :: ROUGHS_1:3
+  for X being set,
+      R being total reflexive Relation of X holds
+    id X c= R;
+
+definition
+  cluster discrete -> diagonal RelStr;
+  cluster non diagonal -> non discrete RelStr;
+end;
+
+definition
+  cluster non diagonal non empty RelStr;
+end;
+
+theorem :: ROUGHS_1:4
+  for A being non diagonal non empty RelStr
+   ex x, y being Element of A st
+    x <> y & [x,y] in the InternalRel of A;
+
+theorem :: ROUGHS_1:5
+  for D being set,
+      p, q being FinSequence of D holds
+    Union (p^q) = Union p \/ Union q;
+
+theorem :: ROUGHS_1:6
+  for p, q being Function st q is disjoint_valued & p c= q holds
+    p is disjoint_valued;
+
+definition
+  cluster empty -> disjoint_valued Function;
+end;
+
+definition let A be set;
+  cluster disjoint_valued FinSequence of A;
+end;
+
+definition let A be non empty set;
+  cluster non empty disjoint_valued FinSequence of A;
+end;
+
+definition let A be set;
+           let X be FinSequence of bool A;
+           let n be Nat;
+  redefine func X.n -> Subset of A;
+end;
+
+definition let A be set;
+           let X be FinSequence of bool A;
+  redefine func Union X -> Subset of A;
+end;
+
+definition let A be finite set; let R be Relation of A;
+  cluster RelStr (# A, R #) -> finite;
+end;
+
+theorem :: ROUGHS_1:7
+  for X, x, y being set,
+      T being Tolerance of X st
+    x in Class (T, y) holds y in Class (T, x);
+
+begin :: Tolerance and Approximation Spaces
+
+definition let P be RelStr;
+  attr P is with_equivalence means
+:: ROUGHS_1:def 2
+    the InternalRel of P is Equivalence_Relation of the carrier of P;
+  attr P is with_tolerance means
+:: ROUGHS_1:def 3
+    the InternalRel of P is Tolerance of the carrier of P;
+end;
+
+definition
+  cluster with_equivalence -> with_tolerance RelStr;
+end;
+
+definition let A be set;
+  cluster RelStr (# A, id A #) -> with_equivalence;
+end;
+
+definition
+  cluster discrete finite with_equivalence non empty RelStr;
+  cluster non diagonal finite with_equivalence non empty RelStr;
+end;
+
+definition
+  mode Approximation_Space is with_equivalence non empty RelStr;
+  mode Tolerance_Space is with_tolerance non empty RelStr;
+end;
+
+definition let A be Tolerance_Space;
+  cluster the InternalRel of A -> total reflexive symmetric;
+end;
+
+definition let A be Approximation_Space;
+  cluster the InternalRel of A -> transitive;
+end;
+
+definition let A be Tolerance_Space;
+           let X be Subset of A;
+  func LAp X -> Subset of A equals
+:: ROUGHS_1:def 4
+    { x where x is Element of A : Class (the InternalRel of A, x) c= X };
+  func UAp X -> Subset of A equals
+:: ROUGHS_1:def 5
+    { x where x is Element of A : Class (the InternalRel of A, x) meets X };
+end;
+
+definition let A be Tolerance_Space;
+           let X be Subset of A;
+  func BndAp X -> Subset of A equals
+:: ROUGHS_1:def 6
+    UAp X \ LAp X;
+end;
+
+definition let A be Tolerance_Space;
+           let X be Subset of A;
+  attr X is rough means
+:: ROUGHS_1:def 7
+    BndAp X <> {};
+  antonym X is exact;
+end;
+
+ reserve A for Tolerance_Space,
+         X, Y for Subset of A;
+
+theorem :: ROUGHS_1:8
+  for x being set st x in LAp X holds
+    Class (the InternalRel of A, x) c= X;
+
+theorem :: ROUGHS_1:9
+  for x being Element of A st Class (the InternalRel of A, x) c= X holds
+    x in LAp X;
+
+theorem :: ROUGHS_1:10
+  for x being set st x in UAp X holds
+    Class (the InternalRel of A, x) meets X;
+
+theorem :: ROUGHS_1:11
+  for x being Element of A st Class (the InternalRel of A, x) meets X holds
+    x in UAp X;
+
+theorem :: ROUGHS_1:12
+  LAp X c= X;
+
+theorem :: ROUGHS_1:13
+  X c= UAp X;
+
+theorem :: ROUGHS_1:14
+  LAp X c= UAp X;
+
+theorem :: ROUGHS_1:15
+  X is exact iff LAp X = X;
+
+theorem :: ROUGHS_1:16
+  X is exact iff UAp X = X;
+
+theorem :: ROUGHS_1:17
+  X = LAp X iff X = UAp X;
+
+theorem :: ROUGHS_1:18
+  LAp {}A = {};
+
+theorem :: ROUGHS_1:19
+  UAp {}A = {};
+
+theorem :: ROUGHS_1:20
+  LAp [#]A = [#]A;
+
+theorem :: ROUGHS_1:21
+  UAp [#]A = [#]A;
+
+theorem :: ROUGHS_1:22
+  LAp (X /\ Y) = LAp X /\ LAp Y;
+
+theorem :: ROUGHS_1:23
+  UAp (X \/ Y) = UAp X \/ UAp Y;
+
+theorem :: ROUGHS_1:24
+  X c= Y implies LAp X c= LAp Y;
+
+theorem :: ROUGHS_1:25
+  X c= Y implies UAp X c= UAp Y;
+
+theorem :: ROUGHS_1:26
+  LAp X \/ LAp Y c= LAp (X \/ Y);
+
+theorem :: ROUGHS_1:27
+  UAp (X /\ Y) c= UAp X /\ UAp Y;
+
+theorem :: ROUGHS_1:28
+  LAp X` = (UAp X)`;
+
+theorem :: ROUGHS_1:29
+  UAp X` = (LAp X)`;
+
+theorem :: ROUGHS_1:30
+  UAp LAp UAp X = UAp X;
+
+theorem :: ROUGHS_1:31
+  LAp UAp LAp X = LAp X;
+
+theorem :: ROUGHS_1:32
+  BndAp X = BndAp X`;
+
+ reserve A for Approximation_Space,
+         X, Y for Subset of A;
+
+theorem :: ROUGHS_1:33
+  LAp LAp X = LAp X;
+
+theorem :: ROUGHS_1:34
+  LAp LAp X = UAp LAp X;
+
+theorem :: ROUGHS_1:35
+  UAp UAp X = UAp X;
+
+theorem :: ROUGHS_1:36
+  UAp UAp X = LAp UAp X;
+
+definition let A be Approximation_Space;
+  cluster exact Subset of A;
+end;
+
+definition let A be Approximation_Space; let X be Subset of A;
+  cluster LAp X -> exact;
+  cluster UAp X -> exact;
+end;
+
+theorem :: ROUGHS_1:37
+  for A being Approximation_Space,
+      X being Subset of A,
+      x, y being set st
+    x in UAp X & [x,y] in the InternalRel of A holds y in UAp X;
+
+definition let A be non diagonal Approximation_Space;
+  cluster rough Subset of A;
+end;
+
+definition let A be Approximation_Space; let X be Subset of A;
+  mode RoughSet of X means
+:: ROUGHS_1:def 8
+    it = [LAp X, UAp X];
+end;
+
+begin :: Membership Function
+
+definition let A be finite Tolerance_Space, x be Element of A;
+  cluster card Class (the InternalRel of A, x) -> non empty;
+end;
+
+definition let A be finite Tolerance_Space;
+           let X be Subset of A;
+  func MemberFunc (X, A) -> Function of the carrier of A, REAL means
+:: ROUGHS_1:def 9
+    for x being Element of A holds
+      it.x = card (X /\ Class (the InternalRel of A, x)) /
+             (card Class (the InternalRel of A, x));
+end;
+
+ reserve A for finite Tolerance_Space,
+         X, Y for Subset of A,
+         x for Element of A;
+
+theorem :: ROUGHS_1:38
+  0 <= MemberFunc (X, A).x & MemberFunc (X, A).x <= 1;
+
+theorem :: ROUGHS_1:39
+  MemberFunc (X, A).x in [. 0, 1 .];
+
+ reserve A for finite Approximation_Space,
+         X, Y for Subset of A,
+         x for Element of A;
+
+theorem :: ROUGHS_1:40
+  MemberFunc (X, A).x = 1 iff x in LAp X;
+
+theorem :: ROUGHS_1:41
+  MemberFunc (X, A).x = 0 iff x in (UAp X)`;
+
+theorem :: ROUGHS_1:42
+  0 < MemberFunc (X, A).x & MemberFunc (X, A).x < 1 iff
+    x in BndAp X;
+
+theorem :: ROUGHS_1:43
+  for A being discrete Approximation_Space,
+      X being Subset of A holds X is exact;
+
+definition let A be discrete Approximation_Space;
+  cluster -> exact Subset of A;
+end;
+
+theorem :: ROUGHS_1:44
+  for A being discrete finite Approximation_Space,
+      X being Subset of A holds
+    MemberFunc (X, A) = chi (X, the carrier of A);
+
+theorem :: ROUGHS_1:45
+  for A being finite Approximation_Space,
+      X being Subset of A,
+      x, y being set st [x,y] in the InternalRel of A holds
+    MemberFunc (X, A).x = MemberFunc (X, A).y;
+
+theorem :: ROUGHS_1:46
+  MemberFunc (X`,A).x = 1 - (MemberFunc (X,A).x);
+
+theorem :: ROUGHS_1:47
+  X c= Y implies MemberFunc (X, A).x <= MemberFunc (Y, A).x;
+
+theorem :: ROUGHS_1:48
+  MemberFunc (X \/ Y, A).x >= MemberFunc (X, A).x;
+
+theorem :: ROUGHS_1:49
+  MemberFunc (X /\ Y, A).x <= MemberFunc (X, A).x;
+
+theorem :: ROUGHS_1:50
+  MemberFunc (X \/ Y, A).x >=
+    max (MemberFunc (X, A).x, MemberFunc (Y, A).x);
+
+theorem :: ROUGHS_1:51
+  X misses Y implies MemberFunc (X \/ Y, A).x =
+    MemberFunc (X, A).x + MemberFunc (Y, A).x;
+
+theorem :: ROUGHS_1:52
+  MemberFunc (X /\ Y, A).x <=
+    min (MemberFunc (X, A).x, MemberFunc (Y, A).x);
+
+definition let A be finite Tolerance_Space;
+           let X be FinSequence of bool the carrier of A;
+           let x be Element of A;
+  func FinSeqM (x,X) -> FinSequence of REAL means
+:: ROUGHS_1:def 10
+    dom it = dom X &
+     for n being Nat st n in dom X holds it.n = MemberFunc (X.n, A).x;
+end;
+
+theorem :: ROUGHS_1:53
+  for X being FinSequence of bool the carrier of A,
+      x being Element of A,
+      y being Element of bool the carrier of A holds
+    FinSeqM (x, X^<*y*>) = FinSeqM (x, X) ^ <* MemberFunc (y, A).x *>;
+
+theorem :: ROUGHS_1:54
+  MemberFunc ({}A, A).x = 0;
+
+theorem :: ROUGHS_1:55
+  for X being disjoint_valued FinSequence of bool the carrier of A holds
+    MemberFunc (Union X, A).x = Sum FinSeqM (x, X);
+
+theorem :: ROUGHS_1:56
+  LAp X = { x where x is Element of A : MemberFunc (X, A).x = 1 };
+
+theorem :: ROUGHS_1:57
+  UAp X = { x where x is Element of A : MemberFunc (X, A).x > 0 };
+
+theorem :: ROUGHS_1:58
+  BndAp X = { x where x is Element of A :
+        0 < MemberFunc (X, A).x & MemberFunc (X, A).x < 1 };
+
+begin :: Rough Inclusion
+
+ reserve A for Tolerance_Space,
+         X, Y, Z for Subset of A;
+
+definition let A be Tolerance_Space, X, Y be Subset of A;
+  pred X _c= Y means
+:: ROUGHS_1:def 11
+    LAp X c= LAp Y;
+  pred X c=^ Y means
+:: ROUGHS_1:def 12
+    UAp X c= UAp Y;
+end;
+
+definition let A be Tolerance_Space, X, Y be Subset of A;
+  pred X _c=^ Y means
+:: ROUGHS_1:def 13
+    X _c= Y & X c=^ Y;
+end;
+
+theorem :: ROUGHS_1:59
+  X _c= Y & Y _c= Z implies X _c= Z;
+
+theorem :: ROUGHS_1:60
+  X c=^ Y & Y c=^ Z implies X c=^ Z;
+
+theorem :: ROUGHS_1:61
+  X _c=^ Y & Y _c=^ Z implies X _c=^ Z;
+
+begin :: Rough Equality of Sets
+
+definition let A be Tolerance_Space, X, Y be Subset of A;
+  pred X _= Y means
+:: ROUGHS_1:def 14
+    LAp X = LAp Y;
+  reflexivity;
+  symmetry;
+  pred X =^ Y means
+:: ROUGHS_1:def 15
+    UAp X = UAp Y;
+  reflexivity;
+  symmetry;
+  pred X _=^ Y means
+:: ROUGHS_1:def 16
+    LAp X = LAp Y & UAp X = UAp Y;
+  reflexivity;
+  symmetry;
+end;
+
+definition let A be Tolerance_Space, X, Y be Subset of A;
+  redefine pred X _= Y means
+:: ROUGHS_1:def 17
+    X _c= Y & Y _c= X;
+  redefine pred X =^ Y means
+:: ROUGHS_1:def 18
+    X c=^ Y & Y c=^ X;
+  redefine pred X _=^ Y means
+:: ROUGHS_1:def 19
+    X _= Y & X =^ Y;
+end;

@@ -1,0 +1,1861 @@
+:: The Composition of Functors and Transformations in Alternative
+:: Categories
+::  by Artur Korni{\l}owicz
+::
+:: Received January 21, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_2, BINOP_1, ALTCAT_1, FUNCTOR0, MSUALG_6, FUNCOP_1, CAT_1,
+      RELAT_1, BOOLE, FUNCT_1, MSUALG_3, PBOOLE, PRALG_1, NATTRA_1, QC_LANG1,
+      FUNCTOR2, SEQ_1, ALTCAT_3, CAT_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      STRUCT_0, BINOP_1, FUNCOP_1, PBOOLE, MSUALG_1, MSUALG_3, ALTCAT_1,
+      ALTCAT_2, ALTCAT_3, FUNCTOR0, FUNCTOR2;
+ constructors ALTCAT_3, FUNCTOR2;
+ clusters STRUCT_0, ALTCAT_1, ALTCAT_4, FUNCTOR0, FUNCTOR2, PRALG_1, FUNCT_1,
+      RELSET_1, SUBSET_1, MSUALG_1, FUNCT_2, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions MSUALG_1, FUNCTOR0, FUNCTOR2;
+ theorems ALTCAT_1, ALTCAT_3, ALTCAT_4, FUNCTOR0, FUNCTOR2, ZFMISC_1, BINOP_1,
+      MSUALG_3, PBOOLE, FUNCT_1, FUNCT_2, MSUALG_1, RELAT_1, XBOOLE_0;
+ schemes MSUALG_1;
+
+begin  :: Preliminaries
+
+definition
+ cluster transitive associative with_units strict (non empty AltCatStr);
+existence
+  proof
+    consider A being transitive associative with_units strict
+     (non empty AltCatStr);
+    take A;
+    thus thesis;
+  end;
+end;
+
+definition let A be non empty transitive AltCatStr,
+               B be with_units (non empty AltCatStr);
+ cluster strict comp-preserving comp-reversing Covariant Contravariant
+          feasible FunctorStr over A, B;
+existence
+  proof
+    consider o being object of B;
+    take A --> idm o;
+    thus thesis;
+  end;
+end;
+
+definition let A be with_units transitive (non empty AltCatStr),
+               B be with_units (non empty AltCatStr);
+ cluster strict comp-preserving comp-reversing Covariant Contravariant
+          feasible id-preserving FunctorStr over A, B;
+existence
+  proof
+    consider o being object of B;
+    take A --> idm o;
+    thus thesis;
+  end;
+end;
+
+definition let A be with_units transitive (non empty AltCatStr),
+               B be with_units (non empty AltCatStr);
+ cluster strict feasible covariant contravariant Functor of A, B;
+existence
+  proof
+    consider o being object of B;
+    set I = A --> idm o;
+      I is Functor of A, B
+    proof
+      thus I is feasible id-preserving &
+           (I is Covariant comp-preserving or
+           I is Contravariant comp-reversing);
+    end;
+    then reconsider I as Functor of A, B;
+    take I;
+    thus I is strict feasible;
+    thus I is covariant
+    proof
+      thus I is Covariant comp-preserving;
+    end;
+    thus thesis
+    proof
+      thus I is Contravariant comp-reversing;
+    end;
+  end;
+end;
+
+theorem
+  for C being category, o1, o2, o3, o4 being object of C
+ for a being Morphism of o1, o2, b being Morphism of o2, o3
+  for c being Morphism of o1, o4, d being Morphism of o4, o3 st
+   b*a = d*c & a*(a") = idm o2 & d"*d = idm o4 & <^o1,o2^> <> {} &
+    <^o2,o1^> <> {} & <^o2,o3^> <> {} & <^o3,o4^> <> {} & <^o4,o3^> <> {}
+ holds c*(a") = d"*b
+  proof
+    let C be category,
+        o1, o2, o3, o4 be object of C,
+        a be Morphism of o1, o2,
+        b be Morphism of o2, o3,
+        c be Morphism of o1, o4,
+        d be Morphism of o4, o3 such that
+A1:  b*a = d*c and
+A2:  a*(a") = idm o2 and
+A3:  d"*d = idm o4 and
+A4: <^o1,o2^> <> {} & <^o2,o1^> <> {} & <^o2,o3^> <> {} & <^o3,o4^> <> {} &
+    <^o4,o3^> <> {};
+      <^o1,o3^> <> {} by A4,ALTCAT_1:def 4;
+then A5: <^o1,o4^> <> {} & <^o2,o4^> <> {} by A4,ALTCAT_1:def 4;
+      b = b*idm o2 by A4,ALTCAT_1:def 19
+     .= b*a*(a") by A2,A4,ALTCAT_1:25;
+    hence d"*b = d"*(d*(c*(a"))) by A1,A4,A5,ALTCAT_1:25
+              .= (d"*d)*(c*(a")) by A4,A5,ALTCAT_1:25
+              .= c*(a") by A3,A5,ALTCAT_1:24;
+  end;
+
+theorem
+  for A being non empty transitive AltCatStr
+ for B, C being with_units (non empty AltCatStr)
+  for F being feasible Covariant FunctorStr over A, B
+   for G being FunctorStr over B, C, o, o1 being object of A
+ holds Morph-Map(G*F,o,o1) = Morph-Map(G,F.o,F.o1)*Morph-Map(F,o,o1)
+  proof
+   let A be non empty transitive AltCatStr,
+       B, C be with_units (non empty AltCatStr),
+       F be feasible Covariant FunctorStr over A, B,
+       G be FunctorStr over B, C,
+       o, o1 be object of A;
+A1: dom(the MorphMap of G) = [:the carrier of B,the carrier of B:]
+     by PBOOLE:def 3;
+      rng(the ObjectMap of F) c= [:the carrier of B,the carrier of B:];
+    then dom((the MorphMap of G)*the ObjectMap of F)
+     = dom(the ObjectMap of F) by A1,RELAT_1:46
+    .= [:the carrier of A,the carrier of A:] by FUNCT_2:def 1;
+then A2: [o,o1] in dom((the MorphMap of G)*the ObjectMap of F) by ZFMISC_1:106;
+      dom(the MorphMap of F) = [:the carrier of A,the carrier of A:]
+      by PBOOLE:def 3;
+    then [o,o1] in dom(the MorphMap of F) by ZFMISC_1:106;
+    then [o,o1] in dom((the MorphMap of G)*the ObjectMap of F)
+           /\ dom(the MorphMap of F) by A2,XBOOLE_0:def 3;
+then A3: [o,o1] in dom(((the MorphMap of G)*the ObjectMap of F)**the MorphMap
+of F)
+      by MSUALG_3:def 4;
+A4: ((the MorphMap of G)*the ObjectMap of F).[o,o1]
+       = (the MorphMap of G).((the ObjectMap of F).[o,o1]) by A2,FUNCT_1:22
+      .= (the MorphMap of G).((the ObjectMap of F).(o,o1)) by BINOP_1:def 1
+      .= (the MorphMap of G).[F.o,F.o1] by FUNCTOR0:23
+      .= (the MorphMap of G).(F.o,F.o1) by BINOP_1:def 1
+      .= Morph-Map(G,F.o,F.o1) by FUNCTOR0:def 15;
+A5: (the MorphMap of F).[o,o1] = (the MorphMap of F).(o,o1) by BINOP_1:def 1
+         .= Morph-Map(F,o,o1) by FUNCTOR0:def 15;
+    thus Morph-Map(G*F,o,o1)
+       = (the MorphMap of G*F).(o,o1) by FUNCTOR0:def 15
+      .= (((the MorphMap of G)*the ObjectMap of F)**the MorphMap of F).(o,o1)
+         by FUNCTOR0:def 37
+      .= (((the MorphMap of G)*the ObjectMap of F)**the MorphMap of F).[o,o1]
+         by BINOP_1:def 1
+      .= Morph-Map(G,F.o,F.o1)*Morph-Map(F,o,o1) by A3,A4,A5,MSUALG_3:def 4;
+  end;
+
+theorem
+  for A being non empty transitive AltCatStr
+ for B, C being with_units (non empty AltCatStr)
+  for F being feasible Contravariant FunctorStr over A, B
+   for G being FunctorStr over B, C, o, o1 being object of A
+ holds Morph-Map(G*F,o,o1) = Morph-Map(G,F.o1,F.o)*Morph-Map(F,o,o1)
+  proof
+   let A be non empty transitive AltCatStr,
+       B, C be with_units (non empty AltCatStr),
+       F be feasible Contravariant FunctorStr over A, B,
+       G be FunctorStr over B, C,
+       o, o1 be object of A;
+A1: dom(the MorphMap of G) = [:the carrier of B,the carrier of B:]
+     by PBOOLE:def 3;
+      rng(the ObjectMap of F) c= [:the carrier of B,the carrier of B:];
+    then dom((the MorphMap of G)*the ObjectMap of F)
+     = dom(the ObjectMap of F) by A1,RELAT_1:46
+    .= [:the carrier of A,the carrier of A:] by FUNCT_2:def 1;
+then A2: [o,o1] in dom((the MorphMap of G)*the ObjectMap of F) by ZFMISC_1:106;
+      dom(the MorphMap of F) = [:the carrier of A,the carrier of A:]
+      by PBOOLE:def 3;
+    then [o,o1] in dom(the MorphMap of F) by ZFMISC_1:106;
+    then [o,o1] in dom((the MorphMap of G)*the ObjectMap of F)
+           /\ dom(the MorphMap of F) by A2,XBOOLE_0:def 3;
+then A3: [o,o1] in dom(((the MorphMap of G)*the ObjectMap of F)**the MorphMap
+of F)
+      by MSUALG_3:def 4;
+A4: ((the MorphMap of G)*the ObjectMap of F).[o,o1]
+       = (the MorphMap of G).((the ObjectMap of F).[o,o1]) by A2,FUNCT_1:22
+      .= (the MorphMap of G).((the ObjectMap of F).(o,o1)) by BINOP_1:def 1
+      .= (the MorphMap of G).[F.o1,F.o] by FUNCTOR0:24
+      .= (the MorphMap of G).(F.o1,F.o) by BINOP_1:def 1
+      .= Morph-Map(G,F.o1,F.o) by FUNCTOR0:def 15;
+A5: (the MorphMap of F).[o,o1] = (the MorphMap of F).(o,o1) by BINOP_1:def 1
+         .= Morph-Map(F,o,o1) by FUNCTOR0:def 15;
+    thus Morph-Map(G*F,o,o1)
+       = (the MorphMap of G*F).(o,o1) by FUNCTOR0:def 15
+      .= (((the MorphMap of G)*the ObjectMap of F)**the MorphMap of F).(o,o1)
+         by FUNCTOR0:def 37
+      .= (((the MorphMap of G)*the ObjectMap of F)**the MorphMap of F).[o,o1]
+         by BINOP_1:def 1
+      .= Morph-Map(G,F.o1,F.o)*Morph-Map(F,o,o1) by A3,A4,A5,MSUALG_3:def 4;
+  end;
+
+Lm1:
+ for I1 being set, I2 being non empty set, f being Function of I1,I2
+ for A being ManySortedSet of I1, B being ManySortedSet of I2
+  st for i being set st i in I1 & A.i <> {} holds B.(f.i) <> {}
+ for M being ManySortedFunction of A,B*f
+  holds ((id B)*f)**M = M
+  proof let I1 be set, I2 be non empty set, f be Function of I1,I2;
+   let A be ManySortedSet of I1, B be ManySortedSet of I2 such that
+A1: for i being set st i in I1 & A.i <> {} holds B.(f.i) <> {};
+   let M be ManySortedFunction of A,B*f;
+A2: now let i be set; assume
+A3:   i in I1;
+     hence
+A4:   (B*f).i = B.(f.i) by FUNCT_2:21;
+        ((id B)*f).i = (id B).(f.i) & f.i in I2 by A3,FUNCT_2:7,21;
+     hence ((id B)*f).i = id ((B*f).i) by A4,MSUALG_3:def 1;
+    end;
+      now let i be set; assume
+A5:   i in I1;
+then A6:   M.i is Function of A.i, (B*f).i by MSUALG_1:def 2;
+A7:   (B*f).i = B.(f.i) by A2,A5;
+then A8:   A.i <> {} implies (B*f).i <> {} by A1,A5;
+A9:   (id B)*f is ManySortedFunction of B*f, B*f
+       proof let i be set; assume i in I1;
+         then ((id B)*f).i = id ((B*f).i) by A2;
+        hence thesis;
+       end;
+        ((id B)*f).i = (id B).(f.i) & f.i in I2 by A5,FUNCT_2:7,21;
+      then ((id B)*f).i = id (B.(f.i)) by MSUALG_3:def 1;
+     hence (((id B)*f)**M).i
+         = (id ((B*f).i))*(M.i) by A5,A7,A9,MSUALG_3:2
+        .= M.i by A6,A8,FUNCT_2:23;
+    end;
+   hence thesis by PBOOLE:3;
+ end;
+
+theorem
+  for A being non empty transitive AltCatStr
+ for B being with_units (non empty AltCatStr)
+  for F being feasible FunctorStr over A, B holds
+ (id B) * F = the FunctorStr of F
+  proof
+    let A be non empty transitive AltCatStr,
+        B be with_units (non empty AltCatStr),
+        F be feasible FunctorStr over A, B;
+A1: the ObjectMap of ((id B) * F)
+       = (the ObjectMap of (id B))*the ObjectMap of F by FUNCTOR0:def 37
+      .= (id [:the carrier of B, the carrier of B:])*the ObjectMap of F
+         by FUNCTOR0:def 30
+      .= the ObjectMap of F by FUNCT_2:23;
+A2: the MorphMap of F is ManySortedFunction of the Arrows of A,
+                      (the Arrows of B)*the ObjectMap of F
+     by FUNCTOR0:def 5;
+A3: now let i be set; assume
+        i in [:the carrier of A, the carrier of A:];
+     then consider i1,i2 being set such that
+A4:   i1 in the carrier of A & i2 in the carrier of A & [i1,i2] = i
+       by ZFMISC_1:def 2;
+     reconsider i1, i2 as object of A by A4;
+        (the Arrows of A).(i1,i2) = <^i1, i2^> by ALTCAT_1:def 2;
+      then (the Arrows of A).i = <^i1, i2^> &
+      (the ObjectMap of F).i = (the ObjectMap of F).(i1,i2)
+       by A4,BINOP_1:def 1;
+     hence (the Arrows of A).i <> {} implies
+       (the Arrows of B).((the ObjectMap of F).i) <> {}
+        by FUNCTOR0:def 12;
+    end;
+      the MorphMap of ((id B) * F)
+     = ((the MorphMap of id B)*the ObjectMap of F)**the MorphMap of F
+      by FUNCTOR0:def 37
+    .= ((id the Arrows of B)*the ObjectMap of F)**the MorphMap of F
+      by FUNCTOR0:def 30
+    .= the MorphMap of F by A2,A3,Lm1;
+    hence thesis by A1;
+  end;
+
+theorem
+  for A being with_units transitive (non empty AltCatStr)
+ for B being with_units (non empty AltCatStr)
+  for F being feasible FunctorStr over A, B holds
+ F * (id A) = the FunctorStr of F
+  proof
+    let A be with_units transitive (non empty AltCatStr),
+        B be with_units (non empty AltCatStr),
+        F be feasible FunctorStr over A, B;
+A1: the ObjectMap of (F*(id A))
+       = (the ObjectMap of F)*the ObjectMap of id A by FUNCTOR0:def 37
+      .= (the ObjectMap of F)*id [:the carrier of A, the carrier of A:]
+         by FUNCTOR0:def 30
+      .= the ObjectMap of F by FUNCT_2:23;
+A2: the MorphMap of F is ManySortedFunction of the Arrows of A,
+                      (the Arrows of B)*the ObjectMap of F
+     by FUNCTOR0:def 5;
+      the MorphMap of (F*id A)
+     = ((the MorphMap of F)*the ObjectMap of id A)**the MorphMap of id A
+      by FUNCTOR0:def 37
+    .= ((the MorphMap of F)*id [:the carrier of A, the carrier of A:])
+        **the MorphMap of id A
+      by FUNCTOR0:def 30
+    .= (the MorphMap of F)**the MorphMap of id A by FUNCTOR0:3
+    .= (the MorphMap of F)**id the Arrows of A by FUNCTOR0:def 30
+    .= the MorphMap of F by A2,MSUALG_3:3;
+    hence thesis by A1;
+  end;
+
+reserve A for non empty AltCatStr,
+        B, C for non empty reflexive AltCatStr,
+        F for feasible Covariant FunctorStr over A, B,
+        G for feasible Covariant FunctorStr over B, C,
+        M for feasible Contravariant FunctorStr over A, B,
+        N for feasible Contravariant FunctorStr over B, C,
+        o1, o2 for object of A,
+        m for Morphism of o1, o2;
+
+theorem Th6:
+<^o1,o2^> <> {} implies (G*F).m = G.(F.m)
+  proof
+    assume
+A1:   <^o1,o2^> <> {};
+    set I = the carrier of A;
+      (the MorphMap of (G*F)).[o1,o2] is Function;
+    then reconsider p = (the MorphMap of (G*F)).(o1,o2) as Function
+      by BINOP_1:def 1;
+      (the MorphMap of F).[o1,o2] is Function;
+    then reconsider s = (the MorphMap of F).(o1,o2) as Function
+      by BINOP_1:def 1;
+      (((the MorphMap of G)*the ObjectMap of F)**
+      the MorphMap of F).[o1,o2] is Function;
+    then reconsider r = (((the MorphMap of G)*the ObjectMap of F)**
+      the MorphMap of F).(o1,o2) as Function by BINOP_1:def 1;
+      ((the MorphMap of G)*the ObjectMap of F).[o1,o2] is Function;
+    then reconsider t = ((the MorphMap of G)*the ObjectMap of F).(o1,o2)
+      as Function by BINOP_1:def 1;
+A2: <^F.o1,F.o2^> <> {} by A1,FUNCTOR0:def 19;
+    then dom Morph-Map(F,o1,o2) = <^o1,o2^> by FUNCT_2:def 1;
+then A3: dom s = <^o1,o2^> by FUNCTOR0:def 15;
+A4: p = (the MorphMap of (G*F)).[o1,o2] &
+    s = (the MorphMap of F).[o1,o2] &
+    r = (((the MorphMap of G)*the ObjectMap of F)**
+       the MorphMap of F).[o1,o2] &
+    t = ((the MorphMap of G)*the ObjectMap of F).[o1,o2] by BINOP_1:def 1;
+      (the MorphMap of G).[F.o1,F.o2] is Function;
+    then reconsider w = (the MorphMap of G).(F.o1,F.o2) as Function
+      by BINOP_1:def 1;
+A5: dom (((the MorphMap of G)*the ObjectMap of F)**the MorphMap of F)
+      = (dom ((the MorphMap of G)*the ObjectMap of F)) /\
+       (dom(the MorphMap of F)) by MSUALG_3:def 4
+     .= [:I,I:] /\ (dom(the MorphMap of F)) by PBOOLE:def 3
+     .= [:I,I:] /\ [:I,I:] by PBOOLE:def 3
+     .= [:I,I:];
+A6: dom the ObjectMap of F = [:I,I:] by FUNCT_2:def 1;
+A7: (G*F).o1 = G.(F.o1) & (G*F).o2 = G.(F.o2) by FUNCTOR0:34;
+A8: [o1,o2] in [:I,I:] by ZFMISC_1:def 2;
+A9: <^G.(F.o1),G.(F.o2)^> <> {} by A2,FUNCTOR0:def 19;
+    hence (G*F).m = Morph-Map(G*F,o1,o2).m by A1,A7,FUNCTOR0:def 16
+       .= p.m by FUNCTOR0:def 15
+       .= r.m by FUNCTOR0:def 37
+       .= (t * s).m by A4,A5,A8,MSUALG_3:def 4
+       .= t.(s.m) by A1,A3,FUNCT_1:23
+       .= t.(Morph-Map(F,o1,o2).m) by FUNCTOR0:def 15
+       .= t.(F.m) by A1,A2,FUNCTOR0:def 16
+       .= ((the MorphMap of G).((the ObjectMap of F).[o1,o2])).(F.m)
+          by A4,A6,A8,FUNCT_1:23
+       .= ((the MorphMap of G).((the ObjectMap of F).(o1,o2))).(F.m)
+          by BINOP_1:def 1
+       .= ((the MorphMap of G).[F.o1,F.o2]).(F.m) by FUNCTOR0:23
+       .= w.(F.m) by BINOP_1:def 1
+       .= Morph-Map(G,F.o1,F.o2).(F.m) by FUNCTOR0:def 15
+       .= G.(F.m) by A2,A9,FUNCTOR0:def 16;
+  end;
+
+theorem Th7:
+<^o1,o2^> <> {} implies (N*M).m = N.(M.m)
+  proof
+    assume
+A1:   <^o1,o2^> <> {};
+    set I = the carrier of A;
+      (the MorphMap of (N*M)).[o1,o2] is Function;
+    then reconsider p = (the MorphMap of (N*M)).(o1,o2) as Function
+      by BINOP_1:def 1;
+      (the MorphMap of M).[o1,o2] is Function;
+    then reconsider s = (the MorphMap of M).(o1,o2) as Function
+      by BINOP_1:def 1;
+      (((the MorphMap of N)*the ObjectMap of M)**
+      the MorphMap of M).[o1,o2] is Function;
+    then reconsider r = (((the MorphMap of N)*the ObjectMap of M)**
+      the MorphMap of M).(o1,o2) as Function by BINOP_1:def 1;
+      ((the MorphMap of N)*the ObjectMap of M).[o1,o2] is Function;
+    then reconsider t = ((the MorphMap of N)*the ObjectMap of M).(o1,o2)
+      as Function by BINOP_1:def 1;
+A2: <^M.o2,M.o1^> <> {} by A1,FUNCTOR0:def 20;
+    then dom Morph-Map(M,o1,o2) = <^o1,o2^> by FUNCT_2:def 1;
+then A3: dom s = <^o1,o2^> by FUNCTOR0:def 15;
+A4: p = (the MorphMap of (N*M)).[o1,o2] &
+    s = (the MorphMap of M).[o1,o2] &
+    r = (((the MorphMap of N)*the ObjectMap of M)**
+       the MorphMap of M).[o1,o2] &
+    t = ((the MorphMap of N)*the ObjectMap of M).[o1,o2] by BINOP_1:def 1;
+      (the MorphMap of N).[M.o2,M.o1] is Function;
+    then reconsider w = (the MorphMap of N).(M.o2,M.o1) as Function
+      by BINOP_1:def 1;
+A5: dom (((the MorphMap of N)*the ObjectMap of M)**the MorphMap of M)
+      = (dom ((the MorphMap of N)*the ObjectMap of M)) /\
+       (dom(the MorphMap of M)) by MSUALG_3:def 4
+     .= [:I,I:] /\ (dom(the MorphMap of M)) by PBOOLE:def 3
+     .= [:I,I:] /\ [:I,I:] by PBOOLE:def 3
+     .= [:I,I:];
+A6: dom the ObjectMap of M = [:I,I:] by FUNCT_2:def 1;
+A7: (N*M).o1 = N.(M.o1) & (N*M).o2 = N.(M.o2) by FUNCTOR0:34;
+A8: [o1,o2] in [:I,I:] by ZFMISC_1:def 2;
+A9: <^N.(M.o1),N.(M.o2)^> <> {} by A2,FUNCTOR0:def 20;
+    hence (N*M).m = Morph-Map(N*M,o1,o2).m by A1,A7,FUNCTOR0:def 16
+       .= p.m by FUNCTOR0:def 15
+       .= r.m by FUNCTOR0:def 37
+       .= (t * s).m by A4,A5,A8,MSUALG_3:def 4
+       .= t.(s.m) by A1,A3,FUNCT_1:23
+       .= t.(Morph-Map(M,o1,o2).m) by FUNCTOR0:def 15
+       .= t.(M.m) by A1,A2,FUNCTOR0:def 17
+       .= ((the MorphMap of N).((the ObjectMap of M).[o1,o2])).(M.m)
+          by A4,A6,A8,FUNCT_1:23
+       .= ((the MorphMap of N).((the ObjectMap of M).(o1,o2))).(M.m)
+          by BINOP_1:def 1
+       .= ((the MorphMap of N).[M.o2,M.o1]).(M.m) by FUNCTOR0:24
+       .= w.(M.m) by BINOP_1:def 1
+       .= Morph-Map(N,M.o2,M.o1).(M.m) by FUNCTOR0:def 15
+       .= N.(M.m) by A2,A9,FUNCTOR0:def 17;
+  end;
+
+theorem Th8:
+<^o1,o2^> <> {} implies (N*F).m = N.(F.m)
+  proof
+    assume
+A1:   <^o1,o2^> <> {};
+    set I = the carrier of A;
+      (the MorphMap of (N*F)).[o1,o2] is Function;
+    then reconsider p = (the MorphMap of (N*F)).(o1,o2) as Function
+      by BINOP_1:def 1;
+      (the MorphMap of F).[o1,o2] is Function;
+    then reconsider s = (the MorphMap of F).(o1,o2) as Function
+      by BINOP_1:def 1;
+      (((the MorphMap of N)*the ObjectMap of F)**
+      the MorphMap of F).[o1,o2] is Function;
+    then reconsider r = (((the MorphMap of N)*the ObjectMap of F)**
+      the MorphMap of F).(o1,o2) as Function by BINOP_1:def 1;
+      ((the MorphMap of N)*the ObjectMap of F).[o1,o2] is Function;
+    then reconsider t = ((the MorphMap of N)*the ObjectMap of F).(o1,o2)
+      as Function by BINOP_1:def 1;
+A2: <^F.o1,F.o2^> <> {} by A1,FUNCTOR0:def 19;
+    then dom Morph-Map(F,o1,o2) = <^o1,o2^> by FUNCT_2:def 1;
+then A3: dom s = <^o1,o2^> by FUNCTOR0:def 15;
+A4: p = (the MorphMap of (N*F)).[o1,o2] &
+    s = (the MorphMap of F).[o1,o2] &
+    r = (((the MorphMap of N)*the ObjectMap of F)**
+       the MorphMap of F).[o1,o2] &
+    t = ((the MorphMap of N)*the ObjectMap of F).[o1,o2] by BINOP_1:def 1;
+      (the MorphMap of N).[F.o1,F.o2] is Function;
+    then reconsider w = (the MorphMap of N).(F.o1,F.o2) as Function
+      by BINOP_1:def 1;
+A5: dom (((the MorphMap of N)*the ObjectMap of F)**the MorphMap of F)
+      = (dom ((the MorphMap of N)*the ObjectMap of F)) /\
+       (dom(the MorphMap of F)) by MSUALG_3:def 4
+     .= [:I,I:] /\ (dom(the MorphMap of F)) by PBOOLE:def 3
+     .= [:I,I:] /\ [:I,I:] by PBOOLE:def 3
+     .= [:I,I:];
+A6: dom the ObjectMap of F = [:I,I:] by FUNCT_2:def 1;
+A7: (N*F).o1 = N.(F.o1) & (N*F).o2 = N.(F.o2) by FUNCTOR0:34;
+A8: [o1,o2] in [:I,I:] by ZFMISC_1:def 2;
+A9: <^N.(F.o2),N.(F.o1)^> <> {} by A2,FUNCTOR0:def 20;
+    hence (N*F).m = Morph-Map(N*F,o1,o2).m by A1,A7,FUNCTOR0:def 17
+       .= p.m by FUNCTOR0:def 15
+       .= r.m by FUNCTOR0:def 37
+       .= (t * s).m by A4,A5,A8,MSUALG_3:def 4
+       .= t.(s.m) by A1,A3,FUNCT_1:23
+       .= t.(Morph-Map(F,o1,o2).m) by FUNCTOR0:def 15
+       .= t.(F.m) by A1,A2,FUNCTOR0:def 16
+       .= ((the MorphMap of N).((the ObjectMap of F).[o1,o2])).(F.m)
+          by A4,A6,A8,FUNCT_1:23
+       .= ((the MorphMap of N).((the ObjectMap of F).(o1,o2))).(F.m)
+          by BINOP_1:def 1
+       .= ((the MorphMap of N).[F.o1,F.o2]).(F.m) by FUNCTOR0:23
+       .= w.(F.m) by BINOP_1:def 1
+       .= Morph-Map(N,F.o1,F.o2).(F.m) by FUNCTOR0:def 15
+       .= N.(F.m) by A2,A9,FUNCTOR0:def 17;
+  end;
+
+theorem Th9:
+<^o1,o2^> <> {} implies (G*M).m = G.(M.m)
+  proof
+    assume
+A1:   <^o1,o2^> <> {};
+    set I = the carrier of A;
+      (the MorphMap of (G*M)).[o1,o2] is Function;
+    then reconsider p = (the MorphMap of (G*M)).(o1,o2) as Function
+      by BINOP_1:def 1;
+      (the MorphMap of M).[o1,o2] is Function;
+    then reconsider s = (the MorphMap of M).(o1,o2) as Function
+      by BINOP_1:def 1;
+      (((the MorphMap of G)*the ObjectMap of M)**
+      the MorphMap of M).[o1,o2] is Function;
+    then reconsider r = (((the MorphMap of G)*the ObjectMap of M)**
+      the MorphMap of M).(o1,o2) as Function by BINOP_1:def 1;
+      ((the MorphMap of G)*the ObjectMap of M).[o1,o2] is Function;
+    then reconsider t = ((the MorphMap of G)*the ObjectMap of M).(o1,o2)
+      as Function by BINOP_1:def 1;
+A2: <^M.o2,M.o1^> <> {} by A1,FUNCTOR0:def 20;
+    then dom Morph-Map(M,o1,o2) = <^o1,o2^> by FUNCT_2:def 1;
+then A3: dom s = <^o1,o2^> by FUNCTOR0:def 15;
+A4: p = (the MorphMap of (G*M)).[o1,o2] &
+    s = (the MorphMap of M).[o1,o2] &
+    r = (((the MorphMap of G)*the ObjectMap of M)**
+       the MorphMap of M).[o1,o2] &
+    t = ((the MorphMap of G)*the ObjectMap of M).[o1,o2] by BINOP_1:def 1;
+      (the MorphMap of G).[M.o2,M.o1] is Function;
+    then reconsider w = (the MorphMap of G).(M.o2,M.o1) as Function
+      by BINOP_1:def 1;
+A5: dom (((the MorphMap of G)*the ObjectMap of M)**the MorphMap of M)
+      = (dom ((the MorphMap of G)*the ObjectMap of M)) /\
+       (dom(the MorphMap of M)) by MSUALG_3:def 4
+     .= [:I,I:] /\ (dom(the MorphMap of M)) by PBOOLE:def 3
+     .= [:I,I:] /\ [:I,I:] by PBOOLE:def 3
+     .= [:I,I:];
+A6: dom the ObjectMap of M = [:I,I:] by FUNCT_2:def 1;
+A7: (G*M).o1 = G.(M.o1) & (G*M).o2 = G.(M.o2) by FUNCTOR0:34;
+A8: [o1,o2] in [:I,I:] by ZFMISC_1:def 2;
+A9: <^G.(M.o2),G.(M.o1)^> <> {} by A2,FUNCTOR0:def 19;
+    hence (G*M).m = Morph-Map(G*M,o1,o2).m by A1,A7,FUNCTOR0:def 17
+       .= p.m by FUNCTOR0:def 15
+       .= r.m by FUNCTOR0:def 37
+       .= (t * s).m by A4,A5,A8,MSUALG_3:def 4
+       .= t.(s.m) by A1,A3,FUNCT_1:23
+       .= t.(Morph-Map(M,o1,o2).m) by FUNCTOR0:def 15
+       .= t.(M.m) by A1,A2,FUNCTOR0:def 17
+       .= ((the MorphMap of G).((the ObjectMap of M).[o1,o2])).(M.m)
+          by A4,A6,A8,FUNCT_1:23
+       .= ((the MorphMap of G).((the ObjectMap of M).(o1,o2))).(M.m)
+          by BINOP_1:def 1
+       .= ((the MorphMap of G).[M.o2,M.o1]).(M.m) by FUNCTOR0:24
+       .= w.(M.m) by BINOP_1:def 1
+       .= Morph-Map(G,M.o2,M.o1).(M.m) by FUNCTOR0:def 15
+       .= G.(M.m) by A2,A9,FUNCTOR0:def 16;
+  end;
+
+definition let A be non empty transitive AltCatStr,
+               B be transitive with_units (non empty AltCatStr),
+               C be with_units (non empty AltCatStr),
+               F be feasible Covariant comp-preserving FunctorStr over A, B,
+               G be feasible Covariant comp-preserving FunctorStr over B, C;
+ cluster G*F -> comp-preserving;
+coherence
+  proof
+    let o1, o2, o3 be object of A such that
+A1:    <^o1,o2^> <> {} & <^o2,o3^> <> {};
+    let f be Morphism of o1, o2,
+        g be Morphism of o2, o3;
+A2: (G*F).o1 = G.(F.o1) & (G*F).o2 = G.(F.o2) & (G*F).o3 = G.(F.o3)
+      by FUNCTOR0:34;
+    then reconsider GFg = (G*F).g as Morphism of G.(F.o2), G.(F.o3);
+A3: <^F.o1,F.o2^> <> {} & <^F.o2,F.o3^> <> {} by A1,FUNCTOR0:def 19;
+      <^o1,o3^> <> {} by A1,ALTCAT_1:def 4;
+    hence (G*F).(g*f) = G.(F.(g*f)) by Th6
+      .= G.((F.g)*(F.f)) by A1,FUNCTOR0:def 24
+      .= (G.(F.g))*(G.(F.f)) by A3,FUNCTOR0:def 24
+      .= GFg*(G.(F.f)) by A1,Th6
+      .= ((G*F).g)*((G*F).f) by A1,A2,Th6;
+  end;
+end;
+
+definition let A be non empty transitive AltCatStr,
+               B be transitive with_units (non empty AltCatStr),
+               C be with_units (non empty AltCatStr),
+               F be feasible Contravariant comp-reversing FunctorStr over A, B,
+               G be feasible Contravariant comp-reversing FunctorStr over B, C;
+ cluster G*F -> comp-preserving;
+coherence
+  proof
+    let o1, o2, o3 be object of A such that
+A1:    <^o1,o2^> <> {} & <^o2,o3^> <> {};
+    let f be Morphism of o1, o2,
+        g be Morphism of o2, o3;
+A2: (G*F).o1 = G.(F.o1) & (G*F).o2 = G.(F.o2) & (G*F).o3 = G.(F.o3)
+      by FUNCTOR0:34;
+    then reconsider GFg = (G*F).g as Morphism of G.(F.o2), G.(F.o3);
+A3: <^F.o2,F.o1^> <> {} & <^F.o3,F.o2^> <> {} by A1,FUNCTOR0:def 20;
+      <^o1,o3^> <> {} by A1,ALTCAT_1:def 4;
+    hence (G*F).(g*f) = G.(F.(g*f)) by Th7
+      .= G.((F.f)*(F.g)) by A1,FUNCTOR0:def 25
+      .= (G.(F.g))*(G.(F.f)) by A3,FUNCTOR0:def 25
+      .= GFg*(G.(F.f)) by A1,Th7
+      .= ((G*F).g)*((G*F).f) by A1,A2,Th7;
+  end;
+end;
+
+definition let A be non empty transitive AltCatStr,
+               B be transitive with_units (non empty AltCatStr),
+               C be with_units (non empty AltCatStr),
+               F be feasible Covariant comp-preserving FunctorStr over A, B,
+               G be feasible Contravariant comp-reversing FunctorStr over B, C;
+ cluster G*F -> comp-reversing;
+coherence
+  proof
+    let o1, o2, o3 be object of A such that
+A1:    <^o1,o2^> <> {} & <^o2,o3^> <> {};
+    let f be Morphism of o1, o2,
+        g be Morphism of o2, o3;
+A2: (G*F).o1 = G.(F.o1) & (G*F).o2 = G.(F.o2) & (G*F).o3 = G.(F.o3)
+      by FUNCTOR0:34;
+    then reconsider GFf = (G*F).f as Morphism of G.(F.o2), G.(F.o1);
+A3: <^F.o1,F.o2^> <> {} & <^F.o2,F.o3^> <> {} by A1,FUNCTOR0:def 19;
+      <^o1,o3^> <> {} by A1,ALTCAT_1:def 4;
+    hence (G*F).(g*f) = G.(F.(g*f)) by Th8
+      .= G.((F.g)*(F.f)) by A1,FUNCTOR0:def 24
+      .= (G.(F.f))*(G.(F.g)) by A3,FUNCTOR0:def 25
+      .= GFf*(G.(F.g)) by A1,Th8
+      .= ((G*F).f)*((G*F).g) by A1,A2,Th8;
+  end;
+end;
+
+definition let A be non empty transitive AltCatStr,
+               B be transitive with_units (non empty AltCatStr),
+               C be with_units (non empty AltCatStr),
+               F be feasible Contravariant comp-reversing FunctorStr over A, B,
+               G be feasible Covariant comp-preserving FunctorStr over B, C;
+ cluster G*F -> comp-reversing;
+coherence
+  proof
+    let o1, o2, o3 be object of A such that
+A1:    <^o1,o2^> <> {} & <^o2,o3^> <> {};
+    let f be Morphism of o1, o2,
+        g be Morphism of o2, o3;
+A2: (G*F).o1 = G.(F.o1) & (G*F).o2 = G.(F.o2) & (G*F).o3 = G.(F.o3)
+      by FUNCTOR0:34;
+    then reconsider GFf = (G*F).f as Morphism of G.(F.o2), G.(F.o1);
+A3: <^F.o2,F.o1^> <> {} & <^F.o3,F.o2^> <> {} by A1,FUNCTOR0:def 20;
+      <^o1,o3^> <> {} by A1,ALTCAT_1:def 4;
+    hence (G*F).(g*f) = G.(F.(g*f)) by Th9
+      .= G.((F.f)*(F.g)) by A1,FUNCTOR0:def 25
+      .= (G.(F.f))*(G.(F.g)) by A3,FUNCTOR0:def 24
+      .= GFf*(G.(F.g)) by A1,Th9
+      .= ((G*F).f)*((G*F).g) by A1,A2,Th9;
+  end;
+end;
+
+definition let A, B be transitive with_units (non empty AltCatStr),
+               C be with_units (non empty AltCatStr),
+               F be covariant Functor of A, B,
+               G be covariant Functor of B, C;
+ redefine func G*F -> strict covariant Functor of A, C;
+coherence
+  proof
+      G*F is Functor of A, C
+    proof
+      thus G*F is feasible id-preserving;
+      thus G*F is Covariant comp-preserving or
+           G*F is Contravariant comp-reversing;
+    end;
+    then reconsider GF = G*F as Functor of A, C;
+      GF is covariant
+    proof
+      thus GF is Covariant comp-preserving;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition let A, B be transitive with_units (non empty AltCatStr),
+               C be with_units (non empty AltCatStr),
+               F be contravariant Functor of A, B,
+               G be contravariant Functor of B, C;
+ redefine func G*F -> strict covariant Functor of A, C;
+coherence
+  proof
+      G*F is Functor of A, C
+    proof
+      thus G*F is feasible id-preserving;
+      thus G*F is Covariant comp-preserving or
+           G*F is Contravariant comp-reversing;
+    end;
+    then reconsider GF = G*F as Functor of A, C;
+      GF is covariant
+    proof
+      thus GF is Covariant comp-preserving;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition let A, B be transitive with_units (non empty AltCatStr),
+               C be with_units (non empty AltCatStr),
+               F be covariant Functor of A, B,
+               G be contravariant Functor of B, C;
+ redefine func G*F -> strict contravariant Functor of A, C;
+coherence
+  proof
+      G*F is Functor of A, C
+    proof
+      thus G*F is feasible id-preserving;
+      thus G*F is Covariant comp-preserving or
+           G*F is Contravariant comp-reversing;
+    end;
+    then reconsider GF = G*F as Functor of A, C;
+      GF is contravariant
+    proof
+      thus GF is Contravariant comp-reversing;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition let A, B be transitive with_units (non empty AltCatStr),
+               C be with_units (non empty AltCatStr),
+               F be contravariant Functor of A, B,
+               G be covariant Functor of B, C;
+ redefine func G*F -> strict contravariant Functor of A, C;
+coherence
+  proof
+      G*F is Functor of A, C
+    proof
+      thus G*F is feasible id-preserving;
+      thus G*F is Covariant comp-preserving or
+           G*F is Contravariant comp-reversing;
+    end;
+    then reconsider GF = G*F as Functor of A, C;
+      GF is contravariant
+    proof
+      thus GF is Contravariant comp-reversing;
+    end;
+    hence thesis;
+  end;
+end;
+
+reserve A, B, C, D for transitive with_units (non empty AltCatStr),
+        F1, F2, F3 for covariant Functor of A, B,
+        G1, G2, G3 for covariant Functor of B, C,
+        H1, H2 for covariant Functor of C, D,
+        p for transformation of F1, F2,
+        p1 for transformation of F2, F3,
+        q for transformation of G1, G2,
+        q1 for transformation of G2, G3,
+        r for transformation of H1, H2;
+
+theorem Th10:
+F1 is_transformable_to F2 & G1 is_transformable_to G2 implies
+ G1*F1 is_transformable_to G2*F2
+  proof
+    assume
+A1:   for a being object of A holds <^F1.a,F2.a^> <> {};
+    assume
+A2:   for a being object of B holds <^G1.a,G2.a^> <> {};
+    let a be object of A;
+A3: (G1*F1).a = G1.(F1.a) & (G2*F2).a = G2.(F2.a) by FUNCTOR0:34;
+A4: <^G1.(F2.a),G2.(F2.a)^> <> {} by A2;
+      <^F1.a,F2.a^> <> {} by A1;
+    then <^G1.(F1.a),G1.(F2.a)^> <> {} by FUNCTOR0:def 19;
+    hence <^(G1*F1).a,(G2*F2).a^> <> {} by A3,A4,ALTCAT_1:def 4;
+  end;
+
+
+begin  :: The composition of functors with transformations
+
+definition let A, B, C be transitive with_units (non empty AltCatStr),
+               F1, F2 be covariant Functor of A, B,
+               t be transformation of F1, F2,
+               G be covariant Functor of B, C such that
+A1: F1 is_transformable_to F2;
+ func G*t -> transformation of G*F1,G*F2 means :Def1:
+  for o being object of A holds it.o = G.(t!o);
+existence
+  proof
+    set I = the carrier of A;
+defpred P[set,set] means
+ ex o being object of A st $1 = o & $2 = G.(t!o);
+A2: for i being set st i in I ex j being set st P[i,j]
+    proof
+      let i be set;
+      assume i in I;
+      then reconsider o = i as object of A;
+      take G.(t!o);
+      thus thesis;
+    end;
+    consider IT being ManySortedSet of I such that
+A3:   for o being set st o in I holds P[o,IT.o] from MSSEx(A2);
+      IT is transformation of G*F1,G*F2
+    proof
+      thus G*F1 is_transformable_to G*F2 by A1,Th10;
+      let o be object of A;
+A4:   P[o,IT.o] by A3;
+        G.(F1.o) = (G*F1).o & G.(F2.o) = (G*F2).o by FUNCTOR0:34;
+      hence IT.o is Morphism of (G*F1).o,(G*F2).o by A4;
+    end;
+    then reconsider IT as transformation of G*F1,G*F2;
+    take IT;
+    let o be object of A;
+      P[o,IT.o] by A3;
+    hence thesis;
+  end;
+uniqueness
+  proof
+    let X, Y be transformation of G*F1,G*F2 such that
+A5:   for o being object of A holds X.o = G.(t!o) and
+A6:   for o being object of A holds Y.o = G.(t!o);
+A7: G*F1 is_transformable_to G*F2 by A1,Th10;
+      now
+      let o be object of A;
+      thus X!o = X.o by A7,FUNCTOR2:def 4
+              .= G.(t!o) by A5
+              .= Y.o by A6
+              .= Y!o by A7,FUNCTOR2:def 4;
+    end;
+    hence thesis by A7,FUNCTOR2:5;
+  end;
+end;
+
+theorem Th11:
+for o being object of A st F1 is_transformable_to F2 holds
+ (G1*p)!o = G1.(p!o)
+  proof
+    let o be object of A; assume
+A1:   F1 is_transformable_to F2;
+    then G1*F1 is_transformable_to G1*F2 by Th10;
+    hence (G1*p)!o = (G1*p).o by FUNCTOR2:def 4
+                  .= G1.(p!o) by A1,Def1;
+  end;
+
+definition let A, B, C be transitive with_units (non empty AltCatStr),
+               G1, G2 be covariant Functor of B, C,
+               F be covariant Functor of A, B,
+               s be transformation of G1, G2 such that
+A1: G1 is_transformable_to G2;
+ func s*F -> transformation of G1*F,G2*F means :Def2:
+  for o being object of A holds it.o = s!(F.o);
+existence
+  proof
+    set I = the carrier of A;
+defpred P[set,set] means
+ ex o being object of A st $1 = o & $2 = s!(F.o);
+A2: for i being set st i in I ex j being set st P[i,j]
+    proof
+      let i be set;
+      assume i in I;
+      then reconsider o = i as object of A;
+      take s!(F.o);
+      thus thesis;
+    end;
+    consider IT being ManySortedSet of I such that
+A3:   for o being set st o in I holds P[o,IT.o] from MSSEx(A2);
+      IT is transformation of G1*F,G2*F
+    proof
+      thus G1*F is_transformable_to G2*F by A1,Th10;
+      let o be object of A;
+A4:   P[o,IT.o] by A3;
+        G1.(F.o) = (G1*F).o & G2.(F.o) = (G2*F).o by FUNCTOR0:34;
+      hence IT.o is Morphism of (G1*F).o,(G2*F).o by A4;
+    end;
+    then reconsider IT as transformation of G1*F,G2*F;
+    take IT;
+    let o be object of A;
+      P[o,IT.o] by A3;
+    hence thesis;
+  end;
+uniqueness
+  proof
+    let X, Y be transformation of G1*F,G2*F such that
+A5:   for o being object of A holds X.o = s!(F.o) and
+A6:   for o being object of A holds Y.o = s!(F.o);
+A7: G1*F is_transformable_to G2*F by A1,Th10;
+      now
+      let o be object of A;
+      thus X!o = X.o by A7,FUNCTOR2:def 4
+              .= s!(F.o) by A5
+              .= Y.o by A6
+              .= Y!o by A7,FUNCTOR2:def 4;
+    end;
+    hence thesis by A7,FUNCTOR2:5;
+  end;
+end;
+
+theorem Th12:
+for o being object of A st G1 is_transformable_to G2 holds
+ (q*F1)!o = q!(F1.o)
+  proof
+    let o be object of A; assume
+A1:   G1 is_transformable_to G2;
+    then G1*F1 is_transformable_to G2*F1 by Th10;
+    hence (q*F1)!o = (q*F1).o by FUNCTOR2:def 4
+                  .= q!(F1.o) by A1,Def2;
+  end;
+
+theorem Th13:
+F1 is_transformable_to F2 & F2 is_transformable_to F3 implies
+ G1*(p1`*`p) = (G1*p1)`*`(G1*p)
+  proof
+    assume
+A1:   F1 is_transformable_to F2 & F2 is_transformable_to F3;
+then A2: F1 is_transformable_to F3 by FUNCTOR2:4;
+then A3: G1*F1 is_transformable_to G1*F3 by Th10;
+A4: G1*F1 is_transformable_to G1*F2 & G1*F2 is_transformable_to G1*F3
+      by A1,Th10;
+      now
+      let a be object of A;
+A5:   <^F1.a,F2.a^> <> {} & <^F2.a,F3.a^> <> {} by A1,FUNCTOR2:def 1;
+A6:   G1.(F1.a) = (G1*F1).a & G1.(F2.a) = (G1*F2).a & G1.(F3.a) = (G1*F3).a
+       by FUNCTOR0:34;
+      then reconsider G1ta = (G1*p)!a as Morphism of G1.(F1.a), G1.(F2.a);
+      thus (G1*(p1`*`p))!a
+        = G1.((p1`*`p)!a) by A2,Th11
+       .= G1.((p1!a)*(p!a)) by A1,FUNCTOR2:def 5
+       .= G1.(p1!a)*G1.(p!a) by A5,FUNCTOR0:def 24
+       .= G1.(p1!a)*G1ta by A1,Th11
+       .= ((G1*p1)!a)*((G1*p)!a) by A1,A6,Th11
+       .= ((G1*p1)`*`(G1*p))!a by A4,FUNCTOR2:def 5;
+    end;
+    hence thesis by A3,FUNCTOR2:5;
+  end;
+
+theorem Th14:
+G1 is_transformable_to G2 & G2 is_transformable_to G3 implies
+ (q1`*`q)*F1 = (q1*F1)`*`(q*F1)
+  proof
+    assume
+A1:   G1 is_transformable_to G2 & G2 is_transformable_to G3;
+then A2: G1 is_transformable_to G3 by FUNCTOR2:4;
+then A3: G1*F1 is_transformable_to G3*F1 by Th10;
+A4: G1*F1 is_transformable_to G2*F1 & G2*F1 is_transformable_to G3*F1
+      by A1,Th10;
+      now
+      let a be object of A;
+A5:   G1.(F1.a) = (G1*F1).a & G2.(F1.a) = (G2*F1).a & G3.(F1.a) = (G3*F1).a
+       by FUNCTOR0:34;
+      then reconsider s1F1a = (q1*F1)!a as Morphism of G2.(F1.a), G3.(F1.a);
+      thus ((q1`*`q)*F1)!a
+        = (q1`*`q)!(F1.a) by A2,Th12
+       .= (q1!(F1.a))*(q!(F1.a)) by A1,FUNCTOR2:def 5
+       .= s1F1a*(q!(F1.a)) by A1,Th12
+       .= ((q1*F1)!a)*((q*F1)!a) by A1,A5,Th12
+       .= ((q1*F1)`*`(q*F1))!a by A4,FUNCTOR2:def 5;
+    end;
+    hence thesis by A3,FUNCTOR2:5;
+  end;
+
+theorem Th15:
+H1 is_transformable_to H2 implies r*G1*F1 = r*(G1*F1)
+  proof
+    assume
+A1:   H1 is_transformable_to H2;
+A2: H2*G1*F1 = H2*(G1*F1) by FUNCTOR0:33;
+    then reconsider m = r*(G1*F1) as transformation of H1*G1*F1, H2*G1*F1
+      by FUNCTOR0:33;
+A3: H1*G1 is_transformable_to H2*G1 by A1,Th10;
+then A4: H1*G1*F1 is_transformable_to H2*G1*F1 by Th10;
+      now
+      let a be object of A;
+      thus (r*G1*F1)!a
+        = (r*G1)!(F1.a) by A3,Th12
+       .= r!(G1.(F1.a)) by A1,Th12
+       .= r!((G1*F1).a) by FUNCTOR0:34
+       .= (r*(G1*F1))!a by A1,Th12
+       .= m!a by A2,FUNCTOR0:33;
+    end;
+    hence thesis by A4,FUNCTOR2:5;
+  end;
+
+theorem Th16:
+G1 is_transformable_to G2 implies H1*q*F1 = H1*(q*F1)
+  proof
+    assume
+A1:   G1 is_transformable_to G2;
+A2: H1*G2*F1 = H1*(G2*F1) by FUNCTOR0:33;
+    then reconsider m = H1*(q*F1) as transformation of H1*G1*F1, H1*G2*F1
+      by FUNCTOR0:33;
+A3: G1*F1 is_transformable_to G2*F1 by A1,Th10;
+A4: H1*G1 is_transformable_to H1*G2 by A1,Th10;
+then A5: H1*G1*F1 is_transformable_to H1*G2*F1 by Th10;
+      now
+      let a be object of A;
+A6:   (G1*F1).a = G1.(F1.a) & (G2*F1).a = G2.(F1.a) by FUNCTOR0:34;
+      thus (H1*q*F1)!a
+        = (H1*q)!(F1.a) by A4,Th12
+       .= H1.(q!(F1.a)) by A1,Th11
+       .= H1.((q*F1)!a) by A1,A6,Th12
+       .= (H1*(q*F1))!a by A3,Th11
+       .= m!a by A2,FUNCTOR0:33;
+    end;
+    hence thesis by A5,FUNCTOR2:5;
+  end;
+
+theorem Th17:
+F1 is_transformable_to F2 implies H1*G1*p = H1*(G1*p)
+  proof
+    assume
+A1:   F1 is_transformable_to F2;
+A2: H1*G1*F2 = H1*(G1*F2) by FUNCTOR0:33;
+    then reconsider m = H1*(G1*p) as transformation of H1*G1*F1, H1*G1*F2
+      by FUNCTOR0:33;
+A3: G1*F1 is_transformable_to G1*F2 by A1,Th10;
+A4: H1*G1*F1 is_transformable_to H1*G1*F2 by A1,Th10;
+      now
+      let a be object of A;
+A5:   (G1*F1).a = G1.(F1.a) & (G1*F2).a = G1.(F2.a) by FUNCTOR0:34;
+A6:   <^F1.a,F2.a^> <> {} by A1,FUNCTOR2:def 1;
+      thus (H1*G1*p)!a
+        = (H1*G1).(p!a) by A1,Th11
+       .= H1.(G1.(p!a)) by A6,Th6
+       .= H1.((G1*p)!a) by A1,A5,Th11
+       .= (H1*(G1*p))!a by A3,Th11
+       .= m!a by A2,FUNCTOR0:33;
+    end;
+    hence thesis by A4,FUNCTOR2:5;
+  end;
+
+theorem Th18:
+(idt G1)*F1 = idt (G1*F1)
+  proof
+      now
+      let a be object of A;
+      thus ((idt G1)*F1)!a
+         = (idt G1)!(F1.a) by Th12
+        .= idm(G1.(F1.a)) by FUNCTOR2:6
+        .= idm((G1*F1).a) by FUNCTOR0:34
+        .= (idt (G1*F1))!a by FUNCTOR2:6;
+    end;
+    hence thesis by FUNCTOR2:5;
+  end;
+
+theorem Th19:
+G1 * idt F1 = idt (G1*F1)
+  proof
+      now
+      let a be object of A;
+      thus (G1*(idt F1))!a
+         = G1.((idt F1)!a) by Th11
+        .= G1.(idm (F1.a)) by FUNCTOR2:6
+        .= idm (G1.(F1.a)) by FUNCTOR2:2
+        .= idm ((G1*F1).a) by FUNCTOR0:34
+        .= (idt (G1*F1))!a by FUNCTOR2:6;
+    end;
+    hence thesis by FUNCTOR2:5;
+  end;
+
+theorem Th20:
+F1 is_transformable_to F2 implies (id B) * p = p
+  proof
+    assume
+A1:   F1 is_transformable_to F2;
+      now
+      let i be set;
+      assume i in the carrier of A;
+      then reconsider a = i as object of A;
+A2:   <^F1.a,F2.a^> <> {} by A1,FUNCTOR2:def 1;
+      thus ((id B) * p).i = (id B).(p!a) by A1,Def1
+                         .= p!a by A2,FUNCTOR0:32
+                         .= p.i by A1,FUNCTOR2:def 4;
+    end;
+    hence (id B) * p = p by PBOOLE:3;
+  end;
+
+theorem Th21:
+G1 is_transformable_to G2 implies q * id B = q
+  proof
+    assume that
+A1:   G1 is_transformable_to G2;
+      now
+      let i be set;
+      assume i in the carrier of B;
+      then reconsider a = i as object of B;
+      thus (q * id B).i = q!((id B).a) by A1,Def2
+                       .= q!a by FUNCTOR0:30
+                       .= q.i by A1,FUNCTOR2:def 4;
+    end;
+    hence thesis by PBOOLE:3;
+  end;
+
+
+begin  :: The composition of transformations
+
+definition let A, B, C be transitive with_units (non empty AltCatStr),
+               F1, F2 be covariant Functor of A, B,
+               G1, G2 be covariant Functor of B, C,
+               t be transformation of F1, F2,
+               s be transformation of G1, G2;
+ func s (#) t -> transformation of G1*F1, G2*F2 equals :Def3:
+  (s*F2) `*` (G1*t);
+coherence;
+end;
+
+theorem Th22:
+for q being natural_transformation of G1, G2 st
+ F1 is_transformable_to F2 & G1 is_naturally_transformable_to G2
+  holds q (#) p = (G2*p) `*` (q*F1)
+  proof
+    let q be natural_transformation of G1, G2; assume
+A1:  F1 is_transformable_to F2 &
+     G1 is_naturally_transformable_to G2;
+then A2: G1 is_transformable_to G2 by FUNCTOR2:def 6;
+    then A3: G1*F1 is_transformable_to G2*F2 by A1,Th10;
+A4: G1*F2 is_transformable_to G2*F2 & G1*F1 is_transformable_to G1*F2
+      by A1,A2,Th10;
+A5: G1*F1 is_transformable_to G2*F1 & G2*F1 is_transformable_to G2*F2
+      by A1,A2,Th10;
+      now
+      let a be object of A;
+A6:   G1.(F1.a) = (G1*F1).a &
+      G1.(F2.a) = (G1*F2).a &
+      G2.(F1.a) = (G2*F1).a &
+      G2.(F2.a) = (G2*F2).a by FUNCTOR0:34;
+      then reconsider sF2a = q!F2.a as Morphism of (G1*F2).a, (G2*F2).a;
+      reconsider G2ta = G2*p!a as Morphism of G2.(F1.a), G2.(F2.a) by A6;
+A7:   <^F1.a,F2.a^> <> {} by A1,FUNCTOR2:def 1;
+      thus ((q*F2) `*` (G1*p))!a
+         = ((q*F2)!a) * ((G1*p)!a) by A4,FUNCTOR2:def 5
+        .= sF2a * ((G1*p)!a) by A2,Th12
+        .= (q!F2.a) * G1.(p!a) by A1,A6,Th11
+        .= G2.(p!a) * (q!F1.a) by A1,A7,FUNCTOR2:def 7
+        .= G2ta * (q!F1.a) by A1,Th11
+        .= G2*p!a * (q*F1!a) by A2,A6,Th12
+        .= ((G2*p) `*` (q*F1))!a by A5,FUNCTOR2:def 5;
+    end;
+    then (q*F2) `*` (G1*p) = (G2*p) `*` (q*F1) by A3,FUNCTOR2:5;
+    hence thesis by Def3;
+  end;
+
+theorem
+  F1 is_transformable_to F2 implies (idt id B)(#)p = p
+  proof
+    assume
+A1:   F1 is_transformable_to F2;
+then A2: (id B)*F1 is_transformable_to (id B)*F2 by Th10;
+    thus (idt id B)(#)p
+      = ((idt id B)*F2) `*` (id B*p) by Def3
+     .= (idt (id B*F2)) `*` (id B*p) by Th18
+     .= id B*p by A2,FUNCTOR2:7
+     .= p by A1,Th20;
+  end;
+
+theorem
+  G1 is_transformable_to G2 implies q(#)(idt id B) = q
+  proof
+    assume
+A1:   G1 is_transformable_to G2;
+then A2: G1*(id B) is_transformable_to G2*(id B) by Th10;
+    thus q(#)(idt id B)
+      = (q*(id B))`*`(G1*(idt id B)) by Def3
+     .= (q*(id B))`*`(idt (G1*id B)) by Th19
+     .= q*id B by A2,FUNCTOR2:7
+     .= q by A1,Th21;
+  end;
+
+theorem
+  F1 is_transformable_to F2 implies G1*p = (idt G1) (#) p
+  proof
+    assume F1 is_transformable_to F2;
+    then G1*F1 is_transformable_to G1*F2 by Th10;
+    hence G1*p = (idt (G1*F2))`*`(G1*p) by FUNCTOR2:7
+              .= ((idt G1)*F2)`*`(G1*p) by Th18
+              .= (idt G1) (#) p by Def3;
+  end;
+
+theorem
+  G1 is_transformable_to G2 implies q*F1 = q (#) idt F1
+  proof
+    assume G1 is_transformable_to G2;
+    then G1*F1 is_transformable_to G2*F1 by Th10;
+    hence q*F1 = (q*F1)`*`(idt(G1*F1)) by FUNCTOR2:7
+              .= (q*F1)`*`(G1*idt F1) by Th19
+              .= q (#) idt F1 by Def3;
+  end;
+
+reserve A, B, C, D for category,
+        F1, F2, F3 for covariant Functor of A, B,
+        G1, G2, G3 for covariant Functor of B, C;
+
+theorem
+  for H1, H2 being covariant Functor of C, D
+ for t being transformation of F1, F2, s being transformation of G1, G2
+  for u being transformation of H1, H2 st
+   F1 is_transformable_to F2 & G1 is_transformable_to G2 &
+    H1 is_transformable_to H2 holds
+ u(#)s(#)t = u(#)(s(#)t)
+  proof
+    let H1, H2 be covariant Functor of C, D,
+        t be transformation of F1, F2,
+        s be transformation of G1, G2,
+        u be transformation of H1, H2; assume
+A1: F1 is_transformable_to F2 & G1 is_transformable_to G2 &
+      H1 is_transformable_to H2;
+then A2: H1*G2 is_transformable_to H2*G2 &
+     H1*G1 is_transformable_to H1*G2 by Th10;
+then A3: H1*G2*F2 is_transformable_to H2*G2*F2 &
+     H1*G1*F2 is_transformable_to H1*G2*F2 &
+      H1*G1*F1 is_transformable_to H1*G1*F2 by A1,Th10;
+A4: G1*F2 is_transformable_to G2*F2 &
+     G1*F1 is_transformable_to G1*F2 by A1,Th10;
+A5: u*G2*F2 = u*(G2*F2) & H1*s*F2 = H1*(s*F2) & H1*G1*t = H1*(G1*t)
+     by A1,Th15,Th16,Th17;
+A6: H1*G1*F1 = H1*(G1*F1) & H1*G1*F2 = H1*(G1*F2) &
+     H1*G2*F2 = H1*(G2*F2) & H2*G2*F2 = H2*(G2*F2) by FUNCTOR0:33;
+    thus u(#)s(#)t
+       = ((u*G2) `*` (H1*s))(#)t by Def3
+      .= (((u*G2) `*` (H1*s))*F2) `*` ((H1*G1)*t) by Def3
+      .= ((u*G2)*F2) `*` ((H1*s)*F2) `*` ((H1*G1)*t) by A2,Th14
+      .= (u*(G2*F2)) `*` ((H1*(s*F2)) `*` (H1*(G1*t))) by A3,A5,A6,FUNCTOR2:8
+      .= (u*(G2*F2)) `*` (H1*((s*F2) `*` (G1*t))) by A4,Th13
+      .= u(#)((s*F2) `*` (G1*t)) by Def3
+      .= u(#)(s(#)t) by Def3;
+  end;
+
+reserve t for natural_transformation of F1, F2,
+        s for natural_transformation of G1, G2,
+        s1 for natural_transformation of G2, G3;
+
+Lm2:now
+    let A, B, C, F1, F2, G1, G2, s, t;
+    assume
+A1:   F1 is_naturally_transformable_to F2;
+then A2: F1 is_transformable_to F2 by FUNCTOR2:def 6;
+    assume
+A3:   G1 is_naturally_transformable_to G2;
+then A4: G1 is_transformable_to G2 by FUNCTOR2:def 6;
+    set k = s(#)t;
+A5: k = (s*F2)`*`(G1*t) by Def3;
+A6: now
+      let a, b be object of A such that
+A7:     <^a,b^> <> {};
+      let f be Morphism of a,b;
+A8:   (G1*F1).a = G1.(F1.a) & (G2*F2).a = G2.(F2.a) by FUNCTOR0:34;
+A9:   (G1*F1).b = G1.(F1.b) & (G2*F2).b = G2.(F2.b) by FUNCTOR0:34;
+A10:   <^F1.b,F2.b^> <> {} by A2,FUNCTOR2:def 1;
+A11:   <^F1.a,F1.b^> <> {} by A7,FUNCTOR0:def 19;
+then A12:   <^F1.a,F2.b^> <> {} by A10,ALTCAT_1:def 4;
+A13:   <^F2.a,F2.b^> <> {} by A7,FUNCTOR0:def 19;
+A14:   <^F1.a,F2.a^> <> {} by A2,FUNCTOR2:def 1;
+A15:   <^G1.(F1.a),G2.(F1.a)^> <> {} by A4,FUNCTOR2:def 1;
+A16:   <^G2.(F1.a),G2.(F2.a)^> <> {} by A14,FUNCTOR0:def 19;
+A17:   <^G2.(F2.a),G2.(F2.b)^> <> {} by A13,FUNCTOR0:def 19;
+A18:   <^(G1*F1).a, (G1*F1).b^> <> {} by A7,FUNCTOR0:def 19;
+        <^G1.(F1.b),G1.(F2.b)^> <> {} by A10,FUNCTOR0:def 19;
+then A19:   <^(G1*F1).b, (G1*F2).b^> <> {} by A9,FUNCTOR0:34;
+        <^G1.(F2.b),G2.(F2.b)^> <> {} by A4,FUNCTOR2:def 1;
+then A20:   <^(G1*F2).b, (G2*F2).b^> <> {} by A9,FUNCTOR0:34;
+A21:   G1*F2 is_transformable_to G2*F2 by A4,Th10;
+A22:   G1*F1 is_transformable_to G1*F2 by A2,Th10;
+A23:   s!(F2.b) = (s*F2).b by A4,Def2;
+A24:   s!(F2.a) = (s*F2).a by A4,Def2;
+      reconsider G1tb = G1.(t!b) as Morphism of (G1*F1).b, (G1*F2).b
+       by A9,FUNCTOR0:34;
+      reconsider sF2b = s!(F2.b) as Morphism of (G1*F2).b, (G2*F2).b
+       by A9,FUNCTOR0:34;
+      reconsider G1F1f = G1.(F1.f) as Morphism of (G1*F1).a, (G1*F1).b
+       by A9,FUNCTOR0:34;
+      reconsider G1tbF1f = G1.(t!b*F1.f) as Morphism of (G1*F1).a, (G1*F2).b
+       by A8,FUNCTOR0:34;
+      reconsider G1ta = G1.(t!a) as Morphism of (G1*F1).a, (G1*F2).a
+       by A8,FUNCTOR0:34;
+      reconsider sF2a = s!(F2.a) as Morphism of (G1*F2).a, (G2*F2).a
+       by A8,FUNCTOR0:34;
+      reconsider G2F2f = G2.(F2.f) as Morphism of (G2*F2).a, (G2*F2).b
+       by A8,FUNCTOR0:34;
+A25:   G1.(t!b*F1.f) = G1.(t!b)*G1.(F1.f) by A10,A11,FUNCTOR0:def 24
+        .= G1tb*G1F1f by A8,A9,FUNCTOR0:34;
+      thus (k!b)*((G1*F1).f)
+       = ((s*F2)!b)*((G1*t)!b)*((G1*F1).f) by A5,A21,A22,FUNCTOR2:def 5
+      .= sF2b*((G1*t)!b)*((G1*F1).f) by A21,A23,FUNCTOR2:def 4
+      .= sF2b*G1tb*((G1*F1).f) by A2,Th11
+      .= sF2b*G1tb*G1F1f by A7,Th6
+      .= sF2b*G1tbF1f by A18,A19,A20,A25,ALTCAT_1:25
+      .= s!(F2.b)*G1.(t!b*F1.f) by A8,A9,FUNCTOR0:34
+      .= G2.(t!b*F1.f)*(s!(F1.a)) by A3,A12,FUNCTOR2:def 7
+      .= G2.(F2.f*(t!a))*(s!(F1.a)) by A1,A7,FUNCTOR2:def 7
+      .= G2.(F2.f)*G2.(t!a)*(s!(F1.a)) by A13,A14,FUNCTOR0:def 24
+      .= G2.(F2.f)*(G2.(t!a)*(s!(F1.a))) by A15,A16,A17,ALTCAT_1:25
+      .= G2.(F2.f)*(s!(F2.a)*G1.(t!a)) by A3,A14,FUNCTOR2:def 7
+      .= G2F2f*(sF2a*G1ta) by A8,A9,FUNCTOR0:34
+      .= ((G2*F2).f)*(sF2a*G1ta) by A7,Th6
+      .= ((G2*F2).f)*(((s*F2)!a)*G1ta) by A21,A24,FUNCTOR2:def 4
+      .= ((G2*F2).f)*(((s*F2)!a)*((G1*t)!a)) by A2,Th11
+      .= ((G2*F2).f)*(k!a) by A5,A21,A22,FUNCTOR2:def 5;
+    end;
+    thus
+A26:   G1*F1 is_naturally_transformable_to G2*F2
+    proof
+      thus G1*F1 is_transformable_to G2*F2 by A2,A4,Th10;
+      take k;
+      thus thesis by A6;
+    end;
+    thus s(#)t is natural_transformation of G1*F1, G2*F2
+    proof
+      thus G1*F1 is_naturally_transformable_to G2*F2 by A26;
+      thus thesis by A6;
+    end;
+  end;
+
+theorem Th28:
+F1 is_naturally_transformable_to F2 implies
+ G1*t is natural_transformation of G1*F1, G1*F2
+  proof
+    assume
+A1:   F1 is_naturally_transformable_to F2;
+      G1 is_naturally_transformable_to G1 by FUNCTOR2:9;
+    hence G1*F1 is_naturally_transformable_to G1*F2 by A1,Lm2;
+    let a, b be object of A such that
+A2:   <^a,b^> <> {};
+    let f be Morphism of a, b;
+A3: F1 is_transformable_to F2 by A1,FUNCTOR2:def 6;
+A4: (G1*F1).a = G1.(F1.a) by FUNCTOR0:34;
+A5: (G1*F1).b = G1.(F1.b) by FUNCTOR0:34;
+A6: (G1*F2).a = G1.(F2.a) by FUNCTOR0:34;
+A7: (G1*F2).b = G1.(F2.b) by FUNCTOR0:34;
+A8: <^F1.a,F1.b^> <> {} by A2,FUNCTOR0:def 19;
+A9: <^F1.a,F2.a^> <> {} by A3,FUNCTOR2:def 1;
+A10: <^F1.b,F2.b^> <> {} by A3,FUNCTOR2:def 1;
+A11: <^F2.a,F2.b^> <> {} by A2,FUNCTOR0:def 19;
+    reconsider G1tb = G1.(t!b) as Morphism of (G1*F1).b, G1.(F2.b)
+     by FUNCTOR0:34;
+    reconsider G1F1f = G1.(F1.f) as Morphism of (G1*F1).a, (G1*F1).b
+     by A4,FUNCTOR0:34;
+    reconsider G1ta = G1.(t!a) as Morphism of G1.(F1.a), (G1*F2).a
+     by FUNCTOR0:34;
+    thus (G1*t)!b*(G1*F1).f
+      = G1tb*((G1*F1).f) by A3,A7,Th11
+     .= G1tb*G1F1f by A2,Th6
+     .= G1.(t!b*F1.f) by A4,A5,A8,A10,FUNCTOR0:def 24
+     .= G1.(F2.f*(t!a)) by A1,A2,FUNCTOR2:def 7
+     .= G1.(F2.f)*G1.(t!a) by A9,A11,FUNCTOR0:def 24
+     .= (G1*F2).f*G1ta by A2,A6,A7,Th6
+     .= (G1*F2).f*((G1*t)!a) by A3,A4,Th11;
+  end;
+
+theorem Th29:
+G1 is_naturally_transformable_to G2 implies
+ s*F1 is natural_transformation of G1*F1, G2*F1
+  proof
+    assume
+A1:   G1 is_naturally_transformable_to G2;
+      F1 is_naturally_transformable_to F1 by FUNCTOR2:9;
+    hence G1*F1 is_naturally_transformable_to G2*F1 by A1,Lm2;
+    let a, b be object of A such that
+A2:   <^a,b^> <> {};
+    let f be Morphism of a, b;
+A3: G1 is_transformable_to G2 by A1,FUNCTOR2:def 6;
+A4: (G1*F1).a = G1.(F1.a) by FUNCTOR0:34;
+A5: (G1*F1).b = G1.(F1.b) by FUNCTOR0:34;
+A6: (G2*F1).a = G2.(F1.a) by FUNCTOR0:34;
+A7: (G2*F1).b = G2.(F1.b) by FUNCTOR0:34;
+A8: (G2*F1).b = G2.(F1.b) by FUNCTOR0:34;
+A9: <^F1.a,F1.b^> <> {} by A2,FUNCTOR0:def 19;
+    reconsider sF1b = s!(F1.b) as Morphism of (G1*F1).b, (G2*F1).b
+     by A7,FUNCTOR0:34;
+    reconsider sF1a = s!F1.a as Morphism of G1.(F1.a), (G2*F1).a
+     by FUNCTOR0:34;
+    reconsider G1F1f = G1.(F1.f) as Morphism of (G1*F1).a, (G1*F1).b
+     by A4,FUNCTOR0:34;
+    thus (s*F1)!b*(G1*F1).f
+      = sF1b*((G1*F1).f) by A3,Th12
+     .= sF1b*G1F1f by A2,Th6
+     .= G2.(F1.f)*(s!F1.a) by A1,A4,A5,A8,A9,FUNCTOR2:def 7
+     .= (G2*F1).f*sF1a by A2,A6,A7,Th6
+     .= (G2*F1).f*((s*F1)!a) by A3,A4,Th12;
+  end;
+
+theorem
+  F1 is_naturally_transformable_to F2 & G1 is_naturally_transformable_to G2
+  implies
+ G1*F1 is_naturally_transformable_to G2*F2 &
+ s(#)t is natural_transformation of G1*F1, G2*F2 by Lm2;
+
+theorem
+  for t being transformation of F1, F2, t1 being transformation of F2, F3 st
+ F1 is_naturally_transformable_to F2 & F2 is_naturally_transformable_to F3 &
+  G1 is_naturally_transformable_to G2 & G2 is_naturally_transformable_to G3
+ holds (s1`*`s)(#)(t1`*`t) = (s1(#)t1)`*`(s(#)t)
+  proof
+    let t be transformation of F1, F2,
+        t1 be transformation of F2, F3 such that
+A1: F1 is_naturally_transformable_to F2 &
+    F2 is_naturally_transformable_to F3 and
+A2: G1 is_naturally_transformable_to G2 and
+A3: G2 is_naturally_transformable_to G3;
+A4: G1 is_naturally_transformable_to G3 by A2,A3,FUNCTOR2:10;
+A5: F1 is_transformable_to F2 &
+    G1 is_transformable_to G2 &
+    F2 is_transformable_to F3 &
+    G2 is_transformable_to G3 by A1,A2,A3,FUNCTOR2:def 6;
+then A6: F1 is_transformable_to F3 by FUNCTOR2:4;
+A7: G3*F2 is_transformable_to G3*F3 &
+    G3*F1 is_transformable_to G3*F2 by A5,Th10;
+      G1 is_transformable_to G3 by A5,FUNCTOR2:4;
+then A8: G1*F1 is_transformable_to G3*F1 &
+    G1*F1 is_transformable_to G2*F1 &
+    G2*F1 is_transformable_to G3*F1 by A5,Th10;
+A9: G2*F2 is_transformable_to G3*F2 &
+    G2*F1 is_transformable_to G2*F2 by A5,Th10;
+      G1*F1 is_naturally_transformable_to G2*F2 by A1,A2,Lm2;
+then A10: G1*F1 is_transformable_to G2*F2 by FUNCTOR2:def 6;
+A11: s1(#)t1 = (G3*t1)`*`(s1*F2) & s(#)t = (G2*t)`*`(s*F1) by A2,A3,A5,Th22;
+    thus (s1`*`s)(#)(t1`*`t)
+          = (G3*(t1`*`t))`*`((s1`*`s)*F1) by A4,A6,Th22
+         .= (G3*t1)`*`(G3*t)`*`((s1`*`s)*F1) by A5,Th13
+         .= (G3*t1)`*`(G3*t)`*`(((s1 qua transformation of G2,G3)`*`s)*F1)
+           by A2,A3,FUNCTOR2:def 8
+         .= (G3*t1)`*`(G3*t)`*`((s1*F1)`*`(s*F1)) by A5,Th14
+         .= (G3*t1)`*`((G3*t)`*`((s1*F1)`*`(s*F1))) by A7,A8,FUNCTOR2:8
+         .= (G3*t1)`*`((G3*t)`*`(s1*F1)`*`(s*F1)) by A7,A8,FUNCTOR2:8
+         .= (G3*t1)`*`((s1(#)t)`*`(s*F1)) by A3,A5,Th22
+         .= (G3*t1)`*`((s1*F2)`*`(G2*t)`*`(s*F1)) by Def3
+         .= (G3*t1)`*`((s1*F2)`*`((G2*t)`*`(s*F1))) by A8,A9,FUNCTOR2:8
+         .= (s1(#)t1)`*`(s(#)t) by A7,A9,A10,A11,FUNCTOR2:8;
+ end;
+
+
+begin  :: Natural equivalences
+
+theorem Th32:
+F1 is_naturally_transformable_to F2 & F2 is_transformable_to F1 &
+ (for a being object of A holds t!a is iso) implies
+  F2 is_naturally_transformable_to F1 &
+   ex f being natural_transformation of F2, F1 st
+    for a being object of A holds f.a = (t!a)" & f!a is iso
+  proof
+    assume that
+A1:   F1 is_naturally_transformable_to F2 and
+A2:   F2 is_transformable_to F1 and
+A3:   for a being object of A holds t!a is iso;
+    set I = the carrier of A;
+defpred P[set,set] means
+  ex a being object of A st a = $1 & $2 = (t!a)";
+A4: for i being set st i in I ex j being set st P[i,j]
+    proof
+      let i be set;
+      assume i in I;
+      then reconsider o = i as object of A;
+      take (t!o)";
+      thus P[i,(t!o)"];
+    end;
+    consider f being ManySortedSet of I such that
+A5:  for i being set st i in I holds P[i,f.i] from MSSEx(A4);
+A6: F1 is_transformable_to F2 by A1,FUNCTOR2:def 6;
+      f is transformation of F2, F1
+    proof
+      thus F2 is_transformable_to F1 by A2;
+      let a be object of A;
+      consider b being object of A such that
+A7:     b = a & f.a = (t!b)" by A5;
+      thus f.a is Morphism of F2.a, F1.a by A7;
+    end;
+    then reconsider f as transformation of F2, F1;
+A8: now
+      let a, b be object of A such that
+A9:     <^a,b^> <> {};
+A10:   ex aa being object of A st aa = a & f.a = (t!aa)" by A5;
+      then reconsider fa = f.a as Morphism of F2.a, F1.a;
+A11:   ex bb being object of A st bb = b & f.b = (t!bb)" by A5;
+A12:   t!a is iso by A3;
+A13:   t!b is iso by A3;
+      let g be Morphism of a, b;
+A14:   <^F1.a,F2.a^> <> {} by A6,FUNCTOR2:def 1;
+A15:   <^F2.a,F1.a^> <> {} by A2,FUNCTOR2:def 1;
+A16:   <^F2.b,F1.b^> <> {} by A2,FUNCTOR2:def 1;
+A17:   <^F2.a,F2.b^> <> {} by A9,FUNCTOR0:def 19;
+then A18:   <^F2.a,F1.b^> <> {} by A16,ALTCAT_1:def 4;
+A19:   <^F1.b,F2.b^> <> {} by A6,FUNCTOR2:def 1;
+A20:   <^F1.a,F1.b^> <> {} by A9,FUNCTOR0:def 19;
+      thus f!b*F2.g = f!b*(F2.g)*(idm (F2.a)) by A18,ALTCAT_1:def 19
+                   .= f!b*(F2.g)*((t!a)*fa) by A10,A12,ALTCAT_3:def 5
+                   .= f!b*(F2.g)*((t!a)*(f!a)) by A2,FUNCTOR2:def 4
+                   .= f!b*(F2.g)*(t!a)*(f!a) by A14,A15,A18,ALTCAT_1:25
+                   .= f!b*((F2.g)*(t!a))*(f!a) by A14,A16,A17,ALTCAT_1:25
+                   .= f!b*((t!b)*(F1.g))*(f!a) by A1,A9,FUNCTOR2:def 7
+                   .= f!b*(t!b)*(F1.g)*(f!a) by A16,A19,A20,ALTCAT_1:25
+                   .= (t!b)"*(t!b)*(F1.g)*(f!a) by A2,A11,FUNCTOR2:def 4
+                   .= (idm (F1.b))*(F1.g)*(f!a) by A13,ALTCAT_3:def 5
+                   .= F1.g*(f!a) by A20,ALTCAT_1:24;
+    end;
+A21: F2 is_naturally_transformable_to F1
+    proof
+      thus F2 is_transformable_to F1 by A2;
+      thus thesis by A8;
+    end;
+      f is natural_transformation of F2, F1
+    proof
+      thus F2 is_naturally_transformable_to F1 by A21;
+      thus thesis by A8;
+    end;
+    then reconsider f as natural_transformation of F2, F1;
+    thus F2 is_naturally_transformable_to F1 by A21;
+    take f;
+    let a be object of A;
+    consider b being object of A such that
+A22:   b = a & f.a = (t!b)" by A5;
+    thus f.a = (t!a)" by A22;
+A23: <^F1.a,F2.a^> <> {} & <^F2.a,F1.a^> <> {} by A2,A6,FUNCTOR2:def 1;
+A24: f!a = (t!b)" by A2,A22,FUNCTOR2:def 4;
+      t!b is iso by A3;
+    hence f!a is iso by A22,A23,A24,ALTCAT_4:3;
+  end;
+
+definition let A, B be category,
+               F1, F2 be covariant Functor of A, B;
+ pred F1, F2 are_naturally_equivalent means :Def4:
+  F1 is_naturally_transformable_to F2 &
+  F2 is_transformable_to F1 &
+  ex t being natural_transformation of F1, F2 st
+   for a being object of A holds t!a is iso;
+reflexivity
+  proof
+    let F be covariant Functor of A, B;
+    thus F is_naturally_transformable_to F & F is_transformable_to F
+     by FUNCTOR2:9;
+    take idt F;
+    let a be object of A;
+      (idt F)!a = idm (F.a) by FUNCTOR2:6;
+    hence (idt F)!a is iso;
+  end;
+symmetry
+  proof
+    let F1, F2 be covariant Functor of A, B such that
+A1:   F1 is_naturally_transformable_to F2 and
+A2:   F2 is_transformable_to F1;
+    given t being natural_transformation of F1, F2 such that
+A3:   for a being object of A holds t!a is iso;
+    thus F2 is_naturally_transformable_to F1 by A1,A2,A3,Th32;
+    thus F1 is_transformable_to F2 by A1,FUNCTOR2:def 6;
+    consider f being natural_transformation of F2, F1 such that
+A4:   for a being object of A holds f.a = (t!a)" & f!a is iso
+        by A1,A2,A3,Th32;
+    take f;
+    thus thesis by A4;
+  end;
+end;
+
+definition let A, B be category,
+               F1, F2 be covariant Functor of A, B such that
+A1: F1, F2 are_naturally_equivalent;
+ mode natural_equivalence of F1, F2 -> natural_transformation of F1, F2 means
+:Def5:
+  for a being object of A holds it!a is iso;
+existence by A1,Def4;
+end;
+
+reserve e for natural_equivalence of F1, F2,
+        e1 for natural_equivalence of F2, F3,
+        f for natural_equivalence of G1, G2;
+
+theorem Th33:
+F1, F2 are_naturally_equivalent & F2, F3 are_naturally_equivalent implies
+ F1, F3 are_naturally_equivalent
+  proof
+    assume that
+A1:   F1 is_naturally_transformable_to F2 and
+A2:   F2 is_transformable_to F1;
+    given t being natural_transformation of F1, F2 such that
+A3:   for a being object of A holds t!a is iso;
+    assume that
+A4:   F2 is_naturally_transformable_to F3 and
+A5:   F3 is_transformable_to F2;
+    given t1 being natural_transformation of F2, F3 such that
+A6:   for a being object of A holds t1!a is iso;
+    thus F1 is_naturally_transformable_to F3 &
+      F3 is_transformable_to F1 by A1,A2,A4,A5,FUNCTOR2:4,10;
+    take t1 `*` t;
+    let a be object of A;
+A7: F1 is_transformable_to F2 & F2 is_transformable_to F3 &
+     F3 is_transformable_to F1 by A1,A2,A4,A5,FUNCTOR2:4,def 6;
+A8: (t1 `*` t)!a = ((t1 qua transformation of F2, F3) `*` t)!a
+                by A1,A4,FUNCTOR2:def 8
+             .= (t1!a)*(t!a) by A7,FUNCTOR2:def 5;
+A9: <^F1.a,F2.a^> <> {} & <^F2.a,F3.a^> <> {} & <^F3.a,F1.a^> <> {}
+      by A7,FUNCTOR2:def 1;
+      t1!a is iso & t!a is iso by A3,A6;
+    hence (t1 `*` t)!a is iso by A8,A9,ALTCAT_3:7;
+  end;
+
+theorem Th34:
+F1, F2 are_naturally_equivalent & F2, F3 are_naturally_equivalent implies
+ e1 `*` e is natural_equivalence of F1, F3
+  proof
+    assume
+A1:   F1, F2 are_naturally_equivalent & F2, F3 are_naturally_equivalent;
+    hence
+A2:   F1, F3 are_naturally_equivalent by Th33;
+    let a be object of A;
+A3: F1 is_naturally_transformable_to F2 & F2 is_naturally_transformable_to F3
+      by A1,Def4;
+A4: F1 is_transformable_to F2 & F2 is_transformable_to F3 &
+     F3 is_transformable_to F1 by A1,A2,Def4;
+A5: (e1 `*` e)!a = ((e1 qua transformation of F2, F3) `*` e)!a
+                by A3,FUNCTOR2:def 8
+             .= (e1!a)*(e!a) by A4,FUNCTOR2:def 5;
+A6: <^F1.a,F2.a^> <> {} & <^F2.a,F3.a^> <> {} & <^F3.a,F1.a^> <> {}
+      by A4,FUNCTOR2:def 1;
+      e1!a is iso & e!a is iso by A1,Def5;
+    hence (e1 `*` e)!a is iso by A5,A6,ALTCAT_3:7;
+  end;
+
+theorem Th35:
+F1, F2 are_naturally_equivalent implies
+ G1*F1, G1*F2 are_naturally_equivalent &
+ G1*e is natural_equivalence of G1*F1, G1*F2
+  proof
+    assume
+A1:   F1, F2 are_naturally_equivalent;
+then A2: F1 is_naturally_transformable_to F2 by Def4;
+A3: F1 is_transformable_to F2 by A1,Def4;
+A4: F2 is_transformable_to F1 by A1,Def4;
+    reconsider k = G1*e as natural_transformation of G1*F1, G1*F2 by A2,Th28;
+A5: now
+      let a be object of A;
+A6:   (G1*F1).a = G1.(F1.a) & (G1*F2).a = G1.(F2.a) by FUNCTOR0:34;
+A7:   k!a = G1.(e!a) by A3,Th11;
+A8:   <^F1.a,F2.a^> <> {} & <^F2.a,F1.a^> <> {} by A3,A4,FUNCTOR2:def 1;
+        e!a is iso by A1,Def5;
+      hence k!a is iso by A6,A7,A8,ALTCAT_4:20;
+    end;
+      G1*F1, G1*F2 are_naturally_equivalent
+    proof
+        G1 is_naturally_transformable_to G1 by FUNCTOR2:9;
+      hence G1*F1 is_naturally_transformable_to G1*F2 by A2,Lm2;
+      thus G1*F2 is_transformable_to G1*F1 by A4,Th10;
+      take k;
+      let a be object of A;
+      thus k!a is iso by A5;
+    end;
+    hence thesis by A5,Def5;
+  end;
+
+theorem Th36:
+G1, G2 are_naturally_equivalent implies
+ G1*F1, G2*F1 are_naturally_equivalent &
+ f*F1 is natural_equivalence of G1*F1, G2*F1
+  proof
+    assume
+A1:   G1, G2 are_naturally_equivalent;
+then A2: G1 is_naturally_transformable_to G2 by Def4;
+    then reconsider k = f*F1 as natural_transformation of G1*F1, G2*F1 by Th29;
+A3: now
+      let a be object of A;
+A4:   (G1*F1).a = G1.(F1.a) & (G2*F1).a = G2.(F1.a) by FUNCTOR0:34;
+        G1 is_transformable_to G2 by A1,Def4;
+      then k!a = f!(F1.a) by Th12;
+      hence k!a is iso by A1,A4,Def5;
+    end;
+      G1*F1, G2*F1 are_naturally_equivalent
+    proof
+        F1 is_naturally_transformable_to F1 by FUNCTOR2:9;
+      hence G1*F1 is_naturally_transformable_to G2*F1 by A2,Lm2;
+        G2 is_transformable_to G1 by A1,Def4;
+      hence G2*F1 is_transformable_to G1*F1 by Th10;
+      take k;
+      let a be object of A;
+      thus k!a is iso by A3;
+    end;
+    hence thesis by A3,Def5;
+  end;
+
+theorem
+  F1, F2 are_naturally_equivalent & G1, G2 are_naturally_equivalent
+ implies
+ G1*F1, G2*F2 are_naturally_equivalent &
+ f (#) e is natural_equivalence of G1*F1, G2*F2
+  proof
+    assume
+A1:   F1, F2 are_naturally_equivalent & G1, G2 are_naturally_equivalent;
+then A2: F1 is_naturally_transformable_to F2 &
+      G1 is_naturally_transformable_to G2 by Def4;
+A3: G1*F2, G2*F2 are_naturally_equivalent &
+     G1*F1, G1*F2 are_naturally_equivalent by A1,Th35,Th36;
+then A4: G1*F2 is_naturally_transformable_to G2*F2 &
+     G1*F1 is_naturally_transformable_to G1*F2 by Def4;
+A5: f*F2 is natural_equivalence of G1*F2, G2*F2 &
+     G1*e is natural_equivalence of G1*F1, G1*F2 by A1,Th35,Th36;
+    reconsider sF2 = f*F2 as natural_transformation of G1*F2, G2*F2
+     by A2,Th29;
+    reconsider G1t = G1*e as natural_transformation of G1*F1, G1*F2
+     by A2,Th28;
+      sF2`*`G1t is natural_equivalence of G1*F1, G2*F2 by A3,A5,Th34;
+    then (f*F2) `*` (G1*e) is natural_equivalence of G1*F1, G2*F2
+     by A4,FUNCTOR2:def 8;
+    hence thesis by A3,Def3,Th33;
+  end;
+
+definition let A, B be category,
+               F1, F2 be covariant Functor of A, B,
+               e be natural_equivalence of F1, F2 such that
+A1: F1, F2 are_naturally_equivalent;
+ func e" -> natural_equivalence of F2, F1 means :Def6:
+  for a being object of A holds it.a = (e!a)";
+existence
+  proof
+A2: F1 is_naturally_transformable_to F2 &
+      F2 is_naturally_transformable_to F1 by A1,Def4;
+A3: F2 is_transformable_to F1 by A1,Def4;
+      for a being object of A holds e!a is iso by A1,Def5;
+    then consider f being natural_transformation of F2, F1 such that
+A4:   for a being object of A holds f.a = (e!a)" & f!a is iso by A2,A3,Th32;
+      f is natural_equivalence of F2, F1
+    proof
+      thus F2, F1 are_naturally_equivalent by A1;
+      let a be object of A;
+      thus f!a is iso by A4;
+    end;
+    then reconsider f as natural_equivalence of F2, F1;
+    take f;
+    let a be object of A;
+    thus thesis by A4;
+  end;
+uniqueness
+  proof
+    let P, R be natural_equivalence of F2, F1 such that
+A5:   for a being object of A holds P.a = (e!a)" and
+A6:   for a being object of A holds R.a = (e!a)";
+A7: F2 is_transformable_to F1 by A1,Def4;
+      now
+      let a be object of A;
+      thus P!a = P.a by A7,FUNCTOR2:def 4
+              .= (e!a)" by A5
+              .= R.a by A6
+              .= R!a by A7,FUNCTOR2:def 4;
+    end;
+    hence P = R by A7,FUNCTOR2:5;
+  end;
+end;
+
+theorem Th38:
+for o being object of A st F1, F2 are_naturally_equivalent holds
+ e"!o = (e!o)"
+  proof
+    let o be object of A; assume
+A1:   F1, F2 are_naturally_equivalent;
+    then F2 is_transformable_to F1 by Def4;
+    hence e"!o = e".o by FUNCTOR2:def 4
+              .= (e!o)" by A1,Def6;
+  end;
+
+theorem Th39:
+F1, F2 are_naturally_equivalent implies e `*` e" = idt F2
+  proof
+    assume
+A1:   F1, F2 are_naturally_equivalent;
+then A2: F1 is_naturally_transformable_to F2 by Def4;
+A3: F1 is_transformable_to F2 by A1,Def4;
+A4: F2 is_naturally_transformable_to F1 by A1,Def4;
+A5: F2 is_transformable_to F1 by A1,Def4;
+      now
+      let a be object of A;
+A6:   e!a is iso by A1,Def5;
+      thus (e `*` e")!a
+           = ((e qua transformation of F1, F2) `*` e")!a
+                by A2,A4,FUNCTOR2:def 8
+          .= (e!a)*(e"!a) by A3,A5,FUNCTOR2:def 5
+          .= (e!a)*((e!a)") by A1,Th38
+          .= idm (F2.a) by A6,ALTCAT_3:def 5
+          .= (idt F2)!a by FUNCTOR2:6;
+    end;
+    hence thesis by FUNCTOR2:5;
+  end;
+
+theorem
+  F1, F2 are_naturally_equivalent implies e" `*` e = idt F1
+  proof
+    assume
+A1:   F1, F2 are_naturally_equivalent;
+then A2: F1 is_naturally_transformable_to F2 by Def4;
+A3: F1 is_transformable_to F2 by A1,Def4;
+A4: F2 is_naturally_transformable_to F1 by A1,Def4;
+A5: F2 is_transformable_to F1 by A1,Def4;
+      now
+      let a be object of A;
+A6:   e!a is iso by A1,Def5;
+      thus (e" `*` e)!a
+           = (e" `*` (e qua transformation of F1, F2))!a
+                by A2,A4,FUNCTOR2:def 8
+          .= (e"!a)*(e!a) by A3,A5,FUNCTOR2:def 5
+          .= (e!a)"*(e!a) by A1,Th38
+          .= idm (F1.a) by A6,ALTCAT_3:def 5
+          .= (idt F1)!a by FUNCTOR2:6;
+    end;
+    hence thesis by FUNCTOR2:5;
+  end;
+
+definition let A, B be category,
+               F be covariant Functor of A, B;
+ redefine func idt F -> natural_equivalence of F, F;
+coherence
+  proof
+    consider e being natural_equivalence of F, F;
+      e `*` e" = idt F by Th39;
+    hence thesis by Th34;
+  end;
+end;
+
+theorem
+  F1, F2 are_naturally_equivalent implies (e")" = e
+  proof
+    assume
+A1:   F1, F2 are_naturally_equivalent;
+then A2: F1 is_transformable_to F2 by Def4;
+      now
+      let a be object of A;
+        F2 is_transformable_to F1 by A1,Def4;
+then A3:   <^F1.a,F2.a^> <> {} & <^F2.a,F1.a^> <> {} by A2,FUNCTOR2:def 1;
+        e!a is iso by A1,Def5;
+then A4:   e!a is retraction coretraction by ALTCAT_3:5;
+      thus (e")"!a = (e"!a)" by A1,Th38
+                  .= ((e!a)")" by A1,Th38
+                  .= e!a by A3,A4,ALTCAT_3:3;
+    end;
+    hence thesis by A2,FUNCTOR2:5;
+  end;
+
+theorem
+  for k being natural_equivalence of F1, F3 st k = e1 `*` e &
+ F1, F2 are_naturally_equivalent & F2, F3 are_naturally_equivalent
+  holds k" = e" `*` e1"
+  proof
+    let k be natural_equivalence of F1, F3 such that
+A1:   k = e1 `*` e and
+A2:   F1, F2 are_naturally_equivalent and
+A3:   F2, F3 are_naturally_equivalent;
+A4: F3, F1 are_naturally_equivalent by A2,A3,Th33;
+A5: F3 is_naturally_transformable_to F2 & F2 is_naturally_transformable_to F1
+      by A2,A3,Def4;
+A6: F3 is_transformable_to F2 & F2 is_transformable_to F1
+     by A2,A3,Def4;
+    then A7: F3 is_transformable_to F1 by FUNCTOR2:4;
+A8: F1 is_naturally_transformable_to F2 & F2 is_naturally_transformable_to F3
+      by A2,A3,Def4;
+A9: F1 is_transformable_to F2 & F2 is_transformable_to F3
+     by A2,A3,Def4;
+      now
+      let a be object of A;
+A10:   e!a is iso & e1!a is iso by A2,A3,Def5;
+A11:   <^F1.a,F2.a^> <> {} & <^F2.a,F3.a^> <> {} & <^F3.a,F1.a^> <> {}
+        by A7,A9,FUNCTOR2:def 1;
+      thus k"!a = ((e1 `*` e)!a)" by A1,A4,Th38
+               .= (((e1 qua transformation of F2, F3)`*` e)!a)"
+                  by A8,FUNCTOR2:def 8
+               .= ((e1!a)*(e!a))" by A9,FUNCTOR2:def 5
+               .= ((e!a)")*((e1!a)") by A10,A11,ALTCAT_3:7
+               .= ((e!a)")*(e1"!a) by A3,Th38
+               .= (e"!a)*(e1"!a) by A2,Th38
+               .= ((e" qua transformation of F2, F1)`*` e1")!a
+                  by A6,FUNCTOR2:def 5
+               .= (e" `*` e1")!a by A5,FUNCTOR2:def 8;
+    end;
+    hence k" = e" `*` e1" by A7,FUNCTOR2:5;
+  end;
+
+theorem
+  (idt F1)" = idt F1
+  proof
+      now
+      let a be object of A;
+      thus (idt F1)"!a = ((idt F1)!a)" by Th38
+                      .= (idm(F1.a))" by FUNCTOR2:6
+                      .= idm(F1.a) by ALTCAT_3:4
+                      .= (idt F1)!a by FUNCTOR2:6;
+    end;
+    hence thesis by FUNCTOR2:5;
+  end;

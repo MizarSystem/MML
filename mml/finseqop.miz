@@ -1,0 +1,1476 @@
+:: Binary Operations Applied to Finite Sequences
+::  by Czes{\l}aw Byli\'nski
+::
+:: Received May 4, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, PARTFUN1, BOOLE, RELAT_1, FUNCOP_1, FINSEQ_1, FINSEQ_2,
+      BINOP_1, SETWISEO, FINSEQOP;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, RELAT_1, FUNCT_1,
+      FINSEQ_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCT_3, FUNCOP_1, FINSEQ_2,
+      SETWISEO;
+ constructors NAT_1, BINOP_1, FUNCT_3, FUNCOP_1, FINSEQ_2, SETWISEO, RELAT_2,
+      PARTFUN1, XBOOLE_0;
+ clusters SUBSET_1, RELAT_1, FUNCT_1, FINSEQ_2, RELSET_1, FUNCOP_1, ARYTM_3,
+      ZFMISC_1, FUNCT_2, PARTFUN1, XBOOLE_0;
+ requirements NUMERALS, BOOLE, SUBSET;
+ definitions BINOP_1;
+ theorems ZFMISC_1, FUNCT_1, FUNCT_2, FUNCOP_1, FINSEQ_1, BINOP_1, SETWISEO,
+      FINSEQ_2, FUNCT_3, FUNCT_4, RELAT_1, XBOOLE_0;
+ schemes NAT_1, FINSEQ_2;
+
+begin
+
+ reserve x,y for set;
+ reserve C,C',D,D',E for non empty set;
+ reserve c for Element of C;
+ reserve c' for Element of C';
+ reserve d,d1,d2,d3,d4,e for Element of D;
+ reserve d' for Element of D';
+
+:: Auxiliary theorems
+
+theorem Th1:
+   for f being Function holds <:{},f:> = {} & <:f,{}:> = {}
+ proof let f be Function;
+    dom <:{},f:> = dom {} /\ dom f & dom <:f,{}:> = dom f /\ dom {} by FUNCT_3:
+def 8;
+  hence thesis by RELAT_1:64;
+ end;
+
+theorem
+     for f being Function holds [:{},f:] = {} & [:f,{}:] = {}
+ proof let f be Function;
+    dom [:{},f:] = [:dom {},dom f:] & dom [:f,{}:] = [:dom f,dom {}:]
+   by FUNCT_3:def 9;
+  then dom [:{},f:] = {} & dom [:f,{}:] = {} by ZFMISC_1:113;
+  hence thesis by RELAT_1:64;
+ end;
+
+canceled;
+
+theorem Th4:
+   for F,f being Function holds F.:({},f) = {} & F.:(f,{}) = {}
+ proof let F,f be Function;
+    F.:({},f) = F*<:{},f:> & F.:(f,{}) = F*<:f,{}:> by FUNCOP_1:def 3;
+  then F.:({},f) = F*{} & F.:(f,{}) = F*{} by Th1;
+  hence thesis;
+ end;
+
+theorem
+     for F being Function holds F[:]({},x) = {}
+ proof let F be Function;
+    F[:]({},x) = F.:({}, dom {} --> x) by FUNCOP_1:34;
+  hence thesis by Th4;
+ end;
+
+theorem
+     for F being Function holds F[;](x,{}) = {}
+ proof let F be Function;
+    F[;](x,{}) = F.:(dom {} --> x, {}) by FUNCOP_1:41;
+  hence thesis by Th4;
+ end;
+
+theorem Th7:
+   for X being set, x1,x2 being set holds <:X-->x1,X-->x2:> = X -->[x1,x2]
+ proof let X be set, x1,x2 be set;
+  set f = X-->x1, g = X-->x2;
+  set fg = <:f,g:>;
+     now per cases;
+    suppose
+A1:    X = {};
+     then f = {} by FUNCT_4:3;
+     then fg = {} by Th1;
+     hence thesis by A1,FUNCT_4:3;
+    suppose
+    A2: X <> {};
+     consider x being Element of X;
+A3:    dom f = X & dom g = X by FUNCOP_1:19;
+then A4:    dom fg = X by FUNCT_3:70;
+       f.x = x1 & g.x = x2 by A2,FUNCOP_1:13;
+     then fg.x = [x1,x2] & rng f = {x1} & rng g = {x2}
+       by A2,A3,FUNCOP_1:14,FUNCT_3:69;
+     then [x1,x2] in rng fg & rng fg c= [:{x1},{x2}:]
+       by A2,A4,FUNCT_1:def 5,FUNCT_3:71;
+     then rng fg c= {[x1,x2]} & {[x1,x2]} c= rng fg by ZFMISC_1:35,37;
+     then rng fg = {[x1,x2]} by XBOOLE_0:def 10;
+     hence thesis by A4,FUNCOP_1:15;
+   end;
+  hence thesis;
+ end;
+
+theorem Th8:
+   for F being Function,X being set, x1,x2 being set st [x1,x2] in dom F
+    holds F.:(X-->x1,X-->x2) = X -->(F.[x1,x2])
+ proof let F be Function, X be set, x1,x2 be set such that
+A1:  [x1,x2] in dom F;
+  set f = X-->x1, g = X-->x2;
+  thus F.:(f,g) = F*<:f,g:> by FUNCOP_1:def 3
+         .= F*(X-->[x1,x2]) by Th7
+         .= X -->(F.[x1,x2]) by A1,FUNCOP_1:23;
+ end;
+
+ reserve i,j for Nat;
+
+ reserve F for Function of [:D,D':],E;
+ reserve p,q for FinSequence of D, p',q' for FinSequence of D';
+
+definition let D,D',E,F,p,p';
+ redefine func F.:(p,p') -> FinSequence of E;
+  coherence by FINSEQ_2:84;
+end;
+
+definition let D,D',E,F,p,d';
+ redefine func F[:](p,d') -> FinSequence of E;
+  coherence by FINSEQ_2:97;
+end;
+
+definition let D,D',E,F,d,p';
+ redefine func F[;](d,p') -> FinSequence of E;
+  coherence by FINSEQ_2:91;
+end;
+
+definition let D,i,d;
+ redefine func i|-> d -> Element of i-tuples_on D;
+  coherence by FINSEQ_2:132;
+end;
+
+ reserve f,f' for Function of C,D,
+         h for Function of D,E;
+
+definition let D,E be set, p be FinSequence of D, h be Function of D,E;
+ redefine func h*p -> FinSequence of E;
+  coherence by FINSEQ_2:36;
+end;
+
+theorem Th9:
+   h*(p^<*d*>) = (h*p)^<*h.d*>
+ proof
+  set q = h*(p^<*d*>);
+  set r = (h*p)^<*h.d*>;
+  set i = len p + 1;
+A1:  len q = len(p^<*d*>) by FINSEQ_2:37;
+A2:  len(p^<*d*>) = i by FINSEQ_2:19;
+A3:  len r = len(h*p)+1 by FINSEQ_2:19;
+A4:  len(h*p) = len p by FINSEQ_2:37;
+     now let j;
+    assume
+A5:   j in Seg i;
+then A6:   j in dom q & j in dom r by A1,A2,A3,A4,FINSEQ_1:def 3;
+A7:  Seg len p = dom p by FINSEQ_1:def 3;
+A8:  Seg len(h*p) = dom(h*p) by FINSEQ_1:def 3;
+      now per cases by A5,A7,FINSEQ_2:8;
+     suppose
+A9:     j in dom p;
+      hence h.((p^<*d*>).j) = h.(p.j) by FINSEQ_1:def 7
+                          .= (h*p).j by A4,A7,A8,A9,FUNCT_1:22
+                          .= r.j by A4,A7,A8,A9,FINSEQ_1:def 7;
+     suppose
+A10:     j = i;
+      hence h.((p^<*d*>).j) = h.d by FINSEQ_1:59
+                           .= r.j by A4,A10,FINSEQ_1:59;
+    end;
+    hence q.j = r.j by A6,FUNCT_1:22;
+   end;
+  hence thesis by A1,A2,A3,A4,FINSEQ_2:10;
+ end;
+
+theorem
+     h*(p^q) = (h*p)^(h*q)
+ proof
+    defpred P[FinSequence of D] means h*(p^$1) = (h*p)^(h*$1);
+    h*(p^<*>D) = h*p by FINSEQ_1:47
+               .= (h*p)^(h*(<*>D)) by FINSEQ_1:47; then
+A1: P[<*>D];
+A2: for q,d st P[q] holds P[q^<*d*>]
+   proof let q,d such that
+A3:   h*(p^q) = (h*p)^(h*q);
+    thus h*(p^(q^<*d*>)) = h*((p^q)^<*d*>) by FINSEQ_1:45
+                        .= (h*(p^q))^<*h.d*> by Th9
+                        .= (h*p)^((h*q)^<*h.d*>) by A3,FINSEQ_1:45
+                        .= (h*p)^(h*(q^<*d*>)) by Th9;
+   end;
+    for q holds P[q] from IndSeqD(A1,A2);
+  hence thesis;
+ end;
+
+ reserve T,T1,T2,T3 for Element of i-tuples_on D;
+ reserve T' for Element of i-tuples_on D';
+ reserve S,S1 for Element of j-tuples_on D;
+ reserve S',S1' for Element of j-tuples_on D';
+
+Lm1: for T being Element of 0-tuples_on C holds f*T = <*>D
+ proof let T be Element of 0-tuples_on C; T = <*>C by FINSEQ_2:113;
+  hence thesis by FINSEQ_2:38;
+ end;
+
+Lm2: for T being Element of 0-tuples_on D holds F.:(T,T') = <*>E
+ proof let T be Element of 0-tuples_on D;
+    T = <*>D by FINSEQ_2:113;
+  hence thesis by FINSEQ_2:87;
+ end;
+
+Lm3: for T' being Element of 0-tuples_on D' holds F[;](d,T') = <*>E
+ proof let T' be Element of 0-tuples_on D';
+     T' = <*>D' by FINSEQ_2:113;
+   hence thesis by FINSEQ_2:93;
+ end;
+
+Lm4: for T being Element of 0-tuples_on D holds F[:](T,d') = <*>E
+ proof let T be Element of 0-tuples_on D;
+     T = <*>D by FINSEQ_2:113;
+   hence thesis by FINSEQ_2:99;
+ end;
+
+theorem Th11:
+   F.:(T^<*d*>,T'^<*d'*>) = (F.:(T,T'))^<*F.(d,d')*>
+ proof set p = T^<*d*>, q = T'^<*d'*>, pq = F.:(T,T');
+  set r = F.:(p,q), s = pq^<*F.(d,d')*>;
+A1:  len T = i & len T' = i by FINSEQ_2:109;
+  then len p = i+1 & len q = i+1 by FINSEQ_2:19;
+then A2:  len r = i+1 by FINSEQ_2:86;
+A3:  len pq = i by A1,FINSEQ_2:86;
+A4:  len s = len pq + 1 by FINSEQ_2:19;
+     now let j;
+    assume
+A5:   j in Seg(i+1);
+then A6:   j in dom r by A2,FINSEQ_1:def 3;
+      now per cases by A5,FINSEQ_2:8;
+     suppose
+A7:     j in Seg i;
+then A8:     j in dom pq by A3,FINSEQ_1:def 3;
+A9:    Seg len pq = dom pq by FINSEQ_1:def 3;
+        Seg len T = dom T & Seg len T' = dom T' by FINSEQ_1:def 3;
+      then p.j = T.j & q.j = T'.j by A1,A7,FINSEQ_1:def 7;
+      hence F.(p.j,q.j) = pq.j by A8,FUNCOP_1:28
+                       .= s.j by A3,A7,A9,FINSEQ_1:def 7;
+     suppose
+A10:     j = i+1;
+      then p.j = d & q.j = d' by A1,FINSEQ_1:59;
+      hence F.(p.j,q.j) = s.j by A3,A10,FINSEQ_1:59;
+    end;
+    hence r.j = s.j by A6,FUNCOP_1:28;
+   end;
+  hence thesis by A2,A3,A4,FINSEQ_2:10;
+ end;
+
+theorem
+     F.:(T^S,T'^S') = (F.:(T,T'))^(F.:(S,S'))
+ proof
+   defpred P[Nat] means
+     for S being Element of $1-tuples_on D,
+         S' being Element of $1-tuples_on D' holds
+       F.:(T^S,T'^S') = (F.:(T,T'))^(F.:(S,S'));
+    now let S be Element of 0-tuples_on D;
+     let S' be Element of 0-tuples_on D';
+       S = <*>D by FINSEQ_2:113;
+     then T^S = T & T'^S' = T' & F.:(S,S') = <*>E & <*>E = {}
+       by FINSEQ_2:87,115;
+     hence F.:(T^S,T'^S') = (F.:(T,T'))^(F.:(S,S')) by FINSEQ_1:47;
+    end; then
+A1: P[0];
+    now let j such that
+A2:    for S,S' holds F.:(T^S,T'^S') = (F.:(T,T'))^(F.:(S,S'));
+      let S be Element of (j+1)-tuples_on D;
+      let S' be Element of (j+1)-tuples_on D';
+      consider S1,d such that
+A3:     S = S1^<*d*> by FINSEQ_2:137;
+      consider S1',d' such that
+A4:     S' = S1'^<*d'*> by FINSEQ_2:137;
+        T^S1 is Element of (i+j)-tuples_on D & T^S = T^S1^<*d*> &
+      T'^S1' is Element of (i+j)-tuples_on D' & T'^S' = T'^S1'^<*d'*>
+       by A3,A4,FINSEQ_1:45,FINSEQ_2:127;
+      hence F.:(T^S,T'^S')
+          = (F.:(T^S1,T'^S1'))^<*F.(d,d')*> by Th11
+         .= (F.:(T,T'))^(F.:(S1,S1'))^<*F.(d,d')*> by A2
+         .= (F.:(T,T'))^((F.:(S1,S1'))^<*F.(d,d')*>) by FINSEQ_1:45
+         .= (F.:(T,T'))^(F.:(S,S')) by A3,A4,Th11;
+     end; then
+A5: for j st P[j] holds P[j+1];
+  for j holds P[j] from Ind(A1,A5);
+  hence thesis;
+ end;
+
+theorem Th13:
+   F[;](d,p'^<*d'*>) = (F[;](d,p'))^<*F.(d,d')*>
+ proof set pd = p'^<*d'*>, q = F[;](d,p');
+  set r = F[;](d,pd), s = q^<*F.(d,d')*>;
+  set i = len p';
+A1: len pd = i + 1 by FINSEQ_2:19;
+A2: len q = i by FINSEQ_2:92;
+A3: len r = i + 1 by A1,FINSEQ_2:92;
+A4: len s = len q + 1 by FINSEQ_2:19;
+     now let j;
+    assume
+A5:   j in Seg(i+1);
+then A6:   j in dom r by A3,FINSEQ_1:def 3;
+      now per cases by A5,FINSEQ_2:8;
+     suppose
+A7:    j in Seg i;
+then A8:    j in dom q by A2,FINSEQ_1:def 3;
+A9:    Seg len q = dom q by FINSEQ_1:def 3;
+        Seg len p' = dom p' by FINSEQ_1:def 3;
+      hence F.(d,pd.j) = F.(d,p'.j) by A7,FINSEQ_1:def 7
+                     .= q.j by A8,FUNCOP_1:42
+                     .= s.j by A2,A7,A9,FINSEQ_1:def 7;
+     suppose
+A10:     j = i+1;
+      hence F.(d,pd.j) = F.(d,d') by FINSEQ_1:59
+                      .= s.j by A2,A10,FINSEQ_1:59;
+    end;
+    hence r.j = s.j by A6,FUNCOP_1:42;
+   end;
+  hence thesis by A2,A3,A4,FINSEQ_2:10;
+ end;
+
+theorem
+     F[;](d,p'^q') = (F[;](d,p'))^(F[;](d,q'))
+ proof
+  defpred P[FinSequence of D'] means
+    F[;](d,p'^($1)) = (F[;](d,p'))^(F[;](d,$1));
+    F[;](d,p'^(<*>D')) = F[;](d,p') by FINSEQ_1:47
+                     .= (F[;](d,p'))^(<*>E) by FINSEQ_1:47
+                     .= (F[;](d,p'))^(F[;](d,<*>D')) by FINSEQ_2:93; then
+A1: P[<*>D'];
+A2: for q',d' st P[q'] holds P[q'^<*d'*>]
+    proof let q',d' such that
+A3:   F[;](d,p'^q') = (F[;](d,p'))^(F[;](d,q'));
+     thus F[;](d,p'^(q'^<*d'*>))
+        = F[;](d,(p'^q')^<*d'*>) by FINSEQ_1:45
+       .= (F[;](d,p'^q'))^<*F.(d,d')*> by Th13
+       .= (F[;](d,p'))^((F[;](d,q'))^<*F.(d,d')*>) by A3,FINSEQ_1:45
+       .= (F[;](d,p'))^(F[;](d,q'^<*d'*>)) by Th13;
+    end;
+    for q' holds P[q'] from IndSeqD(A1,A2);
+  hence thesis;
+ end;
+
+theorem Th15:
+   F[:](p^<*d*>,d') = (F[:](p,d'))^<*F.(d,d')*>
+ proof set pd = p^<*d*>, q = F[:](p,d');
+  set r = F[:](pd,d'), s = q^<*F.(d,d')*>;
+  set i = len p;
+A1: len pd = i + 1 by FINSEQ_2:19;
+A2: len q = i by FINSEQ_2:98;
+A3: len r = i + 1 by A1,FINSEQ_2:98;
+A4: len s = len q + 1 by FINSEQ_2:19;
+     now let j;
+    assume
+A5:   j in Seg(i+1);
+then A6:   j in dom r by A3,FINSEQ_1:def 3;
+      now per cases by A5,FINSEQ_2:8;
+     suppose
+A7:    j in Seg i;
+then A8:    j in dom q by A2,FINSEQ_1:def 3;
+        Seg len p = dom p by FINSEQ_1:def 3;
+      hence F.(pd.j,d') = F.(p.j,d') by A7,FINSEQ_1:def 7
+                      .= q.j by A8,FUNCOP_1:35
+                      .= s.j by A8,FINSEQ_1:def 7;
+     suppose
+A9:     j = i+1;
+      hence F.(pd.j,d') = F.(d,d') by FINSEQ_1:59
+                       .= s.j by A2,A9,FINSEQ_1:59;
+    end;
+    hence r.j = s.j by A6,FUNCOP_1:35;
+   end;
+  hence thesis by A2,A3,A4,FINSEQ_2:10;
+ end;
+
+theorem
+     F[:](p^q,d') = (F[:](p,d'))^(F[:](q,d'))
+ proof
+  defpred P[FinSequence of D] means
+    F[:](p^($1),d') = (F[:](p,d'))^(F[:]($1,d'));
+    F[:](p^(<*>D),d') = F[:](p,d') by FINSEQ_1:47
+                    .= (F[:](p,d'))^(<*>E) by FINSEQ_1:47
+                    .= (F[:](p,d'))^(F[:](<*>D,d')) by FINSEQ_2:99; then
+A1: P[<*>D];
+A2: for q,d st P[q] holds P[q^<*d*>]
+    proof let q,d such that
+A3:   F[:](p^q,d') = (F[:](p,d'))^(F[:](q,d'));
+     thus F[:](p^(q^<*d*>),d')
+        = F[:]((p^q)^<*d*>,d') by FINSEQ_1:45
+       .= (F[:](p^q,d'))^<*F.(d,d')*> by Th15
+       .= (F[:](p,d'))^((F[:](q,d'))^<*F.(d,d')*>) by A3,FINSEQ_1:45
+       .= (F[:](p,d'))^(F[:](q^<*d*>,d')) by Th15;
+    end;
+    for q holds P[q] from IndSeqD(A1,A2);
+    hence thesis;
+ end;
+
+theorem
+     for h being Function of D,E holds h*(i|->d) = i|->(h.d)
+ proof let h be Function of D,E;
+    d in D;
+  then d in dom h by FUNCT_2:def 1;
+  then h*((Seg i)-->d) = (Seg i) --> (h.d) by FUNCOP_1:23;
+  hence h*(i|->d) = (Seg i) --> (h.d) by FINSEQ_2:def 2
+                 .= i|->(h.d) by FINSEQ_2:def 2;
+ end;
+
+theorem Th18:
+   F.:(i|->d,i|->d') = i |-> (F.(d,d'))
+ proof
+    [d,d'] in [:D,D':] by ZFMISC_1:def 2;
+  then [d,d'] in dom F & i|->d = (Seg i)-->d & i|->d' = (Seg i)-->d'
+    by FINSEQ_2:def 2,FUNCT_2:def 1;
+  hence F.:(i|->d,i|->d') = (Seg i) --> (F.[d,d']) by Th8
+                        .= (Seg i) --> (F.(d,d')) by BINOP_1:def 1
+                        .= i |-> (F.(d,d')) by FINSEQ_2:def 2;
+ end;
+
+theorem
+     F[;](d,i|->d') = i |-> (F.(d,d'))
+ proof
+  thus F[;](d,i|->d') = F.:(dom(i|->d')-->d,i|->d') by FUNCOP_1:41
+                   .= F.:(Seg i -->d,i|->d') by FINSEQ_2:68
+                   .= F.:(i |->d,i|->d') by FINSEQ_2:def 2
+                   .= i |-> (F.(d,d')) by Th18;
+ end;
+
+theorem
+     F[:](i|->d,d') = i |-> (F.(d,d'))
+ proof
+  thus F[:](i|->d,d') = F.:(i|->d,dom(i|->d)-->d') by FUNCOP_1:34
+                   .= F.:(i|->d,Seg i-->d') by FINSEQ_2:68
+                   .= F.:(i |->d,i|->d') by FINSEQ_2:def 2
+                   .= i |-> (F.(d,d')) by Th18;
+ end;
+
+theorem
+     F.:(i|->d,T') = F[;](d,T')
+ proof
+A1:  dom T' = Seg len T' by FINSEQ_1:def 3 .= Seg i by FINSEQ_2:109;
+  thus F.:(i|->d,T') = F.:((Seg i)-->d,T') by FINSEQ_2:def 2
+                   .= F[;](d,T') by A1,FUNCOP_1:41;
+ end;
+
+theorem
+     F.:(T,i|->d) = F[:](T,d)
+ proof
+A1:  dom T = Seg len T by FINSEQ_1:def 3 .= Seg i by FINSEQ_2:109;
+  thus F.:(T,i|->d) = F.:(T,(Seg i)-->d) by FINSEQ_2:def 2
+                  .= F[:](T,d) by A1,FUNCOP_1:34;
+ end;
+
+theorem
+     F[;](d,T') = F[;](d,id D')*T'
+ proof rng T' c= D' by FINSEQ_1:def 4;
+  hence F[;](d,T') = F[;](d,(id D')*T') by RELAT_1:79
+                .= F[;](d,(id D'))*T' by FUNCOP_1:44;
+ end;
+
+theorem
+     F[:](T,d) = F[:](id D,d)*T
+ proof rng T c= D by FINSEQ_1:def 4;
+  hence F[:](T,d) = F[:]((id D)*T,d) by RELAT_1:79
+               .= F[:]((id D),d)*T by FUNCOP_1:37;
+ end;
+
+:: Binary Operations
+
+ reserve F,G for BinOp of D;
+ reserve u for UnOp of D;
+ reserve H for BinOp of E;
+
+Lm5: T is Function of Seg i,D
+ proof len T = i by FINSEQ_2:109; then Seg i = dom T by FINSEQ_1:def 3;
+  hence thesis by FINSEQ_2:30;
+ end;
+
+theorem Th25:
+   F is associative implies F[;](d,id D)*(F.:(f,f')) = F.:(F[;](d,id D)*f,f')
+ proof assume
+A1: F is associative;
+    now let c;
+   thus (F[;](d,id D)*(F.:(f,f'))).c
+      = (F[;](d,id D)).((F.:(f,f')).c) by FUNCT_2:21
+     .= (F[;](d,id D)).(F.(f.c,f'.c)) by FUNCOP_1:48
+     .= F.(d,(id D).(F.(f.c,f'.c))) by FUNCOP_1:66
+     .= F.(d,F.(f.c,f'.c)) by FUNCT_1:35
+     .= F.(F.(d,f.c),f'.c) by A1,BINOP_1:def 3
+     .= F.((F[;](d,f)).c,f'.c) by FUNCOP_1:66
+     .= F.(((F[;](d,id D))*f).c,f'.c) by FUNCOP_1:69
+     .= (F.:(F[;](d,id D)*f,f')).c by FUNCOP_1:48;
+  end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem Th26:
+   F is associative implies F[:](id D,d)*(F.:(f,f')) = F.:(f,F[:](id D,d)*f')
+ proof assume
+A1: F is associative;
+    now let c;
+   thus (F[:](id D,d)*(F.:(f,f'))).c
+      = (F[:](id D,d)).((F.:(f,f')).c) by FUNCT_2:21
+     .= (F[:](id D,d)).(F.(f.c,f'.c)) by FUNCOP_1:48
+     .= F.((id D).(F.(f.c,f'.c)),d) by FUNCOP_1:60
+     .= F.(F.(f.c,f'.c),d) by FUNCT_1:35
+     .= F.(f.c,F.(f'.c,d)) by A1,BINOP_1:def 3
+     .= F.(f.c,(F[:](f',d)).c) by FUNCOP_1:60
+     .= F.(f.c,((F[:](id D,d))*f').c) by FUNCOP_1:63
+     .= (F.:(f,F[:](id D,d)*f')).c by FUNCOP_1:48;
+  end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem
+ F is associative implies F[;](d,id D)*(F.:(T1,T2)) = F.:(F[;](d,id D)*T1,T2)
+ proof assume
+A1: F is associative;
+   per cases;
+    suppose i = 0;
+     then F.:(T1,T2) = <*>D & T2 = <*>D by Lm2,FINSEQ_2:113;
+     then F[;](d,id D)*(F.:(T1,T2)) = <*>D & F.:(F[;](d,id D)*T1,T2) = <*>D
+      by FINSEQ_2:38,87;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T1 is Function of C,D & T2 is Function of C,D by Lm5;
+     hence thesis by A1,Th25;
+ end;
+
+theorem
+ F is associative implies F[:](id D,d)*(F.:(T1,T2)) = F.:(T1,F[:](id D,d)*T2)
+ proof assume
+A1: F is associative;
+   per cases;
+    suppose i = 0;
+     then F.:(T1,T2) = <*>D & T1 = <*>D by Lm2,FINSEQ_2:113;
+     then F[:](id D,d)*(F.:(T1,T2)) = <*>D & F.:(T1,F[:](id D,d)*T2) = <*>D
+      by FINSEQ_2:38,87;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T1 is Function of C,D & T2 is Function of C,D by Lm5;
+     hence thesis by A1,Th26;
+ end;
+
+theorem
+ F is associative implies F.:(F.:(T1,T2),T3) = F.:(T1,F.:(T2,T3))
+ proof assume
+A1: F is associative;
+   per cases;
+    suppose i = 0;
+     then F.:(T1,T2) = <*>D & F.:(T2,T3) = <*>D by Lm2;
+     then F.:(F.:(T1,T2),T3) = <*>D & F.:(T1,F.:
+(T2,T3)) = <*>D by FINSEQ_2:87;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T1 is Function of C,D & T2 is Function of C,D & T3 is Function of C,D
+      by Lm5;
+     hence F.:(F.:(T1,T2),T3) = F.:(T1,F.:(T2,T3)) by A1,FUNCOP_1:76;
+ end;
+
+theorem
+     F is associative implies F[:](F[;](d1,T),d2) = F[;](d1,F[:](T,d2))
+ proof assume
+A1: F is associative;
+   per cases;
+    suppose i = 0;
+     then F[;](d1,T) = <*>D & F[:](T,d2) = <*>D by Lm3,Lm4;
+     then F[:](F[;](d1,T),d2) = <*>D & F[;](d1,F[:](T,d2)) = <*>D
+       by FINSEQ_2:93,99;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T is Function of C,D by Lm5;
+     hence F[:](F[;](d1,T),d2) = F[;](d1,F[:](T,d2)) by A1,FUNCOP_1:74;
+ end;
+
+theorem
+     F is associative implies F.:(F[:](T1,d),T2) = F.:(T1,F[;](d,T2))
+ proof assume
+A1:  F is associative;
+   per cases;
+    suppose i = 0;
+     then F[:](T1,d) = <*>D & F[;](d,T2) = <*>D by Lm3,Lm4;
+     then F.:(F[:](T1,d),T2) = <*>D & F.:
+(T1,F[;](d,T2)) = <*>D by FINSEQ_2:87;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T1 is Function of C,D & T2 is Function of C,D by Lm5;
+     hence F.:(F[:](T1,d),T2) = F.:(T1,F[;](d,T2)) by A1,FUNCOP_1:75;
+ end;
+
+theorem
+     F is associative implies F[;](F.(d1,d2),T) = F[;](d1,F[;](d2,T))
+ proof assume
+A1: F is associative;
+   per cases;
+    suppose i = 0;
+     then T = <*>D & F[;](d2,T) = <*>D by Lm3,FINSEQ_2:113;
+     then F[;](F.(d1,d2),T) = <*>D & F[;](d1,F[;]
+(d2,T)) = <*>D by FINSEQ_2:93;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T is Function of C,D by Lm5;
+     hence F[;](F.(d1,d2),T) = F[;](d1,F[;](d2,T)) by A1,FUNCOP_1:77;
+ end;
+
+theorem
+     F is associative implies F[:](T,F.(d1,d2)) = F[:](F[:](T,d1),d2)
+ proof assume
+A1:  F is associative;
+   per cases;
+    suppose i = 0;
+     then T = <*>D & F[:](T,d1) = <*>D by Lm4,FINSEQ_2:113;
+     then F[:](T,F.(d1,d2)) = <*>D & F[:](F[:]
+(T,d1),d2) = <*>D by FINSEQ_2:99;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T is Function of C,D by Lm5;
+     hence F[:](T,F.(d1,d2)) = F[:](F[:](T,d1),d2) by A1,FUNCOP_1:78;
+ end;
+
+theorem
+     F is commutative implies F.:(T1,T2) = F.:(T2,T1)
+ proof assume
+A1:  F is commutative;
+   per cases;
+    suppose i = 0;
+     then F.:(T1,T2) = <*>D & F.:(T2,T1) = <*>D by Lm2;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T1 is Function of C,D & T2 is Function of C,D by Lm5;
+     hence F.:(T1,T2) = F.:(T2,T1) by A1,FUNCOP_1:80;
+ end;
+
+theorem
+     F is commutative implies F[;](d,T) = F[:](T,d)
+ proof assume
+A1:  F is commutative;
+   per cases;
+    suppose i = 0;
+     then F[;](d,T) = <*>D & F[:](T,d) = <*>D by Lm3,Lm4;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T is Function of C,D by Lm5;
+     hence F[;](d,T) = F[:](T,d) by A1,FUNCOP_1:79;
+ end;
+
+theorem Th36:
+   F is_distributive_wrt G implies F[;](G.(d1,d2),f) = G.:(F[;](d1,f),F[;]
+(d2,f))
+ proof assume
+A1:  F is_distributive_wrt G;
+    now let c;
+   thus (F[;](G.(d1,d2),f)).c = F.(G.(d1,d2),f.c) by FUNCOP_1:66
+                           .= G.(F.(d1,f.c),F.(d2,f.c)) by A1,BINOP_1:23
+                           .= G.(F[;](d1,f).c,F.(d2,f.c)) by FUNCOP_1:66
+                           .= G.((F[;](d1,f)).c,(F[;](d2,f)).c) by FUNCOP_1:66
+                           .= (G.:(F[;](d1,f),F[;](d2,f))).c by FUNCOP_1:48;
+  end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem Th37:
+   F is_distributive_wrt G implies F[:](f,G.(d1,d2)) = G.:(F[:](f,d1),F[:]
+(f,d2))
+ proof assume
+A1:  F is_distributive_wrt G;
+    now let c;
+   thus (F[:](f,G.(d1,d2))).c = F.(f.c,G.(d1,d2)) by FUNCOP_1:60
+                           .= G.(F.(f.c,d1),F.(f.c,d2)) by A1,BINOP_1:23
+                           .= G.(F[:](f,d1).c,F.(f.c,d2)) by FUNCOP_1:60
+                           .= G.((F[:](f,d1)).c,(F[:](f,d2)).c) by FUNCOP_1:60
+                           .= (G.:(F[:](f,d1),F[:](f,d2))).c by FUNCOP_1:48;
+  end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem Th38:
+   (for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2))
+     implies h*(F.:(f,f')) = H.:(h*f,h*f')
+ proof assume
+A1: for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2);
+     now let c;
+    thus (h*(F.:(f,f'))).c = h.((F.:(f,f')).c) by FUNCT_2:21
+                         .= h.(F.(f.c,f'.c)) by FUNCOP_1:48
+                         .= H.(h.(f.c),h.(f'.c)) by A1
+                         .= H.((h*f).c,h.(f'.c)) by FUNCT_2:21
+                         .= H.((h*f).c,(h*f').c) by FUNCT_2:21
+                         .= (H.:(h*f,h*f')).c by FUNCOP_1:48;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem Th39:
+   (for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2))
+     implies h*(F[;](d,f)) = H[;](h.d,h*f)
+ proof assume
+A1: for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2);
+A2: dom f = C by FUNCT_2:def 1;
+A3:  dom h = D by FUNCT_2:def 1;
+A4: dom(h*f) = C by FUNCT_2:def 1;
+  reconsider g = C --> d as Function of C,D by FUNCOP_1:58;
+  thus h*(F[;](d,f)) = h*(F.:(g,f)) by A2,FUNCOP_1:41
+                  .= H.:(h*g,h*f) by A1,Th38
+                  .= H.:(C-->(h.d),h*f) by A3,FUNCOP_1:23
+                  .= H[;](h.d,h*f) by A4,FUNCOP_1:41;
+ end;
+
+theorem Th40:
+   (for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2))
+     implies h*(F[:](f,d)) = H[:](h*f,h.d)
+ proof assume
+A1: for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2);
+A2: dom f = C by FUNCT_2:def 1;
+A3:  dom h = D by FUNCT_2:def 1;
+A4: dom(h*f) = C by FUNCT_2:def 1;
+  reconsider g = C --> d as Function of C,D by FUNCOP_1:58;
+  thus h*(F[:](f,d)) = h*(F.:(f,g)) by A2,FUNCOP_1:34
+                  .= H.:(h*f,h*g) by A1,Th38
+                  .= H.:(h*f,C-->h.d) by A3,FUNCOP_1:23
+                  .= H[:](h*f,h.d) by A4,FUNCOP_1:34;
+ end;
+
+theorem
+     u is_distributive_wrt F implies u*(F.:(f,f')) = F.:(u*f,u*f')
+ proof assume for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
+  hence thesis by Th38;
+ end;
+
+theorem
+     u is_distributive_wrt F implies u*(F[;](d,f)) = F[;](u.d,u*f)
+ proof assume for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
+  hence thesis by Th39;
+ end;
+
+theorem
+     u is_distributive_wrt F implies u*(F[:](f,d)) = F[:](u*f,u.d)
+ proof assume for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
+  hence thesis by Th40;
+ end;
+
+theorem Th44:
+   F has_a_unity implies
+     F.:(C-->the_unity_wrt F,f) = f & F.:(f,C-->the_unity_wrt F) = f
+ proof assume
+A1: F has_a_unity;
+  set e = the_unity_wrt F;
+  reconsider g = C-->e as Function of C,D by FUNCOP_1:58;
+     now let c;
+    thus (F.:(g,f)).c = F.(g.c,f.c) by FUNCOP_1:48
+                    .= F.(e,f.c) by FUNCOP_1:13
+                    .= f.c by A1,SETWISEO:23;
+   end;
+  hence F.:(C-->e,f) = f by FUNCT_2:113;
+     now let c;
+    thus (F.:(f,g)).c = F.(f.c,g.c) by FUNCOP_1:48
+                    .= F.(f.c,e) by FUNCOP_1:13
+                    .= f.c by A1,SETWISEO:23;
+   end;
+  hence F.:(f,C-->e) = f by FUNCT_2:113;
+ end;
+
+theorem Th45:
+   F has_a_unity implies F[;](the_unity_wrt F,f) = f
+ proof assume
+A1: F has_a_unity;
+  set e = the_unity_wrt F;
+     now let c;
+    thus (F[;](e,f)).c = F.(e,f.c) by FUNCOP_1:66 .= f.c by A1,SETWISEO:23;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem Th46:
+   F has_a_unity implies F[:](f,the_unity_wrt F) = f
+ proof assume
+A1: F has_a_unity;
+  set e = the_unity_wrt F;
+     now let c;
+    thus (F[:](f,e)).c = F.(f.c,e) by FUNCOP_1:60 .= f.c by A1,SETWISEO:23;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem
+     F is_distributive_wrt G implies F[;](G.(d1,d2),T) = G.:(F[;](d1,T),F[;]
+(d2,T))
+ proof assume
+A1:  F is_distributive_wrt G;
+   per cases;
+    suppose
+A2:    i = 0;
+     then F[;](d1,T) = <*>D by Lm3;
+     then F[;](G.(d1,d2),T) = <*>D & G.:(F[;](d1,T),F[;](d2,T)) = <*>D
+       by A2,Lm3,FINSEQ_2:87;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T is Function of C,D by Lm5; hence thesis by A1,Th36;
+ end;
+
+theorem
+     F is_distributive_wrt G implies F[:](T,G.(d1,d2)) = G.:(F[:](T,d1),F[:]
+(T,d2))
+ proof assume
+A1:  F is_distributive_wrt G;
+   per cases;
+    suppose
+A2:    i = 0;
+     then F[:](T,d1) = <*>D by Lm4;
+     then F[:](T,G.(d1,d2)) = <*>D & G.:(F[:](T,d1),F[:](T,d2)) = <*>D
+       by A2,Lm4,FINSEQ_2:87;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T is Function of C,D by Lm5; hence thesis by A1,Th37;
+ end;
+
+theorem Th49:
+   (for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2))
+     implies h*(F.:(T1,T2)) = H.:(h*T1,h*T2)
+ proof assume
+A1: for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2);
+   per cases;
+    suppose i = 0;
+     then F.:(T1,T2) = <*>D & h*T1 = <*>E by Lm1,Lm2;
+     then h*(F.:(T1,T2)) = <*>E & H.:(h*T1,h*T2) = <*>E
+      by FINSEQ_2:38,87;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T1 is Function of C,D & T2 is Function of C,D by Lm5;
+     hence thesis by A1,Th38;
+ end;
+
+theorem Th50:
+   (for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2))
+     implies h*(F[;](d,T)) = H[;](h.d,h*T)
+ proof assume
+A1: for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2);
+   per cases;
+    suppose i = 0;
+     then F[;](d,T) = <*>D & h*T = <*>E by Lm1,Lm3;
+     then h*(F[;](d,T)) = <*>E & H[;]
+(h.d,h*T) = <*>E by FINSEQ_2:38,93;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T is Function of C,D by Lm5; hence thesis by A1,Th39;
+ end;
+
+theorem Th51:
+   (for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2))
+     implies h*(F[:](T,d)) = H[:](h*T,h.d)
+ proof assume
+A1: for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2);
+   per cases;
+    suppose i = 0;
+     then F[:](T,d) = <*>D & h*T = <*>E by Lm1,Lm4;
+     then h*(F[:](T,d)) = <*>E & H[:]
+(h*T,h.d) = <*>E by FINSEQ_2:38,99;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T is Function of C,D by Lm5; hence thesis by A1,Th40;
+ end;
+
+theorem
+     u is_distributive_wrt F implies u*(F.:(T1,T2)) = F.:(u*T1,u*T2)
+ proof assume for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
+  hence thesis by Th49;
+ end;
+
+theorem
+     u is_distributive_wrt F implies u*(F[;](d,T)) = F[;](u.d,u*T)
+ proof assume for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
+  hence thesis by Th50;
+ end;
+
+theorem
+     u is_distributive_wrt F implies u*(F[:](T,d)) = F[:](u*T,u.d)
+ proof assume for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
+  hence thesis by Th51;
+ end;
+
+theorem
+     G is_distributive_wrt F & u = G[;](d,id D) implies u is_distributive_wrt F
+ proof assume that
+A1:  G is_distributive_wrt F and
+A2:  u = G[;](d,id D);
+  let d1,d2;
+  thus u.(F.(d1,d2)) = G.(d,(id D).(F.(d1,d2))) by A2,FUNCOP_1:66
+                    .= G.(d,F.(d1,d2)) by FUNCT_1:35
+                    .= F.(G.(d,d1),G.(d,d2)) by A1,BINOP_1:23
+                    .= F.(G.(d,(id D).d1),G.(d,d2)) by FUNCT_1:35
+                    .= F.(G.(d,(id D).d1),G.(d,(id D).d2)) by FUNCT_1:35
+                    .= F.(u.d1,G.(d,(id D).d2)) by A2,FUNCOP_1:66
+                    .= F.(u.d1,u.d2) by A2,FUNCOP_1:66;
+ end;
+
+theorem
+     G is_distributive_wrt F & u = G[:](id D,d) implies u is_distributive_wrt F
+ proof assume that
+A1:  G is_distributive_wrt F and
+A2:  u = G[:](id D,d);
+  let d1,d2;
+  thus u.(F.(d1,d2)) = G.((id D).(F.(d1,d2)),d) by A2,FUNCOP_1:60
+                    .= G.(F.(d1,d2),d) by FUNCT_1:35
+                    .= F.(G.(d1,d),G.(d2,d)) by A1,BINOP_1:23
+                    .= F.(G.((id D).d1,d),G.(d2,d)) by FUNCT_1:35
+                    .= F.(G.((id D).d1,d),G.((id D).d2,d)) by FUNCT_1:35
+                    .= F.(u.d1,G.((id D).d2,d)) by A2,FUNCOP_1:60
+                    .= F.(u.d1,u.d2) by A2,FUNCOP_1:60;
+ end;
+
+theorem
+     F has_a_unity implies
+      F.:(i|->the_unity_wrt F,T) = T & F.:(T,i|->the_unity_wrt F) = T
+ proof assume
+A1: F has_a_unity;
+  set e = the_unity_wrt F;
+   per cases;
+    suppose i = 0;
+     then F.:(i|->e,T) = <*>D & T = <*>D & F.:(T,i|->e) = <*>D
+       by Lm2,FINSEQ_2:113;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T is Function of C,D & i|->e = Seg i --> e by Lm5,FINSEQ_2:def 2;
+     hence thesis by A1,Th44;
+ end;
+
+theorem
+     F has_a_unity implies F[;](the_unity_wrt F,T) = T
+ proof assume
+A1: F has_a_unity;
+   per cases;
+    suppose i = 0;
+     then T = <*>D & F[;](the_unity_wrt F,T) = <*>D by Lm3,FINSEQ_2:113;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T is Function of C,D by Lm5; hence thesis by A1,Th45;
+ end;
+
+theorem
+     F has_a_unity implies F[:](T,the_unity_wrt F) = T
+ proof assume
+A1: F has_a_unity;
+   per cases;
+    suppose i = 0;
+     then T = <*>D & F[:](T,the_unity_wrt F) = <*>D by Lm4,FINSEQ_2:113;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T is Function of C,D by Lm5; hence thesis by A1,Th46;
+ end;
+
+definition let D,u,F;
+ pred u is_an_inverseOp_wrt F means
+:Def1:
+   for d holds F.(d,u.d) = the_unity_wrt F & F.(u.d,d) = the_unity_wrt F;
+end;
+
+definition let D,F;
+ attr F is having_an_inverseOp means
+:Def2: ex u st u is_an_inverseOp_wrt F;
+  synonym F has_an_inverseOp;
+end;
+
+definition let D,F;
+ assume that
+A1: F has_a_unity and
+A2: F is associative and
+A3: F has_an_inverseOp;
+ func the_inverseOp_wrt F -> UnOp of D means
+:Def3: it is_an_inverseOp_wrt F;
+ existence by A3,Def2;
+ uniqueness
+  proof set e = the_unity_wrt F;
+    let u1,u2 be UnOp of D such that
+A4:  for d holds F.(d,u1.d) = e & F.(u1.d,d) = e and
+A5:  for d holds F.(d,u2.d) = e & F.(u2.d,d) = e;
+      now let d;
+     set d1 = u1.d, d2 = u2.d;
+     thus u1.d = F.(d1,e) by A1,SETWISEO:23
+              .= F.(d1,F.(d,d2)) by A5
+              .= F.(F.(d1,d),d2) by A2,BINOP_1:def 3
+              .= F.(e,d2) by A4
+              .= u2.d by A1,SETWISEO:23;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+end;
+
+canceled 3;
+
+theorem Th63:
+   F has_a_unity & F is associative & F has_an_inverseOp
+    implies F.((the_inverseOp_wrt F).d,d) = the_unity_wrt F &
+      F.(d,(the_inverseOp_wrt F).d) = the_unity_wrt F
+ proof assume F has_a_unity & F is associative & F has_an_inverseOp;
+  then the_inverseOp_wrt F is_an_inverseOp_wrt F by Def3;
+  hence thesis by Def1;
+ end;
+
+theorem Th64:
+   F has_a_unity & F is associative &
+     F has_an_inverseOp & F.(d1,d2) = the_unity_wrt F
+    implies d1 = (the_inverseOp_wrt F).d2 & (the_inverseOp_wrt F).d1 = d2
+ proof assume that
+A1:   F has_a_unity & F is associative & F has_an_inverseOp and
+A2:   F.(d1,d2) = the_unity_wrt F;
+  set e = the_unity_wrt F, d3 = (the_inverseOp_wrt F).d2;
+    F.(F.(d1,d2),d3) = d3 by A1,A2,SETWISEO:23;
+  then F.(d1,F.(d2,d3)) = d3 by A1,BINOP_1:def 3;
+  then F.(d1,e) = d3 by A1,Th63;
+  hence d1 = d3 by A1,SETWISEO:23;
+  set d3 = (the_inverseOp_wrt F).d1;
+    F.(d3,F.(d1,d2)) = d3 by A1,A2,SETWISEO:23;
+  then F.(F.(d3,d1),d2) = d3 by A1,BINOP_1:def 3;
+  then F.(e,d2) = d3 by A1,Th63;
+  hence d3 = d2 by A1,SETWISEO:23;
+ end;
+
+theorem Th65:
+   F has_a_unity & F is associative & F has_an_inverseOp
+    implies (the_inverseOp_wrt F).(the_unity_wrt F) = the_unity_wrt F
+ proof assume
+A1:  F has_a_unity & F is associative & F has_an_inverseOp;
+  set e = the_unity_wrt F;
+    F.(e,e) = e by A1,SETWISEO:23;
+  hence thesis by A1,Th64;
+ end;
+
+theorem Th66:
+   F has_a_unity & F is associative & F has_an_inverseOp
+    implies (the_inverseOp_wrt F).((the_inverseOp_wrt F).d) = d
+ proof assume
+A1:  F has_a_unity & F is associative & F has_an_inverseOp;
+  then F.(d,(the_inverseOp_wrt F).d) = the_unity_wrt F by Th63;
+  hence thesis by A1,Th64;
+ end;
+
+theorem Th67:
+   F has_a_unity & F is associative & F is commutative & F has_an_inverseOp
+    implies (the_inverseOp_wrt F) is_distributive_wrt F
+ proof assume
+A1:  F has_a_unity & F is associative & F is commutative & F has_an_inverseOp;
+  set e = the_unity_wrt F, u = the_inverseOp_wrt F;
+  let d1,d2;
+    F.(F.(u.d1,u.d2),F.(d1,d2)) = F.(u.d1,F.(u.d2,F.(d1,d2))) by A1,BINOP_1:def
+3
+                             .= F.(u.d1,F.(F.(u.d2,d1),d2)) by A1,BINOP_1:def 3
+                             .= F.(u.d1,F.(F.(d1,u.d2),d2)) by A1,BINOP_1:def 2
+                             .= F.(u.d1,F.(d1,F.(u.d2,d2))) by A1,BINOP_1:def 3
+                             .= F.(u.d1,F.(d1,e)) by A1,Th63
+                             .= F.(F.(u.d1,d1),e) by A1,BINOP_1:def 3
+                             .= F.(e,e) by A1,Th63
+                             .= e by A1,SETWISEO:23;
+  hence u.(F.(d1,d2)) = F.(u.d1,u.d2) by A1,Th64;
+ end;
+
+theorem Th68:
+   F has_a_unity & F is associative & F has_an_inverseOp &
+    (F.(d,d1) = F.(d,d2) or F.(d1,d) = F.(d2,d)) implies d1 = d2
+ proof assume that
+A1:  F has_a_unity & F is associative & F has_an_inverseOp
+   and
+A2:  F.(d,d1) = F.(d,d2) or F.(d1,d) = F.(d2,d);
+  set e = the_unity_wrt F, u = the_inverseOp_wrt F;
+  per cases by A2;
+   suppose
+A3:   F.(d,d1) = F.(d,d2);
+    thus d1 = F.(e,d1) by A1,SETWISEO:23
+           .= F.(F.(u.d,d),d1) by A1,Th63
+           .= F.(u.d,F.(d,d2)) by A1,A3,BINOP_1:def 3
+           .= F.(F.(u.d,d),d2) by A1,BINOP_1:def 3
+           .= F.(e,d2) by A1,Th63
+           .= d2 by A1,SETWISEO:23;
+   suppose
+A4:   F.(d1,d) = F.(d2,d);
+    thus d1 = F.(d1,e) by A1,SETWISEO:23
+           .= F.(d1,F.(d,u.d)) by A1,Th63
+           .= F.(F.(d2,d),u.d) by A1,A4,BINOP_1:def 3
+           .= F.(d2,F.(d,u.d)) by A1,BINOP_1:def 3
+           .= F.(d2,e) by A1,Th63
+           .= d2 by A1,SETWISEO:23;
+ end;
+
+theorem Th69:
+   F has_a_unity & F is associative & F has_an_inverseOp &
+    (F.(d1,d2) = d2 or F.(d2,d1) = d2) implies d1 = the_unity_wrt F
+ proof assume
+A1:  F has_a_unity & F is associative & F has_an_inverseOp;
+  set e = the_unity_wrt F;
+  assume F.(d1,d2) = d2 or F.(d2,d1) = d2;
+  then F.(d1,d2) = F.(e,d2) or F.(d2,d1) = F.(d2,e) by A1,SETWISEO:23;
+  hence thesis by A1,Th68;
+ end;
+
+theorem Th70:
+   F is associative & F has_a_unity & F has_an_inverseOp &
+    G is_distributive_wrt F & e = the_unity_wrt F
+     implies for d holds G.(e,d) = e & G.(d,e) = e
+ proof assume that
+A1:   F is associative and
+A2:   F has_a_unity and
+A3:   F has_an_inverseOp and
+A4:   G is_distributive_wrt F and
+A5:   e = the_unity_wrt F;
+  let d;
+  set ed = G.(e,d);
+    F.(ed,ed) = G.(F.(e,e),d) by A4,BINOP_1:23 .= ed by A2,A5,SETWISEO:23;
+  hence ed = e by A1,A2,A3,A5,Th69;
+  set de = G.(d,e);
+    F.(de,de) = G.(d,F.(e,e)) by A4,BINOP_1:23 .= de by A2,A5,SETWISEO:23;
+  hence de = e by A1,A2,A3,A5,Th69;
+ end;
+
+theorem Th71:
+   F has_a_unity & F is associative & F has_an_inverseOp &
+     u = the_inverseOp_wrt F & G is_distributive_wrt F
+      implies u.(G.(d1,d2)) = G.(u.d1,d2) & u.(G.(d1,d2)) = G.(d1,u.d2)
+ proof assume that
+A1:  F has_a_unity & F is associative & F has_an_inverseOp and
+A2:  u = the_inverseOp_wrt F and
+A3:  G is_distributive_wrt F;
+  set e = the_unity_wrt F;
+    F.(G.(d1,d2),G.(u.d1,d2)) = G.(F.(d1,u.d1),d2) by A3,BINOP_1:23
+                           .= G.(e,d2) by A1,A2,Th63
+                           .= e by A1,A3,Th70;
+  hence u.(G.(d1,d2)) = G.(u.d1,d2) by A1,A2,Th64;
+    F.(G.(d1,d2),G.(d1,u.d2)) = G.(d1,F.(d2,u.d2)) by A3,BINOP_1:23
+                           .= G.(d1,e) by A1,A2,Th63
+                           .= e by A1,A3,Th70;
+  hence u.(G.(d1,d2)) = G.(d1,u.d2) by A1,A2,Th64;
+ end;
+
+theorem
+     F has_a_unity & F is associative & F has_an_inverseOp &
+     u = the_inverseOp_wrt F & G is_distributive_wrt F & G has_a_unity
+      implies G[;](u.(the_unity_wrt G),id D) = u
+ proof assume that
+A1:  F has_a_unity & F is associative & F has_an_inverseOp &
+     u = the_inverseOp_wrt F & G is_distributive_wrt F and
+A2:  G has_a_unity;
+  set o = the_unity_wrt G;
+    for d holds (G[;](u.o,id D)).d = u.d
+   proof let d;
+    thus (G[;](u.o,id D)).d = G.(u.o,(id D).d) by FUNCOP_1:66
+                         .= G.(u.o,d) by FUNCT_1:35
+                         .= u.(G.(o,d)) by A1,Th71
+                         .= u.d by A2,SETWISEO:23;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem
+     F is associative & F has_a_unity & F has_an_inverseOp &
+    G is_distributive_wrt F
+     implies G[;](d,id D).the_unity_wrt F = the_unity_wrt F
+ proof assume that
+A1: F is associative and
+A2: F has_a_unity and
+A3: F has_an_inverseOp and
+A4: G is_distributive_wrt F;
+  set e = the_unity_wrt F, i = the_inverseOp_wrt F;
+    G.(d,e) = G.(d,F.(e,e)) by A2,SETWISEO:23
+         .= F.(G.(d,e),G.(d,e)) by A4,BINOP_1:23;
+  then e = F.(F.(G.(d,e),G.(d,e)),i.(G.(d,e))) by A1,A2,A3,Th63;
+  then e = F.(G.(d,e),F.(G.(d,e),i.(G.(d,e)))) by A1,BINOP_1:def 3;
+  then e = F.(G.(d,e),e) by A1,A2,A3,Th63;
+  then e = G.(d,e) by A2,SETWISEO:23;
+  then G.(d,(id D).e) = e by FUNCT_1:35;
+  hence G[;](d,id D).e = e by FUNCOP_1:66;
+ end;
+
+theorem
+     F is associative & F has_a_unity & F has_an_inverseOp &
+    G is_distributive_wrt F
+     implies G[:](id D,d).the_unity_wrt F = the_unity_wrt F
+ proof assume that
+A1: F is associative and
+A2: F has_a_unity and
+A3: F has_an_inverseOp and
+A4: G is_distributive_wrt F;
+  set e = the_unity_wrt F, i = the_inverseOp_wrt F;
+    G.(e,d) = G.(F.(e,e),d) by A2,SETWISEO:23
+         .= F.(G.(e,d),G.(e,d)) by A4,BINOP_1:23;
+  then e = F.(F.(G.(e,d),G.(e,d)),i.(G.(e,d))) by A1,A2,A3,Th63;
+  then e = F.(G.(e,d),F.(G.(e,d),i.(G.(e,d)))) by A1,BINOP_1:def 3;
+  then e = F.(G.(e,d),e) by A1,A2,A3,Th63;
+  then e = G.(e,d) by A2,SETWISEO:23;
+  then G.((id D).e,d) = e by FUNCT_1:35;
+  hence G[:](id D,d).e = e by FUNCOP_1:60;
+ end;
+
+theorem Th75:
+   F has_a_unity & F is associative & F has_an_inverseOp implies
+     F.:(f,(the_inverseOp_wrt F)*f) = C-->the_unity_wrt F &
+     F.:((the_inverseOp_wrt F)*f,f) = C-->the_unity_wrt F
+ proof assume
+A1:  F has_a_unity & F is associative & F has_an_inverseOp;
+  set u = the_inverseOp_wrt F;
+  reconsider g = C-->the_unity_wrt F as Function of C,D by FUNCOP_1:58;
+     now let c;
+    thus (F.:(f,u*f)).c = F.(f.c,(u*f).c) by FUNCOP_1:48
+                      .= F.(f.c,u.(f.c)) by FUNCT_2:21
+                      .= the_unity_wrt F by A1,Th63
+                      .= g.c by FUNCOP_1:13;
+   end;
+  hence F.:(f,(the_inverseOp_wrt F)*f) = C-->the_unity_wrt F by FUNCT_2:113;
+     now let c;
+    thus (F.:(u*f,f)).c = F.((u*f).c,f.c) by FUNCOP_1:48
+                      .= F.(u.(f.c),f.c) by FUNCT_2:21
+                      .= the_unity_wrt F by A1,Th63
+                      .= g.c by FUNCOP_1:13;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem Th76:
+   F is associative & F has_an_inverseOp &
+    F has_a_unity & F.:(f,f') = C-->the_unity_wrt F implies
+     f = (the_inverseOp_wrt F)*f' & (the_inverseOp_wrt F)*f = f'
+ proof assume that
+A1:  F is associative & F has_an_inverseOp & F has_a_unity and
+A2:  F.:(f,f') = C-->the_unity_wrt F;
+  set e = the_unity_wrt F;
+  reconsider g = C-->e as Function of C,D by FUNCOP_1:58;
+  set u = the_inverseOp_wrt F;
+     now let c;
+      F.(f.c,f'.c) = g.c by A2,FUNCOP_1:48 .= e by FUNCOP_1:13;
+    hence f.c = u.(f'.c) by A1,Th64 .= (u*f').c by FUNCT_2:21;
+   end;
+  hence f = (the_inverseOp_wrt F)*f' by FUNCT_2:113;
+     now let c;
+      F.(f.c,f'.c) = g.c by A2,FUNCOP_1:48 .= e by FUNCOP_1:13;
+    then f'.c = u.(f.c) by A1,Th64;
+    hence (u*f).c = f'.c by FUNCT_2:21;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem
+     F has_a_unity & F is associative & F has_an_inverseOp implies
+     F.:(T,(the_inverseOp_wrt F)*T) = i|->the_unity_wrt F &
+     F.:((the_inverseOp_wrt F)*T,T) = i|->the_unity_wrt F
+ proof assume
+A1:   F has_a_unity & F is associative & F has_an_inverseOp;
+   set e = the_unity_wrt F;
+   reconsider uT = the_inverseOp_wrt F*T as Element of i-tuples_on D
+    by FINSEQ_2:133;
+   per cases;
+    suppose i = 0;
+     then F.:(T,uT) = <*>D & F.:(uT,T) = <*>D & i|->e = <*>D
+      by Lm2,FINSEQ_2:113;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T is Function of C,D & i|->e = C-->e by Lm5,FINSEQ_2:def 2;
+     hence thesis by A1,Th75;
+ end;
+
+theorem
+     F is associative & F has_an_inverseOp &
+    F has_a_unity & F.:(T1,T2) = i|->the_unity_wrt F implies
+     T1 = (the_inverseOp_wrt F)*T2 & (the_inverseOp_wrt F)*T1 = T2
+ proof assume
+A1:   F is associative & F has_an_inverseOp &
+       F has_a_unity & F.:(T1,T2) = i|->the_unity_wrt F;
+   per cases;
+    suppose i = 0;
+     then T1 = <*>D & (the_inverseOp_wrt F)*T2 = <*>D &
+       (the_inverseOp_wrt F)*T1 = <*>D & T2 = <*>D by Lm1,FINSEQ_2:113;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T1 is Function of C,D & T2 is Function of C,D &
+      i|->the_unity_wrt F = C-->the_unity_wrt F by Lm5,FINSEQ_2:def 2;
+     hence thesis by A1,Th76;
+ end;
+
+theorem Th79:
+   F is associative & F has_a_unity & e = the_unity_wrt F &
+    F has_an_inverseOp & G is_distributive_wrt F
+     implies G[;](e,f) = C-->e
+ proof assume
+A1:   F is associative & F has_a_unity & e = the_unity_wrt F &
+      F has_an_inverseOp & G is_distributive_wrt F;
+   reconsider g = C-->e as Function of C,D by FUNCOP_1:58;
+     now let c;
+    thus (G[;](e,f)).c = G.(e,f.c) by FUNCOP_1:66
+                    .= e by A1,Th70
+                    .= g.c by FUNCOP_1:13;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem
+     F is associative & F has_a_unity & e = the_unity_wrt F &
+    F has_an_inverseOp & G is_distributive_wrt F
+     implies G[;](e,T) = i|->e
+ proof assume
+A1:   F is associative & F has_a_unity & e = the_unity_wrt F &
+      F has_an_inverseOp & G is_distributive_wrt F;
+   per cases;
+    suppose i = 0;
+     then G[;](e,T) = <*>D & i|->e = <*>D by Lm3,FINSEQ_2:113;
+     hence thesis;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T is Function of C,D & i|->the_unity_wrt F = C-->the_unity_wrt F
+      by Lm5,FINSEQ_2:def 2;
+     hence thesis by A1,Th79;
+ end;
+
+definition
+ let F,f,g be Function;
+  func F*(f,g) -> Function equals
+:Def4:  F*[:f,g:];
+  correctness;
+end;
+
+canceled;
+
+theorem Th82:
+   for F,f,g being Function st [x,y] in dom(F*(f,g))
+    holds (F*(f,g)).[x,y] = F.[f.x,g.y]
+ proof let F,f,g be Function such that
+A1:  [x,y] in dom(F*(f,g));
+A2:  F*(f,g) = F*[:f,g:] by Def4;
+   then [x,y] in dom [:f,g:] by A1,FUNCT_1:21;
+   then [x,y] in [:dom f,dom g:] by FUNCT_3:def 9;
+   then [:f,g:].[x,y] = [f.x,g.y] by FUNCT_3:86;
+   hence thesis by A1,A2,FUNCT_1:22;
+ end;
+
+theorem Th83:
+   for F,f,g being Function st [x,y] in dom(F*(f,g))
+     holds (F*(f,g)).(x,y) = F.(f.x,g.y)
+ proof let F,f,g be Function;
+  assume [x,y] in dom(F*(f,g));
+  then (F*(f,g)).[x,y] = F.[f.x,g.y] & F.[f.x,g.y] = F.(f.x,g.y)
+   by Th82,BINOP_1:def 1;
+  hence thesis by BINOP_1:def 1;
+ end;
+
+theorem Th84:
+   for F being Function of [:D,D':],E,
+       f being Function of C,D, g being Function of C',D'
+     holds F*(f,g) is Function of [:C,C':],E
+ proof let F be Function of [:D,D':],E,
+       f be Function of C,D, g be Function of C',D';
+     F*(f,g) = F*[:f,g:] by Def4;
+   hence thesis;
+ end;
+
+theorem
+    for u,u' being Function of D,D holds F*(u,u') is BinOp of D by Th84;
+
+definition let D,F; let f,f' be Function of D,D;
+ redefine func F*(f,f') -> BinOp of D;
+  coherence by Th84;
+end;
+
+theorem Th86:
+   for F being Function of [:D,D':],E,
+       f being Function of C,D, g being Function of C',D'
+     holds (F*(f,g)).(c,c') = F.(f.c,g.c')
+ proof let F be Function of [:D,D':],E,
+           f be Function of C,D, g be Function of C',D';
+   set H = F*(f,g);
+     H is Function of [:C,C':],E by Th84;
+   then dom H = [:C,C':] & c in C & c' in C' by FUNCT_2:def 1;
+   then [c,c'] in dom H by ZFMISC_1:def 2;
+   hence thesis by Th83;
+ end;
+
+theorem Th87:
+   for u being Function of D,D holds
+    (F*(id D,u)).(d1,d2) = F.(d1,u.d2) & (F*(u,id D)).(d1,d2) = F.(u.d1,d2)
+ proof let u be Function of D,D;
+    (id D).d1 = d1 & (id D).d2 = d2 by FUNCT_1:35;
+  hence thesis by Th86;
+ end;
+
+theorem Th88:
+   (F*(id D,u)).:(f,f') = F.:(f,u*f')
+ proof
+    now let c;
+   thus ((F*(id D,u)).:(f,f')).c = (F*(id D,u)).(f.c,f'.c) by FUNCOP_1:48
+                               .= F.(f.c,u.(f'.c)) by Th87
+                               .= F.(f.c,(u*f').c) by FUNCT_2:21
+                               .= (F.:(f,u*f')).c by FUNCOP_1:48;
+  end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+theorem
+     (F*(id D,u)).:(T1,T2) = F.:(T1,u*T2)
+ proof
+     now per cases;
+    suppose i = 0;
+     then (F*(id D,u)).:(T1,T2) = <*>D & u*T2 = <*>D by Lm1,Lm2;
+     hence thesis by FINSEQ_2:87;
+    suppose i <> 0; then reconsider C = Seg i as non empty set by FINSEQ_1:5;
+       T1 is Function of C,D & T2 is Function of C,D by Lm5;
+     hence thesis by Th88;
+   end;
+  hence thesis;
+ end;
+
+theorem
+     F is associative & F has_a_unity & F is commutative &
+    F has_an_inverseOp & u = the_inverseOp_wrt F
+      implies u.(F*(id D,u).(d1,d2)) = F*(u,id D).(d1,d2) &
+         F*(id D,u).(d1,d2) = u.(F*(u,id D).(d1,d2))
+ proof assume
+A1:  F is associative & F has_a_unity & F is commutative &
+     F has_an_inverseOp & u = the_inverseOp_wrt F;
+then A2: u is_distributive_wrt F by Th67;
+  thus u.(F*(id D,u).(d1,d2)) = u.(F.(d1,u.d2)) by Th87
+                             .= F.(u.d1,u.(u.d2)) by A2,BINOP_1:def 12
+                             .= F.(u.d1,d2) by A1,Th66
+                             .= F*(u,id D).(d1,d2) by Th87;
+  hence F*(id D,u).(d1,d2) = u.(F*(u,id D).(d1,d2)) by A1,Th66;
+ end;
+
+theorem
+     F is associative & F has_a_unity & F has_an_inverseOp implies
+     (F*(id D,the_inverseOp_wrt F)).(d,d) = the_unity_wrt F
+ proof assume
+A1:   F is associative & F has_a_unity & F has_an_inverseOp;
+   set u = the_inverseOp_wrt F;
+   thus F*(id D,u).(d,d) = F.(d,u.d) by Th87
+                        .= the_unity_wrt F by A1,Th63;
+  end;
+
+
+theorem
+     F is associative & F has_a_unity & F has_an_inverseOp
+     implies (F*(id D,the_inverseOp_wrt F)).(d,the_unity_wrt F) = d
+ proof assume
+A1:   F is associative & F has_a_unity & F has_an_inverseOp;
+  set u = the_inverseOp_wrt F, e = the_unity_wrt F;
+  thus (F*(id D,u)).(d,e) = F.(d,u.e) by Th87
+                         .= F.(d,e) by A1,Th65
+                         .= d by A1,SETWISEO:23;
+ end;
+
+theorem
+     F is associative & F has_a_unity &
+     F has_an_inverseOp & u = the_inverseOp_wrt F
+      implies (F*(id D,u)).(the_unity_wrt F,d) = u.d
+ proof assume
+A1:   F is associative & F has_a_unity & F has_an_inverseOp &
+      u = the_inverseOp_wrt F;
+  set e = the_unity_wrt F;
+  thus (F*(id D,u)).(e,d) = F.(e,u.d) by Th87
+                         .= u.d by A1,SETWISEO:23;
+ end;
+
+theorem
+     F is commutative & F is associative & F has_a_unity &
+    F has_an_inverseOp & G = F*(id D,the_inverseOp_wrt F) implies
+     for d1,d2,d3,d4 holds F.(G.(d1,d2),G.(d3,d4))= G.(F.(d1,d3),F.(d2,d4))
+ proof assume
+A1:   F is commutative & F is associative & F has_a_unity &
+      F has_an_inverseOp & G = F*(id D,the_inverseOp_wrt F);
+   set u = the_inverseOp_wrt F;
+A2:   u is_distributive_wrt F by A1,Th67;
+  let d1,d2,d3,d4;
+  thus F.(G.(d1,d2),G.(d3,d4)) = F.(F.(d1,u.d2),G.(d3,d4)) by A1,Th87
+                              .= F.(F.(d1,u.d2),F.(d3,u.d4)) by A1,Th87
+                      .= F.(d1,F.(u.d2,F.(d3,u.d4))) by A1,BINOP_1:def 3
+                      .= F.(d1,F.(F.(u.d2,d3),u.d4)) by A1,BINOP_1:def 3
+                      .= F.(d1,F.(F.(d3,u.d2),u.d4)) by A1,BINOP_1:def 2
+                      .= F.(d1,F.(d3,F.(u.d2,u.d4))) by A1,BINOP_1:def 3
+                      .= F.(F.(d1,d3),F.(u.d2,u.d4)) by A1,BINOP_1:def 3
+                      .= F.(F.(d1,d3),u.(F.(d2,d4))) by A2,BINOP_1:def 12
+                      .= G.(F.(d1,d3),F.(d2,d4)) by A1,Th87;
+ end;

@@ -1,0 +1,490 @@
+:: Scott Topology
+::  by Andrzej Trybulec
+::
+:: Received January 29, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary ORDERS_1, BHSP_3, WAYBEL_0, SETFAM_1, LATTICES, LATTICE3, QUANTAL1,
+      BOOLE, RELAT_2, FINSET_1, ORDINAL2, YELLOW_0, REALSET1, RELAT_1,
+      SUBSET_1, WAYBEL_9, PRE_TOPC, NATTRA_1, T_0TOPSP, CONNSP_2, TOPS_1,
+      TARSKI, FUNCT_1, YELLOW_6, SEQM_3, CLASSES1, ZF_LANG, YELLOW_2, PROB_1,
+      WAYBEL_3, CARD_3, PBOOLE, CLOSURE1, ZF_REFLE, WAYBEL_5, FUNCT_6,
+      RLVECT_2, WAYBEL_6, CANTOR_1, WAYBEL11, RLVECT_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELSET_1, FINSET_1, RELAT_1,
+      FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCT_6, STRUCT_0, REALSET1,
+      GROUP_1, WAYBEL_6, PRE_TOPC, TOPS_1, CANTOR_1, CONNSP_2, T_0TOPSP,
+      TDLAT_3, PBOOLE, CLASSES1, CLASSES2, CARD_3, PRALG_1, ORDERS_1, LATTICE3,
+      YELLOW_0, WAYBEL_0, YELLOW_1, YELLOW_2, WAYBEL_1, YELLOW_3, YELLOW_4,
+      WAYBEL_2, WAYBEL_3, WAYBEL_5, YELLOW_6, WAYBEL_9, YELLOW_8;
+ constructors T_0TOPSP, TOPS_1, TDLAT_3, GROUP_1, WAYBEL_3, WAYBEL_5, YELLOW_4,
+      CLASSES1, ORDERS_3, CANTOR_1, WAYBEL_9, YELLOW_8, WAYBEL_1, WAYBEL_6,
+      PRALG_2, CLASSES2, CONNSP_2, MEMBERED, PARTFUN1;
+ clusters YELLOW_0, STRUCT_0, WAYBEL_0, TDLAT_3, FINSET_1, WAYBEL_3, YELLOW_6,
+      PBOOLE, RELSET_1, WAYBEL_5, PRALG_1, PRVECT_1, YELLOW_1, WAYBEL_9,
+      LATTICE3, MSUALG_1, CLASSES2, SUBSET_1, FRAENKEL, MEMBERED, ZFMISC_1,
+      FUNCT_2, PARTFUN1;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+scheme Irrel{D,I() -> non empty set, P[set], F(set)->set, F(set,set)-> set}:
+ { F(u) where u is Element of D(): P[u]}
+  = { F(i,v) where i is Element of I(), v is Element of D(): P[v]}
+provided
+ for i being Element of I(), u being Element of D()
+    holds F(u) = F(i,u);
+
+theorem :: WAYBEL11:1
+ for L being complete LATTICE,
+     X,Y being Subset of L st Y is_coarser_than X
+  holds "/\"(X,L) <= "/\"(Y,L);
+
+theorem :: WAYBEL11:2
+ for L being complete LATTICE,
+     X,Y being Subset of L st X is_finer_than Y
+  holds "\/"(X,L) <= "\/"(Y,L);
+
+theorem :: WAYBEL11:3
+   for T being RelStr, A being upper Subset of T, B being directed Subset of T
+  holds A /\ B is directed;
+
+definition let T be reflexive non empty RelStr;
+ cluster non empty directed finite Subset of T;
+end;
+
+theorem :: WAYBEL11:4  :: uogolnione WAYBEL_3:16
+ for T being with_suprema Poset,
+     D being non empty directed finite Subset of T
+  holds sup D in D;
+
+definition
+ cluster trivial reflexive transitive non empty antisymmetric
+  with_suprema with_infima finite strict RelStr;
+end;
+
+definition
+ cluster finite non empty strict 1-sorted;
+end;
+
+definition let T be finite 1-sorted;
+ cluster -> finite Subset of T;
+end;
+
+definition let R be RelStr;
+ cluster {}R -> lower upper;
+end;
+
+definition let R be trivial non empty RelStr;
+ cluster -> upper Subset of R;
+end;
+
+theorem :: WAYBEL11:5
+ for T being non empty RelStr, x being Element of T,
+     A being upper Subset of T st not x in A
+  holds A misses downarrow x;
+
+theorem :: WAYBEL11:6
+ for T being non empty RelStr, x being Element of T,
+     A being lower Subset of T st x in A
+  holds downarrow x c= A;
+
+begin :: Scott Topology
+
+definition let T be non empty reflexive RelStr, S be Subset of T;
+ attr S is inaccessible_by_directed_joins means
+:: WAYBEL11:def 1
+
+  for D being non empty directed Subset of T st sup D in S holds D meets S;
+ synonym S is inaccessible;
+ attr S is closed_under_directed_sups means
+:: WAYBEL11:def 2
+ for D being non empty directed Subset of T st D c= S holds sup D in S;
+ synonym S is directly_closed;
+ attr S is property(S) means
+:: WAYBEL11:def 3
+ for D being non empty directed Subset of T st sup D in S
+  ex y being Element of T st y in D &
+   for x being Element of T st x in D & x >= y holds x in S;
+ synonym S has_the_property_(S);
+end;
+
+definition
+ let T be non empty reflexive RelStr;
+  cluster {}T -> property(S) directly_closed;
+end;
+
+definition
+ let T be non empty reflexive RelStr;
+  cluster property(S) directly_closed Subset of T;
+end;
+
+definition
+ let T be non empty reflexive RelStr, S be property(S) Subset of T;
+ cluster S` -> directly_closed;
+end;
+
+definition let T be reflexive non empty TopRelStr;
+ attr T is Scott means
+:: WAYBEL11:def 4
+ for S being Subset of T holds
+   S is open iff S is inaccessible upper;
+end;
+
+definition
+ let T be reflexive transitive antisymmetric non empty with_suprema
+   finite RelStr;
+ cluster -> inaccessible Subset of T;
+end;
+
+definition
+ let T be reflexive transitive antisymmetric non empty with_suprema
+    finite TopRelStr;
+ redefine attr T is Scott means
+:: WAYBEL11:def 5
+           for S being Subset of T holds S is open iff S is upper;
+end;
+
+definition
+ cluster trivial complete strict non empty Scott TopLattice;
+end;
+
+definition let T be non empty reflexive RelStr;
+ cluster [#]T -> directly_closed inaccessible;
+end;
+
+definition let T be non empty reflexive RelStr;
+ cluster directly_closed lower inaccessible upper Subset of T;
+end;
+
+definition
+ let T be non empty reflexive RelStr, S be inaccessible Subset of T;
+ cluster S` -> directly_closed;
+end;
+
+definition
+ let T be non empty reflexive RelStr, S be directly_closed Subset of T;
+ cluster S` -> inaccessible;
+end;
+
+theorem :: WAYBEL11:7   :: p. 100, Remark 1.4 (i)
+ for T being up-complete Scott (non empty reflexive transitive TopRelStr),
+     S being Subset of T holds
+  S is closed iff S is directly_closed lower;
+
+theorem :: WAYBEL11:8
+ for T being up-complete (non empty reflexive transitive antisymmetric
+     TopRelStr),
+     x being Element of T holds
+  downarrow x is directly_closed;
+
+theorem :: WAYBEL11:9   :: p. 100, Remark 1.4 (ii)
+ for T being complete Scott TopLattice, x being Element of T
+  holds Cl {x} = downarrow x;
+
+theorem :: WAYBEL11:10  :: p. 100, Remark 1.4 (iii)
+   for T being complete Scott TopLattice holds T is T_0-TopSpace;
+
+theorem :: WAYBEL11:11
+ for T being Scott up-complete (non empty reflexive transitive antisymmetric
+     TopRelStr),
+     x being Element of T holds
+  downarrow x is closed;
+
+theorem :: WAYBEL11:12
+ for T being up-complete Scott TopLattice, x being Element of T
+  holds (downarrow x)` is open;
+
+theorem :: WAYBEL11:13
+ for T being up-complete Scott TopLattice, x being Element of T,
+     A being upper Subset of T st not x in A
+  holds (downarrow x)` is a_neighborhood of A;
+
+theorem :: WAYBEL11:14  :: p. 100, Remark 1.4 (iv)
+   for T being complete Scott TopLattice,
+     S being upper Subset of T
+  ex F being Subset-Family of T st S = meet F &
+   for X being Subset of T st X in F holds X is a_neighborhood of S;
+
+theorem :: WAYBEL11:15  :: p. 100, Remark 1.4 (v)
+   for T being Scott TopLattice,
+     S being Subset of T
+  holds S is open iff S is upper property(S);
+
+definition let T be complete TopLattice;
+                  :: p. 100, Remark 1.4 (vi)
+ cluster lower -> property(S) Subset of T;
+end;
+
+theorem :: WAYBEL11:16  :: p. 100, Remark 1.4 (vii)
+   for T being non empty transitive reflexive TopRelStr st
+  the topology of T = { S where S is Subset of T: S has_the_property_(S)}
+  holds T is TopSpace-like;
+
+begin :: Scott Convergence
+
+reserve R for non empty RelStr,
+        N for net of R,
+        i for Element of N;
+
+definition let R,N;
+ func lim_inf N -> Element of R equals
+:: WAYBEL11:def 6
+ "\/"({"/\"({N.i:i >= j},R) where j is Element of N:
+           not contradiction},R);
+end;
+
+definition let R be reflexive non empty RelStr;
+ let N be net of R, p be Element of R;
+ pred p is_S-limit_of N means
+:: WAYBEL11:def 7
+ p <= lim_inf N;
+end;
+
+definition let R be reflexive non empty RelStr;
+ func Scott-Convergence R -> Convergence-Class of R means
+:: WAYBEL11:def 8
+ for N being strict net of R st N in NetUniv R
+ for p being Element of R
+  holds [N,p] in it iff p is_S-limit_of N;
+end;
+
+:: remarks, p.98
+
+theorem :: WAYBEL11:17
+   for R being complete LATTICE,
+     N being net of R, p,q being Element of R
+  st p is_S-limit_of N & N is_eventually_in downarrow q
+ holds p <= q;
+
+theorem :: WAYBEL11:18
+ for R being complete LATTICE,
+     N being net of R, p,q being Element of R
+  st N is_eventually_in uparrow q
+ holds lim_inf N >= q;
+
+definition
+ let R be reflexive non empty RelStr, N be non empty NetStr over R;
+ redefine
+  attr N is monotone means
+:: WAYBEL11:def 9
+ for i,j being Element of N st i <= j
+    holds N.i <= N.j;
+end;
+
+definition let R be non empty RelStr;
+ let S be non empty set, f be Function of S, the carrier of R;
+ func Net-Str(S,f) -> strict non empty NetStr over R means
+:: WAYBEL11:def 10
+ the carrier of it = S &
+     the mapping of it = f &
+     for i,j being Element of it holds i <= j iff it.i <= it.j;
+end;
+
+theorem :: WAYBEL11:19
+ for L being non empty 1-sorted, N being non empty NetStr over L
+  holds rng the mapping of N =
+   { N.i where i is Element of N: not contradiction};
+
+theorem :: WAYBEL11:20
+ for R being non empty RelStr,
+     S being non empty set, f be Function of S, the carrier of R
+   st rng f is directed
+ holds Net-Str(S,f) is directed;
+
+definition let R be non empty RelStr;
+ let S be non empty set, f be Function of S, the carrier of R;
+ cluster Net-Str(S,f) -> monotone;
+end;
+
+definition let R be transitive non empty RelStr;
+ let S be non empty set, f be Function of S, the carrier of R;
+ cluster Net-Str(S,f) -> transitive;
+end;
+
+definition let R be reflexive non empty RelStr;
+ let S be non empty set, f be Function of S, the carrier of R;
+ cluster Net-Str(S,f) -> reflexive;
+end;
+
+theorem :: WAYBEL11:21
+ for R being non empty transitive RelStr,
+     S being non empty set, f be Function of S, the carrier of R
+   st S c= the carrier of R & Net-Str(S,f) is directed
+ holds Net-Str(S,f) in NetUniv R;
+
+definition let R be LATTICE;
+ cluster monotone reflexive strict net of R;
+end;
+
+theorem :: WAYBEL11:22
+ for R being complete LATTICE,
+     N being monotone reflexive net of R
+ holds lim_inf N = sup N;
+
+theorem :: WAYBEL11:23
+ for R being complete LATTICE,
+     N being constant net of R
+  holds the_value_of N = lim_inf N;
+
+theorem :: WAYBEL11:24
+ for R being complete LATTICE,
+     N being constant net of R
+  holds the_value_of N is_S-limit_of N;
+
+definition let S be non empty 1-sorted, e be Element of S;
+ func Net-Str e -> strict NetStr over S means
+:: WAYBEL11:def 11
+ the carrier of it = {e} &
+      the InternalRel of it = {[e,e]} &
+      the mapping of it = id {e};
+end;
+
+definition let S be non empty 1-sorted, e be Element of S;
+ cluster Net-Str e -> non empty;
+end;
+
+theorem :: WAYBEL11:25
+ for S being non empty 1-sorted, e being Element of S,
+     x being Element of Net-Str e holds x = e;
+
+theorem :: WAYBEL11:26
+ for S being non empty 1-sorted, e being Element of S,
+     x being Element of Net-Str e holds (Net-Str e).x = e;
+
+definition let S be non empty 1-sorted, e be Element of S;
+ cluster Net-Str e -> reflexive transitive directed antisymmetric;
+end;
+
+theorem :: WAYBEL11:27
+ for S being non empty 1-sorted, e being Element of S,
+     X being set holds
+   Net-Str e is_eventually_in X iff e in X;
+
+theorem :: WAYBEL11:28
+ for S being reflexive antisymmetric (non empty RelStr),
+     e being Element of S
+  holds e = lim_inf Net-Str e;
+
+theorem :: WAYBEL11:29
+ for S being non empty reflexive RelStr,
+     e being Element of S
+  holds Net-Str e in NetUniv S;
+
+theorem :: WAYBEL11:30
+ for R being complete LATTICE, Z be net of R, D be Subset of R st
+  D = {"/\"({Z.k where k is Element of Z: k >= j},R)
+            where j is Element of Z: not contradiction}
+  holds D is non empty directed;
+
+theorem :: WAYBEL11:31  :: 1.2. Lemma, p.99
+ for L being complete LATTICE
+ for S being Subset of L
+  holds S in the topology of ConvergenceSpace Scott-Convergence L
+    iff S is inaccessible upper;
+
+theorem :: WAYBEL11:32
+ for T being complete Scott TopLattice
+  holds the TopStruct of T = ConvergenceSpace Scott-Convergence T;
+
+theorem :: WAYBEL11:33
+ for T being complete TopLattice
+  st the TopStruct of T = ConvergenceSpace Scott-Convergence T
+ for S being Subset of T
+  holds S is open iff S is inaccessible upper;
+
+theorem :: WAYBEL11:34
+ for T being complete TopLattice
+   st the TopStruct of T = ConvergenceSpace Scott-Convergence T
+  holds T is Scott;
+
+definition let R be complete LATTICE;
+  :: 1.6. Proposition (i)
+ cluster Scott-Convergence R -> (CONSTANTS);
+end;
+
+definition let R be complete LATTICE;
+  :: 1.6. Proposition (i)
+ cluster Scott-Convergence R -> (SUBNETS);
+end;
+
+theorem :: WAYBEL11:35  :: YELLOW_6:32
+ for S being non empty 1-sorted, N being net of S, X being set
+ for M being subnet of N st M = N"X
+ for i being Element of M holds M.i in X;
+
+definition let L be non empty reflexive RelStr;
+ func sigma L -> Subset-Family of L equals
+:: WAYBEL11:def 12
+ the topology of ConvergenceSpace Scott-Convergence L;
+end;
+
+theorem :: WAYBEL11:36  :: 1.5 Examples (5), p.100
+ for L being continuous complete Scott TopLattice, x be Element of L
+  holds wayabove x is open;
+
+theorem :: WAYBEL11:37
+ for T being complete TopLattice
+   st the topology of T = sigma T
+  holds T is Scott;
+
+definition let R be continuous complete LATTICE;
+  :: 1.6. Proposition (ii)
+ cluster Scott-Convergence R -> topological;
+end;
+
+theorem :: WAYBEL11:38 :: Corrollary to Proposition 1.6 (p.103)
+   for T be continuous complete Scott TopLattice,
+     x be Element of T,
+     N be net of T st N in NetUniv T
+ holds x is_S-limit_of N iff x in Lim N;
+
+theorem :: WAYBEL11:39  :: 1.7. Lemma
+ for L being complete (non empty Poset)
+  st Scott-Convergence L is (ITERATED_LIMITS)
+ holds L is continuous;
+
+theorem :: WAYBEL11:40 :: 1.8 Theorem, p.104
+   for T being complete Scott TopLattice holds
+  T is continuous iff Convergence T = Scott-Convergence T;
+
+theorem :: WAYBEL11:41  :: 1.9 Remark, p.104
+ for T being complete Scott TopLattice,
+     S being upper Subset of T st S is Open
+  holds S is open;
+
+theorem :: WAYBEL11:42
+ for L being non empty RelStr, S being upper Subset of L,
+     x being Element of L st x in S
+ holds uparrow x c= S;
+
+theorem :: WAYBEL11:43
+ for L being complete continuous Scott TopLattice,
+     p be Element of L, S be Subset of L st S is open & p in S
+  ex q being Element of L st q << p & q in S;
+
+theorem :: WAYBEL11:44  :: 1.10. Propostion (i), p.104
+ for L being complete continuous Scott TopLattice,
+     p be Element of L
+  holds { wayabove q where q is Element of L: q << p } is Basis of p;
+
+theorem :: WAYBEL11:45
+ for T being complete continuous Scott TopLattice holds
+ { wayabove x where x is Element of T: not contradiction } is Basis of T;
+
+theorem :: WAYBEL11:46  :: 1.10. Propostion (ii), p.104
+   for T being complete continuous Scott TopLattice,
+     S being upper Subset of T
+  holds S is open iff S is Open;
+
+theorem :: WAYBEL11:47  :: 1.10. Propostion (iii), p.104
+   for T being complete continuous Scott TopLattice,
+     p being Element of T
+ holds Int uparrow p = wayabove p;
+
+theorem :: WAYBEL11:48  :: 1.10. Propostion (iv), p.104
+   for T being complete continuous Scott TopLattice,
+     S being Subset of T
+  holds Int S = union{wayabove x where x is Element of T: wayabove x c= S};

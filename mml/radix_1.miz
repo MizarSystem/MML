@@ -1,0 +1,1232 @@
+:: Definitions of Radix-2k Signed-Digit number and its adder algorithm
+::  by Yoshinori Fujisawa and Yasushi Fuwa
+::
+:: Received September 7, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary INT_1, NAT_1, ARYTM_1, ARYTM_3, POWER, MIDSP_3, FINSEQ_1, FUNCT_1,
+      RELAT_1, RLVECT_1, RADIX_1, FINSEQ_4, GROUP_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, XREAL_0, INT_1, NAT_1, FUNCT_1,
+      POWER, FINSEQ_1, FINSEQ_4, BINARITH, TREES_4, WSIERP_1, MIDSP_3;
+ constructors REAL_1, POWER, BINARITH, FINSEQ_4, EULER_2, WSIERP_1, MEMBERED,
+      INT_1;
+ clusters INT_1, RELSET_1, GROUP_2, NAT_1, XREAL_0, MEMBERED;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI;
+ theorems REAL_2, REAL_1, NAT_1, NAT_2, INT_1, FINSEQ_1, AXIOMS, GOBOARD9,
+      GROUP_4, RLVECT_1, GR_CY_1, EULER_1, BINARITH, PREPOWER, POWER, JORDAN4,
+      RVSUM_1, FINSEQ_2, FINSEQ_4, TARSKI, FUNCT_1, GR_CY_2, PEPIN, FINSEQ_5,
+      SCMFSA_7, JORDAN3, NEWTON, SCMFSA9A, SQUARE_1, XCMPLX_0, XCMPLX_1;
+ schemes NAT_1, FINSEQ_2, INT_2;
+
+begin :: Some Useful Theorems
+
+reserve i,k,m,n,p,x,y for Nat,
+        i1,i2,i3 for Integer,
+        e for set;
+
+canceled;
+
+theorem Th2:
+n mod k = k - 1 implies (n+1) mod k = 0
+proof
+  per cases;
+  suppose A1: k <> 0;
+  assume A2: n mod k = k-1;
+    k >= 1 by A1,RLVECT_1:99;
+  then k - 1 >= 0 by SQUARE_1:12;
+  then reconsider K = k - 1 as Nat by INT_1:16;
+   K + 1 = k - (1 - 1) by XCMPLX_1:37
+          .= k - 0;
+  then (n+1) mod k = k mod k by A2,GR_CY_1:2;
+  hence thesis by GR_CY_1:5;
+  suppose k=0;
+  hence thesis by NAT_1:def 2;
+end;
+
+theorem Th3:
+  k <> 0 & n mod k < k - 1 implies (n+1) mod k = (n mod k) + 1
+proof
+  assume k <> 0 & n mod k < k - 1;
+  then A1:(n mod k) + 1 < k by REAL_1:86;
+    (n+1) mod k = ((n mod k)+1) mod k by GR_CY_1:2;
+  hence thesis by A1,GR_CY_1:4;
+end;
+
+theorem Th4:
+  m <> 0 implies (k mod (m*n)) mod n = k mod n
+proof
+  assume A1:m <> 0;
+  per cases;
+  suppose A2: n <> 0;
+  reconsider k' = k, m' = m, n' = n as Integer;
+A3:m'*n' <> 0 by A1,A2,XCMPLX_1:6;
+    k mod (m*n) = k' mod (m'*n') by SCMFSA9A:5;
+  hence (k mod (m*n)) mod n = (k' mod (m'*n')) mod n' by SCMFSA9A:5
+            .= (k' - (k' div (m'*n'))*(m'*n')) mod n' by A3,INT_1:def 8
+            .= (k' - ((k' div m'*n')*m')*n') mod n' by XCMPLX_1:4
+            .= (k' + (-(m'*(k' div m'*n'))*n')) mod n' by XCMPLX_0:def 8
+            .= (k' + (-(m'*(k' div m'*n')))*n') mod n' by XCMPLX_1:175
+            .= k' mod n' by EULER_1:13
+            .= k mod n by SCMFSA9A:5;
+  suppose A4: n = 0;
+  hence (k mod (m*n)) mod n = 0 by NAT_1:def 2
+      .= k mod n by A4,NAT_1:def 2;
+end;
+
+theorem
+    k <> 0 implies (n+1) mod k = 0 or (n+1) mod k = (n mod k) + 1
+proof
+  assume A1:k <> 0;
+  then k >= 1 by RLVECT_1:99;
+  then k - 1 >= 0 by SQUARE_1:12;
+  then reconsider K = k - 1 as Nat by INT_1:16;
+    k > 0 by A1,NAT_1:19;
+  then n mod k < k by NAT_1:46;
+  then n mod k < k + 1 - 1 by XCMPLX_1:26;
+  then n mod k < k - 1 + 1 by XCMPLX_1:29;
+  then A2:n mod k <= K by NAT_1:38;
+  per cases by A2,AXIOMS:21;
+  suppose n mod k < k - 1;
+  hence thesis by A1,Th3;
+  suppose n mod k = k - 1;
+  hence thesis by Th2;
+end;
+
+theorem Th6:
+  i <> 0 & k <> 0 implies (n mod (i |^ k)) div (i |^ (k -'1)) < i
+proof
+  assume A1:i <> 0 & k <> 0;
+  then A2:i > 0 by NAT_1:19;
+  then i |^ k > 0 by PREPOWER:13;
+  then A3:n mod (i |^ k) < (i |^ k) by NAT_1:46;
+  set I1 = i |^ (k -'1);
+  set T = n mod (i |^ k);
+  A4:I1 > 0 by A2,PREPOWER:13;
+  A5:I1 <> 0 by A2,PREPOWER:13;
+    i |^ k = i*(i |^ (k -'1)) by A1,PEPIN:27;
+  then T mod I1 = n mod I1 by A1,Th4
+               .= n - I1*(n div I1) by A4,GR_CY_2:1;
+  then T = I1*(T div I1) + (n - I1*(n div I1)) by A4,NAT_1:47;
+  then I1*(T div I1) + (n - I1*(n div I1)) < i*I1 by A1,A3,PEPIN:27;
+  then I1*(T div I1) + n - I1*(n div I1) < i*I1 by XCMPLX_1:29;
+  then (I1*(T div I1) + n - I1*(n div I1))/I1 < i*I1/I1 by A4,REAL_1:73;
+  then I1*(T div I1)/I1 + n/I1 - I1*(n div I1)/I1 < i*I1/I1
+                                            by XCMPLX_1:125;
+  then (T div I1) + n/I1 - I1*(n div I1)/I1 < i*I1/I1 by A5,XCMPLX_1:90
+;
+  then (T div I1) + n/I1 - (n div I1) < i*I1/I1 by A5,XCMPLX_1:90;
+  then A6:(T div I1) + n/I1 - (n div I1) < i by A5,XCMPLX_1:90;
+  reconsider n' = n , I'1 = I1 as Integer;
+  A7:n div I1 = n' div I'1 by SCMFSA9A:5
+               .= [\n/I1/] by INT_1:def 7;
+    [\n/I1/] <= n/I1 by INT_1:def 4;
+  then (T div I1) + [\n/I1/] <= (T div I1) + n/I1 by AXIOMS:24;
+  then (T div I1) + [\n/I1/] - [\n/I1/] <= (T div I1) + n/I1 - (n div I1)
+                                                         by A7,REAL_1:49;
+  then (T div I1) + ([\n/I1/] - [\n/I1/]) <= (T div I1) + n/I1 - (n div I1)
+                                                         by XCMPLX_1:29;
+  then (T div I1) + 0 <= (T div I1) + n/I1 - (n div I1) by XCMPLX_1:14;
+  hence thesis by A6,AXIOMS:22;
+end;
+
+theorem Th7:
+  k <= n implies m |^ k divides m |^ n
+proof
+  assume k <= n;
+  then consider t being Nat such that
+    A1:n = k + t by NAT_1:28;
+    m |^ n = (m |^ k)*(m |^ t) by A1,NEWTON:13;
+  hence thesis by NAT_1:def 3;
+end;
+
+theorem
+    i2 > 0 & i3 >= 0 implies (i1 mod (i2*i3)) mod i3 = i1 mod i3
+proof
+  assume A1:i2 > 0 & i3 >= 0;
+  per cases by A1;
+  suppose i3 > 0;
+then i2*i3 <> 0 by A1,XCMPLX_1:6;
+  then (i1 mod (i2*i3)) mod i3
+             = (i1 - (i1 div (i2*i3))*(i2*i3)) mod i3 by INT_1:def 8
+            .= (i1 - ((i1 div i2*i3)*i2)*i3) mod i3 by XCMPLX_1:4
+            .= (i1 + (-(i2*(i1 div i2*i3))*i3)) mod i3 by XCMPLX_0:def 8
+            .= (i1 + (-(i2*(i1 div i2*i3)))*i3) mod i3 by XCMPLX_1:175;
+  hence thesis by EULER_1:13;
+  suppose A2:i3 = 0;
+  then (i1 mod (i2*i3)) mod i3 = 0 by INT_1:def 8;
+  hence thesis by A2,INT_1:def 8;
+end;
+
+begin :: Definition for Radix-2^k, k-SD
+
+definition let n;
+  func Radix(n) -> Nat equals
+  :Def1:
+    2 to_power n;
+correctness
+proof
+  defpred P[Nat] means 2 to_power $1 is Nat;
+   A1: P[0] by POWER:29;
+   A2:for m be Nat st P[m]  holds P[m+1]
+   proof
+     let m be Nat;
+     assume 2 to_power m is Nat;
+     then reconsider k = 2 to_power m as Nat;
+       2 to_power (m+1) = 2 to_power m * 2 to_power 1 by POWER:32
+                     .= k * 2 by POWER:30;
+     hence thesis;
+   end;
+     for m be Nat holds P[m] from Ind(A1,A2);
+   hence 2 to_power n is Nat;
+ end;
+end;
+
+definition let k;
+  func k-SD -> set equals
+  :Def2:
+    {e where e is Element of INT:e <= Radix(k)-1 & e >= -Radix(k)+1};
+  correctness;
+end;
+
+theorem Th9:
+  Radix(n) <> 0
+proof
+    Radix(n) = 2 to_power n by Def1;
+  hence thesis by POWER:39;
+end;
+
+Lm1:
+  for k be Nat st k >= 2 holds Radix(k) >= 2 + 2
+proof
+  defpred P[Nat] means Radix($1) >= 2+2;
+    Radix(2) = 2 to_power (1+1) by Def1
+          .= 2 to_power 1 * 2 to_power 1 by POWER:32
+          .= 2 * 2 to_power 1 by POWER:30
+          .= 2 * 2 by POWER:30;
+  then A1:P[2];
+  A2:for kk be Nat st kk >= 2 & P[kk]
+      holds P[kk+1]
+  proof
+    let kk be Nat;
+    assume kk >= 2;
+    assume A3:Radix(kk) >= 2 + 2;
+      Radix(kk) <> 0 by Th9;
+    then A4:Radix(kk) > 0 by NAT_1:19;
+      Radix(kk+1) = 2 to_power (kk+1) by Def1
+               .= 2 to_power kk * 2 to_power 1 by POWER:32
+               .= 2 to_power kk * 2 by POWER:30
+               .= Radix(kk) * 2 by Def1;
+    then Radix(kk+1) >= Radix(kk) by A4,REAL_2:144;
+    hence thesis by A3,AXIOMS:22;
+  end;
+    for k be Nat st k >= 2 holds P[k] from Ind1(A1,A2);
+  hence thesis;
+end;
+
+theorem Th10:
+  for e holds e in 0-SD iff e = 0
+proof
+  let e be set;
+   Radix(0) = 2 to_power(0) by Def1
+             .= 1 by POWER:29;
+then A1:0-SD = {w where w is Element of INT:w <= 1-1 & w >= -1+1} by Def2
+      .= {w where w is Element of INT:w <= 0 & w >= 0};
+  hereby assume e in 0-SD;
+    then consider b be Element of INT such that
+      A2:e = b and
+      A3:b <= 0 & b >= 0 by A1;
+    thus e = 0 by A2,A3;
+  end;
+  assume
+A4:  e = 0;
+  then e is Element of INT by INT_1:def 2;
+  hence thesis by A1,A4;
+end;
+
+theorem
+    0-SD = {0} by Th10,TARSKI:def 1;
+
+theorem Th12:
+  k-SD c= (k+1)-SD
+proof
+  let e be set;
+  assume A1:e in k-SD;
+  A2:(k+1)-SD
+    = {w where w is Element of INT:w <= Radix(k+1)-1 & w >= -Radix(k+1)+1}
+      by Def2;
+    k-SD = {w where w is Element of INT:w <= Radix(k)-1 & w >= -Radix(k)+1}
+  by Def2;
+  then consider g being Element of INT such that
+    A3:e = g and
+    A4:g <= Radix(k)-1 and
+    A5:g >= -Radix(k)+1 by A1;
+  A6:2 to_power k = Radix(k) by Def1;
+    k < k+1 by NAT_1:38;
+  then 2 to_power k < 2 to_power (k+1) by POWER:44;
+  then A7:Radix(k) < Radix(k+1) by A6,Def1;
+  then Radix(k)-1 < Radix(k+1)-1 by REAL_1:54;
+  then A8:g <= Radix(k+1)-1 by A4,AXIOMS:22;
+    -Radix(k) > -Radix(k+1) by A7,REAL_1:50;
+  then -Radix(k)+1 > -Radix(k+1)+1 by REAL_1:53;
+  then g >= -Radix(k+1)+1 by A5,AXIOMS:22;
+  hence thesis by A2,A3,A8;
+end;
+
+theorem Th13:
+  e in k-SD implies e is Integer
+proof
+  assume A1:e in k-SD;
+    k-SD = {w where w is Element of INT:w <= Radix(k)-1 & w >= -Radix(k)+1}
+    by Def2;
+  then consider t be Element of INT such that
+    A2:e = t and
+      t <= Radix(k)-1 & t >= -Radix(k)+1 by A1;
+  thus thesis by A2;
+end;
+
+theorem Th14:
+  k-SD c= INT
+proof
+  let e be set;
+  assume e in k-SD;
+  then e is Integer by Th13;
+  hence thesis by INT_1:12;
+end;
+
+theorem Th15:
+  i1 in k-SD implies i1 <= Radix(k)-1 & i1 >= -Radix(k)+1
+proof
+  assume A1:i1 in k-SD;
+    k-SD = {w where w is Element of INT:w <= Radix(k)-1 & w >= -Radix(k)+1}
+   by Def2;
+  then consider i be Element of INT such that
+    A2:i = i1 and
+    A3:i <= Radix(k)-1 & i >= -Radix(k)+1 by A1;
+  thus thesis by A2,A3;
+end;
+
+theorem Th16:
+  0 in k-SD
+proof
+  defpred P[Nat] means 0 in $1-SD;
+  A1: P[0] by Th10;
+  A2:for k being Nat st P[k] holds P[k+1]
+  proof
+    let kk be Nat;
+    assume A3:0 in kk-SD;
+      kk-SD c= (kk+1)-SD by Th12;
+    hence thesis by A3;
+  end;
+    for k being Nat holds P[k] from Ind(A1,A2);
+  hence thesis;
+end;
+
+definition let k;
+  cluster k-SD -> non empty;
+  coherence by Th16;
+end;
+
+definition let k;
+  redefine func k-SD -> non empty Subset of INT;
+  coherence by Th14;
+end;
+
+begin :: Functions for generating Radix-2^k SD numbers from natural numbers
+      :: and natural numbers from Radix-2^k SD numbers
+
+reserve a for Tuple of n,(k-SD);
+
+canceled;
+
+theorem Th18:
+  i in Seg n implies a.i is Element of k-SD
+proof
+  assume A1:i in Seg n;
+    len a = n by FINSEQ_2:109;
+  then i in dom a by A1,FINSEQ_1:def 3;
+  then a.i in rng a & rng a c= k-SD by FINSEQ_1:def 4,FUNCT_1:def 5;
+  hence thesis;
+end;
+
+definition let i,k,n be Nat, x be Tuple of n,(k-SD);
+  func DigA(x,i) -> Integer equals
+  :Def3:
+    x.i if i in Seg n,
+    0 if i = 0;
+coherence
+  proof
+      i in Seg n implies x.i is Integer
+    proof
+      assume i in Seg n;
+      then x.i is Element of k-SD by Th18;
+      hence thesis by INT_1:def 2;
+    end;
+    hence thesis;
+  end;
+  consistency by FINSEQ_1:3;
+end;
+
+definition let i,k,n be Nat, x be Tuple of n,(k-SD);
+  func DigB(x,i) -> Element of INT equals
+  :Def4:
+    DigA(x,i);
+  coherence by INT_1:def 2;
+end;
+
+theorem Th19:
+  i in Seg n implies DigA(a,i) is Element of k-SD
+proof
+  assume A1:i in Seg n;
+  then a.i = DigA(a,i) by Def3;
+  hence thesis by A1,Th18;
+end;
+
+theorem Th20:
+  for x be Tuple of 1,INT st x/.1 = m holds x = <*m*>
+proof
+  let x be Tuple of 1,INT;
+  assume A1:x/.1 = m;
+  A2:len x = 1 by FINSEQ_2:109;
+  then x/.1 = x.1 by FINSEQ_4:24;
+  hence thesis by A1,A2,FINSEQ_1:57;
+end;
+
+definition let i,k,n be Nat, x be Tuple of n,(k-SD);
+  func SubDigit(x,i,k) -> Element of INT equals
+  :Def5:
+    (Radix(k) |^ (i -'1))*DigB(x,i);
+coherence by INT_1:12;
+end;
+
+definition let n,k be Nat, x be Tuple of n,(k-SD);
+  func DigitSD(x) -> Tuple of n,INT means
+  :Def6:
+    for i be Nat st i in Seg n holds it/.i = SubDigit(x,i,k);
+existence
+  proof
+    deffunc F(Nat)=SubDigit(x,$1,k);
+    consider z being FinSequence of INT such that
+      A1:len z = n and
+      A2:for j be Nat st j in Seg n holds z.j = F(j)
+                                                 from SeqLambdaD;
+    reconsider z as Tuple of n,INT by A1,FINSEQ_2:110;
+    take z;
+    let i;
+    assume A3:i in Seg n;
+    then i in dom z by A1,FINSEQ_1:def 3;
+    hence z/.i = z.i by FINSEQ_4:def 4
+                .= SubDigit(x,i,k) by A2,A3;
+  end;
+uniqueness
+  proof
+    let k1,k2 be Tuple of n,INT such that
+      A4:for i be Nat st i in Seg n holds k1/.i = SubDigit(x,i,k) and
+      A5:for i be Nat st i in Seg n holds k2/.i = SubDigit(x,i,k);
+    A6:len k1 = n & len k2 = n by FINSEQ_2:109;
+      now let j be Nat;
+      assume A7:j in Seg n;
+      then A8:j in dom k1 & j in dom k2 by A6,FINSEQ_1:def 3;
+      then k1.j = k1/.j by FINSEQ_4:def 4
+               .= SubDigit(x,j,k) by A4,A7
+               .= k2/.j by A5,A7
+               .= k2.j by A8,FINSEQ_4:def 4;
+      hence k1.j = k2.j;
+    end;
+    hence k1 = k2 by A6,FINSEQ_2:10;
+  end;
+end;
+
+definition let n,k be Nat, x be Tuple of n,(k-SD);
+  func SDDec(x) -> Integer equals
+  :Def7:
+    Sum DigitSD(x);
+coherence;
+end;
+
+definition let i,k,x be Nat;
+  func DigitDC(x,i,k) -> Element of k-SD equals
+  :Def8:
+    (x mod (Radix(k) |^ i)) div (Radix(k) |^ (i -'1));
+coherence
+  proof
+    set T = Radix(k) |^ i;
+    set S = Radix(k) |^ (i -'1);
+    A1:Radix(k) <> 0 by Th9;
+    then A2:Radix(k) >= 1 by RLVECT_1:99;
+    then A3:T >= 1 by PREPOWER:19;
+      T <> 0 by A2,PREPOWER:19;
+    then A4:T > 0 by NAT_1:19;
+      S <> 0 by A2,PREPOWER:19;
+    then A5:S > 0 by NAT_1:19;
+    then A6:0 div S = 0 by JORDAN4:5;
+    defpred P[Nat] means ($1 mod T) div S is Element of k-SD;
+      0 in k-SD by Th16;
+    then A7: P[0] by A4,A6,GR_CY_1:4;
+    A8:for x being Nat st P[x]
+        holds P[(x+1)]
+    proof
+      let xx be Nat;
+      assume (xx mod T) div S is Element of k-SD;
+        now per cases by A3,AXIOMS:21;
+        suppose A9:T = 1;
+          then (xx+1) mod T = (xx+1) - T*((xx+1) div 1) by GR_CY_2:1
+                           .= (xx+1) - (xx+1) by A9,NAT_2:6
+                           .= 0 by XCMPLX_1:14;
+          then ((xx+1) mod T) div S = 0 by A5,JORDAN4:5;
+        hence thesis by Th16;
+        suppose T > 1;
+            now
+              set X = ((xx+1) mod T) div S;
+              A10:k-SD =
+               {e where e is Element of INT:e <= Radix(k)-1 & e >=
+ -Radix(k)+1} by Def2;
+                Radix(k)-1 >= 0 by A2,SQUARE_1:12;
+              then reconsider R = Radix(k)-1 as Nat by INT_1:16;
+                now per cases by NAT_1:18;
+                suppose A11:i = 0;
+                    Radix(k) |^ i = Radix(k) to_power i by A1,POWER:46
+                               .= 1 by A11,POWER:29;
+                  then ((xx+1) mod T) = (((xx+1)*1) mod 1)
+                                     .= 0 by GROUP_4:101;
+                  then X = 0 by A5,JORDAN4:5;
+                hence thesis by Th16;
+                suppose i > 0;
+                  then X < Radix(k) by A1,Th6;
+                  then X < Radix(k) + 1 - 1 by XCMPLX_1:26;
+                  then X < Radix(k) - 1 + 1 by XCMPLX_1:29;
+                  then A12:X <= R by NAT_1:38;
+ A13:  X is Element of INT by INT_1:def 2;
+                  A14:X >= 0 by NAT_1:18;
+                    -1 >= -Radix(k) by A2,REAL_1:50;
+                  then 0 >= -Radix(k)+1 by REAL_2:109;
+                  then X in k-SD by A10,A12,A13,A14;
+                  hence thesis;
+              end;
+            hence thesis;
+          end;
+        hence thesis;
+      end;
+      hence thesis;
+    end;
+      for x being Nat holds P[x] from Ind(A7,A8);
+    hence thesis;
+  end;
+end;
+
+definition let k,n,x be Nat;
+  func DecSD(x,n,k) -> Tuple of n,(k-SD) means
+  :Def9:
+    for i be Nat st i in Seg n holds DigA(it,i) = DigitDC(x,i,k);
+existence
+  proof
+    deffunc F(Nat)=DigitDC(x,$1,k);
+    consider z being FinSequence of k-SD such that
+      A1: len z = n and
+      A2: for j be Nat st j in Seg n holds z.j = F(j)
+                                                 from SeqLambdaD;
+    reconsider z as Tuple of n,(k-SD) by A1,FINSEQ_2:110;
+    take z;
+    let i;
+    assume A3:i in Seg n;
+    hence DigA(z,i) = z.i by Def3
+                 .= DigitDC(x,i,k) by A2,A3;
+  end;
+uniqueness
+  proof
+    let k1,k2 be Tuple of n,(k-SD) such that
+      A4:for i be Nat st i in Seg n holds DigA(k1,i) = DigitDC(x,i,k) and
+      A5:for i be Nat st i in Seg n holds DigA(k2,i) = DigitDC(x,i,k);
+    A6:len k1 = n & len k2 = n by FINSEQ_2:109;
+      now let j be Nat;
+      assume A7:j in Seg n;
+      then k1.j = DigA(k1,j) by Def3
+               .= DigitDC(x,j,k) by A4,A7
+               .= DigA(k2,j) by A5,A7
+               .= k2.j by A7,Def3;
+      hence k1.j = k2.j;
+    end;
+    hence k1 = k2 by A6,FINSEQ_2:10;
+  end;
+end;
+
+begin :: Definition for carry & data components of Addition
+
+definition let x be Integer;
+  func SD_Add_Carry(x) -> Integer equals
+  :Def10:
+    1 if x > 2,
+    -1 if x < -2
+    otherwise 0;
+coherence;
+consistency by AXIOMS:22;
+end;
+
+theorem Th21:
+  SD_Add_Carry(0) = 0 by Def10;
+
+Lm2:
+  for x be Integer holds -1 <= SD_Add_Carry(x) & SD_Add_Carry(x) <= 1
+proof
+  let x be Integer;
+  per cases;
+  suppose A1:x < -2;
+      -1 <= -1 & -1 <= 1;
+    hence thesis by A1,Def10;
+  suppose -2 <= x & x <= 2;
+    then SD_Add_Carry(x) = 0 by Def10;
+    hence thesis;
+  suppose A2:x > 2;
+      -1 <= 1 & 1 <= 1;
+    hence thesis by A2,Def10;
+end;
+
+definition let x be Integer, k be Nat;
+  func SD_Add_Data(x,k) -> Integer equals
+  :Def11:
+    x - SD_Add_Carry(x)*Radix(k);
+  coherence;
+end;
+
+theorem
+    SD_Add_Data(0,k) = 0
+proof
+    SD_Add_Data(0,k) = 0 - 0*Radix(k) by Def11,Th21
+                  .= 0;
+  hence thesis;
+end;
+
+theorem Th23:
+  k >= 2 & i1 in k-SD & i2 in k-SD implies
+    -Radix(k)+2 <= SD_Add_Data(i1+i2,k) & SD_Add_Data(i1+i2,k) <= Radix(k)-2
+proof
+  assume A1:k >= 2 & i1 in k-SD & i2 in k-SD;
+  then A2:-Radix(k)+1 <= i1 & i1 <= Radix(k)-1 &
+             -Radix(k)+1 <= i2 & i2 <= Radix(k)-1 by Th15;
+  set z = i1+i2;
+  A3: -Radix(k)+1 + (-Radix(k)+1) <= z &
+      z <= Radix(k)-1 + (Radix(k)-1) by A2,REAL_1:55;
+  per cases;
+  suppose A4:z < -2;
+    then SD_Add_Carry(z) = -1 by Def10;
+    then A5:SD_Add_Data(z,k) = z - (-1)*Radix(k) by Def11
+                         .= z - (-Radix(k)) by XCMPLX_1:180
+                         .= z + Radix(k) by XCMPLX_1:151;
+      -Radix(k)+1 + (1 + -Radix(k)) <= z by A2,REAL_1:55;
+    then (-Radix(k)+1+1)+ -Radix(k) <= z by XCMPLX_1:1;
+    then (-Radix(k)+(1+1))+ -Radix(k) <= z by XCMPLX_1:1;
+    then A6: (-Radix(k)+(1+1))-Radix(k) <= z by XCMPLX_0:def 8;
+      z + Radix(k) < -2 + Radix(k) by A4,REAL_1:53;
+    hence thesis by A5,A6,REAL_1:86,XCMPLX_0:def 8;
+  suppose A7:-2 <= z & z <= 2;
+    then SD_Add_Carry(z) = 0 by Def10;
+    then A8:SD_Add_Data(z,k) = z - 0 * Radix(k) by Def11
+                             .= z;
+    A9: Radix(k) >= 2+2 by A1,Lm1;
+    then A10:Radix(k)-2 >= 2 by REAL_1:84;
+      -Radix(k) <= -(2+2) by A9,REAL_1:50;
+    then -Radix(k) <= -2 + -2;
+    then -Radix(k) - -2 <= -2 by REAL_1:86;
+    then -Radix(k) + 2 <= -2 by XCMPLX_1:151;
+    hence thesis by A7,A8,A10,AXIOMS:22;
+  suppose A11:z > 2;
+    then SD_Add_Carry(z) = 1 by Def10;
+    then A12:SD_Add_Data(z,k) = z - 1*Radix(k) by Def11
+                         .= z - Radix(k);
+      z <= Radix(k)-1 + Radix(k) - 1 by A3,XCMPLX_1:29;
+    then z <= Radix(k)-1 + Radix(k) + -1 by XCMPLX_0:def 8;
+    then z <= Radix(k)-1+ -1 + Radix(k) by XCMPLX_1:1;
+    then z <= Radix(k)-1 -1 + Radix(k) by XCMPLX_0:def 8;
+    then A13: z <= Radix(k)-(1 + 1) + Radix(k) by XCMPLX_1:36;
+      z - Radix(k) > 2 - Radix(k) by A11,REAL_1:54;
+    hence thesis by A12,A13,REAL_1:86,XCMPLX_0:def 8;
+end;
+
+begin :: Definition for checking whether or not a natural number can be
+      :: expressed as n digits Radix-2^k SD number
+
+definition let n,x,k be Nat;
+  pred x is_represented_by n,k means
+  :Def12:
+    x < (Radix(k) |^ n);
+end;
+
+theorem Th24:
+  m is_represented_by 1,k implies DigA(DecSD(m,1,k),1) = m
+proof
+  assume m is_represented_by 1,k;
+  then A1:m < Radix(k) |^ 1 by Def12;
+    1 in Seg 1 by FINSEQ_1:3;
+  hence DigA(DecSD(m,1,k),1)
+          = DigitDC(m,1,k) by Def9
+         .= (m mod (Radix(k) |^ 1)) div (Radix(k) |^ (1 -'1)) by Def8
+         .= (m mod (Radix(k) |^ 1)) div (Radix(k) |^ 0) by GOBOARD9:1
+         .= (m mod (Radix(k) |^ 1)) div 1 by NEWTON:9
+         .= m mod (Radix(k) |^ 1) by NAT_2:6
+         .= m by A1,GR_CY_1:4;
+end;
+
+theorem
+    for n st n >= 1 holds
+    for m st m is_represented_by n,k holds m = SDDec(DecSD(m,n,k))
+proof
+  defpred P[Nat] means
+    for m st m is_represented_by $1,k holds m = SDDec(DecSD(m,$1,k));
+  A1:P[1]
+  proof
+    let m;
+    assume A2:m is_represented_by 1,k;
+    A3:1 in Seg 1 by FINSEQ_1:3;
+      SubDigit(DecSD(m,1,k),1,k) = (Radix(k) |^ (1 -'1))*DigB(DecSD(m,1,k),1)
+                                                               by Def5
+                              .= (Radix(k) |^ 0)*DigB(DecSD(m,1,k),1)
+                                                               by GOBOARD9:1
+                              .= 1*DigB(DecSD(m,1,k),1) by NEWTON:9
+                              .= DigA(DecSD(m,1,k),1) by Def4
+                              .= m by A2,Th24;
+    then A4:(DigitSD(DecSD(m,1,k)))/.1 = m by A3,Def6;
+      m is Element of INT by INT_1:def 2;
+    then reconsider M = <*m*> as FinSequence of INT by SCMFSA_7:22;
+    thus SDDec(DecSD(m,1,k)) = Sum (DigitSD(DecSD(m,1,k))) by Def7
+                       .= Sum M by A4,Th20
+                       .= m by RVSUM_1:103;
+  end;
+  A5:for u be Nat st u >= 1 & P[u] holds P[u+1]
+  proof
+    let u be Nat;
+    assume A6:u >= 1 & P[u];
+      p is_represented_by (u+1),k implies p = SDDec(DecSD(p,(u+1),k))
+    proof
+      assume p is_represented_by (u+1),k;
+      then A7:p < Radix(k) |^ (u+1) by Def12;
+      set R = Radix(k) |^ u;
+        Radix(k) <> 0 by Th9;
+      then R <> 0 by PREPOWER:12;
+      then A8:R > 0 by NAT_1:19;
+      then A9:p = R*(p div R) + (p mod R) by NAT_1:47;
+      set M = p mod R;
+      set N = R*(p div R);
+        M < R by A8,NAT_1:46;
+      then M is_represented_by u,k by Def12;
+      then A10:p = SDDec(DecSD(M,u,k)) + N by A6,A9;
+        N is Element of INT by INT_1:def 2;
+      then reconsider NN = <*N*> as FinSequence of INT by SCMFSA_7:22;
+      reconsider DD = DigitSD(DecSD(M,u,k)) as FinSequence of INT;
+      A11:p = Sum DigitSD(DecSD(M,u,k)) + N by A10,Def7
+            .= Sum (DD^NN) by RVSUM_1:104;
+      set I = u + 1;
+      A12:I -' 1 = u by BINARITH:39;
+      then A13:p div R
+                 = (p mod (Radix(k) |^ I)) div (Radix(k) |^ (I -'1))
+                                                 by A7,GR_CY_1:4
+                .= DigitDC(p,(u+1),k) by Def8;
+A14:1 <= u+1 & u+1 <= u+1 by NAT_1:37;
+      then A15:u+1 in Seg (u+1) by FINSEQ_1:3;
+      A16:u+1 <= len (DigitSD(DecSD(p,(u+1),k))) by FINSEQ_2:109;
+      A17:N = (Radix(k) |^ (I -'1))*DigA(DecSD(p,I,k),I) by A12,A13,A15,Def9
+            .= (Radix(k) |^ (I -'1))*DigB(DecSD(p,I,k),I) by Def4
+            .= SubDigit(DecSD(p,(u+1),k),(u+1),k) by Def5
+            .= (DigitSD(DecSD(p,(u+1),k)))/.(u+1) by A15,Def6
+            .= DigitSD(DecSD(p,(u+1),k)).(u+1) by A14,A16,FINSEQ_4:24;
+
+        DigitSD(DecSD(M,u,k))^<*N*> = DigitSD(DecSD(p,(u+1),k))
+      proof
+        A18:N is Element of INT by INT_1:def 2;
+        set z0 = DigitSD(DecSD(M,u,k));
+        reconsider z1 = <*N*> as FinSequence of INT by A18,SCMFSA_7:22;
+        reconsider DD = DigitSD(DecSD(p,(u+1),k)) as FinSequence of INT;
+        reconsider z = z0^z1 as FinSequence of INT;
+        A19:len z = len (DigitSD(DecSD(M,u,k))) + len <*N*> by FINSEQ_1:35
+                 .= u + len <*N*> by FINSEQ_2:109
+                 .= u + 1 by FINSEQ_1:56;
+        A20:len DD = u+1 by FINSEQ_2:109;
+          for i be Nat st 1 <= i & i <= len z holds z/.i = DD/.i
+        proof
+          let i be Nat;
+          assume 1 <= i & i <= len z;
+          then A21:i in Seg (u+1) by A19,FINSEQ_1:3;
+          per cases by A21,FINSEQ_2:8;
+          suppose A22:i in Seg u;
+            A23:M mod (Radix(k) |^ i) = p mod (Radix(k) |^ i)
+            proof
+                i <= u by A22,FINSEQ_1:3;
+              then Radix(k) |^ i divides Radix(k) |^ u by Th7;
+              then consider t being Nat such that
+                A24:Radix(k) |^ u = (Radix(k) |^ i)*t by NAT_1:def 3;
+                Radix(k) <> 0 by Th9;
+              then t <> 0 by A24,PREPOWER:12;
+              hence thesis by A24,Th4;
+            end;
+              len z0 = u by FINSEQ_2:109;
+            then A25:i in dom z0 by A22,FINSEQ_1:def 3;
+            then A26:(z0^z1).i
+              = DigitSD(DecSD(M,u,k)).i by FINSEQ_1:def 7
+             .= (DigitSD(DecSD(M,u,k)))/.i by A25,FINSEQ_4:def 4
+             .= SubDigit(DecSD(M,u,k),i,k) by A22,Def6
+             .= (Radix(k) |^ (i -'1))*DigB(DecSD(M,u,k),i) by Def5
+             .= (Radix(k) |^ (i -'1))*DigA(DecSD(M,u,k),i) by Def4
+             .= (Radix(k) |^ (i -'1))*DigitDC(M,i,k) by A22,Def9
+             .= (Radix(k) |^ (i -'1))*((p mod (Radix(k) |^ i))
+                         div (Radix(k) |^ (i -'1))) by A23,Def8;
+              len DD = u+1 by FINSEQ_2:109;
+            then A27:i in dom DD by A21,FINSEQ_1:def 3;
+            then A28:DD.i = (DigitSD(DecSD(p,(u+1),k)))/.i by FINSEQ_4:def 4
+             .= SubDigit(DecSD(p,(u+1),k),i,k) by A21,Def6
+             .= (Radix(k) |^ (i -'1))*DigB(DecSD(p,(u+1),k),i) by Def5
+             .= (Radix(k) |^ (i -'1))*DigA(DecSD(p,(u+1),k),i) by Def4
+             .= (Radix(k) |^ (i -'1))*DigitDC(p,i,k) by A21,Def9
+             .= (Radix(k) |^ (i -'1))*((p mod (Radix(k) |^ i))
+                         div (Radix(k) |^ (i -'1))) by Def8;
+            A29:DD.i = DD/.i by A27,FINSEQ_4:def 4;
+              i in dom (z0^z1) by A19,A21,FINSEQ_1:def 3;
+          hence thesis by A26,A28,A29,FINSEQ_4:def 4;
+          suppose A30:i = u+1;
+            hence z/.i = z.(u+1) by A14,A19,FINSEQ_4:24
+                   .= (z0^z1).(len z0 + 1) by FINSEQ_2:109
+                   .= DigitSD(DecSD(p,(u+1),k)).(u+1) by A17,FINSEQ_1:59
+                   .= DD/.i by A14,A16,A30,FINSEQ_4:24;
+        end;
+        hence thesis by A19,A20,FINSEQ_5:14;
+      end;
+      hence thesis by A11,Def7;
+    end;
+    hence thesis;
+  end;
+    for u be Nat st u >= 1 holds P[u] from Ind1(A1,A5);
+  hence thesis;
+end;
+
+theorem Th26:
+  k >= 2 & m is_represented_by 1,k & n is_represented_by 1,k implies
+    SD_Add_Carry(DigA(DecSD(m,1,k),1)+DigA(DecSD(n,1,k),1)) = SD_Add_Carry(m+n)
+proof
+  assume A1:k >= 2 & m is_represented_by 1,k & n is_represented_by 1,k;
+  then SD_Add_Carry(DigA(DecSD(m,1,k),1)+DigA(DecSD(n,1,k),1))
+    = SD_Add_Carry(m + DigA(DecSD(n,1,k),1)) by Th24
+   .= SD_Add_Carry(m + n) by A1,Th24;
+  hence thesis;
+end;
+
+Lm3:
+  for i st i in Seg n holds
+    DigA(DecSD(m,n+1,k),i)=DigA(DecSD((m mod (Radix(k) |^ n)),n,k),i)
+proof
+  let i;
+  assume A1:i in Seg n;
+  then A2:1 <= i & i <= n by FINSEQ_1:3;
+  then i <= n+1 by NAT_1:37;
+  then A3:i in Seg (n+1) by A2,FINSEQ_1:3;
+    Radix(k) |^ i divides Radix(k) |^ n by A2,Th7;
+  then consider t be Nat such that
+    A4:Radix(k) |^ n = (Radix(k) |^ i)*t by NAT_1:def 3;
+    Radix(k) <> 0 by Th9;
+  then t <> 0 by A4,PREPOWER:12;
+  then A5:(m mod (Radix(k) |^ n)) mod (Radix(k) |^ i)
+         = m mod (Radix(k) |^ i) by A4,Th4;
+    DigA(DecSD((m mod (Radix(k) |^ n)),n,k),i)
+         = DigitDC((m mod (Radix(k) |^ n)),i,k) by A1,Def9
+        .= (m mod (Radix(k) |^ i)) div (Radix(k) |^ (i -'1)) by A5,Def8
+        .= DigitDC(m,i,k) by Def8
+        .= DigA(DecSD(m,n+1,k),i) by A3,Def9;
+  hence thesis;
+end;
+
+theorem Th27:
+  m is_represented_by (n+1),k implies
+    DigA(DecSD(m,(n+1),k),n+1) = m div (Radix(k) |^ n)
+proof
+  assume A1:m is_represented_by (n+1),k;
+  A2: n+1 in Seg (n+1) by FINSEQ_1:5;
+  A3:m < Radix(k) |^ (n+1) by A1,Def12;
+    DigA(DecSD(m,(n+1),k),n+1)
+    = DigitDC(m,n+1,k) by A2,Def9
+   .= (m mod (Radix(k) |^ (n+1))) div (Radix(k) |^ ((n+1) -'1)) by Def8
+   .= m div (Radix(k) |^ ((n+1) -'1)) by A3,GR_CY_1:4
+   .= m div (Radix(k) |^ n) by BINARITH:39;
+  hence thesis;
+end;
+
+begin :: Definition for Addition operation for a high-speed adder algorithm
+      :: on Radix-2^k SD number
+
+definition let k,i,n be Nat, x,y be Tuple of n,(k-SD);
+  assume A1:i in Seg n & k >= 2;
+  func Add(x,y,i,k) -> Element of k-SD equals
+  :Def13:
+    SD_Add_Data(DigA(x,i)+DigA(y,i),k)
+      + SD_Add_Carry(DigA(x,i -'1)+DigA(y,i -'1));
+coherence
+  proof
+    A2:k-SD = {w where w is Element of INT:w <= Radix(k)-1 & w >=
+ -Radix(k)+1} by Def2;
+    set SDD = SD_Add_Data(DigA(x,i)+DigA(y,i),k);
+    set SDC = SD_Add_Carry(DigA(x,i -'1)+DigA(y,i -'1));
+    A3:DigA(x,i) is Element of k-SD by A1,Th19;
+      DigA(y,i) is Element of k-SD by A1,Th19;
+    then A4:-Radix(k)+2 <= SDD & SDD <= Radix(k)-2 by A1,A3,Th23;
+A5: Radix(k)-2 +1 = Radix(k)-(1+1)+1
+                 .= Radix(k)-1-1+1 by XCMPLX_1:36
+                 .= Radix(k)-1-(1-1) by XCMPLX_1:37
+                 .= Radix(k)-1;
+A6: -Radix(k)+2 +(-1) = -Radix(k)+(1+1)-1 by XCMPLX_0:def 8
+                     .= -Radix(k)+1+1-1 by XCMPLX_1:1
+                     .= -Radix(k)+1 by XCMPLX_1:26;
+A7: SDD + SDC is Element of INT by INT_1:def 2;
+      -1 <= SDC & SDC <= 1 by Lm2;
+    then -Radix(k)+2 +(-1) <= SDD + SDC & SDD + SDC <= Radix(k)-2 + 1
+                                                            by A4,REAL_1:55;
+    then SDD + SDC in k-SD by A2,A5,A6,A7;
+    hence thesis;
+  end;
+end;
+
+definition let n,k be Nat,x,y be Tuple of n,(k-SD);
+  func x '+' y -> Tuple of n,(k-SD) means
+  :Def14:
+    for i st i in Seg n holds DigA(it,i) = Add(x,y,i,k);
+existence
+  proof
+    deffunc F(Nat)= Add(x,y,$1,k);
+    consider z being FinSequence of (k-SD) such that
+      A1: len z = n and
+      A2: for j be Nat st j in Seg n holds z.j = F(j) from SeqLambdaD;
+    reconsider z as Tuple of n,(k-SD) by A1,FINSEQ_2:110;
+    take z;
+    let i;
+    assume A3:i in Seg n;
+    hence DigA(z,i) = z.i by Def3
+                 .= Add(x,y,i,k) by A2,A3;
+  end;
+uniqueness
+  proof
+    let k1,k2 be Tuple of n,(k-SD) such that
+      A4:for i be Nat st i in Seg n holds DigA(k1,i) = Add(x,y,i,k) and
+      A5:for i be Nat st i in Seg n holds DigA(k2,i) = Add(x,y,i,k);
+    A6:len k1 = n & len k2 = n by FINSEQ_2:109;
+      now let j be Nat;
+      assume A7:j in Seg n;
+      then k1.j = DigA(k1,j) by Def3
+          .= Add(x,y,j,k) by A4,A7
+          .= DigA(k2,j) by A5,A7
+          .= k2.j by A7,Def3;
+      hence k1.j = k2.j;
+    end;
+    hence k1 = k2 by A6,FINSEQ_2:10;
+  end;
+end;
+
+theorem Th28:
+  k >= 2 & m is_represented_by 1,k & n is_represented_by 1,k implies
+    SDDec(DecSD(m,1,k)'+'DecSD(n,1,k)) = SD_Add_Data(m+n,k)
+proof
+  assume A1:k >= 2 & m is_represented_by 1,k & n is_represented_by 1,k;
+  set M = DecSD(m,1,k);
+  set N = DecSD(n,1,k);
+
+  A2:1 in Seg 1 by FINSEQ_1:3;
+  then A3:DigA((M '+' N),1)
+    = Add(M,N,1,k) by Def14
+   .= SD_Add_Data(DigA(M,1)+DigA(N,1),k)
+       + SD_Add_Carry(DigA(M,1 -'1)+DigA(N,1 -'1)) by A1,A2,Def13
+   .= SD_Add_Data(DigA(M,1)+DigA(N,1),k)
+       + SD_Add_Carry(DigA(M,0)+DigA(N,1 -'1)) by GOBOARD9:1
+   .= SD_Add_Data(DigA(M,1)+DigA(N,1),k) + SD_Add_Carry(DigA(M,0)+DigA(N,0))
+                                                               by GOBOARD9:1
+   .= SD_Add_Data(DigA(M,1)+DigA(N,1),k) + SD_Add_Carry(0+DigA(N,0)) by Def3
+   .= SD_Add_Data(DigA(M,1)+DigA(N,1),k) + 0 by Def3,Th21
+   .= SD_Add_Data(m+DigA(N,1),k) by A1,Th24
+   .= SD_Add_Data(m+n,k) by A1,Th24;
+  A4:(DigitSD(M '+' N))/.1 = SubDigit((M '+' N),1,k) by A2,Def6
+                       .= (Radix(k) |^ (1 -'1))*DigB((M '+' N),1) by Def5
+                       .= (Radix(k) |^ (1 -'1))*DigA((M '+' N),1) by Def4
+                       .= (Radix(k) |^ 0)*DigA((M '+' N),1) by GOBOARD9:1
+                       .= 1*DigA((M '+' N),1) by NEWTON:9
+                       .= SD_Add_Data(m+n,k) by A3;
+  A5:len (DigitSD(M '+' N)) = 1 by FINSEQ_2:109;
+    1 in Seg 1 by FINSEQ_1:3;
+  then 1 in dom DigitSD(M '+' N) by A5,FINSEQ_1:def 3;
+  then A6:DigitSD(M '+' N).1 = SD_Add_Data(m+n,k) by A4,FINSEQ_4:def 4;
+  reconsider w = SD_Add_Data(m+n,k) as Element of INT by INT_1:def 2;
+    SDDec(M '+' N) = Sum DigitSD(M '+' N) by Def7
+                .= Sum <*w*> by A5,A6,FINSEQ_1:57
+                .= SD_Add_Data(m+n,k) by RVSUM_1:103;
+  hence thesis;
+end;
+
+theorem
+    for n st n >= 1 holds
+    for k,x,y st
+      k >= 2 & x is_represented_by n,k & y is_represented_by n,k holds
+        x + y = (SDDec(DecSD(x,n,k) '+' DecSD(y,n,k)))
+          + (Radix(k) |^ n)*
+            SD_Add_Carry(DigA(DecSD(x,n,k),n)+DigA(DecSD(y,n,k),n))
+proof
+  defpred P[Nat] means
+    for k,x,y be Nat st
+      k >= 2 & x is_represented_by $1,k & y is_represented_by $1,k holds
+        x + y = (SDDec(DecSD(x,$1,k) '+' DecSD(y,$1,k)))+(Radix(k) |^ $1)*
+                 SD_Add_Carry(DigA(DecSD(x,$1,k),$1)+DigA(DecSD(y,$1,k),$1));
+
+A1:P[1]
+  proof
+    let k,x,y be Nat;
+    assume A2:k >= 2 & x is_represented_by 1,k & y is_represented_by 1,k;
+    then A3:SDDec(DecSD(x,1,k)'+'DecSD(y,1,k))
+         = SD_Add_Data(x + y,k) by Th28;
+    A4:SD_Add_Carry(DigA(DecSD(x,1,k),1)+DigA(DecSD(y,1,k),1))
+         = SD_Add_Carry(x+y) by A2,Th26;
+      SD_Add_Data(x + y,k) = x + y - SD_Add_Carry(x+y)*Radix(k) by Def11;
+    then SD_Add_Data(x + y,k) + SD_Add_Carry(x+y)*Radix(k)
+           = x + y -(SD_Add_Carry(x+y)*Radix(k) - SD_Add_Carry(x+y)*Radix(k))
+                                                               by XCMPLX_1:37
+          .= x + y - 0 by XCMPLX_1:14;
+    hence thesis by A3,A4,NEWTON:10;
+  end;
+
+  A5:for n be Nat st n >= 1 & P[n] holds P[n+1]
+  proof
+    let n be Nat;
+    assume A6:n >= 1 & P[n];
+    then n <> 0;
+    then A7: n in Seg n by FINSEQ_1:5;
+    A8: n+1 in Seg (n+1) by FINSEQ_1:5;
+    let k,x,y be Nat;
+    assume A9:k >= 2 &
+           x is_represented_by (n+1),k & y is_represented_by (n+1),k;
+    set x1 = x div (Radix(k) |^ n);
+    set xn = x mod (Radix(k) |^ n);
+    set y1 = y div (Radix(k) |^ n);
+    set yn = y mod (Radix(k) |^ n);
+    set z = DecSD(x,(n+1),k) '+' DecSD(y,(n+1),k);
+    set zn = DecSD(xn,n,k) '+' DecSD(yn,n,k);
+
+    A10:DigA(DecSD(y,(n+1),k),n+1) = y1 by A9,Th27;
+
+      Radix(k) <> 0 by Th9;
+    then Radix(k) > 0 by NAT_1:19;
+    then A11:(Radix(k) |^ n) > 0 by PREPOWER:13;
+    then A12:x = (x div (Radix(k) |^ n))*(Radix(k) |^ n)
+                          + (x mod (Radix(k) |^ n)) by NAT_1:47;
+
+      xn < Radix(k) |^ n & yn < Radix(k) |^ n by A11,NAT_1:46;
+    then A13:xn is_represented_by n,k & yn is_represented_by n,k by Def12;
+
+    A14:SD_Add_Data(x1+y1,k) + SD_Add_Carry(x1+y1)*Radix(k)
+          = x1 + y1 - SD_Add_Carry(x1+y1)*Radix(k)
+              + SD_Add_Carry(x1+y1)*Radix(k) by Def11
+         .= x1 + y1 - (SD_Add_Carry(x1+y1)*Radix(k)
+              - SD_Add_Carry(x1+y1)*Radix(k)) by XCMPLX_1:37
+         .= x1 + y1 - 0 by XCMPLX_1:14;
+    A15:DigitSD(z) = DigitSD(zn)^<*SubDigit(z,n+1,k)*>
+    proof
+      A16:len DigitSD(z) = n+1 by FINSEQ_2:109;
+      A17:len DigitSD(zn) = n by FINSEQ_2:109;
+      A18:len <*SubDigit(z,n+1,k)*> = 1 by FINSEQ_1:56;
+        len (DigitSD(zn)^<*SubDigit(z,n+1,k)*>)
+         = len DigitSD(zn) + len <*SubDigit(z,n+1,k)*> by FINSEQ_1:35
+        .= n+1 by A18,FINSEQ_2:109;
+      then A19:len DigitSD(z) = len (DigitSD(zn)^<*SubDigit(z,n+1,k)*>)
+                                                            by FINSEQ_2:109;
+
+        for i st 1 <= i & i <= len DigitSD(z) holds
+         (DigitSD(z)).i = ((DigitSD(zn))^<*SubDigit(z,n+1,k)*>).i
+      proof
+        let i;
+        assume A20:1 <= i & i <= len DigitSD(z);
+        then A21:i <= n+1 by FINSEQ_2:109;
+        then A22:i in Seg (n+1) by A20,FINSEQ_1:3;
+then A23:      i in dom DigitSD(z) by A16,FINSEQ_1:def 3;
+        A24:i -'1 = i - 1 by A20,SCMFSA_7:3;
+        per cases by A22,FINSEQ_2:8;
+        suppose A25:i in Seg n;
+          then A26:i in dom DigitSD(zn) by A17,FINSEQ_1:def 3;
+          then A27:((DigitSD(zn))^<*SubDigit(z,n+1,k)*>).i
+             = DigitSD(zn).i by FINSEQ_1:def 7
+            .= (DigitSD(zn))/.i by A26,FINSEQ_4:def 4
+            .= SubDigit(zn,i,k) by A25,Def6
+            .= (Radix(k) |^ (i -'1))*DigB(zn,i) by Def5
+            .= (Radix(k) |^ (i -'1))*DigA(zn,i) by Def4
+            .= (Radix(k) |^ (i -'1))
+                *Add(DecSD(xn,n,k),DecSD(yn,n,k),i,k) by A25,Def14
+            .= (Radix(k) |^ (i -'1))
+               *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
+               + DigA(DecSD(yn,n,k),i),k)
+               + SD_Add_Carry(DigA(DecSD(xn,n,k),i -'1)
+               + DigA(DecSD(yn,n,k),i -'1))) by A9,A25,Def13;
+          A28:DigitSD(z).i
+             = (DigitSD(z))/.i by A23,FINSEQ_4:def 4
+            .= SubDigit(z,i,k) by A22,Def6
+            .= (Radix(k) |^ (i -'1))*DigB(z,i) by Def5
+            .= (Radix(k) |^ (i -'1))*DigA(z,i) by Def4
+            .= (Radix(k) |^ (i -'1))
+                *Add(DecSD(x,(n+1),k),DecSD(y,(n+1),k),i,k) by A22,Def14
+            .= (Radix(k) |^ (i -'1))
+               *(SD_Add_Data(DigA(DecSD(x,(n+1),k),i)
+               + DigA(DecSD(y,(n+1),k),i),k)
+               + SD_Add_Carry(DigA(DecSD(x,(n+1),k),i -'1)
+               + DigA(DecSD(y,(n+1),k),i -'1))) by A9,A22,Def13;
+            now per cases by A20,AXIOMS:21;
+            suppose A29:i = 1;
+              then A30:((DigitSD(zn))^<*SubDigit(z,n+1,k)*>).i
+                = (Radix(k) |^ (i -'1))
+                  *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
+                  + DigA(DecSD(yn,n,k),i),k)
+                  + SD_Add_Carry(DigA(DecSD(xn,n,k),i -'1)
+                  + DigA(DecSD(yn,n,k),0))) by A27,GOBOARD9:1
+               .= (Radix(k) |^ (i -'1))
+                  *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
+                  + DigA(DecSD(yn,n,k),i),k)
+                  + SD_Add_Carry(DigA(DecSD(xn,n,k),0)
+                  + DigA(DecSD(yn,n,k),0))) by A29,GOBOARD9:1
+               .= (Radix(k) |^ (i -'1))
+                  *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
+                  + DigA(DecSD(yn,n,k),i),k)
+                  + SD_Add_Carry(DigA(DecSD(xn,n,k),0)
+                  + 0)) by Def3
+               .= (Radix(k) |^ (i -'1))
+                  *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
+                  + DigA(DecSD(yn,n,k),i),k)+0) by Def3,Th21;
+                DigitSD(z).i
+               = (Radix(k) |^ (i -'1))
+                  *(SD_Add_Data(DigA(DecSD(x,(n+1),k),i)
+                  + DigA(DecSD(y,(n+1),k),i),k)
+                  + SD_Add_Carry(DigA(DecSD(x,(n+1),k),i -'1)
+                  + DigA(DecSD(y,(n+1),k),0))) by A28,A29,GOBOARD9:1
+               .= (Radix(k) |^ (i -'1))
+                  *(SD_Add_Data(DigA(DecSD(x,(n+1),k),i)
+                  + DigA(DecSD(y,(n+1),k),i),k)
+                  + SD_Add_Carry(DigA(DecSD(x,(n+1),k),0)
+                  + DigA(DecSD(y,(n+1),k),0))) by A29,GOBOARD9:1
+               .= (Radix(k) |^ (i -'1))
+                  *(SD_Add_Data(DigA(DecSD(x,(n+1),k),i)
+                  + DigA(DecSD(y,(n+1),k),i),k)
+                  + SD_Add_Carry(DigA(DecSD(x,(n+1),k),0)
+                  + 0)) by Def3
+               .= (Radix(k) |^ (i -'1))
+                  *(SD_Add_Data(DigA(DecSD(x,(n+1),k),i)
+                  + DigA(DecSD(y,(n+1),k),i),k)+0) by Def3,Th21
+               .= (Radix(k) |^ (i -'1))
+                  *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
+                  + DigA(DecSD(y,(n+1),k),i),k)) by A25,Lm3
+               .= (Radix(k) |^ (i -'1))
+                  *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
+                  + DigA(DecSD(yn,n,k),i),k)) by A25,Lm3;
+            hence thesis by A30;
+            suppose i > 1;
+              then A31:i -'1 >= 1 by JORDAN3:12;
+                i - 1 <= n by A21,REAL_1:86;
+              then A32:i -'1 in Seg n by A24,A31,FINSEQ_1:3;
+                DigitSD(z).i
+               = (Radix(k) |^ (i -'1))
+                  *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
+                  + DigA(DecSD(y,(n+1),k),i),k)
+                  + SD_Add_Carry(DigA(DecSD(x,(n+1),k),i -'1)
+                  + DigA(DecSD(y,(n+1),k),i -'1))) by A25,A28,Lm3
+               .= (Radix(k) |^ (i -'1))
+                  *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
+                  + DigA(DecSD(yn,n,k),i),k)
+                  + SD_Add_Carry(DigA(DecSD(x,(n+1),k),i -'1)
+                  + DigA(DecSD(y,(n+1),k),i -'1))) by A25,Lm3
+               .= (Radix(k) |^ (i -'1))
+                  *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
+                  + DigA(DecSD(yn,n,k),i),k)
+                  + SD_Add_Carry(DigA(DecSD(xn,n,k),i -'1)
+                  + DigA(DecSD(y,(n+1),k),i -'1))) by A32,Lm3
+               .= (Radix(k) |^ (i -'1))
+                  *(SD_Add_Data(DigA(DecSD(xn,n,k),i)
+                  + DigA(DecSD(yn,n,k),i),k)
+                  + SD_Add_Carry(DigA(DecSD(xn,n,k),i -'1)
+                  + DigA(DecSD(yn,n,k),i -'1))) by A32,Lm3;
+            hence thesis by A27;
+          end;
+        hence thesis;
+        suppose A33:i = n+1;
+          then ((DigitSD(zn))^<*SubDigit(z,n+1,k)*>).i
+         = ((DigitSD(zn))^<*SubDigit(z,n+1,k)*>).((len (DigitSD(zn)))+1)
+                                                     by FINSEQ_2:109
+        .= SubDigit(z,n+1,k) by FINSEQ_1:59
+        .= (DigitSD(z))/.(n+1) by A8,Def6
+        .= DigitSD(z).(n+1) by A23,A33,FINSEQ_4:def 4;
+        hence thesis by A33;
+      end;
+      hence thesis by A19,FINSEQ_1:18;
+    end;
+
+    A34:DigitSD(zn) is FinSequence of INT;
+    A35:SubDigit(z,n+1,k) = (Radix(k) |^ ((n+1)-'1))*DigB(z,(n+1)) by Def5
+                        .= (Radix(k) |^ n)*DigB(z,(n+1)) by BINARITH:39;
+
+      SDDec(z)
+      = Sum(DigitSD(zn)^<*SubDigit(z,n+1,k)*>) by A15,Def7
+  .= (Radix(k) |^ n)*DigB(z,(n+1)) + Sum DigitSD(zn) by A34,A35,RVSUM_1:104
+     .= DigA(z,(n+1))*(Radix(k) |^ n) + Sum DigitSD(zn) by Def4
+     .= Add(DecSD(x,(n+1),k),DecSD(y,(n+1),k),(n+1),k)*(Radix(k) |^ n)
+        + Sum DigitSD(zn) by A8,Def14
+     .= (SD_Add_Data(DigA(DecSD(x,(n+1),k),(n+1))
+        + DigA(DecSD(y,(n+1),k),(n+1)),k)
+        + SD_Add_Carry(DigA(DecSD(x,(n+1),k),(n+1)-'1)
+        + DigA(DecSD(y,(n+1),k),(n+1)-'1)))*(Radix(k) |^ n)
+        + Sum DigitSD(zn) by A8,A9,Def13
+     .= (SD_Add_Data(DigA(DecSD(x,(n+1),k),(n+1))
+        + DigA(DecSD(y,(n+1),k),(n+1)),k)
+        + SD_Add_Carry(DigA(DecSD(x,(n+1),k),(n+1)-'1)
+        + DigA(DecSD(y,(n+1),k),n)))*(Radix(k) |^ n)
+        + Sum DigitSD(zn) by BINARITH:39
+     .= (SD_Add_Data(DigA(DecSD(x,(n+1),k),(n+1))
+        + DigA(DecSD(y,(n+1),k),(n+1)),k)
+        + SD_Add_Carry(DigA(DecSD(x,(n+1),k),n)
+        + DigA(DecSD(y,(n+1),k),n)))*(Radix(k) |^ n)
+        + Sum DigitSD(zn) by BINARITH:39
+     .= (SD_Add_Data(DigA(DecSD(x,(n+1),k),(n+1))
+        + DigA(DecSD(y,(n+1),k),(n+1)),k)
+        + SD_Add_Carry(DigA(DecSD(xn,n,k),n)
+        + DigA(DecSD(y,(n+1),k),n)))*(Radix(k) |^ n)
+        + Sum DigitSD(zn) by A7,Lm3
+     .= (SD_Add_Data(DigA(DecSD(x,(n+1),k),(n+1))
+        + DigA(DecSD(y,(n+1),k),(n+1)),k)
+        + SD_Add_Carry(DigA(DecSD(xn,n,k),n)
+        + DigA(DecSD(yn,n,k),n)))*(Radix(k) |^ n)
+        + Sum DigitSD(zn) by A7,Lm3
+     .= (SD_Add_Data(x1+y1,k)+ SD_Add_Carry(DigA(DecSD(xn,n,k),n)
+        + DigA(DecSD(yn,n,k),n)))*(Radix(k) |^ n)
+        + Sum DigitSD(zn) by A9,A10,Th27
+     .= (SD_Add_Data(x1+y1,k)+ SD_Add_Carry(DigA(DecSD(xn,n,k),n)
+        + DigA(DecSD(yn,n,k),n)))*(Radix(k) |^ n)
+        + SDDec(zn) by Def7
+     .= SD_Add_Data(x1+y1,k)*(Radix(k) |^ n)
+        +SD_Add_Carry(DigA(DecSD(xn,n,k),n)
+        + DigA(DecSD(yn,n,k),n))*(Radix(k) |^ n)
+        + (SDDec(DecSD(xn,n,k) '+' DecSD(yn,n,k))) by XCMPLX_1:8
+     .= SD_Add_Data(x1+y1,k)*(Radix(k) |^ n)
+        + (SD_Add_Carry(DigA(DecSD(xn,n,k),n)+DigA(DecSD(yn,n,k),n))
+        *(Radix(k) |^ n)+(SDDec(DecSD(xn,n,k)'+'DecSD(yn,n,k)))) by XCMPLX_1:1
+     .= SD_Add_Data(x1+y1,k)*(Radix(k) |^ n) + (xn + yn) by A6,A9,A13
+     .= SD_Add_Data(x1+y1,k)*(Radix(k) |^ n) + xn + yn by XCMPLX_1:1;
+    then SDDec(z) + SD_Add_Carry(x1+y1)*(Radix(k) |^ (n+1))
+        = SD_Add_Data(x1+y1,k)*(Radix(k) |^ n) + (xn + yn)
+              + SD_Add_Carry(x1+y1)*(Radix(k) |^ (n+1)) by XCMPLX_1:1
+        .= SD_Add_Data(x1+y1,k)*(Radix(k) |^ n)
+              + SD_Add_Carry(x1+y1)*(Radix(k) |^ (n+1))+ (xn + yn)
+                                                         by XCMPLX_1:1
+        .= SD_Add_Data(x1+y1,k)*(Radix(k) |^ n)
+              + SD_Add_Carry(x1+y1)*(Radix(k) |^ (n+1))+ xn + yn
+                                                         by XCMPLX_1:1
+        .= SD_Add_Data(x1+y1,k)*(Radix(k) |^ n)
+              + SD_Add_Carry(x1+y1)*((Radix(k) |^ n)*Radix(k)) + xn + yn
+                                                        by NEWTON:11
+        .= SD_Add_Data(x1+y1,k)*(Radix(k) |^ n)
+              + SD_Add_Carry(x1+y1)*Radix(k)*(Radix(k) |^ n) + xn + yn
+                                                        by XCMPLX_1:4
+        .= (x1+y1)*(Radix(k) |^ n)+ xn + yn by A14,XCMPLX_1:8
+        .= x1*(Radix(k) |^ n) + y1*(Radix(k) |^ n) + xn + yn by XCMPLX_1:8
+        .= (x1*(Radix(k) |^ n) + xn) + y1*(Radix(k) |^ n) + yn by XCMPLX_1:1
+        .= (x1*(Radix(k) |^ n) + xn) + (y1*(Radix(k) |^ n) + yn) by XCMPLX_1:1
+        .= x + y by A11,A12,NAT_1:47;
+    hence thesis by A9,A10,Th27;
+  end;
+    for n be Nat st n >= 1 holds P[n] from Ind1(A1,A5);
+  hence thesis;
+end;
+

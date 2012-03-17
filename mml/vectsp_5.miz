@@ -1,0 +1,2078 @@
+:: Operations on Subspaces in Vector Space
+::  by Wojciech A. Trybulec
+::
+:: Received July 27, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, BINOP_1, VECTSP_1, LATTICES, RLSUB_1, BOOLE, ARYTM_1,
+      RLSUB_2, FUNCT_1, RELAT_1, TARSKI, MCART_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, BINOP_1, RELAT_1, FUNCT_1,
+      STRUCT_0, LATTICES, RELSET_1, RLVECT_1, VECTSP_1, DOMAIN_1, VECTSP_4;
+ constructors BINOP_1, LATTICES, DOMAIN_1, VECTSP_4, MEMBERED, XBOOLE_0;
+ clusters LATTICES, VECTSP_1, VECTSP_4, STRUCT_0, RLSUB_2, RELSET_1, SUBSET_1,
+      MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions VECTSP_4, TARSKI, XBOOLE_0;
+ theorems BINOP_1, FUNCT_1, FUNCT_2, LATTICES, MCART_1, ORDERS_1, RLSUB_2,
+      TARSKI, VECTSP_1, VECTSP_4, ZFMISC_1, RLVECT_1, RELAT_1, VECTSP_2,
+      XBOOLE_0, XBOOLE_1;
+ schemes BINOP_1, FUNCT_1, ORDERS_2, RELSET_1, XBOOLE_0;
+
+begin
+
+ reserve GF for add-associative right_zeroed right_complementable
+      Abelian associative left_unital distributive (non empty doubleLoopStr);
+ reserve M for Abelian add-associative right_zeroed
+           right_complementable VectSp-like (non empty VectSpStr over GF);
+ reserve W,W1,W2,W3 for Subspace of M;
+ reserve u,u1,u2,v,v1,v2 for Element of M;
+ reserve X,Y,x,y,y1,y2 for set;
+
+ definition let GF; let M; let W1,W2;
+  func W1 + W2 -> strict Subspace of M means
+   :Def1: the carrier of it = {v + u : v in W1 & u in W2};
+  existence
+   proof set VS = {v + u : v in W1 & u in W2};
+         VS c= the carrier of M
+        proof let x be set;
+          assume x in VS;
+           then ex v1,v2 st x = v1 + v2 & v1 in W1 & v2 in W2;
+         hence thesis;
+        end;
+      then reconsider VS as Subset of M;
+         0.M in W1 & 0.M in W2 & 0.M = 0.M + 0.M by RLVECT_1:10,VECTSP_4:25;
+       then A1: 0.M in VS;
+      reconsider V1 = the carrier of W1,
+                 V2 = the carrier of W2 as Subset of M
+                 by VECTSP_4:def 2;
+       A2: VS = {v + u : v in V1 & u in V2}
+        proof
+         thus VS c= {v + u : v in V1 & u in V2}
+          proof let x be set;
+            assume x in VS;
+            then consider v,u such that A3: x = v + u and A4: v in W1 & u in W2
+;
+              v in V1 & u in V2 by A4,RLVECT_1:def 1;
+            hence thesis by A3;
+          end;
+         let x be set;
+         assume x in {v + u : v in V1 & u in V2};
+         then consider v,u such that A5: x = v + u and A6: v in V1 & u in V2;
+           v in W1 & u in W2 by A6,RLVECT_1:def 1;
+         hence thesis by A5;
+        end;
+         V1 is lineary-closed & V2 is lineary-closed by VECTSP_4:41;
+       then VS is lineary-closed by A2,VECTSP_4:9;
+    hence thesis by A1,VECTSP_4:42;
+   end;
+  uniqueness by VECTSP_4:37;
+ end;
+
+ Lm1: W1 + W2 = W2 + W1
+  proof set A = {v + u : v in W1 & u in W2};
+        set B = {v + u : v in W2 & u in W1};
+    A1: the carrier of W1 + W2 = A &
+       the carrier of W2 + W1 = B by Def1;
+    A2: A c= B
+     proof let x be set;
+       assume x in A;
+        then consider v,u such that A3: x = v + u and A4: v in W1 & u in W2;
+      thus thesis by A3,A4;
+     end;
+      B c= A
+     proof let x be set;
+       assume x in B;
+        then consider v,u such that A5: x = v + u and A6: v in W2 & u in W1;
+      thus thesis by A5,A6;
+     end;
+   then A = B by A2,XBOOLE_0:def 10;
+   hence thesis by A1,VECTSP_4:37;
+  end;
+
+ definition let GF; let M; let W1,W2;
+  func W1 /\ W2 -> strict Subspace of M means
+   :Def2: the carrier of it = (the carrier of W1) /\ (the carrier of W2);
+  existence
+   proof set VV = the carrier of M;
+         set VW1 = the carrier of W1;
+         set VW2 = the carrier of W2;
+        VW1 c= VV & VW2 c= VV by VECTSP_4:def 2;
+      then VW1 /\ VW2 c= VV /\ VV by XBOOLE_1:27;
+     then reconsider V1 = VW1, V2 = VW2, V3 = VW1 /\ VW2
+        as Subset of M by VECTSP_4:def 2;
+        0.M in W1 & 0.M in W2 by VECTSP_4:25;
+      then 0.M in VW1 & 0.M in VW2 by RLVECT_1:def 1;
+      then A1: VW1 /\ VW2 <> {} by XBOOLE_0:def 3;
+        V1 is lineary-closed & V2 is lineary-closed by VECTSP_4:41;
+      then V3 is lineary-closed by VECTSP_4:10;
+    hence thesis by A1,VECTSP_4:42;
+   end;
+  uniqueness by VECTSP_4:37;
+  commutativity;
+ end;
+
+canceled 4;
+
+theorem Th5:
+ x in W1 + W2 iff (ex v1,v2 st v1 in W1 & v2 in W2 & x = v1 + v2)
+   proof
+    thus x in W1 + W2 implies (ex v1,v2 st v1 in W1 & v2 in W2 & x = v1 + v2)
+     proof assume x in W1 + W2;
+        then x in the carrier of W1 + W2 by RLVECT_1:def 1;
+        then x in {v + u : v in W1 & u in W2} by Def1;
+       then consider v1,v2 such that A1: x = v1 + v2 & v1 in W1 & v2 in W2;
+      take v1,v2;
+      thus thesis by A1;
+     end;
+     given v1,v2 such that A2: v1 in W1 & v2 in W2 & x = v1 + v2;
+        x in {v + u : v in W1 & u in W2} by A2;
+      then x in the carrier of W1 + W2 by Def1;
+    hence thesis by RLVECT_1:def 1;
+   end;
+
+theorem Th6:
+ v in W1 or v in W2 implies v in W1 + W2
+  proof assume A1: v in W1 or v in W2;
+      now per cases by A1;
+     suppose A2: v in W1;
+         v = v + 0.M & 0.M in W2 by RLVECT_1:10,VECTSP_4:25;
+      hence thesis by A2,Th5;
+     suppose A3: v in W2;
+         v = 0.M + v & 0.M in W1 by RLVECT_1:10,VECTSP_4:25;
+      hence thesis by A3,Th5;
+    end;
+   hence thesis;
+  end;
+
+theorem Th7:
+ x in W1 /\ W2 iff x in W1 & x in W2
+  proof
+      x in W1 /\ W2 iff x in the carrier of W1 /\ W2 by RLVECT_1:def 1;
+    then x in W1 /\ W2 iff
+     x in (the carrier of W1) /\
+         (the carrier of W2) by Def2;
+    then x in W1 /\ W2 iff x in the carrier of W1 &
+         x in the carrier of W2 by XBOOLE_0:def 3;
+   hence thesis by RLVECT_1:def 1;
+  end;
+
+ Lm2: the carrier of W1 c= the carrier of W1 + W2
+  proof let x be set;
+     set A = {v + u : v in W1 & u in W2};
+    assume x in the carrier of W1;
+     then reconsider v = x as Element of W1;
+     reconsider v as Element of M by VECTSP_4:18;
+        v in W1 & 0.M in
+ W2 & v = v + 0.M by RLVECT_1:10,def 1,VECTSP_4:25;
+      then x in A;
+   hence thesis by Def1;
+  end;
+
+ Lm3:
+  for W2 being strict Subspace of M
+  holds the carrier of W1 c= the carrier of W2
+  implies W1 + W2 = W2
+  proof let W2 be strict Subspace of M;
+   assume A1: the carrier of W1 c=
+                   the carrier of W2;
+      the carrier of W1 + W2 = the carrier of W2
+     proof
+      thus the carrier of W1 + W2 c= the carrier of W2
+       proof
+        let x be set;
+         assume x in the carrier of W1 + W2;
+           then x in {v + u : v in W1 & u in W2} by Def1;
+          then consider v,u such that A2: x = v + u and A3: v in W1 and A4: u
+in W2;
+             W1 is Subspace of W2 by A1,VECTSP_4:35;
+           then v in W2 by A3,VECTSP_4:16;
+           then v + u in W2 by A4,VECTSP_4:28;
+        hence thesis by A2,RLVECT_1:def 1;
+       end;
+        W1 + W2 = W2 + W1 by Lm1;
+      hence thesis by Lm2;
+     end;
+   hence thesis by VECTSP_4:37;
+  end;
+
+theorem
+  for W being strict Subspace of M holds W + W = W by Lm3;
+
+theorem
+   W1 + W2 = W2 + W1 by Lm1;
+
+theorem Th10:
+ W1 + (W2 + W3) = (W1 + W2) + W3
+  proof set A = {v + u : v in W1 & u in W2};
+        set B = {v + u : v in W2 & u in W3};
+        set C = {v + u : v in W1 + W2 & u in W3};
+        set D = {v + u : v in W1 & u in W2 + W3};
+    A1: the carrier of W1 + (W2 + W3) = D &
+       the carrier of (W1 + W2) + W3 = C by Def1;
+    A2: D c= C
+     proof let x be set;
+       assume x in D;
+        then consider v,u such that A3: x = v + u and
+                                    A4: v in W1 and A5: u in W2 + W3;
+           u in the carrier of W2 + W3 by A5,RLVECT_1:def 1;
+         then u in B by Def1;
+        then consider u1,u2 such that A6: u = u1 + u2 and
+                                      A7: u1 in W2 and A8: u2 in W3;
+         A9: v + u = (v + u1) + u2 by A6,RLVECT_1:def 6;
+           v + u1 in A by A4,A7;
+         then v + u1 in the carrier of W1 + W2 by Def1;
+         then v + u1 in W1 + W2 by RLVECT_1:def 1;
+      hence thesis by A3,A8,A9;
+     end;
+      C c= D
+     proof let x be set;
+       assume x in C;
+        then consider v,u such that A10: x = v + u and
+                                    A11: v in W1 + W2 and A12: u in W3;
+           v in the carrier of W1 + W2 by A11,RLVECT_1:def 1;
+         then v in A by Def1;
+        then consider u1,u2 such that A13: v = u1 + u2 and
+                                      A14: u1 in W1 and A15: u2 in W2;
+         A16: v + u =u1 + (u2 + u) by A13,RLVECT_1:def 6;
+           u2 + u in B by A12,A15;
+         then u2 + u in the carrier of W2 + W3 by Def1;
+         then u2 + u in W2 + W3 by RLVECT_1:def 1;
+      hence thesis by A10,A14,A16;
+     end;
+    then D = C by A2,XBOOLE_0:def 10;
+   hence thesis by A1,VECTSP_4:37;
+  end;
+
+theorem Th11:
+ W1 is Subspace of W1 + W2 & W2 is Subspace of W1 + W2
+  proof the carrier of W1 c=
+        the carrier of W1 + W2 by Lm2;
+   hence W1 is Subspace of W1 + W2 by VECTSP_4:35;
+      the carrier of W2 c= the carrier of W2 + W1 by Lm2;
+    then the carrier of W2 c=
+         the carrier of W1 + W2 by Lm1;
+   hence thesis by VECTSP_4:35;
+  end;
+
+theorem Th12:
+ for W2 being strict Subspace of M
+ holds W1 is Subspace of W2 iff W1 + W2 = W2
+  proof let W2 be strict Subspace of M;
+   thus W1 is Subspace of W2 implies W1 + W2 = W2
+    proof assume W1 is Subspace of W2;
+      then the carrier of W1 c=
+           the carrier of W2 by VECTSP_4:def 2;
+     hence thesis by Lm3;
+    end;
+   thus thesis by Th11;
+  end;
+
+theorem Th13:
+ for W being strict Subspace of M
+ holds (0).M + W = W & W + (0).M = W
+  proof let W be strict Subspace of M;
+      (0).M is Subspace of W by VECTSP_4:50;
+    then the carrier of (0).M c=
+         the carrier of W by VECTSP_4:def 2;
+   hence (0).M + W = W by Lm3;
+   hence thesis by Lm1;
+  end;
+
+Lm4:
+ for W ex W' being strict Subspace of M st
+  the carrier of W = the carrier of W'
+ proof let W;
+  take W' = W + W;
+  thus the carrier of W c= the carrier of W'
+   by Lm2;
+  let x be set;
+  assume x in the carrier of W';
+  then x in {v + u : v in W & u in W} by Def1;
+  then ex v1,v2 st x = v1 + v2 & v1 in W & v2 in W;
+  then x in W by VECTSP_4:28;
+  hence x in the carrier of W by RLVECT_1:def 1;
+ end;
+
+Lm5:
+ for W,W',W1 being Subspace of M st
+  the carrier of W = the carrier of W'
+ holds W1 + W = W1 + W' & W + W1 = W' + W1
+ proof
+  let W,W',W1 be Subspace of M such that
+A1: the carrier of W = the carrier of W';
+  A2: now
+   set W1W = {v1 + v2 : v1 in W1 & v2 in W};
+   set W1W' = {v1 + v2 : v1 in W1 & v2 in W'};
+   let v;
+   thus v in W1 + W implies v in W1 + W'
+    proof assume v in W1 + W;
+     then v in the carrier of W1 + W by RLVECT_1:def 1;
+     then v in W1W by Def1;
+     then consider v1,v2 such that
+A3:    v = v1 + v2 and
+A4:    v1 in W1 and
+A5:    v2 in W;
+       v2 in the carrier of W' by A1,A5,RLVECT_1:def 1;
+     then v2 in W' by RLVECT_1:def 1;
+     then v in W1W' by A3,A4;
+     then v in the carrier of W1 + W' by Def1;
+     hence thesis by RLVECT_1:def 1;
+    end;
+   assume v in W1 + W';
+   then v in the carrier of W1 + W' by RLVECT_1:def 1;
+   then v in W1W' by Def1;
+   then consider v1,v2 such that
+A6:  v = v1 + v2 and
+A7:  v1 in W1 and
+A8:  v2 in W';
+     v2 in the carrier of W by A1,A8,RLVECT_1:def 1;
+   then v2 in W by RLVECT_1:def 1;
+   then v in W1W by A6,A7;
+   then v in the carrier of W1 + W by Def1;
+   hence v in W1 + W by RLVECT_1:def 1;
+  end;
+  hence
+   W1 + W = W1 + W' by VECTSP_4:38;
+    W1 + W = W + W1 & W1 + W' = W' + W1 by Lm1;
+  hence thesis by A2,VECTSP_4:38;
+ end;
+
+Lm6: for W being Subspace of M holds W is Subspace of (Omega).M
+ proof let W be Subspace of M;
+A1:  the VectSpStr of M = (Omega).M by VECTSP_4:def 4;
+  hence the carrier of W c= the carrier of (Omega).M
+    by VECTSP_4:def 2;
+  thus thesis by A1,VECTSP_4:def 2;
+ end;
+
+theorem Th14:
+ (0).M + (Omega).M = the VectSpStr of M & (Omega).
+M + (0).M = the VectSpStr of M
+  proof
+    consider W' being strict Subspace of M such that
+A1: the carrier of W' = the carrier of (Omega).M;
+A2:  W' is Subspace of (Omega).M & the VectSpStr of M = (Omega).M
+      by Lm6,VECTSP_4:def 4;
+   thus (0).M + (Omega).M = (0).M + W' by A1,Lm5
+                     .= W' by Th13
+                     .= the VectSpStr of M by A1,A2,VECTSP_4:39;
+   hence thesis by Lm1;
+  end;
+
+theorem Th15:
+ (Omega).M + W = the VectSpStr of M & W + (Omega).M = the VectSpStr of M
+  proof
+    consider W' being strict Subspace of M such that
+A1:  the carrier of W' = the carrier of (Omega).M;
+A2:  the VectSpStr of M = (Omega).M by VECTSP_4:def 4;
+then A3: the carrier of W c=
+         the carrier of W' by A1,VECTSP_4:def 2;
+A4:   W' is Subspace of (Omega).M by Lm6;
+      W + (Omega).M = W + W' by A1,Lm5
+                  .= W' by A3,Lm3
+                  .= the VectSpStr of M by A1,A2,A4,VECTSP_4:39;
+   hence thesis by Lm1;
+  end;
+
+theorem
+   for M being strict Abelian add-associative right_zeroed
+               right_complementable VectSp-like (non empty VectSpStr over GF)
+ holds (Omega).M + (Omega).M = M by Th15;
+
+theorem
+   for W being strict Subspace of M
+ holds W /\ W = W
+  proof let W be strict Subspace of M;
+     the carrier of W =
+    (the carrier of W) /\ (the carrier of W);
+   hence thesis by Def2;
+  end;
+
+theorem
+   W1 /\ W2 = W2 /\ W1;
+
+theorem Th19:
+ W1 /\ (W2 /\ W3) = (W1 /\ W2) /\ W3
+  proof
+        set V1 = the carrier of W1;
+        set V2 = the carrier of W2;
+        set V3 = the carrier of W3;
+      the carrier of W1 /\ (W2 /\ W3) = V1 /\ (the carrier of W2 /\ W3) by Def2
+        .= V1 /\ (V2 /\ V3) by Def2
+        .= (V1 /\ V2) /\ V3 by XBOOLE_1:16
+        .= (the carrier of W1 /\ W2) /\ V3 by Def2;
+   hence thesis by Def2;
+  end;
+
+Lm7: the carrier of W1 /\ W2 c= the carrier of W1
+ proof
+     the carrier of W1 /\ W2 =
+   (the carrier of W1) /\ (the carrier of W2) by Def2;
+  hence thesis by XBOOLE_1:17;
+ end;
+
+theorem Th20:
+ W1 /\ W2 is Subspace of W1 & W1 /\ W2 is Subspace of W2
+  proof the carrier of W1 /\ W2 c=
+        the carrier of W1 by Lm7;
+   hence W1 /\ W2 is Subspace of W1 by VECTSP_4:35;
+      the carrier of W2 /\ W1 c= the carrier of W2 by Lm7;
+   hence thesis by VECTSP_4:35;
+  end;
+
+Lm8:
+ for W,W',W1 being Subspace of M st
+  the carrier of W = the carrier of W'
+ holds W1 /\ W = W1 /\ W' & W /\ W1 = W' /\ W1
+ proof
+  let W,W',W1 be Subspace of M such that
+A1: the carrier of W = the carrier of W';
+  A2: now
+   thus the carrier of W1 /\ W
+     = (the carrier of W1) /\ (the carrier of W')
+        by A1,Def2
+    .= the carrier of W1 /\ W' by Def2;
+  end;
+  hence
+   W1 /\ W = W1 /\ W' by VECTSP_4:37;
+  thus thesis by A2,VECTSP_4:37;
+ end;
+
+theorem Th21:
+ (for W1 being strict Subspace of M
+  holds W1 is Subspace of W2 implies W1 /\ W2 = W1) &
+ for W1 st W1 /\ W2 = W1 holds W1 is Subspace of W2
+  proof
+   thus for W1 being strict Subspace of M
+     holds W1 is Subspace of W2 implies W1 /\ W2 = W1
+    proof let W1 be strict Subspace of M;
+      assume W1 is Subspace of W2;
+       then A1: the carrier of W1 c=
+               the carrier of W2 by VECTSP_4:def 2;
+         the carrier of W1 /\ W2 =
+        (the carrier of W1) /\ (the carrier of W2) by Def2;
+       then the carrier of W1 /\ W2 =
+            the carrier of W1 by A1,XBOOLE_1:28;
+     hence thesis by VECTSP_4:37;
+    end;
+   thus thesis by Th20;
+  end;
+
+theorem
+   W1 is Subspace of W2 implies W1 /\ W3 is Subspace of W2 /\ W3
+  proof assume A1: W1 is Subspace of W2;
+   set A1 = the carrier of W1;
+   set A2 = the carrier of W2;
+   set A3 = the carrier of W3;
+   set A4 = the carrier of W1 /\ W3;
+      A1 c= A2 by A1,VECTSP_4:def 2;
+    then A1 /\ A3 c= A2 /\ A3 by XBOOLE_1:26;
+    then A4 c= A2 /\ A3 by Def2;
+    then A4 c= the carrier of W2 /\ W3 by Def2;
+   hence thesis by VECTSP_4:35;
+  end;
+
+theorem
+   W1 is Subspace of W3 implies W1 /\ W2 is Subspace of W3
+  proof assume A1: W1 is Subspace of W3;
+     W1 /\ W2 is Subspace of W1 by Th20;
+   hence thesis by A1,VECTSP_4:34;
+  end;
+
+theorem
+   W1 is Subspace of W2 & W1 is Subspace of W3 implies
+  W1 is Subspace of W2 /\ W3
+   proof assume A1: W1 is Subspace of W2 & W1 is Subspace of W3;
+       now let v;
+      assume v in W1;
+       then v in W2 & v in W3 by A1,VECTSP_4:16;
+     hence v in W2 /\ W3 by Th7;
+    end;
+   hence thesis by VECTSP_4:36;
+ end;
+
+theorem Th25:
+ (0).M /\ W = (0).M & W /\ (0).M = (0).M
+  proof
+    A1: the carrier of (0).M /\ W
+           = (the carrier of (0).M) /\
+             (the carrier of W) by Def2
+          .= {0.M} /\ (the carrier of W) by VECTSP_4:def 3;
+      0.M in W by VECTSP_4:25;
+    then 0.M in the carrier of W by RLVECT_1:def 1;
+    then {0.M} c= the carrier of W by ZFMISC_1:37;
+    then A2: {0.M} /\ (the carrier of W) = {0.M} &
+         the carrier of (0).M = {0.M} by VECTSP_4:def 3,XBOOLE_1:28;
+   hence (0).M /\ W = (0).M by A1,VECTSP_4:37;
+   thus thesis by A1,A2,VECTSP_4:37;
+  end;
+
+canceled;
+
+theorem Th27:
+ for W being strict Subspace of M
+ holds (Omega).M /\ W = W & W /\ (Omega).M = W
+  proof let W be strict Subspace of M;
+    A1: the carrier of (Omega).M /\ W =
+     (the carrier of (Omega).M) /\ (the carrier of W) by Def2
+  .= (the carrier of the VectSpStr of M) /\
+      (the carrier of W) by VECTSP_4:def 4;
+      the carrier of W c= the carrier of M by VECTSP_4:def 2;
+    then A2: the carrier of (Omega).M /\ W =
+         the carrier of W by A1,XBOOLE_1:28;
+   hence (Omega).M /\ W = W by VECTSP_4:37;
+   thus thesis by A2,VECTSP_4:37;
+  end;
+
+theorem
+   for M being strict Abelian add-associative right_zeroed
+              right_complementable VectSp-like (non empty VectSpStr over GF)
+ holds (Omega).M /\ (Omega).M = M
+  proof let M be strict Abelian add-associative right_zeroed
+               right_complementable VectSp-like (non empty VectSpStr over GF);
+    consider W' being strict Subspace of M such that
+A1: the carrier of W' = the carrier of (Omega).M;
+A2:     M = (Omega).M by VECTSP_4:def 4;
+   thus (Omega).M /\ (Omega).M = (Omega).M /\ W' by A1,Lm8
+                     .= W' by Th27
+                     .= M by A1,A2,VECTSP_4:39;
+  end;
+
+Lm9: the carrier of W1 /\ W2 c= the carrier of W1 + W2
+ proof the carrier of W1 /\ W2 c= the carrier of W1 &
+       the carrier of W1 c= the carrier of W1 + W2 by Lm2,Lm7;
+  hence thesis by XBOOLE_1:1;
+ end;
+
+theorem
+   W1 /\ W2 is Subspace of W1 + W2
+  proof the carrier of W1 /\ W2 c=
+        the carrier of W1 + W2 by Lm9;
+   hence thesis by VECTSP_4:35;
+  end;
+
+Lm10: the carrier of (W1 /\ W2) + W2 =
+     the carrier of W2
+ proof
+  thus the carrier of (W1 /\ W2) + W2 c=
+   the carrier of W2
+    proof let x be set;
+      assume x in the carrier of (W1 /\ W2) + W2;
+        then x in {u + v : u in W1 /\ W2 & v in W2} by Def1;
+       then consider u,v such that A1: x = u + v and
+                                   A2: u in W1 /\ W2 and A3: v in W2;
+          u in W2 by A2,Th7;
+        then u + v in W2 by A3,VECTSP_4:28;
+     hence thesis by A1,RLVECT_1:def 1;
+    end;
+  let x be set;
+   assume A4: x in the carrier of W2;
+      the carrier of W2 c=
+    the carrier of W2 + (W1 /\ W2) by Lm2;
+    then the carrier of W2 c=
+         the carrier of (W1 /\ W2) + W2 by Lm1;
+  hence thesis by A4;
+ end;
+
+theorem Th30:
+ for W2 being strict Subspace of M
+ holds (W1 /\ W2) + W2 = W2
+  proof let W2 be strict Subspace of M;
+      the carrier of (W1 /\ W2) + W2 = the carrier of W2 by Lm10;
+   hence thesis by VECTSP_4:37;
+  end;
+
+Lm11: the carrier of W1 /\ (W1 + W2) = the carrier of W1
+ proof
+  thus the carrier of W1 /\ (W1 + W2) c=
+       the carrier of W1
+   proof let x be set;
+     assume A1: x in the carrier of W1 /\ (W1 + W2);
+        the carrier of W1 /\ (W1 + W2) =
+         (the carrier of W1) /\
+         (the carrier of W1 + W2) by Def2;
+    hence thesis by A1,XBOOLE_0:def 3;
+   end;
+  let x be set;
+   assume A2: x in the carrier of W1;
+       the carrier of W1 c= the carrier of M by VECTSP_4:def 2;
+    then reconsider x1 = x as Element of M by A2;
+       x1 + 0.M = x1 & 0.M in W2 & x in W1 by A2,RLVECT_1:10,def 1,VECTSP_4:25;
+     then x in {u + v : u in W1 & v in W2};
+     then x in the carrier of W1 + W2 by Def1;
+     then x in (the carrier of W1) /\
+              (the carrier of W1 + W2) by A2,XBOOLE_0:def 3;
+  hence thesis by Def2;
+ end;
+
+theorem Th31:
+ for W1 being strict Subspace of M
+ holds W1 /\ (W1 + W2) = W1
+  proof let W1 be strict Subspace of M;
+      the carrier of W1 /\ (W1 + W2) =
+    the carrier of W1 by Lm11;
+   hence thesis by VECTSP_4:37;
+  end;
+
+Lm12: the carrier of (W1 /\ W2) + (W2 /\ W3) c=
+     the carrier of W2 /\ (W1 + W3)
+ proof
+  let x be set;
+   assume x in the carrier of (W1 /\ W2) + (W2 /\ W3);
+     then x in {u + v : u in W1 /\ W2 & v in W2 /\ W3} by Def1;
+    then consider u,v such that A1: x = u + v and
+                                A2: u in W1 /\ W2 & v in W2 /\ W3;
+       u in W1 & u in W2 & v in W2 & v in W3 by A2,Th7;
+     then x in W1 + W3 & x in W2 by A1,Th5,VECTSP_4:28;
+     then x in W2 /\ (W1 + W3) by Th7;
+  hence thesis by RLVECT_1:def 1;
+ end;
+
+theorem
+   (W1 /\ W2) + (W2 /\ W3) is Subspace of W2 /\ (W1 + W3)
+  proof
+      the carrier of (W1 /\ W2) + (W2 /\ W3) c=
+    the carrier of W2 /\ (W1 + W3) by Lm12;
+   hence thesis by VECTSP_4:35;
+  end;
+
+Lm13: W1 is Subspace of W2 implies
+      the carrier of W2 /\ (W1 + W3) =
+      the carrier of (W1 /\ W2) + (W2 /\ W3)
+ proof assume A1: W1 is Subspace of W2;
+  thus the carrier of W2 /\ (W1 + W3) c=
+       the carrier of (W1 /\ W2) + (W2 /\ W3)
+   proof let x be set;
+     assume x in the carrier of W2 /\ (W1 + W3);
+      then A2: x in (the carrier of W2) /\
+                  (the carrier of W1 + W3) by Def2;
+      then x in the carrier of W1 + W3 by XBOOLE_0:def 3;
+      then x in {u + v : u in W1 & v in W3} by Def1;
+     then consider u1,v1 such that A3: x = u1 + v1 and
+                                   A4: u1 in W1 and A5: v1 in W3;
+      A6: u1 in W2 by A1,A4,VECTSP_4:16;
+      then A7: u1 in W1 /\ W2 by A4,Th7;
+        x in the carrier of W2 by A2,XBOOLE_0:def 3;
+      then u1 + v1 in W2 by A3,RLVECT_1:def 1;
+      then (v1 + u1) - u1 in W2 by A6,VECTSP_4:31;
+      then v1 + (u1 - u1) in W2 by RLVECT_1:42;
+      then v1 + 0.M in W2 by VECTSP_1:66;
+      then v1 in W2 by RLVECT_1:10;
+      then v1 in W2 /\ W3 by A5,Th7;
+      then x in (W1 /\ W2) + (W2 /\ W3) by A3,A7,Th5;
+    hence thesis by RLVECT_1:def 1;
+   end;
+ thus thesis by Lm12;
+end;
+
+theorem Th33:
+ W1 is Subspace of W2 implies W2 /\ (W1 + W3) = (W1 /\ W2) + (W2 /\ W3)
+  proof
+    assume W1 is Subspace of W2;
+    then the carrier of W2 /\ (W1 + W3) =
+         the carrier of (W1 /\ W2) + (W2 /\ W3) by Lm13;
+   hence thesis by VECTSP_4:37;
+  end;
+
+Lm14: the carrier of W2 + (W1 /\ W3) c=
+        the carrier of (W1 + W2) /\ (W2 + W3)
+   proof let x be set;
+     assume x in the carrier of W2 + (W1 /\ W3);
+       then x in {u + v : u in W2 & v in W1 /\ W3} by Def1;
+      then consider u,v such that A1: x = u + v and
+                                  A2: u in W2 and A3: v in W1 /\ W3;
+         v in W1 & v in W3 & x = v + u by A1,A3,Th7;
+       then x in {v1 + v2 : v1 in W1 & v2 in W2} &
+            x in {u1 + u2 : u1 in W2 & u2 in W3} by A2;
+       then x in the carrier of W1 + W2 &
+            x in the carrier of W2 + W3 by Def1;
+       then x in (the carrier of W1 + W2) /\
+                (the carrier of W2 + W3) by XBOOLE_0:def 3;
+    hence thesis by Def2;
+   end;
+
+theorem
+   W2 + (W1 /\ W3) is Subspace of (W1 + W2) /\ (W2 + W3)
+  proof the carrier of W2 + (W1 /\ W3) c=
+        the carrier of (W1 + W2) /\ (W2 + W3) by Lm14;
+   hence thesis by VECTSP_4:35;
+  end;
+
+Lm15: W1 is Subspace of W2 implies
+        the carrier of W2 + (W1 /\ W3) =
+         the carrier of (W1 + W2) /\ (W2 + W3)
+ proof assume A1: W1 is Subspace of W2;
+   reconsider V2 = the carrier of W2 as Subset of M
+      by VECTSP_4:def 2;
+  thus the carrier of W2 + (W1 /\ W3) c=
+       the carrier of (W1 + W2) /\ (W2 + W3) by Lm14;
+  let x be set;
+   assume x in the carrier of (W1 + W2) /\ (W2 + W3);
+     then x in (the carrier of W1 + W2) /\
+              (the carrier of W2 + W3) by Def2;
+     then x in the carrier of W1 + W2 by XBOOLE_0:def 3;
+     then x in {u1 + u2 : u1 in W1 & u2 in W2} by Def1;
+    then consider u1,u2 such that A2: x = u1 + u2 and
+                                  A3: u1 in W1 and A4: u2 in W2;
+     A5: u1 in the carrier of W1 by A3,RLVECT_1:def 1;
+     A6: u2 in the carrier of W2 by A4,RLVECT_1:def 1;
+       the carrier of W1 c= the carrier of W2 by A1,VECTSP_4:def 2;
+     then u1 in the carrier of W2 & V2 is lineary-closed by A5,VECTSP_4:41;
+     then u1 + u2 in V2 by A6,VECTSP_4:def 1;
+     then A7: u1 + u2 in W2 by RLVECT_1:def 1;
+     A8: 0.M in W1 /\ W3 by VECTSP_4:25;
+       (u1 + u2) + 0.M = u1 + u2 by RLVECT_1:10;
+     then x in {u + v : u in W2 & v in W1 /\ W3} by A2,A7,A8;
+  hence thesis by Def1;
+ end;
+
+theorem
+   W1 is Subspace of W2 implies W2 + (W1 /\ W3) = (W1 + W2) /\ (W2 + W3)
+  proof
+   assume W1 is Subspace of W2;
+    then the carrier of W2 + (W1 /\ W3) =
+         the carrier of (W1 + W2) /\ (W2 + W3) by Lm15;
+   hence thesis by VECTSP_4:37;
+  end;
+
+theorem Th36:
+ for W1 being strict Subspace of M
+ holds W1 is Subspace of W3 implies W1 + (W2 /\ W3) = (W1 + W2) /\ W3
+  proof let W1 be strict Subspace of M;
+   assume A1: W1 is Subspace of W3;
+   hence (W1 + W2) /\ W3 = (W1 /\ W3) + (W3 /\ W2) by Th33
+                      .= W1 + (W2 /\ W3) by A1,Th21;
+  end;
+
+theorem
+   for W1,W2 being strict Subspace of M
+ holds W1 + W2 = W2 iff W1 /\ W2 = W1
+  proof let W1,W2 be strict Subspace of M;
+      (W1 + W2 = W2 iff W1 is Subspace of W2) &
+    (W1 /\ W2 = W1 iff W1 is Subspace of W2) by Th12,Th21;
+   hence thesis;
+  end;
+
+theorem
+   for W2,W3 being strict Subspace of M
+ holds W1 is Subspace of W2 implies W1 + W3 is Subspace of W2 + W3
+  proof let W2,W3 be strict Subspace of M;
+   assume A1: W1 is Subspace of W2;
+      (W1 + W3) + (W2 + W3) = (W1 + W3) + (W3 + W2) by Lm1
+                         .= ((W1 + W3) + W3) + W2 by Th10
+                         .= (W1 + (W3 + W3)) + W2 by Th10
+                         .= (W1 + W3) + W2 by Lm3
+                         .= W1 + (W3 + W2) by Th10
+                         .= W1 + (W2 + W3) by Lm1
+                         .= (W1 + W2) + W3 by Th10
+                         .= W2 + W3 by A1,Th12;
+   hence thesis by Th12;
+  end;
+
+theorem
+   W1 is Subspace of W2 implies W1 is Subspace of W2 + W3
+ proof assume A1: W1 is Subspace of W2;
+     W2 is Subspace of W2 + W3 by Th11;
+  hence thesis by A1,VECTSP_4:34;
+ end;
+
+theorem
+   W1 is Subspace of W3 & W2 is Subspace of W3 implies
+       W1 + W2 is Subspace of W3
+ proof assume A1: W1 is Subspace of W3 & W2 is Subspace of W3;
+     now let v;
+     assume v in W1 + W2;
+      then consider v1,v2 such that A2: v1 in W1 & v2 in W2 and A3: v = v1 + v2
+                                                                       by Th5;
+         v1 in W3 & v2 in W3 by A1,A2,VECTSP_4:16;
+    hence v in W3 by A3,VECTSP_4:28;
+   end;
+  hence thesis by VECTSP_4:36;
+ end;
+
+theorem
+   (ex W st the carrier of W =
+  (the carrier of W1) \/ (the carrier of W2)) iff
+   W1 is Subspace of W2 or W2 is Subspace of W1
+   proof
+     set VW1 = the carrier of W1;
+     set VW2 = the carrier of W2;
+    thus (ex W st the carrier of W =
+       (the carrier of W1) \/ (the carrier of W2))
+        implies W1 is Subspace of W2 or W2 is Subspace of W1
+     proof given W such that
+        A1: the carrier of W = (the carrier of W1) \/ (the carrier of W2);
+        set VW = the carrier of W;
+       assume not W1 is Subspace of W2 & not W2 is Subspace of W1;
+         then A2: not VW1 c= VW2 & not VW2 c= VW1 by VECTSP_4:35;
+        then consider x being set such that A3: x in VW1 and A4: not x in VW2
+                                                   by TARSKI:def 3;
+        consider y being set such that A5: y in VW2 and A6: not y in VW1
+                                                   by A2,TARSKI:def 3;
+        reconsider x as Element of VW1 by A3;
+        reconsider x as Element of M by VECTSP_4:18;
+        reconsider y as Element of VW2 by A5;
+        reconsider y as Element of M by VECTSP_4:18;
+        reconsider A1 = VW as Subset of M by VECTSP_4:def 2;
+           x in VW & y in
+ VW & A1 is lineary-closed by A1,VECTSP_4:41,XBOOLE_0:def 2;
+         then A7: x + y in VW by VECTSP_4:def 1;
+         A8: now assume A9: x + y in VW1;
+           reconsider A2 = VW1 as Subset of M by VECTSP_4:def 2;
+              A2 is lineary-closed by VECTSP_4:41;
+            then (y + x) - x in VW1 by A9,VECTSP_4:6;
+            then y + (x - x) in VW1 by RLVECT_1:42;
+            then y + 0.M in VW1 by VECTSP_1:66;
+          hence contradiction by A6,RLVECT_1:10;
+         end;
+           now assume A10: x + y in VW2;
+           reconsider A2 = VW2 as Subset of M by VECTSP_4:def 2;
+              A2 is lineary-closed by VECTSP_4:41;
+            then (x + y) - y in VW2 by A10,VECTSP_4:6;
+            then x + (y - y) in VW2 by RLVECT_1:42;
+            then x + 0.M in VW2 by VECTSP_1:66;
+          hence contradiction by A4,RLVECT_1:10;
+         end;
+      hence thesis by A1,A7,A8,XBOOLE_0:def 2;
+     end;
+     assume A11: W1 is Subspace of W2 or W2 is Subspace of W1;
+      A12: now assume W1 is Subspace of W2;
+        then VW1 c= VW2 by VECTSP_4:def 2;
+        then VW1 \/ VW2 = VW2 by XBOOLE_1:12;
+       hence thesis;
+      end;
+        now assume W2 is Subspace of W1;
+        then VW2 c= VW1 by VECTSP_4:def 2;
+        then VW1 \/ VW2 = VW1 by XBOOLE_1:12;
+       hence thesis;
+      end;
+    hence thesis by A11,A12;
+   end;
+
+ definition let GF; let M;
+  func Subspaces(M) -> set means
+:Def3: for x holds x in it iff ex W being strict Subspace of M st W = x;
+  existence
+   proof
+     defpred P[set] means
+      ex W being strict Subspace of M st $1 = the carrier of W;
+     consider B being set such that
+      A1: for x holds x in B iff x in bool the carrier of M & P[x]
+           from Separation;
+     defpred R[set, set] means
+       ex W being strict Subspace of M st $2 = W & $1 = the carrier of W;
+      A2:for x,y1,y2 st R[x,y1] & R[x,y2] holds y1 = y2 by VECTSP_4:37;
+     consider f being Function such that
+      A3: for x,y holds [x,y] in f iff x in B & R[x,y] from GraphFunc(A2);
+        for x holds x in B iff ex y st [x,y] in f
+       proof let x;
+        thus x in B implies ex y st [x,y] in f
+         proof assume A4: x in B;
+           then consider W being strict Subspace of M such that
+            A5: x = the carrier of W by A1;
+           reconsider y = W as set;
+          take y;
+          thus thesis by A3,A4,A5;
+         end;
+         given y such that A6: [x,y] in f;
+        thus thesis by A3,A6;
+       end;
+      then A7: B = dom f by RELAT_1:def 4;
+        for y holds y in rng f iff
+        ex W being strict Subspace of M st y = W
+       proof let y;
+        thus y in rng f implies
+         ex W being strict Subspace of M st y = W
+         proof assume y in rng f;
+           then consider x such that A8: x in dom f & y = f.x by FUNCT_1:def 5;
+              [x,y] in f by A8,FUNCT_1:def 4;
+            then ex W being strict Subspace of M st y = W &
+             x = the carrier of W by A3;
+          hence thesis;
+         end;
+         given W being strict Subspace of M such that
+A9:        y = W;
+          reconsider W = y as Subspace of M by A9;
+          reconsider x = the carrier of W as set;
+             the carrier of W c=
+           the carrier of M by VECTSP_4:def 2;
+           then A10: x in dom f by A1,A7,A9;
+           then [x,y] in f by A3,A7,A9;
+           then y = f.x by A10,FUNCT_1:def 4;
+        hence thesis by A10,FUNCT_1:def 5;
+       end;
+    hence thesis;
+   end;
+  uniqueness
+   proof let D1,D2 be set;
+     assume A11: for x holds x in D1 iff
+       ex W being strict Subspace of M st x= W;
+     assume A12: for x holds x in D2 iff
+       ex W being strict Subspace of M st x = W;
+        now let x;
+       thus x in D1 implies x in D2
+        proof assume x in D1;
+          then ex W being strict Subspace of M st x= W by A11;
+         hence thesis by A12;
+        end;
+        assume x in D2;
+         then ex W being strict Subspace of M st x= W by A12;
+       hence x in D1 by A11;
+      end;
+    hence thesis by TARSKI:2;
+   end;
+ end;
+
+ definition let GF; let M;
+  cluster Subspaces(M) -> non empty;
+ coherence
+  proof
+    consider W being strict Subspace of M;
+      W in Subspaces(M) by Def3;
+    hence thesis;
+  end;
+ end;
+
+
+
+canceled 2;
+
+theorem
+   for M being strict Abelian add-associative right_zeroed
+               right_complementable VectSp-like (non empty VectSpStr over GF)
+ holds M in Subspaces(M)
+  proof let M be strict Abelian add-associative right_zeroed
+               right_complementable VectSp-like (non empty VectSpStr over GF);
+    consider W' being strict Subspace of M such that
+A1: the carrier of (Omega).M = the carrier of W';
+A2:  the carrier of M = the carrier of W'
+       by A1,VECTSP_4:def 4;
+      W' in Subspaces(M) by Def3;
+   hence thesis by A2,VECTSP_4:39;
+  end;
+
+definition let GF; let M; let W1,W2;
+ pred M is_the_direct_sum_of W1,W2 means
+  :Def4: the VectSpStr of M = W1 + W2 & W1 /\ W2 = (0).M;
+end;
+
+Lm16:
+ W1 + W2 = the VectSpStr of M iff
+ for v being Element of M
+  ex v1,v2 being Element of M st v1 in W1 & v2 in
+ W2 & v = v1 + v2
+  proof
+A1:  the VectSpStr of M = (Omega).M by VECTSP_4:def 4;
+   thus W1 + W2 = the VectSpStr of M implies
+    for v being Element of M
+     ex v1,v2 being Element of M
+       st v1 in W1 & v2 in W2 & v = v1 + v2
+    proof assume A2: W1 + W2 = the VectSpStr of M;
+     let v be Element of M;
+        v in (Omega).M by A1,RLVECT_1:3;
+     hence thesis by A1,A2,Th5;
+    end;
+    assume A3: for v being Element of M
+      ex v1,v2 being Element of M
+      st v1 in W1 & v2 in W2 & v = v1 + v2;
+       now
+      thus W1 + W2 is Subspace of (Omega).M by Lm6;
+      let u be Element of M;
+         ex v1,v2 being Element of M
+       st v1 in W1 & v2 in W2 & u = v1 + v2 by A3;
+      hence u in W1 + W2 by Th5;
+     end;
+   hence thesis by A1,VECTSP_4:40;
+  end;
+
+ reserve F for Field;
+ reserve V for VectSp of F;
+ reserve W for Subspace of V;
+
+definition let F,V,W;
+ mode Linear_Compl of W -> Subspace of V means
+  :Def5: V is_the_direct_sum_of it,W;
+ existence
+  proof
+    defpred P[set] means
+      ex W1 being strict Subspace of V st $1 = W1 & W /\ W1 = (0).V;
+    consider X such that A1: x in X iff x in Subspaces(V) & P[x]
+       from Separation;
+      W /\ (0).V = (0).V & (0).V in Subspaces(V) by Def3,Th25;
+    then reconsider X as non empty set by A1;
+    defpred P[set,set] means
+          ex W1,W2  being strict Subspace of V
+           st $1 = W1 & $2 = W2 &
+           W1 is Subspace of W2;
+    consider R being Relation of X such that
+     A2: for x,y being Element of X holds
+         [x,y] in R iff P[x,y] from Rel_On_Dom_Ex;
+    defpred Z[set, set] means [$1,$2] in R;
+     A3: now let x be Element of X;
+       consider W1 being strict Subspace of V such that
+A4:     x = W1 & W /\ W1 = (0).V by A1;
+         W1 is Subspace of W1 by VECTSP_4:32;
+      hence Z[x,x] by A2,A4;
+     end;
+     A5: now let x,y be Element of X;
+      assume that A6: Z[x,y] and A7: Z[y,x];
+A8:       ex W1,W2  being strict Subspace of V st x = W1 & y = W2 &
+            W1 is Subspace of W2 by A2,A6;
+         ex W3,W4  being strict Subspace of V st y = W3 & x = W4 &
+            W3 is Subspace of W4 by A2,A7;
+      hence x = y by A8,VECTSP_4:33;
+     end;
+     A9: now let x,y,z be Element of X;
+      assume that A10: Z[x,y] and A11: Z[y,z];
+       consider W1,W2  being strict Subspace of V such that
+        A12: x = W1 & y = W2 &
+            W1 is Subspace of W2 by A2,A10;
+       consider W3,W4  being strict Subspace of V such that
+        A13: y = W3 & z = W4 &
+            W3 is Subspace of W4 by A2,A11;
+          W1 is Subspace of W4 by A12,A13,VECTSP_4:34;
+      hence Z[x,z] by A2,A12,A13;
+     end;
+     A14: for Y st Y c= X &
+          (for x,y being Element of X st x in Y & y in Y holds
+            Z[x,y] or Z[y,x])
+          ex y being Element of X st
+           for x being Element of X st x in Y holds Z[x,y]
+      proof let Y;
+        assume that A15: Y c= X and
+          A16: for x,y being Element of X st x in Y & y in Y holds
+               [x,y] in R or [y,x] in R;
+            now per cases;
+           suppose A17: Y = {};
+             consider y being Element of X;
+            take y' = y;
+            let x be Element of X;
+             assume x in Y;
+            hence [x,y'] in R by A17;
+           suppose A18: Y <> {};
+             defpred P[set,set] means
+                  ex W1 being strict Subspace of V st $1 = W1 &
+                        $2 = the carrier of W1;
+             A19: for x,y1,y2 st x in Y & P[x,y1] & P[x,y2] holds y1 = y2;
+             A20: for x st x in Y ex y st P[x,y]
+              proof let x;
+                assume x in Y;
+                  then consider W1 being strict Subspace of V such that
+                  A21:
+                   x = W1 and W /\ W1 = (0).V by A1,A15;
+                 reconsider y = the carrier of W1 as set;
+               take y;
+               take W1;
+               thus thesis by A21;
+              end;
+            consider f being Function such that
+             A22: dom f = Y and
+             A23: for x st x in Y holds P[x, f.x] from FuncEx(A19,A20);
+            set Z = union(rng f);
+               now let x;
+               assume x in Z;
+                then consider Y' being set such that A24: x in Y' and
+                 A25: Y' in rng f by TARSKI:def 4;
+                consider y such that A26: y in dom f and A27: f.y = Y'
+                                                       by A25,FUNCT_1:def 5;
+                consider W1 being strict Subspace of V such that y = W1 and
+                 A28: f.y = the carrier of W1 by A22,A23,A26;
+                  the carrier of W1 c=
+                the carrier of V &
+                x in the carrier of W1 by A24,A27,A28,VECTSP_4:def 2;
+              hence x in the carrier of V;
+             end;
+            then reconsider Z as Subset of V by TARSKI:def 3;
+A29:          rng f <> {} by A18,A22,RELAT_1:65;
+            consider z being Element of rng f;
+            consider z1 being set such that A30: z1 in dom f and
+                                            A31: f.z1 = z by A29,FUNCT_1:def 5;
+            consider W3 being strict Subspace of V such that
+A32:          z1 = W3 & f.z1 = the carrier of W3 by A22,A23,A30;
+             A33: Z <> {} by A29,A31,A32,ORDERS_1:91;
+               Z is lineary-closed
+              proof
+               thus for v1,v2 being Element of V
+                  st v1 in Z & v2 in Z
+                 holds v1 + v2 in Z
+                proof let v1,v2 be Element of V;
+                  assume that A34: v1 in Z and A35: v2 in Z;
+                   consider Y1 being set such that A36: v1 in Y1 and
+                    A37: Y1 in rng f by A34,TARSKI:def 4;
+                   consider Y2 being set such that A38: v2 in Y2 and
+                    A39: Y2 in rng f by A35,TARSKI:def 4;
+                   consider y1 such that A40: y1 in dom f and
+                                         A41: f.y1 = Y1 by A37,FUNCT_1:def 5;
+                   consider y2 such that A42: y2 in dom f and
+                                         A43: f.y2 = Y2 by A39,FUNCT_1:def 5;
+                   consider W1 being strict Subspace of V such that
+                     A44: y1 = W1 and
+                    A45: f.y1 = the carrier of W1 by A22,A23,A40;
+                   consider W2 being strict Subspace of V such that
+                    A46: y2 = W2 and
+                    A47: f.y2 = the carrier of W2 by A22,A23,A42;
+                   reconsider y1,y2 as Element of X by A15,A22,A40,A42;
+                      now per cases by A16,A22,A40,A42;
+                     suppose [y1,y2] in R;
+                       then ex W3,W4 being strict Subspace of V
+                        st y1 = W3 & y2 = W4 &
+                            W3 is Subspace of W4 by A2;
+                         then the carrier of W1 c=
+                         the carrier of W2 by A44,A46,VECTSP_4:def 2;
+                        then v1 in W2 & v2 in W2 by A36,A38,A41,A43,A45,A47,
+RLVECT_1:def 1;
+                        then v1 + v2 in W2 by VECTSP_4:28;
+                        then A48: v1 + v2 in the carrier of W2 by RLVECT_1:def
+1;
+                          f.y2 in rng f by A42,FUNCT_1:def 5;
+                      hence v1 + v2 in Z by A47,A48,TARSKI:def 4;
+                     suppose [y2,y1] in R;
+                       then ex W3,W4 being strict Subspace of V
+                       st y2 = W3 & y1 = W4 &
+                            W3 is Subspace of W4 by A2;
+                         then the carrier of W2 c=
+                          the carrier of W1 by A44,A46,VECTSP_4:def 2;
+                        then v1 in W1 & v2 in W1 by A36,A38,A41,A43,A45,A47,
+RLVECT_1:def 1;
+                        then v1 + v2 in W1 by VECTSP_4:28;
+                        then A49: v1 + v2 in the carrier of W1 by RLVECT_1:def
+1;
+                          f.y1 in rng f by A40,FUNCT_1:def 5;
+                      hence v1 + v2 in Z by A45,A49,TARSKI:def 4;
+                    end;
+                 hence v1 + v2 in Z;
+                end;
+               let a be Element of F,
+                   v1 be Element of V;
+                assume v1 in Z;
+                 then consider Y1 being set such that A50: v1 in Y1 and
+                  A51: Y1 in rng f by TARSKI:def 4;
+                 consider y1 such that A52: y1 in dom f and
+                                       A53: f.y1 = Y1 by A51,FUNCT_1:def 5;
+                 consider W1 being strict Subspace of V such that
+                     y1 = W1 and
+                  A54: f.y1 = the carrier of W1 by A22,A23,A52;
+                    v1 in W1 by A50,A53,A54,RLVECT_1:def 1;
+                  then a * v1 in W1 by VECTSP_4:29;
+                  then A55: a * v1 in the carrier of W1 by RLVECT_1:def 1;
+                    f.y1 in rng f by A52,FUNCT_1:def 5;
+               hence a * v1 in Z by A54,A55,TARSKI:def 4;
+              end;
+            then consider E being strict Subspace of V such that
+             A56: Z = the carrier of E by A33,VECTSP_4:42;
+               now let u be Element of V;
+              thus u in W /\ E implies u in (0).V
+               proof assume A57: u in W /\ E;
+                  then u in E by Th7;
+                  then u in Z by A56,RLVECT_1:def 1;
+                 then consider Y1 being set such that A58: u in Y1 and
+                  A59: Y1 in rng f by TARSKI:def 4;
+                 consider y1 such that A60: y1 in dom f and
+                                       A61: f.y1 = Y1 by A59,FUNCT_1:def 5;
+                 consider W1 being strict Subspace of V such that
+                  A62: y1 = W1 and
+                  A63: f.y1 = the carrier of W1 by A22,A23,A60;
+A64:                  u in W1 & u in W by A57,A58,A61,A63,Th7,RLVECT_1:def 1;
+                    ex W2 being strict Subspace of V st
+ y1 = W2 & W /\ W2 = (0).V by A1,A15,A22,A60;
+                hence u in (0).V by A62,A64,Th7;
+               end;
+               assume u in (0).V;
+                then u in the carrier of (0).V by RLVECT_1:def 1;
+                then u in {0.V} by VECTSP_4:def 3;
+                then u = 0.V by TARSKI:def 1;
+              hence u in W /\ E by VECTSP_4:25;
+             end;
+             then A65: W /\ E = (0).V by VECTSP_4:38;
+               E in Subspaces(V) by Def3;
+            then reconsider y' = E as Element of X by A1,A65;
+          take y = y';
+          let x be Element of X;
+           assume A66: x in Y;
+            then consider W1 being strict Subspace of V such that
+             A67: x = W1 and
+             A68: f.x = the carrier of W1 by A23;
+               now let u be Element of V;
+               assume u in W1;
+                then A69: u in the carrier of W1 by RLVECT_1:def 1;
+                  the carrier of W1 in rng f by A22,A66,A68,FUNCT_1:def 5;
+                then u in Z by A69,TARSKI:def 4;
+              hence u in E by A56,RLVECT_1:def 1;
+             end;
+             then W1 is Subspace of E by VECTSP_4:36;
+          hence [x,y] in R by A2,A67;
+         end;
+        hence thesis;
+       end;
+    consider x being Element of X such that
+     A70: for y being Element of X st x <> y holds not Z[x,y]
+                                                  from Zorn_Max(A3,A5,A9,A14);
+    consider L being strict Subspace of V such that
+     A71: x = L and
+     A72: W /\ L = (0).V by A1;
+   take L;
+   thus the VectSpStr of V = L + W
+    proof
+     assume not thesis;
+      then consider v being Element of V such that
+       A73: for v1,v2 being Element of V
+              holds not v1 in L or not v2 in W or v <> v1 + v2 by Lm16;
+       A74:   not v in L + W by A73,Th5;
+      set A = {a * v where a is Element of F
+                 : not contradiction};
+      A75: 1_ F * v in A;
+         now let x;
+         assume x in A;
+          then ex a being Element of F st x = a * v;
+        hence x in the carrier of V;
+       end;
+      then reconsider A as Subset of V by TARSKI:def 3;
+         A is lineary-closed
+        proof
+         thus for v1,v2 being Element of V
+           st v1 in A & v2 in A holds v1 + v2 in A
+          proof let v1,v2 be Element of V;
+            assume v1 in A;
+             then consider a1 being Element of F such that
+             A76: v1 = a1 * v;
+            assume v2 in A;
+             then consider a2 being Element of F such that
+             A77: v2 = a2 * v;
+                v1 + v2 = (a1 + a2) * v by A76,A77,VECTSP_1:def 26;
+           hence v1 + v2 in A;
+          end;
+         let a be Element of F,
+             v1 be Element of V;
+          assume v1 in A;
+           then consider a1 being Element of F such that
+           A78: v1 = a1 * v;
+              a * v1 = (a * a1) * v by A78,VECTSP_1:def 26;
+         hence thesis;
+        end;
+      then consider Z being strict Subspace of V such that
+       A79: the carrier of Z = A by A75,VECTSP_4:42;
+         now let u be Element of V;
+        thus u in Z /\ (W + L) implies u in (0).V
+         proof assume A80: u in Z /\ (W + L);
+            then u in Z by Th7;
+            then u in A by A79,RLVECT_1:def 1;
+           then consider a being Element of F such that
+           A81: u = a * v;
+              now assume A82: a <> 0.F;
+                u in W + L by A80,Th7;
+              then a" * (a * v) in W + L by A81,VECTSP_4:29;
+              then (a" * a) * v in W + L by VECTSP_1:def 26;
+              then 1_ F * v in W + L by A82,VECTSP_1:def 22;
+              then 1_ F * v in L + W by Lm1;
+             hence contradiction by A74,VECTSP_1:def 26;
+            end;
+           then u = 0.V by A81,VECTSP_1:59;
+          hence thesis by VECTSP_4:25;
+         end;
+         assume u in (0).V;
+          then u in the carrier of (0).V by RLVECT_1:def 1;
+          then u in {0.V} by VECTSP_4:def 3;
+          then u = 0.V by TARSKI:def 1;
+        hence u in Z /\ (W + L) by VECTSP_4:25;
+       end;
+       then A83: Z /\ (W + L) = (0).V by VECTSP_4:38;
+         now let u be Element of V;
+        thus u in (Z + L) /\ W implies u in (0).V
+         proof assume A84: u in (Z + L) /\ W;
+            then u in Z + L by Th7;
+           then consider v1,v2 being Element of V such that
+            A85: v1 in Z and A86: v2 in L and
+                                         A87: u = v1 + v2 by Th5;
+            A88: v1 = u - v2 by A87,VECTSP_2:22;
+            A89: u in W by A84,Th7;
+            then u in W + L & v2 in W + L by A86,Th6;
+            then v1 in W + L by A88,VECTSP_4:31;
+            then v1 in Z /\ (W + L) by A85,Th7;
+            then v1 in the carrier of (0).V by A83,RLVECT_1:def 1;
+            then v1 in {0.V} by VECTSP_4:def 3;
+            then v1 = 0.V by TARSKI:def 1;
+            then v2 = u by A87,RLVECT_1:10;
+          hence u in (0).V by A72,A86,A89,Th7;
+         end;
+         assume u in (0).V;
+          then u in the carrier of (0).V by RLVECT_1:def 1;
+          then u in {0.V} by VECTSP_4:def 3;
+          then u = 0.V by TARSKI:def 1;
+        hence u in (Z + L) /\ W by VECTSP_4:25;
+       end;
+       then W /\ (Z + L) = (0).V & (Z + L) in Subspaces(V) by Def3,VECTSP_4:38
+;
+      then reconsider x1 = Z + L as Element of X by A1;
+         v = 0.V + v & v = v + 0.V & 0.V in W & 0.V in L
+                                    by RLVECT_1:10,VECTSP_4:25;
+       then A90: not v in L by A73;
+         v in A by A75,VECTSP_1:def 26;
+       then v in Z by A79,RLVECT_1:def 1;
+       then A91: Z + L <> L by A90,Th6;
+         L is Subspace of Z + L by Th11;
+       then [x,x1] in R by A2,A71;
+     hence contradiction by A70,A71,A91;
+    end;
+   thus L /\ W = (0).V by A72;
+  end;
+end;
+
+Lm17: for W1,W2 be Subspace of M holds
+M is_the_direct_sum_of W1,W2 implies M is_the_direct_sum_of W2,W1
+ proof let W1,W2 be Subspace of M;
+   assume M is_the_direct_sum_of W1,W2;
+   then the VectSpStr of M = W1 + W2 & W1 /\ W2 = (0).M by Def4;
+   then the VectSpStr of M = W2 + W1 & W2 /\ W1 = (0).M by Lm1;
+  hence thesis by Def4;
+ end;
+
+ reserve W,W1,W2 for Subspace of V;
+
+canceled 2;
+
+theorem
+   V is_the_direct_sum_of W1,W2 implies W2 is Linear_Compl of W1
+  proof
+   assume V is_the_direct_sum_of W1,W2;
+    then V is_the_direct_sum_of W2,W1 by Lm17;
+   hence thesis by Def5;
+  end;
+
+theorem Th48:
+ for L being Linear_Compl of W
+ holds V is_the_direct_sum_of L,W & V is_the_direct_sum_of W,L
+  proof
+   let L be Linear_Compl of W;
+   thus V is_the_direct_sum_of L,W by Def5;
+   hence thesis by Lm17;
+  end;
+
+theorem Th49:
+ for L being Linear_Compl of W
+ holds W + L = the VectSpStr of V & L + W = the VectSpStr of V
+  proof
+   let L be Linear_Compl of W;
+      V is_the_direct_sum_of W,L by Th48;
+   hence W + L = the VectSpStr of V by Def4;
+   hence thesis by Lm1;
+  end;
+
+theorem Th50:
+ for L being Linear_Compl of W
+ holds W /\ L = (0).V & L /\ W = (0).V
+  proof
+  let L be Linear_Compl of W;
+    A1: V is_the_direct_sum_of W,L by Th48;
+   hence W /\ L = (0).V by Def4;
+   thus thesis by A1,Def4;
+  end;
+
+ reserve W1,W2 for Subspace of M;
+
+theorem
+   M is_the_direct_sum_of W1,W2 implies M is_the_direct_sum_of W2,W1 by Lm17;
+
+theorem Th52:
+ M is_the_direct_sum_of (0).M,(Omega).M & M is_the_direct_sum_of (Omega).
+M,(0).M
+   proof
+       (0).M + (Omega).M = the VectSpStr of M & (0).M = (0).M /\ (Omega).M
+      by Th14,Th25;
+    hence M is_the_direct_sum_of (0).M,(Omega).M by Def4;
+    hence thesis by Lm17;
+   end;
+
+ reserve W for Subspace of V;
+
+theorem
+   for L being Linear_Compl of W holds W is Linear_Compl of L
+  proof
+   let L be Linear_Compl of W;
+      V is_the_direct_sum_of L,W by Def5;
+    then V is_the_direct_sum_of W,L by Lm17;
+   hence thesis by Def5;
+  end;
+
+theorem
+   (0).V is Linear_Compl of (Omega).V & (Omega).V is Linear_Compl of (0).V
+   proof
+    V is_the_direct_sum_of (0).V,(Omega).V &
+      V is_the_direct_sum_of (Omega).V,(0).V by Th52;
+    hence thesis by Def5;
+   end;
+
+ reserve W1,W2 for Subspace of M;
+ reserve u,u1,u2,v for Element of M;
+ reserve C1 for Coset of W1;
+ reserve C2 for Coset of W2;
+
+theorem Th55:
+ C1 meets C2 implies C1 /\ C2 is Coset of W1 /\ W2
+   proof assume
+A1:  C1 /\ C2 <> {};
+     consider v being Element of C1 /\ C2;
+     reconsider v as Element of M by A1,TARSKI:def 3;
+     set C = C1 /\ C2;
+        v in C1 by A1,XBOOLE_0:def 3;
+      then A2: C1 = v + W1 by VECTSP_4:93;
+        v in C2 by A1,XBOOLE_0:def 3;
+      then A3: C2 = v + W2 by VECTSP_4:93;
+        C is Coset of W1 /\ W2
+       proof
+        take v;
+        thus C c= v + W1 /\ W2
+         proof let x;
+          assume A4: x in C;
+            then x in C1 by XBOOLE_0:def 3;
+           then consider u1 such that A5: u1 in W1 and A6: x = v + u1
+                                                             by A2,VECTSP_4:57;
+              x in C2 by A4,XBOOLE_0:def 3;
+           then consider u2 such that A7: u2 in W2 and A8: x = v + u2
+                                                            by A3,VECTSP_4:57;
+              u1 = u2 by A6,A8,RLVECT_1:21;
+            then u1 in W1 /\ W2 by A5,A7,Th7;
+            then x in {v + u : u in W1 /\ W2} by A6;
+          hence thesis by VECTSP_4:def 5;
+         end;
+        let x;
+         assume x in v + (W1 /\ W2);
+          then consider u such that A9: u in W1 /\ W2 and A10: x = v + u
+                                                           by VECTSP_4:57;
+             u in W1 & u in W2 by A9,Th7;
+           then x in {v + u1 : u1 in W1} & x in {v + u2 : u2 in W2} by A10;
+           then x in C1 & x in C2 by A2,A3,VECTSP_4:def 5;
+        hence thesis by XBOOLE_0:def 3;
+       end;
+    hence thesis;
+   end;
+
+theorem Th56:
+ M is_the_direct_sum_of W1,W2 iff
+  for C1 being Coset of W1, C2 being Coset of W2
+   ex v being Element of M st C1 /\ C2 = {v}
+   proof
+      set VW1 = the carrier of W1;
+      set VW2 = the carrier of W2;
+      A1: VW1 is Coset of W1 & VW2 is Coset of W2 by VECTSP_4:89;
+    thus M is_the_direct_sum_of W1,W2 implies
+     for C1 being Coset of W1, C2 being Coset of W2
+      ex v being Element of M st C1 /\ C2 = {v}
+     proof assume A2: M is_the_direct_sum_of W1,W2;
+      let C1 be Coset of W1, C2 be Coset of W2;
+A3:    the VectSpStr of M = (Omega).M by VECTSP_4:def 4;
+       consider v1 being Element of M such that
+       A4: C1 = v1 + W1 by VECTSP_4:def 6;
+       consider v2 being Element of M such that
+       A5: C2 = v2 + W2 by VECTSP_4:def 6;
+        A6: the VectSpStr of M = W1 + W2 by A2,Def4;
+          v1 in (Omega).M by A3,RLVECT_1:3;
+       then consider v11,v12 being Element of M such that
+       A7: v11 in W1 and
+        A8: v12 in W2 and A9: v1 = v11 + v12 by A3,A6,Th5;
+          v2 in (Omega).M by A3,RLVECT_1:3;
+       then consider v21,v22 being Element of M such that
+       A10: v21 in W1 and
+        A11: v22 in W2 and A12: v2 = v21 + v22 by A3,A6,Th5;
+      take v = v12 + v21;
+         {v} = C1 /\ C2
+        proof
+         thus A13: {v} c= C1 /\ C2
+          proof let x;
+            assume x in {v};
+             then A14: x = v by TARSKI:def 1;
+               v12 = v1 - v11 by A9,VECTSP_2:22;
+             then v12 in C1 by A4,A7,VECTSP_4:78;
+             then C1 = v12 + W1 by VECTSP_4:93;
+             then A15: x in C1 by A10,A14,VECTSP_4:57;
+               v21 = v2 - v22 by A12,VECTSP_2:22;
+             then v21 in C2 by A5,A11,VECTSP_4:78;
+             then C2 = v21 + W2 & v = v21 + v12 by VECTSP_4:93;
+             then x in C2 by A8,A14,VECTSP_4:57;
+           hence thesis by A15,XBOOLE_0:def 3;
+          end;
+         let x;
+          assume A16: x in C1 /\ C2;
+           then C1 meets C2 by XBOOLE_0:4;
+           then reconsider C = C1 /\ C2 as Coset of W1 /\ W2 by Th55;
+              W1 /\ W2 = (0).M by A2,Def4;
+           then A17: ex u being Element of M st C = {u}
+             by VECTSP_4:88;
+              v in {v} by TARSKI:def 1;
+            hence thesis by A13,A16,A17,TARSKI:def 1;
+         thus thesis;
+        end;
+       hence C1 /\ C2 = {v};
+      end;
+     assume A18: for C1 being Coset of W1, C2 being Coset of W2
+      ex v being Element of M st C1 /\ C2 = {v};
+A19:   W1 + W2 is Subspace of (Omega).M & the VectSpStr of M = (Omega).M
+        by Lm6,VECTSP_4:def 4;
+         the carrier of M = the carrier of W1 + W2
+        proof
+         thus the carrier of M c=
+              the carrier of W1 + W2
+          proof let x;
+            assume x in the carrier of M;
+             then reconsider u = x as Element of M;
+             consider C1 being Coset of W1 such that
+             A20: u in C1 by VECTSP_4:84;
+             consider v being Element of M such that
+             A21: C1 /\ VW2 = {v} by A1,A18;
+              A22: v in {v} by TARSKI:def 1;
+              then v in VW2 by A21,XBOOLE_0:def 3;
+              then A23: v in W2 by RLVECT_1:def 1;
+                v in C1 by A21,A22,XBOOLE_0:def 3;
+             then consider v1 being Element of M such that
+             A24: v1 in W1 and
+              A25: u - v1 = v by A20,VECTSP_4:95;
+                u = v1 + v by A25,VECTSP_2:22;
+              then x in W1 + W2 by A23,A24,Th5;
+           hence thesis by RLVECT_1:def 1;
+          end;
+         thus thesis by VECTSP_4:def 2;
+        end;
+    hence the VectSpStr of M = W1 + W2 by A19,VECTSP_4:39;
+      consider v being Element of M such that
+      A26: VW1 /\ VW2 = {v} by A1,A18;
+         0.M in W1 & 0.M in W2 by VECTSP_4:25;
+       then 0.M in VW1 & 0.M in VW2 by RLVECT_1:def 1;
+       then A27: 0.M in {v} by A26,XBOOLE_0:def 3;
+         the carrier of (0).M = {0.M} by VECTSP_4:def 3
+                           .= VW1 /\ VW2 by A26,A27,TARSKI:def 1
+                           .= the carrier of W1 /\ W2 by Def2;
+    hence thesis by VECTSP_4:37;
+   end;
+
+theorem
+   for M being strict Abelian add-associative right_zeroed
+          right_complementable VectSp-like (non empty VectSpStr over GF),
+     W1,W2 being Subspace of M
+ holds W1 + W2 = M iff
+  for v being Element of M
+   ex v1,v2 being Element of M
+    st v1 in W1 & v2 in W2 & v = v1 + v2 by Lm16;
+
+theorem Th58:
+ for v,v1,v2,u1,u2 being Element of M
+ holds M is_the_direct_sum_of W1,W2 &
+  v = v1 + v2 & v = u1 + u2 & v1 in W1 & u1 in W1 & v2 in W2 & u2 in W2 implies
+   v1 = u1 & v2 = u2
+     proof let v,v1,v2,u1,u2 be Element of M;
+      assume A1: M is_the_direct_sum_of W1,W2;
+       assume that A2: v = v1 + v2 & v = u1 + u2 and A3: v1 in W1 & u1 in
+ W1 and
+                   A4: v2 in W2 & u2 in W2;
+        reconsider C2 = v1 + W2 as Coset of W2 by VECTSP_4:def 6;
+        reconsider C1 = the carrier of W1 as Coset of W1 by VECTSP_4:89;
+         A5: u1 = (v1 + v2) - u2 by A2,VECTSP_2:22
+              .= v1 + (v2 - u2) by RLVECT_1:42;
+           v2 - u2 in W2 by A4,VECTSP_4:31;
+         then v1 in C1 & v1 in C2 & u1 in C1 & u1 in C2
+                                     by A3,A5,RLVECT_1:def 1,VECTSP_4:57,59;
+         then A6: v1 in C1 /\ C2 & u1 in C1 /\ C2 by XBOOLE_0:def 3;
+        consider u being Element of M such that
+        A7: C1 /\ C2 = {u} by A1,Th56;
+A8:         v1 = u & u1 = u by A6,A7,TARSKI:def 1;
+      hence v1 = u1;
+      thus v2 = u2 by A2,A8,RLVECT_1:21;
+     end;
+
+theorem
+   M = W1 + W2 &
+  (ex v st for v1,v2,u1,u2 being Element of M st
+    v = v1 + v2 & v = u1 + u2 & v1 in W1 & u1 in W1 & v2 in W2 & u2 in W2 holds
+     v1 = u1 & v2 = u2) implies M is_the_direct_sum_of W1,W2
+  proof assume A1: M = W1 + W2;
+    given v such that
+    A2: for v1,v2,u1,u2 being Element of M
+       st v = v1 + v2 & v = u1 + u2 &
+     v1 in W1 & u1 in W1 & v2 in W2 & u2 in W2 holds v1 = u1 & v2 = u2;
+      A3: the carrier of (0).M = {0.M} by VECTSP_4:def 3;
+    assume not thesis;
+      then W1 /\ W2 <> (0).M by A1,Def4;
+      then the carrier of W1 /\ W2 <>
+           the carrier of (0).M &
+           (0).M is Subspace of W1 /\ W2 by VECTSP_4:37,50;
+      then the carrier of W1 /\ W2 <> {0.M} & {0.M} c=
+           the carrier of W1 /\ W2 by A3,VECTSP_4:def 2;
+      then {0.M} c< the carrier of W1 /\ W2 by XBOOLE_0:def 8;
+      then consider x such that A4: x in the carrier of W1 /\ W2 and
+                               A5: not x in {0.M} by RLSUB_2:77;
+A6:      x in W1 /\ W2 by A4,RLVECT_1:def 1;
+      then A7: x in W1 & x in W2 by Th7;
+      A8: x <> 0.M by A5,TARSKI:def 1;
+        x in M by A6,VECTSP_4:17;
+     then reconsider u = x as Element of M by RLVECT_1:def 1;
+     consider v1,v2 being Element of M such that
+     A9: v1 in W1 & v2 in W2 and A10: v = v1 + v2 by A1,Lm16;
+      A11: v = v1 + v2 + 0.M by A10,RLVECT_1:10
+          .= (v1 + v2) + (u - u) by VECTSP_1:66
+          .= ((v1 + v2) + u) - u by RLVECT_1:42
+          .= ((v1 + u) + v2) - u by RLVECT_1:def 6
+          .= (v1 + u) + (v2 - u) by RLVECT_1:42;
+        v1 + u in W1 & v2 - u in W2 by A7,A9,VECTSP_4:28,31;
+      then v2 - u = v2 by A2,A9,A10,A11;
+      then v2 + (- u) = v2 by RLVECT_1:def 11
+                     .= v2 + 0.M by RLVECT_1:10;
+      then - u = 0.M by RLVECT_1:21;
+      then u = - 0.M by RLVECT_1:30;
+   hence thesis by A8,RLVECT_1:25;
+  end;
+
+reserve t1,t2 for Element of [:the carrier of M, the carrier of M:];
+
+definition let GF,M,v,W1,W2;
+ assume A1: M is_the_direct_sum_of W1,W2;
+ func v |-- (W1,W2) -> Element of [:the carrier of M,the carrier of M:] means
+  :Def6: v = it`1 + it`2 & it`1 in W1 & it`2 in W2;
+ existence
+  proof
+    W1 + W2 = the VectSpStr of M by A1,Def4;
+    then consider v1,v2 being Element of M such that
+    A2: v1 in W1 & v2 in W2 & v = v1 + v2 by Lm16;
+   take [v1,v2];
+      [v1,v2]`1 = v1 & [v1,v2]`2 = v2 by MCART_1:7;
+   hence thesis by A2;
+  end;
+ uniqueness
+  proof let t1,t2;
+    assume v = t1`1 + t1`2 & t1`1 in W1 & t1`2 in W2 &
+           v = t2`1 + t2`2 & t2`1 in W1 & t2`2 in W2;
+     then t1`1 = t2`1 & t1`2 = t2`2 & t1 = [t1`1,t1`2] & t2 = [t2`1,t2`2]
+                                                by A1,Th58,MCART_1:23;
+   hence thesis;
+  end;
+end;
+
+canceled 4;
+
+theorem Th64:
+ M is_the_direct_sum_of W1,W2 implies
+  (v |-- (W1,W2))`1 = (v |-- (W2,W1))`2
+   proof assume A1: M is_the_direct_sum_of W1,W2;
+     then A2: v = (v |-- (W1,W2))`1 + (v |-- (W1,W2))`2 & (v |-- (W1,W2))`1 in
+ W1 &
+             (v |-- (W1,W2))`2 in W2 by Def6;
+     A3: M is_the_direct_sum_of W2,W1 by A1,Lm17;
+     then A4: v = (v |-- (W2,W1))`2 + (v |-- (W2,W1))`1 by Def6;
+       (v |-- (W2,W1))`1 in W2 & (v |-- (W2,W1))`2 in W1 by A3,Def6;
+    hence thesis by A1,A2,A4,Th58;
+   end;
+
+theorem Th65:
+ M is_the_direct_sum_of W1,W2 implies
+  (v |-- (W1,W2))`2 = (v |-- (W2,W1))`1
+   proof assume A1: M is_the_direct_sum_of W1,W2;
+     then A2: v = (v |-- (W1,W2))`1 + (v |-- (W1,W2))`2 & (v |-- (W1,W2))`1 in
+ W1 &
+             (v |-- (W1,W2))`2 in W2 by Def6;
+     A3: M is_the_direct_sum_of W2,W1 by A1,Lm17;
+     then A4: v = (v |-- (W2,W1))`2 + (v |-- (W2,W1))`1 by Def6;
+       (v |-- (W2,W1))`1 in W2 & (v |-- (W2,W1))`2 in W1 by A3,Def6;
+    hence thesis by A1,A2,A4,Th58;
+   end;
+
+ reserve W for Subspace of V;
+
+theorem
+   for L being Linear_Compl of W, v being Element of V,
+     t being Element of [:the carrier of V,the carrier of V:]
+ holds t`1 + t`2 = v & t`1 in W & t`2 in L implies t = v |-- (W,L)
+  proof
+   let L be Linear_Compl of W;
+   let v be Element of V;
+   let t be Element of [:the carrier of V,the carrier of V:];
+      V is_the_direct_sum_of W,L by Th48;
+   hence thesis by Def6;
+  end;
+
+theorem
+   for L being Linear_Compl of W, v being Element of V
+ holds (v |-- (W,L))`1 + (v |-- (W,L))`2 = v
+  proof
+   let L be Linear_Compl of W;
+   let v be Element of V;
+      V is_the_direct_sum_of W,L by Th48;
+   hence thesis by Def6;
+  end;
+
+theorem
+   for L being Linear_Compl of W, v being Element of V
+ holds (v |-- (W,L))`1 in W & (v |-- (W,L))`2 in L
+  proof
+   let L be Linear_Compl of W;
+   let v be Element of V;
+      V is_the_direct_sum_of W,L by Th48;
+   hence thesis by Def6;
+  end;
+
+theorem
+   for L being Linear_Compl of W, v being Element of V
+ holds (v |-- (W,L))`1 = (v |-- (L,W))`2
+  proof
+   let L be Linear_Compl of W;
+   let v be Element of V;
+      V is_the_direct_sum_of W,L by Th48;
+   hence thesis by Th64;
+  end;
+
+theorem
+   for L being Linear_Compl of W, v being Element of V
+ holds (v |-- (W,L))`2 = (v |-- (L,W))`1
+  proof
+   let L be Linear_Compl of W;
+   let v be Element of V;
+      V is_the_direct_sum_of W,L by Th48;
+   hence thesis by Th65;
+  end;
+
+reserve A1,A2,B for Element of Subspaces(M),
+        W1,W2 for Subspace of M;
+
+ definition let GF; let M;
+  func SubJoin M -> BinOp of Subspaces M means
+   :Def7: for A1,A2,W1,W2 st A1 = W1 & A2 = W2 holds it.(A1,A2) = W1 + W2;
+  existence
+   proof
+     defpred P[set,set,set] means
+      for W1,W2 st $1 = W1 & $2 = W2 holds $3 = W1 + W2;
+     A1: for A1,A2 ex B st P[A1,A2,B]
+      proof let A1,A2;
+         consider W1 being strict Subspace of M such that
+A2:       W1 = A1 by Def3;
+         consider W2 being strict Subspace of M such that
+A3:       W2 = A2 by Def3;
+        reconsider C = W1 + W2 as Element of Subspaces M
+        by Def3;
+       take C;
+       thus thesis by A2,A3;
+      end;
+    thus ex o being BinOp of Subspaces M st
+    for A1,A2 holds P[A1,A2,o.(A1,A2)] from BinOpEx(A1);
+   end;
+  uniqueness
+   proof let o1,o2 be BinOp of Subspaces M;
+     assume A4: for A1,A2,W1,W2 st A1 = W1 & A2 = W2 holds o1.(A1,A2) = W1 + W2
+;
+     assume A5: for A1,A2,W1,W2 st A1 = W1 & A2 = W2 holds o2.(A1,A2) = W1 + W2
+;
+        now let x,y be set;
+        assume A6: x in Subspaces M & y in Subspaces M;
+         then reconsider A = x, B = y as Element of Subspaces M;
+         consider W1 being strict Subspace of M such that
+A7:       W1 = x by A6,Def3;
+         consider W2 being strict Subspace of M such that
+A8:       W2 = y by A6,Def3;
+            o1.(A,B) = W1 + W2 & o2.(A,B) = W1 + W2 by A4,A5,A7,A8;
+          then o1.(x,y) = o2.(x,y) & o1.[x,y] = o1.(x,y) & o2.[x,y] = o2.(x,y)
+                                                      by BINOP_1:def 1;
+       hence o1.[x,y] = o2.[x,y];
+      end;
+    hence thesis by FUNCT_2:118;
+   end;
+ end;
+
+ definition let GF; let M;
+  func SubMeet M -> BinOp of Subspaces M means
+   :Def8: for A1,A2,W1,W2 st A1 = W1 & A2 = W2 holds it.(A1,A2) = W1 /\ W2;
+  existence
+   proof
+     defpred P[set,set,set] means
+      for W1,W2 st $1 = W1 & $2 = W2 holds $3 = W1 /\ W2;
+     A1: for A1,A2 ex B st P[A1,A2,B]
+      proof let A1,A2;
+         consider W1 being strict Subspace of M such that
+A2:       W1 = A1 by Def3;
+         consider W2 being strict Subspace of M such that
+A3:       W2 = A2 by Def3;
+        reconsider C = W1 /\ W2 as Element of Subspaces M
+        by Def3;
+       take C;
+       thus thesis by A2,A3;
+      end;
+    thus ex o being BinOp of Subspaces M st
+      for A1,A2 holds P[A1,A2,o.(A1,A2)] from BinOpEx(A1);
+   end;
+  uniqueness
+   proof let o1,o2 be BinOp of Subspaces M;
+     assume A4: for A1,A2,W1,W2 st A1 = W1 & A2 = W2 holds o1.(A1,A2) = W1 /\
+W2;
+     assume A5: for A1,A2,W1,W2 st A1 = W1 & A2 = W2 holds o2.(A1,A2) = W1 /\
+W2;
+        now let x,y be set;
+        assume A6: x in Subspaces M & y in Subspaces M;
+         then reconsider A = x, B = y as Element of Subspaces M;
+         consider W1 being strict Subspace of M such that
+A7:       W1 = x by A6,Def3;
+         consider W2 being strict Subspace of M such that
+A8:       W2 = y by A6,Def3;
+            o1.(A,B) = W1 /\ W2 & o2.(A,B) = W1 /\ W2 by A4,A5,A7,A8;
+          then o1.(x,y) = o2.(x,y) & o1.[x,y] = o1.(x,y) & o2.[x,y] = o2.(x,y)
+                                                    by BINOP_1:def 1;
+       hence o1.[x,y] = o2.[x,y];
+      end;
+    hence thesis by FUNCT_2:118;
+   end;
+ end;
+
+
+
+
+
+canceled 4;
+
+theorem Th75:
+ LattStr (# Subspaces(M), SubJoin(M), SubMeet(M) #) is Lattice
+  proof set S = LattStr (# Subspaces(M), SubJoin(M), SubMeet(M) #);
+    A1: for A,B being Element of S
+         holds A "\/" B = B "\/" A
+     proof let A,B be Element of S;
+         consider W1 being strict Subspace of M such that
+A2:       W1 = A by Def3;
+         consider W2 being strict Subspace of M such that
+A3:       W2 = B by Def3;
+      thus A "\/" B = SubJoin(M).(A,B) by LATTICES:def 1
+                 .= W1 + W2 by A2,A3,Def7
+                 .= W2 + W1 by Lm1
+                 .= SubJoin(M).(B,A) by A2,A3,Def7
+                 .= B "\/" A by LATTICES:def 1;
+     end;
+    A4: for A,B,C being Element of S
+         holds A "\/" (B "\/" C) = (A "\/" B) "\/" C
+     proof let A,B,C be Element of S;
+         consider W1 being strict Subspace of M such that
+A5:       W1 = A by Def3;
+         consider W2 being strict Subspace of M such that
+A6:       W2 = B by Def3;
+         consider W3 being strict Subspace of M such that
+A7:       W3 = C by Def3;
+       reconsider AB = W1 + W2, BC = W2 + W3 as
+              Element of S by Def3;
+      thus A "\/" (B "\/" C) = SubJoin(M).(A,B "\/" C) by LATTICES:def 1
+                        .= SubJoin(M).(A,SubJoin(M).(B,C)) by LATTICES:def 1
+                        .= SubJoin(M).(A,BC) by A6,A7,Def7
+                        .= W1 + (W2 + W3) by A5,Def7
+                        .= (W1 + W2) + W3 by Th10
+                        .= SubJoin(M).(AB,C) by A7,Def7
+                        .= SubJoin(M).(SubJoin(M).(A,B),C) by A5,A6,Def7
+                        .= SubJoin(M).(A "\/" B,C) by LATTICES:def 1
+                        .= (A "\/" B) "\/" C by LATTICES:def 1;
+     end;
+    A8: for A,B being Element of S
+         holds (A "/\" B) "\/" B = B
+     proof let A,B be Element of S;
+         consider W1 being strict Subspace of M such that
+A9:       W1 = A by Def3;
+         consider W2 being strict Subspace of M such that
+A10:       W2 = B by Def3;
+       reconsider AB = W1 /\ W2 as Element of S by Def3;
+      thus (A "/\" B) "\/" B = SubJoin(M).(A "/\" B,B) by LATTICES:def 1
+                        .= SubJoin(M).(SubMeet(M).(A,B),B) by LATTICES:def 2
+                        .= SubJoin(M).(AB,B) by A9,A10,Def8
+                        .= (W1 /\ W2) + W2 by A10,Def7
+                        .= B by A10,Th30;
+     end;
+    A11: for A,B being Element of S
+         holds A "/\" B = B "/\" A
+     proof let A,B be Element of S;
+         consider W1 being strict Subspace of M such that
+A12:       W1 = A by Def3;
+         consider W2 being strict Subspace of M such that
+A13:       W2 = B by Def3;
+      thus A "/\" B = SubMeet(M).(A,B) by LATTICES:def 2
+                 .= W1 /\ W2 by A12,A13,Def8
+                 .= SubMeet(M).(B,A) by A12,A13,Def8
+                 .= B "/\" A by LATTICES:def 2;
+     end;
+    A14: for A,B,C being Element of S
+         holds A "/\" (B "/\" C) = (A "/\" B) "/\" C
+     proof let A,B,C be Element of S;
+         consider W1 being strict Subspace of M such that
+A15:       W1 = A by Def3;
+         consider W2 being strict Subspace of M such that
+A16:       W2 = B by Def3;
+         consider W3 being strict Subspace of M such that
+A17:       W3 = C by Def3;
+       reconsider AB = W1 /\ W2, BC = W2 /\ W3 as
+              Element of S by Def3;
+      thus A "/\" (B "/\" C) = SubMeet(M).(A,B "/\" C) by LATTICES:def 2
+                        .= SubMeet(M).(A,SubMeet(M).(B,C)) by LATTICES:def 2
+                        .= SubMeet(M).(A,BC) by A16,A17,Def8
+                        .= W1 /\ (W2 /\ W3) by A15,Def8
+                        .= (W1 /\ W2) /\ W3 by Th19
+                        .= SubMeet(M).(AB,C) by A17,Def8
+                        .= SubMeet(M).(SubMeet(M).(A,B),C) by A15,A16,Def8
+                        .= SubMeet(M).(A "/\" B,C) by LATTICES:def 2
+                        .= (A "/\" B) "/\" C by LATTICES:def 2;
+     end;
+      for A,B being Element of S
+         holds A "/\" (A "\/" B) = A
+     proof let A,B be Element of S;
+         consider W1 being strict Subspace of M such that
+A18:       W1 = A by Def3;
+         consider W2 being strict Subspace of M such that
+A19:       W2 = B by Def3;
+       reconsider AB = W1 + W2 as Element of S by Def3;
+      thus A "/\" (A "\/" B) = SubMeet(M).(A,A "\/" B) by LATTICES:def 2
+                        .= SubMeet(M).(A,SubJoin(M).(A,B)) by LATTICES:def 1
+                        .= SubMeet(M).(A,AB) by A18,A19,Def7
+                        .= W1 /\ (W1 + W2) by A18,Def8
+                        .= A by A18,Th31;
+     end;
+     then S is join-commutative join-associative meet-absorbing
+          meet-commutative meet-associative join-absorbing
+   by A1,A4,A8,A11,A14,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+   hence thesis by LATTICES:def 10;
+  end;
+
+theorem Th76:
+ LattStr (# Subspaces(M), SubJoin(M), SubMeet(M) #) is 0_Lattice
+  proof set S = LattStr (# Subspaces(M), SubJoin(M), SubMeet(M) #);
+      ex C being Element of S st
+     for A being Element of S holds C "/\" A = C & A "/\" C = C
+      proof
+        reconsider C = (0).M as Element of S by Def3;
+       take C;
+       let A be Element of S;
+         consider W being strict Subspace of M such that
+A1:       W = A by Def3;
+       thus C "/\" A = SubMeet(M).(C,A) by LATTICES:def 2
+                  .= (0).M /\ W by A1,Def8
+                  .= C by Th25;
+       thus A "/\" C = SubMeet(M).(A,C) by LATTICES:def 2
+                  .= W /\ (0).M by A1,Def8
+                  .= C by Th25;
+      end;
+   hence thesis by Th75,LATTICES:def 13;
+  end;
+
+theorem Th77:
+ LattStr (# Subspaces(M), SubJoin(M), SubMeet(M) #) is 1_Lattice
+  proof
+    set S = LattStr (# Subspaces(M), SubJoin(M), SubMeet(M) #);
+      ex C being Element of S st
+     for A being Element of S holds C "\/" A = C & A "\/" C = C
+      proof
+     consider W' being strict Subspace of M such that
+A1:  the carrier of W' = the carrier of (Omega).M;
+        reconsider C = W' as Element of S by Def3;
+       take C;
+       let A be Element of S;
+         consider W being strict Subspace of M such that
+A2:       W = A by Def3;
+A3:    C is Subspace of (Omega).M & the VectSpStr of M = (Omega).M
+      by Lm6,VECTSP_4:def 4;
+       thus C "\/" A = SubJoin(M).(C,A) by LATTICES:def 1
+                  .= W' + W by A2,Def7
+                  .= (Omega).M + W by A1,Lm5
+                  .= the VectSpStr of M by Th15
+                  .= C by A1,A3,VECTSP_4:39;
+       thus A "\/" C = SubJoin(M).(A,C) by LATTICES:def 1
+                  .= W + W' by A2,Def7
+                  .= W + (Omega).M by A1,Lm5
+                  .= the VectSpStr of M by Th15
+                  .= C by A1,A3,VECTSP_4:39;
+      end;
+   hence thesis by Th75,LATTICES:def 14;
+  end;
+
+theorem Th78:
+ LattStr (# Subspaces(M), SubJoin(M), SubMeet(M) #) is 01_Lattice
+  proof
+      LattStr (# Subspaces(M), SubJoin(M), SubMeet(M) #)
+     is lower-bounded upper-bounded Lattice by Th76,Th77;
+   hence thesis;
+  end;
+
+theorem
+   LattStr (# Subspaces(M), SubJoin(M), SubMeet(M) #) is M_Lattice
+  proof set S = LattStr (# Subspaces(M), SubJoin(M), SubMeet(M) #);
+      for A,B,C being Element of S st A [= C
+     holds A "\/" (B "/\" C) = (A "\/" B) "/\" C
+      proof let A,B,C be Element of S;
+        assume A1: A [= C;
+         consider W1 being strict Subspace of M such that
+A2:       W1 = A by Def3;
+         consider W2 being strict Subspace of M such that
+A3:       W2 = B by Def3;
+         consider W3 being strict Subspace of M such that
+A4:       W3 = C by Def3;
+         reconsider BC = W2 /\ W3 as Element of S by Def3;
+         reconsider AB = W1 + W2 as Element of S by Def3;
+            W1 + W3 = SubJoin(M).(A,C) by A2,A4,Def7
+                      .= A "\/" C by LATTICES:def 1
+                      .= W3 by A1,A4,LATTICES:def 3;
+          then A5: W1 is Subspace of W3 by Th12;
+       thus A "\/" (B "/\" C) = SubJoin(M).(A,B "/\" C) by LATTICES:def 1
+                         .= SubJoin(M).(A,SubMeet(M).(B,C)) by LATTICES:def 2
+                         .= SubJoin(M).(A,BC) by A3,A4,Def8
+                         .= W1 + (W2 /\ W3) by A2,Def7
+                         .= (W1 + W2) /\ W3 by A5,Th36
+                         .= SubMeet(M).(AB,C) by A4,Def8
+                         .= SubMeet(M).(SubJoin(M).(A,B),C) by A2,A3,Def7
+                         .= SubMeet(M).(A "\/" B,C) by LATTICES:def 1
+                         .= (A "\/" B) "/\" C by LATTICES:def 2;
+      end;
+   hence thesis by Th75,LATTICES:def 12;
+  end;
+
+theorem
+   for F being Field, V being VectSp of F
+ holds LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #) is C_Lattice
+  proof let F be Field, V be VectSp of F;
+    reconsider S = LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #)
+ as 01_Lattice by Th78;
+    reconsider S0 = S as 0_Lattice;
+    reconsider S1 = S as 1_Lattice;
+    reconsider Z = (0).V as Element of S by Def3;
+    consider W' being strict Subspace of V such that
+A1: the carrier of W' = the carrier of (Omega).V;
+    reconsider I = W' as Element of S by Def3;
+    reconsider Z0 = Z as Element of S0;
+    reconsider I1 = I as Element of S1;
+       now let A be Element of S1;
+         consider W being strict Subspace of V such that
+A2:       W = A by Def3;
+A3:    W' is Subspace of (Omega).V & the VectSpStr of V = (Omega).V
+        by Lm6,VECTSP_4:def 4;
+      thus A "\/" I1 = SubJoin(V).(A,I1) by LATTICES:def 1
+                  .= W + W' by A2,Def7
+                  .= W + (Omega).V by A1,Lm5
+                  .= the VectSpStr of V by Th15
+                  .= W' by A1,A3,VECTSP_4:39;
+     end;
+     then A4: Top S = I by RLSUB_2:85;
+       now let A be Element of S0;
+         consider W being strict Subspace of V such that
+A5:       W = A by Def3;
+      thus A "/\" Z0 = SubMeet(V).(A,Z0) by LATTICES:def 2
+                  .= W /\ (0).V by A5,Def8
+                  .= Z0 by Th25;
+     end;
+     then A6: Bottom S = Z by RLSUB_2:84;
+       now let A be Element of S;
+         consider W being strict Subspace of V such that
+A7:       W = A by Def3;
+       consider L being Linear_Compl of W;
+    consider W'' being strict Subspace of V such that
+A8: the carrier of W'' = the carrier of L
+       by Lm4;
+       reconsider B' = W'' as Element of S by Def3;
+      take B = B';
+A9:    I is Subspace of (Omega).V & the VectSpStr of V = (Omega).V
+         by Lm6,VECTSP_4:def 4;
+        A10: B "\/" A = SubJoin(V).(B,A) by LATTICES:def 1
+                 .= W'' + W by A7,Def7
+                 .= L + W by A8,Lm5
+                 .= the VectSpStr of V by Th49
+                 .= Top S by A1,A4,A9,VECTSP_4:39;
+          B "/\" A = SubMeet(V).(B,A) by LATTICES:def 2
+              .= W'' /\ W by A7,Def8
+              .= L /\ W by A8,Lm8
+              .= Bottom S by A6,Th50;
+      hence B is_a_complement_of A by A10,LATTICES:def 18;
+     end;
+   hence thesis by LATTICES:def 19;
+  end;

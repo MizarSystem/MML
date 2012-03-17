@@ -1,0 +1,1510 @@
+:: More on the Finite Sequences on the Plane
+::  by Andrzej Trybulec
+::
+:: Received October 25, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary GOBOARD5, GOBOARD1, BOOLE, JORDAN1E, FINSEQ_5, RFINSEQ, FINSEQ_1,
+      RELAT_1, GRAPH_2, REALSET1, FINSEQ_4, FINSEQ_6, MATRIX_1, FUNCT_1,
+      TOPREAL1, EUCLID, SEQM_3, RLSUB_2, ARYTM_1, PRE_TOPC, ABSVALUE, COMPTS_1,
+      SPPOL_1, MCART_1, TARSKI, SETFAM_1;
+ notation TARSKI, XBOOLE_0, XCMPLX_0, XREAL_0, NAT_1, ABSVALUE, BINARITH,
+      SEQM_3, SETFAM_1, FUNCT_1, FINSEQ_1, FINSEQ_5, FINSEQ_6, RFINSEQ,
+      GRAPH_2, MATRIX_1, RELSET_1, REALSET1, STRUCT_0, PRE_TOPC, COMPTS_1,
+      EUCLID, SPPOL_1, TOPREAL1, GOBOARD1, GOBOARD5, JORDAN1E, FINSEQ_4;
+ constructors REAL_1, GOBOARD1, GRAPH_2, FINSEQ_4, ABSVALUE, REALSET1,
+      JORDAN1E, SPRECT_1, BINARITH, RFINSEQ, INT_1, GOBOARD9, MEMBERED;
+ clusters RELSET_1, FINSEQ_6, FINSEQ_5, JORDAN1E, GOBOARD9, INT_1, REVROT_1,
+      SPRECT_1, SPRECT_3, FINSEQ_1, SPPOL_2, REALSET1, MEMBERED, NUMBERS,
+      ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions FINSEQ_6, GOBOARD1, GOBOARD5, TOPREAL1, TARSKI;
+ theorems AMISTD_1, GRAPH_2, GOBOARD1, FINSEQ_3, NAT_1, REAL_1, AXIOMS,
+      FINSEQ_5, TOPREAL1, FINSEQ_1, RLVECT_1, TARSKI, FUNCT_1, FINSEQ_4,
+      ZFMISC_1, PARTFUN2, SPPOL_1, FINSEQ_6, RELAT_1, RFINSEQ, INT_1, MSSCYC_1,
+      JORDAN3, SCMFSA_7, AMI_5, REVROT_1, JORDAN4, BINARITH, SPRECT_3,
+      GOBOARD2, TOPREAL3, GOBOARD3, SPPOL_2, CQC_THE1, JORDAN8, GOBOARD5,
+      GOBOARD7, ENUMSET1, SETFAM_1, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+
+begin
+
+theorem Th1:
+ for A,x,y being set st A c= {x,y} & x in A & not y in A
+  holds A = {x}
+proof let A,x,y be set such that
+A1: A c= {x,y} and
+A2: x in A and
+A3: not y in A;
+ per cases by A1,ZFMISC_1:42;
+ suppose A = {};
+  hence thesis by A2;
+ suppose A = {x};
+  hence thesis;
+ suppose A = {y};
+  hence thesis by A3,TARSKI:def 1;
+ suppose A = {x,y};
+  hence thesis by A3,TARSKI:def 2;
+end;
+
+definition
+ cluster trivial Function;
+ existence
+  proof
+    consider f being empty Function;
+   take f;
+   thus thesis;
+  end;
+end;
+
+begin :: FinSequences
+
+reserve G for Go-board,
+        i,j,k,m,n for Nat;
+
+definition
+ cluster non constant FinSequence;
+ existence
+  proof consider f being non constant FinSequence;
+   take f;
+   thus thesis;
+  end;
+end;
+
+theorem Th2:
+ for f being non trivial FinSequence holds 1 < len f
+proof let f be non trivial FinSequence;
+   1+1 <= len f by SPPOL_1:2;
+ hence 1 < len f by NAT_1:38;
+end;
+
+theorem Th3:
+ for D being non trivial set
+ for f being non constant circular FinSequence of D
+  holds len f > 2
+ proof let D be non trivial set;
+  let f be non constant circular FinSequence of D;
+  assume
+A1: len f <= 2;
+  per cases by A1,AXIOMS:21;
+  suppose len f < 1+1;
+   then len f <= 1 by NAT_1:38;
+   then reconsider f as trivial Function by Th2;
+     f is constant;
+  hence contradiction;
+  suppose
+A2: len f = 2;
+then A3: dom f = {1,2} by FINSEQ_1:4,def 3;
+     for n,m being Nat st n in dom f & m in dom f holds f.n=f.m
+    proof let n,m be Nat such that
+A4:    n in dom f & m in dom f;
+     per cases by A3,A4,TARSKI:def 2;
+     suppose n = 1 & m = 1 or n = 2 & m = 2;
+     hence f.n=f.m;
+     suppose that
+A5:   n = 1 and
+A6:   m = 2;
+A7:    m in dom f by A3,A6,TARSKI:def 2;
+        n in dom f by A3,A5,TARSKI:def 2;
+     hence f.n = f/.1 by A5,FINSEQ_4:def 4 .= f/.len f by FINSEQ_6:def 1
+      .= f.m by A2,A6,A7,FINSEQ_4:def 4;
+     suppose that
+A8:   n = 2 and
+A9:   m = 1;
+A10:    n in dom f by A3,A8,TARSKI:def 2;
+        m in dom f by A3,A9,TARSKI:def 2;
+     hence f.m = f/.1 by A9,FINSEQ_4:def 4 .= f/.len f by FINSEQ_6:def 1
+      .= f.n by A2,A8,A10,FINSEQ_4:def 4;
+    end;
+  hence contradiction by GOBOARD1:def 2;
+ end;
+
+theorem Th4:
+ for f being FinSequence, x being set
+  holds x in rng f or x..f = 0
+ proof let f be FinSequence, x be set;
+  assume
+A1:  not x in rng f;
+   A2: now assume f " {x} <> {};
+     then consider y being set such that
+A3:    y in f " {x} by XBOOLE_0:def 1;
+A4:   y in dom f & f.y in {x} by A3,FUNCT_1:def 13;
+     then f.y = x by TARSKI:def 1;
+    hence contradiction by A1,A4,FUNCT_1:12;
+   end;
+  thus x..f = Sgm(f " {x}).1 by FINSEQ_4:def 5
+      .= 0 by A2,FINSEQ_3:49,FUNCT_1:def 4,RELAT_1:60;
+ end;
+
+theorem Th5:
+ for p being set, D being non empty set
+ for f being non empty FinSequence of D
+ for g being FinSequence of D
+   st p..f = len f
+ holds (f^g)|--p = g
+proof
+ let p be set, D be non empty set;
+ let f being non empty FinSequence of D;
+ let g being FinSequence of D such that
+A1: p..f = len f;
+     len f <> 0 by FINSEQ_1:25;
+   then A2: p in rng f by A1,Th4;
+  then A3: p..(f^g) = len f by A1,FINSEQ_6:8;
+    rng f c= rng(f^g) by FINSEQ_1:42;
+ hence (f^g) |-- p = (f^g)/^(p..(f^g)) by A2,FINSEQ_5:38
+         .= g by A3,FINSEQ_5:40;
+end;
+
+theorem Th6:
+ for D being non empty set
+ for f being non empty one-to-one FinSequence of D
+ holds f/.len f..f = len f
+proof let D be non empty set;
+ let f be non empty one-to-one FinSequence of D;
+A1: len f in dom f by FINSEQ_5:6;
+   then A2: f/.len f = f.len f by FINSEQ_4:def 4;
+     for i st 1 <= i & i < len f holds f.i <> f.len f
+    proof let i such that
+A3:    1 <= i & i < len f;
+        i in dom f by A3,FINSEQ_3:27;
+     hence f.i <> f.len f by A1,A3,FUNCT_1:def 8;
+    end;
+ hence thesis by A1,A2,FINSEQ_6:4;
+end;
+
+theorem Th7:
+ for f,g being FinSequence holds len f <= len(f^'g)
+proof let f,g be FinSequence;
+    f ^' g = f^(2, len g)-cut g by GRAPH_2:def 2;
+  then len(f^'g) = len f + len(2, len g)-cut g by FINSEQ_1:35;
+ hence len f <= len(f^'g) by NAT_1:29;
+end;
+
+theorem Th8:
+ for f,g being FinSequence
+ for x being set st x in rng f
+ holds x..f = x..(f^'g)
+proof let f,g be FinSequence, x be set;
+ assume
+A1: x in rng f;
+  then A2: f.(x..f) = x by FINSEQ_4:29;
+A3: x..f in dom f by A1,FINSEQ_4:30;
+   then A4:  1 <= x..f & x..f <= len f by FINSEQ_3:27;
+   then A5: (f^'g).(x..f) = x by A2,GRAPH_2:14;
+     len f <= len(f^'g) by Th7;
+   then A6:  dom f c= dom(f^'g) by FINSEQ_3:32;
+    for i st 1 <= i & i < x..f holds (f^'g).i <> x
+   proof let i such that
+A7: 1 <= i & i < x..f;
+A8:  i < len f by A4,A7,AXIOMS:22;
+    then A9:   (f^'g).i = f.i by A7,GRAPH_2:14;
+       i in dom f by A7,A8,FINSEQ_3:27;
+    hence (f^'g).i <> x by A7,A9,FINSEQ_4:34;
+   end;
+ hence x..f = x..(f^'g) by A3,A5,A6,FINSEQ_6:4;
+end;
+
+theorem
+   for f being non empty FinSequence
+ for g being FinSequence holds len g <= len(f^'g)
+proof let f be non empty FinSequence, g be FinSequence;
+ per cases;
+ suppose g = {};
+  then len g = 0 by FINSEQ_1:25;
+ hence thesis by NAT_1:18;
+ suppose g <> {};
+  then A1:  len (f^'g) +1 = len f + len g by GRAPH_2:13;
+    len f <> 0 by FINSEQ_1:25;
+  then len f >= 1 by RLVECT_1:99;
+  then len (f^'g) +1 >= 1 + len g by A1,AXIOMS:24;
+ hence len g <= len(f^'g) by REAL_1:53;
+end;
+
+theorem Th10:
+ for f,g being FinSequence holds rng f c= rng(f^'g)
+proof let f,g be FinSequence;
+    f^'g = f^(2, len g)-cut g by GRAPH_2:def 2;
+ hence rng f c= rng(f^'g) by FINSEQ_1:42;
+end;
+
+theorem Th11:
+ for D being non empty set
+ for f being non empty FinSequence of D
+ for g being non trivial FinSequence of D st g/.len g = f/.1
+ holds f^'g is circular
+proof let D be non empty set;
+ let f be non empty FinSequence of D,
+     g be non trivial FinSequence of D;
+ assume g/.len g = f/.1;
+ hence (f^'g)/.1 = g/.len g by AMISTD_1:5
+       .= (f^'g)/.len(f^'g) by AMISTD_1:6;
+end;
+
+theorem Th12:
+ for D being non empty set
+ for M being Matrix of D
+ for f being FinSequence of D
+ for g being non empty FinSequence of D st
+   f/.len f = g/.1 & f is_sequence_on M & g is_sequence_on M
+ holds f^'g is_sequence_on M
+proof let D be non empty set;
+ let M be Matrix of D;
+ let f be FinSequence of D;
+ let g be non empty FinSequence of D such that
+A1: f/.len f = g/.1 and
+A2: f is_sequence_on M and
+A3: g is_sequence_on M;
+A4: len (f^'g) +1 = len f + len g by GRAPH_2:13;
+ thus for n st n in dom(f^'g)
+   ex i,j st [i,j] in Indices M & (f^'g)/.n = M*(i,j)
+  proof let n such that
+A5:  n in dom(f^'g);
+   per cases;
+   suppose
+A6:  n <= len f;
+A7:  1 <= n by A5,FINSEQ_3:27;
+    then n in dom f by A6,FINSEQ_3:27;
+    then consider i,j such that
+A8:  [i,j] in Indices M and
+A9:  f/.n = M*(i,j) by A2,GOBOARD1:def 11;
+   take i,j;
+   thus [i,j] in Indices M by A8;
+   thus (f^'g)/.n = M*(i,j) by A6,A7,A9,AMISTD_1:9;
+   suppose
+A10:  n > len f;
+    then consider k such that
+A11:  n = len f + k by NAT_1:28;
+      len f + 1 <= n by A10,NAT_1:38;
+    then A12: 1 <= k by A11,REAL_1:53;
+A13: 1 <= k+1 by NAT_1:29;
+      n <= len(f^'g) by A5,FINSEQ_3:27;
+    then n < len f + len g by A4,NAT_1:38;
+    then A14: k < len g by A11,AXIOMS:24;
+    then k+1 <= len g by NAT_1:38;
+    then k+1 in dom g by A13,FINSEQ_3:27;
+    then consider i,j such that
+A15:  [i,j] in Indices M and
+A16:  g/.(k+1) = M*(i,j) by A3,GOBOARD1:def 11;
+   take i,j;
+   thus [i,j] in Indices M by A15;
+   thus (f^'g)/.n = M*(i,j) by A11,A12,A14,A16,AMISTD_1:10;
+  end;
+ let n such that
+A17: n in dom(f^'g) and
+A18: n+1 in dom(f^'g);
+ let m,k,i,j such that
+A19: [m,k] in Indices M and
+A20: [i,j] in Indices M and
+A21: (f^'g)/.n = M*(m,k) and
+A22: (f^'g)/.(n+1) = M*(i,j);
+ per cases by AXIOMS:21;
+ suppose
+A23:  n < len f;
+A24: 1 <= n by A17,FINSEQ_3:27;
+   then A25: n in dom f by A23,FINSEQ_3:27;
+A26: n+1 <= len f by A23,NAT_1:38;
+A27: 1 <= n+1 by NAT_1:29;
+   then A28: n+1 in dom f by A26,FINSEQ_3:27;
+A29: f/.n = M*(m,k) by A21,A23,A24,AMISTD_1:9;
+    f/.(n+1) = M*(i,j) by A22,A26,A27,AMISTD_1:9;
+ hence abs(m-i)+abs(k-j) = 1 by A2,A19,A20,A25,A28,A29,GOBOARD1:def 11;
+ suppose
+A30: n > len f;
+   then consider k0 being Nat such that
+A31: n = len f + k0 by NAT_1:28;
+     len f + 1 <= n by A30,NAT_1:38;
+   then A32: 1 <= k0 by A31,REAL_1:53;
+A33: 1 <= k0+1 by NAT_1:29;
+     n <= len(f^'g) by A17,FINSEQ_3:27;
+   then n < len f + len g by A4,NAT_1:38;
+   then A34: k0 < len g by A31,AXIOMS:24;
+   then k0+1 <= len g by NAT_1:38;
+   then A35:  k0+1 in dom g by A33,FINSEQ_3:27;
+A36: 1 <= k0+1+1 by NAT_1:29;
+     n+1 <= len(f^'g) by A18,FINSEQ_3:27;
+   then n+1 < len f + len g by A4,NAT_1:38;
+   then len f + (k0+1) < len f + len g by A31,XCMPLX_1:1;
+   then A37:   k0+1 < len g by AXIOMS:24;
+   then k0+1+1 <= len g by NAT_1:38;
+   then A38:  k0+1+1 in dom g by A36,FINSEQ_3:27;
+A39: g/.(k0+1) = M*(m,k) by A21,A31,A32,A34,AMISTD_1:10;
+    g/.(k0+1+1) = (f^'g)/.(len f +(k0+1)) by A33,A37,AMISTD_1:10
+       .= M*(i,j) by A22,A31,XCMPLX_1:1;
+ hence abs(m-i)+abs(k-j) = 1 by A3,A19,A20,A35,A38,A39,GOBOARD1:def 11;
+ suppose
+A40: n = len f;
+  1 <= n by A17,FINSEQ_3:27;
+then A41: g/.1 = M*(m,k) by A1,A21,A40,AMISTD_1:9;
+    n+1 <= len(f^'g) by A18,FINSEQ_3:27;
+  then len f + 1 < len f + len g by A4,A40,NAT_1:38;
+  then A42:  1 < len g by AXIOMS:24;
+  then 1+1 <= len g by NAT_1:38;
+  then A43: 1+1 in dom g by FINSEQ_3:27;
+A44: 1 in dom g by FINSEQ_5:6;
+    g/.(1+1) = M*(i,j) by A22,A40,A42,AMISTD_1:10;
+ hence abs(m-i)+abs(k-j) = 1 by A3,A19,A20,A41,A43,A44,GOBOARD1:def 11;
+end;
+
+theorem Th13:
+ for D being set, f being FinSequence of D st 1 <= k
+  holds (k+1, len f)-cut f = f/^k
+ proof let D be set, f being FinSequence of D such that
+A1: 1 <= k;
+  per cases;
+  suppose
+A2: len f < k;
+    then len f + 1 < k+1 by REAL_1:53;
+   hence (k+1, len f)-cut f = {} by GRAPH_2:def 1
+    .= f/^k by A2,FINSEQ_5:35;
+  suppose f = {};
+   then len f = 0 by FINSEQ_1:25;
+   then A3: k > len f by A1,AXIOMS:22;
+   then k+1 > len f + 1 by REAL_1:53;
+  hence (k+1, len f)-cut f = <*>D by GRAPH_2:def 1
+        .= f/^k by A3,RFINSEQ:def 2;
+  suppose that
+A4: k <= len f;
+A5: 1 <= k+1 by NAT_1:29;
+   set IT = (k+1, len f)-cut f;
+A6: k+1 <= len f + 1 by A4,AXIOMS:24;
+   then len f + 1 = len IT + (k+1) by A5,GRAPH_2:def 1
+       .= len IT + k+1 by XCMPLX_1:1;
+   then len f = len IT + k by XCMPLX_1:2;
+   then A7: len IT = len f - k by XCMPLX_1:26;
+     for m be Nat st m in dom IT holds IT.m = f.(m+k)
+    proof let m be Nat such that
+A8:    m in dom IT;
+        1 <= m by A8,FINSEQ_3:27;
+      then consider i such that
+A9:     m = 1+i by NAT_1:28;
+        m <= len IT by A8,FINSEQ_3:27;
+      then i < len IT by A9,NAT_1:38;
+     hence IT.m = f.(k+1+i) by A5,A6,A9,GRAPH_2:def 1
+        .= f.(m+k) by A9,XCMPLX_1:1;
+    end;
+  hence (k+1, len f)-cut f = f/^k by A4,A7,RFINSEQ:def 2;
+ end;
+
+theorem Th14:
+ for D being set, f being FinSequence of D st k <= len f
+  holds (1, k)-cut f = f|k
+proof let D be set, f being FinSequence of D such that
+A1: k <= len f;
+A2: 1 <= k+1 by NAT_1:29;
+A3: len(f|k) = k by A1,TOPREAL1:3;
+     for i being Nat st i<len(f|k) holds (f|k).(i+1)= f.(1+i)
+    proof let i be Nat;
+     assume i<len(f|k);
+      then i+1 <= k by A3,NAT_1:38;
+     hence (f|k).(i+1)= f.(1+i) by JORDAN3:20;
+    end;
+  hence (1, k)-cut f = f|k by A1,A2,A3,GRAPH_2:def 1;
+ end;
+
+theorem Th15:
+ for p being set, D being non empty set
+ for f being non empty FinSequence of D
+ for g being FinSequence of D
+   st p..f = len f
+ holds (f^g)-|p = (1,len f -' 1)-cut f
+proof
+ let p be set, D be non empty set,
+     f be non empty FinSequence of D, g be FinSequence of D such that
+A1: p..f = len f;
+     len f <>0 by FINSEQ_1:25;
+   then A2: 1 <= len f by RLVECT_1:99;
+  then reconsider i = len f - 1 as Nat by INT_1:18;
+     len f <> 0 by FINSEQ_1:25;
+   then A3: p in rng f by A1,Th4;
+  then A4: p..(f^g) = p..f by FINSEQ_6:8;
+A5: len f -' 1 <= len f by JORDAN3:7;
+     len(f^g) = len f + len g by FINSEQ_1:35;
+   then len f <= len(f^g) by NAT_1:29;
+   then A6: len f -' 1 <= len(f^g) by JORDAN3:7;
+A7: len f -' 1 = i by A2,SCMFSA_7:3;
+    rng f c= rng(f^g) by FINSEQ_1:42;
+ hence (f^g)-|p = (f^g)|Seg i by A1,A3,A4,FINSEQ_4:45
+        .= (f^g)|i by TOPREAL1:def 1
+        .= (1,len f -' 1)-cut(f^g) by A6,A7,Th14
+        .= (1,len f -' 1)-cut f by A5,MSSCYC_1:2;
+end;
+
+theorem Th16:
+ for D being non empty set
+ for f,g being non empty FinSequence of D st g/.1..f = len f
+ holds (f^'g:-g/.1) = g
+proof let D be non empty set;
+ let f,g be non empty FinSequence of D
+ such that
+A1: g/.1..f = len f;
+     len f <> 0 by FINSEQ_1:25;
+   then A2: g/.1 in rng f by A1,Th4;
+     len g <>0 by FINSEQ_1:25;
+   then A3: 1 <= len g by RLVECT_1:99;
+A4: f^'g = f^(2, len g)-cut g by GRAPH_2:def 2;
+  then rng f c= rng(f^'g) by FINSEQ_1:42;
+ hence (f^'g:-g/.1) = <*g/.1*>^(f^'g |-- g/.1) by A2,FINSEQ_6:45
+       .= <*g/.1*>^(2, len g)-cut g by A1,A4,Th5
+       .= <*g.1*>^(2, len g)-cut g by A3,FINSEQ_4:24
+       .= ((1,1)-cut g)^(1+1, len g)-cut g by A3,GRAPH_2:6
+       .= g by A3,GRAPH_2:9;
+end;
+
+theorem Th17:
+ for D being non empty set
+ for f,g being non empty FinSequence of D st g/.1..f = len f
+ holds (f^'g-:g/.1) = f
+proof let D be non empty set;
+ let f,g be non empty FinSequence of D
+ such that
+A1: g/.1..f = len f;
+A2: len f <> 0 by FINSEQ_1:25;
+   then A3: g/.1 in rng f by A1,Th4;
+     len f <>0 by FINSEQ_1:25;
+   then A4: 1 <= len f by RLVECT_1:99;
+     g/.1 in rng f by A1,A2,Th4;
+   then A5:  g/.1 = f.len f by A1,FINSEQ_4:29;
+A6: len f -' 1 <= len f by JORDAN3:7;
+A7: len f -' 1 + 1 = len f by A4,AMI_5:4;
+A8: f^'g = f^(2, len g)-cut g by GRAPH_2:def 2;
+  then rng f c= rng(f^'g) by FINSEQ_1:42;
+ hence (f^'g-:g/.1) = (f^'g -| g/.1)^<*g/.1*> by A3,FINSEQ_6:44
+       .= ((1, len f -' 1)-cut f)^<*g/.1*> by A1,A8,Th15
+       .= ((1, len f -' 1)-cut f)^((len f,len f)-cut f) by A4,A5,GRAPH_2:6
+       .= f by A6,A7,GRAPH_2:9;
+end;
+
+theorem Th18:
+ for D being non trivial set
+ for f being non empty FinSequence of D
+ for g being non trivial FinSequence of D
+   st g/.1 = f/.len f &
+      for i st 1 <= i & i < len f holds f/.i <> g/.1
+ holds Rotate(f^'g,g/.1) = g^'f
+proof let D be non trivial set;
+ let f being non empty FinSequence of D;
+ let g being non trivial FinSequence of D such that
+A1: g/.1 = f/.len f and
+A2: for i st 1 <= i & i < len f holds f/.i <> g/.1;
+A3: len f in dom f by FINSEQ_5:6;
+   then A4: f.len f = f/.len f by FINSEQ_4:def 4;
+     for i st 1 <= i & i < len f holds f.i <> f.len f
+    proof let i such that
+A5:    1 <= i & i < len f;
+        f.i = f/.i by A5,FINSEQ_4:24;
+     hence f.i <> f.len f by A1,A2,A4,A5;
+    end;
+   then A6: g/.1..f = len f by A1,A3,A4,FINSEQ_6:4;
+   then A7: (f^'g:-g/.1) = g by Th16;
+     (f^'g-:g/.1) = f by A6,Th17;
+   then A8: (f^'g-:g/.1)/^1 = (1+1, len f)-cut f by Th13;
+A9:  rng f c= rng(f^'g) by Th10;
+    g/.1 in rng f by A1,REVROT_1:3;
+ hence Rotate(f^'g,g/.1) = (f^'g:-g/.1)^((f^'g-:g/.1)/^1) by A9,FINSEQ_6:def 2
+  .= g^'f by A7,A8,GRAPH_2:def 2;
+end;
+
+begin :: TOP-REAL
+
+theorem Th19:
+ for f being non trivial FinSequence of TOP-REAL 2
+  holds LSeg(f,1) = L~(f|2)
+ proof let f be non trivial FinSequence of TOP-REAL 2;
+A1: 1+1 <= len f by SPPOL_1:2;
+   then A2: f|2 = <*f/.1,f/.2*> by JORDAN8:1;
+  thus LSeg(f,1) = LSeg(f/.1,f/.(1+1)) by A1,TOPREAL1:def 5
+    .= L~(f|2) by A2,SPPOL_2:21;
+ end;
+
+theorem Th20:
+ for f being s.c.c. FinSequence of TOP-REAL 2,
+     n st n < len f
+ holds f|n is s.n.c.
+proof let f be s.c.c. FinSequence of TOP-REAL 2, n such that
+A1: n < len f;
+ let i,j such that
+A2: i+1 < j;
+A3: len(f|n) <= n by FINSEQ_5:19;
+ per cases;
+ suppose n < j+1;
+  then len(f|n) < j+1 by A3,AXIOMS:22;
+  then LSeg(f|n,j) = {} by TOPREAL1:def 5;
+  then LSeg(f|n,i) /\ LSeg(f|n,j) = {};
+ hence LSeg(f|n,i) misses LSeg(f|n,j) by XBOOLE_0:def 7;
+ suppose len(f|n) < j+1;
+  then LSeg(f|n,j) = {} by TOPREAL1:def 5;
+  then LSeg(f|n,i) /\ LSeg(f|n,j) = {};
+ hence LSeg(f|n,i) misses LSeg(f|n,j) by XBOOLE_0:def 7;
+ suppose that
+A4: j+1 <= n and
+A5: j+1 <= len(f|n);
+    j+1 < len f by A1,A4,AXIOMS:22;
+  then A6: LSeg(f,i) misses LSeg(f,j) by A2,GOBOARD5:def 4;
+A7: LSeg(f,j) = LSeg(f|n,j) by A5,SPPOL_2:3;
+     j <= j+1 by NAT_1:29;
+   then i+1 <= j+1 by A2,AXIOMS:22;
+   then i+1 <= len(f|n) by A5,AXIOMS:22;
+ hence LSeg(f|n,i) misses LSeg(f|n,j) by A6,A7,SPPOL_2:3;
+end;
+
+theorem Th21:
+ for f being s.c.c. FinSequence of TOP-REAL 2,
+     n st 1 <= n
+ holds f/^n is s.n.c.
+proof let f be s.c.c. FinSequence of TOP-REAL 2, n such that
+A1: 1 <= n;
+ let i,j such that
+A2: i+1 < j;
+ per cases;
+ suppose i < 1;
+   then LSeg(f/^n,i) = {} by TOPREAL1:def 5;
+  then LSeg(f/^n,i) /\ LSeg(f/^n,j) = {};
+  hence LSeg(f/^n,i) misses LSeg(f/^n,j) by XBOOLE_0:def 7;
+ suppose n > len f;
+  then f/^n = <*>the carrier of TOP-REAL2 by RFINSEQ:def 2;
+  then len(f/^n) = 0 by FINSEQ_1:25;
+  then not(1 <= i & i < len(f/^n)) by AXIOMS:22;
+  then not(1 <= i & i+1 <= len(f/^n)) by NAT_1:38;
+  then LSeg(f/^n,i) = {} by TOPREAL1:def 5;
+  then LSeg(f/^n,i) /\ LSeg(f/^n,j) = {};
+ hence LSeg(f/^n,i) misses LSeg(f/^n,j) by XBOOLE_0:def 7;
+ suppose len(f/^n) <= j;
+  then len(f/^n) < j+1 by NAT_1:38;
+  then LSeg(f/^n,j) = {} by TOPREAL1:def 5;
+  then LSeg(f/^n,i) /\ LSeg(f/^n,j) = {};
+ hence LSeg(f/^n,i) misses LSeg(f/^n,j) by XBOOLE_0:def 7;
+ suppose that
+A3: n <= len f and
+A4: 1 <= i and
+A5: j < len(f/^n);
+     1+1 <= i+1 by A4,AXIOMS:24;
+   then 1+1 <= j by A2,AXIOMS:22;
+   then A6: 1 < j by NAT_1:38;
+     1+1 <= i+n by A1,A4,REAL_1:55;
+   then A7: 1 < i+n by NAT_1:38;
+A8: j < len f - n by A3,A5,RFINSEQ:def 2;
+    then A9: j+n < len f by REAL_1:86;
+     i+1+n < j+n by A2,REAL_1:53;
+   then i+n+1 < j+n by XCMPLX_1:1;
+   then A10: LSeg(f,i+n) misses LSeg(f,j+n) by A7,A9,GOBOARD5:def 4;
+A11: j+1 <= len f - n by A8,INT_1:20;
+   then A12: LSeg(f,j+n) = LSeg(f/^n,j) by A6,SPPOL_2:5;
+     j <= j+1 by NAT_1:29;
+   then i+1 <= j+1 by A2,AXIOMS:22;
+   then i+1 <= len f - n by A11,AXIOMS:22;
+ hence LSeg(f/^n,i) misses LSeg(f/^n,j) by A4,A10,A12,SPPOL_2:5;
+end;
+
+theorem Th22:
+ for f being circular s.c.c. FinSequence of TOP-REAL 2,
+     n st n < len f & len f > 4
+ holds f|n is one-to-one
+proof let f be circular s.c.c. FinSequence of TOP-REAL 2,n such that
+A1: n < len f and
+A2: len f > 4;
+    for c1,c2 being Nat
+   st c1 in dom(f|n) & c2 in dom(f|n) & (f|n)/.c1 = (f|n)/.c2 holds c1 = c2
+   proof let c1,c2 being Nat such that
+A3:  c1 in dom(f|n) and
+A4:  c2 in dom(f|n) and
+A5:  (f|n)/.c1 = (f|n)/.c2;
+A6:  1 <= c1 by A3,FINSEQ_3:27;
+A7:  1 <= c2 by A4,FINSEQ_3:27;
+A8:  c2 <= len(f|n) by A4,FINSEQ_3:27;
+       len(f|n) <= n by FINSEQ_5:19;
+     then c2 <= n by A8,AXIOMS:22;
+     then A9:  c2 < len f by A1,AXIOMS:22;
+A10:  c1 <= len(f|n) by A3,FINSEQ_3:27;
+       len(f|n) <= n by FINSEQ_5:19;
+     then c1 <= n by A10,AXIOMS:22;
+     then A11:  c1 < len f by A1,AXIOMS:22;
+A12:   (f|n)/.c1 = f/.c1 & (f|n)/.c2 = f/.c2 by A3,A4,TOPREAL1:1;
+    assume
+A13:   c1 <> c2;
+    per cases by A13,AXIOMS:21;
+    suppose c1 < c2;
+    hence thesis by A2,A5,A6,A9,A12,GOBOARD7:37;
+    suppose c2 < c1;
+    hence thesis by A2,A5,A7,A11,A12,GOBOARD7:37;
+   end;
+ hence f|n is one-to-one by PARTFUN2:16;
+end;
+
+theorem Th23:
+ for f being circular s.c.c. FinSequence of TOP-REAL 2 st len f > 4
+  for i,j being Nat st 1 < i & i < j & j <= len f holds f/.i <> f/.j
+proof let f be circular s.c.c. FinSequence of TOP-REAL 2 such that
+A1: len f > 4;
+ let i,j be Nat such that
+A2: 1 < i and
+A3: i < j and
+A4: j <= len f;
+  per cases by A4,AXIOMS:21;
+  suppose j < len f;
+  hence f/.i <> f/.j by A1,A2,A3,GOBOARD7:37;
+  suppose j = len f;
+   then A5:  f/.j = f/.1 by FINSEQ_6:def 1;
+     i < len f by A3,A4,AXIOMS:22;
+  hence f/.i <> f/.j by A1,A2,A5,GOBOARD7:37;
+end;
+
+theorem Th24:
+ for f being circular s.c.c. FinSequence of TOP-REAL 2,
+     n st 1 <= n & len f > 4
+ holds f/^n is one-to-one
+proof let f be circular s.c.c. FinSequence of TOP-REAL 2,n such that
+A1: 1 <= n and
+A2: len f > 4;
+    for c1,c2 being Nat
+   st c1 in dom(f/^n) & c2 in dom(f/^n) & (f/^n)/.c1 = (f/^n)/.c2 holds c1 = c2
+   proof let c1,c2 being Nat such that
+A3:  c1 in dom(f/^n) and
+A4:  c2 in dom(f/^n) and
+A5:  (f/^n)/.c1 = (f/^n)/.c2;
+       0+1 <= c1 by A3,FINSEQ_3:27;
+     then 0 < c1 by NAT_1:38;
+     then A6:  1+0 < c1+n by A1,REAL_1:67;
+       0+1 <= c2 by A4,FINSEQ_3:27;
+     then 0 < c2 by NAT_1:38;
+     then A7:  1+0 < c2+n by A1,REAL_1:67;
+       f/^n <> <*>the carrier of TOP-REAL 2 by A3,RELAT_1:60;
+     then A8:   n <= len f by RFINSEQ:def 2;
+A9:  c2 <= len(f/^n) by A4,FINSEQ_3:27;
+       len(f/^n) = len f - n by A8,RFINSEQ:def 2;
+     then len(f/^n) + n = len f by XCMPLX_1:27;
+     then A10:  c2+n <= len f by A9,AXIOMS:24;
+A11:  c1 <= len(f/^n) by A3,FINSEQ_3:27;
+       len(f/^n) = len f - n by A8,RFINSEQ:def 2;
+     then len(f/^n) + n = len f by XCMPLX_1:27;
+     then A12:  c1+n <= len f by A11,AXIOMS:24;
+A13:   (f/^n)/.c1 = f/.(c1+n) & (f/^n)/.c2 = f/.(c2+n) by A3,A4,FINSEQ_5:30;
+    assume
+A14:   c1 <> c2;
+    per cases by A14,AXIOMS:21;
+    suppose c1 < c2;
+     then c1+n < c2+n by REAL_1:53;
+    hence thesis by A2,A5,A6,A10,A13,Th23;
+    suppose c2 < c1;
+     then c2+n < c1+n by REAL_1:53;
+    hence thesis by A2,A5,A7,A12,A13,Th23;
+   end;
+ hence f/^n is one-to-one by PARTFUN2:16;
+end;
+
+theorem Th25:
+ for f being special non empty FinSequence of TOP-REAL 2
+  holds (m,n)-cut f is special
+proof let f being special non empty FinSequence of TOP-REAL 2;
+  set h = (m,n)-cut f;
+ let i such that
+A1: 1 <= i and
+A2: i+1 <= len h;
+  A3: 1 <= i+1 by NAT_1:29;
+ per cases;
+ suppose not(1<=m & m<=n+1 & n<=len f);
+  then h = {} by GRAPH_2:def 1;
+  then len h = 0 by FINSEQ_1:25;
+ hence (h/.i)`1 = (h/.(i+1))`1 or (h/.i)`2 = (h/.(i+1))`2 by A2,A3,AXIOMS:22;
+ suppose
+A4: 1<=m & m<=n+1 & n<=len f;
+A5: i-'1+m = i+m-'1 by A1,JORDAN4:3;
+A6: 1+1 <= i+m by A1,A4,REAL_1:55;
+   then A7: 1 <= i+m by AXIOMS:22;
+A8: 1 <= i-'1+m by A5,A6,SPRECT_3:8;
+A9: i < len h by A2,NAT_1:38;
+      len h +m = n+1 by A4,GRAPH_2:def 1;
+    then i+m < n+1 by A9,REAL_1:53;
+    then i+m <= n by NAT_1:38;
+    then A10: i+m <= len f by A4,AXIOMS:22;
+    then A11: i-'1+m <= len f by A5,JORDAN3:7;
+    i -' 1 <= i by JORDAN3:7;
+  then A12: i -' 1 < len h by A9,AXIOMS:22;
+      i-'1+1 = i by A1,AMI_5:4;
+    then A13: h/.i =h.(i -' 1+1) by A1,A9,FINSEQ_4:24
+      .= f.(i-'1+m) by A4,A12,GRAPH_2:def 1
+      .= f/.(i-'1+m) by A8,A11,FINSEQ_4:24;
+     1 <= i+1 by NAT_1:29;
+   then A14: h/.(i+1) =h.(i+1) by A2,FINSEQ_4:24
+      .= f.(i+m) by A4,A9,GRAPH_2:def 1
+      .= f/.(i+m) by A7,A10,FINSEQ_4:24;
+    i-'1+m+1 = i+m-'1+1 by A1,JORDAN4:3
+      .= i+m by A7,AMI_5:4;
+ hence (h/.i)`1 = (h/.(i+1))`1 or (h/.i)`2 = (h/.(i+1))`2
+     by A8,A10,A13,A14,TOPREAL1:def 7;
+end;
+
+theorem Th26:
+ for f being special non empty FinSequence of TOP-REAL 2
+ for g being special non trivial FinSequence of TOP-REAL 2
+   st f/.len f = g/.1
+  holds f^'g is special
+proof
+ let f be special non empty FinSequence of TOP-REAL 2;
+ let g be special non trivial FinSequence of TOP-REAL 2 such that
+A1: f/.len f = g/.1;
+A2: f^'g = f^(2, len g)-cut g by GRAPH_2:def 2;
+  set h = (2, len g)-cut g;
+A3: 1+1 <= len g by SPPOL_1:2;
+     len g <= len g +1 by NAT_1:29;
+   then A4: 2<=len g+1 by A3,AXIOMS:22;
+    len h +1+1 = len h +(1+1) by XCMPLX_1:1
+      .= len g+1 by A4,GRAPH_2:def 1;
+  then len h +1 = len g by XCMPLX_1:2;
+  then 1 <= len h by A3,REAL_1:53;
+  then A5: h/.1 = h.1 by FINSEQ_4:24
+        .= g.(1+1) by A3,GRAPH_2:12
+        .= g/.(1+1) by A3,FINSEQ_4:24;
+A6: h is special by Th25;
+     (g/.1)`1 = (g/.(1+1))`1 or (g/.1)`2 = (g/.(1+1))`2
+       by A3,TOPREAL1:def 7;
+ hence f^'g is special by A1,A2,A5,A6,GOBOARD2:13;
+end;
+
+theorem Th27:
+ for f being circular unfolded s.c.c. FinSequence of TOP-REAL 2
+   st len f > 4
+ holds LSeg(f,1) /\ L~(f/^1) = {f/.1,f/.2}
+proof let f be circular unfolded s.c.c. FinSequence of TOP-REAL 2 such that
+A1: len f > 4;
+A2: 1 < len f by A1,AXIOMS:22;
+  set SFY = { LSeg(f/^1,i) : 1 < i & i+1 < len(f/^1) },
+   Reszta = union SFY;
+A3: L~(f/^1) = union { LSeg(f/^1,i) : 1 <= i & i+1 <= len(f/^1) }
+       by TOPREAL1:def 6;
+   set h2 = f/^1;
+A4: 1+2 <= len f by A1,AXIOMS:22;
+   A5:  1 <= len f by A1,AXIOMS:22;
+   then A6: LSeg(f,1) /\ LSeg(f/^1,1) = LSeg(f,1) /\ LSeg(f,1+1) by SPPOL_2:4
+      .= {f/.(1+1)} by A4,TOPREAL1:def 8;
+A7: len h2 = len f - 1 by A5,RFINSEQ:def 2;
+  then A8: len h2 + 1 = len f by XCMPLX_1:27;
+      len f > 3+1 by A1;
+    then A9: len h2 > 2+1 by A8,AXIOMS:24;
+    then A10: 1 <= len(f/^1) by AXIOMS:22;
+A11: 1+1 <= len h2 by A9,NAT_1:38;
+     1+1 <= len(f/^1) by A9,AXIOMS:22;
+   then A12: 1 <= len(f/^1)-'1 by SPRECT_3:8;
+A13:  1+(len(f/^1)-'1) = len(f/^1) by A10,AMI_5:4
+     .= len f -' 1 by A5,A7,SCMFSA_7:3;
+A14: L~(f/^1) c= LSeg(f/^1,1) \/ LSeg(f/^1,len(f/^1)-'1) \/ Reszta
+    proof let u be set;
+     assume u in L~(f/^1);
+      then consider e being set such that
+A15:    u in e and
+A16:    e in { LSeg(f/^1,i) : 1 <= i & i+1 <= len(f/^1) } by A3,TARSKI:def 4;
+      consider i such that
+A17:    e = LSeg(f/^1,i) and
+A18:    1 <= i and
+A19:    i+1 <= len(f/^1) by A16;
+     per cases by A18,A19,AXIOMS:21;
+     suppose i = 1;
+      then u in LSeg(f/^1,1) \/ LSeg(f/^1,len(f/^1)-'1) by A15,A17,XBOOLE_0:def
+2;
+     hence thesis by XBOOLE_0:def 2;
+     suppose i+1 = len(f/^1);
+      then i = len(f/^1)-'1 by BINARITH:39;
+      then u in LSeg(f/^1,1) \/ LSeg(f/^1,len(f/^1)-'1) by A15,A17,XBOOLE_0:def
+2;
+     hence thesis by XBOOLE_0:def 2;
+     suppose 1 < i & i+1 < len(f/^1);
+      then e in SFY by A17;
+      then u in Reszta by A15,TARSKI:def 4;
+     hence thesis by XBOOLE_0:def 2;
+    end;
+     LSeg(f/^1,1) in { LSeg(f/^1,i) : 1 <= i & i+1 <= len(f/^1) } by A11;
+   then A20:LSeg(f/^1,1) c= L~(f/^1) by A3,ZFMISC_1:92;
+ len(f/^1)-'1+1 <= len(f/^1) by A10,AMI_5:4;
+   then LSeg(f/^1,len(f/^1)-'1) in { LSeg(f/^1,i) : 1 <= i & i+1 <= len(f/^1)
+}
+         by A12;
+   then LSeg(f/^1,len(f/^1)-'1) c= L~(f/^1) by A3,ZFMISC_1:92;
+   then A21:LSeg(f/^1,1) \/ LSeg(f/^1,len(f/^1)-'1) c= L~(f/^1) by A20,XBOOLE_1
+:8;
+     Reszta c= L~(f/^1)
+    proof let u be set;
+     assume u in Reszta;
+      then consider e being set such that
+A22:    u in e and
+A23:    e in SFY by TARSKI:def 4;
+        ex i st e = LSeg(f/^1,i) & 1 < i & i+1 < len(f/^1) by A23;
+      then e in { LSeg(f/^1,i) : 1 <= i & i+1 <= len(f/^1) };
+     hence u in L~(f/^1) by A3,A22,TARSKI:def 4;
+    end;
+   then LSeg(f/^1,1) \/ LSeg(f/^1,len(f/^1)-'1) \/ Reszta c= L~(f/^1)
+     by A21,XBOOLE_1:8;
+   then A24: L~(f/^1) = LSeg(f/^1,1) \/ LSeg(f/^1,len(f/^1)-'1) \/ Reszta
+      by A14,XBOOLE_0:def 10;
+     for Z being set holds Z in {{}} iff
+    ex X,Y being set st X in {LSeg(f,1)} & Y in SFY & Z = X /\ Y
+    proof let Z be set;
+     thus Z in {{}} implies
+        ex X,Y being set st X in {LSeg(f,1)} & Y in SFY & Z = X /\ Y
+     proof assume
+A25:   Z in {{}};
+      take X = LSeg(f,1), Y = LSeg(f,2+1);
+      thus X in {LSeg(f,1)} by TARSKI:def 1;
+         Y = LSeg(f/^1,2) by A5,SPPOL_2:4;
+      hence Y in SFY by A9;
+A26:    1+1 < 3;
+         3+1 < len f by A1;
+       then X misses Y by A26,GOBOARD5:def 4;
+       then X /\ Y = {} by XBOOLE_0:def 7;
+      hence Z = X /\ Y by A25,TARSKI:def 1;
+     end;
+     given X,Y being set such that
+A27:   X in {LSeg(f,1)} and
+A28:   Y in SFY and
+A29:   Z = X /\ Y;
+A30:    X = LSeg(f,1) by A27,TARSKI:def 1;
+      consider i such that
+A31:    Y = LSeg(f/^1,i) and
+A32:    1 < i and
+A33:    i+1 < len(f/^1) by A28;
+A34:    LSeg(f/^1,i) = LSeg(f,i+1) by A2,A32,SPPOL_2:4;
+A35:   i+1+1 < len f by A8,A33,REAL_1:53;
+        1+1 < i+1 by A32,REAL_1:53;
+      then X misses Y by A30,A31,A34,A35,GOBOARD5:def 4;
+      then Z = {} by A29,XBOOLE_0:def 7;
+     hence Z in {{}} by TARSKI:def 1;
+    end;
+   then INTERSECTION({LSeg(f,1)},SFY) = {{}} by SETFAM_1:def 5;
+   then A36: LSeg(f,1) /\Reszta
+       = union {{}} by SETFAM_1:36
+      .= {} by ZFMISC_1:31;
+A37: LSeg(f,1) /\ LSeg(f/^1,len(f/^1)-'1)
+       = LSeg(f,1) /\ LSeg(f,len f-'1) by A5,A12,A13,SPPOL_2:4
+      .= {f/.1} by A1,REVROT_1:30;
+ thus LSeg(f,1) /\ L~(f/^1)
+    = LSeg(f,1) /\ (LSeg(f/^1,1) \/ LSeg(f/^1,len(f/^1)-'1)) \/ {}
+                    by A24,A36,XBOOLE_1:23
+   .= {f/.1} \/ {f/.2} by A6,A37,XBOOLE_1:23
+   .= {f/.1,f/.2} by ENUMSET1:41;
+end;
+
+definition
+ cluster one-to-one special unfolded s.n.c. non empty
+     FinSequence of TOP-REAL 2;
+ existence
+  proof consider n being Nat;
+    consider C being compact non vertical non horizontal Subset of TOP-REAL 2;
+   take Upper_Seq(C,n);
+   thus thesis;
+  end;
+end;
+
+theorem Th28:
+ for f,g being FinSequence of TOP-REAL 2 st j < len f
+  holds LSeg(f^'g,j) = LSeg(f,j)
+proof let f,g be FinSequence of TOP-REAL 2 such that
+A1: j < len f;
+ per cases;
+ suppose
+A2: j < 1;
+ hence LSeg(f^'g,j) = {} by TOPREAL1:def 5
+    .= LSeg(f,j) by A2,TOPREAL1:def 5;
+ suppose
+A3: 1 <= j;
+  then A4: (f^'g)/.j = f/.j by A1,AMISTD_1:9;
+A5: j+1 <= len f by A1,NAT_1:38;
+     1 <= j+1 by NAT_1:29;
+  then A6: (f^'g)/.(j+1) = f/.(j+1) by A5,AMISTD_1:9;
+    len f <= len(f^'g) by Th7;
+  then j+1 <= len (f^'g) by A5,AXIOMS:22;
+ hence LSeg(f^'g,j) = LSeg((f^'g)/.j,(f^'g)/.(j+1)) by A3,TOPREAL1:def 5
+     .= LSeg(f,j) by A3,A4,A5,A6,TOPREAL1:def 5;
+end;
+
+theorem Th29:
+ for f,g being non empty FinSequence of TOP-REAL 2 st 1 <= j & j+1 < len g
+  holds LSeg(f^'g,len f+j) = LSeg(g,j+1)
+proof
+ let f,g be non empty FinSequence of TOP-REAL 2 such that
+A1: 1 <= j and
+A2: j+1 < len g;
+    j+0 <= j+1 by AXIOMS:24;
+  then j < len g by A2,AXIOMS:22;
+then A3: (f^'g)/.(len f +j) = g/.(j+1) by A1,AMISTD_1:10;
+A4: 1 <= j+1 by NAT_1:29;
+A5: (f^'g)/.(len f +j+1) = (f^'g)/.(len f +(j+1)) by XCMPLX_1:1
+       .= g/.(j+1+1) by A2,A4,AMISTD_1:10;
+A6: j+1+1 <= len g by A2,NAT_1:38;
+      j <= len f + j by NAT_1:29;
+    then A7: 1 <= len f +j by A1,AXIOMS:22;
+      len f + (j+1) < len f + len g by A2,REAL_1:53;
+    then len f + j+1 < len f + len g by XCMPLX_1:1;
+  then len f +j+1 < len (f^'g)+1 by GRAPH_2:13;
+  then len f +j+1 <= len (f^'g) by NAT_1:38;
+ hence LSeg(f^'g,len f+j)
+      = LSeg((f^'g)/.(len f+j),(f^'g)/.(len f+j+1)) by A7,TOPREAL1:def 5
+     .= LSeg(g,j+1) by A3,A4,A5,A6,TOPREAL1:def 5;
+end;
+
+theorem Th30:
+ for f being non empty FinSequence of TOP-REAL 2
+ for g being non trivial FinSequence of TOP-REAL 2 st
+   f/.len f = g/.1
+  holds LSeg(f^'g,len f) = LSeg(g,1)
+proof
+ let f be non empty FinSequence of TOP-REAL 2;
+ let g be non trivial FinSequence of TOP-REAL 2 such that
+A1: f/.len f = g/.1;
+A2: 1 < len g by Th2;
+      0 <> len f by FINSEQ_1:25;
+    then A3: 1 <= len f by RLVECT_1:99;
+then A4: (f^'g)/.(len f +0) = g/.(0+1) by A1,AMISTD_1:9;
+A5: (f^'g)/.(len f +0+1) = g/.(0+1+1) by A2,AMISTD_1:10;
+A6: 1+1 <= len g by A2,NAT_1:38;
+    len f + 0+1 < len f + len g by A2,REAL_1:53;
+  then len f +0+1 < len (f^'g)+1 by GRAPH_2:13;
+  then len f +0+1 <= len (f^'g) by NAT_1:38;
+ hence LSeg(f^'g,len f)
+      = LSeg((f^'g)/.(len f+0),(f^'g)/.(len f+0+1)) by A3,TOPREAL1:def 5
+     .= LSeg(g,1) by A4,A5,A6,TOPREAL1:def 5;
+end;
+
+theorem Th31:
+ for f being non empty FinSequence of TOP-REAL 2
+ for g being non trivial FinSequence of TOP-REAL 2
+    st j+1 < len g & f/.len f = g/.1
+  holds LSeg(f^'g,len f+j) = LSeg(g,j+1)
+proof
+ let f be non empty FinSequence of TOP-REAL 2;
+ let g be non trivial FinSequence of TOP-REAL 2 such that
+A1: j+1 < len g and
+A2: f/.len f = g/.1;
+ per cases by RLVECT_1:99;
+ suppose j = 0;
+  hence LSeg(f^'g,len f+j) = LSeg(g,j+1) by A2,Th30;
+ suppose 1 <= j;
+ hence thesis by A1,Th29;
+end;
+
+theorem Th32:
+ for f being non empty s.n.c. unfolded FinSequence of TOP-REAL 2, i
+    st 1 <= i & i < len f
+ holds LSeg(f,i) /\ rng f = {f/.i,f/.(i+1)}
+proof
+ let f be non empty s.n.c. unfolded FinSequence of TOP-REAL 2, i such that
+A1: 1 <= i and
+A2: i < len f;
+A3: i+1 <= len f by A2,NAT_1:38;
+then A4: f/.i in LSeg(f,i) by A1,TOPREAL1:27;
+A5: i in dom f by A1,A2,FINSEQ_3:27;
+   then f/.i = f.i by FINSEQ_4:def 4;
+   then f/.i in rng f by A5,FUNCT_1:12;
+   then A6: f/.i in LSeg(f,i) /\ rng f by A4,XBOOLE_0:def 3;
+     0 < i by A1,AXIOMS:22;
+   then A7: 1 < i+1 by REAL_1:69;
+   then A8: i+1 in dom f by A3,FINSEQ_3:27;
+   then f/.(i+1) = f.(i+1) by FINSEQ_4:def 4;
+   then A9:  f/.(i+1) in rng f by A8,FUNCT_1:12;
+     f/.(i+1) in LSeg(f,i) by A1,A3,TOPREAL1:27;
+   then f/.(i+1) in LSeg(f,i) /\ rng f by A9,XBOOLE_0:def 3;
+   then A10: {f/.i,f/.(i+1)} c= LSeg(f,i) /\ rng f by A6,ZFMISC_1:38;
+ assume LSeg(f,i) /\ rng f <> {f/.i,f/.(i+1)};
+  then not LSeg(f,i) /\ rng f c= {f/.i,f/.(i+1)} by A10,XBOOLE_0:def 10;
+  then consider x being set such that
+A11: x in LSeg(f,i) /\ rng f and
+A12: not x in {f/.i,f/.(i+1)} by TARSKI:def 3;
+  reconsider x as Point of TOP-REAL 2 by A11;
+A13: x <> f/.i & x <> f/.(i+1) by A12,TARSKI:def 2;
+    x in rng f by A11,XBOOLE_0:def 3;
+  then consider j being set such that
+A14: j in dom f and
+A15: x = f.j by FUNCT_1:def 5;
+A16:  x = f/.j by A14,A15,FINSEQ_4:def 4;
+  reconsider j as Nat by A14;
+A17:  1 <= j by A14,FINSEQ_3:27;
+   reconsider j as Nat;
+A18: x in LSeg(f,i) by A11,XBOOLE_0:def 3;
+A19: j <> i & j <> i+1 by A13,A14,A15,FINSEQ_4:def 4;
+    now per cases by A19,AXIOMS:21;
+   suppose j+1 > len f;
+    then A20:  len f <= j by NAT_1:38;
+       j <= len f by A14,FINSEQ_3:27;
+     then A21:    j = len f by A20,AXIOMS:21;
+A22:   1 < len f by A3,A7,AXIOMS:22;
+     then consider k such that
+A23:   len f = 1 + k by NAT_1:28;
+       1 <= k by A22,A23,NAT_1:38;
+     then A24:    x in LSeg(f,k) by A16,A21,A23,TOPREAL1:27;
+       i <= k by A2,A23,NAT_1:38;
+     then i < k by A13,A16,A21,A23,AXIOMS:21;
+     then A25:  i+1 <= k by NAT_1:38;
+       now per cases by A25,AXIOMS:21;
+      suppose
+A26:     i+1 = k;
+        then i+(1+1) <= len f by A23,XCMPLX_1:1;
+        then LSeg(f,i) /\ LSeg(f,k) = {f/.(i+1)} by A1,A26,TOPREAL1:def 8;
+        then x in {f/.(i+1)} by A18,A24,XBOOLE_0:def 3;
+       hence contradiction by A13,TARSKI:def 1;
+      suppose i+1 < k;
+       then LSeg(f,i) misses LSeg(f,k) by TOPREAL1:def 9;
+       hence contradiction by A18,A24,XBOOLE_0:3;
+     end;
+    hence contradiction;
+   suppose that
+A27:  i < j and
+A28:  j+1 <= len f;
+A29:   x in LSeg(f,j) by A16,A17,A28,TOPREAL1:27;
+       i+1 <= j by A27,NAT_1:38;
+     then i+1 < j by A19,AXIOMS:21;
+     then LSeg(f,i) misses LSeg(f,j) by TOPREAL1:def 9;
+    hence contradiction by A18,A29,XBOOLE_0:3;
+   suppose
+A30:  j < i;
+     then A31:  j+1 <= i by NAT_1:38;
+       j+1 <= i+1 by A30,AXIOMS:24;
+     then j+1 <= len f by A3,AXIOMS:22;
+     then x in LSeg(f,j) by A16,A17,TOPREAL1:27;
+     then A32:   x in LSeg(f,i) /\ LSeg(f,j) by A18,XBOOLE_0:def 3;
+       now per cases by A31,AXIOMS:21;
+      suppose
+A33:     j+1 = i;
+       then j+1+1 <= len f by A2,NAT_1:38;
+       then j+(1+1) <= len f by XCMPLX_1:1;
+       then LSeg(f,i) /\ LSeg(f,j) = {f/.i} by A17,A33,TOPREAL1:def 8;
+      hence contradiction by A13,A32,TARSKI:def 1;
+      suppose j+1 < i;
+      then LSeg(f,j) misses LSeg(f,i) by TOPREAL1:def 9;
+      hence contradiction by A32,XBOOLE_0:4;
+     end;
+    hence contradiction;
+  end;
+ hence contradiction;
+end;
+
+Lm1:
+ for f being non empty s.n.c. one-to-one unfolded FinSequence of TOP-REAL 2
+ for g being non trivial s.n.c. one-to-one unfolded FinSequence of TOP-REAL 2
+ for i,j st i < len f & 1 < i
+ for x being Point of TOP-REAL 2 st x in LSeg(f^'g,i) /\ LSeg(f^'g,j)
+ holds x <> f/.1
+proof
+ let f being non empty s.n.c. one-to-one unfolded FinSequence of TOP-REAL 2;
+ let g being non trivial s.n.c. one-to-one unfolded FinSequence of TOP-REAL 2;
+ let i,j such that
+A1: i < len f and
+A2: 1 < i;
+ let x being Point of TOP-REAL 2 such that
+A3: x in LSeg(f^'g,i) /\ LSeg(f^'g,j);
+ assume that
+A4: x = f/.1;
+A5: i+1 <= len f by A1,NAT_1:38;
+       LSeg(f^'g,i) = LSeg(f,i) by A1,Th28;
+     then A6:   x in LSeg(f,i) by A3,XBOOLE_0:def 3;
+A7:   1 in dom f by FINSEQ_5:6;
+     then x = f.1 by A4,FINSEQ_4:def 4;
+     then x in rng f by A7,FUNCT_1:12;
+     then A8:   x in LSeg(f,i) /\ rng f by A6,XBOOLE_0:def 3;
+       LSeg(f,i) /\ rng f = {f/.i,f/.(i+1)} by A1,A2,Th32;
+     then A9:    x = f/.i or x = f/.(i+1) by A8,TARSKI:def 2;
+       0 < i by A2,AXIOMS:22;
+     then A10:    1 < i+1 by REAL_1:69;
+     then i in dom f & i+1 in dom f by A1,A2,A5,FINSEQ_3:27;
+    hence contradiction by A2,A4,A7,A9,A10,PARTFUN2:17;
+end;
+
+Lm2:
+ for f being non empty s.n.c. one-to-one unfolded FinSequence of TOP-REAL 2
+ for g being non trivial s.n.c. one-to-one unfolded FinSequence of TOP-REAL 2
+ for i,j st j > len f & j+1 < len(f^'g)
+ for x being Point of TOP-REAL 2 st x in LSeg(f^'g,i) /\ LSeg(f^'g,j)
+ holds x <> g/.len g
+proof
+ let f being non empty s.n.c. one-to-one unfolded FinSequence of TOP-REAL 2;
+ let g being non trivial s.n.c. one-to-one unfolded FinSequence of TOP-REAL 2;
+ let i,j such that
+A1: j > len f and
+A2: j+1 < len(f^'g);
+ let x being Point of TOP-REAL 2 such that
+A3: x in LSeg(f^'g,i) /\ LSeg(f^'g,j);
+ assume that
+A4: x = g/.len g;
+  consider k such that
+A5: j = len f + k by A1,NAT_1:28;
+     len(f^'g)+1 = len f + len g by GRAPH_2:13;
+   then A6:  j+1+1 < len f + len g by A2,REAL_1:53;
+     j+1+1 = j+(1+1) by XCMPLX_1:1
+        .= len f+(k+(1+1)) by A5,XCMPLX_1:1
+        .= len f+(k+1+1) by XCMPLX_1:1;
+   then A7:  k+1+1 < len g by A6,AXIOMS:24;
+   A8: k+1 <= k+1+1 by NAT_1:29;
+   then A9: k+1 < len g by A7,AXIOMS:22;
+     len f + 0 < len f +k by A1,A5;
+   then 0 < k by AXIOMS:24;
+   then 0+1 <= k by NAT_1:38;
+  then LSeg(f^'g,j) = LSeg(g,k+1) by A5,A9,Th29;
+  then A10: x in LSeg(g,k+1) by A3,XBOOLE_0:def 3;
+A11: len g in dom g by FINSEQ_5:6;
+   then x = g.len g by A4,FINSEQ_4:def 4;
+   then x in rng g by A11,FUNCT_1:12;
+   then A12:   x in LSeg(g,k+1) /\ rng g by A10,XBOOLE_0:def 3;
+A13: 1 <= k+1 by NAT_1:29;
+   then LSeg(g,k+1) /\ rng g = {g/.(k+1),g/.(k+1+1)} by A9,Th32;
+   then A14:  x = g/.(k+1) or x = g/.(k+1+1) by A12,TARSKI:def 2;
+     1 <= k+1+1 by NAT_1:29;
+   then k+1 in dom g & k+1+1 in dom g by A7,A9,A13,FINSEQ_3:27;
+ hence contradiction by A4,A7,A8,A11,A14,PARTFUN2:17;
+end;
+
+theorem Th33:
+ for f,g being non trivial s.n.c. one-to-one unfolded FinSequence of TOP-REAL 2
+   st L~f /\ L~g = {f/.1,g/.1} &
+      f/.1 = g/.len g & g/.1 = f/.len f
+ holds f ^' g is s.c.c.
+proof
+ let f,g being non trivial s.n.c. one-to-one unfolded FinSequence of TOP-REAL 2
+   such that
+A1: L~f /\ L~g = {f/.1,g/.1} and
+A2: f/.1 = g/.len g and
+A3: g/.1 = f/.len f;
+ let i,j such that
+A4: i+1 < j and
+A5: i > 1 & j < len(f^'g) or j+1 < len(f^'g);
+A6: i < j by A4,NAT_1:38;
+    j <= j+1 by NAT_1:29;
+  then A7: j < len(f^'g) by A5,AXIOMS:22;
+A8: len(f^'g)+1 = len f + len g by GRAPH_2:13;
+A9: len(g^'f)+1 = len f + len g by GRAPH_2:13;
+A10: for i st 1 <= i & i < len f holds f/.i <> g/.1
+  proof let i such that
+A11: 1 <= i and
+A12: i < len f;
+A13:  i in dom f & len f in dom f by A11,A12,FINSEQ_3:27,FINSEQ_5:6;
+    then f/.i = f.i & f/.len f = f.len f by FINSEQ_4:def 4;
+   hence f/.i <> g/.1 by A3,A12,A13,FUNCT_1:def 8;
+  end;
+ per cases by RLVECT_1:99;
+ suppose i = 0;
+  then LSeg(f^'g,i) = {} by TOPREAL1:def 5;
+  then LSeg(f^'g,i) /\ LSeg(f^'g,j) = {};
+ hence thesis by XBOOLE_0:def 7;
+ suppose
+A14: j < len f;
+   then i < len f by A6,AXIOMS:22;
+   then A15: LSeg(f^'g,i) = LSeg(f,i) by Th28;
+     LSeg(f^'g,j) = LSeg(f,j) by A14,Th28;
+ hence thesis by A4,A15,TOPREAL1:def 9;
+ suppose
+A16: i >= len f;
+   then consider m such that
+A17:  i = len f + m by NAT_1:28;
+     len f < j by A6,A16,AXIOMS:22;
+   then consider n such that
+A18:  j = len f + n by NAT_1:28;
+A19:  m < n by A6,A17,A18,AXIOMS:24;
+      j+1 < len f + len g by A7,A8,REAL_1:53;
+    then len f + (n+1) < len f + len g by A18,XCMPLX_1:1;
+    then A20: n+1 < len g by AXIOMS:24;
+     m+1 < n+1 by A19,REAL_1:53;
+   then m+1 < len g by A20,AXIOMS:22;
+   then A21: LSeg(f^'g,i) = LSeg(g,m+1) by A3,A17,Th31;
+A22: m+1 <= n by A19,NAT_1:38;
+     1 <= m+1 by NAT_1:29;
+   then 1 <= n by A22,AXIOMS:22;
+   then A23: LSeg(f^'g,j) = LSeg(g,n+1) by A18,A20,Th29;
+    i + 1 + 1 < j + 1 by A4,REAL_1:53;
+  then len f + m + (1 + 1) < j + 1 by A17,XCMPLX_1:1;
+  then len f + (m + (1 + 1)) < j + 1 by XCMPLX_1:1;
+  then len f + (m + (1 + 1)) < len f + (n + 1) by A18,XCMPLX_1:1;
+  then m + (1 + 1) < n + 1 by AXIOMS:24;
+  then m+1+1 < n+1 by XCMPLX_1:1;
+ hence thesis by A21,A23,TOPREAL1:def 9;
+ suppose that
+A24: j >= len f and
+A25: i < len f and
+A26: 1 <= i;
+ assume LSeg(f^'g,i) meets LSeg(f^'g,j);
+  then consider x being set such that
+A27: x in LSeg(f^'g,i) /\ LSeg(f^'g,j) by XBOOLE_0:4;
+A28: LSeg(f^'g,i) = LSeg(f,i) by A25,Th28;
+  consider k such that
+A29:  j = len f + k by A24,NAT_1:28;
+    j+1 < len f+ len g by A7,A8,REAL_1:53;
+  then len f + (k +1) < len f+ len g by A29,XCMPLX_1:1;
+  then k+1 < len g by AXIOMS:24;
+  then LSeg(f^'g,j) = LSeg(g,k+1) by A3,A29,Th31;
+  then A30: LSeg(f^'g,j) c= L~g by TOPREAL3:26;
+    LSeg(f^'g,i) c= L~f by A28,TOPREAL3:26;
+  then A31: LSeg(f^'g,i) /\ LSeg(f^'g,j) c= {f/.1,g/.1} by A1,A30,XBOOLE_1:27;
+   now per cases by A5,A24,A27,A31,AXIOMS:21,TARSKI:def 2;
+  suppose 1 < i & x = f/.1;
+  hence contradiction by A25,A27,Lm1;
+ suppose that
+A32: j > len f + 0 and
+A33:   x = g/.1;
+A34: Rotate(f^'g,g/.1) = g^'f by A3,A10,Th18;
+A35: len f in dom f by FINSEQ_5:6;
+then f.len f = f/.len f by FINSEQ_4:def 4;
+then A36:   g/.1 in rng f by A3,A35,FUNCT_1:12;
+then A37: g/.1..(f^'g) = g/.1..f by Th8
+      .= len f by A3,Th6;
+    A38: rng f c= rng(f^'g) by Th10;
+      f^'g is circular by A2,Th11;
+    then A39: LSeg(f^'g,i) = LSeg(Rotate((f^'g),g/.1),i + len (f^'g) -' g/.1..(
+f^'g))
+                      by A25,A26,A36,A37,A38,REVROT_1:32;
+A40: LSeg(f^'g,j) = LSeg(Rotate((f^'g),g/.1),j -' g/.1..(f^'g)+1)
+      by A7,A32,A36,A37,A38,REVROT_1:25;
+      j+0 < j+1 by REAL_1:53;
+    then A41: len f < j+1 by A32,AXIOMS:22;
+      j+1 < len(g^'f) + 1 by A7,A8,A9,REAL_1:53;
+    then j+1 -' len f < len g by A9,A41,SPRECT_3:7;
+    then A42: j -' len f+1 < len g by A32,JORDAN4:3;
+      0 < j -' len f by A32,SPRECT_3:5;
+    then 0+1 < j -' len f+1 by REAL_1:53;
+ hence contradiction by A27,A33,A34,A37,A39,A40,A42,Lm1;
+ suppose that
+A43: j = len f and
+A44: x = g/.1;
+     i <= i+1 by NAT_1:29;
+   then i < len f by A4,A43,AXIOMS:22;
+   then A45: i in dom f by A26,FINSEQ_3:27;
+     1 <= i+1 by NAT_1:29;
+   then A46: i+1 in dom f by A4,A43,FINSEQ_3:27;
+     i <= i+1 by NAT_1:29;
+   then i < j by A4,AXIOMS:22;
+   then LSeg(f^'g,i) = LSeg(f,i) by A43,Th28;
+   then f/.len f in LSeg(f,i) by A3,A27,A44,XBOOLE_0:def 3;
+ hence contradiction by A4,A43,A45,A46,GOBOARD2:7;
+ suppose that
+A47: j > len f and
+A48: x = f/.1 and
+A49: j+1 < len(f^'g);
+ thus thesis by A2,A27,A47,A48,A49,Lm2;
+ suppose that
+A50: j = len f and
+A51: x = f/.1 and
+A52: j+1 < len(f^'g);
+   j+1+1 < len f+ len g by A8,A52,REAL_1:53;
+ then A53: j+(1+1) < len f+ len g by XCMPLX_1:1;
+ then A54: 1+1 < len g by A50,AXIOMS:24;
+     0+1 < len g by Th2;
+  then LSeg(f^'g,len f+0) = LSeg(g,0+1) by A3,Th31;
+  then A55: g/.len g in LSeg(g,1) by A2,A27,A50,A51,XBOOLE_0:def 3;
+A56: 1 in dom g by FINSEQ_5:6;
+    1+1 in dom g by A54,FINSEQ_3:27;
+ hence contradiction by A50,A53,A55,A56,GOBOARD2:7;
+ end;
+ hence contradiction;
+end;
+
+reserve f,g,g1,g2 for FinSequence of TOP-REAL 2;
+
+theorem Th34:
+ f is unfolded & g is unfolded & f/.len f = g/.1 &
+   LSeg(f,len f -' 1) /\ LSeg(g,1) = { f/.len f }
+  implies f^'g is unfolded
+proof assume that
+A1: f is unfolded and
+A2: g is unfolded and
+A3: f/.len f = g/.1 and
+A4: LSeg(f,len f -' 1) /\ LSeg(g,1) = { f/.len f };
+A5: f ^' g = f^(1+1, len g)-cut g by GRAPH_2:def 2;
+  reconsider g' = g as unfolded FinSequence of TOP-REAL 2 by A2;
+  set c = (1+1, len g)-cut g, k = len f -' 1;
+A6: c = g'/^1 by Th13;
+  per cases by CQC_THE1:3;
+  suppose f is empty;
+  hence thesis by A5,A6,FINSEQ_1:47;
+  suppose len g = 0;
+    then g = {} by FINSEQ_1:25;
+    then c = <*>the carrier of TOP-REAL 2 by A6,FINSEQ_6:86;
+   hence thesis by A1,A5,FINSEQ_1:47;
+  suppose len g = 1;
+    then c = {} by A6,REVROT_1:2;
+   hence thesis by A1,A5,FINSEQ_1:47;
+  suppose that
+A7: f is non empty and
+A8: len g = 1+1;
+     len f <> 0 by A7,FINSEQ_1:25;
+   then 1 <= len f by RLVECT_1:99;
+   then A9: k+1 = len f by AMI_5:4;
+      g|len g = g by TOPREAL1:2;
+    then g = <*g/.1,g/.2*> by A8,JORDAN8:1;
+    then A10:   f^'g = f^<*g/.2*> by A5,A6,FINSEQ_6:50;
+     1 <= len g - 1 by A8;
+   then 1 <= len(g/^1) by A8,RFINSEQ:def 2;
+   then A11: 1 in dom(g/^1) by FINSEQ_3:27;
+   then A12: c/.1 = (g/^1).1 by A6,FINSEQ_4:def 4
+      .= g.(1+1) by A8,A11,RFINSEQ:def 2
+      .= g/.(1+1) by A8,FINSEQ_4:24;
+   then LSeg(g,1) = LSeg(f/.len f,c/.1) by A3,A8,TOPREAL1:def 5;
+   hence thesis by A1,A4,A9,A10,A12,SPPOL_2:31;
+  suppose that
+A13:  f is non empty and
+A14: 2 < len g;
+     len f <> 0 by A13,FINSEQ_1:25;
+   then 1 <= len f by RLVECT_1:99;
+   then A15: k+1 = len f by AMI_5:4;
+A16: 1 + 2 <= len g by A14,NAT_1:38;
+A17: 1+1 <= len g by A14;
+A18: 1 <= len g by A14,AXIOMS:22;
+     1 <= len g - 1 by A17,REAL_1:84;
+   then 1 <= len(g/^1) by A18,RFINSEQ:def 2;
+   then A19: 1 in dom(g/^1) by FINSEQ_3:27;
+   then A20: c/.1 = (g/^1).1 by A6,FINSEQ_4:def 4
+      .= g.(1+1) by A18,A19,RFINSEQ:def 2
+      .= g/.(1+1) by A14,FINSEQ_4:24;
+   then A21:  LSeg(g,1) = LSeg(f/.len f,c/.1) by A3,A14,TOPREAL1:def 5;
+  LSeg(g/^1,1) = LSeg(g,1+1) by A18,SPPOL_2:4;
+  then LSeg(g,1) /\ LSeg(c,1) = {c/.1} by A6,A16,A20,TOPREAL1:def 8;
+ hence f^'g is unfolded by A1,A4,A5,A6,A15,A21,SPPOL_2:32;
+end;
+
+theorem Th35:
+ f is non empty & g is non trivial &
+ f/.len f = g/.1 implies L~(f^'g) = L~f \/ L~g
+proof assume that
+A1: f is non empty and
+A2: g is non trivial and
+A3: f/.len f = g/.1;
+set c = (1+1, len g)-cut g;
+A4: c = g/^1 by Th13;
+A5:len g > 1 by A2,Th2;
+  then len c = len g - 1 by A4,RFINSEQ:def 2;
+  then len c > 1-1 by A5,REAL_1:54;
+  then A6: c is non empty by FINSEQ_1:25;
+    now assume g is empty;
+    then g = <*>the carrier of TOP-REAL 2;
+   hence contradiction by A4,A6,FINSEQ_6:86;
+  end;
+  then g = <*g/.1*>^c by A4,FINSEQ_5:32;
+  then A7: LSeg(g/.1,c/.1) \/ L~c = L~g by A6,SPPOL_2:20;
+    L~(f^c) = L~f \/ LSeg(f/.(len f),c/.1) \/ L~c by A1,A6,SPPOL_2:23
+      .= L~f \/ (LSeg(g/.1,c/.1) \/ L~c) by A3,XBOOLE_1:4;
+ hence thesis by A7,GRAPH_2:def 2;
+end;
+
+theorem
+  (for n st n in dom f ex i,j st [i,j] in Indices G & f/.n=G*(i,j)) &
+ f is non constant circular unfolded s.c.c. special & len f > 4
+implies
+ ex g st g is_sequence_on G & g is unfolded s.c.c. special &
+  L~f = L~g & f/.1 = g/.1 & f/.len f = g/.len g & len f <= len g
+proof assume that
+A1: for n st n in dom f ex i,j st [i,j] in Indices G & f/.n=G*(i,j) and
+A2: f is non constant circular unfolded and
+A3: f is s.c.c. and
+A4: f is special and
+A5: len f > 4;
+  reconsider f' = f as non constant unfolded s.c.c. special
+      circular FinSequence of TOP-REAL 2 by A2,A3,A4;
+  reconsider f' as non constant unfolded s.c.c. special
+      circular non empty FinSequence of TOP-REAL 2;
+A6: len f > 1+1 by A2,Th3;
+  set h1 = f'|2, h2 = f'/^1;
+A7: len h1 = 1+1 by A6,TOPREAL1:3;
+  then reconsider h1 as non trivial FinSequence of TOP-REAL 2 by SPPOL_1:2;
+    1 <= len f by A6,AXIOMS:22;
+  then A8: len h2 = len f - 1 by RFINSEQ:def 2;
+  then A9: len h2 + 1 = len f by XCMPLX_1:27;
+  A10: len h2 > 1+1-1 by A6,A8,REAL_1:54;
+  then A11: len h2 >= 2 by NAT_1:38;
+  then reconsider h2 as non trivial FinSequence of TOP-REAL 2 by SPPOL_1:2;
+A12: (1+1, len h2)-cut h2 = h2/^1 by Th13;
+A13: f = h1^(f/^(1+1)) by RFINSEQ:21
+     .= h1^(2, len h2)-cut h2 by A12,FINSEQ_6:87
+     .= h1^'h2 by GRAPH_2:def 2;
+A14: dom h1 c= dom f by FINSEQ_5:20;
+A15: for n st n in dom h1
+     ex i,j st [i,j] in Indices G & h1/.n=G*(i,j)
+   proof let n;
+     assume
+A16:    n in dom h1;
+      then consider i,j such that
+A17:    [i,j] in Indices G and
+A18:    f/.n=G*(i,j) by A1,A14;
+    take i,j;
+    thus [i,j] in Indices G by A17;
+    thus h1/.n=G*(i,j) by A16,A18,TOPREAL1:1;
+   end;
+A19: h1 is one-to-one by A5,A6,Th22;
+    h1 is s.n.c. by A6,Th20;
+  then consider g1 such that
+A20:  g1 is_sequence_on G and
+A21: g1 is one-to-one unfolded s.n.c. special and
+A22: L~h1 = L~g1 and
+A23: h1/.1 = g1/.1 and
+A24: h1/.len h1 = g1/.len g1 and
+A25: len h1 <= len g1 by A15,A19,GOBOARD3:1;
+  reconsider g1 as non trivial FinSequence of TOP-REAL 2 by A7,A25,SPPOL_1:2;
+A26: for n st n in dom h2 ex i,j st [i,j] in Indices G & h2/.n=G*(i,j)
+   proof let n;
+    assume
+A27:   n in dom h2;
+     then n+1 in dom f by FINSEQ_5:29;
+     then consider i,j such that
+A28:    [i,j] in Indices G and
+A29:    f/.(n+1)=G*(i,j) by A1;
+    take i,j;
+    thus [i,j] in Indices G by A28;
+    thus h2/.n=G*(i,j) by A27,A29,FINSEQ_5:30;
+   end;
+A30: h2 is one-to-one by A5,Th24;
+    h2 is s.n.c. by Th21;
+  then consider g2 such that
+A31: g2 is_sequence_on G and
+A32: g2 is one-to-one unfolded s.n.c. special and
+A33: L~h2 = L~g2 and
+A34: h2/.1 = g2/.1 and
+A35: h2/.len h2 = g2/.len g2 and
+A36: len h2 <= len g2 by A26,A30,GOBOARD3:1;
+A37: len g2 >= 1+1 by A11,A36,AXIOMS:22;
+  then reconsider g2 as non trivial FinSequence of TOP-REAL 2 by SPPOL_1:2;
+ take g = g1 ^' g2;
+  A38: 1 in dom h2 by A10,FINSEQ_3:27;
+A39: len h2 in dom h2 by FINSEQ_5:6;
+         len h1 in dom h1 by A7,FINSEQ_3:27;
+  then A40: h1/.len h1 = f/.(1+1) by A7,TOPREAL1:1;
+  then A41: h1/.len h1= h2/.1 by A38,FINSEQ_5:30;
+A42: 1 in dom h1 by FINSEQ_5:6;
+    then A43: h1/.1 = f/.1 by TOPREAL1:1;
+    then A44: h1/.1 = f/.len f by FINSEQ_6:def 1
+     .= h2/.len h2 by A9,A39,FINSEQ_5:30;
+ thus g is_sequence_on G by A20,A24,A31,A34,A41,Th12;
+     1 <= len g2 by A37,AXIOMS:22;
+   then A45: len g2 -'1 +1 = len g2 by AMI_5:4;
+     1 <= len g1 by A7,A25,AXIOMS:22;
+   then A46: len g1 -'1 +1 = len g1 by AMI_5:4;
+    len h2 > 3+1-1 by A5,A8,REAL_1:54;
+   then 2+1 < len g2 by A36,AXIOMS:22;
+   then A47: 1+1 < len g2 -' 1 by SPRECT_3:5;
+     LSeg(f,1) /\ L~h2 = {h1/.1,h2/.1} by A5,A40,A41,A43,Th27;
+
+   then A48: L~g1 /\ L~g2 = {g1/.1,g2/.1} by A22,A23,A33,A34,Th19;
+
+    1 <= len g1 -'1 by A7,A25,SPRECT_3:8;
+  then A49: g1/.len g1 in LSeg(g1,len g1 -'1) by A46,TOPREAL1:27;
+      g2/.1 in LSeg(g2,1) by A37,TOPREAL1:27;
+    then A50: g2/.1 in LSeg(g1,len g1 -' 1) /\ LSeg(g2,1) by A24,A34,A41,A49,
+XBOOLE_0:def 3;
+   A51: LSeg(g2,1) misses LSeg(g2,len g2-'1) by A32,A47,TOPREAL1:def 9;
+    1 <= len g2-'1 by A47,NAT_1:38;
+  then g2/.len g2 in LSeg(g2,len g2-'1) by A45,TOPREAL1:27;
+  then not g2/.len g2 in LSeg(g2,1) by A51,XBOOLE_0:3;
+  then A52: not g2/.len g2 in LSeg(g1,len g1 -' 1) /\ LSeg(g2,1) by XBOOLE_0:
+def 3;
+A53: LSeg(g1,len g1 -' 1) c= L~g1 by TOPREAL3:26;
+    LSeg(g2,1) c= L~g2 by TOPREAL3:26;
+  then LSeg(g1,len g1 -' 1) /\ LSeg(g2,1) c= {g1/.1,g2/.1}
+          by A48,A53,XBOOLE_1:27;
+  then LSeg(g1,len g1 -' 1) /\ LSeg(g2,1) = { g2/.1 } by A23,A35,A44,A50,A52,
+Th1;
+ hence g is unfolded by A21,A24,A32,A34,A41,Th34;
+ thus g is s.c.c. by A21,A23,A24,A32,A34,A35,A41,A44,A48,Th33;
+ thus g is special by A21,A24,A32,A34,A41,Th26;
+ thus L~f = L~h1 \/ L~h2 by A13,A41,Th35
+     .= L~g by A22,A24,A33,A34,A41,Th35;
+ thus f/.1 = h1/.1 by A42,TOPREAL1:1
+     .= g/.1 by A23,AMISTD_1:5;
+ thus f/.len f = h2/.len h2 by A9,A39,FINSEQ_5:30
+    .= g/.len g by A35,AMISTD_1:6;
+A54: len f + 1 = len h1 + len h2 by A13,GRAPH_2:13;
+    len g + 1 = len g1 + len g2 by GRAPH_2:13;
+  then len f +1 <= len g +1 by A25,A36,A54,REAL_1:55;
+ hence len f <= len g by REAL_1:53;
+end;
+

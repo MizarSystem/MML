@@ -1,0 +1,1510 @@
+:: Completely-Irreducible Elements
+::  by Robert Milewski
+::
+:: Received February 9, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary WAYBEL_0, LATTICES, BOOLE, ORDERS_1, ORDERS_2, LATTICE3, OPPCAT_1,
+      RELAT_1, RELAT_2, FILTER_0, QUANTAL1, FILTER_2, BHSP_3, PRE_TOPC,
+      FUNCOP_1, FUNCT_1, YELLOW_0, SEQM_3, FINSET_1, ORDINAL2, YELLOW_1,
+      SETFAM_1, WELLORD2, TARSKI, WAYBEL_1, WAYBEL_6, WAYBEL_2, SUBSET_1,
+      WAYBEL_3, WAYBEL_8, COMPTS_1, WAYBEL16;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, SETFAM_1, RELAT_1,
+      FINSET_1, FUNCT_2, FUNCOP_1, ORDERS_1, PRE_TOPC, LATTICE3, YELLOW_0,
+      YELLOW_1, YELLOW_4, YELLOW_7, WAYBEL_0, WAYBEL_1, WAYBEL_2, WAYBEL_3,
+      WAYBEL_4, WAYBEL_6, WAYBEL_8;
+ constructors ORDERS_3, YELLOW_4, WAYBEL_1, WAYBEL_2, WAYBEL_3, WAYBEL_6,
+      WAYBEL_4, WAYBEL_8, MEMBERED;
+ clusters STRUCT_0, FINSET_1, LATTICE3, YELLOW_1, YELLOW_2, YELLOW_7, WAYBEL_0,
+      WAYBEL_2, WAYBEL_3, WAYBEL_6, WAYBEL_8, RELSET_1, SUBSET_1, MEMBERED,
+      ZFMISC_1;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, XBOOLE_0;
+ theorems TARSKI, SUBSET_1, SETFAM_1, RELAT_1, ZFMISC_1, FINSET_1, FUNCOP_1,
+      ORDERS_1, LATTICE3, YELLOW_0, YELLOW_1, YELLOW_2, YELLOW_4, YELLOW_7,
+      WAYBEL_0, WAYBEL_1, WAYBEL_2, WAYBEL_3, WAYBEL_4, WAYBEL_6, WAYBEL_7,
+      WAYBEL_8, WAYBEL13, WAYBEL14, WAYBEL15, XBOOLE_0, XBOOLE_1;
+ schemes YELLOW_2, WAYBEL_3;
+
+begin  :: Preliminaries
+
+  theorem Th1:
+   for L be sup-Semilattice
+   for x,y be Element of L holds
+    "/\"((uparrow x) /\ (uparrow y),L) = x "\/" y
+   proof
+    let L be sup-Semilattice;
+    let x,y be Element of L;
+      (uparrow x) /\ (uparrow y) = uparrow (x "\/" y) by WAYBEL14:4;
+    hence "/\"((uparrow x) /\ (uparrow y),L) = x "\/" y by WAYBEL_0:39;
+   end;
+
+  theorem
+     for L be Semilattice
+   for x,y be Element of L holds
+    "\/"((downarrow x) /\ (downarrow y),L) = x "/\" y
+   proof
+    let L be Semilattice;
+    let x,y be Element of L;
+      (downarrow x) /\ (downarrow y) = downarrow (x "/\" y) by WAYBEL14:3;
+    hence "\/"((downarrow x) /\ (downarrow y),L) = x "/\" y by WAYBEL_0:34;
+   end;
+
+  theorem Th3:
+   for L be non empty RelStr
+   for x,y be Element of L st
+    x is_maximal_in (the carrier of L) \ uparrow y holds
+     (uparrow x) \ {x} = (uparrow x) /\ (uparrow y)
+   proof
+    let L be non empty RelStr;
+    let x,y be Element of L;
+    assume A1: x is_maximal_in (the carrier of L) \ uparrow y;
+    then x in (the carrier of L) \ uparrow y by WAYBEL_4:56;
+    then not x in uparrow y by XBOOLE_0:def 4;
+    then A2: not y <= x by WAYBEL_0:18;
+    thus (uparrow x) \ {x} c= (uparrow x) /\ (uparrow y)
+    proof
+     let a be set;
+     assume A3: a in (uparrow x) \ {x};
+     then A4: a in uparrow x & not a in {x} by XBOOLE_0:def 4;
+     reconsider a1 = a as Element of L by A3;
+       x <= a1 & a1 <> x by A4,TARSKI:def 1,WAYBEL_0:18;
+     then x < a1 by ORDERS_1:def 10;
+     then not a1 in (the carrier of L) \ uparrow y by A1,WAYBEL_4:56;
+     then a in uparrow y by XBOOLE_0:def 4;
+     hence a in (uparrow x) /\ (uparrow y) by A4,XBOOLE_0:def 3;
+    end;
+    let a be set;
+    assume A5: a in (uparrow x) /\ (uparrow y);
+    then A6: a in uparrow x & a in uparrow y by XBOOLE_0:def 3;
+    reconsider a1 = a as Element of L by A5;
+      y <= a1 by A6,WAYBEL_0:18;
+    then not a in {x} by A2,TARSKI:def 1;
+    hence a in (uparrow x) \ {x} by A6,XBOOLE_0:def 4;
+   end;
+
+  theorem
+     for L be non empty RelStr
+   for x,y be Element of L st
+    x is_minimal_in (the carrier of L) \ downarrow y holds
+     (downarrow x) \ {x} = (downarrow x) /\ (downarrow y)
+   proof
+    let L be non empty RelStr;
+    let x,y be Element of L;
+    assume A1: x is_minimal_in (the carrier of L) \ downarrow y;
+    then x in (the carrier of L) \ downarrow y by WAYBEL_4:57;
+    then not x in downarrow y by XBOOLE_0:def 4;
+    then A2: not x <= y by WAYBEL_0:17;
+    thus (downarrow x) \ {x} c= (downarrow x) /\ (downarrow y)
+    proof
+     let a be set;
+     assume A3: a in (downarrow x) \ {x};
+     then A4: a in downarrow x & not a in {x} by XBOOLE_0:def 4;
+     reconsider a1 = a as Element of L by A3;
+       a1 <= x & a1 <> x by A4,TARSKI:def 1,WAYBEL_0:17;
+     then a1 < x by ORDERS_1:def 10;
+     then not a1 in (the carrier of L) \ downarrow y by A1,WAYBEL_4:57;
+     then a in downarrow y by XBOOLE_0:def 4;
+     hence a in (downarrow x) /\ (downarrow y) by A4,XBOOLE_0:def 3;
+    end;
+    let a be set;
+    assume A5: a in (downarrow x) /\ (downarrow y);
+    then A6: a in downarrow x & a in downarrow y by XBOOLE_0:def 3;
+    reconsider a1 = a as Element of L by A5;
+      a1 <= y by A6,WAYBEL_0:17;
+    then not a in {x} by A2,TARSKI:def 1;
+    hence a in (downarrow x) \ {x} by A6,XBOOLE_0:def 4;
+   end;
+
+  theorem Th5:
+   for L be with_suprema Poset
+   for X,Y be Subset of L
+   for X',Y' be Subset of L opp st X = X' & Y = Y' holds
+    X "\/" Y = X' "/\" Y'
+   proof
+    let L be with_suprema Poset;
+    let X,Y be Subset of L;
+    let X',Y' be Subset of L opp;
+    assume that
+     A1: X = X' and
+     A2: Y = Y';
+    thus X "\/" Y c= X' "/\" Y'
+    proof
+     let a be set;
+     assume a in X "\/" Y;
+     then a in { p "\/" q where p,q is Element of L : p in X & q in Y }
+                                                          by YELLOW_4:def 3;
+     then consider x,y be Element of L such that
+      A3: a = x "\/" y and
+      A4: x in X and
+      A5: y in Y;
+     A6: x~ in X' & y~ in Y' by A1,A2,A4,A5,LATTICE3:def 6;
+       a = x~ "/\" y~ by A3,YELLOW_7:23;
+     then a in { p "/\" q where p,q is Element of L opp : p in X' & q in Y' }
+                                                                       by A6;
+     hence a in X' "/\" Y' by YELLOW_4:def 4;
+    end;
+    let a be set;
+    assume a in X' "/\" Y';
+    then a in { p "/\" q where p,q is Element of L opp : p in X' & q in Y' }
+                                                          by YELLOW_4:def 4;
+    then consider x,y be Element of L opp such that
+     A7: a = x "/\" y and
+     A8: x in X' and
+     A9: y in Y';
+    A10: ~x in X & ~y in Y by A1,A2,A8,A9,LATTICE3:def 7;
+      a = ~x "\/" ~y by A7,YELLOW_7:24;
+    then a in { p "\/" q where p,q is Element of L : p in X & q in Y } by A10;
+    hence a in X "\/" Y by YELLOW_4:def 3;
+   end;
+
+  theorem
+     for L be with_infima Poset
+   for X,Y be Subset of L
+   for X',Y' be Subset of L opp st X = X' & Y = Y' holds
+    X "/\" Y = X' "\/" Y'
+   proof
+    let L be with_infima Poset;
+    let X,Y be Subset of L;
+    let X',Y' be Subset of L opp;
+    assume that
+     A1: X = X' and
+     A2: Y = Y';
+    thus X "/\" Y c= X' "\/" Y'
+    proof
+     let a be set;
+     assume a in X "/\" Y;
+     then a in { p "/\" q where p,q is Element of L : p in X & q in Y }
+                                                          by YELLOW_4:def 4;
+     then consider x,y be Element of L such that
+      A3: a = x "/\" y and
+      A4: x in X and
+      A5: y in Y;
+     A6: x~ in X' & y~ in Y' by A1,A2,A4,A5,LATTICE3:def 6;
+       a = x~ "\/" y~ by A3,YELLOW_7:21;
+     then a in { p "\/" q where p,q is Element of L opp : p in X' & q in Y' }
+                                                                       by A6;
+     hence a in X' "\/" Y' by YELLOW_4:def 3;
+    end;
+    let a be set;
+    assume a in X' "\/" Y';
+    then a in { p "\/" q where p,q is Element of L opp : p in X' & q in Y' }
+                                                          by YELLOW_4:def 3;
+    then consider x,y be Element of L opp such that
+     A7: a = x "\/" y and
+     A8: x in X' and
+     A9: y in Y';
+    A10: ~x in X & ~y in Y by A1,A2,A8,A9,LATTICE3:def 7;
+      a = ~x "/\" ~y by A7,YELLOW_7:22;
+    then a in { p "/\" q where p,q is Element of L : p in X & q in Y } by A10;
+    hence a in X "/\" Y by YELLOW_4:def 4;
+   end;
+
+  theorem Th7:
+   for L be non empty reflexive transitive RelStr holds
+    Filt L = Ids (L opp)
+   proof
+    let L be non empty reflexive transitive RelStr;
+    A1: Filt L c= Ids (L opp)
+    proof
+     let x be set;
+     assume x in Filt L;
+     then x in { X where X is Filter of L : not contradiction }
+                                                         by WAYBEL_0:def 24;
+     then consider x1 be Filter of L such that
+      A2: x1 = x;
+     A3: x1 is lower Subset of L opp by YELLOW_7:29;
+       x1 is directed Subset of L opp by YELLOW_7:27;
+     then x in { X where X is Ideal of L opp : not contradiction } by A2,A3;
+     hence x in Ids (L opp) by WAYBEL_0:def 23;
+    end;
+      Ids (L opp) c= Filt L
+    proof
+     let x be set;
+     assume x in Ids L opp;
+     then x in { X where X is Ideal of L opp : not contradiction }
+                                                         by WAYBEL_0:def 23;
+     then consider x1 be Ideal of L opp such that
+      A4: x1 = x;
+     A5: x1 is upper Subset of L by YELLOW_7:29;
+       x1 is filtered Subset of L by YELLOW_7:27;
+     then x in { X where X is Filter of L : not contradiction } by A4,A5;
+     hence x in Filt L by WAYBEL_0:def 24;
+    end;
+    hence Filt L = Ids (L opp) by A1,XBOOLE_0:def 10;
+   end;
+
+  theorem
+     for L be non empty reflexive transitive RelStr holds
+    Ids L = Filt (L opp)
+   proof
+    let L be non empty reflexive transitive RelStr;
+    A1: Ids L c= Filt (L opp)
+    proof
+     let x be set;
+     assume x in Ids L;
+     then x in { X where X is Ideal of L : not contradiction }
+                                                         by WAYBEL_0:def 23;
+     then consider x1 be Ideal of L such that
+      A2: x1 = x;
+     A3: x1 is upper Subset of L opp by YELLOW_7:28;
+       x1 is filtered Subset of L opp by YELLOW_7:26;
+     then x in { X where X is Filter of L opp : not contradiction } by A2,A3;
+     hence x in Filt (L opp) by WAYBEL_0:def 24;
+    end;
+      Filt (L opp) c= Ids L
+    proof
+     let x be set;
+     assume x in Filt L opp;
+     then x in { X where X is Filter of L opp : not contradiction }
+                                                         by WAYBEL_0:def 24;
+     then consider x1 be Filter of L opp such that
+      A4: x1 = x;
+     A5: x1 is lower Subset of L by YELLOW_7:28;
+       x1 is directed Subset of L by YELLOW_7:26;
+     then x in { X where X is Ideal of L : not contradiction } by A4,A5;
+     hence x in Ids L by WAYBEL_0:def 23;
+    end;
+    hence Ids L = Filt (L opp) by A1,XBOOLE_0:def 10;
+   end;
+
+begin  :: Free Generation Set
+
+  definition
+   let S,T be complete (non empty Poset);
+   mode CLHomomorphism of S,T -> map of S,T means
+      it is directed-sups-preserving infs-preserving;
+   existence
+   proof
+    reconsider f = (the carrier of S) --> Top T as
+                Function of the carrier of S,the carrier of T by FUNCOP_1:58;
+    reconsider f as map of S,T;
+    take f;
+      now let X be Subset of S;
+     assume A1: X is non empty directed;
+       now assume ex_sup_of X,S;
+        now let x,y be Element of S;
+       assume x <= y;
+         f.x = Top T by FUNCOP_1:13
+          .= f.y by FUNCOP_1:13;
+       hence f.x <= f.y;
+      end;
+      then A2: f is monotone by WAYBEL_1:def 2;
+        rng f = {Top T} by FUNCOP_1:14;
+      then A3: f.:X c= {Top T} by RELAT_1:144;
+        for X be non empty Subset of S holds f.:X is non empty;
+      then A4: f.:X is non empty finite directed Subset of T
+                                         by A1,A2,A3,FINSET_1:13,YELLOW_2:17;
+      then sup (f.:X) in f.:X by WAYBEL_3:16;
+      then A5: sup (f.:X) = Top T by A3,TARSKI:def 1;
+      thus ex_sup_of f.:X,T by A4,WAYBEL_0:75;
+      thus sup (f.:X) = f.sup X by A5,FUNCOP_1:13;
+     end;
+     hence f preserves_sup_of X by WAYBEL_0:def 31;
+    end;
+    hence f is directed-sups-preserving by WAYBEL_0:def 37;
+      now let X be Subset of S;
+       now assume ex_inf_of X,S;
+        rng f = {Top T} by FUNCOP_1:14;
+      then A6: f.:X is Subset of {Top T} by RELAT_1:144;
+      thus ex_inf_of f.:X,T by YELLOW_0:17;
+        now per cases;
+       suppose f.:X = {};
+        hence inf (f.:X) = Top T by YELLOW_0:def 12
+           .= f.inf X by FUNCOP_1:13;
+       suppose f.:X <> {};
+        then f.:X = {Top T} by A6,ZFMISC_1:39;
+        hence inf (f.:X) = Top T by YELLOW_0:39
+           .= f.inf X by FUNCOP_1:13;
+      end;
+      hence inf (f.:X) = f.inf X;
+     end;
+     hence f preserves_inf_of X by WAYBEL_0:def 30;
+    end;
+    hence f is infs-preserving by WAYBEL_0:def 32;
+   end;
+  end;
+
+  definition
+   let S be continuous complete (non empty Poset);
+   let A be Subset of S;
+   pred A is_FG_set means
+      for T be continuous complete (non empty Poset)
+    for f be Function of A,the carrier of T
+    ex h be CLHomomorphism of S,T st
+     h|A = f & for h' be CLHomomorphism of S,T st h'|A = f holds h' = h;
+  end;
+
+  definition
+   let L be upper-bounded non empty Poset;
+   cluster Filt L -> non empty;
+   coherence
+   proof
+      now let x,y be Element of L;
+     assume that
+      A1: x in {Top L} and
+      A2: x <= y;
+       x = Top L by A1,TARSKI:def 1;
+     then y = Top L by A2,WAYBEL15:5;
+     hence y in {Top L} by TARSKI:def 1;
+    end;
+    then {Top L} is Filter of L by WAYBEL_0:5,def 20;
+    then {Top L} in {Y where Y is Filter of L : not contradiction};
+    hence thesis by WAYBEL_0:def 24;
+   end;
+  end;
+
+  theorem Th9:
+   for X be set
+   for Y be non empty Subset of InclPoset Filt BoolePoset X holds
+    meet Y is Filter of BoolePoset X
+   proof
+    let X be set;
+    set L = BoolePoset X;
+    let Y be non empty Subset of InclPoset Filt L;
+    A1: now let Z  be set;
+     assume Z in Y;
+     then Z in the carrier of InclPoset Filt L;
+     then Z in the carrier of RelStr(#Filt L, RelIncl (Filt L)#)
+                                                          by YELLOW_1:def 1;
+     then Z in { V where V is Filter of L : not contradiction }
+                                                         by WAYBEL_0:def 24;
+     then consider Z1 be Filter of L such that
+      A2: Z1 = Z;
+     thus Top L in Z by A2,WAYBEL_4:22;
+    end;
+      Y c= the carrier of InclPoset Filt L;
+    then A3: Y c= the carrier of RelStr(#Filt L, RelIncl (Filt L)#)
+                                                          by YELLOW_1:def 1;
+    A4: Y c= bool the carrier of L
+    proof
+     let v be set;
+     assume v in Y;
+     then v in Filt L by A3;
+     then v in { V where V is Filter of L : not contradiction }
+                                                         by WAYBEL_0:def 24;
+     then consider v1 be Filter of L such that
+      A5: v1 = v;
+     thus v in bool the carrier of L by A5;
+    end;
+    A6: for Z be Subset of L st Z in Y holds Z is upper
+    proof
+     let Z be Subset of L;
+     assume Z in Y;
+     then Z in Filt L by A3;
+     then Z in { V where V is Filter of L : not contradiction }
+                                                         by WAYBEL_0:def 24;
+     then consider Z1 be Filter of L such that
+      A7: Z1 = Z;
+     thus Z is upper by A7;
+    end;
+      now let V be Subset of L;
+     assume V in Y;
+     then V in Filt L by A3;
+     then V in { Z where Z is Filter of L : not contradiction }
+                                                         by WAYBEL_0:def 24;
+     then consider V1 be Filter of L such that
+      A8: V1 = V;
+     thus V is upper by A8;
+     thus V is filtered by A8;
+    end;
+    hence meet Y is Filter of L
+                              by A1,A4,A6,SETFAM_1:def 1,YELLOW_2:39,41;
+   end;
+
+  theorem
+     for X be set
+   for Y be non empty Subset of InclPoset Filt BoolePoset X holds
+    ex_inf_of Y,InclPoset Filt BoolePoset X &
+    "/\"(Y,InclPoset Filt BoolePoset X) = meet Y
+   proof
+    let X be set;
+    set L = InclPoset Filt BoolePoset X;
+    let Y be non empty Subset of L;
+      meet Y is Filter of BoolePoset X by Th9;
+    then meet Y in { Z where Z is Filter of BoolePoset X: not contradiction };
+    then meet Y in the carrier of
+     RelStr(#Filt BoolePoset X, RelIncl (Filt BoolePoset X)#)
+                                                         by WAYBEL_0:def 24;
+    then meet Y in the carrier of L by YELLOW_1:def 1;
+    then reconsider a = meet Y as Element of L;
+      now let b be Element of L;
+     assume b in Y;
+     then meet Y c= b by SETFAM_1:4;
+     hence a <= b by YELLOW_1:3;
+    end;
+    then A1: a is_<=_than Y by LATTICE3:def 8;
+      for b be Element of L st b is_<=_than Y holds b <= a
+    proof
+     let b be Element of L;
+     assume A2: b is_<=_than Y;
+       now let x be set;
+      assume A3: x in Y;
+      then reconsider x' = x as Element of L;
+        b <= x' by A2,A3,LATTICE3:def 8;
+      hence b c= x by YELLOW_1:3;
+     end;
+     then b c= meet Y by SETFAM_1:6;
+     hence b <= a by YELLOW_1:3;
+    end;
+    hence ex_inf_of Y,InclPoset Filt BoolePoset X &
+     "/\"(Y,InclPoset Filt BoolePoset X) = meet Y by A1,YELLOW_0:31;
+   end;
+
+  theorem Th11:
+   for X be set holds
+    bool X is Filter of BoolePoset X
+   proof
+    let X be set;
+      bool X c= the carrier of BoolePoset X by WAYBEL_7:4;
+    then reconsider A = bool X as non empty Subset of BoolePoset X
+                                                         ;
+      for x,y be set st x c= y & y c= X & x in A holds y in A;
+    then A1: A is upper by WAYBEL_7:11;
+      now let x,y be set;
+     assume that
+      A2: x in A and
+      A3: y in A;
+       x /\ y c= X /\ X by A2,A3,XBOOLE_1:27;
+     hence x /\ y in A;
+    end;
+    hence bool X is Filter of BoolePoset X by A1,WAYBEL_7:13;
+   end;
+
+  theorem Th12:
+   for X be set holds
+    {X} is Filter of BoolePoset X
+   proof
+    let X be set;
+      now let c be set;
+     assume c in {X};
+     then c = X by TARSKI:def 1;
+     then c is Element of BoolePoset X by WAYBEL_8:28;
+     hence c in the carrier of BoolePoset X;
+    end;
+    then {X} c= the carrier of BoolePoset X by TARSKI:def 3;
+    then reconsider A = {X} as non empty Subset of BoolePoset X
+                                                         ;
+      for x,y be set st x c= y & y c= X & x in A holds y in A
+    proof
+     let x,y be set;
+     assume that
+      A1: x c= y and
+      A2: y c= X and
+      A3: x in A;
+       x = X by A3,TARSKI:def 1;
+     then y = X by A1,A2,XBOOLE_0:def 10;
+     hence y in A by TARSKI:def 1;
+    end;
+    then A4: A is upper by WAYBEL_7:11;
+      now let x,y be set;
+     assume that
+      A5: x in A and
+      A6: y in A;
+       x = X & y = X by A5,A6,TARSKI:def 1;
+     hence x /\ y in A by TARSKI:def 1;
+    end;
+    hence thesis by A4,WAYBEL_7:13;
+   end;
+
+  theorem
+     for X be set holds
+    InclPoset Filt BoolePoset X is upper-bounded
+   proof
+    let X be set;
+    set L = InclPoset Filt BoolePoset X;
+      bool X is Filter of BoolePoset X by Th11;
+    then bool X in { Z where Z is Filter of BoolePoset X: not contradiction };
+    then bool X in the carrier of RelStr(#Filt BoolePoset X,
+                            RelIncl (Filt BoolePoset X)#) by WAYBEL_0:def 24;
+    then bool X in the carrier of L by YELLOW_1:def 1;
+    then reconsider x = bool X as Element of L;
+      now let b be Element of L;
+     assume b in the carrier of L;
+     then b in the carrier of RelStr(#Filt BoolePoset X,
+                             RelIncl (Filt BoolePoset X)#) by YELLOW_1:def 1;
+     then b in { V where V is Filter of BoolePoset X : not contradiction }
+                                                         by WAYBEL_0:def 24;
+     then consider b1 be Filter of BoolePoset X such that
+      A1: b1 = b;
+       b c= the carrier of BoolePoset X by A1;
+     then b c= bool X by WAYBEL_7:4;
+     hence b <= x by YELLOW_1:3;
+    end;
+    then x is_>=_than the carrier of L by LATTICE3:def 9;
+    hence L is upper-bounded by YELLOW_0:def 5;
+   end;
+
+  theorem
+     for X be set holds
+    InclPoset Filt BoolePoset X is lower-bounded
+   proof
+    let X be set;
+    set L = InclPoset Filt BoolePoset X;
+      {X} is Filter of BoolePoset X by Th12;
+    then {X} in { Z where Z is Filter of BoolePoset X: not contradiction };
+    then {X} in the carrier of RelStr(#Filt BoolePoset X,
+                            RelIncl (Filt BoolePoset X)#) by WAYBEL_0:def 24;
+    then {X} in the carrier of L by YELLOW_1:def 1;
+    then reconsider x = {X} as Element of L;
+      now let b be Element of L;
+     assume b in the carrier of L;
+     then b in the carrier of RelStr(#Filt BoolePoset X,
+                             RelIncl (Filt BoolePoset X)#) by YELLOW_1:def 1;
+     then b in { V where V is Filter of BoolePoset X : not contradiction }
+                                                         by WAYBEL_0:def 24;
+     then consider b1 be Filter of BoolePoset X such that
+      A1: b1 = b;
+     consider d be set such that
+      A2: d in b1 by XBOOLE_0:def 1;
+       d is Element of BoolePoset X by A2;
+     then A3: d c= X by WAYBEL_8:28;
+       now let c be set;
+      assume c in {X};
+      then c = X by TARSKI:def 1;
+      hence c in b by A1,A2,A3,WAYBEL_7:11;
+     end;
+     then {X} c= b by TARSKI:def 3;
+     hence x <= b by YELLOW_1:3;
+    end;
+    then x is_<=_than the carrier of L by LATTICE3:def 8;
+    hence L is lower-bounded by YELLOW_0:def 4;
+   end;
+
+  theorem
+     for X be set holds
+    Top (InclPoset Filt BoolePoset X) = bool X
+   proof
+    let X be set;
+    set L = InclPoset Filt BoolePoset X;
+      bool X is Filter of BoolePoset X by Th11;
+    then bool X in { Z where Z is Filter of BoolePoset X: not contradiction };
+    then bool X in the carrier of RelStr(#Filt BoolePoset X,
+                            RelIncl (Filt BoolePoset X)#) by WAYBEL_0:def 24;
+    then bool X in the carrier of L by YELLOW_1:def 1;
+    then reconsider bX = bool X as Element of L;
+    A1: bX is_<=_than {} by YELLOW_0:6;
+      for b be Element of L st b is_<=_than {} holds bX >= b
+    proof
+     let b be Element of L;
+     assume b is_<=_than {};
+       b in the carrier of L;
+     then b in the carrier of RelStr(#Filt BoolePoset X,
+                             RelIncl (Filt BoolePoset X)#) by YELLOW_1:def 1;
+     then b in { V where V is Filter of BoolePoset X : not contradiction }
+                                                         by WAYBEL_0:def 24;
+     then consider b1 be Filter of BoolePoset X such that
+      A2: b1 = b;
+       b c= the carrier of BoolePoset X by A2;
+     then b c= bool X by WAYBEL_7:4;
+     hence bX >= b by YELLOW_1:3;
+    end;
+    then "/\"({},L) = bool X by A1,YELLOW_0:31;
+    hence Top (InclPoset Filt BoolePoset X) = bool X by YELLOW_0:def 12;
+   end;
+
+  theorem
+     for X be set holds
+    Bottom (InclPoset Filt BoolePoset X) = {X}
+   proof
+    let X be set;
+    set L = InclPoset Filt BoolePoset X;
+      {X} is Filter of BoolePoset X by Th12;
+    then {X} in { Z where Z is Filter of BoolePoset X: not contradiction };
+    then {X} in the carrier of RelStr(#Filt BoolePoset X,
+                            RelIncl (Filt BoolePoset X)#) by WAYBEL_0:def 24;
+    then {X} in the carrier of L by YELLOW_1:def 1;
+    then reconsider bX = {X} as Element of L;
+    A1: bX is_>=_than {} by YELLOW_0:6;
+      for b be Element of L st b is_>=_than {} holds bX <= b
+    proof
+     let b be Element of L;
+     assume b is_>=_than {};
+       b in the carrier of L;
+     then b in the carrier of RelStr(#Filt BoolePoset X,
+                             RelIncl (Filt BoolePoset X)#) by YELLOW_1:def 1;
+     then b in { V where V is Filter of BoolePoset X : not contradiction }
+                                                         by WAYBEL_0:def 24;
+     then consider b1 be Filter of BoolePoset X such that
+      A2: b1 = b;
+     consider d be set such that
+      A3: d in b1 by XBOOLE_0:def 1;
+       d is Element of BoolePoset X by A3;
+     then A4: d c= X by WAYBEL_8:28;
+       now let c be set;
+      assume c in {X};
+      then c = X by TARSKI:def 1;
+      hence c in b by A2,A3,A4,WAYBEL_7:11;
+     end;
+     then {X} c= b by TARSKI:def 3;
+     hence bX <= b by YELLOW_1:3;
+    end;
+    then "\/"({},L) = {X} by A1,YELLOW_0:30;
+    hence Bottom (InclPoset Filt BoolePoset X) = {X} by YELLOW_0:def 11;
+   end;
+
+  theorem
+     for X be non empty set
+   for Y be non empty Subset of InclPoset X st ex_sup_of Y,InclPoset X holds
+    union Y c= sup Y
+   proof
+    let X be non empty set;
+    let Y be non empty Subset of InclPoset X;
+    assume A1: ex_sup_of Y,InclPoset X;
+      now let x be set;
+     assume A2: x in Y;
+     then reconsider x1 = x as Element of InclPoset X;
+       sup Y is_>=_than Y by A1,YELLOW_0:30;
+     then sup Y >= x1 by A2,LATTICE3:def 9;
+     hence x c= sup Y by YELLOW_1:3;
+    end;
+    hence union Y c= sup Y by ZFMISC_1:94;
+   end;
+
+  theorem Th18:
+   for L be upper-bounded Semilattice holds
+    InclPoset Filt L is complete
+   proof
+    let L be upper-bounded Semilattice;
+      InclPoset Ids (L opp) is complete;
+    hence InclPoset Filt L is complete by Th7;
+   end;
+
+  definition
+   let L be upper-bounded Semilattice;
+   cluster InclPoset Filt L -> complete;
+   coherence by Th18;
+  end;
+
+begin  :: Completely-irreducible Elements
+
+  definition  :: DEFINITION 4.19
+   let L be non empty RelStr;
+   let p be Element of L;
+   attr p is completely-irreducible means :Def3:
+    ex_min_of (uparrow p)\{p},L;
+  end;
+
+  theorem Th19:
+   for L be non empty RelStr
+   for p be Element of L st p is completely-irreducible holds
+    "/\"((uparrow p)\{p},L) <> p
+   proof
+    let L be non empty RelStr;
+    let p be Element of L;
+    assume p is completely-irreducible;
+    then ex_min_of (uparrow p)\{p},L by Def3;
+    then "/\"((uparrow p)\{p},L) in (uparrow p)\{p} by WAYBEL_1:def 4;
+    then not "/\"((uparrow p)\{p},L) in {p} by XBOOLE_0:def 4;
+    hence "/\"((uparrow p)\{p},L) <> p by TARSKI:def 1;
+   end;
+
+  definition  :: DEFINITION 4.19
+   let L be non empty RelStr;
+   func Irr L -> Subset of L means :Def4:
+    for x be Element of L holds x in it iff x is completely-irreducible;
+   existence
+   proof
+     defpred P[Element of L] means $1 is completely-irreducible;
+    consider X be Subset of L such that
+     A1: for x be Element of L holds x in X iff P[x] from SSubsetEx;
+    take X;
+    thus thesis by A1;
+   end;
+   uniqueness
+   proof
+    let S1,S2 be Subset of L such that
+     A2: for x be Element of L holds x in S1 iff
+         x is completely-irreducible and
+     A3: for x be Element of L holds x in S2 iff
+         x is completely-irreducible;
+       now let x1 be set;
+      thus x1 in S1 implies x1 in S2
+      proof
+       assume A4: x1 in S1;
+       then reconsider x2 = x1 as Element of L;
+         x2 is completely-irreducible by A2,A4;
+       hence x1 in S2 by A3;
+      end;
+      thus x1 in S2 implies x1 in S1
+      proof
+       assume A5: x1 in S2;
+       then reconsider x2 = x1 as Element of L;
+         x2 is completely-irreducible by A3,A5;
+       hence x1 in S1 by A2;
+      end;
+     end;
+     hence S1 = S2 by TARSKI:2;
+   end;
+  end;
+
+  theorem Th20: :: THEOREM 4.19 (i)
+   for L be non empty Poset
+   for p be Element of L holds
+    p is completely-irreducible iff
+    ex q be Element of L st
+     p < q &
+     (for s be Element of L st p < s holds q <= s) &
+     uparrow p = {p} \/ uparrow q
+   proof
+    let L be non empty Poset;
+    let p be Element of L;
+    thus p is completely-irreducible implies
+     ex q be Element of L st p < q &
+     (for s be Element of L st p < s holds q <= s) &
+     uparrow p = {p} \/ uparrow q
+    proof
+     assume A1: p is completely-irreducible;
+     then A2: ex_min_of (uparrow p)\{p},L by Def3;
+     A3: "/\"((uparrow p)\{p},L) <> p by A1,Th19;
+     take q = "/\" ((uparrow p)\{p},L);
+     A4: ex_inf_of (uparrow p)\{p},L by A2,WAYBEL_1:def 4;
+     then A5: q is_<=_than (uparrow p)\{p} by YELLOW_0:def 10;
+       now let s be Element of L;
+      assume s in (uparrow p)\{p};
+      then s in uparrow p by XBOOLE_0:def 4;
+      hence p <= s by WAYBEL_0:18;
+     end;
+     then p is_<=_than (uparrow p)\{p} by LATTICE3:def 8;
+     then A6: p <= q by A4,YELLOW_0:def 10;
+     hence p < q by A3,ORDERS_1:def 10;
+     thus for s be Element of L st p < s holds q <= s
+     proof
+      let s be Element of L;
+      assume A7: p < s;
+      then A8: not s in {p} by TARSKI:def 1;
+        p <= s by A7,ORDERS_1:def 10;
+      then s in uparrow p by WAYBEL_0:18;
+      then s in (uparrow p)\{p} by A8,XBOOLE_0:def 4;
+      hence q <= s by A5,LATTICE3:def 8;
+     end;
+     thus uparrow p = {p} \/ uparrow q
+     proof
+      thus uparrow p c= {p} \/ uparrow q
+      proof
+       let x be set;
+       assume A9: x in uparrow p;
+       then reconsider x1 = x as Element of L;
+         p = x1 or (x1 in uparrow p & not x1 in {p}) by A9,TARSKI:def 1;
+       then p = x1 or x1 in (uparrow p)\{p} by XBOOLE_0:def 4;
+       then p = x1 or "/\" ((uparrow p)\{p},L) <= x1 by A5,LATTICE3:def 8;
+       then x in {p} or x in uparrow q by TARSKI:def 1,WAYBEL_0:18;
+       hence x in {p} \/ uparrow q by XBOOLE_0:def 2;
+      end;
+      thus {p} \/ uparrow q c= uparrow p
+      proof
+       let x be set;
+       assume A10: x in {p} \/ uparrow q;
+         now per cases by A10,XBOOLE_0:def 2;
+        suppose x in {p};
+         then x = p & p <= p by TARSKI:def 1;
+         hence x in uparrow p by WAYBEL_0:18;
+        suppose A11: x in uparrow q;
+         then reconsider x1 = x as Element of L;
+           q <= x1 by A11,WAYBEL_0:18;
+         then p <= x1 by A6,ORDERS_1:26;
+         hence x in uparrow p by WAYBEL_0:18;
+       end;
+       hence x in uparrow p;
+      end;
+     end;
+    end;
+    thus (ex q be Element of L st p < q &
+         (for s be Element of L st p < s holds q <= s) &
+         uparrow p = {p} \/ uparrow q)
+            implies p is completely-irreducible
+    proof
+     given q be Element of L such that
+      A12: p < q and
+      A13: for s be Element of L st p < s holds q <= s and
+      A14: uparrow p = {p} \/ uparrow q;
+       ex q be Element of L st (uparrow p)\{p} is_>=_than q &
+      for b be Element of L st (uparrow p)\{p} is_>=_than b holds q >= b
+     proof
+      take q;
+        now let a be Element of L;
+       assume a in (uparrow p)\{p};
+       then a in uparrow p & not a in {p} by XBOOLE_0:def 4;
+       then p <= a & a <> p by TARSKI:def 1,WAYBEL_0:18;
+       then p < a by ORDERS_1:def 10;
+       hence q <= a by A13;
+      end;
+      hence (uparrow p)\{p} is_>=_than q by LATTICE3:def 8;
+      let b be Element of L;
+      assume A15: (uparrow p)\{p} is_>=_than b;
+        q <> p & q <= q by A12;
+      then q in uparrow q & q <> p by WAYBEL_0:18;
+      then q in {p} \/ uparrow q & not q in {p} by TARSKI:def 1,XBOOLE_0:def 2
+;
+      then q in (uparrow p)\{p} by A14,XBOOLE_0:def 4;
+      hence q >= b by A15,LATTICE3:def 8;
+     end;
+     then A16: ex_inf_of (uparrow p)\{p},L by YELLOW_0:16;
+       now let c be Element of L;
+      assume c in (uparrow p)\{p};
+      then c in uparrow p & not c in {p} by XBOOLE_0:def 4;
+      then c in uparrow q by A14,XBOOLE_0:def 2;
+      hence q <= c by WAYBEL_0:18;
+     end;
+     then A17: q is_<=_than (uparrow p)\{p} by LATTICE3:def 8;
+       now let b be Element of L;
+      assume A18: b is_<=_than (uparrow p)\{p};
+        p <= q & p <> q by A12,ORDERS_1:def 10;
+      then q in uparrow p & not q in {p} by TARSKI:def 1,WAYBEL_0:18;
+      then q in (uparrow p)\{p} by XBOOLE_0:def 4;
+      hence q >= b by A18,LATTICE3:def 8;
+     end;
+     then A19: q = "/\"((uparrow p)\{p},L) by A17,YELLOW_0:31;
+       p <= q & p <> q by A12,ORDERS_1:def 10;
+     then q in uparrow p & not q in {p} by TARSKI:def 1,WAYBEL_0:18;
+     then "/\"((uparrow p)\{p},L) in (uparrow p)\{p} by A19,XBOOLE_0:def 4;
+     then ex_min_of (uparrow p)\{p},L by A16,WAYBEL_1:def 4;
+     hence p is completely-irreducible by Def3;
+    end;
+   end;
+
+  theorem Th21: :: THEOREM 4.19 (ii)
+   for L be upper-bounded non empty Poset holds
+    not Top L in Irr L
+   proof
+    let L be upper-bounded non empty Poset;
+    assume Top L in Irr L;
+    then Top L is completely-irreducible by Def4;
+    then "/\" ((uparrow Top L)\{Top L},L) <> Top L by Th19;
+    then "/\" ({Top L}\{Top L},L) <> Top L by WAYBEL_4:24;
+    then "/\" ({},L) <> Top L by XBOOLE_1:37;
+    hence contradiction by YELLOW_0:def 12;
+   end;
+
+  theorem Th22: :: THEOREM 4.19 (iii)
+   for L be Semilattice holds
+    Irr L c= IRR L
+   proof
+    let L be Semilattice;
+    let x be set;
+    assume A1: x in Irr L;
+    then reconsider x1 = x as Element of L;
+      x1 is completely-irreducible by A1,Def4;
+    then consider q be Element of L such that
+     A2: x1 < q and
+     A3: for s be Element of L st x1 < s holds q <= s and
+       uparrow x1 = {x1} \/ uparrow q by Th20;
+      now let a,b be Element of L;
+     assume that
+      A4: x1 = a "/\" b and
+      A5: a <> x1 and
+      A6: b <> x1;
+       x1 <= a & x1 <= b by A4,YELLOW_0:23;
+     then x1 < a & x1 < b by A5,A6,ORDERS_1:def 10;
+     then q <= a & q <= b by A3;
+     then A7: q <= x1 by A4,YELLOW_0:23;
+       x1 <= q & x1 <> q by A2,ORDERS_1:def 10;
+     hence contradiction by A7,ORDERS_1:25;
+    end;
+    then x1 is irreducible by WAYBEL_6:def 2;
+    hence x in IRR L by WAYBEL_6:def 4;
+   end;
+
+  theorem Th23:
+   for L be Semilattice
+   for x be Element of L holds
+    x is completely-irreducible implies x is irreducible
+   proof
+    let L be Semilattice;
+    let x be Element of L;
+    A1: Irr L c= IRR L by Th22;
+    assume x is completely-irreducible;
+    then x in Irr L by Def4;
+    hence x is irreducible by A1,WAYBEL_6:def 4;
+   end;
+
+  theorem Th24:
+   for L be non empty Poset
+   for x be Element of L holds
+    x is completely-irreducible implies
+     for X be Subset of L st ex_inf_of X,L & x = inf X holds x in X
+   proof
+    let L be non empty Poset;
+    let x be Element of L;
+    assume x is completely-irreducible;
+    then consider q be Element of L such that
+     A1: x < q and
+     A2: for s be Element of L st x < s holds q <= s and
+       uparrow x = {x} \/ uparrow q by Th20;
+    let X be Subset of L;
+    assume that
+     A3: ex_inf_of X,L and
+     A4: x = inf X and
+     A5: not x in X;
+    A6: ex_inf_of uparrow q,L by WAYBEL_0:39;
+      X c= uparrow q
+    proof
+     let y be set;
+     assume A7: y in X;
+     then reconsider y1 = y as Element of L;
+       inf X is_<=_than X by A3,YELLOW_0:31;
+     then x <= y1 by A4,A7,LATTICE3:def 8;
+     then x < y1 by A5,A7,ORDERS_1:def 10;
+     then q <= y1 by A2;
+     hence y in uparrow q by WAYBEL_0:18;
+    end;
+    then inf (uparrow q) <= inf X by A3,A6,YELLOW_0:35;
+    then q <= x by A4,WAYBEL_0:39;
+    hence contradiction by A1,ORDERS_1:30;
+   end;
+
+  theorem Th25: :: REMARK 4.20
+   for L be non empty Poset
+   for X be Subset of L st X is order-generating holds
+    Irr L c= X
+   proof
+    let L be non empty Poset;
+    let X be Subset of L;
+    assume A1: X is order-generating;
+    let x be set;
+    assume A2: x in Irr L;
+    then reconsider x1 = x as Element of L;
+    A3: x1 = "/\" ((uparrow x1) /\ X,L) by A1,WAYBEL_6:def 5;
+    A4: x1 is completely-irreducible by A2,Def4;
+      ex_inf_of (uparrow x1) /\ X,L by A1,WAYBEL_6:def 5;
+    then x1 in (uparrow x1) /\ X by A3,A4,Th24;
+    hence x in X by XBOOLE_0:def 3;
+   end;
+
+  theorem Th26: :: PROPOSITION 4.21 (i)
+   for L be complete LATTICE
+   for p be Element of L holds
+    (ex k be Element of L st p is_maximal_in (the carrier of L) \ uparrow k)
+       implies
+    p is completely-irreducible
+   proof
+    let L be complete LATTICE;
+    let p be Element of L;
+    given k be Element of L such that
+     A1: p is_maximal_in (the carrier of L) \ uparrow k;
+    A2: (uparrow p) \ {p} = (uparrow p) /\ (uparrow k) by A1,Th3;
+    then A3: "/\" ((uparrow p) \ {p},L) = p "\/" k by Th1;
+    A4: ex_inf_of (uparrow p) \ {p},L by YELLOW_0:17;
+      p <= p "\/" k & k <= p "\/" k by YELLOW_0:22;
+    then p "\/" k in uparrow p & p "\/" k in uparrow k by WAYBEL_0:18;
+    then p "\/" k in (uparrow p) /\ (uparrow k) by XBOOLE_0:def 3;
+    then ex_min_of (uparrow p) \ {p},L by A2,A3,A4,WAYBEL_1:def 4;
+    hence p is completely-irreducible by Def3;
+   end;
+
+  theorem Th27:
+   for L be transitive antisymmetric with_suprema RelStr
+   for p,q,u be Element of L st
+    p < q & (for s be Element of L st p < s holds q <= s) & not u <= p holds
+     p "\/" u = q "\/" u
+   proof
+    let L be transitive antisymmetric with_suprema RelStr;
+    let p,q,u be Element of L;
+    assume that
+     A1: p < q and
+     A2: for s be Element of L st p < s holds q <= s and
+     A3: not u <= p;
+    A4: p <= q by A1,ORDERS_1:def 10;
+      q "\/" u >= q by YELLOW_0:22;
+    then A5: q "\/" u >= p by A4,ORDERS_1:26;
+    A6: q "\/" u >= u by YELLOW_0:22;
+      now let v be Element of L;
+     assume that
+      A7: v >= p and
+      A8: v >= u;
+       v > p by A3,A7,A8,ORDERS_1:def 10;
+     then v >= q by A2;
+     hence q "\/" u <= v by A8,YELLOW_0:22;
+    end;
+    hence p "\/" u = q "\/" u by A5,A6,YELLOW_0:22;
+   end;
+
+  theorem Th28:
+   for L be distributive LATTICE
+   for p,q,u be Element of L st
+    p < q & (for s be Element of L st p < s holds q <= s) & not u <= p holds
+     not u "/\" q <= p
+   proof
+    let L be distributive LATTICE;
+    let p,q,u be Element of L;
+    assume that
+     A1: p < q and
+     A2: for s be Element of L st p < s holds q <= s and
+     A3: not u <= p and
+     A4: u "/\" q <= p;
+    A5: p <= q by A1,ORDERS_1:def 10;
+      p = p "\/" (u "/\" q) by A4,YELLOW_0:24
+     .= (p "\/" u) "/\" (q "\/" p) by WAYBEL_1:6
+     .= (p "\/" u) "/\" q by A5,YELLOW_0:24
+     .= q "/\" (q "\/" u) by A1,A2,A3,Th27
+     .= q by LATTICE3:18;
+    hence contradiction by A1;
+   end;
+
+  theorem Th29:
+   for L be distributive complete LATTICE st L opp is meet-continuous
+   for p be Element of L st p is completely-irreducible holds
+    (the carrier of L) \ downarrow p is Open Filter of L
+   proof
+    let L be distributive complete LATTICE;
+    assume L opp is meet-continuous;
+    then A1: L opp is satisfying_MC by WAYBEL_2:def 7;
+    let p be Element of L;
+    assume A2: p is completely-irreducible;
+      not Top L in Irr L by Th21;
+    then A3: p <> Top L by A2,Def4;
+      p is irreducible by A2,Th23;
+    then p is prime by WAYBEL_6:27;
+    then (downarrow p)` is Filter of L by A3,WAYBEL_6:26;
+    then (downarrow p)` is Filter of L;
+    then reconsider V = (the carrier of L) \ downarrow p
+                                               as Filter of L by SUBSET_1:def 5
+;
+    consider q be Element of L such that
+     A4: p < q and
+     A5: for s be Element of L st p < s holds q <= s and
+       uparrow p = {p} \/ uparrow q by A2,Th20;
+    defpred P[Element of L] means $1 <= q & not $1 <= p;
+    reconsider F = { t where t is Element of L : P[t]}
+                                            as Subset of L from RelStrSubset;
+      not q <= p by A4,ORDERS_1:30;
+    then A6: q in F;
+      now let x,y be Element of L;
+     assume that
+      A7: x in F and
+      A8: y in F;
+     take z = x "/\" y;
+     consider x1 be Element of L such that
+      A9: x1 = x and
+      A10: x1 <= q and
+      A11: not x1 <= p by A7;
+     consider y1 be Element of L such that
+      A12: y1 = y and
+      A13: y1 <= q and
+      A14: not y1 <= p by A8;
+     A15: z <= x by YELLOW_0:23;
+     then A16: z <= q by A9,A10,ORDERS_1:26;
+       not z <= p
+     proof
+      assume A17: z <= p;
+      A18: q >= p by A4,ORDERS_1:def 10;
+      A19: now let d be Element of L;
+       assume that
+        A20: d >= y and
+        A21: d >= p;
+         d > p by A12,A14,A20,A21,ORDERS_1:def 10;
+       hence q <= d by A5;
+      end;
+        x = x "/\" q by A9,A10,YELLOW_0:25
+       .= x "/\" (y "\/" p) by A12,A13,A18,A19,YELLOW_0:22
+       .= z "\/" (x "/\" p) by WAYBEL_1:def 3
+       .= (x "\/" z) "/\" (z "\/" p) by WAYBEL_1:6
+       .= x "/\" (p "\/" z) by A15,YELLOW_0:24
+       .= x "/\" p by A17,YELLOW_0:24;
+      hence contradiction by A9,A11,YELLOW_0:25;
+     end;
+     hence z in F by A16;
+     thus z <= x by YELLOW_0:23;
+     thus z <= y by YELLOW_0:23;
+    end;
+    then reconsider F as non empty filtered Subset of L by A6,WAYBEL_0:def 2;
+    reconsider F1 = F as non empty directed Subset of L opp by YELLOW_7:27;
+      now let x be Element of L;
+     assume A22: x in V;
+     take y = inf F;
+     thus y in V
+     proof
+        ex_inf_of F,L by YELLOW_0:17;
+      then A23: inf F = sup F1 by YELLOW_7:13;
+      A24: ex_inf_of {p~} "/\" F1,L by YELLOW_0:17;
+      A25: {p~} = {p} by LATTICE3:def 6;
+      assume not y in V;
+      then y in downarrow p by XBOOLE_0:def 4;
+      then y <= p by WAYBEL_0:17;
+      then A26: p = p "\/" y by YELLOW_0:24
+         .= p~ "/\" (inf F)~ by YELLOW_7:23
+         .= p~ "/\" sup F1 by A23,LATTICE3:def 6
+         .= sup ({p~} "/\" F1) by A1,WAYBEL_2:def 6
+         .= "/\"({p~} "/\" F1,L) by A24,YELLOW_7:13
+         .= "/\"({p} "\/" F,L) by A25,Th5;
+        now let r be Element of L;
+       assume r in {p} "\/" F;
+       then r in {p "\/" v where v is Element of L : v in F} by YELLOW_4:15;
+       then consider v be Element of L such that
+        A27: r = p "\/" v and
+        A28: v in F;
+       A29: p <= r by A27,YELLOW_0:22;
+       consider v1 be Element of L such that
+        A30: v = v1 and
+          v1 <= q and
+        A31: not v1 <= p by A28;
+         p <> r by A27,A30,A31,YELLOW_0:24;
+       then p < r by A29,ORDERS_1:def 10;
+       hence q <= r by A5;
+      end;
+      then q is_<=_than {p} "\/" F by LATTICE3:def 8;
+      then q <= p by A26,YELLOW_0:33;
+      hence contradiction by A4,ORDERS_1:30;
+     end;
+     then not y in downarrow p by XBOOLE_0:def 4;
+     then A32: not y <= p by WAYBEL_0:17;
+     A33: x "/\" q <= x by YELLOW_0:23;
+     A34: y is_<=_than F by YELLOW_0:33;
+     A35: x "/\" q <= q by YELLOW_0:23;
+       not x in downarrow p by A22,XBOOLE_0:def 4;
+     then not x <= p by WAYBEL_0:17;
+     then not x "/\" q <= p by A4,A5,Th28;
+     then x "/\" q in F by A35;
+     then y <= x "/\" q by A34,LATTICE3:def 8;
+     then A36: y <= x by A33,ORDERS_1:26;
+       now let D be non empty directed Subset of L;
+      assume A37: y <= sup D;
+        D \ downarrow p is non empty
+      proof
+       assume D \ downarrow p is empty;
+       then D c= downarrow p by XBOOLE_1:37;
+       then sup D <= sup (downarrow p) by WAYBEL_7:3;
+       then y <= sup (downarrow p) by A37,ORDERS_1:26;
+       hence contradiction by A32,WAYBEL_0:34;
+      end;
+      then consider d be set such that
+       A38: d in D \ downarrow p by XBOOLE_0:def 1;
+      reconsider d as Element of L by A38;
+      take d;
+      thus d in D by A38,XBOOLE_0:def 4;
+      A39: d "/\" q <= d & d "/\" q <= q by YELLOW_0:23;
+      A40: y is_<=_than F by YELLOW_0:33;
+        not d in downarrow p by A38,XBOOLE_0:def 4;
+      then not d <= p by WAYBEL_0:17;
+      then not d "/\" q <= p by A4,A5,Th28;
+      then d "/\" q in F by A39;
+      then y <= d "/\" q by A40,LATTICE3:def 8;
+      hence y <= d by A39,ORDERS_1:26;
+     end;
+     then y << y by WAYBEL_3:def 1;
+     hence y << x by A36,WAYBEL_3:2;
+    end;
+    hence (the carrier of L) \ downarrow p is Open Filter of L
+                                                          by WAYBEL_6:def 1;
+   end;
+
+  theorem  :: PROPOSITION 4.21 (ii)
+     for L be distributive complete LATTICE st L opp is meet-continuous
+   for p be Element of L holds
+    p is completely-irreducible implies
+    (ex k be Element of L st
+      k in the carrier of CompactSublatt L &
+      p is_maximal_in (the carrier of L) \ uparrow k)
+   proof
+    let L be distributive complete LATTICE;
+    assume A1: L opp is meet-continuous;
+    let p be Element of L;
+    assume A2: p is completely-irreducible;
+    then reconsider V = (the carrier of L) \ downarrow p as Open Filter of L
+                                                                   by A1,Th29;
+    reconsider V' = V as non empty directed Subset of L opp by YELLOW_7:27;
+    take k = inf V;
+    A3: L opp is satisfying_MC by A1,WAYBEL_2:def 7;
+    A4: ex_inf_of V,L & ex_inf_of {p~} "/\" V',L by YELLOW_0:17;
+    A5: ex_inf_of {p} "\/" V,L & ex_inf_of (uparrow p) \ {p},L by YELLOW_0:17;
+    A6: (inf V)~ = inf V by LATTICE3:def 6;
+    A7: p = p~ by LATTICE3:def 6;
+    A8: {p} "\/" V c= (uparrow p) \ {p}
+    proof
+     let x be set;
+     assume x in {p} "\/" V;
+     then x in {p "\/" v where v is Element of L: v in V} by YELLOW_4:15;
+     then consider v be Element of L such that
+      A9: x = p "\/" v and
+      A10: v in V;
+       not v in downarrow p by A10,XBOOLE_0:def 4;
+     then not v <= p by WAYBEL_0:17;
+     then p <= p "\/" v & p "\/" v <> p by YELLOW_0:22;
+     then p "\/" v in uparrow p & not p "\/"
+ v in {p} by TARSKI:def 1,WAYBEL_0:18;
+     hence x in (uparrow p) \ {p} by A9,XBOOLE_0:def 4;
+    end;
+      p "\/" k = (p~) "/\" (inf V)~ by YELLOW_7:23
+          .= (p~) "/\" "\/"(V,L opp) by A4,A6,YELLOW_7:13
+          .= "\/"({p~} "/\" V',L opp) by A3,WAYBEL_2:def 6
+          .= "/\"({p~} "/\" V',L) by A4,YELLOW_7:13
+          .= inf ({p} "\/" V) by A7,Th5;
+    then A11: "/\"((uparrow p) \ {p},L) <= p "\/" k by A5,A8,YELLOW_0:35;
+    A12: "/\"((uparrow p) \ {p},L) <> p by A2,Th19;
+      now let b be Element of L;
+     assume b in (uparrow p) \ {p};
+     then b in uparrow p by XBOOLE_0:def 4;
+     hence p <= b by WAYBEL_0:18;
+    end;
+    then p is_<=_than (uparrow p) \ {p} by LATTICE3:def 8;
+    then p <= "/\"((uparrow p) \ {p},L) by YELLOW_0:33;
+    then A13: p < "/\"((uparrow p) \ {p},L) by A12,ORDERS_1:def 10;
+    A14: not k <= p
+    proof
+     assume k <= p;
+     then p "\/" k = p by YELLOW_0:24;
+     hence contradiction by A11,A13,ORDERS_1:32;
+    end;
+      uparrow k = V
+    proof
+     thus uparrow k c= V
+     proof
+      let x be set;
+      assume A15: x in uparrow k;
+      then reconsider x1 = x as Element of L;
+        k <= x1 by A15,WAYBEL_0:18;
+      then not x1 <= p by A14,ORDERS_1:26;
+      then not x1 in downarrow p by WAYBEL_0:17;
+      hence x in V by XBOOLE_0:def 4;
+     end;
+     let x be set;
+     assume A16: x in V;
+     then reconsider x1 = x as Element of L;
+       k is_<=_than V by YELLOW_0:33;
+     then k <= x1 by A16,LATTICE3:def 8;
+     hence x in uparrow k by WAYBEL_0:18;
+    end;
+    then k is compact by WAYBEL_8:2;
+    hence k in the carrier of CompactSublatt L by WAYBEL_8:def 1;
+      not p in uparrow k by A14,WAYBEL_0:18;
+    then A17: p in (the carrier of L) \ uparrow k by XBOOLE_0:def 4;
+      not ex y be Element of L st y in (the carrier of L) \ uparrow k & p < y
+    proof
+     given y be Element of L such that
+      A18: y in (the carrier of L) \ uparrow k and
+      A19: p < y;
+     A20: k is_<=_than V by YELLOW_0:33;
+       not y in uparrow k by A18,XBOOLE_0:def 4;
+     then not k <= y by WAYBEL_0:18;
+     then not y in V by A20,LATTICE3:def 8;
+     then y in downarrow p by XBOOLE_0:def 4;
+     then y <= p by WAYBEL_0:17;
+     hence contradiction by A19,ORDERS_1:30;
+    end;
+    hence p is_maximal_in (the carrier of L) \ uparrow k by A17,WAYBEL_4:56;
+   end;
+
+  theorem Th31: :: THEOREM 4.22
+   for L be lower-bounded algebraic LATTICE
+   for x,y be Element of L holds
+    not y <= x implies
+     ex p be Element of L st
+      p is completely-irreducible & x <= p & not y <= p
+   proof
+    let L be lower-bounded algebraic LATTICE;
+    let x,y be Element of L;
+    A1: for z be Element of L holds waybelow z is non empty directed;
+    assume not y <= x;
+    then consider k1 be Element of L such that
+     A2: k1 << y and
+     A3: not k1 <= x by A1,WAYBEL_3:24;
+    consider k be Element of L such that
+     A4: k in the carrier of CompactSublatt L and
+     A5: k1 <= k and
+     A6: k <= y by A2,WAYBEL_8:7;
+       not k <= x by A3,A5,ORDERS_1:26;
+    then not x in uparrow k by WAYBEL_0:18;
+    then x in (the carrier of L) \ (uparrow k) by XBOOLE_0:def 4;
+    then x in (uparrow k)` by SUBSET_1:def 5;
+    then A7: x in (uparrow k)`;
+      k is compact by A4,WAYBEL_8:def 1;
+    then uparrow k is Open Filter of L by WAYBEL_8:2;
+    then consider p be Element of L such that
+     A8: x <= p and
+     A9: p is_maximal_in ((uparrow k)`) by A7,WAYBEL_6:9;
+    take p;
+      (the carrier of L) \ uparrow k = (uparrow k)` by SUBSET_1:def 5;
+    hence p is completely-irreducible by A9,Th26;
+    thus x <= p by A8;
+    thus not y <= p
+    proof
+     assume y <= p;
+     then A10: k <= p by A6,ORDERS_1:26;
+       p in (uparrow k)` by A9,WAYBEL_4:56;
+     then p in (uparrow k)`;
+     then p in (the carrier of L) \ uparrow k by SUBSET_1:def 5;
+     then not p in uparrow k by XBOOLE_0:def 4;
+     hence contradiction by A10,WAYBEL_0:18;
+    end;
+   end;
+
+  theorem Th32: :: THEOREM 4.23 (i)
+   for L be lower-bounded algebraic LATTICE holds
+    Irr L is order-generating &
+    for X be Subset of L st X is order-generating holds Irr L c= X
+   proof
+    let L be lower-bounded algebraic LATTICE;
+      now let x,y be Element of L;
+     assume not y <= x;
+     then consider p be Element of L such that
+      A1: p is completely-irreducible and
+      A2: x <= p and
+      A3: not y <= p by Th31;
+     take p;
+     thus p in Irr L by A1,Def4;
+     thus x <= p by A2;
+     thus not y <= p by A3;
+    end;
+    hence Irr L is order-generating by WAYBEL_6:17;
+    let X be Subset of L;
+    assume X is order-generating;
+    hence Irr L c= X by Th25;
+   end;
+
+  theorem  :: THEOREM 4.23 (ii)
+     for L be lower-bounded algebraic LATTICE
+   for s be Element of L holds
+    s = "/\" (uparrow s /\ Irr L,L)
+   proof
+    let L be lower-bounded algebraic LATTICE;
+    let s be Element of L;
+      Irr L is order-generating by Th32;
+    hence s = "/\" (uparrow s /\ Irr L,L) by WAYBEL_6:def 5;
+   end;
+
+  theorem Th34:
+   for L be complete (non empty Poset)
+   for X be Subset of L
+   for p be Element of L st p is completely-irreducible & p = inf X holds
+    p in X
+   proof
+    let L be complete (non empty Poset);
+    let X be Subset of L;
+    let p be Element of L;
+    assume that
+     A1: p is completely-irreducible and
+     A2: p = inf X;
+    consider q be Element of L such that
+     A3: p < q and
+     A4: for s be Element of L st p < s holds q <= s and
+       uparrow p = {p} \/ uparrow q by A1,Th20;
+    assume A5: not p in X;
+    A6: p is_<=_than X &
+     for b be Element of L st b is_<=_than X holds p >= b by A2,YELLOW_0:33;
+    A7: p <= q by A3,ORDERS_1:def 10;
+      now let b be Element of L;
+     assume A8: b in X;
+     then p <= b by A6,LATTICE3:def 8;
+     then p < b by A5,A8,ORDERS_1:def 10;
+     hence q <= b by A4;
+    end;
+    then A9: q is_<=_than X by LATTICE3:def 8;
+      now let b be Element of L;
+     assume b is_<=_than X;
+     then p >= b by A2,YELLOW_0:33;
+     hence q >= b by A7,ORDERS_1:26;
+    end;
+    hence contradiction by A2,A3,A9,YELLOW_0:33;
+   end;
+
+  theorem Th35:
+   for L be complete algebraic LATTICE
+   for p be Element of L st p is completely-irreducible holds
+    p = "/\" ({ x where x is Element of L : x in uparrow p &
+              ex k be Element of L st k in the carrier of CompactSublatt L &
+              x is_maximal_in (the carrier of L) \ uparrow k },L)
+   proof
+    let L be complete algebraic LATTICE;
+    let p be Element of L;
+    set A = { x where x is Element of L : x in uparrow p &
+              ex k be Element of L st k in the carrier of CompactSublatt L &
+              x is_maximal_in (the carrier of L) \ uparrow k };
+    assume p is completely-irreducible;
+    then consider q be Element of L such that
+     A1: p < q and
+     A2: for s be Element of L st p < s holds q <= s and
+       uparrow p = {p} \/ uparrow q by Th20;
+      p <= q by A1,ORDERS_1:def 10;
+    then A3: compactbelow p c= compactbelow q by WAYBEL13:1;
+      compactbelow p <> compactbelow q
+    proof
+     assume compactbelow p = compactbelow q;
+     then p = sup compactbelow q by WAYBEL_8:def 3
+        .= q by WAYBEL_8:def 3;
+     hence contradiction by A1;
+    end;
+    then not compactbelow q c= compactbelow p by A3,XBOOLE_0:def 10;
+    then consider k1 be set such that
+     A4: k1 in compactbelow q and
+     A5: not k1 in compactbelow p by TARSKI:def 3;
+      k1 in { y where y is Element of L: q >= y & y is compact }
+                                                       by A4,WAYBEL_8:def 2;
+    then consider k be Element of L such that
+     A6: k = k1 and
+     A7: q >= k and
+     A8: k is compact;
+    A9: k in the carrier of CompactSublatt L by A8,WAYBEL_8:def 1;
+      p <= p;
+    then A10: p in uparrow p by WAYBEL_0:18;
+      not k <= p by A5,A6,A8,WAYBEL_8:4;
+    then not p in uparrow k by WAYBEL_0:18;
+    then A11: p in (the carrier of L) \ uparrow k by XBOOLE_0:def 4;
+      not ex y be Element of L st y in (the carrier of L) \ uparrow k & p < y
+    proof
+     given y be Element of L such that
+      A12: y in (the carrier of L) \ uparrow k and
+      A13: p < y;
+       q <= y by A2,A13;
+     then k <= y by A7,ORDERS_1:26;
+     then y in uparrow k by WAYBEL_0:18;
+     hence contradiction by A12,XBOOLE_0:def 4;
+    end;
+    then p is_maximal_in (the carrier of L) \ uparrow k by A11,WAYBEL_4:56;
+    then A14: p in A by A9,A10;
+      now let a be Element of L;
+     assume a in A;
+     then consider a1 be Element of L such that
+      A15: a1 = a and
+      A16: a1 in uparrow p and
+        ex k be Element of L st k in the carrier of CompactSublatt L &
+       a1 is_maximal_in (the carrier of L) \ uparrow k;
+     thus p <= a by A15,A16,WAYBEL_0:18;
+    end;
+    then A17: p is_<=_than A by LATTICE3:def 8;
+      for u be Element of L st u is_<=_than A holds p >=
+ u by A14,LATTICE3:def 8;
+    hence p = "/\"(A,L) by A17,YELLOW_0:33;
+   end;
+
+  theorem  :: COROLLARY 4.24
+     for L be complete algebraic LATTICE
+   for p be Element of L holds
+    (ex k be Element of L st
+      k in the carrier of CompactSublatt L &
+      p is_maximal_in (the carrier of L) \ uparrow k)
+       iff
+    p is completely-irreducible
+   proof
+    let L be complete algebraic LATTICE;
+    let p be Element of L;
+    thus (ex k be Element of L st k in the carrier of CompactSublatt L &
+     p is_maximal_in (the carrier of L) \ uparrow k) implies
+      p is completely-irreducible by Th26;
+    thus p is completely-irreducible implies
+     (ex k be Element of L st k in the carrier of CompactSublatt L &
+      p is_maximal_in (the carrier of L) \ uparrow k)
+    proof
+     defpred P[Element of L] means $1 in uparrow p &
+               ex k be Element of L st k in the carrier of CompactSublatt L &
+               $1 is_maximal_in (the carrier of L) \ uparrow k;
+     reconsider A = { x where x is Element of L : P[x]}
+       as Subset of L from RelStrSubset;
+     assume A1: p is completely-irreducible;
+     then p = inf A by Th35;
+     then p in A by A1,Th34;
+     then consider x be Element of L such that
+      A2: x = p and
+        x in uparrow p and
+      A3: ex k be Element of L st k in the carrier of CompactSublatt L &
+       x is_maximal_in (the carrier of L) \ uparrow k;
+     consider k be Element of L such that
+      A4: k in the carrier of CompactSublatt L and
+      A5: x is_maximal_in (the carrier of L) \ uparrow k by A3;
+     take k;
+     thus k in the carrier of CompactSublatt L by A4;
+     thus p is_maximal_in (the carrier of L) \ uparrow k by A2,A5;
+    end;
+   end;
+

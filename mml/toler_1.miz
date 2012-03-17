@@ -1,0 +1,1066 @@
+:: Relations of Tolerance
+::  by Krzysztof Hryniewiecki
+::
+:: Received September 20, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, BOOLE, RELAT_2, EQREL_1, WELLORD1, ZFMISC_1, TARSKI,
+      TOLER_1, HAHNBAN, PARTFUN1, FUNCT_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELSET_1, RELAT_2,
+      PARTFUN1, ORDINAL1, WELLORD1, EQREL_1;
+ constructors RELAT_2, WELLORD1, EQREL_1, ORDINAL1, PARTFUN1, XBOOLE_0;
+ clusters RELAT_1, RELSET_1, SUBSET_1, ZFMISC_1, PARTFUN1, XBOOLE_0, EQREL_1;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, RELAT_1, RELAT_2;
+ theorems TARSKI, RELAT_1, RELSET_1, RELAT_2, ZFMISC_1, WELLORD1, ENUMSET1,
+      ORDERS_2, EQREL_1, ORDINAL1, XBOOLE_0, XBOOLE_1, ORDERS_1, PARTFUN1;
+ schemes XBOOLE_0;
+
+begin
+
+ reserve X,Y,Z,x,y,z for set;
+
+theorem Th1:
+  field {} = {}
+proof
+  thus field {} = {} \/ {} by RELAT_1:60,def 6
+     .= {};
+end;
+
+theorem Th2:
+  {} is reflexive
+proof
+    x in {} implies [x,x] in {};
+  then {} is_reflexive_in field {} by Th1,RELAT_2:def 1;
+ hence thesis by RELAT_2:def 9;
+end;
+
+theorem Th3:
+  {} is symmetric
+proof let x,y; assume x in field {} & y in field {} & [x,y] in {};
+  hence thesis;
+end;
+
+theorem Th4:
+    {} is irreflexive
+proof
+    {} is_irreflexive_in field {}
+   proof let x; assume x in field {};
+    thus not [x,x] in {};
+   end;
+ hence thesis by RELAT_2:def 10;
+end;
+
+theorem Th5:
+    {} is antisymmetric
+proof
+    {} is_antisymmetric_in field {}
+    proof let x,y; assume x in field {} & y in field {} &
+        [x,y] in {} & [y,x] in {};
+      hence x = y;
+    end;
+  hence thesis by RELAT_2:def 12;
+end;
+
+theorem Th6:
+    {} is asymmetric
+proof
+    {} is_asymmetric_in field {}
+    proof let x,y; assume x in field {} & y in field {} & [x,y] in {};
+      thus not [y,x] in {};
+    end;
+  hence thesis by RELAT_2:def 13;
+end;
+
+theorem Th7:
+    {} is connected
+proof
+    {} is_connected_in field {}
+    proof let x,y; assume x in field {} & y in field {} & x <> y;
+     hence [x,y] in {} or [y,x] in {} by Th1;
+    end;
+  hence thesis by RELAT_2:def 14;
+end;
+
+theorem Th8:
+    {} is strongly_connected
+proof
+    {} is_strongly_connected_in field {}
+    proof let x,y; assume x in field {} & y in field {};
+     hence [x,y] in {} or [y,x] in {} by Th1;
+    end;
+  hence thesis by RELAT_2:def 15;
+end;
+
+theorem Th9:
+    {} is transitive
+proof
+     {} is_transitive_in field {}
+     proof let x,y,z; assume x in field {} & y in field {} &
+       z in field {} & [x,y] in {} & [y,z] in {};
+      hence [x,z] in {};
+     end;
+  hence thesis by RELAT_2:def 16;
+end;
+
+definition
+  cluster {} -> reflexive irreflexive symmetric antisymmetric asymmetric
+    connected strongly_connected transitive;
+  coherence by Th2, Th3, Th4, Th5, Th6, Th7, Th8, Th9;
+end;
+
+::::::::::::::::::::
+:: Total relation ::
+::::::::::::::::::::
+
+definition let X;
+  redefine func nabla X;
+   synonym Total X;
+end;
+
+definition let R be Relation, Y be set;
+  redefine func R |_2 Y -> Relation of Y,Y;
+  coherence
+   proof
+       R |_2 Y = R /\ [:Y,Y:] by WELLORD1:def 6;
+     then R |_2 Y c= [:Y,Y:] by XBOOLE_1:17;
+   hence R|_2 Y is Relation of Y,Y by RELSET_1:def 1;
+   end;
+end;
+
+canceled 2;
+
+theorem
+  dom Total X = X by PARTFUN1:def 4;
+
+theorem
+  rng Total X = X
+proof
+    for x holds x in X iff ex y st [y,x] in Total X
+    proof let x;
+      thus x in X implies ex y st [y,x] in Total X
+        proof assume A1: x in X; take x;
+            [x,x] in [:X,X:] by A1,ZFMISC_1:106;
+         hence thesis by EQREL_1:def 1;
+        end;
+      given y such that A2: [y,x] in Total X;
+      thus thesis by A2,ZFMISC_1:106;
+    end;
+  hence thesis by RELAT_1:def 5;
+end;
+
+canceled;
+
+theorem Th15:
+  for x,y st x in X & y in X holds [x,y] in Total X
+proof let x,y; assume x in X & y in X;
+ then [x,y] in [:X,X:] by ZFMISC_1:106;
+ hence thesis by EQREL_1:def 1;
+end;
+
+theorem
+  for x,y st x in field Total X & y in field Total X holds
+    [x,y] in Total X
+proof let x,y; assume x in field Total X & y in field Total X;
+  then x in X & y in X by ORDERS_1:97;
+ hence thesis by Th15;
+end;
+
+canceled 2;
+
+theorem
+    Total X is strongly_connected
+proof let x,y; assume x in field Total X & y in field Total X;
+  then x in X & y in X by ORDERS_1:97;
+  then [x,y] in [:X,X:] by ZFMISC_1:106;
+ hence thesis by EQREL_1:def 1;
+end;
+
+canceled;
+
+theorem
+  Total X is connected
+proof let x,y; assume x in field Total X & y in field Total X & x<>y;
+  then x in X & y in X by ORDERS_1:97;
+  then [x,y] in [:X,X:] by ZFMISC_1:106;
+ hence thesis by EQREL_1:def 1;
+end;
+
+::  Tolerance
+
+reserve T,R for Tolerance of X;
+
+canceled 2;
+
+theorem
+  for T being Tolerance of X holds dom T = X by PARTFUN1:def 4;
+
+theorem
+   for T being Tolerance of X holds rng T = X
+proof let T be Tolerance of X;
+     for x holds x in rng T iff x in X
+    proof let x;
+       x in X implies x in rng T
+     proof assume A1: x in X;
+       field T = X by ORDERS_1:97;
+       then T is_reflexive_in X by RELAT_2:def 9;
+       then [x,x] in T by A1,RELAT_2:def 1;
+      hence x in rng T by RELAT_1:def 5;
+     end;
+    hence thesis;
+   end;
+   hence thesis by TARSKI:2;
+end;
+
+canceled;
+
+theorem Th27:
+  for T being total reflexive Relation of X holds x in X iff [x,x] in T
+proof let T be total reflexive Relation of X;
+A1:     field T = X by ORDERS_1:97;
+  thus x in X implies [x,x] in T by EQREL_1:11;
+  assume [x,x] in T;
+ hence thesis by A1,RELAT_1:30;
+end;
+
+theorem
+    for T being Tolerance of X holds T is_reflexive_in X
+proof let T be Tolerance of X;
+ field T = X by ORDERS_1:97;
+ hence thesis by RELAT_2:def 9;
+end;
+
+theorem
+  for T being Tolerance of X holds T is_symmetric_in X
+proof let T be Tolerance of X;
+       field T = X by ORDERS_1:97;
+ hence thesis by RELAT_2:def 11;
+end;
+
+Th30:
+  for T being Tolerance of X holds [x,y] in T implies [y,x] in T
+    by EQREL_1:12;
+
+canceled 2;
+
+theorem Th32:
+  for R be Relation of X,Y st R is symmetric holds
+    R |_2 Z is symmetric
+proof let R be Relation of X,Y; assume R is symmetric;
+then A1:  R is_symmetric_in field R by RELAT_2:def 11;
+       now let x,y; assume A2: x in field(R|_2 Z) & y in field(R|_2 Z)
+       & [x,y] in R|_2 Z;
+      then A3: x in (field R) & x in Z by WELLORD1:19;
+      A4: y in (field R) & y in Z by A2,WELLORD1:19;
+        [x,y] in R & [x,y] in [:Z,Z:] by A2,WELLORD1:16;
+      then A5: [y,x] in R by A1,A3,A4,RELAT_2:def 3;
+            [y,x] in [:Z,Z:] by A2,ZFMISC_1:107;
+      hence [y,x] in R|_2 Z by A5,WELLORD1:16;
+     end;
+   then R|_2 Z is_symmetric_in field(R|_2 Z) by RELAT_2:def 3;
+ hence R|_2 Z is symmetric by RELAT_2:def 11;
+end;
+
+definition let X,T;let Y be Subset of X;
+ canceled 2;
+  redefine func T |_2 Y -> Tolerance of Y;
+  coherence
+    proof
+      A1: T |_2 Y = T /\ [:Y,Y:] by WELLORD1:def 6;
+           now let x; assume A2: x in Y;
+           then A3: [x,x] in [:Y,Y:] by ZFMISC_1:106;
+             [x,x] in T by A2,Th27;
+           then [x,x] in T |_2 Y by A1,A3,XBOOLE_0:def 3;
+          hence x in dom (T |_2 Y) by RELAT_1:def 4;
+         end;
+        then Y c= dom(T |_2 Y) by TARSKI:def 3;
+      then dom(T |_2 Y) = Y by XBOOLE_0:def 10;
+      hence T |_2 Y is Tolerance of Y by Th32,WELLORD1:22,PARTFUN1:def 4;
+    end;
+end;
+
+theorem
+    Y c= X implies T|_2 Y is Tolerance of Y
+proof assume Y c= X;
+  then reconsider Z = Y as Subset of X;
+    T |_2 Z is Tolerance of Z;
+ hence thesis;
+end;
+
+:: Set and Class of Tolerance
+
+definition let X;let T be Tolerance of X;
+  mode TolSet of T -> set means
+:Def3: for x,y st x in it & y in it holds [x,y] in T;
+ existence
+   proof take {};
+     let x,y; assume x in {} & y in {};
+     hence thesis;
+   end;
+end;
+
+theorem Th34:
+  {} is TolSet of T
+proof
+  let x,y; assume x in {} & y in {};
+  hence thesis;
+end;
+
+definition let X;let T be Tolerance of X;
+   let IT be TolSet of T;
+  attr IT is TolClass-like means
+:Def4: for x st not x in IT & x in X ex y st y in IT & not [x,y] in T;
+end;
+
+definition let X;let T be Tolerance of X;
+  cluster TolClass-like TolSet of T;
+ existence
+  proof
+   defpred X[set] means $1 is TolSet of T;
+    consider TS being set such that A1:
+       for x holds x in TS iff x in bool X & X[x] from Separation;
+    A2: TS <> {}
+        proof
+         {} c= X by XBOOLE_1:2;
+         then {} in bool X & {} is TolSet of T by Th34;
+         hence TS <> {} by A1;
+        end;
+    A3: TS c= bool X
+         proof let x; assume x in TS;
+           hence x in bool X by A1;
+         end;
+       for Z st Z c= TS & Z is c=-linear
+       ex Y st Y in TS & for X1 being set st X1 in Z holds X1 c= Y
+       proof let Z such that A4: Z c= TS & Z is c=-linear;
+        take union Z;
+            Z c= bool X by A3,A4,XBOOLE_1:1;
+          then union Z c= union bool X by ZFMISC_1:95;
+          then A5: union Z c= X by ZFMISC_1:99;
+                for x,y st x in union Z & y in union Z holds [x,y] in T
+                proof let x,y;assume A6: x in union Z & y in union Z;
+                  then consider Zx being set such that
+                  A7:x in Zx & Zx in Z by TARSKI:def 4;
+                  consider Zy being set such that
+                  A8:y in Zy & Zy in Z by A6,TARSKI:def 4;
+                  reconsider Zx as TolSet of T by A1,A4,A7;
+                  reconsider Zy as TolSet of T by A1,A4,A8;
+                  Zx,Zy are_c=-comparable by A4,A7,A8,ORDINAL1:def 9;
+             then Zx c= Zy or Zy c= Zx by XBOOLE_0:def 9;
+                   hence [x,y] in T by A7,A8,Def3;
+                end;
+           then union Z is TolSet of T by Def3;
+         hence union Z in TS by A1,A5;
+         let X1 be set;
+         assume X1 in Z;
+        hence X1 c= union Z by ZFMISC_1:92;
+       end;
+     then consider Y such that A9: Y in TS & for Z st Z in TS & Z <> Y
+                               holds not Y c= Z by A2,ORDERS_2:77;
+     reconsider Y as TolSet of T by A1,A9;
+     take Y;
+     let x such that A10: not x in Y & x in X;
+     assume A11: for y st y in Y holds [x,y] in T;
+     set Y1 = Y \/ {x};
+       for y,z st y in Y1 & z in Y1 holds [y,z] in T
+       proof let y,z; assume y in Y1 & z in Y1;
+          then (y in Y or y in {x}) & (z in Y or z in {x}) by XBOOLE_0:def 2;
+        then A12: (y in Y or y = x) & (z in Y or z = x) by TARSKI:def 1;
+         assume A13: not [y,z] in T;
+             then not [z,y] in T by Th30;
+         hence contradiction by A10,A11,A12,A13,Def3,Th27;
+       end;
+     then A14: Y1 is TolSet of T by Def3;
+          Y in bool X by A1,A9;
+      then {x} c= X & Y c= X by A10,ZFMISC_1:37;
+      then Y1 c= X by XBOOLE_1:8;
+     then A15: Y1 in TS by A1,A14;
+           Y1 <> Y
+           proof assume A16: Y1 = Y;
+               x in {x} by TARSKI:def 1;
+            hence contradiction by A10,A16,XBOOLE_0:def 2;
+           end;
+        then not Y c= Y1 by A9,A15;
+      hence contradiction by XBOOLE_1:7;
+  end;
+end;
+
+definition let X;let T be Tolerance of X;
+  mode TolClass of T is TolClass-like TolSet of T;
+end;
+
+canceled 3;
+
+theorem
+    for T being Tolerance of X st {} is TolClass of T holds T={}
+proof let T be Tolerance of X; assume {} is TolClass of T;
+  then reconsider 00 = {} as TolClass of T;
+  assume T <> {};
+   then consider x,y such that A1: [x,y] in T by RELAT_1:56;
+      x in X by A1,ZFMISC_1:106;
+    then ex z st z in 00 & not [x,z] in T by Def4;
+  hence contradiction;
+end;
+
+theorem
+  {} is Tolerance of {} by PARTFUN1:def 4,RELAT_1:60,RELSET_1:25;
+
+theorem Th40:
+  for x,y st [x,y] in T holds {x,y} is TolSet of T
+proof let x,y; assume A1: [x,y] in T;
+  then A2: x in X & y in X by ZFMISC_1:106;
+        for a,b being set st a in {x,y} & b in {x,y} holds [a,b] in T
+        proof let a,b be set; assume a in {x,y} & b in {x,y};
+          then (a = x or a = y) & (b = x or b = y) by TARSKI:def 2;
+           hence [a,b] in T by A1,A2,Th27,Th30;
+        end;
+    hence thesis by Def3;
+end;
+
+theorem
+    for x st x in X holds {x} is TolSet of T
+proof let x; assume x in X;
+  then [x,x] in T by Th27;
+  then {x,x} is TolSet of T by Th40;
+ hence thesis by ENUMSET1:69;
+end;
+
+theorem
+    for Y,Z st Y is TolSet of T & Z is TolSet of T holds Y /\ Z is TolSet of T
+proof let Y,Z such that A1: Y is TolSet of T & Z is TolSet of T;
+  let x,y; assume x in Y /\ Z & y in Y /\ Z;
+    then x in Y & y in Y by XBOOLE_0:def 3;
+  hence [x,y] in T by A1,Def3;
+end;
+
+theorem Th43:
+  Y is TolSet of T implies Y c= X
+proof assume A1: Y is TolSet of T;let x;
+  assume x in Y;
+  then [x,x] in T by A1,Def3;
+ hence x in X by Th27;
+end;
+
+canceled;
+
+theorem Th45:
+  for Y being TolSet of T ex Z being TolClass of T st Y c= Z
+proof let Y be TolSet of T;
+   defpred X[set] means $1 is TolSet of T & ex Z st $1=Z & Y c= Z;
+    consider TS being set such that A1:
+       for x holds x in TS iff x in bool X & X[x] from Separation;
+    A2: for x being set holds x in TS iff x in bool X & x is TolSet of T
+            & Y c= x
+        proof let x be set;
+          thus x in TS implies x in bool X & x is TolSet of T & Y c= x
+             proof assume A3: x in TS;
+               hence x in bool X & x is TolSet of T by A1;
+                  ex Z st x=Z & Y c= Z by A1,A3;
+               hence Y c= x;
+             end;
+          thus thesis by A1;
+        end;
+    A4: TS <> {}
+        proof
+            Y c= X by Th43;
+         hence TS <> {} by A2;
+        end;
+    A5: TS c= bool X
+         proof let x; assume x in TS;
+           hence x in bool X by A1;
+         end;
+       for Z st Z c= TS & Z is c=-linear
+       ex Y st Y in TS & for X1 being set st X1 in Z holds X1 c= Y
+       proof let Z such that A6: Z c= TS & Z is c=-linear;
+       A7: Z = {} implies thesis
+         proof assume A8: Z = {};
+           consider Y being Element of TS;
+           take Y;
+           thus Y in TS by A4;
+           let X1 be set; assume X1 in Z;
+          hence thesis by A8;
+         end;
+          Z <> {} implies thesis
+       proof assume A9: Z <> {};
+        take union Z;
+            Z c= bool X by A5,A6,XBOOLE_1:1;
+          then union Z c= union bool X by ZFMISC_1:95;
+          then A10: union Z c= X by ZFMISC_1:99;
+                for x,y st x in union Z & y in union Z holds [x,y] in T
+                proof let x,y;assume A11: x in union Z & y in union Z;
+                  then consider Zx being set such that A12:
+                     x in Zx & Zx in Z by TARSKI:def 4;
+                  consider Zy being set such that A13:
+                     y in Zy & Zy in Z by A11,TARSKI:def 4;
+                      reconsider Zx as TolSet of T by A1,A6,A12;
+                      reconsider Zy as TolSet of T by A1,A6,A13;
+                        Zx, Zy are_c=-comparable by A6,A12,A13,ORDINAL1:def 9;
+                  then Zx c= Zy or Zy c= Zx by XBOOLE_0:def 9;
+                   hence [x,y] in T by A12,A13,Def3;
+                end;
+          then A14: union Z is TolSet of T by Def3;
+                Y c= union Z
+                proof let x such that A15: x in Y;
+                    consider y being Element of Z;
+                       y in TS by A6,A9,TARSKI:def 3;
+                      then Y c= y by A2; hence x in union Z by A9,A15,TARSKI:
+def 4;
+                end;
+         hence union Z in TS by A2,A10,A14;
+         let X1 be set;
+         assume X1 in Z;
+        hence X1 c= union Z by ZFMISC_1:92;
+        end;
+      hence thesis by A7;
+       end;
+     then consider Z1 being set such that A16: Z1 in TS & for Z st Z in TS & Z
+<>Z1
+                                         holds not Z1 c= Z by A4,ORDERS_2:77;
+     reconsider Z1 as TolSet of T by A1,A16;
+         Z1 is TolClass of T
+    proof assume not thesis;
+     then consider x such that A17: not x in Z1 & x in X &
+          for y st y in Z1 holds [x,y] in T by Def4;
+     set Y1 = Z1 \/ {x};
+       for y,z st y in Y1 & z in Y1 holds [y,z] in T
+       proof let y,z; assume y in Y1 & z in Y1;
+          then (y in Z1 or y in {x}) & (z in Z1 or z in {x}) by XBOOLE_0:def 2
+;
+        then A18: (y in Z1 or y = x) & (z in Z1 or z = x) by TARSKI:def 1;
+         assume A19: not [y,z] in T;
+             then not [z,y] in T by Th30;
+         hence contradiction by A17,A18,A19,Def3,Th27;
+       end;
+     then A20: Y1 is TolSet of T by Def3;
+          Z1 in bool X by A1,A16;
+      then {x} c= X & Z1 c= X by A17,ZFMISC_1:37;
+      then A21: Y1 c= X by XBOOLE_1:8;
+           Y c= Z1 & Z1 c= Y1 by A2,A16,XBOOLE_1:7;
+         then Y c= Y1 by XBOOLE_1:1;
+     then A22: Y1 in TS by A2,A20,A21;
+           Y1 <> Z1
+           proof assume A23: Y1 = Z1;
+               x in {x} by TARSKI:def 1;
+            hence contradiction by A17,A23,XBOOLE_0:def 2;
+           end;
+         then not Z1 c= Y1 by A16,A22;
+       hence contradiction by XBOOLE_1:7;
+    end;
+    then reconsider Z1 as TolClass of T;
+    take Z1;
+  thus Y c= Z1 by A2,A16;
+end;
+
+theorem Th46:
+  for x,y st [x,y] in T ex Z being TolClass of T st x in Z & y in Z
+proof let x,y; assume A1: [x,y] in T;
+  then A2: x in X & y in X by ZFMISC_1:106;
+    for a,b being set st a in {x,y} & b in {x,y} holds [a,b] in T
+    proof let a,b be set; assume a in {x,y} & b in {x,y};
+       then (a = x or a = y) & (b = x or b = y) by TARSKI:def 2;
+      hence thesis by A1,A2,Th27,Th30;
+    end;
+  then reconsider PS = {x,y} as TolSet of T by Def3;
+  consider Z being TolClass of T such that A3: PS c= Z by Th45;
+  take Z;
+    x in {x,y} by TARSKI:def 2;
+ hence x in Z by A3;
+    y in {x,y} by TARSKI:def 2;
+ hence thesis by A3;
+end;
+
+theorem Th47:
+  for x st x in X ex Z being TolClass of T st x in Z
+proof let x; assume x in X;
+  then [x,x] in T by Th27;
+  then ex Z being TolClass of T st x in Z & x in Z by Th46;
+ hence thesis;
+end;
+
+canceled;
+
+theorem
+  T c= Total X
+proof let x,y; assume [x,y] in T;
+  then [x,y] in [:X,X:];
+ hence [x,y] in Total X by EQREL_1:def 1;
+end;
+
+theorem
+  id X c= T
+proof let x,y;assume [x,y] in id X;
+  then x in X & x = y by RELAT_1:def 10;
+ hence [x,y] in T by Th27;
+end;
+
+scheme ToleranceEx{A() -> set,P[set,set]}:
+  ex T being Tolerance of A() st
+    for x,y st x in A() & y in A() holds [x,y] in T iff P[x,y]
+provided
+A1: for x st x in A() holds P[x,x] and
+A2: for x,y st x in A() & y in A() & P[x,y] holds P[y,x]
+proof
+   defpred X[set] means ex y,z st $1 = [y,z] & P[y,z];
+  consider T being set such that A3:
+    for x holds x in T iff x in [:A(),A():] & X[x] from Separation;
+    for x st x in T holds x in [:A(),A():] by A3;
+  then T c= [:A(),A():] by TARSKI:def 3;
+  then reconsider T as Relation of A(),A() by RELSET_1:def 1;
+A4: dom T = A()
+      proof
+          for x st x in A() holds x in dom T
+          proof let x; assume x in A();
+            then [x,x] in [:A(),A():] & P[x,x] by A1,ZFMISC_1:106;
+            then [x,x] in T by A3;
+          hence x in dom T by RELAT_1:def 4;
+          end;
+        then A() c= dom T by TARSKI:def 3;
+       hence dom T = A() by XBOOLE_0:def 10;
+      end;
+  A5: field T = A()
+      proof
+        A6: field T c= A() \/ A() by RELSET_1:19;
+          for x st x in A() holds x in field T
+          proof let x; assume x in A();
+            then [x,x] in [:A(),A():] & P[x,x] by A1,ZFMISC_1:106;
+            then [x,x] in T by A3;
+            then x in dom T by RELAT_1:def 4;
+            then x in dom T \/ rng T by XBOOLE_0:def 2;
+           hence x in field T by RELAT_1:def 6;
+          end;
+        then A() c= field T by TARSKI:def 3;
+       hence field T = A() by A6,XBOOLE_0:def 10;
+      end;
+A7:  T is total by A4,PARTFUN1:def 4;
+        T is_reflexive_in field T
+        proof
+             for x st x in field T holds [x,x] in T
+             proof let x; assume x in field T;
+               then [x,x] in [:A(),A():] & P[x,x] by A1,A5,ZFMISC_1:106;
+              hence [x,x] in T by A3;
+             end;
+           hence thesis by RELAT_2:def 1;
+        end;
+   then A8: T is reflexive by RELAT_2:def 9;
+        T is_symmetric_in field T
+        proof
+            for x,y st x in field T & y in field T & [x,y] in T holds [y,x] in
+T
+            proof let x,y such that A9:
+ x in field T & y in field T & [x,y] in T;
+                x in A() & y in A() & P[x,y]
+                proof
+                   thus x in A() & y in A() by A5,A9;
+                   consider a,b being set such that A10:
+                       [x,y] = [a,b] & P[a,b] by A3,A9;
+                     x = a & y = b by A10,ZFMISC_1:33;
+                    hence P[x,y] by A10;
+                end;
+              then [y,x] in [:A(),A():] & P[y,x] by A2,ZFMISC_1:106;
+            hence [y,x] in T by A3;
+            end;
+          hence thesis by RELAT_2:def 3;
+        end;
+   then reconsider T as Tolerance of A() by A7,A8,RELAT_2:def 11;
+   take T;
+   let x,y;
+   assume A11: x in A() & y in A();
+    thus [x,y] in T implies P[x,y]
+     proof assume [x,y] in T;
+       then consider a,b being set such that A12: [x,y] = [a,b] & P[a,b] by A3;
+          x = a & y = b by A12,ZFMISC_1:33;
+       hence P[x,y] by A12;
+     end;
+    assume A13: P[x,y];
+      [x,y] in [:A(),A():] by A11,ZFMISC_1:106;
+   hence [x,y] in T by A3,A13;
+end;
+
+theorem
+    for Y ex T being Tolerance of union Y st
+    for Z st Z in Y holds Z is TolSet of T
+proof let Y;
+   defpred X[set,set] means ex Z st Z in Y & $1 in Z & $2 in Z;
+  A1: for x st x in union Y holds X[x,x]
+     proof let x; assume x in union Y;
+        then ex Z st x in Z & Z in Y by TARSKI:def 4;
+       hence thesis;
+     end;
+  A2: for x,y st x in union Y & y in union Y & X[x,y] holds X[y,x];
+  consider T being Tolerance of union Y such that A3:
+   for x,y st x in union Y & y in union Y holds
+     [x,y] in T iff X[x,y]  from ToleranceEx(A1,A2);
+  take T;
+  let Z such that A4: Z in Y;
+    for x,y st x in Z & y in Z holds [x,y] in T
+   proof let x,y; assume A5: x in Z & y in Z;
+     then x in union Y & y in union Y by A4,TARSKI:def 4;
+    hence [x,y] in T by A3,A4,A5;
+   end;
+ hence Z is TolSet of T by Def3;
+end;
+
+theorem
+    for Y being set for T,R being Tolerance of union Y st
+    (for x,y holds [x,y] in T iff ex Z st Z in Y & x in Z & y in Z) &
+    (for x,y holds [x,y] in R iff ex Z st Z in Y & x in Z & y in Z)
+  holds T = R
+proof let Y be set;let T,R be Tolerance of union Y such that A1:
+    (for x,y holds [x,y] in T iff ex Z st Z in Y & x in Z & y in Z) &
+    (for x,y holds [x,y] in R iff ex Z st Z in Y & x in Z & y in Z);
+    for x,y holds [x,y] in T iff [x,y] in R
+    proof let x,y;
+      thus [x,y] in T implies [x,y] in R
+        proof assume [x,y] in T;
+          then ex Z st Z in Y & x in Z & y in Z by A1;
+         hence [x,y] in R by A1;
+        end;
+      assume [x,y] in R;
+        then ex Z st Z in Y & x in Z & y in Z by A1;
+       hence [x,y] in T by A1;
+    end;
+  hence T = R by RELAT_1:def 2;
+end;
+
+theorem Th53:
+  for T,R being Tolerance of X st
+    for Z holds Z is TolClass of T iff Z is TolClass of R
+  holds T = R
+proof let T,R be Tolerance of X;
+  assume A1: for Z holds Z is TolClass of T iff Z is TolClass of R;
+    for x,y holds [x,y] in T iff [x,y] in R
+    proof let x,y;
+      thus [x,y] in T implies [x,y] in R
+        proof assume [x,y] in T;
+         then consider Z being TolClass of T such that
+A2: x in Z & y in Z by Th46;
+         reconsider Z as TolClass of R by A1;
+         Z is TolSet of R;
+         hence [x,y] in R by A2,Def3;
+        end;
+     assume [x,y] in R;
+     then consider Z being TolClass of R such that A3: x in Z & y in Z by Th46;
+     reconsider Z as TolClass of T by A1;
+       Z is TolSet of T;
+    hence [x,y] in T by A3,Def3;
+    end;
+  hence T = R by RELAT_1:def 2;
+end;
+
+:: Tolerance neighbourhood
+
+definition let X; let T be Tolerance of X; let x;
+  canceled;
+  redefine func Class (T,x);
+  synonym neighbourhood (x, T);
+end;
+
+theorem Th54:
+  for y being set holds y in neighbourhood(x,T) iff [x,y] in T
+  proof
+    let y be set;
+    hereby assume y in neighbourhood(x,T); then
+      [y,x] in T by EQREL_1:27;
+      hence [x,y] in T by EQREL_1:12;
+    end;
+    assume [x,y] in T; then
+    [y,x] in T by EQREL_1:12;
+    hence thesis by EQREL_1:27;
+  end;
+
+Th56:
+  x in X implies x in neighbourhood(x,T) by EQREL_1:28;
+
+canceled 3;
+
+theorem
+  for Y st for Z being set holds Z in Y iff x in Z & Z is TolClass of T
+   holds neighbourhood(x,T) = union Y
+proof let Y such that A1: for Z being set holds
+                          Z in Y iff x in Z & Z is TolClass of T;
+    for y holds y in neighbourhood(x,T) iff y in union Y
+    proof let y;
+      thus y in neighbourhood(x,T) implies y in union Y
+       proof assume y in neighbourhood(x,T);
+         then [x,y] in T by Th54;
+         then consider Z being TolClass of T such that
+A2: x in Z & y in Z by Th46;
+        Z in Y by A1,A2;
+        hence y in union Y by A2,TARSKI:def 4;
+       end;
+       assume y in union Y;
+       then consider Z such that A3: y in Z & Z in Y by TARSKI:def 4;
+       reconsider Z as TolClass of T by A1,A3;
+         x in Z by A1,A3;
+       then [x,y] in T by A3,Def3;
+      hence y in neighbourhood(x,T) by Th54;
+    end;
+  hence thesis by TARSKI:2;
+end;
+
+theorem
+    for Y st for Z holds Z in Y iff x in Z & Z is TolSet of T holds
+    neighbourhood(x,T) = union Y
+proof let Y such that A1: for Z holds Z in Y iff x in Z & Z is TolSet of T;
+    for y holds y in neighbourhood(x,T) iff y in union Y
+    proof let y;
+      thus y in neighbourhood(x,T) implies y in union Y
+       proof assume y in neighbourhood(x,T);
+         then [x,y] in T by Th54;
+         then consider Z being TolClass of T such that
+A2: x in Z & y in Z by Th46;
+           Z in Y by A1,A2;
+        hence y in union Y by A2,TARSKI:def 4;
+       end;
+       assume y in union Y;
+       then consider Z such that A3: y in Z & Z in Y by TARSKI:def 4;
+       reconsider Z as TolSet of T by A1,A3;
+       x in Z by A1,A3;
+      then [x,y] in T by A3,Def3;
+      hence y in neighbourhood(x,T) by Th54;
+    end;
+  hence thesis by TARSKI:2;
+end;
+
+:::::::::::::::::::::::::::::::::::::::::::::
+:: Family of sets and classes of proximity ::
+:::::::::::::::::::::::::::::::::::::::::::::
+definition let X; let T be Tolerance of X;
+  func TolSets T -> set means
+:Def6: for Y holds Y in it iff Y is TolSet of T;
+  existence
+    proof
+   defpred X[set] means $1 is TolSet of T;
+      consider Z being set such that A1:
+        x in Z iff x in bool X & X[x] from Separation;
+      take Z;
+      let Y;
+      thus Y in Z implies Y is TolSet of T by A1;
+      assume A2: Y is TolSet of T;
+        for x holds x in Y implies x in X
+        proof let x;assume x in Y;
+          then [x,x] in T by A2,Def3;
+         hence x in X by ZFMISC_1:106;
+        end;
+      then Y c= X by TARSKI:def 3;
+    hence Y in Z by A1,A2;
+    end;
+  uniqueness
+    proof
+      defpred P[set] means $1 is TolSet of T;
+      let Z1,Z2 be set such that
+      A3: for Y holds Y in Z1 iff P[Y] and
+      A4: for Y holds Y in Z2 iff P[Y];
+      Z1 = Z2 from Extensionality (A3, A4);
+      hence thesis;
+    end;
+
+  func TolClasses T -> set means
+:Def7: for Y holds Y in it iff Y is TolClass of T;
+   existence
+    proof
+   defpred X[set] means $1 is TolClass of T;
+      consider Z being set such that A5:
+        x in Z iff x in bool X & X[x] from Separation;
+      take Z;
+      let Y;
+      thus Y in Z implies Y is TolClass of T by A5;
+      assume A6: Y is TolClass of T;
+        for x holds x in Y implies x in X
+        proof let x;assume x in Y;
+          then [x,x] in T by A6,Def3;
+         hence x in X by ZFMISC_1:106;
+        end;
+      then Y c= X by TARSKI:def 3;
+     hence Y in Z by A5,A6;
+   end;
+   uniqueness
+     proof
+      defpred P[set] means $1 is TolClass of T;
+      let C1,C2 be set such that
+      A7: for Y holds Y in C1 iff P[Y] and
+      A8: for Y holds Y in C2 iff P[Y];
+      C1 = C2 from Extensionality (A7, A8);
+      hence thesis;
+     end;
+end;
+
+canceled 4;
+
+theorem
+    TolClasses R c= TolClasses T implies R c= T
+proof assume A1: TolClasses R c= TolClasses T;
+  let x,y; assume [x,y] in R;
+  then consider Z being TolClass of R such that A2: x in Z & y in Z by Th46;
+    Z in TolClasses R by Def7;
+  then Z is TolSet of T by A1,Def7;
+ hence [x,y] in T by A2,Def3;
+end;
+
+theorem
+     for T,R being Tolerance of X st TolClasses T = TolClasses R
+     holds T = R
+proof let T,R be Tolerance of X;
+  assume A1: TolClasses T = TolClasses R;
+    for Z holds Z is TolClass of T iff Z is TolClass of R
+    proof let Z;
+        Z is TolClass of T iff Z in TolClasses R by A1,Def7;
+     hence thesis by Def7;
+    end;
+  hence thesis by Th53;
+end;
+
+theorem
+    union TolClasses T = X
+proof
+    for x holds x in union TolClasses T iff x in X
+    proof let x;
+      thus x in union TolClasses T implies x in X
+        proof assume x in union TolClasses T;
+          then consider Z such that A1: x in Z & Z in TolClasses T by TARSKI:
+def 4;
+            Z is TolSet of T by A1,Def7;
+          then Z c= X by Th43;
+         hence x in X by A1;
+        end;
+      assume x in X;
+      then consider Z being TolClass of T such that A2: x in Z by Th47;
+        Z in TolClasses T by Def7;
+    hence x in union TolClasses T by A2,TARSKI:def 4;
+    end;
+  hence thesis by TARSKI:2;
+end;
+
+theorem
+    union TolSets T = X
+proof
+    for x holds x in union TolSets T iff x in X
+   proof let x;
+      thus x in union TolSets T implies x in X
+         proof assume x in union TolSets T;
+           then consider Z such that A1: x in Z & Z in TolSets T by TARSKI:def
+4;
+             Z is TolSet of T by A1,Def6;
+           then Z c= X by Th43;
+          hence x in X by A1;
+         end;
+      assume x in X;
+      then consider Z being TolClass of T such that A2: x in Z by Th47;
+        Z in TolSets T by Def6;
+    hence x in union TolSets T by A2,TARSKI:def 4;
+   end;
+ hence thesis by TARSKI:2;
+end;
+
+theorem
+    (for x st x in X holds neighbourhood(x,T) is TolSet of T)
+   implies T is transitive
+proof
+A1:     field T = X by ORDERS_1:97;
+  assume A2: for x st x in X holds neighbourhood(x,T) is TolSet of T;
+    for x,y,z st x in field T & y in field T & z in field T &
+    [x,y] in T & [y,z] in T holds [x,z] in T
+  proof let x,y,z; assume A3: x in field T & y in field T & z in field T &
+                                   [x,y] in T & [y,z] in T;
+    then reconsider N = neighbourhood(y,T) as TolSet of T by A1,A2;
+    A4: z in N by A3,Th54;
+          [y,x] in T by A3,Th30;
+        then x in N by Th54;
+     hence [x,z] in T by A4,Def3;
+  end;
+  then T is_transitive_in field T by RELAT_2:def 8;
+ hence T is transitive by RELAT_2:def 16;
+end;
+
+theorem
+    T is transitive implies
+  (for x st x in X holds neighbourhood(x,T) is TolClass of T)
+proof
+A1:     field T = X by ORDERS_1:97;
+ assume T is transitive;
+  then A2: T is_transitive_in X by A1,RELAT_2:def 16;
+  let x;
+  assume A3: x in X;
+  set N = neighbourhood(x,T);
+    for y,z st y in N & z in N holds [y,z] in T
+    proof let y,z such that A4: y in N & z in N;
+      A6: [x,z] in T by A4,Th54;
+       [x,y] in T by A4,Th54;
+       then [y,x] in T by Th30;
+     hence [y,z] in T by A2,A3,A4,A6,RELAT_2:def 8;
+    end;
+  then reconsider Z = N as TolSet of T by Def3;
+    for x st not x in Z & x in X ex y st y in Z & not [x,y] in T
+    proof let y such that A7: not y in Z & y in X;
+      assume A8: for z st z in Z holds [y,z] in T;
+        x in Z by A3,Th56;
+      then [y,x] in T by A8;
+      then [x,y] in T by Th30;
+     hence contradiction by A7,Th54;
+    end;
+ hence thesis by Def4;
+end;
+
+theorem
+    for x for Y being TolClass of T st x in Y holds
+     Y c= neighbourhood(x,T)
+proof let x;let Y be TolClass of T such that A1: x in Y;
+    for y st y in Y holds y in neighbourhood(x,T)
+    proof let y; assume y in Y;
+      then [x,y] in T by A1,Def3;
+     hence thesis by Th54;
+    end;
+  hence thesis by TARSKI:def 3;
+end;
+
+theorem
+    TolSets R c= TolSets T iff R c= T
+proof
+  thus TolSets R c= TolSets T implies R c= T
+    proof assume A1: TolSets R c= TolSets T;
+      let x,y; assume [x,y] in R;
+      then consider Z being TolClass of R such that A2: x in Z & y in Z by Th46
+;
+        Z in TolSets R by Def6;
+      then Z is TolSet of T by A1,Def6;
+     hence [x,y] in T by A2,Def3;
+    end;
+  assume A3: R c= T;
+   let x; assume x in TolSets R;
+   then reconsider Z = x as TolSet of R by Def6;
+     for x,y st x in Z & y in Z holds [x,y] in T
+     proof let x,y;assume x in Z & y in Z;
+       then [x,y] in R by Def3;
+      hence [x,y] in T by A3;
+     end;
+   then Z is TolSet of T by Def3;
+  hence x in TolSets T by Def6;
+end;
+
+theorem
+    TolClasses T c= TolSets T
+proof let x; assume x in TolClasses T;
+   then x is TolSet of T by Def7;
+  hence thesis by Def6;
+end;
+
+theorem
+    (for x st x in X holds neighbourhood(x,R) c= neighbourhood(x,T))
+    implies R c= T
+proof
+  assume A1: for x st x in X holds neighbourhood(x,R) c= neighbourhood(x,T);
+  let x,y; assume A2: [x,y] in R;
+  then A3: y in neighbourhood(x,R) by Th54;
+    x in X by A2,ZFMISC_1:106;
+  then neighbourhood(x,R) c= neighbourhood(x,T) by A1; hence [x,y] in T by A3,
+Th54;
+end;
+
+theorem
+    T c= T*T
+proof let x,y; assume A1: [x,y] in T;
+  then y in X by ZFMISC_1:106;
+  then [y,y] in T by Th27;
+ hence [x,y] in T*T by A1,RELAT_1:def 8;
+end;

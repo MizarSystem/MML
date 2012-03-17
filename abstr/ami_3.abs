@@ -1,0 +1,539 @@
+:: Some Remarks on Simple Concrete Model of Computer
+::  by Andrzej Trybulec and Yatsuka Nakamura
+::
+:: Received October 8, 1993
+:: Copyright (c) 1993 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_1, INT_1, AMI_2, GR_CY_1, RELAT_1, FUNCT_1, CAT_1, FINSEQ_1,
+      FUNCT_2, CARD_3, ARYTM_1, NAT_1, CQC_LANG, BOOLE, MCART_1, FUNCT_4,
+      PARTFUN1, FUNCOP_1, FINSET_1, ORDINAL2, AMI_3, ARYTM;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL2, ORDINAL1, NUMBERS,
+      XCMPLX_0, XREAL_0, FUNCT_1, FUNCT_2, INT_1, NAT_1, MCART_1, CQC_LANG,
+      CARD_3, GR_CY_1, RELAT_1, FUNCT_4, PARTFUN1, FINSET_1, FINSEQ_1,
+      STRUCT_0, AMI_1, CAT_3, AMI_2;
+ constructors DOMAIN_1, REAL_1, NAT_1, CAT_2, FINSEQ_4, AMI_1, AMI_2, CAT_3,
+      MEMBERED, XBOOLE_0;
+ clusters INT_1, AMI_1, FUNCT_1, RELSET_1, AMI_2, CQC_LANG, NAT_1, FINSET_1,
+      XBOOLE_0, FRAENKEL, MEMBERED, ZFMISC_1, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: A small concrete machine
+
+
+ reserve i,j,k for Nat;
+
+definition
+ func SCM -> strict AMI-Struct over { INT } equals
+:: AMI_3:def 1
+
+   AMI-Struct(#NAT,0,SCM-Instr-Loc,Segm 9,SCM-Instr,SCM-OK,SCM-Exec#);
+end;
+
+definition
+ cluster SCM -> non empty non void;
+end;
+
+theorem :: AMI_3:1
+ SCM is data-oriented;
+
+theorem :: AMI_3:2
+ SCM is definite;
+
+definition
+ cluster SCM -> IC-Ins-separated data-oriented definite;
+end;
+
+definition
+ mode Data-Location -> Object of SCM means
+:: AMI_3:def 2
+ it in SCM-Data-Loc;
+end;
+
+definition let s be State of SCM, d be Data-Location;
+ redefine func s.d -> Integer;
+end;
+
+reserve a,b,c for Data-Location,
+        loc for Instruction-Location of SCM,
+        I for Instruction of SCM;
+
+definition let a,b;
+ func a := b -> Instruction of SCM equals
+:: AMI_3:def 3
+ [ 1, <*a, b*>];
+ func AddTo(a,b) -> Instruction of SCM equals
+:: AMI_3:def 4
+ [ 2, <*a, b*>];
+ func SubFrom(a,b) -> Instruction of SCM equals
+:: AMI_3:def 5
+ [ 3, <*a, b*>];
+ func MultBy(a,b) -> Instruction of SCM equals
+:: AMI_3:def 6
+ [ 4, <*a, b*>];
+ func Divide(a,b) -> Instruction of SCM equals
+:: AMI_3:def 7
+ [ 5, <*a, b*>];
+end;
+
+definition let loc;
+ func goto loc -> Instruction of SCM equals
+:: AMI_3:def 8
+ [ 6, <*loc*>];
+ let a;
+ func a=0_goto loc -> Instruction of SCM equals
+:: AMI_3:def 9
+ [ 7, <*loc,a*>];
+ func a>0_goto loc -> Instruction of SCM equals
+:: AMI_3:def 10
+ [ 8, <*loc,a*>];
+end;
+
+reserve s for State of SCM;
+
+canceled;
+
+theorem :: AMI_3:4
+ IC SCM = 0;
+
+theorem :: AMI_3:5
+ for S being SCM-State st S = s holds IC s = IC S;
+
+definition let loc be Instruction-Location of SCM;
+ func Next loc -> Instruction-Location of SCM means
+:: AMI_3:def 11
+ ex mj being Element of SCM-Instr-Loc st mj = loc & it = Next mj;
+end;
+
+theorem :: AMI_3:6
+ for loc being Instruction-Location of SCM,
+     mj being Element of SCM-Instr-Loc st mj = loc
+ holds Next mj = Next loc;
+
+theorem :: AMI_3:7
+for i being Element of SCM-Instr st i = I
+for S being SCM-State st S = s holds
+ Exec(I,s) = SCM-Exec-Res(i,S);
+
+begin :: Users guide
+
+theorem :: AMI_3:8
+ Exec(a:=b, s).IC SCM = Next IC s &
+ Exec(a:=b, s).a = s.b &
+ for c st c <> a holds Exec(a:=b, s).c = s.c;
+
+theorem :: AMI_3:9
+ Exec(AddTo(a,b), s).IC SCM = Next IC s &
+ Exec(AddTo(a,b), s).a = s.a + s.b &
+ for c st c <> a holds Exec(AddTo(a,b), s).c = s.c;
+
+theorem :: AMI_3:10
+ Exec(SubFrom(a,b), s).IC SCM = Next IC s &
+ Exec(SubFrom(a,b), s).a = s.a - s.b &
+ for c st c <> a holds Exec(SubFrom(a,b), s).c = s.c;
+
+theorem :: AMI_3:11
+ Exec(MultBy(a,b), s).IC SCM = Next IC s &
+ Exec(MultBy(a,b), s).a = s.a * s.b &
+ for c st c <> a holds Exec(MultBy(a,b), s).c = s.c;
+
+theorem :: AMI_3:12
+ Exec(Divide(a,b), s).IC SCM = Next IC s &
+ (a <> b implies Exec(Divide(a,b), s).a = s.a div s.b) &
+ Exec(Divide(a,b), s).b = s.a mod s.b &
+ for c st c <> a & c <> b holds Exec(Divide(a,b), s).c = s.c;
+
+theorem :: AMI_3:13
+   Exec(goto loc, s).IC SCM = loc &
+ Exec(goto loc, s).c = s.c;
+
+theorem :: AMI_3:14
+ (s.a = 0 implies Exec(a =0_goto loc, s).IC SCM = loc) &
+ (s.a <> 0 implies Exec(a=0_goto loc, s).IC SCM = Next IC s) &
+ Exec(a=0_goto loc, s).c = s.c;
+
+theorem :: AMI_3:15
+ (s.a > 0 implies Exec(a >0_goto loc, s).IC SCM = loc) &
+ (s.a <= 0 implies Exec(a>0_goto loc, s).IC SCM = Next IC s) &
+ Exec(a>0_goto loc, s).c = s.c;
+
+reserve Y,K,T for Element of Segm 9,
+        a1,a2,a3 for Element of SCM-Instr-Loc,
+        b1,b2,c1,c2,c3 for Element of SCM-Data-Loc;
+
+definition
+ cluster SCM -> halting;
+end;
+
+begin :: Preliminaries
+
+canceled 2;
+
+theorem :: AMI_3:18
+ for m,j being Integer holds m*j, 0 are_congruent_mod m;
+
+scheme INDI{ k,n() -> Nat, P[set] }:
+     P[n()]
+provided
+  P[0] and
+  k() > 0 and
+  for i,j st P[k()*i] & j <> 0 & j <= k() holds
+     P[k()*i+j];
+
+theorem :: AMI_3:19
+ for X,Y being non empty set,
+  f,g being PartFunc of X,Y st
+   for x being Element of X, y being Element of Y holds
+    [x,y] in f iff [x,y] in g
+ holds f = g;
+
+theorem :: AMI_3:20
+ for f,g being Function, A,B being set st
+  f|A = g|A & f|B = g|B holds f|(A \/ B) = g|(A \/ B);
+
+theorem :: AMI_3:21
+   for X being set, f,g being Function st dom g c= X & g c= f
+  holds g c= f|X;
+
+theorem :: AMI_3:22
+ for f being Function, x being set st x in dom f
+ holds f|{x} = {[x,f.x]};
+
+theorem :: AMI_3:23
+ for f being Function, X being set st X misses dom f
+  holds f|X = {};
+
+theorem :: AMI_3:24
+ for f,g being Function, x being set st dom f = dom g & f.x = g.x
+ holds f|{x} = g|{x};
+
+theorem :: AMI_3:25
+ for f,g being Function, x,y being set st dom f = dom g
+  & f.x = g.x & f.y = g.y
+ holds f|{x,y} = g|{x,y};
+
+theorem :: AMI_3:26
+   for f,g being Function, x,y,z being set st dom f = dom g
+  & f.x = g.x & f.y = g.y & f.z = g.z
+ holds f|{x,y,z} = g|{x,y,z};
+
+theorem :: AMI_3:27
+ for a,b being set, f being Function st a in dom f & f.a = b
+  holds a .--> b c= f;
+
+canceled;
+
+theorem :: AMI_3:29
+   for a,b,c,d being set, f being Function st
+     a in dom f & c in dom f & f.a = b & f.c = d
+  holds (a,c) --> (b,d) c= f;
+
+begin :: Some Remarks on AMI-Struct
+
+reserve N for set;
+
+canceled;
+
+theorem :: AMI_3:31
+ for S being AMI-Struct over N,
+     p being FinPartState of S
+  holds p in FinPartSt S;
+
+definition let N be set; let S be AMI-Struct over N;
+ cluster FinPartSt S -> non empty;
+end;
+
+theorem :: AMI_3:32
+ for S being AMI-Struct over N,
+     p being Element of FinPartSt S
+  holds p is FinPartState of S;
+
+theorem :: AMI_3:33
+ for S being AMI-Struct over N,
+     F1,F2 being PartFunc of FinPartSt S, FinPartSt S
+  st for p,q being FinPartState of S holds
+   [p,q] in F1 iff [p,q] in F2
+  holds F1 = F2;
+
+scheme EqFPSFunc{ N() -> non empty with_non-empty_elements set,
+    S() -> AMI-Struct over N(), P[set,set],
+    IT1,IT2()->PartFunc of FinPartSt S(), FinPartSt S()}:
+ IT1() = IT2()
+ provided
+ for p,q being FinPartState of S() holds [p,q] in IT1() iff P[p,q] and
+ for p,q being FinPartState of S() holds [p,q] in IT2() iff P[p,q];
+
+definition let N be with_non-empty_elements set;
+   let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+   let l be Instruction-Location of S;
+ func Start-At l -> FinPartState of S equals
+:: AMI_3:def 12
+ IC S .--> l;
+end;
+
+reserve N for with_non-empty_elements set;
+
+theorem :: AMI_3:34
+   for S being IC-Ins-separated definite (non empty non void AMI-Struct over N)
+ for l being Instruction-Location of S
+  holds dom(Start-At l) = {IC S};
+
+definition let N be set; let S be AMI-Struct over N;
+ let IT be FinPartState of S;
+ attr IT is programmed means
+:: AMI_3:def 13
+ dom IT c= the Instruction-Locations of S;
+end;
+
+definition let N be set; let S be AMI-Struct over N;
+ cluster programmed FinPartState of S;
+end;
+
+theorem :: AMI_3:35
+  for N being set for S being AMI-Struct over N
+ for p1,p2 being programmed FinPartState of S
+  holds p1 +* p2 is programmed;
+
+theorem :: AMI_3:36
+ for S being non void AMI-Struct over N, s being State of S holds
+  dom s = the carrier of S;
+
+theorem :: AMI_3:37
+ for S being AMI-Struct over N, p being FinPartState of S holds
+  dom p c= the carrier of S;
+
+theorem :: AMI_3:38
+  for S being steady-programmed IC-Ins-separated definite
+   (non empty non void AMI-Struct over N)
+ for p being programmed FinPartState of S
+ for s being State of S st p c= s
+ for k holds p c= (Computation s).k;
+
+definition let N;
+ let S be IC-Ins-separated (non empty non void AMI-Struct over N);
+ let s be State of S, l be Instruction-Location of S;
+ pred s starts_at l means
+:: AMI_3:def 14
+    IC s = l;
+end;
+
+definition let N;
+ let S be IC-Ins-separated halting (non empty non void AMI-Struct over N);
+ let s be State of S, l be Instruction-Location of S;
+ pred s halts_at l means
+:: AMI_3:def 15
+  s.l = halt S;
+end;
+
+theorem :: AMI_3:39
+ for S being non void AMI-Struct over N, p being FinPartState of S
+  ex s being State of S st p c= s;
+
+definition let N;
+  let S be definite IC-Ins-separated (non empty non void AMI-Struct over N);
+ let p be FinPartState of S such that
+ IC S in dom p;
+ func IC p -> Instruction-Location of S equals
+:: AMI_3:def 16
+  p.IC S;
+end;
+
+definition let N;
+ let S be definite IC-Ins-separated (non empty non void AMI-Struct over N);
+ let p be FinPartState of S, l be Instruction-Location of S;
+ pred p starts_at l means
+:: AMI_3:def 17
+    IC S in dom p & IC p = l;
+end;
+
+definition let N;
+ let S be definite IC-Ins-separated halting
+  (non empty non void AMI-Struct over N);
+ let p be FinPartState of S, l be Instruction-Location of S;
+ pred p halts_at l means
+:: AMI_3:def 18
+    l in dom p & p.l = halt S;
+end;
+
+theorem :: AMI_3:40
+ for S being IC-Ins-separated
+ definite steady-programmed halting (non empty non void AMI-Struct over N),
+  s being State of S holds
+  s is halting iff ex k st s halts_at IC (Computation s).k;
+
+theorem :: AMI_3:41
+   for S being IC-Ins-separated
+ definite steady-programmed halting (non empty non void AMI-Struct over N),
+  s being State of S, p being FinPartState of S,
+  l being Instruction-Location of S st p c= s & p halts_at l
+   holds s halts_at l;
+
+theorem :: AMI_3:42
+ for S being halting steady-programmed IC-Ins-separated
+ definite (non empty non void AMI-Struct over N),
+     s being State of S, k st s is halting
+  holds Result s = (Computation s).k iff s halts_at IC (Computation s).k;
+
+theorem :: AMI_3:43
+   for S being steady-programmed IC-Ins-separated definite
+       (non empty non void AMI-Struct over N),
+     s being State of S, p being programmed FinPartState of S, k
+  holds p c= s iff p c= (Computation s).k;
+
+theorem :: AMI_3:44
+ for S being halting steady-programmed IC-Ins-separated
+ definite (non empty non void AMI-Struct over N),
+     s being State of S, k st s halts_at IC (Computation s).k
+  holds Result s = (Computation s).k;
+
+theorem :: AMI_3:45
+ i <= j implies
+  for S being halting steady-programmed IC-Ins-separated
+ definite (non empty non void AMI-Struct over N)
+  for s being State of S st s halts_at IC (Computation s).i
+   holds s halts_at IC (Computation s).j;
+
+theorem :: AMI_3:46 :: AMI_1:46
+   i <= j implies
+  for S being halting steady-programmed IC-Ins-separated
+ definite (non empty non void AMI-Struct over N)
+  for s being State of S st s halts_at IC (Computation s).i
+   holds (Computation s).j = (Computation s).i;
+
+theorem :: AMI_3:47 :: AMI_2:46
+   for S being steady-programmed IC-Ins-separated
+ halting definite (non empty non void AMI-Struct over N)
+ for s being State of S st ex k st s halts_at IC (Computation s).k
+ for i holds Result s = Result (Computation s).i;
+
+theorem :: AMI_3:48
+   for S being steady-programmed IC-Ins-separated
+ definite halting (non empty non void AMI-Struct over N)
+ for s being State of S,l being Instruction-Location of S,k holds
+  s halts_at l iff (Computation s).k halts_at l;
+
+theorem :: AMI_3:49
+   for S being definite IC-Ins-separated (non empty non void AMI-Struct over N)
+,
+     p being FinPartState of S, l being Instruction-Location of S
+  st p starts_at l
+ for s being State of S st p c= s holds s starts_at l;
+
+theorem :: AMI_3:50
+   for S being IC-Ins-separated definite (non empty non void AMI-Struct over N)
+,
+     l being Instruction-Location of S
+  holds (Start-At l).IC S = l;
+
+definition let N;
+ let S be definite IC-Ins-separated (non empty non void AMI-Struct over N);
+ let l be Instruction-Location of S, I be Element of the Instructions of S;
+ redefine func l .--> I -> programmed FinPartState of S;
+end;
+
+begin
+
+theorem :: AMI_3:51
+  SCM is realistic;
+
+definition
+ cluster SCM -> steady-programmed realistic;
+end;
+
+definition let k be natural number;
+ func dl.k -> Data-Location equals
+:: AMI_3:def 19
+  2*k +1;
+ func il.k -> Instruction-Location of SCM equals
+:: AMI_3:def 20
+  2*k +2;
+end;
+
+reserve i,j,k for natural number;
+
+theorem :: AMI_3:52
+   i <> j implies dl.i <> dl.j;
+
+theorem :: AMI_3:53
+   i <> j implies il.i <> il.j;
+
+theorem :: AMI_3:54
+   Next il.k = il.(k+1);
+
+theorem :: AMI_3:55
+ for l being Data-Location holds ObjectKind l = INT;
+
+definition
+ let la be Data-Location;
+ let a be Integer;
+ redefine func la .--> a -> FinPartState of SCM;
+end;
+
+definition
+ let la,lb be Data-Location;
+ let a, b be Integer;
+ redefine func (la,lb) --> (a,b) -> FinPartState of SCM;
+end;
+
+theorem :: AMI_3:56
+   dl.i <> il.j;
+
+theorem :: AMI_3:57
+   IC SCM <> dl.i & IC SCM <> il.i;
+
+begin  :: Halt Instruction
+
+theorem :: AMI_3:58
+   for I being Instruction of SCM st
+  ex s st Exec(I,s).IC SCM = Next IC s
+ holds I is non halting;
+
+theorem :: AMI_3:59
+   for I being Instruction of SCM st I = [0,{}] holds I is halting;
+
+theorem :: AMI_3:60
+   a := b is non halting;
+
+theorem :: AMI_3:61
+   AddTo(a,b) is non halting;
+
+theorem :: AMI_3:62
+   SubFrom(a,b) is non halting;
+
+theorem :: AMI_3:63
+   MultBy(a,b) is non halting;
+
+theorem :: AMI_3:64
+   Divide(a,b) is non halting;
+
+theorem :: AMI_3:65
+   goto loc is non halting;
+
+theorem :: AMI_3:66
+   a=0_goto loc is non halting;
+
+theorem :: AMI_3:67
+   a>0_goto loc is non halting;
+
+theorem :: AMI_3:68
+   [0,{}] is Instruction of SCM;
+
+theorem :: AMI_3:69
+   for I being set holds I is Instruction of SCM iff
+  I = [0,{}] or
+  (ex a,b st I = a:=b) or
+  (ex a,b st I = AddTo(a,b)) or
+  (ex a,b st I = SubFrom(a,b)) or
+  (ex a,b st I = MultBy(a,b)) or
+  (ex a,b st I = Divide(a,b)) or
+  (ex loc st I = goto loc) or
+  (ex a,loc st I = a=0_goto loc) or
+  ex a,loc st I = a>0_goto loc;
+
+theorem :: AMI_3:70
+   for I being Instruction of SCM st I is halting holds I = halt SCM;
+
+theorem :: AMI_3:71
+   halt SCM = [0,{}];

@@ -1,0 +1,212 @@
+:: Fanoian, Pappian and Desarguesian Affine Spaces
+::  by Krzysztof Pra\.zmowski
+::
+:: Received November 16, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ANALOAF, DIRAF, REALSET1, RLVECT_1, PARSP_1, ARYTM_1, AFF_2,
+      VECTSP_1, PASCH, TRANSGEO, CONAFFM, AFF_1, RELAT_1, INCSP_1, PAPDESAF;
+ notation SUBSET_1, STRUCT_0, RLVECT_1, REAL_1, ANALOAF, DIRAF, AFF_1, AFF_2,
+      GEOMTRAP, TRANSLAC, REALSET1;
+ constructors REAL_1, AFF_1, AFF_2, GEOMTRAP, TRANSLAC, XREAL_0, MEMBERED,
+      XBOOLE_0;
+ clusters DIRAF, STRUCT_0, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, REAL, SUBSET, ARITHM;
+
+
+begin
+
+definition let OAS be OAffinSpace;
+  cluster Lambda(OAS) -> AffinSpace-like non trivial;
+end;
+
+definition let OAS be OAffinPlane;
+  cluster Lambda(OAS) -> 2-dimensional;
+end;
+
+canceled;
+
+theorem :: PAPDESAF:2
+for OAS being OAffinSpace, x being set holds
+  (x is Element of OAS iff
+   x is Element of Lambda(OAS)) &
+  (x is Subset of OAS iff
+   x is Subset of Lambda(OAS));
+
+theorem :: PAPDESAF:3
+ for OAS being OAffinSpace holds for a,b,c being (Element of the carrier
+ of OAS), a',b',c' being (Element of Lambda(OAS)) st
+   a=a' & b=b' & c =c' holds LIN a,b,c iff LIN a',b',c';
+
+theorem :: PAPDESAF:4
+for V being RealLinearSpace, x being set holds
+ (x is Element of OASpace(V) iff x is VECTOR of V);
+
+theorem :: PAPDESAF:5
+ for V being RealLinearSpace, OAS being OAffinSpace st OAS=OASpace(V)
+ holds (for a,b,c,d being Element of OAS,u,v,w,y being VECTOR
+ of V st a=u & b=v & c =w & d=y holds
+ (a,b '||' c,d iff u,v '||' w,y));
+
+theorem :: PAPDESAF:6
+for V being RealLinearSpace, OAS being OAffinSpace st
+ OAS=OASpace(V) holds (ex u,v being VECTOR of V st
+ (for a,b being Real st a*u + b*v = 0.V holds a=0 & b=0));
+
+definition let AS be AffinSpace;
+  redefine attr AS is Pappian;
+ synonym AS satisfies_PAP';
+end;
+
+definition let AS be AffinSpace;
+  redefine attr AS is Desarguesian;
+ synonym AS satisfies_DES';
+end;
+
+definition let AS be AffinSpace;
+  redefine attr AS is Moufangian;
+ synonym AS satisfies_TDES';
+end;
+
+definition let AS be AffinSpace;
+  redefine attr AS is translational;
+ synonym AS satisfies_des';
+end;
+
+definition let AS be AffinSpace;
+  redefine canceled 4;
+
+attr AS is Fanoian means
+:: PAPDESAF:def 5
+ for a,b,c,d being Element of AS st a,b // c,d & a,c // b,d &
+  a,d // b,c holds a,b // a,c;
+  synonym AS satisfies_Fano;
+end;
+
+definition let IT be OAffinSpace;
+ canceled 5;
+
+ attr IT is Pappian means
+:: PAPDESAF:def 11
+  Lambda(IT) satisfies_PAP';
+
+ attr IT is Desarguesian means
+:: PAPDESAF:def 12
+  Lambda(IT) satisfies_DES';
+
+ attr IT is Moufangian means
+:: PAPDESAF:def 13
+  Lambda(IT) satisfies_TDES';
+
+ attr IT is translation means
+:: PAPDESAF:def 14
+  Lambda(IT) satisfies_des';
+end;
+
+definition let OAS be OAffinSpace;
+  attr OAS is satisfying_DES means
+:: PAPDESAF:def 15
+ for o,a,b,c,a1,b1,c1 being Element of OAS st
+ (o,a // o,a1 & o,b // o,b1 & o,c // o,c1 & not LIN o,a,b & not LIN o,a,c
+  & a,b // a1,b1 & a,c // a1,c1) holds b,c // b1,c1;
+  synonym OAS satisfies_DES;
+end;
+
+definition let OAS be OAffinSpace;
+  attr OAS is satisfying_DES_1 means
+:: PAPDESAF:def 16
+ for o,a,b,c,a1,b1,c1 being Element of OAS st
+ (a,o // o,a1 & b,o // o,b1 & c,o // o,c1 & not LIN o,a,b & not LIN o,a,c
+  & a,b // b1,a1 & a,c // c1,a1) holds b,c // c1,b1;
+  synonym OAS satisfies_DES_1;
+end;
+
+canceled 4;
+
+theorem :: PAPDESAF:11
+for OAS being OAffinSpace st OAS satisfies_DES_1 holds
+ OAS satisfies_DES;
+
+theorem :: PAPDESAF:12
+ for OAS being OAffinSpace holds for o,a,b,a',b' being Element of the
+ carrier of OAS st not LIN o,a,b & a,o // o,a' & LIN o,b,b' & a,b '||' a',b'
+ holds b,o // o,b' & a,b // b',a';
+
+theorem :: PAPDESAF:13
+ for OAS being OAffinSpace holds for o,a,b,a',b' being Element of the
+ carrier of OAS st not LIN o,a,b & o,a // o,a' & LIN o,b,b' & a,b '||' a',b'
+ holds o,b // o,b' & a,b // a',b';
+
+theorem :: PAPDESAF:14
+for OAP being OAffinSpace st OAP satisfies_DES_1 holds
+ Lambda(OAP) satisfies_DES';
+
+theorem :: PAPDESAF:15
+ for V being RealLinearSpace holds for o,u,v,u1,v1 being VECTOR of V,
+r being Real st o-u=r*(u1-o) & r<>0 & o,v '||' o,v1 & not o,u '||' o,v &
+ u,v '||' u1,v1 holds v1 = u1 + (-r)"*(v-u) & v1 = o + (-r)"*(v-o)
+ & v-u = (-r)*(v1-u1);
+
+canceled;
+
+theorem :: PAPDESAF:17
+for V being RealLinearSpace, OAS being OAffinSpace st
+      OAS = OASpace(V) holds OAS satisfies_DES_1;
+
+theorem :: PAPDESAF:18
+for V being RealLinearSpace, OAS being OAffinSpace st
+ OAS = OASpace(V) holds OAS satisfies_DES_1 & OAS satisfies_DES;
+
+theorem :: PAPDESAF:19
+for V being RealLinearSpace, OAS being OAffinSpace st
+      OAS = OASpace(V) holds Lambda(OAS) satisfies_PAP';
+
+theorem :: PAPDESAF:20
+for V being RealLinearSpace, OAS being OAffinSpace st
+      OAS = OASpace(V) holds Lambda(OAS) satisfies_DES';
+
+theorem :: PAPDESAF:21
+ for AS being AffinSpace st AS satisfies_DES' holds AS satisfies_TDES';
+
+theorem :: PAPDESAF:22
+for V being RealLinearSpace, OAS being OAffinSpace st
+      OAS = OASpace(V) holds Lambda(OAS) satisfies_TDES';
+
+theorem :: PAPDESAF:23
+for V being RealLinearSpace, OAS being OAffinSpace st
+      OAS = OASpace(V) holds Lambda(OAS) satisfies_des';
+
+theorem :: PAPDESAF:24
+for OAS being OAffinSpace holds Lambda(OAS) satisfies_Fano;
+
+definition cluster Pappian Desarguesian Moufangian translation OAffinSpace;
+ end;
+
+definition
+ cluster strict Fanoian Pappian Desarguesian Moufangian translational
+AffinPlane; end;
+
+definition cluster strict Fanoian Pappian Desarguesian Moufangian
+ translational AffinSpace; end;
+
+definition let OAS be OAffinSpace;
+ cluster Lambda(OAS) -> Fanoian;
+end;
+
+definition let OAS be Pappian OAffinSpace;
+ cluster Lambda(OAS) -> Pappian;
+ end;
+
+definition let OAS be Desarguesian OAffinSpace;
+ cluster Lambda(OAS) -> Desarguesian;
+ end;
+
+definition let OAS be Moufangian OAffinSpace;
+ cluster Lambda(OAS) -> Moufangian;
+ end;
+
+definition let OAS be translation OAffinSpace;
+ cluster Lambda(OAS) -> translational;
+ end;

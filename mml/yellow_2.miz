@@ -1,0 +1,2378 @@
+:: Properties of Relational Structures, Posets, Lattices and Maps
+::  by Mariusz \.Zynel and Czes{\l}aw Byli\'nski
+::
+:: Received September 20, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary ORDERS_1, WAYBEL_0, LATTICE3, RELAT_2, YELLOW_0, BOOLE, LATTICES,
+      RELAT_1, WELLORD1, CAT_1, QUANTAL1, PRE_TOPC, FUNCT_1, GROUP_6, SEQM_3,
+      ORDINAL2, BINOP_1, BHSP_3, SETFAM_1, FILTER_2, YELLOW_1, SUBSET_1,
+      WELLORD2, YELLOW_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
+      SETFAM_1, LATTICE3, WELLORD1, STRUCT_0, ORDERS_1, PRE_TOPC, QUANTAL1,
+      ORDERS_3, YELLOW_0, YELLOW_1, WAYBEL_0, GRCAT_1;
+ constructors WAYBEL_0, YELLOW_1, TOLER_1, ORDERS_3, QUANTAL1, TOPS_2, GRCAT_1;
+ clusters STRUCT_0, LATTICE3, RELSET_1, YELLOW_0, YELLOW_1, WAYBEL_0, SUBSET_1,
+      XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, LATTICE3, QUANTAL1, ORDERS_3, WAYBEL_0;
+ theorems TARSKI, STRUCT_0, RELAT_1, FUNCT_1, FUNCT_2, SETFAM_1, LATTICE3,
+      WELLORD1, ORDERS_1, PRE_TOPC, TMAP_1, ORDERS_3, YELLOW_0, YELLOW_1,
+      WAYBEL_0, GRCAT_1, RELSET_1, XBOOLE_0, XBOOLE_1;
+ schemes FUNCT_2, SUPINF_2;
+
+begin :: Basic Facts
+
+reserve x, X, Y for set;
+
+scheme RelStrSubset{L() -> non empty RelStr, P[set]}:
+  {x where x is Element of L(): P[x]} is Subset of L()
+proof
+    {x where x is Element of L(): P[x]} c= the carrier of L()
+  proof
+    let x be set;
+    assume x in {l where l is Element of L(): P[l]};
+    then ex l being Element of L() st x = l & P[l];
+    hence thesis;
+  end;
+  hence thesis;
+end;
+
+theorem
+    for L being non empty RelStr
+  for x being Element of L
+  for X being Subset of L
+   holds
+  X c= downarrow x iff X is_<=_than x
+ proof let L be non empty RelStr, x be Element of L, X be Subset of L;
+  hereby
+   assume
+A1:  X c= downarrow x;
+   thus X is_<=_than x
+    proof let a be Element of L;
+     assume a in X;
+     hence a <= x by A1,WAYBEL_0:17;
+    end;
+  end;
+  assume
+A2: for a being Element of L st a in X holds a <= x;
+  let a be set;
+  assume
+A3:  a in X;
+  then reconsider a as Element of L;
+    a <= x by A2,A3;
+  hence thesis by WAYBEL_0:17;
+ end;
+
+theorem
+    for L being non empty RelStr
+  for x being Element of L
+  for X being Subset of L
+    holds
+   X c= uparrow x iff x is_<=_than X
+ proof let L be non empty RelStr, x be Element of L, X be Subset of L;
+  hereby
+   assume
+A1:  X c= uparrow x;
+   thus x is_<=_than X
+    proof let a be Element of L;
+     assume a in X;
+     hence x <= a by A1,WAYBEL_0:18;
+    end;
+  end;
+  assume
+A2: for a being Element of L st a in X holds x <= a;
+  let a be set;
+  assume
+A3:  a in X;
+  then reconsider a as Element of L;
+    x <= a by A2,A3;
+  hence thesis by WAYBEL_0:18;
+ end;
+
+theorem
+    for L being antisymmetric transitive with_suprema RelStr
+  for X, Y being set st ex_sup_of X,L & ex_sup_of Y,L
+    holds
+   ex_sup_of (X \/ Y),L & "\/"(X \/ Y, L) = "\/"(X, L) "\/" "\/"(Y, L)
+proof
+  let L be antisymmetric transitive with_suprema RelStr;
+  let X, Y be set such that
+A1: ex_sup_of X,L and
+A2: ex_sup_of Y,L;
+
+  set a = "\/"(X, L) "\/" "\/"(Y, L);
+
+A3: X \/ Y is_<=_than a
+  proof
+    let x be Element of L;
+    assume
+A4:    x in X \/ Y;
+    per cases by A4,XBOOLE_0:def 2;
+    suppose
+  A5: x in X;
+      X is_<=_than "\/"(X, L) by A1,YELLOW_0:30;
+    then x <= "\/"(X, L) & "\/"(X, L) <= a by A5,LATTICE3:def 9,YELLOW_0:22;
+    hence x <= a by ORDERS_1:26;
+
+    suppose
+  A6: x in Y;
+      Y is_<=_than "\/"(Y, L) by A2,YELLOW_0:30;
+    then x <= "\/"(Y, L) & "\/"(Y, L) <= a by A6,LATTICE3:def 9,YELLOW_0:22;
+    hence x <= a by ORDERS_1:26;
+  end;
+
+    for b being Element of L st X \/ Y is_<=_than b holds a <= b
+  proof
+    let b be Element of L;
+    assume
+  A7: X \/ Y is_<=_than b;
+      X c= X \/ Y & Y c= X \/ Y by XBOOLE_1:7;
+    then X is_<=_than b & Y is_<=_than b by A7,YELLOW_0:9;
+    then "\/"(X, L) <= b & "\/"(Y, L) <= b by A1,A2,YELLOW_0:30;
+    hence a <= b by YELLOW_0:22;
+  end;
+  hence thesis by A3,YELLOW_0:30;
+end;
+
+theorem
+    for L being antisymmetric transitive with_infima RelStr
+  for X, Y being set st ex_inf_of X,L & ex_inf_of Y,L
+    holds
+   ex_inf_of (X \/ Y),L & "/\"(X \/ Y, L) = "/\"(X, L) "/\" "/\"(Y, L)
+proof
+  let L be antisymmetric transitive with_infima RelStr;
+  let X, Y be set such that
+A1: ex_inf_of X,L and
+A2: ex_inf_of Y,L;
+
+  set a = "/\"(X, L) "/\" "/\"(Y, L);
+
+A3: X \/ Y is_>=_than a
+  proof
+    let x be Element of L;
+    assume
+A4:    x in X \/ Y;
+    per cases by A4,XBOOLE_0:def 2;
+    suppose
+  A5: x in X;
+      X is_>=_than "/\"(X, L) by A1,YELLOW_0:31;
+    then x >= "/\"(X, L) & "/\"(X, L) >= a by A5,LATTICE3:def 8,YELLOW_0:23;
+    hence x >= a by ORDERS_1:26;
+
+    suppose
+  A6: x in Y;
+      Y is_>=_than "/\"(Y, L) by A2,YELLOW_0:31;
+    then x >= "/\"(Y, L) & "/\"(Y, L) >= a by A6,LATTICE3:def 8,YELLOW_0:23;
+    hence x >= a by ORDERS_1:26;
+  end;
+
+    for b being Element of L st X \/ Y is_>=_than b holds a >= b
+  proof
+    let b be Element of L;
+    assume
+  A7: X \/ Y is_>=_than b;
+      X c= X \/ Y & Y c= X \/ Y by XBOOLE_1:7;
+    then X is_>=_than b & Y is_>=_than b by A7,YELLOW_0:9;
+    then "/\"(X, L) >= b & "/\"(Y, L) >= b by A1,A2,YELLOW_0:31;
+    hence a >= b by YELLOW_0:23;
+  end;
+  hence thesis by A3,YELLOW_0:31;
+end;
+
+
+begin :: Relational Substructures
+
+theorem Th5:
+  for R being Relation
+  for X, Y being set
+    holds
+   X c= Y implies R |_2 X c= R |_2 Y
+ proof let R be Relation, X,Y be set;
+   assume
+A1:  X c= Y;
+   then X|R c= Y|R by RELAT_1:131;
+then A2:  X|R|X c= Y|R|X by RELAT_1:105;
+     Y|R|X c= Y|R|Y by A1,RELAT_1:104;
+   then X|R|X c= Y|R|Y by A2,XBOOLE_1:1;
+   then R|_2 X c= Y|R|Y by WELLORD1:17;
+   hence R|_2 X c= R|_2 Y by WELLORD1:17;
+ end;
+
+theorem
+    for L being RelStr
+  for S, T being full SubRelStr of L st the carrier of S c= the carrier of T
+    holds
+   the InternalRel of S c= the InternalRel of T
+ proof
+ let L be RelStr, S1,S2 be full SubRelStr of L;
+    the InternalRel of S1 = (the InternalRel of L)|_2 the carrier of S1 &
+   the InternalRel of S2 = (the InternalRel of L)|_2 the carrier of S2
+    by YELLOW_0:def 14;
+  hence thesis by Th5;
+ end;
+
+theorem Th7:
+  for L being non empty RelStr
+  for S being non empty SubRelStr of L
+    holds
+   (X is directed Subset of S implies X is directed Subset of L) &
+   (X is filtered Subset of S implies X is filtered Subset of L)
+proof
+  let L be non empty RelStr;
+  let S be non empty SubRelStr of L;
+
+  thus X is directed Subset of S implies X is directed Subset of L
+  proof
+    assume
+  A1: X is directed Subset of S;
+
+     the carrier of S c= the carrier of L by YELLOW_0:def 13;
+    then X c= the carrier of L by A1,XBOOLE_1:1;
+    then reconsider X as Subset of L;
+
+      for x, y being Element of L st x in X & y in X
+      ex z being Element of L st z in X & x <= z & y <= z
+    proof
+      let x, y be Element of L;
+      assume
+    A2: x in X & y in X;
+      then reconsider x'= x, y'= y as Element of S by A1;
+      consider z being Element of S such that
+    A3: z in X and
+    A4: x' <= z & y' <= z by A1,A2,WAYBEL_0:def 1;
+      reconsider z as Element of L by YELLOW_0:59;
+      take z;
+      thus thesis by A3,A4,YELLOW_0:60;
+    end;
+    hence thesis by WAYBEL_0:def 1;
+  end;
+
+  thus X is filtered Subset of S implies X is filtered Subset of L
+  proof
+    assume
+  A5: X is filtered Subset of S;
+     the carrier of S c= the carrier of L by YELLOW_0:def 13;
+    then X c= the carrier of L by A5,XBOOLE_1:1;
+    then reconsider X as Subset of L;
+
+      for x, y being Element of L st x in X & y in X
+      ex z being Element of L st z in X & z <= x & z <= y
+    proof
+      let x, y be Element of L;
+      assume
+    A6: x in X & y in X;
+      then reconsider x'= x, y'= y as Element of S by A5;
+      consider z being Element of S such that
+    A7: z in X and
+    A8: z <= x' & z <= y' by A5,A6,WAYBEL_0:def 2;
+      reconsider z as Element of L by YELLOW_0:59;
+      take z;
+      thus thesis by A7,A8,YELLOW_0:60;
+    end;
+    hence thesis by WAYBEL_0:def 2;
+  end;
+end;
+
+theorem
+    for L being non empty RelStr
+  for S, T being non empty full SubRelStr of L
+    st the carrier of S c= the carrier of T
+  for X being Subset of S
+    holds
+   X is Subset of T & for Y being Subset of T st X = Y holds
+     (X is filtered implies Y is filtered) &
+     (X is directed implies Y is directed)
+ proof
+ let L be non empty RelStr, S1,S2 be non empty full SubRelStr of L;
+   assume
+A1:  the carrier of S1 c= the carrier of S2;
+  let X be Subset of S1;
+    X is Subset of S2 by A1,XBOOLE_1:1;
+  hence X is Subset of S2;
+  let X2 be Subset of S2 such that
+A2:  X = X2;
+   hereby assume
+A3:   X is filtered;
+    thus X2 is filtered
+     proof let x, y be Element of S2; assume
+A4:    x in X2 & y in X2;
+      then reconsider x'= x, y'= y as Element of S1 by A2;
+      consider z being Element of S1 such that
+A5:    z in X & z <= x' & z <= y' by A2,A3,A4,WAYBEL_0:def 2;
+      reconsider x1 = x, y1 = y, z1 = z as Element of L by YELLOW_0:59;
+      reconsider z as Element of S2 by A2,A5;
+      take z;
+        z1 <= x1 & z1 <= y1 by A5,YELLOW_0:60;
+      hence z in X2 & z <= x & z <= y by A2,A5,YELLOW_0:61;
+     end;
+   end;
+   assume
+A6:  X is directed;
+   let x, y be Element of S2; assume
+A7:  x in X2 & y in X2;
+   then reconsider x'= x, y'= y as Element of S1 by A2;
+   consider z being Element of S1 such that
+A8:  z in X & x' <= z & y' <= z by A2,A6,A7,WAYBEL_0:def 1;
+   reconsider x1 = x, y1 = y, z1 = z as Element of L by YELLOW_0:59;
+   reconsider z as Element of S2 by A2,A8;
+   take z;
+     x1 <= z1 & y1 <= z1 by A8,YELLOW_0:60;
+   hence z in X2 & x <= z & y <= z by A2,A8,YELLOW_0:61;
+ end;
+
+
+begin :: Maps
+
+scheme LambdaMD{X, Y() -> non empty RelStr, F(set) -> Element of Y()}:
+  ex f being map of X(), Y() st for x being Element of X() holds f.x = F(x)
+ proof deffunc f(set) = F($1);
+  consider f being Function of the carrier of X(),the carrier of Y() such that
+A1:  for s being Element of X() holds f.s = f(s)
+   from LambdaD;
+  reconsider f as map of X(),Y();
+  take f;
+  thus thesis by A1;
+ end;
+
+scheme KappaMD{X, Y() -> non empty RelStr, F(set) -> set}:
+  ex f being map of X(), Y() st for x being Element of X() holds f.x = F(x)
+provided
+A1:  for x being Element of X() holds F(x) is Element of Y()
+ proof
+  reconsider X = the carrier of X(),Y = the carrier of Y() as non empty set;
+  deffunc f(set) = F($1);
+A2: now let x be Element of X;
+     F(x) is Element of Y() by A1;
+     hence f(x) in Y;
+    end;
+  consider f being Function of X, Y such that
+A3: for x being Element of X holds f.x = f(x) from FunctR_ealEx(A2);
+  reconsider f as map of X(),Y();
+  take f;
+  thus thesis by A3;
+ end;
+
+scheme NonUniqExMD{X, Y() -> non empty RelStr, P[set,set]}:
+  ex f being map of X(), Y() st for x being Element of X() holds P[x, f.x]
+provided
+A1:  for x being Element of X() ex y being Element of Y() st P[x, y]
+ proof
+  defpred p[set,set] means P[$1,$2];
+A2: for x being set st x in the carrier of X()
+     ex y being set st y in the carrier of Y() & p[x,y]
+   proof let x be set;
+    assume x in the carrier of X();
+    then reconsider x as Element of X();
+      ex y being Element of Y() st p[x,y] by A1;
+    hence thesis;
+   end;
+  consider f being Function of the carrier of X(),the carrier of Y() such that
+A3:  for x being set st x in the carrier of X() holds p[x,f.x]
+   from FuncEx1(A2);
+  reconsider f as map of X(),Y();
+  take f;
+  thus thesis by A3;
+ end;
+
+definition
+  let S, T be 1-sorted;
+  let f be map of S, T;
+  redefine func rng f -> Subset of T;
+  coherence by RELSET_1:12;
+end;
+
+theorem Th9:
+  for S, T being non empty 1-sorted
+  for f, g being map of S, T
+    holds
+   (for s being Element of S holds f.s = g.s) implies f = g by FUNCT_2:113;
+
+definition
+  let J be set, L be RelStr;
+  let f, g be Function of J, the carrier of L;
+  pred f <= g means
+:Def1:
+  for j being set st j in J
+    ex a, b being Element of L st a = f.j & b = g.j & a <= b;
+  synonym g >= f;
+end;
+
+theorem
+    for L, M being non empty RelStr, f,g being map of L, M holds
+    f <= g iff for x being Element of L holds f.x <= g.x
+ proof let L, M be non empty RelStr, f,g be map of L, M;
+  hereby assume
+A1:  f <= g;
+    let x be Element of L;
+      ex m1,m2 being Element of M st m1 = f.x & m2 = g.x & m1 <= m2
+     by A1,Def1;
+    hence f.x <= g.x;
+  end;
+  assume
+A2:  for x being Element of L holds f.x <= g.x;
+  let x be set;
+  assume x in the carrier of L;
+  then reconsider x as Element of L;
+  take f.x, g.x;
+  thus thesis by A2;
+ end;
+
+
+begin :: The Image of a Map
+
+definition
+  let L, M be non empty RelStr;
+  let f be map of L, M;
+  func Image f -> strict full SubRelStr of M equals
+:Def2:
+   subrelstr rng f;
+  correctness;
+end;
+
+theorem Th11:
+  for L, M being non empty RelStr
+  for f being map of L, M
+    holds
+   rng f = the carrier of Image f
+ proof let L1, L2 be non empty RelStr, g be map of L1,L2;
+    Image g = subrelstr(rng g) by Def2;
+  hence the carrier of Image g = rng g by YELLOW_0:def 15;
+ end;
+
+theorem
+    for L, M being non empty RelStr
+  for f being map of L, M
+  for y being Element of Image f
+    ex x being Element of L st f.x = y
+ proof let L1, L2 be non empty RelStr, g be map of L1,L2;
+   let s be Element of Image g;
+A1: dom g = the carrier of L1 by FUNCT_2:def 1;
+  then rng g is non empty & rng g = the carrier of Image g by Th11,RELAT_1:65;
+  then consider l being set such that
+A2:   l in dom g and
+A3:   s = g.l by FUNCT_1:def 5;
+  reconsider l as Element of L1 by A1,A2;
+  take l;
+  thus thesis by A3;
+ end;
+
+definition
+  let L be non empty RelStr;
+  let X be non empty Subset of L;
+  cluster subrelstr X -> non empty;
+  coherence
+ proof the carrier of subrelstr X = X by YELLOW_0:def 15;
+  hence thesis by STRUCT_0:def 1;
+ end;
+end;
+
+definition
+  let L, M be non empty RelStr;
+  let f be map of L, M;
+  cluster Image f -> non empty;
+  coherence
+ proof
+    dom f = the carrier of L by FUNCT_2:def 1;
+  then rng f is non empty & rng f = the carrier of Image f by Th11,RELAT_1:65;
+  hence Image f is non empty by STRUCT_0:def 1;
+ end;
+end;
+
+
+begin :: Monotone Maps
+
+theorem
+    for L being non empty RelStr holds id L is monotone
+proof
+  let L be non empty RelStr;
+  let l1,l2 be Element of L;
+  assume l1 <= l2;
+  then l1 <= (id L).l2 by TMAP_1:91;
+  hence thesis by TMAP_1:91;
+ end;
+
+theorem
+    for L, M, N being non empty RelStr
+  for f being map of L, M, g being map of M, N
+    holds
+   f is monotone & g is monotone implies g*f is monotone
+ proof let L1,L2,L3 be non empty RelStr;
+  let g1 be map of L1,L2, g2 be map of L2,L3 such that
+A1:  g1 is monotone and
+A2:  g2 is monotone;
+  let s1,s2 be Element of L1;
+  assume s1 <= s2;
+  then g1.s1 <= g1.s2 by A1,ORDERS_3:def 5;
+  then g2.(g1.s1) <= g2.(g1.s2) by A2,ORDERS_3:def 5;
+  then (g2*g1).s1 <= g2.(g1.s2) by FUNCT_2:21;
+  hence thesis by FUNCT_2:21;
+ end;
+
+theorem
+    for L, M being non empty RelStr
+  for f being map of L, M
+  for X being Subset of L, x being Element of L
+    holds
+   f is monotone & x is_<=_than X implies f.x is_<=_than f.:X
+ proof let L1,L2 be non empty RelStr, g be map of L1,L2;
+   let X be Subset of L1, x be Element of L1 such that
+A1: g is monotone and
+A2: x is_<=_than X;
+  let y2 be Element of L2; assume
+      y2 in g.:X;
+  then consider x2 being Element of L1 such that
+A3: x2 in X and
+A4: y2 = g.x2 by FUNCT_2:116;
+  reconsider x2 as Element of L1;
+    x <= x2 by A2,A3,LATTICE3:def 8;
+  hence g.x <= y2 by A1,A4,ORDERS_3:def 5;
+ end;
+
+theorem
+    for L, M being non empty RelStr
+  for f being map of L, M
+  for X being Subset of L, x being Element of L
+    holds
+   f is monotone & X is_<=_than x implies f.:X is_<=_than f.x
+ proof let L1,L2 be non empty RelStr, g be map of L1,L2;
+   let X be Subset of L1, x be Element of L1 such that
+A1: g is monotone and
+A2: x is_>=_than X;
+  let y2 be Element of L2; assume
+      y2 in g.:X;
+  then consider x2 being Element of L1 such that
+A3: x2 in X and
+A4: y2 = g.x2 by FUNCT_2:116;
+  reconsider x2 as Element of L1;
+    x >= x2 by A2,A3,LATTICE3:def 9;
+  hence g.x >= y2 by A1,A4,ORDERS_3:def 5;
+ end;
+
+theorem
+    for S, T being non empty RelStr
+  for f being map of S, T
+  for X being directed Subset of S
+    holds
+   f is monotone implies f.:X is directed
+proof
+  let S, T be non empty RelStr;
+  let f be map of S, T;
+  let X be directed Subset of S;
+  assume
+A1: f is monotone;
+  set Y = f.:X;
+
+    for y1, y2 being Element of T st y1 in Y & y2 in Y
+    ex z being Element of T st z in Y & y1 <= z & y2 <= z
+  proof
+    let y1, y2 be Element of T;
+    assume
+  A2: y1 in Y & y2 in Y;
+    then consider x1 being set such that
+        x1 in dom f and
+  A3: x1 in X and
+  A4: y1 = f.x1 by FUNCT_1:def 12;
+    consider x2 being set such that
+        x2 in dom f and
+  A5: x2 in X and
+  A6: y2 = f.x2 by A2,FUNCT_1:def 12;
+    reconsider x1, x2 as Element of S by A3,A5;
+    consider z being Element of S such that
+  A7: z in X & x1 <= z & x2 <= z by A3,A5,WAYBEL_0:def 1;
+    take f.z;
+    thus f.z in Y by A7,FUNCT_2:43;
+    thus y1 <= f.z & y2 <= f.z by A1,A4,A6,A7,ORDERS_3:def 5;
+  end;
+  hence f.:X is directed by WAYBEL_0:def 1;
+end;
+
+theorem Th18:
+  for L being with_suprema Poset
+  for f being map of L, L
+    holds
+   f is directed-sups-preserving implies f is monotone
+proof
+  let L be with_suprema Poset;
+  let f be map of L, L;
+  assume
+A1: f is directed-sups-preserving;
+
+  let x, y be Element of L such that
+A2: x <= y;
+  let afx, bfy be Element of L such that
+A3: afx = f.x & bfy = f.y;
+
+A4:  y = y"\/"x by A2,YELLOW_0:24;
+    x <= y & y <= y by A2;
+then A5: {x, y} is_<=_than y by YELLOW_0:8;
+
+    for b being Element of L st {x, y} is_<=_than b holds y <= b by YELLOW_0:8;
+  then A6: ex_sup_of {x, y},L by A5,YELLOW_0:30;
+
+    for a, b being Element of L st a in {x, y} & b in {x, y}
+    ex z being Element of L st z in {x, y} & a <= z & b <= z
+  proof
+    let a, b be Element of L such that
+  A7: a in {x, y} & b in {x, y};
+    take y;
+    thus y in {x, y} by TARSKI:def 2;
+    thus a <= y & b <= y by A2,A7,TARSKI:def 2;
+  end;
+  then {x, y} is directed non empty by WAYBEL_0:def 1;
+  then f preserves_sup_of {x, y} by A1,WAYBEL_0:def 37;
+then A8: sup(f.:{x, y}) = f.sup{x, y} by A6,WAYBEL_0:def 31
+                 .= f.y by A4,YELLOW_0:41;
+
+    dom f = the carrier of L by FUNCT_2:def 1;
+  then f.y = sup{f.x, f.y} by A8,FUNCT_1:118
+     .= f.y"\/"f.x by YELLOW_0:41;
+  hence afx <= bfy by A3,YELLOW_0:22;
+end;
+
+theorem
+    for L being with_infima Poset
+  for f being map of L, L
+    holds
+   f is filtered-infs-preserving implies f is monotone
+proof
+  let L be with_infima Poset;
+  let f be map of L, L;
+  assume
+A1: f is filtered-infs-preserving;
+
+  let x, y be Element of L such that
+A2: x <= y;
+  let a, b be Element of L such that
+A3: a = f.x & b = f.y;
+
+A4:  x = x"/\"y by A2,YELLOW_0:25;
+       x <= x & x <= y by A2;
+then A5: x is_<=_than {x, y} by YELLOW_0:8;
+
+    for c being Element of L st c is_<=_than {x, y} holds c <= x by YELLOW_0:8
+;
+  then A6: ex_inf_of {x, y},L by A5,YELLOW_0:31;
+
+    for c, d being Element of L st c in {x, y} & d in {x, y}
+    ex z being Element of L st z in {x, y} & z <= c & z <= d
+  proof
+    let c, d be Element of L such that
+  A7: c in {x, y} & d in {x, y};
+    take x;
+    thus x in {x, y} by TARSKI:def 2;
+    thus x <= c & x <= d by A2,A7,TARSKI:def 2;
+  end;
+  then {x, y} is filtered non empty by WAYBEL_0:def 2;
+  then f preserves_inf_of {x, y} by A1,WAYBEL_0:def 36;
+then A8: inf(f.:{x, y}) = f.inf{x, y} by A6,WAYBEL_0:def 30
+                 .= f.x by A4,YELLOW_0:40;
+    dom f = the carrier of L by FUNCT_2:def 1;
+  then f.x = inf{f.x, f.y} by A8,FUNCT_1:118
+     .= f.x"/\"f.y by YELLOW_0:40;
+  hence a <= b by A3,YELLOW_0:23;
+end;
+
+
+begin :: Idempotent Maps
+
+theorem
+    for S being non empty 1-sorted
+  for f being map of S, S
+    holds
+   f is idempotent implies for x being Element of S holds f.(f.x) = f.x
+ proof let L be non empty 1-sorted, p be map of L,L; assume
+A1:  p*p = p;
+   let l be Element of L;
+   thus p.(p.l) = p.l by A1,FUNCT_2:21;
+ end;
+
+theorem Th21:
+  for S being non empty 1-sorted
+  for f being map of S, S
+    holds
+   f is idempotent implies rng f = {x where x is Element of S: x = f.x}
+proof
+  let S be non empty 1-sorted;
+  let f be map of S, S;
+  assume
+A1: f = f*f;
+
+  set M = {x where x is Element of S: x = f.x};
+
+A2:
+  rng f c= M
+  proof
+    let y be set;
+    assume
+  A3: y in rng f;
+    then consider x being set such that
+  A4: x in dom f and
+  A5: y = f.x by FUNCT_1:def 5;
+    reconsider y'= y as Element of S by A3;
+      y'= f.y' by A1,A4,A5,FUNCT_1:23;
+    hence y in M;
+  end;
+
+    M c= rng f
+  proof
+    let y be set;
+    assume y in M;
+    then consider y' being Element of S such that
+  A6: y' = y and
+  A7: y' = f.y';
+      dom f = the carrier of S by FUNCT_2:def 1;
+    hence y in rng f by A6,A7,FUNCT_1:def 5;
+  end;
+  hence rng f = {x where x is Element of S: x = f.x} by A2,XBOOLE_0:def 10;
+end;
+
+theorem Th22:
+  for S being non empty 1-sorted
+  for f being map of S, S st f is idempotent
+    holds
+   X c= rng f implies f.:X = X
+proof
+  let S be non empty 1-sorted;
+  let f be map of S, S such that
+A1: f is idempotent;
+  set M = {x where x is Element of S: x = f.x};
+  assume X c= rng f;
+then A2: X c= M by A1,Th21;
+
+A3:
+  f.:X c= X
+  proof
+    let y be set;
+    assume y in f.:X;
+    then consider x being set such that
+        x in dom f and
+  A4: x in X and
+  A5: y = f.x by FUNCT_1:def 12;
+      x in M by A2,A4;
+    then consider x' being Element of S such that
+  A6: x' = x and
+  A7: x' = f.x';
+    thus y in X by A4,A5,A6,A7;
+  end;
+
+    X c= f.:X
+  proof
+    let y be set;
+    assume
+  A8: y in X;
+    then y in M by A2;
+    then consider x being Element of S such that
+  A9: x = y and
+  A10: x = f.x;
+    thus y in f.:X by A8,A9,A10,FUNCT_2:43;
+  end;
+  hence f.:X = X by A3,XBOOLE_0:def 10;
+end;
+
+theorem
+    for L being non empty RelStr holds id L is idempotent
+ proof
+ let L be non empty RelStr;
+   id L = id the carrier of L by GRCAT_1:def 11;
+  hence (id L)*(id L)
+       = id ((the carrier of L) /\ (the carrier of L)) by FUNCT_1:43
+      .= (id L) by GRCAT_1:def 11;
+ end;
+
+
+begin :: Complete Lattices (CCL Chapter 0, Section 2, pp. 8 -- 9)
+
+reserve L for complete LATTICE,
+        a for Element of L;
+
+theorem Th24:
+  a in X implies a <= "\/"(X, L) & "/\"(X, L) <= a
+proof
+  assume
+A1: a in X;
+    X is_<=_than "\/"(X, L) by YELLOW_0:32;
+  hence a <= "\/"(X, L) by A1,LATTICE3:def 9;
+
+    X is_>=_than "/\"(X, L) by YELLOW_0:33;
+  hence "/\"(X, L) <= a by A1,LATTICE3:def 8;
+end;
+
+theorem Th25:
+  for L being (non empty RelStr)
+    holds
+   (for X holds ex_sup_of X,L) iff (for Y holds ex_inf_of Y,L)
+proof
+  let L be (non empty RelStr);
+  hereby
+    assume
+  A1: for X holds ex_sup_of X,L;
+    let Y;
+    set X = {x where x is Element of L: x is_<=_than Y};
+      ex_sup_of X,L by A1;
+    then consider a being Element of L such that
+  A2: X is_<=_than a and
+  A3: for b being Element of L st X is_<=_than b holds b >= a and
+  A4: for c being Element of L st X is_<=_than c &
+        for b being Element of L st X is_<=_than b holds b >= c
+       holds c = a by YELLOW_0:def 7;
+
+  A5: a is_<=_than Y
+    proof
+      let b be Element of L;
+      assume
+    A6: b in Y;
+        b is_>=_than X
+      proof
+        let c be Element of L;
+        assume c in X;
+        then ex x being Element of L st c = x & x is_<=_than Y;
+        hence c <= b by A6,LATTICE3:def 8;
+      end;
+      hence a <= b by A3;
+    end;
+
+  A7: for b being Element of L st Y is_>=_than b holds a >= b
+    proof
+      let b be Element of L;
+      assume b is_<=_than Y;
+      then b in X;
+      hence b <= a by A2,LATTICE3:def 9;
+    end;
+
+      for c being Element of L st Y is_>=_than c &
+      for b being Element of L st Y is_>=_than b holds b <= c
+     holds c = a
+    proof
+      let c be Element of L such that
+    A8: Y is_>=_than c and
+    A9: for b being Element of L st Y is_>=_than b holds b <= c;
+
+    A10: X is_<=_than c
+      proof
+        let b be Element of L;
+        assume b in X;
+        then ex x being Element of L st b = x & x is_<=_than Y;
+        hence b <= c by A9;
+      end;
+
+        for b being Element of L st X is_<=_than b holds b >= c
+      proof
+        let b be Element of L;
+        assume
+      A11: X is_<=_than b;
+          c in X by A8;
+        hence c <= b by A11,LATTICE3:def 9;
+      end;
+      hence thesis by A4,A10;
+    end;
+    hence ex_inf_of Y,L by A5,A7,YELLOW_0:def 8;
+  end;
+  assume
+A12: for Y holds ex_inf_of Y,L;
+  let X;
+  set Y = {y where y is Element of L: X is_<=_than y};
+    ex_inf_of Y,L by A12;
+  then consider a being Element of L such that
+A13: Y is_>=_than a and
+A14: for b being Element of L st Y is_>=_than b holds b <= a and
+A15: for c being Element of L st Y is_>=_than c &
+      for b being Element of L st Y is_>=_than b holds b <= c
+     holds c = a by YELLOW_0:def 8;
+
+A16: X is_<=_than a
+  proof
+    let b be Element of L;
+    assume
+  A17: b in X;
+      b is_<=_than Y
+    proof
+      let c be Element of L;
+      assume c in Y;
+      then ex y being Element of L st c = y & X is_<=_than y;
+      hence b <= c by A17,LATTICE3:def 9;
+    end;
+    hence b <= a by A14;
+  end;
+
+  A18: for b being Element of L st X is_<=_than b holds a <= b
+  proof
+    let b be Element of L;
+    assume X is_<=_than b;
+    then b in Y;
+    hence a <= b by A13,LATTICE3:def 8;
+  end;
+
+    for c being Element of L st X is_<=_than c &
+    for b being Element of L st X is_<=_than b holds b >= c
+   holds c = a
+  proof
+    let c be Element of L such that
+  A19: X is_<=_than c and
+  A20: for b being Element of L st X is_<=_than b holds b >= c;
+
+  A21: Y is_>=_than c
+    proof
+      let b be Element of L;
+      assume b in Y;
+      then ex x being Element of L st b = x & x is_>=_than X;
+      hence c <= b by A20;
+    end;
+
+      for b being Element of L st Y is_>=_than b holds b <= c
+    proof
+      let b be Element of L;
+      assume
+    A22: Y is_>=_than b;
+        c in Y by A19;
+      hence b <= c by A22,LATTICE3:def 8;
+    end;
+    hence c = a by A15,A21;
+  end;
+  hence ex_sup_of X,L by A16,A18,YELLOW_0:def 7;
+end;
+
+theorem Th26:  ::Proposition 2.2 (i)  (variant 1)   cf YELLOW_0
+  for L being (non empty RelStr)
+    holds
+   (for X holds ex_sup_of X,L) implies L is complete
+proof
+  let L be (non empty RelStr);
+  assume
+A1: for X holds ex_sup_of X,L;
+
+    L is complete
+  proof
+    let X be set;
+    take a = "\/"(X, L);
+  A2: ex_sup_of X,L by A1;
+
+    hence X is_<=_than a by YELLOW_0:def 9;
+    thus thesis by A2,YELLOW_0:def 9;
+  end;
+  hence thesis;
+end;
+
+theorem Th27:  ::Proposition 2.2 (i)  (variant 2)   cf variant 3
+  for L being (non empty RelStr)
+    holds
+   (for X holds ex_inf_of X,L) implies L is complete
+proof
+  let L be (non empty RelStr);
+  assume for X holds ex_inf_of X,L;
+  then for X holds ex_sup_of X,L by Th25;
+  hence thesis by Th26;
+end;
+
+theorem Th28:
+  for L being (non empty RelStr)
+    holds
+  (for A being Subset of L holds ex_inf_of A, L) implies
+    for X holds ex_inf_of X,L & "/\"(X, L) = "/\"(X /\ the carrier of L, L)
+proof
+  let L be (non empty RelStr);
+  assume
+A1: for A being Subset of L holds ex_inf_of A, L;
+  let X;
+  set Y = X /\ the carrier of L;
+  set a = "/\"(Y, L);
+
+    Y c= the carrier of L by XBOOLE_1:17;
+  then reconsider Y as Subset of L;
+
+A2: ex_inf_of Y,L by A1;
+then A3: ex_inf_of X,L by YELLOW_0:50;
+
+A4:
+  a is_<=_than X
+  proof
+    let x be Element of L;
+    assume x in X;
+  then A5: x in Y by XBOOLE_0:def 3;
+      a is_<=_than Y by A2,YELLOW_0:def 10;
+    hence a <= x by A5,LATTICE3:def 8;
+  end;
+
+    for b being Element of L st b is_<=_than X holds b <= a
+  proof
+    let b be Element of L;
+    assume
+  A6: b is_<=_than X;
+      Y c= X by XBOOLE_1:17;
+    then b is_<=_than Y by A6,YELLOW_0:9;
+    hence b <= a by A2,YELLOW_0:def 10;
+  end;
+  hence thesis by A3,A4,YELLOW_0:def 10;
+end;
+
+theorem
+    for L being (non empty RelStr)
+    holds
+  (for A being Subset of L holds ex_sup_of A, L) implies
+    for X holds ex_sup_of X,L & "\/"(X, L) = "\/"(X /\ the carrier of L, L)
+proof
+  let L be (non empty RelStr);
+  assume
+A1: for A being Subset of L holds ex_sup_of A, L;
+  let X;
+  set Y = X /\ the carrier of L;
+  set a = "\/"(Y, L);
+
+    Y c= the carrier of L by XBOOLE_1:17;
+  then reconsider Y as Subset of L;
+
+A2: ex_sup_of Y,L by A1;
+then A3: ex_sup_of X,L by YELLOW_0:50;
+
+A4:
+  X is_<=_than a
+  proof
+    let x be Element of L;
+    assume x in X;
+  then A5: x in Y by XBOOLE_0:def 3;
+      Y is_<=_than a by A2,YELLOW_0:def 9;
+    hence x <= a by A5,LATTICE3:def 9;
+  end;
+
+    for b being Element of L st X is_<=_than b holds a <= b
+  proof
+    let b be Element of L;
+    assume
+  A6: X is_<=_than b;
+      Y c= X by XBOOLE_1:17;
+    then Y is_<=_than b by A6,YELLOW_0:9;
+    hence a <= b by A2,YELLOW_0:def 9;
+  end;
+  hence thesis by A3,A4,YELLOW_0:def 9;
+end;
+
+theorem Th30:  ::Proposition 2.2 (i)  (variant 3)
+  for L being (non empty RelStr)
+    holds
+   (for A being Subset of L holds ex_inf_of A,L) implies L is complete
+proof
+  let L be (non empty RelStr);
+  assume for A being Subset of L holds ex_inf_of A,L;
+  then for X holds ex_inf_of X, L by Th28;
+  hence thesis by Th27;
+end;
+
+Lm1:
+  for L being non empty Poset
+    holds
+   L is up-complete /\-complete upper-bounded implies
+     L is complete (non empty Poset)
+proof
+  let L be non empty Poset;
+  assume
+A1: L is up-complete /\-complete upper-bounded;
+    for A being Subset of L holds ex_inf_of A,L
+  proof
+    let A be Subset of L;
+    per cases;
+    suppose A is empty;
+    hence ex_inf_of A,L by A1,YELLOW_0:43;
+
+    suppose A is non empty;
+    hence ex_inf_of A,L by A1,WAYBEL_0:76;
+  end;
+  hence thesis by Th30;
+end;
+
+definition
+  cluster up-complete /\-complete upper-bounded -> complete (non empty Poset);
+  correctness by Lm1;
+end;
+
+theorem Th31:  :: Theorem 2.3 (The Fixed-Point Theorem)
+  for f being map of L, L st f is monotone
+  for M being Subset of L st M = {x where x is Element of L: x = f.x}
+    holds
+   subrelstr M is complete LATTICE
+proof
+  let f be map of L, L such that
+A1: f is monotone;
+  let M be Subset of L such that
+A2: M = {x where x is Element of L: x = f.x};
+
+  set S = subrelstr M;
+
+A3:
+  for X being Subset of S
+  for Y being Subset of L st
+    Y = {y where y is Element of L: X is_<=_than f.y & f.y <= y}
+      holds
+     inf Y in M
+  proof
+    let X be Subset of S;
+    let Y be Subset of L such that
+  A4: Y = {y where y is Element of L: X is_<=_than f.y & f.y <= y};
+
+    set z = inf Y;
+
+  A5: ex_inf_of Y,L by YELLOW_0:17;
+
+      f.z is_<=_than Y
+    proof
+      let u be Element of L;
+      assume
+    A6: u in Y;
+      then consider y being Element of L such that
+    A7: y = u and
+          X is_<=_than f.y and
+    A8: f.y <= y by A4;
+        z <= u by A6,Th24;
+      then f.z <= f.y by A1,A7,ORDERS_3:def 5;
+      hence f.z <= u by A7,A8,ORDERS_1:26;
+    end;
+  then A9: f.z <= z by A5,YELLOW_0:31;
+  then A10: f.(f.z) <= f.z by A1,ORDERS_3:def 5;
+
+      X is_<=_than f.(f.z)
+    proof
+      let m be Element of L;
+      assume
+    A11: m in X;
+        X c= the carrier of S;
+      then X c= M by YELLOW_0:def 15;
+      then m in M by A11;
+      then consider x being Element of L such that
+    A12: x = m and
+    A13: x = f.x by A2;
+        m is_<=_than Y
+      proof
+        let u be Element of L;
+        assume u in Y;
+        then consider y being Element of L such that
+      A14: y = u and
+      A15: X is_<=_than f.y and
+      A16: f.y <= y by A4;
+          m <= f.y by A11,A15,LATTICE3:def 9;
+        hence m <= u by A14,A16,ORDERS_1:26;
+      end;
+      then m <= z by YELLOW_0:33;
+      then f.m <= f.z by A1,ORDERS_3:def 5;
+      hence m <= f.(f.z) by A1,A12,A13,ORDERS_3:def 5;
+
+    end;
+    then f.z in Y by A4,A10;
+    then z <= f.z by Th24;
+    then z = f.z by A9,ORDERS_1:25;
+    hence inf Y in M by A2;
+  end;
+
+    M c= the carrier of S by YELLOW_0:def 15;
+  then reconsider M as Subset of S;
+  defpred P[Element of L] means M is_<=_than f.$1 & f.$1 <= $1;
+  reconsider Y = {y where y is Element of L: P[y]} as Subset of L
+    from RelStrSubset;
+    inf Y in M by A3;
+  then reconsider S as non empty Poset by STRUCT_0:def 1;
+
+    for X being Subset of S holds ex_sup_of X, S
+  proof
+    let X be Subset of S;
+    defpred Q[Element of L] means X is_<=_than f.$1 & f.$1 <= $1;
+    reconsider Y = {y where y is Element of L: Q[y]} as Subset of L
+      from RelStrSubset;
+
+    set z = inf Y;
+      z in M & M = the carrier of S by A3,YELLOW_0:def 15;
+    then reconsider z as Element of S;
+
+  A17:
+    X is_<=_than z
+    proof
+      let x be Element of S;
+      assume
+    A18: x in X;
+        x in the carrier of S;
+        then x in M by YELLOW_0:def 15;
+      then consider m being Element of L such that
+    A19: x = m and
+          m = f.m by A2;
+        m is_<=_than Y
+      proof
+        let u be Element of L;
+        assume u in Y;
+        then consider y being Element of L such that
+      A20: y = u and
+      A21: X is_<=_than f.y and
+      A22: f.y <= y;
+          m <= f.y by A18,A19,A21,LATTICE3:def 9;
+        hence m <= u by A20,A22,ORDERS_1:26;
+      end;
+      then m <= inf Y & x in the carrier of S & z in
+ the carrier of S by YELLOW_0:33;
+      hence x <= z by A19,YELLOW_0:61;
+    end;
+
+      for b being Element of S st X is_<=_than b holds z <= b
+    proof
+      let b be Element of S;
+        b in the carrier of S;
+      then b in M by YELLOW_0:def 15;
+      then consider x being Element of L such that
+    A23: x = b and
+    A24: x = f.x by A2;
+
+      assume
+       X is_<=_than b;
+      then X is_<=_than f.x & f.x <= x by A23,A24,YELLOW_0:63;
+      then x in Y;
+      then inf Y <= x & z in the carrier of S & b in the carrier of S by Th24;
+      hence z <= b by A23,YELLOW_0:61;
+    end;
+    hence thesis by A17,YELLOW_0:30;
+  end;
+  then reconsider S as complete (non empty Poset) by YELLOW_0:53;
+    S is complete LATTICE;
+  hence thesis;
+end;
+
+theorem Th32:
+  for S being infs-inheriting non empty full SubRelStr of L
+    holds
+   S is complete LATTICE
+proof
+  let S be infs-inheriting non empty full SubRelStr of L;
+
+    for X being Subset of S holds ex_inf_of X,S
+  proof
+    let X be Subset of S;
+A1:    ex_inf_of X,L by YELLOW_0:17;
+    then "/\"(X,L) in the carrier of S by YELLOW_0:def 18;
+    hence ex_inf_of X,S by A1,YELLOW_0:64;
+  end;
+  then S is complete by Th30;
+  hence S is complete LATTICE by LATTICE3:12;
+end;
+
+theorem Th33:
+  for S being sups-inheriting non empty full SubRelStr of L
+    holds
+   S is complete LATTICE
+proof
+  let S be sups-inheriting non empty full SubRelStr of L;
+
+    for X being Subset of S holds ex_sup_of X, S
+  proof
+    let X be Subset of S;
+A1:    ex_sup_of X,L by YELLOW_0:17;
+    then "\/"(X,L) in the carrier of S by YELLOW_0:def 19;
+    hence ex_sup_of X,S by A1,YELLOW_0:65;
+  end;
+  then S is complete by YELLOW_0:53;
+  hence S is complete LATTICE by LATTICE3:12;
+end;
+
+theorem Th34:  ::Remark 2.4 (Part I, variant 1)
+  for M being non empty RelStr
+  for f being map of L, M st f is sups-preserving
+    holds
+   Image f is sups-inheriting
+proof
+  let M be non empty RelStr;
+  let f be map of L, M such that
+A1: f is sups-preserving;
+  set S = subrelstr(rng f);
+
+    for Y being Subset of S st ex_sup_of Y,M holds "\/"(Y, M) in the carrier of
+S
+  proof
+    let Y be Subset of S;
+    assume ex_sup_of Y,M;
+  A2: f preserves_sup_of (f"Y) by A1,WAYBEL_0:def 33;
+A3:    ex_sup_of f"Y,L by YELLOW_0:17;
+      Y c= the carrier of S;
+    then Y c= rng f by YELLOW_0:def 15;
+  then "\/"(Y, M) = sup(f.:(f"Y)) by FUNCT_1:147
+            .= f.sup(f"Y) by A2,A3,WAYBEL_0:def 31;
+    then "\/"(Y, M) in rng f by FUNCT_2:6;
+    hence "\/"(Y, M) in the carrier of S by YELLOW_0:def 15;
+  end;
+  then S is sups-inheriting by YELLOW_0:def 19;
+  hence thesis by Def2;
+end;
+
+theorem Th35:  ::Remark 2.4  (Part I, variant 2)
+  for M being non empty RelStr
+  for f being map of L, M st f is infs-preserving
+    holds
+   Image f is infs-inheriting
+proof
+  let M be non empty RelStr;
+  let f be map of L, M such that
+A1: f is infs-preserving;
+  set S = subrelstr(rng f);
+
+    for Y being Subset of S st ex_inf_of Y,M holds "/\"(Y, M) in the carrier of
+S
+  proof
+    let Y be Subset of S;
+    assume ex_inf_of Y,M;
+  A2: f preserves_inf_of (f"Y) by A1,WAYBEL_0:def 32;
+A3:    ex_inf_of f"Y,L by YELLOW_0:17;
+      Y c= the carrier of S;
+    then Y c= rng f by YELLOW_0:def 15;
+  then "/\"(Y, M) = inf(f.:(f"Y)) by FUNCT_1:147
+            .= f.inf(f"Y) by A2,A3,WAYBEL_0:def 30;
+    then "/\"(Y, M) in rng f by FUNCT_2:6;
+    hence "/\"(Y, M) in the carrier of S by YELLOW_0:def 15;
+  end;
+  then S is infs-inheriting by YELLOW_0:def 18;
+  hence thesis by Def2;
+end;
+
+theorem   ::Remark 2.4  (Part II)
+    for L, M being complete LATTICE
+  for f being map of L, M st f is sups-preserving or f is infs-preserving
+    holds
+   Image f is complete LATTICE
+proof
+  let L, M be complete LATTICE;
+  let f be map of L, M such that
+A1: f is sups-preserving or f is infs-preserving;
+  per cases by A1;
+  suppose f is sups-preserving;
+  then Image f is sups-inheriting by Th34;
+  hence Image f is complete LATTICE by Th33;
+
+  suppose f is infs-preserving;
+  then Image f is infs-inheriting by Th35;
+  hence Image f is complete LATTICE by Th32;
+end;
+
+theorem   ::Remark 2.5
+    for f being map of L, L st f is idempotent directed-sups-preserving
+    holds
+   Image f is directed-sups-inheriting & Image f is complete LATTICE
+proof
+  let f be map of L, L;
+  assume
+A1: f is idempotent directed-sups-preserving;
+then A2: f is monotone by Th18;
+
+  set S = subrelstr(rng f);
+
+  consider a being Element of L;
+    dom f = the carrier of L by FUNCT_2:def 1;
+  then f.a in rng f by FUNCT_1:def 5;
+  then the carrier of S is non empty by YELLOW_0:def 15;
+  then reconsider S'= S as non empty full SubRelStr of L by STRUCT_0:def 1;
+
+    for X being directed Subset of S st X <> {} & ex_sup_of X,L
+    holds "\/"(X,L) in the carrier of S
+  proof
+    let X be directed Subset of S;
+    assume X <> {};
+    then X is non empty directed Subset of S';
+    then reconsider X'= X as non empty directed Subset of L by Th7;
+  A3: f preserves_sup_of X' by A1,WAYBEL_0:def 37;
+
+    assume ex_sup_of X,L;
+  then A4: ex_sup_of f.:X',L & sup(f.:X') = f.sup X' by A3,WAYBEL_0:def 31;
+
+      X c= the carrier of S;
+    then X c= rng f by YELLOW_0:def 15;
+    then sup X' = f.sup X' & the carrier of L <> {} by A1,A4,Th22;
+    then "\/"(X, L) in rng f by FUNCT_2:6;
+    hence "\/"(X, L) in the carrier of S by YELLOW_0:def 15;
+  end;
+  then S is directed-sups-inheriting by WAYBEL_0:def 4;
+  hence Image f is directed-sups-inheriting by Def2;
+
+    rng f = {x where x is Element of L: x = f.x} by A1,Th21;
+  then S is complete LATTICE by A2,Th31;
+  hence Image f is complete LATTICE by Def2;
+end;
+
+
+begin :: A Lattice of Ideals
+
+theorem Th38:
+  for L being RelStr
+  for F being Subset of bool the carrier of L st
+    for X being Subset of L st X in F holds X is lower
+  holds meet F is lower Subset of L
+proof
+  let L be RelStr;
+  let F be Subset of bool the carrier of L;
+  reconsider F' = F as Subset-Family of L by SETFAM_1:def 7;
+  assume
+A1: for X being Subset of L st X in F holds X is lower;
+  reconsider M = meet F' as Subset of L;
+
+  per cases;
+  suppose
+   F = {};
+
+  then for x, y being Element of L st x in M & y <= x holds y in M
+    by SETFAM_1:def 1;
+  hence thesis by WAYBEL_0:def 19;
+
+  suppose
+A2: F <> {};
+    for x, y being Element of L st x in M & y <= x holds y in M
+  proof
+    let x, y be Element of L;
+    assume that
+  A3: x in M and
+  A4: y <= x;
+
+      for Y being set st Y in F holds y in Y
+    proof
+      let Y be set;
+      assume
+    A5: Y in F;
+      then reconsider X = Y as Subset of L;
+    A6: X is lower by A1,A5;
+        x in X by A3,A5,SETFAM_1:def 1;
+      hence y in Y by A4,A6,WAYBEL_0:def 19;
+    end;
+    hence y in M by A2,SETFAM_1:def 1;
+  end;
+  hence thesis by WAYBEL_0:def 19;
+end;
+
+theorem
+    for L being RelStr
+  for F being Subset of bool the carrier of L st
+    for X being Subset of L st X in F holds X is upper
+  holds meet F is upper Subset of L
+proof
+  let L be RelStr;
+  let F be Subset of bool the carrier of L;
+  reconsider F' = F as Subset-Family of L by SETFAM_1:def 7;
+  assume
+A1: for X being Subset of L st X in F holds X is upper;
+  reconsider M = meet F' as Subset of L;
+
+  per cases;
+  suppose
+   F = {};
+  then for x, y being Element of L st x in M & x <= y holds y in M
+    by SETFAM_1:def 1;
+  hence thesis by WAYBEL_0:def 20;
+
+  suppose
+A2: F <> {};
+
+    for x, y being Element of L st x in M & x <= y holds y in M
+  proof
+    let x, y be Element of L;
+    assume that
+  A3: x in M and
+  A4: x <= y;
+
+      for Y being set st Y in F holds y in Y
+    proof
+      let Y be set;
+      assume
+    A5: Y in F;
+      then reconsider X = Y as Subset of L;
+    A6: X is upper by A1,A5;
+        x in X by A3,A5,SETFAM_1:def 1;
+      hence y in Y by A4,A6,WAYBEL_0:def 20;
+    end;
+    hence y in M by A2,SETFAM_1:def 1;
+  end;
+  hence thesis by WAYBEL_0:def 20;
+end;
+
+theorem Th40:
+  for L being with_suprema antisymmetric RelStr
+  for F being Subset of bool the carrier of L st
+    for X being Subset of L st X in F holds X is lower directed
+  holds meet F is directed Subset of L
+proof
+  let L be with_suprema antisymmetric RelStr;
+  let F be Subset of bool the carrier of L;
+  assume
+A1: for X being Subset of L st X in F holds X is lower directed;
+  reconsider F' = F as Subset-Family of L by SETFAM_1:def 7;
+  reconsider M = meet F' as Subset of L;
+
+  per cases;
+  suppose
+A2:  F = {};
+    M is directed
+  proof
+    let x, y be Element of L;
+    assume x in M & y in M;
+    hence thesis by A2,SETFAM_1:def 1;
+  end;
+  hence thesis;
+
+  suppose
+A3: F <> {};
+
+    M is directed
+  proof
+    let x, y be Element of L such that
+  A4: x in M & y in M;
+    take z = x"\/"y;
+
+      for Y being set st Y in F holds z in Y
+    proof
+      let Y be set;
+      assume
+    A5: Y in F;
+      then reconsider X = Y as Subset of L;
+    A6: X is lower directed by A1,A5;
+        x in X & y in X by A4,A5,SETFAM_1:def 1;
+      hence z in Y by A6,WAYBEL_0:40;
+    end;
+    hence z in M by A3,SETFAM_1:def 1;
+    thus x <= z & y <= z by YELLOW_0:22;
+  end;
+  hence thesis;
+end;
+
+theorem
+    for L being with_infima antisymmetric RelStr
+  for F being Subset of bool the carrier of L st
+    for X being Subset of L st X in F holds X is upper filtered
+  holds meet F is filtered Subset of L
+proof
+  let L be with_infima antisymmetric RelStr;
+  let F be Subset of bool the carrier of L;
+  assume
+A1: for X being Subset of L st X in F holds X is upper filtered;
+  reconsider F' = F as Subset-Family of L by SETFAM_1:def 7;
+  reconsider M = meet F' as Subset of L;
+
+  per cases;
+  suppose
+A2: F = {};
+    M is filtered
+  proof
+    let x, y be Element of L;
+    assume x in M & y in M;
+    hence thesis by A2,SETFAM_1:def 1;
+  end;
+  hence thesis;
+
+  suppose
+A3: F <> {};
+
+    M is filtered
+  proof
+    let x, y be Element of L such that
+  A4: x in M & y in M;
+    take z = x"/\"y;
+
+      for Y being set st Y in F holds z in Y
+    proof
+      let Y be set;
+      assume
+    A5: Y in F;
+      then reconsider X = Y as Subset of L;
+    A6: X is upper filtered by A1,A5;
+        x in X & y in X by A4,A5,SETFAM_1:def 1;
+      hence z in Y by A6,WAYBEL_0:41;
+    end;
+    hence z in M by A3,SETFAM_1:def 1;
+    thus z <= x & z <= y by YELLOW_0:23;
+  end;
+  hence thesis;
+end;
+
+theorem Th42:
+  for L being with_infima Poset
+  for I, J being Ideal of L
+    holds
+   I /\ J is Ideal of L
+proof
+  let L be with_infima Poset;
+  let I, J be Ideal of L;
+  consider i being Element of I, j being Element of J;
+  set a = i"/\"j;
+    a <= i & a <= j by YELLOW_0:23;
+  then a in I & a in J by WAYBEL_0:def 19;
+  hence I /\ J is Ideal of L by WAYBEL_0:27,44,XBOOLE_0:def 3;
+end;
+
+definition
+  let L be non empty reflexive transitive RelStr;
+  cluster Ids L -> non empty;
+  correctness
+  proof
+    consider x being Element of L;
+      downarrow x in {Y where Y is Ideal of L: not contradiction};
+    hence Ids L is non empty by WAYBEL_0:def 23;
+  end;
+end;
+
+theorem Th43:
+  for L being non empty reflexive transitive RelStr
+    holds
+   (x is Element of InclPoset(Ids L) iff x is Ideal of L)
+proof
+  let L be non empty reflexive transitive RelStr;
+  hereby
+    assume x is Element of InclPoset(Ids L);
+    then x in the carrier of InclPoset(Ids L);
+    then x in Ids L by YELLOW_1:1;
+    then x in {Y where Y is Ideal of L: not contradiction} by WAYBEL_0:def 23;
+    then consider J being Ideal of L such that
+  A1: J = x;
+    thus x is Ideal of L by A1;
+  end;
+  assume x is Ideal of L;
+  then x in {Y where Y is Ideal of L: not contradiction};
+  then x in Ids L by WAYBEL_0:def 23;
+  then x in the carrier of InclPoset(Ids L) by YELLOW_1:1;
+  hence x is Element of InclPoset(Ids L);
+end;
+
+theorem Th44:
+  for L being non empty reflexive transitive RelStr
+  for I being Element of InclPoset(Ids L)
+    holds
+   x in I implies x is Element of L
+proof
+  let L be non empty reflexive transitive RelStr;
+  let I be Element of InclPoset(Ids L);
+  reconsider I'= I as non empty Subset of L by Th43;
+  assume x in I;
+  then reconsider x'= x as Element of I';
+    x' in the carrier of L;
+  hence x is Element of L;
+end;
+
+theorem
+    for L being with_infima Poset
+  for x, y being Element of InclPoset(Ids L)
+    holds
+   x "/\" y = x /\ y
+proof
+  let L be with_infima Poset;
+  let x, y be Element of InclPoset(Ids L);
+  reconsider x'= x, y'= y as Ideal of L by Th43;
+    x' /\ y' is Ideal of L by Th42;
+  then x' /\ y' in {X where X is Ideal of L: not contradiction};
+  then x /\ y in Ids L by WAYBEL_0:def 23;
+  hence x /\ y = x "/\" y by YELLOW_1:9;
+end;
+
+definition
+  let L be with_infima Poset;
+  cluster InclPoset(Ids L) -> with_infima;
+  correctness
+  proof
+      for x, y be set st (x in Ids L & y in Ids L) holds x /\ y in Ids L
+    proof
+      let x, y be set;
+      assume
+    A1: x in Ids L & y in Ids L;
+      then x in
+ {X where X is Ideal of L: not contradiction} by WAYBEL_0:def 23;
+      then consider I being Ideal of L such that
+    A2: I = x;
+        y in {X where X is Ideal of L: not contradiction} by A1,WAYBEL_0:def 23
+;
+      then consider J being Ideal of L such that
+    A3: J = y;
+        I /\ J is Ideal of L by Th42;
+      then I /\ J in {X where X is Ideal of L: not contradiction};
+      hence x /\ y in Ids L by A2,A3,WAYBEL_0:def 23;
+    end;
+    hence InclPoset(Ids L) is with_infima by YELLOW_1:12;
+  end;
+end;
+
+theorem Th46:
+  for L being with_suprema Poset
+  for x, y being Element of InclPoset(Ids L)
+    holds
+   ex Z being Subset of L st Z = {z where z is Element of L: z in x or z in
+ y or
+     ex a, b being Element of L st a in x & b in y & z = a "\/" b} &
+       ex_sup_of {x, y},InclPoset(Ids L) & x "\/" y = downarrow Z
+proof
+  let L be with_suprema Poset;
+  set P = InclPoset(Ids L);
+  let x, y be Element of P;
+  reconsider x'= x, y'= y as Ideal of L by Th43;
+  defpred P[Element of L] means $1 in x or $1 in y or
+    ex a, b being Element of L st a in x & b in y & $1 = a "\/" b;
+  reconsider Z = {z where z is Element of L: P[z]}
+    as Subset of L from RelStrSubset;
+  take Z;
+
+  consider z being Element of x';
+    z in Z;
+  then reconsider Z as non empty Subset of L;
+  set DZ = downarrow Z;
+
+    for u, v being Element of L st u in Z & v in Z
+    ex z being Element of L st z in Z & u <= z & v <= z
+  proof
+    let u, v be Element of L such that
+  A1: u in Z and
+  A2: v in Z;
+    consider p being Element of L such that
+  A3: p = u and
+  A4: p in x or p in y or
+      ex a, b being Element of L st a in x & b in y & p = a "\/" b by A1;
+    consider q being Element of L such that
+  A5: q = v and
+  A6: q in x or q in y or
+      ex a, b being Element of L st a in x & b in y & q = a "\/" b by A2;
+
+A7: for p, q being Element of L st p in x &
+     ex a, b being Element of L st a in x & b in y & q = a "\/" b
+       holds
+      ex z being Element of L st z in Z & p <= z & q <= z
+    proof
+      let p, q be Element of L such that
+    A8: p in x and
+    A9: ex a, b being Element of L st a in x & b in y & q = a "\/" b;
+      consider a, b being Element of L such that
+    A10: a in x and
+    A11: b in y and
+    A12: q = a "\/" b by A9;
+      reconsider c = a "\/" p as Element of L;
+      take z = c "\/" b;
+        c in x' by A8,A10,WAYBEL_0:40;
+      hence z in Z by A11;
+
+    A13: a <= c & p <= c & c <= z & b <= z by YELLOW_0:22;
+      then a <= z & b <= z by ORDERS_1:26;
+      hence p <= z & q <= z by A12,A13,ORDERS_1:26,YELLOW_0:22;
+    end;
+
+A14: for p, q being Element of L st p in y &
+     ex a, b being Element of L st a in x & b in y & q = a "\/" b
+       holds
+      ex z being Element of L st z in Z & p <= z & q <= z
+    proof
+      let p, q be Element of L such that
+    A15: p in y and
+    A16: ex a, b being Element of L st a in x & b in y & q = a "\/" b;
+      consider a, b being Element of L such that
+    A17: a in x and
+    A18: b in y and
+    A19: q = a "\/" b by A16;
+      reconsider c = b "\/" p as Element of L;
+      take z = a "\/" c;
+        c in y' by A15,A18,WAYBEL_0:40;
+      hence z in Z by A17;
+
+    A20: b <= c & p <= c & a <= z & c <= z by YELLOW_0:22;
+      then a <= z & b <= z by ORDERS_1:26;
+      hence p <= z & q <= z by A19,A20,ORDERS_1:26,YELLOW_0:22;
+    end;
+
+    per cases by A4,A6;
+    suppose p in x & q in x;
+    then consider z being Element of L such that
+  A21: z in x' & p <= z & q <= z by WAYBEL_0:def 1;
+    take z;
+    thus thesis by A3,A5,A21;
+
+    suppose
+  A22: p in x & q in y;
+    take p "\/" q;
+    thus thesis by A3,A5,A22,YELLOW_0:22;
+
+    suppose p in x & ex a, b being Element of L st
+      a in x & b in y & q = a "\/" b;
+    then consider z being Element of L such that
+  A23: z in Z & p <= z & q <= z by A7;
+    take z;
+    thus thesis by A3,A5,A23;
+
+    suppose
+  A24: p in y & q in x;
+    take q "\/" p;
+    thus thesis by A3,A5,A24,YELLOW_0:22;
+
+    suppose p in y & q in y;
+    then consider z being Element of L such that
+  A25: z in y' & p <= z & q <= z by WAYBEL_0:def 1;
+    take z;
+    thus thesis by A3,A5,A25;
+
+    suppose p in y & ex a, b being Element of L st
+      a in x & b in y & q = a "\/" b;
+    then consider z being Element of L such that
+  A26: z in Z & p <= z & q <= z by A14;
+    take z;
+    thus thesis by A3,A5,A26;
+
+    suppose q in x & ex a, b being Element of L st
+      a in x & b in y & p = a "\/" b;
+    then consider z being Element of L such that
+  A27: z in Z & q <= z & p <= z by A7;
+    take z;
+    thus thesis by A3,A5,A27;
+
+    suppose q in y & ex a, b being Element of L st
+      a in x & b in y & p = a "\/" b;
+    then consider z being Element of L such that
+  A28: z in Z & q <= z & p <= z by A14;
+    take z;
+    thus thesis by A3,A5,A28;
+
+    suppose (ex a, b being Element of L st a in x & b in y & p = a "\/" b) &
+      (ex a, b being Element of L st a in x & b in y & q = a "\/" b);
+    then consider a, b, c, d being Element of L such that
+  A29: a in x & b in y & p = a "\/" b and
+  A30: c in x & d in y & q = c "\/" d;
+    reconsider ac = a "\/" c, bd = b "\/" d as Element of L;
+    take z = ac "\/" bd;
+      ac in x' & bd in y' by A29,A30,WAYBEL_0:40;
+    hence z in Z;
+
+  A31: a <= ac & c <= ac & b <= bd & d <= bd & ac <= z & bd <= z
+    by YELLOW_0:22;
+    then a <= z & b <= z by ORDERS_1:26;
+    hence u <= z by A3,A29,YELLOW_0:22;
+
+      c <= z & d <= z by A31,ORDERS_1:26;
+    hence v <= z by A5,A30,YELLOW_0:22;
+  end;
+  then Z is directed by WAYBEL_0:def 1;
+  then DZ is Ideal of L by WAYBEL_0:30;
+  then reconsider DZ as Element of P by Th43;
+
+    x c= DZ
+  proof
+    let a be set;
+    assume
+  A32: a in x;
+    then reconsider a'= a as Element of L by Th44;
+      a' in Z & Z c= DZ by A32,WAYBEL_0:16;
+    hence a in DZ;
+  end;
+then A33: x <= DZ by YELLOW_1:3;
+
+    y c= DZ
+  proof
+    let a be set;
+    assume
+  A34: a in y;
+    then reconsider a'= a as Element of L by Th44;
+      a' in Z & Z c= DZ by A34,WAYBEL_0:16;
+    hence a in DZ;
+  end;
+then A35: y <= DZ by YELLOW_1:3;
+
+    for d being Element of P st d >= x & d >= y holds DZ <= d
+  proof
+    let d be Element of P;
+    assume x <= d & y <= d;
+  then A36:  x c= d & y c= d by YELLOW_1:3;
+
+      DZ c= d
+    proof
+      let p be set;
+      assume p in DZ;
+      then p in {q where q is Element of L:
+        ex u being Element of L st q <= u & u in Z} by WAYBEL_0:14;
+      then consider p' being Element of L such that
+    A37: p' = p and
+    A38: ex u being Element of L st p' <= u & u in Z;
+      consider u being Element of L such that
+    A39: p' <= u and
+    A40: u in Z by A38;
+      consider z being Element of L such that
+    A41: z = u and
+    A42: z in x or z in y or
+        ex a, b being Element of L st a in x & b in y & z = a "\/" b by A40;
+
+      per cases by A42;
+      suppose z in x;
+      then p in x' by A37,A39,A41,WAYBEL_0:def 19;
+      hence p in d by A36;
+
+      suppose z in y;
+      then p in y' by A37,A39,A41,WAYBEL_0:def 19;
+      hence p in d by A36;
+
+      suppose ex a, b being Element of L st a in x & b in y & z = a "\/"
+ b;
+      then consider a, b being Element of L such that
+    A43: a in x and
+    A44: b in y and
+    A45: z = a "\/" b;
+      reconsider d'= d as Ideal of L by Th43;
+        u in d' by A36,A41,A43,A44,A45,WAYBEL_0:40;
+      hence p in d by A37,A39,WAYBEL_0:def 19;
+    end;
+    hence DZ <= d by YELLOW_1:3;
+  end;
+  hence thesis by A33,A35,YELLOW_0:18;
+end;
+
+definition
+  let L be with_suprema Poset;
+  cluster InclPoset(Ids L) -> with_suprema;
+  correctness
+  proof
+    set P = InclPoset(Ids L);
+      for x, y being Element of P
+      ex z being Element of P st x <= z & y <= z &
+        for z' being Element of P st x <= z' & y <= z' holds z <= z'
+    proof
+      let x, y be Element of P;
+      consider Z being Subset of L such that
+          Z = {z where z is Element of L: z in x or z in y or
+        ex a, b being Element of L st a in x & b in y & z = a "\/" b} and
+    A1: ex_sup_of {x, y},InclPoset(Ids L) and
+          x "\/" y = downarrow Z by Th46;
+
+      take x "\/" y;
+      thus thesis by A1,YELLOW_0:18;
+    end;
+    hence thesis by LATTICE3:def 10;
+  end;
+end;
+
+theorem Th47:
+  for L being lower-bounded sup-Semilattice
+  for X being non empty Subset of Ids L
+    holds
+   meet X is Ideal of L
+proof
+  let L be lower-bounded sup-Semilattice;
+  let X be non empty Subset of Ids L;
+A1: for J being set st J in X holds J is Ideal of L
+  proof
+    let J be set;
+    assume J in X;
+    then J in Ids L;
+    then J in {Y where Y is Ideal of L: not contradiction} by WAYBEL_0:def 23;
+    then ex Y being Ideal of L st Y = J;
+    hence thesis;
+  end;
+
+    X c= bool the carrier of L
+  proof
+    let x;
+    assume x in X;
+    then x is Ideal of L by A1;
+    hence x in bool the carrier of L;
+  end;
+  then reconsider F = X as Subset of bool the carrier of L;
+
+    for J being Subset of L st J in F holds J is lower by A1;
+  then reconsider I = meet X as lower Subset of L by Th38;
+
+    for J being set st J in X holds Bottom L in J
+  proof
+    let J be set;
+    assume
+     J in X;
+    then reconsider J'= J as Ideal of L by A1;
+    consider j being Element of J';
+      Bottom L <= j by YELLOW_0:44;
+    hence Bottom L in J by WAYBEL_0:def 19;
+  end;
+  then reconsider I as non empty lower Subset of L by SETFAM_1:def 1;
+
+    for J being Subset of L st J in F holds J is lower directed by A1;
+  then I is Ideal of L by Th40;
+  hence thesis;
+end;
+
+theorem Th48:
+  for L being lower-bounded sup-Semilattice
+  for A being non empty Subset of InclPoset(Ids L)
+    holds
+   ex_inf_of A,InclPoset(Ids L) & inf A = meet A
+proof
+  let L be lower-bounded sup-Semilattice;
+  let A be non empty Subset of InclPoset(Ids L);
+  set P = InclPoset(Ids L);
+  A c= the carrier of InclPoset Ids L; then
+  A c= Ids L by YELLOW_1:1; then
+  reconsider A'= A as non empty Subset of Ids L;
+    meet A' is Ideal of L by Th47;
+  then reconsider I = meet A as Element of P by Th43;
+A1: I is_<=_than A
+  proof
+    let y be Element of P;
+    assume
+  A2: y in A;
+      I c= y
+    proof
+      let x be set;
+      assume x in I;
+      hence x in y by A2,SETFAM_1:def 1;
+    end;
+    hence I <= y by YELLOW_1:3;
+  end;
+
+    for b being Element of P st b is_<=_than A holds I >= b
+  proof
+    let b be Element of P;
+    assume
+  A3: A is_>=_than b;
+
+  A4: for J being set st J in A holds b c= J
+    proof
+      let J be set;
+      assume
+    A5: J in A;
+      then J is Element of A;
+      then reconsider y = J as Element of P;
+        b <= y by A3,A5,LATTICE3:def 8;
+      hence b c= J by YELLOW_1:3;
+    end;
+
+      b c= I
+    proof
+      let c be set;
+      assume
+    A6: c in b;
+        for J being set st J in A holds c in J
+      proof
+        let J be set;
+        assume J in A;
+        then b c= J by A4;
+        hence c in J by A6;
+      end;
+      hence c in I by SETFAM_1:def 1;
+    end;
+    hence I >= b by YELLOW_1:3;
+  end;
+  hence thesis by A1,YELLOW_0:31;
+end;
+
+theorem Th49:
+  for L being with_suprema Poset
+    holds
+   ex_inf_of {},InclPoset(Ids L) & "/\"({}, InclPoset(Ids L)) = [#]L
+proof
+  let L be with_suprema Poset;
+  set P = InclPoset(Ids L);
+  reconsider I = [#]L as Element of P by Th43;
+
+A1: I is_<=_than {}
+  proof
+    let y be Element of P;
+    assume y in {};
+    hence thesis;
+  end;
+
+    for b being Element of P st b is_<=_than {} holds I >= b
+  proof
+    let b be Element of P;
+    assume {} is_>=_than b;
+    reconsider b'= b as Ideal of L by Th43;
+      b' c= the carrier of L;
+    then b' c= [#]L by PRE_TOPC:12;
+    hence I >= b by YELLOW_1:3;
+  end;
+  hence thesis by A1,YELLOW_0:31;
+end;
+
+theorem Th50:
+  for L being lower-bounded sup-Semilattice
+    holds
+   InclPoset(Ids L) is complete
+proof
+  let L be lower-bounded sup-Semilattice;
+  set P = InclPoset(Ids L);
+
+    for A being Subset of P holds ex_inf_of A,InclPoset(Ids L)
+  proof
+    let A be Subset of P;
+    per cases;
+    suppose A = {};
+    hence thesis by Th49;
+
+    suppose A <> {};
+    hence thesis by Th48;
+  end;
+  hence InclPoset(Ids L) is complete by Th30;
+end;
+
+definition
+  let L be lower-bounded sup-Semilattice;
+  cluster InclPoset(Ids L) -> complete;
+  correctness by Th50;
+end;
+
+
+begin :: Special Maps
+
+definition
+  let L be non empty Poset;
+  func SupMap L -> map of InclPoset(Ids L), L means
+:Def3:
+  for I being Ideal of L holds it.I = sup I;
+  existence
+  proof
+    set P = InclPoset(Ids L);
+    deffunc F(set) = "\/"($1, L);
+  A1: for I being set st I in the carrier of P holds
+      F(I) in the carrier of L;
+
+      ex f being Function of the carrier of P, the carrier of L st
+      for I being set st I in the carrier of P holds f.I = F(I)
+        from Lambda1(A1);
+    then consider f being Function of the carrier of P, the carrier of L such
+that
+  A2: for I being set st I in the carrier of P holds f.I = "\/"(I, L);
+
+    reconsider f as map of P, L;
+    take f;
+
+      for I being Ideal of L holds f.I = sup I
+    proof
+      let I be Ideal of L;
+        I in {X where X is Ideal of L: not contradiction};
+      then I in the carrier of RelStr(#Ids L, RelIncl Ids L#)
+ by WAYBEL_0:def 23;
+      then I in the carrier of P by YELLOW_1:def 1;
+      hence f.I = sup I by A2;
+    end;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let f, g be map of InclPoset(Ids L), L;
+    assume that
+  A3: for I being Ideal of L holds f.I = sup I and
+  A4: for I being Ideal of L holds g.I = sup I;
+    set P = InclPoset(Ids L);
+  A5: dom f = the carrier of P & dom g = the carrier of P by FUNCT_2:def 1;
+
+  A6: the carrier of P = the carrier of RelStr(#Ids L, RelIncl(Ids L)#)
+                           by YELLOW_1:def 1
+                      .= Ids L;
+       now
+      let x be set;
+      assume x in the carrier of P;
+      then x in {X where X is Ideal of L: not contradiction} by A6,WAYBEL_0:def
+23;
+      then ex I being Ideal of L st x = I;
+      then reconsider I = x as Ideal of L;
+        f.I = sup I & g.I = sup I by A3,A4;
+      hence f.x = g.x;
+    end;
+    hence f = g by A5,FUNCT_1:9;
+  end;
+end;
+
+theorem Th51:
+  for L being non empty Poset
+    holds
+   dom SupMap L = Ids L & rng SupMap L is Subset of L
+proof
+  let L be non empty Poset;
+  set P = InclPoset(Ids L);
+  thus dom(SupMap L) = the carrier of P by FUNCT_2:def 1
+          .= the carrier of RelStr(#Ids L, RelIncl(Ids L)#) by YELLOW_1:def 1
+          .= Ids L;
+  thus rng(SupMap L) is Subset of L;
+end;
+
+theorem
+    for L being non empty Poset
+    holds
+   x in dom SupMap L iff x is Ideal of L
+proof
+  let L be non empty Poset;
+  hereby
+    assume x in dom SupMap L;
+    then x in Ids L by Th51;
+    then x in {X where X is Ideal of L: not contradiction} by WAYBEL_0:def 23;
+    then ex I being Ideal of L st x = I;
+    hence x is Ideal of L;
+  end;
+  assume x is Ideal of L;
+  then x in {X where X is Ideal of L: not contradiction};
+  then x in Ids L by WAYBEL_0:def 23;
+  hence x in dom(SupMap L) by Th51;
+end;
+
+theorem Th53:
+  for L being up-complete (non empty Poset) holds SupMap L is monotone
+proof
+  let L be up-complete (non empty Poset);
+  set P = InclPoset Ids L;
+  set f = SupMap L;
+
+    for x, y being Element of P st x <= y
+  for a, b being Element of L st a = f.x & b = f.y holds a <= b
+  proof
+    let x, y be Element of P such that
+  A1: x <= y;
+    let a, b be Element of L such that
+  A2: a = f.x & b = f.y;
+
+    reconsider I = x, J = y as Ideal of L by Th43;
+  A3: ex_sup_of I,L & ex_sup_of J,L by WAYBEL_0:75;
+    A4: I c= J by A1,YELLOW_1:3;
+      f.x = sup I & f.y = sup J by Def3;
+    hence thesis by A2,A3,A4,YELLOW_0:34;
+  end;
+  hence thesis by ORDERS_3:def 5;
+end;
+
+definition
+  let L be up-complete (non empty Poset);
+  cluster SupMap L -> monotone;
+  correctness by Th53;
+end;
+
+definition
+  let L be non empty Poset;
+  func IdsMap L -> map of L, InclPoset(Ids L) means
+:Def4:
+  for x being Element of L holds it.x = downarrow x;
+  existence
+ proof
+   deffunc F(Element of L) = downarrow $1;
+A1: for x being Element of L holds F(x) is Element of InclPoset(Ids L)
+    by Th43;
+  thus ex m being map of L, InclPoset Ids L st
+   for x being Element of L holds m.x = F(x) from KappaMD(A1);
+ end;
+  uniqueness
+ proof let f1,f2 be map of L,InclPoset(Ids L) such that
+A2: for x being Element of L holds f1.x = downarrow x and
+A3: for x being Element of L holds f2.x = downarrow x;
+    now let x be Element of L;
+   thus f1.x = downarrow x by A2
+            .= f2.x by A3;
+  end;
+  hence thesis by Th9;
+ end;
+end;
+
+theorem Th54:
+  for L being non empty Poset holds IdsMap L is monotone
+ proof
+  let L be non empty Poset;
+  let x1,x2 be Element of L such that
+A1: x1 <= x2;
+  let a, b be Element of InclPoset(Ids L) such that
+A2: a = (IdsMap L).x1 & b = (IdsMap L).x2;
+    downarrow x1 c= downarrow x2 by A1,WAYBEL_0:21;
+  then (IdsMap L).x1 c= downarrow x2 by Def4;
+  then (IdsMap L).x1 c= (IdsMap L).x2 by Def4;
+  hence a <= b by A2,YELLOW_1:3;
+ end;
+
+definition
+  let L be non empty Poset;
+  cluster IdsMap L -> monotone;
+  correctness by Th54;
+end;
+
+
+begin :: A Family of Elements in a Lattice
+
+definition
+  let L be non empty RelStr;
+  let F be Relation;
+  func \\/(F, L) -> Element of L equals
+:Def5:
+   "\/"(rng F, L);
+  coherence;
+
+  func //\(F, L) -> Element of L equals
+:Def6:
+   "/\"(rng F, L);
+  coherence;
+end;
+
+definition
+  let J be set, L be non empty RelStr;
+  let F be Function of J, the carrier of L;
+  redefine func \\/(F, L);
+  synonym Sup F;
+
+  redefine func //\(F, L);
+  synonym Inf F;
+end;
+
+definition
+  let J be non empty set, S be non empty 1-sorted;
+  let F be Function of J, the carrier of S;
+  let j be Element of J;
+  redefine func F.j -> Element of S;
+  coherence
+  proof
+      F.j in the carrier of S;
+    hence thesis;
+  end;
+end;
+
+definition
+  let J be set, S be non empty 1-sorted;
+  let F be Function of J, the carrier of S;
+  redefine func rng F -> Subset of S;
+  coherence by RELSET_1:12;
+end;
+
+reserve J for non empty set,
+        j for Element of J;
+
+theorem
+    for F being Function of J, the carrier of L
+    holds
+   F.j <= Sup F & Inf F <= F.j
+proof
+  let F be Function of J, the carrier of L;
+
+    F.j in rng F by FUNCT_2:6;
+  then F.j <= "\/"(rng F, L) & "/\"(rng F, L) <= F.j by Th24;
+  hence F.j <= Sup F & Inf F <= F.j by Def5,Def6;
+end;
+
+theorem
+    for F being Function of J, the carrier of L
+    holds
+   (for j holds F.j <= a) implies Sup F <= a
+proof
+  let F be Function of J, the carrier of L;
+  assume
+A1: for j holds F.j <= a;
+
+    now
+    let c be Element of L;
+    assume c in rng F;
+    then consider j being set such that
+  A2: j in dom F and
+  A3: c = F.j by FUNCT_1:def 5;
+    reconsider j as Element of J by A2,FUNCT_2:def 1;
+      c = F.j by A3;
+    hence c <= a by A1;
+  end;
+  then rng F is_<=_than a by LATTICE3:def 9;
+  then "\/"(rng F, L) <= a by YELLOW_0:32;
+  hence thesis by Def5;
+end;
+
+theorem
+    for F being Function of J, the carrier of L
+    holds
+   (for j holds a <= F.j) implies a <= Inf F
+proof
+  let F be Function of J, the carrier of L;
+  assume
+A1: for j holds a <= F.j;
+
+    now
+    let c be Element of L;
+    assume c in rng F;
+    then consider j being set such that
+  A2: j in dom F and
+  A3: c = F.j by FUNCT_1:def 5;
+    reconsider j as Element of J by A2,FUNCT_2:def 1;
+      c = F.j by A3;
+    hence a <= c by A1;
+  end;
+  then a is_<=_than rng F by LATTICE3:def 8;
+  then a <= "/\"(rng F, L) by YELLOW_0:33;
+  hence thesis by Def6;
+end;

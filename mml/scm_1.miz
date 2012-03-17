@@ -1,0 +1,1194 @@
+:: Development of Terminology for {\bf SCM}
+::  by Grzegorz Bancerek and Piotr Rudnicki
+::
+:: Received October 8, 1993
+:: Copyright (c) 1993 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_3, INT_1, FINSEQ_1, AMI_1, AMI_2, FUNCT_1, RELAT_1, ARYTM_1,
+      NAT_1, MCART_1, SCM_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, NAT_1, INT_1,
+      MCART_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, STRUCT_0, AMI_1, AMI_2,
+      AMI_3;
+ constructors NAT_1, AMI_2, AMI_3, MEMBERED, XBOOLE_0;
+ clusters AMI_1, AMI_3, INT_1, XBOOLE_0, RELSET_1, FINSEQ_1, FRAENKEL, XREAL_0,
+      MEMBERED, ZFMISC_1, NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions AMI_1;
+ theorems AXIOMS, REAL_1, NAT_1, INT_1, MCART_1, FUNCT_1, FUNCT_2, FINSEQ_1,
+      CARD_3, AMI_1, AMI_2, AMI_3, FINSEQ_3, RELSET_1, XCMPLX_1;
+ schemes NAT_1, PARTFUN1, COMPTS_1;
+
+begin
+
+definition
+ let i be Integer;
+ redefine func <*i*> -> FinSequence of INT;
+ coherence proof
+  reconsider i1 = i as Element of INT by INT_1:def 2;
+    <*i1*> is FinSequence of INT;
+  hence thesis;
+ end;
+end;
+
+theorem Th1: for s being State of SCM
+     holds IC s = s.0 & CurInstr s = s.(s.0)
+ proof let s be State of SCM;
+  thus IC s = s.0 by AMI_1:def 15,AMI_3:4;
+  hence CurInstr s = s.(s.0) by AMI_1:def 17;
+ end;
+
+theorem Th2: for s being State of SCM, k being Nat
+     holds CurInstr (Computation s).k = s.(IC (Computation s).k) &
+       CurInstr (Computation s).k = s.((Computation s).k.0)
+ proof let s be State of SCM, k be Nat;
+  thus CurInstr (Computation s).k
+           = (Computation s).k.((Computation s).k.0) by Th1
+          .= (Computation s).k.(IC (Computation s).k)
+            by AMI_1:def 15,AMI_3:4
+          .= s.(IC (Computation s).k) by AMI_1:54;
+  hence thesis by AMI_1:def 15,AMI_3:4;
+ end;
+
+theorem Th3:
+for s being State of SCM
+ st ex k being Nat st s.(IC (Computation s).k) = halt SCM
+  holds s is halting proof
+ let s be State of SCM;
+ given k being Nat such that
+A1: s.(IC (Computation s).k) = halt SCM;
+ take k;
+ thus CurInstr (Computation s).k = halt SCM by A1,Th2;
+end;
+
+theorem Th4:
+for s being State of SCM, k being Nat
+  st s.(IC (Computation s).k) = halt SCM
+   holds (Result s) = (Computation s).k proof
+ let s be State of SCM, k be Nat; assume
+A1: s.(IC (Computation s).k) = halt SCM;
+then A2: s is halting by Th3;
+     CurInstr (Computation s).k = halt SCM by A1,Th2;
+  hence Result s = (Computation s).k by A2,AMI_1:def 22;
+end;
+
+canceled 2;
+
+theorem Th7: for n, m being Nat holds
+  IC SCM <> il.n & IC SCM <> dl.n & il.n <> dl.m by AMI_3:56,57;
+
+Lm1: now let p be FinSequence, n be Nat; assume
+A1:    n < len p; n >= 0 by NAT_1:18;
+       then n+1 >= 0+1 & n+1 <= len p by A1,NAT_1:38,REAL_1:55;
+       then n+1 in dom p & dom p = Seg len p by FINSEQ_1:def 3,FINSEQ_3:27;
+      hence n+1 in dom p & p.(n+1) in rng p by FUNCT_1:def 5;
+ end;
+
+Lm2:
+  now let n be Nat, x be set; let p be FinSequence of x; assume
+      n < len p; then p.(n+1) in rng p & rng p c= x by Lm1,FINSEQ_1:def 4;
+   hence p.(n+1) in x;
+  end;
+
+definition
+ let I be FinSequence of the Instructions of SCM,
+     D be FinSequence of INT,
+     il, ps, ds be Nat;
+ mode State-consisting of il, ps, ds, I, D -> State of SCM means
+:Def1:  IC it = il.il &
+  (for k being Nat st k < len I holds it.il.(ps+k) = I.(k+1)) &
+  (for k being Nat st k < len D holds it.dl.(ds+k) = D.(k+1));
+ existence proof
+   defpred X[set,set] means
+     (ex n being Nat st $1 = il.(ps+n) & n < len I & $2 = I.(n+1)) or
+      $2 = halt SCM & not ex n being Nat st $1 = il.(ps+n) & n < len I;
+A1: for x being set st x in NAT ex y being set st y in SCM-Instr & X[x,y]
+  proof let x be set;
+     assume x in NAT;
+     per cases;
+     suppose ex n being Nat st x = il.(ps+n) & n < len I;
+       then consider n being Nat such that
+ A2:   x = il.(ps+n) & n < len I;
+A3:     I.(n+1) in SCM-Instr by A2,Lm2,AMI_3:def 1;
+       then reconsider y = I.(n+1) as Element of the Instructions of SCM
+               by AMI_3:def 1;
+      take y;
+      thus y in SCM-Instr by A3;
+      thus X[x,y] by A2;
+    suppose
+A4:    not ex n being Nat st x = il.(ps+n) & n < len I;
+       reconsider y = halt SCM as Element of the Instructions of SCM;
+     take y;
+     thus y in SCM-Instr by AMI_3:def 1;
+     thus X[x,y] by A4;
+   end;
+  consider I1 being Function such that
+A5: dom I1 = NAT & rng I1 c= SCM-Instr &
+    for x being set st x in NAT holds X[x,I1.x] from NonUniqBoundFuncEx(A1);
+  reconsider I1 as Function of NAT, the Instructions of SCM
+    by A5,AMI_3:def 1,FUNCT_2:def 1,RELSET_1:11;
+A6:  0 in INT by INT_1:12;
+   defpred X[set,set] means
+     (ex n being Nat st $1 = dl.(ds+n) & n < len D & $2 = D.(n+1)) or
+      $2 = 0 & not ex n being Nat st $1 = dl.(ds+n) & n < len D;
+
+A7: now let x be set;
+     assume x in NAT;
+     per cases;
+     suppose ex n being Nat st x = dl.(ds+n) & n < len D;
+       then consider n being Nat such that
+ A8:   x = dl.(ds+n) & n < len D;
+      take y = D.(n+1);
+      thus y in INT by A8,Lm2;
+      thus X[x,y] by A8;
+    suppose not ex n being Nat st x = dl.(ds+n) & n < len D;
+     hence ex y being set st y in INT &  X[x,y] by A6;
+   end;
+  consider D1 being Function such that
+A9: dom D1 = NAT & rng D1 c= INT &
+    for x being set st x in NAT holds X[x,D1.x] from NonUniqBoundFuncEx(A7);
+  reconsider D1 as Function of NAT, INT by A9,FUNCT_2:def 1,RELSET_1:11;
+A10: dom the Object-Kind of SCM = NAT by AMI_3:def 1,FUNCT_2:def 1;
+  consider s being State of SCM;
+  deffunc U(set) = il.il;
+  deffunc V(set) = s.$1;
+  defpred X[set] means $1 = 0;
+  consider s1 being Function such that
+A11: dom s1 = NAT &
+    for x being set st x in NAT holds
+     (X[x] implies s1.x = U(x)) & (not X[x] implies s1.x = V(x)) from LambdaC;
+    now let x be set; assume x in NAT; then reconsider n = x as Nat;
+   per cases;
+   suppose x = 0;
+     then s1.n = il.il & (the Object-Kind of SCM).x = SCM-Instr-Loc
+       by A11,AMI_2:def 5,AMI_3:def 1;
+    hence s1.x in (the Object-Kind of SCM).x by AMI_3:def 1;
+   suppose x <> 0; then s1.n = s.x by A11;
+    hence s1.x in (the Object-Kind of SCM).x by A10,CARD_3:18;
+  end;
+  then reconsider s1 as State of SCM by A10,A11,CARD_3:18;
+  deffunc U(set) = I1.$1;
+  deffunc V(set) = s1.$1;
+  defpred X[set] means ex n being Nat st $1 = il.n;
+  consider s2 being Function such that
+A12: dom s2 = NAT &
+    for x being set st x in NAT holds
+     (X[x] implies s2.x = U(x)) &
+     (not X[x] implies s2.x = V(x)) from LambdaC;
+    now let x be set; assume x in NAT; then reconsider n = x as Nat;
+   per cases;
+   suppose ex n being Nat st x = il.n;
+     then s2.x = I1.n & x is Instruction-Location of SCM by A12;
+     then s2.x is Instruction of SCM & (the Object-Kind of SCM).x = SCM-Instr
+      by AMI_2:11,AMI_3:def 1;
+    hence s2.x in (the Object-Kind of SCM).x by AMI_3:def 1;
+   suppose not ex n being Nat st x = il.n;
+    then s2.n = s1.x by A12;
+    hence s2.x in (the Object-Kind of SCM).x by A10,CARD_3:18;
+  end;
+  then reconsider s2 as State of SCM by A10,A12,CARD_3:18;
+  deffunc U(set) = D1.$1;
+  deffunc V(set) = s2.$1;
+  defpred X[set] means ex n being Nat st $1 = dl.n;
+
+  consider s3 being Function such that
+A13: dom s3 = NAT &
+    for x being set st x in NAT holds
+     (X[x] implies s3.x = U(x)) &
+     (not X[x] implies s3.x = V(x)) from LambdaC;
+    now let x be set; assume x in NAT; then reconsider n = x as Nat;
+   per cases;
+   suppose ex n being Nat st x = dl.n;
+     then s3.x = D1.n & x in SCM-Data-Loc by A13,AMI_3:def 2;
+     then s3.x in INT & (the Object-Kind of SCM).x = INT by AMI_2:10,AMI_3:def
+1;
+    hence s3.x in (the Object-Kind of SCM).x;
+   suppose not ex n being Nat st x = dl.n;
+    then s3.n = s2.x by A13;
+    hence s3.x in (the Object-Kind of SCM).x by A10,CARD_3:18;
+  end;
+  then reconsider s3 as State of SCM by A10,A13,CARD_3:18;
+
+  take s3;
+  thus IC s3 = s3.0 by AMI_1:def 15,AMI_3:4
+            .= s2.0 by A13,Th7,AMI_3:4
+            .= s1.0 by A12,Th7,AMI_3:4
+            .= il.il by A11;
+  hereby let k be Nat; assume k<len I; then consider k' being Nat such that
+A14: il.(ps+k) = il.(ps+k') & k' < len I & I1.il.(ps+k) = I.(k'+1)
+     by A5,AMI_3:def 1;
+A15:    ps+k = ps+k' by A14,AMI_3:53;
+     for n being Nat holds il.(ps+k) <> dl.n by AMI_3:56;
+   hence s3.il.(ps+k) = s2.il.(ps+k) by A13,AMI_3:def 1
+               .= I1.il.(ps+k) by A12,AMI_3:def 1
+               .= I.(k+1) by A14,A15,XCMPLX_1:2;
+   end;
+   let k be Nat; assume k < len D; then consider k' being Nat such that
+A16: dl.(ds+k) = dl.(ds+k') & k' < len D & D1.dl.(ds+k) = D.(k'+1)
+                by A9,AMI_3:def 1;
+A17:     ds+k = ds+k' by A16,AMI_3:52;
+   thus s3.dl.(ds+k) = D1.dl.(ds+k) by A13,AMI_3:def 1
+              .= D.(k+1) by A16,A17,XCMPLX_1:2;
+ end;
+end;
+
+Lm3:  1 in Seg 3 & 2 in Seg 3 & 3 in Seg 3 by FINSEQ_1:3;
+Lm4:  1 in Seg 4 & 2 in Seg 4 & 3 in Seg 4 & 4 in Seg 4 by FINSEQ_1:3;
+Lm5:  1 in Seg 5 & 2 in Seg 5 & 3 in Seg 5 & 4 in Seg 5 & 5 in Seg 5
+                                          by FINSEQ_1:3;
+Lm6:  1 in Seg 6 & 2 in Seg 6 & 3 in Seg 6 & 4 in Seg 6 &
+       5 in Seg 6 & 6 in Seg 6 by FINSEQ_1:3;
+Lm7:  1 in Seg 7 & 2 in Seg 7 & 3 in Seg 7 & 4 in Seg 7 &
+       5 in Seg 7 & 6 in Seg 7 & 7 in Seg 7 by FINSEQ_1:3;
+Lm8:  1 in Seg 8 & 2 in Seg 8 & 3 in Seg 8 & 4 in Seg 8 &
+       5 in Seg 8 & 6 in Seg 8 & 7 in Seg 8 & 8 in Seg 8 by FINSEQ_1:3;
+
+theorem Th8: for x1, x2, x3, x4 being set, p being FinSequence
+ st p = <*x1*>^<*x2*>^<*x3*>^<*x4*>
+  holds len p = 4 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4
+proof
+let x1, x2, x3, x4 be set, p be FinSequence; assume
+A1: p = <*x1*>^<*x2*>^<*x3*>^<*x4*>;
+  set p13 = <*x1*>^<*x2*>^<*x3*>;
+    p13 = <*x1, x2, x3*> by FINSEQ_1:def 10;
+then A2: len p13 = 3 & p13.1 = x1 & p13.2 = x2 & p13.3 = x3 by FINSEQ_1:62;
+ thus len p = len p13 + len <*x4*> by A1,FINSEQ_1:35
+            .= 3 + 1 by A2,FINSEQ_1:57
+            .= 4;
+    dom p13 = Seg 3 by A2,FINSEQ_1:def 3;
+ hence p.1 = x1 & p.2 = x2 & p.3 = x3 by A1,A2,Lm3,FINSEQ_1:def 7;
+ thus p.4 = p.(len p13 + 1) by A2
+         .= x4 by A1,FINSEQ_1:59;
+end;
+
+theorem Th9: for x1, x2, x3, x4, x5 being set, p being FinSequence
+ st p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>
+  holds len p = 5 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5
+proof
+let x1, x2, x3, x4, x5 be set, p be FinSequence; assume
+A1: p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>;
+  set p14 = <*x1*>^<*x2*>^<*x3*>^<*x4*>;
+A2: len p14 = 4 & p14.1 = x1 & p14.2 = x2 & p14.3 = x3 & p14.4 = x4 by Th8;
+ thus len p = len p14 + len <*x5*> by A1,FINSEQ_1:35
+            .= 4 + 1 by A2,FINSEQ_1:57
+            .= 5;
+    dom p14 = Seg 4 by A2,FINSEQ_1:def 3;
+ hence p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4
+                                          by A1,A2,Lm4,FINSEQ_1:def 7;
+ thus p.5 = p.(len p14 + 1) by A2
+         .= x5 by A1,FINSEQ_1:59;
+end;
+
+theorem Th10: for x1, x2, x3, x4, x5, x6 being set, p being FinSequence
+ st p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>
+  holds len p = 6 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 &
+                    p.6 = x6
+proof
+let x1, x2, x3, x4, x5, x6 be set, p be FinSequence; assume
+A1: p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>;
+  set p15 = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>;
+A2: len p15 = 5 & p15.1 = x1 & p15.2 = x2 & p15.3 = x3 & p15.4 = x4 &
+                   p15.5 = x5 by Th9;
+ thus len p = len p15 + len <*x6*> by A1,FINSEQ_1:35
+            .= 5 + 1 by A2,FINSEQ_1:57
+            .= 6;
+    dom p15 = Seg 5 by A2,FINSEQ_1:def 3;
+ hence p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5
+                                          by A1,A2,Lm5,FINSEQ_1:def 7;
+ thus p.6 = p.(len p15 + 1) by A2
+         .= x6 by A1,FINSEQ_1:59;
+end;
+
+theorem Th11: for x1, x2, x3, x4, x5, x6, x7 being set, p being FinSequence
+ st p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>
+  holds len p = 7 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 &
+                    p.6 = x6 & p.7 = x7
+proof
+let x1, x2, x3, x4, x5, x6, x7 be set, p be FinSequence; assume
+A1: p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>;
+  set p16 = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>;
+A2: len p16 = 6 & p16.1 = x1 & p16.2 = x2 & p16.3 = x3 & p16.4 = x4 &
+                   p16.5 = x5 & p16.6 = x6 by Th10;
+ thus len p = len p16 + len <*x7*> by A1,FINSEQ_1:35
+            .= 6 + 1 by A2,FINSEQ_1:57
+            .= 7;
+    dom p16 = Seg 6 by A2,FINSEQ_1:def 3;
+ hence p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 & p.6 = x6
+                                            by A1,A2,Lm6,FINSEQ_1:def 7;
+ thus p.7 = p.(len p16 + 1) by A2
+         .= x7 by A1,FINSEQ_1:59;
+end;
+theorem Th12: for x1,x2,x3,x4, x5, x6, x7, x8 being set, p being FinSequence
+ st p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>^<*x8*>
+  holds len p = 8 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 &
+                    p.6 = x6 & p.7 = x7 & p.8 = x8
+proof
+let x1, x2, x3, x4, x5, x6, x7, x8 be set, p be FinSequence; assume
+A1: p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>^<*x8*>;
+  set p17 = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>;
+A2: len p17 = 7 & p17.1 = x1 & p17.2 = x2 & p17.3 = x3 & p17.4 = x4 &
+                   p17.5 = x5 & p17.6 = x6 & p17.7 = x7 by Th11;
+ thus len p = len p17 + len <*x8*> by A1,FINSEQ_1:35
+            .= 7 + 1 by A2,FINSEQ_1:57
+            .= 8;
+    dom p17 = Seg 7 by A2,FINSEQ_1:def 3;
+ hence p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 & p.6 = x6 &
+       p.7 = x7 by A1,A2,Lm7,FINSEQ_1:def 7;
+ thus p.8 = p.(len p17 + 1) by A2
+         .= x8 by A1,FINSEQ_1:59;
+end;
+
+theorem Th13: for x1,x2,x3,x4,x5,x6,x7, x8, x9 being set, p being FinSequence
+ st p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>^<*x8*>^<*x9*>
+  holds len p = 9 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 &
+                    p.6 = x6 & p.7 = x7 & p.8 = x8 & p.9 = x9
+proof
+let x1, x2, x3, x4, x5, x6, x7, x8, x9 be set, p be FinSequence; assume
+A1: p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>^<*x8*>^<*x9*>;
+  set p17 = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>^<*x8*>;
+A2: len p17 = 8 & p17.1 = x1 & p17.2 = x2 & p17.3 = x3 & p17.4 = x4 &
+                   p17.5 = x5 & p17.6 = x6 & p17.7 = x7 & p17.8 = x8 by Th12;
+ thus len p = len p17 + len <*x9*> by A1,FINSEQ_1:35
+            .= 8 + 1 by A2,FINSEQ_1:57
+            .= 9;
+    dom p17 = Seg 8 by A2,FINSEQ_1:def 3;
+ hence p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 & p.6 = x6 &
+       p.7 = x7 & p.8 = x8 by A1,A2,Lm8,FINSEQ_1:def 7;
+ thus p.9 = p.(len p17 + 1) by A2
+         .= x9 by A1,FINSEQ_1:59;
+end;
+
+theorem
+  for I1, I2, I3, I4, I5, I6, I7, I8, I9 being Instruction of SCM,
+    i1, i2, i3, i4 being Integer,
+    il being Nat,
+    s being State-consisting of il, 0, 0,
+             <*I1*>^<*I2*>^<*I3*>^<*I4*>^<*I5*>^<*I6*>^<*I7*>^<*I8*>^<*I9*>,
+             <*i1*>^<*i2*>^<*i3*>^<*i4*>
+ holds IC s = il.il &
+       s.il.0 = I1 & s.il.1 = I2 & s.il.2 = I3 & s.il.3 = I4 &
+       s.il.4 = I5 & s.il.5 = I6 & s.il.6 = I7 & s.il.7 = I8 & s.il.8 = I9 &
+       s.dl.0 = i1 & s.dl.1 = i2 & s.dl.2 = i3 & s.dl.3 = i4
+proof
+let I1, I2, I3, I4, I5, I6, I7, I8, I9 be Instruction of SCM,
+    i1, i2, i3, i4 be Integer,
+    il  be Nat,
+    s be State-consisting of il, 0, 0,
+             <*I1*>^<*I2*>^<*I3*>^<*I4*>^<*I5*>^<*I6*>^<*I7*>^<*I8*>^<*I9*>,
+             <*i1*>^<*i2*>^<*i3*>^<*i4*>;
+thus IC s = il.il by Def1;
+ set I = <*I1*>^<*I2*>^<*I3*>^<*I4*>^<*I5*>^<*I6*>^<*I7*>^<*I8*>^<*I9*>,
+     D = <*i1*>^<*i2*>^<*i3*>^<*i4*>;
+A1:   I.(0+1) = I1 & I.(1+1) = I2 & I.(2+1) = I3 & I.(3+1) = I4 & I.(4+1)=I5 &
+     I.(5+1) = I6 & I.(6+1) = I7 & I.(7+1) = I8 & I.(8+1) = I9 by Th13;
+A2:   D.(0+1) = i1 & D.(1+1) = i2 & D.(2+1) = i3 & D.(3+1) = i4 by Th8;
+       len I=9 & 0+0=0&0+1=1&0+2=2&0+3=3&0+4=4&0+5=5&0+6=6&0+7=7&0+8=8 by Th13;
+hence s.il.0 = I1 & s.il.1 = I2 & s.il.2 = I3 & s.il.3 = I4 &
+     s.il.4 = I5 & s.il.5 = I6 & s.il.6 = I7 & s.il.7 = I8 & s.il.8 = I9
+                                                           by A1,Def1;
+       len D = 4 & 0+0=0&0+1=1&0+2=2&0+3=3 by Th8;
+hence s.dl.0 = i1 & s.dl.1 = i2 & s.dl.2 = i3 & s.dl.3 = i4 by A2,Def1;
+end;
+
+theorem Th15:
+for I1, I2 being Instruction of SCM,
+    i1, i2 being Integer,
+    il being Nat,
+    s being State-consisting of il, 0, 0, <*I1*>^<*I2*>, <*i1*>^<*i2*>
+ holds IC s = il.il &
+       s.il.0 = I1 & s.il.1 = I2 &
+       s.dl.0 = i1 & s.dl.1 = i2
+proof
+let I1, I2 be Instruction of SCM, i1, i2 be Integer,
+    il be Nat,
+    s be State-consisting of il, 0, 0, <*I1*>^<*I2*>, <*i1*>^<*i2*>;
+ thus IC s = il.il by Def1;
+  set ins = <*I1*>^<*I2*>, data = <*i1*>^<*i2*>;
+    ins = <*I1, I2*> & data = <*i1, i2*> by FINSEQ_1:def 9;
+then A1:  len ins = 2 & len data = 2 & ins.(0+1) = I1 & ins.(1+1) = I2 &
+                           data.(0+1) = i1 & data.(1+1) = i2 by FINSEQ_1:61;
+     1 < 2 & 0+0=0&0+1=1;
+ hence s.il.0 = I1 & s.il.1 = I2 &
+       s.dl.0 = i1 & s.dl.1 = i2 by A1,Def1;
+ end;
+
+definition
+let N be with_non-empty_elements set;
+ let S be halting IC-Ins-separated definite
+    (non empty non void AMI-Struct over N);
+ let s be State of S such that
+A1: s is halting;
+ func Complexity s -> Nat means
+:Def2:  CurInstr((Computation s).it) = halt S &
+  for k being Nat st CurInstr((Computation s).k) = halt S holds it <= k;
+  existence proof
+    defpred X[Nat] means CurInstr((Computation s).$1)=halt S;
+A2: ex k being Nat st X[k] by A1,AMI_1:def 20;
+   thus  ex k being Nat st X[k] &
+    for n being Nat st X[n] holds k <= n from Min ( A2 );
+  end;
+  uniqueness proof
+   let it1, it2 be Nat;
+   assume
+A3:  not thesis;
+    then it1 <= it2 & it2 <= it1;
+   hence contradiction by A3,AXIOMS:21;
+  end;
+ synonym LifeSpan s;
+end;
+
+theorem Th16:
+ for s being State of SCM, k being Nat
+  holds s.(IC (Computation s).k) <> halt SCM &
+     s.(IC (Computation s).(k+1)) = halt SCM
+  iff Complexity s = k+1 & s is halting
+proof let s be State of SCM, k be Nat;
+  hereby assume
+      s.(IC (Computation s).k) <> halt SCM &
+    s.(IC (Computation s).(k+1)) = halt SCM;
+then A1:  s is halting & CurInstr (Computation s).k <> halt SCM &
+    CurInstr (Computation s).(k+1) = halt SCM by Th2,Th3;
+      now let i be Nat; assume
+A2:    CurInstr (Computation s).i = halt SCM & k+1 > i;
+      then i <= k by NAT_1:38;
+     hence contradiction by A1,A2,AMI_1:52;
+    end;
+   hence Complexity s = k+1 & s is halting by A1,Def2;
+  end;
+  assume
+ A3: Complexity s = k+1 & s is halting;
+then A4: CurInstr((Computation s).(k+1)) = halt SCM &
+   for l being Nat st CurInstr((Computation s).l)=halt SCM holds (k+1)<=l
+                                                       by Def2;
+     now assume CurInstr((Computation s).k) = halt SCM;
+    then k+1 <= k by A3,Def2;
+    hence contradiction by NAT_1:38;
+   end;
+  hence thesis by A4,Th2;
+end;
+
+theorem Th17:
+ for s being State of SCM, k being Nat
+  st IC (Computation s).k <> IC (Computation s).(k+1) &
+     s.(IC (Computation s).(k+1)) = halt SCM
+  holds Complexity s = k+1 proof
+ let s be State of SCM, k be Nat; assume
+A1: IC (Computation s).k <> IC (Computation s).(k+1) &
+   s.(IC (Computation s).(k+1)) = halt SCM;
+     now assume s.(IC (Computation s).k) = halt SCM;
+     then CurInstr (Computation s).k = halt SCM & k <= k+1 by Th2,NAT_1:29;
+    hence contradiction by A1,AMI_1:52;
+   end;
+ hence thesis by A1,Th16;
+end;
+
+Lm9: for n being Nat holds Next il.n = il.(n+1) proof
+ let n be Nat;
+  consider iN being Element of SCM-Instr-Loc such that
+A1: iN = il.n & Next il.n = Next iN by AMI_3:def 11;
+ thus Next il.n = (iN + 2) by A1,AMI_2:def 15
+              .= 2*n+2*1 + 2 by A1,AMI_3:def 20
+              .= 2*(n+1) + 2 by XCMPLX_1:8
+              .= il.(n+1) by AMI_3:def 20;
+end;
+
+Lm10:
+ for k being Nat, s being State of SCM
+  holds (Computation s).(k+1) = Exec(CurInstr (Computation s).k,
+                                     (Computation s).k) proof
+ let k be Nat, s be State of SCM;
+ thus (Computation s).(k+1) = Following (Computation s).k by AMI_1:def 19
+                    .= Exec(CurInstr (Computation s).k,
+                                     (Computation s).k) by AMI_1:def 18;
+end;
+
+Lm11:
+now let k, n be Nat, s be State of SCM, a, b be Data-Location;
+ assume
+A1: IC (Computation s).k = il.n;
+A2: (Computation s).k.il.n = s.il.n by AMI_1:54;
+   set c_s_k = (Computation s).k;
+   set c_s_k1 = (Computation s).(k+1);
+A3: c_s_k.0 = il.n by A1,Th1;
+   assume
+A4:  s.il.n = a := b or s.il.n = AddTo(a,b) or s.il.n = SubFrom(a, b) or
+      s.il.n = MultBy(a, b) or a<>b & s.il.n = Divide(a,b);
+    thus
+A5:  c_s_k1 = (Exec(CurInstr c_s_k, c_s_k)) by Lm10
+           .= (Exec(s.il.n, c_s_k)) by A2,A3,Th1;
+    thus IC c_s_k1 = c_s_k1.0 by Th1
+      .= Next IC c_s_k by A4,A5,AMI_3:4,8,9,10,11,12
+      .= il.(n+1) by A1,Lm9;
+end;
+
+theorem Th18:
+for k, n being Nat, s being State of SCM, a, b being Data-Location
+ st IC (Computation s).k = il.n & s.il.n = a := b
+  holds IC (Computation s).(k+1) = il.(n+1) &
+        (Computation s).(k+1).a = (Computation s).k.b &
+        for d being Data-Location st d <> a holds
+                              (Computation s).(k+1).d = (Computation s).k.d
+proof let k, n be Nat, s be State of SCM, a, b be Data-Location;
+ assume
+A1: IC (Computation s).k = il.n;
+   set c_s_k = (Computation s).k;
+   set c_s_k1 = (Computation s).(k+1);
+  assume
+A2:  s.il.n = a := b;
+    then c_s_k1 = Exec(a:=b, c_s_k) by A1,Lm11;
+  hence IC c_s_k1 = il.(n+1) & c_s_k1.a = c_s_k.b &
+    for d being Data-Location st d <> a holds c_s_k1.d = c_s_k.d
+      by A1,A2,Lm11,AMI_3:8;
+end;
+
+theorem Th19:
+for k, n being Nat, s being State of SCM, a, b being Data-Location
+ st IC (Computation s).k = il.n & s.il.n = AddTo(a,b)
+  holds IC (Computation s).(k+1) = il.(n+1) &
+        (Computation s).(k+1).a = (Computation s).k.a+(Computation s).k.b &
+        for d being Data-Location st d <> a holds
+                              (Computation s).(k+1).d = (Computation s).k.d
+proof let k, n be Nat, s be State of SCM, a, b be Data-Location;
+ assume
+A1: IC (Computation s).k = il.n;
+   set c_s_k = (Computation s).k;
+   set c_s_k1 = (Computation s).(k+1);
+  assume
+A2:  s.il.n = AddTo(a,b);
+    then c_s_k1 = Exec(AddTo(a,b), c_s_k) by A1,Lm11;
+  hence IC c_s_k1 = il.(n+1) & c_s_k1.a = c_s_k.a + c_s_k.b &
+    for d being Data-Location st d <> a holds c_s_k1.d = c_s_k.d
+      by A1,A2,Lm11,AMI_3:9;
+end;
+
+theorem Th20:
+for k, n being Nat, s being State of SCM, a, b being Data-Location
+ st IC (Computation s).k = il.n & s.il.n = SubFrom(a,b)
+  holds IC (Computation s).(k+1) = il.(n+1) &
+        (Computation s).(k+1).a = (Computation s).k.a-(Computation s).k.b &
+        for d being Data-Location st d <> a holds
+                              (Computation s).(k+1).d = (Computation s).k.d
+proof let k, n be Nat, s be State of SCM, a, b be Data-Location;
+ assume
+A1: IC (Computation s).k= il.n;
+   set c_s_k = (Computation s).k;
+   set c_s_k1 = (Computation s).(k+1);
+  assume
+A2:  s.il.n = SubFrom(a,b);
+    then c_s_k1 = Exec(SubFrom(a,b), c_s_k) by A1,Lm11;
+   hence IC c_s_k1 = il.(n+1) & c_s_k1.a = c_s_k.a - c_s_k.b &
+    for d being Data-Location st d <> a holds c_s_k1.d = c_s_k.d
+      by A1,A2,Lm11,AMI_3:10;
+end;
+
+theorem Th21:
+for k, n being Nat, s being State of SCM, a, b being Data-Location
+ st IC (Computation s).k = il.n & s.il.n = MultBy(a,b)
+  holds IC (Computation s).(k+1) = il.(n+1) &
+        (Computation s).(k+1).a = (Computation s).k.a*(Computation s).k.b &
+        for d being Data-Location st d <> a holds
+                              (Computation s).(k+1).d = (Computation s).k.d
+proof let k, n be Nat, s be State of SCM, a, b be Data-Location;
+ assume
+A1: IC (Computation s).k = il.n;
+   set c_s_k = (Computation s).k;
+   set c_s_k1 = (Computation s).(k+1);
+  assume
+A2:  s.il.n = MultBy(a,b);
+    then c_s_k1 = Exec(MultBy(a,b), c_s_k) by A1,Lm11;
+   hence IC c_s_k1 = il.(n+1) & c_s_k1.a = c_s_k.a * c_s_k.b &
+    for d being Data-Location st d <> a holds c_s_k1.d = c_s_k.d
+      by A1,A2,Lm11,AMI_3:11;
+end;
+
+theorem Th22:
+for k, n being Nat, s being State of SCM, a, b being Data-Location
+ st IC (Computation s).k = il.n & s.il.n = Divide(a,b) & a<>b
+  holds IC (Computation s).(k+1) = il.(n+1) &
+    (Computation s).(k+1).a = (Computation s).k.a div (Computation s).k.b &
+    (Computation s).(k+1).b = (Computation s).k.a mod (Computation s).k.b &
+        for d being Data-Location st d <> a & d <> b holds
+                              (Computation s).(k+1).d = (Computation s).k.d
+proof let k, n be Nat, s be State of SCM, a, b be Data-Location;
+ assume
+A1: IC (Computation s).k = il.n;
+   set c_s_k = (Computation s).k;
+   set c_s_k1 = (Computation s).(k+1);
+  assume
+A2:  s.il.n = Divide(a,b) & a <> b;
+    then c_s_k1 = Exec(Divide(a,b), c_s_k) by A1,Lm11;
+   hence IC c_s_k1 = il.(n+1) &
+    c_s_k1.a = c_s_k.a div c_s_k.b & c_s_k1.b = c_s_k.a mod c_s_k.b &
+    for d being Data-Location st d <> a & d <> b holds c_s_k1.d = c_s_k.d
+      by A1,A2,Lm11,AMI_3:12;
+end;
+
+theorem Th23:
+for k, n being Nat, s being State of SCM,
+    il being Instruction-Location of SCM
+ st IC (Computation s).k = il.n & s.il.n = goto il
+ holds IC (Computation s).(k+1) = il &
+       for d being Data-Location holds
+                              (Computation s).(k+1).d = (Computation s).k.d
+proof
+let k, n be Nat, s be State of SCM,
+    il be Instruction-Location of SCM; assume
+A1: IC (Computation s).k = il.n & s.il.n = goto il;
+A2: (Computation s).k.il.n = s.il.n by AMI_1:54;
+   set c_s_k = (Computation s).k;
+   set c_s_k1 = (Computation s).(k+1);
+A3: c_s_k.0 = il.n by A1,Th1;
+ A4: c_s_k1 = Exec(CurInstr c_s_k, c_s_k) by Lm10
+           .= Exec(goto il, c_s_k) by A1,A2,A3,Th1;
+ thus IC c_s_k1 = c_s_k1.IC SCM by AMI_1:def 15 .= il by A4,AMI_3:13;
+ thus thesis by A4,AMI_3:13;
+end;
+
+theorem Th24:
+for k, n being Nat, s being State of SCM, a being Data-Location,
+    il being Instruction-Location of SCM
+ st IC (Computation s).k = il.n & s.il.n = a =0_goto il
+ holds ((Computation s).k.a = 0 implies IC (Computation s).(k+1) = il) &
+       ((Computation s).k.a <>0 implies IC (Computation s).(k+1) = il.(n+1)) &
+       for d being Data-Location holds
+                              (Computation s).(k+1).d = (Computation s).k.d
+proof
+let k, n be Nat, s be State of SCM, a be Data-Location,
+    il be Instruction-Location of SCM; assume
+A1: IC (Computation s).k = il.n & s.il.n = a =0_goto il;
+A2: (Computation s).k.il.n = s.il.n by AMI_1:54;
+   set c_s_k = (Computation s).k;
+   set c_s_k1 = (Computation s).(k+1);
+A3: c_s_k.0 = il.n by A1,Th1;
+ A4: c_s_k1 = Exec(CurInstr c_s_k, c_s_k) by Lm10
+           .= Exec(a =0_goto il, c_s_k) by A1,A2,A3,Th1;
+ A5: IC c_s_k1 = c_s_k1.IC SCM by AMI_1:def 15;
+ hence c_s_k.a = 0 implies IC c_s_k1 = il by A4,AMI_3:14;
+ hereby assume
+     c_s_k.a <> 0;
+  hence IC c_s_k1 = Next il.n by A1,A4,A5,AMI_3:14
+               .= il.(n+1) by Lm9;
+ end;
+ thus thesis by A4,AMI_3:14;
+end;
+
+theorem Th25:
+for k, n being Nat, s being State of SCM, a being Data-Location,
+    il being Instruction-Location of SCM
+ st IC (Computation s).k = il.n & s.il.n = a >0_goto il
+  holds ((Computation s).k.a > 0 implies IC (Computation s).(k+1) = il) &
+   ((Computation s).k.a <= 0 implies IC (Computation s).(k+1) = il.(n+1)) &
+       for d being Data-Location holds
+                              (Computation s).(k+1).d = (Computation s).k.d
+proof
+let k, n be Nat, s be State of SCM, a be Data-Location,
+    il be Instruction-Location of SCM; assume
+A1: IC (Computation s).k = il.n & s.il.n = a >0_goto il;
+A2: (Computation s).k.il.n = s.il.n by AMI_1:54;
+   set c_s_k = (Computation s).k;
+   set c_s_k1 = (Computation s).(k+1);
+A3: c_s_k.0 = il.n by A1,Th1;
+ A4: c_s_k1 = Exec(CurInstr c_s_k, c_s_k) by Lm10
+           .= Exec(a >0_goto il, c_s_k) by A1,A2,A3,Th1;
+ A5: IC c_s_k1 = c_s_k1.IC SCM by AMI_1:def 15;
+ hence c_s_k.a > 0 implies IC c_s_k1 = il by A4,AMI_3:15;
+ hereby assume
+     c_s_k.a <= 0;
+  hence IC c_s_k1 = Next il.n by A1,A4,A5,AMI_3:15
+               .= il.(n+1) by Lm9;
+ end;
+ thus thesis by A4,AMI_3:15;
+end;
+
+theorem Th26:
+ (halt SCM)`1 = 0 &
+ (for a, b being Data-Location holds (a := b)`1 = 1) &
+ (for a, b being Data-Location holds (AddTo(a,b))`1 = 2) &
+ (for a, b being Data-Location holds (SubFrom(a,b))`1 = 3) &
+ (for a, b being Data-Location holds (MultBy(a,b))`1 = 4) &
+ (for a, b being Data-Location holds (Divide(a,b))`1 = 5) &
+ (for i being Instruction-Location of SCM holds (goto i)`1 = 6) &
+ (for a being Data-Location, i being Instruction-Location of SCM
+     holds (a =0_goto i)`1 = 7) &
+ (for a being Data-Location, i being Instruction-Location of SCM
+     holds (a >0_goto i)`1 = 8)
+proof
+  thus (halt SCM)`1 = 0 by AMI_3:71,MCART_1:7;
+ hereby let a, b be Data-Location;
+     a := b = [1, <*a,b*>] by AMI_3:def 3;
+  hence (a := b)`1 = 1 by MCART_1:7;
+ end;
+ hereby let a, b be Data-Location;
+     AddTo(a,b) = [2, <*a,b*>] by AMI_3:def 4;
+  hence (AddTo(a,b))`1 = 2 by MCART_1:7;
+ end;
+ hereby let a, b be Data-Location;
+     SubFrom(a,b) = [3, <*a,b*>] by AMI_3:def 5;
+  hence (SubFrom(a,b))`1 = 3 by MCART_1:7;
+ end;
+ hereby let a, b be Data-Location;
+     MultBy(a,b) = [4, <*a,b*>] by AMI_3:def 6;
+  hence (MultBy(a,b))`1 = 4 by MCART_1:7;
+ end;
+ hereby let a, b be Data-Location;
+     Divide(a,b) = [5, <*a,b*>] by AMI_3:def 7;
+  hence (Divide(a,b))`1 = 5 by MCART_1:7;
+ end;
+ hereby let i be Instruction-Location of SCM;
+     goto i = [6, <*i*>] by AMI_3:def 8;
+  hence (goto i)`1 = 6 by MCART_1:7;
+ end;
+ hereby let a be Data-Location, i be Instruction-Location of SCM;
+     a =0_goto i = [7, <*i,a*>] by AMI_3:def 9;
+  hence (a =0_goto i)`1 = 7 by MCART_1:7;
+ end;
+ hereby let a be Data-Location, i be Instruction-Location of SCM;
+     a >0_goto i = [8, <*i,a*>] by AMI_3:def 10;
+  hence (a >0_goto i)`1 = 8 by MCART_1:7;
+ end;
+end;
+
+theorem Th27:
+ for N being non empty with_non-empty_elements set,
+     S be IC-Ins-separated definite halting
+       (non empty non void AMI-Struct over N),
+     s being State of S, m being Nat
+ holds s is halting iff (Computation s).m is halting
+proof
+ let N be non empty with_non-empty_elements set;
+ let S be IC-Ins-separated definite halting
+     (non empty non void AMI-Struct over N),
+     s be State of S, m be Nat;
+ hereby assume s is halting;
+   then consider n being Nat such that
+A1:  CurInstr((Computation s).n) = halt S by AMI_1:def 20;
+  per cases;
+  suppose n <= m;
+   then (Computation s).n = (Computation s).(m+0) by A1,AMI_1:52
+            .= (Computation (Computation s).m).0 by AMI_1:51;
+  hence (Computation s).m is halting by A1,AMI_1:def 20;
+  suppose n >= m;
+   then reconsider k = n - m as Nat by INT_1:18;
+     (Computation (Computation s).m).k
+        = (Computation s).(m+k) by AMI_1:51
+       .= (Computation s).n by XCMPLX_1:27;
+  hence (Computation s).m is halting by A1,AMI_1:def 20;
+ end;
+ assume (Computation s).m is halting;
+  then consider n being Nat such that
+A2: CurInstr((Computation (Computation s).m).n) = halt S by AMI_1:def 20;
+ take m+n;
+ thus thesis by A2,AMI_1:51;
+end;
+
+theorem
+   for s1, s2 being State of SCM, k, c being Nat
+  st s2 = (Computation s1).k & Complexity s2 = c & s2 is halting & 0 < c
+   holds Complexity s1 = k+c
+proof
+ let s1, s2 be State of SCM, k, c be Nat; assume
+A1: s2 = (Computation s1).k & Complexity s2 = c & s2 is halting & 0 < c;
+   then consider l being Nat such that
+A2: c = l+1 by NAT_1:22;
+     s2.(IC (Computation s2).l) <> halt SCM &
+   s2.(IC (Computation s2).(l+1)) = halt SCM by A1,A2,Th16;
+   then s2.(IC (Computation s1).(k+l)) <> halt SCM &
+   s2.(IC (Computation s1).(k+(l+1))) = halt SCM by A1,AMI_1:51;
+   then s1.(IC (Computation s1).(k+l)) <> halt SCM &
+   s1.(IC (Computation s1).(k+(l+1))) = halt SCM by A1,AMI_1:54;
+   then s1.(IC (Computation s1).(k+l)) <> halt SCM &
+   s1.(IC (Computation s1).((k+l)+1)) = halt SCM by XCMPLX_1:1;
+  hence Complexity s1 = (k+l)+1 by Th16
+                     .= k+c by A2,XCMPLX_1:1;
+end;
+
+theorem
+   for s1, s2 being State of SCM, k being Nat
+  st s2 = (Computation s1).k & s2 is halting
+   holds Result s2 = Result s1
+ proof
+ let s1, s2 be State of SCM, k be Nat; assume
+A1: s2 = (Computation s1).k & s2 is halting;
+then A2: s1 is halting by Th27;
+   consider l being Nat such that
+A3: Result s2 = (Computation s2).l & CurInstr(Result s2) = halt SCM
+                                                     by A1,AMI_1:def 22;
+   (Computation (Computation s1).k).l = (Computation s1).(k+l) by AMI_1:51;
+ hence Result s2 = Result s1 by A1,A2,A3,AMI_1:def 22;
+end;
+
+theorem
+  for I1, I2, I3, I4, I5, I6, I7, I8, I9 being Instruction of SCM,
+    i1, i2, i3, i4 being Integer,
+    il being Nat,
+    s being State of SCM
+ st IC s = il.il &
+    s.il.0 = I1 & s.il.1 = I2 & s.il.2 = I3 & s.il.3 = I4 &
+    s.il.4 = I5 & s.il.5 = I6 & s.il.6 = I7 & s.il.7 = I8 & s.il.8 = I9 &
+    s.dl.0 = i1 & s.dl.1 = i2 & s.dl.2 = i3 & s.dl.3 = i4
+ holds
+    s is State-consisting of il, 0, 0,
+             <*I1*>^<*I2*>^<*I3*>^<*I4*>^<*I5*>^<*I6*>^<*I7*>^<*I8*>^<*I9*>,
+             <*i1*>^<*i2*>^<*i3*>^<*i4*>
+proof
+let I1, I2, I3, I4, I5, I6, I7, I8, I9 be Instruction of SCM,
+    i1, i2, i3, i4 be Integer,
+    il  be Nat,
+    s be State of SCM such that
+A1:  IC s = il.il &
+    s.il.0 = I1 & s.il.1 = I2 & s.il.2 = I3 & s.il.3 = I4 &
+    s.il.4 = I5 & s.il.5 = I6 & s.il.6 = I7 & s.il.7 = I8 & s.il.8 = I9 &
+    s.dl.0 = i1 & s.dl.1 = i2 & s.dl.2 = i3 & s.dl.3 = i4;
+ set I = <*I1*>^<*I2*>^<*I3*>^<*I4*>^<*I5*>^<*I6*>^<*I7*>^<*I8*>^<*I9*>,
+     D = <*i1*>^<*i2*>^<*i3*>^<*i4*>;
+A2: now let k be Nat; assume
+A3:  k < len I; len I=9 & 9=8+1 by Th13;
+
+    then k <= 8 & 8=7+1 by A3,NAT_1:38;
+    then (k <= 7 or k=8) & 7=6+1 by NAT_1:26;
+    then (k <= 6 or k=7 or k=8) & 6=5+1 by NAT_1:26;
+    then (k <= 5 or k = 6 or k=7 or k=8) & 5=4+1 by NAT_1:26;
+    then (k <= 4 or k=5 or k = 6 or k=7 or k=8) & 4=3+1 by NAT_1:26;
+    then (k <= 3 or k=4 or k=5 or k = 6 or k=7 or k=8) & 3=2+1
+                                                           by NAT_1:26;
+    then (k <= 2 or k=3 or k=4 or k=5 or k = 6 or k=7 or k=8) & 2=1+1
+                                                           by NAT_1:26;
+    then (k <= 1 or k= 2 or k=3 or k=4 or k=5 or k = 6 or k=7 or k=8) & 1=0+1
+                                                           by NAT_1:26;
+    then (k <= 0 or k=1 or k= 2 or k=3 or k=4 or k=5 or k = 6 or k=7 or k=8) &
+                                        0 <= k by NAT_1:18,26;
+    then k=0 or k=1 or k=2 or k=3 or k=4 or k=5 or k=6 or k=7 or k=8;
+    hence s.il.(0+k)=I.(k+1) by A1,Th13;
+   end;
+  now let k be Nat; assume
+A4: k < len D; len D=4 & 4=3+1 by Th8;
+    then k <= 3 & 3=2+1 by A4,NAT_1:38;
+    then (k <= 2 or k=3) & 2=1+1 by NAT_1:26;
+    then (k <= 1 or k=2 or k=3) & 1=0+1 by NAT_1:26;
+    then (k <= 0 or k = 1 or k=2 or k=3) & 0 <= k by NAT_1:18,26;
+    then k=0 or k=1 or k=2 or k=3;
+    hence s.dl.(0+k)=D.(k+1) by A1,Th8;
+   end;
+hence s is State-consisting of il, 0, 0,
+             <*I1*>^<*I2*>^<*I3*>^<*I4*>^<*I5*>^<*I6*>^<*I7*>^<*I8*>^<*I9*>,
+             <*i1*>^<*i2*>^<*i3*>^<*i4*> by A1,A2,Def1;
+end;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Empty program
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem
+  for s being State-consisting of 0, 0, 0, <*halt SCM*>, <*>INT
+    holds s is halting & Complexity s = 0 & Result s = s proof
+ let s be State-consisting of 0, 0, 0, <*halt SCM*>, <*>INT;
+A1: IC s = il.0 by Def1;
+     1 = len <*halt SCM*> by FINSEQ_1:57;
+then A2: s.il.(0+0) = <*halt SCM*>.(0+1) by Def1
+        .= halt SCM by FINSEQ_1:57;
+   set s0 = (Computation s).0;
+A3: s = s0 by AMI_1:def 19;
+then s.IC s0 = halt SCM by A2,Def1;
+ hence
+A4: s is halting by Th3;
+    CurInstr s0 = halt SCM &
+  for k be Nat st CurInstr (Computation s).k = halt SCM holds
+  0 <= k by A1,A2,A3,Th2,NAT_1:18;
+ hence Complexity s = 0 by A4,Def2;
+
+ thus Result s = s by A1,A2,A3,Th4;
+end;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Assignment
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem
+  for i1, i2 being Integer,
+    s being State-consisting of 0, 0, 0, <*dl.0 := dl.1*>^<*halt SCM*>,
+                                 <*i1*>^<*i2*>
+    holds s is halting &
+          Complexity s = 1 &
+          (Result s).dl.0 = i2 &
+          for d being Data-Location st d<>dl.0 holds (Result s).d = s.d
+proof
+ let i1, i2 be Integer,
+     s be State-consisting of 0, 0, 0, <*dl.0 := dl.1*>^<*halt SCM*>,
+                                  <*i1*>^<*i2*>;
+A1: IC s = il.0 &
+   s.il.0 = dl.0 := dl.1 & s.il.1 = halt SCM &
+   s.dl.0 = i1 & s.dl.1 = i2 by Th15;
+   set s1 = (Computation s).(0+1);
+A2: s = (Computation s).0 by AMI_1:def 19;
+then A3: IC s1 = il.(0+1) by A1,Th18;
+A4:  s1.dl.0 = s.dl.1 by A1,A2,Th18;
+ thus s is halting by A1,A3,Th3; il.0 <> il.1 by AMI_3:53;
+ hence Complexity s = 1 by A1,A2,A3,Th17;
+
+ thus (Result s).dl.0 = i2 by A1,A3,A4,Th4;
+
+ let d be Data-Location; assume
+A5: d<>dl.0;
+ thus (Result s).d = s1.d by A1,A3,Th4
+                  .= s.d by A1,A2,A5,Th18;
+end;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Adding two integers
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem
+  for i1, i2 being Integer,
+    s being State-consisting of 0, 0, 0, <*AddTo(dl.0,dl.1)*>^<*halt SCM*>,
+                                <*i1*>^<*i2*>
+    holds s is halting &
+          Complexity s = 1 &
+          (Result s).dl.0 = i1 + i2 &
+          for d being Data-Location st d<>dl.0 holds (Result s).d = s.d
+proof
+ let i1, i2 be Integer,
+     s be State-consisting of 0, 0, 0, <*AddTo(dl.0,dl.1)*>^<*halt SCM*>,
+                              <*i1*>^<*i2*>;
+A1: IC s = il.0 &
+   s.il.0 = AddTo(dl.0,dl.1) & s.il.1 = halt SCM &
+   s.dl.0 = i1 & s.dl.1 = i2 by Th15;
+
+   set s0 = (Computation s).0;
+   set s1 = (Computation s).(0+1);
+
+:: Step 0
+
+A2: s = s0 by AMI_1:def 19;
+:: Step 1
+then A3: IC s1 = il.(0+1) by A1,Th19;
+A4: s1.dl.0 = s0.dl.0 + s0.dl.1 by A1,A2,Th19;
+
+ thus s is halting by A1,A3,Th3; il.0 <> il.1 by AMI_3:53;
+ hence Complexity s = 1 by A1,A2,A3,Th17;
+
+ thus (Result s).dl.0 = i1 + i2 by A1,A2,A3,A4,Th4;
+
+ let d be Data-Location; assume
+A5: d<>dl.0;
+ thus (Result s).d = s1.d by A1,A3,Th4
+                  .= s.d by A1,A2,A5,Th19;
+end;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Subtracting two integers
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem
+  for i1, i2 being Integer,
+    s being State-consisting of 0, 0, 0, <*SubFrom(dl.0,dl.1)*>^<*halt SCM*>,
+                                <*i1*>^<*i2*>
+    holds s is halting &
+          Complexity s = 1 &
+          (Result s).dl.0 = i1 - i2 &
+          for d being Data-Location st d<>dl.0 holds (Result s).d = s.d
+proof
+ let i1, i2 be Integer,
+     s be State-consisting of 0, 0, 0, <*SubFrom(dl.0,dl.1)*>^<*halt SCM*>,
+                              <*i1*>^<*i2*>;
+A1: IC s = il.0 &
+   s.il.0 = SubFrom(dl.0,dl.1) & s.il.1 = halt SCM &
+   s.dl.0 = i1 & s.dl.1 = i2 by Th15;
+
+   set s0 = (Computation s).0;
+   set s1 = (Computation s).(0+1);
+
+:: Step 0
+
+A2: s = s0 by AMI_1:def 19;
+:: Step 1
+then A3: IC s1 = il.(0+1) by A1,Th20;
+A4: s1.dl.0 = s0.dl.0 - s0.dl.1 by A1,A2,Th20;
+
+ thus s is halting by A1,A3,Th3; il.0 <> il.1 by AMI_3:53;
+ hence Complexity s = 1 by A1,A2,A3,Th17;
+
+ thus (Result s).dl.0 = i1 - i2 by A1,A2,A3,A4,Th4;
+
+ let d be Data-Location; assume
+A5: d<>dl.0;
+ thus (Result s).d = s1.d by A1,A3,Th4
+                  .= s.d by A1,A2,A5,Th20;
+end;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Multiplying two integers
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem
+  for i1, i2 being Integer,
+    s being State-consisting of 0, 0, 0, <*MultBy(dl.0,dl.1)*>^<*halt SCM*>,
+                                <*i1*>^<*i2*>
+    holds s is halting &
+          Complexity s = 1 &
+          (Result s).dl.0 = i1 * i2 &
+          for d being Data-Location st d<>dl.0 holds (Result s).d = s.d
+proof
+ let i1, i2 be Integer,
+     s be State-consisting of 0, 0, 0, <*MultBy(dl.0,dl.1)*>^<*halt SCM*>,
+                              <*i1*>^<*i2*>;
+A1: IC s = il.0 &
+   s.il.0 = MultBy(dl.0,dl.1) & s.il.1 = halt SCM &
+   s.dl.0 = i1 & s.dl.1 = i2 by Th15;
+
+   set s0 = (Computation s).0;
+   set s1 = (Computation s).(0+1);
+
+:: Step 0
+
+A2: s = s0 by AMI_1:def 19;
+:: Step 1
+then A3: IC s1 = il.(0+1) by A1,Th21;
+A4: s1.dl.0 = s0.dl.0 * s0.dl.1 by A1,A2,Th21;
+
+ thus s is halting by A1,A3,Th3; il.0 <> il.1 by AMI_3:53;
+ hence Complexity s = 1 by A1,A2,A3,Th17;
+
+ thus (Result s).dl.0 = i1 * i2 by A1,A2,A3,A4,Th4;
+
+ let d be Data-Location; assume
+A5: d<>dl.0;
+ thus (Result s).d = s1.d by A1,A3,Th4
+                  .= s.d by A1,A2,A5,Th21;
+end;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Dividing two integers
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem
+  for i1, i2 being Integer,
+    s being State-consisting of 0, 0, 0, <*Divide(dl.0,dl.1)*>^<*halt SCM*>,
+                                <*i1*>^<*i2*>
+    holds s is halting &
+          Complexity s = 1 &
+          (Result s).dl.0 = i1 div i2 & (Result s).dl.1 = i1 mod i2 &
+::            (i2 <> 0 implies abs((Result s).dl.1) < abs i2
+          for d being Data-Location st d<>dl.0 & d<>dl.1
+                                    holds (Result s).d = s.d
+proof
+ let i1, i2 be Integer,
+     s be State-consisting of 0, 0, 0, <*Divide(dl.0,dl.1)*>^<*halt SCM*>,
+                              <*i1*>^<*i2*>;
+A1: IC s = il.0 &
+   s.il.0 = Divide(dl.0,dl.1) & s.il.1 = halt SCM &
+   s.dl.0 = i1 & s.dl.1 = i2 by Th15;
+   set s1 = (Computation s).(0+1);
+A2: dl.0 <> dl.1 by AMI_3:52;
+A3: s = (Computation s).0 by AMI_1:def 19;
+then A4: s.(IC s1) = halt SCM by A1,A2,Th22;
+ hence s is halting by Th3; Divide(dl.0, dl.1) <> halt SCM by Th26;
+ hence Complexity s = 1 by A1,A3,A4,Th16;
+
+ thus (Result s).dl.0 = s1.dl.0 by A4,Th4
+                    .= i1 div i2 by A1,A2,A3,Th22;
+ thus (Result s).dl.1 = s1.dl.1 by A4,Th4
+                    .= i1 mod i2 by A1,A2,A3,Th22;
+ let d be Data-Location; assume
+A5: d<>dl.0 & d<>dl.1;
+ thus (Result s).d = s1.d by A4,Th4
+                  .= s.d by A1,A2,A3,A5,Th22;
+end;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Unconditional jump
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem
+  for i1, i2 being Integer,
+    s being State-consisting of 0, 0, 0, <*goto il.1*>^<*halt SCM*>,
+                                <*i1*>^<*i2*>
+    holds s is halting &
+          Complexity s = 1 &
+          for d being Data-Location holds (Result s).d = s.d
+proof
+ let i1, i2 be Integer,
+     s be State-consisting of 0, 0, 0, <*goto il.1*>^<*halt SCM*>,
+                              <*i1*>^<*i2*>;
+A1: IC s = il.0 &
+   s.il.0 = goto il.1 & s.il.1 = halt SCM &
+   s.dl.0 = i1 & s.dl.1 = i2 by Th15;
+   set s1 = (Computation s).(0+1);
+:: Step 0
+A2: s = (Computation s).0 by AMI_1:def 19;
+:: Step 1
+then A3: IC s1 = il.(0+1) by A1,Th23;
+hence s is halting by A1,Th3; il.0 <> il.1 by AMI_3:53;
+ hence Complexity s = 1 by A1,A2,A3,Th17;
+
+ let d be Data-Location;
+ thus (Result s).d = s1.d by A1,A3,Th4
+                  .= s.d by A1,A2,Th23;
+end;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Jump at zero
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem
+  for i1, i2 being Integer,
+    s being State-consisting of 0, 0, 0, <*dl.0 =0_goto il.1*>^<*halt SCM*>,
+                                <*i1*>^<*i2*>
+    holds s is halting &
+          Complexity s = 1 &
+          for d being Data-Location holds (Result s).d = s.d
+proof
+ let i1, i2 be Integer,
+     s be State-consisting of 0, 0, 0, <*dl.0 =0_goto il.1*>^<*halt SCM*>,
+                              <*i1*>^<*i2*>;
+A1: IC s = il.0 &
+   s.il.0 = dl.0 =0_goto il.1 & s.il.1 = halt SCM &
+   s.dl.0 = i1 & s.dl.1 = i2 by Th15;
+   set s1 = (Computation s).(0+1);
+:: Step 0
+
+A2: s = (Computation s).0 by AMI_1:def 19;
+:: Step 1
+       s.dl.0 = 0 or s.dl.0 <> 0;
+then A3: IC s1 = il.(0+1) by A1,A2,Th24;
+hence s is halting by A1,Th3; il.0 <> il.1 by AMI_3:53;
+ hence Complexity s = 1 by A1,A2,A3,Th17;
+
+ let d be Data-Location;
+ thus (Result s).d = s1.d by A1,A3,Th4
+                  .= s.d by A1,A2,Th24;
+end;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Jump at greater than zero
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem
+  for i1, i2 being Integer,
+    s being State-consisting of 0, 0, 0, <*dl.0 >0_goto il.1*>^<*halt SCM*>,
+                                <*i1*>^<*i2*>
+    holds s is halting &
+          Complexity s = 1 &
+          for d being Data-Location holds (Result s).d = s.d
+proof
+ let i1, i2 be Integer,
+     s be State-consisting of 0, 0, 0, <*dl.0 >0_goto il.1*>^<*halt SCM*>,
+                              <*i1*>^<*i2*>;
+A1: IC s = il.0 &
+   s.il.0 = dl.0 >0_goto il.1 & s.il.1 = halt SCM &
+   s.dl.0 = i1 & s.dl.1 = i2 by Th15;
+   set s1 = (Computation s).(0+1);
+:: Step 0
+
+A2: s = (Computation s).0 by AMI_1:def 19;
+:: Step 1
+       s.dl.0 <= 0 or s.dl.0 > 0;
+then A3: IC s1 = il.(0+1) by A1,A2,Th25;
+hence s is halting by A1,Th3; il.0 <> il.1 by AMI_3:53;
+ hence Complexity s = 1 by A1,A2,A3,Th17;
+
+ let d be Data-Location;
+ thus (Result s).d = s1.d by A1,A3,Th4
+                  .= s.d by A1,A2,Th25;
+end;
+

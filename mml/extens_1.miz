@@ -1,0 +1,1134 @@
+:: Extensions of Mappings on Generator Set
+::  by Artur Korni{\l}owicz
+::
+:: Received March 23, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_1, MSUALG_1, ZF_REFLE, PBOOLE, PRALG_1, MSUALG_3, RELAT_1,
+      BOOLE, FUNCT_1, FUNCT_6, MSUALG_2, REALSET1, NATTRA_1, MSAFREE, LANG1,
+      MCART_1, TREES_4, CQC_LANG, ALG_1, GROUP_6, FREEALG, PRELAMB, UNIALG_2,
+      QC_LANG1, TDGROUP, CARD_3, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, RELSET_1, FUNCT_1, MCART_1,
+      STRUCT_0, LANG1, FUNCT_2, CARD_3, FINSEQ_4, FUNCT_6, TREES_4, DTCONSTR,
+      PBOOLE, CQC_LANG, PRALG_1, MSUALG_1, MSUALG_2, MSUALG_3, AUTALG_1,
+      MSAFREE;
+ constructors CQC_LANG, MSUALG_3, AUTALG_1, MSAFREE, FINSEQ_4, MEMBERED,
+      XBOOLE_0;
+ clusters FUNCT_1, MSAFREE, MSUALG_1, MSUALG_2, MSUALG_3, PBOOLE, PRALG_1,
+      RELSET_1, STRUCT_0, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions MSUALG_1, MSUALG_2, MSUALG_3, PBOOLE, PRALG_1, TARSKI, XBOOLE_0;
+ theorems AUTALG_1, CQC_LANG, FUNCT_1, FUNCT_2, FUNCT_6, MCART_1, MSAFREE,
+      MSAFREE2, MSUALG_1, MSUALG_2, MSUALG_3, MSUHOM_1, PBOOLE, RELAT_1,
+      CARD_3, FINSEQ_4, RELSET_1;
+ schemes FUNCT_2, MSAFREE1, MSUALG_1, PBOOLE;
+
+begin :: Preliminaries
+
+reserve S for non void non empty ManySortedSign,
+        U1, U2, U3 for non-empty MSAlgebra over S,
+        I for set,
+        A for ManySortedSet of I,
+        B, C for non-empty ManySortedSet of I;
+
+Lm1:
+for I be set for A, B, C be ManySortedSet of I
+ for F be ManySortedFunction of A, B
+  for G be ManySortedFunction of B, C
+ holds G ** F is ManySortedSet of I
+  proof
+    let I be set;
+    let A, B, C be ManySortedSet of I;
+    let F be ManySortedFunction of A, B;
+    let G be ManySortedFunction of B, C;
+      dom (G ** F) = (dom F) /\ (dom G) by MSUALG_3:def 4
+                .= I /\ (dom G) by PBOOLE:def 3
+                .= I /\ I by PBOOLE:def 3
+                .= I;
+    hence thesis by PBOOLE:def 3;
+  end;
+
+theorem Th1:
+for R be Relation, X, Y be set st X c= Y holds (R|Y).:X = R.:X
+  proof
+   let R be Relation,
+       X, Y be set such that
+A1: X c= Y;
+   thus (R|Y).:X c= R.:X by RELAT_1:161;
+   let y be set;
+   assume y in R.:X;
+   then consider x1 be set such that
+A2: [x1,y] in R and
+A3: x1 in X by RELAT_1:def 13;
+     ex x be set st [x,y] in R|Y & x in X
+   proof
+    take x = x1;
+    thus [x,y] in R|Y by A1,A2,A3,RELAT_1:def 11;
+    thus thesis by A3;
+   end;
+   hence y in (R|Y).:X by RELAT_1:def 13;
+  end;
+
+canceled;
+
+theorem Th3:
+for f be Function-yielding Function holds dom doms f = dom f
+  proof
+   let f be Function-yielding Function;
+   thus dom doms f c= dom f
+   proof
+    let i be set;
+      dom doms f = f"SubFuncs rng f by FUNCT_6:def 2;
+    hence i in dom doms f implies i in dom f by FUNCT_6:28;
+   end;
+   thus dom f c= dom doms f
+   proof
+    let i be set; assume
+A1:  i in dom f;
+A2: f.i is Function;
+      dom doms f = f"SubFuncs rng f by FUNCT_6:def 2;
+    hence i in dom doms f by A1,A2,FUNCT_6:28;
+   end;
+  end;
+
+theorem Th4:
+for f be Function-yielding Function holds dom rngs f = dom f
+  proof
+   let f be Function-yielding Function;
+   thus dom rngs f c= dom f
+   proof
+    let i be set;
+      dom rngs f = f"SubFuncs rng f by FUNCT_6:def 3;
+    hence i in dom rngs f implies i in dom f by FUNCT_6:28;
+   end;
+   thus dom f c= dom rngs f
+   proof
+    let i be set; assume
+A1:  i in dom f;
+A2: f.i is Function;
+      dom rngs f = f"SubFuncs rng f by FUNCT_6:def 3;
+    hence i in dom rngs f by A1,A2,FUNCT_6:28;
+   end;
+  end;
+
+begin :: Facts about Many Sorted Functions
+
+theorem
+  for F be ManySortedFunction of A, B
+ for X be ManySortedSubset of A st A c= X
+  holds F || X = F
+  proof
+   let F be ManySortedFunction of A, B,
+       X be ManySortedSubset of A such that
+A1: A c= X;
+     now
+    let i be set; assume
+A2:  i in I;
+    then reconsider f = F.i as Function of A.i, B.i by MSUALG_1:def 2;
+A3: A.i c= X.i by A1,A2,PBOOLE:def 5;
+    thus (F || X).i = (f | (X.i)) by A2,MSAFREE:def 1
+                   .= F.i by A3,FUNCT_2:40;
+   end;
+   hence thesis by PBOOLE:3;
+  end;
+
+theorem
+  for A, B be ManySortedSet of I
+ for M be ManySortedSubset of A
+  for F be ManySortedFunction of A, B
+ holds F.:.:M c= F.:.:A
+  proof
+   let A, B be ManySortedSet of I,
+       M be ManySortedSubset of A,
+       F be ManySortedFunction of A, B;
+   let i be set such that
+A1: i in I;
+   let x be set such that
+A2: x in (F.:.:M).i;
+   reconsider f = F.i as Function of A.i, B.i by A1,MSUALG_1:def 2;
+A3:(F.:.:M).i = f.:(M.i) by A1,MSUALG_3:def 6;
+     M c= A by MSUALG_2:def 1;
+   then M.i c= A.i by A1,PBOOLE:def 5;
+   then f.:(M.i) c= f.:(A.i) by RELAT_1:156;
+   then x in f.:(A.i) by A2,A3;
+   hence x in (F.:.:A).i by A1,MSUALG_3:def 6;
+  end;
+
+theorem
+  for F be ManySortedFunction of A, B
+ for M1, M2 be ManySortedSubset of A st M1 c= M2
+  holds (F||M2).:.:M1 = F.:.:M1
+  proof
+   let F be ManySortedFunction of A, B,
+       M1, M2 be ManySortedSubset of A such that
+A1: M1 c= M2;
+     now
+    let i be set; assume
+A2:  i in I;
+    then reconsider f = F.i as Function of A.i, B.i by MSUALG_1:def 2;
+    reconsider fm = (F||M2).i as Function of M2.i, B.i by A2,MSUALG_1:def 2;
+A3: M1.i c= M2.i by A1,A2,PBOOLE:def 5;
+      fm = f|(M2.i) by A2,MSAFREE:def 1;
+    hence ((F||M2).:.:M1).i = (f|(M2.i)).:(M1.i) by A2,MSUALG_3:def 6
+                         .= f.:(M1.i) by A3,Th1
+                         .= (F.:.:M1).i by A2,MSUALG_3:def 6;
+   end;
+   hence (F||M2).:.:M1 = F.:.:M1 by PBOOLE:3;
+  end;
+
+theorem Th8:
+for F be ManySortedFunction of A, B
+ for G be ManySortedFunction of B, C
+  for X be ManySortedSubset of A
+ holds (G ** F) || X = G ** (F || X)
+  proof
+   let F be ManySortedFunction of A, B,
+       G be ManySortedFunction of B, C,
+       X be ManySortedSubset of A;
+     now
+    let i be set; assume
+A1:  i in I;
+    then reconsider gf = (G ** F).i as Function of A.i, C.i by MSUALG_1:def 2;
+    reconsider f = F.i as Function of A.i, B.i by A1,MSUALG_1:def 2;
+    reconsider g = G.i as Function of B.i, C.i by A1,MSUALG_1:def 2;
+    reconsider fx = (F || X).i as Function of X.i, B.i by A1,MSUALG_1:def 2;
+    thus ((G ** F) || X).i = gf | (X.i) by A1,MSAFREE:def 1
+                          .= (g*f) | (X.i) by A1,MSUALG_3:2
+                          .= g * (f | (X.i)) by RELAT_1:112
+                          .= g * fx by A1,MSAFREE:def 1
+                          .= (G ** (F || X)).i by A1,MSUALG_3:2;
+   end;
+   hence thesis by PBOOLE:3;
+  end;
+
+theorem
+  for A, B be ManySortedSet of I st A is_transformable_to B
+ for F be ManySortedFunction of A, B
+  for C be ManySortedSet of I st B is ManySortedSubset of C
+ holds F is ManySortedFunction of A, C
+  proof
+   let A, B be ManySortedSet of I such that
+A1: A is_transformable_to B;
+   let F be ManySortedFunction of A, B,
+       C be ManySortedSet of I such that
+A2: B is ManySortedSubset of C;
+   let i be set such that
+A3: i in I;
+     B c= C by A2,MSUALG_2:def 1;
+then A4:(B.i) c= (C.i) by A3,PBOOLE:def 5;
+A5:B.i = {} implies A.i = {} by A1,A3,AUTALG_1:def 4;
+     F.i is Function of A.i, B.i by A3,MSUALG_1:def 2;
+   hence F.i is Function of A.i, C.i by A4,A5,FUNCT_2:9;
+  end;
+
+theorem
+  for F be ManySortedFunction of A, B
+ for X be ManySortedSubset of A
+  holds F is "1-1" implies F || X is "1-1"
+  proof
+   let F be ManySortedFunction of A, B,
+       X be ManySortedSubset of A;
+   assume
+A1: F is "1-1";
+     now
+    let i be set; assume
+A2:  i in I;
+    then reconsider f = F.i as Function of A.i, B.i by MSUALG_1:def 2;
+      f is one-to-one by A1,A2,MSUALG_3:1;
+    then f | (X.i) is one-to-one by FUNCT_1:84;
+    hence (F||X).i is one-to-one by A2,MSAFREE:def 1;
+   end;
+   hence thesis by MSUALG_3:1;
+  end;
+
+begin :: doms & rngs of Many Sorted Function
+
+definition let I; let F be ManySortedFunction of I;
+ redefine func doms F -> ManySortedSet of I;
+coherence
+  proof
+     dom doms F = dom F by Th3
+             .= I by PBOOLE:def 3;
+   hence doms F is ManySortedSet of I by PBOOLE:def 3;
+  end;
+ redefine func rngs F -> ManySortedSet of I;
+coherence
+  proof
+     dom rngs F = dom F by Th4
+             .= I by PBOOLE:def 3;
+   hence rngs F is ManySortedSet of I by PBOOLE:def 3;
+  end;
+end;
+
+theorem
+  for F be ManySortedFunction of A, B
+ for X be ManySortedSubset of A
+  holds doms (F || X) c= doms F
+  proof
+   let F be ManySortedFunction of A, B,
+       X be ManySortedSubset of A;
+   let i be set; assume
+A1: i in I;
+   then reconsider f = F.i as Function of A.i, B.i by MSUALG_1:def 2;
+     dom F = I by PBOOLE:def 3;
+then A2:(doms F).i = dom f by A1,FUNCT_6:31;
+A3:(F||X).i = f|(X.i) by A1,MSAFREE:def 1;
+     dom (F||X) = I by PBOOLE:def 3;
+   then (doms (F||X)).i = dom (f|(X.i)) by A1,A3,FUNCT_6:31;
+   hence (doms (F||X)).i c= (doms F).i by A2,FUNCT_1:76;
+  end;
+
+theorem
+  for F be ManySortedFunction of A, B
+ for X be ManySortedSubset of A
+  holds rngs (F || X) c= rngs F
+  proof
+   let F be ManySortedFunction of A, B,
+       X be ManySortedSubset of A;
+   let i be set; assume
+A1: i in I;
+   then reconsider f = F.i as Function of A.i, B.i by MSUALG_1:def 2;
+     dom F = I by PBOOLE:def 3;
+then A2:(rngs F).i = rng f by A1,FUNCT_6:31;
+A3:(F||X).i = f|(X.i) by A1,MSAFREE:def 1;
+     dom (F||X) = I by PBOOLE:def 3;
+   then (rngs (F||X)).i = rng (f|(X.i)) by A1,A3,FUNCT_6:31;
+   hence (rngs (F||X)).i c= (rngs F).i by A2,FUNCT_1:76;
+  end;
+
+theorem
+  for A, B be ManySortedSet of I
+ for F be ManySortedFunction of A, B
+  holds F is "onto" iff rngs F = B
+  proof
+   let A, B be ManySortedSet of I,
+       F be ManySortedFunction of A, B;
+A1:dom F = I by PBOOLE:def 3;
+   thus F is "onto" implies rngs F = B
+   proof assume
+A2:  F is "onto";
+      now
+     let i be set; assume
+A3:   i in I;
+     then reconsider f = F.i as Function of A.i, B.i by MSUALG_1:def 2;
+       rng f = B.i by A2,A3,MSUALG_3:def 3;
+     hence (rngs F).i = B.i by A1,A3,FUNCT_6:31;
+    end;
+    hence thesis by PBOOLE:3;
+   end;
+   assume
+A4: rngs F = B;
+   let i be set;
+   assume i in I;
+   hence rng (F.i) = B.i by A1,A4,FUNCT_6:31;
+  end;
+
+theorem
+  for X be non-empty ManySortedSet of the carrier of S
+ holds rngs Reverse X = X
+  proof
+   let X be non-empty ManySortedSet of the carrier of S;
+   set I = the carrier of S,
+       R = Reverse X;
+     now
+    let i be set such that
+A1:  i in I;
+A2: dom R = I by PBOOLE:def 3;
+    reconsider r = R.i as Function of (FreeGen X).i, X.i by A1,MSUALG_1:def 2;
+    thus (rngs R).i = X.i
+    proof
+     thus (rngs R).i c= X.i
+     proof
+      let x be set;
+      assume x in (rngs R).i;
+then A3:   x in rng r by A1,A2,FUNCT_6:31;
+        rng r c= X.i by RELSET_1:12;
+      hence x in X.i by A3;
+     end;
+     let x be set such that
+A4:   x in X.i;
+     reconsider s0 = i as SortSymbol of S by A1;
+     set D = DTConMSA X;
+A5:  [x,s0] in Terminals D by A4,MSAFREE:7;
+     then reconsider t = [x,s0] as Symbol of D;
+A6:  R.s0 = Reverse(s0, X) by MSAFREE:def 20;
+then A7:  dom (R.s0) = FreeGen(s0, X) by FUNCT_2:def 1;
+       t`2 = s0 by MCART_1:7;
+     then root-tree t in {root-tree tt where tt is Symbol of D :
+                             tt in Terminals D & tt`2 = s0} by A5;
+then A8:  root-tree t in FreeGen(s0, X) by MSAFREE:14;
+then A9:  (R.s0).(root-tree t) in rng (R.s0) by A7,FUNCT_1:def 5;
+       (R.s0).(root-tree t) = t`1 by A6,A8,MSAFREE:def 19
+                         .= x by MCART_1:7;
+     hence x in (rngs R).i by A2,A9,FUNCT_6:31;
+    end;
+   end;
+   hence thesis by PBOOLE:3;
+  end;
+
+theorem
+  for F be ManySortedFunction of A, B
+ for G be ManySortedFunction of B, C
+  for X be non-empty ManySortedSubset of B st rngs F c= X
+ holds (G || X) ** F = G ** F
+  proof
+   let F be ManySortedFunction of A, B,
+       G be ManySortedFunction of B, C,
+       X be non-empty ManySortedSubset of B such that
+A1: rngs F c= X;
+A2:dom F = I by PBOOLE:def 3;
+A3:F is ManySortedFunction of A, X
+   proof
+    let i be set; assume
+A4:  i in I;
+    then reconsider f = F.i as Function of A.i, B.i by MSUALG_1:def 2;
+A5: X.i <> {} by A4,PBOOLE:def 16;
+      B.i <> {} by A4,PBOOLE:def 16;
+then A6: dom f = A.i by FUNCT_2:def 1;
+      (rngs F).i = rng f & (rngs F).i c= X.i
+      by A1,A2,A4,FUNCT_6:31,PBOOLE:def 5;
+    hence F.i is Function of A.i, X.i by A5,A6,FUNCT_2:def 1,RELSET_1:11;
+   end;
+then A7:(G || X) ** F is ManySortedSet of I by Lm1;
+     now
+    let i be set;
+    assume
+A8:  i in I;
+then A9: X.i <> {} by PBOOLE:def 16;
+    reconsider f = F.i as Function of A.i, B.i by A8,MSUALG_1:def 2;
+A10: (rngs F).i = rng f & (rngs F).i c= X.i
+      by A1,A2,A8,FUNCT_6:31,PBOOLE:def 5;
+      B.i <> {} by A8,PBOOLE:def 16;
+    then rng f c= X.i & dom f = A.i by A10,FUNCT_2:def 1;
+    then reconsider f' = f as Function of A.i, X.i by A9,FUNCT_2:def 1,RELSET_1
+:11;
+    reconsider g = G.i as Function of B.i, C.i by A8,MSUALG_1:def 2;
+    reconsider gx = (G || X).i as Function of X.i, C.i by A8,MSUALG_1:def 2;
+A11: rng f' c= X.i by RELSET_1:12;
+    thus ((G || X) ** F).i = gx * f' by A3,A8,MSUALG_3:2
+      .= (g | (X.i)) * f by A8,MSAFREE:def 1
+      .= g * f' by A11,MSUHOM_1:1
+      .= (G ** F).i by A8,MSUALG_3:2;
+   end;
+   hence thesis by A7,PBOOLE:3;
+  end;
+
+begin :: Other properties of "onto" & "1-1"
+
+theorem Th16:
+for F be ManySortedFunction of A, B
+ holds F is "onto" iff
+  for C for G, H be ManySortedFunction of B, C st G**F = H**F holds G = H
+  proof
+   let F be ManySortedFunction of A, B;
+   thus F is "onto" implies
+    for C for G, H be ManySortedFunction of B, C st G**F = H**F holds G = H
+     proof assume
+A1:    F is "onto";
+      let C;
+      let G, H be ManySortedFunction of B, C such that
+A2:    G**F = H**F;
+        now
+       let i be set; assume
+A3:     i in I;
+then A4:    B.i <> {} & C.i <> {} by PBOOLE:def 16;
+       reconsider f = F.i as Function of A.i, B.i by A3,MSUALG_1:def 2;
+       reconsider g = G.i as Function of B.i, C.i by A3,MSUALG_1:def 2;
+       reconsider h = H.i as Function of B.i, C.i by A3,MSUALG_1:def 2;
+A5:    rng f = B.i by A1,A3,MSUALG_3:def 3;
+         g*f = (H**F).i by A2,A3,MSUALG_3:2
+          .= h*f by A3,MSUALG_3:2;
+       hence G.i = H.i by A4,A5,FUNCT_2:22;
+      end;
+      hence G = H by PBOOLE:3;
+     end;
+   assume that
+A6:for C for G, H be ManySortedFunction of B, C st G**F = H**F holds G = H and
+A7: not F is "onto";
+   consider j be set such that
+A8: j in I & rng (F.j) <> B.j by A7,MSUALG_3:def 3;
+   reconsider I as non empty set by A8;
+   reconsider j as Element of I by A8;
+   reconsider A,B as ManySortedSet of I;
+   reconsider F as ManySortedFunction of A,B;
+   reconsider f =F.j as Function of A.j,B.j;
+     B.j <> {} by PBOOLE:def 16;
+   then consider Z be set such that
+A9: Z <> {} & ex g, h be Function of B.j, Z st g*f = h*f & g <> h
+     by A8,FUNCT_2:22;
+   consider g, h be Function of B.j, Z such that
+A10: g*(F.j) = h*(F.j) & g <> h by A9;
+     ex C be ManySortedSet of I st C is non-empty &
+    ex G, H be ManySortedFunction of B, C
+     st G**F = H**F & G <> H
+   proof
+    deffunc F(set) = IFEQ($1, j, Z, B.$1);
+    consider C be ManySortedSet of I such that
+A11:  for i be set st i in I holds C.i = F(i) from MSSLambda;
+    take C;
+    deffunc F(set) = IFEQ($1, j, g, (id B).$1);
+    consider G be ManySortedSet of I such that
+A12:  for i be set st i in I holds G.i = F(i) from MSSLambda;
+    deffunc F(set) = IFEQ($1, j, h, (id B).$1);
+    consider H be ManySortedSet of I such that
+A13:  for i be set st i in I holds H.i = F(i) from MSSLambda;
+    thus
+    C is non-empty
+    proof
+     let i be set such that
+A14:   i in I;
+       now per cases;
+      case i = j;
+      then IFEQ(i, j, Z, B.i) = Z by CQC_LANG:def 1;
+      hence C.i is non empty by A9,A11,A14;
+      case i <> j;
+then A15:   IFEQ(i, j, Z, B.i) = B.i by CQC_LANG:def 1;
+        B.i <> {} by A14,PBOOLE:def 16;
+      hence C.i is non empty by A11,A14,A15;
+     end;
+     hence C.i is non empty;
+    end;
+      now
+     let G be ManySortedSet of I;
+     let g, h be Function of B.j, Z such that g*(F.j) = h*(F.j) & g <> h and
+A16:   for i be set st i in I holds G.i = IFEQ(i, j, g, (id B).i);
+     thus G is Function-yielding
+     proof
+      let i be set;
+      assume i in dom G;
+then A17:   i in I by PBOOLE:def 3;
+        now per cases;
+       case i = j;
+       then IFEQ(i, j, g, (id B).i) = g by CQC_LANG:def 1;
+       hence G.i is Function by A16,A17;
+       case i <> j;
+       then IFEQ(i, j, g, (id B).i) = (id B).i by CQC_LANG:def 1;
+hence G.i is Function by A16,A17;
+      end;
+      hence G.i is Function;
+     end;
+    end;
+    then reconsider G, H as ManySortedFunction of I by A10,A12,A13;
+      now
+     let G be ManySortedFunction of I;
+     let g, h be Function of B.j, Z such that g*(F.j) = h*(F.j) & g <> h and
+A18:   for i be set st i in I holds G.i = IFEQ(i, j, g, (id B).i);
+     thus G is ManySortedFunction of B, C
+     proof
+      let i be set such that
+A19:    i in I;
+        now per cases;
+       case
+A20:     i = j;
+       then A21: IFEQ(i, j, g, (id B).i) = g by CQC_LANG:def 1;
+A22:    C.i = IFEQ(i, j, Z, B.i) by A11,A20;
+         IFEQ(i, j, Z, B.i) = Z by A20,CQC_LANG:def 1;
+       hence G.i is Function of B.i, C.i by A18,A20,A21,A22;
+       case
+A23:     i <> j;
+       then IFEQ(i, j, g, (id B).i) = (id B).i by CQC_LANG:def 1;
+then A24:    G.i = (id B).i by A18,A19;
+         IFEQ(i, j, Z, B.i) = B.i by A23,CQC_LANG:def 1;
+       then B.i = C.i by A11,A19;
+       hence G.i is Function of B.i, C.i by A19,A24,MSUALG_1:def 2;
+      end;
+      hence G.i is Function of B.i, C.i;
+     end;
+    end;
+    then reconsider G, H as ManySortedFunction of B, C by A10,A12,A13;
+    take G, H;
+A25: G**F is ManySortedSet of I & H**F is ManySortedSet of I by Lm1;
+      now
+     let i be set such that
+A26:   i in I;
+       now per cases;
+      case
+A27:    i = j;
+      then IFEQ(i, j, g, (id B).i) = g by CQC_LANG:def 1;
+then A28:   g = G.i by A12,A26;
+        IFEQ(i, j, h, (id B).i) = h by A27,CQC_LANG:def 1;
+then A29:   h = H.i by A13,A26;
+      thus (G**F).i = h*(F.j) by A10,A27,A28,MSUALG_3:2
+        .= (H**F).i by A27,A29,MSUALG_3:2;
+      case
+A30:    i <> j;
+then A31:   IFEQ(i, j, g, (id B).i) = (id B).i by CQC_LANG:def 1;
+A32:   IFEQ(i, j, h, (id B).i) = (id B).i by A30,CQC_LANG:def 1;
+      reconsider f' = F.i as Function of A.i, B.i by A26,MSUALG_1:def 2;
+      reconsider g' = G.i as Function of B.i, C.i by A26,MSUALG_1:def 2;
+      reconsider h' = H.i as Function of B.i, C.i by A26,MSUALG_1:def 2;
+    g' = (id B).i by A12,A26,A31
+        .= h' by A13,A26,A32;
+      hence (G**F).i = h'*f' by A26,MSUALG_3:2
+                   .= (H**F).i by A26,MSUALG_3:2;
+     end;
+     hence (G**F).i = (H**F).i;
+    end;
+    hence G**F = H**F by A25,PBOOLE:3;
+      ex i be set st i in I & G.i <> H.i
+    proof
+     take i = j;
+     thus i in I;
+A33:  g = IFEQ(i, j, g, (id B).i) by CQC_LANG:def 1
+      .= G.i by A12;
+       h = IFEQ(i, j, h, (id B).i) by CQC_LANG:def 1
+      .= H.i by A13;
+     hence thesis by A10,A33;
+    end;
+    hence G <> H;
+   end;
+   hence contradiction by A6;
+  end;
+
+theorem Th17:
+for F be ManySortedFunction of A, B st A is non-empty & B is non-empty
+ holds F is "1-1" iff
+  for C be ManySortedSet of I
+   for G, H be ManySortedFunction of C, A st F**G = F**H holds G = H
+  proof
+   let F be ManySortedFunction of A, B such that
+A1: A is non-empty & B is non-empty;
+   thus F is "1-1" implies
+    for C be ManySortedSet of I
+     for G, H be ManySortedFunction of C, A st F**G = F**H holds G = H
+   proof assume
+A2: F is "1-1";
+    let C be ManySortedSet of I;
+    let G, H be ManySortedFunction of C, A such that
+A3:  F**G = F**H;
+      now
+     let i be set; assume
+A4:   i in I;
+then A5:  A.i <> {} & B.i <> {} by A1,PBOOLE:def 16;
+     reconsider f = F.i as Function of A.i, B.i by A4,MSUALG_1:def 2;
+     reconsider g = G.i as Function of C.i, A.i by A4,MSUALG_1:def 2;
+     reconsider h = H.i as Function of C.i, A.i by A4,MSUALG_1:def 2;
+A6:  f is one-to-one by A2,A4,MSUALG_3:1;
+       f*g = (F**H).i by A3,A4,MSUALG_3:2
+        .= f*h by A4,MSUALG_3:2;
+     hence G.i = H.i by A5,A6,FUNCT_2:27;
+    end;
+    hence G = H by PBOOLE:3;
+   end;
+   assume that
+A7: (for C be ManySortedSet of I for G, H be ManySortedFunction of C, A st
+     F**G = F**H holds G = H)
+     and
+A8:   not F is "1-1";
+   consider j be set such that
+A9: j in I & not (F.j) is one-to-one by A8,MSUALG_3:1;
+A10:A.j <> {} & B.j <> {} by A1,A9,PBOOLE:def 16;
+  F.j is Function of A.j, B.j by A9,MSUALG_1:def 2;
+   then consider Z be set such that
+A11: ex g, h be Function of Z, A.j st (F.j)*g = (F.j)*h & g <> h
+     by A9,A10,FUNCT_2:27;
+   consider g, h be Function of Z, A.j such that
+A12: (F.j)*g = (F.j)*h & g <> h by A11;
+     ex C be ManySortedSet of I st ex G, H be ManySortedFunction of C, A st
+    F**G = F**H & G <> H
+   proof
+    deffunc F(set) = IFEQ($1, j, Z, A.$1);
+    consider C be ManySortedSet of I such that
+A13:  for i be set st i in I holds C.i = F(i) from MSSLambda;
+    take C;
+    deffunc F(set) = IFEQ($1, j, g, (id C).$1);
+    consider G be ManySortedSet of I such that
+A14:  for i be set st i in I holds G.i = F(i) from MSSLambda;
+    deffunc F(set) = IFEQ($1, j, h, (id C).$1);
+    consider H be ManySortedSet of I such that
+A15:  for i be set st i in I holds H.i = F(i) from MSSLambda;
+      now
+     let G be ManySortedSet of I;
+     let g, h be Function of Z, A.j such that (F.j)*g = (F.j)*h & g <> h and
+A16:   for i be set st i in I holds G.i = IFEQ(i, j, g, (id C).i);
+     thus G is Function-yielding
+     proof
+      let i be set;
+      assume i in dom G;
+then A17:    i in I by PBOOLE:def 3;
+        now per cases;
+       case i = j;
+       then IFEQ(i, j, g, (id C).i) = g by CQC_LANG:def 1;
+       hence G.i is Function by A16,A17;
+       case i <> j;
+       then IFEQ(i, j, g, (id C).i) = (id C).i by CQC_LANG:def 1;
+hence G.i is Function by A16,A17;
+      end;
+      hence G.i is Function;
+     end;
+    end;
+    then reconsider G, H as ManySortedFunction of I by A12,A14,A15;
+      now
+     let G be ManySortedFunction of I;
+     let g, h be Function of Z, A.j such that (F.j)*g = (F.j)*h & g <> h and
+A18:   for i be set st i in I holds G.i = IFEQ(i, j, g, (id C).i);
+     thus G is ManySortedFunction of C, A
+     proof
+      let i be set such that
+A19:    i in I;
+        now per cases;
+       case
+A20:     i = j;
+       then A21: IFEQ(i, j, g, (id C).i) = g by CQC_LANG:def 1;
+A22:    C.i = IFEQ(i, j, Z, A.i) by A13,A19;
+         IFEQ(i, j, Z, A.i) = Z by A20,CQC_LANG:def 1;
+       hence G.i is Function of C.i, A.i by A18,A19,A20,A21,A22;
+       case
+A23:     i <> j;
+       then IFEQ(i, j, g, (id C).i) = (id C).i by CQC_LANG:def 1;
+then A24:    G.i = (id C).i by A18,A19;
+         IFEQ(i, j, Z, A.i) = A.i by A23,CQC_LANG:def 1;
+       then C.i = A.i by A13,A19;
+       hence G.i is Function of C.i, A.i by A19,A24,MSUALG_1:def 2;
+      end;
+      hence G.i is Function of C.i, A.i;
+     end;
+    end;
+    then reconsider G, H as ManySortedFunction of C, A by A12,A14,A15;
+    take G, H;
+A25: F**G is ManySortedSet of I & F**H is ManySortedSet of I by Lm1;
+      now
+     let i be set such that
+A26:   i in I;
+       now per cases;
+      case
+A27:    i = j;
+      then IFEQ(i, j, g, (id C).i) = g by CQC_LANG:def 1;
+then A28:   g = G.i by A14,A26;
+        IFEQ(i, j, h, (id C).i) = h by A27,CQC_LANG:def 1;
+then A29:   h = H.i by A15,A26;
+      thus (F**G).i = (F.j)*h by A9,A12,A27,A28,MSUALG_3:2
+        .= (F**H).i by A9,A27,A29,MSUALG_3:2;
+      case
+A30:    i <> j;
+then A31:   IFEQ(i, j, g, (id C).i) = (id C).i by CQC_LANG:def 1;
+A32:   IFEQ(i, j, h, (id C).i) = (id C).i by A30,CQC_LANG:def 1;
+      reconsider f' = F.i as Function of A.i, B.i by A26,MSUALG_1:def 2;
+      reconsider g' = G.i as Function of C.i, A.i by A26,MSUALG_1:def 2;
+      reconsider h' = H.i as Function of C.i, A.i by A26,MSUALG_1:def 2;
+    g' = (id C).i by A14,A26,A31
+        .= h' by A15,A26,A32;
+      hence (F**G).i = f'*h' by A26,MSUALG_3:2
+                   .= (F**H).i by A26,MSUALG_3:2;
+     end;
+     hence (F**G).i = (F**H).i;
+    end;
+    hence F**G = F**H by A25,PBOOLE:3;
+      ex i be set st i in I & G.i <> H.i
+    proof
+     take i = j;
+     thus i in I by A9;
+A33:  g = IFEQ(i, j, g, (id C).i) by CQC_LANG:def 1
+      .= G.i by A9,A14;
+       h = IFEQ(i, j, h, (id C).i) by CQC_LANG:def 1
+      .= H.i by A9,A15;
+     hence thesis by A12,A33;
+    end;
+    hence G <> H;
+   end;
+   hence contradiction by A7;
+  end;
+
+begin :: Extensions of Mappings on Generator Set
+
+theorem Th18:
+for X be non-empty ManySortedSet of the carrier of S
+ for h1, h2 be ManySortedFunction of FreeMSA X, U1 st
+  h1 is_homomorphism FreeMSA X, U1 &
+   h2 is_homomorphism FreeMSA X, U1 &
+    h1 || FreeGen (X) = h2 || FreeGen (X)
+ holds h1 = h2
+  proof
+   let X be non-empty ManySortedSet of the carrier of S,
+       h1, h2 be ManySortedFunction of FreeMSA X, U1;
+   assume that
+A1: h1 is_homomorphism FreeMSA X, U1 and
+A2: h2 is_homomorphism FreeMSA X, U1 and
+A3: h1 || FreeGen (X) = h2 || FreeGen (X);
+A4: h1 is_homomorphism FreeMSA X, U1 by A1;
+    defpred P[SortSymbol of S,set,set] means h1.$1.$3 = $2;
+A5: for s be SortSymbol of S, x, y be set st y in FreeGen(s,X)
+    holds h1.s.y = x iff P[s,x,y];
+A6: h2 is_homomorphism FreeMSA X, U1 by A2;
+A7: for s be SortSymbol of S, x, y be set st y in FreeGen(s,X)
+    holds h2.s.y = x iff P[s,x,y]
+    proof
+     let s be SortSymbol of S,
+         x, y be set such that
+A8:   y in FreeGen(s, X);
+     set FG = FreeGen X;
+A9:  (h1 || FG).s = (h1.s) | (FG.s) &
+      (h2 || FG).s = (h2.s) | (FG.s) by MSAFREE:def 1;
+    y in FG.s by A8,MSAFREE:def 18;
+     then ((h1.s) | (FG.s)).y = h1.s.y & ((h2.s) | (FG.s)).y = h2.s.y
+      by FUNCT_1:72;
+     hence thesis by A3,A9;
+    end;
+   thus h1 = h2 from ExtFreeGen (A4, A5, A6, A7);
+  end;
+
+theorem
+  for F be ManySortedFunction of U1, U2 st F is_homomorphism U1, U2
+ holds F is_epimorphism U1, U2 implies
+  for U3 be non-empty MSAlgebra over S
+   for h1, h2 be ManySortedFunction of U2, U3 st
+    h1 is_homomorphism U2, U3 & h2 is_homomorphism U2, U3
+     holds (h1**F = h2**F implies h1 = h2)
+  proof
+   let F be ManySortedFunction of U1, U2 such that F is_homomorphism U1, U2;
+   assume
+A1: F is_epimorphism U1, U2;
+   let U3 be non-empty MSAlgebra over S,
+       h1, h2 be ManySortedFunction of U2, U3 such that
+      h1 is_homomorphism U2, U3 & h2 is_homomorphism U2, U3;
+   assume
+A2: h1**F = h2**F;
+     F is "onto" by A1,MSUALG_3:def 10;
+   hence h1 = h2 by A2,Th16;
+  end;
+
+theorem
+  for F be ManySortedFunction of U2, U3 st F is_homomorphism U2, U3
+ holds F is_monomorphism U2, U3 iff
+  for U1 be non-empty MSAlgebra over S
+   for h1, h2 be ManySortedFunction of U1, U2 st
+    h1 is_homomorphism U1, U2 & h2 is_homomorphism U1, U2
+     holds (F**h1 = F**h2 implies h1 = h2)
+  proof
+   let F be ManySortedFunction of U2, U3 such that
+A1: F is_homomorphism U2, U3;
+   thus F is_monomorphism U2, U3 implies
+    for U1 be non-empty MSAlgebra over S
+     for h1, h2 be ManySortedFunction of U1, U2 st
+      h1 is_homomorphism U1, U2 & h2 is_homomorphism U1, U2
+       holds (F**h1 = F**h2 implies h1 = h2)
+   proof
+    assume F is_monomorphism U2, U3;
+    then F is "1-1" by MSUALG_3:def 11;
+    hence thesis by Th17;
+   end;
+   assume that
+A2: for U1 be non-empty MSAlgebra over S
+     for h1, h2 be ManySortedFunction of U1, U2 st
+      h1 is_homomorphism U1, U2 & h2 is_homomorphism U1, U2
+       holds F**h1 = F**h2 implies h1 = h2 and
+A3: not F is_monomorphism U2, U3;
+   set I = the carrier of S;
+     not F is "1-1" by A1,A3,MSUALG_3:def 11;
+   then consider j be set such that
+A4: j in I & not F.j is one-to-one by MSUALG_3:1;
+   set B = the Sorts of U2;
+   set C = the Sorts of U3;
+A5:F.j is Function of B.j, C.j by A4,MSUALG_1:def 2;
+   set f = F.j;
+     B.j <> {} & C.j <> {} by A4,PBOOLE:def 16;
+   then consider x1, x2 be set such that
+A6: x1 in B.j & x2 in B.j & f.x1 = f.x2 & x1 <> x2 by A4,A5,FUNCT_2:25;
+     ex U1 be non-empty MSAlgebra over S st
+    ex h1, h2 be ManySortedFunction of the Sorts of U1, the Sorts of U2
+     st h1 is_homomorphism U1, U2 & h2 is_homomorphism U1, U2 &
+      F**h1 = F**h2 & h1 <> h2
+   proof
+    take U1 = FreeMSA the Sorts of U2;
+    reconsider FG = FreeGen(B) as GeneratorSet of U1;
+A7: FG is free by MSAFREE:17;
+    set r = Reverse(B);
+      FG is non-empty by MSAFREE:15;
+    then reconsider FGj = FG.j, Bj = B.j as non empty set by A4,PBOOLE:def 16;
+    reconsider x1' = x1, x2' = x2 as Element of Bj by A6;
+    deffunc F(set) = x1';
+    deffunc G(set) = x2';
+    consider g be Function of FGj, Bj such that
+A8:  for x be Element of FGj holds g.x = F(x) from LambdaD;
+    consider h be Function of FGj, Bj such that
+A9:  for x be Element of FGj holds h.x = G(x) from LambdaD;
+    deffunc F(set) = IFEQ($1, j, g, r.$1);
+    consider G be ManySortedSet of I such that
+A10:  for i be set st i in I holds G.i = F(i) from MSSLambda;
+    deffunc F(set) = IFEQ($1, j, h, r.$1);
+    consider H be ManySortedSet of I such that
+A11:  for i be set st i in I holds H.i = F(i) from MSSLambda;
+      now
+     let G be ManySortedSet of I;
+     let g, h be Function of FGj, Bj such that
+A12:   for i be set st i in I holds G.i = IFEQ(i, j, g, r.i);
+     thus G is Function-yielding
+     proof
+      let i be set;
+      assume i in dom G;
+then A13:   i in I by PBOOLE:def 3;
+        now per cases;
+       case i = j;
+       then IFEQ(i, j, g, r.i) = g by CQC_LANG:def 1;
+       hence G.i is Function by A12,A13;
+       case i <> j;
+       then IFEQ(i, j, g, r.i) = r.i by CQC_LANG:def 1;
+       hence G.i is Function by A12,A13;
+      end;
+      hence G.i is Function;
+     end;
+    end;
+    then reconsider G, H as ManySortedFunction of I by A10,A11;
+      now
+     let G be ManySortedFunction of I;
+     let g, h be Function of FGj, Bj such that
+A14:   for i be set st i in I holds G.i = IFEQ(i, j, g, r.i);
+     thus G is ManySortedFunction of FG, B
+     proof
+      let i be set such that
+A15:    i in I;
+        now per cases;
+       case
+A16:     i = j;
+       then IFEQ(i, j, g, r.i) = g by CQC_LANG:def 1;
+       hence G.i is Function of FG.i, B.i by A14,A15,A16;
+       case i <> j;
+       then IFEQ(i, j, g, r.i) = r.i by CQC_LANG:def 1;
+       then G.i = r.i by A14,A15;
+       hence G.i is Function of FG.i, B.i by A15,MSUALG_1:def 2;
+      end;
+      hence G.i is Function of FG.i, B.i;
+     end;
+    end;
+    then reconsider G, H as ManySortedFunction of FG, B by A10,A11;
+    consider h1 be ManySortedFunction of U1, U2 such that
+A17:  h1 is_homomorphism U1, U2 & h1 || FG = G by A7,MSAFREE:def 5;
+    consider h2 be ManySortedFunction of U1, U2 such that
+A18:  h2 is_homomorphism U1, U2 & h2 || FG = H by A7,MSAFREE:def 5;
+    take h1, h2;
+    thus h1 is_homomorphism U1, U2 & h2 is_homomorphism U1, U2 by A17,A18;
+      now
+     let i be set; assume
+A19:   i in I;
+       now per cases;
+      case
+A20:    i = j;
+then A21:      IFEQ(i, j, g, r.i) = g by CQC_LANG:def 1;
+A22:      IFEQ(i, j, h, r.i) = h by A20,CQC_LANG:def 1;
+A23:   f is Function of B.i, C.i by A4,A20,MSUALG_1:def 2;
+      then reconsider fg = f*g as Function of FGj, C.i by A20,FUNCT_2:19;
+      reconsider fh = f*h as Function of FGj, C.i by A20,A23,FUNCT_2:19;
+        now
+       let x be set; assume
+A24:     x in FGj;
+       hence fg.x = f.(g.x) by FUNCT_2:21
+                .= f.x2' by A6,A8,A24
+                .= f.(h.x) by A9,A24
+                .= fh.x by A24,FUNCT_2:21;
+      end;
+then A25:   f*g = f*h by FUNCT_2:18;
+A26:   h = (h2 || FG).i by A11,A18,A19,A22;
+        g = (h1 || FG).i by A10,A17,A19,A21;
+      then (F**(h1 || FG)).i = f*g by A4,A20,MSUALG_3:2;
+      hence (F**(h1 || FG)).i = (F**(h2 || FG)).i
+       by A4,A20,A25,A26,MSUALG_3:2;
+      case
+A27:    i <> j;
+then A28:   IFEQ(i, j, g, r.i) = r.i by CQC_LANG:def 1;
+A29:   IFEQ(i, j, h, r.i) = r.i by A27,CQC_LANG:def 1;
+A30:   (h1 || FG).i = r.i by A10,A17,A19,A28
+               .= (h2 || FG).i by A11,A18,A19,A29;
+      reconsider h2' = (h2 || FG).i
+       as Function of FG.i, B.i by A19,MSUALG_1:def 2;
+      reconsider f' = F.i as Function of B.i, C.i by A19,MSUALG_1:def 2;
+      thus (F**(h1 || FG)).i = f'*h2' by A19,A30,MSUALG_3:2
+                            .= (F**(h2 || FG)).i by A19,MSUALG_3:2;
+     end;
+     hence (F**(h1 || FG)).i = (F**(h2 || FG)).i;
+    end;
+then A31: F**(h1 || FG) = F**(h2 || FG) by PBOOLE:3;
+A32: (F**h1) || FG = F**(h1 || FG) by Th8
+                 .= (F**h2) || FG by A31,Th8;
+    reconsider Fh1 = F**h1, Fh2 = F**h2 as ManySortedFunction of U1, U3;
+      Fh1 is_homomorphism U1, U3 & Fh2 is_homomorphism U1, U3
+     by A1,A17,A18,MSUALG_3:10;
+    hence F**h1 = F**h2 by A32,Th18;
+      now
+     take i = j;
+     thus i in I by A4;
+A33:  g = IFEQ(i, j, g, r.i) by CQC_LANG:def 1
+      .= G.i by A4,A10;
+A34:  h = IFEQ(i, j, h, r.i) by CQC_LANG:def 1
+      .= H.i by A4,A11;
+       now
+      let x be Element of FGj;
+      assume g = h;
+      then g.x = x2' by A9;
+      hence contradiction by A6,A8;
+     end;
+     hence G <> H by A33,A34;
+    end;
+    hence h1 <> h2 by A17,A18;
+   end;
+   hence contradiction by A2;
+  end;
+
+definition let S, U1;
+ cluster non-empty GeneratorSet of U1;
+existence
+ proof
+    the Sorts of U1 is GeneratorSet of U1 by MSAFREE2:9;
+  then consider G be GeneratorSet of U1 such that
+A1: G = the Sorts of U1;
+  take G;
+  thus thesis by A1;
+ end;
+end;
+
+theorem
+  for U1 being MSAlgebra over S
+ for A, B being MSSubset of U1 st A is ManySortedSubset of B
+ holds GenMSAlg A is MSSubAlgebra of GenMSAlg B
+  proof
+   let U1 be MSAlgebra over S,
+       A, B be MSSubset of U1;
+   assume A is ManySortedSubset of B;
+then A1:A c= B by MSUALG_2:def 1;
+     B is MSSubset of GenMSAlg B by MSUALG_2:def 18;
+   then B c= the Sorts of GenMSAlg B by MSUALG_2:def 1;
+   then A c= the Sorts of GenMSAlg B by A1,PBOOLE:15;
+   then A is MSSubset of GenMSAlg B by MSUALG_2:def 1;
+   hence thesis by MSUALG_2:def 18;
+  end;
+
+theorem
+  for U1 being MSAlgebra over S, U2 being MSSubAlgebra of U1
+  for B1 being MSSubset of U1, B2 being MSSubset of U2 st B1 = B2
+ holds GenMSAlg B1 = GenMSAlg B2
+  proof
+   let U1 be MSAlgebra over S,
+       U2 be MSSubAlgebra of U1,
+       B1 be MSSubset of U1,
+       B2 be MSSubset of U2 such that
+A1:      B1 = B2;
+   reconsider G = GenMSAlg B2 as MSSubAlgebra of U1 by MSUALG_2:7;
+   reconsider H = GenMSAlg B1 as MSSubAlgebra of U2 by A1,MSUALG_2:def 18;
+     B1 is MSSubset of H by MSUALG_2:def 18;
+then A2:GenMSAlg B2 is MSSubAlgebra of GenMSAlg B1 by A1,MSUALG_2:def 18;
+     B1 is MSSubset of G by A1,MSUALG_2:def 18;
+   then GenMSAlg B1 is MSSubAlgebra of G by MSUALG_2:def 18;
+   hence GenMSAlg B1 = GenMSAlg B2 by A2,MSUALG_2:8;
+  end;
+
+theorem
+  for U1 being strict non-empty MSAlgebra over S
+ for U2 being non-empty MSAlgebra over S
+  for Gen being GeneratorSet of U1
+   for h1, h2 being ManySortedFunction of U1, U2 st
+    h1 is_homomorphism U1, U2 & h2 is_homomorphism U1, U2 &
+     h1 || Gen = h2 || Gen
+ holds h1 = h2
+  proof
+    let U1 be strict non-empty MSAlgebra over S,
+        U2 be non-empty MSAlgebra over S,
+        Gen be GeneratorSet of U1,
+        h1, h2 be ManySortedFunction of U1, U2 such that
+A1:  h1 is_homomorphism U1, U2 and
+A2:  h2 is_homomorphism U1, U2 and
+A3:  h1 || Gen = h2 || Gen;
+set I = the carrier of S;
+
+defpred P[set,set] means
+ ex s being SortSymbol of S st $1 = s & h1.s.$2 = h2.s.$2;
+
+    consider A being ManySortedSet of I such that
+A4:   for i being set st i in I
+       for e being set holds e in A.i iff e in (the Sorts of U1).i & P[i,e]
+        from PSeparation;
+      A is ManySortedSubset of the Sorts of U1
+    proof
+      let i be set such that
+A5:     i in I;
+      let e be set;
+      assume e in A.i;
+      hence thesis by A4,A5;
+    end;
+    then reconsider A as MSSubset of U1;
+      A is opers_closed
+    proof
+      let o be OperSymbol of S;
+      let y be set;
+set r = the_result_sort_of o;
+set ar = the_arity_of o;
+      assume y in rng ((Den(o,U1))|((A# * the Arity of S).o));
+      then consider x being set such that
+A6:     x in dom ((Den(o,U1))|((A# * the Arity of S).o)) and
+A7:     ((Den(o,U1))|((A# * the Arity of S).o)).x = y by FUNCT_1:def 5;
+A8:   x in (A# * the Arity of S).o by A6,RELAT_1:86;
+      then x in A#.((the Arity of S).o) by FUNCT_2:21;
+      then x in A#.ar by MSUALG_1:def 6;
+then A9:   x in product(A*ar) by MSUALG_1:def 3;
+      reconsider x as Element of Args(o,U1) by A6;
+A10:   y = Den(o,U1).x by A7,A8,FUNCT_1:72;
+        Den(o,U1).x is Element of ((the Sorts of U1)*the ResultSort of S).o
+        by MSUALG_1:def 10;
+      then Den(o,U1).x is Element of (the Sorts of U1).((the ResultSort of S).
+o)
+        by FUNCT_2:21;
+      then A11: Den(o,U1).x is Element of (the Sorts of U1).r by MSUALG_1:def 7
+;
+A12:   dom (h1#x) = dom ar by MSUALG_3:6;
+A13:   dom (h2#x) = dom ar by MSUALG_3:6;
+A14:   for n being set st n in dom (h1#x) holds (h1#x).n = (h2#x).n
+      proof
+        let n be set such that
+A15:       n in dom (h1#x);
+A16:     dom x = dom ar by MSUALG_3:6;
+          dom x = dom (A*ar) by A9,CARD_3:18;
+        then x.n in (A*ar).n by A9,A12,A15,A16,CARD_3:18;
+        then x.n in A.(ar.n) by A12,A15,FUNCT_1:23;
+        then x.n in A.(ar/.n) by A12,A15,FINSEQ_4:def 4;
+then ex s being SortSymbol of S st s = ar/.n & h1.s.(x.n) = h2.s.(x.n)
+         by A4;
+        hence (h1#x).n = h2.(ar/.n).(x.n) by A12,A15,A16,MSUALG_3:def 8
+                     .= (h2#x).n by A12,A15,A16,MSUALG_3:def 8;
+      end;
+        h1.r.y = h1.r.(Den(o,U1).x) by A7,A8,FUNCT_1:72
+            .= Den(o,U2).(h1#x) by A1,MSUALG_3:def 9
+            .= Den(o,U2).(h2#x) by A12,A13,A14,FUNCT_1:9
+            .= h2.r.(Den(o,U1).x) by A2,MSUALG_3:def 9
+            .= h2.r.y by A7,A8,FUNCT_1:72;
+      then y in A.r by A4,A10,A11;
+      then y in A.((the ResultSort of S).o) by MSUALG_1:def 7;
+      hence y in (A * the ResultSort of S).o by FUNCT_2:21;
+    end;
+then A17: U1|A = MSAlgebra (#A , Opers(U1,A)#) by MSUALG_2:def 16;
+      Gen is ManySortedSubset of the Sorts of U1|A
+    proof
+      let i be set such that
+A18:     i in I;
+      let x be set such that
+A19:     x in Gen.i;
+        Gen c= the Sorts of U1 by MSUALG_2:def 1;
+then A20:   Gen.i c= (the Sorts of U1).i by A18,PBOOLE:def 5;
+      reconsider s = i as SortSymbol of S by A18;
+        h1.s.x = ((h1.s) | (Gen.s)).x by A19,FUNCT_1:72
+            .= (h1 || Gen).s.x by MSAFREE:def 1
+            .= ((h2.s) | (Gen.s)).x by A3,MSAFREE:def 1
+            .= h2.s.x by A19,FUNCT_1:72;
+      hence x in (the Sorts of U1|A).i by A4,A17,A19,A20;
+    end;
+then A21: GenMSAlg Gen is MSSubAlgebra of U1|A by MSUALG_2:def 18;
+      the Sorts of GenMSAlg Gen = the Sorts of U1 by MSAFREE:def 4;
+    then the Sorts of U1 is ManySortedSubset of A by A17,A21,MSUALG_2:def 10;
+      then A22: the Sorts of U1 c= A by MSUALG_2:def 1;
+      now
+      let i be set; assume
+A23:     i in I;
+      then reconsider s = i as SortSymbol of S;
+A24:   dom (h1.s) = (the Sorts of U1).i by FUNCT_2:def 1;
+A25:   dom (h2.s) = (the Sorts of U1).i by FUNCT_2:def 1;
+        now
+        let x be set such that
+A26:       x in dom (h1.s);
+          (the Sorts of U1).i c= A.i by A22,A23,PBOOLE:def 5;
+        then ex t being SortSymbol of S st t = s & h1.t.x = h2.t.x by A4,A24,
+A26;
+        hence h1.s.x = h2.s.x;
+      end;
+      hence h1.i = h2.i by A24,A25,FUNCT_1:9;
+    end;
+    hence h1 = h2 by PBOOLE:3;
+  end;

@@ -1,0 +1,1617 @@
+:: The Ordering of Points on a Curve, Part {III}
+::  by Artur Korni{\l}owicz
+::
+:: Received September 16, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, PRE_TOPC, EUCLID, BORSUK_1, RCOMP_1, RELAT_1, BOOLE,
+      SUBSET_1, FUNCT_1, TOPREAL1, TOPS_2, COMPTS_1, JORDAN3, PSCOMP_1,
+      TOPREAL2, JORDAN6, JORDAN17;
+ notation XBOOLE_0, ORDINAL1, XREAL_0, REAL_1, NAT_1, RCOMP_1, STRUCT_0,
+      RELAT_1, FUNCT_1, TOPREAL1, TOPREAL2, PRE_TOPC, TOPS_2, COMPTS_1,
+      BORSUK_1, EUCLID, JORDAN5C, PSCOMP_1, JORDAN6;
+ constructors RCOMP_1, TOPREAL2, CONNSP_1, TOPS_2, REAL_1, TOPREAL1, JORDAN5C,
+      TREAL_1, PSCOMP_1, JORDAN6, SPPOL_1;
+ clusters EUCLID, PSCOMP_1, XREAL_0, RELSET_1, JORDAN1B, MEMBERED;
+ requirements NUMERALS, REAL, SUBSET;
+ definitions TOPREAL1;
+ theorems XBOOLE_0, JORDAN5C, JORDAN6, JORDAN7, REAL_1, TOPS_2, FUNCT_1,
+      BORSUK_1, PRE_TOPC, TOPREAL5, JORDAN1, AXIOMS, XREAL_0, SPRECT_1,
+      JORDAN16;
+
+begin
+
+reserve C, P for Simple_closed_curve,
+        a, b, c, d, e for Point of TOP-REAL 2;
+
+theorem Th1:
+  for n being Nat,
+      a, p1, p2 being Point of TOP-REAL n,
+      P being Subset of TOP-REAL n st
+    a in P & P is_an_arc_of p1,p2
+  ex f being map of I[01], (TOP-REAL n)|P,
+     r being Real st
+   f is_homeomorphism & f.0 = p1 & f.1 = p2 & 0 <= r & r <= 1 & f.r = a
+  proof
+    let n be Nat,
+        a, p1, p2 be Point of TOP-REAL n,
+        P be Subset of TOP-REAL n such that
+A1:   a in P;
+    given f being map of I[01], (TOP-REAL n)|P such that
+A2:   f is_homeomorphism and
+A3:   f.0 = p1 and
+A4:   f.1 = p2;
+      rng f = [#]((TOP-REAL n)|P) by A2,TOPS_2:def 5
+         .= the carrier of (TOP-REAL n)|P by PRE_TOPC:12
+         .= P by JORDAN1:1;
+    then consider r being set such that
+A5:   r in dom f and
+A6:   a = f.r by A1,FUNCT_1:def 5;
+A7: dom f = [#]I[01] by A2,TOPS_2:def 5
+         .= [.0,1.] by BORSUK_1:83,PRE_TOPC:12;
+    then reconsider r as Real by A5;
+    take f, r;
+    thus f is_homeomorphism & f.0 = p1 & f.1 = p2 by A2,A3,A4;
+    thus 0 <= r & r <= 1 by A5,A7,TOPREAL5:1;
+    thus f.r = a by A6;
+  end;
+
+theorem
+    LE W-min(P),E-max(P),P
+  proof
+      W-min(P) in Upper_Arc(P) &
+    E-max(P) in Lower_Arc(P) &
+    E-max(P) <> W-min(P) by JORDAN7:1,TOPREAL5:25;
+    hence thesis by JORDAN6:def 10;
+  end;
+
+theorem
+    LE a,E-max(P),P implies a in Upper_Arc(P)
+  proof
+    assume
+A1:   LE a,E-max(P),P;
+    per cases by A1,JORDAN6:def 10;
+    suppose a in Upper_Arc(P) & E-max(P) in Lower_Arc(P) &
+            not E-max(P) = W-min(P) or
+            a in Upper_Arc(P) & E-max(P) in Upper_Arc(P) &
+            LE a,E-max(P),Upper_Arc(P),W-min(P),E-max(P);
+    hence thesis;
+    suppose that
+A2:         a in Lower_Arc(P) and
+              E-max(P) in Lower_Arc(P) &
+            not E-max(P) = W-min(P) and
+A3:         LE a,E-max(P),Lower_Arc(P),E-max(P),W-min(P);
+      Lower_Arc(P) is_an_arc_of E-max(P),W-min(P) by JORDAN6:def 9;
+    then consider f being map of I[01], (TOP-REAL 2)|Lower_Arc(P),
+                  r being Real such that
+A4:   f is_homeomorphism and
+A5:   f.0 = E-max(P) and
+A6:   f.1 = W-min(P) and
+A7:   0 <= r and
+A8:   r <= 1 and
+A9:   f.r = a by A2,Th1;
+    thus thesis
+    proof
+      per cases;
+      suppose r = 0;
+      hence thesis by A5,A9,JORDAN7:1;
+      suppose r <> 0;
+      then r > 0 by A7,REAL_1:def 5;
+      hence thesis by A3,A4,A5,A6,A8,A9,JORDAN5C:def 3;
+    end;
+  end;
+
+theorem
+    LE E-max(P),a,P implies a in Lower_Arc(P)
+  proof
+    assume
+A1:   LE E-max(P),a,P;
+    per cases by A1,JORDAN6:def 10;
+    suppose E-max(P) in Upper_Arc(P) & a in Lower_Arc(P) & not a = W-min(P) or
+            E-max(P) in Lower_Arc(P) & a in Lower_Arc(P) &
+            not a = W-min(P) & LE E-max(P),a,Lower_Arc(P),E-max(P),W-min(P);
+    hence thesis;
+    suppose that E-max(P) in Upper_Arc(P) and
+A2:         a in Upper_Arc(P) and
+A3:         LE E-max(P),a,Upper_Arc(P),W-min(P),E-max(P);
+      Upper_Arc(P) is_an_arc_of W-min(P),E-max(P) by JORDAN6:def 8;
+    then consider f being map of I[01], (TOP-REAL 2)|Upper_Arc(P),
+                  r being Real such that
+A4:   f is_homeomorphism and
+A5:   f.0 = W-min(P) and
+A6:   f.1 = E-max(P) and
+A7:   0 <= r and
+A8:   r <= 1 and
+A9:   f.r = a by A2,Th1;
+    thus thesis
+    proof
+      per cases;
+      suppose r = 1;
+      hence thesis by A6,A9,JORDAN7:1;
+      suppose r <> 1;
+      then r < 1 by A8,REAL_1:def 5;
+      hence thesis by A3,A4,A5,A6,A7,A9,JORDAN5C:def 3;
+    end;
+  end;
+
+theorem
+    LE a,W-min(P),P implies a in Lower_Arc(P)
+  proof
+    assume
+A1:   LE a,W-min(P),P;
+    per cases by A1,JORDAN6:def 10;
+    suppose a in Upper_Arc(P) & W-min(P) in Lower_Arc(P) &
+            not W-min(P) = W-min(P) or
+            a in Lower_Arc(P) & W-min(P) in Lower_Arc(P) &
+            not W-min(P) = W-min(P) &
+            LE a,W-min(P),Lower_Arc(P),E-max(P),W-min(P);
+    hence thesis;
+    suppose that
+A2:   a in Upper_Arc(P) and
+        W-min(P) in Upper_Arc(P) and
+A3:   LE a,W-min(P),Upper_Arc(P),W-min(P),E-max(P);
+      Upper_Arc(P) is_an_arc_of W-min(P),E-max(P) by JORDAN6:def 8;
+    then consider f being map of I[01], (TOP-REAL 2)|Upper_Arc(P),
+                  r being Real such that
+A4:   f is_homeomorphism and
+A5:   f.0 = W-min(P) and
+A6:   f.1 = E-max(P) and
+A7:   0 <= r and
+A8:   r <= 1 and
+A9:   f.r = a by A2,Th1;
+    thus thesis
+    proof
+      per cases;
+      suppose r = 0;
+      hence thesis by A5,A9,JORDAN7:1;
+      suppose r <> 0;
+      then r > 0 by A7,REAL_1:def 5;
+      hence thesis by A3,A4,A5,A6,A8,A9,JORDAN5C:def 3;
+    end;
+  end;
+
+theorem Th6:
+  for P being Subset of TOP-REAL 2 st
+    a <> b &
+    P is_an_arc_of c,d &
+    LE a,b,P,c,d holds
+  ex e st a <> e & b <> e & LE a,e,P,c,d & LE e,b,P,c,d
+  proof
+    let P be Subset of TOP-REAL 2;
+    assume that
+A1:   a <> b and
+A2:   P is_an_arc_of c,d and
+A3:   LE a,b,P,c,d;
+A4: a in P by A3,JORDAN5C:def 3;
+   b in P by A3,JORDAN5C:def 3;
+    then consider f being map of I[01], (TOP-REAL 2)|P,
+                  rb being Real such that
+A5:   f is_homeomorphism and
+A6:   f.0 = c and
+A7:   f.1 = d and
+A8:   0 <= rb and
+A9:   rb <= 1 and
+A10:   f.rb = b by A2,Th1;
+A11: rng f = [#]((TOP-REAL 2)|P) by A5,TOPS_2:def 5
+         .= the carrier of (TOP-REAL 2)|P by PRE_TOPC:12
+         .= P by JORDAN1:1;
+    then consider ra being set such that
+A12:   ra in dom f and
+A13:   a = f.ra by A4,FUNCT_1:def 5;
+A14: dom f = [#]I[01] by A5,TOPS_2:def 5
+         .= [.0,1.] by BORSUK_1:83,PRE_TOPC:12;
+    then reconsider ra as Real by A12;
+A15: 0 <= ra by A12,A14,TOPREAL5:1;
+A16: ra <= 1 by A12,A14,TOPREAL5:1;
+    then ra <= rb by A3,A5,A6,A7,A8,A9,A10,A13,A15,JORDAN5C:def 3;
+    then ra < rb by A1,A10,A13,REAL_1:def 5;
+    then consider re being real number such that
+A17:   ra < re and
+A18:   re < rb by REAL_1:75;
+A19: re is Real by XREAL_0:def 1;
+A20: 0 <= re & re <= 1 by A9,A15,A17,A18,AXIOMS:22;
+    set e = f.re;
+A21: re in dom f by A14,A20,TOPREAL5:1;
+    then e in rng f by FUNCT_1:def 5;
+    then reconsider e as Point of TOP-REAL 2 by A11;
+    take e;
+      now
+      assume
+A22:     a = e or b = e;
+A23:   f is one-to-one by A5,TOPS_2:def 5;
+        ra in dom f & rb in dom f by A8,A9,A12,A14,TOPREAL5:1;
+      hence contradiction by A10,A13,A17,A18,A21,A22,A23,FUNCT_1:def 8;
+    end;
+    hence a <> e & b <> e;
+    thus thesis by A2,A5,A6,A7,A8,A9,A10,A13,A15,A16,A17,A18,A19,A20,JORDAN5C:8
+;
+  end;
+
+theorem Th7:
+  a in P implies ex e st a <> e & LE a,e,P
+  proof
+    assume
+A1:   a in P;
+A2: E-max(P) <> W-min(P) by TOPREAL5:25;
+A3: Lower_Arc(P) is_an_arc_of E-max(P),W-min(P) by JORDAN6:def 9;
+    per cases;
+    suppose
+A4:   a = W-min(P);
+    take E-max(P);
+      E-max(P) in P by SPRECT_1:16;
+    hence thesis by A4,JORDAN7:3,TOPREAL5:25;
+    suppose
+A5:   a <> W-min(P);
+    thus thesis
+    proof
+      per cases;
+      suppose
+A6:     a in Upper_Arc(P);
+      thus thesis
+      proof
+        per cases;
+        suppose
+A7:       a = E-max(P);
+        consider e such that
+A8:       e in Lower_Arc(P) & e <> E-max(P) & e <> W-min(P) by A3,JORDAN6:55;
+        take e;
+        thus thesis by A6,A7,A8,JORDAN6:def 10;
+        suppose
+A9:       a <> E-max(P);
+        take E-max(P);
+          E-max(P) in Lower_Arc(P) by JORDAN7:1;
+        hence thesis by A2,A6,A9,JORDAN6:def 10;
+      end;
+      suppose
+A10:     not a in Upper_Arc(P);
+        Upper_Arc(P) \/ Lower_Arc(P) = P by JORDAN6:def 9;
+      then A11:     a in Lower_Arc(P) by A1,A10,XBOOLE_0:def 2;
+      then consider f being map of I[01], (TOP-REAL 2)|Lower_Arc(P),
+                    r being Real such that
+A12:     f is_homeomorphism and
+A13:     f.0 = E-max(P) and
+A14:     f.1 = W-min(P) and
+A15:     0 <= r and
+A16:     r <= 1 and
+A17:     f.r = a by A3,Th1;
+A18:   dom f = [#]I[01] by A12,TOPS_2:def 5
+           .= [.0,1.] by BORSUK_1:83,PRE_TOPC:12;
+then A19:   r in dom f by A15,A16,TOPREAL5:1;
+A20:   1 in dom f by A18,TOPREAL5:1;
+A21:   f is one-to-one by A12,TOPS_2:def 5;
+        r < 1 by A5,A14,A16,A17,REAL_1:def 5;
+      then consider s being real number such that
+A22:     r < s & s < 1 by REAL_1:75;
+A23:   s is Real by XREAL_0:def 1;
+A24:   0 <= s & s <= 1 by A15,A22,AXIOMS:22;
+then A25:   s in dom f by A18,TOPREAL5:1;
+A26:   rng f = [#]((TOP-REAL 2)|Lower_Arc(P)) by A12,TOPS_2:def 5
+           .= the carrier of (TOP-REAL 2)|Lower_Arc(P) by PRE_TOPC:12
+           .= Lower_Arc(P) by JORDAN1:1;
+A27:   f.s in rng f by A25,FUNCT_1:def 5;
+      then reconsider e = f.s as Point of TOP-REAL 2 by A26;
+      take e;
+      thus a <> e by A17,A19,A21,A22,A25,FUNCT_1:def 8;
+A28:   e <> W-min(P) by A14,A20,A21,A22,A25,FUNCT_1:def 8;
+        LE a,e,Lower_Arc(P),E-max(P),W-min(P)
+        by A3,A12,A13,A14,A15,A16,A17,A22,A23,A24,JORDAN5C:8;
+      hence LE a,e,P by A11,A26,A27,A28,JORDAN6:def 10;
+    end;
+  end;
+
+theorem Th8:
+  a <> b & LE a,b,P implies
+  ex c st c <> a & c <> b & LE a,c,P & LE c,b,P
+  proof
+    assume that
+A1:   a <> b and
+A2:   LE a,b,P;
+A3: Upper_Arc(P) is_an_arc_of W-min(P),E-max(P) by JORDAN6:def 8;
+A4: Lower_Arc(P) is_an_arc_of E-max(P),W-min(P) by JORDAN6:def 9;
+
+    per cases by A2,JORDAN6:def 10;
+    suppose that
+A5:   a in Upper_Arc(P) and
+A6:   b in Lower_Arc(P) and
+A7:   not b = W-min(P);
+A8: E-max(P) in Upper_Arc(P) by JORDAN7:1;
+A9: E-max(P) in Lower_Arc(P) by JORDAN7:1;
+A10: E-max(P) <> W-min(P) by TOPREAL5:25;
+
+    thus thesis
+    proof
+         per cases;
+         suppose that
+A11:        a <> E-max(P) and
+A12:        b <> E-max(P);
+         take e = E-max(P);
+         thus a <> e & b <> e by A11,A12;
+         thus LE a,e,P & LE e,b,P by A5,A6,A7,A8,A9,A10,JORDAN6:def 10;
+
+         suppose
+A13:        a = E-max(P);
+         then LE a,b,Lower_Arc(P),E-max(P),W-min(P) by A4,A6,JORDAN5C:10;
+         then consider e such that
+A14:        a <> e & b <> e and
+A15:        LE a,e,Lower_Arc(P),E-max(P),W-min(P) and
+A16:        LE e,b,Lower_Arc(P),E-max(P),W-min(P) by A1,A4,Th6;
+         take e;
+         thus e <> a & e <> b by A14;
+A17:      e in Lower_Arc(P) by A15,JORDAN5C:def 3;
+           e <> W-min(P) by A4,A7,A16,JORDAN6:70;
+         hence LE a,e,P & LE e,b,P by A6,A7,A9,A13,A15,A16,A17,JORDAN6:def 10;
+
+         suppose
+A18:        b = E-max(P);
+         then LE a,b,Upper_Arc(P),W-min(P),E-max(P) by A3,A5,JORDAN5C:10;
+         then consider e such that
+A19:        a <> e & b <> e and
+A20:        LE a,e,Upper_Arc(P),W-min(P),E-max(P) and
+             LE e,b,Upper_Arc(P),W-min(P),E-max(P) by A1,A3,Th6;
+         take e;
+         thus e <> a & e <> b by A19;
+           e in Upper_Arc(P) by A20,JORDAN5C:def 3;
+         hence LE a,e,P & LE e,b,P by A5,A7,A9,A18,A20,JORDAN6:def 10;
+    end;
+
+    suppose that
+A21:   a in Upper_Arc(P) and
+A22:   b in Upper_Arc(P) and
+A23:   LE a,b,Upper_Arc(P),W-min(P),E-max(P);
+    consider e such that
+A24:   a <> e & b <> e and
+A25:   LE a,e,Upper_Arc(P),W-min(P),E-max(P) &
+      LE e,b,Upper_Arc(P),W-min(P),E-max(P) by A1,A3,A23,Th6;
+    take e;
+    thus e <> a & e <> b by A24;
+      e in Upper_Arc(P) by A25,JORDAN5C:def 3;
+    hence thesis by A21,A22,A25,JORDAN6:def 10;
+
+    suppose that
+A26:    a in Lower_Arc(P) and
+A27:    b in Lower_Arc(P) and
+A28:    not b = W-min(P) and
+A29:    LE a,b,Lower_Arc(P),E-max(P),W-min(P);
+    consider e such that
+A30:   a <> e & b <> e and
+A31:   LE a,e,Lower_Arc(P),E-max(P),W-min(P) and
+A32:   LE e,b,Lower_Arc(P),E-max(P),W-min(P) by A1,A4,A29,Th6;
+    take e;
+    thus e <> a & e <> b by A30;
+A33: e <> W-min(P) by A4,A28,A32,JORDAN6:70;
+      e in Lower_Arc(P) by A31,JORDAN5C:def 3;
+    hence thesis by A26,A27,A28,A31,A32,A33,JORDAN6:def 10;
+  end;
+
+definition
+  let P be compact non empty Subset of TOP-REAL 2,
+      a, b, c, d be Point of TOP-REAL 2;
+  pred a,b,c,d are_in_this_order_on P means
+:Def1:
+  LE a,b,P & LE b,c,P & LE c,d,P or
+  LE b,c,P & LE c,d,P & LE d,a,P or
+  LE c,d,P & LE d,a,P & LE a,b,P or
+  LE d,a,P & LE a,b,P & LE b,c,P;
+end;
+
+theorem
+    a in P implies a,a,a,a are_in_this_order_on P
+  proof
+    assume a in P;
+    then LE a,a,P by JORDAN6:71;
+    hence thesis by Def1;
+  end;
+
+theorem
+    a,b,c,d are_in_this_order_on P implies
+  b,c,d,a are_in_this_order_on P
+  proof
+    assume
+        LE a,b,P & LE b,c,P & LE c,d,P or
+      LE b,c,P & LE c,d,P & LE d,a,P or
+      LE c,d,P & LE d,a,P & LE a,b,P or
+      LE d,a,P & LE a,b,P & LE b,c,P;
+    hence
+        LE b,c,P & LE c,d,P & LE d,a,P or
+      LE c,d,P & LE d,a,P & LE a,b,P or
+      LE d,a,P & LE a,b,P & LE b,c,P or
+      LE a,b,P & LE b,c,P & LE c,d,P;
+  end;
+
+theorem
+    a,b,c,d are_in_this_order_on P implies
+  c,d,a,b are_in_this_order_on P
+  proof
+    assume
+        LE a,b,P & LE b,c,P & LE c,d,P or
+      LE b,c,P & LE c,d,P & LE d,a,P or
+      LE c,d,P & LE d,a,P & LE a,b,P or
+      LE d,a,P & LE a,b,P & LE b,c,P;
+    hence
+        LE c,d,P & LE d,a,P & LE a,b,P or
+      LE d,a,P & LE a,b,P & LE b,c,P or
+      LE a,b,P & LE b,c,P & LE c,d,P or
+      LE b,c,P & LE c,d,P & LE d,a,P;
+  end;
+
+theorem
+    a,b,c,d are_in_this_order_on P implies
+  d,a,b,c are_in_this_order_on P
+  proof
+    assume
+        LE a,b,P & LE b,c,P & LE c,d,P or
+      LE b,c,P & LE c,d,P & LE d,a,P or
+      LE c,d,P & LE d,a,P & LE a,b,P or
+      LE d,a,P & LE a,b,P & LE b,c,P;
+    hence
+        LE d,a,P & LE a,b,P & LE b,c,P or
+      LE a,b,P & LE b,c,P & LE c,d,P or
+      LE b,c,P & LE c,d,P & LE d,a,P or
+      LE c,d,P & LE d,a,P & LE a,b,P;
+  end;
+
+theorem
+    a <> b & a,b,c,d are_in_this_order_on P
+  implies
+  ex e st e <> a & e <> b & a,e,b,c are_in_this_order_on P
+  proof
+    assume that
+A1:   a <> b and
+A2:   LE a,b,P & LE b,c,P & LE c,d,P or
+      LE b,c,P & LE c,d,P & LE d,a,P or
+      LE c,d,P & LE d,a,P & LE a,b,P or
+      LE d,a,P & LE a,b,P & LE b,c,P;
+    per cases by A2;
+    suppose
+A3:   LE a,b,P & LE b,c,P & LE c,d,P;
+    then consider e such that
+A4:   e <> a & e <> b & LE a,e,P & LE e,b,P by A1,Th8;
+    take e;
+    thus thesis by A3,A4,Def1;
+
+    suppose that
+A5:   LE b,c,P and
+A6:   LE c,d,P and
+A7:   LE d,a,P;
+    thus thesis
+    proof
+A8:   LE c,a,P by A6,A7,JORDAN6:73;
+      per cases;
+      suppose
+A9:     b = W-min(P);
+        a in P by A7,JORDAN7:5;
+      then consider e such that
+A10:     e <> a and
+A11:     LE a,e,P by Th7;
+      take e;
+      thus e <> a by A10;
+      thus e <> b by A1,A9,A11,JORDAN7:2;
+      thus thesis by A5,A8,A11,Def1;
+      suppose
+A12:     b <> W-min(P);
+      take e = W-min(P);
+        b in P by A5,JORDAN7:5;
+then A13:   LE e,b,P by JORDAN7:3;
+        now
+        assume
+A14:       e = a;
+          LE b,d,P by A5,A6,JORDAN6:73;
+        then LE b,a,P by A7,JORDAN6:73;
+        hence contradiction by A1,A13,A14,JORDAN6:72;
+      end;
+      hence e <> a;
+      thus e <> b by A12;
+      thus thesis by A5,A8,A13,Def1;
+    end;
+
+    suppose that
+A15:   LE c,d,P and
+A16:   LE d,a,P & LE a,b,P;
+    consider e such that
+A17:   e <> a & e <> b & LE a,e,P & LE e,b,P by A1,A16,Th8;
+    take e;
+      LE c,a,P by A15,A16,JORDAN6:73;
+    hence thesis by A17,Def1;
+
+    suppose that
+A18:   LE d,a,P & LE a,b,P and
+A19:   LE b,c,P;
+    consider e such that
+A20:   e <> a & e <> b & LE a,e,P & LE e,b,P by A1,A18,Th8;
+    take e;
+    thus thesis by A19,A20,Def1;
+  end;
+
+theorem
+    a <> b & a,b,c,d are_in_this_order_on P
+  implies
+  ex e st e <> a & e <> b & a,e,b,d are_in_this_order_on P
+  proof
+    assume that
+A1:   a <> b and
+A2:   LE a,b,P & LE b,c,P & LE c,d,P or
+      LE b,c,P & LE c,d,P & LE d,a,P or
+      LE c,d,P & LE d,a,P & LE a,b,P or
+      LE d,a,P & LE a,b,P & LE b,c,P;
+    per cases by A2;
+    suppose that
+A3:   LE a,b,P and
+A4:   LE b,c,P & LE c,d,P;
+    consider e such that
+A5:   e <> a & e <> b & LE a,e,P & LE e,b,P by A1,A3,Th8;
+    take e;
+      LE b,d,P by A4,JORDAN6:73;
+    hence thesis by A5,Def1;
+
+    suppose that
+A6:   LE b,c,P and
+A7:   LE c,d,P and
+A8:   LE d,a,P;
+    thus thesis
+    proof
+
+A9:   LE b,d,P by A6,A7,JORDAN6:73;
+      per cases;
+      suppose
+A10:     b = W-min(P);
+        a in P by A8,JORDAN7:5;
+      then consider e such that
+A11:     e <> a and
+A12:     LE a,e,P by Th7;
+      take e;
+      thus e <> a by A11;
+      thus e <> b by A1,A10,A12,JORDAN7:2;
+      thus thesis by A8,A9,A12,Def1;
+      suppose
+A13:     b <> W-min(P);
+      take e = W-min(P);
+        b in P by A6,JORDAN7:5;
+then A14:   LE e,b,P by JORDAN7:3;
+        now
+        assume
+A15:       e = a;
+          LE b,d,P by A6,A7,JORDAN6:73;
+        then LE b,a,P by A8,JORDAN6:73;
+        hence contradiction by A1,A14,A15,JORDAN6:72;
+      end;
+      hence e <> a;
+      thus e <> b by A13;
+      thus thesis by A8,A9,A14,Def1;
+    end;
+
+    suppose that
+        LE c,d,P and
+A16:   LE d,a,P and
+A17:   LE a,b,P;
+    consider e such that
+A18:   e <> a & e <> b & LE a,e,P & LE e,b,P by A1,A17,Th8;
+    take e;
+    thus thesis by A16,A18,Def1;
+
+    suppose that
+A19:   LE d,a,P and
+A20:   LE a,b,P and
+        LE b,c,P;
+    consider e such that
+A21:   e <> a & e <> b & LE a,e,P & LE e,b,P by A1,A20,Th8;
+    take e;
+    thus thesis by A19,A21,Def1;
+  end;
+
+theorem
+    b <> c & a,b,c,d are_in_this_order_on P
+  implies
+  ex e st e <> b & e <> c & a,b,e,c are_in_this_order_on P
+  proof
+    assume that
+A1:   b <> c and
+A2:   LE a,b,P & LE b,c,P & LE c,d,P or
+      LE b,c,P & LE c,d,P & LE d,a,P or
+      LE c,d,P & LE d,a,P & LE a,b,P or
+      LE d,a,P & LE a,b,P & LE b,c,P;
+    per cases by A2;
+    suppose
+A3:   LE a,b,P & LE b,c,P & LE c,d,P;
+    then consider e such that
+A4:   e <> b & e <> c & LE b,e,P & LE e,c,P by A1,Th8;
+    take e;
+    thus thesis by A3,A4,Def1;
+
+    suppose that
+A5:   LE b,c,P and
+A6:   LE c,d,P and
+A7:   LE d,a,P;
+    consider e such that
+A8:   e <> b & e <> c & LE b,e,P & LE e,c,P by A1,A5,Th8;
+    take e;
+      LE c,a,P by A6,A7,JORDAN6:73;
+    hence thesis by A8,Def1;
+
+    suppose that
+A9:   LE c,d,P and
+A10:   LE d,a,P and
+A11:   LE a,b,P;
+    thus thesis
+    proof
+A12:   LE c,a,P by A9,A10,JORDAN6:73;
+      per cases;
+      suppose
+A13:     c = W-min(P);
+        b in P by A11,JORDAN7:5;
+      then consider e such that
+A14:     e <> b and
+A15:     LE b,e,P by Th7;
+      take e;
+      thus e <> b by A14;
+      thus e <> c by A1,A13,A15,JORDAN7:2;
+      thus thesis by A11,A12,A15,Def1;
+      suppose
+A16:     c <> W-min(P);
+      take e = W-min(P);
+        c in P by A9,JORDAN7:5;
+then A17:   LE e,c,P by JORDAN7:3;
+        now
+        assume
+A18:       e = b;
+          LE c,a,P by A9,A10,JORDAN6:73;
+        then LE c,b,P by A11,JORDAN6:73;
+        hence contradiction by A1,A17,A18,JORDAN6:72;
+      end;
+      hence e <> b;
+      thus e <> c by A16;
+      thus thesis by A11,A12,A17,Def1;
+    end;
+
+    suppose that
+        LE d,a,P and
+A19:   LE a,b,P & LE b,c,P;
+    consider e such that
+A20:   e <> b & e <> c & LE b,e,P & LE e,c,P by A1,A19,Th8;
+    take e;
+    thus thesis by A19,A20,Def1;
+  end;
+
+theorem
+    b <> c & a,b,c,d are_in_this_order_on P
+  implies
+  ex e st e <> b & e <> c & b,e,c,d are_in_this_order_on P
+  proof
+    assume that
+A1:   b <> c and
+A2:   LE a,b,P & LE b,c,P & LE c,d,P or
+      LE b,c,P & LE c,d,P & LE d,a,P or
+      LE c,d,P & LE d,a,P & LE a,b,P or
+      LE d,a,P & LE a,b,P & LE b,c,P;
+    per cases by A2;
+    suppose
+A3:   LE a,b,P & LE b,c,P & LE c,d,P;
+    then consider e such that
+A4:   e <> b & e <> c & LE b,e,P & LE e,c,P by A1,Th8;
+    take e;
+    thus thesis by A3,A4,Def1;
+
+    suppose
+A5:   LE b,c,P & LE c,d,P & LE d,a,P;
+    then consider e such that
+A6:   e <> b & e <> c & LE b,e,P & LE e,c,P by A1,Th8;
+    take e;
+    thus thesis by A5,A6,Def1;
+
+    suppose that
+A7:   LE c,d,P and
+A8:   LE d,a,P and
+A9:   LE a,b,P;
+    thus thesis
+    proof
+A10:   LE d,b,P by A8,A9,JORDAN6:73;
+      per cases;
+      suppose
+A11:     c = W-min(P);
+        b in P by A9,JORDAN7:5;
+      then consider e such that
+A12:     e <> b and
+A13:     LE b,e,P by Th7;
+      take e;
+      thus e <> b by A12;
+      thus e <> c by A1,A11,A13,JORDAN7:2;
+      thus thesis by A7,A10,A13,Def1;
+      suppose
+A14:     c <> W-min(P);
+      take e = W-min(P);
+        c in P by A7,JORDAN7:5;
+then A15:   LE e,c,P by JORDAN7:3;
+        now
+        assume
+A16:       e = b;
+          LE c,a,P by A7,A8,JORDAN6:73;
+        then LE c,b,P by A9,JORDAN6:73;
+        hence contradiction by A1,A15,A16,JORDAN6:72;
+      end;
+      hence e <> b;
+      thus e <> c by A14;
+      thus thesis by A7,A10,A15,Def1;
+    end;
+
+    suppose that
+A17:   LE d,a,P and
+A18:   LE a,b,P and
+A19:   LE b,c,P;
+    consider e such that
+A20:   e <> b & e <> c & LE b,e,P & LE e,c,P by A1,A19,Th8;
+    take e;
+    thus e <> b & e <> c by A20;
+      LE d,b,P by A17,A18,JORDAN6:73;
+    hence thesis by A20,Def1;
+  end;
+
+theorem
+    c <> d & a,b,c,d are_in_this_order_on P
+  implies
+  ex e st e <> c & e <> d & a,c,e,d are_in_this_order_on P
+  proof
+    assume that
+A1:   c <> d and
+A2:   LE a,b,P & LE b,c,P & LE c,d,P or
+      LE b,c,P & LE c,d,P & LE d,a,P or
+      LE c,d,P & LE d,a,P & LE a,b,P or
+      LE d,a,P & LE a,b,P & LE b,c,P;
+    per cases by A2;
+    suppose that
+A3:   LE a,b,P & LE b,c,P and
+A4:   LE c,d,P;
+    consider e such that
+A5:   e <> c & e <> d & LE c,e,P & LE e,d,P by A1,A4,Th8;
+    take e;
+      LE a,c,P by A3,JORDAN6:73;
+    hence thesis by A5,Def1;
+
+    suppose that
+A6:   LE b,c,P & LE c,d,P and
+A7:   LE d,a,P;
+    consider e such that
+A8:   e <> c & e <> d & LE c,e,P & LE e,d,P by A1,A6,Th8;
+    take e;
+    thus thesis by A7,A8,Def1;
+
+    suppose that
+A9:   LE c,d,P and
+A10:   LE d,a,P and
+        LE a,b,P;
+    consider e such that
+A11:   e <> c & e <> d & LE c,e,P & LE e,d,P by A1,A9,Th8;
+    take e;
+    thus thesis by A10,A11,Def1;
+
+    suppose that
+A12:   LE d,a,P and
+A13:   LE a,b,P and
+A14:   LE b,c,P;
+    thus thesis
+    proof
+A15:   LE a,c,P by A13,A14,JORDAN6:73;
+      per cases;
+      suppose
+A16:     d = W-min(P);
+        c in P by A14,JORDAN7:5;
+      then consider e such that
+A17:     e <> c and
+A18:     LE c,e,P by Th7;
+      take e;
+      thus e <> c by A17;
+      thus e <> d by A1,A16,A18,JORDAN7:2;
+      thus thesis by A12,A15,A18,Def1;
+      suppose
+A19:     d <> W-min(P);
+      take e = W-min(P);
+        d in P by A12,JORDAN7:5;
+then A20:   LE e,d,P by JORDAN7:3;
+        now
+        assume
+A21:       e = c;
+          LE d,b,P by A12,A13,JORDAN6:73;
+        then LE d,c,P by A14,JORDAN6:73;
+        hence contradiction by A1,A20,A21,JORDAN6:72;
+      end;
+      hence e <> c;
+      thus e <> d by A19;
+      thus thesis by A12,A15,A20,Def1;
+    end;
+  end;
+
+theorem
+    c <> d & a,b,c,d are_in_this_order_on P
+  implies
+  ex e st e <> c & e <> d & b,c,e,d are_in_this_order_on P
+  proof
+    assume that
+A1:   c <> d and
+A2:   LE a,b,P & LE b,c,P & LE c,d,P or
+      LE b,c,P & LE c,d,P & LE d,a,P or
+      LE c,d,P & LE d,a,P & LE a,b,P or
+      LE d,a,P & LE a,b,P & LE b,c,P;
+    per cases by A2;
+    suppose that
+A3:   LE a,b,P & LE b,c,P and
+A4:   LE c,d,P;
+    consider e such that
+A5:   e <> c & e <> d & LE c,e,P & LE e,d,P by A1,A4,Th8;
+    take e;
+    thus thesis by A3,A5,Def1;
+
+    suppose that
+A6:   LE b,c,P and
+A7:   LE c,d,P and
+        LE d,a,P;
+    consider e such that
+A8:   e <> c & e <> d & LE c,e,P & LE e,d,P by A1,A7,Th8;
+    take e;
+    thus thesis by A6,A8,Def1;
+
+    suppose that
+A9:   LE c,d,P and
+A10:   LE d,a,P and
+A11:   LE a,b,P;
+    consider e such that
+A12:   e <> c & e <> d & LE c,e,P & LE e,d,P by A1,A9,Th8;
+    take e;
+      LE d,b,P by A10,A11,JORDAN6:73;
+    hence thesis by A12,Def1;
+
+    suppose that
+A13:   LE d,a,P and
+A14:   LE a,b,P and
+A15:   LE b,c,P;
+    thus thesis
+    proof
+A16:   LE d,b,P by A13,A14,JORDAN6:73;
+      per cases;
+      suppose
+A17:     d = W-min(P);
+        c in P by A15,JORDAN7:5;
+      then consider e such that
+A18:     e <> c and
+A19:     LE c,e,P by Th7;
+      take e;
+      thus e <> c by A18;
+      thus e <> d by A1,A17,A19,JORDAN7:2;
+      thus thesis by A15,A16,A19,Def1;
+      suppose
+A20:     d <> W-min(P);
+      take e = W-min(P);
+        d in P by A13,JORDAN7:5;
+then A21:   LE e,d,P by JORDAN7:3;
+        now
+        assume
+A22:       e = c;
+          LE d,c,P by A15,A16,JORDAN6:73;
+        hence contradiction by A1,A21,A22,JORDAN6:72;
+      end;
+      hence e <> c;
+      thus e <> d by A20;
+      thus thesis by A15,A16,A21,Def1;
+    end;
+  end;
+
+theorem
+    d <> a & a,b,c,d are_in_this_order_on P
+  implies
+  ex e st e <> d & e <> a & a,b,d,e are_in_this_order_on P
+  proof
+    assume that
+A1:   d <> a and
+A2:   LE a,b,P & LE b,c,P & LE c,d,P or
+      LE b,c,P & LE c,d,P & LE d,a,P or
+      LE c,d,P & LE d,a,P & LE a,b,P or
+      LE d,a,P & LE a,b,P & LE b,c,P;
+    per cases by A2;
+    suppose that
+A3:   LE a,b,P and
+A4:   LE b,c,P and
+A5:   LE c,d,P;
+    thus thesis
+    proof
+A6:   LE b,d,P by A4,A5,JORDAN6:73;
+      per cases;
+      suppose
+A7:     a = W-min(P);
+        d in P by A5,JORDAN7:5;
+      then consider e such that
+A8:     e <> d and
+A9:     LE d,e,P by Th7;
+      take e;
+      thus e <> d by A8;
+      thus e <> a by A1,A7,A9,JORDAN7:2;
+      thus thesis by A3,A6,A9,Def1;
+      suppose
+A10:     a <> W-min(P);
+      take e = W-min(P);
+        a in P by A3,JORDAN7:5;
+then A11:   LE e,a,P by JORDAN7:3;
+        now
+        assume
+A12:       e = d;
+          LE a,c,P by A3,A4,JORDAN6:73;
+        then LE a,d,P by A5,JORDAN6:73;
+        hence contradiction by A1,A11,A12,JORDAN6:72;
+      end;
+      hence e <> d;
+      thus e <> a by A10;
+      thus thesis by A3,A6,A11,Def1;
+    end;
+
+    suppose that
+A13:   LE b,c,P and
+A14:   LE c,d,P and
+A15:   LE d,a,P;
+    consider e such that
+A16:   e <> d & e <> a & LE d,e,P & LE e,a,P by A1,A15,Th8;
+    take e;
+      LE b,d,P by A13,A14,JORDAN6:73;
+    hence thesis by A16,Def1;
+
+    suppose that
+        LE c,d,P and
+A17:   LE d,a,P and
+A18:   LE a,b,P;
+    consider e such that
+A19:   e <> d & e <> a & LE d,e,P & LE e,a,P by A1,A17,Th8;
+    take e;
+    thus thesis by A18,A19,Def1;
+
+    suppose that
+A20:   LE d,a,P and
+A21:   LE a,b,P and
+        LE b,c,P;
+    consider e such that
+A22:   e <> d & e <> a & LE d,e,P & LE e,a,P by A1,A20,Th8;
+    take e;
+    thus thesis by A21,A22,Def1;
+  end;
+
+theorem
+    d <> a & a,b,c,d are_in_this_order_on P
+  implies
+  ex e st e <> d & e <> a & a,c,d,e are_in_this_order_on P
+  proof
+    assume that
+A1:   d <> a and
+A2:   LE a,b,P & LE b,c,P & LE c,d,P or
+      LE b,c,P & LE c,d,P & LE d,a,P or
+      LE c,d,P & LE d,a,P & LE a,b,P or
+      LE d,a,P & LE a,b,P & LE b,c,P;
+    per cases by A2;
+    suppose that
+A3:   LE a,b,P and
+A4:   LE b,c,P and
+A5:   LE c,d,P;
+    thus thesis
+    proof
+A6:   LE a,c,P by A3,A4,JORDAN6:73;
+      per cases;
+      suppose
+A7:     a = W-min(P);
+        d in P by A5,JORDAN7:5;
+      then consider e such that
+A8:     e <> d and
+A9:     LE d,e,P by Th7;
+      take e;
+      thus e <> d by A8;
+      thus e <> a by A1,A7,A9,JORDAN7:2;
+      thus thesis by A5,A6,A9,Def1;
+      suppose
+A10:     a <> W-min(P);
+      take e = W-min(P);
+        a in P by A3,JORDAN7:5;
+then A11:   LE e,a,P by JORDAN7:3;
+        now
+        assume
+A12:       e = d;
+          LE a,d,P by A5,A6,JORDAN6:73;
+        hence contradiction by A1,A11,A12,JORDAN6:72;
+      end;
+      hence e <> d;
+      thus e <> a by A10;
+      thus thesis by A5,A6,A11,Def1;
+    end;
+
+    suppose that
+        LE b,c,P and
+A13:   LE c,d,P and
+A14:   LE d,a,P;
+    consider e such that
+A15:   e <> d & e <> a & LE d,e,P & LE e,a,P by A1,A14,Th8;
+    take e;
+    thus thesis by A13,A15,Def1;
+
+    suppose that
+A16:   LE c,d,P and
+A17:   LE d,a,P and
+        LE a,b,P;
+    consider e such that
+A18:   e <> d & e <> a & LE d,e,P & LE e,a,P by A1,A17,Th8;
+    take e;
+    thus thesis by A16,A18,Def1;
+
+    suppose that
+A19:   LE d,a,P and
+A20:   LE a,b,P and
+A21:   LE b,c,P;
+    consider e such that
+A22:   e <> d & e <> a & LE d,e,P & LE e,a,P by A1,A19,Th8;
+    take e;
+      LE a,c,P by A20,A21,JORDAN6:73;
+    hence thesis by A22,Def1;
+  end;
+
+theorem
+    a <> c & a <> d & b <> d &
+  a,b,c,d are_in_this_order_on P &
+  b,a,c,d are_in_this_order_on P implies
+  a = b
+  proof
+    assume that
+A1:   a <> c and
+A2:   a <> d and
+A3:   b <> d and
+A4:   a,b,c,d are_in_this_order_on P and
+A5:   b,a,c,d are_in_this_order_on P;
+    per cases by A4,Def1;
+    suppose
+A6:   LE a,b,P & LE b,c,P & LE c,d,P;
+    then A7: LE b,d,P by JORDAN6:73;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE b,a,P & LE a,c,P & LE c,d,P;
+      hence thesis by A6,JORDAN6:72;
+      suppose LE a,c,P & LE c,d,P & LE d,b,P;
+      hence thesis by A3,A7,JORDAN6:72;
+      suppose LE c,d,P & LE d,b,P & LE b,a,P;
+      hence thesis by A6,JORDAN6:72;
+      suppose LE d,b,P & LE b,a,P & LE a,c,P;
+      hence thesis by A6,JORDAN6:72;
+    end;
+    suppose
+A8:   LE b,c,P & LE c,d,P & LE d,a,P;
+    then A9: LE b,d,P by JORDAN6:73;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose
+A10:     LE b,a,P & LE a,c,P & LE c,d,P;
+        LE c,a,P by A8,JORDAN6:73;
+      hence thesis by A1,A10,JORDAN6:72;
+      suppose LE a,c,P & LE c,d,P & LE d,b,P;
+      hence thesis by A3,A9,JORDAN6:72;
+      suppose LE c,d,P & LE d,b,P & LE b,a,P;
+      hence thesis by A3,A9,JORDAN6:72;
+      suppose LE d,b,P & LE b,a,P & LE a,c,P;
+      hence thesis by A3,A9,JORDAN6:72;
+    end;
+    suppose
+A11:   LE c,d,P & LE d,a,P & LE a,b,P;
+    then A12: LE c,a,P by JORDAN6:73;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE b,a,P & LE a,c,P & LE c,d,P;
+      hence thesis by A11,JORDAN6:72;
+      suppose LE a,c,P & LE c,d,P & LE d,b,P;
+      hence thesis by A1,A12,JORDAN6:72;
+      suppose LE c,d,P & LE d,b,P & LE b,a,P;
+      hence thesis by A11,JORDAN6:72;
+      suppose LE d,b,P & LE b,a,P & LE a,c,P;
+      hence thesis by A11,JORDAN6:72;
+    end;
+    suppose
+A13:   LE d,a,P & LE a,b,P & LE b,c,P;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE b,a,P & LE a,c,P & LE c,d,P;
+      hence thesis by A13,JORDAN6:72;
+      suppose LE a,c,P & LE c,d,P & LE d,b,P;
+      then LE a,d,P by JORDAN6:73;
+      hence thesis by A2,A13,JORDAN6:72;
+      suppose LE c,d,P & LE d,b,P & LE b,a,P;
+      hence thesis by A13,JORDAN6:72;
+      suppose LE d,b,P & LE b,a,P & LE a,c,P;
+      hence thesis by A13,JORDAN6:72;
+    end;
+  end;
+
+theorem
+    a <> b & b <> c & c <> d &
+  a,b,c,d are_in_this_order_on P &
+  c,b,a,d are_in_this_order_on P implies
+  a = c
+  proof
+    assume that
+A1:   a <> b and
+A2:   b <> c and
+A3:   c <> d and
+A4:   a,b,c,d are_in_this_order_on P and
+A5:   c,b,a,d are_in_this_order_on P;
+    per cases by A4,Def1;
+    suppose
+A6:   LE a,b,P & LE b,c,P & LE c,d,P;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE c,b,P & LE b,a,P & LE a,d,P;
+      hence thesis by A1,A6,JORDAN6:72;
+      suppose LE b,a,P & LE a,d,P & LE d,c,P;
+      hence thesis by A3,A6,JORDAN6:72;
+      suppose LE a,d,P & LE d,c,P & LE c,b,P;
+      hence thesis by A3,A6,JORDAN6:72;
+      suppose LE d,c,P & LE c,b,P & LE b,a,P;
+      hence thesis by A3,A6,JORDAN6:72;
+    end;
+    suppose
+A7:   LE b,c,P & LE c,d,P & LE d,a,P;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE c,b,P & LE b,a,P & LE a,d,P;
+      hence thesis by A2,A7,JORDAN6:72;
+      suppose LE b,a,P & LE a,d,P & LE d,c,P;
+      hence thesis by A3,A7,JORDAN6:72;
+      suppose LE a,d,P & LE d,c,P & LE c,b,P;
+      hence thesis by A3,A7,JORDAN6:72;
+      suppose LE d,c,P & LE c,b,P & LE b,a,P;
+      hence thesis by A3,A7,JORDAN6:72;
+    end;
+    suppose
+A8:   LE c,d,P & LE d,a,P & LE a,b,P;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE c,b,P & LE b,a,P & LE a,d,P;
+      hence thesis by A1,A8,JORDAN6:72;
+      suppose LE b,a,P & LE a,d,P & LE d,c,P;
+      hence thesis by A3,A8,JORDAN6:72;
+      suppose LE a,d,P & LE d,c,P & LE c,b,P;
+      hence thesis by A3,A8,JORDAN6:72;
+      suppose LE d,c,P & LE c,b,P & LE b,a,P;
+      hence thesis by A3,A8,JORDAN6:72;
+    end;
+    suppose
+A9:   LE d,a,P & LE a,b,P & LE b,c,P;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE c,b,P & LE b,a,P & LE a,d,P;
+      hence thesis by A2,A9,JORDAN6:72;
+      suppose LE b,a,P & LE a,d,P & LE d,c,P;
+      hence thesis by A1,A9,JORDAN6:72;
+      suppose LE a,d,P & LE d,c,P & LE c,b,P;
+      hence thesis by A2,A9,JORDAN6:72;
+      suppose LE d,c,P & LE c,b,P & LE b,a,P;
+      hence thesis by A1,A9,JORDAN6:72;
+    end;
+  end;
+
+theorem
+    a <> b & a <> c & b <> d &
+  a,b,c,d are_in_this_order_on P &
+  d,b,c,a are_in_this_order_on P implies
+  a = d
+  proof
+    assume that
+A1:   a <> b and
+A2:   a <> c and
+A3:   b <> d and
+A4:   a,b,c,d are_in_this_order_on P and
+A5:   d,b,c,a are_in_this_order_on P;
+    per cases by A4,Def1;
+    suppose
+A6:   LE a,b,P & LE b,c,P & LE c,d,P;
+    then A7: LE a,c,P by JORDAN6:73;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE d,b,P & LE b,c,P & LE c,a,P;
+      hence thesis by A2,A7,JORDAN6:72;
+      suppose LE b,c,P & LE c,a,P & LE a,d,P;
+      hence thesis by A2,A7,JORDAN6:72;
+      suppose LE c,a,P & LE a,d,P & LE d,b,P;
+      hence thesis by A2,A7,JORDAN6:72;
+      suppose
+A8:     LE a,d,P & LE d,b,P & LE b,c,P;
+        LE b,d,P by A6,JORDAN6:73;
+      hence thesis by A3,A8,JORDAN6:72;
+    end;
+    suppose
+A9:   LE b,c,P & LE c,d,P & LE d,a,P;
+    then A10: LE b,d,P by JORDAN6:73;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE d,b,P & LE b,c,P & LE c,a,P;
+      hence thesis by A3,A10,JORDAN6:72;
+      suppose LE b,c,P & LE c,a,P & LE a,d,P;
+      hence thesis by A9,JORDAN6:72;
+      suppose LE c,a,P & LE a,d,P & LE d,b,P;
+      hence thesis by A9,JORDAN6:72;
+      suppose LE a,d,P & LE d,b,P & LE b,c,P;
+      hence thesis by A9,JORDAN6:72;
+    end;
+    suppose
+A11:   LE c,d,P & LE d,a,P & LE a,b,P;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE d,b,P & LE b,c,P & LE c,a,P;
+      then LE b,a,P by JORDAN6:73;
+      hence thesis by A1,A11,JORDAN6:72;
+      suppose LE b,c,P & LE c,a,P & LE a,d,P;
+      hence thesis by A11,JORDAN6:72;
+      suppose LE c,a,P & LE a,d,P & LE d,b,P;
+      hence thesis by A11,JORDAN6:72;
+      suppose LE a,d,P & LE d,b,P & LE b,c,P;
+      hence thesis by A11,JORDAN6:72;
+    end;
+    suppose
+A12:   LE d,a,P & LE a,b,P & LE b,c,P;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose
+A13:     LE d,b,P & LE b,c,P & LE c,a,P;
+        LE a,c,P by A12,JORDAN6:73;
+      hence thesis by A2,A13,JORDAN6:72;
+      suppose LE b,c,P & LE c,a,P & LE a,d,P;
+      hence thesis by A12,JORDAN6:72;
+      suppose LE c,a,P & LE a,d,P & LE d,b,P;
+      hence thesis by A12,JORDAN6:72;
+      suppose LE a,d,P & LE d,b,P & LE b,c,P;
+      hence thesis by A12,JORDAN6:72;
+    end;
+  end;
+
+theorem
+    a <> c & a <> d & b <> d &
+  a,b,c,d are_in_this_order_on P &
+  a,c,b,d are_in_this_order_on P implies
+  b = c
+  proof
+    assume that
+A1:   a <> c and
+A2:   a <> d and
+A3:   b <> d and
+A4:   a,b,c,d are_in_this_order_on P and
+A5:   a,c,b,d are_in_this_order_on P;
+    per cases by A4,Def1;
+    suppose
+A6:   LE a,b,P & LE b,c,P & LE c,d,P;
+    then A7: LE b,d,P by JORDAN6:73;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE a,c,P & LE c,b,P & LE b,d,P;
+      hence thesis by A6,JORDAN6:72;
+      suppose LE c,b,P & LE b,d,P & LE d,a,P;
+      hence thesis by A6,JORDAN6:72;
+      suppose
+A8:     LE b,d,P & LE d,a,P & LE a,c,P;
+        LE a,d,P by A6,A7,JORDAN6:73;
+      hence thesis by A2,A8,JORDAN6:72;
+      suppose LE d,a,P & LE a,c,P & LE c,b,P;
+      hence thesis by A6,JORDAN6:72;
+    end;
+    suppose
+A9:   LE b,c,P & LE c,d,P & LE d,a,P;
+    then A10: LE c,a,P by JORDAN6:73;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE a,c,P & LE c,b,P & LE b,d,P;
+      hence thesis by A9,JORDAN6:72;
+      suppose LE c,b,P & LE b,d,P & LE d,a,P;
+      hence thesis by A9,JORDAN6:72;
+      suppose LE b,d,P & LE d,a,P & LE a,c,P;
+      hence thesis by A1,A10,JORDAN6:72;
+      suppose LE d,a,P & LE a,c,P & LE c,b,P;
+      hence thesis by A9,JORDAN6:72;
+    end;
+    suppose
+A11:   LE c,d,P & LE d,a,P & LE a,b,P;
+    then A12: LE c,a,P by JORDAN6:73;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE a,c,P & LE c,b,P & LE b,d,P;
+      hence thesis by A1,A12,JORDAN6:72;
+      suppose
+A13:     LE c,b,P & LE b,d,P & LE d,a,P;
+        LE d,b,P by A11,JORDAN6:73;
+      hence thesis by A3,A13,JORDAN6:72;
+      suppose LE b,d,P & LE d,a,P & LE a,c,P;
+      hence thesis by A1,A12,JORDAN6:72;
+      suppose LE d,a,P & LE a,c,P & LE c,b,P;
+      hence thesis by A1,A12,JORDAN6:72;
+    end;
+    suppose
+A14:   LE d,a,P & LE a,b,P & LE b,c,P;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE a,c,P & LE c,b,P & LE b,d,P;
+      hence thesis by A14,JORDAN6:72;
+      suppose LE c,b,P & LE b,d,P & LE d,a,P;
+      hence thesis by A14,JORDAN6:72;
+      suppose
+A15:     LE b,d,P & LE d,a,P & LE a,c,P;
+        LE d,b,P by A14,JORDAN6:73;
+      hence thesis by A3,A15,JORDAN6:72;
+      suppose LE d,a,P & LE a,c,P & LE c,b,P;
+      hence thesis by A14,JORDAN6:72;
+    end;
+  end;
+
+theorem
+    a <> b & b <> c & c <> d &
+  a,b,c,d are_in_this_order_on P &
+  a,d,c,b are_in_this_order_on P implies
+  b = d
+  proof
+    assume that
+A1:   a <> b and
+A2:   b <> c and
+A3:   c <> d and
+A4:   a,b,c,d are_in_this_order_on P and
+A5:   a,d,c,b are_in_this_order_on P;
+    per cases by A4,Def1;
+    suppose
+A6:   LE a,b,P & LE b,c,P & LE c,d,P;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE a,d,P & LE d,c,P & LE c,b,P;
+      hence thesis by A2,A6,JORDAN6:72;
+      suppose LE d,c,P & LE c,b,P & LE b,a,P;
+      hence thesis by A3,A6,JORDAN6:72;
+      suppose LE c,b,P & LE b,a,P & LE a,d,P;
+      hence thesis by A2,A6,JORDAN6:72;
+      suppose LE b,a,P & LE a,d,P & LE d,c,P;
+      hence thesis by A3,A6,JORDAN6:72;
+    end;
+    suppose
+A7:   LE b,c,P & LE c,d,P & LE d,a,P;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE a,d,P & LE d,c,P & LE c,b,P;
+      hence thesis by A3,A7,JORDAN6:72;
+      suppose LE d,c,P & LE c,b,P & LE b,a,P;
+      hence thesis by A3,A7,JORDAN6:72;
+      suppose LE c,b,P & LE b,a,P & LE a,d,P;
+      hence thesis by A2,A7,JORDAN6:72;
+      suppose LE b,a,P & LE a,d,P & LE d,c,P;
+      hence thesis by A3,A7,JORDAN6:72;
+    end;
+    suppose
+A8:   LE c,d,P & LE d,a,P & LE a,b,P;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE a,d,P & LE d,c,P & LE c,b,P;
+      hence thesis by A3,A8,JORDAN6:72;
+      suppose LE d,c,P & LE c,b,P & LE b,a,P;
+      hence thesis by A1,A8,JORDAN6:72;
+      suppose LE c,b,P & LE b,a,P & LE a,d,P;
+      hence thesis by A1,A8,JORDAN6:72;
+      suppose LE b,a,P & LE a,d,P & LE d,c,P;
+      hence thesis by A1,A8,JORDAN6:72;
+    end;
+    suppose
+A9:   LE d,a,P & LE a,b,P & LE b,c,P;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE a,d,P & LE d,c,P & LE c,b,P;
+      hence thesis by A2,A9,JORDAN6:72;
+      suppose LE d,c,P & LE c,b,P & LE b,a,P;
+      hence thesis by A2,A9,JORDAN6:72;
+      suppose LE c,b,P & LE b,a,P & LE a,d,P;
+      hence thesis by A2,A9,JORDAN6:72;
+      suppose LE b,a,P & LE a,d,P & LE d,c,P;
+      hence thesis by A1,A9,JORDAN6:72;
+    end;
+  end;
+
+theorem
+    a <> b & a <> c & b <> d &
+  a,b,c,d are_in_this_order_on P &
+  a,b,d,c are_in_this_order_on P implies
+  c = d
+  proof
+    assume that
+A1:   a <> b and
+A2:   a <> c and
+A3:   b <> d and
+A4:   a,b,c,d are_in_this_order_on P and
+A5:   a,b,d,c are_in_this_order_on P;
+    per cases by A4,Def1;
+    suppose
+A6:   LE a,b,P & LE b,c,P & LE c,d,P;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE a,b,P & LE b,d,P & LE d,c,P;
+      hence thesis by A6,JORDAN6:72;
+      suppose LE b,d,P & LE d,c,P & LE c,a,P;
+      hence thesis by A6,JORDAN6:72;
+      suppose LE d,c,P & LE c,a,P & LE a,b,P;
+      hence thesis by A6,JORDAN6:72;
+      suppose
+A7:     LE c,a,P & LE a,b,P & LE b,d,P;
+        LE a,c,P by A6,JORDAN6:73;
+      hence thesis by A2,A7,JORDAN6:72;
+    end;
+    suppose
+A8:   LE b,c,P & LE c,d,P & LE d,a,P;
+    then A9: LE c,a,P by JORDAN6:73;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE a,b,P & LE b,d,P & LE d,c,P;
+      hence thesis by A8,JORDAN6:72;
+      suppose LE b,d,P & LE d,c,P & LE c,a,P;
+      hence thesis by A8,JORDAN6:72;
+      suppose LE d,c,P & LE c,a,P & LE a,b,P;
+      hence thesis by A8,JORDAN6:72;
+      suppose
+A10:     LE c,a,P & LE a,b,P & LE b,d,P;
+        LE b,a,P by A8,A9,JORDAN6:73;
+      hence thesis by A1,A10,JORDAN6:72;
+    end;
+    suppose
+A11:   LE c,d,P & LE d,a,P & LE a,b,P;
+    then A12: LE d,b,P by JORDAN6:73;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE a,b,P & LE b,d,P & LE d,c,P;
+      hence thesis by A11,JORDAN6:72;
+      suppose LE b,d,P & LE d,c,P & LE c,a,P;
+      hence thesis by A11,JORDAN6:72;
+      suppose LE d,c,P & LE c,a,P & LE a,b,P;
+      hence thesis by A11,JORDAN6:72;
+      suppose LE c,a,P & LE a,b,P & LE b,d,P;
+      hence thesis by A3,A12,JORDAN6:72;
+    end;
+    suppose
+A13:   LE d,a,P & LE a,b,P & LE b,c,P;
+    then A14:   LE d,b,P by JORDAN6:73;
+    thus thesis
+    proof
+      per cases by A5,Def1;
+      suppose LE a,b,P & LE b,d,P & LE d,c,P;
+      hence thesis by A3,A14,JORDAN6:72;
+      suppose LE b,d,P & LE d,c,P & LE c,a,P;
+      hence thesis by A3,A14,JORDAN6:72;
+      suppose
+A15:     LE d,c,P & LE c,a,P & LE a,b,P;
+        LE a,c,P by A13,JORDAN6:73;
+      hence thesis by A2,A15,JORDAN6:72;
+      suppose LE c,a,P & LE a,b,P & LE b,d,P;
+      hence thesis by A3,A14,JORDAN6:72;
+    end;
+  end;
+
+theorem
+    a in C & b in C & c in C & d in C implies
+  a,b,c,d are_in_this_order_on C or
+  a,b,d,c are_in_this_order_on C or
+  a,c,b,d are_in_this_order_on C or
+  a,c,d,b are_in_this_order_on C or
+  a,d,b,c are_in_this_order_on C or
+  a,d,c,b are_in_this_order_on C
+  proof
+    assume
+A1:   a in C & b in C & c in C & d in C;
+    per cases;
+    suppose LE a,b,C & LE b,c,C & LE c,d,C;
+    hence thesis by Def1;
+
+    suppose
+A2:   LE a,b,C & LE b,c,C & not LE c,d,C;
+    then A3: LE d,c,C by A1,JORDAN16:11;
+    thus thesis
+    proof
+      per cases by A1,JORDAN16:11;
+      suppose
+A4:     LE a,d,C;
+        LE b,d,C or LE d,b,C by A1,JORDAN16:11;
+      hence thesis by A2,A3,A4,Def1;
+      suppose LE d,a,C;
+      hence thesis by A2,Def1;
+    end;
+
+    suppose
+A5:   LE a,b,C & not LE b,c,C & LE c,d,C;
+    then A6: LE c,b,C by A1,JORDAN16:11;
+    thus thesis
+    proof
+      per cases by A1,JORDAN16:11;
+      suppose
+A7:     LE b,d,C;
+        LE a,c,C or LE c,a,C by A1,JORDAN16:11;
+      hence thesis by A5,A6,A7,Def1;
+      suppose
+A8:     LE d,b,C;
+      thus thesis
+      proof
+        per cases by A1,JORDAN16:11;
+        suppose LE a,c,C;
+        hence thesis by A5,A8,Def1;
+        suppose
+A9:       LE c,a,C;
+          LE a,d,C or LE d,a,C by A1,JORDAN16:11;
+        hence thesis by A5,A8,A9,Def1;
+      end;
+    end;
+
+    suppose
+A10:   LE a,b,C & not LE b,c,C & not LE c,d,C;
+    then A11: LE c,b,C & LE d,c,C by A1,JORDAN16:11;
+    thus thesis
+    proof
+      per cases by A1,JORDAN16:11;
+      suppose
+A12:     LE a,c,C;
+        LE a,d,C or LE d,a,C by A1,JORDAN16:11;
+      hence thesis by A11,A12,Def1;
+      suppose LE c,a,C;
+      hence thesis by A10,A11,Def1;
+    end;
+
+    suppose
+A13:   not LE a,b,C & LE b,c,C & LE c,d,C;
+    then A14: LE b,a,C by A1,JORDAN16:11;
+    thus thesis
+    proof
+      per cases by A1,JORDAN16:11;
+      suppose
+A15:     LE a,d,C;
+        LE a,c,C or LE c,a,C by A1,JORDAN16:11;
+      hence thesis by A13,A14,A15,Def1;
+      suppose LE d,a,C;
+      hence thesis by A13,Def1;
+    end;
+
+    suppose
+A16:   not LE a,b,C & LE b,c,C & not LE c,d,C;
+    then A17: LE b,a,C & LE d,c,C by A1,JORDAN16:11;
+    thus thesis
+    proof
+      per cases by A1,JORDAN16:11;
+      suppose LE a,d,C;
+      hence thesis by A17,Def1;
+      suppose
+A18:     LE d,a,C;
+        (LE a,c,C or LE c,a,C) & (LE b,d,C or LE d,b,C) by A1,JORDAN16:11;
+      hence thesis by A16,A17,A18,Def1;
+    end;
+
+    suppose
+A19:   not LE a,b,C & not LE b,c,C & LE c,d,C;
+    then A20: LE b,a,C & LE c,b,C by A1,JORDAN16:11;
+    thus thesis
+    proof
+      per cases by A1,JORDAN16:11;
+      suppose LE a,d,C;
+      hence thesis by A20,Def1;
+      suppose
+A21:     LE d,a,C;
+        LE b,d,C or LE d,b,C by A1,JORDAN16:11;
+      hence thesis by A19,A20,A21,Def1;
+    end;
+
+    suppose not LE a,b,C & not LE b,c,C & not LE c,d,C;
+    then LE b,a,C & LE c,b,C & LE d,c,C by A1,JORDAN16:11;
+    hence thesis by Def1;
+  end;

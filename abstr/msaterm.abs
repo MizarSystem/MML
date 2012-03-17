@@ -1,0 +1,461 @@
+:: Terms over many sorted universal algebra
+::  by Grzegorz Bancerek
+::
+:: Received November 25, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, RELAT_1, FUNCT_1, ZF_REFLE, PBOOLE, AMI_1, MSUALG_1,
+      TREES_3, MSAFREE, DTCONSTR, FREEALG, LANG1, TREES_4, BOOLE, TDGROUP,
+      PROB_1, TREES_2, FINSET_1, MCART_1, QC_LANG1, FINSEQ_4, TREES_9, TREES_1,
+      PRALG_1, ORDINAL1, FUNCT_6, CARD_3, MSATERM;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
+      MCART_1, RELAT_1, STRUCT_0, FUNCT_1, FINSEQ_1, FUNCT_2, FINSET_1,
+      TREES_1, TREES_2, PROB_1, CARD_3, FINSEQ_4, FUNCT_6, LANG1, TREES_3,
+      TREES_4, TREES_9, PBOOLE, MSUALG_1, DTCONSTR, MSUALG_3, MSAFREE;
+ constructors NAT_1, MCART_1, TREES_9, MSUALG_3, MSAFREE, FINSOP_1, FINSEQ_4,
+      MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, FUNCT_1, FINSEQ_1, PRELAMB, TREES_3, DTCONSTR, PBOOLE,
+      MSUALG_1, MSAFREE, PRALG_1, TREES_9, RELSET_1, MSUALG_2, STRUCT_0,
+      ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+definition let I be non empty set;
+ let X be non-empty ManySortedSet of I;
+ let i be Element of I;
+ cluster X.i -> non empty;
+end;
+
+reserve S for non void non empty ManySortedSign,
+        V for non-empty ManySortedSet of the carrier of S;
+
+definition let S; let V be ManySortedSet of the carrier of S;
+ func S-Terms V -> Subset of FinTrees the carrier of DTConMSA V equals
+:: MSATERM:def 1
+  TS DTConMSA V;
+end;
+
+definition let S, V;
+ cluster S-Terms V -> non empty;
+end;
+
+definition let S, V;
+ mode Term of S,V is Element of S-Terms V;
+end;
+
+reserve A for MSAlgebra over S,
+        t for Term of S,V;
+
+definition let S, V;
+ let o be OperSymbol of S;
+ redefine func Sym(o, V) -> NonTerminal of DTConMSA V;
+end;
+
+definition let S, V; let sy be NonTerminal of DTConMSA V;
+ mode ArgumentSeq of sy -> FinSequence of S-Terms V means
+:: MSATERM:def 2
+  it is SubtreeSeq of sy;
+end;
+
+theorem :: MSATERM:1
+ for o being OperSymbol of S, a being FinSequence holds
+   [o,the carrier of S]-tree a in S-Terms V & a is DTree-yielding
+      iff a is ArgumentSeq of Sym(o,V);
+
+scheme TermInd
+ { S() -> non void non empty ManySortedSign,
+   V() -> non-empty ManySortedSet of the carrier of S(),
+   P[set]
+ }:
+  for t being Term of S(),V() holds P[t]
+provided
+  for s being SortSymbol of S(), v being Element of V().s
+     holds P[root-tree [v,s]]
+    and
+  for o being OperSymbol of S(),
+      p being ArgumentSeq of Sym(o,V()) st
+       for t being Term of S(),V() st t in rng p holds P[t]
+    holds P[[o,the carrier of S()]-tree p];
+
+definition let S, A, V;
+ mode c-Term of A,V is Term of S, (the Sorts of A) \/ V;
+end;
+
+definition let S, A, V;
+ let o be OperSymbol of S;
+ mode ArgumentSeq of o,A,V is ArgumentSeq of Sym(o,(the Sorts of A) \/ V);
+end;
+
+scheme CTermInd
+ { S() -> non void non empty ManySortedSign,
+   A() -> non-empty MSAlgebra over S(),
+   V() -> non-empty ManySortedSet of the carrier of S(),
+   P[set]
+ }:
+  for t being c-Term of A(),V() holds P[t]
+provided
+  for s being SortSymbol of S(), x being Element of (the Sorts of A()).s
+     holds P[root-tree [x,s]]
+    and
+  for s being SortSymbol of S(), v being Element of V().s
+     holds P[root-tree [v,s]]
+    and
+  for o being OperSymbol of S(),
+      p being ArgumentSeq of o,A(),V() st
+       for t being c-Term of A(),V() st t in rng p holds P[t]
+    holds P[Sym(o,(the Sorts of A()) \/ V())-tree p];
+
+definition let S, V, t;
+ let p be Node of t;
+ redefine func t.p -> Symbol of DTConMSA V;
+end;
+
+definition let S, V;
+ cluster -> finite Term of S,V;
+end;
+
+theorem :: MSATERM:2
+   (ex s being SortSymbol of S, v being Element of V.s st t.{} = [v,s])
+  or
+   t.{} in [:the OperSymbols of S,{the carrier of S}:];
+
+theorem :: MSATERM:3
+   for t being c-Term of A,V holds
+   (ex s being SortSymbol of S, x being set st
+       x in (the Sorts of A).s & t.{} = [x,s])
+  or
+   (ex s being SortSymbol of S, v being Element of V.s st t.{} = [v,s])
+  or
+   t.{} in [:the OperSymbols of S,{the carrier of S}:];
+
+theorem :: MSATERM:4
+ for s being SortSymbol of S, v being Element of V.s holds
+  root-tree [v,s] is Term of S, V;
+
+theorem :: MSATERM:5
+ for s being SortSymbol of S, v being Element of V.s
+  st t.{} = [v,s] holds t = root-tree [v,s];
+
+theorem :: MSATERM:6
+ for s being SortSymbol of S, x being set st x in (the Sorts of A).s holds
+  root-tree [x,s] is c-Term of A, V;
+
+theorem :: MSATERM:7
+   for t being c-Term of A,V
+ for s being SortSymbol of S, x being set st x in (the Sorts of A).s &
+  t.{} = [x,s] holds t = root-tree [x,s];
+
+theorem :: MSATERM:8
+ for s being SortSymbol of S, v being Element of V.s holds
+  root-tree [v,s] is c-Term of A, V;
+
+theorem :: MSATERM:9
+   for t being c-Term of A,V
+ for s being SortSymbol of S, v being Element of V.s
+  st t.{} = [v,s] holds t = root-tree [v,s];
+
+theorem :: MSATERM:10
+ for o being OperSymbol of S st t.{} = [o,the carrier of S]
+  ex a being ArgumentSeq of Sym(o,V) st t = [o,the carrier of S]-tree a;
+
+definition let S;
+ let A be non-empty MSAlgebra over S;
+ let V;
+ let s be SortSymbol of S;
+ let x be Element of (the Sorts of A).s;
+ func x-term(A,V) -> c-Term of A,V equals
+:: MSATERM:def 3
+   root-tree [x,s];
+end;
+
+definition let S, A, V;
+ let s be SortSymbol of S;
+ let v be Element of V.s;
+ func v-term A -> c-Term of A,V equals
+:: MSATERM:def 4
+   root-tree [v,s];
+end;
+
+definition let S, V;
+ let sy be NonTerminal of DTConMSA V;
+ let p be ArgumentSeq of sy;
+ redefine func sy-tree p -> Term of S,V;
+end;
+
+scheme TermInd2
+ { S() -> non void non empty ManySortedSign,
+   A() -> non-empty MSAlgebra over S(),
+   V() -> non-empty ManySortedSet of the carrier of S(),
+   P[set]
+ }:
+  for t being c-Term of A(),V() holds P[t]
+provided
+  for s being SortSymbol of S(), x being Element of (the Sorts of A()).s
+     holds P[x-term (A(), V())]
+    and
+  for s being SortSymbol of S(), v being Element of V().s
+     holds P[v-term A()]
+    and
+
+  for o being OperSymbol of S(),
+      p being ArgumentSeq of Sym(o,(the Sorts of A()) \/ V()) st
+       for t being c-Term of A(),V() st t in rng p holds P[t]
+    holds P[Sym(o,(the Sorts of A()) \/ V())-tree p];
+
+begin :: Sort of a term
+
+theorem :: MSATERM:11
+ for t being Term of S,V ex s being SortSymbol of S st t in FreeSort (V, s);
+
+theorem :: MSATERM:12
+ for s being SortSymbol of S holds FreeSort (V, s) c= S-Terms V;
+
+theorem :: MSATERM:13
+   S-Terms V = Union FreeSort V;
+
+definition let S, V, t;
+ func the_sort_of t -> SortSymbol of S means
+:: MSATERM:def 5
+   t in FreeSort (V, it);
+end;
+
+theorem :: MSATERM:14
+ for s being SortSymbol of S, v be Element of V.s st
+  t = root-tree [v,s] holds the_sort_of t = s;
+
+theorem :: MSATERM:15
+ for t being c-Term of A,V
+ for s being SortSymbol of S, x be set st x in (the Sorts of A).s &
+  t = root-tree [x,s] holds the_sort_of t = s;
+
+theorem :: MSATERM:16
+   for t being c-Term of A,V
+ for s being SortSymbol of S, v being Element of V.s st
+  t = root-tree [v,s] holds the_sort_of t = s;
+
+theorem :: MSATERM:17
+ for o being OperSymbol of S st t.{} = [o,the carrier of S] holds
+  the_sort_of t = the_result_sort_of o;
+
+theorem :: MSATERM:18
+ for A being non-empty MSAlgebra over S
+ for s being SortSymbol of S, x being Element of (the Sorts of A).s holds
+  the_sort_of (x-term (A,V)) = s;
+
+theorem :: MSATERM:19
+ for s being SortSymbol of S, v being Element of V.s holds
+  the_sort_of (v-term A) = s;
+
+theorem :: MSATERM:20
+ for o being OperSymbol of S, p being ArgumentSeq of Sym(o,V) holds
+  the_sort_of (Sym(o,V)-tree p qua Term of S,V) = the_result_sort_of o;
+
+begin :: Argument Sequence
+
+theorem :: MSATERM:21
+ for o being OperSymbol of S, a being FinSequence of S-Terms V holds
+  a is ArgumentSeq of Sym(o,V) iff Sym(o, V) ==> roots a;
+
+theorem :: MSATERM:22
+ for o being OperSymbol of S, a being ArgumentSeq of Sym(o,V) holds
+  len a = len the_arity_of o & dom a = dom the_arity_of o &
+   for i being Nat st i in dom a holds a.i is Term of S,V;
+
+theorem :: MSATERM:23
+   for o being OperSymbol of S, a being ArgumentSeq of Sym(o,V)
+ for i being Nat st i in dom a for t being Term of S,V st t = a.i holds
+  t = (a qua FinSequence of S-Terms V qua non empty set)/.i &
+  the_sort_of t = (the_arity_of o).i &
+  the_sort_of t = (the_arity_of o)/.i;
+
+theorem :: MSATERM:24
+ for o being OperSymbol of S, a being FinSequence st
+  (len a = len the_arity_of o or dom a = dom the_arity_of o) &
+  ((for i being Nat st i in dom a ex t being Term of S,V st t = a.i &
+     the_sort_of t = (the_arity_of o).i) or
+   for i being Nat st i in dom a ex t being Term of S,V st t = a.i &
+     the_sort_of t = (the_arity_of o)/.i)
+ holds a is ArgumentSeq of Sym(o,V);
+
+theorem :: MSATERM:25
+   for o being OperSymbol of S, a being FinSequence of S-Terms V st
+  (len a = len the_arity_of o or dom a = dom the_arity_of o) &
+  ((for i being Nat st i in dom a for t being Term of S,V st t = a.i holds
+     the_sort_of t = (the_arity_of o).i) or
+   for i being Nat st i in dom a for t being Term of S,V st t = a.i holds
+     the_sort_of t = (the_arity_of o)/.i)
+ holds a is ArgumentSeq of Sym(o,V);
+
+theorem :: MSATERM:26
+ for S being non void non empty ManySortedSign,
+     V1,V2 being non-empty ManySortedSet of the carrier of S st V1 c= V2
+ for t being Term of S, V1 holds t is Term of S, V2;
+
+theorem :: MSATERM:27
+   for S being non void non empty ManySortedSign,
+     A being MSAlgebra over S,
+     V being non-empty ManySortedSet of the carrier of S,
+     t being Term of S, V
+  holds t is c-Term of A, V;
+
+begin :: Compound terms
+
+definition
+ let S be non void non empty ManySortedSign;
+ let V be non-empty ManySortedSet of the carrier of S;
+ mode CompoundTerm of S,V -> Term of S,V means
+:: MSATERM:def 6
+    it.{} in [:the OperSymbols of S, {the carrier of S}:];
+end;
+
+definition
+ let S be non void non empty ManySortedSign;
+ let V be non-empty ManySortedSet of the carrier of S;
+ mode SetWithCompoundTerm of S,V -> non empty Subset of S-Terms V means
+:: MSATERM:def 7
+    ex t being CompoundTerm of S,V st t in it;
+end;
+
+theorem :: MSATERM:28
+   t is not root implies t is CompoundTerm of S,V;
+
+theorem :: MSATERM:29
+ for p being Node of t holds t|p is Term of S,V;
+
+definition
+ let S be non void non empty ManySortedSign;
+ let V be non-empty ManySortedSet of the carrier of S;
+ let t be Term of S,V;
+ let p be Node of t;
+ redefine func t|p -> Term of S,V;
+end;
+
+begin :: Evaluation of terms
+
+definition
+ let S be non void non empty ManySortedSign;
+ let A be MSAlgebra over S;
+ mode Variables of A -> non-empty ManySortedSet of the carrier of S means
+:: MSATERM:def 8
+
+  it misses the Sorts of A;
+end;
+
+theorem :: MSATERM:30
+ for V being Variables of A
+ for s being SortSymbol of S, x being set st x in (the Sorts of A).s
+ for v being Element of V.s holds x <> v;
+
+definition
+ let S be non void non empty ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ let V be non-empty ManySortedSet of the carrier of S;
+ let t be c-Term of A,V;
+ let f be ManySortedFunction of V, the Sorts of A;
+ let vt be finite DecoratedTree;
+ pred vt is_an_evaluation_of t,f means
+:: MSATERM:def 9
+
+  dom vt = dom t &
+  for p being Node of vt holds
+   (for s being SortSymbol of S, v being Element of V.s st t.p = [v,s]
+    holds vt.p = f.s.v) &
+   (for s being SortSymbol of S, x being Element of (the Sorts of A).s st
+     t.p = [x,s] holds vt.p = x) &
+   (for o being OperSymbol of S st t.p = [o,the carrier of S] holds
+     vt.p = Den(o, A).succ(vt,p));
+end;
+
+reserve S for non void non empty ManySortedSign,
+ A for non-empty MSAlgebra over S,
+ V for Variables of A,
+ t for c-Term of A,V,
+ f for ManySortedFunction of V, the Sorts of A;
+
+theorem :: MSATERM:31
+ for s being SortSymbol of S, x being Element of (the Sorts of A).s st
+  t = root-tree [x,s] holds root-tree x is_an_evaluation_of t,f;
+
+theorem :: MSATERM:32
+ for s being SortSymbol of S, v being Element of V.s st
+  t = root-tree [v,s] holds root-tree (f.s.v) is_an_evaluation_of t,f;
+
+theorem :: MSATERM:33
+ for o being OperSymbol of S, p being ArgumentSeq of o,A,V
+ for q being DTree-yielding FinSequence st len q = len p &
+  for i being Nat, t being c-Term of A,V st i in dom p & t = p.i
+   ex vt being finite DecoratedTree st vt = q.i & vt is_an_evaluation_of t,f
+ ex vt being finite DecoratedTree st
+  vt = (Den(o,A).roots q)-tree q &
+     vt is_an_evaluation_of
+            (Sym(o,(the Sorts of A) \/ V)-tree p qua c-Term of A,V), f;
+
+theorem :: MSATERM:34
+ for t being c-Term of A,V, e being finite DecoratedTree st
+  e is_an_evaluation_of t,f
+ for p being Node of t, n being Node of e st n = p holds
+  e|n is_an_evaluation_of t|p, f;
+
+theorem :: MSATERM:35
+ for o being OperSymbol of S, p being ArgumentSeq of o,A,V
+ for vt being finite DecoratedTree st
+     vt is_an_evaluation_of
+       (Sym(o,(the Sorts of A) \/ V)-tree p qua c-Term of A,V), f
+ ex q being DTree-yielding FinSequence st len q = len p &
+  vt = (Den(o,A).roots q)-tree q &
+  for i being Nat, t being c-Term of A,V st i in dom p & t = p.i
+   ex vt being finite DecoratedTree st vt = q.i & vt is_an_evaluation_of t,f;
+
+theorem :: MSATERM:36
+ ex vt being finite DecoratedTree st vt is_an_evaluation_of t,f;
+
+theorem :: MSATERM:37
+ for e1, e2 being finite DecoratedTree st
+  e1 is_an_evaluation_of t,f & e2 is_an_evaluation_of t,f holds e1 = e2;
+
+theorem :: MSATERM:38
+ for vt being finite DecoratedTree st vt is_an_evaluation_of t,f holds
+  vt.{} in (the Sorts of A).the_sort_of t;
+
+definition
+ let S be non void non empty ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ let V be Variables of A;
+ let t be c-Term of A,V;
+ let f be ManySortedFunction of V, the Sorts of A;
+ func t@f -> Element of (the Sorts of A).the_sort_of t means
+:: MSATERM:def 10
+
+  ex vt being finite DecoratedTree st
+    vt is_an_evaluation_of t,f & it = vt.{};
+end;
+
+reserve t for c-Term of A,V;
+
+theorem :: MSATERM:39
+ for vt being finite DecoratedTree st vt is_an_evaluation_of t,f holds
+  t@f = vt.{};
+
+theorem :: MSATERM:40
+   for vt being finite DecoratedTree st vt is_an_evaluation_of t,f
+  for p being Node of t holds vt.p = (t|p)@f;
+
+theorem :: MSATERM:41
+   for s being SortSymbol of S, x being Element of (the Sorts of A).s holds
+  (x-term(A,V))@f = x;
+
+theorem :: MSATERM:42
+   for s being SortSymbol of S, v being Element of V.s holds
+  (v-term A)@f = f.s.v;
+
+theorem :: MSATERM:43
+   for o being OperSymbol of S, p being ArgumentSeq of o,A,V
+ for q being FinSequence st len q = len p &
+   for i being Nat st i in dom p
+   for t being c-Term of A,V st t = p.i holds q.i = t@f
+ holds (Sym(o,(the Sorts of A) \/ V)-tree p qua c-Term of A,V)@f = Den(o,A).q;
+

@@ -1,0 +1,2865 @@
+:: The First Part of Jordan's Theorem for Special Polygons
+::  by Yatsuka Nakamura and Andrzej Trybulec
+::
+:: Received July 22, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, SEQM_3, GOBOARD5, ARYTM_3, EUCLID, MCART_1, RELAT_1,
+      SUBSET_1, TOPREAL1, FINSEQ_1, GOBOARD2, TREES_1, TOPS_1, BOOLE, CONNSP_3,
+      RELAT_2, GOBOARD9, CONNSP_1, TARSKI, MATRIX_1, ARYTM_1, GOBRD10, FUNCT_1,
+      FINSEQ_4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, TOPREAL1, GOBOARD1, NUMBERS,
+      XREAL_0, STRUCT_0, REAL_1, NAT_1, BINARITH, PRE_TOPC, FUNCT_1, FINSEQ_1,
+      FINSEQ_4, MATRIX_1, TOPS_1, CONNSP_1, EUCLID, GOBOARD2, GOBOARD5,
+      GOBOARD9, CONNSP_3, GOBRD10;
+ constructors REAL_1, BINARITH, TOPS_1, CONNSP_1, GOBOARD2, GOBOARD9, CONNSP_3,
+      GOBRD10, FINSEQ_4, MEMBERED;
+ clusters SUBSET_1, GOBOARD5, RELSET_1, PRE_TOPC, GOBOARD2, EUCLID, XREAL_0,
+      GOBRD11, NAT_1, MEMBERED;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI;
+ theorems TARSKI, NAT_1, FINSEQ_1, REAL_1, AXIOMS, SPPOL_1, FINSEQ_4, GOBOARD7,
+      GOBOARD8, GOBOARD9, PRE_TOPC, CONNSP_1, SUBSET_1, EUCLID, CONNSP_3,
+      TOPREAL1, GOBOARD5, SQUARE_1, TOPREAL3, MATRIX_1, BINARITH, GOBRD10,
+      GOBRD11, ZFMISC_1, XBOOLE_0, XBOOLE_1, JORDAN1, FINSEQ_3, XCMPLX_1;
+ schemes MATRIX_1;
+
+begin
+
+reserve i,j,k,k1,k2,i1,i2,j1,j2 for Nat,
+        r,s for Real,
+        x for set,
+
+        f for non constant standard special_circular_sequence;
+
+Lm1: for r holds 1/2*(r+r)=r
+proof let r; 1/2*(r+r)=(r+r)/2 by XCMPLX_1:100;
+hence thesis by XCMPLX_1:65;
+end;
+
+Lm2: (L~f)` = the carrier of ((TOP-REAL 2)|(L~f)`)
+proof
+    (L~f)`=[#]((TOP-REAL 2)|(L~f)`) by PRE_TOPC:def 10
+       .=the carrier of ((TOP-REAL 2)|(L~f)`) by PRE_TOPC:12;
+  hence thesis;
+end;
+
+Lm3: the carrier of TOP-REAL 2 = REAL 2 by EUCLID:25;
+
+canceled;
+
+theorem Th2: for i,j st i<=len GoB f & j<=width GoB f
+ holds Int cell(GoB f,i,j)c=(L~f)`
+proof let i,j;assume i<=len GoB f & j<=width GoB f;
+  then Int cell(GoB f,i,j) misses (L~f) by GOBOARD7:14;
+ hence thesis by SUBSET_1:43;
+end;
+
+theorem
+Th3: for i,j st i<=len GoB f & j<=width GoB f holds
+   Cl Down(Int cell(GoB f,i,j),(L~f)`)=cell(GoB f,i,j)/\((L~f)`)
+proof let i,j;assume A1:i<=len GoB f & j<=width GoB f;
+   reconsider V=Int cell(GoB f,i,j) as Subset of TOP-REAL 2;
+   reconsider B=(L~f)` as Subset of TOP-REAL 2;
+     V c= B by A1,Th2;
+  then Cl Down(V,B) =(Cl V) /\ B by CONNSP_3:30;
+  hence thesis by A1,GOBRD11:35;
+end;
+
+theorem
+Th4: for i,j st i<=len GoB f & j<=width GoB f holds
+   Cl Down(Int cell(GoB f,i,j),(L~f)`) is connected
+   & Down(Int cell(GoB f,i,j),(L~f)`)=Int cell(GoB f,i,j)
+proof let i,j;assume A1:i<=len GoB f & j<=width GoB f;
+  then A2:Int cell(GoB f,i,j) is connected by GOBOARD9:21;
+  A3: Int cell(GoB f,i,j) c= (L~f)` by A1,Th2;
+  then Down(Int cell(GoB f,i,j),(L~f)`)=Int cell(GoB f,i,j) by CONNSP_3:28;
+  then Down(Int cell(GoB f,i,j),(L~f)`) is connected by A2,CONNSP_1:24;
+ hence Cl Down(Int cell(GoB f,i,j),(L~f)`) is connected
+                                by CONNSP_1:20;
+ thus thesis by A3,CONNSP_3:28;
+end;
+Lm4:Cl Down(LeftComp f,(L~f)`) is connected
+   & Down(LeftComp f,(L~f)`)=LeftComp f
+   & Down(LeftComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+proof
+    LeftComp f is_a_component_of (L~f)` by GOBOARD9:def 1;
+  then consider B1 being Subset of (TOP-REAL 2)|((L~f)`) such that
+   A1:B1 = LeftComp f & B1 is_a_component_of (TOP-REAL 2)|((L~f)`)
+     by CONNSP_1:def 6;
+  A2: the carrier of (TOP-REAL 2)|((L~f)`) =(L~f)` by JORDAN1:1;
+  then Down(LeftComp f,(L~f)`)=LeftComp f by A1,CONNSP_3:28;
+  then Down(LeftComp f,(L~f)`) is connected by A1,CONNSP_1:def 5;
+ hence Cl Down(LeftComp f,(L~f)`) is connected
+                                by CONNSP_1:20;
+ thus thesis by A1,A2,CONNSP_3:28;
+end;
+Lm5:Cl Down(RightComp f,(L~f)`) is connected
+   & Down(RightComp f,(L~f)`)=RightComp f
+   & Down(RightComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+proof
+    RightComp f is_a_component_of (L~f)` by GOBOARD9:def 2;
+  then consider B1 being Subset of (TOP-REAL 2)|((L~f)`) such that
+   A1:B1 = RightComp f & B1 is_a_component_of (TOP-REAL 2)|((L~f)`)
+     by CONNSP_1:def 6;
+  A2: the carrier of (TOP-REAL 2)|((L~f)`) =(L~f)` by JORDAN1:1;
+  then Down(RightComp f,(L~f)`)=RightComp f by A1,CONNSP_3:28;
+  then Down(RightComp f,(L~f)`) is connected by A1,CONNSP_1:def 5;
+ hence Cl Down(RightComp f,(L~f)`) is connected by CONNSP_1:20;
+ thus thesis by A1,A2,CONNSP_3:28;
+end;
+
+theorem
+Th5:  (L~f)`=union {Cl Down(Int cell(GoB f,i,j),(L~f)`):
+                          i<=len GoB f & j<=width GoB f}
+proof
+A1: (the carrier of TOP-REAL 2)
+            =union {cell(GoB f,i,j):i<=(len GoB f) & j<=(width GoB f)} by
+GOBRD11:7;
+  A2:(L~f)`c= union {Cl Down(Int cell(GoB f,i,j),(L~f)`):
+                        i<=len GoB f & j<=width GoB f}
+ proof let x;assume A3:x in (L~f)`;
+     then consider Y being set such that A4: x in Y &
+         Y in {cell(GoB f,i,j):i<=len GoB f & j<=width GoB f} by A1,TARSKI:def
+4;
+     consider i,j such that
+         A5:Y=cell(GoB f,i,j) & (i<=len GoB f & j<=width GoB f) by A4;
+      A6: x in cell(GoB f,i,j)/\((L~f)`) by A3,A4,A5,XBOOLE_0:def 3;
+      reconsider Y0=Cl Down(Int cell(GoB f,i,j),(L~f)`) as set;
+         x in Y0 & Y0 in {Cl Down(Int cell(GoB f,i1,j1),(L~f)`):
+          i1<=len GoB f & j1<=width GoB f} by A5,A6,Th3;
+  hence x in union {Cl Down(Int cell(GoB f,i1,j1),(L~f)`):
+                        i1<=len GoB f & j1<=width GoB f} by TARSKI:def 4;
+  end;
+    union {Cl Down(Int cell(GoB f,i,j),(L~f)`):
+               i<=len GoB f & j<=width GoB f} c= (L~f)`
+    proof let x;assume x in union {Cl Down(Int cell(GoB f,i,j),(L~f)`):
+           i<=len GoB f & j<=width GoB f};
+      then consider Y being set such that
+      A7: x in Y & Y in {Cl Down(Int cell(GoB f,i,j),(L~f)`):
+          i<=len GoB f & j<=width GoB f} by TARSKI:def 4;
+      consider i,j such that
+      A8: Y= Cl Down(Int cell(GoB f,i,j),(L~f)`) &
+      (i<=len GoB f & j<=width GoB f) by A7;
+        Cl Down(Int cell(GoB f,i,j),(L~f)`)
+                 c= the carrier of (TOP-REAL 2)|(L~f)`;
+      then Y c= (L~f)` by A8,Lm2;
+     hence x in (L~f)` by A7;
+    end;
+ hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+theorem Th6:Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+            is a_union_of_components of (TOP-REAL 2)|((L~f)`)
+ & Down(LeftComp f,(L~f)`)=LeftComp f & Down(RightComp f,(L~f)`)=RightComp f
+proof
+      LeftComp f is_a_component_of (L~f)` by GOBOARD9:def 1;
+    then consider B1 being Subset of (TOP-REAL 2)|((L~f)`)
+     such that A1:B1 = LeftComp f
+     & B1 is_a_component_of ((TOP-REAL 2)|((L~f)`)) by CONNSP_1:def 6;
+     A2: B1 is Subset of (L~f)` by Lm2;
+     then A3:Down(LeftComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                 by A1,CONNSP_3:28;
+      RightComp f is_a_component_of (L~f)` by GOBOARD9:def 2;
+    then consider B2 being Subset of (TOP-REAL 2)|((L~f)`)
+     such that A4:B2 = RightComp f
+     & B2 is_a_component_of ((TOP-REAL 2)|((L~f)`)) by CONNSP_1:def 6;
+     A5: B2 is Subset of (L~f)` by Lm2;
+then Down(RightComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                 by A4,CONNSP_3:28;
+ hence thesis by A1,A2,A3,A4,A5,CONNSP_3:28,GOBRD11:3;
+end;
+
+Lm6: for i1,j1,i2,j2 st i1<=len GoB f & j1<=width GoB f
+  & i2<=len GoB f & j2<=width GoB f & (i2=i1+1 or i1=i2+1)&(j1=j2)
+  holds Int cell(GoB f,i1,j1) c= LeftComp f \/ RightComp f
+    implies Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f
+proof let i1,j1,i2,j2;assume
+ A1: i1<=len GoB f & j1<=width GoB f
+  & i2<=len GoB f & j2<=width GoB f & (i2=i1+1 or i1=i2+1)&(j1=j2);
+     now assume A2:Int cell(GoB f,i1,j1) c= LeftComp f \/ RightComp f;
+          now per cases by A1;
+        case A3:i2=i1+1;
+           now per cases;
+         case ex k st 1<=k & k+1 <=len f & j2<>0 & j2<>width GoB f &
+           LSeg(f/.k,f/.(k+1))=LSeg((GoB f)*(i1+1,j2),(GoB f)*(i1+1,j2+1));
+           then consider k such that A4:1<=k & k+1 <=len f
+           & j2<>0 & j2<>width GoB f &
+           LSeg(f/.k,f/.(k+1))=LSeg((GoB f)*(i1+1,j2),(GoB f)*(i1+1,j2+1));
+             now per cases by A4,SPPOL_1:25;
+           case A5:f/.k=(GoB f)*(i1+1,j2)& f/.(k+1)= (GoB f)*(i1+1,j2+1);
+            A6:Indices GoB f=[:dom GoB f,Seg width GoB f:] by MATRIX_1:def 5;
+              0<=i1 by NAT_1:18;
+            then 0+1<=i1+1 by AXIOMS:24;
+            then A7:i1+1 in dom GoB f by A1,A3,FINSEQ_3:27;
+              j2>0 by A4,NAT_1:19; then j2>=0+1 by NAT_1:38;
+            then j2 in Seg width GoB f by A1,FINSEQ_1:3;
+            then A8:[i1+1,j2] in Indices GoB f by A6,A7,ZFMISC_1:106;
+              j2<width GoB f by A1,A4,REAL_1:def 5;
+            then A9:j2+1<=width GoB f by NAT_1:38;
+              1<=j2+1 by NAT_1:29;
+            then j2+1 in Seg width GoB f by A9,FINSEQ_1:3;
+            then [i1+1,j2+1] in Indices GoB f by A6,A7,ZFMISC_1:106;
+            then A10:right_cell(f,k) = cell(GoB f,i1+1,j2)
+                                     by A4,A5,A8,GOBOARD5:28;
+            A11: Int right_cell(f,k) c= RightComp f by A4,GOBOARD9:28;
+              RightComp f c= LeftComp f \/ RightComp f by XBOOLE_1:7;
+           hence Int cell(GoB f,i1+1,j2) c= LeftComp f \/ RightComp f
+                                 by A10,A11,XBOOLE_1:1;
+           case A12:f/.k=(GoB f)*(i1+1,j2+1)& f/.(k+1)=(GoB f)*(i1+1,j2);
+            A13:Indices GoB f=[:dom GoB f,Seg width GoB f:] by MATRIX_1:def 5;
+              0<=i1 by NAT_1:18;
+            then 0+1<=i1+1 by AXIOMS:24;
+            then A14:i1+1 in dom GoB f by A1,A3,FINSEQ_3:27;
+              j2>0 by A4,NAT_1:19; then j2>=0+1 by NAT_1:38;
+            then j2 in Seg width GoB f by A1,FINSEQ_1:3;
+            then A15:[i1+1,j2] in Indices GoB f by A13,A14,ZFMISC_1:106;
+              j2<width GoB f by A1,A4,REAL_1:def 5;
+            then A16:j2+1<=width GoB f by NAT_1:38;
+              1<=j2+1 by NAT_1:29;
+            then j2+1 in Seg width GoB f by A16,FINSEQ_1:3;
+            then [i1+1,j2+1] in Indices GoB f by A13,A14,ZFMISC_1:106;
+        then A17:left_cell(f,k) = cell(GoB f,i1+1,j2) by A4,A12,A15,GOBOARD5:31
+;
+            A18: Int left_cell(f,k) c= LeftComp f by A4,GOBOARD9:24;
+              LeftComp f c= LeftComp f \/ RightComp f by XBOOLE_1:7;
+           hence Int cell(GoB f,i1+1,j2) c= LeftComp f \/ RightComp f
+                                     by A17,A18,XBOOLE_1:1;
+           end;
+         hence Int cell(GoB f,i1+1,j2) c= LeftComp f \/ RightComp f;
+         case A19: not ex k st 1<=k & k+1 <=len f & j2<>0 & j2<>width GoB f &
+          LSeg(f/.k,f/.(k+1))=LSeg((GoB f)*(i1+1,j2),(GoB f)*(i1+1,j2+1));
+            now per cases by A19;
+          case A20:j2=0;
+           reconsider p=|[((GoB f)*(i1+1,1))`1,((GoB f)*(i1+1,1))`2-1]| as
+            Point of TOP-REAL 2;
+            A21:1<width GoB f by GOBOARD7:35;
+            A22:1<len GoB f by GOBOARD7:34;
+            A23:1<=i1+1 by NAT_1:29;
+            then ((GoB f)*(i1+1,1))`2=((GoB f)*(1,1))`2 by A1,A3,A21,GOBOARD5:2
+;
+            then A24:p`2=((GoB f)*(1,1))`2-1 by EUCLID:56;
+              p`2<p`2+1 by REAL_1:69;
+            then A25:p`2< ((GoB f)*(1,1))`2 by A24,XCMPLX_1:27;
+            A26:p in {p} by TARSKI:def 1;
+            reconsider P={p} as Subset of TOP-REAL 2;
+             (for q being Point of TOP-REAL 2
+              st q in P holds q`2<((GoB f)*(1,1))`2) implies
+              P misses L~f by GOBOARD8:23;
+            then A27: {p} c= (L~f)` by A25,SUBSET_1:43,TARSKI:def 1;
+            then reconsider p1=p as Point of (TOP-REAL 2)|((L~f)`) by A26,
+JORDAN1:1;
+               p in {|[r,s]|:s<=(GoB f)*(1,1)`2}
+              proof
+                 p=|[p`1,p`2]| by EUCLID:57;
+               hence thesis by A25;
+              end;
+             then A28:p in h_strip(GoB f,j2) by A20,A22,GOBOARD5:8;
+              0<=i1 by NAT_1:18;
+            then A29: i1=0 or i1>=0+1 by NAT_1:38;
+              now per cases by A1,A3,A29,REAL_1:def 5;
+            case A30:i1>=1 & i1+1<len GoB f;
+             then A31:1<=i1+1 & i1+1<len GoB f by NAT_1:29;
+             A32:1<=i1 & i1<len GoB f by A30,NAT_1:38;
+               p in {|[r,s]|:(GoB f)*(i1,1)`1<=r & r<=(GoB f)*(i1+1,1)`1}
+             proof i1<i1+1 by NAT_1:38;
+              then ((GoB f)*(i1,1))`1<((GoB f)*(i1+1,1))`1 by A21,A30,GOBOARD5:
+4;
+              hence thesis;
+             end;
+             then A33:p in v_strip(GoB f,i1) by A21,A32,GOBOARD5:9;
+             A34:i1+1+1<=len GoB f by A30,NAT_1:38;
+               p in {|[r,s]|:(GoB f)*(i1+1,1)`1<=r & r<=(GoB f)*(i1+1+1,1)`1}
+              proof i1+1<i1+1+1 by NAT_1:38;
+                then ((GoB f)*(i1+1,1)`1<=((GoB f)*(i1+1,1))`1
+                & ((GoB f)*(i1+1,1))`1<=(GoB f)*(i1+1+1,1)`1)
+                                   by A21,A23,A34,GOBOARD5:4;
+               hence thesis;
+              end;
+             then p in v_strip(GoB f,i1+1) by A21,A31,GOBOARD5:9;
+             then p in v_strip(GoB f,i1)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i1+1)/\ h_strip(GoB f,j2) by A28,A33,XBOOLE_0:
+def 3
+;
+             then p in cell(GoB f,i1,j2) &
+             p in cell(GoB f,i1+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i1+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i1,j2)/\((L~f)`) by A26,A27,XBOOLE_0:def 3;
+           case A35:i1>=1 & i1+1=len GoB f;
+             A36: i1<i1+1 by NAT_1:38;
+             A37:1<=i1 & i1<len GoB f by A35,NAT_1:38;
+               p in {|[r,s]|:(GoB f)*(i1,1)`1<=r & r<=(GoB f)*(i1+1,1)`1}
+             proof
+                ((GoB f)*(i1,1))`1<((GoB f)*(i1+1,1))`1 by A21,A35,A36,GOBOARD5
+:4;
+              hence thesis;
+             end;
+             then A38:p in v_strip(GoB f,i1) by A21,A37,GOBOARD5:9;
+               p in {|[r,s]|:(GoB f)*(i1+1,1)`1<=r};
+             then p in v_strip(GoB f,i1+1) by A21,A35,GOBOARD5:10;
+             then p in v_strip(GoB f,i1)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i1+1)/\ h_strip(GoB f,j2) by A28,A38,XBOOLE_0:
+def 3
+;
+             then p in cell(GoB f,i1,j2) &
+             p in cell(GoB f,i1+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i1+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i1,j2)/\((L~f)`) by A26,A27,XBOOLE_0:def 3;
+           case A39:i1=0 & i1+1<len GoB f;
+             then p in {|[r,s]|: r<=(GoB f)*(1,1)`1};
+             then A40:p in v_strip(GoB f,i1) by A21,A39,GOBOARD5:11;
+             A41:i1+1+1<=len GoB f by A39,NAT_1:38;
+               p in {|[r,s]|:(GoB f)*(i1+1,1)`1<=r & r<=(GoB f)*(i1+1+1,1)`1}
+              proof i1+1<i1+1+1 by NAT_1:38;
+                then ((GoB f)*(i1+1,1)`1<=((GoB f)*(i1+1,1))`1
+                & ((GoB f)*(i1+1,1))`1<=(GoB f)*(i1+1+1,1)`1) by A21,A23,A41,
+GOBOARD5:4;
+               hence thesis;
+              end;
+             then p in v_strip(GoB f,i1+1) by A21,A39,GOBOARD5:9;
+             then p in v_strip(GoB f,i1)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i1+1)/\ h_strip(GoB f,j2) by A28,A40,XBOOLE_0:
+def 3
+;
+             then p in cell(GoB f,i1,j2) &
+             p in cell(GoB f,i1+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i1+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i1,j2)/\((L~f)`) by A26,A27,XBOOLE_0:def 3;
+           case A42:i1=0 & i1+1=len GoB f;
+             then p in {|[r,s]|: r<=(GoB f)*(1,1)`1};
+             then A43:p in v_strip(GoB f,i1) by A21,A42,GOBOARD5:11;
+               p in {|[r,s]|:(GoB f)*(i1+1,1)`1<=r};
+             then p in v_strip(GoB f,i1+1) by A21,A42,GOBOARD5:10;
+             then p in v_strip(GoB f,i1)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i1+1)/\ h_strip(GoB f,j2) by A28,A43,XBOOLE_0:
+def 3
+;
+             then p in cell(GoB f,i1,j2) &
+             p in cell(GoB f,i1+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i1+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i1,j2)/\((L~f)`) by A26,A27,XBOOLE_0:def 3;
+            end;
+             then A44:p in Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`)
+                    & p in Cl Down(Int cell(GoB f,i1,j2),(L~f)`) by A1,Th3;
+             A45:Down(LeftComp f,(L~f)`)=LeftComp f &
+             Down(RightComp f,(L~f)`)=RightComp f by Th6;
+               Down(Int cell(GoB f,i1,j2),(L~f)`)
+                     c= LeftComp f \/ RightComp f by A1,A2,Th4;
+             then Down(Int cell(GoB f,i1,j2),(L~f)`)
+                     c= Down(LeftComp f \/ RightComp f,(L~f)`)
+                                             by A45,GOBRD11:4;
+             then A46:Cl Down(Int cell(GoB f,i1,j2),(L~f)`)
+                     c= Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+                                 by PRE_TOPC:49;
+             A47:Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`) is connected
+                                  by A1,A3,Th4;
+               Down(LeftComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm4;
+             then Down(LeftComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A48:Cl Down(LeftComp f,(L~f)`)=Down(LeftComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(RightComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm5;
+             then Down(RightComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A49:Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+             =Down((LeftComp f) \/ (RightComp f),(L~f)`) by GOBRD11:4;
+             then A50:Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+             =Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                       by A48,A49,PRE_TOPC:50;
+              Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+               is a_union_of_components of (TOP-REAL 2)|((L~f)`) by Th6;
+             then A51:skl p1 c= Down(LeftComp f,(L~f)`)
+                 \/ Down(RightComp f,(L~f)`) by A44,A46,A50,CONNSP_3:21;
+               Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`) c= skl p1
+                                              by A44,A47,GOBRD11:1;
+             then A52: Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`)
+                c= Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                          by A51,XBOOLE_1:1;
+             A53:Down(Int cell(GoB f,i1+1,j2),(L~f)`)
+                          c= Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`)
+                                          by PRE_TOPC:48;
+               Down(Int cell(GoB f,i1+1,j2),(L~f)`)=Int cell(GoB f,i1+1,j2)
+                                  by A1,A3,Th4;
+           hence Int cell(GoB f,i1+1,j2) c= LeftComp f \/ RightComp f
+                                         by A45,A52,A53,XBOOLE_1:1;
+          case A54:j2=width GoB f;
+           reconsider p=|[((GoB f)*(i1+1,width GoB f))`1,
+                ((GoB f)*(i1+1,width GoB f))`2+1]| as Point of TOP-REAL 2;
+            A55:1<width GoB f by GOBOARD7:35;
+            A56:1<len GoB f by GOBOARD7:34;
+A57:        1<=1+i1 by NAT_1:29;
+            then ((GoB f)*(i1+1,width GoB f))`2
+                        =((GoB f)*(1,width GoB f))`2 by A1,A3,A55,GOBOARD5:2;
+            then A58:p`2=((GoB f)*(1,width GoB f))`2+1 by EUCLID:56;
+            A59: ((GoB f)*(1,width GoB f))`2<((GoB f)*(1,width GoB f))`2+1
+                                   by REAL_1:69;
+            A60:((GoB f)*(1,width GoB f))`2<p`2 by A58,REAL_1:69;
+            A61:p in {p} by TARSKI:def 1;
+            reconsider P={p} as Subset of TOP-REAL 2;
+             (for q being Point of TOP-REAL 2
+              st q in P holds ((GoB f)*(1,width GoB f)`2)<q`2) implies
+              P misses L~f by GOBOARD8:24;
+            then A62: {p} c= (L~f)` by A58,A59,SUBSET_1:43,TARSKI:def 1;
+            then reconsider p1=p as Point of (TOP-REAL 2)|((L~f)`) by A61,
+JORDAN1:1;
+               p in {|[r,s]|:(GoB f)*(1,width (GoB f))`2<=s}
+              proof
+                 p=|[p`1,p`2]| by EUCLID:57;
+               hence thesis by A60;
+              end;
+             then A63:p in h_strip(GoB f,j2) by A54,A56,GOBOARD5:7;
+              0<=i1 by NAT_1:18;
+            then A64: i1=0 or i1>=0+1 by NAT_1:38;
+              now per cases by A1,A3,A64,REAL_1:def 5;
+            case A65:i1>=1 & i1+1<len GoB f;
+             then A66:1<=i1+1 & i1+1<len GoB f by NAT_1:29;
+             A67:1<=i1 & i1<len GoB f by A65,NAT_1:38;
+               p in {|[r,s]|:(GoB f)*(i1,width GoB f)`1<=r &
+                r<=(GoB f)*(i1+1,width GoB f)`1}
+             proof i1<i1+1 by NAT_1:38;
+              then ((GoB f)*(i1,width GoB f))`1
+                   <((GoB f)*(i1+1,width GoB f))`1 by A55,A65,GOBOARD5:4;
+              hence thesis;
+             end;
+             then A68:p in v_strip(GoB f,i1) by A55,A67,GOBOARD5:9;
+             A69:i1+1+1<=len GoB f by A65,NAT_1:38;
+               p in {|[r,s]|:(GoB f)*(i1+1,width GoB f)`1<=r
+                & r<=(GoB f)*(i1+1+1,width GoB f)`1}
+              proof i1+1<i1+1+1 by NAT_1:38;
+                then ((GoB f)*(i1+1,width GoB f)`1
+                        <=((GoB f)*(i1+1,width GoB f))`1
+                & ((GoB f)*(i1+1,width GoB f))`1
+                   <=(GoB f)*(i1+1+1,width GoB f)`1) by A55,A57,A69,GOBOARD5:4;
+               hence thesis;
+              end;
+             then p in v_strip(GoB f,i1+1) by A55,A66,GOBOARD5:9;
+             then p in v_strip(GoB f,i1)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i1+1)/\ h_strip(GoB f,j2) by A63,A68,XBOOLE_0:
+def 3
+;
+             then p in cell(GoB f,i1,j2) &
+             p in cell(GoB f,i1+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i1+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i1,j2)/\((L~f)`) by A61,A62,XBOOLE_0:def 3;
+           case A70:i1>=1 & i1+1=len GoB f;
+             A71: i1<i1+1 by NAT_1:38;
+             A72:1<=i1 & i1<len GoB f by A70,NAT_1:38;
+               p in {|[r,s]|:(GoB f)*(i1,width (GoB f))`1<=r
+                & r<=(GoB f)*(i1+1,width (GoB f))`1}
+             proof
+                ((GoB f)*(i1,width GoB f))`1
+                           <((GoB f)*(i1+1,width (GoB f)))`1 by A55,A70,A71,
+GOBOARD5:4;
+              hence thesis;
+             end;
+             then A73:p in v_strip(GoB f,i1) by A55,A72,GOBOARD5:9;
+               p in {|[r,s]|:(GoB f)*(i1+1,width (GoB f))`1<=r};
+              then p in v_strip(GoB f,i1+1) by A55,A70,GOBOARD5:10;
+             then p in v_strip(GoB f,i1)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i1+1)/\ h_strip(GoB f,j2) by A63,A73,XBOOLE_0:
+def 3
+;
+             then p in cell(GoB f,i1,j2) &
+             p in cell(GoB f,i1+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i1+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i1,j2)/\((L~f)`) by A61,A62,XBOOLE_0:def 3;
+           case A74:i1=0 & i1+1<len GoB f;
+             then p in {|[r,s]|: r<=(GoB f)*(1,width (GoB f))`1};
+             then A75:p in v_strip(GoB f,i1) by A55,A74,GOBOARD5:11;
+             A76:i1+1+1<=len GoB f by A74,NAT_1:38;
+               p in {|[r,s]|:(GoB f)*(i1+1,width (GoB f))`1<=r
+                & r<=(GoB f)*(i1+1+1,width (GoB f))`1}
+              proof i1+1<i1+1+1 by NAT_1:38;
+                then ((GoB f)*(i1+1,width (GoB f))`1
+                      <=((GoB f)*(i1+1,width (GoB f)))`1
+                     & ((GoB f)*(i1+1,width (GoB f)))`1
+                   <=(GoB f)*(i1+1+1,width (GoB f))`1) by A55,A57,A76,GOBOARD5:
+4;
+               hence thesis;
+              end;
+             then p in v_strip(GoB f,i1+1) by A55,A74,GOBOARD5:9;
+             then p in v_strip(GoB f,i1)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i1+1)/\ h_strip(GoB f,j2) by A63,A75,XBOOLE_0:
+def 3
+;
+             then p in cell(GoB f,i1,j2) &
+             p in cell(GoB f,i1+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i1+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i1,j2)/\((L~f)`) by A61,A62,XBOOLE_0:def 3;
+           case i1=0 & i1+1=len GoB f;
+            hence contradiction by GOBOARD7:34;
+            end;
+             then A77:p in Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`)
+                    & p in Cl Down(Int cell(GoB f,i1,j2),(L~f)`) by A1,Th3;
+             A78:Down(LeftComp f,(L~f)`)=LeftComp f &
+             Down(RightComp f,(L~f)`)=RightComp f by Th6;
+               Down(Int cell(GoB f,i1,j2),(L~f)`)
+                     c= LeftComp f \/ RightComp f by A1,A2,Th4;
+             then Down(Int cell(GoB f,i1,j2),(L~f)`)
+                     c= Down(LeftComp f \/ RightComp f,(L~f)`)
+                                             by A78,GOBRD11:4;
+             then A79:Cl Down(Int cell(GoB f,i1,j2),(L~f)`)
+                     c= Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+                                 by PRE_TOPC:49;
+             A80:Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`) is connected
+                                  by A1,A3,Th4;
+               Down(LeftComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm4;
+             then Down(LeftComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A81:Cl Down(LeftComp f,(L~f)`)=Down(LeftComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(RightComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm5;
+             then Down(RightComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A82:Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+             =Down((LeftComp f) \/ (RightComp f),(L~f)`) by GOBRD11:4;
+             then A83:Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+             =Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                       by A81,A82,PRE_TOPC:50;
+              Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+               is a_union_of_components of (TOP-REAL 2)|((L~f)`) by Th6;
+             then A84:skl p1 c= Down(LeftComp f,(L~f)`)
+                 \/ Down(RightComp f,(L~f)`) by A77,A79,A83,CONNSP_3:21;
+               Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`) c= skl p1
+                                              by A77,A80,GOBRD11:1;
+             then A85: Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`)
+                c= Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                          by A84,XBOOLE_1:1;
+             A86:Down(Int cell(GoB f,i1+1,j2),(L~f)`)
+                          c= Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`)
+                                          by PRE_TOPC:48;
+               Down(Int cell(GoB f,i1+1,j2),(L~f)`)=Int cell(GoB f,i1+1,j2)
+                                  by A1,A3,Th4;
+           hence Int cell(GoB f,i1+1,j2) c= LeftComp f \/ RightComp f
+                                         by A78,A85,A86,XBOOLE_1:1;
+          case A87:j2<>0 & j2<>width GoB f &
+          not ex k st 1<=k & k+1 <=len f &
+          LSeg(f/.k,f/.(k+1))
+               =LSeg((GoB f)*(i1+1,j2),(GoB f)*(i1+1,j2+1));
+            then 0<j2 by NAT_1:19; then A88: 0+1<=j2 by NAT_1:38;
+            A89:j2<width GoB f by A1,A87,REAL_1:def 5;
+            then A90:j2+1<=width GoB f by NAT_1:38;
+            for k st 1<=k & k+1<=len f holds
+           LSeg((GoB f)*(i1+1,j2),(GoB f)*(i1+1,j2+1))<>LSeg(f,k)
+           proof let k;assume A91:1<=k & k+1<=len f;
+            then LSeg(f,k)=LSeg(f/.k,f/.(k+1)) by TOPREAL1:def 5;
+           hence LSeg((GoB f)*(i1+1,j2),(GoB f)*(i1+1,j2+1))<>LSeg(f,k)
+                                        by A87,A91;
+           end;
+           then A92: 1 <= i1+1 & i1+1 <= len GoB f & 1 <= j2 & j2+1 <= width
+GoB f
+           implies not (1/2*((GoB f)*(i1+1,j2)+(GoB f)*(i1+1,j2+1)) in L~f)
+                                  by GOBOARD7:41;
+           reconsider p=1/2*((GoB f)*(i1+1,j2)+(GoB f)*(i1+1,j2+1)) as
+            Point of TOP-REAL 2;
+            A93:p`1=1/2*((GoB f)*(i1+1,j2)+(GoB f)*(i1+1,j2+1))`1 by TOPREAL3:9
+               .=1/2*(((GoB f)*(i1+1,j2))`1+((GoB f)*(i1+1,j2+1))`1) by
+TOPREAL3:7;
+            A94:p`2=1/2*((GoB f)*(i1+1,j2)+(GoB f)*(i1+1,j2+1))`2 by TOPREAL3:9
+               .=1/2*(((GoB f)*(i1+1,j2))`2+((GoB f)*(i1+1,j2+1))`2) by
+TOPREAL3:7;
+             then A95:p=|[1/2*(((GoB f)*(i1+1,j2))`1+((GoB f)*(i1+1,j2+1))`1),
+               1/2*(((GoB f)*(i1+1,j2))`2+((GoB f)*(i1+1,j2+1))`2)]|
+                                  by A93,EUCLID:57;
+            A96:1<width GoB f by GOBOARD7:35;
+A97:       1<=1+i1 by NAT_1:29;
+            A98:j2<j2+1 by NAT_1:38;
+            A99: 1<j2+1 by A88,NAT_1:38;
+            A100:((GoB f)*(i1+1,j2))`2 <((GoB f)*(i1+1,j2+1))`2
+                              by A1,A3,A88,A90,A97,A98,GOBOARD5:5;
+            then A101:((GoB f)*(i1+1,j2))`2+((GoB f)*(i1+1,j2))`2
+              <((GoB f)*(i1+1,j2))`2+((GoB f)*(i1+1,j2+1))`2
+                                           by REAL_1:67;
+            A102:((GoB f)*(i1+1,j2))`2+((GoB f)*(i1+1,j2+1))`2
+              <((GoB f)*(i1+1,j2+1))`2+((GoB f)*(i1+1,j2+1))`2
+                                           by A100,REAL_1:67;
+              (((GoB f)*(i1+1,j2))`2+((GoB f)*(i1+1,j2))`2)/2
+              <(((GoB f)*(i1+1,j2))`2+((GoB f)*(i1+1,j2+1))`2)/2
+                                  by A101,REAL_1:73;
+            then A103:((GoB f)*(i1+1,j2))`2
+             <(((GoB f)*(i1+1,j2))`2+((GoB f)*(i1+1,j2+1))`2)/2
+                                 by XCMPLX_1:65;
+              (((GoB f)*(i1+1,j2))`2+((GoB f)*(i1+1,j2+1))`2)/2
+              <(((GoB f)*(i1+1,j2+1))`2+((GoB f)*(i1+1,j2+1))`2)/2
+                                  by A102,REAL_1:73;
+            then A104:((GoB f)*(i1+1,j2+1))`2
+             >(((GoB f)*(i1+1,j2))`2+((GoB f)*(i1+1,j2+1))`2)/2
+                                 by XCMPLX_1:65;
+            A105:((GoB f)*(i1+1,j2))`2<p`2 by A94,A103,XCMPLX_1:100;
+            A106:p`2< ((GoB f)*(i1+1,j2+1))`2 by A94,A104,XCMPLX_1:100;
+            A107:p in {p} by TARSKI:def 1;
+            reconsider P={p} as Subset of TOP-REAL 2;
+             (for x st x in P holds not x in (L~f)) implies
+              P misses L~f by XBOOLE_0:3;
+            then A108: {p} c= (L~f)` by A1,A3,A88,A89,A92,NAT_1:29,38,SUBSET_1:
+43,TARSKI:def 1;
+            then reconsider p1=p as Point of (TOP-REAL 2)|((L~f)`) by A107,
+JORDAN1:1;
+            A109:1<=i1+1 & i1+1<=len GoB f by A1,A3,NAT_1:29;
+               p in {|[r,s]|:(GoB f)*(i1+1,j2)`2<=s & s<=(GoB f)*(i1+1,j2+1)`2}
+              proof
+                 p=|[p`1,p`2]| by EUCLID:57;
+               hence thesis by A105,A106;
+              end;
+             then A110:p in h_strip(GoB f,j2) by A88,A89,A109,GOBOARD5:6;
+              0<=i1 by NAT_1:18;
+            then A111: i1=0 or i1>=0+1 by NAT_1:38;
+              now per cases by A1,A3,A111,REAL_1:def 5;
+            case A112:i1>=1 & i1+1<len GoB f;
+             then A113:1<=i1+1 & i1+1<len GoB f by NAT_1:29;
+             A114:1<=i1 & i1<len GoB f by A112,NAT_1:38;
+               p in {|[r,s]|:(GoB f)*(i1,1)`1<=r & r<=(GoB f)*(i1+1,1)`1}
+             proof A115: i1<i1+1 by NAT_1:38;
+              A116:((GoB f)*(i1+1,j2))`1=((GoB f)*(i1+1,1))`1
+                                       by A1,A3,A88,A97,GOBOARD5:3;
+              A117:((GoB f)*(i1+1,j2+1))`1=((GoB f)*(i1+1,1))`1
+                                       by A1,A3,A90,A97,A99,GOBOARD5:3;
+              A118:((GoB f)*(i1,1))`1<((GoB f)*(i1+1,1))`1
+                                       by A96,A112,A115,GOBOARD5:4;
+               1/2*(((GoB f)*(i1+1,j2))`1+((GoB f)*(i1+1,j2+1))`1)
+              =((GoB f)*(i1+1,1))`1 by A116,A117,Lm1;
+              hence thesis by A95,A118;
+             end;
+             then A119:p in v_strip(GoB f,i1) by A96,A114,GOBOARD5:9;
+             A120:i1+1+1<=len GoB f by A112,NAT_1:38;
+               p in {|[r,s]|:(GoB f)*(i1+1,1)`1<=r & r<=(GoB f)*(i1+1+1,1)`1}
+              proof A121: i1+1<i1+1+1 by NAT_1:38;
+              A122:((GoB f)*(i1+1,j2))`1=((GoB f)*(i1+1,1))`1
+                                       by A1,A3,A88,A97,GOBOARD5:3;
+              A123:((GoB f)*(i1+1,j2+1))`1=((GoB f)*(i1+1,1))`1
+                                       by A1,A3,A90,A97,A99,GOBOARD5:3;
+              A124:((GoB f)*(i1+1,1))`1<((GoB f)*(i1+1+1,1))`1
+                                       by A96,A97,A120,A121,GOBOARD5:4;
+               1/2*(((GoB f)*(i1+1,j2))`1+((GoB f)*(i1+1,j2+1))`1)
+              =((GoB f)*(i1+1,1))`1 by A122,A123,Lm1;
+               hence thesis by A95,A124;
+              end;
+             then p in v_strip(GoB f,i1+1) by A96,A113,GOBOARD5:9;
+             then p in v_strip(GoB f,i1)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i1+1)/\ h_strip(GoB f,j2) by A110,A119,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i1,j2) &
+             p in cell(GoB f,i1+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i1+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i1,j2)/\((L~f)`) by A107,A108,XBOOLE_0:def 3;
+           case A125:i1>=1 & i1+1=len GoB f;
+             A126: i1<i1+1 by NAT_1:38;
+               p in {|[r,s]|:(GoB f)*(i1,1)`1<=r & r<=(GoB f)*(i1+1,1)`1}
+             proof
+              A127:((GoB f)*(i1+1,j2))`1=((GoB f)*(i1+1,1))`1
+                                       by A1,A3,A88,A97,GOBOARD5:3;
+              A128:((GoB f)*(i1+1,j2+1))`1=((GoB f)*(i1+1,1))`1
+                                       by A1,A3,A90,A97,A99,GOBOARD5:3;
+              A129:((GoB f)*(i1,1))`1<((GoB f)*(i1+1,1))`1
+                                       by A96,A125,A126,GOBOARD5:4;
+               1/2*(((GoB f)*(i1+1,j2))`1+((GoB f)*(i1+1,j2+1))`1)
+              =((GoB f)*(i1+1,1))`1 by A127,A128,Lm1;
+              hence thesis by A95,A129;
+             end;
+             then A130:p in v_strip(GoB f,i1) by A96,A125,A126,GOBOARD5:9;
+               p in {|[r,s]|:(GoB f)*(i1+1,1)`1<=r}
+              proof
+               A131:((GoB f)*(i1+1,j2))`1=((GoB f)*(i1+1,1))`1
+                                       by A1,A3,A88,A97,GOBOARD5:3;
+                 ((GoB f)*(i1+1,j2+1))`1=((GoB f)*(i1+1,1))`1
+                                       by A1,A3,A90,A97,A99,GOBOARD5:3;
+                then (GoB f)*(i1+1,1)`1
+                   <=1/2*(((GoB f)*(i1+1,j2))`1+((GoB f)*(i1+1,j2+1))`1) by
+A131,Lm1;
+               hence thesis by A95;
+              end;
+             then p in v_strip(GoB f,i1+1) by A96,A125,GOBOARD5:10;
+             then p in v_strip(GoB f,i1)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i1+1)/\ h_strip(GoB f,j2) by A110,A130,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i1,j2) &
+             p in cell(GoB f,i1+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i1+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i1,j2)/\((L~f)`) by A107,A108,XBOOLE_0:def 3;
+           case A132:i1=0 & i1+1<len GoB f;
+               p in {|[r,s]|: r<=(GoB f)*(1,1)`1}
+             proof
+               A133:((GoB f)*(i1+1,j2))`1=((GoB f)*(i1+1,1))`1
+                                       by A1,A3,A88,A97,GOBOARD5:3;
+                 ((GoB f)*(i1+1,j2+1))`1=((GoB f)*(i1+1,1))`1
+                                       by A1,A3,A90,A97,A99,GOBOARD5:3;
+              then 1/2*(((GoB f)*(i1+1,j2))`1+((GoB f)*(i1+1,j2+1))`1)
+                              <=((GoB f)*(1,1))`1 by A132,A133,Lm1;
+              hence thesis by A95;
+             end;
+             then A134:p in v_strip(GoB f,i1) by A96,A132,GOBOARD5:11;
+             A135:i1+1+1<=len GoB f by A132,NAT_1:38;
+               p in {|[r,s]|:(GoB f)*(i1+1,1)`1<=r & r<=(GoB f)*(i1+1+1,1)`1}
+              proof A136: i1+1<i1+1+1 by NAT_1:38;
+               A137:((GoB f)*(i1+1,j2))`1=((GoB f)*(i1+1,1))`1
+                                       by A1,A3,A88,A97,GOBOARD5:3;
+               A138:((GoB f)*(i1+1,j2+1))`1=((GoB f)*(i1+1,1))`1
+                                       by A1,A3,A90,A97,A99,GOBOARD5:3;
+               A139:((GoB f)*(i1+1,1))`1<((GoB f)*(i1+1+1,1))`1
+                                       by A96,A97,A135,A136,GOBOARD5:4;
+                1/2*(((GoB f)*(i1+1,j2))`1+((GoB f)*(i1+1,j2+1))`1)
+               =((GoB f)*(i1+1,1))`1 by A137,A138,Lm1;
+               hence thesis by A95,A139;
+              end;
+             then p in v_strip(GoB f,i1+1) by A96,A132,GOBOARD5:9;
+             then p in v_strip(GoB f,i1)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i1+1)/\ h_strip(GoB f,j2) by A110,A134,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i1,j2) &
+             p in cell(GoB f,i1+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i1+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i1,j2)/\((L~f)`) by A107,A108,XBOOLE_0:def 3;
+           case i1=0 & i1+1=len GoB f;
+            hence contradiction by GOBOARD7:34;
+           end;
+             then A140:p in Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`)
+                    & p in Cl Down(Int cell(GoB f,i1,j2),(L~f)`) by A1,Th3;
+             A141:Down(LeftComp f,(L~f)`)=LeftComp f &
+             Down(RightComp f,(L~f)`)=RightComp f by Th6;
+               Down(Int cell(GoB f,i1,j2),(L~f)`)
+                     c= LeftComp f \/ RightComp f by A1,A2,Th4;
+             then Down(Int cell(GoB f,i1,j2),(L~f)`)
+                     c= Down(LeftComp f \/ RightComp f,(L~f)`)
+                                             by A141,GOBRD11:4;
+             then A142:Cl Down(Int cell(GoB f,i1,j2),(L~f)`)
+                     c= Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+                                 by PRE_TOPC:49;
+             A143:Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`) is connected
+                                  by A1,A3,Th4;
+               Down(LeftComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm4;
+             then Down(LeftComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A144:Cl Down(LeftComp f,(L~f)`)=Down(LeftComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(RightComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm5;
+             then Down(RightComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A145:Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+             =Down((LeftComp f) \/ (RightComp f),(L~f)`) by GOBRD11:4;
+             then A146:Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+             =Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                       by A144,A145,PRE_TOPC:50;
+              Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+               is a_union_of_components of (TOP-REAL 2)|((L~f)`) by Th6;
+             then A147:skl p1 c= Down(LeftComp f,(L~f)`)
+                 \/ Down(RightComp f,(L~f)`) by A140,A142,A146,CONNSP_3:21;
+               Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`) c= skl p1
+                                              by A140,A143,GOBRD11:1;
+             then A148: Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`)
+                c= Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                          by A147,XBOOLE_1:1;
+             A149:Down(Int cell(GoB f,i1+1,j2),(L~f)`)
+                          c= Cl Down(Int cell(GoB f,i1+1,j2),(L~f)`)
+                                          by PRE_TOPC:48;
+               Down(Int cell(GoB f,i1+1,j2),(L~f)`)=Int cell(GoB f,i1+1,j2)
+                                  by A1,A3,Th4;
+           hence Int cell(GoB f,i1+1,j2) c= LeftComp f \/ RightComp f
+                                         by A141,A148,A149,XBOOLE_1:1;
+          end;
+         hence Int cell(GoB f,i1+1,j2) c= LeftComp f \/ RightComp f;
+         end;
+        hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f by A3;
+        case A150: i1=i2+1;
+          then A151:i1-'1=i2 by BINARITH:39;
+          A152:i2<i2+1 by NAT_1:38;
+          A153:i2<i1 by A150,NAT_1:38;
+          A154:1<=i2+1 by NAT_1:29;
+          A155:1<=i1 by A150,NAT_1:29;
+          A156:i2+1<i2+1+1 by NAT_1:38;
+            i1-1=i2 by A150,XCMPLX_1:26;
+          then i1-1>=0 by NAT_1:18;
+          then i1-'1=i1-1 by BINARITH:def 3;
+          then A157:i1=i1-'1+1 by XCMPLX_1:27;
+          A158:1<=i1-'1+1 by NAT_1:29;
+          A159:i1-'1<i1 by A150,A153,BINARITH:39;
+           now per cases;
+         case ex k st 1<=k & k+1 <=len f & j2<>0 & j2<>width GoB f &
+           LSeg(f/.k,f/.(k+1))
+                  =LSeg((GoB f)*(i2+1,j2),(GoB f)*(i2+1,j2+1));
+           then consider k such that A160:1<=k & k+1 <=len f
+           & j2<>0 & j2<>width GoB f &
+           LSeg(f/.k,f/.(k+1))
+                =LSeg((GoB f)*(i1-'1+1,j2),(GoB f)*(i1-'1+1,j2+1))
+                   by A151;
+             now per cases by A160,SPPOL_1:25;
+           case A161:f/.k=(GoB f)*(i1-'1+1,j2)
+                      & f/.(k+1)= (GoB f)*(i1-'1+1,j2+1);
+            A162:Indices GoB f=[:dom GoB f,Seg width GoB f:] by MATRIX_1:def 5;
+              i1-'1<len GoB f by A1,A159,AXIOMS:22;
+            then i1-'1+1<=len GoB f by NAT_1:38;
+            then A163:i1-'1+1 in dom GoB f by A158,FINSEQ_3:27;
+              j2>0 by A160,NAT_1:19; then j2>=0+1 by NAT_1:38;
+            then j2 in Seg width GoB f by A1,FINSEQ_1:3;
+            then A164:[i1-'1+1,j2] in Indices GoB f by A162,A163,ZFMISC_1:106;
+              j2<width GoB f by A1,A160,REAL_1:def 5;
+            then A165:j2+1<=width GoB f by NAT_1:38;
+              1<=j2+1 by NAT_1:29;
+            then j2+1 in Seg width GoB f by A165,FINSEQ_1:3;
+            then [i1-'1+1,j2+1] in Indices GoB f by A162,A163,ZFMISC_1:106;
+            then A166:left_cell(f,k) = cell(GoB f,i1-'1,j2)
+                                     by A160,A161,A164,GOBOARD5:28;
+            A167: Int left_cell(f,k) c= LeftComp f by A160,GOBOARD9:24;
+              LeftComp f c= LeftComp f \/ RightComp f by XBOOLE_1:7;
+           hence Int cell(GoB f,i1-'1,j2) c= LeftComp f \/ RightComp f
+                                 by A166,A167,XBOOLE_1:1;
+           case A168:f/.k=(GoB f)*(i1-'1+1,j2+1)
+                   & f/.(k+1)= (GoB f)*(i1-'1+1,j2);
+            A169:Indices GoB f=[:dom GoB f,Seg width GoB f:] by MATRIX_1:def 5;
+            A170:i1-'1+1 in dom GoB f by A1,A155,A157,FINSEQ_3:27;
+              j2>0 by A160,NAT_1:19; then j2>=0+1 by NAT_1:38;
+            then j2 in Seg width GoB f by A1,FINSEQ_1:3;
+            then A171:[i1-'1+1,j2] in Indices GoB f by A169,A170,ZFMISC_1:106;
+              j2<width GoB f by A1,A160,REAL_1:def 5;
+            then A172:j2+1<=width GoB f by NAT_1:38;
+              1<=j2+1 by NAT_1:29;
+            then j2+1 in Seg width GoB f by A172,FINSEQ_1:3;
+            then [i1-'1+1,j2+1] in Indices GoB f by A169,A170,ZFMISC_1:106;
+            then A173:right_cell(f,k) = cell(GoB f,i1-'1,j2)
+                                     by A160,A168,A171,GOBOARD5:31;
+            A174: Int right_cell(f,k) c= RightComp f by A160,GOBOARD9:28;
+              RightComp f c= LeftComp f \/ RightComp f by XBOOLE_1:7;
+           hence Int cell(GoB f,i1-'1,j2) c= LeftComp f \/ RightComp f
+                                     by A173,A174,XBOOLE_1:1;
+           end;
+         hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f
+                                 by A150,BINARITH:39;
+         case A175: not ex k st 1<=k & k+1 <=len f & j2<>0 & j2<>width GoB f &
+          LSeg(f/.k,f/.(k+1))
+                 =LSeg((GoB f)*(i2+1,j2),(GoB f)*(i2+1,j2+1));
+            now per cases by A175;
+          case A176:j2=0;
+           reconsider p=|[((GoB f)*(i2+1,1))`1,((GoB f)*(i2+1,1))`2-1]| as
+            Point of TOP-REAL 2;
+            A177:1<width GoB f by GOBOARD7:35;
+            A178:1<len GoB f by GOBOARD7:34;
+            A179:1<=i2+1 by NAT_1:29;
+            then ((GoB f)*(i2+1,1))`2=((GoB f)*(1,1))`2 by A1,A150,A177,
+GOBOARD5:2;
+            then A180:p`2=((GoB f)*(1,1))`2-1 by EUCLID:56;
+              p`2<p`2+1 by REAL_1:69;
+            then A181:p`2< ((GoB f)*(1,1))`2 by A180,XCMPLX_1:27;
+            A182:p in {p} by TARSKI:def 1;
+            reconsider P={p} as Subset of TOP-REAL 2;
+             (for q being Point of TOP-REAL 2
+              st q in P holds q`2<((GoB f)*(1,1))`2) implies
+              P misses L~f by GOBOARD8:23;
+            then A183: {p} c= (L~f)` by A181,SUBSET_1:43,TARSKI:def 1;
+            then reconsider p1=p as Point of (TOP-REAL 2)|((L~f)`) by A182,
+JORDAN1:1;
+               p in {|[r,s]|:s<=(GoB f)*(1,1)`2}
+              proof
+                 p=|[p`1,p`2]| by EUCLID:57;
+               hence thesis by A181;
+              end;
+             then A184:p in h_strip(GoB f,j2) by A176,A178,GOBOARD5:8;
+              now per cases by A1,A150,NAT_1:18,REAL_1:def 5;
+            case A185:i2+1<len GoB f & i2>0; then A186: 0+1<=i2 by NAT_1:38;
+             then A187:1<=i2+1 & i2+1<len GoB f by A185,NAT_1:38;
+             A188:1<=i2 & i2<len GoB f by A185,A186,NAT_1:38;
+               p in {|[r,s]|:(GoB f)*(i2,1)`1<=r & r<=(GoB f)*(i2+1,1)`1}
+             proof i2<i2+1 by NAT_1:38;
+              then ((GoB f)*(i2,1))`1<((GoB f)*(i2+1,1))`1 by A1,A150,A177,A186
+,GOBOARD5:4;
+              hence thesis;
+             end;
+             then A189:p in v_strip(GoB f,i2) by A177,A188,GOBOARD5:9;
+             A190:i2+1+1<=len GoB f by A185,NAT_1:38;
+               p in {|[r,s]|:(GoB f)*(i2+1,1)`1<=r & r<=(GoB f)*(i2+1+1,1)`1}
+              proof i2+1<i2+1+1 by NAT_1:38;
+                then ((GoB f)*(i2+1,1)`1<=((GoB f)*(i2+1,1))`1
+                & ((GoB f)*(i2+1,1))`1<=(GoB f)*(i2+1+1,1)`1)
+                                   by A177,A179,A190,GOBOARD5:4;
+               hence thesis;
+              end;
+             then p in v_strip(GoB f,i2+1) by A177,A187,GOBOARD5:9;
+             then p in v_strip(GoB f,i2)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i2+1)/\ h_strip(GoB f,j2) by A184,A189,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A182,A183,XBOOLE_0:def 3;
+           case A191:i2+1<len GoB f & i2=0;
+             then A192:i2+1+1<=len GoB f by NAT_1:38;
+             A193: i2+1<i2+1+1 by NAT_1:38;
+               p in {|[r,s]|: r<=(GoB f)*(i2+1,1)`1};
+             then A194:p in v_strip(GoB f,i2) by A177,A191,GOBOARD5:11;
+               p in {|[r,s]|:(GoB f)*(i2+1,1)`1<=r & r<=(GoB f)*(i2+1+1,1)`1}
+              proof
+                  (GoB f)*(i2+1,1)`1<(GoB f)*(i2+1+1,1)`1 by A154,A177,A192,
+A193,GOBOARD5:4;
+               hence thesis;
+              end;
+             then p in v_strip(GoB f,i2+1) by A177,A191,GOBOARD5:9;
+             then p in v_strip(GoB f,i2)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i2+1)/\ h_strip(GoB f,j2) by A184,A194,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A182,A183,XBOOLE_0:def 3;
+           case A195:i2+1=len GoB f & i2>0; then A196: 0+1<=i2 by NAT_1:38;
+             then A197:1<=i2 & i2<len GoB f by A195,NAT_1:38;
+               p in {|[r,s]|:((GoB f)*(i2,1))`1<=r & r<=((GoB f)*(i2+1,1))`1}
+             proof
+                ((GoB f)*(i2,1))`1<((GoB f)*(i2+1,1))`1 by A152,A177,A195,A196,
+GOBOARD5:4;
+              hence thesis;
+             end;
+             then A198:p in v_strip(GoB f,i2) by A177,A197,GOBOARD5:9;
+               p in {|[r,s]|:(GoB f)*(i2+1,1)`1<=r};
+              then p in v_strip(GoB f,i2+1) by A177,A195,GOBOARD5:10;
+             then p in v_strip(GoB f,i2)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i2+1)/\ h_strip(GoB f,j2) by A184,A198,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A182,A183,XBOOLE_0:def 3;
+           case A199:i2+1=len GoB f & i2=0;
+             then p in {|[r,s]|: r<=(GoB f)*(1,1)`1};
+             then A200:p in v_strip(GoB f,i2) by A177,A199,GOBOARD5:11;
+               p in {|[r,s]|:(GoB f)*(i2+1,1)`1<=r};
+              then p in v_strip(GoB f,i2+1) by A177,A199,GOBOARD5:10;
+             then p in v_strip(GoB f,i2)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i2+1)/\ h_strip(GoB f,j2) by A184,A200,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A182,A183,XBOOLE_0:def 3;
+            end;
+             then A201:p in Cl Down(Int cell(GoB f,i2+1,j2),(L~f)`)
+                    & p in Cl Down(Int cell(GoB f,i2,j2),(L~f)`) by A1,Th3;
+             A202:Down(LeftComp f,(L~f)`)=LeftComp f &
+             Down(RightComp f,(L~f)`)=RightComp f by Th6;
+               Down(Int cell(GoB f,i1,j2),(L~f)`)
+                     c= LeftComp f \/ RightComp f by A1,A2,Th4;
+             then Down(Int cell(GoB f,i1,j2),(L~f)`)
+                     c= Down(LeftComp f \/ RightComp f,(L~f)`)
+                                             by A202,GOBRD11:4;
+             then A203:Cl Down(Int cell(GoB f,i1,j2),(L~f)`)
+                     c= Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+                                 by PRE_TOPC:49;
+             A204:Cl Down(Int cell(GoB f,i2,j2),(L~f)`) is connected
+                                  by A1,Th4;
+               Down(LeftComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm4;
+             then Down(LeftComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A205:Cl Down(LeftComp f,(L~f)`)=Down(LeftComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(RightComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm5;
+             then Down(RightComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A206:Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+             =Down((LeftComp f) \/ (RightComp f),(L~f)`) by GOBRD11:4;
+             then A207:Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+             =Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                       by A205,A206,PRE_TOPC:50;
+              Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+               is a_union_of_components of (TOP-REAL 2)|((L~f)`) by Th6;
+             then A208:skl p1 c= Down(LeftComp f,(L~f)`)
+                 \/ Down(RightComp f,(L~f)`) by A150,A201,A203,A207,CONNSP_3:21
+;
+               Cl Down(Int cell(GoB f,i2,j2),(L~f)`) c= skl p1
+                                              by A201,A204,GOBRD11:1;
+             then A209: Cl Down(Int cell(GoB f,i2,j2),(L~f)`)
+                c= Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                          by A208,XBOOLE_1:1;
+             A210:Down(Int cell(GoB f,i2,j2),(L~f)`)
+                          c= Cl Down(Int cell(GoB f,i2,j2),(L~f)`)
+                                          by PRE_TOPC:48;
+               Down(Int cell(GoB f,i2,j2),(L~f)`)=Int cell(GoB f,i2,j2)
+                                  by A1,Th4;
+           hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f
+                                         by A202,A209,A210,XBOOLE_1:1;
+          case A211:j2=width GoB f;
+           reconsider p=|[((GoB f)*(i2+1,width GoB f))`1,
+                ((GoB f)*(i2+1,width GoB f))`2+1]| as Point of TOP-REAL 2;
+            A212:1<width GoB f by GOBOARD7:35;
+            A213:1<len GoB f by GOBOARD7:34;
+            A214:1<=i2+1 by NAT_1:29;
+            then ((GoB f)*(i2+1,width GoB f))`2
+                        =((GoB f)*(1,width GoB f))`2 by A1,A150,A212,GOBOARD5:2
+;
+            then A215:p`2=((GoB f)*(1,width GoB f))`2+1 by EUCLID:56;
+            A216: ((GoB f)*(1,width GoB f))`2<((GoB f)*(1,width GoB f))`2+1
+                                   by REAL_1:69;
+            A217:p in {p} by TARSKI:def 1;
+            reconsider P={p} as Subset of TOP-REAL 2;
+             (for q being Point of TOP-REAL 2
+              st q in P holds ((GoB f)*(1,width GoB f)`2)<q`2) implies
+              P misses L~f by GOBOARD8:24;
+            then A218: {p} c= (L~f)` by A215,A216,SUBSET_1:43,TARSKI:def 1;
+            then reconsider p1=p as Point of (TOP-REAL 2)|((L~f)`) by A217,
+JORDAN1:1;
+               p in {|[r,s]|:(GoB f)*(1,width (GoB f))`2<=s}
+              proof
+                 p=|[p`1,p`2]| & ((GoB f)*(1,width GoB f)`2<=p`2) by A215,
+EUCLID:57,REAL_1:69;
+               hence thesis;
+              end;
+             then A219:p in h_strip(GoB f,j2) by A211,A213,GOBOARD5:7;
+              now per cases by A1,A150,NAT_1:18,REAL_1:def 5;
+            case A220:i2+1<len GoB f & i2>0;
+             then A221:i2+1+1<=len GoB f by NAT_1:38;
+             A222:0+1<=i2 by A220,NAT_1:38;
+             A223:i2<i2+1 by NAT_1:38;
+             A224:1<=i2+1 & i2+1<len GoB f by A220,NAT_1:29;
+             A225:1<=i2 & i2<len GoB f by A220,A222,NAT_1:38;
+               p in {|[r,s]|:(GoB f)*(i2,width GoB f)`1<=r &
+                r<=(GoB f)*(i2+1,width GoB f)`1}
+             proof
+                ((GoB f)*(i2,width GoB f))`1
+                   <((GoB f)*(i2+1,width GoB f))`1 by A1,A150,A212,A222,A223,
+GOBOARD5:4;
+              hence thesis;
+             end;
+             then A226:p in v_strip(GoB f,i2) by A212,A225,GOBOARD5:9;
+               p in {|[r,s]|:(GoB f)*(i2+1,width GoB f)`1<=r
+                & r<=(GoB f)*(i2+1+1,width GoB f)`1}
+              proof i2+1<i2+1+1 by NAT_1:38;
+                then ((GoB f)*(i2+1,width GoB f)`1
+                        <=((GoB f)*(i2+1,width GoB f))`1
+                & ((GoB f)*(i2+1,width GoB f))`1
+                   <=(GoB f)*(i2+1+1,width GoB f)`1) by A212,A214,A221,GOBOARD5
+:4;
+               hence thesis;
+              end;
+             then p in v_strip(GoB f,i2+1) by A212,A224,GOBOARD5:9;
+             then p in v_strip(GoB f,i2)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i2+1)/\ h_strip(GoB f,j2) by A219,A226,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A217,A218,XBOOLE_0:def 3;
+           case A227:i2+1<len GoB f & i2=0;
+             then A228:i2+1+1<=len GoB f by NAT_1:38;
+               p in {|[r,s]|: r<=(GoB f)*(1,width (GoB f))`1} by A227;
+             then A229:p in v_strip(GoB f,i2) by A212,A227,GOBOARD5:11;
+               p in {|[r,s]|:(GoB f)*(i2+1,width (GoB f))`1<=r &
+                r<=(GoB f)*(i2+1+1,width (GoB f))`1}
+              proof
+                  (GoB f)*(i2+1,width (GoB f))`1
+                <(GoB f)*(i2+1+1,width (GoB f))`1 by A154,A156,A212,A228,
+GOBOARD5:4;
+               hence thesis;
+              end;
+             then p in v_strip(GoB f,i2+1) by A212,A227,GOBOARD5:9;
+             then p in v_strip(GoB f,i2)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i2+1)/\ h_strip(GoB f,j2) by A219,A229,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A217,A218,XBOOLE_0:def 3;
+           case A230:i2+1=len GoB f & i2>0;
+             then A231: 0+1<=i2 by NAT_1:38;
+             then A232:1<=i2 & i2<len GoB f by A230,NAT_1:38;
+               p in {|[r,s]|: (GoB f)*(len GoB f,width (GoB f))`1<=r}
+                  by A230;
+             then A233:p in v_strip(GoB f,i2+1) by A212,A230,GOBOARD5:10;
+               p in {|[r,s]|:(GoB f)*(i2,width (GoB f))`1<=r
+                & r<=(GoB f)*(i2+1,width (GoB f))`1}
+              proof
+                  ((GoB f)*(i2+1,width (GoB f))`1
+                      <=((GoB f)*(i2+1,width (GoB f)))`1
+                     & ((GoB f)*(i2,width (GoB f)))`1
+                   <=(GoB f)*(i2+1,width (GoB f))`1)
+                                   by A152,A212,A230,A231,GOBOARD5:4;
+               hence thesis;
+              end;
+             then p in v_strip(GoB f,i2) by A212,A232,GOBOARD5:9;
+             then p in v_strip(GoB f,i2)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i2+1)/\ h_strip(GoB f,j2) by A219,A233,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A217,A218,XBOOLE_0:def 3;
+           case i2+1=len GoB f & i2=0;
+            hence contradiction by GOBOARD7:34;
+            end;
+             then A234:p in Cl Down(Int cell(GoB f,i2+1,j2),(L~f)`)
+                    & p in Cl Down(Int cell(GoB f,i2,j2),(L~f)`) by A1,Th3;
+             A235:Down(LeftComp f,(L~f)`)=LeftComp f &
+             Down(RightComp f,(L~f)`)=RightComp f by Th6;
+               Down(Int cell(GoB f,i1,j2),(L~f)`)
+                     c= LeftComp f \/ RightComp f by A1,A2,Th4;
+             then Down(Int cell(GoB f,i1,j2),(L~f)`)
+                     c= Down(LeftComp f \/ RightComp f,(L~f)`)
+                                             by A235,GOBRD11:4;
+             then A236:Cl Down(Int cell(GoB f,i1,j2),(L~f)`)
+                     c= Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+                                 by PRE_TOPC:49;
+             A237:Cl Down(Int cell(GoB f,i2,j2),(L~f)`) is connected
+                                  by A1,Th4;
+               Down(LeftComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm4;
+             then Down(LeftComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A238:Cl Down(LeftComp f,(L~f)`)=Down(LeftComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(RightComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm5;
+             then Down(RightComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A239:Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+             =Down((LeftComp f) \/ (RightComp f),(L~f)`) by GOBRD11:4;
+             then A240:Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+             =Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                       by A238,A239,PRE_TOPC:50;
+              Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+               is a_union_of_components of (TOP-REAL 2)|((L~f)`) by Th6;
+             then A241:skl p1 c= Down(LeftComp f,(L~f)`)
+                 \/ Down(RightComp f,(L~f)`) by A150,A234,A236,A240,CONNSP_3:21
+;
+               Cl Down(Int cell(GoB f,i2,j2),(L~f)`) c= skl p1
+                                              by A234,A237,GOBRD11:1;
+             then A242: Cl Down(Int cell(GoB f,i2,j2),(L~f)`)
+                c= Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                          by A241,XBOOLE_1:1;
+             A243:Down(Int cell(GoB f,i2,j2),(L~f)`)
+                          c= Cl Down(Int cell(GoB f,i2,j2),(L~f)`)
+                                          by PRE_TOPC:48;
+               Down(Int cell(GoB f,i2,j2),(L~f)`)=Int cell(GoB f,i2,j2)
+                                  by A1,Th4;
+           hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f
+                                         by A235,A242,A243,XBOOLE_1:1;
+          case A244:j2<>0 & j2<>width GoB f &
+          not ex k st 1<=k & k+1 <=len f &
+          LSeg(f/.k,f/.(k+1))
+               =LSeg((GoB f)*(i2+1,j2),(GoB f)*(i2+1,j2+1));
+            then 0<j2 by NAT_1:19; then A245: 0+1<=j2 by NAT_1:38;
+            A246:j2<width GoB f by A1,A244,REAL_1:def 5;
+            then A247:j2+1<=width GoB f by NAT_1:38;
+            for k st 1<=k & k+1<=len f holds
+           LSeg((GoB f)*(i2+1,j2),(GoB f)*(i2+1,j2+1))<>LSeg(f,k)
+           proof let k;assume A248:1<=k & k+1<=len f;
+            then LSeg(f,k)=LSeg(f/.k,f/.(k+1)) by TOPREAL1:def 5;
+           hence LSeg((GoB f)*(i2+1,j2),(GoB f)*(i2+1,j2+1))<>LSeg(f,k)
+                                        by A244,A248;
+           end;
+           then A249: 1 <= i2+1 & i2+1 <= len GoB f & 1 <= j2 & j2+1 <= width
+GoB f
+           implies not (1/2*((GoB f)*(i2+1,j2)+(GoB f)*(i2+1,j2+1)) in L~f)
+                                  by GOBOARD7:41;
+           reconsider p=1/2*((GoB f)*(i2+1,j2)+(GoB f)*(i2+1,j2+1)) as
+            Point of TOP-REAL 2;
+            A250:p`1=1/2*((GoB f)*(i2+1,j2)+(GoB f)*(i2+1,j2+1))`1 by TOPREAL3:
+9
+               .=1/2*(((GoB f)*(i2+1,j2))`1+((GoB f)*(i2+1,j2+1))`1) by
+TOPREAL3:7;
+            A251:p`2=1/2*((GoB f)*(i2+1,j2)+(GoB f)*(i2+1,j2+1))`2 by TOPREAL3:
+9
+               .=1/2*(((GoB f)*(i2+1,j2))`2+((GoB f)*(i2+1,j2+1))`2) by
+TOPREAL3:7;
+             then A252:p=|[1/2*(((GoB f)*(i2+1,j2))`1+((GoB f)*(i2+1,j2+1))`1),
+               1/2*(((GoB f)*(i2+1,j2))`2+((GoB f)*(i2+1,j2+1))`2)]|
+                                  by A250,EUCLID:57;
+            A253:1<width GoB f by GOBOARD7:35;
+A254:       1<=1+i2 by NAT_1:29;
+            A255:j2<j2+1 by NAT_1:38;
+            A256: 1<j2+1 by A245,NAT_1:38;
+            A257:((GoB f)*(i2+1,j2))`2 <((GoB f)*(i2+1,j2+1))`2
+                              by A1,A150,A245,A247,A254,A255,GOBOARD5:5;
+            then A258:((GoB f)*(i2+1,j2))`2+((GoB f)*(i2+1,j2))`2
+              <((GoB f)*(i2+1,j2))`2+((GoB f)*(i2+1,j2+1))`2 by REAL_1:67;
+            A259:((GoB f)*(i2+1,j2))`2+((GoB f)*(i2+1,j2+1))`2
+              <((GoB f)*(i2+1,j2+1))`2+((GoB f)*(i2+1,j2+1))`2
+                                           by A257,REAL_1:67;
+              (((GoB f)*(i2+1,j2))`2+((GoB f)*(i2+1,j2))`2)/2
+              <(((GoB f)*(i2+1,j2))`2+((GoB f)*(i2+1,j2+1))`2)/2
+                                  by A258,REAL_1:73;
+            then A260:((GoB f)*(i2+1,j2))`2
+             <(((GoB f)*(i2+1,j2))`2+((GoB f)*(i2+1,j2+1))`2)/2
+                                 by XCMPLX_1:65;
+              (((GoB f)*(i2+1,j2))`2+((GoB f)*(i2+1,j2+1))`2)/2
+              <(((GoB f)*(i2+1,j2+1))`2+((GoB f)*(i2+1,j2+1))`2)/2
+                                  by A259,REAL_1:73;
+            then A261:((GoB f)*(i2+1,j2+1))`2
+             >(((GoB f)*(i2+1,j2))`2+((GoB f)*(i2+1,j2+1))`2)/2
+                                 by XCMPLX_1:65;
+            A262:((GoB f)*(i2+1,j2))`2<p`2 by A251,A260,XCMPLX_1:100;
+            A263:p`2< ((GoB f)*(i2+1,j2+1))`2 by A251,A261,XCMPLX_1:100;
+            A264:p in {p} by TARSKI:def 1;
+            reconsider P={p} as Subset of TOP-REAL 2;
+             (for x st x in P holds not x in (L~f)) implies
+              P misses L~f by XBOOLE_0:3;
+            then A265: {p} c= (L~f)` by A1,A150,A245,A246,A249,NAT_1:29,38,
+SUBSET_1:43,TARSKI:def 1;
+            then reconsider p1=p as Point of (TOP-REAL 2)|((L~f)`) by A264,
+JORDAN1:1;
+            A266:1<=i2+1 & i2+1<=len GoB f by A1,A150,NAT_1:29;
+               p in {|[r,s]|:(GoB f)*(i2+1,j2)`2<=s & s<=(GoB f)*(i2+1,j2+1)`2}
+              proof
+                 p=|[p`1,p`2]| by EUCLID:57;
+               hence thesis by A262,A263;
+              end;
+             then A267:p in h_strip(GoB f,j2) by A245,A246,A266,GOBOARD5:6;
+              0<=i2 by NAT_1:18;
+            then A268: i2=0 or i2>=0+1 by NAT_1:38;
+              now per cases by A1,A150,A268,REAL_1:def 5;
+            case A269:i2>=1 & i2+1<len GoB f;
+             then A270:1<=i2+1 & i2+1<len GoB f by NAT_1:29;
+             A271:1<=i2 & i2<len GoB f by A269,NAT_1:38;
+               p in {|[r,s]|:(GoB f)*(i2,1)`1<=r & r<=(GoB f)*(i2+1,1)`1}
+             proof A272: i2<i2+1 by NAT_1:38;
+              A273:((GoB f)*(i2+1,j2))`1=((GoB f)*(i2+1,1))`1
+                                       by A1,A150,A245,A254,GOBOARD5:3;
+              A274:((GoB f)*(i2+1,j2+1))`1=((GoB f)*(i2+1,1))`1
+                                       by A1,A150,A247,A254,A256,GOBOARD5:3;
+              A275:((GoB f)*(i2,1))`1<((GoB f)*(i2+1,1))`1
+                                       by A253,A269,A272,GOBOARD5:4;
+               1/2*(((GoB f)*(i2+1,j2))`1+((GoB f)*(i2+1,j2+1))`1)
+              =((GoB f)*(i2+1,1))`1 by A273,A274,Lm1;
+              hence thesis by A252,A275;
+             end;
+             then A276:p in v_strip(GoB f,i2) by A253,A271,GOBOARD5:9;
+             A277:i2+1+1<=len GoB f by A269,NAT_1:38;
+               p in {|[r,s]|:(GoB f)*(i2+1,1)`1<=r & r<=(GoB f)*(i2+1+1,1)`1}
+              proof A278: i2+1<i2+1+1 by NAT_1:38;
+              A279:((GoB f)*(i2+1,j2))`1=((GoB f)*(i2+1,1))`1
+                                       by A1,A150,A245,A254,GOBOARD5:3;
+              A280:((GoB f)*(i2+1,j2+1))`1=((GoB f)*(i2+1,1))`1
+                                       by A1,A150,A247,A254,A256,GOBOARD5:3;
+              A281:((GoB f)*(i2+1,1))`1<((GoB f)*(i2+1+1,1))`1
+                                       by A253,A254,A277,A278,GOBOARD5:4;
+               1/2*(((GoB f)*(i2+1,j2))`1+((GoB f)*(i2+1,j2+1))`1)
+              =((GoB f)*(i2+1,1))`1 by A279,A280,Lm1;
+               hence thesis by A252,A281;
+              end;
+             then p in v_strip(GoB f,i2+1) by A253,A270,GOBOARD5:9;
+             then p in v_strip(GoB f,i2)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i2+1)/\ h_strip(GoB f,j2) by A267,A276,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A264,A265,XBOOLE_0:def 3;
+           case A282:i2>=1 & i2+1=len GoB f;
+             A283: i2<i2+1 by NAT_1:38;
+               p in {|[r,s]|:(GoB f)*(i2,1)`1<=r & r<=(GoB f)*(i2+1,1)`1}
+             proof
+              A284:((GoB f)*(i2+1,j2))`1=((GoB f)*(i2+1,1))`1
+                                       by A1,A150,A245,A254,GOBOARD5:3;
+              A285:((GoB f)*(i2+1,j2+1))`1=((GoB f)*(i2+1,1))`1
+                                       by A1,A150,A247,A254,A256,GOBOARD5:3;
+              A286:((GoB f)*(i2,1))`1<((GoB f)*(i2+1,1))`1
+                                       by A253,A282,A283,GOBOARD5:4;
+               1/2*(((GoB f)*(i2+1,j2))`1+((GoB f)*(i2+1,j2+1))`1)
+              =((GoB f)*(i2+1,1))`1 by A284,A285,Lm1;
+              hence thesis by A252,A286;
+             end;
+             then A287:p in v_strip(GoB f,i2) by A253,A282,A283,GOBOARD5:9;
+               p in {|[r,s]|:(GoB f)*(i2+1,1)`1<=r}
+              proof
+               A288:((GoB f)*(i2+1,j2))`1=((GoB f)*(i2+1,1))`1
+                                       by A1,A150,A245,A254,GOBOARD5:3;
+                 ((GoB f)*(i2+1,j2+1))`1=((GoB f)*(i2+1,1))`1
+                                       by A1,A150,A247,A254,A256,GOBOARD5:3;
+                then (GoB f)*(i2+1,1)`1
+                   <=1/2*(((GoB f)*(i2+1,j2))`1+((GoB f)*(i2+1,j2+1))`1) by
+A288,Lm1;
+               hence thesis by A252;
+              end;
+             then p in v_strip(GoB f,i2+1) by A253,A282,GOBOARD5:10;
+             then p in v_strip(GoB f,i2)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i2+1)/\ h_strip(GoB f,j2) by A267,A287,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A264,A265,XBOOLE_0:def 3;
+           case A289:i2=0 & i2+1<len GoB f;
+               p in {|[r,s]|: r<=(GoB f)*(1,1)`1}
+             proof
+               A290:((GoB f)*(i2+1,j2))`1=((GoB f)*(i2+1,1))`1
+                                       by A1,A150,A245,A254,GOBOARD5:3;
+                 ((GoB f)*(i2+1,j2+1))`1=((GoB f)*(i2+1,1))`1
+                                       by A1,A150,A247,A254,A256,GOBOARD5:3;
+              then 1/2*(((GoB f)*(i2+1,j2))`1+((GoB f)*(i2+1,j2+1))`1)
+                              <=((GoB f)*(1,1))`1 by A289,A290,Lm1;
+              hence thesis by A252;
+             end;
+             then A291:p in v_strip(GoB f,i2) by A253,A289,GOBOARD5:11;
+             A292:i2+1+1<=len GoB f by A289,NAT_1:38;
+               p in {|[r,s]|:(GoB f)*(i2+1,1)`1<=r & r<=(GoB f)*(i2+1+1,1)`1}
+              proof A293: i2+1<i2+1+1 by NAT_1:38;
+               A294:((GoB f)*(i2+1,j2))`1=((GoB f)*(i2+1,1))`1
+                                       by A1,A150,A245,A254,GOBOARD5:3;
+               A295:((GoB f)*(i2+1,j2+1))`1=((GoB f)*(i2+1,1))`1
+                                       by A1,A150,A247,A254,A256,GOBOARD5:3;
+               A296:((GoB f)*(i2+1,1))`1<((GoB f)*(i2+1+1,1))`1
+                                       by A253,A254,A292,A293,GOBOARD5:4;
+                1/2*(((GoB f)*(i2+1,j2))`1+((GoB f)*(i2+1,j2+1))`1)
+               =((GoB f)*(i2+1,1))`1 by A294,A295,Lm1;
+               hence thesis by A252,A296;
+              end;
+             then p in v_strip(GoB f,i1) by A150,A253,A289,GOBOARD5:9;
+             then p in v_strip(GoB f,i2)/\ h_strip(GoB f,j2) &
+             p in v_strip(GoB f,i2+1)/\ h_strip(GoB f,j2) by A150,A267,A291,
+XBOOLE_0:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2+1,j2) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2+1,j2)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A264,A265,XBOOLE_0:def 3;
+           case i2=0 & i2+1=len GoB f;
+            hence contradiction by GOBOARD7:34;
+           end;
+             then A297:p in Cl Down(Int cell(GoB f,i1,j2),(L~f)`)
+                    & p in Cl Down(Int cell(GoB f,i2,j2),(L~f)`)
+                    by A1,A150,Th3;
+             A298:Down(LeftComp f,(L~f)`)=LeftComp f &
+             Down(RightComp f,(L~f)`)=RightComp f by Th6;
+               Down(Int cell(GoB f,i1,j2),(L~f)`)
+                     c= LeftComp f \/ RightComp f by A1,A2,Th4;
+             then Down(Int cell(GoB f,i1,j2),(L~f)`)
+                     c= Down(LeftComp f \/ RightComp f,(L~f)`)
+                                             by A298,GOBRD11:4;
+             then A299:Cl Down(Int cell(GoB f,i1,j2),(L~f)`)
+                     c= Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+                                 by PRE_TOPC:49;
+             A300:Cl Down(Int cell(GoB f,i2,j2),(L~f)`) is connected
+                                  by A1,Th4;
+               Down(LeftComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm4;
+             then Down(LeftComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A301:Cl Down(LeftComp f,(L~f)`)=Down(LeftComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(RightComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm5;
+             then Down(RightComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A302:Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+             =Down((LeftComp f) \/ (RightComp f),(L~f)`) by GOBRD11:4;
+             then A303:Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+             =Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                       by A301,A302,PRE_TOPC:50;
+              Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+               is a_union_of_components of (TOP-REAL 2)|((L~f)`) by Th6;
+             then A304:skl p1 c= Down(LeftComp f,(L~f)`)
+                 \/ Down(RightComp f,(L~f)`) by A297,A299,A303,CONNSP_3:21;
+               Cl Down(Int cell(GoB f,i2,j2),(L~f)`) c= skl p1
+                                              by A297,A300,GOBRD11:1;
+             then A305: Cl Down(Int cell(GoB f,i2,j2),(L~f)`)
+                c= Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                          by A304,XBOOLE_1:1;
+             A306:Down(Int cell(GoB f,i2,j2),(L~f)`)
+                          c= Cl Down(Int cell(GoB f,i2,j2),(L~f)`)
+                                          by PRE_TOPC:48;
+               Down(Int cell(GoB f,i2,j2),(L~f)`)=Int cell(GoB f,i2,j2)
+                                  by A1,Th4;
+           hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f
+                                         by A298,A305,A306,XBOOLE_1:1;
+          end;
+         hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f;
+         end;
+        hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f;
+        end;
+   hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f;
+  end;
+ hence Int cell(GoB f,i1,j1) c= LeftComp f \/ RightComp f
+    implies Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f;
+end;
+
+Lm7: for i1,j1,i2,j2 st i1<=len GoB f & j1<=width GoB f
+  & i2<=len GoB f & j2<=width GoB f & (j2=j1+1 or j1=j2+1)&(i1=i2)
+  holds Int cell(GoB f,i1,j1) c= LeftComp f \/ RightComp f
+    implies Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f
+proof let i1,j1,i2,j2;assume
+ A1: i1<=len GoB f & j1<=width GoB f
+  & i2<=len GoB f & j2<=width GoB f & (j2=j1+1 or j1=j2+1)&(i1=i2);
+     now assume A2:Int cell(GoB f,i1,j1) c= LeftComp f \/ RightComp f;
+          now per cases by A1;
+        case A3:j2=j1+1;
+           now per cases;
+         case ex k st 1<=k & k+1 <=len f & i2<>0 & i2<>len GoB f &
+           LSeg(f/.k,f/.(k+1))=LSeg((GoB f)*(i2,j1+1),(GoB f)*(i2+1,j1+1));
+           then consider k such that A4:1<=k & k+1 <=len f
+           & i2<>0 & i2<>len GoB f &
+           LSeg(f/.k,f/.(k+1))=LSeg((GoB f)*(i2,j1+1),(GoB f)*(i2+1,j1+1));
+             now per cases by A4,SPPOL_1:25;
+           case A5:f/.k=(GoB f)*(i2,j1+1)& f/.(k+1)= (GoB f)*(i2+1,j1+1);
+            A6:Indices GoB f=[:dom GoB f,Seg width GoB f:] by MATRIX_1:def 5;
+              0<=j1 by NAT_1:18;
+            then 0+1<=j1+1 by AXIOMS:24;
+            then A7:j1+1 in Seg width GoB f by A1,A3,FINSEQ_1:3;
+              i2>0 by A4,NAT_1:19; then i2>=0+1 by NAT_1:38;
+            then i2 in dom GoB f by A1,FINSEQ_3:27;
+            then A8:[i2,j1+1] in Indices GoB f by A6,A7,ZFMISC_1:106;
+              i2<len GoB f by A1,A4,REAL_1:def 5;
+            then A9:i2+1<=len GoB f by NAT_1:38;
+              1<=i2+1 by NAT_1:29;
+            then i2+1 in dom GoB f by A9,FINSEQ_3:27;
+            then [i2+1,j1+1] in Indices GoB f by A6,A7,ZFMISC_1:106;
+            then A10:left_cell(f,k) = cell(GoB f,i2,j1+1)
+                                     by A4,A5,A8,GOBOARD5:29;
+            A11: Int left_cell(f,k) c= LeftComp f by A4,GOBOARD9:24;
+              LeftComp f c= LeftComp f \/ RightComp f by XBOOLE_1:7;
+           hence Int cell(GoB f,i2,j1+1) c= LeftComp f \/ RightComp f
+                                 by A10,A11,XBOOLE_1:1;
+           case A12:f/.k=(GoB f)*(i2+1,j1+1)& f/.(k+1)= (GoB f)*(i2,j1+1);
+            A13:Indices GoB f=[:dom GoB f,Seg width GoB f:] by MATRIX_1:def 5;
+              0<=j1 by NAT_1:18;
+            then 0+1<=j1+1 by AXIOMS:24;
+            then A14:j1+1 in Seg width GoB f by A1,A3,FINSEQ_1:3;
+              i2>0 by A4,NAT_1:19; then i2>=0+1 by NAT_1:38;
+            then i2 in dom GoB f by A1,FINSEQ_3:27;
+            then A15:[i2,j1+1] in Indices GoB f by A13,A14,ZFMISC_1:106;
+              i2<len GoB f by A1,A4,REAL_1:def 5;
+            then A16:i2+1<=len GoB f by NAT_1:38;
+              1<=i2+1 by NAT_1:29;
+            then i2+1 in dom GoB f by A16,FINSEQ_3:27;
+            then [i2+1,j1+1] in Indices GoB f by A13,A14,ZFMISC_1:106;
+            then A17:right_cell(f,k) = cell(GoB f,i2,j1+1)
+                                     by A4,A12,A15,GOBOARD5:30;
+            A18: Int right_cell(f,k) c= RightComp f by A4,GOBOARD9:28;
+              RightComp f c= LeftComp f \/ RightComp f by XBOOLE_1:7;
+           hence Int cell(GoB f,i2,j1+1) c= LeftComp f \/ RightComp f
+                                     by A17,A18,XBOOLE_1:1;
+           end;
+         hence Int cell(GoB f,i2,j1+1) c= LeftComp f \/ RightComp f;
+         case A19: not ex k st 1<=k & k+1 <=len f & i2<>0 & i2<>len GoB f &
+          LSeg(f/.k,f/.(k+1))=LSeg((GoB f)*(i2,j1+1),(GoB f)*(i2+1,j1+1));
+            now per cases by A19;
+          case A20:i2=0;
+           reconsider p=|[((GoB f)*(1,j1+1))`1-1,((GoB f)*(1,j1+1))`2]| as
+            Point of TOP-REAL 2;
+            A21:1<len GoB f by GOBOARD7:34;
+            A22:1<width GoB f by GOBOARD7:35;
+A23:        1<=1+j1 by NAT_1:29;
+            then ((GoB f)*(1,j1+1))`1=((GoB f)*(1,1))`1 by A1,A3,A21,GOBOARD5:3
+;
+            then A24:p`1=((GoB f)*(1,1))`1-1 by EUCLID:56;
+              p`1<p`1+1 by REAL_1:69;
+            then A25:p`1< ((GoB f)*(1,1))`1 by A24,XCMPLX_1:27;
+            A26:p in {p} by TARSKI:def 1;
+            reconsider P={p} as Subset of TOP-REAL 2;
+             (for q being Point of TOP-REAL 2
+              st q in P holds q`1<((GoB f)*(1,1))`1) implies
+              P misses L~f by GOBOARD8:21;
+            then A27: {p} c= (L~f)` by A25,SUBSET_1:43,TARSKI:def 1;
+            then reconsider p1=p as Point of (TOP-REAL 2)|((L~f)`) by A26,
+JORDAN1:1;
+               p in {|[s,r]|:s<=(GoB f)*(1,1)`1}
+              proof
+                 p=|[p`1,p`2]| by EUCLID:57;
+               hence thesis by A25;
+              end;
+             then A28:p in v_strip(GoB f,i2) by A20,A22,GOBOARD5:11;
+              0<=j1 by NAT_1:18;
+            then A29: j1=0 or j1>=0+1 by NAT_1:38;
+              now per cases by A1,A3,A29,REAL_1:def 5;
+            case A30:j1>=1 & j1+1<width GoB f;
+             then A31:1<=j1+1 & j1+1<width GoB f by NAT_1:29;
+             A32:1<=j1 & j1<width GoB f by A30,NAT_1:38;
+               p in {|[s,r]|:(GoB f)*(1,j1)`2<=r & r<=(GoB f)*(1,j1+1)`2}
+             proof j1<j1+1 by NAT_1:38;
+              then ((GoB f)*(1,j1))`2<((GoB f)*(1,j1+1))`2 by A21,A30,GOBOARD5:
+5;
+              hence thesis;
+             end;
+             then A33:p in h_strip(GoB f,j1) by A21,A32,GOBOARD5:6;
+             A34:j1+1+1<=width GoB f by A30,NAT_1:38;
+               p in {|[s,r]|:(GoB f)*(1,j1+1)`2<=r & r<=(GoB f)*(1,j1+1+1)`2}
+              proof j1+1<j1+1+1 by NAT_1:38;
+                then ((GoB f)*(1,j1+1)`2<=((GoB f)*(1,j1+1))`2
+                & ((GoB f)*(1,j1+1))`2<=(GoB f)*(1,j1+1+1)`2)
+                                   by A21,A23,A34,GOBOARD5:5;
+               hence thesis;
+              end;
+             then p in h_strip(GoB f,j1+1) by A21,A31,GOBOARD5:6;
+             then p in h_strip(GoB f,j1)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j1+1)/\ v_strip(GoB f,i2) by A28,A33,XBOOLE_0:
+def 3
+;
+             then p in cell(GoB f,i2,j1) &
+             p in cell(GoB f,i2,j1+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j1+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j1)/\((L~f)`) by A26,A27,XBOOLE_0:def 3;
+           case A35:j1>=1 & j1+1=width GoB f;
+             A36: j1<j1+1 by NAT_1:38;
+             A37:1<=j1 & j1<width GoB f by A35,NAT_1:38;
+               p in {|[s,r]|:(GoB f)*(1,j1)`2<=r & r<=(GoB f)*(1,j1+1)`2}
+             proof
+                ((GoB f)*(1,j1))`2<((GoB f)*(1,j1+1))`2 by A21,A35,A36,GOBOARD5
+:5;
+              hence thesis;
+             end;
+             then A38:p in h_strip(GoB f,j1) by A21,A37,GOBOARD5:6;
+               p in {|[s,r]|:(GoB f)*(1,j1+1)`2<=r};
+              then p in h_strip(GoB f,j1+1) by A21,A35,GOBOARD5:7;
+             then p in h_strip(GoB f,j1)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j1+1)/\ v_strip(GoB f,i2) by A28,A38,XBOOLE_0:
+def 3
+;
+             then p in cell(GoB f,i2,j1) &
+             p in cell(GoB f,i2,j1+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j1+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j1)/\((L~f)`) by A26,A27,XBOOLE_0:def 3;
+           case A39:j1=0 & j1+1<width GoB f;
+             then p in {|[s,r]|: r<=(GoB f)*(1,1)`2};
+             then A40:p in h_strip(GoB f,j1) by A21,A39,GOBOARD5:8;
+             A41:j1+1+1<=width GoB f by A39,NAT_1:38;
+               p in {|[s,r]|:(GoB f)*(1,j1+1)`2<=r & r<=(GoB f)*(1,j1+1+1)`2}
+              proof j1+1<j1+1+1 by NAT_1:38;
+                then ((GoB f)*(1,j1+1)`2<=((GoB f)*(1,j1+1))`2
+                & ((GoB f)*(1,j1+1))`2<=(GoB f)*(1,j1+1+1)`2) by A21,A23,A41,
+GOBOARD5:5;
+               hence thesis;
+              end;
+             then p in h_strip(GoB f,j1+1) by A21,A39,GOBOARD5:6;
+             then p in h_strip(GoB f,j1)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j1+1)/\ v_strip(GoB f,i2) by A28,A40,XBOOLE_0:
+def 3
+;
+             then p in cell(GoB f,i2,j1) &
+             p in cell(GoB f,i2,j1+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j1+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j1)/\((L~f)`) by A26,A27,XBOOLE_0:def 3;
+           case A42:j1=0 & j1+1=width GoB f;
+             then p in {|[s,r]|: r<=(GoB f)*(1,1)`2};
+             then A43:p in h_strip(GoB f,j1) by A21,A42,GOBOARD5:8;
+               p in {|[s,r]|:(GoB f)*(1,j1+1)`2<=r};
+              then p in h_strip(GoB f,j1+1) by A21,A42,GOBOARD5:7;
+             then p in h_strip(GoB f,j1)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j1+1)/\ v_strip(GoB f,i2) by A28,A43,XBOOLE_0:
+def 3
+;
+             then p in cell(GoB f,i2,j1) &
+             p in cell(GoB f,i2,j1+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j1+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j1)/\((L~f)`) by A26,A27,XBOOLE_0:def 3;
+            end;
+             then A44:p in Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`)
+                    & p in Cl Down(Int cell(GoB f,i2,j1),(L~f)`) by A1,Th3;
+             A45:Down(LeftComp f,(L~f)`)=LeftComp f &
+             Down(RightComp f,(L~f)`)=RightComp f by Th6;
+               Down(Int cell(GoB f,i2,j1),(L~f)`)
+                     c= LeftComp f \/ RightComp f by A1,A2,Th4;
+             then Down(Int cell(GoB f,i2,j1),(L~f)`)
+                     c= Down(LeftComp f \/ RightComp f,(L~f)`)
+                                             by A45,GOBRD11:4;
+             then A46:Cl Down(Int cell(GoB f,i2,j1),(L~f)`)
+                     c= Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+                                 by PRE_TOPC:49;
+             A47:Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`) is connected
+                                  by A1,A3,Th4;
+               Down(LeftComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm4;
+             then Down(LeftComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A48:Cl Down(LeftComp f,(L~f)`)=Down(LeftComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(RightComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm5;
+             then Down(RightComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A49:Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+             =Down((LeftComp f) \/ (RightComp f),(L~f)`) by GOBRD11:4;
+             then A50:Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+             =Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                       by A48,A49,PRE_TOPC:50;
+              Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+               is a_union_of_components of (TOP-REAL 2)|((L~f)`) by Th6;
+             then A51:skl p1 c= Down(LeftComp f,(L~f)`)
+                 \/ Down(RightComp f,(L~f)`) by A44,A46,A50,CONNSP_3:21;
+               Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`) c= skl p1
+                                              by A44,A47,GOBRD11:1;
+             then A52: Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`)
+                c= Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                          by A51,XBOOLE_1:1;
+             A53:Down(Int cell(GoB f,i2,j1+1),(L~f)`)
+                          c= Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`)
+                                          by PRE_TOPC:48;
+               Down(Int cell(GoB f,i2,j1+1),(L~f)`)=Int cell(GoB f,i2,j1+1)
+                                  by A1,A3,Th4;
+           hence Int cell(GoB f,i2,j1+1) c= LeftComp f \/ RightComp f
+                                         by A45,A52,A53,XBOOLE_1:1;
+          case A54:i2=len GoB f;
+           reconsider p=|[((GoB f)*(len GoB f,j1+1))`1+1,
+                ((GoB f)*(len GoB f,j1+1))`2]| as Point of TOP-REAL 2;
+            A55:1<len GoB f by GOBOARD7:34;
+            A56:1<width GoB f by GOBOARD7:35;
+A57:        1<=1+j1 by NAT_1:29;
+            then ((GoB f)*(len GoB f,j1+1))`1
+                        =((GoB f)*(len GoB f,1))`1 by A1,A3,A55,GOBOARD5:3;
+            then A58:p`1=((GoB f)*(len GoB f,1))`1+1 by EUCLID:56;
+            A59: ((GoB f)*(len GoB f,1))`1<((GoB f)*(len GoB f,1))`1+1
+                                   by REAL_1:69;
+            A60:((GoB f)*(len GoB f,1))`1<p`1 by A58,REAL_1:69;
+            A61:p in {p} by TARSKI:def 1;
+            reconsider P={p} as Subset of TOP-REAL 2;
+             (for q being Point of TOP-REAL 2
+              st q in P holds ((GoB f)*(len GoB f,1)`1)<q`1) implies
+              P misses L~f by GOBOARD8:22;
+            then A62: {p} c= (L~f)` by A58,A59,SUBSET_1:43,TARSKI:def 1;
+            then reconsider p1=p as Point of (TOP-REAL 2)|((L~f)`) by A61,
+JORDAN1:1;
+               p in {|[s,r]|:(GoB f)*(len (GoB f),1)`1<=s}
+              proof
+                 p=|[p`1,p`2]| by EUCLID:57;
+               hence thesis by A60;
+              end;
+             then A63:p in v_strip(GoB f,i2) by A54,A56,GOBOARD5:10;
+              0<=j1 by NAT_1:18;
+            then A64: j1=0 or j1>=0+1 by NAT_1:38;
+              now per cases by A1,A3,A64,REAL_1:def 5;
+            case A65:j1>=1 & j1+1<width GoB f;
+             then A66:1<=j1+1 & j1+1<width GoB f by NAT_1:29;
+             A67:1<=j1 & j1<width GoB f by A65,NAT_1:38;
+               p in {|[s,r]|:(GoB f)*(len GoB f,j1)`2<=r &
+                r<=(GoB f)*(len GoB f,j1+1)`2}
+             proof j1<j1+1 by NAT_1:38;
+              then ((GoB f)*(len GoB f,j1))`2
+                   <((GoB f)*(len GoB f,j1+1))`2 by A55,A65,GOBOARD5:5;
+              hence thesis;
+             end;
+             then A68:p in h_strip(GoB f,j1) by A55,A67,GOBOARD5:6;
+             A69:j1+1+1<=width GoB f by A65,NAT_1:38;
+               p in {|[s,r]|:(GoB f)*(len GoB f,j1+1)`2<=r
+                & r<=(GoB f)*(len GoB f,j1+1+1)`2}
+              proof j1+1<j1+1+1 by NAT_1:38;
+                then ((GoB f)*(len GoB f,j1+1)`2
+                        <=((GoB f)*(len GoB f,j1+1))`2
+                & ((GoB f)*(len GoB f,j1+1))`2
+                   <=(GoB f)*(len GoB f,j1+1+1)`2) by A55,A57,A69,GOBOARD5:5;
+               hence thesis;
+              end;
+             then p in h_strip(GoB f,j1+1) by A55,A66,GOBOARD5:6;
+             then p in h_strip(GoB f,j1)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j1+1)/\ v_strip(GoB f,i2) by A63,A68,XBOOLE_0:
+def 3
+;
+             then p in cell(GoB f,i2,j1) &
+             p in cell(GoB f,i2,j1+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j1+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j1)/\((L~f)`) by A61,A62,XBOOLE_0:def 3;
+           case A70:j1>=1 & j1+1=width GoB f;
+             A71: j1<j1+1 by NAT_1:38;
+             A72:1<=j1 & j1<width GoB f by A70,NAT_1:38;
+               p in {|[s,r]|:(GoB f)*(len (GoB f),j1)`2<=r
+                & r<=(GoB f)*(len (GoB f),j1+1)`2}
+             proof
+                ((GoB f)*(len GoB f,j1))`2
+                           <((GoB f)*(len (GoB f),j1+1))`2 by A55,A70,A71,
+GOBOARD5:5;
+              hence thesis;
+             end;
+             then A73:p in h_strip(GoB f,j1) by A55,A72,GOBOARD5:6;
+               p in {|[s,r]|:(GoB f)*(len (GoB f),j1+1)`2<=r};
+             then p in h_strip(GoB f,j1+1) by A55,A70,GOBOARD5:7;
+             then p in h_strip(GoB f,j1)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j1+1)/\ v_strip(GoB f,i2) by A63,A73,XBOOLE_0:
+def 3
+;
+             then p in cell(GoB f,i2,j1) &
+             p in cell(GoB f,i2,j1+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j1+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j1)/\((L~f)`) by A61,A62,XBOOLE_0:def 3;
+           case A74:j1=0 & j1+1<width GoB f;
+             then p in {|[s,r]|: r<=(GoB f)*(len (GoB f),1)`2};
+             then A75:p in h_strip(GoB f,j1) by A55,A74,GOBOARD5:8;
+             A76:j1+1+1<=width GoB f by A74,NAT_1:38;
+               p in {|[s,r]|:(GoB f)*(len (GoB f),j1+1)`2<=r
+                & r<=(GoB f)*(len (GoB f),j1+1+1)`2}
+              proof
+               j1+1<j1+1+1 by NAT_1:38;
+                then ((GoB f)*(len (GoB f),j1+1)`2
+                      <=((GoB f)*(len (GoB f),j1+1))`2
+                     & ((GoB f)*(len (GoB f),j1+1))`2
+                   <=(GoB f)*(len (GoB f),j1+1+1)`2) by A55,A57,A76,GOBOARD5:5;
+               hence thesis;
+              end;
+             then p in h_strip(GoB f,j1+1) by A55,A74,GOBOARD5:6;
+             then p in h_strip(GoB f,j1)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j1+1)/\ v_strip(GoB f,i2) by A63,A75,XBOOLE_0:
+def 3
+;
+             then p in cell(GoB f,i2,j1) &
+             p in cell(GoB f,i2,j1+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j1+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j1)/\((L~f)`) by A61,A62,XBOOLE_0:def 3;
+           case j1=0 & j1+1=width GoB f;
+            hence contradiction by GOBOARD7:35;
+            end;
+             then A77:p in Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`)
+                    & p in Cl Down(Int cell(GoB f,i2,j1),(L~f)`) by A1,Th3;
+             A78:Down(LeftComp f,(L~f)`)=LeftComp f &
+             Down(RightComp f,(L~f)`)=RightComp f by Th6;
+               Down(Int cell(GoB f,i2,j1),(L~f)`)
+                     c= LeftComp f \/ RightComp f by A1,A2,Th4;
+             then Down(Int cell(GoB f,i2,j1),(L~f)`)
+                     c= Down(LeftComp f \/ RightComp f,(L~f)`)
+                                             by A78,GOBRD11:4;
+             then A79:Cl Down(Int cell(GoB f,i2,j1),(L~f)`)
+                     c= Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+                                 by PRE_TOPC:49;
+             A80:Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`) is connected
+                                  by A1,A3,Th4;
+               Down(LeftComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm4;
+             then Down(LeftComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A81:Cl Down(LeftComp f,(L~f)`)=Down(LeftComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(RightComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm5;
+             then Down(RightComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A82:Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+             =Down((LeftComp f) \/ (RightComp f),(L~f)`) by GOBRD11:4;
+             then A83:Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+             =Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                       by A81,A82,PRE_TOPC:50;
+              Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+               is a_union_of_components of (TOP-REAL 2)|((L~f)`) by Th6;
+             then A84:skl p1 c= Down(LeftComp f,(L~f)`)
+                 \/ Down(RightComp f,(L~f)`) by A77,A79,A83,CONNSP_3:21;
+               Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`) c= skl p1
+                                              by A77,A80,GOBRD11:1;
+             then A85: Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`)
+                c= Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                          by A84,XBOOLE_1:1;
+             A86:Down(Int cell(GoB f,i2,j1+1),(L~f)`)
+                          c= Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`)
+                                          by PRE_TOPC:48;
+               Down(Int cell(GoB f,i2,j1+1),(L~f)`)=Int cell(GoB f,i2,j1+1)
+                                  by A1,A3,Th4;
+           hence Int cell(GoB f,i2,j1+1) c= LeftComp f \/ RightComp f
+                                         by A78,A85,A86,XBOOLE_1:1;
+          case A87:i2<>0 & i2<>len GoB f &
+          not ex k st 1<=k & k+1 <=len f &
+          LSeg(f/.k,f/.(k+1))
+               =LSeg((GoB f)*(i2,j1+1),(GoB f)*(i2+1,j1+1));
+            then 0<i2 by NAT_1:19; then A88: 0+1<=i2 by NAT_1:38;
+            A89:i2<len GoB f by A1,A87,REAL_1:def 5;
+            then A90:i2+1<=len GoB f by NAT_1:38;
+            for k st 1<=k & k+1<=len f holds
+           LSeg((GoB f)*(i2,j1+1),(GoB f)*(i2+1,j1+1))<>LSeg(f,k)
+           proof let k;assume A91:1<=k & k+1<=len f;
+            then LSeg(f,k)=LSeg(f/.k,f/.(k+1)) by TOPREAL1:def 5;
+           hence LSeg((GoB f)*(i2,j1+1),(GoB f)*(i2+1,j1+1))<>LSeg(f,k)
+                                        by A87,A91;
+           end;
+           then A92: 1 <= j1+1 & j1+1 <= width GoB f & 1 <= i2 & i2+1 <= len
+GoB f
+           implies not (1/2*((GoB f)*(i2,j1+1)+(GoB f)*(i2+1,j1+1)) in L~f)
+                                  by GOBOARD7:42;
+           reconsider p=1/2*((GoB f)*(i2,j1+1)+(GoB f)*(i2+1,j1+1)) as
+            Point of TOP-REAL 2;
+            A93:p`2=1/2*((GoB f)*(i2,j1+1)+(GoB f)*(i2+1,j1+1))`2 by TOPREAL3:9
+               .=1/2*(((GoB f)*(i2,j1+1))`2+((GoB f)*(i2+1,j1+1))`2) by
+TOPREAL3:7;
+            A94:p`1=1/2*((GoB f)*(i2,j1+1)+(GoB f)*(i2+1,j1+1))`1 by TOPREAL3:9
+               .=1/2*(((GoB f)*(i2,j1+1))`1+((GoB f)*(i2+1,j1+1))`1) by
+TOPREAL3:7;
+             then A95:p=|[1/2*(((GoB f)*(i2,j1+1))`1+((GoB f)*(i2+1,j1+1))`1),
+               1/2*(((GoB f)*(i2,j1+1))`2+((GoB f)*(i2+1,j1+1))`2)]|
+                                  by A93,EUCLID:57;
+            A96:1<len GoB f by GOBOARD7:34;
+A97:       1<=1+j1 by NAT_1:29;
+            A98:i2<i2+1 by NAT_1:38;
+            A99: 1<i2+1 by A88,NAT_1:38;
+            A100:((GoB f)*(i2,j1+1))`1 <((GoB f)*(i2+1,j1+1))`1
+                              by A1,A3,A88,A90,A97,A98,GOBOARD5:4;
+            then A101:((GoB f)*(i2,j1+1))`1+((GoB f)*(i2,j1+1))`1
+              <((GoB f)*(i2,j1+1))`1+((GoB f)*(i2+1,j1+1))`1
+                                           by REAL_1:67;
+            A102:((GoB f)*(i2,j1+1))`1+((GoB f)*(i2+1,j1+1))`1
+              <((GoB f)*(i2+1,j1+1))`1+((GoB f)*(i2+1,j1+1))`1
+                                           by A100,REAL_1:67;
+              (((GoB f)*(i2,j1+1))`1+((GoB f)*(i2,j1+1))`1)/2
+              <(((GoB f)*(i2,j1+1))`1+((GoB f)*(i2+1,j1+1))`1)/2
+                                  by A101,REAL_1:73;
+            then A103:((GoB f)*(i2,j1+1))`1
+             <(((GoB f)*(i2,j1+1))`1+((GoB f)*(i2+1,j1+1))`1)/2
+                                 by XCMPLX_1:65;
+              (((GoB f)*(i2,j1+1))`1+((GoB f)*(i2+1,j1+1))`1)/2
+              <(((GoB f)*(i2+1,j1+1))`1+((GoB f)*(i2+1,j1+1))`1)/2
+                                  by A102,REAL_1:73;
+            then A104:((GoB f)*(i2+1,j1+1))`1
+             >(((GoB f)*(i2,j1+1))`1+((GoB f)*(i2+1,j1+1))`1)/2
+             by XCMPLX_1:65;
+            A105:p in {p} by TARSKI:def 1;
+            reconsider P={p} as Subset of TOP-REAL 2;
+             (for x st x in P holds not x in (L~f)) implies
+              P misses L~f by XBOOLE_0:3;
+            then A106: {p} c= (L~f)` by A1,A3,A88,A89,A92,NAT_1:29,38,SUBSET_1:
+43,TARSKI:def 1;
+            then reconsider p1=p as Point of (TOP-REAL 2)|((L~f)`) by A105,
+JORDAN1:1;
+            A107:1<=j1+1 & j1+1<=width GoB f by A1,A3,NAT_1:29;
+               p in {|[s,r]|:(GoB f)*(i2,j1+1)`1<=s & s<=(GoB f)*(i2+1,j1+1)`1}
+              proof
+                 p=|[p`1,p`2]| & ((GoB f)*(i2,j1+1)`1<=p`1
+                  & p`1<=(GoB f)*(i2+1,j1+1)`1) by A94,A103,A104,EUCLID:57,
+XCMPLX_1:100;
+               hence thesis;
+              end;
+             then A108:p in v_strip(GoB f,i2) by A88,A89,A107,GOBOARD5:9;
+              0<=j1 by NAT_1:18;
+            then A109: j1=0 or j1>=0+1 by NAT_1:38;
+              now per cases by A1,A3,A109,REAL_1:def 5;
+            case A110:j1>=1 & j1+1<width GoB f;
+             then A111:1<=j1+1 & j1+1<width GoB f by NAT_1:29;
+             A112:1<=j1 & j1<width GoB f by A110,NAT_1:38;
+               p in {|[s,r]|:(GoB f)*(1,j1)`2<=r & r<=(GoB f)*(1,j1+1)`2}
+             proof A113: j1<j1+1 by NAT_1:38;
+              A114:((GoB f)*(i2,j1+1))`2=((GoB f)*(1,j1+1))`2
+                                       by A1,A3,A88,A97,GOBOARD5:2;
+              A115:((GoB f)*(i2+1,j1+1))`2=((GoB f)*(1,j1+1))`2
+                                       by A1,A3,A90,A97,A99,GOBOARD5:2;
+              A116:((GoB f)*(1,j1))`2<((GoB f)*(1,j1+1))`2
+                                       by A96,A110,A113,GOBOARD5:5;
+               1/2*(((GoB f)*(i2,j1+1))`2+((GoB f)*(i2+1,j1+1))`2)
+              =((GoB f)*(1,j1+1))`2 by A114,A115,Lm1;
+              hence thesis by A95,A116;
+             end;
+             then A117:p in h_strip(GoB f,j1) by A96,A112,GOBOARD5:6;
+             A118:j1+1+1<=width GoB f by A110,NAT_1:38;
+               p in {|[s,r]|:(GoB f)*(1,j1+1)`2<=r & r<=(GoB f)*(1,j1+1+1)`2}
+              proof
+              A119: j1+1<j1+1+1 by NAT_1:38;
+              A120:((GoB f)*(i2,j1+1))`2=((GoB f)*(1,j1+1))`2
+                                       by A1,A3,A88,A97,GOBOARD5:2;
+              A121:((GoB f)*(i2+1,j1+1))`2=((GoB f)*(1,j1+1))`2
+                                       by A1,A3,A90,A97,A99,GOBOARD5:2;
+              A122:((GoB f)*(1,j1+1))`2<((GoB f)*(1,j1+1+1))`2
+                                       by A96,A97,A118,A119,GOBOARD5:5;
+               1/2*(((GoB f)*(i2,j1+1))`2+((GoB f)*(i2+1,j1+1))`2)
+              =((GoB f)*(1,j1+1))`2 by A120,A121,Lm1;
+               hence thesis by A95,A122;
+              end;
+             then p in h_strip(GoB f,j1+1) by A96,A111,GOBOARD5:6;
+             then p in h_strip(GoB f,j1)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j1+1)/\ v_strip(GoB f,i2) by A108,A117,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j1) &
+             p in cell(GoB f,i2,j1+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j1+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j1)/\((L~f)`) by A105,A106,XBOOLE_0:def 3;
+           case A123:j1>=1 & j1+1=width GoB f;
+             A124: j1<j1+1 by NAT_1:38;
+               p in {|[s,r]|:(GoB f)*(1,j1)`2<=r & r<=(GoB f)*(1,j1+1)`2}
+             proof
+              A125:((GoB f)*(i2,j1+1))`2=((GoB f)*(1,j1+1))`2
+                                       by A1,A3,A88,A97,GOBOARD5:2;
+              A126:((GoB f)*(i2+1,j1+1))`2=((GoB f)*(1,j1+1))`2
+                                       by A1,A3,A90,A97,A99,GOBOARD5:2;
+              A127:((GoB f)*(1,j1))`2<((GoB f)*(1,j1+1))`2
+                                       by A96,A123,A124,GOBOARD5:5;
+               1/2*(((GoB f)*(i2,j1+1))`2+((GoB f)*(i2+1,j1+1))`2)
+              =((GoB f)*(1,j1+1))`2 by A125,A126,Lm1;
+              hence thesis by A95,A127;
+             end;
+             then A128:p in h_strip(GoB f,j1) by A96,A123,A124,GOBOARD5:6;
+               p in {|[s,r]|:(GoB f)*(1,j1+1)`2<=r}
+              proof
+               A129:((GoB f)*(i2,j1+1))`2=((GoB f)*(1,j1+1))`2
+                                       by A1,A3,A88,A97,GOBOARD5:2;
+                 ((GoB f)*(i2+1,j1+1))`2=((GoB f)*(1,j1+1))`2
+                                       by A1,A3,A90,A97,A99,GOBOARD5:2;
+                then (GoB f)*(1,j1+1)`2
+                   <=1/2*(((GoB f)*(i2,j1+1))`2+((GoB f)*(i2+1,j1+1))`2) by
+A129,Lm1;
+               hence thesis by A95;
+              end;
+             then p in h_strip(GoB f,j1+1) by A96,A123,GOBOARD5:7;
+             then p in h_strip(GoB f,j1)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j1+1)/\ v_strip(GoB f,i2) by A108,A128,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j1) &
+             p in cell(GoB f,i2,j1+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j1+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j1)/\((L~f)`) by A105,A106,XBOOLE_0:def 3;
+           case A130:j1=0 & j1+1<width GoB f;
+               p in {|[s,r]|: r<=(GoB f)*(1,1)`2}
+             proof
+               A131:((GoB f)*(i2,j1+1))`2=((GoB f)*(1,j1+1))`2
+                                       by A1,A3,A88,A97,GOBOARD5:2;
+                 ((GoB f)*(i2+1,j1+1))`2=((GoB f)*(1,j1+1))`2
+                                       by A1,A3,A90,A97,A99,GOBOARD5:2;
+              then 1/2*(((GoB f)*(i2,j1+1))`2+((GoB f)*(i2+1,j1+1))`2)
+                              <=((GoB f)*(1,1))`2 by A130,A131,Lm1;
+              hence thesis by A95;
+             end;
+             then A132:p in h_strip(GoB f,j1) by A96,A130,GOBOARD5:8;
+             A133:j1+1+1<=width GoB f by A130,NAT_1:38;
+               p in {|[s,r]|:(GoB f)*(1,j1+1)`2<=r & r<=(GoB f)*(1,j1+1+1)`2}
+              proof A134: j1+1<j1+1+1 by NAT_1:38;
+               A135:((GoB f)*(i2,j1+1))`2=((GoB f)*(1,j1+1))`2
+                                       by A1,A3,A88,A97,GOBOARD5:2;
+               A136:((GoB f)*(i2+1,j1+1))`2=((GoB f)*(1,j1+1))`2
+                                       by A1,A3,A90,A97,A99,GOBOARD5:2;
+               A137:((GoB f)*(1,j1+1))`2<((GoB f)*(1,j1+1+1))`2
+                                       by A96,A97,A133,A134,GOBOARD5:5;
+                1/2*(((GoB f)*(i2,j1+1))`2+((GoB f)*(i2+1,j1+1))`2)
+               =((GoB f)*(1,j1+1))`2 by A135,A136,Lm1;
+               hence thesis by A95,A137;
+              end;
+             then p in h_strip(GoB f,j1+1) by A96,A130,GOBOARD5:6;
+             then p in h_strip(GoB f,j1)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j1+1)/\ v_strip(GoB f,i2) by A108,A132,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j1) &
+             p in cell(GoB f,i2,j1+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j1+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j1)/\((L~f)`) by A105,A106,XBOOLE_0:def 3;
+           case j1=0 & j1+1=width GoB f;
+            hence contradiction by GOBOARD7:35;
+           end;
+             then A138:p in Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`)
+                    & p in Cl Down(Int cell(GoB f,i2,j1),(L~f)`) by A1,Th3;
+             A139:Down(LeftComp f,(L~f)`)=LeftComp f &
+             Down(RightComp f,(L~f)`)=RightComp f by Th6;
+               Down(Int cell(GoB f,i2,j1),(L~f)`)
+                     c= LeftComp f \/ RightComp f by A1,A2,Th4;
+             then Down(Int cell(GoB f,i2,j1),(L~f)`)
+                     c= Down(LeftComp f \/ RightComp f,(L~f)`)
+                                             by A139,GOBRD11:4;
+             then A140:Cl Down(Int cell(GoB f,i2,j1),(L~f)`)
+                     c= Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+                                 by PRE_TOPC:49;
+             A141:Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`) is connected
+                                  by A1,A3,Th4;
+               Down(LeftComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm4;
+             then Down(LeftComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A142:Cl Down(LeftComp f,(L~f)`)=Down(LeftComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(RightComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm5;
+             then Down(RightComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A143:Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+             =Down((LeftComp f) \/ (RightComp f),(L~f)`) by GOBRD11:4;
+             then A144:Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+             =Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                       by A142,A143,PRE_TOPC:50;
+              Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+               is a_union_of_components of (TOP-REAL 2)|((L~f)`) by Th6;
+             then A145:skl p1 c= Down(LeftComp f,(L~f)`)
+                 \/ Down(RightComp f,(L~f)`) by A138,A140,A144,CONNSP_3:21;
+               Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`) c= skl p1
+                                              by A138,A141,GOBRD11:1;
+             then A146: Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`)
+                c= Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                          by A145,XBOOLE_1:1;
+             A147:Down(Int cell(GoB f,i2,j1+1),(L~f)`)
+                          c= Cl Down(Int cell(GoB f,i2,j1+1),(L~f)`)
+                                          by PRE_TOPC:48;
+               Down(Int cell(GoB f,i2,j1+1),(L~f)`)=Int cell(GoB f,i2,j1+1)
+                                  by A1,A3,Th4;
+           hence Int cell(GoB f,i2,j1+1) c= LeftComp f \/ RightComp f
+                                         by A139,A146,A147,XBOOLE_1:1;
+          end;
+         hence Int cell(GoB f,i2,j1+1) c= LeftComp f \/ RightComp f;
+         end;
+        hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f by A3;
+        case A148: j1=j2+1;
+          then A149:j1-'1=j2 by BINARITH:39;
+          A150:j2<j2+1 by NAT_1:38;
+          A151:j2<j1 by A148,NAT_1:38;
+          A152:1<=j2+1 by NAT_1:29;
+          A153:1<=j1 by A148,NAT_1:29;
+          A154:j2+1<j2+1+1 by NAT_1:38;
+            j1-1=j2 by A148,XCMPLX_1:26;
+          then j1-1>=0 by NAT_1:18;
+          then j1-'1=j1-1 by BINARITH:def 3;
+          then A155:j1=j1-'1+1 by XCMPLX_1:27;
+          A156:1<=j1-'1+1 by NAT_1:29;
+          A157:j1-'1<j1 by A148,A151,BINARITH:39;
+           now per cases;
+         case ex k st 1<=k & k+1 <=len f & i2<>0 & i2<>len GoB f &
+           LSeg(f/.k,f/.(k+1))
+                  =LSeg((GoB f)*(i2,j2+1),(GoB f)*(i2+1,j2+1));
+           then consider k such that A158:1<=k & k+1 <=len f
+           & i2<>0 & i2<>len GoB f &
+           LSeg(f/.k,f/.(k+1))
+                =LSeg((GoB f)*(i2,j1-'1+1),(GoB f)*(i2+1,j1-'1+1))
+                   by A149;
+             now per cases by A158,SPPOL_1:25;
+           case A159:f/.k=(GoB f)*(i2,j1-'1+1)
+                      & f/.(k+1)= (GoB f)*(i2+1,j1-'1+1);
+            A160:Indices GoB f=[:dom GoB f,Seg width GoB f:] by MATRIX_1:def 5;
+              j1-'1<width GoB f by A1,A157,AXIOMS:22;
+            then j1-'1+1<=width GoB f by NAT_1:38;
+            then A161:j1-'1+1 in Seg width GoB f by A156,FINSEQ_1:3;
+              i2>0 by A158,NAT_1:19; then i2>=0+1 by NAT_1:38;
+            then i2 in dom GoB f by A1,FINSEQ_3:27;
+            then A162:[i2,j1-'1+1] in Indices GoB f by A160,A161,ZFMISC_1:106;
+              i2<len GoB f by A1,A158,REAL_1:def 5;
+            then A163:i2+1<=len GoB f by NAT_1:38;
+              1<=i2+1 by NAT_1:29;
+            then i2+1 in dom GoB f by A163,FINSEQ_3:27;
+            then [i2+1,j1-'1+1] in Indices GoB f by A160,A161,ZFMISC_1:106;
+            then A164:right_cell(f,k) = cell(GoB f,i2,j1-'1)
+                                     by A158,A159,A162,GOBOARD5:29;
+            A165: Int right_cell(f,k) c= RightComp f by A158,GOBOARD9:28;
+              RightComp f c= LeftComp f \/ RightComp f by XBOOLE_1:7;
+           hence Int cell(GoB f,i2,j1-'1) c= LeftComp f \/ RightComp f
+                                 by A164,A165,XBOOLE_1:1;
+           case A166:f/.k=(GoB f)*(i2+1,j1-'1+1)
+                   & f/.(k+1)= (GoB f)*(i2,j1-'1+1);
+            A167:Indices GoB f=[:dom GoB f,Seg width GoB f:] by MATRIX_1:def 5;
+            A168:j1-'1+1 in Seg width GoB f by A1,A153,A155,FINSEQ_1:3;
+              i2>0 by A158,NAT_1:19; then i2>=0+1 by NAT_1:38;
+            then i2 in dom GoB f by A1,FINSEQ_3:27;
+            then A169:[i2,j1-'1+1] in Indices GoB f by A167,A168,ZFMISC_1:106;
+              i2<len GoB f by A1,A158,REAL_1:def 5;
+            then A170:i2+1<=len GoB f by NAT_1:38;
+              1<=i2+1 by NAT_1:29;
+            then i2+1 in dom GoB f by A170,FINSEQ_3:27;
+            then [i2+1,j1-'1+1] in Indices GoB f by A167,A168,ZFMISC_1:106;
+            then A171:left_cell(f,k) = cell(GoB f,i2,j1-'1)
+                                     by A158,A166,A169,GOBOARD5:30;
+            A172: Int left_cell(f,k) c= LeftComp f by A158,GOBOARD9:24;
+              LeftComp f c= LeftComp f \/ RightComp f by XBOOLE_1:7;
+           hence Int cell(GoB f,i2,j1-'1) c= LeftComp f \/ RightComp f
+                                     by A171,A172,XBOOLE_1:1;
+           end;
+         hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f
+                                 by A148,BINARITH:39;
+         case A173: not ex k st 1<=k & k+1 <=len f & i2<>0 & i2<>len GoB f &
+          LSeg(f/.k,f/.(k+1))
+                 =LSeg((GoB f)*(i2,j2+1),(GoB f)*(i2+1,j2+1));
+            now per cases by A173;
+          case A174:i2=0;
+           reconsider p=|[((GoB f)*(1,j2+1))`1-1,((GoB f)*(1,j2+1))`2]| as
+            Point of TOP-REAL 2;
+            A175:1<len GoB f by GOBOARD7:34;
+            A176:1<width GoB f by GOBOARD7:35;
+            A177:1<=j2+1 by NAT_1:29;
+            then ((GoB f)*(1,j2+1))`1=((GoB f)*(1,1))`1 by A1,A148,A175,
+GOBOARD5:3;
+            then A178:p`1=((GoB f)*(1,1))`1-1 by EUCLID:56;
+              p`1<p`1+1 by REAL_1:69;
+            then A179:p`1< ((GoB f)*(1,1))`1 by A178,XCMPLX_1:27;
+            A180:p in {p} by TARSKI:def 1;
+            reconsider P={p} as Subset of TOP-REAL 2;
+             (for q being Point of TOP-REAL 2
+              st q in P holds q`1<((GoB f)*(1,1))`1) implies
+              P misses L~f by GOBOARD8:21;
+            then A181: {p} c= (L~f)` by A179,SUBSET_1:43,TARSKI:def 1;
+            then reconsider p1=p as Point of (TOP-REAL 2)|((L~f)`) by A180,
+JORDAN1:1;
+               p in {|[s,r]|:s<=(GoB f)*(1,1)`1}
+              proof
+                 p=|[p`1,p`2]| by EUCLID:57;
+               hence thesis by A179;
+              end;
+             then A182:p in v_strip(GoB f,i2) by A174,A176,GOBOARD5:11;
+              now per cases by A1,A148,NAT_1:18,REAL_1:def 5;
+            case A183:j2+1<width GoB f & j2>0; then A184: 0+1<=j2 by NAT_1:38;
+             then A185:1<=j2+1 & j2+1<width GoB f by A183,NAT_1:38;
+             A186:1<=j2 & j2<width GoB f by A183,A184,NAT_1:38;
+               p in {|[s,r]|:(GoB f)*(1,j2)`2<=r & r<=(GoB f)*(1,j2+1)`2}
+             proof j2<j2+1 by NAT_1:38;
+              then ((GoB f)*(1,j2))`2<((GoB f)*(1,j2+1))`2 by A1,A148,A175,A184
+,GOBOARD5:5;
+              hence thesis;
+             end;
+             then A187:p in h_strip(GoB f,j2) by A175,A186,GOBOARD5:6;
+             A188:j2+1+1<=width GoB f by A183,NAT_1:38;
+               p in {|[s,r]|:(GoB f)*(1,j2+1)`2<=r & r<=(GoB f)*(1,j2+1+1)`2}
+              proof j2+1<j2+1+1 by NAT_1:38;
+                then ((GoB f)*(1,j2+1)`2<=((GoB f)*(1,j2+1))`2
+                & ((GoB f)*(1,j2+1))`2<=(GoB f)*(1,j2+1+1)`2)
+                                   by A175,A177,A188,GOBOARD5:5;
+               hence thesis;
+              end;
+             then p in h_strip(GoB f,j2+1) by A175,A185,GOBOARD5:6;
+             then p in h_strip(GoB f,j2)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j2+1)/\ v_strip(GoB f,i2) by A182,A187,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2,j2+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j2+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A180,A181,XBOOLE_0:def 3;
+           case A189:j2+1<width GoB f & j2=0;
+             then A190:j2+1+1<=width GoB f by NAT_1:38;
+             A191: j2+1<j2+1+1 by NAT_1:38;
+               p in {|[s,r]|: r<=(GoB f)*(1,j2+1)`2};
+             then A192:p in h_strip(GoB f,j2) by A175,A189,GOBOARD5:8;
+               p in {|[s,r]|:(GoB f)*(1,j2+1)`2<=r & r<=(GoB f)*(1,j2+1+1)`2}
+              proof
+                  (GoB f)*(1,j2+1)`2<(GoB f)*(1,j2+1+1)`2 by A152,A175,A190,
+A191,GOBOARD5:5;
+               hence thesis;
+              end;
+             then p in h_strip(GoB f,j2+1) by A175,A189,GOBOARD5:6;
+             then p in h_strip(GoB f,j2)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j2+1)/\ v_strip(GoB f,i2) by A182,A192,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2,j2+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j2+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A180,A181,XBOOLE_0:def 3;
+           case A193:j2+1=width GoB f & j2>0; then A194: 0+1<=j2 by NAT_1:38;
+             then A195:1<=j2 & j2<width GoB f by A193,NAT_1:38;
+               p in {|[s,r]|:((GoB f)*(1,j2))`2<=r & r<=((GoB f)*(1,j2+1))`2}
+             proof
+                ((GoB f)*(1,j2))`2<((GoB f)*(1,j2+1))`2 by A150,A175,A193,A194,
+GOBOARD5:5;
+              hence thesis;
+             end;
+             then A196:p in h_strip(GoB f,j2) by A175,A195,GOBOARD5:6;
+               p in {|[s,r]|:(GoB f)*(1,j2+1)`2<=r};
+              then p in h_strip(GoB f,j2+1) by A175,A193,GOBOARD5:7;
+             then p in h_strip(GoB f,j2)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j2+1)/\ v_strip(GoB f,i2) by A182,A196,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2,j2+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j2+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A180,A181,XBOOLE_0:def 3;
+           case A197:j2+1=width GoB f & j2=0;
+             then p in {|[s,r]|: r<=(GoB f)*(1,1)`2};
+             then A198:p in h_strip(GoB f,j2) by A175,A197,GOBOARD5:8;
+               p in {|[s,r]|:(GoB f)*(1,j2+1)`2<=r};
+              then p in h_strip(GoB f,j2+1) by A175,A197,GOBOARD5:7;
+             then p in h_strip(GoB f,j2)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j2+1)/\ v_strip(GoB f,i2) by A182,A198,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2,j2+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j2+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A180,A181,XBOOLE_0:def 3;
+            end;
+             then A199:p in Cl Down(Int cell(GoB f,i2,j2+1),(L~f)`)
+                    & p in Cl Down(Int cell(GoB f,i2,j2),(L~f)`) by A1,Th3;
+             A200:Down(LeftComp f,(L~f)`)=LeftComp f &
+             Down(RightComp f,(L~f)`)=RightComp f by Th6;
+               Down(Int cell(GoB f,i2,j1),(L~f)`)
+                     c= LeftComp f \/ RightComp f by A1,A2,Th4;
+             then Down(Int cell(GoB f,i2,j1),(L~f)`)
+               c= Down(LeftComp f \/ RightComp f,(L~f)`) by A200,GOBRD11:4;
+             then A201:Cl Down(Int cell(GoB f,i2,j1),(L~f)`)
+                     c= Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+                                 by PRE_TOPC:49;
+             A202:Cl Down(Int cell(GoB f,i2,j2),(L~f)`) is connected
+                                  by A1,Th4;
+               Down(LeftComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm4;
+             then Down(LeftComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A203:Cl Down(LeftComp f,(L~f)`)=Down(LeftComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(RightComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm5;
+             then Down(RightComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A204:Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+             =Down((LeftComp f) \/ (RightComp f),(L~f)`) by GOBRD11:4;
+             then A205:Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+             =Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                       by A203,A204,PRE_TOPC:50;
+              Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+               is a_union_of_components of (TOP-REAL 2)|((L~f)`) by Th6;
+             then A206:skl p1 c= Down(LeftComp f,(L~f)`)
+                 \/ Down(RightComp f,(L~f)`) by A148,A199,A201,A205,CONNSP_3:21
+;
+               Cl Down(Int cell(GoB f,i2,j2),(L~f)`) c= skl p1
+                                              by A199,A202,GOBRD11:1;
+             then A207: Cl Down(Int cell(GoB f,i2,j2),(L~f)`)
+                c= Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                          by A206,XBOOLE_1:1;
+             A208:Down(Int cell(GoB f,i2,j2),(L~f)`)
+                          c= Cl Down(Int cell(GoB f,i2,j2),(L~f)`)
+                                          by PRE_TOPC:48;
+               Down(Int cell(GoB f,i2,j2),(L~f)`)=Int cell(GoB f,i2,j2)
+                                  by A1,Th4;
+           hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f
+                                         by A200,A207,A208,XBOOLE_1:1;
+          case A209:i2=len GoB f;
+           reconsider p=|[((GoB f)*(len GoB f,j2+1))`1+1,
+                ((GoB f)*(len GoB f,j2+1))`2]| as Point of TOP-REAL 2;
+            A210:1<len GoB f by GOBOARD7:34;
+            A211:1<width GoB f by GOBOARD7:35;
+             1<=j2+1 by NAT_1:29;
+            then ((GoB f)*(len GoB f,j2+1))`1
+                        =((GoB f)*(len GoB f,1))`1 by A1,A148,A210,GOBOARD5:3;
+            then A212:p`1=((GoB f)*(len GoB f,1))`1+1 by EUCLID:56;
+            A213: ((GoB f)*(len GoB f,1))`1<((GoB f)*(len GoB f,1))`1+1
+                                   by REAL_1:69;
+            A214:((GoB f)*(len GoB f,1))`1<p`1 by A212,REAL_1:69;
+            A215:p in {p} by TARSKI:def 1;
+            reconsider P={p} as Subset of TOP-REAL 2;
+             (for q being Point of TOP-REAL 2
+              st q in P holds ((GoB f)*(len GoB f,1)`1)<q`1) implies
+              P misses L~f by GOBOARD8:22;
+            then A216: {p} c= (L~f)` by A212,A213,SUBSET_1:43,TARSKI:def 1;
+            then reconsider p1=p as Point of (TOP-REAL 2)|((L~f)`) by A215,
+JORDAN1:1;
+               p in {|[s,r]|:(GoB f)*(len (GoB f),1)`1<=s}
+              proof
+                 p=|[p`1,p`2]| by EUCLID:57;
+               hence thesis by A214;
+              end;
+             then A217:p in v_strip(GoB f,i2) by A209,A211,GOBOARD5:10;
+              now per cases by A1,A148,NAT_1:18,REAL_1:def 5;
+            case A218:j2+1<width GoB f & j2>0;
+             then A219:j2+1+1<=width GoB f by NAT_1:38;
+             A220:0+1<=j2 by A218,NAT_1:38;
+             A221:j2<j2+1 by NAT_1:38;
+             A222:1<=j2+1 & j2+1<width GoB f by A218,NAT_1:29;
+             A223:1<=j2 & j2<width GoB f by A218,A220,NAT_1:38;
+               p in {|[s,r]|:(GoB f)*(len GoB f,j2)`2<=r &
+                r<=(GoB f)*(len GoB f,j2+1)`2}
+             proof
+                ((GoB f)*(len GoB f,j2))`2
+                   <((GoB f)*(len GoB f,j2+1))`2 by A1,A148,A210,A220,A221,
+GOBOARD5:5;
+              hence thesis;
+             end;
+             then A224:p in h_strip(GoB f,j2) by A210,A223,GOBOARD5:6;
+               p in {|[s,r]|:(GoB f)*(len GoB f,j2+1)`2<=r
+                & r<=(GoB f)*(len GoB f,j2+1+1)`2}
+              proof
+                 j2+1<j2+1+1 by NAT_1:38;
+                then ((GoB f)*(len GoB f,j2+1)`2
+                        <=((GoB f)*(len GoB f,j2+1))`2
+                & ((GoB f)*(len GoB f,j2+1))`2
+                   <=(GoB f)*(len GoB f,j2+1+1)`2) by A152,A210,A219,GOBOARD5:5
+;
+               hence thesis;
+              end;
+             then p in h_strip(GoB f,j2+1) by A210,A222,GOBOARD5:6;
+             then p in h_strip(GoB f,j2)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j2+1)/\ v_strip(GoB f,i2) by A217,A224,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2,j2+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j2+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A215,A216,XBOOLE_0:def 3;
+           case A225:j2+1<width GoB f & j2=0;
+             then A226:j2+1+1<=width GoB f by NAT_1:38;
+               p in {|[s,r]|: r<=(GoB f)*(len (GoB f),1)`2} by A225;
+             then A227:p in h_strip(GoB f,j2) by A210,A225,GOBOARD5:8;
+               p in {|[s,r]|:(GoB f)*(len (GoB f),j2+1)`2<=r &
+                r<=(GoB f)*(len (GoB f),j2+1+1)`2}
+              proof
+                  (GoB f)*(len (GoB f),j2+1)`2
+                <(GoB f)*(len (GoB f),j2+1+1)`2 by A152,A154,A210,A226,GOBOARD5
+:5;
+               hence thesis;
+              end;
+             then p in h_strip(GoB f,j2+1) by A210,A225,GOBOARD5:6;
+             then p in h_strip(GoB f,j2)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j2+1)/\ v_strip(GoB f,i2) by A217,A227,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2,j2+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j2+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A215,A216,XBOOLE_0:def 3;
+           case A228:j2+1=width GoB f & j2>0;
+             then 0+1<=j2 by NAT_1:38;
+             then A229:1<=j2 & j2<width GoB f by A228,NAT_1:38;
+               p in {|[s,r]|: (GoB f)*(len GoB f,width GoB f)`2<=r} by A228;
+             then A230:p in h_strip(GoB f,j2+1) by A210,A228,GOBOARD5:7;
+               p in {|[s,r]|:(GoB f)*(len (GoB f),j2)`2<=r
+                & r<=(GoB f)*(len (GoB f),j2+1)`2}
+              proof
+                  ((GoB f)*(len (GoB f),j2+1)`2
+                      <=((GoB f)*(len (GoB f),j2+1))`2
+                     & ((GoB f)*(len (GoB f),j2))`2
+                   <=(GoB f)*(len (GoB f),j2+1)`2) by A210,A228,A229,GOBOARD5:5
+;
+               hence thesis;
+              end;
+             then p in h_strip(GoB f,j2) by A210,A229,GOBOARD5:6;
+             then p in h_strip(GoB f,j2)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j2+1)/\ v_strip(GoB f,i2) by A217,A230,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2,j2+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j2+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A215,A216,XBOOLE_0:def 3;
+           case j2+1=width GoB f & j2=0;
+            hence contradiction by GOBOARD7:35;
+            end;
+             then A231:p in Cl Down(Int cell(GoB f,i2,j2+1),(L~f)`)
+                    & p in Cl Down(Int cell(GoB f,i2,j2),(L~f)`) by A1,Th3;
+             A232:Down(LeftComp f,(L~f)`)=LeftComp f &
+             Down(RightComp f,(L~f)`)=RightComp f by Th6;
+               Down(Int cell(GoB f,i2,j1),(L~f)`)
+                     c= LeftComp f \/ RightComp f by A1,A2,Th4;
+             then Down(Int cell(GoB f,i2,j1),(L~f)`)
+                     c= Down(LeftComp f \/ RightComp f,(L~f)`)
+                                             by A232,GOBRD11:4;
+             then A233:Cl Down(Int cell(GoB f,i2,j1),(L~f)`)
+                     c= Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+                                 by PRE_TOPC:49;
+             A234:Cl Down(Int cell(GoB f,i2,j2),(L~f)`) is connected
+                                  by A1,Th4;
+               Down(LeftComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm4;
+             then Down(LeftComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A235:Cl Down(LeftComp f,(L~f)`)=Down(LeftComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(RightComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm5;
+             then Down(RightComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A236:Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+             =Down((LeftComp f) \/ (RightComp f),(L~f)`) by GOBRD11:4;
+             then A237:Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+             =Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                       by A235,A236,PRE_TOPC:50;
+              Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+               is a_union_of_components of (TOP-REAL 2)|((L~f)`) by Th6;
+             then A238:skl p1 c= Down(LeftComp f,(L~f)`)
+                 \/ Down(RightComp f,(L~f)`) by A148,A231,A233,A237,CONNSP_3:21
+;
+               Cl Down(Int cell(GoB f,i2,j2),(L~f)`) c= skl p1
+                                              by A231,A234,GOBRD11:1;
+             then A239: Cl Down(Int cell(GoB f,i2,j2),(L~f)`)
+                c= Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                          by A238,XBOOLE_1:1;
+             A240:Down(Int cell(GoB f,i2,j2),(L~f)`)
+                          c= Cl Down(Int cell(GoB f,i2,j2),(L~f)`)
+                                          by PRE_TOPC:48;
+               Down(Int cell(GoB f,i2,j2),(L~f)`)=Int cell(GoB f,i2,j2)
+                                  by A1,Th4;
+           hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f
+                                         by A232,A239,A240,XBOOLE_1:1;
+          case A241:i2<>0 & i2<>len GoB f &
+          not ex k st 1<=k & k+1 <=len f &
+          LSeg(f/.k,f/.(k+1))
+               =LSeg((GoB f)*(i2,j2+1),(GoB f)*(i2+1,j2+1));
+            then 0<i2 by NAT_1:19; then A242: 0+1<=i2 by NAT_1:38;
+            A243:i2<len GoB f by A1,A241,REAL_1:def 5;
+            then A244:i2+1<=len GoB f by NAT_1:38;
+            for k st 1<=k & k+1<=len f holds
+           LSeg((GoB f)*(i2,j2+1),(GoB f)*(i2+1,j2+1))<>LSeg(f,k)
+           proof let k;assume A245:1<=k & k+1<=len f;
+            then LSeg(f,k)=LSeg(f/.k,f/.(k+1)) by TOPREAL1:def 5;
+           hence LSeg((GoB f)*(i2,j2+1),(GoB f)*(i2+1,j2+1))<>LSeg(f,k)
+                                        by A241,A245;
+           end;
+           then A246: 1 <= j2+1 & j2+1 <= width GoB f & 1 <= i2 & i2+1 <= len
+GoB f
+           implies not (1/2*((GoB f)*(i2,j2+1)+(GoB f)*(i2+1,j2+1)) in L~f)
+                                  by GOBOARD7:42;
+           reconsider p=1/2*((GoB f)*(i2,j2+1)+(GoB f)*(i2+1,j2+1)) as
+            Point of TOP-REAL 2;
+            A247:p`2=1/2*((GoB f)*(i2,j2+1)+(GoB f)*(i2+1,j2+1))`2 by TOPREAL3:
+9
+               .=1/2*(((GoB f)*(i2,j2+1))`2+((GoB f)*(i2+1,j2+1))`2) by
+TOPREAL3:7;
+            A248:p`1=1/2*((GoB f)*(i2,j2+1)+(GoB f)*(i2+1,j2+1))`1 by TOPREAL3:
+9
+               .=1/2*(((GoB f)*(i2,j2+1))`1+((GoB f)*(i2+1,j2+1))`1) by
+TOPREAL3:7;
+             then A249:p=|[1/2*(((GoB f)*(i2,j2+1))`1+((GoB f)*(i2+1,j2+1))`1),
+               1/2*(((GoB f)*(i2,j2+1))`2+((GoB f)*(i2+1,j2+1))`2)]|
+                                  by A247,EUCLID:57;
+            A250:1<len GoB f by GOBOARD7:34;
+            A251: 1<=1+j2 by NAT_1:29;
+            A252:1<=j2+1 by NAT_1:29;
+            A253:i2<i2+1 by NAT_1:38;
+            A254: 1<i2+1 by A242,NAT_1:38;
+            A255:((GoB f)*(i2,j2+1))`1 <((GoB f)*(i2+1,j2+1))`1
+                              by A1,A148,A242,A244,A252,A253,GOBOARD5:4;
+            then A256:((GoB f)*(i2,j2+1))`1+((GoB f)*(i2,j2+1))`1
+              <((GoB f)*(i2,j2+1))`1+((GoB f)*(i2+1,j2+1))`1
+                                           by REAL_1:67;
+            A257:((GoB f)*(i2,j2+1))`1+((GoB f)*(i2+1,j2+1))`1
+              <((GoB f)*(i2+1,j2+1))`1+((GoB f)*(i2+1,j2+1))`1
+                                           by A255,REAL_1:67;
+
+              (((GoB f)*(i2,j2+1))`1+((GoB f)*(i2,j2+1))`1)/2
+              <(((GoB f)*(i2,j2+1))`1+((GoB f)*(i2+1,j2+1))`1)/2
+                                  by A256,REAL_1:73;
+            then A258:((GoB f)*(i2,j2+1))`1
+             <(((GoB f)*(i2,j2+1))`1+((GoB f)*(i2+1,j2+1))`1)/2
+                                 by XCMPLX_1:65;
+              (((GoB f)*(i2,j2+1))`1+((GoB f)*(i2+1,j2+1))`1)/2
+              <(((GoB f)*(i2+1,j2+1))`1+((GoB f)*(i2+1,j2+1))`1)/2
+                                  by A257,REAL_1:73;
+            then A259:((GoB f)*(i2+1,j2+1))`1
+             >(((GoB f)*(i2,j2+1))`1+((GoB f)*(i2+1,j2+1))`1)/2
+                                 by XCMPLX_1:65;
+            A260:((GoB f)*(i2,j2+1))`1<p`1 by A248,A258,XCMPLX_1:100;
+            A261:p`1< ((GoB f)*(i2+1,j2+1))`1 by A248,A259,XCMPLX_1:100;
+            A262:p in {p} by TARSKI:def 1;
+            reconsider P={p} as Subset of TOP-REAL 2;
+             (for x st x in P holds not x in (L~f)) implies
+              P misses L~f by XBOOLE_0:3;
+            then A263: {p} c= (L~f)` by A1,A148,A242,A243,A246,NAT_1:29,38,
+SUBSET_1:43,TARSKI:def 1;
+            then reconsider p1=p as Point of (TOP-REAL 2)|((L~f)`) by A262,
+JORDAN1:1;
+               p in {|[s,r]|:(GoB f)*(i2,j2+1)`1<=s & s<=(GoB f)*(i2+1,j2+1)`1}
+              proof
+                 p=|[p`1,p`2]| by EUCLID:57;
+               hence thesis by A260,A261;
+              end;
+             then A264:p in v_strip(GoB f,i2) by A1,A148,A242,A243,A251,
+GOBOARD5:9;
+              0<=j2 by NAT_1:18;
+            then A265: j2=0 or j2>=0+1 by NAT_1:38;
+              now per cases by A1,A148,A265,REAL_1:def 5;
+            case A266:j2>=1 & j2+1<width GoB f;
+             then A267:1<=j2 & j2<width GoB f by NAT_1:38;
+               p in {|[s,r]|:(GoB f)*(1,j2)`2<=r & r<=(GoB f)*(1,j2+1)`2}
+             proof
+              A268: j2<j2+1 by NAT_1:38;
+              A269:((GoB f)*(i2,j2+1))`2=((GoB f)*(1,j2+1))`2
+                                       by A1,A148,A242,A252,GOBOARD5:2;
+              A270:((GoB f)*(i2+1,j2+1))`2=((GoB f)*(1,j2+1))`2
+                                       by A1,A148,A244,A252,A254,GOBOARD5:2;
+              A271:((GoB f)*(1,j2))`2<((GoB f)*(1,j2+1))`2
+                                       by A250,A266,A268,GOBOARD5:5;
+               1/2*(((GoB f)*(i2,j2+1))`2+((GoB f)*(i2+1,j2+1))`2)
+              =((GoB f)*(1,j2+1))`2 by A269,A270,Lm1;
+              hence thesis by A249,A271;
+             end;
+             then A272:p in h_strip(GoB f,j2) by A250,A267,GOBOARD5:6;
+             A273:j2+1+1<=width GoB f by A266,NAT_1:38;
+               p in {|[s,r]|:(GoB f)*(1,j2+1)`2<=r & r<=(GoB f)*(1,j2+1+1)`2}
+              proof
+              A274: j2+1<j2+1+1 by NAT_1:38;
+              A275:((GoB f)*(i2,j2+1))`2=((GoB f)*(1,j2+1))`2
+                                       by A1,A148,A242,A252,GOBOARD5:2;
+              A276:((GoB f)*(i2+1,j2+1))`2=((GoB f)*(1,j2+1))`2
+                                       by A1,A148,A244,A252,A254,GOBOARD5:2;
+              A277:((GoB f)*(1,j2+1))`2<((GoB f)*(1,j2+1+1))`2
+                                       by A250,A252,A273,A274,GOBOARD5:5;
+               1/2*(((GoB f)*(i2,j2+1))`2+((GoB f)*(i2+1,j2+1))`2)
+              =((GoB f)*(1,j2+1))`2 by A275,A276,Lm1;
+               hence thesis by A249,A277;
+              end;
+             then p in h_strip(GoB f,j2+1) by A250,A251,A266,GOBOARD5:6;
+             then p in h_strip(GoB f,j2)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j2+1)/\ v_strip(GoB f,i2) by A264,A272,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2,j2+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j2+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A262,A263,XBOOLE_0:def 3;
+           case A278:j2>=1 & j2+1=width GoB f;
+             A279: j2<j2+1 by NAT_1:38;
+               p in {|[s,r]|:(GoB f)*(1,j2)`2<=r & r<=(GoB f)*(1,j2+1)`2}
+             proof
+              A280:((GoB f)*(i2,j2+1))`2=((GoB f)*(1,j2+1))`2
+                                       by A1,A148,A242,A252,GOBOARD5:2;
+              A281:((GoB f)*(i2+1,j2+1))`2=((GoB f)*(1,j2+1))`2
+                                       by A1,A148,A244,A252,A254,GOBOARD5:2;
+              A282:((GoB f)*(1,j2))`2<((GoB f)*(1,j2+1))`2
+                                       by A250,A278,A279,GOBOARD5:5;
+               1/2*(((GoB f)*(i2,j2+1))`2+((GoB f)*(i2+1,j2+1))`2)
+              =((GoB f)*(1,j2+1))`2 by A280,A281,Lm1;
+              hence thesis by A249,A282;
+             end;
+             then A283:p in h_strip(GoB f,j2) by A250,A278,A279,GOBOARD5:6;
+               p in {|[s,r]|:(GoB f)*(1,j2+1)`2<=r}
+              proof
+               A284:((GoB f)*(i2,j2+1))`2=((GoB f)*(1,j2+1))`2
+                                       by A1,A148,A242,A252,GOBOARD5:2;
+                 ((GoB f)*(i2+1,j2+1))`2=((GoB f)*(1,j2+1))`2
+                                       by A1,A148,A244,A252,A254,GOBOARD5:2;
+               then 1/2*(((GoB f)*(i2,j2+1))`2+((GoB f)*(i2+1,j2+1))`2)
+               =((GoB f)*(1,j2+1))`2 by A284,Lm1;
+               hence thesis by A249;
+              end;
+             then p in h_strip(GoB f,j2+1) by A250,A278,GOBOARD5:7;
+             then p in h_strip(GoB f,j2)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j2+1)/\ v_strip(GoB f,i2) by A264,A283,XBOOLE_0
+:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2,j2+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j2+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A262,A263,XBOOLE_0:def 3;
+           case A285:j2=0 & j2+1<width GoB f;
+               p in {|[s,r]|: r<=(GoB f)*(1,1)`2}
+             proof
+               A286:((GoB f)*(i2,j2+1))`2=((GoB f)*(1,j2+1))`2
+                                       by A1,A148,A242,A252,GOBOARD5:2;
+                 ((GoB f)*(i2+1,j2+1))`2=((GoB f)*(1,j2+1))`2
+                                       by A1,A148,A244,A252,A254,GOBOARD5:2;
+              then 1/2*(((GoB f)*(i2,j2+1))`2+((GoB f)*(i2+1,j2+1))`2)
+                              <=((GoB f)*(1,1))`2 by A285,A286,Lm1;
+              hence thesis by A249;
+             end;
+             then A287:p in h_strip(GoB f,j2) by A250,A285,GOBOARD5:8;
+             A288:j2+1+1<=width GoB f by A285,NAT_1:38;
+               p in {|[s,r]|:(GoB f)*(1,j2+1)`2<=r & r<=(GoB f)*(1,j2+1+1)`2}
+              proof
+               A289: j2+1<j2+1+1 by NAT_1:38;
+               A290:((GoB f)*(i2,j2+1))`2=((GoB f)*(1,j2+1))`2
+                                       by A1,A148,A242,A252,GOBOARD5:2;
+               A291:((GoB f)*(i2+1,j2+1))`2=((GoB f)*(1,j2+1))`2
+                                       by A1,A148,A244,A252,A254,GOBOARD5:2;
+               A292:((GoB f)*(1,j2+1))`2<((GoB f)*(1,j2+1+1))`2
+                                       by A250,A252,A288,A289,GOBOARD5:5;
+                1/2*(((GoB f)*(i2,j2+1))`2+((GoB f)*(i2+1,j2+1))`2)
+               =((GoB f)*(1,j2+1))`2 by A290,A291,Lm1;
+               hence thesis by A249,A292;
+              end;
+             then p in h_strip(GoB f,j1) by A148,A250,A285,GOBOARD5:6;
+             then p in h_strip(GoB f,j2)/\ v_strip(GoB f,i2) &
+             p in h_strip(GoB f,j2+1)/\ v_strip(GoB f,i2) by A148,A264,A287,
+XBOOLE_0:def 3
+;
+             then p in cell(GoB f,i2,j2) &
+             p in cell(GoB f,i2,j2+1) by GOBOARD5:def 3;
+            hence p in cell(GoB f,i2,j2+1)/\((L~f)`) &
+             p in cell(GoB f,i2,j2)/\((L~f)`) by A262,A263,XBOOLE_0:def 3;
+           case j2=0 & j2+1=width GoB f;
+            hence contradiction by GOBOARD7:35;
+           end;
+             then A293:p in Cl Down(Int cell(GoB f,i2,j1),(L~f)`)
+                    & p in Cl Down(Int cell(GoB f,i2,j2),(L~f)`)
+                    by A1,A148,Th3;
+             A294:Down(LeftComp f,(L~f)`)=LeftComp f &
+             Down(RightComp f,(L~f)`)=RightComp f by Th6;
+               Down(Int cell(GoB f,i2,j1),(L~f)`)
+                     c= LeftComp f \/ RightComp f by A1,A2,Th4;
+             then Down(Int cell(GoB f,i2,j1),(L~f)`)
+                     c= Down(LeftComp f \/ RightComp f,(L~f)`)
+                                             by A294,GOBRD11:4;
+             then A295:Cl Down(Int cell(GoB f,i2,j1),(L~f)`)
+                     c= Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+                                 by PRE_TOPC:49;
+             A296:Cl Down(Int cell(GoB f,i2,j2),(L~f)`) is connected
+                                  by A1,Th4;
+               Down(LeftComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm4;
+             then Down(LeftComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A297:Cl Down(LeftComp f,(L~f)`)=Down(LeftComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(RightComp f,(L~f)`) is_a_component_of (TOP-REAL 2)|((L~f)`)
+                                              by Lm5;
+             then Down(RightComp f,(L~f)`) is closed by CONNSP_1:35;
+             then A298:Cl Down(RightComp f,(L~f)`)=Down(RightComp f,(L~f)`)
+                                          by PRE_TOPC:52;
+               Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+             =Down((LeftComp f) \/ (RightComp f),(L~f)`)
+                                    by GOBRD11:4;
+             then A299:Cl Down(LeftComp f \/ RightComp f,(L~f)`)
+             =Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                       by A297,A298,PRE_TOPC:50;
+              Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+               is a_union_of_components of (TOP-REAL 2)|((L~f)`) by Th6;
+             then A300:skl p1 c= Down(LeftComp f,(L~f)`)
+                 \/ Down(RightComp f,(L~f)`) by A293,A295,A299,CONNSP_3:21;
+               Cl Down(Int cell(GoB f,i2,j2),(L~f)`) c= skl p1
+                                              by A293,A296,GOBRD11:1;
+             then A301: Cl Down(Int cell(GoB f,i2,j2),(L~f)`)
+                c= Down(LeftComp f,(L~f)`) \/ Down(RightComp f,(L~f)`)
+                                          by A300,XBOOLE_1:1;
+             A302:Down(Int cell(GoB f,i2,j2),(L~f)`)
+                          c= Cl Down(Int cell(GoB f,i2,j2),(L~f)`)
+                                          by PRE_TOPC:48;
+               Down(Int cell(GoB f,i2,j2),(L~f)`)=Int cell(GoB f,i2,j2)
+                                  by A1,Th4;
+           hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f
+                                         by A294,A301,A302,XBOOLE_1:1;
+          end;
+         hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f;
+         end;
+        hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f;
+        end;
+   hence Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f;
+  end;
+ hence Int cell(GoB f,i1,j1) c= LeftComp f \/ RightComp f
+    implies Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f;
+end;
+
+theorem
+Th7: for i1,j1,i2,j2 st i1<=len GoB f & j1<=width GoB f
+  & i2<=len GoB f & j2<=width GoB f & i1,j1,i2,j2 are_adjacent2
+  holds Int cell(GoB f,i1,j1) c= LeftComp f \/ RightComp f
+    iff Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f
+proof let i1,j1,i2,j2;assume
+ A1: i1<=len GoB f & j1<=width GoB f
+  & i2<=len GoB f & j2<=width GoB f & i1,j1,i2,j2 are_adjacent2;
+   then A2: i1,i2 are_adjacent1 & j1=j2 or i1=i2 & j1,j2 are_adjacent1
+                                     by GOBRD10:def 2;
+   now per cases by A2,GOBRD10:def 1;
+ case (i2=i1+1 or i1=i2+1)& j1=j2;
+ hence thesis by A1,Lm6;
+ case (i1=i2)&(j2=j1+1 or j1=j2+1);
+ hence thesis by A1,Lm7;
+ end;
+hence thesis;
+end;
+
+theorem
+Th8: for F1,F2 being FinSequence of NAT st len F1=len F2 &
+   (ex i st i in dom F1 & Int cell(GoB f,F1/.i,F2/.i)
+                                c=LeftComp f \/ RightComp f)&
+   (for i st 1<=i & i<len F1 holds
+       F1/.i,F2/.i,F1/.(i+1),F2/.(i+1) are_adjacent2)&
+   (for i,k1,k2 st i in dom F1 & k1=F1.i & k2=F2.i holds
+        k1<=len GoB f & k2<=width GoB f)
+   holds (for i st i in dom F1 holds
+   Int cell(GoB f,F1/.i,F2/.i)c=LeftComp f \/ RightComp f)
+proof let F1,F2 be FinSequence of NAT;
+  assume that A1:len F1=len F2 and
+   A2:(ex i st i in dom F1 & Int cell(GoB f,F1/.i,F2/.i)
+                       c=LeftComp f \/ RightComp f)and
+     (for i st 1<=i & i<len F1 holds
+       F1/.i,F2/.i,F1/.(i+1),F2/.(i+1) are_adjacent2)and
+   A3:(for i,k1,k2 st i in dom F1 & k1=F1.i & k2=F2.i holds
+        k1<=len GoB f & k2<=width GoB f);
+   reconsider F=LeftComp f \/ RightComp f as Subset of REAL 2 by EUCLID:25;
+   consider i1 such that A4: i1 in dom F1 &
+               Int cell(GoB f,F1/.i1,F2/.i1)
+                                c=LeftComp f \/ RightComp f by A2;
+   reconsider kw1=F1/.i1,kw2=F2/.i1 as Nat;
+   reconsider k1=kw1+1,k2=kw2+1 as Nat;
+   A5:F1/.i1=F1.i1 by A4,FINSEQ_4:def 4;
+    dom F1=Seg len F1 by FINSEQ_1:def 3;
+   then dom F1=dom F2 by A1,FINSEQ_1:def 3;
+   then A6:F2/.i1=F2.i1 by A4,FINSEQ_4:def 4;
+   defpred P[Nat,Nat,set] means $3 = Int cell(GoB f,$1-'1,$2-'1);
+     A7:for i,j st [i,j] in [:Seg ((len (GoB f))+1),
+          Seg ((width (GoB f))+1):]
+      for x1,x2 being Element of (bool (REAL 2)) st P[i,j,x1] & P[i,j,x2]
+       holds x1 = x2;
+      A8: for i,j st [i,j] in [:Seg ((len (GoB f))+1),
+          Seg ((width (GoB f))+1):]
+         ex x being Element of bool (REAL 2) st P[i,j,x] by Lm3;
+       ex Mm being (Matrix of (len (GoB f))+1, (width (GoB f))+1,(bool (REAL 2)
+      )) st for i,j st [i,j] in Indices Mm holds P[i,j,Mm*(i,j)]
+                                    from MatrixEx(A7,A8);
+     then consider
+      Mm being (Matrix of (len (GoB f))+1, (width (GoB f))+1,(bool (REAL 2)))
+     such that
+     A9: for i,j st [i,j] in Indices Mm holds
+                      Mm*(i,j) = Int cell(GoB f,i-'1,j-'1);
+       kw1<=len GoB f & kw2<=width GoB f by A3,A4,A5,A6;
+     then A10:k1 <=len GoB f +1 & k2<=width GoB f +1 by AXIOMS:24;
+       0<k1 & 0<k2 by NAT_1:19;
+     then 0+1<=k1 & 0+1<=k2 by NAT_1:38;
+     then A11:k1 in Seg (len GoB f +1)&
+     k2 in Seg (width GoB f +1) by A10,FINSEQ_1:3;
+     A12:len Mm=len GoB f +1 by MATRIX_1:def 3;
+     then A13:dom Mm=Seg (len (GoB f) +1) by FINSEQ_1:def 3;
+     A14:Mm is Matrix of len Mm,width (GoB f) +1,bool (REAL 2) by MATRIX_1:def
+3;
+     A15: 0<len GoB f +1 by NAT_1:19;
+     A16: 0<len Mm by A12,NAT_1:19;
+     A17: width (GoB f) +1=width Mm by A12,A15,MATRIX_1:20;
+     A18: Seg (width (GoB f) +1)=Seg width Mm by A14,A16,MATRIX_1:20;
+     A19:k1-'1=F1/.i1 & k2-'1=F2/.i1 by BINARITH:39;
+       [k1,k2] in [:dom Mm,Seg width Mm:] by A11,A13,A18,ZFMISC_1:106;
+     then [k1,k2] in Indices Mm by MATRIX_1:def 5;
+     then A20: Mm*(k1,k2) c=LeftComp f \/ RightComp f by A4,A9,A19;
+      for i1,j1,i2,j2 st i1 in Seg (len GoB f +1) & i2 in Seg (len GoB f +1)
+       & j1 in Seg (width GoB f +1) & j2 in Seg (width GoB f +1)
+      & i1,j1,i2,j2 are_adjacent2 holds
+           Mm*(i1,j1)c=LeftComp f \/ RightComp f
+        iff Mm*(i2,j2)c=LeftComp f \/ RightComp f
+        proof let i1,j1,i2,j2;
+          assume A21:i1 in Seg (len GoB f +1) & i2 in Seg (len GoB f +1)
+           & j1 in Seg (width GoB f +1) & j2 in Seg (width GoB f +1)
+           & i1,j1,i2,j2 are_adjacent2;
+           reconsider ii1=i1-'1,ii2=i2-'1,jj1=j1-'1,jj2=j2-'1 as Nat;
+           A22:1<=i1 & i1<=len GoB f +1 by A21,FINSEQ_1:3;
+           A23:1<=i2 & i2<=len GoB f +1 by A21,FINSEQ_1:3;
+           A24:1<=j1 & j1<=width GoB f +1 by A21,FINSEQ_1:3;
+           A25:1<=j2 & j2<=width GoB f +1 by A21,FINSEQ_1:3;
+             0<=i1-1 by A22,SQUARE_1:12;
+           then i1-'1=i1-1 by BINARITH:def 3;
+           then i1-'1<=len GoB f +1-1 by A22,REAL_1:49;
+           then A26: ii1<=len GoB f by XCMPLX_1:26;
+             0<=i2-1 by A23,SQUARE_1:12;
+           then i2-'1=i2-1 by BINARITH:def 3;
+           then i2-'1<=len GoB f +1-1 by A23,REAL_1:49;
+           then A27: ii2<=len GoB f by XCMPLX_1:26;
+             0<=j1-1 by A24,SQUARE_1:12;
+           then j1-'1=j1-1 by BINARITH:def 3;
+           then j1-'1<=width GoB f +1-1 by A24,REAL_1:49;
+           then A28: jj1<=width GoB f by XCMPLX_1:26;
+             0<=j2-1 by A25,SQUARE_1:12;
+           then j2-'1=j2-1 by BINARITH:def 3;
+           then j2-'1<=width GoB f +1-1 by A25,REAL_1:49;
+           then A29: jj2<=width GoB f by XCMPLX_1:26;
+           A30: ii1,jj1,ii2,jj2 are_adjacent2 by A21,A22,A23,A24,A25,GOBRD10:4;
+             [i1,j1] in [:dom Mm,Seg width Mm:] by A13,A17,A21,ZFMISC_1:106;
+           then [i1,j1] in Indices Mm by MATRIX_1:def 5;
+           then A31:Mm*(i1,j1)=Int cell(GoB f,i1-'1,j1-'1) by A9;
+             [i2,j2] in [:dom Mm,Seg width Mm:] by A13,A18,A21,ZFMISC_1:106;
+           then [i2,j2] in Indices Mm by MATRIX_1:def 5;
+           then Mm*(i2,j2)=Int cell(GoB f,i2-'1,j2-'1) by A9;
+          hence Mm*(i1,j1)c=LeftComp f \/ RightComp f
+              iff Mm*(i2,j2)c=LeftComp f \/ RightComp f
+                      by A26,A27,A28,A29,A30,A31,Th7;
+        end;
+   then A32:for i,j st i in Seg (len GoB f +1) & j in Seg (width GoB f +1)
+        holds Mm*(i,j)c=F by A11,A20,GOBRD10:9;
+ thus for i st i in dom F1 holds
+   Int cell(GoB f,F1/.i,F2/.i)c=LeftComp f \/ RightComp f
+   proof let i;assume A33:i in dom F1;
+    reconsider kx1=F1/.i,kx2=F2/.i as Nat;
+    reconsider kk1=kx1+1,kk2=kx2+1 as Nat;
+    A34:F1/.i=F1.i by A33,FINSEQ_4:def 4;
+     dom F1=Seg len F1 by FINSEQ_1:def 3;
+    then dom F1=dom F2 by A1,FINSEQ_1:def 3;
+    then F2/.i=F2.i by A33,FINSEQ_4:def 4;
+    then kx1<=len GoB f & kx2 <=width GoB f by A3,A33,A34;
+    then A35:kk1<=len GoB f +1 & kk2 <=width GoB f +1 by AXIOMS:24;
+      0<kk1 & 0<kk2 by NAT_1:19;
+     then 0+1<=kk1 & 0+1<=kk2 by NAT_1:38;
+     then A36:kk1 in Seg (len GoB f +1)&
+             kk2 in Seg (width GoB f +1) by A35,FINSEQ_1:3;
+     then A37: Mm*(kk1,kk2)c=LeftComp f \/ RightComp f by A32;
+     A38:len Mm=len GoB f +1 by MATRIX_1:def 3;
+     then A39:dom Mm=Seg (len (GoB f) +1) by FINSEQ_1:def 3;
+     A40:Mm is Matrix of len Mm,width (GoB f) +1,bool (REAL 2) by MATRIX_1:def
+3;
+      0<len Mm by A38,NAT_1:19;
+     then A41: Seg (width (GoB f) +1)=Seg width Mm by A40,MATRIX_1:20;
+     A42:kk1-'1=F1/.i & kk2-'1=F2/.i by BINARITH:39;
+       [kk1,kk2] in [:dom Mm,Seg width Mm:] by A36,A39,A41,ZFMISC_1:106;
+     then [kk1,kk2] in Indices Mm by MATRIX_1:def 5;
+   hence Int cell(GoB f,F1/.i,F2/.i)c=LeftComp f \/ RightComp f by A9,A37,A42;
+   end;
+end;
+
+theorem
+Th9:  ex i,j st i<=len GoB f & j<=width GoB f &
+  Int cell(GoB f,i,j) c= LeftComp f \/ RightComp f
+proof len f>4 by GOBOARD7:36;
+   then A1:1<=1 & 1+1<=len f by AXIOMS:22;
+  then consider i,j such that A2:i <= len GoB f & j <= width GoB f
+    & cell(GoB f,i,j) = left_cell(f,1) by GOBOARD9:14;
+    A3: Int left_cell(f,1) c= LeftComp f by A1,GOBOARD9:24;
+      LeftComp f c= LeftComp f \/ RightComp f by XBOOLE_1:7;
+    then Int cell(GoB f,i,j) c= LeftComp f \/ RightComp f by A2,A3,XBOOLE_1:1;
+   hence thesis by A2;
+end;
+
+theorem
+Th10:  for i,j st i<=len GoB f & j<=width GoB f holds
+  Int cell(GoB f,i,j) c= LeftComp f \/ RightComp f
+proof let i,j;assume A1:i<=len GoB f & j<=width GoB f;
+  consider i2,j2 such that A2: i2<=len GoB f & j2<=width GoB f &
+  Int cell(GoB f,i2,j2) c= LeftComp f \/ RightComp f by Th9;
+  reconsider n=(len GoB f), m=(width GoB f) as Nat;
+  consider fs1,fs2 being FinSequence of NAT such that
+  A3: (for k,k1,k2 st k in dom fs1 & k1=fs1.k & k2=fs2.k
+            holds k1 <= n & k2 <= m)&
+   fs1.1=i & fs1.(len fs1)=i2 &
+   fs2.1=j & fs2.(len fs2)=j2 & len fs1=len fs2 &
+   len fs1=(i-'i2)+(i2-'i)+(j-'j2)+(j2-'j)+1 &
+  for k st 1<=k & k<len fs1 holds
+     fs1/.k,fs2/.k,fs1/.(k+1),fs2/.(k+1) are_adjacent2 by A1,A2,GOBRD10:8;
+    A4: 1<=1+((i-'i2)+(i2-'i)+(j-'j2)+(j2-'j)) by NAT_1:37;
+   then A5:len fs1 in dom fs1 by A3,FINSEQ_3:27;
+     len fs2 in dom fs2 by A3,A4,FINSEQ_3:27;
+   then A6: i2= fs1/.len fs1 & j2=fs2/.len fs1 by A3,A5,FINSEQ_4:def 4;
+   1<=1+((i-'i2)+(i2-'i)+(j-'j2)+(j2-'j)) by NAT_1:37;
+ then A7:1 in dom fs1 & 1 in dom fs2 by A3,FINSEQ_3:27;
+ then fs1/.1=i & fs2/.1=j by A3,FINSEQ_4:def 4;
+hence thesis by A2,A3,A5,A6,A7,Th8;
+end;
+
+theorem
+   (L~f)`=LeftComp f \/ RightComp f
+proof
+   union {Cl Down(Int cell(GoB f,i,j),(L~f)`):
+  i<=len GoB f & j<=width GoB f} c= LeftComp f \/ RightComp f
+  proof let x;assume x in union {Cl Down(Int cell(GoB f,i,j),(L~f)`):
+   i<=len GoB f & j<=width GoB f};
+   then consider y being set such that
+   A1:x in y & y in {Cl Down(Int cell(GoB f,i,j),(L~f)`):
+           i<=len GoB f & j<=width GoB f} by TARSKI:def 4;
+    consider i,j such that A2:y=Cl Down(Int cell(GoB f,i,j),(L~f)`) &
+           i<=len GoB f & j<=width GoB f by A1;
+    A3:Int cell(GoB f,i,j)c= LeftComp f \/ RightComp f by A2,Th10;
+    reconsider P=Int cell(GoB f,i,j) as Subset of TOP-REAL 2;
+    reconsider Q=(L~f)` as Subset of TOP-REAL 2;
+       P c=(L~f)` by A2,Th2;
+    then A4:Cl Down(P,Q) =(Cl (P))/\(Q) by CONNSP_3:30;
+    A5:Cl (Int cell(GoB f,i,j)) c= Cl (LeftComp f \/ RightComp f)
+                   by A3,PRE_TOPC:49;
+      Cl (LeftComp f \/ RightComp f)= Cl (LeftComp f) \/ Cl(RightComp f)
+                        by PRE_TOPC:50;
+    then A6:(Cl (Int cell(GoB f,i,j)))/\((L~f)`)
+              c= (Cl (LeftComp f) \/ Cl (RightComp f))/\((L~f)`)
+                               by A5,XBOOLE_1:26;
+    A7:(Cl (LeftComp f) \/ Cl (RightComp f))/\((L~f)`)
+    = (Cl LeftComp f)/\((L~f)`) \/ (Cl RightComp f)/\((L~f)`) by XBOOLE_1:23;
+      LeftComp f is_a_component_of (L~f)` by GOBOARD9:def 1;
+    then consider B1 being Subset of (TOP-REAL 2)|(L~f)` such that
+    A8: B1 = LeftComp f
+    & B1 is_a_component_of ((TOP-REAL 2)|(L~f)`) by CONNSP_1:def 6;
+      Cl B1= (Cl LeftComp f)/\([#]((TOP-REAL 2)|(L~f)`))
+                           by A8,PRE_TOPC:47;
+    then A9:Cl B1= (Cl LeftComp f)/\((L~f)`) by PRE_TOPC:def 10;
+    reconsider B1 as Subset of (TOP-REAL 2)|(L~f)`;
+      B1 is closed by A8,CONNSP_1:35;
+    then A10:(Cl LeftComp f)/\((L~f)`)=LeftComp f by A8,A9,PRE_TOPC:52;
+      RightComp f is_a_component_of (L~f)` by GOBOARD9:def 2;
+    then consider B2 being Subset of (TOP-REAL 2)|(L~f)` such that
+    A11: B2 = RightComp f
+    & B2 is_a_component_of ((TOP-REAL 2)|(L~f)`) by CONNSP_1:def 6;
+      Cl B2= (Cl RightComp f)/\([#]((TOP-REAL 2)|(L~f)`))
+                             by A11,PRE_TOPC:47;
+    then A12:Cl B2= (Cl RightComp f)/\((L~f)`) by PRE_TOPC:def 10;
+    reconsider B2 as Subset of (TOP-REAL 2)|(L~f)`;
+      B2 is closed by A11,CONNSP_1:35;
+    then (Cl RightComp f)/\((L~f)`)=RightComp f by A11,A12,PRE_TOPC:52;
+  hence x in (LeftComp f) \/ (RightComp f) by A1,A2,A4,A6,A7,A10;
+  end;
+ then A13:(L~f)`c=LeftComp f \/ RightComp f by Th5;
+   LeftComp f is_a_component_of (L~f)` by GOBOARD9:def 1;
+  then consider B1 being Subset of (TOP-REAL 2)|(L~f)` such that
+  A14: B1 = LeftComp f & B1 is_a_component_of (TOP-REAL 2)|(L~f)`
+    by CONNSP_1:def 6;
+    B1 c= the carrier of (TOP-REAL 2)|(L~f)`;
+  then A15:LeftComp f c= (L~f)` by A14,Lm2;
+    RightComp f is_a_component_of (L~f)` by GOBOARD9:def 2;
+  then consider B1 being Subset of (TOP-REAL 2)|(L~f)` such that
+  A16: B1 = RightComp f & B1 is_a_component_of (TOP-REAL 2)|(L~f)`
+    by CONNSP_1:def 6;
+    B1 c= the carrier of (TOP-REAL 2)|(L~f)`;
+  then B1 c= (L~f)` by Lm2;
+  then LeftComp f \/ RightComp f c= (L~f)` by A15,A16,XBOOLE_1:8;
+  hence thesis by A13,XBOOLE_0:def 10;
+end;

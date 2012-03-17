@@ -1,0 +1,1032 @@
+:: Locally Connected Spaces
+::  by Beata Padlewska
+::
+:: Received September 5, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, TOPS_1, SUBSET_1, BOOLE, RELAT_1, CONNSP_1, RELAT_2,
+      SETFAM_1, TARSKI, COMPTS_1, CONNSP_2;
+ notation TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, PRE_TOPC, TOPS_1, CONNSP_1,
+      COMPTS_1;
+ constructors TOPS_1, CONNSP_1, COMPTS_1, MEMBERED;
+ clusters PRE_TOPC, STRUCT_0, SUBSET_1, MEMBERED, ZFMISC_1;
+ requirements SUBSET, BOOLE;
+ definitions COMPTS_1;
+ theorems TARSKI, ZFMISC_1, SETFAM_1, PRE_TOPC, TOPS_1, CONNSP_1, COMPTS_1,
+      XBOOLE_0, XBOOLE_1;
+ schemes PRE_TOPC;
+
+begin
+::
+::            A NEIGHBORHOOD OF A POINT
+::
+definition let X be non empty TopSpace,x be Point of X;
+  mode a_neighborhood of x -> Subset of X means
+:Def1: x in Int(it);
+existence
+proof
+  take Z=[#] X;
+    Int([#] X) = [#] X by TOPS_1:43;
+ hence x in Int(Z) by PRE_TOPC:13;
+end;
+end;
+
+::
+::               A NEIGHBORHOOD OF A SET
+::
+
+definition let X be non empty TopSpace,A be Subset of X;
+  mode a_neighborhood of A -> Subset of X means
+:Def2: A c= Int(it);
+existence
+proof
+  take Z=[#] X;
+    Int([#] X) = [#] X by TOPS_1:43;
+ hence A c= Int(Z) by PRE_TOPC:14;
+end;
+end;
+
+reserve X for non empty TopSpace;
+reserve x for Point of X;
+reserve U1 for Subset of X;
+
+canceled 2;
+
+theorem
+  for A,B being Subset of X holds
+A is a_neighborhood of x & B is a_neighborhood of x implies
+A \/ B is a_neighborhood of x
+proof
+ let A,B be Subset of X;
+ reconsider A1 = A, B1 = B as Subset of X;
+   A1 is a_neighborhood of x & B1 is a_neighborhood of x implies
+  A1 \/ B1 is a_neighborhood of x
+ proof
+   assume x in Int A1 & x in Int B1;
+  then A1:  x in Int A1 \/ Int B1 by XBOOLE_0:def 2;
+          Int A1 \/ Int B1 c= Int (A1 \/ B1) by TOPS_1:49;
+    hence thesis by A1,Def1;
+  end;
+  hence thesis;
+end;
+
+theorem
+  for A,B being Subset of X holds
+A is a_neighborhood of x & B is a_neighborhood of x iff
+A /\ B is a_neighborhood of x
+proof
+ let A,B be Subset of X;
+  A is a_neighborhood of x & B is a_neighborhood of x iff
+  x in Int A & x in Int B by Def1;
+  then A is a_neighborhood of x & B is a_neighborhood of x iff
+  x in Int A /\ Int B by XBOOLE_0:def 3;
+  then A is a_neighborhood of x & B is a_neighborhood of x iff
+  x in Int (A /\ B) by TOPS_1:46;
+ hence thesis by Def1;
+end;
+
+theorem Th5:
+ for U1 being Subset of X, x being Point of X st U1 is open & x in U1 holds
+ U1 is a_neighborhood of x
+proof
+ let U1 be Subset of X, x be Point of X;
+  assume U1 is open & x in U1;
+   then x in Int U1 by TOPS_1:55;
+ hence thesis by Def1;
+end;
+
+theorem Th6:
+ for U1 being Subset of X, x being Point of X
+ st U1 is a_neighborhood of x
+ holds x in U1
+proof
+ let U1 be Subset of X, x be Point of X;
+ assume U1 is a_neighborhood of x;
+  then A1: x in Int (U1) by Def1;
+        Int(U1) c= U1 by TOPS_1:44;
+ hence thesis by A1;
+end;
+
+theorem Th7:
+ U1 is a_neighborhood of x implies
+ ex V being non empty Subset of X st
+  V is a_neighborhood of x & V is open & V c= U1
+proof
+  assume U1 is a_neighborhood of x;
+  then x in Int(U1) by Def1;
+  then consider V being Subset of X such that
+  A1:V is open and
+  A2:V c= U1 and
+  A3:x in V by TOPS_1:54;
+  reconsider V as non empty Subset of X by A3;
+  take V;
+ thus thesis by A1,A2,A3,Th5;
+end;
+
+theorem Th8:
+ U1 is a_neighborhood of x iff
+  ex V being Subset of X st V is open & V c= U1 & x in V
+proof
+ A1:now
+   given V being Subset of X such that
+    A2:V is open & V c= U1 & x in V;
+      x in Int U1 by A2,TOPS_1:54;
+   hence U1 is a_neighborhood of x by Def1;
+  end;
+    now
+   assume U1 is a_neighborhood of x;
+    then consider V being non empty Subset of X such that
+    A3:V is a_neighborhood of x and
+    A4:V is open and
+    A5:V c= U1 by Th7;
+    take V;
+      x in V by A3,Th6;
+   hence ex V being Subset of X st V is open & V c= U1 & x in V by A4,A5;
+  end;
+ hence thesis by A1;
+end;
+
+theorem
+   for U1 being Subset of X holds
+  U1 is open iff for x st x in U1 ex A being Subset of X st
+ A is a_neighborhood of x & A c= U1
+proof
+ let U1 be Subset of X;
+ A1:now
+   assume A2:U1 is open;
+       let x; assume
+      x in U1;
+    then U1 is a_neighborhood of x by A2,Th5;
+   hence ex A being Subset of X
+   st A is a_neighborhood of x & A c= U1;
+  end;
+    now assume
+   A3:for x st x in U1 ex A being Subset of X st
+      A is a_neighborhood of x & A c= U1;
+     for x being set holds x in U1 iff ex V being Subset of X st
+                     V is open & V c= U1 & x in V
+   proof
+    let x be set;
+    thus x in U1 implies ex V being Subset of X st V is open & V c= U1 & x in
+V
+     proof
+      assume A4:x in U1;
+       then reconsider x as Point of X;
+       consider S being Subset of X such that
+       A5: S is a_neighborhood of x & S c= U1 by A3,A4;
+       consider V being Subset of X such that
+       A6:V is open & V c= S & x in V by A5,Th8;
+       take V;
+      thus thesis by A5,A6,XBOOLE_1:1;
+     end;
+       given V being Subset of X such that
+       A7:V is open & V c= U1 & x in V;
+       thus x in U1 by A7;
+     end;
+   hence U1 is open by TOPS_1:57;
+  end;
+ hence thesis by A1;
+end;
+
+theorem
+  for V being Subset of X holds
+V is a_neighborhood of {x} iff V is a_neighborhood of x
+ proof
+let V be Subset of X;
+  thus V is a_neighborhood of {x} implies V is a_neighborhood of x
+  proof
+    assume
+       V is a_neighborhood of {x};
+     then A1: {x} c= Int(V) by Def2;
+       x in {x} by TARSKI:def 1;
+     hence V is a_neighborhood of x by A1,Def1;
+  end;
+  assume V is a_neighborhood of x;
+   then x in Int (V) by Def1;
+   then for p being set holds p in {x} implies p in Int V by TARSKI:def 1;
+   then {x} c= Int V by TARSKI:def 3;
+ hence V is a_neighborhood of {x} by Def2;
+end;
+
+theorem Th11:
+for B being non empty Subset of X, x being Point of X|B,
+    A being Subset of X|B,
+    A1 being Subset of X, x1 being Point of X
+ st B is open & A is a_neighborhood of x & A = A1 & x = x1 holds
+ A1 is a_neighborhood of x1
+proof
+ let B be non empty Subset of X, x be Point of X|B,
+ A be Subset of X|B,
+  A1 be Subset of X, x1 be Point of X such that
+   A1: B is open and
+   A2: A is a_neighborhood of x and
+   A3: A=A1 & x=x1;
+      x in Int A by A2,Def1;
+    then consider Q1 being Subset of X|B such that
+    A4: Q1 is open and
+    A5: Q1 c= A and
+    A6: x in Q1 by TOPS_1:54;
+      Q1 in the topology of X|B by A4,PRE_TOPC:def 5;
+    then consider Q being Subset of X such that
+    A7: Q in the topology of X and
+    A8: Q1 = Q /\ [#](X|B) by PRE_TOPC:def 9;
+    A9: Q1 = Q /\ B by A8,PRE_TOPC:def 10;
+    reconsider Q2 = Q as Subset of X;
+      Q2 is open by A7,PRE_TOPC:def 5;
+     then Q /\ B is open by A1,TOPS_1:38;
+   then x1 in Int A1 by A3,A5,A6,A9,TOPS_1:54;
+  hence thesis by Def1;
+end;
+
+Lm1:
+ for X1 being SubSpace of X, A being Subset of X,
+ A1 being Subset of X1 st
+ A = A1 holds Int (A) /\ [#](X1) c= Int A1
+proof
+ let X1 be SubSpace of X, A be Subset of X,
+ A1 be Subset of X1;
+  assume A1: A = A1;
+    for p being set holds p in Int (A) /\ [#](X1) implies p in Int A1
+  proof
+  let p be set;
+   assume p in Int (A) /\ [#](X1);
+        then A2:p in Int (A) & p in [#](X1) by XBOOLE_0:def 3;
+        then consider Q being Subset of X such that
+        A3:Q is open and
+        A4:Q c= A and
+        A5:p in Q by TOPS_1:54;
+          ex Q1 being Subset of X1 st Q1 is open & Q1 c= A1 & p in Q1
+        proof
+            Q /\ [#] X1 c= [#] X1 by XBOOLE_1:17;
+          then reconsider Q1=Q /\ [#] X1 as Subset of X1 by PRE_TOPC:16;
+          take Q1;
+A6:          Q1 c= Q by XBOOLE_1:17;
+            Q in the topology of X by A3,PRE_TOPC:def 5;
+          then Q1 in the topology of X1 by PRE_TOPC:def 9;
+          hence thesis by A1,A2,A4,A5,A6,PRE_TOPC:def 5,XBOOLE_0:def 3,XBOOLE_1
+:1;
+        end;
+      hence p in Int A1 by TOPS_1:54;
+     end;
+  hence thesis by TARSKI:def 3;
+end;
+
+theorem Th12:
+for B being non empty Subset of X, x being Point of X|B,
+    A being Subset of X|B,
+    A1 being Subset of X, x1 being Point of X
+ st A1 is a_neighborhood of x1 & A=A1 & x=x1 holds
+ A is a_neighborhood of x
+proof
+ let B be non empty Subset of X, x be Point of X|B,
+ A be Subset of X|B,
+  A1 be Subset of X, x1 be Point of X such that
+   A1: A1 is a_neighborhood of x1 and
+   A2: A=A1 & x=x1;
+   A3:Int (A1) /\ [#](X|B) c= Int A by A2,Lm1;
+   A4:x1 in [#](X|B) by A2,PRE_TOPC:13;
+     x1 in Int A1 by A1,Def1;
+   then x1 in Int (A1) /\ [#](X|B) by A4,XBOOLE_0:def 3;
+   hence thesis by A2,A3,Def1;
+end;
+
+theorem Th13:
+for A being Subset of X, B being Subset of X st
+ A is_a_component_of X & A c= B holds A is_a_component_of B
+proof
+ let A be Subset of X,B be Subset of X such that
+  A1:A is_a_component_of X and
+  A2:A c= B;
+  A3:A is connected by A1,CONNSP_1:def 5;
+       ex A1 being Subset of X|B st A=A1 &
+     A1 is_a_component_of X|B
+     proof
+         B = [#](X|B) by PRE_TOPC:def 10;
+       then reconsider C = A as Subset of X|B by A2,PRE_TOPC:16;
+       take A1=C;
+       A4:A1 is connected by A3,CONNSP_1:24;
+         for D being Subset of X|B st D is connected holds A1 c= D implies A1=D
+       proof
+        let D be Subset of X|B such that
+         A5:D is connected;
+         assume A6:A1 c= D;
+         reconsider D1=D as Subset of X by PRE_TOPC:39;
+           D1 is connected by A5,CONNSP_1:24;
+        hence thesis by A1,A6,CONNSP_1:def 5;
+       end;
+      hence thesis by A4,CONNSP_1:def 5;
+     end;
+    hence thesis by CONNSP_1:def 6;
+end;
+
+theorem
+   for X1 being non empty SubSpace of X, x being Point of X,
+     x1 being Point of X1 st
+ x = x1 holds skl x1 c= skl x
+proof
+ let X1 be non empty SubSpace of X, x be Point of X, x1 be Point of X1;
+  assume A1:x = x1;
+     consider F being Subset-Family of X such that
+A2: (for A being Subset of X holds A in F iff A is connected
+    & x in A) and
+A3: union F = skl x by CONNSP_1:def 7;
+    reconsider Z = skl x1 as Subset of X by PRE_TOPC:39;
+A4: skl x1 is connected by CONNSP_1:41;
+A5: x1 in Z by CONNSP_1:40;
+      Z is connected by A4,CONNSP_1:24;
+    then Z in F by A1,A2,A5;
+  hence skl x1 c= skl x by A3,ZFMISC_1:92;
+end;
+
+::
+::            LOCALLY CONNECTED TOPOLOGICAL SPACES
+::
+
+definition let X be non empty TopSpace, x be Point of X;
+   pred X is_locally_connected_in x means :Def3:
+         for U1 being Subset of X st
+           U1 is a_neighborhood of x ex V being Subset of X st
+           V is a_neighborhood of x & V is connected & V c= U1;
+end;
+
+definition let X be non empty TopSpace;
+  attr X is locally_connected means
+   :Def4:  for x being Point of X holds X is_locally_connected_in x;
+end;
+
+definition
+ let X be non empty TopSpace,
+     A be Subset of X, x be Point of X;
+ pred A is_locally_connected_in x means
+  :Def5: for B being non empty Subset of X st A = B
+   ex x1 being Point of X|B st x1=x & X|B is_locally_connected_in x1;
+end;
+
+definition
+ let X be non empty TopSpace, A be non empty Subset of X;
+ attr A is locally_connected means :Def6: X|A is locally_connected;
+end;
+
+canceled 4;
+
+theorem Th19:
+ for x holds X is_locally_connected_in x iff
+ for V,S being Subset of X st V is a_neighborhood of x &
+ S is_a_component_of V & x in S
+ holds S is a_neighborhood of x
+proof
+ let x;
+ thus X is_locally_connected_in x implies
+      for V,S being Subset of X st V is a_neighborhood of x &
+      S is_a_component_of V & x in S
+      holds S is a_neighborhood of x
+  proof
+   assume A1:X is_locally_connected_in x;
+   let V,S be Subset of X such that
+       A2: V is a_neighborhood of x and
+       A3: S is_a_component_of V and
+       A4: x in S;
+           consider V1 being Subset of X such that
+       A5: V1 is a_neighborhood of x and
+       A6: V1 is connected and
+       A7: V1 c= V by A1,A2,Def3;
+           consider S1 being Subset of X|V such that
+       A8: S1=S & S1 is_a_component_of X|V by A3,CONNSP_1:def 6;
+           reconsider V' = V as non empty Subset of X by A2,Th6;
+             V1 c= [#](X|V) by A7,PRE_TOPC:def 10;
+           then reconsider V2=V1 as Subset of X|V by PRE_TOPC:16;
+             V2 is connected by A6,CONNSP_1:24;
+           then V2 misses S1 or V2 c= S1 by A8,CONNSP_1:38;
+      then A9: V2 /\ S1 = {}(X|V') or V2 c= S1 by XBOOLE_0:def 7;
+             x in V2 & x in S1 by A4,A5,A8,Th6;
+      then A10: Int V1 c= Int S by A8,A9,TOPS_1:48,XBOOLE_0:def 3;
+             x in Int V1 by A5,Def1;
+           hence thesis by A10,Def1;
+  end;
+  assume
+    A11:for V,S being Subset of X st V is a_neighborhood of x &
+       S is_a_component_of V & x in S holds
+       S is a_neighborhood of x;
+        for U1 being Subset of X st
+      U1 is a_neighborhood of x ex V being Subset of X st
+      V is a_neighborhood of x & V is connected & V c= U1
+      proof
+      let U1 be Subset of X; assume
+        A12: U1 is a_neighborhood of x;
+        then A13: x in U1 by Th6;
+        A14: [#](X|U1) = U1 by PRE_TOPC:def 10;
+        reconsider U1 as non empty Subset of X by A12,Th6;
+              x in [#](X|U1) by A13,PRE_TOPC:def 10;
+            then reconsider x1=x as Point of X|U1;
+            set S1 = skl x1;
+        A15: S1 is_a_component_of X|U1 by CONNSP_1:43;
+            reconsider S=S1 as Subset of X by PRE_TOPC:39;
+            take S;
+        A16: S is_a_component_of U1 by A15,CONNSP_1:def 6;
+        A17: x in S by CONNSP_1:40;
+              S <> {} X & S1 is connected by CONNSP_1:40,41;
+       hence thesis by A11,A12,A14,A16,A17,CONNSP_1:24,PRE_TOPC:14;
+    end;
+  hence X is_locally_connected_in x by Def3;
+end;
+
+theorem Th20:
+ for x holds X is_locally_connected_in x iff
+ for U1 being non empty Subset of X st U1 is open & x in U1
+ ex x1 being Point of X|U1 st x1=x & x in Int(skl x1)
+proof
+ let x;
+  A1: X is_locally_connected_in x implies
+   for U1 being non empty Subset of X st U1 is open & x in U1
+   ex x1 being Point of X|U1 st x1=x & x in Int(skl x1)
+   proof
+    assume A2: X is_locally_connected_in x;
+     let U1 be non empty Subset of X such that
+      A3: U1 is open and
+      A4: x in U1;
+            x in [#](X|U1) by A4,PRE_TOPC:def 10;
+          then reconsider x1=x as Point of X|U1;
+          take x1;
+          reconsider S1=skl x1 as Subset of X|U1;
+      A5: S1 is_a_component_of X|U1 by CONNSP_1:43;
+          reconsider S=S1 as Subset of X by PRE_TOPC:39;
+      A6: S is_a_component_of U1 by A5,CONNSP_1:def 6;
+      A7: U1 is a_neighborhood of x by A3,A4,Th5;
+            x in S by CONNSP_1:40;
+          then S is a_neighborhood of x by A2,A6,A7,Th19;
+          then S1 is a_neighborhood of x1 by Th12;
+        hence thesis by Def1;
+     end;
+     (for U1 being non empty Subset of X st U1 is open & x in U1
+    ex x1 being Point of X|U1 st x1=x & x in Int(skl x1))
+    implies X is_locally_connected_in x
+   proof
+    assume
+     A8: for U1 being non empty Subset of X st U1 is open & x in U1
+         ex x1 being Point of X|U1 st x1=x & x in Int(skl x1);
+           for U1 being Subset of X st U1 is a_neighborhood of x
+         ex V1 being Subset of X st
+         V1 is a_neighborhood of x & V1 is connected & V1 c= U1
+         proof
+          let U1 be Subset of X; assume
+              U1 is a_neighborhood of x;
+               then consider V being non empty Subset of X such that
+           A9: V is a_neighborhood of x and
+           A10: V is open and
+           A11: V c= U1 by Th7;
+              x in V by A9,Th6;
+               then consider x1 being Point of X|V such that
+           A12: x1=x and
+           A13: x in Int(skl x1) by A8,A10;
+               set S1=skl x1;
+           A14: S1 is a_neighborhood of x1 by A12,A13,Def1;
+               reconsider S=S1 as Subset of X by PRE_TOPC:39;
+               take S;
+               A15: S <> {} X & S1 is connected by CONNSP_1:40,41;
+                 S1 c= [#](X|V) by PRE_TOPC:14;
+               then S c= V by PRE_TOPC:def 10;
+           hence thesis by A10,A11,A12,A14,A15,Th11,CONNSP_1:24,XBOOLE_1:1;
+        end;
+     hence X is_locally_connected_in x by Def3;
+    end;
+   hence thesis by A1;
+end;
+
+theorem Th21:
+  X is locally_connected implies
+  for S being Subset of X st S is_a_component_of X holds
+  S is open
+proof
+ assume A1:X is locally_connected;
+ let S be Subset of X such that
+ A2: S is_a_component_of X;
+ A3: Int(S) c= S by TOPS_1:44;
+      now
+      let p be set;
+       assume
+       A4: p in S;
+           then reconsider x=p as Point of X;
+       A5: X is_locally_connected_in x by A1,Def4;
+             S c= [#] X by PRE_TOPC:14;
+       then A6: S is_a_component_of [#] X by A2,Th13;
+             x in [#] X & [#] X is open by PRE_TOPC:13,TOPS_1:53;
+           then [#] X is a_neighborhood of x by Th5;
+           then S is a_neighborhood of x by A4,A5,A6,Th19;
+       hence p in Int S by Def1;
+     end;
+    then S c= Int S by TARSKI:def 3;
+    then Int S = S by A3,XBOOLE_0:def 10;
+ hence S is open by TOPS_1:55;
+end;
+
+theorem Th22:
+ X is_locally_connected_in x implies
+ for A being non empty Subset of X st A is open & x in A holds
+  A is_locally_connected_in x
+proof
+ assume A1: X is_locally_connected_in x;
+ let A be non empty Subset of X such that
+ A2: A is open and
+ A3: x in A;
+  reconsider B = A as non empty Subset of X;
+A4:  [#](X|A) = A by PRE_TOPC:def 10;
+    for C being non empty Subset of X st B = C
+ ex x1 being Point of X|C st x1=x & X|C is_locally_connected_in x1
+ proof let C be non empty Subset of X; assume
+A5: B = C;
+   then reconsider y=x as Point of X|C by A3,A4;
+  take x1=y;
+     for U1 being Subset of X|B st
+   U1 is a_neighborhood of x1 ex V being Subset of X|B st
+   V is a_neighborhood of x1 & V is connected & V c= U1
+   proof
+    let U1 be Subset of X|B such that
+     A6: U1 is a_neighborhood of x1;
+         reconsider U2=U1 as Subset of X by PRE_TOPC:39;
+           U2 is a_neighborhood of x by A2,A5,A6,Th11;
+         then consider V being Subset of X such that
+     A7: V is a_neighborhood of x and
+     A8: V is connected and
+     A9: V c= U2 by A1,Def3;
+           V is Subset of X|B by A9,XBOOLE_1:1;
+         then reconsider V1= V as Subset of X|B;
+         take V1;
+    thus thesis by A5,A7,A8,A9,Th12,CONNSP_1:24;
+   end;
+  hence thesis by A5,Def3;
+ end;
+ hence A is_locally_connected_in x by Def5;
+end;
+
+theorem Th23:
+ X is locally_connected implies
+ for A being non empty Subset of X st A is open holds
+  A is locally_connected
+proof
+  assume A1: X is locally_connected;
+       let A be non empty Subset of X such that
+   A2: A is open;
+         for x being Point of X|A holds X|A is_locally_connected_in x
+       proof
+        let x be Point of X|A;
+             x in [#](X|A) by PRE_TOPC:13;
+       then A3: x in A by PRE_TOPC:def 10;
+           then reconsider x1=x as Point of X;
+             X is_locally_connected_in x1 by A1,Def4;
+           then A is_locally_connected_in x1 by A2,A3,Th22;
+            then ex x2 being Point of X|A st
+ x2=x1 & X|A is_locally_connected_in x2 by Def5;
+         hence X|A is_locally_connected_in x;
+       end;
+       then X|A is locally_connected by Def4;
+  hence thesis by Def6;
+end;
+
+theorem Th24:
+ X is locally_connected iff
+ for A being non empty Subset of X, B being Subset of X st A is open &
+ B is_a_component_of A holds B is open
+proof
+ thus X is locally_connected implies
+  for A being non empty Subset of X,
+  B being Subset of X st A is open &
+  B is_a_component_of A holds B is open
+  proof
+    assume A1:X is locally_connected;
+     let A be non empty Subset of X,
+     B be Subset of X such that
+    A2: A is open and
+    A3: B is_a_component_of A;
+        consider B1 being Subset of X|A such that
+    A4: B1=B and
+    A5: B1 is_a_component_of X|A by A3,CONNSP_1:def 6;
+       reconsider B1 as Subset of X|A;
+          A is locally_connected by A1,A2,Th23;
+        then X|A is locally_connected by Def6;
+        then B1 is open by A5,Th21;
+     then B1 in the topology of X|A by PRE_TOPC:def 5;
+        then consider B2 being Subset of X such that
+    A6: B2 in the topology of X and
+    A7: B1 = B2 /\ [#](X|A) by PRE_TOPC:def 9;
+    A8: B = B2 /\ A by A4,A7,PRE_TOPC:def 10;
+       reconsider B2 as Subset of X;
+          B2 is open by A6,PRE_TOPC:def 5;
+   hence thesis by A2,A8,TOPS_1:38;
+  end;
+   assume
+   A9: for A being non empty Subset of X,
+           B being Subset of X st A is open &
+       B is_a_component_of A holds B is open;
+      let x;
+        for U1 being non empty Subset of X st U1 is open & x in U1
+      ex x1 being Point of X|U1 st x1=x & x in Int(skl x1)
+      proof
+       let U1 be non empty Subset of X such that
+      A10: U1 is open and
+      A11: x in U1;
+            x in [#](X|U1) by A11,PRE_TOPC:def 10;
+          then reconsider x1=x as Point of X|U1;
+          take x1;
+          set S1=skl x1;
+      A12: S1 is_a_component_of X|U1 by CONNSP_1:43;
+          reconsider S=S1 as Subset of X by PRE_TOPC:39;
+            S is_a_component_of U1 by A12,CONNSP_1:def 6;
+      then A13: S is open by A9,A10;
+            x in S by CONNSP_1:40;
+          then S is a_neighborhood of x by A13,Th5;
+          then S1 is a_neighborhood of x1 by Th12;
+      hence thesis by Def1;
+     end;
+   hence thesis by Th20;
+end;
+
+theorem
+   X is locally_connected implies
+ for E being non empty Subset of X,
+ C being non empty Subset of X|E st
+ C is connected & C is open ex H being Subset of X st
+ H is open & H is connected & C = E /\ H
+proof
+ assume A1: X is locally_connected;
+  let E be non empty Subset of X,
+  C be non empty Subset of X|E such that
+  A2: C is connected and
+  A3: C is open;
+  A4: E <> {} X & C <> {} (X|E);
+        C in the topology of X|E by A3,PRE_TOPC:def 5;
+      then consider G being Subset of X such that
+  A5: G in the topology of X and
+  A6: C = G /\ [#](X|E) by PRE_TOPC:def 9;
+  A7: C = G /\ E by A6,PRE_TOPC:def 10;
+      reconsider G as non empty Subset of X by A6;
+      consider x being Point of X|E such that
+  A8: x in C by A4,PRE_TOPC:41;
+        x in G by A6,A8,XBOOLE_0:def 3;
+      then x in [#](X|G) by PRE_TOPC:def 10;
+      then reconsider y=x as Point of X|G;
+      set H1 = skl y;
+  A9: H1 is_a_component_of X|G by CONNSP_1:43;
+      reconsider H=H1 as Subset of X by PRE_TOPC:39;
+ A10: H is_a_component_of G by A9,CONNSP_1:def 6;
+      take H;
+        G is open by A5,PRE_TOPC:def 5;
+ hence H is open by A1,A10,Th24;
+        H1 is connected by A9,CONNSP_1:def 5;
+ hence H is connected by CONNSP_1:24;
+      reconsider C1=C as Subset of X by PRE_TOPC:39;
+ A11: C1 is connected by A2,CONNSP_1:24;
+        C c= G by A6,XBOOLE_1:17;
+      then C c= [#](X|G) by PRE_TOPC:def 10;
+      then reconsider C2=C1 as Subset of X|G by PRE_TOPC:16;
+        C2 is connected by A11,CONNSP_1:24;
+      then C2 misses H or C2 c= H by A9,CONNSP_1:38;
+ then A12: C2 /\ H = {}(X|G) or C2 c= H by XBOOLE_0:def 7;
+A13:      x in H1 by CONNSP_1:40;
+        C c= E by A7,XBOOLE_1:17;
+ then A14: C c= E /\ H by A8,A12,A13,XBOOLE_0:def 3,XBOOLE_1:19;
+        H /\ (G /\ E) c= C by A7,A8,A12,A13,XBOOLE_0:def 3,XBOOLE_1:28;
+ then A15: (H /\ G) /\ E c= C by XBOOLE_1:16;
+        H1 c= [#](X|G) by PRE_TOPC:14;
+      then H c= G by PRE_TOPC:def 10;
+      then E /\ H c= C by A15,XBOOLE_1:28;
+ hence C = E /\ H by A14,XBOOLE_0:def 10;
+end;
+
+theorem Th26:
+ X is_T4 iff for A,C being Subset of X
+ st A <> {} & C <> [#] X & A c= C & A is closed & C is open
+    ex G being Subset of X st G is open & A c= G & Cl G c= C
+proof
+ thus X is_T4 implies for A,C being Subset of X
+   st A <> {} & C <> [#] X &
+       A c= C & A is closed & C is open
+       ex G being Subset of X st G is open & A c= G & Cl G c= C
+  proof
+   assume A1:for A,B being Subset of X st A <> {} & B <> {} &
+             A is closed & B is closed & A misses B
+             ex G,H being Subset of X st G is open & H is open &
+             A c= G & B c= H & G misses H;
+    let A,C be Subset of X such that
+    A2: A <> {} & C <> [#] X and
+    A3: A c= C and
+    A4: A is closed and
+    A5: C is open;
+        set B=[#](X) \ C;
+    A6: B <> {} by A2,PRE_TOPC:23;
+          C` is closed by A5,TOPS_1:30;
+    then A7: B is closed by PRE_TOPC:17;
+          B c= [#](X) \ A by A3,XBOOLE_1:34;
+        then B c= A` by PRE_TOPC:17;
+        then A misses B by PRE_TOPC:21;
+        then consider G,H being Subset of X such that
+    A8: G is open & H is open and
+    A9: A c= G & B c= H and
+    A10: G misses H by A1,A2,A4,A6,A7;
+        take G;
+          for p being set holds p in Cl G implies p in C
+        proof
+          let p be set;
+           assume A11:p in Cl G;
+             then reconsider y=p as Point of X;
+             A12: H` is closed by A8,TOPS_1:30;
+                   G c= H` by A10,PRE_TOPC:21;
+             then A13: y in H` by A11,A12,PRE_TOPC:45;
+                   H` c= B` by A9,PRE_TOPC:19;
+             then A14: y in B` by A13;
+                   B`= [#] X \ ([#] X \ C) by PRE_TOPC:17;
+          hence p in C by A14,PRE_TOPC:22;
+        end;
+    hence thesis by A8,A9,TARSKI:def 3;
+  end;
+  assume
+    A15: for A,C being Subset of X st A <> {} & C <> [#] X &
+        A c= C & A is closed & C is open
+        ex G being Subset of X
+        st G is open & A c= G & Cl G c= C;
+
+          for A,B being Subset of X st A <> {} & B <> {} &
+        A is closed & B is closed & A misses B
+        ex G,H being Subset of X st G is open & H is open &
+        A c= G & B c= H & G misses H
+        proof
+          let A,B be Subset of X such that
+          A16: A <> {} & B <> {} and
+          A17: A is closed & B is closed and
+          A18: A misses B;
+              set C = [#] X \ B;
+                [#] X \ C = B by PRE_TOPC:22;
+          then A19: C <> [#] X by A16,PRE_TOPC:23;
+                A c= B` by A18,PRE_TOPC:21;
+          then A20: A c= C by PRE_TOPC:17;
+                C is open by A17,PRE_TOPC:def 6;
+              then consider G being Subset of X such that
+          A21: G is open & A c= G and
+          A22: Cl G c= C by A15,A16,A17,A19,A20;
+              take G;
+              take H = [#] X \ Cl G;
+                Cl(Cl G) = Cl G by TOPS_1:26;
+              then Cl G is closed by PRE_TOPC:52;
+         hence G is open & H is open by A21,PRE_TOPC:def 6;
+                 C` c= (Cl G)` by A22,PRE_TOPC:19;
+               then [#] X \([#] X \ B) c= (Cl G)` by PRE_TOPC:17;
+               then [#] X \([#] X \ B) c= [#] X \ Cl G by PRE_TOPC:17;
+         hence A c= G & B c= H by A21,PRE_TOPC:22;
+                 G c= Cl G by PRE_TOPC:48;
+               then [#] X \ Cl G c= [#] X \ G by XBOOLE_1:34;
+               then H c= G` by PRE_TOPC:17;
+         hence G misses H by PRE_TOPC:21;
+        end;
+   hence X is_T4 by COMPTS_1:def 6;
+end;
+
+theorem
+   X is locally_connected & X is_T4 implies
+ for A,B being Subset of X
+ st A <> {} & B <> {} & A is closed & B is closed & A misses B holds
+ (A is connected & B is connected implies
+ ex R,S being Subset of X st R is connected & S is connected &
+ R is open & S is open & A c= R & B c= S & R misses S)
+proof
+  assume A1: X is locally_connected & X is_T4;
+   let A,B be Subset of X such that
+ A2: A <> {} & B <> {} and
+ A3: A is closed & B is closed and
+ A4: A misses B;
+     assume A5: A is connected & B is connected;
+   A6: A c= B` by A4,PRE_TOPC:21;
+   A7: B` is open by A3,TOPS_1:29;
+         B = [#] X \ ([#] X \ B) by PRE_TOPC:22;
+       then [#] X \ B <> [#] X by A2,PRE_TOPC:23;
+       then B` <> [#] X by PRE_TOPC:17;
+       then consider G being Subset of X such that
+   A8: G is open & A c= G and
+   A9: Cl G c= B` by A1,A2,A3,A6,A7,Th26;
+   A10: Cl G misses B by A9,PRE_TOPC:21;
+     A <> {} X by A2;
+       then consider x being Point of X such that
+  A11: x in A by PRE_TOPC:41;
+  A12: x in G by A8,A11;
+       reconsider G as non empty Subset of X by A2,A8,XBOOLE_1:3
+;
+         x in [#](X|G) by A12,PRE_TOPC:def 10;
+       then reconsider y=x as Point of X|G;
+       set H=skl y;
+       reconsider H1=H as Subset of X by PRE_TOPC:39;
+       take R=H1;
+  A13: H is_a_component_of X|G by CONNSP_1:43;
+A14:   H is connected by CONNSP_1:41;
+A15:   H1 is_a_component_of G by A13,CONNSP_1:def 6;
+         A c= [#](X|G) by A8,PRE_TOPC:def 10;
+       then reconsider A1=A as Subset of X|G by PRE_TOPC:16;
+         A1 is connected by A5,CONNSP_1:24;
+       then A1 misses H or A1 c= H by A13,CONNSP_1:38;
+  then A16: A1 /\ H = {} or A1 c= H by XBOOLE_0:def 7;
+A17:   y in H by CONNSP_1:40;
+         B <> {} X by A2;
+       then consider z being Point of X such that
+  A18: z in B by PRE_TOPC:41;
+       A19: B c= (Cl G)` by A10,PRE_TOPC:21;
+  then A20: z in (Cl G)` by A18;
+       reconsider C = (Cl G)` as non empty Subset of X
+       by A18,A19;
+         z in [#](X|C) by A20,PRE_TOPC:def 10;
+       then reconsider z1=z as Point of X|C;
+       set V=skl z1;
+       reconsider V1=V as Subset of X by PRE_TOPC:39;
+       take S=V1;
+  A21: V is_a_component_of X|C by CONNSP_1:43;
+         Cl G = Cl(Cl G) by TOPS_1:26;
+       then Cl G is closed by PRE_TOPC:52;
+  then A22: (Cl G)` is open by TOPS_1:29;
+A23:   V1 is_a_component_of (Cl G)` by A21,CONNSP_1:def 6;
+A24:   V is connected by CONNSP_1:41;
+         B c= [#](X|(Cl G)`) by A19,PRE_TOPC:def 10;
+       then reconsider B1=B as Subset of X|(Cl G)` by PRE_TOPC:16;
+         B1 is connected by A5,CONNSP_1:24;
+       then B1 misses V or B1 c= V by A21,CONNSP_1:38;
+  then A25: B1 /\ V = {} or B1 c= V by XBOOLE_0:def 7;
+A26:   z1 in V by CONNSP_1:40;
+         H c= [#](X|G) by PRE_TOPC:14;
+  then A27: R c= G by PRE_TOPC:def 10;
+         G c= Cl G by PRE_TOPC:48;
+  then A28: R c= Cl G by A27,XBOOLE_1:1;
+         V c= [#](X|(Cl G)`) by PRE_TOPC:14;
+       then S c= (Cl G)` by PRE_TOPC:def 10;
+then A29:     R /\ S c= Cl G /\ (Cl G)` by A28,XBOOLE_1:27;
+         Cl G misses (Cl G)` by PRE_TOPC:26;
+       then R /\ S c= {} X by A29,XBOOLE_0:def 7;
+       then R /\ S = {} by XBOOLE_1:3;
+   hence thesis by A1,A8,A11,A14,A15,A16,A17,A18,A22,A23,A24,A25,A26,Th24,
+CONNSP_1:24,XBOOLE_0:def 3,def 7;
+end;
+
+theorem Th28:
+  for x being Point of X, F being Subset-Family of X
+  st for A being Subset of X holds A in F iff A is open closed
+  & x in A holds F <> {}
+proof
+  let x be Point of X, F be Subset-Family of X such that
+A1: for A being Subset of X holds A in F iff A is open closed
+    & x in A;
+      [#] X is open closed & x in [#] X by PRE_TOPC:13,TOPS_1:53;
+  hence F <> {} by A1;
+end;
+
+::
+::             A QUASICOMPONENT OF A POINT
+::
+
+definition let X be non empty TopSpace, x be Point of X;
+  func qskl x -> Subset of X means
+   :Def7:ex F being Subset-Family of X st
+      (for A being Subset of X holds A in F iff
+      A is open closed & x in A) & meet F = it;
+   existence
+   proof
+     defpred P[set] means
+       ex A1 being Subset of X st A1 = $1 & A1 is open closed & x in $1;
+        consider F being Subset-Family of X such that
+   A1:  for A being Subset of X holds A in F iff P[A]
+          from SubFamExS;
+        reconsider S = meet F as Subset of X;
+      take S, F;
+      thus for A being Subset of X holds A in F iff A is open closed & x in A
+      proof
+       let A be Subset of X;
+       thus A in F implies A is open closed & x in A
+       proof
+         assume A in F;
+         then ex A1 being Subset of X st A1 = A & A1 is open closed & x in A
+by A1;
+         hence thesis;
+       end;
+       thus thesis by A1;
+      end;
+      thus meet F = S;
+   end;
+   uniqueness
+   proof let S,S' be Subset of X; assume
+   A2:  (ex F being Subset-Family of X st
+        (for A being Subset of X holds A in F
+        iff A is open closed &
+        x in A) & meet F = S) & ex F' being Subset-Family of X st
+        (for A being Subset of X holds A in F'
+        iff A is open closed & x in A) & meet F' = S';
+        then consider F being Subset-Family of X such that
+   A3:  (for A being Subset of X holds A in F
+   iff A is open closed
+        & x in A) & meet F = S;
+        consider F' being Subset-Family of X such that
+   A4: (for A being Subset of X holds A in F'
+   iff A is open closed
+        & x in A) & meet F' = S' by A2;
+   A5: F <> {} & F' <> {} by A3,A4,Th28;
+         now let y be set;
+       A6:  now assume
+A7:            y in S;
+                 for B being set st B in F' holds y in B
+               proof
+                let B be set; assume
+               A8: B in F';
+                   then reconsider B1=B as Subset of X;
+                     B1 is open closed & x in B1 by A4,A8;
+                   then B1 in F by A3;
+                hence y in B by A3,A7,SETFAM_1:def 1;
+               end;
+             hence y in S' by A4,A5,SETFAM_1:def 1;
+           end;
+             now assume
+A9:            y in S';
+                 for B being set st B in F holds y in B
+               proof
+                let B be set; assume
+                A10: B in F;
+                   then reconsider B1=B as Subset of X;
+                      B1 is open closed & x in B1 by A3,A10;
+                    then B1 in F' by A4;
+                hence y in B by A4,A9,SETFAM_1:def 1;
+               end;
+             hence y in S by A3,A5,SETFAM_1:def 1;
+           end;
+         hence y in S iff y in S' by A6;
+       end;
+     hence S = S' by TARSKI:2;
+   end;
+end;
+
+canceled;
+
+theorem
+    x in qskl x
+proof
+    consider F being Subset-Family of X such that
+A1: (for A being Subset of X holds A in F iff A is open closed
+    & x in A) and
+A2: qskl x = meet F by Def7;
+A3: F <> {} by A1,Th28;
+      for A being set holds A in F implies x in A by A1;
+  hence x in qskl x by A2,A3,SETFAM_1:def 1;
+end;
+
+theorem
+   for A being Subset of X st A is open closed & x in A holds
+   A c= qskl x implies A = qskl x
+proof
+ let A be Subset of X; assume
+A1: A is open closed & x in A; assume
+A2: A c= qskl x;
+    consider F being Subset-Family of X such that
+A3: for A being Subset of X holds
+    (A in F iff A is open closed & x in A) and
+A4: qskl x = meet F by Def7;
+      A in F by A1,A3;
+    then qskl x c= A by A4,SETFAM_1:4;
+  hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+theorem
+   qskl x is closed
+proof
+    consider F being Subset-Family of X such that
+A1: for A being Subset of X holds
+    (A in F iff A is open closed & x in A) and
+A2: qskl x = meet F by Def7;
+      for A being Subset of X st A in F holds A is closed by A1;
+ hence qskl x is closed by A2,PRE_TOPC:44;
+end;
+
+theorem
+   skl x c= qskl x
+proof
+    consider F' being Subset-Family of X such that
+A1: for A being Subset of X holds
+    (A in F' iff A is open closed & x in A) and
+A2: qskl x = meet F' by Def7;
+A3:F' <> {} by A1,Th28;
+      for B1 being set st B1 in F' holds skl x c= B1
+    proof
+     let B1 be set; assume
+     A4: B1 in F';
+         then reconsider B=B1 as Subset of X;
+     A5: B is open closed & x in B by A1,A4;
+         set S=skl x;
+     A6: [#] X = B \/ B` by PRE_TOPC:18;
+     A7: S = S /\ [#] X by PRE_TOPC:15
+          .= (S /\ B) \/ (S /\ B`) by A6,XBOOLE_1:23;
+           Cl B = B & B` is closed by A5,PRE_TOPC:52,TOPS_1:30;
+         then Cl B = B & Cl B` = B` by PRE_TOPC:52;
+         then Cl B misses B` & B misses Cl B` by PRE_TOPC:26;
+     then A8: B,B` are_separated by CONNSP_1:def 1;
+     A9: x in S by CONNSP_1:40;
+           S /\ B c= B & S /\ B` c= B` by XBOOLE_1:17;
+    then A10: S /\ B,S /\ B` are_separated by A8,CONNSP_1:8;
+           S is connected by CONNSP_1:41;
+then S /\ B = {}X or S /\ B` = {}X by A7,A10,CONNSP_1:16;
+         then S misses B` by A5,A9,XBOOLE_0:def 3,def 7;
+         then S c= B`` by PRE_TOPC:21;
+      hence thesis;
+    end;
+  hence skl x c= qskl x by A2,A3,SETFAM_1:6;
+end;

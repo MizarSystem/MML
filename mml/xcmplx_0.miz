@@ -1,0 +1,684 @@
+:: Complex Numbers - Basic Definitions
+::  by Library Committee
+::
+:: Received March 7, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary XCMPLX_0, ARYTM_0, COMPLEX1, ARYTM, FUNCOP_1, BOOLE, FUNCT_1,
+      FUNCT_2, ORDINAL2, ORDINAL1, RELAT_1, OPPCAT_1, ARYTM_1, ARYTM_2,
+      ARYTM_3, XREAL_0;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, FUNCT_1, FUNCT_2, FUNCT_4,
+      ORDINAL1, ORDINAL2, ARYTM_2, ARYTM_1, NUMBERS, ARYTM_0;
+ constructors ARYTM_1, FRAENKEL, FUNCT_4, ARYTM_0, XBOOLE_0;
+ clusters NUMBERS, FRAENKEL, FUNCT_2, ZFMISC_1, XBOOLE_0;
+ requirements BOOLE, SUBSET, NUMERALS;
+ theorems ARYTM_0, XBOOLE_0, FUNCT_4, FUNCT_2, ORDINAL2, ZFMISC_1, ARYTM_2,
+      TARSKI, ARYTM_1, XBOOLE_1, NUMBERS;
+
+begin
+
+Lm1: one = succ 0 by ORDINAL2:def 4 .= 1;
+
+definition
+ func <i> equals
+:Def1: (0,1) --> (0,1);
+ coherence;
+ let c be number;
+ attr c is complex means
+:Def2: c in COMPLEX;
+end;
+
+definition
+ cluster <i> -> complex;
+ coherence
+  proof set X = { x where x is Element of Funcs({0,one},REAL): x.1 = 0};
+A1:  now assume <i> in X;
+      then ex x being Element of Funcs({0,one},REAL) st <i> = x & x.1 = 0;
+     hence contradiction by Def1,FUNCT_4:66;
+    end;
+    reconsider z=0, j=1 as Element of REAL;
+      <i> = (0,1) --> (z,j) by Def1;
+    then <i> in Funcs({0,one},REAL) by Lm1,FUNCT_2:11;
+    then <i> in Funcs({0,one},REAL) \ X by A1,XBOOLE_0:def 4;
+   hence <i> in COMPLEX by Lm1,NUMBERS:def 2,XBOOLE_0:def 2;
+  end;
+end;
+
+definition
+ cluster complex number;
+ existence
+  proof
+   take <i>;
+   thus thesis;
+  end;
+end;
+
+definition let x be complex number;
+  redefine attr x is empty means
+      x = 0;
+  compatibility;
+  synonym x is zero;
+end;
+
+definition let x,y be complex number;
+     x in COMPLEX by Def2;
+   then consider x1,x2 being Element of REAL such that
+A1: x = [*x1,x2*] by ARYTM_0:11;
+     y in COMPLEX by Def2;
+   then consider y1,y2 being Element of REAL such that
+A2: y = [*y1,y2*] by ARYTM_0:11;
+ func x+y means :Def4:
+  ex x1,x2,y1,y2 being Element of REAL st
+   x = [*x1,x2*] & y = [*y1,y2*] & it = [*+(x1,y1),+(x2,y2)*];
+ existence
+  proof
+   take [*+(x1,y1),+(x2,y2)*];
+   thus thesis by A1,A2;
+  end;
+ uniqueness
+  proof let c1,c2 be number;
+   given x1,x2,y1,y2 being Element of REAL such that
+A3: x = [*x1,x2*] and
+A4: y = [*y1,y2*] and
+A5: c1 = [*+(x1,y1),+(x2,y2)*];
+   given x1',x2',y1',y2' being Element of REAL such that
+A6: x = [*x1',x2'*] and
+A7: y = [*y1',y2'*] and
+A8: c2 = [*+(x1',y1'),+(x2',y2')*];
+     x1 = x1' & x2 = x2' & y1 = y1' & y2 = y2' by A3,A4,A6,A7,ARYTM_0:12;
+   hence c1 = c2 by A5,A8;
+  end;
+ commutativity;
+ func x*y means :Def5:
+  ex x1,x2,y1,y2 being Element of REAL st
+   x = [*x1,x2*] & y = [*y1,y2*] &
+    it = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *];
+ existence
+  proof
+   take [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *];
+   thus thesis by A1,A2;
+  end;
+ uniqueness
+  proof let c1,c2 be number;
+   given x1,x2,y1,y2 being Element of REAL such that
+A9: x = [*x1,x2*] and
+A10: y = [*y1,y2*] and
+A11: c1 = [*+(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1))*];
+   given x1',x2',y1',y2' being Element of REAL such that
+A12: x = [*x1',x2'*] and
+A13: y = [*y1',y2'*] and
+A14: c2 = [*+(*(x1',y1'),opp*(x2',y2')), +(*(x1',y2'),*(x2',y1'))*];
+     x1 = x1' & x2 = x2' & y1 = y1' & y2 = y2' by A9,A10,A12,A13,ARYTM_0:12;
+   hence c1 = c2 by A11,A14;
+  end;
+ commutativity;
+end;
+
+Lm2:  0 = [*0,0*] by ARYTM_0:def 7;
+     reconsider j = one as Element of REAL by ARYTM_0:1,ARYTM_2:21;
+Lm3: for x,y,z being Element of REAL st +(x,y) = 0 & +(x,z) = 0
+   holds y = z
+  proof let x,y,z be Element of REAL such that
+A1: +(x,y) = 0 and
+A2: +(x,z) = 0;
+    per cases;
+    suppose x in REAL+ & y in REAL+ & z in REAL+;
+     then (ex x',y' being Element of REAL+ st x = x' & y = y' & 0 = x' + y')
+      & ex x',y' being Element of REAL+ st x = x' & z = y' & 0 = x' + y'
+                   by A1,A2,ARYTM_0:def 2;
+    hence y = z by ARYTM_2:12;
+    suppose that
+A3:  x in REAL+ and
+A4:  y in REAL+ and
+A5:  z in [:{0},REAL+:];
+     consider x',y' being Element of REAL+ such that
+A6:   x = x' and y = y' and
+A7:   0 = x' + y' by A1,A3,A4,ARYTM_0:def 2;
+     consider x'',y'' being Element of REAL+ such that
+A8:   x = x'' and
+A9:   z = [0,y''] and
+A10:   0 = x'' - y'' by A2,A3,A5,ARYTM_0:def 2;
+A11:   x'' = 0 by A6,A7,A8,ARYTM_2:6;
+       [{},{}] in {[{},{}]} by TARSKI:def 1;
+     then
+A12:    not [{},{}] in REAL by NUMBERS:def 1,XBOOLE_0:def 4;
+       z in REAL;
+    hence y = z by A9,A10,A11,A12,ARYTM_1:19;
+    suppose that
+A13:  x in REAL+ and
+A14:  z in REAL+ and
+A15:  y in [:{0},REAL+:];
+     consider x',z' being Element of REAL+ such that
+A16:   x = x' and z = z' and
+A17:   0 = x' + z' by A2,A13,A14,ARYTM_0:def 2;
+     consider x'',y' being Element of REAL+ such that
+A18:   x = x'' and
+A19:   y = [0,y'] and
+A20:   0 = x'' - y' by A1,A13,A15,ARYTM_0:def 2;
+A21:   x'' = 0 by A16,A17,A18,ARYTM_2:6;
+       [0,0] in {[0,0]} by TARSKI:def 1;
+     then
+A22:    not [0,0] in REAL by NUMBERS:def 1,XBOOLE_0:def 4;
+       y in REAL;
+    hence z = y by A19,A20,A21,A22,ARYTM_1:19;
+    suppose that
+A23:  x in REAL+ and
+A24:  y in [:{0},REAL+:] and
+A25:  z in [:{0},REAL+:];
+     consider x',y' being Element of REAL+ such that
+A26:   x = x' and
+A27:   y = [0,y'] and
+A28:   0 = x' - y' by A1,A23,A24,ARYTM_0:def 2;
+     consider x'',z' being Element of REAL+ such that
+A29:   x = x'' and
+A30:   z = [0,z'] and
+A31:   0 = x'' - z' by A2,A23,A25,ARYTM_0:def 2;
+       y' = x' by A28,ARYTM_0:6 .= z' by A26,A29,A31,ARYTM_0:6;
+    hence y = z by A27,A30;
+    suppose that
+A32:  z in REAL+ and
+A33:  y in REAL+ and
+A34:  x in [:{0},REAL+:];
+     consider x',y' being Element of REAL+ such that
+A35:   x = [0,x'] and
+A36:   y = y' and
+A37:   0 = y' - x' by A1,A33,A34,ARYTM_0:def 2;
+     consider x'',z' being Element of REAL+ such that
+A38:   x = [0,x''] and
+A39:   z = z' and
+A40:   0 = z' - x'' by A2,A32,A34,ARYTM_0:def 2;
+       x' = x'' by A35,A38,ZFMISC_1:33;
+     then z' = x' by A40,ARYTM_0:6 .= y' by A37,ARYTM_0:6;
+    hence y = z by A36,A39;
+    suppose not(x in REAL+ & y in REAL+) &
+            not(x in REAL+ & y in [:{0},REAL+:]) &
+            not(y in REAL+ & x in [:{0},REAL+:]);
+     then ex x',y' being Element of REAL+
+      st x = [0,x'] & y = [0,y'] & 0 = [0,x'+y'] by A1,ARYTM_0:def 2;
+    hence y = z;
+    suppose not(x in REAL+ & z in REAL+) &
+            not(x in REAL+ & z in [:{0},REAL+:]) &
+            not(z in REAL+ & x in [:{0},REAL+:]);
+     then ex x',z' being Element of REAL+
+      st x = [0,x'] & z = [0,z'] & 0 = [0,x'+z'] by A2,ARYTM_0:def 2;
+    hence y = z;
+   end;
+
+definition let z,z' be complex number;
+ cluster z+z' -> complex;
+ coherence
+  proof
+      ex x1,x2,y1,y2 being Element of REAL st
+     z = [*x1,x2*] & z' = [*y1,y2*] & z+z' = [*+(x1,y1),+(x2,y2)*] by Def4;
+   hence z+z' in COMPLEX;
+  end;
+ cluster z*z' -> complex;
+ coherence
+  proof
+      ex x1,x2,y1,y2 being Element of REAL st
+     z = [*x1,x2*] & z' = [*y1,y2*] &
+    z*z' = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *] by Def5;
+   hence z*z' in COMPLEX;
+  end;
+end;
+
+definition let z be complex number;
+     z in COMPLEX by Def2;
+   then consider x,y being Element of REAL such that
+A1: z = [*x,y*] by ARYTM_0:11;
+ func -z -> complex number means :Def6:
+   z + it = 0;
+ existence
+  proof
+    reconsider z' = [*opp x, opp y*] as complex number by Def2;
+   take z';
+      0 = +(x,opp x) & 0 = +(y,opp y) by ARYTM_0:def 4;
+   hence thesis by A1,Def4,Lm2;
+  end;
+ uniqueness
+  proof let c1,c2 be complex number such that
+A2: z+c1 = 0 and
+A3: z+c2 = 0;
+   consider x1,x2,y1,y2 being Element of REAL such that
+A4: z = [*x1,x2*] and
+A5: c1 = [*y1,y2*] and
+A6: 0 = [*+(x1,y1),+(x2,y2)*] by A2,Def4;
+   consider x1',x2',y1',y2' being Element of REAL such that
+A7: z = [*x1',x2'*] and
+A8: c2 = [*y1',y2'*] and
+A9: 0 = [*+(x1',y1'),+(x2',y2')*] by A3,Def4;
+A10:  x1 = x1' & x2 = x2' by A4,A7,ARYTM_0:12;
+A11: +(x1,y1) = 0 by A6,Lm2,ARYTM_0:12;
+      +(x1,y1') = 0 by A9,A10,Lm2,ARYTM_0:12;
+    then A12: y1 = y1' by A11,Lm3;
+A13: +(x2,y2) = 0 by A6,Lm2,ARYTM_0:12;
+      +(x2,y2') = 0 by A9,A10,Lm2,ARYTM_0:12;
+   hence c1 = c2 by A5,A8,A12,A13,Lm3;
+  end;
+ involutiveness;
+ func z" -> complex number means :Def7:
+   z*it = 1 if z <> 0
+   otherwise it = 0;
+ existence
+  proof
+   thus z <> 0 implies
+     ex z' being complex number st z*z' = 1
+    proof
+      set y1 = *(x,inv +(*(x,x),*(y,y))), y2 = *(opp y,inv +(*(x,x),*(y,y)));
+      set z' = [* y1, y2 *];
+      reconsider z' as complex number by Def2;
+     assume
+A14:    z <> 0;
+     take z';
+A15:    opp *(y,y2)
+        = opp *(y,opp *(y,inv +(*(x,x),*(y,y)))) by ARYTM_0:17
+       .= opp opp *(y,*(y,inv +(*(x,x),*(y,y)))) by ARYTM_0:17
+       .= *(*(y,y),inv +(*(x,x),*(y,y))) by ARYTM_0:15;
+A16:    *(x,y1) = *(*(x,x),inv +(*(x,x),*(y,y))) by ARYTM_0:15;
+A17:    now assume +(*(x,x),*(y,y)) = 0;
+        then x = 0 & y = 0 by ARYTM_0:19;
+       hence contradiction by A1,A14,ARYTM_0:def 7;
+      end;
+        *(x,y2) = *(opp y,y1) by ARYTM_0:15
+           .= opp *(y,y1) by ARYTM_0:17;
+      then +(*(x,y2),*(y,y1)) = 0 by ARYTM_0:def 4;
+      then [* +(*(x,y1),opp*(y,y2)), +(*(x,y2),*(y,y1)) *]
+             = +(*(x,y1),opp*(y,y2)) by ARYTM_0:def 7
+            .=*(+(*(x,x),*(y,y)),inv +(*(x,x),*(y,y))) by A15,A16,ARYTM_0:16
+            .= one by A17,ARYTM_0:def 5;
+     hence z*z' = 1 by A1,Def5,Lm1;
+    end;
+   assume z = 0;
+   hence thesis;
+  end;
+ uniqueness
+  proof let c1,c2 be complex number;
+   thus z <> 0 & z*c1 = 1 & z*c2 = 1 implies c1 = c2
+    proof assume that
+A18:   z <> 0 and
+A19:   z*c1 = 1 and
+A20:   z*c2 = 1;
+A21: for z' being complex number st z*z' = 1
+ holds z' = [* *(x,inv +(*(x,x),*(y,y))) , *(opp y,inv +(*(x,x),*(y,y))) *]
+proof let z' being complex number such that
+A22: z*z' = 1;
+  consider x1,x2,x',y' being Element of REAL such that
+A23: z = [*x1,x2*] and
+A24: z' = [*x',y'*] and
+A25: 1 = [* +(*(x1,x'),opp*(x2,y')), +(*(x1,y'),*(x2,x')) *] by A22,Def5;
+A26:  x = x1 & y = x2 by A1,A23,ARYTM_0:12;
+   per cases by A1,A18,ARYTM_0:def 7;
+   suppose that
+A27: x = 0 and
+A28: y <> 0;
+      +(y, opp y) = 0 by ARYTM_0:def 4;
+    then A29: opp y <> 0 by A28,ARYTM_0:13;
+A30:  *(x,y') = 0 by A27,ARYTM_0:14;
+      *(x,x') = 0 by A27,ARYTM_0:14;
+    then A31:   1 = [* opp*(y,y'), +(0,*(y,x')) *] by A25,A26,A30,ARYTM_0:13
+        .= [* opp*(y,y'), *(y,x') *] by ARYTM_0:13;
+A32:   one = [*j,0*] by ARYTM_0:def 7;
+       *(opp y,y') = opp*(y,y') by ARYTM_0:17 .= one by A31,A32,Lm1,ARYTM_0:12;
+     then A33:    y' = inv opp y by A29,ARYTM_0:def 5;
+A34:   *(x,x) = 0 by A27,ARYTM_0:14;
+       *(opp y,opp inv y) = opp *(y,opp inv y) by ARYTM_0:17
+        .= opp opp *(y,inv y) by ARYTM_0:17
+        .= one by A28,ARYTM_0:def 5;
+     then A35:   inv opp y = opp inv y by A29,ARYTM_0:def 5;
+       *(y,x') = 0 by A31,A32,Lm1,ARYTM_0:12;
+    hence z' = [*0,inv opp y*] by A24,A28,A33,ARYTM_0:23
+       .= [* 0 , opp *(j,inv y) *] by A35,ARYTM_0:21
+       .= [* 0 , opp *(*(y,inv y),inv y) *] by A28,ARYTM_0:def 5
+       .= [* 0 , opp *(y,*(inv y,inv y)) *] by ARYTM_0:15
+       .= [* 0 , *(opp y,*(inv y,inv y)) *] by ARYTM_0:17
+       .= [* 0 , *(opp y,inv *(y,y)) *] by ARYTM_0:24
+       .= [* 0 , *(opp y,inv +(0,*(y,y))) *] by ARYTM_0:13
+       .= [* *(x,inv +(*(x,x),*(y,y))) , *(opp y,inv +(*(x,x),*(y,y))) *]
+                  by A27,A34,ARYTM_0:14;
+   suppose that
+A36: opp y = 0 and
+A37: x <> 0;
+      +(y,opp y) = 0 by ARYTM_0:def 4;
+     then A38:    y = 0 by A36,ARYTM_0:13;
+     then A39:    *(y,x') = 0 by ARYTM_0:14;
+       opp*(y,y') = *(opp y,y') by ARYTM_0:17 .= 0 by A36,ARYTM_0:14;
+     then A40: one = [* *(x,x'), +(*(x,y'),0) *] by A25,A26,A39,Lm1,ARYTM_0:13
+          .= [* *(x,x'), *(x,y') *] by ARYTM_0:13;
+A41:   one = [*j,0*] by ARYTM_0:def 7;
+     then *(x,x') = one by A40,ARYTM_0:12;
+     then A42:     x' = inv x by A37,ARYTM_0:def 5;
+       *(x,y') = 0 by A40,A41,ARYTM_0:12;
+     then A43:    y' = 0 by A37,ARYTM_0:23;
+A44:   *(y,y) = 0 by A38,ARYTM_0:14;
+       x' = *(j,inv x) by A42,ARYTM_0:21
+       .= *(*(x,inv x),inv x) by A37,ARYTM_0:def 5
+       .= *(x,*(inv x,inv x)) by ARYTM_0:15
+       .= *(x,inv *(x,x)) by ARYTM_0:24
+       .= *(x,inv +(*(x,x),0)) by ARYTM_0:13;
+    hence z'
+      = [* *(x,inv +(*(x,x),*(y,y))) , *(opp y,inv +(*(x,x),*(y,y))) *]
+                by A24,A36,A43,A44,ARYTM_0:14;
+   suppose that
+A45: opp y <> 0 and
+A46: x <> 0;
+A47: now assume +(*(*(x,x), inv opp y),opp y) = 0;
+      then +(*(*(x,x), inv opp y),*(opp y,j)) = 0 by ARYTM_0:21;
+      then +(*(*(x,x), inv opp y),*(opp y,*(opp y, inv opp y))) = 0
+                  by A45,ARYTM_0:def 5;
+      then +(*(*(x,x), inv opp y),*(*(opp y,opp y), inv opp y)) = 0
+                  by ARYTM_0:15;
+      then A48:     *(inv opp y, +(*(x,x),*(opp y,opp y))) = 0 by ARYTM_0:16;
+        +(*(x,x),*(opp y,opp y)) <> 0 by A46,ARYTM_0:19;
+      then A49:     inv opp y = 0 by A48,ARYTM_0:23;
+        *(opp y,inv opp y) = one by A45,ARYTM_0:def 5;
+     hence contradiction by A49,ARYTM_0:14;
+    end;
+   reconsider j = one as Element of REAL by ARYTM_0:1,ARYTM_2:21;
+A50: one = [*j,0*] by ARYTM_0:def 7;
+   then +(*(x1,y'),*(x2,x')) = 0 by A25,Lm1,ARYTM_0:12;
+   then *(x,y') = opp*(y,x') by A26,ARYTM_0:def 4;
+   then *(x,y') = *(opp y,x') by ARYTM_0:17;
+   then A51:  x' = *(*(x,y'), inv opp y) by A45,ARYTM_0:22
+    .= *(x,*(y', inv opp y)) by ARYTM_0:15;
+   then +(*(x,*(x,*(y', inv opp y))),opp*(y,y')) = one by A25,A26,A50,Lm1,
+ARYTM_0:12;
+   then +(*(*(x,x),*(y', inv opp y)),opp*(y,y')) = one by ARYTM_0:15;
+   then +(*(*(x,x),*(y', inv opp y)),*(opp y,y')) = one by ARYTM_0:17;
+   then +(*(y',*(*(x,x), inv opp y)),*(opp y,y')) = one by ARYTM_0:15;
+   then *(y',+(*(*(x,x), inv opp y),opp y)) = one by ARYTM_0:16;
+   then A52:  y' = inv +(*(*(x,x), inv opp y),opp y) by A47,ARYTM_0:def 5;
+   then A53:  x' = *(x,inv *(+(*(*(x,x), inv opp y),opp y), opp y)) by A51,
+ARYTM_0:24
+    .= *(x,inv +(*(*(*(x,x), inv opp y),opp y),*(opp y, opp y))) by ARYTM_0:16
+    .= *(x,inv +(*(*(*(x,x), inv opp y),opp y),opp*(y, opp y))) by ARYTM_0:17
+    .= *(x,inv +(*(*(*(x,x), inv opp y),opp y),opp opp*(y,y))) by ARYTM_0:17
+    .= *(x,inv +(*(*(x,x), *(inv opp y,opp y)),*(y,y))) by ARYTM_0:15
+    .= *(x,inv +(*(*(x,x), j),*(y,y))) by A45,ARYTM_0:def 5
+    .= *(x,inv +(*(x,x),*(y,y))) by ARYTM_0:21;
+     y' = *(j,inv +(*(*(x,x), inv opp y),opp y)) by A52,ARYTM_0:21
+     .= *(*(opp y, inv opp y),inv +(*(*(x,x), inv opp y),opp y))
+                      by A45,ARYTM_0:def 5
+     .= *(opp y, *(inv opp y,inv +(*(*(x,x), inv opp y),opp y))) by ARYTM_0:15
+     .= *(opp y, inv *(opp y,+(*(*(x,x), inv opp y),opp y))) by ARYTM_0:24
+     .= *(opp y, inv +(*(opp y,*(*(x,x), inv opp y)),*(opp y,opp y)))
+           by ARYTM_0:16
+     .= *(opp y, inv +(*(*(x,x),*(opp y, inv opp y)),*(opp y,opp y)))
+           by ARYTM_0:15
+     .= *(opp y, inv +(*(*(x,x),j),*(opp y,opp y))) by A45,ARYTM_0:def 5
+     .= *(opp y, inv +(*(x,x),*(opp y,opp y))) by ARYTM_0:21
+     .= *(opp y, inv +(*(x,x),opp *(y,opp y))) by ARYTM_0:17
+     .= *(opp y, inv +(*(x,x),opp opp *(y,y))) by ARYTM_0:17
+     .= *(opp y, inv +(*(x,x),*(y,y)));
+ hence z' = [* *(x,inv +(*(x,x),*(y,y))) , *(opp y,inv +(*(x,x),*(y,y))) *]
+                 by A24,A53;
+end;
+     hence c1 = [* *(x,inv +(*(x,x),*(y,y))) , *(opp y,inv +(*(x,x),*(y,y)))
+          *] by A19
+     .= c2 by A20,A21;
+    end;
+   thus thesis;
+  end;
+ consistency;
+  involutiveness
+   proof let z,z' be complex number;
+    assume that
+A54:  z' <> 0 implies z'*z = 1 and
+A55:  z' = 0 implies z = 0;
+    thus z <> 0 implies z*z' = 1 by A54,A55;
+    assume
+A56:  z = 0;
+    assume z' <> 0;
+     then consider x1,x2,y1,y2 being Element of REAL such that
+A57:  z = [*x1,x2*] and
+       z' = [*y1,y2*] and
+A58:  1 = [*+(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1))*] by A54,Def5;
+       z = [*0,0*] by A56,ARYTM_0:def 7;
+     then A59:    x1 = 0 & x2 = 0 by A57,ARYTM_0:12;
+     then A60:    *(x1,y1) = 0 by ARYTM_0:14;
+       *(x2,y2) = 0 by A59,ARYTM_0:14;
+     then A61:    +(*(x1,y1),opp*(x2,y2)) = 0 by A60,ARYTM_0:def 4;
+       *(x1,y2) = 0 & *(x2,y1) = 0 by A59,ARYTM_0:14;
+     then +(*(x1,y2),*(x2,y1)) = 0 by ARYTM_0:13;
+    hence contradiction by A58,A61,ARYTM_0:def 7;
+   end;
+end;
+
+definition let x,y be complex number;
+  func x-y equals :Def8:
+    x+(-y);
+   coherence;
+  func x/y equals :Def9:
+    x * y";
+   coherence;
+end;
+
+definition let x,y be complex number;
+  cluster x-y -> complex;
+ coherence proof x-y = x+-y by Def8; hence thesis; end;
+  cluster x/y -> complex;
+ coherence proof x/y = x*y" by Def9; hence thesis; end;
+end;
+
+Lm4:  for x, y, z being complex number holds
+  x * (y * z) = (x * y) * z
+proof
+   let x, y, z be complex number;
+   consider x1,x2,y1,y2 being Element of REAL such that
+A1: x = [*x1,x2*] and
+A2: y = [*y1,y2*] and
+A3: x*y = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *]
+      by Def5;
+   consider y3,y4,z1,z2 being Element of REAL such that
+A4: y = [*y3,y4*] and
+A5: z = [*z1,z2*] and
+A6: y*z = [* +(*(y3,z1),opp*(y4,z2)), +(*(y3,z2),*(y4,z1)) *]
+      by Def5;
+A7: y1 = y3 & y2 = y4 by A2,A4,ARYTM_0:12;
+   consider x3,x4,yz1,yz2 being Element of REAL such that
+A8: x = [*x3,x4*] and
+A9: y*z = [*yz1,yz2*] and
+A10: x*(y*z) = [* +(*(x3,yz1),opp*(x4,yz2)), +(*(x3,yz2),*(x4,yz1)) *]
+      by Def5;
+A11: x1 = x3 & x2 = x4 by A1,A8,ARYTM_0:12;
+   consider xy1,xy2,z3,z4 being Element of REAL such that
+A12: x*y = [*xy1,xy2*] and
+A13: z = [*z3,z4*] and
+A14: (x*y)*z = [* +(*(xy1,z3),opp*(xy2,z4)), +(*(xy1,z4),*(xy2,z3)) *]
+       by Def5;
+A15: z1 = z3 & z2 = z4 by A5,A13,ARYTM_0:12;
+A16: xy1 = +(*(x1,y1),opp*(x2,y2)) & xy2 = +(*(x1,y2),*(x2,y1))
+          by A3,A12,ARYTM_0:12;
+A17: yz1 = +(*(y3,z1),opp*(y4,z2)) & yz2 = +(*(y3,z2),*(y4,z1))
+          by A6,A9,ARYTM_0:12;
+      +(*(opp x4,*(y3,z2)),*(opp x4,*(y4,z1)))
+       = +(*(opp x4,*(y4,z1)),*(*(opp x2,y1),z4)) by A7,A11,A15,ARYTM_0:15
+      .= +(*(*(opp x2,y2),z3),*(*(opp x2,y1),z4)) by A7,A11,A15,ARYTM_0:15;
+     then A18:     +(*(x3,*(opp y4,z2)),+(*(opp x4,*(y3,z2)),*(opp x4,*(y4,z1))
+))
+       = +(*(*(x1,opp y2),z4), +(*(*(opp x2,y2),z3),*(*(opp x2,y1),z4)))
+                 by A7,A11,A15,ARYTM_0:15
+      .= +(*(opp *(x1,y2),z4), +(*(*(opp x2,y2),z3),*(*(opp x2,y1),z4)))
+                by ARYTM_0:17
+      .= +(*(*(opp x1,y2),z4), +(*(*(opp x2,y2),z3),*(*(opp x2,y1),z4)))
+                by ARYTM_0:17
+      .= +(*(*(opp x2,y2),z3), +(*(*(opp x1,y2),z4),*(*(opp x2,y1),z4)))
+                              by ARYTM_0:25;
+A19:  +(*(x3,yz1),opp*(x4,yz2)) = +(*(x3,yz1),*(opp x4,yz2)) by ARYTM_0:17
+       .= +(*(x3,+(*(y3,z1),*(opp y4,z2))),*(opp x4,yz2)) by A17,ARYTM_0:17
+       .= +(+(*(x3,*(y3,z1)),*(x3,*(opp y4,z2))),
+            *(opp x4,+(*(y3,z2),*(y4,z1)))) by A17,ARYTM_0:16
+       .= +(+(*(x3,*(y3,z1)),*(x3,*(opp y4,z2))),
+            +(*(opp x4,*(y3,z2)),*(opp x4,*(y4,z1)))) by ARYTM_0:16
+       .= +(*(x3,*(y3,z1)),+(*(*(opp x2,y2),z3),
+            +(*(*(opp x1,y2),z4),*(*(opp x2,y1),z4)))) by A18,ARYTM_0:25
+      .= +(+(*(x3,*(y3,z1)),*(*(opp x2,y2),z3)),
+            +(*(*(opp x1,y2),z4),*(*(opp x2,y1),z4))) by ARYTM_0:25
+       .= +(+(*(*(x1,y1),z3),*(*(opp x2,y2),z3)),
+            +(*(*(opp x1,y2),z4),*(*(opp x2,y1),z4))) by A7,A11,A15,ARYTM_0:15
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            +(*(*(opp x1,y2),z4),*(*(opp x2,y1),z4))) by ARYTM_0:16
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            +(*(*(opp x1,y2),z4),*(opp *(x2,y1),z4))) by ARYTM_0:17
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            +(*(*(opp x1,y2),z4),opp *(*(x2,y1),z4))) by ARYTM_0:17
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            +(*(opp *(x1,y2),z4),opp *(*(x2,y1),z4))) by ARYTM_0:17
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            +(opp *(*(x1,y2),z4),opp *(*(x2,y1),z4))) by ARYTM_0:17
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            opp +(*(*(x1,y2),z4),*(*(x2,y1),z4))) by ARYTM_0:27
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),
+            opp*( +(*(x1,y2),*(x2,y1)),z4)) by ARYTM_0:16
+       .= +(*(+(*(x1,y1),*(opp x2,y2)),z3),*(opp xy2,z4)) by A16,ARYTM_0:17
+       .= +(*(xy1,z3),*(opp xy2,z4)) by A16,ARYTM_0:17
+       .= +(*(xy1,z3),opp*(xy2,z4)) by ARYTM_0:17;
+A20: +(*(opp*(x2,y2),z4),*(*(x2,y1),z3))
+       = +(opp*(*(x2,y2),z4),*(*(x2,y1),z3)) by ARYTM_0:17
+      .= +(*(x4,*(y3,z1)),opp*(*(x2,y2),z4)) by A7,A11,A15,ARYTM_0:15
+      .= +(*(x4,*(y3,z1)),opp*(x4,*(y4,z2))) by A7,A11,A15,ARYTM_0:15
+      .= +(*(x4,*(y3,z1)),*(x4,opp*(y4,z2))) by ARYTM_0:17;
+A21: +(*(opp*(x2,y2),z4),*(xy2,z3))
+        = +(*(opp*(x2,y2),z4),+(*(*(x1,y2),z3),*(*(x2,y1),z3)))
+               by A16,ARYTM_0:16
+       .= +(*(*(x1,y2),z3),+(*(opp*(x2,y2),z4),*(*(x2,y1),z3))) by ARYTM_0:25
+       .= +(*(x3,*(y4,z1)),+(*(x4,*(y3,z1)),*(x4,opp*(y4,z2))))
+                 by A7,A11,A15,A20,ARYTM_0:15
+       .= +(*(x3,*(y4,z1)),*(x4,yz1)) by A17,ARYTM_0:16;
+    +(*(xy1,z4),*(xy2,z3))
+        = +(+(*(*(x1,y1),z4),*(opp*(x2,y2),z4)),*(xy2,z3)) by A16,ARYTM_0:16
+       .= +(*(*(x1,y1),z4),+(*(opp*(x2,y2),z4),*(xy2,z3))) by ARYTM_0:25
+       .= +(*(x3,*(y3,z2)),+(*(x3,*(y4,z1)),*(x4,yz1)))
+                   by A7,A11,A15,A21,ARYTM_0:15
+       .= +(+(*(x3,*(y3,z2)),*(x3,*(y4,z1))),*(x4,yz1)) by ARYTM_0:25
+       .= +(*(x3,yz2),*(x4,yz1)) by A17,ARYTM_0:16;
+  hence thesis by A10,A14,A19;
+end;
+
+definition
+ cluster non zero (complex number);
+ existence
+  proof
+A1:  REAL c= COMPLEX by NUMBERS:def 2,XBOOLE_1:7;
+     one in REAL by ARYTM_0:1,ARYTM_2:21;
+    then one is complex number by A1,Def2;
+   hence thesis;
+  end;
+end;
+
+Lm5:  REAL c= COMPLEX by NUMBERS:def 2,XBOOLE_1:7;
+
+definition let x be non zero (complex number);
+  cluster -x -> non zero;
+  coherence
+   proof
+    assume
+A1:   -x = 0;
+      x + -x = 0 by Def6;
+     then consider x1,x2,y1,y2 being Element of REAL such that
+A2:   x = [*x1,x2*] and
+A3:   -x = [*y1,y2*] and
+A4:   0 = [*+(x1,y1),+(x2,y2)*] by Def4;
+A5:   +(x2,y2) = 0 by A4,ARYTM_0:26;
+     then A6:    +(x1,y1) = 0 by A4,ARYTM_0:def 7;
+A7:   y2 = 0 by A1,A3,ARYTM_0:26;
+     then A8:     y1 = 0 by A1,A3,ARYTM_0:def 7;
+      x2 = 0 by A5,A7,ARYTM_0:13;
+     then x = x1 by A2,ARYTM_0:def 7 .= 0 by A6,A8,ARYTM_0:13;
+    hence contradiction;
+   end;
+  cluster x" -> non zero;
+  coherence
+   proof
+    assume
+A9:   x" = 0;
+      x*x" = 1 by Def7;
+     then consider x1,x2,y1,y2 being Element of REAL such that
+       x = [*x1,x2*] and
+A10:   x" = [*y1,y2*] and
+A11:   1 = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *] by Def5;
+A12:   y2 = 0 by A9,A10,ARYTM_0:26;
+     then A13:   y1 = 0 by A9,A10,ARYTM_0:def 7;
+      +(*(x1,y2),*(x2,y1)) = 0 by A11,ARYTM_0:26;
+     then 1 = +(*(x1,y1),opp*(x2,y2)) by A11,ARYTM_0:def 7
+          .= +(*(x1,y1),*(opp x2,y2)) by ARYTM_0:17
+          .= +(0,*(opp x2,y2)) by A13,ARYTM_0:14
+          .= *(opp x2,y2) by ARYTM_0:13;
+    hence contradiction by A12,ARYTM_0:14;
+   end;
+ let y be non zero (complex number);
+  cluster x*y -> non zero;
+  coherence
+   proof
+A14:   1 = succ 0 .= one by ORDINAL2:def 4;
+      1 in REAL;
+     then reconsider j =1 as complex number by Def2,Lm5;
+     consider u1,u2,v1,v2 being Element of REAL such that
+A15:   j = [*u1,u2*] and
+A16:   y = [*v1,v2*] and
+A17:   j*y = [* +(*(u1,v1),opp*(u2,v2)), +(*(u1,v2),*(u2,v1)) *] by Def5;
+A18:   u2 = 0 by A15,ARYTM_0:26;
+     then *(u2,v1) = 0 by ARYTM_0:14;
+     then A19:    +(*(u1,v2),*(u2,v1)) = *(u1,v2) by ARYTM_0:13;
+A20:   u1 = 1 by A15,A18,ARYTM_0:def 7;
+      +(0,opp 0) = 0 by ARYTM_0:def 4;
+     then A21:   opp 0 = 0 by ARYTM_0:13;
+A22:   +(*(u1,v1),opp*(u2,v2)) = +(v1,opp*(u2,v2)) by A14,A20,ARYTM_0:21
+         .= +(v1,*(opp u2,v2)) by ARYTM_0:17
+         .= +(v1,*(0,v2)) by A15,A21,ARYTM_0:26
+         .= +(v1,0) by ARYTM_0:14
+         .= v1 by ARYTM_0:13;
+      0 in REAL;
+     then reconsider z =0 as complex number by Def2,Lm5;
+     consider u1,u2,v1,v2 being Element of REAL such that
+       x" = [*u1,u2*] and
+A23:   z = [*v1,v2*] and
+A24:   x"*z = [* +(*(u1,v1),opp*(u2,v2)), +(*(u1,v2),*(u2,v1)) *] by Def5;
+A25:    v2 = 0 by A23,ARYTM_0:26;
+      then A26:    v1 = 0 by A23,ARYTM_0:def 7;
+      then A27:    +(*(u1,v1),opp*(u2,v2)) = +(0,opp*(u2,v2)) by ARYTM_0:14
+         .= opp*(u2,v2) by ARYTM_0:13
+         .= 0 by A21,A25,ARYTM_0:14;
+A28:   +(*(u1,v2),*(u2,v1)) = +(0,*(u2,v1)) by A25,ARYTM_0:14
+         .= *(u2,v1) by ARYTM_0:13
+         .= 0 by A26,ARYTM_0:14;
+    assume
+A29:   x*y = 0;
+A30:   x"*x*y = x"*(x*y) by Lm4 .= 0 by A24,A27,A28,A29,ARYTM_0:def 7;
+      x"*x*y = j * y by Def7 .= y by A14,A16,A17,A19,A20,A22,ARYTM_0:21;
+    hence contradiction by A30;
+   end;
+end;
+
+definition let x,y be non zero (complex number);
+  cluster x/y -> non zero;
+  coherence
+   proof
+      x/y = x*y" by Def9;
+     hence thesis;
+   end;
+end;
+
+definition
+  cluster -> complex Element of REAL;
+  coherence
+  proof
+    let n be Element of REAL;
+     n in REAL;
+    hence thesis by Def2,Lm5;
+  end;
+end;
+
+definition
+  cluster natural -> complex number;
+  coherence
+  proof
+    let n be set;
+    assume n is natural;
+    then n in NAT by ORDINAL2:def 21;
+    then n in REAL;
+    hence thesis by Def2,Lm5;
+  end;
+end;
+

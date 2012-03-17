@@ -1,0 +1,4430 @@
+:: The set of primitive recursive functions
+::  by Grzegorz Bancerek and Piotr Rudnicki
+::
+:: Received July 27, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FUNCT_4, MATRIX_2, BOOLE,
+      PARTFUN1, SETFAM_1, FUNCT_6, MSUALG_6, FRAENKEL, TARSKI, RFUNCT_3,
+      SEQM_3, UNIALG_1, FUNCOP_1, FUNCT_2, PRALG_3, ORDINAL1, FINSEQ_4,
+      BORSUK_1, PROB_1, FUNCT_5, FINSET_1, SQUARE_1, BINTREE1, CARD_3,
+      MONOID_0, QC_LANG1, GROUP_1, ARYTM_1, COMPUT_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      NAT_1, RELAT_1, RELSET_1, FUNCT_1, FINSEQ_1, FINSEQ_2, SETFAM_1,
+      MATRIX_2, FRAENKEL, FUNCT_2, FUNCT_4, FUNCT_5, PROB_1, CARD_3, PRE_CIRC,
+      FINSEQ_4, PARTFUN1, RFUNCT_3, PRALG_3, UNIALG_1, FUNCT_6, FUNCT_7,
+      FINSET_1, SQUARE_1, NEWTON, SEQM_3, BINARITH, CARD_4;
+ constructors DOMAIN_1, MATRIX_2, FINSEQ_4, PRALG_3, RFUNCT_3, FUNCT_7,
+      PRE_CIRC, BINARITH, SEQM_3, CARD_4, PROB_1;
+ clusters XREAL_0, PARTFUN1, RELAT_1, RELSET_1, FUNCT_1, FUNCOP_1, ALTCAT_1,
+      FINSEQ_1, FINSEQ_2, FUNCT_7, FINSET_1, SUBSET_1, NAT_1, FRAENKEL,
+      MEMBERED, PRE_CIRC, NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions FRAENKEL, PARTFUN1, RFUNCT_3, UNIALG_1, FUNCT_1, RELAT_1, SEQM_3,
+      TARSKI;
+ theorems TARSKI, AXIOMS, NAT_1, ZFMISC_1, RELAT_1, RELSET_1, FINSEQ_1,
+      FUNCOP_1, PARTFUN1, FINSEQ_2, MSUALG_1, FINSEQ_4, FUNCT_6, FUNCT_1,
+      RFUNCT_3, PROB_1, FUNCT_2, GRFUNC_1, FUNCT_7, FUNCT_4, FINSEQ_3,
+      GOBOARD1, REAL_1, SUBSET_1, MATRIX_2, PRALG_3, SETFAM_1, CARD_5,
+      SQUARE_1, PRE_CIRC, FINSET_1, UNIALG_1, SEQM_3, FUNCT_5, CARD_1, CARD_3,
+      FRAENKEL, NEWTON, BINARITH, REAL_2, JORDAN4, JORDAN2B, SCMFSA10,
+      WSIERP_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, ORDINAL2;
+ schemes NAT_1, FUNCT_2, RECDEF_1, MONOID_1, PARTFUN2;
+
+begin :: Preliminaries
+
+reserve i, j, k, c, m, n for Nat,
+        a, x, y, z, X, Y for set,
+        D, E for non empty set,
+        R for Relation,
+        f, g for Function,
+        p, q for FinSequence;
+
+definition
+ let X be non empty set, n be Nat, p be Element of n-tuples_on X,
+     i be Nat, x be Element of X;
+ redefine func p+*(i,x) -> Element of n-tuples_on X;
+ coherence proof dom (p+*(i,x)) = dom p by FUNCT_7:32;
+ then len (p+*(i,x)) = len p by FINSEQ_3:31 .= n by FINSEQ_2:109;
+  hence p+*(i,x) is Element of n-tuples_on X by FINSEQ_2:110;
+ end;
+end;
+
+definition
+ let n be Nat, t be Element of n-tuples_on NAT, i be Nat;
+ redefine func t.i -> Element of NAT;
+ coherence proof
+ per cases;
+ suppose i in dom t; hence thesis by FINSEQ_2:13;
+ suppose not i in dom t; hence thesis by CARD_1:51,FUNCT_1:def 4;
+ end;
+end;
+
+canceled 2;
+
+theorem Th3:
+<*x,y*>+*(1,z) = <*z,y*> & <*x,y*>+*(2,z) = <*x,z*>
+proof set a = <*x,y*>+*(1,z), b = <*x,y*>+*(2,z);
+A1: len <*x,y*> = 2 & <*x,y*>.1 = x & <*x,y*>.2 = y by FINSEQ_1:61;
+then A2: 1 in dom <*x,y*> & 2 in dom <*x,y*> by FINSEQ_3:27;
+   then len a = 2 & a.1 = z & a.2 = y by A1,FUNCT_7:33,34,JORDAN2B:12;
+ hence <*x,y*>+*(1,z) = <*z,y*> by FINSEQ_1:61;
+     len b = 2 & b.1 = x & b.2 = z by A1,A2,FUNCT_7:33,34,JORDAN2B:12;
+ hence <*x,y*>+*(2,z) = <*x,z*> by FINSEQ_1:61;
+end;
+
+canceled;
+
+theorem Th5:
+f+*(a,x) = g+*(a,y) implies f+*(a,z) = g+*(a,z)
+proof set i = a; assume
+A1: f+*(i,x) = g+*(i,y);
+A2: dom (f+*(i,x)) = dom f by FUNCT_7:32;
+A3: dom (g+*(i,y)) = dom g by FUNCT_7:32;
+A4: dom (g+*(i,z)) = dom g by FUNCT_7:32;
+    now
+   thus dom (f+*(i,z)) = dom f by FUNCT_7:32;
+   thus dom (g+*(i,z)) = dom f by A1,A3,A4,FUNCT_7:32;
+   let a be set; assume
+  A5: a in dom f;
+   per cases;
+   suppose A6: a = i;
+    hence (f+*(i,z)).a = z by A5,FUNCT_7:33
+                     .= g+*(i,z).a by A1,A2,A3,A5,A6,FUNCT_7:33;
+   suppose A7: a <> i;
+    hence (f+*(i,z)).a = f.a by FUNCT_7:34 .= (g+*(i,y)).a by A1,A7,FUNCT_7:34
+      .= g.a by A7,FUNCT_7:34 .= (g+*(i,z)).a by A7,FUNCT_7:34;
+  end;
+  hence f+*(i,z) = g+*(i,z) by FUNCT_1:9;
+end;
+
+theorem Th6:
+Del(p+*(i,x),i) = Del(p,i)
+proof set f = p;
+ per cases;
+ suppose A1: i in dom f;
+ then 1 <= i & i <= len f by FINSEQ_3:27;
+    then 0 <> len f by AXIOMS:22;
+    then consider j being Nat such that
+ A2: len f = j+1 by NAT_1:22;
+ A3: dom (f+*(i,x)) = dom f by FUNCT_7:32;
+ then A4: len (f+*(i,x)) = len f by FINSEQ_3:31;
+    now thus len Del(f+*(i,x),i) = j by A1,A2,A3,A4,GOBOARD1:6;
+   thus len Del(f,i) = j by A1,A2,GOBOARD1:6;
+   let a be Nat; assume a in Seg j;
+  then A5: 1 <= a & a <= j by FINSEQ_1:3;
+   per cases;
+   suppose A6: a < i;
+    hence Del(f+*(i,x),i).a = (f+*(i,x)).a by A2,A4,GOBOARD1:8
+          .= f.a by A6,FUNCT_7:34 .= Del(f,i).a by A2,A6,GOBOARD1:8;
+   suppose A7: i <= a;
+    then A8: i < a+1 by NAT_1:38;
+    thus Del(f+*(i,x),i).a = (f+*(i,x)).(a+1) by A1,A2,A3,A4,A5,A7,GOBOARD1:9
+      .= f.(a+1) by A8,FUNCT_7:34 .= Del(f,i).a by A1,A2,A5,A7,GOBOARD1:9;
+  end;
+  hence Del(f+*(i,x),i) = Del(f,i) by FINSEQ_2:10;
+ suppose not i in dom f;
+  hence Del(f+*(i,x),i) = Del(f,i) by FUNCT_7:def 3;
+end;
+
+theorem Th7:
+p+*(i,a) = q+*(i,a) implies Del(p,i) = Del(q,i)
+proof set x = p, y = q; assume
+A1: x+*(i,a) = y+*(i,a);
+  set dx = Del(x,i), dy = Del(y,i); set xi = x+*(i,a), yi = y+*(i,a);
+  A2: dom xi = dom x & dom yi = dom y by FUNCT_7:32;
+  A3: Seg len xi = dom xi & Seg len x = dom x & Seg len yi = dom yi &
+      Seg len y = dom y by FINSEQ_1:def 3;
+  then A4: len xi = len x & len yi = len y by A2,FINSEQ_1:8;
+  per cases;
+  suppose A5: i in dom x;
+    now thus len dx = len dx; x <> {} by A5,FINSEQ_1:26;
+      then len x <> 0 by FINSEQ_1:25; then consider m being Nat such that
+   A6: len x = m+1 by NAT_1:22;
+   A7: len dx = m by A5,A6,GOBOARD1:6;
+    hence len dy = len dx by A1,A3,A4,A5,A6,GOBOARD1:6;
+    let j be Nat such that
+   A8: j in Seg len dx;
+   A9: 1 <= j & j <= m by A7,A8,FINSEQ_1:3;
+    per cases;
+    suppose A10: j < i;
+     hence dx.j = x.j by A6,GOBOARD1:8 .= yi.j by A1,A10,FUNCT_7:34
+       .= y.j by A10,FUNCT_7:34 .= dy.j by A1,A4,A6,A10,GOBOARD1:8;
+    suppose A11: i <= j; then A12: j+1 > i by NAT_1:38;
+     thus dx.j = x.(j+1) by A5,A6,A9,A11,GOBOARD1:9
+       .= yi.(j+1) by A1,A12,FUNCT_7:34 .= y.(j+1) by A12,FUNCT_7:34
+       .= dy.j by A1,A3,A4,A5,A6,A9,A11,GOBOARD1:9;
+  end;
+ hence Del(x,i) = Del(y,i) by FINSEQ_2:10;
+ suppose not i in dom x; then xi = x & yi = y by A1,A2,FUNCT_7:def 3;
+  hence Del(x,i) = Del(y,i) by A1;
+end;
+
+theorem Th8:
+0-tuples_on X = {{}}
+proof set S = {s where s is Element of X*: len s = 0};
+A1: 0-tuples_on X = S by FINSEQ_2:def 4;
+A2: len <*>(X*) = 0 by FINSEQ_1:25;
+   now let x be set;
+  hereby assume x in S; then consider s being Element of X* such that
+  A3: x = s & len s = 0; s = {} by A3,FINSEQ_1:25;
+   hence x in {{}} by A3,TARSKI:def 1;
+  end;
+  assume x in {{}};
+ then A4: x = {} by TARSKI:def 1; <*>(X*) is Element of X* by FINSEQ_1:66
+;
+  hence x in S by A2,A4;
+ end;
+ hence thesis by A1,TARSKI:2;
+end;
+
+theorem
+  n <> 0 implies n-tuples_on {} = {}
+proof assume that
+A1: n <> 0 and
+A2: n-tuples_on {} <> {};
+A3: n-tuples_on {} = {s where s is Element of {}*
+: len s = n} by FINSEQ_2:def 4;
+   consider x such that
+A4: x in n-tuples_on {} by A2,XBOOLE_0:def 1;
+   consider s being Element of {}* such that
+A5: s = x & len s = n by A3,A4;
+     rng s c= {} by FINSEQ_1:def 4; then rng s = {} by XBOOLE_1:3;
+   then s = {} by RELAT_1:64;
+ hence contradiction by A1,A5,FINSEQ_1:25;
+end;
+
+theorem Th10:
+{} in rng f implies <:f:> = {}
+proof assume
+A1: {} in rng f;
+A2: dom <:f:> = meet doms f by FUNCT_6:49 .= meet rng doms f by FUNCT_6:def 4;
+   consider x being set such that
+A3: x in dom f & f.x = {} by A1,FUNCT_1:def 5;
+A4: dom doms f = f"SubFuncs rng f by FUNCT_6:def 2;
+then A5: x in dom doms f by A3,FUNCT_6:28;
+   then (doms f).x = {} by A3,A4,FUNCT_5:10,FUNCT_6:def 2;
+   then {} in rng doms f by A5,FUNCT_1:12; then meet rng doms f = {} by
+SETFAM_1:5;
+ hence <:f:> = {} by A2,RELAT_1:64;
+end;
+
+theorem Th11:
+rng f = D implies rng <:<*f*>:> = 1-tuples_on D
+proof set X = D; assume
+A1: rng f = X;
+ A2: dom <:<*f*>:> = dom f by FUNCT_6:61;
+    now let x be set;
+   hereby assume x in rng <:<*f*>:>; then consider y being set such that
+   A3: y in dom <:<*f*>:> & <:<*f*>:>.y = x by FUNCT_1:def 5;
+   A4: <:<*f*>:>.y = <*f.y*> by A2,A3,FUNCT_6:61;
+      reconsider fy = f.y as Element of X by A1,A2,A3,FUNCT_1:12; <*fy*> is
+Element of 1-tuples_on X;
+    hence x in 1-tuples_on X by A3,A4;
+   end; assume x in 1-tuples_on X; then consider d being Element of X such
+that
+   A5: x = <*d*> by FINSEQ_2:117; consider y being set such that
+   A6: y in dom f & f.y = d by A1,FUNCT_1:def 5;
+     <:<*f*>:>.y = <*d*> by A6,FUNCT_6:61;
+   hence x in rng <:<*f*>:> by A2,A5,A6,FUNCT_1:12;
+  end;
+  hence rng <:<*f*>:> = 1-tuples_on X by TARSKI:2;
+end;
+
+theorem Th12:
+1 <= i & i <= n+1 implies
+  for p being Element of (n+1)-tuples_on D holds Del(p,i) in n-tuples_on D
+proof set X = D; assume
+A1: 1 <= i & i <= n+1;
+ let p be Element of (n+1)-tuples_on X;
+A2: len p = n+1 by FINSEQ_2:109;
+then A3: i in dom p by A1,FINSEQ_3:27;
+A4: Del(p,i) is FinSequence of X by MATRIX_2:9;
+     len Del(p,i) = n by A2,A3,GOBOARD1:6;
+   then Del(p,i) is Element of n-tuples_on X by A4,FINSEQ_2:110;
+ hence Del(p,i) in n-tuples_on X;
+end;
+
+theorem Th13:
+for X being set, Y being FinSequenceSet of X holds Y c= X*
+proof let X be set, Y be FinSequenceSet of X;
+ let x be set; assume x in Y; then x is FinSequence of X by FINSEQ_2:def 3;
+ hence thesis by FINSEQ_1:def 11;
+end;
+
+begin :: Sets of compatible functions
+
+definition
+ let X be set;
+ attr X is compatible means
+:Def1: for f,g being Function st f in X & g in X holds f tolerates g;
+end;
+
+definition
+ cluster non empty functional compatible set;
+ existence proof set A = {{}};
+A1: A is compatible proof let f, g be Function; assume f in A & g in A;
+    then f={} by TARSKI:def 1; then f c= g by XBOOLE_1:2;
+    hence f tolerates g by PARTFUN1:135;
+   end; take A; thus thesis by A1;
+ end;
+end;
+
+definition
+ let X be functional compatible set;
+ cluster union X -> Function-like Relation-like;
+ coherence proof thus union X is Function-like proof let x,y1,y2 be set;
+assume
+  A1: [x,y1] in union X & [x,y2] in union X; then consider f being set such
+that
+  A2: [x,y1] in f & f in X by TARSKI:def 4; consider g being set such that
+  A3: [x,y2] in g & g in X by A1,TARSKI:def 4;
+     reconsider f, g as Function by A2,A3,FRAENKEL:def 1;
+  A4: x in dom f & x in dom g by A2,A3,RELAT_1:def 4;
+  then A5: f.x = y1 & g.x = y2 by A2,A3,FUNCT_1:def 4;
+  A6: x in dom f /\ dom g by A4,XBOOLE_0:def 3
+; f tolerates g by A2,A3,Def1
+;
+   hence y1 = y2 by A5,A6,PARTFUN1:def 6;
+  end;
+  thus union X is Relation-like proof let x be set; assume
+       x in union X; then consider f being set such that
+  A7: x in f & f in X by TARSKI:def 4;
+    f is Function by A7,FRAENKEL:def 1; then consider y, z being set such
+that
+  A8: x = [y,z] by A7,RELAT_1:def 1; thus thesis by A8;
+  end;
+ end;
+end;
+
+theorem Th14:
+X is functional compatible iff union X is Function
+proof
+A1: now assume
+   A2: union X is Function;
+   thus X is functional proof let f be set; assume
+    A3: f in X;
+    A4: f is Function-like proof let x, y1, y2 be set; assume
+          [x,y1] in f & [x, y2] in f;
+            then [x,y1] in union X & [x,y2] in union X by A3,TARSKI:def 4;
+         hence y1 = y2 by A2,FUNCT_1:def 1;
+        end;
+          f is Relation-like proof let x be set; assume x in f;
+          then x in union X by A3,TARSKI:def 4;
+         hence ex y, z being set st x = [y,z] by A2,RELAT_1:def 1;
+        end;
+     hence f is Function by A4;
+    end;
+    thus X is compatible proof let f,g be Function such that
+    A5: f in X & g in X;
+      let x be set; assume x in dom f /\ dom g;
+    then A6: x in dom f & x in dom g by XBOOLE_0:def 3
+; then consider y1 being set such that
+    A7: [x,y1] in f by RELAT_1:def 4;
+        consider y2 being set such that
+    A8: [x,y2] in g by A6,RELAT_1:def 4;
+      [x,y1] in union X & [x,y2] in union X by A5,A7,A8,TARSKI:def 4;
+    then A9: y1 = y2 by A2,FUNCT_1:def 1;
+      thus f.x = y1 by A6,A7,FUNCT_1:def 4 .= g.x by A6,A8,A9,FUNCT_1:def 4;
+    end;
+   end;
+     now assume X is functional compatible;
+    then reconsider X' = X as functional compatible set; union X' is
+Function;
+    hence union X is Function;
+   end;
+ hence X is functional compatible iff union X is Function by A1;
+end;
+
+definition
+ let X,Y be set;
+ cluster non empty compatible PFUNC_DOMAIN of X,Y;
+ existence proof set A = {{}};
+     now let x be Element of A;
+   A1: x = {} by TARSKI:def 1; dom {} c= X & rng {} c= Y by XBOOLE_1:2;
+    hence x is PartFunc of X, Y by A1,RELSET_1:11;
+   end;
+then A2: A is PFUNC_DOMAIN of X,Y by RFUNCT_3:def 3;
+     A is compatible proof let f, g be Function;
+   assume f in A & g in A; then f = {} by TARSKI:def 1; then f c= g by XBOOLE_1
+:2;
+    hence f tolerates g by PARTFUN1:135;
+    end;
+  hence thesis by A2;
+ end;
+end;
+
+theorem Th15:
+for X being non empty functional compatible set
+ holds dom union X = union {dom f where f is Element of X: not contradiction}
+proof let X be non empty functional compatible set;
+ set F = {dom f where f is Element of X: not contradiction};
+   now let x be set;
+  hereby assume x in dom union X; then consider y being set such that
+  A1: [x,y] in union X by RELAT_1:def 4; consider Z being set such that
+  A2: [x,y] in Z & Z in X by A1,TARSKI:def 4;
+      reconsider Z as Element of X by A2;
+  A3: x in dom Z by A2,RELAT_1:20; dom Z in F;
+   hence x in union F by A3,TARSKI:def 4;
+  end; assume x in union F; then consider Z being set such that
+  A4: x in Z & Z in F by TARSKI:def 4; consider f being Element of X such that
+  A5: Z = dom f & not contradiction by A4; consider y being set such that
+  A6: [x, y] in f by A4,A5,RELAT_1:def 4; [x, y] in union X by A6,TARSKI:def 4
+;
+  hence x in dom union X by RELAT_1:20;
+ end;
+ hence dom union X = union {dom f where f is Element of X: not contradiction}
+   by TARSKI:2;
+end;
+
+theorem Th16:
+for X being functional compatible set, f being Function st f in X holds
+ dom f c= dom union X & for x being set st x in dom f holds (union X).x = f.x
+proof let X be functional compatible set, f be Function such that
+A1: f in X;
+ thus dom f c= dom union X proof let x be set; assume
+      x in dom f; then consider y being set such that
+ A2: [x,y] in f by RELAT_1:def 4; [x, y] in union X by A1,A2,TARSKI:def 4;
+  hence x in dom union X by RELAT_1:20;
+ end; let x being set; assume x in dom f; then consider y being set such that
+ A3: [x,y] in f by RELAT_1:def 4; [x, y] in union X by A1,A3,TARSKI:def 4;
+ hence (union X).x = y by FUNCT_1:8 .= f.x by A3,FUNCT_1:8;
+end;
+
+theorem Th17:
+for X being non empty functional compatible set
+ holds rng union X = union {rng f where f is Element of X: not contradiction}
+proof let X be non empty functional compatible set;
+ set F = {rng f where f is Element of X: not contradiction};
+   now let y be set;
+  hereby assume y in rng union X; then consider x being set such that
+  A1: [x,y] in union X by RELAT_1:def 5; consider Z being set such that
+  A2: [x,y] in Z & Z in X by A1,TARSKI:def 4;
+      reconsider Z as Element of X by A2;
+  A3: y in rng Z by A2,RELAT_1:20; rng Z in F;
+   hence y in union F by A3,TARSKI:def 4;
+  end; assume y in union F; then consider Z being set such that
+  A4: y in Z & Z in F by TARSKI:def 4; consider f being Element of X such that
+  A5: Z = rng f & not contradiction by A4; consider x being set such that
+  A6: [x, y] in f by A4,A5,RELAT_1:def 5;
+        [x, y] in union X by A6,TARSKI:def 4;
+  hence y in rng union X by RELAT_1:20;
+ end;
+ hence thesis by TARSKI:2;
+end;
+
+definition let X,Y;
+  cluster -> functional PFUNC_DOMAIN of X,Y;
+  coherence
+  proof
+    let P be PFUNC_DOMAIN of X,Y;
+    let x be set;
+    assume x in P;
+    hence thesis by RFUNCT_3:def 3;
+  end;
+end;
+
+theorem Th18:
+for P being compatible PFUNC_DOMAIN of X,Y holds union P is PartFunc of X,Y
+proof let D be compatible PFUNC_DOMAIN of X,Y;
+ set E = {dom f where f is Element of D: not contradiction};
+ set F = {rng f where f is Element of D: not contradiction};
+ reconsider u = union D as Function;
+A1: dom u c= X proof let x be set; assume x in dom u;
+       then x in union E by Th15; then consider Z being set such that
+   A2: x in Z & Z in E by TARSKI:def 4; consider f being Element of D such that
+   A3: Z = dom f & not contradiction by A2;
+    thus x in X by A2,A3;
+   end;
+  rng u c= Y proof let y be set; assume y in rng u;
+       then y in union F by Th17; then consider Z being set such that
+   A4: y in Z & Z in F by TARSKI:def 4; consider f being Element of D such that
+   A5: Z = rng f & not contradiction by A4; rng f c= Y by RELSET_1:12;
+    hence y in Y by A4,A5;
+   end;
+ hence thesis by A1,RELSET_1:11;
+end;
+
+begin :: Homogeneous relations
+
+definition
+ let f be Relation;
+ redefine attr f is natural-yielding;
+ synonym f is to-naturals;
+end;
+
+definition
+ let f be Relation;
+ attr f is from-natural-fseqs means
+:Def2: dom f c= NAT*;
+end;
+
+definition
+ cluster from-natural-fseqs to-naturals Function;
+existence proof take f={}; thus dom f c= NAT* & rng f c= NAT by XBOOLE_1:2
+; end;
+end;
+
+definition
+ let f be from-natural-fseqs Relation;
+ attr f is len-total means:Def3:
+ for x,y being FinSequence of NAT
+  st len x = len y & x in dom f holds y in dom f;
+end;
+
+definition
+ let f be Relation;
+ attr f is homogeneous means :Def4:
+ for x,y being FinSequence st x in dom f & y in dom f holds len x = len y;
+end;
+
+theorem Th19:
+dom R c= n-tuples_on D implies R is homogeneous
+proof set X = D; assume
+A1: dom R c= n-tuples_on X; let x,y be FinSequence such that
+A2: x in dom R & y in dom R;
+   reconsider x' = x, y' = y as Element of n-tuples_on X by A1,A2;
+     len x' = n & len y' = n by FINSEQ_2:109;
+  hence len x = len y;
+end;
+
+definition
+ cluster {} -> homogeneous;
+ coherence proof let x,y be FinSequence; assume x in dom {}; thus thesis; end
+;
+end;
+
+definition
+ let p be FinSequence, x be set;
+ cluster {p} --> x -> non empty homogeneous;
+ coherence proof set f = {p} --> x;
+ A1: dom f = {p} by FUNCOP_1:19;
+   thus f is non empty by FUNCOP_1:19,RELAT_1:60; let x,y be FinSequence;
+assume
+      x in dom f & y in dom f; then x = p & y = p by A1,TARSKI:def 1;
+   hence thesis;
+  end;
+end;
+
+definition
+ cluster non empty homogeneous Function;
+existence proof consider p being FinSequence;take {p}-->0; thus thesis; end;
+end;
+
+definition
+ let f be homogeneous Function, g be Function;
+ cluster g*f -> homogeneous;
+ coherence proof let x,y be FinSequence such that
+A1:  x in dom (g*f) & y in dom (g*f); dom (g*f) c= dom f by RELAT_1:44; hence
+ thesis by A1,Def4;
+  end;
+end;
+
+definition
+ let X,Y be set;
+ cluster homogeneous PartFunc of X*, Y;
+ existence proof set f = {}; dom f c= X* & rng f c= Y by XBOOLE_1:2;
+   then reconsider f as PartFunc of X*, Y by RELSET_1:11;
+   take f; let x,y be FinSequence; assume
+      x in dom f & y in dom f;
+   hence thesis by RELAT_1:60;
+  end;
+end;
+
+definition
+ let X,Y be non empty set;
+ cluster non empty homogeneous PartFunc of X*, Y;
+ existence proof consider n being Nat, y being Element of Y;
+   reconsider Z = n-tuples_on X as non empty Subset of X* by Th13;
+   reconsider f = Z --> y as PartFunc of X*, Y;
+   take f;
+A1:  dom f = Z by FUNCOP_1:19;
+   thus f is non empty by FUNCOP_1:19,RELAT_1:60;
+   let x,y be FinSequence; assume x in dom f & y in dom f;
+    then len x = n & len y = n by A1,FINSEQ_2:109;
+   hence thesis;
+  end;
+end;
+
+definition
+ let X be non empty set;
+ cluster non empty homogeneous quasi_total PartFunc of X*, X;
+ existence proof consider n being Nat, y being Element of X;
+   reconsider Z = n-tuples_on X as non empty Subset of X* by Th13;
+   reconsider f = Z --> y as PartFunc of X*, X;
+   take f;
+A1:  dom f = Z by FUNCOP_1:19;
+   thus f is non empty by FUNCOP_1:19,RELAT_1:60;
+   thus f is homogeneous proof let x,y be FinSequence; assume
+        x in dom f & y in dom f; then len x = n & len y = n by A1,FINSEQ_2:109
+;
+     hence thesis;
+    end;
+   let p,q be FinSequence of X; assume len p = len q & p in dom f;
+    then len q = n by A1,FINSEQ_2:109; then q is Element of Z by FINSEQ_2:110
+;
+   hence thesis by A1;
+  end;
+end;
+
+definition
+ cluster non empty homogeneous to-naturals len-total
+         (from-natural-fseqs Function);
+ existence proof consider n, m being Nat;
+   reconsider Z = n-tuples_on NAT as non empty Subset of NAT* by Th13;
+   set f = Z --> m;
+A1: dom f = Z & rng f c= {m} by FUNCOP_1:19;
+    then reconsider f as from-natural-fseqs Function by Def2;
+   take f;
+A2: f is homogeneous proof let x,y be FinSequence; assume
+       x in dom f & y in dom f; then len x = n & len y = n by A1,FINSEQ_2:109;
+    hence thesis;
+   end; {m} is Subset of NAT by SUBSET_1:55;
+   then A3: rng f c= NAT by A1,XBOOLE_1:1;
+  f is len-total proof let x,y be FinSequence of NAT such that
+    A4: len x = len y and
+    A5: x in dom f;
+    A6: y is Element of (len y)-tuples_on NAT by FINSEQ_2:110;
+         len x = n by A1,A5,FINSEQ_2:109;
+     hence y in dom f by A1,A4,A6;
+    end;
+   hence thesis by A2,A3,FUNCOP_1:19,RELAT_1:60,SEQM_3:def 8;
+ end;
+end;
+
+definition
+cluster -> to-naturals from-natural-fseqs PartFunc of NAT*, NAT;
+coherence proof let f be PartFunc of NAT*,NAT; A1: rng f c=NAT by RELSET_1:12;
+ dom f c= NAT*;
+  hence thesis by A1,Def2,SEQM_3:def 8;
+ end;
+end;
+
+definition
+cluster quasi_total -> len-total PartFunc of NAT*,NAT;
+coherence proof let f be PartFunc of NAT*,NAT; assume
+  A1: f is quasi_total; let x,y be FinSequence of NAT such that
+  A2: len x = len y & x in dom f;
+  thus y in dom f by A1,A2,UNIALG_1:def 2;
+ end;
+end;
+
+theorem Th20:
+for g being len-total to-naturals (from-natural-fseqs Function)
+ holds g is quasi_total PartFunc of NAT*, NAT
+proof let g be len-total to-naturals (from-natural-fseqs Function);
+A1: dom g c= NAT* by Def2;
+  rng g c= NAT by SEQM_3:def 8;
+   then reconsider g' = g as PartFunc of NAT*, NAT by A1,RELSET_1:11;
+     for x,y being FinSequence of NAT
+    st len x = len y & x in dom g holds y in dom g by Def3;
+   then g' is quasi_total by UNIALG_1:def 2;
+ hence g is quasi_total PartFunc of NAT*, NAT;
+end;
+
+definition
+ let f be homogeneous Relation;
+ func arity f -> Nat means :Def5:
+  for x being FinSequence st x in dom f holds it = len x
+   if ex x being FinSequence st x in dom f
+   otherwise it = 0;
+ existence proof
+   hereby given x being FinSequence such that
+   A1:   x in dom f; take i = len x;
+    thus for x being FinSequence st x in dom f holds i = len x by A1,Def4;
+   end; thus thesis;
+  end;
+ uniqueness proof let i1, i2 be Nat;
+   hereby given x being FinSequence such that
+A2:   x in dom f;assume for x being FinSequence st x in dom f holds i1 = len x
+;
+     then i1 = len x by A2;
+    hence (for x being FinSequence st x in dom f holds i2 = len x) implies
+     i1 = i2 by A2;
+   end; thus thesis;
+  end;
+ correctness;
+end;
+
+theorem Th21:
+arity {} = 0
+proof not ex x being FinSequence st x in dom {}; hence thesis by Def5; end;
+
+theorem Th22:
+for f being homogeneous Relation st dom f = {{}} holds arity f = 0
+proof let f be homogeneous Relation; assume dom f = {{}};
+   then {} in dom f by TARSKI:def 1;
+ hence arity f = len {} by Def5 .= 0 by FINSEQ_1:25;
+end;
+
+theorem Th23:
+for f being homogeneous PartFunc of X*, Y holds dom f c= (arity f)-tuples_on X
+proof let f be homogeneous PartFunc of X*, Y; let x be set; assume
+A1: x in dom f;
+ per cases;
+ suppose A2: X is empty;
+ then x = <*>(X*) by A1,FUNCT_7:19,TARSKI:def 1;
+ then A3: arity f = len <*>(X*) by A1,Def5;
+ A4: len <*>(X*) = 0 by FINSEQ_1:25; 0-tuples_on X = {{}} by Th8;
+   hence x in (arity f)-tuples_on X by A1,A2,A3,A4,FUNCT_7:19;
+ suppose X is non empty; then reconsider X' = X as non empty set;
+   reconsider x' = x as FinSequence of X' by A1,FINSEQ_1:def 11;
+     len x' = arity f by A1,Def5;
+   then x' is Element of (arity f)-tuples_on X' by FINSEQ_2:110;
+   hence x in (arity f)-tuples_on X;
+end;
+
+theorem Th24:
+for f being homogeneous from-natural-fseqs Function
+ holds dom f c= (arity f)-tuples_on NAT
+proof let f be homogeneous from-natural-fseqs Function; let x be set; assume
+A1: x in dom f; dom f c= NAT* by Def2;
+   then reconsider x' = x as FinSequence of NAT by A1,FINSEQ_1:def 11;
+     len x' = arity f by A1,Def5;
+   then x' is Element of (arity f)-tuples_on NAT by FINSEQ_2:110;
+   hence x in (arity f)-tuples_on NAT;
+end;
+
+Lm1:
+for f being homogeneous PartFunc of D*, D
+ holds f is quasi_total non empty iff dom f = (arity f)-tuples_on D
+proof set X = D; let f being homogeneous PartFunc of X*, X;
+A1: dom f c= (arity f)-tuples_on X by Th23;
+ hereby assume f is quasi_total non empty;
+    then reconsider f' = f as quasi_total non empty homogeneous PartFunc of X*,
+X;
+    consider x being set such that
+  A2: x in dom f' by XBOOLE_0:def 1;
+     reconsider x' = x as FinSequence of X by A2,FINSEQ_1:def 11;
+  A3: len x' = arity f by A2,Def5;
+       now let z be set; thus z in dom f implies z in (arity f)-tuples_on X by
+A1
+;
+      assume z in (arity f)-tuples_on X;
+       then reconsider z' = z as Element of (arity f)-tuples_on X;
+         len z'=arity f by FINSEQ_2:109;
+      hence z in dom f by A2,A3,UNIALG_1:def 2;
+     end;
+    hence dom f = (arity f)-tuples_on X by TARSKI:2;
+ end;
+ assume A4: dom f = (arity f)-tuples_on X;
+ thus f is quasi_total proof let x, y be FinSequence of X; assume
+ A5: len x = len y & x in dom f; then len x = arity f by A4,FINSEQ_2:109;
+    then y is Element of (arity f)-tuples_on X by A5,FINSEQ_2:110;
+  hence y in dom f by A4;
+ end;
+ thus f is non empty by A4,RELAT_1:60;
+end;
+
+theorem Th25:
+for f being homogeneous PartFunc of X*, X
+ holds f is quasi_total non empty iff dom f = (arity f)-tuples_on X
+proof let f be homogeneous PartFunc of X*, X;
+ per cases;
+ suppose X is empty; then rng f c= {} by RELSET_1:12;
+  then rng f = {} by XBOOLE_1:3;
+ then f = {} by RELAT_1:64;
+  hence f is quasi_total non empty iff dom f = (arity f)-tuples_on X by Th8,
+Th21,RELAT_1:60;
+ suppose X is non empty;
+  hence f is quasi_total non empty iff dom f = (arity f)-tuples_on X by Lm1;
+end;
+
+theorem Th26:
+for f being homogeneous to-naturals from-natural-fseqs Function
+ holds f is len-total non empty iff dom f = (arity f)-tuples_on NAT
+proof let f being homogeneous to-naturals from-natural-fseqs Function;
+A1: dom f c= (arity f)-tuples_on NAT by Th24;
+ hereby assume f is len-total non empty;
+    then reconsider f' = f as quasi_total non empty homogeneous
+                         PartFunc of NAT*, NAT by Th20;
+    consider x being set such that
+  A2: x in dom f' by XBOOLE_0:def 1;
+     reconsider x' = x as FinSequence of NAT by A2,FINSEQ_1:def 11;
+  A3: len x' = arity f by A2,Def5;
+      now let z be set;thus z in dom f implies z in (arity f)-tuples_on NAT by
+A1
+;
+      assume z in (arity f)-tuples_on NAT;
+       then reconsider z' = z as Element of (arity f)-tuples_on NAT;
+         len z' = arity f by FINSEQ_2:109;
+      hence z in dom f by A2,A3,UNIALG_1:def 2;
+     end;
+    hence dom f = (arity f)-tuples_on NAT by TARSKI:2;
+ end; assume A4: dom f = (arity f)-tuples_on NAT;
+ thus f is len-total proof let x, y be FinSequence of NAT; assume
+ A5: len x = len y & x in dom f; then len x = arity f by A4,FINSEQ_2:109;
+    then y is Element of (arity f)-tuples_on NAT by A5,FINSEQ_2:110;
+  hence y in dom f by A4;
+ end;
+ thus f is non empty by A4,RELAT_1:60;
+end;
+
+theorem
+  for f being non empty homogeneous PartFunc of D*, D, n
+ st dom f c= n-tuples_on D holds arity f = n
+proof let f be non empty homogeneous PartFunc of D*, D, n; assume
+A1: dom f c= n-tuples_on D; consider x being set such that
+A2: x in dom f by XBOOLE_0:def 1;
+   reconsider x as Element of n-tuples_on D by A1,A2;
+A3: x in dom f by A2;
+     for x being FinSequence st x in dom f holds n = len x by A1,FINSEQ_2:109;
+ hence arity f = n by A3,Def5;
+end;
+
+theorem Th28:
+for f being homogeneous PartFunc of D*, D, n
+ st dom f = n-tuples_on D holds arity f = n
+proof let f be homogeneous PartFunc of D*, D, n; assume
+A1: dom f = n-tuples_on D; consider x being set such that
+A2: x in n-tuples_on D by XBOOLE_0:def 1;
+   reconsider x as Element of n-tuples_on D by A2;
+A3: x in dom f by A1;
+     for x be FinSequence st x in dom f holds len x = n by A1,FINSEQ_2:109;
+  hence arity f = n by A3,Def5;
+end;
+
+definition
+ let R be Relation;
+ attr R is with_the_same_arity means:Def6:
+  for f,g being Function st f in rng R & g in rng R holds
+   (f is empty implies g is empty or dom g = {{}}) &
+   (f is non empty & g is non empty implies
+     ex n being Nat, X being non empty set
+      st dom f c= n-tuples_on X & dom g c= n-tuples_on X);
+end;
+
+definition
+ cluster {} -> with_the_same_arity;
+ coherence proof let f, g be Function; thus thesis; end;
+end;
+
+definition
+ cluster with_the_same_arity FinSequence;
+ existence proof take {}; thus thesis; end;
+
+ let X be set;
+ cluster with_the_same_arity FinSequence of X;
+ existence proof take <*>X; thus thesis; end;
+ cluster with_the_same_arity Element of X*;
+ existence proof reconsider p = <*>X as Element of X* by FINSEQ_1:def 11;
+   take p; thus thesis;
+ end;
+end;
+
+definition
+ let F be with_the_same_arity Relation;
+ func arity F -> Nat means:Def7:
+  for f being homogeneous Function st f in rng F holds it = arity f
+   if ex f being homogeneous Function st f in rng F
+   otherwise it = 0;
+ existence proof
+   hereby given f being homogeneous Function such that
+A1:   f in rng F; take i = arity f;
+    let g be homogeneous Function; assume
+A2: g in rng F;
+    per cases;
+    suppose A3: f is empty;
+     thus i = arity g proof
+     per cases by A1,A2,A3,Def6;
+     suppose g is empty; hence i = arity g by A3;
+     suppose dom g = {{}}; hence i = arity g by A3,Th21,Th22;
+     end;
+    suppose A4: g is empty;
+     thus i = arity g proof
+     per cases by A1,A2,A4,Def6;
+     suppose f is empty; hence i = arity g by A4;
+     suppose dom f = {{}}; hence i = arity g by A4,Th21,Th22;
+     end;
+    suppose A5: f is non empty & g is non empty;
+    then consider n being Nat, X being non empty set such that
+A6:   dom f c= n-tuples_on X & dom g c= n-tuples_on X by A1,A2,Def6;
+    consider a being Element of dom f; A7: dom f <> {} by A5,RELAT_1:64;
+then a in dom f; then reconsider a as Element of n-tuples_on X by A6;
+A8:   arity f = len a by A7,Def5 .= n by FINSEQ_2:109;
+    consider a being Element of dom g; A9: dom g <> {} by A5,RELAT_1:64;
+then a in dom g; then reconsider a as Element of n-tuples_on X by A6;
+       arity g = len a by A9,Def5;
+    hence i = arity g by A8,FINSEQ_2:109;
+   end;
+   thus thesis;
+  end;
+ uniqueness proof let i1, i2 be Nat;
+   hereby given f being homogeneous Function such that
+A10:   f in rng F;
+    assume for f being homogeneous Function st f in rng F holds i1 = arity f
+;
+     then i1 = arity f by A10;
+    hence (for f being homogeneous Function st f in rng F
+            holds i2 = arity f) implies i1 = i2 by A10;
+   end; thus thesis;
+  end;
+ correctness;
+end;
+
+theorem
+  for F be with_the_same_arity FinSequence st len F = 0 holds arity F = 0
+proof let F be with_the_same_arity FinSequence; assume
+   len F = 0; then for f being homogeneous Function holds not f in rng F
+      by FINSEQ_1:25,RELAT_1:60;
+ hence arity F = 0 by Def7;
+end;
+
+definition
+ let X be set;
+ func HFuncs X -> PFUNC_DOMAIN of X*, X equals:Def8:
+  {f where f is Element of PFuncs(X*, X): f is homogeneous};
+ coherence proof
+  set H = {f where f is Element of PFuncs(X*, X): f is homogeneous};
+      H is non empty functional proof {} is PartFunc of X*
+,X by PARTFUN1:56;
+       then {} in PFuncs(X*, X) by PARTFUN1:119; then {} in H;
+      hence H is non empty;
+      let x be set; assume x in H;
+       then ex g being Element of PFuncs(X*, X) st x = g & g is homogeneous;
+      hence x is Function;
+     end; then reconsider H as non empty functional set;
+      now let f be Element of H; f in H;
+      then ex g being Element of PFuncs(X*, X) st f = g & g is homogeneous;
+     hence f is PartFunc of X*, X;
+    end;
+   hence thesis by RFUNCT_3:def 3;
+  end;
+end;
+
+theorem Th30:
+{} in HFuncs X
+proof set f = {}; dom f c= X* & rng f c= X by XBOOLE_1:2;
+  then reconsider f as PartFunc of X*, X by RELSET_1:11;
+  reconsider f as Element of PFuncs(X*, X) by PARTFUN1:119;
+    f in {g where g is Element of PFuncs(X*, X): g is homogeneous};
+ hence {} in HFuncs X by Def8;
+end;
+
+definition
+ let X be non empty set;
+ cluster non empty homogeneous quasi_total Element of HFuncs X;
+ existence proof consider x being Element of X; set p = <*>X;
+      p in X* by FINSEQ_1:def 11;
+   then reconsider Y = {p} as Subset of X* by ZFMISC_1:37;
+     {p} --> x is homogeneous & Y --> x in PFuncs(X*, X);
+   then {p} --> x in {f where f is Element of PFuncs(X*
+, X): f is homogeneous};
+   then reconsider f = {p} --> x as Element of HFuncs X by Def8;
+   take f;
+A1:  dom f = {p} by FUNCOP_1:19;
+   thus f is non empty homogeneous; let a,b be FinSequence of X such that
+A2:  len a = len b; assume a in dom f; then a = p by A1,TARSKI:def 1;
+    then len b = 0 by A2,FINSEQ_1:25; then b = {} by FINSEQ_1:25;
+   hence thesis by A1,TARSKI:def 1;
+  end;
+end;
+
+definition
+ let X be set;
+ cluster -> homogeneous Element of HFuncs X;
+ coherence proof let f be Element of HFuncs X;
+      HFuncs X = {g where g is Element of PFuncs(X*, X): g is homogeneous} &
+    f in HFuncs X by Def8;
+    then ex g being Element of PFuncs(X*, X) st f = g & g is homogeneous;
+   hence thesis;
+  end;
+end;
+
+definition
+ let X be non empty set, S be non empty Subset of HFuncs X;
+ cluster -> homogeneous Element of S;
+ coherence proof let f be Element of S;
+      HFuncs X = {g where g is Element of PFuncs(X*, X): g is homogeneous} &
+    f in HFuncs X by Def8;
+    then ex g being Element of PFuncs(X*, X) st f = g & g is homogeneous;
+   hence thesis;
+  end;
+end;
+
+theorem Th31:
+for f being to-naturals homogeneous from-natural-fseqs Function
+ holds f is Element of HFuncs NAT
+proof let f be to-naturals homogeneous from-natural-fseqs Function;
+    dom f c= NAT* & rng f c= NAT by Def2,SEQM_3:def 8;
+  then f is PartFunc of NAT*,NAT by RELSET_1:11;
+  then reconsider f'=f as Element of PFuncs(NAT*,NAT) by PARTFUN1:119;
+    f' in {f1 where f1 is Element of PFuncs(NAT*,NAT): f1 is homogeneous};
+ hence f is Element of HFuncs NAT by Def8;
+end;
+
+theorem Th32:
+for f being len-total to-naturals (homogeneous from-natural-fseqs Function)
+ holds f is quasi_total Element of HFuncs NAT
+proof let f be len-total to-naturals (homogeneous from-natural-fseqs Function);
+ reconsider f'=f as Element of HFuncs NAT by Th31;
+   f' is quasi_total proof
+  let x,y be FinSequence of NAT; assume len x = len y & x in dom f';
+  hence y in dom f' by Def3;
+ end;
+ hence f is quasi_total Element of HFuncs NAT;
+end;
+
+theorem Th33:
+for X being non empty set, F being Relation
+ st rng F c= HFuncs X &
+    for f,g being homogeneous Function st f in rng F & g in rng F
+     holds arity f = arity g
+  holds F is with_the_same_arity
+  proof let X be non empty set, R be Relation such that
+A1:  rng R c= HFuncs X and
+A2:  for f,g being homogeneous Function st f in rng R & g in rng R
+      holds arity f = arity g;
+   let f,g be Function; assume
+A3:  f in rng R & g in rng R;
+   then reconsider f' = f, g' = g as Element of HFuncs X by A1;
+A4:  arity f' = arity g' by A2,A3;
+   hereby assume f is empty;
+     then dom g' c= 0-tuples_on X by A4,Th21,Th23; then dom g' c= {<*>X} by
+FINSEQ_2:112;
+     then dom g = {} or dom g = {{}} by ZFMISC_1:39;
+    hence g is empty or dom g = {{}} by RELAT_1:64;
+   end; assume f is non empty & g is non empty;
+   then reconsider f' as non empty Element of HFuncs X;
+   take n = arity f', X;
+   thus dom f c= n-tuples_on X & dom g c= n-tuples_on X by A4,Th23;
+  end;
+
+definition
+ let n, m be Nat;
+ func n const m -> homogeneous to-naturals from-natural-fseqs Function equals
+:Def9: (n-tuples_on NAT) --> m;
+ coherence proof set X=NAT; set f = (n-tuples_on X)-->m;
+ A1: dom f = n-tuples_on X by FUNCOP_1:19;
+ A2: n-tuples_on X c= X* by MSUALG_1:12;
+      rng f c= {m} & {m} c= X by FUNCOP_1:19,ZFMISC_1:37;
+ then A3: rng f c= X by XBOOLE_1:1;
+      f is homogeneous proof let x,y be FinSequence; assume
+          x in dom f & y in dom f; then len x = n & len y = n by A1,FINSEQ_2:
+109
+;
+     hence len x = len y;
+    end;
+  hence thesis by A1,A2,A3,Def2,SEQM_3:def 8;
+ end;
+end;
+
+theorem Th34:
+n const m in HFuncs NAT
+proof set X=NAT; set f=n const m;
+ A1: dom f c= NAT* by Def2;
+    rng f c= NAT by SEQM_3:def 8;
+  then f is PartFunc of X*, X by A1,RELSET_1:11;
+  then f is Element of PFuncs(X*, X) by PARTFUN1:119;
+  then f in {g where g is Element of PFuncs(X*, X): g is homogeneous};
+ hence thesis by Def8;
+end;
+
+definition
+ let n,m be Nat;
+ cluster n const m -> len-total non empty;
+ coherence proof set X = NAT;
+A1: dom (n const m) = dom ((n-tuples_on X)-->m) by Def9
+   .= n-tuples_on X by FUNCOP_1:19;
+     n const m is len-total proof let x, y be FinSequence of X; assume
+   A2: len x = len y & x in dom (n const m); then len x = n by A1,FINSEQ_2:109
+;
+       then y is Element of n-tuples_on X by A2,FINSEQ_2:110;
+     hence y in dom (n const m) by A1;
+   end;
+  hence thesis by A1,RELAT_1:60;
+ end;
+end;
+
+theorem Th35:
+arity (n const m) = n
+proof set X = NAT;
+A1: dom (n const m) = dom ((n-tuples_on X)-->m) by Def9
+  .= n-tuples_on X by FUNCOP_1:19;
+   consider d being Element of n-tuples_on X;
+A2: d in dom (n const m) by A1;
+   for x be FinSequence st x in dom (n const m) holds n=len x by A1,FINSEQ_2:
+109;
+  hence arity (n const m) = n by A2,Def5;
+end;
+
+theorem Th36:
+for t being Element of n-tuples_on NAT holds (n const m).t = m
+proof set X = NAT; let t be Element of n-tuples_on X;
+ thus (n const m).t = ((n-tuples_on X) --> m).t by Def9 .= m by FUNCOP_1:13;
+end;
+
+definition
+ let n,i be Nat;
+ func n succ i -> homogeneous to-naturals from-natural-fseqs Function means:
+Def10:  dom it = n-tuples_on NAT &
+  for p being Element of n-tuples_on NAT holds it.p = (p/.i)+1;
+ existence proof
+ defpred p[set] means $1 in n-tuples_on NAT;
+ deffunc f(Element of NAT*) = ($1/.i)+1;
+ consider f being PartFunc of NAT*, NAT such that
+ A1: for d being Element of NAT* holds d in dom f iff p[d] and
+ A2: for d being Element of NAT* st d in dom f holds f/.d = f(d)
+     from LambdaPFD;
+ A3: n-tuples_on NAT c= NAT* by MSUALG_1:12;
+    then A4: for x be set holds x in dom f iff x in n-tuples_on NAT by A1;
+ then A5: dom f = n-tuples_on NAT by TARSKI:2;
+    reconsider f as Element of PFuncs(NAT*, NAT) by PARTFUN1:119;
+      f is homogeneous proof let x,y be FinSequence; assume
+        x in dom f & y in dom f; then len x = n & len y = n by A5,FINSEQ_2:109;
+     hence len x = len y;
+    end; then f in {g where g is Element of PFuncs(NAT*,NAT):g is homogeneous};
+    then reconsider f as Element of HFuncs NAT by Def8;
+  take f; thus dom f = n-tuples_on NAT by A4,TARSKI:2;
+  let p be Element of n-tuples_on NAT; p in n-tuples_on NAT; then reconsider
+p' = p as Element of NAT* by A3;
+  thus f.p = f/.p' by A5,FINSEQ_4:def 4 .= (p/.i)+1 by A2,A5;
+ end;
+ uniqueness proof let it1, it2 be homogeneous to-naturals from-natural-fseqs
+    Function such that
+A6: dom it1 = n-tuples_on NAT and
+A7: for p being Element of n-tuples_on NAT holds it1.p = (p/.i)+1 and
+A8: dom it2 = n-tuples_on NAT and
+A9: for p being Element of n-tuples_on NAT holds it2.p = (p/.i)+1;
+      now let x be set; assume x in n-tuples_on NAT;
+      then reconsider x' = x as Element of n-tuples_on NAT;
+     thus it1.x = (x'/.i)+1 by A7 .= it2.x by A9;
+    end;
+  hence it1 = it2 by A6,A8,FUNCT_1:9;
+ end;
+end;
+
+theorem Th37:
+n succ i in HFuncs NAT
+proof set X=NAT; set f=n succ i;
+A1: dom f c= NAT* by Def2;
+     rng f c= NAT by SEQM_3:def 8;
+   then f is PartFunc of X*, X by A1,RELSET_1:11;
+   then f is Element of PFuncs(X*, X) by PARTFUN1:119;
+   then f in {g where g is Element of PFuncs(X*, X): g is homogeneous};
+ hence thesis by Def8;
+end;
+
+definition
+ let n,i be Nat;
+ cluster n succ i -> len-total non empty;
+ coherence proof
+ A1: dom (n succ i) = n-tuples_on NAT by Def10;
+      (n succ i) is len-total proof let x, y be FinSequence of NAT; assume
+    A2: len x = len y & x in dom (n succ i); then len x = n by A1,FINSEQ_2:109
+;
+        then y is Element of n-tuples_on NAT by A2,FINSEQ_2:110;
+     hence y in dom (n succ i) by A1;
+    end; hence thesis by A1,RELAT_1:60;
+ end;
+end;
+
+theorem Th38:
+arity (n succ i) = n
+proof
+A1: dom (n succ i) = n-tuples_on NAT by Def10; consider d being set such that
+A2: d in dom (n succ i) by XBOOLE_0:def 1;
+   reconsider d as Element of n-tuples_on NAT by A2,Def10;
+A3: d in dom (n succ i) by A2;
+    for y be FinSequence st y in dom (n succ i) holds n= len y by A1,FINSEQ_2:
+109;
+ hence arity (n succ i) = n by A3,Def5;
+end;
+
+definition
+ let n,i be Nat;
+ func n proj i -> homogeneous to-naturals from-natural-fseqs Function equals
+:Def11:  proj(n|->NAT, i);
+ correctness proof
+ A1: dom proj(n|->NAT, i) = product(n|->NAT) by PRALG_3:def 2
+   .= n-tuples_on NAT by FUNCT_6:9;
+ A2: HFuncs NAT = {f where f is Element of PFuncs(NAT*, NAT): f is homogeneous}
+    by Def8;
+   now set P = proj(n|->NAT, i);
+    A3: P is homogeneous proof let x,y be FinSequence such that
+        A4: x in dom P & y in dom P;
+         thus len x = n by A1,A4,FINSEQ_2:109 .= len y by A1,A4,FINSEQ_2:109;
+        end;
+    A5: dom P c= NAT* by A1,MSUALG_1:12;
+          rng P c= NAT proof let x be set; assume x in rng P;
+            then consider d being set such that
+        A6: d in dom P & x = P.d by FUNCT_1:def 5;
+            reconsider d as Element of n-tuples_on NAT by A1,A6;
+            reconsider d as FinSequence of NAT;
+        A7: P.d = d.i by A6,PRALG_3:def 2;
+              i in dom d or not i in dom d;
+            then d.i in rng d & rng d c= NAT or d.i = {}
+             by FINSEQ_1:def 4,FUNCT_1:12,def 4;
+          hence x in NAT by A6,A7,CARD_1:51;
+        end; then reconsider P as PartFunc of NAT*, NAT by A5,RELSET_1:11;
+          P is Element of PFuncs(NAT*, NAT) by PARTFUN1:119;
+        then P in HFuncs NAT by A2,A3;
+      hence proj(n|->NAT, i) is Element of HFuncs NAT;
+    end;
+  hence thesis;
+ end;
+end;
+
+theorem Th39:
+n proj i in HFuncs NAT proof set X=NAT; set f=n proj i;
+ A1: dom f c= NAT* by Def2;
+   rng f c= NAT by SEQM_3:def 8;
+    then f is PartFunc of X*, X by A1,RELSET_1:11;
+    then f is Element of PFuncs(X*, X) by PARTFUN1:119;
+    then f in {g where g is Element of PFuncs(X*, X): g is homogeneous};
+  hence thesis by Def8;
+end;
+
+theorem Th40:
+dom (n proj i) = n-tuples_on NAT &
+(1 <= i & i <= n implies rng (n proj i) = NAT)
+proof
+A1: n proj i = proj(n|->NAT, i) by Def11;
+   hence
+A2: dom (n proj i)= product(n|->NAT) by PRALG_3:def 2
+   .= n-tuples_on NAT by FUNCT_6:9;
+ assume
+A3: 1 <= i & i <= n;
+   now let x be set;
+ hereby assume x in rng (n proj i); then consider d being set such that
+ A4: d in dom (n proj i) & x = (n proj i).d by FUNCT_1:def 5;
+     reconsider d as Element of n-tuples_on NAT by A2,A4;
+     reconsider d as FinSequence of NAT;
+ A5: (n proj i).d = d.i by A1,A4,PRALG_3:def 2;
+       len d = n by FINSEQ_2:109; then i in dom d by A3,FINSEQ_3:27;
+     then d.i in rng d & rng d c= NAT by FINSEQ_1:def 4,FUNCT_1:12;
+  hence x in NAT by A4,A5;
+ end;
+ assume x in NAT; then reconsider x' = x as Nat;
+   reconsider d = n |-> x' as FinSequence of NAT by FINSEQ_2:77;
+   A6: d is Element of n-tuples_on NAT by FINSEQ_2:132;
+ then A7: (n proj i).d = d.i by A1,A2,PRALG_3:def 2;
+     i in Seg n by A3,FINSEQ_1:3; then d.i = x' by FINSEQ_2:70;
+ hence x in rng (n proj i) by A2,A6,A7,FUNCT_1:def 5;
+ end; hence thesis by TARSKI:2;
+end;
+
+definition
+ let n,i be Nat;
+ cluster n proj i -> len-total non empty;
+ coherence proof
+   A1: dom (n proj i) = n-tuples_on NAT by Th40;
+     n proj i is len-total proof let x, y be FinSequence of NAT; assume
+       A2: len x=len y & x in dom (n proj i); then len x=n by A1,FINSEQ_2:109;
+           then y is Element of n-tuples_on NAT by A2,FINSEQ_2:110;
+        hence y in dom (n proj i) by A1;
+       end;
+   hence thesis by A1,RELAT_1:60;
+ end;
+end;
+
+theorem Th41:
+arity (n proj i) = n
+proof
+A1: dom (n proj i) = n-tuples_on NAT by Th40; consider d being set such that
+A2: d in n-tuples_on NAT by XBOOLE_0:def 1;
+   reconsider d as Element of n-tuples_on NAT by A2;
+A3: d in dom (n proj i) by A1;
+     for x be FinSequence st x in dom (n proj i) holds n= len x
+    by A1,FINSEQ_2:109;
+ hence arity (n proj i) = n by A3,Def5;
+end;
+
+theorem Th42:
+for t being Element of n-tuples_on NAT holds (n proj i).t = t.i
+proof let t be Element of n-tuples_on NAT;
+A1: dom (n proj i) = n-tuples_on NAT by Th40;
+  (n proj i) = proj(n|->NAT, i) by Def11;
+  hence (n proj i).t = t.i by A1,PRALG_3:def 2;
+end;
+
+definition let X be set;
+  cluster HFuncs X -> functional;
+  coherence;
+end;
+
+theorem Th43:
+for F being Function of D, HFuncs E
+ st rng F is compatible &
+    for x being Element of D holds dom (F.x) c= n-tuples_on E
+  ex f being Element of HFuncs E st f = Union F & dom f c= n-tuples_on E
+proof set X = D, Y = E; let F be Function of X, HFuncs Y; assume
+A1: rng F is compatible; assume
+A2: for x being Element of X holds dom (F.x) c= n-tuples_on Y;
+per cases;
+ suppose A3: F is empty; reconsider f ={} as Element of HFuncs Y by Th30;
+  take f; thus f = Union F by A3,PROB_1:def 3,RELAT_1:60,ZFMISC_1:2;
+  thus dom f c= n-tuples_on Y by RELAT_1:60,XBOOLE_1:2;
+ thus thesis;
+ suppose A4: F <> {};
+A5: Union F = union rng F by PROB_1:def 3;
+A6: rng F is functional proof let x be set; assume
+   A7: x in rng F; rng F c= HFuncs Y by RELSET_1:12;
+       then x is Element of HFuncs Y by A7;
+    hence thesis;
+   end; then reconsider f = Union F as Function by A1,A5,Th14;
+   reconsider rngF = rng F as non empty functional compatible set by A1,A4,A6,
+RELAT_1:64;
+   set D = {dom g where g is Element of rngF: not contradiction};
+A8: dom f c= n-tuples_on Y proof let x be set; assume x in dom f;
+       then x in union D by A5,Th15; then consider d being set such that
+   A9: x in d & d in D by TARSKI:def 4;
+       consider g being Element of rngF such that
+   A10: d = dom g & not contradiction by A9; consider e being set such that
+   A11: e in dom F & F.e = g by FUNCT_1:def 5;
+       reconsider e as Element of X by A11;
+         dom (F.e) c= n-tuples_on Y by A2;
+     hence x in n-tuples_on Y by A9,A10,A11;
+   end;
+     n-tuples_on Y c= Y* by MSUALG_1:12;
+then A12: dom f c= Y* by A8,XBOOLE_1:1;
+  rng f c= Y proof let y be set; assume y in rng f;
+     then consider x being set such that
+   A13: x in dom f & f.x = y by FUNCT_1:def 5;
+         x in union D by A5,A13,Th15; then consider d being set such that
+   A14: x in d & d in D by TARSKI:def 4;
+       consider g being Element of rngF such that
+   A15: d = dom g & not contradiction by A14;
+         g in rngF & rng F c= HFuncs Y by RELSET_1:12;
+       then reconsider g as Element of HFuncs Y;
+   A16: f.x = g.x by A5,A14,A15,Th16;
+   A17: rng g c= Y by RELSET_1:12; g.x in rng g by A14,A15,FUNCT_1:12;
+    hence y in Y by A13,A16,A17;
+   end; then reconsider f as PartFunc of Y*, Y by A12,RELSET_1:11;
+   reconsider f as Element of PFuncs(Y*, Y) by PARTFUN1:119;
+     f is homogeneous proof let x,y be FinSequence; assume
+         x in dom f&y in dom f;
+       then len x = n & len y = n by A8,FINSEQ_2:109;
+     hence len x = len y;
+   end; then f in {g where g is Element of PFuncs(Y*, Y): g is homogeneous};
+   then reconsider f = Union F as Element of HFuncs Y by Def8;
+ take f; thus f = Union F; thus dom f c= n-tuples_on Y by A8;
+end;
+
+theorem
+  for F being Function of NAT, HFuncs D
+ st for i holds F.i c= F.(i+1) holds Union F in HFuncs D
+proof set X = D; let F be Function of NAT, HFuncs X such that
+A1:  for i being Nat holds F.i c= F.(i+1);
+A2:  Union F = union rng F by PROB_1:def 3;
+   rng F c= HFuncs X & dom F = NAT by FUNCT_2:def 1,RELSET_1:12;
+    then F.0 in rng F by FUNCT_1:12;
+   then reconsider Y = rng F as non empty Subset of HFuncs X by RELSET_1:12;
+   A3: Y is PartFunc-set of X*, X
+   proof
+     let f be Element of Y; f is Element of HFuncs X; hence thesis;
+   end;
+A4:  now let n be Nat;
+      defpred p[Nat] means F.n c= F.(n+$1);
+A5:   p[0];
+A6:   now let i be Nat such that
+A7:     p[i]; F.(n+i) c= F.(n+i+1) by A1;
+        then F.n c= F.(n+i+1) by A7,XBOOLE_1:1;
+       hence p[i+1] by XCMPLX_1:1;
+      end;
+A8:   for i being Nat holds p[i] from Ind(A5,A6);
+     let m be Nat; assume n <= m; then ex i being Nat st m = n+i by NAT_1:28;
+     hence F.n c= F.m by A8;
+    end;
+A9:  Y is compatible proof let f,g be Function; assume f in Y;
+      then consider i being set such that
+A10:    i in dom F & f = F.i by FUNCT_1:def 5;
+      assume g in Y; then consider j being set such that
+A11:    j in dom F & g = F.j by FUNCT_1:def 5;
+       reconsider i,j as Nat by A10,A11;
+        i <= j or j <= i; then f c= g or g c= f by A4,A10,A11;
+      hence f tolerates g by PARTFUN1:135;
+     end; then Union F is PartFunc of X*, X by A2,A3,Th18;
+   then reconsider f = Union F as Element of PFuncs(X*, X) by PARTFUN1:119;
+A12:  dom f=union {dom g where g is Element of Y: not contradiction} by A2,A9,
+Th15;
+      f is homogeneous proof let x,y be FinSequence; assume x in dom f;
+      then consider A1 being set such that
+A13:    x in A1 & A1 in {dom g where g is Element of Y: not contradiction}
+        by A12,TARSKI:def 4; consider g1 being Element of Y such that
+A14:    A1 = dom g1 by A13;
+      assume y in dom f; then consider A2 being set such that
+A15:    y in A2 & A2 in {dom g where g is Element of Y: not contradiction}
+        by A12,TARSKI:def 4; consider g2 being Element of Y such that
+A16:    A2 = dom g2 by A15; consider i1 being set such that
+A17:    i1 in dom F & g1 = F.i1 by FUNCT_1:def 5;
+       consider i2 being set such that
+A18:    i2 in dom F & g2 = F.i2 by FUNCT_1:def 5;
+       reconsider i1, i2 as Nat by A17,A18;
+         i1 <= i2 or i2 <= i1; then g1 c= g2 or g2 c= g1 by A4,A17,A18;
+       then dom g1 c= dom g2 or dom g2 c= dom g1 by GRFUNC_1:8;
+      hence thesis by A13,A14,A15,A16,Def4;
+     end; then f in {g where g is Element of PFuncs(X*, X): g is homogeneous};
+   hence thesis by Def8;
+  end;
+
+theorem Th45:
+for F being with_the_same_arity FinSequence of HFuncs D
+ holds dom <:F:> c= (arity F)-tuples_on D
+proof set X = D; let F be with_the_same_arity FinSequence of HFuncs X;
+ thus dom <:F:> c= (arity F)-tuples_on X proof let x be set such that
+A1: x in dom <:F:>;
+A2: dom <:F:> = meet doms F by FUNCT_6:49
+            .= meet rng doms F by FUNCT_6:def 4;
+A3: dom doms F=F"SubFuncs rng F by FUNCT_6:def 2; consider y being set such
+that
+A4: y in rng doms F by A1,A2,SETFAM_1:2,XBOOLE_0:def 1; consider z being set
+such that
+A5: z in dom doms F & (doms F).z = y by A4,FUNCT_1:def 5;
+     z in dom F by A3,A5,FUNCT_6:28;
+then A6: F.z in rng F & rng F c= HFuncs X by FUNCT_1:12,RELSET_1:12;
+then reconsider Fz = F.z as Element of HFuncs X;
+A7: (doms F).z = proj1(F.z) by A3,A5,FUNCT_6:def 2 .= dom Fz by FUNCT_5:21;
+A8: x in y by A1,A2,A4,SETFAM_1:def 1;
+     dom Fz c= (arity Fz)-tuples_on X by Th23;
+then x in (arity Fz)-tuples_on X by A5,A7,A8;
+  hence x in (arity F)-tuples_on X by A6,Def7;
+ end;
+end;
+
+definition
+ let X be non empty set;
+ let F be with_the_same_arity FinSequence of HFuncs X;
+ cluster <:F:> -> homogeneous;
+ coherence proof let x,y be FinSequence such that
+A1: x in dom <:F:> & y in dom <:F:>;
+  dom <:F:> c= (arity F)-tuples_on X by Th45;
+    then len x = arity F & len y = arity F by A1,FINSEQ_2:109;
+   hence len x = len y;
+  end;
+end;
+
+theorem Th46:
+for f being Element of HFuncs D,
+    F being with_the_same_arity FinSequence of HFuncs D
+  holds dom (f*<:F:>) c= (arity F)-tuples_on D & rng (f*<:F:>) c= D &
+             f*<:F:> in HFuncs D
+proof set X = D; let f be Element of HFuncs X;
+let F be with_the_same_arity FinSequence of HFuncs X;
+  dom (f*<:F:>) c=dom <:F:>&dom <:F:> c=(arity F)-tuples_on X by Th45,RELAT_1:
+44
+;
+hence A1: dom (f*<:F:>) c= (arity F)-tuples_on X by XBOOLE_1:1;
+       (arity F)-tuples_on X c= X* by MSUALG_1:12;
+then A2:   dom (f*<:F:>) c= X* by A1,XBOOLE_1:1;
+       rng (f*<:F:>) c= rng f & rng f c= X by RELAT_1:45,RELSET_1:12;
+hence rng (f*<:F:>) c= X by XBOOLE_1:1;
+     then f*<:F:> is PartFunc of X*, X by A2,RELSET_1:11;
+     then f*<:F:> in PFuncs(X*, X) by PARTFUN1:119;
+     then f*<:F:> in {g where g is Element of PFuncs(X*, X): g is homogeneous}
+;
+ hence f*<:F:> in HFuncs X by Def8;
+end;
+
+definition
+ let X,Y be non empty set, P be PFUNC_DOMAIN of X,Y;
+ let S be non empty Subset of P;
+ redefine mode Element of S -> Element of P;
+ coherence proof let f be Element of S; thus f is Element of P; end;
+end;
+
+definition
+ let f be homogeneous from-natural-fseqs Function;
+ cluster <*f*> -> with_the_same_arity;
+ coherence proof let h,g be Function such that
+A1: h in rng <*f*> & g in rng <*f*>; rng <*f*> = {f} by FINSEQ_1:56;
+then A2: h = f & g = f by A1,TARSKI:def 1;
+   hence h is empty implies g is empty or dom g = {{}};
+   assume h is non empty & g is non empty; take i = arity f,NAT;
+   thus dom h c= i-tuples_on NAT & dom g c= i-tuples_on NAT by A2,Th24;
+  end;
+end;
+
+theorem
+  for f being homogeneous to-naturals from-natural-fseqs Function
+ holds arity <*f*> = arity f
+proof let f be homogeneous to-naturals from-natural-fseqs Function;
+     rng <*f*> = {f} by FINSEQ_1:55; then f in rng <*f*> by TARSKI:def 1;
+ hence arity <*f*> = arity f by Def7;
+end;
+
+theorem Th48:
+for f,g being non empty Element of HFuncs NAT,
+    F being with_the_same_arity FinSequence of HFuncs NAT
+ st g = f*<:F:> holds arity g = arity F
+proof let f, g be non empty Element of HFuncs NAT,
+          F be with_the_same_arity FinSequence of HFuncs NAT such that
+A1: g = f*<:F:>;
+A2: dom g c= (arity F)-tuples_on NAT by A1,Th46;
+   consider x being set such that
+A3: x in dom g by XBOOLE_0:def 1;
+   reconsider x as Element of (arity F)-tuples_on NAT by A2,A3;
+     len x = arity F by FINSEQ_2:109;
+ hence arity g = arity F by A3,Def5;
+end;
+
+theorem Th49:
+for f being non empty quasi_total Element of HFuncs D,
+    F being with_the_same_arity FinSequence of HFuncs D
+ st arity f = len F & F is non empty &
+    (for h being Element of HFuncs D st h in rng F
+      holds h is quasi_total non empty)
+  holds f*<:F:> is non empty quasi_total Element of HFuncs D &
+        dom (f*<:F:>) = (arity F)-tuples_on D
+proof set X = D; let f being non empty quasi_total Element of HFuncs X,
+       F being with_the_same_arity FinSequence of HFuncs X such that
+A1: arity f = len F & F is non empty and
+A2: for h being Element of HFuncs X st h in rng F
+    holds h is quasi_total non empty;
+A3: HFuncs X={h where h is Element of PFuncs(X*,X):h is homogeneous} by Def8;
+   set fF = f*<:F:>; set n = arity F;
+A4: dom fF c= n-tuples_on X by Th46;
+   A5: n-tuples_on X c= dom fF proof let x be set; assume
+   A6: x in n-tuples_on X;
+       A7: n-tuples_on X c= dom <:F:> proof let x be set; assume
+       A8: x in n-tuples_on X;
+       A9: dom <:F:> = meet doms F by FUNCT_6:49
+                    .= meet rng doms F by FUNCT_6:def 4;
+             dom F <> {} by A1,RELAT_1:64; then consider z being set such that
+       A10: z in dom F by XBOOLE_0:def 1;
+             F.z in rng F&rng F c=HFuncs X by A10,FINSEQ_1:def 4,FUNCT_1:12;
+       then A11: F.z is Element of HFuncs X;
+       A12: dom doms F = F"SubFuncs rng F by FUNCT_6:def 2;
+           then z in dom doms F by A10,A11,FUNCT_6:28;
+       then A13: rng doms F <> {} by RELAT_1:65;
+             now let y be set; assume y in rng doms F;
+               then consider w being set such that
+           A14: w in dom doms F & (doms F).w = y by FUNCT_1:def 5;
+           A15: w in dom F by A12,A14,FUNCT_6:28;
+               then reconsider Fw = F.w as Element of HFuncs X by FINSEQ_2:13;
+           A16: (doms F).w = proj1(F.w) by A12,A14,FUNCT_6:def 2
+               .= dom (Fw) by FUNCT_5:21;
+           A17: Fw in rng F by A15,FUNCT_1:12;
+               then Fw is non empty quasi_total by A2;
+           then dom (Fw) = (arity Fw)-tuples_on X by Th25;
+            hence x in y by A8,A14,A16,A17,Def7;
+           end; hence x in dom <:F:> by A9,A13,SETFAM_1:def 1;
+       end;
+   A18: dom f = (arity f)-tuples_on X by Th25;
+   A19: rng <:F:> c= product rngs F by FUNCT_6:49;
+         product rngs F c= (len F)-tuples_on X proof let p be set; assume
+           p in product rngs F; then consider g being Function such that
+       A20: p = g & dom g = dom rngs F and
+       A21: for x being set st x in dom rngs F holds g.x in (rngs F).x
+             by CARD_3:def 5;
+       A22: dom rngs F = F"SubFuncs rng F by FUNCT_6:def 3;
+             now let x be set;
+            hereby assume x in F"SubFuncs rng F;
+              then x in dom F & dom F = Seg len F by FINSEQ_1:def 3,FUNCT_6:28
+;
+             hence x in Seg len F;
+            end; assume x in Seg len F;
+            then A23: x in dom F by FINSEQ_1:def 3;
+                then F.x in rng F & rng F c= HFuncs X by FINSEQ_1:def 4,FUNCT_1
+:12;
+                then F.x is Element of HFuncs X;
+             hence x in F"SubFuncs rng F by A23,FUNCT_6:28;
+           end;
+       then A24: F"SubFuncs rng F = Seg len F by TARSKI:2;
+           then reconsider g as FinSequence by A20,A22,FINSEQ_1:def 2;
+             rng g c= X proof let x be set; assume
+                 x in rng g; then consider d being set such that
+           A25: d in dom g & g.d = x by FUNCT_1:def 5;
+           A26: g.d in (rngs F).d by A20,A21,A25;
+                 dom F = Seg len F by FINSEQ_1:def 3;
+             then reconsider Fd = F.d as Element of HFuncs X by A20,A22,A24,A25
+,FINSEQ_2:13;
+           A27: (rngs F).d = proj2(F.d) by A20,A22,A25,FUNCT_6:def 3
+                         .= rng Fd by FUNCT_5:21;
+                 rng Fd c= X by RELSET_1:12;
+            hence x in X by A25,A26,A27;
+           end; then reconsider g as FinSequence of X by FINSEQ_1:def 4;
+             len g = len F by A20,A22,A24,FINSEQ_1:def 3;
+           then p is Element of (len F)-tuples_on X by A20,FINSEQ_2:110;
+         hence p in (len F)-tuples_on X;
+       end; then <:F:>.x in rng <:F:> & rng <:F:> c= (len F)-tuples_on X
+                   by A6,A7,A19,FUNCT_1:12,XBOOLE_1:1;
+    hence x in dom fF by A1,A6,A7,A18,FUNCT_1:21;
+   end;
+then A28:  dom fF = n-tuples_on X by A4,XBOOLE_0:def 10;
+     (arity F)-tuples_on X c= X* by MSUALG_1:12;
+then A29: dom fF c= X* by A4,XBOOLE_1:1;
+  rng fF c= X by Th46; then fF is Relation of X*, X by A29,RELSET_1:11;
+then fF is Element of PFuncs(X*, X) by PARTFUN1:119;
+   then fF in HFuncs X by A3; then reconsider fF as Element of HFuncs X;
+     fF is quasi_total proof let x, y be FinSequence of X such that
+   A30: len x = len y & x in dom fF; len x = n by A4,A30,FINSEQ_2:109;
+       then y is Element of n-tuples_on X by A30,FINSEQ_2:110;
+    hence y in dom fF by A28;
+   end; hence f*<:F:> is non empty quasi_total Element of HFuncs X by A4,A5,
+RELAT_1:60,XBOOLE_0:def 10;
+  thus dom (f*<:F:>) = (arity F)-tuples_on D by A4,A5,XBOOLE_0:def 10;
+end;
+
+theorem Th50:
+for f being quasi_total Element of HFuncs D,
+    F being with_the_same_arity FinSequence of HFuncs D
+ st arity f = len F &
+    for h being Element of HFuncs D st h in rng F holds h is quasi_total
+  holds f*<:F:> is quasi_total Element of HFuncs D
+proof set X = D; let f being quasi_total Element of HFuncs X,
+          F being with_the_same_arity FinSequence of HFuncs X such that
+A1: arity f = len F and
+A2: for h being Element of HFuncs X st h in rng F holds h is quasi_total;
+   set fF = f*<:F:>;
+     reconsider g = {} as PartFunc of X*, X by PARTFUN1:56;
+       g in PFuncs(X*, X) by PARTFUN1:119;
+     then A3: g in {h where h is Element of PFuncs(X*, X): h is homogeneous};
+     A4: g is quasi_total proof let x, y be FinSequence of X;
+      assume len x = len y & x in dom g;
+      hence y in dom g by RELAT_1:60;
+     end;
+then A5: g is quasi_total Element of HFuncs X by A3,Def8;
+per cases;
+suppose f = {}; hence thesis by RELAT_1:62;
+suppose F = {}; then fF = f*{} by FUNCT_6:60; hence thesis by A3,A4,Def8;
+suppose ex h being set st h in rng F & h = {}; then <:F:> = {} by Th10; hence
+ thesis by A5,RELAT_1:62;
+suppose A6: F <> {} & f <> {} & for h being set st h in rng F holds h <> {};
+   then for h be Element of HFuncs X st h in rng F
+    holds h is quasi_total non empty by A2;
+  hence f*<:F:> is quasi_total Element of HFuncs X by A1,A6,Th49;
+end;
+
+theorem Th51:
+for f,g being non empty quasi_total Element of HFuncs D
+ st arity f = 0 & arity g = 0 & f.{} = g.{} holds f = g
+proof set X = D; let f,g be non empty quasi_total Element of HFuncs X; assume
+A1: arity f = 0 & arity g = 0 & f.{} = g.{};
+    now thus dom f = 0-tuples_on X by A1,Th25 .= {<*>X} by FINSEQ_2:112;
+   thus dom g = 0-tuples_on X by A1,Th25 .= {<*>X} by FINSEQ_2:112;
+   let x be set; assume x in {<*>X}; then x = {} by TARSKI:def 1;
+   hence f.x = g.x by A1;
+  end; hence f = g by FUNCT_1:9;
+end;
+
+theorem Th52:
+for f,g being non empty len-total homogeneous to-naturals
+              (from-natural-fseqs Function)
+ st arity f = 0 & arity g = 0 & f.{} = g.{} holds f = g
+proof let f,g be non empty len-total homogeneous to-naturals
+               (from-natural-fseqs Function); assume
+A1: arity f = 0 & arity g = 0 & f.{} = g.{};
+     f is non empty quasi_total Element of HFuncs NAT &
+   g is non empty quasi_total Element of HFuncs NAT by Th32;
+ hence f = g by A1,Th51;
+end;
+
+begin :: Primitive recursiveness
+
+reserve f1, f2 for non empty homogeneous to-naturals from-natural-fseqs
+                   Function,
+        e1, e2 for homogeneous to-naturals from-natural-fseqs Function,
+        p for Element of (arity f1+1)-tuples_on NAT;
+
+definition
+ let g, f1, f2 be homogeneous to-naturals from-natural-fseqs Function,
+     i be Nat;
+ pred g is_primitive-recursively_expressed_by f1,f2,i means:Def12:
+  ex n being Nat st dom g c= n-tuples_on NAT & i >= 1 & i <= n &
+  (arity f1)+1 = n & n+1 = arity f2 &
+  for p being FinSequence of NAT st len p = n
+   holds
+   (p+*(i,0) in dom g iff Del(p,i) in dom f1) &
+   (p+*(i,0) in dom g implies g.(p+*(i,0)) = f1.Del(p,i)) &
+   for n being Nat holds
+    (p+*(i,n+1) in dom g iff
+       p+*(i,n) in dom g & (p+*(i,n))^<*g.(p+*(i,n))*> in dom f2) &
+    (p+*(i,n+1) in dom g implies
+       g.(p+*(i,n+1)) = f2.((p+*(i,n))^<*g.(p+*(i,n))*>));
+end;
+
+defpred Q[Nat,Element of HFuncs NAT, Element of HFuncs NAT,
+          FinSequence of NAT, Nat, homogeneous Function] means
+ ($5 in dom $4 & $4+*($5,$1) in dom $2 &
+      ($4+*($5,$1))^<*$2.($4+*($5,$1))*> in dom $6
+    implies $3 =
+     $2+*({$4+*($5,$1+1)}--> $6.(($4+*($5,$1))^<*$2.($4+*($5,$1))*>))) &
+ (not $5 in dom $4 or not $4+*($5,$1) in dom $2 or
+  not ($4+*($5,$1))^<*$2.($4+*($5,$1))*> in dom $6
+    implies $3 = $2);
+
+definition
+ let f1,f2 be homogeneous to-naturals from-natural-fseqs Function;
+     reconsider ff1 = f1, ff2 = f2 as Element of HFuncs NAT by Th31;
+ let i be Nat;
+ let p be FinSequence of NAT;
+ func primrec(f1,f2,i,p) -> Element of HFuncs NAT means:Def13:
+  ex F being Function of NAT, HFuncs NAT st it = F.(p/.i) &
+   (i in dom p & Del(p,i) in dom f1 implies
+      F.0 = {p+*(i,0)} --> (f1.Del(p,i))) &
+   (not i in dom p or not Del(p,i) in dom f1 implies F.0 = {}) &
+  for m being Nat holds
+   (i in dom p & p+*(i,m) in dom (F.m) &
+    (p+*(i,m))^<*(F.m).(p+*(i,m))*> in dom f2
+      implies F.(m+1) =
+       (F.m)+*({p+*(i,m+1)}--> f2.((p+*(i,m))^<*(F.m).(p+*(i,m))*>))) &
+   (not i in dom p or not p+*(i,m) in dom (F.m) or
+      not (p+*(i,m))^<*(F.m).(p+*(i,m))*> in dom f2 implies F.(m+1) = F.m);
+ existence proof set n = len p;
+A1:  HFuncs NAT = {f where f is Element of PFuncs(NAT*, NAT): f is homogeneous}
+     by Def8;
+      p+*(i,0) in NAT* by FINSEQ_1:def 11;
+   then reconsider Ap = {p+*(i,0)} as non empty Subset of NAT* by ZFMISC_1:37;
+      Del(p,i) in dom f1 or not Del(p,i) in dom f1;
+    then ff1.Del(p,i) = ff1/.Del(p,i) or ff1.Del(p,i) = {}
+     by FINSEQ_4:def 4,FUNCT_1:def 4;
+   then reconsider z = ff1.Del(p,i) as Nat by CARD_1:51;
+      {} is PartFunc of NAT*, NAT &
+    Ap --> z is PartFunc of NAT*, NAT by PARTFUN1:56;
+    then Ap --> z = {p+*(i,0)} --> z & Ap --> z in PFuncs(NAT*, NAT) &
+    {} in PFuncs(NAT*, NAT) by PARTFUN1:119;
+    then Ap --> z in HFuncs NAT & {} in HFuncs NAT by A1;
+   then reconsider t = Ap --> z, e = {} as Element of HFuncs NAT;
+   i in dom p & Del(p,i) in dom f1 or not i in dom p or not Del(p,i) in dom f1;
+   then consider A being Element of HFuncs NAT such that
+A2:  (i in dom p & Del(p,i) in dom f1 implies A = t) &
+    (not i in dom p or not Del(p,i) in dom f1 implies A = e);
+   defpred A[Nat,Element of HFuncs NAT, Element of HFuncs NAT] means
+    Q[$1, $2, $3, p, i, ff2];
+A3: for m being Nat for x being Element of HFuncs NAT
+     ex y being Element of HFuncs NAT st A[m,x,y]
+     proof let m be Nat, x be Element of HFuncs NAT;
+         i in dom p & p+*(i,m) in dom x &
+        (p+*(i,m))^<*x.(p+*(i,m))*> in dom f2 or
+       not i in dom p or not p+*(i,m) in dom x or
+       not (p+*(i,m))^<*x.(p+*(i,m))*> in dom f2;
+      then consider y being Function such that
+A4:    i in dom p & p+*(i,m) in dom x &
+         (p+*(i,m))^<*x.(p+*(i,m))*> in dom f2 &
+       y = x+*({p+*(i,m+1)}--> f2.((p+*(i,m))^<*x.(p+*(i,m))*>)) or
+       (not i in dom p or not p+*(i,m) in dom x or
+        not (p+*(i,m))^<*x.(p+*(i,m))*> in dom f2) & y = x;
+      set f= x+*({p+*(i,m+1)} --> f2.((p+*(i,m))^<*x.(p+*(i,m))*>));
+         p+*(i,m+1) in NAT* by FINSEQ_1:def 11;
+      then reconsider B = {p+*(i,m+1)} as Subset of NAT* by ZFMISC_1:37;
+         (p+*(i,m))^<*x.(p+*(i,m))*> in dom f2 or
+       not (p+*(i,m))^<*x.(p+*(i,m))*> in dom f2;
+       then ff2.((p+*(i,m))^<*x.(p+*(i,m))*>) in rng ff2 & rng ff2 c= NAT or
+       ff2.((p+*(i,m))^<*x.(p+*(i,m))*>) = {}
+        by FUNCT_1:12,def 4,RELSET_1:12;
+     then reconsider z = ff2.((p+*(i,m))^<*x.(p+*(i,m))*>) as Nat by CARD_1:51;
+         dom p = dom (p+*(i,m+1)) by FUNCT_7:32;
+       then len (p+*(i,m+1)) = n by FINSEQ_3:31;
+       then p+*(i,m+1) is Element of n-tuples_on NAT by FINSEQ_2:110;
+then A5:    B c= n-tuples_on NAT by ZFMISC_1:37;
+         dom (B --> z) = B by FUNCOP_1:19;
+then A6:    f = x+*(B --> z) & dom f = dom x \/ B by FUNCT_4:def 1;
+         now assume
+A7:      p+*(i,m) in dom x;
+           dom x c= n-tuples_on NAT proof let a be set; assume
+A8:         a in dom x; then reconsider q = a as Element of NAT*;
+A9:         len q = len (p+*(i,m)) by A7,A8,Def4;
+              dom p = dom (p+*(i,m)) by FUNCT_7:32;
+            then len q = n by A9,FINSEQ_3:31;
+            then q is Element of n-tuples_on NAT by FINSEQ_2:110;
+           hence thesis;
+         end;
+         then f is PartFunc of NAT*, NAT & dom f c= n-tuples_on NAT
+          by A5,A6,FUNCT_4:41,XBOOLE_1:8;
+         then f in PFuncs(NAT*, NAT) & f is homogeneous by Th19,PARTFUN1:119;
+        hence f in HFuncs NAT by A1;
+       end; then reconsider y as Element of HFuncs NAT by A4;
+      take y;
+      thus i in dom p & p+*(i,m) in dom x &
+        (p+*(i,m))^<*x.(p+*(i,m))*> in dom ff2
+       implies y = x+*({p+*(i,m+1)}-->ff2.((p+*(i,m))^<*x.(p+*(i,m))*>)) by A4;
+      thus not i in dom p or not p+*(i,m) in dom x or
+            not (p+*(i,m))^<*x.(p+*(i,m))*> in dom ff2 implies y = x by A4;
+     end;
+   consider FF being Function of NAT, HFuncs NAT such that
+A10:  FF.0 = A and
+A11:  for m being Nat holds A[m,FF.m,FF.(m+1)] from RecExD(A3);
+   take FF.(p/.i), FF; thus thesis by A2,A10,A11;
+  end;
+ uniqueness proof let g1,g2 be Element of HFuncs NAT;
+   given F1 being Function of NAT, HFuncs NAT such that
+A12: g1 = F1.(p/.i) and
+A13: i in dom p & Del(p,i) in dom f1
+      implies F1.0 = {p+*(i,0)} --> (f1.Del(p,i)) and
+A14: not i in dom p or not Del(p,i) in dom f1 implies F1.0 = {} and
+A15: for m being Nat holds Q[m, F1.m, F1.(m+1), p, i , f2];
+   given F2 being Function of NAT, HFuncs NAT such that
+A16: g2 = F2.(p/.i) and
+A17: i in dom p & Del(p,i) in dom f1
+      implies F2.0 = {p+*(i,0)} --> (f1.Del(p,i)) and
+A18: not i in dom p or not Del(p,i) in dom f1 implies F2.0 = {} and
+A19: for m being Nat holds Q[m, F2.m, F2.(m+1), p, i , f2];
+defpred p[Nat] means F1.$1 = F2.$1;
+A20: p[0] by A13,A14,A17,A18;
+A21: now let m be Nat; assume p[m];
+      then Q[m,F1.m,F1.(m+1),p,i,f2] & Q[m, F1.m, F2.(m+1), p, i , ff2] by A15,
+A19;
+     hence p[m+1];
+    end; for m being Nat holds p[m] from Ind(A20,A21);
+   hence g1 = g2 by A12,A16;
+  end;
+end;
+
+theorem Th53:
+for p, q being FinSequence of NAT
+ st q in dom primrec(e1,e2,i,p) ex k st q = p+*(i,k)
+proof set f1 = e1, f2 = e2; let p, q being FinSequence of NAT such that
+A1: q in dom primrec(f1,f2,i,p);
+    consider F being Function of NAT, HFuncs NAT such that
+A2: primrec(f1,f2,i,p) = F.(p/.i) and
+A3: (i in dom p & Del(p,i) in dom f1
+        implies F.0 = {p+*(i,0)} --> (f1.Del(p,i))) and
+A4: (not i in dom p or not Del(p,i) in dom f1 implies F.0 = {}) and
+A5:  for m being Nat holds Q[m, F.m, F.(m+1), p, i, f2] by Def13;
+defpred p[Nat] means q in dom (F.$1) implies ex k being Nat st q = p+*(i,k);
+A6: p[0] proof assume
+    A7: q in dom (F.0);
+    per cases;
+    suppose i in dom p & Del(p,i) in dom f1;
+        then dom (F.0) = {p+*(i,0)} by A3,FUNCOP_1:19;
+        then p+*(i,0) = q by A7,TARSKI:def 1;
+     hence ex k being Nat st q = p+*(i,k);
+    suppose not i in dom p or not Del(p,i) in dom f1;
+     hence ex k being Nat st q = p+*(i,k) by A4,A7,RELAT_1:60;
+    end;
+A8: for m be Nat st p[m] holds p[m+1] proof let m be Nat such that
+  A9: p[m] and
+  A10: q in dom (F.(m+1));
+      per cases;
+      suppose i in dom p & p+*(i,m) in dom (F.m) &
+              (p+*(i,m))^<*(F.m).(p+*(i,m))*> in dom f2;
+       then F.(m+1) =
+       (F.m)+*({p+*(i,m+1)}--> f2.((p+*(i,m))^<*(F.m).(p+*(i,m))*>)) by A5;
+       then dom (F.(m+1)) = dom (F.m) \/
+         dom ({p+*(i,m+1)}--> f2.((p+*(i,m))^<*(F.m).(p+*(i,m))*>))
+           by FUNCT_4:def 1;
+       then A11: dom (F.(m+1)) = dom (F.m) \/ {p+*(i,m+1)} by FUNCOP_1:19;
+       thus ex k being Nat st q = p+*(i,k) proof
+        per cases by A10,A11,XBOOLE_0:def 2;
+        suppose q in dom (F.m); hence ex k being Nat st q = p+*(i,k) by A9;
+        suppose q in {p+*(i,m+1)}; then q = p+*(i,m+1) by TARSKI:def 1;
+         hence ex k being Nat st q = p+*(i,k);
+       end;
+      suppose not i in dom p or not p+*(i,m) in dom (F.m) or
+        not (p+*(i,m))^<*(F.m).(p+*(i,m))*> in dom f2;
+       hence ex k being Nat st q = p+*(i,k) by A5,A9,A10;
+    end;
+    for n being Nat holds p[n] from Ind(A6,A8);
+ hence ex k being Nat st q = p+*(i,k) by A1,A2;
+end;
+
+theorem Th54:
+for p being FinSequence of NAT st not i in dom p holds primrec(e1,e2,i,p) = {}
+proof set f1 = e1, f2 = e2; let p be FinSequence of NAT; assume
+A1: not i in dom p; consider F being Function of NAT, HFuncs NAT such that
+A2: primrec(f1,f2,i,p) = F.(p/.i) and
+     (i in dom p & Del(p,i) in dom f1
+    implies F.0 = {p+*(i,0)} --> (f1.Del(p,i))) and
+A3: (not i in dom p or not Del(p,i) in dom f1 implies F.0 = {}) and
+A4:  for m being Nat holds Q[m, F.m, F.(m+1), p, i, f2] by Def13;
+defpred p[Nat] means F.$1 = {};
+A5: p[0] by A1,A3;
+A6: for m be Nat st p[m] holds p[m+1] by A1,A4;
+    for m being Nat holds p[m] from Ind(A5, A6);
+ hence primrec(f1,f2,i,p) = {} by A2;
+end;
+
+theorem Th55:
+for p, q being FinSequence of NAT holds
+  primrec(e1,e2,i,p) tolerates primrec(e1,e2,i,q)
+proof set f1 = e1, f2 = e2; let p1,p2 be FinSequence of NAT;
+ per cases;
+ suppose not i in dom p1 or not i in dom p2;
+    then primrec(f1,f2,i, p1) = {} or primrec(f1,f2,i, p2) = {} by Th54;
+   hence thesis by PARTFUN1:141;
+ suppose A1: i in dom p1 & i in dom p2;
+    consider F1 being Function of NAT, HFuncs NAT such that
+A2: primrec(f1,f2,i,p1) = F1.(p1/.i) and
+A3: (i in dom p1 & Del(p1,i) in dom f1
+        implies F1.0 = {p1+*(i,0)} --> (f1.Del(p1,i))) and
+A4: (not i in dom p1 or not Del(p1,i) in dom f1 implies F1.0 = {}) and
+A5:  for m being Nat holds Q[m, F1.m, F1.(m+1), p1, i, f2] by Def13;
+    consider F2 being Function of NAT, HFuncs NAT such that
+A6: primrec(f1,f2,i,p2) = F2.(p2/.i) and
+A7: (i in dom p2 & Del(p2,i) in dom f1
+     implies F2.0 = {p2+*(i,0)} --> (f1.Del(p2,i))) and
+A8: (not i in dom p2 or not Del(p2,i) in dom f1 implies F2.0 = {}) and
+A9:  for m being Nat holds Q[m, F2.m, F2.(m+1), p2, i, f2] by Def13;
+defpred p[Nat] means for x being set st x in dom (F1.$1)
+     ex n being Nat st x = p1+*(i,n) & n <= $1;
+ A10: p[0] proof let x be set such that
+     A11: x in dom (F1.0);
+           dom (F1.0) = {p1+*(i,0)} by A3,A4,A11,FUNCOP_1:19,RELAT_1:60;
+         then x = p1+*(i,0) by A11,TARSKI:def 1;
+     hence ex n being Nat st x = p1+*(i,n) & n <= 0;
+    end;
+A12: now let m be Nat such that
+     A13: p[m];
+     thus p[m+1] proof
+         let x be set such that
+     A14: x in dom (F1.(m+1));
+     A15: m <= m+1 by NAT_1:29; set p1c = (p1+*(i,m))^<*(F1.m).(p1+*(i,m))*>;
+      per cases;
+      suppose i in dom p1 & p1+*(i,m) in dom (F1.m) & p1c in dom f2;
+       then F1.(m+1) = (F1.m)+*({p1+*(i,m+1)}--> f2.(p1c)) by A5;
+       then dom (F1.(m+1))
+        = dom (F1.m) \/ dom ({p1+*(i,m+1)}--> f2.(p1c)) by FUNCT_4:def 1
+       .= dom (F1.m) \/ {p1+*(i,m+1)} by FUNCOP_1:19;
+       then A16: x in dom (F1.m) or x in {p1+*(i,m+1)} by A14,XBOOLE_0:def 2;
+      thus ex n being Nat st x = p1+*(i,n) & n <= m+1 proof
+            per cases by A16,TARSKI:def 1;
+            suppose x in dom (F1.m); then consider n being Nat such that
+            A17: x = p1+*(i,n) & n <= m by A13; n <= m+1 by A15,A17,AXIOMS:22;
+             hence thesis by A17;
+            suppose x = p1+*(i,m+1); hence thesis;
+           end;
+      suppose not i in dom p1 or not p1+*(i,m) in dom (F1.m)
+           or not p1c in dom f2; then F1.(m+1) = F1.m by A5;
+        then consider n being Nat such that
+      A18: x = p1+*(i,n) & n <= m by A13,A14; n <= m+1 by A15,A18,AXIOMS:22;
+      hence ex n being Nat st x = p1+*(i,n) & n <= m+1 by A18;
+      end;
+     end;
+A19: for m being Nat holds p[m] from Ind(A10, A12);
+     defpred p[Nat] means for x being set st x in dom (F2.$1)
+     ex n being Nat st x = p2+*(i,n) & n <= $1;
+A20: p[0] proof let x be set such that
+     A21: x in dom (F2.0);
+           dom (F2.0) = {p2+*(i,0)} by A7,A8,A21,FUNCOP_1:19,RELAT_1:60;
+         then x = p2+*(i,0) by A21,TARSKI:def 1;
+     hence ex n being Nat st x = p2+*(i,n) & n <= 0;
+    end;
+A22: now let m be Nat such that
+     A23: p[m];
+     thus p[m+1]
+     proof let x be set such that
+     A24: x in dom (F2.(m+1));
+     A25: m <= m+1 by NAT_1:29; set p2c = (p2+*(i,m))^<*(F2.m).(p2+*(i,m))*>;
+      per cases;
+      suppose i in dom p2 & p2+*(i,m) in dom (F2.m) & p2c in dom f2;
+       then F2.(m+1) = (F2.m)+*({p2+*(i,m+1)}--> f2.(p2c)) by A9;
+       then dom (F2.(m+1))
+        = dom (F2.m) \/ dom ({p2+*(i,m+1)}--> f2.(p2c)) by FUNCT_4:def 1
+       .= dom (F2.m) \/ {p2+*(i,m+1)} by FUNCOP_1:19;
+       then A26: x in dom (F2.m) or x in {p2+*(i,m+1)} by A24,XBOOLE_0:def 2;
+      thus ex n being Nat st x = p2+*(i,n) & n <= m+1 proof
+            per cases by A26,TARSKI:def 1;
+            suppose x in dom (F2.m); then consider n being Nat such that
+            A27: x = p2+*(i,n) & n <= m by A23; n <= m+1 by A25,A27,AXIOMS:22;
+             hence thesis by A27;
+            suppose x = p2+*(i,m+1); hence thesis;
+            end;
+      suppose not i in dom p2 or not p2+*(i,m) in dom (F2.m)
+           or not p2c in dom f2; then F2.(m+1) = F2.m by A9;
+        then consider n being Nat such that
+      A28: x = p2+*(i,n) & n <= m by A23,A24; n <= m+1 by A25,A28,AXIOMS:22;
+      hence ex n being Nat st x = p2+*(i,n) & n <= m+1 by A28;
+      end;
+     end;
+A29: for m being Nat holds p[m] from Ind(A20, A22);
+A30: for m being Nat holds F1.m = F2.m or dom (F1.m) /\ dom (F2.m) = {} proof
+   A31: now assume A32: p1+*(i,0) = p2+*(i,0);
+  defpred r[Nat] means F1.$1 = F2.$1;
+A33: r[0] proof
+           per cases;
+           suppose i in dom p1 & Del(p1,i) in dom f1;
+            hence thesis by A1,A3,A7,A32,Th7;
+           suppose not i in dom p1 or not Del(p1, i) in dom f1;
+            hence thesis by A1,A4,A8,A32,Th7;
+           end;
+       A34: now let m be Nat such that
+           A35: r[m];
+           A36: p1+*(i,m) = p2+*(i,m) & p1+*(i,m+1) = p2+*(i,m+1) by A32,Th5;
+       A37: Q[m, F1.m, F1.(m+1), p1, i, f2] by A5;
+              Q[m, F2.m, F2.(m+1), p2, i, f2] by A9;
+            hence r[m+1] by A1,A35,A36,A37;
+           end;
+        thus for m being Nat holds r[m] from Ind(A33, A34);
+       end;
+         now assume A38: p1+*(i,0) <> p2+*(i,0);
+        let m be Nat; assume dom (F1.m) /\ dom (F2.m) <> {};
+          then consider x being set such that
+        A39: x in dom(F1.m) /\ dom(F2.m) by XBOOLE_0:def 1;
+        A40: x in dom(F1.m) & x in dom(F2.m) by A39,XBOOLE_0:def 3;
+          then consider n1 being Nat such that
+        A41: x = p1+*(i,n1) & n1 <= m by A19;
+          consider n2 being Nat such that
+        A42: x = p2+*(i,n2) & n2 <= m by A29,A40;
+        thus contradiction by A38,A41,A42,Th5;
+       end;
+    hence thesis by A31;
+   end;
+A43: for m, n being Nat holds F1.m c= F1.(m+n) proof
+     let m be Nat;
+defpred r[Nat] means F1.m c= F1.(m+$1);
+A44: r[0];
+A45: now let n be Nat such that
+     A46: r[n]; set k = m+n;
+         F1.k qua set c= F1.(k+1) qua set proof let x be set such that
+       A47: x in F1.k; set p1c = (p1+*(i,k))^<*(F1.k).(p1+*(i,k))*>;
+         per cases;
+         suppose i in dom p1 & p1+*(i,k) in dom (F1.k) & p1c in dom f2;
+          then A48: F1.(k+1) = (F1.k)+*({p1+*(i,k+1)}--> f2.(p1c)) by A5;
+             dom (F1.k) misses dom ({p1+*(i,k+1)}--> f2.(p1c))
+           proof
+            assume not thesis; then consider x being set such that
+           A49: x in dom (F1.k) /\
+ dom({p1+*(i,k+1)}--> f2.(p1c)) by XBOOLE_0:4;
+             A50: x in dom (F1.k) & x in dom({p1+*(i,k+1)}--> f2.(p1c))
+               by A49,XBOOLE_0:def 3;
+             then x in dom (F1.k) & x in {p1+*(i,k+1)} by FUNCOP_1:19;
+           then A51: x in dom (F1.k) & x = p1+*(i,k+1) by TARSKI:def 1;
+               consider n1 being Nat such that
+           A52: x = p1+*(i,n1) & n1 <= k by A19,A50;
+                 n1 = (p1+*(i,n1)).i & k+1 = (p1+*(i,k+1)).i by A1,FUNCT_7:33;
+            hence contradiction by A51,A52,NAT_1:38;
+           end; then F1.k c= F1.(k+1) by A48,FUNCT_4:33;
+          hence x in F1.(k+1) by A47;
+         suppose not i in dom p1 or not p1+*(i,k) in dom (F1.k)
+              or not p1c in dom f2;
+          hence x in F1.(k+1) by A5,A47;
+       end; then F1.m c= F1.((m+n)+1) by A46,XBOOLE_1:1;
+      hence r[n+1] by XCMPLX_1:1;
+     end; thus for n being Nat holds r[n] from Ind(A44, A45);
+    end;
+A53: for m, n being Nat holds F2.m c= F2.(m+n) proof
+     let m be Nat;
+defpred r[Nat] means F2.m c= F2.(m+$1);
+A54: r[0];
+A55: now let n be Nat such that
+     A56: r[n]; set k = m+n;
+         F2.k c= F2.(k+1) proof let x be set such that
+       A57: x in F2.k; set p2c = (p2+*(i,k))^<*(F2.k).(p2+*(i,k))*>;
+         per cases;
+         suppose i in dom p2 & p2+*(i,k) in dom (F2.k) & p2c in dom f2;
+         then A58: F2.(k+1) = (F2.k)+*({p2+*(i,k+1)}--> f2.(p2c)) by A9;
+             dom (F2.k) misses dom ({p2+*(i,k+1)}--> f2.(p2c))
+           proof
+            assume not thesis; then consider x being set such that
+           A59: x in dom (F2.k) /\
+            dom({p2+*(i,k+1)}--> f2.(p2c)) by XBOOLE_0:4;
+             A60: x in dom (F2.k) & x in dom({p2+*(i,k+1)}--> f2.(p2c))
+               by A59,XBOOLE_0:def 3;
+             then x in dom (F2.k) & x in {p2+*(i,k+1)} by FUNCOP_1:19;
+           then A61: x in dom (F2.k) & x = p2+*(i,k+1) by TARSKI:def 1;
+               consider n2 being Nat such that
+           A62: x = p2+*(i,n2) & n2 <= k by A29,A60;
+                 n2 = (p2+*(i,n2)).i & k+1 = (p2+*(i,k+1)).i by A1,FUNCT_7:33;
+            hence contradiction by A61,A62,NAT_1:38;
+           end; then F2.k c= F2.(k+1) by A58,FUNCT_4:33;
+          hence x in F2.(k+1) by A57;
+         suppose not i in dom p2 or not p2+*(i,k) in dom (F2.k)
+              or not p2c in dom f2;
+          hence x in F2.(k+1) by A9,A57;
+       end; then F2.m c= F2.((m+n)+1) by A56,XBOOLE_1:1;
+      hence r[n+1] by XCMPLX_1:1;
+     end; thus for n being Nat holds r[n] from Ind(A54, A55);
+    end;
+    reconsider m = p1/.i, n = p2/.i as Nat;
+    reconsider F1m = F1.m, F1n = F1.n, F2m = F2.m, F2n = F2.n
+             as Element of HFuncs NAT;
+  thus thesis proof
+  per cases;
+  suppose m <= n; then consider k being Nat such that
+  A63: n = m+k by NAT_1:28;
+   thus primrec(f1,f2,i,p1) tolerates primrec(f1,f2,i,p2) proof
+    per cases by A30;
+    suppose A64: F1n = F2n; F1m c= F1n by A43,A63;
+     hence thesis by A2,A6,A64,PARTFUN1:140;
+    suppose dom (F1n) /\ dom (F2n) = {};
+    then dom (F1n) misses dom (F2n) by XBOOLE_0:def 7;
+    then A65: F1n tolerates F2n by PARTFUN1:138; F1m c= F1n by A43,A63;
+     hence thesis by A2,A6,A65,PARTFUN1:140;
+   end;
+  suppose m >= n; then consider k being Nat such that
+  A66: m = n+k by NAT_1:28;
+   thus primrec(f1,f2,i,p1) tolerates primrec(f1,f2,i,p2) proof
+    per cases by A30;
+    suppose A67: F1m = F2m; F2n c= F2m by A53,A66;
+     hence thesis by A2,A6,A67,PARTFUN1:140;
+    suppose dom (F1m) /\ dom (F2m) = {};
+    then dom (F1m) misses dom (F2m) by XBOOLE_0:def 7;
+    then A68: F1m tolerates F2m by PARTFUN1:138; F2n c= F2m by A53,A66;
+     hence thesis by A2,A6,A68,PARTFUN1:140;
+   end;
+ end;
+end;
+
+theorem Th56:
+for p being FinSequence of NAT
+ holds dom primrec(e1,e2,i,p) c= (1+arity e1)-tuples_on NAT
+proof set f1 = e1, f2 = e2; let p be FinSequence of NAT;
+ per cases;
+ suppose A1: i in dom p;
+    consider F being Function of NAT, HFuncs NAT such that
+A2: primrec(f1,f2,i,p) = F.(p/.i) and
+A3: (i in dom p & Del(p,i) in dom f1
+        implies F.0 = {p+*(i,0)} --> (f1.Del(p,i))) and
+A4: (not i in dom p or not Del(p,i) in dom f1 implies F.0 = {}) and
+A5:  for m being Nat holds Q[m, F.m, F.(m+1), p, i, f2] by Def13;
+defpred p[Nat] means dom (F.$1) c= (1+arity f1)-tuples_on NAT;
+A6: p[0] proof
+    per cases;
+    suppose A7: Del(p,i) in dom f1;
+    then A8: dom (F.0) = {p+*(i,0)} by A1,A3,FUNCOP_1:19;
+         dom f1 c= (arity f1)-tuples_on NAT by Th24;
+    then A9: len Del(p,i) = arity f1 by A7,FINSEQ_2:109; p <> <*>NAT by A1,
+RELAT_1:60;
+       then len p <> 0 by FINSEQ_1:32; then consider n being Nat such that
+    A10: len p = n+1 by NAT_1:22;
+    A11: len Del(p,i) = n by A1,A10,GOBOARD1:6;
+         dom p = dom (p+*(i,0)) by FUNCT_7:32;
+       then len (p+*(i,0)) = 1+arity f1 by A9,A10,A11,FINSEQ_3:31;
+      then (p+*(i,0)) is Element of (1+arity f1)-tuples_on NAT by FINSEQ_2:110;
+      hence dom (F.0) c= (1+arity f1)-tuples_on NAT by A8,ZFMISC_1:37;
+    suppose not Del(p,i) in dom f1;
+     hence dom (F.0) c= (1+arity f1)-tuples_on NAT by A4,RELAT_1:60,XBOOLE_1:2;
+    end;
+A12: now let m be Nat such that
+    A13: p[m];
+     set pc = (p+*(i,m))^<*(F.m).(p+*(i,m))*>;
+     per cases;
+     suppose A14: p+*(i,m) in dom (F.m) & pc in dom f2;
+        then F.(m+1) = (F.m)+*({p+*(i,m+1)}--> f2.(pc)) by A1,A5;
+        then dom (F.(m+1)) = dom (F.m) \/ dom ({p+*(i,m+1)}--> f2.(pc))
+         by FUNCT_4:def 1;
+      then A15: dom (F.(m+1)) = dom (F.m) \/ {p+*(i,m+1)} by FUNCOP_1:19;
+           dom (p+*(i,m)) = dom p by FUNCT_7:32
+          .= dom (p+*(i,m+1)) by FUNCT_7:32;
+      then A16: len (p+*(i,m)) = len (p+*(i,m+1)) by FINSEQ_3:31;
+           len (p+*(i,m)) = 1+arity f1 by A13,A14,FINSEQ_2:109;
+         then p+*(i,m+1)is Element of (1+arity f1)-tuples_on NAT by A16,
+FINSEQ_2:110;
+         then {p+*(i,m+1)} c= (1+arity f1)-tuples_on NAT by ZFMISC_1:37;
+      hence p[m+1] by A13,A15,XBOOLE_1:8;
+     suppose not p+*(i,m) in dom (F.m) or not pc in dom f2;
+      hence p[m+1] by A5,A13;
+    end;
+     for m being Nat holds p[m] from Ind(A6,A12);
+  hence thesis by A2;
+ suppose not i in dom p; then primrec(f1,f2,i,p) = {} by Th54;
+  hence thesis by RELAT_1:60,XBOOLE_1:2;
+end;
+
+theorem Th57:
+for p being FinSequence of NAT st e1 is empty holds primrec(e1,e2,i,p) is empty
+proof set f1 = e1, f2 = e2; let p be FinSequence of NAT; assume
+A1: f1 is empty; consider F be Function of NAT, HFuncs NAT such that
+A2: primrec(f1,f2,i,p) = F.(p/.i) and
+A3: (i in dom p & Del(p,i) in dom f1 implies
+      F.0 = {p+*(i,0)} --> (f1.Del(p,i))) &
+   (not i in dom p or not Del(p,i) in dom f1 implies F.0 = {}) and
+A4: for m being Nat holds
+   (i in dom p & p+*(i,m) in dom (F.m) &
+    (p+*(i,m))^<*(F.m).(p+*(i,m))*> in dom f2
+      implies F.(m+1) =
+       (F.m)+*({p+*(i,m+1)}--> f2.((p+*(i,m))^<*(F.m).(p+*(i,m))*>))) &
+   (not i in dom p or not p+*(i,m) in dom (F.m) or
+      not (p+*(i,m))^<*(F.m).(p+*(i,m))*> in dom f2 implies F.(m+1) = F.m)
+         by Def13;
+defpred p[Nat] means F.$1 = {};
+A5: p[0] by A1,A3,RELAT_1:60;
+A6: for k be Nat st p[k] holds p[k+1] by A4,RELAT_1:60;
+    for k being Nat holds p[k] from Ind(A5,A6);
+ hence primrec(f1,f2,i,p) is empty by A2;
+end;
+
+theorem Th58:
+f1 is len-total & f2 is len-total & arity f1 +2 = arity f2 &
+ 1 <= i & i <= 1+arity f1 implies p in dom primrec(f1,f2,i,p)
+proof assume that
+A1: f1 is len-total and
+A2: f2 is len-total and
+A3: arity f1 +2 = arity f2 and
+A4: 1 <= i & i <= 1+arity f1;
+A5: len p = 1+arity f1 by FINSEQ_2:109;
+then A6: i in dom p by A4,FINSEQ_3:27;
+then A7: p/.i = p.i by FINSEQ_4:def 4;
+   consider F being Function of NAT, HFuncs NAT such that
+A8: primrec(f1,f2,i,p) = F.(p/.i) and
+A9: (i in dom p & Del(p,i) in dom f1
+       implies F.0 = {p+*(i,0)} --> (f1.Del(p,i))) and
+     (not i in dom p or not Del(p,i) in dom f1 implies F.0 = {}) and
+A10: for m being Nat holds
+   (i in dom p & p+*(i,m) in dom (F.m) &
+    (p+*(i,m))^<*(F.m).(p+*(i,m))*> in dom f2
+      implies F.(m+1) =
+       (F.m)+*({p+*(i,m+1)}--> f2.((p+*(i,m))^<*(F.m).(p+*(i,m))*>))) &
+   (not i in dom p or not p+*(i,m) in dom (F.m) or
+      not (p+*(i,m))^<*(F.m).(p+*(i,m))*> in dom f2 implies F.(m+1) = F.m)
+      by Def13;
+defpred p[Nat] means (p+*(i,$1)) in dom (F.$1);
+A11: now
+    A12: len Del(p,i) = arity f1 by A5,A6,GOBOARD1:6;
+        reconsider Dpi = Del(p,i) as FinSequence of NAT by MATRIX_2:9;
+        reconsider Dpi' = Dpi as Element of (len Dpi)-tuples_on NAT
+          by FINSEQ_2:110; dom f1 = (arity f1)-tuples_on NAT by A1,Th26;
+        then Dpi' in dom f1 by A12; then dom (F.0) = {p+*(i,0)} by A4,A5,A9,
+FINSEQ_3:27,FUNCOP_1:19;
+     hence p[0] by TARSKI:def 1;
+    end;
+A13: now let m be Nat such that
+    A14: p[m]; set pc = (p+*(i,m))^<*(F.m).(p+*(i,m))*>;
+    A15: dom f2 = (arity f2)-tuples_on NAT by A2,Th26;
+          F.m is Element of HFuncs NAT;
+    then A16: rng (F.m) c= NAT by RELSET_1:12;
+          (F.m).(p+*(i,m)) in rng (F.m) by A14,FUNCT_1:12;
+        then reconsider aa = (F.m).(p+*(i,m)) as Nat by A16;
+        reconsider p2 = <*aa*> as FinSequence of NAT;
+        reconsider p1 = (p+*(i,m))^p2 as FinSequence of NAT;
+          len (p+*(i,m))=1+arity f1 & len p2 = 1 by FINSEQ_2:109;
+        then len p1 = arity f1+1+1 by FINSEQ_1:35
+          .= arity f1+(1+1) by XCMPLX_1:1 .= arity f2 by A3;
+        then p1 is Element of (arity f2)-tuples_on NAT by FINSEQ_2:110;
+        then F.(m+1) = (F.m)+*({p+*(i,m+1)}--> f2.(pc)) by A6,A10,A14,A15;
+    then A17: dom(F.(m+1))=dom (F.m) \/
+ dom ({p+*(i,m+1)}--> f2.(pc))by FUNCT_4:def 1;
+          p+*(i,m+1) in {p+*(i,m+1)} by TARSKI:def 1;
+        then p+*(i,m+1) in dom ({p+*(i,m+1)}--> f2.(pc)) by FUNCOP_1:19;
+     hence p[m+1] by A17,XBOOLE_0:def 2;
+    end;
+A18: for m being Nat holds p[m] from Ind(A11, A13);
+     (p+*(i,p.i)) = p by FUNCT_7:37;
+  hence p in dom primrec(f1,f2,i,p) by A7,A8,A18;
+end;
+
+definition
+ let f1,f2 be homogeneous to-naturals from-natural-fseqs Function;
+ let i be Nat;
+     reconsider ff1 = f1, ff2 = f2 as Element of HFuncs NAT by Th31;
+ func primrec(f1,f2,i) -> Element of HFuncs NAT means:Def14:
+  ex G being Function of (arity f1+1)-tuples_on NAT, HFuncs NAT st
+   it = Union G &
+   for p being Element of (arity f1+1)-tuples_on NAT
+    holds G.p = primrec(f1,f2,i,p);
+ existence proof set n = arity f1+1;
+   deffunc f(FinSequence of NAT) = primrec(f1,f2,i,$1);
+   consider G being Function of n-tuples_on NAT, HFuncs NAT such that
+A1:  for p being Element of n-tuples_on NAT holds G.p = f(p)
+     from LambdaD;
+A2: dom G = n-tuples_on NAT & rng G c= HFuncs NAT by FUNCT_2:def 1,RELSET_1:12;
+   consider np being Element of n-tuples_on NAT;
+      G.np in rng G by A2,FUNCT_1:12;
+   then reconsider Y = rng G as non empty Subset of HFuncs NAT by RELSET_1:12;
+      Y is PartFunc-set of NAT*, NAT
+     proof let f be Element of Y; thus f is PartFunc of NAT*, NAT; end;
+   then reconsider Y as PFUNC_DOMAIN of NAT*, NAT;
+A3: Y is compatible proof let f,g be Function; assume f in Y;
+      then consider x being set such that
+A4:    x in dom G & f = G.x by FUNCT_1:def 5; assume g in Y;
+      then consider y being set such that
+A5:    y in dom G & g = G.y by FUNCT_1:def 5;
+      reconsider x,y as Element of n-tuples_on NAT by A4,A5;
+         f = primrec(ff1,ff2,i,x) & g = primrec(ff1,ff2,i,y) by A1,A4,A5;
+      hence thesis by Th55;
+     end;
+      now let x be Element of n-tuples_on NAT; G.x = primrec(ff1,ff2,i,x) by A1
+;
+     hence dom (G.x) c= n-tuples_on NAT by Th56;
+    end; then consider g being Element of HFuncs NAT such that
+A6:  g = Union G & dom g c= n-tuples_on NAT by A3,Th43;
+   take g, G; thus thesis by A1,A6;
+  end;
+ uniqueness proof let g1,g2 be Element of HFuncs NAT;
+   given G1 being Function of (arity f1+1)-tuples_on NAT, HFuncs NAT such that
+A7: g1 = Union G1 and
+A8: for p being Element of (arity f1+1)-tuples_on NAT
+     holds G1.p = primrec(f1,f2,i,p);
+   given G2 being Function of (arity f1+1)-tuples_on NAT, HFuncs NAT such that
+A9: g2 = Union G2 and
+A10: for p being Element of (arity f1+1)-tuples_on NAT
+     holds G2.p = primrec(f1,f2,i,p);
+      now let p be Element of (arity f1+1)-tuples_on NAT;
+     thus G1.p = primrec(f1,f2,i,p) by A8 .= G2.p by A10;
+    end;
+   hence thesis by A7,A9,FUNCT_2:113;
+  end;
+end;
+
+theorem Th59:
+e1 is empty implies primrec(e1,e2,i) is empty
+proof set f1 = e1, f2 = e2; assume
+A1: f1 is empty; consider G being
+     Function of (arity f1+1)-tuples_on NAT, HFuncs NAT such that
+A2: primrec(f1,f2,i) = Union G and
+A3: for p being Element of (arity f1+1)-tuples_on NAT
+    holds G.p = primrec(f1,f2,i,p) by Def14;
+A4: dom G = (arity f1+1)-tuples_on NAT by FUNCT_2:def 1;
+     now let y be set;
+    hereby assume y in rng G; then consider x being set such that
+    A5: x in dom G & G.x = y by FUNCT_1:def 5;
+        reconsider p = x as Element of (arity f1+1)-tuples_on NAT by A5;
+          G.p = primrec(f1,f2,i,p) by A3 .= {} by A1,Th57;
+     hence y in {{}} by A5,TARSKI:def 1;
+    end; assume y in {{}};
+    then A6: y = {} by TARSKI:def 1;
+        consider p being Element of (arity f1+1)-tuples_on NAT; G.p = primrec
+(
+f1,f2,i,p) by A3
+        .= {} by A1,Th57;
+     hence y in rng G by A4,A6,FUNCT_1:12;
+   end;
+then A7: rng G = {{}} by TARSKI:2;
+     Union G = union rng G by PROB_1:def 3 .= {} by A7,ZFMISC_1:31;
+ hence primrec(f1,f2,i) is empty by A2;
+end;
+
+theorem Th60:
+dom primrec(f1,f2,i) c= (arity f1+1)-tuples_on NAT
+proof let x be set such that
+A1: x in dom primrec(f1,f2,i); consider G being
+                  Function of (arity f1+1)-tuples_on NAT, HFuncs NAT such that
+A2: primrec(f1,f2,i) = Union G and
+A3: for p being Element of (arity f1+1)-tuples_on NAT
+    holds G.p = primrec(f1,f2,i,p) by Def14;
+A4: rng G is compatible proof let f,g being Function such that
+   A5: f in rng G & g in rng G; consider fx being set such that
+   A6: fx in dom G & f = G.fx by A5,FUNCT_1:def 5;
+     consider gx being set such that
+   A7: gx in dom G & g = G.gx by A5,FUNCT_1:def 5;
+     reconsider fx as Element of (arity f1+1)-tuples_on NAT by A6;
+     reconsider gx as Element of (arity f1+1)-tuples_on NAT by A7;
+       G.fx = primrec(f1,f2,i,fx) & G.gx = primrec(f1,f2,i,gx) by A3;
+    hence f tolerates g by A6,A7,Th55;
+   end;
+  now let x be Element of (arity f1+1)-tuples_on NAT;
+       G.x = primrec(f1,f2,i,x) by A3;
+    hence dom (G.x) c= (arity f1+1)-tuples_on NAT by Th56;
+   end; then consider F being Element of HFuncs NAT such that
+A8: F = Union G & dom F c= (arity f1+1)-tuples_on NAT by A4,Th43;
+ thus x in (arity f1+1)-tuples_on NAT by A1,A2,A8;
+end;
+
+theorem Th61:
+f1 is len-total & f2 is len-total & arity f1 +2 = arity f2 &
+1 <= i & i <= 1+arity f1
+ implies dom primrec(f1,f2,i) = (arity f1+1)-tuples_on NAT &
+         arity primrec(f1,f2,i) = arity f1+1
+ proof assume that
+A1: f1 is len-total and
+A2: f2 is len-total and
+A3: arity f1 +2 = arity f2 and
+A4: 1 <= i & i <= 1+arity f1;
+A5: dom primrec(f1,f2,i) c= (arity f1+1)-tuples_on NAT by Th60;
+   set n = arity f1+1;
+     n-tuples_on NAT c= dom primrec(f1,f2,i) proof let x be set such that
+   A6: x in n-tuples_on NAT;
+       reconsider x' = x as Element of n-tuples_on NAT by A6;
+       consider G being Function of n-tuples_on NAT, HFuncs NAT such that
+   A7: primrec(f1,f2,i) = Union G and
+   A8: for p being Element of n-tuples_on NAT
+        holds G.p = primrec(f1,f2,i,p) by Def14;
+   A9: G.x' = primrec(f1,f2,i,x') by A8;
+   A10: x' in dom primrec(f1,f2,i,x') by A1,A2,A3,A4,Th58;
+         dom G = n-tuples_on NAT by FUNCT_2:def 1;
+   then A11: G.x' in rng G by FUNCT_1:12;
+         Union G = union rng G by PROB_1:def 3;
+  then reconsider rngG = rng G as non empty functional compatible set by A7,A11
+,Th14
+;
+   A12: dom union rngG =
+        union {dom f where f is Element of rngG: not contradiction} by Th15;
+  dom (G.x') in {dom f where f is Element of rngG:not contradiction} by A11
+;
+   then x in dom union rngG by A9,A10,A12,TARSKI:def 4;
+     hence x in dom primrec(f1,f2,i) by A7,PROB_1:def 3;
+   end;
+ hence dom primrec(f1,f2,i) = (arity f1+1)-tuples_on NAT by A5,XBOOLE_0:def 10
+;
+ hence arity primrec(f1,f2,i) = arity f1+1 by Th28;
+end;
+
+Lm2: now
+   let f1,f2 be non empty homogeneous to-naturals from-natural-fseqs Function;
+   let p be Element of (arity f1+1)-tuples_on NAT;
+   let i, m be Nat; set pm1 = p+*(i,m+1), pm = p+*(i,m);
+   let F1, F be Function of NAT, HFuncs NAT such that
+    A1: (i in dom pm1 & Del(pm1,i) in dom f1
+          implies F1.0 = {pm1+*(i,0)} --> (f1.Del(pm1,i))) &
+        (not i in dom pm1 or not Del(pm1,i) in dom f1 implies F1.0 = {}) and
+    A2: for M being Nat holds Q[M, F1.M, F1.(M+1), pm1, i, f2] and
+    A3: (i in dom pm & Del(pm,i) in dom f1
+          implies F.0 = {pm+*(i,0)} --> (f1.Del(pm,i))) &
+        (not i in dom pm or not Del(pm,i) in dom f1 implies F.0 = {}) and
+    A4: for M being Nat holds Q[M, F.M, F.(M+1), pm, i, f2];
+    A5: dom p = dom pm & dom p = dom pm1 by FUNCT_7:32;
+    A6: pm+*(i,0) = p+*(i,0) by FUNCT_7:36 .= pm1+*(i,0) by FUNCT_7:36;
+    A7: Del(pm,i) = Del(p,i) by Th6 .= Del(pm1,i) by Th6;
+      for x being set st x in NAT holds F.x = F1.x proof
+defpred p[Nat] means F.$1 = F1.$1;
+  A8: p[0] by A1,A3,A5,A6,A7;
+  A9: for k be Nat st p[k] holds p[k+1] proof let k be Nat such that
+   A10: p[k];
+   A11: pm+*(i,k) = p+*(i,k) by FUNCT_7:36 .= pm1+*(i,k) by FUNCT_7:36;
+   A12: pm+*(i,(k+1))=p+*(i,(k+1)) by FUNCT_7:36.=pm1+*(i,(k+1)) by FUNCT_7:36;
+       per cases;
+       suppose A13: i in dom pm & pm+*(i,k) in dom (F.k) &
+                   (pm+*(i,k))^<*(F.k).(pm+*(i,k))*> in dom f2;
+        hence F.(k+1) =
+       (F.k)+*({pm+*(i,k+1)}--> f2.((pm+*(i,k))^<*(F.k).(pm+*(i,k))*>)) by A4
+            .= F1.(k+1) by A2,A5,A10,A11,A12,A13;
+      suppose A14: not i in dom pm or not pm+*(i,k) in dom (F.k) or
+              not (pm+*(i,k))^<*(F.k).(pm+*(i,k))*> in dom f2;
+       hence F.(k+1) = F.k by A4 .= F1.(k+1) by A2,A5,A10,A11,A14;
+      end;
+  A15:  for k being Nat holds p[k] from Ind(A8, A9);
+     let x be set; assume x in NAT; hence thesis by A15;
+    end; hence F1 = F by FUNCT_2:18;
+end;
+
+Lm3: now
+  let f1,f2 be non empty homogeneous to-naturals from-natural-fseqs Function;
+  let p be Element of (arity f1+1)-tuples_on NAT;
+  let i, m be Nat such that
+A1: i in dom p; set pm = p+*(i,m), pm1 = p+*(i,(m+1));
+  let F be Function of NAT, HFuncs NAT such that
+    A2: (i in dom pm1 & Del(pm1,i) in dom f1
+          implies F.0 = {pm1+*(i,0)} --> (f1.Del(pm1,i))) &
+        (not i in dom pm1 or not Del(pm1,i) in dom f1 implies F.0 = {}) and
+    A3: for M being Nat holds Q[M, F.M, F.(M+1), pm1, i, f2];
+    thus F.(m+1).pm = F.m.pm proof
+     per cases;
+     suppose i in dom pm1 & pm1+*(i,m) in dom (F.m) &
+                 (pm1+*(i,m))^<*(F.m).(pm1+*(i,m))*> in dom f2;
+     then A4: F.(m+1) =
+     (F.m)+*({pm1+*(i,m+1)}--> f2.((pm1+*(i,m))^<*(F.m).(pm1+*(i,m))*>)) by A3;
+         pm.i = m & pm1.i = m+1 by A1,FUNCT_7:33;
+       then pm <> pm1 & pm1 = pm1+*(i,m+1) by FUNCT_7:36,NAT_1:38;
+       then not pm in {pm1+*(i,m+1)} by TARSKI:def 1;
+      then not pm in dom
+  ({pm1+*(i,m+1)}--> f2.((pm1+*(i,m))^<*(F.m).(pm1+*(i,m))*>)) by FUNCOP_1:19;
+      hence F.(m+1).pm = F.m.pm by A4,FUNCT_4:12;
+     suppose not i in dom pm1 or not pm1+*(i,m) in dom (F.m) or
+   not (pm1+*(i,m))^<*(F.m).(pm1+*(i,m))*> in dom f2;
+      hence F.(m+1).pm = F.m.pm by A3;
+    end;
+A5:  for m, k being Nat st p+*(i,k) in dom (F.m) holds k <= m proof
+defpred p[Nat] means for k being Nat st p+*(i,k) in dom (F.$1) holds k <= $1;
+ A6: p[0] proof let k be Nat such that
+   A7: p+*(i,k) in dom (F.0);
+       per cases;
+       suppose i in dom pm1 & Del(pm1,i) in dom f1;
+          then dom (F.0) = {pm1+*(i,0)} by A2,FUNCOP_1:19;
+    then A8:(p+*(i,k)) = (pm1+*(i,0)) by A7,TARSKI:def 1 .= p+*(i,0) by FUNCT_7
+:36;
+            k = (p+*(i,k)).i by A1,FUNCT_7:33 .= 0 by A1,A8,FUNCT_7:33;
+        hence k <= 0;
+       suppose not i in dom pm1 or not Del(pm1,i) in dom f1;
+        hence k <= 0 by A2,A7,RELAT_1:60;
+     end;
+ A9: for m be Nat st p[m] holds p[m+1]
+  proof let m be Nat such that
+   A10: p[m];
+       let k be Nat such that
+   A11: p+*(i,k) in dom (F.(m+1));
+      per cases;
+      suppose i in dom pm1 & pm1+*(i,m) in dom (F.m) &
+                  (pm1+*(i,m))^<*(F.m).(pm1+*(i,m))*> in dom f2;
+         then F.(m+1) =
+     (F.m)+*({pm1+*(i,m+1)}--> f2.((pm1+*(i,m))^<*(F.m).(pm1+*(i,m))*>))by A3;
+         then dom (F.(m+1)) = dom (F.m) \/
+            dom ({pm1+*(i,m+1)}--> f2.((pm1+*(i,m))^<*(F.m).(pm1+*(i,m))*>))
+           by FUNCT_4:def 1;
+        then A12: dom (F.(m+1)) = dom (F.m) \/ {pm1+*(i,m+1)} by FUNCOP_1:19;
+        thus k <= (m+1) proof
+         per cases by A11,A12,XBOOLE_0:def 2;
+         suppose p+*(i,k) in dom (F.m); then k <= m & m <= m+1 by A10,NAT_1:29;
+          hence k <= (m+1) by AXIOMS:22;
+         suppose p+*(i,k) in {pm1+*(i,m+1)};
+          then A13: p+*(i,k)= pm1+*(i,m+1) by TARSKI:def 1 .=p+*(i,m+1) by
+FUNCT_7:36;
+                k = (p+*(i,k)).i by A1,FUNCT_7:33 .= m+1 by A1,A13,FUNCT_7:33;
+         hence k <= (m+1);
+        end;
+      suppose not i in dom pm1 or not pm1+*(i,m) in dom (F.m) or
+   not (pm1+*(i,m))^<*(F.m).(pm1+*(i,m))*> in dom f2; then F.(m+1) = F.m by A3;
+        then k <= m & m <= m+1 by A10,A11,NAT_1:29;
+       hence k <= (m+1) by AXIOMS:22;
+     end; thus for n be Nat holds p[n] from Ind(A6, A9);
+    end;
+    thus not pm1 in dom (F.m) proof assume not thesis; then m+1 <= m by A5;
+     hence contradiction by NAT_1:38;
+    end;
+end;
+
+Lm4: now
+    let f1,f2 be non empty homogeneous to-naturals from-natural-fseqs Function;
+    let p be Element of (arity f1+1)-tuples_on NAT;
+    let i, m be Nat such that
+A1: i in dom p;
+     let G be Function of (arity f1+1)-tuples_on NAT, HFuncs NAT such that
+A2: for p being Element of (arity f1+1)-tuples_on NAT
+     holds G.p = primrec(f1,f2,i,p);
+ thus for k, n being Nat holds dom (G.(p+*(i,k))) c= dom (G.(p+*(i,(k+n))))
+proof let k be Nat; set pk = p+*(i,k);
+defpred p[Nat] means dom (G.pk) c= dom(G.(p+*(i,(k+$1))));
+A3: p[0];
+A4: now let n be Nat such that
+  A5: p[n];
+      set pkn = p+*(i,(k+n)); set pkn1 = p+*(i,((k+n)+1)); set m = k+n;
+      consider F being Function of NAT, HFuncs NAT such that
+    A6: primrec(f1,f2,i,pkn)= F.(pkn/.i) and
+    A7: (i in dom pkn & Del(pkn,i) in dom f1
+          implies F.0 = {pkn+*(i,0)} --> (f1.Del(pkn,i))) &
+        (not i in dom pkn or not Del(pkn,i) in dom f1 implies F.0 = {}) and
+    A8: for M being Nat holds Q[M, F.M, F.(M+1), pkn, i, f2] by Def13;
+      consider F1 being Function of NAT, HFuncs NAT such that
+    A9: primrec(f1,f2,i,pkn1)= F1.(pkn1/.i) and
+    A10: (i in dom pkn1 & Del(pkn1,i) in dom f1
+          implies F1.0 = {pkn1+*(i,0)} --> (f1.Del(pkn1,i))) &
+        (not i in dom pkn1 or not Del(pkn1,i) in dom f1 implies F1.0 = {}) and
+    A11: for M being Nat holds Q[M, F1.M, F1.(M+1), pkn1, i, f2] by Def13;
+  A12: F1 = F by A7,A8,A10,A11,Lm2;
+  A13: dom p = dom pk & dom p = dom pkn1 & dom p = dom pkn by FUNCT_7:32;
+  then A14: pkn1/.i = pkn1.i by A1,FINSEQ_4:def 4 .= m+1 by A1,FUNCT_7:33;
+  A15: pkn/.i = pkn.i by A1,A13,FINSEQ_4:def 4 .= m by A1,FUNCT_7:33;
+    k+n+1 = k+(n+1) by XCMPLX_1:1;
+  then A16:  G.(p+*(i,(k+(n+1)))) = F.(m+1) by A2,A9,A12,A14;
+  A17:  G.(p+*(i,(k+n))) = F.m by A2,A6,A15;
+    per cases;
+    suppose i in dom pkn & pkn+*(i,m) in dom (F.m) &
+            (pkn+*(i,m))^<*(F.m).(pkn+*(i,m))*> in dom f2;
+      then F.(m+1) =
+     (F.m)+*({pkn+*(i,m+1)}--> f2.((pkn+*(i,m))^<*(F.m).(pkn+*(i,m))*>)) by A8;
+     then dom (F.(m+1)) = dom (F.m) \/
+        dom ({pkn+*(i,m+1)}--> f2.((pkn+*(i,m))^<*(F.m).(pkn+*(i,m))*>))
+         by FUNCT_4:def 1;
+      then dom (F.m) c= dom (F.(m+1)) by XBOOLE_1:7;
+     hence p[n+1] by A5,A16,A17,XBOOLE_1:1;
+    suppose not i in dom pkn or not pkn+*(i,m) in dom (F.m) or
+             not (pkn+*(i,m))^<*(F.m).(pkn+*(i,m))*> in dom f2;
+     hence p[n+1] by A5,A8,A16,A17;
+    end;
+thus for n being Nat holds p[n] from Ind(A3, A4);
+ end;
+end;
+
+Lm5: now
+   let f1,f2 be non empty homogeneous to-naturals from-natural-fseqs Function;
+   let p be Element of (arity f1+1)-tuples_on NAT;
+   let i, m be Nat such that
+A1: i in dom p;
+     let G be Function of (arity f1+1)-tuples_on NAT, HFuncs NAT such that
+A2: for p being Element of (arity f1+1)-tuples_on NAT
+     holds G.p = primrec(f1,f2,i,p);
+ thus for k, n being Nat st not p+*(i,k) in dom (G.(p+*(i,k)))
+       holds not p+*(i,k) in dom (G.(p+*(i,(k+n)))) proof
+  let k be Nat; set pk = p+*(i,k);
+defpred p[Nat] means not pk in dom (G.pk)
+        implies not pk in dom (G.(p+*(i,(k+$1))));
+A3: p[0];
+A4: for n be Nat st p[n] holds p[n+1] proof let n be Nat such that
+  A5: p[n] and
+  A6: not pk in dom (G.pk);
+  set pkn = p+*(i,(k+n)); set pkn1 = p+*(i,((k+n)+1)); set m = k+n;
+      consider F being Function of NAT, HFuncs NAT such that
+    A7: primrec(f1,f2,i,pkn)= F.(pkn/.i) and
+    A8: (i in dom pkn & Del(pkn,i) in dom f1
+          implies F.0 = {pkn+*(i,0)} --> (f1.Del(pkn,i))) &
+        (not i in dom pkn or not Del(pkn,i) in dom f1 implies F.0 = {}) and
+    A9: for M being Nat holds Q[M, F.M, F.(M+1), pkn, i, f2] by Def13;
+      consider F1 being Function of NAT, HFuncs NAT such that
+    A10: primrec(f1,f2,i,pkn1)= F1.(pkn1/.i) and
+    A11: (i in dom pkn1 & Del(pkn1,i) in dom f1
+          implies F1.0 = {pkn1+*(i,0)} --> (f1.Del(pkn1,i))) &
+        (not i in dom pkn1 or not Del(pkn1,i) in dom f1 implies F1.0 = {}) and
+    A12: for M being Nat holds Q[M, F1.M, F1.(M+1), pkn1, i, f2] by Def13;
+  A13: F1 = F by A8,A9,A11,A12,Lm2;
+  A14: dom p = dom pk & dom p = dom pkn1 & dom p = dom pkn by FUNCT_7:32;
+  then A15: pkn1/.i = pkn1.i by A1,FINSEQ_4:def 4 .= m+1 by A1,FUNCT_7:33;
+  A16: pkn/.i = pkn.i by A1,A14,FINSEQ_4:def 4 .= m by A1,FUNCT_7:33;
+  A17: k+n+1 = k+(n+1) by XCMPLX_1:1;
+  A18: not pk in dom (F.m) by A2,A5,A6,A7,A16;
+  A19:  G.(p+*(i,(k+(n+1)))) = F.(m+1) by A2,A10,A13,A15,A17;
+    per cases;
+    suppose i in dom pkn & pkn+*(i,m) in dom (F.m) &
+            (pkn+*(i,m))^<*(F.m).(pkn+*(i,m))*> in dom f2;
+      then F.(m+1) =
+     (F.m)+*({pkn+*(i,m+1)}--> f2.((pkn+*(i,m))^<*(F.m).(pkn+*(i,m))*>)) by A9;
+     then dom (F.(m+1)) = dom (F.m) \/
+          dom ({pkn+*(i,m+1)}--> f2.((pkn+*(i,m))^<*(F.m).(pkn+*(i,m))*>))
+           by FUNCT_4:def 1;
+    then A20: dom (F.(m+1)) = dom (F.m) \/ {pkn+*(i,m+1)} by FUNCOP_1:19;
+          k <= k+n by NAT_1:29;
+    then A21: k <> m+1 by NAT_1:38; pk.i = k & (pkn+*(i,m+1)).i = m+1 by A1,A14
+,FUNCT_7:33; then not pk in {pkn+*(i,m+1)} by A21,TARSKI:def 1;
+     hence not pk in dom (G.(p+*(i,(k+(n+1))))) by A18,A19,A20,XBOOLE_0:def 2;
+    suppose not i in dom pkn or not pkn+*(i,m) in dom (F.m) or
+   not (pkn+*(i,m))^<*(F.m).(pkn+*(i,m))*> in dom f2;
+     hence not pk in dom (G.(p+*(i,(k+(n+1))))) by A9,A18,A19;
+    end;
+  thus for n being Nat holds p[n] from Ind(A3, A4);
+ end;
+end;
+
+Lm6: i in dom p implies
+ (p+*(i,0) in dom primrec(f1,f2,i) iff Del(p,i) in dom f1) &
+ (p+*(i,0) in dom primrec(f1,f2,i) implies
+             primrec(f1,f2,i).(p+*(i,0)) = f1.Del(p,i)) &
+ (p+*(i,m+1) in dom primrec(f1,f2,i) iff
+   p+*(i,m) in dom primrec(f1,f2,i) &
+   (p+*(i,m))^<*primrec(f1,f2,i).(p+*(i,m))*> in dom f2) &
+ (p+*(i,m+1) in dom primrec(f1,f2,i) implies
+   primrec(f1,f2,i).(p+*(i,m+1))
+       = f2.((p+*(i,m))^<*primrec(f1,f2,i).(p+*(i,m))*>))
+proof assume
+A1: i in dom p;
+ consider G being Function of (arity f1+1)-tuples_on NAT, HFuncs NAT such that
+A2: primrec(f1,f2,i) = Union G and
+A3: for p being Element of (arity f1+1)-tuples_on NAT
+     holds G.p = primrec(f1,f2,i,p) by Def14;
+A4: Union G = union rng G by PROB_1:def 3;
+   then reconsider rngG = rng G as functional compatible set by A2,Th14;
+A5: dom G = (arity f1+1)-tuples_on NAT by FUNCT_2:def 1;
+A6: now let k be Nat such that
+    A7: p+*(i,k) in dom primrec(f1,f2,i) and
+    A8: not p+*(i,k) in dom (G.((p+*(i,k)))); set pk = p+*(i,k); union
+rngG <> {} by A2,A7,PROB_1:def 3,RELAT_1:60;
+        then reconsider rngG = rng G as non empty functional compatible set by
+ZFMISC_1:2;
+          dom union rngG = union {dom f where f is Element of rngG
+                                  : not contradiction} by Th15;
+        then consider X being set such that
+    A9: pk in X & X in {dom f where f is Element of rngG: not contradiction}
+                    by A2,A4,A7,TARSKI:def 4;
+        consider f being Element of rngG such that
+    A10: X = dom f & not contradiction by A9; consider pp being set such that
+    A11: pp in dom G & f = G.pp by FUNCT_1:def 5;
+        reconsider pp as Element of (arity f1+1)-tuples_on NAT by A11;
+          G.pp = primrec(f1,f2,i,pp) by A3; then consider m being Nat such that
+    A12: pk = pp+*(i,m) by A9,A10,A11,Th53;
+        set ppi = pp.i;
+    A13: p+*(i,ppi) = pk+*(i,ppi) by FUNCT_7:36 .= pp+*(i,ppi) by A12,FUNCT_7:
+36
+          .= pp by FUNCT_7:37;
+        per cases by AXIOMS:21;
+        suppose k = ppi; hence contradiction by A8,A9,A10,A11,A13;
+        suppose ppi < k; then consider m being Nat such that
+        A14: k = ppi+m by NAT_1:28; dom (G.pp) c= dom (G.pk) by A1,A3,A13,A14,
+Lm4;
+         hence contradiction by A8,A9,A10,A11;
+        suppose ppi > k; then consider m being Nat such that
+        A15: ppi=k+m by NAT_1:28;
+         thus contradiction by A1,A3,A8,A9,A10,A11,A13,A15,Lm5;
+    end;
+    set p0 = p+*(i,0);
+A16: dom p = dom p0 by FUNCT_7:32;
+A17: now
+    A18: G.p0 = primrec(f1,f2,i,p0) by A3;
+        consider F being Function of NAT, HFuncs NAT such that
+    A19: primrec(f1,f2,i,p0)= F.(p0/.i) and
+    A20: (i in dom p0 & Del(p0,i) in dom f1
+          implies F.0 = {p0+*(i,0)} --> (f1.Del(p0,i)))and
+    A21: (not i in dom p0 or not Del(p0,i) in dom f1 implies F.0 = {}) and
+          for m being Nat holds Q[m, F.m, F.(m+1), p0, i, f2] by Def13;
+    A22: p0/.i = p0.i by A1,A16,FINSEQ_4:def 4 .= 0 by A1,FUNCT_7:33;
+     thus p0 in dom (G.p0) iff Del(p,i) in dom f1 proof
+      thus p0 in dom (G.p0) implies Del(p,i) in dom f1
+         by A3,A19,A21,A22,Th6,RELAT_1:60;
+      assume Del(p,i) in dom f1;
+        then dom (F.0) = {p0+*(i,0)} by A1,A20,Th6,FUNCOP_1:19,FUNCT_7:32 .= {
+p0} by FUNCT_7:36;
+      hence p0 in dom (G.p0) by A18,A19,A22,TARSKI:def 1;
+     end;
+     assume p0 in dom (G.p0);
+         then F.0 = {p0} --> (f1.Del(p0,i)) by A3,A19,A20,A21,A22,FUNCT_7:36,
+RELAT_1:60;
+         then F.0 = {p0} --> (f1.Del(p,i)) & p0 in {p0} by Th6,TARSKI:def 1;
+     hence (G.p0).p0 = f1.Del(p,i) by A18,A19,A22,FUNCOP_1:13;
+    end;
+A23:  G.p0 in rng G by A5,FUNCT_1:def 5;
+     then reconsider rngG as non empty functional compatible set;
+ thus p+*(i,0) in dom primrec(f1,f2,i) iff Del(p,i) in dom f1 proof
+  thus p+*(i,0) in dom primrec(f1,f2,i) implies Del(p,i) in dom f1 by A6,A17;
+  assume A24: Del(p,i) in dom f1;
+    dom (G.p0) in {dom f where f is Element of rngG:not contradiction} by A23
+;
+  then p0 in union {dom f where f is Element of rngG: not contradiction}
+        by A17,A24,TARSKI:def 4;
+  hence p+*(i,0) in dom primrec(f1,f2,i) by A2,A4,Th15;
+ end;
+ hereby assume A25: p+*(i,0) in dom primrec(f1,f2,i);
+ then p0 in dom (G.p0) by A6; then (union rngG).p0 = (G.p0).p0 by A23,Th16;
+  hence primrec(f1,f2,i).(p+*(i,0)) = f1.Del(p,i) by A2,A6,A17,A25,PROB_1:def 3
+;
+ end;
+    set pm1 = p+*(i,m+1), pm = p+*(i,m), pc = <*(G.pm1).(pm1+*(i,m))*>;
+A26: dom p = dom pm1 & dom p = dom pm by FUNCT_7:32;
+A27: pm1+*(i,m) = pm & pm1+*(i,m+1) = pm1 by FUNCT_7:36;
+A28: now
+    A29: G.pm1 = primrec(f1,f2,i,pm1) & G.pm = primrec(f1,f2,i,pm) by A3;
+        consider F1 being Function of NAT, HFuncs NAT such that
+    A30: primrec(f1,f2,i,pm1)= F1.(pm1/.i) and
+    A31: (i in dom pm1 & Del(pm1,i) in dom f1
+          implies F1.0 = {pm1+*(i,0)} --> (f1.Del(pm1,i))) &
+        (not i in dom pm1 or not Del(pm1,i) in dom f1 implies F1.0 = {}) and
+    A32: for M being Nat holds Q[M, F1.M, F1.(M+1), pm1, i, f2] by Def13;
+        consider F being Function of NAT, HFuncs NAT such that
+    A33: primrec(f1,f2,i,pm)= F.(pm/.i) and
+    A34: (i in dom pm & Del(pm,i) in dom f1
+          implies F.0 = {pm+*(i,0)} --> (f1.Del(pm,i))) &
+        (not i in dom pm or not Del(pm,i) in dom f1 implies F.0 = {}) and
+    A35: for M being Nat holds Q[M, F.M, F.(M+1), pm, i, f2] by Def13;
+    A36: pm1/.i = pm1.i by A1,A26,FINSEQ_4:def 4 .= m+1 by A1,FUNCT_7:33;
+    A37: pm/.i = pm.i by A1,A26,FINSEQ_4:def 4 .= m by A1,FUNCT_7:33;
+    A38: F1.m = F.m by A31,A32,A34,A35,Lm2;
+    A39: F1.(m+1).pm = F1.m.pm by A1,A31,A32,Lm3;
+    A40: not pm1 in dom (F1.m) by A1,A31,A32,Lm3;
+     thus
+   A41: pm1 in dom (G.pm1) iff pm in dom (G.pm) & pm^pc in dom f2 proof
+      hereby assume A42: pm1 in dom (G.pm1);
+      then A43: pm1 in dom (F1.(m+1)) by A3,A30,A36;
+       assume A44: not (pm in dom (G.pm) & pm^pc in dom f2);
+       per cases by A44;
+       suppose not pm in dom (G.pm);
+         then not pm in dom (F1.m) by A3,A33,A37,A38;
+        hence contradiction by A27,A32,A40,A43;
+       suppose not pm^pc in dom f2;
+        hence contradiction by A27,A29,A30,A32,A36,A39,A40,A42;
+      end;
+      assume pm in dom (G.pm) & pm^pc in dom f2;
+      then A45: F1.(m+1) = (F1.m)+*({pm1}--> f2.((pm)^<*(F1.m).pm*>))
+            by A1,A26,A27,A29,A30,A32,A33,A36,A37,A38,A39; pm1 in {pm1} by
+TARSKI:def 1;
+          then pm1 in dom ({pm1}--> f2.((pm)^<*(F1.m).pm*>)) by FUNCOP_1:19;
+          then pm1 in dom (F1.m) \/ dom ({pm1}--> f2.((pm)^<*(F1.m).pm*>))
+              by XBOOLE_0:def 2
+;
+      hence pm1 in dom (G.pm1) by A29,A30,A36,A45,FUNCT_4:def 1;
+     end;
+     assume A46: pm1 in dom (G.pm1);
+      then pm^<*(F1.m).pm*> in dom f2 by A27,A29,A30,A32,A36,A41;
+      then A47: F1.(m+1) = (F1.m)+*({pm1}--> f2.((pm)^<*(F1.m).pm*>))
+            by A1,A26,A27,A29,A32,A33,A37,A38,A41,A46;
+      A48:  pm1 in {pm1} by TARSKI:def 1;
+      then pm1 in dom ({pm1}--> f2.((pm)^<*(F1.m).pm*>)) by FUNCOP_1:19;
+     hence G.(pm1).pm1 =
+         ({pm1}-->f2.((pm)^<*(F1.m).pm*>)).pm1 by A29,A30,A36,A47,FUNCT_4:14
+        .= f2.(pm^pc) by A27,A29,A30,A36,A39,A48,FUNCOP_1:13;
+    end;
+  thus (p+*(i,m+1) in dom primrec(f1,f2,i) iff p+*(i,m) in dom primrec(f1,f2,i
+)
+   & (p+*(i,m))^<*primrec(f1,f2,i).(p+*(i,m))*> in dom f2) proof
+   hereby assume A49: p+*(i,m+1) in dom primrec(f1,f2,i); G.pm in rng G by A5,
+FUNCT_1:def 5;
+       then dom (G.pm) in {dom f where f is Element of rngG: not contradiction
+};
+        then pm in union {dom f where f is Element of rngG: not contradiction}
+        by A6,A28,A49,TARSKI:def 4;
+    hence p+*(i,m) in dom primrec(f1,f2,i) by A2,A4,Th15;
+    A50: G.pm1 in rng G by A5,FUNCT_1:def 5; dom (G.pm) c= dom (G.pm1) by A1,A3
+,Lm4
+; then (union rngG).pm = (G.pm1).pm by A6,A28,A49,A50,Th16
+;
+    hence (p+*(i,m))^<*primrec(f1,f2,i).(p+*(i,m))*> in dom f2 by A2,A6,A27,A28
+,A49,PROB_1:def 3;
+   end;
+   assume A51: p+*(i,m) in dom primrec(f1,f2,i) &
+             (p+*(i,m))^<*primrec(f1,f2,i).(p+*(i,m))*> in dom f2;
+   then A52: pm in dom (G.pm) by A6;
+    A53: G.pm1 in rng G by A5,FUNCT_1:def 5; dom (G.pm) c= dom (G.pm1) by A1,A3
+,Lm4; then A54: (union rngG).pm = (G.pm1).pm by A52,A53,Th16
+;
+         G.pm1 in rng G by A5,FUNCT_1:def 5;
+       then dom (G.pm1)in {dom f where f is Element of rngG: not contradiction
+};
+    then pm1 in union {dom f where f is Element of rngG: not contradiction}
+        by A2,A6,A27,A28,A51,A54,PROB_1:def 3,TARSKI:def 4;
+   hence p+*(i,m+1) in dom primrec(f1,f2,i) by A2,A4,Th15;
+  end;
+ assume A55: p+*(i,m+1) in dom primrec(f1,f2,i);
+    A56: G.pm1 in rng G by A5,FUNCT_1:def 5;
+         dom (G.pm) c= dom (G.pm1) by A1,A3,Lm4;
+       then (union rngG).pm = (G.pm1).pm & (union rngG).pm1 = (G.pm1).pm1
+                by A6,A28,A55,A56,Th16;
+ hence primrec(f1,f2,i).(p+*(i,m+1))
+       = f2.((p+*(i,m))^<*primrec(f1,f2,i).(p+*(i,m))*>) by A2,A4,A6,A28,A55,
+FUNCT_7:36;
+end;
+
+theorem
+ i in dom p implies (p+*(i,0) in dom primrec(f1,f2,i) iff Del(p,i) in dom f1)
+ by Lm6;
+
+theorem
+ i in dom p & p+*(i,0) in dom primrec(f1,f2,i) implies
+   primrec(f1,f2,i).(p+*(i,0)) = f1.Del(p,i) by Lm6;
+
+theorem Th64:
+i in dom p & f1 is len-total implies primrec(f1,f2,i).(p+*(i,0)) = f1.Del(p,i)
+proof assume that
+A1: i in dom p and
+A2: f1 is len-total; len p = arity f1+1 by FINSEQ_2:109;
+then A3: len Del(p,i) = arity f1 by A1,GOBOARD1:6;
+A4: dom f1 = (arity f1)-tuples_on NAT by A2,Th26;
+     Del(p,i) is FinSequence of NAT by MATRIX_2:9;
+   then Del(p,i) is Element of (arity f1)-tuples_on NAT by A3,FINSEQ_2:110;
+   then p+*(i,0) in dom primrec(f1,f2,i) by A1,A4,Lm6;
+  hence primrec(f1,f2,i).(p+*(i,0)) = f1.Del(p,i) by A1,Lm6;
+end;
+
+theorem
+ i in dom p implies
+ (p+*(i,m+1) in dom primrec(f1,f2,i) iff
+      p+*(i,m) in dom primrec(f1,f2,i) &
+      (p+*(i,m))^<*primrec(f1,f2,i).(p+*(i,m))*> in dom f2) by Lm6;
+
+theorem
+ i in dom p & p+*(i,m+1) in dom primrec(f1,f2,i) implies
+ primrec(f1,f2,i).(p+*(i,m+1)) =
+                   f2.((p+*(i,m))^<*primrec(f1,f2,i).(p+*(i,m))*>) by Lm6;
+
+theorem Th67:
+ f1 is len-total & f2 is len-total & arity f1 +2 = arity f2 &
+ 1 <= i & i <= 1+arity f1 implies
+primrec(f1,f2,i).(p+*(i,m+1)) = f2.((p+*(i,m))^<*primrec(f1,f2,i).(p+*(i,m))*>)
+proof assume that
+A1: f1 is len-total and
+A2: f2 is len-total and
+A3: arity f1 +2 = arity f2 and
+A4:  1 <= i & i <= 1+arity f1; len p = arity f1 +1 by FINSEQ_2:109;
+then A5: i in dom p by A4,FINSEQ_3:27;
+     (p+*(i,m+1)) in (arity f1 +1)-tuples_on NAT;
+   then (p+*(i,m+1)) in dom primrec(f1,f2,i) by A1,A2,A3,A4,Th61;
+ hence primrec(f1,f2,i).(p+*(i,m+1))
+       = f2.((p+*(i,m))^<*primrec(f1,f2,i).(p+*(i,m))*>) by A5,Lm6;
+end;
+
+theorem Th68:
+arity f1+2 = arity f2 & 1 <= i & i <= arity f1+1 implies
+ primrec(f1,f2,i) is_primitive-recursively_expressed_by f1,f2,i
+proof assume that
+A1:  arity f1+2 = arity f2 and
+A2:  1 <= i & i <= arity f1+1;
+   set g = primrec(f1,f2,i);
+   take n = arity f1+1; thus dom g c= n-tuples_on NAT by Th60;
+   thus i >= 1 & i <= n by A2; thus arity f1+1 = n;
+   thus n+1 = arity f1+(1+1) by XCMPLX_1:1 .= arity f2 by A1;
+   let p be FinSequence of NAT; assume
+A3: len p = n;
+then A4: p is Element of n-tuples_on NAT by FINSEQ_2:110;
+A5: i in dom p by A2,A3,FINSEQ_3:27;
+   hence p+*(i,0) in dom g iff Del(p,i) in dom f1 by A4,Lm6;
+   thus p+*(i,0) in dom g implies g.(p+*(i,0)) = f1.Del(p,i) by A4,A5,Lm6;
+   let m be Nat;
+   thus p+*(i,m+1) in dom g iff
+     p+*(i,m) in dom g & (p+*(i,m))^<*g.(p+*(i,m))*> in dom f2 by A4,A5,Lm6;
+   thus p+*(i,m+1) in dom g implies
+     g.(p+*(i,m+1)) = f2.((p+*(i,m))^<*g.(p+*(i,m))*>) by A4,A5,Lm6;
+end;
+
+theorem
+  1 <= i & i <= arity f1+1 implies
+ for g being Element of HFuncs NAT
+  st g is_primitive-recursively_expressed_by f1,f2,i holds g = primrec(f1,f2,i)
+  proof assume
+A1:  i >= 1 & i <= arity f1+1; set n = arity f1+1, h = primrec(f1,f2,i);
+   let g be Element of HFuncs NAT; given n' being Nat such that
+A2: dom g c= n'-tuples_on NAT & i >= 1 & i <= n' and
+A3: (arity f1)+1 = n' & n'+1 = arity f2 and
+A4: for p being FinSequence of NAT st len p = n' holds
+     (p+*(i,0) in dom g iff Del(p,i) in dom f1) &
+     (p+*(i,0) in dom g implies g.(p+*(i,0)) = f1.Del(p,i)) &
+    for n being Nat holds
+     (p+*(i,n+1) in dom g iff
+        p+*(i,n) in dom g & (p+*(i,n))^<*g.(p+*(i,n))*> in dom f2) &
+     (p+*(i,n+1) in dom g implies
+        g.(p+*(i,n+1)) = f2.((p+*(i,n))^<*g.(p+*(i,n))*>));
+A5: dom h c= n-tuples_on NAT by Th60;
+A6:  now let p be Element of n-tuples_on NAT;
+defpred p[Nat] means (p+*(i,$1) in dom g iff p+*(i,$1) in dom h) &
+       (p+*(i,$1) in dom g implies g.(p+*(i,$1)) = h.(p+*(i,$1)));
+A7:   len p = n by FINSEQ_2:109;
+then A8:  i in dom p by A1,FINSEQ_3:27;
+then A9:   (p+*(i,0) in dom g iff Del(p,i) in dom f1) &
+      (p+*(i,0) in dom h iff Del(p,i) in dom f1) by A3,A4,A7,Lm6;
+      then p+*(i,0) in dom g implies
+        g.(p+*(i,0)) = f1.Del(p,i) & h.(p+*(i,0)) = f1.Del(p,i)
+         by A3,A4,A7,A8,Lm6;
+then A10: p[0]   by A9;
+     set k = p/.i;
+A11:   p = p+*(i,k) by FUNCT_7:40;
+A12:   for m be Nat st p[m] holds p[m+1] proof let m such that
+A13:     p+*(i,m) in dom g iff p+*(i,m) in dom h and
+A14:     p+*(i,m) in dom g implies g.(p+*(i,m)) = h.(p+*(i,m));
+A15:     p+*(i,m+1) in dom g iff
+         p+*(i,m) in dom g & (p+*(i,m))^<*g.(p+*(i,m))*> in dom f2 by A3,A4,A7;
+        A16: p+*(i,m+1) in dom h iff
+        p+*(i,m) in dom h & (p+*(i,m))^<*h.(p+*(i,m))*> in dom f2 by A8,Lm6;
+       thus
+      p+*(i,m+1) in dom g iff p+*(i,m+1) in dom h by A8,A13,A14,A15,Lm6;
+assume
+A17:     p+*(i,m+1) in dom g;
+        then g.(p+*(i,m+1)) = f2.((p+*(i,m))^<*g.(p+*(i,m))*>) &
+        g.(p+*(i,m)) = h.(p+*(i,m)) by A3,A4,A7,A14;
+       hence g.(p+*(i,m+1)) = h.(p+*(i,m+1)) by A3,A4,A7,A8,A13,A16,A17,Lm6;
+      end;
+        for m holds p[m] from Ind(A10,A12);
+     hence (p in dom g iff p in dom h) & (p in dom g implies g.p = h.p) by A11;
+    end;
+then A18:  dom g = dom h by A2,A3,A5,SUBSET_1:8;
+    then for x being set st x in dom h holds g.x = h.x by A5,A6;
+   hence thesis by A18,FUNCT_1:9;
+end;
+
+begin :: The set of primitive recursive functions
+
+definition
+ let X be set;
+ attr X is composition_closed means:Def15:
+for f being Element of HFuncs NAT,
+     F being with_the_same_arity FinSequence of HFuncs NAT
+ st f in X & arity f = len F & rng F c= X holds f*<:F:> in X;
+ attr X is primitive-recursion_closed means:Def16:
+for g,f1,f2 being Element of HFuncs NAT, i being Nat
+ st g is_primitive-recursively_expressed_by f1,f2,i & f1 in X & f2 in X
+  holds g in X;
+end;
+
+definition
+ let X be set;
+ attr X is primitive-recursively_closed means:Def17:
+  0 const 0 in X & 1 succ 1 in X &
+  (for n,i being Nat st 1 <= i & i <= n holds n proj i in X) &
+  X is composition_closed & X is primitive-recursion_closed;
+end;
+
+theorem Th70:
+HFuncs NAT is primitive-recursively_closed
+proof set X = HFuncs NAT;
+   thus 0 const 0 in X & 1 succ 1 in X &
+    for n,i being Nat st 1<=i & i <= n holds n proj i in X
+     by Th34,Th37,Th39;
+   thus for f being Element of HFuncs NAT
+    for F being with_the_same_arity FinSequence of HFuncs NAT
+     st f in X & arity f = len F & rng F c= X
+     holds f*<:F:> in X by Th46;
+   let g be Element of HFuncs NAT; thus thesis;
+end;
+
+definition
+cluster primitive-recursively_closed non empty Subset of HFuncs NAT;
+existence proof HFuncs NAT c= HFuncs NAT;
+   then reconsider X = HFuncs NAT as non empty Subset of HFuncs NAT;
+   take X; thus thesis by Th70;
+  end;
+end;
+
+reserve P for primitive-recursively_closed non empty Subset of HFuncs NAT;
+
+Lm7:
+ for X being non empty set, n,i be Nat st 1 <= i & i <= n
+ for x being Element of X
+ for p being Element of n-tuples_on X holds p+*(i,x) in n-tuples_on X;
+
+theorem Th71:
+for g being Element of HFuncs NAT
+ st e1 = {} & g is_primitive-recursively_expressed_by e1, e2, i holds g = {}
+proof set f1 = e1, f2 = e2; let g be Element of HFuncs(NAT); assume
+A1: f1 = {}; assume g is_primitive-recursively_expressed_by f1, f2, i;
+  then consider n being Nat such that
+A2: dom g c= n-tuples_on NAT and
+     i >= 1 & i <= n and
+   (arity f1)+1 = n & n+1 = arity f2 and
+A3: for p being FinSequence of NAT st len p = n holds
+   (p+*(i,0) in dom g iff Del(p,i) in dom f1) &
+   (p+*(i,0) in dom g implies g.(p+*(i,0)) = f1.Del(p,i)) &
+   for n being Nat holds
+    (p+*(i,n+1) in dom g iff
+       p+*(i,n) in dom g & (p+*(i,n))^<*g.(p+*(i,n))*> in dom f2) &
+    (p+*(i,n+1) in dom g implies
+       g.(p+*(i,n+1)) = f2.((p+*(i,n))^<*g.(p+*(i,n))*>)) by Def12;
+A4: now let y be Element of n-tuples_on NAT;
+defpred p[Nat] means not y+*(i,$1) in dom g;
+A5: len y = n by FINSEQ_2:109;
+ then A6: p[0] by A1,A3,RELAT_1:60;
+ A7: for k being Nat st p[k] holds p[k+1] by A3,A5;
+    thus for k being Nat holds p[k] from Ind(A6, A7);
+  end; assume g <> {}; then dom g <> {} by RELAT_1:64;
+   then consider x being set such that
+A8: x in dom g by XBOOLE_0:def 1;
+   reconsider x as Element of n-tuples_on NAT by A2,A8;
+   set xi = x.i;
+     x = x+*(i,xi) by FUNCT_7:37;
+ hence contradiction by A4,A8;
+end;
+
+theorem Th72:
+for g being Element of HFuncs(NAT),
+    f1, f2 being quasi_total Element of HFuncs(NAT), i being Nat
+ st g is_primitive-recursively_expressed_by f1, f2, i
+  holds g is quasi_total & (f1 is non empty implies g is non empty)
+proof let g be Element of HFuncs(NAT),
+       f1, f2 be quasi_total Element of HFuncs(NAT), i be Nat; assume
+A1: g is_primitive-recursively_expressed_by f1, f2, i;
+  then consider n being Nat such that
+A2: dom g c= n-tuples_on NAT and
+A3: i >= 1 & i <= n and
+A4: (arity f1)+1 = n & n+1 = arity f2 and
+A5: for p being FinSequence of NAT st len p = n holds
+   (p+*(i,0) in dom g iff Del(p,i) in dom f1) &
+   (p+*(i,0) in dom g implies g.(p+*(i,0)) = f1.Del(p,i)) &
+   for n being Nat holds
+    (p+*(i,n+1) in dom g iff
+       p+*(i,n) in dom g & (p+*(i,n))^<*g.(p+*(i,n))*> in dom f2) &
+    (p+*(i,n+1) in dom g implies
+       g.(p+*(i,n+1)) = f2.((p+*(i,n))^<*g.(p+*(i,n))*>)) by Def12;
+   reconsider f2' = f2 as non empty quasi_total Element of HFuncs(NAT) by A4,
+Th21;
+ per cases;
+ suppose f1 is empty;
+  hence thesis by A1,Th71;
+ suppose A6: f1 is non empty; consider pp being set such that
+A7: pp in n-tuples_on NAT by XBOOLE_0:def 1;
+     pp is Element of n-tuples_on NAT by A7;
+   then reconsider p = pp as FinSequence of NAT;
+A8: len p = n by A7,FINSEQ_2:109;
+A9: dom f1 = (arity f1)-tuples_on NAT by A6,Th25;
+   A10: Del(p,i) in (arity f1)-tuples_on NAT by A3,A4,A7,Th12;
+    g is quasi_total proof let x, y be FinSequence of NAT such that
+ A11: len x = len y and
+ A12: x in dom g;
+ A13: len x = n by A2,A12,FINSEQ_2:109;
+ defpred p[Nat] means y+*(i,$1) in dom g;
+       y is Element of (len y)-tuples_on NAT by FINSEQ_2:110;
+     then Del(y,i) in (arity f1)-tuples_on NAT by A3,A4,A11,A13,Th12;
+ then A14: p[0] by A5,A9,A11,A13;
+ A15: now let k be Nat such that
+     A16: p[k];
+     A17: dom f2' = (arity f2)-tuples_on NAT by Th25;
+     A18: len ((y+*(i,k))^<*g.(y+*(i,k))*>)
+         = len (y+*(i,k)) + len <*g.(y+*(i,k))*> by FINSEQ_1:35
+        .= n+len <*g.(y+*(i,k))*> by A11,A13,JORDAN2B:12 .= n+1 by FINSEQ_1:56;
+           rng g c= NAT & g.(y+*(i,k)) in rng g by A16,FUNCT_1:12,RELSET_1:12;
+         then reconsider gyk = g.(y+*(i,k)) as Nat;
+         reconsider gyik = <*gyk*> as FinSequence of NAT;
+           (y+*(i,k))^gyik is FinSequence of NAT;
+      then (y+*(i,k))^<*g.(y+*(i,k))*> is Element of dom f2 by A4,A17,A18,
+FINSEQ_2:110;
+       then (y+*(i,k))^<*g.(y+*(i,k))*> in dom f2';
+      hence p[k+1] by A5,A11,A13,A16;
+     end; for k being Nat holds p[k] from Ind(A14, A15);
+ then A19: y+*(i,y/.i) in dom g; i in dom y by A3,A11,A13,FINSEQ_3:27;
+ then y.i = y/.i by FINSEQ_4:def 4;
+  hence y in dom g by A19,FUNCT_7:37;
+ end; hence thesis by A5,A8,A9,A10,RELAT_1:60;
+end;
+
+theorem Th73:
+n const c in P
+proof
+A1: P is composition_closed by Def17;
+defpred p[Nat] means 0 const $1 in P;
+A2: p[0] by Def17;
+A3: for i be Nat st p[i] holds p[i+1] proof
+let i be Nat; set F = <*0 const i*>;
+     reconsider 0consti = 0 const i as Element of HFuncs NAT by Th31;
+       <*0consti*> is FinSequence of HFuncs NAT;
+     then reconsider F as with_the_same_arity FinSequence of HFuncs NAT;
+     assume 0 const i in P;
+then A4:   {0 const i} c= P & rng F = {0 const i} by FINSEQ_1:56,ZFMISC_1:37;
+A5:   (1 succ 1) in P by Def17;
+A6:   arity (1 succ 1) = 1 by Th38 .= len F by FINSEQ_1:56;
+     reconsider 1succ1 = 1 succ 1 as quasi_total Element of HFuncs NAT by Th32;
+        now let h be Element of HFuncs NAT; assume h in rng F;
+        then h = 0 const i by A4,TARSKI:def 1;
+       hence h is quasi_total by Th32;
+      end; then reconsider g = (1succ1)*<:F:>
+        as quasi_total Element of HFuncs NAT by A6,Th50;
+A7:   arity (0 const (i+1)) = 0 & arity (0 const i) = 0 by Th35;
+A8:   <*>NAT is Element of 0-tuples_on NAT by FINSEQ_2:114;
+then A9:   (0 const (i+1)).{} = i+1 & (0 const i).{} = i by Th36;
+A10:   dom <:<*0 const i*>:> = dom (0 const i) by FUNCT_6:61;
+      A11: dom (0 const i) = 0-tuples_on NAT by A7,Th26;
+then A12:   <:<*0 const i*>:>.{} = <*i*> by A8,A9,FUNCT_6:61;
+        dom (1 succ 1) = 1-tuples_on NAT by Def10;
+      then A13: {} in dom g by A8,A10,A11,A12,FUNCT_1:21; 0 const i in rng F
+by A4,TARSKI:def 1;
+      then arity F = 0 by A7,Def7;
+then A14:   arity g = 0 by A13,Th48,RELAT_1:60; dom (0 const i) = 0-tuples_on
+NAT by A7,Th26;
+      then g.{} = (1 succ 1).(<:F:>.{}) & <:F:>.{} = <*i*> &
+        <*i*> is Element of 1-tuples_on NAT by A8,A9,A10,FUNCT_1:23,FUNCT_6:61;
+      then g.{} = (<*i*>/.1)+1 by Def10 .= i+1 by FINSEQ_4:25;
+      then 0 const (i+1) = (1 succ 1)*<:<*0 const i*>:> by A7,A9,A13,A14,Th52,
+RELAT_1:60;
+     hence 0 const (i+1) in P by A1,A4,A5,A6,Def15;
+    end;
+A15: P is primitive-recursion_closed by Def17;
+A16: for i being Nat holds p[i] from Ind(A2,A3);
+defpred r[Nat] means for c being Nat holds $1 const c in P;
+A17: r[0] by A16;
+A18: now let n be Nat such that
+A19:   r[n];
+     thus r[n+1]
+     proof
+     let i be Nat; set g=(n+1) const i, f1=n const i,j=n+1,f2=(n+2) proj (n+2);
+A20:   arity g = j by Th35; g = ((n+1)-tuples_on NAT) --> i by Def9;
+then A21:   dom g = (n+1)-tuples_on NAT by FUNCOP_1:19;
+A22:   arity f1 = n by Th35; f1 = (n-tuples_on NAT) --> i by Def9;
+then A23:   dom f1 = n-tuples_on NAT by FUNCOP_1:19;
+A24:   dom f2 = (n+2)-tuples_on NAT by Th40;
+A25:   arity f2 = n+2 by Th41;
+A26:   n+(1+1) = j+1 by XCMPLX_1:1;
+A27:   g is_primitive-recursively_expressed_by f1,f2,n+1
+       proof take m = arity g;
+        thus dom g c= m-tuples_on NAT by Th24;
+        thus j >= 1 & j <= m by Th35,NAT_1:29;
+        thus (arity f1)+1 = m & m+1 = arity f2 by A22,A25,A26,Th35;
+        let p be FinSequence of NAT; assume len p = m;
+then A28:      p is Element of j-tuples_on NAT & j >= 1 by A20,FINSEQ_2:110,
+NAT_1:29;
+then Del(p,j) in n-tuples_on NAT by Th12;
+then A29:      f1.Del(p,j) = i by Th36;
+        thus p+*(j,0) in dom g implies Del(p,j) in dom f1 by A23,A28,Th12;
+        thus Del(p,j) in dom f1 implies p+*(j,0) in dom g by A21,A28,Lm7;
+        hereby assume p+*(j,0) in dom g;
+            p+*(j,0) in j-tuples_on NAT by A28,Lm7;
+         hence g.(p+*(j,0)) = f1.Del(p,j) by A29,Th36;
+        end;
+        let m being Nat;
+A30:      p+*(j,m) in j-tuples_on NAT by A28,Lm7;
+         then len (p+*(j,m)) = j by FINSEQ_2:109;
+then A31:      ((p+*(j,m))^<*i*>).(j+1) = i by FINSEQ_1:59;
+A32:      (p+*(j,m))^<*i*> is Element of (n+2)-tuples_on NAT
+          by A26,A30,FINSEQ_2:127;
+        hereby
+         hereby assume p+*(j,m+1) in dom g;
+          thus p+*(j,m) in dom g by A21,A28,Lm7; g.(p+*(j,m)) = i by A30,Th36;
+          hence (p+*(j,m))^<*g.(p+*(j,m))*> in dom f2 by A24,A32;
+         end;
+         thus p+*(j,m) in dom g & (p+*(j,m))^<*g.(p+*(j,m))*> in dom f2
+               implies p+*(j,m+1) in dom g by A21,A28,Lm7;
+        end;
+        assume p+*(j,m+1) in dom g; p+*(j,m+1) in j-tuples_on NAT by A28,Lm7;
+        hence g.(p+*(j,m+1)) = i by Th36
+           .= f2.((p+*(j,m))^<*i*>) by A26,A31,A32,Th42
+           .= f2.((p+*(j,m))^<*g.(p+*(j,m))*>) by A30,Th36;
+       end;
+A33: f1 is Element of HFuncs NAT & f2 is Element of HFuncs NAT &
+   (n+1) const i is Element of HFuncs NAT by Th31;
+        1 <= n+2 by A26,NAT_1:29; then f1 in P & f2 in P by A19,Def17;
+     hence (n+1) const i in P by A15,A27,A33,Def16;
+     end;
+    end; for n holds r[n] from Ind(A17,A18);
+   hence thesis;
+  end;
+
+theorem Th74:
+1 <= i & i <= n implies n succ i in P
+proof assume
+A1: 1 <= i & i <= n;
+      now thus dom (n succ i) = n-tuples_on NAT by Def10;
+    A2: dom (n proj i) = n-tuples_on NAT by Th40;
+    then A3: dom <:<*n proj i*>:> = n-tuples_on NAT by FUNCT_6:61;
+         rng (n proj i) = NAT by A1,Th40;
+    then A4: rng <:<*n proj i*>:> = 1-tuples_on NAT by Th11;
+      dom (1 succ 1) = 1-tuples_on NAT by Def10;
+    hence dom ((1 succ 1)*<:<*n proj i*>:>)=n-tuples_on NAT by A3,A4,RELAT_1:46
+;
+    let x be set; assume x in n-tuples_on NAT;
+        then reconsider x' = x as Element of n-tuples_on NAT;
+          len x' = n by FINSEQ_2:109;
+    then A5: i in dom x' by A1,FINSEQ_3:27;
+        set xi = x'.i;
+    A6: (n succ i).x = (x'/.i)+1 by Def10 .= xi+1 by A5,FINSEQ_4:def 4;
+      ((1 succ 1)*<:<*n proj i*>:>).x'
+         = (1 succ 1).(<:<*n proj i*>:>.x') by A3,FUNCT_1:23
+        .= (1 succ 1).<*(n proj i).x'*> by A2,FUNCT_6:61
+        .= (1 succ 1).<*x'.i*> by Th42 .= (<*xi*>/.1)+1 by Def10
+        .= xi+1 by FINSEQ_4:25;
+     hence (n succ i).x = ((1 succ 1)*<:<*n proj i*>:>).x by A6;
+    end;
+then A7:  n succ i = (1 succ 1)*<:<*n proj i*>:> by FUNCT_1:9;
+A8:   P is composition_closed by Def17;
+A9:   1 succ 1 in P by Def17;
+A10:   arity (1 succ 1) = 1 by Th38 .= len <*n proj i*> by FINSEQ_1:56;
+A11:   rng <*n proj i*> c= P proof let x be set; assume x in rng <*n proj i*>;
+       then x in {n proj i} by FINSEQ_1:56; then x = n proj i by TARSKI:def 1
+;
+      hence thesis by A1,Def17;
+     end; reconsider nproji = n proj i as Element of HFuncs NAT by Th31;
+     <*nproji*> is with_the_same_arity FinSequence of HFuncs NAT;
+ hence n succ i in P by A7,A8,A9,A10,A11,Def15;
+end;
+
+theorem Th75:
+{} in P
+proof set f = 0 const 0;
+A1: f in P by Th73;
+A2: len {} = 0 by FINSEQ_1:25;
+A3: arity f = 0 by Th35;
+A4: rng {} c= P by XBOOLE_1:2;
+   reconsider F = {} as with_the_same_arity Element of (HFuncs NAT)* by
+FINSEQ_1:66;
+     P is composition_closed by Def17; then f*<:F:> in P by A1,A2,A3,A4,Def15
+;
+   then f*{} in P by FUNCT_6:60;
+ hence {} in P;
+end;
+
+theorem Th76:
+for f being Element of P, F being with_the_same_arity FinSequence of P
+ st arity f = len F holds f*<:F:> in P
+proof let f be Element of P, F being with_the_same_arity FinSequence of P;
+   assume
+A1: arity f = len F;
+A2: rng F c= P by FINSEQ_1:def 4;
+ per cases;
+  suppose f is empty; then f*<:F:> = {} by RELAT_1:62;
+   hence f*<:F:> in P by Th75;
+  suppose f is non empty;
+   then reconsider f' = f as non empty Element of HFuncs NAT;
+     F in P* & P* c= (HFuncs NAT)* by FINSEQ_1:def 11,FUNCT_7:21;
+   then reconsider F' = F as with_the_same_arity Element of (HFuncs NAT)*;
+     P is composition_closed by Def17; then f'*<:F':> in P by A1,A2,Def15;
+ hence f*<:F:> in P;
+end;
+
+theorem Th77:
+ for f1,f2 being Element of P st arity f1+2 = arity f2
+ for i being Nat st 1 <= i & i <= arity f1+1 holds primrec(f1,f2,i) in P
+proof let f1,f2 be Element of P; assume
+A1: arity f1+2 = arity f2;
+  let i be Nat; assume
+A2: 1 <= i & i <= arity f1+1;
+A3: P is primitive-recursion_closed by Def17;
+   per cases;
+   suppose f1 is empty; then primrec(f1,f2,i) is empty by Th59;
+    hence primrec(f1,f2,i) in P by Th75;
+   suppose f1 is non empty;
+then primrec(f1,f2,i) is_primitive-recursively_expressed_by f1,f2,i by A1,A2,
+Th21,Th68
+;
+  hence primrec(f1,f2,i) in P by A3,Def16;
+end;
+
+definition
+ func PrimRec -> Subset of HFuncs(NAT) equals:Def18:
+ meet { R where R is Element of bool HFuncs(NAT) :
+                R is primitive-recursively_closed };
+  coherence proof set S = { R where R is Element of bool HFuncs(NAT) :
+                     R is primitive-recursively_closed }; set T = meet S;
+     HFuncs(NAT) in {HFuncs(NAT)} & {HFuncs(NAT)} c= bool HFuncs(NAT)
+     by TARSKI:def 1,ZFMISC_1:80;
+then A1: HFuncs(NAT) in S by Th70;
+     T c= HFuncs(NAT) proof let x be set; assume x in T;
+    hence x in HFuncs(NAT) by A1,SETFAM_1:def 1;
+   end; hence thesis;
+  end;
+end;
+
+theorem Th78:
+for X being Subset of HFuncs(NAT) st X is primitive-recursively_closed
+ holds PrimRec c= X
+proof set S = { R where R is Element of bool HFuncs(NAT) :
+               R is primitive-recursively_closed };
+ let X be Subset of HFuncs(NAT); assume X is primitive-recursively_closed;
+then A1: X in S;
+ let x be set; assume x in PrimRec; hence x in X by A1,Def18,SETFAM_1:def 1;
+end;
+
+definition
+ cluster PrimRec -> non empty primitive-recursively_closed;
+ coherence proof set S = { R where R is Element of bool HFuncs(NAT) :
+               R is primitive-recursively_closed };
+     HFuncs(NAT) in {HFuncs(NAT)} & {HFuncs(NAT)} c= bool HFuncs(NAT)
+     by TARSKI:def 1,ZFMISC_1:80;
+then A1: HFuncs(NAT) in S by Th70;
+     A2: now let Y be set; assume Y in S;
+       then consider R being Element of bool HFuncs(NAT) such that
+     A3: R = Y & R is primitive-recursively_closed;
+      thus 0 const 0 in Y by A3,Def17;
+     end;
+   hence PrimRec is non empty by A1,Def18,SETFAM_1:def 1;
+   thus PrimRec is primitive-recursively_closed proof
+    thus 0 const 0 in PrimRec by A1,A2,Def18,SETFAM_1:def 1;
+       now let Y be set; assume Y in S;
+       then consider R being Element of bool HFuncs(NAT) such that
+     A4: R = Y & R is primitive-recursively_closed;
+      thus 1 succ 1 in Y by A4,Def17;
+     end;
+    hence 1 succ 1 in PrimRec by A1,Def18,SETFAM_1:def 1;
+    hereby let n, i be Nat; assume
+    A5: 1 <= i & i <= n;
+        now let Y be set; assume Y in S;
+        then consider R being Element of bool HFuncs(NAT) such that
+      A6: R = Y & R is primitive-recursively_closed;
+       thus n proj i in Y by A5,A6,Def17;
+      end;
+     hence n proj i in PrimRec by A1,Def18,SETFAM_1:def 1;
+    end;
+    hereby     :: T is composition_closed;
+     let f be Element of HFuncs NAT,
+         F being with_the_same_arity FinSequence of HFuncs NAT such that
+    A7: f in PrimRec & arity f = len F & rng F c= PrimRec;
+        now let Y be set; assume
+      A8: Y in S; then consider R being Element of bool HFuncs(NAT) such that
+      A9: R = Y & R is primitive-recursively_closed;
+      A10: R is composition_closed by A9,Def17;
+            PrimRec c= R by A8,A9,Def18,SETFAM_1:4;
+          then f in R & rng F c= R by A7,XBOOLE_1:1;
+       hence f*<:F:> in Y by A7,A9,A10,Def15;
+      end;
+     hence f*<:F:> in PrimRec by A1,Def18,SETFAM_1:def 1;
+    end;
+    hereby ::  thus T is primitive-recursion_closed;
+     let g, f1, f2 be Element of HFuncs NAT, i being Nat such that
+    A11: g is_primitive-recursively_expressed_by f1,f2,i and
+    A12: f1 in PrimRec and
+    A13: f2 in PrimRec;
+        now let Y be set; assume
+      A14: Y in S; then consider R being Element of bool HFuncs(NAT) such that
+      A15: R = Y & R is primitive-recursively_closed;
+      A16: R is primitive-recursion_closed by A15,Def17;
+            f1 in R & f2 in R by A12,A13,A14,A15,Def18,SETFAM_1:def 1;
+       hence g in Y by A11,A15,A16,Def16;
+      end;
+     hence g in PrimRec by A1,Def18,SETFAM_1:def 1;
+    end;
+   end;
+ end;
+end;
+
+definition
+ cluster -> homogeneous Element of PrimRec; coherence;
+end;
+
+definition
+ let x be set;
+ attr x is primitive-recursive means:Def19:  x in PrimRec;
+end;
+
+definition
+ cluster primitive-recursive -> Relation-like Function-like set;
+ coherence proof let x be set; assume x in PrimRec;
+   then x is Element of PrimRec; hence thesis; end;
+end;
+
+definition
+ cluster primitive-recursive -> homogeneous to-naturals from-natural-fseqs
+                                Relation;
+ coherence proof let x be Relation; assume x in PrimRec;
+    then x is Element of PrimRec; hence thesis;
+ end;
+end;
+
+definition
+ cluster -> primitive-recursive Element of PrimRec;
+ coherence by Def19;
+end;
+
+definition
+ cluster primitive-recursive Function;
+existence proof consider x being Element of PrimRec; take x; thus thesis; end;
+ cluster primitive-recursive Element of HFuncs NAT;
+existence proof consider x being Element of PrimRec; take x; thus thesis; end;
+end;
+
+definition
+ func initial-funcs -> Subset of HFuncs NAT equals:Def20:
+  {0 const 0, 1 succ 1} \/ {n proj i where n,i is Nat: 1 <= i & i <= n};
+ coherence proof set Q1 = {0 const 0, 1 succ 1},
+     Q2 = {n proj i where n,i is Nat: 1 <= i & i <= n};
+ A1: Q1 c= HFuncs NAT proof let x be set; assume x in Q1;
+      then x = 0 const 0 or x = 1 succ 1 by TARSKI:def 2;
+     hence x in HFuncs NAT by Th34,Th37;
+    end; Q2 c= HFuncs NAT proof let x be set; assume x in Q2;
+       then consider n, i being Nat such that
+    A2: x = n proj i and 1 <= i & i <= n;
+     thus x in HFuncs NAT by A2,Th39;
+   end;
+  hence thesis by A1,XBOOLE_1:8;
+ end;
+ let Q be Subset of HFuncs NAT;
+ func PR-closure Q -> Subset of HFuncs NAT equals:Def21:
+  Q \/ {g where g is Element of HFuncs NAT:
+         ex f1,f2 being Element of HFuncs NAT, i being Nat
+          st f1 in Q & f2 in Q &
+             g is_primitive-recursively_expressed_by f1,f2,i};
+ coherence proof set Q1 = {g where g is Element of HFuncs NAT:
+         ex f1,f2 being Element of HFuncs NAT, i being Nat
+          st f1 in Q & f2 in Q &
+             g is_primitive-recursively_expressed_by f1,f2,i};
+    Q1 c= HFuncs NAT proof let x be set; assume x in Q1;
+     then consider g being Element of HFuncs NAT such that
+  A3: x = g and
+           ex f1,f2 being Element of HFuncs NAT, i being Nat
+          st f1 in Q & f2 in Q &
+             g is_primitive-recursively_expressed_by f1,f2,i;
+   thus x in HFuncs NAT by A3;
+  end; hence thesis by XBOOLE_1:8;
+ end;
+ func composition-closure Q -> Subset of HFuncs NAT equals:Def22:
+  Q \/ {f*<:F:> where f is Element of HFuncs NAT,
+           F is with_the_same_arity Element of (HFuncs NAT)*:
+       f in Q & arity f = len F & rng F c= Q};
+ coherence proof set Q1 = {f*<:F:> where f is Element of HFuncs NAT,
+           F is with_the_same_arity Element of (HFuncs NAT)*:
+              f in Q & arity f = len F & rng F c= Q};
+     Q1 c= HFuncs NAT proof let x be set; assume x in Q1;
+     then consider f being Element of HFuncs NAT ,
+              F being with_the_same_arity Element of (HFuncs NAT)* such that
+   A4: x = f*<:F:> and f in Q & arity f = len F & rng F c= Q;
+    thus x in HFuncs NAT by A4,Th46;
+   end; hence thesis by XBOOLE_1:8;
+  end;
+end;
+
+definition
+ deffunc f(set,Element of bool HFuncs(NAT)) =
+  (PR-closure $2) \/ (composition-closure $2);
+ func PrimRec-Approximation -> Function of NAT, bool HFuncs NAT means:Def23:
+  it.0 = initial-funcs &
+  for m being Nat
+   holds it.(m+1) = (PR-closure (it.m)) \/ (composition-closure (it.m));
+ existence proof
+ consider A being Function of NAT, bool HFuncs NAT such that
+A1: A.0 = initial-funcs and
+A2: for m being Nat holds A.(m+1) = f(m,A.m) from LambdaRecExD;
+  take A; thus A.0 = initial-funcs by A1;let m being Nat;
+  thus A.(m+1) = (PR-closure A.m) \/ (composition-closure A.m) by A2;
+ end;
+ uniqueness proof let it1, it2 be Function of NAT, bool HFuncs NAT such that
+A3: it1.0 = initial-funcs and
+A4: for m being Nat
+    holds it1.(m+1) = (PR-closure (it1.m)) \/ (composition-closure (it1.m)) and
+A5: it2.0 = initial-funcs and
+A6:  for m being Nat
+    holds it2.(m+1) = (PR-closure (it2.m)) \/ (composition-closure (it2.m));
+A7: it1.0 = initial-funcs &
+    for m being Nat holds it1.(m+1) = f(m,it1.m) by A3,A4;
+A8: it2.0 = initial-funcs &
+    for m being Nat holds it2.(m+1) = f(m,it2.m) by A5,A6;
+  thus it1 = it2 from LambdaRecUnD(A7, A8);
+ end;
+end;
+
+theorem Th79:
+m <= n implies PrimRec-Approximation.m c= PrimRec-Approximation.n
+proof set prd = PrimRec-Approximation;
+defpred p[Nat] means m <= $1 implies prd.m c= prd.$1;
+A1: p[0] proof assume A2: m <= 0; 0 <= m by NAT_1:18;
+     hence prd.m c= prd.0 by A2,AXIOMS:21;
+    end;
+A3: for n be Nat st p[n] holds p[n+1] proof let n be Nat such that
+  A4: p[n] and
+  A5: m <= n+1;
+  A6: prd.(n+1) = (PR-closure (prd.n)) \/ (composition-closure (prd.n)) by
+Def23;
+       PR-closure (prd.n) = prd.n \/ {g where g is Element of HFuncs NAT:
+         ex f1,f2 being Element of HFuncs NAT, i being Nat
+          st f1 in prd.n & f2 in prd.n &
+           g is_primitive-recursively_expressed_by f1,f2,i} by Def21;
+     then prd.n c= PR-closure (prd.n) & PR-closure (prd.n) c= prd.(n+1)
+            by A6,XBOOLE_1:7;
+   then A7: prd.n c= prd.(n+1) by XBOOLE_1:1;
+     per cases by A5,REAL_1:def 5;
+     suppose m < n+1;
+     hence prd.m c= prd.(n+1) by A4,A7,NAT_1:38,XBOOLE_1:1;
+     suppose m = n+1; hence prd.m c= prd.(n+1);
+    end; for n being Nat holds p[n] from Ind(A1,A3);
+  hence thesis;
+end;
+
+theorem Th80:
+Union PrimRec-Approximation is primitive-recursively_closed
+proof set prd = PrimRec-Approximation; set UP = Union prd;
+      set PROJ = {n proj i where n,i is Nat: 1 <= i & i <= n};
+A1: prd.0 = {0 const 0, 1 succ 1} \/ PROJ by Def20,Def23;
+A2: dom prd = NAT by FUNCT_2:def 1;
+     0 const 0 in {0 const 0, 1 succ 1} by TARSKI:def 2;
+   then 0 const 0 in prd.0 by A1,XBOOLE_0:def 2;
+ hence 0 const 0 in UP by A2,CARD_5:10;
+     1 succ 1 in {0 const 0, 1 succ 1} by TARSKI:def 2;
+   then 1 succ 1 in prd.0 by A1,XBOOLE_0:def 2;
+ hence 1 succ 1 in UP by A2,CARD_5:10;
+ hereby let n,i being Nat; assume 1 <= i & i <= n; then n proj i in PROJ;
+   then n proj i in prd.0 by A1,XBOOLE_0:def 2;
+  hence n proj i in UP by A2,CARD_5:10;
+ end;
+ hereby  :: UP is composition_closed;
+  deffunc mcocl(Nat) = {f*<:F:> where f is Element of HFuncs NAT,
+           F is with_the_same_arity Element of (HFuncs NAT)*:
+             f in prd.$1 & arity f = len F & rng F c= prd.$1};
+  let f be Element of HFuncs NAT,
+      F be with_the_same_arity FinSequence of HFuncs NAT such that
+ A3: f in UP & arity f = len F & rng F c= UP;
+     consider kf being set such that
+ A4: kf in dom prd & f in prd.kf by A3,CARD_5:10; reconsider kf as Nat by A4;
+ per cases;
+ suppose arity f = 0; then F = {} by A3,FINSEQ_1:25;
+ then A5: rng F c= prd.kf by RELAT_1:60,XBOOLE_1:2;
+       F is with_the_same_arity Element of (HFuncs NAT)*
+ by FINSEQ_1:def 11;
+     then f*<:F:> in mcocl(kf) by A3,A4,A5;
+     then f*<:F:> in prd.kf \/ mcocl(kf) by XBOOLE_0:def 2;
+     then f*<:F:> in composition-closure(prd.kf) by Def22;
+     then f*<:F:> in PR-closure (prd.kf) \/ composition-closure(prd.kf)
+      by XBOOLE_0:def 2; then f*<:F:> in prd.(kf+1) by Def23;
+   hence f*<:F:> in UP by A2,CARD_5:10;
+ suppose A6: arity f <> 0;
+     defpred B[set,set] means ex k being Nat st F.$1 in prd.k & $2 = k;
+A7:  for x st x in Seg len F ex y being Element of NAT st B[x,y]
+    proof
+    let x be set; assume x in Seg len F;
+         then x in dom F by FINSEQ_1:def 3; then F.x in rng F by FUNCT_1:def 5;
+     then consider k being set such that
+  A8: k in dom prd & F.x in prd.k by A3,CARD_5:10; reconsider k as Nat by A8;
+      take k; take k1 = k; thus F.x in prd.k1 by A8; thus k = k1;
+     end;
+     consider fKF being Function of Seg len F, NAT such that
+ A9: for x being set st x in Seg len F holds B[x,fKF.x]
+       from NonUniqFuncDEx(A7);
+      set KF = rng fKF;
+ A10:  len F in Seg len F by A3,A6,FINSEQ_1:5;
+ A11:  dom fKF = Seg len F by FUNCT_2:def 1;
+     then reconsider KF as non empty finite Subset of NAT by A10,FINSET_1:26,
+RELAT_1:65,RELSET_1:12;
+    set K = max KF; set k = max(kf, K);
+    K is Nat by ORDINAL2:def 21; then
+    reconsider k as Nat by SQUARE_1:49;
+      kf <= k by SQUARE_1:46; then A12: prd.kf c= prd.k by Th79;
+ A13: rng F c= prd.k proof let x be set; assume x in rng F;
+        then consider d being set such that
+    A14: d in dom F & x = F.d by FUNCT_1:def 5;
+  A15: d in Seg len F by A14,FINSEQ_1:def 3; then consider m being Nat such
+that
+    A16: F.d in prd.m & fKF.d = m by A9;
+        m in KF by A11,A15,A16,FUNCT_1:12;
+      then m <= K & K <= k by PRE_CIRC:def 1,SQUARE_1:46;
+      then m <= k by AXIOMS:22; then prd.m c= prd.k by Th79;
+     hence x in prd.k by A14,A16;
+    end; F is with_the_same_arity Element of (HFuncs NAT)*
+      by FINSEQ_1:def 11;
+    then f*<:F:> in mcocl(k) by A3,A4,A12,A13;
+    then f*<:F:> in prd.k \/ mcocl(k) by XBOOLE_0:def 2;
+    then f*<:F:> in composition-closure(prd.k) by Def22;
+    then f*<:F:> in PR-closure (prd.k) \/ composition-closure(prd.k) by
+XBOOLE_0:def 2;
+    then f*<:F:> in prd.(k+1) by Def23;
+   hence f*<:F:> in UP by A2,CARD_5:10;
+ end;
+ :: UP is primitive-recursion_closed;
+  deffunc mprcl(Nat) = {g where g is Element of HFuncs NAT:
+         ex f1,f2 being Element of HFuncs NAT, i being Nat
+          st f1 in prd.$1 & f2 in prd.$1 &
+             g is_primitive-recursively_expressed_by f1,f2,i};
+  let g, f1, f2 be Element of HFuncs NAT, i being Nat such that
+ A17:  g is_primitive-recursively_expressed_by f1,f2,i & f1 in UP & f2 in UP;
+     consider k1 being set such that
+ A18: k1 in dom prd & f1 in prd.k1 by A17,CARD_5:10;
+     consider k2 being set such that
+ A19: k2 in dom prd & f2 in prd.k2 by A17,CARD_5:10;
+    reconsider k1 as Nat by A18; reconsider k2 as Nat by A19;
+  per cases;
+  suppose k1 <= k2; then prd.k1 c= prd.k2 by Th79;
+      then g in mprcl(k2) by A17,A18,A19
+; then g in prd.k2 \/ mprcl(k2) by XBOOLE_0:def 2;
+      then g in PR-closure (prd.k2) by Def21;
+      then g in PR-closure (prd.k2) \/ composition-closure(prd.k2) by XBOOLE_0:
+def 2
+;
+      then g in prd.(k2+1) by Def23;
+   hence g in UP by A2,CARD_5:10;
+  suppose k2 <= k1; then prd.k2 c= prd.k1 by Th79;
+      then g in mprcl(k1) by A17,A18,A19;
+ then g in prd.k1 \/ mprcl(k1) by XBOOLE_0:def 2;
+      then g in PR-closure (prd.k1) by Def21;
+      then g in PR-closure (prd.k1) \/ composition-closure(prd.k1) by XBOOLE_0:
+def 2;
+      then g in prd.(k1+1) by Def23;
+   hence g in UP by A2,CARD_5:10;
+end;
+
+theorem Th81:
+PrimRec = Union PrimRec-Approximation
+proof set prd = PrimRec-Approximation;
+A1: PrimRec c= Union prd by Th78,Th80;
+defpred p[Nat] means prd.$1 c= PrimRec;
+A2: p[0] proof let x be set; assume
+   A3: x in prd.0;
+         prd.0 = {0 const 0, 1 succ 1} \/
+              {n proj i where n,i is Nat: 1 <= i & i <= n} by Def20,Def23;
+       then A4: x in {0 const 0, 1 succ 1} or
+     x in {n proj i where n,i is Nat: 1 <= i & i <= n} by A3,XBOOLE_0:def 2;
+     per cases by A4,TARSKI:def 2;
+     suppose x = 0 const 0; hence thesis by Def17;
+     suppose x = 1 succ 1; hence thesis by Def17;
+     suppose x in {n proj i where n,i is Nat: 1 <= i & i <= n};
+     then consider n, i being Nat such that A5: x = n proj i & 1 <= i & i <= n;
+      thus thesis by A5,Def17;
+    end;
+A6: now let m being Nat such that
+    A7: p[m];
+     thus p[m+1] proof let x be set; assume
+   A8: x in prd.(m+1);
+  A9: prd.(m+1) = (PR-closure (prd.m)) \/
+ (composition-closure (prd.m)) by Def23;
+    set mprcl = {g where g is Element of HFuncs NAT:
+         ex f1,f2 being Element of HFuncs NAT, i being Nat
+          st f1 in prd.m & f2 in prd.m &
+             g is_primitive-recursively_expressed_by f1,f2,i};
+    set mcocl = {f*<:F:> where f is Element of HFuncs NAT,
+           F is with_the_same_arity Element of (HFuncs NAT)*:
+       f in prd.m & arity f = len F & rng F c= prd.m};
+    per cases by A8,A9,XBOOLE_0:def 2;
+    suppose x in PR-closure (prd.m);
+    then A10: x in prd.m \/ mprcl by Def21;
+     thus thesis proof
+     per cases by A10,XBOOLE_0:def 2;
+     suppose x in prd.m; hence thesis by A7;
+     suppose x in mprcl; then consider g being Element of HFuncs NAT such that
+      A11: x = g & ex f1,f2 being Element of HFuncs NAT, i being Nat
+                   st f1 in prd.m & f2 in prd.m &
+                    g is_primitive-recursively_expressed_by f1,f2,i;
+            PrimRec is primitive-recursion_closed by Def17;
+      hence thesis by A7,A11,Def16;
+     end;
+    suppose x in composition-closure (prd.m);
+    then A12: x in prd.m \/ mcocl by Def22;
+     thus thesis proof
+     per cases by A12,XBOOLE_0:def 2;
+     suppose x in prd.m; hence thesis by A7;
+     suppose x in mcocl; then consider f being Element of HFuncs NAT,
+                F being with_the_same_arity Element of (HFuncs NAT)* such that
+     A13: x = f*<:F:> & f in prd.m & arity f = len F & rng F c= prd.m;
+     A14: rng F c= PrimRec by A7,A13,XBOOLE_1:1;
+           PrimRec is composition_closed by Def17;
+      hence thesis by A7,A13,A14,Def15;
+     end;
+    end;
+   end;
+A15: for k being Nat holds p[k] from Ind(A2, A6);
+     Union prd c= PrimRec proof let x be set; assume
+   A16: x in Union prd & not x in PrimRec;
+      then x in union rng prd by PROB_1:def 3; then consider X being set such
+that
+   A17: x in X & X in rng prd by TARSKI:def 4; consider m being set such that
+   A18: m in dom prd & prd.m = X by A17,FUNCT_1:def 5; reconsider m as Nat by
+A18;
+        prd.m c= PrimRec by A15;
+    hence contradiction by A16,A17,A18;
+   end;
+ hence thesis by A1,XBOOLE_0:def 10;
+end;
+
+theorem Th82:
+for f being Element of HFuncs(NAT)
+ st f in PrimRec-Approximation.m holds f is quasi_total
+proof set prd = PrimRec-Approximation;
+defpred p[Nat] means for f being Element of HFuncs(NAT)
+     st f in PrimRec-Approximation.$1 holds f is quasi_total;
+A1: p[0] proof let f be Element of HFuncs(NAT); assume
+        f in prd.0; then f in initial-funcs by Def23; then A2: f in {0 const 0,
+1 succ 1} or
+       f in {n proj i where n,i is Nat: 1 <= i & i <= n} by Def20,XBOOLE_0:def
+2;
+     per cases by A2,TARSKI:def 2;
+     suppose f = 0 const 0; hence f is quasi_total by Th32;
+     suppose f = 1 succ 1; hence f is quasi_total by Th32;
+     suppose f in {n proj i where n,i is Nat: 1 <= i & i <= n};
+     then consider n, i being Nat such that A3: f = n proj i & 1 <= i & i <= n;
+      thus f is quasi_total by A3,Th32;
+    end;
+A4: for m be Nat st p[m] holds p[m+1] proof let m be Nat; assume
+    A5: p[m];
+     let f be Element of HFuncs(NAT); assume f in prd.(m+1);
+       then A6: f in (PR-closure (prd.m)) \/ (composition-closure (prd.m)) by
+Def23;
+     per cases by A6,XBOOLE_0:def 2;
+     suppose f in (PR-closure (prd.m));
+     then A7: f in prd.m \/ {g where g is Element of HFuncs NAT:
+            ex f1,f2 being Element of HFuncs NAT, i being Nat st
+             f1 in prd.m & f2 in prd.m &
+             g is_primitive-recursively_expressed_by f1,f2,i} by Def21;
+      thus f is quasi_total proof
+       per cases by A7,XBOOLE_0:def 2;
+       suppose f in prd.m; hence f is quasi_total by A5;
+       suppose f in {g where g is Element of HFuncs NAT:
+            ex f1,f2 being Element of HFuncs NAT, i being Nat st
+               f1 in prd.m & f2 in prd.m &
+               g is_primitive-recursively_expressed_by f1,f2,i};
+        then consider g being Element of HFuncs NAT such that
+       A8: f = g and
+       A9: ex f1,f2 being Element of HFuncs NAT, i being Nat st
+               f1 in prd.m & f2 in prd.m &
+               g is_primitive-recursively_expressed_by f1,f2,i;
+           consider f1, f2 being Element of HFuncs NAT, i being Nat such that
+       A10:  f1 in prd.m & f2 in prd.m and
+       A11:  g is_primitive-recursively_expressed_by f1,f2,i by A9;
+              f1 is quasi_total & f2 is quasi_total by A5,A10;
+        hence f is quasi_total by A8,A11,Th72;
+      end;
+     suppose f in (composition-closure (prd.m));
+     then A12: f in prd.m \/ {h*<:F:> where h is Element of HFuncs NAT,
+           F is with_the_same_arity Element of (HFuncs NAT)*:
+             h in prd.m & arity h = len F & rng F c= prd.m} by Def22;
+      thus f is quasi_total proof
+       per cases by A12,XBOOLE_0:def 2;
+       suppose f in prd.m; hence f is quasi_total by A5;
+       suppose f in {h*<:F:> where h is Element of HFuncs NAT,
+            F is with_the_same_arity Element of (HFuncs NAT)*:
+              h in prd.m & arity h = len F & rng F c= prd.m};
+        then consider h being Element of HFuncs NAT,
+             F being with_the_same_arity Element of (HFuncs NAT)* such that
+       A13: f = h*<:F:> & h in prd.m & arity h = len F & rng F c= prd.m;
+       A14: h is quasi_total by A5,A13;
+             for h being Element of HFuncs NAT st h in rng F
+             holds h is quasi_total by A5,A13;
+        hence f is quasi_total by A13,A14,Th50;
+      end;
+    end;
+    for m being Nat holds p[m] from Ind(A1, A4);
+  hence thesis;
+end;
+
+definition
+ cluster -> quasi_total homogeneous Element of PrimRec;
+ coherence proof let f be Element of PrimRec; set prd = PrimRec-Approximation;
+     f in Union PrimRec-Approximation by Th81;
+   then f in union rng PrimRec-Approximation by PROB_1:def 3;
+   then consider X being set such that
+A1: f in X & X in rng prd by TARSKI:def 4; ex m being set st
+   m in dom prd & prd.m = X by A1,FUNCT_1:def 5;
+  hence f is quasi_total homogeneous by A1,Th82;
+ end;
+end;
+
+definition
+ cluster primitive-recursive -> quasi_total Element of HFuncs NAT;
+ coherence proof let f be Element of HFuncs NAT; assume f in PrimRec;
+   then f is Element of PrimRec; hence thesis;
+  end;
+end;
+
+definition
+ cluster primitive-recursive -> len-total (from-natural-fseqs Function);
+ coherence proof let x be from-natural-fseqs Function; assume x in PrimRec;
+    then x is Element of PrimRec;
+   hence x is len-total;
+ end;
+ cluster non empty Element of PrimRec;
+ existence proof 0 const 0 in PrimRec by Th73; hence thesis; end;
+end;
+
+begin :: Examples
+
+definition
+ let f be homogeneous Relation;
+ attr f is nullary means :Def24:  arity f = 0;
+ attr f is unary means :Def25:  arity f = 1;
+ attr f is binary means :Def26:  arity f = 2;
+ attr f is 3-ary means :Def27:  arity f = 3;
+end;
+
+definition
+ cluster unary -> non empty (homogeneous Function);
+ coherence proof let f be homogeneous Function; assume arity f = 1; then ex
+x being FinSequence st x in dom f by Def5;
+   hence thesis by RELAT_1:60;
+  end;
+ cluster binary -> non empty (homogeneous Function);
+ coherence proof let f be homogeneous Function; assume arity f = 2; then ex x
+being FinSequence st x in dom f by Def5;
+   hence thesis by RELAT_1:60;
+  end;
+ cluster 3-ary -> non empty (homogeneous Function);
+ coherence proof let f be homogeneous Function; assume arity f = 3; then ex x
+being FinSequence st x in dom f by Def5;
+   hence thesis by RELAT_1:60;
+  end;
+end;
+
+definition
+ cluster 1 proj 1 -> primitive-recursive;
+ coherence proof 1 proj 1 in PrimRec by Def17; hence thesis by Def19; end;
+ cluster 2 proj 1 -> primitive-recursive;
+ coherence proof 2 proj 1 in PrimRec by Def17; hence thesis by Def19; end;
+ cluster 2 proj 2 -> primitive-recursive;
+ coherence proof 2 proj 2 in PrimRec by Def17; hence thesis by Def19; end;
+ cluster 1 succ 1 -> primitive-recursive;
+ coherence proof 1 succ 1 in PrimRec by Th74; hence thesis by Def19; end;
+ cluster 3 succ 3 -> primitive-recursive;
+ coherence proof 3 succ 3 in PrimRec by Th74; hence thesis by Def19; end;
+
+ let i be Nat;
+ cluster 0 const i -> nullary;
+ coherence proof thus arity (0 const i) = 0 by Th35; end;
+ cluster 1 const i -> unary;
+ coherence proof thus arity (1 const i) = 1 by Th35; end;
+ cluster 2 const i -> binary;
+ coherence proof thus arity (2 const i) = 2 by Th35; end;
+ cluster 3 const i -> 3-ary;
+ coherence proof thus arity (3 const i) = 3 by Th35; end;
+ cluster 1 proj i -> unary;
+ coherence proof thus arity (1 proj i) = 1 by Th41; end;
+ cluster 2 proj i -> binary;
+ coherence proof thus arity (2 proj i) = 2 by Th41; end;
+ cluster 3 proj i -> 3-ary;
+ coherence proof thus arity (3 proj i) = 3 by Th41; end;
+ cluster 1 succ i -> unary;
+ coherence proof thus arity (1 succ i) = 1 by Th38; end;
+ cluster 2 succ i -> binary;
+ coherence proof thus arity (2 succ i) = 2 by Th38; end;
+ cluster 3 succ i -> 3-ary;
+ coherence proof thus arity (3 succ i) = 3 by Th38; end;
+
+ let j be Nat;
+ cluster i const j -> primitive-recursive;
+ coherence proof thus i const j in PrimRec by Th73; end;
+end;
+
+definition
+ cluster nullary primitive-recursive non empty (homogeneous Function);
+ existence by Def17;
+ cluster unary primitive-recursive (homogeneous Function);
+ existence by Def17;
+ cluster binary primitive-recursive (homogeneous Function);
+existence proof take f=2 proj 1;thus f is binary;thus f in PrimRec by Def17
+;end;
+ cluster 3-ary primitive-recursive (homogeneous Function);
+existence proof take f=3 proj 1;thus f is 3-ary; thus f in PrimRec by Def17
+;end;
+end;
+
+definition
+  cluster non empty nullary len-total to-naturals
+          (homogeneous from-natural-fseqs Function);
+  existence proof 0 const 0 is nullary; hence thesis; end;
+  cluster non empty unary len-total to-naturals
+          (homogeneous from-natural-fseqs Function);
+  existence proof 1 const 0 is unary; hence thesis; end;
+  cluster non empty binary len-total to-naturals
+          (homogeneous from-natural-fseqs Function);
+  existence proof 2 const 0 is binary; hence thesis; end;
+  cluster non empty 3-ary len-total to-naturals
+          (homogeneous from-natural-fseqs Function);
+  existence proof 3 const 0 is 3-ary; hence thesis; end;
+end;
+
+definition
+ let f be nullary non empty (primitive-recursive Function);
+ let g be binary (primitive-recursive Function);
+ cluster primrec(f,g,1) -> primitive-recursive unary;
+ coherence proof
+A1:  0 <= 1 & 1 <= 0+1 & arity f = 0 & arity g = 0+2 &
+    f in PrimRec & g in PrimRec by Def19,Def24,Def26;
+   hence primrec(f,g,1) in PrimRec by Th77;
+A2:  dom <*0*> = {1} by FINSEQ_1:4,55; f is Element of PrimRec by Def19;
+    then dom f = 0-tuples_on NAT by A1,Th25 .= {<*>NAT} by FINSEQ_2:112;
+    then Del(<*0*>,1) = {} & {} in dom f & 1 in dom <*0*>
+     by A2,TARSKI:def 1,WSIERP_1:26; then <*0*>+*(1,0) in dom primrec(f,g,1)
+by A1,Lm6
+;
+     then <*0*> in dom primrec(f,g,1) & len <*0*> = 1 by FINSEQ_1:56,SCMFSA10:2
+;
+   hence arity primrec(f,g,1) = 1 by Def5;
+  end;
+end;
+
+definition
+ let f be unary (primitive-recursive Function);
+ let g be 3-ary (primitive-recursive Function);
+ cluster primrec(f,g,1) -> primitive-recursive binary;
+ coherence proof A1:  1 <= 1 & 1 <= 1+1 & arity f = 1 & arity g = 1+2 &
+    f in PrimRec & g in PrimRec by Def19,Def25,Def27;
+   hence primrec(f,g,1) in PrimRec by Th77;
+   thus arity primrec(f,g,1) = 2 by A1,Th61;
+  end;
+ cluster primrec(f,g,2) -> primitive-recursive binary;
+ coherence proof A2:  1 <= 2 & 2 <= 1+1 & arity f = 1 & arity g = 1+2 &
+    f in PrimRec & g in PrimRec by Def19,Def25,Def27;
+   hence primrec(f,g,2) in PrimRec by Th77;
+   thus arity primrec(f,g,2) = 2 by A2,Th61;
+  end;
+end;
+
+theorem Th83:
+for f1 be unary len-total to-naturals
+          (homogeneous from-natural-fseqs Function),
+    f2 be non empty to-naturals homogeneous from-natural-fseqs Function
+ holds primrec(f1,f2,2).<*i,0*> = f1.<*i*>
+proof let f1 be unary len-total to-naturals
+                (homogeneous from-natural-fseqs Function),
+     f2 be non empty to-naturals homogeneous from-natural-fseqs Function;
+  arity f1 = 1 by Def25;
+    then reconsider p = <*i,0*> as Element of (arity f1 +1)-tuples_on NAT
+    by FINSEQ_2:121;
+A1: p+*(2,0) = p by Th3; 1 <= 2 & len p = 2 by FINSEQ_1:61;
+then 2 in dom p by FINSEQ_3:27;
+ hence primrec(f1,f2,2).<*i,0*> = f1.Del(p,2) by A1,Th64 .= f1.<*i*> by
+WSIERP_1:26
+;
+end;
+
+theorem Th84:
+f1 is len-total & arity f1 = 0 implies primrec(f1,f2,1).<*0*> = f1.{}
+proof assume that
+A1: f1 is len-total and
+A2: arity f1 = 0;
+   reconsider p = <*0*> as Element of (arity f1 +1)-tuples_on NAT by A2;
+A3: p+*(1,0) = p by SCMFSA10:2; 1 <= 1 & len p = 1 by FINSEQ_1:56;
+then 1 in dom p by FINSEQ_3:27;
+ hence primrec(f1,f2,1).<*0*> = f1.Del(p,1) by A1,A3,Th64 .= f1.{} by WSIERP_1:
+26;
+end;
+
+theorem Th85:
+for f1 being unary len-total to-naturals
+              (homogeneous from-natural-fseqs Function),
+    f2 being 3-ary len-total to-naturals
+              (homogeneous from-natural-fseqs Function)
+ holds primrec(f1,f2,2).<*i,j+1*> = f2.<*i,j,primrec(f1,f2,2).<*i,j*>*>
+proof let f1 being unary len-total to-naturals
+              (homogeneous from-natural-fseqs Function),
+    f2 being 3-ary len-total to-naturals
+              (homogeneous from-natural-fseqs Function);
+A1: arity f1 = 1 by Def25;
+   then reconsider p = <*i,j*> as Element of (arity f1 +1)-tuples_on NAT
+   by FINSEQ_2:121;
+A2: p+*(2,j+1) = <*i,j+1*> by Th3;
+A3: p+*(2,j) = <*i,j*> by Th3; arity f1 +2 = arity f2 by A1,Def27;
+ hence primrec(f1,f2,2).<*i,j+1*> =
+       f2.((p+*(2,j))^<*primrec(f1,f2,2).(p+*(2,j))*>) by A1,A2,Th67
+    .= f2.<*i,j,primrec(f1,f2,2).<*i,j*>*> by A3,FINSEQ_1:60;
+end;
+
+theorem Th86:
+f1 is len-total & f2 is len-total & arity f1 = 0 & arity f2 = 2
+ implies primrec(f1,f2,1).<*i+1*> = f2.<*i,primrec(f1,f2,1).<*i*>*>
+proof assume that
+A1: f1 is len-total and
+A2: f2 is len-total and
+A3: arity f1 = 0 and
+A4: arity f2 = 2;
+   reconsider p = <*i*> as Element of (arity f1 +1)-tuples_on NAT by A3;
+A5: p+*(1,i+1) = <*i+1*> by SCMFSA10:2;
+A6: p+*(1,i) = <*i*> by SCMFSA10:2; arity f1 +2 = arity f2 by A3,A4;
+ hence primrec(f1,f2,1).<*i+1*> =
+       f2.((p+*(1,i))^<*primrec(f1,f2,1).(p+*(1,i))*>) by A1,A2,A3,A5,Th67
+    .= f2.<*i,primrec(f1,f2,1).<*i*>*> by A6,FINSEQ_1:def 9;
+end;
+
+Lm8: now
+ let g be quasi_total homogeneous non empty PartFunc of NAT*, NAT; assume
+A1:  arity g = 2;
+ thus
+ A2:dom <:<*3 proj 1,3 proj 3*>:>=dom (3 proj 1)/\dom (3 proj 3) by FUNCT_6:62;
+ hence
+ A3: dom <:<*3 proj 1, 3 proj 3*>:> = (3-tuples_on NAT) /\
+ dom (3 proj 3) by Th40
+    .= (3-tuples_on NAT) /\ (3-tuples_on NAT) by Th40 .= (3-tuples_on NAT);
+    reconsider z3 = <*0,0,0*> as FinSequence of NAT;
+      len z3 = 3 by FINSEQ_1:62;
+    then A4: z3 is Element of 3-tuples_on NAT by FINSEQ_2:110;
+ A5: dom g = 2-tuples_on NAT by A1,Th25
+; set G = g*<:<*3 proj 1, 3 proj 3*>:>;
+      now let x be set; set f = <*3 proj 1, 3 proj 3*>; set F = <:f:>;
+    A6: product rngs f = product <*rng (3 proj 1),rng (3 proj 3)*> by FUNCT_6:
+34
+       .= product <*NAT, rng (3 proj 3)*> by Th40.=product <*NAT, NAT*> by Th40
+       .= 2-tuples_on NAT by FUNCT_6:6;
+     hereby assume
+     A7: x in rng F; rng F c= product rngs f by FUNCT_6:49;
+      hence x in dom g by A5,A6,A7;
+     end; assume x in dom g; then consider d1, d2 being Nat such that
+     A8: x = <*d1, d2*> by A5,FINSEQ_2:120;
+   reconsider x' = <*d1, 0, d2*> as Element of 3-tuples_on NAT by FINSEQ_2:124;
+        F.x' = <*(3 proj 1).x', (3 proj 3).x'*> by A2,A3,FUNCT_6:62
+          .= <*x'.1, (3 proj 3).x'*> by Th42 .= <*x'.1, x'.3*> by Th42
+          .= <*d1, x'.3*> by FINSEQ_1:62 .= x by A8,FINSEQ_1:62;
+     hence x in rng F by A3,FUNCT_1:def 5;
+    end;
+ then A9: rng <:<*3 proj 1, 3 proj 3*>:> = dom g by TARSKI:2;
+ hence
+ A10: dom (g*<:<*3 proj 1, 3 proj 3*>:>) = 3-tuples_on NAT by A3,RELAT_1:46;
+ then A11: dom G c= NAT* by MSUALG_1:12; rng g c= NAT by RELSET_1:12;
+    then rng G c= NAT by A9,RELAT_1:47;
+    then reconsider G as PartFunc of NAT*, NAT by A11,RELSET_1:11;
+      now let x, y be FinSequence; assume x in dom G & y in dom G;
+       then 3 = len x & 3 = len y by A10,FINSEQ_2:109;
+     hence len x = len y;
+    end; then reconsider G as homogeneous PartFunc of NAT*, NAT by Def4;
+    take G; thus G = g*<:<*3 proj 1, 3 proj 3*>:>;
+ A12: HFuncs NAT = {f where f is Element of PFuncs(NAT*, NAT): f is homogeneous
+}
+        by Def8;
+    G is Element of PFuncs(NAT*
+, NAT) by PARTFUN1:119; then G in HFuncs NAT by A12;
+  hence G is Element of HFuncs NAT;
+      for x being FinSequence st x in dom G holds 3 = len x by A10,FINSEQ_2:109
+;
+  hence arity G = 3 by A4,A10,Def5; hence G is quasi_total non empty by A10,
+Th25;
+end;
+
+definition
+ let g be Function;
+ func (1,2)->(1,?,2) g -> Function equals:Def28:
+ g * <:<*3 proj 1, 3 proj 3*>:>;
+ coherence;
+end;
+
+definition
+ let g be to-naturals from-natural-fseqs Function;
+ cluster (1,2)->(1,?,2) g -> to-naturals from-natural-fseqs;
+ coherence proof set G = (1,2)->(1,?,2) g;
+ A1: G = g*<:<*3 proj 1, 3 proj 3*>:> by Def28;
+  dom <:<*3 proj 1, 3 proj 3*>:> = dom (3 proj 1) /\
+ dom (3 proj 3) by FUNCT_6:62;
+then A2: dom <:<*3 proj 1, 3 proj 3*>:>
+ = (3-tuples_on NAT) /\ dom (3 proj 3) by Th40
+.= (3-tuples_on NAT)/\(3-tuples_on NAT) by Th40.= (3-tuples_on NAT);
+ A3: dom G c= dom <:<*3 proj 1, 3 proj 3*>:> by A1,RELAT_1:44;
+   (3-tuples_on NAT) c= NAT* by MSUALG_1:12;
+ then A4: dom G c= NAT* by A2,A3,XBOOLE_1:1;
+ A5: rng g c= NAT by SEQM_3:def 8; rng G c= rng g by A1,RELAT_1:45;
+    then rng G c= NAT by A5,XBOOLE_1:1;
+  hence thesis by A4,Def2,SEQM_3:def 8;
+ end;
+end;
+
+definition
+ let g be homogeneous Function;
+ cluster (1,2)->(1,?,2) g -> homogeneous;
+ coherence proof set G = (1,2)->(1,?,2) g;
+A1: G = g*<:<*3 proj 1, 3 proj 3*>:> by Def28;
+  let x,y be FinSequence such that
+A2: x in dom G and
+A3: y in dom G;
+  dom <:<*3 proj 1, 3 proj 3*>:> = dom (3 proj 1) /\
+ dom (3 proj 3) by FUNCT_6:62;
+then dom <:<*3 proj 1, 3 proj 3*>:>
+ = (3-tuples_on NAT) /\ dom (3 proj 3) by Th40
+.= (3-tuples_on NAT)/\(3-tuples_on NAT) by Th40 .=(3-tuples_on NAT);
+ then dom (g*<:<*3 proj 1, 3 proj 3*>:>) c= 3-tuples_on NAT by RELAT_1:44;
+    then 3 = len x & 3 = len y by A1,A2,A3,FINSEQ_2:109;
+  hence len x = len y;
+ end;
+end;
+
+definition
+ let g be binary len-total to-naturals
+          (homogeneous from-natural-fseqs Function);
+ cluster (1,2)->(1,?,2) g -> non empty 3-ary len-total;
+ coherence proof
+ A1: arity g = 2 by Def26;
+      g is quasi_total homogeneous non empty PartFunc of NAT*, NAT by Th20;
+    then consider G being homogeneous PartFunc of NAT*, NAT such that
+ A2: G = g*<:<*3 proj 1, 3 proj 3*>:> and G is Element of HFuncs NAT and
+ A3: arity G = 3 and
+ A4: G is quasi_total non empty by A1,Lm8;
+    reconsider G' = G as quasi_total non empty
+                         homogeneous PartFunc of NAT*, NAT by A4;
+     G' is non empty 3-ary len-total to-naturals
+                        (homogeneous from-natural-fseqs Function) by A3,Def27;
+  hence thesis by A2,Def28;
+ end;
+end;
+
+theorem Th87:
+for f being binary len-total to-naturals
+            (homogeneous from-natural-fseqs Function)
+ holds ((1,2)->(1,?,2) f).<*i,j,k*> = f.<*i,k*>
+proof let f be binary len-total to-naturals
+          (homogeneous from-natural-fseqs Function);
+   reconsider ijk = <*i,j,k*> as Element of 3-tuples_on NAT by FINSEQ_2:124;
+   reconsider ff=f as quasi_total homogeneous non empty PartFunc of NAT*, NAT
+     by Th20;
+A1: arity ff = 2 by Def26;
+   then A2: dom (ff*<:<*3 proj 1, 3 proj 3*>:>) = 3-tuples_on NAT by Lm8;
+   A3: dom <:<*3 proj 1, 3 proj 3*>:> = dom (3 proj 1) /\ dom (3 proj 3) &
+   dom <:<*3 proj 1, 3 proj 3*>:> = (3-tuples_on NAT) by A1,Lm8;
+ thus ((1,2)->(1,?,2) f).<*i,j,k*> = (f*<:<*3 proj 1,3 proj 3*>:>).ijk by Def28
+   .= f.(<:<*3 proj 1, 3 proj 3*>:>.ijk) by A2,FUNCT_1:22
+   .= f.<*(3 proj 1).ijk, (3 proj 3).ijk*> by A3,FUNCT_6:62
+   .= f.<*ijk.1, (3 proj 3).ijk*> by Th42 .= f.<*ijk.1, ijk.3*> by Th42
+   .= f.<*i, ijk.3*> by FINSEQ_1:62 .= f.<*i,k*> by FINSEQ_1:62;
+end;
+
+theorem Th88:
+for g being binary (primitive-recursive Function)
+ holds (1,2)->(1,?,2) g in PrimRec
+proof let g be binary (primitive-recursive Function);
+A1: arity g = 2 by Def26;
+A2: (1,2)->(1,?,2) g = g*<:<*3 proj 1, 3 proj 3*>:> by Def28;
+     3 proj 1 in PrimRec & 3 proj 3 in PrimRec by Def17;
+   then <*3 proj 1, 3 proj 3*> is Element of 2-tuples_on PrimRec
+         by FINSEQ_2:121;
+then A3: <*3 proj 1, 3 proj 3*> in 2-tuples_on PrimRec;
+     2-tuples_on PrimRec c= (PrimRec)* by MSUALG_1:12;
+   then reconsider F = <*3 proj 1, 3 proj 3*> as Element of (PrimRec)* by A3;
+     F is with_the_same_arity proof let f,g be Function; assume
+   A4: f in rng F & g in rng F;
+   A5: rng F = {3 proj 1, 3 proj 3} by FINSEQ_2:147;
+       then A6: f = 3 proj 1 or f = 3 proj 3 by A4,TARSKI:def 2;
+       A7: g = 3 proj 1 or g = 3 proj 3 by A4,A5,TARSKI:def 2;
+      thus f is empty implies g is empty or dom g = {{}} by A4,A5,TARSKI:def 2
+;
+      assume f is non empty & g is non empty; take 3, NAT;
+    thus dom f c= 3-tuples_on NAT by A6,Th40; thus dom g c= 3-tuples_on NAT
+by A7,Th40;
+   end;
+   then reconsider F as with_the_same_arity Element of (PrimRec)*;
+A8: g is Element of PrimRec by Def19; arity g = len F by A1,FINSEQ_1:61;
+ hence (1,2)->(1,?,2) g in PrimRec by A2,A8,Th76;
+end;
+
+definition
+ let f be binary primitive-recursive (homogeneous Function);
+ cluster (1,2)->(1,?,2) f -> primitive-recursive 3-ary;
+ coherence proof thus (1,2)->(1,?,2) f in PrimRec by Th88;
+   thus arity ((1,2)->(1,?,2) f) = 3 by Def27;
+  end;
+end;
+
+definition
+ func [+] -> binary (primitive-recursive Function) equals:Def29:
+  primrec(1 proj 1, 3 succ 3, 2);
+ coherence;
+end;
+
+theorem Th89:
+[+].<*i,j*> = i+j
+proof
+   reconsider q = <*i*> as Element of 1-tuples_on NAT;
+   defpred p[Nat] means [+].<*i,$1*> = i+$1;
+A1: p[0] proof
+  thus [+].<*i,0*> = (1 proj 1).q by Def29,Th83 .= q.1 by Th42
+ .= i+0 by FINSEQ_1:57;
+end;
+A2:  now let j be Nat;
+     reconsider r = <*i,j,i+j*> as Element of 3-tuples_on NAT by FINSEQ_2:124;
+     assume p[j];
+     then [+].<*i,j+1*> = (3 succ 3).r by Def29,Th85
+        .= (r/.3)+1 by Def10 .= i+j+1 by FINSEQ_4:27 .= i+(j+1) by XCMPLX_1:1;
+     hence p[j+1];
+    end;
+     for j being Nat holds p[j] from Ind(A1,A2);
+   hence thesis;
+  end;
+
+definition
+ func [*] -> binary (primitive-recursive Function) equals:Def30:
+  primrec(1 const 0, (1,2)->(1,?,2) [+], 2);
+ coherence;
+end;
+
+theorem Th90:
+for i, j being Nat holds [*].<*i,j*> = i*j
+ proof let i be Nat;
+   defpred p[Nat] means [*].<*i,$1*> = i*$1;
+A1:  p[0] proof
+    thus [*].<*i,0*> = (1 const 0).<*i*> by Def30,Th83 .= i*0 by Th36;
+    end;
+A2:  now let j be Nat; assume p[j];
+     then [*].<*i,j+1*> = ((1,2)->(1,?,2) [+]).<*i,j,i*j*> by Def30,Th85
+        .= [+].<*i,i*j*> by Th87 .= (i*1)+i*j by Th89
+        .= i*(j+1) by XCMPLX_1:8;
+     hence p[j+1];
+    end;
+   thus for i be Nat holds p[i] from Ind(A1,A2);
+end;
+
+definition
+ let g,h be binary primitive-recursive (homogeneous Function);
+ cluster <*g,h*> -> with_the_same_arity;
+ coherence proof
+   reconsider g, h as Element of PrimRec by Def19;
+      rng <*g,h*> c= PrimRec by FINSEQ_1:def 4;
+then A1:  rng <*g,h*> c= HFuncs NAT by XBOOLE_1:1;
+A2:  rng <*g,h*> = {g,h} by FINSEQ_2:147;
+      now let f1,f2 be homogeneous Function;
+     assume f1 in rng <*g,h*> & f2 in rng <*g,h*>;
+      then (f1 = g or f1 = h) & (f2 = g or f2 = h) by A2,TARSKI:def 2;
+      then arity f1 = 2 & arity f2 = 2 by Def26;
+     hence arity f1 = arity f2;
+    end; hence thesis by A1,Th33;
+  end;
+end;
+
+definition
+ let f,g,h be binary (primitive-recursive Function);
+ cluster f*<:<*g,h*>:> -> primitive-recursive;
+ coherence proof
+   reconsider g' = g, h' = h as Element of PrimRec by Def19;
+A1:  rng <*g',h'*> c= PrimRec by FINSEQ_1:def 4;
+    then rng <*g,h*> c= HFuncs NAT by XBOOLE_1:1;
+   then reconsider F = <*g,h*> as with_the_same_arity FinSequence of HFuncs NAT
+     by FINSEQ_1:def 4;
+A2:  f in PrimRec & PrimRec is composition_closed by Def17,Def19;
+    then f in HFuncs NAT & len F = 2 & arity f = 2 by Def26,FINSEQ_1:61;
+   hence f*<:<*g,h*>:> in PrimRec by A1,A2,Def15;
+  end;
+end;
+
+definition
+ let f,g,h be binary (primitive-recursive Function);
+ cluster f*<:<*g,h*>:> -> binary;
+ coherence proof
+  reconsider f' = f, fgh = f*<:<*g,h*>:>, g' = g, h' = h as Element of PrimRec
+by Def19;
+      rng <*g',h'*> c= PrimRec by FINSEQ_1:def 4;
+    then rng <*g,h*> c= HFuncs NAT by XBOOLE_1:1;
+   then reconsider F = <*g,h*> as with_the_same_arity FinSequence of HFuncs NAT
+     by FINSEQ_1:def 4;
+A1:  arity f = 2 & arity g = 2 & arity h = 2 by Def26;
+then A2:  dom f' = 2-tuples_on NAT & dom g' = 2-tuples_on NAT &
+    dom h' = 2-tuples_on NAT by Lm1;
+   consider x being Element of 2-tuples_on NAT;
+A3:  dom <:F:> = dom g /\ dom h by FUNCT_6:62;
+then x in dom <:F:> & g'.x in rng g' & h'.x in rng h' & rng g' c= NAT &
+    rng h' c= NAT by A2,FUNCT_1:def 5,RELSET_1:12;
+    then <:F:>.x = <*g'.x,h'.x*> & g'.x in NAT & h'.x in NAT by A3,FUNCT_6:62;
+    then <:F:>.x is Element of 2-tuples_on NAT by FINSEQ_2:121;
+then A4:fgh is non empty & f' = f by A2,A3,FUNCT_1:21,RELAT_1:60; rng F = {g,
+h
+} by FINSEQ_2:147;
+    then g in rng F by TARSKI:def 2; then arity F = 2 by A1,Def7;
+   hence arity (f*<:<*g,h*>:>) = 2 by A4,Th48;
+  end;
+end;
+
+definition
+ let f be unary (primitive-recursive Function);
+ let g be primitive-recursive Function;
+ cluster f*<:<*g*>:> -> primitive-recursive;
+ coherence proof
+   reconsider g' = g as Element of PrimRec by Def19;
+A1:  rng <*g'*> c= PrimRec by FINSEQ_1:def 4;
+    then rng <*g*> c= HFuncs NAT by XBOOLE_1:1;
+   then reconsider F = <*g'*> as with_the_same_arity FinSequence of HFuncs NAT
+     by FINSEQ_1:def 4;
+A2:  f in PrimRec & PrimRec is composition_closed by Def17,Def19;
+    then f in HFuncs NAT & len F = 1 & arity f = 1 by Def25,FINSEQ_1:56;
+   hence f*<:<*g*>:> in PrimRec by A1,A2,Def15;
+  end;
+end;
+
+definition
+ let f be unary (primitive-recursive Function);
+ let g be binary (primitive-recursive Function);
+ cluster f*<:<*g*>:> -> binary;
+coherence proof
+ reconsider f' = f, fg = f*<:<*g*>:>, g' = g as Element of PrimRec by Def19;
+      rng <*g'*> c= PrimRec by FINSEQ_1:def 4;
+    then rng <*g*> c= HFuncs NAT by XBOOLE_1:1;
+   then reconsider F = <*g'*> as with_the_same_arity FinSequence of HFuncs NAT
+     by FINSEQ_1:def 4;
+A1:  arity f = 1 & arity g = 2 by Def25,Def26;
+then A2:  dom f' = 1-tuples_on NAT & dom g' = 2-tuples_on NAT by Lm1;
+   consider x being Element of 2-tuples_on NAT;
+A3:  dom <:F:> = dom g by FUNCT_6:61;
+then x in dom <:F:> & g'.x in rng g' & rng g' c= NAT
+     by A2,FUNCT_1:def 5,RELSET_1:12;
+    then <:F:>.x = <*g'.x*> & g'.x in NAT by A3,FUNCT_6:61;
+    then <:F:>.x is Element of 1-tuples_on NAT by FINSEQ_2:118;
+then A4:  fg is non empty & f' = f by A2,A3,FUNCT_1:21,RELAT_1:60; rng F =
+{
+g} by FINSEQ_1:56;
+    then g in rng F by TARSKI:def 1; then arity F = 2 by A1,Def7;
+   hence arity (f*<:<*g*>:>) = 2 by A4,Th48;
+  end;
+end;
+
+definition
+ func [!] -> unary (primitive-recursive Function) equals:Def31:
+ primrec(0 const 1, [*]*<:<*(1 succ 1)*<:<*2 proj 1*>:>, 2 proj 2*>:>, 1);
+ coherence;
+end;
+
+scheme Primrec1{F() -> unary len-total to-naturals
+                       (homogeneous from-natural-fseqs Function),
+                G() -> binary len-total to-naturals
+                       (homogeneous from-natural-fseqs Function),
+                f(set) -> Nat, g(set,set) -> Nat}:
+for i, j being Nat holds (F()*<:<*G()*>:>).<*i,j*> = f(g(i,j))
+provided
+A1: for i being Nat holds F().<*i*> = f(i) and
+A2: for i,j being Nat holds G().<*i,j*> = g(i,j)
+proof let i, j be Nat;
+A3: dom <:<*G()*>:> = dom G() by FUNCT_6:61;
+     arity G() = 2 by Def26;
+then A4: dom G() = 2-tuples_on NAT by Th26;
+   A5: <*i,j*> is Element of 2-tuples_on NAT by FINSEQ_2:121;
+hence (F()*<:<*G()*>:>).<*i,j*>
+   = F().(<:<*G()*>:>.<*i,j*>) by A3,A4,FUNCT_1:23
+  .= F().<*G().<*i,j*>*> by A4,A5,FUNCT_6:61
+  .= F().<*g(i,j)*> by A2
+  .= f(g(i,j)) by A1;
+end;
+
+scheme Primrec2{F,G,H() -> binary len-total to-naturals
+                           (homogeneous from-natural-fseqs Function),
+                f,g,h(set,set) -> Nat}:
+for i, j being Nat holds (F()*<:<*G(),H()*>:>).<*i,j*> = f(g(i,j),h(i,j))
+provided
+A1: for i,j being Nat holds F().<*i,j*> = f(i,j) and
+A2: for i,j being Nat holds G().<*i,j*> = g(i,j) and
+A3: for i,j being Nat holds H().<*i,j*> = h(i,j)
+proof let i, j being Nat;
+A4: dom <:<*G(),H()*>:> = dom G() /\ dom H() by FUNCT_6:62;
+     arity G() = 2 & arity H() = 2 by Def26;
+then A5: dom G() = 2-tuples_on NAT & dom H() = 2-tuples_on NAT by Th26;
+   A6: <*i,j*> is Element of 2-tuples_on NAT by FINSEQ_2:121;
+hence (F()*<:<*G(),H()*>:>).<*i,j*>
+   = F().(<:<*G(),H()*>:>.<*i,j*>) by A4,A5,FUNCT_1:23
+  .= F().<*G().<*i,j*>,H().<*i,j*>*> by A4,A5,A6,FUNCT_6:62
+  .= F().<*g(i,j),H().<*i,j*>*> by A2
+  .= F().<*g(i,j),h(i,j)*> by A3
+  .= f(g(i,j),h(i,j)) by A1;
+end;
+
+theorem
+  [!].<*i*> = i!
+proof set g = [*]*<:<*(1 succ 1)*<:<*2 proj 1*>:>, 2 proj 2*>:>;
+  deffunc f(Nat) = $1+1;
+  deffunc g(Nat,Nat) = $1;
+  deffunc a(Nat,Nat) = $1*$2;
+  deffunc b(Nat,Nat) = f(g($1,$2));
+  deffunc c(Nat,Nat) = $2;
+A1: for i, j being Nat holds [*].<*i,j*> = a(i,j) by Th90;
+A2: for i being Nat holds (1 succ 1).<*i*> = f(i) proof let i be Nat;
+      reconsider ij = <*i*> as Element of 1-tuples_on NAT;
+     thus (1 succ 1).<*i*> = ij/.1+1 by Def10 .= i+1 by FINSEQ_4:25;
+    end;
+A3: for i,j being Nat holds (2 proj 1).<*i,j*> = g(i,j) proof let i,j be Nat;
+      reconsider ij = <*i,j*> as Element of 2-tuples_on NAT by FINSEQ_2:121;
+    thus (2 proj 1).<*i,j*> = ij.1 by Th42 .= i by FINSEQ_1:61;
+   end;
+for i, j being Nat holds ((1 succ 1)*<:<*2 proj 1*>:>).<*i,j*> = f(g(i,j))
+    from Primrec1(A2,A3);
+    then
+A4: for i, j being Nat holds ((1 succ 1)*<:<*2 proj 1*>:>).<*i,j*> = b(i,j);
+A5: for i, j being Nat holds (2 proj 2).<*i,j*> = c(i,j) proof let i,j be Nat;
+      reconsider ij = <*i,j*> as Element of 2-tuples_on NAT by FINSEQ_2:121;
+    thus (2 proj 2).<*i,j*> = ij.2 by Th42 .= j by FINSEQ_1:61;
+   end;
+A6: for i, j being Nat holds g.<*i,j*> = a(b(i,j),c(i,j))
+    from Primrec2(A1,A4,A5);
+A7: arity g = 2 by Def26;
+A8: arity (0 const 1) = 0 by Th35; 0-tuples_on NAT = {{}} by Th8;
+then A9: {} in 0-tuples_on NAT by TARSKI:def 1;
+defpred p[Nat] means [!].<*$1*> = $1!;
+A10: p[0] proof
+thus [!].<*0*> = (0 const 1).{} by A8,Def31,Th84 .= 0! by A9,Th36,NEWTON:18;
+end;
+A11: now let i be Nat; assume
+   A12: p[i]; reconsider ie = i! as Nat by NEWTON:22;
+    [!].<*i+1*> = g.<*i,ie*> by A7,A8,A12,Def31,Th86 .= (i+1)*ie by A6
+      .= (i+1)! by NEWTON:21;
+      hence p[i+1];
+    end;
+   for i being Nat holds p[i] from Ind(A10, A11);
+ hence thesis;
+end;
+
+definition
+ func [^] -> binary (primitive-recursive Function) equals:Def32:
+  primrec(1 const 1, (1,2)->(1,?,2) [*], 2);
+ coherence;
+end;
+
+theorem
+  [^].<*i,j*> = i |^ j
+proof
+  defpred p[Nat] means [^].<*i,$1*> = i |^ $1;
+A1:  p[0] proof
+thus [^].<*i,0*>=(1 const 1).<*i*> by Def32,Th83 .= 1 by Th36 .= i|^0 by NEWTON
+:9;
+end;
+A2:  now let j be Nat; reconsider ij = i|^j as Nat; assume p[j];
+     then [^].<*i,j+1*> = ((1,2)->(1,?,2) [*]).<*i,j,ij*> by Def32,Th85
+     .= [*].<*i,ij*> by Th87 .= i*ij by Th90 .= i|^(j+1) by NEWTON:11;
+     hence p[j+1];
+    end;
+     for j being Nat holds p[j] from Ind(A1,A2);
+   hence thesis;
+end;
+
+definition
+ func [pred] -> unary (primitive-recursive Function) equals:Def33:
+   primrec(0 const 0, 2 proj 1, 1);
+ coherence;
+end;
+
+theorem Th93:
+[pred].<*0*> = 0 & [pred].<*i+1*> = i
+proof
+A1: arity (0 const 0) = 0 by Th35; 0-tuples_on NAT = {{}} by Th8;
+then A2: {} in 0-tuples_on NAT by TARSKI:def 1;
+ thus
+A3: [pred].<*0*> = (0 const 0).{} by A1,Def33,Th84 .= 0 by A2,Th36;
+A4: arity (2 proj 1) = 2 by Th41;
+    reconsider p0 = <*0, 0*> as Element of 2-tuples_on NAT by FINSEQ_2:121;
+    defpred p[Nat] means [pred].<*$1+1*> = $1;
+A5: p[0] proof thus [pred].<*0+1*> = (2 proj 1).p0 by A1,A3,A4,Def33,Th86
+       .= <*0, 0*>.1 by Th42 .= 0 by FINSEQ_1:61;
+       end;
+A6: now let i be Nat; assume
+    A7: p[i];
+    reconsider p0 = <*i+1,i*> as Element of 2-tuples_on NAT by FINSEQ_2:121;
+     [pred].<*(i+1)+1*> = (2 proj 1).p0 by A1,A4,A7,Def33,Th86
+       .= <*i+1, i*>.1 by Th42 .= i+1 by FINSEQ_1:61;
+     hence p[i+1];
+    end;
+    for i holds p[i] from Ind(A5, A6);
+ hence [pred].<*i+1*> = i;
+end;
+
+definition
+ func [-] -> binary (primitive-recursive Function) equals:Def34:
+primrec(1 proj 1, (1,2)->(1,?,2) ([pred]*<:<*2 proj 2*>:>), 2);
+ coherence;
+end;
+
+theorem
+  [-].<*i,j*> = i -' j
+proof
+  set F = <*2 proj 2*>; set g = [pred]*<:F:>;
+    rng F c= PrimRec proof let x be set; assume x in rng F;
+    then x in {2 proj 2} by FINSEQ_1:56; then x = 2 proj 2 by TARSKI:def 1;
+   hence thesis by Def17;
+  end;
+  then reconsider F as with_the_same_arity FinSequence of PrimRec by FINSEQ_1:
+def 4;
+A1: for i, j holds g.<*i,0*> = 0 & g.<*i,j+1*> = j proof let i, j;
+  A2: dom <:F:> = dom (2 proj 2) by FUNCT_6:61;
+  A3: dom (2 proj 2) = 2-tuples_on NAT by Th40;
+     reconsider i0 = <*i,0*> as Element of 2-tuples_on NAT by FINSEQ_2:121;
+   thus g.<*i,0*> = [pred].(<:F:>.i0) by A2,A3,FUNCT_1:23
+      .= [pred].<*(2 proj 2).i0*> by A3,FUNCT_6:61 .= [pred].<*i0.2*> by Th42
+      .= 0 by Th93,FINSEQ_1:61;
+     reconsider ij = <*i,j+1*> as Element of 2-tuples_on NAT by FINSEQ_2:121;
+   thus g.<*i,j+1*> = [pred].(<:F:>.ij) by A2,A3,FUNCT_1:23
+      .= [pred].<*(2 proj 2).ij*> by A3,FUNCT_6:61 .= [pred].<*ij.2*> by Th42
+      .= [pred].<*j+1*> by FINSEQ_1:61 .= j by Th93;
+  end;
+  defpred p[Nat] means [-].<*i,$1*> = i -' $1;
+A4: p[0] proof
+  thus [-].<*i,0*> = (1 proj 1).<*i*> by Def34,Th83
+    .= <*i*>.1 by Th42 .= i by FINSEQ_1:57 .= i+0-'0 by BINARITH:39 .= i-'0;
+   end;
+A5: now let j; assume
+   A6: p[j];
+   A7: now
+        per cases by NAT_1:22;
+        suppose A8: i-'j = 0; then i <= j by JORDAN4:1;
+          then i < j+1 by NAT_1:38;
+        then A9: i-(j+1) < 0 by REAL_2:105;
+         thus g.<*i,i-'j*> = 0 by A1,A8 .= i-'(j+1) by A9,BINARITH:def 3;
+        suppose ex k st i-'j = k+1; then consider k being Nat such that
+        A10: i-'j = k+1;
+              0 <= i-j by A10,BINARITH:def 3;
+            then i - j = k+1 by A10,BINARITH:def 3;
+            then i-j-1 = k by XCMPLX_1:26;
+        then A11: i-(j+1) = k & 0 <= k by NAT_1:18,XCMPLX_1:36;
+         thus g.<*i,i-'j*> = k by A1,A10 .= i-'(j+1) by A11,BINARITH:def 3;
+       end;
+     [-].<*i,j+1*> =((1,2)->(1,?,2) g).<*i,j,[-].<*i,j*>*> by Def34,Th85
+       .= i-'(j+1) by A6,A7,Th87;
+     hence p[j+1];
+    end;
+    for j holds p[j] from Ind(A4, A5);
+ hence thesis;
+end;
+

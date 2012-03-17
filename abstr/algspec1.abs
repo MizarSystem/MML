@@ -1,0 +1,430 @@
+:: Technical Preliminaries to Algebraic Specifications
+::  by Grzegorz Bancerek
+::
+:: Received September 7, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, RELAT_1, BOOLE, FUNCT_4, PARTFUN1, PBOOLE, AMI_1,
+      MSUALG_1, QC_LANG1, CATALG_1, PUA2MSS1, TREES_1, FINSEQ_1, INSTALG1,
+      FUNCSDOM, MSUALG_6, TDGROUP, PRALG_1, ZF_REFLE, PROB_2, CARD_3, ALGSPEC1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, MSAFREE1, FINSEQ_1,
+      RELSET_1, PARTFUN1, FINSEQ_2, FUNCT_4, PBOOLE, LANG1, FUNCT_2, STRUCT_0,
+      CARD_3, MSUALG_1, PROB_2, PUA2MSS1, CIRCCOMB, MSUALG_6, INSTALG1,
+      CATALG_1;
+ constructors MSAFREE1, PUA2MSS1, CIRCCOMB, MSUALG_6, CATALG_1;
+ clusters RELAT_1, FUNCT_1, PRALG_1, RELSET_1, STRUCT_0, MSUALG_1, MSUALG_2,
+      MSAFREE, PRE_CIRC, CIRCCOMB, MSUALG_6, INSTALG1, CATALG_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin :: Preliminaries
+
+theorem :: ALGSPEC1:1
+ for f,g,h being Function st dom f /\ dom g c= dom h holds f+*g+*h = g+*f+*h;
+
+theorem :: ALGSPEC1:2
+ for f,g,h being Function st f c= g & (rng h) /\ dom g c= dom f
+   holds g*h = f*h;
+
+theorem :: ALGSPEC1:3
+ for f,g,h being Function
+   st dom f c= rng g & dom f misses rng h & g.:dom h misses dom f
+   holds f*(g+*h) = f*g;
+
+theorem :: ALGSPEC1:4
+ for f1,f2,g1,g2 being Function st f1 tolerates f2 & g1 tolerates g2 holds
+  f1*g1 tolerates f2*g2;
+
+theorem :: ALGSPEC1:5
+ for X1,Y1, X2,Y2 being non empty set
+ for f being Function of X1,X2, g being Function of Y1,Y2 st f c= g
+  holds f* c= g*;
+
+theorem :: ALGSPEC1:6
+ for X1,Y1, X2,Y2 be non empty set
+ for f being Function of X1,X2, g being Function of Y1,Y2 st f tolerates g
+  holds f* tolerates g*;
+
+definition
+ let X be set, f be Function;
+ func X-indexing(f) -> ManySortedSet of X equals
+:: ALGSPEC1:def 1
+
+  (id X) +* (f|X);
+end;
+
+theorem :: ALGSPEC1:7
+ for X being set, f being Function
+  holds rng (X-indexing f) = (X \ dom f) \/ f.:X;
+
+theorem :: ALGSPEC1:8
+ for X being non empty set, f being Function, x being Element of X
+  holds (X-indexing f).x = ((id X) +* f).x;
+
+theorem :: ALGSPEC1:9
+ for X,x being set, f being Function st x in X
+  holds (x in dom f implies (X-indexing f).x = f.x) &
+   (not x in dom f implies (X-indexing f).x = x);
+
+theorem :: ALGSPEC1:10
+ for X being set, f being Function st dom f = X holds X-indexing f = f;
+
+theorem :: ALGSPEC1:11
+ for X being set, f being Function holds
+   X-indexing (X-indexing f) = X-indexing f;
+
+theorem :: ALGSPEC1:12
+ for X being set, f being Function holds X-indexing ((id X)+*f) = X-indexing f;
+
+theorem :: ALGSPEC1:13
+ for X being set, f being Function st f c= id X holds X-indexing f = id X;
+
+theorem :: ALGSPEC1:14
+   for X being set holds X-indexing {} = id X;
+
+theorem :: ALGSPEC1:15
+ for X being set, f being Function holds X-indexing (f|X) = X-indexing f;
+
+theorem :: ALGSPEC1:16
+ for X being set, f being Function st X c= dom f holds X-indexing f = f|X;
+
+theorem :: ALGSPEC1:17
+   for f being Function holds {}-indexing f = {};
+
+theorem :: ALGSPEC1:18
+ for X,Y being set, f being Function st X c= Y
+   holds (Y-indexing f)|X = X-indexing f;
+
+theorem :: ALGSPEC1:19
+ for X,Y being set, f being Function holds
+   (X \/ Y)-indexing f = (X-indexing f) +* (Y-indexing f);
+
+theorem :: ALGSPEC1:20
+ for X,Y being set, f being Function holds X-indexing f tolerates Y-indexing f;
+
+theorem :: ALGSPEC1:21
+ for X,Y being set, f being Function holds
+   (X \/ Y)-indexing f = (X-indexing f) \/ (Y-indexing f);
+
+theorem :: ALGSPEC1:22
+ for X being non empty set, f,g being Function st rng g c= X
+   holds (X-indexing f)*g = ((id X) +* f)*g;
+
+theorem :: ALGSPEC1:23
+   for f,g being Function st dom f misses dom g & rng g misses dom f
+ for X being set holds f*(X-indexing g) = f|X;
+
+definition
+ let f be Function;
+ mode rng-retract of f -> Function means
+:: ALGSPEC1:def 2
+
+  dom it = rng f & f*it = id rng f;
+end;
+
+theorem :: ALGSPEC1:24
+ for f being Function, g being rng-retract of f holds rng g c= dom f;
+
+theorem :: ALGSPEC1:25
+ for f being Function, g being rng-retract of f
+ for x being set st x in rng f holds g.x in dom f & f.(g.x) = x;
+
+theorem :: ALGSPEC1:26
+   for f being Function st f is one-to-one holds f" is rng-retract of f;
+
+theorem :: ALGSPEC1:27
+   for f being Function st f is one-to-one
+ for g being rng-retract of f holds g = f";
+
+theorem :: ALGSPEC1:28
+ for f1,f2 being Function st f1 tolerates f2
+ for g1 being rng-retract of f1, g2 being rng-retract of f2
+  holds g1+*g2 is rng-retract of f1+*f2;
+
+theorem :: ALGSPEC1:29
+   for f1,f2 being Function st f1 c= f2
+ for g1 being rng-retract of f1
+ ex g2 being rng-retract of f2 st g1 c= g2;
+
+begin :: Replacement in signature
+
+definition
+ let S be non empty non void ManySortedSign;
+ let f,g be Function;
+ pred f,g form_a_replacement_in S means
+:: ALGSPEC1:def 3
+
+  for o1,o2 being OperSymbol of S
+   st ((id the OperSymbols of S) +* g).o1 = ((id the OperSymbols of S) +* g).o2
+   holds ((id the carrier of S) +* f)*the_arity_of o1
+             = ((id the carrier of S) +* f)*the_arity_of o2 &
+         ((id the carrier of S) +* f).the_result_sort_of o1
+             = ((id the carrier of S) +* f).the_result_sort_of o2;
+end;
+
+theorem :: ALGSPEC1:30
+ for S being non empty non void ManySortedSign, f,g being Function
+  holds
+      f,g form_a_replacement_in S
+  iff
+   for o1,o2 being OperSymbol of S
+    st ((the OperSymbols of S)-indexing g).o1
+       = ((the OperSymbols of S)-indexing g).o2
+   holds
+    ((the carrier of S)-indexing f)*the_arity_of o1
+       = ((the carrier of S)-indexing f)*the_arity_of o2 &
+    ((the carrier of S)-indexing f).the_result_sort_of o1
+       = ((the carrier of S)-indexing f).the_result_sort_of o2;
+
+theorem :: ALGSPEC1:31
+ for S being non empty non void ManySortedSign, f,g being Function
+  holds
+     f,g form_a_replacement_in S
+  iff
+   (the carrier of S)-indexing f, (the OperSymbols of S)-indexing g
+      form_a_replacement_in S;
+
+reserve S,S' for non void Signature, f,g for Function;
+
+theorem :: ALGSPEC1:32
+ f,g form_morphism_between S,S' implies f,g form_a_replacement_in S;
+
+
+theorem :: ALGSPEC1:33
+   f, {} form_a_replacement_in S;
+
+theorem :: ALGSPEC1:34
+ g is one-to-one & (the OperSymbols of S) /\ rng g c= dom g
+   implies f,g form_a_replacement_in S;
+
+
+theorem :: ALGSPEC1:35
+   g is one-to-one & rng g misses the OperSymbols of S
+   implies f,g form_a_replacement_in S;
+
+
+definition
+ let X be set, Y be non empty set;
+ let a be Function of Y, X*;
+ let r be Function of Y, X;
+ cluster ManySortedSign(#X, Y, a, r#) -> non void;
+end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let f,g be Function such that
+   f,g form_a_replacement_in S;
+ func S with-replacement (f,g) -> strict non empty non void ManySortedSign
+ means
+:: ALGSPEC1:def 4
+
+  (the carrier of S)-indexing f, (the OperSymbols of S)-indexing g
+     form_morphism_between S, it &
+    the carrier of it = rng ((the carrier of S)-indexing f) &
+    the OperSymbols of it = rng ((the OperSymbols of S)-indexing g);
+end;
+
+theorem :: ALGSPEC1:36
+ for S1,S2 being non void Signature
+ for f being Function of the carrier of S1, the carrier of S2
+ for g being Function st f,g form_morphism_between S1,S2
+  holds f**the Arity of S1 = (the Arity of S2)*g;
+
+theorem :: ALGSPEC1:37
+ f,g form_a_replacement_in S implies
+   (the carrier of S)-indexing f is
+     Function of the carrier of S, the carrier of S with-replacement (f,g);
+
+theorem :: ALGSPEC1:38
+ f,g form_a_replacement_in S implies
+ for f' being Function of the carrier of S,
+                          the carrier of S with-replacement (f,g)
+  st f' = (the carrier of S)-indexing f
+ for g' being rng-retract of (the OperSymbols of S)-indexing g holds
+  the Arity of S with-replacement (f,g) = f'* *(the Arity of S)*g';
+
+theorem :: ALGSPEC1:39
+ f,g form_a_replacement_in S implies
+ for g' being rng-retract of (the OperSymbols of S)-indexing g holds
+  the ResultSort of S with-replacement (f,g)
+     = ((the carrier of S)-indexing f)*(the ResultSort of S)*g';
+
+theorem :: ALGSPEC1:40
+ f,g form_morphism_between S,S' implies
+  S with-replacement (f,g) is Subsignature of S';
+
+theorem :: ALGSPEC1:41
+ f,g form_a_replacement_in S iff
+   (the carrier of S)-indexing f, (the OperSymbols of S)-indexing g
+             form_morphism_between S, S with-replacement (f,g);
+
+theorem :: ALGSPEC1:42
+ dom f c= the carrier of S & dom g c= the OperSymbols of S &
+   f,g form_a_replacement_in S
+  implies (id the carrier of S) +* f, (id the OperSymbols of S) +* g
+             form_morphism_between S, S with-replacement (f,g);
+
+theorem :: ALGSPEC1:43
+   dom f = the carrier of S & dom g = the OperSymbols of S &
+   f,g form_a_replacement_in S
+  implies f,g form_morphism_between S, S with-replacement (f,g);
+
+theorem :: ALGSPEC1:44
+ f,g form_a_replacement_in S implies
+  S with-replacement ((the carrier of S)-indexing f, g)
+   = S with-replacement (f,g);
+
+theorem :: ALGSPEC1:45
+ f,g form_a_replacement_in S implies
+  S with-replacement (f, (the OperSymbols of S)-indexing g)
+   = S with-replacement (f,g);
+
+begin :: Signature extensions
+
+definition
+ let S be Signature;
+ mode Extension of S -> Signature means
+:: ALGSPEC1:def 5
+
+  S is Subsignature of it;
+end;
+
+canceled;
+
+theorem :: ALGSPEC1:47
+ for S being Signature holds S is Extension of S;
+
+theorem :: ALGSPEC1:48
+ for S1 being Signature, S2 being Extension of S1, S3 being Extension of S2
+  holds S3 is Extension of S1;
+
+theorem :: ALGSPEC1:49
+ for S1,S2 being non empty Signature st S1 tolerates S2
+  holds S1+*S2 is Extension of S1;
+
+theorem :: ALGSPEC1:50
+ for S1, S2 being non empty Signature
+  holds S1+*S2 is Extension of S2;
+
+theorem :: ALGSPEC1:51
+ for S1,S2,S being non empty ManySortedSign
+ for f1,g1, f2,g2 being Function st f1 tolerates f2 &
+   f1, g1 form_morphism_between S1, S &
+   f2, g2 form_morphism_between S2, S
+ holds f1+*f2, g1+*g2 form_morphism_between S1+*S2, S;
+
+theorem :: ALGSPEC1:52
+   for S1,S2,E being non empty Signature holds
+   E is Extension of S1 & E is Extension of S2 iff
+    S1 tolerates S2 & E is Extension of S1+*S2;
+
+definition
+ let S be non empty Signature;
+ cluster -> non empty Extension of S;
+end;
+
+definition
+ let S be non void Signature;
+ cluster -> non void Extension of S;
+end;
+
+theorem :: ALGSPEC1:53
+ for S,T being Signature st S is empty
+   holds T is Extension of S;
+
+definition
+ let S be Signature;
+ cluster non empty non void strict Extension of S;
+end;
+
+theorem :: ALGSPEC1:54
+ for S being non void Signature, E being Extension of S
+  st f,g form_a_replacement_in E
+  holds f,g form_a_replacement_in S;
+
+theorem :: ALGSPEC1:55
+   for S being non void Signature, E being Extension of S
+  st f,g form_a_replacement_in E
+  holds E with-replacement(f,g) is Extension of S with-replacement(f,g);
+
+theorem :: ALGSPEC1:56
+   for S1,S2 being non void Signature st S1 tolerates S2
+ for f,g being Function
+  st f,g form_a_replacement_in S1+*S2
+  holds (S1+*S2) with-replacement (f,g)
+           = (S1 with-replacement (f,g))+*(S2 with-replacement (f,g));
+
+begin :: Algebras
+
+definition
+ mode Algebra means
+:: ALGSPEC1:def 6
+
+  ex S being non void Signature st it is feasible MSAlgebra over S;
+end;
+
+definition
+ let S be Signature;
+ mode Algebra of S -> Algebra means
+:: ALGSPEC1:def 7
+
+  ex E being non void Extension of S st it is feasible MSAlgebra over E;
+end;
+
+theorem :: ALGSPEC1:57
+   for S being non void Signature, A being feasible MSAlgebra over S
+   holds A is Algebra of S;
+
+theorem :: ALGSPEC1:58
+   for S being Signature, E being Extension of S, A being Algebra of E
+  holds A is Algebra of S;
+
+theorem :: ALGSPEC1:59
+ for S being Signature, E being non empty Signature, A being MSAlgebra over E
+  st A is Algebra of S
+  holds the carrier of S c= the carrier of E &
+        the OperSymbols of S c= the OperSymbols of E;
+
+theorem :: ALGSPEC1:60
+ for S being non void Signature, E being non empty Signature
+ for A being MSAlgebra over E st A is Algebra of S
+ for o being OperSymbol of S
+  holds (the Charact of A).o is Function of (the Sorts of A)#.the_arity_of o,
+     (the Sorts of A).the_result_sort_of o;
+
+theorem :: ALGSPEC1:61
+   for S being non empty Signature, A being Algebra of S
+ for E being non empty ManySortedSign
+  st A is MSAlgebra over E
+  holds A is MSAlgebra over E+*S;
+
+theorem :: ALGSPEC1:62
+ for S1,S2 being non empty Signature
+ for A being MSAlgebra over S1 st A is MSAlgebra over S2
+  holds the carrier of S1 = the carrier of S2 &
+        the OperSymbols of S1 = the OperSymbols of S2;
+
+theorem :: ALGSPEC1:63
+ for S being non void Signature
+ for A being non-empty disjoint_valued MSAlgebra over S
+  holds the Sorts of A is one-to-one;
+
+theorem :: ALGSPEC1:64
+ for S being non void Signature
+ for A being disjoint_valued MSAlgebra over S
+ for C1,C2 being Component of the Sorts of A
+  holds C1 = C2 or C1 misses C2;
+
+theorem :: ALGSPEC1:65
+ for S,S' being non void Signature
+ for A being non-empty disjoint_valued MSAlgebra over S
+  st A is MSAlgebra over S'
+  holds the ManySortedSign of S = the ManySortedSign of S';
+
+theorem :: ALGSPEC1:66
+   for S' being non void Signature
+ for A being non-empty disjoint_valued MSAlgebra over S st A is Algebra of S'
+  holds S is Extension of S';
+

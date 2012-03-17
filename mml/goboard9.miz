@@ -1,0 +1,2163 @@
+:: Left and Right Component of the Complement of a Special Closed Curve
+::  by Andrzej Trybulec
+::
+:: Received October 29, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary SEQM_3, GOBOARD5, PRE_TOPC, EUCLID, GOBOARD1, ARYTM_1, CONNSP_1,
+      BOOLE, RELAT_1, SUBSET_1, RELAT_2, TOPREAL1, JORDAN1, FINSEQ_1, FINSEQ_5,
+      FUNCT_1, MCART_1, GOBOARD2, CARD_1, MATRIX_1, ABSVALUE, FINSEQ_6, ARYTM,
+      TREES_1, TOPS_1, ARYTM_3, GOBOARD9, FINSEQ_4, ORDINAL2;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, XCMPLX_0, XREAL_0,
+      REAL_1, NAT_1, ABSVALUE, BINARITH, FUNCT_1, FINSEQ_1, FINSEQ_4, MATRIX_1,
+      CARD_1, STRUCT_0, PRE_TOPC, TOPS_1, CONNSP_1, EUCLID, TOPREAL1, GOBOARD1,
+      GOBOARD2, JORDAN1, FINSEQ_5, FINSEQ_6, GOBOARD5;
+ constructors SEQM_3, REAL_1, ABSVALUE, BINARITH, TOPS_1, CONNSP_1, GOBOARD2,
+      JORDAN1, FINSEQ_5, GOBOARD5, FINSEQ_4, INT_1, MEMBERED;
+ clusters STRUCT_0, GOBOARD5, RELSET_1, PRE_TOPC, GOBOARD2, FINSEQ_6, EUCLID,
+      FINSEQ_1, TOPREAL1, INT_1, XREAL_0, MEMBERED, ARYTM_3;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, FINSEQ_6, GOBOARD5, GOBOARD1, JORDAN1, XBOOLE_0;
+ theorems CONNSP_1, GOBOARD5, TOPS_1, SPPOL_2, PRE_TOPC, GOBOARD1, RLVECT_1,
+      REAL_1, AXIOMS, REAL_2, ABSVALUE, TARSKI, TOPREAL1, GOBOARD2, FINSEQ_3,
+      NAT_1, SUBSET_1, AMI_5, FINSEQ_6, GOBOARD6, GOBOARD7, GOBOARD8, BINARITH,
+      FINSEQ_1, FINSEQ_5, FINSEQ_4, JORDAN1, TSEP_1, INT_1, XBOOLE_0, XBOOLE_1,
+      XCMPLX_1;
+ schemes NAT_1;
+
+begin
+
+reserve f for non constant standard special_circular_sequence,
+        i,j,k,i1,i2,j1,j2 for Nat,
+        r,s,r1,s1,r2,s2 for Real,
+        a,b for natural number,
+        p,q for Point of TOP-REAL 2,
+        G for Go-board;
+
+theorem Th1:
+ a -' a = 0
+  proof a-a = 0 by XCMPLX_1:14; hence thesis by BINARITH:def 3; end;
+
+theorem Th2:
+ a -' b <= a
+  proof per cases;
+   suppose
+    A1: a-b >= 0;
+      b >= 0 by NAT_1:18;
+    then a-b <= a-0 by REAL_2:106;
+   hence thesis by A1,BINARITH:def 3;
+   suppose a-b < 0;
+    then a-'b = 0 by BINARITH:def 3;
+   hence thesis by NAT_1:18;
+  end;
+
+theorem Th3:
+ for GX being non empty TopSpace, A1,A2,B being Subset of GX
+  st A1 is_a_component_of B & A2 is_a_component_of B
+ holds A1 = A2 or A1 misses A2
+proof let GX be non empty TopSpace, A1,A2,B be Subset of GX;
+ assume A1 is_a_component_of B;
+ then consider B1 being Subset of GX|B such that
+A1: B1 = A1 and
+A2: B1 is_a_component_of GX|B by CONNSP_1:def 6;
+ assume A2 is_a_component_of B;
+ then ex B2 being Subset of GX|B st B2 = A2 & B2 is_a_component_of GX|B
+  by CONNSP_1:def 6;
+ hence A1 = A2 or A1 misses A2 by A1,A2,CONNSP_1:37;
+end;
+
+theorem Th4:
+ for GX being non empty TopSpace,
+     A,B being non empty Subset of GX,
+     AA being Subset of GX|B st A = AA holds GX|A = GX|B|AA
+proof
+ let GX be non empty TopSpace, A,B be non empty Subset of GX;
+ let AA be Subset of GX|B; assume
+A1: A = AA;
+    the carrier of GX|A = [#](GX|A) by PRE_TOPC:12
+   .= A by PRE_TOPC:def 10;
+  then reconsider GY = GX|A as strict SubSpace of GX|B by A1,TSEP_1:4;
+    [#] GY = AA by A1,PRE_TOPC:def 10;
+ hence GX|A = GX|B|AA by PRE_TOPC:def 10;
+end;
+
+theorem Th5:
+ for GX being non empty TopSpace,
+     A being non empty Subset of GX,
+     B being non empty Subset of GX
+  st A c= B & A is connected
+ ex C being Subset of GX st C is_a_component_of B & A c= C
+ proof
+  let GX be non empty TopSpace, A be non empty Subset of GX,
+  B be non empty Subset of GX such that
+A1: A c= B and
+A2: A is connected;
+  consider p being set such that
+A3: p in A by XBOOLE_0:def 1;
+A4: B = [#](GX|B) by PRE_TOPC:def 10
+   .= the carrier of GX|B by PRE_TOPC:12;
+ then reconsider p as Point of GX|B by A1,A3;
+ reconsider C = skl p as Subset of GX by PRE_TOPC:39;
+ take C;
+A5: skl p is_a_component_of GX|B by CONNSP_1:43;
+  hence C is_a_component_of B by CONNSP_1:def 6;
+   reconsider AA = A as Subset of GX|B by A1,A4;
+     GX|A is connected by A2,CONNSP_1:def 3;
+   then GX|B|AA is connected by Th4;
+then A6: AA is connected by CONNSP_1:def 3;
+     p in skl p by CONNSP_1:40;
+   then AA /\ skl p <> {}(GX|B) by A3,XBOOLE_0:def 3;
+   then AA meets skl p by XBOOLE_0:def 7;
+  hence A c= C by A5,A6,CONNSP_1:38;
+ end;
+
+theorem Th6:
+ for GX being non empty TopSpace, A,C,D being Subset of GX,
+  B being Subset of GX st B is connected & C is_a_component_of D
+      & A c= C & A meets B & B c= D
+  holds B c= C
+ proof let GX be non empty TopSpace,
+           A,C,D be Subset of GX,
+           B be Subset of GX such that
+A1: B is connected and
+A2: C is_a_component_of D and
+A3: A c= C and
+A4: A meets B and
+A5: B c= D;
+A6: A <> {} & B <> {} by A4,XBOOLE_1:65;
+   reconsider A,B as non empty Subset of GX by A4,XBOOLE_1:65;
+   reconsider C,D as non empty Subset of GX by A3,A5,A6,XBOOLE_1
+:3;
+   consider CC being Subset of GX such that
+A7: CC is_a_component_of D and
+A8: B c= CC by A1,A5,Th5;
+     A meets CC by A4,A8,XBOOLE_1:63;
+then A9: C meets CC by A3,XBOOLE_1:63;
+    consider C1 being Subset of GX|D such that
+A10:  C1 = C and
+A11:  C1 is_a_component_of GX|D by A2,CONNSP_1:def 6;
+    consider CC1 being Subset of GX|D such that
+A12:  CC1 = CC and
+A13:  CC1 is_a_component_of GX|D by A7,CONNSP_1:def 6;
+  thus thesis by A8,A9,A10,A11,A12,A13,CONNSP_1:37;
+ end;
+
+theorem Th7:
+ LSeg(p,q) is convex
+ proof
+     for w1,w2 be Point of TOP-REAL 2 st w1 in LSeg(p,q) & w2 in LSeg(p,q)
+    holds LSeg(w1,w2) c= LSeg(p,q) by TOPREAL1:12;
+  hence LSeg(p,q) is convex by JORDAN1:def 1;
+ end;
+
+theorem Th8:
+ LSeg(p,q) is connected
+ proof
+    LSeg(p,q) is convex by Th7;
+  hence LSeg(p,q) is connected by JORDAN1:9;
+ end;
+
+definition
+ cluster convex non empty Subset of TOP-REAL 2;
+ existence
+  proof consider p being Point of TOP-REAL 2;
+   take LSeg(p,p);
+   thus thesis by Th7;
+  end;
+end;
+
+theorem Th9:
+ for P,Q being convex Subset of TOP-REAL 2 holds P /\ Q is convex
+  proof let P,Q be convex Subset of TOP-REAL 2;
+   let p,q; assume
+A1: p in P /\ Q & q in P /\ Q;
+    then p in P & q in P by XBOOLE_0:def 3;
+then A2:  LSeg(p,q) c= P by JORDAN1:def 1;
+      p in Q & q in Q by A1,XBOOLE_0:def 3;
+    then LSeg(p,q) c= Q by JORDAN1:def 1;
+   hence LSeg(p,q) c= P /\ Q by A2,XBOOLE_1:19;
+  end;
+
+theorem Th10:
+for f being FinSequence of TOP-REAL 2
+ holds Rev X_axis f = X_axis Rev f
+ proof let f be FinSequence of TOP-REAL 2;
+A1: len Rev X_axis f = len X_axis f by FINSEQ_5:def 3
+           .= len f by GOBOARD1:def 3
+           .= len Rev f by FINSEQ_5:def 3;
+   len X_axis f = len f by GOBOARD1:def 3;
+then A2: dom X_axis f = dom f by FINSEQ_3:31;
+A3: len f = len Rev f by FINSEQ_5:def 3;
+     now let k such that
+A4:  k in dom Rev X_axis f;
+    set l = len f + 1 -' k;
+      k <= len f & len f < len f + 1 by A1,A3,A4,FINSEQ_3:27,NAT_1:38;
+    then k <= len f +1 by AXIOMS:22;
+then A5: l + k = len f + 1 by AMI_5:4;
+A6:  Rev Rev X_axis f = X_axis f by FINSEQ_6:29;
+    then A7: l in dom X_axis f by A1,A3,A4,A5,FINSEQ_5:62;
+    thus (Rev X_axis f).k = (Rev X_axis f)/.k by A4,FINSEQ_4:def 4
+               .= (X_axis f)/.l by A1,A3,A4,A5,A6,FINSEQ_5:69
+               .= (X_axis f).l by A7,FINSEQ_4:def 4
+               .= (f/.l)`1 by A7,GOBOARD1:def 3
+               .= ((Rev f)/.k)`1 by A2,A5,A7,FINSEQ_5:69;
+   end;
+  hence Rev X_axis f = X_axis Rev f by A1,GOBOARD1:def 3;
+ end;
+
+theorem Th11:
+for f being FinSequence of TOP-REAL 2
+ holds Rev Y_axis f = Y_axis Rev f
+ proof let f be FinSequence of TOP-REAL 2;
+A1: len Rev Y_axis f = len Y_axis f by FINSEQ_5:def 3
+           .= len f by GOBOARD1:def 4
+           .= len Rev f by FINSEQ_5:def 3;
+   len Y_axis f = len f by GOBOARD1:def 4;
+then A2: dom Y_axis f = dom f by FINSEQ_3:31;
+A3: len f = len Rev f by FINSEQ_5:def 3;
+     now let k such that
+A4:  k in dom Rev Y_axis f;
+    set l = len f + 1 -' k;
+      k <= len f & len f < len f + 1 by A1,A3,A4,FINSEQ_3:27,NAT_1:38;
+    then k <= len f +1 by AXIOMS:22;
+then A5: l + k = len f + 1 by AMI_5:4;
+A6:  Rev Rev Y_axis f = Y_axis f by FINSEQ_6:29;
+    then A7: l in dom Y_axis f by A1,A3,A4,A5,FINSEQ_5:62;
+    thus (Rev Y_axis f).k = (Rev Y_axis f)/.k by A4,FINSEQ_4:def 4
+               .= (Y_axis f)/.l by A1,A3,A4,A5,A6,FINSEQ_5:69
+               .= (Y_axis f).l by A7,FINSEQ_4:def 4
+               .= (f/.l)`2 by A7,GOBOARD1:def 4
+               .= ((Rev f)/.k)`2 by A2,A5,A7,FINSEQ_5:69;
+   end;
+  hence Rev Y_axis f = Y_axis Rev f by A1,GOBOARD1:def 4;
+ end;
+
+Lm1: for f,ff being non empty FinSequence of TOP-REAL 2 st ff = Rev f
+ holds GoB ff = GoB f
+ proof let f,ff be non empty FinSequence of TOP-REAL 2; assume
+A1:  ff = Rev f;
+then A2: Rev X_axis f = X_axis ff by Th10;
+A3: rng Incr X_axis ff = rng X_axis ff by GOBOARD2:def 2
+          .= rng X_axis f by A2,FINSEQ_5:60;
+     len Incr X_axis ff = card rng X_axis ff by GOBOARD2:def 2
+                .= card rng X_axis f by A2,FINSEQ_5:60;
+then A4: Incr X_axis f = Incr X_axis ff by A3,GOBOARD2:def 2;
+A5: Rev Y_axis f = Y_axis ff by A1,Th11;
+A6: rng Incr Y_axis ff = rng Y_axis ff by GOBOARD2:def 2
+               .= rng Y_axis f by A5,FINSEQ_5:60;
+     len Incr Y_axis ff = card rng Y_axis ff by GOBOARD2:def 2
+               .= card rng Y_axis f by A5,FINSEQ_5:60;
+   then Incr Y_axis f = Incr Y_axis ff by A6,GOBOARD2:def 2;
+  hence GoB ff = GoB(Incr X_axis f,Incr Y_axis f) by A4,GOBOARD2:def 3
+       .= GoB f by GOBOARD2:def 3;
+ end;
+
+definition
+ cluster non constant FinSequence;
+ existence
+  proof take <*1,2*>,1,2;
+      1 in {1,2} & 2 in {1,2} by TARSKI:def 2;
+   hence 1 in dom <*1,2*> & 2 in dom <*1,2*> by FINSEQ_1:4,FINSEQ_3:29;
+      <*1,2*>.1 = 1 & <*1,2*>.2 = 2 by FINSEQ_1:61;
+   hence thesis;
+  end;
+end;
+
+definition let f be non constant FinSequence;
+ cluster Rev f -> non constant;
+ coherence
+ proof
+  consider i,j such that
+A1: i in dom f & j in dom f and
+A2: f.i <> f.j by GOBOARD1:def 2;
+     i <= len f & j <= len f by A1,FINSEQ_3:27;
+   then reconsider k1 = len f -i, l1 = len f -j as Nat by INT_1:18;
+  take k = k1+1, l = l1+1;
+     k + i = len f -i +i +1 by XCMPLX_1:1
+         .= len f +1 by XCMPLX_1:27;
+  hence k in dom Rev f by A1,FINSEQ_5:62;
+   then A3: (Rev f).k = f.(len f -k +1) by FINSEQ_5:def 3
+           .= f.(len f -(len f - i) -1 +1) by XCMPLX_1:36
+           .= f.(len f -(len f - i)) by XCMPLX_1:27
+           .= f.(len f -len f + i) by XCMPLX_1:37
+           .= f.(0 + i) by XCMPLX_1:14;
+     l + j = len f -j +j +1 by XCMPLX_1:1
+         .= len f +1 by XCMPLX_1:27;
+  hence l in dom Rev f by A1,FINSEQ_5:62;
+   then (Rev f).l = f.(len f -l +1) by FINSEQ_5:def 3
+           .= f.(len f -(len f - j) -1 +1) by XCMPLX_1:36
+           .= f.(len f -(len f - j)) by XCMPLX_1:27
+           .= f.(len f -len f + j) by XCMPLX_1:37
+           .= f.(0 + j) by XCMPLX_1:14;
+  hence thesis by A2,A3;
+ end;
+end;
+
+definition let f be standard special_circular_sequence;
+ redefine func Rev f -> standard special_circular_sequence;
+ coherence
+  proof
+    reconsider ff = Rev f as non empty FinSequence of TOP-REAL 2;
+A1:  Rev ff = f by FINSEQ_6:29;
+A2:  GoB ff = GoB f by Lm1;
+A3:  f is_sequence_on GoB f by GOBOARD5:def 5;
+A4:  len f = len ff by FINSEQ_5:def 3;
+A5:  ff is standard
+     proof
+      hereby let k such that
+A6:     k in dom ff;
+       set l = len f + 1 -' k;
+         k <= len f & len f < len f + 1 by A4,A6,FINSEQ_3:27,NAT_1:38;
+       then k <= len f +1 by AXIOMS:22;
+then A7:    l + k = len f + 1 by AMI_5:4;
+       then l in dom f by A1,A4,A6,FINSEQ_5:62;
+       then consider i,j such that
+A8:     [i,j] in Indices GoB f and
+A9:     f/.l = (GoB f)*(i,j) by A3,GOBOARD1:def 11;
+       take i,j;
+       thus [i,j] in Indices GoB ff by A8,Lm1;
+       thus ff/.k = (GoB ff)*(i,j) by A1,A2,A4,A6,A7,A9,FINSEQ_5:69;
+      end;
+      let k such that
+A10:    k in dom ff and
+A11:    k+1 in dom ff;
+       set l = len f + 1 -' (k + 1);
+         k <= len f by A4,A10,FINSEQ_3:27;
+       then k+1 <= len f +1 by AXIOMS:24;
+then A12:    l + (k+1) = len f + 1 by AMI_5:4;
+       then A13:     l in dom f by A1,A4,A11,FINSEQ_5:62;
+A14:    l+1 + k = len f + 1 by A12,XCMPLX_1:1;
+then A15:    l+1 in dom f by A1,A4,A10,FINSEQ_5:62;
+      let i1,j1,i2,j2 such that
+A16:    [i1,j1] in Indices GoB ff and
+A17:    [i2,j2] in Indices GoB ff and
+A18:    ff/.k = (GoB ff)*(i1,j1) and
+A19:    ff/.(k+1) = (GoB ff)*(i2,j2);
+A20:    abs(i2-i1) = abs(-(i1-i2)) by XCMPLX_1:143
+           .= abs(i1-i2) by ABSVALUE:17;
+A21:    abs(j2-j1) = abs(-(j1-j2)) by XCMPLX_1:143
+           .= abs(j1-j2) by ABSVALUE:17;
+A22:    f/.l = (GoB f)*(i2,j2) by A1,A2,A4,A11,A12,A19,FINSEQ_5:69;
+         f/.(l+1) = (GoB f)*(i1,j1) by A1,A2,A4,A10,A14,A18,FINSEQ_5:69;
+      hence abs(i1-i2)+abs(j1-j2) = 1
+         by A2,A3,A13,A15,A16,A17,A20,A21,A22,GOBOARD1:def 11;
+     end;
+A23:  ff is circular
+     proof
+      thus ff/.1 = f/.len f by FINSEQ_5:68
+         .= f/.1 by FINSEQ_6:def 1
+         .= ff/.len ff by A4,FINSEQ_5:68;
+     end;
+      ff is s.c.c.
+     proof let i,j such that
+A24:    i+1 < j and
+A25:    i > 1 & j < len ff or j+1 < len ff;
+       set k = len f -' i, l = len f -' j;
+       A26:      j <= len f by A4,A25,NAT_1:38;
+then A27:    l + j = len f by AMI_5:4;
+         i < j by A24,NAT_1:38;
+       then i <= len f by A26,AXIOMS:22;
+then A28:    k + i = len f by AMI_5:4;
+       then i+1+k = len f + 1 by XCMPLX_1:1
+         .= l+1+j by A27,XCMPLX_1:1;
+       then l+1+j < j+k by A24,REAL_1:53;
+       then A29:     l+1 < k by AXIOMS:24;
+A30:    j+1 <= len f by A4,A25,NAT_1:38;
+       per cases by A30,AXIOMS:21,RLVECT_1:99;
+       suppose j+1 = len f;
+        then k+1 < len f by A25,A28,FINSEQ_5:def 3,REAL_1:53;
+       then LSeg(f,k) misses LSeg(f,l) by A29,GOBOARD5:def 4;
+then A31:     LSeg(f,k) /\ LSeg(f,l) = {} by XBOOLE_0:def 7;
+      LSeg(f,k) = LSeg(ff,i) by A28,SPPOL_2:2;
+      hence LSeg(ff,i) /\ LSeg(ff,j) = {} by A27,A31,SPPOL_2:2;
+       suppose that
+A32:    i >= 1 and
+A33:    j+1 < len f;
+A34:     l > 1 by A27,A33,AXIOMS:24;
+         k+1 <= len f by A28,A32,AXIOMS:24;
+       then k < len f by NAT_1:38;
+       then LSeg(f,k) misses LSeg(f,l) by A29,A34,GOBOARD5:def 4;
+then A35:    LSeg(f,k) /\ LSeg(f,l) = {} by XBOOLE_0:def 7;
+     LSeg(f,k) = LSeg(ff,i) by A28,SPPOL_2:2;
+      hence LSeg(ff,i) /\ LSeg(ff,j) = {} by A27,A35,SPPOL_2:2;
+      suppose i = 0;
+       then LSeg(ff,i) = {} by TOPREAL1:def 5;
+      hence LSeg(ff,i) /\ LSeg(ff,j) = {};
+     end;
+   hence thesis by A5,A23,SPPOL_2:29,42;
+  end;
+end;
+
+theorem Th12:
+ i >= 1 & j >= 1 & i+j = len f implies left_cell(f,i) = right_cell(Rev f,j)
+proof assume that
+A1: i >= 1 and
+A2: j >= 1 and
+A3: i+j = len f;
+A4: i+1 <= len f by A2,A3,AXIOMS:24;
+     len f = len Rev f by FINSEQ_5:def 3;
+then A5: j+1 <= len Rev f by A1,A3,AXIOMS:24;
+A6: GoB Rev f = GoB f by Lm1;
+   now let i1,j1,i2,j2 be Nat such that
+A7: [i1,j1] in Indices GoB f and
+A8: [i2,j2] in Indices GoB f and
+A9: f/.i = (GoB f)*(i1,j1) and
+A10: f/.(i+1) = (GoB f)*(i2,j2);
+      1 <= i+1 by NAT_1:29;
+then A11: i+1 in dom f by A4,FINSEQ_3:27;
+      i+1+j = len f + 1 by A3,XCMPLX_1:1;
+then A12: (Rev f)/.j = (GoB f)*(i2,j2) by A10,A11,FINSEQ_5:69;
+      i <= len f by A4,NAT_1:38;
+then A13: i in dom f by A1,FINSEQ_3:27;
+      j+1+i = len f + 1 by A3,XCMPLX_1:1;
+then A14: (Rev f)/.(j+1) = (GoB f)*(i1,j1) by A9,A13,FINSEQ_5:69;
+      1 <= i1 by A7,GOBOARD5:1;
+then A15: i1-'1+1 = i1 by AMI_5:4;
+      1 <= j1 by A7,GOBOARD5:1;
+then A16: j1-'1+1 = j1 by AMI_5:4;
+     f is_sequence_on GoB f by GOBOARD5:def 5;
+   then abs(i1-i2)+abs(j1-j2) = 1 by A7,A8,A9,A10,A11,A13,GOBOARD1:def 11;
+   then A17: abs(i1-i2)=1 & j1=j2 or abs(j1-j2)=1 & i1=i2 by GOBOARD1:2;
+   per cases by A17,GOBOARD1:1;
+    case i1 = i2 & j1+1 = j2;
+    hence right_cell(Rev f,j) = cell(GoB f,i1-'1,j1)
+                        by A2,A5,A6,A7,A8,A12,A14,A15,GOBOARD5:31;
+    case i1+1 = i2 & j1 = j2;
+    hence right_cell(Rev f,j) = cell(GoB f,i1,j1)
+                        by A2,A5,A6,A7,A8,A12,A14,A16,GOBOARD5:30;
+    case i1 = i2+1 & j1 = j2;
+    hence right_cell(Rev f,j) = cell(GoB f,i2,j2-'1)
+                        by A2,A5,A6,A7,A8,A12,A14,A16,GOBOARD5:29;
+    case i1 = i2 & j1 = j2+1;
+    hence right_cell(Rev f,j) = cell(GoB f,i1,j2)
+                        by A2,A5,A6,A7,A8,A12,A14,A15,GOBOARD5:28;
+  end;
+ hence left_cell(f,i) = right_cell(Rev f,j) by A1,A4,GOBOARD5:def 7;
+end;
+
+theorem Th13:
+ i >= 1 & j >= 1 & i+j = len f implies left_cell(Rev f,i) = right_cell(f,j)
+proof
+   len Rev f = len f & Rev Rev f = f by FINSEQ_5:def 3,FINSEQ_6:29;
+ hence thesis by Th12;
+end;
+
+theorem Th14:
+ 1 <= k & k+1 <= len f implies
+  ex i,j st i <= len GoB f & j <=
+ width GoB f & cell(GoB f,i,j) = left_cell(f,k)
+proof assume that
+A1: 1 <= k and
+A2: k+1 <= len f;
+A3: f is_sequence_on GoB f by GOBOARD5:def 5;
+   k <= len f by A2,NAT_1:38;
+then A4: k in dom f by A1,FINSEQ_3:27;
+ then consider i1,j1 being Nat such that
+A5: [i1,j1] in Indices GoB f and
+A6: f/.k = (GoB f)*(i1,j1) by A3,GOBOARD1:def 11;
+     1 <= k+1 by NAT_1:29;
+then A7: k+1 in dom f by A2,FINSEQ_3:27;
+ then consider i2,j2 being Nat such that
+A8: [i2,j2] in Indices GoB f and
+A9: f/.(k+1) = (GoB f)*(i2,j2) by A3,GOBOARD1:def 11;
+      1 <= i1 by A5,GOBOARD5:1;
+then A10: i1-'1+1 = i1 by AMI_5:4;
+      1 <= j1 by A5,GOBOARD5:1;
+then A11: j1-'1+1 = j1 by AMI_5:4;
+     abs(i1-i2)+abs(j1-j2) = 1 by A3,A4,A5,A6,A7,A8,A9,GOBOARD1:def 11;
+   then A12: abs(i1-i2)=1 & j1=j2 or abs(j1-j2)=1 & i1=i2 by GOBOARD1:2;
+A13: i1 <= len GoB f by A5,GOBOARD5:1;
+A14: j1 <= width GoB f by A5,GOBOARD5:1;
+  per cases by A12,GOBOARD1:1;
+  suppose
+A15:  i1 = i2 & j1+1 = j2;
+   take i1-'1,j1;
+      i1-'1 <= i1 by Th2;
+   hence i1-'1 <= len GoB f by A13,AXIOMS:22;
+   thus j1 <= width GoB f by A5,GOBOARD5:1;
+   thus left_cell(f,k) = cell(GoB f,i1-'1,j1)
+                        by A1,A2,A5,A6,A8,A9,A10,A15,GOBOARD5:28;
+  suppose
+A16:  i1+1 = i2 & j1 = j2;
+   take i1,j1;
+   thus i1 <= len GoB f by A5,GOBOARD5:1;
+   thus j1 <= width GoB f by A5,GOBOARD5:1;
+   thus left_cell(f,k) = cell(GoB f,i1,j1)
+                        by A1,A2,A5,A6,A8,A9,A11,A16,GOBOARD5:29;
+  suppose
+A17: i1 = i2+1 & j1 = j2;
+   take i2,j1-'1;
+   thus i2 <= len GoB f by A8,GOBOARD5:1;
+      j1-'1 <= j1 by Th2;
+   hence j1-'1 <= width GoB f by A14,AXIOMS:22;
+   thus left_cell(f,k) = cell(GoB f,i2,j1-'1)
+                        by A1,A2,A5,A6,A8,A9,A11,A17,GOBOARD5:30;
+  suppose
+A18: i1 = i2 & j1 = j2+1;
+   take i1,j2;
+   thus i1 <= len GoB f by A5,GOBOARD5:1;
+   thus j2 <= width GoB f by A8,GOBOARD5:1;
+   thus left_cell(f,k) = cell(GoB f,i1,j2)
+                        by A1,A2,A5,A6,A8,A9,A10,A18,GOBOARD5:31;
+end;
+
+theorem Th15:
+  j <= width G implies Int h_strip(G,j) is convex
+proof assume
+A1: j <= width G;
+ per cases by A1,AXIOMS:21,RLVECT_1:99;
+ suppose j = 0;
+  then Int h_strip(G,j) = { |[r,s]| : s < G*(1,1)`2 } by GOBOARD6:18;
+ hence Int h_strip(G,j) is convex by JORDAN1:22;
+ suppose j = width G;
+  then Int h_strip(G,j) = { |[r,s]| : G*(1,width G)`2 < s } by GOBOARD6:19;
+ hence Int h_strip(G,j) is convex by JORDAN1:20;
+ suppose 1 <= j & j < width G;
+  then A2: Int h_strip(G,j) = { |[r,s]| : G*(1,j)`2 < s & s < G*(1,j+1)`2 }
+                     by GOBOARD6:20;
+A3: { |[r,s]| : G*(1,j)`2 < s} c= the carrier of TOP-REAL 2
+     proof let x be set;
+      assume x in { |[r,s]| : G*(1,j)`2 < s};
+       then ex r,s st x = |[r,s]| & G*(1,j)`2 < s;
+      hence thesis;
+     end;
+     { |[r,s]| : s < G*(1,j+1)`2 } c= the carrier of TOP-REAL 2
+     proof let x be set;
+      assume x in { |[r,s]| : s < G*(1,j+1)`2 };
+       then ex r,s st x = |[r,s]| & s < G*(1,j+1)`2;
+      hence thesis;
+     end;
+   then reconsider P = { |[r,s]| : G*(1,j)`2 < s},
+              Q = { |[r,s]| : s < G*(1,j+1)`2 }
+              as Subset of TOP-REAL 2 by A3;
+A4: Int h_strip(G,j) = P /\ Q
+   proof
+    hereby let x be set;
+     assume x in Int h_strip(G,j);
+      then ex r,s st x = |[r,s]| & G*(1,j)`2 < s & s < G*(1,j+1)`2 by A2;
+      then x in P & x in Q;
+     hence x in P /\ Q by XBOOLE_0:def 3;
+    end;
+    let x be set;
+    assume
+A5:   x in P /\ Q;
+     then x in P by XBOOLE_0:def 3;
+     then consider r1,s1 such that
+A6:   x = |[r1,s1]| and
+A7:   G*(1,j)`2 < s1;
+       x in Q by A5,XBOOLE_0:def 3;
+     then consider r2,s2 such that
+A8:   x = |[r2,s2]| and
+A9:   s2 < G*(1,j+1)`2;
+       r1 = r2 & s1 = s2 by A6,A8,SPPOL_2:1;
+    hence x in Int h_strip(G,j) by A2,A6,A7,A9;
+   end;
+A10: P is convex by JORDAN1:20;
+     Q is convex by JORDAN1:22;
+ hence Int h_strip(G,j) is convex by A4,A10,Th9;
+end;
+
+theorem Th16:
+  i <= len G implies Int v_strip(G,i) is convex
+proof assume
+A1: i <= len G;
+ per cases by A1,AXIOMS:21,RLVECT_1:99;
+ suppose i = 0;
+  then Int v_strip(G,i) = { |[r,s]| : r < G*(1,1)`1 } by GOBOARD6:15;
+ hence Int v_strip(G,i) is convex by JORDAN1:18;
+ suppose i = len G;
+  then Int v_strip(G,i) = { |[r,s]| : G*(len G,1)`1 < r } by GOBOARD6:16;
+ hence Int v_strip(G,i) is convex by JORDAN1:16;
+ suppose 1 <= i & i < len G;
+  then A2: Int v_strip(G,i) = { |[r,s]| : G*(i,1)`1 < r & r < G*(i+1,1)`1 }
+                   by GOBOARD6:17;
+A3: { |[r,s]| : G*(i,1)`1 < r} c= the carrier of TOP-REAL 2
+     proof let x be set;
+      assume x in { |[r,s]| : G*(i,1)`1 < r};
+       then ex r,s st x = |[r,s]| & G*(i,1)`1 < r;
+      hence thesis;
+     end;
+     { |[r,s]| : r < G*(i+1,1)`1 } c= the carrier of TOP-REAL 2
+     proof let x be set;
+      assume x in { |[r,s]| : r < G*(i+1,1)`1 };
+       then ex r,s st x = |[r,s]| & r < G*(i+1,1)`1;
+      hence thesis;
+     end;
+   then reconsider P = { |[r,s]| : G*(i,1)`1 < r},
+              Q = { |[r,s]| : r < G*(i+1,1)`1 }
+          as Subset of TOP-REAL 2 by A3;
+A4: Int v_strip(G,i) = P /\ Q
+   proof
+    hereby let x be set;
+     assume x in Int v_strip(G,i);
+      then ex r,s st x = |[r,s]| & G*(i,1)`1 < r & r < G*(i+1,1)`1 by A2;
+      then x in P & x in Q;
+     hence x in P /\ Q by XBOOLE_0:def 3;
+    end;
+    let x be set;
+    assume
+A5:   x in P /\ Q;
+     then x in P by XBOOLE_0:def 3;
+     then consider r1,s1 such that
+A6:   x = |[r1,s1]| and
+A7:   G*(i,1)`1 < r1;
+       x in Q by A5,XBOOLE_0:def 3;
+     then consider r2,s2 such that
+A8:   x = |[r2,s2]| and
+A9:   r2 < G*(i+1,1)`1;
+       r1 = r2 & s1 = s2 by A6,A8,SPPOL_2:1;
+    hence x in Int v_strip(G,i) by A2,A6,A7,A9;
+   end;
+A10: P is convex by JORDAN1:16;
+     Q is convex by JORDAN1:18;
+ hence Int v_strip(G,i) is convex by A4,A10,Th9;
+end;
+
+theorem Th17:
+ i <= len G & j <= width G implies Int cell(G,i,j) <> {}
+proof assume
+A1: i <= len G & j <= width G;
+   then A2: j = width G or j < width G by AXIOMS:21;
+   A3: i = len G or i < len G by A1,AXIOMS:21;
+  consider p being Point of TOP-REAL 2;
+ per cases by A2,A3,NAT_1:38,RLVECT_1:99;
+ suppose 1 <= i & i+1 <= len G & 1 <= j & j+1 <= width G;
+  then LSeg(1/2*(G*(i,j)+G*
+(i+1,j+1)),p) meets Int cell(G,i,j) by GOBOARD6:85;
+ hence Int cell(G,i,j) <> {} by XBOOLE_1:65;
+ suppose 1 <= i & i+1 <= len G & j = width G;
+  then LSeg(p,1/2*(G*(i,j)+G*(i+1,j))+|[0,1]|) meets Int cell(G,i,j)
+          by GOBOARD6:86;
+ hence Int cell(G,i,j) <> {} by XBOOLE_1:65;
+ suppose 1 <= i & i+1 <= len G & j = 0;
+  then LSeg(1/2*(G*(i,j+1)+G*(i+1,j+1))- |[0,1]|,p) meets Int cell(G,i,j)
+                by GOBOARD6:87;
+ hence Int cell(G,i,j) <> {} by XBOOLE_1:65;
+ suppose 1 <= j & j+1 <= width G & i = 0;
+  then LSeg(1/2*(G*(i+1,j)+G*(i+1,j+1))- |[1,0]|,p) meets Int cell(G,i,j)
+                by GOBOARD6:88;
+ hence Int cell(G,i,j) <> {} by XBOOLE_1:65;
+ suppose 1 <= j & j+1 <= width G & i = len G;
+  then LSeg(p,1/2*(G*(i,j)+G*(i,j+1))+|[1,0]|) meets Int cell(G,i,j)
+                by GOBOARD6:89;
+ hence Int cell(G,i,j) <> {} by XBOOLE_1:65;
+ suppose i = 0 & j = 0;
+  then LSeg(p,G*(i+1,j+1)- |[1,1]|) meets Int cell(G,i,j) by GOBOARD6:90;
+ hence Int cell(G,i,j) <> {} by XBOOLE_1:65;
+ suppose i = len G & j = width G;
+  then LSeg(p,G*(i,j)+|[1,1]|) meets Int cell(G,i,j) by GOBOARD6:91;
+ hence Int cell(G,i,j) <> {} by XBOOLE_1:65;
+ suppose i = 0 & j = width G;
+  then LSeg(p,G*(i+1,j)+|[-1,1]|) meets Int cell(G,i,j) by GOBOARD6:92;
+ hence Int cell(G,i,j) <> {} by XBOOLE_1:65;
+ suppose i = len G & j = 0;
+  then LSeg(p,G*(i,j+1)+|[1,-1]|) meets Int cell(G,i,j) by GOBOARD6:93;
+ hence Int cell(G,i,j) <> {} by XBOOLE_1:65;
+end;
+
+theorem Th18:
+ 1 <= k & k+1 <= len f implies Int left_cell(f,k) <> {}
+proof assume 1 <= k & k+1 <= len f;
+  then ex i,j st i <= len GoB f & j <=
+ width GoB f & cell(GoB f,i,j) = left_cell(f,k)
+                  by Th14;
+ hence thesis by Th17;
+end;
+
+theorem Th19:
+ 1 <= k & k+1 <= len f implies Int right_cell(f,k) <> {}
+proof assume that
+A1: 1 <= k and
+A2: k+1 <= len f;
+A3: len f = len Rev f by FINSEQ_5:def 3;
+     k <= len f by A2,NAT_1:38;
+then A4: len f-'k+k = len f by AMI_5:4;
+then A5:  len f-'k+1 <= len f by A1,AXIOMS:24;
+A6: len f-'k >= 1 by A2,A4,REAL_1:53;
+  then right_cell(f,k) = left_cell(Rev f,len f-'k) by A1,A4,Th13;
+ hence Int right_cell(f,k) <> {} by A3,A5,A6,Th18;
+end;
+
+theorem Th20:
+ i <= len G & j <= width G implies Int cell(G,i,j) is convex
+proof assume
+A1: i <= len G & j <= width G;
+  set P = Int cell(G,i,j);
+    cell(G,i,j) = v_strip(G,i) /\ h_strip(G,j) by GOBOARD5:def 3;
+then A2: P = Int v_strip(G,i) /\ Int h_strip(G,j) by TOPS_1:46;
+    Int v_strip(G,i) is convex & Int h_strip(G,j) is convex by A1,Th15,Th16;
+ hence P is convex by A2,Th9;
+end;
+
+theorem Th21:
+ i <= len G & j <= width G implies Int cell(G,i,j) is connected
+proof assume
+A1: i <= len G & j <= width G;
+  then reconsider P = Int cell(G,i,j)
+   as non empty Subset of TOP-REAL 2 by Th17;
+    P is convex by A1,Th20;
+ hence Int cell(G,i,j) is connected by JORDAN1:9;
+end;
+
+theorem Th22:
+ 1 <= k & k+1 <= len f implies Int left_cell(f,k) is connected
+proof assume 1 <= k & k+1 <= len f;
+  then ex i,j st i <= len GoB f & j <=
+ width GoB f & cell(GoB f,i,j) = left_cell(f,k)
+                  by Th14;
+ hence thesis by Th21;
+end;
+
+theorem Th23:
+ 1 <= k & k+1 <= len f implies Int right_cell(f,k) is connected
+proof assume that
+A1: 1 <= k and
+A2: k+1 <= len f;
+A3: len f = len Rev f by FINSEQ_5:def 3;
+     k <= len f by A2,NAT_1:38;
+then A4: len f-'k+k = len f by AMI_5:4;
+then A5:  len f-'k+1 <= len f by A1,AXIOMS:24;
+A6: len f-'k >= 1 by A2,A4,REAL_1:53;
+  then right_cell(f,k) = left_cell(Rev f,len f-'k) by A1,A4,Th13;
+ hence Int right_cell(f,k) is connected by A3,A5,A6,Th22;
+end;
+
+definition let f;
+    4 < len f by GOBOARD7:36;
+then A1:  1+1 < len f by AXIOMS:22;
+then A2: Int left_cell(f,1) <> {} by Th18;
+A3: Int right_cell(f,1) <> {} by A1,Th19;
+ func LeftComp f -> Subset of TOP-REAL 2 means
+:Def1: it is_a_component_of (L~f)` & Int left_cell(f,1) c= it;
+ existence
+  proof
+A4: Int left_cell(f,1) is connected by A1,Th22;
+      Int left_cell(f,1) misses L~f by A1,GOBOARD8:37;
+    then A5:   Int left_cell(f,1) c= (L~f)` by SUBSET_1:43;
+    then (L~f)` <> {} by A2,XBOOLE_1:3;
+   hence thesis by A2,A4,A5,Th5;
+  end;
+ uniqueness
+  proof let P1,P2 be Subset of TOP-REAL 2 such that
+A6: P1 is_a_component_of (L~f)` and
+A7: Int left_cell(f,1) c= P1 and
+A8: P2 is_a_component_of (L~f)` and
+A9: Int left_cell(f,1) c= P2;
+      P1 meets P2 by A2,A7,A9,XBOOLE_1:67;
+   hence P1 = P2 by A6,A8,Th3;
+  end;
+ func RightComp f -> Subset of TOP-REAL 2 means
+:Def2:  it is_a_component_of (L~f)` & Int right_cell(f,1) c= it;
+ existence
+  proof
+A10: Int right_cell(f,1) is connected by A1,Th23;
+      Int right_cell(f,1) misses L~f by A1,GOBOARD8:38;
+    then A11:   Int right_cell(f,1) c= (L~f)` by SUBSET_1:43;
+    then (L~f)` <> {} by A3,XBOOLE_1:3;
+   hence thesis by A3,A10,A11,Th5;
+  end;
+ uniqueness
+  proof let P1,P2 be Subset of TOP-REAL 2 such that
+A12: P1 is_a_component_of (L~f)` and
+A13: Int right_cell(f,1) c= P1 and
+A14: P2 is_a_component_of (L~f)` and
+A15: Int right_cell(f,1) c= P2;
+      P1 meets P2 by A3,A13,A15,XBOOLE_1:67;
+   hence P1 = P2 by A12,A14,Th3;
+  end;
+end;
+
+theorem Th24:
+ for k st 1 <= k & k+1 <= len f holds Int left_cell(f,k) c= LeftComp f
+proof
+  defpred P[Nat] means
+  1 <= $1 & $1+1 <= len f implies Int left_cell(f,$1) c= LeftComp f;
+A1: P[0];
+A2: now let k such that
+A3: P[k];
+    thus P[k+1]
+    proof
+    assume that
+A4: 1 <= k+1 and
+A5: k+1+1 <= len f;
+    per cases by RLVECT_1:99;
+    suppose k = 0;
+    hence Int left_cell(f,k+1) c= LeftComp f by Def1;
+    suppose
+A6:   k >= 1;
+A7:  k+1 <= len f by A5,NAT_1:38;
+A8:  k <= k+1 by NAT_1:29;
+  then k <= len f by A7,AXIOMS:22;
+then A9:  k in dom f by A6,FINSEQ_3:27;
+     then consider i0,j0 being Nat such that
+A10:  [i0,j0] in Indices GoB f and
+A11:  f/.k = (GoB f)*(i0,j0) by GOBOARD2:25;
+A12:  k+1 in dom f by A4,A7,FINSEQ_3:27;
+     then consider i1,j1 being Nat such that
+A13:  [i1,j1] in Indices GoB f and
+A14:  f/.(k+1) = (GoB f)*(i1,j1) by GOBOARD2:25;
+       k+1+1 >= 1 by NAT_1:29;
+then A15:  k+1+1 in dom f by A5,FINSEQ_3:27;
+     then consider i2,j2 being Nat such that
+A16:  [i2,j2] in Indices GoB f and
+A17:  f/.(k+1+1) = (GoB f)*(i2,j2) by GOBOARD2:25;
+A18: 1 <= i0 & i0 <= len GoB f by A10,GOBOARD5:1;
+A19: 1 <= i1 & i1 <= len GoB f by A13,GOBOARD5:1;
+A20: 1 <= i2 & i2 <= len GoB f by A16,GOBOARD5:1;
+A21: 1 <= j0 & j0 <= width GoB f by A10,GOBOARD5:1;
+A22: 1 <= j1 & j1 <= width GoB f by A13,GOBOARD5:1;
+A23: 1 <= j2 & j2 <= width GoB f by A16,GOBOARD5:1;
+A24: i0 = i1 or j0 = j1 by A9,A10,A11,A12,A13,A14,GOBOARD2:16;
+A25: i1 = i2 or j1 = j2 by A12,A13,A14,A15,A16,A17,GOBOARD2:16;
+A26:  f is_sequence_on GoB f by GOBOARD5:def 5;
+    then abs(i0-i1)+abs(j0-j1) = 1 by A9,A10,A11,A12,A13,A14,GOBOARD1:def 11;
+    then A27: abs(i0-i1)=1 & j0 = j1 or abs(j0-j1)=1 & i0=i1 by GOBOARD1:2;
+    then A28: i0 = i1 or i0 = i1+1 or i0+1 = i1 by GOBOARD1:1;
+    abs(i1-i2)+abs(j1-j2) = 1 by A12,A13,A14,A15,A16,A17,A26,GOBOARD1:def 11;
+    then A29: abs(i1-i2)=1 & j1 = j2 or abs(j1-j2)=1 & i1=i2 by GOBOARD1:2;
+    then A30: i1 = i2 or i1 = i2+1 or i1+1 = i2 by GOBOARD1:1;
+A31: j0 = j1 or j0 = j1+1 or j0+1 = j1 by A27,GOBOARD1:1;
+A32: j1 = j2 or j1 = j2+1 or j1+1 = j2 by A29,GOBOARD1:1;
+A33:
+   now assume A34: i0 = i2 & j0 = j2;
+A35:  now assume k <= 1;
+then A36:    k = 1 by A6,AXIOMS:21;
+      assume k+1+1 >= len f;
+       then k+1+1 = len f by A5,AXIOMS:21;
+      hence contradiction by A36,GOBOARD7:36;
+     end;
+A37: k < k+1+1 by A8,NAT_1:38;
+    per cases by A35;
+    suppose k > 1;
+    hence contradiction by A5,A11,A17,A34,A37,GOBOARD7:39;
+    suppose k+1+1 < len f;
+    hence contradiction by A6,A11,A17,A34,A37,GOBOARD7:38;
+   end;
+     i1 >= 1 by A13,GOBOARD5:1;
+then A38: i1 = i1 -' 1 + 1 by AMI_5:4;
+     j1 >= 1 by A13,GOBOARD5:1;
+then A39: j1 = j1 -' 1 + 1 by AMI_5:4;
+     then A40: j1 -' 1 <= j1 by NAT_1:29;
+then A41: j1 -' 1 <= width GoB f by A22,AXIOMS:22;
+      len GoB f > 1 by GOBOARD7:34;
+then A42: len GoB f -'1 + 1 = len GoB f by AMI_5:4;
+      width GoB f >= 1 by GOBOARD7:35;
+then A43: width GoB f -'1 + 1 = width GoB f by AMI_5:4;
+A44: k+1+1 = k+(1+1) by XCMPLX_1:1;
+A45: i0+1+1 = i0+(1+1) by XCMPLX_1:1;
+A46: i2+1+1 = i2+(1+1) by XCMPLX_1:1;
+A47: j0+1+1 = j0+(1+1) by XCMPLX_1:1;
+A48: j2+1+1 = j2+(1+1) by XCMPLX_1:1;
+A49:  LeftComp f is_a_component_of (L~f)` by Def1;
+A50: Int left_cell(f,k+1) is connected by A4,A5,Th22;
+A51: 0+1 = 1;
+     now per cases by A9,A11,A12,A14,A15,A17,A28,A30,A31,A32,A33,GOBOARD7:31,
+XCMPLX_1:2;
+    suppose that
+A52: i0 = i1+1 and
+A53: i1 = i2+1 and
+A54: j0 = 1;
+A55: left_cell(f,k) = cell(GoB f,i1,0)
+                by A6,A7,A10,A11,A13,A14,A24,A51,A52,A54,GOBOARD5:30,NAT_1:38;
+   0+1 = j2 by A24,A25,A52,A53,A54,NAT_1:38;
+then A56: left_cell(f,k+1) = cell(GoB f,i2,0)
+                by A4,A5,A13,A14,A16,A17,A24,A52,A53,A54,GOBOARD5:30,NAT_1:38;
+A57: LSeg(1/2*((GoB f)*(i1,1)+(GoB f)*(i0,1))- |[0,1]|,
+          1/2*((GoB f)*(i2,1)+(GoB f)*(i1,1))- |[0,1]|) is connected by Th8;
+A58: LSeg(1/2*((GoB f)*(i1,1)+(GoB f)*(i0,1))- |[0,1]|,
+          1/2*((GoB f)*(i2,1)+(GoB f)*(i1,1))- |[0,1]|)
+           meets Int cell(GoB f,i1,0) by A18,A19,A52,GOBOARD6:87;
+       LSeg(1/2*((GoB f)*(i1,1)+(GoB f)*(i0,1))- |[0,1]|,
+          1/2*((GoB f)*(i2,1)+(GoB f)*(i1,1))- |[0,1]|) misses L~f
+         by A18,A20,A46,A52,A53,GOBOARD8:25;
+     then LSeg(1/2*((GoB f)*(i1,1)+(GoB f)*(i0,1))- |[0,1]|,
+               1/2*((GoB f)*(i2,1)+(GoB f)*(i1,1))- |[0,1]|) c= (L~f)`
+           by SUBSET_1:43;
+     then A59: LSeg(1/2*((GoB f)*(i1,1)+(GoB f)*(i0,1))- |[0,1]|,
+          1/2*((GoB f)*(i2,1)+(GoB f)*(i1,1))- |[0,1]|) c= LeftComp f
+                             by A3,A5,A6,A49,A55,A57,A58,Th6,NAT_1:38;
+A60: LSeg(1/2*((GoB f)*(i1,1)+(GoB f)*(i0,1))- |[0,1]|,
+          1/2*((GoB f)*(i2,1)+(GoB f)*(i1,1))- |[0,1]|) meets
+             Int cell(GoB f,i2,0) by A19,A20,A53,GOBOARD6:87;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f by A49,A50,A56,A59,A60,Th6;
+    suppose that
+A61: i0 = i1+1 and
+A62: i1 = i2+1 and
+A63: j0 <> 1;
+A64: left_cell(f,k) = cell(GoB f,i1,j1-'1)
+                by A6,A7,A10,A11,A13,A14,A24,A39,A61,GOBOARD5:30,NAT_1:38;
+      1 < j0 by A21,A63,AXIOMS:21;
+then A65: 1 <= j0-'1 by A24,A39,A61,NAT_1:38;
+A66: left_cell(f,k+1) = cell(GoB f,i2,j1-'1)
+                by A4,A5,A13,A14,A16,A17,A25,A39,A62,GOBOARD5:30,NAT_1:38;
+A67: LSeg(1/2*((GoB f)*(i1,j0-'1)+(GoB f)*(i0,j0)),
+          1/2*((GoB f)*(i2,j0-'1)+(GoB f)*(i1,j0))) is connected by Th8;
+A68: LSeg(1/2*((GoB f)*(i1,j0-'1)+(GoB f)*(i0,j0)),
+          1/2*((GoB f)*(i2,j0-'1)+(GoB f)*(i1,j0)))
+           meets Int cell(GoB f,i1,j1-'1)
+             by A18,A19,A22,A24,A39,A61,A65,GOBOARD6:85,NAT_1:38;
+       LSeg(1/2*((GoB f)*(i1,j0-'1)+(GoB f)*(i0,j0)),
+          1/2*((GoB f)*(i2,j0-'1)+(GoB f)*(i1,j0))) misses L~f
+       by A5,A6,A11,A14,A17,A18,A20,A21,A24,A25,A39,A44,A46,A61,A62,A65,
+GOBOARD8:11,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i1,j0-'1)+(GoB f)*(i0,j0)),
+          1/2*((GoB f)*(i2,j0-'1)+(GoB f)*(i1,j0))) c= (L~f)` by SUBSET_1:43;
+     then A69: LSeg(1/2*((GoB f)*(i1,j0-'1)+(GoB f)*(i0,j0)),
+          1/2*((GoB f)*(i2,j0-'1)+(GoB f)*(i1,j0))) c= LeftComp f
+                             by A3,A5,A6,A49,A64,A67,A68,Th6,NAT_1:38;
+A70: LSeg(1/2*((GoB f)*(i1,j0-'1)+(GoB f)*(i0,j0)),
+          1/2*((GoB f)*(i2,j0-'1)+(GoB f)*(i2+1,j0))) meets
+             Int cell(GoB f,i2,j0-'1) by A19,A20,A21,A24,A39,A61,A62,A65,
+GOBOARD6:85,NAT_1:38;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f
+               by A24,A49,A50,A61,A62,A66,A69,A70,Th6,NAT_1:38;
+    suppose that
+A71: i0 = i1+1 and
+A72: j1 = j2+1;
+       left_cell(f,k) = cell(GoB f,i1,j2)
+                by A6,A7,A10,A11,A13,A14,A24,A71,A72,GOBOARD5:30,NAT_1:38
+        .= left_cell(f,k+1) by A4,A5,A13,A14,A16,A17,A25,A38,A72,GOBOARD5:31,
+NAT_1:38;
+    hence Int left_cell(f,k+1) c= LeftComp f by A3,A5,A6,NAT_1:38;
+    suppose that
+A73: j0 = j1+1 and
+A74: i1 = i2+1 and
+A75: i0 = len GoB f and
+A76: j1 = 1;
+A77: left_cell(f,k) = cell(GoB f,i0,j1)
+                   by A6,A7,A10,A11,A13,A14,A24,A38,A73,GOBOARD5:31,NAT_1:38;
+A78: LSeg((GoB f)*(len GoB f,1)+|[1,-1]|,
+          1/2*((GoB f)*(len GoB f,1)+(GoB f)*(len GoB f,2))+|[1,0]|)
+           is connected by Th8;
+A79: LSeg((GoB f)*(len GoB f,1)+|[1,-1]|,
+          1/2*((GoB f)*(len GoB f,1)+(GoB f)*(len GoB f,2))+|[1,0]|)
+           meets Int cell(GoB f,i0,j1) by A21,A73,A75,A76,GOBOARD6:89;
+       LSeg((GoB f)*(len GoB f,1)+|[1,-1]|,
+          1/2*((GoB f)*(len GoB f,1)+(GoB f)*(len GoB f,2))+|[1,0]|)
+          misses L~f by GOBOARD8:35;
+
+     then LSeg((GoB f)*(len GoB f,1)+|[1,-1]|,
+          1/2*((GoB f)*(len GoB f,1)+(GoB f)*(len GoB f,2))+|[1,0]|)
+              c= (L~f)` by SUBSET_1:43;
+     then A80: LSeg((GoB f)*(len GoB f,1)+|[1,-1]|,
+          1/2*((GoB f)*(len GoB f,1)+(GoB f)*(len GoB f,2))+|[1,0]|)
+            c= LeftComp f by A3,A5,A6,A49,A77,A78,A79,Th6,NAT_1:38;
+A81:  j1 -' 1 = 0 by A76,Th1;
+then A82: Int cell(GoB f,i1,0) is connected by A19,A22,A40,Th21;
+A83: LSeg((GoB f)*(len GoB f,1)+|[1,-1]|,
+          1/2*((GoB f)*(len GoB f,1)+(GoB f)*(len GoB f,2))+|[1,0]|) meets
+             Int cell(GoB f,i1,0) by A24,A73,A75,GOBOARD6:93,NAT_1:38;
+       Int cell(GoB f,i1,0) misses L~f by A19,A22,A40,A81,GOBOARD7:14;
+     then Int cell(GoB f,i1,0) c= (L~f)` by SUBSET_1:43;
+     then A84:  Int cell(GoB f,i1,0) c= LeftComp f by A49,A80,A82,A83,Th6;
+A85: left_cell(f,k+1) = cell(GoB f,i2,0)
+                by A4,A5,A13,A14,A16,A17,A25,A39,A74,A81,GOBOARD5:30,NAT_1:38;
+A86: LSeg(1/2*((GoB f)*(len GoB f -' 1,1)+(GoB f)*(len GoB f,1))- |[0,1]|,
+         (GoB f)*(len GoB f,1)+|[1,-1]|) is connected by Th8;
+A87: LSeg(1/2*((GoB f)*(len GoB f -' 1,1)+(GoB f)*(len GoB f,1))- |[0,1]|,
+         (GoB f)*(len GoB f,1)+|[1,-1]|)
+           meets Int cell(GoB f,i1,0) by A24,A73,A75,GOBOARD6:93,NAT_1:38;
+      LSeg(1/2*((GoB f)*(len GoB f -' 1,1)+(GoB f)*(len GoB f,1))- |[0,1]|,
+         (GoB f)*(len GoB f,1)+|[1,-1]|) misses L~f by GOBOARD8:27;
+     then LSeg(1/2*((GoB f)*(len GoB f -' 1,1)+(GoB f)*
+(len GoB f,1))- |[0,1]|,
+         (GoB f)*(len GoB f,1)+|[1,-1]|) c= (L~f)` by SUBSET_1:43;
+     then A88: LSeg(1/2*((GoB f)*(len GoB f -' 1,1)+(GoB f)*(len GoB f,1))- |[0
+,1]|,
+         (GoB f)*(len GoB f,1)+|[1,-1]|) c= LeftComp f
+                             by A49,A84,A86,A87,Th6;
+       i2 = len GoB f -' 1 by A24,A38,A73,A74,A75,NAT_1:38,XCMPLX_1:2;
+then A89: LSeg(1/2*((GoB f)*(len GoB f -' 1,1)+(GoB f)*(len GoB f,1))- |[0,1]|,
+         (GoB f)*(len GoB f,1)+|[1,-1]|) meets
+             Int cell(GoB f,i2,0) by A20,A24,A73,A74,A75,GOBOARD6:87,NAT_1:38;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f
+               by A49,A50,A85,A88,A89,Th6;
+    suppose that
+A90: j0 = j1+1 and
+A91: i1 = i2+1 and
+A92: i0 <> len GoB f and
+A93: j1 = 1;
+A94: left_cell(f,k) = cell(GoB f,i0,j1)
+                   by A6,A7,A10,A11,A13,A14,A24,A38,A90,GOBOARD5:31,NAT_1:38;
+      len GoB f > i0 by A18,A92,AXIOMS:21;
+then A95: len GoB f >= i0+1 by NAT_1:38;
+A96: LSeg(1/2*((GoB f)*(i0,1)+(GoB f)*(i0+1,1))- |[0,1]|,
+          1/2*((GoB f)*(i1,1)+(GoB f)*(i1+1,2))) is connected by Th8;
+A97: LSeg(1/2*((GoB f)*(i0,1)+(GoB f)*(i0+1,1))- |[0,1]|,
+          1/2*((GoB f)*(i1,1)+(GoB f)*(i1+1,1+1)))
+           meets Int cell(GoB f,i0,j1)
+             by A19,A21,A24,A90,A93,A95,GOBOARD6:85;
+       LSeg(1/2*((GoB f)*(i0,1)+(GoB f)*(i0+1,1))- |[0,1]|,
+          1/2*((GoB f)*(i1,1)+(GoB f)*(i1+1,2))) misses L~f
+           by A5,A6,A11,A14,A17,A20,A24,A25,A44,A46,A90,A91,A93,A95,GOBOARD8:8,
+NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i0,1)+(GoB f)*(i0+1,1))- |[0,1]|,
+          1/2*((GoB f)*(i1,1)+(GoB f)*(i1+1,2))) c= (L~f)` by SUBSET_1:43;
+     then A98: LSeg(1/2*((GoB f)*(i0,1)+(GoB f)*(i0+1,1))- |[0,1]|,
+          1/2*((GoB f)*(i1,1)+(GoB f)*(i1+1,2))) c= LeftComp f
+                             by A3,A5,A6,A49,A94,A96,A97,Th6,NAT_1:38;
+A99:  j1 -' 1 = 0 by A93,Th1;
+then A100: Int cell(GoB f,i1,0) is connected by A19,A22,A40,Th21;
+A101: LSeg(1/2*((GoB f)*(i0,1)+(GoB f)*(i0+1,1))- |[0,1]|,
+          1/2*((GoB f)*(i1,1)+(GoB f)*(i1+1,2))) meets
+             Int cell(GoB f,i1,0) by A19,A24,A90,A95,GOBOARD6:87,NAT_1:38;
+       Int cell(GoB f,i1,0) misses L~f by A19,A22,A40,A99,GOBOARD7:14;
+     then Int cell(GoB f,i1,0) c= (L~f)` by SUBSET_1:43;
+     then A102:  Int cell(GoB f,i1,0) c= LeftComp f by A49,A98,A100,A101,Th6;
+A103: left_cell(f,k+1) = cell(GoB f,i2,0)
+                by A4,A5,A13,A14,A16,A17,A25,A39,A91,A99,GOBOARD5:30,NAT_1:38;
+A104: LSeg(1/2*((GoB f)*(i2,1)+(GoB f)*(i2+1,1))- |[0,1]|,
+   1/2*((GoB f)*(i2+1,1)+(GoB f)*(i2+2,1))- |[0,1]|) is connected by Th8;
+A105: LSeg(1/2*((GoB f)*(i2,1)+(GoB f)*(i2+1,1))- |[0,1]|,
+         1/2*((GoB f)*(i2+1,1)+(GoB f)*(i2+2,1))- |[0,1]|)
+           meets Int cell(GoB f,i1,0) by A19,A24,A46,A90,A91,A95,GOBOARD6:87,
+NAT_1:38;
+      LSeg(1/2*((GoB f)*(i2,1)+(GoB f)*(i2+1,1))- |[0,1]|,
+         1/2*((GoB f)*(i2+1,1)+(GoB f)*(i2+2,1))- |[0,1]|) misses L~f
+                          by A20,A24,A46,A90,A91,A95,GOBOARD8:25,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i2,1)+(GoB f)*(i2+1,1))- |[0,1]|,
+               1/2*((GoB f)*(i2+1,1)+(GoB f)*(i2+2,1))- |[0,1]|) c= (L~f)`
+          by SUBSET_1:43;
+     then A106: LSeg(1/2*((GoB f)*(i2,1)+(GoB f)*(i2+1,1))- |[0,1]|,
+         1/2*((GoB f)*(i2+1,1)+(GoB f)*(i2+2,1))- |[0,1]|) c= LeftComp f
+                             by A49,A102,A104,A105,Th6;
+A107: LSeg(1/2*((GoB f)*(i2,1)+(GoB f)*(i2+1,1))- |[0,1]|,
+         1/2*((GoB f)*(i2+1,1)+(GoB f)*(i2+2,1))- |[0,1]|) meets
+             Int cell(GoB f,i2,0) by A19,A20,A91,GOBOARD6:87;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f
+               by A49,A50,A103,A106,A107,Th6;
+    suppose that
+A108: j0 = j1+1 and
+A109: i1 = i2+1 and
+A110: i0 = len GoB f and
+A111: j1 <> 1;
+A112: left_cell(f,k) = cell(GoB f,i0,j1)
+                   by A6,A7,A10,A11,A13,A14,A24,A38,A108,GOBOARD5:31,NAT_1:38;
+      1 < j1 by A22,A111,AXIOMS:21;
+then A113: 1 <= j1-'1 by A39,NAT_1:38;
+A114: j1+1 = j1-'1+(1+1) by A39,XCMPLX_1:1;
+A115: LSeg(1/2*((GoB f)*(len GoB f,j1-'1)+(GoB f)*(len GoB f,j1))+|[1,0]|,
+         1/2*((GoB f)*(len GoB f,j1)+(GoB f)*(len GoB f,j1+1))+|[1,0]|)
+             is connected by Th8;
+A116: LSeg(1/2*((GoB f)*(len GoB f,j1-'1)+(GoB f)*(len GoB f,j1))+|[1,0]|,
+          1/2*((GoB f)*(len GoB f,j1)+(GoB f)*(len GoB f,j1+1))+|[1,0]|)
+           meets Int cell(GoB f,i0,j1) by A21,A22,A108,A110,GOBOARD6:89;
+      LSeg(1/2*((GoB f)*(len GoB f,j1-'1)+(GoB f)*(len GoB f,j1))+|[1,0]|,
+         1/2*((GoB f)*(len GoB f,j1)+(GoB f)*(len GoB f,j1+1))+|[1,0]|)
+            misses L~f by A21,A39,A108,A113,A114,GOBOARD8:34;
+     then LSeg(1/2*((GoB f)*(len GoB f,j1-'1)+(GoB f)*
+(len GoB f,j1))+|[1,0]|,
+               1/2*((GoB f)*(len GoB f,j1)+(GoB f)*(len GoB f,j1+1))+|[1,0]|)
+             c= (L~f)` by SUBSET_1:43;
+     then A117: LSeg(1/2*((GoB f)*(len GoB f,j1-'1)+(GoB f)*(len GoB f,j1))+|[1
+,0]|,
+          1/2*((GoB f)*(len GoB f,j1)+(GoB f)*(len GoB f,j1+1))+|[1,0]|)
+              c= LeftComp f by A3,A5,A6,A49,A112,A115,A116,Th6,NAT_1:38;
+A118: Int cell(GoB f,i1,j1-'1) is connected by A19,A41,Th21;
+       j1 > 1 by A22,A111,AXIOMS:21;
+     then 1 <= j1-'1 by A39,NAT_1:38;
+then A119: LSeg(1/2*((GoB f)*(len GoB f,j1-'1)+(GoB f)*(len GoB f,j1))+|[1,0]|,
+          1/2*((GoB f)*(len GoB f,j1)+(GoB f)*
+(len GoB f,j1+1))+|[1,0]|) meets
+             Int cell(GoB f,i1,j1-'1) by A22,A24,A39,A108,A110,GOBOARD6:89,
+NAT_1:38;
+       Int cell(GoB f,i1,j1-'1) misses L~f by A19,A41,GOBOARD7:14;
+     then Int cell(GoB f,i1,j1-'1) c= (L~f)` by SUBSET_1:43;
+     then A120:  Int cell(GoB f,i1,j1-'1) c= LeftComp f by A49,A117,A118,A119,
+Th6;
+A121: left_cell(f,k+1) = cell(GoB f,i2,j1-'1)
+                by A4,A5,A13,A14,A16,A17,A25,A39,A109,GOBOARD5:30,NAT_1:38;
+A122: LSeg(1/2*((GoB f)*(i1 -' 1,j1-'1)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1,j1-'1)+(GoB f)*
+(i1,j1))+|[1,0]|) is connected by Th8
+;
+A123: LSeg(1/2*((GoB f)*(i1 -' 1,j1-'1)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1,j1-'1)+(GoB f)*(i1,j1))+|[1,0]|)
+           meets Int cell(GoB f,i1,j1-'1) by A22,A24,A39,A108,A110,A113,
+GOBOARD6:89,NAT_1:38
+;
+A124:  i1-'1 = i2 by A109,BINARITH:39;
+     then LSeg(1/2*((GoB f)*(i1 -' 1,j1-'1)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1,j1-'1)+(GoB f)*(i1,j1))+|[1,0]|) misses L~f
+         by A5,A6,A11,A14,A17,A21,A24,A25,A39,A44,A108,A109,A110,A113,A114,
+GOBOARD8:19,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i1 -' 1,j1-'1)+(GoB f)*(i1,j1)),
+               1/2*((GoB f)*(i1,j1-'1)+(GoB f)*(i1,j1))+|[1,0]|) c= (L~f)`
+           by SUBSET_1:43;
+     then A125: LSeg(1/2*((GoB f)*(i1 -' 1,j1-'1)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1,j1-'1)+(GoB f)*(i1,j1))+|[1,0]|) c= LeftComp f
+                             by A49,A120,A122,A123,Th6;
+A126: LSeg(1/2*((GoB f)*(i1 -' 1,j1-'1)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1,j1-'1)+(GoB f)*(i1,j1))+|[1,0]|) meets
+             Int cell(GoB f,i2,j1-'1) by A19,A20,A22,A39,A109,A113,A124,
+GOBOARD6:85;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f
+               by A49,A50,A121,A125,A126,Th6;
+    suppose that
+A127: j0 = j1+1 and
+A128: i1 = i2+1 and
+A129: i0 <> len GoB f and
+A130: j1 <> 1;
+A131: left_cell(f,k) = cell(GoB f,i0,j1)
+                   by A6,A7,A10,A11,A13,A14,A24,A38,A127,GOBOARD5:31,NAT_1:38;
+      1 < j1 by A22,A130,AXIOMS:21;
+then A132: 1 <= j1-'1 by A39,NAT_1:38;
+      len GoB f > i0 by A18,A129,AXIOMS:21;
+then A133: len GoB f >= i0+1 by NAT_1:38;
+A134: j1+1 = j1-'1+(1+1) by A39,XCMPLX_1:1;
+A135: LSeg(1/2*((GoB f)*(i0,j1-'1)+(GoB f)*(i0+1,j1)),
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i1+1,j1+1))) is connected by Th8;
+A136: LSeg(1/2*((GoB f)*(i0,j1-'1)+(GoB f)*(i0+1,j1)),
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i1+1,j1+1)))
+           meets Int cell(GoB f,i0,j1) by A19,A21,A22,A24,A127,A133,GOBOARD6:85
+,NAT_1:38;
+       LSeg(1/2*((GoB f)*(i0,j1-'1)+(GoB f)*(i0+1,j1)),
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i1+1,j1+1))) misses L~f
+    by A5,A6,A11,A14,A17,A20,A21,A24,A25,A39,A44,A46,A127,A128,A132,A133,A134,
+GOBOARD8:5,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i0,j1-'1)+(GoB f)*(i0+1,j1)),
+         1/2*((GoB f)*(i1,j1)+(GoB f)*(i1+1,j1+1))) c= (L~f)` by SUBSET_1:43;
+     then A137: LSeg(1/2*((GoB f)*(i0,j1-'1)+(GoB f)*(i0+1,j1)),
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i1+1,j1+1))) c= LeftComp f
+                             by A3,A5,A6,A49,A131,A135,A136,Th6,NAT_1:38;
+A138: Int cell(GoB f,i1,j1-'1) is connected by A19,A41,Th21;
+       j1 > 1 by A22,A130,AXIOMS:21;
+     then 1 <= j1-'1 by A39,NAT_1:38;
+then A139: LSeg(1/2*((GoB f)*(i1,j1-'1)+(GoB f)*(i1+1,j1)),
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i1+1,j1+1))) meets
+             Int cell(GoB f,i1,j1-'1) by A19,A22,A24,A39,A127,A133,GOBOARD6:85,
+NAT_1:38;
+       Int cell(GoB f,i1,j1-'1) misses L~f by A19,A41,GOBOARD7:14;
+     then Int cell(GoB f,i1,j1-'1) c= (L~f)` by SUBSET_1:43;
+     then A140:  Int cell(GoB f,i1,j1-'1) c= LeftComp f by A24,A49,A127,A137,
+A138,A139,Th6,NAT_1:38;
+A141: left_cell(f,k+1) = cell(GoB f,i2,j1-'1)
+                by A4,A5,A13,A14,A16,A17,A25,A39,A128,GOBOARD5:30,NAT_1:38;
+A142: LSeg(1/2*((GoB f)*(i1,j1-'1)+(GoB f)*(i1+1,j1)),
+          1/2*((GoB f)*(i2,j1-'1)+(GoB f)*(i1,j1))) is connected by Th8;
+A143: LSeg(1/2*((GoB f)*(i1,j1-'1)+(GoB f)*(i1+1,j1)),
+          1/2*((GoB f)*(i2,j1-'1)+(GoB f)*(i1,j1)))
+     meets Int cell(GoB f,i1,j1-'1) by A19,A22,A24,A39,A127,A132,A133,GOBOARD6:
+85,NAT_1:38;
+       i1 < len GoB f by A19,A24,A127,A129,AXIOMS:21,NAT_1:38;
+     then i1+1 <= len GoB f by NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i1,j1-'1)+(GoB f)*(i1+1,j1)),
+               1/2*((GoB f)*(i2,j1-'1)+(GoB f)*(i1,j1))) misses L~f
+       by A5,A6,A11,A14,A17,A20,A21,A24,A25,A39,A44,A46,A127,A128,A132,A134,
+GOBOARD8:13,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i1,j1-'1)+(GoB f)*(i1+1,j1)),
+          1/2*((GoB f)*(i2,j1-'1)+(GoB f)*(i1,j1))) c= (L~f)` by SUBSET_1:43;
+     then A144: LSeg(1/2*((GoB f)*(i1,j1-'1)+(GoB f)*(i1+1,j1)),
+          1/2*((GoB f)*(i2,j1-'1)+(GoB f)*(i1,j1))) c= LeftComp f
+                             by A49,A140,A142,A143,Th6;
+A145: LSeg(1/2*((GoB f)*(i1,j1-'1)+(GoB f)*(i1+1,j1)),
+          1/2*((GoB f)*(i2,j1-'1)+(GoB f)*(i2+1,j1))) meets
+             Int cell(GoB f,i2,j1-'1) by A19,A20,A22,A39,A128,A132,GOBOARD6:85;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f
+               by A49,A50,A128,A141,A144,A145,Th6;
+    suppose that
+A146: j0 = j1+1 and
+A147: j1 = j2+1 and
+A148: i0 = len GoB f;
+A149: left_cell(f,k) = cell(GoB f,len GoB f,j1)
+                   by A6,A7,A10,A11,A13,A14,A24,A42,A146,A148,GOBOARD5:31,NAT_1
+:38;
+A150: left_cell(f,k+1) = cell(GoB f,len GoB f,j2)
+                by A4,A5,A13,A14,A16,A17,A24,A25,A42,A146,A147,A148,GOBOARD5:31
+,NAT_1:38;
+A151: LSeg(1/2*((GoB f)*(len GoB f,j2)+(GoB f)*(len GoB f,j2+1))+|[1,0]|,
+          1/2*((GoB f)*(len GoB f,j2+1)+(GoB f)*(len GoB f,j2+2))+|[1,0]|)
+           is connected by Th8;
+A152: LSeg(1/2*((GoB f)*(len GoB f,j2)+(GoB f)*(len GoB f,j2+1))+|[1,0]|,
+          1/2*((GoB f)*(len GoB f,j2+1)+(GoB f)*(len GoB f,j2+2))+|[1,0]|)
+           meets Int cell(GoB f,len GoB f,j1)
+             by A21,A22,A48,A146,A147,GOBOARD6:89;
+       LSeg(1/2*((GoB f)*(len GoB f,j2)+(GoB f)*(len GoB f,j2+1))+|[1,0]|,
+          1/2*((GoB f)*(len GoB f,j2+1)+(GoB f)*(len GoB f,j2+2))+|[1,0]|)
+                  misses L~f by A21,A23,A48,A146,A147,GOBOARD8:34;
+     then LSeg(1/2*((GoB f)*(len GoB f,j2)+(GoB f)*(len GoB f,j2+1))+|[1,0]|,
+               1/2*((GoB f)*(len GoB f,j2+1)+(GoB f)*
+(len GoB f,j2+2))+|[1,0]|)
+           c= (L~f)` by SUBSET_1:43;
+     then A153: LSeg(1/2*((GoB f)*(len GoB f,j2)+(GoB f)*(len GoB f,j2+1))+|[1,
+0]|,
+          1/2*((GoB f)*(len GoB f,j2+1)+(GoB f)*(len GoB f,j2+2))+|[1,0]|)
+           c= LeftComp f by A3,A5,A6,A49,A149,A151,A152,Th6,NAT_1:38;
+A154: LSeg(1/2*((GoB f)*(len GoB f,j2)+(GoB f)*(len GoB f,j2+1))+|[1,0]|,
+          1/2*((GoB f)*(len GoB f,j2+1)+(GoB f)*(len GoB f,j2+2))+|[1,0]|)
+           meets Int cell(GoB f,i1,j2) by A22,A23,A24,A146,A147,A148,GOBOARD6:
+89,NAT_1:38;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f by A24,A49,A50,A146,A148,A150,A153
+,A154,Th6,NAT_1:38
+;
+    suppose that
+A155: j0 = j1+1 and
+A156: j1 = j2+1 and
+A157: i0 <> len GoB f;
+A158: left_cell(f,k) = cell(GoB f,i0,j1)
+                   by A6,A7,A10,A11,A13,A14,A24,A38,A155,GOBOARD5:31,NAT_1:38;
+      len GoB f > i0 by A18,A157,AXIOMS:21;
+then A159: len GoB f >= i0+1 by NAT_1:38;
+A160: left_cell(f,k+1) = cell(GoB f,i1,j2)
+                by A4,A5,A13,A14,A16,A17,A25,A38,A156,GOBOARD5:31,NAT_1:38;
+A161: LSeg(1/2*((GoB f)*(i0,j2)+(GoB f)*(i0+1,j2+1)),
+          1/2*((GoB f)*(i1,j2+1)+(GoB f)*(i1+1,j2+2))) is connected by Th8;
+A162: LSeg(1/2*((GoB f)*(i0,j2)+(GoB f)*(i0+1,j2+1)),
+          1/2*((GoB f)*(i1,j2+1)+(GoB f)*(i1+1,j2+2)))
+           meets Int cell(GoB f,i0,j1)
+             by A19,A21,A22,A24,A48,A155,A156,A159,GOBOARD6:85,NAT_1:38;
+       LSeg(1/2*((GoB f)*(i0,j2)+(GoB f)*(i0+1,j2+1)),
+          1/2*((GoB f)*(i1,j2+1)+(GoB f)*(i1+1,j2+2))) misses L~f
+       by A5,A6,A11,A14,A17,A18,A21,A23,A24,A25,A44,A48,A155,A156,A159,GOBOARD8
+:4,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i0,j2)+(GoB f)*(i0+1,j2+1)),
+         1/2*((GoB f)*(i1,j2+1)+(GoB f)*
+(i1+1,j2+2))) c= (L~f)` by SUBSET_1:43;
+     then A163: LSeg(1/2*((GoB f)*(i0,j2)+(GoB f)*(i0+1,j2+1)),
+          1/2*((GoB f)*(i1,j2+1)+(GoB f)*(i1+1,j2+2))) c= LeftComp f
+                             by A3,A5,A6,A49,A158,A161,A162,Th6,NAT_1:38;
+A164: LSeg(1/2*((GoB f)*(i0,j2)+(GoB f)*(i0+1,j2+1)),
+          1/2*((GoB f)*(i1,j2+1)+(GoB f)*(i1+1,j2+2))) meets
+             Int cell(GoB f,i1,j2) by A19,A22,A23,A24,A155,A156,A159,GOBOARD6:
+85,NAT_1:38;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f by A49,A50,A160,A163,A164,Th6;
+    suppose that
+A165: i0+1 = i1 and
+A166: j1 = j2+1 and
+A167: i1 = len GoB f and
+A168: j0 = width GoB f;
+A169: left_cell(f,k) = cell(GoB f,i0,j1)
+                   by A6,A7,A10,A11,A13,A14,A24,A39,A165,GOBOARD5:29,NAT_1:38;
+A170: i0 = i1-'1 by A42,A165,A167,XCMPLX_1:2;
+A171: LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i1,j0))+|[0,1]|,
+         (GoB f)*(i1,j0)+|[1,1]|) is connected by Th8;
+A172: LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i1,j0))+|[0,1]|,
+         (GoB f)*(i1,j0)+|[1,1]|)
+           meets Int cell(GoB f,i0,j1) by A18,A19,A24,A165,A168,GOBOARD6:86,
+NAT_1:38;
+      LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i1,j0))+|[0,1]|,
+         (GoB f)*(i1,j0)+|[1,1]|)
+         misses L~f by A167,A168,A170,GOBOARD8:30;
+     then LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i1,j0))+|[0,1]|,
+         (GoB f)*(i1,j0)+|[1,1]|) c= (L~f)` by SUBSET_1:43;
+     then A173: LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i1,j0))+|[0,1]|,
+         (GoB f)*(i1,j0)+|[1,1]|) c= LeftComp f by A3,A5,A6,A49,A169,A171,A172,
+Th6,NAT_1:38;
+A174: Int cell(GoB f,i1,j1) is connected by A19,A22,Th21;
+A175: LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i1,j0))+|[0,1]|,
+         (GoB f)*(i1,j0)+|[1,1]|) meets
+             Int cell(GoB f,i1,j1) by A24,A165,A167,A168,GOBOARD6:91,NAT_1:38;
+       Int cell(GoB f,i1,j1) misses L~f by A19,A22,GOBOARD7:14;
+     then Int cell(GoB f,i1,j1) c= (L~f)` by SUBSET_1:43;
+     then A176:  Int cell(GoB f,i1,j1) c= LeftComp f by A49,A173,A174,A175,Th6;
+A177: left_cell(f,k+1) = cell(GoB f,i1,j2)
+                by A4,A5,A13,A14,A16,A17,A25,A38,A166,GOBOARD5:31,NAT_1:38;
+A178: LSeg(1/2*((GoB f)*(i1,j2)+(GoB f)*(i1,j1))+|[1,0]|,
+         (GoB f)*(i1,j1)+|[1,1]|)
+          is connected by Th8;
+A179:  j2 = j1-'1 by A24,A43,A165,A166,A168,NAT_1:38,XCMPLX_1:2;
+A180: LSeg(1/2*((GoB f)*(i1,j2)+(GoB f)*(i1,j1))+|[1,0]|,
+         (GoB f)*(i1,j1)+|[1,1]|) meets Int cell(GoB f,i1,j1)
+            by A24,A165,A167,A168,GOBOARD6:91,NAT_1:38;
+      LSeg(1/2*((GoB f)*(i1,j2)+(GoB f)*(i1,j1))+|[1,0]|,
+         (GoB f)*
+(i1,j1)+|[1,1]|) misses L~f by A24,A165,A167,A168,A179,GOBOARD8:36,NAT_1:38
+;
+     then LSeg(1/2*((GoB f)*(i1,j2)+(GoB f)*(i1,j1))+|[1,0]|,
+         (GoB f)*(i1,j1)+|[1,1]|) c= (L~f)`
+           by SUBSET_1:43;
+     then A181: LSeg(1/2*((GoB f)*(i1,j2)+(GoB f)*(i1,j1))+|[1,0]|,
+         (GoB f)*(i1,j1)+|[1,1]|) c= LeftComp f
+                             by A49,A176,A178,A180,Th6;
+A182: LSeg(1/2*((GoB f)*(i1,j2)+(GoB f)*(i1,j1))+|[1,0]|,
+         (GoB f)*(i1,j1)+|[1,1]|) meets Int cell(GoB f,i1,j2)
+             by A22,A23,A166,A167,GOBOARD6:89;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f by A49,A50,A177,A181,A182,Th6;
+    suppose that
+A183: i0+1 = i1 and
+A184: j1 = j2+1 and
+A185: i1 <> len GoB f and
+A186: j0 = width GoB f;
+A187: left_cell(f,k) = cell(GoB f,i0,j1)
+                   by A6,A7,A10,A11,A13,A14,A24,A39,A183,GOBOARD5:29,NAT_1:38;
+      len GoB f > i1 by A19,A185,AXIOMS:21;
+then A188:  i1+1 <= len GoB f by NAT_1:38;
+A189: LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i0+1,j0))+|[0,1]|,
+         1/2*((GoB f)*(i0+1,j0)+(GoB f)*
+(i0+2,j0))+|[0,1]|) is connected by Th8
+;
+A190: LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i0+1,j0))+|[0,1]|,
+         1/2*((GoB f)*(i0+1,j0)+(GoB f)*(i0+2,j0))+|[0,1]|)
+           meets Int cell(GoB f,i0,j1) by A18,A19,A24,A183,A186,GOBOARD6:86,
+NAT_1:38;
+      LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i0+1,j0))+|[0,1]|,
+         1/2*((GoB f)*(i0+1,j0)+(GoB f)*(i0+2,j0))+|[0,1]|)
+            misses L~f by A18,A45,A183,A186,A188,GOBOARD8:28;
+     then LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i0+1,j0))+|[0,1]|,
+         1/2*((GoB f)*(i0+1,j0)+(GoB f)*(i0+2,j0))+|[0,1]|)
+           c= (L~f)` by SUBSET_1:43;
+     then A191: LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i0+1,j0))+|[0,1]|,
+         1/2*((GoB f)*(i0+1,j0)+(GoB f)*(i0+2,j0))+|[0,1]|) c= LeftComp f
+                             by A3,A5,A6,A49,A187,A189,A190,Th6,NAT_1:38;
+A192: Int cell(GoB f,i1,j1) is connected by A19,A22,Th21;
+A193: LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i0+1,j0))+|[0,1]|,
+         1/2*((GoB f)*(i0+1,j0)+(GoB f)*(i0+2,j0))+|[0,1]|) meets
+             Int cell(GoB f,i1,j1) by A19,A24,A45,A183,A186,A188,GOBOARD6:86,
+NAT_1:38;
+       Int cell(GoB f,i1,j1) misses L~f by A19,A22,GOBOARD7:14;
+     then Int cell(GoB f,i1,j1) c= (L~f)` by SUBSET_1:43;
+     then A194:  Int cell(GoB f,i1,j1) c= LeftComp f by A49,A191,A192,A193,Th6;
+A195: left_cell(f,k+1) = cell(GoB f,i1,j2)
+                by A4,A5,A13,A14,A16,A17,A25,A38,A184,GOBOARD5:31,NAT_1:38;
+A196: LSeg(1/2*((GoB f)*(i0+1,j2)+(GoB f)*(i1+1,j0)),
+          1/2*((GoB f)*(i0+1,j0)+(GoB f)*(i1+1,j0))+|[0,1]|)
+          is connected by Th8;
+A197:  j2 = j1-'1 by A24,A43,A183,A184,A186,NAT_1:38,XCMPLX_1:2;
+A198: LSeg(1/2*((GoB f)*(i0+1,j2)+(GoB f)*(i1+1,j0)),
+          1/2*((GoB f)*(i0+1,j0)+(GoB f)*(i1+1,j0))+|[0,1]|)
+           meets Int cell(GoB f,i1,j1) by A19,A24,A183,A186,A188,GOBOARD6:86,
+NAT_1:38;
+       LSeg(1/2*((GoB f)*(i0+1,j2)+(GoB f)*(i1+1,j0)),
+          1/2*((GoB f)*(i0+1,j0)+(GoB f)*(i1+1,j0))+|[0,1]|)
+        misses L~f
+         by A5,A6,A11,A14,A17,A18,A24,A25,A44,A45,A183,A184,A186,A188,A197,
+GOBOARD8:10,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i0+1,j2)+(GoB f)*(i1+1,j0)),
+          1/2*((GoB f)*(i0+1,j0)+(GoB f)*(i1+1,j0))+|[0,1]|) c= (L~f)`
+           by SUBSET_1:43;
+     then A199: LSeg(1/2*((GoB f)*(i0+1,j2)+(GoB f)*(i1+1,j0)),
+          1/2*((GoB f)*(i0+1,j0)+(GoB f)*(i1+1,j0))+|[0,1]|) c= LeftComp f
+                             by A49,A194,A196,A198,Th6;
+A200: LSeg(1/2*((GoB f)*(i0+1,j2)+(GoB f)*(i1+1,j0)),
+          1/2*((GoB f)*(i0+1,j0)+(GoB f)*(i1+1,j0))+|[0,1]|) meets
+             Int cell(GoB f,i1,j2) by A19,A23,A24,A183,A184,A186,A188,GOBOARD6:
+85,NAT_1:38;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f by A49,A50,A195,A199,A200,Th6;
+    suppose that
+A201: i0+1 = i1 and
+A202: j1 = j2+1 and
+A203: i1 = len GoB f and
+A204: j0 <> width GoB f;
+A205: left_cell(f,k) = cell(GoB f,i0,j1)
+                   by A6,A7,A10,A11,A13,A14,A24,A39,A201,GOBOARD5:29,NAT_1:38;
+      width GoB f > j0 by A21,A204,AXIOMS:21;
+then A206: width GoB f >= j0+1 by NAT_1:38;
+A207: i0 = i1-'1 by A42,A201,A203,XCMPLX_1:2;
+A208: LSeg(1/2*((GoB f)*(i0,j1)+(GoB f)*(i1,j1+1)),
+          1/2*((GoB f)*(i1,j1)+(GoB f)*
+(i1,j1+1))+|[1,0]|) is connected by Th8;
+A209: LSeg(1/2*((GoB f)*(i0,j1)+(GoB f)*(i1,j1+1)),
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i1,j1+1))+|[1,0]|)
+           meets Int cell(GoB f,i0,j1) by A18,A19,A22,A24,A201,A206,GOBOARD6:85
+,NAT_1:38;
+       LSeg(1/2*((GoB f)*(i0,j1)+(GoB f)*(i1,j1+1)),
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i1,j1+1))+|[1,0]|) misses L~f
+        by A5,A6,A11,A14,A17,A23,A24,A25,A44,A48,A201,A202,A203,A206,A207,
+GOBOARD8:20,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i0,j1)+(GoB f)*(i1,j1+1)),
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i1,j1+1))+|[1,0]|)
+           c= (L~f)` by SUBSET_1:43;
+     then A210: LSeg(1/2*((GoB f)*(i0,j1)+(GoB f)*(i1,j1+1)),
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i1,j1+1))+|[1,0]|) c= LeftComp f
+                             by A3,A5,A6,A49,A205,A208,A209,Th6,NAT_1:38;
+A211: Int cell(GoB f,i1,j1) is connected by A19,A22,Th21;
+A212: LSeg(1/2*((GoB f)*(i0,j1)+(GoB f)*(i1,j1+1)),
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i1,j1+1))+|[1,0]|) meets
+             Int cell(GoB f,i1,j1) by A22,A24,A201,A203,A206,GOBOARD6:89,NAT_1:
+38;
+       Int cell(GoB f,i1,j1) misses L~f by A19,A22,GOBOARD7:14;
+     then Int cell(GoB f,i1,j1) c= (L~f)` by SUBSET_1:43;
+     then A213:  Int cell(GoB f,i1,j1) c= LeftComp f by A49,A210,A211,A212,Th6;
+A214: left_cell(f,k+1) = cell(GoB f,i1,j2)
+                by A4,A5,A13,A14,A16,A17,A25,A38,A202,GOBOARD5:31,NAT_1:38;
+A215: LSeg(1/2*((GoB f)*(len GoB f,j2)+(GoB f)*(len GoB f,j1))+|[1,0]|,
+          1/2*((GoB f)*(len GoB f,j1)+(GoB f)*(len GoB f,j1+1))+|[1,0]|)
+                 is connected by Th8;
+A216: LSeg(1/2*((GoB f)*(len GoB f,j2)+(GoB f)*(len GoB f,j1))+|[1,0]|,
+          1/2*((GoB f)*(len GoB f,j1)+(GoB f)*(len GoB f,j1+1))+|[1,0]|)
+           meets Int cell(GoB f,i1,j1) by A22,A24,A201,A203,A206,GOBOARD6:89,
+NAT_1:38;
+      LSeg(1/2*((GoB f)*(len GoB f,j2)+(GoB f)*(len GoB f,j1))+|[1,0]|,
+         1/2*((GoB f)*(len GoB f,j1)+(GoB f)*(len GoB f,j1+1))+|[1,0]|)
+            misses L~f by A23,A24,A48,A201,A202,A206,GOBOARD8:34,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(len GoB f,j2)+(GoB f)*(len GoB f,j1))+|[1,0]|,
+         1/2*((GoB f)*(len GoB f,j1)+(GoB f)*(len GoB f,j1+1))+|[1,0]|)
+            c= (L~f)` by SUBSET_1:43;
+     then A217: LSeg(1/2*((GoB f)*(len GoB f,j2)+(GoB f)*(len GoB f,j1))+|[1,0
+]|,
+         1/2*((GoB f)*(len GoB f,j1)+(GoB f)*(len GoB f,j1+1))+|[1,0]|)
+          c= LeftComp f by A49,A213,A215,A216,Th6;
+A218: LSeg(1/2*((GoB f)*(len GoB f,j2)+(GoB f)*(len GoB f,j1))+|[1,0]|,
+         1/2*((GoB f)*(len GoB f,j1)+(GoB f)*(len GoB f,j1+1))+|[1,0]|) meets
+             Int cell(GoB f,i1,j2) by A22,A23,A202,A203,GOBOARD6:89;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f by A49,A50,A214,A217,A218,Th6;
+    suppose that
+A219: i0+1 = i1 and
+A220: j1 = j2+1 and
+A221: i1 <> len GoB f and
+A222: j0 <> width GoB f;
+A223: left_cell(f,k) = cell(GoB f,i0,j1)
+                   by A6,A7,A10,A11,A13,A14,A24,A39,A219,GOBOARD5:29,NAT_1:38;
+      len GoB f > i1 by A19,A221,AXIOMS:21;
+then A224:  i1+1 <= len GoB f by NAT_1:38;
+      width GoB f > j0 by A21,A222,AXIOMS:21;
+then A225: width GoB f >= j0+1 by NAT_1:38;
+A226: LSeg(1/2*((GoB f)*(i0,j2+1)+(GoB f)*(i0+1,j1+1)),
+          1/2*((GoB f)*(i0+1,j2+1)+(GoB f)*(i1+1,j1+1))) is connected by Th8;
+A227: LSeg(1/2*((GoB f)*(i0,j2+1)+(GoB f)*(i0+1,j1+1)),
+          1/2*((GoB f)*(i0+1,j2+1)+(GoB f)*(i1+1,j1+1)))
+           meets Int cell(GoB f,i0,j1) by A18,A19,A22,A24,A219,A220,A225,
+GOBOARD6:85,NAT_1:38;
+       LSeg(1/2*((GoB f)*(i0,j2+1)+(GoB f)*(i0+1,j1+1)),
+          1/2*((GoB f)*(i0+1,j2+1)+(GoB f)*(i1+1,j1+1))) misses L~f
+     by A5,A6,A11,A14,A17,A18,A23,A24,A25,A44,A45,A48,A219,A220,A224,A225,
+GOBOARD8:16,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i0,j2+1)+(GoB f)*(i0+1,j1+1)),
+          1/2*((GoB f)*(i0+1,j2+1)+(GoB f)*(i1+1,j1+1)))
+           c= (L~f)` by SUBSET_1:43;
+     then A228: LSeg(1/2*((GoB f)*(i0,j2+1)+(GoB f)*(i0+1,j1+1)),
+          1/2*((GoB f)*(i0+1,j2+1)+(GoB f)*(i1+1,j1+1))) c= LeftComp f
+                             by A3,A5,A6,A49,A223,A226,A227,Th6,NAT_1:38;
+A229: Int cell(GoB f,i1,j1) is connected by A19,A22,Th21;
+A230: LSeg(1/2*((GoB f)*(i0,j2+1)+(GoB f)*(i0+1,j1+1)),
+          1/2*((GoB f)*(i0+1,j2+1)+(GoB f)*(i1+1,j1+1))) meets
+             Int cell(GoB f,i1,j1) by A19,A22,A24,A219,A220,A224,A225,GOBOARD6:
+85,NAT_1:38;
+       Int cell(GoB f,i1,j1) misses L~f by A19,A22,GOBOARD7:14;
+     then Int cell(GoB f,i1,j1) c= (L~f)` by SUBSET_1:43;
+     then A231:  Int cell(GoB f,i1,j1) c= LeftComp f by A49,A228,A229,A230,Th6;
+A232: left_cell(f,k+1) = cell(GoB f,i1,j2)
+                by A4,A5,A13,A14,A16,A17,A25,A38,A220,GOBOARD5:31,NAT_1:38;
+A233: LSeg(1/2*((GoB f)*(i0+1,j2)+(GoB f)*(i1+1,j2+1)),
+          1/2*((GoB f)*(i0+1,j2+1)+(GoB f)*(i1+1,j1+1))) is connected by Th8;
+A234: LSeg(1/2*((GoB f)*(i0+1,j2)+(GoB f)*(i1+1,j2+1)),
+          1/2*((GoB f)*(i0+1,j2+1)+(GoB f)*(i1+1,j1+1)))
+           meets Int cell(GoB f,i1,j1)
+            by A19,A22,A24,A219,A220,A224,A225,GOBOARD6:85,NAT_1:38;
+       LSeg(1/2*((GoB f)*(i0+1,j2)+(GoB f)*(i1+1,j2+1)),
+          1/2*((GoB f)*(i0+1,j2+1)+(GoB f)*(i1+1,j1+1))) misses L~f
+       by A5,A6,A11,A14,A17,A18,A23,A24,A25,A44,A45,A48,A219,A220,A224,A225,
+GOBOARD8:6,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i0+1,j2)+(GoB f)*(i1+1,j2+1)),
+          1/2*((GoB f)*(i0+1,j2+1)+(GoB f)*(i1+1,j1+1))) c= (L~f)`
+           by SUBSET_1:43;
+     then A235: LSeg(1/2*((GoB f)*(i0+1,j2)+(GoB f)*(i1+1,j2+1)),
+          1/2*((GoB f)*(i0+1,j2+1)+(GoB f)*(i1+1,j1+1))) c= LeftComp f
+                             by A49,A231,A233,A234,Th6;
+A236: LSeg(1/2*((GoB f)*(i0+1,j2)+(GoB f)*(i1+1,j2+1)),
+          1/2*((GoB f)*(i0+1,j2+1)+(GoB f)*(i1+1,j1+1))) meets
+             Int cell(GoB f,i1,j2) by A19,A22,A23,A219,A220,A224,GOBOARD6:85;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f by A49,A50,A232,A235,A236,Th6;
+    suppose that
+A237: j0+1 = j1 and
+A238: i1 = i2+1;
+       left_cell(f,k) = cell(GoB f,i2,j0)
+                by A6,A7,A10,A11,A13,A14,A24,A237,A238,GOBOARD5:28,NAT_1:38
+        .= left_cell(f,k+1) by A4,A5,A13,A14,A16,A17,A25,A237,A238,GOBOARD5:30,
+NAT_1:38
+;
+    hence Int left_cell(f,k+1) c= LeftComp f by A3,A5,A6,NAT_1:38;
+    suppose that
+A239: i0 = i1+1 and
+A240: j1+1 = j2 and
+A241: i1 = 1 and
+A242: j1 = 1;
+A243: left_cell(f,k) = cell(GoB f,i1,j1-'1)
+                by A6,A7,A10,A11,A13,A14,A24,A39,A239,GOBOARD5:30,NAT_1:38;
+A244: LSeg((GoB f)*(i1,j1)- |[1,1]|,
+        1/2*((GoB f)*(i1,j1)+(GoB f)*(i0,j1))- |[0,1]|) is connected by Th8;
+       i1-'1 <= i1 by Th2;
+then A245:  i1-'1 <= len GoB f by A19,AXIOMS:22;
+A246:  j1-'1 = 0 by A242,Th1;
+A247:  i1-'1 = 0 by A241,Th1;
+       j1-'1 <= j1 by Th2;
+then A248:  j1-'1 <= width GoB f by A22,AXIOMS:22;
+A249: LSeg((GoB f)*(i1,j1)- |[1,1]|,
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i0,j1))- |[0,1]|)
+     meets Int cell(GoB f,i1,j1-'1) by A18,A19,A239,A242,A246,GOBOARD6:87;
+       LSeg((GoB f)*(i1,j1)- |[1,1]|,
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i0,j1))- |[0,1]|)
+       misses L~f by A239,A241,A242,GOBOARD8:26;
+     then LSeg((GoB f)*(i1,j1)- |[1,1]|,
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i0,j1))- |[0,1]|) c= (L~f)`
+           by SUBSET_1:43;
+     then A250: LSeg((GoB f)*(i1,j1)- |[1,1]|,
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i0,j1))- |[0,1]|) c= LeftComp f
+                             by A3,A5,A6,A49,A243,A244,A249,Th6,NAT_1:38;
+A251: Int cell(GoB f,i1-'1,j1-'1) is connected by A245,A248,Th21;
+A252: LSeg((GoB f)*(i1,j1)- |[1,1]|,
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i0,j1))- |[0,1]|) meets
+             Int cell(GoB f,i1-'1,j0-'1) by A24,A239,A241,A242,A246,GOBOARD6:90
+;
+       Int cell(GoB f,i1-'1,j1-'1) misses L~f by A245,A248,GOBOARD7:14;
+     then Int cell(GoB f,i1-'1,j1-'1) c= (L~f)` by SUBSET_1:43;
+     then A253:   Int cell(GoB f,i1-'1,j1-'1) c= LeftComp f
+                     by A24,A49,A239,A250,A251,A252,Th6,NAT_1:38;
+A254: left_cell(f,k+1) = cell(GoB f,i1-'1,j1)
+                by A4,A5,A13,A14,A16,A17,A25,A38,A240,GOBOARD5:28,NAT_1:38;
+A255: LSeg((GoB f)*(i1,j1)- |[1,1]|,
+           1/2*((GoB f)*(i1,j1)+(GoB f)*
+(i1,j2))- |[1,0]|) is connected by Th8;
+A256: LSeg((GoB f)*(i1,j1)- |[1,1]|,
+           1/2*((GoB f)*(i1,j1)+(GoB f)*(i1,j2))- |[1,0]|)
+           meets Int cell(GoB f,i1-'1,j1-'1) by A241,A242,A246,GOBOARD6:90;
+        LSeg((GoB f)*(i1,j1)- |[1,1]|,
+           1/2*((GoB f)*(i1,j1)+(GoB f)*(i1,j2))- |[1,0]|)
+       misses L~f by A240,A241,A242,GOBOARD8:32;
+
+     then LSeg((GoB f)*(i1,j1)- |[1,1]|,
+           1/2*((GoB f)*(i1,j1)+(GoB f)*(i1,j2))- |[1,0]|) c= (L~f)`
+            by SUBSET_1:43;
+     then A257: LSeg((GoB f)*(i1,j1)- |[1,1]|,
+           1/2*((GoB f)*(i1,j1)+(GoB f)*(i1,j2))- |[1,0]|) c= LeftComp f
+                             by A49,A253,A255,A256,Th6;
+A258: LSeg((GoB f)*(i1,j1)- |[1,1]|,
+           1/2*((GoB f)*(i1,j1)+(GoB f)*(i1,j2))- |[1,0]|) meets
+             Int cell(GoB f,i1-'1,j1) by A22,A23,A240,A241,A247,GOBOARD6:88;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f by A49,A50,A254,A257,A258,Th6;
+    suppose that
+A259: i0 = i1+1 and
+A260: j1+1 = j2 and
+A261: i1 <> 1 and
+A262: j1 = 1;
+A263: left_cell(f,k) = cell(GoB f,i1,j1-'1)
+                by A6,A7,A10,A11,A13,A14,A24,A39,A259,GOBOARD5:30,NAT_1:38;
+      1 < i1 by A19,A261,AXIOMS:21;
+then A264: 1 <= i1-'1 by A38,NAT_1:38;
+A265: i1-'1+(1+1) = i0 by A38,A259,XCMPLX_1:1;
+A266: LSeg(1/2*((GoB f)*(i1-'1,1)+(GoB f)*(i1,1))- |[0,1]|,
+         1/2*((GoB f)*(i1,1)+(GoB f)*(i0,1))- |[0,1]|) is connected by Th8;
+       i1-'1 <= i1 by Th2;
+then A267:  i1-'1 <= len GoB f by A19,AXIOMS:22;
+A268:  j1-'1 = 0 by A262,Th1;
+       j1-'1 <= j1 by Th2;
+then A269:  j1-'1 <= width GoB f by A22,AXIOMS:22;
+A270: LSeg(1/2*((GoB f)*(i1-'1,1)+(GoB f)*(i1,1))- |[0,1]|,
+         1/2*((GoB f)*(i1,1)+(GoB f)*(i0,1))- |[0,1]|)
+           meets Int cell(GoB f,i1,j1-'1) by A18,A19,A259,A268,GOBOARD6:87;
+      LSeg(1/2*((GoB f)*(i1-'1,1)+(GoB f)*(i1,1))- |[0,1]|,
+         1/2*((GoB f)*(i1,1)+(GoB f)*(i0,1))- |[0,1]|) misses L~f
+          by A18,A38,A264,A265,GOBOARD8:25;
+     then LSeg(1/2*((GoB f)*(i1-'1,1)+(GoB f)*(i1,1))- |[0,1]|,
+         1/2*((GoB f)*(i1,1)+(GoB f)*
+(i0,1))- |[0,1]|) c= (L~f)` by SUBSET_1:43;
+     then A271: LSeg(1/2*((GoB f)*(i1-'1,1)+(GoB f)*(i1,1))- |[0,1]|,
+         1/2*((GoB f)*(i1,1)+(GoB f)*(i0,1))- |[0,1]|) c= LeftComp f
+                             by A3,A5,A6,A49,A263,A266,A270,Th6,NAT_1:38;
+A272: Int cell(GoB f,i1-'1,j1-'1) is connected by A267,A269,Th21;
+A273: LSeg(1/2*((GoB f)*(i1-'1,1)+(GoB f)*(i1,1))- |[0,1]|,
+         1/2*((GoB f)*(i1,1)+(GoB f)*(i0,1))- |[0,1]|) meets
+             Int cell(GoB f,i1-'1,j0-'1) by A19,A24,A38,A259,A264,A268,GOBOARD6
+:87,NAT_1:38;
+       Int cell(GoB f,i1-'1,j1-'1) misses L~f by A267,A269,GOBOARD7:14;
+     then Int cell(GoB f,i1-'1,j1-'1) c= (L~f)` by SUBSET_1:43;
+     then A274:   Int cell(GoB f,i1-'1,j1-'1) c= LeftComp f
+                     by A24,A49,A259,A271,A272,A273,Th6,NAT_1:38;
+A275: left_cell(f,k+1) = cell(GoB f,i1-'1,j1)
+                by A4,A5,A13,A14,A16,A17,A25,A38,A260,GOBOARD5:28,NAT_1:38;
+A276: LSeg(1/2*((GoB f)*(i1-'1,1)+(GoB f)*(i1,1))- |[0,1]|,
+          1/2*((GoB f)*(i1-'1,1)+(GoB f)*(i1,2))) is connected by Th8;
+A277: LSeg(1/2*((GoB f)*(i1-'1,1)+(GoB f)*(i1,1))- |[0,1]|,
+          1/2*((GoB f)*(i1-'1,1)+(GoB f)*(i1,2)))
+           meets Int cell(GoB f,i1-'1,j1-'1) by A19,A38,A264,A268,GOBOARD6:87;
+       LSeg(1/2*((GoB f)*(i1-'1,1)+(GoB f)*(i1,1))- |[0,1]|,
+          1/2*((GoB f)*(i1-'1,1)+(GoB f)*(i1,2))) misses L~f
+          by A5,A6,A11,A14,A17,A18,A24,A25,A38,A44,A259,A260,A262,A264,A265,
+GOBOARD8:7,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i1-'1,1)+(GoB f)*(i1,1))- |[0,1]|,
+          1/2*((GoB f)*(i1-'1,1)+(GoB f)*(i1,2))) c= (L~f)` by SUBSET_1:43;
+     then A278: LSeg(1/2*((GoB f)*(i1-'1,1)+(GoB f)*(i1,1))- |[0,1]|,
+          1/2*((GoB f)*(i1-'1,1)+(GoB f)*(i1,2))) c= LeftComp f
+                             by A49,A274,A276,A277,Th6;
+A279: LSeg(1/2*((GoB f)*(i1-'1,1)+(GoB f)*(i1,1))- |[0,1]|,
+          1/2*((GoB f)*(i1-'1,1)+(GoB f)*(i1,2))) meets
+          Int cell(GoB f,i1-'1,j1) by A19,A23,A38,A260,A262,A264,GOBOARD6:85;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f by A49,A50,A275,A278,A279,Th6;
+    suppose that
+A280: i0 = i1+1 and
+A281: j1+1 = j2 and
+A282: i1 = 1 and
+A283: j1 <> 1;
+A284: left_cell(f,k) = cell(GoB f,i1,j1-'1)
+                by A6,A7,A10,A11,A13,A14,A24,A39,A280,GOBOARD5:30,NAT_1:38;
+      1 < j0 by A21,A24,A280,A283,AXIOMS:21,NAT_1:38;
+then A285: 1 <= j0-'1 by A24,A39,A280,NAT_1:38;
+A286: j0-'1+(1+1) = j2 by A24,A39,A280,A281,NAT_1:38,XCMPLX_1:1;
+A287: LSeg(1/2*((GoB f)*(1,j1-'1)+(GoB f)*(1,j1-'1+1))- |[1,0]|,
+          1/2*((GoB f)*(1,j1-'1)+(GoB f)*(2,j1-'1+1))) is connected by Th8;
+A288: LSeg(1/2*((GoB f)*(1,j1-'1)+(GoB f)*(1,j1-'1+1))- |[1,0]|,
+          1/2*((GoB f)*(1,j1-'1)+(GoB f)*(2,j1-'1+1)))
+           meets Int cell(GoB f,i1,j1-'1)
+           by A18,A22,A24,A39,A280,A282,A285,GOBOARD6:85;
+       LSeg(1/2*((GoB f)*(1,j1-'1)+(GoB f)*(1,j1-'1+1))- |[1,0]|,
+          1/2*((GoB f)*(1,j1-'1)+(GoB f)*(2,j1-'1+1))) misses L~f
+           by A5,A6,A11,A14,A17,A23,A24,A25,A39,A44,A280,A281,A282,A285,A286,
+GOBOARD8:17,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(1,j1-'1)+(GoB f)*(1,j1-'1+1))- |[1,0]|,
+               1/2*((GoB f)*(1,j1-'1)+(GoB f)*(2,j1-'1+1))) c= (L~f)`
+           by SUBSET_1:43;
+     then A289: LSeg(1/2*((GoB f)*(1,j1-'1)+(GoB f)*(1,j1-'1+1))- |[1,0]|,
+          1/2*((GoB f)*(1,j1-'1)+(GoB f)*(2,j1-'1+1))) c= LeftComp f
+                             by A3,A5,A6,A49,A284,A287,A288,Th6,NAT_1:38;
+       i1-'1 <= i1 by Th2;
+then A290:  i1-'1 <= len GoB f by A19,AXIOMS:22;
+A291:  i1-'1 = 0 by A282,Th1;
+       j1-'1 <= j1 by Th2;
+then A292:  j1-'1 <= width GoB f by A22,AXIOMS:22;
+then A293: Int cell(GoB f,i1-'1,j1-'1) is connected by A290,Th21;
+A294: LSeg(1/2*((GoB f)*(1,j1-'1)+(GoB f)*(1,j1-'1+1))- |[1,0]|,
+          1/2*((GoB f)*(1,j1-'1)+(GoB f)*(2,j1-'1+1))) meets
+             Int cell(GoB f,i1-'1,j0-'1) by A22,A24,A39,A280,A285,A291,GOBOARD6
+:88,NAT_1:38;
+       Int cell(GoB f,i1-'1,j1-'1) misses L~f by A290,A292,GOBOARD7:14;
+     then Int cell(GoB f,i1-'1,j1-'1) c= (L~f)` by SUBSET_1:43;
+     then A295:   Int cell(GoB f,i1-'1,j1-'1) c= LeftComp f
+                     by A24,A49,A280,A289,A293,A294,Th6,NAT_1:38;
+A296: left_cell(f,k+1) = cell(GoB f,i1-'1,j1)
+                by A4,A5,A13,A14,A16,A17,A25,A38,A281,GOBOARD5:28,NAT_1:38;
+A297: LSeg(1/2*((GoB f)*(1,j1-'1)+(GoB f)*(1,j1-'1+1))- |[1,0]|,
+         1/2*((GoB f)*(1,j1-'1+1)+(GoB f)*(1,j1-'1+2))- |[1,0]|)
+          is connected by Th8;
+A298: LSeg(1/2*((GoB f)*(1,j1-'1)+(GoB f)*(1,j1-'1+1))- |[1,0]|,
+         1/2*((GoB f)*(1,j1-'1+1)+(GoB f)*(1,j1-'1+2))- |[1,0]|)
+           meets Int cell(GoB f,i1-'1,j1-'1)
+           by A22,A24,A39,A280,A285,A291,GOBOARD6:88,NAT_1:38;
+      LSeg(1/2*((GoB f)*(1,j1-'1)+(GoB f)*(1,j1-'1+1))- |[1,0]|,
+         1/2*((GoB f)*(1,j1-'1+1)+(GoB f)*(1,j1-'1+2))- |[1,0]|) misses L~f
+         by A23,A24,A280,A285,A286,GOBOARD8:31,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(1,j1-'1)+(GoB f)*(1,j1-'1+1))- |[1,0]|,
+         1/2*((GoB f)*(1,j1-'1+1)+(GoB f)*(1,j1-'1+2))- |[1,0]|) c= (L~f)`
+          by SUBSET_1:43;
+     then A299: LSeg(1/2*((GoB f)*(1,j1-'1)+(GoB f)*(1,j1-'1+1))- |[1,0]|,
+         1/2*((GoB f)*(1,j1-'1+1)+(GoB f)*(1,j1-'1+2))- |[1,0]|) c= LeftComp f
+                             by A49,A295,A297,A298,Th6;
+A300: LSeg(1/2*((GoB f)*(1,j1-'1)+(GoB f)*(1,j1-'1+1))- |[1,0]|,
+         1/2*((GoB f)*(1,j1-'1+1)+(GoB f)*(1,j1-'1+2))- |[1,0]|) meets
+             Int cell(GoB f,i1-'1,j1)
+             by A22,A23,A24,A39,A280,A281,A286,A291,GOBOARD6:88,NAT_1:38;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f by A49,A50,A296,A299,A300,Th6;
+    suppose that
+A301: i0 = i1+1 and
+A302: j1+1 = j2 and
+A303: i1 <> 1 and
+A304: j1 <> 1;
+A305: left_cell(f,k) = cell(GoB f,i1,j1-'1)
+                by A6,A7,A10,A11,A13,A14,A24,A39,A301,GOBOARD5:30,NAT_1:38;
+      1 < j0 by A21,A24,A301,A304,AXIOMS:21,NAT_1:38;
+then A306: 1 <= j0-'1 by A24,A39,A301,NAT_1:38;
+      1 < i1 by A19,A303,AXIOMS:21;
+then A307: 1 <= i1-'1 by A38,NAT_1:38;
+A308: i1-'1+(1+1) = i0 by A38,A301,XCMPLX_1:1;
+A309: j0-'1+(1+1) = j2 by A24,A39,A301,A302,NAT_1:38,XCMPLX_1:1;
+A310: LSeg(1/2*((GoB f)*(i1-'1,j0-'1)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1,j0-'1)+(GoB f)*(i0,j1))) is connected by Th8;
+A311: LSeg(1/2*((GoB f)*(i1-'1,j0-'1)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1,j0-'1)+(GoB f)*(i0,j1)))
+           meets Int cell(GoB f,i1,j1-'1)
+             by A18,A19,A22,A24,A39,A301,A306,GOBOARD6:85,NAT_1:38;
+       LSeg(1/2*((GoB f)*(i1-'1,j0-'1)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1,j0-'1)+(GoB f)*(i0,j1))) misses L~f
+    by A5,A6,A11,A14,A17,A18,A23,A24,A25,A38,A39,A44,A301,A302,A306,A307,A308,
+A309,GOBOARD8:12,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i1-'1,j0-'1)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1,j0-'1)+(GoB f)*(i0,j1))) c= (L~f)` by SUBSET_1:43;
+     then A312: LSeg(1/2*((GoB f)*(i1-'1,j0-'1)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1,j0-'1)+(GoB f)*(i0,j1))) c= LeftComp f
+                             by A3,A5,A6,A49,A305,A310,A311,Th6,NAT_1:38;
+       i1-'1 <= i1 by Th2;
+then A313:  i1-'1 <= len GoB f by A19,AXIOMS:22;
+       j1-'1 <= j1 by Th2;
+then A314:  j1-'1 <= width GoB f by A22,AXIOMS:22;
+then A315: Int cell(GoB f,i1-'1,j1-'1) is connected by A313,Th21;
+A316: LSeg(1/2*((GoB f)*(i1-'1,j0-'1)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1,j0-'1)+(GoB f)*(i0,j1))) meets
+             Int cell(GoB f,i1-'1,j0-'1)
+             by A19,A22,A24,A38,A39,A301,A306,A307,GOBOARD6:85,NAT_1:38;
+       Int cell(GoB f,i1-'1,j1-'1) misses L~f by A313,A314,GOBOARD7:14;
+     then Int cell(GoB f,i1-'1,j1-'1) c= (L~f)` by SUBSET_1:43;
+     then A317:   Int cell(GoB f,i1-'1,j1-'1) c= LeftComp f
+                     by A24,A49,A301,A312,A315,A316,Th6,NAT_1:38;
+A318: left_cell(f,k+1) = cell(GoB f,i1-'1,j1)
+                by A4,A5,A13,A14,A16,A17,A25,A38,A302,GOBOARD5:28,NAT_1:38;
+A319: LSeg(1/2*((GoB f)*(i1-'1,j1-'1)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j2))) is connected by Th8;
+A320: LSeg(1/2*((GoB f)*(i1-'1,j1-'1)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j2)))
+           meets Int cell(GoB f,i1-'1,j1-'1)
+           by A19,A22,A24,A38,A39,A301,A306,A307,GOBOARD6:85,NAT_1:38;
+       LSeg(1/2*((GoB f)*(i1-'1,j1-'1)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j2))) misses L~f
+      by A5,A6,A11,A14,A17,A18,A23,A24,A25,A38,A39,A44,A301,A302,A306,A307,A308
+,A309,GOBOARD8:2,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i1-'1,j1-'1)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j2))) c= (L~f)` by SUBSET_1:43;
+     then A321: LSeg(1/2*((GoB f)*(i1-'1,j1-'1)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j2))) c= LeftComp f
+                             by A49,A317,A319,A320,Th6;
+A322: LSeg(1/2*((GoB f)*(i1-'1,j1-'1)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j2))) meets
+             Int cell(GoB f,i1-'1,j1) by A19,A22,A23,A38,A302,A307,GOBOARD6:85;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f by A49,A50,A318,A321,A322,Th6;
+    suppose that
+A323: j0 = j1+1 and
+A324: i1+1 = i2;
+       left_cell(f,k) = cell(GoB f,i0,j1)
+                by A6,A7,A10,A11,A13,A14,A24,A38,A323,GOBOARD5:31,NAT_1:38
+        .= left_cell(f,k+1)
+                by A4,A5,A13,A14,A16,A17,A24,A25,A39,A323,A324,GOBOARD5:29,
+NAT_1:38;
+    hence Int left_cell(f,k+1) c= LeftComp f by A3,A5,A6,NAT_1:38;
+   suppose that
+A325: i0+1 = i1 and
+A326: i1+1 = i2 and
+A327: j0 = width GoB f;
+A328: left_cell(f,k) = cell(GoB f,i0,width GoB f)
+                   by A6,A7,A10,A11,A13,A14,A24,A43,A325,A327,GOBOARD5:29,NAT_1
+:38;
+A329: left_cell(f,k+1) = cell(GoB f,i1,width GoB f)
+             by A4,A5,A13,A14,A16,A17,A24,A25,A43,A325,A326,A327,GOBOARD5:29,
+NAT_1:38;
+A330: LSeg(1/2*((GoB f)*(i0,width GoB f)+(GoB f)*(i0+1,width GoB f))+|[0,1]|,
+          1/2*((GoB f)*(i1,width GoB f)+(GoB f)*(i1+1,width GoB f))+|[0,1]|)
+           is connected by Th8;
+A331: LSeg(1/2*((GoB f)*(i0,width GoB f)+(GoB f)*(i0+1,width GoB f))+|[0,1]|,
+          1/2*((GoB f)*(i1,width GoB f)+(GoB f)*(i1+1,width GoB f))+|[0,1]|)
+           meets Int cell(GoB f,i0,width GoB f) by A18,A19,A325,GOBOARD6:86;
+       LSeg(1/2*((GoB f)*(i0,width GoB f)+(GoB f)*(i0+1,width GoB f))+|[0,1]|,
+          1/2*((GoB f)*(i1,width GoB f)+(GoB f)*(i1+1,width GoB f))+|[0,1]|)
+           misses L~f by A18,A20,A45,A325,A326,GOBOARD8:28;
+     then LSeg(1/2*((GoB f)*(i0,width GoB f)+(GoB f)*(i0+1,width GoB f))+|[0,1
+]|,
+           1/2*((GoB f)*(i1,width GoB f)+(GoB f)*(i1+1,width GoB f))+|[0,1]|)
+           c= (L~f)` by SUBSET_1:43;
+     then A332: LSeg(1/2*((GoB f)*(i0,width GoB f)+(GoB f)*(i0+1,width GoB f))+
+|[0,1]|,
+           1/2*((GoB f)*(i1,width GoB f)+(GoB f)*(i1+1,width GoB f))+|[0,1]|)
+           c= LeftComp f by A3,A5,A6,A49,A328,A330,A331,Th6,NAT_1:38;
+A333: LSeg(1/2*((GoB f)*(i0,width GoB f)+(GoB f)*(i0+1,width GoB f))+|[0,1]|,
+           1/2*((GoB f)*(i1,width GoB f)+(GoB f)*(i1+1,width GoB f))+|[0,1]|)
+         meets Int cell(GoB f,i1,width GoB f) by A19,A20,A326,GOBOARD6:86;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f by A49,A50,A329,A332,A333,Th6;
+    suppose that
+A334: i0+1 = i1 and
+A335: i1+1 = i2 and
+A336: j0 <> width GoB f;
+A337: left_cell(f,k) = cell(GoB f,i0,j1)
+                   by A6,A7,A10,A11,A13,A14,A24,A39,A334,GOBOARD5:29,NAT_1:38;
+      width GoB f > j0 by A21,A336,AXIOMS:21;
+then A338: width GoB f >= j0+1 by NAT_1:38;
+A339: left_cell(f,k+1) = cell(GoB f,i1,j1)
+                by A4,A5,A13,A14,A16,A17,A25,A39,A335,GOBOARD5:29,NAT_1:38;
+A340: LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i0+1,j0+1)),
+          1/2*((GoB f)*(i1,j0)+(GoB f)*(i1+1,j0+1))) is connected by Th8;
+A341: LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i0+1,j0+1)),
+          1/2*((GoB f)*(i1,j0)+(GoB f)*(i1+1,j0+1)))
+           meets Int cell(GoB f,i0,j1)
+             by A18,A19,A22,A24,A334,A338,GOBOARD6:85,NAT_1:38;
+       LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i0+1,j0+1)),
+          1/2*((GoB f)*(i1,j0)+(GoB f)*(i1+1,j0+1))) misses L~f
+       by A5,A6,A11,A14,A17,A18,A20,A21,A24,A25,A44,A45,A334,A335,A338,GOBOARD8
+:14,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i0+1,j0+1)),
+          1/2*((GoB f)*(i1,j0)+(GoB f)*
+(i1+1,j0+1))) c= (L~f)` by SUBSET_1:43;
+     then A342: LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i0+1,j0+1)),
+          1/2*((GoB f)*(i1,j0)+(GoB f)*(i1+1,j0+1))) c= LeftComp f
+                             by A3,A5,A6,A49,A337,A340,A341,Th6,NAT_1:38;
+A343: LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i0+1,j0+1)),
+          1/2*((GoB f)*(i1,j0)+(GoB f)*(i1+1,j0+1))) meets
+             Int cell(GoB f,i1,j1) by A19,A20,A21,A24,A334,A335,A338,GOBOARD6:
+85,NAT_1:38;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f by A49,A50,A339,A342,A343,Th6;
+    suppose that
+A344: i0+1 = i1 and
+A345: j1+1 = j2;
+       left_cell(f,k) = cell(GoB f,i0,j1)
+                by A6,A7,A10,A11,A13,A14,A24,A39,A344,GOBOARD5:29,NAT_1:38
+        .= left_cell(f,k+1) by A4,A5,A13,A14,A16,A17,A25,A344,A345,GOBOARD5:28,
+NAT_1:38;
+    hence Int left_cell(f,k+1) c= LeftComp f by A3,A5,A6,NAT_1:38;
+    suppose that
+A346: j0+1 = j1 and
+A347: i1+1 = i2 and
+A348: i0 = 1 and
+A349: j1 = width GoB f;
+A350: left_cell(f,k) = cell(GoB f,i1-'1,j0)
+                by A6,A7,A10,A11,A13,A14,A24,A38,A346,GOBOARD5:28,NAT_1:38;
+A351: i0-'1 = 0 by A348,Th1;
+A352: j1-'1 = j0 by A346,BINARITH:39;
+A353: LSeg(1/2*((GoB f)*(1,j0)+(GoB f)*(1,j1))- |[1,0]|,
+         (GoB f)*(1,j1)+|[-1,1]|) is connected by Th8;
+A354: LSeg(1/2*((GoB f)*(1,j0)+(GoB f)*(1,j1))- |[1,0]|,
+         (GoB f)*(1,j1)+|[-1,1]|) meets Int cell(GoB f,i1-'1,j0)
+         by A21,A22,A24,A346,A351,GOBOARD6:88,NAT_1:38;
+      LSeg(1/2*((GoB f)*(1,j0)+(GoB f)*(1,j1))- |[1,0]|,
+         (GoB f)*(1,j1)+|[-1,1]|) misses L~f by A349,A352,GOBOARD8:33;
+     then LSeg(1/2*((GoB f)*(1,j0)+(GoB f)*(1,j1))- |[1,0]|,
+         (GoB f)*(1,j1)+|[-1,1]|) c= (L~f)` by SUBSET_1:43;
+     then A355: LSeg(1/2*((GoB f)*(1,j0)+(GoB f)*(1,j1))- |[1,0]|,
+         (GoB f)*(1,j1)+|[-1,1]|) c= LeftComp f
+                             by A3,A5,A6,A49,A350,A353,A354,Th6,NAT_1:38;
+       i1-'1 <= i1 by Th2;
+then A356:  i1-'1 <= len GoB f by A19,AXIOMS:22;
+     then A357: Int cell(GoB f,i1-'1,j1) is connected by A22,Th21;
+A358: LSeg(1/2*((GoB f)*(1,j0)+(GoB f)*(1,j1))- |[1,0]|,
+         (GoB f)*(1,j1)+|[-1,1]|) meets Int cell(GoB f,i0-'1,j1)
+             by A349,A351,GOBOARD6:92;
+       Int cell(GoB f,i1-'1,j1) misses L~f by A22,A356,GOBOARD7:14;
+     then Int cell(GoB f,i1-'1,j1) c= (L~f)` by SUBSET_1:43;
+     then A359:  Int cell(GoB f,i1-'1,j1) c= LeftComp f by A24,A49,A346,A355,
+A357,A358,Th6,NAT_1:38;
+A360: left_cell(f,k+1) = cell(GoB f,i1,j1)
+                by A4,A5,A13,A14,A16,A17,A25,A346,A347,GOBOARD5:29,NAT_1:38;
+A361: LSeg((GoB f)*(1,j1)+|[-1,1]|,
+        1/2*((GoB f)*(1,j1)+(GoB f)*(2,j1))+|[0,1]|) is connected by Th8;
+A362: LSeg((GoB f)*(1,j1)+|[-1,1]|,
+        1/2*((GoB f)*(1,j1)+(GoB f)*(2,j1))+|[0,1]|)
+           meets Int cell(GoB f,i1-'1,j1) by A24,A346,A349,A351,GOBOARD6:92,
+NAT_1:38;
+    LSeg((GoB f)*(1,j1)+|[-1,1]|,
+        1/2*((GoB f)*(1,j1)+(GoB f)*(2,j1))+|[0,1]|) misses L~f
+         by A349,GOBOARD8:29;
+     then LSeg((GoB f)*(1,j1)+|[-1,1]|,
+        1/2*((GoB f)*(1,j1)+(GoB f)*(2,j1))+|[0,1]|) c= (L~f)`
+          by SUBSET_1:43;
+     then A363: LSeg((GoB f)*(1,j1)+|[-1,1]|,
+        1/2*((GoB f)*(1,j1)+(GoB f)*(2,j1))+|[0,1]|) c= LeftComp f
+                             by A49,A359,A361,A362,Th6;
+A364: LSeg((GoB f)*(1,j1)+|[-1,1]|,
+        1/2*((GoB f)*(1,j1)+(GoB f)*(2,j1))+|[0,1]|) meets
+             Int cell(GoB f,i1,j1) by A20,A24,A346,A347,A348,A349,GOBOARD6:86,
+NAT_1:38;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f by A49,A50,A360,A363,A364,Th6;
+    suppose that
+A365: j0+1 = j1 and
+A366: i1+1 = i2 and
+A367: i0 <> 1 and
+A368: j1 = width GoB f;
+A369: left_cell(f,k) = cell(GoB f,i1-'1,j0)
+                by A6,A7,A10,A11,A13,A14,A24,A38,A365,GOBOARD5:28,NAT_1:38;
+      1 < i0 by A18,A367,AXIOMS:21;
+then A370: 1 <= i0-'1 by A24,A38,A365,NAT_1:38;
+A371: j1-'1 = j0 by A365,BINARITH:39;
+A372: i1-'1+(1+1) = i2 by A38,A366,XCMPLX_1:1;
+A373: LSeg(1/2*((GoB f)*(i1-'1,j0)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1-'1,j1)+(GoB f)*
+(i1,j1))+|[0,1]|) is connected by Th8;
+A374: LSeg(1/2*((GoB f)*(i1-'1,j0)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j1))+|[0,1]|)
+           meets Int cell(GoB f,i1-'1,j0)
+           by A19,A21,A22,A24,A38,A365,A370,GOBOARD6:85,NAT_1:38;
+       LSeg(1/2*((GoB f)*(i1-'1,j0)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j1))+|[0,1]|) misses L~f
+        by A5,A6,A11,A14,A17,A20,A24,A25,A38,A44,A365,A366,A368,A370,A371,A372,
+GOBOARD8:9,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i1-'1,j0)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j1))+|[0,1]|) c= (L~f)`
+           by SUBSET_1:43;
+     then A375: LSeg(1/2*((GoB f)*(i1-'1,j0)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j1))+|[0,1]|) c= LeftComp f
+                             by A3,A5,A6,A49,A369,A373,A374,Th6,NAT_1:38;
+       i1-'1 <= i1 by Th2;
+then A376:  i1-'1 <= len GoB f by A19,AXIOMS:22;
+     then A377: Int cell(GoB f,i1-'1,j1) is connected by A22,Th21;
+A378: LSeg(1/2*((GoB f)*(i1-'1,j0)+(GoB f)*(i1,j1)),
+          1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j1))+|[0,1]|) meets
+             Int cell(GoB f,i0-'1,j1) by A18,A24,A38,A365,A368,A370,GOBOARD6:86
+,NAT_1:38;
+       Int cell(GoB f,i1-'1,j1) misses L~f by A22,A376,GOBOARD7:14;
+     then Int cell(GoB f,i1-'1,j1) c= (L~f)` by SUBSET_1:43;
+     then A379:  Int cell(GoB f,i1-'1,j1) c= LeftComp f by A24,A49,A365,A375,
+A377,A378,Th6,NAT_1:38;
+A380: left_cell(f,k+1) = cell(GoB f,i1,j1)
+                by A4,A5,A13,A14,A16,A17,A25,A365,A366,GOBOARD5:29,NAT_1:38;
+A381: LSeg(1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j1))+|[0,1]|,
+         1/2*((GoB f)*(i1,j1)+(GoB f)*(i2,j1))+|[0,1]|) is connected by Th8;
+A382: LSeg(1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j1))+|[0,1]|,
+         1/2*((GoB f)*(i1,j1)+(GoB f)*(i2,j1))+|[0,1]|)
+           meets Int cell(GoB f,i1-'1,j1) by A19,A24,A38,A365,A368,A370,
+GOBOARD6:86,NAT_1:38;
+      LSeg(1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j1))+|[0,1]|,
+         1/2*((GoB f)*(i1,j1)+(GoB f)*(i2,j1))+|[0,1]|) misses L~f
+            by A20,A24,A38,A365,A368,A370,A372,GOBOARD8:28,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j1))+|[0,1]|,
+         1/2*((GoB f)*(i1,j1)+(GoB f)*(i2,j1))+|[0,1]|) c= (L~f)`
+          by SUBSET_1:43;
+     then A383: LSeg(1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j1))+|[0,1]|,
+         1/2*((GoB f)*(i1,j1)+(GoB f)*(i2,j1))+|[0,1]|) c= LeftComp f
+                             by A49,A379,A381,A382,Th6;
+A384: LSeg(1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j1))+|[0,1]|,
+         1/2*((GoB f)*(i1,j1)+(GoB f)*(i2,j1))+|[0,1]|) meets
+             Int cell(GoB f,i1,j1) by A19,A20,A366,A368,GOBOARD6:86;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f by A49,A50,A380,A383,A384,Th6;
+    suppose that
+A385: j0+1 = j1 and
+A386: i1+1 = i2 and
+A387: i0 = 1 and
+A388: j1 <> width GoB f;
+A389: left_cell(f,k) = cell(GoB f,i1-'1,j0)
+                by A6,A7,A10,A11,A13,A14,A24,A38,A385,GOBOARD5:28,NAT_1:38;
+      width GoB f > j1 by A22,A388,AXIOMS:21;
+then A390: width GoB f >= j1+1 by NAT_1:38;
+A391:  i0-'1 = 0 by A387,Th1;
+A392: LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i0,j1))- |[1,0]|,
+          1/2*((GoB f)*(i0,j1)+(GoB f)*
+(i0,j1+1))- |[1,0]|) is connected by Th8;
+A393: LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i0,j1))- |[1,0]|,
+          1/2*((GoB f)*(i0,j1)+(GoB f)*(i0,j1+1))- |[1,0]|)
+           meets Int cell(GoB f,i1-'1,j0)
+            by A21,A22,A24,A385,A387,A391,GOBOARD6:88,NAT_1:38;
+       LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i0,j1))- |[1,0]|,
+          1/2*((GoB f)*(i0,j1)+(GoB f)*(i0,j1+1))- |[1,0]|) misses L~f
+         by A21,A47,A385,A387,A390,GOBOARD8:31;
+     then LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i0,j1))- |[1,0]|,
+          1/2*((GoB f)*(i0,j1)+(GoB f)*(i0,j1+1))- |[1,0]|) c= (L~f)`
+           by SUBSET_1:43;
+     then A394: LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i0,j1))- |[1,0]|,
+          1/2*((GoB f)*(i0,j1)+(GoB f)*(i0,j1+1))- |[1,0]|) c= LeftComp f
+                             by A3,A5,A6,A49,A389,A392,A393,Th6,NAT_1:38;
+       i1-'1 <= i1 by Th2;
+then A395:  i1-'1 <= len GoB f by A19,AXIOMS:22;
+     then A396: Int cell(GoB f,i1-'1,j1) is connected by A22,Th21;
+A397: LSeg(1/2*((GoB f)*(i0,j0)+(GoB f)*(i0,j1))- |[1,0]|,
+          1/2*((GoB f)*(i0,j1)+(GoB f)*(i0,j1+1))- |[1,0]|) meets
+             Int cell(GoB f,i0-'1,j1) by A22,A387,A390,A391,GOBOARD6:88;
+       Int cell(GoB f,i1-'1,j1) misses L~f by A22,A395,GOBOARD7:14;
+     then Int cell(GoB f,i1-'1,j1) c= (L~f)` by SUBSET_1:43;
+     then A398:  Int cell(GoB f,i1-'1,j1) c= LeftComp f by A24,A49,A385,A394,
+A396,A397,Th6,NAT_1:38;
+A399: left_cell(f,k+1) = cell(GoB f,i1,j1)
+                by A4,A5,A13,A14,A16,A17,A25,A385,A386,GOBOARD5:29,NAT_1:38;
+A400: LSeg(1/2*((GoB f)*(i1,j0+1)+(GoB f)*(i1,j0+2))- |[1,0]|,
+          1/2*((GoB f)*(i1,j0+1)+(GoB f)*(i2,j0+2))) is connected by Th8;
+A401: LSeg(1/2*((GoB f)*(i1,j0+1)+(GoB f)*(i1,j0+2))- |[1,0]|,
+          1/2*((GoB f)*(i1,j0+1)+(GoB f)*(i2,j0+2)))
+           meets Int cell(GoB f,i1-'1,j1)
+           by A22,A24,A47,A385,A387,A390,A391,GOBOARD6:88,NAT_1:38;
+       LSeg(1/2*((GoB f)*(i1,j0+1)+(GoB f)*(i1,j0+2))- |[1,0]|,
+          1/2*((GoB f)*(i1,j0+1)+(GoB f)*(i2,j0+2))) misses L~f
+          by A5,A6,A11,A14,A17,A21,A24,A25,A44,A47,A385,A386,A387,A390,GOBOARD8
+:18,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i1,j0+1)+(GoB f)*(i1,j0+2))- |[1,0]|,
+          1/2*((GoB f)*(i1,j0+1)+(GoB f)*
+(i2,j0+2))) c= (L~f)` by SUBSET_1:43;
+     then A402: LSeg(1/2*((GoB f)*(i1,j0+1)+(GoB f)*(i1,j0+2))- |[1,0]|,
+          1/2*((GoB f)*(i1,j0+1)+(GoB f)*(i2,j0+2))) c= LeftComp f
+                             by A49,A398,A400,A401,Th6;
+A403: LSeg(1/2*((GoB f)*(i1,j0+1)+(GoB f)*(i1,j0+2))- |[1,0]|,
+          1/2*((GoB f)*(i1,j0+1)+(GoB f)*(i2,j0+2))) meets
+             Int cell(GoB f,i1,j1) by A19,A20,A22,A47,A385,A386,A390,GOBOARD6:
+85;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f by A49,A50,A399,A402,A403,Th6;
+    suppose that
+A404: j0+1 = j1 and
+A405: i1+1 = i2 and
+A406: i0 <> 1 and
+A407: j1 <> width GoB f;
+A408: left_cell(f,k) = cell(GoB f,i1-'1,j0)
+                by A6,A7,A10,A11,A13,A14,A24,A38,A404,GOBOARD5:28,NAT_1:38;
+      1 < i0 by A18,A406,AXIOMS:21;
+then A409: 1 <= i0-'1 by A24,A38,A404,NAT_1:38;
+      width GoB f > j1 by A22,A407,AXIOMS:21;
+then A410: width GoB f >= j1+1 by NAT_1:38;
+A411: i1-'1+(1+1) = i2 by A38,A405,XCMPLX_1:1;
+A412: LSeg(1/2*((GoB f)*(i0-'1,j0)+(GoB f)*(i0,j1)),
+          1/2*((GoB f)*(i0-'1,j1)+(GoB f)*(i0,j1+1))) is connected by Th8;
+A413: LSeg(1/2*((GoB f)*(i0-'1,j0)+(GoB f)*(i0,j1)),
+          1/2*((GoB f)*(i0-'1,j1)+(GoB f)*(i0,j1+1)))
+           meets Int cell(GoB f,i1-'1,j0)
+           by A19,A21,A22,A24,A38,A404,A409,GOBOARD6:85,NAT_1:38;
+       LSeg(1/2*((GoB f)*(i0-'1,j0)+(GoB f)*(i0,j1)),
+          1/2*((GoB f)*(i0-'1,j1)+(GoB f)*(i0,j1+1))) misses L~f
+      by A5,A6,A11,A14,A17,A20,A21,A24,A25,A38,A44,A47,A404,A405,A409,A410,A411
+,GOBOARD8:3,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i0-'1,j0)+(GoB f)*(i0,j1)),
+          1/2*((GoB f)*(i0-'1,j1)+(GoB f)*
+(i0,j1+1))) c= (L~f)` by SUBSET_1:43;
+     then A414: LSeg(1/2*((GoB f)*(i0-'1,j0)+(GoB f)*(i0,j1)),
+          1/2*((GoB f)*(i0-'1,j1)+(GoB f)*(i0,j1+1))) c= LeftComp f
+                             by A3,A5,A6,A49,A408,A412,A413,Th6,NAT_1:38;
+       i1-'1 <= i1 by Th2;
+then A415:  i1-'1 <= len GoB f by A19,AXIOMS:22;
+     then A416: Int cell(GoB f,i1-'1,j1) is connected by A22,Th21;
+A417: LSeg(1/2*((GoB f)*(i0-'1,j0)+(GoB f)*(i0,j1)),
+          1/2*((GoB f)*(i0-'1,j1)+(GoB f)*(i0,j1+1))) meets
+             Int cell(GoB f,i0-'1,j1) by A18,A22,A24,A38,A404,A409,A410,
+GOBOARD6:85,NAT_1:38;
+       Int cell(GoB f,i1-'1,j1) misses L~f by A22,A415,GOBOARD7:14;
+     then Int cell(GoB f,i1-'1,j1) c= (L~f)` by SUBSET_1:43;
+     then A418:  Int cell(GoB f,i1-'1,j1) c= LeftComp f by A24,A49,A404,A414,
+A416,A417,Th6,NAT_1:38;
+A419: left_cell(f,k+1) = cell(GoB f,i1,j1)
+                by A4,A5,A13,A14,A16,A17,A25,A404,A405,GOBOARD5:29,NAT_1:38;
+A420: LSeg(1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j1+1)),
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i2,j1+1))) is connected by Th8;
+A421: LSeg(1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j1+1)),
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i2,j1+1)))
+           meets Int cell(GoB f,i1-'1,j1) by A19,A22,A24,A38,A404,A409,A410,
+GOBOARD6:85,NAT_1:38;
+       LSeg(1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j1+1)),
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i2,j1+1))) misses L~f
+      by A5,A6,A11,A14,A17,A20,A21,A24,A25,A38,A44,A47,A404,A405,A409,A410,A411
+,GOBOARD8:15,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j1+1)),
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i2,j1+1))) c= (L~f)` by SUBSET_1:43;
+     then A422: LSeg(1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j1+1)),
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i2,j1+1))) c= LeftComp f
+                             by A49,A418,A420,A421,Th6;
+A423: LSeg(1/2*((GoB f)*(i1-'1,j1)+(GoB f)*(i1,j1+1)),
+          1/2*((GoB f)*(i1,j1)+(GoB f)*(i2,j1+1))) meets
+             Int cell(GoB f,i1,j1) by A19,A20,A22,A405,A410,GOBOARD6:85;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f by A49,A50,A419,A422,A423,Th6;
+    suppose that
+A424: j0+1 = j1 and
+A425: j1+1 = j2 and
+A426: i0 = 1;
+A427: left_cell(f,k) = cell(GoB f,0,j0)
+        by A6,A7,A10,A11,A13,A14,A24,A51,A424,A426,GOBOARD5:28,NAT_1:38;
+A428: left_cell(f,k+1) = cell(GoB f,0,j1)
+                by A4,A5,A13,A14,A16,A17,A24,A25,A51,A424,A425,A426,GOBOARD5:28
+,NAT_1:38;
+A429: LSeg(1/2*((GoB f)*(1,j0)+(GoB f)*(1,j1))- |[1,0]|,
+          1/2*((GoB f)*(1,j1)+(GoB f)*(1,j2))- |[1,0]|) is connected by Th8;
+A430: LSeg(1/2*((GoB f)*(1,j0)+(GoB f)*(1,j1))- |[1,0]|,
+          1/2*((GoB f)*(1,j1)+(GoB f)*(1,j2))- |[1,0]|)
+           meets Int cell(GoB f,0,j0) by A21,A22,A424,GOBOARD6:88;
+       LSeg(1/2*((GoB f)*(1,j0)+(GoB f)*(1,j1))- |[1,0]|,
+          1/2*((GoB f)*(1,j1)+(GoB f)*(1,j2))- |[1,0]|) misses L~f
+         by A21,A23,A47,A424,A425,GOBOARD8:31;
+     then LSeg(1/2*((GoB f)*(1,j0)+(GoB f)*(1,j1))- |[1,0]|,
+               1/2*((GoB f)*(1,j1)+(GoB f)*(1,j2))- |[1,0]|) c= (L~f)`
+           by SUBSET_1:43;
+     then A431: LSeg(1/2*((GoB f)*(1,j0)+(GoB f)*(1,j1))- |[1,0]|,
+          1/2*((GoB f)*(1,j1)+(GoB f)*(1,j2))- |[1,0]|) c= LeftComp f
+                             by A3,A5,A6,A49,A427,A429,A430,Th6,NAT_1:38;
+A432: LSeg(1/2*((GoB f)*(1,j0)+(GoB f)*(1,j1))- |[1,0]|,
+          1/2*((GoB f)*(1,j1)+(GoB f)*(1,j2))- |[1,0]|) meets
+             Int cell(GoB f,0,j1) by A22,A23,A425,GOBOARD6:88;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f by A49,A50,A428,A431,A432,Th6;
+    suppose that
+A433: j0+1 = j1 and
+A434: j1+1 = j2 and
+A435: i0 <> 1;
+A436: left_cell(f,k) = cell(GoB f,i1-'1,j0)
+                by A6,A7,A10,A11,A13,A14,A24,A38,A433,GOBOARD5:28,NAT_1:38;
+      1 < i0 by A18,A435,AXIOMS:21;
+then A437: 1 <= i0-'1 by A24,A38,A433,NAT_1:38;
+A438: left_cell(f,k+1) = cell(GoB f,i1-'1,j1)
+                by A4,A5,A13,A14,A16,A17,A25,A38,A434,GOBOARD5:28,NAT_1:38;
+A439: LSeg(1/2*((GoB f)*(i0-'1,j0)+(GoB f)*(i0,j1)),
+          1/2*((GoB f)*(i0-'1,j1)+(GoB f)*(i0,j2))) is connected by Th8;
+A440: LSeg(1/2*((GoB f)*(i0-'1,j0)+(GoB f)*(i0,j1)),
+          1/2*((GoB f)*(i0-'1,j1)+(GoB f)*(i0,j2)))
+           meets Int cell(GoB f,i1-'1,j0)
+             by A19,A21,A22,A24,A38,A433,A437,GOBOARD6:85,NAT_1:38;
+       LSeg(1/2*((GoB f)*(i0-'1,j0)+(GoB f)*(i0,j1)),
+          1/2*((GoB f)*(i0-'1,j1)+(GoB f)*(i0,j2))) misses L~f
+       by A5,A6,A11,A14,A17,A18,A21,A23,A24,A25,A38,A44,A47,A433,A434,A437,
+GOBOARD8:1,NAT_1:38;
+     then LSeg(1/2*((GoB f)*(i0-'1,j0)+(GoB f)*(i0,j1)),
+          1/2*((GoB f)*(i0-'1,j1)+(GoB f)*(i0,j2))) c= (L~f)` by SUBSET_1:43;
+     then A441: LSeg(1/2*((GoB f)*(i0-'1,j0)+(GoB f)*(i0,j1)),
+          1/2*((GoB f)*(i0-'1,j1)+(GoB f)*(i0,j2))) c= LeftComp f
+                             by A3,A5,A6,A49,A436,A439,A440,Th6,NAT_1:38;
+A442: LSeg(1/2*((GoB f)*(i0-'1,j0)+(GoB f)*(i0,j1)),
+          1/2*((GoB f)*(i0-'1,j1)+(GoB f)*(i0,j2))) meets
+             Int cell(GoB f,i0-'1,j1) by A18,A22,A23,A24,A38,A433,A434,A437,
+GOBOARD6:85,NAT_1:38;
+       Int left_cell(f,k+1) misses L~f by A4,A5,GOBOARD8:37;
+     then Int left_cell(f,k+1) c= (L~f)` by SUBSET_1:43;
+    hence Int left_cell(f,k+1) c= LeftComp f by A24,A49,A50,A433,A438,A441,A442
+,Th6,NAT_1:38;
+   end;
+    hence Int left_cell(f,k+1) c= LeftComp f;
+    end;
+   end;
+ thus for k holds P[k] from Ind(A1,A2);
+end;
+
+theorem
+   GoB Rev f = GoB f by Lm1;
+
+theorem Th26:
+ RightComp f = LeftComp Rev f
+proof
+    LeftComp Rev f is_a_component_of (L~Rev f)` by Def1;
+then A1: LeftComp Rev f is_a_component_of (L~f)` by SPPOL_2:22;
+   A2: len f >= 4 by GOBOARD7:36;
+then A3: len f >= 1+1 by AXIOMS:22;
+     len f >= 1 by A2,AXIOMS:22;
+then A4: len f -' 1 + 1 = len f by AMI_5:4;
+then A5: 1 <= len f -' 1 by A3,REAL_1:53;
+A6: len f -' 1 + 1 <= len Rev f by A4,FINSEQ_5:def 3;
+    right_cell(f,1) = left_cell(Rev f,len f -' 1) by A4,A5,Th13;
+  then Int right_cell(f,1) c= LeftComp Rev f by A5,A6,Th24;
+ hence thesis by A1,Def2;
+end;
+
+theorem
+   RightComp Rev f = LeftComp f
+proof Rev Rev f = f by FINSEQ_6:29;
+ hence thesis by Th26;
+end;
+
+theorem
+   for k st 1 <= k & k+1 <= len f holds Int right_cell(f,k) c= RightComp f
+proof let k such that
+A1: 1 <= k & k+1 <= len f;
+A2: len f = len Rev f by FINSEQ_5:def 3;
+     k <= len f by A1,NAT_1:38;
+   then A3:  len f-'k+k = len f by AMI_5:4;
+then A4: 1 <= len f-'k & len f-'k+1 <= len f by A1,AXIOMS:24,REAL_1:53;
+   then A5: right_cell(f,k) = left_cell(Rev f,len f-'k) by A1,A3,Th13;
+    RightComp f = LeftComp Rev f by Th26;
+ hence Int right_cell(f,k) c= RightComp f by A2,A4,A5,Th24;
+end;

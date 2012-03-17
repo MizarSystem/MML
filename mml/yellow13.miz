@@ -1,0 +1,1296 @@
+:: Introduction to Meet-Continuous Topological Lattices
+::  by Artur Korni{\l}owicz
+::
+:: Received November 3, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary FINSET_1, REALSET1, ORDERS_1, WAYBEL_9, URYSOHN1, PRE_TOPC, BOOLE,
+      COMPTS_1, SUBSET_1, NATTRA_1, TSP_1, RELAT_2, WAYBEL_0, RELAT_1, SEQM_3,
+      FUNCT_1, YELLOW_2, YELLOW_1, FILTER_2, ORDINAL2, YELLOW_0, WELLORD1,
+      WAYBEL_1, SGRAPH1, BHSP_3, LATTICES, LATTICE3, TDLAT_3, CANTOR_1,
+      SETFAM_1, RLVECT_3, TOPS_1, CONNSP_2, PRELAMB, TARSKI, WAYBEL_2,
+      YELLOW13;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
+      FINSET_1, STRUCT_0, ORDERS_1, PRE_TOPC, TOPS_1, GROUP_1, COMPTS_1,
+      TDLAT_2, TDLAT_3, TSP_1, LATTICE3, CANTOR_1, REALSET1, BORSUK_1,
+      URYSOHN1, YELLOW_0, WAYBEL_0, YELLOW_1, ORDERS_3, WAYBEL_1, YELLOW_2,
+      YELLOW_3, WAYBEL_2, YELLOW_8, WAYBEL_9;
+ constructors CANTOR_1, TOPS_1, TDLAT_2, TDLAT_3, TSP_1, URYSOHN1, YELLOW_8,
+      WAYBEL_1, WAYBEL_3, YELLOW_9, ORDERS_3, GROUP_1, LATTICE3, XCMPLX_0,
+      MEMBERED;
+ clusters STRUCT_0, TOPS_1, FINSET_1, REALSET1, TDLAT_3, TEX_1, YELLOW_0,
+      YELLOW_1, YELLOW_2, WAYBEL_0, WAYBEL_1, WAYBEL_3, YELLOW_8, YELLOW_9,
+      WAYBEL11, WAYBEL12, YELLOW11, YELLOW12, BORSUK_1, RELSET_1, SUBSET_1,
+      RLVECT_2, XREAL_0, MEMBERED, ZFMISC_1;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, COMPTS_1, GROUP_1, URYSOHN1, LATTICE3, WAYBEL_0, WAYBEL_1,
+      YELLOW_8, BORSUK_1, XBOOLE_0;
+ theorems TARSKI, STRUCT_0, PRE_TOPC, ORDERS_1, TOPS_1, WAYBEL_3, CONNSP_2,
+      TDLAT_3, SETFAM_1, COMPTS_1, CANTOR_1, LATTICE3, ZFMISC_1, YELLOW_0,
+      YELLOW_2, YELLOW_3, YELLOW_8, WAYBEL_1, WAYBEL14, YELLOW_9, URYSOHN1,
+      HEINE, GROUP_1, TSP_1, REALSET1, YELLOW_4, WAYBEL_0, RELAT_1, TDLAT_2,
+      FUNCT_1, FUNCT_2, ORDERS_3, BORSUK_1, TEX_1, WAYBEL_2, YELLOW_6,
+      XBOOLE_0, XBOOLE_1;
+ schemes FINSET_1;
+
+begin  :: Preliminaries
+
+definition let S be finite 1-sorted;
+ cluster the carrier of S -> finite;
+coherence by GROUP_1:def 13;
+end;
+
+definition let S be trivial 1-sorted;
+ cluster the carrier of S -> trivial;
+coherence by REALSET1:def 13;
+end;
+
+definition
+ cluster trivial -> finite set;
+coherence
+  proof
+    let S be set such that
+A1:   S is trivial;
+    per cases by A1,REALSET1:def 12;
+    suppose S is empty;
+    then reconsider T = S as empty set;
+      T is finite;
+    hence thesis;
+    suppose ex x being set st S = {x};
+    hence thesis;
+  end;
+end;
+
+definition
+ cluster trivial -> finite 1-sorted;
+coherence
+  proof
+    let S be 1-sorted such that
+A1:   S is trivial;
+    per cases;
+    suppose S is empty;
+    then reconsider R = S as empty 1-sorted;
+      the carrier of R is finite;
+    hence the carrier of S is finite;
+    suppose S is non empty;
+    then reconsider R = S as non empty trivial 1-sorted by A1;
+      the carrier of R is finite;
+    hence the carrier of S is finite;
+  end;
+end;
+
+definition
+ cluster non trivial -> non empty 1-sorted;
+coherence
+  proof
+    let S be 1-sorted;
+    assume S is non trivial;
+    then reconsider A = the carrier of S as non trivial set by REALSET1:def 13;
+      A is non empty;
+    hence thesis by STRUCT_0:def 1;
+  end;
+end;
+
+definition
+ cluster strict non empty trivial 1-sorted;
+existence
+  proof
+    consider A being strict non empty trivial 1-sorted;
+    take A;
+    thus thesis;
+  end;
+
+ cluster strict non empty trivial RelStr;
+existence
+  proof
+    consider A being strict non empty trivial RelStr;
+    take A;
+    thus thesis;
+  end;
+
+ cluster strict non empty trivial TopRelStr;
+existence
+  proof
+    consider A being strict non empty trivial TopRelStr;
+    take A;
+    thus thesis;
+  end;
+end;
+
+theorem Th1:
+ for T being being_T1 (non empty TopSpace),
+     A being finite Subset of T holds A is closed
+  proof
+    let T be being_T1 (non empty TopSpace),
+        A be finite Subset of T;
+defpred P[set] means
+ ex S being Subset of T st $1 = S & S is closed;
+A1: A is finite;
+A2: P[{}]
+    proof
+      take {}T;
+      thus {}T = {};
+      thus thesis;
+    end;
+A3: for x, C being set st x in A & C c= A & P[C] holds P[C \/ {x}]
+    proof
+      let x, C be set; assume
+A4:     x in A & C c= A & P[C];
+      then consider S being Subset of T such that
+A5:     C = S & S is closed;
+      reconsider y = x as Element of T by A4;
+        {y} is closed by URYSOHN1:27;
+      then S \/ {y} is closed by A5,TOPS_1:36;
+      hence P[C \/ {x}] by A5;
+    end;
+      P[A] from Finite(A1,A2,A3);
+    hence thesis;
+  end;
+
+definition let T be being_T1 (non empty TopSpace);
+ cluster finite -> closed Subset of T;
+coherence by Th1;
+end;
+
+definition let T be compact TopStruct;
+ cluster [#]T -> compact;
+coherence by COMPTS_1:10;
+end;
+
+definition
+ cluster strict non empty trivial TopSpace;
+existence
+  proof
+    consider T being strict non empty trivial TopSpace;
+    take T;
+    thus thesis;
+  end;
+end;
+
+definition
+ cluster finite being_T1 -> discrete (non empty TopSpace);
+coherence
+  proof
+    let T be non empty TopSpace such that
+A1:   T is finite being_T1;
+      now
+      let A be Subset of T;
+      reconsider W = T as finite (non empty TopSpace) by A1;
+      reconsider K = A as Subset of W;
+        K is closed by A1,Th1;
+      hence A is closed;
+    end;
+    hence thesis by TDLAT_3:18;
+  end;
+end;
+
+definition
+ cluster finite -> compact TopSpace;
+coherence
+  proof
+    let T be TopSpace;
+    assume T is finite;
+    then the carrier of T is finite by GROUP_1:def 13;
+    hence thesis by HEINE:10;
+  end;
+end;
+
+theorem Th2:
+ for T being discrete non empty TopSpace holds T is_T4
+  proof
+    let T be discrete non empty TopSpace;
+    let W, V be Subset of T such that
+A1:   W <> {} & V <> {} & W is closed & V is closed & W /\ V = {};
+    take P = W, Q = V;
+    thus P is open & Q is open by TDLAT_3:17;
+    thus W c= P & V c= Q & P /\ Q = {} by A1;
+  end;
+
+theorem Th3:
+ for T being discrete non empty TopSpace holds T is_T3
+  proof
+    let T be discrete non empty TopSpace;
+    let p be Point of T,
+        P be Subset of T such that
+A1:   P <> {} & P is closed & not p in P;
+    take W = {p}, V = P;
+    thus W is open & V is open by TDLAT_3:17;
+      W /\ V c= {}
+    proof
+      let a be set;
+      assume a in W /\ V;
+then A2:   a in W & a in V by XBOOLE_0:def 3;
+      assume not a in {};
+      thus contradiction by A1,A2,TARSKI:def 1;
+    end;
+    hence p in W & P c= V & W /\ V = {} by TARSKI:def 1,XBOOLE_1:3;
+  end;
+
+theorem Th4:
+ for T being discrete non empty TopSpace holds T is_T2
+  proof
+    let T be discrete non empty TopSpace;
+    let p, q be Point of T such that
+A1:  not p = q;
+    take W = {p}, V = {q};
+    thus W is open & V is open by TDLAT_3:17;
+      W /\ V c= {}
+    proof
+      let a be set;
+      assume a in W /\ V;
+      then a in W & a in V by XBOOLE_0:def 3;
+then A2:   a = p & a = q by TARSKI:def 1;
+      assume not a in {};
+      thus contradiction by A1,A2;
+    end;
+    hence p in W & q in V & W /\ V = {} by TARSKI:def 1,XBOOLE_1:3;
+  end;
+
+theorem Th5:
+ for T being discrete non empty TopSpace holds T is_T1
+  proof
+    let T be discrete non empty TopSpace;
+      for p being Point of T holds {p} is closed by TDLAT_3:18;
+    hence T is_T1 by URYSOHN1:27;
+  end;
+
+definition
+ cluster discrete non empty -> being_T4 being_T3 being_T2 being_T1 TopSpace;
+coherence by Th2,Th3,Th4,Th5;
+end;
+
+definition
+ cluster being_T4 being_T1 -> being_T3 (non empty TopSpace);
+coherence
+  proof
+    let T be non empty TopSpace such that
+A1:   T is being_T4 being_T1;
+    let p be Point of T,
+        P be Subset of T such that
+A2:   P <> {} & P is closed & not p in P;
+A3: {p} is closed by A1,URYSOHN1:27;
+      P /\ {p} c= {}
+    proof
+      let a be set;
+      assume a in P /\ {p};
+then A4:   a in P & a in {p} by XBOOLE_0:def 3;
+      assume not a in {};
+      thus contradiction by A2,A4,TARSKI:def 1;
+    end;
+    then P /\ {p} = {} by XBOOLE_1:3;
+    then P misses {p} by XBOOLE_0:def 7;
+    then consider R, Q being Subset of T such that
+A5:   R is open & Q is open & {p} c= R & P c= Q & R misses Q
+       by A1,A2,A3,COMPTS_1:def 6;
+    take R, Q;
+      p in {p} by TARSKI:def 1;
+    hence thesis by A5;
+  end;
+end;
+
+definition
+ cluster being_T3 being_T1 -> being_T2 (non empty TopSpace);
+coherence
+  proof
+    let T be non empty TopSpace such that
+A1:   T is being_T3 being_T1;
+    let p, q be Point of T;
+    assume p <> q;
+then A2: not p in {q} by TARSKI:def 1;
+      {q} is closed by A1,URYSOHN1:27;
+    then consider W, V being Subset of T such that
+A3:   W is open & V is open & p in W & {q} c= V & W misses V
+       by A1,A2,COMPTS_1:def 5;
+    take W, V;
+      q in {q} by TARSKI:def 1;
+    hence thesis by A3;
+  end;
+end;
+
+definition
+ cluster being_T2 -> being_T1 TopSpace;
+coherence
+  proof
+    let T be TopSpace such that
+A1:   for p, q being Point of T st not p = q
+       ex W, V being Subset of T st W is open & V is open &
+        p in W & q in V & W misses V;
+    let p, q be Point of T;
+    assume p <> q;
+    then consider W, V being Subset of T such that
+A2:   W is open & V is open & p in W & q in V & W misses V by A1;
+    take W, V;
+    thus thesis by A2,XBOOLE_0:3;
+  end;
+end;
+
+definition
+ cluster being_T1 -> T_0 TopSpace;
+coherence
+  proof
+    let T be TopSpace such that
+A1:  for p, q being Point of T st not p = q
+      ex W, V being Subset of T st W is open & V is open &
+       p in W & not q in W & q in V & not p in V;
+      for p, q being Point of T st p <> q holds
+     (ex V being Subset of T st V is open & p in V & not q in V)
+     or
+     (ex W being Subset of T st W is open & not p in W & q in W)
+    proof
+      let p, q be Point of T;
+      assume p <> q;
+      then ex W, V being Subset of T st W is open & V is open &
+       p in W & not q in W & q in V & not p in V by A1;
+      hence thesis;
+    end;
+    hence thesis by TSP_1:def 3;
+  end;
+end;
+
+theorem Th6:
+ for S being reflexive RelStr, T being reflexive transitive RelStr,
+     f being map of S, T, X being Subset of S
+  holds downarrow (f.:X) c= downarrow (f.:downarrow X)
+  proof
+    let S be reflexive RelStr,
+        T be reflexive transitive RelStr,
+        f be map of S, T,
+        X be Subset of S;
+      X c= downarrow X by WAYBEL_0:16;
+    then f.:X c= f.:downarrow X by RELAT_1:156;
+    hence downarrow f.:X c= downarrow f.:downarrow X by YELLOW_3:6;
+end;
+
+theorem
+   for S being reflexive RelStr, T being reflexive transitive RelStr,
+     f being map of S, T, X being Subset of S st f is monotone
+ holds downarrow (f.:X) = downarrow (f.:downarrow X)
+  proof
+    let S be reflexive RelStr,
+        T be reflexive transitive RelStr,
+        f be map of S, T,
+        X be Subset of S such that
+A1:   f is monotone;
+    thus downarrow f.:X c= downarrow f.:downarrow X by Th6;
+    let a be set; assume
+A2:   a in downarrow (f.:downarrow X);
+    then reconsider T1 = T as non empty reflexive transitive RelStr
+     by STRUCT_0:def 1;
+    reconsider b = a as Element of T1 by A2;
+    consider fx being Element of T1 such that
+A3:   fx >= b & fx in f.:downarrow X by A2,WAYBEL_0:def 15;
+    consider x being set such that
+A4:   x in dom f & x in downarrow X & fx = f.x by A3,FUNCT_1:def 12;
+    reconsider S1 = S as non empty reflexive RelStr by A4,STRUCT_0:def 1;
+    reconsider x as Element of S1 by A4;
+    reconsider f1 = f as map of S1, T1;
+    consider y being Element of S1 such that
+A5:   y >= x & y in X by A4,WAYBEL_0:def 15;
+      f1.x <= f1.y by A1,A5,ORDERS_3:def 5;
+then A6: b <= f1.y by A3,A4,ORDERS_1:26;
+      the carrier of T1 <> {};
+    then dom f = the carrier of S by FUNCT_2:def 1;
+    then f.y in f.:X by A5,FUNCT_1:def 12;
+    hence a in downarrow (f.:X) by A6,WAYBEL_0:def 15;
+  end;
+
+theorem Th8:
+ for N being non empty Poset holds IdsMap N is one-to-one
+  proof
+    let N be non empty Poset;
+    set f = IdsMap N;
+    let x, y be Element of N such that
+A1:   f.x = f.y;
+      f.x = downarrow x & f.y = downarrow y by YELLOW_2:def 4;
+    hence x = y by A1,WAYBEL_0:19;
+  end;
+
+definition let N be non empty Poset;
+ cluster IdsMap N -> one-to-one;
+coherence by Th8;
+end;
+
+theorem Th9:
+ for N being finite LATTICE holds SupMap N is one-to-one
+  proof
+    let N be finite LATTICE;
+    set f = SupMap N;
+    let x, y be Element of InclPoset Ids N such that
+A1:   f.x = f.y;
+    reconsider X = x, Y = y as Ideal of N by YELLOW_2:43;
+A2: f.x = sup X & f.y = sup Y by YELLOW_2:def 3;
+      X = Y
+    proof
+      hereby
+        let a be set; assume
+A3:       a in X;
+        then reconsider b = a as Element of N;
+          ex_sup_of X,N by YELLOW_0:17;
+then A4:     b <= sup Y by A1,A2,A3,YELLOW_4:1;
+          sup Y in Y by WAYBEL_3:16;
+        hence a in Y by A4,WAYBEL_0:def 19;
+      end;
+      let a be set; assume
+A5:     a in Y;
+      then reconsider b = a as Element of N;
+        ex_sup_of Y,N by YELLOW_0:17;
+then A6:   b <= sup X by A1,A2,A5,YELLOW_4:1;
+        sup X in X by WAYBEL_3:16;
+      hence a in X by A6,WAYBEL_0:def 19;
+    end;
+    hence thesis;
+  end;
+
+definition let N be finite LATTICE;
+ cluster SupMap N -> one-to-one;
+coherence by Th9;
+end;
+
+theorem
+   for N being finite LATTICE holds N, InclPoset Ids N are_isomorphic
+  proof
+    let N be finite LATTICE;
+    set I = InclPoset Ids N;
+    take i = IdsMap N;
+      now
+      thus N is non empty & I is non empty implies
+        i is one-to-one monotone &
+        ex s being map of I,N st s = i" & s is monotone
+      proof
+        assume N is non empty & I is non empty;
+        thus i is one-to-one monotone;
+        take s = SupMap N;
+A1:     dom s = the carrier of I by FUNCT_2:def 1;
+          [i,s] is Galois by WAYBEL_1:60;
+        then i is onto by WAYBEL_1:26;
+then A2:     rng i = the carrier of I by FUNCT_2:def 3;
+          for y, x being set holds
+         y in rng i & x = s.y iff x in dom i & y = i.x
+        proof
+          let y, x be set;
+A3:       dom i = the carrier of N by FUNCT_2:def 1;
+          hereby
+            assume that
+A4:           y in rng i and
+A5:           x = s.y;
+            reconsider Y = y as Element of I by A4;
+            reconsider Y1 = Y as Ideal of N by YELLOW_2:43;
+              x = s.Y by A5;
+            hence x in dom i by A3;
+A6:         sup Y1 in Y1 by WAYBEL_3:16;
+            thus i.x = i.sup Y1 by A5,YELLOW_2:def 3
+                    .= downarrow sup Y1 by YELLOW_2:def 4
+                    .= y by A6,WAYBEL14:5;
+          end;
+          assume that
+A7:         x in dom i and
+A8:         y = i.x;
+          reconsider X = x as Element of N by A3,A7;
+A9:      y = i.X by A8;
+          hence y in rng i by A2;
+          reconsider Y = y as Ideal of N by A9,YELLOW_2:43;
+          thus s.y = sup Y by YELLOW_2:def 3
+                  .= sup downarrow X by A8,YELLOW_2:def 4
+                  .= x by WAYBEL_0:34;
+        end;
+        hence s = i" by A1,A2,FUNCT_1:54;
+        thus thesis;
+      end;
+    thus not (N is non empty & I is non empty) implies
+     N is empty & I is empty;
+    end;
+    hence thesis by WAYBEL_0:def 38;
+  end;
+
+theorem Th11:
+ for N being complete (non empty Poset), x being Element of N,
+     X being non empty Subset of N holds x"/\" preserves_inf_of X
+  proof
+    let N be complete (non empty Poset),
+        x be Element of N,
+        X be non empty Subset of N such that
+A1:    ex_inf_of X,N;
+    thus ex_inf_of (x"/\").:X,N by YELLOW_0:17;
+      inf X is_<=_than X by A1,YELLOW_0:def 10;
+then A2: x"/\".inf X is_<=_than (x"/\").:X by YELLOW_2:15;
+      for b being Element of N st b is_<=_than (x"/\").:X holds x"/\".inf X >=
+b
+    proof
+      let b be Element of N such that
+A3:     b is_<=_than (x"/\").:X;
+      consider y being set such that
+A4:     y in X by XBOOLE_0:def 1;
+      reconsider y as Element of N by A4;
+A5:   (x"/\").:
+X = {x"/\"z where z is Element of N: z in X} by WAYBEL_1:64;
+      then x "/\" y in (x"/\").:X by A4;
+then A6:   b <= x "/\" y by A3,LATTICE3:def 8;
+        x "/\" y <= x by YELLOW_0:23;
+then A7:   b <= x by A6,ORDERS_1:26;
+        X is_>=_than b
+      proof
+        let c be Element of N;
+        assume c in X;
+        then x "/\" c in (x"/\").:X by A5;
+then A8:     b <= x "/\" c by A3,LATTICE3:def 8;
+          x "/\" c <= c by YELLOW_0:23;
+        hence b <= c by A8,ORDERS_1:26;
+      end;
+      then b <= inf X by A1,YELLOW_0:def 10;
+      then b "/\" b <= x "/\" inf X by A7,YELLOW_3:2;
+      then b <= x "/\" inf X by YELLOW_0:25;
+      hence b <= x"/\".inf X by WAYBEL_1:def 18;
+    end;
+    hence inf ((x"/\").:X) = x"/\".inf X by A2,YELLOW_0:33;
+  end;
+
+theorem Th12:
+ for N being complete (non empty Poset), x being Element of N holds
+  x"/\" is meet-preserving
+  proof
+    let N be complete (non empty Poset),
+        x be Element of N;
+    let a, b be Element of N;
+    thus x"/\" preserves_inf_of {a,b} by Th11;
+  end;
+
+definition let N be complete (non empty Poset),
+               x be Element of N;
+ cluster x"/\" -> meet-preserving;
+coherence by Th12;
+end;
+
+
+begin  :: On the basis of topological spaces
+
+theorem
+   for T being anti-discrete non empty TopStruct, p being Point of T holds
+  {the carrier of T} is Basis of p
+  proof
+    let T be anti-discrete non empty TopStruct,
+        p be Point of T;
+    set A = {the carrier of T};
+      A c= bool the carrier of T
+    proof
+      let a be set;
+      assume a in A;
+then A1:   a = the carrier of T by TARSKI:def 1;
+        the carrier of T c= the carrier of T;
+      hence thesis by A1;
+    end;
+    then reconsider A as Subset-Family of T by SETFAM_1:def 7;
+    reconsider A as Subset-Family of T;
+      A is Basis of p
+    proof
+      thus A c= the topology of T
+      proof
+        let a be set;
+        assume a in A;
+        then a = the carrier of T by TARSKI:def 1
+         .= [#]T by PRE_TOPC:12;
+        hence a in the topology of T by PRE_TOPC:def 5;
+      end;
+        Intersect A = meet A by CANTOR_1:def 3
+         .= the carrier of T by SETFAM_1:11;
+      hence p in Intersect A;
+      let S be Subset of T such that
+A2:     S is open & p in S;
+      take S;
+        S = the carrier of T by A2,TDLAT_3:20;
+      hence S in A & S c= S by TARSKI:def 1;
+    end;
+    hence {the carrier of T} is Basis of p;
+  end;
+
+theorem
+   for T being anti-discrete non empty TopStruct, p being Point of T,
+     D being Basis of p holds D = {the carrier of T}
+  proof
+    let T be anti-discrete non empty TopStruct,
+        p be Point of T,
+        D be Basis of p;
+    thus D c= {the carrier of T}
+    proof
+      let a be set; assume
+A1:     a in D;
+      then reconsider X = a as Subset of T;
+        X is open & p in X by A1,YELLOW_8:21;
+      then X = the carrier of T by TDLAT_3:20;
+      hence a in {the carrier of T} by TARSKI:def 1;
+    end;
+    hence thesis by ZFMISC_1:39;
+  end;
+
+theorem
+   for T being non empty TopSpace, P being Basis of T, p being Point of T holds
+  {A where A is Subset of T: A in P & p in A} is Basis of p
+  proof
+    let T be non empty TopSpace,
+        P be Basis of T,
+        p be Point of T;
+    set Z = {A where A is Subset of T: A in P & p in A};
+      Z c= bool the carrier of T
+    proof
+      let z be set;
+      assume z in Z;
+      then ex A being Subset of T st A = z & A in P & p in A;
+      hence thesis;
+    end;
+    then reconsider Z as Subset-Family of T by SETFAM_1:def 7;
+    reconsider Z as Subset-Family of T;
+      Z is Basis of p
+    proof
+      thus Z c= the topology of T
+      proof
+        let z be set;
+        assume z in Z;
+        then consider A being Subset of T such that
+A1:       A = z & A in P & p in A;
+          A is open by A1,YELLOW_8:19;
+        hence thesis by A1,PRE_TOPC:def 5;
+      end;
+        now
+        let z be set;
+        assume z in Z;
+        then ex A being Subset of T st A = z & A in P & p in A;
+        hence p in z;
+      end;
+      hence p in Intersect Z by CANTOR_1:10;
+      let S be Subset of T;
+      assume S is open & p in S;
+      then consider V being Subset of T such that
+A2:     V in P & p in V & V c= S by YELLOW_9:31;
+      take V;
+      thus V in Z & V c= S by A2;
+    end;
+    hence thesis;
+  end;
+
+Lm1:
+ for T being non empty TopStruct, A being Subset of T, p being Point of T
+   st p in Cl A
+  for K being Basis of p, Q being Subset of T st Q in K holds A meets Q
+  proof
+    let T be non empty TopStruct,
+        A be Subset of T,
+        p be Point of T such that
+A1:   p in Cl A;
+    let K be Basis of p,
+        Q be Subset of T; assume Q in K;
+    then Q is open & p in Q by YELLOW_8:21;
+    then A meets Q by A1,PRE_TOPC:def 13;
+    hence A /\ Q <> {} by XBOOLE_0:def 7;
+  end;
+
+Lm2:
+ for T being non empty TopStruct, A being Subset of T, p being Point of T st
+   for K being Basis of p, Q being Subset of T st Q in K holds A meets Q
+ ex K being Basis of p st for Q being Subset of T st Q in K holds A meets Q
+  proof
+    let T be non empty TopStruct,
+        A be Subset of T,
+        p be Point of T such that
+A1:   for K being Basis of p, Q being Subset of T st Q in K holds A meets Q
+ and
+A2:   for K being Basis of p ex Q being Subset of T st Q in K & A misses Q;
+    consider K being Basis of p;
+      ex Q being Subset of T st Q in K & A misses Q by A2;
+    hence contradiction by A1;
+  end;
+
+Lm3:
+ for T being non empty TopStruct, A being Subset of T, p being Point of T st
+   ex K being Basis of p st for Q being Subset of T st Q in K holds A meets
+ Q
+  holds p in Cl A
+  proof
+    let T be non empty TopStruct,
+        A be Subset of T,
+        p be Point of T;
+    given K being Basis of p such that
+A1:   for Q being Subset of T st Q in K holds A meets Q;
+    assume not p in Cl A;
+    then consider F being Subset of T such that
+A2:   F is closed & A c= F & not p in F by PRE_TOPC:45;
+A3: p in F` by A2,YELLOW_6:10;
+      F` is open by A2,TOPS_1:29;
+    then consider W being Subset of T such that
+A4:   W in K & W c= F` by A3,YELLOW_8:22;
+    A5: A meets W by A1,A4;
+      A misses F` by A2,TOPS_1:20;
+    hence contradiction by A4,A5,XBOOLE_1:63;
+  end;
+
+theorem
+   for T being non empty TopStruct, A being Subset of T, p being Point of T
+   holds
+  p in Cl A iff
+  for K being Basis of p, Q being Subset of T st Q in K holds A meets Q
+  proof
+    let T be non empty TopStruct,
+        A be Subset of T,
+        p be Point of T;
+    thus p in Cl A implies
+     for K being Basis of p, Q being Subset of T st Q in K holds A meets Q
+      by Lm1;
+    assume for K being Basis of p, Q being Subset of T st Q in K
+      holds A meets Q;
+    then ex K being Basis of p st for Q being Subset of T st Q in K
+      holds A meets Q by Lm2;
+    hence thesis by Lm3;
+  end;
+
+theorem
+   for T being non empty TopStruct, A being Subset of T, p being Point of T
+   holds
+  p in Cl A iff
+  ex K being Basis of p st for Q being Subset of T st Q in K holds A meets Q
+  proof
+    let T be non empty TopStruct,
+        A be Subset of T,
+        p be Point of T;
+    hereby
+      assume p in Cl A;
+      then for K being Basis of p, Q being Subset of T st Q in K holds A meets
+Q
+        by Lm1;
+      hence ex K being Basis of p st for Q being Subset of T st Q in K
+        holds A meets Q by Lm2;
+    end;
+    assume ex K being Basis of p st for Q being Subset of T st Q in K
+      holds A meets Q;
+    hence thesis by Lm3;
+  end;
+
+definition let T be TopStruct, p be Point of T;
+ mode basis of p -> Subset-Family of T means :Def1:
+  for A being Subset of T st p in Int A ex P being Subset of T st
+   P in it & p in Int P & P c= A;
+existence
+  proof
+    reconsider F = bool the carrier of T as Subset-Family of T
+      by SETFAM_1:def 7;
+    reconsider F as Subset-Family of T;
+    take F;
+    let A be Subset of T such that
+A1:   p in Int A;
+    take Int A;
+    thus thesis by A1,TOPS_1:44,45;
+  end;
+end;
+
+definition let T be non empty TopSpace, p be Point of T;
+ redefine mode basis of p means
+    for A being a_neighborhood of p ex P being a_neighborhood of p st
+   P in it & P c= A;
+compatibility
+  proof
+    let F be Subset-Family of T;
+    hereby assume
+A1:     F is basis of p;
+      let A be a_neighborhood of p;
+        p in Int A by CONNSP_2:def 1;
+      then consider P being Subset of T such that
+A2:     P in F & p in Int P & P c= A by A1,Def1;
+      reconsider P as a_neighborhood of p by A2,CONNSP_2:def 1;
+      take P;
+      thus P in F & P c= A by A2;
+    end;
+    assume
+A3:  for A being a_neighborhood of p ex P being a_neighborhood of p st
+      P in F & P c= A;
+    let A be Subset of T;
+    assume p in Int A;
+    then A is a_neighborhood of p by CONNSP_2:def 1;
+    then consider P being a_neighborhood of p such that
+A4:   P in F & P c= A by A3;
+    take P;
+    thus P in F & p in Int P & P c= A by A4,CONNSP_2:def 1;
+  end;
+end;
+
+theorem Th18:
+ for T being TopStruct, p being Point of T holds
+  bool the carrier of T is basis of p
+  proof
+    let T be TopStruct,
+        p be Point of T;
+    reconsider F = bool the carrier of T as Subset-Family of T
+      by SETFAM_1:def 7;
+    reconsider F as Subset-Family of T;
+      F is basis of p
+    proof
+      let A be Subset of T such that
+A1:     p in Int A;
+      take Int A;
+      thus thesis by A1,TOPS_1:44,45;
+    end;
+    hence thesis;
+  end;
+
+theorem Th19:
+ for T being non empty TopSpace, p being Point of T, P being basis of p holds
+  P is non empty
+  proof
+    let T be non empty TopSpace,
+        p be Point of T,
+        P be basis of p;
+      Int [#]T = [#]T by TOPS_1:43;
+    then p in Int [#]T by PRE_TOPC:13;
+    then ex W being Subset of T st W in P & p in Int W & W c= [#]T by Def1;
+    hence thesis;
+  end;
+
+definition let T be non empty TopSpace, p be Point of T;
+ cluster -> non empty basis of p;
+coherence by Th19;
+end;
+
+definition let T be TopStruct, p be Point of T;
+ cluster non empty basis of p;
+existence
+  proof
+      bool the carrier of T is basis of p by Th18;
+    hence thesis;
+  end;
+end;
+
+definition let T be TopStruct, p be Point of T, P be basis of p;
+ attr P is correct means :Def3:
+  for A being Subset of T holds A in P iff p in Int A;
+end;
+
+Lm4: now
+    let T be TopStruct,
+        p be Point of T;
+    let K be set such that
+A1:   K = {A where A is Subset of T: p in Int A};
+      K c= bool the carrier of T
+    proof
+      let y be set;
+      assume y in K;
+      then consider A being Subset of T such that
+A2:     y = A and p in Int A by A1;
+      thus y in bool the carrier of T by A2;
+    end;
+    then reconsider J = K as Subset-Family of T by SETFAM_1:def
+7;
+    reconsider J as Subset-Family of T;
+      for A being Subset of T st p in Int A ex P being Subset of T st
+     P in J & p in Int P & P c= A
+    proof
+      let A be Subset of T such that
+A3:     p in Int A;
+      take P = A;
+      thus P in J & p in Int P & P c= A by A1,A3;
+    end;
+    hence K is basis of p by Def1;
+end;
+
+Lm5: now
+    let T be TopStruct,
+        p be Point of T,
+        K be basis of p such that
+A1:   K = {A where A is Subset of T: p in Int A};
+    thus K is correct
+    proof
+      let A be Subset of T;
+      hereby
+        assume A in K;
+        then consider M being Subset of T such that
+A2:       A = M & p in Int M by A1;
+        thus p in Int A by A2;
+      end;
+      thus thesis by A1;
+    end;
+end;
+
+definition let T be TopStruct, p be Point of T;
+ cluster correct basis of p;
+existence
+  proof
+    reconsider P = {A where A is Subset of T: p in Int A} as basis of p by Lm4;
+    take P;
+    thus thesis by Lm5;
+  end;
+end;
+
+theorem
+   for T being TopStruct, p being Point of T holds
+  {A where A is Subset of T: p in Int A} is correct basis of p by Lm4,Lm5;
+
+definition let T be non empty TopSpace, p be Point of T;
+ cluster non empty correct basis of p;
+existence
+  proof
+    reconsider K = {A where A is Subset of T: p in Int A} as correct basis of p
+     by Lm4,Lm5;
+    take K;
+    thus thesis;
+  end;
+end;
+
+theorem
+   for T being anti-discrete non empty TopStruct, p being Point of T holds
+  {the carrier of T} is correct basis of p
+  proof
+    let T be anti-discrete non empty TopStruct,
+        p be Point of T;
+    set A = {the carrier of T};
+      A c= bool the carrier of T
+    proof
+      let a be set;
+      assume a in A;
+then A1:   a = the carrier of T by TARSKI:def 1;
+        the carrier of T c= the carrier of T;
+      hence thesis by A1;
+    end;
+    then reconsider A as Subset-Family of T by SETFAM_1:def 7;
+    reconsider A as Subset-Family of T;
+      A is basis of p
+    proof
+      let S be a_neighborhood of p;
+A2:   p in Int S by CONNSP_2:def 1;
+      take S;
+A3:   Int S = the carrier of T by A2,TDLAT_3:20;
+        Int S = S
+      proof
+        thus Int S c= S by TOPS_1:44;
+        thus thesis by A3;
+      end;
+      hence S in A & S c= S by A3,TARSKI:def 1;
+    end;
+    then reconsider A as basis of p;
+      A is correct
+    proof
+      let X be Subset of T;
+      hereby
+        assume X in A;
+then A4:     X = the carrier of T by TARSKI:def 1;
+then A5:     X = [#]T by PRE_TOPC:12;
+        then Int X = [#]T by TOPS_1:43;
+        hence p in Int X by A4,A5;
+      end;
+      assume
+       p in Int X;
+then A6:   Int X = the carrier of T by TDLAT_3:20;
+        Int X = X
+      proof
+        thus Int X c= X by TOPS_1:44;
+        thus thesis by A6;
+      end;
+      hence X in A by A6,TARSKI:def 1;
+    end;
+    hence thesis;
+  end;
+
+theorem
+   for T being anti-discrete non empty TopStruct, p being Point of T,
+     D being correct basis of p holds D = {the carrier of T}
+  proof
+    let T be anti-discrete non empty TopStruct,
+        p be Point of T,
+        D be correct basis of p;
+    thus D c= {the carrier of T}
+    proof
+      let a be set; assume
+A1:     a in D;
+      then reconsider X = a as Subset of T;
+        p in Int X by A1,Def3;
+then A2:   Int X = the carrier of T by TDLAT_3:20;
+        Int X = X
+      proof
+        thus Int X c= X by TOPS_1:44;
+        thus thesis by A2;
+      end;
+      hence a in {the carrier of T} by A2,TARSKI:def 1;
+    end;
+    hence thesis by ZFMISC_1:39;
+  end;
+
+theorem
+   for T being non empty TopSpace, p being Point of T,
+     P being Basis of p holds P is basis of p
+  proof
+    let T be non empty TopSpace,
+        p be Point of T,
+        P be Basis of p;
+      now
+      let A be Subset of T; assume p in Int A;
+      then consider V being Subset of T such that
+A1:     V in P & V c= Int A by YELLOW_8:def 2;
+      take V;
+A2:   Int A c= A by TOPS_1:44;
+        V is open by A1,YELLOW_8:21;
+      then Int V = V by TOPS_1:55;
+      hence V in P & p in Int V & V c= A by A1,A2,XBOOLE_1:1,YELLOW_8:21;
+    end;
+    hence thesis by Def1;
+  end;
+
+definition let T be TopStruct;
+ mode basis of T -> Subset-Family of T means :Def4:
+  for p being Point of T holds it is basis of p;
+existence
+  proof
+    reconsider F = bool the carrier of T as Subset-Family of T
+      by SETFAM_1:def 7;
+    reconsider F as Subset-Family of T;
+    take F;
+    thus thesis by Th18;
+  end;
+end;
+
+theorem Th24:
+ for T being TopStruct holds bool the carrier of T is basis of T
+  proof
+    let T be TopStruct;
+    reconsider P = bool the carrier of T as Subset-Family of T
+      by SETFAM_1:def 7;
+    reconsider P as Subset-Family of T;
+      P is basis of T
+    proof
+      let p be Point of T;
+      thus thesis by Th18;
+    end;
+    hence thesis;
+  end;
+
+theorem Th25:
+ for T being non empty TopSpace, P being basis of T holds P is non empty
+  proof
+    let T be non empty TopSpace,
+        P be basis of T;
+    consider p being Point of T;
+    reconsider C = P as basis of p by Def4;
+      C is non empty;
+    hence thesis;
+  end;
+
+definition let T be non empty TopSpace;
+ cluster -> non empty basis of T;
+coherence by Th25;
+end;
+
+definition let T be TopStruct;
+ cluster non empty basis of T;
+existence
+  proof
+      bool the carrier of T is basis of T by Th24;
+    hence thesis;
+  end;
+end;
+
+theorem
+   for T being non empty TopSpace, P being basis of T holds
+  the topology of T c= UniCl Int P
+  proof
+    let T be non empty TopSpace,
+        P be basis of T;
+    let x be set; assume
+A1:   x in the topology of T;
+    then reconsider X = x as Subset of T;
+      ex Y being Subset-Family of T st Y c= Int P & X = union Y
+    proof
+      set Y = {A where A is Subset of T:
+        A in Int P & Int A c= x};
+        Y c= bool the carrier of T
+      proof
+        let y be set;
+        assume y in Y;
+        then consider A being Subset of T such that
+A2:       y = A and A in Int P and Int A c= x;
+        thus y in bool the carrier of T by A2;
+      end;
+      then reconsider Y as Subset-Family of T by SETFAM_1:def 7;
+      reconsider Y as Subset-Family of T;
+      take Y;
+      hereby
+        let y be set;
+        assume y in Y;
+        then consider A being Subset of T such that
+A3:       y = A & A in Int P and Int A c= x;
+        thus y in Int P by A3;
+      end;
+      hereby
+        let y be set; assume
+A4:       y in X;
+        then reconsider p = y as Point of T;
+        reconsider C = P as basis of p by Def4;
+          X is open by A1,PRE_TOPC:def 5;
+        then p in Int X by A4,TOPS_1:55;
+        then consider W being Subset of T such that
+A5:       W in C & p in Int W & W c= X by Def1;
+A6:     Int W in Int P by A5,TDLAT_2:def 1;
+          Int W c= W by TOPS_1:44;
+        then Int W c= X by A5,XBOOLE_1:1;
+        then Int Int W c= X by TOPS_1:45;
+        then Int W in Y by A6;
+        hence y in union Y by A5,TARSKI:def 4;
+      end;
+      let y be set;
+      assume y in union Y;
+      then consider K being set such that
+A7:     y in K & K in Y by TARSKI:def 4;
+      consider A being Subset of T such that
+A8:     A = K & A in Int P & Int A c= x by A7;
+      reconsider A as Subset of T;
+        ex E being Subset of T st
+        A = Int E & E in P by A8,TDLAT_2:def 1;
+      then A is open;
+      then Int A = A by TOPS_1:55;
+      hence y in X by A7,A8;
+    end;
+    hence x in UniCl Int P by CANTOR_1:def 1;
+  end;
+
+theorem
+   for T being TopSpace, P being Basis of T holds P is basis of T
+  proof
+    let T be TopSpace,
+        P be Basis of T;
+A1: P c= the topology of T & the topology of T c= UniCl P by CANTOR_1:def 2;
+    let p be Point of T,
+        A be Subset of T such that
+A2:   p in Int A;
+      Int A in the topology of T by PRE_TOPC:def 5;
+    then consider Y being Subset-Family of T such that
+A3:   Y c= P & Int A = union Y by A1,CANTOR_1:def 1;
+    reconsider Y as Subset-Family of T;
+    consider K being set such that
+A4:   p in K & K in Y by A2,A3,TARSKI:def 4;
+    reconsider K as Subset of T by A4;
+    take K;
+    thus
+     K in P by A3,A4;
+    then K is open by A1,PRE_TOPC:def 5;
+    hence p in Int K by A4,TOPS_1:55;
+A5: K c= union Y by A4,ZFMISC_1:92;
+      Int A c= A by TOPS_1:44;
+    hence K c= A by A3,A5,XBOOLE_1:1;
+  end;
+
+definition let T be non empty TopSpace-like TopRelStr;
+ attr T is topological_semilattice means :Def5:
+  for f being map of [:T,T qua TopSpace:], T st f = inf_op T
+   holds f is continuous;
+end;
+
+definition
+ cluster reflexive trivial -> topological_semilattice
+                                 (non empty TopSpace-like TopRelStr);
+coherence
+  proof
+    let T be non empty TopSpace-like TopRelStr;
+    assume T is reflexive trivial;
+    then reconsider W = T as reflexive trivial non empty TopSpace-like
+TopRelStr;
+    consider d being Element of W such that
+A1:   the carrier of W = {d} by TEX_1:def 1;
+    let f be map of [:T,T qua TopSpace:], T such that
+A2:   f = inf_op T;
+      now
+      let P1 be Subset of T such that
+A3:     P1 is closed;
+      per cases by A3,TDLAT_3:21;
+      suppose P1 = {};
+      then f"P1 = {}[:T,T qua TopSpace:] by RELAT_1:171;
+      hence f"P1 is closed;
+      suppose
+A4:     P1 = the carrier of W;
+A5:   dom f = the carrier of [:T,T qua TopSpace:] by FUNCT_2:def 1
+           .= [:the carrier of T,the carrier of T:] by BORSUK_1:def 5;
+A6:   f"P1 = [:{d},{d}:]
+      proof
+          thus for x being set st x in f"P1 holds x in [:{d},{d}:]
+            by A1,A5,FUNCT_1:def 13;
+        let x be set;
+        assume x in [:{d},{d}:];
+        then x in {[d,d]} by ZFMISC_1:35;
+then A7:     x = [d,d] by TARSKI:def 1;
+A8:     f. [d,d] = d "/\" d by A2,WAYBEL_2:def 4
+                .= d by YELLOW_0:25;
+          [d,d] in [:the carrier of T,the carrier of T:] by ZFMISC_1:106;
+        hence thesis by A4,A5,A7,A8,FUNCT_1:def 13;
+      end;
+        [#][:T,T qua TopSpace:]
+          = the carrier of [:T,T qua TopSpace:] by PRE_TOPC:12
+         .= [:{d},{d}:] by A1,BORSUK_1:def 5;
+      hence f"P1 is closed by A6;
+    end;
+    hence thesis by PRE_TOPC:def 12;
+  end;
+end;
+
+definition
+ cluster reflexive trivial non empty TopSpace-like TopRelStr;
+existence
+  proof
+    consider A being reflexive trivial non empty TopSpace-like TopRelStr;
+    take A;
+    thus thesis;
+  end;
+end;
+
+theorem Th28:
+ for T being topological_semilattice (non empty TopSpace-like TopRelStr),
+     x being Element of T holds
+  x"/\" is continuous
+  proof
+    let T be topological_semilattice (non empty TopSpace-like TopRelStr),
+        x be Element of T;
+    let p be Point of T,
+        G be a_neighborhood of x"/\".p;
+    set TT = [:T,T qua TopSpace:];
+A1: the carrier of TT = [:the carrier of T,the carrier of T:]
+      by BORSUK_1:def 5;
+      the carrier of [:T,T:] = [:the carrier of T,the carrier of T:]
+      by YELLOW_3:def 2;
+    then reconsider f = inf_op T as map of TT, T by A1;
+A2: G is a_neighborhood of x"/\"p by WAYBEL_1:def 18;
+    reconsider xp = [x,p] as Point of TT by A1,YELLOW_3:def 2;
+A3: f.xp = x "/\" p by WAYBEL_2:def 4;
+      f is continuous by Def5;
+    then consider H being a_neighborhood of xp such that
+A4:    f.:H c= G by A2,A3,BORSUK_1:def 2;
+    consider A being Subset-Family of TT such that
+A5:   Int H = union A and
+A6:   for e being set st e in A ex X1, Y1 being Subset of T st
+       e = [:X1,Y1:] & X1 is open & Y1 is open by BORSUK_1:45;
+      xp in Int H by CONNSP_2:def 1;
+    then consider Z being set such that
+A7:   xp in Z and
+A8:   Z in A by A5,TARSKI:def 4;
+    consider X1, Y1 being Subset of T such that
+A9:   Z = [:X1,Y1:] and
+A10:   X1 is open & Y1 is open by A6,A8;
+      p in Y1 by A7,A9,ZFMISC_1:106;
+    then reconsider Y1 as a_neighborhood of p by A10,CONNSP_2:5;
+    take Y1;
+    let b be set;
+    assume b in (x"/\").:Y1;
+    then consider a being set such that
+        a in dom (x"/\") and
+A11:  a in Y1 and
+A12:  b = x"/\".a by FUNCT_1:def 12;
+    reconsider a as Element of T by A11;
+A13:b = x "/\" a by A12,WAYBEL_1:def 18
+     .= f. [x,a] by WAYBEL_2:def 4;
+      x in X1 by A7,A9,ZFMISC_1:106;
+    then [x,a] in Z by A9,A11,ZFMISC_1:106;
+then A14:[x,a] in Int H by A5,A8,TARSKI:def 4;
+A15:Int H c= H by TOPS_1:44;
+  [x,a] in [:the carrier of T,the carrier of T:] by ZFMISC_1:106;
+    then [x,a] in dom f by A1,FUNCT_2:def 1;
+    then b in f.:H by A13,A14,A15,FUNCT_1:def 12;
+    hence b in G by A4;
+  end;
+
+definition let T be topological_semilattice(non empty TopSpace-like TopRelStr),
+               x be Element of T;
+ cluster x"/\" -> continuous;
+coherence by Th28;
+end;
+

@@ -1,0 +1,1284 @@
+:: On the Group of Inner Automorphisms
+::  by Artur Korni{\l}owicz
+::
+:: Received April 22, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary REALSET1, GROUP_2, GROUP_6, GROUP_1, GROUP_3, RELAT_1, FRAENKEL,
+      FUNCT_1, FUNCT_2, BINOP_1, VECTSP_1, GROUP_5, WELLORD1, AUTGROUP;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, REALSET1, RELAT_1, FUNCT_1,
+      PARTFUN1, FUNCT_2, STRUCT_0, BINOP_1, FRAENKEL, RLVECT_1, VECTSP_1,
+      GROUP_1, GROUP_2, GROUP_3, GROUP_5, GROUP_6;
+ constructors REALSET1, FUNCSDOM, GROUP_5, GROUP_6, PARTFUN1, MEMBERED,
+      RELAT_2, XBOOLE_0;
+ clusters FUNCT_1, FRAENKEL, GROUP_1, GROUP_2, GROUP_3, GROUP_6, STRUCT_0,
+      GR_CY_2, RELSET_1, MEMBERED, ZFMISC_1, PARTFUN1, FUNCT_2, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions FRAENKEL, FUNCT_1, GROUP_1, GROUP_6, TARSKI, VECTSP_1;
+ theorems BINOP_1, FUNCT_1, FUNCT_2, FRAENKEL, GROUP_1, GROUP_2, GROUP_3,
+      GROUP_5, GROUP_6, REALSET1, RLVECT_1, VECTSP_1, RELAT_1, ZFMISC_1,
+      TARSKI, XBOOLE_0;
+ schemes BINOP_1, FUNCT_2;
+
+begin
+
+ reserve G for strict Group;
+ reserve H for Subgroup of G;
+ reserve a, b, c, x, y for Element of G;
+ reserve h for Homomorphism of G, G;
+ reserve q, q1 for set;
+
+Lm1: (for a,b st b is Element of H holds b |^ a in H)
+    implies H is normal
+  proof
+    assume A1: for a, b st b is Element of H holds b |^ a in H;
+      now
+      let a;
+      thus H * a c= a * H
+      proof
+        let q;
+        assume q in H * a;
+        then consider b such that
+A2:       q = b * a and
+A3:       b in H by GROUP_2:126;
+        set A = carr H;
+          b is Element of H by A3,RLVECT_1:def 1;
+        then b |^ a in H by A1;
+        then b |^ a in A by GROUP_2:88;
+        then a" * b * a in A by GROUP_3:20;
+        then a * (a" * b * a) in a * A by GROUP_2:33;
+        then a * (a" * (b * a)) in a * A by VECTSP_1:def 16;
+        then (a * a") * (b * a) in a * A by VECTSP_1:def 16;
+        then a * a" * b * a in a * A by VECTSP_1:def 16;
+        then 1.G * b * a in a * A by GROUP_1:def 5;
+        then q in a * A by A2,GROUP_1:def 4;
+        hence q in a * H by GROUP_2:def 13;
+      end;
+    end;
+    hence thesis by GROUP_3:142;
+  end;
+
+Lm2: H is normal implies (for a,b st b is Element of H
+  holds b |^ a in H)
+  proof
+    assume A1: H is normal;
+    let a, b;
+    assume A2: b is Element of H;
+    set A = carr H;
+    consider q such that
+A3:   q = b;
+   q in H by A2,A3,RLVECT_1:def 1;
+then A4: b in A & b in H by A3,GROUP_2:88;
+      H * a = a * H by A1,GROUP_3:140;
+    then a" * H * a = a" * (a * H) by GROUP_2:128;
+    then a" * H * a = a" * a * H by GROUP_2:127;
+    then a" * H * a = 1.G * H by GROUP_1:def 5;
+    then a" * H * a = A by GROUP_2:132;
+    then the carrier of H |^ a = A by GROUP_3:71;
+then A5: A |^ a = A by GROUP_3:def 6;
+      a" * b in a" * A by A4,GROUP_2:33;
+    then a" * b * a in a" * A * a by GROUP_2:34;
+    then b |^ a in a" * A * a by GROUP_3:20;
+    then b |^ a in A by A5,GROUP_3:59;
+    hence thesis by GROUP_2:88;
+  end;
+
+theorem
+ (for a, b st b is Element of H holds b |^ a in
+ H) iff H is normal
+   by Lm1,Lm2;
+
+definition
+  let G;
+  func Aut G -> FUNCTION_DOMAIN of the carrier of G, the carrier of G means
+:Def1:  ( for f being Element of it
+    holds f is Homomorphism of G, G ) &
+     for h holds h in it iff h is one-to-one & h is_epimorphism;
+existence
+ proof
+  set X = { x where x is Element of Funcs (the carrier of G,the carrier of G)
+      : ex h st x = h & h is one-to-one & h is_epimorphism };
+A1: id the carrier of G in X
+    proof
+      set I = id the carrier of G;
+A2:   I in Funcs (the carrier of G, the carrier of G) by FUNCT_2:11;
+      reconsider I as Homomorphism of G, G by GROUP_6:47;
+        rng I = the carrier of G by RELAT_1:71;
+      then I is_epimorphism by GROUP_6:def 13;
+      hence thesis by A2;
+    end;
+    reconsider X as set;
+      X is functional
+    proof
+      let q;
+      assume q in X;
+      then consider x be Element of Funcs (the carrier of G, the carrier of G)
+        such that
+A3:     q = x & ex h st h = x & h is one-to-one & h is_epimorphism;
+      thus q is Function by A3;
+    end;
+    then reconsider X as functional non empty set by A1;
+      X is FUNCTION_DOMAIN of the carrier of G, the carrier of G
+    proof
+      let a be Element of X;
+        a in X;
+      then consider x be Element of Funcs (the carrier of G, the carrier of G)
+        such that
+A4:   a = x & ex h st h = x & h is one-to-one & h is_epimorphism;
+      thus a is Function of the carrier of G,the carrier of G by A4;
+    end;
+  then reconsider X as FUNCTION_DOMAIN of the carrier of G, the carrier of G;
+  take X;
+  hereby
+    let f be Element of X;
+      f in X;
+    then ex x being Element of Funcs (the carrier of G, the carrier of G)
+       st f = x & ex h st h = x & h is one-to-one & h is_epimorphism;
+    hence f is Homomorphism of G, G;
+  end;
+  let x be Homomorphism of G, G;
+  hereby
+    assume x in X;
+ then ex f being Element of Funcs (the carrier of G, the carrier of G)
+       st f = x & ex h st h = f & h is one-to-one & h is_epimorphism;
+    hence x is one-to-one & x is_epimorphism;
+  end;
+  assume A5: x is one-to-one & x is_epimorphism;
+    x is Element of Funcs (the carrier of G, the carrier of G) by FUNCT_2:11;
+  hence x in X by A5;
+ end;
+uniqueness
+ proof
+   let F1, F2 be FUNCTION_DOMAIN of the carrier of G, the carrier of G
+      such that
+A6: ( for f being Element of F1 holds f is Homomorphism of G, G ) &
+   for h holds h in F1
+     iff
+   h is one-to-one & h is_epimorphism and
+A7: ( for f being Element of F2
+   holds f is Homomorphism of G, G ) &
+   for h holds h in F2
+     iff
+   h is one-to-one & h is_epimorphism;
+A8: F1 c= F2
+   proof
+     let q;
+     assume A9: q in F1;
+     then reconsider h1 = q as Homomorphism of G, G by A6;
+       h1 is one-to-one & h1 is_epimorphism by A6,A9;
+     hence q in F2 by A7;
+   end;
+     F2 c= F1
+   proof
+     let q;
+     assume A10: q in F2;
+     then reconsider h1 = q as Homomorphism of G, G by A7;
+       h1 is one-to-one & h1 is_epimorphism by A7,A10;
+     hence q in F1 by A6;
+   end;
+   hence F1 = F2 by A8,XBOOLE_0:def 10;
+ end;
+end;
+
+canceled;
+
+theorem
+  Aut G c= Funcs (the carrier of G, the carrier of G)
+  proof
+    let q;
+    assume q in Aut G;
+    then consider f be Element of Aut G such that
+A1:    f = q;
+    thus thesis by A1,FUNCT_2:12;
+  end;
+
+theorem Th4:
+id the carrier of G is Element of Aut G
+  proof
+      id the carrier of G is Homomorphism of G, G by GROUP_6:47;
+    then consider h such that
+A1:   h = id the carrier of G;
+      h is_epimorphism
+    proof
+        rng h = the carrier of G by A1,RELAT_1:71;
+      hence thesis by GROUP_6:def 13;
+    end;
+    hence thesis by A1,Def1;
+  end;
+
+theorem Th5:
+for h holds h in Aut G iff h is_isomorphism
+  proof
+    let h;
+    hereby
+      assume A1: h in Aut G;
+then A2:   h is_epimorphism by Def1;
+        h is one-to-one by A1,Def1;
+      then h is_monomorphism by GROUP_6:def 12;
+      hence h is_isomorphism by A2,GROUP_6:def 14;
+    end;
+    hereby
+      assume h is_isomorphism;
+then A3:   (h is_epimorphism) & (h is_monomorphism)
+         by GROUP_6:def 14;
+      then h is one-to-one by GROUP_6:def 12;
+      hence h in Aut G by A3,Def1;
+    end;
+  end;
+
+Lm3: for f being Element of Aut G holds dom f = rng f &
+        dom f = the carrier of G
+  proof
+    let f be Element of Aut G;
+    reconsider f as Homomorphism of G, G by Def1;
+      f is_isomorphism by Th5;
+    then (dom f = the carrier of G) & (rng f = the carrier of G) by GROUP_6:71
+;
+    hence thesis;
+  end;
+
+theorem Th6:
+for f being Element of Aut G holds f" is Homomorphism of G, G
+  proof
+    let f be Element of Aut G;
+    reconsider f as Homomorphism of G, G by Def1;
+      f is_isomorphism by Th5;
+    hence thesis by GROUP_6:72;
+  end;
+
+theorem Th7:
+for f being Element of Aut G
+  holds f" is Element of Aut G
+  proof
+    let f be Element of Aut G;
+    reconsider f as Homomorphism of G, G by Def1;
+A1: f is_isomorphism by Th5;
+    reconsider A = f" as Homomorphism of G, G by Th6;
+      A is_isomorphism by A1,GROUP_6:73;
+then A2: (A is_epimorphism) & (A is_monomorphism)
+       by GROUP_6:def 14;
+    then A is one-to-one by GROUP_6:def 12;
+    hence thesis by A2,Def1;
+  end;
+
+theorem Th8:
+for f1, f2 being Element of Aut G
+holds f1 * f2 is Element of Aut G
+  proof
+    let f1, f2 be Element of Aut G;
+    reconsider f1, f2 as Homomorphism of G, G by Def1;
+      (f1 is_isomorphism) & (f2 is_isomorphism) by Th5;
+    then f1 * f2 is_isomorphism by GROUP_6:74;
+    hence thesis by Th5;
+  end;
+
+definition
+  let G;
+  func AutComp G -> BinOp of Aut G means
+:Def2:  for x, y being Element of Aut G holds it.(x,y) = x * y;
+existence
+ proof
+    defpred _P[Element of Aut G,Element of Aut G,Element of Aut G] means
+    $3 = $1 * $2;
+A1: for x, y being Element of Aut G ex m being Element of Aut G st _P[x,y,m]
+   proof
+     let x, y be Element of Aut G;
+     reconsider xx = x, yy = y as Homomorphism of G, G by Def1;
+     reconsider m = xx * yy as Element of Aut G by Th8;
+     take m;
+     thus thesis;
+   end;
+   thus ex M being BinOp of Aut G st
+     for x, y being Element of Aut G holds _P[x,y,M.(x,y)] from BinOpEx(A1);
+ end;
+uniqueness
+ proof
+   let b1, b2 be BinOp of Aut G such that
+A2: for x, y be Element of Aut G holds b1.(x,y) = x * y and
+A3: for x, y be Element of Aut G holds b2.(x,y) = x * y;
+     for x, y be Element of Aut G holds b1.(x,y) = b2.(x,y)
+   proof
+     let x, y be Element of Aut G;
+     thus b1.(x,y) = x * y by A2
+                  .= b2.(x,y) by A3;
+   end;
+   hence thesis by BINOP_1:2;
+ end;
+end;
+
+definition
+  let G;
+  func AutGroup G -> strict Group equals
+:Def3:   HGrStr (# Aut G, AutComp G #);
+coherence
+ proof
+  set H = HGrStr (# Aut G, AutComp G #);
+    H is associative Group-like
+  proof
+A1: now
+     let f, g be Element of H,
+         A, B be Element of Aut G;
+     assume f = A & g = B;
+     hence f * g = (AutComp G).(A,B) by VECTSP_1:def 10
+                .= A * B by Def2;
+   end;
+   thus for f, g, h being Element of H
+   holds (f * g) * h = f * (g * h)
+   proof
+     let f,g,h be Element of H;
+     reconsider A = f, B = g, C = h as Element of Aut G;
+A2:  f * g = A * B by A1;
+A3:  g * h = B * C by A1;
+     thus (f * g) * h = A * B * C by A1,A2
+                     .= A * (B * C) by RELAT_1:55
+                     .= f * (g * h) by A1,A3;
+   end;
+   thus
+       ex e being Element of H st
+       for h being Element of H holds
+         h * e = h & e * h = h &
+         ex g being Element of H st h * g = e & g * h = e
+   proof
+     reconsider e = id the carrier of G as Element of H by Th4;
+     take e;
+     let h be Element of H;
+     consider A be Element of Aut G such that
+A4:      A = h;
+       h * e = A * id the carrier of G by A1,A4
+          .= A by FUNCT_2:74;
+     hence h * e = h by A4;
+       e * h = (id the carrier of G) * A by A1,A4
+          .= A by FUNCT_2:74;
+     hence e * h = h by A4;
+     reconsider g = A" as Element of H by Th7;
+     take g;
+     reconsider A as Homomorphism of G, G by Def1;
+A5:  (A is one-to-one) & (A is_epimorphism) by Def1;
+then A6:  rng A = the carrier of G by GROUP_6:def 13;
+     thus h * g = A * A" by A1,A4
+               .= e by A5,A6,FUNCT_2:35;
+     thus g * h = A" * A by A1,A4
+               .= e by A5,A6,FUNCT_2:35;
+   end;
+  end;
+  hence thesis;
+ end;
+end;
+
+theorem Th9:
+for x, y being Element of AutGroup G
+  for f, g being Element of Aut G st x = f & y = g
+  holds x * y = f * g
+  proof
+    let x, y be Element of AutGroup G;
+    let f, g be Element of Aut G;
+    assume A1: x = f & y = g;
+  AutGroup G = HGrStr (# Aut G, AutComp G #) by Def3;
+    hence x * y = (AutComp G).(f,g) by A1,VECTSP_1:def 10
+              .= f * g by Def2;
+  end;
+
+theorem Th10:
+id the carrier of G = 1.AutGroup G
+  proof
+    A1: AutGroup G = HGrStr (# Aut G, AutComp G #) by Def3;
+    then reconsider g = id the carrier of G as Element of
+AutGroup G
+     by Th4;
+    consider g1 be Function of the carrier of G, the carrier of G such that
+A2:    g1 = g;
+    consider f be Element of AutGroup G;
+      f is Homomorphism of G, G by A1,Def1;
+    then consider f1 be Function of the carrier of G, the carrier of G such
+that
+A3:    f1 = f;
+A4: f1 * g1 = f1 by A2,FUNCT_2:74;
+        f1 = f & g1 = g implies f1 * g1 = f * g by A1,Th9;
+    hence thesis by A2,A3,A4,GROUP_1:15;
+  end;
+
+theorem Th11:
+for f being Element of Aut G
+  for g being Element of AutGroup G st f = g holds f" = g"
+  proof
+    let f be Element of Aut G;
+    let g be Element of AutGroup G;
+    assume A1: f = g;
+      AutGroup G = HGrStr (# Aut G, AutComp G #) by Def3;
+    then consider g1 be Element of Aut G such that
+A2:   g1 = g";
+A3: rng f = dom f by Lm3
+         .= the carrier of G by Lm3;
+      f is Homomorphism of G, G by Def1;
+then A4: f is one-to-one by Def1;
+      g1 * f = g" * g by A1,A2,Th9;
+    then g1 * f = 1.AutGroup G by GROUP_1:def 5;
+    then g1 * f = id the carrier of G by Th10;
+    hence thesis by A2,A3,A4,FUNCT_2:36;
+  end;
+
+definition
+  let G;
+  func InnAut G -> FUNCTION_DOMAIN of the carrier of G,the carrier of G means
+:Def4:  for f being Element of Funcs (the carrier of G, the carrier of G)
+    holds f in it iff ex a st for x holds f.x = x |^ a;
+existence
+ proof
+   set X = { f where f is Element of Funcs (the carrier of G,the carrier of G)
+      : ex a st for x holds f.x = x |^ a };
+    set I = id the carrier of G;
+A1: I is Element of Funcs (the carrier of G, the carrier of G)
+      by FUNCT_2:11;
+      ex a st for x holds I.x = x |^ a
+    proof
+      take a = 1.G;
+      let x;
+A2:   a" = 1.G by GROUP_1:16;
+      thus I.x = x by FUNCT_1:35
+              .= x * a by GROUP_1:def 4
+              .= a" * x * a by A2,GROUP_1:def 4
+              .= x |^ a by GROUP_3:def 2;
+    end;
+then A3:  I in X by A1;
+      X is functional
+    proof
+     let h be set;
+     assume h in X;
+      then ex f being Element of Funcs (the carrier of G,the carrier of G)
+       st f = h & ex a st for x holds f.x = x |^ a;
+     hence h is Function;
+    end;
+    then reconsider X as functional non empty set by A3;
+      X is FUNCTION_DOMAIN of the carrier of G, the carrier of G
+    proof
+     let h be Element of X;
+        h in X;
+      then ex f being Element of Funcs (the carrier of G,the carrier of G)
+       st f = h & ex a st for x holds f.x = x |^ a;
+     hence h is Function of the carrier of G,the carrier of G;
+    end;
+   then reconsider X as FUNCTION_DOMAIN of the carrier of G, the carrier of G;
+   take X;
+   let f be Element of Funcs (the carrier of G, the carrier of G);
+   hereby
+    assume f in X;
+    then ex f1 being Element of Funcs (the carrier of G,the carrier of G)
+      st f1 = f & ex a st for x holds f1.x = x |^ a;
+    hence ex a st for x holds f.x = x |^ a;
+   end;
+   thus thesis;
+ end;
+uniqueness
+ proof
+   let F1, F2 be FUNCTION_DOMAIN of the carrier of G, the carrier of G
+      such that
+A4: for f being Element of Funcs (the carrier of G, the carrier of G) holds
+   f in F1
+     iff
+   ex a st for x holds f.x = x |^ a and
+A5: for f being Element of Funcs (the carrier of G, the carrier of G) holds
+   f in F2
+     iff
+   ex a st for x holds f.x = x |^ a;
+A6: F1 c= F2
+   proof
+    let q;
+    assume A7: q in F1;
+    then q is Function of the carrier of G, the carrier of G
+      by FRAENKEL:def 2;
+    then reconsider b1 = q as Element of Funcs (the carrier of G,the carrier of
+G)
+      by FUNCT_2:12;
+      ex a st for x holds b1.x = x |^ a by A4,A7;
+    hence q in F2 by A5;
+   end;
+     F2 c= F1
+   proof
+    let q;
+    assume A8: q in F2;
+    then q is Function of the carrier of G, the carrier of G
+      by FRAENKEL:def 2;
+    then reconsider b1 = q as Element of Funcs (the carrier of G,the carrier of
+G)
+      by FUNCT_2:12;
+       ex a st for x holds b1.x = x |^ a by A5,A8;
+     hence q in F1 by A4;
+   end;
+   hence F1 = F2 by A6,XBOOLE_0:def 10;
+ end;
+end;
+
+theorem
+  InnAut G c= Funcs (the carrier of G, the carrier of G)
+  proof
+    let q;
+    assume q in InnAut G;
+    then consider f be Element of InnAut G such that
+A1:    f = q;
+    thus thesis by A1,FUNCT_2:12;
+  end;
+
+theorem Th13:
+for f being Element of InnAut G
+ holds f is Element of Aut G
+  proof
+    let f be Element of InnAut G;
+A1: f is Element of Funcs (the carrier of G, the carrier of G) by FUNCT_2:12;
+      f is Homomorphism of G, G
+    proof
+      let x,y;
+      consider a such that
+A2:     for x holds f.x = x |^ a by A1,Def4;
+      thus f.(x * y) = (x * y) |^ a by A2
+                    .= a" * (x * y) * a by GROUP_3:def 2
+                    .= a" * x * y * a by VECTSP_1:def 16
+                    .= (a" * x) * (y * a) by VECTSP_1:def 16
+                    .= (a" * x) * 1.G * (y * a) by GROUP_1:def 4
+                    .= a" * x * (a * a") * (y * a) by GROUP_1:def 5
+                    .= a" * x * a * a" * (y * a) by VECTSP_1:def 16
+                    .= (a" * x * a) * a" * y * a by VECTSP_1:def 16
+                    .= (a" * x * a) * (a" * y) * a by VECTSP_1:def 16
+                    .= (a" * x * a) * (a" * y * a) by VECTSP_1:def 16
+                    .= (a" * x * a)* (y |^ a) by GROUP_3:def 2
+                    .= (x |^ a) * (y |^ a) by GROUP_3:def 2
+                    .= f.x * (y |^ a) by A2
+                    .= f.x * f.y by A2;
+    end;
+    then reconsider f as Homomorphism of G, G;
+A3: f is one-to-one
+    proof
+      consider a such that
+A4:     for x holds f.x = x |^ a by A1,Def4;
+      let q,q1;
+      assume that A5: q in dom f and A6: q1 in dom f and A7: f.q = f.q1;
+        ex f1 being Function st f = f1 & dom f1 = the carrier of G &
+        rng f1 c= the carrier of G by A1,FUNCT_2:def 2;
+      then consider x, y such that
+A8:     x = q & y = q1 by A5,A6;
+        f.x = y |^ a by A4,A7,A8;
+      then x |^ a = y |^ a by A4;
+      then a" * x * a = y |^ a by GROUP_3:def 2;
+      then a * (a" * x * a) = a * (a" * y * a) by GROUP_3:def 2;
+      then a * (a" * (x * a)) = a * (a" * y * a) by VECTSP_1:def 16;
+      then (a * a") * (x * a) = a * (a" * y * a) by VECTSP_1:def 16;
+      then (a * a") * (x * a) = a * (a" * (y * a)) by VECTSP_1:def 16;
+      then (a * a") * (x * a) = (a * a") * (y * a) by VECTSP_1:def 16;
+      then 1.G * (x * a) = (a * a") * (y * a) by GROUP_1:def 5;
+      then 1.G * (x * a) = 1.G * (y * a) by GROUP_1:def 5;
+      then x * a = 1.G * (y * a) by GROUP_1:def 4;
+      then x * a * a" = y * a * a" by GROUP_1:def 4;
+      then x * (a * a") = y * a * a" by VECTSP_1:def 16;
+      then x * (a * a") = y * (a * a") by VECTSP_1:def 16;
+      then x * 1.G = y * (a * a") by GROUP_1:def 5;
+      then x * 1.G = y * 1.G by GROUP_1:def 5;
+      then x = y * 1.G by GROUP_1:def 4;
+      hence q = q1 by A8,GROUP_1:def 4;
+    end;
+      f is_epimorphism
+    proof
+        for q st q in the carrier of G ex q1 st q1 in dom f & q=f.q1
+      proof
+        consider a such that
+A9:     for x holds f.x = x |^ a by A1,Def4;
+        let q;
+        assume q in the carrier of G;
+        then consider y such that
+A10:       y = q;
+        take q1 = a * y * a";
+          ex f1 being Function st f = f1 & dom f1 = the carrier of G &
+          rng f1 c= the carrier of G by A1,FUNCT_2:def 2;
+        hence q1 in dom f;
+          y = 1.G * y by GROUP_1:def 4
+         .= 1.G * y * 1.G by GROUP_1:def 4
+         .= a" * a * y * 1.G by GROUP_1:def 5
+         .= a" * a * y * (a" * a) by GROUP_1:def 5
+         .= (a" * a * y) * a" * a by VECTSP_1:def 16
+         .= (a" * a * (y * a")) * a by VECTSP_1:def 16
+         .= a" * (a * (y * a")) * a by VECTSP_1:def 16
+         .= a" * q1 * a by VECTSP_1:def 16
+         .= q1 |^ a by GROUP_3:def 2
+         .= f.q1 by A9;
+        hence thesis by A10;
+      end;
+      then the carrier of G c= rng f by FUNCT_1:19;
+      hence rng f = the carrier of G by XBOOLE_0:def 10;
+    end;
+    hence thesis by A3,Def1;
+  end;
+
+theorem Th14:
+InnAut G c= Aut G
+  proof
+      now
+      let q;
+      assume q in InnAut G;
+      then consider f be Element of InnAut G such that
+A1:      f = q;
+        f is Element of Aut G by Th13;
+      hence q in Aut G by A1;
+    end;
+    hence thesis by TARSKI:def 3;
+  end;
+
+theorem Th15:
+for f, g being Element of InnAut G
+holds (AutComp G).(f, g) = f * g
+  proof
+    let f, g be Element of InnAut G;
+      f is Element of Aut G &
+    g is Element of Aut G by Th13;
+    then consider f1, g1 be Element of Aut G such that
+A1:   f1 = f & g1 = g;
+    thus thesis by A1,Def2;
+  end;
+
+theorem Th16:
+id the carrier of G is Element of InnAut G
+  proof
+    set I = id the carrier of G;
+A1: I is Element of Funcs (the carrier of G, the carrier of G)
+      by FUNCT_2:11;
+      ex a st for x holds I.x = x |^ a
+    proof
+      take a = 1.G;
+      let x;
+A2:   a" = 1.G by GROUP_1:16;
+      thus I.x = x by FUNCT_1:35
+              .= x * a by GROUP_1:def 4
+              .= a" * x * a by A2,GROUP_1:def 4
+              .= x |^ a by GROUP_3:def 2;
+    end;
+    hence thesis by A1,Def4;
+  end;
+
+theorem Th17:
+for f being Element of InnAut G
+holds f" is Element of InnAut G
+  proof
+  let f be Element of InnAut G;
+  reconsider f1 = f as Element of
+    Funcs (the carrier of G, the carrier of G) by FUNCT_2:12;
+    f1 = f;
+  then consider f1 be Element of Funcs (the carrier of G, the carrier of G)
+    such that
+A1: f1 = f;
+A2: f is Element of Aut G by Th13;
+    then reconsider f2 = f as Homomorphism of G, G by Def1;
+      f2 = f;
+    then consider f2 be Homomorphism of G, G such that
+A3:   f2 = f;
+      f2 is one-to-one & f2 is_epimorphism by A2,A3,Def1;
+    then f2 is one-to-one & rng f2 = the carrier of G by GROUP_6:def 13;
+    then f" is Function of the carrier of G, the carrier of G by A3,FUNCT_2:31
+;
+      then A4: f" is Element of Funcs(the carrier of G, the carrier of G) by
+FUNCT_2:12;
+      ex a st for x holds f".x = x |^ a
+    proof
+      consider b such that
+A5:      for y holds f1.y = y |^ b by A1,Def4;
+      take a = b";
+      let x;
+A6:   f1 is Element of Aut G by A1,Th13;
+      then reconsider f1 as Homomorphism of G, G by Def1;
+        f1 is_isomorphism by A6,Th5;
+then A7:   f1 is_epimorphism & f1 is_monomorphism
+         by GROUP_6:def 14;
+      then consider y1 be Element of G such that
+A8:      x = f1.y1 by GROUP_6:68;
+   f1 is one-to-one by A7,GROUP_6:def 12;
+      then f1".x = y1 by A8,FUNCT_2:32
+           .= 1.G * y1 by GROUP_1:def 4
+           .= 1.G * y1 * 1.G by GROUP_1:def 4
+           .= b * b" * y1 * 1.G by GROUP_1:def 5
+           .= b * b" * y1 * (b * b") by GROUP_1:def 5
+           .= (b * b" * y1) * b * b" by VECTSP_1:def 16
+           .= (b * b" * (y1 * b)) * b" by VECTSP_1:def 16
+           .= b * (b" * (y1 * b)) * b" by VECTSP_1:def 16
+           .= b * (b" * y1 * b) * b" by VECTSP_1:def 16
+           .= b * (y1 |^ b) * b" by GROUP_3:def 2
+           .= b * x * b" by A5,A8
+           .= a" * x * a by GROUP_1:19;
+      hence f".x = x |^ a by A1,GROUP_3:def 2;
+    end;
+    hence thesis by A4,Def4;
+  end;
+
+theorem Th18:
+for f, g being Element of InnAut G
+holds f * g is Element of InnAut G
+  proof
+    let f, g be Element of InnAut G;
+A1: f is Element of Funcs (the carrier of G, the carrier of G) &
+    g is Element of Funcs (the carrier of G, the carrier of G) by FUNCT_2:12;
+A2: f * g is Element of Funcs (the carrier of G, the carrier of G)
+      by FUNCT_2:12;
+      ex a st for x holds (f * g).x = x |^ a
+    proof
+      consider b such that
+A3:     for x1 being Element of G holds f.x1 = x1 |^ b
+    by A1,Def4;
+      consider c such that
+A4:      for x2 being Element of G holds g.x2 = x2 |^ c
+    by A1,Def4;
+      take a = c * b;
+      let x;
+        (f * g).x = f.(g.x) by FUNCT_2:21
+        .= f.(x |^ c) by A4
+        .= f.(c" * x * c) by GROUP_3:20
+        .= (c" * x * c) |^ b by A3
+        .= b" * (c" * x * c * b) by GROUP_3:20
+        .= b" * (c" * (x * c) * b) by VECTSP_1:def 16
+        .= b" * (c" * (x * c * b)) by VECTSP_1:def 16
+        .= (b" * c") * (x * c * b) by VECTSP_1:def 16
+        .= (b" * c") * (x * (c * b)) by VECTSP_1:def 16
+        .= (b" * c") * x * (c * b) by VECTSP_1:def 16
+        .= a" * x * (c * b) by GROUP_1:25
+        .= x |^ a by GROUP_3:20;
+      hence (f * g).x = x |^ a;
+    end;
+    hence thesis by A2,Def4;
+  end;
+
+definition
+  let G;
+  func InnAutGroup G -> normal strict Subgroup of AutGroup G means
+:Def5:  the carrier of it = InnAut G;
+existence
+ proof
+  reconsider K1 = Aut G as set;
+    reconsider K2 = InnAut G as Subset of K1 by Th14;
+    for q holds q in [:K2,K2:] implies (AutComp G).q in K2
+  proof
+    let q;
+    assume q in [:K2,K2:];
+    then consider x, y be set such that
+A1:   x in K2 & y in K2 & q = [x, y] by ZFMISC_1:def 2;
+    reconsider x, y as Element of InnAut G by A1;
+A2: x * y is Element of InnAut G by Th18;
+      (AutComp G).q = (AutComp G).(x, y) by A1,BINOP_1:def 1
+      .= x * y by Th15;
+    hence thesis by A2;
+  end;
+  then AutComp G is Presv of K1, K2 by REALSET1:def 16;
+  then reconsider op = (AutComp G)|[:InnAut G, InnAut G:] as BinOp of InnAut G
+    by REALSET1:41;
+  set IG = HGrStr (# InnAut G, op #);
+    IG is associative Group-like
+  proof
+A3:  now let x,y be Element of IG,
+            f,g be Element of InnAut G;
+      assume A4: x = f & y = g;
+A5:   [f, g] in [:InnAut G, InnAut G:] by ZFMISC_1:def 2;
+      thus x * y = (op).(f,g) by A4,VECTSP_1:def 10
+                .= (op).[f,g] by BINOP_1:def 1
+                .= (AutComp G).[f,g] by A5,FUNCT_1:72
+                .= (AutComp G).(f,g) by BINOP_1:def 1
+                .= f * g by Th15;
+    end;
+    thus for f,g,h being Element of IG
+    holds (f * g) * h = f * (g * h)
+    proof
+      let f,g,h be Element of IG;
+      reconsider A = f, B = g, C = h as Element of InnAut G;
+A6:   f * g = A * B by A3;
+A7:   g * h = B * C by A3;
+      thus (f * g) * h = A * B * C by A3,A6
+                      .= A * (B * C) by RELAT_1:55
+                      .= f * (g * h) by A3,A7;
+    end;
+    thus
+        ex e being Element of IG st
+        for h being Element of IG holds
+          h * e = h & e * h = h &
+          ex g being Element of IG st h * g = e & g * h = e
+    proof
+      reconsider e = id the carrier of G as Element of IG
+      by Th16;
+      take e;
+      let h be Element of IG;
+      consider A be Element of InnAut G such that
+A8:     A = h;
+        h * e = A * id the carrier of G by A3,A8
+           .= A by FUNCT_2:74;
+      hence h * e = h by A8;
+        e * h = (id the carrier of G) * A by A3,A8
+           .= A by FUNCT_2:74;
+      hence e * h = h by A8;
+      reconsider g = A" as Element of IG by Th17;
+      take g;
+      reconsider A as Element of Aut G by Th13;
+      reconsider A as Homomorphism of G, G by Def1;
+A9:   (A is one-to-one) & (A is_epimorphism) by Def1;
+then A10:  rng A = the carrier of G by GROUP_6:def 13;
+      thus h * g = A * A" by A3,A8
+                .= e by A9,A10,FUNCT_2:35;
+      thus g * h = A" * A by A3,A8
+                .= e by A9,A10,FUNCT_2:35;
+    end;
+  end;
+  then reconsider IG as Group;
+    IG is Subgroup of AutGroup G
+  proof
+      AutGroup G = HGrStr (# Aut G, AutComp G #) by Def3;
+then A11: the carrier of IG c= the carrier of AutGroup G by Th14;
+      the mult of IG =
+      (the mult of AutGroup G) | [:the carrier of IG,the carrier of IG:]
+    proof
+        AutGroup G = HGrStr (# Aut G, AutComp G #) by Def3;
+      hence the mult of IG =
+ (the mult of AutGroup G) | [:the carrier of IG,the carrier of IG:];
+    end;
+    hence thesis by A11,GROUP_2:def 5;
+  end;
+  then reconsider IG as strict Subgroup of AutGroup G;
+    for f, k being Element of AutGroup G
+    st k is Element of IG holds k |^ f in IG
+  proof
+    let f, k be Element of AutGroup G;
+    assume A12: k is Element of IG;
+      AutGroup G = HGrStr (# Aut G, AutComp G #) by Def3;
+    then consider f1 be Element of Aut G such that
+A13:   f1 = f;
+    consider g be Element of InnAut G such that
+A14:   g = k by A12;
+      g is Element of Aut G by Th13;
+    then consider g1 be Element of Aut G such that
+A15:   g1 = g;
+      g1 is Element of Funcs (the carrier of G, the carrier of G)
+      by FUNCT_2:11;
+    then consider a such that
+A16:   for x holds g1.x = x |^ a by A15,Def4;
+      f1" * g1 * f1 is Element of InnAut G
+    proof
+        f1 is Homomorphism of G, G by Def1;
+then A17:   f1 is one-to-one by Def1;
+A18:   rng f1 = dom f1 by Lm3
+         .= the carrier of G by Lm3;
+   then f1" is Function of the carrier of G, the carrier of G
+        by A17,FUNCT_2:31;
+      then f1" * g1 is Function of the carrier of G, the carrier of G
+        by FUNCT_2:19;
+      then f1" * g1 * f1 is Function of the carrier of G, the carrier of G
+        by FUNCT_2:19;
+then A19:   f1" * g1 * f1 is Element of
+         Funcs (the carrier of G, the carrier of G) by FUNCT_2:11;
+        f1" is Element of Aut G by Th7;
+      then f1" is Homomorphism of G, G by Def1;
+      then consider A be Homomorphism of G, G such that
+A20:     A = f1";
+      A21: A * f1 = id the carrier of G by A17,A18,A20,FUNCT_2:35;
+    now
+      let y;
+      thus (f1" * g1 * f1).y = (f1" * (g1 * f1)).y by RELAT_1:55
+        .= f1".((g1 * f1).y) by FUNCT_2:70
+        .= f1".(g1.(f1.y)) by FUNCT_2:70
+        .= f1".(f1.y |^ a) by A16
+        .= A.(a" * f1.y * a) by A20,GROUP_3:20
+        .= A.(a" * f1.y) * A.a by GROUP_6:def 7
+        .= A.a" * A.(f1.y) * A.a by GROUP_6:def 7
+        .= A.a" * (A * f1).y * A.a by FUNCT_2:70
+        .= A.a" * y * A.a by A21,FUNCT_1:35
+        .= (A.a)" * y * A.a by GROUP_6:41
+        .= y |^ A.a by GROUP_3:20;
+      end;
+      hence f1" * g1 * f1 is Element of InnAut G by A19,Def4;
+    end;
+then A22: f1" * g * f1 in InnAut G by A15;
+    reconsider C = f1" as Element of Aut G by Th7;
+    reconsider D = g as Element of Aut G by Th13;
+      f1" = f" by A13,Th11;
+    then A23: C * D = f" * k by A14,Th9;
+      f1" * g is Element of Aut G
+    proof
+        f1" is Element of Aut G &
+      g is Element of Aut G by Th7,Th13;
+      hence f1" * g is Element of Aut G by Th8;
+    end;
+    then reconsider E = f1" * g as Element of Aut G;
+    consider q such that
+A24:   q = f" * k * f;
+      E * f1 = f" * k * f by A13,A23,Th9;
+    then q in carr IG by A22,A24,GROUP_2:def 9;
+    then f" * k * f in IG by A24,GROUP_2:88;
+    hence k |^ f in IG by GROUP_3:20;
+  end;
+  then reconsider IG as normal strict Subgroup of AutGroup G by Lm1;
+  take IG;
+  thus thesis;
+ end;
+uniqueness by GROUP_2:68;
+end;
+
+canceled;
+
+theorem Th20:
+for x, y being Element of InnAutGroup G
+  for f, g being Element of InnAut G st x = f & y = g
+  holds x * y = f * g
+  proof
+    let x,y be Element of InnAutGroup G;
+    let f,g be Element of InnAut G;
+    assume A1: x = f & y = g;
+      f is Element of Aut G &
+    g is Element of Aut G by Th13;
+    then consider f1, g1 be Element of Aut G such that
+A2:   f1 = f & g1 = g;
+      x is Element of AutGroup G &
+    y is Element of AutGroup G by GROUP_2:51;
+    then consider x1, y1 be Element of AutGroup G such that
+A3:   x1 = x & y1 = y;
+      x1 * y1 = f1 * g1 by A1,A2,A3,Th9;
+    hence thesis by A2,A3,GROUP_2:52;
+  end;
+
+theorem Th21:
+id the carrier of G = 1.InnAutGroup G
+  proof
+      id the carrier of G = 1.AutGroup G by Th10;
+    hence thesis by GROUP_2:53;
+  end;
+
+theorem
+  for f being Element of InnAut G
+  for g being Element of InnAutGroup G st f = g holds f" = g"
+  proof
+    let f be Element of InnAut G;
+    let g be Element of InnAutGroup G;
+    assume A1: f = g;
+      f is Element of Aut G by Th13;
+    then consider f1 be Element of Aut G such that
+A2:   f1 = f;
+      g is Element of AutGroup G by GROUP_2:51;
+    then consider g1 be Element of AutGroup G such that
+A3:   g1 = g;
+      f1" = g1" by A1,A2,A3,Th11;
+    hence thesis by A2,A3,GROUP_2:57;
+  end;
+
+definition
+  let G, b;
+  func Conjugate b -> Element of InnAut G means
+:Def6:  for a holds it.a = a |^ b;
+existence
+  proof
+    deffunc _F(Element of G) = ($1) |^ b;
+    consider g be Function of the carrier of G, the carrier of G such that
+A1:   for a holds g.a = _F(a) from LambdaD;
+      g is Element of Funcs (the carrier of G, the carrier of G) by FUNCT_2:11;
+    then reconsider g as Element of InnAut G by A1,Def4;
+    take g;
+    let a;
+    thus g.a = a |^ b by A1;
+  end;
+uniqueness
+  proof
+    let f1, f2 be Element of InnAut G such that
+A2:  for a holds f1.a = a |^ b and
+A3:  for a holds f2.a = a |^ b;
+      for a holds f1.a = f2.a
+    proof
+      let a;
+      thus f1.a = a |^ b by A2
+               .= f2.a by A3;
+    end;
+    hence f1 = f2 by FUNCT_2:113;
+  end;
+end;
+
+theorem Th23:
+for a, b holds Conjugate (a * b) = (Conjugate b) * (Conjugate a)
+  proof
+    let a, b;
+    set f1 = Conjugate (a * b);
+    set f2 = ((Conjugate b) * (Conjugate a));
+A1: for c holds f1.c = c |^ a |^ b
+    proof
+      let c;
+        c |^ (a * b) = c |^ a |^ b by GROUP_3:29;
+      hence thesis by Def6;
+    end;
+A2: for c holds f1.c = (Conjugate b).(c |^ a)
+    proof
+      let c;
+        c |^ a |^ b = (Conjugate b).(c |^ a) by Def6;
+      hence thesis by A1;
+    end;
+A3: for c holds f1.c = (Conjugate b).((Conjugate a).c)
+    proof
+      let c;
+        (Conjugate b).(c |^ a) = (Conjugate b).((Conjugate a).c) by Def6;
+      hence thesis by A2;
+    end;
+      for c holds f1.c = f2.c
+    proof
+      let c;
+        (Conjugate b).((Conjugate a).c) = f2.c by FUNCT_2:21;
+      hence thesis by A3;
+    end;
+    hence f1 = f2 by FUNCT_2:113;
+  end;
+
+theorem Th24:
+Conjugate 1.G = id the carrier of G
+  proof
+      for a holds (Conjugate 1.G).a = a
+    proof
+      let a;
+        a |^ 1.G = a by GROUP_3:24;
+      hence thesis by Def6;
+    end;
+then A1: for q st q in the carrier of G holds (Conjugate 1.G).q = q;
+      Conjugate 1.G is Element of Aut G by Th13;
+    then dom (Conjugate 1.G) = the carrier of G by Lm3;
+    hence thesis by A1,FUNCT_1:34;
+  end;
+
+theorem Th25:
+for a holds (Conjugate 1.G).a = a
+  proof
+    let a;
+    thus (Conjugate 1.G).a = a |^ 1.G by Def6
+           .= a by GROUP_3:24;
+  end;
+
+theorem
+  for a holds (Conjugate a) * (Conjugate a") = Conjugate 1.G
+  proof
+    let a;
+    set f1 = (Conjugate a) * (Conjugate a");
+    set f2 = Conjugate 1.G;
+A1: for b holds f1.b = b
+    proof
+      let b;
+        (Conjugate a).((Conjugate a").b) = (Conjugate a).(b |^ a") by Def6
+        .= b |^ a" |^ a by Def6
+        .= b by GROUP_3:30;
+      hence thesis by FUNCT_2:21;
+    end;
+  for b holds f1.b = f2.b
+    proof
+      let b;
+      thus f1.b = b by A1
+          .= f2.b by Th25;
+    end;
+    hence f1 = f2 by FUNCT_2:113;
+  end;
+
+theorem Th27:
+for a holds (Conjugate a") * (Conjugate a) = Conjugate 1.G
+  proof
+    let a;
+    set f1 = (Conjugate a") * (Conjugate a);
+    set f2 = Conjugate 1.G;
+A1: for b holds f1.b = b
+    proof
+      let b;
+        (Conjugate a").((Conjugate a).b) = (Conjugate a").(b |^ a) by Def6
+        .= b |^ a |^ a" by Def6
+        .= b by GROUP_3:30;
+      hence thesis by FUNCT_2:21;
+    end;
+      for b holds f1.b = f2.b
+    proof
+      let b;
+      thus f1.b = b by A1
+               .= f2.b by Th25;
+    end;
+    hence f1 = f2 by FUNCT_2:113;
+  end;
+
+theorem
+  for a holds Conjugate a" = (Conjugate a)"
+  proof
+    let a;
+    set f = Conjugate a;
+    set g = Conjugate a";
+A1: g * f = id the carrier of G
+    proof
+      thus g * f = Conjugate 1.G by Th27
+                .= id the carrier of G by Th24;
+    end;
+A2: f is Element of Aut G by Th13;
+then A3: rng f = dom f by Lm3
+         .= the carrier of G by A2,Lm3;
+      f is Homomorphism of G, G by A2,Def1;
+    then f is one-to-one by A2,Def1;
+    hence thesis by A1,A3,FUNCT_2:36;
+  end;
+
+theorem
+  for a holds ( (Conjugate a) * (Conjugate 1.G) = Conjugate a ) &
+       ( (Conjugate 1.G) * (Conjugate a) = Conjugate a )
+  proof
+    let a;
+      Conjugate 1.G = id the carrier of G by Th24;
+    hence thesis by FUNCT_2:23;
+  end;
+
+theorem
+  for f being Element of InnAut G holds
+    f * Conjugate 1.G = f & (Conjugate 1.G) * f = f
+  proof
+    let f be Element of InnAut G;
+      Conjugate 1.G = id the carrier of G by Th24;
+    hence thesis by FUNCT_2:23;
+  end;
+
+theorem
+  for G holds InnAutGroup G, G./.center G are_isomorphic
+  proof
+    let G;
+A1: the carrier of InnAutGroup G = InnAut G by Def5;
+    deffunc _F(Element of G) = Conjugate ($1)";
+    consider f be Function of the carrier of G, InnAut G
+     such that
+A2:   for a holds f.a = _F(a) from LambdaD;
+    reconsider f as Function of the carrier of G,
+      the carrier of InnAutGroup G by A1;
+      f is Homomorphism of G, InnAutGroup G
+    proof
+      let a,b;
+A3:   f.(a * b) = Conjugate (a * b)" by A2
+          .= Conjugate (b" * a") by GROUP_1:25
+          .= (Conjugate a") * (Conjugate b") by Th23;
+        now
+        let A, B be Element of InnAutGroup G;
+        assume A4:  A = f.a & B = f.b;
+        then A = Conjugate a" & B = Conjugate b" by A2;
+        hence f.(a * b) = f.a * f.b by A3,A4,Th20;
+      end;
+      hence thesis;
+    end;
+    then consider f1 be Homomorphism of G, InnAutGroup G such that
+A5:     f1 = f;
+A6: Ker f1 = center G
+    proof
+      set KER = the carrier of Ker f1;
+      set C = { a : for b holds a * b = b * a };
+A7:   KER = { a : f1.a = 1.InnAutGroup G } by GROUP_6:def 10;
+A8:   KER c= C
+      proof
+       let q;
+       assume A9: q in KER;
+         1.InnAutGroup G = id the carrier of G by Th21;
+       then consider x such that
+A10:      q = x & f1.x = id the carrier of G by A7,A9;
+A11:    for b holds (Conjugate x").b = b
+       proof
+         let b;
+           (id the carrier of G).b = b by FUNCT_1:35;
+         hence thesis by A2,A5,A10;
+       end;
+A12:    for b holds b |^ x" = b
+       proof
+         let b;
+           (Conjugate x").b = b |^ x" by Def6;
+         hence thesis by A11;
+       end;
+         for b holds x * b = b * x
+       proof
+         let b;
+           b |^ x" = x"" * b * x" by GROUP_3:20
+           .= x * b * x" by GROUP_1:19;
+         then x * b * x" * x = b * x by A12;
+         then x * b * (x" * x) = b * x by VECTSP_1:def 16;
+         then x * b * 1.G = b * x by GROUP_1:def 5;
+         hence thesis by GROUP_1:def 4;
+       end;
+       hence q in C by A10;
+      end;
+        C c= KER
+      proof
+       let q;
+       assume q in C;
+       then consider x such that
+A13:      x = q & for b holds x * b = b * x;
+A14:    for b holds b = (Conjugate x").b
+       proof
+         let b;
+           x * b * x" = b * x * x" by A13;
+         then x * b * x" = b * (x * x") by VECTSP_1:def 16;
+         then x * b * x" = b * 1.G by GROUP_1:def 5;
+         then b = x * b * x" by GROUP_1:def 4;
+         then b = x"" * b * x" by GROUP_1:19;
+         then b = b |^ x" by GROUP_3:20;
+         hence thesis by Def6;
+       end;
+       consider g be Function of the carrier of G, the carrier of G such that
+A15:      g = Conjugate x";
+         for b holds (id the carrier of G).b = g.b
+       proof
+         let b;
+           b = g.b & b = (id the carrier of G).b by A14,A15,FUNCT_1:35;
+         hence thesis;
+       end;
+       then g = id the carrier of G by FUNCT_2:113;
+       then Conjugate x" = 1.InnAutGroup G by A15,Th21;
+       then f1.x = 1.InnAutGroup G by A2,A5;
+       hence thesis by A7,A13;
+      end;
+      then KER = C by A8,XBOOLE_0:def 10;
+      hence thesis by GROUP_5:def 10;
+    end;
+      f1 is_epimorphism
+    proof
+        for q st q in the carrier of InnAutGroup G
+        ex q1 st q1 in the carrier of G & q = f1.q1
+      proof
+        let q;
+        assume A16: q in the carrier of InnAutGroup G;
+then A17:     q is Element of InnAut G by Def5;
+        then consider y1 be Function of the carrier of G, the carrier of G
+        such that
+A18:       y1 = q;
+          y1 is Element of Funcs (the carrier of G, the carrier of G)
+          by FUNCT_2:12;
+        then consider b such that
+A19:       for a holds y1.a = a |^ b by A1,A16,A18,Def4;
+        take q1 = b";
+        thus q1 in the carrier of G;
+          f1.q1 = Conjugate b"" by A2,A5
+             .= Conjugate b by GROUP_1:19;
+        hence thesis by A17,A18,A19,Def6;
+      end;
+      then rng f1 = the carrier of InnAutGroup G by FUNCT_2:16;
+      hence thesis by GROUP_6:def 13;
+    end;
+    then InnAutGroup G = Image f1 by GROUP_6:67;
+    hence thesis by A6,GROUP_6:90;
+  end;
+
+theorem
+  for G holds ( G is commutative Group implies
+  for f being Element of InnAutGroup G
+  holds f = 1.InnAutGroup G )
+  proof
+    let G;
+    assume A1: G is commutative Group;
+    let f be Element of InnAutGroup G;
+      the carrier of InnAutGroup G = InnAut G by Def5;
+    then consider f1 be Element of InnAut G such that
+A2:   f1 = f;
+      f1 is Element of Funcs (the carrier of G, the carrier of G)
+       by FUNCT_2:11;
+    then consider a such that
+A3:   for x holds f1.x = x |^ a by Def4;
+A4: for x holds f1.x = x
+    proof
+      let x;
+      thus f1.x = x |^ a by A3
+               .= x by A1,GROUP_3:35;
+    end;
+      for x holds f1.x = (id the carrier of G).x
+    proof
+      let x;
+      thus f1.x = x by A4
+               .= (id the carrier of G).x by FUNCT_1:35;
+    end;
+    then f1 = id the carrier of G by FUNCT_2:113;
+    hence thesis by A2,Th21;
+  end;
+

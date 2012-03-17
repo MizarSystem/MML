@@ -1,0 +1,2807 @@
+:: Projective Spaces
+::  by Wojciech Leo\'nczuk and Krzysztof Pra\.zmowski
+::
+:: Received June 15, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, ANPROJ_1, ARYTM_1, RELAT_1, FUNCT_2, FUNCT_1, FUNCSDOM,
+      REALSET1, COLLSP, RELAT_2, INCSP_1, VECTSP_1, AFF_2, ANALOAF, ANPROJ_2;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, FUNCT_1, FUNCT_2, BINOP_1,
+      DOMAIN_1, STRUCT_0, RLVECT_1, REAL_1, FRAENKEL, FUNCSDOM, COLLSP,
+      ANPROJ_1;
+ constructors DOMAIN_1, REAL_1, FUNCSDOM, ANPROJ_1, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, COLLSP, ANPROJ_1, STRUCT_0, RELSET_1, MEMBERED, ZFMISC_1,
+      XBOOLE_0;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions COLLSP, ANPROJ_1;
+ theorems RLVECT_1, BINOP_1, FUNCT_2, FUNCSDOM, COLLSP, ANPROJ_1, ENUMSET1,
+      XCMPLX_0, XCMPLX_1;
+ schemes FUNCT_2;
+
+begin
+
+ reserve V for RealLinearSpace,
+         o,p,q,r,s,u,v,w,y,y1,u1,v1,w1,u2,v2,w2 for Element of V,
+         a,b,c,d,a1,b1,c1,d1,a2,b2,c2,d2,a3,b3,c3,d3 for Real,
+         z for set;
+
+theorem
+Th1: (for a,b,c st a*u + b*v + c*w = 0.V holds a = 0 & b = 0 & c = 0)
+ implies u is_Prop_Vect & v is_Prop_Vect & w is_Prop_Vect &
+   not u,v,w are_LinDep & not are_Prop u,v
+ proof assume A1: for a,b,c st a*u + b*v + c*w = 0.V holds a=0 & b=0 & c = 0;
+  thus u is_Prop_Vect & v is_Prop_Vect & w is_Prop_Vect proof
+  A2: now assume not u is_Prop_Vect; then A3: u = 0.V by RLVECT_1:def 13;
+     0.V = 0.V + 0.V by RLVECT_1:10 .= 0.V + 0.V + 0.V by RLVECT_1:10
+       .= 1*u + 0.V + 0.V by A3,RLVECT_1:def 9
+ .= 1*u + 0*v + 0.V by RLVECT_1:23
+       .= 1*u + 0*v + 0*w by RLVECT_1:23;
+       hence contradiction by A1; end;
+  A4: now assume not v is_Prop_Vect; then A5: v = 0.V by RLVECT_1:def 13;
+     0.V = 0.V + 0.V by RLVECT_1:10 .= 0.V + 0.V + 0.V by RLVECT_1:10
+       .= 0.V + 1*v + 0.V by A5,RLVECT_1:def 9
+ .= 0*u + 1*v + 0.V by RLVECT_1:23
+       .= 0*u + 1*v + 0*w by RLVECT_1:23;
+       hence contradiction by A1; end;
+     now assume not w is_Prop_Vect; then A6: w = 0.V by RLVECT_1:def 13;
+     0.V = 0.V + 0.V by RLVECT_1:10 .= 0.V + 0.V + 0.V by RLVECT_1:10
+       .= 0.V + 0.V + 1*w by A6,RLVECT_1:def 9
+ .= 0*u + 0.V + 1*w by RLVECT_1:23
+       .= 0*u + 0*v + 1*w by RLVECT_1:23;
+       hence contradiction by A1; end;
+   hence thesis by A2,A4; end;
+  thus not u,v,w are_LinDep by A1,ANPROJ_1:def 3;
+  hence not are_Prop u,v by ANPROJ_1:17;
+ end;
+
+Lm1: (for a,b st a*u + b*v = 0.V holds a = 0 & b = 0 )
+ implies u is_Prop_Vect & v is_Prop_Vect & not are_Prop u,v
+proof assume A1: for a,b st a*u + b*v = 0.V holds a=0 & b=0;
+  thus u is_Prop_Vect & v is_Prop_Vect proof
+  A2: now assume not u is_Prop_Vect; then A3: u = 0.V by RLVECT_1:def 13;
+     0.V = 0.V + 0.V by RLVECT_1:10
+       .= 1*u + 0.V by A3,RLVECT_1:def 9
+       .= 1*u + 0*v by RLVECT_1:23;
+       hence contradiction by A1; end;
+     now assume not v is_Prop_Vect; then A4: v = 0.V by RLVECT_1:def 13;
+     0.V = 0.V + 0.V by RLVECT_1:10
+       .= 0.V + 1*v by A4,RLVECT_1:def 9
+       .= 0*u + 1*v by RLVECT_1:23;
+       hence contradiction by A1; end;
+  hence thesis by A2; end;
+  given a,b such that A5: a*u = b*v and A6: a<>0 & b<>0;
+    0.V = a*u - b*v by A5,RLVECT_1:28
+     .= a*u + -(b*v) by RLVECT_1:def 11
+     .= a*u + b*(-v) by RLVECT_1:39
+     .= a*u + (-b)*v by RLVECT_1:38;
+  hence contradiction by A1,A6;
+end;
+
+theorem
+Th2: for u,v,u1,v1 holds
+    ((for a,b,a1,b1 st a*u + b*v + a1*u1 + b1*v1 = 0.V holds
+     a=0 & b=0 & a1=0 & b1=0) implies
+ u is_Prop_Vect & v is_Prop_Vect & not are_Prop u,v & u1 is_Prop_Vect &
+ v1 is_Prop_Vect & not are_Prop u1,v1 & not u,v,u1 are_LinDep &
+                     not u1,v1,u are_LinDep)
+  proof let u,v,u1,v1;
+  assume A1: for a,b,a1,b1 st a*u + b*v + a1*u1 + b1*v1 = 0.V holds
+  a=0 & b=0 & a1=0 & b1=0;
+A2:  now let d1,d2,d3; assume d1*u1 + d2*v1 + d3*u = 0.V;
+   then 0.V = d3*u + d1*u1 + d2*v1 by RLVECT_1:def 6
+   .= d3*u + 0.V + d1*u1 + d2*v1 by RLVECT_1:10
+    .= d3*u + 0*v + d1*u1 + d2*v1 by RLVECT_1:23;
+    hence d1=0 & d2=0 & d3=0 by A1; end;
+    now let d1,d2,d3; assume d1*u + d2*v + d3*u1 = 0.V;
+   then 0.V = d1*u + d2*v + d3*u1 + 0.V by RLVECT_1:10
+    .= d1*u + d2*v + d3*u1 + 0*v1 by RLVECT_1:23;
+    hence d1=0 & d2=0 & d3=0 by A1; end;
+   hence thesis by A2,Th1; end;
+
+Lm2: a*(b*v+c*w+d*u) = (a*b)*v+(a*c)*w+(a*d)*u
+ proof thus (a*b)*v+(a*c)*w+(a*d)*u = a*(b*v)+(a*c)*w+(a*d)*u by RLVECT_1:def 9
+   .= a*(b*v)+a*(c*w)+(a*d)*u by RLVECT_1:def 9 .= a*(b*v+c*w)+(a*d)*u
+   by RLVECT_1:def 9 .= a*(b*v+c*w)+a*(d*u) by RLVECT_1:def 9
+   .= a*(b*v+c*w+d*u) by RLVECT_1:def 9; end;
+
+Lm3: (u+v+w) + (u1+v1+w1) = (u+u1)+(v+v1)+(w+w1)
+  proof thus (u+u1)+(v+v1)+(w+w1) = u1+(u+(v+v1))+(w+w1) by RLVECT_1:def 6
+   .= u1+((u+v)+v1)+(w+w1) by RLVECT_1:def 6
+   .= (u1+v1)+(u+v)+(w+w1) by RLVECT_1:def 6
+   .= (u1+v1)+((u+v)+(w+w1)) by RLVECT_1:def 6
+   .= (u1+v1)+(u+v+w+w1) by RLVECT_1:def 6
+   .= (u+v+w) + (u1+v1+w1) by RLVECT_1:def 6; end;
+
+theorem Th3: (for w ex a,b,c st w = a*p + b*q + c*r) &
+  (for a,b,c st a*p + b*q + c*r = 0.V holds a = 0 & b = 0 & c = 0) implies
+(for u,u1 ex y st p,q,y are_LinDep & u,u1,y are_LinDep & y is_Prop_Vect)
+proof assume that A1: for w ex a,b,c st w = a*p + b*q + c*r and
+ A2: for a,b,c st a*p + b*q + c*r = 0.V holds a = 0 & b = 0 & c = 0; let u,u1;
+ consider a,b,c such that A3: u = a*p + b*q + c*r by A1;
+ consider a1,b1,c1 such that A4: u1 = a1*p + b1*q + c1*r by A1;
+ A5: p is_Prop_Vect & q is_Prop_Vect & r is_Prop_Vect &
+     not p,q,r are_LinDep & not are_Prop p,q by A2,Th1;
+ A6: a3*u + b3*u1 = (a3*a + b3*a1)*p + (a3*b + b3*b1)*q + (a3*c + b3*c1)*r
+  proof a3*u = (a3*a)*p + (a3*b)*q + (a3*c)*r by A3,Lm2;
+   hence a3*u + b3*u1 = ((a3*a)*p + (a3*b)*q + (a3*c)*r) +
+   ((b3*a1)*p + (b3*b1)*q + (b3*c1)*r) by A4,Lm2
+ .= ((a3*a)*p + (b3*a1)*p) +
+   ((a3*b)*q + (b3*b1)*q) + ((a3*c)*r + (b3*c1)*r) by Lm3 .= (a3*a + b3*a1)*p
+   + ((a3*b)*q + (b3*b1)*q) + ((a3*c)*r + (b3*c1)*r) by RLVECT_1:def 9 .=
+   (a3*a + b3*a1)*p + (a3*b + b3*b1)*q + ((a3*c)*r + (b3*c1)*r) by RLVECT_1:def
+9
+ .= (a3*a + b3*a1)*p + (a3*b + b3*b1)*q + (a3*c + b3*c1)*r by RLVECT_1:def 9
+; end;
+ A7: now assume A8: are_Prop u,u1 or not u is_Prop_Vect or not u1 is_Prop_Vect;
+   A9: now assume A10: are_Prop u,u1;
+    A11: p,q,q are_LinDep by ANPROJ_1:16; u,u1,q are_LinDep by A10,ANPROJ_1:16
+;
+    hence thesis by A5,A11; end;
+   A12: now assume not u is_Prop_Vect; then A13: u = 0.V by RLVECT_1:def 13;
+ A14: p,q,q are_LinDep by ANPROJ_1:16;
+      u,u1,q are_LinDep by A13,ANPROJ_1:15; hence thesis by A5,A14; end;
+      now assume not u1 is_Prop_Vect; then A15: u1 = 0.V by RLVECT_1:def 13;
+ A16: p,q,q are_LinDep by ANPROJ_1:16;
+      u,u1,q are_LinDep by A15,ANPROJ_1:15; hence thesis by A5,A16; end;
+  hence thesis by A8,A9,A12; end;
+ A17: now assume A18: not are_Prop u,u1 & u is_Prop_Vect &
+     u1 is_Prop_Vect & c = 0;
+     now set a3 = 1,b3 = 0; set y = a3*u + b3*u1;
+   A19: y is_Prop_Vect proof y = u + 0*u1 by RLVECT_1:def 9
+    .= u + 0.V by RLVECT_1:23 .= u by RLVECT_1:10; hence thesis by A18; end;
+     a3*c + b3*c1 = 0 by A18;
+   then y = (a3*a + b3*a1)*p + (a3*b + b3*b1)*q + 0*r
+   by A6 .= (a3*a + b3*a1)*p + (a3*b + b3*b1)*q + 0.V by RLVECT_1:23
+   .= (a3*a + b3*a1)*p + (a3*b + b3*b1)*q by RLVECT_1:10;
+   then A20: p,q,y are_LinDep by A5,ANPROJ_1:11; u,u1,y are_LinDep by A18,
+ANPROJ_1:11;
+  hence thesis by A19,A20; end;
+  hence thesis; end;
+    now assume A21: not are_Prop u,u1 & u is_Prop_Vect &
+    u1 is_Prop_Vect & c <> 0;
+  A22: now assume A23: c1 = 0; set a3 = 0,b3 = 1; set y = a3*u + b3*u1;
+   A24: y is_Prop_Vect proof y = 0*u + u1 by RLVECT_1:def 9
+    .= 0.V + u1 by RLVECT_1:23 .= u1 by RLVECT_1:10; hence thesis by A21; end;
+     a3*c + b3*c1 = 0 by A23; then y = (a3*a + b3*a1)*p +
+   (a3*b + b3*b1)*q + 0*r by A6 .= (a3*a + b3*a1)*p + (a3*b + b3*b1)*q + 0.V
+   by RLVECT_1:23 .= (a3*a + b3*a1)*p + (a3*b + b3*b1)*q by RLVECT_1:10;
+   then A25: p,q,y are_LinDep by A5,ANPROJ_1:11; u,u1,y are_LinDep by A21,
+ANPROJ_1:11;
+  hence thesis by A24,A25; end;
+     now assume A26: c1 <> 0; set a3 = 1,b3 = -(c*c1");
+    set y = a3*u + b3*u1; c1"<>0 by A26,XCMPLX_1:203; then A27: c*c1" <> 0
+by A21,XCMPLX_1:6;
+   A28: y is_Prop_Vect proof assume not y is_Prop_Vect;
+then 0.V = 1*u + (-(c*c1"))*u1 by RLVECT_1:def 13 .= 1*u +
+     (c*c1")*(-u1) by RLVECT_1:38 .= 1*u + -((c*c1")*u1) by RLVECT_1:39;
+     then -1*u = -((c*c1")*u1) by RLVECT_1:def 10; then 1*u = (c*c1")*u1
+     by RLVECT_1:31;
+     hence contradiction by A21,A27,ANPROJ_1:def 2; end;
+     a3*c + b3*c1 = c + ((-c)*c1")*c1 by XCMPLX_1:175
+   .= c + (-c)*(c1"*c1) by XCMPLX_1:4
+    .= c + (-c)*1 by A26,XCMPLX_0:def 7 .= 0 by XCMPLX_0:def 6;
+   then y = (a3*a + b3*a1)*p + (a3*b + b3*b1)*q + 0*r by A6
+    .= (a3*a + b3*a1)*p + (a3*b + b3*b1)*q + 0.V by RLVECT_1:23
+    .= (a3*a + b3*a1)*p + (a3*b + b3*b1)*q by RLVECT_1:10;
+   then A29: p,q,y are_LinDep by A5,ANPROJ_1:11; u,u1,y are_LinDep by A21,
+ANPROJ_1:11;
+   hence thesis by A28,A29; end; hence thesis by A22; end;
+ hence thesis by A7,A17; end;
+
+::: < ANPROJ_3
+
+Lm4: a*(b*v+c*w+d*u+d1*y) = (a*b)*v+(a*c)*w+(a*d)*u+(a*d1)*y
+ proof thus (a*b)*v+(a*c)*w+(a*d)*u+(a*d1)*y = a*(b*v)+(a*c)*w+(a*d)*u+
+ (a*d1)*y by RLVECT_1:def 9
+ .= a*(b*v)+a*(c*w)+(a*d)*u+(a*d1)*y by RLVECT_1:def 9
+ .= a*(b*v+c*w)+(a*d)*u+(a*d1)*y by RLVECT_1:def 9
+ .= a*(b*v+c*w)+a*(d*u)+(a*d1)*y by RLVECT_1:def 9
+ .= a*(b*v+c*w)+a*(d*u)+a*(d1*y) by RLVECT_1:def 9
+ .= a*(b*v+c*w+d*u)+a*(d1*y) by RLVECT_1:def 9
+ .= a*(b*v+c*w+d*u+d1*y) by RLVECT_1:def 9; end;
+
+Lm5: (u+v+w+y) + (u1+v1+w1+y1) = (u+u1)+(v+v1)+(w+w1)+(y+y1) proof
+ thus (u+u1)+(v+v1)+(w+w1)+(y+y1)
+  = u1+(u+(v+v1))+(w+w1)+(y+y1) by RLVECT_1:def 6
+ .= u1+((u+v)+v1)+(w+w1)+(y+y1) by RLVECT_1:def 6
+ .= (u1+v1)+(u+v)+(w+w1)+(y+y1) by RLVECT_1:def 6
+ .= (u1+v1)+((u+v)+(w+w1))+(y+y1) by RLVECT_1:def 6
+ .= (u1+v1)+(u+v+w+w1)+(y+y1) by RLVECT_1:def 6
+ .= (u1+v1+w1)+(u+v+w)+(y+y1) by RLVECT_1:def 6
+ .= (u+v+w)+((u1+v1+w1)+(y+y1)) by RLVECT_1:def 6
+ .= (u+v+w)+(y+(y1+(u1+v1+w1))) by RLVECT_1:def 6
+ .= (u+v+w+y)+(u1+v1+w1+y1) by RLVECT_1:def 6; end;
+
+Lm6: a*(b*v+c*w+d*u) = (a*b)*v+(a*c)*w+(a*d)*u
+ proof thus (a*b)*v+(a*c)*w+(a*d)*u = a*(b*v)+(a*c)*w+(a*d)*u by RLVECT_1:def 9
+   .= a*(b*v)+a*(c*w)+(a*d)*u by RLVECT_1:def 9 .= a*(b*v+c*w)+(a*d)*u
+   by RLVECT_1:def 9 .= a*(b*v+c*w)+a*(d*u) by RLVECT_1:def 9
+   .= a*(b*v+c*w+d*u) by RLVECT_1:def 9; end;
+
+Lm7:
+ y = a1*p + b1*w & w = a*p + b*q + c*r implies
+            y = (a1 + b1*a)*p + (b1*b)*q + (b1*c)*r
+ proof assume y = a1*p + b1*w & w = a*p + b*q + c*r;
+hence y = a1*p + ((b1*a)*p +
+  (b1*b)*q + (b1*c)*r) by Lm6 .= a1*p + ((b1*a)*p + ((b1*b)*q + (b1*c)*r))
+  by RLVECT_1:def 6 .= (a1*p + (b1*a)*p) + ((b1*b)*q + (b1*c)*r) by RLVECT_1:
+def 6 .=
+  (a1+b1*a)*p + ((b1*b)*q + (b1*c)*r) by RLVECT_1:def 9 .= (a1 + b1*a)*p +
+  (b1*b)*q + (b1*c)*r by RLVECT_1:def 6; end;
+
+theorem Th4:
+ (for w ex a,b,c,d st w = a*p + b*q + c*r + d*s) &
+ (for a,b,c,d st a*p + b*q + c*r + d*s = 0.V holds
+  a = 0 & b = 0 & c = 0 & d = 0) implies
+ (for u,v st u is_Prop_Vect & v is_Prop_Vect
+    ex y,w st u,v,w are_LinDep & q,r,y are_LinDep & p,w,y are_LinDep &
+     y is_Prop_Vect & w is_Prop_Vect)
+proof assume A1: (for w ex a,b,c,d st w = a*p + b*q + c*r + d*s) & (for a,b,c,d
+ st a*p + b*q + c*r + d*s = 0.V holds a = 0 & b = 0 & c = 0 & d = 0);
+ let u,v such that A2: u is_Prop_Vect & v is_Prop_Vect;
+ A3: p is_Prop_Vect & q is_Prop_Vect & not are_Prop p,q & r is_Prop_Vect &
+     s is_Prop_Vect & not are_Prop r,s & not p,q,r are_LinDep &
+                   not r,s,p are_LinDep by A1,Th2;
+ consider a1,b1,c1,d1 such that A4: u = a1*p + b1*q + c1*r + d1*s by A1;
+ consider a2,b2,c2,d2 such that A5: v = a2*p + b2*q + c2*r + d2*s by A1;
+ A6: a3*u + b3*v = (a3*a1 + b3*a2)*p + (a3*b1 + b3*b2)*q + (a3*c1 + b3*c2)*r +
+   (a3*d1 + b3*d2)*s proof a3*u = (a3*a1)*p + (a3*b1)*q + (a3*c1)*r +
+   (a3*d1)*s by A4,Lm4;hence
+   a3*u + b3*v = ((a3*a1)*p + (a3*b1)*q + (a3*c1)*r +
+   (a3*d1)*s) + ((b3*a2)*p + (b3*b2)*q + (b3*c2)*r + (b3*d2)*s) by A5,Lm4 .=
+  ((a3*a1)*p + (b3*a2)*p) + ((a3*b1)*q + (b3*b2)*q) + ((a3*c1)*r + (b3*c2)*r) +
+   ((a3*d1)*s + (b3*d2)*s) by Lm5 .= (a3*a1+b3*a2)*p + ((a3*b1)*q +
+  (b3*b2)*q) + ((a3*c1)*r + (b3*c2)*r) + ((a3*d1)*s + (b3*d2)*s) by RLVECT_1:
+def 9
+  .= (a3*a1+b3*a2)*p + (a3*b1+b3*b2)*q + ((a3*c1)*r + (b3*c2)*r) + ((a3*d1)*s
+  + (b3*d2)*s) by RLVECT_1:def 9 .= (a3*a1+b3*a2)*p + (a3*b1+b3*b2)*q + (a3*c1+
+  b3*c2)*r + ((a3*d1)*s + (b3*d2)*s) by RLVECT_1:def 9 .= (a3*a1+b3*a2)*p +
+  (a3*b1+b3*b2)*q + (a3*c1+b3*c2)*r + (a3*d1+b3*d2)*s by RLVECT_1:def 9; end;
+ A7: not are_Prop q,r by A3,ANPROJ_1:16;
+ A8: now assume A9: are_Prop u,v;
+  A10: q,r,q are_LinDep & p,p,q are_LinDep by ANPROJ_1:16; u,v,p
+  are_LinDep by A9,ANPROJ_1:16;
+  hence thesis by A3,A10; end;
+    now assume A11: not are_Prop u,v;
+     ex w st (w is_Prop_Vect & u,v,w are_LinDep & ex A,B,C being Real st
+   w = A*p + B*q + C*r) proof
+   A12: now assume A13: d1=0; take w = u;
+    A14: u,v,w are_LinDep by ANPROJ_1:16;
+      w = a1*p + b1*q + c1*r + 0.V
+    by A4,A13,RLVECT_1:23 .= a1*p + b1*q + c1*r by RLVECT_1:10;hence thesis
+by A2,A14; end;
+   A15: now assume A16: d2=0; take w = v;
+    A17: u,v,w are_LinDep by ANPROJ_1:16; w = a2*p + b2*q + c2*r + 0.V
+    by A5,A16,RLVECT_1:23 .= a2*p + b2*q + c2*r by RLVECT_1:10;hence thesis
+by A2,A17; end;
+      now assume A18: d1<>0 & d2<>0; set a3 = -d2*d1",b3=1, w = a3*u+b3*v;
+      a3*d1 + b3*d2 = -(d2*d1")*d1 + d2 by XCMPLX_1:175
+    .= -d2*(d1"*d1) + d2 by XCMPLX_1:4
+    .= -d2*1 + d2 by A18,XCMPLX_0:def 7 .= 0 by XCMPLX_0:def 6;
+    then A19: w = (a3*a1 + b3*a2)*p + (a3*b1 + b3*b2)*q + (a3*c1 + b3*c2)*r +
+    0*s by A6 .= (a3*a1 + b3*a2)*p + (a3*b1 + b3*b2)*q + (a3*c1 + b3*c2)*r +
+    0.V by RLVECT_1:23 .= (a3*a1 + b3*a2)*p + (a3*b1 + b3*b2)*q + (a3*c1 +
+    b3*c2)*r by RLVECT_1:10; A20: u,v,w are_LinDep by A2,A11,ANPROJ_1:11;
+    set A = a3*a1 + b3*a2, B = a3*b1 + b3*b2, C = a3*c1 + b3*c2;
+    A21: w = A*p+B*q+C*r+0.V by A19,RLVECT_1:10 .=
+                       A*p+B*q+C*r+0*s by RLVECT_1:23;
+    A22: A<>0 or B<>0 or C<>0 proof assume not thesis;
+then 0 = -d2*d1"*a1 + a2 & 0 = -d2*d1"*b1 + b2 &
+     0 = -d2*d1"*c1 + c2 by XCMPLX_1:175;
+then A23: --d2*d1"*a1 = a2 & --d2*d1"*b1 = b2
+     & --d2*d1"*c1 = c2 by XCMPLX_0:def 6;
+     A24: d2*d1"*d1 = d2 proof thus d2*d1"*d1 =
+     d2*(d1"*d1) by XCMPLX_1:4 .= d2*1 by A18,XCMPLX_0:def 7 .= d2; end;
+     A25: d2*d1" <> 0 proof assume not thesis;
+     then d1"=0 by A18,XCMPLX_1:6; hence contradiction by A18,XCMPLX_1:203
+; end;
+       (d2*d1")*u = v by A4,A5,A23,A24,Lm4; hence contradiction by A11,A25,
+ANPROJ_1:5; end;
+       w is_Prop_Vect proof assume not thesis; then w = 0.V by RLVECT_1:def 13
+;
+   hence contradiction by A1,A21,A22; end;
+  hence thesis by A19,A20; end; hence thesis by A12,A15; end;
+  then consider w such that A26: w is_Prop_Vect & u,v,w are_LinDep &
+   ex A,B,C being Real st w = A*p + B*q + C*r; consider A,B,C being Real
+  such that A27: w = A*p + B*q + C*r by A26;
+  A28: now assume are_Prop p,w;
+   then q,r,q are_LinDep & p,w,q are_LinDep by ANPROJ_1:16;
+   hence thesis by A3,A26; end;
+     now assume A29: not are_Prop p,w;
+  A30: B<>0 or C<>0 proof assume not thesis; then A31: w = A*p + 0.V + 0*r by
+A27,RLVECT_1:23 .= A*p + 0.V + 0.V by RLVECT_1:23
+   .= A*p + 0.V by RLVECT_1:10 .= A*p by RLVECT_1:10;
+     A<>0 proof assume not thesis; then w = 0.V by A31,RLVECT_1:23;
+   hence contradiction by A26,RLVECT_1:def 13; end; hence contradiction by A29,
+A31,ANPROJ_1:5; end;
+   set b = 1, a = -A; set y = a*p + b*w;
+   A32: y = (a+b*A)*p + (b*B)*q + (b*C)*r by A27,Lm7
+  .= 0*p + (1*B)*q + (1*C)*r by XCMPLX_0:def 6
+  .= 0.V + (1*B)*q + (1*C)*r by RLVECT_1:23 .= B*q + C*r by RLVECT_1:10;
+   A33: y is_Prop_Vect proof assume not thesis; then 0.V = B*q + C*r by A32,
+RLVECT_1:def 13 .= 0.V + B*q + C*r by RLVECT_1:10 .= 0*p + B*q + C*r
+    by RLVECT_1:23 .= 0*p + B*q + C*r + 0.V by RLVECT_1:10 .= 0*p + B*q + C*r +
+    0*s by RLVECT_1:23; hence contradiction by A1,A30; end;
+     q,r,y are_LinDep & p,w,y are_LinDep by A3,A7,A26,A29,A32,ANPROJ_1:11;
+  hence thesis by A26,A33; end; hence thesis by A28; end;
+ hence thesis by A8; end;
+
+theorem Th5:
+  (for a,b,a1,b1 st a*u + b*v + a1*u1 + b1*v1 = 0.V holds
+  a=0 & b=0 & a1=0 & b1=0) implies
+      not ex y st y is_Prop_Vect & u,v,y are_LinDep & u1,v1,y are_LinDep
+  proof assume A1: for a,b,a1,b1 st a*u + b*v + a1*u1 + b1*v1 = 0.V holds
+  a=0 & b=0 & a1=0 & b1=0; assume not thesis; then consider y such that
+  A2: y is_Prop_Vect & u,v,y are_LinDep & u1,v1,y are_LinDep;
+  A3: u is_Prop_Vect & v is_Prop_Vect & not are_Prop u,v by A1,Th2;
+  A4: u1 is_Prop_Vect & v1 is_Prop_Vect & not are_Prop u1,v1 by A1,Th2;
+  consider a,b such that A5: y = a*u + b*v by A2,A3,ANPROJ_1:11;
+  consider a1,b1 such that A6: y = a1*u1 + b1*v1 by A2,A4,ANPROJ_1:11;
+    0.V = (a*u + b*v) - (a1*u1 + b1*v1) by A5,A6,RLVECT_1:28
+   .= (a*u + b*v) + -(a1*u1 + b1*v1) by RLVECT_1:def 11
+   .= (a*u + b*v) + (-1)*(a1*u1 + b1*v1) by RLVECT_1:29
+   .= (a*u + b*v) + ((-1)*(a1*u1) + (-1)*(b1*v1)) by RLVECT_1:def 9
+   .= (a*u + b*v) + (((-1)*a1)*u1 + (-1)*(b1*v1)) by RLVECT_1:def 9
+   .= (a*u + b*v) + (((-1)*a1)*u1 + ((-1)*b1)*v1) by RLVECT_1:def 9
+   .= a*u + b*v + ((-1)*a1)*u1 + ((-1)*b1)*v1 by RLVECT_1:def 6;
+   then a=0 & b=0 by A1;
+  then y = 0.V + 0*v by A5,RLVECT_1:23 .= 0.V + 0.V
+   by RLVECT_1:23 .= 0.V by RLVECT_1:10;
+  hence contradiction by A2,RLVECT_1:def 13; end;
+
+::: > ANPROJ_3
+
+::: < ANPROJ_4
+
+definition let V,u,v,w;
+ pred u,v,w are_Prop_Vect means :Def1:
+  u is_Prop_Vect & v is_Prop_Vect & w is_Prop_Vect;
+end;
+
+definition let V,u,v,w,u1,v1,w1;
+ pred u,v,w,u1,v1,w1 lie_on_a_triangle means :Def2:
+  u,v,w1 are_LinDep & u,w,v1 are_LinDep & v,w,u1 are_LinDep;
+end;
+
+definition let V,o,u,v,w,u2,v2,w2;
+ pred o,u,v,w,u2,v2,w2 are_perspective means :Def3:
+  o,u,u2 are_LinDep & o,v,v2 are_LinDep & o,w,w2 are_LinDep;
+end;
+
+Lm8: -(a*o) = (-a)*o
+proof thus -(a*o) = a*(-o) by RLVECT_1:39 .= (-a)*o by RLVECT_1:38; end;
+
+theorem
+Th6: o,u,u2 are_LinDep & not are_Prop o,u & not are_Prop o,u2 &
+ not are_Prop u,u2 & o,u,u2 are_Prop_Vect implies ((ex a1,b1 st b1*u2=o+a1*u
+ & a1<>0 & b1<>0) & (ex a2,c2 st u2=c2*o+a2*u & c2<>0 & a2<>0))
+ proof assume A1: o,u,u2 are_LinDep & not are_Prop o,u & not are_Prop o,u2 &
+ not are_Prop u,u2 & o,u,u2 are_Prop_Vect;
+ then consider a,b,c such that
+ A2: a*o + b*u + c*u2 = 0.V & (a<>0 or b<>0 or c <>0) by ANPROJ_1:def 3;
+    o is_Prop_Vect & u is_Prop_Vect & u2 is_Prop_Vect by A1,Def1;
+ then A3: o <> 0.V & u <> 0.V & u2 <>0.V by RLVECT_1:def 13;
+ A4: a<>0 & b<>0 & c <>0 proof assume A5: not thesis;
+ A6: now assume A7: a = 0;
+  A8: b<>0 & c <>0 proof assume A9: not thesis;
+   A10: now assume A11: b = 0; then 0.V =
+0.V + 0*u + c*u2 by A2,A7,RLVECT_1:23 .= 0*u + c*u2 by RLVECT_1:10
+ .= 0.V + c*u2 by RLVECT_1:23 .= c*u2 by RLVECT_1:10;
+   hence contradiction by A2,A3,A7,A11,RLVECT_1:24; end;
+      now assume A12: c = 0; then 0.V = 0.V + b*u + 0*u2 by A2,A7,RLVECT_1:23
+ .= b*u + 0*u2 by RLVECT_1:10 .= b*u + 0.V by RLVECT_1:23 .= b*u by RLVECT_1:10
+;
+   hence contradiction by A2,A3,A7,A12,RLVECT_1:24; end;
+  hence contradiction by A9,A10; end;
+    0.V = 0.V + b*u + c*u2 by A2,A7,RLVECT_1:23
+  .= b*u + c*u2 by RLVECT_1:10; then b*u = -c*u2 by RLVECT_1:19 .= c*(-u2) by
+RLVECT_1:39; then A13: b*u = (-c)*u2 by RLVECT_1:38; -c <>0 by A8,XCMPLX_1:135
+;
+  hence contradiction by A1,A8,A13,ANPROJ_1:def 2; end;
+ A14: now assume A15: b = 0;
+  A16: a<>0 & c <>0 proof assume A17: not thesis;
+   A18: now assume A19: a = 0; then 0.V =
+0.V + 0*u + c*u2 by A2,A15,RLVECT_1:23 .= 0*u + c*u2 by RLVECT_1:10
+ .= 0.V + c*u2 by RLVECT_1:23 .= c*u2 by RLVECT_1:10;
+   hence contradiction by A2,A3,A15,A19,RLVECT_1:24; end;
+      now assume A20: c = 0; then 0.V = a*o + 0*u + 0.V by A2,A15,RLVECT_1:23
+ .= a*o + 0*u by RLVECT_1:10 .= a*o + 0.V by RLVECT_1:23 .= a*o by RLVECT_1:10;
+   hence contradiction by A2,A3,A15,A20,RLVECT_1:24; end;
+  hence contradiction by A17,A18; end;
+    0.V = a*o + 0.V + c*u2 by A2,A15,RLVECT_1:23
+  .= a*o + c*u2 by RLVECT_1:10; then a*o = -c*u2 by RLVECT_1:19 .= c*(-u2) by
+RLVECT_1:39; then A21: a*o = (-c)*u2 by RLVECT_1:38; -c <>0 by A16,XCMPLX_1:135
+;
+  hence contradiction by A1,A16,A21,ANPROJ_1:def 2; end;
+    now assume A22: c = 0;
+  A23: a<>0 & b<>0 proof assume A24: not thesis;
+   A25: now assume A26: a = 0; then 0.V =
+0.V + b*u + 0*u2 by A2,A22,RLVECT_1:23 .= b*u + 0*u2 by RLVECT_1:10
+ .= b*u + 0.V by RLVECT_1:23 .= b*u by RLVECT_1:10;
+   hence contradiction by A2,A3,A22,A26,RLVECT_1:24; end;
+      now assume A27: b = 0; then 0.V = a*o + 0*u + 0.V by A2,A22,RLVECT_1:23
+ .= a*o + 0*u by RLVECT_1:10 .= a*o + 0.V by RLVECT_1:23 .= a*o by RLVECT_1:10;
+   hence contradiction by A2,A3,A22,A27,RLVECT_1:24; end;
+  hence contradiction by A24,A25; end;
+    0.V = a*o + b*u + 0.V by A2,A22,RLVECT_1:23
+  .= a*o + b*u by RLVECT_1:10; then a*o = -b*u by RLVECT_1:19 .= b*(-u) by
+RLVECT_1:39; then A28: a*o = (-b)*u by RLVECT_1:38; -b<>0 by A23,XCMPLX_1:135
+;
+  hence contradiction by A1,A23,A28,ANPROJ_1:def 2; end;
+ hence contradiction by A5,A6,A14; end;
+   a"*(-c*u2) = a"*(a*o + b*u) by A2,RLVECT_1:19 .=
+ a"*(a*o) + a"*(b*u) by RLVECT_1:def 9 .= (a"*a)*o + a"*(b*u) by RLVECT_1:def 9
+ .=
+ (a"*a)*o + (a"*b)*u by RLVECT_1:def 9 .= 1*o + (a"*b)*u by A4,XCMPLX_0:def 7
+ .= o +
+ (a"*b)*u by RLVECT_1:def 9; then A29: o + (a"*b)*u = a"*(c*(-u2)) by RLVECT_1:
+39 .= (a"*c)*(-u2) by RLVECT_1:def 9 .= (-(a"*c))*u2 by RLVECT_1:38;
+ A30: a" <> 0 & c" <> 0 by A4,XCMPLX_1:203;
+ then A31: a"*b <> 0 by A4,XCMPLX_1:6; -(a"*c) <> 0 proof a"*c <> 0
+ by A4,A30,XCMPLX_1:6; hence thesis by XCMPLX_1:135; end;
+ hence ex a1,b1 st b1*u2=o+a1*u & a1<>0 & b1<>0 by A29,A31;
+   c*u2 = -(a*o + b*u) by A2,RLVECT_1:def 10 .= -(a*o) + (-(b*u)) by RLVECT_1:
+45
+ .= (-a)*o + (-(b*u)) by Lm8 .= (-a)*o + (-b)*u by Lm8; then c"*(c*u2) =
+c"*((-a)*o) + c"*((-b)*u) by RLVECT_1:def 9 .=
+ (c"*(-a))*o + c"*((-b)*u) by RLVECT_1:def 9 .= (c"*(-a))*o + (c"*(-b))*u by
+RLVECT_1:def 9; then A32: (c"*(-a))*o + (c"*(-b))*u = (c"*c)*u2 by RLVECT_1:def
+9
+ .= 1*u2 by A4,XCMPLX_0:def 7
+ .= u2 by RLVECT_1:def 9; A33: (c"*(-a)) <> 0 proof
+   -a <> 0 by A4,XCMPLX_1:135; hence thesis by A30,XCMPLX_1:6
+; end; (c"*(-b)) <>
+ 0 proof -b <> 0 by A4,XCMPLX_1:135; hence thesis by A30,XCMPLX_1:6; end;
+ hence ex a2,c2 st u2=c2*o+a2*u & c2<>0 & a2<>0 by A32,A33; end;
+
+theorem
+Th7: p,q,r are_LinDep & not are_Prop p,q & p,q,r are_Prop_Vect implies
+      ex a,b st r = a*p + b*q
+proof
+ assume A1: p,q,r are_LinDep & not are_Prop p,q & p,q,r are_Prop_Vect;
+ then p is_Prop_Vect & q is_Prop_Vect & r is_Prop_Vect by Def1;
+then A2: p <> 0.V & q <> 0.V & r <> 0.V by RLVECT_1:def 13;
+ consider a,b,c such that
+A3: a*p + b*q + c*r = 0.V & (a<>0 or b<>0 or c <>0) by A1,ANPROJ_1:def 3;
+A4: c <>0
+ proof
+  assume A5: not thesis;
+A6: a<>0 & b<>0
+   proof
+    assume A7: not thesis;
+A8: now assume A9: a = 0; then 0.V = 0.V + b*q + 0*r by A3,A5,RLVECT_1:23
+     .= 0.V + b*q + 0.V by RLVECT_1:23 .= b*q + 0.V by RLVECT_1:10
+     .= b*q by RLVECT_1:10; hence contradiction by A2,A3,A5,A9,RLVECT_1:24;
+    end;
+      now assume A10: b = 0; then 0.V =a*p + 0.V + 0*r by A3,A5,RLVECT_1:23
+    .= a*p + 0.V + 0.V by RLVECT_1:23 .= a*p + 0.V by RLVECT_1:10
+    .= a*p by RLVECT_1:10; hence contradiction by A2,A3,A5,A10,RLVECT_1:24;
+    end; hence contradiction by A7,A8;
+   end; 0.V = a*p + b*q + 0.V by A3,A5,RLVECT_1:23 .= a*p + b*q by RLVECT_1:10
+;
+   then A11: a*p = -(b*q) by RLVECT_1:19 .= (-b)*q by Lm8;
+     -b <> 0 by A6,XCMPLX_1:135
+; hence contradiction by A1,A6,A11,ANPROJ_1:def 2;
+  end;
+    c*r = -(a*p + b*q) by A3,RLVECT_1:def 10 .= -(a*p) + (-(b*q)) by RLVECT_1:
+45
+  .= (-a)*p + (-(b*q)) by Lm8 .= (-a)*p + (-b)*q by Lm8; then c"*(c*r) =
+  c"*((-a)*p) + c"*((-b)*q) by RLVECT_1:def 9 .=
+(c"*(-a))*p + c"*((-b)*q) by RLVECT_1:def 9 .= (c"*(-a))*p + (c"*(-b))*q by
+RLVECT_1:def 9; then (c"*(-a))*p + (c"*(-b))*q = (c"*c)*r by RLVECT_1:def 9
+ .= 1*r by A4,XCMPLX_0:def 7 .= r by RLVECT_1:def 9; hence thesis; end;
+
+Lm9: b1*u2=w2 & b1 <> 0 implies are_Prop u2,w2
+proof assume A1: b1*u2=w2 & b1 <> 0; then b1*u2 = 1*w2 by RLVECT_1:def 9;
+ hence thesis by A1,ANPROJ_1:def 2; end;
+
+Lm10: q = o + a*p & r = o + b*s & are_Prop q,r & a<>0 implies o,p,s are_LinDep
+proof assume A1: q = o + a*p & r = o + b*s & are_Prop q,r & a<>0; then consider
+A being Real such that A2: A <> 0 & o + a*p = A*(o + b*s) by ANPROJ_1:5;
+  o + a*p = A*o + A*(b*s) by A2,RLVECT_1:def 9 .= A*o + (A*b)*s by RLVECT_1:def
+9
+;
+then -(A*o) + (o + a*p) = (-(A*o) + A*o) + (A*b)*s by RLVECT_1:def 6
+ .= 0.V + (A*b)*s by RLVECT_1:16 .= (A*b)*s by RLVECT_1:10; then (-(A*o) + o)
++ a*p = (A*b)*s by RLVECT_1:def 6
+; then (A*b)*s = ((-A)*o + o) + a*p by Lm8 .= ((-A)*o + 1*o) + a*p
+by RLVECT_1:def 9 .= (-A+1)*o + a*p by RLVECT_1:def 9; then (-A+1)*o + a*p +
+(-((A*b)*s)) = 0.V by RLVECT_1:16; then 0.V =
+(-A+1)*o + a*p + (-(A*b))*s by Lm8; hence thesis by A1,ANPROJ_1:def 3; end;
+
+Lm11: a*p = q & a <> 0 & p is_Prop_Vect implies q is_Prop_Vect
+proof assume A1: a*p = q & a <> 0 & p is_Prop_Vect; then p <> 0.V by RLVECT_1:
+def 13;
+then q <> 0.V by A1,RLVECT_1:24; hence thesis by RLVECT_1:def 13; end;
+
+Lm12: for A,B being Real holds ( r = A*u2 + B*v2 & u2 = o + a1*u &
+v2 = o + a2 *v implies r = (A + B)*o + (A*a1)*u + (B*a2)*v )
+proof let A,B be Real; assume r = A*u2 + B*v2 & u2 = o + a1*u &
+v2 = o + a2 *v; hence r = A*o + A*(a1*u) +
+B*(o + a2*v) by RLVECT_1:def 9 .= A*o + A*(a1*u) + (B*o + B*(a2*v)) by RLVECT_1
+:def 9 .= A*o + (A*a1)*u + (B*o + B*(a2*v)) by RLVECT_1:def 9 .= A*o +
+(A*a1)*u + (B*o + (B*a2)*v) by RLVECT_1:def 9
+.= (A*o + (A*a1)*u + B*o) + (B*a2)*v by RLVECT_1:def 6
+.= A*o + B*o + (A*a1)*u + (B*a2)*v by RLVECT_1:def 6
+.= (A + B)*o + (A*a1)*u + (B*a2)*v by RLVECT_1:def 9;
+end;
+
+Lm13: r = a*p + b*q implies r = 0*o + a*p + b*q proof assume r = a*p + b*q;
+hence r = 0.V + a*p + b*q by RLVECT_1:10 .= 0*o + a*p + b*q by RLVECT_1:23;
+end;
+
+Lm14: 0*p + 0*q = 0.V
+proof
+  thus 0*p + 0*q = 0.V + 0*q by RLVECT_1:23
+        .= 0*q by RLVECT_1:10
+        .= 0.V by RLVECT_1:23;
+end;
+
+Lm15: 0*o + (b*a2)*v + ((-b)*a3)*w = b*(a2*v - a3*w)
+proof thus
+    0*o + (b*a2)*v + ((-b)*a3)*w = 0.V + (b*a2)*v + ((-b)*a3)*w by RLVECT_1:23
+        .= (b*a2)*v + ((-b)*a3)*w by RLVECT_1:10
+        .= b*(a2*v) + ((-b)*a3)*w by RLVECT_1:def 9
+        .= b*(a2*v) + (b*(-a3))*w by XCMPLX_1:176
+        .= b*(a2*v) + b*((-a3)*w) by RLVECT_1:def 9
+        .= b*(a2*v) + b*(-(a3*w)) by Lm8
+        .= b*(a2*v + (-(a3*w))) by RLVECT_1:def 9
+        .= b*(a2*v - a3*w) by RLVECT_1:def 11; end;
+
+theorem Th8:
+o is_Prop_Vect & u,v,w are_Prop_Vect & u2,v2,w2 are_Prop_Vect &
+u1,v1,w1 are_Prop_Vect & o,u,v,w,u2,v2,w2 are_perspective &
+not are_Prop o,u2 & not are_Prop o,v2 & not are_Prop o,w2 &
+not are_Prop u,u2 & not are_Prop v,v2 & not are_Prop w,w2 &
+not o,u,v are_LinDep & not o,u,w are_LinDep & not o,v,w are_LinDep &
+u,v,w,u1,v1,w1 lie_on_a_triangle & u2,v2,w2,u1,v1,w1 lie_on_a_triangle
+              implies u1,v1,w1 are_LinDep proof assume that
+A1: o is_Prop_Vect & u,v,w are_Prop_Vect & u2,v2,w2 are_Prop_Vect &
+u1,v1,w1 are_Prop_Vect and A2: o,u,v,w,u2,v2,w2 are_perspective and
+A3: not are_Prop o,u2 & not are_Prop o,v2 & not are_Prop o,w2 &
+not are_Prop u,u2 & not are_Prop v,v2 & not are_Prop w,w2 and
+A4: not o,u,v are_LinDep & not o,u,w are_LinDep & not o,v,w are_LinDep
+and A5: u,v,w,u1,v1,w1 lie_on_a_triangle &
+         u2,v2,w2,u1,v1,w1 lie_on_a_triangle;
+A6: o is_Prop_Vect & u is_Prop_Vect & v is_Prop_Vect & w is_Prop_Vect &
+u2 is_Prop_Vect & v2 is_Prop_Vect & w2 is_Prop_Vect & u1 is_Prop_Vect &
+v1 is_Prop_Vect & w1 is_Prop_Vect by A1,Def1; A7: o,u,u2 are_LinDep &
+o,v,v2 are_LinDep & o,w,w2 are_LinDep by A2,Def3;
+A8: u,v,w1 are_LinDep & u,w,v1 are_LinDep & v,w,u1 are_LinDep &
+u2,v2,w1 are_LinDep & u2,w2,v1 are_LinDep & v2,w2,u1 are_LinDep by A5,Def2;
+A9: not are_Prop o,u & not are_Prop o,v & not are_Prop w,o by A4,ANPROJ_1:16;
+A10: o,u,u2 are_Prop_Vect & o,v,v2 are_Prop_Vect & o,w,w2 are_Prop_Vect by A6,
+Def1; then consider a1,b1 such that A11: b1*u2=o+a1*u & a1<>0 & b1<>0 by A3,A7,
+A9,Th6; consider a2,b2 such that A12: b2*v2=o+a2*v & a2<>0 &
+b2<>0 by A3,A7,A9,A10,Th6; consider a3,b3 such that A13: b3*w2=o+a3*w &
+a3<>0 & b3<>0 by A3,A7,A9,A10,Th6; set u2' = o+a1*u, v2' = o+a2*v,
+w2' = o+a3*w;
+A14: u,v,w1 are_Prop_Vect & u,w,v1 are_Prop_Vect & v,w,u1 are_Prop_Vect
+& u2,v2,w1 are_Prop_Vect & u2,w2,v1 are_Prop_Vect & v2,w2,u1 are_Prop_Vect by
+A6,Def1; A15: not are_Prop u,v & not are_Prop u,w &
+not are_Prop v,w by A4,ANPROJ_1:17; then consider c3,d3 such that
+A16: w1 = c3*u + d3*v by A8,A14,Th7; consider c2,d2 such that
+A17: v1 = c2*u + d2*w by A8,A14,A15,Th7; consider c1,d1 such that
+A18: u1 = c1*v + d1*w by A8,A14,A15,Th7;
+A19: u2',v2',w1 are_LinDep & u2',w2',v1 are_LinDep & v2',w2',u1 are_LinDep
+proof are_Prop u2,u2' & are_Prop v2,v2' & are_Prop w2,w2' by A11,A12,A13,Lm9;
+hence thesis by A8,ANPROJ_1:9; end;
+A20: not are_Prop u2',v2' & not are_Prop u2',w2' & not are_Prop v2',w2'
+by A4,A11,A12,Lm10; u2' is_Prop_Vect & v2' is_Prop_Vect &
+w2' is_Prop_Vect by A6,A11,A12,A13,Lm11;
+then A21: u2',v2',w1 are_Prop_Vect &
+u2',w2',v1 are_Prop_Vect & v2',w2',u1 are_Prop_Vect by A6,Def1;
+then consider A3,B3 being Real such that A22: w1 = A3*u2' + B3*v2' by A19,A20,
+Th7; consider A2,B2 being Real such that
+A23: v1 = A2*u2' + B2*w2' by A19,A20,A21,Th7; consider A1,B1
+being Real such that A24: u1 = A1*v2' + B1*w2' by A19,A20,A21,Th7
+; A25: w1 = (A3 + B3)*o + (A3*a1)*u + (B3*a2)*v & v1 = (A2 + B2)*o +
+(A2*a1)*u + (B2*a3)*w & u1 = (A1 + B1)*o + (A1*a2)*v + (B1*a3)*w by A22,A23,A24
+,Lm12; u1 = 0*o + c1*v + d1*w & v1 = 0*o + c2*u + d2*w &
+w1 = 0*o + c3*u + d3*v by A16,A17,A18,Lm13; then A26: A1 + B1 = 0 & A2 + B2 =
+0 & A3 + B3 = 0 by A4,A25,ANPROJ_1:13;
+then A27: B1 = -A1 & B2 = -A2 & B3 = -A3 by XCMPLX_0:def 6;
+A28: A1 <> 0 & A2 <> 0 & A3 <> 0 proof assume A29: not thesis;
+A30: now assume A1 = 0; then u1 = 0.V
+by A24,A26,Lm14; hence contradiction by A6,RLVECT_1:def 13; end;
+A31: now assume A2 = 0; then v1 = 0.V
+by A23,A26,Lm14; hence contradiction by A6,RLVECT_1:def 13; end;
+   now assume A3 = 0; then w1 = 0.V
+by A22,A26,Lm14; hence contradiction by A6,RLVECT_1:def 13; end;
+hence contradiction by A29,A30,A31; end;
+set u1' = a2*v - a3*w, v1' = a1*u - a3*w, w1' = a1*u - a2*v;
+   u1 = A1*u1' & v1 = A2*v1' & w1 = A3*w1' by A25,A26,A27,Lm15;
+then A32: are_Prop u1',u1 & are_Prop v1',v1 & are_Prop w1',w1 by A28,Lm9
+; 1*u1' + (-1)*v1' + 1*w1' = u1' + (-1)*v1' + 1*w1' by RLVECT_1:def 9
+ .= u1' + (-1)*v1' + w1' by RLVECT_1:def 9
+ .= u1' + (-v1') + w1' by RLVECT_1:29 .=
+(a2*v - a3*w) + (-(a1*u) + a3*w) + (a1*u - a2*v) by RLVECT_1:47
+ .= (a2*v + (-(a3*w))) + (a3*w + (-(a1*u))) + (a1*u - a2*v)
+by RLVECT_1:def 11 .= (a2*v + (-(a3*w))) + (a3*w + (-(a1*u))) + (a1*u +
+(-(a2*v))) by RLVECT_1:def 11 .= a2*v + (-(a3*w)) + a3*w + (-(a1*u)) +
+(a1*u + (-(a2*v))) by RLVECT_1:def 6 .= a2*v + ((-(a3*w)) + a3*w) + (-(a1*u))
++ (a1*u + (-(a2*v))) by RLVECT_1:def 6
+.= a2*v + 0.V + (-(a1*u)) + (a1*u + (-(a2*v))) by RLVECT_1:16
+.= a2*v + (-(a1*u)) + (a1*u +
+(-(a2*v))) by RLVECT_1:10 .= a2*v + ((-(a1*u)) + (a1*u + (-(a2*v))))
+by RLVECT_1:def 6 .= a2*v + ((-(a1*u)) + a1*u + (-(a2*v))) by RLVECT_1:def 6
+.= a2*v + (0.V +
+(-(a2*v))) by RLVECT_1:16 .= a2*v + (-(a2*v)) by RLVECT_1:10 .= 0.V by RLVECT_1
+:16; then u1',v1',w1' are_LinDep by ANPROJ_1:def 3;
+hence thesis by A32,ANPROJ_1:9; end;
+
+::: > ANPROJ_4
+
+::: < ANPROJ_6
+
+definition let V,o,u,v,w,u2,v2,w2;
+ pred o,u,v,w,u2,v2,w2 lie_on_an_angle means :Def4:
+  not o,u,u2 are_LinDep & o,u,v are_LinDep & o,u,w are_LinDep &
+   o,u2,v2 are_LinDep & o,u2,w2 are_LinDep;
+end;
+
+definition let V,o,u,v,w,u2,v2,w2;
+ pred o,u,v,w,u2,v2,w2 are_half_mutually_not_Prop means :Def5:
+  not are_Prop o,v & not are_Prop o,w & not are_Prop o,v2 &
+   not are_Prop o,w2 & not are_Prop u,v & not are_Prop u,w &
+    not are_Prop u2,v2 & not are_Prop u2,w2 & not are_Prop v,w &
+     not are_Prop v2,w2;
+end;
+
+Lm16: b1*u2=w2 & b1 <> 0 implies are_Prop u2,w2
+proof assume A1: b1*u2=w2 & b1 <> 0; then b1*u2 = 1*w2 by RLVECT_1:def 9;
+ hence thesis by A1,ANPROJ_1:def 2; end;
+
+Lm17: not are_Prop p,q & y = a*q & a <> 0 implies not are_Prop p,y
+proof assume A1: not are_Prop p,q & y = a*q & a <> 0; assume not thesis;
+then consider b such that A2: b <> 0 & p = b*y by ANPROJ_1:5; A3: p =
+(b*a)*q by A1,A2,RLVECT_1:def 9; b*a <> 0 by A1,A2,XCMPLX_1:6; hence
+  contradiction by A1,A3,ANPROJ_1:5; end;
+
+Lm18: w1 = a*u + b*v2 & v2 = o + c2*u2 implies w1 = b*o + a*u + (b*c2)*u2
+proof assume w1 = a*u + b*v2 & v2 = o + c2*u2; hence w1 =
+a*u + (b*o + b*(c2*u2)) by RLVECT_1:def 9 .= a*u + b*o +
+b*(c2*u2) by RLVECT_1:def 6
+.= b*o + a*u + (b*c2)*u2 by RLVECT_1:def 9; end;
+
+Lm19: w1 = a*u2 + b*v1 & v1 = o + a2*u implies w1 = b*o + (b*a2)*u + a*u2
+proof assume w1 = a*u2 + b*v1 & v1 = o + a2*u;
+hence w1 = b*o + a*u2 + (b*a2)*u by Lm18
+.= b*o + (b*a2)*u + a*u2 by RLVECT_1:def 6; end;
+
+Lm20: a*p = q & a <> 0 & p is_Prop_Vect implies q is_Prop_Vect
+proof assume A1: a*p = q & a <> 0 & p is_Prop_Vect; then p <> 0.V by RLVECT_1:
+def 13;
+then q <> 0.V by A1,RLVECT_1:24; hence thesis by RLVECT_1:def 13; end;
+
+Lm21: not are_Prop p,q & y = a*q & a <> 0 & s = b*p & b <> 0 implies
+  not are_Prop s,y proof assume A1: not are_Prop p,q & y = a*q & a <> 0 &
+s = b*p & b <> 0; assume not thesis; then consider c such that
+A2: c <> 0 & s = c*y by ANPROJ_1:5; A3: s = (c*a)*q by A1,A2,RLVECT_1:def 9
+; c*a <> 0 by A1,A2,XCMPLX_1:6;
+hence contradiction by A1,A3,ANPROJ_1:def 2; end;
+
+Lm22: for A,B being Real holds ( r = A*u2 + B*v2 & u2 = o + a1*u &
+v2 = o + a2 *v implies r = (A + B)*o + (A*a1)*u + (B*a2)*v )
+proof let A,B be Real; assume r = A*u2 + B*v2 & u2 = o + a1*u &
+v2 = o + a2 *v; hence r = A*o + A*(a1*u) +
+B*(o + a2*v) by RLVECT_1:def 9 .= A*o + A*(a1*u) + (B*o + B*(a2*v)) by RLVECT_1
+:def 9 .= A*o + (A*a1)*u + (B*o + B*(a2*v)) by RLVECT_1:def 9 .= A*o +
+(A*a1)*u + (B*o + (B*a2)*v) by RLVECT_1:def 9
+.= (A*o + (A*a1)*u + B*o) + (B*a2)*v by RLVECT_1:def 6
+.= A*o + B*o + (A*a1)*u + (B*a2)*v by RLVECT_1:def 6
+.= (A + B)*o + (A*a1)*u + (B*a2)*v by RLVECT_1:def 9;
+end;
+
+Lm23: a2<>a3 & c2<>0 implies a3*c2 - a2*c2 <> 0 proof assume
+A1: a2<>a3 & c2<>0; A2: a3*c2 - a2*c2 = (a3 - a2)*c2 by XCMPLX_1:40;
+   a3 - a2 <> 0 by A1,XCMPLX_1:15;
+hence thesis by A1,A2,XCMPLX_1:6; end;
+
+Lm24: for A1,A1',B1,B1' being Real holds ( A1 + B1 = A1' + B1' &
+ A1*a2 = A1'*a3 & B1*c3 = B1'*c2 & a2<>a3 & c2<>0
+ implies A1 = (a3*c3 - a3*c2)*(a3*c2 - a2*c2)"*B1 )
+proof let A1,A1',B1,B1' be Real;
+assume A1: A1 + B1 = A1' + B1' & A1*a2 = A1'*a3
+& B1*c3 = B1'*c2 & a2<>a3 & c2<>0;
+then A1*(a2*c2) = A1'*a3*c2 & B1*(c3*a3) = B1'*c2*a3 by XCMPLX_1:4;
+then A2:A1*(a2*c2) = A1'*(a3*c2) & B1*(c3*a3) = B1'*(a3*c2) by XCMPLX_1:4;
+  A1*(a3*c2) + B1*(a3*c2) =
+(A1' + B1')*(a3*c2) by A1,XCMPLX_1:8; then A1*(a3*c2) + B1*(a3*c2) =
+A1*(a2*c2) + B1*(a3*c3) by A2,XCMPLX_1:8;
+then A1*(a3*c2) + (B1*(a3*c2) + -(B1*(a3*c2))) = A1*(a2*c2) + B1*(a3*c3) +
+-(B1*(a3*c2)) by XCMPLX_1:1; then A1*(a3*c2) + 0 = A1*(a2*c2) + B1*(a3*c3) +
+-(B1*(a3*c2)) by XCMPLX_0:def 6; then A1*(a3*c2)
+= A1*(a2*c2) + (B1*(a3*c3) + -(B1*(a3*c2))) by XCMPLX_1:1
+ .= A1*(a2*c2) + (B1*(a3*c3) + B1*(-(a3*c2))) by XCMPLX_1:175 .=
+A1*(a2*c2) + B1*(a3*c3 + -(a3*c2)) by XCMPLX_1:8 .=
+B1*(a3*c3 - a3*c2) + A1*(a2*c2) by XCMPLX_0:def 8;
+then A1*(a3*c2) + -(A1*(a2*c2)) =
+B1*(a3*c3 - a3*c2) + (A1*(a2*c2) + -(A1*(a2*c2))) by XCMPLX_1:1 .= B1*(a3*c3 -
+a3*c2) + 0 by XCMPLX_0:def 6 .= B1*(a3*c3 - a3*c2); then B1*(a3*c3 -
+a3*c2) = A1*(a3*c2) + A1*(-(a2*c2)) by XCMPLX_1:175
+ .= A1*(a3*c2 + -(a2*c2)) by XCMPLX_1:8 .= A1*(a3*c2 -a2*c2) by XCMPLX_0:def 8
+; then A3: A1*((a3*c2 -a2*c2)*
+(a3*c2 - a2*c2)") = B1*(a3*c3 - a3*c2)*(a3*c2 -a2*c2)" by XCMPLX_1:4; a3*c2 -
+a2*c2 <> 0 by A1,Lm23; then A1*1 = B1*(a3*c3 - a3*c2)*(a3*c2 -a2*c2)" by A3,
+XCMPLX_0:def 7;
+hence A1 = (a3*c3 - a3*c2)*(a3*c2 - a2*c2)"*B1 by XCMPLX_1:4; end;
+
+Lm25: for B1 being Real st c2<>0 & a2<>a3 & B1 <> 0 holds
+B1*(a3*c2 - a2*c2)" <> 0
+proof let B1 be Real; assume A1: c2<>0 & a2<>a3 &
+B1 <> 0; then a3*c2 - a2*c2 <> 0 by Lm23; then (a3*c2 - a2*c2)" <> 0 by
+XCMPLX_1:203; hence thesis by A1,XCMPLX_1:6; end;
+
+Lm26:
+ for A1,B1 being Real holds ( A1 = (a3*c3 - a3*c2)*(a3*c2 - a2*c2)"*B1 &
+  c2<>0 & a2<>a3 & u1 = (A1 + B1)*o + (A1*a2)*u + (B1*c3)*u2 implies
+ u1 = (B1*(a3*c2 - a2*c2)")*((a3*c3 - a2*c2)*o + ((a2*a3)*(c3 - c2))*u +
+        ((c2*c3)*(a3 - a2))*u2) )
+proof let A1,B1 be Real; assume A1: A1 = (a3*c3 - a3*c2)*(a3*c2 - a2*c2)"*B1 &
+c2<>0 & a2<>a3 & u1 = (A1 + B1)*o + (A1*a2)*u + (B1*c3)*u2;
+then A2: (a3*c2 - a2*c2) <> 0 by Lm23;
+A3: ((a3*c3 - a3*c2)*(a3*c2 - a2*c2)"*B1 + B1*1)*o
+  = ((a3*c3 - a3*c2)*(B1*(a3*c2 - a2*c2)") + B1*1)*o by XCMPLX_1:4
+ .= ((a3*c3 - a3*c2)*(B1*(a3*c2 - a2*c2)") + B1*((a3*c2 - a2*c2)"*(a3*c2 -
+a2*c2)))*o by A2,XCMPLX_0:def 7
+ .= ((B1*(a3*c2 - a2*c2)")*(a3*c3 - a3*c2) + (B1*(a3*c2 - a2*c2)")*
+  (a3*c2 - a2*c2))*o by XCMPLX_1:4
+ .= ((B1*(a3*c2 - a2*c2)")*(a3*c3 - a3*c2 + (a3*c2 - a2*c2)))*o by XCMPLX_1:8
+ .=
+((B1*(a3*c2 - a2*c2)")*(a3*c3 + - a3*c2 + (a3*c2 - a2*c2)))*o by XCMPLX_0:def 8
+ .= ((B1*(a3*c2 - a2*c2)")*(a3*c3 + - a3*c2 + a3*c2 - a2*c2))*o by XCMPLX_1:29
+ .= ((B1*(a3*c2 - a2*c2)")*(a3*c3 + (- a3*c2 + a3*c2) - a2*c2))*o by XCMPLX_1:1
+ .= ((B1*(a3*c2 - a2*c2)")*(a3*c3 + 0 - a2*c2))*o by XCMPLX_0:def 6
+ .= (B1*(a3*c2 - a2*c2)")*((a3*c3 - a2*c2)*o) by RLVECT_1:def 9;
+A4: ((a3*c3 - a3*c2)*(a3*c2 - a2*c2)"*B1*a2)*u
+  = ((B1*(a3*c2 - a2*c2)")*(a3*c3 - a3*c2)*a2)*u by XCMPLX_1:4
+ .= ((B1*(a3*c2 - a2*c2)")*(a2*(a3*c3 - a3*c2)))*u by XCMPLX_1:4
+ .= ((B1*(a3*c2 - a2*c2)")*(a2*(a3*(c3 - c2))))*u by XCMPLX_1:40
+ .= ((B1*(a3*c2 - a2*c2)")*((a2*a3)*(c3 - c2)))*u by XCMPLX_1:4
+ .= (B1*(a3*c2 - a2*c2)")*(((a2*a3)*(c3 - c2))*u) by RLVECT_1:def 9;
+   (B1*c3)*u2 = (B1*1*c3)*u2
+ .= (B1*((a3*c2 - a2*c2)"*(a3*c2 - a2*c2))*c3)*u2 by A2,XCMPLX_0:def 7
+ .= ((B1*(a3*c2 - a2*c2)")*(a3*c2 - a2*c2)*c3)*u2 by XCMPLX_1:4
+ .= ((B1*(a3*c2 - a2*c2)")*(c3*(a3*c2 - a2*c2)))*u2 by XCMPLX_1:4
+ .= ((B1*(a3*c2 - a2*c2)")*(c3*(c2*(a3 - a2))))*u2 by XCMPLX_1:40
+ .= ((B1*(a3*c2 - a2*c2)")*((c3*c2)*(a3 - a2)))*u2 by XCMPLX_1:4
+ .= (B1*(a3*c2 - a2*c2)")*(((c2*c3)*(a3 - a2))*u2) by RLVECT_1:def 9;
+ hence u1 = (B1*(a3*c2 - a2*c2)")*((a3*c3 - a2*c2)*o +
+ ((a2*a3)*(c3 - c2))*u) + (B1*(a3*c2 - a2*c2)")*
+ (((c2*c3)*(a3 - a2))*u2) by A1,A3,A4,RLVECT_1:def 9
+ .= (B1*(a3*c2 - a2*c2)")*((a3*c3 - a2*
+c2)*o + ((a2*a3)*(c3 - c2))*u + ((c2*c3)*(a3 - a2))*u2) by RLVECT_1:def 9; end;
+
+Lm27: (p+q+r) + (u+u2+u1) = (p+u)+(q+u2)+(r+u1)
+proof thus (p+u)+(q+u2)+(r+u1) = u+(p+(q+u2))+(r+u1) by RLVECT_1:def 6
+.= u+((p+q)+u2)+(r+u1) by RLVECT_1:def 6
+.= (u+u2)+(p+q)+(r+u1) by RLVECT_1:def 6
+.= (u+u2)+((p+q)+(r+u1)) by RLVECT_1:def 6
+.= (u+u2)+(p+q+r+u1) by RLVECT_1:def 6
+.= (p+q+r) + (u+u2+u1) by RLVECT_1:def 6; end;
+
+Lm28:a*(b-c) = - (a*(c-b)) proof thus - (a*(c-b)) = a*(-(c-b)) by XCMPLX_1:175
+
+.=a*(b-c) by XCMPLX_1:143; end;
+
+Lm29: for C2,C3 being Real holds
+( u1 = (a3*c3 - a2*c2)*o + ((a2*a3)*(c3 - c2))*u + ((c2*c3)*(a3 - a2))*u2 &
+  v1 = o + a3*u + c3*u2 & w2 = o + a2*u + c2*u2 &
+  C2 + C3 = a2*c2 - a3*c3 & C2*a3 + C3*a2 = (a2*a3)*(c2 - c3) &
+  C2*c3 + C3*c2 = (c2*c3)*(a2 - a3) implies 1*u1 + C2*v1 + C3*w2 = 0.V )
+proof let C2,C3 be Real such that A1: u1 = (a3*c3 - a2*c2)*o +
+((a2*a3)*(c3 - c2))*u + ((c2*c3)*(a3 - a2))*u2 & v1 = o + a3*u + c3*u2 &
+w2 = o + a2*u + c2*u2 & C2 + C3 = a2*c2 - a3*c3 & C2*a3 + C3*a2 =
+(a2*a3)*(c2 - c3) & C2*c3 + C3*c2 = (c2*c3)*(a2 - a3);
+A2: 1*u1 + C2*v1 + C3*w2 = u1 + C2*v1 + C3*w2 by RLVECT_1:def 9 .=
+u1 + (C2*v1 + C3*w2) by RLVECT_1:def 6; C2*v1 + C3*w2 =
+C2*(o + a3*u) + C2*(c3*u2) + C3*(o + a2*u + c2*u2) by A1,RLVECT_1:def 9
+ .= C2*o + C2*(a3*u) + C2*(c3*u2) + C3*(o + a2*u
++ c2*u2) by RLVECT_1:def 9 .= C2*o + C2*(a3*u) + C2*(c3*u2) + (C3*(o + a2*u) +
+C3*(c2*u2)) by RLVECT_1:def 9 .= C2*o + C2*(a3*u) + C2*(c3*u2) + (C3*o + C3*
+(a2*u) + C3*(c2*u2)) by RLVECT_1:def 9 .= (C2*o + C3*o) + (C2*(a3*u) + C3*
+(a2*u)) + (C2*(c3*u2) + C3*(c2*u2)) by Lm27 .= (C2 + C3)*o + (C2*(a3*u) +
+C3*(a2*u)) + (C2*(c3*u2) + C3*(c2*u2)) by RLVECT_1:def 9 .= (C2 + C3)*o +
+((C2*a3)*u + C3*(a2*u)) + (C2*(c3*u2) + C3*(c2*u2)) by RLVECT_1:def 9 .=
+(C2 + C3)*o + ((C2*a3)*u + (C3*a2)*u) + (C2*(c3*u2) + C3*(c2*u2)) by RLVECT_1:
+def 9 .= (C2 + C3)*o + ((C2*a3)*u + (C3*a2)*u) + ((C2*c3)*u2 +
+C3*(c2*u2)) by RLVECT_1:def 9 .= (C2 + C3)*o + ((C2*a3)*u + (C3*a2)*u) +
+((C2*c3)*u2 + (C3*c2)*u2) by RLVECT_1:def 9
+ .= (C2 + C3)*o + (C2*a3 + C3*a2)*u + ((C2*c3)*u2 + (C3*c2)*u2)
+  by RLVECT_1:def 9
+ .= (a2*c2 - a3*c3)*o + ((a2*a3)*(c2 - c3))*u + ((c2*c3)*(a2 - a3))*u2
+  by A1,RLVECT_1:def 9;
+  hence 1*u1 + C2*v1 + C3*w2 = ((a3*c3 -
+a2*c2)*o + (a2*c2 - a3*c3)*o) + (((a2*a3)*(c3 - c2))*u + ((a2*a3)*(c2 -
+c3))*u) + (((c2*c3)*(a3 - a2))*u2 + ((c2*c3)*(a2 - a3))*u2) by A1,A2,Lm27
+.=
+((a3*c3 - a2*c2 + (a2*c2 - a3*c3))*o) + (((a2*a3)*(c3 - c2))*u + ((a2*a3)*(c2
+- c3))*u) + (((c2*c3)*(a3 - a2))*u2 + ((c2*c3)*(a2 - a3))*u2) by RLVECT_1:def 9
+.= (a3*c3 - a2*c2 + (a2*c2 - a3*c3))*o + ((a2*a3)*(c3 - c2) + (a2*a3)*(c2 -
+c3))*u + (((c2*c3)*(a3 - a2))*u2 + ((c2*c3)*(a2 - a3))*u2) by RLVECT_1:def 9
+.= (a3*c3 - a2*c2 + (a2*c2 - a3*c3))*o + ((a2*a3)*(c3 - c2) +
+   (a2*a3)*(c2 - c3))*u + ((c2*c3)*(a3 - a2) + (c2*c3)*(a2 - a3))*u2
+    by RLVECT_1:def 9
+.= (a3*c3 - a2*c2 + a2*c2 - a3*c3)*o + ((a2*a3)*(c3 - c2) +
+   (a2*a3)*(c2 - c3))*u + ((c2*c3)*(a3 - a2) + (c2*c3)*(a2 - a3))*u2
+    by XCMPLX_1:29
+.= (a3*c3 + -a2*c2 + a2*c2 - a3*c3)*o + ((a2*a3)*(c3 - c2) +
+   (a2*a3)*(c2 - c3))*u + ((c2*c3)*(a3 - a2) + (c2*c3)*(a2 - a3))*u2
+    by XCMPLX_0:def 8 .= (a3*c3 + -a2*c2 + a2*c2 + -a3*c3)*o
++ ((a2*a3)*(c3 - c2) + (a2*a3)*(c2 - c3))*u + ((c2*c3)*(a3 - a2) +
+(c2*c3)*(a2 - a3))*u2 by XCMPLX_0:def 8
+ .= (a3*c3 + (-a2*c2 + a2*c2) + -a3*c3)*o
++ ((a2*a3)*(c3 - c2) + (a2*a3)*(c2 - c3))*u + ((c2*c3)*(a3 - a2) + (c2*c3)*(a2
+- a3))*u2 by XCMPLX_1:1
+ .= (a3*c3 + 0 + -a3*c3)*o + ((a2*a3)*(c3 - c2) + (a2*a3)*
+(c2 - c3))*u + ((c2*c3)*(a3 - a2) + (c2*c3)*(a2 - a3))*u2 by XCMPLX_0:def 6
+.= 0*o + ((a2*a3)*(c3 - c2) + (a2*
+a3)*(c2 - c3))*u + ((c2*c3)*(a3 - a2) + (c2*c3)*(a2 - a3))*u2 by XCMPLX_0:def 6
+ .=
+0.V + ((a2*a3)*(c3 - c2) + (a2*a3)*(c2 - c3))*u + ((c2*c3)*(a3 - a2) + (c2*
+c3)*(a2 - a3))*u2 by RLVECT_1:23 .= ((a2*a3)*(c3 - c2) + (a2*a3)*(c2 - c3))*u
++ ((c2*c3)*(a3 - a2) + (c2*c3)*(a2 - a3))*u2 by RLVECT_1:10 .= ((a2*a3)*(c3 -
+c2) + -((a2*a3)*(c3 - c2)))*u + ((c2*c3)*(a3 - a2) + (c2*c3)*(a2 - a3))*u2 by
+Lm28
+.= ((a2*a3)*(c3 - c2) + -((a2*a3)*(c3 - c2)))*u + ((c2*c3)*(a3 - a2) +
+-((c2*c3)*(a3 - a2)))*u2 by Lm28 .= 0*u + ((c2*c3)*(a3 - a2) + -((c2*c3)*
+(a3 - a2)))*u2 by XCMPLX_0:def 6 .= 0*u + 0*u2 by XCMPLX_0:def 6
+ .= 0.V + 0*u2 by RLVECT_1:23 .= 0.V + 0.V by RLVECT_1:23 .= 0.V by RLVECT_1:10
+; end;
+
+Lm30: for C2,C3 being Real holds ( C2 = a2*c2 & C3 = -(a3*c3)
+     implies C2*a3 + C3*a2 = (a2*a3)*(c2 - c3) )
+proof let C2,C3 be Real; assume C2 = a2*c2 & C3 = -(a3*c3);
+hence C2*a3 + C3*a2 = a2*c2*a3 + (a3*(-c3))*a2 by XCMPLX_1:175
+ .= a2*a3*c2 + ((-c3)*a3)*a2 by XCMPLX_1:4
+ .= a2*a3*c2 + (a2*a3)*(-c3) by XCMPLX_1:4
+ .= a2*a3*(c2 + -c3) by XCMPLX_1:8
+ .= (a2*a3)*(c2 - c3) by XCMPLX_0:def 8;
+ end;
+
+Lm31: for A3,A3',B3,B3' being Real holds ( w2 = o + a2*u + c2*u2 &
+ w1 = B3*o + A3*u + (B3*c2)*u2 & B3 = B3' & A3 = B3'*a2 & B3*c2 = A3'
+ implies w1 = B3*w2 )
+proof let A3,A3',B3,B3' be Real;
+ assume A1: w2 = o + a2*u + c2*u2 & w1 = B3*o + A3*u + (B3*c2)*u2 &
+            B3 = B3' & A3 = B3'*a2 & B3*c2 = A3';
+ hence w1 = B3*o + B3*(a2*u) + (B3*c2)*u2 by RLVECT_1:def 9
+  .= B3*o + B3*(a2*u) + B3*(c2*u2) by RLVECT_1:def 9
+  .= B3*(o + a2*u) + B3*(c2*u2) by RLVECT_1:def 9
+  .= B3*w2 by A1,RLVECT_1:def 9; end;
+
+theorem Th9:
+o is_Prop_Vect & u,v,w are_Prop_Vect & u2,v2,w2 are_Prop_Vect &
+u1,v1,w1 are_Prop_Vect & o,u,v,w,u2,v2,w2 lie_on_an_angle &
+o,u,v,w,u2,v2,w2 are_half_mutually_not_Prop & u,v2,w1 are_LinDep &
+u2,v,w1 are_LinDep & u,w2,v1 are_LinDep & w,u2,v1 are_LinDep &
+v,w2,u1 are_LinDep & w,v2,u1 are_LinDep implies u1,v1,w1 are_LinDep
+proof assume that A1: o is_Prop_Vect & u,v,w are_Prop_Vect &
+u2,v2,w2 are_Prop_Vect & u1,v1,w1 are_Prop_Vect and
+A2: o,u,v,w,u2,v2,w2 lie_on_an_angle and
+A3: o,u,v,w,u2,v2,w2 are_half_mutually_not_Prop and
+A4: u,v2,w1 are_LinDep & u2,v,w1 are_LinDep & u,w2,v1 are_LinDep &
+w,u2,v1 are_LinDep & v,w2,u1 are_LinDep & w,v2,u1 are_LinDep;
+A5: o is_Prop_Vect & u is_Prop_Vect & v is_Prop_Vect & w is_Prop_Vect &
+u2 is_Prop_Vect & v2 is_Prop_Vect & w2 is_Prop_Vect & u1 is_Prop_Vect &
+v1 is_Prop_Vect & w1 is_Prop_Vect by A1,Def1;
+A6: not o,u,u2 are_LinDep & o,u,v are_LinDep & o,u,w are_LinDep &
+o,u2,v2 are_LinDep & o,u2,w2 are_LinDep by A2,Def4;
+A7: not are_Prop o,v & not are_Prop o,w & not are_Prop o,v2 &
+not are_Prop o,w2 & not are_Prop u,v & not are_Prop u,w &
+not are_Prop u2,v2 & not are_Prop u2,w2 & not are_Prop v,w &
+not are_Prop v2,w2 by A3,Def5;
+A8:not are_Prop o,u & not are_Prop u,u2 & not are_Prop u2,o by A6,ANPROJ_1:17;
+A9: o,u,v are_Prop_Vect & o,u,w are_Prop_Vect & o,u2,v2 are_Prop_Vect &
+o,u2,w2 are_Prop_Vect by A5,Def1; then consider a2,b2 such that
+A10: b2*v=o+a2*u & a2<>0 & b2<>0 by A6,A7,A8,Th6;
+consider a3,b3 such that A11: b3*w=o+a3*u & a3<>0 & b3<>0 by A6,A7,A8,A9,Th6;
+consider c2,d2 such that A12: d2*v2=o+c2*u2 & c2<>0 & d2<>0 by A6,A7,A8,A9,Th6;
+consider c3,d3 such that
+A13: d3*w2=o+c3*u2 & c3<>0 & d3<>0 by A6,A7,A8,A9,Th6;
+set v' = o+a2*u, w' = o+a3*u, v2' = o+c2*u2, w2' = o+c3*u2;
+A14: are_Prop v,v' & are_Prop w,w' & are_Prop v2,v2' & are_Prop w2,w2' by A10,
+A11,A12,A13,Lm16; A15:not are_Prop v',w' & not are_Prop v2',w2' proof
+assume A16: not thesis;
+A17:now assume are_Prop v',w';
+then are_Prop v,w' by A14,ANPROJ_1:6;
+    hence contradiction by A7,A14,ANPROJ_1:6;
+  end;
+    now assume are_Prop v2',w2';
+    then are_Prop v2,w2' by A14,ANPROJ_1:6;
+    hence contradiction by A7,A14,ANPROJ_1:6;
+  end;
+  hence contradiction by A16,A17;
+end;
+A18: not are_Prop u,v2 proof assume not thesis;
+then o,u2,u are_LinDep by A6,ANPROJ_1:9;hence contradiction by A6,ANPROJ_1:10
+; end;
+A19: not are_Prop u2,v by A6,ANPROJ_1:9;
+A20: not are_Prop u,w2 proof assume not thesis;
+then o,u2,u are_LinDep by A6,ANPROJ_1:9;hence contradiction by A6,ANPROJ_1:10
+; end;
+A21: not are_Prop u2,w by A6,ANPROJ_1:9;
+  not o,u2,v are_LinDep proof assume not thesis; then A22: o,v,u2 are_LinDep
+by ANPROJ_1:10; A23: o,v,u are_LinDep by A6,ANPROJ_1:10;
+  o,v,o are_LinDep by ANPROJ_1:16;hence
+   contradiction by A5,A6,A7,A22,A23,ANPROJ_1:19; end;
+then A24: not are_Prop v,w2 by A6,ANPROJ_1:9;
+  not o,u,v2 are_LinDep proof assume not thesis; then A25: o,v2,u are_LinDep
+by ANPROJ_1:10; A26: o,v2,u2 are_LinDep by A6,ANPROJ_1:10;
+  o,v2,o are_LinDep by ANPROJ_1:16;
+hence contradiction by A5,A6,A7,A25,A26,ANPROJ_1:19; end;
+then A27: not are_Prop v2,w by A6,ANPROJ_1:9;
+A28: u,v2',w1 are_LinDep & u2,v',w1 are_LinDep by A4,A14,ANPROJ_1:9;
+A29: u2,w,v1 are_LinDep by A4,ANPROJ_1:10;
+A30: v2' is_Prop_Vect & v' is_Prop_Vect & w2' is_Prop_Vect & w' is_Prop_Vect
+   by A5,A10,A11,A12,A13,Lm20;
+A31: not are_Prop u,v2' by A12,A18,Lm17;
+A32: not are_Prop u2,v' by A10,A19,Lm17;
+A33: u,w2',v1 are_LinDep by A4,A14,ANPROJ_1:9;
+A34: u2,w',v1 are_LinDep by A14,A29,ANPROJ_1:9;
+A35: not are_Prop u,w2' by A13,A20,Lm17;
+A36: not are_Prop u2,w' by A11,A21,Lm17; consider A3,B3 being Real such that
+A37: w1 = A3*u + B3*v2' by A5,A28,A30,A31,ANPROJ_1:11;
+consider A3',B3' being Real such that
+A38: w1 = A3'*u2 + B3'*v' by A5,A28,A30,A32,ANPROJ_1:11;
+A39: w1 = B3*o + A3*u + (B3*c2)*u2 by A37,Lm18;
+  w1 = B3'*o + (B3'*a2)*u + A3'*u2 by A38,Lm19;
+then A40: B3 = B3' & A3 = B3'*a2 & B3*c2 = A3' by A6,A39,ANPROJ_1:13;
+set w1' = o + a2*u + c2*u2;
+A41: B3 <> 0 proof assume not thesis;
+then w1 = 0.V + 0*v2' by A37,A40,RLVECT_1:23 .= 0.V + 0.V by RLVECT_1:23
+.= 0.V by RLVECT_1:10; hence contradiction by A5,RLVECT_1:def 13; end;
+  w1 = B3*w1' by A39,A40,Lm31; then A42: are_Prop w1',w1 by A41,Lm16;
+consider A2,B2 being Real such that A43: v1 = A2*u + B2*w2' by A5,A30,A33,A35,
+ANPROJ_1:11; consider A2',B2' being Real such that
+A44: v1 = A2'*u2 + B2'*w' by A5,A30,A34,A36,ANPROJ_1:11;
+A45: v1 = B2*o + A2*u + (B2*c3)*u2 by A43,Lm18; v1 = B2'*o +
+(B2'*a3)*u + A2'*u2 by A44,Lm19;
+then A46: B2 = B2' & A2 = B2'*a3 & B2*c3 = A2' by A6,A45,ANPROJ_1:13;
+set v1' = o + a3*u + c3*u2;
+A47: B2 <> 0 proof assume not thesis;
+then v1 = 0.V + 0*w2' by A43,A46,RLVECT_1:23 .= 0.V + 0.V by RLVECT_1:23
+.= 0.V by RLVECT_1:10; hence contradiction by A5,RLVECT_1:def 13; end;
+  v1 = B2*v1' by A45,A46,Lm31; then A48: are_Prop v1',v1 by A47,Lm16;
+A49: not are_Prop v',w2' by A10,A13,A24,Lm21; A50: not are_Prop w',v2' by A11,
+A12,A27,Lm21;
+A51: v',w2',u1 are_LinDep & w',v2',u1 are_LinDep by A4,A14,ANPROJ_1:9;
+then consider A1,B1 being Real such that A52: u1 = A1*v' + B1*w2' by A30,A49,
+ANPROJ_1:11; consider A1',B1' being Real such that
+A53: u1 = A1'*w' + B1'*v2' by A30,A50,A51,ANPROJ_1:11;
+A54: u1 = (A1 + B1)*o + (A1*a2)*u + (B1*c3)*u2 by A52,Lm22;
+   u1 = (A1' + B1')*o + (A1'*a3)*u + (B1'*c2)*u2 by A53,Lm22;
+then A1 + B1 = A1' + B1' & A1*a2 = A1'*a3 & B1*c3 = B1'*c2 by A6,A54,ANPROJ_1:
+13; then A55: A1 = (a3*c3 - a3*c2)*(a3*c2 - a2*c2)"*B1
+by A12,A15,Lm24; then A56: u1 = (B1*(a3*c2 - a2*c2)")*((a3*c3 - a2*c2)*o +
+((a2*a3)*(c3 - c2))*u + ((c2*c3)*(a3 - a2))*u2) by A12,A15,A54,Lm26;
+set u1' = (a3*c3 - a2*c2)*o + ((a2*a3)*(c3 - c2))*u + ((c2*c3)*(a3 - a2))*u2;
+   B1<>0 proof assume not thesis;
+then u1 = 0.V + 0*w2' by A52,A55,RLVECT_1:23 .= 0.V + 0.V by RLVECT_1:23
+.= 0.V by RLVECT_1:10; hence contradiction by A5,RLVECT_1:def 13; end;
+ then (B1*(a3*c2 - a2*c2)") <> 0 by A12,A15,Lm25;
+then A57: are_Prop u1',u1 by A56,Lm16; set C2 = a2*c2, C3 = -(a3*c3);
+   C2 + C3 = a2*c2 - a3*c3 & C2*a3 + C3*a2 = (a2*a3)*(c2 - c3) &
+C2*c3 + C3*c2 = (c2*c3)*(a2 - a3) by Lm30,XCMPLX_0:def 8;
+ then 1*u1' + C2*v1' + C3*w1' = 0.V by Lm29;
+ then u1',v1',w1' are_LinDep by ANPROJ_1:def 3;
+hence thesis by A42,A48,A57,ANPROJ_1:9; end;
+
+::: > ANPROJ_6
+
+reserve A for non empty set;
+reserve f,g,h,f1 for Element of Funcs(A,REAL);
+reserve x1,x2,x3,x4 for Element of A;
+
+theorem
+Th10: ex f,g,h st
+      (for z st z in A holds
+      (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0)) &
+      (for z st z in A holds
+      (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0)) &
+      (for z st z in A holds
+      (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0))
+  proof
+   defpred P[set] means $1 = x1;
+   defpred R[set] means $1 = x2;
+   defpred S[set] means $1 = x3;
+   deffunc F(set) = 1;
+   deffunc G(set) = 0;
+A1:   for z st z in A holds
+     (P[z] implies F(z) in REAL) & (not P[z] implies G(z) in REAL);
+   consider f being Function of A,REAL such that
+    A2: for z st z in A holds
+    (P[z] implies f.z = F(z)) & (not P[z] implies f.z = G(z))
+      from Lambda1C(A1);
+A3:  for z st z in A holds
+     (R[z] implies F(z) in REAL) & (not R[z] implies G(z) in REAL);
+   consider g being Function of A,REAL such that
+A4: for z st z in A holds
+    (R[z] implies g.z = F(z)) & (not R[z] implies g.z = G(z))
+      from Lambda1C(A3);
+   A5:  for z st z in A holds
+     (S[z] implies F(z) in REAL) & (not S[z] implies G(z) in REAL);
+   consider h being Function of A,REAL such that
+     A6: for z st z in A holds
+   (S[z] implies h.z = F(z)) & (not S[z] implies h.z = G(z))
+     from Lambda1C(A5);
+  reconsider f,g,h as Element of Funcs(A,REAL) by FUNCT_2:11;
+   take f,g,h; thus thesis by A2,A4,A6; end;
+
+theorem
+Th11: (x1 in A & x2 in A & x3 in A & x1<>x2 & x1<>x3 & x2<>x3) &
+      (for z st z in A holds
+      (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0)) &
+      (for z st z in A holds
+      (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0)) &
+      (for z st z in A holds
+      (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0)) implies
+ (for a,b,c st (RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+   (RealFuncExtMult(A)).[c,h]) = RealFuncZero(A)
+   holds a=0 & b=0 & c = 0)
+ proof set RM = RealFuncExtMult(A), RA = RealFuncAdd(A);
+ assume that
+  A1: x1 in A & x2 in A & x3 in A & x1<>x2 & x1<>x3 & x2<>x3 and
+  A2: for z st z in A holds
+      (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0) and
+  A3: for z st z in A holds
+      (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
+  A4: for z st z in A holds
+      (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0);
+   A5: f.x1=1 & f.x2=0 & f.x3=0 & g.x1=0 & g.x2=1 & g.x3=0 &
+       h.x1=0 & h.x2=0 & h.x3=1 by A1,A2,A3,A4;
+
+    let a,b,c;
+    assume A6: RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h]) = RealFuncZero(A);
+     then A7: 0 = (RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h])).x1 by FUNCSDOM:13
+      .= (RA.(RM.[a,f],RM.[b,g])).x1 + (RM.[c,h]).x1 by FUNCSDOM:10
+      .= ((RM.[a,f]).x1) + ((RM.[b,g]).x1) + (RM.[c,h]).x1 by FUNCSDOM:10
+      .= ((RM.[a,f]).x1) + ((RM.[b,g]).x1) + c*(h.x1) by FUNCSDOM:15
+      .= ((RM.[a,f]).x1) + b*(g.x1) + c*(h.x1) by FUNCSDOM:15
+      .= a*1 + b*0 + c*0 by A5,FUNCSDOM:15
+      .= a;
+     A8: 0 = (RA.(RA.(RM.[a,f],RM.[b,g]), RM.[c,h])).x2 by A6,FUNCSDOM:13
+      .= (RA.(RM.[a,f],RM.[b,g])).x2 + (RM.[c,h]).x2 by FUNCSDOM:10
+      .= ((RM.[a,f]).x2) + ((RM.[b,g]).x2) + (RM.[c,h]).x2 by FUNCSDOM:10
+      .= ((RM.[a,f]).x2) + ((RM.[b,g]).x2) + c*(h.x2) by FUNCSDOM:15
+      .= ((RM.[a,f]).x2) + b*(g.x2) + c*(h.x2) by FUNCSDOM:15
+      .= a*0 + b*1 + c*0 by A5,FUNCSDOM:15
+      .= b;
+        0 = (RA.(RA.(RM.[a,f],RM.[b,g]), RM.[c,h])).x3 by A6,FUNCSDOM:13
+      .= (RA.(RM.[a,f],RM.[b,g])).x3 + (RM.[c,h]).x3 by FUNCSDOM:10
+      .= ((RM.[a,f]).x3) + ((RM.[b,g]).x3) + (RM.[c,h]).x3 by FUNCSDOM:10
+      .= ((RM.[a,f]).x3) + ((RM.[b,g]).x3) + c*(h.x3) by FUNCSDOM:15
+      .= ((RM.[a,f]).x3) + b*(g.x3) + c*(h.x3) by FUNCSDOM:15
+      .= a*0 + b*0 + c*1 by A5,FUNCSDOM:15
+      .= c;
+    hence a=0 & b=0 & c = 0 by A7,A8;
+  end;
+
+theorem
+   x1 in A & x2 in A & x3 in A & x1<>x2 & x1<>x3 & x2<>x3 implies
+ (ex f,g,h st
+   for a,b,c st (RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+   (RealFuncExtMult(A)).[c,h]) = RealFuncZero(A)
+   holds a=0 & b=0 & c = 0)
+  proof assume A1: x1 in A & x2 in A & x3 in A & x1<>x2 & x1<>x3 & x2<>x3;
+   consider f,g,h such that
+   A2: for z st z in A holds
+      (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0) and
+   A3: for z st z in A holds
+      (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
+   A4: for z st z in A holds
+      (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0) by Th10;
+   take f,g,h;
+    let a,b,c; assume
+     (RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+   (RealFuncExtMult(A)).[c,h]) = RealFuncZero(A);
+   hence thesis by A1,A2,A3,A4,Th11;
+ end;
+
+theorem
+Th13: A = {x1,x2,x3} & x1<>x2 & x1<>x3 & x2<>x3 &
+     (for z st z in A holds
+       (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0)) &
+     (for z st z in A holds
+      (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0)) &
+     (for z st z in A holds
+      (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0))
+     implies for h' being Element of Funcs(A,REAL) holds
+     (ex a,b,c st h' = (RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+   (RealFuncExtMult(A)).[c,h]))
+proof assume that A1: A = {x1,x2,x3} & x1<>x2 & x1<>x3 & x2<>x3 and
+   A2: for z st z in A holds
+       (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0) and
+   A3: for z st z in A holds
+       (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
+   A4: for z st z in A holds
+       (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0);
+   A5: f.x1=1 & f.x2=0 & f.x3=0 & g.x1=0 & g.x2=1 & g.x3=0 &
+       h.x1=0 & h.x2=0 & h.x3=1 by A1,A2,A3,A4;
+    let h' be Element of Funcs(A,REAL);
+    take a = h'.x1, b = h'.x2, c = h'.x3;
+    now let x be Element of A;
+  A6: x = x1 or x = x2 or x = x3 by A1,ENUMSET1:def 1;
+   A7: ((RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+   (RealFuncExtMult(A)).[c,h])).x1
+       = ((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g])).x1 +
+               ((RealFuncExtMult(A)).[c,h]).x1 by FUNCSDOM:10
+     .= (((RealFuncExtMult(A)).[a,f]).x1) + (((RealFuncExtMult(A)).[b,g]).x1)
+          + ((RealFuncExtMult(A)).[c,h]).x1 by FUNCSDOM:10
+     .= (((RealFuncExtMult(A)).[a,f]).x1) + (((RealFuncExtMult(A)).[b,g]).x1)
+           + c*(h.x1) by FUNCSDOM:15
+     .= (((RealFuncExtMult(A)).[a,f]).x1) + b*(g.x1)
+           + c*(h.x1) by FUNCSDOM:15
+     .= a*1 + b*0 + c*0 by A5,FUNCSDOM:15
+     .= h'.x1;
+   A8: ((RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+   (RealFuncExtMult(A)).[c,h])).x2
+       = ((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g])).x2 +
+               ((RealFuncExtMult(A)).[c,h]).x2 by FUNCSDOM:10
+     .= (((RealFuncExtMult(A)).[a,f]).x2) + (((RealFuncExtMult(A)).[b,g]).x2)
+          + ((RealFuncExtMult(A)).[c,h]).x2 by FUNCSDOM:10
+     .= (((RealFuncExtMult(A)).[a,f]).x2) + (((RealFuncExtMult(A)).[b,g]).x2)
+           + c*(h.x2) by FUNCSDOM:15
+     .= (((RealFuncExtMult(A)).[a,f]).x2) + b*(g.x2)
+           + c*(h.x2) by FUNCSDOM:15
+     .= a*0 + b*1 + c*0 by A5,FUNCSDOM:15
+     .= h'.x2;
+      ((RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+   (RealFuncExtMult(A)).[c,h])).x3
+       = ((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g])).x3 +
+               ((RealFuncExtMult(A)).[c,h]).x3 by FUNCSDOM:10
+     .= (((RealFuncExtMult(A)).[a,f]).x3) + (((RealFuncExtMult(A)).[b,g]).x3)
+          + ((RealFuncExtMult(A)).[c,h]).x3 by FUNCSDOM:10
+     .= (((RealFuncExtMult(A)).[a,f]).x3) + (((RealFuncExtMult(A)).[b,g]).x3)
+           + c*(h.x3) by FUNCSDOM:15
+     .= (((RealFuncExtMult(A)).[a,f]).x3) + b*(g.x3)
+           + c*(h.x3) by FUNCSDOM:15
+     .= a*0 + b*0 + c*1 by A5,FUNCSDOM:15
+     .= h'.x3;
+    hence h'.x = ((RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+   (RealFuncExtMult(A)).[c,h])).x by A6,A7,A8; end;
+  hence thesis by FUNCT_2:113; end;
+
+theorem
+   A = {x1,x2,x3} & x1<>x2 & x1<>x3 & x2<>x3 implies ex f,g,h st
+   (for h' being Element of Funcs(A,REAL) holds
+     (ex a,b,c st h' =
+     (RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+   (RealFuncExtMult(A)).[c,h])))
+proof assume A1: A = {x1,x2,x3} & x1<>x2 & x1<>x3 & x2<>x3;
+  consider f,g,h such that
+     A2: for z st z in A holds
+      (z=x1 implies f.z = 1) & (z<>x1 implies f.z =0) and
+     A3: for z st z in A holds
+      (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
+     A4: for z st z in A holds
+      (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0) by Th10;
+   take f,g,h;
+    let h' be Element of Funcs(A,REAL); thus thesis by A1,A2,A3,A4,Th13;
+ end;
+
+theorem Th15:
+  (A = {x1,x2,x3} & x1<>x2 & x1<>x3 & x2<>x3) implies (ex f,g,h st
+   (for a,b,c st (RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+   (RealFuncExtMult(A)).[c,h]) = RealFuncZero(A)
+   holds a=0 & b=0 & c = 0) &
+   (for h' being Element of Funcs(A,REAL) holds
+     (ex a,b,c st h' =
+     (RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+   (RealFuncExtMult(A)).[c,h]))))
+ proof assume A1:  A = {x1,x2,x3} & x1<>x2 & x1<>x3 & x2<>x3;
+  consider f,g,h such that
+     A2: for z st z in A holds
+      (z=x1 implies f.z = 1) & (z<>x1 implies f.z =0) and
+     A3: for z st z in A holds
+      (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
+     A4: for z st z in A holds
+      (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0) by Th10;
+   take f,g,h;
+   thus thesis by A1,A2,A3,A4,Th11,Th13;
+   end;
+
+Lm32: ex A,x1,x2,x3 st A={x1,x2,x3} & x1<>x2 & x1<>x3 & x2<>x3
+ proof
+  reconsider A={0,1,2} as non empty set by ENUMSET1:14; take A;
+ reconsider x1=0,x2=1,x3=2 as Element of A by ENUMSET1:14;
+ take x1,x2,x3; thus thesis; end;
+
+ theorem Th16: ex V being non trivial RealLinearSpace st
+    (ex u,v,w being Element of V st
+     (for a,b,c st a*u + b*v + c*w = 0.V holds a=0 & b=0 & c = 0) &
+     (for y being Element of V ex a,b,c st y = a*u + b*v + c*w))
+  proof consider A,x1,x2,x3 such that A1: A={x1,x2,x3} & x1<>x2 & x1<>x3
+   & x2<>x3 by Lm32;
+   set V = RealVectSpace(A);
+   consider f,g,h such that
+   A2: (for a,b,c st (RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+   (RealFuncExtMult(A)).[c,h]) = RealFuncZero(A)
+   holds a=0 & b=0 & c = 0) &
+   (for h' being Element of Funcs(A,REAL) holds
+     (ex a,b,c st h' =
+     (RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+   (RealFuncExtMult(A)).[c,h]))) by A1,Th15;
+     A3: V=RLSStruct(#Funcs(A,REAL),
+         (RealFuncZero(A)),RealFuncAdd(A),RealFuncExtMult(A)#) by FUNCSDOM:def
+7;
+    then reconsider u=f, v=g, w = h as Element of V;
+    A4: for a,b,c st a*u + b*v + c*w = 0.V holds a=0 & b=0 & c = 0
+     proof let r,s,t be Real such that A5: r*u + s*v + t*w = 0.V;
+        A6: r*u = (RealFuncExtMult(A)).[r,f] &
+        s*v = (RealFuncExtMult(A)).[s,g] &
+        t*w = (RealFuncExtMult(A)).[t,h] by A3,RLVECT_1:def 4;
+        reconsider u' = r*u,v' = s*v,w' = t*w as Element of Funcs(A,REAL) by A3
+;
+        reconsider u''=u',v''=v' as Element of V;
+    0.V = (the add of V).[u'' + v'',w'] by A5,RLVECT_1:def 3
+       .= (RealFuncAdd(A)).[(RealFuncAdd(A)).[u',v'],w'] by A3,RLVECT_1:def 3
+       .= (RealFuncAdd(A)).[(RealFuncAdd(A)).(u',v'),w'] by BINOP_1:def 1
+       .= (RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[r,f],(RealFuncExtMult(A)).[s,g]),
+   (RealFuncExtMult(A)).[t,h]) by A6,BINOP_1:def 1;
+         then (RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[r,f],(RealFuncExtMult(A)).[s,g]),
+   (RealFuncExtMult(A)).[t,h]) = RealFuncZero(A) by A3,RLVECT_1:def 2;
+        hence r=0 & s=0 & t=0 by A2; end;
+   A7: for y being Element of V ex a,b,c st y = a*u + b*v + c*w
+        proof let y be Element of V;
+         reconsider h'=y as Element of Funcs(A,REAL) by A3;
+         consider a,b,c such that
+    A8: h' = (RealFuncAdd(A)).((RealFuncAdd(A)).
+            ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+            (RealFuncExtMult(A)).[c,h]) by A2;
+       a*u = (RealFuncExtMult(A)).[a,f] &
+         b*v = (RealFuncExtMult(A)).[b,g] &
+         c*w = (RealFuncExtMult(A)).[c,h] by A3,RLVECT_1:def 4;
+        then h' = (the add of V).((the add of V).[a*u,b*v],c*w) by A3,A8,
+BINOP_1:def 1
+          .= (the add of V).[(the add of V).[a*u,b*v],c*w] by BINOP_1:def 1
+          .= (the add of V).[a*u + b*v,c*w] by RLVECT_1:def 3
+          .= a*u + b*v + c*w by RLVECT_1:def 3; hence thesis; end;
+      u is_Prop_Vect by A4,Th1; then u <> 0.V by RLVECT_1:def 13;
+    then reconsider V as non trivial RealLinearSpace by ANPROJ_1:def 8;
+    take V; reconsider u,v,w as Element of V; take u,v,w;
+   thus thesis by A4,A7; end;
+
+theorem
+Th17: ex f,g,h,f1 st
+      (for z st z in A holds
+      (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0)) &
+      (for z st z in A holds
+      (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0)) &
+      (for z st z in A holds
+      (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0)) &
+      (for z st z in A holds
+      (z=x4 implies f1.z = 1) & (z<>x4 implies f1.z = 0))
+  proof
+   defpred P[set] means $1 = x1;
+   defpred R[set] means $1 = x2;
+   defpred S[set] means $1 = x3;
+   deffunc F(set) = 1;
+   deffunc G(set) = 0;
+   A1:   for z st z in A holds
+     (P[z] implies F(z) in REAL) & (not P[z] implies G(z) in REAL);
+   consider f being Function of A,REAL such that
+     A2: for z st z in A holds
+      (P[z] implies f.z = F(z)) & (not P[z] implies f.z = G(z))
+        from Lambda1C(A1);
+   A3:  for z st z in A holds
+     (R[z] implies F(z) in REAL) & (not R[z] implies G(z) in REAL);
+   consider g being Function of A,REAL such that
+     A4: for z st z in A holds
+      (R[z] implies g.z = F(z)) & (not R[z] implies g.z = G(z))
+        from Lambda1C(A3);
+   A5:  for z st z in A holds
+     (S[z] implies F(z) in REAL) & (not S[z] implies G(z) in REAL);
+   consider h being Function of A,REAL such that
+     A6: for z st z in A holds
+      (S[z] implies h.z = F(z)) & (not S[z] implies h.z = G(z))
+        from Lambda1C(A5);
+   defpred Z[set] means $1 = x4;
+   A7:  for z st z in A holds
+     (Z[z] implies F(z) in REAL) & (not Z[z] implies G(z) in REAL);
+   consider f1 being Function of A,REAL such that
+     A8: for z st z in A holds
+      (Z[z] implies f1.z = F(z)) & (not Z[z] implies f1.z = G(z))
+        from Lambda1C(A7);
+  reconsider f,g,h,f1 as Element of Funcs(A,REAL) by FUNCT_2:11;
+   take f,g,h,f1; thus thesis by A2,A4,A6,A8; end;
+
+theorem
+Th18: (x1 in A & x2 in A & x3 in A & x4 in A &
+      x1<>x2 & x1<>x3 & x1<>x4 & x2<>x3 & x2<>x4 & x3<>x4) &
+      (for z st z in A holds
+      (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0)) &
+      (for z st z in A holds
+      (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0)) &
+      (for z st z in A holds
+      (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0)) &
+      (for z st z in A holds
+      (z=x4 implies f1.z = 1) & (z<>x4 implies f1.z = 0))
+      implies (for a,b,c,d st
+ (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+ ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+ (RealFuncExtMult(A)).[c,h]),(RealFuncExtMult(A)).[d,f1]) = RealFuncZero(A)
+        holds a=0 & b=0 & c = 0 & d=0)
+ proof set RM = RealFuncExtMult(A), RA = RealFuncAdd(A);
+ assume that
+  A1: x1 in A & x2 in A & x3 in A & x4 in A &
+     x1<>x2 & x1<>x3 & x1<>x4 & x2<>x3 & x2<>x4 & x3<>x4 and
+  A2: for z st z in A holds
+      (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0) and
+  A3: for z st z in A holds
+      (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
+  A4: for z st z in A holds
+      (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0) and
+  A5: for z st z in A holds
+      (z=x4 implies f1.z = 1) & (z<>x4 implies f1.z = 0);
+  A6: f.x1=1 & f.x2=0 & f.x3=0 & f.x4=0 & g.x1=0 & g.x2=1 & g.x3=0 & g.x4=0 &
+      h.x1=0 & h.x2=0 & h.x3=1 & h.x4=0 & f1.x1=0 & f1.x2=0 & f1.x3=0 & f1.x4=1
+                             by A1,A2,A3,A4,A5;
+
+    let a,b,c,d;
+    assume A7: RA.(RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h]),RM.[d,f1]) =
+     RealFuncZero(A);
+ then A8: 0 = (RA.(RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h]),RM.[d,f1])).x1 by
+FUNCSDOM:13
+  .= (RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h])).x1 + (RM.[d,f1]).x1 by FUNCSDOM:10
+  .= (RA.(RM.[a,f],RM.[b,g])).x1 + (RM.[c,h]).x1 +
+         (RM.[d,f1]).x1 by FUNCSDOM:10
+  .= (RM.[a,f]).x1 + (RM.[b,g]).x1 + (RM.[c,h]).x1 + (RM.[d,f1]).x1
+                        by FUNCSDOM:10
+  .= (RM.[a,f]).x1 + (RM.[b,g]).x1 +
+                 (RM.[c,h]).x1 + d*(f1.x1) by FUNCSDOM:15
+  .= (RM.[a,f]).x1 + (RM.[b,g]).x1 + c*(h.x1) + d*(f1.x1) by FUNCSDOM:15
+  .= (RM.[a,f]).x1 + b*(g.x1) + c*(h.x1) + d*(f1.x1) by FUNCSDOM:15
+  .= a*1 + b*0 + c*0 + d*0 by A6,FUNCSDOM:15
+  .= a;
+ A9: 0 = (RA.(RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h]),RM.[d,f1])).x2 by A7,
+FUNCSDOM:13
+  .= (RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h])).x2 + (RM.[d,f1]).x2 by FUNCSDOM:10
+  .= (RA.(RM.[a,f],RM.[b,g])).x2 + (RM.[c,h]).x2 + (RM.[d,f1]).x2
+      by FUNCSDOM:10
+  .= (RM.[a,f]).x2 + (RM.[b,g]).x2 +
+         (RM.[c,h]).x2 + (RM.[d,f1]).x2 by FUNCSDOM:10
+  .= (RM.[a,f]).x2 + (RM.[b,g]).x2 +
+                 (RM.[c,h]).x2 + d*(f1.x2) by FUNCSDOM:15
+  .= (RM.[a,f]).x2 + (RM.[b,g]).x2 + c*(h.x2) + d*(f1.x2) by FUNCSDOM:15
+  .= (RM.[a,f]).x2 + b*(g.x2) + c*(h.x2) + d*(f1.x2) by FUNCSDOM:15
+  .= a*0 + b*1 + c*0 + d*0 by A6,FUNCSDOM:15
+  .= b;
+ A10: 0 = (RA.(RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h]),RM.[d,f1])).x3 by A7,
+FUNCSDOM:13
+  .= (RA.(RA.(RM.[a,f], RM.[b,g]),RM.[c,h])).x3 +
+         (RM.[d,f1]).x3 by FUNCSDOM:10
+  .= (RA.(RM.[a,f],RM.[b,g])).x3 + (RM.[c,h]).x3 + (RM.[d,f1]).x3
+       by FUNCSDOM:10
+  .= (RM.[a,f]).x3 + (RM.[b,g]).x3 +
+         (RM.[c,h]).x3 + (RM.[d,f1]).x3 by FUNCSDOM:10
+  .= (RM.[a,f]).x3 + (RM.[b,g]).x3 + (RM.[c,h]).x3 + d*(f1.x3) by FUNCSDOM:15
+  .= (RM.[a,f]).x3 + (RM.[b,g]).x3 + c*(h.x3) + d*(f1.x3) by FUNCSDOM:15
+  .= (RM.[a,f]).x3 + b*(g.x3) + c*(h.x3) + d*(f1.x3) by FUNCSDOM:15
+  .= a*0 + b*0 + c*1 + d*0 by A6,FUNCSDOM:15
+  .= c;
+    0 = (RA.(RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h]),RM.[d,f1])).x4
+      by A7,FUNCSDOM:13
+ .= (RA.(RA.(RM.[a,f],RM.[b,g]),RM.[c,h])).x4 + (RM.[d,f1]).x4 by FUNCSDOM:10
+ .= (RA.(RM.[a,f], RM.[b,g])).x4 + (RM.[c,h]).x4 + (RM.[d,f1]).x4
+     by FUNCSDOM:10
+  .= (RM.[a,f]).x4 + (RM.[b,g]).x4 + (RM.[c,h]).x4 + (RM.[d,f1]).x4
+                        by FUNCSDOM:10
+  .= (RM.[a,f]).x4 + (RM.[b,g]).x4 + (RM.[c,h]).x4 + d*(f1.x4) by FUNCSDOM:15
+  .= (RM.[a,f]).x4 + (RM.[b,g]).x4 + c*(h.x4) + d*(f1.x4) by FUNCSDOM:15
+  .= (RM.[a,f]).x4 + b*(g.x4) + c*(h.x4) + d*(f1.x4) by FUNCSDOM:15
+  .= a*0 + b*0 + c*0 + d*1 by A6,FUNCSDOM:15
+  .= d;
+hence thesis by A8,A9,A10; end;
+
+theorem
+   x1 in A & x2 in A & x3 in A & x4 in A &
+     x1<>x2 & x1<>x3 & x1<>x4 & x2<>x3 & x2<>x4 & x3<>x4 implies
+ (ex f,g,h,f1 st for a,b,c,d st
+  (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+  ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+  (RealFuncExtMult(A)).[c,h]),(RealFuncExtMult(A)).[d,f1]) = RealFuncZero(A)
+   holds a = 0 & b = 0 & c = 0 & d = 0)
+  proof assume A1: x1 in A & x2 in A & x3 in A & x4 in A &
+  x1<>x2 & x1<>x3 & x1<>x4 & x2<>x3 & x2<>x4 & x3<>x4;
+   consider f,g,h,f1 such that
+   A2: for z st z in A holds
+      (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0) and
+   A3: for z st z in A holds
+      (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
+   A4: for z st z in A holds
+      (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0) and
+   A5: for z st z in A holds
+      (z=x4 implies f1.z = 1) & (z<>x4 implies f1.z = 0) by Th17;
+   take f,g,h,f1;
+    let a,b,c,d; assume
+    (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+  ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+  (RealFuncExtMult(A)).[c,h]),(RealFuncExtMult(A)).[d,f1]) = RealFuncZero(A);
+  hence thesis by A1,A2,A3,A4,A5,Th18; end;
+
+theorem Th20:
+A = {x1,x2,x3,x4} & x1<>x2 & x1<>x3 & x1<>x4 & x2<>x3 & x2<>x4 & x3<>x4 &
+     (for z st z in A holds
+      (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0)) &
+     (for z st z in A holds
+      (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0)) &
+     (for z st z in A holds
+      (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0)) &
+     (for z st z in A holds
+      (z=x4 implies f1.z = 1) & (z<>x4 implies f1.z = 0))
+     implies for h' being Element of Funcs(A,REAL) holds
+     ( ex a,b,c,d st h' = (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+  ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+  (RealFuncExtMult(A)).[c,h]),(RealFuncExtMult(A)).[d,f1]) )
+proof assume that
+ A1: A = {x1,x2,x3,x4} & x1<>x2 & x1<>x3 & x1<>x4 & x2<>x3 & x2<>x4 & x3<>x4
+and
+ A2: for z st z in A holds
+       (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0) and
+ A3: for z st z in A holds
+       (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
+ A4: for z st z in A holds
+       (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0) and
+ A5: for z st z in A holds
+      (z=x4 implies f1.z = 1) & (z<>x4 implies f1.z = 0);
+ A6: f.x1=1 & f.x2=0 & f.x3=0 & f.x4=0 & g.x1=0 & g.x2=1 & g.x3=0 & g.x4=0 &
+     h.x1=0 & h.x2=0 & h.x3=1 & h.x4=0 & f1.x1=0 & f1.x2=0 & f1.x3=0 & f1.x4=1
+                    by A1,A2,A3,A4,A5;
+ let h' be Element of Funcs(A,REAL);
+    take a = h'.x1, b = h'.x2, c = h'.x3, d = h'.x4;
+    now let x be Element of A;
+  A7: x = x1 or x = x2 or x = x3 or x = x4 by A1,ENUMSET1:18;
+  A8: ((RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+         ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+         (RealFuncExtMult(A)).[c,h]),(RealFuncExtMult(A)).[d,f1])).x1
+   = ((RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncExtMult(A)).[a,f],
+         (RealFuncExtMult(A)).[b,g]),(RealFuncExtMult(A)).[c,h])).x1 +
+         ((RealFuncExtMult(A)).[d,f1]).x1 by FUNCSDOM:10
+  .= ((RealFuncAdd(A)).((RealFuncExtMult(A)).[a,f],
+         (RealFuncExtMult(A)).[b,g])).x1 + ((RealFuncExtMult(A)).[c,h]).x1 +
+         ((RealFuncExtMult(A)).[d,f1]).x1 by FUNCSDOM:10
+  .= ((RealFuncExtMult(A)).[a,f]).x1 + ((RealFuncExtMult(A)).[b,g]).x1 +
+         ((RealFuncExtMult(A)).[c,h]).x1 + ((RealFuncExtMult(A)).[d,f1]).x1
+                        by FUNCSDOM:10
+  .= ((RealFuncExtMult(A)).[a,f]).x1 + ((RealFuncExtMult(A)).[b,g]).x1 +
+                 ((RealFuncExtMult(A)).[c,h]).x1 + d*(f1.x1) by FUNCSDOM:15
+  .= ((RealFuncExtMult(A)).[a,f]).x1 + ((RealFuncExtMult(A)).[b,g]).x1 +
+                                    c*(h.x1) + d*(f1.x1) by FUNCSDOM:15
+  .= ((RealFuncExtMult(A)).[a,f]).x1 + b*(g.x1) + c*(h.x1) + d*(f1.x1)
+                                                            by FUNCSDOM:15
+  .= a*1 + b*0 + c*0 + d*0 by A6,FUNCSDOM:15
+  .= h'.x1;
+  A9: ((RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+         ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+         (RealFuncExtMult(A)).[c,h]),(RealFuncExtMult(A)).[d,f1])).x2
+   = ((RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncExtMult(A)).[a,f],
+         (RealFuncExtMult(A)).[b,g]),(RealFuncExtMult(A)).[c,h])).x2 +
+         ((RealFuncExtMult(A)).[d,f1]).x2 by FUNCSDOM:10
+  .= ((RealFuncAdd(A)).((RealFuncExtMult(A)).[a,f],
+         (RealFuncExtMult(A)).[b,g])).x2 + ((RealFuncExtMult(A)).[c,h]).x2 +
+         ((RealFuncExtMult(A)).[d,f1]).x2 by FUNCSDOM:10
+  .= ((RealFuncExtMult(A)).[a,f]).x2 + ((RealFuncExtMult(A)).[b,g]).x2 +
+         ((RealFuncExtMult(A)).[c,h]).x2 + ((RealFuncExtMult(A)).[d,f1]).x2
+                        by FUNCSDOM:10
+  .= ((RealFuncExtMult(A)).[a,f]).x2 + ((RealFuncExtMult(A)).[b,g]).x2 +
+                 ((RealFuncExtMult(A)).[c,h]).x2 + d*(f1.x2) by FUNCSDOM:15
+  .= ((RealFuncExtMult(A)).[a,f]).x2 + ((RealFuncExtMult(A)).[b,g]).x2 +
+                                    c*(h.x2) + d*(f1.x2) by FUNCSDOM:15
+  .= ((RealFuncExtMult(A)).[a,f]).x2 + b*(g.x2) + c*(h.x2) + d*(f1.x2)
+                                                            by FUNCSDOM:15
+  .= a*0 + b*1 + c*0 + d*0 by A6,FUNCSDOM:15
+  .= h'.x2;
+  A10: ((RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+         ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+         (RealFuncExtMult(A)).[c,h]),(RealFuncExtMult(A)).[d,f1])).x3
+   = ((RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncExtMult(A)).[a,f],
+         (RealFuncExtMult(A)).[b,g]),(RealFuncExtMult(A)).[c,h])).x3 +
+         ((RealFuncExtMult(A)).[d,f1]).x3 by FUNCSDOM:10
+  .= ((RealFuncAdd(A)).((RealFuncExtMult(A)).[a,f],
+         (RealFuncExtMult(A)).[b,g])).x3 + ((RealFuncExtMult(A)).[c,h]).x3 +
+         ((RealFuncExtMult(A)).[d,f1]).x3 by FUNCSDOM:10
+  .= ((RealFuncExtMult(A)).[a,f]).x3 + ((RealFuncExtMult(A)).[b,g]).x3 +
+         ((RealFuncExtMult(A)).[c,h]).x3 + ((RealFuncExtMult(A)).[d,f1]).x3
+                        by FUNCSDOM:10
+  .= ((RealFuncExtMult(A)).[a,f]).x3 + ((RealFuncExtMult(A)).[b,g]).x3 +
+                 ((RealFuncExtMult(A)).[c,h]).x3 + d*(f1.x3) by FUNCSDOM:15
+  .= ((RealFuncExtMult(A)).[a,f]).x3 + ((RealFuncExtMult(A)).[b,g]).x3 +
+                                    c*(h.x3) + d*(f1.x3) by FUNCSDOM:15
+  .= ((RealFuncExtMult(A)).[a,f]).x3 + b*(g.x3) + c*(h.x3) + d*(f1.x3)
+                                                            by FUNCSDOM:15
+  .= a*0 + b*0 + c*1 + d*0 by A6,FUNCSDOM:15
+  .= h'.x3;
+     ((RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+         ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+         (RealFuncExtMult(A)).[c,h]),(RealFuncExtMult(A)).[d,f1])).x4
+   = ((RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncExtMult(A)).[a,f],
+         (RealFuncExtMult(A)).[b,g]),(RealFuncExtMult(A)).[c,h])).x4 +
+         ((RealFuncExtMult(A)).[d,f1]).x4 by FUNCSDOM:10
+  .= ((RealFuncAdd(A)).((RealFuncExtMult(A)).[a,f],
+         (RealFuncExtMult(A)).[b,g])).x4 + ((RealFuncExtMult(A)).[c,h]).x4 +
+         ((RealFuncExtMult(A)).[d,f1]).x4 by FUNCSDOM:10
+  .= ((RealFuncExtMult(A)).[a,f]).x4 + ((RealFuncExtMult(A)).[b,g]).x4 +
+         ((RealFuncExtMult(A)).[c,h]).x4 + ((RealFuncExtMult(A)).[d,f1]).x4
+                        by FUNCSDOM:10
+  .= ((RealFuncExtMult(A)).[a,f]).x4 + ((RealFuncExtMult(A)).[b,g]).x4 +
+                 ((RealFuncExtMult(A)).[c,h]).x4 + d*(f1.x4) by FUNCSDOM:15
+  .= ((RealFuncExtMult(A)).[a,f]).x4 + ((RealFuncExtMult(A)).[b,g]).x4 +
+                                    c*(h.x4) + d*(f1.x4) by FUNCSDOM:15
+  .= ((RealFuncExtMult(A)).[a,f]).x4 + b*(g.x4) + c*(h.x4) + d*(f1.x4)
+                                                            by FUNCSDOM:15
+  .= a*0 + b*0 + c*0 + d*1 by A6,FUNCSDOM:15
+  .= h'.x4;
+    hence h'.x = ((RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+       ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+       (RealFuncExtMult(A)).[c,h]),(RealFuncExtMult(A)).[d,f1])).x
+                           by A7,A8,A9,A10; end;
+  hence thesis by FUNCT_2:113; end;
+
+theorem
+   A = {x1,x2,x3,x4} & x1<>x2 & x1<>x3 & x1<>x4 & x2<>x3 & x2<>x4 & x3<>x4
+  implies ex f,g,h,f1 st
+   (for h' being Element of Funcs(A,REAL) holds
+     (ex a,b,c,d st h' = (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+       ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+       (RealFuncExtMult(A)).[c,h]),(RealFuncExtMult(A)).[d,f1]) ))
+proof assume
+   A1: A = {x1,x2,x3,x4} & x1<>x2 & x1<>x3 & x1<>x4 & x2<>x3 & x2<>x4 & x3<>x4;
+  consider f,g,h,f1 such that
+     A2: for z st z in A holds
+      (z=x1 implies f.z = 1) & (z<>x1 implies f.z =0) and
+     A3: for z st z in A holds
+      (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
+     A4: for z st z in A holds
+      (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0) and
+     A5: for z st z in A holds
+      (z=x4 implies f1.z = 1) & (z<>x4 implies f1.z = 0) by Th17;
+   take f,g,h,f1;
+    let h' be Element of Funcs(A,REAL); thus thesis by A1,A2,A3,A4,A5,Th20;
+ end;
+
+theorem Th22:
+  (A = {x1,x2,x3,x4} & x1<>x2 & x1<>x3 & x1<>x4 & x2<>x3 & x2<>x4 & x3<>x4)
+  implies ( ex f,g,h,f1 st
+   (for a,b,c,d st (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+ ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+ (RealFuncExtMult(A)).[c,h]),(RealFuncExtMult(A)).[d,f1]) = RealFuncZero(A)
+   holds a = 0 & b = 0 & c = 0 & d = 0) &
+   (for h' being Element of Funcs(A,REAL) holds
+     (ex a,b,c,d st h' = (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+       ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+       (RealFuncExtMult(A)).[c,h]),(RealFuncExtMult(A)).[d,f1]) )))
+ proof assume
+  A1:  A = {x1,x2,x3,x4} & x1<>x2 & x1<>x3 & x1<>x4 & x2<>x3 & x2<>x4 & x3<>x4;
+   consider f,g,h,f1 such that
+   A2: for z st z in A holds
+      (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0) and
+   A3: for z st z in A holds
+      (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
+   A4: for z st z in A holds
+      (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0) and
+   A5: for z st z in A holds
+      (z=x4 implies f1.z = 1) & (z<>x4 implies f1.z = 0) by Th17;
+   take f,g,h,f1;
+   thus thesis by A1,A2,A3,A4,A5,Th18,Th20;
+   end;
+
+Lm33: ex A,x1,x2,x3,x4 st A={x1,x2,x3,x4} &
+        x1<>x2 & x1<>x3 & x1<>x4 & x2<>x3 & x2<>x4 & x3<>x4
+ proof
+  reconsider A={0,1,2,3} as non empty set by ENUMSET1:19; take A;
+  reconsider x1=0,x2=1,x3=2,x4=3 as Element of A by ENUMSET1:19;
+ take x1,x2,x3,x4;
+  thus thesis; end;
+
+ theorem
+Th23: ex V being non trivial RealLinearSpace st
+    (ex u,v,w,u1 being Element of V
+      st (for a,b,c,d st a*u + b*v + c*w + d*u1 = 0.V holds
+                            a = 0 & b = 0 & c = 0 & d = 0) &
+     (for y being Element of V ex a,b,c,d st y = a*u + b*v + c*w + d*u1))
+  proof consider A,x1,x2,x3,x4 such that A1: A={x1,x2,x3,x4} &
+   x1<>x2 & x1<>x3 & x1<>x4 & x2<>x3 & x2<>x4 & x3<>x4 by Lm33;
+   set V = RealVectSpace(A);
+   consider f,g,h,f1 such that
+   A2: (for a,b,c,d st (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+     (RealFuncExtMult(A)).[c,h]),(RealFuncExtMult(A)).[d,f1]) = RealFuncZero(A)
+   holds a = 0 & b = 0 & c = 0 & d = 0) &
+   (for h' being Element of Funcs(A,REAL) holds
+     (ex a,b,c,d st h' = (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+       ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+       (RealFuncExtMult(A)).[c,h]),(RealFuncExtMult(A)).[d,f1]) )) by A1,Th22;
+    A3: V=RLSStruct(#Funcs(A,REAL),
+         (RealFuncZero(A)),RealFuncAdd(A),RealFuncExtMult(A)#) by FUNCSDOM:def
+7;
+    then reconsider u = f, v = g, w = h, u1 = f1 as Element of V
+   ;
+  A4: for a,b,c,d st a*u + b*v + c*w + d*u1 = 0.V holds
+                                   a = 0 & b = 0 & c = 0 & d = 0
+     proof let r,s,t,r1 be Real such that A5: r*u + s*v + t*w + r1*u1 = 0.V;
+      reconsider u' = r*u,v' = s*v,w' = t*w,u1' = r1*u1
+ as Element of Funcs(A,REAL) by A3; reconsider
+      u''= u',v''=v',w''=w' as Element of V;
+  0.V = (the add of V).[u'' + v'' + w'',u1'] by A5,RLVECT_1:def 3
+ .= (the add of V).[(the add of V).[u'' + v'',w'],u1'] by RLVECT_1:def 3
+ .= (RealFuncAdd(A)).[(RealFuncAdd(A)).[(RealFuncAdd(A)).[u',v'],w'],u1'] by A3
+,RLVECT_1:def 3
+ .= (RealFuncAdd(A)).[(RealFuncAdd(A)).[(RealFuncAdd(A)).(u',v'),w'],u1']
+                           by BINOP_1:def 1
+ .= (RealFuncAdd(A)).[(RealFuncAdd(A)).((RealFuncAdd(A)).(u',v'),w'),u1']
+                           by BINOP_1:def 1
+ .= (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).(u',v'),w'),u1')
+                           by BINOP_1:def 1
+ .= (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+                             ((RealFuncExtMult(A)).[r,f],v'),w'),u1') by A3,
+RLVECT_1:def 4
+ .= (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[r,f],(RealFuncExtMult(A)).[s,g]),w'),u1') by A3,
+RLVECT_1:def 4
+ .= (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[r,f],(RealFuncExtMult(A)).[s,g]),
+                   (RealFuncExtMult(A)).[t,h]),u1') by A3,RLVECT_1:def 4
+ .= (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[r,f],(RealFuncExtMult(A)).[s,g]),
+      (RealFuncExtMult(A)).[t,h]),(RealFuncExtMult(A)).[r1,f1]) by A3,RLVECT_1:
+def 4;
+  then (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+   ((RealFuncExtMult(A)).[r,f],(RealFuncExtMult(A)).[s,g]),
+    (RealFuncExtMult(A)).[t,h]),(RealFuncExtMult(A)).[r1,f1]) =
+                 RealFuncZero(A) by A3,RLVECT_1:def 2;
+  hence r = 0 & s = 0 & t = 0 & r1 = 0 by A2; end;
+   A6: for y being Element of V ex a,b,c,d st y = a*u + b*v + c*w + d*u1
+    proof let y be Element of V;
+ reconsider
+     h'=y as Element of Funcs(A,REAL) by A3; consider a,b,c,d such that
+     A7: h' = (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+       ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
+       (RealFuncExtMult(A)).[c,h]),(RealFuncExtMult(A)).[d,f1]) by A2;
+        a*u = (RealFuncExtMult(A)).[a,f] & b*v = (RealFuncExtMult(A)).[b,g] &
+         c*w = (RealFuncExtMult(A)).[c,h] & d*u1 = (RealFuncExtMult(A)).[d,f1]
+                        by A3,RLVECT_1:def 4; then h' =
+(the add of V).((the add of V).((the add of V).[a*u,b*v],c*w),d*u1)
+        by A3,A7,BINOP_1:def 1
+ .= (the add of V).((the add of V).[(the add of V).[a*u,b*v],c*w],d*u1)
+        by BINOP_1:def 1
+ .= (the add of V).[(the add of V).[(the add of V).[a*u,b*v],c*w],d*u1]
+        by BINOP_1:def 1
+ .= (the add of V).[(the add of V).[a*u + b*v,c*w],d*u1] by RLVECT_1:def 3
+ .= (the add of V).[a*u + b*v + c*w,d*u1] by RLVECT_1:def 3
+ .= a*u + b*v + c*w + d*u1 by RLVECT_1:def 3; hence thesis; end;
+      u is_Prop_Vect by A4,Th2; then u <> 0.V by RLVECT_1:def 13;
+    then reconsider V as non trivial RealLinearSpace by ANPROJ_1:def 8;
+    take V; reconsider u,v,w,u1 as Element of V; take u,v,w,u1;
+   thus thesis by A4,A6; end;
+
+definition let IT be RealLinearSpace;
+ attr IT is up-3-dimensional means
+ :Def6: ex u,v,w1 being Element of IT st
+   for a,b,c st a*u + b*v + c*w1 = 0.IT holds a = 0 & b = 0 & c = 0;
+end;
+
+definition cluster up-3-dimensional RealLinearSpace;
+  existence
+proof
+  consider V0 being non trivial RealLinearSpace such that
+  A1: ex u,v,w being Element of V0 st
+     (for a,b,c st a*u + b*v + c*w = 0.V0 holds a=0 & b=0 & c = 0) &
+     (for y being Element of V0 ex a,b,c st y = a*u + b*v + c*w) by Th16;
+  consider u0,v0,w0 being Element of V0 such that
+  A2: for a,b,c st a*u0 + b*v0 + c*w0 = 0.V0 holds a=0 & b=0 & c = 0 and
+     for y being Element of V0 ex a,b,c st y = a*u0 + b*v0 + c*w0 by A1;
+  take V0;
+  thus thesis by A2,Def6;
+ end;
+end;
+
+definition cluster up-3-dimensional -> non trivial RealLinearSpace;
+  coherence
+ proof let V be RealLinearSpace;
+ given u,v,w1 being Element of V such that
+  A1: for a,b,c st a*u + b*v + c*w1 = 0.V holds a = 0 & b = 0 & c = 0;
+    now assume w1 = 0.V; then A2: 0.V = 1*w1 by RLVECT_1:23;
+      0.V = 0*u & 0.V = 0*v by RLVECT_1:23;
+    then 0.V = 0*u + 0*v by RLVECT_1:10
+             .= 0*u + 0*v + 1*w1 by A2,RLVECT_1:10;
+    hence contradiction by A1; end;
+  hence thesis by ANPROJ_1:def 8;
+ end;
+end;
+
+definition let CS be non empty CollStr;
+ redefine attr CS is reflexive means
+:Def7:
+ for p,q,r being Element of CS holds
+   p,q,p is_collinear & p,p,q is_collinear & p,q,q is_collinear;
+  compatibility
+proof
+  hereby
+   assume
+A1:   CS is reflexive;
+   let p,q,r be Element of CS;
+     [p,q,p] in the Collinearity of CS by A1,COLLSP:def 3;
+      hence p,q,p is_collinear by COLLSP:def 2;
+     [p,p,q] in the Collinearity of CS by A1,COLLSP:def 3;
+      hence p,p,q is_collinear by COLLSP:def 2;
+     [p,q,q] in the Collinearity of CS by A1,COLLSP:def 3;
+      hence p,q,q is_collinear by COLLSP:def 2;
+  end;
+ assume
+A2: for p,q,r being Element of CS holds
+    p,q,p is_collinear & p,p,q is_collinear & p,q,q is_collinear;
+  let p,q,r be Element of CS such that
+A3: p=q or p=r or q=r;
+  per cases by A3;
+   suppose p=q;
+    then p,q,r is_collinear by A2;
+    hence thesis by COLLSP:def 2;
+   suppose p=r;
+    then p,q,r is_collinear by A2;
+    hence thesis by COLLSP:def 2;
+   suppose q=r;
+    then p,q,r is_collinear by A2;
+    hence thesis by COLLSP:def 2;
+ end;
+ attr CS is transitive means
+:Def8:
+ for p,q,r,r1,r2 being Element of CS
+   st p<>q & p,q,r is_collinear & p,q,r1 is_collinear & p,q,r2 is_collinear
+   holds r,r1,r2 is_collinear;
+  compatibility
+proof
+  hereby assume A4: CS is transitive;
+   let p,q,r,r1,r2 be Element of CS such that
+     A5: p<>q and
+     A6: p,q,r is_collinear & p,q,r1 is_collinear & p,q,r2 is_collinear;
+     [p,q,r] in the Collinearity of CS & [p,q,r1] in the Collinearity of CS
+    & [p,q,r2] in the Collinearity of CS by A6,COLLSP:def 2;
+   then [r,r1,r2] in the Collinearity of CS by A4,A5,COLLSP:def 4;
+   hence r,r1,r2 is_collinear by COLLSP:def 2; end;
+ assume A7: for p,q,r,r1,r2 being Element of CS
+   st p<>q & p,q,r is_collinear & p,q,r1 is_collinear & p,q,r2 is_collinear
+   holds r,r1,r2 is_collinear;
+   let p,q,r,r1,r2 be Element of CS such that
+     A8: p<>q and
+     A9: [p,q,r] in the Collinearity of CS & [p,q,r1] in the Collinearity of CS
+    & [p,q,r2] in the Collinearity of CS;
+      p,q,r is_collinear & p,q,r1 is_collinear & p,q,r2 is_collinear
+    by A9,COLLSP:def 2;
+    then r,r1,r2 is_collinear by A7,A8;
+   hence [r,r1,r2] in the Collinearity of CS by COLLSP:def 2;
+ end;
+end;
+
+definition let IT be non empty CollStr;
+ attr IT is Vebleian means
+:Def9:
+ for p,p1,p2,r,r1 being Element of IT st
+   p,p1,r is_collinear & p1,p2,r1 is_collinear
+  ex r2 being Element of IT st
+            p,p2,r2 is_collinear & r,r1,r2 is_collinear;
+ attr IT is at_least_3rank means
+:Def10:
+ for p,q being Element of IT ex r being
+   Element of IT st p<>r & q<>r & p,q,r is_collinear;
+end;
+
+reserve V for non trivial RealLinearSpace;
+reserve u,v,w,y,u1,v1,w1,u2,w2 for Element of V;
+reserve p,p1,p2,p3,q,q1,q2,q3,r,r1,r2,r3 for
+                    Element of ProjectiveSpace(V);
+
+theorem Th24:
+ p,q,r is_collinear iff ex u,v,w st
+  p = Dir(u) & q = Dir(v) & r = Dir(w) & u is_Prop_Vect & v is_Prop_Vect &
+  w is_Prop_Vect & u,v,w are_LinDep
+ proof A1: now assume p,q,r is_collinear;
+ then [p,q,r] in the Collinearity of ProjectiveSpace(V) by COLLSP:def 2;
+ then consider u,v,w such that A2:
+  p = Dir(u) & q = Dir(v) & r = Dir(w) & u is_Prop_Vect & v is_Prop_Vect &
+  w is_Prop_Vect & u,v,w are_LinDep by ANPROJ_1:40; take u,v,w; thus
+    p = Dir(u) & q = Dir(v) & r = Dir(w) & u is_Prop_Vect & v is_Prop_Vect &
+  w is_Prop_Vect & u,v,w are_LinDep by A2; end;
+     now assume ex u,v,w st
+  p = Dir(u) & q = Dir(v) & r = Dir(w) & u is_Prop_Vect & v is_Prop_Vect &
+  w is_Prop_Vect & u,v,w are_LinDep;
+ then [p,q,r] in the Collinearity of ProjectiveSpace(V) by ANPROJ_1:41;
+ hence p,q,r is_collinear by COLLSP:def 2; end;
+ hence thesis by A1; end;
+
+Lm34: ProjectiveSpace(V) is reflexive
+proof let p,q;
+ consider u such that A1: u is_Prop_Vect & p = Dir(u) by ANPROJ_1:42;
+ consider v such that A2: v is_Prop_Vect & q = Dir(v) by ANPROJ_1:42;
+   u,v,u are_LinDep & u,u,v are_LinDep & u,v,v are_LinDep by ANPROJ_1:16;
+ hence thesis by A1,A2,Th24; end;
+
+Lm35: ProjectiveSpace(V) is transitive
+proof let p,q,r,r1,r2;
+ assume that A1: p<>q and
+   A2: p,q,r is_collinear & p,q,r1 is_collinear & p,q,r2 is_collinear;
+ consider u such that A3: u is_Prop_Vect & p = Dir(u) by ANPROJ_1:42;
+ consider v such that A4: v is_Prop_Vect & q = Dir(v) by ANPROJ_1:42;
+ consider u1,v1,w1 such that A5:
+  p = Dir(u1) & q = Dir(v1) & r = Dir(w1) & u1 is_Prop_Vect & v1 is_Prop_Vect
+   & w1 is_Prop_Vect & u1,v1,w1 are_LinDep by A2,Th24;
+ consider u2,v2,w2 being Element of V such that A6:
+  p = Dir(u2) & q = Dir(v2) & r1 = Dir(w2) & u2 is_Prop_Vect & v2 is_Prop_Vect
+   & w2 is_Prop_Vect & u2,v2,w2 are_LinDep by A2,Th24;
+ consider u3,v3,w3 being Element of V such that A7:
+  p = Dir(u3) & q = Dir(v3) & r2 = Dir(w3) & u3 is_Prop_Vect & v3 is_Prop_Vect
+   & w3 is_Prop_Vect & u3,v3,w3 are_LinDep by A2,Th24;
+  A8: not are_Prop u,v by A1,A3,A4,ANPROJ_1:35;
+     are_Prop u1,u & are_Prop u2,u & are_Prop u3,u & are_Prop v1,v &
+       are_Prop v2,v & are_Prop v3,v & are_Prop w1,w1 & are_Prop w2,w2 &
+       are_Prop w3,w3 by A3,A4,A5,A6,A7,ANPROJ_1:35;
+  then u,v,w1 are_LinDep & u,v,w2 are_LinDep & u,v,w3 are_LinDep
+     by A5,A6,A7,ANPROJ_1:9;
+  then w1,w2,w3 are_LinDep by A3,A4,A8,ANPROJ_1:19;
+  hence r,r1,r2 is_collinear by A5,A6,A7,Th24; end;
+
+definition let V;
+ cluster ProjectiveSpace V -> reflexive transitive;
+  coherence by Lm34,Lm35;
+end;
+
+theorem Th25:
+ p,q,r is_collinear implies p,r,q is_collinear & q,p,r is_collinear &
+   r,q,p is_collinear & r,p,q is_collinear & q,r,p is_collinear
+ proof assume p,q,r is_collinear; then consider u,v,w such that
+ A1: p = Dir(u) & q = Dir(v) & r = Dir(w) & u is_Prop_Vect & v is_Prop_Vect
+   & w is_Prop_Vect & u,v,w are_LinDep by Th24;
+   u,w,v are_LinDep & v,u,w are_LinDep & w,v,u are_LinDep & w,u,v are_LinDep
+  & v,w,u are_LinDep by A1,ANPROJ_1:10; hence thesis by A1,Th24; end;
+
+Lm36:
+ p,p1,p2 is_collinear & p,p1,r is_collinear & p1,p2,r1 is_collinear
+ implies ex r2 st (p,p2,r2 is_collinear & r,r1,r2 is_collinear)
+proof assume that A1: p,p1,p2 is_collinear and A2: p,p1,r is_collinear and
+                  A3: p1,p2,r1 is_collinear;
+ A4: now assume A5: p=p2; take r;
+  A6: p,p2,r is_collinear by A5,Def7;
+        r,r1,r is_collinear by Def7;
+   hence thesis by A6; end;
+    now assume A7: p<>p2;
+  A8: now assume A9: p1<>p; take r;
+    A10: p,p2,r is_collinear proof p<>p1 & p,p1,p is_collinear &
+     p,p1,p2 is_collinear & p,p1,r is_collinear by A1,A2,A9,Def7;
+      hence thesis by Def8; end;
+      r,r1,r is_collinear by Def7; hence thesis by A10; end;
+     now assume A11: p1<>p2; take r1;
+   A12: p,p2,r1 is_collinear proof p1,p2,p is_collinear &
+   p1,p2,p2 is_collinear & p1,p2,r1 is_collinear
+    by A1,A3,Def7,Th25;
+   hence thesis by A11,Def8; end;
+     r,r1,r1 is_collinear by Def7; hence thesis by A12; end;
+  hence thesis by A7,A8; end; hence thesis by A4; end;
+
+Lm37:
+ not p,p1,p2 is_collinear & p,p1,r is_collinear & p1,p2,r1 is_collinear
+ implies ex r2 st (p,p2,r2 is_collinear & r,r1,r2 is_collinear)
+ proof assume that A1: not p,p1,p2 is_collinear and
+                   A2: p,p1,r is_collinear & p1,p2,r1 is_collinear;
+consider u,v,t being Element of V such that A3:
+  p = Dir(u) & p1 = Dir(v) & r = Dir(t) & u is_Prop_Vect & v is_Prop_Vect &
+  t is_Prop_Vect & u,v,t are_LinDep by A2,Th24;
+consider v1,w,s being Element of V such that A4:
+  p1 = Dir(v1) & p2 = Dir(w) & r1 = Dir(s) & v1 is_Prop_Vect &
+  w is_Prop_Vect & s is_Prop_Vect & v1,w,s are_LinDep by A2,Th24;
+   are_Prop v1,v & are_Prop w,w & are_Prop s,s by A3,A4,ANPROJ_1:35;
+ then A5: v,w,s are_LinDep by A4,ANPROJ_1:9;
+    not u,v,w are_LinDep by A1,A3,A4,Th24;
+then consider y such that A6: u,w,y are_LinDep & t,s,y are_LinDep & y
+is_Prop_Vect
+                 by A3,A5,ANPROJ_1:20;
+ reconsider r2 = Dir(y) as Element of ProjectiveSpace(V)
+    by A6,ANPROJ_1:42; take r2;
+ thus thesis by A3,A4,A6,Th24; end;
+
+Lm38: ProjectiveSpace(V) is Vebleian
+proof let p,p1,p2,r,r1;
+ assume A1: p,p1,r is_collinear & p1,p2,r1 is_collinear;
+ then p,p1,p2 is_collinear implies thesis by Lm36;
+ hence thesis by A1,Lm37; end;
+
+definition let V;
+ cluster ProjectiveSpace(V) -> Vebleian;
+  coherence by Lm38;
+end;
+
+Lm39:
+ V is up-3-dimensional implies ProjectiveSpace(V) is proper
+proof given u,v,w such that
+  A1: for a,b,c st a*u + b*v + c*w = 0.V holds a = 0 & b = 0 & c = 0;
+ A2: u is_Prop_Vect & v is_Prop_Vect & w is_Prop_Vect by A1,Th1;
+ A3: not u,v,w are_LinDep by A1,Th1;
+  reconsider p = Dir(u),q = Dir(v),r = Dir(w)
+ as Element of ProjectiveSpace(V)
+  by A2,ANPROJ_1:42; take p,q,r; assume
+     p,q,r is_collinear;
+   then [Dir(u),Dir(v),Dir(w)] in the Collinearity of ProjectiveSpace(V) by
+COLLSP:def 2;
+   hence contradiction by A2,A3,ANPROJ_1:41; end;
+
+definition let V be up-3-dimensional RealLinearSpace;
+  cluster ProjectiveSpace(V) -> proper;
+   coherence by Lm39;
+end;
+
+theorem Th26:
+(ex u,v st for a,b st a*u + b*v = 0.V holds a = 0 & b = 0 ) implies
+    ProjectiveSpace(V) is at_least_3rank
+proof given u,v such that A1: for a,b st a*u + b*v = 0.V
+    holds a = 0 & b = 0; let p,q;
+   consider y such that A2: y is_Prop_Vect & p = Dir(y) by ANPROJ_1:42;
+   consider w such that A3: w is_Prop_Vect & q = Dir(w) by ANPROJ_1:42;
+   A4: u is_Prop_Vect & v is_Prop_Vect by A1,Lm1;
+      not are_Prop u,v by A1,Lm1;
+  then consider z being Element of V such that
+  A5: z is_Prop_Vect & y,w,z are_LinDep & not are_Prop y,z & not are_Prop w,z
+   by A4,ANPROJ_1:21;
+   reconsider r = Dir(z) as Element of ProjectiveSpace(V)
+           by A5,ANPROJ_1:42; take r;
+  thus p<>r by A2,A5,ANPROJ_1:35;
+  thus q<>r by A3,A5,ANPROJ_1:35;
+  thus p,q,r is_collinear by A2,A3,A5,Th24; end;
+
+Lm40:
+   V is up-3-dimensional implies ProjectiveSpace(V) is at_least_3rank
+proof given u,v,w1 such that A1: for a,b,c st a*u + b*v + c*w1 = 0.V
+    holds a = 0 & b = 0 & c = 0;
+    now let a,b; assume a*u + b*v =0.V;
+      then 0.V = a*u + b*v + 0.V by RLVECT_1:10
+         .= a*u + b*v + 0*w1 by RLVECT_1:23;
+      hence a = 0 & b = 0 by A1; end;
+   hence thesis by Th26; end;
+
+definition let V be up-3-dimensional RealLinearSpace;
+ cluster ProjectiveSpace(V) -> at_least_3rank;
+  coherence by Lm40;
+end;
+
+definition
+ cluster transitive reflexive proper Vebleian at_least_3rank
+               (non empty CollStr);
+  existence
+ proof
+  consider V0 being up-3-dimensional RealLinearSpace;
+  take ProjectiveSpace(V0);
+  thus thesis;
+ end;
+end;
+
+definition
+ mode CollProjectiveSpace is
+   reflexive transitive Vebleian at_least_3rank proper (non empty CollStr);
+end;
+
+Lm41:  for V being up-3-dimensional RealLinearSpace
+    holds ProjectiveSpace(V) is CollProjectiveSpace;
+
+definition let IT be CollProjectiveSpace;
+ attr IT is Fanoian means :Def11:
+ for p1,r2,q,r1,q1,p,r being Element of IT holds
+ (p1,r2,q is_collinear & r1,q1,q is_collinear & p1,r1,p is_collinear &
+   r2,q1,p is_collinear & p1,q1,r is_collinear & r2,r1,r is_collinear &
+   p,q,r is_collinear implies
+ (p1,r2,q1 is_collinear or p1,r2,r1 is_collinear or p1,r1,q1 is_collinear
+     or r2,r1,q1 is_collinear));
+
+ attr IT is Desarguesian means
+   for o,p1,p2,p3,q1,q2,q3,r1,r2,r3 being Element of IT
+  st o<>q1 & p1<>q1 & o<>q2 & p2<>q2 & o<>q3 & p3<>q3 &
+   not o,p1,p2 is_collinear
+ & not o,p1,p3 is_collinear & not o,p2,p3 is_collinear & p1,p2,r3 is_collinear
+ & q1,q2,r3 is_collinear & p2,p3,r1 is_collinear & q2,q3,r1 is_collinear &
+ p1,p3,r2 is_collinear & q1,q3,r2 is_collinear & o,p1,q1 is_collinear &
+ o,p2,q2 is_collinear & o,p3,q3 is_collinear holds r1,r2,r3 is_collinear;
+
+ attr IT is Pappian means
+    for o,p1,p2,p3,q1,q2,q3,r1,r2,r3 being Element of IT
+   st o<>p2 & o<>p3 & p2<>p3 & p1<>p2 & p1<>p3 & o<>q2 & o<>q3 &
+     q2<>q3 & q1<>q2 & q1<>q3 &
+  not o,p1,q1 is_collinear & o,p1,p2 is_collinear & o,p1,p3 is_collinear
+ & o,q1,q2 is_collinear & o,q1,q3 is_collinear & p1,q2,r3 is_collinear &
+ q1,p2,r3 is_collinear & p1,q3,r2 is_collinear & p3,q1,r2 is_collinear &
+ p2,q3,r1 is_collinear & p3,q2,r1 is_collinear holds r1,r2,r3 is_collinear;
+end;
+
+definition let IT be CollProjectiveSpace;
+ attr IT is 2-dimensional means
+ :Def14:
+  for p,p1,q,q1 being Element of IT
+  ex r being Element of IT st p,p1,r is_collinear &
+  q,q1,r is_collinear;
+ antonym IT is up-3-dimensional;
+end;
+
+definition let IT be CollProjectiveSpace;
+ attr IT is at_most-3-dimensional means
+:Def15: for p,p1,q,q1,r2 being Element of IT
+  ex r,r1 being Element of IT st p,q,r is_collinear &
+         p1,q1,r1 is_collinear & r2,r,r1 is_collinear;
+end;
+
+canceled;
+
+theorem Th28:
+ p1,r2,q is_collinear & r1,q1,q is_collinear & p1,r1,p is_collinear &
+  r2,q1,p is_collinear & p1,q1,r is_collinear & r2,r1,r is_collinear &
+  p,q,r is_collinear implies
+(p1,r2,q1 is_collinear or p1,r2,r1 is_collinear or p1,r1,q1 is_collinear
+    or r2,r1,q1 is_collinear) proof assume A1:
+ p1,r2,q is_collinear & r1,q1,q is_collinear & p1,r1,p is_collinear &
+  r2,q1,p is_collinear & p1,q1,r is_collinear & r2,r1,r is_collinear &
+  p,q,r is_collinear;
+then consider u,v,z being Element of V such that A2:
+  p1 = Dir(u) & r2 = Dir(v) & q = Dir(z) & u is_Prop_Vect & v is_Prop_Vect
+     & z is_Prop_Vect & u,v,z are_LinDep by Th24;
+consider w,y,z1 being Element of V such that A3:
+  r1 = Dir(w) & q1 = Dir(y) & q = Dir(z1) & w is_Prop_Vect & y is_Prop_Vect
+     & z1 is_Prop_Vect & w,y,z1 are_LinDep by A1,Th24;
+consider u1,w1,x being Element of V such that A4:
+  p1 = Dir(u1) & r1 = Dir(w1) & p = Dir(x) & u1 is_Prop_Vect & w1 is_Prop_Vect
+     & x is_Prop_Vect & u1,w1,x are_LinDep by A1,Th24;
+consider v1,y1,x1 being Element of V such that A5:
+  r2 = Dir(v1) & q1 = Dir(y1) & p = Dir(x1) & v1 is_Prop_Vect & y1 is_Prop_Vect
+     & x1 is_Prop_Vect & v1,y1,x1 are_LinDep by A1,Th24;
+consider u2,y2,t being Element of V such that A6:
+  p1 = Dir(u2) & q1 = Dir(y2) & r = Dir(t) & u2 is_Prop_Vect & y2 is_Prop_Vect
+     & t is_Prop_Vect & u2,y2,t are_LinDep by A1,Th24;
+consider v2,w2,t1 being Element of V such that A7:
+  r2 = Dir(v2) & r1 = Dir(w2) & r = Dir(t1) & v2 is_Prop_Vect & w2 is_Prop_Vect
+     & t1 is_Prop_Vect & v2,w2,t1 are_LinDep by A1,Th24;
+consider x2,z2,t2 being Element of V such that A8:
+  p = Dir(x2) & q = Dir(z2) & r = Dir(t2) & x2 is_Prop_Vect & z2 is_Prop_Vect
+     & t2 is_Prop_Vect & x2,z2,t2 are_LinDep by A1,Th24;
+   u,v,z are_LinDep & w,y,z are_LinDep & u,w,x are_LinDep & v,y,x are_LinDep
+    & u,y,t are_LinDep & v,w,t are_LinDep & x,z,t are_LinDep proof
+  A9: are_Prop z1,z & are_Prop w1,w & are_Prop u1,u by A2,A3,A4,ANPROJ_1:35;
+  A10: are_Prop y1,y & are_Prop x1,x by A3,A4,A5,ANPROJ_1:35;
+  A11: are_Prop u2,u & are_Prop y2,y by A2,A3,A6,ANPROJ_1:35;
+  A12: are_Prop v2,v & are_Prop w2,w by A2,A3,A7,ANPROJ_1:35;
+  A13: are_Prop t1,t & are_Prop x2,x by A4,A6,A7,A8,ANPROJ_1:35;
+  A14: are_Prop z2,z & are_Prop t2,t by A2,A6,A8,ANPROJ_1:35;
+  A15: are_Prop v1,v by A2,A5,ANPROJ_1:35;
+  thus u,v,z are_LinDep by A2;
+  thus w,y,z are_LinDep by A3,A9,ANPROJ_1:9;
+  thus u,w,x are_LinDep by A4,A9,ANPROJ_1:9;
+  thus v,y,x are_LinDep by A5,A10,A15,ANPROJ_1:9;
+  thus u,y,t are_LinDep by A6,A11,ANPROJ_1:9;
+  thus v,w,t are_LinDep by A7,A12,A13,ANPROJ_1:9;
+  thus x,z,t are_LinDep by A8,A13,A14,ANPROJ_1:9; end;
+then u,v,y are_LinDep or u,v,w are_LinDep or u,w,y are_LinDep or v,w,y
+are_LinDep
+by A2,A4,A6,ANPROJ_1:23; hence thesis by A2,A3,Th24; end;
+
+Lm42:
+  for V being up-3-dimensional RealLinearSpace
+   holds ProjectiveSpace(V) is Fanoian
+proof let V be up-3-dimensional RealLinearSpace;
+  for p1,r2,q,r1,q1,p,r being Element of ProjectiveSpace(V)
+holds
+   (p1,r2,q is_collinear & r1,q1,q is_collinear & p1,r1,p is_collinear &
+    r2,q1,p is_collinear & p1,q1,r is_collinear & r2,r1,r is_collinear &
+    p,q,r is_collinear implies
+    (p1,r2,q1 is_collinear or p1,r2,r1 is_collinear or
+  p1,r1,q1 is_collinear or r2,r1,q1 is_collinear)) by Th28;
+ hence thesis by Def11; end;
+
+Lm43:
+  for V being up-3-dimensional RealLinearSpace
+   holds ProjectiveSpace(V) is Desarguesian
+proof let V be up-3-dimensional RealLinearSpace;
+ let o,p1,p2,p3,q1,q2,q3,r1,r2,r3
+  be Element of ProjectiveSpace(V);
+ assume that A1: o<>q1 & p1<>q1 & o<>q2 & p2<>q2 & o<>q3 & p3<>q3 and
+ A2: not o,p1,p2 is_collinear & not o,p1,p3 is_collinear &
+ not o,p2,p3 is_collinear and A3: p1,p2,r3 is_collinear &
+ q1,q2,r3 is_collinear & p2,p3,r1 is_collinear & q2,q3,r1 is_collinear &
+ p1,p3,r2 is_collinear & q1,q3,r2 is_collinear and
+ A4: o,p1,q1 is_collinear & o,p2,q2 is_collinear & o,p3,q3 is_collinear;
+ consider o' being Element of V such that
+ A5: o' is_Prop_Vect & o = Dir(o') by ANPROJ_1:42;
+ consider p1',p2',r3' being Element of V such that
+ A6: p1 = Dir(p1') & p2 = Dir(p2') & r3 = Dir(r3') & p1' is_Prop_Vect &
+ p2' is_Prop_Vect & r3' is_Prop_Vect & p1',p2',r3' are_LinDep
+ by A3,Th24; consider q1',q2',r3'' being Element of V such that
+ A7: q1 = Dir(q1') & q2 = Dir(q2') & r3 = Dir(r3'') & q1' is_Prop_Vect &
+ q2' is_Prop_Vect & r3'' is_Prop_Vect & q1',q2',r3'' are_LinDep
+ by A3,Th24;
+ A8: q1',q2',r3' are_LinDep proof
+   are_Prop r3'',r3' by A6,A7,ANPROJ_1:35;
+hence thesis by A7,ANPROJ_1:9; end;
+ consider p2'',p3',r1' being Element of V such that
+ A9: p2 = Dir(p2'') & p3 = Dir(p3') & r1 = Dir(r1') & p2'' is_Prop_Vect &
+ p3' is_Prop_Vect & r1' is_Prop_Vect & p2'',p3',r1' are_LinDep
+ by A3,Th24;
+ A10: p2',p3',r1' are_LinDep proof
+   are_Prop p2'',p2' by A6,A9,ANPROJ_1:35;
+hence thesis by A9,ANPROJ_1:9; end;
+ consider q2'',q3',r1'' being Element of V such that
+ A11: q2 = Dir(q2'') & q3 = Dir(q3') & r1 = Dir(r1'') & q2'' is_Prop_Vect &
+ q3' is_Prop_Vect & r1'' is_Prop_Vect & q2'',q3',r1'' are_LinDep
+ by A3,Th24; A12: q2',q3',r1' are_LinDep proof
+    are_Prop q2'',q2' &
+ are_Prop r1'',r1' by A7,A9,A11,ANPROJ_1:35;
+ hence thesis by A11,ANPROJ_1:9; end;
+ consider p1'',p3'',r2' being Element of V such that
+ A13: p1 = Dir(p1'') & p3 = Dir(p3'') & r2 = Dir(r2') & p1'' is_Prop_Vect &
+ p3'' is_Prop_Vect & r2' is_Prop_Vect & p1'',p3'',r2' are_LinDep
+ by A3,Th24;
+ A14: p1',p3',r2' are_LinDep proof
+    are_Prop p1'',p1' & are_Prop p3'',p3' by A6,A9,A13,ANPROJ_1:35; hence
+ thesis
+by A13,ANPROJ_1:9; end;
+ consider q1'',q3'',r2'' being Element of V such that
+ A15: q1 = Dir(q1'') & q3 = Dir(q3'') & r2 = Dir(r2'') & q1'' is_Prop_Vect &
+ q3'' is_Prop_Vect & r2'' is_Prop_Vect & q1'',q3'',r2'' are_LinDep
+ by A3,Th24;
+ A16: q1',q3',r2' are_LinDep proof
+   are_Prop q1'',q1' &
+ are_Prop q3'',q3' & are_Prop r2'',r2' by A7,A11,A13,A15,ANPROJ_1:35;
+ hence thesis by A15,ANPROJ_1:9; end;
+ A17: not are_Prop o',q1' & not are_Prop o',q2' & not are_Prop o',q3' &
+ not are_Prop p1',q1' & not are_Prop p2',q2' & not are_Prop p3',q3'
+ by A1,A5,A6,A7,A9,A11,ANPROJ_1:35;
+ consider o'',p1''',q1''' being Element of V such that
+ A18: o = Dir(o'') & p1 = Dir(p1''') & q1 = Dir(q1''') & o'' is_Prop_Vect &
+ p1''' is_Prop_Vect & q1''' is_Prop_Vect & o'',p1''',q1''' are_LinDep
+ by A4,Th24;
+ A19: o',p1',q1' are_LinDep proof
+   are_Prop o'',o' &
+ are_Prop p1''',p1' & are_Prop q1''',q1' by A5,A6,A7,A18,ANPROJ_1:35;
+ hence thesis by A18,ANPROJ_1:9; end;
+ consider o''',p2''',q2''' being Element of V such that
+ A20: o = Dir(o''') & p2 = Dir(p2''') & q2 = Dir(q2''') & o''' is_Prop_Vect &
+ p2''' is_Prop_Vect & q2''' is_Prop_Vect & o''',p2''',q2''' are_LinDep
+ by A4,Th24;
+ A21: o',p2',q2' are_LinDep proof
+   are_Prop o''',o' &
+ are_Prop p2''',p2' & are_Prop q2''',q2' by A5,A6,A7,A20,ANPROJ_1:35;
+ hence thesis by A20,ANPROJ_1:9; end;
+ consider o'''',p3''',q3''' being Element of V such that
+ A22: o = Dir(o'''') & p3 = Dir(p3''') & q3 = Dir(q3''') & o'''' is_Prop_Vect &
+ p3''' is_Prop_Vect & q3''' is_Prop_Vect & o'''',p3''',q3''' are_LinDep
+ by A4,Th24;
+ A23: o',p3',q3' are_LinDep proof
+   are_Prop o'''',o' &
+ are_Prop p3''',p3' & are_Prop q3''',q3' by A5,A9,A11,A22,ANPROJ_1:35;
+ hence thesis by A22,ANPROJ_1:9; end; A24: p1',p2',p3' are_Prop_Vect by A6,A9,
+Def1; A25: q1',q2',q3' are_Prop_Vect by A7,A11,Def1;
+ A26: r1',r2',r3' are_Prop_Vect by A6,A9,A13,Def1;
+ A27: o',p1',p2',p3',q1',q2',q3' are_perspective by A19,A21,A23,Def3;
+ A28: not o',p1',p2' are_LinDep by A2,A5,A6,Th24;
+ A29: not o',p1',p3' are_LinDep by A2,A5,A6,A9,Th24;
+ A30: not o',p2',p3' are_LinDep by A2,A5,A6,A9,Th24;
+ A31: p1',p2',p3',r1',r2',r3' lie_on_a_triangle by A6,A10,A14,Def2;
+    q1',q2',q3',r1',r2',r3' lie_on_a_triangle by A8,A12,A16,Def2;
+ then r1',r2',r3' are_LinDep by A5,A17,A24,A25,A26,A27,A28,A29,A30,A31,Th8;
+hence thesis by A6,A9,A13,Th24; end;
+
+Lm44:
+  for V being up-3-dimensional RealLinearSpace
+   holds ProjectiveSpace(V) is Pappian
+proof let V be up-3-dimensional RealLinearSpace;
+ let o,p1,p2,p3,q1,q2,q3,r1,r2,r3 be
+  Element of ProjectiveSpace V;
+ assume that A1: o<>p2 & o<>p3 & p2<>p3 & p1<>p2 & p1<>p3 & o<>q2 & o<>q3
+& q2<>q3 & q1<>q2 & q1<>q3 and A2: not o,p1,q1 is_collinear and
+A3: o,p1,p2 is_collinear & o,p1,p3 is_collinear & o,q1,q2 is_collinear &
+o,q1,q3 is_collinear and A4: p1,q2,r3 is_collinear & q1,p2,r3 is_collinear &
+p1,q3,r2 is_collinear & p3,q1,r2 is_collinear & p2,q3,r1 is_collinear &
+p3,q2,r1 is_collinear; consider o',p1',p2' being Element of V such that
+A5: o = Dir(o') &
+p1 = Dir(p1') & p2 = Dir(p2') & o' is_Prop_Vect & p1' is_Prop_Vect &
+p2' is_Prop_Vect & o',p1',p2' are_LinDep by A3,Th24;
+consider o'',p1'',p3' being Element of V such that A6: o = Dir(o'') &
+p1 = Dir(p1'') & p3 = Dir(p3') & o'' is_Prop_Vect & p1'' is_Prop_Vect &
+p3' is_Prop_Vect & o'',p1'',p3' are_LinDep by A3,Th24;
+A7: o',p1',p3' are_LinDep proof are_Prop o'',o' & are_Prop p1'',p1' by A5,A6,
+ANPROJ_1:35; hence thesis by A6,ANPROJ_1:9
+; end; consider o''',q1',q2' being Element of V such that
+A8: o = Dir(o''') & q1 = Dir(q1') & q2 = Dir(q2') & o''' is_Prop_Vect & q1'
+is_Prop_Vect & q2' is_Prop_Vect & o''',q1',q2' are_LinDep by A3,Th24;
+A9: o',q1',q2' are_LinDep proof are_Prop o''',o' by A5,A8,ANPROJ_1:35;
+ hence thesis by A8,ANPROJ_1:9; end;
+ consider o'''',q1'',q3' being Element of V such that
+A10: o = Dir(o'''') & q1 = Dir(q1'') & q3 = Dir(q3') & o'''' is_Prop_Vect &
+q1'' is_Prop_Vect & q3' is_Prop_Vect & o'''',q1'',q3' are_LinDep by A3,Th24
+; A11: o',q1',q3' are_LinDep proof are_Prop o'''',o' & are_Prop q1'',q1'
+by A5,A8,A10,ANPROJ_1:35; hence thesis by A10,ANPROJ_1:9
+; end; not o',p1',q1' are_LinDep by A2,A5,A8,Th24;
+then A12: o',p1',p2',p3',q1',q2',q3' lie_on_an_angle by A5,A7,A9,A11,Def4;
+  not are_Prop o',p2' & not are_Prop o',p3' & not are_Prop o',q2' &
+not are_Prop o',q3' & not are_Prop p1',p2' & not are_Prop p1',p3' &
+not are_Prop q1',q2' & not are_Prop q1',q3' & not are_Prop p2',p3' &
+not are_Prop q2',q3' by A1,A5,A6,A8,A10,ANPROJ_1:35;
+then A13: o',p1',p2',p3',q1',q2',q3' are_half_mutually_not_Prop by Def5;
+A14: p1',p2',p3' are_Prop_Vect & q1',q2',q3' are_Prop_Vect by A5,A6,A8,A10,Def1
+; consider p1''',q2''',r3' being Element of V such that
+A15: p1 = Dir(p1''') & q2 = Dir(q2''') & r3 = Dir(r3') & p1''' is_Prop_Vect &
+q2''' is_Prop_Vect & r3' is_Prop_Vect & p1''',q2''',r3' are_LinDep by A4,Th24
+; A16: p1',q2',r3' are_LinDep proof are_Prop p1''',p1' &
+are_Prop q2''',q2' by A5,A8,A15,ANPROJ_1:35;
+hence thesis by A15,ANPROJ_1:9; end; consider q1''',p2''',r3'' being Element
+of V such that A17: q1 = Dir(q1''') & p2 = Dir(p2''') & r3 = Dir(r3'') &
+q1''' is_Prop_Vect & p2''' is_Prop_Vect & r3'' is_Prop_Vect &
+q1''',p2''',r3'' are_LinDep by A4,Th24; A18: q1',p2',r3' are_LinDep
+proof are_Prop q1''',q1' & are_Prop p2''',p2' & are_Prop r3'',r3' by A5,A8,A15,
+A17,ANPROJ_1:35; hence thesis by A17,ANPROJ_1:9; end;
+consider p1'''',q3'',r2' being Element of V such that
+A19: p1 = Dir(p1'''') & q3 = Dir(q3'') & r2 = Dir(r2') & p1'''' is_Prop_Vect &
+q3'' is_Prop_Vect & r2' is_Prop_Vect & p1'''',q3'',r2' are_LinDep by A4,Th24
+; A20: p1',q3',r2' are_LinDep proof are_Prop p1'''',p1' &
+are_Prop q3'',q3' by A5,A10,A19,ANPROJ_1:35;
+hence thesis by A19,ANPROJ_1:9; end;
+consider p3'',q1''',r2'' being Element of V such that
+A21: p3 = Dir(p3'') & q1 = Dir(q1''') & r2 = Dir(r2'') & p3'' is_Prop_Vect &
+q1''' is_Prop_Vect & r2'' is_Prop_Vect & p3'',q1''',r2'' are_LinDep by A4,Th24
+; A22: p3',q1',r2' are_LinDep proof are_Prop p3'',p3' &
+are_Prop q1''',q1' & are_Prop r2'',r2' by A6,A8,A19,A21,ANPROJ_1:35;
+hence thesis by A21,ANPROJ_1:9; end;
+consider p2'''',q3''',r1' being Element of V such that
+A23: p2 = Dir(p2'''') & q3 = Dir(q3''') & r1 = Dir(r1') & p2'''' is_Prop_Vect &
+q3''' is_Prop_Vect & r1' is_Prop_Vect & p2'''',q3''',r1' are_LinDep by A4,Th24
+; A24: p2',q3',r1' are_LinDep proof are_Prop p2'''',p2' &
+are_Prop q3''',q3' by A5,A10,A23,ANPROJ_1:35;
+hence thesis by A23,ANPROJ_1:9; end;
+consider p3''',q2'''',r1'' being Element of V such that
+A25: p3 = Dir(p3''') & q2 = Dir(q2'''') & r1 = Dir(r1'') & p3''' is_Prop_Vect
+& q2'''' is_Prop_Vect & r1'' is_Prop_Vect & p3''',q2'''',r1'' are_LinDep by A4,
+Th24; A26: p3',q2',r1' are_LinDep proof are_Prop p3''',p3' &
+are_Prop q2'''',q2' & are_Prop r1'',r1' by A6,A8,A23,A25,ANPROJ_1:35;
+hence thesis by A25,ANPROJ_1:9; end; r1',r2',r3' are_Prop_Vect by A15,A19,A23,
+Def1; then r1',r2',r3' are_LinDep by A5,A12,A13,A14,A16,A18,A20,A22,A24,A26,Th9
+; hence thesis by A15,A19,A23,Th24; end;
+
+definition let V be up-3-dimensional RealLinearSpace;
+ cluster ProjectiveSpace V -> Fanoian Desarguesian Pappian;
+  coherence by Lm42,Lm43,Lm44;
+end;
+
+theorem Th29: (ex u,v,w st
+     (for a,b,c st a*u + b*v + c*w = 0.V holds a=0 & b=0 & c = 0) &
+     (for y ex a,b,c st y = a*u + b*v + c*w)) implies
+    (ex x1,x2 being Element of ProjectiveSpace(V) st
+     (x1<>x2 & for r1,r2 ex q st
+         x1,x2,q is_collinear & r1,r2,q is_collinear))
+proof given p,q,r being Element of V such that
+   A1:  (for a,b,c st a*p + b*q + c*r = 0.V holds a=0 & b=0 & c = 0) and
+   A2:  (for y ex a,b,c st y = a*p + b*q + c*r);
+   A3: p is_Prop_Vect & q is_Prop_Vect by A1,Th1;
+ then reconsider x1=Dir(p),x2=Dir(q)
+ as Element of
+   ProjectiveSpace(V) by ANPROJ_1:42;
+   take x1,x2; thus x1<>x2 proof not are_Prop p,q by A1,Th1;
+   hence thesis by A3,ANPROJ_1:35; end; let r1,r2;
+   consider u such that A4: u is_Prop_Vect & r1 = Dir(u) by ANPROJ_1:42;
+   consider u1 such that A5: u1 is_Prop_Vect & r2 = Dir(u1) by ANPROJ_1:42;
+   consider y such that
+   A6: p,q,y are_LinDep & u,u1,y are_LinDep & y is_Prop_Vect by A1,A2,Th3;
+ reconsider q = Dir(y)
+ as Element of ProjectiveSpace(V)
+         by A6,ANPROJ_1:42; take q;
+  thus x1,x2,q is_collinear by A3,A6,Th24;
+  thus r1,r2,q is_collinear by A4,A5,A6,Th24; end;
+
+theorem Th30: (ex x1,x2 being Element of ProjectiveSpace(V) st
+     (x1<>x2 & for r1,r2 ex q st
+         x1,x2,q is_collinear & r1,r2,q is_collinear)) implies
+  (for p,p1,q,q1 ex r st p,p1,r is_collinear & q,q1,r is_collinear)
+proof
+ given x1,x2 being Element of ProjectiveSpace(V) such that
+ A1: x1<>x2 and A2: for r1,r2 ex q st x1,x2,q is_collinear &
+  r1,r2,q is_collinear; let p,p1,q,q1;
+  consider p3 being Element of ProjectiveSpace(V) such that
+ A3: x1,x2,p3 is_collinear & p,p1,p3 is_collinear by A2;
+  consider q3 being Element of ProjectiveSpace(V) such that
+ A4: x1,x2,q3 is_collinear & q,q1,q3 is_collinear by A2;
+  consider s being Element of ProjectiveSpace(V) such that
+ A5: x1,x2,s is_collinear & p1,q1,s is_collinear by A2;
+    p1,s,q1 is_collinear & s,p3,q3 is_collinear by A1,A3,A4,A5,Def8,Th25;
+ then consider s1 being Element of ProjectiveSpace(V) such that
+ A6: p1,p3,s1 is_collinear & q1,q3,s1 is_collinear by Def9;
+  consider s2 being Element of ProjectiveSpace(V) such that
+ A7: x1,x2,s2 is_collinear & p,q,s2 is_collinear by A2;
+    p3,s2,q3 is_collinear & s2,p,q is_collinear
+               by A1,A3,A4,A7,Def8,Th25;
+ then consider s3 being Element of ProjectiveSpace(V) such that
+ A8: p3,p,s3 is_collinear & q3,q,s3 is_collinear by Def9;
+  consider s4 being Element of ProjectiveSpace(V) such that
+ A9: x1,x2,s4 is_collinear & p,q1,s4 is_collinear by A2;
+    q3,s4,p3 is_collinear & s4,q1,p is_collinear
+    by A1,A3,A4,A9,Def8,Th25;
+ then consider s5 being Element of ProjectiveSpace(V) such that
+ A10: q3,q1,s5 is_collinear & p3,p,s5 is_collinear by Def9;
+  consider s6 being Element of ProjectiveSpace(V) such that
+ A11: x1,x2,s6 is_collinear & p1,q,s6 is_collinear by A2;
+    p3,s6,q3 is_collinear & s6,p1,q is_collinear
+    by A1,A3,A4,A11,Def8,Th25;
+ then consider s7 being Element of ProjectiveSpace(V) such that
+ A12: p3,p1,s7 is_collinear & q3,q,s7 is_collinear by Def9;
+ A13: now assume A14: p = p1 or q = q1;
+   A15: now assume A16: q=q1; take p3; q,q1,p3 is_collinear by A16,Def7;
+      hence thesis by A3; end;
+      now assume A17: p=p1; take q3; p,p1,q3 is_collinear by A17,Def7;
+      hence thesis by A4; end;
+ hence thesis by A14,A15; end;
+    now assume A18: p<>p1 & q<>q1;
+   A19: now assume A20: p3<>p & q3<>q; take s3;
+      p3,p,p is_collinear & p3,p,p1 is_collinear & p3,p,s3 is_collinear
+     by A3,A8,Def7,Th25; then A21: p,p1,s3 is_collinear by A20,Def8;
+      q3,q,q is_collinear & q3,q,q1 is_collinear & q3,q,s3 is_collinear
+     by A4,A8,Def7,Th25; then q,q1,s3 is_collinear by A20,Def8;
+   hence thesis by A21; end;
+   A22: now assume A23: p3<>p & q3<>q1; take s5;
+      p3,p,p is_collinear & p3,p,p1 is_collinear & p3,p,s5 is_collinear
+     by A3,A10,Def7,Th25; then A24: p,p1,s5 is_collinear
+      by A23,Def8;
+      q3,q1,q is_collinear & q3,q1,q1 is_collinear & q3,q1,s5 is_collinear
+     by A4,A10,Def7,Th25; then q,q1,s5 is_collinear by A23,Def8;
+   hence thesis by A24; end;
+   A25: now assume A26: p3<>p1 & q3<>q; take s7;
+      p3,p1,p is_collinear & p3,p1,p1 is_collinear & p3,p1,s7 is_collinear
+     by A3,A12,Def7,Th25; then A27: p,p1,s7 is_collinear by A26,Def8;
+      q3,q,q is_collinear & q3,q,q1 is_collinear & q3,q,s7 is_collinear
+     by A4,A12,Def7,Th25; then q,q1,s7 is_collinear by A26,Def8;
+   hence thesis by A27; end;
+      now assume A28: p3<>p1 & q3<>q1; take s1;
+      p3,p1,p is_collinear & p3,p1,p1 is_collinear & p3,p1,s1 is_collinear
+     by A3,A6,Def7,Th25; then A29: p,p1,s1 is_collinear by A28,Def8;
+      q3,q1,q is_collinear & q3,q1,q1 is_collinear & q3,q1,s1 is_collinear
+     by A4,A6,Def7,Th25; then q,q1,s1 is_collinear by A28,Def8;
+   hence thesis by A29; end;
+ hence thesis by A18,A19,A22,A25; end; hence thesis by A13; end;
+
+theorem Th31: (ex u,v,w st
+     (for a,b,c st a*u + b*v + c*w = 0.V holds a=0 & b=0 & c = 0) &
+     (for y ex a,b,c st y = a*u + b*v + c*w)) implies
+      ex CS being CollProjectiveSpace
+       st CS = ProjectiveSpace(V) & CS is 2-dimensional
+proof given u,v,w such that A1: for a,b,c st a*u + b*v + c*w = 0.V holds
+ a=0 & b=0 & c = 0 and A2: for y ex a,b,c st y = a*u + b*v + c*w;
+ reconsider V' = V as up-3-dimensional RealLinearSpace by A1,Def6;
+ take ProjectiveSpace(V');
+   ex x1,x2 being Element of ProjectiveSpace(V) st
+  (x1<>x2 & for r1,r2 ex q st x1,x2,q is_collinear & r1,r2,q is_collinear)
+ by A1,A2,Th29;
+   then (for p,p1,q,q1 ex r st p,p1,r is_collinear & q,q1,r is_collinear) by
+Th30;
+ hence thesis by Def14; end;
+
+::: ANPROJ_3
+
+Lm45: (ex y,u,v,w st
+ (for a,b,a1,b1 st a*y + b*u + a1*v + b1*w = 0.V holds
+  a=0 & b=0 & a1=0 & b1=0)) implies
+  V is up-3-dimensional
+proof given y,u,v,w such that A1: for a,b,a1,b1 st
+  a*y + b*u + a1*v + b1*w = 0.V holds a=0 & b=0 & a1=0 & b1=0;
+  take y,u,v; let a,b,a1; assume a*y + b*u + a1*v = 0.V;
+  then 0.V = a*y + b*u + a1*v + 0.V by RLVECT_1:10 .= a*y + b*u + a1*v + 0*w
+  by RLVECT_1:23; hence thesis by A1; end;
+
+Lm46: (ex y,u,v,w st
+ (for a,b,a1,b1 st a*y + b*u + a1*v + b1*w = 0.V holds
+  a=0 & b=0 & a1=0 & b1=0)) implies
+  ProjectiveSpace(V) is proper at_least_3rank
+proof given y,u,v,w such that A1: for a,b,a1,b1 st
+  a*y + b*u + a1*v + b1*w = 0.V holds a=0 & b=0 & a1=0 & b1=0;
+    V is up-3-dimensional by A1,Lm45;
+  hence thesis by Lm39,Lm40; end;
+
+theorem Th32: (ex y,u,v,w st
+ (for w1 ex a,b,a1,b1 st w1 = a*y + b*u + a1*v + b1*w) &
+ (for a,b,a1,b1 st a*y + b*u + a1*v + b1*w = 0.V holds
+  a=0 & b=0 & a1=0 & b1=0)) implies (ex p,q1,q2 st not p,q1,q2 is_collinear &
+  (for r1,r2 ex q3,r3
+  st r1,r2,r3 is_collinear & q1,q2,q3 is_collinear & p,r3,q3 is_collinear))
+proof given y,u,v,w such that A1:
+ (for w1 ex a,b,a1,b1 st w1 = a*y + b*u + a1*v + b1*w) &
+(for a,b,a1,b1 st a*y + b*u + a1*v + b1*w = 0.V holds a=0 & b=0 & a1=0 & b1=0);
+ A2: y is_Prop_Vect & u is_Prop_Vect & v is_Prop_Vect & w is_Prop_Vect &
+     not y,u,v are_LinDep by A1,Th2;
+ then reconsider p = Dir(y),q1 = Dir(u),q2 = Dir(v) as Element of
+      the carrier of ProjectiveSpace(V) by ANPROJ_1:42; take p,q1,q2;
+    now assume p,q1,q2 is_collinear; then [p,q1,q2] in the Collinearity of
+   ProjectiveSpace(V) by COLLSP:def 2;
+   hence contradiction by A2,ANPROJ_1:41; end;
+  hence not p,q1,q2 is_collinear; let r1,r2;
+ consider u1 such that A3: u1 is_Prop_Vect & r1 = Dir(u1) by ANPROJ_1:42;
+ consider u2 such that A4: u2 is_Prop_Vect & r2 = Dir(u2) by ANPROJ_1:42;
+ consider w1,w2 such that A5: u1,u2,w2 are_LinDep & u,v,w1 are_LinDep &
+  y,w2,w1 are_LinDep & w1 is_Prop_Vect & w2 is_Prop_Vect by A1,A3,A4,Th4;
+ reconsider q3 = Dir(w1),r3 = Dir(w2) as Element of
+     the carrier of ProjectiveSpace(V) by A5,ANPROJ_1:42; take q3,r3;
+ thus r1,r2,r3 is_collinear by A3,A4,A5,Th24;
+ thus q1,q2,q3 is_collinear by A2,A5,Th24;
+ thus p,r3,q3 is_collinear by A2,A5,Th24; end;
+
+Lm47: for x,d,b,b',d',q being Element of ProjectiveSpace(V)
+       st not q,b,d is_collinear & b,d,x is_collinear & q,b',b is_collinear &
+       q,d',d is_collinear holds ( ex o being Element of
+       ProjectiveSpace(V) st b',d',o is_collinear & q,x,o is_collinear)
+ proof let x,d,b,b',d',q be Element of ProjectiveSpace(V)
+; assume A1: not q,b,d is_collinear & b,d,x is_collinear &
+              q,b',b is_collinear & q,d',d is_collinear;
+   then A2: b<>d by Def7; A3: b',q,b is_collinear by A1,Th25;
+   A4: now assume A5: b = b'; A6: d',d,q is_collinear by A1,Th25;
+       d,b',x is_collinear by A1,A5,Th25; then consider o being Element
+           of the carrier of ProjectiveSpace(V) such that
+   A7: d',b',o is_collinear & q,x,o is_collinear by A6,Def9;
+     b',d',o is_collinear & q,x,o is_collinear by A7,Th25;
+     hence thesis; end;
+      now assume A8: b <> b';
+      consider z being Element of ProjectiveSpace(V) such that
+     A9: b',d',z is_collinear & b,d,z is_collinear by A1,A3,Def9;
+       A10: z,b,x is_collinear proof b,d,b is_collinear by Def7;
+         hence thesis by A1,A2,A9,Def8; end;
+          b,b',q is_collinear by A1,Th25; then consider o being Element
+           of the carrier of ProjectiveSpace(V) such that
+     A11: z,b',o is_collinear & x,q,o is_collinear by A10,Def9;
+     A12: z<>b' proof assume not thesis;
+      then A13: b,b',d is_collinear & b,b',q is_collinear by A1,A9,Th25;
+        b,b',b is_collinear by Def7;hence contradiction
+       by A1,A8,A13,Def8; end;
+     A14: z,b',d' is_collinear by A9,Th25;
+        z,b',b' is_collinear by Def7;
+    then A15: b',d',o is_collinear by A11,A12,A14,Def8;
+       q,x,o is_collinear by A11,Th25;
+   hence thesis by A15; end; hence thesis by A4; end;
+
+reserve x,z,x1,y1,z1,x2,x3,y2,z2,p4,q4
+                for Element of ProjectiveSpace(V);
+
+theorem Th33:
+ ProjectiveSpace(V) is proper at_least_3rank &
+(ex p,q1,q2 st not p,q1,q2 is_collinear & (for r1,r2 ex q3,r3
+  st r1,r2,r3 is_collinear & q1,q2,q3 is_collinear & p,r3,q3 is_collinear))
+  implies ex CS being CollProjectiveSpace st
+   CS = ProjectiveSpace(V) & CS is at_most-3-dimensional
+proof assume that
+ A1: ProjectiveSpace(V) is proper and
+ A2: (for p,q holds ex r st p<>r & q<>r & p,q,r is_collinear);
+ given p,q1,q2 such that A3: not p,q1,q2 is_collinear and
+ A4: for r1,r2 ex q3,r3 st r1,r2,r3 is_collinear & q1,q2,q3 is_collinear &
+      p,r3,q3 is_collinear;
+ defpred P[Element of ProjectiveSpace(V),
+        Element of ProjectiveSpace(V),
+        Element of ProjectiveSpace(V)] means
+        for y1,y2 ex x2,x1 st
+  y1,y2,x1 is_collinear & $2,$3,x2 is_collinear & $1,x1,x2 is_collinear;
+A5: for p,q1,q2 st q1,q2,p is_collinear holds P[p,q1,q2] proof
+  let p,q1,q2 such that A6: q1,q2,p is_collinear;
+    now let y1,y2; y1,y2,y2 is_collinear & q1,q2,p is_collinear &
+   p,y2,p is_collinear by A6,Def7; hence ex x2,x1 st
+   y1,y2,x1 is_collinear & q1,q2,x2 is_collinear & p,x1,x2 is_collinear; end;
+ hence thesis; end;
+A7: for q1,q2,p1,p2,q st
+ not q1,q2,q is_collinear & not p1,p2,q is_collinear &
+ (not ex x st (q1,q2,x is_collinear & p1,p2,x is_collinear))
+ ex q3,p3 st (p1,p2,p3 is_collinear & q1,q2,q3 is_collinear &
+ not q3,p3,q is_collinear)
+ proof let q1,q2,p1,p2,q such that
+  A8: not q1,q2,q is_collinear & not p1,p2,q is_collinear and
+     not ex x st (q1,q2,x is_collinear & p1,p2,x is_collinear);
+ A9: q1,q2,q1 is_collinear & p1,p2,p1 is_collinear &
+                                 p1,p2,p2 is_collinear by Def7;
+ A10: q<>q1 by A8,Def7;
+    not q1,p1,q is_collinear or not q1,p2,q is_collinear proof assume not
+ thesis; then A11: q,q1,p1 is_collinear & q,q1,p2 is_collinear by Th25;
+    q,q1,q is_collinear by Def7;
+  hence contradiction by A8,A10,A11,Def8; end;
+ hence ex q3,p3 st (p1,p2,p3 is_collinear & q1,q2,q3 is_collinear &
+ not q3,p3,q is_collinear) by A9; end;
+A12: for q,q1,q2,p1,p2,x st
+  P[q,q1,q2] & not q1,q2,q is_collinear & q1,q2,x is_collinear &
+  not p1,p2,q is_collinear & p1,p2,x is_collinear holds P[q,p1,p2]
+proof let q,q1,q2,p1,p2,x; assume that A13: P[q,q1,q2] and
+ A14: not q1,q2,q is_collinear and A15: q1,q2,x is_collinear and
+ A16: not p1,p2,q is_collinear and A17: p1,p2,x is_collinear;
+ A18: q1<>q2 & q1<>q & q2<>q by A14,Def7;
+ A19: p1<>p2 & p1<>q & p2<>q by A16,Def7;
+  now let y1,y2;
+ A20: now assume y1=y2;
+then y1,y2,q is_collinear & p1,p2,p1 is_collinear &
+  q,q,p1 is_collinear by Def7; hence ex z2,z1
+  st y1,y2,z1 is_collinear & p1,p2,z2 is_collinear & q,z1,z2 is_collinear; end;
+    now assume A21: y1<>y2;
+  consider b,b' being Element of ProjectiveSpace(V) such that
+  A22: y1,y2,b' is_collinear & q1,q2,b is_collinear &
+      q,b',b is_collinear by A13;
+       ex a being Element of ProjectiveSpace(V) st
+     p1,p2,a is_collinear & x<>a proof A23: now assume A24: x<>p1; take p1;
+      p1,p2,p1 is_collinear by Def7; hence thesis by A24; end;
+       now assume A25: x<>p2; take p2; p1,p2,p2 is_collinear by Def7;
+    hence thesis by A25; end; hence thesis by A16,A23,Def7; end;
+then consider x1 such that
+  A26: p1,p2,x1 is_collinear & x<>x1;
+       ex a being Element of ProjectiveSpace(V) st
+       y1,y2,a is_collinear & b'<>a proof A27: now assume A28: b'<>y1; take y1;
+      y1,y2,y1 is_collinear by Def7; hence thesis by A28; end;
+       now assume A29: b'<>y2; take y2; y1,y2,y2 is_collinear by Def7;
+    hence thesis by A29; end; hence thesis by A21,A27; end;
+then consider x3 such that
+  A30: b'<>x3 & y1,y2,x3 is_collinear;
+    consider d,d' being Element of ProjectiveSpace(V) such that
+  A31: x1,x3,d' is_collinear & q1,q2,d is_collinear &
+        q,d',d is_collinear by A13;
+  A32: b,d,x is_collinear by A15,A18,A22,A31,Def8;
+  A33: now assume A34: b=d;
+   A35: b,q,b' is_collinear by A22,Th25;
+   A36: b,q,d' is_collinear by A31,A34,Th25;
+      b,q,q is_collinear by Def7;
+   then A37: b',d',q is_collinear by A14,A22,A35,A36,Def8;
+      d',x3,x1 is_collinear by A31,Th25;
+    then consider z1 such that A38: b',x3,z1 is_collinear & q,x1,z1
+is_collinear
+     by A37,Def9;
+      y1,y2,y1 is_collinear & y1,y2,y2 is_collinear by Def7;
+  then b',x3,y1 is_collinear & b',x3,y2 is_collinear by A21,A22,A30,Def8;
+   then A39: y1,y2,z1 is_collinear by A30,A38,Def8;
+     q,z1,x1 is_collinear by A38,Th25;
+  hence ex z2,z1 st y1,y2,z1 is_collinear &
+   p1,p2,z2 is_collinear & q,z1,z2 is_collinear by A26,A39; end;
+     now assume A40: b<>d;
+      not q,b,d is_collinear proof assume not thesis;
+     then A41: b,d,q is_collinear by Th25;
+     A42: b,d,q1 is_collinear proof q1,q2,q1 is_collinear by Def7;
+      hence thesis by A18,A22,A31,Def8; end;
+        b,d,q2 is_collinear proof q1,q2,q2 is_collinear by Def7;
+      hence thesis by A18,A22,A31,Def8; end;
+     hence contradiction by A14,A40,A41,A42,Def8; end;
+    then consider o being Element of ProjectiveSpace(V)
+    such that
+ A43: b',d',o is_collinear & q,x,o is_collinear by A22,A31,A32,Lm47;
+    d',x3,x1 is_collinear by A31,Th25; then consider z1 such that
+ A44: b',x3,z1 is_collinear & o,x1,z1 is_collinear by A43,Def9;
+    x1,o,z1 is_collinear & o,x,q is_collinear by A43,A44,Th25;
+  then consider z2 such that A45: x1,x,z2 is_collinear & z1,q,z2 is_collinear
+     by Def9;
+ A46: y1,y2,z1 is_collinear proof
+      y1,y2,y1 is_collinear & y1,y2,y2 is_collinear by Def7;
+  then b',x3,y1 is_collinear & b',x3,y2 is_collinear by A21,A22,A30,Def8;
+   hence thesis by A30,A44,Def8; end;
+ A47: p1,p2,z2 is_collinear proof
+    p1,p2,p1 is_collinear & p1,p2,p2 is_collinear by Def7;
+  then x1,x,p1 is_collinear & x1,x,p2 is_collinear by A17,A19,A26,Def8;
+  hence thesis by A26,A45,Def8; end;
+    q,z1,z2 is_collinear by A45,Th25;
+  hence ex z2,z1 st y1,y2,z1 is_collinear &
+     p1,p2,z2 is_collinear & q,z1,z2 is_collinear by A46,A47; end;
+hence ex z2,z1 st y1,y2,z1 is_collinear & p1,p2,z2 is_collinear &
+  q,z1,z2 is_collinear by A33; end;
+hence ex z2,z1 st y1,y2,z1 is_collinear & p1,p2,z2 is_collinear &
+  q,z1,z2 is_collinear by A20; end; hence thesis; end;
+A48: for q,q1,q2,p1,p2 st
+  P[q,q1,q2] & not q1,q2,q is_collinear & not p1,p2,q is_collinear &
+  not ex x st (q1,q2,x is_collinear & p1,p2,x is_collinear) holds P[q,p1,p2]
+ proof let q,q1,q2,p1,p2; assume that
+  A49: P[q,q1,q2] and A50: not q1,q2,q is_collinear and
+  A51: not p1,p2,q is_collinear and
+  A52: not ex x st (q1,q2,x is_collinear & p1,p2,x is_collinear);
+  consider q3,p3 such that A53: p1,p2,p3 is_collinear & q1,q2,q3 is_collinear &
+   not q3,p3,q is_collinear by A7,A50,A51,A52;
+  A54: q3,p3,q3 is_collinear & q3,p3,p3 is_collinear by Def7;
+  then P[q,q3,p3] by A12,A49,A50,A53;
+ hence P[q,p1,p2] by A12,A51,A53,A54; end;
+A55: for q,q1,q2 st P[q,q1,q2] & not q1,q2,q is_collinear holds
+  (for p1,p2 holds P[q,p1,p2])
+ proof let q,q1,q2 such that A56: P[q,q1,q2] and A57: not q1,q2,q is_collinear;
+ let p1,p2;
+ A58: not p1,p2,q is_collinear &
+  (ex x st q1,q2,x is_collinear & p1,p2,x is_collinear) implies
+  P[q,p1,p2] by A12,A56,A57;
+    not p1,p2,q is_collinear &
+  (not ex x st q1,q2,x is_collinear & p1,p2,x is_collinear) implies
+  P[q,p1,p2] by A48,A56,A57;
+ hence P[q,p1,p2] by A5,A58; end;
+A59: for q,q1,q2,x,q3 st
+  P[q,q1,q2] & not q1,q2,q is_collinear & q1,q2,x is_collinear &
+  q,q3,x is_collinear holds P[q3,q1,q2]
+ proof let q,q1,q2,x,q3 such that A60: P[q,q1,q2] and
+  A61: not q1,q2,q is_collinear and
+  A62: q1,q2,x is_collinear & q,q3,x is_collinear;
+    now let y1,y2; consider z2,z1 such that A63: y1,y2,z1 is_collinear &
+  q1,q2,z2 is_collinear & q,z1,z2 is_collinear by A60;
+  A64: now assume A65: x=z2; then q,x,q3 is_collinear & q,x,z1 is_collinear &
+   q,x,x is_collinear by A62,A63,Def7,Th25;
+then q3,z1,z2 is_collinear by A61,A62,A65,Def8;
+  hence ex x2,x1 st y1,y2,x1 is_collinear & q1,q2,x2 is_collinear &
+   q3,x1,x2 is_collinear by A63; end;
+     now assume A66: x<>z2; q3,q,x is_collinear & q,z1,z2 is_collinear
+   by A62,A63,Th25; then consider x2 such that
+   A67: q3,z1,x2 is_collinear & x,z2,x2 is_collinear by Def9;
+    A68:q1<>q2 by A61,Def7;
+     q1,q2,q1 is_collinear & q1,q2,q2 is_collinear by Def7;
+   then x,z2,q1 is_collinear & x,z2,q2 is_collinear by A62,A63,A68,Def8;
+   then q1,q2,x2 is_collinear by A66,A67,Def8;
+    hence ex x2,x1 st y1,y2,x1 is_collinear & q1,q2,x2 is_collinear &
+  q3,x1,x2 is_collinear by A63,A67; end;
+ hence ex x2,x1 st y1,y2,x1 is_collinear & q1,q2,x2 is_collinear &
+  q3,x1,x2 is_collinear by A64; end; hence thesis; end;
+A69: for q,p holds
+  ((for q1,q2 holds P[q,q1,q2]) implies
+  (ex p1,p2 st P[p,p1,p2] & not p1,p2,p is_collinear))
+ proof let q,p such that A70: for q1,q2 holds P[q,q1,q2];
+ consider x1 such that A71: p<>x1 & q<>x1 &
+      p,q,x1 is_collinear by A2; consider x2 such that
+    A72: not p,x1,x2 is_collinear by A1,A71,COLLSP:19;
+   A73: not x1,x2,p is_collinear by A72,Th25;
+   A74: not x1,x2,q is_collinear proof assume not thesis;
+    then q,x1,x1 is_collinear & q,x1,x2 is_collinear & q,x1,p is_collinear
+   by A71,Def7,Th25; hence contradiction by A71,A72,Def8;
+   end; A75: x1,x2,x1 is_collinear & q,p,x1 is_collinear by A71,Def7,Th25
+; P[q,x1,x2] by A70; then P[p,x1,x2] by A59,A74,A75;
+   hence thesis by A73; end;
+A76: for x,y1,z holds P[x,y1,z] proof let x,y1,z;
+   not q1,q2,p is_collinear by A3,Th25;
+ then for p1,p2 holds P[p,p1,p2] by A4,A55;
+ then ex r1,r2 st P[x,r1,r2] & not r1,r2,x is_collinear
+ by A69; hence P[x,y1,z] by A55; end;
+A77: for p4,p1,q,q4,r2 ex r,r1 st p4,q,r is_collinear & p1,q4,r1 is_collinear
+                    & r2,r,r1 is_collinear proof
+ let p4,p1,q,q4,r2; ex r1,r st
+ p4,q,r is_collinear & p1,q4,r1 is_collinear & r2,r,r1 is_collinear by A76;
+ hence thesis; end;
+reconsider CS = ProjectiveSpace(V) as CollProjectiveSpace by A1,A2,Def10;
+take CS; thus thesis by A77,Def15;
+end;
+
+theorem Th34: (ex y,u,v,w st
+ (for w1 ex a,b,c,c1 st w1 = a*y + b*u + c*v + c1*w) &
+ (for a,b,a1,b1 st a*y + b*u + a1*v + b1*w = 0.V holds
+  a=0 & b=0 & a1=0 & b1=0)) implies
+   ex CS being CollProjectiveSpace st
+   CS = ProjectiveSpace(V) & CS is at_most-3-dimensional
+proof given y,u,v,w such that
+A1: (for w1 ex a,b,c,c1 st w1 = a*y + b*u + c*v + c1*w) & (for a,b,a1,b1 st
+ a*y + b*u + a1*v + b1*w = 0.V holds a=0 & b=0 & a1=0 & b1=0);
+A2: ProjectiveSpace(V) is proper at_least_3rank by A1,Lm46;
+    ex p,q1,q2 st not p,q1,q2 is_collinear &
+  (for r1,r2 ex q3,r3 st r1,r2,r3 is_collinear & q1,q2,q3 is_collinear &
+  p,r3,q3 is_collinear) by A1,Th32;
+  hence thesis by A2,Th33; end;
+
+theorem
+Th35: (ex u,v,u1,v1 st
+   (for a,b,a1,b1 st a*u + b*v + a1*u1 + b1*v1 = 0.V holds
+          a=0 & b=0 & a1=0 & b1=0)) implies
+   ex CS being CollProjectiveSpace st
+    CS = ProjectiveSpace(V) & CS is non 2-dimensional
+ proof given u,v,u1,v1 such that
+ A1: for a,b,a1,b1 st a*u + b*v + a1*u1 + b1*v1 = 0.V holds
+                       a=0 & b=0 & a1=0 & b1=0;
+ A2: u is_Prop_Vect & v is_Prop_Vect & u1 is_Prop_Vect & v1 is_Prop_Vect
+        by A1,Th2;
+   V is up-3-dimensional by A1,Lm45;
+ then reconsider CS = ProjectiveSpace(V) as CollProjectiveSpace by Lm41;
+ take CS; thus CS = ProjectiveSpace(V);
+ reconsider p=Dir(u),p1=Dir(v),q=Dir(u1),q1=Dir(v1)
+              as Element of CS by A2,ANPROJ_1:42;
+   take p,p1,q,q1;
+ thus not ex r being Element of CS
+    st (p,p1,r is_collinear & q,q1,r is_collinear) proof
+  assume not thesis; then consider r being Element of the carrier
+    of CS such that
+  A3: p,p1,r is_collinear & q,q1,r is_collinear;
+  A4: [p,p1,r] in the Collinearity of ProjectiveSpace(V) &
+  [q,q1,r] in the Collinearity of ProjectiveSpace(V) by A3,COLLSP:def 2;
+  consider y such that A5: y is_Prop_Vect & r=Dir(y) by ANPROJ_1:42;
+    u,v,y are_LinDep & u1,v1,y are_LinDep by A2,A4,A5,ANPROJ_1:41;
+  hence contradiction by A1,A5,Th5; end; end;
+
+theorem
+Th36: (ex u,v,u1,v1 st
+ (for w ex a,b,a1,b1 st w = a*u + b*v + a1*u1 + b1*v1) &
+   (for a,b,a1,b1 st a*u + b*v + a1*u1 + b1*v1 = 0.V holds
+          a=0 & b=0 & a1=0 & b1=0)) implies
+   ex CS being CollProjectiveSpace st CS = ProjectiveSpace(V) &
+       CS is up-3-dimensional at_most-3-dimensional
+proof assume A1: ex u,v,u1,v1 st
+ (for w ex a,b,a1,b1 st w = a*u + b*v + a1*u1 + b1*v1) &
+ (for a,b,a1,b1 st a*u + b*v + a1*u1 + b1*v1 = 0.V holds
+   a=0 & b=0 & a1=0 & b1=0); then consider u,v,u1,v1 such that
+    for w ex a,b,a1,b1 st w = a*u + b*v + a1*u1 + b1*v1 and
+ A2: for a,b,a1,b1 st a*u + b*v + a1*u1 + b1*v1 = 0.V holds
+                       a=0 & b=0 & a1=0 & b1=0;
+consider CS1 being CollProjectiveSpace such that
+    A3: CS1 = ProjectiveSpace(V) and
+    A4: CS1 is up-3-dimensional by A2,Th35;
+consider CS2 being CollProjectiveSpace such that
+    A5: CS2 = ProjectiveSpace(V) and
+    A6: CS2 is at_most-3-dimensional by A1,Th34;
+thus thesis by A3,A4,A5,A6;
+end;
+
+definition
+ cluster strict Fanoian Desarguesian Pappian 2-dimensional CollProjectiveSpace;
+  existence
+proof
+  consider V being non trivial RealLinearSpace such that
+A1: (ex u,v,w being Element of V st
+     (for a,b,c st a*u + b*v + c*w = 0.V holds a=0 & b=0 & c = 0) &
+     (for y being Element of V ex a,b,c st y = a*u + b*v + c*w)) by Th16;
+    consider u,v,w being Element of V such that
+    A2: for a,b,c st a*u + b*v + c*w = 0.V holds a=0 & b=0 & c = 0 and
+       for y being Element of V ex a,b,c st y = a*u + b*v + c*w by A1;
+    reconsider V as up-3-dimensional RealLinearSpace by A2,Def6;
+    take CS = ProjectiveSpace(V);
+    thus CS is strict Fanoian Desarguesian Pappian;
+    consider CS1 being CollProjectiveSpace such that
+     A3: CS1 = ProjectiveSpace(V) and
+     A4: CS1 is 2-dimensional by A1,Th31;
+    thus thesis by A3,A4;
+ end;
+
+ cluster strict Fanoian Desarguesian Pappian at_most-3-dimensional
+         up-3-dimensional CollProjectiveSpace;
+  existence
+ proof
+  consider V being non trivial RealLinearSpace such that
+A5: (ex u,v,w,u1 being Element of V
+    st (for a,b,c,d st a*u + b*v + c*w + d*u1 = 0.V holds
+                      a = 0 & b = 0 & c = 0 & d = 0) &
+  (for y being Element of V ex a,b,c,d st y = a*u + b*v + c*w + d*u1)) by Th23;
+  reconsider V as up-3-dimensional RealLinearSpace by A5,Lm45;
+    take CS = ProjectiveSpace(V);
+    thus CS is strict Fanoian Desarguesian Pappian;
+     ex CS being CollProjectiveSpace st CS = ProjectiveSpace(V) &
+       CS is up-3-dimensional at_most-3-dimensional by A5,Th36;
+    hence thesis;
+ end;
+end;
+
+definition
+ mode CollProjectivePlane is 2-dimensional CollProjectiveSpace;
+end;
+
+theorem
+  for CS being non empty CollStr holds
+   CS is 2-dimensional CollProjectiveSpace iff
+   (CS is at_least_3rank proper CollSp &
+     for p,p1,q,q1 being Element of CS
+     ex r being Element of CS st p,p1,r is_collinear &
+      q,q1,r is_collinear)
+proof let CS be non empty CollStr;
+ thus CS is 2-dimensional CollProjectiveSpace implies
+   CS is at_least_3rank proper CollSp &
+     for p,p1,q,q1 being Element of CS
+     ex r being Element of CS st p,p1,r is_collinear &
+      q,q1,r is_collinear by Def14;
+   assume that A1: CS is at_least_3rank proper CollSp and
+     A2: for p,p1,q,q1 being Element of CS
+     ex r being Element of CS st p,p1,r is_collinear &
+      q,q1,r is_collinear;
+       CS is Vebleian proof
+       let p,p1,p2,r,r1 be Element of CS such that
+             p,p1,r is_collinear & p1,p2,r1 is_collinear;
+       thus ex r2 being Element of CS st
+          p,p2,r2 is_collinear & r,r1,r2 is_collinear by A2; end;
+     hence thesis by A1,A2,Def14;
+end;
+

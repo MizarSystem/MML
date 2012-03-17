@@ -1,0 +1,2585 @@
+:: Noetherian Lattices
+::  by Christoph Schwarzweller
+::
+:: Received June 9, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary FINSET_1, LATTICES, LATTICE3, BOOLE, FINSEQ_1, RELAT_1, FUNCT_1,
+      ORDERS_1, FILTER_1, RELAT_2, BHSP_3, WELLORD1, ARYTM_3, WAYBEL_6,
+      ZF_LANG, REALSET1, BINOP_1, TARSKI, LATTICE6;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, RELAT_1, FUNCT_1,
+      NAT_1, STRUCT_0, BINOP_1, LATTICES, LATTICE3, FINSET_1, WELLORD1,
+      WAYBEL_6, GROUP_1, ORDERS_1, FINSEQ_1, WELLFND1, YELLOW_0, LATTICE2,
+      REALSET1;
+ constructors LATTICE2, WAYBEL_1, WAYBEL_6, NAT_1, GROUP_1, WELLFND1, WELLORD1,
+      BINOP_1, REALSET1, MEMBERED;
+ clusters SUBSET_1, STRUCT_0, LATTICE2, LATTICE3, YELLOW_1, FINSET_1, ORDERS_1,
+      INT_1, FINSEQ_1, FINSEQ_6, WAYBEL_0, KNASTER, LATTICES;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions WELLFND1, WELLORD1;
+ theorems AXIOMS, TARSKI, FUNCT_1, LATTICES, LATTICE3, STRUCT_0, ORDERS_1,
+      VECTSP_8, FINSEQ_1, WAYBEL_6, FINSET_1, GROUP_1, NAT_1, INT_1, REAL_1,
+      RELAT_1, YELLOW_0, WELLORD1, WELLFND1, REALSET1, XBOOLE_0;
+ schemes NAT_1, WELLFND1;
+
+begin
+
+definition
+cluster finite Lattice;
+existence
+ proof
+ set L = BooleLatt {};
+ A1: the carrier of L = bool {} by LATTICE3:def 1;
+   bool {} is finite by FINSET_1:24;
+ then L is finite by A1,GROUP_1:def 13;
+ hence thesis;
+ end;
+end;
+
+Lm1:for L being finite Lattice
+for X being Subset of L holds
+X is empty or
+ex a being Element of LattPOSet L
+st a in X & for b being Element of LattPOSet L
+           st b in X & b <> a holds not(b <= a)
+proof
+let L be finite Lattice;
+let X be Subset of L;
+defpred P[Nat] means
+for L being finite Lattice
+for X being Subset of LattPOSet L
+for p being FinSequence st rng p = X & len p = $1 holds
+X is empty or
+ex a being Element of LattPOSet L
+st a in X & for b being Element of LattPOSet L
+           st b in X & b <> a holds not(b <= a);
+A1: P[0]
+    proof
+    let L be finite Lattice;
+    let X be Subset of LattPOSet L;
+    let p be FinSequence;
+    assume A2: rng p = X & len p = 0;
+    then Seg 0 = dom p by FINSEQ_1:def 3;
+    hence thesis by A2,FINSEQ_1:4,RELAT_1:65;
+    end;
+A3: for k being Nat st P[k] holds P[k + 1]
+    proof
+    let k be Nat;
+    assume
+A4:  P[k];
+    per cases;
+    suppose A5: k = 0;
+        for L being finite Lattice
+      for X being Subset of LattPOSet L
+      for p being FinSequence st rng p = X & len p = 1 holds
+      ex a being Element of LattPOSet L
+      st a in X & for b being Element of LattPOSet L
+                 st b in X & b <> a holds not(b <= a)
+          proof
+          let L be finite Lattice;
+          let X be Subset of LattPOSet L;
+          let p be FinSequence;
+          assume A6: rng p = X & len p = 1;
+          then A7:        Seg 1 = dom p by FINSEQ_1:def 3;
+          consider a being set such that A8: p.1 = a;
+            1 in dom p by A7,FINSEQ_1:4,TARSKI:def 1;
+          then A9: a in rng p by A8,FUNCT_1:def 5;
+          then reconsider a as Element of LattPOSet L by A6;
+             rng p = { a } by A7,A8,FINSEQ_1:4,FUNCT_1:14;
+          then for b being Element of LattPOSet L
+          st b in X & b <> a holds not(b <= a) by A6,TARSKI:def 1;
+          hence thesis by A6,A9;
+      end;
+      hence thesis by A5;
+    suppose A10: k <> 0;
+        for L being finite Lattice
+      for X being Subset of LattPOSet L
+      for p being FinSequence st rng p = X & len p = k + 1
+      holds ex a being Element of LattPOSet L
+      st a in X & for b being Element of LattPOSet L
+                 st b in X & b <> a holds not(b <= a)
+        proof
+        let L be finite Lattice;
+        let X be Subset of LattPOSet L;
+        let p be FinSequence;
+        assume A11: rng p = X & len p = k + 1;
+        set q = p|(Seg k), X' = rng q;
+        A12: k <= len p by A11,NAT_1:29;
+        then A13: len q = k by FINSEQ_1:21;
+        A14: rng q c= rng p by FUNCT_1:76;
+          for x being set holds x in X' implies x in the carrier of LattPOSet L
+          proof
+          let x be set;
+          assume x in X';
+          then x in rng p by A14;
+          hence thesis by A11;
+          end;
+        then A15: X' is Subset of LattPOSet L by TARSKI:def 3;
+          q <> {} by A10,A13,FINSEQ_1:25;
+        then X' <> {} by FINSEQ_1:27;
+        then consider a being Element of LattPOSet L such that
+           A16: a in X' & for b being Element of LattPOSet L
+                        st b in X' & b <> a holds not(b <= a) by A4,A13,A15;
+        consider b being set such that A17: p.(k+1) = b;
+          Seg (k+1) = dom p by A11,FINSEQ_1:def 3;
+        then k + 1 in dom p by FINSEQ_1:6;
+        then A18: b in rng p by A17,FUNCT_1:def 5;
+        then reconsider b as Element of LattPOSet L by A11;
+        per cases;
+        suppose ex c being Element of LattPOSet L
+                st c in X & c <= b & c <> b;
+           then consider c being Element of LattPOSet L
+                such that A19: c in X & c <= b & c <> b;
+             for u being Element of LattPOSet L
+                st u in X & u <> a holds not(u <= a)
+             proof
+             let u be Element of LattPOSet L;
+             assume A20: u in X & u <> a;
+             per cases;
+             suppose u in X';
+               hence thesis by A16,A20;
+             suppose A21: not(u in X');
+               consider n being set such that
+               A22: n in dom p & p.n = u by A11,A20,FUNCT_1:def 5;
+               A23: Seg(k+1) = dom p by A11,FINSEQ_1:def 3;
+               reconsider n as Nat by A22;
+               A24: 1 <= n & n <= k+1 by A22,A23,FINSEQ_1:3;
+A25:            n = k + 1
+                 proof
+                 assume n <> k + 1;
+                 then n < k + 1 by A24,REAL_1:def 5;
+                 then n <= k by NAT_1:38;
+                 then n in Seg(k) by A24,FINSEQ_1:3;
+                 then A26: n in dom q by A12,FINSEQ_1:21;
+                 then q.n = u by A22,FUNCT_1:70;
+                 hence thesis by A21,A26,FUNCT_1:def 5;
+                 end;
+               assume
+A27:            u <= a;
+               then A28: c <= a by A17,A19,A22,A25,ORDERS_1:26;
+               A29: c in X'
+                    proof
+                    consider n being set such that
+                    A30: n in dom p & p.n = c by A11,A19,FUNCT_1:def 5;
+                    A31: Seg(k+1) = dom p by A11,FINSEQ_1:def 3;
+                    reconsider n as Nat by A30;
+                    A32: 1 <= n & n <= k+1 by A30,A31,FINSEQ_1:3;
+                    then n < k + 1 by A17,A19,A30,REAL_1:def 5;
+                    then n <= k by NAT_1:38;
+                    then n in Seg(k) by A32,FINSEQ_1:3;
+                    then A33: n in dom q by A12,FINSEQ_1:21;
+                    then q.n = c by A30,FUNCT_1:70;
+                    hence thesis by A33,FUNCT_1:def 5;
+                    end;
+                 c <> a by A17,A19,A22,A25,A27,ORDERS_1:25;
+               hence thesis by A16,A28,A29;
+             end;
+           hence thesis by A11,A14,A16;
+        suppose not(ex c being Element of LattPOSet L
+                    st c in X & c <= b & c <> b);
+         then for u being Element of LattPOSet L
+                st u in X & u <> b holds not(u <= b);
+           hence thesis by A11,A18;
+        end;
+      hence thesis;
+    end;
+A34: for k being Nat holds P[k] from Ind(A1,A3);
+  the carrier of L is finite by GROUP_1:def 13;
+then reconsider X as finite Subset of L
+  by FINSET_1:13;
+  LattPOSet L = RelStr(#the carrier of L, LattRel L#) by LATTICE3:def 2;
+then reconsider X' = X as finite Subset of LattPOSet L;
+consider p being FinSequence such that
+A35: rng p = X' by FINSEQ_1:73;
+   dom p = Seg len p by FINSEQ_1:def 3;
+hence thesis by A34,A35;
+end;
+
+Lm2:for L being finite Lattice
+for X being Subset of L holds
+X is empty or
+ex a being Element of LattPOSet L
+st a in X & for b being Element of LattPOSet L
+           st b in X & b <> a holds not(a <= b)
+proof
+let L be finite Lattice;
+let X be Subset of L;
+defpred P[Nat] means
+for L being finite Lattice
+for X being Subset of LattPOSet L
+for p being FinSequence st rng p = X & len p = $1 holds
+X is empty or
+ex a being Element of LattPOSet L
+st a in X & for b being Element of LattPOSet L
+           st b in X & b <> a holds not(a <= b);
+A1: P[0]
+    proof
+    let L be finite Lattice;
+    let X be Subset of LattPOSet L;
+    let p be FinSequence;
+    assume A2: rng p = X & len p = 0;
+    then Seg 0 = dom p by FINSEQ_1:def 3;
+    hence thesis by A2,FINSEQ_1:4,RELAT_1:65;
+    end;
+A3: for k being Nat st P[k] holds P[k + 1]
+    proof
+    let k be Nat;
+    assume
+A4:  P[k];
+    per cases;
+    suppose A5: k = 0;
+        for L being finite Lattice
+      for X being Subset of LattPOSet L
+      for p being FinSequence st rng p = X & len p = 1 holds
+      ex a being Element of LattPOSet L
+      st a in X & for b being Element of LattPOSet L
+                 st b in X & b <> a holds not(a <= b)
+          proof
+          let L be finite Lattice;
+          let X be Subset of LattPOSet L;
+          let p be FinSequence;
+          assume A6: rng p = X & len p = 1;
+          then A7: dom p = { 1 } by FINSEQ_1:4,def 3;
+          consider a being set such that A8: p.1 = a;
+            1 in dom p by A7,TARSKI:def 1;
+          then A9: a in rng p by A8,FUNCT_1:def 5;
+          then reconsider a as Element of LattPOSet L by A6;
+             rng p = { a } by A7,A8,FUNCT_1:14;
+          then for b being Element of LattPOSet L
+          st b in X & b <> a holds not(a <= b) by A6,TARSKI:def 1;
+          hence thesis by A6,A9;
+      end;
+      hence thesis by A5;
+    suppose A10: k <> 0;
+        for L being finite Lattice
+      for X being Subset of LattPOSet L
+      for p being FinSequence st rng p = X & len p = k + 1
+      holds ex a being Element of LattPOSet L
+      st a in X & for b being Element of LattPOSet L
+                 st b in X & b <> a holds not(a <= b)
+        proof
+        let L be finite Lattice;
+        let X be Subset of LattPOSet L;
+        let p be FinSequence;
+        assume A11: rng p = X & len p = k + 1;
+        set q = p|(Seg k), X' = rng q;
+        A12: k <= len p by A11,NAT_1:29;
+        then A13: len q = k by FINSEQ_1:21;
+        A14: rng q c= rng p by FUNCT_1:76;
+          for x being set holds x in X' implies x in the carrier of LattPOSet L
+          proof
+          let x be set;
+          assume x in X';
+          then x in rng p by A14;
+          hence thesis by A11;
+          end;
+        then A15: X' is Subset of LattPOSet L by TARSKI:def 3;
+          q <> {} by A10,A13,FINSEQ_1:25;
+        then X' <> {} by FINSEQ_1:27;
+        then consider a being Element of LattPOSet L such that
+           A16: a in X' & for b being Element of LattPOSet L
+                        st b in X' & b <> a holds not(a <= b) by A4,A13,A15;
+        consider b being set such that A17: p.(k+1) = b;
+          Seg (k+1) = dom p by A11,FINSEQ_1:def 3;
+        then k + 1 in dom p by FINSEQ_1:6;
+        then A18: b in rng p by A17,FUNCT_1:def 5;
+        then reconsider b as Element of LattPOSet L by A11;
+        per cases;
+        suppose ex c being Element of LattPOSet L
+                st c in X & b <= c & c <> b;
+           then consider c being Element of LattPOSet L
+                such that A19: c in X & b <= c & c <> b;
+             for u being Element of LattPOSet L
+                st u in X & u <> a holds not(a <= u)
+             proof
+             let u be Element of LattPOSet L;
+             assume A20: u in X & u <> a;
+               now per cases;
+             case u in X';
+               hence thesis by A16,A20;
+             case A21: not(u in X');
+               consider n being set such that
+               A22: n in dom p & p.n = u by A11,A20,FUNCT_1:def 5;
+               A23: Seg(k+1) = dom p by A11,FINSEQ_1:def 3;
+               reconsider n as Nat by A22;
+               A24: 1 <= n & n <= k+1 by A22,A23,FINSEQ_1:3;
+A25:            n = k + 1
+                 proof
+                 assume n <> k + 1;
+                 then n < k + 1 by A24,REAL_1:def 5;
+                 then n <= k by NAT_1:38;
+                 then n in Seg(k) by A24,FINSEQ_1:3;
+                 then A26: n in dom q by A12,FINSEQ_1:21;
+                 then q.n = u by A22,FUNCT_1:70;
+                 hence thesis by A21,A26,FUNCT_1:def 5;
+                 end;
+               assume
+A27:            a <= u;
+               then A28: a <= c by A17,A19,A22,A25,ORDERS_1:26;
+               A29: c in X'
+                    proof
+                    consider n being set such that
+                    A30: n in dom p & p.n = c by A11,A19,FUNCT_1:def 5;
+                    A31: Seg(k+1) = dom p by A11,FINSEQ_1:def 3;
+                    reconsider n as Nat by A30;
+                    A32: 1 <= n & n <= k+1 by A30,A31,FINSEQ_1:3;
+                    then n < k + 1 by A17,A19,A30,REAL_1:def 5;
+                    then n <= k by NAT_1:38;
+                    then n in Seg(k) by A32,FINSEQ_1:3;
+                    then A33: n in dom q by A12,FINSEQ_1:21;
+                    then q.n = c by A30,FUNCT_1:70;
+                    hence thesis by A33,FUNCT_1:def 5;
+                    end;
+                 c <> a by A17,A19,A22,A25,A27,ORDERS_1:25;
+               hence thesis by A16,A28,A29;
+             end;  :: cases
+             hence thesis;
+             end;
+           hence thesis by A11,A14,A16;
+        suppose not(ex c being Element of LattPOSet L
+                    st c in X & b <= c & c <> b);
+         then for u being Element of LattPOSet L
+                st u in X & u <> b holds not(b <= u);
+           hence thesis by A11,A18;
+    end;
+    hence thesis;
+    end;
+A34: for k being Nat holds P[k] from Ind(A1,A3);
+  the carrier of L is finite by GROUP_1:def 13;
+then reconsider X as finite Subset of L
+  by FINSET_1:13;
+  LattPOSet L = RelStr(#the carrier of L, LattRel L#) by LATTICE3:def 2;
+then reconsider X' = X as finite Subset of LattPOSet L;
+consider p being FinSequence such that
+A35: rng p = X' by FINSEQ_1:73;
+  dom p = Seg len p by FINSEQ_1:def 3;
+hence thesis by A34,A35;
+end;
+
+Lm3:for L being finite Lattice
+for X being Subset of L holds
+X is empty or
+ex a being Element of LattPOSet L
+st for b being Element of LattPOSet L
+   st b in X holds b <= a
+proof
+let L be finite Lattice;
+let X be Subset of L;
+defpred P[Nat] means
+for L being finite Lattice
+for X being Subset of LattPOSet L
+for p being FinSequence st rng p = X & len p = $1 holds
+X is empty or
+ex a being Element of LattPOSet L
+st for b being Element of LattPOSet L
+   st b in X holds b <= a;
+A1: P[0]
+    proof
+    let L be finite Lattice;
+    let X be Subset of LattPOSet L;
+    let p be FinSequence;
+    assume A2: rng p = X & len p = 0;
+    then dom p = {} by FINSEQ_1:4,def 3;
+    hence thesis by A2,RELAT_1:65;
+    end;
+A3: for k being Nat st P[k] holds P[k + 1]
+    proof
+    let k be Nat;
+    assume
+A4:  P[k];
+    per cases;
+    suppose
+A5:   k = 0;
+        for L being finite Lattice
+      for X being Subset of LattPOSet L
+      for p being FinSequence st rng p = X & len p = 1 holds
+      ex a being Element of LattPOSet L
+      st for b being Element of LattPOSet L
+         st b in X holds b <= a
+          proof
+          let L be finite Lattice;
+          let X be Subset of LattPOSet L;
+          let p be FinSequence;
+          assume A6: rng p = X & len p = 1;
+          then A7:        Seg 1 = dom p by FINSEQ_1:def 3;
+          consider a being set such that A8: p.1 = a;
+            1 in dom p by A7,FINSEQ_1:4,TARSKI:def 1;
+          then a in rng p by A8,FUNCT_1:def 5;
+          then reconsider a as Element of LattPOSet L by A6;
+            rng p = { a } by A7,A8,FINSEQ_1:4,FUNCT_1:14;
+          then for b being Element of LattPOSet L
+          st b in X holds b <= a by A6,TARSKI:def 1;
+          hence thesis;
+      end;
+      hence thesis by A5;
+    suppose A9: k <> 0;
+        for L being finite Lattice
+      for X being Subset of LattPOSet L
+      for p being FinSequence st rng p = X & len p = k + 1
+      holds ex a being Element of LattPOSet L
+      st for b being Element of LattPOSet L
+        st b in X holds b <= a
+        proof
+        let L be finite Lattice;
+        let X be Subset of LattPOSet L;
+        let p be FinSequence;
+        assume A10: rng p = X & len p = k + 1;
+        set q = p|(Seg k), X' = rng q;
+        A11: k <= k + 1 by NAT_1:29;
+        then A12: len q = k by A10,FINSEQ_1:21;
+          for x being set holds x in X' implies x in the carrier of LattPOSet L
+          proof
+          let x be set;
+          assume
+A13:         x in X';
+            rng q c= rng p by FUNCT_1:76;
+          then x in rng p by A13;
+          hence thesis by A10;
+          end;
+        then A14: X' is Subset of LattPOSet L by TARSKI:def 3;
+          q <> {} by A9,A12,FINSEQ_1:25;
+        then X' <> {} by FINSEQ_1:27;
+        then consider a being Element of LattPOSet L
+             such that A15: for b being Element of LattPOSet L
+                           st b in X' holds b <= a by A4,A12,A14;
+        consider b being set such that A16: p.(k+1) = b;
+          Seg (k+1) = dom p by A10,FINSEQ_1:def 3;
+        then k + 1 in dom p by FINSEQ_1:6;
+        then b in rng p by A16,FUNCT_1:def 5;
+        then reconsider b as Element of LattPOSet L by A10;
+        set a2 = %a "\/" %b;
+        A17: %a "\/" a2 = (%a "\/" %a) "\/" %b by LATTICES:def 5
+                    .= %a "\/" %b by LATTICES:17;
+          %b "\/" a2 = (%b "\/" %b) "\/" %a by LATTICES:def 5
+                .= %b "\/" %a by LATTICES:17;
+        then A18:      %a [= a2 & %b [= a2 by A17,LATTICES:def 3;
+        A19: (%a)% = %a by LATTICE3:def 3
+             .= a by LATTICE3:def 4;
+A20:    (%b)% = %b by LATTICE3:def 3
+             .= b by LATTICE3:def 4;
+          for c being Element of LattPOSet L
+        st c in X holds c <= a2%
+          proof
+          let c be Element of LattPOSet L;
+          assume A21: c in X;
+          per cases;
+          suppose
+          c in X';
+            then a <= a2% & c <= a by A15,A18,A19,LATTICE3:7;
+            hence thesis by ORDERS_1:26;
+          suppose A22: not(c in X');
+            consider n being set such that
+            A23: n in dom p & c = p.n by A10,A21,FUNCT_1:def 5;
+            reconsider n as Nat by A23;
+            A24: n in Seg(k + 1) by A10,A23,FINSEQ_1:def 3;
+            then A25: 1 <= n & n <= k + 1 by FINSEQ_1:3;
+              n >= k + 1
+              proof
+              assume not(n >= k + 1);
+              then 1 <= n & n <= k by A24,FINSEQ_1:3,INT_1:20;
+              then A26: n in Seg(k) by FINSEQ_1:3;
+              then A27: n in dom q by A10,A11,FINSEQ_1:21;
+                 dom(p|(Seg k))
+                 = dom p /\ Seg(k) by RELAT_1:90
+                .= Seg(k+1) /\ Seg(k) by A10,FINSEQ_1:def 3
+                .= Seg(k) by A11,FINSEQ_1:9;
+              then q.n = c by A23,A26,FUNCT_1:70;
+              hence thesis by A22,A27,FUNCT_1:def 5;
+              end;
+            then c = b by A16,A23,A25,AXIOMS:21;
+            hence thesis by A18,A20,LATTICE3:7;
+          end;
+        hence thesis;
+    end;
+    hence thesis;
+    end;
+A28: for k being Nat holds P[k] from Ind(A1,A3);
+  the carrier of L is finite by GROUP_1:def 13;
+then reconsider X as finite Subset of L
+  by FINSET_1:13;
+  LattPOSet L = RelStr(#the carrier of L, LattRel L#) by LATTICE3:def 2;
+then reconsider X' = X as finite Subset of LattPOSet L;
+consider p being FinSequence such that
+A29: rng p = X' by FINSEQ_1:73;
+   dom p = Seg len p by FINSEQ_1:def 3;
+hence thesis by A28,A29;
+end;
+Lm4:for L being finite Lattice holds
+ex a being Element of LattPOSet L
+st for b being Element of LattPOSet L holds b <= a
+proof
+let L be finite Lattice;
+  the carrier of L c= the carrier of L;
+then reconsider L' = the carrier of L as Subset of L;
+consider a being Element of LattPOSet L such that
+A1: for b being Element of LattPOSet L
+   st b in L' holds b <= a by Lm3;
+  for b being Element of LattPOSet L holds b <= a
+   proof
+   let b be Element of LattPOSet L;
+     LattPOSet L = RelStr(#the carrier of L, LattRel L#) by LATTICE3:def 2;
+   hence thesis by A1;
+   end;
+hence thesis;
+end;
+
+Lm5:for L being finite Lattice holds L is complete
+proof
+let L be finite Lattice;
+  for X being Subset of L
+ex a being Element of L
+st a is_less_than X &
+   for b being Element of L
+   st b is_less_than X holds b [= a
+  proof
+  let X be Subset of L;
+  defpred P[Nat] means
+  for X' being finite Subset of LattPOSet L
+  for p being FinSequence st rng p = X' & len p = $1 holds
+  ex a being Element of LattPOSet L st
+  (for x being Element of LattPOSet L
+   st x in X' holds a <= x) &
+  (for x' being Element of LattPOSet L
+   st for x being Element of LattPOSet L
+      st x in X' holds x' <= x holds x' <= a);
+  A1: P[0]
+      proof
+        for X' being finite Subset of LattPOSet L
+      for p being FinSequence st rng p = X' & len p = 0 holds
+      ex a being Element of LattPOSet L st
+      (for x being Element of LattPOSet L
+       st x in X' holds a <= x) &
+      (for x' being Element of LattPOSet L
+       st for x being Element of LattPOSet L
+          st x in X' holds x' <= x holds x' <= a)
+       proof
+       let X' be finite Subset of LattPOSet L;
+       let p be FinSequence;
+       assume A2: rng p = X' & len p = 0;
+       then A3:     dom p = {} by FINSEQ_1:4,def 3;
+         ex a being Element of LattPOSet L st
+       (for x being Element of LattPOSet L
+        st x in X' holds a <= x) &
+       (for x' being Element of LattPOSet L
+        st for x being Element of LattPOSet L
+           st x in X' holds x' <= x holds x' <= a)
+         proof
+         consider a being Element of LattPOSet L such that
+         A4: for b being Element of LattPOSet L
+            holds b <= a by Lm4;
+         A5: for x being Element of LattPOSet L
+            st x in X' holds a <= x by A2,A3,RELAT_1:65;
+           for x' being Element of LattPOSet L
+         st for x being Element of LattPOSet L
+            st x in X' holds x' <= x holds x' <= a by A4;
+         hence thesis by A5;
+         end;
+       hence thesis;
+       end;
+      hence thesis;
+      end;
+  A6: for k being Nat st P[k] holds P[k + 1]
+    proof
+    let k be Nat;
+    assume
+A7:  P[k];
+      for X' being finite Subset of LattPOSet L
+    for p being FinSequence st rng p = X' & len p = k + 1 holds
+    ex a being Element of LattPOSet L st
+    (for x being Element of LattPOSet L
+     st x in X' holds a <= x) &
+    (for x' being Element of LattPOSet L
+     st for x being Element of LattPOSet L
+        st x in X' holds x' <= x holds x' <= a)
+      proof
+      let X be finite Subset of LattPOSet L;
+      let p be FinSequence;
+      assume A8: rng p = X & len p = k + 1;
+      set q = p|(Seg k), X' = rng q;
+      A9: k <= k + 1 by NAT_1:29;
+      then A10: len q = k by A8,FINSEQ_1:21;
+        for x being set holds x in X' implies x in the carrier of LattPOSet L
+        proof
+        let x be set;
+        assume
+A11:       x in X';
+          rng q c= rng p by FUNCT_1:76;
+        then x in rng p by A11;
+        hence thesis by A8;
+        end;
+      then X' is Subset of LattPOSet L by TARSKI:def 3;
+      then consider a being Element of LattPOSet L such that
+      A12: (for x being Element of LattPOSet L
+           st x in X' holds a <= x) &
+          (for x' being Element of LattPOSet L
+           st for x being Element of LattPOSet L
+              st x in X' holds x' <= x holds x' <= a) by A7,A10;
+      consider b being set such that A13: p.(k+1) = b;
+        Seg (k+1) = dom p by A8,FINSEQ_1:def 3;
+      then k + 1 in dom p by FINSEQ_1:6;
+      then A14: b in rng p by A13,FUNCT_1:def 5;
+      then reconsider b as Element of LattPOSet L by A8;
+      set a2 = %a "/\" %b;
+      A15: a2 "\/" %a = %a by LATTICES:def 8;
+        a2 "\/" %b = %b by LATTICES:def 8;
+      then A16: a2 [= %a & a2 [= %b by A15,LATTICES:def 3;
+      A17: (%a)% = %a by LATTICE3:def 3
+           .= a by LATTICE3:def 4;
+A18:  (%b)% = %b by LATTICE3:def 3
+           .= b by LATTICE3:def 4;
+      A19: for x being Element of LattPOSet L
+           st x in X holds a2% <= x
+          proof
+          let c be Element of LattPOSet L;
+          assume A20: c in X;
+          per cases;
+          suppose
+          c in X';
+            then a2% <= a & a <= c by A12,A16,A17,LATTICE3:7;
+            hence thesis by ORDERS_1:26;
+          suppose A21: not c in X';
+            consider n being set such that
+            A22: n in dom p & c = p.n by A8,A20,FUNCT_1:def 5;
+            reconsider n as Nat by A22;
+            A23: n in Seg(k + 1) by A8,A22,FINSEQ_1:def 3;
+            then A24: 1 <= n & n <= k + 1 by FINSEQ_1:3;
+              n >= k + 1
+              proof
+              assume not(n >= k + 1);
+              then 1 <= n & n <= k by A23,FINSEQ_1:3,INT_1:20;
+              then A25: n in Seg(k) by FINSEQ_1:3;
+              then A26: n in dom q by A8,A9,FINSEQ_1:21;
+                  dom(p|(Seg k))
+                 = dom p /\ Seg(k) by RELAT_1:90
+                .= Seg(k+1) /\ Seg(k) by A8,FINSEQ_1:def 3
+                .= Seg(k) by A9,FINSEQ_1:9;
+              then q.n = c by A22,A25,FUNCT_1:70;
+              hence thesis by A21,A26,FUNCT_1:def 5;
+              end;
+            then c = b by A13,A22,A24,AXIOMS:21;
+            hence thesis by A16,A18,LATTICE3:7;
+          end;
+        for x' being Element of LattPOSet L
+      st for x being Element of LattPOSet L
+         st x in X holds x' <= x holds x' <= a2%
+        proof
+        let x' be Element of LattPOSet L;
+        assume A27: for x being Element of LattPOSet L
+                   st x in X holds x' <= x;
+          for x being Element of LattPOSet L
+        st x in X' holds x' <= x
+          proof
+          let x be Element of LattPOSet L;
+            rng q c= rng p by FUNCT_1:76;
+          hence thesis by A8,A27;
+          end;
+        then A28: x' <= a by A12;
+        A29: x' <= b by A8,A14,A27;
+        A30: (%a)% = %a by LATTICE3:def 3
+                 .= a by LATTICE3:def 4;
+        A31: (%b)% = %b by LATTICE3:def 3
+                 .= b by LATTICE3:def 4;
+        A32: (%(x'))% = %(x') by LATTICE3:def 3
+                    .= x' by LATTICE3:def 4;
+        then A33:      %(x') [= %a & %(x') [= %b by A28,A29,A30,A31,LATTICE3:7;
+          %(x') "/\" a2 = (%(x') "/\" %a) "/\" %b by LATTICES:def 7
+                   .= %(x') "/\" %b by A33,LATTICES:21
+                   .= %(x') by A33,LATTICES:21;
+        then %(x') [= a2 by LATTICES:21;
+        hence thesis by A32,LATTICE3:7;
+        end;
+      hence thesis by A19;
+      end;
+    hence thesis;
+    end;
+  A34: for k being Nat holds P[k] from Ind(A1,A6);
+    the carrier of L is finite by GROUP_1:def 13;
+  then reconsider X as finite Subset of L
+    by FINSET_1:13;
+    LattPOSet L = RelStr(#the carrier of L, LattRel L#) by LATTICE3:def 2;
+  then reconsider X' = X as finite Subset of LattPOSet L;
+  consider p being FinSequence such that
+  A35: rng p = X' by FINSEQ_1:73;
+    dom p = Seg len p by FINSEQ_1:def 3;
+  then consider a being Element of LattPOSet L such that
+  A36: (for x being Element of LattPOSet L
+      st x in X' holds a <= x) &
+     (for x' being Element of LattPOSet L
+      st for x being Element of LattPOSet L
+         st x in X' holds x' <= x holds x' <= a) by A34,A35;
+    for x being Element of L st x in X holds %a [= x
+    proof
+    let x be Element of L;
+    assume x in X;
+    then consider x' being Element of LattPOSet L
+    such that A37: x' = x & x' in X';
+    A38: a <= x' by A36,A37;
+    A39: (%a)% = %a by LATTICE3:def 3
+         .= a by LATTICE3:def 4;
+      x' = x% by A37,LATTICE3:def 3;
+    hence thesis by A38,A39,LATTICE3:7;
+    end;
+  then A40: %a is_less_than X by LATTICE3:def 16;
+    for b being Element of L
+  st b is_less_than X holds b [= %a
+    proof
+    let b be Element of L;
+    assume
+A41:   b is_less_than X;
+      for x being Element of LattPOSet L st x in X'
+    holds b% <= x
+      proof
+      let x be Element of LattPOSet L;
+      assume x in X';
+      then consider x' being Element of L such that
+      A42: x' = x & x' in X;
+        b [= x' by A41,A42,LATTICE3:def 16;
+      then b% <= (x')% by LATTICE3:7;
+      hence thesis by A42,LATTICE3:def 3;
+      end;
+    then A43: b% <= a by A36;
+      (%a)% = %a by LATTICE3:def 3
+         .= a by LATTICE3:def 4;
+    hence thesis by A43,LATTICE3:7;
+    end;
+  hence thesis by A40;
+  end;
+hence thesis by VECTSP_8:def 6;
+end;
+
+definition
+cluster finite -> complete Lattice;
+coherence by Lm5;
+end;
+
+definition
+let L be Lattice;
+let D be Subset of L;
+func D% -> Subset of LattPOSet L equals :Def1:
+ {d% where d is Element of L : d in D};
+coherence
+ proof
+ set M' = {d% where d is Element of L : d in D};
+   for x being set holds x in M' implies x in the carrier of LattPOSet L
+   proof
+   let x be set;
+   assume x in M';
+   then ex x' being Element of L st x = x'% & x' in D;
+   hence thesis;
+   end;
+ then M' c= the carrier of (LattPOSet L) by TARSKI:def 3;
+ hence thesis;
+ end;
+end;
+
+definition
+let L be Lattice;
+let D be Subset of LattPOSet L;
+func %D -> Subset of L equals :Def2:
+ {%d where d is Element of LattPOSet L : d in D};
+coherence
+ proof
+ set M' = {%d where d is Element of LattPOSet L : d in D};
+   for x being set holds x in M' implies x in the carrier of L
+   proof
+   let x be set;
+   assume x in M';
+   then ex x' being Element of LattPOSet L st x = %x' & x' in D;
+   hence thesis;
+   end;
+   then M' c= the carrier of L by TARSKI:def 3;
+ hence thesis;
+ end;
+end;
+
+definition let L be finite Lattice;
+cluster LattPOSet L -> well_founded;
+ coherence
+  proof set R = LattPOSet L;
+  let Y be set; assume A1: Y c= the carrier of R & Y <> {};
+     LattPOSet L = RelStr(#the carrier of L, LattRel L#) by LATTICE3:def 2;
+  then reconsider Y as Subset of L by A1;
+  consider a being Element of LattPOSet L such that
+  A2: a in Y & for b being Element of LattPOSet L
+              st b in Y & b <> a holds not(b <= a) by A1,Lm1;
+  A3: not(ex x being Element of R
+          st x <> a & [x,a] in the InternalRel of R & x in Y)
+      proof
+      given x being Element of R such that
+      A4: x <> a & [x,a] in the InternalRel of R & x in Y;
+        x <= a by A4,ORDERS_1:def 9;
+      hence thesis by A2,A4;
+      end;
+    (the InternalRel of R)-Seg(a) /\ Y = {}
+     proof
+     assume A5: (the InternalRel of R)-Seg(a) /\ Y <> {};
+     consider z being Element of (the InternalRel of R)-Seg(a) /\ Y;
+     A6: z in (the InternalRel of R)-Seg(a) & z in Y by A5,XBOOLE_0:def 3;
+     then A7: z <> a & [z,a] in (the InternalRel of R) by WELLORD1:def 1;
+       z is Element of R by A1,A6;
+     hence thesis by A3,A6,A7;
+     end;
+   then (the InternalRel of R)-Seg(a) misses Y by XBOOLE_0:def 7;
+   hence thesis by A2;
+  end;
+end;
+
+Lm6:for L being finite Lattice holds (LattPOSet L)~ is well_founded
+proof
+let L be finite Lattice;
+set R = LattPOSet L;
+A1:(LattPOSet L)~ =
+RelStr(#the carrier of R, (the InternalRel of R)~#) by LATTICE3:def 5;
+  for Y being set st Y c= the carrier of R~ & Y <> {}
+ex a being set st a in Y & (the InternalRel of R~)-Seg(a) misses Y
+  proof
+  let Y be set; assume A2: Y c= the carrier of R~ & Y <> {};
+     LattPOSet L = RelStr(#the carrier of L, LattRel L#) by LATTICE3:def 2;
+  then reconsider Y as Subset of L by A1,A2;
+  consider a being Element of R such that
+  A3: a in Y & for b being Element of LattPOSet L
+              st b in Y & b <> a holds not(a <= b) by A2,Lm2;
+  reconsider a as Element of R;
+  reconsider a' = a as Element of R~ by A1;
+  A4: for b being Element of (LattPOSet L)~
+      st b in Y & b <> a holds not(b <= a')
+      proof
+      let b be Element of (LattPOSet L)~;
+      assume A5: b in Y & b <> a;
+      reconsider b' = b as Element of R by A1;
+A6:      not(a <= b') by A3,A5;
+        a~ = a' & (b')~ = b by LATTICE3:def 6;
+      hence thesis by A6,LATTICE3:9;
+      end;
+  A7: not(ex x being Element of R~
+          st x <> a & [x,a] in the InternalRel of R~ & x in Y)
+      proof
+      given x being Element of R~ such that
+      A8: x <> a & [x,a] in the InternalRel of R~ & x in Y;
+        x <= a' by A8,ORDERS_1:def 9;
+      hence thesis by A4,A8;
+      end;
+    (the InternalRel of R~)-Seg(a) /\ Y = {}
+     proof
+     assume A9: (the InternalRel of R~)-Seg(a) /\ Y <> {};
+     consider z being Element of (the InternalRel of R~)-Seg(a) /\ Y;
+     A10: z in (the InternalRel of R~)-Seg(a) & z in Y by A9,XBOOLE_0:def 3;
+     then A11: z <> a & [z,a] in (the InternalRel of R~) by WELLORD1:def 1;
+       z is Element of R~ by A2,A10;
+     hence thesis by A7,A10,A11;
+     end;
+     then (the InternalRel of R~)-Seg(a) misses Y by XBOOLE_0:def 7;
+  hence thesis by A3;
+  end;
+then the InternalRel of R~ is_well_founded_in the carrier of R~ by WELLORD1:def
+3;
+hence thesis by WELLFND1:def 2;
+end;
+
+definition
+let L be Lattice;
+attr L is noetherian means :Def3:
+  LattPOSet L is well_founded;
+attr L is co-noetherian means :Def4:
+  (LattPOSet L)~ is well_founded;
+end;
+
+definition
+cluster noetherian upper-bounded lower-bounded complete Lattice;
+existence
+ proof
+ consider L being finite Lattice;
+ take L;
+    LattPOSet L is well_founded;
+ hence thesis by Def3;
+ end;
+end;
+
+definition
+cluster co-noetherian upper-bounded lower-bounded complete Lattice;
+existence
+ proof
+ consider L being finite Lattice;
+ take L;
+    (LattPOSet L)~ is well_founded by Lm6;
+ hence thesis by Def4;
+ end;
+end;
+
+theorem
+  for L being Lattice holds L is noetherian iff L.: is co-noetherian
+proof
+let L be Lattice;
+set R = LattPOSet L;
+set Ri = (LattPOSet L)~;
+A1: now assume L is noetherian;
+    then R is well_founded by Def3;
+   then A2: (Ri)~ is well_founded by LATTICE3:8;
+     (LattPOSet L)~ = LattPOSet (L.:) by LATTICE3:20;
+   hence L.: is co-noetherian by A2,Def4;
+   end;
+  now assume A3: L.: is co-noetherian;
+     (LattPOSet L)~ = LattPOSet (L.:) by LATTICE3:20;
+   then (Ri)~ is well_founded by A3,Def4;
+   then R is well_founded by LATTICE3:8;
+   hence L is noetherian by Def3;
+   end;
+hence thesis by A1;
+end;
+
+Lm7:for L being finite Lattice holds
+L is noetherian & L is co-noetherian
+proof
+let L be finite Lattice;
+   LattPOSet L is well_founded & (LattPOSet L)~ is well_founded by Lm6;
+hence thesis by Def3,Def4;
+end;
+
+definition
+cluster finite -> noetherian Lattice;
+coherence by Lm7;
+cluster finite -> co-noetherian Lattice;
+coherence by Lm7;
+end;
+
+definition
+let L be Lattice;
+let a,b be Element of L;
+pred a is-upper-neighbour-of b means :Def5:
+ a <> b & b [= a &
+ for c being Element of L holds
+ (b [= c & c [= a) implies (c = a or c = b);
+synonym b is-lower-neighbour-of a;
+end;
+
+theorem
+Th2:for L being Lattice
+for a being Element of L
+for b,c being Element of L st b <> c holds
+((b is-upper-neighbour-of a & c is-upper-neighbour-of a)
+ implies a = c "/\" b) &
+((b is-lower-neighbour-of a & c is-lower-neighbour-of a)
+ implies a = c "\/" b)
+proof
+let L be Lattice;
+let a be Element of L;
+let b,c be Element of L;
+assume A1: b <> c;
+A2: now assume A3: b is-upper-neighbour-of a & c is-upper-neighbour-of a;
+   then A4: a [= b & a [= c by Def5;
+     a = a "/\" a by LATTICES:18
+    .= (b "/\" a) "/\" a by A4,LATTICES:21
+    .= (b "/\" a) "/\" (c "/\" a) by A4,LATTICES:21
+    .= b "/\" (a "/\" (c "/\" a)) by LATTICES:def 7
+    .= b "/\" ((a "/\" a) "/\" c) by LATTICES:def 7
+    .= b "/\" (a "/\" c) by LATTICES:18
+    .= (b "/\" c) "/\" a by LATTICES:def 7;
+   then A5: a [= b "/\" c by LATTICES:21;
+A6: b "/\" c [= c by LATTICES:23;
+     not(b "/\" c = c)
+     proof
+     assume b "/\" c = c;
+     then c [= b by LATTICES:21;
+     then c = a or c = b by A3,A4,Def5;
+     hence contradiction by A1,A3,Def5;
+     end;
+   hence b "/\" c = a by A3,A5,A6,Def5;
+   end;
+  now assume A7: b is-lower-neighbour-of a & c is-lower-neighbour-of a;
+   then A8: b [= a & c [= a by Def5;
+     a = a "\/" a by LATTICES:17
+    .= (b "\/" a) "\/" a by A8,LATTICES:def 3
+    .= (b "\/" a) "\/" (c "\/" a) by A8,LATTICES:def 3
+    .= b "\/" (a "\/" (a "\/" c)) by LATTICES:def 5
+    .= b "\/" ((a "\/" a) "\/" c) by LATTICES:def 5
+    .= b "\/" (a "\/" c) by LATTICES:17
+    .= (b "\/" c) "\/" a by LATTICES:def 5;
+   then A9: b "\/" c [= a by LATTICES:def 3;
+A10:  c [= b "\/" c by LATTICES:22;
+     not(b "\/" c = c)
+     proof
+     assume b "\/" c = c;
+     then b [= c by LATTICES:def 3;
+     then c = a or c = b by A7,A8,Def5;
+     hence contradiction by A1,A7,Def5;
+     end;
+   hence b "\/" c = a by A7,A9,A10,Def5;
+   end;
+hence thesis by A2;
+end;
+
+theorem
+Th3:for L being noetherian Lattice
+for a being Element of L
+for d being Element of L st a [= d & a <> d holds
+ex c being Element of L
+st c [= d & c is-upper-neighbour-of a
+proof
+let L be noetherian Lattice;
+let a be Element of L;
+let d be Element of L;
+assume A1: a [= d & a <> d;
+defpred P[Element of LattPOSet L] means
+   a [= %($1) & a <> %($1) implies
+   ex c being Element of L st
+   c [= %($1) & c is-upper-neighbour-of a;
+A2: LattPOSet L is well_founded by Def3;
+A3: for x being Element of LattPOSet L
+      st for y being Element of LattPOSet L
+          st y <> x & [y,x] in the InternalRel of LattPOSet L holds P[y]
+       holds P[x]
+    proof
+    let x be Element of LattPOSet L;
+    assume A4: for y being Element of LattPOSet L st y <> x &
+               [y,x] in the InternalRel of LattPOSet L holds P[y];
+      a [= %x & a <> %x implies
+    ex c being Element of L st
+    c [= %x & c is-upper-neighbour-of a
+      proof
+      assume A5: a [= %x & a <> %x;
+      A6: (%x)% = %x by LATTICE3:def 3 .= x by LATTICE3:def 4;
+      per cases;
+      suppose %x is-upper-neighbour-of a;
+        hence thesis;
+      suppose not(%x is-upper-neighbour-of a);
+        then consider c being Element of L such that
+        A7: a [= c & c [= %x & not(c = %x or c = a) by A5,Def5;
+        A8: %(c%) = c% by LATTICE3:def 4 .= c by LATTICE3:def 3;
+          c% <= x by A6,A7,LATTICE3:7;
+        then [c%,x] in the InternalRel of LattPOSet L by ORDERS_1:def 9;
+        then consider c' being Element of L such that
+        A9: c' [= c & c' is-upper-neighbour-of a by A4,A7,A8;
+          c' [= %x by A7,A9,LATTICES:25;
+        hence thesis by A9;
+      end;
+    hence thesis;
+    end;
+A10: for x being Element of LattPOSet L holds P[x] from WFInduction(A3,A2);
+  %(d%) = d% by LATTICE3:def 4 .= d by LATTICE3:def 3;
+hence thesis by A1,A10;
+end;
+
+theorem
+Th4:for L being co-noetherian Lattice
+for a being Element of L
+for d being Element of L st d [= a & a <> d holds
+ex c being Element of L
+st d [= c & c is-lower-neighbour-of a
+proof
+let L be co-noetherian Lattice;
+let a be Element of L;
+let d be Element of L;
+assume A1: d [= a & a <> d;
+defpred P[Element of (LattPOSet L)~] means
+   %(~($1)) [= a & a <> %(~($1)) implies
+   ex c being Element of L st
+   %(~($1)) [= c & c is-lower-neighbour-of a;
+A2: (LattPOSet L)~ is well_founded by Def4;
+A3: for x being Element of (LattPOSet L)~
+      st for y being Element of (LattPOSet L)~
+          st y <> x & [y,x] in the InternalRel of (LattPOSet L)~ holds P[y]
+       holds P[x]
+    proof
+    let x be Element of (LattPOSet L)~;
+    assume A4: for y being Element of (LattPOSet L)~ st y <> x &
+               [y,x] in the InternalRel of (LattPOSet L)~ holds P[y];
+      %(~x) [= a & a <> %(~x) implies
+    ex c being Element of L st
+    %(~x) [= c & c is-lower-neighbour-of a
+      proof
+      assume A5: %(~x) [= a & a <> %(~x);
+      A6: (%(~x))% = %(~x) by LATTICE3:def 3 .= ~x by LATTICE3:def 4;
+      A7: (~x)~ = ~x by LATTICE3:def 6 .= x by LATTICE3:def 7;
+      per cases;
+      suppose %(~x) is-lower-neighbour-of a;
+        hence thesis;
+      suppose not(%(~x) is-lower-neighbour-of a);
+        then consider c being Element of L such that
+        A8: %(~x) [= c & c [= a & not(c = a or c = %(~x)) by A5,Def5;
+        A9: %(~((c%)~)) = ~((c%)~) by LATTICE3:def 4
+                        .= (c%)~ by LATTICE3:def 7
+                        .= c% by LATTICE3:def 6
+                        .= c by LATTICE3:def 3;
+          ~x <= c% by A6,A8,LATTICE3:7;
+        then (c%)~ <= x by A7,LATTICE3:9;
+        then [(c%)~,x] in the InternalRel of (LattPOSet L)~ by ORDERS_1:def 9;
+        then consider c' being Element of L such that
+        A10: %(~((c%)~)) [= c' & c' is-lower-neighbour-of a by A4,A8,A9;
+          %(~x) [= c' by A8,A9,A10,LATTICES:25;
+        hence thesis by A10;
+      end;
+    hence thesis;
+    end;
+A11: for x being Element of (LattPOSet L)~ holds P[x] from WFInduction(A3,A2);
+  %(~((d%)~)) = ~((d%)~) by LATTICE3:def 4 .= (d%)~ by LATTICE3:def 7
+           .= d% by LATTICE3:def 6 .= d by LATTICE3:def 3;
+hence thesis by A1,A11;
+end;
+
+theorem
+Th5:for L being upper-bounded Lattice holds
+not(ex b being Element of L st b is-upper-neighbour-of Top L)
+proof
+  let L be upper-bounded Lattice;
+  given b being Element of L such that
+  A1: b is-upper-neighbour-of Top L;
+  A2: Top L [= b & Top L <> b by A1,Def5;
+    b [= Top L by LATTICES:45;
+  hence thesis by A2,LATTICES:26;
+end;
+
+theorem
+Th6:for L being noetherian upper-bounded Lattice
+for a being Element of L holds
+a = Top L iff
+not(ex b being Element of L st b is-upper-neighbour-of a)
+proof
+let L be noetherian upper-bounded Lattice;
+let a be Element of L;
+  now assume A1:
+not(ex b being Element of L st b is-upper-neighbour-of a);
+  for b being Element of L holds a "\/" b = a & b "\/" a = a
+  proof
+  let b be Element of L;
+    consider c being Element of L such that
+    A2: c = a "\/" b;
+    A3: a [= c & b [= c by A2,LATTICES:22;
+    per cases;
+    suppose a <> c;
+      then ex d being Element of L st
+           d [= c & d is-upper-neighbour-of a by A3,Th3;
+      hence thesis by A1;
+    suppose a = c;
+      hence thesis by A2;
+  end;
+hence a = Top L by LATTICES:def 17;
+end;
+hence thesis by Th5;
+end;
+
+theorem
+Th7:for L being lower-bounded Lattice holds
+not(ex b being Element of L st b is-lower-neighbour-of Bottom L)
+proof
+  let L be lower-bounded Lattice;
+  given b being Element of L such that
+  A1: b is-lower-neighbour-of Bottom L;
+  A2: b [= Bottom L & b <> Bottom L by A1,Def5;
+    Bottom L [= b by LATTICES:41;
+  hence thesis by A2,LATTICES:26;
+  end;
+
+theorem
+Th8:for L being co-noetherian lower-bounded Lattice
+for a being Element of L holds
+a = Bottom L iff
+not(ex b being Element of L st b is-lower-neighbour-of a)
+proof
+let L be co-noetherian lower-bounded Lattice;
+let a be Element of L;
+  now assume A1:
+not(ex b being Element of L st b is-lower-neighbour-of a);
+  for b being Element of L holds a "/\" b = a & b "/\" a = a
+  proof
+  let b be Element of L;
+    consider c being Element of L such that
+    A2: c = a "/\" b;
+    A3: c [= a & c [= b by A2,LATTICES:23;
+    per cases;
+    suppose a <> c;
+      then ex d being Element of L st
+           c [= d & d is-lower-neighbour-of a by A3,Th4;
+      hence thesis by A1;
+    suppose a = c;
+      hence thesis by A2;
+  end;
+hence a = Bottom L by LATTICES:def 16;
+end;
+hence thesis by Th7;
+end;
+
+definition
+let L be complete Lattice;
+let a be Element of L;
+func a*' -> Element of L equals :Def6:
+  "/\"({d where d is Element of L : a [= d & d <> a},L);
+correctness;
+func *'a -> Element of L equals :Def7:
+  "\/"({d where d is Element of L : d [= a & d <> a},L);
+correctness;
+end;
+
+definition
+let L be complete Lattice;
+let a be Element of L;
+attr a is completely-meet-irreducible means :Def8:
+  a*' <> a;
+attr a is completely-join-irreducible means :Def9:
+  *'a <> a;
+end;
+
+theorem
+Th9:for L being complete Lattice
+for a being Element of L holds a [= a*' & *'a [= a
+proof
+let L be complete Lattice;
+let a be Element of L;
+set X = {d where d is Element of L : a [= d & d <> a};
+A1: a is_less_than X
+    proof
+      for q being Element of L st q in X holds a [= q
+      proof
+      let q be Element of L;
+      assume q in X;
+      then ex q' being Element of L st
+       q' = q & a [= q' & q' <> a;
+      hence thesis;
+      end;
+    hence thesis by LATTICE3:def 16;
+    end;
+A2: a*' = "/\"(X,L) by Def6;
+set X = {d where d is Element of L : d [= a & d <> a};
+A3: X is_less_than a
+    proof
+      for q being Element of L st q in X holds q [= a
+      proof
+      let q be Element of L;
+      assume q in X;
+      then ex q' being Element of L st
+       q' = q & q' [= a & q' <> a;
+      hence thesis;
+      end;
+    hence thesis by LATTICE3:def 17;
+    end;
+  *'a = "\/"(X,L) by Def7;
+hence thesis by A1,A2,A3,LATTICE3:34,def 21;
+end;
+
+theorem
+  for L being complete Lattice holds
+ Top L*' = Top L & (Top L)% is meet-irreducible
+proof
+let L be complete Lattice;
+set X = {d where d is Element of L : Top L [= d & d <> Top L};
+A1: X = {}
+    proof
+    assume X <> {};
+    then reconsider X as non empty set;
+    consider x being Element of X;
+      x in X;
+    then consider x' being Element of L such that
+    A2: x' = x & Top L [= x' & x' <> Top L;
+      x' [= Top L by LATTICES:45;
+    hence thesis by A2,LATTICES:26;
+    end;
+A3: Top L is_less_than {}
+    proof
+      for q being Element of L st q in {} holds Top L [= q;
+    hence thesis by LATTICE3:def 16;
+    end;
+A4: for b being Element of L st b is_less_than {} holds b [=
+Top L
+  by LATTICES:45;
+then A5: "/\"({},L) = Top L by A3,LATTICE3:34;
+     (Top L)% = Top (LattPOSet L)
+    proof
+       Top (LattPOSet L) = "/\"({},LattPOSet L) by YELLOW_0:def 12
+                      .= "/\"({},L) by YELLOW_0:29
+                      .= Top L by A3,A4,LATTICE3:34;
+    hence thesis by LATTICE3:def 3;
+    end;
+hence thesis by A1,A5,Def6,WAYBEL_6:10;
+end;
+
+theorem
+  for L being complete Lattice holds
+*'Bottom L = Bottom L & (Bottom L)% is join-irreducible
+proof
+let L be complete Lattice;
+set X = {d where d is Element of L : d [= Bottom L & d <>
+Bottom L};
+A1: X = {}
+    proof
+    assume X <> {};
+    then reconsider X as non empty set;
+    consider x being Element of X;
+      x in X;
+    then consider x' being Element of L such that
+    A2: x' = x & x' [= Bottom L & x' <> Bottom L;
+      Bottom L [= x' by LATTICES:41;
+    hence thesis by A2,LATTICES:26;
+    end;
+A3: Bottom L is_great_than {}
+    proof
+      for q being Element of L st q in {} holds q [= Bottom L;
+    hence thesis by LATTICE3:def 17;
+    end;
+A4: for b being Element of L st b is_great_than {} holds Bottom
+L [= b
+  by LATTICES:41;
+then A5:  "\/"({},L) = Bottom L by A3,LATTICE3:def 21;
+A6: (Bottom L)% = Bottom (LattPOSet L)
+    proof
+       Bottom (LattPOSet L) = "\/"({},LattPOSet L) by YELLOW_0:def 11
+                      .= "\/"({},L) by YELLOW_0:29
+                      .= Bottom L by A3,A4,LATTICE3:def 21;
+    hence thesis by LATTICE3:def 3;
+    end;
+  Bottom (LattPOSet L) is join-irreducible
+    proof
+      for x,y being Element of LattPOSet L st Bottom (LattPOSet L) = x "\/" y
+    holds x = Bottom (LattPOSet L) or y = Bottom (LattPOSet L)
+      proof
+      let x,y be Element of LattPOSet L;
+      assume Bottom (LattPOSet L) = x "\/" y;
+      then A7: Bottom (LattPOSet L) >= x & Bottom
+(LattPOSet L) >= y by YELLOW_0:22;
+      reconsider L' = LattPOSet L
+          as lower-bounded antisymmetric non empty RelStr;
+      reconsider x' = x as Element of L';
+      reconsider y' = y as Element of L';
+        x' >= Bottom (L') or y' >= Bottom (L') by YELLOW_0:44;
+      hence x = Bottom (LattPOSet L) or y = Bottom
+(LattPOSet L) by A7,ORDERS_1:25;
+      end;
+    hence thesis by WAYBEL_6:def 3;
+    end;
+hence thesis by A1,A5,A6,Def7;
+end;
+
+theorem
+Th12:for L being complete Lattice
+for a being Element of L st a is completely-meet-irreducible
+holds a*' is-upper-neighbour-of a &
+      for c being Element of L
+      holds c is-upper-neighbour-of a implies c = a*'
+proof
+let L be complete Lattice;
+let a be Element of L;
+assume a is completely-meet-irreducible;
+then A1: a*' <> a by Def8;
+set X = { x where x is Element of L : a [= x & x <> a};
+A2: a*' = "/\"(X,L) by Def6;
+A3: a [= a*' by Th9;
+  for c being Element of L st a [= c & c [= a*'
+ holds c = a or c = a*'
+  proof
+  let c be Element of L;
+  assume A4: a [= c & c [= a*';
+  assume c <> a;
+  then c in X by A4;
+  then a*' [= c by A2,LATTICE3:38;
+  hence thesis by A4,LATTICES:26;
+  end;
+then A5: for c being Element of L holds
+     (a [= c & c [= a*') implies (c = a*' or c = a);
+  for c being Element of L
+holds c is-upper-neighbour-of a implies c = a*'
+  proof
+  let c be Element of L;
+  assume
+A6: c is-upper-neighbour-of a;
+  then a <> c & a [= c &
+       for d being Element of L holds
+       (a [= d & d [= c) implies (d = c or d = a) by Def5;
+  then c in X;
+  then a [= a*' & a*' [= c by A2,Th9,LATTICE3:38;
+  hence thesis by A1,A6,Def5;
+  end;
+hence thesis by A1,A3,A5,Def5;
+end;
+
+theorem
+Th13:for L being complete Lattice
+for a being Element of L st a is completely-join-irreducible
+holds *'a is-lower-neighbour-of a &
+      for c being Element of L
+      holds c is-lower-neighbour-of a implies c = *'a
+proof
+let L be complete Lattice;
+let a be Element of L;
+assume a is completely-join-irreducible;
+then A1: *'a <> a by Def9;
+set X = { x where x is Element of L : x [= a & x <> a};
+A2: *'a = "\/"(X,L) by Def7;
+A3: *'a [= a by Th9;
+A4: for c being Element of L st *'a [= c & c [= a
+ holds c = a or c = *'a
+  proof
+  let c be Element of L;
+  assume A5: *'a [= c & c [= a;
+  assume c <> a;
+  then c in X by A5;
+  then c [= *'a by A2,LATTICE3:38;
+  hence thesis by A5,LATTICES:26;
+  end;
+  for c being Element of L
+holds c is-lower-neighbour-of a implies c = *'a
+  proof
+  let c be Element of L;
+  assume
+A6: c is-lower-neighbour-of a;
+  then a <> c & c [= a &
+       for d being Element of L holds
+       (c [= d & d [= a) implies (d = c or d = a) by Def5;
+  then c in X;
+  then *'a [= a & c [= *'a by A2,Th9,LATTICE3:38;
+  hence thesis by A1,A6,Def5;
+  end;
+hence thesis by A1,A3,A4,Def5;
+end;
+
+theorem
+Th14:for L being noetherian complete Lattice
+for a being Element of L holds
+a is completely-meet-irreducible iff
+ex b being Element of L
+st b is-upper-neighbour-of a &
+   for c being Element of L holds
+   c is-upper-neighbour-of a implies c = b
+proof
+let L be noetherian complete Lattice;
+let a be Element of L;
+set X = { x where x is Element of L : a [= x & x <> a};
+ hereby assume a is completely-meet-irreducible;
+   then a*' is-upper-neighbour-of a &
+        for c being Element of L
+        holds c is-upper-neighbour-of a implies c = a*' by Th12;
+   hence ex b being Element of L
+         st b is-upper-neighbour-of a &
+         for c being Element of L holds
+         c is-upper-neighbour-of a implies c = b;
+ end;
+ given b being Element of L such that
+    A1: b is-upper-neighbour-of a &
+        for c being Element of L holds
+        c is-upper-neighbour-of a implies c = b;
+    A2: a [= b & a <> b by A1,Def5;
+    then A3: b in X;
+      for q being Element of L st q in X holds b [= q
+      proof
+      let q be Element of L;
+      assume q in X;
+      then ex q' being Element of L st
+       q' = q & a [= q' & q' <> a;
+      then ex c being Element of L st
+       c [= q & c is-upper-neighbour-of a by Th3;
+      hence thesis by A1;
+      end;
+    then b is_less_than X by LATTICE3:def 16;
+    then b = "/\"(X,L) by A3,LATTICE3:42;
+    hence a <> a*' by A2,Def6;
+end;
+
+theorem
+Th15:for L being co-noetherian complete Lattice
+for a being Element of L holds
+a is completely-join-irreducible iff
+ex b being Element of L
+st b is-lower-neighbour-of a &
+   for c being Element of L holds
+   c is-lower-neighbour-of a implies c = b
+proof
+let L be co-noetherian complete Lattice;
+let a be Element of L;
+set X = { x where x is Element of L : x [= a & x <> a};
+A1: now assume a is completely-join-irreducible;
+   then *'a is-lower-neighbour-of a &
+        for c being Element of L
+        holds c is-lower-neighbour-of a implies c = *'a by Th13;
+   hence ex b being Element of L
+         st b is-lower-neighbour-of a &
+         for c being Element of L holds
+         c is-lower-neighbour-of a implies c = b;
+   end;
+  now
+    given b being Element of L such that
+    A2: b is-lower-neighbour-of a &
+        for c being Element of L holds
+        c is-lower-neighbour-of a implies c = b;
+    A3: b [= a & a <> b by A2,Def5;
+    then A4: b in X;
+      for q being Element of L st q in X holds q [= b
+      proof
+      let q be Element of L;
+      assume q in X;
+      then ex q' being Element of L st
+       q' = q & q' [= a & q' <> a;
+      then ex c being Element of L st
+       q [= c & c is-lower-neighbour-of a by Th4;
+      hence thesis by A2;
+      end;
+    then b is_great_than X by LATTICE3:def 17;
+    then b = "\/"(X,L) by A4,LATTICE3:41;
+    then a <> *'a by A3,Def7;
+    hence a is completely-join-irreducible by Def9;
+    end;
+hence thesis by A1;
+end;
+
+theorem
+Th16:for L being complete Lattice
+for a being Element of L holds
+a is completely-meet-irreducible implies a% is meet-irreducible
+proof
+let L be complete Lattice;
+let a be Element of L;
+set X = {d where d is Element of L : a [= d & d <> a};
+assume a is completely-meet-irreducible;
+then A1: a <> a*' by Def8;
+  for x,y being Element of LattPOSet L st a% = x "/\" y
+holds x = a% or y = a%
+    proof
+    let x,y be Element of LattPOSet L;
+    assume A2: a% = x "/\" y;
+    then A3: a% <= x & a% <= y &
+        for d being Element of LattPOSet L st d <= x & d <= y holds a% >= d
+        by YELLOW_0:23;
+    A4: a = a% by LATTICE3:def 3 .= %(a%) by LATTICE3:def 4;
+    A5: y = %y by LATTICE3:def 4 .= (%y)% by LATTICE3:def 3;
+    A6: x = %x by LATTICE3:def 4 .= (%x)% by LATTICE3:def 3;
+    then A7: a [= %x & a [= %y by A3,A5,LATTICE3:7;
+    A8: x = %x & y = %y & %(a%) = a% by LATTICE3:def 4;
+    A9: a [= a*' by Th9;
+    assume x <> a% & y <> a%;
+    then A10: %x in X & %y in X by A4,A7,A8;
+      a*' = "/\"(X,L) by Def6;
+    then a*' is_less_than X &
+    for b being Element of L st b is_less_than X holds b [= a*'
+       by LATTICE3:34;
+    then a*' [= %x & a*' [= %y by A10,LATTICE3:def 16;
+    then (a*')% <= (%x)% & (a*')% <= (%y)% by LATTICE3:7;
+    then A11: (a*')% <= a% by A2,A5,A6,YELLOW_0:23;
+A12: a% <= (a*')% by A9,LATTICE3:7;
+      a = a% & a*' = (a*')% by LATTICE3:def 3;
+    hence contradiction by A1,A11,A12,ORDERS_1:25;
+    end;
+hence thesis by WAYBEL_6:def 2;
+end;
+
+Lm8:for L being Lattice
+for a,b being Element of L holds
+a "/\" b = a% "/\" b% & a "\/" b = a% "\/" b%
+proof
+let L be Lattice;
+let a,b be Element of L;
+consider c being Element of L such that
+A1: c = a "/\" b;
+  c [= a & c [= b by A1,LATTICES:23;
+then A2: c% <= a% & c% <= b% by LATTICE3:7;
+  for d being Element of LattPOSet L st d <= a% & d <= b% holds c% >= d
+  proof
+  let d be Element of LattPOSet L;
+  assume A3: d <= a% & d <= b%;
+  A4: (%d)% = %d by LATTICE3:def 3 .= d by LATTICE3:def 4;
+  then A5: %d [= a & %d [= b by A3,LATTICE3:7;
+    %d "/\" c = (%d "/\" a) "/\" b by A1,LATTICES:def 7
+         .= %d "/\" b by A5,LATTICES:21
+         .= %d by A5,LATTICES:21;
+  then %d [= c by LATTICES:21;
+  hence thesis by A4,LATTICE3:7;
+  end;
+then A6: c% = a% "/\" b% by A2,YELLOW_0:23;
+consider c being Element of L such that
+A7: c = a "\/" b;
+  a [= c & b [= c by A7,LATTICES:22;
+then A8: a% <= c% & b% <= c% by LATTICE3:7;
+  for d being Element of LattPOSet L st a% <= d & b% <= d holds d >= c%
+  proof
+  let d be Element of LattPOSet L;
+  assume A9: a% <= d & b% <= d;
+  A10: (%d)% = %d by LATTICE3:def 3 .= d by LATTICE3:def 4;
+  then A11: a [= %d & b [= %d by A9,LATTICE3:7;
+    %d "\/" c = (%d "\/" a) "\/" b by A7,LATTICES:def 5
+         .= %d "\/" b by A11,LATTICES:def 3
+         .= %d by A11,LATTICES:def 3;
+  then c [= %d by LATTICES:def 3;
+  hence thesis by A10,LATTICE3:7;
+  end;
+then c% = a% "\/" b% by A8,YELLOW_0:22;
+hence thesis by A1,A6,A7,LATTICE3:def 3;
+end;
+
+theorem
+Th17:for L being complete noetherian Lattice
+for a being Element of L st a <> Top L holds
+a is completely-meet-irreducible iff a% is meet-irreducible
+proof
+let L be complete noetherian Lattice;
+let a be Element of L;
+assume a <> Top L;
+then consider b being Element of L such that
+     A1: b is-upper-neighbour-of a by Th6;
+A2: b <> a & a [= b &
+    for c being Element of L holds
+    (a [= c & c [= b) implies (c = b or c = a) by A1,Def5;
+  now assume
+A3: a% is meet-irreducible;
+      for d being Element of L holds
+    d is-upper-neighbour-of a implies d = b
+      proof
+      let d be Element of L;
+      assume A4: d is-upper-neighbour-of a;
+      then A5: d <> a & a [= d &
+               for c being Element of L holds
+               (a [= c & c [= d) implies (c = d or c = a) by Def5;
+      assume d <> b;
+      then A6: a = d "/\" b by A1,A4,Th2;
+      A7: a% = a & d% = d & b% = b by LATTICE3:def 3;
+      then a% = d% "/\" b% by A6,Lm8;
+      hence thesis by A2,A3,A5,A7,WAYBEL_6:def 2;
+      end;
+    hence a is completely-meet-irreducible by A1,Th14;
+    end;
+hence thesis by Th16;
+end;
+
+theorem
+Th18:for L being complete Lattice
+for a being Element of L holds
+a is completely-join-irreducible implies a% is join-irreducible
+proof
+let L be complete Lattice;
+let a be Element of L;
+set X = {d where d is Element of L : d [= a & d <> a};
+assume a is completely-join-irreducible;
+then A1: a <> *'a by Def9;
+  for x,y being Element of LattPOSet L st a% = x "\/" y
+holds x = a% or y = a%
+    proof
+    let x,y be Element of LattPOSet L;
+    assume A2: a% = x "\/" y;
+    then A3: x <= a% & y <= a% &
+        for d being Element of LattPOSet L st d >= x & d >= y holds a% <= d
+        by YELLOW_0:22;
+    A4: a = a% by LATTICE3:def 3 .= %(a%) by LATTICE3:def 4;
+    A5: y = %y by LATTICE3:def 4 .= (%y)% by LATTICE3:def 3;
+    A6: x = %x by LATTICE3:def 4 .= (%x)% by LATTICE3:def 3;
+    then A7: %x [= a & %y [= a by A3,A5,LATTICE3:7;
+    A8: x = %x & y = %y & %(a%) = a% by LATTICE3:def 4;
+    A9: *'a [= a by Th9;
+    assume x <> a% & y <> a%;
+    then A10: %x in X & %y in X by A4,A7,A8;
+      *'a = "\/"(X,L) by Def7;
+    then X is_less_than *'a &
+    for b being Element of L st X is_less_than b holds *'a [= b
+       by LATTICE3:def 21;
+    then %x [= *'a & %y [= *'a by A10,LATTICE3:def 17;
+    then (*'a)% >= x & (*'a)% >= y by A5,A6,LATTICE3:7;
+    then A11: (*'a)% >= a% by A2,YELLOW_0:22;
+A12:  a% >= (*'a)% by A9,LATTICE3:7;
+      a = a% & *'a = (*'a)% by LATTICE3:def 3;
+    hence contradiction by A1,A11,A12,ORDERS_1:25;
+    end;
+hence thesis by WAYBEL_6:def 3;
+end;
+
+theorem
+Th19:for L being complete co-noetherian Lattice
+for a being Element of L st a <> Bottom L holds
+a is completely-join-irreducible iff a% is join-irreducible
+proof
+let L be complete co-noetherian Lattice;
+let a be Element of L;
+assume a <> Bottom L;
+then consider b being Element of L such that
+     A1: b is-lower-neighbour-of a by Th8;
+A2: a <> b & b [= a &
+    for c being Element of L holds
+    (b [= c & c [= a) implies (c = a or c = b) by A1,Def5;
+  now assume
+A3: a% is join-irreducible;
+      for d being Element of L holds
+    d is-lower-neighbour-of a implies d = b
+      proof
+      let d be Element of L;
+      assume A4: d is-lower-neighbour-of a;
+      then A5: a <> d & d [= a &
+               for c being Element of L holds
+               (d [= c & c [= a) implies (c = a or c = d) by Def5;
+      assume d <> b;
+      then A6: a = d "\/" b by A1,A4,Th2;
+      A7: a% = a & d% = d & b% = b by LATTICE3:def 3;
+      then a% = d% "\/" b% by A6,Lm8;
+      hence thesis by A2,A3,A5,A7,WAYBEL_6:def 3;
+      end;
+    hence a is completely-join-irreducible by A1,Th15;
+    end;
+hence thesis by Th18;
+end;
+
+theorem
+  for L being finite Lattice
+for a being Element of L st a <> Bottom L & a <> Top L holds
+(a is completely-meet-irreducible iff a% is meet-irreducible) &
+(a is completely-join-irreducible iff a% is join-irreducible) by Th17,Th19;
+
+definition
+let L be Lattice;
+let a be Element of L;
+attr a is atomic means :Def10:
+  a is-upper-neighbour-of Bottom L;
+attr a is co-atomic means :Def11:
+  a is-lower-neighbour-of Top L;
+end;
+
+theorem
+  for L being complete Lattice
+for a being Element of L st a is atomic holds
+a is completely-join-irreducible
+proof
+let L be complete Lattice;
+let a be Element of L;
+assume a is atomic;
+then A1: a is-upper-neighbour-of Bottom L by Def10;
+then A2: a <> Bottom L & Bottom L [= a &
+         for c being Element of L holds
+         (Bottom L [= c & c [= a) implies (c = a or c = Bottom L) by Def5;
+set X = { x where x is Element of L : x [= a & x <> a};
+A3: for x being set holds x in X implies x in {Bottom L}
+    proof
+    let x be set;
+    assume x in X;
+    then A4:  ex x' being Element of L st x' = x & x' [= a & x'
+<> a;
+    then reconsider x as Element of L;
+      Bottom L [= x by LATTICES:41;
+    then x = Bottom L by A1,A4,Def5;
+    hence thesis by TARSKI:def 1;
+    end;
+A5: for x being set holds x in {Bottom L} implies x in X
+  proof
+  let x be set; assume x in {Bottom L};
+   then x = Bottom L by TARSKI:def 1;
+  hence thesis by A2;
+  end;
+  Bottom L = "\/"({Bottom L},L) by LATTICE3:43
+  .= "\/"(X,L) by A3,A5,TARSKI:2
+  .= *'a by Def7;
+hence thesis by A2,Def9;
+end;
+
+theorem
+  for L being complete Lattice
+for a being Element of L st a is co-atomic holds
+a is completely-meet-irreducible
+proof
+let L be complete Lattice;
+let a be Element of L;
+assume a is co-atomic;
+then A1: a is-lower-neighbour-of Top L by Def11;
+then A2: a <> Top L & a [= Top L &
+         for c being Element of L holds
+         (a [= c & c [= Top L) implies (c = Top L or c = a) by Def5;
+set X = { x where x is Element of L : a [= x & x <> a};
+A3: for x being set holds x in X implies x in {Top L}
+    proof
+    let x be set;
+    assume x in X;
+    then A4:  ex x' being Element of L st x' = x & a [= x' & x'
+<> a;
+    then reconsider x as Element of L;
+      x [= Top L by LATTICES:45;
+    then x = Top L by A1,A4,Def5;
+    hence thesis by TARSKI:def 1;
+    end;
+A5: for x being set holds x in {Top L} implies x in X
+  proof
+  let x be set; assume x in {Top L};
+   then x = Top L by TARSKI:def 1;
+  hence thesis by A2;
+  end;
+  Top L = "/\"({Top L},L) by LATTICE3:43
+  .= "/\"(X,L) by A3,A5,TARSKI:2
+  .= a*' by Def6;
+hence thesis by A2,Def8;
+end;
+
+definition
+let L be Lattice;
+attr L is atomic means :Def12:
+ for a being Element of L holds
+ ex X being Subset of L st
+ (for x being Element of L st x in X holds x is atomic) &
+ a = "\/"(X,L);
+end;
+
+definition
+  cluster strict non empty trivial Lattice;
+  existence
+  proof
+ consider x being set;
+ set X = {x};
+ consider XJ,XM being BinOp of X;
+ reconsider L = LattStr(#X,XJ,XM#) as non empty LattStr by STRUCT_0:def 1;
+ A1: the carrier of L is trivial by REALSET1:def 12;
+then A2: L is trivial by REALSET1:def 13;
+   L is Lattice-like
+   proof
+   A3: for a,b being Element of L holds a"\/"b = b"\/"a
+     by A2,REALSET1:def 20;
+   A4: for a,b,c being Element of L
+             holds a"\/"(b"\/"c) = (a"\/"b)"\/"c by A2,REALSET1:def 20;
+   A5: for a,b being Element of L holds (a"/\"b)"\/"b = b
+             by A2,REALSET1:def 20;
+   A6: for a,b being Element of L holds a"/\"b = b"/\"a
+             by A2,REALSET1:def 20;
+   A7: for a,b,c being Element of L
+                                   holds a"/\"(b"/\"c) = (a"/\"b)"/\"c
+             by A2,REALSET1:def 20;
+     for a,b being Element of L holds a"/\"(a"\/"b)=a
+             by A2,REALSET1:def 20;
+   then L is join-commutative join-associative meet-absorbing
+        meet-commutative meet-associative join-absorbing
+   by A3,A4,A5,A6,A7,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+   hence thesis by LATTICES:def 10;
+   end;
+   then reconsider L as Lattice;
+   take L;
+   thus thesis by A1,REALSET1:def 13;
+  end;
+end;
+
+Lm9:ex L being Lattice st L is atomic & L is complete
+proof
+ consider L being strict non empty trivial Lattice;
+   the carrier of L is trivial non empty by REALSET1:def 13;
+ then consider x being set such that
+A1:  the carrier of L = {x} by REALSET1:def 12;
+ reconsider x as Element of L by A1,TARSKI:def 1;
+   for Y being set ex p being Element of L st Y is_less_than p &
+ for r being Element of L st Y is_less_than r holds p [= r
+    proof
+    let Y be set;
+      for q being Element of L st q in Y holds q [= x
+      by A1,TARSKI:def 1;
+    then A2: Y is_less_than x by LATTICE3:def 17;
+      for r being Element of L st Y is_less_than r holds x [= r
+      by A1,TARSKI:def 1;
+    hence thesis by A2;
+    end;
+ then reconsider L as complete Lattice by LATTICE3:def 18;
+   for a being Element of L holds
+ ex X being Subset of L st
+ (for u being Element of L st u in X holds u is atomic) &
+ a = "\/"(X,L)
+ proof
+   let a be Element of L;
+   A3: a = x by A1,TARSKI:def 1;
+   A4: x = "\/"({},L) by A1,TARSKI:def 1;
+   A5: for u being Element of L st u in {} holds u is atomic;
+     for u being set holds u in {} implies u in the carrier of L;
+   then {} is Subset of L by TARSKI:def 3;
+   hence thesis by A3,A4,A5;
+   end;
+ then L is atomic by Def12;
+ hence thesis;
+end;
+
+definition
+cluster atomic complete Lattice;
+existence by Lm9;
+end;
+
+definition
+let L be complete Lattice;
+let D be Subset of L;
+attr D is supremum-dense means :Def13:
+ for a being Element of L holds
+ ex D' being Subset of D st a = "\/"(D',L);
+attr D is infimum-dense means :Def14:
+ for a being Element of L holds
+ ex D' being Subset of D st a = "/\"(D',L);
+end;
+
+theorem
+Th23:for L being complete Lattice
+for D being Subset of L holds
+D is supremum-dense iff
+for a being Element of L holds
+a = "\/"({d where d is Element of L: d in D & d [= a},L)
+proof
+let L be complete Lattice;
+let D be Subset of L;
+A1: now assume
+ A2: D is supremum-dense;
+   thus for a being Element of L holds
+      a = "\/"({d where d is Element of L: d in D & d [= a},L)
+     proof
+     let a be Element of L;
+     set X = {d where d is Element of L: d in D & d [= a};
+     consider D' being Subset of D such that A3: a = "\/"(D',L) by A2,Def13;
+       for x being set holds x in D' implies x in X
+       proof
+       let x be set; assume A4: x in D';
+       then x in D;
+       then reconsider x as Element of L;
+         D' is_less_than a by A3,LATTICE3:def 21;
+       then x [= a by A4,LATTICE3:def 17;
+       hence thesis by A4;
+       end;
+     then D' c= X by TARSKI:def 3;
+     then A5: a [= "\/"(X,L) by A3,LATTICE3:46;
+       for q being Element of L st q in X holds q [= a
+       proof
+       let q be Element of L;
+       assume q in X;
+       then ex q' being Element of L st
+        q' = q & q' in D & q' [= a;
+       hence thesis;
+       end;
+     then X is_less_than a by LATTICE3:def 17;
+     then "\/"(X,L) [= a by LATTICE3:def 21;
+     hence thesis by A5,LATTICES:26;
+     end;
+   end;
+  now assume A6:
+    for a being Element of L holds
+    a = "\/"({d where d is Element of L: d in D & d [= a},L);
+      for a being Element of L holds
+    ex D' being Subset of D st a = "\/"(D',L)
+       proof
+       let a be Element of L;
+       set X = {d where d is Element of L: d in D & d [= a};
+         for x being set holds x in X implies x in D
+         proof
+         let x be set; assume x in X;
+         then ex x' being Element of L st x' = x & x' in D & x'
+[= a;
+         hence thesis;
+         end;
+       then A7: X is Subset of D by TARSKI:def 3;
+         a = "\/"(X,L) by A6;
+       hence thesis by A7;
+       end;
+    hence D is supremum-dense by Def13;
+    end;
+hence thesis by A1;
+end;
+
+theorem
+Th24:for L being complete Lattice
+for D being Subset of L holds
+D is infimum-dense iff
+for a being Element of L holds
+a = "/\"({d where d is Element of L : d in D & a [= d},L)
+proof
+let L be complete Lattice;
+let D be Subset of L;
+A1: now assume
+A2: D is infimum-dense;
+   thus for a being Element of L holds
+      a = "/\"({d where d is Element of L: d in D & a [= d},L)
+     proof
+     let a be Element of L;
+     set X = {d where d is Element of L: d in D & a [= d};
+     consider D' being Subset of D such that A3: a = "/\"(D',L) by A2,Def14;
+       for x being set holds x in D' implies x in X
+       proof
+       let x be set; assume A4: x in D';
+       then x in D;
+       then reconsider x as Element of L;
+         a is_less_than D' by A3,LATTICE3:34;
+       then a [= x by A4,LATTICE3:def 16;
+       hence thesis by A4;
+       end;
+     then D' c= X by TARSKI:def 3;
+     then A5: "/\"(X,L) [= a by A3,LATTICE3:46;
+       for q being Element of L st q in X holds a [= q
+       proof
+       let q be Element of L;
+       assume q in X;
+       then ex q' being Element of L st
+        q' = q & q' in D & a [= q';
+       hence thesis;
+       end;
+     then a is_less_than X by LATTICE3:def 16;
+     then a [= "/\"(X,L) by LATTICE3:40;
+     hence thesis by A5,LATTICES:26;
+     end;
+   end;
+  now assume A6:
+    for a being Element of L holds
+    a = "/\"({d where d is Element of L: d in D & a [= d},L);
+      for a being Element of L holds
+    ex D' being Subset of D st a = "/\"(D',L)
+       proof
+       let a be Element of L;
+       set X = {d where d is Element of L: d in D & a [= d};
+         for x being set holds x in X implies x in D
+         proof
+         let x be set; assume x in X;
+         then ex x' being Element of L st x' = x & x' in D & a
+[= x';
+         hence thesis;
+         end;
+       then A7: X is Subset of D by TARSKI:def 3;
+         a = "/\"(X,L) by A6;
+       hence thesis by A7;
+       end;
+    hence D is infimum-dense by Def14;
+    end;
+hence thesis by A1;
+end;
+
+theorem
+  for L being complete Lattice
+for D being Subset of L holds
+D is infimum-dense iff D% is order-generating
+proof
+let L be complete Lattice;
+let D be Subset of L;
+A1: now assume
+A2: D is infimum-dense;
+     for a being Element of LattPOSet L
+   ex Y being Subset of D% st a = "/\"(Y,LattPOSet L)
+     proof
+     let a be Element of LattPOSet L;
+     consider D' being Subset of D such that
+     A3: %a = "/\"(D',L) by A2,Def14;
+     A4: %a is_less_than D' & for b being Element of L
+          st b is_less_than D' holds b [= %a by A3,LATTICE3:34;
+       for x being set holds x in D' implies x in the carrier of L
+       proof
+       let x be set; assume x in D';
+       then x in D; hence thesis;
+       end;
+     then reconsider D' as Subset of L by TARSKI:def 3;
+       for u being Element of LattPOSet L st u in (D')% holds a <= u
+        proof
+        let u be Element of LattPOSet L;
+        assume u in (D')%;
+        then u in {d% where d is Element of L : d in D'} by Def1
+;
+        then consider u' being Element of L such that
+        A5: u = (u')% & u' in D';
+        A6: %a [= u' by A4,A5,LATTICE3:def 16;
+          (%a)% = %a by LATTICE3:def 3 .= a by LATTICE3:def 4;
+        hence thesis by A5,A6,LATTICE3:7;
+        end;
+     then A7: (D')% is_>=_than a by LATTICE3:def 8;
+       for b being Element of LattPOSet L st (D')% is_>=_than b holds b <= a
+       proof
+       let b be Element of LattPOSet L;
+       assume
+A8:     (D')% is_>=_than b;
+       A9: b = %b by LATTICE3:def 4 .= (%b)% by LATTICE3:def 3;
+       A10: a = %a by LATTICE3:def 4 .= (%a)% by LATTICE3:def 3;
+         for u being Element of L st u in D' holds %b [= u
+          proof
+          let u be Element of L; assume u in D';
+          then u% in {d% where d is Element of L : d in D'};
+          then u% in (D')% by Def1;
+          then b <= u% by A8,LATTICE3:def 8;
+          hence thesis by A9,LATTICE3:7;
+          end;
+       then %b is_less_than D' by LATTICE3:def 16;
+       then %b [= %a by A3,LATTICE3:34;
+       hence thesis by A9,A10,LATTICE3:7;
+       end;
+     then A11: a = "/\"((D')%,LattPOSet L)by A7,YELLOW_0:33;
+       for x being set holds x in (D')% implies x in D%
+        proof
+        let x be set; assume x in (D')%;
+        then x in {d% where d is Element of L : d in D'} by Def1
+;
+        then ex x' being Element of L st x = (x')% & x' in D';
+        then x in {d% where d is Element of L : d in D};
+        hence thesis by Def1;
+        end;
+     then (D')% is Subset of D% by TARSKI:def 3;
+     hence thesis by A11;
+     end;
+   hence D% is order-generating by WAYBEL_6:15;
+   end;
+  now assume
+A12: D% is order-generating;
+      for a being Element of L holds
+    ex D' being Subset of D st a = "/\"(D',L)
+       proof
+       let a be Element of L;
+       consider Y being Subset of D% such that
+       A13: a% = "/\"(Y,LattPOSet L) by A12,WAYBEL_6:15;
+       A14: a% is_<=_than Y & for b being Element of LattPOSet L
+           st b is_<=_than Y holds a% >= b by A13,YELLOW_0:33;
+         for x being set holds x in Y implies x in the carrier of LattPOSet L
+          proof
+          let x be set; assume x in Y;
+          then x in D%; hence thesis;
+          end;
+       then reconsider Y as Subset of LattPOSet L
+             by TARSKI:def 3;
+         for q being Element of L st q in %Y holds a [= q
+          proof
+          let q be Element of L;
+          assume q in %Y;
+          then q in {%d where d is Element of LattPOSet L : d in Y} by Def2;
+          then consider q' being Element of LattPOSet L such that
+          A15: q = %(q') & q' in Y;
+          A16: a% <= q' by A14,A15,LATTICE3:def 8;
+            q' = %(q') by LATTICE3:def 4 .= (%(q'))% by LATTICE3:def 3;
+          hence thesis by A15,A16,LATTICE3:7;
+          end;
+       then A17: a is_less_than %Y by LATTICE3:def 16;
+         for b being Element of L
+       st b is_less_than %Y holds b [= a
+          proof
+          let b be Element of L;
+          assume
+A18:           b is_less_than %Y;
+            for u being Element of LattPOSet L st u in Y holds b% <= u
+            proof
+            let u be Element of LattPOSet L; assume u in Y;
+            then %u in {%d where d is Element of LattPOSet L : d in Y};
+            then %u in %Y by Def2;
+            then A19:          b [= %u by A18,LATTICE3:def 16;
+              (%u)% = %u by LATTICE3:def 3 .= u by LATTICE3:def 4;
+            hence thesis by A19,LATTICE3:7;
+            end;
+          then b% is_<=_than Y by LATTICE3:def 8;
+          then b% <= a% by A13,YELLOW_0:33;
+          hence thesis by LATTICE3:7;
+          end;
+       then A20: a = "/\"(%Y,L) by A17,LATTICE3:34;
+         for x being set holds x in %Y implies x in D
+         proof
+         let x be set; assume x in %Y;
+         then x in {%d where d is Element of LattPOSet L : d in Y} by Def2;
+         then consider x' being Element of LattPOSet L such that
+         A21: x = %(x') & x' in Y;
+           x' in D% by A21;
+         then x' in {d% where d is Element of L : d in D} by
+Def1;
+         then consider y being Element of L such that
+         A22: x' = y% & y in D;
+           x = y% by A21,A22,LATTICE3:def 4
+          .= y by LATTICE3:def 3;
+         hence thesis by A22;
+         end;
+       then %Y is Subset of D by TARSKI:def 3;
+       hence thesis by A20;
+       end;
+    hence D is infimum-dense by Def14;
+    end;
+hence thesis by A1;
+end;
+
+definition
+let L be complete Lattice;
+func MIRRS(L) -> Subset of L equals :Def15:
+{a where a is Element of L : a is completely-meet-irreducible};
+correctness
+ proof
+ set X = {a where a is Element of L :
+                                     a is completely-meet-irreducible};
+   for x being set holds x in X implies x in the carrier of L
+   proof
+   let x be set; assume x in X;
+   then ex x' being Element of L st x' = x &
+                          x' is completely-meet-irreducible;
+   hence thesis;
+   end;
+  then X is Subset of L by TARSKI:def 3;
+ hence thesis;
+ end;
+func JIRRS(L) -> Subset of L equals :Def16:
+{a where a is Element of L : a is completely-join-irreducible };
+correctness
+ proof
+ set X = {a where a is Element of L :
+                                         a is completely-join-irreducible };
+   for x being set holds x in X implies x in the carrier of L
+   proof
+   let x be set; assume x in X;
+   then ex x' being Element of L st x' = x &
+                                 x' is completely-join-irreducible;
+   hence thesis;
+   end;
+  then X is Subset of L by TARSKI:def 3;
+ hence thesis;
+ end;
+end;
+
+theorem
+  for L being complete Lattice
+for D being Subset of L st D is supremum-dense holds JIRRS(L) c= D
+proof
+let L be complete Lattice;
+let D be Subset of L;
+assume A1: D is supremum-dense;
+  for x being set holds x in JIRRS(L) implies x in D
+  proof
+  let x be set; assume A2: x in JIRRS(L); assume A3: not(x in D);
+    JIRRS(L) = {a where a is Element of L :
+                            a is completely-join-irreducible} by Def16;
+  then consider x' being Element of L such that
+  A4: x' = x & x' is completely-join-irreducible by A2;
+  A5: x' = x & *'(x') <> x' by A4,Def9;
+  reconsider x as Element of L by A4;
+  set D' = {d where d is Element of L: d in D & d [= x};
+  set X = {d where d is Element of L: d [= x & d <> x};
+  A6: not(x in D')
+      proof
+      assume x in D';
+      then ex x' being Element of L st
+         x' = x & x' in D & x' [= x;
+      hence thesis by A3;
+      end;
+    for u being set holds u in D' implies u in X
+    proof
+    let u be set; assume u in D';
+    then consider u' being Element of L such that
+    A7: u' = u & u' in D & u' [= x;
+    reconsider u as Element of L by A7;
+      u <> x by A6,A7;
+    hence thesis by A7;
+    end;
+  then D' c= X by TARSKI:def 3;
+  then "\/"(D',L) [= "\/"(X,L) by LATTICE3:46;
+  then A8: x [= "\/"(X,L) by A1,Th23;
+    for q being Element of L st q in X holds q [= x
+    proof
+    let q be Element of L;
+    assume q in X;
+    then ex q' being Element of L st
+     q' = q & q' [= x & q' <> x;
+    hence thesis;
+    end;
+  then X is_less_than x by LATTICE3:def 17;
+  then "\/"(X,L) [= x by LATTICE3:def 21;
+  then x = "\/"(X,L) by A8,LATTICES:26;
+  hence thesis by A5,Def7;
+  end;
+hence thesis by TARSKI:def 3;
+end;
+
+theorem
+  for L being complete Lattice
+for D being Subset of L st D is infimum-dense holds MIRRS(L) c= D
+proof
+let L be complete Lattice;
+let D be Subset of L;
+assume A1: D is infimum-dense;
+  for x being set holds x in MIRRS(L) implies x in D
+  proof
+  let x be set; assume A2: x in MIRRS(L); assume A3: not(x in D);
+    MIRRS(L) = {a where a is Element of L :
+                           a is completely-meet-irreducible} by Def15;
+  then consider x' being Element of L such that
+  A4: x' = x & x' is completely-meet-irreducible by A2;
+  A5: x' = x & (x')*' <> x' by A4,Def8;
+  reconsider x as Element of L by A4;
+  set D' = {d where d is Element of L: d in D & x [= d};
+  set X = {d where d is Element of L: x [= d & d <> x};
+  A6: not(x in D')
+      proof
+      assume x in D';
+      then ex x' being Element of L st
+        x' = x & x' in D & x [= x';
+      hence thesis by A3;
+      end;
+    for u being set holds u in D' implies u in X
+    proof
+    let u be set; assume u in D';
+    then consider u' being Element of L such that
+    A7: u' = u & u' in D & x [= u';
+    reconsider u as Element of L by A7;
+      u <> x by A6,A7;
+    hence thesis by A7;
+    end;
+  then D' c= X by TARSKI:def 3;
+  then "/\"(X,L) [= "/\"(D',L) by LATTICE3:46;
+  then A8: "/\"(X,L) [= x by A1,Th24;
+    for q being Element of L st q in X holds x [= q
+    proof
+    let q be Element of L;
+    assume q in X;
+    then ex q' being Element of L st
+     q' = q & x [= q' & q' <> x;
+    hence thesis;
+    end;
+  then x is_less_than X by LATTICE3:def 16;
+  then x [= "/\"(X,L) by LATTICE3:40;
+  then x = "/\"(X,L) by A8,LATTICES:26;
+  hence thesis by A5,Def6;
+  end;
+hence thesis by TARSKI:def 3;
+end;
+
+Lm10:for L being co-noetherian complete Lattice holds MIRRS(L) is infimum-dense
+proof
+let L be co-noetherian complete Lattice;
+defpred P[Element of (LattPOSet L)~] means
+  ex D' being Subset of MIRRS(L) st $1 = ("/\"(D',L))%;
+A1: (LattPOSet L)~ is well_founded by Def4;
+A2: for x being Element of (LattPOSet L)~
+    st for y being Element of (LattPOSet L)~
+       st y <> x & [y,x] in the InternalRel of (LattPOSet L)~ holds P[y]
+    holds P[x]
+      proof
+      let x be Element of (LattPOSet L)~;
+      assume A3: for y being Element of (LattPOSet L)~
+       st y <> x & [y,x] in the InternalRel of (LattPOSet L)~ holds P[y];
+      set X =
+        {d where d is Element of L: %(~x) [= d & d <> %(~x)};
+      A4: for u being Element of L st u in X holds
+          (u%)~ <> x & [(u%)~,x] in the InternalRel of (LattPOSet L)~
+          proof
+          let u be Element of L; assume u in X;
+          then consider u' being Element of L such that
+          A5: u' = u & %(~x) [= u' & %(~x) <> u';
+A6:       (%(~x))% <= u% by A5,LATTICE3:7;
+            ((%(~x))%)~ = (%(~x))% by LATTICE3:def 6
+                          .= %(~x) by LATTICE3:def 3
+                          .= ~x by LATTICE3:def 4 .= x by LATTICE3:def 7;
+          then A7:       (u%)~ <= x by A6,LATTICE3:9;
+          A8: %(~x) = ~x by LATTICE3:def 4 .= x by LATTICE3:def 7;
+            (u%)~ = u% by LATTICE3:def 6 .= u by LATTICE3:def 3;
+          hence thesis by A5,A7,A8,ORDERS_1:def 9;
+          end;
+      A9: for u being Element of L st u in X holds P[(u%)~]
+         proof
+         let u be Element of L; assume u in X;
+         then (u%)~ <> x & [(u%)~,x] in
+ the InternalRel of (LattPOSet L)~ by A4;
+         hence thesis by A3;
+         end;
+      per cases;
+      suppose %(~x) is completely-meet-irreducible;
+        then %(~x) in {a where a is Element of L :
+                                   a is completely-meet-irreducible };
+        then %(~x) in MIRRS(L) by Def15;
+        then for y being set holds y in {%(~x)} implies y in
+ MIRRS(L) by TARSKI:def 1;
+        then A10: {%(~x)} is Subset of MIRRS(L) by TARSKI:def 3;
+          ("/\"({%(~x)},L))% = "/\"({%(~x)},L) by LATTICE3:def 3
+                         .= %(~x) by LATTICE3:43
+                         .= ~x by LATTICE3:def 4
+                         .= x by LATTICE3:def 7;
+        hence thesis by A10;
+     suppose not( %(~x) is completely-meet-irreducible );
+        then (%(~x))*' = %(~x) by Def8;
+        then A11: %(~x) = "/\"(X,L) by Def6;
+        set G = {H where H is Subset of MIRRS(L) :
+                 ex u being Element of LattPOSet L st %u in X & %u = "/\"
+(H,L)};
+        set D' = union G;
+          for v being set holds v in D' implies v in MIRRS(L)
+            proof
+            let v be set; assume v in D';
+            then consider v' being set such that
+            A12: v in v' & v' in G by TARSKI:def 4;
+            consider H being Subset of MIRRS(L) such that A13: H = v' &
+            ex u being Element of LattPOSet L st %u in X & %u = "/\"
+(H,L) by A12;
+            thus thesis by A12,A13;
+            end;
+        then A14: D' is Subset of MIRRS(L) by TARSKI:def 3;
+          for q being Element of L st q in D' holds %(~x) [= q
+            proof
+            let q be Element of L;
+            assume q in D';
+            then consider h being set such that A15: q in h & h in
+ G by TARSKI:def 4;
+            consider h' being Subset of MIRRS(L) such that A16: h' = h &
+            ex u being Element of LattPOSet L st %u in
+ X & %u = "/\"(h',L) by A15;
+            consider u being Element of LattPOSet L such that
+            A17: %u in X & %u = "/\"(h,L) by A16;
+              %u is_less_than h by A17,LATTICE3:34;
+            then A18: %u [= q by A15,LATTICE3:def 16;
+              %(~x) is_less_than X by A11,LATTICE3:34;
+            then %(~x) [= %u by A17,LATTICE3:def 16;
+            hence thesis by A18,LATTICES:25;
+            end;
+        then A19: %(~x) is_less_than D' by LATTICE3:def 16;
+          for r being Element of L
+        st r is_less_than D' holds r [= %(~x)
+            proof
+            let r be Element of L;
+            assume
+A20:          r is_less_than D';
+              for q being Element of L st q in X holds r [= q
+              proof
+              let q be Element of L;
+              assume A21: q in X;
+              A22: q% = q by LATTICE3:def 3;
+              consider D being Subset of MIRRS(L) such that
+              A23: (q%)~ = ("/\"(D,L))% by A9,A21;
+A24:           q = (q%)~ by A22,LATTICE3:def 6
+                    .= "/\"(D,L) by A23,LATTICE3:def 3;
+                for v being set holds v in D implies v in D'
+                 proof
+                 let v be set; assume A25: v in D;
+                 A26: %(q%) in X by A21,A22,LATTICE3:def 4;
+                   (q%)~ = q% by LATTICE3:def 6.= %(q%) by LATTICE3:def 4;
+                 then %(q%) = "/\"(D,L) by A23,LATTICE3:def 3;
+                 then D in G by A26;
+                 hence thesis by A25,TARSKI:def 4;
+                 end;
+              then D c= D' by TARSKI:def 3;
+              then for p being Element of L
+                   st p in D holds r [= p by A20,LATTICE3:def 16;
+              then r is_less_than D by LATTICE3:def 16;
+              hence thesis by A24,LATTICE3:34;
+              end;
+            then r is_less_than X by LATTICE3:def 16;
+            hence thesis by A11,LATTICE3:34;
+            end;
+        then A27: %(~x) = "/\"(D',L) by A19,LATTICE3:34;
+        A28: %(~x) = ~x by LATTICE3:def 4 .= x by LATTICE3:def 7;
+          ("/\"(D',L))% = "/\"(D',L) by LATTICE3:def 3;
+        hence thesis by A14,A27,A28;
+     end;
+A29: for x being Element of (LattPOSet L)~ holds P[x] from WFInduction(A2,A1);
+  for a being Element of L holds
+     ex D' being Subset of MIRRS(L) st a = "/\"(D',L)
+  proof
+  let a be Element of L;
+    (LattPOSet L)~ =
+  RelStr(#the carrier of LattPOSet L,
+          (the InternalRel of LattPOSet L)~#) by LATTICE3:def 5;
+  then reconsider a' = a% as Element of (LattPOSet L)~;
+  consider D' being Subset of MIRRS(L) such that A30: a' = ("/\"
+(D',L))% by A29;
+  A31: ("/\"(D',L))% = "/\"(D',L) by LATTICE3:def 3;
+    a% = a by LATTICE3:def 3;
+  hence thesis by A30,A31;
+  end;
+hence thesis by Def14;
+end;
+
+definition
+let L be co-noetherian complete Lattice;
+cluster MIRRS(L) -> infimum-dense;
+coherence by Lm10;
+end;
+
+Lm11:for L being noetherian complete Lattice holds JIRRS(L) is supremum-dense
+proof
+let L be noetherian complete Lattice;
+defpred P[Element of LattPOSet L] means
+  ex D' being Subset of JIRRS(L) st %($1) = "\/"(D',L);
+A1: LattPOSet L is well_founded by Def3;
+A2: for x being Element of LattPOSet L
+    st for y being Element of LattPOSet L
+       st y <> x & [y,x] in the InternalRel of LattPOSet L holds P[y]
+    holds P[x]
+      proof
+      let x be Element of LattPOSet L;
+      assume A3: for y being Element of LattPOSet L
+       st y <> x & [y,x] in the InternalRel of LattPOSet L holds P[y];
+      set X = {d where d is Element of L: d [= %x & d <> %x};
+      A4: for u being Element of L st u in X holds
+          u% <> x & [u%,x] in the InternalRel of LattPOSet L
+          proof
+          let u be Element of L; assume u in X;
+          then consider u' being Element of L such that
+          A5: u' = u & u' [= %x & %x <> u';
+          A6: %x = x by LATTICE3:def 4;
+          then (%x)% = x by LATTICE3:def 3;
+          then u% <= x by A5,LATTICE3:7;
+          hence thesis by A5,A6,LATTICE3:def 3,ORDERS_1:def 9;
+          end;
+      A7: for u being Element of L st u in X holds P[u%]
+         proof
+         let u be Element of L; assume u in X;
+         then u% <> x & [u%,x] in the InternalRel of LattPOSet L by A4;
+         hence thesis by A3;
+         end;
+      per cases;
+      suppose %x is completely-join-irreducible;
+        then %x in {a where a is Element of L :
+                                   a is completely-join-irreducible};
+        then %x in JIRRS(L) by Def16;
+        then for y being set holds y in {%x} implies y in
+ JIRRS(L) by TARSKI:def 1;
+        then A8: {%x} is Subset of JIRRS(L) by TARSKI:def 3;
+          "\/"({%x},L) = %x by LATTICE3:43;
+        hence thesis by A8;
+     suppose not( %x is completely-join-irreducible );
+        then *'(%x) = %x by Def9;
+        then A9: %x = "\/"(X,L) by Def7;
+        set G = {H where H is Subset of JIRRS(L) :
+                 ex u being Element of LattPOSet L st %u in X & %u = "\/"
+(H,L)};
+        set D' = union G;
+          for v being set holds v in D' implies v in JIRRS(L)
+            proof
+            let v be set; assume v in D';
+            then consider v' being set such that
+            A10: v in v' & v' in G by TARSKI:def 4;
+            consider H being Subset of JIRRS(L) such that A11: H = v' &
+            ex u being Element of LattPOSet L st %u in X & %u = "\/"
+(H,L) by A10;
+            thus thesis by A10,A11;
+            end;
+        then A12: D' is Subset of JIRRS(L) by TARSKI:def 3;
+          for q being Element of L st q in D' holds q [= %x
+            proof
+            let q be Element of L;
+            assume q in D';
+            then consider h being set such that A13: q in h & h in
+ G by TARSKI:def 4;
+            consider h' being Subset of JIRRS(L) such that A14: h' = h &
+            ex u being Element of LattPOSet L st %u in
+ X & %u = "\/"(h',L) by A13;
+            consider u being Element of LattPOSet L such that
+            A15: %u in X & %u = "\/"(h,L) by A14;
+              h is_less_than %u by A15,LATTICE3:def 21;
+            then A16: q [= %u by A13,LATTICE3:def 17;
+              X is_less_than %x by A9,LATTICE3:def 21;
+            then %u [= %x by A15,LATTICE3:def 17;
+            hence thesis by A16,LATTICES:25;
+            end;
+        then A17: D' is_less_than %x by LATTICE3:def 17;
+          for r being Element of L
+        st D' is_less_than r holds %x [= r
+            proof
+            let r be Element of L;
+            assume
+A18:          D' is_less_than r;
+              for q being Element of L st q in X holds q [= r
+              proof
+              let q be Element of L;
+              assume A19: q in X;
+              A20: q% = q by LATTICE3:def 3;
+              consider D being Subset of JIRRS(L) such that
+              A21: %(q%) = "\/"(D,L) by A7,A19;
+              A22: q = "\/"(D,L) by A20,A21,LATTICE3:def 4;
+                for v being set holds v in D implies v in D'
+                 proof
+                 let v be set; assume A23: v in D;
+                   D in G by A19,A21,A22;
+                 hence thesis by A23,TARSKI:def 4;
+                 end;
+              then D c= D' by TARSKI:def 3;
+              then for p being Element of L
+                   st p in D holds p [= r by A18,LATTICE3:def 17;
+              then D is_less_than r by LATTICE3:def 17;
+              hence thesis by A22,LATTICE3:def 21;
+              end;
+            then X is_less_than r by LATTICE3:def 17;
+            hence thesis by A9,LATTICE3:def 21;
+            end;
+        then %x = "\/"(D',L) by A17,LATTICE3:def 21;
+        hence thesis by A12;
+     end;
+A24: for x being Element of LattPOSet L holds P[x] from WFInduction(A2,A1);
+  for a being Element of L holds
+     ex D' being Subset of JIRRS(L) st a = "\/"(D',L)
+  proof
+  let a be Element of L;
+    %(a%) = a% by LATTICE3:def 4 .= a by LATTICE3:def 3;
+  hence thesis by A24;
+  end;
+hence thesis by Def13;
+end;
+
+definition
+let L be noetherian complete Lattice;
+cluster JIRRS(L) -> supremum-dense;
+coherence by Lm11;
+end;

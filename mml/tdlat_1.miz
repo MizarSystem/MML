@@ -1,0 +1,2084 @@
+:: The Lattice of Domains_of of a Topological Space
+::  by Toshihiko Watanabe
+::
+:: Received June 12, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, BOOLE, SUBSET_1, TOPS_1, SETFAM_1, BINOP_1, FUNCT_1,
+      MCART_1, LATTICES, RELAT_1, NAT_LAT, TDLAT_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, PRE_TOPC, LATTICES,
+      BINOP_1, TOPS_1, RELAT_1, FUNCT_1, DOMAIN_1, FUNCT_2, NAT_LAT;
+ constructors BINOP_1, TOPS_1, DOMAIN_1, NAT_LAT, PARTFUN1, MEMBERED;
+ clusters PRE_TOPC, FUNCT_1, RLSUB_2, RELSET_1, SUBSET_1, TOPS_1, LATTICES,
+      MEMBERED, ZFMISC_1;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, LATTICES, NAT_LAT, XBOOLE_0;
+ theorems TOPS_1, PRE_TOPC, LATTICES, LATTICE2, BINOP_1, ZFMISC_1, FUNCT_2,
+      SUBSET_1, MCART_1, TARSKI, FUNCT_1, RELSET_1, SETFAM_1, XBOOLE_0,
+      XBOOLE_1;
+ schemes FUNCT_2, COMPLSP1;
+
+begin
+:: 1. Preliminary Theorems on Subsets of Topological Spaces.
+reserve T for non empty TopSpace;
+
+theorem Th1:
+ for A,B being Subset of T holds A \/ B = [#] T iff A` c= B
+ proof
+  let A,B be Subset of T;
+  A1: now assume A \/ B = [#] T;
+       then [#] T \ A = B \ A by XBOOLE_1:40;
+       then A` = B \ A by PRE_TOPC:17;
+       hence A` c= B by XBOOLE_1:36;
+      end;
+    now assume A` c= B;
+   then A \/ A` c= A \/ B by XBOOLE_1:9;
+   then [#] T c= A \/ B & A \/ B c= [#] T by PRE_TOPC:14,18;
+   hence A \/ B = [#] T by XBOOLE_0:def 10;
+  end;
+ hence thesis by A1;
+ end;
+
+theorem Th2:
+ for A,B being Subset of T holds A misses B iff B c= A`
+ proof
+  let A,B be Subset of T;
+  thus A misses B implies B c= A`
+   proof
+    assume A misses B;
+    then A /\ B = {}T by XBOOLE_0:def 7;
+    then (A /\ B)` = ([#] T)`` by TOPS_1:8 .= [#]T;
+    then (A /\ B)` = [#]T;
+    then B` \/ A` = [#] T by SUBSET_1:30;
+    then B`` c= A` by Th1;
+    hence B c= A`;
+   end;
+  assume B c= A`;
+  then B`` c= A`;
+  then B` \/ A` = [#] T by Th1;
+  then (A /\ B)` = [#] T by SUBSET_1:30;
+  then (A /\ B)` = [#] T;
+  then A /\ B = ([#] T)`;
+  then A /\ B = {} T by TOPS_1:8;
+  hence thesis by XBOOLE_0:def 7;
+ end;
+
+theorem Th3:
+ for A being Subset of T holds Cl Int Cl A c= Cl A
+ proof
+  let A be Subset of T;
+    Int Cl A c= Cl A by TOPS_1:44;
+  then Cl Int Cl A c= Cl Cl A by PRE_TOPC:49;
+  hence Cl Int Cl A c= Cl A by TOPS_1:26;
+ end;
+
+theorem Th4:
+ for A being Subset of T holds Int A c= Int Cl Int A
+ proof
+  let A be Subset of T;
+    Int A c= Cl Int A by PRE_TOPC:48;
+  then Int Int A c= Int Cl Int A by TOPS_1:48;
+  hence Int A c= Int Cl Int A by TOPS_1:45;
+ end;
+
+theorem Th5:
+ for A being Subset of T holds Int Cl A = Int Cl Int Cl A
+ proof
+  let A be Subset of T;
+    Cl Int Cl A c= Cl A by Th3;
+  then A1: Int Cl Int Cl A c= Int Cl A by TOPS_1:48;
+    Int Cl A c= Cl Int Cl A by PRE_TOPC:48;
+  then Int Int Cl A c= Int Cl Int Cl A by TOPS_1:48;
+  then Int Cl A c= Int Cl Int Cl A by TOPS_1:45;
+  hence thesis by A1,XBOOLE_0:def 10;
+ end;
+
+theorem Th6:
+ for A,B being Subset of T st
+  A is closed or B is closed holds Cl Int A \/ Cl Int B = Cl Int(A \/ B)
+ proof
+  let A,B be Subset of T;
+  assume A1: A is closed or B is closed;
+    A c= A \/ B & B c= A \/ B by XBOOLE_1:7;
+  then Int A c= Int(A \/ B) & Int B c= Int(A \/ B) by TOPS_1:48;
+  then Cl Int A c= Cl Int(A \/ B) & Cl Int B c= Cl Int(A \/ B) by PRE_TOPC:49;
+  then A2: Cl Int A \/ Cl Int B c= Cl Int(A \/ B) by XBOOLE_1:8;
+    (A \/ B)` c= Cl(A \/ B)` by PRE_TOPC:48;
+  then (A \/ B) \/ (A \/ B)` = [#] T & (A \/ B) \/ (A \/ B)` c= (A \/ B) \/
+ Cl (A \/ B)`
+         & (A \/ B) \/ Cl(A \/ B)` c= [#] T by PRE_TOPC:14,18,XBOOLE_1:9;
+  then A3: (A \/ B) \/ Cl(A \/ B)` = [#] T by XBOOLE_0:def 10;
+  then A \/ (B \/ Cl(A \/ B)`) = [#] T by XBOOLE_1:4;
+  then A` c= B \/ Cl(A \/ B)` by Th1;
+  then Cl A` c= Cl(B \/ Cl(A \/ B)`) by PRE_TOPC:49;
+  then Cl A` c= Cl B \/ Cl Cl(A \/ B)` by PRE_TOPC:50;
+  then A4: Cl A` c= Cl B \/ Cl(A \/ B)` by TOPS_1:26;
+    B \/ (A \/ Cl(A \/ B)`) = [#] T by A3,XBOOLE_1:4;
+  then B` c= A \/ Cl(A \/ B)` by Th1;
+  then Cl B` c= Cl(A \/ Cl(A \/ B)`) by PRE_TOPC:49;
+  then Cl B` c= Cl A \/ Cl Cl(A \/ B)` by PRE_TOPC:50;
+  then A5: Cl B` c= Cl A \/ Cl(A \/ B)` by TOPS_1:26;
+    now per cases by A1;
+   suppose A is closed;
+    then Cl B` c= A \/ Cl(B \/ A)` by A5,PRE_TOPC:52;
+    then (Cl B`)`` c= A \/ Cl(B \/ A)`;
+    then (Cl B`)` \/ (A \/ Cl(B \/ A)`) = [#] T by Th1;
+    then Int B \/ (A \/ Cl(B \/ A)`) = [#] T by TOPS_1:def 1;
+    then A \/ (Int B \/ Cl(B \/ A)`) = [#] T by XBOOLE_1:4;
+    then A` c= Int B \/ Cl(B \/ A)` by Th1;
+    then Cl A` c= Cl(Int B \/ Cl(B \/ A)`) by PRE_TOPC:49;
+    then Cl A` c= Cl Int B \/ Cl Cl(B \/ A)` by PRE_TOPC:50;
+    then Cl A` c= Cl Int B \/ Cl(B \/ A)` by TOPS_1:26;
+    then Cl A` \/ (Cl A`)` c= (Cl Int B \/ Cl(B \/ A)`) \/ (Cl A`)`
+             by XBOOLE_1:9
+;
+    then [#] T c= (Cl Int B \/ Cl(B \/ A)`) \/ ((Cl A`)`) by PRE_TOPC:18;
+    then [#] T c= (Cl(B \/ A)` \/ Cl Int B) \/ Int A by TOPS_1:def 1;
+    then [#] T c= Cl(B \/ A)` \/ (Cl Int B \/ Int A) &
+         Cl(B \/ A)` \/ (Cl Int B \/ Int A) c= [#] T by PRE_TOPC:14,XBOOLE_1:4;
+    then [#] T = Cl(B \/ A)` \/ (Cl Int B \/ Int A) by XBOOLE_0:def 10;
+    then (Cl(B \/ A)`)` c= Cl Int B \/ Int A by Th1;
+    then Int(B \/ A) c= Cl Int B \/ Int A by TOPS_1:def 1;
+    then Cl Int(B \/ A) c= Cl(Cl Int B \/ Int A) by PRE_TOPC:49;
+    then Cl Int(B \/ A) c= Cl Cl Int B \/ Cl Int A by PRE_TOPC:50;
+   hence Cl Int(A \/ B) c= Cl Int A \/ Cl Int B by TOPS_1:26;
+   suppose B is closed;
+    then Cl A` c= B \/ Cl(A \/ B)` by A4,PRE_TOPC:52;
+    then (Cl A`)`` c= B \/ Cl(A \/ B)`;
+    then ((Cl A`)`) \/ (B \/ Cl(A \/ B)`) = [#] T by Th1;
+    then Int A \/ (B \/ Cl(A \/ B)`) = [#] T by TOPS_1:def 1;
+    then B \/ (Int A \/ Cl(A \/ B)`) = [#] T by XBOOLE_1:4;
+    then B` c= Int A \/ Cl(A \/ B)` by Th1;
+    then Cl B` c= Cl(Int A \/ Cl(A \/ B)`) by PRE_TOPC:49;
+    then Cl B` c= Cl Int A \/ Cl Cl(A \/ B)` by PRE_TOPC:50;
+    then Cl B` c= Cl Int A \/ Cl(A \/ B)` by TOPS_1:26;
+    then Cl B` \/ (Cl B`)` c= (Cl Int A \/ Cl(A \/ B)`) \/ (Cl B`)`
+          by XBOOLE_1:9;
+    then [#] T c= (Cl Int A \/ Cl(A \/ B)`) \/ (Cl B`)` by PRE_TOPC:18;
+    then [#] T c= (Cl(A \/ B)` \/ Cl Int A) \/ Int B by TOPS_1:def 1;
+    then [#] T c= Cl(A \/ B)` \/ (Cl Int A \/ Int B) &
+         Cl(A \/ B)` \/ (Cl Int A \/ Int B) c= [#] T by PRE_TOPC:14,XBOOLE_1:4;
+    then [#] T = Cl(A \/ B)` \/ (Cl Int A \/ Int B) by XBOOLE_0:def 10;
+    then (Cl(A \/ B)`)` c= Cl Int A \/ Int B by Th1;
+    then Int(A \/ B) c= Cl Int A \/ Int B by TOPS_1:def 1;
+    then Cl Int(A \/ B) c= Cl(Cl Int A \/ Int B) by PRE_TOPC:49;
+    then Cl Int(A \/ B) c= Cl Cl Int A \/ Cl Int B by PRE_TOPC:50;
+   hence Cl Int(A \/ B) c= Cl Int A \/ Cl Int B by TOPS_1:26;
+  end;
+  hence thesis by A2,XBOOLE_0:def 10;
+ end;
+
+theorem Th7:
+ for A,B being Subset of T st
+  A is open or B is open holds Int Cl A /\ Int Cl B = Int Cl(A /\ B)
+ proof
+  let A,B be Subset of T;
+  assume A1: A is open or B is open;
+    A /\ B c= A & A /\ B c= B by XBOOLE_1:17;
+  then Cl(A /\ B) c= Cl A & Cl(A /\ B) c= Cl B by PRE_TOPC:49;
+  then Int Cl(A /\ B) c= Int Cl A & Int Cl(A /\ B) c= Int Cl B by TOPS_1:48;
+  then A2: Int Cl(A /\ B) c= Int Cl A /\ Int Cl B by XBOOLE_1:19;
+    Int(A /\ B)` c= (A /\ B)` & ((A /\ B) /\ Int(A /\ B)`) /\ {} T = {} T
+                                                        by TOPS_1:44;
+  then (A /\ B) misses (A /\ B)` &
+       (A /\ B) /\ Int (A /\ B)` c= (A /\ B) /\ (A /\ B)`
+         & {} T c= (A /\ B) /\ Int(A /\ B)` by PRE_TOPC:26,XBOOLE_1:17,26;
+  then {} T = (A /\ B) /\ (A /\ B)` & (A /\ B) /\ Int (A /\ B)` c= (A /\ B) /\
+ (A /\ B)` &
+  {} T c= (A /\ B) /\ Int(A /\ B)` by XBOOLE_0:def 7;
+  then A3: (A /\ B) /\ Int(A /\ B)` = {} T by XBOOLE_0:def 10;
+  then A /\ (B /\ Int(A /\ B)`) = {} T by XBOOLE_1:16;
+  then A misses (B /\ Int(A /\ B)`) by XBOOLE_0:def 7;
+  then B /\ Int(A /\ B)` c= A` by Th2;
+  then Int(B /\ Int(A /\ B)`) c= Int A` by TOPS_1:48;
+  then Int B /\ Int Int(A /\ B)` c= Int A` by TOPS_1:46;
+  then A4: Int B /\ Int(A /\ B)` c= Int A` by TOPS_1:45;
+    B /\ (A /\ Int(A /\ B)`) = {} T by A3,XBOOLE_1:16;
+  then B misses (A /\ Int(A /\ B)`) by XBOOLE_0:def 7;
+  then A /\ Int(A /\ B)` c= B` by Th2;
+  then Int(A /\ Int(A /\ B)`) c= Int B` by TOPS_1:48;
+  then Int A /\ Int Int(A /\ B)` c= Int B` by TOPS_1:46;
+  then A5: Int A /\ Int(A /\ B)` c= Int B` by TOPS_1:45;
+A6:  (Int A`) misses (Int A`)` by PRE_TOPC:26;
+A7:  (Int B`) misses (Int B`)` by PRE_TOPC:26;
+    now per cases by A1;
+   suppose A is open;
+    then A /\ Int(A /\ B)` c= Int B` by A5,TOPS_1:55;
+    then A /\ Int(A /\ B)` c= (Int B`)``;
+    then (Int B`)` misses (A /\ Int(A /\ B)`) by Th2;
+    then (Int B`)` /\ (A /\ Int(A /\ B)`) = {} by XBOOLE_0:def 7;
+    then (Cl B``)`` /\ (A /\ Int(A /\ B)`) = {} by TOPS_1:def 1;
+    then (Cl B``) /\ (A /\ Int(A /\ B)`) = {};
+    then Cl B /\ (A /\ Int(A /\ B)`) = {};
+    then A /\ (Cl B /\ Int(A /\ B)`) = {} by XBOOLE_1:16;
+    then A misses (Cl B /\ Int(A /\ B)`) by XBOOLE_0:def 7;
+    then Cl B /\ Int(A /\ B)` c= A` by Th2;
+    then Int(Cl B /\ Int(A /\ B)`) c= Int A` by TOPS_1:48;
+    then Int Cl B /\ Int Int(A /\ B)` c= Int A` by TOPS_1:46;
+    then Int Cl B /\ Int(A /\ B)` c= Int A` by TOPS_1:45;
+    then (Int Cl B /\ Int(A /\ B)`) /\ (Int A`)` c= (Int A`) /\ (Int A`)`
+                                                  by XBOOLE_1:26;
+    then (Int Cl B /\ Int(A /\ B)`) /\ (Int A`)` c= {} T by A6,XBOOLE_0:def 7;
+    then (Int Cl B /\ Int(A /\ B)`) /\ (Cl A``)`` c= {} T by TOPS_1:def 1;
+    then (Int Cl B /\ Int(A /\ B)`) /\ Cl (A``) c= {} T;
+    then ((Int(A /\ B)`) /\ Int Cl B) /\ Cl A c= {} T &
+       ((Int(A /\ B)`) /\ (Int Cl B /\ Cl A)) /\ {} T = {} T;
+    then (Int(A /\ B)`) /\ (Int Cl B /\ Cl A) c= {} T &
+         {} T c= (Int(A /\ B)`) /\ (Int Cl B /\ Cl A) by XBOOLE_1:16,17;
+    then {} T = (Int(A /\ B)`) /\ (Int Cl B /\ Cl A) by XBOOLE_0:def 10;
+    then (Int(A /\ B)`) misses (Int Cl B /\ Cl A) by XBOOLE_0:def 7;
+    then Int Cl B /\ Cl A c= (Int(A /\ B)`)` by Th2;
+    then Int Cl B /\ Cl A c= (Cl (A /\ B)``)`` by TOPS_1:def 1;
+    then Int Cl B /\ Cl A c= Cl (A /\ B)``;
+    then Int Cl B /\ Cl A c= Cl(B /\ A);
+    then Int(Int Cl B /\ Cl A) c= Int Cl(B /\ A) by TOPS_1:48;
+    then Int Int Cl B /\ Int Cl A c= Int Cl(B /\ A) by TOPS_1:46;
+   hence Int Cl A /\ Int Cl B c= Int Cl(A /\ B) by TOPS_1:45;
+   suppose B is open;
+    then B /\ Int(A /\ B)` c= Int A` by A4,TOPS_1:55;
+    then B /\ Int(A /\ B)` c= (Int A`)``;
+    then (Int A`)` misses (B /\ Int(A /\ B)`) by Th2;
+    then (Int A`)` /\ (B /\ Int(A /\ B)`) = {} T by XBOOLE_0:def 7;
+    then (Cl A``)`` /\ (B /\ Int(A /\ B)`) = {} T by TOPS_1:def 1;
+    then Cl (A``) /\ (B /\ Int(A /\ B)`) = {} T;
+    then Cl A /\ (B /\ Int(A /\ B)`) = {} T;
+    then B /\ (Cl A /\ Int(A /\ B)`) = {} T by XBOOLE_1:16;
+    then B misses (Cl A /\ Int(A /\ B)`) by XBOOLE_0:def 7;
+    then Cl A /\ Int(A /\ B)` c= B` by Th2;
+    then Int(Cl A /\ Int(A /\ B)`) c= Int B` by TOPS_1:48;
+    then Int Cl A /\ Int Int(A /\ B)` c= Int B` by TOPS_1:46;
+    then Int Cl A /\ Int(A /\ B)` c= Int B` by TOPS_1:45;
+    then (Int Cl A /\ Int(A /\ B)`) /\ (Int B`)` c= (Int B`) /\ (Int B`)`
+                                                  by XBOOLE_1:26;
+    then (Int Cl A /\ Int(A /\ B)`) /\ (Int B`)` c= {} T by A7,XBOOLE_0:def 7;
+    then (Int Cl A /\ Int(A /\ B)`) /\ ((Cl B``)``) c= {} T by TOPS_1:def 1;
+    then (Int Cl A /\ Int(A /\ B)`) /\ Cl (B``) c= {} T;
+    then ((Int(A /\ B)`) /\ Int Cl A) /\ Cl B c= {} T &
+      ((Int(A /\ B)`) /\ (Int Cl A /\ Cl B)) /\ {} T = {} T;
+    then (Int(A /\ B)`) /\ (Int Cl A /\ Cl B) c= {} T &
+         {} T c= (Int(A /\ B)`) /\ (Int Cl A /\ Cl B) by XBOOLE_1:16,17;
+    then {} T = (Int(A /\ B)`) /\ (Int Cl A /\ Cl B) by XBOOLE_0:def 10;
+    then (Int(A /\ B)`) misses (Int Cl A /\ Cl B) by XBOOLE_0:def 7;
+    then Int Cl A /\ Cl B c= (Int(A /\ B)`)` by Th2;
+    then Int Cl A /\ Cl B c= (Cl (A /\ B)``)`` by TOPS_1:def 1;
+    then Int Cl A /\ Cl B c= Cl((A /\ B)``);
+    then Int Cl A /\ Cl B c= Cl(A /\ B);
+    then Int(Int Cl A /\ Cl B) c= Int Cl(A /\ B) by TOPS_1:48;
+    then Int Int Cl A /\ Int Cl B c= Int Cl(A /\ B) by TOPS_1:46;
+   hence Int Cl A /\ Int Cl B c= Int Cl(A /\ B) by TOPS_1:45;
+  end;
+  hence thesis by A2,XBOOLE_0:def 10;
+ end;
+
+theorem Th8:
+ for A being Subset of T holds Int(A /\ Cl A`) = {} T
+ proof
+  let A be Subset of T;
+A1:Int A misses (Int A)` by PRE_TOPC:26;
+  thus Int(A /\ Cl A`) = Int(A /\ ((Cl A`)`)`)
+                     .= Int(A /\ (Int A)`) by TOPS_1:def 1
+                     .= Int A /\ Int((Int A)`) by TOPS_1:46
+                     .= Int Int A /\ Int((Int A)`) by TOPS_1:45
+                     .= Int(Int A /\ (Int A)`) by TOPS_1:46
+                     .= Int({} T) by A1,XBOOLE_0:def 7
+                     .= {} T by TOPS_1:47;
+ end;
+
+theorem Th9:
+ for A being Subset of T holds Cl(A \/ Int A`) = [#] T
+ proof
+  let A be Subset of T;
+  thus Cl(A \/ Int A`) = Cl(A \/ (Cl(A``))`) by TOPS_1:def 1
+                     .= Cl A \/ Cl (Cl A)` by PRE_TOPC:50
+                     .= Cl Cl A \/ Cl (Cl A)` by TOPS_1:26
+                     .= Cl(Cl A \/ (Cl A)`) by PRE_TOPC:50
+                     .= Cl([#] T) by PRE_TOPC:18
+                     .= [#] T by TOPS_1:27;
+ end;
+
+theorem Th10:
+ for A,B being Subset of T holds
+  Int(Cl(A \/ (Int(Cl B) \/ B))) \/ (A \/ (Int(Cl B) \/ B)) =
+   Int Cl(A \/ B) \/ (A \/ B)
+proof
+ let A,B be Subset of T;
+ A1:  Int(Cl(A \/ (Int(Cl B) \/ B))) \/ Int(Cl B)
+  = Int Cl(A \/ B)
+ proof
+  A2: Cl Int Cl B c= Cl B by Th3;
+A3:  Int(Cl(A \/ (Int(Cl B) \/ B)))
+       = Int(Cl((A \/ Int(Cl B)) \/ B)) by XBOOLE_1:4
+      .= Int(Cl(A \/ Int(Cl B)) \/ Cl B) by PRE_TOPC:50
+      .= Int(Cl A \/ Cl Int Cl B \/ Cl B) by PRE_TOPC:50
+      .= Int(Cl A \/ (Cl Int Cl B \/ Cl B)) by XBOOLE_1:4
+      .= Int(Cl A \/ Cl B) by A2,XBOOLE_1:12
+      .= Int Cl(A \/ B) by PRE_TOPC:50;
+
+    B c= A \/ B by XBOOLE_1:7;
+  then Cl B c= Cl (A \/ B) by PRE_TOPC:49;
+  then Int Cl B c= Int Cl(A \/ B) by TOPS_1:48;
+  hence Int(Cl(A \/ (Int(Cl B) \/ B))) \/ Int(Cl B)
+    c= Int Cl(A \/ B) by A3,XBOOLE_1:8;
+    A c= A \/ Int Cl B by XBOOLE_1:7;
+  then A \/ B c= A \/ Int(Cl B) \/ B by XBOOLE_1:9;
+  then A \/ B c= A \/ (Int(Cl B) \/ B) by XBOOLE_1:4;
+  then Cl(A \/ B) c= Cl(A \/ (Int(Cl B) \/ B)) by PRE_TOPC:49;
+  then A4: Int Cl(A \/ B) c= Int(Cl(A \/ (Int(Cl B) \/ B))) by TOPS_1:48;
+    Int(Cl(A \/ (Int(Cl B) \/ B)))
+       c= Int(Cl(A \/ (Int(Cl B) \/ B))) \/ Int(Cl B) by XBOOLE_1:7;
+  hence Int Cl(A \/ B)
+       c= Int(Cl(A \/ (Int(Cl B) \/ B))) \/ Int(Cl B) by A4,XBOOLE_1:1;
+ end;
+   A \/ (Int(Cl B) \/ B)
+       = Int(Cl B) \/ (A \/ B) by XBOOLE_1:4;
+ hence Int(Cl(A \/ (Int(Cl B) \/ B))) \/
+                  (A \/ (Int(Cl B) \/ B))
+  = Int Cl(A \/ B) \/ (A \/ B) by A1,XBOOLE_1:4;
+end;
+
+theorem
+  for A,C being Subset of T holds
+  Int(Cl((Int(Cl A) \/ A) \/ C)) \/ ((Int(Cl A) \/ A) \/ C) =
+   Int Cl(A \/ C) \/ (A \/ C) by Th10;
+
+theorem Th12:
+ for A,B being Subset of T holds
+  Cl(Int(A /\ (Cl(Int B) /\ B))) /\ (A /\ (Cl(Int B) /\ B)) =
+   Cl Int(A /\ B) /\ (A /\ B)
+proof
+ let A,B be Subset of T;
+ A1:  Cl(Int(A /\ (Cl(Int B) /\ B))) /\ Cl(Int B)
+  = Cl Int(A /\ B)
+ proof
+   A /\ Cl Int B c= A by XBOOLE_1:17;
+ then A /\ Cl(Int B) /\ B c= A /\ B by XBOOLE_1:26;
+ then A /\ (Cl(Int B) /\ B) c= A /\ B by XBOOLE_1:16;
+ then Int(A /\ (Cl(Int B) /\ B)) c= Int(A /\ B) by TOPS_1:48;
+ then A2: Cl(Int(A /\ (Cl(Int B) /\ B))) c= Cl Int(A /\ B) by PRE_TOPC:49;
+   Cl(Int(A /\ (Cl(Int B) /\ B))) /\ Cl(Int B) c=
+       Cl(Int(A /\ (Cl(Int B) /\ B))) by XBOOLE_1:17;
+ hence Cl(Int(A /\ (Cl(Int B) /\ B))) /\ Cl(Int B)
+         c= Cl Int(A /\ B) by A2,XBOOLE_1:1;
+ A3: Int B c= Int Cl Int B by Th4;
+A4: Cl(Int(A /\ (Cl(Int B) /\ B)))
+      = Cl(Int((A /\ Cl(Int B)) /\ B)) by XBOOLE_1:16
+     .= Cl(Int(A /\ Cl(Int B)) /\ Int B) by TOPS_1:46
+     .= Cl(Int A /\ Int Cl Int B /\ Int B) by TOPS_1:46
+     .= Cl(Int A /\ (Int Cl Int B /\ Int B)) by XBOOLE_1:16
+     .= Cl(Int A /\ Int B) by A3,XBOOLE_1:28
+     .= Cl Int(A /\ B) by TOPS_1:46;
+
+   A /\ B c= B by XBOOLE_1:17;
+ then Int (A /\ B) c= Int B by TOPS_1:48;
+ then Cl Int(A /\ B) c= Cl(Int B) by PRE_TOPC:49;
+ hence Cl Int(A /\ B)
+  c= Cl(Int(A /\ (Cl(Int B) /\ B))) /\ Cl(Int B) by A4,XBOOLE_1:19;
+ end;
+   A /\ (Cl(Int B) /\ B)
+       = Cl(Int B) /\ (A /\ B) by XBOOLE_1:16;
+ hence Cl(Int(A /\ (Cl(Int B) /\ B))) /\
+                  (A /\ (Cl(Int B) /\ B))
+  = Cl Int(A /\ B) /\ (A /\ B) by A1,XBOOLE_1:16;
+end;
+
+theorem
+  for A,C being Subset of T holds
+  Cl(Int((Cl(Int A) /\ A) /\ C)) /\ ((Cl(Int A) /\ A) /\ C) =
+   Cl Int(A /\ C) /\ (A /\ C) by Th12;
+
+begin
+:: 2. Properties of Domains_of of Topological Spaces.
+reserve T for non empty TopSpace;
+
+theorem Th14:
+ {}T is condensed
+ proof
+    Int {} T c= {} T & {} T c= Cl {} T by PRE_TOPC:48,TOPS_1:44;
+  then Int Cl {} T c= {} T & {} T c= Cl Int {} T by PRE_TOPC:52,TOPS_1:47;
+  hence {} T is condensed by TOPS_1:def 6;
+ end;
+
+theorem Th15:
+ [#] T is condensed
+ proof
+    Int [#] T c= [#] T & [#] T c= Cl [#] T by PRE_TOPC:48,TOPS_1:44;
+  then Int Cl [#] T c= [#] T & [#] T c= Cl Int [#] T by TOPS_1:27,43;
+  hence [#] T is condensed by TOPS_1:def 6;
+ end;
+
+theorem Th16:
+ for A being Subset of T st A is condensed holds A` is condensed
+ proof
+  let X be Subset of T;
+  assume X is condensed;
+  then A1: Int Cl X c= X & X c= Cl Int X by TOPS_1:def 6;
+  then (Cl((Cl X)`))` c= X by TOPS_1:def 1;
+  then A2: X` c= Cl(Cl(X``))` by PRE_TOPC:19;
+     (Cl(Int X))` c= X` by A1,PRE_TOPC:19;
+  then (Cl(Int X)``)` c= X`;
+  then Int(Int X)` c= X` by TOPS_1:def 1;
+  then Int(Cl X`)`` c= X` by TOPS_1:def 1;
+  then Int(Cl X`) c= X` & X` c= Cl(Int X`) by A2,TOPS_1:def 1;
+  hence X` is condensed by TOPS_1:def 6;
+ end;
+
+theorem Th17:
+ for A,B being Subset of T st A is condensed & B is condensed holds
+  Int(Cl(A \/ B)) \/ (A \/ B) is condensed & Cl(Int(A /\ B)) /\ (A /\
+ B) is condensed
+ proof
+  let A,B be Subset of T;
+   assume A is condensed;
+   then A1: Int(Cl(A)) c= A & A c= Cl(Int(A)) by TOPS_1:def 6;
+   assume B is condensed;
+   then A2: Int(Cl(B)) c= B & B c= Cl(Int(B)) by TOPS_1:def 6;
+  thus Int(Cl(A \/ B)) \/ (A \/ B) is condensed
+   proof
+    set X = Int(Cl(A \/ B)) \/ (A \/ B);
+       Int(Cl(A \/ B)) c= Cl(Int(Cl(A \/ B))) by PRE_TOPC:48;
+    then A3: Int(Cl(A \/ B)) \/ Cl(Int(A \/ B)) c=
+              Cl(Int(Cl(A \/ B))) \/ Cl(Int(A \/ B)) by XBOOLE_1:9;
+    A4: A \/ B c= Cl(Int(A)) \/ Cl(Int(B)) by A1,A2,XBOOLE_1:13;
+       Int(A) \/ Int(B) c= Int(A \/ B) by TOPS_1:49;
+    then Cl(Int(A) \/ Int(B)) c= Cl(Int(A \/ B)) by PRE_TOPC:49;
+    then Cl(Int(A)) \/ Cl(Int(B)) c= Cl(Int(A \/ B)) by PRE_TOPC:50;
+    then A \/ B c= Cl(Int(A \/ B)) by A4,XBOOLE_1:1;
+    then A5: Int(Cl(A \/ B)) \/ (A \/ B) c=
+             Int(Cl(A \/ B)) \/ Cl(Int(A \/ B)) by XBOOLE_1:9;
+      Int(Int(Cl(A \/ B))) \/ Int(A \/ B) c= Int(X) by TOPS_1:49;
+    then Cl(Int(Int(Cl(A \/ B))) \/ Int(A \/ B)) c= Cl(Int(X)) by PRE_TOPC:49;
+    then Cl(Int(Cl(A \/ B)) \/ Int(A \/ B)) c= Cl(Int(X)) by TOPS_1:45;
+    then Cl(Int(Cl(A \/ B))) \/ Cl(Int(A \/ B)) c= Cl(Int(X)) by PRE_TOPC:50;
+    then Int(Cl(A \/ B)) \/ Cl(Int(A \/ B)) c= Cl(Int(X)) by A3,XBOOLE_1:1;
+    then A6: X c= Cl(Int(X)) by A5,XBOOLE_1:1;
+       Int(Cl(A \/ B)) c= Cl(A \/ B) by TOPS_1:44;
+    then Cl(Int(Cl(A \/ B))) c= Cl(Cl(A \/ B)) by PRE_TOPC:49;
+    then Cl(Int(Cl(A \/ B))) c= Cl(A \/ B) by TOPS_1:26;
+    then Cl(Int(Cl(A \/ B))) \/ Cl(A \/ B) = Cl(A \/ B) by XBOOLE_1:12;
+    then Int(Cl(X)) = Int(Cl(A \/ B)) by PRE_TOPC:50;
+    then Int(Cl(X)) c= X by XBOOLE_1:7;
+    hence thesis by A6,TOPS_1:def 6;
+   end;
+  thus Cl(Int(A /\ B)) /\ (A /\ B) is condensed
+   proof
+    set X = Cl(Int(A /\ B)) /\ (A /\ B);
+      Int(Cl(Int(A /\ B))) c= Cl(Int(A /\ B)) by TOPS_1:44;
+    then A7: Int(Cl(Int(A /\ B))) /\ Int(Cl(A /\ B)) c=
+                 Cl(Int(A /\ B)) /\ Int(Cl(A /\ B)) by XBOOLE_1:26;
+    A8: Int(Cl(A)) /\ Int(Cl(B)) c= A /\ B by A1,A2,XBOOLE_1:27;
+      Cl(A /\ B) c= Cl(A) /\ Cl(B) by PRE_TOPC:51;
+    then Int(Cl(A /\ B)) c= Int(Cl(A) /\ Cl(B)) by TOPS_1:48;
+    then Int(Cl(A /\ B)) c= Int(Cl(A)) /\ Int(Cl(B)) by TOPS_1:46;
+    then Int(Cl(A /\ B)) c= A /\ B by A8,XBOOLE_1:1;
+    then A9: Cl(Int(A /\ B)) /\ Int(Cl(A /\ B)) c=
+             Cl(Int(A /\ B)) /\ (A /\ B) by XBOOLE_1:26;
+      Cl(X) c= Cl(Cl(Int(A /\ B))) /\ Cl(A /\ B) by PRE_TOPC:51;
+    then Int(Cl(X)) c= Int(Cl(Cl(Int(A /\ B))) /\ Cl(A /\ B)) by TOPS_1:48;
+    then Int(Cl(X)) c= Int(Cl(Int(A /\ B)) /\ Cl(A /\ B)) by TOPS_1:26;
+    then Int(Cl(X)) c= Int(Cl(Int(A /\ B))) /\ Int(Cl(A /\ B)) by TOPS_1:46;
+    then Int(Cl(X)) c= Cl(Int(A /\ B)) /\ Int(Cl(A /\ B)) by A7,XBOOLE_1:1;
+    then A10: Int(Cl(X)) c= X by A9,XBOOLE_1:1;
+       Int(A /\ B) c= Cl(Int(A /\ B)) by PRE_TOPC:48;
+    then Int(Int(A /\ B)) c= Int(Cl(Int(A /\ B))) by TOPS_1:48;
+    then Int(A /\ B) c= Int(Cl(Int(A /\ B))) by TOPS_1:45;
+    then Int(A /\ B) = Int(Cl(Int(A /\ B))) /\ Int(A /\ B) by XBOOLE_1:28;
+    then Cl(Int(A /\ B)) = Cl(Int(X)) by TOPS_1:46;
+    then X c= Cl(Int(X)) by XBOOLE_1:17;
+    hence thesis by A10,TOPS_1:def 6;
+   end;
+ end;
+
+theorem Th18:
+ {} T is closed_condensed
+proof
+   Int {} T = {} T by TOPS_1:47;
+ then Cl Int {} T = {} T by PRE_TOPC:52;
+ hence {} T is closed_condensed by TOPS_1:def 7;
+end;
+
+theorem Th19:
+ [#] T is closed_condensed
+ proof
+     Int [#] T = [#] T by TOPS_1:43;
+  then Cl Int [#] T = [#] T by TOPS_1:27;
+  hence [#] T is closed_condensed by TOPS_1:def 7;
+ end;
+
+theorem Th20:
+ {} T is open_condensed
+ proof
+     Cl {} T = {} T by PRE_TOPC:52;
+  then Int Cl {} T = {} T by TOPS_1:47;
+  hence {} T is open_condensed by TOPS_1:def 8;
+ end;
+
+theorem Th21:
+ [#] T is open_condensed
+ proof
+    Cl [#] T = [#] T by TOPS_1:27;
+  then Int Cl [#] T = [#] T by TOPS_1:43;
+  hence [#] T is open_condensed by TOPS_1:def 8;
+ end;
+
+theorem Th22:
+ for A being Subset of T holds Cl(Int A) is closed_condensed
+ proof
+   let A be Subset of T;
+     Cl(Int A) = Cl Int Cl(Int A) by TOPS_1:58;
+   hence thesis by TOPS_1:def 7;
+ end;
+
+theorem Th23:
+ for A being Subset of T holds Int(Cl A) is open_condensed
+ proof
+   let A be Subset of T;
+     Int(Cl A) = Int Cl Int(Cl A) by Th5;
+   hence thesis by TOPS_1:def 8;
+ end;
+
+theorem Th24:
+ for A being Subset of T st A is condensed holds Cl A is closed_condensed
+ proof
+  let A be Subset of T;
+  assume A1: A is condensed;
+  then Cl A is condensed by TOPS_1:111;
+  then A2: Cl A c= Cl Int Cl A by TOPS_1:def 6;
+    Int Cl A c= A by A1,TOPS_1:def 6;
+  then Cl Int Cl A c= Cl A by PRE_TOPC:49;
+  then Cl A = Cl Int Cl A by A2,XBOOLE_0:def 10;
+  hence thesis by TOPS_1:def 7;
+ end;
+
+theorem Th25:
+ for A being Subset of T st A is condensed holds Int A is open_condensed
+ proof
+  let A be Subset of T;
+  assume A1: A is condensed;
+  then Int A is condensed by TOPS_1:111;
+  then A2: Int Cl Int A c= Int A by TOPS_1:def 6;
+    A c= Cl Int A by A1,TOPS_1:def 6;
+  then Int A c= Int Cl Int A by TOPS_1:48;
+  then Int Cl Int A = Int A by A2,XBOOLE_0:def 10;
+  hence thesis by TOPS_1:def 8;
+ end;
+
+theorem Th26:
+ for A being Subset of T st A is condensed holds Cl A` is closed_condensed
+ proof
+  let A be Subset of T;
+  assume A is condensed;
+  then A` is condensed by Th16;
+  hence thesis by Th24;
+ end;
+
+theorem Th27:
+ for A being Subset of T st A is condensed holds Int A` is open_condensed
+ proof
+  let A be Subset of T;
+  assume A is condensed;
+  then A` is condensed by Th16;
+  hence thesis by Th25;
+ end;
+
+theorem Th28:
+ for A,B,C being Subset of T st
+  A is closed_condensed & B is closed_condensed & C is closed_condensed holds
+   Cl(Int(A /\ (Cl(Int(B /\ C))))) = Cl(Int((Cl(Int(A /\ B)) /\ C)))
+ proof
+  let A,B,C be Subset of T;
+  assume A is closed_condensed & B is closed_condensed & C is closed_condensed
+;
+  then A1: A = Cl Int A & B = Cl Int B & C = Cl Int C by TOPS_1:def 7;
+    Cl Int(A /\ B) = Cl(Int A /\ Int B) by TOPS_1:46;
+  then Cl Int(A /\ B) c= A /\ B by A1,PRE_TOPC:51;
+  then Int(Cl Int(A /\ B) /\ C) c= Cl Int(A /\ B) /\ C &
+       Cl Int(A /\ B) /\ C c= (A /\ B) /\ C by TOPS_1:44,XBOOLE_1:26;
+  then A2: Int(Cl Int(A /\ B) /\ C) c= (A /\ B) /\ C by XBOOLE_1:1;
+  then Int(Cl Int(A /\ B) /\ C) c= A /\ (B /\ C) &
+                                     A /\ (B /\ C) c= B /\ C by XBOOLE_1:16,17;
+  then Int(Cl Int(A /\ B) /\ C) c= B /\ C by XBOOLE_1:1;
+  then Int Int(Cl Int(A /\ B) /\ C) c= Int(B /\ C) by TOPS_1:48;
+  then Int(Cl Int(A /\ B) /\ C) c= Int(B /\ C) &
+                    Int(B /\ C) c= Cl Int(B /\ C) by PRE_TOPC:48,TOPS_1:45;
+  then A3: Int(Cl Int(A /\ B) /\ C) c= Cl Int(B /\ C) by XBOOLE_1:1;
+    Int(Cl Int(A /\ B) /\ C) c= A /\ (B /\ C) &
+                                     A /\ (B /\ C) c= A by A2,XBOOLE_1:16,17;
+  then Int(Cl Int(A /\ B) /\ C) c= A by XBOOLE_1:1;
+  then Int(Cl Int(A /\ B) /\ C) c= A /\ Cl Int(B /\ C) by A3,XBOOLE_1:19;
+  then Int Int(Cl Int(A /\ B) /\ C) c= Int(A /\ Cl Int(B /\ C)) by TOPS_1:48;
+  then Int(Cl Int(A /\ B) /\ C) c= Int(A /\ Cl Int(B /\ C)) by TOPS_1:45;
+  then A4: Cl Int(Cl Int(A /\ B) /\ C) c= Cl Int(A /\ Cl Int(B /\ C))
+                    by PRE_TOPC:49;
+    Cl Int(B /\ C) = Cl(Int B /\ Int C) by TOPS_1:46;
+  then Cl Int(B /\ C) c= B /\ C by A1,PRE_TOPC:51;
+  then Int(A /\ Cl Int(B /\ C)) c= A /\ Cl Int(B /\ C) &
+       A /\ Cl Int(B /\ C) c= A /\ (B /\ C) by TOPS_1:44,XBOOLE_1:26;
+  then A5: Int(A /\ Cl Int(B /\ C)) c= A /\ (B /\ C) by XBOOLE_1:1;
+  then Int(A /\ Cl Int(B /\ C)) c= (A /\ B) /\ C &
+                                    (A /\ B) /\ C c= A /\ B by XBOOLE_1:16,17;
+  then Int(A /\ Cl Int(B /\ C)) c= A /\ B by XBOOLE_1:1;
+  then Int Int(A /\ Cl Int(B /\ C)) c= Int(A /\ B) by TOPS_1:48;
+  then Int(A /\ Cl Int(B /\ C)) c= Int(A /\ B) &
+                    Int(A /\ B) c= Cl Int(A /\ B) by PRE_TOPC:48,TOPS_1:45;
+  then A6: Int(A /\ Cl Int(B /\ C)) c= Cl Int(A /\ B) by XBOOLE_1:1;
+    Int(A /\ Cl Int(B /\ C)) c= (A /\ B) /\ C &
+                                     (A /\ B) /\ C c= C by A5,XBOOLE_1:16,17;
+  then Int(A /\ Cl Int(B /\ C)) c= C by XBOOLE_1:1;
+  then Int(A /\ Cl Int(B /\ C)) c= Cl Int(A /\ B) /\ C by A6,XBOOLE_1:19;
+  then Int Int(A /\ Cl Int(B /\ C)) c= Int(Cl Int(A /\ B) /\ C) by TOPS_1:48;
+  then Int(A /\ Cl Int(B /\ C)) c= Int(Cl Int(A /\ B) /\ C) by TOPS_1:45;
+  then Cl Int(A /\ Cl Int(B /\ C)) c= Cl Int(Cl Int(A /\ B) /\ C)
+                    by PRE_TOPC:49;
+  hence thesis by A4,XBOOLE_0:def 10;
+ end;
+
+theorem Th29:
+ for A,B,C being Subset of T st
+  A is open_condensed & B is open_condensed & C is open_condensed holds
+   Int(Cl(A \/ (Int(Cl(B \/ C))))) = Int(Cl((Int(Cl(A \/ B)) \/ C)))
+ proof
+  let A,B,C be Subset of T;
+  assume A is open_condensed & B is open_condensed & C is open_condensed;
+  then A1: A = Int Cl A & B = Int Cl B & C = Int Cl C by TOPS_1:def 8;
+    Int Cl(A \/ B) = Int(Cl A \/ Cl B) by PRE_TOPC:50;
+  then A \/ B c= Int Cl(A \/ B) by A1,TOPS_1:49;
+  then (A \/ B) \/ C c= Int Cl(A \/ B) \/ C &
+        Int Cl(A \/ B) \/ C c= Cl(Int Cl(A \/ B) \/ C) by PRE_TOPC:48,XBOOLE_1:
+9;
+  then A2: (A \/ B) \/ C c= Cl(Int Cl(A \/ B) \/ C) by XBOOLE_1:1;
+  then B \/ C c= A \/ (B \/ C) &
+        A \/ (B \/ C) c= Cl(Int Cl(A \/ B) \/ C) by XBOOLE_1:4,7
+;
+  then B \/ C c= Cl(Int Cl(A \/ B) \/ C) by XBOOLE_1:1;
+  then Cl(B \/ C) c= Cl Cl(Int Cl(A \/ B) \/ C) by PRE_TOPC:49;
+  then Int Cl(B \/ C) c= Cl(B \/ C) &
+         Cl(B \/ C) c= Cl(Int Cl(A \/ B) \/ C) by TOPS_1:26,44;
+  then A3: Int Cl(B \/ C) c= Cl(Int Cl(A \/ B) \/ C) by XBOOLE_1:1;
+    A c= A \/ (B \/ C) &
+       A \/ (B \/ C) c= Cl(Int Cl(A \/ B) \/ C) by A2,XBOOLE_1:4,7;
+  then A c= Cl(Int Cl(A \/ B) \/ C) by XBOOLE_1:1;
+  then A \/ Int Cl(B \/ C) c= Cl(Int Cl(A \/ B) \/ C) by A3,XBOOLE_1:8;
+  then Cl(A \/ Int Cl(B \/ C)) c= Cl Cl(Int Cl(A \/ B) \/ C) by PRE_TOPC:49;
+  then Cl(A \/ Int Cl(B \/ C)) c= Cl(Int Cl(A \/ B) \/ C) by TOPS_1:26;
+  then A4: Int Cl(A \/ Int Cl(B \/ C)) c= Int Cl(Int Cl(A \/ B) \/ C)
+                    by TOPS_1:48;
+    Int Cl(B \/ C) = Int(Cl B \/ Cl C) by PRE_TOPC:50;
+  then B \/ C c= Int Cl(B \/ C) by A1,TOPS_1:49;
+  then A \/ (B \/ C) c= A \/ Int Cl(B \/ C) &
+       A \/ Int Cl(B \/ C) c= Cl(A \/ Int Cl(B \/ C)) by PRE_TOPC:48,XBOOLE_1:9
+;
+  then A5: A \/ (B \/ C) c= Cl(A \/ Int Cl(B \/ C)) by XBOOLE_1:1;
+  then A \/ B c= (A \/ B) \/ C &
+       (A \/ B) \/ C c= Cl(A \/ Int Cl(B \/ C)) by XBOOLE_1:4,7;
+  then A \/ B c= Cl(A \/ Int Cl(B \/ C)) by XBOOLE_1:1;
+  then Cl(A \/ B) c= Cl Cl(A \/ Int Cl(B \/ C)) by PRE_TOPC:49;
+  then Int Cl(A \/ B) c= Cl(A \/ B) &
+        Cl(A \/ B) c= Cl(A \/ Int Cl(B \/ C)) by TOPS_1:26,44;
+  then A6: Int Cl(A \/ B) c= Cl(A \/ Int Cl(B \/ C)) by XBOOLE_1:1;
+    C c= (A \/ B) \/ C &
+         (A \/ B) \/ C c= Cl(A \/ Int Cl(B \/ C)) by A5,XBOOLE_1:4,7;
+  then C c= Cl(A \/ Int Cl(B \/ C)) by XBOOLE_1:1;
+  then Int Cl(A \/ B) \/ C c= Cl(A \/ Int Cl(B \/ C)) by A6,XBOOLE_1:8;
+  then Cl(Int Cl(A \/ B) \/ C) c= Cl Cl(A \/ Int Cl(B \/ C)) by PRE_TOPC:49;
+  then Cl(Int Cl(A \/ B) \/ C) c= Cl(A \/ Int Cl(B \/ C)) by TOPS_1:26;
+  then Int Cl(Int Cl(A \/ B) \/ C) c= Int Cl(A \/ Int Cl(B \/ C)) by TOPS_1:48
+;
+  hence thesis by A4,XBOOLE_0:def 10;
+ end;
+
+begin
+:: 3. The Lattice of Domains.
+
+definition let T be TopStruct;
+ func Domains_of T -> Subset-Family of T equals
+:Def1: { A where A is Subset of T : A is condensed };
+ coherence
+ proof
+  set B = { A where A is Subset of T : A is condensed };
+    B c= bool the carrier of T
+  proof
+   let x be set;
+   assume x in B;
+   then ex A being Subset of T st x = A & A is condensed;
+   hence x in bool the carrier of T;
+  end;
+  then B is Subset-Family of T by SETFAM_1:def 7;
+  hence thesis;
+ end;
+end;
+
+definition let T be non empty TopSpace;
+ cluster Domains_of T -> non empty;
+ coherence
+ proof
+    {} T is condensed by Th14;
+  then {} T in { A where A is Subset of T : A is condensed };
+  hence thesis by Def1;
+ end;
+end;
+
+definition let T be non empty TopSpace;
+ func Domains_Union T -> BinOp of Domains_of T means
+:Def2: for A,B being Element of Domains_of T holds
+              it.(A,B) = Int(Cl(A \/ B)) \/ (A \/ B);
+ existence
+proof
+    set D = [:Domains_of T,(Domains_of T) qua non empty set:];
+   defpred X[set,set] means
+     for A,B being Element of Domains_of T st $1 = [A,B] holds
+            $2 = Int(Cl(A \/ B)) \/ (A \/ B);
+     A1: for a being Element of D
+      ex b being Element of Domains_of T st X[a,b]
+     proof
+      let a be Element of D;
+      reconsider G = a`1, F = a`2 as Element of Domains_of T;
+        G in Domains_of T & F in Domains_of T;
+      then G in { E where E is Subset of T : E is condensed } &
+           F in { H where H is Subset of T : H is condensed }
+           by Def1;
+      then (ex E being Subset of T st E = G & E is condensed) &
+           (ex H being Subset of T st H = F & H is condensed);
+      then Int(Cl(G \/ F)) \/ (G \/ F) is condensed by Th17;
+      then Int(Cl(G \/ F)) \/ (G \/ F) in
+           { E where E is Subset of T : E is condensed };
+      then reconsider
+         b = Int(Cl(G \/ F)) \/ (G \/ F)
+         as Element of Domains_of T by Def1;
+      take b;
+       let A,B be Element of Domains_of T;
+       assume a = [A,B];
+       then [A,B] = [G,F] by MCART_1:23;
+       then A = G & B = F by ZFMISC_1:33;
+       hence b = Int(Cl(A \/ B)) \/ (A \/ B);
+     end;
+    consider h being Function of D, Domains_of T
+      such that A2: for a being Element of D holds X[a,h.a]
+                              from FuncExD(A1);
+   take h;
+   let A,B be Element of Domains_of T;
+   thus h.(A,B) = h . [A,B] by BINOP_1:def 1
+               .= Int(Cl(A \/ B)) \/ (A \/ B) by A2;
+ end;
+ uniqueness
+  proof
+    deffunc U(Element of Domains_of T,Element of Domains_of T)
+       = Int(Cl($1 \/ $2)) \/ ($1 \/ $2);
+    thus for o1,o2 being BinOp of Domains_of T st
+    (for a,b being Element of Domains_of T holds o1.(a,b) = U(a,b)) &
+    (for a,b being Element of Domains_of T holds o2.(a,b) = U(a,b))
+  holds o1 = o2 from BinOpDefuniq;
+  end;
+synonym D-Union T;
+end;
+
+definition let T be non empty TopSpace;
+ func Domains_Meet T -> BinOp of Domains_of T means
+:Def3: for A,B being Element of Domains_of T holds
+      it.(A,B) = Cl(Int(A /\ B)) /\ (A /\ B);
+ existence
+ proof
+    set D = [:Domains_of T,(Domains_of T) qua non empty set:];
+   defpred X[set,set] means
+      for A,B being Element of Domains_of T st $1 = [A,B] holds
+            $2 = Cl(Int(A /\ B)) /\ (A /\ B);
+     A1: for a being Element of D
+      ex b being Element of Domains_of T st X[a,b]
+     proof
+      let a be Element of D;
+      reconsider G = a`1, F = a`2 as Element of Domains_of T;
+        G in Domains_of T & F in Domains_of T;
+      then G in { E where E is Subset of T : E is condensed } &
+           F in { H where H is Subset of T : H is condensed }
+           by Def1;
+      then (ex E being Subset of T st E = G & E is condensed) &
+           (ex H being Subset of T st H = F & H is condensed);
+      then Cl(Int(G /\ F)) /\ (G /\ F) is condensed by Th17;
+      then Cl(Int(G /\ F)) /\ (G /\ F) in
+           { E where E is Subset of T : E is condensed };
+      then reconsider
+         b = Cl(Int(G /\ F)) /\ (G /\ F)
+         as Element of Domains_of T by Def1;
+      take b;
+       let A,B be Element of Domains_of T;
+       assume a = [A,B];
+       then [A,B] = [G,F] by MCART_1:23;
+       then A = G & B = F by ZFMISC_1:33;
+       hence b = Cl(Int(A /\ B)) /\ (A /\ B);
+     end;
+    consider h being Function of D, Domains_of T
+      such that A2: for a being Element of D holds X[a,h.a]
+             from FuncExD(A1);
+   take h;
+   let A,B be Element of Domains_of T;
+   thus h.(A,B) = h . [A,B] by BINOP_1:def 1
+               .= Cl(Int(A /\ B)) /\ (A /\ B) by A2;
+ end;
+ uniqueness
+  proof
+    deffunc U(Element of Domains_of T,Element of Domains_of T)
+       = Cl(Int($1 /\ $2)) /\ ($1 /\ $2);
+    thus for o1,o2 being BinOp of Domains_of T st
+    (for a,b being Element of Domains_of T holds o1.(a,b) = U(a,b)) &
+    (for a,b being Element of Domains_of T holds o2.(a,b) = U(a,b))
+  holds o1 = o2 from BinOpDefuniq;
+  end;
+synonym D-Meet T;
+end;
+
+theorem Th30:
+ for T being non empty TopSpace holds
+  LattStr(#Domains_of T,D-Union T,D-Meet T#) is C_Lattice
+ proof let T be non empty TopSpace;
+  set L = LattStr(#Domains_of T,D-Union T,D-Meet T#);
+ A1:
+  for a,b being Element of L,
+      A,B being Element of Domains_of T
+   st a = A & b = B holds a"\/"b = Int(Cl(A \/ B)) \/ (A \/ B)
+  proof
+    let a,b be Element of L,
+        A,B be Element of Domains_of T;
+    assume a = A & b = B;
+    hence a"\/"b = (D-Union T).(A,B) by LATTICES:def 1
+             .= Int(Cl(A \/ B)) \/ (A \/ B) by Def2;
+  end;
+ A2:
+  for a,b being Element of L,
+      A,B being Element of Domains_of T
+   st a = A & b = B holds a"/\"b = Cl(Int(A /\ B)) /\ (A /\ B)
+  proof
+    let a,b be Element of L,
+        A,B be Element of Domains_of T;
+    assume a = A & b = B;
+    hence a"/\"b = (D-Meet T).(A,B) by LATTICES:def 2
+             .= Cl(Int(A /\ B)) /\ (A /\ B) by Def3;
+  end;
+   L is Lattice-like
+ proof
+  thus for a,b being Element of L holds a"\/"b = b"\/"a
+  proof
+    let a,b be Element of L;
+    reconsider A = a, B = b as Element of Domains_of T;
+    thus a"\/"b = Int(Cl(B \/ A)) \/ (B \/ A) by A1
+             .= b"\/"a by A1;
+  end;
+  thus for a,b,c being Element of L
+                                      holds a"\/"(b"\/"c) = (a"\/"b)"\/"c
+  proof
+   let a,b,c be Element of L;
+   reconsider A = a, B = b, C = c as Element of Domains_of T;
+   A3:b"\/"c = Int(Cl(B \/ C)) \/ (B \/ C) by A1;
+   A4:a"\/"b = Int(Cl(A \/ B)) \/ (A \/ B) by A1;
+   thus a"\/"(b"\/"c) = Int(Cl(A \/ (Int(Cl(B \/ C)) \/ (B \/ C)))) \/
+                    (A \/ (Int(Cl(B \/ C)) \/ (B \/ C))) by A1,A3
+                 .= Int Cl(A \/ (B \/ C)) \/ (A \/ (B \/ C)) by Th10
+                 .= Int Cl(A \/ (B \/ C)) \/ (A \/ B \/ C) by XBOOLE_1:4
+                 .= Int Cl(A \/ B \/ C) \/ (A \/ B \/ C) by XBOOLE_1:4
+                 .= Int(Cl((Int(Cl(A \/ B)) \/ (A \/ B)) \/ C)) \/
+                    ((Int(Cl(A \/ B)) \/ (A \/ B)) \/ C) by Th10
+                 .= (a"\/"b)"\/"c by A1,A4;
+  end;
+  thus for a,b being Element of L holds (a"/\"b)"\/"b = b
+  proof
+   let a,b be Element of L;
+   reconsider A = a, B = b as Element of Domains_of T;
+   A5:a"/\"b = Cl(Int(A /\ B)) /\ (A /\ B) by A2;
+      Cl(Int(A /\ B)) /\ (A /\ B) c= A /\ B & A /\ B c= B by XBOOLE_1:17;
+    then A6: Cl(Int(A /\ B)) /\ (A /\ B) c= B by XBOOLE_1:1;
+      B c= Cl(B) by PRE_TOPC:48;
+    then Cl(Int(A /\ B)) /\ (A /\ B) c= Cl(B) by A6,XBOOLE_1:1;
+    then Cl(Cl(Int(A /\ B)) /\ (A /\ B)) c= Cl(Cl(B)) by PRE_TOPC:49;
+    then A7: Cl(Cl(Int(A /\ B)) /\ (A /\ B)) c= Cl(B) by TOPS_1:26;
+      B in Domains_of T;
+    then B in { D where D is Subset of T : D is condensed }
+    by Def1;
+    then ex D being Subset of T st D = B & D is condensed;
+    then A8: Int(Cl(B)) c= B by TOPS_1:def 6;
+   thus (a"/\"b)"\/"b = Int(Cl((Cl(Int(A /\ B)) /\ (A /\ B)) \/ B)) \/
+                     ((Cl(Int(A /\ B)) /\ (A /\ B)) \/ B) by A1,A5
+              .= Int(Cl((Cl(Int(A /\ B)) /\ (A /\ B)) \/ B)) \/
+ B by A6,XBOOLE_1:12
+              .= Int(Cl(Cl(Int(A /\ B)) /\ (A /\ B)) \/ Cl(B)) \/
+ B by PRE_TOPC:50
+              .= Int(Cl(B)) \/ B by A7,XBOOLE_1:12
+              .= b by A8,XBOOLE_1:12;
+  end;
+  thus for a,b being Element of L holds a"/\"b = b"/\"a
+  proof
+   let a,b be Element of L;
+   reconsider A = a, B = b as Element of Domains_of T;
+   thus a"/\"b = Cl(Int(B /\ A)) /\ (B /\ A) by A2
+            .= b"/\"a by A2;
+  end;
+  thus for a,b,c being Element of L
+                                      holds a"/\"(b"/\"c) = (a"/\"b)"/\"c
+  proof
+   let a,b,c be Element of L;
+   reconsider A = a, B = b, C = c as Element of Domains_of T;
+   A9:b"/\"c = Cl(Int(B /\ C)) /\ (B /\ C) by A2;
+   A10:a"/\"b = Cl(Int(A /\ B)) /\ (A /\ B) by A2;
+   thus a"/\"(b"/\"c) = Cl(Int(A /\ (Cl(Int(B /\ C)) /\ (B /\ C)))) /\
+                    (A /\ (Cl(Int(B /\ C)) /\ (B /\ C))) by A2,A9
+                 .= Cl Int(A /\ (B /\ C)) /\ (A /\ (B /\ C)) by Th12
+                 .= Cl Int(A /\ (B /\ C)) /\ (A /\ B /\ C) by XBOOLE_1:16
+                 .= Cl Int(A /\ B /\ C) /\ (A /\ B /\ C) by XBOOLE_1:16
+                 .= Cl(Int((Cl(Int(A /\ B)) /\ (A /\ B)) /\ C)) /\
+                    ((Cl(Int(A /\ B)) /\ (A /\ B)) /\ C) by Th12
+                 .= (a"/\"b)"/\"c by A2,A10;
+  end;
+  thus for a,b being Element of L holds a"/\"(a"\/"b)=a
+  proof
+   let a,b be Element of L;
+   reconsider A = a, B = b as Element of Domains_of T;
+   A11:a"\/"b = Int(Cl(A \/ B)) \/ (A \/ B) by A1;
+      A c= (A \/ B) & (A \/ B) c= Int(Cl(A \/ B)) \/ (A \/ B) by XBOOLE_1:7;
+    then A12: A c= Int(Cl(A \/ B)) \/ (A \/ B) by XBOOLE_1:1;
+      Int(A) c= A by TOPS_1:44;
+    then Int(A) c= Int(Cl(A \/ B)) \/ (A \/ B) by A12,XBOOLE_1:1;
+    then Int(Int(A)) c= Int(Int(Cl(A \/ B)) \/ (A \/ B)) by TOPS_1:48;
+    then A13: Int(A) c= Int(Int(Cl(A \/ B)) \/ (A \/ B)) by TOPS_1:45;
+      A in Domains_of T;
+    then A in { D where D is Subset of T : D is condensed } by Def1;
+    then ex D being Subset of T st D = A & D is condensed;
+    then A14: A c= Cl(Int(A)) by TOPS_1:def 6;
+   thus a"/\"(a"\/"b) = Cl(Int(A /\ (Int(Cl(A \/ B)) \/ (A \/ B)))) /\
+                    (A /\ (Int(Cl(A \/ B)) \/ (A \/ B))) by A2,A11
+              .= Cl(Int(A /\ (Int(Cl(A \/ B)) \/ (A \/ B)))) /\
+ A by A12,XBOOLE_1:28
+              .= Cl(Int(A) /\ Int(Int(Cl(A \/ B)) \/ (A \/ B))) /\
+ A by TOPS_1:46
+              .= Cl(Int(A)) /\ A by A13,XBOOLE_1:28
+              .= a by A14,XBOOLE_1:28;
+  end;
+ end;
+ then reconsider L as Lattice;
+   L is bounded
+ proof
+  thus L is lower-bounded
+  proof
+     {} T is condensed by Th14;
+   then {} T in { D where D is Subset of T : D is condensed };
+   then reconsider c = {} T as Element of L by Def1;
+   take c;
+   let a be Element of L;
+   reconsider C = c, A = a as Element of Domains_of T;
+     C /\ A = C;
+   hence c"/\"a = Cl(Int(C)) /\ C by A2 .= c;
+   hence a"/\"c = c;
+  end;
+  thus L is upper-bounded
+  proof
+A15:   [#] T is condensed by Th15;
+   then [#] T in { D where D is Subset of T : D is condensed };
+   then reconsider c = [#] T as Element of L by Def1;
+   take c;
+   let a be Element of L;
+   reconsider C = c, A = a as Element of Domains_of T;
+     C = [#] T & A c= [#] T by PRE_TOPC:14;
+   then A16: C \/ A = C by XBOOLE_1:12;
+   A17: Int(Cl(C)) c= C by A15,TOPS_1:def 6;
+   thus c"\/"a = Int(Cl(C)) \/ C by A1,A16
+            .= c by A17,XBOOLE_1:12;
+   hence a"\/"c = c;
+  end;
+ end;
+ then reconsider L as 01_Lattice;
+   L is complemented
+ proof
+   let b be Element of L;
+   reconsider B = b as Element of Domains_of T;
+     B in Domains_of T;
+   then B in { D where D is Subset of T : D is condensed} by Def1;
+   then ex D being Subset of T st D = B & D is condensed;
+   then B` is condensed by Th16;
+   then B` in { D where D is Subset of T : D is condensed};
+   then reconsider a = B` as Element of L by Def1;
+   take a;
+     [#] T is condensed by Th15;
+   then [#] T in { D where D is Subset of T : D is condensed};
+   then reconsider c = [#] T as Element of L by Def1;
+   A18: for v being Element of L
+   holds (the L_meet of L).(c,v) = v
+   proof
+    let v be Element of L;
+    reconsider V = v as Element of Domains_of T;
+      V in Domains_of T;
+    then V in { D where D is Subset of T : D is condensed} by Def1;
+    then ex D being Subset of T st D = V & D is condensed;
+    then A19: V c= Cl(Int V) by TOPS_1:def 6;
+    thus (the L_meet of L).(c,v) = c"/\"v by LATTICES:def 2
+             .= Cl(Int([#] T /\ V)) /\ ([#] T /\ V) by A2
+             .= Cl(Int([#] T /\ V)) /\ V by PRE_TOPC:15
+             .= Cl(Int V) /\ V by PRE_TOPC:15
+             .= v by A19,XBOOLE_1:28;
+   end;
+   thus a"\/"b = Int(Cl(B` \/ B)) \/ (B` \/ B) by A1
+             .= Int(Cl(B` \/ B)) \/ ([#] T) by PRE_TOPC:18
+             .= c by TOPS_1:2
+             .= Top L by A18,LATTICE2:25;
+   hence b"\/"a = Top L;
+     {} T is condensed by Th14;
+   then {} T in { D where D is Subset of T : D is condensed};
+   then reconsider c = {} T as Element of L by Def1;
+A20: for v being Element of L holds (the L_join of L).(c,v) = v
+   proof
+    let v be Element of L;
+    reconsider V = v as Element of Domains_of T;
+      V in Domains_of T;
+    then V in { D where D is Subset of T : D is condensed} by Def1;
+    then ex D being Subset of T st D = V & D is condensed;
+    then A21: Int(Cl V) c= V by TOPS_1:def 6;
+    thus (the L_join of L).(c,v) = c"\/"v by LATTICES:def 1
+             .= Int(Cl({} T \/ V)) \/ ({} T \/ V) by A1
+             .= Int(Cl((([#]T)`) \/ V)) \/ ({} T \/ V) by TOPS_1:8
+             .= Int(Cl((([#]T)`) \/ (V``))) \/ ((([#]T)`) \/ V) by TOPS_1:8
+             .= Int(Cl((([#] T) /\ V`)`)) \/ (([#] T)` \/ (V``))
+                  by SUBSET_1:30
+             .= Int(Cl((([#] T) /\ V`)`)) \/ ((([#] T) /\ V`)`)
+                    by SUBSET_1:30
+             .= Int(Cl((V`)`)) \/ ((([#] T) /\ V`))` by PRE_TOPC:15
+             .= Int(Cl V) \/ ((V``)) by PRE_TOPC:15
+             .= v by A21,XBOOLE_1:12;
+   end;
+A22: (B`) misses B by PRE_TOPC:26;
+   thus a"/\"b = Cl(Int((B`) /\ B)) /\ ((B`) /\ B) by A2
+             .= Cl(Int((B`) /\ B)) /\ ({} T) by A22,XBOOLE_0:def 7
+             .= Bottom L by A20,LATTICE2:22;
+   hence b"/\"a = Bottom L;
+ end;
+ hence thesis;
+end;
+
+definition let T be non empty TopSpace;
+ func Domains_Lattice T-> C_Lattice equals
+:Def4: LattStr(#Domains_of T,Domains_Union T,Domains_Meet T#);
+coherence by Th30;
+end;
+
+
+begin
+:: 4. The Lattice of Closed Domains.
+
+definition let T be TopStruct;
+ func Closed_Domains_of T -> Subset-Family of T equals :Def5:
+  { A where A is Subset of T : A is closed_condensed };
+ coherence
+ proof
+  set B = { A where A is Subset of T : A is closed_condensed };
+    B c= bool the carrier of T
+  proof
+   let x be set;
+   assume x in B;
+   then ex A being Subset of T st x = A & A is closed_condensed;
+   hence x in bool the carrier of T;
+  end;
+  then B is Subset-Family of T by SETFAM_1:def 7;
+  hence thesis;
+ end;
+end;
+
+definition let T be non empty TopSpace;
+ cluster Closed_Domains_of T -> non empty;
+ coherence
+ proof
+    {} T is closed_condensed by Th18;
+  then {} T in { A where A is Subset of T : A is closed_condensed };
+  hence thesis by Def5;
+ end;
+end;
+
+theorem Th31:
+ for T being non empty TopSpace holds Closed_Domains_of T c= Domains_of T
+proof let T be non empty TopSpace;
+   now let A be set;
+ assume A in Closed_Domains_of T;
+ then A in { D where D is Subset of T : D is closed_condensed } by Def5;
+ then A1: ex D being Subset of T st D = A & D is closed_condensed;
+ then reconsider F = A as Subset of T;
+   F is condensed by A1,TOPS_1:106;
+ then F in { E where E is Subset of T : E is condensed };
+ hence A in Domains_of T by Def1;
+ end;
+ hence thesis by TARSKI:def 3;
+end;
+
+definition let T be non empty TopSpace;
+ func Closed_Domains_Union T -> BinOp of Closed_Domains_of T means
+:Def6: for A,B being Element of Closed_Domains_of T holds
+   it.(A,B) = A \/ B;
+ existence
+ proof
+    set D = [:Closed_Domains_of T,(Closed_Domains_of T) qua non empty set:];
+   defpred X[set,set] means
+    for A,B being Element of Closed_Domains_of T
+        st $1 = [A,B] holds $2 = A \/ B;
+     A1: for a being Element of D
+      ex b being Element of Closed_Domains_of T st X[a,b]
+            proof
+      let a be Element of D;
+      reconsider G = a`1, F = a`2 as Element of Closed_Domains_of T;
+        G in Closed_Domains_of T & F in Closed_Domains_of T;
+      then A2:   G in { E where E is Subset of T : E is closed_condensed } &
+      F in { H where H is Subset of T : H is closed_condensed } by Def5;
+      then consider E being Subset of T such that
+A3:     E = G & E is closed_condensed;
+      consider H being Subset of T such that
+A4:     H = F & H is closed_condensed by A2;
+        E \/ H is closed_condensed by A3,A4,TOPS_1:108;
+      then G \/ F
+        in { K where K is Subset of T : K is closed_condensed } by A3,A4;
+      then reconsider
+         b = G \/ F as Element of Closed_Domains_of T by Def5;
+      take b;
+       let A,B be Element of Closed_Domains_of T;
+       assume a = [A,B];
+       then [A,B] = [G,F] by MCART_1:23;
+       then A = G & B = F by ZFMISC_1:33;
+       hence b = A \/ B;
+     end;
+    consider h being Function of D, Closed_Domains_of T
+      such that
+      A5: for a being Element of D holds X[a,h.a] from FuncExD(A1);
+   take h;
+   let A,B be Element of Closed_Domains_of T;
+   thus h.(A,B) = h . [A,B] by BINOP_1:def 1
+               .= A \/ B by A5;
+ end;
+ uniqueness
+  proof
+    deffunc U(Element of Closed_Domains_of T,Element of Closed_Domains_of T)
+        = $1 \/ $2;
+    thus for o1,o2 being BinOp of Closed_Domains_of T st
+    (for a,b being Element of Closed_Domains_of T holds o1.(a,b) = U(a,b)) &
+    (for a,b being Element of Closed_Domains_of T holds o2.(a,b) = U(a,b))
+  holds o1 = o2 from BinOpDefuniq;
+  end;
+synonym CLD-Union T;
+end;
+
+theorem Th32:
+ for A,B being Element of Closed_Domains_of T holds
+  (CLD-Union T).(A,B) = (D-Union T).(A,B)
+ proof
+   let A,B be Element of Closed_Domains_of T;
+     A in Closed_Domains_of T & B in Closed_Domains_of T;
+   then A1: A in { D where D is Subset of T : D is closed_condensed } &
+    B in { E where E is Subset of T : E is closed_condensed } by Def5;
+    then consider D being Subset of T such that
+A2:   D = A & D is closed_condensed;
+    consider E being Subset of T such that
+A3:   E = B & E is closed_condensed by A1;
+     D \/ E is closed_condensed by A2,A3,TOPS_1:108;
+   then D \/ E is condensed by TOPS_1:106;
+   then A4: Int Cl(A \/ B) c= A \/ B by A2,A3,TOPS_1:def 6;
+      D is condensed & E is condensed by A2,A3,TOPS_1:106;
+   then A in { P where P is Subset of T : P is condensed } &
+         B in { S where S is Subset of T : S is condensed } by A2,A3;
+   then reconsider A0 = A, B0 = B as Element of Domains_of T by Def1;
+   thus (CLD-Union T).(A,B) = A \/ B by Def6
+                          .= Int(Cl(A0 \/ B0)) \/ (A0 \/ B0) by A4,XBOOLE_1:12
+                          .= (D-Union T).(A,B) by Def2;
+ end;
+
+definition let T be non empty TopSpace;
+ func Closed_Domains_Meet T -> BinOp of Closed_Domains_of T means
+:Def7: for A,B being Element of Closed_Domains_of T holds
+       it.(A,B) = Cl(Int(A /\ B));
+ existence
+ proof
+    set D = [:Closed_Domains_of T,(Closed_Domains_of T) qua non empty set:];
+   defpred X[set,set] means for A,B being Element of Closed_Domains_of T
+       st $1 = [A,B] holds $2 = Cl Int(A /\ B);
+     A1: for a being Element of D
+      ex b being Element of Closed_Domains_of T st X[a,b]
+     proof
+      let a be Element of D;
+      reconsider G = a`1, F = a`2
+      as Element of Closed_Domains_of T;
+        Cl(Int(G /\ F)) is closed_condensed by Th22;
+      then Cl(Int(G /\ F)) in
+           { E where E is Subset of T : E is closed_condensed };
+      then reconsider
+         b = Cl(Int(G /\ F)) as Element of Closed_Domains_of T by Def5;
+      take b;
+       let A,B be Element of Closed_Domains_of T;
+       assume a = [A,B];
+       then [A,B] = [G,F] by MCART_1:23;
+       then A = G & B = F by ZFMISC_1:33;
+       hence b = Cl(Int(A /\ B));
+     end;
+    consider h being Function of D, Closed_Domains_of T
+      such that A2: for a being Element of D holds X[a,h.a]
+        from FuncExD(A1);
+   take h;
+   let A,B be Element of Closed_Domains_of T;
+   thus h.(A,B) = h . [A,B] by BINOP_1:def 1
+               .= Cl(Int(A /\ B)) by A2;
+ end;
+ uniqueness
+  proof
+    deffunc U(Element of Closed_Domains_of T,Element of Closed_Domains_of T)
+     = Cl Int($1 /\ $2);
+    thus for o1,o2 being BinOp of Closed_Domains_of T st
+    (for a,b being Element of Closed_Domains_of T holds o1.(a,b) = U(a,b)) &
+    (for a,b being Element of Closed_Domains_of T holds o2.(a,b) = U(a,b))
+  holds o1 = o2 from BinOpDefuniq;
+  end;
+synonym CLD-Meet T;
+end;
+
+theorem Th33:
+ for A,B being Element of Closed_Domains_of T holds
+  (CLD-Meet T).(A,B) = (D-Meet T).(A,B)
+ proof
+   let A,B be Element of Closed_Domains_of T;
+     A in Closed_Domains_of T & B in Closed_Domains_of T;
+   then A1: A in { D where D is Subset of T : D is closed_condensed } &
+    B in { E where E is Subset of T : E is closed_condensed }
+    by Def5;
+    then consider D being Subset of T such that
+A2:   D = A & D is closed_condensed;
+    consider E being Subset of T such that
+A3:   E = B & E is closed_condensed by A1;
+     D is closed & E is closed by A2,A3,TOPS_1:106;
+   then D /\ E is closed by TOPS_1:35;
+   then A4: Cl(D /\ E) = D /\ E by PRE_TOPC:52;
+     Int(A /\ B) c= A /\ B by TOPS_1:44;
+   then A5: Cl(Int(A /\ B)) c= A /\ B by A2,A3,A4,PRE_TOPC:49;
+      D is condensed & E is condensed by A2,A3,TOPS_1:106;
+   then A in { P where P is Subset of T : P is condensed } &
+         B in { S where S is Subset of T : S is condensed }
+         by A2,A3;
+   then reconsider A0 = A, B0 = B as Element of Domains_of T
+   by Def1;
+   thus (CLD-Meet T).(A,B) = Cl(Int(A /\ B)) by Def7
+                                .= Cl(Int(A0 /\ B0)) /\ (A0 /\
+ B0) by A5,XBOOLE_1:28
+                                .= (D-Meet T).(A,B) by Def3;
+ end;
+
+theorem Th34:
+ for T being non empty TopSpace holds
+  LattStr(#Closed_Domains_of T,CLD-Union T,CLD-Meet T#) is B_Lattice
+ proof let T be non empty TopSpace;
+  set L = LattStr(#Closed_Domains_of T,CLD-Union T,CLD-Meet T#);
+ A1:
+  for a,b being Element of L,
+      A,B being Element of Closed_Domains_of T st
+       a = A & b = B holds a"\/"b = A \/ B
+  proof
+    let a,b be Element of L,
+        A,B be Element of Closed_Domains_of T;
+    assume a = A & b = B;
+    hence a"\/"b = (CLD-Union T).(A,B) by LATTICES:def 1
+             .= A \/ B by Def6;
+  end;
+ A2:
+  for a,b being Element of L,
+      A,B being Element of Closed_Domains_of T
+  st a = A & b = B holds a"/\"b = Cl(Int(A /\ B))
+  proof
+    let a,b be Element of L,
+        A,B be Element of Closed_Domains_of T;
+    assume a = A & b = B;
+    hence a"/\"b = (CLD-Meet T).(A,B) by LATTICES:def 2
+             .= Cl(Int(A /\ B)) by Def7;
+  end;
+   L is Lattice-like
+ proof
+  thus for a,b being Element of L holds a"\/"b = b"\/"a
+  proof
+    let a,b be Element of L;
+    reconsider A = a, B = b as Element of Closed_Domains_of T;
+    thus a"\/"b = B \/ A by A1
+             .= b"\/"a by A1;
+  end;
+  thus for a,b,c being Element of L
+                                      holds a"\/"(b"\/"c) = (a"\/"b)"\/"c
+  proof
+   let a,b,c be Element of L;
+   reconsider A = a, B = b, C = c
+   as Element of Closed_Domains_of T;
+   A3: b"\/"c = B \/ C by A1;
+   A4: a"\/"b = A \/ B by A1;
+   thus a"\/"(b"\/"c) = A \/ (B \/ C) by A1,A3
+                 .= (A \/ B) \/ C by XBOOLE_1:4
+                 .= (a"\/"b)"\/"c by A1,A4;
+  end;
+  thus for a,b being Element of L holds (a"/\"b)"\/"b = b
+  proof
+   let a,b be Element of L;
+   reconsider A = a, B = b as Element of Closed_Domains_of T;
+   A5:a"/\"b = Cl(Int(A /\ B)) by A2;
+      B in Closed_Domains_of T;
+    then B in { D where D is Subset of T : D is closed_condensed } by Def5;
+     then ex D being Subset of T st D = B & D is closed_condensed;
+    then A6: B = Cl Int B by TOPS_1:def 7;
+     Cl(Int(A /\ B)) = Cl(Int A /\ Int B) by TOPS_1:46;
+   then Cl(Int(A /\ B)) c= Cl Int A /\ B &
+                       Cl Int A /\ B c= B by A6,PRE_TOPC:51,XBOOLE_1:17;
+   then A7: Cl(Int(A /\ B)) c= B by XBOOLE_1:1;
+   thus (a"/\"b)"\/"b = Cl(Int(A /\ B)) \/ B by A1,A5
+              .= b by A7,XBOOLE_1:12;
+  end;
+  thus for a,b being Element of L holds a"/\"b = b"/\"a
+  proof
+   let a,b be Element of L;
+   reconsider A = a, B = b as Element of Closed_Domains_of T;
+   thus a"/\"b = Cl(Int(B /\ A)) by A2
+            .= b"/\"a by A2;
+  end;
+  thus for a,b,c being Element of L
+                                      holds a"/\"(b"/\"c) = (a"/\"b)"/\"c
+  proof
+   let a,b,c be Element of L;
+   reconsider A = a, B = b, C = c
+   as Element of Closed_Domains_of T;
+     A in Closed_Domains_of T & B in Closed_Domains_of T &
+                                C in Closed_Domains_of T;
+   then A in { D where D is Subset of T : D is closed_condensed } &
+    B in { E where E is Subset of T : E is closed_condensed } &
+    C in { F where F is Subset of T : F is closed_condensed } by Def5;
+then A8:
+    (ex D being Subset of T st D = A & D is closed_condensed) &
+    (ex E being Subset of T st E = B & E is closed_condensed) &
+    (ex F being Subset of T st F = C & F is closed_condensed);
+
+   A9: b"/\"c = Cl(Int(B /\ C)) by A2;
+   A10: a"/\"b = Cl(Int(A /\ B)) by A2;
+   thus a"/\"(b"/\"c) = Cl(Int(A /\ (Cl(Int(B /\ C))))) by A2,A9
+                 .= Cl(Int((Cl(Int(A /\ B)) /\ C))) by A8,Th28
+                 .= (a"/\"b)"/\"c by A2,A10;
+  end;
+  thus for a,b being Element of L holds a"/\"(a"\/"b)=a
+  proof
+   let a,b be Element of L;
+   reconsider A = a, B = b as Element of Closed_Domains_of T;
+   A11:a"\/"b = A \/ B by A1;
+      A in Closed_Domains_of T;
+     then A in { D where D is Subset of T : D is closed_condensed } by Def5;
+    then A12:
+     ex D being Subset of T st D = A & D is closed_condensed;
+   thus a"/\"(a"\/"b) = Cl(Int(A /\ (A \/ B))) by A2,A11
+              .= Cl(Int(A)) by XBOOLE_1:21
+              .= a by A12,TOPS_1:def 7;
+  end;
+ end;
+ then reconsider L as Lattice;
+   L is Boolean
+ proof
+  thus L is lower-bounded
+  proof
+A13:   {} T is closed_condensed by Th18;
+    then {}T in { D where D is Subset of T : D is closed_condensed };
+   then reconsider c = {} T as Element of L by Def5;
+   take c;
+   let a be Element of L;
+   reconsider C = c, A = a as Element of Closed_Domains_of T;
+   thus c"/\"a = Cl(Int(C /\ A)) by A2
+            .= c by A13,TOPS_1:def 7;
+   hence a"/\"c = c;
+  end;
+  thus L is upper-bounded
+  proof
+     [#] T is closed_condensed by Th19;
+    then [#] T in { D where D is Subset of T : D is closed_condensed };
+   then reconsider c = [#] T as Element of L by Def5;
+   take c;
+   let a be Element of L;
+   reconsider C = c, A = a as Element of Closed_Domains_of T;
+A14:   C = [#] T & A c= [#] T by PRE_TOPC:14;
+   thus c"\/"a = C \/ A by A1
+            .= c by A14,XBOOLE_1:12;
+   hence a"\/"c = c;
+  end;
+  thus L is complemented
+ proof
+   let b be Element of L;
+   reconsider B = b as Element of Closed_Domains_of T;
+     B in Closed_Domains_of T;
+   then B in { D where D is Subset of T : D is closed_condensed} by Def5;
+   then consider D being Subset of T such that
+A15:   D = B & D is closed_condensed;
+   A16: D is condensed & D is closed by A15,TOPS_1:106;
+   then Cl B` is closed_condensed by A15,Th26;
+   then Cl B` in { K where K is Subset of T : K is closed_condensed};
+   then reconsider a = Cl B` as Element of L by Def5;
+   take a;
+     [#] T is closed_condensed by Th19;
+    then [#] T in { K where K is Subset of T : K is closed_condensed};
+   then reconsider c = [#] T as Element of L by Def5;
+A17: for v being Element of L holds (the L_meet of L).(c,v) = v
+   proof
+    let v be Element of L;
+    reconsider V = v as Element of Closed_Domains_of T;
+      V in Closed_Domains_of T;
+     then V in { K where K is Subset of T : K is closed_condensed} by Def5;
+then A18:  ex D being Subset of T st D = V & D is closed_condensed;
+    thus (the L_meet of L).(c,v) = c"/\"v by LATTICES:def 2
+             .= Cl(Int([#] T /\ V)) by A2
+             .= Cl(Int V) by PRE_TOPC:15
+             .= v by A18,TOPS_1:def 7;
+   end;
+    thus a"\/"b = Cl B` \/ B by A1
+             .= Cl D` \/ Cl D by A15,A16,PRE_TOPC:52
+             .= Cl(B` \/ B) by A15,PRE_TOPC:50
+             .= Cl [#] T by PRE_TOPC:18
+             .= c by TOPS_1:27
+             .= Top L by A17,LATTICE2:25;
+   hence b"\/"a = Top L;
+     {} T is closed_condensed by Th18;
+    then {} T in { K where K is Subset of T : K is closed_condensed};
+   then reconsider c = {} T as Element of L by Def5;
+A19: for v being Element of L holds (the L_join of L).(c,v) = v
+   proof
+    let v be Element of L;
+    reconsider V = v as Element of Closed_Domains_of T;
+    thus (the L_join of L).(c,v) = c"\/"v by LATTICES:def 1
+             .= {} T \/ V by A1
+             .= (([#]T)`) \/ (V``) by TOPS_1:8
+             .= ([#] T /\ V`)` by SUBSET_1:30
+             .= (V``) by PRE_TOPC:15
+             .= v;
+   end;
+   thus a"/\"b = Cl(Int(B /\ Cl B`)) by A2
+             .= Cl({} T) by Th8
+             .= c by PRE_TOPC:52
+             .= Bottom L by A19,LATTICE2:22;
+  hence b"/\"a = Bottom L;
+ end;
+  thus L is distributive
+  proof
+   let a,b,c be Element of L;
+   reconsider A = a, B = b, C = c
+   as Element of Closed_Domains_of T;
+     A in Closed_Domains_of T & B in Closed_Domains_of T &
+                                C in Closed_Domains_of T;
+   then A20: A in { D where D is Subset of T : D is closed_condensed } &
+    B in { E where E is Subset of T : E is closed_condensed } &
+    C in { F where F is Subset of T : F is closed_condensed }
+    by Def5;
+    then consider D being Subset of T such that
+A21:   D = A & D is closed_condensed;
+    consider E being Subset of T such that
+A22:    E = B & E is closed_condensed by A20;
+   consider F being Subset of T such that
+A23:    F = C & F is closed_condensed by A20;
+      D is closed & E is closed & F is closed by A21,A22,A23,TOPS_1:106;
+   then A24: D /\ E is closed & D /\ F is closed by TOPS_1:35;
+   A25:b"\/"c = B \/ C by A1;
+   A26:a"/\"b = Cl(Int(A /\ B)) by A2;
+   A27:a"/\"c = Cl(Int(A /\ C)) by A2;
+   thus a"/\"(b"\/"c) = Cl(Int(A /\ (B \/ C))) by A2,A25
+                 .= Cl(Int((A /\ B) \/ (A /\ C))) by XBOOLE_1:23
+                 .= Cl(Int(A /\ B)) \/ Cl(Int(A /\ C)) by A21,A22,A24,Th6
+                 .= (a"/\"b)"\/"(a"/\"c) by A1,A26,A27;
+  end;
+ end;
+ hence thesis;
+end;
+
+definition let T be non empty TopSpace;
+ func Closed_Domains_Lattice T-> B_Lattice equals
+:Def8:
+   LattStr(#Closed_Domains_of T,Closed_Domains_Union T,Closed_Domains_Meet T#);
+coherence by Th34;
+end;
+
+begin
+:: 5. The Lattice of Open Domains.
+
+definition let T be TopStruct;
+ func Open_Domains_of T -> Subset-Family of T equals
+:Def9: { A where A is Subset of T : A is open_condensed };
+ coherence
+ proof
+  set B = { A where A is Subset of T : A is open_condensed };
+    B c= bool the carrier of T
+  proof
+   let x be set;
+   assume x in B;
+   then ex A being Subset of T st x = A & A is open_condensed;
+   hence x in bool the carrier of T;
+  end;
+  then B is Subset-Family of T by SETFAM_1:def 7;
+  hence thesis;
+ end;
+end;
+
+definition let T be non empty TopSpace;
+ cluster Open_Domains_of T -> non empty;
+ coherence
+ proof
+    {} T is open_condensed by Th20;
+  then {} T in { A where A is Subset of T : A is open_condensed };
+  hence thesis by Def9;
+ end;
+end;
+
+theorem Th35:
+ for T being non empty TopSpace holds Open_Domains_of T c= Domains_of T
+proof let T be non empty TopSpace;
+   now let A be set;
+ assume A in Open_Domains_of T;
+ then A in { D where D is Subset of T : D is open_condensed } by Def9;
+ then A1: ex D being Subset of T st D = A & D is open_condensed;
+ then reconsider F = A as Subset of T;
+   F is condensed by A1,TOPS_1:107;
+ then F in { E where E is Subset of T : E is condensed };
+ hence A in Domains_of T by Def1;
+ end;
+ hence thesis by TARSKI:def 3;
+end;
+
+definition let T be non empty TopSpace;
+ func Open_Domains_Union T -> BinOp of Open_Domains_of T means
+:Def10: for A,B being Element of Open_Domains_of T holds
+  it.(A,B) = Int(Cl(A \/ B));
+ existence
+ proof
+    set D = [:Open_Domains_of T,(Open_Domains_of T) qua non empty set:];
+   defpred X[set,set] means  for A,B being Element of Open_Domains_of T
+       st $1 = [A,B] holds $2 = Int(Cl(A \/ B));
+     A1: for a being Element of D
+      ex b being Element of Open_Domains_of T st X[a,b]
+     proof
+      let a be Element of D;
+      reconsider G = a`1, F = a`2
+      as Element of Open_Domains_of T;
+        Int(Cl(G \/ F)) is open_condensed by Th23;
+      then Int(Cl(G \/ F)) in
+           { E where E is Subset of T : E is open_condensed };
+      then reconsider
+         b = Int(Cl(G \/ F)) as Element of Open_Domains_of T
+         by Def9;
+      take b;
+       let A,B be Element of Open_Domains_of T;
+       assume a = [A,B];
+       then [A,B] = [G,F] by MCART_1:23;
+       then A = G & B = F by ZFMISC_1:33;
+       hence b = Int(Cl(A \/ B));
+     end;
+    consider h being Function of D, Open_Domains_of T
+      such that A2: for a being Element of D holds X[a,h.a]
+        from FuncExD(A1);
+   take h;
+   let A,B be Element of Open_Domains_of T;
+   thus h.(A,B) = h . [A,B] by BINOP_1:def 1
+               .= Int(Cl(A \/ B)) by A2;
+ end;
+ uniqueness
+  proof
+    deffunc U(Element of Open_Domains_of T,Element of Open_Domains_of T)
+     = Int Cl($1 \/ $2);
+    thus for o1,o2 being BinOp of Open_Domains_of T st
+    (for a,b being Element of Open_Domains_of T holds o1.(a,b) = U(a,b)) &
+    (for a,b being Element of Open_Domains_of T holds o2.(a,b) = U(a,b))
+  holds o1 = o2 from BinOpDefuniq;
+  end;
+synonym OPD-Union T;
+end;
+
+theorem Th36:
+ for A,B being Element of Open_Domains_of T holds
+  (OPD-Union T).(A,B) = (D-Union T).(A,B)
+ proof
+   let A,B be Element of Open_Domains_of T;
+     A in Open_Domains_of T & B in Open_Domains_of T;
+then A1:  A in { D where D is Subset of T : D is open_condensed } &
+     B in { E where E is Subset of T : E is open_condensed }
+        by Def9;
+   then consider D being Subset of T such that
+A2:   D = A & D is open_condensed;
+   consider E being Subset of T such that
+A3:  E = B & E is open_condensed by A1;
+     D is open & E is open by A2,A3,TOPS_1:107;
+   then D \/ E is open by TOPS_1:37;
+   then A4: Int(D \/ E) = D \/ E by TOPS_1:55;
+     A \/ B c= Cl(A \/ B) by PRE_TOPC:48;
+   then A5: A \/ B c= Int(Cl(A \/ B)) by A2,A3,A4,TOPS_1:48;
+      D is condensed & E is condensed by A2,A3,TOPS_1:107;
+   then A in { P where P is Subset of T : P is condensed } &
+         B in { S where S is Subset of T : S is condensed }
+         by A2,A3;
+   then reconsider A0 = A, B0 = B as Element of Domains_of T by Def1;
+   thus (OPD-Union T).(A,B) = Int(Cl(A \/ B)) by Def10
+                           .= Int(Cl(A0 \/ B0)) \/ (A0 \/ B0) by A5,XBOOLE_1:12
+                           .= (D-Union T).(A,B) by Def2;
+ end;
+
+definition let T be non empty TopSpace;
+ func Open_Domains_Meet T -> BinOp of Open_Domains_of T means
+:Def11: for A,B being Element of Open_Domains_of T holds
+       it.(A,B) = A /\ B;
+ existence
+ proof
+    set D = [:Open_Domains_of T,(Open_Domains_of T) qua non empty set:];
+   defpred X[set,set] means
+     for A,B being Element of Open_Domains_of T st $1 = [A,B]
+       holds $2 = A /\ B;
+     A1: for a being Element of D
+      ex b being Element of Open_Domains_of T st X[a,b]
+     proof
+      let a be Element of D;
+      reconsider G = a`1, F = a`2
+      as Element of Open_Domains_of T;
+        G in Open_Domains_of T & F in Open_Domains_of T;
+      then A2:    G in { E where E is Subset of T : E is open_condensed } &
+       F in { H where H is Subset of T : H is open_condensed }
+       by Def9;
+       then consider E being Subset of T such that
+A3:       E = G & E is open_condensed;
+       consider H being Subset of T such that
+A4:       H = F & H is open_condensed by A2;
+        E /\ H is open_condensed by A3,A4,TOPS_1:109;
+      then G /\ F
+       in { K where K is Subset of T : K is open_condensed }
+       by A3,A4;
+      then reconsider
+         b = G /\ F as Element of Open_Domains_of T by Def9;
+      take b;
+       let A,B be Element of Open_Domains_of T;
+       assume a = [A,B];
+       then [A,B] = [G,F] by MCART_1:23;
+       then A = G & B = F by ZFMISC_1:33;
+       hence b = A /\ B;
+     end;
+    consider h being Function of D, Open_Domains_of T
+      such that A5: for a being Element of D holds X[a,h.a]
+        from FuncExD(A1);
+   take h;
+   let A,B be Element of Open_Domains_of T;
+   thus h.(A,B) = h . [A,B] by BINOP_1:def 1
+               .= A /\ B by A5;
+ end;
+ uniqueness
+  proof
+    deffunc U(Element of Open_Domains_of T,Element of Open_Domains_of T)
+        = $1 /\ $2;
+    thus for o1,o2 being BinOp of Open_Domains_of T st
+    (for a,b being Element of Open_Domains_of T holds o1.(a,b) = U(a,b)) &
+    (for a,b being Element of Open_Domains_of T holds o2.(a,b) = U(a,b))
+  holds o1 = o2 from BinOpDefuniq;
+  end;
+synonym OPD-Meet T;
+end;
+
+theorem Th37:
+ for A,B being Element of Open_Domains_of T holds
+  (OPD-Meet T).(A,B) = (D-Meet T).(A,B)
+ proof
+   let A,B be Element of Open_Domains_of T;
+     A in Open_Domains_of T & B in Open_Domains_of T;
+   then A1: A in { D where D is Subset of T : D is open_condensed } &
+    B in { E where E is Subset of T : E is open_condensed }
+    by Def9;
+   then consider D being Subset of T such that
+A2:  D = A & D is open_condensed;
+   consider E being Subset of T such that
+A3:   E = B & E is open_condensed by A1;
+     D /\ E is open_condensed by A2,A3,TOPS_1:109;
+   then A /\ B is condensed by A2,A3,TOPS_1:107;
+   then A4: A /\ B c= Cl Int(A /\ B) by TOPS_1:def 6;
+      D is condensed & E is condensed by A2,A3,TOPS_1:107;
+   then A in { P where P is Subset of T : P is condensed } &
+         B in { S where S is Subset of T : S is condensed }
+         by A2,A3;
+   then reconsider A0 = A, B0 = B as Element of Domains_of T by Def1;
+   thus (OPD-Meet T).(A,B) = A /\ B by Def11
+                              .= Cl(Int(A0 /\ B0)) /\ (A0 /\ B0) by A4,XBOOLE_1
+:28
+                              .= (D-Meet T).(A,B) by Def3;
+ end;
+
+theorem Th38:
+ for T being non empty TopSpace holds
+  LattStr(#Open_Domains_of T,OPD-Union T,OPD-Meet T#) is B_Lattice
+ proof let T be non empty TopSpace;
+  set L = LattStr(#Open_Domains_of T,OPD-Union T,OPD-Meet T#);
+ A1:
+  for a,b being Element of L,
+      A,B being Element of Open_Domains_of T
+    st a = A & b = B holds a"\/"b = Int(Cl(A \/ B))
+  proof
+    let a,b be Element of L,
+        A,B be Element of Open_Domains_of T;
+    assume a = A & b = B;
+    hence a"\/"b = (OPD-Union T).(A,B) by LATTICES:def 1
+             .= Int(Cl(A \/ B)) by Def10;
+  end;
+ A2:
+  for a,b being Element of L,
+      A,B being Element of Open_Domains_of T st
+   a = A & b = B holds a"/\"b = A /\ B
+  proof
+    let a,b be Element of L,
+        A,B be Element of Open_Domains_of T;
+    assume a = A & b = B;
+    hence a"/\"b = (OPD-Meet T).(A,B) by LATTICES:def 2
+             .= A /\ B by Def11;
+  end;
+   L is Lattice-like
+ proof
+  thus for a,b being Element of L holds a"\/"b = b"\/"a
+  proof
+    let a,b be Element of L;
+    reconsider A = a, B = b as Element of Open_Domains_of T;
+    thus a"\/"b = Int(Cl(B \/ A)) by A1
+             .= b"\/"a by A1;
+  end;
+  thus for a,b,c being Element of L
+                                      holds a"\/"(b"\/"c) = (a"\/"b)"\/"c
+  proof
+   let a,b,c be Element of L;
+   reconsider A = a, B = b, C = c
+   as Element of Open_Domains_of T;
+     A in Open_Domains_of T & B in Open_Domains_of T & C in Open_Domains_of T;
+   then A in { D where D is Subset of T : D is open_condensed } &
+        B in { E where E is Subset of T : E is open_condensed } &
+        C in { F where F is Subset of T : F is open_condensed }
+        by Def9;
+   then A3:
+    (ex D being Subset of T st D = A & D is open_condensed) &
+        (ex E being Subset of T st E = B & E is open_condensed) &
+        (ex F being Subset of T st F = C & F is open_condensed);
+
+   A4:b"\/"c = Int(Cl(B \/ C)) by A1;
+   A5:a"\/"b = Int(Cl(A \/ B)) by A1;
+   thus a"\/"(b"\/"c) = Int(Cl(A \/ (Int(Cl(B \/ C))))) by A1,A4
+                 .= Int(Cl((Int(Cl(A \/ B)) \/ C))) by A3,Th29
+                 .= (a"\/"b)"\/"c by A1,A5;
+  end;
+  thus for a,b being Element of L holds (a"/\"b)"\/"b = b
+  proof
+   let a,b be Element of L;
+   reconsider A = a, B = b as Element of Open_Domains_of T;
+   A6:a"/\"b = A /\ B by A2;
+      B in Open_Domains_of T;
+     then B in { D where D is Subset of T : D is open_condensed } by Def9;
+then A7:  ex D being Subset of T st D = B & D is open_condensed;
+   thus (a"/\"b)"\/"b = Int(Cl((A /\ B) \/ B)) by A1,A6
+              .= Int(Cl(B))by XBOOLE_1:22
+              .= b by A7,TOPS_1:def 8;
+  end;
+  thus for a,b being Element of L holds a"/\"b = b"/\"a
+  proof
+   let a,b be Element of L;
+   reconsider A = a, B = b as Element of Open_Domains_of T;
+   thus a"/\"b = B /\ A by A2
+            .= b"/\"a by A2;
+  end;
+  thus for a,b,c being Element of L
+                                      holds a"/\"(b"/\"c) = (a"/\"b)"/\"c
+  proof
+   let a,b,c be Element of L;
+   reconsider A = a, B = b, C = c
+    as Element of Open_Domains_of T;
+   A8:b"/\"c = B /\ C by A2;
+   A9:a"/\"b = A /\ B by A2;
+   thus a"/\"(b"/\"c) = A /\ (B /\ C) by A2,A8
+                 .= (A /\ B) /\ C by XBOOLE_1:16
+                 .= (a"/\"b)"/\"c by A2,A9;
+  end;
+  thus for a,b being Element of L holds a"/\"(a"\/"b)=a
+  proof
+   let a,b be Element of L;
+   reconsider A = a, B = b as Element of Open_Domains_of T;
+   A10:a"\/"b = Int(Cl(A \/ B)) by A1;
+      A in Open_Domains_of T;
+     then A in { D where D is Subset of T : D is open_condensed } by Def9;
+     then ex D being Subset of T st D = A & D is open_condensed;
+    then A11: A = Int Cl A by TOPS_1:def 8;
+     Int(Cl A \/ Cl B) = Int(Cl(A \/ B)) by PRE_TOPC:50;
+   then A c= A \/ Int Cl B & A \/ Int Cl B c= Int(Cl(A \/ B)) by A11,TOPS_1:49,
+XBOOLE_1:7;
+   then A12: A c= Int(Cl(A \/ B)) by XBOOLE_1:1;
+   thus a"/\"(a"\/"b) = A /\ Int(Cl(A \/ B)) by A2,A10
+              .= a by A12,XBOOLE_1:28;
+  end;
+ end;
+ then reconsider L as Lattice;
+   L is Boolean
+ proof
+  thus L is lower-bounded
+  proof
+     {} T is open_condensed by Th20;
+    then {} T in { D where D is Subset of T : D is open_condensed };
+   then reconsider c = {} T as Element of L by Def9;
+   take c;
+   let a be Element of L;
+   reconsider C = c, A = a as Element of Open_Domains_of T;
+   thus c"/\"a = C /\ A by A2 .= c;
+   hence a"/\"c = c;
+  end;
+  thus L is upper-bounded
+  proof
+A13:   [#] T is open_condensed by Th21;
+    then [#] T in { D where D is Subset of T : D is open_condensed };
+   then reconsider c = [#] T as Element of L by Def9;
+   take c;
+   let a be Element of L;
+   reconsider C = c, A = a as Element of Open_Domains_of T;
+A14:   C = [#] T & A c= [#] T by PRE_TOPC:14;
+
+   thus c"\/"a = Int(Cl(C \/ A)) by A1
+            .= Int(Cl(C)) by A14,XBOOLE_1:12
+            .= c by A13,TOPS_1:def 8;
+   hence a"\/"c = c;
+  end;
+ thus L is complemented
+ proof
+   let b be Element of L;
+   reconsider B = b as Element of Open_Domains_of T;
+     B in Open_Domains_of T;
+    then B in { D where D is Subset of T : D is open_condensed} by Def9;
+   then consider D being Subset of T such that
+A15:  D = B & D is open_condensed;
+   A16: D is condensed & D is open by A15,TOPS_1:107;
+   then Int B` is open_condensed by A15,Th27;
+    then Int B` in { K where K is Subset of T : K is open_condensed};
+   then reconsider a = Int B` as Element of L by Def9;
+   take a;
+     [#] T is open_condensed by Th21;
+   then [#] T in { K where K is Subset of T : K is open_condensed};
+   then reconsider c = [#] T as Element of L by Def9;
+A17: for v being Element of L holds (the L_meet of L).(c,v) = v
+   proof
+    let v be Element of L;
+    reconsider V = v as Element of Open_Domains_of T;
+    thus (the L_meet of L).(c,v) = c"/\"v by LATTICES:def 2
+             .= [#] T /\ V by A2
+             .= v by PRE_TOPC:15;
+   end;
+    thus a"\/"b = Int(Cl(B \/ Int B`)) by A1
+             .= Int([#] T) by Th9
+             .= c by TOPS_1:43
+             .= Top L by A17,LATTICE2:25;
+   hence b"\/"a = Top L;
+     {} T is open_condensed by Th20;
+   then {} T in { K where K is Subset of T : K is open_condensed};
+   then reconsider c = {} T as Element of L by Def9;
+A18: for v being Element of L holds (the L_join of L).(c,v) = v
+   proof
+    let v be Element of L;
+    reconsider V = v as Element of Open_Domains_of T;
+      V in Open_Domains_of T;
+     then V in { K where K is Subset of T : K is open_condensed} by Def9;
+then A19: ex D being Subset of T st D = V & D is open_condensed;
+    thus (the L_join of L).(c,v) = c"\/"v by LATTICES:def 1
+             .= Int(Cl({} T \/ V)) by A1
+             .= Int Cl((([#]T)`) \/ (V``)) by TOPS_1:8
+             .= Int Cl([#] T /\ V`)` by SUBSET_1:30
+             .= Int Cl(V``) by PRE_TOPC:15
+             .= v by A19,TOPS_1:def 8;
+   end;
+A20:  (B`) misses B by PRE_TOPC:26;
+    thus a"/\"b = (Int B`) /\ B by A2
+             .= (Int D`) /\ Int D by A15,A16,TOPS_1:55
+             .= Int((B`) /\ B) by A15,TOPS_1:46
+             .= Int {} T by A20,XBOOLE_0:def 7
+             .= c by TOPS_1:47
+             .= Bottom L by A18,LATTICE2:22;
+  hence b"/\"a = Bottom L;
+ end;
+  thus L is distributive
+  proof
+   let a,b,c be Element of L;
+   reconsider A = a, B = b, C = c
+     as Element of Open_Domains_of T;
+     A in Open_Domains_of T & B in Open_Domains_of T &
+                                C in Open_Domains_of T;
+   then A21: A in { D where D is Subset of T : D is open_condensed } &
+    B in { E where E is Subset of T : E is open_condensed } &
+    C in { F where F is Subset of T : F is open_condensed }
+    by Def9;
+    then consider D being Subset of T such that
+A22:   D = A & D is open_condensed;
+    consider E being Subset of T such that
+A23:   E = B & E is open_condensed by A21;
+    consider F being Subset of T such that
+A24:   F = C & F is open_condensed by A21;
+   A25: D is open & E is open & F is open by A22,A23,A24,TOPS_1:107;
+   A26:b"\/"c = Int(Cl(B \/ C)) by A1;
+   A27:a"/\"b = A /\ B by A2;
+   A28:a"/\"c = A /\ C by A2;
+   thus a"/\"(b"\/"c) = A /\ Int(Cl(B \/ C)) by A2,A26
+                 .= Int Cl A /\ Int(Cl(B \/ C)) by A22,TOPS_1:def 8
+                 .= Int(Cl(D /\ (E \/ F))) by A22,A23,A24,A25,Th7
+                 .= Int(Cl((A /\ B) \/ (A /\ C))) by A22,A23,A24,XBOOLE_1:23
+                 .= (a"/\"b)"\/"(a"/\"c) by A1,A27,A28;
+  end;
+ end;
+ hence thesis;
+end;
+
+definition let T be non empty TopSpace;
+ func Open_Domains_Lattice T-> B_Lattice equals :Def12:
+    LattStr(#Open_Domains_of T,Open_Domains_Union T,Open_Domains_Meet T#);
+coherence by Th38;
+end;
+
+begin
+:: 6. Connections between Lattices of Domains.
+reserve T for non empty TopSpace;
+
+theorem Th39:
+ CLD-Union T = (D-Union T)|[:Closed_Domains_of T,Closed_Domains_of T:]
+proof
+  A1: Closed_Domains_of T c= Domains_of T &
+   rng (CLD-Union T) c= Closed_Domains_of T by Th31,RELSET_1:12;
+ then dom (CLD-Union T) = [:Closed_Domains_of T,Closed_Domains_of T:] &
+   rng (CLD-Union T) c= Domains_of T by FUNCT_2:def 1,XBOOLE_1:1;
+ then reconsider F = CLD-Union T as Function of
+     [:Closed_Domains_of T,Closed_Domains_of T:],Domains_of T
+       by FUNCT_2:def 1,RELSET_1:11;
+    [:Closed_Domains_of T,Closed_Domains_of T:] c=
+        [:Domains_of T,Domains_of T:]
+   & Domains_of T <> {} by A1,ZFMISC_1:119;
+ then reconsider
+   G = (D-Union T)|[:Closed_Domains_of T,Closed_Domains_of T:]
+    as Function of
+     [:Closed_Domains_of T,Closed_Domains_of T:],Domains_of T
+       by FUNCT_2:38;
+   for A being Element of Closed_Domains_of T,
+     B being Element of Closed_Domains_of T
+      holds F.(A,B) = G.(A,B)
+  proof
+    let A be Element of Closed_Domains_of T,
+        B be Element of Closed_Domains_of T;
+    thus F.(A,B) = (D-Union T).(A,B) by Th32
+                .= (D-Union T) . [A,B] by BINOP_1:def 1
+                .= ((D-Union T)|[:Closed_Domains_of T,
+                     Closed_Domains_of T:]) . [A,B] by FUNCT_1:72
+                .= G.(A,B) by BINOP_1:def 1;
+  end;
+ hence thesis by BINOP_1:2;
+end;
+
+theorem Th40:
+ CLD-Meet T = (D-Meet T)|[:Closed_Domains_of T,Closed_Domains_of T:]
+proof
+  A1: Closed_Domains_of T c= Domains_of T &
+   rng (CLD-Meet T) c= Closed_Domains_of T by Th31,RELSET_1:12;
+ then dom (CLD-Meet T) = [:Closed_Domains_of T,Closed_Domains_of T:] &
+   rng (CLD-Meet T) c= Domains_of T by FUNCT_2:def 1,XBOOLE_1:1;
+ then reconsider F = CLD-Meet T as Function of
+     [:Closed_Domains_of T,Closed_Domains_of T:],Domains_of T
+       by FUNCT_2:def 1,RELSET_1:11;
+    [:Closed_Domains_of T,Closed_Domains_of T:] c=
+        [:Domains_of T,Domains_of T:]
+   & Domains_of T <> {} by A1,ZFMISC_1:119;
+ then reconsider
+   G = (D-Meet T)|[:Closed_Domains_of T,Closed_Domains_of T:]
+    as Function of
+     [:Closed_Domains_of T,Closed_Domains_of T:],Domains_of T by FUNCT_2:38;
+   for A being Element of Closed_Domains_of T,
+       B being Element of Closed_Domains_of T
+       holds F.(A,B) = G.(A,B)
+  proof
+    let A be Element of Closed_Domains_of T,
+        B be Element of Closed_Domains_of T;
+    thus F.(A,B) = (D-Meet T).(A,B) by Th33
+                .= (D-Meet T) . [A,B] by BINOP_1:def 1
+                .= ((D-Meet T)|[:Closed_Domains_of T,
+                     Closed_Domains_of T:]) . [A,B] by FUNCT_1:72
+                .= G.(A,B) by BINOP_1:def 1;
+  end;
+ hence thesis by BINOP_1:2;
+end;
+
+theorem
+   Closed_Domains_Lattice T is SubLattice of Domains_Lattice T
+proof
+ set L = Domains_Lattice T, CL = Closed_Domains_Lattice T;
+ A1: L = LattStr(#Domains_of T,D-Union T,D-Meet T#) by Def4;
+ A2: CL =
+   LattStr(#Closed_Domains_of T,CLD-Union T,CLD-Meet T#)
+     by Def8;
+ hence the carrier of CL c= the carrier of L by A1,Th31;
+ thus the L_join of CL = (the L_join of L) | [:the carrier of CL,
+   the carrier of CL:] by A1,A2,Th39;
+ thus the L_meet of CL = (the L_meet of L) | [:the carrier of CL,
+   the carrier of CL:] by A1,A2,Th40;
+end;
+
+theorem Th42:
+ OPD-Union T = (D-Union T)|[:Open_Domains_of T,Open_Domains_of T:]
+ proof
+  A1: Open_Domains_of T c= Domains_of T &
+   rng (OPD-Union T) c= Open_Domains_of T by Th35,RELSET_1:12;
+ then dom (OPD-Union T) = [:Open_Domains_of T,Open_Domains_of T:] &
+   rng (OPD-Union T) c= Domains_of T by FUNCT_2:def 1,XBOOLE_1:1;
+ then reconsider F = OPD-Union T as Function of
+     [:Open_Domains_of T,Open_Domains_of T:],Domains_of T
+      by FUNCT_2:def 1,RELSET_1:11;
+    [:Open_Domains_of T,Open_Domains_of T:] c=
+        [:Domains_of T,Domains_of T:]
+   & Domains_of T <> {} by A1,ZFMISC_1:119;
+ then reconsider
+   G = (D-Union T)|[:Open_Domains_of T,Open_Domains_of T:]
+    as Function of
+     [:Open_Domains_of T,Open_Domains_of T:],Domains_of T by FUNCT_2:38;
+   for A being Element of Open_Domains_of T,
+       B being Element of Open_Domains_of T
+       holds F.(A,B) = G.(A,B)
+  proof
+    let A be Element of Open_Domains_of T,
+        B be Element of Open_Domains_of T;
+    thus F.(A,B) = (D-Union T).(A,B) by Th36
+                .= (D-Union T) . [A,B] by BINOP_1:def 1
+                .= ((D-Union T)|[:Open_Domains_of T,
+                     Open_Domains_of T:]) . [A,B] by FUNCT_1:72
+                .= G.(A,B) by BINOP_1:def 1;
+  end;
+ hence thesis by BINOP_1:2;
+ end;
+
+theorem Th43:
+ OPD-Meet T = (D-Meet T)|[:Open_Domains_of T,Open_Domains_of T:]
+ proof
+  A1: Open_Domains_of T c= Domains_of T &
+   rng (OPD-Meet T) c= Open_Domains_of T by Th35,RELSET_1:12;
+ then dom (OPD-Meet T) = [:Open_Domains_of T,Open_Domains_of T:] &
+   rng (OPD-Meet T) c= Domains_of T by FUNCT_2:def 1,XBOOLE_1:1;
+ then reconsider F = OPD-Meet T as Function of
+     [:Open_Domains_of T,Open_Domains_of T:],Domains_of T
+     by FUNCT_2:def 1,RELSET_1:11;
+    [:Open_Domains_of T,Open_Domains_of T:] c=
+        [:Domains_of T,Domains_of T:]
+   & Domains_of T <> {} by A1,ZFMISC_1:119;
+ then reconsider
+   G = (D-Meet T)|[:Open_Domains_of T,Open_Domains_of T:]
+    as Function of
+     [:Open_Domains_of T,Open_Domains_of T:],Domains_of T by FUNCT_2:38;
+   for A being Element of Open_Domains_of T,
+       B being Element of Open_Domains_of T
+        holds F.(A,B) = G.(A,B)
+  proof
+    let A be Element of Open_Domains_of T,
+        B be Element of Open_Domains_of T;
+    thus F.(A,B) = (D-Meet T).(A,B) by Th37
+                .= (D-Meet T) . [A,B] by BINOP_1:def 1
+                .= ((D-Meet T)|[:Open_Domains_of T,
+                     Open_Domains_of T:]) . [A,B] by FUNCT_1:72
+                .= G.(A,B) by BINOP_1:def 1;
+  end;
+ hence thesis by BINOP_1:2;
+ end;
+
+theorem
+   Open_Domains_Lattice T is SubLattice of Domains_Lattice T
+proof
+ set L = Domains_Lattice T, OL = Open_Domains_Lattice T;
+ A1: L = LattStr(#Domains_of T,D-Union T,D-Meet T#) by Def4;
+ A2: OL =
+   LattStr(#Open_Domains_of T,OPD-Union T,OPD-Meet T#)
+     by Def12;
+ hence the carrier of OL c= the carrier of L by A1,Th35;
+ thus the L_join of OL = (the L_join of L) | [:the carrier of OL,
+   the carrier of OL:] by A1,A2,Th42;
+ thus the L_meet of OL = (the L_meet of L) | [:the carrier of OL,
+   the carrier of OL:] by A1,A2,Th43;
+end;
+

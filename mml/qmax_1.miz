@@ -1,0 +1,796 @@
+:: The Fundamental Logic Structure in Quantum Mechanics
+::  by Pawe{\l} Sadowski, Andrzej Trybulec and Konrad Raczkowski
+::
+:: Received December 18, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary PROB_1, FUNCT_2, FUNCT_1, BOOLE, SEQ_2, ORDINAL2, RELAT_1, ARYTM_1,
+      ORDERS_2, MCART_1, SUBSET_1, ZF_LANG, EQREL_1, RELAT_2, QMAX_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      NAT_1, RELAT_1, RELSET_1, RELAT_2, FUNCT_1, REAL_1, FUNCT_2, ORDERS_2,
+      DOMAIN_1, SEQ_2, PROB_1, MCART_1, EQREL_1;
+ constructors RELAT_2, ORDERS_2, DOMAIN_1, SEQ_2, PROB_1, EQREL_1, XCMPLX_0,
+      MEMBERED, XBOOLE_0;
+ clusters RELSET_1, XREAL_0, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS,
+      ORDINAL2, EQREL_1, PARTFUN1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions RELAT_2, ORDERS_2;
+ theorems TARSKI, FUNCT_1, GRFUNC_1, REAL_1, ZFMISC_1, SUBSET_1, FUNCT_2,
+      PROB_1, MCART_1, EQREL_1, RELAT_1, AXIOMS, RELSET_1, XBOOLE_0, XCMPLX_1;
+ schemes EQREL_1, RELSET_1, FUNCT_2, XBOOLE_0;
+
+begin
+
+reserve X1,x,y,z for set,
+        n,m for Nat,
+        X for non empty set;
+reserve A,B for Event of Borel_Sets,
+        D for Subset of REAL;
+
+definition
+  let X; let S be SigmaField of X;
+  func Probabilities(S) -> set means :Def1:
+  x in it iff x is Probability of S;
+  existence
+  proof
+   defpred P[set] means $1 is Probability of S;
+   consider X being set such that
+A1:    x in X iff x in Funcs(S,REAL) & P[x] from Separation;
+   take X; let x;
+     x is Probability of S implies x in Funcs(S,REAL) by FUNCT_2:11;
+   hence thesis by A1;
+  end;
+  uniqueness
+  proof let A1,A2 be set;
+   assume that
+   A2: x in A1 iff x is Probability of S and
+   A3: x in A2 iff x is Probability of S;
+     now let y;
+       y in A1 iff y is Probability of S by A2;
+    hence y in A1 iff y in A2 by A3;
+   end;
+   hence thesis by TARSKI:2;
+  end;
+end;
+
+definition let X; let S be SigmaField of X;
+ cluster Probabilities(S) -> non empty;
+ coherence
+ proof
+  consider x being Probability of S;
+    x in Probabilities(S) by Def1;
+  hence thesis;
+ end;
+end;
+
+definition
+  struct QM_Str (# Observables, States -> non empty set,
+       Quantum_Probability -> Function of
+       [:the Observables, the States:], Probabilities(Borel_Sets) #);
+end;
+
+reserve Q for QM_Str;
+
+definition let Q;
+  func Obs Q -> set equals :Def2:
+   the Observables of Q;
+  coherence;
+  func Sts Q -> set equals :Def3:
+   the States of Q;
+  coherence;
+end;
+
+definition let Q;
+  cluster Obs Q -> non empty;
+  coherence
+  proof
+      the Observables of Q is non empty;
+    hence thesis by Def2;
+  end;
+  cluster Sts Q -> non empty;
+  coherence
+  proof
+      the States of Q is non empty;
+    hence thesis by Def3;
+  end;
+end;
+
+reserve A1 for Element of Obs Q;
+reserve s for Element of Sts Q;
+reserve E for Event of Borel_Sets;
+reserve ASeq for SetSequence of Borel_Sets;
+
+definition
+  let Q,A1,s;
+  func Meas(A1,s) -> Probability of Borel_Sets equals
+     (the Quantum_Probability of Q).[A1,s];
+  coherence
+proof
+   Obs Q = the Observables of Q & Sts Q = the States of Q by Def2,Def3;
+ then reconsider A1s = [A1,s]
+   as Element of [:the Observables of Q, the States of Q:];
+  (the Quantum_Probability of Q).A1s is Element of Probabilities Borel_Sets;
+hence thesis by Def1;
+end;
+end;
+
+ reconsider X = {0} as non empty set;
+ consider P being Function of Borel_Sets,REAL such that
+ Lm1: for D st D in Borel_Sets holds
+ (0 in D implies P.D = 1) & (not 0 in D implies P.D = 0) by PROB_1:60;
+ Lm2: for A holds (0 in A implies P.A = 1) & (not 0 in A implies P.A = 0)
+ proof let A; A in Borel_Sets by PROB_1:def 10;
+  hence thesis by Lm1;
+ end;
+  Lm3: for A holds 0 <= P.A
+  proof let A;
+     now per cases;
+     suppose 0 in A; then P.A = 1 by Lm2;hence 0 <= P.A;
+     suppose not 0 in A; hence 0 <= P.A by Lm2;
+   end; hence thesis;
+  end;
+  Lm4: P.REAL = 1
+     proof
+        REAL c= REAL;
+      then reconsider Omega = REAL as Subset of REAL;
+        Omega in Borel_Sets by PROB_1:43;
+      hence thesis by Lm1;
+     end;
+  Lm5: for A,B st A misses B holds P.(A \/ B) = P.A + P.B
+      proof let A,B such that
+A1:        A misses B;
+         now per cases by A1,XBOOLE_0:3;
+        suppose A2: 0 in A & not 0 in B;
+then A3:         P.A = 1 & P.B = 0 by Lm2;
+           0 in A \/ B by A2,XBOOLE_0:def 2;
+         hence P.(A \/ B) = P.A + P.B by A3,Lm2;
+        suppose A4: not 0 in A & 0 in B;
+then A5:         P.A = 0 & P.B = 1 by Lm2;
+           0 in A \/ B by A4,XBOOLE_0:def 2;
+         hence P.(A \/ B) = P.A + P.B by A5,Lm2;
+        suppose A6: not 0 in A & not 0 in B;
+then A7:         P.A = 0 & P.B = 0 by Lm2;
+           not 0 in (A \/ B) by A6,XBOOLE_0:def 2;
+         hence P.(A \/ B)=P.A + P.B by A7,Lm2;
+        end; hence thesis;
+      end;
+    for ASeq st ASeq is non-increasing holds
+  P * ASeq is convergent & lim (P * ASeq) = P.Intersection ASeq
+  proof let ASeq;
+   assume A1: ASeq is non-increasing;
+   A2: now let n;
+          dom (P * ASeq) = NAT by FUNCT_2:def 1;
+        hence (P * ASeq).n = P.(ASeq.n) by FUNCT_1:22;
+       end;
+     now per cases;
+    suppose A3: for n holds 0 in ASeq.n;
+     A4: now let n;
+          A5: ASeq.n in Borel_Sets by PROB_1:def 9;
+            0 in ASeq.n by A3;
+          then P.(ASeq.n) = 1 by A5,Lm1;
+          hence (P * ASeq).n = 1 by A2;
+         end;
+     reconsider r = 1 as Real;
+       ex m st for n st m <= n holds (P * ASeq).n = r
+     proof take 0; thus thesis by A4; end;
+     then A6: P * ASeq is convergent & lim (P * ASeq) = 1 by PROB_1:3;
+     A7: 0 in Intersection ASeq by A3,PROB_1:29;
+       for n holds ASeq.n in Borel_Sets by PROB_1:def 9;
+     then Intersection ASeq in Borel_Sets by PROB_1:def 8;
+     hence P * ASeq is convergent & lim (P * ASeq) = P.Intersection ASeq
+                                                               by A6,A7,Lm1;
+    suppose A8: not (for n holds 0 in ASeq.n);
+        ex m st (for n st m <= n holds (P * ASeq).n = 0)
+         proof
+          consider m such that A9: not 0 in ASeq.m by A8;
+          take m;
+            for n st m <= n holds (P * ASeq).n = 0
+          proof let n; assume
+             m <= n;
+            then ASeq.n c= ASeq.m by A1,PROB_1:def 6;
+           then A10: not 0 in ASeq.n by A9;
+             ASeq.n in Borel_Sets by PROB_1:def 9;
+           then P.(ASeq.n) = 0 by A10,Lm1;
+           hence thesis by A2;
+          end; hence thesis;
+         end;
+     then A11: P * ASeq is convergent & lim (P * ASeq) = 0 by PROB_1:3;
+     A12: not 0 in Intersection ASeq by A8,PROB_1:29;
+       for n holds ASeq.n in Borel_Sets by PROB_1:def 9;
+     then Intersection ASeq in Borel_Sets by PROB_1:def 8;
+     hence
+       P * ASeq is convergent & lim (P * ASeq) = P.Intersection ASeq by A11,A12
+,Lm1;
+   end; hence thesis;
+  end;
+ then reconsider P as Probability of Borel_Sets by Lm3,Lm4,Lm5,PROB_1:def 13;
+ reconsider f = { [ [0,0], P] } as Function by GRFUNC_1:15;
+ Lm6: dom f = { [0,0] } & rng f = {P} by RELAT_1:23;
+ then Lm7: dom f = [:X,X:] by ZFMISC_1:35;
+   P in Probabilities(Borel_Sets) by Def1;
+ then rng f c= Probabilities(Borel_Sets) by Lm6,ZFMISC_1:37;
+ then reconsider Y = f as Function of [:X, X:], Probabilities(Borel_Sets)
+    by Lm7,FUNCT_2:def 1,RELSET_1:11;
+Lm8:
+now
+ thus for A1,A2 being Element of Obs QM_Str(#X,X,Y#) st
+      for s being Element of Sts QM_Str(#X,X,Y#) holds
+      Meas(A1,s)=Meas(A2,s) holds A1=A2
+      proof
+       A1: Obs QM_Str(#X,X,Y#) = X by Def2;
+       let A1,A2 be Element of Obs QM_Str(#X,X,Y#);
+         A1=0 & A2=0 by A1,TARSKI:def 1;
+       hence thesis;
+      end;
+       A2: Sts QM_Str(#X,X,Y#) = X by Def3;
+ thus for s1,s2 being Element of Sts QM_Str(#X,X,Y#) st
+      for A being Element of Obs QM_Str(#X,X,Y#) holds
+      Meas(A,s1)=Meas(A,s2) holds s1=s2
+      proof
+       let s1,s2 be Element of Sts QM_Str(#X,X,Y#);
+         s1=0 & s2=0 by A2,TARSKI:def 1;
+       hence thesis;
+      end;
+ thus for s1,s2 being Element of Sts QM_Str(#X,X,Y#),
+         t being Real st 0<=t & t<=1
+     ex s being Element of Sts QM_Str(#X,X,Y#) st
+     for A being Element of Obs QM_Str(#X,X,Y#), E holds
+      Meas(A,s).E=t*(Meas(A,s1).E) + ((1-t)*Meas(A,s2).E)
+ proof
+  let s1,s2 be Element of Sts QM_Str(#X,X,Y#);
+A3:  s1=0 & s2=0 by A2,TARSKI:def 1;
+  let t be Real;
+   assume 0<=t & t<=1;
+  take s2;
+  let A be Element of Obs QM_Str(#X,X,Y#), E;
+  thus Meas(A,s2).E = 1*Meas(A,s2).E
+                   .= (t + (1-t))*Meas(A,s2).E by XCMPLX_1:27
+                   .= t*Meas(A,s1).E + (1-t)*Meas(A,s2).E by A3,XCMPLX_1:8;
+ end;
+end;
+
+definition let IT be QM_Str;
+ attr IT is Quantum_Mechanics-like means :Def5:
+  (for A1,A2 being Element of Obs IT st
+  for s being Element of Sts IT holds
+  Meas(A1,s)=Meas(A2,s) holds A1=A2) &
+
+  (for s1,s2 being Element of Sts IT st
+  for A being Element of Obs IT holds
+  Meas(A,s1)=Meas(A,s2) holds s1=s2) &
+
+  for s1,s2 being Element of Sts IT, t being Real st 0<=t & t<=1
+  ex s being Element of Sts IT st
+  for A being Element of Obs IT, E holds
+   Meas(A,s).E=t*(Meas(A,s1).E) + ((1-t)*Meas(A,s2).E);
+end;
+
+definition
+ cluster strict Quantum_Mechanics-like QM_Str;
+  existence
+   proof
+       QM_Str(#X,X,Y#) is Quantum_Mechanics-like by Def5,Lm8;
+    hence thesis;
+   end;
+end;
+
+definition
+  mode Quantum_Mechanics is Quantum_Mechanics-like QM_Str;
+end;
+
+reserve Q for Quantum_Mechanics;
+
+reserve s for Element of Sts Q;
+
+definition let X be set;
+  struct POI_Str over X (#
+           Ordering -> (Relation of X),
+         Involution -> Function of X,X #);
+end;
+
+reserve x1 for Element of X1;
+reserve Inv for Function of X1,X1;
+
+definition let X1, Inv;
+  pred Inv is_an_involution_in X1 means
+    Inv.(Inv.x1) = x1;
+end;
+
+definition let X1; let W be POI_Str over X1;
+  pred W is_a_Quantuum_Logic_on X1 means :Def7:
+  ex Ord being (Relation of X1),
+  Inv being Function of X1,X1 st
+  W = POI_Str(#Ord,Inv#) & Ord partially_orders X1 &
+  Inv is_an_involution_in X1 &
+  for x,y being Element of X1 st [x,y] in Ord holds
+  [Inv.y,Inv.x] in Ord;
+end;
+
+definition let Q;
+  func Prop Q -> set equals :Def8:
+   [:Obs Q,Borel_Sets:];
+  coherence;
+end;
+
+definition let Q;
+  cluster Prop Q -> non empty;
+  coherence
+  proof
+      Prop Q = [:Obs Q,Borel_Sets:] by Def8;
+    hence thesis;
+  end;
+end;
+
+reserve p,q,r,p1,q1 for Element of Prop Q;
+
+definition let Q,p;
+  redefine func p`1 -> Element of Obs Q;
+    coherence
+     proof
+       Prop Q = [:Obs Q,Borel_Sets:] by Def8;
+      hence thesis by MCART_1:10;
+     end;
+  func p`2 -> Event of Borel_Sets;
+    coherence
+     proof
+       Prop Q = [:Obs Q,Borel_Sets:] by Def8;
+      then p`2 in Borel_Sets by MCART_1:10;
+      hence thesis by PROB_1:48;
+    end;
+end;
+
+canceled 13;
+
+theorem Th14:
+p = [p`1,p`2]
+proof
+    Prop Q = [:Obs Q,Borel_Sets:] by Def8; hence thesis by MCART_1:23;
+end;
+
+canceled;
+
+theorem Th16:
+for E st E = p`2` holds Meas(p`1,s).p`2 = 1 - Meas(p`1,s).E
+proof let E such that A1: E = p`2`;
+ A2: [#] Borel_Sets = REAL by PROB_1:def 11;
+    REAL \ E = E` by SUBSET_1:def 5;
+ hence thesis by A1,A2,PROB_1:68;
+end;
+
+definition let Q,p;
+  func 'not' p -> Element of Prop Q equals :Def9:
+   [p`1,(p`2)`];
+  coherence
+  proof
+   A1: Prop Q = [:Obs Q,Borel_Sets:] by Def8;
+   reconsider x = p`2` as Event of Borel_Sets by PROB_1:50;
+      x in Borel_Sets by PROB_1:def 10;
+   hence thesis by A1,ZFMISC_1:106;
+  end;
+end;
+
+definition let Q,p,q;
+  pred p |- q means :Def10:
+  for s holds Meas(p`1,s).p`2 <= Meas(q`1,s).q`2;
+end;
+
+definition let Q,p,q;
+  pred p <==> q means :Def11:
+  p |- q & q |- p;
+end;
+
+canceled 3;
+
+theorem Th20:
+p <==> q iff for s holds Meas(p`1,s).p`2 = Meas(q`1,s).q`2
+proof
+ thus p <==> q implies for s holds Meas(p`1,s).p`2 = Meas(q`1,s).q`2
+ proof assume p <==> q;
+  then A1: p |- q & q |- p by Def11; let s;
+    Meas(p`1,s).p`2 <= Meas(q`1,s).q`2 & Meas(q`1,s).q`2 <= Meas(p`1,s).p`2
+  by A1,Def10; hence thesis by AXIOMS:21;
+ end;
+ assume A2: for s holds Meas(p`1,s).p`2 = Meas(q`1,s).q`2;
+ thus p |- q
+ proof let s;
+  thus thesis by A2;
+ end; let s;
+ thus thesis by A2;
+end;
+
+theorem Th21:
+p |- p proof let s; thus thesis; end;
+
+theorem Th22:
+p |- q & q |- r implies p |- r
+proof assume A1: p |- q & q |- r;
+ let s; Meas(p`1,s).p`2 <= Meas(q`1,s).q`2 &
+ Meas(q`1,s).q`2 <= Meas(r`1,s).r`2 by A1,Def10;
+ hence thesis by AXIOMS:22;
+end;
+
+theorem Th23:
+p <==> p proof p |- p by Th21; hence thesis by Def11; end;
+
+theorem Th24:
+p <==> q implies q <==> p
+proof
+ assume p |- q & q |- p;
+ hence thesis by Def11;
+end;
+
+theorem Th25:
+p <==> q & q <==> r implies p <==> r
+proof
+ assume p |- q & q |- p & q |- r & r |- q;
+ hence p |- r & r |- p by Th22;
+end;
+
+theorem Th26:
+('not' p)`1 = p`1 & ('not' p)`2 = (p`2)`
+proof
+   'not' p = [p`1,(p`2)`] by Def9;
+ hence thesis by MCART_1:7;
+end;
+
+theorem Th27:
+'not'('not' p) = p
+proof
+ thus 'not'('not' p) = [('not' p)`1,(('not' p)`2)`] by Def9
+           .= [p`1,(('not' p)`2)`] by Th26
+           .= [p`1,((p`2)`)`] by Th26
+           .= p by Th14;
+     end;
+
+theorem Th28:
+p |- q implies 'not' q |- 'not' p
+proof assume A1: p |- q;
+ reconsider E = p`2` as Event of Borel_Sets by PROB_1:50;
+ reconsider E1 = q`2` as Event of Borel_Sets by PROB_1:50;
+ let s;
+ set p1 = Meas(p`1,s).E, p2 = Meas(q`1,s).E1;
+ A2: Meas(q`1,s).q`2 = 1 - p2 & Meas(p`1,s).p`2 = 1 - p1 by Th16;
+ A3: -(1-p1) = p1 -1 & -(1-p2) = p2 -1 by XCMPLX_1:143;
+   Meas(p`1,s).p`2 <= Meas(q`1,s).q`2 by A1,Def10;
+ then A4: p2 -1 <= p1 - 1 by A2,A3,REAL_1:50;
+   ('not' q)`1 = q`1 & ('not' q)`2 = (q`2)` & ('not' p)`1 = p`1 &
+ ('not' p)`2 = (p`2)` by Th26; hence thesis by A4,REAL_1:54;
+end;
+
+definition let Q;
+  func PropRel(Q) -> Equivalence_Relation of Prop Q means :Def12:
+  [p,q] in it iff p <==> q;
+  existence
+  proof
+   defpred P[set,set] means ex p,q st p=$1 & q = $2 & p <==> q;
+   A1: for x st x in Prop Q holds P[x,x]
+      proof let x; assume x in Prop Q;
+       then reconsider x as Element of Prop Q;
+       A2: x<==>x by Th23;
+       take x;
+       thus thesis by A2;
+      end;
+   A3: for x,y st P[x,y] holds P[y,x]
+      proof let x,y; given p1,q1 such that A4: p1=x & q1=y & p1<==>q1;
+       take q1,p1;
+       thus thesis by A4,Th24;
+      end;
+   A5: for x,y,z st P[x,y] & P[y,z] holds P[x,z]
+      proof let x,y,z;
+       assume that A6: ex p,q st p=x & q=y & p <==> q and
+                   A7: ex p1,q1 st p1=y & q1=z & p1 <==> q1;
+       consider p,q such that A8: p=x & q=y & p <==> q by A6;
+       consider p1,q1 such that A9: p1=y & q1=z & p1 <==> q1 by A7;
+       take p,q1;
+       thus thesis by A8,A9,Th25;
+      end;
+   consider R being Equivalence_Relation of Prop Q such that A10:
+   for x,y holds [x,y] in R iff x in Prop Q & y in Prop Q & P[x,y]
+    from Ex_Eq_Rel(A1,A3,A5);
+   take R;
+     [p,q] in R iff p <==> q
+   proof
+    thus [p,q] in R implies p <==> q
+         proof assume [p,q] in R;
+           then ex p1,q1 st p1=p & q1=q & p1 <==> q1 by A10;
+          hence thesis;
+         end;
+    assume p <==> q;
+    hence thesis by A10;
+   end;
+   hence thesis;
+  end;
+  uniqueness
+  proof let R1,R2 be Equivalence_Relation of Prop Q;
+   assume A11: (for p,q holds [p,q] in R1 iff p <==> q) &
+              (for p,q holds [p,q] in R2 iff p <==> q);
+   A12: now let p,q;
+      ([p,q] in R1 iff p <==> q) & ([p,q] in R2 iff p <==> q) by A11;
+    hence [p,q] in R1 iff [p,q] in R2;
+   end;
+     for x,y holds [x,y] in R1 iff [x,y] in R2
+   proof let x,y;
+    thus [x,y] in R1 implies [x,y] in R2
+         proof assume A13: [x,y] in R1;
+          then x is Element of Prop Q & y is Element of Prop Q by ZFMISC_1:106
+;
+          hence thesis by A12,A13;
+         end;
+    assume A14: [x,y] in R2;
+    then x is Element of Prop Q & y is Element of Prop Q by ZFMISC_1:106;
+    hence thesis by A12,A14;
+   end;
+   hence thesis by RELAT_1:def 2;
+  end;
+end;
+
+reserve B,C for Subset of Prop Q;
+
+canceled;
+
+theorem Th30:
+for B,C st (B in Class PropRel(Q) & C in Class PropRel(Q))
+for a,b,c,d being Element of Prop Q holds
+(a in B & b in B & c in C & d in C & a |- c) implies b |- d
+proof
+ let B,C such that A1: B in Class PropRel(Q) & C in Class PropRel(Q);
+ let a,b,c,d be Element of Prop Q;
+ A2: ex x st x in Prop Q & B = Class(PropRel(Q),x) by A1,EQREL_1:def 5;
+ A3: ex y st y in Prop Q & C = Class(PropRel(Q),y) by A1,EQREL_1:def 5;
+ assume a in B & b in B & c in C & d in C;
+ then [a,b] in PropRel(Q) & [c,d] in PropRel(Q) by A2,A3,EQREL_1:30;
+ then A4: a <==> b & c <==> d by Def12;
+ assume A5: a |- c;
+ let s;
+   Meas(a`1,s).a`2 = Meas(b`1,s).b`2 &
+ Meas(c`1,s).c`2 = Meas(d`1,s).d`2 by A4,Th20;
+ hence thesis by A5,Def10;
+end;
+
+definition let Q;
+  func OrdRel(Q) -> Relation of Class PropRel (Q) means :Def13:
+  [B,C] in it iff B in Class PropRel(Q) & C in Class PropRel(Q) &
+  for p,q st p in B & q in C holds p |- q;
+  existence
+  proof
+   defpred P[set,set] means ex B,C st $1 = B & $2 = C &
+    for p,q st p in B & q in C holds p |- q;
+   consider R being Relation of Class PropRel(Q),Class PropRel(Q)
+   such that A1: for x,y holds
+   [x,y] in R iff x in Class PropRel(Q) & y in Class PropRel(Q) & P[x,y]
+    from Rel_On_Set_Ex;
+     [B,C] in R iff B in Class PropRel(Q) & C in Class PropRel(Q) &
+   for p,q st p in B & q in C holds p |- q
+   proof
+    thus [B,C] in R implies B in Class PropRel(Q) & C in Class PropRel(Q) &
+    for p,q st p in B & q in C holds p |- q
+    proof
+     assume [B,C] in R;
+     then B in Class PropRel(Q) & C in Class PropRel(Q) &
+     ex B',C' being Subset of Prop Q st B = B' & C = C' &
+     for p,q st p in B' & q in C' holds p |- q by A1;
+     hence thesis;
+    end;
+    assume B in Class PropRel(Q) & C in Class PropRel(Q) &
+    for p,q st p in B & q in C holds p |- q;
+    hence thesis by A1;
+   end;
+   hence thesis;
+  end;
+  uniqueness
+  proof let R1,R2 be Relation of Class PropRel(Q);
+   assume that A2: for B,C holds [B,C] in R1 iff B in Class PropRel(Q) &
+   C in Class PropRel(Q) & for p,q st p in B & q in C holds p |- q and
+   A3: for B,C holds [B,C] in R2 iff B in Class PropRel(Q) &
+   C in Class PropRel(Q) & for p,q st p in B & q in C holds p |- q;
+   A4: now let B,C;
+           [B,C] in R1 iff B in Class PropRel(Q) & C in Class PropRel(Q) &
+        for p,q st p in B & q in C holds p |- q by A2;
+        hence [B,C] in R1 iff [B,C] in R2 by A3;
+       end;
+     for x,y holds [x,y] in R1 iff [x,y] in R2
+   proof let x,y;
+    thus [x,y] in R1 implies [x,y] in R2
+    proof assume A5: [x,y] in R1;
+      then x in Class PropRel(Q) & y in Class PropRel(Q) by ZFMISC_1:106;
+     hence thesis by A4,A5;
+    end;
+    assume A6: [x,y] in R2;
+     then x in Class PropRel(Q) & y in Class PropRel(Q) by ZFMISC_1:106;
+    hence thesis by A4,A6;
+   end;
+   hence thesis by RELAT_1:def 2;
+  end;
+end;
+
+canceled;
+
+theorem Th32:
+p |- q iff [Class(PropRel(Q),p),Class(PropRel(Q),q)] in OrdRel(Q)
+proof
+   p <==> p & q <==> q by Th23;
+ then [p,p] in PropRel(Q) & [q,q] in PropRel(Q) by Def12;
+ then A1: p in Class(PropRel(Q),p) & q in Class(PropRel(Q),q) by EQREL_1:27;
+ A2: Class(PropRel(Q),p) in Class PropRel(Q) &
+     Class(PropRel(Q),q) in Class PropRel(Q) by EQREL_1:def 5;
+ thus p |- q implies [Class(PropRel(Q),p),Class(PropRel(Q),q)] in OrdRel(Q)
+ proof
+  assume p |- q;
+then for p1,q1 holds p1 in Class(PropRel(Q),p) & q1 in Class(PropRel(Q),q)
+implies
+ p1 |- q1 by A1,A2,Th30;
+  hence thesis by A2,Def13;
+ end;
+ assume [Class(PropRel(Q),p),Class(PropRel(Q),q)] in OrdRel(Q);
+ hence thesis by A1,Def13;
+end;
+
+theorem Th33:
+for B,C st (B in Class PropRel(Q) & C in Class PropRel(Q))
+for p1,q1 holds (p1 in B & q1 in B & 'not' p1 in C) implies 'not' q1 in C
+proof
+ let B,C such that A1: B in Class PropRel(Q) & C in Class PropRel(Q);
+ let p1,q1;
+ consider x such that
+ A2: x in Prop Q & B = Class(PropRel(Q),x) by A1,EQREL_1:def 5;
+ consider y such that
+ A3: y in Prop Q & C = Class(PropRel(Q),y) by A1,EQREL_1:def 5;
+ reconsider q = y as Element of Prop Q by A3;
+ assume p1 in B & q1 in B & 'not' p1 in C;
+ then [p1,q1] in PropRel(Q) & ['not'
+p1,q] in PropRel(Q) by A2,A3,EQREL_1:27,30
+;
+then A4: p1 <==> q1 & 'not' p1 <==> q by Def12;
+ then A5: p1 <==> q1 & q <==> 'not' p1 by Th24;
+   now let s;
+  A6: 1 - 1 = 0;
+  reconsider E = p1`2` as Event of Borel_Sets by PROB_1:50;
+  reconsider E1 = q1`2` as Event of Borel_Sets by PROB_1:50;
+  set r1 = Meas(p1`1,s).E, r2 = Meas(q1`1,s).E1;
+  A7: 1 - r1 = Meas(p1`1,s).p1`2 by Th16
+            .= Meas(q1`1,s).q1`2 by A4,Th20
+            .= 1 - r2 by Th16;
+  A8: ('not' p1)`1 = p1`1 & ('not' p1)`2 = (p1`2)` & ('not' q1)`1 = q1`1 &
+      ('not' q1)`2 = (q1`2)` by Th26;
+  hence Meas(('not' p1)`1,s).('not' p1)`2 = 0 + r1
+                               .= 1 - (1 - r1) by A6,XCMPLX_1:37
+                               .= 0 + r2 by A6,A7,XCMPLX_1:37
+                               .= Meas(('not' q1)`1,s).('not' q1)`2 by A8;
+ end;
+ then 'not' p1 <==> 'not' q1 by Th20;
+ then q <==> 'not' q1 by A5,Th25;
+ then [q,'not' q1] in PropRel(Q) by Def12;
+ then ['not' q1,q] in PropRel(Q) by EQREL_1:12;
+ hence thesis by A3,EQREL_1:27;
+end;
+
+theorem
+  for B,C st (B in Class PropRel(Q) & C in Class PropRel(Q))
+for p,q holds 'not' p in C & 'not' q in C & p in B implies q in B
+proof
+ let B,C such that A1: B in Class PropRel(Q) & C in Class PropRel(Q);
+ let p,q; 'not'('not' p) = p & 'not'('not' q) =q by Th27;
+ hence thesis by A1,Th33;
+end;
+
+definition let Q;
+  func InvRel(Q) -> Function of Class PropRel(Q),Class PropRel(Q)
+  means :Def14:
+  it.Class(PropRel(Q),p) = Class(PropRel(Q),'not' p);
+  existence
+  proof
+   defpred P[set,set] means
+    for p st $1 = Class(PropRel(Q),p) holds $2 = Class(PropRel(Q),'not' p);
+   A1: for x st x in Class PropRel(Q) ex y st y in Class PropRel(Q) & P[x,y]
+   proof let x; assume A2: x in Class PropRel(Q); then consider q such that
+    A3: x = Class(PropRel(Q),q) by EQREL_1:45;
+    reconsider y = Class(PropRel(Q),'not' q) as set; take y; thus
+    A4: y in Class PropRel(Q) by EQREL_1:def 5;
+    reconsider y'=y as Subset of Prop Q; let p;
+    assume A5: x = Class(PropRel(Q),p);
+    then reconsider x as Subset of Prop Q;
+      p in x & q in x & 'not' q in y' by A3,A5,EQREL_1:28;
+    then 'not' p in y' by A2,A4,Th33;
+    hence y = Class(PropRel(Q),'not' p) by EQREL_1:31;
+   end;
+   consider F being Function of Class PropRel(Q),Class PropRel(Q)
+   such that A6: for x st x in Class PropRel(Q) holds P[x,F.x]
+    from FuncEx1(A1);
+   take F; let p;
+     Class(PropRel(Q),p) in Class PropRel(Q) by EQREL_1:def 5;
+   hence F.Class(PropRel(Q),p) = Class(PropRel(Q),'not' p) by A6;
+  end;
+  uniqueness
+  proof let F1,F2 be Function of Class PropRel(Q),Class PropRel(Q);
+   assume that
+   A7: for p holds F1.Class(PropRel(Q),p) = Class(PropRel(Q),'not' p) and
+   A8: for p holds F2.Class(PropRel(Q),p) = Class(PropRel(Q),'not' p);
+     now let x;
+    assume x in Class PropRel(Q);
+    then consider p such that
+    A9: x = Class(PropRel Q, p) by EQREL_1:45;
+      F1.x = Class(PropRel(Q),'not' p) & F2.x = Class(PropRel(Q),'not'
+p) by A7,A8,A9;
+    hence F1.x = F2.x;
+   end;
+   hence thesis by FUNCT_2:18;
+  end;
+end;
+
+canceled;
+
+theorem ::Main Theorem
+  for Q holds POI_Str(#OrdRel(Q),InvRel(Q)#)
+is_a_Quantuum_Logic_on Class PropRel(Q)
+proof let Q;
+A1: OrdRel(Q) partially_orders Class PropRel(Q)
+     proof
+      thus OrdRel(Q) is_reflexive_in Class PropRel(Q)
+           proof let x; assume x in Class PropRel(Q);
+            then consider p such that
+            A2: x = Class(PropRel(Q),p) by EQREL_1:45;
+              p |- p by Th21;
+            hence thesis by A2,Th32;
+           end;
+      thus OrdRel(Q) is_transitive_in Class PropRel(Q)
+           proof let x,y,z;
+            assume that A3: x in Class PropRel(Q) & y in Class PropRel(Q) &
+            z in Class PropRel(Q) and
+            A4: [x,y] in OrdRel(Q) & [y,z] in OrdRel(Q);
+            consider p such that
+            A5: x = Class(PropRel(Q),p) by A3,EQREL_1:45;
+            consider q such that
+            A6: y = Class(PropRel(Q),q) by A3,EQREL_1:45;
+            consider r such that
+            A7: z = Class(PropRel(Q),r) by A3,EQREL_1:45;
+              p |- q & q |- r implies p |- r by Th22;
+            hence thesis by A4,A5,A6,A7,Th32;
+           end;
+      thus OrdRel(Q) is_antisymmetric_in Class PropRel(Q)
+           proof let x,y;
+            assume that
+            A8: x in Class PropRel(Q) & y in Class PropRel(Q) and
+            A9: [x,y] in OrdRel(Q) & [y,x] in OrdRel(Q);
+            consider p such that
+            A10: x = Class(PropRel(Q),p) by A8,EQREL_1:45;
+            consider q such that
+            A11: y = Class(PropRel(Q),q) by A8,EQREL_1:45;
+              (p |- q & q |- p implies p <==> q) &
+            (p <==> q implies [p,q] in PropRel(Q)) by Def11,Def12;
+            hence thesis by A9,A10,A11,Th32,EQREL_1:44;
+           end;
+     end;
+A12: InvRel(Q) is_an_involution_in Class PropRel(Q)
+     proof let x be Element of Class PropRel(Q);
+      consider r;
+        Class(PropRel Q,r) in Class PropRel Q by EQREL_1:def 5;
+      then reconsider D = Class PropRel(Q) as non empty set;
+        x in D;
+      then consider p such that
+      A13: x = Class(PropRel(Q),p) by EQREL_1:45;
+        (InvRel(Q)).((InvRel(Q)).x)
+           = (InvRel(Q)).Class(PropRel(Q),'not' p) by A13,Def14
+          .= Class(PropRel(Q),'not'('not' p)) by Def14;
+      hence thesis by A13,Th27;
+     end;
+   for x,y being Element of Class PropRel(Q) st [x,y] in OrdRel(Q) holds
+ [(InvRel(Q)).y,(InvRel(Q)).x] in OrdRel(Q)
+ proof let x,y be Element of Class PropRel(Q);
+      consider r;
+        Class(PropRel Q,r) in Class PropRel Q by EQREL_1:def 5;
+      then reconsider D = Class PropRel(Q) as non empty set;
+        x in D;
+      then consider p such that
+      A14: x = Class(PropRel(Q),p) by EQREL_1:45;
+        y in D;
+      then consider q such that
+      A15: y = Class(PropRel(Q),q) by EQREL_1:45;
+      A16: (InvRel(Q)).Class(PropRel(Q),p) = Class(PropRel(Q),'not' p) &
+      (InvRel(Q)).Class(PropRel(Q),q) = Class(PropRel(Q),'not' q) by Def14;
+        p |- q implies 'not' q |- 'not' p by Th28;
+      hence thesis by A14,A15,A16,Th32;
+ end;
+ hence thesis by A1,A12,Def7;
+end;

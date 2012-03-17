@@ -1,0 +1,239 @@
+:: Measurability of Extended Real Valued Functions
+::  by Noboru Endou , Katsumi Wasaki and Yasunari Shidama
+::
+:: Received October 6, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary PARTFUN1, SUPINF_1, MEASURE1, FUNCT_1, RAT_1, RELAT_1, COMPLEX1,
+      SEQ_1, MEASURE6, BOOLE, ARYTM_1, MESFUNC1, TARSKI, ARYTM_3, FUNCT_2,
+      RFUNCT_3, SQUARE_1, RLVECT_1, FUNCT_3, GROUP_1, PROB_2, FINSEQ_1,
+      MESFUNC2, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, RELAT_1, FUNCT_1, NAT_1, WELLORD2, RAT_1, FINSEQ_1, SUPINF_1,
+      SUPINF_2, FUNCT_3, PROB_2, MEASURE1, MEASURE2, MEASURE3, MEASURE6,
+      FUNCT_2, PARTFUN1, EXTREAL1, MESFUNC1, EXTREAL2;
+ constructors REAL_1, NAT_1, MEASURE3, WELLORD2, EXTREAL1, MESFUNC1, PARTFUN1,
+      MEASURE6, SUPINF_2, EXTREAL2, PROB_2, FUNCT_3, MEMBERED, RAT_1;
+ clusters SUPINF_1, XREAL_0, RELSET_1, RAT_1, FINSEQ_1, MEMBERED, NUMBERS,
+      ORDINAL2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET;
+
+
+begin  :: Finite Valued Function ::
+
+reserve X for non empty set;
+reserve Y for set;
+reserve x for Element of X;
+reserve f,g for PartFunc of X,ExtREAL;
+reserve S for sigma_Field_Subset of X;
+reserve F for Function of RAT,S;
+reserve p,q for Rational;
+reserve r for Real;
+reserve n,m for Nat;
+reserve A,B for Element of S;
+
+definition let X; let f;
+pred f is_finite means
+:: MESFUNC2:def 1
+  for x st x in dom f holds |. f.x .| <' +infty;
+end;
+
+theorem :: MESFUNC2:1
+  f = 1(#)f;
+
+theorem :: MESFUNC2:2
+for f,g,A st f is_finite or g is_finite
+holds dom (f+g) = dom f /\ dom g & dom (f-g) = dom f /\ dom g;
+
+theorem :: MESFUNC2:3
+for f,g,F,r,A st f is_finite & g is_finite &
+(for p holds F.p = (A /\ less_dom(f,R_EAL p)) /\ (A /\
+ less_dom(g,R_EAL (r-p))))
+holds A /\ less_dom(f+g,R_EAL r) = union (rng F);
+
+begin  :: Measurability of f+g and f-g ::
+
+theorem :: MESFUNC2:4
+  ex F being Function of NAT,RAT st F is one-to-one & dom F = NAT & rng F = RAT
+;
+
+theorem :: MESFUNC2:5
+for X,Y,Z be non empty set, F be Function of X,Z st X,Y are_equipotent holds
+(ex G be Function of Y,Z st rng F = rng G);
+
+theorem :: MESFUNC2:6
+for S,f,g,A st f is_measurable_on A & g is_measurable_on A holds
+ex F being Function of RAT,S st
+(for p being Rational holds
+F.p = (A /\ less_dom(f,R_EAL p)) /\ (A /\ less_dom(g,R_EAL (r-p))));
+
+theorem :: MESFUNC2:7
+for f,g,A st f is_finite & g is_finite & f is_measurable_on A &
+g is_measurable_on A holds f+g is_measurable_on A;
+
+canceled;
+
+theorem :: MESFUNC2:9
+for C being non empty set, f1,f2 being PartFunc of C,ExtREAL holds
+f1 - f2 = f1 + (-f2);
+
+theorem :: MESFUNC2:10
+for r being Real holds R_EAL -r = -(R_EAL r);
+
+theorem :: MESFUNC2:11
+for C being non empty set, f being PartFunc of C,ExtREAL holds
+-f = (-1)(#)f;
+
+theorem :: MESFUNC2:12
+for C being non empty set, f being PartFunc of C,ExtREAL, r be Real
+st f is_finite holds r(#)f is_finite;
+
+theorem :: MESFUNC2:13
+  for f,g,A st f is_finite & g is_finite & f is_measurable_on A &
+g is_measurable_on A & A c= dom g holds f-g is_measurable_on A;
+
+begin  ::definitions of extended real valued functions max+(f) and max-(f) ::
+       :: and their basic properties                                        ::
+
+definition let C be non empty set, f be PartFunc of C,ExtREAL;
+func max+(f) -> PartFunc of C,ExtREAL means
+:: MESFUNC2:def 2
+dom it = dom f &
+for x be Element of C st x in dom it holds it.x = max(f.x,0.);
+
+func max-(f) -> PartFunc of C,ExtREAL means
+:: MESFUNC2:def 3
+dom it = dom f &
+for x be Element of C st x in dom it holds it.x = max(-(f.x),0.);
+end;
+
+theorem :: MESFUNC2:14
+for C being non empty set, f being PartFunc of C,ExtREAL,
+x being Element of C st x in dom f holds 0. <=' (max+(f)).x;
+
+theorem :: MESFUNC2:15
+for C being non empty set, f being PartFunc of C,ExtREAL,
+x being Element of C st x in dom f holds 0. <=' (max-(f)).x;
+
+theorem :: MESFUNC2:16
+  for C being non empty set, f being PartFunc of C,ExtREAL holds
+max-(f) = max+(-f);
+
+theorem :: MESFUNC2:17
+for C being non empty set, f being PartFunc of C,ExtREAL, x being Element of C
+st x in dom f & 0. <' max+(f).x holds max-(f).x = 0.;
+
+theorem :: MESFUNC2:18
+  for C being non empty set, f being PartFunc of C,ExtREAL, x being Element of
+C
+st x in dom f & 0. <' max-(f).x holds max+(f).x = 0.;
+
+theorem :: MESFUNC2:19
+for C being non empty set, f being PartFunc of C,ExtREAL holds
+dom f = dom (max+(f)-max-(f)) & dom f = dom (max+(f)+max-(f));
+
+theorem :: MESFUNC2:20
+for C being non empty set, f being PartFunc of C,ExtREAL, x being Element of C
+st x in dom f holds
+(max+(f).x = f.x or max+(f).x = 0.) & (max-(f).x = -(f.x) or max-(f).x = 0.);
+
+theorem :: MESFUNC2:21
+for C being non empty set, f being PartFunc of C,ExtREAL, x being Element of C
+st x in dom f & max+(f).x = f.x holds max-(f).x = 0.;
+
+theorem :: MESFUNC2:22
+for C being non empty set, f being PartFunc of C,ExtREAL, x being Element of C
+st x in dom f & max+(f).x = 0. holds max-(f).x = -(f.x);
+
+theorem :: MESFUNC2:23
+  for C being non empty set, f being PartFunc of C,ExtREAL, x being Element of
+C
+st x in dom f & max-(f).x = -(f.x) holds max+(f).x = 0.;
+
+theorem :: MESFUNC2:24
+  for C being non empty set, f being PartFunc of C,ExtREAL, x being Element of
+C
+st x in dom f & max-(f).x = 0. holds max+(f).x = f.x;
+
+theorem :: MESFUNC2:25
+  for C being non empty set, f being PartFunc of C,ExtREAL holds
+f = max+(f) - max-(f);
+
+theorem :: MESFUNC2:26
+  for C being non empty set, f being PartFunc of C,ExtREAL holds
+|.f.| = max+(f) + max-(f);
+
+begin  :: Measurability of max+(f), max-(f) and |.f.|
+
+theorem :: MESFUNC2:27
+  f is_measurable_on A implies max+(f) is_measurable_on A;
+
+theorem :: MESFUNC2:28
+  f is_measurable_on A & A c= dom f implies max-(f) is_measurable_on A;
+
+theorem :: MESFUNC2:29
+  for f,A st f is_measurable_on A & A c= dom f holds |.f.| is_measurable_on A;
+
+begin  :: Definition and measurability of characteristic function ::
+
+theorem :: MESFUNC2:30
+for A,X being set holds rng chi(A,X) c= {0.,1.};
+
+definition let A,X be set;
+redefine func chi(A,X) -> PartFunc of X,ExtREAL;
+end;
+
+theorem :: MESFUNC2:31
+  chi(A,X) is_finite;
+
+theorem :: MESFUNC2:32
+  chi(A,X) is_measurable_on B;
+
+begin  :: Definition and measurability of simple function
+
+definition
+  let X be set;
+  let S be sigma_Field_Subset of X;
+  cluster disjoint_valued FinSequence of S;
+end;
+
+definition
+  let X be set;
+  let S be sigma_Field_Subset of X;
+  mode Finite_Sep_Sequence of S is disjoint_valued FinSequence of S;
+end;
+
+theorem :: MESFUNC2:33
+F is Finite_Sep_Sequence of S implies
+ex G being Sep_Sequence of S st (union rng F = union rng G &
+(for n st n in dom F holds F.n = G.n) &
+(for m st not m in dom F holds G.m = {}));
+
+theorem :: MESFUNC2:34
+  F is Finite_Sep_Sequence of S implies union rng F in S;
+
+definition
+let X be non empty set;
+let S be sigma_Field_Subset of X;
+let f be PartFunc of X,ExtREAL;
+ canceled;
+
+pred f is_simple_func_in S means
+:: MESFUNC2:def 5
+f is_finite &
+ex F being Finite_Sep_Sequence of S st (dom f = union rng F &
+for n being Nat,x,y being Element of X st
+n in dom F & x in F.n & y in F.n holds f.x = f.y);
+end;
+
+theorem :: MESFUNC2:35
+  f is_finite implies rng f is Subset of REAL;
+
+theorem :: MESFUNC2:36
+  F is Finite_Sep_Sequence of S implies
+for n holds F|(Seg n) is Finite_Sep_Sequence of S;
+
+theorem :: MESFUNC2:37
+  f is_simple_func_in S implies f is_measurable_on A;

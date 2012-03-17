@@ -1,0 +1,1066 @@
+:: On the Category of Posets
+::  by Adam Grabowski
+::
+:: Received January 22, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary ORDERS_1, NATTRA_1, RELAT_1, RELAT_2, BOOLE, WELLORD1, SUBSET_1,
+      PRE_TOPC, SEQM_3, FUNCT_1, FUNCT_2, UNIALG_3, FRAENKEL, CAT_5, CAT_1,
+      ALTCAT_1, PBOOLE, PRALG_1, BINOP_1, ORDERS_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1,
+      CAT_5, STRUCT_0, MCART_1, WELLORD1, PARTFUN1, BINOP_1, MULTOP_1,
+      RELSET_1, PRE_TOPC, ORDERS_1, CAT_1, ENS_1, FRAENKEL, PBOOLE, GRCAT_1,
+      FUNCT_2, PRALG_1, ALTCAT_1;
+ constructors RELAT_2, ORDERS_1, WELLORD1, ALTCAT_1, ENS_1, CAT_5, DOMAIN_1,
+      TOPS_2, GRCAT_1;
+ clusters SUBSET_1, RELSET_1, ORDERS_1, STRUCT_0, FUNCT_1, FRAENKEL, CAT_5,
+      ALTCAT_1, ENS_1, PARTFUN1, XBOOLE_0;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, ALTCAT_1, PRALG_1, XBOOLE_0;
+ theorems RELAT_1, RELSET_1, RELAT_2, ORDERS_1, STRUCT_0, TARSKI, ZFMISC_1,
+      WELLORD1, SYSREL, FUNCT_1, FUNCT_2, FRAENKEL, MCART_1, ENS_1, PBOOLE,
+      MULTOP_1, ALTCAT_1, MSUALG_1, PRE_TOPC, TMAP_1, GRCAT_1, XBOOLE_0,
+      XBOOLE_1;
+ schemes TARSKI, CAT_5, ALTCAT_1, XBOOLE_0;
+
+begin :: Preliminaries
+
+definition let IT be RelStr;
+  attr IT is discrete means :Def1:
+  the InternalRel of IT = id (the carrier of IT);
+end;
+
+definition
+  cluster strict discrete non empty Poset;
+ existence
+ proof
+   consider A be non empty set;
+   reconsider R = id A as Relation of A;
+   reconsider R as Order of A;
+   take RelStr(#A,R#);
+   thus thesis by Def1;
+ end;
+
+  cluster strict discrete empty Poset;
+  existence
+  proof
+    consider A be empty set;
+    reconsider R = id A as Relation of A;
+   reconsider R as Order of A;
+   take RelStr(#A,R#);
+   thus thesis by Def1,STRUCT_0:def 1;
+  end;
+end;
+
+Lm1:
+  for P be empty RelStr holds the InternalRel of P = {}
+ proof
+  let P be empty RelStr;
+    the carrier of P = {} by STRUCT_0:def 1;
+  hence the InternalRel of P = {} by RELSET_1:26;
+ end;
+
+definition
+  cluster RelStr (#{},id {}#) -> empty;
+  coherence by STRUCT_0:def 1;
+
+  let P be empty RelStr;
+  cluster the InternalRel of P -> empty;
+  coherence by Lm1;
+end;
+
+Lm2:
+  for P be RelStr st P is empty holds P is discrete
+  proof
+    let P be RelStr;
+    assume A1: P is empty;
+then A2: the carrier of P = {} by STRUCT_0:def 1;
+      the InternalRel of P = {} by A1,Lm1;
+    hence P is discrete by A2,Def1,RELAT_1:81;
+  end;
+
+definition
+  cluster empty -> discrete RelStr;
+  coherence by Lm2;
+end;
+
+definition let P be RelStr;
+  let IT be Subset of P;
+  attr IT is disconnected means :Def2:
+   ex A,B be Subset of P st A <> {} & B <> {}
+  & IT = A \/ B & A misses B &
+    the InternalRel of P =
+     (the InternalRel of P) |_2 A \/ (the InternalRel of P) |_2 B;
+  antonym IT is connected;
+end;
+
+definition let IT be RelStr;
+  attr IT is disconnected means :Def3:
+   [#] IT is disconnected;
+  antonym IT is connected;
+end;
+
+reserve T for non empty RelStr,
+        a for Element of T;
+
+theorem
+    for DP be discrete non empty RelStr, x,y be Element of DP holds
+   x <= y iff x = y
+  proof
+   let DP be discrete non empty RelStr, x,y be Element of DP;
+   hereby assume x <= y;
+    then [x,y] in the InternalRel of DP by ORDERS_1:def 9;
+    then [x,y] in id (the carrier of DP) by Def1;
+    hence x = y by RELAT_1:def 10;
+   end;
+   assume x = y;
+   then [x,y] in id (the carrier of DP) by RELAT_1:def 10;
+   then [x,y] in the InternalRel of DP by Def1;
+   hence thesis by ORDERS_1:def 9;
+  end;
+
+theorem
+    for R be Relation, a be set st R is Order of {a} holds R = id {a}
+proof
+  let R be Relation, a be set;
+  assume A1: R is Order of {a};
+  then R c= [:{a},{a}:];
+then A2:R c= {[a,a]} by ZFMISC_1:35;
+  field R = {a} by A1,ORDERS_1:97;
+  then
+A3:R is_reflexive_in {a} by A1,RELAT_2:def 9;
+ R <> {}
+   proof
+     assume A4: R = {};
+       a in {a} by TARSKI:def 1;
+     hence contradiction by A3,A4,RELAT_2:def 1;
+   end;
+   then R = { [a,a] } by A2,ZFMISC_1:39;
+   hence thesis by SYSREL:30;
+end;
+
+theorem
+    T is reflexive & [#] T = {a} implies T is discrete
+proof assume
+A1:  T is reflexive;
+   assume [#] T = {a};
+then A2: the carrier of T = {a} by PRE_TOPC:12;
+   set R = the InternalRel of T;
+     R = id {a}
+    proof
+A3:    R c= [:{a},{a}:] & id {a} = {[a,a]} by A2,SYSREL:30;
+     hence R c= id {a} by ZFMISC_1:35;
+     let x be set; assume x in id {a};
+      then x = [a,a] & a >= a by A1,A3,ORDERS_1:24,TARSKI:def 1;
+     hence thesis by ORDERS_1:def 9;
+    end;
+   hence thesis by A2,Def1;
+ end;
+
+ reserve a for set;
+
+theorem Th4:
+  [#] T = {a} implies T is connected
+  proof
+    assume A1: [#] T = {a};
+    then reconsider OT = [#] T as non empty set;
+A2: for Z,Z' be non empty Subset of OT holds not Z misses Z'
+    proof
+      let Z,Z' be non empty Subset of OT;
+        Z = {a} & Z' = {a} by A1,ZFMISC_1:39; hence thesis;
+    end;
+      [#] T is connected
+    proof
+      assume [#] T is disconnected;
+      then consider A,B be Subset of T such that
+A3:    A <> {} & B <> {} &
+       [#] T = A \/ B & A misses B &
+        the InternalRel of T =
+       (the InternalRel of T) |_2 A \/ (the InternalRel of T) |_2 B by Def2;
+     reconsider A' = A , B' = B as non empty Subset of OT by A3,PRE_TOPC:12;
+       A' misses B' by A3;
+     hence contradiction by A2;
+    end;
+    hence thesis by Def3;
+  end;
+
+theorem Th5:
+  for DP be discrete non empty Poset st
+   (ex a,b be Element of DP st a <> b) holds DP is disconnected
+  proof
+    let DP be discrete non empty Poset;
+    given a,b be Element of DP such that
+A1:    a <> b;
+A2: the carrier of DP = ( (the carrier of DP) \ {a} ) \/ {a} by XBOOLE_1:45;
+A3: ( (the carrier of DP) \ {a} ) misses {a} by XBOOLE_1:79;
+    reconsider B = {a} as non empty Subset of DP;
+      not b in {a} by A1,TARSKI:def 1;
+    then ( (the carrier of DP) \ {a} )
+      is non empty Subset of DP by XBOOLE_0:def 4,XBOOLE_1:36;
+    then reconsider A = ( (the carrier of DP) \ {a} )
+      as non empty Subset of DP;
+A4: (the InternalRel of DP) |_2 A = ((the InternalRel of DP) /\ [:A,A:])
+                                              by WELLORD1:def 6;
+A5: (the InternalRel of DP) |_2 B = ((the InternalRel of DP) /\ [:B,B:])
+                                              by WELLORD1:def 6;
+      the InternalRel of DP c= ([:A,A:] \/ [:B,B:])
+    proof
+     let x be set; assume A6: x in the InternalRel of DP;
+then A7:  x in id (the carrier of DP) by Def1;
+     consider x1,x2 be set such that A8: x = [x1,x2] by A6,RELAT_1:def 1;
+A9:  x1 = x2 by A7,A8,RELAT_1:def 10;
+     per cases;
+     suppose x1 in A;
+then A10:  [x1,x1] in [:A,A:] by ZFMISC_1:106;
+       [:A,A:] c= ([:A,A:] \/ [:B,B:]) by XBOOLE_1:7;
+     hence thesis by A8,A9,A10;
+     suppose A11: not x1 in A;
+       x1 in the carrier of DP by A7,A8,RELAT_1:def 10;
+     then x1 in (the carrier of DP) \ A by A11,XBOOLE_0:def 4;
+     then x1 in (the carrier of DP) /\ B by XBOOLE_1:48;
+     then x1 in B by XBOOLE_1:28;
+then A12:  [x1,x1] in [:B,B:] by ZFMISC_1:106;
+       [:B,B:] c= ([:A,A:] \/ [:B,B:]) by XBOOLE_1:7;
+     hence thesis by A8,A9,A12;
+    end;
+    then the InternalRel of DP = ((the InternalRel of DP) /\
+       ([:A,A:] \/ [:B,B:])) by XBOOLE_1:28;
+then A13: the InternalRel of DP = (the InternalRel of DP) |_2 A
+           \/ (the InternalRel of DP) |_2 B by A4,A5,XBOOLE_1:23;
+      the carrier of DP c= the carrier of DP;
+    then reconsider C = the carrier of DP as Subset of DP
+                        ;
+      C is disconnected by A2,A3,A13,Def2;
+    then [#] DP is disconnected by PRE_TOPC:12;
+    hence thesis by Def3;
+  end;
+
+definition
+  cluster strict connected (non empty Poset);
+  existence
+  proof
+    consider x be set;
+    reconsider A = RelStr (#{x},id {x}#) as non empty Poset;
+      [#] A = {x} by PRE_TOPC:12;
+    then A is connected by Th4;
+    hence thesis;
+  end;
+
+  cluster strict disconnected discrete (non empty Poset);
+  existence
+  proof
+     ex Y be non empty Poset st Y is strict & Y is disconnected & Y is discrete
+   proof
+    reconsider A = RelStr (#{1,2},id {1,2}#) as non empty Poset;
+    reconsider A as discrete (non empty Poset) by Def1;
+    take A;
+      ex a,b be Element of A st a <> b
+    proof
+     set a = 1 , b = 2;
+       a is Element of A &
+     b is Element of A by TARSKI:def 2;
+     then reconsider a, b as Element of A;
+     take a, b;
+     thus thesis;
+    end;
+    hence thesis by Th5;
+   end;
+   hence thesis;
+  end;
+end;
+
+begin  :: Category of Posets
+
+definition let IT be set;
+  attr IT is POSet_set-like means :Def4:
+   for a be set st a in IT holds a is non empty Poset;
+end;
+
+definition
+  cluster non empty POSet_set-like set;
+  existence
+  proof
+    consider P be non empty Poset;
+    set A = {P};
+A1:  for a be set st a in A holds a is non empty Poset by TARSKI:def 1;
+    take A;
+    thus thesis by A1,Def4;
+  end;
+end;
+
+definition
+  mode POSet_set is POSet_set-like set;
+end;
+
+definition let P be non empty POSet_set;
+  redefine mode Element of P -> non empty Poset;
+  coherence by Def4;
+end;
+
+definition
+ let L1,L2 be RelStr;
+ let f be map of L1, L2;
+ attr f is monotone means :Def5:
+  for x,y being Element of L1 st x <= y
+   for a,b being Element of L2 st a = f.x & b = f.y holds a <= b;
+end;
+
+Lm3:
+  for A,B,C be non empty RelStr
+  for f be map of A, B,
+      g be map of B, C st
+      f is monotone & g is monotone
+      ex gf be map of A, C st gf = g * f & gf is monotone
+  proof
+    let A,B,C be non empty RelStr;
+    let f be map of A, B ,
+        g be map of B, C;
+    assume A1: f is monotone & g is monotone;
+    reconsider gf = g * f as map of A, C;
+    take gf;
+      now let p1,p2 be Element of A;
+    A2: dom f = the carrier of A by FUNCT_2:def 1;
+      assume A3: p1 <= p2;
+      reconsider p1' = f.p1, p2' = f.p2 as Element of B;
+A4:    g.(f.p1) = (g*f).p1 & g.(f.p2) = (g*f).p2 by A2,FUNCT_1:23;
+A5:    p1' <= p2' by A1,A3,Def5;
+      let r1, r2 be Element of C; assume r1 = gf.p1 & r2 = gf.p2;
+      hence r1 <= r2 by A1,A4,A5,Def5;
+    end;
+    hence thesis by Def5;
+  end;
+
+ reserve P for non empty POSet_set, A,B for Element of P;
+
+Lm4:
+  id T is monotone
+  proof
+    set IT = id T;
+    let p1,p2 be Element of T; assume A1: p1 <= p2;
+    reconsider p1' = p1, p2' = p2 as Element of T;
+A2:  IT.p1' = p1' & IT.p2' = p2' by TMAP_1:91;
+    let r1, r2 be Element of T; assume r1 = IT.p1 & r2 = IT.p2;
+    hence r1 <= r2 by A1,A2;
+  end;
+
+definition let A,B be RelStr;
+ func MonFuncs (A,B) means :Def6:
+   a in it iff ex f be map of A, B st a = f &
+    f in Funcs (the carrier of A, the carrier of B) & f is monotone;
+existence
+proof
+  defpred P[set] means ex f be map of A, B st f = $1 & f is monotone;
+  consider AB be set such that
+A1: for a be set holds a in AB iff
+    a in Funcs (the carrier of A, the carrier of B) & P[a]
+     from Separation;
+  take AB;
+  thus a in AB iff
+    ex f be map of A, B st a = f &
+    f in Funcs (the carrier of A, the carrier of B) & f is monotone
+  proof
+   hereby assume A2: a in AB;
+    then consider f be map of A, B such that A3: f = a &
+      f is monotone by A1;
+    take f;
+    thus a = f & f in Funcs (the carrier of A, the carrier of B) &
+      f is monotone by A1,A2,A3;
+   end;
+    given f be map of A, B such that
+A4:    a = f & f in Funcs (the carrier of A, the carrier of B) &
+        f is monotone;
+    thus thesis by A1,A4;
+  end;
+end;
+uniqueness
+proof
+  let A1, A2 be set such that
+A5:  a in A1 iff ex f be map of A, B st a = f &
+   f in Funcs (the carrier of A, the carrier of B) &
+     f is monotone
+   and
+A6:  a in A2 iff ex f be map of A, B st a = f &
+    f in Funcs (the carrier of A, the carrier of B) &
+     f is monotone;
+   thus A1 = A2
+   proof
+A7:   A1 c= A2
+     proof
+      thus a in A1 implies a in A2
+      proof
+        assume a in A1;
+        then ex f be map of A, B st a = f &
+         f in Funcs (the carrier of A, the carrier of B) & f is monotone by A5;
+        hence thesis by A6;
+      end;
+     end;
+    A2 c= A1
+     proof
+     thus a in A2 implies a in A1
+       proof
+       assume a in A2;
+       then ex f be map of A, B st a = f &
+         f in Funcs (the carrier of A, the carrier of B) &f is monotone by A6;
+       hence thesis by A5;
+       end;
+     end;
+   hence thesis by A7,XBOOLE_0:def 10;
+  end;
+end;
+end;
+
+theorem Th6:
+for A,B,C be non empty RelStr
+ for f,g be Function st f in MonFuncs (A,B) & g in MonFuncs (B,C) holds
+  (g*f) in MonFuncs (A,C)
+  proof
+    let A,B,C be non empty RelStr;
+    let f,g be Function;
+    assume A1: f in MonFuncs (A,B) & g in MonFuncs (B,C);
+    then consider f' be map of A, B such that A2: f = f' &
+      f' in Funcs (the carrier of A, the carrier of B) &
+     f' is monotone by Def6;
+    consider g' be map of B, C such that A3: g = g' &
+     g' in Funcs (the carrier of B, the carrier of C)
+     & g' is monotone by A1,Def6;
+    consider gf be map of A,C such that A4: gf = g' * f' &
+      gf is monotone by A2,A3,Lm3;
+      gf in Funcs (the carrier of A, the carrier of C) by FUNCT_2:11;
+    hence thesis by A2,A3,A4,Def6;
+  end;
+
+theorem Th7:
+  id the carrier of T in MonFuncs (T,T)
+  proof
+A1: id T is monotone by Lm4;
+   reconsider IT = id T as Function of the carrier of T, the carrier of T;
+   reconsider IT' = IT as map of T,T;
+A2: IT' in Funcs (the carrier of T, the carrier of T) by FUNCT_2:12;
+     IT' = id the carrier of T by GRCAT_1:def 11;
+   hence thesis by A1,A2,Def6;
+  end;
+
+definition let T;
+  cluster MonFuncs (T,T) -> non empty;
+  coherence by Th7;
+end;
+
+definition let X be set;
+  func Carr X -> set means :Def7:
+    a in it iff ex s be 1-sorted st s in X & a = the carrier of s;
+  existence
+  proof
+    defpred P[set,set] means ex s be 1-sorted st s = $1 &
+      $2 = the carrier of s;
+A1:  for x,y,z be set st P[x,y] & P[x,z] holds y = z;
+    consider CX be set such that A2: for x be set holds
+    x in CX iff ex y be set st y in X & P[y,x] from Fraenkel(A1);
+    take CX;
+    let x be set;
+      x in CX iff ex s be 1-sorted st s in X & x = the carrier of s
+    proof
+      thus x in CX implies (ex s be 1-sorted st s in X & x = the carrier of s)
+      proof
+        assume x in CX;
+        then consider y be set such that A3: y in X & ex s be 1-sorted st s = y
+&
+                x = the carrier of s by A2;
+        consider s be 1-sorted such that A4: s = y & x = the carrier of s
+            by A3;
+        take s;
+        thus thesis by A3,A4;
+      end;
+        given s be 1-sorted such that A5: s in X & x = the carrier of s;
+        consider y be set such that
+A6:        y in X & s = y & x = the carrier of s by A5;
+        thus thesis by A2,A6;
+    end;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let C1,C2 be set;
+    assume that
+    A7: a in C1 iff ex s be 1-sorted st s in X & a = the carrier of s and
+    A8: a in C2 iff ex s be 1-sorted st s in X & a = the carrier of s;
+      a in C1 iff a in C2
+    proof
+      thus a in C1 implies a in C2
+      proof
+        assume a in C1;
+        then ex s be 1-sorted st s in X & a = the carrier of s by A7;
+        hence thesis by A8;
+      end;
+      thus a in C2 implies a in C1
+      proof
+        assume a in C2;
+        then ex s be 1-sorted st s in X & a = the carrier of s by A8;
+        hence thesis by A7;
+      end;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+end;
+
+Lm5:
+  the carrier of A in Carr P by Def7;
+
+definition let P;
+  cluster Carr P -> non empty;
+  coherence by Lm5;
+end;
+
+theorem
+    for f be 1-sorted holds Carr {f} = {the carrier of f}
+  proof
+    let f be 1-sorted;
+A1:  f in {f} by TARSKI:def 1;
+    thus Carr {f} c= {the carrier of f}
+    proof
+      let a;
+      assume a in Carr {f};
+      then consider s be 1-sorted such that
+A2:      s in {f} & a = the carrier of s by Def7;
+        s = f by A2,TARSKI:def 1;
+      hence thesis by A2,TARSKI:def 1;
+    end;
+    thus {the carrier of f} c= Carr {f}
+    proof
+      let a;
+      assume a in {the carrier of f};
+      then a = the carrier of f by TARSKI:def 1;
+      hence a in Carr {f} by A1,Def7;
+    end;
+  end;
+
+theorem
+    for f,g be 1-sorted holds Carr {f,g} = {the carrier of f, the carrier of g}
+  proof
+    let f,g be 1-sorted;
+    thus Carr {f,g} c= {the carrier of f, the carrier of g}
+    proof
+      let a; assume a in Carr {f,g};
+      then consider s be 1-sorted such that
+A1:      s in {f,g} & a = the carrier of s by Def7;
+      per cases by A1,TARSKI:def 2;
+      suppose s = f;
+      hence thesis by A1,TARSKI:def 2;
+      suppose s = g;
+      hence thesis by A1,TARSKI:def 2;
+    end;
+    thus {the carrier of f, the carrier of g} c= Carr {f,g}
+    proof
+      let a;
+      assume A2: a in {the carrier of f, the carrier of g};
+A3:    f in {f,g} & g in {f,g} by TARSKI:def 2;
+      per cases by A2,TARSKI:def 2;
+      suppose a = the carrier of f;
+      hence a in Carr {f,g} by A3,Def7;
+      suppose a = the carrier of g;
+      hence a in Carr {f,g} by A3,Def7;
+    end;
+  end;
+
+theorem Th10:
+  MonFuncs (A,B) c= Funcs Carr P
+  proof let x be set;
+  assume x in MonFuncs(A,B);
+  then consider g be map of A, B such that A1: x = g &
+    g in Funcs (the carrier of A, the carrier of B) &
+   g is monotone by Def6;
+  reconsider CA = the carrier of A , CB = the carrier of B as
+     Element of Carr P by Def7;
+    Funcs (CA,CB) c= Funcs Carr P by ENS_1:2;
+  hence thesis by A1;
+ end;
+
+theorem Th11:
+  for A,B be RelStr holds
+   MonFuncs (A,B) c= Funcs (the carrier of A,the carrier of B)
+ proof
+ let A,B be RelStr;
+ let a be set; assume a in MonFuncs (A,B);
+ then consider f be map of A, B such that A1: a = f &
+  f in Funcs (the carrier of A, the carrier of B) & f is monotone by Def6;
+ thus thesis by A1;
+end;
+
+definition let A,B be non empty Poset;
+  cluster MonFuncs (A,B) -> functional;
+  coherence
+  proof
+    reconsider X = MonFuncs (A,B) as Subset of
+           Funcs (the carrier of A,the carrier of B) by Th11;
+      X is functional;
+    hence thesis;
+  end;
+end;
+
+definition let P be non empty POSet_set;
+  func POSCat P -> strict with_triple-like_morphisms Category means
+    the Objects of it = P &
+  (for a,b be Element of P, f be Element of Funcs Carr P st
+    f in MonFuncs (a,b) holds [[a,b],f] is Morphism of it) &
+  (for m be Morphism of it
+    ex a,b be Element of P, f be Element of Funcs (Carr P) st
+     m = [[a,b],f] & f in MonFuncs (a,b)) &
+   for m1,m2 be (Morphism of it), a1,a2,a3 be Element of P,
+   f1,f2 be Element of Funcs (Carr P) st
+   m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
+    holds m2*m1 = [[a1,a3], f2*f1];
+existence
+proof
+    defpred P[Element of P, Element of P, set]
+    means $3 in MonFuncs($1,$2);
+    deffunc F(Function, Function) = $1*$2;
+A1:for a,b,c be Element of P, f,g be Element of Funcs (Carr P) st
+   P[a,b,f] & P[b,c,g] holds
+   F(g,f) in Funcs (Carr P) & P[a,c,F(g,f)]
+     proof
+       let a,b,c be Element of P; let f,g be Element of Funcs (Carr P);
+       assume A2:  f in MonFuncs(a,b) & g in MonFuncs (b,c);
+A3:    MonFuncs (a,c) c= Funcs (Carr P) by Th10;
+         (g*f) in MonFuncs (a,c) by A2,Th6;
+      hence thesis by A3;
+     end;
+A4:  for a be Element of P ex f be Element of Funcs (Carr P) st
+     P[a,a,f] &
+     for b be Element of P, g be Element of Funcs (Carr P) holds
+      (P[a,b,g] implies F(g,f) = g) &
+      (P[b,a,g] implies F(f,g) = g)
+    proof
+      let a be Element of P;
+      set f = id the carrier of a;
+A5:   MonFuncs (a,a) c= Funcs (Carr P) by Th10;
+        f in MonFuncs (a,a) by Th7;
+      then reconsider f as Element of Funcs (Carr P) by A5;
+      take f;
+        now let b be Element of P, g be Element of Funcs (Carr P);
+        thus (g in MonFuncs (a,b) implies (g*f) = g) &
+          (g in MonFuncs (b,a) implies (f*g) = g)
+        proof
+          thus g in MonFuncs (a,b) implies (g*f) = g
+          proof
+            assume g in MonFuncs (a,b);
+            then consider g' be map of a, b
+             such that A6: g' = g &
+             g' in Funcs (the carrier of a, the carrier of b) &
+             g' is monotone by Def6;
+            reconsider g as Function of the carrier of a, the carrier of b
+              by A6;
+              dom g = the carrier of a by FUNCT_2:def 1;
+            hence thesis by RELAT_1:77;
+          end;
+          thus g in MonFuncs (b,a) implies (f*g) = g
+          proof
+            assume g in MonFuncs (b,a);
+            then consider g' be map of b, a
+             such that A7: g' = g &
+             g' in Funcs (the carrier of b, the carrier of a) &
+              g' is monotone by Def6;
+            reconsider g as Function of the carrier of b, the carrier of a
+              by A7;
+              rng g c= the carrier of a;
+            hence thesis by RELAT_1:79;
+          end;
+        end;
+      end;
+      hence thesis by Th7;
+    end;
+A8:  for a,b,c,d be Element of P, f,g,h be Element of Funcs Carr P st
+      P[a,b,f] & P[b,c,g] & P[c,d,h]
+      holds F(h,F(g,f)) = F(F(h,g),f) by RELAT_1:55;
+     ex C be with_triple-like_morphisms strict Category st
+     the Objects of C = P &
+  (for a,b be Element of P, f be Element of Funcs (Carr P) st
+    P[a,b,f] holds [[a,b],f] is Morphism of C) &
+  (for m be Morphism of C
+    ex a,b be Element of P, f be Element of Funcs (Carr P) st
+     m = [[a,b],f] & P[a,b,f]) &
+   for m1,m2 be (Morphism of C), a1,a2,a3 be Element of P,
+   f1,f2 be Element of Funcs (Carr P) st
+   m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
+    holds m2*m1 = [[a1,a3], F(f2,f1)] from CatEx(A1,A4,A8);
+   hence thesis;
+end;
+uniqueness
+proof
+    defpred P[Element of P, Element of P, Element of Funcs Carr P]
+    means $3 in MonFuncs($1,$2);
+    deffunc F(Element of Funcs Carr P, Element of Funcs Carr P) = $1*$2;
+A9:now let a be Element of P;
+    thus ex f be Element of Funcs Carr P st P[a,a,f] &
+      for b be Element of P, g be Element of Funcs Carr P holds
+      (P[a,b,g] implies F(g,f) = g) &
+      (P[b,a,g] implies F(f,g) = g)
+     proof
+      set f = id the carrier of a;
+A10:   MonFuncs (a,a) c= Funcs (Carr P) by Th10;
+A11:   f in MonFuncs (a,a) by Th7;
+      then reconsider f as Element of Funcs (Carr P) by A10;
+        now let b be Element of P, g be Element of Funcs (Carr P);
+       thus (g in MonFuncs (a,b) implies (g*f) = g) &
+         (g in MonFuncs (b,a) implies (f*g) = g)
+       proof
+        thus g in MonFuncs (a,b) implies (g*f) = g
+        proof
+         assume g in MonFuncs (a,b);
+         then consider g' be map of a, b
+           such that A12: g' = g &
+           g' in Funcs (the carrier of a,the carrier of b) &
+           g' is monotone by Def6;
+         reconsider g as Function of the carrier of a, the carrier of b
+             by A12;
+           dom g = the carrier of a by FUNCT_2:def 1;
+         hence thesis by RELAT_1:77;
+        end;
+        thus g in MonFuncs (b,a) implies (f*g) = g
+        proof
+         assume g in MonFuncs (b,a);
+         then consider g' be map of b, a
+           such that A13: g' = g &
+           g' in Funcs (the carrier of b,the carrier of a) &
+           g' is monotone by Def6;
+         reconsider g as Function of the carrier of b, the carrier of a
+            by A13;
+           rng g c= the carrier of a;
+         hence thesis by RELAT_1:79;
+        end;
+       end;
+      end;
+      hence thesis by A11;
+     end;
+    end;
+    thus for C1, C2 be strict with_triple-like_morphisms Category st
+      the Objects of C1 = P &
+    (for a,b be Element of P, f be Element of Funcs Carr P st
+    P[a,b,f] holds [[a,b],f] is Morphism of C1) &
+  (for m be Morphism of C1
+    ex a,b be Element of P, f be Element of Funcs Carr P st
+     m = [[a,b],f] & P[a,b,f]) &
+  (for m1,m2 be (Morphism of C1), a1,a2,a3 be Element of P,
+    f1,f2 be Element of Funcs Carr P st m1 = [[a1,a2],f1] &
+    m2 = [[a2,a3],f2]
+    holds m2*m1 = [[a1,a3], F(f2,f1)]) &
+   the Objects of C2 = P &
+  (for a,b be Element of P, f be Element of Funcs Carr P st
+    P[a,b,f] holds [[a,b],f] is Morphism of C2) &
+  (for m be Morphism of C2
+    ex a,b be Element of P, f be Element of Funcs Carr P st
+     m = [[a,b],f] & P[a,b,f] ) &
+   for m1,m2 be (Morphism of C2), a1,a2,a3 be Element of P,
+    f1,f2 be Element of Funcs Carr P st
+    m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
+    holds m2*m1 = [[a1,a3], F(f2,f1)]
+    holds C1 = C2 from CatUniq(A9);
+  end;
+end;
+
+begin   :: Alternative Category of Posets
+
+scheme AltCatEx
+ {A() -> non empty set, F(set,set) -> functional set }:
+  ex C be strict AltCatStr st
+   the carrier of C = A() &
+   for i,j be Element of A() holds (the Arrows of C).(i,j) = F (i,j) &
+   for i,j,k be Element of A() holds
+    (the Comp of C).(i,j,k) = FuncComp ( F(i,j) , F(j,k) )
+   provided
+A1: for i,j,k be Element of A() for f,g be Function st
+     f in F(i,j) & g in F(j,k) holds g * f in F (i,k)
+  proof
+    deffunc G(set,set) = F($1,$2);
+    consider M be ManySortedSet of [:A(),A():] such that
+A2:   for i,j be Element of A() holds M.(i,j) = G(i,j) from MSSLambda2D;
+    deffunc H(set,set,set) = FuncComp(G($1,$2),G($2,$3));
+    consider c be ManySortedSet of [:A(),A(),A():] such that
+A3:   for i,j,k be Element of A() holds
+      c.(i,j,k) = H(i,j,k) from MSSLambda3D;
+      c is Function-yielding
+    proof let i be set;
+     assume i in dom c;
+     then i in [:A(),A(),A():] by PBOOLE:def 3;
+     then consider x1,x2,x3 be set such that
+A4:   x1 in A() & x2 in A() & x3 in A() and
+A5:   i = [x1,x2,x3] by MCART_1:72;
+       c.i = c.(x1,x2,x3) by A5,MULTOP_1:def 1
+        .= FuncComp(F(x1,x2),F(x2,x3)) by A3,A4;
+     hence c.i is Function;
+    end;
+    then reconsider c as ManySortedFunction of [:A(),A(),A():];
+      now let i be set;
+     assume i in [:A(),A(),A():];
+     then consider x1,x2,x3 be set such that
+A6:   x1 in A() & x2 in A() & x3 in A() and
+A7:   i = [x1,x2,x3] by MCART_1:72;
+A8:    M.(x1,x2) = F(x1,x2) by A2,A6;
+A9:     c.i = c.(x1,x2,x3) by A7,MULTOP_1:def 1
+         .= FuncComp(F(x1,x2),F(x2,x3)) by A3,A6;
+      then reconsider ci = c.i as Function;
+A10:   dom ci = [:F(x2,x3),F(x1,x2):] by A9,PBOOLE:def 3;
+A11:   [:F(x2,x3),F(x1,x2):] = [:M.(x2,x3),M.(x1,x2):] by A2,A6,A8
+         .= {|M,M|}.(x1,x2,x3) by A6,ALTCAT_1:def 6
+         .= {|M,M|}.i by A7,MULTOP_1:def 1;
+A12:   rng FuncComp(F(x1,x2),F(x2,x3)) c= F (x1,x3)
+      proof let i be set;
+       set F = FuncComp(F(x1,x2),F(x2,x3));
+       assume i in rng F;
+       then consider j be set such that
+A13:     j in dom F and
+A14:     i = F.j by FUNCT_1:def 5;
+       consider f,g be Function such that
+A15:      j = [g,f] and
+A16:     F.j = g*f by A13,ALTCAT_1:def 11;
+         dom F = [:F(x2,x3),F(x1,x2):] by PBOOLE:def 3;
+       then g in F(x2,x3) & f in F(x1,x2) by A13,A15,ZFMISC_1:106;
+       hence i in F(x1,x3) by A1,A6,A14,A16;
+      end;
+A17:    {|M|}.i = {|M|}.(x1,x2,x3) by A7,MULTOP_1:def 1
+             .= M.(x1,x3) by A6,ALTCAT_1:def 5;
+then A18:    rng ci c= {|M|}.i by A2,A6,A9,A12;
+        now assume {|M,M|}.i <> {};
+        then consider j be set such that
+A19:      j in [:F(x2,x3),F(x1,x2):] by A11,XBOOLE_0:def 1;
+        consider j1,j2 be set such that
+A20:      j1 in F(x2,x3) and
+A21:      j2 in F(x1,x2) and
+           j = [j1,j2] by A19,ZFMISC_1:103;
+        reconsider j1 as Function by A20,FRAENKEL:def 1;
+        reconsider j2 as Function by A21,FRAENKEL:def 1;
+          j1*j2 in F (x1,x3) by A1,A6,A20,A21;
+       hence {|M|}.i <> {} by A2,A6,A17;
+      end;
+     hence c.i is Function of {|M,M|}.i, {|M|}.i by A10,A11,A18,FUNCT_2:def 1,
+RELSET_1:11;
+    end;
+    then reconsider c as BinComp of M by MSUALG_1:def 2;
+    set C = AltCatStr(#A(),M,c#);
+    take C;
+    thus the carrier of C = A();
+    let i,j be Element of A();
+    thus (the Arrows of C).(i,j) = F (i,j) by A2;
+    let i,j,k be Element of A();
+    thus (the Comp of C).(i,j,k) = FuncComp ( F(i,j) , F(j,k) ) by A3;
+  end;
+
+scheme AltCatUniq
+   {A() -> non empty set, F(set,set) -> functional set } :
+  for C1,C2 be strict AltCatStr st
+  ( the carrier of C1 = A() &
+   for i,j be Element of A() holds (the Arrows of C1).(i,j) = F (i,j) &
+   for i,j,k be Element of A() holds
+    (the Comp of C1).(i,j,k) = FuncComp ( F(i,j) , F(j,k) ) ) &
+  ( the carrier of C2 = A() &
+   for i,j be Element of A() holds (the Arrows of C2).(i,j) = F (i,j) &
+   for i,j,k be Element of A() holds
+    (the Comp of C2).(i,j,k) = FuncComp ( F(i,j) , F(j,k) ) )
+    holds C1 = C2
+  proof
+    let C1,C2 be strict AltCatStr; assume that
+A1:   the carrier of C1 = A() &
+   for i,j be Element of A() holds (the Arrows of C1).(i,j) = F (i,j) &
+   for i,j,k be Element of A() holds
+    (the Comp of C1).(i,j,k) = FuncComp ( F(i,j) , F(j,k) ) and
+A2:   the carrier of C2 = A() &
+   for i,j be Element of A() holds (the Arrows of C2).(i,j) = F (i,j) &
+   for i,j,k be Element of A() holds
+    (the Comp of C2).(i,j,k) = FuncComp ( F(i,j) , F(j,k) );
+      now let i,j be Element of A();
+        thus (the Arrows of C1).(i,j) = F (i,j) by A1
+                                     .= (the Arrows of C2).(i,j) by A2;
+    end;
+then A3: the Arrows of C1 = the Arrows of C2 by A1,A2,ALTCAT_1:9;
+      now let i,j,k be set; assume
+A4:   i in A() & j in A() & k in A();
+      hence (the Comp of C1).(i,j,k) = FuncComp ( F(i,j) , F(j,k) ) by A1
+            .= (the Comp of C2).(i,j,k) by A2,A4;
+    end;
+    hence C1 = C2 by A1,A2,A3,ALTCAT_1:10;
+  end;
+
+definition let P be non empty POSet_set;
+  func POSAltCat P -> strict AltCatStr means :Def9:
+   the carrier of it = P &
+   for i,j be Element of P holds
+    (the Arrows of it).(i,j) = MonFuncs (i,j) &
+   for i,j,k be Element of P holds
+    (the Comp of it).(i,j,k) = FuncComp ( MonFuncs (i,j) , MonFuncs (j,k) );
+  existence
+  proof
+    deffunc F(Element of P,Element of P) = MonFuncs($1,$2);
+A1:for i,j,k be Element of P for f,g be Function st f in F(i,j) &
+   g in F(j,k) holds g * f in F(i,k) by Th6;
+   thus ex C be strict AltCatStr st
+   the carrier of C = P &
+   for i,j be Element of P holds (the Arrows of C).(i,j) = F (i,j) &
+   for i,j,k be Element of P holds
+    (the Comp of C).(i,j,k) = FuncComp ( F(i,j) , F(j,k) ) from AltCatEx(A1);
+  end;
+  uniqueness
+  proof
+   deffunc F(Element of P,Element of P) = MonFuncs ($1,$2);
+   thus
+   for C1,C2 be strict AltCatStr st
+   ( the carrier of C1 = P &
+   for i,j be Element of P holds (the Arrows of C1).(i,j) = F (i,j) &
+   for i,j,k be Element of P holds
+    (the Comp of C1).(i,j,k) = FuncComp ( F(i,j) , F(j,k) ) ) &
+   ( the carrier of C2 = P &
+   for i,j be Element of P holds (the Arrows of C2).(i,j) = F (i,j) &
+   for i,j,k be Element of P holds
+    (the Comp of C2).(i,j,k) = FuncComp ( F(i,j) , F(j,k) ) )
+    holds C1 = C2 from AltCatUniq;
+  end;
+end;
+
+definition let P be non empty POSet_set;
+  cluster POSAltCat P -> transitive non empty;
+  coherence
+  proof
+   set A = POSAltCat P;
+   thus A is transitive
+   proof
+     let o1,o2,o3 be object of A;
+     reconsider o1' = o1 ,o2' = o2 ,o3' = o3 as Element of P by Def9;
+     assume <^o1,o2^> <> {} & <^o2,o3^> <> {};
+     then (the Arrows of A).(o1,o2) <> {} & (the Arrows of A).(o2,o3) <> {}
+                                              by ALTCAT_1:def 2;
+  then A1: MonFuncs (o1',o2') <> {} & MonFuncs (o2',o3') <> {} by Def9;
+     then consider f be set such that
+  A2: f in MonFuncs (o1',o2') by XBOOLE_0:def 1;
+     consider g be set such that
+  A3:  g in MonFuncs (o2',o3') by A1,XBOOLE_0:def 1;
+     consider g' be map of o2', o3'
+       such that A4: g = g' &
+        g' in Funcs (the carrier of o2',the carrier of o3') &
+       g' is monotone by A3,Def6;
+     consider f' be map of o1', o2'
+       such that A5: f = f' &
+        f' in Funcs (the carrier of o1',the carrier of o2') &
+       f' is monotone by A2,Def6;
+     reconsider f,g as Function by A4,A5;
+       g * f in MonFuncs (o1',o3') by A2,A3,Th6;
+     then (the Arrows of A).(o1,o3) <> {} by Def9;
+     hence thesis by ALTCAT_1:def 2;
+    end;
+      the carrier of A is non empty by Def9;
+    hence thesis by STRUCT_0:def 1;
+  end;
+end;
+
+definition let P be non empty POSet_set;
+  cluster POSAltCat P -> associative with_units;
+  coherence
+  proof
+   set A = POSAltCat P;
+   set G = the Arrows of A, C = the Comp of A;
+   thus C is associative
+   proof
+     let i,j,k,l be Element of A;
+     reconsider i'=i,j'=j,k'=k,l'=l as Element of P by Def9;
+     let f,g,h be set; assume f in G.(i,j) & g in G.(j,k) & h in G.(k,l);
+then A1:  f in MonFuncs (i',j') &
+     g in MonFuncs (j',k') & h in MonFuncs (k',l') by Def9;
+     then consider f' be map of i', j'
+              such that
+A2:     f = f' &
+        f' in Funcs (the carrier of i',the carrier of j') &
+f' is monotone by Def6;
+     consider g' be map of j', k'
+             such that
+A3:     g = g' &
+        g' in Funcs (the carrier of j',the carrier of k') &
+g' is monotone by A1,Def6;
+     consider h' be map of k', l'
+             such that
+A4:     h = h' &
+        h' in Funcs (the carrier of k',the carrier of l') &
+h' is monotone by A1,Def6;
+     reconsider f' = f, g'=g ,h'=h as Function by A2,A3,A4;
+A5: g' * f' in MonFuncs (i',k') by A1,Th6;
+A6: h' * g' in MonFuncs (j',l') by A1,Th6;
+A7:  C.(i,k,l) = FuncComp ( MonFuncs (i',k') , MonFuncs (k',l') ) by Def9;
+A8:  C.(i,j,k) = FuncComp ( MonFuncs (i',j') , MonFuncs (j',k') ) by Def9;
+A9:  C.(i,j,l) = FuncComp ( MonFuncs (i',j') , MonFuncs (j',l') ) by Def9;
+A10:  C.(j,k,l) = FuncComp ( MonFuncs (j',k') , MonFuncs (k',l') ) by Def9;
+A11:  C.(i,j,k).(g,f) = g' * f' by A1,A8,ALTCAT_1:13;
+A12:   C.(i,k,l).(h,g'*f') = h' * ( g' *f') by A1,A5,A7,ALTCAT_1:13;
+A13:  C.(j,k,l).(h,g) = h' * g' by A1,A10,ALTCAT_1:13;
+       C.(i,j,l).((h' *g'),f') = (h' * g') * f'
+          by A1,A6,A9,ALTCAT_1:13;
+     hence thesis by A11,A12,A13,RELAT_1:55;
+   end;
+   thus C is with_left_units
+   proof
+     let j be Element of A;
+     reconsider j' = j as Element of P by Def9;
+     take e = id the carrier of j';
+       G.(j,j) = MonFuncs (j',j') by Def9;
+     hence e in G.(j,j) by Th7;
+A14:     e in MonFuncs (j',j') by Th7;
+     then consider e' be map of j', j'
+              such that
+A15:     e = e' &
+        e' in Funcs (the carrier of j',the carrier of j') &
+e' is monotone by Def6;
+     let i be Element of A, f be set;
+     reconsider i' = i as Element of P by Def9;
+     assume f in G.(i,j);
+then A16:  f in MonFuncs(i',j') by Def9;
+     then consider f' be map of i', j'
+              such that
+A17:     f = f' &
+        f' in Funcs (the carrier of i',the carrier of j') &
+f' is monotone by Def6;
+A18:   rng f' c= the carrier of j';
+A19:  C.(i,j,j) = FuncComp ( MonFuncs (i',j') , MonFuncs (j',j') ) by Def9;
+       e' * f' = f by A15,A17,A18,RELAT_1:79;
+     hence C.(i,j,j).(e,f) = f by A14,A15,A16,A17,A19,ALTCAT_1:13;
+   end;
+   thus C is with_right_units
+   proof
+     let i be Element of A;
+     reconsider i' = i as Element of P by Def9;
+     take e = id the carrier of i';
+       G.(i,i) = MonFuncs (i',i') by Def9;
+     hence e in G.(i,i) by Th7;
+A20:     e in MonFuncs (i',i') by Th7;
+     then consider e' be map of i', i'
+              such that
+A21:     e = e' &
+        e' in Funcs (the carrier of i',the carrier of i') &
+e' is monotone by Def6;
+     let j be Element of A, f be set;
+     reconsider j' = j as Element of P by Def9;
+     assume f in G.(i,j);
+then A22:  f in MonFuncs(i',j') by Def9;
+     then consider f' be map of i', j'
+              such that
+A23:     f = f' & f' in Funcs (the carrier of i',the carrier of j') &
+      f' is monotone by Def6;
+A24:   dom f' = the carrier of i' by FUNCT_2:def 1;
+A25:  C.(i,i,j) = FuncComp ( MonFuncs (i',i') , MonFuncs (i',j') ) by Def9;
+       f' * e' = f by A21,A23,A24,RELAT_1:78;
+     hence C.(i,i,j).(f,e) = f by A20,A21,A22,A23,A25,ALTCAT_1:13;
+   end;
+  end;
+end;
+
+theorem
+   for o1,o2 be object of POSAltCat P, A,B be Element of P st o1 = A & o2 = B
+  holds <^ o1 , o2 ^> c= Funcs (the carrier of A, the carrier of B)
+proof
+  let o1,o2 be object of POSAltCat P, A,B be Element of P;
+  assume A1: o1 = A & o2 = B;
+  let x be set; assume x in <^ o1 , o2 ^>;
+  then x in (the Arrows of POSAltCat P).(o1,o2) by ALTCAT_1:def 2;
+  then x in MonFuncs (A,B) by A1,Def9;
+  then consider f be map of A, B such that
+A2:  f = x &
+        f in Funcs (the carrier of A,the carrier of B) &
+  f is monotone by Def6;
+  thus thesis by A2;
+end;
+

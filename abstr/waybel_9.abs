@@ -1,0 +1,554 @@
+:: On The Topological Properties of Meet-Continuous Lattices
+::  by Artur Korni{\l}owicz
+::
+:: Received December 20, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary ORDERS_1, FUNCT_1, SEQM_3, PRE_TOPC, WAYBEL_0, SETFAM_1, SUBSET_1,
+      TARSKI, RELAT_2, LATTICE3, LATTICES, RELAT_1, QUANTAL1, WELLORD1,
+      YELLOW_0, CAT_1, ORDINAL2, WAYBEL_2, YELLOW_2, FINSUB_1, WELLORD2,
+      YELLOW_1, YELLOW_6, BOOLE, PCOMPS_1, NATTRA_1, REALSET1, FINSET_1,
+      COMPTS_1, CONNSP_2, TOPS_1, SEQ_2, WAYBEL_7, MCART_1, WAYBEL_9;
+ notation TARSKI, XBOOLE_0, SUBSET_1, MCART_1, FINSUB_1, RELAT_1, RELSET_1,
+      RELAT_2, FUNCT_1, FINSET_1, SETFAM_1, TOLER_1, PARTFUN1, FUNCT_2,
+      STRUCT_0, PRE_TOPC, TOPS_1, TOPS_2, ORDERS_1, COMPTS_1, PCOMPS_1,
+      REALSET1, GROUP_1, CONNSP_2, LATTICE3, ORDERS_3, TDLAT_3, YELLOW_0,
+      WAYBEL_0, YELLOW_1, YELLOW_2, WAYBEL_1, GRCAT_1, YELLOW_4, WAYBEL_2,
+      YELLOW_6;
+ constructors FINSUB_1, TOPS_1, PCOMPS_1, CONNSP_2, ORDERS_3, WAYBEL_2,
+      YELLOW_4, WAYBEL_1, TOLER_1, TOPS_2, YELLOW_6, TDLAT_3, GROUP_1, GRCAT_1,
+      WAYBEL_3;
+ clusters STRUCT_0, LATTICE3, WAYBEL_0, YELLOW_6, FUNCT_1, PRE_TOPC, RELSET_1,
+      YELLOW_0, TDLAT_3, WAYBEL_2, YELLOW_4, FINSET_1, FINSUB_1, WAYBEL_3,
+      FUNCT_2, XBOOLE_0;
+ requirements BOOLE, SUBSET;
+
+
+begin :: Preliminaries
+
+::-------------------------------------------------------------------
+:: Acknowledgements:
+:: =================
+::
+:: I would like to thank Professor A. Trybulec for his help in the preparation
+:: of the article.
+::-------------------------------------------------------------------
+
+definition let L be non empty RelStr;
+ cluster id L -> monotone;
+end;
+
+definition let S, T be non empty RelStr,
+               f be map of S,T;
+ redefine attr f is antitone means
+:: WAYBEL_9:def 1
+  for x, y being Element of S st x <= y holds f.x >= f.y;
+end;
+
+theorem :: WAYBEL_9:1
+for S, T being RelStr, K, L being non empty RelStr
+ for f being map of S, T, g being map of K, L
+  st the RelStr of S = the RelStr of K & the RelStr of T = the RelStr of L &
+   f = g & f is monotone
+ holds g is monotone;
+
+theorem :: WAYBEL_9:2
+for S, T being RelStr, K, L being non empty RelStr
+ for f being map of S, T, g being map of K, L
+  st the RelStr of S = the RelStr of K & the RelStr of T = the RelStr of L &
+   f = g & f is antitone
+ holds g is antitone;
+
+theorem :: WAYBEL_9:3
+for A, B being 1-sorted
+ for F being Subset-Family of A,
+     G being Subset-Family of B
+  st the carrier of A = the carrier of B & F = G & F is_a_cover_of A
+ holds G is_a_cover_of B;
+
+theorem :: WAYBEL_9:4
+for L being antisymmetric reflexive with_suprema RelStr, x being Element of L
+ holds uparrow x = {x} "\/" [#]L;
+
+theorem :: WAYBEL_9:5
+for L being antisymmetric reflexive with_infima RelStr, x being Element of L
+ holds downarrow x = {x} "/\" [#]L;
+
+theorem :: WAYBEL_9:6
+  for L being antisymmetric reflexive with_infima RelStr, y being Element of L
+ holds (y"/\").:(uparrow y) = {y};
+
+theorem :: WAYBEL_9:7
+for L being antisymmetric reflexive with_infima RelStr, x being Element of L
+ holds (x"/\")"{x} = uparrow x;
+
+theorem :: WAYBEL_9:8
+for T being non empty 1-sorted, N being non empty NetStr over T
+ holds N is_eventually_in rng the mapping of N;
+
+definition let L be non empty reflexive RelStr,
+               D be non empty directed Subset of L,
+               n be Function of D, the carrier of L;
+ cluster NetStr (#D,(the InternalRel of L)|_2 D,n#) -> directed;
+end;
+
+definition let L be non empty reflexive transitive RelStr,
+               D be non empty directed Subset of L,
+               n be Function of D, the carrier of L;
+ cluster NetStr (#D,(the InternalRel of L)|_2 D,n#) -> transitive;
+end;
+
+:: cf WAYBEL_2:42
+theorem :: WAYBEL_9:9
+for L being non empty reflexive transitive RelStr st
+ for x being Element of L, N being net of L st N is eventually-directed
+  holds x "/\" sup N = sup ({x} "/\" rng netmap (N,L)) holds
+ L is satisfying_MC;
+
+theorem :: WAYBEL_9:10
+for L being non empty RelStr, a being Element of L, N being net of L holds
+ a "/\" N is net of L;
+
+definition let L be non empty RelStr,
+               x be Element of L,
+               N be net of L;
+ redefine func x "/\" N -> strict net of L;
+end;
+
+definition let L be non empty RelStr,
+               x be Element of L,
+               N be non empty reflexive NetStr over L;
+ cluster x "/\" N -> reflexive;
+end;
+
+definition let L be non empty RelStr,
+               x be Element of L,
+               N be non empty antisymmetric NetStr over L;
+ cluster x "/\" N -> antisymmetric;
+end;
+
+definition let L be non empty RelStr,
+               x be Element of L,
+               N be non empty transitive NetStr over L;
+ cluster x "/\" N -> transitive;
+end;
+
+definition let L be non empty RelStr,
+               J be set,
+               f be Function of J,the carrier of L;
+ cluster FinSups f -> transitive;
+end;
+
+
+begin :: The Operations Defined on Nets
+
+definition let L be non empty RelStr,
+               N be NetStr over L;
+ func inf N -> Element of L equals
+:: WAYBEL_9:def 2
+   Inf the mapping of N;
+end;
+
+definition let L be RelStr,
+               N be NetStr over L;
+ pred ex_sup_of N means
+:: WAYBEL_9:def 3
+  ex_sup_of rng the mapping of N,L;
+ pred ex_inf_of N means
+:: WAYBEL_9:def 4
+  ex_inf_of rng the mapping of N,L;
+end;
+
+definition let L be RelStr;
+ func L+id -> strict NetStr over L means
+:: WAYBEL_9:def 5
+  the RelStr of it = the RelStr of L &
+  the mapping of it = id L;
+end;
+
+definition let L be non empty RelStr;
+ cluster L+id -> non empty;
+end;
+
+definition let L be reflexive RelStr;
+ cluster L+id -> reflexive;
+end;
+
+definition let L be antisymmetric RelStr;
+ cluster L+id -> antisymmetric;
+end;
+
+definition let L be transitive RelStr;
+ cluster L+id -> transitive;
+end;
+
+definition let L be with_suprema RelStr;
+ cluster L+id -> directed;
+end;
+
+definition let L be directed RelStr;
+ cluster L+id -> directed;
+end;
+
+definition let L be non empty RelStr;
+ cluster L+id -> monotone eventually-directed;
+end;
+
+definition let L be RelStr;
+ func L opp+id -> strict NetStr over L means
+:: WAYBEL_9:def 6
+  the carrier of it = the carrier of L &
+  the InternalRel of it = (the InternalRel of L)~ &
+  the mapping of it = id L;
+end;
+
+theorem :: WAYBEL_9:11
+for L being RelStr holds the RelStr of L~ = the RelStr of L opp+id;
+
+definition let L be non empty RelStr;
+ cluster L opp+id -> non empty;
+end;
+
+definition let L be reflexive RelStr;
+ cluster L opp+id -> reflexive;
+end;
+
+definition let L be antisymmetric RelStr;
+ cluster L opp+id -> antisymmetric;
+end;
+
+definition let L be transitive RelStr;
+ cluster L opp+id -> transitive;
+end;
+
+definition let L be with_infima RelStr;
+ cluster L opp+id -> directed;
+end;
+
+definition let L be non empty RelStr;
+ cluster L opp+id -> antitone eventually-filtered;
+end;
+
+definition let L be non empty 1-sorted,
+               N be non empty NetStr over L,
+               i be Element of N;
+ func N|i -> strict NetStr over L means
+:: WAYBEL_9:def 7
+  (for x being set holds x in the carrier of it iff ex y being Element of N
+    st y = x & i <= y) &
+  the InternalRel of it = (the InternalRel of N)|_2 the carrier of it &
+  the mapping of it = (the mapping of N)|the carrier of it;
+end;
+
+theorem :: WAYBEL_9:12
+  for L being non empty 1-sorted, N being non empty NetStr over L
+ for i being Element of N holds
+  the carrier of N|i = { y where y is Element of N : i <= y };
+
+theorem :: WAYBEL_9:13
+for L being non empty 1-sorted, N being non empty NetStr over L
+ for i being Element of N holds the carrier of N|i c= the carrier of N;
+
+theorem :: WAYBEL_9:14
+for L being non empty 1-sorted, N being non empty NetStr over L
+ for i being Element of N holds N|i is full SubNetStr of N;
+
+definition let L be non empty 1-sorted,
+               N be non empty reflexive NetStr over L,
+               i be Element of N;
+ cluster N|i -> non empty reflexive;
+end;
+
+definition let L be non empty 1-sorted,
+               N be non empty directed NetStr over L,
+               i be Element of N;
+ cluster N|i -> non empty;
+end;
+
+definition let L be non empty 1-sorted,
+               N be non empty reflexive antisymmetric NetStr over L,
+               i be Element of N;
+ cluster N|i -> antisymmetric;
+end;
+
+definition let L be non empty 1-sorted,
+               N be non empty directed antisymmetric NetStr over L,
+               i be Element of N;
+ cluster N|i -> antisymmetric;
+end;
+
+definition let L be non empty 1-sorted,
+               N be non empty reflexive transitive NetStr over L,
+               i be Element of N;
+ cluster N|i -> transitive;
+end;
+
+definition let L be non empty 1-sorted,
+               N be net of L,
+               i be Element of N;
+ cluster N|i -> transitive directed;
+end;
+
+theorem :: WAYBEL_9:15
+  for L being non empty 1-sorted, N being non empty reflexive NetStr over L
+ for i, x being Element of N, x1 being Element of N|i st x = x1
+  holds N.x = (N|i).x1;
+
+theorem :: WAYBEL_9:16
+for L being non empty 1-sorted, N being non empty directed NetStr over L
+ for i, x being Element of N, x1 being Element of N|i st x = x1
+  holds N.x = (N|i).x1;
+
+theorem :: WAYBEL_9:17
+for L being non empty 1-sorted, N being net of L, i being Element of N
+ holds N|i is subnet of N;
+
+definition let T be non empty 1-sorted,
+               N be net of T;
+ cluster strict subnet of N;
+end;
+
+definition let L be non empty 1-sorted,
+               N be net of L,
+               i be Element of N;
+ redefine func N|i -> strict subnet of N;
+end;
+
+definition let S be non empty 1-sorted,
+               T be 1-sorted,
+               f be map of S, T,
+               N be NetStr over S;
+ func f * N -> strict NetStr over T means
+:: WAYBEL_9:def 8
+  the RelStr of it = the RelStr of N &
+  the mapping of it = f * the mapping of N;
+end;
+
+definition let S be non empty 1-sorted,
+               T be 1-sorted,
+               f be map of S, T,
+               N be non empty NetStr over S;
+ cluster f * N -> non empty;
+end;
+
+definition let S be non empty 1-sorted,
+               T be 1-sorted,
+               f be map of S, T,
+               N be reflexive NetStr over S;
+ cluster f * N -> reflexive;
+end;
+
+definition let S be non empty 1-sorted,
+               T be 1-sorted,
+               f be map of S, T,
+               N be antisymmetric NetStr over S;
+ cluster f * N -> antisymmetric;
+end;
+
+definition let S be non empty 1-sorted,
+               T be 1-sorted,
+               f be map of S, T,
+               N be transitive NetStr over S;
+ cluster f * N -> transitive;
+end;
+
+definition let S be non empty 1-sorted,
+               T be 1-sorted,
+               f be map of S, T,
+               N be directed NetStr over S;
+ cluster f * N -> directed;
+end;
+
+theorem :: WAYBEL_9:18
+for L being non empty RelStr, N being non empty NetStr over L
+ for x being Element of L holds (x"/\")*N = x "/\" N;
+
+
+begin :: The Properties of Topological Spaces
+
+theorem :: WAYBEL_9:19
+for S, T being TopStruct
+ for F being Subset-Family of S,
+     G being Subset-Family of T
+  st the TopStruct of S = the TopStruct of T & F = G & F is open
+ holds G is open;
+
+theorem :: WAYBEL_9:20
+  for S, T being TopStruct
+ for F being Subset-Family of S, G being Subset-Family of T
+  st the TopStruct of S = the TopStruct of T & F = G & F is closed
+ holds G is closed;
+
+definition
+  struct(TopStruct,RelStr) TopRelStr (# carrier -> set,
+             InternalRel -> (Relation of the carrier),
+             topology -> Subset-Family of the carrier #);
+end;
+
+definition let A be non empty set,
+               R be Relation of A,A,
+               T be Subset-Family of A;
+ cluster TopRelStr (#A,R,T#) -> non empty;
+end;
+
+definition let x be set,
+               R be Relation of {x};
+           let T be Subset-Family of {x};
+ cluster TopRelStr (#{x}, R, T#) -> trivial;
+end;
+
+definition let X be set,
+               O be Order of X,
+               T be Subset-Family of X;
+ cluster TopRelStr (#X, O, T#) -> reflexive transitive antisymmetric;
+end;
+
+definition
+ cluster trivial reflexive non empty discrete strict finite TopRelStr;
+end;
+
+definition
+ mode TopLattice is with_infima with_suprema
+  reflexive transitive antisymmetric TopSpace-like TopRelStr;
+end;
+
+definition
+ cluster strict non empty trivial discrete finite compact Hausdorff
+         TopLattice;
+end;
+
+definition let T be Hausdorff (non empty TopSpace);
+ cluster -> Hausdorff (non empty SubSpace of T);
+end;
+
+theorem :: WAYBEL_9:21
+for T being non empty TopSpace, p being Point of T
+ for A being Element of OpenNeighborhoods p holds A is a_neighborhood of p;
+
+theorem :: WAYBEL_9:22
+for T being non empty TopSpace, p being Point of T
+ for A, B being Element of OpenNeighborhoods p
+  holds A /\ B is Element of OpenNeighborhoods p;
+
+theorem :: WAYBEL_9:23
+  for T being non empty TopSpace, p being Point of T
+ for A, B being Element of OpenNeighborhoods p
+  holds A \/ B is Element of OpenNeighborhoods p;
+
+theorem :: WAYBEL_9:24
+for T being non empty TopSpace, p being Element of T
+ for N being net of T st p in Lim N
+  for S being Subset of T st S = rng the mapping of N
+   holds p in Cl S;
+
+theorem :: WAYBEL_9:25
+for T being Hausdorff TopLattice, N being convergent net of T
+ for f being map of T, T st f is continuous
+  holds f.(lim N) in Lim (f * N);
+
+theorem :: WAYBEL_9:26
+for T being Hausdorff TopLattice, N being convergent net of T
+ for x being Element of T st x"/\" is continuous
+  holds x "/\" lim N in Lim (x "/\" N);
+
+theorem :: WAYBEL_9:27
+for S being Hausdorff TopLattice, x being Element of S st
+ for a being Element of S holds a"/\" is continuous holds uparrow x is closed;
+
+theorem :: WAYBEL_9:28
+for S being compact Hausdorff TopLattice, x being Element of S st
+ for b being Element of S holds b"/\" is continuous holds downarrow x is closed
+;
+
+begin :: The Cluster Points of Nets
+
+definition let T be non empty TopSpace,
+               N be non empty NetStr over T,
+               p be Point of T;
+ pred p is_a_cluster_point_of N means
+:: WAYBEL_9:def 9
+  for O being a_neighborhood of p holds N is_often_in O;
+end;
+
+theorem :: WAYBEL_9:29
+  for L being non empty TopSpace, N being net of L
+ for c being Point of L st c in Lim N holds c is_a_cluster_point_of N;
+
+theorem :: WAYBEL_9:30
+for T being compact Hausdorff (non empty TopSpace), N being net of T
+ ex c being Point of T st c is_a_cluster_point_of N;
+
+theorem :: WAYBEL_9:31
+for L being non empty TopSpace, N being net of L, M being subnet of N
+ for c being Point of L st c is_a_cluster_point_of M holds
+  c is_a_cluster_point_of N;
+
+theorem :: WAYBEL_9:32
+for T being non empty TopSpace, N being net of T
+ for x being Point of T st x is_a_cluster_point_of N holds
+  ex M being subnet of N st x in Lim M;
+
+theorem :: WAYBEL_9:33
+for L being compact Hausdorff (non empty TopSpace), N being net of L st
+ for c, d being Point of L st c is_a_cluster_point_of N &
+  d is_a_cluster_point_of N holds c = d holds
+ for s being Point of L st s is_a_cluster_point_of N holds s in Lim N;
+
+theorem :: WAYBEL_9:34
+for S being non empty TopSpace, c being Point of S
+ for N being net of S, A being Subset of S st c is_a_cluster_point_of N &
+  A is closed & rng the mapping of N c= A
+ holds c in A;
+
+theorem :: WAYBEL_9:35
+for S being compact Hausdorff TopLattice, c being Point of S
+ for N being net of S st
+  (for x being Element of S holds x"/\" is continuous) &
+  N is eventually-directed & c is_a_cluster_point_of N
+ holds c = sup N;
+
+theorem :: WAYBEL_9:36
+for S being compact Hausdorff TopLattice, c being Point of S
+ for N being net of S st
+  (for x being Element of S holds x"/\" is continuous) &
+  N is eventually-filtered & c is_a_cluster_point_of N
+ holds c = inf N;
+
+
+begin :: On The Topological Properties of Meet-Continuous Lattices
+
+:: Proposition 4.4 s. 32     (i) & (ii) => MC
+theorem :: WAYBEL_9:37
+for S being Hausdorff TopLattice st
+ (for N being net of S st N is eventually-directed
+   holds ex_sup_of N & sup N in Lim N) &
+ (for x being Element of S holds x"/\" is continuous) holds
+  S is meet-continuous;
+
+:: Proposition 4.4 s. 32      (ii) => (i)
+theorem :: WAYBEL_9:38
+for S being compact Hausdorff TopLattice st
+ for x being Element of S holds x"/\" is continuous
+  holds
+ for N being net of S st N is eventually-directed
+  holds ex_sup_of N & sup N in Lim N;
+
+:: Proposition 4.4 s. 32      (ii) => (i) dual
+theorem :: WAYBEL_9:39
+for S being compact Hausdorff TopLattice st
+ for x being Element of S holds x"/\" is continuous
+  holds
+ for N being net of S st N is eventually-filtered holds
+  ex_inf_of N & inf N in Lim N;
+
+theorem :: WAYBEL_9:40
+  for S being compact Hausdorff TopLattice st
+ for x being Element of S holds x"/\" is continuous
+  holds S is bounded;
+
+theorem :: WAYBEL_9:41
+  for S being compact Hausdorff TopLattice st
+ for x being Element of S holds x"/\" is continuous holds
+  S is meet-continuous;

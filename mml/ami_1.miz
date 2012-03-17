@@ -1,0 +1,2175 @@
+:: A Mathematical Model of CPU
+::  by Yatsuka Nakamura and Andrzej Trybulec
+::
+:: Received October 14, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary INT_1, BOOLE, FUNCT_2, FUNCT_1, RELAT_1, FUNCOP_1, CAT_1, FUNCT_4,
+      CARD_3, TARSKI, FRAENKEL, FUNCT_3, PARTFUN1, FINSET_1, AMI_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, CARD_3,
+      RELAT_1, FUNCT_1, FUNCT_2, FINSET_1, NAT_1, CQC_LANG, FRAENKEL, FUNCOP_1,
+      FUNCT_4, FINSEQ_1, FUNCT_3, PARTFUN1, STRUCT_0;
+ constructors CARD_3, NAT_1, CQC_LANG, CAT_2, INT_2, PARTFUN1, STRUCT_0,
+      MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, FUNCT_1, INT_1, FRAENKEL, RELAT_1, FINSET_1, RELSET_1,
+      FINSEQ_1, FUNCOP_1, FUNCT_4, CQC_LANG, STRUCT_0, XBOOLE_0, FUNCT_2,
+      MEMBERED, ZFMISC_1, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, FRAENKEL, STRUCT_0, XBOOLE_0;
+ theorems ZFMISC_1, FUNCT_2, TARSKI, NAT_1, CQC_LANG, CARD_3, CARD_5, FINSEQ_1,
+      FUNCT_4, FUNCOP_1, FRAENKEL, FINSET_1, PARTFUN1, FUNCT_1, GRFUNC_1,
+      FUNCT_3, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, NUMBERS;
+ schemes NAT_1, RECDEF_1, FRAENKEL, XBOOLE_0;
+
+begin :: Preliminaries
+
+ reserve x for set;
+
+theorem
+   NAT <> INT by NUMBERS:27;
+
+theorem Th2:
+ for a,b being set holds 1 <> [a,b]
+ proof let a,b be set;
+A1: 1 = { {} } & [a,b] = {{a,b},{a}} by CARD_5:1,TARSKI:def 5;
+  assume 1 = [a,b];
+  hence contradiction by A1,ZFMISC_1:8;
+ end;
+
+theorem
+   for a,b being set holds 2 <> [a,b]
+ proof let a,b be set;
+A1: 2 = { {}, {{}} } & [a,b] = {{a,b},{a}} by CARD_5:1,TARSKI:def 5;
+  assume 2 = [a,b];
+  hence contradiction by A1,ZFMISC_1:10;
+ end;
+
+canceled;
+
+theorem Th5:
+ for a,b,c,d being set st a <> b holds
+  product (a,b) --> ({c},{d}) = { (a,b) --> (c,d) }
+ proof let a,b,c,d be set such that
+A1: a <> b;
+  set X = { (a,b) --> (c,d) },
+      f = (a,b) --> ({c},{d});
+A2: dom f = {a,b} by FUNCT_4:65;
+     now let x;
+    thus x in X implies ex g being Function st x = g & dom g = dom f &
+       for x st x in dom f holds g.x in f.x
+     proof assume
+A3:    x in X;
+      take g = (a,b) --> (c,d);
+      thus x = g by A3,TARSKI:def 1;
+      thus dom g = dom f by A2,FUNCT_4:65;
+      let x;
+      assume x in dom f;
+       then A4:     x = a or x = b by A2,TARSKI:def 2;
+         g.a = c & f.a = {c} & g.b = d & f.b = {d} by A1,FUNCT_4:66;
+      hence g.x in f.x by A4,TARSKI:def 1;
+     end;
+    given g being Function such that
+A5:  x = g and
+A6:  dom g = dom f and
+A7:  for x st x in dom f holds g.x in f.x;
+       a in dom f & b in dom f by A2,TARSKI:def 2;
+     then g.a in f.a & g.b in f.b & f.a = {c} & f.b = {d} by A1,A7,FUNCT_4:66;
+     then g.a = c & g.b = d by TARSKI:def 1;
+     then g = (a,b) --> (c,d) by A2,A6,FUNCT_4:69;
+    hence x in X by A5,TARSKI:def 1;
+   end;
+  hence product (a,b) --> ({c},{d}) = { (a,b) --> (c,d) } by CARD_3:def 5;
+ end;
+
+definition let IT be set;
+ attr IT is with_non-empty_elements means
+:Def1: not {} in IT;
+end;
+
+definition
+ cluster non empty with_non-empty_elements set;
+ existence
+  proof
+   take {{{}}};
+   thus {{{}}} is non empty;
+   assume {} in {{{}}};
+   hence contradiction by TARSKI:def 1;
+  end;
+end;
+
+definition
+ let A be non empty set;
+  cluster { A } -> with_non-empty_elements;
+  coherence
+   proof
+      { A } is with_non-empty_elements
+    proof
+    assume {} in { A };
+    hence contradiction by TARSKI:def 1;
+    end;
+    hence thesis;
+   end;
+ let B be non empty set;
+  cluster { A, B } -> with_non-empty_elements;
+  coherence
+   proof
+      { A, B } is with_non-empty_elements
+    proof
+    assume {} in { A,B };
+    hence contradiction by TARSKI:def 2;
+    end;
+    hence thesis;
+   end;
+end;
+
+definition let A,B be with_non-empty_elements set;
+ cluster A \/ B -> with_non-empty_elements;
+ coherence
+  proof
+     A \/ B is with_non-empty_elements
+    proof
+       not {} in A & not {} in B by Def1;
+     hence not {} in A \/ B by XBOOLE_0:def 2;
+    end;
+   hence thesis;
+  end;
+end;
+
+begin :: General concepts
+
+reserve N for with_non-empty_elements set;
+
+definition let N be set;
+ struct (1-sorted) AMI-Struct over N
+  (# carrier -> set,
+    Instruction-Counter -> Element of the carrier,
+    Instruction-Locations -> Subset of the carrier,
+    Instruction-Codes -> non empty set,
+    Instructions -> non empty Subset of
+     [: the Instruction-Codes, ((union N) \/ the carrier)* :],
+    Object-Kind ->
+     Function of the carrier,
+                 N \/ { the Instructions, the Instruction-Locations },
+    Execution ->
+     Function of the Instructions,
+       Funcs(product the Object-Kind, product the Object-Kind)
+  #);
+end;
+
+definition let N be set;
+ func Trivial-AMI N -> strict AMI-Struct over N means
+:Def2:
+  the carrier of it = {0,1} &
+  the Instruction-Counter of it = 0 &
+  the Instruction-Locations of it = {1} &
+  the Instruction-Codes of it = {0} &
+  the Instructions of it = {[0,{}]} &
+  the Object-Kind of it = (0,1) --> ({1},{[0,{}]}) &
+  the Execution of it = {[0,{}]} --> id product (0,1) --> ({1},{[0,{}]});
+ existence
+  proof
+    reconsider y = 0 as Element of {0,1}by TARSKI:def 2;
+      0 in {0} & {} in (union N \/ {0,1})* by FINSEQ_1:66,TARSKI:def 1;
+    then [0,{}] in [: {0}, (union N \/ {0,1})* :] by ZFMISC_1:106;
+    then reconsider I = {[0,{}]} as non empty Subset of
+        [: {0}, (union(N) \/ {0,1})* :] by ZFMISC_1:37;
+    reconsider S = {1} as non empty Subset of {0,1} by ZFMISC_1:12;
+    set f = (0,1) --> (S,I);
+      rng f c= { I,S} & { I,S } c= N \/ {I, S} by FUNCT_4:65,XBOOLE_1:7;
+    then dom f = {0,1} & rng f c= N \/ {I, S} by FUNCT_4:65,XBOOLE_1:1;
+    then reconsider f as Function of {0,1}, N \/ {I, S} by FUNCT_2:def 1,
+RELSET_1:11;
+      id product f in Funcs(product f, product f) by FUNCT_2:12;
+    then reconsider E = I --> id product f as
+     Function of I,Funcs(product f, product f) by FUNCOP_1:57;
+   take AMI-Struct(#{0,1},y,S,{0},I,f,E #);
+ thus thesis;
+end;
+ uniqueness;
+end;
+
+definition let N be set; let S be AMI-Struct over N;
+ attr S is void means
+:Def3: the Instruction-Locations of S is empty;
+end;
+
+definition let N be set;
+ cluster Trivial-AMI N -> non empty non void;
+ coherence
+ proof
+   thus the carrier of Trivial-AMI N is non empty by Def2;
+   thus the Instruction-Locations of Trivial-AMI N is non empty by Def2;
+ end;
+end;
+
+definition let N be set;
+ cluster non empty non void AMI-Struct over N;
+ existence
+ proof
+   take Trivial-AMI N;
+   thus thesis;
+ end;
+end;
+
+definition let N be set; let S be non empty AMI-Struct over N;
+ cluster the carrier of S -> non empty;
+coherence;
+end;
+
+definition let N be set; let S be non void AMI-Struct over N;
+ cluster the Instruction-Locations of S -> non empty;
+ coherence by Def3;
+end;
+
+definition let N be set; let S be non empty AMI-Struct over N;
+ mode Object of S is Element of S;
+end;
+
+definition let N be set; let S be non empty non void AMI-Struct over N;
+ mode Instruction-Location of S is Element of the Instruction-Locations of S;
+end;
+
+definition let N be set; let S be AMI-Struct over N;
+ mode Instruction of S is Element of the Instructions of S;
+ canceled;
+end;
+
+definition let N be set; let S be non empty AMI-Struct over N;
+ func IC S -> Object of S equals
+:Def5:  the Instruction-Counter of S;
+ correctness;
+end;
+
+definition let N be set; let S be non empty AMI-Struct over N;
+ let o be Object of S;
+ func ObjectKind o ->
+  Element of N \/ { the Instructions of S, the Instruction-Locations of S }
+   equals
+:Def6:  (the Object-Kind of S).o;
+ correctness;
+end;
+
+definition let f be Function;
+ cluster product f -> functional;
+ coherence
+  proof
+    set d = product f;
+     let x be set; assume x in d;
+       then ex g being Function
+      st x = g & dom g= dom f & for x being set st x in dom f holds g.x in f.x
+         by CARD_3:def 5;
+      hence x is Function;
+  end;
+end;
+
+definition let A be set; let B be with_non-empty_elements set;
+ let f be Function of A,B;
+ cluster product f -> non empty;
+ coherence
+  proof
+      rng f c= B by RELSET_1:12;
+    then not {} in rng f by Def1;
+    hence thesis by CARD_3:37;
+  end;
+end;
+
+definition let N be set; let S be AMI-Struct over N;
+  mode State of S is Element of product the Object-Kind of S;
+end;
+
+definition let N be with_non-empty_elements set;
+ let S be non void AMI-Struct over N;
+ let I be Instruction of S, s be State of S;
+ func Exec(I,s) -> State of S equals
+   ((the Execution of S).I).s;
+ coherence
+  proof
+    consider f being Function such that
+A1:   (the Execution of S).I = f &
+      dom f = product the Object-Kind of S &
+      rng f c= product the Object-Kind of S by FUNCT_2:def 2;
+      (the Execution of S).I.s in rng f by A1,FUNCT_1:def 5;
+    hence thesis by A1;
+  end;
+end;
+
+definition let N; let S be non void AMI-Struct over N;
+           let I be Instruction of S;
+ attr I is halting means
+:Def8:  for s being State of S holds Exec(I,s) = s;
+end;
+
+definition let N; let S be non void AMI-Struct over N;
+ attr S is halting means
+:Def9:  ex I being Instruction of S st I is halting &
+   for J being Instruction of S st J is halting holds I = J;
+end;
+
+reserve E for set;
+
+theorem Th6:
+ Trivial-AMI N is halting
+  proof
+   set T = Trivial-AMI N;
+A1:{[0,{}]} = the Instructions of T by Def2;
+   then reconsider I = [0,{}] as Instruction of T by TARSKI:def 1;
+   take I;
+   thus I is halting
+   proof
+    let s be State of T;
+A2: product the Object-Kind of T
+      = product (0,1) --> ({1},{[0,{}]}) by Def2
+     .= { (0,1) --> (1,[0,{}]) } by Th5;
+    hence Exec(I,s) = (0,1) --> (1,[0,{}]) by TARSKI:def 1
+     .= s by A2,TARSKI:def 1;
+   end;
+   let J be Instruction of T such that J is halting;
+   thus I = J by A1,TARSKI:def 1;
+  end;
+
+definition let N;
+ cluster Trivial-AMI N -> halting;
+coherence by Th6;
+end;
+
+definition let N;
+ cluster halting (non void AMI-Struct over N);
+existence
+  proof
+    take Trivial-AMI N;
+    thus thesis;
+  end;
+end;
+
+definition let N; let S be halting (non void AMI-Struct over N);
+ func halt S -> Instruction of S means
+:Def10:  ex I being Instruction of S st I is halting & it = I;
+existence
+  proof
+     consider I being Instruction of S such that
+A1:   I is halting and
+        for J being Instruction of S st J is halting holds I = J by Def9;
+    take I;
+    thus thesis by A1;
+  end;
+uniqueness
+  proof
+    let I1, I2 be Instruction of S such that
+A2:  ex I being Instruction of S st I is halting & I1 = I and
+A3:  ex I being Instruction of S st I is halting & I2 = I;
+    consider Ia being Instruction of S such that
+A4:   Ia is halting & I1 = Ia by A2;
+    consider Ib being Instruction of S such that
+A5:   Ib is halting & I2 = Ib by A3;
+    consider I being Instruction of S such that
+A6:   I is halting &
+      for J being Instruction of S st J is halting holds I = J by Def9;
+      I = Ia by A4,A6;
+    hence thesis by A4,A5,A6;
+   end;
+end;
+
+Lm1:
+now let N; let S be halting (non void AMI-Struct over N);
+  thus halt S is halting
+  proof
+      ex I being Instruction of S st I is halting & halt S = I by Def10;
+    hence thesis;
+  end;
+end;
+
+definition let N; let S be halting (non void AMI-Struct over N);
+ cluster halt S -> halting;
+coherence by Lm1;
+end;
+
+definition let N be set; let IT be non empty AMI-Struct over N;
+ attr IT is IC-Ins-separated means
+:Def11:  ObjectKind IC IT = the Instruction-Locations of IT;
+end;
+
+definition let N be set; let IT be AMI-Struct over N;
+ attr IT is data-oriented means
+    (the Object-Kind of IT)"{ the Instructions of IT }
+     c= the Instruction-Locations of IT;
+end;
+
+definition let N be with_non-empty_elements set;
+ let IT be non empty non void AMI-Struct over N;
+ attr IT is steady-programmed means
+:Def13:  for s being State of IT, i being Instruction of IT,
+      l being Instruction-Location of IT
+   holds Exec(i,s).l = s.l;
+end;
+
+definition let N be set; let IT be non empty non void AMI-Struct over N;
+ attr IT is definite means
+:Def14:  for l being Instruction-Location of IT holds
+   ObjectKind l = the Instructions of IT;
+end;
+
+theorem Th7:
+ Trivial-AMI E is IC-Ins-separated
+  proof
+A1:  IC Trivial-AMI E = the Instruction-Counter of Trivial-AMI E by Def5
+       .= 0 by Def2;
+   thus ObjectKind IC Trivial-AMI E
+           = (the Object-Kind of Trivial-AMI E).IC Trivial-AMI E by Def6
+          .= (0,1) --> ({1},{[0,{}]}).0 by A1,Def2
+          .= {1} by FUNCT_4:66
+          .= the Instruction-Locations of Trivial-AMI E by Def2;
+  end;
+
+theorem Th8:
+ Trivial-AMI E is data-oriented
+ proof let x be set;
+A1:   1 <> [0,{}] by Th2;
+  assume
+A2:  x in (the Object-Kind of Trivial-AMI E)"
+             { the Instructions of Trivial-AMI E };
+        then x in the carrier of Trivial-AMI E &
+   (the Object-Kind of Trivial-AMI E).x in
+       { the Instructions of Trivial-AMI E } by FUNCT_2:46;
+then A3:     (the Object-Kind of Trivial-AMI E).x =
+      the Instructions of Trivial-AMI E by TARSKI:def 1
+       .= {[0,{}]} by Def2;
+A4:  (the Object-Kind of Trivial-AMI E).0 =
+             (0,1) --> ({1},{[0,{}]}).0 by Def2
+          .= {1} by FUNCT_4:66;
+     the carrier of Trivial-AMI E = {0,1} by Def2;
+   then x = 0 or x = 1 by A2,TARSKI:def 2;
+   then x in {1} by A1,A3,A4,TARSKI:def 1,ZFMISC_1:6;
+  hence x in the Instruction-Locations of Trivial-AMI E by Def2;
+ end;
+
+theorem Th9:
+ for s1, s2 being State of Trivial-AMI E holds s1=s2
+ proof let s1,s2 be State of Trivial-AMI E;
+A1:  product the Object-Kind of Trivial-AMI E
+   = product (0,1) --> ({1},{[0,{}]}) by Def2
+  .= { (0,1) --> (1,[0,{}]) } by Th5;
+  hence s1 = (0,1) --> (1,[0,{}]) by TARSKI:def 1
+     .= s2 by A1,TARSKI:def 1;
+ end;
+
+theorem Th10:
+ Trivial-AMI N is steady-programmed
+  proof
+   let s be State of Trivial-AMI N, i be Instruction of Trivial-AMI N,
+       l be Instruction-Location of Trivial-AMI N;
+   thus Exec(i,s).l = s.l by Th9;
+  end;
+
+theorem Th11:
+ Trivial-AMI E is definite
+  proof let l be Instruction-Location of Trivial-AMI E;
+      l in the Instruction-Locations of Trivial-AMI E;
+    then l in {1} by Def2;
+then A1:    l = 1 by TARSKI:def 1;
+   thus ObjectKind l
+         = (the Object-Kind of Trivial-AMI E).l by Def6
+        .= (0,1) --> ({1},{[0,{}]}).1 by A1,Def2
+        .= {[0,{}]} by FUNCT_4:66
+        .= the Instructions of Trivial-AMI E by Def2;
+  end;
+
+definition let E be set;
+  cluster Trivial-AMI E -> data-oriented;
+  coherence by Th8;
+end;
+
+definition let E be set;
+  cluster Trivial-AMI E -> IC-Ins-separated definite;
+  coherence by Th7,Th11;
+end;
+
+definition let N be with_non-empty_elements set;
+  cluster Trivial-AMI N -> steady-programmed;
+  coherence by Th10;
+end;
+
+definition let E be set;
+ cluster data-oriented strict AMI-Struct over E;
+ existence
+  proof
+    take Trivial-AMI E;
+    thus thesis;
+  end;
+end;
+
+definition let M be set;
+ cluster IC-Ins-separated data-oriented definite strict
+              (non empty non void AMI-Struct over M);
+ existence
+  proof
+    take Trivial-AMI M;
+    thus thesis;
+  end;
+end;
+
+definition let N;
+ cluster IC-Ins-separated data-oriented halting steady-programmed definite
+         strict (non empty non void AMI-Struct over N);
+ existence
+  proof
+    take Trivial-AMI N;
+    thus thesis;
+  end;
+end;
+
+definition let N be with_non-empty_elements set;
+  let S be IC-Ins-separated (non empty non void AMI-Struct over N);
+ let s be State of S;
+ func IC s -> Instruction-Location of S equals
+:Def15:  s.IC S;
+ coherence
+  proof
+      dom the Object-Kind of S = the carrier of S by FUNCT_2:def 1;
+    then pi(product the Object-Kind of S,IC S) = (the Object-Kind of S).IC S
+        by CARD_3:22
+      .= ObjectKind IC S by Def6
+      .= the Instruction-Locations of S by Def11;
+   hence thesis by CARD_3:def 6;
+  end;
+end;
+
+begin :: Preliminaries
+
+reserve x,y,z,A,B for set,
+        f,g,h for Function,
+        i,j,k for Nat;
+
+canceled;
+
+theorem Th13:
+ for f being Function holds pr1(dom f,rng f).:f = dom f
+ proof let f be Function;
+     now let y be set;
+    thus y in dom f implies
+     ex x being set st x in dom pr1(dom f,rng f) & x in f &
+                       y = pr1(dom f,rng f).x
+     proof assume
+A1:      y in dom f;
+then A2:     f.y in rng f by FUNCT_1:def 5;
+      take [y,f.y];
+         [y,f.y] in [:dom f,rng f:] by A1,A2,ZFMISC_1:106;
+      hence [y,f.y] in dom pr1(dom f,rng f) by FUNCT_3:def 5;
+      thus [y,f.y] in f by A1,FUNCT_1:def 4;
+      thus y = pr1(dom f,rng f).[y,f.y] by A1,A2,FUNCT_3:def 5;
+     end;
+    given x being set such that
+A3:  x in dom pr1(dom f,rng f) and
+       x in f and
+A4:  y = pr1(dom f,rng f).x;
+       dom pr1(dom f,rng f) = [:dom f, rng f:] by FUNCT_3:def 5;
+     then consider x1,x2 being set such that
+A5:   x1 in dom f and
+A6:   x2 in rng f and
+A7:   x = [x1,x2] by A3,ZFMISC_1:103;
+    thus y in dom f by A4,A5,A6,A7,FUNCT_3:def 5;
+   end;
+  hence pr1(dom f,rng f).:f = dom f by FUNCT_1:def 12;
+ end;
+
+theorem Th14:
+ f tolerates g & [x,y] in f & [x,z] in g implies y = z
+ proof assume f tolerates g;
+   then consider h such that
+A1:  h = f \/ g by PARTFUN1:130;
+  assume [x,y] in f & [x,z] in g;
+   then [x,y] in h & [x,z] in h by A1,XBOOLE_0:def 2;
+  hence y = z by FUNCT_1:def 1;
+ end;
+
+theorem Th15:
+ (for x st x in A holds x is Function) &
+ (for f,g being Function st f in A & g in A holds f tolerates g)
+  implies union A is Function
+ proof assume that
+A1: for x st x in A holds x is Function and
+A2: for f,g being Function st f in A & g in A holds f tolerates g;
+A3: now let z;
+    assume z in union A;
+     then consider p being set such that
+A4:   z in p & p in A by TARSKI:def 4;
+     reconsider p as Function by A1,A4;
+       p = p;
+    hence ex x,y st [x,y] = z by A4,RELAT_1:def 1;
+   end;
+     now let x,y,z; assume
+A5:  [x,y] in union A & [x,z] in union A;
+     then consider p being set such that
+A6:   [x,y] in p & p in A by TARSKI:def 4;
+     consider q being set such that
+A7:   [x,z] in q & q in A by A5,TARSKI:def 4;
+     reconsider p,q as Function by A1,A6,A7;
+       p tolerates q by A2,A6,A7;
+    hence y = z by A6,A7,Th14;
+   end;
+  hence union A is Function by A3,FUNCT_1:def 1,RELAT_1:def 1;
+ end;
+
+theorem Th16:
+ dom f c= A \/ B implies f|A +* f|B = f
+ proof
+A1:dom(f|A) = dom f /\ A & dom(f|B) = dom f /\ B by RELAT_1:90;
+  assume dom f c= A \/ B;
+then A2: dom f = dom f /\ (A \/ B) by XBOOLE_1:28
+     .= dom(f|A) \/ dom(f|B) by A1,XBOOLE_1:23;
+     x in dom(f|A) \/ dom(f|B) implies
+    (x in dom(f|B) implies f.x = f|B.x) &
+    (not x in dom(f|B) implies f.x = f|A.x)
+   proof
+    assume
+A3:   x in dom(f|A) \/ dom(f|B);
+    thus x in dom(f|B) implies f.x = f|B.x by FUNCT_1:70;
+    assume not x in dom(f|B);
+     then x in dom(f|A) by A3,XBOOLE_0:def 2;
+    hence f.x = f|A.x by FUNCT_1:70;
+   end;
+  hence f|A +* f|B = f by A2,FUNCT_4:def 1;
+ end;
+
+canceled;
+
+theorem Th18:
+ for x1,x2,y1,y2 being set holds
+   (x1,x2)-->(y1,y2) = (x1 .--> y1) +* (x2 .--> y2)
+proof let x1,x2,y1,y2 be set;
+     (x1 .--> y1) = {x1} --> y1 & (x2 .--> y2) = {x2} --> y2 by CQC_LANG:def 2;
+ hence (x1,x2)-->(y1,y2) = (x1 .--> y1) +* (x2 .--> y2) by FUNCT_4:def 4;
+end;
+
+theorem Th19:
+ for x,y holds x .--> y = {[x,y]}
+  proof let x,y;
+   thus x .--> y = ({x} --> y) by CQC_LANG:def 2
+     .= [:{x},{y}:] by FUNCOP_1:def 2
+     .= {[x,y]} by ZFMISC_1:35;
+  end;
+
+theorem Th20:
+ for a,b,c being set holds (a,a) --> (b,c) = a .--> c
+ proof let a,b,c be set;
+A1: dom({a} -->c) = {a} by FUNCOP_1:19
+        .= dom({a} -->b) by FUNCOP_1:19;
+  thus (a,a) --> (b,c) = ({a} --> b) +* ({a} -->c) by FUNCT_4:def 4
+     .= {a} -->c by A1,FUNCT_4:20
+     .= a .--> c by CQC_LANG:def 2;
+ end;
+
+theorem Th21:
+ for f being Function holds dom f is finite iff f is finite
+ proof let f be Function;
+  thus dom f is finite implies f is finite
+   proof assume
+A1:    dom f is finite;
+     then rng f is finite by FINSET_1:26;
+     then A2:    [:dom f, rng f:] is finite by A1,FINSET_1:19;
+       f c= [:dom f, rng f:] by RELAT_1:21;
+    hence f is finite by A2,FINSET_1:13;
+   end;
+     pr1(dom f,rng f).:f = dom f by Th13;
+  hence thesis by FINSET_1:17;
+ end;
+
+theorem
+   x in product f implies x is Function
+ proof assume x in product f;
+   then ex g st x = g & dom g = dom f &
+       for x st x in dom f holds g.x in f.x by CARD_3:def 5;
+  hence x is Function;
+ end;
+
+begin :: Superproducts
+
+definition let f be Function;
+ func sproduct f -> set means
+:Def16: x in it iff ex g st x = g & dom g c= dom f &
+     for x st x in dom g holds g.x in f.x;
+ existence
+ proof
+   defpred _P[set] means ex g st $1 = g & dom g c= dom f &
+     for x st x in dom g holds g.x in f.x;
+   consider A being set such that
+A1:x in A iff x in
+ PFuncs(dom f, union rng f) & _P[x] from Separation;
+     now let x;
+    thus x in A implies ex g st x = g & dom g c= dom f &
+         for x st x in dom g holds g.x in f.x by A1;
+    given g such that
+A2:     x = g & dom g c= dom f &
+     for x st x in dom g holds g.x in f.x;
+       rng g c= union rng f
+      proof let y be set;
+       assume y in rng g;
+        then consider z being set such that
+A3:       z in dom g & y = g.z by FUNCT_1:def 5;
+A4:      g.z in f.z by A2,A3;
+          f.z in rng f by A2,A3,FUNCT_1:def 5;
+       hence y in union rng f by A3,A4,TARSKI:def 4;
+      end;
+     then x in PFuncs(dom f, union rng f) by A2,PARTFUN1:def 5;
+    hence x in A by A1,A2;
+   end;
+  hence thesis;
+ end;
+ uniqueness
+  proof defpred _P[set] means ex g st $1 = g & dom g c= dom f &
+                               for x st x in dom g holds g.x in f.x;
+   let A,B be set such that
+A5: x in A iff _P[x] and A6: x in B iff _P[x];
+   thus thesis from Extensionality(A5,A6);
+  end;
+end;
+
+definition let f be Function;
+ cluster sproduct f -> functional non empty;
+ coherence
+ proof
+   defpred _P[set] means ex g st $1 = g & dom g c= dom f &
+     for x st x in dom g holds g.x in f.x;
+   consider A being set such that
+A1:x in A iff x in  PFuncs(dom f, union rng f) & _P[x] from Separation;
+     {} is PartFunc of dom f, union rng f by PARTFUN1:56;
+then A2:{} in PFuncs(dom f, union rng f) by PARTFUN1:119;
+     dom {} c= dom f & for x st x in dom {} holds {} .x in f.x by XBOOLE_1:2;
+   then reconsider A as non empty set by A1,A2;
+     now let x be set;
+    assume x in A;
+     then ex g st x = g & dom g c= dom f &
+         for x st x in dom g holds g.x in f.x by A1;
+    hence x is Function;
+   end;
+   then reconsider A as functional non empty set by FRAENKEL:def 1;
+     now let x;
+    thus x in A implies ex g st x = g & dom g c= dom f &
+         for x st x in dom g holds g.x in f.x by A1;
+    given g such that
+A3:     x = g & dom g c= dom f &
+     for x st x in dom g holds g.x in f.x;
+       rng g c= union rng f
+      proof let y be set;
+       assume y in rng g;
+        then consider z being set such that
+A4:       z in dom g & y = g.z by FUNCT_1:def 5;
+A5:      g.z in f.z by A3,A4;
+          f.z in rng f by A3,A4,FUNCT_1:def 5;
+       hence y in union rng f by A4,A5,TARSKI:def 4;
+      end;
+     then x in PFuncs(dom f, union rng f) by A3,PARTFUN1:def 5;
+    hence x in A by A1,A3;
+   end;
+  hence thesis by Def16;
+ end;
+end;
+
+canceled 2;
+
+theorem Th25:
+ g in sproduct f implies dom g c= dom f &
+   for x st x in dom g holds g.x in f.x
+ proof assume g in sproduct f;
+   then ex h st g = h & dom h c= dom f &
+     for x st x in dom h holds h.x in f.x by Def16;
+  hence thesis;
+ end;
+
+theorem Th26:
+ {} in sproduct f
+ proof
+     dom {} c= dom f & for x st x in dom {} holds {} .x in f.x by XBOOLE_1:2;
+  hence {} in sproduct f by Def16;
+ end;
+
+theorem Th27:
+ product f c= sproduct f
+proof let x;
+ assume x in product f;
+  then ex g st x = g & dom g = dom f &
+       for x st x in dom f holds g.x in f.x by CARD_3:def 5;
+ hence x in sproduct f by Def16;
+end;
+
+theorem Th28:
+ x in sproduct f implies x is PartFunc of dom f, union rng f
+ proof assume x in sproduct f;
+   then consider g such that
+A1:  x = g & dom g c= dom f &
+     for x st x in dom g holds g.x in f.x by Def16;
+     rng g c= union rng f
+    proof let y be set;
+     assume y in rng g;
+      then consider z being set such that
+A2:       z in dom g & y = g.z by FUNCT_1:def 5;
+A3:      g.z in f.z by A1,A2;
+        f.z in rng f by A1,A2,FUNCT_1:def 5;
+     hence y in union rng f by A2,A3,TARSKI:def 4;
+    end;
+  hence x is PartFunc of dom f, union rng f by A1,RELSET_1:11;
+ end;
+
+theorem Th29:
+ g in product f & h in sproduct f implies g +* h in product f
+ proof assume A1: g in product f;
+then A2: dom g = dom f & for x st x in dom f holds g.x in f.x by CARD_3:18;
+  assume A3: h in sproduct f;
+ then dom h c= dom f & for x st x in dom h holds h.x in f.x by Th25;
+then A4: dom g \/ dom h = dom f by A2,XBOOLE_1:12;
+then A5:  dom(g +* h) = dom f by FUNCT_4:def 1;
+     now let x;
+    assume
+A6:    x in dom f;
+A7:   (dom g \ dom h) \/ dom h = dom f by A4,XBOOLE_1:39;
+       now per cases by A6,A7,XBOOLE_0:def 2;
+      case
+A8:      x in dom g \ dom h;
+      then not x in dom h by XBOOLE_0:def 4;
+       hence x in dom f & (g +* h).x = g.x by A7,A8,FUNCT_4:12,XBOOLE_0:def 2;
+      case x in dom h;
+       hence (g +* h).x = h.x by FUNCT_4:14;
+     end;
+    hence (g +* h).x in f.x by A1,A3,Th25,CARD_3:18;
+   end;
+  hence g +* h in product f by A5,CARD_3:18;
+ end;
+
+theorem Th30:
+ product f <> {} implies
+ (g in sproduct f iff ex h st h in product f & g <= h)
+ proof assume
+A1: product f <> {};
+  thus g in sproduct f implies ex h st h in product f & g <= h
+   proof assume
+A2:  g in sproduct f;
+     consider k being Element of product f;
+     reconsider k as Function;
+    take k +* g;
+    thus k +* g in product f by A1,A2,Th29;
+    thus g <= k +* g by FUNCT_4:26;
+   end;
+  given h such that
+A3: h in product f & g <= h;
+A4: dom h = dom f & for x st x in dom f holds h.x in f.x by A3,CARD_3:18;
+A5: dom g c= dom h by A3,RELAT_1:25;
+     now let x;
+    assume
+A6:   x in dom g;
+     then g.x = h.x by A3,GRFUNC_1:8;
+    hence g.x in f.x by A4,A5,A6;
+   end;
+  hence g in sproduct f by A4,A5,Def16;
+ end;
+
+theorem Th31:
+ sproduct f c= PFuncs(dom f,union rng f)
+ proof let x;
+  assume x in sproduct f;
+   then x is PartFunc of dom f, union rng f by Th28;
+  hence x in PFuncs(dom f,union rng f) by PARTFUN1:119;
+ end;
+
+theorem Th32:
+ f c= g implies sproduct f c= sproduct g
+ proof
+  assume A1: f c= g;
+then A2: dom f c= dom g by GRFUNC_1:8;
+  let y;
+  assume y in sproduct f;
+   then consider h such that
+A3: y = h & dom h c= dom f and
+A4: for x st x in dom h holds h.x in f.x by Def16;
+A5: dom h c= dom g by A2,A3,XBOOLE_1:1;
+     now let x;
+    assume
+A6:   x in dom h;
+     then f.x = g.x by A1,A3,GRFUNC_1:8;
+    hence h.x in g.x by A4,A6;
+   end;
+  hence y in sproduct g by A3,A5,Def16;
+ end;
+
+theorem Th33:
+  sproduct {} = {{}}
+proof
+    sproduct {} c= PFuncs({},{}) by Th31,RELAT_1:60,ZFMISC_1:2;
+ hence sproduct {} c= {{}} by PARTFUN1:122;
+ let x be set;
+ assume x in {{}};
+  then x = {} by TARSKI:def 1;
+ hence x in sproduct {} by Th26;
+end;
+
+theorem
+    PFuncs(A,B) = sproduct (A --> B)
+  proof
+      now per cases;
+     case
+A1:    A = {};
+      hence sproduct (A --> B) = { {} } by Th33,FUNCT_4:3
+       .= PFuncs(A,B) by A1,PARTFUN1:122;
+     case
+       A <> {};
+       then rng (A --> B) = { B } by FUNCOP_1:14;
+       then A2:    dom(A --> B) = A & B = union rng (A --> B)
+        by FUNCOP_1:19,ZFMISC_1:31;
+      thus PFuncs(A,B) c= sproduct (A --> B)
+       proof let x;
+        assume x in PFuncs(A,B);
+         then consider f being Function such that
+A3:         x = f & dom f c= A & rng f c= B by PARTFUN1:def 5;
+A4:       dom f c= dom (A --> B) by A3,FUNCOP_1:19;
+           now let x;
+          assume
+A5:          x in dom f;
+           then f.x in rng f by FUNCT_1:def 5;
+           then f.x in B by A3;
+          hence f.x in (A --> B).x by A3,A5,FUNCOP_1:13;
+         end;
+        hence x in sproduct (A --> B) by A3,A4,Def16;
+       end;
+      thus sproduct (A --> B) c= PFuncs(A,B) by A2,Th31;
+    end;
+   hence thesis by XBOOLE_0:def 10;
+  end;
+
+theorem
+   for A, B being non empty set
+ for f being Function of A,B
+  holds sproduct f = sproduct(f|{x where x is Element of A: f.x <> {} })
+ proof let A, B be non empty set;
+  let f be Function of A,B;
+  set X = {x where x is Element of A: f.x <> {} };
+  thus sproduct f c= sproduct(f|X)
+   proof let x;
+    assume x in sproduct f;
+     then consider g such that
+A1:    x = g & dom g c= dom f &
+     for x st x in dom g holds g.x in f.x by Def16;
+A2:  now let x;
+      assume
+A3:       x in dom g;
+       then reconsider a = x as Element of A by A1,FUNCT_2:def 1;
+         f.a <> {} by A1,A3;
+      hence x in X;
+     end;
+A4:    now let x;
+       assume A5: x in dom g;
+        then x in X by A2;
+       hence x in (dom f)/\ X by A1,A5,XBOOLE_0:def 3;
+      end;
+A6:   dom g c= dom(f|X)
+      proof let x;
+       assume x in dom g;
+        then x in (dom f)/\ X by A4;
+       hence x in dom(f|X) by RELAT_1:90;
+      end;
+       now let x;
+      assume x in dom g;
+       then x in (dom f)/\ X & g.x in f.x by A1,A4;
+      hence g.x in (f|X).x by FUNCT_1:71;
+     end;
+    hence x in sproduct(f|X) by A1,A6,Def16;
+   end;
+     f|X c= f by RELAT_1:88;
+  hence thesis by Th32;
+ end;
+
+theorem Th36:
+ x in dom f & y in f.x implies x .--> y in sproduct f
+  proof assume that
+A1: x in dom f and
+A2:    y in f.x;
+A3:   dom(x .--> y) = {x} by CQC_LANG:5;
+then A4:  dom(x .--> y) c= dom f by A1,ZFMISC_1:37;
+     now let z;
+    assume z in dom(x .--> y);
+     then z = x by A3,TARSKI:def 1;
+    hence (x .--> y).z in f.z by A2,CQC_LANG:6;
+   end;
+  hence x .--> y in sproduct f by A4,Def16;
+  end;
+
+theorem
+   sproduct f = {{}} iff for x st x in dom f holds f.x = {}
+ proof
+  thus sproduct f = {{}} implies for x st x in dom f holds f.x = {}
+   proof assume
+A1:  sproduct f = {{}};
+    let x; assume
+A2:   x in dom f;
+    assume
+A3:   f.x <> {};
+     consider y being Element of f.x;
+       x .--> y in sproduct f by A2,A3,Th36;
+     then x .--> y = {} by A1,TARSKI:def 1;
+     then {[x,y]} = {} by Th19;
+    hence contradiction;
+   end;
+  assume
+A4: for x st x in dom f holds f.x = {};
+     now let x;
+    thus x in sproduct f implies x = {}
+     proof assume x in sproduct f;
+      then consider g such that
+A5:    x = g and
+A6:    dom g c= dom f and
+A7:    for y st y in dom g holds g.y in f.y by Def16;
+      assume x <> {};
+       then A8:      dom g <> {} by A5,RELAT_1:64;
+       consider y being Element of dom g;
+         f.y <> {} & y in dom f by A6,A7,A8,TARSKI:def 3;
+      hence contradiction by A4;
+     end;
+    thus x = {} implies x in sproduct f by Th26;
+   end;
+  hence sproduct f = {{}} by TARSKI:def 1;
+ end;
+
+theorem Th38:
+ A c= sproduct f &
+ (for h1,h2 being Function st h1 in A & h2 in A holds h1 tolerates h2)
+ implies union A in sproduct f
+ proof assume that
+A1: A c= sproduct f and
+A2: for h1,h2 being Function st h1 in A & h2 in A holds h1 tolerates h2;
+     for x be set st x in A holds x is Function by A1,FRAENKEL:def 1;
+   then reconsider g = union A as Function by A2,Th15;
+A3: dom g c= dom f
+    proof let x;
+     assume x in dom g;
+      then consider y such that
+A4:     [x,y] in g by RELAT_1:def 4;
+      consider h being set such that
+A5:    [x,y] in h and
+A6:    h in A by A4,TARSKI:def 4;
+      reconsider h as Function by A1,A6,FRAENKEL:def 1;
+A7:    x in dom h by A5,RELAT_1:def 4;
+        dom h c= dom f by A1,A6,Th25;
+     hence x in dom f by A7;
+    end;
+     now let x;
+    assume x in dom g;
+     then consider y such that
+A8:     [x,y] in g by RELAT_1:def 4;
+     consider h being set such that
+A9:    [x,y] in h and
+A10:    h in A by A8,TARSKI:def 4;
+     reconsider h as Function by A1,A10,FRAENKEL:def 1;
+A11:    x in dom h by A9,RELAT_1:def 4;
+       h.x = y by A9,FUNCT_1:8 .= g.x by A8,FUNCT_1:8;
+    hence g.x in f.x by A1,A10,A11,Th25;
+   end;
+  hence union A in sproduct f by A3,Def16;
+ end;
+
+theorem
+   g tolerates h & g in sproduct f & h in sproduct f
+  implies g \/ h in sproduct f
+ proof assume that
+A1: g tolerates h and
+A2: g in sproduct f & h in sproduct f;
+A3: {g,h} c= sproduct f by A2,ZFMISC_1:38;
+A4: now let h1,h2 be Function;
+    assume h1 in {g,h} & h2 in {g,h};
+     then (h1 = g or h1 = h) & (h2 = g or h2 = h) by TARSKI:def 2;
+    hence h1 tolerates h2 by A1;
+   end;
+     union {g,h} = g \/ h by ZFMISC_1:93;
+  hence g \/ h in sproduct f by A3,A4,Th38;
+ end;
+
+theorem Th40:
+ g c= h & h in sproduct f implies g in sproduct f
+  proof assume that
+A1: g c= h and
+A2: h in sproduct f;
+A3:  dom g c= dom h by A1,GRFUNC_1:8;
+      dom h c= dom f by A2,Th25;
+then A4:  dom g c= dom f by A3,XBOOLE_1:1;
+      now let x;
+     assume
+A5:     x in dom g;
+      then h.x in f.x by A2,A3,Th25;
+     hence g.x in f.x by A1,A5,GRFUNC_1:8;
+    end;
+   hence g in sproduct f by A4,Def16;
+  end;
+
+theorem Th41:
+ g in sproduct f implies g|A in sproduct f
+ proof
+     g|A c= g by RELAT_1:88;
+  hence thesis by Th40;
+ end;
+
+theorem Th42:
+ g in sproduct f implies g|A in sproduct f|A
+ proof
+A1: dom(g|A) = dom g /\ A & dom(f|A) = dom f /\ A by RELAT_1:90;
+  assume
+A2: g in sproduct f;
+   then dom g c= dom f by Th25;
+   then A3:  dom(g|A) c= dom(f|A) by A1,XBOOLE_1:26;
+     now let x;
+    assume
+A4:  x in dom(g|A);
+     then A5:  (g|A).x = g.x & (f|A).x = f.x by A3,FUNCT_1:70;
+       x in dom g by A1,A4,XBOOLE_0:def 3;
+    hence (g|A).x in (f|A).x by A2,A5,Th25;
+   end;
+  hence g|A in sproduct f|A by A3,Def16;
+ end;
+
+theorem
+   h in sproduct(f+*g) implies
+  ex f',g' being Function st f' in sproduct f & g' in sproduct g & h = f'+*g'
+proof
+ assume
+A1: h in sproduct(f+*g);
+ take h|(dom f \ dom g), h|dom g;
+A2:  h|(dom f \ dom g) in sproduct (f +* g)|(dom f \ dom g) by A1,Th42;
+    (f +* g)|(dom f \ dom g) c= f by FUNCT_4:25;
+  then sproduct (f +* g)|(dom f \ dom g) c= sproduct f by Th32;
+ hence h|(dom f \ dom g) in sproduct f by A2;
+    (f +* g)|dom g = g by FUNCT_4:24;
+ hence h|dom g in sproduct g by A1,Th42;
+    dom h c= dom(f+*g) by A1,Th25;
+  then dom h c= dom f \/ dom g by FUNCT_4:def 1;
+  then dom h c= (dom f \ dom g) \/ dom g by XBOOLE_1:39;
+ hence h = h|(dom f \ dom g) +* h|dom g by Th16;
+end;
+
+theorem Th44:
+ for f',g' being Function st dom g misses dom f' \ dom g' &
+  f' in sproduct f & g' in sproduct g
+ holds f'+*g' in sproduct(f+*g)
+proof
+ let f',g' be Function such that
+A1: dom g misses dom f' \ dom g' and
+A2: f' in sproduct f & g' in sproduct g;
+ set h = f'+*g';
+A3: dom f' c= dom f & dom g' c= dom g by A2,Th25;
+   then A4:dom f' \/ dom g' c= dom f \/ dom g by XBOOLE_1:13;
+A5: dom h = dom f' \/ dom g' by FUNCT_4:def 1;
+then A6: dom h c= dom(f+*g) by A4,FUNCT_4:def 1;
+    x in dom h implies h.x in (f+*g).x
+   proof assume
+A7:  x in dom h;
+    then x in dom(f+*g) by A6;
+then A8:  x in dom f \/ dom g by FUNCT_4:def 1;
+       x in dom f' \ dom g' \/ dom g' by A5,A7,XBOOLE_1:39;
+     then A9:   x in dom f' \ dom g' or x in dom g' by XBOOLE_0:def 2;
+       now per cases;
+      case
+A10:       x in dom g;
+        then h.x = g'.x by A1,A5,A7,A9,FUNCT_4:def 1,XBOOLE_0:3;
+       hence h.x in g.x by A1,A2,A9,A10,Th25,XBOOLE_0:3;
+      case not x in dom g;
+then A11:       not x in dom g' by A3;
+        then A12:       h.x = f'.x by A5,A7,FUNCT_4:def 1;
+          x in dom f' by A5,A7,A11,XBOOLE_0:def 2;
+       hence h.x in f.x by A2,A12,Th25;
+     end;
+    hence h.x in (f+*g).x by A8,FUNCT_4:def 1;
+   end;
+ hence h in sproduct(f+*g) by A6,Def16;
+end;
+
+theorem
+   for f',g' being Function st dom f' misses dom g \ dom g' &
+  f' in sproduct f & g' in sproduct g
+ holds f'+*g' in sproduct(f+*g)
+proof let f',g' be Function;
+ assume dom f' misses dom g \ dom g';
+  then dom g misses dom f' \ dom g' by XBOOLE_1:81;
+ hence thesis by Th44;
+end;
+
+theorem Th46:
+ g in sproduct f & h in sproduct f
+  implies g +* h in sproduct f
+proof
+ assume
+A1: g in sproduct f & h in sproduct f;
+  then dom g c= dom f & dom h c= dom f by Th25;
+  then dom g \/ dom h c= dom f by XBOOLE_1:8;
+then A2: dom(g+*h) c= dom f by FUNCT_4:def 1;
+   now let x;
+  assume x in dom(g+*h);
+   then x in dom g \/ dom h by FUNCT_4:def 1;
+   then A3:  x in (dom g \ dom h \/ dom h) by XBOOLE_1:39;
+     now per cases by A3,XBOOLE_0:def 2;
+    suppose
+A4:   x in dom h;
+      then h.x in f.x by A1,Th25;
+     hence (g+*h).x in f.x by A4,FUNCT_4:14;
+    suppose
+A5:   x in dom g \ dom h;
+      then x in dom g by XBOOLE_0:def 4;
+then A6:      g.x in f.x by A1,Th25;
+       not x in dom h by A5,XBOOLE_0:def 4;
+     hence (g+*h).x in f.x by A6,FUNCT_4:12;
+   end;
+  hence (g+*h).x in f.x;
+ end;
+ hence thesis by A2,Def16;
+end;
+
+theorem
+   for x1,x2,y1,y2 being set holds
+  x1 in dom f & y1 in f.x1 & x2 in dom f & y2 in f.x2
+   implies (x1,x2)-->(y1,y2) in sproduct f
+ proof let x1,x2,y1,y2 be set;
+  assume x1 in dom f & y1 in f.x1;
+   then A1:  x1 .--> y1 in sproduct f by Th36;
+  assume x2 in dom f & y2 in f.x2;
+   then A2:  x2 .--> y2 in sproduct f by Th36;
+     (x1,x2)-->(y1,y2) = (x1 .--> y1) +* (x2 .--> y2) by Th18;
+  hence (x1,x2)-->(y1,y2) in sproduct f by A1,A2,Th46;
+ end;
+
+begin :: General theory
+
+definition let N;
+ let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let s be State of S;
+ func CurInstr s -> Instruction of S equals
+:Def17: s.IC s;
+ coherence
+  proof
+    dom the Object-Kind of S = the carrier of S by FUNCT_2:def 1;
+    then pi(product the Object-Kind of S,IC s) = (the Object-Kind of S).IC s
+        by CARD_3:22
+      .= ObjectKind IC s by Def6
+      .= the Instructions of S by Def14;
+    hence thesis by CARD_3:def 6;
+  end;
+end;
+
+definition let N;
+ let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let s be State of S;
+ func Following s -> State of S equals
+:Def18: Exec(CurInstr s,s);
+ correctness;
+end;
+
+definition let N;
+ let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let s be State of S;
+ func Computation s -> Function of NAT, product the Object-Kind of S
+  means
+:Def19:
+  it.0 = s &
+  for i holds it.(i+1) = Following(it.i);
+ existence
+   proof
+     deffunc F(set, Element of product the Object-Kind of S) = Following $2;
+     consider f being Function of NAT, product the Object-Kind of S
+      such that
+A1:    f.0 = s & for n being Element of NAT holds f.(n+1) = F(n,f.n)
+          from LambdaRecExD;
+      take f;
+      thus thesis by A1;
+   end;
+ uniqueness
+  proof let F1,F2 be Function of NAT, product the Object-Kind of S such that
+A2: F1.0 = s &
+   for i holds F1.(i+1) = Following(F1.i) and
+A3: F2.0 = s &
+   for i holds F2.(i+1) = Following(F2.i);
+   deffunc F(set, Element of product the Object-Kind of S) = Following $2;
+A4: F1.0 = s & for i holds F1.(i+1) = F(i,F1.i) by A2;
+A5: F2.0 = s & for i holds F2.(i+1) = F(i,F2.i) by A3;
+   thus F1 = F2 from LambdaRecUnD(A4,A5);
+  end;
+end;
+
+definition let N; let S be non void AMI-Struct over N;
+ let f be Function of NAT, product the Object-Kind of S;
+ let k;
+ redefine func f.k -> State of S;
+coherence by FUNCT_2:7;
+end;
+
+definition let N;
+ let S be halting IC-Ins-separated definite
+       (non empty non void AMI-Struct over N);
+ let IT be State of S;
+ attr IT is halting means
+:Def20: ex k st CurInstr((Computation IT).k) = halt S;
+end;
+
+definition let N be set; let IT be AMI-Struct over N;
+ attr IT is realistic means
+:Def21: the Instructions of IT <> the Instruction-Locations of IT;
+end;
+
+theorem Th48:
+ for S being IC-Ins-separated definite (non empty non void AMI-Struct over E)
+  st S is realistic holds
+  not ex l being Instruction-Location of S st IC S = l
+ proof
+  let S be IC-Ins-separated definite (non empty non void AMI-Struct over E)
+    such that
+A1: S is realistic;
+  given l being Instruction-Location of S such that
+A2: IC S = l;
+     ObjectKind IC S = the Instruction-Locations of S &
+   ObjectKind l = the Instructions of S by Def11,Def14;
+  hence contradiction by A1,A2,Def21;
+ end;
+
+ reserve
+   S for IC-Ins-separated definite (non empty non void AMI-Struct over N),
+   s for State of S;
+
+canceled 2;
+
+theorem Th51:
+ for k holds
+ (Computation s).(i+k) = (Computation (Computation s).i).k
+ proof
+    defpred _P[Nat] means
+     (Computation s).(i+$1) = (Computation (Computation s).i).$1;
+A1: _P[0] by Def19;
+A2: now let k; assume
+A3:  _P[k];
+     (Computation s).(i+(k+1)) = (Computation s).(i+k+1) by XCMPLX_1:1
+         .= Following (Computation s).(i+k) by Def19
+         .= (Computation (Computation s).i).(k+1) by A3,Def19;
+     hence _P[k+1];
+   end;
+  thus for k holds _P[k] from Ind(A1,A2);
+ end;
+
+theorem Th52:
+ i <= j implies
+  for N for S being
+   halting IC-Ins-separated definite (non empty non void AMI-Struct over N)
+  for s being State of S st CurInstr((Computation s).i) = halt S
+   holds (Computation s).j = (Computation s).i
+ proof assume i <= j;
+   then consider k such that
+A1:   j = i + k by NAT_1:28;
+  let N;
+  let S be halting IC-Ins-separated definite
+      (non empty non void AMI-Struct over N);
+  let s be State of S such that
+A2: CurInstr((Computation s).i) = halt S;
+    defpred _P[Nat] means
+     (Computation s).(i+$1) = (Computation s).i;
+A3: _P[0];
+A4: now let k; assume
+A5:  _P[k];
+     (Computation s).(i+(k+1)) = (Computation s).(i+k+1) by XCMPLX_1:1
+         .= Following (Computation s).(i+k) by Def19
+         .= Exec(halt S,(Computation s).i) by A2,A5,Def18
+         .= (Computation s).i by Def8;
+     hence _P[k+1];
+   end;
+     for k holds _P[k] from Ind(A3,A4);
+  hence (Computation s).j = (Computation s).i by A1;
+ end;
+
+definition let N;
+ let S be halting IC-Ins-separated definite
+     (non empty non void AMI-Struct over N);
+ let s be State of S such that
+A1: s is halting;
+ func Result s -> State of S means
+:Def22:  ex k st it = (Computation s).k & CurInstr(it) = halt S;
+ uniqueness
+  proof let s1,s2 be State of S;
+   given k1 being Nat such that
+A2: s1 = (Computation s).k1 & CurInstr(s1) = halt S;
+   given k2 being Nat such that
+A3: s2 = (Computation s).k2 & CurInstr(s2) = halt S;
+      k1 <= k2 or k2 <= k1;
+   hence s1 = s2 by A2,A3,Th52;
+  end;
+ correctness
+  proof
+      ex k st CurInstr((Computation s).k) = halt S by A1,Def20;
+   hence thesis;
+  end;
+end;
+
+theorem
+   for S being steady-programmed
+  IC-Ins-separated definite (non empty non void AMI-Struct over N)
+ for s being State of S, i be Instruction-Location of S
+  holds s.i = (Following s).i
+ proof
+  let S be steady-programmed
+   IC-Ins-separated definite (non empty non void AMI-Struct over N);
+  let s be State of S, i be Instruction-Location of S;
+  thus s.i = Exec(CurInstr s,s).i by Def13
+  .= (Following s).i by Def18;
+ end;
+
+definition let N; let S be definite (non empty non void AMI-Struct over N);
+ let s be State of S, l be Instruction-Location of S;
+ redefine func s.l -> Instruction of S;
+ coherence
+  proof
+    dom the Object-Kind of S = the carrier of S by FUNCT_2:def 1;
+    then pi(product the Object-Kind of S,l) = (the Object-Kind of S).l
+        by CARD_3:22
+      .= ObjectKind l by Def6
+      .= the Instructions of S by Def14;
+   hence s.l is Instruction of S by CARD_3:def 6;
+  end;
+end;
+
+theorem Th54:
+ for S being steady-programmed IC-Ins-separated definite
+   (non empty non void AMI-Struct over N)
+ for s being State of S, i be Instruction-Location of S, k
+  holds s.i = (Computation s).k.i
+ proof
+  let S be steady-programmed
+    IC-Ins-separated definite (non empty non void AMI-Struct over N);
+  let s be State of S, i be Instruction-Location of S;
+    defpred _P[Nat] means s.i = (Computation s).$1.i;
+A1: _P[0] by Def19;
+A2: now let k;
+    assume _P[k];
+    then s.i = Exec(CurInstr (Computation s).k,(Computation s).k).i by Def13
+          .= (Following (Computation s).k).i by Def18
+          .= (Computation s).(k+1).i by Def19;
+    hence _P[k+1];
+   end;
+  thus for k holds _P[k] from Ind(A1,A2);
+ end;
+
+theorem
+   for S being steady-programmed IC-Ins-separated definite
+    (non empty non void AMI-Struct over N)
+ for s being State of S
+  holds (Computation s).(k+1)
+    = Exec(s.(IC (Computation s).k),(Computation s).k)
+ proof
+  let S be steady-programmed
+   IC-Ins-separated definite (non empty non void AMI-Struct over N);
+  let s be State of S;
+  thus (Computation s).(k+1)
+    = Following (Computation s).k by Def19
+   .= Exec(CurInstr (Computation s).k,(Computation s).k) by Def18
+   .= Exec((Computation s).k.(IC (Computation s).k),(Computation s).k) by Def17
+   .= Exec(s.(IC (Computation s).k),(Computation s).k) by Th54;
+ end;
+
+theorem Th56:
+ for S being steady-programmed IC-Ins-separated
+ halting definite (non empty non void AMI-Struct over N)
+ for s being State of S, k st s.IC (Computation s).k = halt S
+  holds Result s = (Computation s).k
+proof
+ let S be steady-programmed IC-Ins-separated
+ halting definite (non empty non void AMI-Struct over N);
+ let s be State of S, k such that
+A1:  s.IC (Computation s).k = halt S;
+A2:CurInstr((Computation s).k)
+      = (Computation s).k.IC (Computation s).k by Def17
+     .= halt S by A1,Th54;
+  then s is halting by Def20;
+ hence Result s = (Computation s).k by A2,Def22;
+end;
+
+theorem
+   for S being steady-programmed IC-Ins-separated
+ halting definite (non empty non void AMI-Struct over N)
+ for s being State of S st
+   ex k st s.IC (Computation s).k = halt S
+ for i holds Result s = Result (Computation s).i
+ proof
+  let S be steady-programmed IC-Ins-separated
+ halting definite (non empty non void AMI-Struct over N);
+  let s be State of S;
+  given k such that
+A1:   s.IC (Computation s).k = halt S;
+   set s' = (Computation s).k;
+A2: CurInstr s' = s'.IC s' by Def17
+      .= halt S by A1,Th54;
+  let i;
+     now per cases;
+    suppose i <= k;
+      then consider j such that
+A3:     k = i + j by NAT_1:28;
+A4:    (Computation s).k = (Computation (Computation s).i).j by A3,Th51;
+      then A5:    (Computation s).i is halting by A2,Def20;
+     thus Result s = s' by A1,Th56
+       .= Result (Computation s).i by A2,A4,A5,Def22;
+    suppose i >= k;
+then A6:     (Computation s).i = s' by A2,Th52;
+A7:     (Computation (Computation s).k).0 = (Computation s).k by Def19;
+      then A8:    (Computation s).i is halting by A2,A6,Def20;
+     thus Result s = s' by A1,Th56
+      .= Result (Computation s).i by A2,A6,A7,A8,Def22;
+    end;
+  hence Result s = Result (Computation s).i;
+ end;
+
+definition let N;
+  let S be non empty non void AMI-Struct over N, o be Object of S;
+  cluster ObjectKind o -> non empty;
+coherence by Def1;
+end;
+
+begin :: Finite substates
+
+definition let N be set; let S be AMI-Struct over N;
+ func FinPartSt S -> Subset of sproduct the Object-Kind of S equals
+    { p where p is Element of sproduct the Object-Kind of S: p is finite };
+ coherence
+  proof defpred _P[set] means $1 is finite;
+      { p where p is Element of sproduct the Object-Kind of S: _P[p] } c=
+    sproduct the Object-Kind of S from Fr_Set0;
+   hence thesis;
+  end;
+end;
+
+definition let N be set; let S be AMI-Struct over N;
+ mode FinPartState of S -> Element of sproduct the Object-Kind of S means
+:Def24: it is finite;
+ existence
+  proof
+      {} in sproduct the Object-Kind of S & {} is finite by Th26;
+   hence thesis;
+  end;
+end;
+
+definition let N;
+ let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let IT be FinPartState of S;
+ attr IT is autonomic means
+:Def25:  for s1,s2 being State of S st IT c= s1 & IT c= s2
+   for i holds (Computation s1).i|dom IT = (Computation s2).i|dom IT;
+end;
+
+definition let N;
+ let S be halting IC-Ins-separated definite
+     (non empty non void AMI-Struct over N);
+ let IT be FinPartState of S;
+ attr IT is halting means
+:Def26:  for s being State of S st IT c= s holds s is halting;
+end;
+
+definition let N;
+ let IT be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ attr IT is programmable means
+:Def27: ex s being FinPartState of IT st s is non empty autonomic;
+end;
+
+theorem Th58:
+ for S being IC-Ins-separated definite (non empty non void AMI-Struct over N)
+ for A,B being set, la,lb being Object of S st
+  ObjectKind la = A & ObjectKind lb = B
+ for a being Element of A, b being Element of B holds
+  (la,lb) --> (a,b) is FinPartState of S
+proof
+ let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let A,B be set, la,lb be Object of S such that
+A1: ObjectKind la = A & ObjectKind lb = B;
+ let a be Element of A, b be Element of B;
+  set p = (la,lb) --> (a,b);
+A2:dom p = {la,lb} by FUNCT_4:65;
+A3: dom the Object-Kind of S = the carrier of S by FUNCT_2:def 1;
+    now let x be set such that
+A4:   x in dom p;
+      now per cases by A2,A4,TARSKI:def 2;
+     suppose
+A5:    la <> lb & x = la;
+       then p.x = a by FUNCT_4:66;
+       then p.x in ObjectKind la by A1;
+      hence p.x in (the Object-Kind of S).x by A5,Def6;
+     suppose
+A6:    la <> lb & x = lb;
+       then p.x = b by FUNCT_4:66;
+       then p.x in ObjectKind lb by A1;
+      hence p.x in (the Object-Kind of S).x by A6,Def6;
+     suppose
+A7:    la = lb & x = la;
+       then p = la .--> b by Th20;
+       then p.x = b by A7,CQC_LANG:6;
+       then p.x in ObjectKind lb by A1;
+      hence p.x in (the Object-Kind of S).x by A7,Def6;
+    end;
+   hence p.x in (the Object-Kind of S).x;
+  end;
+ then reconsider p as Element of sproduct the Object-Kind of S by A2,A3,Def16;
+    p is FinPartState of S
+   proof
+       dom p = {la,lb} by FUNCT_4:65;
+    hence p is finite by Th21;
+   end;
+ hence thesis;
+end;
+
+theorem Th59:
+ for S being IC-Ins-separated definite (non empty non void AMI-Struct over N)
+ for A being set, la being Object of S st ObjectKind la = A
+ for a being Element of A holds la .--> a is FinPartState of S
+proof let S be IC-Ins-separated definite
+ (non empty non void AMI-Struct over N);
+ let A be set, la be Object of S such that
+A1: ObjectKind la = A;
+ let a be Element of A;
+  set p = la .--> a;
+A2:dom p = {la} by CQC_LANG:5;
+A3:dom the Object-Kind of S = the carrier of S by FUNCT_2:def 1;
+    now let x be set;
+   assume x in dom p;
+    then A4:   x = la by A2,TARSKI:def 1;
+    then p.x = a by CQC_LANG:6;
+    then p.x in ObjectKind la by A1;
+   hence p.x in (the Object-Kind of S).x by A4,Def6;
+  end;
+ then reconsider p as Element of sproduct the Object-Kind of S by A2,A3,Def16;
+    p is FinPartState of S
+   proof
+       dom p = {la} by CQC_LANG:5;
+    hence p is finite by Th21;
+   end;
+ hence thesis;
+end;
+
+definition let N;
+ let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let la be Object of S;
+ let a be Element of ObjectKind la;
+ redefine func la .--> a -> FinPartState of S;
+ coherence by Th59;
+end;
+
+definition let N;
+ let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let la,lb be Object of S;
+ let a be Element of ObjectKind la,
+     b be Element of ObjectKind lb;
+ redefine func (la,lb) --> (a,b) -> FinPartState of S;
+ coherence by Th58;
+end;
+
+theorem Th60:
+ Trivial-AMI E is realistic
+ proof
+A1: the Instructions of Trivial-AMI E = {[0,{}]} &
+   the Instruction-Locations of Trivial-AMI E = {1} by Def2;
+  assume the Instructions of Trivial-AMI E
+      = the Instruction-Locations of Trivial-AMI E;
+   then [0,{}] = 1 by A1,ZFMISC_1:6;
+  hence contradiction by Th2;
+ end;
+
+theorem Th61:
+ Trivial-AMI N is programmable
+proof
+  reconsider la = 0 as Object of Trivial-AMI N by Def2;
+    ObjectKind la = (the Object-Kind of Trivial-AMI N).la by Def6
+    .= ((0,1) --> ({1},{[0,{}]})).0 by Def2
+    .= {1} by FUNCT_4:66;
+  then reconsider a = 1 as Element of ObjectKind la by TARSKI:def 1;
+ take la .--> a;
+    0 .--> 1 = ({0} --> 1) by CQC_LANG:def 2
+          .= [:{0},{1}:] by FUNCOP_1:def 2;
+ hence la .--> a is non empty;
+ let s1,s2 be State of Trivial-AMI N such that
+    la .--> a c= s1 & la .--> a c= s2;
+ let i;
+ thus (Computation s1).i|dom(la .--> a) = (Computation s2).i|dom(la .--> a)
+  by Th9;
+end;
+
+definition let E;
+  cluster Trivial-AMI E -> realistic;
+  coherence by Th60;
+end;
+
+definition let N;
+  cluster Trivial-AMI N -> programmable;
+  coherence by Th61;
+end;
+
+definition let E;
+ cluster data-oriented realistic strict AMI-Struct over E;
+ existence
+  proof
+   take Trivial-AMI E;
+   thus thesis;
+  end;
+end;
+
+definition let M be set;
+ cluster data-oriented realistic strict IC-Ins-separated
+ definite (non empty non void AMI-Struct over M);
+ existence
+  proof
+   take Trivial-AMI M;
+   thus thesis;
+  end;
+end;
+
+definition let N;
+ cluster data-oriented halting steady-programmed realistic programmable
+         strict (IC-Ins-separated definite
+         (non empty non void AMI-Struct over N));
+ existence
+  proof
+   take Trivial-AMI N;
+   thus thesis;
+  end;
+end;
+
+theorem Th62:
+ for S being non void AMI-Struct over N,
+     s being State of S, p being FinPartState of S
+  holds s|dom p is FinPartState of S
+proof let S be non void AMI-Struct over N,
+    s be State of S, p be FinPartState of S;
+    product the Object-Kind of S c= sproduct the Object-Kind of S
+  & s in product the Object-Kind of S by Th27;
+  then A1:s|dom p in sproduct the Object-Kind of S by Th41;
+A2: dom(s|dom p) = dom s /\ dom p by RELAT_1:90;
+    p is finite by Def24;
+  then dom p is finite by Th21;
+  then dom(s|dom p) is finite by A2,FINSET_1:15;
+  then s|dom p is finite by Th21;
+ hence s|dom p is FinPartState of S by A1,Def24;
+end;
+
+theorem Th63:
+for N being set for S being AMI-Struct over N holds {} is FinPartState of S
+ proof let N be set, S be AMI-Struct over N;
+     {} is Element of sproduct the Object-Kind of S
+   & {} is finite by Th26;
+  hence {} is FinPartState of S by Def24;
+ end;
+
+definition let N;
+ let S be programmable
+  (IC-Ins-separated definite (non empty non void AMI-Struct over N));
+ cluster non empty autonomic FinPartState of S;
+ existence by Def27;
+end;
+
+definition let N be set;
+ let S be AMI-Struct over N;
+ let f,g be FinPartState of S;
+ redefine func f +* g -> FinPartState of S;
+ coherence
+  proof
+A1:  f +* g is Element of sproduct the Object-Kind of S by Th46;
+      f is finite & g is finite by Def24;
+    then A2:   dom f is finite & dom g is finite by Th21;
+      dom(f +* g) = dom f \/ dom g by FUNCT_4:def 1;
+    then dom(f +* g) is finite by A2,FINSET_1:14;
+    then f +* g is finite by Th21;
+   hence thesis by A1,Def24;
+  end;
+end;
+
+begin :: Preprograms
+
+theorem Th64:
+for S being halting realistic IC-Ins-separated definite
+  (non empty non void AMI-Struct over N)
+for loc being Instruction-Location of S
+for l being Element of ObjectKind IC S st l = loc
+for h being Element of ObjectKind loc st h = halt S
+for s being State of S st (IC S,loc) --> (l, h) c= s
+ holds CurInstr s = halt S
+proof
+ let S be halting realistic
+  IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let loc be Instruction-Location of S;
+ let l be Element of ObjectKind IC S such that
+A1: l = loc;
+ let h be Element of ObjectKind loc such that
+A2: h = halt S;
+   let s be State of S such that
+A3: (IC S,loc) --> (l, h) c= s;
+A4:  IC S <> loc by Th48;
+      dom((IC S,loc) --> (l, h)) = {IC S,loc} by FUNCT_4:65;
+then A5: IC S in dom((IC S,loc) --> (l, h)) & loc in dom((IC S,loc) --> (l, h))
+     by TARSKI:def 2;
+then A6: ((IC S,loc) --> (l, h)).IC S in dom((IC S,loc) --> (l, h))
+        by A1,A4,FUNCT_4:66;
+   thus CurInstr s = s.IC s by Def17
+     .= s.(s.IC S) by Def15
+     .= s.(((IC S,loc) --> (l, h)).IC S) by A3,A5,GRFUNC_1:8
+     .= ((IC S,loc) --> (l, h)).(((IC S,loc) --> (l, h)).IC S)
+           by A3,A6,GRFUNC_1:8
+     .= ((IC S,loc) --> (l, h)).loc by A1,A4,FUNCT_4:66
+     .= halt S by A2,A4,FUNCT_4:66;
+end;
+
+theorem Th65:
+for S being halting realistic IC-Ins-separated definite
+   (non empty non void AMI-Struct over N)
+for loc being Instruction-Location of S
+for l being Element of ObjectKind IC S st l = loc
+for h being Element of ObjectKind loc st h = halt S
+ holds (IC S,loc) --> (l, h) is halting
+proof
+ let S be halting realistic
+  IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let loc be Instruction-Location of S;
+ let l be Element of ObjectKind IC S such that
+A1: l = loc;
+ let h be Element of ObjectKind loc such that
+A2: h = halt S;
+ thus (IC S,loc) --> (l, h) is halting
+  proof let s be State of S such that
+A3: (IC S,loc) --> (l, h) c= s;
+   take 0;
+   thus CurInstr((Computation s).0)
+      = CurInstr s by Def19
+     .= halt S by A1,A2,A3,Th64;
+  end;
+end;
+
+theorem Th66:
+for S being realistic halting IC-Ins-separated definite
+ (non empty non void AMI-Struct over N)
+for loc being Instruction-Location of S
+for l being Element of ObjectKind IC S st l = loc
+for h being Element of ObjectKind loc st h = halt S
+for s being State of S st (IC S,loc) --> (l, h) c= s
+for i holds (Computation s).i = s
+proof
+ let S be realistic halting
+  IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let loc be Instruction-Location of S;
+ let l be Element of ObjectKind IC S such that
+A1: l = loc;
+ let h be Element of ObjectKind loc such that
+A2: h = halt S;
+   let s be State of S such that
+A3: (IC S,loc) --> (l, h) c= s;
+    defpred _P[Nat] means (Computation s).$1 = s;
+A4: _P[0] by Def19;
+A5: now let i;
+    assume
+A6:  _P[i];
+     (Computation s).(i+1) = Following (Computation s).i by Def19
+     .= Exec(CurInstr s,s) by A6,Def18 .= Exec(halt S,s) by A1,A2,A3,Th64
+     .= s by Def8;
+    hence _P[i+1];
+   end;
+ thus for i holds _P[i] from Ind(A4,A5);
+end;
+
+theorem Th67:
+for S be realistic halting IC-Ins-separated definite
+   (non empty non void AMI-Struct over N)
+for loc being Instruction-Location of S
+for l being Element of ObjectKind IC S st l = loc
+for h being Element of ObjectKind loc st h = halt S
+ holds (IC S,loc) --> (l, h) is autonomic
+proof
+ let S be realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N);
+ let loc be Instruction-Location of S;
+ let l be Element of ObjectKind IC S such that
+A1: l = loc;
+ let h be Element of ObjectKind loc such that
+A2: h = halt S;
+ thus (IC S,loc) --> (l, h) is autonomic
+  proof let s1,s2 be State of S;
+   assume
+A3:    (IC S,loc) --> (l, h) c= s1 & (IC S,loc) --> (l, h) c= s2;
+    then A4:   s1|dom((IC S,loc) --> (l, h)) = (IC S,loc) --> (l, h) &
+     s2|dom((IC S,loc) --> (l, h)) = (IC S,loc) --> (l, h) by GRFUNC_1:64;
+   let i;
+      (Computation s1).i = s1 & (Computation s2).i = s2 by A1,A2,A3,Th66;
+   hence thesis by A4;
+  end;
+end;
+
+definition let N;
+ let S be realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N);
+ cluster autonomic halting FinPartState of S;
+ existence
+  proof
+    consider loc being Instruction-Location of S;
+    reconsider l = loc as Element of ObjectKind IC S by Def11;
+    reconsider h = halt S as Element of ObjectKind loc by Def14;
+      (IC S,loc) --> (l, h) is autonomic halting by Th65,Th67;
+   hence thesis;
+  end;
+end;
+
+definition let N;
+ let S be realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N);
+ mode pre-program of S is autonomic halting FinPartState of S;
+end;
+
+definition let N;
+ let S be realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N);
+ let s be FinPartState of S;
+ assume
+A1: s is pre-program of S;
+ func Result(s) -> FinPartState of S means
+   for s' being State of S st s c= s' holds it = (Result s')|dom s;
+ existence
+  proof
+      sproduct the Object-Kind of S <> {};
+    then consider h being Function such that
+A2:  h in product the Object-Kind of S and
+A3:  s <= h by Th30;
+    reconsider h as State of S by A2;
+    reconsider R = (Result h)|dom s as FinPartState of S by Th62;
+   take R;
+   let s' be State of S such that
+A4:  s c= s';
+      h is halting by A1,A3,Def26;
+    then consider k1 being Nat such that
+A5:  Result h = (Computation h).k1 & CurInstr(Result h) = halt S by Def22;
+      s' is halting by A1,A4,Def26;
+    then consider k2 being Nat such that
+A6:  Result s' = (Computation s').k2 & CurInstr(Result s') = halt S by Def22;
+      now per cases;
+     suppose k1 <= k2;
+       then Result h = (Computation h).k2 by A5,Th52;
+      hence R = (Result s')|dom s by A1,A3,A4,A6,Def25;
+     suppose k1 >= k2;
+       then Result s' = (Computation s').k1 by A6,Th52;
+      hence R = (Result s')|dom s by A1,A3,A4,A5,Def25;
+    end;
+   hence R = (Result s')|dom s;
+  end;
+ correctness
+  proof let p1,p2 be FinPartState of S such that
+A7: for s' being State of S st s c= s' holds p1 = (Result s')|dom s and
+A8: for s' being State of S st s c= s' holds p2 = (Result s')|dom s;
+      sproduct the Object-Kind of S <> {};
+    then consider h being Function such that
+A9:  h in product the Object-Kind of S and
+A10:  s <= h by Th30;
+    reconsider h as State of S by A9;
+   thus p1 = (Result h)|dom s by A7,A10 .= p2 by A8,A10;
+  end;
+end;
+
+begin :: Computability
+
+definition let N;
+ let S be realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N);
+ let p be FinPartState of S, F be Function;
+  pred p computes F means
+:Def29:
+  for x being set st x in dom F ex s being FinPartState of S st x = s &
+   p +* s is pre-program of S & F.s c= Result(p +* s);
+ antonym p does_not_compute F;
+end;
+
+theorem Th68:
+ for S being realistic halting IC-Ins-separated definite
+    (non empty non void AMI-Struct over N)
+ for p being FinPartState of S
+  holds p computes {}
+  proof
+   let S be realistic halting IC-Ins-separated definite
+    (non empty non void AMI-Struct over N);
+   let p be FinPartState of S;
+   let x be set;
+   assume
+A1: x in dom {};
+    then reconsider x as FinPartState of S;
+   take x;
+   thus thesis by A1;
+  end;
+
+theorem Th69:
+ for S being realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N)
+ for p being FinPartState of S
+  holds p is pre-program of S iff p computes {} .--> Result(p)
+  proof
+   let S be realistic halting IC-Ins-separated definite
+     (non empty non void AMI-Struct over N);
+   let p be FinPartState of S;
+   thus p is pre-program of S implies p computes {} .--> Result(p)
+    proof assume
+A1:   p is pre-program of S;
+     let x be set such that
+A2:    x in dom({} .--> Result(p));
+        dom({} .--> Result(p)) = {{}} by CQC_LANG:5;
+then A3:    x = {} by A2,TARSKI:def 1;
+      then reconsider s = x as FinPartState of S by Th63;
+     take s;
+     thus x = s;
+     thus p +* s is pre-program of S by A1,A3,FUNCT_4:22;
+        ({} .--> Result(p)).s = Result(p) by A3,CQC_LANG:6;
+     hence ({} .--> Result(p)).s c= Result(p +* s) by A3,FUNCT_4:22;
+    end;
+     dom({} .--> Result(p)) = {{}} by CQC_LANG:5;
+then A4: {} in dom({} .--> Result(p)) by TARSKI:def 1;
+   assume p computes {} .--> Result(p);
+    then consider s being FinPartState of S such that
+A5:  s = {} and
+A6:  p +* s is pre-program of S and
+       ({} .--> Result(p)).s c= Result(p +* s) by A4,Def29;
+   thus thesis by A5,A6,FUNCT_4:22;
+  end;
+
+theorem Th70:
+ for S being realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N)
+ for p being FinPartState of S
+  holds p is pre-program of S iff p computes {} .--> {}
+  proof
+   let S be realistic halting IC-Ins-separated definite
+    (non empty non void AMI-Struct over N);
+   let p be FinPartState of S;
+   thus p is pre-program of S implies p computes {} .--> {}
+    proof assume
+A1:   p is pre-program of S;
+     let x be set such that
+A2:    x in dom({} .--> {});
+        dom({} .--> {}) = {{}} by CQC_LANG:5;
+then A3:    x = {} by A2,TARSKI:def 1;
+      then reconsider s = x as FinPartState of S by Th63;
+     take s;
+     thus x = s;
+     thus p +* s is pre-program of S by A1,A3,FUNCT_4:22;
+        ({} .--> {}).s = {} by A3,CQC_LANG:6;
+     hence ({} .--> {}).s c= Result(p +* s) by XBOOLE_1:2;
+    end;
+     dom({} .--> {}) = {{}} by CQC_LANG:5;
+then A4: {} in dom({} .--> {}) by TARSKI:def 1;
+   assume p computes {} .--> {};
+    then consider s being FinPartState of S such that
+A5:  s = {} and
+A6:  p +* s is pre-program of S and
+       ({} .--> {}).s c= Result(p +* s) by A4,Def29;
+   thus thesis by A5,A6,FUNCT_4:22;
+  end;
+
+definition let N;
+ let S be realistic halting IC-Ins-separated definite
+    (non empty non void AMI-Struct over N);
+ let IT be PartFunc of FinPartSt S, FinPartSt S;
+ attr IT is computable means
+:Def30: ex p being FinPartState of S st p computes IT;
+end;
+
+theorem Th71:
+ for S being realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N)
+ for F being PartFunc of FinPartSt S, FinPartSt S st F = {}
+  holds F is computable
+proof
+ let S be realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N);
+ let F be PartFunc of FinPartSt S, FinPartSt S;
+  consider p being FinPartState of S;
+ assume
+A1: F = {};
+ take p;
+ thus thesis by A1,Th68;
+end;
+
+theorem Th72:
+ for S being realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N)
+ for F being PartFunc of FinPartSt S, FinPartSt S st F = {} .--> {}
+  holds F is computable
+proof
+ let S be realistic halting IC-Ins-separated definite
+   (non empty non void AMI-Struct over N);
+ let F be PartFunc of FinPartSt S, FinPartSt S;
+  consider p being pre-program of S;
+ assume
+A1: F = {} .--> {};
+ take p;
+ thus thesis by A1,Th70;
+end;
+
+theorem Th73:
+ for S being realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N)
+ for p being pre-program of S
+ for F being PartFunc of FinPartSt S, FinPartSt S st F = {} .--> Result(p)
+  holds F is computable
+proof
+ let S be realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N);
+ let p be pre-program of S;
+ let F be PartFunc of FinPartSt S, FinPartSt S;
+ assume
+A1: F = {} .--> Result(p);
+ take p;
+ thus thesis by A1,Th69;
+end;
+
+definition let N;
+ let S be realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N);
+ let F be PartFunc of FinPartSt S, FinPartSt S such that
+A1: F is computable;
+  mode Program of F -> FinPartState of S means it computes F;
+  existence by A1,Def30;
+end;
+
+definition
+ let N be set, S be AMI-Struct over N;
+ mode InsType of S is Element of the Instruction-Codes of S;
+ canceled;
+end;
+
+theorem
+   for S being realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N)
+ for F being PartFunc of FinPartSt S, FinPartSt S st F = {}
+ for p being FinPartState of S
+  holds p is Program of F
+proof
+ let S be realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N);
+ let F be PartFunc of FinPartSt S, FinPartSt S such that
+A1: F = {};
+ let p be FinPartState of S;
+ thus F is computable by A1,Th71;
+ thus p computes F by A1,Th68;
+end;
+
+theorem
+   for S being realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N)
+ for F being PartFunc of FinPartSt S, FinPartSt S st F = {} .--> {}
+ for p being pre-program of S holds p is Program of F
+proof
+ let S be realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N);
+ let F be PartFunc of FinPartSt S, FinPartSt S such that
+A1: F = {} .--> {};
+ let p be pre-program of S;
+ thus F is computable by A1,Th72;
+ thus p computes F by A1,Th70;
+end;
+
+theorem
+   for S being realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N)
+ for p being pre-program of S
+ for F being PartFunc of FinPartSt S, FinPartSt S st F = {} .--> Result p
+  holds p is Program of F
+proof
+ let S be realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N);
+ let p be pre-program of S;
+ let F be PartFunc of FinPartSt S, FinPartSt S; assume
+A1: F = {} .--> Result p;
+ hence F is computable by Th73;
+ thus p computes F by A1,Th69;
+end;

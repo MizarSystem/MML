@@ -1,0 +1,975 @@
+:: Hilbert Positive Propositional Calculus
+::  by Adam Grabowski
+::
+:: Received February 20, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, RELAT_1, FUNCT_1, QC_LANG1, ZF_LANG, BOOLE, HILBERT1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1, NAT_1,
+      FINSEQ_1;
+ constructors NAT_1, CQC_LANG, MEMBERED;
+ clusters RELSET_1, MEMBERED, NUMBERS, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET;
+ definitions TARSKI;
+ theorems TARSKI, FINSEQ_1, XBOOLE_0, XBOOLE_1;
+ schemes XBOOLE_0;
+
+begin :: Definition of the language
+
+definition let D be set;
+  attr D is with_VERUM means :Def1:
+    <*0*> in D;
+end;
+
+definition let D be set;
+  attr D is with_implication means :Def2:
+     for p, q being FinSequence st
+         p in D & q in D holds <*1*>^p^q in D;
+end;
+
+definition let D be set;
+  attr D is with_conjunction means :Def3:
+     for p, q being FinSequence st
+         p in D & q in D holds <*2*>^p^q in D;
+end;
+
+definition let D be set;
+  attr D is with_propositional_variables means :Def4:
+     for n being Nat holds <*3+n*> in D;
+end;
+
+definition let D be set;
+  attr D is HP-closed means :Def5:
+   D c= NAT* &
+   D is with_VERUM with_implication with_conjunction
+     with_propositional_variables;
+end;
+
+Lm1: for D be set st D is HP-closed holds D is non empty
+proof
+  let D be set;
+  assume D is HP-closed;
+  then D is with_VERUM by Def5;
+  hence thesis by Def1;
+end;
+
+definition
+  cluster HP-closed -> with_VERUM with_implication
+     with_conjunction with_propositional_variables non empty set;
+  coherence by Def5,Lm1;
+  cluster with_VERUM with_implication
+     with_conjunction with_propositional_variables -> HP-closed Subset of NAT*
+;
+  coherence by Def5;
+end;
+
+definition
+  func HP-WFF -> set means :Def6:
+   it is HP-closed &
+   for D being set st D is HP-closed holds it c= D;
+existence
+  proof
+    defpred P[set] means for D being set st D is HP-closed holds $1 in D;
+
+     consider D0 being set such that
+A1:   for x being set holds x in D0 iff x in NAT* & P[x]
+               from Separation;
+  A2: <*0*> in NAT* by FINSEQ_1:def 11;
+  A3: for D being set st D is HP-closed holds <*0*> in D
+      proof
+        let D be set; assume D is HP-closed;
+        then D is with_VERUM by Def5;
+        hence thesis by Def1;
+      end;
+   then reconsider D0 as non empty set by A1,A2;
+   take D0;
+A4: D0 c= NAT*
+   proof let x be set;
+     thus thesis by A1;
+   end;
+     <*0*> in D0 by A1,A2,A3;
+then A5:D0 is with_VERUM by Def1;
+     for n being Nat holds <*3+n*> in D0
+   proof let n be Nat;
+     set p = 3+n;
+     reconsider h = <*p*> as FinSequence of NAT;
+A6:  h in NAT* by FINSEQ_1:def 11;
+       for D being set st D is HP-closed holds <*p*> in D
+     proof
+       let D be set;
+       assume D is HP-closed;
+       then D is with_propositional_variables by Def5;
+       hence thesis by Def4;
+     end;
+     hence thesis by A1,A6;
+   end;
+then A7:D0 is with_propositional_variables by Def4;
+     for p, q being FinSequence
+    st p in D0 & q in D0 holds <*1*>^p^q in D0
+        proof
+          let p, q be FinSequence such that
+        A8: p in D0 & q in D0;
+              p in NAT* & q in NAT* by A1,A8;
+            then reconsider p'=p, q'=q as FinSequence of NAT by FINSEQ_1:def 11
+;
+       A9: <*1*>^p'^q' in NAT* by FINSEQ_1:def 11;
+              for D being set
+              st D is HP-closed holds <*1*>^p^q in D
+                proof let D be set; assume
+                A10:    D is HP-closed;
+then A11:               D is with_implication by Def5;
+                    p in D & q in D by A1,A8,A10;
+                  hence thesis by A11,Def2;
+                end;
+           hence <*1*>^p^q in D0 by A1,A9;
+        end;
+then A12:     D0 is with_implication by Def2;
+     for p, q being FinSequence
+    st p in D0 & q in D0 holds <*2*>^p^q in D0
+        proof
+          let p, q be FinSequence such that
+        A13: p in D0 & q in D0;
+              p in NAT* & q in NAT* by A1,A13;
+            then reconsider p'=p, q'=q as FinSequence of NAT by FINSEQ_1:def 11
+;
+       A14: <*2*>^p'^q' in NAT* by FINSEQ_1:def 11;
+              for D being set
+              st D is HP-closed holds <*2*>^p^q in D
+                proof let D be set; assume
+                A15:    D is HP-closed;
+then A16:              D is with_conjunction by Def5;
+                    p in D & q in D by A1,A13,A15;
+                  hence thesis by A16,Def3;
+                end;
+           hence <*2*>^p^q in D0 by A1,A14;
+        end;
+   then D0 is with_conjunction by Def3;
+   hence D0 is HP-closed by A4,A5,A7,A12,Def5;
+   let D be set such that
+A17:   D is HP-closed;
+   let x be set; assume
+     x in D0;
+   hence thesis by A1,A17;
+  end;
+uniqueness
+  proof
+    let D1, D2 be set such that
+A18:  D1 is HP-closed & for D being set
+        st D is HP-closed holds D1 c= D and
+A19:  D2 is HP-closed & for D being set
+        st D is HP-closed holds D2 c= D;
+      D1 c= D2 & D2 c= D1 by A18,A19;
+  hence D1 = D2 by XBOOLE_0:def 10;
+  end;
+end;
+
+definition
+  cluster HP-WFF -> HP-closed;
+  coherence by Def6;
+end;
+
+definition
+  cluster HP-closed non empty set;
+  existence
+  proof
+    take HP-WFF;
+    thus thesis;
+  end;
+end;
+
+definition
+  cluster -> Relation-like Function-like Element of HP-WFF;
+coherence
+   proof let p be Element of HP-WFF;
+       HP-WFF c= NAT* & p in HP-WFF by Def5;
+     hence thesis by FINSEQ_1:def 11;
+   end;
+end;
+
+definition
+  cluster -> FinSequence-like Element of HP-WFF;
+coherence
+   proof let p be Element of HP-WFF;
+       HP-WFF c= NAT* & p in HP-WFF by Def5;
+     hence thesis by FINSEQ_1:def 11;
+   end;
+end;
+
+definition
+  mode HP-formula is Element of HP-WFF;
+end;
+
+definition
+  func VERUM -> HP-formula equals
+    <*0*>;
+correctness by Def1;
+
+  let p, q be Element of HP-WFF;
+  func p => q -> HP-formula equals
+    <*1*>^p^q;
+coherence by Def2;
+
+  func p '&' q -> HP-formula equals
+    <*2*>^p^q;
+correctness by Def3;
+end;
+
+ reserve T, X, Y for Subset of HP-WFF;
+ reserve p, q, r, s for Element of HP-WFF;
+
+definition let T be Subset of HP-WFF;
+  attr T is Hilbert_theory means :Def10:
+   VERUM in T & for p, q, r being Element of HP-WFF holds
+    p => (q => p) in T &
+    (p => (q => r)) => ((p => q) => (p => r)) in T &
+    (p '&' q) => p in T &
+    (p '&' q) => q in T &
+    p => (q => (p '&' q)) in T &
+    (p in T & p => q in T implies q in T);
+ correctness;
+end;
+
+definition let X;
+  func CnPos X -> Subset of HP-WFF means
+  :Def11:  r in it iff for T st T is Hilbert_theory & X c= T holds r in T;
+ existence
+  proof
+    defpred P[set] means
+    (for T st T is Hilbert_theory & X c= T holds $1 in T);
+   consider Y being set such that
+A1: for a being set holds a in Y iff a in HP-WFF & P[a] from Separation;
+      Y c= HP-WFF
+    proof
+     let a be set; assume a in Y;
+     hence a in HP-WFF by A1;
+    end;
+   then reconsider Z = Y as Subset of HP-WFF;
+   take Z;
+   thus r in Z iff for T st T is Hilbert_theory & X c= T holds r in T by A1;
+  end;
+ uniqueness
+  proof
+   let Y,Z be Subset of HP-WFF such that
+    A2: r in Y iff for T st T is Hilbert_theory & X c= T holds r in T and
+    A3: r in Z iff for T st T is Hilbert_theory & X c= T holds r in T;
+     for a being set holds a in Y iff a in Z
+    proof
+     let a be set;
+     hereby assume A4: a in Y;
+       then reconsider t=a as Element of HP-WFF;
+         for T st T is Hilbert_theory & X c= T holds t in T by A2,A4;
+       hence a in Z by A3;
+      end;
+       assume A5: a in Z;
+       then reconsider t=a as Element of HP-WFF;
+         for T st T is Hilbert_theory & X c= T holds t in T by A3,A5;
+       hence a in Y by A2;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+end;
+
+definition
+  func HP_TAUT -> Subset of HP-WFF equals :Def12:
+    CnPos({}(HP-WFF));
+  correctness;
+end;
+
+theorem Th1:
+  VERUM in CnPos (X)
+ proof
+    T is Hilbert_theory & X c= T implies VERUM in T by Def10;
+  hence thesis by Def11;
+ end;
+
+theorem Th2:
+  p => (q => (p '&' q)) in CnPos (X)
+ proof
+    T is Hilbert_theory & X c= T implies p => (q => (p '&' q)) in T by Def10;
+  hence thesis by Def11;
+ end;
+
+theorem Th3:
+  (p => (q => r)) => ((p => q) => (p => r)) in CnPos (X)
+ proof
+    T is Hilbert_theory & X c= T implies
+    (p => (q => r)) => ((p => q) => (p => r)) in T by Def10;
+  hence thesis by Def11;
+ end;
+
+theorem Th4:
+  p => (q => p) in CnPos (X)
+proof
+    T is Hilbert_theory & X c= T implies p => (q => p) in T by Def10;
+  hence thesis by Def11;
+ end;
+
+theorem Th5:
+  p '&' q => p in CnPos(X)
+ proof
+    T is Hilbert_theory & X c= T implies p '&' q => p in T by Def10;
+  hence thesis by Def11;
+ end;
+
+theorem Th6:
+  p '&' q => q in CnPos(X)
+ proof
+    T is Hilbert_theory & X c= T implies p '&' q => q in T by Def10;
+  hence thesis by Def11;
+ end;
+
+theorem Th7:
+  p in CnPos(X) & p => q in CnPos(X) implies q in CnPos(X)
+ proof
+  assume A1: p in CnPos(X) & p => q in CnPos(X);
+    T is Hilbert_theory & X c= T implies q in T
+  proof
+    assume A2: T is Hilbert_theory & X c= T;
+    then p in T & p => q in T by A1,Def11;
+    hence thesis by A2,Def10;
+  end;
+  hence thesis by Def11;
+ end;
+
+theorem Th8: T is Hilbert_theory & X c= T implies CnPos(X) c= T
+ proof
+  assume that A1:T is Hilbert_theory and A2: X c= T;
+  let a be set;
+  thus thesis by A1,A2,Def11;
+ end;
+
+theorem Th9:
+  X c= CnPos(X)
+ proof
+  let a be set;
+  assume A1: a in X;
+  then reconsider t = a as Element of HP-WFF;
+    for T st T is Hilbert_theory & X c= T holds t in T by A1;
+  hence a in CnPos(X) by Def11;
+ end;
+
+theorem Th10:
+  X c= Y implies CnPos(X) c= CnPos(Y)
+ proof
+  assume A1: X c= Y;
+  thus CnPos(X) c= CnPos(Y)
+   proof
+    let a be set; assume A2: a in CnPos(X);
+    then reconsider t = a as Element of HP-WFF;
+      for T st T is Hilbert_theory & Y c= T holds t in T
+     proof
+      let T such that A3: T is Hilbert_theory and A4: Y c= T;
+        X c= T by A1,A4,XBOOLE_1:1;
+      hence t in T by A2,A3,Def11;
+     end;
+    hence thesis by Def11;
+   end;
+ end;
+
+Lm2: CnPos(CnPos(X)) c= CnPos(X)
+ proof
+  let a be set; assume A1: a in CnPos(CnPos(X));
+  then reconsider t = a as Element of HP-WFF;
+    for T st T is Hilbert_theory & X c= T holds t in T
+   proof
+    let T; assume that A2: T is Hilbert_theory and A3: X c= T;
+      CnPos(X) c= T by A2,A3,Th8;
+    hence t in T by A1,A2,Def11;
+   end;
+  hence thesis by Def11;
+ end;
+
+theorem
+    CnPos(CnPos(X)) = CnPos(X)
+ proof
+    CnPos(CnPos(X)) c= CnPos(X) & CnPos(X) c= CnPos(CnPos(X)) by Lm2,Th9;
+  hence thesis by XBOOLE_0:def 10;
+ end;
+
+Lm3:
+CnPos(X) is Hilbert_theory
+ proof
+  thus VERUM in CnPos(X) by Th1;
+  let p, q, r;
+  thus p => (q => p) in CnPos(X) by Th4;
+  thus (p => (q => r)) => ((p => q) => (p => r)) in CnPos(X) by Th3;
+  thus (p '&' q) => p in CnPos(X) by Th5;
+  thus (p '&' q) => q in CnPos(X) by Th6;
+  thus p => (q => (p '&' q)) in CnPos(X) by Th2;
+  thus (p in CnPos(X) & p => q in CnPos(X) implies q in CnPos(X)) by Th7;
+ end;
+
+definition let X be Subset of HP-WFF;
+  cluster CnPos(X) -> Hilbert_theory;
+  coherence by Lm3;
+end;
+
+theorem Th12:
+  T is Hilbert_theory iff CnPos(T) = T
+ proof
+   hereby assume A1: T is Hilbert_theory;
+    A2: T c= CnPos(T) by Th9;
+      CnPos(T) c= T
+     proof
+      let a be set; assume a in CnPos(T);
+      hence a in T by A1,Def11;
+     end;
+    hence CnPos(T) = T by A2,XBOOLE_0:def 10;
+   end;
+  thus CnPos(T) = T implies T is Hilbert_theory;
+ end;
+
+theorem
+    T is Hilbert_theory implies HP_TAUT c= T
+ proof
+  assume A1: T is Hilbert_theory;
+    {}(HP-WFF) c= T by XBOOLE_1:2;
+  then HP_TAUT c= CnPos(T) by Def12,Th10;
+  hence thesis by A1,Th12;
+ end;
+
+definition
+  cluster HP_TAUT -> Hilbert_theory;
+  coherence by Def12;
+end;
+
+begin  :: The tautologies of the Hilbert calculus - implicational part
+
+theorem Th14:  :: Identity law
+  p => p in HP_TAUT
+proof
+A1:p => (p => p) in HP_TAUT by Def10;
+A2:(p => ((p => p) => p))
+      => ((p => (p => p)) => (p => p)) in HP_TAUT by Def10;
+      p => ((p => p) => p) in HP_TAUT by Def10;
+    then (p => (p => p)) => (p => p) in HP_TAUT by A2,Def10;
+  hence thesis by A1,Def10;
+end;
+
+theorem Th15:
+  q in HP_TAUT implies p => q in HP_TAUT
+  proof
+      q => (p => q) in HP_TAUT by Def10;
+    hence thesis by Def10;
+  end;
+
+theorem
+    p => VERUM in HP_TAUT
+  proof
+      VERUM in HP_TAUT by Def12,Th1;
+    hence thesis by Th15;
+  end;
+
+theorem
+    (p => q) => (p => p) in HP_TAUT
+proof
+    (p => p) in HP_TAUT by Th14;
+  hence thesis by Th15;
+end;
+
+theorem
+    (q => p) => (p => p) in HP_TAUT
+proof
+    (p => p) in HP_TAUT by Th14;
+  hence thesis by Th15;
+end;
+
+theorem Th19:
+  (q => r) => ((p => q) => (p => r)) in HP_TAUT
+proof
+A1:((p => (q => r)) => ((p => q) => (p => r))) =>
+     ( (q => r) => ((p => (q => r)) => ((p => q) => (p => r)))) in HP_TAUT
+         by Def10;
+     ((p => (q => r)) => ((p => q) => (p => r))) in HP_TAUT by Def10;
+then A2: ( (q => r) => ((p => (q => r)) => ((p => q) => (p => r)))) in HP_TAUT
+      by A1,Def10;
+      ( (q => r) => ((p => (q => r)) => ((p => q) => (p => r))))
+      => (((q => r) => (p => (q => r))) =>
+    ((q => r) => ((p => q) => (p => r)))) in HP_TAUT
+      by Def10;
+then A3: ((q => r) => (p => (q => r))) =>
+     ((q => r) => ((p => q) => (p => r))) in HP_TAUT
+       by A2,Def10;
+      (q => r) => (p => (q => r)) in HP_TAUT by Def10;
+  hence thesis by A3,Def10;
+end;
+
+theorem Th20:
+  p => (q => r) in HP_TAUT implies q => (p => r) in HP_TAUT
+proof
+  assume A1: p => (q => r) in HP_TAUT;
+    (p => (q => r)) => ((p => q) => (p => r)) in HP_TAUT by Def10;
+then A2:  ((p => q) => (p => r)) in HP_TAUT by A1,Def10;
+    ((p => q) => (p => r)) => ((q => (p => q)) => (q => (p => r))) in HP_TAUT
+    by Th19;
+then A3:((q => (p => q)) => (q => (p => r))) in HP_TAUT by A2,Def10;
+    q => (p => q) in HP_TAUT by Def10;
+  hence thesis by A3,Def10;
+end;
+
+theorem Th21: :: Hypothetical syllogism
+  (p => q) => ((q => r) => (p => r)) in HP_TAUT
+proof
+    (q => r) => ((p => q) => (p => r)) in HP_TAUT by Th19;
+  hence thesis by Th20;
+end;
+
+theorem Th22:
+  p => q in HP_TAUT implies (q => r) => (p => r) in HP_TAUT
+ proof assume
+A1: p => q in HP_TAUT;
+     (p => q) => ((q => r) => (p => r)) in HP_TAUT by Th21;
+  hence (q => r) => (p => r) in HP_TAUT by A1,Def10;
+ end;
+
+theorem Th23:
+  p => q in HP_TAUT & q => r in HP_TAUT implies p => r in HP_TAUT
+ proof assume that
+A1: p => q in HP_TAUT and
+A2: q => r in HP_TAUT;
+     (p => q) => ((q => r) => (p => r)) in HP_TAUT by Th21;
+   then (q => r) => (p => r) in HP_TAUT by A1,Def10;
+  hence p => r in HP_TAUT by A2,Def10;
+ end;
+
+Lm4: (((q => r) => (p => r)) => s) => ((p => q) => s) in HP_TAUT
+ proof
+    (p => q) => ((q => r) => (p => r)) in HP_TAUT by Th21;
+  hence thesis by Th22;
+ end;
+
+theorem Th24:
+ (p => (q => r)) => ((s => q) => (p => (s => r))) in HP_TAUT
+  proof
+A1:  ((((q => r) => (s => r)) => (p => (s => r))) =>
+     ((s => q) => (p => (s => r)))) =>
+      ((p => (q => r)) => ((s => q) => (p => (s => r)))) in HP_TAUT by Lm4;
+      (((q => r) => (s => r)) => (p => (s => r))) =>
+    ((s => q) => (p => (s => r))) in HP_TAUT by Lm4;
+   hence thesis by A1,Def10;
+  end;
+
+theorem
+    ((p => q) => r) => (q => r) in HP_TAUT
+proof
+    q => (p => q) in HP_TAUT &
+  (q => (p => q)) => (((p => q) => r) => (q => r)) in HP_TAUT
+    by Def10,Th21;
+ hence thesis by Def10;
+end;
+
+theorem Th26: :: Contraposition
+  (p => (q => r)) => (q => (p => r)) in HP_TAUT
+proof
+    (p => (q => r)) => ((p => q) => (p => r)) in HP_TAUT by Def10;
+then A1:(p => q) => ((p => (q => r)) => (p => r)) in HP_TAUT by Th20;
+    ((p => q) => ((p => (q => r)) => (p => r))) =>
+    ((q => (p => q)) => (q => ((p => (q => r)) => (p => r)))) in HP_TAUT
+      by Th19;
+then A2:(q => (p => q)) => (q => ((p => (q => r)) => (p => r))) in HP_TAUT
+    by A1,Def10;
+    q => (p => q) in HP_TAUT by Def10;
+  then (q => ((p => (q => r)) => (p => r))) in HP_TAUT by A2,Def10;
+  hence thesis by Th20;
+end;
+
+theorem Th27:  :: A Hilbert axiom
+  (p => (p => q)) => (p => q) in HP_TAUT
+proof
+A1:p => p in HP_TAUT by Th14;
+    (p => (p => q)) => ((p => p) => (p => q)) in HP_TAUT by Def10;
+  then (p => p) => ((p => (p => q)) => (p => q)) in HP_TAUT by Th20;
+  hence thesis by A1,Def10;
+end;
+
+theorem  :: Modus ponendo ponens
+    q => ((q => p) => p) in HP_TAUT
+proof
+A1:(q => p) => (q => p) in HP_TAUT by Th14;
+    ((q => p) => (q => p)) => (q => ((q => p) => p)) in HP_TAUT by Th26;
+  hence thesis by A1,Def10;
+end;
+
+theorem Th29:
+  s => (q => p) in HP_TAUT & q in HP_TAUT implies s => p in HP_TAUT
+proof
+  assume A1: s => (q => p) in HP_TAUT & q in HP_TAUT;
+    (s => (q => p)) => (q => (s => p)) in HP_TAUT by Th26;
+  then q => (s => p) in HP_TAUT by A1,Def10;
+  hence thesis by A1,Def10;
+end;
+
+begin :: Conjunctional part of the calculus
+
+theorem Th30:
+  p => (p '&' p) in HP_TAUT
+proof
+A1:p => (p => (p '&' p)) in HP_TAUT by Def10;
+    (p => (p => (p '&' p))) => (p => (p '&' p)) in HP_TAUT by Th27;
+  hence thesis by A1,Def10;
+end;
+
+theorem Th31:
+  (p '&' q) in HP_TAUT iff p in HP_TAUT & q in HP_TAUT
+proof
+  hereby assume A1: p '&' q in HP_TAUT;
+      (p '&' q) => p in HP_TAUT & (p '&' q) => q in HP_TAUT by Def10;
+    hence p in HP_TAUT & q in HP_TAUT by A1,Def10;
+  end;
+  assume A2: p in HP_TAUT & q in HP_TAUT;
+    p => (q => (p '&' q)) in HP_TAUT by Def10;
+  then q => (p '&' q) in HP_TAUT by A2,Def10;
+  hence thesis by A2,Def10;
+end;
+
+theorem
+    (p '&' q) in HP_TAUT iff (q '&' p) in HP_TAUT
+proof
+  hereby assume p '&' q in HP_TAUT;
+    then p in HP_TAUT & q in HP_TAUT by Th31;
+    hence q '&' p in HP_TAUT by Th31;
+  end;
+  assume q '&' p in HP_TAUT;
+  then q in HP_TAUT & p in HP_TAUT by Th31;
+  hence p '&' q in HP_TAUT by Th31;
+end;
+
+theorem Th33:
+  (( p '&' q ) => r ) => ( p => ( q => r )) in HP_TAUT
+proof
+       ( q => ( p '&' q )) => ((( p '&' q ) => r ) => ( q => r )) in HP_TAUT
+     by Th21;
+then A1: p => (( q => ( p '&' q )) => ((( p '&' q ) => r ) => ( q => r )))
+    in HP_TAUT by Th15;
+    set qp = ( q => ( p '&' q ));
+    set pr = (( p '&' q ) => r) => ( q => r );
+      ( p => ( qp => pr )) => ( ( p => qp ) => ( p => pr )) in HP_TAUT by Def10
+;
+    then A2: ( ( p => qp ) => ( p => pr )) in HP_TAUT by A1,Def10;
+      p => ( q => ( p '&' q )) in HP_TAUT by Def10;
+then A3: p => ((( p '&' q ) => r ) => ( q => r )) in HP_TAUT by A2,Def10;
+       (p => ((( p '&' q ) => r ) => ( q => r ))) =>
+     ((( p '&' q ) => r ) => ( p => ( q => r ))) in HP_TAUT by Th26;
+     hence thesis by A3,Def10;
+end;
+
+theorem Th34:
+  ( p => ( q => r )) => (( p '&' q ) => r ) in HP_TAUT
+proof
+  A1: ( p '&' q ) => q in HP_TAUT by Def10;
+       (( p '&' q ) => q) => (( q => r ) => (( p '&' q ) => r )) in HP_TAUT
+     by Th21;
+     then ( q => r ) => (( p '&' q ) => r ) in HP_TAUT by A1,Def10;
+  then A2: p => (( q => r ) => (( p '&' q ) => r )) in HP_TAUT by Th15;
+       p => (( q => r ) => (( p '&' q ) => r )) =>
+     ((p => ( q => r )) => ( p => (( p '&' q ) => r ))) in HP_TAUT
+     by Def10;
+  then A3: (p => ( q => r )) => ( p => (( p '&' q ) => r )) in HP_TAUT
+     by A2,Def10;
+       ( p => (( p '&' q ) => r )) => ((p '&' q ) => ( p => r )) in HP_TAUT
+     by Th26;
+  then A4: (p => ( q => r )) => ((p '&' q ) => ( p => r )) in HP_TAUT by A3,
+Th23;
+  A5: ((p '&' q ) => ( p => r )) => ((( p '&' q ) => p ) => (( p '&' q )
+     => r )) in HP_TAUT by Def10;
+       ( p '&' q ) => p in HP_TAUT by Def10;
+     then ((p '&' q ) => ( p => r )) => (( p '&' q ) => r ) in HP_TAUT by A5,
+Th29;
+     hence thesis by A4,Th23;
+end;
+
+theorem Th35:
+  ( r => p ) => (( r => q ) => ( r => ( p '&' q ))) in HP_TAUT
+proof
+       p => ( q => ( p '&' q )) in HP_TAUT by Def10;
+  then A1: r => ( p => ( q => ( p '&' q ))) in HP_TAUT by Th15;
+       (r => ( p => ( q => ( p '&' q )))) =>
+     (( r => p ) => ( r => ( q => ( p '&' q )))) in HP_TAUT by Def10;
+  then A2: ( r => p ) => ( r => ( q => ( p '&' q ))) in HP_TAUT by A1,Def10;
+       ( r => ( q => ( p '&' q ))) => (( r => q ) => ( r => ( p '&' q )))
+     in HP_TAUT by Def10;
+     hence thesis by A2,Th23;
+end;
+
+theorem Th36:
+  ( (p => q) '&' p ) => q in HP_TAUT
+proof
+  set P = p => q;
+A1:( P => P ) => (( P '&' p ) => q ) in HP_TAUT by Th34;
+    P => P in HP_TAUT by Th14;
+  hence thesis by A1,Def10;
+end;
+
+theorem
+    (( (p => q) '&' p ) '&' s ) => q in HP_TAUT
+proof
+  set P = (p => q) '&' p;
+A1:(P '&' s) => P in HP_TAUT by Def10;
+    P => q in HP_TAUT by Th36;
+  hence thesis by A1,Th23;
+end;
+
+theorem
+    (q => s) => (( p '&' q ) => s) in HP_TAUT
+proof
+  set P = p '&' q;
+A1:(P => q) => ((q => s) => (P => s)) in HP_TAUT by Th21;
+    P => q in HP_TAUT by Def10;
+  hence thesis by A1,Def10;
+end;
+
+theorem Th39:
+  (q => s) => (( q '&' p ) => s) in HP_TAUT
+proof
+  set P = q '&' p;
+A1:(P => q) => ((q => s) => (P => s)) in HP_TAUT by Th21;
+    P => q in HP_TAUT by Def10;
+  hence thesis by A1,Def10;
+end;
+
+theorem Th40:
+  ( (p '&' s) => q ) => ((p '&' s) => (q '&' s)) in HP_TAUT
+proof
+  set P = p '&' s;
+A1:P => s in HP_TAUT by Def10;
+    ( P => q ) => (( P => s ) => ( P => ( q '&' s ))) in HP_TAUT by Th35;
+  hence thesis by A1,Th29;
+end;
+
+theorem Th41:
+  ( p => q ) => ((p '&' s) => (q '&' s)) in HP_TAUT
+proof
+A1:(p => q) => (( p '&' s ) => q) in HP_TAUT by Th39;
+    ( (p '&' s) => q ) => ((p '&' s) => (q '&' s)) in HP_TAUT by Th40;
+  hence thesis by A1,Th23;
+end;
+
+theorem Th42:
+  ( p => q ) '&' ( p '&' s ) => ( q '&' s ) in HP_TAUT
+proof
+  set P = p => q, Q = p '&' s, S = q '&' s;
+A1:( P => ( Q => S )) => (( P '&' Q ) => S ) in HP_TAUT by Th34;
+    P => (Q => S) in HP_TAUT by Th41;
+  hence thesis by A1,Def10;
+end;
+
+theorem Th43:
+  ( p '&' q ) => ( q '&' p ) in HP_TAUT
+proof
+  set P = p '&' q;
+A1:( P => q ) => (( P => p ) => ( P => ( q '&' p ))) in HP_TAUT by Th35;
+    P => q in HP_TAUT by Def10;
+then A2:( P => p ) => ( P => ( q '&' p )) in HP_TAUT by A1,Def10;
+    P => p in HP_TAUT by Def10;
+  hence thesis by A2,Def10;
+end;
+
+theorem Th44:
+  ( p => q ) '&' ( p '&' s ) => ( s '&' q ) in HP_TAUT
+proof
+A1:( p => q ) '&' ( p '&' s ) => ( q '&' s ) in HP_TAUT by Th42;
+    ( q '&' s ) => ( s '&' q ) in HP_TAUT by Th43;
+  hence thesis by A1,Th23;
+end;
+
+theorem Th45:
+  ( p => q ) => (( p '&' s ) => ( s '&' q )) in HP_TAUT
+proof
+  set P = p => q, Q = p '&' s, S = s '&' q;
+A1:(( P '&' Q ) => S ) => ( P => ( Q => S )) in HP_TAUT by Th33;
+    P '&' Q => S in HP_TAUT by Th44;
+  hence thesis by A1,Def10;
+end;
+
+theorem Th46:
+  ( p => q ) => (( s '&' p ) => ( s '&' q )) in HP_TAUT
+proof
+  set P = p => q, Q = p '&' s, S = s '&' q, T = s '&' p;
+A1:(P => (Q => S)) => ((T => Q) => (P => (T => S))) in HP_TAUT by Th24;
+    P => (Q => S) in HP_TAUT by Th45;
+then A2:(T => Q) => (P => (T => S)) in HP_TAUT by A1,Def10;
+    T => Q in HP_TAUT by Th43;
+  hence thesis by A2,Def10;
+end;
+
+theorem
+    ( p '&' (s '&' q) ) => ( p '&' (q '&' s) ) in HP_TAUT
+proof
+  set P = s '&' q, Q = q '&' s;
+A1:( P => Q ) => (( p '&' P ) => ( p '&' Q )) in HP_TAUT by Th46;
+    P => Q in HP_TAUT by Th43;
+  hence thesis by A1,Def10;
+end;
+
+theorem
+    ( ( p => q ) '&' (p => s) ) => ( p => (q '&' s) ) in HP_TAUT
+proof
+  set P = p => q, Q = p => s, S = p => (q '&' s);
+A1:( P => ( Q => S )) => (( P '&' Q ) => S ) in HP_TAUT by Th34;
+    P => (Q => S) in HP_TAUT by Th35;
+  hence thesis by A1,Def10;
+end;
+
+Lm5:
+  ( (p '&' q) '&' s ) => q in HP_TAUT
+proof
+A1:((p '&' q) '&' s) => (p '&' q) in HP_TAUT by Def10;
+    (p '&' q) => q in HP_TAUT by Def10;
+  hence thesis by A1,Th23;
+end;
+
+Lm6:
+  ( (p '&' q) '&' s ) '&' ( (p '&' q) '&' s ) => ( (p '&' q) '&' s ) '&' q
+     in HP_TAUT
+proof
+  set P = (p '&' q) '&' s;
+A1:( P => q ) => (( P '&' P ) => ( P '&' q )) in HP_TAUT by Th46;
+    P => q in HP_TAUT by Lm5;
+  hence thesis by A1,Def10;
+end;
+
+Lm7:
+  (p '&' q) '&' s => ((p '&' q) '&' s) '&' q in HP_TAUT
+proof
+A1:( (p '&' q) '&' s ) => ( (p '&' q) '&' s ) '&' ( (p '&' q) '&' s )
+    in HP_TAUT by Th30;
+    ( (p '&' q) '&' s ) '&' ( (p '&' q) '&' s ) => ( (p '&' q) '&' s ) '&' q
+     in HP_TAUT by Lm6;
+  hence thesis by A1,Th23;
+end;
+
+Lm8:
+  (p '&' q) '&' s => (p '&' s) in HP_TAUT
+proof
+  set P = p '&' q;
+A1:( P => p ) => ((P '&' s) => (p '&' s)) in HP_TAUT by Th41;
+    P => p in HP_TAUT by Def10;
+  hence thesis by A1,Def10;
+end;
+
+Lm9:
+  (p '&' q) '&' s '&' q => (p '&' s) '&' q in HP_TAUT
+proof
+  set P = p '&' q '&' s, Q = p '&' s;
+A1:( P => Q ) => ((P '&' q) => (Q '&' q)) in HP_TAUT by Th41;
+    P => Q in HP_TAUT by Lm8;
+  hence thesis by A1,Def10;
+end;
+
+Lm10:
+  (p '&' q) '&' s => (p '&' s) '&' q in HP_TAUT
+proof
+A1:(p '&' q) '&' s => ((p '&' q) '&' s) '&' q in HP_TAUT by Lm7;
+    (p '&' q) '&' s '&' q => (p '&' s) '&' q in HP_TAUT by Lm9;
+  hence thesis by A1,Th23;
+end;
+
+Lm11:
+  (p '&' s) '&' q => (s '&' p) '&' q in HP_TAUT
+proof
+  set P = p '&' s, Q = s '&' p;
+A1:( P => Q ) => ((P '&' q) => (Q '&' q)) in HP_TAUT by Th41;
+    P => Q in HP_TAUT by Th43;
+  hence thesis by A1,Def10;
+end;
+
+Lm12:
+  (p '&' q) '&' s => (s '&' p) '&' q in HP_TAUT
+proof
+A1:(p '&' q) '&' s => (p '&' s) '&' q in HP_TAUT by Lm10;
+    (p '&' s) '&' q => (s '&' p) '&' q in HP_TAUT by Lm11;
+  hence thesis by A1,Th23;
+end;
+
+Lm13:
+  (p '&' q) '&' s => (s '&' q) '&' p in HP_TAUT
+proof
+A1:(p '&' q) '&' s => (s '&' p) '&' q in HP_TAUT by Lm12;
+    (s '&' p) '&' q => (s '&' q) '&' p in HP_TAUT by Lm10;
+  hence thesis by A1,Th23;
+end;
+
+Lm14:
+  (p '&' q) '&' s => p '&' (s '&' q) in HP_TAUT
+proof
+A1:(p '&' q) '&' s => (s '&' q) '&' p in HP_TAUT by Lm13;
+    (s '&' q) '&' p => p '&' (s '&' q) in HP_TAUT by Th43;
+  hence thesis by A1,Th23;
+end;
+
+Lm15:
+  p '&' (s '&' q) => p '&' (q '&' s) in HP_TAUT
+proof
+  set P = s '&' q, Q = q '&' s;
+A1:( P => Q ) => (( p '&' P ) => ( p '&' Q )) in HP_TAUT by Th46;
+    s '&' q => q '&' s in HP_TAUT by Th43;
+  hence thesis by A1,Def10;
+end;
+
+theorem
+    (p '&' q) '&' s => p '&' (q '&' s) in HP_TAUT
+proof
+A1:(p '&' q) '&' s => p '&' (s '&' q) in HP_TAUT by Lm14;
+    p '&' (s '&' q) => p '&' (q '&' s) in HP_TAUT by Lm15;
+  hence thesis by A1,Th23;
+end;
+
+Lm16:
+  p '&' (q '&' s) => (s '&' q) '&' p in HP_TAUT
+proof
+A1:p '&' (q '&' s) => p '&' (s '&' q) in HP_TAUT by Lm15;
+    p '&' (s '&' q) => (s '&' q) '&' p in HP_TAUT by Th43;
+  hence thesis by A1,Th23;
+end;
+
+Lm17:
+  (s '&' q) '&' p => (q '&' s) '&' p in HP_TAUT
+proof
+  set P = s '&' q, Q = q '&' s;
+A1:( P => Q ) => ((P '&' p) => (Q '&' p)) in HP_TAUT by Th41;
+    s '&' q => q '&' s in HP_TAUT by Th43;
+  hence thesis by A1,Def10;
+end;
+
+Lm18:
+  p '&' (q '&' s) => (q '&' s) '&' p in HP_TAUT
+proof
+A1:p '&' (q '&' s) => (s '&' q) '&' p in HP_TAUT by Lm16;
+    (s '&' q) '&' p => (q '&' s) '&' p in HP_TAUT by Lm17;
+  hence thesis by A1,Th23;
+end;
+
+Lm19:
+  p '&' (q '&' s) => (p '&' s) '&' q in HP_TAUT
+proof
+A1:p '&' (q '&' s) => (q '&' s) '&' p in HP_TAUT by Lm18;
+    (q '&' s) '&' p => (p '&' s) '&' q in HP_TAUT by Lm13;
+  hence thesis by A1,Th23;
+end;
+
+Lm20:
+  p '&' (q '&' s) => p '&' (s '&' q) in HP_TAUT
+proof
+  set P = q '&' s, Q = s '&' q;
+A1:( P => Q ) => (( p '&' P ) => ( p '&' Q )) in HP_TAUT by Th46;
+    q '&' s => s '&' q in HP_TAUT by Th43;
+  hence thesis by A1,Def10;
+end;
+
+theorem
+    p '&' (q '&' s) => (p '&' q) '&' s in HP_TAUT
+proof
+A1:p '&' (q '&' s) => p '&' (s '&' q) in HP_TAUT by Lm20;
+    p '&' (s '&' q) => (p '&' q) '&' s in HP_TAUT by Lm19;
+  hence thesis by A1,Th23;
+end;
+
+
+
+
+
+
+
+

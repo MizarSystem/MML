@@ -1,0 +1,250 @@
+:: Totally Bounded Metric Spaces
+::  by Alicia de la Cruz
+::
+:: Received September 30, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary METRIC_1, SETFAM_1, RELAT_2, FUNCT_1, POWER, SEQ_1, SEQ_2,
+      ORDINAL2, ABSVALUE, ARYTM_1, FINSET_1, TARSKI, NORMSP_1, RELAT_1,
+      ARYTM_3, BHSP_3, ALI2, PRE_TOPC, PCOMPS_1, COMPTS_1, BOOLE, SUBSET_1,
+      LATTICES, FINSEQ_1, TBSP_1, HAHNBAN, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XREAL_0, REAL_1, NAT_1, RELAT_1,
+      ORDINAL1, FUNCT_1, FINSEQ_1, DOMAIN_1, SETFAM_1, FUNCT_2, FINSET_1,
+      STRUCT_0, PRE_TOPC, TOPS_2, ABSVALUE, SEQ_1, SEQ_2, COMPTS_1, METRIC_1,
+      POWER, PCOMPS_1, ALI2, NORMSP_1;
+ constructors REAL_1, NAT_1, DOMAIN_1, TOPS_2, ABSVALUE, SEQ_2, COMPTS_1,
+      POWER, PCOMPS_1, ALI2, NORMSP_1, MEMBERED, XBOOLE_0;
+ clusters FINSET_1, PRE_TOPC, PCOMPS_1, STRUCT_0, XREAL_0, FINSEQ_1, METRIC_1,
+      RELSET_1, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+ reserve M for non empty MetrSpace,
+         c,g1,g2 for Element of M;
+ reserve N for non empty MetrStruct,
+         w for Element of N,
+         G for Subset-Family of N,
+         C for Subset of N;
+ reserve R for Reflexive (non empty MetrStruct);
+ reserve T for Reflexive symmetric triangle (non empty MetrStruct),
+         t1 for Element of T,
+         Y for Subset-Family of T,
+         P for Subset of T;
+ reserve f for Function,
+         n,m,p,n1,n2,k for Nat,
+         r,s,L for Real,
+         x,y for set;
+
+theorem :: TBSP_1:1
+for L st 0<L & L<1 holds for n,m st n<=m holds L to_power m <= L to_power n;
+
+theorem :: TBSP_1:2
+for L st 0<L & L<1 holds for k holds L to_power k <= 1 & 0 < L to_power k;
+
+theorem :: TBSP_1:3
+for L st 0<L & L<1 holds for s st 0<s ex n st L to_power n<s;
+
+definition let N;
+attr N is totally_bounded means
+:: TBSP_1:def 1
+for r st r>0 ex G st G is finite & the carrier of N = union G &
+                     for C st C in G ex w st C = Ball(w,r);
+end;
+
+definition let N;
+ redefine mode sequence of N -> Function means
+:: TBSP_1:def 2
+  dom it = NAT & rng it c= the carrier of N;
+end;
+
+ reserve S1 for sequence of M,
+         S2 for sequence of N;
+
+canceled;
+
+theorem :: TBSP_1:5
+  f is sequence of N iff
+  dom f = NAT & for n holds f.n is Element of N;
+
+definition let N,S2;
+attr S2 is convergent means
+:: TBSP_1:def 3
+ ex x being Element of N st
+      for r st r>0 ex n st for m st n<=m holds dist(S2.m,x)<r;
+end;
+
+definition let M,S1;
+  assume S1 is convergent;
+  func lim S1 -> Element of M means
+:: TBSP_1:def 4
+    for r st r>0 ex n st for m st m>=n holds dist(S1.m,it)<r;
+end;
+
+definition let N,S2;
+  attr S2 is Cauchy means
+:: TBSP_1:def 5
+  for r st r>0 ex p st for n,m st p<=n & p<=m holds dist(S2.n,S2.m)<r;
+end;
+
+definition let N;
+  attr N is complete means
+:: TBSP_1:def 6
+  for S2 st S2 is Cauchy holds S2 is convergent;
+end;
+
+canceled;
+
+theorem :: TBSP_1:7
+ N is triangle symmetric & S2 is convergent implies S2 is Cauchy;
+
+definition let M be triangle symmetric (non empty MetrStruct);
+  cluster convergent -> Cauchy sequence of M;
+end;
+
+theorem :: TBSP_1:8
+  N is symmetric implies
+  (S2 is Cauchy iff
+         for r st r>0 ex p st for n,k st p<=n holds dist(S2.(n+k),S2.n)<r);
+
+theorem :: TBSP_1:9
+for f being contraction of M st M is complete
+  ex c st f.c = c & for y being Element of M st f.y=y holds y=c;
+
+theorem :: TBSP_1:10
+   TopSpaceMetr(T) is compact implies T is complete;
+
+canceled;
+
+theorem :: TBSP_1:12
+   N is Reflexive triangle & TopSpaceMetr(N) is compact implies
+  N is totally_bounded;
+
+definition let N;
+ canceled;
+
+  attr N is bounded means
+:: TBSP_1:def 8
+    ex r st 0<r & for x,y being Point of N holds dist(x,y)<=r;
+
+  let C be Subset of N;
+  attr C is bounded means
+:: TBSP_1:def 9
+    ex r st 0<r & for x,y being Point of N st
+     x in C & y in C holds dist(x,y)<=r;
+end;
+
+definition let A be non empty set;
+ cluster DiscreteSpace(A) -> bounded;
+end;
+
+definition
+ cluster bounded (non empty MetrSpace);
+end;
+
+canceled;
+
+theorem :: TBSP_1:14
+ {}N is bounded;
+
+theorem :: TBSP_1:15
+for C being Subset of N holds
+( C <> {} & C is bounded implies
+  ex r,w st 0<r & w in C &
+  for z being Point of N st z in C holds dist(w,z)<=r ) &
+  (N is symmetric triangle &
+   (ex r,w st 0<r & w in C &
+   for z being Point of N st z in C holds dist(w,z)<=r)
+  implies C is bounded);
+
+theorem :: TBSP_1:16
+ N is Reflexive & 0<r implies w in Ball(w,r) & Ball(w,r) <> {};
+
+theorem :: TBSP_1:17
+ r<=0 implies Ball(t1,r) = {};
+
+canceled;
+
+theorem :: TBSP_1:19
+ Ball(t1,r) is bounded;
+
+theorem :: TBSP_1:20
+ for P, Q being Subset of T holds
+P is bounded & Q is bounded implies P \/ Q is bounded;
+
+theorem :: TBSP_1:21
+ for C, D being Subset of N holds
+ C is bounded & D c= C implies D is bounded;
+
+theorem :: TBSP_1:22
+ for P being Subset of T holds P = {t1} implies P is bounded;
+
+theorem :: TBSP_1:23
+for P being Subset of T holds P is finite implies P is bounded;
+
+definition let T;
+ cluster finite -> bounded Subset of T;
+end;
+
+definition let T;
+ cluster finite non empty Subset of T;
+end;
+
+theorem :: TBSP_1:24
+Y is finite & (for P being Subset of T st P in Y holds P is bounded) implies
+ union Y is bounded;
+
+theorem :: TBSP_1:25
+ N is bounded iff [#]N is bounded;
+
+definition let N be bounded (non empty MetrStruct);
+ cluster [#]N -> bounded;
+end;
+
+theorem :: TBSP_1:26
+T is totally_bounded implies T is bounded;
+
+definition let N be Reflexive (non empty MetrStruct),
+               C be Subset of N;
+assume  C is bounded;
+func diameter C -> Real means
+:: TBSP_1:def 10
+(for x,y being Point of N st x in C & y in C holds dist(x,y)<=it) &
+for s st (for x,y being Point of N st x in C & y in C holds dist(x,y)<=s) holds
+ it<=s if C <> {}
+  otherwise it = 0;
+end;
+
+canceled;
+
+theorem :: TBSP_1:28
+  for P being Subset of T holds P = {x} implies diameter P = 0;
+
+theorem :: TBSP_1:29
+for S being Subset of R st S is bounded holds 0 <= diameter S;
+
+theorem :: TBSP_1:30
+  for A being Subset of M holds A <> {} & A is bounded & diameter A = 0 implies
+    ex g being Point of M st A = {g};
+
+theorem :: TBSP_1:31
+0<r implies diameter Ball(t1,r) <= 2*r;
+
+theorem :: TBSP_1:32
+  for S, V being Subset of R holds
+ S is bounded & V c= S implies diameter V <= diameter S;
+
+theorem :: TBSP_1:33
+   for P, Q being Subset of T holds
+ P is bounded & Q is bounded & P meets Q implies
+        diameter (P \/ Q) <= diameter P + diameter Q;
+
+definition let N,S2;
+ redefine func rng S2 -> Subset of N;
+end;
+
+theorem :: TBSP_1:34
+  for S1 being sequence of T holds S1 is Cauchy implies rng S1 is bounded;

@@ -1,0 +1,91 @@
+:: Hilbert Space of Real Sequences
+::  by Noboru Endou , Yasumasa Suzuki and Yasunari Shidama
+::
+:: Received April 3, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
+      RELAT_1, ABSVALUE, ORDINAL2, SQUARE_1, PROB_1, SEQ_1, SEQ_2, SEQM_3,
+      SERIES_1, PROB_2, BHSP_1, BHSP_3, SUPINF_2, RSSPACE;
+ notation TARSKI, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, XCMPLX_0, STRUCT_0,
+      XREAL_0, REAL_1, NAT_1, RELAT_1, PARTFUN1, FUNCT_1, FUNCT_2, PRE_TOPC,
+      RLVECT_1, ABSVALUE, NORMSP_1, BHSP_1, BHSP_2, BHSP_3, SQUARE_1, SEQ_1,
+      SEQ_2, SEQM_3, SERIES_1, RSSPACE;
+ constructors REAL_1, NAT_1, DOMAIN_1, SQUARE_1, SEQ_2, SERIES_1, PREPOWER,
+      PARTFUN1, RLSUB_1, BHSP_2, BHSP_3, RSSPACE, MEMBERED;
+ clusters RELSET_1, XREAL_0, STRUCT_0, SEQ_1, RSSPACE, MEMBERED, NUMBERS,
+      ORDINAL2;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: Hilbert Space of Real Sequences
+
+theorem :: RSSPACE2:1
+( the carrier of l2_Space = the_set_of_l2RealSequences) &
+(for x be set holds x is Element of l2_Space
+  iff x is Real_Sequence & seq_id(x)(#)seq_id(x) is summable) &
+(for x be set holds x is VECTOR of l2_Space
+  iff x is Real_Sequence & seq_id(x)(#)seq_id(x) is summable) &
+0.l2_Space = Zeroseq &
+(for u be VECTOR of l2_Space holds u =seq_id(u)) &
+(for u,v be VECTOR of l2_Space holds u+v =seq_id(u)+seq_id(v)) &
+(for r be Real for u be VECTOR of l2_Space holds r*u =r(#)seq_id(u)) &
+(for u be VECTOR of l2_Space holds -u =-seq_id(u) & seq_id(-u)=-seq_id(u)) &
+(for u,v be VECTOR of l2_Space holds u-v =seq_id(u)-seq_id(v)) &
+ for v,w be VECTOR of l2_Space holds seq_id(v)(#)seq_id(w) is summable &
+ for v,w be VECTOR of l2_Space holds v.|.w = Sum(seq_id(v)(#)seq_id(w));
+
+theorem :: RSSPACE2:2
+for x, y, z being Point of l2_Space for a be Real holds
+    ( x .|. x = 0 iff x = 0.l2_Space ) &
+    0 <= x .|. x &
+    x .|. y = y .|. x &
+    (x+y) .|. z = x .|. z + y .|. z &
+    (a*x) .|. y = a * ( x .|. y );
+
+definition
+  cluster l2_Space -> RealUnitarySpace-like;
+end;
+
+theorem :: RSSPACE2:3
+ for vseq be sequence of l2_Space st vseq is_Cauchy_sequence holds
+ vseq is convergent;
+
+definition
+  cluster l2_Space -> Hilbert complete;
+end;
+
+begin  :: Miscellaneous
+
+theorem :: RSSPACE2:4
+  for rseq be Real_Sequence st
+ ((for n be Nat holds 0 <= rseq.n) & rseq is summable) holds
+  ( for n be Nat holds rseq.n <= (Partial_Sums rseq).n ) &
+  ( for n be Nat holds 0 <= (Partial_Sums rseq).n ) &
+  ( for n be Nat holds (Partial_Sums(rseq)).n <= Sum rseq ) &
+  ( for n be Nat holds rseq.n <= Sum(rseq) );
+
+theorem :: RSSPACE2:5
+  (for x,y be Real holds (x+y)*(x+y) <= 2*x*x + 2*y*y) &
+(for x,y be Real holds x*x <= 2*(x-y)*(x-y) + 2*y*y);
+
+theorem :: RSSPACE2:6
+  for e being Real, seq being Real_Sequence st
+ (seq is convergent &
+  ex k being Nat st (for i being Nat st k <= i holds seq.i <=e))
+   holds lim seq <=e;
+
+theorem :: RSSPACE2:7
+  for c being Real, seq being Real_Sequence st seq is convergent
+ for rseq be Real_Sequence st
+  (for i be Nat holds rseq.i = (seq.i-c)*(seq.i-c)) holds
+   rseq is convergent & lim rseq = (lim seq-c)*(lim seq-c);
+
+theorem :: RSSPACE2:8
+  for c being Real, seq,seq1 being Real_Sequence st
+ seq is convergent & seq1 is convergent
+  for rseq be Real_Sequence st
+  (for i be Nat holds rseq.i = (seq.i-c)*(seq.i-c)+seq1.i) holds
+   rseq is convergent & lim rseq = (lim seq-c)*(lim seq-c)+lim seq1;

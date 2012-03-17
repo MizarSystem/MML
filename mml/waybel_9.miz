@@ -1,0 +1,2551 @@
+:: On The Topological Properties of Meet-Continuous Lattices
+::  by Artur Korni{\l}owicz
+::
+:: Received December 20, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary ORDERS_1, FUNCT_1, SEQM_3, PRE_TOPC, WAYBEL_0, SETFAM_1, SUBSET_1,
+      TARSKI, RELAT_2, LATTICE3, LATTICES, RELAT_1, QUANTAL1, WELLORD1,
+      YELLOW_0, CAT_1, ORDINAL2, WAYBEL_2, YELLOW_2, FINSUB_1, WELLORD2,
+      YELLOW_1, YELLOW_6, BOOLE, PCOMPS_1, NATTRA_1, REALSET1, FINSET_1,
+      COMPTS_1, CONNSP_2, TOPS_1, SEQ_2, WAYBEL_7, MCART_1, WAYBEL_9;
+ notation TARSKI, XBOOLE_0, SUBSET_1, MCART_1, FINSUB_1, RELAT_1, RELSET_1,
+      RELAT_2, FUNCT_1, FINSET_1, SETFAM_1, TOLER_1, PARTFUN1, FUNCT_2,
+      STRUCT_0, PRE_TOPC, TOPS_1, TOPS_2, ORDERS_1, COMPTS_1, PCOMPS_1,
+      REALSET1, GROUP_1, CONNSP_2, LATTICE3, ORDERS_3, TDLAT_3, YELLOW_0,
+      WAYBEL_0, YELLOW_1, YELLOW_2, WAYBEL_1, GRCAT_1, YELLOW_4, WAYBEL_2,
+      YELLOW_6;
+ constructors FINSUB_1, TOPS_1, PCOMPS_1, CONNSP_2, ORDERS_3, WAYBEL_2,
+      YELLOW_4, WAYBEL_1, TOLER_1, TOPS_2, YELLOW_6, TDLAT_3, GROUP_1, GRCAT_1,
+      WAYBEL_3;
+ clusters STRUCT_0, LATTICE3, WAYBEL_0, YELLOW_6, FUNCT_1, PRE_TOPC, RELSET_1,
+      YELLOW_0, TDLAT_3, WAYBEL_2, YELLOW_4, FINSET_1, FINSUB_1, WAYBEL_3,
+      FUNCT_2, XBOOLE_0;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, YELLOW_6, ORDERS_1, WAYBEL_0, WAYBEL_1, YELLOW_0,
+      PRE_TOPC, WAYBEL_2, COMPTS_1, LATTICE3, TOPS_2, REALSET1, GROUP_1,
+      STRUCT_0, XBOOLE_0;
+ theorems BORSUK_1, COMPTS_1, CONNSP_2, FINSET_1, FUNCT_1, FUNCT_2, LATTICE3,
+      MCART_1, ORDERS_1, ORDERS_2, PCOMPS_1, PRE_TOPC, RELAT_1, SETFAM_1,
+      STRUCT_0, TARSKI, TMAP_1, TOPMETR, TOPS_1, TOPS_2, WAYBEL_0, WAYBEL_1,
+      WAYBEL_2, WELLORD1, YELLOW_0, YELLOW_1, YELLOW_2, YELLOW_4, YELLOW_6,
+      YELLOW_7, ZFMISC_1, RELSET_1, TDLAT_3, WAYBEL_8, GRCAT_1, XBOOLE_0,
+      XBOOLE_1, RELAT_2;
+ schemes SUPINF_2, YELLOW_0, FUNCT_2, XBOOLE_0;
+
+begin :: Preliminaries
+
+::-------------------------------------------------------------------
+:: Acknowledgements:
+:: =================
+::
+:: I would like to thank Professor A. Trybulec for his help in the preparation
+:: of the article.
+::-------------------------------------------------------------------
+
+definition let L be non empty RelStr;
+ cluster id L -> monotone;
+coherence by YELLOW_2:13;
+end;
+
+definition let S, T be non empty RelStr,
+               f be map of S,T;
+ redefine attr f is antitone means :Def1:
+  for x, y being Element of S st x <= y holds f.x >= f.y;
+compatibility
+  proof
+    thus f is antitone implies
+      for x, y being Element of S st x <= y holds f.x >=
+ f.y by WAYBEL_0:def 5;
+    assume for x, y being Element of S st x <= y holds f.x >= f.y;
+    hence for x, y being Element of S st x <= y
+      for a, b being Element of T st a = f.x & b = f.y holds a >= b;
+  end;
+end;
+
+theorem Th1:
+for S, T being RelStr, K, L being non empty RelStr
+ for f being map of S, T, g being map of K, L
+  st the RelStr of S = the RelStr of K & the RelStr of T = the RelStr of L &
+   f = g & f is monotone
+ holds g is monotone
+  proof
+    let S, T be RelStr,
+        K, L be non empty RelStr,
+        f be map of S, T,
+        g be map of K, L such that
+A1:   the RelStr of S = the RelStr of K and
+A2:   the RelStr of T = the RelStr of L and
+A3:   f = g and
+A4:   f is monotone;
+    reconsider S1 = S, T1 = T as non empty RelStr by A1,A2,STRUCT_0:def 1;
+    reconsider f1 = f as map of S1, T1;
+    let x, y be Element of K such that
+A5:   x <= y;
+    reconsider x1 = x, y1 = y as Element of S1 by A1;
+      x1 <= y1 by A1,A5,YELLOW_0:1;
+    then f1.x1 <= f1.y1 by A4,WAYBEL_1:def 2;
+    hence g.x <= g.y by A2,A3,YELLOW_0:1;
+  end;
+
+theorem Th2:
+for S, T being RelStr, K, L being non empty RelStr
+ for f being map of S, T, g being map of K, L
+  st the RelStr of S = the RelStr of K & the RelStr of T = the RelStr of L &
+   f = g & f is antitone
+ holds g is antitone
+  proof
+    let S, T be RelStr,
+        K, L be non empty RelStr,
+        f be map of S, T,
+        g be map of K, L such that
+A1:   the RelStr of S = the RelStr of K and
+A2:   the RelStr of T = the RelStr of L and
+A3:   f = g and
+A4:   f is antitone;
+    reconsider S1 = S, T1 = T as non empty RelStr by A1,A2,STRUCT_0:def 1;
+    reconsider f1 = f as map of S1, T1;
+    let x, y be Element of K such that
+A5:   x <= y;
+    reconsider x1 = x, y1 = y as Element of S1 by A1;
+      x1 <= y1 by A1,A5,YELLOW_0:1;
+    then f1.x1 >= f1.y1 by A4,Def1;
+    hence g.x >= g.y by A2,A3,YELLOW_0:1;
+  end;
+
+theorem Th3:
+for A, B being 1-sorted
+ for F being Subset-Family of A,
+     G being Subset-Family of B
+  st the carrier of A = the carrier of B & F = G & F is_a_cover_of A
+ holds G is_a_cover_of B
+  proof
+    let A, B be 1-sorted,
+        F be Subset-Family of A,
+        G be Subset-Family of B such that
+A1:   the carrier of A = the carrier of B and
+A2:   F = G and
+A3:   F is_a_cover_of A;
+    thus [#]B = the carrier of B by PRE_TOPC:12
+           .= [#]A by A1,PRE_TOPC:12
+           .= union G by A2,A3,PRE_TOPC:def 8;
+  end;
+
+Lm1:
+for L being antisymmetric reflexive with_infima RelStr, x being Element of L
+ holds uparrow x = {z where z is Element of L : z "/\" x = x}
+  proof
+    let L be antisymmetric reflexive with_infima RelStr,
+        x be Element of L;
+    thus uparrow x c= {z where z is Element of L : z "/\" x = x}
+    proof
+      let q be set; assume
+A1:     q in uparrow x;
+      then reconsider q1 = q as Element of L;
+        x <= q1 by A1,WAYBEL_0:18;
+      then q1 "/\" x = x by YELLOW_0:25;
+      hence q in {z where z is Element of L : z "/\" x = x};
+    end;
+    let q be set;
+    assume q in {z where z is Element of L : z "/\" x = x};
+    then consider z being Element of L such that
+A2:   q = z and
+A3:   z "/\" x = x;
+      x <= z by A3,YELLOW_0:25;
+    hence q in uparrow x by A2,WAYBEL_0:18;
+  end;
+
+theorem Th4:
+for L being antisymmetric reflexive with_suprema RelStr, x being Element of L
+ holds uparrow x = {x} "\/" [#]L
+  proof
+    let L be antisymmetric reflexive with_suprema RelStr,
+        x be Element of L;
+A1: {x} "\/" [#]L = {x "\/" s where s is Element of L : s in [#]
+L} by YELLOW_4:15;
+A2: [#]L = the carrier of L by PRE_TOPC:12;
+    thus uparrow x c= {x} "\/" [#]L
+    proof
+      let q be set; assume
+A3:     q in uparrow x;
+      then reconsider q1 = q as Element of L;
+        x <= q1 by A3,WAYBEL_0:18;
+      then x "\/" q1 = q1 by YELLOW_0:24;
+      hence q in {x} "\/" [#]L by A1,A2;
+    end;
+    let q be set;
+    assume q in {x} "\/" [#]L;
+    then consider z being Element of L such that
+A4:   q = x "\/" z and z in [#]L by A1;
+      x <= x "\/" z by YELLOW_0:22;
+    hence q in uparrow x by A4,WAYBEL_0:18;
+  end;
+
+Lm2:
+for L being antisymmetric reflexive with_suprema RelStr, x being Element of L
+ holds downarrow x = {z where z is Element of L : z "\/" x = x}
+  proof
+    let L be antisymmetric reflexive with_suprema RelStr,
+        x be Element of L;
+    thus downarrow x c= {z where z is Element of L : z "\/" x = x}
+    proof
+      let q be set; assume
+A1:     q in downarrow x;
+      then reconsider q1 = q as Element of L;
+        x >= q1 by A1,WAYBEL_0:17;
+      then q1 "\/" x = x by YELLOW_0:24;
+      hence q in {z where z is Element of L : z "\/" x = x};
+    end;
+    let q be set;
+    assume q in {z where z is Element of L : z "\/" x = x};
+    then consider z being Element of L such that
+A2:   q = z and
+A3:   z "\/" x = x;
+      x >= z by A3,YELLOW_0:24;
+    hence q in downarrow x by A2,WAYBEL_0:17;
+  end;
+
+theorem Th5:
+for L being antisymmetric reflexive with_infima RelStr, x being Element of L
+ holds downarrow x = {x} "/\" [#]L
+  proof
+    let L be antisymmetric reflexive with_infima RelStr,
+        x be Element of L;
+A1: {x} "/\" [#]L = {x "/\" s where s is Element of L : s in [#]
+L} by YELLOW_4:42;
+A2: [#]L = the carrier of L by PRE_TOPC:12;
+    thus downarrow x c= {x} "/\" [#]L
+    proof
+      let q be set; assume
+A3:     q in downarrow x;
+      then reconsider q1 = q as Element of L;
+        x >= q1 by A3,WAYBEL_0:17;
+      then x "/\" q1 = q1 by YELLOW_0:25;
+      hence q in {x} "/\" [#]L by A1,A2;
+    end;
+    let q be set;
+    assume q in {x} "/\" [#]L;
+    then consider z being Element of L such that
+A4:   q = x "/\" z and z in [#]L by A1;
+      x "/\" z <= x by YELLOW_0:23;
+    hence q in downarrow x by A4,WAYBEL_0:17;
+  end;
+
+theorem
+  for L being antisymmetric reflexive with_infima RelStr, y being Element of L
+ holds (y"/\").:(uparrow y) = {y}
+  proof
+    let L be antisymmetric reflexive with_infima RelStr,
+        y be Element of L;
+    thus (y"/\").:(uparrow y) c= {y}
+    proof
+      let q be set;
+      assume q in (y"/\").:(uparrow y);
+      then consider a being set such that
+          a in dom (y"/\") and
+A1:     a in uparrow y and
+A2:     q = (y"/\").a by FUNCT_1:def 12;
+      reconsider a as Element of L by A1;
+A3:   y <= a by A1,WAYBEL_0:18;
+        q = y "/\" a by A2,WAYBEL_1:def 18
+       .= y by A3,YELLOW_0:25;
+      hence q in {y} by TARSKI:def 1;
+    end;
+    let q be set;
+    assume q in {y};
+then A4: q = y by TARSKI:def 1;
+A5: dom (y"/\") = the carrier of L by FUNCT_2:def 1;
+      y <= y;
+then A6: y in uparrow y by WAYBEL_0:18;
+      y = y "/\" y by YELLOW_0:25
+     .= (y"/\").y by WAYBEL_1:def 18;
+    hence q in (y"/\").:(uparrow y) by A4,A5,A6,FUNCT_1:def 12;
+  end;
+
+theorem Th7:
+for L being antisymmetric reflexive with_infima RelStr, x being Element of L
+ holds (x"/\")"{x} = uparrow x
+  proof
+    let L be antisymmetric reflexive with_infima RelStr,
+        x be Element of L;
+    thus (x"/\")"{x} c= uparrow x
+    proof
+      let q be set; assume
+A1:     q in (x"/\")"{x};
+      then reconsider q1 = q as Element of L;
+A2:   (x"/\").q1 in {x} by A1,FUNCT_1:def 13;
+        x "/\" q1 = (x"/\").q1 by WAYBEL_1:def 18
+             .= x by A2,TARSKI:def 1;
+      then x <= q1 by YELLOW_0:25;
+      hence q in uparrow x by WAYBEL_0:18;
+    end;
+    let q be set; assume
+A3:   q in uparrow x;
+    then reconsider q1 = q as Element of L;
+A4: dom (x"/\") = the carrier of L by FUNCT_2:def 1;
+A5: x <= q1 by A3,WAYBEL_0:18;
+      (x"/\").q1 = x "/\" q1 by WAYBEL_1:def 18
+            .= x by A5,YELLOW_0:25;
+    then (x"/\").q1 in {x} by TARSKI:def 1;
+    hence q in (x"/\")"{x} by A4,FUNCT_1:def 13;
+  end;
+
+theorem Th8:
+for T being non empty 1-sorted, N being non empty NetStr over T
+ holds N is_eventually_in rng the mapping of N
+  proof
+    let T be non empty 1-sorted,
+        N be non empty NetStr over T;
+    consider i being Element of N;
+    take i;
+    let j be Element of N such that i <= j;
+      N.j = (the mapping of N).j by WAYBEL_0:def 8;
+    hence N.j in rng the mapping of N by FUNCT_2:6;
+  end;
+
+:: cf WAYBEL_2:19
+Lm3:
+for L being non empty reflexive transitive RelStr
+ for D being non empty directed Subset of L
+  for n being Function of D, the carrier of L holds
+ NetStr (#D,(the InternalRel of L)|_2 D,n#) is net of L
+  proof
+    let L be non empty reflexive transitive RelStr,
+        D be non empty directed Subset of L,
+        n be Function of D, the carrier of L;
+    set N = NetStr (#D,(the InternalRel of L)|_2 D,n#);
+      N is SubRelStr of L
+    proof
+      thus the carrier of N c= the carrier of L;
+      thus the InternalRel of N c= the InternalRel of L by WELLORD1:15;
+    end;
+    then reconsider N as SubRelStr of L;
+      N is full
+    proof
+     thus the InternalRel of N = (the InternalRel of L)|_2 the carrier of N;
+    end;
+    then reconsider N as full SubRelStr of L;
+      N is directed
+    proof
+      let x, y be Element of N;
+      assume x in [#]N & y in [#]N;
+      reconsider x1 = x, y1 = y as Element of D;
+      consider z1 being Element of L such that
+A1:     z1 in D & x1 <= z1 & y1 <= z1 by WAYBEL_0:def 1;
+      reconsider z = z1 as Element of N by A1;
+      take z;
+        D = [#]N by PRE_TOPC:12;
+      hence z in [#]N;
+      thus x <= z & y <= z by A1,YELLOW_0:61;
+    end;
+    then reconsider N as prenet of L;
+      N is transitive;
+    hence thesis;
+  end;
+
+definition let L be non empty reflexive RelStr,
+               D be non empty directed Subset of L,
+               n be Function of D, the carrier of L;
+ cluster NetStr (#D,(the InternalRel of L)|_2 D,n#) -> directed;
+coherence by WAYBEL_2:19;
+end;
+
+definition let L be non empty reflexive transitive RelStr,
+               D be non empty directed Subset of L,
+               n be Function of D, the carrier of L;
+ cluster NetStr (#D,(the InternalRel of L)|_2 D,n#) -> transitive;
+coherence by Lm3;
+end;
+
+:: cf WAYBEL_2:42
+theorem Th9:
+for L being non empty reflexive transitive RelStr st
+ for x being Element of L, N being net of L st N is eventually-directed
+  holds x "/\" sup N = sup ({x} "/\" rng netmap (N,L)) holds
+ L is satisfying_MC
+  proof
+    let L be non empty reflexive transitive RelStr such that
+A1:  for x being Element of L, N being net of L st N is eventually-directed
+      holds x "/\" sup N = sup ({x} "/\" rng netmap (N,L));
+    let x be Element of L,
+        D be non empty directed Subset of L;
+    reconsider n = id D as Function of D, the carrier of L by FUNCT_2:9;
+    set N = NetStr (#D,(the InternalRel of L)|_2 D,n#);
+      D c= D;
+then A2: D = n.:D by BORSUK_1:3
+     .= rng n by FUNCT_2:45
+     .= rng netmap (N,L) by WAYBEL_0:def 7;
+A3: N is eventually-directed by WAYBEL_2:20;
+A4: Sup netmap (N,L) = Sup the mapping of N by WAYBEL_0:def 7
+                    .= sup N by WAYBEL_2:def 1;
+    thus x "/\" sup D = x "/\" Sup netmap (N,L) by A2,YELLOW_2:def 5
+                   .= sup ({x} "/\" D) by A1,A2,A3,A4;
+  end;
+
+theorem Th10:
+for L being non empty RelStr, a being Element of L, N being net of L holds
+ a "/\" N is net of L
+  proof
+    let L be non empty RelStr,
+        a be Element of L,
+        N be net of L;
+    set aN = a "/\" N;
+      aN is transitive
+    proof
+      let x, y, z be Element of aN such that
+A1:     x <= y & y <= z;
+      reconsider x1 = x, y1 = y, z1 = z as Element of N by WAYBEL_2:22;
+A2:   the RelStr of N = the RelStr of aN by WAYBEL_2:def 3;
+      then x1 <= y1 & y1 <= z1 by A1,YELLOW_0:1;
+      then x1 <= z1 by YELLOW_0:def 2;
+      hence x <= z by A2,YELLOW_0:1;
+    end;
+    hence thesis;
+  end;
+
+definition let L be non empty RelStr,
+               x be Element of L,
+               N be net of L;
+ redefine func x "/\" N -> strict net of L;
+coherence by Th10;
+end;
+
+definition let L be non empty RelStr,
+               x be Element of L,
+               N be non empty reflexive NetStr over L;
+ cluster x "/\" N -> reflexive;
+coherence
+  proof
+      the RelStr of N = the RelStr of x "/\" N by WAYBEL_2:def 3;
+    then the InternalRel of x "/\" N is_reflexive_in the carrier of x "/\" N
+      by ORDERS_1:def 4;
+    hence thesis by ORDERS_1:def 4;
+  end;
+end;
+
+definition let L be non empty RelStr,
+               x be Element of L,
+               N be non empty antisymmetric NetStr over L;
+ cluster x "/\" N -> antisymmetric;
+coherence
+  proof
+      the RelStr of N = the RelStr of x "/\" N by WAYBEL_2:def 3;
+    then the InternalRel of x "/\" N is_antisymmetric_in the carrier of x "/\"
+N
+      by ORDERS_1:def 6;
+    hence thesis by ORDERS_1:def 6;
+  end;
+end;
+
+definition let L be non empty RelStr,
+               x be Element of L,
+               N be non empty transitive NetStr over L;
+ cluster x "/\" N -> transitive;
+coherence
+  proof
+      the RelStr of N = the RelStr of x "/\" N by WAYBEL_2:def 3;
+    then the InternalRel of x "/\" N is_transitive_in the carrier of x "/\" N
+      by ORDERS_1:def 5;
+    hence thesis by ORDERS_1:def 5;
+  end;
+end;
+
+definition let L be non empty RelStr,
+               J be set,
+               f be Function of J,the carrier of L;
+ cluster FinSups f -> transitive;
+coherence
+  proof
+    let x, y, z be Element of FinSups f such that
+A1:   x <= y & y <= z;
+    consider g being Function of Fin J, the carrier of L such that
+A2:  for x being Element of Fin J holds g.x = sup (f.:x) &
+      FinSups f = NetStr (# Fin J, RelIncl Fin J, g #) by WAYBEL_2:def 2;
+A3: InclPoset Fin J = RelStr(#Fin J, RelIncl Fin J#) by YELLOW_1:def 1;
+    then reconsider x1 = x, y1 = y, z1 = z as Element of InclPoset Fin J
+      by A2;
+      x1 <= y1 & y1 <= z1 by A1,A2,A3,YELLOW_0:1;
+    then x1 c= y1 & y1 c= z1 by YELLOW_1:3;
+    then x1 c= z1 by XBOOLE_1:1;
+    then x1 <= z1 by YELLOW_1:3;
+    hence x <= z by A2,A3,YELLOW_0:1;
+  end;
+end;
+
+
+begin :: The Operations Defined on Nets
+
+definition let L be non empty RelStr,
+               N be NetStr over L;
+ func inf N -> Element of L equals :Def2:
+   Inf the mapping of N;
+coherence;
+end;
+
+definition let L be RelStr,
+               N be NetStr over L;
+ pred ex_sup_of N means :Def3:
+  ex_sup_of rng the mapping of N,L;
+ pred ex_inf_of N means :Def4:
+  ex_inf_of rng the mapping of N,L;
+end;
+
+definition let L be RelStr;
+ func L+id -> strict NetStr over L means :Def5:
+  the RelStr of it = the RelStr of L &
+  the mapping of it = id L;
+existence
+  proof
+    take NetStr (#the carrier of L, the InternalRel of L, id L#);
+    thus thesis;
+  end;
+uniqueness;
+end;
+
+definition let L be non empty RelStr;
+ cluster L+id -> non empty;
+coherence
+  proof
+      the RelStr of L = the RelStr of L+id by Def5;
+    hence thesis by STRUCT_0:def 1;
+  end;
+end;
+
+definition let L be reflexive RelStr;
+ cluster L+id -> reflexive;
+coherence
+  proof
+      the RelStr of L = the RelStr of L+id by Def5;
+    then the InternalRel of L+id is_reflexive_in the carrier of L+id
+      by ORDERS_1:def 4;
+    hence thesis by ORDERS_1:def 4;
+  end;
+end;
+
+definition let L be antisymmetric RelStr;
+ cluster L+id -> antisymmetric;
+coherence
+  proof
+      the RelStr of L = the RelStr of L+id by Def5;
+    then the InternalRel of L+id is_antisymmetric_in the carrier of L+id
+      by ORDERS_1:def 6;
+    hence thesis by ORDERS_1:def 6;
+  end;
+end;
+
+definition let L be transitive RelStr;
+ cluster L+id -> transitive;
+coherence
+  proof
+      the RelStr of L = the RelStr of L+id by Def5;
+    then the InternalRel of L+id is_transitive_in the carrier of L+id
+      by ORDERS_1:def 5;
+    hence thesis by ORDERS_1:def 5;
+  end;
+end;
+
+definition let L be with_suprema RelStr;
+ cluster L+id -> directed;
+coherence
+  proof
+A1: the RelStr of L = the RelStr of L+id by Def5;
+      [#]L = the carrier of L by PRE_TOPC:12
+      .= [#](L+id) by A1,PRE_TOPC:12;
+    hence [#](L+id) is directed by A1,WAYBEL_0:3;
+  end;
+end;
+
+definition let L be directed RelStr;
+ cluster L+id -> directed;
+coherence
+  proof
+A1: [#]L is directed by WAYBEL_0:def 6;
+A2: the RelStr of L = the RelStr of L+id by Def5;
+      [#]L = the carrier of L by PRE_TOPC:12
+      .= [#](L+id) by A2,PRE_TOPC:12;
+    hence [#](L+id) is directed by A1,A2,WAYBEL_0:3;
+  end;
+end;
+
+definition let L be non empty RelStr;
+ cluster L+id -> monotone eventually-directed;
+coherence
+  proof
+    set N = L+id;
+    thus N is monotone
+    proof
+A1:   netmap(N,L)
+         = the mapping of N by WAYBEL_0:def 7
+        .= id L by Def5;
+    the RelStr of N = the RelStr of L by Def5;
+      hence netmap(L+id,L) is monotone by A1,Th1;
+    end;
+      for i being Element of N ex j being Element of N st
+     for k being Element of N st j <= k holds N.i <= N.k
+    proof
+      let i be Element of N;
+      take j = i;
+      let k be Element of N such that
+A2:     j <= k;
+A3:   the RelStr of N = the RelStr of L by Def5;
+        the mapping of N = id L by Def5;
+      then (the mapping of N).i = i & (the mapping of N).k = k by A3,TMAP_1:91
+;
+        then N.i = i & N.k = k by WAYBEL_0:def 8;
+      hence N.i <= N.k by A2,A3,YELLOW_0:1;
+    end;
+    hence thesis by WAYBEL_0:11;
+  end;
+end;
+
+definition let L be RelStr;
+ func L opp+id -> strict NetStr over L means :Def6:
+  the carrier of it = the carrier of L &
+  the InternalRel of it = (the InternalRel of L)~ &
+  the mapping of it = id L;
+existence
+  proof
+    take NetStr (#the carrier of L, (the InternalRel of L)~, id L#);
+    thus thesis;
+  end;
+uniqueness;
+end;
+
+theorem Th11:
+for L being RelStr holds the RelStr of L~ = the RelStr of L opp+id
+  proof
+    let L be RelStr;
+A1: L~ = RelStr (#the carrier of L, (the InternalRel of L)~#)
+ by LATTICE3:def 5;
+    then the InternalRel of L~
+      = the InternalRel of L opp+id by Def6;
+    hence the RelStr of L~ = the RelStr of L opp+id by A1,Def6;
+  end;
+
+definition let L be non empty RelStr;
+ cluster L opp+id -> non empty;
+coherence
+  proof
+      the RelStr of L~ = the RelStr of L opp+id by Th11;
+    hence thesis by STRUCT_0:def 1;
+  end;
+end;
+
+definition let L be reflexive RelStr;
+ cluster L opp+id -> reflexive;
+coherence
+  proof
+      the InternalRel of L is_reflexive_in the carrier of L by ORDERS_1:def 4;
+      then A1: (the InternalRel of L)~ is_reflexive_in the carrier of L by
+ORDERS_2:91;
+      the InternalRel of L opp+id = (the InternalRel of L)~ by Def6;
+    hence the InternalRel of L opp+id is_reflexive_in the carrier
+     of L opp+id by A1,Def6;
+  end;
+end;
+
+definition let L be antisymmetric RelStr;
+ cluster L opp+id -> antisymmetric;
+coherence
+  proof
+      the InternalRel of L is_antisymmetric_in the carrier of L
+      by ORDERS_1:def 6;
+then A1: (the InternalRel of L)~ is_antisymmetric_in the carrier of L
+      by ORDERS_2:93;
+      the InternalRel of L opp+id = (the InternalRel of L)~ by Def6;
+    then the InternalRel of L opp+id is_antisymmetric_in
+      the carrier of L opp+id by A1,Def6;
+    hence thesis by ORDERS_1:def 6;
+  end;
+end;
+
+definition let L be transitive RelStr;
+ cluster L opp+id -> transitive;
+coherence
+  proof
+      the InternalRel of L is_transitive_in the carrier of L
+      by ORDERS_1:def 5;
+then A1: (the InternalRel of L)~ is_transitive_in the carrier of L
+      by ORDERS_2:92;
+      the InternalRel of L opp+id = (the InternalRel of L)~ by Def6;
+    then the InternalRel of L opp+id is_transitive_in
+      the carrier of L opp+id by A1,Def6;
+    hence thesis by ORDERS_1:def 5;
+  end;
+end;
+
+definition let L be with_infima RelStr;
+ cluster L opp+id -> directed;
+coherence
+  proof
+A1: the RelStr of L~ = the RelStr of L opp+id by Th11;
+    reconsider A = L~ as with_suprema RelStr by YELLOW_7:16;
+      [#]A = the carrier of A by PRE_TOPC:12
+      .= the carrier of L by YELLOW_6:12
+      .= the carrier of L opp+id by Def6
+      .= [#](L opp+id) by PRE_TOPC:12;
+    hence [#](L opp+id) is directed by A1,WAYBEL_0:3;
+  end;
+end;
+
+definition let L be non empty RelStr;
+ cluster L opp+id -> antitone eventually-filtered;
+coherence
+  proof
+    set N = L opp+id;
+    thus N is antitone
+    proof
+A1:   netmap(N,L)
+         = the mapping of N by WAYBEL_0:def 7
+        .= id L by Def6;
+A2:   the RelStr of L opp+id = the RelStr of L~ by Th11;
+      reconsider f = id L as map of L~, L by YELLOW_7:39;
+      reconsider g = f as map of L, L~ by YELLOW_7:39;
+A3:   the RelStr of L = the RelStr of L;
+        g is antitone by YELLOW_7:40;
+      then f is antitone by YELLOW_7:41;
+      hence netmap(N,L) is antitone by A1,A2,A3,Th2;
+    end;
+      for i being Element of N ex j being Element of N st
+     for k being Element of N st j <= k holds N.i >= N.k
+    proof
+      let i be Element of N;
+      take j = i;
+      let k be Element of N such that
+A4:     j <= k;
+      reconsider i1 = i, k1 = k as Element of L
+        by Def6;
+A5:   (id L).i1 = i1 & (id L).k1 = k1 by TMAP_1:91;
+        the mapping of N = id L by Def6;
+then A6:   N.i = i & N.k = k by A5,WAYBEL_0:def 8;
+      A7: the InternalRel of N = (the InternalRel of L)~ by Def6;
+        [i,k] in the InternalRel of N by A4,ORDERS_1:def 9;
+      then [k,i] in (the InternalRel of N)~ by RELAT_1:def 7;
+      hence N.k <= N.i by A6,A7,ORDERS_1:def 9;
+    end;
+    hence thesis by WAYBEL_0:12;
+  end;
+end;
+
+definition let L be non empty 1-sorted,
+               N be non empty NetStr over L,
+               i be Element of N;
+ func N|i -> strict NetStr over L means :Def7:
+  (for x being set holds x in the carrier of it iff ex y being Element of N
+    st y = x & i <= y) &
+  the InternalRel of it = (the InternalRel of N)|_2 the carrier of it &
+  the mapping of it = (the mapping of N)|the carrier of it;
+existence
+  proof defpred P[set] means ex y being Element of N st y = $1 & i <= y;
+    consider X being set such that
+A1:   for x being set holds x in X iff x in the carrier of N & P[x]
+         from Separation;
+      X c= the carrier of N
+    proof
+      let x be set;
+      assume x in X;
+      hence x in the carrier of N by A1;
+    end;
+    then reconsider f = (the mapping of N)|X as Function of X, the carrier of L
+      by FUNCT_2:38;
+    set IT = NetStr (#X, (the InternalRel of N)|_2 X, f#);
+    take IT;
+    thus for x being set holds x in the carrier of IT iff
+      ex y being Element of N st y = x & i <= y by A1;
+    thus thesis;
+  end;
+uniqueness
+  proof
+    defpred P[set] means ex y being Element of N st y = $1 & i <= y;
+    let A, B be strict NetStr over L such that
+A2:  for x being set holds x in the carrier of A iff P[x] and
+A3: the InternalRel of A = (the InternalRel of N)|_2 the carrier of A and
+A4: the mapping of A = (the mapping of N)|the carrier of A and
+A5: for x being set holds x in the carrier of B iff P[x] and
+A6: the InternalRel of B = (the InternalRel of N)|_2 the carrier of B and
+A7: the mapping of B = (the mapping of N)|the carrier of B;
+      the carrier of A = the carrier of B from Extensionality(A2, A5);
+    hence thesis by A3,A4,A6,A7;
+  end;
+end;
+
+theorem
+  for L being non empty 1-sorted, N being non empty NetStr over L
+ for i being Element of N holds
+  the carrier of N|i = { y where y is Element of N : i <= y }
+  proof
+    let L be non empty 1-sorted,
+        N be non empty NetStr over L,
+        i be Element of N;
+    thus the carrier of N|i c= { y where y is Element of N : i <= y }
+    proof
+      let q be set;
+      assume q in the carrier of N|i;
+      then consider y being Element of N such that
+A1:     y = q & i <= y by Def7;
+      thus thesis by A1;
+    end;
+    let q be set;
+    assume q in { y where y is Element of N : i <= y };
+    then consider y being Element of N such that
+A2:   q = y & i <= y;
+    thus thesis by A2,Def7;
+  end;
+
+theorem Th13:
+for L being non empty 1-sorted, N being non empty NetStr over L
+ for i being Element of N holds the carrier of N|i c= the carrier of N
+  proof
+    let L be non empty 1-sorted,
+        N be non empty NetStr over L,
+        i be Element of N;
+    let x be set;
+    assume x in the carrier of N|i;
+    then consider y being Element of N such that
+A1:   y = x and i <= y by Def7;
+    thus x in the carrier of N by A1;
+  end;
+
+theorem Th14:
+for L being non empty 1-sorted, N being non empty NetStr over L
+ for i being Element of N holds N|i is full SubNetStr of N
+  proof
+    let L be non empty 1-sorted,
+        N be non empty NetStr over L,
+        i be Element of N;
+A1: the InternalRel of N|i = (the InternalRel of N)|_2 the carrier of N|i
+       by Def7;
+A2: N|i is SubRelStr of N
+    proof
+      thus the carrier of N|i c= the carrier of N by Th13;
+      thus the InternalRel of N|i c= the InternalRel of N by A1,WELLORD1:15;
+    end;
+      N|i is SubNetStr of N
+    proof
+      thus N|i is SubRelStr of N by A2;
+      thus the mapping of N|i = (the mapping of N)|the carrier of N|i by Def7;
+    end;
+    then reconsider K = N|i as SubNetStr of N;
+      K is full
+    proof
+      thus K is full SubRelStr of N
+      proof
+          the InternalRel of K = (the InternalRel of N)|_2 the carrier of K
+           by Def7;
+        hence thesis by A2,YELLOW_0:def 14;
+      end;
+    end;
+    hence thesis;
+  end;
+
+definition let L be non empty 1-sorted,
+               N be non empty reflexive NetStr over L,
+               i be Element of N;
+ cluster N|i -> non empty reflexive;
+coherence
+  proof
+    thus N|i is non empty
+    proof
+        i <= i;
+      then i in the carrier of N|i by Def7;
+      hence thesis by STRUCT_0:def 1;
+    end;
+    then reconsider A = N|i as strict non empty NetStr over L;
+      A is reflexive
+    proof
+      let x be Element of A;
+      consider y being Element of N such that
+A1:     y = x and i <= y by Def7;
+A2:   N|i is full SubNetStr of N by Th14;
+        y <= y;
+      hence x <= x by A1,A2,YELLOW_6:21;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition let L be non empty 1-sorted,
+               N be non empty directed NetStr over L,
+               i be Element of N;
+ cluster N|i -> non empty;
+coherence
+  proof
+    consider z1 being Element of N such that
+A1:   i <= z1 & i <= z1 by YELLOW_6:def 5;
+      z1 in the carrier of N|i by A1,Def7;
+    hence thesis by STRUCT_0:def 1;
+  end;
+end;
+
+definition let L be non empty 1-sorted,
+               N be non empty reflexive antisymmetric NetStr over L,
+               i be Element of N;
+ cluster N|i -> antisymmetric;
+coherence
+  proof
+    let x, y be Element of N|i such that
+A1:   x <= y & y <= x;
+A2: N|i is SubNetStr of N by Th14;
+    consider x1 being Element of N such that
+A3:   x1 = x and i <= x1 by Def7;
+    consider y1 being Element of N such that
+A4:   y1 = y and i <= y1 by Def7;
+      x1 <= y1 & y1 <= x1 by A1,A2,A3,A4,YELLOW_6:20;
+    hence x = y by A3,A4,YELLOW_0:def 3;
+  end;
+end;
+
+definition let L be non empty 1-sorted,
+               N be non empty directed antisymmetric NetStr over L,
+               i be Element of N;
+ cluster N|i -> antisymmetric;
+coherence
+  proof
+    let x, y be Element of N|i such that
+A1:   x <= y & y <= x;
+A2: N|i is SubNetStr of N by Th14;
+    consider x1 being Element of N such that
+A3:   x1 = x and i <= x1 by Def7;
+    consider y1 being Element of N such that
+A4:   y1 = y and i <= y1 by Def7;
+      x1 <= y1 & y1 <= x1 by A1,A2,A3,A4,YELLOW_6:20;
+    hence x = y by A3,A4,YELLOW_0:def 3;
+  end;
+end;
+
+definition let L be non empty 1-sorted,
+               N be non empty reflexive transitive NetStr over L,
+               i be Element of N;
+ cluster N|i -> transitive;
+coherence
+  proof
+    let x, y, z be Element of N|i such that
+A1:   x <= y & y <= z;
+A2: N|i is full SubNetStr of N by Th14;
+    consider x1 being Element of N such that
+A3:   x1 = x and i <= x1 by Def7;
+    consider y1 being Element of N such that
+A4:   y1 = y and i <= y1 by Def7;
+    consider z1 being Element of N such that
+A5:   z1 = z and i <= z1 by Def7;
+      x1 <= y1 & y1 <= z1 by A1,A2,A3,A4,A5,YELLOW_6:20;
+    then x1 <= z1 by YELLOW_0:def 2;
+    hence x <= z by A2,A3,A5,YELLOW_6:21;
+  end;
+end;
+
+definition let L be non empty 1-sorted,
+               N be net of L,
+               i be Element of N;
+ cluster N|i -> transitive directed;
+coherence
+  proof
+    thus N|i is transitive
+    proof
+      let x, y, z be Element of N|i such that
+A1:     x <= y & y <= z;
+A2:   N|i is full SubNetStr of N by Th14;
+      consider x1 being Element of N such that
+A3:     x1 = x and i <= x1 by Def7;
+      consider y1 being Element of N such that
+A4:     y1 = y and i <= y1 by Def7;
+      consider z1 being Element of N such that
+A5:     z1 = z and i <= z1 by Def7;
+        x1 <= y1 & y1 <= z1 by A1,A2,A3,A4,A5,YELLOW_6:20;
+      then x1 <= z1 by YELLOW_0:def 2;
+      hence x <= z by A2,A3,A5,YELLOW_6:21;
+    end;
+      for x, y being Element of N|i ex z being Element of N|i st x <= z & y <=
+z
+    proof
+      let x, y be Element of N|i;
+      consider x1 being Element of N such that
+A6:     x1 = x and
+A7:     i <= x1 by Def7;
+      consider y1 being Element of N such that
+A8:     y1 = y and i <= y1 by Def7;
+      consider z1 being Element of N such that
+A9:     x1 <= z1 & y1 <= z1 by YELLOW_6:def 5;
+        i <= z1 by A7,A9,YELLOW_0:def 2;
+      then z1 in the carrier of N|i by Def7;
+      then reconsider z = z1 as Element of N|i;
+      take z;
+        N|i is full SubNetStr of N by Th14;
+      hence x <= z & y <= z by A6,A8,A9,YELLOW_6:21;
+    end;
+    hence thesis by YELLOW_6:def 5;
+  end;
+end;
+
+theorem
+  for L being non empty 1-sorted, N being non empty reflexive NetStr over L
+ for i, x being Element of N, x1 being Element of N|i st x = x1
+  holds N.x = (N|i).x1
+  proof
+    let L be non empty 1-sorted,
+        N be non empty reflexive NetStr over L,
+        i, x be Element of N,
+        x1 be Element of N|i such that
+A1:   x = x1;
+    thus N.x = (the mapping of N).x1 by A1,WAYBEL_0:def 8
+            .= ((the mapping of N)|(the carrier of N|i)).x1 by FUNCT_1:72
+            .= (the mapping of N|i).x1 by Def7
+            .= (N|i).x1 by WAYBEL_0:def 8;
+  end;
+
+theorem Th16:
+for L being non empty 1-sorted, N being non empty directed NetStr over L
+ for i, x being Element of N, x1 being Element of N|i st x = x1
+  holds N.x = (N|i).x1
+  proof
+    let L be non empty 1-sorted,
+        N be non empty directed NetStr over L,
+        i, x be Element of N,
+        x1 be Element of N|i such that
+A1:   x = x1;
+    thus N.x = (the mapping of N).x1 by A1,WAYBEL_0:def 8
+            .= ((the mapping of N)|(the carrier of N|i)).x1 by FUNCT_1:72
+            .= (the mapping of N|i).x1 by Def7
+            .= (N|i).x1 by WAYBEL_0:def 8;
+  end;
+
+theorem Th17:
+for L being non empty 1-sorted, N being net of L, i being Element of N
+ holds N|i is subnet of N
+  proof
+    let L be non empty 1-sorted,
+        N be net of L,
+        i be Element of N;
+    reconsider A = N|i as net of L;
+A1: the carrier of A c= the carrier of N by Th13;
+      A is subnet of N
+    proof
+      deffunc F(set) = $1;
+A2:   for a being Element of A holds F(a) in the carrier of N
+        by A1,TARSKI:def 3;
+      consider f being Function of the carrier of A, the carrier of N
+        such that
+A3:    for x being Element of A holds f.x = F(x)
+        from FunctR_ealEx(A2);
+      reconsider f as map of A, N;
+      take f;
+        for x being set st x in the carrier of A holds
+        (the mapping of A).x = ((the mapping of N)*f).x
+      proof
+        let x be set such that
+A4:       x in the carrier of A;
+        thus (the mapping of A).x
+            = ((the mapping of N)|the carrier of A).x by Def7
+           .= (the mapping of N).x by A4,FUNCT_1:72
+           .= (the mapping of N).(f.x) by A3,A4
+           .= ((the mapping of N)*f).x by A4,FUNCT_2:21;
+      end;
+      hence the mapping of A = (the mapping of N)*f by FUNCT_2:18;
+      let m be Element of N;
+      consider z being Element of N such that
+A5:     i <= z and
+A6:     m <= z by YELLOW_6:def 5;
+        z in the carrier of A by A5,Def7;
+      then reconsider n = z as Element of A;
+      take n;
+      let p be Element of A such that
+A7:     n <= p;
+        p in the carrier of A;
+      then reconsider p1 = p as Element of N by A1;
+        A is SubNetStr of N by Th14;
+      then z <= p1 by A7,YELLOW_6:20;
+      then m <= p1 by A6,YELLOW_0:def 2;
+      hence m <= f.p by A3;
+    end;
+    hence thesis;
+  end;
+
+definition let T be non empty 1-sorted,
+               N be net of T;
+ cluster strict subnet of N;
+existence
+  proof
+    set A = NetStr (#the carrier of N,the InternalRel of N,the mapping of N#);
+A1: the RelStr of A = the RelStr of N;
+  A is directed
+    proof
+A2:   [#]N is directed by WAYBEL_0:def 6;
+        [#]N = the carrier of N by PRE_TOPC:12
+        .= [#]A by PRE_TOPC:12;
+      hence [#]A is directed by A1,A2,WAYBEL_0:3;
+    end;
+    then reconsider A as net of T by A1,WAYBEL_8:13;
+      A is subnet of N
+    proof
+      reconsider f = id N as map of A, N;
+      take f;
+      thus the mapping of A = (the mapping of N)*f by TMAP_1:93;
+      let m be Element of N;
+      reconsider n = m as Element of A;
+      take n;
+      let p be Element of A such that
+A3:     n <= p;
+        p = f.p by TMAP_1:91;
+      hence m <= f.p by A1,A3,YELLOW_0:1;
+    end;
+    then reconsider A as subnet of N;
+    take A;
+    thus thesis;
+  end;
+end;
+
+definition let L be non empty 1-sorted,
+               N be net of L,
+               i be Element of N;
+ redefine func N|i -> strict subnet of N;
+coherence by Th17;
+end;
+
+definition let S be non empty 1-sorted,
+               T be 1-sorted,
+               f be map of S, T,
+               N be NetStr over S;
+ func f * N -> strict NetStr over T means :Def8:
+  the RelStr of it = the RelStr of N &
+  the mapping of it = f * the mapping of N;
+existence
+  proof
+    take NetStr (#the carrier of N, the InternalRel of N,
+                     f*the mapping of N#);
+    thus thesis;
+  end;
+uniqueness;
+end;
+
+definition let S be non empty 1-sorted,
+               T be 1-sorted,
+               f be map of S, T,
+               N be non empty NetStr over S;
+ cluster f * N -> non empty;
+coherence
+  proof
+      the RelStr of N = the RelStr of f * N by Def8;
+    hence thesis by STRUCT_0:def 1;
+  end;
+end;
+
+definition let S be non empty 1-sorted,
+               T be 1-sorted,
+               f be map of S, T,
+               N be reflexive NetStr over S;
+ cluster f * N -> reflexive;
+coherence
+  proof
+      the RelStr of N = the RelStr of f * N by Def8;
+    hence the InternalRel of f*N is_reflexive_in the carrier of f*N
+      by ORDERS_1:def 4;
+  end;
+end;
+
+definition let S be non empty 1-sorted,
+               T be 1-sorted,
+               f be map of S, T,
+               N be antisymmetric NetStr over S;
+ cluster f * N -> antisymmetric;
+coherence
+  proof
+      the RelStr of N = the RelStr of f * N by Def8;
+    then the InternalRel of f*N is_antisymmetric_in the carrier of f*N
+      by ORDERS_1:def 6;
+    hence thesis by ORDERS_1:def 6;
+  end;
+end;
+
+definition let S be non empty 1-sorted,
+               T be 1-sorted,
+               f be map of S, T,
+               N be transitive NetStr over S;
+ cluster f * N -> transitive;
+coherence
+  proof
+      the RelStr of N = the RelStr of f * N by Def8;
+    then the InternalRel of f*N is_transitive_in the carrier of f*N
+      by ORDERS_1:def 5;
+    hence thesis by ORDERS_1:def 5;
+  end;
+end;
+
+definition let S be non empty 1-sorted,
+               T be 1-sorted,
+               f be map of S, T,
+               N be directed NetStr over S;
+ cluster f * N -> directed;
+coherence
+  proof
+A1: the RelStr of N = the RelStr of f * N by Def8;
+    thus [#](f*N) is directed
+    proof
+A2:   [#]N is directed by WAYBEL_0:def 6;
+        [#](f*N) = the carrier of f*N by PRE_TOPC:12
+            .= [#]N by A1,PRE_TOPC:12;
+      hence thesis by A1,A2,WAYBEL_0:3;
+    end;
+  end;
+end;
+
+theorem Th18:
+for L being non empty RelStr, N being non empty NetStr over L
+ for x being Element of L holds (x"/\")*N = x "/\" N
+  proof
+    let L be non empty RelStr,
+        N be non empty NetStr over L,
+        x be Element of L;
+A1: the RelStr of (x"/\")*N = the RelStr of N by Def8
+                         .= the RelStr of x "/\" N by WAYBEL_2:def 3;
+    set n = the mapping of N;
+A2: the RelStr of N = the RelStr of x "/\" N by WAYBEL_2:def 3;
+    then reconsider f2 = the mapping of x "/\" N as Function of the carrier of
+N,
+      the carrier of L;
+A3: for c being Element of N holds ((x"/\") * n).c = f2.c
+    proof
+      let c be Element of N;
+      consider y being Element of L such that
+A4:     y = n.c and
+A5:     f2.c = x "/\" y by A2,WAYBEL_2:def 3;
+      thus ((x"/\") * n).c = (x"/\").y by A4,FUNCT_2:21
+                        .= f2.c by A5,WAYBEL_1:def 18;
+    end;
+      the mapping of (x"/\")*N = (x"/\") * n by Def8
+                          .= the mapping of x "/\" N by A3,FUNCT_2:113;
+    hence (x"/\")*N = x "/\" N by A1;
+  end;
+
+
+begin :: The Properties of Topological Spaces
+
+theorem Th19:
+for S, T being TopStruct
+ for F being Subset-Family of S,
+     G being Subset-Family of T
+  st the TopStruct of S = the TopStruct of T & F = G & F is open
+ holds G is open
+  proof
+    let S, T be TopStruct,
+        F be Subset-Family of S,
+        G be Subset-Family of T such that
+A1:   the TopStruct of S = the TopStruct of T and
+A2:   F = G and
+A3:   F is open;
+    let P be Subset of T such that
+A4:   P in G;
+    reconsider R = P as Subset of S by A1;
+      R is open by A2,A3,A4,TOPS_2:def 1;
+    hence P in the topology of T by A1,PRE_TOPC:def 5;
+  end;
+
+theorem
+  for S, T being TopStruct
+ for F being Subset-Family of S, G being Subset-Family of T
+  st the TopStruct of S = the TopStruct of T & F = G & F is closed
+ holds G is closed
+  proof
+    let S, T be TopStruct,
+        F be Subset-Family of S,
+        G be Subset-Family of T such that
+A1:   the TopStruct of S = the TopStruct of T and
+A2:   F = G and
+A3:   F is closed;
+    let P be Subset of T such that
+A4:   P in G;
+    reconsider R = P as Subset of S by A1;
+      R is closed by A2,A3,A4,TOPS_2:def 2;
+    then [#]S \ R is open by PRE_TOPC:def 6;
+    then [#]S \ R in the topology of S by PRE_TOPC:def 5;
+    then (the carrier of S) \ R in the topology of S by PRE_TOPC:12;
+    hence [#]T \ P in the topology of T by A1,PRE_TOPC:12;
+  end;
+
+definition
+  struct(TopStruct,RelStr) TopRelStr (# carrier -> set,
+             InternalRel -> (Relation of the carrier),
+             topology -> Subset-Family of the carrier #);
+end;
+
+definition let A be non empty set,
+               R be Relation of A,A,
+               T be Subset-Family of A;
+ cluster TopRelStr (#A,R,T#) -> non empty;
+coherence
+  proof
+    thus the carrier of TopRelStr (#A,R,T#) is non empty;
+  end;
+end;
+
+definition let x be set,
+               R be Relation of {x};
+           let T be Subset-Family of {x};
+ cluster TopRelStr (#{x}, R, T#) -> trivial;
+coherence
+  proof
+    let a, b be Element of TopRelStr (#{x},R,T#);
+      a = x & b = x by TARSKI:def 1;
+    hence thesis;
+  end;
+end;
+
+definition let X be set,
+               O be Order of X,
+               T be Subset-Family of X;
+ cluster TopRelStr (#X, O, T#) -> reflexive transitive antisymmetric;
+coherence
+  proof
+    set A = TopRelStr(#X,O,T#);
+  field the InternalRel of A = the carrier of A by ORDERS_1:97;
+  then
+      the InternalRel of A is_reflexive_in the carrier of A &
+    the InternalRel of A is_transitive_in the carrier of A &
+    the InternalRel of A is_antisymmetric_in the carrier of A
+                        by RELAT_2:def 9,def 12,def 16;
+    hence thesis by ORDERS_1:def 4,def 5,def 6;
+  end;
+end;
+
+Lm4:
+for tau being Subset-Family of {0}, r being Relation of {0}
+ st tau = {{},{0}} & r = {[0,0]}
+  holds TopRelStr (#{0},r,tau#) is trivial reflexive non empty discrete finite
+  proof
+    let tau be Subset-Family of {0}, r be Relation of {0} such that
+A1:   tau = {{},{0}} and
+A2:   r = {[0,0]};
+    set T = TopRelStr (#{0},r,tau#);
+    thus T is trivial;
+    thus T is reflexive
+    proof
+      let x be Element of T;
+        x = 0 by TARSKI:def 1;
+      then [x,x] in {[0,0]} by TARSKI:def 1;
+      hence x <= x by A2,ORDERS_1:def 9;
+    end;
+    thus T is non empty;
+      the topology of T = bool the carrier of T by A1,ZFMISC_1:30;
+    hence T is discrete by TDLAT_3:def 1;
+    thus the carrier of T is finite;
+  end;
+
+definition
+ cluster trivial reflexive non empty discrete strict finite TopRelStr;
+existence
+  proof
+      {{},{0}} = bool {0} & bool {0} c= bool {0} by ZFMISC_1:30;
+    then reconsider tau = {{},{0}} as Subset-Family of {0};
+      0 in {0} by TARSKI:def 1;
+    then reconsider r = {[0,0]} as Relation of {0} by RELSET_1:8;
+    take TopRelStr (#{0},r,tau#);
+    thus thesis by Lm4;
+  end;
+end;
+
+definition
+ mode TopLattice is with_infima with_suprema
+  reflexive transitive antisymmetric TopSpace-like TopRelStr;
+end;
+
+definition
+ cluster strict non empty trivial discrete finite compact Hausdorff
+         TopLattice;
+existence
+  proof
+A1: {{},{0}} = bool {0} & bool {0} c= bool {0} by ZFMISC_1:30;
+      0 in {0} by TARSKI:def 1;
+    then reconsider r = {[0,0]} as Relation of {0} by RELSET_1:8;
+A2: 1TopSp {0} = TopStruct (# {0}, bool {0}#) by PCOMPS_1:def 1;
+    reconsider C = bool {0} as Subset-Family of {0};
+    reconsider A = TopRelStr (#{0}, r, C#)
+    as trivial reflexive non empty discrete finite TopRelStr by A1,Lm4;
+    reconsider A as TopLattice;
+    take A;
+    thus A is strict non empty trivial discrete finite;
+    thus A is compact
+    proof
+      let F be Subset-Family of A such that
+A3:     F is_a_cover_of A and
+A4:     F is open;
+      reconsider F1 = F as Subset-Family of 1TopSp {0} by A2;
+A5:   F1 is_a_cover_of 1TopSp {0} by A2,A3,Th3;
+A6:   F1 is open by A2,A4,Th19;
+        1TopSp {0} is compact by PCOMPS_1:9;
+      then consider G1 being Subset-Family of 1TopSp {0} such that
+A7:     G1 c= F1 and
+A8:     G1 is_a_cover_of 1TopSp {0} and
+A9:     G1 is finite by A5,A6,COMPTS_1:def 3;
+      reconsider G = G1 as Subset-Family of A by A2;
+      take G;
+      thus G c= F by A7;
+      thus G is_a_cover_of A by A2,A8,Th3;
+      thus G is finite by A9;
+    end;
+    let p, q be Point of A such that
+A10:   not p = q;
+    assume not ex W, V being Subset of A
+      st W is open & V is open & p in W & q in V & W misses V;
+      p = 0 & q = 0 by TARSKI:def 1;
+    hence contradiction by A10;
+  end;
+end;
+
+definition let T be Hausdorff (non empty TopSpace);
+ cluster -> Hausdorff (non empty SubSpace of T);
+coherence by TOPMETR:3;
+end;
+
+theorem Th21:
+for T being non empty TopSpace, p being Point of T
+ for A being Element of OpenNeighborhoods p holds A is a_neighborhood of p
+  proof
+    let T be non empty TopSpace,
+        p be Point of T,
+        A be Element of OpenNeighborhoods p;
+    consider W being Subset of T such that
+A1:   W = A & p in W & W is open by YELLOW_6:38;
+    thus A is a_neighborhood of p by A1,CONNSP_2:5;
+  end;
+
+theorem Th22:
+for T being non empty TopSpace, p being Point of T
+ for A, B being Element of OpenNeighborhoods p
+  holds A /\ B is Element of OpenNeighborhoods p
+  proof
+    let T be non empty TopSpace,
+        p be Point of T,
+        A, B be Element of OpenNeighborhoods p;
+    consider W being Subset of T such that
+A1:   W = A & p in W & W is open by YELLOW_6:38;
+    consider X being Subset of T such that
+A2:   X = B & p in X & X is open by YELLOW_6:38;
+A3: p in A /\ B by A1,A2,XBOOLE_0:def 3;
+      W /\ X is open by A1,A2,TOPS_1:38;
+    then A /\ B in the carrier of OpenNeighborhoods p by A1,A2,A3,YELLOW_6:39;
+    hence A /\ B is Element of OpenNeighborhoods p;
+  end;
+
+theorem
+  for T being non empty TopSpace, p being Point of T
+ for A, B being Element of OpenNeighborhoods p
+  holds A \/ B is Element of OpenNeighborhoods p
+  proof
+    let T be non empty TopSpace,
+        p be Point of T,
+        A, B be Element of OpenNeighborhoods p;
+    consider W being Subset of T such that
+A1:   W = A & p in W & W is open by YELLOW_6:38;
+    consider X being Subset of T such that
+A2:   X = B & p in X & X is open by YELLOW_6:38;
+A3: p in A \/ B by A1,XBOOLE_0:def 2;
+      W \/ X is open by A1,A2,TOPS_1:37;
+    then A \/ B in the carrier of OpenNeighborhoods p by A1,A2,A3,YELLOW_6:39;
+    hence A \/ B is Element of OpenNeighborhoods p;
+  end;
+
+theorem Th24:
+for T being non empty TopSpace, p being Element of T
+ for N being net of T st p in Lim N
+  for S being Subset of T st S = rng the mapping of N
+   holds p in Cl S
+  proof
+    let T be non empty TopSpace,
+        p be Element of T,
+        N be net of T such that
+A1:   p in Lim N;
+    let S be Subset of T;
+    assume S = rng the mapping of N;
+then A2: N is_eventually_in S by Th8;
+      for G being Subset of T st G is open holds p in G implies S meets G
+    proof
+      let G be Subset of T such that
+A3:     G is open and
+A4:     p in G;
+        G = Int G by A3,TOPS_1:55;
+      then reconsider V = G as a_neighborhood of p by A4,CONNSP_2:def 1;
+        N is_eventually_in V by A1,YELLOW_6:def 18;
+      hence S meets G by A2,YELLOW_6:26;
+    end;
+    hence p in Cl S by PRE_TOPC:def 13;
+  end;
+
+theorem Th25:
+for T being Hausdorff TopLattice, N being convergent net of T
+ for f being map of T, T st f is continuous
+  holds f.(lim N) in Lim (f * N)
+  proof
+    let T be Hausdorff TopLattice,
+        N be convergent net of T,
+        f be map of T, T such that
+A1:   f is continuous;
+      for V being a_neighborhood of f.(lim N) holds f*N is_eventually_in V
+    proof
+      let V be a_neighborhood of f.(lim N);
+      consider O being a_neighborhood of lim N such that
+A2:     f.:O c= V by A1,BORSUK_1:def 2;
+        lim N in Lim N by YELLOW_6:def 20;
+      then N is_eventually_in O by YELLOW_6:def 18;
+      then consider s0 being Element of N such that
+A3:     for j being Element of N st s0 <= j holds N.j in O by WAYBEL_0:def 11;
+A4:   the RelStr of f*N = the RelStr of N by Def8;
+      then reconsider s1 = s0 as Element of f*N;
+      take s1;
+      let j1 be Element of f*N such that
+A5:     s1 <= j1;
+A6:   the carrier of f*N = dom the mapping of N by A4,FUNCT_2:def 1;
+      reconsider j = j1 as Element of N by A4;
+A7:   (f*N).j1 = (the mapping of f*N).j1 by WAYBEL_0:def 8
+              .= (f * the mapping of N).j1 by Def8
+              .= f.((the mapping of N).j1) by A6,FUNCT_1:23
+              .= f.(N.j) by WAYBEL_0:def 8;
+        s0 <= j by A4,A5,YELLOW_0:1;
+then A8:   N.j in O by A3;
+        dom f = the carrier of T by FUNCT_2:def 1;
+      then f.(N.j) in f.:O by A8,FUNCT_1:def 12;
+      hence (f*N).j1 in V by A2,A7;
+    end;
+    hence f.(lim N) in Lim (f * N) by YELLOW_6:def 18;
+  end;
+
+theorem Th26:
+for T being Hausdorff TopLattice, N being convergent net of T
+ for x being Element of T st x"/\" is continuous
+  holds x "/\" lim N in Lim (x "/\" N)
+  proof
+    let T be Hausdorff TopLattice,
+        N be convergent net of T,
+        x be Element of T such that
+A1:   x"/\" is continuous;
+      x "/\" lim N = (x"/\").(lim N) by WAYBEL_1:def 18;
+    then x "/\" lim N in Lim (x"/\" * N) by A1,Th25;
+    hence x "/\" lim N in Lim (x "/\" N) by Th18;
+  end;
+
+theorem Th27:
+for S being Hausdorff TopLattice, x being Element of S st
+ for a being Element of S holds a"/\" is continuous holds uparrow x is closed
+  proof
+    let S be Hausdorff TopLattice,
+        x be Element of S;
+    assume for a being Element of S holds a"/\" is continuous;
+then A1: x"/\" is continuous;
+A2: (x"/\")"{x} = uparrow x by Th7;
+      {x} is closed by PCOMPS_1:10;
+    hence uparrow x is closed by A1,A2,PRE_TOPC:def 12;
+  end;
+
+theorem Th28:
+for S being compact Hausdorff TopLattice, x being Element of S st
+ for b being Element of S holds b"/\" is continuous holds downarrow x is closed
+  proof
+    let S be compact Hausdorff TopLattice,
+        b be Element of S such that
+A1:  for a being Element of S holds a"/\" is continuous;
+A2: {b} "/\" [#]S = {b "/\" y where y is Element of S: y in [#]
+S} by YELLOW_4:42;
+A3: b"/\" is continuous by A1;
+    set g1 = (rng (b"/\"))|(b"/\");
+A4: g1 = b"/\" by RELAT_1:125;
+A5: dom (b"/\") = the carrier of S by FUNCT_2:def 1;
+then A6: dom (b"/\") = [#]S by PRE_TOPC:12;
+A7: rng (b"/\") = {b} "/\" [#]S
+    proof
+      thus rng (b"/\") c= {b} "/\" [#]S
+      proof
+        let q be set;
+        assume q in rng (b"/\");
+        then consider x being set such that
+A8:       x in dom (b"/\") and
+A9:       (b"/\").x = q by FUNCT_1:def 5;
+        reconsider x1 = x as Element of S by A8;
+          q = b "/\" x1 by A9,WAYBEL_1:def 18;
+        hence q in {b} "/\" [#]S by A2,A5,A6;
+      end;
+      let q be set;
+      assume q in {b} "/\" [#]S;
+      then consider y being Element of S such that
+A10:     q = b "/\" y & y in [#]S by A2;
+        q = (b"/\").y by A10,WAYBEL_1:def 18;
+      hence q in rng (b"/\") by A5,FUNCT_1:def 5;
+    end;
+    then rng g1 = {b} "/\" [#]S by RELAT_1:125
+          .= [#](S | (rng (b"/\"))) by A7,PRE_TOPC:def 10
+          .= the carrier of S|(rng(b"/\")) by PRE_TOPC:12;
+    then g1 is Function of the carrier of S, the carrier of S|(rng(b"/\"))
+      by A4,A5,FUNCT_2:3;
+    then reconsider g1 as map of S, S|(rng (b"/\"));
+A11: rng g1 = {b} "/\" [#]S by A7,RELAT_1:125
+          .= [#](S | ({b}"/\"[#]S)) by PRE_TOPC:def 10;
+      g1 is continuous by A3,A4,TOPMETR:9;
+    then S | ({b} "/\" [#]S) is compact by A7,A11,COMPTS_1:23;
+    then {b} "/\" [#]S is compact by COMPTS_1:12;
+    then {b} "/\" [#]S is closed by COMPTS_1:16;
+    hence downarrow b is closed by Th5;
+  end;
+
+begin :: The Cluster Points of Nets
+
+definition let T be non empty TopSpace,
+               N be non empty NetStr over T,
+               p be Point of T;
+ pred p is_a_cluster_point_of N means :Def9:
+  for O being a_neighborhood of p holds N is_often_in O;
+end;
+
+theorem
+  for L being non empty TopSpace, N being net of L
+ for c being Point of L st c in Lim N holds c is_a_cluster_point_of N
+  proof
+    let L be non empty TopSpace,
+        N be net of L,
+        c be Point of L such that
+A1:  c in Lim N;
+    let O be a_neighborhood of c;
+      N is_eventually_in O by A1,YELLOW_6:def 18;
+    hence N is_often_in O by YELLOW_6:28;
+  end;
+
+theorem Th30:
+for T being compact Hausdorff (non empty TopSpace), N being net of T
+ ex c being Point of T st c is_a_cluster_point_of N
+  proof
+    let T be compact Hausdorff (non empty TopSpace),
+        N be net of T;
+
+defpred P[set,set] means
+ ex X being Subset of T, a being Element of N st a = $1 &
+  X = {N.j where j is Element of N : a <= j} & $2 = Cl X;
+
+A1: for e being Element of N
+      ex u being Element of bool the carrier of T st P[e,u]
+    proof
+      let e be Element of N;
+      reconsider a = e as Element of N;
+        {N.j where j is Element of N : a <= j} c= the carrier of T
+      proof
+        let q be set;
+        assume q in {N.j where j is Element of N : a <= j};
+        then consider j being Element of N such that
+A2:       q = N.j & a <= j;
+        thus q in the carrier of T by A2;
+      end;
+      then reconsider X = {N.j where j is Element of N : a <= j} as Subset of
+        the carrier of T;
+      take Cl X, X, a;
+      thus thesis;
+    end;
+    consider F being Function of the carrier of N, bool the carrier of T
+      such that
+A3:  for e being Element of N holds P[e,F.e]
+        from FuncExD(A1);
+A4: dom F = the carrier of N by FUNCT_2:def 1;
+      rng F c= bool the carrier of T by RELSET_1:12;
+    then rng F is Subset-Family of T by SETFAM_1:def 7;
+    then reconsider RF = rng F as Subset-Family of T;
+A5: RF is centered
+    proof
+      thus RF <> {} by A4,RELAT_1:65;
+      let H be set such that
+A6:     H <> {} and
+A7:     H c= RF and
+A8:     H is finite;
+      reconsider H1 = H as non empty set by A6;
+
+      set J = {i where i is Element of N :
+       ex h, Ch being Subset of T st
+        h = {N.j where j is Element of N : i <= j} & Ch = Cl h};
+
+      consider e being Element of H1;
+        e in RF by A7,TARSKI:def 3;
+      then consider x being set such that
+A9:       x in dom F and
+            e = F.x by FUNCT_1:def 5;
+      reconsider x as Element of N by A9;
+      consider X being Subset of T,
+               a being Element of N such that
+           a = x and
+A10:      X = {N.j where j is Element of N : a <= j} & F.x = Cl X by A3;
+        a in J by A10;
+      then reconsider J as non empty set;
+
+defpred P[set,set] means
+ ex i being Element of N, h, Ch being Subset of T
+  st i = $2 & Ch = $1 & h = {N.j where j is Element of N : i <= j} & Ch = Cl h;
+
+A11:   for e being Element of H1 ex u being Element of J st P[e,u]
+      proof
+        let e be Element of H1;
+          e in RF by A7,TARSKI:def 3;
+        then consider x being set such that
+A12:       x in dom F and
+A13:       e = F.x by FUNCT_1:def 5;
+        reconsider x as Element of N by A12;
+        consider X being Subset of T,
+                 a being Element of N such that
+A14:        a = x and
+A15:        X = {N.j where j is Element of N : a <= j} and
+A16:        F.x = Cl X by A3;
+          a in J by A15,A16;
+        then reconsider a as Element of J;
+        take u = a, i = x, h = X, Ch = Cl X;
+        thus i = u by A14;
+        thus Ch = e by A13,A16;
+        thus h = {N.j where j is Element of N : i <= j} by A14,A15;
+        thus Ch = Cl h;
+      end;
+      consider Q being Function of H1, J such that
+A17:     for e being Element of H1 holds P[e,Q.e] from FuncExD(A11);
+        dom Q = H by FUNCT_2:def 1;
+then A18:   rng Q is finite by A8,FINSET_1:26;
+        rng Q c= [#]N
+      proof
+        let q be set;
+        assume q in rng Q;
+        then consider x being set such that
+A19:       x in dom Q and
+A20:       Q.x = q by FUNCT_1:def 5;
+        reconsider x as Element of H1 by A19;
+        consider i being Element of N,
+                 h, Ch being Subset of T such that
+A21:        i = Q.x and
+             Ch = x & h = {N.j where j is Element of N : i <= j} & Ch = Cl h
+             by A17;
+        thus q in [#]N by A20,A21,PRE_TOPC:13;
+      end;
+      then reconsider RQ = rng Q as Subset of [#]N;
+        [#]N is non empty directed by WAYBEL_0:def 6;
+      then consider i0 being Element of N such that
+          i0 in [#]N and
+A22:     i0 is_>=_than RQ by A18,WAYBEL_0:1;
+        for Y being set holds Y in H implies N.i0 in Y
+      proof
+        let Y be set; assume
+A23:       Y in H;
+then A24:     Y in dom Q by FUNCT_2:def 1;
+        consider i being Element of N,
+                 h, Ch being Subset of T such that
+A25:        i = Q.Y and
+A26:        Ch = Y and
+A27:        h = {N.j where j is Element of N : i <= j} and
+A28:        Ch = Cl h by A17,A23;
+          i in rng Q by A24,A25,FUNCT_1:def 5;
+        then i <= i0 by A22,LATTICE3:def 9;
+then A29:     N.i0 in h by A27;
+          h c= Cl h by PRE_TOPC:48;
+        hence N.i0 in Y by A26,A28,A29;
+      end;
+      hence meet H <> {} by A6,SETFAM_1:def 1;
+    end;
+      RF is closed
+    proof
+      let P be Subset of T;
+      assume P in RF;
+      then consider x being set such that
+A30:     x in dom F and
+A31:     F.x = P by FUNCT_1:def 5;
+      reconsider x as Element of N by A30;
+      consider X being Subset of T,
+               a being Element of N such that
+            a = x & X = {N.j where j is Element of N : a <= j} and
+A32:       F.x = Cl X by A3;
+        P = Cl P by A31,A32,TOPS_1:26;
+      hence P is closed by PRE_TOPC:52;
+    end;
+    then meet RF <> {} by A5,COMPTS_1:13;
+    then consider c being set such that
+A33:   c in meet RF by XBOOLE_0:def 1;
+    reconsider c as Point of T by A33;
+    take c;
+    assume not c is_a_cluster_point_of N;
+    then consider O being a_neighborhood of c such that
+A34:   not N is_often_in O by Def9;
+      N is_eventually_in (the carrier of T) \ O by A34,WAYBEL_0:10;
+    then consider s0 being Element of N such that
+A35:  for j being Element of N st s0 <= j holds N.j in (the carrier of T) \ O
+      by WAYBEL_0:def 11;
+
+    consider Y being Subset of T,
+             a being Element of N such that
+A36:    a = s0 and
+A37:    Y = {N.j where j is Element of N : a <= j} and
+A38:    F.s0 = Cl Y by A3;
+
+      Cl Y in RF by A4,A38,FUNCT_1:def 5;
+then A39: c in Cl Y by A33,SETFAM_1:def 1;
+A40: Int O c= O by TOPS_1:44;
+      {} = O /\ Y
+    proof
+      thus {} c= O /\ Y by XBOOLE_1:2;
+      let q be set such that
+A41:     q in O /\ Y;
+      assume not q in {};
+        q in Y by A41,XBOOLE_0:def 3;
+      then consider j being Element of N such that
+A42:     q = N.j and
+A43:     s0 <= j by A36,A37;
+        N.j in (the carrier of T) \ O by A35,A43;
+      then not N.j in O by XBOOLE_0:def 4;
+      hence contradiction by A41,A42,XBOOLE_0:def 3;
+    end;
+    then O misses Y by XBOOLE_0:def 7;
+then A44: Int O misses Y by A40,XBOOLE_1:63;
+A45: Int O is open by TOPS_1:51;
+      c in Int O by CONNSP_2:def 1;
+    hence contradiction by A39,A44,A45,PRE_TOPC:def 13;
+  end;
+
+theorem Th31:
+for L being non empty TopSpace, N being net of L, M being subnet of N
+ for c being Point of L st c is_a_cluster_point_of M holds
+  c is_a_cluster_point_of N
+  proof
+    let L be non empty TopSpace,
+        N be net of L,
+        M be subnet of N,
+        c be Point of L such that
+A1:   c is_a_cluster_point_of M;
+    let O be a_neighborhood of c;
+      M is_often_in O by A1,Def9;
+    hence N is_often_in O by YELLOW_6:27;
+  end;
+
+theorem Th32:
+for T being non empty TopSpace, N being net of T
+ for x being Point of T st x is_a_cluster_point_of N holds
+  ex M being subnet of N st x in Lim M
+  proof
+    let T be non empty TopSpace,
+        N be net of T,
+        x be Point of T such that
+A1:   x is_a_cluster_point_of N;
+    set n = the mapping of N;
+    set S' = {[s,O] where s is Element of N,
+                 O is Element of OpenNeighborhoods x : N.s in O};
+A2: x in [#]T by PRE_TOPC:13;
+      [#]T is open by TOPS_1:53;
+    then [#]T in the carrier of OpenNeighborhoods x by A2,YELLOW_6:39;
+    then reconsider O = [#]T as Element of OpenNeighborhoods x;
+    consider q being Element of N;
+      N.q in [#]T by PRE_TOPC:13;
+    then [q,O] in S';
+    then reconsider S' as non empty set;
+
+defpred P[set,set] means
+ ex s1, s2 being Element of N st s1 = $1`1 & s2 = $2`1 &
+  s1 <= s2 & $2`2 c= $1`2;
+
+    consider L being non empty strict RelStr such that
+A3:   the carrier of L = S' and
+A4:   for a, b being Element of L holds a <= b iff P[a,b] from RelStrEx;
+
+    deffunc F(Element of L) = n.($1`1);
+A5:   for a being Element of L holds F(a) in the carrier of T
+      proof
+        let a be Element of L;
+          a in S' by A3;
+        then consider s being Element of N, O being Element of
+OpenNeighborhoods x
+           such that
+A6:       a = [s,O] and N.s in O;
+          n.(a`1) = n.s by A6,MCART_1:7;
+        hence n.(a`1) in the carrier of T;
+      end;
+    consider g being Function of the carrier of L, the carrier of T
+       such that
+A7:  for x being Element of L holds g.x = F(x)
+       from FunctR_ealEx(A5);
+    set M = NetStr (#the carrier of L, the InternalRel of L, g#);
+      for a, b being Element of M ex z being Element of M st a <= z & b <= z
+    proof
+      let a, b be Element of M;
+        a in S' by A3;
+      then consider aa being Element of N, Oa being Element of
+OpenNeighborhoods x
+         such that
+A8:     a = [aa,Oa] and N.aa in Oa;
+        b in S' by A3;
+      then consider bb being Element of N, Ob being Element of
+OpenNeighborhoods x
+         such that
+A9:     b = [bb,Ob] and N.bb in Ob;
+      consider z1 being Element of N such that
+A10:     aa <= z1 & bb <= z1 by YELLOW_6:def 5;
+        Oa is a_neighborhood of x & Ob is a_neighborhood of x by Th21;
+      then Oa /\ Ob is a_neighborhood of x by CONNSP_2:4;
+      then N is_often_in Oa /\ Ob by A1,Def9;
+      then consider d being Element of N such that
+A11:     z1 <= d and
+A12:     N.d in Oa /\ Ob by WAYBEL_0:def 12;
+        Oa /\ Ob is Element of OpenNeighborhoods x by Th22;
+      then [d, Oa /\ Ob] in S' by A12;
+      then reconsider z = [d, Oa /\ Ob] as Element of M by A3;
+      take z;
+      reconsider A1 = a, C7 = b, z2 = z as Element of L;
+A13:   Oa /\ Ob c= Oa & Oa /\ Ob c= Ob by XBOOLE_1:17;
+A14:   aa <= d & bb <= d by A10,A11,YELLOW_0:def 2;
+        A1`1 = aa & C7`1 = bb & z2`1 = d &
+        A1`2 = Oa & C7`2 = Ob & z2`2 = Oa /\ Ob by A8,A9,MCART_1:7;
+      then A1 <= z2 & C7 <= z2 by A4,A13,A14;
+      hence a <= z & b <= z by YELLOW_0:1;
+    end;
+    then reconsider M as prenet of T by YELLOW_6:def 5;
+      M is transitive
+    proof
+      let x, y, z be Element of M such that
+A15:     x <= y and
+A16:     y <= z;
+      reconsider x1 = x, y1 = y, z1 = z as Element of L;
+        x1 <= y1 by A15,YELLOW_0:1;
+      then consider sx, sy being Element of N such that
+A17:     sx = x1`1 & sy = y1`1 & sx <= sy & y1`2 c= x1`2 by A4;
+        y1 <= z1 by A16,YELLOW_0:1;
+      then consider s1, s2 being Element of N such that
+A18:     s1 = y1`1 & s2 = z1`1 & s1 <= s2 & z1`2 c= y1`2 by A4;
+A19:   sx <= s2 by A17,A18,YELLOW_0:def 2;
+        z1`2 c= x1`2 by A17,A18,XBOOLE_1:1;
+      then x1 <= z1 by A4,A17,A18,A19;
+      hence x <= z by YELLOW_0:1;
+    end;
+    then reconsider M as net of T;
+      M is subnet of N
+    proof
+      deffunc F(Element of L) = $1`1;
+A20:   for a being Element of L holds F(a) in the carrier of N
+      proof
+        let a be Element of L;
+          a in S' by A3;
+        then consider s being Element of N, O being Element of
+OpenNeighborhoods x
+           such that
+A21:       a = [s,O] and N.s in O;
+          a`1 = s by A21,MCART_1:7;
+        hence a`1 in the carrier of N;
+      end;
+      consider f being Function of the carrier of L, the carrier of N
+       such that
+A22:   for x being Element of L holds f.x = F(x)
+        from FunctR_ealEx(A20);
+      reconsider f as map of M, N;
+      take f;
+        for x being set st x in the carrier of M holds g.x = (n*f).x
+      proof
+        let x be set; assume
+A23:       x in the carrier of M;
+        hence g.x = n.(x`1) by A7
+                .= n.(f.x) by A22,A23
+                .= (n*f).x by A23,FUNCT_2:21;
+      end;
+      hence the mapping of M = (the mapping of N)*f by FUNCT_2:18;
+      let m be Element of N;
+        N.m in [#]T by PRE_TOPC:13;
+      then [m,O] in S';
+      then reconsider n = [m,O] as Element of M by A3;
+      take n;
+      let p be Element of M such that
+A24:     n <= p;
+      reconsider n1 = n, p1 = p as Element of L;
+        n1 <= p1 by A24,YELLOW_0:1;
+      then consider s1, s2 being Element of N such that
+A25:     s1 = n1`1 & s2 = p1`1 & s1 <= s2 and
+          p1`2 c= n1`2 by A4;
+        f.p = p`1 by A22;
+      hence m <= f.p by A25,MCART_1:7;
+    end;
+    then reconsider M as subnet of N;
+    take M;
+      for V being a_neighborhood of x holds M is_eventually_in V
+    proof
+      let V be a_neighborhood of x;
+      consider i being Element of N;
+A26:   x in Int V by CONNSP_2:def 1;
+        Int V is open by TOPS_1:51;
+      then Int V in the carrier of OpenNeighborhoods x by A26,YELLOW_6:39;
+then A27:   Int V is Element of OpenNeighborhoods x;
+      then Int V is a_neighborhood of x by Th21;
+      then N is_often_in Int V by A1,Def9;
+      then consider s being Element of N such that
+          i <= s and
+A28:     N.s in Int V by WAYBEL_0:def 12;
+A29:   M is_eventually_in Int V
+      proof
+        [s,Int V] in S' by A27,A28;
+      then reconsider j = [s,Int V] as Element of M by A3;
+      take j;
+      let s' be Element of M such that
+A30:     j <= s';
+        s' in S' by A3;
+      then consider ss being Element of N, OO being Element of
+OpenNeighborhoods x
+         such that
+A31:     s' = [ss,OO] and
+A32:     N.ss in OO;
+      reconsider j1 = j, s1 = s' as Element of L;
+        j1 <= s1 by A30,YELLOW_0:1;
+      then consider s1, s2 being Element of N such that
+          s1 = j`1 & s2 = s'`1 & s1 <= s2 and
+A33:     s'`2 c= j`2 by A4;
+A34:   j`2 = Int V by MCART_1:7;
+A35:   s'`2 = OO by A31,MCART_1:7;
+        M.s' = (the mapping of M).s' by WAYBEL_0:def 8
+          .= n.(s'`1) by A7
+          .= n.ss by A31,MCART_1:7
+          .= N.ss by WAYBEL_0:def 8;
+      hence M.s' in Int V by A32,A33,A34,A35;
+     end;
+       Int V c= V by TOPS_1:44;
+     hence M is_eventually_in V by A29,WAYBEL_0:8;
+    end;
+    hence x in Lim M by YELLOW_6:def 18;
+  end;
+
+theorem Th33:
+for L being compact Hausdorff (non empty TopSpace), N being net of L st
+ for c, d being Point of L st c is_a_cluster_point_of N &
+  d is_a_cluster_point_of N holds c = d holds
+ for s being Point of L st s is_a_cluster_point_of N holds s in Lim N
+  proof
+    let L be compact Hausdorff (non empty TopSpace),
+        N be net of L such that
+A1:  for c, d being Point of L st c is_a_cluster_point_of N &
+      d is_a_cluster_point_of N holds c = d;
+    let c be Point of L such that
+A2:   c is_a_cluster_point_of N;
+    assume not c in Lim N;
+    then consider M being subnet of N such that
+A3:   not ex P being subnet of M st c in Lim P by YELLOW_6:46;
+    consider d being Point of L such that
+A4:   d is_a_cluster_point_of M by Th30;
+A5: c <> d by A3,A4,Th32;
+      d is_a_cluster_point_of N by A4,Th31;
+    hence contradiction by A1,A2,A5;
+  end;
+
+theorem Th34:
+for S being non empty TopSpace, c being Point of S
+ for N being net of S, A being Subset of S st c is_a_cluster_point_of N &
+  A is closed & rng the mapping of N c= A
+ holds c in A
+  proof
+    let S be non empty TopSpace,
+        c be Point of S,
+        N be net of S,
+        A be Subset of S such that
+A1:  c is_a_cluster_point_of N and
+A2:  A is closed and
+A3:  rng the mapping of N c= A;
+    consider M being subnet of N such that
+A4:   c in Lim M by A1,Th32;
+    consider f being map of M, N such that
+A5:  the mapping of M = (the mapping of N)*f and
+       for m being Element of N ex n being Element of M st
+       for p being Element of M st n <= p holds m <= f.p by YELLOW_6:def 12;
+    reconsider R = rng the mapping of M as Subset of S;
+      R c= rng the mapping of N by A5,RELAT_1:45;
+    then R c= A by A3,XBOOLE_1:1;
+then A6: Cl R c= Cl A by PRE_TOPC:49;
+      c in Cl R by A4,Th24;
+    then c in Cl A by A6;
+    hence c in A by A2,PRE_TOPC:52;
+  end;
+
+Lm5:
+for S being compact Hausdorff TopLattice, N being net of S
+ for c being Point of S, d being Element of S st c = d &
+  (for x being Element of S holds x"/\" is continuous) &
+  N is eventually-directed & c is_a_cluster_point_of N
+ holds d is_>=_than rng the mapping of N
+  proof
+    let S be compact Hausdorff TopLattice,
+        N be net of S,
+        c be Point of S,
+        d be Element of S such that
+A1:  c = d and
+A2:  for x being Element of S holds x"/\" is continuous and
+A3:  N is eventually-directed and
+A4:  c is_a_cluster_point_of N;
+    let i be Element of S;
+    assume i in rng the mapping of N;
+    then consider iJ being set such that
+A5:   iJ in dom the mapping of N and
+A6:   (the mapping of N).iJ = i by FUNCT_1:def 5;
+    reconsider i1 = iJ as Element of N by A5;
+A7: uparrow (N.i1) = {z where z is Element of S : z "/\" N.i1 = N.i1} by Lm1;
+A8: N is_eventually_in uparrow (N.i1)
+    proof
+      consider j being Element of N such that
+A9:     for k being Element of N st j <= k holds N.i1 <= N.k
+          by A3,WAYBEL_0:11;
+      take j;
+      let k be Element of N;
+      assume j <= k;
+      then N.i1 <= N.k by A9;
+      hence N.k in uparrow (N.i1) by WAYBEL_0:18;
+    end;
+      uparrow N.i1 is closed by A2,Th27;
+then A10: Cl (uparrow N.i1) = uparrow N.i1 by PRE_TOPC:52;
+    consider t being Element of N such that
+A11:   for j being Element of N st t <= j holds N.j in uparrow N.i1
+        by A8,WAYBEL_0:def 11;
+    reconsider A = N|t as subnet of N;
+A12: rng the mapping of A c= uparrow N.i1
+    proof
+      let q be set;
+      assume q in rng the mapping of A;
+      then consider x being set such that
+A13:     x in dom the mapping of A and
+A14:     q = (the mapping of A).x by FUNCT_1:def 5;
+      reconsider x as Element of A by A13;
+      consider y being Element of N such that
+A15:     y = x and
+A16:     t <= y by Def7;
+A17:   N.y in uparrow N.i1 by A11,A16;
+        A.x = N.y by A15,Th16;
+      hence q in uparrow N.i1 by A14,A17,WAYBEL_0:def 8;
+    end;
+      c is_a_cluster_point_of A
+    proof
+      let O be a_neighborhood of c;
+      let i be Element of A;
+      consider i2 being Element of N such that
+A18:      i2 = i and
+A19:      t <= i2 by Def7;
+        N is_often_in O by A4,Def9;
+      then consider j2 being Element of N such that
+A20:     i2 <= j2 and
+A21:     N.j2 in O by WAYBEL_0:def 12;
+        t <= j2 by A19,A20,YELLOW_0:def 2;
+      then j2 in the carrier of A by Def7;
+      then reconsider j = j2 as Element of A;
+      take j;
+        A is full SubNetStr of N by Th14;
+      hence i <= j by A18,A20,YELLOW_6:21;
+      thus A.j in O by A21,Th16;
+    end;
+    then consider M being subnet of A such that
+A22:   c in Lim M by Th32;
+    consider f being map of M, A such that
+A23:  the mapping of M = (the mapping of A)*f and
+       for m being Element of A ex n being Element of M st
+       for p being Element of M st n <= p holds m <= f.p by YELLOW_6:def 12;
+    reconsider R = rng the mapping of M as Subset of S;
+      R c= rng the mapping of A by A23,RELAT_1:45;
+    then R c= uparrow N.i1 by A12,XBOOLE_1:1;
+then A24: Cl R c= Cl (uparrow N.i1) by PRE_TOPC:49;
+      c in Cl R by A22,Th24;
+    then c in uparrow (N.i1) by A10,A24;
+    then consider z being Element of S such that
+A25:   c = z & z "/\" N.i1 = N.i1 by A7;
+      d >= N.i1 by A1,A25,YELLOW_0:25;
+    hence d >= i by A6,WAYBEL_0:def 8;
+  end;
+
+Lm6:
+for S being compact Hausdorff TopLattice, N being net of S
+ for c being Point of S, d being Element of S st c = d &
+  (for x being Element of S holds x"/\" is continuous) &
+  c is_a_cluster_point_of N
+ holds for b being Element of S st rng the mapping of N is_<=_than b
+  holds d <= b
+  proof
+    let S be compact Hausdorff TopLattice,
+        N be net of S,
+        c be Point of S,
+        d be Element of S such that
+A1:  c = d and
+A2:  for x being Element of S holds x"/\" is continuous and
+A3:  c is_a_cluster_point_of N;
+    let b be Element of S such that
+A4:   rng the mapping of N is_<=_than b;
+A5: now
+      let i be Element of N;
+A6:   the carrier of N = dom the mapping of N by FUNCT_2:def 1;
+A7:   N.i = (the mapping of N).i by WAYBEL_0:def 8;
+      then reconsider Ni = N.i as Element of rng the mapping of N
+        by A6,FUNCT_1:def 5;
+        N.i in rng the mapping of N by A6,A7,FUNCT_1:def 5;
+      then N.i <= b by A4,LATTICE3:def 9;
+then A8:   b "/\" N.i = N.i by YELLOW_0:25;
+        the carrier of S = [#]S by PRE_TOPC:12;
+      then b in {b} & Ni in [#]S by TARSKI:def 1;
+      hence N.i in {b} "/\" [#]S by A8,YELLOW_4:37;
+    end;
+A9: {b} "/\" [#]S = {b "/\" y where y is Element of S: y in [#]
+S} by YELLOW_4:42;
+A10: rng the mapping of N c= {b} "/\" [#]S
+    proof
+      let y be set;
+      assume y in rng the mapping of N;
+      then consider x being set such that
+A11:     x in dom the mapping of N and
+A12:     y = (the mapping of N).x by FUNCT_1:def 5;
+      reconsider x as Element of N by A11;
+        y = N.x by A12,WAYBEL_0:def 8;
+      hence y in {b} "/\" [#]S by A5;
+    end;
+      downarrow b is closed by A2,Th28;
+    then {b} "/\" [#]S is closed by Th5;
+    then c in {b} "/\" [#]S by A3,A10,Th34;
+    then consider y being Element of S such that
+A13:   c = b "/\" y and
+        y in [#]S by A9;
+    thus d <= b by A1,A13,YELLOW_0:23;
+ end;
+
+theorem Th35:
+for S being compact Hausdorff TopLattice, c being Point of S
+ for N being net of S st
+  (for x being Element of S holds x"/\" is continuous) &
+  N is eventually-directed & c is_a_cluster_point_of N
+ holds c = sup N
+  proof
+    let S be compact Hausdorff TopLattice,
+        c be Point of S,
+        N be net of S such that
+A1:  for x being Element of S holds x"/\" is continuous and
+A2:  N is eventually-directed and
+A3:  c is_a_cluster_point_of N;
+    reconsider c' = c as Element of S;
+A4: c' is_>=_than rng the mapping of N by A1,A2,A3,Lm5;
+      for b being Element of S st rng the mapping of N is_<=_than b
+     holds c' <= b by A1,A3,Lm6;
+    hence c = sup rng the mapping of N by A4,YELLOW_0:30
+           .= Sup the mapping of N by YELLOW_2:def 5
+           .= sup N by WAYBEL_2:def 1;
+  end;
+
+Lm7:
+for S being compact Hausdorff TopLattice, N being net of S
+ for c being Point of S, d being Element of S st c = d &
+  (for x being Element of S holds x"/\" is continuous) &
+  N is eventually-filtered & c is_a_cluster_point_of N
+ holds d is_<=_than rng the mapping of N
+  proof
+    let S be compact Hausdorff TopLattice,
+        N be net of S,
+        c be Point of S,
+        d be Element of S such that
+A1:  c = d and
+A2:  for x being Element of S holds x"/\" is continuous and
+A3:  N is eventually-filtered and
+A4:  c is_a_cluster_point_of N;
+    let i be Element of S;
+    assume i in rng the mapping of N;
+    then consider iJ being set such that
+A5:   iJ in dom the mapping of N and
+A6:   (the mapping of N).iJ = i by FUNCT_1:def 5;
+    reconsider i1 = iJ as Element of N by A5;
+A7: downarrow (N.i1) = {z where z is Element of S : z "\/" N.i1 = N.i1}
+      by Lm2;
+A8: N is_eventually_in downarrow (N.i1)
+    proof
+      consider j being Element of N such that
+A9:     for k being Element of N st j <= k holds N.i1 >= N.k
+          by A3,WAYBEL_0:12;
+      take j;
+      let k be Element of N;
+      assume j <= k;
+      then N.i1 >= N.k by A9;
+      hence N.k in downarrow (N.i1) by WAYBEL_0:17;
+    end;
+      downarrow N.i1 is closed by A2,Th28;
+then A10: Cl (downarrow N.i1) = downarrow N.i1 by PRE_TOPC:52;
+    consider t being Element of N such that
+A11:   for j being Element of N st t <= j holds N.j in downarrow N.i1
+        by A8,WAYBEL_0:def 11;
+    reconsider A = N|t as subnet of N;
+A12: rng the mapping of A c= downarrow N.i1
+    proof
+      let q be set;
+      assume q in rng the mapping of A;
+      then consider x being set such that
+A13:     x in dom the mapping of A and
+A14:     q = (the mapping of A).x by FUNCT_1:def 5;
+      reconsider x as Element of A by A13;
+      consider y being Element of N such that
+A15:     y = x and
+A16:     t <= y by Def7;
+A17:   N.y in downarrow N.i1 by A11,A16;
+        A.x = N.y by A15,Th16;
+      hence q in downarrow N.i1 by A14,A17,WAYBEL_0:def 8;
+    end;
+      c is_a_cluster_point_of A
+    proof
+      let O be a_neighborhood of c;
+      let i be Element of A;
+      consider i2 being Element of N such that
+A18:      i2 = i and
+A19:      t <= i2 by Def7;
+        N is_often_in O by A4,Def9;
+      then consider j2 being Element of N such that
+A20:     i2 <= j2 and
+A21:     N.j2 in O by WAYBEL_0:def 12;
+        t <= j2 by A19,A20,YELLOW_0:def 2;
+      then j2 in the carrier of A by Def7;
+      then reconsider j = j2 as Element of A;
+      take j;
+        A is full SubNetStr of N by Th14;
+      hence i <= j by A18,A20,YELLOW_6:21;
+      thus A.j in O by A21,Th16;
+    end;
+    then consider M being subnet of A such that
+A22:   c in Lim M by Th32;
+    consider f being map of M, A such that
+A23:  the mapping of M = (the mapping of A)*f and
+       for m being Element of A ex n being Element of M st
+       for p being Element of M st n <= p holds m <= f.p by YELLOW_6:def 12;
+    reconsider R = rng the mapping of M as Subset of S;
+      R c= rng the mapping of A by A23,RELAT_1:45;
+    then R c= downarrow N.i1 by A12,XBOOLE_1:1;
+then A24: Cl R c= Cl (downarrow N.i1) by PRE_TOPC:49;
+      c in Cl R by A22,Th24;
+    then c in downarrow (N.i1) by A10,A24;
+    then consider z being Element of S such that
+A25:   c = z & z "\/" N.i1 = N.i1 by A7;
+      d <= N.i1 by A1,A25,YELLOW_0:24;
+    hence d <= i by A6,WAYBEL_0:def 8;
+  end;
+
+Lm8:
+for S being compact Hausdorff TopLattice, N being net of S
+ for c being Point of S, d being Element of S st c = d &
+  (for x being Element of S holds x"/\" is continuous) &
+  c is_a_cluster_point_of N
+ holds for b being Element of S st rng the mapping of N is_>=_than b
+  holds d >= b
+  proof
+    let S be compact Hausdorff TopLattice,
+        N be net of S,
+        c be Point of S,
+        d be Element of S such that
+A1:  c = d and
+A2:  for x being Element of S holds x"/\" is continuous and
+A3:  c is_a_cluster_point_of N;
+    let b be Element of S such that
+A4:   rng the mapping of N is_>=_than b;
+A5: now
+      let i be Element of N;
+A6:   the carrier of N = dom the mapping of N by FUNCT_2:def 1;
+A7:   N.i = (the mapping of N).i by WAYBEL_0:def 8;
+      then reconsider Ni = N.i as Element of rng the mapping of N
+        by A6,FUNCT_1:def 5;
+        N.i in rng the mapping of N by A6,A7,FUNCT_1:def 5;
+      then N.i >= b by A4,LATTICE3:def 8;
+then A8:   b "\/" N.i = N.i by YELLOW_0:24;
+        the carrier of S = [#]S by PRE_TOPC:12;
+      then b in {b} & Ni in [#]S by TARSKI:def 1;
+      hence N.i in {b} "\/" [#]S by A8,YELLOW_4:10;
+    end;
+A9: {b} "\/" [#]S = {b "\/" y where y is Element of S: y in [#]
+S} by YELLOW_4:15;
+A10: rng the mapping of N c= {b} "\/" [#]S
+    proof
+      let y be set;
+      assume y in rng the mapping of N;
+      then consider x being set such that
+A11:     x in dom the mapping of N and
+A12:     y = (the mapping of N).x by FUNCT_1:def 5;
+      reconsider x as Element of N by A11;
+        y = N.x by A12,WAYBEL_0:def 8;
+      hence y in {b} "\/" [#]S by A5;
+    end;
+      uparrow b is closed by A2,Th27;
+    then {b} "\/" [#]S is closed by Th4;
+    then c in {b} "\/" [#]S by A3,A10,Th34;
+    then consider y being Element of S such that
+A13:   c = b "\/" y and
+        y in [#]S by A9;
+    thus d >= b by A1,A13,YELLOW_0:22;
+  end;
+
+theorem Th36:
+for S being compact Hausdorff TopLattice, c being Point of S
+ for N being net of S st
+  (for x being Element of S holds x"/\" is continuous) &
+  N is eventually-filtered & c is_a_cluster_point_of N
+ holds c = inf N
+  proof
+    let S be compact Hausdorff TopLattice,
+        c be Point of S,
+        N be net of S such that
+A1:  for x being Element of S holds x"/\" is continuous and
+A2:  N is eventually-filtered and
+A3:  c is_a_cluster_point_of N;
+    reconsider c' = c as Element of S;
+A4: c' is_<=_than rng the mapping of N by A1,A2,A3,Lm7;
+      for b being Element of S st rng the mapping of N is_>=_than b
+     holds c' >= b by A1,A3,Lm8;
+    hence c = inf rng the mapping of N by A4,YELLOW_0:31
+           .= Inf the mapping of N by YELLOW_2:def 6
+           .= inf N by Def2;
+  end;
+
+
+begin :: On The Topological Properties of Meet-Continuous Lattices
+
+:: Proposition 4.4 s. 32     (i) & (ii) => MC
+theorem Th37:
+for S being Hausdorff TopLattice st
+ (for N being net of S st N is eventually-directed
+   holds ex_sup_of N & sup N in Lim N) &
+ (for x being Element of S holds x"/\" is continuous) holds
+  S is meet-continuous
+  proof
+    let S be Hausdorff TopLattice such that
+A1:  for N being net of S st N is eventually-directed
+       holds ex_sup_of N & sup N in Lim N and
+A2:  for x being Element of S holds x "/\" is continuous;
+      for X being non empty directed Subset of S holds ex_sup_of X,S
+    proof
+      let X be non empty directed Subset of S;
+      reconsider n = id X as Function of X, the carrier of S by FUNCT_2:9;
+      set N = NetStr (#X,(the InternalRel of S)|_2 X,n#);
+        N is eventually-directed by WAYBEL_2:20;
+then A3:   ex_sup_of N by A1;
+        rng the mapping of N = X by RELAT_1:71;
+      hence ex_sup_of X,S by A3,Def3;
+    end;
+    hence S is up-complete by WAYBEL_0:75;
+      for x being Element of S, M being net of S st M is eventually-directed
+     holds x "/\" sup M = sup ({x} "/\" rng netmap (M,S))
+    proof
+      let x be Element of S,
+          M be net of S such that
+A4:     M is eventually-directed;
+      set xM = x "/\" M;
+A5:   x "/\" M is eventually-directed by A4,WAYBEL_2:27;
+A6:   x"/\" is continuous by A2;
+A7:   sup M in Lim M by A1,A4;
+      then reconsider M1 = M as convergent net of S by YELLOW_6:def 19;
+A8:   sup xM in Lim xM by A1,A5;
+      then reconsider xM as convergent net of S by YELLOW_6:def 19;
+A9:   x "/\" lim M1 in Lim (x "/\" M1) by A6,Th26;
+      thus x "/\" sup M = x "/\" lim M1 by A7,YELLOW_6:def 20
+                     .= lim xM by A9,YELLOW_6:def 20
+                     .= sup xM by A8,YELLOW_6:def 20
+                     .= Sup the mapping of xM by WAYBEL_2:def 1
+                     .= sup rng the mapping of xM by YELLOW_2:def 5
+                     .= sup ({x} "/\" rng the mapping of M) by WAYBEL_2:23
+                     .= sup ({x} "/\" rng netmap (M,S)) by WAYBEL_0:def 7;
+    end;
+    hence S is satisfying_MC by Th9;
+  end;
+
+:: Proposition 4.4 s. 32      (ii) => (i)
+theorem Th38:
+for S being compact Hausdorff TopLattice st
+ for x being Element of S holds x"/\" is continuous
+  holds
+ for N being net of S st N is eventually-directed
+  holds ex_sup_of N & sup N in Lim N
+  proof
+    let S be compact Hausdorff TopLattice such that
+A1:   for x being Element of S holds x "/\" is continuous;
+    let N be net of S such that
+A2:   N is eventually-directed;
+    consider c being Point of S such that
+A3:   c is_a_cluster_point_of N by Th30;
+A4: c = sup N by A1,A2,A3,Th35;
+    thus ex_sup_of N
+    proof
+      set X = rng the mapping of N;
+      reconsider d = c as Element of S;
+A5:   X is_<=_than d by A1,A2,A3,Lm5;
+        for b being Element of S st X is_<=_than b holds d <= b
+        by A1,A3,Lm6;
+      hence ex_sup_of rng the mapping of N, S by A5,YELLOW_0:15;
+    end;
+      for c, d being Point of S st c is_a_cluster_point_of N &
+      d is_a_cluster_point_of N holds c = d
+    proof
+      let c, d be Point of S such that
+A6:     c is_a_cluster_point_of N and
+A7:     d is_a_cluster_point_of N;
+      thus c = sup N by A1,A2,A6,Th35
+            .= d by A1,A2,A7,Th35;
+    end;
+    hence sup N in Lim N by A3,A4,Th33;
+  end;
+
+:: Proposition 4.4 s. 32      (ii) => (i) dual
+theorem Th39:
+for S being compact Hausdorff TopLattice st
+ for x being Element of S holds x"/\" is continuous
+  holds
+ for N being net of S st N is eventually-filtered holds
+  ex_inf_of N & inf N in Lim N
+  proof
+    let S be compact Hausdorff TopLattice such that
+A1:   for x being Element of S holds x "/\" is continuous;
+    let N be net of S such that
+A2:   N is eventually-filtered;
+    consider c being Point of S such that
+A3:   c is_a_cluster_point_of N by Th30;
+A4: c = inf N by A1,A2,A3,Th36;
+    thus ex_inf_of N
+    proof
+      set X = rng the mapping of N;
+      reconsider d = c as Element of S;
+A5:   X is_>=_than d by A1,A2,A3,Lm7;
+        for b being Element of S st X is_>=_than b holds d >= b
+        by A1,A3,Lm8;
+      hence ex_inf_of rng the mapping of N, S by A5,YELLOW_0:16;
+    end;
+      for c, d being Point of S st c is_a_cluster_point_of N &
+      d is_a_cluster_point_of N holds c = d
+    proof
+      let c, d be Point of S such that
+A6:     c is_a_cluster_point_of N and
+A7:     d is_a_cluster_point_of N;
+      thus c = inf N by A1,A2,A6,Th36
+            .= d by A1,A2,A7,Th36;
+    end;
+    hence inf N in Lim N by A3,A4,Th33;
+  end;
+
+theorem
+  for S being compact Hausdorff TopLattice st
+ for x being Element of S holds x"/\" is continuous
+  holds S is bounded
+  proof
+    let S be compact Hausdorff TopLattice such that
+A1:  for x being Element of S holds x"/\" is continuous;
+    thus S is lower-bounded
+    proof
+      reconsider x = inf (S opp+id) as Element of S;
+      take x;
+A2:   rng the mapping of S opp+id
+          = rng id S by Def6
+         .= rng id the carrier of S by GRCAT_1:def 11
+         .= the carrier of S by RELAT_1:71;
+        ex_inf_of S opp+id by A1,Th39;
+then A3:   ex_inf_of the carrier of S, S by A2,Def4;
+        x = Inf the mapping of S opp+id by Def2
+       .= "/\"(the carrier of S,S) by A2,YELLOW_2:def 6;
+      hence x is_<=_than the carrier of S by A3,YELLOW_0:31;
+    end;
+    reconsider x = sup (S+id) as Element of S;
+    take x;
+A4: rng the mapping of S+id
+        = rng id S by Def5
+       .= rng id the carrier of S by GRCAT_1:def 11
+       .= the carrier of S by RELAT_1:71;
+      ex_sup_of S+id by A1,Th38;
+then A5: ex_sup_of the carrier of S, S by A4,Def3;
+      x = Sup the mapping of S+id by WAYBEL_2:def 1
+     .= "\/"(the carrier of S,S) by A4,YELLOW_2:def 5;
+    hence x is_>=_than the carrier of S by A5,YELLOW_0:30;
+  end;
+
+theorem
+  for S being compact Hausdorff TopLattice st
+ for x being Element of S holds x"/\" is continuous holds
+  S is meet-continuous
+  proof
+    let S be compact Hausdorff TopLattice; assume
+A1:   for x being Element of S holds x "/\" is continuous;
+    then for N being net of S st N is eventually-directed
+      holds ex_sup_of N & sup N in Lim N by Th38;
+    hence S is meet-continuous by A1,Th37;
+  end;

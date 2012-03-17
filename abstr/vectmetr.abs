@@ -1,0 +1,281 @@
+:: Real Linear-Metric Space and Isometric Functions
+::  by Robert Milewski
+::
+:: Received November 3, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary METRIC_1, JORDAN1, ARYTM_1, FINSEQ_1, ABSVALUE, RLVECT_1, ARYTM_3,
+      BINTREE1, TREES_2, RELAT_1, FUNCT_1, BOOLE, TREES_4, CAT_1, TREES_1,
+      POWER, INT_1, BINTREE2, MCART_1, EUCLID, FINSEQ_2, MIDSP_3, MARGREL1,
+      ZF_LANG, NAT_1, MATRIX_2, FUNCOP_1, RELAT_2, PRE_TOPC, FUNCT_2, SUBSET_1,
+      BINOP_1, UNIALG_1, COMPLEX1, VECTSP_1, GROUP_1, GROUP_2, VECTMETR,
+      FINSEQ_4, PARTFUN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, MCART_1,
+      REAL_1, RELAT_2, NAT_1, INT_1, STRUCT_0, POWER, ABIAN, SERIES_1, RELAT_1,
+      RELSET_1, ABSVALUE, MARGREL1, BINOP_1, DOMAIN_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, PRE_TOPC, FUNCOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSEQOP,
+      BINARITH, TREES_1, TREES_2, TREES_4, BINTREE1, BINTREE2, RVSUM_1,
+      RLVECT_1, VECTSP_1, GROUP_1, GROUP_2, TOPS_2, GRCAT_1, METRIC_1, EUCLID,
+      MIDSP_3;
+ constructors REAL_1, ABIAN, SERIES_1, DOMAIN_1, TOPS_2, TREES_9, FINSEQ_4,
+      FINSEQOP, BINARITH, BINTREE2, GRCAT_1, EUCLID, GROUP_2, MEMBERED;
+ clusters SUBSET_1, STRUCT_0, RELSET_1, FUNCT_1, BINTREE1, BINTREE2, GROUP_1,
+      GROUP_2, METRIC_1, TREES_2, MARGREL1, BINARITH, NAT_1, MEMBERED, FUNCT_2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin  :: Convex and Internal Metric Spaces
+
+  definition
+   let V be non empty MetrStruct;
+   attr V is convex means
+:: VECTMETR:def 1
+    for x,y be Element of V
+    for r be Real st 0 <= r & r <= 1
+    ex z be Element of V st
+     dist(x,z) = r * dist(x,y) & dist(z,y) = (1 - r) * dist(x,y);
+  end;
+
+  definition
+   let V be non empty MetrStruct;
+   attr V is internal means
+:: VECTMETR:def 2
+      for x,y be Element of V
+    for p,q be Real st p > 0 & q > 0
+    ex f be FinSequence of the carrier of V st
+     f/.1 = x & f/.len f = y &
+     (for i be Nat st 1 <= i & i <=
+ len f - 1 holds dist(f/.i,f/.(i+1)) < p) &
+     for F be FinSequence of REAL st len F = len f - 1 &
+      for i be Nat st 1 <= i & i <= len F holds F/.i = dist(f/.i,f/.(i+1))
+     holds abs(dist(x,y) - Sum F) < q;
+  end;
+
+  theorem :: VECTMETR:1
+   for V be non empty MetrSpace st V is convex
+   for x,y be Element of V
+   for p be Real st p > 0
+   ex f be FinSequence of the carrier of V st
+    f/.1 = x & f/.len f = y &
+    (for i be Nat st 1 <= i & i <= len f - 1 holds dist(f/.i,f/.(i+1)) < p) &
+    for F be FinSequence of REAL st len F = len f - 1 &
+     for i be Nat st 1 <= i & i <= len F holds F/.i = dist(f/.i,f/.(i+1))
+    holds dist(x,y) = Sum F;
+
+  definition
+   cluster convex -> internal (non empty MetrSpace);
+  end;
+
+  definition
+   cluster convex (non empty MetrSpace);
+  end;
+
+  definition
+   mode Geometry is Reflexive discerning symmetric triangle internal
+        (non empty MetrStruct);
+  end;
+
+begin  :: Isometric Functions
+
+  definition
+   let V be non empty MetrStruct;
+   let f be map of V,V;
+   attr f is isometric means
+:: VECTMETR:def 3
+    rng f = the carrier of V &
+    for x,y be Element of V holds dist(x,y) = dist(f.x,f.y);
+  end;
+
+  definition
+   let V be non empty MetrStruct;
+   func ISOM(V) -> set means
+:: VECTMETR:def 4
+    for x be set holds
+     x in it iff ex f be map of V,V st f = x & f is isometric;
+  end;
+
+  definition
+   let V be non empty MetrStruct;
+   redefine func ISOM(V) -> Subset of Funcs(the carrier of V,the carrier of V);
+  end;
+
+  theorem :: VECTMETR:2
+   for V be discerning Reflexive (non empty MetrStruct)
+   for f be map of V,V st f is isometric holds
+    f is one-to-one;
+
+  definition
+   let V be discerning Reflexive (non empty MetrStruct);
+   cluster isometric -> one-to-one map of V,V;
+  end;
+
+  definition
+   let V be non empty MetrStruct;
+   cluster isometric map of V,V;
+  end;
+
+  theorem :: VECTMETR:3
+   for V be discerning Reflexive (non empty MetrStruct)
+   for f be isometric map of V,V holds
+    f" is isometric;
+
+  theorem :: VECTMETR:4
+   for V be non empty MetrStruct
+   for f,g be isometric map of V,V holds
+    f*g is isometric;
+
+  theorem :: VECTMETR:5
+   for V be non empty MetrStruct holds
+    id(V) is isometric;
+
+  definition
+   let V be non empty MetrStruct;
+   cluster ISOM V -> non empty;
+  end;
+
+begin  :: Real Linear-Metric Spaces
+
+definition
+  struct(RLSStruct,MetrStruct) RLSMetrStruct (# carrier -> set,
+          distance -> Function of [:the carrier,the carrier:],REAL,
+          Zero -> Element of the carrier,
+          add -> BinOp of the carrier,
+          Mult -> Function of [:REAL, the carrier:],the carrier #);
+end;
+
+  definition
+   cluster non empty strict RLSMetrStruct;
+  end;
+
+  definition
+   let X be non empty set;
+   let F be Function of [:X,X:],REAL;
+   let O be Element of X;
+   let B be BinOp of X;
+   let G be Function of [:REAL,X:],X;
+   cluster RLSMetrStruct (# X,F,O,B,G #) -> non empty;
+  end;
+
+  definition
+   let V be non empty RLSMetrStruct;
+   attr V is homogeneous means
+:: VECTMETR:def 5
+    for r be Real
+    for v,w be Element of V holds
+     dist(r*v,r*w) = abs(r) * dist(v,w);
+  end;
+
+  definition
+   let V be non empty RLSMetrStruct;
+   attr V is translatible means
+:: VECTMETR:def 6
+    for u,w,v be Element of V holds
+     dist(v,w) = dist(v+u,w+u);
+  end;
+
+  definition
+   let V be non empty RLSMetrStruct;
+   let v be Element of V;
+   func Norm(v) -> Real equals
+:: VECTMETR:def 7
+    dist(0.V,v);
+  end;
+
+  definition
+   cluster strict Abelian add-associative right_zeroed
+           right_complementable RealLinearSpace-like
+           Reflexive discerning symmetric triangle
+           homogeneous translatible (non empty RLSMetrStruct);
+  end;
+
+  definition
+   mode RealLinearMetrSpace is
+    Abelian add-associative right_zeroed right_complementable
+    RealLinearSpace-like Reflexive discerning symmetric triangle
+    homogeneous translatible (non empty RLSMetrStruct);
+  end;
+
+  theorem :: VECTMETR:6
+     for V be homogeneous Abelian add-associative right_zeroed
+    right_complementable RealLinearSpace-like (non empty RLSMetrStruct)
+   for r be Real
+   for v be Element of V holds
+    Norm (r * v) = abs(r) * Norm v;
+
+  theorem :: VECTMETR:7
+     for V be translatible Abelian add-associative right_zeroed
+              right_complementable triangle (non empty RLSMetrStruct)
+   for v,w be Element of V holds
+    Norm (v + w) <= Norm v + Norm w;
+
+  theorem :: VECTMETR:8
+     for V be translatible add-associative right_zeroed right_complementable
+                                                    (non empty RLSMetrStruct)
+   for v,w be Element of V holds
+    dist(v,w) = Norm (w - v);
+
+  definition
+   let n be Nat;
+   func RLMSpace n -> strict RealLinearMetrSpace means
+:: VECTMETR:def 8
+    the carrier of it = REAL n &
+    the distance of it = Pitag_dist n &
+    the Zero of it = 0*n &
+    (for x,y be Element of REAL n holds (the add of it).(x,y) = x + y) &
+    for x be Element of REAL n,r be Element of REAL holds
+     (the Mult of it).(r,x) = r * x;
+  end;
+
+  theorem :: VECTMETR:9
+     for n be Nat
+   for f be isometric map of RLMSpace n,RLMSpace n holds
+    rng f = REAL n;
+
+begin  :: Groups of Isometric Functions
+
+  definition
+   let n be Nat;
+   func IsomGroup n -> strict HGrStr means
+:: VECTMETR:def 9
+    the carrier of it = ISOM RLMSpace n &
+    (for f,g be Function st f in ISOM RLMSpace n &
+     g in ISOM RLMSpace n holds (the mult of it).(f,g) = f*g);
+  end;
+
+  definition
+   let n be Nat;
+   cluster IsomGroup n -> non empty;
+  end;
+
+  definition
+   let n be Nat;
+   cluster IsomGroup n -> associative Group-like;
+  end;
+
+  theorem :: VECTMETR:10
+   for n be Nat holds
+    1.(IsomGroup n) = id (RLMSpace n);
+
+  theorem :: VECTMETR:11
+   for n be Nat
+   for f be Element of IsomGroup n
+   for g be map of RLMSpace n,RLMSpace n st f = g holds
+    f" = g";
+
+  definition
+   let n be Nat;
+   let G be Subgroup of IsomGroup n;
+   func SubIsomGroupRel G -> Relation of the carrier of RLMSpace n means
+:: VECTMETR:def 10
+
+    for A,B be Element of RLMSpace n holds
+     [A,B] in it iff ex f be Function st f in the carrier of G & f.A = B;
+  end;
+
+  definition
+   let n be Nat;
+   let G be Subgroup of IsomGroup n;
+   cluster SubIsomGroupRel G -> total symmetric transitive;
+  end;

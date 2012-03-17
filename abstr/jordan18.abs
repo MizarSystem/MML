@@ -1,0 +1,231 @@
+:: The Ordering of Points on a Curve, Part {IV}
+::  by Artur Korni{\l}owicz
+::
+:: Received September 16, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL2, ARYTM, PRE_TOPC, EUCLID, TOPREAL1, BOOLE, TOPREAL2,
+      INCPROJ, ARYTM_1, MCART_1, FUNCT_5, RELAT_1, JORDAN1A, JORDAN2C, JORDAN3,
+      TOPS_2, RELAT_2, SUBSET_1, SEQ_2, FUNCT_1, JORDAN6, COMPTS_1, LATTICES,
+      METRIC_1, PCOMPS_1, ABSVALUE, SQUARE_1, JORDAN18, SPPOL_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, ORDINAL1,
+      NUMBERS, XCMPLX_0, XREAL_0, REAL_1, SQUARE_1, ABSVALUE, SEQ_4, STRUCT_0,
+      INCPROJ, PRE_TOPC, TOPS_2, CONNSP_1, RCOMP_1, COMPTS_1, METRIC_1,
+      SPPOL_1, PCOMPS_1, EUCLID, TOPREAL1, PSCOMP_1, TOPREAL2, JORDAN5C,
+      JORDAN2C, GOBRD14, JORDAN1A, JORDAN6;
+ constructors REAL_1, TOPREAL1, TOPREAL2, INCPROJ, SPPOL_1, JORDAN1A, PSCOMP_1,
+      JORDAN5C, TOPS_2, JORDAN2C, JORDAN6, CONNSP_1, JORDAN1, BORSUK_2,
+      RCOMP_1, ABSVALUE, GOBRD14, SQUARE_1, MEMBERED;
+ clusters XREAL_0, EUCLID, STRUCT_0, JORDAN1A, SUBSET_1, RELSET_1, BORSUK_2,
+      SPRECT_4, MEMBERED, ZFMISC_1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin  :: Preliminaries
+
+reserve n for Element of NAT,
+        V for Subset of TOP-REAL n,
+        s,s1,s2,t,t1,t2 for Point of TOP-REAL n,
+        C for Simple_closed_curve,
+        P for Subset of TOP-REAL 2,
+        a,p,p1,p2,q,q1,q2 for Point of TOP-REAL 2;
+
+theorem :: JORDAN18:1
+  for a,b being real number holds (a-b)^2 = (b-a)^2;
+
+theorem :: JORDAN18:2
+    for S,T being non empty TopSpace,
+      f being map of S,T,
+      A being Subset of T st f is_homeomorphism & A is connected
+   holds f"A is connected;
+
+theorem :: JORDAN18:3
+    for S,T being non empty TopStruct,
+      f being map of S,T,
+      A being Subset of T st f is_homeomorphism & A is compact
+   holds f"A is compact;
+
+theorem :: JORDAN18:4
+  proj2.:(north_halfline a) is bounded_below;
+
+theorem :: JORDAN18:5
+  proj2.:(south_halfline a) is bounded_above;
+
+theorem :: JORDAN18:6
+  proj1.:(west_halfline a) is bounded_above;
+
+theorem :: JORDAN18:7
+  proj1.:(east_halfline a) is bounded_below;
+
+definition
+  let a;
+  cluster proj2.:(north_halfline a) -> non empty;
+  cluster proj2.:(south_halfline a) -> non empty;
+  cluster proj1.:(west_halfline a) -> non empty;
+  cluster proj1.:(east_halfline a) -> non empty;
+end;
+
+theorem :: JORDAN18:8
+  inf(proj2.:(north_halfline a)) = a`2;
+
+theorem :: JORDAN18:9
+  sup(proj2.:(south_halfline a)) = a`2;
+
+theorem :: JORDAN18:10
+    sup(proj1.:(west_halfline a)) = a`1;
+
+theorem :: JORDAN18:11
+    inf(proj1.:(east_halfline a)) = a`1;
+
+definition
+  let a;
+  cluster north_halfline a -> closed;
+
+  cluster south_halfline a -> closed;
+
+  cluster east_halfline a -> closed;
+
+  cluster west_halfline a -> closed;
+end;
+
+theorem :: JORDAN18:12
+  a in BDD P implies not north_halfline a c= UBD P;
+
+theorem :: JORDAN18:13
+  a in BDD P implies not south_halfline a c= UBD P;
+
+theorem :: JORDAN18:14
+    a in BDD P implies not east_halfline a c= UBD P;
+
+theorem :: JORDAN18:15
+    a in BDD P implies not west_halfline a c= UBD P;
+
+theorem :: JORDAN18:16
+    for P being Subset of TOP-REAL 2,
+      p1,p2,q being Point of TOP-REAL 2
+   st P is_an_arc_of p1,p2 & q <> p2
+   holds not p2 in L_Segment(P,p1,p2,q);
+
+theorem :: JORDAN18:17
+    for P being Subset of TOP-REAL 2,
+      p1,p2,q being Point of TOP-REAL 2
+   st P is_an_arc_of p1,p2 & q <> p1
+   holds not p1 in R_Segment(P,p1,p2,q);
+
+theorem :: JORDAN18:18
+  for C being Simple_closed_curve,
+      P being Subset of TOP-REAL 2,
+      p1,p2 being Point of TOP-REAL 2
+   st P is_an_arc_of p1,p2 & P c= C
+  ex R being non empty Subset of TOP-REAL 2 st
+     R is_an_arc_of p1,p2 & P \/ R = C & P /\ R = {p1,p2};
+
+theorem :: JORDAN18:19
+  for P being Subset of TOP-REAL 2,
+      p1,p2,q1,q2 being Point of TOP-REAL 2
+    st P is_an_arc_of p1,p2 & q1 in P & q2 in P &
+       q1 <> p1 & q1 <> p2 & q2 <> p1 & q2 <> p2 & q1 <> q2
+   ex Q being non empty Subset of TOP-REAL 2 st
+      Q is_an_arc_of q1,q2 & Q c= P & Q misses {p1,p2};
+
+begin  :: Two Special Points on a Simple Closed Curve
+
+definition let p,P;
+ func North-Bound(p,P) -> Point of TOP-REAL 2 equals
+:: JORDAN18:def 1
+ |[p`1,inf(proj2.:(P /\ north_halfline p))]|;
+ func South-Bound(p,P) -> Point of TOP-REAL 2 equals
+:: JORDAN18:def 2
+ |[p`1,sup(proj2.:(P /\ south_halfline p))]|;
+end;
+
+theorem :: JORDAN18:20
+  North-Bound(p,P)`1 = p`1 & South-Bound(p,P)`1 = p`1;
+
+theorem :: JORDAN18:21
+  North-Bound(p,P)`2 = inf(proj2.:(P /\ north_halfline p)) &
+  South-Bound(p,P)`2 = sup(proj2.:(P /\ south_halfline p));
+
+theorem :: JORDAN18:22
+  for C being compact Subset of TOP-REAL 2 holds
+  p in BDD C implies
+  North-Bound(p,C) in C & North-Bound(p,C) in north_halfline p &
+  South-Bound(p,C) in C & South-Bound(p,C) in south_halfline p;
+
+theorem :: JORDAN18:23
+  for C being compact Subset of TOP-REAL 2 holds
+  p in BDD C implies South-Bound(p,C)`2 < p`2 & p`2 < North-Bound(p,C)`2;
+
+theorem :: JORDAN18:24
+  for C being compact Subset of TOP-REAL 2 holds
+  p in BDD C implies
+  inf(proj2.:(C /\ north_halfline p)) > sup(proj2.:(C /\ south_halfline p));
+
+theorem :: JORDAN18:25
+    for C being compact Subset of TOP-REAL 2 holds
+  p in BDD C implies South-Bound(p,C) <> North-Bound(p,C);
+
+theorem :: JORDAN18:26
+  for C being Subset of TOP-REAL 2 holds
+   LSeg(North-Bound(p,C),South-Bound(p,C)) is vertical;
+
+theorem :: JORDAN18:27
+    for C being compact Subset of TOP-REAL 2 holds
+   p in BDD C implies
+   LSeg(North-Bound(p,C),South-Bound(p,C)) /\ C
+      = { North-Bound(p,C), South-Bound(p,C) };
+
+theorem :: JORDAN18:28
+    for C being compact Subset of TOP-REAL 2 holds
+  p in BDD C & q in BDD C & p`1 <> q`1 implies
+   North-Bound(p,C), South-Bound(q,C), North-Bound(q,C), South-Bound(p,C)
+       are_mutually_different;
+
+begin  :: An Order of Points on a Simple Closed Curve
+
+definition let n,V,s1,s2,t1,t2;
+ pred s1,s2, V-separate t1,t2 means
+:: JORDAN18:def 3
+ for A being Subset of TOP-REAL n st
+    A is_an_arc_of s1,s2 & A c= V
+  holds A meets {t1,t2};
+ antonym s1,s2 are_neighbours_wrt t1,t2, V;
+end;
+
+theorem :: JORDAN18:29
+    t,t, V-separate s1,s2;
+
+theorem :: JORDAN18:30
+    s1,s2, V-separate t1,t2 implies s2,s1, V-separate t1,t2;
+
+theorem :: JORDAN18:31
+    s1,s2, V-separate t1,t2 implies s1,s2, V-separate t2,t1;
+
+theorem :: JORDAN18:32
+  s,t1, V-separate s,t2;
+
+theorem :: JORDAN18:33
+  t1,s, V-separate t2,s;
+
+theorem :: JORDAN18:34
+  t1,s, V-separate s,t2;
+
+theorem :: JORDAN18:35
+  s,t1, V-separate t2,s;
+
+theorem :: JORDAN18:36
+    for p1,p2,q being Point of TOP-REAL 2 st
+    q in C & p1 in C & p2 in C & p1 <> p2 & p1 <> q & p2 <> q holds
+  p1,p2 are_neighbours_wrt q,q, C;
+
+theorem :: JORDAN18:37
+    p1 <> p2 & p1 in C & p2 in C implies
+  (p1,p2, C-separate q1,q2 implies q1,q2, C-separate p1,p2);
+
+theorem :: JORDAN18:38
+    p1 in C & p2 in C & q1 in C &
+  p1 <> p2 & q1 <> p1 & q1 <> p2 & q2 <> p1 & q2 <> p2
+    implies p1,p2 are_neighbours_wrt q1,q2, C
+         or p1,q1 are_neighbours_wrt p2,q2, C;

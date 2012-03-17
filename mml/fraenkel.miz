@@ -1,0 +1,1008 @@
+:: Function Domains and Fr{\ae}nkel Operator
+::  by Andrzej Trybulec
+::
+:: Received February 7, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, RELAT_1, FUNCT_2, BOOLE, PARTFUN1, FINSET_1, MCART_1,
+      FINSUB_1, SETWISEO, FRAENKEL;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, FINSET_1,
+      FINSUB_1, FUNCT_1, FUNCT_2, DOMAIN_1, PARTFUN1, SETWISEO;
+ constructors FINSET_1, DOMAIN_1, SETWISEO, XBOOLE_0;
+ clusters FINSUB_1, FUNCT_1, RELSET_1, SUBSET_1, FINSET_1, RELAT_1, ZFMISC_1,
+      XBOOLE_0;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, XBOOLE_0;
+ theorems FINSET_1, ZFMISC_1, MCART_1, FUNCT_1, FUNCT_2, SETWISEO, FINSUB_1,
+      TARSKI, RELAT_1, RELSET_1, WELLORD2, XBOOLE_0, XBOOLE_1, SUBSET_1;
+ schemes FUNCT_1, FUNCT_2, SETWISEO, DOMAIN_1;
+
+begin
+
+reserve B for non empty set,
+        A,C,X,x for set;
+
+scheme Fraenkel5'{ A() -> non empty set, F(set) -> set, P[set], Q[set] } :
+  { F(v') where v' is Element of A() : P[v'] }
+    c= { F(u') where u' is Element of A() : Q[u'] }
+ provided A1: for v being Element of A() holds P[v] implies Q[v]
+proof
+ let x be set;
+ assume x in { F(v') where v' is Element of A() : P[v'] };
+  then consider v being Element of A() such that
+A2: x = F(v) and
+A3: P[v];
+    Q[v] by A1,A3;
+ hence x in { F(u') where u' is Element of A() : Q[u'] } by A2;
+end;
+
+scheme Fraenkel5''
+ { A() -> non empty set, B() -> non empty set
+, F(set,set) -> set, P[set,set], Q[set,set] } :
+  { F(u1,v1) where u1 is (Element of A()), v1 is Element of B() : P[u1,v1] }
+  c= { F(u2,v2) where u2 is (Element of A()), v2 is Element of B() : Q[u2,v2] }
+ provided
+A1: for u being (Element of A()), v being Element of B()
+      holds P[u,v] implies Q[u,v]
+proof
+ let x be set;
+ assume
+    x in
+ {F(u',v') where u' is (Element of A()), v' is Element of B() : P[u',v']};
+  then consider u being (Element of A()), v being Element of B() such that
+A2: x = F(u,v) and
+A3: P[u,v];
+    Q[u,v] by A1,A3;
+ hence
+    x in { F(u',v') where u' is (Element of A()), v' is Element of B(): Q[u',v'
+]}               by A2;
+end;
+
+scheme Fraenkel6'{ B() -> non empty set, F(set) -> set, P[set], Q[set] } :
+  { F(v1) where v1 is Element of B() : P[v1] }
+  = { F(v2) where v2 is Element of B() : Q[v2] }
+ provided
+A1: for v being Element of B() holds P[v] iff Q[v]
+proof
+ defpred PP[set] means P[$1];
+ defpred QQ[set] means Q[$1];
+ deffunc G(set) = F($1);
+ set A = { G(v1) where v1 is Element of B() : PP[v1] },
+     B = { G(v2) where v2 is Element of B() : QQ[v2] };
+A2: for v being Element of B() holds PP[v] implies QQ[v] by A1;
+ thus A c= B from Fraenkel5'(A2);
+A3: for v being Element of B() holds QQ[v] implies PP[v] by A1;
+ thus B c= A from Fraenkel5'(A3);
+end;
+
+scheme Fraenkel6''
+ { A() -> non empty set, B() -> non empty set
+, F(set,set) -> set, P[set,set], Q[set,set] } :
+  { F(u1,v1) where u1 is (Element of A()), v1 is Element of B() : P[u1,v1] }
+  = { F(u2,v2) where u2 is (Element of A()), v2 is Element of B() : Q[u2,v2] }
+ provided
+A1: for u being (Element of A()), v being Element of B()
+      holds P[u,v] iff Q[u,v]
+proof
+ defpred PP[set,set] means P[$1,$2];
+ defpred QQ[set,set] means Q[$1,$2];
+ deffunc G(set,set) = F($1,$2);
+ set A =
+  { G(u1,v1) where u1 is (Element of A()), v1 is Element of B() : PP[u1,v1] };
+ set B =
+  { G(u2,v2) where u2 is (Element of A()), v2 is Element of B() : QQ[u2,v2] };
+A2: for u being (Element of A()), v being Element of B()
+      holds PP[u,v] implies QQ[u,v] by A1;
+ thus A c= B from Fraenkel5''(A2);
+A3: for u being (Element of A()), v being Element of B()
+      holds QQ[u,v] implies PP[u,v] by A1;
+ thus B c= A from Fraenkel5''(A3);
+end;
+
+scheme FraenkelF'{ B() -> non empty set
+, F(set) -> set, G(set) -> set, P[set] } :
+  { F(v1) where v1 is Element of B() : P[v1] }
+  = { G(v2) where v2 is Element of B() : P[v2] }
+ provided
+A1: for v being Element of B() holds F(v) = G(v)
+proof
+  set X = { F(v1) where v1 is Element of B() : P[v1] },
+      Y = { G(v2) where v2 is Element of B() : P[v2] };
+A2: X c= Y
+   proof let x be set;
+    assume x in X;
+     then consider v1 being Element of B() such that
+A3:   x = F(v1) & P[v1];
+       x = G(v1) by A1,A3;
+    hence x in Y by A3;
+   end;
+    Y c= X
+   proof let x be set;
+    assume x in Y;
+     then consider v1 being Element of B() such that
+A4:   x = G(v1) & P[v1];
+       x = F(v1) by A1,A4;
+    hence x in X by A4;
+   end;
+ hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+scheme FraenkelF'R{ B() -> non empty set
+, F(set) -> set, G(set) -> set, P[set] } :
+  { F(v1) where v1 is Element of B() : P[v1] }
+  = { G(v2) where v2 is Element of B() : P[v2] }
+ provided
+A1: for v being Element of B() st P[v] holds F(v) = G(v)
+proof
+  set X = { F(v1) where v1 is Element of B() : P[v1] },
+      Y = { G(v2) where v2 is Element of B() : P[v2] };
+A2: X c= Y
+   proof let x be set;
+    assume x in X;
+     then consider v1 being Element of B() such that
+A3:   x = F(v1) & P[v1];
+       x = G(v1) by A1,A3;
+    hence x in Y by A3;
+   end;
+    Y c= X
+   proof let x be set;
+    assume x in Y;
+     then consider v1 being Element of B() such that
+A4:   x = G(v1) & P[v1];
+       x = F(v1) by A1,A4;
+    hence x in X by A4;
+   end;
+ hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+scheme FraenkelF''
+ { A() -> non empty set, B() -> non empty set,
+   F(set,set) -> set, G(set,set) -> set, P[set,set] } :
+  { F(u1,v1) where u1 is (Element of A()), v1 is Element of B() : P[u1,v1] }
+  = { G(u2,v2) where u2 is (Element of A()), v2 is Element of B() : P[u2,v2] }
+ provided
+A1: for u being (Element of A()), v being Element of B()
+      holds F(u,v) = G(u,v)
+proof
+  set X =
+   { F(u1,v1) where u1 is (Element of A()), v1 is Element of B() : P[u1,v1] };
+  set Y =
+   { G(u2,v2) where u2 is (Element of A()), v2 is Element of B() : P[u2,v2] };
+A2: X c= Y
+   proof let x be set;
+    assume x in X;
+     then consider u1 being (Element of A()), v1 being Element of B() such that
+A3:   x = F(u1,v1) & P[u1,v1];
+       x = G(u1,v1) by A1,A3;
+    hence x in Y by A3;
+   end;
+    Y c= X
+   proof let x be set;
+    assume x in Y;
+     then consider u1 being (Element of A()), v1 being Element of B() such that
+A4:   x = G(u1,v1) & P[u1,v1];
+       x = F(u1,v1) by A1,A4;
+    hence x in X by A4;
+   end;
+ hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+scheme FraenkelF6''
+ { A() -> non empty set, B() -> non empty set
+, F(set,set) -> set, P[set,set], Q[set,set] } :
+  { F(u1,v1) where u1 is (Element of A()), v1 is Element of B() : P[u1,v1] }
+  = { F(v2,u2) where u2 is (Element of A()), v2 is Element of B() : Q[u2,v2] }
+ provided
+A1: for u being (Element of A()), v being Element of B()
+      holds P[u,v] iff Q[u,v]
+  and
+A2: for u being (Element of A()), v being Element of B()
+      holds F(u,v) = F(v,u)
+proof
+ defpred PP[set,set] means P[$1,$2];
+ defpred QQ[set,set] means Q[$1,$2];
+ deffunc G(set,set) = F($1,$2);
+ deffunc H(set,set) = F($2,$1);
+A3: for u being Element of A(), v being Element of B()
+      holds G(u,v) = H(u,v) by A2;
+A4: for u being (Element of A()), v being Element of B()
+      holds PP[u,v] implies QQ[u,v] by A1;
+A5:
+  { G(u1,v1) where u1 is (Element of A()), v1 is Element of B() : PP[u1,v1] }
+  c= { G(u2,v2) where u2 is (Element of A()), v2 is Element of B() :
+     QQ[u2,v2] } from Fraenkel5''(A4);
+A6: for u being (Element of A()), v being Element of B()
+      holds QQ[u,v] implies PP[u,v] by A1;
+A7:  { G(u1,v1) where u1 is (Element of A()), v1 is Element of B() :
+         QQ[u1,v1] }
+  c= { G(u2,v2) where u2 is (Element of A()), v2 is Element of B() :
+         PP[u2,v2] } from Fraenkel5''(A6);
+    { G(u1,v1) where u1 is Element of A(), v1 is Element of B() : QQ[u1,v1] }
+  = { H(u2,v2) where u2 is Element of A(), v2 is Element of B() : QQ[u2,v2] }
+                                                     from FraenkelF''(A3);
+ hence thesis by A5,A7,XBOOLE_0:def 10;
+end;
+
+canceled 2;
+
+theorem Th3:
+ for A,B being non empty set, F,G being Function of A,B
+  for X being set st F|X = G|X
+   for x being Element of A st x in X holds F.x = G.x
+proof let A,B be non empty set, F,G be Function of A,B;
+ let X be set such that
+A1: F|X = G|X;
+ let x be Element of A;
+ assume
+A2: x in X;
+ hence F.x = (G|X).x by A1,FUNCT_1:72 .= G.x by A2,FUNCT_1:72;
+end;
+
+canceled;
+
+theorem Th5:
+ for A,B being set holds Funcs(A,B) c= bool [:A,B:]
+  proof let A,B be set, x be set;
+   assume x in Funcs(A,B); then consider f being Function such that
+A1:  x = f and
+A2:  dom f = A & rng f c= B by FUNCT_2:def 2;
+A3: f c= [: dom f, rng f:] by RELAT_1:21;
+      [:dom f, rng f:] c= [:A,B:] by A2,ZFMISC_1:118;
+    then f c= [:A,B:] by A3,XBOOLE_1:1;
+   hence x in bool [:A,B:] by A1;
+  end;
+
+theorem Th6:
+ for X,Y being set st Funcs(X,Y) <> {} & X c= A & Y c= B
+  for f being Element of Funcs(X,Y) holds f is PartFunc of A,B
+ proof let X,Y be set such that
+A1: Funcs(X,Y) <> {} and
+A2: X c= A & Y c= B;
+  let f be Element of Funcs(X,Y);
+    consider g being Function such that
+A3: f = g and
+A4: dom g = X & rng g c= Y by A1,FUNCT_2:def 2;
+     dom g c= A & rng g c= B by A2,A4,XBOOLE_1:1;
+  hence f is PartFunc of A,B by A3,RELSET_1:11;
+ end;
+
+scheme RelevantArgs
+{ A() -> non empty set, B() -> non empty set, X() -> set,
+  f() -> (Function of A(),B()), g() -> (Function of A(),B()),
+   P[set], Q[set] } :
+   { f().u' where u' is Element of A() : P[u'] & u' in X() }
+    = { g().v' where v' is Element of A() : Q[v'] & v' in X() }
+provided
+ A1: f()|X() = g()|X() and
+ A2: for u being Element of A() st u in X() holds P[u] iff Q[u]
+proof
+  defpred QQ[set] means Q[$1] & $1 in X();
+  defpred PP[set] means P[$1] & $1 in X();
+  deffunc G(set) = g().$1;
+  deffunc F(set) = f().$1;
+  set C = { G(v') where v' is Element of A() : PP[v'] };
+A3: for v being Element of A() holds PP[v] iff QQ[v] by A2;
+A4: C = { G(v') where v' is Element of A() : QQ[v'] }
+     from Fraenkel6'(A3);
+A5: for v being Element of A() st PP[v] holds F(v) = G(v) by A1,Th3;
+   { F(u') where u' is Element of A() : PP[u'] }
+  = C from FraenkelF'R(A5);
+ hence thesis by A4;
+end;
+
+scheme Fr_Set0{ A() -> non empty set, P[set] }:
+  { x where x is Element of A(): P[x] } c= A()
+ proof
+   { x where x is Element of A(): P[x] } is Subset of A() from SubsetD;
+  hence thesis;
+ end;
+
+scheme Gen1''{A() -> non empty set, B() -> non empty set, F(set,set) -> set,
+              P[set, set], Q[set] } :
+ for s being (Element of A()), t being Element of B()
+      st P[s,t] holds Q[F(s,t)]
+provided
+A1: for s_t being set st s_t in
+    { F(s1,t1) where s1 is (Element of A()), t1 is Element of B(): P[s1,t1] }
+    holds Q[s_t]
+proof let s be (Element of A()), t be Element of B();
+ assume P[s,t];
+  then F(s,t) in
+   { F(s1,t1) where s1 is (Element of A()), t1 is Element of B(): P[s1,t1] };
+ hence Q[F(s,t)] by A1;
+end;
+
+scheme Gen1''A{A() -> non empty set, B() -> non empty set, F(set,set) -> set,
+              P[set, set], Q[set] } :
+  for s_t being set st s_t in
+    { F(s1,t1) where s1 is (Element of A()), t1 is Element of B(): P[s1,t1] }
+    holds Q[s_t]
+provided
+A1: for s being (Element of A()), t being Element of B()
+      st P[s,t] holds Q[F(s,t)]
+ proof let s_t be set; assume s_t in
+    { F(s1,t1) where s1 is (Element of A()), t1 is Element of B(): P[s1,t1] };
+   then ex s1 being (Element of A()), t1 being Element of B() st
+      s_t = F(s1,t1) & P[s1,t1];
+  hence Q[s_t] by A1;
+ end;
+
+scheme Gen2''{A() -> non empty set, B() -> non empty set, C() -> non empty set,
+              F(set,set) -> (Element of C()),
+              P[set, set], Q[set] } :
+ { s_t where s_t is Element of C()
+     : s_t in { F(s1,t1) where s1 is (Element of A()), t1 is Element of B()
+              : P[s1,t1] }
+   & Q[s_t] }
+= { F(s2,t2) where s2 is (Element of A()), t2 is Element of B()
+    : P[s2,t2] & Q[F(s2,t2)]}
+proof thus
+   { s_t where s_t is Element of C()
+     : s_t in { F(s1,t1) where s1 is (Element of A()), t1 is Element of B()
+              : P[s1,t1] }
+   & Q[s_t] }
+ c= { F(s2,t2) where s2 is (Element of A()), t2 is Element of B()
+    : P[s2,t2] & Q[F(s2,t2)]}
+ proof let x be set;
+  assume x in { s_t where s_t is Element of C()
+     : s_t in { F(s1,t1) where s1 is (Element of A()), t1 is Element of B()
+              : P[s1,t1] }
+   & Q[s_t] };
+   then consider s_t being Element of C() such that
+A1: x = s_t and
+A2: s_t in { F(s1,t1) where s1 is (Element of A()), t1 is Element of B()
+              : P[s1,t1] } and
+A3: Q[s_t];
+     ex s1 being (Element of A()), t1 being Element of B() st
+      s_t = F(s1,t1) & P[s1,t1] by A2;
+  hence
+     x in { F(s2,t2) where s2 is (Element of A()), t2 is Element of B()
+    : P[s2,t2] & Q[F(s2,t2)]} by A1,A3;
+ end;
+ let x be set;
+ assume x in { F(s2,t2) where s2 is (Element of A()), t2 is Element of B()
+    : P[s2,t2] & Q[F(s2,t2)]};
+  then consider s2 being (Element of A()), t2 being Element of B() such that
+A4:  x = F(s2,t2) and
+A5:  P[s2,t2] and
+A6:  Q[F(s2,t2)];
+      F(s2,t2) in { F(s1,t1) where s1 is (Element of A()), t1 is Element of B()
+              : P[s1,t1] } by A5;
+ hence x in { s_t where s_t is Element of C()
+     : s_t in { F(s1,t1) where s1 is (Element of A()), t1 is Element of B()
+              : P[s1,t1] }
+   & Q[s_t] } by A4,A6;
+end;
+
+scheme Gen3'{A() -> non empty set, F(set) -> set, P[set], Q[set] } :
+ { F(s) where s is Element of A()
+   : s in { s1 where s1 is Element of A(): Q[s1] } & P[s] }
+   = { F(s2) where s2 is Element of A() : Q[s2] & P[s2] }
+  proof
+   deffunc G(set) = F($1);
+   defpred PP[set] means
+     $1 in { s1 where s1 is Element of A(): Q[s1] } & P[$1];
+   defpred QQ[set] means Q[$1] & P[$1];
+A1: for s being Element of A() holds PP[s] iff QQ[s]
+   proof let s be Element of A();
+      now assume s in { s1 where s1 is Element of A(): Q[s1] };
+      then ex s1 being Element of A() st s = s1 & Q[s1];
+     hence Q[s];
+    end;
+    hence thesis;
+   end;
+   thus { G(s) where s is Element of A() : PP[s] }
+   = { G(s2) where s2 is Element of A() : QQ[s2] }
+     from Fraenkel6'(A1);
+  end;
+
+scheme Gen3''{A() -> non empty set, B() -> non empty set, F(set,set) -> set,
+              P[set, set], Q[set] } :
+ { F(s,t) where s is (Element of A()), t is Element of B()
+   : s in { s1 where s1 is Element of A(): Q[s1] } & P[s,t] }
+   = { F(s2,t2) where s2 is (Element of A()), t2 is Element of B()
+      : Q[s2] & P[s2,t2] }
+  proof
+   defpred PP[set,set] means
+     $1 in { s1 where s1 is Element of A(): Q[s1] } & P[$1,$2];
+   defpred QQ[set,set] means Q[$1] & P[$1,$2];
+   deffunc G(set,set) = F($1,$2);
+A1: for s being Element of A(), t being Element of B() holds
+    PP[s,t] iff QQ[s,t]
+   proof let s be Element of A(), t be Element of B();
+      now assume s in { s1 where s1 is Element of A(): Q[s1] };
+      then ex s1 being Element of A() st s = s1 & Q[s1];
+     hence Q[s];
+    end;
+    hence thesis;
+   end;
+   thus { G(s,t) where s is (Element of A()), t is Element of B() : PP[s,t] }
+   = { G(s2,t2) where s2 is (Element of A()), t2 is Element of B()
+      : QQ[s2,t2] }
+      from Fraenkel6''(A1);
+  end;
+
+scheme Gen4''{A() -> non empty set, B() -> non empty set, F(set,set) -> set,
+              P[set, set], Q[set,set] } :
+ { F(s,t) where s is (Element of A()), t is Element of B()
+  : P[s,t] }
+ c= { F(s1,t1) where s1 is (Element of A()), t1 is Element of B()
+    : Q[s1,t1] }
+provided
+A1: for s being (Element of A()), t being Element of B() st P[s,t]
+   ex s' being Element of A() st Q[s',t] & F(s,t) = F(s',t)
+  proof let x be set; assume
+   x in { F(s,t) where s is (Element of A()), t is Element of B() : P[s,t] };
+     then consider s being (Element of A()), t being Element of B() such that
+A2: x = F(s,t) and
+A3: P[s,t];
+      ex s' being Element of A() st Q[s',t] & F(s,t) = F(s',t) by A1,A3;
+   hence
+      x in {F(s',t') where s' is (Element of A()), t' is Element of B():Q[s',t'
+]}                                                 by A2;
+  end;
+
+scheme FrSet_1{ D() -> non empty set, A() -> set, P[set], F(set) -> set }:
+  { F(y) where y is Element of D() : F(y) in A() & P[y] } c= A()
+ proof let x be set;
+  assume x in { F(y) where y is Element of D() : F(y) in A() & P[y] };
+   then ex y being Element of D() st x = F(y) & F(y) in A() & P[y];
+  hence thesis;
+ end;
+
+scheme FrSet_2{ D() -> non empty set, A() -> set, Q[set], F(set) -> set }:
+  { F(y) where y is Element of D() : Q[y] & not F(y) in A() } misses A()
+  proof
+   assume { F(y) where y is Element of D() : Q[y] & not F(y) in A() }
+     meets A();
+   then consider x be set such that
+A1: x in { F(y) where y is Element of D() : Q[y] & not F(y) in A() } &
+   x in A() by XBOOLE_0:3;
+     ex y being Element of D() st x = F(y) & Q[y] & not F(y) in A() by A1;
+   hence thesis by A1;
+  end;
+
+scheme FrEqua1{ A()-> non empty set, B() -> non empty set, F(set,set) -> set,
+             x() -> (Element of B()), P[set,set], Q[set,set] }:
+  { F(s,t) where s is (Element of A()), t is Element of B(): Q[s,t] }
+    = { F(s',x()) where s' is Element of A(): P[s',x()] }
+ provided
+A1: for s being Element of A() for t being Element of B() holds
+     Q[s,t] iff t = x() & P[s,t]
+ proof
+  thus { F(s,t) where s is (Element of A()), t is Element of B(): Q[s,t] }
+    c= { F(s',x()) where s' is Element of A(): P[s',x()] }
+   proof let x be set; assume
+       x in { F(s,t) where s is (Element of A()), t is Element of B(): Q[s,t] }
+;
+     then consider s being (Element of A()), t being Element of B() such that
+A2:   x = F(s,t) and
+A3:   Q[s,t];
+       t = x() & P[s,t] by A1,A3;
+    hence x in { F(s',x()) where s' is Element of A(): P[s',x()] } by A2;
+   end;
+  let x be set; assume
+      x in { F(s',x()) where s' is Element of A(): P[s',x()] };
+   then consider s' being Element of A() such that
+A4: x = F(s',x()) and
+A5: P[s',x()];
+     Q[s',x()] by A1,A5;
+  hence x in {F(s,t) where s is (Element of A()), t is Element of B(): Q[s,t]}
+                                                                      by A4;
+ end;
+
+scheme FrEqua2{ A()-> non empty set, B() -> non empty set, F(set,set) -> set,
+               x() -> (Element of B()), P[set,set] }:
+  { F(s,t) where s is (Element of A()), t is Element of B(): t = x() & P[s,t] }
+    = { F(s',x()) where s' is Element of A(): P[s',x()] }
+ proof
+    defpred Q[set,set] means $2 = x() & P[$1,$2];
+    defpred P'[set,set] means P[$1,$2];
+A1: for s being Element of A() for t being Element of B() holds
+      Q[s,t] iff t = x() & P'[s,t];
+    deffunc G(set,set) = F($1,$2);
+  thus { G(s,t) where s is Element of A(), t is Element of B(): Q[s,t] }
+    = { G(s',x()) where s' is Element of A(): P'[s',x()] } from FrEqua1(A1);
+ end;
+
+:: dziedziny funkcji
+
+definition let IT be set;
+ attr IT is functional means :Def1:
+ for x being set st x in IT holds x is Function;
+end;
+
+definition
+ cluster non empty functional set;
+ existence
+  proof consider f being Function;
+   take { f }; thus { f } is non empty;
+   let g be set;
+   thus thesis by TARSKI:def 1;
+  end;
+end;
+
+definition let P be functional set;
+  cluster -> Function-like Relation-like Element of P;
+  coherence
+   proof
+     let x be Element of P;
+     per cases;
+     suppose P is empty;
+     then x = {} by SUBSET_1:def 2;
+     hence thesis;
+     suppose P is non empty;
+     hence thesis by Def1;
+   end;
+end;
+
+canceled;
+
+theorem Th8:
+ for f being Function holds { f } is functional
+  proof let f be Function;
+   let g be set;
+   thus thesis by TARSKI:def 1;
+  end;
+
+definition let A, B be set;
+ cluster Funcs(A,B) -> functional;
+  coherence
+   proof
+    let x be set;
+    assume x in Funcs(A,B);
+     then ex f being Function st x = f & dom f = A & rng f c= B
+      by FUNCT_2:def 2;
+    hence x is Function;
+   end;
+end;
+
+definition let A, B be set;
+ mode FUNCTION_DOMAIN of A,B -> functional non empty set means
+:Def2: for x being Element of it holds x is Function of A,B;
+ correctness
+  proof consider f being Function of A,B;
+    reconsider IT = { f } as functional non empty set by Th8;
+   take IT; let g be Element of IT;
+   thus thesis by TARSKI:def 1;
+  end;
+end;
+
+canceled;
+
+theorem
+   for f being Function of A,C holds { f } is FUNCTION_DOMAIN of A,C
+  proof let f be Function of A,C;
+A1: { f } is functional non empty set by Th8;
+      for g be Element of { f } holds g is Function of A,C by TARSKI:def 1;
+   hence { f } is FUNCTION_DOMAIN of A,C by A1,Def2;
+  end;
+
+theorem Th11:
+ Funcs(A,B) is FUNCTION_DOMAIN of A,B
+  proof
+A1: Funcs(A,B) <> {} by FUNCT_2:11;
+then for f be Element of Funcs(A,B) holds
+     f is Function of A,B by FUNCT_2:121;
+    hence thesis by A1,Def2;
+  end;
+
+definition let A be set, B be non empty set;
+ redefine func Funcs(A,B) -> FUNCTION_DOMAIN of A,B;
+ coherence by Th11;
+ let F be FUNCTION_DOMAIN of A,B;
+  mode Element of F -> Function of A,B;
+ coherence by Def2;
+end;
+
+reserve phi for Element of Funcs(A,B);
+
+canceled 2;
+
+theorem Th14:
+ for X,Y being set st Funcs(X,Y) <> {} & X c= A & Y c= B
+  for f being Element of Funcs(X,Y)
+   ex phi being Element of Funcs(A,B) st phi|X = f
+  proof let X,Y be set such that
+A1: Funcs(X,Y) <> {} and
+A2: X c= A & Y c= B;
+   let f be Element of Funcs(X,Y);
+    A3: ex g being Function st f = g & dom g = X & rng g c= Y by A1,FUNCT_2:def
+2;
+    reconsider f'=f as PartFunc of A,B by A1,A2,Th6;
+    consider phi being Function of A,B such that
+A4:   for x st x in dom f' holds phi.x = f'.x by FUNCT_2:136;
+    reconsider phi as Element of Funcs(A,B) by FUNCT_2:11;
+   take phi;
+      dom f' = A /\ X by A2,A3,XBOOLE_1:28
+          .= dom phi /\ X by FUNCT_2:def 1;
+   hence phi|X = f by A4,FUNCT_1:68;
+  end;
+
+theorem Th15:
+  for X being set, phi holds phi|X = phi|(A /\ X)
+  proof let X be set, phi be Element of Funcs(A,B);
+  dom phi = A by FUNCT_2:def 1;
+then A1: dom (phi|X) = (dom phi /\ A) /\ X by RELAT_1:90
+               .= dom phi /\ (A /\ X) by XBOOLE_1:16;
+      for x st x in dom (phi|X) holds (phi|X).x = phi.x by FUNCT_1:68;
+   hence phi|X = phi|(A /\ X) by A1,FUNCT_1:68;
+  end;
+
+:: Zbiory skonczone
+
+scheme FraenkelFin { A() ->non empty set, X() -> set, F(set) -> set }:
+ { F(w) where w is Element of A(): w in X() } is finite
+provided
+ A1: X() is finite
+proof
+  set M = { F(w) where w is Element of A(): w in X() };
+  deffunc G(set) = F($1);
+  consider f being Function such that
+A2: dom f = X() /\ A() and
+A3: for y being set st y in X() /\ A() holds f.y = G(y) from Lambda;
+    M = f.:X()
+   proof
+    thus M c= f.:X()
+     proof let x be set;
+      assume x in M;
+       then consider u being Element of A() such that
+A4:     x = F(u) and
+A5:     u in X();
+A6:    u in dom f by A2,A5,XBOOLE_0:def 3;
+       then f.u = F(u) by A2,A3;
+      hence x in f.:X() by A4,A5,A6,FUNCT_1:def 12;
+     end;
+    let x be set;
+    assume x in f.:X();
+     then consider y being set such that
+A7:   y in dom f and
+A8:   y in X() and
+A9:   x = f.y by FUNCT_1:def 12;
+     reconsider y as Element of A() by A2,A7,XBOOLE_0:def 3;
+       x = F(y) by A2,A3,A7,A9;
+    hence x in M by A8;
+   end;
+ hence M is finite by A1,FINSET_1:17;
+end;
+
+scheme CartFin { A, B() -> non empty set, X, Y() -> set, F(set, set) -> set }:
+ { F(u',v') where u' is (Element of A()), v' is Element of B()
+             : u' in X() & v' in Y() } is finite
+provided
+ A1: X() is finite and
+ A2: Y() is finite
+proof
+set M = { F(u',v') where u' is (Element of A()), v' is Element of B()
+             : u' in X() & v' in Y() };
+A3: [:X(), Y():] is finite by A1,A2,FINSET_1:19;
+  deffunc G(set) = F($1`1,$1`2);
+  consider f being Function such that
+A4: dom f = [:X() /\ A(), Y() /\ B():] and
+A5: for y being set st y in [:X() /\ A(), Y() /\ B():] holds f.y = G(y)
+                                                               from Lambda;
+A6: dom f = [:X(), Y():] /\ [:A(), B():] by A4,ZFMISC_1:123;
+    M = f.:[:X(), Y():]
+   proof
+    thus M c= f.:[:X(), Y():]
+     proof let x be set;
+      assume x in M;
+       then consider u being Element of A(), v being Element of B() such that
+A7:     x = F(u,v) and
+A8:     u in X() & v in Y();
+A9:    [u,v] in [:X(), Y():] by A8,ZFMISC_1:106;
+then A10:    [u,v] in dom f by A6,XBOOLE_0:def 3;
+         [u,v]`1 = u & [u,v]`2 = v by MCART_1:7;
+       then f.[u,v] = F(u,v) by A4,A5,A10;
+      hence x in f.:[:X(), Y():] by A7,A9,A10,FUNCT_1:def 12;
+     end;
+    let x be set;
+    assume x in f.:[:X(), Y():];
+     then consider y being set such that
+A11:   y in dom f and
+A12:   y in [:X(), Y():] and
+A13:   x = f.y by FUNCT_1:def 12;
+     reconsider y as Element of [:A(), B():] by A6,A11,XBOOLE_0:def 3;
+       y = [y`1,y`2] by MCART_1:23;
+then A14:  y`1 in X() & y`2 in Y() by A12,ZFMISC_1:106;
+       x = F(y`1,y`2) by A4,A5,A11,A13;
+    hence x in M by A14;
+   end;
+ hence M is finite by A3,FINSET_1:17;
+end;
+
+scheme Finiteness
+ { A()->non empty set, B()->(Element of Fin A()),
+   P[(Element of A()), Element of A()] } :
+  for x being Element of A() st x in B()
+   ex y being Element of A() st y in B() & P[y,x] &
+    for z being Element of A() st z in B() & P[z,y] holds P[y,z]
+ provided
+A1: for x being Element of A() holds P[x,x] and
+A2: for x,y,z being Element of A() st P[x,y] & P[y,z] holds P[x,z]
+proof
+ defpred R[(Element of A()), Element of Fin A()] means
+   ex y being Element of A() st y in $2 & P[y,$1] &
+    for z being Element of A() st z in $2 & P[z,y] holds P[y,z];
+ defpred Q[Element of Fin A()] means
+  for x being Element of A() st x in $1 holds R[x, $1];
+A3:Q[{}.A()];
+A4:now let B be (Element of Fin A()), x be Element of A();
+   assume
+A5:  Q[B];
+   thus  Q[B \/ {x}]
+   proof
+    let z be Element of A() such that
+A6: z in B \/ {x};
+      now per cases by A6,SETWISEO:6;
+     suppose z in B;
+    then consider y being Element of A() such that
+A7:  y in B and
+A8:  P[y,z] and
+A9:  for x being Element of A() st x in B & P[x,y] holds P[y,x] by A5;
+      now per cases;
+     case
+A10:    P[x,y];
+      thus x in B \/ {x} by SETWISEO:6;
+      thus P[x,z] by A2,A8,A10;
+      let v be Element of A() such that
+A11:    v in B \/ {x} and
+A12:    P[v,x];
+A13:    v in B or v = x by A11,SETWISEO:6;
+         now assume
+A14:     v in B;
+           P[v,y] by A2,A10,A12;
+         then P[y,v] by A9,A14;
+        hence P[x,v] by A2,A10;
+       end;
+      hence P[x,v] by A1,A13;
+     case
+A15:    not P[x,y];
+      thus y in B \/ {x} by A7,XBOOLE_0:def 2;
+      thus P[y,z] by A8;
+      let v be Element of A() such that
+A16:    v in B \/ {x} and
+A17:    P[v,y];
+         v in B or v = x by A16,SETWISEO:6;
+      hence P[y,v] by A9,A15,A17;
+    end;
+    hence R[z, B \/ {x}];
+   suppose
+A18:  z = x;
+      now per cases;
+     case ex w being Element of A() st w in B & P[w,x];
+      then consider w being Element of A() such that
+A19:    w in B and
+A20:    P[w,z] by A18;
+      consider y being Element of A() such that
+A21:    y in B and
+A22:    P[y,w] and
+A23:    for x being Element of A() st x in B & P[x,y] holds P[y,x] by A5,A19;
+      take u = y;
+      thus u in B \/ {x} by A21,XBOOLE_0:def 2;
+      thus P[u,z] by A2,A20,A22;
+      let v be Element of A() such that
+A24:    v in B \/ {x} and
+A25:    P[v,u];
+         v in B or v = x by A24,SETWISEO:6;
+      hence P[u,v] by A2,A18,A20,A22,A23,A25;
+     case
+A26:   for w being Element of A() st w in B holds not P[w,x];
+     thus x in B \/ {x} by SETWISEO:6;
+     thus
+A27:   P[x,x] by A1;
+      let v be Element of A() such that
+A28:    v in B \/ {x} and
+A29:    P[v,x];
+        not v in B by A26,A29;
+     hence P[x,v] by A27,A28,SETWISEO:6;
+    end;
+    hence R[z, B \/ {x}] by A18;
+    end;
+    hence R[z, B \/ {x}];
+   end;
+  end;
+    for B being Element of Fin A() holds Q[B] from FinSubInd3(A3,A4);
+ hence thesis;
+end;
+
+scheme Fin_Im{A() ->non empty set, B()->non empty set
+, x()-> (Element of Fin B()),
+  F(set)->(Element of A()), P[set,set]}:
+  ex c1 being Element of Fin A() st
+   for t being Element of A() holds t in c1 iff
+    ex t' being Element of B() st t' in x() & t = F(t') & P[t,t']
+ proof
+   defpred R[set] means
+   ex t' being Element of B() st t' in x() & $1 = F(t') & P[$1,t'];
+   deffunc G(set) = F($1);
+   set c = { G(t') where t' is Element of B() : t' in x() },
+      c1 = { tt where tt is Element of A() : R[tt]};
+A1:  x() is finite;
+A2:  c is finite from FraenkelFin(A1);
+      c1 c= c
+     proof let x;
+      assume x in c1;
+       then ex tt being Element of A() st x = tt &
+            ex t' being Element of B() st t' in x() & tt = F(t') & P[tt,t'];
+      hence thesis;
+     end;
+then A3: c1 is finite by A2,FINSET_1:13;
+     c1 c= A() from Fr_Set0;
+   then reconsider c1 as Element of Fin A() by A3,FINSUB_1:def 5;
+  take c1; let t be Element of A();
+     t in c1 implies
+    ex tt being Element of A() st t = tt &
+     ex t' being Element of B() st t' in x() & tt = F(t') & P[tt,t'];
+  hence t in c1 iff
+       ex t' being Element of B() st t' in x() & t = F(t') & P[t,t'];
+ end;
+
+theorem Th16:
+ for A,B being set st A is finite & B is finite holds
+   Funcs(A,B) is finite
+ proof let A,B be set;
+ A1: Funcs(A,B) c= bool [:A,B:] by Th5;
+  assume A is finite & B is finite;
+   then [:A,B:] is finite by FINSET_1:19;
+   then bool [:A,B:] is finite by FINSET_1:24;
+  hence Funcs(A,B) is finite by A1,FINSET_1:13;
+ end;
+
+scheme ImFin { A() -> non empty set, B() -> non empty set,
+               X() -> set, Y() -> set, F(set) -> set } :
+ { F(phi') where phi' is Element of Funcs(A(),B()):
+     phi'.:X() c= Y() } is finite
+provided
+A1: X() is finite and
+A2: Y() is finite and
+A3: for phi,psi being Element of Funcs(A(),B())
+    holds phi|X() = psi|X() implies F(phi) = F(psi)
+ proof
+  set Z = { F(phi') where phi' is Element of Funcs(A(),B()): phi'.:
+X() c= Y() };
+   consider x being Element of Z;
+  assume
+A4: not thesis;
+   then Z <> {};
+   then x in Z;
+   then consider phi being Element of Funcs(A(),B()) such that
+   x = F(phi) and
+A5: phi.:X() c= Y();
+      now
+A6:  A() = dom phi & rng phi c= B() by FUNCT_2:def 1,RELSET_1:12;
+A7:  phi.:X() c= B() /\ Y() by A5,XBOOLE_1:19;
+     assume B() /\ Y() = {};
+      then phi.:X() = {} by A7,XBOOLE_1:3;
+     then A() misses X() by A6,RELAT_1:151;
+     hence A() /\ X() = {} by XBOOLE_0:def 7;
+    end;
+   then reconsider FF = Funcs(A() /\ X(),B() /\ Y()), Z as non empty set
+ by A4,FUNCT_2:11;
+A8: A() /\ X() c= A() & B() /\ Y() c= B() by XBOOLE_1:17;
+A9: B() /\ Y() c= Y() by XBOOLE_1:17;
+    defpred P[set,set] means
+     for phi being Element of Funcs(A(),B()) st phi|X() = $1 holds $2 = F(phi);
+A10: now let f be Element of FF;
+      consider phi being Element of Funcs(A(),B()) such that
+A11:    phi|(A() /\ X()) = f by A8,Th14;
+A12:   phi|X() = f by A11,Th15;
+        ex g being Function st f = g & dom g = A() /\ X() & rng g c= B() /\ Y()
+                                                 by FUNCT_2:def 2;
+      then rng (phi|X()) c= Y() by A9,A12,XBOOLE_1:1;
+      then phi.:X() c= Y() by RELAT_1:148;
+      then F(phi) in Z;
+      then reconsider g' = F(phi) as Element of Z;
+     take g = g';
+     thus P[f,g] by A3,A12;
+    end;
+   consider F being Function of FF, Z such that
+A13:  for f being Element of FF holds P[f,F.f] from FuncExD(A10);
+     Z c= F.:Funcs(A() /\ X(), B() /\ Y())
+    proof let y be set;
+     assume y in Z; then consider phi being Element of Funcs(A(),B()) such
+that
+A14:   y = F(phi) and
+A15:   phi.:X() c= Y();
+A16:   dom (phi|X()) = dom phi /\ X() by RELAT_1:90
+                   .= A() /\ X() by FUNCT_2:def 1;
+A17:   rng phi c= B() by RELSET_1:12;
+        rng (phi|X()) c= rng phi by FUNCT_1:76;
+then A18:   rng (phi|X()) c= B() by A17,XBOOLE_1:1;
+        rng (phi|X()) c= Y() by A15,RELAT_1:148;
+      then A19:rng (phi|X()) c= B() /\ Y() by A18,XBOOLE_1:19;
+then A20:   phi|X() in Funcs(A() /\ X(), B() /\ Y()) by A16,FUNCT_2:def 2;
+      reconsider x = phi|X() as Element of Funcs(A() /\ X(), B() /\ Y()) by A16
+,A19,FUNCT_2:def 2;
+A21:   x in dom F by A20,FUNCT_2:def 1;
+        y = F.x by A13,A14;
+     hence y in F.:Funcs(A() /\ X(), B() /\ Y()) by A21,FUNCT_1:def 12;
+    end;
+then A22: F.:Funcs(A() /\ X(), B() /\ Y()) = Z by XBOOLE_0:def 10;
+     B() /\ Y() is finite & A() /\ X() is finite by A1,A2,FINSET_1:15;
+   then Funcs(A() /\ X(), B() /\ Y()) is finite by Th16;
+  hence contradiction by A4,A22,FINSET_1:17;
+ end;
+
+:: Schematy zwiazane z pewnikiem wyboru
+
+scheme FunctChoice
+   { A()->non empty set, B()->non empty set
+, P[(Element of A()), Element of B()],
+    x()->Element of Fin A() }:
+ ex ff being Function of A(), B() st
+  for t being Element of A() st t in x() holds P[t,ff.t]
+provided
+A1: for t being Element of A() st t in x()
+     ex ff being Element of B() st P[t,ff]
+ proof assume
+A2: not thesis;
+   consider f being Function of A(), B();
+   consider t being Element of A() such that
+A3: t in x() and not P[t,f.t] by A2;
+   set M = { { ff where ff is Element of B() : P[tt,ff] }
+                     where tt is Element of A() : tt in x() };
+     { ff where ff is Element of B() : P[t,ff] } in M by A3;
+   then reconsider M as non empty set;
+   now let X;
+     assume X in M; then consider t being Element of A() such that
+A4:   X = { ff where ff is Element of B() : P[t,ff] } and
+A5:   t in x();
+      consider ff being Element of B() such that
+A6:    P[t,ff] by A1,A5;
+        ff in X by A4,A6;
+     hence X <> {};
+    end;
+   then consider Choice being Function such that dom Choice = M and
+A7: X in M implies Choice.X in X by WELLORD2:28;
+   consider b being Element of B();
+   defpred Q[(Element of A()),set] means
+    ($1 in
+ x() implies $2 = Choice.{ ff where ff is Element of B() : P[$1,ff] })
+    & ($1 in x() or $2 = b);
+A8: now let t be Element of A();
+A9:   t in x() implies t in x();
+        now set s = { ff where ff is Element of B() : P[t,ff] };
+       assume t in x();
+        then s in M;
+        then Choice.s in s by A7;
+        then ex ff being Element of B() st Choice.s = ff & P[t,ff];
+       hence Choice.s is Element of B();
+      end;
+     hence ex y being Element of B() st Q[t,y] by A9;
+    end;
+   consider f being Function of A(), B() such that
+A10: for x being Element of A() holds Q[x,f.x] from FuncExD(A8);
+     now let t be Element of A();
+    assume
+A11:   t in x();
+then A12:  { ff where ff is Element of B() : P[t,ff] } in M;
+       f.t = Choice.{ ff where ff is Element of B() : P[t,ff] } by A10,A11;
+     then f.t in { ff where ff is Element of B() : P[t,ff] } by A7,A12;
+     then ex ff being Element of B() st f.t = ff & P[t,ff];
+    hence P[t,f.t];
+   end;
+  hence contradiction by A2;
+ end;
+
+scheme FuncsChoice
+   { A()->non empty set, B()->non empty set
+, P[(Element of A()), Element of B()],
+    x()->Element of Fin A() }:
+ ex ff being Element of Funcs(A(),B()) st
+  for t being Element of A() st t in x() holds P[t,ff.t]
+provided
+A1: for t being Element of A() st t in x()
+     ex ff being Element of B() st P[t,ff]
+ proof
+    defpred R[Element of A(), Element of B()] means P[$1,$2];
+A2: for t being Element of A() st t in x()
+     ex ff being Element of B() st R[t,ff] by A1;
+   consider ff being Function of A(), B() such that
+A3:  for t being Element of A() st t in x() holds R[t,ff.t]
+      from FunctChoice(A2);
+   reconsider ff as Element of Funcs(A(),B()) by FUNCT_2:11;
+  take ff; thus thesis by A3;
+ end;

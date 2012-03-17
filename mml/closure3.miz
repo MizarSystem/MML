@@ -1,0 +1,1148 @@
+:: Algebraic Operation on Subsets of Many Sorted Sets
+::  by Agnieszka Julia Marasik
+::
+:: Received June 23, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary PBOOLE, FUNCT_4, RELAT_1, CLOSURE2, SETFAM_1, MSSUBFAM, AMI_1,
+      MSUALG_1, ZF_REFLE, MSUALG_2, UNIALG_2, BOOLE, CAT_4, FUNCT_1, QC_LANG1,
+      TDGROUP, CANTOR_1, PRE_CIRC, FINSET_1, FUNCOP_1, TARSKI, MATRIX_1,
+      WAYBEL_8, RELAT_2, MSAFREE2, BINOP_1, CLOSURE1, PROB_1, FUNCT_2,
+      CLOSURE3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CANTOR_1, SETFAM_1, RELAT_1,
+      FUNCT_1, STRUCT_0, PARTFUN1, FUNCT_2, FINSET_1, FUNCT_4, PBOOLE,
+      MSUALG_1, MSUALG_2, PROB_1, CLOSURE2, MSSUBFAM, MBOOLEAN, PRE_CIRC;
+ constructors CLOSURE2, PRE_CIRC, PRALG_2, CANTOR_1, PROB_1, MSSUBFAM;
+ clusters STRUCT_0, MSUALG_1, FUNCT_1, PBOOLE, CLOSURE2, FINSET_1, MSSUBFAM,
+      RELSET_1, SUBSET_1, FUNCT_2, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions XBOOLE_0, TARSKI, PBOOLE, CLOSURE2, MSUALG_2;
+ theorems FUNCT_4, FUNCT_1, TARSKI, PBOOLE, MSUALG_1, MBOOLEAN, FUNCOP_1,
+      MSUALG_2, STRUCT_0, CLOSURE2, ZFMISC_1, RELAT_1, PRE_CIRC, PROB_1,
+      CANTOR_1, MSSUBFAM, FUNCT_2, RELSET_1, XBOOLE_0, XBOOLE_1;
+ schemes FUNCT_1;
+
+begin  :: Preliminaries
+
+definition let S be non empty 1-sorted;
+ cluster the 1-sorted of S -> non empty;
+ coherence by STRUCT_0:def 1;
+end;
+
+theorem Th1:
+ for I be non empty set, M, N be ManySortedSet of I holds
+  M +* N = N
+  proof
+   let I be non empty set,
+       M, N be ManySortedSet of I;
+     dom M = I by PBOOLE:def 3
+        .= dom N by PBOOLE:def 3;
+   hence thesis by FUNCT_4:20;
+  end;
+
+theorem Th2:
+ for I be set, M, N be ManySortedSet of I, F be SubsetFamily of M holds
+  N in F implies meet |:F:| c=' N
+  proof
+   let I be set, M, N be ManySortedSet of I, F be SubsetFamily of M;
+     assume N in F;
+     then N in |:F:| by CLOSURE2:22;
+     hence thesis by MSSUBFAM:43;
+  end;
+
+theorem Th3:
+for S be non void non empty ManySortedSign,
+    MA be strict non-empty MSAlgebra over S
+for F be SubsetFamily of the Sorts of MA st
+      F c= SubSort MA
+for B be MSSubset of MA st B = meet |:F:| holds
+    B is opers_closed
+    proof
+       let S be non void non empty ManySortedSign,
+       MA be strict non-empty MSAlgebra over S;
+       let F be SubsetFamily of the Sorts of MA such that
+A1:       F c= SubSort MA;
+       let B be MSSubset of MA such that
+A2:       B = meet |:F:|;
+       per cases;
+       suppose
+A3:      F = {};
+       set I = the carrier of S;
+       reconsider FF = |:F:| as MSSubsetFamily of the Sorts of MA;
+       A4: FF = [0]I by A3,CLOSURE2:def 4;
+       set Q = the Sorts of MA;
+A5:    Q = B by A2,A4,MSSUBFAM:41;
+       reconsider Q as MSSubset of MA by MSUALG_2:def 1;
+         for o be OperSymbol of S holds Q is_closed_on o
+         proof
+            let o be OperSymbol of S;
+          A6: the OperSymbols of S <> {} by MSUALG_1:def 5;
+A7:         (the Arity of S).o = the_arity_of o &
+              (the ResultSort of S).o = the_result_sort_of o
+                by MSUALG_1:def 6,def 7;
+A8:         dom the Arity of S = the OperSymbols of S by FUNCT_2:def 1;
+A9:         dom the ResultSort of S = the OperSymbols of S by FUNCT_2:def 1;
+A10:         (Q# * (the Arity of S)).o = Q#.(the_arity_of o) by A6,A7,A8,
+FUNCT_1:23;
+A11:         (Q * the ResultSort of S).o = Q.(the_result_sort_of o) by A6,A7,A9
+,FUNCT_1:23;
+A12:         rng Den(o,MA) c= Result(o,MA) by RELSET_1:12;
+            A13: Result(o,MA) = (Q * the ResultSort of S).o by MSUALG_1:def 10
+               .= Q.(the_result_sort_of o) by A6,A7,A9,FUNCT_1:23;
+              rng ((Den(o,MA))|(Q#.(the_arity_of o))) c= rng Den(o,MA)
+              by FUNCT_1:76;
+            then rng ((Den(o,MA))|((Q#.(the_arity_of o))))
+              c= Q.(the_result_sort_of o) by A12,A13,XBOOLE_1:1;
+            hence thesis by A10,A11,MSUALG_2:def 6;
+         end;
+       hence thesis by A5,MSUALG_2:def 7;
+
+       suppose
+A14:      F <> {};
+       set SS = S;
+       let o be OperSymbol of SS;
+    A15: the OperSymbols of SS <> {} by MSUALG_1:def 5;
+       set i = (the_result_sort_of o);
+A16:    (the Arity of SS).o = the_arity_of o &
+       (the ResultSort of SS).o = the_result_sort_of o
+           by MSUALG_1:def 6,def 7;
+A17:    dom the Arity of SS = the OperSymbols of SS by FUNCT_2:def 1;
+A18:    dom the ResultSort of SS = the OperSymbols of SS by FUNCT_2:def 1;
+A19:    (B# * (the Arity of SS)).o = B#.(the_arity_of o) by A15,A16,A17,FUNCT_1
+:23;
+A20:    (B * the ResultSort of SS).o = B.(the_result_sort_of o) by A15,A16,A18,
+FUNCT_1:23;
+A21:    rng Den(o,MA) c= Result(o,MA) by RELSET_1:12;
+       A22: Result(o,MA) = ((the Sorts of MA) * the ResultSort of SS).o
+            by MSUALG_1:def 10
+            .= (the Sorts of MA).(the_result_sort_of o) by A15,A16,A18,FUNCT_1:
+23;
+         rng ((Den(o,MA))|(B#.(the_arity_of o))) c= rng Den(o,MA)
+            by FUNCT_1:76;
+then A23:    rng ((Den(o,MA))|((B#.(the_arity_of o))))
+            c= (the Sorts of MA).(the_result_sort_of o)
+             by A21,A22,XBOOLE_1:1;
+         rng ((Den(o,MA))|((B#.(the_arity_of o)))) c= B.(the_result_sort_of o)
+         proof
+            let v be set; assume
+A24:            v in rng ((Den(o,MA))|((B#.(the_arity_of o))));
+            then consider p be set such that
+A25:            p in dom ((Den(o,MA))|(B#.(the_arity_of o))) &
+               v = ((Den(o,MA))|(B#.(the_arity_of o))).p by FUNCT_1:def 5;
+            consider Q be Subset-Family of ((the Sorts of MA).i) such that
+A26:           Q = |:F:|.i and
+A27:           B.i = Intersect Q by A2,MSSUBFAM:def 2;
+              for Y being set st Y in Q holds v in Y
+             proof
+              let Y be set such that
+A28:             Y in Q;
+                |:F:|.i = { xx.i where xx is Element of
+               Bool the Sorts of MA : xx in F }
+                by A14,CLOSURE2:15;
+              then consider xx be Element of Bool the Sorts of MA such that
+A29:              Y = xx.i & xx in F by A26,A28;
+              reconsider xx as MSSubset of MA;
+                xx is opers_closed by A1,A29,MSUALG_2:15;
+              then xx is_closed_on o by MSUALG_2:def 7;
+then A30:          rng ((Den(o,MA))|((xx# * the Arity of SS).o))
+                c= (xx * the ResultSort of SS).o by MSUALG_2:def 6;
+                B c= xx by A2,A29,Th2;
+              then (B#*(the Arity of SS)).o c= (xx#*(the Arity of SS)).o
+                 by MSUALG_2:3;
+              then (Den(o,MA))|((B# * the Arity of SS).o) c=
+                (Den(o,MA))|((xx# * the Arity of SS).o) by RELAT_1:104;
+              then A31: dom ((Den(o,MA))|((B# * the Arity of SS).o)) c=
+              dom ((Den(o,MA))|((xx# * the Arity of SS).o)) by RELAT_1:25;
+A32:           v = (Den(o,MA)).p by A25,FUNCT_1:70;
+              then v = ((Den(o,MA))|((xx# * the Arity of SS).o)).p
+                   by A19,A25,A31,FUNCT_1:70;
+              then v in rng ((Den(o,MA))|((xx# * the Arity of SS).o))
+                   by A19,A25,A31,FUNCT_1:def 5;
+              then (Den(o,MA)).p in (xx * the ResultSort of SS).o by A30,A32;
+              then (Den(o,MA)).p in xx.((the ResultSort of SS).o) by A15,A18,
+FUNCT_1:23;
+              then (Den(o,MA)).p in xx.i by MSUALG_1:def 7;
+              hence v in Y by A25,A29,FUNCT_1:70;
+             end;
+            hence v in B.i by A23,A24,A27,CANTOR_1:10;
+         end;
+       hence B is_closed_on o by A19,A20,MSUALG_2:def 6;
+     end;
+
+begin :: Relationships between Subsets Families
+
+definition let I be set, M be ManySortedSet of I,
+               B be SubsetFamily of M, A be SubsetFamily of M;
+ pred A is_finer_than B means
+:Def1:      for a be set st a in A ex b be set st b in B & a c= b;
+  reflexivity;
+ pred B is_coarser_than A means
+:Def2:      for b be set st b in B ex a be set st a in A & a c= b;
+  reflexivity;
+ end;
+
+theorem
+   for I be set, M be ManySortedSet of I
+ for A,B,C be SubsetFamily of M holds
+ A is_finer_than B & B is_finer_than C implies A is_finer_than C
+ proof
+    let I be set,
+        M be ManySortedSet of I;
+    let A,B,C be SubsetFamily of M;
+    assume that
+A1:    A is_finer_than B and
+A2:    B is_finer_than C;
+    let a be set; assume
+      a in A;
+    then consider b be set such that
+A3:     b in B and
+A4:     a c= b by A1,Def1;
+    consider c be set such that
+A5:     c in C and
+A6:     b c= c by A2,A3,Def1;
+    take c;
+    thus thesis by A4,A5,A6,XBOOLE_1:1;
+ end;
+
+theorem
+   for I be set, M be ManySortedSet of I
+ for A,B,C be SubsetFamily of M holds
+ A is_coarser_than B & B is_coarser_than C implies A is_coarser_than C
+ proof
+    let I be set,
+        M be ManySortedSet of I;
+    let A,B,C be SubsetFamily of M;
+    assume that
+A1:    A is_coarser_than B and
+A2:    B is_coarser_than C;
+    let a be set; assume
+      a in A;
+    then consider b be set such that
+A3:     b in B and
+A4:     b c= a by A1,Def2;
+    consider c be set such that
+A5:     c in C and
+A6:     c c= b by A2,A3,Def2;
+    take c;
+    thus thesis by A4,A5,A6,XBOOLE_1:1;
+ end;
+
+definition let I be non empty set, M be ManySortedSet of I;
+func supp M -> set means
+:Def3:
+     it = { x where x is Element of I : M.x <> {} };
+correctness;
+end;
+
+theorem
+   for I be non empty set, M be non-empty ManySortedSet of I holds
+  M = [0]I +* (M|supp M)
+  proof
+    let I be non empty set,
+        M be non-empty ManySortedSet of I;
+    set MM = M|supp M;
+A1: dom M = I by PBOOLE:def 3;
+     supp M = I
+     proof
+       thus for v be set st v in supp M holds v in I
+       proof
+         let v be set; assume
+           v in supp M;
+         then v in { x where x is Element of I : M.x <> {} } by Def3;
+         then consider x be Element of I such that
+A2:         v = x and
+              M.x <> {};
+         thus thesis by A2;
+       end;
+       thus for v be set st v in I holds v in supp M
+        proof
+         let v be set; assume
+A3:         v in I;
+         then M.v <> {} by PBOOLE:def 16;
+         then v in { x where x is Element of I : M.x <> {} } by A3;
+         hence thesis by Def3;
+        end;
+     end;
+then MM = M by A1,RELAT_1:97;
+    hence thesis by Th1;
+  end;
+
+theorem
+   for I be non empty set, M1, M2 be non-empty ManySortedSet of I holds
+  supp M1 = supp M2 & M1|supp M1 = M2|supp M2 implies M1 = M2
+  proof
+     let I be non empty set,
+         M1, M2 be non-empty ManySortedSet of I;
+     assume that
+          supp M1 = supp M2 and
+A1:     M1|supp M1 = M2|supp M2;
+A2:  dom M1 = I & dom M2 = I by PBOOLE:def 3;
+       for x be set st x in I holds M1.x = M2.x
+      proof
+         let x be set; assume
+A3:          x in I;
+         then M1.x is non empty by PBOOLE:def 16;
+         then x in { a where a is Element of I : M1.a <> {} } by A3;
+then A4:       x in supp M1 by Def3;
+           M2.x is non empty by A3,PBOOLE:def 16;
+         then x in { a where a is Element of I : M2.a <> {} } by A3;
+then A5:       x in supp M2 by Def3;
+           dom (M1|supp M1) = dom M1 /\ supp M1 &
+           dom (M2|supp M2) = dom M2 /\ supp M2 by RELAT_1:90;
+then A6:       x in dom (M1|supp M1) & x in dom (M2|supp M2)
+             by A2,A3,A4,A5,XBOOLE_0:def 3;
+         then M1.x = (M2|supp M2).x by A1,FUNCT_1:70
+             .= M2.x by A6,FUNCT_1:70;
+         hence thesis;
+      end;
+     hence M1 = M2 by A2,FUNCT_1:9;
+  end;
+
+theorem
+   for I be non empty set, M be ManySortedSet of I, x be Element of I holds
+  (not x in supp M) implies M.x = {}
+  proof
+   let I be non empty set,
+       M be ManySortedSet of I,
+       x be Element of I;
+   assume
+    not x in supp M;
+   then not x in { v where v is Element of I : M.v <> {} } by Def3;
+   hence thesis;
+  end;
+
+theorem Th9:
+ for I being non empty set, M being ManySortedSet of I,
+     x being Element of Bool M, i being Element of I
+ for y being set st y in x.i
+  ex a being Element of Bool M st y in a.i &
+    a is locally-finite & supp a is finite & a c= x
+    proof
+       let I be non empty set,
+       M be ManySortedSet of I,
+       x be Element of Bool M,
+       i be Element of I;
+       let y be set such that
+A1:       y in x.i;
+       set N = {i} --> {y};
+       set A = [0]I +* N;
+A2:    dom N = {i} & rng N = {{y}} by FUNCOP_1:14,19;
+then A3:    i in dom N by TARSKI:def 1;
+then A4:    N.i = {y} by A2,FUNCOP_1:13;
+then A5:    A.i = {y} by A3,FUNCT_4:14;
+A6:    dom A = dom [0]I \/ dom N by FUNCT_4:def 1
+            .= I \/ {i} by A2,PBOOLE:def 3
+            .= I by ZFMISC_1:46;
+       then reconsider A as ManySortedSet of I by PBOOLE:def 3;
+         for j be set st j in I holds A.j c= M.j
+         proof
+          let j be set such that
+A7:          j in I;
+           per cases;
+           suppose
+A8:           i = j;
+           let v be set;
+           assume
+A9:           v in A.j;
+           reconsider x as ManySortedSubset of M;
+             x c= M by MSUALG_2:def 1;
+then A10:        x.j c= M.j by A7,PBOOLE:def 5;
+             v in {y} by A3,A4,A8,A9,FUNCT_4:14;
+           then v in x.j by A1,A8,TARSKI:def 1;
+           hence thesis by A10;
+           suppose
+             i <> j;
+           then A11: not j in {i} by TARSKI:def 1;
+             j in dom [0]I \/ dom N by A6,A7,FUNCT_4:def 1;
+           then A.j = ([0]I).j by A2,A11,FUNCT_4:def 1
+              .= (I --> {}).j by PBOOLE:def 6
+              .= {} by A7,FUNCOP_1:13;
+           hence thesis by XBOOLE_1:2;
+         end;
+       then A c= M by PBOOLE:def 5;
+       then reconsider AA = A as ManySortedSubset of M by MSUALG_2:def 1;
+       reconsider a = AA as Element of Bool M by CLOSURE2:def 1;
+       take a;
+       A12: for j be set st j in I holds a.j is finite
+         proof
+           let j be set such that
+A13:            j in I;
+           per cases;
+           suppose
+             j = i;
+           hence thesis by A3,A4,FUNCT_4:14;
+           suppose
+             j <> i;
+           then A14: not j in {i} by TARSKI:def 1;
+             j in dom [0]I \/ dom N by A6,A13,FUNCT_4:def 1;
+           then a.j = ([0]I).j by A2,A14,FUNCT_4:def 1
+              .= (I --> {}).j by PBOOLE:def 6
+              .= {} by A13,FUNCOP_1:13;
+           hence thesis;
+         end;
+A15:     { b where b is Element of I : a.b <> {}} = {i}
+       proof
+         thus { b where b is Element of I : a.b <> {}} c= {i}
+           proof
+             let s be set;
+             assume
+A16:              s in { b where b is Element of I : a.b <> {}};
+             assume
+A17:            not s in {i};
+             consider b be Element of I such that
+A18:             s = b and
+A19:             a.b <> {} by A16;
+             reconsider s as Element of I by A18;
+               s in dom a by A6;
+             then s in dom [0]I \/ dom N by FUNCT_4:def 1;
+             then a.s = ([0]I).s by A2,A17,FUNCT_4:def 1
+                .= (I --> {}).s by PBOOLE:def 6
+                .= {} by FUNCOP_1:13;
+             hence contradiction by A18,A19;
+           end;
+         let s be set;
+         assume
+         A20: s in {i};
+then A21:      s = i by TARSKI:def 1;
+         reconsider s as Element of I by A20,TARSKI:def 1;
+           a.s = {y} by A3,A4,A21,FUNCT_4:14;
+         hence thesis;
+       end;
+         for j be set st j in I holds a.j c= x.j
+         proof
+           let j be set such that
+A22:           j in I;
+           per cases;
+           suppose
+A23:           i = j;
+           let v be set;
+           assume
+A24:            v in a.j;
+             a.j = {y} by A3,A4,A23,FUNCT_4:14;
+           hence thesis by A1,A23,A24,TARSKI:def 1;
+           suppose
+             j <> i;
+           then A25: not j in {i} by TARSKI:def 1;
+             j in dom [0]I \/ dom N by A6,A22,FUNCT_4:def 1;
+           then a.j = ([0]I).j by A2,A25,FUNCT_4:def 1
+              .= (I --> {}).j by PBOOLE:def 6
+              .= {} by A22,FUNCOP_1:13;
+           hence thesis by XBOOLE_1:2;
+         end;
+       hence thesis by A5,A12,A15,Def3,PBOOLE:def 5,PRE_CIRC:def 3,TARSKI:def 1
+;
+    end;
+
+
+definition let I be set, M be ManySortedSet of I;
+           let A be SubsetFamily of M;
+func MSUnion A -> ManySortedSubset of M means
+:Def4:
+     for i be set st i in I holds
+     it.i = union { f.i where f is Element of Bool M: f in A };
+ existence
+ proof
+    defpred P[set, set] means
+      $2 = union { f.$1 where f is Element of Bool M: f in A };
+A1:   for x,y1,y2 be set st x in I & P[x,y1] & P[x,y2] holds y1 = y2;
+A2:   for x be set st x in I ex y be set st P[x,y];
+
+     consider IT be Function such that
+A3:     dom IT = I and
+A4:     for x be set st x in I holds P[x, IT.x] from FuncEx(A1,A2);
+    reconsider IT as ManySortedSet of I by A3,PBOOLE:def 3;
+       for i be set st i in I holds IT.i c= M.i
+      proof
+       let i be set such that
+A5:     i in I;
+         for x be set holds x in IT.i implies x in M.i
+        proof
+          let x be set;
+          assume
+A6:         x in IT.i;
+            IT.i = union { f.i where f is Element of Bool M: f in A } by A4,A5
+;
+          then consider Y be set such that
+A7:          x in Y and
+A8:          Y in { f.i where f is Element of Bool M: f in
+ A } by A6,TARSKI:def 4;
+          consider ff be Element of Bool M such that
+A9:          ff.i = Y and
+            ff in A by A8;
+          reconsider ff as ManySortedSubset of M;
+            ff c= M by MSUALG_2:def 1;
+then ff.i c= M.i by A5,PBOOLE:def 5;
+          hence thesis by A7,A9;
+        end;
+       hence IT.i c= M.i by TARSKI:def 3;
+      end;
+     then IT c= M by PBOOLE:def 5;
+     then reconsider IT as ManySortedSubset of M by MSUALG_2:def 1;
+     take IT;
+    thus thesis by A4;
+ end;
+
+ uniqueness
+   proof
+     let B1,B2 be ManySortedSubset of M;
+     assume that
+A10:     for i be set st i in I holds
+            B1.i = union { f.i where f is Element of Bool M: f in A } and
+A11:     for i be set st i in I holds
+            B2.i = union { ff.i where ff is Element of Bool M: ff in A };
+          for i be set st i in I holds B1.i = B2.i
+        proof
+          let i be set; assume
+A12:          i in I;
+           then B1.i = union { f.i where f is Element of Bool M : f in A } by
+A10
+           .= B2.i by A11,A12;
+           hence thesis;
+         end;
+      hence thesis by PBOOLE:3;
+   end;
+end;
+
+definition let I be set, M be ManySortedSet of I;
+ let B be non empty SubsetFamily of M;
+ redefine
+  mode Element of B -> ManySortedSet of I;
+ coherence
+ proof
+   let x be set; assume
+      x is Element of B;
+   hence thesis;
+ end;
+end;
+
+definition let I be set, M be ManySortedSet of I,
+ A be empty SubsetFamily of M;
+ cluster MSUnion A -> empty-yielding;
+ coherence
+  proof
+    set MA = MSUnion A;
+     let i be set; assume
+        i in I;
+then A1:      MA.i = union {f.i where f is Element of Bool M : f in A}
+          by Def4;
+        assume MA.i is non empty;
+        then consider v being set such that
+A2:        v in MA.i by XBOOLE_0:def 1;
+           consider h be set such that
+               v in h and
+A3:        h in {f.i where f is Element of Bool M : f in A} by A1,A2,TARSKI:def
+4;
+          consider g be Element of Bool M such that
+              h = g.i and
+A4:        g in A by A3;
+          thus contradiction by A4;
+  end;
+end;
+
+theorem
+   for I be set, M be ManySortedSet of I,
+     A be SubsetFamily of M holds
+ MSUnion A = union |:A:|
+ proof
+   let I be set,
+       M be ManySortedSet of I,
+       A be SubsetFamily of M;
+   set AA = |:A:|;
+   reconsider UA = union AA as ManySortedSet of I;
+   per cases;
+   suppose
+A1:   A is non empty;
+     for i be set st i in I holds (MSUnion A).i = UA.i
+    proof
+     let i be set; assume
+A2:      i in I;
+then A3:   AA.i = { g.i where g is Element of Bool M : g in A }
+       by A1,CLOSURE2:15;
+        UA.i = union (AA.i) by A2,MBOOLEAN:def 2;
+      hence thesis by A2,A3,Def4;
+    end;
+   hence thesis by PBOOLE:3;
+   suppose
+A4:   A is empty SubsetFamily of M;
+     for A be empty SubsetFamily of M holds MSUnion A is empty-yielding;
+then A5: MSUnion A is empty-yielding by A4;
+     for i be set st i in I holds (MSUnion A).i = UA.i
+   proof
+     let i be set; assume
+A6:     i in I;
+        AA = [0]I by A4,CLOSURE2:def 4;
+      then UA = [0]I by MBOOLEAN:22;
+      then UA.i is empty by A6,PBOOLE:def 15;
+      hence thesis by A5,A6,PBOOLE:def 15;
+   end;
+   hence thesis by PBOOLE:3;
+ end;
+
+definition let I be set, M be ManySortedSet of I,
+ A, B be SubsetFamily of M;
+ redefine func A \/ B -> SubsetFamily of M;
+ correctness by CLOSURE2:4;
+ end;
+
+theorem
+  for I be set, M be ManySortedSet of I
+for A, B be SubsetFamily of M holds
+ MSUnion (A \/ B) = MSUnion A \/ MSUnion B
+  proof
+    let I be set,
+        M be ManySortedSet of I,
+        A, B be SubsetFamily of M;
+    reconsider MAB = MSUnion (A \/ B) as ManySortedSubset of M;
+    reconsider MAB as ManySortedSet of I;
+    reconsider MA = MSUnion A as ManySortedSubset of M;
+    reconsider MA as ManySortedSet of I;
+    reconsider MB = MSUnion B as ManySortedSubset of M;
+    reconsider MB as ManySortedSet of I;
+      for i be set st i in I holds MAB.i = (MA \/ MB).i
+     proof
+      let i be set; assume
+A1:      i in I;
+then A2:   MAB.i = union {f.i where f is Element of Bool M : f in (A \/ B)} by
+Def4;
+A3:   (MA \/ MB).i = MA.i \/ MB.i by A1,PBOOLE:def 7;
+A4:   MA.i = union {f.i where f is Element of Bool M : f in A } by A1,Def4;
+A5:   MB.i = union {f.i where f is Element of Bool M : f in B } by A1,Def4;
+A6:   for v be set holds v in MAB.i implies v in (MA \/ MB).i
+       proof
+        let v be set;
+        assume
+          v in MAB.i;
+        then consider h be set such that
+A7:       v in h and
+A8:       h in {f.i where f is Element of Bool M : f in (A \/ B)}
+            by A2,TARSKI:def 4;
+        consider g be Element of Bool M such that
+A9:       h = g.i and
+A10:       g in (A \/ B) by A8;
+          g in A or g in B by A10,XBOOLE_0:def 2;
+        then h in {f.i where f is Element of Bool M : f in A } or
+        h in {f.i where f is Element of Bool M : f in B } by A9;
+        then v in union {f.i where f is Element of Bool M : f in A } or
+        v in union {f.i where f is Element of Bool M : f in B }
+          by A7,TARSKI:def 4;
+        hence v in (MA \/ MB).i by A3,A4,A5,XBOOLE_0:def 2;
+       end;
+  for v be set holds v in (MA \/ MB).i implies v in MAB.i
+      proof
+       let v be set;
+       assume
+          v in (MA \/ MB).i;
+       then A11: v in MA.i or v in MB.i by A3,XBOOLE_0:def 2;
+       per cases by A1,A11,Def4;
+       suppose
+       v in union { f.i where f is Element of Bool M : f in A};
+       then consider g be set such that
+A12:        v in g and
+A13:        g in { f.i where f is Element of Bool M : f in A} by TARSKI:def 4;
+       consider h be Element of Bool M such that
+A14:        g = h.i and
+A15:        h in A by A13;
+         h in A \/ B by A15,XBOOLE_0:def 2;
+       then g in { f.i where f is Element of Bool M : f in (A \/ B)} by A14;
+       hence thesis by A2,A12,TARSKI:def 4;
+       suppose
+       v in union { f.i where f is Element of Bool M : f in B};
+       then consider g be set such that
+A16:        v in g and
+A17:        g in { f.i where f is Element of Bool M : f in B} by TARSKI:def 4;
+       consider h be Element of Bool M such that
+A18:        g = h.i and
+A19:        h in B by A17;
+         h in A \/ B by A19,XBOOLE_0:def 2;
+       then g in { f.i where f is Element of Bool M : f in (A \/ B)} by A18;
+       hence thesis by A2,A16,TARSKI:def 4;
+       end;
+       hence thesis by A6,TARSKI:2;
+      end;
+    hence thesis by PBOOLE:3;
+ end;
+
+theorem
+  for I be set, M be ManySortedSet of I
+for A, B be SubsetFamily of M holds
+ A c= B implies MSUnion A c= MSUnion B
+   proof
+    let I be set, M be ManySortedSet of I;
+    let A, B be SubsetFamily of M;
+    assume
+A1:    A c= B;
+    reconsider MA = MSUnion A as ManySortedSubset of M;
+    reconsider MA as ManySortedSet of I;
+    reconsider MB = MSUnion B as ManySortedSubset of M;
+    reconsider MB as ManySortedSet of I;
+      for i be set st i in I holds MA.i c= MB.i
+     proof
+      let i be set such that
+A2:      i in I;
+       for v be set st v in MA.i holds v in MB.i
+     proof
+      let v be set such that
+A3:       v in MA.i;
+        MA.i = union {f.i where f is Element of Bool M : f in
+ A} by A2,Def4;
+      then consider h be set such that
+A4:      v in h and
+A5:      h in {f.i where f is Element of Bool M : f in A} by A3,TARSKI:def 4;
+      consider g be Element of Bool M such that
+A6:       h = g.i and
+A7:       g in A by A5;
+        h in {k.i where k is Element of Bool M : k in B} by A1,A6,A7;
+      then v in union {k.i where k is Element of Bool M : k in B}
+       by A4,TARSKI:def 4;
+      hence v in MB.i by A2,Def4;
+      end;
+     hence MA.i c= MB.i by TARSKI:def 3;
+     end;
+    hence thesis by PBOOLE:def 5;
+   end;
+
+definition let I be set, M be ManySortedSet of I,
+ A, B be SubsetFamily of M;
+ redefine func A /\ B -> SubsetFamily of M;
+ correctness by CLOSURE2:5;
+ end;
+
+theorem
+   for I be set, M be ManySortedSet of I
+ for A, B be SubsetFamily of M holds
+ MSUnion (A /\ B) c= MSUnion A /\ MSUnion B
+   proof
+    let I be set, M be ManySortedSet of I;
+    let A, B be SubsetFamily of M;
+    reconsider MAB = MSUnion (A /\ B) as ManySortedSet of I;
+    reconsider MA = MSUnion A as ManySortedSet of I;
+    reconsider MB = MSUnion B as ManySortedSet of I;
+      for i be set st i in I holds MAB.i c= (MA /\ MB).i
+     proof
+       let i be set; assume
+A1:        i in I;
+then A2:     MAB.i = union {f.i where f is Element of Bool M : f in (A /\ B)}
+              by Def4;
+A3:     MA.i = union {f.i where f is Element of Bool M : f in A } by A1,Def4;
+A4:     MB.i = union {f.i where f is Element of Bool M : f in B } by A1,Def4;
+          for v be set st v in MAB.i holds v in (MA /\ MB).i
+        proof
+         let v be set; assume
+           v in MAB.i;
+         then consider w be set such that
+A5:          v in w and
+A6:          w in {f.i where f is Element of Bool M : f in (A /\ B)}
+             by A2,TARSKI:def 4;
+         consider g be Element of Bool M such that
+A7:          w = g.i and
+A8:          g in A /\ B by A6;
+           g in A & g in B by A8,XBOOLE_0:def 3;
+         then w in {f.i where f is Element of Bool M : f in A } &
+         w in {f.i where f is Element of Bool M : f in B } by A7;
+         then v in union {f.i where f is Element of Bool M : f in A } &
+         v in union {f.i where f is Element of Bool M : f in B }
+            by A5,TARSKI:def 4;
+         then v in (MA.i /\ MB.i) by A3,A4,XBOOLE_0:def 3;
+         hence thesis by A1,PBOOLE:def 8;
+        end;
+        hence thesis by TARSKI:def 3;
+     end;
+    hence thesis by PBOOLE:def 5;
+   end;
+
+theorem
+    for I be set, M be ManySortedSet of I,
+      AA be set st for x being set st x in AA holds x is SubsetFamily of M
+  for A,B be SubsetFamily of M
+   st B = { MSUnion X where X is SubsetFamily of M : X in AA} & A = union AA
+  holds MSUnion B = MSUnion A
+  proof
+    let I be set,
+        M be ManySortedSet of I,
+        AA be set such that
+A1:      for x being set st x in AA holds x is SubsetFamily of M;
+     let A,B be SubsetFamily of M such that
+A2:      B = { MSUnion X where X is SubsetFamily of M : X in AA} and
+A3:      A = union AA;
+     thus MSUnion B c= MSUnion A
+     proof
+       for i be set st i in I holds (MSUnion B).i c= (MSUnion A).i
+       proof
+         let i be set such that
+A4:           i in I;
+           now let a be set;
+         thus a in (MSUnion B).i implies a in (MSUnion A).i
+         proof
+           assume
+            a in (MSUnion B).i;
+           then a in union { f.i where f is Element of Bool M: f in
+ B} by A4,Def4;
+           then consider Y be set such that
+A5:              a in Y and
+A6:             Y in { f.i where f is Element of Bool M: f in B} by TARSKI:def
+4;
+           consider f be Element of Bool M such that
+A7:             f.i = Y and
+A8:             f in B by A6;
+           consider Q be SubsetFamily of M such that
+A9:              f = MSUnion Q and
+A10:              Q in AA by A2,A8;
+             (MSUnion Q).i = union { g.i where g is Element of Bool M : g in Q}
+           by A4,Def4;
+           then consider d be set such that
+A11:           a in d and
+A12:           d in { g.i where g is Element of Bool M : g in Q}
+              by A5,A7,A9,TARSKI:def 4;
+           consider g be Element of Bool M such that
+A13:          d = g.i and
+A14:          g in Q by A12;
+             g in union AA by A10,A14,TARSKI:def 4;
+           then d in { h.i where h is Element of Bool M: h in union AA } by A13
+;
+           then a in union { h.i where h is Element of Bool M: h in union AA }
+               by A11,TARSKI:def 4;
+           hence thesis by A3,A4,Def4;
+         end;
+         end;
+         hence (MSUnion B).i c= (MSUnion A).i by TARSKI:def 3;
+        end;
+        hence thesis by PBOOLE:def 5;
+      end;
+         for i be set st i in I holds (MSUnion A).i c= (MSUnion B).i
+       proof
+         let i be set such that
+A15:           i in I;
+         let a be set;
+           a in (MSUnion A).i implies a in (MSUnion B).i
+         proof
+           assume
+            a in (MSUnion A).i;
+           then a in union { f.i where f is Element of Bool M: f in
+ A} by A15,Def4;
+           then consider Y be set such that
+A16:              a in Y and
+A17:             Y in { f.i where f is Element of Bool M: f in A} by TARSKI:def
+4;
+           consider f be Element of Bool M such that
+A18:             f.i = Y and
+A19:             f in A by A17;
+           consider c be set such that
+A20:            f in c and
+A21:            c in AA by A3,A19,TARSKI:def 4;
+           reconsider c as SubsetFamily of M by A1,A21;
+A22:       (MSUnion c).i = union {v.i where v is Element of Bool M: v in c}
+              by A15,Def4;
+             f.i in {v.i where v is Element of Bool M: v in c} by A20;
+           then A23: a in union {v.i where v is Element of Bool M: v in c}
+             by A16,A18,TARSKI:def 4;
+           A24: MSUnion c in { MSUnion X where X is SubsetFamily of M : X in AA
+}
+              by A21;
+           consider cos be set such that
+A25:            a in cos and
+A26:            cos = (MSUnion c).i by A22,A23;
+             cos in { t.i where t is Element of Bool M : t in B} by A2,A24,A26;
+           then a in union { t.i where t is Element of Bool M : t in B}
+              by A25,TARSKI:def 4;
+           hence thesis by A15,Def4;
+         end;
+         hence thesis;
+        end;
+        hence thesis by PBOOLE:def 5;
+      end;
+
+begin ::Algebraic Operation on Subsets of Many Sorted Sets
+
+definition let I be non empty set, M be ManySortedSet of I, S be SetOp of M;
+attr S is algebraic means
+
+        for x be Element of Bool M st x = S.x
+       ex A be SubsetFamily of M st A = { S.a where a is Element of Bool M :
+                 a is locally-finite & supp a is finite & a c= x} &
+          x = MSUnion A;
+end;
+
+definition let I be non empty set, M be ManySortedSet of I;
+ cluster algebraic reflexive monotonic idempotent SetOp of M;
+existence
+  proof
+    reconsider f = id (Bool M) as SetOp of M;
+    take f;
+    thus f is algebraic
+     proof
+       let x be Element of Bool M such that
+             x = f.x;
+       set A = { f.a where a is Element of Bool M :
+                 a is locally-finite & supp a is finite & a c= x};
+         A c= Bool M
+         proof
+           let v be set;
+           assume
+             v in A;
+           then consider a be Element of Bool M such that
+A1:             v = f.a and
+                  a is locally-finite & supp a is finite & a c= x;
+           thus v in Bool M by A1;
+         end;
+       then reconsider A as SubsetFamily of M;
+      take A;
+      thus A = { f.a where a is Element of Bool M :
+                 a is locally-finite & supp a is finite & a c= x};
+      thus x c= MSUnion A
+       proof
+          let i be set such that
+A2:           i in I;
+          let y be set such that
+A3:           y in x.i;
+          consider a be Element of Bool M such that
+A4:           y in a.i & a is locally-finite & supp a is finite & a c= x
+                 by A2,A3,Th9;
+            a = f.a by FUNCT_1:35;
+          then a in A by A4;
+          then a.i in {g.i where g is Element of Bool M : g in A};
+          then y in union {g.i where g is Element of Bool M : g in A}
+             by A4,TARSKI:def 4;
+          hence thesis by A2,Def4;
+       end;
+       thus MSUnion A c= x
+         proof
+           let i be set such that
+A5:          i in I;
+             for v be set holds v in (MSUnion A).i implies v in x.i
+             proof
+               let v be set;
+               assume
+                v in (MSUnion A).i;
+               then v in union {ff.i where ff is Element of Bool M: ff in A}
+                 by A5,Def4;
+               then consider Y be set such that
+A6:               v in Y and
+A7:               Y in {ff.i where ff is Element of Bool M: ff in A}
+                     by TARSKI:def 4;
+               consider ff be Element of Bool M such that
+A8:               Y = ff.i and
+A9:               ff in A by A7;
+               consider a be Element of Bool M such that
+A10:               ff = f.a and
+A11:               a is locally-finite & supp a is finite & a c= x by A9;
+                 ff = a by A10,FUNCT_1:35;
+then ff.i c= x.i by A5,A11,PBOOLE:def 5;
+               hence thesis by A6,A8;
+             end;
+             hence thesis by TARSKI:def 3;
+           end;
+     end;
+    thus f is reflexive
+    proof
+      let X be Element of Bool M;
+      thus thesis by FUNCT_1:35;
+    end;
+    thus f is monotonic
+    proof
+      let X, Y be Element of Bool M such that
+A12:     X c= Y;
+        f.X = X & f.Y = Y by FUNCT_1:35;
+      hence thesis by A12;
+    end;
+    thus f is idempotent
+    proof
+      let X be Element of Bool M;
+      thus f.(f.X) = f.X by FUNCT_1:35;
+    end;
+  end;
+end;
+
+definition let S be non empty 1-sorted,
+               IT be ClosureSystem of S;
+attr IT is algebraic means
+   ClSys->ClOp IT is algebraic;
+end;
+
+definition let S be non void non empty ManySortedSign,
+               MA be non-empty MSAlgebra over S;
+func SubAlgCl MA -> strict ClosureStr over the 1-sorted of S means
+:Def7:
+  the Sorts of it = the Sorts of MA &
+  the Family of it = SubSort MA;
+ existence
+ proof
+A1: SubSort MA c= Bool the Sorts of MA
+   proof
+     let x be set;
+     assume x in SubSort MA;
+     then x is ManySortedSubset of the Sorts of MA by MSUALG_2:def 12;
+     hence x in Bool the Sorts of MA by CLOSURE2:def 1;
+   end;
+   reconsider SS = the Sorts of MA as
+       ManySortedSet of the carrier of the 1-sorted of S;
+   reconsider SF = SubSort MA as SubsetFamily of SS by A1;
+   take ClosureStr (#SS, SF#);
+   thus thesis;
+ end;
+ uniqueness;
+end;
+
+canceled;
+
+theorem Th16:
+for S be non void non empty ManySortedSign,
+    MA be strict non-empty MSAlgebra over S holds
+SubSort MA is absolutely-multiplicative SubsetFamily of the Sorts of MA
+  proof
+     let S be non void non empty ManySortedSign,
+         MA be strict non-empty MSAlgebra over S;
+       SubSort MA c= Bool the Sorts of MA
+      proof
+        let x be set;
+        assume x in SubSort MA;
+        then x is ManySortedSubset of the Sorts of MA by MSUALG_2:def 12;
+        hence x in Bool the Sorts of MA by CLOSURE2:def 1;
+      end;
+     then reconsider SUBMA = SubSort MA as SubsetFamily of the Sorts of MA;
+       for F be SubsetFamily of the Sorts of MA st F c= SUBMA holds
+       meet |:F:| in SUBMA
+     proof
+       let F be SubsetFamily of the Sorts of MA such that
+A1:        F c= SUBMA;
+       set I = the carrier of S;
+       set x = meet |:F:|;
+       set M = bool (Union (the Sorts of MA));
+A2:     dom x = I by PBOOLE:def 3;
+         rng x c= M
+        proof
+          let u be set;
+          assume
+            u in rng x;
+          then consider i be set such that
+A3:           i in dom x and
+A4:           u = x.i by FUNCT_1:def 5;
+         consider Q be Subset-Family of (the Sorts of MA).i
+             such that
+                Q = |:F:|.i and
+A5:           u = Intersect Q by A2,A3,A4,MSSUBFAM:def 2;
+           dom (the Sorts of MA) = I by PBOOLE:def 3;
+         then (the Sorts of MA).i in rng (the Sorts of MA) by A2,A3,FUNCT_1:def
+5;
+         then (the Sorts of MA).i c= union rng (the Sorts of MA) by ZFMISC_1:92
+;
+         then u c= union rng (the Sorts of MA) by A5,XBOOLE_1:1;
+         then u in bool (union rng (the Sorts of MA));
+         hence thesis by PROB_1:def 3;
+        end;
+then A6:    x in Funcs ( I, M) by A2,FUNCT_2:def 2;
+       reconsider x as MSSubset of MA;
+         for B be MSSubset of MA st B = x holds B is opers_closed by A1,Th3;
+       hence thesis by A6,MSUALG_2:def 12;
+       end;
+      hence thesis by CLOSURE2:def 8;
+   end;
+
+
+definition let S be non void non empty ManySortedSign,
+               MA be strict non-empty MSAlgebra over S;
+ cluster SubAlgCl MA -> absolutely-multiplicative;
+coherence
+ proof
+  thus SubAlgCl MA is absolutely-multiplicative
+   proof
+A1:     the Sorts of SubAlgCl MA = the Sorts of MA by Def7;
+       set F = the Family of SubAlgCl MA;
+       reconsider SF = SubSort MA as
+         absolutely-multiplicative SubsetFamily of the Sorts of MA by Th16;
+         F = SF by Def7;
+       hence thesis by A1,CLOSURE2:def 19;
+     end;
+   end;
+end;
+
+definition let S be non void non empty ManySortedSign,
+               MA be strict non-empty MSAlgebra over S;
+ cluster SubAlgCl MA -> algebraic;
+coherence
+   proof
+    set SS = ClSys->ClOp SubAlgCl MA,
+        M = the Sorts of SubAlgCl MA;
+    let x be Element of Bool M such that
+A1:    x = SS.x;
+    set A = { SS.a where a is Element of Bool M :
+                 a is locally-finite & supp a is finite & a c= x};
+      A c= Bool M
+       proof
+          let v be set;
+          assume
+            v in A;
+          then consider a be Element of Bool M such that
+A2:          v = SS.a and
+               a is locally-finite & supp a is finite & a c= x;
+          reconsider vv = v as Element of Bool M by A2;
+            vv in Bool M;
+          hence thesis;
+          end;
+     then reconsider A as SubsetFamily of M;
+    take A;
+    reconsider I = the carrier of S as non empty set;
+    thus A = { SS.b where b is Element of Bool M :
+                 b is locally-finite & supp b is finite & b c= x};
+    thus x c= MSUnion A
+      proof
+          for i be set st i in I holds x.i c= (MSUnion A).i
+          proof
+            let i be set such that
+A3:              i in I;
+            let v be set such that
+A4:             v in x.i;
+            consider b be Element of Bool M such that
+A5:             v in b.i and
+A6:             b is locally-finite & supp b is finite & b c= x
+                   by A3,A4,Th9;
+A7:          SS.b in A by A6;
+             reconsider SS' = SS as reflexive SetOp of M;
+               b c=' SS'.b by CLOSURE2:def 12;
+             then A8: b.i c= (SS'.b).i by A3,PBOOLE:def 5;
+               (SS'.b).i in {f.i where f is Element of Bool M : f in
+ A} by A7;
+             then v in union {f.i where f is Element of Bool M : f in A}
+                 by A5,A8,TARSKI:def 4;
+             hence v in (MSUnion A).i by A3,Def4;
+        end;
+        hence thesis by PBOOLE:def 5;
+      end;
+
+    thus MSUnion A c= x
+      proof
+          for i be set st i in I holds (MSUnion A).i c= x.i
+        proof
+           let i be set such that
+A9:          i in I;
+             for v be set holds v in (MSUnion A).i implies v in x.i
+             proof
+               let v be set;
+               assume
+                 v in (MSUnion A).i;
+               then v in union {ff.i where ff is Element of Bool M: ff in A}
+                 by A9,Def4;
+               then consider Y be set such that
+A10:               v in Y and
+A11:               Y in {ff.i where ff is Element of Bool M: ff in A}
+                   by TARSKI:def 4;
+               consider ff be Element of Bool M such that
+A12:               Y = ff.i and
+A13:               ff in A by A11;
+               consider a be Element of Bool M such that
+A14:               ff = SS.a and
+                    a is locally-finite & supp a is finite and
+A15:              a c=' x by A13;
+               reconsider SS' = SS as monotonic SetOp of M;
+                 SS'.a c=' SS'.x by A15,CLOSURE2:def 13;
+then ff.i c= x.i by A1,A9,A14,PBOOLE:def 5;
+               hence thesis by A10,A12;
+             end;
+             hence (MSUnion A).i c= x.i by TARSKI:def 3;
+           end;
+           hence thesis by PBOOLE:def 5;
+        end;
+ end;
+end;
+

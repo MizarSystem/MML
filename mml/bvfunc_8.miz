@@ -1,0 +1,1466 @@
+:: Propositional Calculus For Boolean Valued Functions, IV
+::  by Shunichi Kobayashi
+::
+:: Received April 23, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_2, MARGREL1, BVFUNC_1, ZF_LANG, FUNCT_1, RELAT_1, BINARITH,
+      PARTIT1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, MARGREL1, VALUAT_1, RELAT_1, FUNCT_1,
+      FRAENKEL, BINARITH, BVFUNC_1;
+ constructors BINARITH, BVFUNC_1;
+ clusters MARGREL1, VALUAT_1, BINARITH, FRAENKEL;
+ requirements SUBSET, BOOLE;
+ definitions BVFUNC_1;
+ theorems FUNCT_1, FUNCT_2, MARGREL1, BINARITH, BVFUNC_1, BVFUNC_4, VALUAT_1;
+
+begin
+
+::Chap. 1  Propositional Calculus
+
+reserve Y for non empty set;
+
+theorem for a,b,c,d being Element of Funcs(Y,BOOLEAN) holds
+a 'imp' (b '&' c '&' d) = (a 'imp' b) '&' (a 'imp' c) '&' (a 'imp' d)
+proof
+  let a,b,c,d be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj(a 'imp' (b '&' c '&' d),x) =
+   Pj((a 'imp' b) '&' (a 'imp' c) '&' (a 'imp' d),x)
+  proof
+    let x be Element of Y;
+      Pj((a 'imp' b) '&' (a 'imp' c) '&' (a 'imp' d),x)
+   =Pj((a 'imp' b) '&' (a 'imp' c),x) '&' Pj(a 'imp' d,x) by VALUAT_1:def 6
+  .=Pj(a 'imp' b,x) '&' Pj(a 'imp' c,x) '&' Pj(a 'imp' d,x) by VALUAT_1:def 6
+  .=('not' Pj(a,x) 'or' Pj(b,x)) '&' Pj(a 'imp' c,x) '&' Pj(a 'imp' d,x)
+   by BVFUNC_1:def 11
+  .=('not' Pj(a,x) 'or' Pj(b,x)) '&' ('not'
+Pj(a,x) 'or' Pj(c,x)) '&' Pj(a 'imp' d,x)
+   by BVFUNC_1:def 11
+  .=('not' Pj(a,x) 'or' Pj(b,x)) '&' ('not' Pj(a,x) 'or' Pj(c,x)) '&'
+    ('not' Pj(a,x) 'or' Pj(d,x))
+   by BVFUNC_1:def 11
+  .=('not' Pj(a,x) 'or' (Pj(b,x) '&' Pj(c,x))) '&' ('not' Pj(a,x) 'or' Pj(d,x))
+   by BINARITH:23
+  .='not' Pj(a,x) 'or' (Pj(b,x) '&' Pj(c,x) '&' Pj(d,x))
+   by BINARITH:23
+  .='not' Pj(a,x) 'or' (Pj(b '&' c,x) '&' Pj(d,x)) by VALUAT_1:def 6
+  .='not' Pj(a,x) 'or' (Pj(b '&' c '&' d,x)) by VALUAT_1:def 6
+  .=Pj(a 'imp' (b '&' c '&' d),x) by BVFUNC_1:def 11;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: (a 'imp' (b '&' c '&' d))=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: (a 'imp' b) '&' (a 'imp' c) '&' (a 'imp' d)=
+        k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence thesis by A2,A3,FUNCT_1:9;
+end;
+
+theorem for a,b,c,d being Element of Funcs(Y,BOOLEAN) holds
+a 'imp' (b 'or' c 'or' d) = (a 'imp' b) 'or' (a 'imp' c) 'or' (a 'imp' d)
+proof
+  let a,b,c,d be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj(a 'imp' (b 'or' c 'or' d),x) =
+   Pj((a 'imp' b) 'or' (a 'imp' c) 'or' (a 'imp' d),x)
+  proof
+    let x be Element of Y;
+      Pj((a 'imp' b) 'or' (a 'imp' c) 'or' (a 'imp' d),x)
+   =Pj((a 'imp' b) 'or' (a 'imp' c),x) 'or' Pj(a 'imp' d,x)
+   by BVFUNC_1:def 7
+  .=Pj(a 'imp' b,x) 'or' Pj(a 'imp' c,x) 'or' Pj(a 'imp' d,x)
+   by BVFUNC_1:def 7
+  .=('not' Pj(a,x) 'or' Pj(b,x)) 'or' Pj(a 'imp' c,x) 'or' Pj(a 'imp' d,x)
+   by BVFUNC_1:def 11
+  .=('not' Pj(a,x) 'or' Pj(b,x)) 'or' ('not' Pj(a,x) 'or' Pj(c,x)) 'or'
+    Pj(a 'imp' d,x)
+   by BVFUNC_1:def 11
+  .=('not' Pj(a,x) 'or' Pj(b,x)) 'or' ('not' Pj(a,x) 'or' Pj(c,x))
+    'or' ('not' Pj(a,x) 'or' Pj(d,x))
+   by BVFUNC_1:def 11
+  .=(('not' Pj(a,x) 'or' ('not' Pj(a,x) 'or' Pj(b,x))) 'or' Pj(c,x))
+    'or' ('not' Pj(a,x) 'or' Pj(d,x)) by BINARITH:20
+  .=((('not' Pj(a,x) 'or' 'not' Pj(a,x)) 'or' Pj(b,x)) 'or' Pj(c,x))
+    'or' ('not' Pj(a,x) 'or' Pj(d,x))
+   by BINARITH:20
+  .=(('not' Pj(a,x) 'or' Pj(b,x)) 'or' Pj(c,x))
+    'or' ('not' Pj(a,x) 'or' Pj(d,x))
+   by BINARITH:21
+  .=('not' Pj(a,x) 'or' (Pj(b,x) 'or' Pj(c,x)))
+    'or' ('not' Pj(a,x) 'or' Pj(d,x))
+   by BINARITH:20
+  .=('not' Pj(a,x) 'or' Pj(b 'or' c,x)) 'or' ('not' Pj(a,x) 'or' Pj(d,x))
+   by BVFUNC_1:def 7
+  .=('not' Pj(a,x) 'or' ('not'
+Pj(a,x) 'or' Pj(b 'or' c,x))) 'or' Pj(d,x) by BINARITH:20
+  .=(('not' Pj(a,x) 'or' 'not' Pj(a,x)) 'or' Pj(b 'or' c,x)) 'or' Pj(d,x)
+   by BINARITH:20
+  .=('not' Pj(a,x) 'or' Pj(b 'or' c,x)) 'or' Pj(d,x)
+   by BINARITH:21
+  .='not' Pj(a,x) 'or' (Pj(b 'or' c,x) 'or' Pj(d,x))
+   by BINARITH:20
+  .='not' Pj(a,x) 'or' Pj(b 'or' c 'or' d,x)
+   by BVFUNC_1:def 7
+  .=Pj(a 'imp' (b 'or' c 'or' d),x) by BVFUNC_1:def 11;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: (a 'imp' (b 'or' c 'or' d))=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: (a 'imp' b) 'or' (a 'imp' c) 'or' (a 'imp' d)=
+        k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence thesis by A2,A3,FUNCT_1:9;
+end;
+
+theorem for a,b,c,d being Element of Funcs(Y,BOOLEAN) holds
+(a '&' b '&' c) 'imp' d = (a 'imp' d) 'or' (b 'imp' d) 'or' (c 'imp' d)
+proof
+  let a,b,c,d be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj((a '&' b '&' c) 'imp' d,x) =
+   Pj((a 'imp' d) 'or' (b 'imp' d) 'or' (c 'imp' d),x)
+  proof
+    let x be Element of Y;
+      Pj((a 'imp' d) 'or' (b 'imp' d) 'or' (c 'imp' d),x)
+   =Pj((a 'imp' d) 'or' (b 'imp' d),x) 'or' Pj(c 'imp' d,x)
+   by BVFUNC_1:def 7
+  .=Pj(a 'imp' d,x) 'or' Pj(b 'imp' d,x) 'or' Pj(c 'imp' d,x)
+   by BVFUNC_1:def 7
+  .=('not' Pj(a,x) 'or' Pj(d,x)) 'or' Pj(b 'imp' d,x) 'or' Pj(c 'imp' d,x)
+   by BVFUNC_1:def 11
+  .=('not' Pj(a,x) 'or' Pj(d,x)) 'or' ('not' Pj(b,x) 'or' Pj(d,x))
+    'or' Pj(c 'imp' d,x)
+   by BVFUNC_1:def 11
+  .=('not' Pj(a,x) 'or' Pj(d,x)) 'or' ('not' Pj(b,x) 'or' Pj(d,x))
+    'or' ('not' Pj(c,x) 'or' Pj(d,x))
+   by BVFUNC_1:def 11
+  .=(('not' Pj(a,x) 'or' (Pj(d,x) 'or' 'not' Pj(b,x))) 'or' Pj(d,x))
+    'or' ('not' Pj(c,x) 'or' Pj(d,x))
+   by BINARITH:20
+  .=(('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(d,x)) 'or' Pj(d,x)
+    'or' ('not' Pj(c,x) 'or' Pj(d,x))
+   by BINARITH:20
+  .=('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' (Pj(d,x) 'or' Pj(d,x))
+    'or' ('not' Pj(c,x) 'or' Pj(d,x))
+   by BINARITH:20
+  .=('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(d,x)
+    'or' ('not' Pj(c,x) 'or' Pj(d,x))
+   by BINARITH:21
+  .=('not'( Pj(a,x) '&' Pj(b,x)) 'or' Pj(d,x)) 'or'
+  ('not' Pj(c,x) 'or' Pj(d,x))
+   by BINARITH:9
+  .=('not'( Pj(a,x) '&' Pj(b,x)) 'or' (Pj(d,x) 'or' 'not'
+  Pj(c,x))) 'or' Pj(d,x)
+   by BINARITH:20
+  .=(('not'( Pj(a,x) '&' Pj(b,x)) 'or' 'not' Pj(c,x)) 'or'
+  Pj(d,x)) 'or' Pj(d,x) by BINARITH:20
+  .=('not'( Pj(a,x) '&' Pj(b,x)) 'or' 'not' Pj(c,x)) 'or'
+  (Pj(d,x) 'or' Pj(d,x)) by BINARITH:20
+  .=('not'( Pj(a,x) '&' Pj(b,x)) 'or' 'not' Pj(c,x)) 'or' Pj(d,x)
+   by BINARITH:21
+  .='not'( Pj(a,x) '&' Pj(b,x) '&' Pj(c,x)) 'or' Pj(d,x) by BINARITH:9
+  .='not'( Pj(a '&' b,x) '&' Pj(c,x)) 'or' Pj(d,x) by VALUAT_1:def 6
+  .='not' Pj(a '&' b '&' c,x) 'or' Pj(d,x) by VALUAT_1:def 6
+  .=Pj((a '&' b '&' c) 'imp' d,x) by BVFUNC_1:def 11;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: ((a '&' b '&' c) 'imp' d)=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: (a 'imp' d) 'or' (b 'imp' d) 'or' (c 'imp' d)
+        =k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence thesis by A2,A3,FUNCT_1:9;
+end;
+
+theorem for a,b,c,d being Element of Funcs(Y,BOOLEAN) holds
+(a 'or' b 'or' c) 'imp' d = (a 'imp' d) '&' (b 'imp' d) '&' (c 'imp' d)
+proof
+  let a,b,c,d be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj((a 'or' b 'or' c) 'imp' d,x) =
+   Pj((a 'imp' d) '&' (b 'imp' d) '&' (c 'imp' d),x)
+  proof
+    let x be Element of Y;
+      Pj((a 'imp' d) '&' (b 'imp' d) '&' (c 'imp' d),x)
+   =Pj((a 'imp' d) '&' (b 'imp' d),x) '&' Pj(c 'imp' d,x)
+   by VALUAT_1:def 6
+  .=Pj(a 'imp' d,x) '&' Pj(b 'imp' d,x) '&' Pj(c 'imp' d,x)
+   by VALUAT_1:def 6
+  .=('not' Pj(a,x) 'or' Pj(d,x)) '&' Pj(b 'imp' d,x) '&' Pj(c 'imp' d,x)
+   by BVFUNC_1:def 11
+  .=('not' Pj(a,x) 'or' Pj(d,x)) '&' ('not'
+Pj(b,x) 'or' Pj(d,x)) '&' Pj(c 'imp' d,x)
+   by BVFUNC_1:def 11
+  .=(Pj(d,x) 'or' 'not' Pj(a,x)) '&' ('not' Pj(b,x) 'or' Pj(d,x))
+    '&' ('not' Pj(c,x) 'or' Pj(d,x)) by BVFUNC_1:def 11
+  .=(Pj(d,x) 'or' ('not' Pj(a,x) '&' 'not' Pj(b,x)))
+    '&' ('not' Pj(c,x) 'or' Pj(d,x))
+   by BINARITH:23
+  .=('not'( Pj(a,x) 'or' Pj(b,x)) 'or' Pj(d,x))
+    '&' ('not' Pj(c,x) 'or' Pj(d,x))
+   by BINARITH:10
+  .=(Pj(d,x) 'or' 'not' Pj(a 'or' b,x)) '&' ('not' Pj(c,x) 'or' Pj(d,x)) by
+BVFUNC_1:def 7
+  .=Pj(d,x) 'or' ('not' Pj(a 'or' b,x) '&' 'not' Pj(c,x))
+   by BINARITH:23
+  .=('not'( Pj(a 'or' b,x) 'or' Pj(c,x))) 'or' Pj(d,x)
+   by BINARITH:10
+  .='not' Pj(a 'or' b 'or' c,x) 'or' Pj(d,x)
+   by BVFUNC_1:def 7
+  .=Pj((a 'or' b 'or' c) 'imp' d,x) by BVFUNC_1:def 11;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: ((a 'or' b 'or' c) 'imp' d)=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: (a 'imp' d) '&' (b 'imp' d) '&' (c 'imp' d)
+        =k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence thesis by A2,A3,FUNCT_1:9;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+(a 'imp' b) '&' (b 'imp' c) '&' (c 'imp' a) =
+(a 'imp' b) '&' (b 'imp' c) '&' (c 'imp' a) '&'
+(b 'imp' a) '&' (a 'imp' c)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj((a 'imp' b) '&' (b 'imp' c) '&' (c 'imp' a),x) =
+   Pj((a 'imp' b) '&' (b 'imp' c) '&' (c 'imp' a) '&'
+      (b 'imp' a) '&' (a 'imp' c),x)
+  proof
+    let x be Element of Y;
+      (a 'imp' b) '&' (b 'imp' c) '&' (c 'imp' a)
+   =('not' a 'or' b) '&' (b 'imp' c) '&' (c 'imp' a) by BVFUNC_4:8
+  .=('not' a 'or' b) '&' ('not' b 'or' c) '&' (c 'imp' a) by BVFUNC_4:8
+  .=('not' a 'or' b) '&' ('not' b 'or' c) '&' ('not' c 'or' a) by BVFUNC_4:8
+  .=(('not' a '&' ('not' b 'or' c) 'or' b '&' ('not' b 'or' c))) '&' ('not'
+c 'or' a)
+   by BVFUNC_1:15
+  .=(('not' a '&' ('not' b 'or' c) 'or'
+  (b '&' 'not' b 'or' b '&' c))) '&' ('not' c 'or' a)
+   by BVFUNC_1:15
+  .=(('not' a '&' ('not' b 'or' c) 'or' (O_el(Y) 'or' b '&' c))) '&' ('not'
+c 'or' a)
+   by BVFUNC_4:5
+  .=(('not' a '&' ('not' b 'or' c) 'or' (b '&' c))) '&' ('not' c 'or' a)
+   by BVFUNC_1:12
+  .=(('not' a 'or' (b '&' c)) '&' (('not' b 'or' c)
+  'or' (b '&' c))) '&' ('not' c 'or' a)
+   by BVFUNC_1:14
+  .=((('not' a 'or' b) '&' ('not' a 'or' c)) '&' (('not'
+b 'or' c) 'or' (b '&' c)))
+    '&' ('not' c 'or' a)
+   by BVFUNC_1:14
+  .=((('not' a 'or' b) '&' ('not' a 'or' c)) '&'
+    ((('not' b 'or' c) 'or' b) '&' (('not' b 'or' c) 'or' c)))
+    '&' ('not' c 'or' a)
+   by BVFUNC_1:14
+  .=((('not' a 'or' b) '&' ('not' a 'or' c)) '&'
+    ((c 'or' ('not' b 'or' b)) '&' (('not' b 'or' c) 'or' c)))
+    '&' ('not' c 'or' a)
+   by BVFUNC_1:11
+  .=((('not' a 'or' b) '&' ('not' a 'or' c)) '&'
+    ((c 'or' I_el(Y)) '&' (('not' b 'or' c) 'or' c)))
+    '&' ('not' c 'or' a)
+   by BVFUNC_4:6
+  .=((('not' a 'or' b) '&' ('not' a 'or' c)) '&'
+    (I_el(Y) '&' (('not' b 'or' c) 'or' c)))
+    '&' ('not' c 'or' a)
+   by BVFUNC_1:13
+  .=((('not' a 'or' b) '&' ('not' a 'or' c)) '&'
+    (('not' b 'or' c) 'or' c))
+    '&' ('not' c 'or' a)
+   by BVFUNC_1:9
+  .=((('not' a 'or' b) '&' ('not' a 'or' c)) '&'
+    ('not' b 'or' (c 'or' c)))
+    '&' ('not' c 'or' a)
+   by BVFUNC_1:11
+  .=((('not' a 'or' b) '&' ('not' a 'or' c)) '&' ('not' b 'or' c))
+    '&' ('not' c 'or' a)
+   by BVFUNC_1:10
+  .=(('not' a 'or' b) '&' ('not' a 'or' c)) '&' (('not' b 'or' c)
+    '&' ('not' c 'or' a))
+   by BVFUNC_1:7
+  .=(('not' a 'or' b) '&' ('not' a 'or' c)) '&'
+    (('not' b '&' ('not' c 'or' a)) 'or' (c '&' ('not' c 'or' a)))
+   by BVFUNC_1:15
+  .=(('not' a 'or' b) '&' ('not' a 'or' c)) '&'
+    (('not' b '&' ('not' c 'or' a)) 'or' ((c '&' 'not' c 'or' c '&' a)))
+   by BVFUNC_1:15
+  .=(('not' a 'or' b) '&' ('not' a 'or' c)) '&'
+    (('not' b '&' ('not' c 'or' a)) 'or' ((O_el(Y) 'or' c '&' a)))
+   by BVFUNC_4:5
+  .=(('not' a 'or' b) '&' ('not' a 'or' c)) '&'
+    (('not' b '&' ('not' c 'or' a)) 'or' (c '&' a))
+   by BVFUNC_1:12
+  .=(('not' a 'or' b) '&' ('not' a 'or' c)) '&'
+    (('not' b 'or' (c '&' a)) '&' (('not' c 'or' a) 'or' (c '&' a)))
+   by BVFUNC_1:14
+  .=(('not' a 'or' b) '&' ('not' a 'or' c)) '&'
+    ((('not' b 'or' c) '&' ('not' b 'or' a)) '&' (('not'
+c 'or' a) 'or' (c '&' a)))
+   by BVFUNC_1:14
+  .= (('not' a 'or' c) '&' ('not' a 'or' b)) '&'
+    ((('not' b 'or' a) '&' ('not' b 'or' c)) '&'
+     ((('not' c 'or' a) 'or' c) '&' (('not' c 'or' a) 'or' a)))
+   by BVFUNC_1:14
+  .= (('not' a 'or' c) '&' ('not' a 'or' b)) '&'
+    ((('not' b 'or' a) '&' ('not' b 'or' c)) '&'
+     ((a 'or' ('not' c 'or' c)) '&' (('not' c 'or' a) 'or' a)))
+   by BVFUNC_1:11
+  .= (('not' a 'or' c) '&' ('not' a 'or' b)) '&'
+    ((('not' b 'or' a) '&' ('not' b 'or' c)) '&'
+     ((a 'or' I_el(Y)) '&' (('not' c 'or' a) 'or' a)))
+   by BVFUNC_4:6
+  .= (('not' a 'or' c) '&' ('not' a 'or' b)) '&'
+    ((('not' b 'or' a) '&' ('not' b 'or' c)) '&'
+     (I_el(Y) '&' (('not' c 'or' a) 'or' a)))
+   by BVFUNC_1:13
+  .= (('not' a 'or' c) '&' ('not' a 'or' b)) '&'
+    ((('not' b 'or' a) '&' ('not' b 'or' c)) '&'
+     (('not' c 'or' a) 'or' a))
+   by BVFUNC_1:9
+  .= (('not' a 'or' c) '&' ('not' a 'or' b)) '&'
+    ((('not' b 'or' a) '&' ('not' b 'or' c)) '&'
+     ('not' c 'or' (a 'or' a)))
+   by BVFUNC_1:11
+  .= (('not' a 'or' c) '&' ('not' a 'or' b)) '&'
+     ((('not' b 'or' a) '&' ('not' b 'or' c)) '&' ('not' c 'or' a))
+   by BVFUNC_1:10
+  .= ((('not' a 'or' c) '&' ('not' a 'or' b)) '&' (('not' b 'or' a) '&' ('not'
+b 'or' c)))
+     '&' ('not' c 'or' a)
+   by BVFUNC_1:7
+  .= (((('not' a 'or' b) '&' ('not' a 'or' c)) '&' ('not' b 'or' a)) '&' ('not'
+b 'or' c))
+     '&' ('not' c 'or' a)
+   by BVFUNC_1:7
+  .= (((('not' b 'or' a) '&' ('not' a 'or' c)) '&' ('not' a 'or' b)) '&' ('not'
+b 'or' c))
+     '&' ('not' c 'or' a)
+   by BVFUNC_1:7
+  .= ((('not' b 'or' a) '&' ('not' a 'or' c)) '&' (('not' a 'or' b) '&' ('not'
+b 'or' c)))
+     '&' ('not' c 'or' a)
+   by BVFUNC_1:7
+  .= (('not' b 'or' a) '&' ('not' a 'or' c)) '&'
+     ((('not' a 'or' b) '&' ('not' b 'or' c)) '&' ('not' c 'or' a))
+   by BVFUNC_1:7
+  .= ('not' b 'or' a) '&'
+     (('not' a 'or' b) '&' ('not' b 'or' c) '&' ('not' c 'or' a)) '&'
+     ('not' a 'or' c)
+   by BVFUNC_1:7
+  .= (a 'imp' b) '&' ('not' b 'or' c) '&' ('not' c 'or' a) '&'
+     ('not' b 'or' a) '&' ('not' a 'or' c)
+   by BVFUNC_4:8
+  .= (a 'imp' b) '&' (b 'imp' c) '&' ('not' c 'or' a) '&'
+     ('not' b 'or' a) '&' ('not' a 'or' c)
+   by BVFUNC_4:8
+  .= (a 'imp' b) '&' (b 'imp' c) '&' (c 'imp' a) '&'
+     ('not' b 'or' a) '&' ('not' a 'or' c)
+   by BVFUNC_4:8
+  .= (a 'imp' b) '&' (b 'imp' c) '&' (c 'imp' a) '&'
+     (b 'imp' a) '&' ('not' a 'or' c)
+   by BVFUNC_4:8
+  .=(a 'imp' b) '&' (b 'imp' c) '&' (c 'imp' a) '&'
+    (b 'imp' a) '&' (a 'imp' c) by BVFUNC_4:8;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: ((a 'imp' b) '&' (b 'imp' c) '&' (c 'imp' a))=
+    k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: (a 'imp' b) '&' (b 'imp' c) '&' (c 'imp' a) '&' (b 'imp' a) '&'
+        (a 'imp' c)=k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence ((a 'imp' b) '&' (b 'imp' c) '&' (c 'imp' a))=
+  (a 'imp' b) '&' (b 'imp' c) '&' (c 'imp' a) '&'
+  (b 'imp' a) '&' (a 'imp' c) by A2,A3,FUNCT_1:9;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+a = (a '&' b) 'or' (a '&' 'not' b)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj(a,x) = Pj((a '&' b) 'or' (a '&' 'not' b),x)
+  proof
+    let x be Element of Y;
+      Pj((a '&' b) 'or' (a '&' 'not' b),x)
+   =Pj(a '&' (b 'or' 'not' b),x) by BVFUNC_1:15
+  .=Pj(a '&' I_el(Y),x) by BVFUNC_4:6
+  .=Pj(a,x) by BVFUNC_1:9;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: (a)=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: (a '&' b) 'or' (a '&' 'not' b)
+        =k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence thesis by A2,A3,FUNCT_1:9;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+a = (a 'or' b) '&' (a 'or' 'not' b)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj(a,x) = Pj((a 'or' b) '&' (a 'or' 'not' b),x)
+  proof
+    let x be Element of Y;
+      Pj((a 'or' b) '&' (a 'or' 'not' b),x)
+   =Pj(a 'or' (b '&' 'not' b),x) by BVFUNC_1:14
+  .=Pj(a 'or' O_el(Y),x) by BVFUNC_4:5
+  .=Pj(a,x) by BVFUNC_1:12;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: (a)=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: (a 'or' b) '&' (a 'or' 'not' b)
+        =k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence thesis by A2,A3,FUNCT_1:9;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+a = (a '&' b '&' c) 'or' (a '&' b '&' 'not' c) 'or'
+    (a '&' 'not' b '&' c) 'or' (a '&' 'not' b '&' 'not' c)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj(a,x) = Pj((a '&' b '&' c) 'or' (a '&' b '&' 'not' c) 'or'
+                (a '&' 'not' b '&' c) 'or' (a '&' 'not' b '&' 'not' c),x)
+  proof
+    let x be Element of Y;
+      Pj((a '&' b '&' c) 'or' (a '&' b '&' 'not' c) 'or'
+       (a '&' 'not' b '&' c) 'or' (a '&' 'not' b '&' 'not' c),x)
+   =Pj(((a '&' b) '&' (c 'or' 'not' c)) 'or'
+       (a '&' 'not' b '&' c) 'or' (a '&' 'not' b '&' 'not' c),x)
+   by BVFUNC_1:15
+  .=Pj(((a '&' b) '&' I_el(Y)) 'or'
+       (a '&' 'not' b '&' c) 'or' (a '&' 'not' b '&' 'not' c),x)
+   by BVFUNC_4:6
+  .=Pj((a '&' b) 'or'
+       (a '&' 'not' b '&' c) 'or' (a '&' 'not' b '&' 'not' c),x)
+   by BVFUNC_1:9
+  .=Pj((a '&' b) 'or'
+       ((a '&' 'not' b '&' c) 'or' (a '&' 'not' b '&' 'not' c)),x)
+   by BVFUNC_1:11
+  .=Pj((a '&' b) 'or' ((a '&' 'not' b) '&' (c 'or' 'not' c)),x)
+   by BVFUNC_1:15
+  .=Pj((a '&' b) 'or' ((a '&' 'not' b) '&' I_el(Y)),x)
+   by BVFUNC_4:6
+  .=Pj((a '&' b) 'or' (a '&' 'not' b),x)
+   by BVFUNC_1:9
+  .=Pj(a '&' (b 'or' 'not' b),x) by BVFUNC_1:15
+  .=Pj(a '&' I_el(Y),x) by BVFUNC_4:6
+  .=Pj(a,x) by BVFUNC_1:9;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: (a)=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: (a '&' b '&' c) 'or' (a '&' b '&' 'not' c) 'or' (a '&' 'not' b '&' c)
+        'or' (a '&' 'not' b '&' 'not' c)=
+        k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence (a)=(a '&' b '&' c) 'or' (a '&' b '&' 'not' c)
+        'or' (a '&' 'not' b '&' c) 'or' (a '&' 'not' b '&' 'not' c) by A2,A3,
+FUNCT_1:9;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+a = (a 'or' b 'or' c) '&' (a 'or' b 'or' 'not' c) '&'
+    (a 'or' 'not' b 'or' c) '&' (a 'or' 'not' b 'or' 'not' c)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj(a,x) = Pj((a 'or' b 'or' c) '&' (a 'or' b 'or' 'not' c) '&'
+                (a 'or' 'not' b 'or' c) '&' (a 'or' 'not' b 'or' 'not' c),x)
+  proof
+    let x be Element of Y;
+      Pj((a 'or' b 'or' c) '&' (a 'or' b 'or' 'not' c) '&'
+      (a 'or' 'not' b 'or' c) '&' (a 'or' 'not' b 'or' 'not' c),x)
+   =Pj(((a 'or' b) 'or' (c '&' 'not' c)) '&'
+      (a 'or' 'not' b 'or' c) '&' (a 'or' 'not' b 'or' 'not' c),x)
+   by BVFUNC_1:14
+  .=Pj(((a 'or' b) 'or' O_el(Y)) '&'
+      (a 'or' 'not' b 'or' c) '&' (a 'or' 'not' b 'or' 'not' c),x)
+   by BVFUNC_4:5
+  .=Pj((a 'or' b) '&'
+      (a 'or' 'not' b 'or' c) '&' (a 'or' 'not' b 'or' 'not' c),x)
+   by BVFUNC_1:12
+  .=Pj((a 'or' b) '&'
+       ((a 'or' 'not' b 'or' c) '&' (a 'or' 'not' b 'or' 'not' c)),x)
+   by BVFUNC_1:7
+  .=Pj((a 'or' b) '&' ((a 'or' 'not' b) 'or' (c '&' 'not' c)),x)
+   by BVFUNC_1:14
+  .=Pj((a 'or' b) '&' ((a 'or' 'not' b) 'or' O_el(Y)),x)
+   by BVFUNC_4:5
+  .=Pj((a 'or' b) '&' (a 'or' 'not' b),x)
+   by BVFUNC_1:12
+  .=Pj(a 'or' (b '&' 'not' b),x)
+   by BVFUNC_1:14
+  .=Pj(a 'or' O_el(Y),x) by BVFUNC_4:5
+  .=Pj(a,x) by BVFUNC_1:12;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: (a)=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+A3: (a 'or' b 'or' c) '&' (a 'or' b 'or' 'not' c) '&' (a 'or' 'not' b 'or' c)
+ '&' (a 'or' 'not' b 'or' 'not' c)=k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence (a)=(a 'or' b 'or' c) '&' (a 'or' b 'or' 'not' c)
+   '&' (a 'or' 'not' b 'or' c) '&' (a 'or' 'not' b 'or' 'not' c) by A2,A3,
+FUNCT_1:9;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+a '&' b = a '&' ('not' a 'or' b)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj(a '&' b,x) =
+   Pj(a '&' ('not' a 'or' b),x)
+  proof
+    let x be Element of Y;
+      Pj(a '&' ('not' a 'or' b),x)
+   =Pj(a,x) '&' Pj('not' a 'or' b,x)
+   by VALUAT_1:def 6
+  .=Pj(a,x) '&' (Pj('not' a,x) 'or' Pj(b,x))
+   by BVFUNC_1:def 7
+  .=Pj(a,x) '&' Pj('not' a,x) 'or' Pj(a,x) '&' Pj(b,x)
+   by BINARITH:22
+  .=Pj(a,x) '&' 'not' Pj(a,x) 'or' Pj(a,x) '&' Pj(b,x)
+   by VALUAT_1:def 5
+  .=FALSE 'or' Pj(a,x) '&' Pj(b,x)
+   by MARGREL1:46
+  .=Pj(a,x) '&' Pj(b,x)
+   by BINARITH:7
+  .=Pj(a '&' b,x) by VALUAT_1:def 6;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: (a '&' b)=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: a '&' ('not' a 'or' b)
+        =k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence thesis by A2,A3,FUNCT_1:9;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+a 'or' b = a 'or' ('not' a '&' b)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj(a 'or' b,x) =
+   Pj(a 'or' ('not' a '&' b),x)
+  proof
+    let x be Element of Y;
+      Pj(a 'or' ('not' a '&' b),x)
+   =Pj(a,x) 'or' Pj('not' a '&' b,x)
+   by BVFUNC_1:def 7
+  .=Pj(a,x) 'or' (Pj('not' a,x) '&' Pj(b,x))
+   by VALUAT_1:def 6
+  .=(Pj(a,x) 'or' Pj('not' a,x)) '&' (Pj(a,x) 'or' Pj(b,x))
+   by BINARITH:23
+  .=(Pj(a,x) 'or' 'not' Pj(a,x)) '&' (Pj(a,x) 'or' Pj(b,x))
+   by VALUAT_1:def 5
+  .=TRUE '&' (Pj(a,x) 'or' Pj(b,x))
+   by BINARITH:18
+  .=Pj(a,x) 'or' Pj(b,x)
+   by MARGREL1:50
+  .=Pj(a 'or' b,x) by BVFUNC_1:def 7;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: (a 'or' b)=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: a 'or' ('not' a '&' b)
+        =k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence thesis by A2,A3,FUNCT_1:9;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+a 'xor' b = 'not'( a 'eqv' b)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj(a 'xor' b,x) = Pj('not'( a 'eqv' b),x)
+  proof
+    let x be Element of Y;
+      Pj(a 'xor' b,x)
+   =Pj(('not' a '&' b) 'or' (a '&' 'not' b),x)
+   by BVFUNC_4:9
+  .=Pj('not' 'not'( ('not' a '&' b) 'or' (a '&' 'not' b)),x)
+   by BVFUNC_1:4
+  .=Pj('not'('not'('not' a '&' b) '&' 'not'( a '&' 'not' b)),x)
+   by BVFUNC_1:16
+  .=Pj('not'( ('not' 'not' a 'or' 'not' b) '&' 'not'( a '&' 'not' b)),x)
+   by BVFUNC_1:17
+  .=Pj('not'( ('not' 'not' a 'or' 'not' b) '&' ('not' a 'or' 'not' 'not' b)),x)
+   by BVFUNC_1:17
+  .=Pj('not'( (a 'or' 'not' b) '&' ('not' a 'or' 'not' 'not' b)),x)
+   by BVFUNC_1:4
+  .=Pj('not'( (a 'or' 'not' b) '&' ('not' a 'or' b)),x)
+   by BVFUNC_1:4
+  .=Pj('not'( (b 'imp' a) '&' ('not' a 'or' b)),x)
+   by BVFUNC_4:8
+  .=Pj('not'( (b 'imp' a) '&' (a 'imp' b)),x)
+   by BVFUNC_4:8
+  .=Pj('not'( a 'eqv' b),x) by BVFUNC_4:7;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: (a 'xor' b)=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: 'not'( a 'eqv' b)
+        =k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence thesis by A2,A3,FUNCT_1:9;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+a 'xor' b = (a 'or' b) '&' ('not' a 'or' 'not' b)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj(a 'xor' b,x) = Pj((a 'or' b) '&' ('not' a 'or' 'not' b),x)
+  proof
+    let x be Element of Y;
+      Pj((a 'or' b) '&' ('not' a 'or' 'not' b),x)
+   =Pj(a 'or' b,x) '&' Pj('not' a 'or' 'not' b,x) by VALUAT_1:def 6
+  .=(Pj(a,x) 'or' Pj(b,x)) '&' Pj('not' a 'or' 'not' b,x) by BVFUNC_1:def 7
+  .=(Pj(a,x) 'or' Pj(b,x)) '&' (Pj('not' a,x) 'or' Pj('not'
+b,x)) by BVFUNC_1:def 7
+  .=(Pj('not' a,x) '&' (Pj(a,x) 'or' Pj(b,x))) 'or'
+    ((Pj(a,x) 'or' Pj(b,x)) '&' Pj('not' b,x)) by BINARITH:22
+  .=(Pj('not' a,x) '&' Pj(a,x) 'or' Pj('not' a,x) '&' Pj(b,x)) 'or'
+    (Pj('not' b,x) '&' (Pj(a,x) 'or' Pj(b,x)))
+   by BINARITH:22
+  .=(Pj('not' a,x) '&' Pj(a,x) 'or' Pj('not' a,x) '&' Pj(b,x)) 'or'
+    (Pj('not' b,x) '&' Pj(a,x) 'or' Pj('not' b,x) '&' Pj(b,x))
+   by BINARITH:22
+  .=('not' Pj(a,x) '&' Pj(a,x) 'or' Pj('not' a,x) '&' Pj(b,x)) 'or'
+    (Pj('not' b,x) '&' Pj(a,x) 'or' Pj('not' b,x) '&' Pj(b,x))
+   by VALUAT_1:def 5
+  .=('not' Pj(a,x) '&' Pj(a,x) 'or' Pj('not' a,x) '&' Pj(b,x)) 'or'
+    (Pj('not' b,x) '&' Pj(a,x) 'or' 'not' Pj(b,x) '&' Pj(b,x))
+   by VALUAT_1:def 5
+  .=(FALSE 'or' Pj('not' a,x) '&' Pj(b,x)) 'or'
+    (Pj('not' b,x) '&' Pj(a,x) 'or' 'not' Pj(b,x) '&' Pj(b,x))
+   by MARGREL1:46
+  .=(FALSE 'or' Pj('not' a,x) '&' Pj(b,x)) 'or'
+    (Pj('not' b,x) '&' Pj(a,x) 'or' FALSE)
+   by MARGREL1:46
+  .=(Pj('not' a,x) '&' Pj(b,x)) 'or'
+    (Pj('not' b,x) '&' Pj(a,x) 'or' FALSE)
+   by BINARITH:7
+  .=(Pj('not' a,x) '&' Pj(b,x)) 'or' (Pj(a,x) '&' Pj('not' b,x)) by BINARITH:7
+  .=Pj('not' a '&' b,x) 'or' (Pj(a,x) '&' Pj('not' b,x))
+   by VALUAT_1:def 6
+  .=Pj('not' a '&' b,x) 'or' Pj(a '&' 'not' b,x)
+   by VALUAT_1:def 6
+  .=Pj('not' a '&' b 'or' a '&' 'not' b,x)
+   by BVFUNC_1:def 7
+  .=Pj(a 'xor' b,x) by BVFUNC_4:9;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: (a 'xor' b)=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: (a 'or' b) '&' ('not' a 'or' 'not' b)
+        =k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence thesis by A2,A3,FUNCT_1:9;
+end;
+
+theorem for a being Element of Funcs(Y,BOOLEAN) holds
+a 'xor' I_el(Y) = 'not' a
+proof
+  let a be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj(a 'xor' I_el(Y),x) = Pj('not' a,x)
+  proof
+    let x be Element of Y;
+      Pj(a 'xor' I_el(Y),x)
+   =Pj(('not' a '&' I_el(Y)) 'or' (a '&' 'not' I_el(Y)),x) by BVFUNC_4:9
+  .=Pj(('not' a '&' I_el(Y)) 'or' (a '&' O_el(Y)),x) by BVFUNC_1:5
+  .=Pj(('not' a '&' I_el(Y)) 'or' O_el(Y),x) by BVFUNC_1:8
+  .=Pj('not' a '&' I_el(Y),x) by BVFUNC_1:12
+  .=Pj('not' a,x) by BVFUNC_1:9;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: (a 'xor' I_el(Y))=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: 'not' a
+        =k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence thesis by A2,A3,FUNCT_1:9;
+end;
+
+theorem for a being Element of Funcs(Y,BOOLEAN) holds
+a 'xor' O_el(Y) = a
+proof
+  let a be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj(a 'xor' O_el(Y),x) = Pj(a,x)
+  proof
+    let x be Element of Y;
+      Pj(a 'xor' O_el(Y),x)
+   =Pj(('not' a '&' O_el(Y)) 'or' (a '&' 'not' O_el(Y)),x) by BVFUNC_4:9
+  .=Pj(('not' a '&' O_el(Y)) 'or' (a '&' I_el(Y)),x) by BVFUNC_1:5
+  .=Pj(('not' a '&' O_el(Y)) 'or' a,x) by BVFUNC_1:9
+  .=Pj(O_el(Y) 'or' a,x) by BVFUNC_1:8
+  .=Pj(a,x) by BVFUNC_1:12;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: (a 'xor' O_el(Y))=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: a
+        =k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence thesis by A2,A3,FUNCT_1:9;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+a 'xor' b = 'not' a 'xor' 'not' b
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj(a 'xor' b,x) = Pj('not' a 'xor' 'not' b,x)
+  proof
+    let x be Element of Y;
+      Pj('not' a 'xor' 'not' b,x)
+   =Pj(('not' 'not' a '&' 'not' b) 'or' ('not' a '&' 'not' 'not' b),x)
+   by BVFUNC_4:9
+  .=Pj((a '&' 'not' b) 'or' ('not' a '&' 'not' 'not' b),x) by BVFUNC_1:4
+  .=Pj((a '&' 'not' b) 'or' ('not' a '&' b),x) by BVFUNC_1:4
+  .=Pj(a 'xor' b,x) by BVFUNC_4:9;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: (a 'xor' b)=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: 'not' a 'xor' 'not' b
+        =k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence thesis by A2,A3,FUNCT_1:9;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+'not'( a 'xor' b) = a 'xor' 'not' b
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj('not'( a 'xor' b),x) = Pj(a 'xor' 'not' b,x)
+  proof
+    let x be Element of Y;
+      Pj('not'( a 'xor' b),x)
+   =Pj('not'( ('not' a '&' b) 'or' (a '&' 'not' b)),x) by BVFUNC_4:9
+  .=Pj(('not'('not' a '&' b) '&' 'not'( a '&' 'not' b)),x) by BVFUNC_1:16
+  .=Pj((('not' 'not' a 'or' 'not' b) '&' 'not'( a '&' 'not' b)),x)
+  by BVFUNC_1:17
+  .=Pj((('not' 'not' a 'or' 'not' b) '&' ('not' a 'or' 'not' 'not'
+b)),x) by BVFUNC_1:17
+  .=Pj(((a 'or' 'not' b) '&' ('not' a 'or' 'not' 'not' b)),x) by BVFUNC_1:4
+  .=Pj(((a 'or' 'not' b) '&' ('not' a 'or' b)),x) by BVFUNC_1:4
+  .=Pj(((a 'or' 'not' b) '&' 'not' a 'or' (a 'or' 'not'
+b) '&' b),x) by BVFUNC_1:15
+  .=Pj(((a '&' 'not' a 'or' 'not' b '&' 'not' a) 'or' (a 'or' 'not'
+b) '&' b),x) by BVFUNC_1:15
+  .=Pj(((O_el(Y) 'or' 'not' b '&' 'not' a) 'or' (a 'or' 'not'
+b) '&' b),x) by BVFUNC_4:5
+  .=Pj((('not' b '&' 'not' a) 'or' (a 'or' 'not' b) '&' b),x) by BVFUNC_1:12
+  .=Pj((('not' b '&' 'not' a) 'or' (a '&' b 'or' 'not' b '&' b)),x)
+  by BVFUNC_1:15
+  .=Pj((('not' b '&' 'not' a) 'or' (a '&' b 'or' O_el(Y))),x) by BVFUNC_4:5
+  .=Pj(('not' b '&' 'not' a) 'or' (a '&' b),x) by BVFUNC_1:12
+  .=Pj(('not' a '&' 'not' b) 'or' (a '&' 'not' 'not' b),x) by BVFUNC_1:4
+  .=Pj(a 'xor' 'not' b,x) by BVFUNC_4:9;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: ('not'( a 'xor' b))=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: a 'xor' 'not' b
+        =k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence thesis by A2,A3,FUNCT_1:9;
+end;
+
+theorem Th18: for a,b being Element of Funcs(Y,BOOLEAN) holds
+a 'eqv' b = (a 'or' 'not' b) '&' ('not' a 'or' b)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj(a 'eqv' b,x) = Pj((a 'or' 'not' b) '&' ('not' a 'or' b),x)
+  proof
+    let x be Element of Y;
+      Pj((a 'or' 'not' b) '&' ('not' a 'or' b),x)
+   =Pj((a 'or' 'not' b) '&' (a 'imp' b),x) by BVFUNC_4:8
+  .=Pj((a 'imp' b) '&' (b 'imp' a),x) by BVFUNC_4:8
+  .=Pj(a 'eqv' b,x) by BVFUNC_4:7;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: (a 'eqv' b)=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: (a 'or' 'not' b) '&' ('not' a 'or' b)
+        =k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence thesis by A2,A3,FUNCT_1:9;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+a 'eqv' b = (a '&' b) 'or' ('not' a '&' 'not' b)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj(a 'eqv' b,x) = Pj((a '&' b) 'or' ('not' a '&' 'not' b),x)
+  proof
+    let x be Element of Y;
+      Pj((a '&' b) 'or' ('not' a '&' 'not' b),x)
+   =Pj(((a '&' b) 'or' 'not' a) '&' ((a '&' b) 'or' 'not' b),x)
+   by BVFUNC_1:14
+  .=Pj(((a 'or' 'not' a) '&' (b 'or' 'not' a)) '&' ((a '&' b) 'or' 'not' b),x)
+   by BVFUNC_1:14
+  .=Pj(((a 'or' 'not' a) '&' (b 'or' 'not' a)) '&'
+       ((a 'or' 'not' b) '&' (b 'or' 'not' b)),x)
+   by BVFUNC_1:14
+  .=Pj((I_el(Y) '&' (b 'or' 'not' a)) '&'
+       ((a 'or' 'not' b) '&' (b 'or' 'not' b)),x)
+   by BVFUNC_4:6
+  .=Pj((I_el(Y) '&' (b 'or' 'not' a)) '&'
+       ((a 'or' 'not' b) '&' I_el(Y)),x)
+   by BVFUNC_4:6
+  .=Pj((b 'or' 'not' a) '&'
+       ((a 'or' 'not' b) '&' I_el(Y)),x)
+   by BVFUNC_1:9
+  .=Pj((b 'or' 'not' a) '&' (a 'or' 'not' b),x)
+   by BVFUNC_1:9
+  .=Pj(a 'eqv' b,x) by Th18;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: (a 'eqv' b)=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: (a '&' b) 'or' ('not' a '&' 'not' b)
+        =k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence thesis by A2,A3,FUNCT_1:9;
+end;
+
+theorem for a being Element of Funcs(Y,BOOLEAN) holds
+a 'eqv' I_el(Y) = a
+proof
+  let a be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj(a 'eqv' I_el(Y),x) = Pj(a,x)
+  proof
+    let x be Element of Y;
+      Pj(a 'eqv' I_el(Y),x)
+   =Pj((a 'imp' I_el(Y)) '&' (I_el(Y) 'imp' a),x)
+   by BVFUNC_4:7
+  .=Pj(('not' a 'or' I_el(Y)) '&' (I_el(Y) 'imp' a),x)
+   by BVFUNC_4:8
+  .=Pj(('not' a 'or' I_el(Y)) '&' ('not' I_el(Y) 'or' a),x)
+   by BVFUNC_4:8
+  .=Pj(I_el(Y) '&' ('not' I_el(Y) 'or' a),x)
+   by BVFUNC_1:13
+  .=Pj(I_el(Y) '&' (O_el(Y) 'or' a),x)
+   by BVFUNC_1:5
+  .=Pj(I_el(Y) '&' a,x)
+   by BVFUNC_1:12
+  .=Pj(a,x) by BVFUNC_1:9;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: (a 'eqv' I_el(Y))=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: a
+        =k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence thesis by A2,A3,FUNCT_1:9;
+end;
+
+theorem for a being Element of Funcs(Y,BOOLEAN) holds
+a 'eqv' O_el(Y) = 'not' a
+proof
+  let a be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj(a 'eqv' O_el(Y),x) = Pj('not' a,x)
+  proof
+    let x be Element of Y;
+      Pj(a 'eqv' O_el(Y),x)
+   =Pj((a 'imp' O_el(Y)) '&' (O_el(Y) 'imp' a),x)
+   by BVFUNC_4:7
+  .=Pj(('not' a 'or' O_el(Y)) '&' (O_el(Y) 'imp' a),x)
+   by BVFUNC_4:8
+  .=Pj(('not' a 'or' O_el(Y)) '&' ('not' O_el(Y) 'or' a),x)
+   by BVFUNC_4:8
+  .=Pj('not' a '&' ('not' O_el(Y) 'or' a),x)
+   by BVFUNC_1:12
+  .=Pj('not' a '&' (I_el(Y) 'or' a),x)
+   by BVFUNC_1:5
+  .=Pj('not' a '&' I_el(Y),x)
+   by BVFUNC_1:13
+  .=Pj('not' a,x) by BVFUNC_1:9;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: (a 'eqv' O_el(Y))=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: 'not' a
+        =k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence thesis by A2,A3,FUNCT_1:9;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+'not'( a 'eqv' b) = (a 'eqv' 'not' b)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  A1:for x being Element of Y holds
+   Pj('not'( a 'eqv' b),x) = Pj(a 'eqv' 'not' b,x)
+  proof
+    let x be Element of Y;
+      Pj('not'( a 'eqv' b),x)
+   =Pj('not'( (a 'imp' b) '&' (b 'imp' a)),x) by BVFUNC_4:7
+  .=Pj('not'( ('not' a 'or' b) '&' (b 'imp' a)),x) by BVFUNC_4:8
+  .=Pj('not'( ('not' a 'or' b) '&' ('not' b 'or' a)),x) by BVFUNC_4:8
+  .=Pj('not'('not' a 'or' b) 'or' 'not'('not' b 'or' a),x) by BVFUNC_1:17
+  .=Pj(('not' 'not' a '&' 'not' b) 'or' 'not'('not' b 'or' a),x) by BVFUNC_1:16
+  .=Pj(('not' 'not' a '&' 'not' b) 'or' ('not' 'not' b '&' 'not' a),x)
+  by BVFUNC_1:16
+  .=Pj((a '&' 'not' b) 'or' ('not' 'not' b '&' 'not' a),x) by BVFUNC_1:4
+  .=Pj((a '&' 'not' b) 'or' (b '&' 'not' a),x) by BVFUNC_1:4
+  .=Pj(((a '&' 'not' b) 'or' b) '&' ((a '&' 'not' b) 'or' 'not'
+a),x) by BVFUNC_1:14
+  .=Pj(((a 'or' b) '&' ('not' b 'or' b)) '&' ((a '&' 'not' b) 'or' 'not' a),x)
+   by BVFUNC_1:14
+  .=Pj(((a 'or' b) '&' ('not' b 'or' b)) '&'
+       ((a 'or' 'not' a) '&' ('not' b 'or' 'not' a)),x) by BVFUNC_1:14
+  .=Pj(((a 'or' b) '&' I_el(Y)) '&'
+       ((a 'or' 'not' a) '&' ('not' b 'or' 'not' a)),x) by BVFUNC_4:6
+  .=Pj(((a 'or' b) '&' I_el(Y)) '&'
+       (I_el(Y) '&' ('not' b 'or' 'not' a)),x) by BVFUNC_4:6
+  .=Pj((a 'or' b) '&' (I_el(Y) '&' ('not' b 'or' 'not' a)),x) by BVFUNC_1:9
+  .=Pj((a 'or' b) '&' ('not' b 'or' 'not' a),x) by BVFUNC_1:9
+  .=Pj(('not' a 'or' 'not' b) '&' ('not' 'not' b 'or' a),x) by BVFUNC_1:4
+  .=Pj(('not' a 'or' 'not' b) '&' ('not' b 'imp' a),x) by BVFUNC_4:8
+  .=Pj((a 'imp' 'not' b) '&' ('not' b 'imp' a),x) by BVFUNC_4:8
+  .=Pj(a 'eqv' 'not' b,x) by BVFUNC_4:7;
+    hence thesis;
+  end;
+  consider k3 being Function such that
+    A2: ('not'( a 'eqv' b))=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A3: (a 'eqv' 'not' b)
+        =k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+     Y=dom k3 & Y=dom k4 & (for u being set
+            st u in Y holds k3.u=k4.u)by A1,A2,A3;
+  hence thesis by A2,A3,FUNCT_1:9;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+'not' a '<' (a 'imp' b) 'eqv' 'not' a
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    let z be Element of Y;
+    assume A1:Pj('not' a,z)=TRUE;
+    then 'not' Pj(a,z)=TRUE by VALUAT_1:def 5;
+    then A2:Pj(a,z)=FALSE by MARGREL1:41;
+      Pj((a 'imp' b) 'eqv' 'not' a,z)
+   =Pj(('not' a 'or' b) 'eqv' 'not' a,z) by BVFUNC_4:8
+  .=Pj((('not' a 'or' b) 'imp' 'not' a) '&' ('not' a 'imp' ('not'
+a 'or' b)),z) by BVFUNC_4:7
+  .=Pj(('not'('not' a 'or' b) 'or' 'not' a) '&' ('not' a 'imp' ('not'
+a 'or' b)),z) by BVFUNC_4:8
+  .=Pj(('not'('not' a 'or' b) 'or' 'not' a) '&' ('not' 'not' a 'or' ('not'
+a 'or' b)),z) by BVFUNC_4:8
+  .=Pj('not'('not' a 'or' b) 'or' 'not' a,z) '&' Pj('not' 'not' a 'or' ('not'
+a 'or' b),z)
+   by VALUAT_1:def 6
+  .=(Pj('not'('not' a 'or' b),z) 'or' Pj('not' a,z)) '&'
+  Pj('not' 'not' a 'or' ('not' a 'or' b),z)
+   by BVFUNC_1:def 7
+  .=('not' Pj('not' a 'or' b,z) 'or' Pj('not' a,z)) '&'
+  Pj('not' 'not' a 'or' ('not'
+a 'or' b),z)
+   by VALUAT_1:def 5
+  .=('not'( Pj('not' a,z) 'or' Pj(b,z)) 'or' Pj('not' a,z)) '&' Pj('not' 'not'
+a 'or' ('not' a 'or' b),z)
+   by BVFUNC_1:def 7
+  .=('not'('not' Pj(a,z) 'or' Pj(b,z)) 'or' Pj('not' a,z)) '&' Pj('not' 'not'
+a 'or' ('not' a 'or' b),z)
+   by VALUAT_1:def 5
+  .=(('not' 'not' Pj(a,z) '&' 'not' Pj(b,z)) 'or' Pj('not' a,z)) '&'
+  Pj('not' 'not'
+a 'or' ('not' a 'or' b),z)
+   by BINARITH:10
+  .=((Pj(a,z) '&' 'not' Pj(b,z)) 'or' Pj('not' a,z)) '&'
+  Pj('not' 'not' a 'or' (
+'not' a 'or' b),z)
+   by MARGREL1:40
+  .=((Pj(a,z) '&' 'not' Pj(b,z)) 'or' Pj('not' a,z)) '&'
+     (Pj('not' 'not' a,z) 'or' Pj('not' a 'or' b,z))
+   by BVFUNC_1:def 7
+  .=((Pj(a,z) '&' 'not' Pj(b,z)) 'or' Pj('not' a,z)) '&'
+    (Pj('not' 'not' a,z) 'or' (Pj('not' a,z) 'or' Pj(b,z)))
+   by BVFUNC_1:def 7
+  .=((Pj(a,z) '&' 'not' Pj(b,z)) 'or' Pj('not' a,z)) '&'
+    (Pj('not' 'not' a,z) 'or' ('not' Pj(a,z) 'or' Pj(b,z)))
+   by VALUAT_1:def 5
+  .=((Pj(a,z) '&' 'not' Pj(b,z)) 'or' Pj('not' a,z)) '&'
+    (Pj(a,z) 'or' ('not' Pj(a,z) 'or' Pj(b,z)))
+   by BVFUNC_1:4
+  .=((Pj(a,z) '&' 'not' Pj(b,z)) 'or' Pj('not' a,z)) '&'
+    (Pj(a,z) 'or' (Pj('not' a,z) 'or' Pj(b,z)))
+   by VALUAT_1:def 5
+  .=TRUE '&' (FALSE 'or' (TRUE 'or' Pj(b,z)))
+   by A1,A2,BINARITH:19
+  .=FALSE 'or' (TRUE 'or' Pj(b,z))
+   by MARGREL1:50
+  .=(TRUE 'or' Pj(b,z))
+   by BINARITH:7
+  .=TRUE by BINARITH:19;
+    hence thesis;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+'not' a '<' (b 'imp' a) 'eqv' 'not' b
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    let z be Element of Y;
+    assume Pj('not' a,z)=TRUE;
+    then A1: 'not' Pj(a,z)=TRUE by VALUAT_1:def 5;
+      Pj((b 'imp' a) 'eqv' 'not' b,z)
+   =Pj(('not' b 'or' a) 'eqv' 'not' b,z) by BVFUNC_4:8
+  .=Pj((('not' b 'or' a) 'imp' 'not' b) '&' ('not' b 'imp' ('not'
+b 'or' a)),z) by BVFUNC_4:7
+  .=Pj(('not'('not' b 'or' a) 'or' 'not' b) '&' ('not' b 'imp' ('not'
+b 'or' a)),z) by BVFUNC_4:8
+  .=Pj(('not'('not' b 'or' a) 'or' 'not' b) '&' ('not' 'not' b 'or' ('not'
+b 'or' a)),z) by BVFUNC_4:8
+  .=Pj('not'('not' b 'or' a) 'or' 'not' b,z) '&' Pj('not' 'not' b 'or' ('not'
+b 'or' a),z)
+   by VALUAT_1:def 6
+  .=(Pj('not'('not' b 'or' a),z) 'or' Pj('not' b,z)) '&'
+  Pj('not' 'not' b 'or' ('not' b 'or' a),z)
+   by BVFUNC_1:def 7
+  .=('not' Pj('not' b 'or' a,z) 'or' Pj('not' b,z)) '&'
+  Pj('not' 'not' b 'or' ('not'
+b 'or' a),z)
+   by VALUAT_1:def 5
+  .=('not'( Pj('not' b,z) 'or' Pj(a,z)) 'or' Pj('not' b,z)) '&' Pj('not' 'not'
+b 'or' ('not' b 'or' a),z)
+   by BVFUNC_1:def 7
+  .=('not'('not' Pj(b,z) 'or' Pj(a,z)) 'or' Pj('not' b,z)) '&' Pj('not' 'not'
+b 'or' ('not' b 'or' a),z)
+   by VALUAT_1:def 5
+  .=(('not' 'not' Pj(b,z) '&' 'not' Pj(a,z)) 'or' Pj('not' b,z)) '&'
+  Pj('not' 'not'
+b 'or' ('not' b 'or' a),z)
+   by BINARITH:10
+  .=((Pj(b,z) '&' 'not' Pj(a,z)) 'or' Pj('not' b,z)) '&'
+  Pj('not' 'not' b 'or' (
+'not' b 'or' a),z)
+   by MARGREL1:40
+  .=((Pj(b,z) '&' 'not' Pj(a,z)) 'or' Pj('not' b,z)) '&' (Pj('not' 'not'
+b,z) 'or' Pj('not' b 'or' a,z))
+   by BVFUNC_1:def 7
+  .=((Pj(b,z) '&' 'not' Pj(a,z)) 'or' Pj('not' b,z)) '&'
+    (Pj('not' 'not' b,z) 'or' (Pj('not' b,z) 'or' Pj(a,z))) by BVFUNC_1:def 7
+  .=((Pj(b,z) '&' 'not' Pj(a,z)) 'or' Pj('not' b,z)) '&'
+    (Pj('not' 'not' b,z) 'or' ('not' Pj(b,z) 'or' Pj(a,z))) by VALUAT_1:def 5
+  .=((Pj(b,z) '&' 'not' Pj(a,z)) 'or' Pj('not' b,z)) '&'
+    (Pj(b,z) 'or' ('not' Pj(b,z) 'or' Pj(a,z))) by BVFUNC_1:4
+  .=((TRUE '&' Pj(b,z)) 'or' Pj('not' b,z)) '&'
+    (Pj(b,z) 'or' ('not' Pj(b,z) 'or' FALSE)) by A1,MARGREL1:41
+  .=(Pj(b,z) 'or' Pj('not' b,z)) '&'
+    (Pj(b,z) 'or' ('not' Pj(b,z) 'or' FALSE)) by MARGREL1:50
+  .=(Pj(b,z) 'or' 'not' Pj(b,z)) '&'
+    (Pj(b,z) 'or' ('not' Pj(b,z) 'or' FALSE)) by VALUAT_1:def 5
+  .=TRUE '&' (Pj(b,z) 'or' ('not' Pj(b,z) 'or' FALSE)) by BINARITH:18
+  .=Pj(b,z) 'or' ('not' Pj(b,z) 'or' FALSE) by MARGREL1:50
+  .=Pj(b,z) 'or' 'not' Pj(b,z) 'or' FALSE by BINARITH:20
+  .=TRUE 'or' FALSE by BINARITH:18
+  .=TRUE by BINARITH:19;
+    hence thesis;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+a '<' (a 'or' b) 'eqv' (b 'or' a) 'eqv' a
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    let z be Element of Y;
+    assume A1:Pj(a,z)=TRUE;
+A2:Pj((a 'or' b) 'eqv' (b 'or' a),z)
+   =Pj(((a 'or' b) 'imp' (a 'or' b)) '&' ((a 'or' b) 'imp' (a 'or' b)),z)
+   by BVFUNC_4:7
+  .=Pj((a 'or' b) 'imp' (a 'or' b),z) '&' Pj((a 'or' b) 'imp' (a 'or' b),z)
+   by VALUAT_1:def 6
+  .=Pj((a 'or' b) 'imp' (a 'or' b),z)
+   by BINARITH:16
+  .=Pj('not'( a 'or' b) 'or' (a 'or' b),z)
+   by BVFUNC_4:8
+  .=Pj(I_el(Y),z) by BVFUNC_4:6
+  .=TRUE by BVFUNC_1:def 14;
+      Pj((a 'or' b) 'eqv' (b 'or' a) 'eqv' a,z)
+   =Pj((((a 'or' b) 'eqv' (a 'or' b)) 'imp' a) '&'
+       (a 'imp' ((a 'or' b) 'eqv' (a 'or' b))),z) by BVFUNC_4:7
+  .=Pj(((a 'or' b) 'eqv' (a 'or' b)) 'imp' a,z) '&'
+    Pj(a 'imp' ((a 'or' b) 'eqv' (a 'or' b)),z)
+   by VALUAT_1:def 6
+  .=Pj('not'( (a 'or' b) 'eqv' (a 'or' b)) 'or' a,z) '&'
+    Pj(a 'imp' ((a 'or' b) 'eqv' (a 'or' b)),z)
+   by BVFUNC_4:8
+  .=Pj('not'( (a 'or' b) 'eqv' (a 'or' b)) 'or' a,z) '&'
+    Pj('not' a 'or' ((a 'or' b) 'eqv' (a 'or' b)),z)
+   by BVFUNC_4:8
+  .=(Pj('not'( (a 'or' b) 'eqv' (a 'or' b)),z) 'or' Pj(a,z)) '&'
+    Pj('not' a 'or' ((a 'or' b) 'eqv' (a 'or' b)),z)
+   by BVFUNC_1:def 7
+  .=(Pj('not'( (a 'or' b) 'eqv' (a 'or' b)),z) 'or' Pj(a,z)) '&'
+    (Pj('not' a,z) 'or' Pj((a 'or' b) 'eqv' (a 'or' b),z))
+   by BVFUNC_1:def 7
+  .=('not' Pj((a 'or' b) 'eqv' (a 'or' b),z) 'or' Pj(a,z)) '&'
+    (Pj('not' a,z) 'or' Pj((a 'or' b) 'eqv' (a 'or' b),z)) by VALUAT_1:def 5
+  .=(FALSE 'or' Pj(a,z)) '&' (Pj('not' a,z) 'or' TRUE) by A2,MARGREL1:41
+  .=Pj(a,z) '&' (Pj('not' a,z) 'or' TRUE) by BINARITH:7
+  .=Pj(a,z) '&' TRUE by BINARITH:19
+  .=TRUE by A1,MARGREL1:50;
+    hence thesis;
+end;
+
+theorem for a being Element of Funcs(Y,BOOLEAN) holds
+a 'imp' ('not' a 'eqv' 'not' a) = I_el(Y)
+proof
+  let a be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+   Pj(a 'imp' ('not' a 'eqv' 'not' a),x) = TRUE
+  proof
+    let x be Element of Y;
+      Pj(a 'imp' ('not' a 'eqv' 'not' a),x)
+   =Pj('not' a 'or' ('not' a 'eqv' 'not' a),x) by BVFUNC_4:8
+  .=Pj('not' a 'or' (('not' a 'imp' 'not' a) '&' ('not' a 'imp' 'not'
+a)),x) by BVFUNC_4:7
+  .=Pj('not' a 'or' ('not' a 'imp' 'not' a),x) by BVFUNC_1:6
+  .=Pj('not' a 'or' ('not' 'not' a 'or' 'not' a),x) by BVFUNC_4:8
+  .=Pj('not' a 'or' I_el(Y),x) by BVFUNC_4:6
+  .=Pj(I_el(Y),x) by BVFUNC_1:13
+  .=TRUE by BVFUNC_1:def 14;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+((a 'imp' b) 'imp' a) 'imp' a = I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+   Pj(((a 'imp' b) 'imp' a) 'imp' a,x) = TRUE
+  proof
+    let x be Element of Y;
+      Pj(((a 'imp' b) 'imp' a) 'imp' a,x)
+   =Pj('not'( (a 'imp' b) 'imp' a) 'or' a,x) by BVFUNC_4:8
+  .=Pj('not'('not'( a 'imp' b) 'or' a) 'or' a,x) by BVFUNC_4:8
+  .=Pj('not'('not'('not' a 'or' b) 'or' a) 'or' a,x) by BVFUNC_4:8
+  .=Pj('not'( ('not' 'not' a '&' 'not' b) 'or' a) 'or' a,x) by BVFUNC_1:16
+  .=Pj('not'( (a '&' 'not' b) 'or' a) 'or' a,x) by BVFUNC_1:4
+  .=Pj('not'( ((a 'or' a) '&' ('not' b 'or' a))) 'or' a,x) by BVFUNC_1:14
+  .=Pj('not'( a '&' ('not' b 'or' a)) 'or' a,x) by BVFUNC_1:10
+  .=Pj(('not' a 'or' 'not'('not' b 'or' a)) 'or' a,x) by BVFUNC_1:17
+  .=Pj(('not' a 'or' ('not' 'not' b '&' 'not' a)) 'or' a,x) by BVFUNC_1:16
+  .=Pj(('not' a 'or' (b '&' 'not' a)) 'or' a,x) by BVFUNC_1:4
+  .=Pj((('not' a 'or' b) '&' ('not' a 'or' 'not' a)) 'or' a,x) by BVFUNC_1:14
+  .=Pj((('not' a 'or' b) '&' 'not' a) 'or' a,x) by BVFUNC_1:10
+  .=Pj((('not' a 'or' b) 'or' a) '&' ('not' a 'or' a),x) by BVFUNC_1:14
+  .=Pj((('not' a 'or' b) 'or' a) '&' I_el(Y),x) by BVFUNC_4:6
+  .=Pj(('not' a 'or' b) 'or' a,x) by BVFUNC_1:9
+  .=Pj(b 'or' ('not' a 'or' a),x) by BVFUNC_1:11
+  .=Pj(b 'or' I_el(Y),x) by BVFUNC_4:6
+  .=Pj(I_el(Y),x) by BVFUNC_1:13
+  .=TRUE by BVFUNC_1:def 14;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c,d being Element of Funcs(Y,BOOLEAN) holds
+((a 'imp' c) '&' (b 'imp' d)) '&'
+('not' c 'or' 'not' d) 'imp' ('not' a 'or' 'not' b)=I_el(Y)
+proof
+  let a,b,c,d be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+   Pj(((a 'imp' c) '&' (b 'imp' d)) '&'
+      ('not' c 'or' 'not' d) 'imp' ('not' a 'or' 'not' b),x) = TRUE
+  proof
+    let x be Element of Y;
+      ((a 'imp' c) '&' (b 'imp' d)) '&' ('not' c 'or' 'not' d)
+    'imp' ('not' a 'or'
+'not' b)
+   ='not'( ((a 'imp' c) '&' (b 'imp' d)) '&' ('not' c 'or' 'not' d))
+   'or' ('not'
+a 'or' 'not' b)
+   by BVFUNC_4:8
+  .='not'( (('not' a 'or' c) '&' (b 'imp' d)) '&' ('not' c 'or' 'not' d))
+  'or' ('not' a 'or' 'not' b)
+   by BVFUNC_4:8
+  .='not'( (('not' a 'or' c) '&' ('not' b 'or' d)) '&' ('not' c 'or' 'not'
+d)) 'or' ('not' a 'or' 'not' b)
+   by BVFUNC_4:8
+  .=('not'( ('not' a 'or' c) '&' ('not' b 'or' d)) 'or'
+  'not'('not' c 'or' 'not'
+d)) 'or' ('not' a 'or' 'not' b)
+   by BVFUNC_1:17
+  .=(('not'('not' a 'or' c) 'or' 'not'('not' b 'or' d)) 'or' 'not'('not' c 'or'
+'not' d)) 'or' ('not' a 'or' 'not' b)
+   by BVFUNC_1:17
+  .=((('not' 'not' a '&' 'not' c) 'or' 'not'('not' b 'or' d)) 'or' 'not'('not'
+c 'or' 'not' d)) 'or' ('not' a 'or' 'not' b)
+   by BVFUNC_1:16
+  .=(((a '&' 'not' c) 'or' 'not'('not' b 'or' d)) 'or' 'not'('not' c 'or' 'not'
+d)) 'or' ('not' a 'or' 'not' b)
+   by BVFUNC_1:4
+  .=(((a '&' 'not' c) 'or' ('not' 'not' b '&' 'not' d)) 'or' 'not'('not' c 'or'
+'not' d)) 'or' ('not' a 'or' 'not' b)
+   by BVFUNC_1:16
+  .=(((a '&' 'not' c) 'or' (b '&' 'not' d)) 'or' 'not'('not' c 'or' 'not'
+d)) 'or' ('not' a 'or' 'not' b)
+   by BVFUNC_1:4
+  .=(((a '&' 'not' c) 'or' (b '&' 'not' d)) 'or' ('not' 'not' c '&' 'not' 'not'
+d)) 'or' ('not' a 'or' 'not' b)
+   by BVFUNC_1:16
+  .=(((a '&' 'not' c) 'or' (b '&' 'not' d)) 'or'
+  (c '&' 'not' 'not' d)) 'or' ('not'
+a 'or' 'not' b)
+   by BVFUNC_1:4
+  .=(((a '&' 'not' c) 'or' (b '&' 'not' d)) 'or' (c '&' d)) 'or' ('not' a 'or'
+'not' b)
+   by BVFUNC_1:4
+  .=((a '&' 'not' c) 'or' ((b '&' 'not' d) 'or' (c '&' d))) 'or' ('not' a 'or'
+'not' b)
+   by BVFUNC_1:11
+  .=((a '&' 'not' c) 'or' ((b 'or' (c '&' d)) '&' ('not' d 'or' (c '&' d))))
+    'or' ('not' a 'or' 'not' b)
+   by BVFUNC_1:14
+  .=((a '&' 'not' c) 'or' ((b 'or' (c '&' d)) '&' (('not' d 'or' c) '&' ('not'
+d 'or' d))))
+    'or' ('not' a 'or' 'not' b)
+   by BVFUNC_1:14
+  .=((a '&' 'not' c) 'or' ((b 'or' (c '&' d)) '&' (('not'
+d 'or' c) '&' I_el(Y))))
+    'or' ('not' a 'or' 'not' b) by BVFUNC_4:6
+  .=((a '&' 'not' c) 'or' ((b 'or' (c '&' d)) '&' ('not' d 'or' c)))
+    'or' ('not' a 'or' 'not' b) by BVFUNC_1:9
+  .=((b 'or' (c '&' d)) '&' ('not' d 'or' c)) 'or'
+    ((a '&' 'not' c) 'or' ('not' a 'or' 'not' b)) by BVFUNC_1:11
+  .=((b 'or' (c '&' d)) '&' ('not' d 'or' c)) 'or'
+    ((a 'or' ('not' a 'or' 'not' b)) '&' ('not' c 'or' ('not' a 'or' 'not'
+b))) by BVFUNC_1:14
+  .=((b 'or' (c '&' d)) '&' ('not' d 'or' c)) 'or'
+    (((a 'or' 'not' a) 'or' 'not' b) '&' ('not' c 'or' ('not' a 'or' 'not'
+b))) by BVFUNC_1:11
+  .=((b 'or' (c '&' d)) '&' ('not' d 'or' c)) 'or'
+    ((I_el(Y) 'or' 'not' b) '&' ('not' c 'or' ('not' a 'or' 'not'
+b))) by BVFUNC_4:6
+  .=((b 'or' (c '&' d)) '&' ('not' d 'or' c)) 'or'
+    (I_el(Y) '&' ('not' c 'or' ('not' a 'or' 'not' b))) by BVFUNC_1:13
+  .=((b 'or' (c '&' d)) '&' ('not' d 'or' c)) 'or' ('not' c 'or' ('not' a 'or'
+'not' b))
+   by BVFUNC_1:9
+  .=((b 'or' (c '&' d)) 'or' ('not' c 'or' ('not' a 'or' 'not' b))) '&'
+    (('not' d 'or' c) 'or' ('not' c 'or' ('not' a 'or' 'not' b)))
+    by BVFUNC_1:14
+  .=((b 'or' (c '&' d)) 'or' ('not' c 'or' ('not' a 'or' 'not' b))) '&'
+    ((('not' d 'or' c) 'or' 'not' c) 'or' ('not' a 'or' 'not' b))
+    by BVFUNC_1:11
+  .=((b 'or' (c '&' d)) 'or' ('not' c 'or' ('not' a 'or' 'not' b))) '&'
+    (('not' d 'or' (c 'or' 'not' c)) 'or' ('not' a 'or' 'not' b))
+    by BVFUNC_1:11
+  .=((b 'or' (c '&' d)) 'or' ('not' c 'or' ('not' a 'or' 'not' b))) '&'
+    (('not' d 'or' I_el(Y)) 'or' ('not' a 'or' 'not' b)) by BVFUNC_4:6
+  .=((b 'or' (c '&' d)) 'or' ('not' c 'or' ('not' a 'or' 'not' b))) '&'
+    (I_el(Y) 'or' ('not' a 'or' 'not' b)) by BVFUNC_1:13
+  .=((b 'or' (c '&' d)) 'or' ('not' c 'or' ('not' a 'or' 'not' b))) '&'
+    I_el(Y) by BVFUNC_1:13
+  .=(b 'or' (c '&' d)) 'or' ('not' c 'or' ('not' a 'or' 'not' b)) by BVFUNC_1:9
+  .=(c '&' d) 'or' (b 'or' ('not' c 'or' ('not' a 'or' 'not' b)))
+  by BVFUNC_1:11
+  .=(c '&' d) 'or' ((b 'or' ('not' b 'or' 'not' a)) 'or' 'not' c)
+  by BVFUNC_1:11
+  .=(c '&' d) 'or' (((b 'or' 'not' b) 'or' 'not' a) 'or' 'not' c)
+  by BVFUNC_1:11
+  .=(c '&' d) 'or' ((I_el(Y) 'or' 'not' a) 'or' 'not' c) by BVFUNC_4:6
+  .=(c '&' d) 'or' (I_el(Y) 'or' 'not' c) by BVFUNC_1:13
+  .=(c '&' d) 'or' I_el(Y) by BVFUNC_1:13
+  .=I_el(Y) by BVFUNC_1:13;
+    hence thesis by BVFUNC_1:def 14;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+(a 'imp' b) 'imp' ((a 'imp' (b 'imp' c)) 'imp' (a 'imp' c)) = I_el(Y)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+   Pj((a 'imp' b) 'imp' ((a 'imp' (b 'imp' c)) 'imp' (a 'imp' c)),x)=TRUE
+  proof
+    let x be Element of Y;
+  (a 'imp' b) 'imp' ((a 'imp' (b 'imp' c)) 'imp' (a 'imp' c))
+   ='not'
+(a 'imp' b) 'or' ((a 'imp' (b 'imp' c)) 'imp' (a 'imp' c)) by BVFUNC_4:8
+  .='not'('not'
+a 'or' b) 'or' ((a 'imp' (b 'imp' c)) 'imp' (a 'imp' c)) by BVFUNC_4:8
+  .='not'('not' a 'or' b) 'or' (('not'
+a 'or' (b 'imp' c)) 'imp' (a 'imp' c)) by BVFUNC_4:8
+  .='not'('not' a 'or' b) 'or' (('not' a 'or' ('not'
+b 'or' c)) 'imp' (a 'imp' c)) by BVFUNC_4:8
+  .='not'('not' a 'or' b) 'or' (('not' a 'or' ('not' b 'or' c)) 'imp' ('not'
+a 'or' c)) by BVFUNC_4:8
+  .='not'('not' a 'or' b) 'or' ('not'('not' a 'or'
+  ('not' b 'or' c)) 'or' ('not'
+a 'or' c)) by BVFUNC_4:8
+  .=('not' 'not' a '&' 'not' b) 'or' ('not'('not' a 'or'
+  ('not' b 'or' c)) 'or' (
+'not' a 'or' c)) by BVFUNC_1:16
+  .=('not' 'not' a '&' 'not' b) 'or' (('not' 'not' a '&' 'not'('not'
+b 'or' c)) 'or' ('not' a 'or' c)) by BVFUNC_1:16
+  .=('not' 'not' a '&' 'not' b) 'or' (('not' 'not' a '&'
+  ('not' 'not' b '&' 'not'
+c)) 'or' ('not' a 'or' c)) by BVFUNC_1:16
+  .=(a '&' 'not' b) 'or' (('not' 'not' a '&' ('not' 'not' b
+  '&' 'not' c)) 'or' ('not'
+a 'or' c)) by BVFUNC_1:4
+  .=(a '&' 'not' b) 'or' ((a '&' ('not' 'not' b '&' 'not' c)) 'or' ('not'
+a 'or' c)) by BVFUNC_1:4
+  .=(a '&' 'not' b) 'or' ((a '&' (b '&' 'not' c)) 'or' ('not'
+a 'or' c)) by BVFUNC_1:4
+  .=(a '&' 'not' b) 'or'
+    ((a 'or' ('not' a 'or' c)) '&' ((b '&' 'not' c) 'or' ('not'
+a 'or' c))) by BVFUNC_1:14
+  .=(a '&' 'not' b) 'or'
+    (((a 'or' 'not' a) 'or' c) '&' ((b '&' 'not' c) 'or' ('not'
+a 'or' c))) by BVFUNC_1:11
+  .=(a '&' 'not' b) 'or'
+    ((I_el(Y) 'or' c) '&' ((b '&' 'not' c) 'or' ('not' a 'or' c)))
+    by BVFUNC_4:6
+  .=(a '&' 'not' b) 'or'
+    (I_el(Y) '&' ((b '&' 'not' c) 'or' ('not' a 'or' c))) by BVFUNC_1:13
+  .=(a '&' 'not' b) 'or'
+    ((b '&' 'not' c) 'or' ('not' a 'or' c)) by BVFUNC_1:9
+  .=(a '&' 'not' b) 'or'
+    ((b 'or' ('not' a 'or' c)) '&' ('not' c 'or' ('not' a 'or' c)))
+    by BVFUNC_1:14
+  .=(a '&' 'not' b) 'or'
+    ((b 'or' ('not' a 'or' c)) '&' (('not' c 'or' c) 'or' 'not' a))
+    by BVFUNC_1:11
+  .=(a '&' 'not' b) 'or'
+    ((b 'or' ('not' a 'or' c)) '&' (I_el(Y) 'or' 'not' a)) by BVFUNC_4:6
+  .=(a '&' 'not' b) 'or'
+    ((b 'or' ('not' a 'or' c)) '&' I_el(Y)) by BVFUNC_1:13
+  .=(a '&' 'not' b) 'or' (b 'or' ('not' a 'or' c)) by BVFUNC_1:9
+  .=(a 'or' (b 'or' ('not' a 'or' c))) '&' ('not' b 'or' (b 'or' ('not'
+a 'or' c)))
+   by BVFUNC_1:14
+  .=(a 'or' (b 'or' ('not' a 'or' c))) '&' (('not' b 'or' b) 'or' ('not'
+a 'or' c))
+   by BVFUNC_1:11
+  .=(a 'or' (b 'or' ('not' a 'or' c))) '&' (I_el(Y) 'or' ('not' a 'or' c))
+   by BVFUNC_4:6
+  .=(a 'or' (b 'or' ('not' a 'or' c))) '&' I_el(Y) by BVFUNC_1:13
+  .=a 'or' (b 'or' ('not' a 'or' c)) by BVFUNC_1:9
+  .=a 'or' (('not' a 'or' b) 'or' c) by BVFUNC_1:11
+  .=a 'or' ('not' a 'or' b) 'or' c by BVFUNC_1:11
+  .=(a 'or' 'not' a) 'or' b 'or' c by BVFUNC_1:11
+  .=I_el(Y) 'or' b 'or' c by BVFUNC_4:6
+  .=I_el(Y) 'or' c by BVFUNC_1:13
+  .=I_el(Y) by BVFUNC_1:13;
+    hence thesis by BVFUNC_1:def 14;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;

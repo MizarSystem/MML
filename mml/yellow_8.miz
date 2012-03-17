@@ -1,0 +1,1063 @@
+:: Baire Spaces, Sober Spaces
+::  by Andrzej Trybulec
+::
+:: Received January 8, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary FINSUB_1, FINSET_1, SETFAM_1, BOOLE, REALSET1, SUBSET_1, TARSKI,
+      FUNCT_1, RELAT_1, CARD_4, CARD_1, CANTOR_1, PRE_TOPC, TOPS_1, TOPS_3,
+      WAYBEL_6, YELLOW_6, TSP_1, SETWISEO, URYSOHN1, COMPTS_1, WAYBEL_3,
+      YELLOW_8, RLVECT_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, CANTOR_1,
+      SETFAM_1, WELLORD2, CARD_1, CARD_4, REALSET1, FINSET_1, FINSUB_1,
+      SETWISEO, STRUCT_0, PRE_TOPC, TOPS_1, TOPS_3, TSP_1, URYSOHN1, YELLOW_6,
+      COMPTS_1, WAYBEL_3;
+ constructors CANTOR_1, TOPS_1, CARD_4, TOPS_3, URYSOHN1, COMPTS_1, REALSET1,
+      DOMAIN_1, T_0TOPSP, SETWISEO, WAYBEL_3, MEMBERED;
+ clusters SUBSET_1, YELLOW_6, PRE_TOPC, CARD_5, FINSET_1, STRUCT_0, FINSUB_1,
+      ARYTM_3, SETFAM_1, MEMBERED, ZFMISC_1;
+ requirements NUMERALS, BOOLE, SUBSET;
+ definitions TARSKI, CANTOR_1, STRUCT_0, PRE_TOPC, WELLORD2, FUNCT_1, CARD_4,
+      WAYBEL_3, COMPTS_1, XBOOLE_0;
+ theorems TOPS_1, PRE_TOPC, PCOMPS_1, CANTOR_1, TARSKI, ZFMISC_1, TOPS_3,
+      COMPTS_1, TEX_2, URYSOHN1, TSP_1, FINSUB_1, SETFAM_1, SUBSET_1, FINSET_1,
+      FUNCT_1, CARD_1, REALSET1, WAYBEL_3, XBOOLE_0, XBOOLE_1;
+ schemes DOMAIN_1, FUNCT_1;
+
+begin :: Preliminaries
+
+theorem Th1:
+ for X,A,B being set st A in Fin X & B c= A holds B in Fin X
+proof let X,A,B be set such that
+A1: A in Fin X and
+A2: B c= A;
+    A is finite & A c= X by A1,FINSUB_1:def 5;
+  then B is finite & B c= X by A2,FINSET_1:13,XBOOLE_1:1;
+ hence B in Fin X by FINSUB_1:def 5;
+end;
+
+theorem Th2:
+ for X being set, F being Subset-Family of X st F c= Fin X
+  holds meet F in Fin X
+proof
+ let X be set, F be Subset-Family of X such that
+A1: F c= Fin X;
+ per cases;
+ suppose F = {};
+ hence meet F in Fin X by FINSUB_1:18,SETFAM_1:2;
+ suppose F <> {};
+  then consider A being set such that
+A2: A in F by XBOOLE_0:def 1;
+    meet F c= A by A2,SETFAM_1:4;
+ hence meet F in Fin X by A1,A2,Th1;
+end;
+
+definition let X be non empty set;
+ redefine attr X is trivial means
+:Def1: for x,y being Element of X holds x = y;
+ compatibility
+  proof
+   hereby assume X is trivial;
+     then consider w being set such that
+A1:    X = {w} by REALSET1:def 12;
+    let x,y be Element of X;
+       x = w & y = w by A1,TARSKI:def 1;
+    hence x = y;
+   end;
+   assume
+A2:   for x,y being Element of X holds x = y;
+    consider w being set such that
+A3:   w in X by XBOOLE_0:def 1;
+      for z being set holds z in X iff z = w by A2,A3;
+    then X = {w} by TARSKI:def 1;
+   hence X is trivial by REALSET1:def 12;
+  end;
+end;
+
+begin :: Families of complements
+
+theorem Th3:
+for X being set, F being Subset-Family of X
+ for P being Subset of X holds P` in COMPLEMENT F iff P in F
+proof let X be set, F be Subset-Family of X;
+ let P be Subset of X;
+    P = P``;
+ hence P` in COMPLEMENT F iff P in F by SETFAM_1:def 8;
+end;
+
+theorem Th4:
+ for X being set, F being Subset-Family of X
+  holds F,COMPLEMENT F are_equipotent
+proof let X be set, F be Subset-Family of X;
+  deffunc F(set) = X \ $1;
+  consider f being Function such that
+A1: dom f = F and
+A2: for x being set st x in F holds f.x = F(x) from Lambda;
+ take f;
+ thus f is one-to-one
+  proof let x1,x2 be set such that
+A3: x1 in dom f & x2 in dom f and
+A4: f.x1 = f.x2;
+    reconsider X1 = x1, X2 = x2 as Subset of X by A1,A3;
+   X1` = X \ x1 by SUBSET_1:def 5
+      .= f.x1 by A1,A2,A3 .= X \ x2 by A1,A2,A3,A4
+      .= X2` by SUBSET_1:def 5;
+   hence x1 = X2`` .= x2;
+  end;
+ thus dom f = F by A1;
+ thus rng f c= COMPLEMENT F
+  proof let e be set;
+  assume e in rng f;
+   then consider u being set such that
+A5: u in dom f and
+A6: e = f.u by FUNCT_1:def 5;
+   reconsider Y = u as Subset of X by A1,A5;
+     e = X \ Y by A1,A2,A5,A6 .= Y` by SUBSET_1:def 5;
+  hence e in COMPLEMENT F by A1,A5,Th3;
+  end;
+ let e be set;
+ assume
+A7: e in COMPLEMENT F;
+  then reconsider Y = e as Subset of X;
+A8: Y` in F by A7,SETFAM_1:def 8;
+    e = Y`` .= X \ Y` by SUBSET_1:def 5
+    .= f.Y` by A2,A8;
+ hence e in rng f by A1,A8,FUNCT_1:def 5;
+end;
+
+theorem Th5:
+ for X,Y being set st X,Y are_equipotent & X is countable holds
+ Y is countable
+proof let X,Y be set such that
+A1: X,Y are_equipotent and
+A2: Card X c= alef 0;
+ thus Card Y c= alef 0 by A1,A2,CARD_1:21;
+end;
+
+theorem
+  for X being set, F being Subset-Family of X
+ holds COMPLEMENT COMPLEMENT F = F;
+
+theorem
+  for X being set, F being Subset-Family of X
+ for P being Subset of X holds P` in COMPLEMENT F iff P in F
+proof let X be set, F be Subset-Family of X;
+ let P be Subset of X;
+    P = P``;
+ hence P` in COMPLEMENT F iff P in F by SETFAM_1:def 8;
+end;
+
+theorem Th8:
+for X being set, F,G being Subset-Family of X
+  st COMPLEMENT F c= COMPLEMENT G
+ holds F c= G
+ proof let X be set, F,G be Subset-Family of X such that
+A1: COMPLEMENT F c= COMPLEMENT G;
+  let x be set;
+  assume
+A2:  x in F;
+   then reconsider A = x as Subset of X;
+     A in COMPLEMENT COMPLEMENT F by A2;
+   then A` in COMPLEMENT F by SETFAM_1:def 8;
+   then A`` in G by A1,SETFAM_1:def 8;
+  hence x in G;
+ end;
+
+theorem Th9:
+for X being set, F,G being Subset-Family of X
+ holds COMPLEMENT F c= G iff F c= COMPLEMENT G
+proof let X be set, F,G be Subset-Family of X;
+ hereby assume COMPLEMENT F c= G;
+   then COMPLEMENT F c= COMPLEMENT COMPLEMENT G;
+  hence F c= COMPLEMENT G by Th8;
+ end;
+ assume F c= COMPLEMENT G;
+  then COMPLEMENT COMPLEMENT F c= COMPLEMENT G;
+ hence COMPLEMENT F c= G by Th8;
+end;
+
+theorem Th10:
+for X being set, F,G being Subset-Family of X
+  st COMPLEMENT F = COMPLEMENT G
+ holds F = G
+proof let X be set, F,G be Subset-Family of X; assume
+A1: COMPLEMENT F = COMPLEMENT G;
+then A2: F c= G by Th8;
+    G c= F by A1,Th8;
+ hence F = G by A2,XBOOLE_0:def 10;
+end;
+
+definition let X be set; let F,G be Subset of bool X;
+  redefine func F \/ G -> Subset-Family of X;
+  coherence
+  proof
+      F \/ G is Subset of bool X;
+    hence thesis by SETFAM_1:def 7;
+  end;
+end;
+
+theorem Th11:
+for X being set, F,G being Subset-Family of X
+ holds COMPLEMENT(F \/ G) = COMPLEMENT F \/ COMPLEMENT G
+proof let X be set, F,G be Subset-Family of X;
+    for P being Subset of X holds P in COMPLEMENT F \/ COMPLEMENT G iff
+   P` in F \/ G
+   proof let P be Subset of X;
+      P in COMPLEMENT F or P in COMPLEMENT G iff P` in F or P` in G
+    by SETFAM_1:def 8;
+    hence thesis by XBOOLE_0:def 2;
+   end;
+ hence thesis by SETFAM_1:def 8;
+end;
+
+theorem Th12:
+for X being set, F being Subset-Family of X st F = {X}
+ holds COMPLEMENT F = {{}}
+proof let X be set, F be Subset-Family of X such that
+A1: F = {X};
+    {} c= X by XBOOLE_1:2;
+  then reconsider G = {{}} as Subset of bool X by ZFMISC_1:37;
+  reconsider G as Subset-Family of X by SETFAM_1:def 7;
+    for P being Subset of X holds P in G iff P` in F
+   proof let P be Subset of X;
+    hereby assume P in G;
+      then P = {}X by TARSKI:def 1;
+      then P` = [#]X by SUBSET_1:22 .= X by SUBSET_1:def 4;
+     hence P` in F by A1,TARSKI:def 1;
+    end;
+    assume P` in F;
+     then A2:    P` = X by A1,TARSKI:def 1 .= [#]X by SUBSET_1:def 4;
+       P = P`` .= {}X by A2,SUBSET_1:21 .= {};
+    hence P in G by TARSKI:def 1;
+   end;
+ hence COMPLEMENT F = {{}} by SETFAM_1:def 8;
+end;
+
+definition let X be set, F be empty Subset-Family of X;
+ cluster COMPLEMENT F -> empty;
+ coherence
+  proof
+   assume COMPLEMENT F is not empty;
+    then ex x being Subset of X st
+     x in COMPLEMENT F by SUBSET_1:10;
+   hence contradiction by SETFAM_1:def 8;
+  end;
+end;
+
+theorem Th13:
+ for X being 1-sorted, F being Subset-Family of X,
+     P being Subset of X
+  holds P in COMPLEMENT F iff P` in F by SETFAM_1:def 8;
+
+theorem
+   for X being 1-sorted, F being Subset-Family of X,
+     P being Subset of X
+  holds P` in COMPLEMENT F iff P in F
+proof
+ let X be 1-sorted, F be Subset-Family of X,
+     P be Subset of X;
+     P = (P`)`;
+ hence P` in COMPLEMENT F iff P in F by SETFAM_1:def 8;
+end;
+
+theorem Th15:
+ for X being 1-sorted, F being Subset-Family of X
+  holds Intersect COMPLEMENT F = (union F)`
+proof let X be 1-sorted, F be Subset-Family of X;
+ per cases;
+ suppose
+A1: F <> {};
+  then COMPLEMENT F <> {} by SETFAM_1:46;
+ hence Intersect COMPLEMENT F = meet COMPLEMENT F by CANTOR_1:def 3
+          .= ([#] the carrier of X) \ union F by A1,SETFAM_1:47
+          .= (the carrier of X) \ union F by SUBSET_1:def 4
+          .= [#]X \ union F by PRE_TOPC:def 3
+          .= (union F)` by PRE_TOPC:17;
+ suppose
+A2: F = {};
+  then reconsider G = F as empty Subset-Family of X;
+    COMPLEMENT G = {};
+ hence Intersect COMPLEMENT F = the carrier of X by CANTOR_1:def 3
+            .= [#]X by PRE_TOPC:12
+            .= ({}X)` by PRE_TOPC:27
+            .= (union F)` by A2,ZFMISC_1:2;
+end;
+
+theorem Th16:
+ for X being 1-sorted, F being Subset-Family of X
+  holds union COMPLEMENT F = (Intersect F)`
+proof let X be 1-sorted, F be Subset-Family of X;
+ thus union COMPLEMENT F = (union COMPLEMENT F)``
+        .= (Intersect COMPLEMENT COMPLEMENT F)` by Th15
+        .= (Intersect F)`;
+end;
+
+begin :: Topological preliminaries
+
+theorem
+   for T being non empty TopSpace, A,B being Subset of T st
+  B c= A & A is closed &
+   (for C being Subset of T st B c= C & C is closed
+    holds A c= C)
+ holds A = Cl B
+proof let T be non empty TopSpace, A,B be Subset of T;
+ assume that
+A1: B c= A and
+A2: A is closed and
+A3: for C being Subset of T st B c= C & C is closed
+    holds A c= C;
+    B c= Cl B & Cl B is closed by PCOMPS_1:4,PRE_TOPC:48;
+ hence A c= Cl B by A3;
+ thus Cl B c= A by A1,A2,TOPS_1:31;
+end;
+
+theorem Th18:
+ for T being TopStruct, B being Basis of T,
+     V being Subset of T st V is open
+ holds V = union { G where G is Subset of T: G in B & G c= V }
+proof let T be TopStruct, B be Basis of T, V be Subset of T such that
+A1: V is open;
+  set X = { G where G is Subset of T: G in B & G c= V };
+A2: the topology of T c= UniCl B by CANTOR_1:def 2;
+    for x being set holds x in V iff ex Y being set st x in Y & Y in X
+   proof let x be set;
+    hereby assume
+A3:   x in V;
+        V in the topology of T by A1,PRE_TOPC:def 5;
+      then consider Y being Subset-Family of T such that
+A4:    Y c= B and
+A5:    V = union Y by A2,CANTOR_1:def 1;
+      consider W being set such that
+A6:    x in W and
+A7:    W in Y by A3,A5,TARSKI:def 4;
+     take W;
+     thus x in W by A6;
+      reconsider G = W as Subset of T by A7;
+        G c= V by A5,A7,ZFMISC_1:92;
+     hence W in X by A4,A7;
+    end;
+    given Y being set such that
+A8:  x in Y and
+A9:  Y in X;
+       ex G being Subset of T st Y = G & G in B & G c= V by A9;
+    hence x in V by A8;
+   end;
+ hence V = union X by TARSKI:def 4;
+end;
+
+theorem Th19:
+ for T being TopStruct, B being Basis of T,
+     S being Subset of T st S in B
+  holds S is open
+ proof
+  let T be TopStruct, B be Basis of T,
+      S be Subset of T such that
+A1:  S in B;
+     B c= the topology of T by CANTOR_1:def 2;
+  hence S is open by A1,PRE_TOPC:def 5;
+ end;
+
+theorem
+   for T being non empty TopSpace, B being Basis of T,
+     V being Subset of T
+ holds Int V = union { G where G is Subset of T: G in B & G c= V }
+proof
+ let T be non empty TopSpace, B be Basis of T,
+     V be Subset of T;
+  set X = { G where G is Subset of T: G in B & G c= V },
+      Y = { G where G is Subset of T: G in B & G c= Int V };
+A1: X = Y
+   proof
+    thus X c= Y
+     proof let e be set;
+      assume e in X;
+       then consider G being Subset of T such that
+A2:     e = G and
+A3:     G in B and
+A4:     G c= V;
+         G is open by A3,Th19;
+       then G c= Int V by A4,TOPS_1:56;
+      hence e in Y by A2,A3;
+     end;
+    let e be set;
+    assume e in Y;
+     then consider G being Subset of T such that
+A5:     e = G and
+A6:     G in B and
+A7:     G c= Int V;
+       Int V c= V by TOPS_1:44;
+     then G c= V by A7,XBOOLE_1:1;
+    hence e in X by A5,A6;
+   end;
+  reconsider W = Int V as Subset of T;
+    W is open by TOPS_1:51;
+ hence thesis by A1,Th18;
+end;
+
+begin :: Baire Spaces
+
+definition let T be non empty TopStruct, x be Point of T;
+ mode Basis of x -> Subset-Family of T means
+:Def2: it c= the topology of T & x in Intersect it &
+   for S being Subset of T st S is open & x in S
+    ex V being Subset of T st V in it & V c= S;
+ existence
+  proof
+    defpred P[set] means $1 in the topology of T & x in $1;
+    set IT = { S where S is Subset of T: P[S]};
+      IT is Subset of bool the carrier of T from SubsetD;
+    then IT is Subset-Family of T by SETFAM_1:def 7;
+    then reconsider IT as Subset-Family of T;
+   take IT;
+   thus IT c= the topology of T
+    proof let e be set;
+     assume e in IT;
+      then ex S being Subset of T st
+        S = e & S in the topology of T & x in S;
+     hence thesis;
+    end;
+      now let e be set;
+     assume e in IT;
+      then ex S being Subset of T st
+        S = e & S in the topology of T & x in S;
+     hence x in e;
+    end;
+   hence x in Intersect IT by CANTOR_1:10;
+   let S be Subset of T such that
+A1: S is open and
+A2: x in S;
+   take V = S;
+      V in the topology of T by A1,PRE_TOPC:def 5;
+   hence V in IT by A2;
+   thus V c= S;
+  end;
+end;
+
+theorem Th21:
+ for T being non empty TopStruct, x being Point of T,
+     B being Basis of x, V being Subset of T st V in B
+ holds V is open & x in V
+proof
+ let T be non empty TopStruct, x be Point of T,
+     B be Basis of x, V be Subset of T such that
+A1: V in B;
+    B c= the topology of T by Def2;
+ hence V is open by A1,PRE_TOPC:def 5;
+    x in Intersect B by Def2;
+ hence x in V by A1,CANTOR_1:10;
+end;
+
+theorem
+  for T being non empty TopStruct, x being Point of T,
+     B being Basis of x, V being Subset of T st
+       x in V & V is open
+  ex W being Subset of T st W in B & W c= V by Def2;
+
+theorem
+   for T being non empty TopStruct, P being Subset-Family of T st
+  P c= the topology of T &
+  for x being Point of T ex B being Basis of x st B c= P
+ holds P is Basis of T
+proof let T be non empty TopStruct;
+ let P be Subset-Family of T such that
+A1: P c= the topology of T and
+A2: for x being Point of T ex B being Basis of x st B c= P;
+ thus P c= the topology of T by A1;
+ let e be set;
+ assume
+A3: e in the topology of T;
+  then reconsider S = e as Subset of T;
+  set X = { V where V is Subset of T: V in P & V c= S };
+A4: X c= P
+   proof let e be set;
+    assume e in X;
+     then ex V being Subset of T st e = V & V in P & V c= S;
+    hence e in P;
+   end;
+  then X is Subset of bool the carrier of T by XBOOLE_1:1;
+  then X is Subset-Family of T by SETFAM_1:def 7;
+  then reconsider X as Subset-Family of T;
+    for u being set holds u in S iff ex Z being set st u in Z & Z in X
+   proof let u be set;
+    hereby assume
+A5:   u in S;
+      then reconsider p = u as Point of T;
+A6:    S is open by A3,PRE_TOPC:def 5;
+      consider B being Basis of p such that
+A7:    B c= P by A2;
+      consider W being Subset of T such that
+A8:    W in B and
+A9:    W c= S by A5,A6,Def2;
+      reconsider Z = W as set;
+     take Z;
+     thus u in Z by A8,Th21;
+     thus Z in X by A7,A8,A9;
+    end;
+    given Z being set such that
+A10:  u in Z and
+A11:  Z in X;
+       ex V being Subset of T st V = Z & V in P & V c= S by A11;
+    hence u in S by A10;
+   end;
+  then S = union X by TARSKI:def 4;
+ hence e in UniCl P by A4,CANTOR_1:def 1;
+end;
+
+definition let T be non empty TopSpace;
+ attr T is Baire means
+:Def3: for F being Subset-Family of T st F is countable &
+  for S being Subset of T st S in F holds S is everywhere_dense
+  ex I being Subset of T st I = Intersect F & I is dense;
+end;
+
+theorem
+   for T being non empty TopSpace holds
+  T is Baire iff
+  for F being Subset-Family of T st F is countable &
+   for S being Subset of T st S in F holds S is nowhere_dense
+  holds union F is boundary
+proof
+ let T be non empty TopSpace;
+ hereby assume
+A1: T is Baire;
+  let F be Subset-Family of T such that
+A2: F is countable and
+A3: for S being Subset of T st S in F holds S is nowhere_dense;
+  reconsider G = COMPLEMENT F as Subset-Family of T;
+    G,F are_equipotent by Th4;
+then A4: G is countable by A2,Th5;
+     for S being Subset of T st S in G holds S is everywhere_dense
+    proof let S be Subset of T;
+     assume S in G;
+      then S` in F by Th13;
+      then S` is nowhere_dense by A3;
+     hence S is everywhere_dense by TOPS_3:39;
+    end;
+   then consider I being Subset of T such that
+A5:  I = Intersect G & I is dense by A1,A4,Def3;
+     (union F)` is dense by A5,Th15;
+  hence union F is boundary by TOPS_1:def 4;
+ end;
+ assume
+A6: for F being Subset-Family of T st F is countable &
+   for S being Subset of T st S in F holds S is nowhere_dense
+  holds union F is boundary;
+ let F be Subset-Family of T such that
+A7: F is countable and
+A8: for S being Subset of T st S in F holds S is everywhere_dense;
+  reconsider G = COMPLEMENT F as Subset-Family of T;
+    G,F are_equipotent by Th4;
+then A9: G is countable by A7,Th5;
+   reconsider I = Intersect F as Subset of T;
+   take I;
+   thus I = Intersect F;
+     for S being Subset of T st S in G holds S is nowhere_dense
+    proof let S be Subset of T;
+     assume S in G;
+      then S` in F by Th13;
+      then S` is everywhere_dense by A8;
+     hence S is nowhere_dense by TOPS_3:40;
+    end;
+  then union G is boundary by A6,A9;
+  then (Intersect F)` is boundary by Th16;
+ hence I is dense by TOPS_3:18;
+end;
+
+begin :: Sober Spaces
+
+definition let T be TopStruct, S be Subset of T;
+ attr S is irreducible means
+:Def4: S is non empty closed &
+ for S1,S2 being Subset of T st S1 is closed & S2 is closed & S = S1 \/ S2
+  holds S1 = S or S2 = S;
+end;
+
+definition let T be TopStruct;
+ cluster irreducible -> non empty Subset of T;
+ coherence by Def4;
+end;
+
+definition let T be non empty TopSpace, S be Subset of T;
+ let p be Point of T;
+ pred p is_dense_point_of S means
+:Def5: p in S & S c= Cl{p};
+end;
+
+theorem
+   for T being non empty TopSpace,
+     S being Subset of T st S is closed
+ for p being Point of T st p is_dense_point_of S
+  holds S = Cl{p}
+proof
+ let T be non empty TopSpace,
+     S be Subset of T such that
+A1: S is closed;
+ let p be Point of T such that
+A2: p in S and
+A3: S c= Cl{p};
+    {p} c= S by A2,ZFMISC_1:37;
+  then Cl{p} c= S by A1,TOPS_1:31;
+ hence S = Cl{p} by A3,XBOOLE_0:def 10;
+end;
+
+theorem Th26:
+ for T being non empty TopSpace, p being Point of T
+  holds Cl{p} is irreducible
+ proof let T be non empty TopSpace, p be Point of T;
+A1: Cl{p} is closed by PCOMPS_1:4;
+A2: Cl{p} is non empty by PCOMPS_1:2;
+  assume not thesis;
+   then consider S1,S2 being Subset of T such that
+A3: S1 is closed & S2 is closed and
+A4: Cl{p} = S1 \/ S2 and
+A5: S1 <> Cl{p} & S2 <> Cl{p} by A1,A2,Def4;
+A6: {p} c= Cl{p} by PRE_TOPC:48;
+     p in {p} by TARSKI:def 1;
+   then p in S1 or p in S2 by A4,A6,XBOOLE_0:def 2;
+   then {p} c= S1 or {p} c= S2 by ZFMISC_1:37;
+   then A7:  Cl{p} c= S1 or Cl{p} c= S2 by A3,TOPS_1:31;
+     S1 c= Cl{p} & S2 c= Cl{p} by A4,XBOOLE_1:7;
+  hence contradiction by A5,A7,XBOOLE_0:def 10;
+ end;
+
+definition let T be non empty TopSpace;
+ cluster irreducible Subset of T;
+ existence
+  proof consider p being Point of T;
+      Cl{p} is irreducible by Th26;
+   hence thesis;
+  end;
+end;
+
+definition let T be non empty TopSpace;
+ attr T is sober means
+:Def6:
+ for S being irreducible Subset of T
+  ex p being Point of T st p is_dense_point_of S &
+   for q being Point of T st q is_dense_point_of S holds p = q;
+end;
+
+theorem Th27:
+ for T being non empty TopSpace, p being Point of T
+  holds p is_dense_point_of Cl{p}
+proof let T be non empty TopSpace, p be Point of T;
+A1: {p} c= Cl{p} by PRE_TOPC:48;
+    p in {p} by TARSKI:def 1;
+ hence p in Cl{p} by A1;
+ thus Cl{p} c= Cl{p};
+end;
+
+theorem Th28:
+ for T being non empty TopSpace, p being Point of T
+  holds p is_dense_point_of {p}
+proof let T be non empty TopSpace, p be Point of T;
+ thus p in {p} by TARSKI:def 1;
+ thus {p} c= Cl{p} by PRE_TOPC:48;
+end;
+
+theorem Th29:
+ for T being non empty TopSpace,
+     G,F being Subset of T st G is open & F is closed
+ holds F \ G is closed
+proof
+ let T be non empty TopSpace,
+     G,F be Subset of T such that
+A1: G is open and
+A2: F is closed;
+A3: G` is closed by A1,TOPS_1:30;
+    F \ G = F /\ G` by SUBSET_1:32;
+ hence F \ G is closed by A2,A3,TOPS_1:35;
+end;
+
+theorem Th30:
+ for T being Hausdorff (non empty TopSpace),
+     S being irreducible Subset of T
+  holds S is trivial
+proof
+ let T be Hausdorff (non empty TopSpace),
+     S be irreducible Subset of T;
+ assume S is non trivial;
+  then consider x,y being Element of S such that
+A1: x <> y by Def1;
+  reconsider x,y as Point of T;
+  consider W,V being Subset of T such that
+A2: W is open & V is open and
+A3: x in W & y in V and
+A4: W misses V by A1,COMPTS_1:def 4;
+A5: S is closed by Def4;
+  set S1 = S \ W, S2 = S \ V;
+A6: S1 is closed & S2 is closed by A2,A5,Th29;
+A7:  W /\ V = {} by A4,XBOOLE_0:def 7;
+A8: S1 \/ S2 = S \ W /\ V by XBOOLE_1:54
+       .= S by A7;
+    S1 <> S & S2 <> S by A3,XBOOLE_0:def 4;
+ hence contradiction by A6,A8,Def4;
+end;
+
+definition let T be Hausdorff (non empty TopSpace);
+ cluster irreducible -> trivial Subset of T;
+ coherence by Th30;
+end;
+
+theorem Th31:
+ for T being Hausdorff (non empty TopSpace) holds T is sober
+proof
+ let T be Hausdorff (non empty TopSpace);
+ let S be irreducible Subset of T;
+  consider d be Element of S such that
+A1: S = {d} by TEX_2:def 1;
+  reconsider d as Point of T;
+ take d;
+ thus d is_dense_point_of S by A1,Th28;
+ let p be Point of T;
+ assume p is_dense_point_of S;
+  then p in S by Def5;
+ hence p = d by A1,TARSKI:def 1;
+end;
+
+definition
+ cluster Hausdorff -> sober (non empty TopSpace);
+ coherence by Th31;
+end;
+
+definition
+ cluster sober (non empty TopSpace);
+ existence
+  proof consider T being Hausdorff (non empty TopSpace);
+   take T;
+   thus thesis;
+  end;
+end;
+
+theorem Th32:
+ for T being non empty TopSpace holds
+  T is T_0 iff for p,q being Point of T st Cl{p} = Cl{q} holds p = q
+proof let T be non empty TopSpace;
+ thus T is T_0 implies for p,q being Point of T st Cl{p} = Cl{q} holds p = q
+   by TSP_1:def 5;
+ assume for p,q being Point of T st Cl{p} = Cl{q} holds p = q;
+  then for p,q being Point of T st p <> q holds Cl{p} <> Cl{q};
+ hence T is T_0 by TSP_1:def 5;
+end;
+
+theorem Th33:
+ for T being sober (non empty TopSpace) holds T is T_0
+proof let T be sober (non empty TopSpace);
+    for p,q being Point of T st Cl{p} = Cl{q} holds p = q
+   proof let p,q be Point of T such that
+A1:   Cl{p} = Cl{q};
+       Cl{p} is irreducible by Th26;
+     then consider r being Point of T such that
+        r is_dense_point_of Cl{p} and
+A2:   for q being Point of T st q is_dense_point_of Cl{p}
+        holds r = q by Def6;
+       p is_dense_point_of Cl{p} & q is_dense_point_of Cl{q} by Th27;
+     then p = r & q = r by A1,A2;
+    hence p = q;
+   end;
+ hence T is T_0 by Th32;
+end;
+
+definition
+ cluster sober -> T_0 (non empty TopSpace);
+ coherence by Th33;
+end;
+
+definition let X be set;
+ func CofinTop X -> strict TopStruct means
+:Def7: the carrier of it = X &
+     COMPLEMENT the topology of it = {X} \/ Fin X;
+ existence
+  proof
+A1:  {X} c= bool X by ZFMISC_1:80;
+      Fin X c= bool X by FINSUB_1:26;
+    then reconsider F = {X} \/ Fin X as Subset of bool X by A1,XBOOLE_1:8;
+    reconsider F as Subset-Family of X by SETFAM_1:def 7;
+   take T = TopStruct(#X,COMPLEMENT F#);
+   thus the carrier of T = X;
+   thus COMPLEMENT the topology of T = {X} \/ Fin X;
+  end;
+ uniqueness by Th10;
+end;
+
+definition let X be non empty set;
+ cluster CofinTop X -> non empty;
+ coherence
+  proof
+   thus the carrier of CofinTop X is non empty by Def7;
+  end;
+end;
+
+definition let X be set;
+ cluster CofinTop X -> TopSpace-like;
+ coherence
+  proof set IT = CofinTop X;
+A1: the carrier of IT = X by Def7;
+A2: COMPLEMENT the topology of IT = {X} \/ Fin X by Def7;
+   reconsider XX = {X} as Subset of bool X by ZFMISC_1:80;
+   reconsider XX as Subset-Family of X by SETFAM_1:def 7;
+   reconsider F = Fin X as Subset of bool X by FINSUB_1:26;
+   reconsider F as Subset-Family of X by SETFAM_1:def 7;
+A3: the topology of IT
+       = COMPLEMENT COMPLEMENT the topology of IT
+      .= COMPLEMENT XX \/ COMPLEMENT F by A1,A2,Th11
+      .= {{}} \/ COMPLEMENT F by Th12;
+   A4: {} in {{}} by TARSKI:def 1;
+      {}.X in F;
+    then ({}X)`` in F;
+    then ({}X)` in COMPLEMENT F by SETFAM_1:def 8;
+    then [#]X in COMPLEMENT F by SUBSET_1:22;
+    then [#]X in the topology of IT by A3,XBOOLE_0:def 2;
+   hence the carrier of IT in the topology of IT by A1,SUBSET_1:def 4;
+   thus for a being Subset-Family of IT
+      st a c= the topology of IT
+       holds union a in the topology of IT
+   proof let a be Subset-Family of IT such that
+A5:   a c= the topology of IT;
+    set b = a /\ COMPLEMENT F;
+      b c= a by XBOOLE_1:17;
+    then reconsider b as Subset of bool X by A1,XBOOLE_1:1;
+    reconsider b as Subset-Family of X by SETFAM_1:def 7;
+      a /\ {{}} c= {{}} by XBOOLE_1:17;
+    then a /\ {{}} = {{}} or a /\ {{}} = {} by ZFMISC_1:39;
+then A6:   union(a /\ {{}}) = {} by ZFMISC_1:2,31;
+A7:  union a = union(a /\ the topology of IT) by A5,XBOOLE_1:28
+       .= union(a /\ {{}} \/ a /\ COMPLEMENT F) by A3,XBOOLE_1:23
+       .= union(a /\ {{}}) \/ union(a /\ COMPLEMENT F) by ZFMISC_1:96
+       .= union b by A6;
+    per cases;
+    suppose b = {};
+    hence union a in the topology of IT by A3,A4,A7,XBOOLE_0:def 2,ZFMISC_1:2;
+    suppose b <> {};
+then A8:   meet COMPLEMENT b = [#]X \ union b by SETFAM_1:47
+      .= X \ union b by SUBSET_1:def 4
+      .= (union b)` by SUBSET_1:def 5;
+       b c= COMPLEMENT F by XBOOLE_1:17;
+     then COMPLEMENT b c= Fin X by Th9;
+     then (union b)` in Fin X by A8,Th2;
+     then union b in COMPLEMENT F by SETFAM_1:def 8;
+    hence union a in the topology of IT by A3,A7,XBOOLE_0:def 2;
+   end;
+   let a,b be Subset of IT such that
+A9:  a in the topology of IT & b in the topology of IT;
+    reconsider a'=a, b'=b as Subset of X by Def7;
+   per cases;
+   suppose a = {} or b = {};
+   hence a /\ b in the topology of IT by A3,A4,XBOOLE_0:def 2;
+   suppose a <> {} & b <> {};
+    then not(a in {{}} or b in {{}}) by TARSKI:def 1;
+    then a' in COMPLEMENT F & b' in COMPLEMENT F by A3,A9,XBOOLE_0:def 2;
+    then a'` in Fin X & b'` in Fin X by SETFAM_1:def 8;
+    then a'` \/ b'` in Fin X by FINSUB_1:10;
+    then (a' /\ b')` in Fin X by SUBSET_1:30;
+    then a /\ b in COMPLEMENT F by SETFAM_1:def 8;
+   hence a /\ b in the topology of IT by A3,XBOOLE_0:def 2;
+  end;
+end;
+
+theorem Th34:
+ for X being non empty set, P being Subset of CofinTop X
+  holds P is closed iff P = X or P is finite
+proof let X be non empty set, P be Subset of CofinTop X;
+  set T = CofinTop X;
+  hereby assume that
+A1: P is closed and
+A2: P <> X;
+      P` is open by A1,TOPS_1:29;
+    then P` in the topology of T by PRE_TOPC:def 5;
+    then P` in the topology of T;
+    then P in COMPLEMENT the topology of T by SETFAM_1:def 8;
+    then A3:   P in {X} \/ Fin X by Def7;
+      not P in {X} by A2,TARSKI:def 1;
+    then P in Fin X by A3,XBOOLE_0:def 2;
+   hence P is finite by FINSUB_1:def 5;
+  end;
+A4: the carrier of T = X by Def7;
+ assume P = X or P is finite;
+  then P in {X} or P in Fin X by A4,FINSUB_1:def 5,TARSKI:def 1;
+  then P in {X} \/ Fin X by XBOOLE_0:def 2;
+  then P in COMPLEMENT the topology of T by Def7;
+  then P` in the topology of T by SETFAM_1:def 8;
+  then P` in the topology of T;
+  then P` is open by PRE_TOPC:def 5;
+ hence P is closed by TOPS_1:29;
+end;
+
+theorem Th35:
+ for T being non empty TopSpace st T is_T1
+ for p being Point of T holds Cl{p} = {p}
+proof
+ let T be non empty TopSpace such that
+A1: T is_T1;
+ let p be Point of T;
+    {p} is closed by A1,URYSOHN1:27;
+  then A2:  Cl{p} c= {p} by TOPS_1:31;
+    {p} c= Cl{p} by PRE_TOPC:48;
+ hence Cl{p} = {p} by A2,XBOOLE_0:def 10;
+end;
+
+definition let X be non empty set;
+ cluster CofinTop X -> being_T1;
+ coherence
+  proof
+      for p being Point of CofinTop X holds {p} is closed by Th34;
+   hence CofinTop X is_T1 by URYSOHN1:27;
+  end;
+end;
+
+definition let X be infinite set;
+ cluster CofinTop X -> non sober;
+ coherence
+  proof set T = CofinTop X;
+A1:  the carrier of CofinTop X = X by Def7;
+    then reconsider S = [#]X as Subset of T;
+      S is irreducible
+     proof
+A2:     S = X & X = [#]T by A1,PRE_TOPC:12,SUBSET_1:def 4;
+      hence S is non empty closed;
+      let S1,S2 be Subset of T such that
+A3:     S1 is closed & S2 is closed and
+A4:     S = S1 \/ S2;
+      assume S1 <> S & S2 <> S;
+       then reconsider S1'=S1, S2'=S2 as finite set by A2,A3,Th34;
+         S = S1' \/ S2' by A4;
+      hence contradiction by SUBSET_1:def 4;
+     end;
+    then reconsider S as irreducible Subset of T;
+   take S;
+   let p be Point of T;
+      now assume p is_dense_point_of S;
+      then S c= Cl{p} by Def5;
+      then X c= Cl{p} by SUBSET_1:def 4;
+      then Cl{p} is infinite by FINSET_1:13;
+     hence contradiction by Th35;
+    end;
+   hence thesis;
+  end;
+end;
+
+definition
+ cluster being_T1 non sober (non empty TopSpace);
+ existence
+  proof consider X being infinite set;
+   take CofinTop X;
+   thus thesis;
+  end;
+end;
+
+begin :: More on regular spaces
+
+theorem Th36:
+ for T being non empty TopSpace holds T is_T3 iff
+  for p being Point of T, P being Subset of T st p in Int P
+ ex Q being Subset of T st Q is closed & Q c= P & p in Int Q
+proof let T be non empty TopSpace;
+ hereby assume
+A1: T is_T3;
+  let p be Point of T, P be Subset of T such that
+A2: p in Int P;
+  per cases;
+  suppose
+A3: P = [#]T;
+   take Q = [#]T;
+   thus Q is closed;
+   thus Q c= P by A3;
+      Int Q = Q by TOPS_1:43;
+   hence p in Int Q by PRE_TOPC:13;
+  suppose
+A4: P <> [#]T;
+A5: now assume (Int P)` = {};
+     then (Int P)`` = ({}T)`
+         .= [#]T by PRE_TOPC:27;
+     then Int P = [#]T;
+     then A6:   [#]T c= P by TOPS_1:44;
+       P c= [#]T by PRE_TOPC:14;
+    hence contradiction by A4,A6,XBOOLE_0:def 10;
+   end;
+     Int P is open by TOPS_1:51;
+then A7: (Int P)` is closed by TOPS_1:30;
+     not p in (Int P)` by A2,SUBSET_1:54;
+   then not p in (Int P)`;
+   then consider W,V being Subset of T such that
+A8:  W is open and
+A9:  V is open and
+A10:  p in W and
+A11:  (Int P)` c= V and
+A12:  W misses V by A1,A5,A7,COMPTS_1:def 5;
+  take Q = V`;
+  thus Q is closed by A9,TOPS_1:30;
+     (Int P)` c= Q` by A11;
+   then A13:  Q c= Int P by PRE_TOPC:19;
+     Int P c= P by TOPS_1:44;
+  hence Q c= P by A13,XBOOLE_1:1;
+     W c= Q by A12,PRE_TOPC:21;
+   then W c= Int Q by A8,TOPS_1:56;
+  hence p in Int Q by A10;
+ end;
+assume
+A14: for p being Point of T, P being Subset of T st p in Int P
+ ex Q being Subset of T st Q is closed & Q c= P & p in Int Q;
+ let p be Point of T, P be Subset of T such that P <> {} and
+A15: P is closed and
+A16: not p in P;
+    p in P` by A16,SUBSET_1:50;
+  then A17:  p in P`;
+    P` is open by A15,TOPS_1:29;
+  then p in Int P` by A17,TOPS_1:55;
+  then consider Q being Subset of T such that
+A18: Q is closed and
+A19: Q c= P` and
+A20: p in Int Q by A14;
+  reconsider W = Int Q as Subset of T;
+ take W, V = Q`;
+ thus W is open by TOPS_1:51;
+ thus V is open by A18,TOPS_1:29;
+ thus p in W by A20;
+    P`` c= V by A19,PRE_TOPC:19;
+ hence P c= V;
+A21: Q misses V by PRE_TOPC:26;
+    W c= Q by TOPS_1:44;
+ hence W misses V by A21,XBOOLE_1:63;
+end;
+
+theorem
+   for T being non empty TopSpace st T is_T3 holds
+  T is locally-compact iff
+   for x being Point of T
+    ex Y being Subset of T st x in Int Y & Y is compact
+proof let T be non empty TopSpace such that
+A1: T is_T3;
+ hereby assume
+A2: T is locally-compact;
+  let x be Point of T;
+     x in [#]T & [#]T is open by PRE_TOPC:13,TOPS_1:53;
+   then ex Y being Subset of T st x in Int Y & Y c= [#]T & Y is compact
+      by A2,WAYBEL_3:def 9;
+  hence ex Y being Subset of T st x in Int Y & Y is compact;
+ end;
+assume
+A3: for x being Point of T
+    ex Y being Subset of T st x in Int Y & Y is compact;
+ let x be Point of T, X be Subset of T such that
+A4: x in X and
+A5: X is open;
+  consider Y being Subset of T such that
+A6: x in Int Y and
+A7: Y is compact by A3;
+    x in Int X by A4,A5,TOPS_1:55;
+  then x in Int X /\ Int Y by A6,XBOOLE_0:def 3;
+  then x in Int(X /\ Y) by TOPS_1:46;
+  then consider Q being Subset of T such that
+A8: Q is closed and
+A9: Q c= X /\ Y and
+A10: x in Int Q by A1,Th36;
+ take Q;
+ thus x in Int Q by A10;
+    X /\ Y c= X by XBOOLE_1:17;
+ hence Q c= X by A9,XBOOLE_1:1;
+    X /\ Y c= Y by XBOOLE_1:17;
+  then Q c= Y by A9,XBOOLE_1:1;
+ hence Q is compact by A7,A8,COMPTS_1:18;
+end;

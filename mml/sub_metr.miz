@@ -1,0 +1,609 @@
+:: Submetric Spaces - Part I
+::  by Adam Lecko and Mariusz Startek
+::
+:: Received September 27, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary SQUARE_1, METRIC_1, BOOLE, FUNCT_1, RELAT_2, FUNCOP_1, RELAT_1,
+      SUB_METR;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FUNCOP_1, DOMAIN_1, SQUARE_1,
+      STRUCT_0, METRIC_1;
+ constructors FUNCOP_1, DOMAIN_1, SQUARE_1, METRIC_1, REAL_1, MEMBERED,
+      XBOOLE_0;
+ clusters SUBSET_1, METRIC_1, METRIC_3, STRUCT_0, XREAL_0, FUNCOP_1, RELSET_1,
+      MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ theorems TARSKI, REAL_1, AXIOMS, BINOP_1, FUNCOP_1, ZFMISC_1, SQUARE_1,
+      METRIC_1, FUNCT_2, RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+ schemes FRAENKEL;
+
+begin
+
+theorem Th1:
+  for x,y being Element of REAL holds
+    (0 <= x & 0 <= y) implies max(x,y) <= x + y
+       proof
+         let x,y be Element of REAL;
+         assume A1: 0 <= x & 0 <= y;
+           now per cases by SQUARE_1:49;
+           suppose A2: max(x,y) = x;
+               x + 0 <= x + y by A1,REAL_1:55;
+             hence max(x,y) <= x + y by A2;
+           suppose A3: max(x,y) = y;
+               y + 0 <= y + x by A1,REAL_1:55;
+             hence max(x,y) <= x + y by A3;
+         end;
+        hence thesis;
+      end;
+
+theorem
+Th2:  for M being MetrSpace, x,y being Element of M holds
+    x <> y implies 0 < dist(x,y)
+     proof
+       let M be MetrSpace;
+       let x,y be Element of M;
+       assume x <> y;
+        then dist(x,y) <> 0 by METRIC_1:2;
+       hence thesis by METRIC_1:5;
+     end;
+
+Lm1: [{},{}] in [:{{}},{{}}:] by ZFMISC_1:34;
+
+Lm2: Empty^2-to-zero.({},{}) = Empty^2-to-zero.[{},{}] by BINOP_1:def 1
+                              .=0 by Lm1,FUNCOP_1:13,METRIC_1:def 2;
+
+canceled;
+
+theorem
+Th4:  for x,y being Element of {{}} holds
+    x = y implies Empty^2-to-zero.(x,y) = 0
+  proof
+    let x,y be Element of {{}};
+      x={} & y={} by TARSKI:def 1;
+    hence thesis by Lm2;
+  end;
+
+theorem
+Th5:  for x,y being Element of {{}} holds
+    x <> y implies 0 < Empty^2-to-zero.(x,y)
+  proof
+    let x,y be Element of {{}};
+      x={} & y={} by TARSKI:def 1;
+    hence thesis;
+  end;
+
+theorem
+Th6:  for x,y being Element of {{}} holds
+    Empty^2-to-zero.(x,y) = Empty^2-to-zero.(y,x)
+  proof
+    let x,y be Element of {{}};
+      x={} & y={} by TARSKI:def 1;
+    hence thesis;
+  end;
+
+theorem
+Th7:  for x,y,z being Element of {{}} holds
+    Empty^2-to-zero.(x,z) <= Empty^2-to-zero.(x,y) + Empty^2-to-zero.(y,z)
+  proof
+    let x,y,z be Element of {{}};
+       x={} & y={} & z={} by TARSKI:def 1;
+    hence thesis by Lm2;
+  end;
+
+theorem
+Th8:  for x,y,z being Element of {{}} holds
+    Empty^2-to-zero.(x,z) <= max(Empty^2-to-zero.(x,y),Empty^2-to-zero.(y,z))
+  proof
+    let x,y,z be Element of {{}};
+       x={} & y={} & z={} by TARSKI:def 1;
+    hence thesis;
+  end;
+
+ set M0=MetrStruct(#{{}},Empty^2-to-zero#);
+
+definition
+  mode PseudoMetricSpace is Reflexive symmetric triangle
+    (non empty MetrStruct);
+end;
+
+definition let A be non empty set;
+  let f be Function of [:A,A:], REAL;
+  attr f is Discerning means :Def1:
+    for a, b being Element of A holds a <> b implies 0 < f.(a,b);
+end;
+
+definition let M be non empty MetrStruct;
+  attr M is Discerning means :Def2:
+   the distance of M is Discerning;
+end;
+
+canceled 5;
+
+theorem Th14:
+  for M being non empty MetrStruct holds
+  ( for a, b being Element of M holds
+    a <> b implies 0 < dist(a,b)) iff M is Discerning
+  proof
+   let M be non empty MetrStruct;
+    hereby
+     assume A1: for a, b being Element of M st a <> b
+       holds 0 < dist(a,b);
+       the distance of M is Discerning
+     proof let a, b be Element of M;
+       assume a <> b;
+       then 0 < dist(a,b) by A1;
+       hence thesis by METRIC_1:def 1;
+     end;
+     hence M is Discerning by Def2;
+    end;
+    assume M is Discerning;
+then A2: the distance of M is Discerning by Def2;
+      now let a, b be Element of M;
+      assume a <> b;
+      then 0 < (the distance of M).(a,b) by A2,Def1;
+      hence 0 < dist(a,b) by METRIC_1:def 1;
+    end;
+    hence thesis;
+  end;
+
+definition
+  cluster MetrStruct(#{{}},Empty^2-to-zero#) -> Reflexive symmetric Discerning
+    triangle;
+  coherence
+  proof
+A1: now let x, y be Element of M0;
+      thus dist(x,y) = Empty^2-to-zero.(x,y) by METRIC_1:def 1
+                    .= Empty^2-to-zero.(y,x) by Th6
+                    .= dist (y,x) by METRIC_1:def 1;
+    end;
+A2: now let x, y be Element of M0;
+A3:   dist(x,y) = Empty^2-to-zero.(x,y) by METRIC_1:def 1;
+      assume x <> y;
+      hence 0 < dist(x,y) by A3,Th5;
+    end;
+A4: now let x, y, z be Element of M0;
+        dist(x,y) = Empty^2-to-zero.(x,y) & dist(x,z) = Empty^2-to-zero.(x,z) &
+        dist(y,z) = Empty^2-to-zero.(y,z) by METRIC_1:def 1;
+      hence dist(x,z) <= dist(x,y) + dist(y,z) by Th7;
+    end;
+      now let x be Element of M0;
+      thus dist(x,x) = Empty^2-to-zero.(x,x) by METRIC_1:def 1
+                    .= 0 by Th4;
+    end;
+    hence thesis by A1,A2,A4,Th14,METRIC_1:1,3,4;
+  end;
+end;
+
+definition
+  cluster Reflexive Discerning symmetric triangle (non empty MetrStruct);
+  existence
+  proof
+    take M0;
+    thus thesis;
+  end;
+end;
+
+definition
+  mode SemiMetricSpace is Reflexive Discerning symmetric
+    (non empty MetrStruct);
+end;
+
+canceled;
+
+theorem
+    for M being Discerning (non empty MetrStruct),
+      a,b being Element of M holds
+    a <> b implies 0 < dist(a,b) by Th14;
+
+canceled;
+
+theorem
+    for M being Reflexive Discerning (non empty MetrStruct),
+      a,b being Element of M holds
+    0 <= dist(a,b)
+proof
+  let M be Reflexive Discerning (non empty MetrStruct);
+  let a,b be Element of M;
+    now per cases;
+    suppose a = b;
+    hence 0 <= dist(a,b) by METRIC_1:1;
+    suppose a <> b;
+    hence 0 <= dist(a,b) by Th14;
+  end;
+  hence thesis;
+end;
+
+definition
+  mode NonSymmetricMetricSpace is Reflexive Discerning triangle
+         (non empty MetrStruct);
+end;
+
+canceled 2;
+
+theorem
+   for M being Discerning (non empty MetrStruct),
+      a, b being Element of M holds
+       a <> b implies 0 < dist(a,b) by Th14;
+
+canceled;
+
+theorem
+    for M being Reflexive Discerning (non empty MetrStruct),
+      a,b being Element of M holds 0 <= dist(a,b)
+proof
+  let M be Reflexive Discerning (non empty MetrStruct);
+  let a,b be Element of M;
+    now per cases;
+  suppose a = b;
+     hence 0 <= dist(a,b) by METRIC_1:1;
+  suppose a <> b;
+     hence 0 <= dist(a,b) by Th14;
+  end;
+  hence thesis;
+end;
+
+definition let M be non empty MetrStruct;
+ canceled;
+
+  attr M is ultra means :Def4:
+    for a, b, c being Element of M holds
+     dist(a,c) <= max (dist(a,b),dist(b,c));
+end;
+
+definition
+  cluster strict ultra Reflexive symmetric Discerning (non empty MetrStruct);
+  existence
+   proof
+    take M0;
+      M0 is ultra
+    proof
+     let x, y, z be Element of M0;
+       dist(x,y) = Empty^2-to-zero.(x,y) &
+     dist(x,z) = Empty^2-to-zero.(x,z) &
+     dist(y,z) = Empty^2-to-zero.(y,z) by METRIC_1:def 1;
+     hence thesis by Th8;
+    end;
+    hence thesis;
+   end;
+end;
+
+definition
+  mode UltraMetricSpace is ultra Reflexive symmetric Discerning
+    (non empty MetrStruct);
+end;
+
+canceled 2;
+
+theorem
+   for M being Discerning (non empty MetrStruct),
+                   a,b being Element of M holds
+       a <> b implies 0 < dist(a,b) by Th14;
+
+definition
+  cluster -> Discerning (non empty MetrSpace);
+  coherence
+  proof
+    let M be non empty MetrSpace;
+      for a, b being Element of M holds
+      a <> b implies 0 < dist(a,b) by Th2;
+    hence thesis by Th14;
+  end;
+end;
+
+canceled 2;
+
+theorem
+Th29:  for M being Reflexive Discerning (non empty MetrStruct),
+       a,b being Element of M holds 0 <= dist(a,b)
+proof
+  let M be Reflexive Discerning (non empty MetrStruct);
+  let a,b be Element of M;
+    now per cases;
+    suppose a = b;
+    hence 0 <= dist(a,b) by METRIC_1:1;
+    suppose a <> b;
+    hence 0 <= dist(a,b) by Th14;
+  end;
+  hence thesis;
+end;
+
+definition
+  cluster -> triangle discerning UltraMetricSpace;
+  coherence
+  proof
+  let M be UltraMetricSpace;
+    now let x,y,z be Element of M;
+  thus (dist(x,y) = 0 iff x = y) by Th14,METRIC_1:1;
+  thus dist(x,y) = dist(y,x);
+  thus dist(x,z) <= dist(x,y) + dist(y,z)
+  proof
+     A1: dist(x,z) <= max(dist(x,y),dist(y,z)) by Def4;
+       0 <= dist(x,y) & 0 <= dist(y,z) by Th29;
+     then max(dist(x,y),dist(y,z)) <= dist(x,y) + dist(y,z) by Th1;
+     hence thesis by A1,AXIOMS:22;
+  end;
+  end;
+  hence thesis by METRIC_1:6;
+  end;
+end;
+
+definition
+  func Set_to_zero -> Function of [:{{},{{}}},{{},{{}}}:],REAL equals :Def5:
+    [:{{},{{}}},{{},{{}}}:] --> 0;
+coherence
+  proof
+    set X =[:{{},{{}}},{{},{{}}}:];
+      {0} c= REAL & X <> {};
+    then X = dom(X --> 0) & rng(X --> 0) c= REAL by FUNCOP_1:14,19;
+    hence thesis by FUNCT_2:def 1,RELSET_1:11;
+  end;
+end;
+
+canceled 9;
+
+theorem
+   [{},{}] in [:{{},{{}}},{{},{{}}}:] & [{},{{}}] in [:{{},{{}}},{{},{{}}}:] &
+       [{{}},{}] in [:{{},{{}}},{{},{{}}}:] & [{{}},{{}}] in
+ [:{{},{{}}},{{},{{}}}:]
+         proof
+           A1: {} in {{},{{}}} & {{}} in {{},{{}}} by TARSKI:def 2;
+           hence [{},{}] in [:{{},{{}}},{{},{{}}}:] by ZFMISC_1:106;
+           thus [{},{{}}] in [:{{},{{}}},{{},{{}}}:] by A1,ZFMISC_1:106;
+           thus [{{}},{}] in [:{{},{{}}},{{},{{}}}:] by A1,ZFMISC_1:106;
+           thus [{{}},{{}}] in [:{{},{{}}},{{},{{}}}:] by A1,ZFMISC_1:106;
+           thus thesis;
+         end;
+
+theorem Th40:
+  for x,y being Element of {{},{{}}} holds Set_to_zero.(x,y) = 0
+    proof
+      let x,y be Element of {{},{{}}};
+      thus Set_to_zero.(x,y) = Set_to_zero.[x,y] by BINOP_1:def 1
+                            .= 0 by Def5,FUNCOP_1:13;
+     end;
+
+canceled;
+
+theorem Th42:
+  for x,y being Element of {{},{{}}} holds Set_to_zero.(x,y)=Set_to_zero.(y,x)
+    proof
+      let x,y be Element of {{},{{}}};
+        Set_to_zero.(x,y)=0 by Th40
+                      .=Set_to_zero.(y,x) by Th40;
+      hence thesis;
+    end;
+
+theorem Th43:
+  for x,y,z being Element of {{},{{}}} holds
+    Set_to_zero.(x,z) <= Set_to_zero.(x,y) + Set_to_zero.(y,z)
+     proof
+       let x,y,z be Element of {{},{{}}};
+       A1: Set_to_zero.(x,y) = 0 by Th40;
+         Set_to_zero.(y,z) = 0 by Th40;
+       hence thesis by A1,Th40;
+     end;
+
+definition
+  func ZeroSpace -> MetrStruct equals :Def6:
+    MetrStruct(#{{},{{}}},Set_to_zero#);
+  coherence;
+end;
+
+definition
+  cluster ZeroSpace -> strict non empty;
+  coherence by Def6;
+end;
+
+definition
+  cluster ZeroSpace -> Reflexive symmetric triangle;
+  coherence
+  proof
+    set M = MetrStruct(#{{},{{}}},Set_to_zero#);
+      M is PseudoMetricSpace
+      proof
+A1:     now let x be Element of M;
+            dist(x,x) = Set_to_zero.(x,x) by METRIC_1:def 1;
+          hence dist(x,x) = 0 by Th40;
+        end;
+          now let x,y,z be Element of M;
+        set x'=x, y'=y,z'=z;
+        A2: dist(x,y) = Set_to_zero.(x',y') by METRIC_1:def 1;
+        A3: dist(y,x) = Set_to_zero.(y',x') by METRIC_1:def 1;
+        A4: dist(x,z) = Set_to_zero.(x',z') by METRIC_1:def 1;
+        A5: dist(y,z) = Set_to_zero.(y',z') by METRIC_1:def 1;
+        thus dist(x,y) = dist(y,x) by A2,A3,Th42;
+        thus dist(x,z) <= dist(x,y) + dist(y,z) by A2,A4,A5,Th43;
+        end;
+        hence thesis by A1,METRIC_1:1,3,4;
+      end;
+    hence thesis by Def6;
+  end;
+end;
+
+definition let S be MetrStruct,
+               p,q,r be Element of S;
+  pred q is_between p,r means :Def7:
+    p <> q & p <> r & q <> r & dist(p,r) = dist(p,q) + dist(q,r);
+end;
+
+canceled 3;
+
+theorem
+    for S being symmetric triangle Reflexive (non empty MetrStruct),
+      p, q, r being Element of S holds
+    q is_between p,r implies q is_between r,p
+proof
+   let S be symmetric triangle Reflexive (non empty MetrStruct),
+       p,q,r be Element of S;
+   assume A1: q is_between p,r;
+   then A2: p <> q & p <> r & q <> r &
+        dist(p,r) = dist(p,q) + dist(q,r) by Def7;
+   thus r <> q & r <> p & q <> p by A1,Def7;
+   thus thesis by A2;
+end;
+
+theorem
+   for S being MetrSpace, p,q,r being Element of S holds
+   (q is_between p,r implies (not p is_between q,r) & not r is_between p,q)
+proof
+   let S be MetrSpace,
+       p,q,r be Element of S;
+   assume A1: q is_between p,r;
+   then A2: p <> q & p <> r & q <> r by Def7;
+   A3: dist(p,r) = dist(p,q) + dist(q,r) by A1,Def7;
+   thus not p is_between q,r
+     proof
+       assume p is_between q,r;
+       then dist(p,r) = dist(p,q) + (dist(q,p) + dist(p,r)) by A3,Def7;
+       then dist(p,r) = dist(p,q) + dist(p,q) + dist(p,r) by XCMPLX_1:1;
+       then 0 + dist(p,r) = 2*dist(p,q) + dist(p,r) by XCMPLX_1:11;
+       then 0 = 2*dist(p,q) by XCMPLX_1:2;
+       then dist(p,q) = 0 or 0 = 2 by XCMPLX_1:6;
+       hence contradiction by A2,METRIC_1:2;
+     end;
+   thus not r is_between p,q
+     proof
+       assume r is_between p,q;
+       then dist(p,q) = dist(p,q) + dist(q,r) + dist(r,q) by A3,Def7;
+       then dist(p,q) = dist(p,q) + (dist(q,r) + dist(q,r)) by XCMPLX_1:1;
+       then 0 + dist(p,q) = dist(p,q) + 2*dist(q,r) by XCMPLX_1:11;
+       then 0 = 2*dist(q,r) by XCMPLX_1:2;
+       then dist(q,r) = 0 or 0 = 2 by XCMPLX_1:6;
+       hence contradiction by A2,METRIC_1:2;
+     end;
+end;
+
+theorem
+    for S being MetrSpace, p,q,r,s being Element of S
+            holds (q is_between p,r & r is_between p,s) implies
+                   (q is_between p,s & r is_between q,s)
+     proof
+        let S be MetrSpace, p,q,r,s be Element of S;
+        assume A1:q is_between p,r;
+        assume A2:r is_between p,s;
+        then A3: (p<>q) & (p<>r) & (p <> s) & (q<>r) & (r <> s) by A1,Def7;
+           dist(p,r) = dist(p,q) + dist(q,r) by A1,Def7;
+        then A4: dist(p,s) = dist(p,q) + dist(q,r) + dist(r,s) by A2,Def7;
+        A5: dist(p,s) <= dist(p,q) + dist(q,s) by METRIC_1:4;
+          dist(q,s) <= dist(q,r) + dist(r,s) by METRIC_1:4;
+        then dist(p,q) + dist(q,s) <= (dist(q,r) + dist(r,s)) + dist(p,q) by
+AXIOMS:24;
+        then A6:dist(p,q) + dist(q,s) <= dist(p,s) by A4,XCMPLX_1:1;
+        then A7: dist(p,q) + dist(q,s) = dist(p,s) by A5,AXIOMS:21;
+          dist(p,q) + dist(q,s) = dist(p,q) + dist(q,r) + dist(r,s)
+                              by A4,A5,A6,AXIOMS:21;
+        then dist(p,q) + dist(q,s) = dist(p,q) + (dist(q,r) + dist(r,s))
+                              by XCMPLX_1:1;
+        then A8: dist(q,s) = dist(q,r) + dist(r,s) by XCMPLX_1:2;
+           q <> s
+           proof
+              assume A9: q = s;
+              A10: 0 <= dist(q,r) & 0 <= dist(r,s) by METRIC_1:5;
+                dist(q,r) <> 0 & dist(r,s) <> 0 by A3,METRIC_1:2;
+              then 0 + 0 < dist(q,r) + dist(r,s) by A10,REAL_1:67;
+              hence thesis by A8,A9,METRIC_1:1;
+           end;
+        hence thesis by A3,A7,A8,Def7;
+     end;
+
+definition let M be non empty MetrStruct,
+               p,r be Element of M;
+  func open_dist_Segment(p,r) -> Subset of M equals :Def8:
+    {q where q is Element of M : q is_between p,r};
+        coherence
+          proof
+     defpred X[Element of M] means $1 is_between p,r;
+              {q where q is Element of M: X[q]}
+                 c= the carrier of M from Fr_Set0;
+            hence thesis;
+          end;
+end;
+
+canceled;
+
+theorem
+    for M being non empty MetrSpace, p,r,x being Element of M
+   holds x in open_dist_Segment(p,r) iff x is_between p,r
+   proof
+     let M be non empty MetrSpace, p,r,x be Element of M;
+     A1: x in open_dist_Segment(p,r) implies x is_between p,r
+     proof
+       assume x in open_dist_Segment(p,r);
+       then x in {q where q is Element of M:
+                  q is_between p,r} by Def8;
+       then ex q be Element of M st x = q & q is_between p,r;
+       hence thesis;
+     end;
+       now assume x is_between p,r;
+     then x in {q where q is Element of M: q is_between p,r};
+     hence x in open_dist_Segment(p,r) by Def8;
+     end;
+    hence thesis by A1;
+    end;
+
+definition let M be non empty MetrStruct,
+               p,r be Element of M;
+  func close_dist_Segment(p,r) -> Subset of M equals :Def9:
+    {q where q is Element of M : q is_between p,r} \/ {p,r};
+        coherence
+          proof
+     defpred X[Element of M] means $1 is_between p,r;
+               {q where q is Element of M: X[q] }
+                   c= the carrier of M from Fr_Set0;
+            then {q where q is Element of M:
+                  q is_between p,r} \/ {p,r}
+                    is Subset of M by XBOOLE_1:8;
+            hence thesis;
+          end;
+end;
+
+canceled;
+
+theorem
+    for M being non empty MetrStruct,
+      p,r,x being Element of M holds
+    x in close_dist_Segment(p,r) iff (x is_between p,r or x = p or x = r)
+   proof
+     let M be non empty MetrStruct, p,r,x be Element of M;
+     A1: x in close_dist_Segment(p,r) implies
+              (x is_between p,r or x = p or x = r)
+     proof
+       assume x in close_dist_Segment(p,r);
+       then x in {q where q is Element of M:
+                  q is_between p,r} \/ {p,r} by Def9;
+       then x in {q where q is Element of M:
+                  q is_between p,r} or x in {p,r} by XBOOLE_0:def 2;
+
+       then (ex q be Element of M st x = q & q is_between p,r)
+             or (x = p or x = r) by TARSKI:def 2;
+       hence thesis;
+     end;
+         now assume x is_between p,r or x = p or x = r;
+       then x in
+ {q where q is Element of M: q is_between p,r} or
+               x in {p,r} by TARSKI:def 2;
+       then x in {q where q is Element of M: q is_between p,r}
+\/
+              {p,r} by XBOOLE_0:def 2;
+       hence x in close_dist_Segment(p,r) by Def9;
+       end;
+     hence thesis by A1;
+    end;
+
+theorem
+    for M being non empty MetrStruct,
+      p,r being Element of M holds
+    open_dist_Segment(p,r) c= close_dist_Segment(p,r)
+proof
+  let M be non empty MetrStruct,
+      p,r be Element of M;
+    open_dist_Segment(p,r) = {q where q is Element of M:
+                      q is_between p,r} by Def8;
+  then open_dist_Segment(p,r) c=
+  {q where q is Element of M: q is_between p,r} \/ {p,r}
+                      by XBOOLE_1:7;
+  hence thesis by Def9;
+end;

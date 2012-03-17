@@ -1,0 +1,1420 @@
+:: Properties of Real Functions
+::  by Jaros{\l}aw Kotowicz
+::
+:: Received June 18, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary SEQ_1, ORDINAL2, SEQM_3, PARTFUN1, FUNCT_1, RELAT_1, BOOLE,
+      ARYTM_1, ABSVALUE, SEQ_2, ARYTM, FINSEQ_1, LATTICES, SEQ_4, PARTFUN2,
+      RCOMP_1, RFUNCT_2;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, NAT_1, RELAT_1, FUNCT_1, SEQ_1, SEQ_2, SEQ_4, RELSET_1, ABSVALUE,
+      PARTFUN1, PARTFUN2, RCOMP_1, RFUNCT_1, SEQM_3;
+ constructors REAL_1, NAT_1, SEQ_2, SEQM_3, SEQ_4, ABSVALUE, PARTFUN1,
+      PARTFUN2, RCOMP_1, RFUNCT_1, MEMBERED, XBOOLE_0;
+ clusters FUNCT_1, RELSET_1, PARTFUN2, XREAL_0, SEQ_1, SEQM_3, MEMBERED,
+      ZFMISC_1, XBOOLE_0, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, SEQM_3, XBOOLE_0;
+ theorems TARSKI, AXIOMS, SUBSET_1, FUNCT_1, REAL_1, SEQ_1, SEQ_2, SEQM_3,
+      SEQ_4, PARTFUN1, PARTFUN2, RFUNCT_1, FUNCT_2, RELAT_1, RELSET_1,
+      XBOOLE_0, XBOOLE_1, XCMPLX_0;
+
+begin
+
+ reserve x,y,X,X1,Y for set;
+ reserve g,r,r1,r2,p,p1,p2 for Element of REAL;
+ reserve R for Subset of REAL;
+ reserve seq,seq1,seq2,seq3 for Real_Sequence;
+ reserve Ns for increasing Seq_of_Nat;
+ reserve n,m for Element of NAT;
+ reserve h,h1,h2 for PartFunc of REAL,REAL;
+
+canceled;
+
+theorem
+  for F,G be Function, X holds (G|(F.:X))*(F|X) = (G*F)|X
+proof let F,G be Function,X;
+set Y = dom ((G*F)|X);
+   now let x;
+  thus x in dom ((G|(F.:X))*(F|X)) implies x in Y
+  proof assume x in dom ((G|(F.:X))*(F|X));
+then A1:   x in dom (F|X) & (F|X).x in dom (G|(F.:X)) by FUNCT_1:21;
+   then A2: x in dom (F|X) & F.x in dom (G|(F.:X)) by FUNCT_1:70;
+     x in dom F /\ X by A1,RELAT_1:90;
+   then A3: x in dom F & x in X by XBOOLE_0:def 3;
+     F.x in dom G /\ (F.:X) by A2,RELAT_1:90;
+   then F.x in dom G & F.x in (F.:X) by XBOOLE_0:def 3;
+   then x in dom (G*F) & x in X by A3,FUNCT_1:21;
+   then x in dom (G*F)/\ X by XBOOLE_0:def 3; hence thesis by RELAT_1:90;
+  end;
+  assume x in Y; then x in dom (G*F) /\ X by RELAT_1:90;
+  then x in dom (G*F) & x in X by XBOOLE_0:def 3;
+  then x in dom F & F.x in dom G & x in X by FUNCT_1:21;
+  then x in dom F & F.x in dom G & x in X & F.x in F.:X by FUNCT_1:def 12;
+  then x in dom F /\ X & F.x in dom G /\ (F.:X) by XBOOLE_0:def 3;
+  then x in dom (F|X) & F.x in dom (G|(F.:X)) by RELAT_1:90;
+  then x in dom (F|X) & (F|X).x in dom (G|(F.:X)) by FUNCT_1:70;
+  hence x in dom ((G|(F.:X))*(F|X)) by FUNCT_1:21;
+ end;
+ then A4: Y = dom ((G|(F.:X))*(F|X)) by TARSKI:2;
+   now let x; assume A5: x in Y;
+  then A6: x in dom (G*F) /\ X by RELAT_1:90;
+  then A7: x in dom (G*F) & x in X by XBOOLE_0:def 3;
+  then A8: x in dom F & F.x in dom G & x in X by FUNCT_1:21;
+  then A9: F.x in F.:X & F.x in dom G by FUNCT_1:def 12;
+  thus ((G|(F.:X))*(F|X)).x =(G|(F.:X)).((F|X).x) by A4,A5,FUNCT_1:22
+   .= (G|(F.:X)).(F.x) by A7,FUNCT_1:72
+   .= G.(F.x) by A9,FUNCT_1:72
+   .= (G*F).x by A8,FUNCT_1:23
+   .= ((G*F)|X).x by A6,FUNCT_1:71;
+ end; hence thesis by A4,FUNCT_1:9;
+end;
+
+theorem
+  for F,G be Function, X,X1 holds (G|X1)*(F|X) = (G*F)|(X /\ (F"X1))
+proof let F,G be Function,X,X1;
+set Y = dom ((G|X1)*(F|X));
+   now let x;
+  thus x in dom ((G*F)|(X /\ (F"X1))) implies x in Y
+  proof assume x in dom ((G*F)|(X /\ (F"X1)));
+   then x in dom (G*F) /\ (X /\ (F"X1)) by RELAT_1:90;
+   then x in dom (G*F) & x in X /\ (F"X1) by XBOOLE_0:def 3;
+   then x in dom F & F.x in dom G & x in X & x in (F"X1)
+   by FUNCT_1:21,XBOOLE_0:def 3;
+   then x in dom F & F.x in dom G & x in X & F.x in X1 by FUNCT_1:def 13;
+   then x in dom F /\ X & F.x in dom G /\ X1 by XBOOLE_0:def 3;
+   then x in dom (F|X) & F.x in dom (G|X1) by RELAT_1:90;
+   then x in dom (F|X) & (F|X).x in dom (G|X1) by FUNCT_1:70;
+   hence thesis by FUNCT_1:21;
+  end;
+  assume x in Y; then x in dom(F|X) & (F|X).x in dom(G|X1) by FUNCT_1:21;
+  then x in dom F /\ X & F.x in dom (G|X1) by FUNCT_1:70,RELAT_1:90;
+  then x in dom F /\ X & F.x in dom G /\ X1 by RELAT_1:90;
+  then x in dom F & x in X & F.x in dom G & F.x in X1 by XBOOLE_0:def 3;
+  then x in dom (G*F) & x in X & x in F"X1 by FUNCT_1:21,def 13;
+  then x in dom (G*F) & x in X /\ F"X1 by XBOOLE_0:def 3;
+  then x in dom (G*F) /\ (X/\(F"X1)) by XBOOLE_0:def 3;
+  hence x in dom ((G*F)|(X /\ (F"X1))) by RELAT_1:90;
+ end;
+ then A1: Y = dom ((G*F)|(X /\ (F"X1))) by TARSKI:2;
+   now let x; assume A2: x in Y;
+then A3:  x in dom (F|X) & (F|X).x in dom (G|X1) by FUNCT_1:21;
+  then A4: x in dom (F|X) & F.x in dom (G|X1) by FUNCT_1:70;
+    x in dom F /\ X & F.x in dom (G|X1) by A3,FUNCT_1:70,RELAT_1:90;
+then A5:  x in dom F & x in X & F.x in dom G /\ X1 by RELAT_1:90,XBOOLE_0:def 3
+;
+   then x in dom F & x in X & F.x in dom G & F.x in X1 by XBOOLE_0:def 3;
+  then x in dom (G*F) & x in X & x in F"X1 by FUNCT_1:21,def 13;
+  then A6: x in dom (G*F) & x in X /\ F"X1 by XBOOLE_0:def 3;
+  thus ((G|X1)*(F|X)).x =(G|X1).((F|X).x) by A2,FUNCT_1:22
+   .= (G|X1).(F.x) by A3,FUNCT_1:70
+   .= G.(F.x) by A4,FUNCT_1:70
+   .= (G*F).x by A5,FUNCT_1:23
+   .= ((G*F)|(X/\(F"X1))).x by A6,FUNCT_1:72;
+ end; hence thesis by A1,FUNCT_1:9;
+end;
+
+theorem Th4:
+for F,G be Function,X holds X c= dom (G*F) iff X c= dom F & F.:X c= dom G
+proof let F,G be Function,X;
+ thus X c= dom (G*F) implies X c= dom F & F.:X c= dom G
+ proof assume A1: X c= dom (G*F);
+  then for x st x in X holds x in dom F by FUNCT_1:21;
+  hence X c= dom F by TARSKI:def 3;
+  let x; assume x in F.:X; then consider y such that
+  A2: y in dom F & y in X & x=F.y by FUNCT_1:def 12;
+  thus x in dom G by A1,A2,FUNCT_1:21;
+ end;
+ assume A3: X c= dom F & F.:X c= dom G;
+ let x; assume A4: x in X;
+ then F.x in F.:X by A3,FUNCT_1:def 12;
+ hence x in dom (G*F) by A3,A4,FUNCT_1:21;
+end;
+
+theorem
+  for F be Function, X holds (F|X).:X=F.:X
+proof let F be Function,X;
+ thus (F|X).:X c= F.:X by RELAT_1:161;
+ let y; assume y in F.:X; then consider x such that
+ A1: x in dom F & x in X & y=F.x by FUNCT_1:def 12;
+   x in dom F/\X & x in X & y=(F|X).x by A1,FUNCT_1:72,XBOOLE_0:def 3;
+ then x in dom (F|X) & x in X & y=(F|X).x by RELAT_1:90;
+ hence y in (F|X).:X by FUNCT_1:def 12;
+end;
+
+::
+:: REAL SEQUENCES
+::
+
+definition let seq;
+  redefine func rng seq -> Subset of REAL;
+  coherence by RELSET_1:12;
+end;
+
+theorem Th6:
+seq1=seq2-seq3 iff for n holds seq1.n=seq2.n-seq3.n
+proof thus seq1=seq2-seq3 implies for n holds seq1.n=seq2.n-seq3.n
+ proof assume seq1=seq2-seq3;
+  then A1: seq1=seq2+-seq3 by SEQ_1:15;
+    now let n;
+     seq1.n=seq2.n+(-seq3).n by A1,SEQ_1:11;
+   then seq1.n=seq2.n+-seq3.n by SEQ_1:14;
+   hence seq1.n=seq2.n-seq3.n by XCMPLX_0:def 8;
+  end; hence thesis;
+ end;
+ assume A2: for n holds seq1.n=seq2.n-seq3.n;
+   now let n;
+  thus seq1.n = seq2.n-seq3.n by A2
+   .= seq2.n+-seq3.n by XCMPLX_0:def 8
+   .= seq2.n+(-seq3).n by SEQ_1:14;
+ end; then seq1=seq2+(-seq3) by SEQ_1:11; hence thesis by SEQ_1:15;
+end;
+
+theorem Th7:
+rng (seq^\n) c= rng seq
+proof
+ let x; assume x in rng (seq^\n); then consider y such that
+A1: y in dom (seq^\n) & (seq^\n).y = x by FUNCT_1:def 5;
+ reconsider y as Nat by A1;
+A2: (seq^\n).y = seq.(y+n) by SEQM_3:def 9;
+   y+n in NAT; then y+n in dom seq by FUNCT_2:def 1;
+ hence x in rng seq by A1,A2,FUNCT_1:def 5;
+end;
+
+theorem Th8:
+rng seq c= dom h implies seq.n in dom h
+proof assume A1: rng seq c= dom h; n in NAT;
+ then n in dom seq by FUNCT_2:def 1;
+ then n in dom ((h qua Function)*seq) by A1,RELAT_1:46;
+ hence seq.n in dom h by FUNCT_1:21;
+end;
+
+theorem Th9:
+x in rng seq iff ex n st x = seq.n
+proof
+thus x in rng seq implies ex n st x = seq.n
+ proof assume x in rng seq;
+  then consider y such that A1: y in dom seq & x = seq.y by FUNCT_1:def 5;
+  reconsider m=y as Nat by A1; take m; thus thesis by A1;
+ end;
+ given n such that A2: x = seq.n; n in NAT;
+ then n in dom seq by FUNCT_2:def 1; hence thesis by A2,FUNCT_1:def 5;
+end;
+
+theorem
+  seq.n in rng seq by Th9;
+
+theorem Th11:
+seq1 is_subsequence_of seq implies rng seq1 c= rng seq
+proof assume seq1 is_subsequence_of seq;
+ then consider Ns such that A1: seq1 = seq * Ns by SEQM_3:def 10;
+ let x; assume x in rng seq1;
+ then consider n such that A2: x = (seq *Ns).n by A1,Th9;
+   x = seq.(Ns.n) by A2,SEQM_3:31; hence x in rng seq by Th9;
+end;
+
+theorem
+  seq1 is_subsequence_of seq & seq is_not_0 implies seq1 is_not_0
+proof assume A1: seq1 is_subsequence_of seq & seq is_not_0;
+ then consider Ns such that A2: seq1=seq*Ns by SEQM_3:def 10;
+    now given n such that A3: seq1.n=0;
+     seq.(Ns.n) = 0 by A2,A3,SEQM_3:31; hence contradiction by A1,SEQ_1:7;
+  end; hence thesis by SEQ_1:7;
+end;
+
+theorem Th13:
+(seq1 + seq2)*Ns = (seq1*Ns) + (seq2*Ns) &
+(seq1 - seq2)*Ns = (seq1*Ns) - (seq2*Ns) &
+(seq1 (#) seq2)*Ns = (seq1*Ns) (#) (seq2*Ns)
+proof
+   now let n;
+  thus ((seq1 + seq2)*Ns).n = (seq1 + seq2).(Ns.n) by SEQM_3:31
+   .= seq1.(Ns.n) + seq2.(Ns.n) by SEQ_1:11
+   .= (seq1*Ns).n + seq2.(Ns.n) by SEQM_3:31
+   .= (seq1*Ns).n + (seq2*Ns).n by SEQM_3:31
+   .= (seq1*Ns + seq2*Ns).n by SEQ_1:11;
+ end; hence (seq1 + seq2)*Ns = (seq1*Ns) + (seq2*Ns) by FUNCT_2:113;
+   now let n;
+  thus ((seq1 - seq2)*Ns).n = (seq1 - seq2).(Ns.n) by SEQM_3:31
+   .= seq1.(Ns.n) - seq2.(Ns.n) by Th6
+   .= (seq1*Ns).n - seq2.(Ns.n) by SEQM_3:31
+   .= (seq1*Ns).n - (seq2*Ns).n by SEQM_3:31
+   .= (seq1*Ns - seq2*Ns).n by Th6;
+ end; hence (seq1 - seq2)*Ns = (seq1*Ns) - (seq2*Ns) by FUNCT_2:113;
+   now let n;
+  thus ((seq1 (#) seq2)*Ns).n = (seq1 (#) seq2).(Ns.n) by SEQM_3:31
+   .= seq1.(Ns.n) * seq2.(Ns.n) by SEQ_1:12
+   .= (seq1*Ns).n * seq2.(Ns.n) by SEQM_3:31
+   .= (seq1*Ns).n * (seq2*Ns).n by SEQM_3:31
+   .= ((seq1*Ns)(#)(seq2*Ns)).n by SEQ_1:12;
+ end; hence thesis by FUNCT_2:113;
+end;
+
+theorem Th14:
+(p(#)seq)*Ns = p(#)(seq*Ns)
+proof
+   now let n;
+  thus ((p(#)seq)*Ns).n = (p(#)seq).(Ns.n) by SEQM_3:31
+   .= p*(seq.(Ns.n)) by SEQ_1:13
+   .= p*((seq*Ns).n) by SEQM_3:31
+   .= (p(#)(seq*Ns)).n by SEQ_1:13;
+ end; hence thesis by FUNCT_2:113;
+end;
+
+theorem
+  (-seq)*Ns = -(seq*Ns) & (abs(seq))*Ns = abs((seq*Ns))
+proof
+ thus (-seq)*Ns = ((-1)(#)seq)*Ns by SEQ_1:25
+  .= (-1)(#)(seq*Ns) by Th14
+  .= -(seq*Ns) by SEQ_1:25;
+   now let n;
+  thus ((abs(seq))*Ns).n = (abs(seq)).(Ns.n) by SEQM_3:31
+  .= abs(seq.(Ns.n)) by SEQ_1:16
+  .= abs((seq*Ns).n) by SEQM_3:31
+  .= (abs(seq*Ns)).n by SEQ_1:16;
+ end; hence thesis by FUNCT_2:113;
+end;
+
+theorem Th16:
+  (seq*Ns)" = (seq")*Ns
+proof
+   now let n;
+  thus ((seq*Ns)").n = ((seq*Ns).n)" by SEQ_1:def 8
+   .= (seq.(Ns.n))" by SEQM_3:31
+   .= (seq").(Ns.n) by SEQ_1:def 8
+   .= ((seq")*Ns).n by SEQM_3:31;
+ end; hence thesis by FUNCT_2:113;
+end;
+
+theorem
+  (seq1/"seq)*Ns = (seq1*Ns)/"(seq*Ns)
+proof
+ thus (seq1/"seq)*Ns = (seq1(#)(seq"))*Ns by SEQ_1:def 9
+  .= (seq1*Ns)(#)((seq")*Ns) by Th13
+  .= (seq1*Ns)(#)((seq*Ns)") by Th16
+  .= (seq1*Ns)/"(seq*Ns) by SEQ_1:def 9;
+end;
+
+theorem
+  seq is convergent & (for n holds seq.n<=0) implies lim seq <= 0
+proof
+ assume that A1: seq is convergent and A2: for n holds seq.n<=0;
+ set seq1 = -seq;
+ A3: seq1 is convergent by A1,SEQ_2:23;
+   now let n;
+  A4: seq1.n = -seq.n by SEQ_1:14;
+    seq.n<=0 by A2; hence 0<=seq1.n by A4,REAL_1:26,50;
+ end; then 0 <= lim seq1 by A3,SEQ_2:31;
+ then 0 <= - lim seq by A1,SEQ_2:24;hence thesis by REAL_1:26,50;
+end;
+
+theorem
+  (for n holds seq.n in Y) implies rng seq c= Y
+proof assume A1: for n holds seq.n in Y;
+ let x; assume x in rng seq; then ex n st seq.n=x by Th9; hence x in Y by A1
+;
+end;
+
+definition let h,seq;
+assume A1: rng seq c= dom h;
+func h*seq -> Real_Sequence equals :Def1: (h qua Function)*seq;
+coherence
+proof dom seq = NAT by FUNCT_2:def 1;
+then A2: dom ((h qua Function)*seq) = NAT by A1,RELAT_1:46;
+   rng ((h qua Function)*seq) c= rng h by RELAT_1:45;
+ then rng ((h qua Function)*seq) c= REAL by XBOOLE_1:1;
+ hence (h qua Function)*seq is Real_Sequence by A2,FUNCT_2:def 1,RELSET_1:11;
+end;
+end;
+
+canceled;
+
+theorem Th21:
+rng seq c= dom h implies (h*seq).n = h.(seq.n)
+proof assume A1: rng seq c= dom h; n in NAT;
+then A2: n in dom seq by FUNCT_2:def 1;
+ thus (h*seq).n = ((h qua Function)*seq).n by A1,Def1
+  .=h.(seq.n) by A2,FUNCT_1:23;
+end;
+
+theorem Th22:
+rng seq c= dom h implies (h*seq)^\n=h*(seq^\n)
+proof assume A1: rng seq c= dom h; rng (seq^\n) c= rng seq by Th7;
+then A2: rng (seq^\n) c= dom h by A1,XBOOLE_1:1;
+   now let m;
+  thus ((h*seq)^\n).m = (h*seq).(m+n) by SEQM_3:def 9
+   .= h.(seq.(m+n)) by A1,Th21
+   .= h.((seq^\n).m) by SEQM_3:def 9
+   .= (h*(seq^\n)).m by A2,Th21;
+ end; hence thesis by FUNCT_2:113;
+end;
+
+theorem Th23:
+rng seq c= dom h1 /\ dom h2 implies (h1+h2)*seq=h1*seq+h2*seq &
+                                   (h1-h2)*seq=h1*seq-h2*seq &
+                                   (h1(#)h2)*seq=(h1*seq)(#)(h2*seq)
+proof assume A1: rng seq c= dom h1 /\ dom h2;
+   dom h1 /\ dom h2 c= dom h1 & dom h1 /\ dom h2 c= dom h2 by XBOOLE_1:17;
+then A2: rng seq c= dom h1 & rng seq c= dom h2 by A1,XBOOLE_1:1;
+A3: rng seq c= dom (h1 + h2) by A1,SEQ_1:def 3;
+A4: rng seq c= dom (h1 - h2) by A1,SEQ_1:def 4;
+A5: rng seq c= dom (h1 (#) h2) by A1,SEQ_1:def 5;
+   now let n;
+  A6: seq.n in dom (h1 + h2) by A3,Th8;
+  thus ((h1+h2)*seq).n = (h1+h2).(seq.n) by A3,Th21
+   .= h1.(seq.n) + h2.(seq.n) by A6,SEQ_1:def 3
+   .= (h1*seq).n + h2.(seq.n) by A2,Th21
+   .= (h1*seq).n + (h2*seq).n by A2,Th21;
+ end; hence (h1+h2)*seq=h1*seq+h2*seq by SEQ_1:11;
+   now let n;
+  A7: seq.n in dom (h1 - h2) by A4,Th8;
+  thus ((h1-h2)*seq).n = (h1-h2).(seq.n) by A4,Th21
+   .= h1.(seq.n) - h2.(seq.n) by A7,SEQ_1:def 4
+   .= (h1*seq).n - h2.(seq.n) by A2,Th21
+   .= (h1*seq).n - (h2*seq).n by A2,Th21;
+ end; hence (h1-h2)*seq=h1*seq-h2*seq by Th6;
+   now let n;
+ A8: seq.n in dom (h1(#)h2) by A5,Th8;
+  thus ((h1(#)h2)*seq).n = (h1(#)h2).(seq.n) by A5,Th21
+   .= h1.(seq.n) * h2.(seq.n) by A8,SEQ_1:def 5
+   .= (h1*seq).n * h2.(seq.n) by A2,Th21
+   .= (h1*seq).n * (h2*seq).n by A2,Th21;
+ end; hence thesis by SEQ_1:12;
+end;
+
+theorem Th24:
+for r being real number holds rng seq c= dom h implies (r(#)h)*seq = r(#)
+(h*seq)
+proof
+let r be real number;
+assume A1: rng seq c= dom h;
+then A2: rng seq c= dom (r(#)h) by SEQ_1:def 6;
+   now let n;
+ A3: seq.n in dom (r(#)h) by A2,Th8;
+  thus ((r(#)h)*seq).n = (r(#)h).(seq.n) by A2,Th21
+   .= r * (h.(seq.n)) by A3,SEQ_1:def 6
+   .= r * (h*seq).n by A1,Th21;
+ end; hence thesis by SEQ_1:13;
+end;
+
+theorem
+  rng seq c= dom h implies abs(h*seq) = (abs(h))*seq & -(h*seq) = (-h)*seq
+proof assume A1: rng seq c= dom h;
+ then A2: rng seq c= dom abs(h) by SEQ_1:def 10;
+   now let n;
+    seq.n in rng seq by Th9;
+  then seq.n in dom h by A1;
+  then A3: seq.n in dom abs(h) by SEQ_1:def 10;
+  thus abs(h*seq).n = abs((h*seq).n) by SEQ_1:16
+  .= abs(h.(seq.n)) by A1,Th21
+  .= abs(h).(seq.n) by A3,SEQ_1:def 10
+  .= (abs(h)*seq).n by A2,Th21;
+ end; hence abs(h*seq) = (abs(h))*seq by FUNCT_2:113;
+ thus -(h*seq) = (-1)(#)(h*seq) by SEQ_1:25
+ .= ((-1)(#)h)*seq by A1,Th24
+ .= (-h)*seq by RFUNCT_1:38;
+end;
+
+theorem
+  rng seq c= dom (h^) implies h*seq is_not_0
+proof assume A1: rng seq c= dom (h^);
+ A2: dom h \ h"{0} c= dom h by XBOOLE_1:36;
+   rng seq c= dom h \ h"{0} by A1,RFUNCT_1:def 8;
+ then A3: rng seq c= dom h by A2,XBOOLE_1:1;
+   now given n such that A4: (h*seq).n=0;
+    seq.n in rng seq by Th9; then seq.n in dom (h^) by A1;
+  then seq.n in dom h \ h"{0} by RFUNCT_1:def 8;
+  then seq.n in dom h & not seq.n in h"{0} by XBOOLE_0:def 4;
+  then A5: not h.(seq.n) in {0} by FUNCT_1:def 13;
+    h.(seq.n) =0 by A3,A4,Th21; hence contradiction by A5,TARSKI:def 1;
+ end; hence thesis by SEQ_1:7;
+end;
+
+theorem
+  rng seq c= dom (h^) implies (h^)*seq =(h*seq)"
+proof assume A1: rng seq c= dom (h^);
+ A2: dom h \ h"{0} c= dom h by XBOOLE_1:36;
+   rng seq c= dom h \ h"{0} by A1,RFUNCT_1:def 8;
+ then A3: rng seq c= dom h by A2,XBOOLE_1:1;
+   now let n; A4: seq.n in rng seq by Th9;
+  thus ((h^)*seq).n = (h^).(seq.n) by A1,Th21
+  .= (h.(seq.n))" by A1,A4,RFUNCT_1:def 8
+  .= ((h*seq).n)" by A3,Th21
+  .= ((h*seq)").n by SEQ_1:def 8;
+ end; hence thesis by FUNCT_2:113;
+end;
+
+theorem Th28:
+rng seq c= dom h implies (h*seq)*Ns = h * (seq*Ns)
+proof assume A1: rng seq c= dom h;
+   (seq * Ns) is_subsequence_of seq by SEQM_3:def 10;
+ then rng (seq*Ns) c= rng seq by Th11;
+then A2: rng (seq*Ns) c= dom h by A1,XBOOLE_1:1;
+ thus (h*seq)*Ns = ((h qua Function)*seq)*Ns by A1,Def1
+  .= (h qua Function)*(seq*Ns) by RELAT_1:55
+  .= h*(seq*Ns) by A2,Def1;
+end;
+
+theorem
+  rng seq1 c= dom h & seq2 is_subsequence_of seq1 implies
+  h*seq2 is_subsequence_of h*seq1
+proof assume A1: rng seq1 c= dom h & seq2 is_subsequence_of seq1;
+ then consider Ns such that A2: seq2=seq1*Ns by SEQM_3:def 10;
+ take Ns; thus thesis by A1,A2,Th28;
+end;
+
+theorem
+  h is total implies (h*seq).n = h.(seq.n)
+proof assume h is total; then dom h = REAL by PARTFUN1:def 4;
+ then rng seq c= dom h; hence thesis by Th21;
+end;
+
+theorem
+  h is total implies h*(seq^\n) = (h*seq)^\n
+proof assume h is total; then dom h = REAL by PARTFUN1:def 4;
+ then rng seq c= dom h; hence thesis by Th22;
+end;
+
+theorem
+  h1 is total & h2 is total implies (h1+h2)*seq = h1*seq + h2*seq &
+(h1-h2)*seq = h1*seq - h2*seq & (h1(#)h2)*seq = (h1*seq) (#) (h2*seq)
+proof assume h1 is total & h2 is total; then h1+h2 is total by RFUNCT_1:66;
+ then dom (h1+h2) = REAL by PARTFUN1:def 4;
+ then dom h1 /\ dom h2 = REAL by SEQ_1:def 3;
+ then A1: rng seq c= dom h1 /\ dom h2;
+ hence (h1+h2)*seq = h1*seq + h2*seq by Th23;
+ thus (h1-h2)*seq = h1*seq - h2*seq by A1,Th23;
+ thus thesis by A1,Th23;
+end;
+
+theorem
+  h is total implies (r(#)h)*seq = r(#)(h*seq)
+proof assume h is total; then dom h = REAL by PARTFUN1:def 4;
+ then rng seq c= dom h; hence thesis by Th24;
+end;
+
+theorem
+  rng seq c= dom (h|X) implies (h|X)*seq = h*seq
+proof assume A1: rng seq c= dom (h|X);
+   dom (h|X) = dom h /\
+ X by RELAT_1:90; then dom (h|X) c= dom h by XBOOLE_1:17;
+ then A2: rng seq c= dom h by A1,XBOOLE_1:1;
+   now let n;
+  A3: seq.n in rng seq by Th9;
+  thus ((h|X)*seq).n = (h|X).(seq.n) by A1,Th21
+   .= h.(seq.n) by A1,A3,FUNCT_1:68
+   .= (h*seq).n by A2,Th21;
+ end; hence thesis by FUNCT_2:113;
+end;
+
+theorem
+  rng seq c= dom (h|X) & (rng seq c= dom (h|Y) or X c= Y) implies
+ (h|X)*seq = (h|Y)*seq
+proof assume A1: rng seq c= dom (h|X) & (rng seq c= dom (h|Y) or X c= Y);
+   now per cases by A1;
+ suppose A2: rng seq c= dom (h|Y);
+    now let n;
+   A3: seq.n in rng seq by Th9;
+   thus ((h|X)*seq).n = (h|X).(seq.n) by A1,Th21
+    .= h.(seq.n) by A1,A3,FUNCT_1:68
+    .= (h|Y).(seq.n) by A2,A3,FUNCT_1:68
+    .= ((h|Y)*seq).n by A2,Th21;
+  end; hence thesis by FUNCT_2:113;
+ suppose X c= Y;
+  then dom h /\ X c= dom h /\ Y by XBOOLE_1:26;
+  then dom (h|X) c= dom h /\ Y by RELAT_1:90;
+  then dom (h|X) c= dom (h|Y) by RELAT_1:90;
+  then A4: rng seq c= dom (h|Y) by A1,XBOOLE_1:1;
+    now let n;
+   A5: seq.n in rng seq by Th9;
+   thus ((h|X)*seq).n = (h|X).(seq.n) by A1,Th21
+    .= h.(seq.n) by A1,A5,FUNCT_1:68
+    .= (h|Y).(seq.n) by A4,A5,FUNCT_1:68
+    .= ((h|Y)*seq).n by A4,Th21;
+  end; hence thesis by FUNCT_2:113;
+ end; hence thesis;
+end;
+
+theorem
+  rng seq c= dom (h|X) implies abs((h|X)*seq) = ((abs(h))|X)*seq
+proof assume A1: rng seq c= dom (h|X);
+A2: dom (h|X) = dom h /\ X by RELAT_1:90
+ .= dom abs(h) /\ X by SEQ_1:def 10
+ .= dom (abs(h)|X) by RELAT_1:90;
+    now let n; A3: seq.n in rng seq by Th9;
+   then seq.n in dom (h|X) by A1;
+   then seq.n in dom h /\ X by RELAT_1:90;
+   then A4: seq.n in dom h & seq.n in X by XBOOLE_0:def 3;
+   then A5: seq.n in dom (abs(h)) & seq.n in X by SEQ_1:def 10;
+   thus (abs((h|X)*seq)).n = abs( ((h|X)*seq).n ) by SEQ_1:16
+    .= abs( (h|X).(seq.n) ) by A1,Th21
+    .= abs( h.(seq.n) ) by A1,A3,FUNCT_1:68
+    .= (abs(h)).(seq.n) by A5,SEQ_1:def 10
+    .= ((abs(h))|X).(seq.n) by A4,FUNCT_1:72
+    .= (((abs(h))|X)*seq).n by A1,A2,Th21;
+   end; hence thesis by FUNCT_2:113;
+end;
+
+theorem
+  rng seq c= dom (h|X) & h"{0}={} implies ((h^)|X)*seq = ((h|X)*seq)"
+proof assume A1: rng seq c= dom (h|X) & h"{0}={};
+    now let x; assume x in rng seq; then x in dom (h|X) by A1;
+   then x in dom h /\ X by RELAT_1:90;
+   then x in dom h \ h"{0} & x in X by A1,XBOOLE_0:def 3;
+   then x in dom (h^) & x in X by RFUNCT_1:def 8;
+   then x in dom (h^) /\ X by XBOOLE_0:def 3;
+   hence x in dom ((h^)|X) by RELAT_1:90;
+  end;
+ then A2: rng seq c= dom ((h^)|X) by TARSKI:def 3;
+    now let n; A3: seq.n in rng seq by Th9;
+   then seq.n in dom (h|X) by A1;
+   then seq.n in dom h /\ X by RELAT_1:90;
+   then A4: seq.n in dom h \ h"{0} & seq.n in X by A1,XBOOLE_0:def 3;
+   then A5: seq.n in dom (h^) & seq.n in X by RFUNCT_1:def 8;
+   thus (((h^)|X)*seq).n = ((h^)|X).(seq.n) by A2,Th21
+    .= (h^).(seq.n) by A4,FUNCT_1:72
+    .= (h.(seq.n))" by A5,RFUNCT_1:def 8
+    .= ((h|X).(seq.n))" by A1,A3,FUNCT_1:68
+    .= (((h|X)*seq).n)" by A1,Th21
+    .= (((h|X)*seq)").n by SEQ_1:def 8;
+  end; hence thesis by FUNCT_2:113;
+end;
+
+theorem Th38:
+rng seq c= dom h implies h.:(rng seq) = rng (h*seq)
+proof assume A1: rng seq c= dom h;
+    now let r be Element of REAL;
+   thus r in h.:(rng seq) implies r in rng (h*seq)
+   proof assume r in h.:(rng seq); then consider p such that
+    A2: p in dom h & p in rng seq & r=h.p by PARTFUN2:78;
+    consider n such that A3: p=seq.n by A2,Th9;
+      r = (h*seq).n by A1,A2,A3,Th21; hence r in rng (h*seq) by Th9;
+   end;
+   assume r in rng (h*seq); then consider n such that
+   A4: (h*seq).n=r by Th9;
+   A5: seq.n in rng seq by Th9;
+     r = h.(seq.n) by A1,A4,Th21; hence r in h.:(rng seq)
+     by A1,A5,FUNCT_1:def 12;
+  end; hence thesis by SUBSET_1:8;
+end;
+
+theorem
+  rng seq c= dom (h2*h1) implies h2*(h1*seq) = h2*h1*seq
+proof assume A1: rng seq c= dom (h2*h1);
+   now let n; seq.n in rng seq by Th9;
+  then A2: seq.n in dom h1 & h1.(seq.n) in dom h2 by A1,FUNCT_1:21;
+A3:  rng seq c= dom h1 & h1.:(rng seq) c= dom h2 by A1,Th4;
+  then A4: rng seq c= dom h1 & rng (h1*seq) c= dom h2 by Th38;
+  thus (h2*h1*seq).n = (h2*h1).(seq.n) by A1,Th21
+   .= h2.(h1.(seq.n)) by A2,FUNCT_1:23
+   .= h2.((h1*seq).n) by A3,Th21
+   .= (h2*(h1*seq)).n by A4,Th21;
+  end; hence thesis by FUNCT_2:113;
+end;
+
+::
+:: MONOTONE FUNCTIONS
+::
+
+definition let Z be set;
+ let f be one-to-one Function;
+ cluster f|Z -> one-to-one;
+ coherence by FUNCT_1:84;
+end;
+
+theorem
+   for h being one-to-one Function holds (h|X)" = (h")|(h.:X)
+proof
+  let h be one-to-one Function;
+  reconsider hX = h|X as one-to-one Function;
+    now let r be set;
+  thus r in dom ((h|X)") implies r in dom ((h")|(h.:X))
+   proof assume r in dom ((h|X)"); then r in rng(hX) by FUNCT_1:55;
+    then consider g being set such that
+    A1: g in dom (h|X) & (h|X).g=r by FUNCT_1:def 5;
+      g in dom h /\ X & h.g=r by A1,FUNCT_1:68;
+    then g in dom h & g in X & h.g=r by XBOOLE_0:def 3;
+    then r in rng h & g in dom h & g in X & h.g=r by FUNCT_1:def 5;
+    then r in dom (h") & r in h.:X by FUNCT_1:55,def 12;
+    then r in dom (h")/\(h.:X) by XBOOLE_0:def 3;
+    hence r in dom ((h")|(h.:X)) by RELAT_1:90;
+   end;
+   assume r in dom ((h")|(h.:X)); then r in dom(h") /\ (h.:X)
+     by RELAT_1:90;
+   then r in h.:X by XBOOLE_0:def 3; then consider t being set such that
+   A2: t in dom h & t in X & h.t=r by FUNCT_1:def 12;
+     t in dom h/\X & (h|X).t=r by A2,FUNCT_1:72,XBOOLE_0:def 3;
+   then t in dom(h|X) & (h|X).t=r by RELAT_1:90;
+   then r in rng(hX) by FUNCT_1:def 5; hence r in dom((h|X)") by FUNCT_1:55;
+  end;
+  then A3:dom ((hX)")=dom ((h")|(h.:X)) by TARSKI:2;
+    now given r being set such that A4: r in dom((h|X)") and
+   A5: ((h|X)").r<>((h")|(h.:X)).r;
+   A6: ((hX)").r<>(h").r by A3,A4,A5,FUNCT_1:68;
+     r in rng (hX) by A4,FUNCT_1:55;
+   then consider g be set such that
+   A7: g in dom(h|X) & (h|X).g=r by FUNCT_1:def 5;
+     r in dom(h")/\(h.:X) by A3,A4,RELAT_1:90;
+   then r in h.:X by XBOOLE_0:def 3; then consider t be set such that
+   A8: t in dom h & t in X & h.t=r by FUNCT_1:def 12;
+A9:   g<>(h").(h.t) by A6,A7,A8,FUNCT_1:56;
+     g in dom h /\ X & h.g=r by A7,FUNCT_1:68;
+   then g in dom h & h.g=r by XBOOLE_0:def 3;
+   hence contradiction by A8,A9,FUNCT_1:56;
+  end;
+ hence thesis by A3,FUNCT_1:9;
+end;
+
+theorem Th41:
+rng h is bounded & upper_bound (rng h) = lower_bound (rng h) implies
+h is_constant_on dom h
+proof assume that A1: rng h is bounded and
+             A2: upper_bound (rng h) = lower_bound (rng h) and
+             A3: not h is_constant_on dom h;
+ consider x1,x2 being Element of REAL such that A4:
+ x1 in dom h /\ dom h & x2 in dom h /\ dom h & h.x1 <> h.x2 by A3,PARTFUN2:77;
+   h.x1 in rng h & h.x2 in rng h by A4,FUNCT_1:def 5;
+ hence contradiction by A1,A2,A4,SEQ_4:25;
+end;
+
+theorem
+  Y c= dom h & h.:Y is bounded & upper_bound (h.:Y) = lower_bound (h.:Y)
+implies h is_constant_on Y
+proof assume that A1: Y c= dom h & h.:Y is bounded and
+                  A2: upper_bound (h.:Y) = lower_bound (h.:Y);
+ A3: dom (h|Y) = dom h /\ Y by RELAT_1:90
+  .= Y by A1,XBOOLE_1:28;
+ A4: rng (h|Y) is bounded by A1,RELAT_1:148;
+   upper_bound (rng (h|Y)) = upper_bound (h.:Y) by RELAT_1:148
+  .= lower_bound (rng (h|Y)) by A2,RELAT_1:148;
+ then h|Y is_constant_on Y by A3,A4,Th41;
+ then consider r such that
+ A5: for p st p in Y /\ dom (h|Y) holds (h|Y).p = r by PARTFUN2:76;
+   now
+  take r; let p; assume A6: p in Y /\ dom h; then p in Y /\ Y /\ dom h;
+  then p in Y /\ (dom h /\ Y) by XBOOLE_1:16;
+  then p in Y /\ dom (h|Y) by RELAT_1:90; then A7: (h|Y).p=r by A5;
+    p in dom (h|Y) by A3,A6,XBOOLE_0:def 3;
+  hence h.p = r by A7,FUNCT_1:68;
+ end;
+ hence thesis by PARTFUN2:76;
+end;
+
+definition let h,Y;
+pred h is_increasing_on Y means :Def2:
+ for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r1 < h.r2;
+pred h is_decreasing_on Y means :Def3:
+ for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r2 < h.r1;
+pred h is_non_decreasing_on Y means :Def4:
+ for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r1 <= h.r2;
+pred h is_non_increasing_on Y means :Def5:
+ for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r2 <= h.r1;
+end;
+
+definition let h,Y;
+pred h is_monotone_on Y means :Def6:
+ h is_non_decreasing_on Y or h is_non_increasing_on Y;
+end;
+
+canceled 5;
+
+theorem Th48:
+h is_non_decreasing_on Y iff for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h &
+  r1<=r2 holds h.r1 <= h.r2
+proof
+thus h is_non_decreasing_on Y implies
+     for r1,r2 st r1 in Y /\ dom h & r2 in Y /\
+ dom h & r1<=r2 holds h.r1 <= h.r2
+ proof assume A1: h is_non_decreasing_on Y;
+  let r1,r2 such that A2: r1 in Y /\ dom h & r2 in Y /\ dom h & r1<=r2;
+    now per cases by A2,REAL_1:def 5;
+   suppose r1 < r2; hence thesis by A1,A2,Def4;
+   suppose r1 = r2; hence thesis;
+  end; hence thesis;
+ end;
+ assume
+A3: for r1,r2 st r1 in Y /\ dom h & r2 in Y /\
+ dom h & r1<=r2 holds h.r1 <= h.r2;
+ let r1,r2; assume r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2;
+ hence thesis by A3;
+end;
+
+theorem Th49:
+h is_non_increasing_on Y iff for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h &
+  r1<=r2 holds h.r2 <= h.r1
+proof
+thus h is_non_increasing_on Y implies
+     for r1,r2 st r1 in Y /\ dom h & r2 in Y /\
+ dom h & r1<=r2 holds h.r2 <= h.r1
+ proof assume A1: h is_non_increasing_on Y;
+  let r1,r2 such that A2: r1 in Y /\ dom h & r2 in Y /\ dom h & r1<=r2;
+    now per cases by A2,REAL_1:def 5;
+   suppose r1 < r2; hence thesis by A1,A2,Def5;
+   suppose r1 = r2; hence thesis;
+  end; hence thesis;
+ end;
+ assume
+A3: for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<=r2 holds h.r2<=h.r1;
+ let r1,r2; assume r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2;
+ hence thesis by A3;
+end;
+
+theorem Th50:
+h is_increasing_on X iff h|X is_increasing_on X
+proof
+ thus h is_increasing_on X implies h|X is_increasing_on X
+ proof assume A1: h is_increasing_on X;
+  let r1,r2; assume r1 in X/\dom(h|X) & r2 in X/\dom(h|X) & r1<r2;
+  then r1 in X/\(X/\dom h) & r2 in X/\(X/\dom h) & r1<r2 by RELAT_1:90;
+then A2:r1 in X/\X/\dom h & r2 in X/\X/\dom h & r1<r2 by XBOOLE_1:16;
+  then h.r1<h.r2 by A1,Def2; then (h|X).r1<h.r2 by A2,FUNCT_1:71;
+  hence thesis by A2,FUNCT_1:71;
+ end;
+ assume A3: h|X is_increasing_on X;
+ let r1,r2; assume A4: r1 in X/\dom h & r2 in X/\dom h & r1<r2;
+ then r1 in X/\X/\dom h & r2 in X/\X/\dom h & r1<r2;
+ then r1 in X/\(dom h /\X) & r2 in X/\(dom h /\ X) & r1<r2 by XBOOLE_1:16;
+ then r1 in X/\dom(h|X) & r2 in X/\dom(h|X) & r1<r2 by RELAT_1:90;
+  then (h|X).r1<(h|X).r2 by A3,Def2;
+  then h.r1<(h|X).r2 by A4,FUNCT_1:71;
+ hence thesis by A4,FUNCT_1:71;
+end;
+
+theorem Th51:
+h is_decreasing_on X iff h|X is_decreasing_on X
+proof
+ thus h is_decreasing_on X implies h|X is_decreasing_on X
+ proof assume A1: h is_decreasing_on X;
+  let r1,r2; assume r1 in X/\dom(h|X) & r2 in X/\dom(h|X) & r1<r2;
+  then r1 in X/\(X/\dom h) & r2 in X/\(X/\dom h) & r1<r2 by RELAT_1:90;
+then A2: r1 in X/\X/\dom h & r2 in X/\X/\dom h & r1<r2 by XBOOLE_1:16;
+  then h.r1>h.r2 by A1,Def3; then (h|X).r1>h.r2 by A2,FUNCT_1:71;
+  hence (h|X).r1>(h|X).r2 by A2,FUNCT_1:71;
+ end;
+ assume A3: h|X is_decreasing_on X;
+ let r1,r2; assume A4: r1 in X/\dom h & r2 in X/\dom h & r1<r2;
+ then r1 in X/\X/\dom h & r2 in X/\X/\dom h & r1<r2;
+ then r1 in X/\(dom h /\X) & r2 in X/\(dom h /\ X) & r1<r2 by XBOOLE_1:16;
+ then r1 in X/\dom(h|X) & r2 in X/\dom(h|X) & r1<r2 by RELAT_1:90;
+  then (h|X).r1>(h|X).r2 by A3,Def3;
+  then h.r1>(h|X).r2 by A4,FUNCT_1:71; hence h.r1>h.r2 by A4,FUNCT_1:71;
+end;
+
+theorem
+  h is_non_decreasing_on X iff h|X is_non_decreasing_on X
+proof
+ thus h is_non_decreasing_on X implies h|X is_non_decreasing_on X
+ proof assume A1: h is_non_decreasing_on X;
+  let r1,r2; assume r1 in X/\dom(h|X) & r2 in X/\dom(h|X) & r1<r2;
+  then r1 in X/\(X/\dom h) & r2 in X/\(X/\dom h) & r1<r2 by RELAT_1:90;
+then A2:r1 in X/\X/\dom h & r2 in X/\X/\dom h & r1<r2 by XBOOLE_1:16;
+  then h.r1<=h.r2 by A1,Def4; then (h|X).r1<=h.r2 by A2,FUNCT_1:71;
+  hence thesis by A2,FUNCT_1:71;
+ end;
+ assume A3: h|X is_non_decreasing_on X;
+ let r1,r2; assume A4: r1 in X/\dom h & r2 in X/\dom h & r1<r2;
+ then r1 in X/\X/\dom h & r2 in X/\X/\dom h & r1<r2;
+ then r1 in X/\(dom h /\X) & r2 in X/\(dom h /\ X) & r1<r2 by XBOOLE_1:16;
+ then r1 in X/\dom(h|X) & r2 in X/\dom(h|X) & r1<r2 by RELAT_1:90;
+  then (h|X).r1<=(h|X).r2 by A3,Def4;
+  then h.r1<=(h|X).r2 by A4,FUNCT_1:71; hence thesis by A4,FUNCT_1:71;
+end;
+
+theorem
+  h is_non_increasing_on X iff h|X is_non_increasing_on X
+proof
+ thus h is_non_increasing_on X implies h|X is_non_increasing_on X
+ proof assume A1: h is_non_increasing_on X;
+  let r1,r2; assume r1 in X/\dom(h|X) & r2 in X/\dom(h|X) & r1<r2;
+  then r1 in X/\(X/\dom h) & r2 in X/\(X/\dom h) & r1<r2 by RELAT_1:90;
+then A2: r1 in X/\X/\dom h & r2 in X/\X/\dom h & r1<r2 by XBOOLE_1:16;
+  then h.r1>=h.r2 by A1,Def5; then (h|X).r1>=h.r2 by A2,FUNCT_1:71;
+  hence thesis by A2,FUNCT_1:71;
+ end;
+ assume A3: h|X is_non_increasing_on X;
+ let r1,r2; assume A4: r1 in X/\dom h & r2 in X/\dom h & r1<r2;
+ then r1 in X/\X/\dom h & r2 in X/\X/\dom h & r1<r2;
+ then r1 in X/\(dom h /\X) & r2 in X/\(dom h /\ X) & r1<r2 by XBOOLE_1:16;
+ then r1 in X/\dom(h|X) & r2 in X/\dom(h|X) & r1<r2 by RELAT_1:90;
+  then (h|X).r1>=(h|X).r2 by A3,Def5;
+  then h.r1>=(h|X).r2 by A4,FUNCT_1:71; hence thesis by A4,FUNCT_1:71;
+end;
+
+theorem
+  Y misses dom h implies h is_increasing_on Y & h is_decreasing_on Y &
+                      h is_non_decreasing_on Y & h is_non_increasing_on Y &
+                      h is_monotone_on Y
+proof assume A1: Y /\ dom h = {};
+then for r1,r2 holds ( r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 implies
+ h.r1<h.r2); hence h is_increasing_on Y by Def2;
+   for r1,r2 holds ( r1 in Y /\ dom h &
+ r2 in Y /\ dom h & r1<r2 implies h.r2<h.r1) by A1; hence h is_decreasing_on Y
+by Def3;
+   for r1,r2 holds ( r1 in Y /\ dom h & r2 in
+ Y /\ dom h & r1<r2 implies h.r1<=
+h.r2) by A1; hence h is_non_decreasing_on Y by Def4;
+   for r1,r2 holds ( r1 in Y /\ dom h & r2 in
+ Y /\ dom h & r1<r2 implies h.r2<=
+h.r1) by A1; hence h is_non_increasing_on Y by Def5;
+ hence thesis by Def6;
+end;
+
+theorem
+  h is_increasing_on Y implies h is_non_decreasing_on Y
+proof assume A1: h is_increasing_on Y;
+ let r1,r2; assume r1 in Y /\ dom h & r2 in Y /\ dom h & r1 < r2;
+ hence thesis by A1,Def2;
+end;
+
+theorem
+  h is_decreasing_on Y implies h is_non_increasing_on Y
+proof assume A1: h is_decreasing_on Y;
+ let r1,r2; assume r1 in Y /\ dom h & r2 in Y /\
+ dom h & r1 < r2;hence thesis by A1,Def3;
+end;
+
+theorem
+  h is_constant_on Y implies h is_non_decreasing_on Y
+proof assume A1: h is_constant_on Y;
+ let r1,r2; assume r1 in Y /\ dom h & r2 in Y /\ dom h & r1 < r2;hence h.r1
+<=
+ h.r2 by A1,PARTFUN2:77;
+end;
+
+theorem
+  h is_constant_on Y implies h is_non_increasing_on Y
+proof assume A1: h is_constant_on Y;
+ let r1,r2; assume r1 in Y /\ dom h & r2 in Y /\ dom h & r1 < r2;
+ hence h.r2 <= h.r1 by A1,PARTFUN2:77;
+end;
+
+theorem
+  h is_non_decreasing_on Y & h is_non_increasing_on X implies
+ h is_constant_on (Y /\ X)
+proof assume A1: h is_non_decreasing_on Y & h is_non_increasing_on X;
+   now per cases;
+  suppose Y /\ X /\ dom h = {}; then Y /\ X misses dom h by XBOOLE_0:def 7;
+  hence thesis by PARTFUN2:58;
+  suppose
+A2: Y /\ X /\ dom h <> {};
+   consider x being Element of Y /\ X /\ dom h; x in dom h by A2,XBOOLE_0:def 3
+;
+then reconsider x as Real;
+     now take r1 = h.x;
+      now let p; assume p in Y /\ X /\ dom h;
+     then p in Y /\ X & p in dom h by XBOOLE_0:def 3;
+     then p in Y & p in X & p in dom h by XBOOLE_0:def 3;
+  then A3: p in (Y /\ dom h) & p in (X /\ dom h) by XBOOLE_0:def 3;
+       x in Y /\ X & x in dom h by A2,XBOOLE_0:def 3;
+     then x in Y & x in X & x in dom h by XBOOLE_0:def 3;
+  then A4: x in (Y /\ dom h) & x in (X /\ dom h) by XBOOLE_0:def 3;
+        now per cases;
+       suppose A5: x <= p;
+    then A6: h.x <= h.p by A1,A3,A4,Th48;
+         h.p <= h.x by A1,A3,A4,A5,Th49; hence h.p = h.x by A6,AXIOMS:21;
+       suppose A7: p <= x;
+    then A8: h.p <= h.x by A1,A3,A4,Th48;
+         h.x <= h.p by A1,A3,A4,A7,Th49; hence h.p = h.x by A8,AXIOMS:21;
+      end; hence h.p = r1;
+    end; hence for p st p in Y /\ X /\ dom h holds h.p = r1;
+  end; hence h is_constant_on (Y /\ X) by PARTFUN2:76;
+ end; hence thesis;
+end;
+
+theorem
+  X c= Y & h is_increasing_on Y implies h is_increasing_on X
+proof assume A1: X c= Y & h is_increasing_on Y;
+ let r1,r2 such that A2: r1 in X /\ dom h & r2 in X /\ dom h & r1 < r2;
+   X /\ dom h c= Y /\ dom h by A1,XBOOLE_1:26; hence thesis by A1,A2,Def2;
+end;
+
+theorem
+  X c= Y & h is_decreasing_on Y implies h is_decreasing_on X
+proof assume A1: X c= Y & h is_decreasing_on Y;
+ let r1,r2 such that A2: r1 in X /\ dom h & r2 in X /\ dom h & r1 < r2;
+   X /\ dom h c= Y /\ dom h by A1,XBOOLE_1:26; hence thesis by A1,A2,Def3;
+end;
+
+theorem
+  X c= Y & h is_non_decreasing_on Y implies h is_non_decreasing_on X
+proof assume A1: X c= Y & h is_non_decreasing_on Y;
+ let r1,r2 such that A2: r1 in X /\ dom h & r2 in X /\ dom h & r1 < r2;
+   X /\ dom h c= Y /\ dom h by A1,XBOOLE_1:26; hence thesis by A1,A2,Def4;
+end;
+
+theorem
+  X c= Y & h is_non_increasing_on Y implies h is_non_increasing_on X
+proof assume A1: X c= Y & h is_non_increasing_on Y;
+ let r1,r2 such that A2: r1 in X /\ dom h & r2 in X /\ dom h & r1 < r2;
+   X /\ dom h c= Y /\ dom h by A1,XBOOLE_1:26; hence thesis by A1,A2,Def5;
+end;
+
+theorem Th64:
+(h is_increasing_on Y & 0<r implies r(#)h is_increasing_on Y) &
+(r = 0 implies r(#)h is_constant_on Y) &
+(h is_increasing_on Y & r<0 implies r(#)h is_decreasing_on Y)
+proof
+thus h is_increasing_on Y & 0<r implies r(#)h is_increasing_on Y
+ proof assume A1: h is_increasing_on Y & 0<r;
+  let r1,r2; assume A2: r1 in Y /\ dom (r(#)h) & r2 in Y /\ dom (r(#)
+h) & r1<r2;
+ then A3: r1 in Y & r1 in dom (r(#)h) & r2 in Y & r2 in dom (r(#)
+h) by XBOOLE_0:def 3;
+  then r1 in Y & r1 in dom h & r2 in Y & r2 in dom h by SEQ_1:def 6;
+  then r1 in Y /\ dom h & r2 in Y /\ dom h by XBOOLE_0:def 3;
+  then h.r1 < h.r2 by A1,A2,Def2; then r* h.r1 < r* h.r2 by A1,REAL_1:70;
+  then (r(#)h).r1 < r * h.r2 by A3,SEQ_1:def 6;
+  hence (r(#)h).r1 < (r(#)h).r2 by A3,SEQ_1:def 6;
+ end; thus r = 0 implies r(#)h is_constant_on Y
+ proof assume A4: r = 0;
+    now let r1; assume r1 in Y /\ dom (r(#)h);
+   then A5: r1 in dom (r(#)h) by XBOOLE_0:def 3;
+     r* h.r1 = 0 by A4; hence (r(#)h).r1 = 0 by A5,SEQ_1:def 6;
+  end; hence thesis by PARTFUN2:76;
+ end;
+ assume A6: h is_increasing_on Y & r<0;
+ let r1,r2; assume A7: r1 in Y /\ dom (r(#)h) & r2 in Y /\ dom (r(#)
+h) & r1<r2;
+ then A8: r1 in Y & r1 in dom (r(#)h) & r2 in Y & r2 in dom (r(#)
+h) by XBOOLE_0:def 3;
+ then r1 in Y & r1 in dom h & r2 in Y & r2 in dom h by SEQ_1:def 6;
+ then r1 in Y /\ dom h & r2 in Y /\ dom h by XBOOLE_0:def 3;
+ then h.r1 < h.r2 by A6,A7,Def2;
+ then r* h.r2 < r* h.r1 by A6,REAL_1:71; then (r(#)h).r2 < r * h.r1
+   by A8,SEQ_1:def 6;
+ hence thesis by A8,SEQ_1:def 6;
+end;
+
+theorem
+  (h is_decreasing_on Y & 0<r implies r(#)h is_decreasing_on Y) &
+(h is_decreasing_on Y & r<0 implies r(#)h is_increasing_on Y)
+proof
+thus h is_decreasing_on Y & 0<r implies r(#)h is_decreasing_on Y
+ proof assume A1: h is_decreasing_on Y & 0<r;
+  let r1,r2; assume A2: r1 in Y /\ dom(r(#)h) & r2 in Y /\ dom(r(#)
+h) & r1<r2;
+ then A3: r1 in Y & r1 in dom (r(#)h) & r2 in Y & r2 in dom (r(#)
+h) by XBOOLE_0:def 3;
+  then r1 in Y & r1 in dom h & r2 in Y & r2 in dom h by SEQ_1:def 6;
+  then r1 in Y /\ dom h & r2 in Y /\ dom h by XBOOLE_0:def 3;
+  then h.r2 < h.r1 by A1,A2,Def3; then r * h.r2 < r * h.r1 by A1,REAL_1:70;
+  then (r(#)h).r2 < r * h.r1 by A3,SEQ_1:def 6; hence thesis by A3,SEQ_1:def 6;
+ end;
+ assume A4: h is_decreasing_on Y & r<0;
+ let r1,r2; assume A5: r1 in Y /\ dom(r(#)h) & r2 in Y /\ dom(r(#)
+h) & r1<r2;
+then A6: r1 in Y & r1 in dom (r(#)h) & r2 in Y & r2 in dom (r(#)
+h) by XBOOLE_0:def 3;
+ then r1 in Y & r1 in dom h & r2 in Y & r2 in dom h by SEQ_1:def 6;
+ then r1 in Y /\ dom h & r2 in Y /\ dom h by XBOOLE_0:def 3;
+ then h.r2 < h.r1 by A4,A5,Def3;
+ then r* h.r1 < r* h.r2 by A4,REAL_1:71; then (r(#)
+h).r1 < r* h.r2 by A6,SEQ_1:def 6;
+ hence thesis by A6,SEQ_1:def 6;
+end;
+
+theorem Th66:
+(h is_non_decreasing_on Y & 0<=r implies r(#)h is_non_decreasing_on Y) &
+(h is_non_decreasing_on Y & r<=0 implies r(#)h is_non_increasing_on Y)
+proof
+thus h is_non_decreasing_on Y & 0<=r implies r(#)h is_non_decreasing_on Y
+ proof assume A1: h is_non_decreasing_on Y & 0<=r;
+  let r1,r2; assume A2: r1 in Y /\ dom(r(#)h) & r2 in Y /\ dom(r(#)
+h) & r1<r2;
+ then A3: r1 in Y & r1 in dom (r(#)h) & r2 in Y & r2 in dom (r(#)
+h) by XBOOLE_0:def 3;
+  then r1 in Y & r1 in dom h & r2 in Y & r2 in dom h by SEQ_1:def 6;
+  then r1 in Y /\ dom h & r2 in Y /\ dom h by XBOOLE_0:def 3;
+  then h.r1 <= h.r2 by A1,A2,Def4;
+  then r* h.r1 <= (h.r2)*r by A1,AXIOMS:25;
+  then (r(#)h).r1 <= r * h.r2 by A3,SEQ_1:def 6; hence thesis by A3,SEQ_1:def 6
+;
+ end;
+ assume A4: h is_non_decreasing_on Y & r<=0;
+ let r1,r2; assume A5: r1 in Y /\ dom (r(#)h) & r2 in Y /\ dom (r(#)
+h) & r1<r2;
+then A6: r1 in Y & r1 in dom (r(#)h) & r2 in Y & r2 in dom (r(#)
+h) by XBOOLE_0:def 3;
+ then r1 in Y & r1 in dom h & r2 in Y & r2 in dom h by SEQ_1:def 6;
+ then r1 in Y /\ dom h & r2 in Y /\ dom h by XBOOLE_0:def 3;
+ then h.r1<=h.r2 by A4,A5,Def4; then r*h.r2<=r*h.r1 by A4,REAL_1:52;
+ then (r(#)h).r2<=r*h.r1 by A6,SEQ_1:def 6; hence thesis by A6,SEQ_1:def 6;
+end;
+
+theorem
+  (h is_non_increasing_on Y & 0<=r implies r(#)h is_non_increasing_on Y) &
+(h is_non_increasing_on Y & r<=0 implies r(#)h is_non_decreasing_on Y)
+proof
+thus h is_non_increasing_on Y & 0<=r implies r(#)h is_non_increasing_on Y
+ proof assume A1: h is_non_increasing_on Y & 0<=r;
+  let r1,r2; assume A2: r1 in Y /\ dom(r(#)h) & r2 in Y /\ dom(r(#)
+h) & r1<r2;
+ then A3: r1 in Y & r1 in dom (r(#)h) & r2 in Y & r2 in dom (r(#)
+h) by XBOOLE_0:def 3;
+  then r1 in Y & r1 in dom h & r2 in Y & r2 in dom h by SEQ_1:def 6;
+  then r1 in Y /\ dom h & r2 in Y /\ dom h by XBOOLE_0:def 3;
+  then h.r2 <= h.r1 by A1,A2,Def5;
+  then r* h.r2 <= (h.r1)*r by A1,AXIOMS:25;
+  then (r(#)h).r2 <= r * h.r1 by A3,SEQ_1:def 6; hence thesis by A3,SEQ_1:def 6
+;
+ end;
+ assume A4: h is_non_increasing_on Y & r<=0;
+ let r1,r2;
+ assume A5: r1 in Y /\ dom (r(#)h) & r2 in Y /\ dom (r(#)h) & r1<r2;
+then A6: r1 in Y & r1 in dom (r(#)h) & r2 in Y & r2 in dom (r(#)
+h) by XBOOLE_0:def 3;
+ then r1 in Y & r1 in dom h & r2 in Y & r2 in dom h by SEQ_1:def 6;
+ then r1 in Y /\ dom h & r2 in Y /\ dom h by XBOOLE_0:def 3;
+ then h.r2 <= h.r1 by A4,A5,Def5; then r* h.r1 <= r* h.r2 by A4,REAL_1:52;
+ then (r(#)h).r1 <= r * h.r2 by A6,SEQ_1:def 6; hence thesis by A6,SEQ_1:def 6;
+end;
+
+theorem Th68:
+r in X /\ Y /\ dom (h1+h2) implies r in X /\ dom h1 & r in Y /\ dom h2
+proof assume r in X /\ Y /\ dom (h1+h2);
+  then r in X /\ Y & r in dom (h1+h2) by XBOOLE_0:def 3;
+  then r in X & r in Y & r in dom h1 /\ dom h2 by SEQ_1:def 3,XBOOLE_0:def 3;
+  then r in X & r in Y & r in dom h1 & r in dom h2
+  by XBOOLE_0:def 3;hence thesis by XBOOLE_0:def 3;
+end;
+
+theorem
+  (h1 is_increasing_on X & h2 is_increasing_on Y implies
+                                h1+h2 is_increasing_on (X /\ Y)) &
+(h1 is_decreasing_on X & h2 is_decreasing_on Y implies
+                                h1+h2 is_decreasing_on (X /\ Y)) &
+(h1 is_non_decreasing_on X & h2 is_non_decreasing_on Y implies
+                                h1+h2 is_non_decreasing_on X /\ Y) &
+(h1 is_non_increasing_on X & h2 is_non_increasing_on Y implies
+                                h1+h2 is_non_increasing_on X /\ Y)
+proof
+thus h1 is_increasing_on X & h2 is_increasing_on Y implies
+         h1+h2 is_increasing_on X /\ Y
+ proof assume A1: h1 is_increasing_on X & h2 is_increasing_on Y;
+  let r1,r2; assume A2:
+  r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
+then A3: r1 in X /\ dom h1 & r1 in Y /\ dom h2 by Th68;
+A4: r2 in X /\ dom h1 & r2 in Y /\ dom h2 by A2,Th68;
+A5: r1 in dom (h1+h2) & r2 in dom (h1+h2) & r1<r2 by A2,XBOOLE_0:def 3;
+A6: h1.r1 < h1.r2 by A1,A2,A3,A4,Def2; h2.r1 < h2.r2 by A1,A2,A3,A4,Def2;
+  then h1.r1+h2.r1 < h1.r2+h2.r2 by A6,REAL_1:67;
+  then (h1+h2).r1 < h1.r2 + h2.r2 by A5,SEQ_1:def 3; hence thesis by A5,SEQ_1:
+def 3;
+ end;
+thus h1 is_decreasing_on X & h2 is_decreasing_on Y implies
+         h1+h2 is_decreasing_on X /\ Y
+ proof assume A7: h1 is_decreasing_on X & h2 is_decreasing_on Y;
+  let r1,r2; assume A8:
+  r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
+then A9: r1 in X /\ dom h1 & r1 in Y /\ dom h2 by Th68;
+A10: r2 in X /\ dom h1 & r2 in Y /\ dom h2 by A8,Th68;
+A11: r1 in dom (h1+h2) & r2 in dom (h1+h2) & r1<r2 by A8,XBOOLE_0:def 3;
+A12: h1.r2 < h1.r1 by A7,A8,A9,A10,Def3; h2.r2 < h2.r1 by A7,A8,A9,A10,Def3
+;
+  then h1.r2+h2.r2 < h1.r1+h2.r1 by A12,REAL_1:67;
+  then (h1+h2).r2 < h1.r1 + h2.r1 by A11,SEQ_1:def 3;
+  hence thesis by A11,SEQ_1:def 3;
+ end;
+thus h1 is_non_decreasing_on X & h2 is_non_decreasing_on Y implies
+         h1+h2 is_non_decreasing_on X /\ Y
+ proof assume A13: h1 is_non_decreasing_on X & h2 is_non_decreasing_on Y;
+  let r1,r2; assume A14:
+  r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
+then A15: r1 in X /\ dom h1 & r1 in Y /\ dom h2 by Th68;
+A16: r2 in X /\ dom h1 & r2 in Y /\ dom h2 by A14,Th68;
+A17: r1 in dom (h1+h2) & r2 in dom (h1+h2) & r1<r2 by A14,XBOOLE_0:def 3;
+A18: h1.r1 <= h1.r2 by A13,A14,A15,A16,Def4;
+    h2.r1 <= h2.r2 by A13,A14,A15,A16,Def4;
+  then h1.r1+h2.r1 <= h1.r2+h2.r2 by A18,REAL_1:55;
+  then (h1+h2).r1 <= h1.r2 + h2.r2 by A17,SEQ_1:def 3;
+  hence thesis by A17,SEQ_1:def 3;
+ end;
+ assume A19: h1 is_non_increasing_on X & h2 is_non_increasing_on Y;
+  let r1,r2; assume A20:
+  r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
+then A21: r1 in X /\ dom h1 & r1 in Y /\ dom h2 by Th68;
+A22: r2 in X /\ dom h1 & r2 in Y /\ dom h2 by A20,Th68;
+A23: r1 in dom (h1+h2) & r2 in dom (h1+h2) & r1<r2 by A20,XBOOLE_0:def 3;
+A24: h1.r2 <= h1.r1 by A19,A20,A21,A22,Def5;
+    h2.r2 <= h2.r1 by A19,A20,A21,A22,Def5;
+  then h1.r2+h2.r2 <= h1.r1+h2.r1 by A24,REAL_1:55;
+  then (h1+h2).r2 <= h1.r1 + h2.r1 by A23,SEQ_1:def 3;
+  hence thesis by A23,SEQ_1:def 3;
+end;
+
+theorem
+  (h1 is_increasing_on X & h2 is_constant_on Y implies
+                               h1+h2 is_increasing_on X /\ Y) &
+(h1 is_decreasing_on X & h2 is_constant_on Y implies
+                               h1+h2 is_decreasing_on X /\ Y)
+proof
+thus h1 is_increasing_on X & h2 is_constant_on Y implies
+        h1+h2 is_increasing_on X /\ Y
+ proof assume A1: h1 is_increasing_on X & h2 is_constant_on Y;
+  then consider r such that
+A2: for p st p in Y /\ dom h2 holds h2.p = r by PARTFUN2:76;
+  let r1,r2; assume A3:
+  r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
+then A4: r1 in X /\ dom h1 & r1 in Y /\ dom h2 by Th68;
+A5: r2 in X /\ dom h1 & r2 in Y /\ dom h2 by A3,Th68;
+A6: r1 in dom (h1+h2) & r2 in dom (h1+h2) & r1<r2 by A3,XBOOLE_0:def 3;
+    h1.r1 < h1.r2 by A1,A3,A4,A5,Def2;
+  then h1.r1 + r < h1.r2 + r by REAL_1:53;
+  then h1.r1 + h2.r1 < h1.r2 + r by A2,A4;
+  then h1.r1 + h2.r1 < h1.r2 + h2.r2 by A2,A5;
+  then (h1+h2).r1 < h1.r2 + h2.r2 by A6,SEQ_1:def 3;
+  hence thesis by A6,SEQ_1:def 3;
+ end;
+ assume A7: h1 is_decreasing_on X & h2 is_constant_on Y;
+ then consider r such that
+A8: for p st p in Y /\ dom h2 holds h2.p = r by PARTFUN2:76;
+ let r1,r2; assume A9:
+ r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
+then A10: r1 in X /\ dom h1 & r1 in Y /\ dom h2 by Th68;
+A11: r2 in X /\ dom h1 & r2 in Y /\ dom h2 by A9,Th68;
+A12: r1 in dom (h1+h2) & r2 in dom (h1+h2) & r1<r2 by A9,XBOOLE_0:def 3;
+   h1.r2 < h1.r1 by A7,A9,A10,A11,Def3;
+ then h1.r2 + r < h1.r1 + r by REAL_1:53;
+ then h1.r2 + h2.r2 < h1.r1 + r by A8,A11;
+ then h1.r2 + h2.r2 < h1.r1 + h2.r1 by A8,A10;
+ then (h1+h2).r2 < h1.r1 + h2.r1 by A12,SEQ_1:def 3;
+ hence thesis by A12,SEQ_1:def 3;
+end;
+
+theorem
+  h1 is_increasing_on X & h2 is_non_decreasing_on Y implies
+ h1 + h2 is_increasing_on X /\ Y
+proof assume A1: h1 is_increasing_on X & h2 is_non_decreasing_on Y;
+ let r1,r2; assume
+A2: r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
+then A3: r1 in X /\ Y & r1 in dom (h1+h2) & r2 in X /\ Y & r2 in dom (h1+h2)
+     by XBOOLE_0:def 3;
+then A4: r1 in X & r1 in Y & r2 in X & r2 in Y by XBOOLE_0:def 3;
+   r1 in dom h1 /\ dom h2 & r2 in dom h1 /\ dom h2 by A3,SEQ_1:def 3;
+then A5: r1 in dom h1 & r1 in dom h2 & r2 in dom h1 &
+  r2 in dom h2 by XBOOLE_0:def 3;
+ then r1 in X /\ dom h1 & r2 in X /\ dom h1 by A4,XBOOLE_0:def 3;
+then A6: h1.r1 < h1.r2 by A1,A2,Def2;
+   r1 in Y /\ dom h2 & r2 in Y /\ dom h2 by A4,A5,XBOOLE_0:def 3;
+ then h2.r1 <= h2.r2 by A1,A2,Def4;
+ then h1.r1 + h2.r1 < h1.r2 + h2.r2 by A6,REAL_1:67;
+ then (h1+h2).r1 < h1.r2 + h2.r2 by A3,SEQ_1:def 3;
+ hence thesis by A3,SEQ_1:def 3;
+end;
+
+theorem
+  h1 is_non_increasing_on X & h2 is_constant_on Y implies
+ h1 + h2 is_non_increasing_on X /\ Y
+proof assume A1: h1 is_non_increasing_on X & h2 is_constant_on Y;
+ let r1,r2; assume
+A2: r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
+then A3: r1 in X /\ Y & r1 in dom (h1+h2) & r2 in X /\ Y & r2 in dom (h1+h2)
+     by XBOOLE_0:def 3;
+then A4: r1 in X & r1 in Y & r2 in X & r2 in Y by XBOOLE_0:def 3;
+   r1 in dom h1 /\ dom h2 & r2 in dom h1 /\ dom h2 by A3,SEQ_1:def 3;
+then A5: r1 in dom h1 & r1 in dom h2 &
+ r2 in dom h1 & r2 in dom h2 by XBOOLE_0:def 3;
+ then r1 in X /\ dom h1 & r2 in X /\ dom h1 by A4,XBOOLE_0:def 3;
+then A6: h1.r2 <= h1.r1 by A1,A2,Def5;
+   r1 in Y /\ dom h2 & r2 in Y /\ dom h2 by A4,A5,XBOOLE_0:def 3;
+ then h2.r2 = h2.r1 by A1,PARTFUN2:77;
+ then h1.r2 + h2.r2 <= h1.r1 + h2.r1 by A6,AXIOMS:24;
+ then (h1+h2).r2 <= h1.r1 + h2.r1 by A3,SEQ_1:def 3;
+ hence thesis by A3,SEQ_1:def 3;
+end;
+
+theorem
+  h1 is_decreasing_on X & h2 is_non_increasing_on Y implies
+ h1 + h2 is_decreasing_on X /\ Y
+proof assume A1: h1 is_decreasing_on X & h2 is_non_increasing_on Y;
+ let r1,r2; assume
+A2: r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
+then A3: r1 in X /\ Y & r1 in dom (h1+h2) & r2 in X /\ Y & r2 in dom (h1+h2)
+     by XBOOLE_0:def 3;
+then A4: r1 in X & r1 in Y & r2 in X & r2 in Y by XBOOLE_0:def 3;
+   r1 in dom h1 /\ dom h2 & r2 in dom h1 /\ dom h2 by A3,SEQ_1:def 3;
+then A5: r1 in dom h1 & r1 in dom h2 & r2 in dom h1 &
+ r2 in dom h2 by XBOOLE_0:def 3;
+ then r1 in X /\ dom h1 & r2 in X /\ dom h1 by A4,XBOOLE_0:def 3;
+then A6: h1.r2 < h1.r1 by A1,A2,Def3;
+   r1 in Y /\ dom h2 & r2 in Y /\ dom h2 by A4,A5,XBOOLE_0:def 3;
+ then h2.r2 <= h2.r1 by A1,A2,Def5;
+ then h1.r2 + h2.r2 < h1.r1 + h2.r1 by A6,REAL_1:67;
+ then (h1+h2).r2 < h1.r1 + h2.r1 by A3,SEQ_1:def 3;
+ hence thesis by A3,SEQ_1:def 3;
+end;
+
+theorem
+  h1 is_non_decreasing_on X & h2 is_constant_on Y implies
+ h1 + h2 is_non_decreasing_on X /\ Y
+proof assume A1: h1 is_non_decreasing_on X & h2 is_constant_on Y;
+ let r1,r2; assume
+A2: r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
+then A3: r1 in X /\ Y & r1 in dom (h1+h2) & r2 in X /\ Y & r2 in dom (h1+h2)
+     by XBOOLE_0:def 3;
+then A4: r1 in X & r1 in Y & r2 in X & r2 in Y by XBOOLE_0:def 3;
+   r1 in dom h1 /\ dom h2 & r2 in dom h1 /\ dom h2 by A3,SEQ_1:def 3;
+then A5: r1 in dom h1 & r1 in dom h2 & r2 in dom h1 &
+ r2 in dom h2 by XBOOLE_0:def 3;
+ then r1 in X /\ dom h1 & r2 in X /\ dom h1 by A4,XBOOLE_0:def 3;
+then A6: h1.r1 <= h1.r2 by A1,A2,Def4;
+   r1 in Y /\ dom h2 & r2 in Y /\ dom h2 by A4,A5,XBOOLE_0:def 3;
+ then h2.r2 = h2.r1 by A1,PARTFUN2:77;
+ then h1.r1 + h2.r1 <= h1.r2 + h2.r2 by A6,AXIOMS:24;
+ then (h1+h2).r1 <= h1.r2 + h2.r2 by A3,SEQ_1:def 3;
+ hence thesis by A3,SEQ_1:def 3;
+end;
+
+theorem
+  h is_increasing_on {x}
+proof let r1,r2; assume
+A1: r1 in {x} /\ dom h & r2 in {x} /\ dom h & r1<r2;
+ then r1 in {x} & r2 in {x} by XBOOLE_0:def 3;
+ then r1 = x & r2 = x by TARSKI:def 1; hence thesis by A1;
+end;
+
+theorem
+  h is_decreasing_on {x}
+proof let r1,r2; assume
+A1: r1 in {x} /\ dom h & r2 in {x} /\ dom h & r1<r2;
+ then r1 in {x} & r2 in {x} by XBOOLE_0:def 3;
+ then r1 = x & r2 = x by TARSKI:def 1; hence thesis by A1;
+end;
+
+theorem
+  h is_non_decreasing_on {x}
+proof let r1,r2; assume
+   r1 in {x} /\ dom h & r2 in {x} /\ dom h & r1<r2;
+ then r1 in {x} & r2 in {x} by XBOOLE_0:def 3;
+ then r1 = x & r2 = x by TARSKI:def 1; hence h.r1 <= h.r2;
+end;
+
+theorem
+  h is_non_increasing_on {x}
+proof let r1,r2; assume
+   r1 in {x} /\ dom h & r2 in {x} /\ dom h & r1<r2;
+ then r1 in {x} & r2 in {x} by XBOOLE_0:def 3;
+ then r1 = x & r2 = x by TARSKI:def 1; hence h.r2 <= h.r1;
+end;
+
+theorem
+  id R is_increasing_on R
+proof let r1,r2; assume
+A1: r1 in R /\ dom (id R) & r2 in R /\ dom (id R) & r1<r2;
+ then r1 in R & r1 in dom (id R) & r2 in R & r2 in dom (id R) by XBOOLE_0:def 3
+;
+ then (id R).r1 = r1 & (id R).r2 = r2 by FUNCT_1:35; hence thesis by A1;
+end;
+
+theorem
+  h is_increasing_on X implies -h is_decreasing_on X
+proof assume h is_increasing_on X;
+ then (-1)(#)h is_decreasing_on X by Th64; hence thesis by RFUNCT_1:38;
+end;
+
+theorem
+  h is_non_decreasing_on X implies -h is_non_increasing_on X
+proof assume h is_non_decreasing_on X;
+ then (-1)(#)h is_non_increasing_on X by Th66;
+ hence thesis by RFUNCT_1:38;
+end;
+
+theorem
+  (h is_increasing_on [.p,g.] or h is_decreasing_on [.p,g.])
+implies h|[.p,g.] is one-to-one
+proof assume A1: h is_increasing_on [.p,g.] or h is_decreasing_on [.p,g.];
+   now per cases by A1;
+ suppose A2: h is_increasing_on [.p,g.];
+    now let p1,p2; assume A3: p1 in dom(h|[.p,g.]) & p2 in dom(h|[.p,g.]) &
+   (h|[.p,g.]).p1 = (h|[.p,g.]).p2;
+   then A4: h.p1=(h|[.p,g.]).p2 by FUNCT_1:68
+          .=h.p2 by A3,FUNCT_1:68;
+   A5: p1 in [.p,g.] /\ dom h & p2 in [.p,g.] /\ dom h by A3,FUNCT_1:68;
+   thus p1=p2
+   proof assume A6: p1<>p2;
+      now per cases by A6,REAL_1:def 5;
+    suppose p1<p2; hence contradiction by A2,A4,A5,Def2;
+    suppose p2<p1; hence contradiction by A2,A4,A5,Def2;
+    end; hence contradiction;
+   end;
+  end; hence h|[.p,g.] is one-to-one by PARTFUN1:38;
+ suppose A7: h is_decreasing_on [.p,g.];
+    now let p1,p2; assume A8: p1 in dom(h|[.p,g.]) & p2 in dom(h|[.p,g.]) &
+   (h|[.p,g.]).p1 = (h|[.p,g.]).p2;
+   then A9: h.p1=(h|[.p,g.]).p2 by FUNCT_1:68
+          .=h.p2 by A8,FUNCT_1:68;
+   A10: p1 in [.p,g.] /\ dom h & p2 in [.p,g.] /\ dom h by A8,FUNCT_1:68;
+   thus p1=p2
+   proof assume A11: p1<>p2;
+      now per cases by A11,REAL_1:def 5;
+    suppose p1<p2; hence contradiction by A7,A9,A10,Def3;
+    suppose p2<p1; hence contradiction by A7,A9,A10,Def3;
+    end; hence contradiction;
+   end;
+  end; hence h|[.p,g.] is one-to-one by PARTFUN1:38;
+ end; hence thesis;
+end;
+
+theorem
+  for h being one-to-one PartFunc of REAL, REAL st h is_increasing_on [.p,g.]
+ holds (h|[.p,g.])" is_increasing_on h.:[.p,g.]
+proof let h be one-to-one PartFunc of REAL, REAL;
+ assume that A1: h is_increasing_on [.p,g.] and
+ A2: not (h|[.p,g.])" is_increasing_on h.:[.p,g.];
+ consider y1,y2 be Real such that A3: y1 in h.:[.p,g.] /\ dom((h|[.p,g.])") &
+ y2 in h.:[.p,g.] /\ dom((h|[.p,g.])") & y1<y2 &
+ ((h|[.p,g.])").y1 >= ((h|[.p,g.])").y2 by A2,Def2;
+    y1 in h.:[.p,g.] & y2 in h.:[.p,g.] by A3,XBOOLE_0:def 3;
+ then A4: y1 in rng (h|[.p,g.]) & y2 in rng (h|[.p,g.]) by RELAT_1:148;
+ A5: h|[.p,g.] is_increasing_on [.p,g.] by A1,Th50;
+   now per cases;
+ suppose ((h|[.p,g.])").y1 = ((h|[.p,g.])").y2;
+  then y1 =(h|[.p,g.]).(((h|[.p,g.])").y2) by A4,FUNCT_1:57
+    .=y2 by A4,FUNCT_1:57;
+  hence contradiction by A3;
+ suppose ((h|[.p,g.])").y1 <> ((h|[.p,g.])").y2;
+  then A6: ((h|[.p,g.])").y2 < ((h|[.p,g.])").y1 by A3,REAL_1:def 5;
+  A7: ((h|[.p,g.])").y2 in dom (h|[.p,g.]) &
+  ((h|[.p,g.])").y1 in dom (h|[.p,g.]) by A4,PARTFUN2:79;
+    dom (h|[.p,g.])=dom ((h|[.p,g.])|[.p,g.]) by RELAT_1:101
+  .=[.p,g.]/\dom(h|[.p,g.]) by RELAT_1:90;
+  then (h|[.p,g.]).(((h|[.p,g.])").y2) < (h|[.p,g.]).(((h|[.p,g.])").y1)
+  by A5,A6,A7,Def2;
+  then y2 < (h|[.p,g.]).(((h|[.p,g.])").y1) by A4,FUNCT_1:57;
+hence contradiction by A3,A4,FUNCT_1:57;
+ end; hence contradiction;
+end;
+
+theorem
+   for h being one-to-one PartFunc of REAL, REAL st h is_decreasing_on [.p,g.]
+  holds (h|[.p,g.])" is_decreasing_on h.:[.p,g.]
+proof let h be one-to-one PartFunc of REAL, REAL;
+ assume that A1: h is_decreasing_on [.p,g.] and
+ A2: not (h|[.p,g.])" is_decreasing_on h.:[.p,g.];
+ consider y1,y2 be Real such that A3: y1 in h.:[.p,g.] /\ dom((h|[.p,g.])") &
+ y2 in h.:[.p,g.] /\ dom((h|[.p,g.])") & y1<y2 &
+ ((h|[.p,g.])").y2 >= ((h|[.p,g.])").y1 by A2,Def3;
+    y1 in h.:[.p,g.] & y2 in h.:[.p,g.] by A3,XBOOLE_0:def 3;
+ then A4: y1 in rng (h|[.p,g.]) & y2 in rng (h|[.p,g.]) by RELAT_1:148;
+ A5: h|[.p,g.] is_decreasing_on [.p,g.] by A1,Th51;
+   now per cases;
+ suppose ((h|[.p,g.])").y1 = ((h|[.p,g.])").y2;
+  then y1 =(h|[.p,g.]).(((h|[.p,g.])").y2) by A4,FUNCT_1:57
+    .=y2 by A4,FUNCT_1:57;
+  hence contradiction by A3;
+ suppose ((h|[.p,g.])").y1 <> ((h|[.p,g.])").y2;
+  then A6: ((h|[.p,g.])").y2 > ((h|[.p,g.])").y1 by A3,REAL_1:def 5;
+  A7: ((h|[.p,g.])").y2 in dom (h|[.p,g.]) &
+  ((h|[.p,g.])").y1 in dom (h|[.p,g.])
+  by A4,PARTFUN2:79;
+    dom (h|[.p,g.])=dom ((h|[.p,g.])|[.p,g.]) by RELAT_1:101
+  .=[.p,g.]/\dom(h|[.p,g.]) by RELAT_1:90;
+  then (h|[.p,g.]).(((h|[.p,g.])").y2) < (h|[.p,g.]).(((h|[.p,g.])").y1)
+  by A5,A6,A7,Def3;
+  then y2 < (h|[.p,g.]).(((h|[.p,g.])").y1) by A4,FUNCT_1:57;
+hence contradiction by A3,A4,FUNCT_1:57;
+ end; hence contradiction;
+end;

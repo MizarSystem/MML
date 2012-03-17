@@ -1,0 +1,439 @@
+:: Asymptotic notation. Part I: Theory
+::  by Richard Krueger , Piotr Rudnicki and Paul Shelley
+::
+:: Received November 4, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary FINSET_1, ARYTM, ZF_LANG, ARYTM_1, SEQ_1, FUNCT_1, SQUARE_1,
+      ARYTM_3, RELAT_1, SEQ_2, ORDINAL2, ABSVALUE, LIMFUNC1, FRAENKEL, FUNCT_2,
+      BOOLE, INT_1, POWER, GROUP_1, ASYMPT_0;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, FUNCT_1, FUNCT_2, FRAENKEL, INT_1, NAT_1, SEQ_1, SEQ_2, NEWTON,
+      POWER, PRE_CIRC, FINSET_1, SQUARE_1, LIMFUNC1, ABSVALUE, SFMASTR3;
+ constructors REAL_1, FRAENKEL, SEQ_2, POWER, PRE_CIRC, SFMASTR3, LIMFUNC1,
+      CARD_4, PARTFUN1, ABSVALUE, NAT_1, ORDINAL2, NUMBERS;
+ clusters XREAL_0, FRAENKEL, GROUP_2, INT_1, SEQ_1, MEMBERED, ORDINAL2,
+      NUMBERS;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve c, c1, d for Real,
+        k, n, m, N, n1, N1, N2, N3, N4, N5, M for Nat,
+        x for set;
+
+scheme FinSegRng1{m, n() -> Nat, X() -> non empty set,
+                  F(set) -> Element of X()} :
+ {F(i) where i is Nat: m() <= i & i <= n()} is finite non empty Subset of X()
+provided
+ m() <= n();
+
+scheme FinImInit1{N() -> Nat, X() -> non empty set, F(set) -> Element of X()} :
+ {F(n) where n is Nat: n <= N()} is finite non empty Subset of X();
+
+scheme FinImInit2{N() -> Nat, X() -> non empty set, F(set) -> Element of X()} :
+ {F(n) where n is Nat: n < N()} is finite non empty Subset of X()
+provided
+ N() > 0;
+
+definition let c be real number;
+ canceled 2;
+
+ attr c is logbase means
+:: ASYMPT_0:def 3
+ c > 0 & c <> 1;
+end;
+
+definition
+ cluster positive Real;
+ cluster negative Real;
+ cluster logbase Real;
+ cluster non negative Real;
+ cluster non positive Real;
+ cluster non logbase Real;
+end;
+
+definition let f be Real_Sequence;
+ attr f is eventually-nonnegative means
+:: ASYMPT_0:def 4
+  ex N st for n st n >= N holds f.n >= 0;
+ attr f is positive means
+:: ASYMPT_0:def 5
+  for n holds f.n > 0;
+ attr f is eventually-positive means
+:: ASYMPT_0:def 6
+  ex N st for n st n >= N holds f.n > 0;
+ attr f is eventually-nonzero means
+:: ASYMPT_0:def 7
+  ex N st for n st n >= N holds f.n <> 0;
+ attr f is eventually-nondecreasing means
+:: ASYMPT_0:def 8
+  ex N st for n st n >= N holds f.n <= f.(n+1);
+end;
+
+definition
+ cluster eventually-nonnegative eventually-nonzero positive eventually-positive
+         eventually-nondecreasing Real_Sequence;
+end;
+
+definition
+ cluster positive -> eventually-positive Real_Sequence;
+ cluster eventually-positive ->
+                       eventually-nonnegative eventually-nonzero Real_Sequence;
+ cluster eventually-nonnegative eventually-nonzero ->
+                                             eventually-positive Real_Sequence;
+end;
+
+definition let f,g be eventually-nonnegative Real_Sequence;
+ cluster f+g -> eventually-nonnegative;
+end;
+
+definition let f be Real_Sequence, c be real number;
+ func c+f -> Real_Sequence means
+:: ASYMPT_0:def 9
+  for n holds it.n = c + f.n;
+ synonym f+c;
+end;
+
+definition let f be eventually-nonnegative Real_Sequence, c be positive Real;
+ cluster c(#)f -> eventually-nonnegative;
+end;
+
+definition let f be eventually-nonnegative Real_Sequence,
+               c be non negative Real;
+ cluster c+f -> eventually-nonnegative;
+end;
+
+definition let f be eventually-nonnegative Real_Sequence, c be positive Real;
+ cluster c+f -> eventually-positive;
+end;
+
+definition let f,g be Real_Sequence;
+ func max(f, g) -> Real_Sequence means
+:: ASYMPT_0:def 10
+  for n holds it.n = max( f.n, g.n );
+ commutativity;
+end;
+
+definition let f be Real_Sequence, g be eventually-nonnegative Real_Sequence;
+ cluster max(f, g) -> eventually-nonnegative;
+end;
+
+definition let f be Real_Sequence, g be eventually-positive Real_Sequence;
+ cluster max(f, g) -> eventually-positive;
+end;
+
+definition let f,g be Real_Sequence;
+ pred g majorizes f means
+:: ASYMPT_0:def 11
+  ex N st for n st n >= N holds f.n <= g.n;
+end;
+
+theorem :: ASYMPT_0:1  :: Problem 3.25
+ for f being Real_Sequence, N being Nat st for n st n >= N holds f.n <= f.(n+1)
+  holds for n,m being Nat st N <= n & n <= m holds f.n <= f.m;
+
+theorem :: ASYMPT_0:2
+ for f,g being eventually-positive Real_Sequence
+  st f/"g is convergent & lim(f/"g) <> 0
+   holds g/"f is convergent & lim(g/"f) = (lim(f/"g))";
+
+theorem :: ASYMPT_0:3
+ for f being eventually-nonnegative Real_Sequence
+  st f is convergent holds 0 <= lim f;
+
+theorem :: ASYMPT_0:4
+ for f,g being Real_Sequence
+  st f is convergent & g is convergent & g majorizes f holds lim(f) <= lim(g);
+
+theorem :: ASYMPT_0:5
+ for f being Real_Sequence, g being eventually-nonzero Real_Sequence
+  st f/"g is divergent_to+infty holds g/"f is convergent & lim(g/"f)=0;
+
+begin :: A Notation for "the order of" (Section 3.2)
+
+definition :: Defining O(f) (page 80)
+ let f be eventually-nonnegative Real_Sequence;
+ func Big_Oh(f) -> FUNCTION_DOMAIN of NAT, REAL equals
+:: ASYMPT_0:def 12
+  { t where t is Element of Funcs(NAT, REAL) :
+     ex c,N st c > 0 & for n st n >= N holds t.n <= c*f.n & t.n >= 0 };
+end;
+
+theorem :: ASYMPT_0:6
+ for x being set, f being eventually-nonnegative Real_Sequence
+  st x in Big_Oh(f) holds x is eventually-nonnegative Real_Sequence;
+
+theorem :: ASYMPT_0:7 :: Threshold Rule (page 81)
+   for f being positive Real_Sequence,
+     t being eventually-nonnegative Real_Sequence holds
+  t in Big_Oh(f) iff ex c st c > 0 & for n holds t.n <= c*f.n;
+
+theorem :: ASYMPT_0:8 :: Generalized Threshold Rule (page 81)
+   for f being eventually-positive Real_Sequence,
+     t being eventually-nonnegative Real_Sequence,
+     N being Nat
+  st t in Big_Oh(f) & for n st n >= N holds f.n > 0
+   holds ex c st c > 0 & for n st n >= N holds t.n <= c*f.n;
+
+theorem :: ASYMPT_0:9 :: Maximum Rule (page 81)
+   for f,g being eventually-nonnegative Real_Sequence holds
+  Big_Oh( f + g ) = Big_Oh( max( f, g ) );
+
+theorem :: ASYMPT_0:10  :: Reflexivity of Big_Oh (page 83; Problem 3.9)
+ for f being eventually-nonnegative Real_Sequence holds f in Big_Oh(f);
+
+theorem :: ASYMPT_0:11
+ for f,g being eventually-nonnegative Real_Sequence
+  st f in Big_Oh(g) holds Big_Oh(f) c= Big_Oh(g);
+
+theorem :: ASYMPT_0:12  :: Transitivity of Big_Oh (page 83; Problem 3.10)
+ for f,g,h being eventually-nonnegative Real_Sequence holds
+  f in Big_Oh(g) & g in Big_Oh(h) implies f in Big_Oh(h);
+
+theorem :: ASYMPT_0:13
+   for f being eventually-nonnegative Real_Sequence, c being positive Real
+holds
+  Big_Oh(f) = Big_Oh(c(#)f);
+
+theorem :: ASYMPT_0:14
+:: NOTE: The reverse implication is not true. Consider the case of
+:: f = 1/n, c = 1. Then 1/n in Big_Oh(1+1/n), but 1+1/n is not in Big_Oh(1/n).
+   for c being non negative Real, x,f being eventually-nonnegative
+Real_Sequence
+  holds x in Big_Oh(f) implies x in Big_Oh(c+f);
+
+theorem :: ASYMPT_0:15  :: Limit Rule, Part 1 (page 84)
+for f,g being eventually-positive Real_Sequence
+ st f/"g is convergent & lim( f/"g ) > 0 holds Big_Oh(f) = Big_Oh(g);
+
+theorem :: ASYMPT_0:16  :: Limit Rule, Part 2 (page 84)
+for f,g being eventually-positive Real_Sequence
+ st f/"g is convergent & lim( f/"g )=0 holds f in Big_Oh(g) & not g in
+ Big_Oh(f);
+
+theorem :: ASYMPT_0:17  :: Limit Rule, Part 3 (page 84)
+ for f,g being eventually-positive Real_Sequence
+  st f/"g is divergent_to+infty holds not f in Big_Oh(g) & g in Big_Oh(f);
+
+begin :: Other Asymptotic Notation (Section 3.3)
+
+definition :: (page 86)
+ let f be eventually-nonnegative Real_Sequence;
+ func Big_Omega(f) -> FUNCTION_DOMAIN of NAT, REAL equals
+:: ASYMPT_0:def 13
+  { t where t is Element of Funcs(NAT, REAL) :
+     ex d,N st d > 0 & for n st n >= N holds t.n >= d*f.n & t.n >= 0 };
+end;
+
+theorem :: ASYMPT_0:18
+   for x being set, f being eventually-nonnegative Real_Sequence
+  st x in Big_Omega(f) holds x is eventually-nonnegative Real_Sequence;
+
+theorem :: ASYMPT_0:19  :: Duality Rule (page 86)
+ for f,g being eventually-nonnegative Real_Sequence holds
+  f in Big_Omega(g) iff g in Big_Oh(f);
+
+theorem :: ASYMPT_0:20  :: Reflexivity of Big_Omega (Problem 3.12)
+ for f being eventually-nonnegative Real_Sequence holds f in Big_Omega(f);
+
+theorem :: ASYMPT_0:21  :: Transitivity of Big_Omega (Problem 3.12)
+ for f,g,h being eventually-nonnegative Real_Sequence holds
+  f in Big_Omega(g) & g in Big_Omega(h) implies f in Big_Omega(h);
+
+theorem :: ASYMPT_0:22 :: Limit Rule for Big_Omega, Part 1 (page 86)
+   for f,g being eventually-positive Real_Sequence
+  st f/"g is convergent & lim( f/"g ) > 0 holds Big_Omega(f) = Big_Omega(g);
+
+theorem :: ASYMPT_0:23  :: Limit Rule for Big_Omega, Part 2 (page 86)
+for f,g being eventually-positive Real_Sequence
+ st f/"g is convergent & lim( f/"g ) = 0 holds
+  g in Big_Omega(f) & not f in Big_Omega(g);
+
+theorem :: ASYMPT_0:24 :: Limit Rule for Big_Omega, Part 3 (page 86)
+   for f,g being eventually-positive Real_Sequence
+  st f/"g is divergent_to+infty holds not g in Big_Omega(f) & f in Big_Omega(g)
+;
+
+theorem :: ASYMPT_0:25 :: Threshold Rule for Big_Omega (page 86)
+   for f,t being positive Real_Sequence holds
+  t in Big_Omega(f) iff ex d st d > 0 & for n holds d*f.n <= t.n;
+
+theorem :: ASYMPT_0:26 :: Maximum Rule for Big_Omega (page 86)
+   for f,g being eventually-nonnegative Real_Sequence holds
+  Big_Omega(f+g) = Big_Omega(max(f,g));
+
+definition :: (page 87)
+ let f be eventually-nonnegative Real_Sequence;
+ func Big_Theta(f) -> FUNCTION_DOMAIN of NAT, REAL equals
+:: ASYMPT_0:def 14
+
+  Big_Oh(f) /\ Big_Omega(f);
+end;
+
+theorem :: ASYMPT_0:27  :: Alternate Definition for Big_Theta (page 87)
+ for f being eventually-nonnegative Real_Sequence holds
+  Big_Theta(f) = { t where t is Element of Funcs(NAT, REAL) :
+     ex c,d,N st c > 0 & d > 0 &
+      for n st n >= N holds d*f.n <= t.n & t.n <= c*f.n };
+
+theorem :: ASYMPT_0:28 :: Reflexivity of Big_Theta (Problem 3.18 Part 1)
+   for f being eventually-nonnegative Real_Sequence holds f in Big_Theta(f);
+
+theorem :: ASYMPT_0:29 :: Symmetry of Big_Theta (Problem 3.18 Part 2)
+   for f,g being eventually-nonnegative Real_Sequence
+  st f in Big_Theta(g) holds g in Big_Theta(f);
+
+theorem :: ASYMPT_0:30 :: Transitivity of Big_Theta (Problem 3.18 Part 3)
+   for f,g,h being eventually-nonnegative Real_Sequence
+  st f in Big_Theta(g) & g in Big_Theta(h) holds f in Big_Theta(h);
+
+theorem :: ASYMPT_0:31 :: Threshold Rule for Big_Theta (page 87)
+   for f,t being positive Real_Sequence holds
+  t in Big_Theta(f) iff
+   ex c,d st c > 0 & d > 0 & for n holds d*f.n <= t.n & t.n <= c*f.n;
+
+theorem :: ASYMPT_0:32 :: Maximum Rule for Big_Theta (page 87)
+   for f,g being eventually-nonnegative Real_Sequence holds
+  Big_Theta(f+g) = Big_Theta(max(f,g));
+
+theorem :: ASYMPT_0:33 :: Limit Rule for Big_Theta, Part 1 (page 88)
+  for f,g being eventually-positive Real_Sequence
+ st f/"g is convergent & lim( f/"g ) > 0 holds f in Big_Theta(g);
+
+theorem :: ASYMPT_0:34 :: Limit Rule for Big_Theta, Part 2 (page 88)
+  for f,g being eventually-positive Real_Sequence
+ st f/"g is convergent & lim( f/"g ) = 0
+  holds f in Big_Oh(g) & not f in Big_Theta(g);
+
+theorem :: ASYMPT_0:35 :: Limit Rule for Big_Theta, Part 3 (page 88)
+   for f,g being eventually-positive Real_Sequence
+  st f/"g is divergent_to+infty holds f in Big_Omega(g) & not f in Big_Theta(g)
+;
+
+begin :: Conditional Asymptotic Notation (Section 3.4)
+
+definition :: page 89
+ let f be eventually-nonnegative Real_Sequence, X be set;
+ func Big_Oh(f,X) -> FUNCTION_DOMAIN of NAT, REAL equals
+:: ASYMPT_0:def 15
+  { t where t is Element of Funcs(NAT, REAL) :
+     ex c,N st c > 0 & for n st n >= N & n in X holds t.n <= c*f.n & t.n >=
+ 0 };
+end;
+
+definition :: page 89
+ let f be eventually-nonnegative Real_Sequence, X be set;
+ func Big_Omega(f,X) -> FUNCTION_DOMAIN of NAT, REAL equals
+:: ASYMPT_0:def 16
+  { t where t is Element of Funcs(NAT, REAL) :
+     ex d,N st d > 0 & for n st n >= N & n in X holds t.n >= d*f.n & t.n >=
+ 0 };
+end;
+
+definition :: page 89
+ let f be eventually-nonnegative Real_Sequence, X be set;
+ func Big_Theta(f,X) -> FUNCTION_DOMAIN of NAT, REAL equals
+:: ASYMPT_0:def 17
+  { t where t is Element of Funcs(NAT, REAL) :
+     ex c,d,N st c > 0 & d > 0 &
+      for n st n >= N & n in X holds d*f.n <= t.n & t.n <= c*f.n };
+end;
+
+theorem :: ASYMPT_0:36  :: Alternate definition for Big_Theta_Cond
+ for f being eventually-nonnegative Real_Sequence, X being set holds
+  Big_Theta(f,X) = Big_Oh(f,X) /\ Big_Omega(f,X);
+
+definition :: Definition of f(bn) (page 89)
+ let f be Real_Sequence, b be Nat;
+  func f taken_every b -> Real_Sequence means
+:: ASYMPT_0:def 18
+   for n holds it.n = f.(b*n);
+end;
+
+definition :: (page 89)
+ let f be eventually-nonnegative Real_Sequence, b be Nat;
+ pred f is_smooth_wrt b means
+:: ASYMPT_0:def 19
+  f is eventually-nondecreasing & f taken_every b in Big_Oh(f);
+end;
+
+definition :: (page 89)
+ let f be eventually-nonnegative Real_Sequence;
+ attr f is smooth means
+:: ASYMPT_0:def 20
+  for b being Nat st b >= 2 holds f is_smooth_wrt b;
+end;
+
+theorem :: ASYMPT_0:37 :: b-smooth implies smooth (page 90)
+   for f being eventually-nonnegative Real_Sequence
+  st ex b being Nat st b >= 2 & f is_smooth_wrt b holds f is smooth;
+
+theorem :: ASYMPT_0:38  :: First half of smoothness rule proof (page 90)
+ for f being eventually-nonnegative Real_Sequence,
+     t being eventually-nonnegative eventually-nondecreasing Real_Sequence,
+     b being Nat
+  st f is smooth & b >= 2 &
+     t in Big_Oh(f, { b|^n where n is Nat : not contradiction } )
+   holds t in Big_Oh(f);
+
+theorem :: ASYMPT_0:39  :: Second half of smoothness rule proof (page 90),
+                    :: also Problem 3.29
+ for f being eventually-nonnegative Real_Sequence,
+     t being eventually-nonnegative eventually-nondecreasing Real_Sequence,
+     b being Nat
+  st f is smooth & b >= 2 &
+     t in Big_Omega(f, { b|^n where n is Nat : not contradiction } )
+   holds t in Big_Omega(f);
+
+theorem :: ASYMPT_0:40 :: Smoothness Rule (page 90)
+   for f being eventually-nonnegative Real_Sequence,
+     t being eventually-nonnegative eventually-nondecreasing Real_Sequence,
+     b being Nat
+  st f is smooth & b >= 2 &
+     t in Big_Theta(f, { b|^n where n is Nat : not contradiction } )
+   holds t in Big_Theta(f);
+
+:: Section 3.5 omitted
+
+begin :: Operations on Asymptotic Notation (Section 3.6)
+
+definition :: Definition of operators on sets (page 91)
+ let X be non empty set, F,G be FUNCTION_DOMAIN of X,REAL;
+  func F + G -> FUNCTION_DOMAIN of X,REAL equals
+:: ASYMPT_0:def 21
+   { t where t is Element of Funcs(X,REAL) :
+      ex f,g being Element of Funcs(X,REAL) st
+       f in F & g in G & for n being Element of X holds t.n = f.n + g.n };
+end;
+
+definition :: (page 91)
+ let X be non empty set, F,G be FUNCTION_DOMAIN of X,REAL;
+  func max(F, G) -> FUNCTION_DOMAIN of X,REAL equals
+:: ASYMPT_0:def 22
+   { t where t is Element of Funcs(X,REAL) :
+      ex f,g being Element of Funcs(X,REAL) st
+       f in F & g in G & for n being Element of X holds t.n = max(f.n, g.n) };
+end;
+
+theorem :: ASYMPT_0:41 :: Properties, Part 1 (page 91; Problem 3.33)
+   for f,g being eventually-nonnegative Real_Sequence holds
+  Big_Oh(f) + Big_Oh(g) = Big_Oh(f+g);
+
+theorem :: ASYMPT_0:42 :: Properties, Part 3 (page 91; Problem 3.33)
+   for f,g being eventually-nonnegative Real_Sequence holds
+  max(Big_Oh(f), Big_Oh(g)) = Big_Oh(max(f,g));
+
+definition :: Definition of operators on sets (page 92)
+ let F,G be FUNCTION_DOMAIN of NAT,REAL;
+  func F to_power G -> FUNCTION_DOMAIN of NAT,REAL equals
+:: ASYMPT_0:def 23
+     { t where t is Element of Funcs(NAT,REAL) :
+      ex f,g being Element of Funcs(NAT,REAL), N being Element of NAT st
+       f in F & g in G &
+        for n being Element of NAT st n >=
+ N holds t.n = (f.n) to_power (g.n) };
+end;

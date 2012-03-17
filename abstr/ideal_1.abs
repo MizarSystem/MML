@@ -1,0 +1,1148 @@
+:: Ring Ideals
+::  by Jonathan Backer , Piotr Rudnicki and Christoph Schwarzweller
+::
+:: Received November 20, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, ALGSTR_1, VECTSP_1, VECTSP_2, BINOM, BINOP_1, LATTICES,
+      REALSET1, FINSEQ_1, FILTER_2, ALGSTR_2, COLLSP, BOOLE, ARYTM_1, GROUP_1,
+      RELAT_1, FUNCT_1, FUNCT_7, ARYTM_3, FINSEQ_4, PRELAMB, MCART_1, SETFAM_1,
+      RLVECT_3, SUBSET_1, GCD_1, LATTICE3, SQUARE_1, NEWTON, FINSET_1, INT_3,
+      WAYBEL_0, TARSKI, NORMSP_1, GR_CY_1, IDEAL_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CQC_SIM1, FINSET_1, FUNCT_1,
+      FINSEQ_1, VECTSP_1, INT_3, NORMSP_1, NUMBERS, XCMPLX_0, XREAL_0, NAT_1,
+      RELSET_1, RLVECT_1, PARTFUN1, FUNCT_2, ALGSTR_1, PRE_TOPC, GR_CY_1,
+      PRE_CIRC, MCART_1, DOMAIN_1, FINSEQ_4, POLYNOM1, SETFAM_1, STRUCT_0,
+      GROUP_1, BINOP_1, VECTSP_2, FUNCT_7, REALSET1, GCD_1, BINOM;
+ constructors INT_3, CQC_SIM1, PRE_CIRC, GROUP_2, ALGSEQ_1, BINOM, GCD_1,
+      ALGSTR_2, DOMAIN_1, POLYNOM1, MONOID_0, BINOP_1, PRE_TOPC;
+ clusters INT_3, RELSET_1, FINSET_1, SUBSET_1, VECTSP_2, STRUCT_0, PRE_TOPC,
+      FINSEQ_1, FINSEQ_5, XBOOLE_0, POLYNOM1, INT_1, GCD_1, BINOM, REALSET1,
+      VECTSP_1, NAT_1, XREAL_0, MEMBERED, RELAT_1, FUNCT_2, PRE_CIRC, NUMBERS,
+      ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Preliminaries
+
+definition
+cluster add-associative left_zeroed right_zeroed (non empty LoopStr);
+end;
+
+definition
+cluster
+  Abelian left_zeroed right_zeroed add-cancelable well-unital add-associative
+  associative commutative distributive non trivial (non empty doubleLoopStr);
+end;
+
+theorem :: IDEAL_1:1
+for V being add-associative left_zeroed right_zeroed (non empty LoopStr),
+    v,u being Element of V
+ holds Sum <* v,u *> = v + u;
+
+begin :: Ideals
+
+definition
+ let L be non empty LoopStr, F being Subset of L;
+ attr F is add-closed means
+:: IDEAL_1:def 1
+  for x, y being Element of L st x in F & y in F holds x+y in
+ F;
+end;
+
+definition
+ let L be non empty HGrStr, F be Subset of L;
+ attr F is left-ideal means
+:: IDEAL_1:def 2
+  for p, x being Element of L st x in F holds p*x in F;
+ attr F is right-ideal means
+:: IDEAL_1:def 3
+  for p, x being Element of L st x in F holds x*p in F;
+end;
+
+definition
+let L be non empty LoopStr;
+cluster add-closed (non empty Subset of L);
+end;
+
+definition
+let L be non empty HGrStr;
+cluster left-ideal (non empty Subset of L);
+cluster right-ideal (non empty Subset of L);
+end;
+
+definition
+let L be non empty doubleLoopStr;
+cluster add-closed left-ideal right-ideal (non empty Subset of L);
+cluster add-closed right-ideal (non empty Subset of L);
+cluster add-closed left-ideal (non empty Subset of L);
+end;
+
+definition
+let R be commutative (non empty HGrStr);
+cluster left-ideal -> right-ideal (non empty Subset of R);
+cluster right-ideal -> left-ideal (non empty Subset of R);
+end;
+
+definition
+let L be non empty doubleLoopStr;
+mode Ideal of L is add-closed left-ideal right-ideal (non empty Subset of L);
+end;
+
+definition
+let L be non empty doubleLoopStr;
+mode RightIdeal of L is add-closed right-ideal (non empty Subset of L);
+end;
+
+definition
+let L be non empty doubleLoopStr;
+mode LeftIdeal of L is add-closed left-ideal (non empty Subset of L);
+end;
+
+theorem :: IDEAL_1:2
+for R being right_zeroed add-left-cancelable
+            left-distributive (non empty doubleLoopStr),
+    I being left-ideal (non empty Subset of R)
+ holds 0.R in I;
+
+theorem :: IDEAL_1:3
+for R being left_zeroed add-right-cancelable
+            right-distributive (non empty doubleLoopStr),
+    I being right-ideal (non empty Subset of R)
+ holds 0.R in I;
+
+theorem :: IDEAL_1:4
+for L being right_zeroed (non empty doubleLoopStr) holds {0.L} is add-closed;
+
+theorem :: IDEAL_1:5
+for L being left_zeroed add-right-cancelable
+            right-distributive (non empty doubleLoopStr)
+  holds {0.L} is left-ideal;
+
+theorem :: IDEAL_1:6
+for L being right_zeroed add-left-cancelable
+            left-distributive (non empty doubleLoopStr)
+  holds {0.L} is right-ideal;
+
+theorem :: IDEAL_1:7
+for L being add-associative right_zeroed right_complementable
+             distributive (non empty doubleLoopStr)
+  holds {0.L} is Ideal of L;
+
+theorem :: IDEAL_1:8
+  for L being add-associative right_zeroed right_complementable
+             right-distributive (non empty doubleLoopStr)
+  holds {0.L} is LeftIdeal of L;
+
+theorem :: IDEAL_1:9
+  for L being add-associative right_zeroed right_complementable
+             left-distributive (non empty doubleLoopStr)
+  holds {0.L} is RightIdeal of L;
+
+theorem :: IDEAL_1:10
+ for L being non empty doubleLoopStr holds the carrier of L is Ideal of L;
+
+theorem :: IDEAL_1:11
+ for L being non empty doubleLoopStr holds the carrier of L is LeftIdeal of L;
+
+theorem :: IDEAL_1:12
+ for L being non empty doubleLoopStr holds the carrier of L is RightIdeal of L;
+
+definition
+let R be left_zeroed right_zeroed add-cancelable
+         distributive (non empty doubleLoopStr),
+    I be Ideal of R;
+redefine attr I is trivial means
+:: IDEAL_1:def 4
+    I = {0.R};
+end;
+
+definition
+let S be 1-sorted,
+    T be Subset of S;
+attr T is proper means
+:: IDEAL_1:def 5
+  T <> the carrier of S;
+end;
+
+definition
+let S be non empty 1-sorted;
+cluster proper Subset of S;
+end;
+
+definition
+let R be non trivial left_zeroed right_zeroed add-cancelable
+         distributive (non empty doubleLoopStr);
+cluster proper Ideal of R;
+end;
+
+theorem :: IDEAL_1:13
+ for L being add-associative right_zeroed right_complementable
+             left-distributive left_unital (non empty doubleLoopStr),
+     I being left-ideal (non empty Subset of L),
+     x being Element of L
+  st x in I holds -x in I;
+
+theorem :: IDEAL_1:14
+ for L being add-associative right_zeroed right_complementable
+             right-distributive right_unital (non empty doubleLoopStr),
+     I being right-ideal (non empty Subset of L),
+     x being Element of L
+  st x in I holds -x in I;
+
+theorem :: IDEAL_1:15
+   for L being add-associative right_zeroed right_complementable
+             left-distributive left_unital (non empty doubleLoopStr),
+     I being LeftIdeal of L, x,y being Element of L
+  st x in I & y in I holds x-y in I;
+
+theorem :: IDEAL_1:16
+   for L being add-associative right_zeroed right_complementable
+             right-distributive right_unital (non empty doubleLoopStr),
+     I being RightIdeal of L, x,y being Element of L
+  st x in I & y in I holds x-y in I;
+
+theorem :: IDEAL_1:17
+for R being left_zeroed right_zeroed add-cancelable
+            add-associative distributive (non empty doubleLoopStr),
+    I being add-closed right-ideal (non empty Subset of R),
+    a being Element of I, n being Nat
+ holds n*a in I;
+
+theorem :: IDEAL_1:18
+  for R being unital left_zeroed right_zeroed add-cancelable associative
+            distributive (non empty doubleLoopStr),
+    I being right-ideal (non empty Subset of R),
+    a being Element of I, n being Nat
+  st n <> 0 holds a|^n in I;
+
+definition
+let R be non empty LoopStr,
+    I be add-closed (non empty Subset of R);
+func add|(I,R) -> BinOp of I equals
+:: IDEAL_1:def 6
+  (the add of R)|[:I,I:];
+end;
+
+definition
+let R be non empty HGrStr,
+    I be right-ideal (non empty Subset of R);
+func mult|(I,R) -> BinOp of I equals
+:: IDEAL_1:def 7
+    (the mult of R)|[:I,I:];
+end;
+
+definition
+let R be non empty LoopStr,
+    I be add-closed (non empty Subset of R);
+func Gr(I,R) -> non empty LoopStr equals
+:: IDEAL_1:def 8
+  LoopStr (#I,add|(I,R),In (0.R,I)#);
+end;
+
+definition
+let R be left_zeroed right_zeroed add-cancelable
+         add-associative distributive (non empty doubleLoopStr),
+    I be add-closed (non empty Subset of R);
+cluster Gr(I,R) -> add-associative;
+end;
+
+definition
+let R be left_zeroed right_zeroed add-cancelable
+         add-associative distributive (non empty doubleLoopStr),
+    I be add-closed right-ideal (non empty Subset of R);
+cluster Gr(I,R) -> right_zeroed;
+end;
+
+definition
+let R be Abelian (non empty doubleLoopStr),
+    I be add-closed (non empty Subset of R);
+cluster Gr(I,R) -> Abelian;
+end;
+
+definition
+let R be Abelian right_unital left_zeroed right_zeroed right_complementable
+         add-associative distributive (non empty doubleLoopStr),
+    I be add-closed right-ideal (non empty Subset of R);
+cluster Gr(I,R) -> right_complementable;
+end;
+
+theorem :: IDEAL_1:19
+for R being right_unital (non empty doubleLoopStr),
+    I being left-ideal (non empty Subset of R)
+  holds I is proper iff not(1_ R in I);
+
+theorem :: IDEAL_1:20
+  for R being left_unital right_unital (non empty doubleLoopStr),
+    I being right-ideal (non empty Subset of R)
+  holds I is proper iff
+for u being Element of R st u is unital holds not(u in I);
+
+theorem :: IDEAL_1:21
+  for R being right_unital (non empty doubleLoopStr),
+    I being left-ideal right-ideal (non empty Subset of R)
+ holds I is proper iff for u being Element of R st u is unital holds not(u in
+ I);
+
+theorem :: IDEAL_1:22
+  for R being non degenerated comRing
+ holds R is Field iff
+       for I being Ideal of R holds (I = {0.R} or I = the carrier of R);
+
+begin  :: Linear combinations
+
+definition
+  let R be non empty multLoopStr,
+      A be non empty Subset of R;
+  mode LinearCombination of A -> FinSequence of the carrier of R
+                                                                  means
+:: IDEAL_1:def 9
+    for i being set st i in dom it
+      ex u,v being Element of R, a being Element of A st it/.i = u*a*v;
+  mode LeftLinearCombination of A -> FinSequence of the carrier of R
+                                                                 means
+:: IDEAL_1:def 10
+    for i being set st i in dom it
+      ex u being Element of R, a being Element of A st it/.i = u*a;
+  mode RightLinearCombination of A -> FinSequence of the carrier of R
+                                                                 means
+:: IDEAL_1:def 11
+    for i being set st i in dom it
+      ex u being Element of R, a being Element of A st it/.i = a*u;
+end;
+
+definition
+ let R be non empty multLoopStr,
+      A be non empty Subset of R;
+ cluster non empty LinearCombination of A;
+ cluster non empty LeftLinearCombination of A;
+ cluster non empty RightLinearCombination of A;
+end;
+
+definition
+  let R be non empty multLoopStr,
+      A,B be non empty Subset of R,
+      F be LinearCombination of A,
+      G be LinearCombination of B;
+  redefine func F^G -> LinearCombination of (A \/ B);
+end;
+
+theorem :: IDEAL_1:23
+  for R be associative (non empty multLoopStr),
+      A be non empty Subset of R,
+      a be Element of R, F be LinearCombination of A
+  holds a*F is LinearCombination of A;
+
+theorem :: IDEAL_1:24
+  for R be associative (non empty multLoopStr),
+      A be non empty Subset of R,
+      a be Element of R, F be LinearCombination of A
+  holds F*a is LinearCombination of A;
+
+theorem :: IDEAL_1:25
+for R being right_unital (non empty multLoopStr),
+    A being non empty Subset of R,
+    f being LeftLinearCombination of A
+ holds f is LinearCombination of A;
+
+definition
+  let R be non empty multLoopStr,
+      A,B be non empty Subset of R,
+      F be LeftLinearCombination of A,
+      G be LeftLinearCombination of B;
+  redefine func F^G -> LeftLinearCombination of (A \/ B);
+end;
+
+theorem :: IDEAL_1:26
+  for R be associative (non empty multLoopStr),
+      A be non empty Subset of R,
+      a be Element of R,
+      F be LeftLinearCombination of A
+  holds a*F is LeftLinearCombination of A;
+
+theorem :: IDEAL_1:27
+    for R be non empty multLoopStr,
+      A be non empty Subset of R,
+      a be Element of R,
+      F be LeftLinearCombination of A
+  holds F*a is LinearCombination of A;
+
+theorem :: IDEAL_1:28
+for R being left_unital (non empty multLoopStr),
+    A being non empty Subset of R,
+    f being RightLinearCombination of A
+holds f is LinearCombination of A;
+
+definition
+  let R be non empty multLoopStr,
+      A,B be non empty Subset of R,
+      F be RightLinearCombination of A,
+      G be RightLinearCombination of B;
+  redefine func F^G -> RightLinearCombination of (A \/ B);
+end;
+
+theorem :: IDEAL_1:29
+  for R be associative (non empty multLoopStr),
+      A be non empty Subset of R,
+      a be Element of R,
+      F be RightLinearCombination of A
+  holds F*a is RightLinearCombination of A;
+
+theorem :: IDEAL_1:30
+    for R be associative (non empty multLoopStr),
+      A be non empty Subset of R,
+      a be Element of R,
+      F be RightLinearCombination of A
+  holds a*F is LinearCombination of A;
+
+theorem :: IDEAL_1:31
+for R being commutative associative (non empty multLoopStr),
+    A being non empty Subset of R,
+    f being LinearCombination of A
+holds f is LeftLinearCombination of A & f is RightLinearCombination of A;
+
+theorem :: IDEAL_1:32
+for S being non empty doubleLoopStr,
+    F being non empty Subset of S,
+    lc being non empty LinearCombination of F
+  ex p being LinearCombination of F,
+     e being Element of S
+   st lc = p^<* e *> & <*e*> is LinearCombination of F;
+
+theorem :: IDEAL_1:33
+for S being non empty doubleLoopStr,
+    F being non empty Subset of S,
+    lc being non empty LeftLinearCombination of F
+  ex p being LeftLinearCombination of F,
+     e being Element of S
+   st lc = p^<* e *> & <*e*> is LeftLinearCombination of F;
+
+theorem :: IDEAL_1:34
+for S being non empty doubleLoopStr,
+    F being non empty Subset of S,
+    lc being non empty RightLinearCombination of F
+  ex p being RightLinearCombination of F,
+     e being Element of S
+   st lc = p^<* e *> & <*e*> is RightLinearCombination of F;
+
+definition
+  let R be non empty multLoopStr, A be non empty Subset of R,
+      L be LinearCombination of A,
+      E be FinSequence of
+                      [:the carrier of R, the carrier of R, the carrier of R:];
+ pred E represents L means
+:: IDEAL_1:def 12
+
+   len E = len L &
+   for i being set st i in dom L
+     holds L.i = ((E/.i)`1)*((E/.i)`2)*((E/.i)`3) & ((E/.i)`2) in A;
+end;
+
+theorem :: IDEAL_1:35
+    for R being non empty multLoopStr,
+      A being non empty Subset of R,
+      L be LinearCombination of A
+   ex E be FinSequence of
+                      [:the carrier of R, the carrier of R, the carrier of R:]
+    st E represents L;
+
+theorem :: IDEAL_1:36
+    for R, S being non empty multLoopStr,
+      F being non empty Subset of R,
+      lc being LinearCombination of F,
+      G being non empty Subset of S,
+      P being Function of the carrier of R, the carrier of S,
+      E being FinSequence of
+                      [:the carrier of R, the carrier of R, the carrier of R:]
+    st P.:F c= G & E represents lc
+    holds ex LC being LinearCombination of G st len lc = len LC &
+          for i being set st i in dom LC
+           holds LC.i = (P.(E/.i)`1)*(P.(E/.i)`2)*(P.(E/.i)`3);
+
+definition
+  let R be non empty multLoopStr, A be non empty Subset of R,
+      L be LeftLinearCombination of A,
+      E be FinSequence of [:the carrier of R, the carrier of R:];
+ pred E represents L means
+:: IDEAL_1:def 13
+   len E = len L &
+   for i being set st i in dom L
+     holds L.i = ((E/.i)`1)*((E/.i)`2) & ((E/.i)`2) in A;
+end;
+
+theorem :: IDEAL_1:37
+    for R being non empty multLoopStr,
+      A being non empty Subset of R,
+      L be LeftLinearCombination of A
+   ex E be FinSequence of [:the carrier of R, the carrier of R:]
+    st E represents L;
+
+theorem :: IDEAL_1:38
+    for R, S being non empty multLoopStr,
+      F being non empty Subset of R,
+      lc being LeftLinearCombination of F,
+      G being non empty Subset of S,
+      P being Function of the carrier of R, the carrier of S,
+      E being FinSequence of [:the carrier of R, the carrier of R:]
+    st P.:F c= G & E represents lc
+    holds ex LC being LeftLinearCombination of G st len lc = len LC &
+          for i being set st i in dom LC
+           holds LC.i = (P.(E/.i)`1)*(P.(E/.i)`2);
+
+definition
+  let R be non empty multLoopStr, A be non empty Subset of R,
+      L be RightLinearCombination of A,
+      E be FinSequence of [:the carrier of R, the carrier of R:];
+ pred E represents L means
+:: IDEAL_1:def 14
+   len E = len L &
+   for i being set st i in dom L
+     holds L.i = ((E/.i)`1)*((E/.i)`2) & ((E/.i)`1) in A;
+end;
+
+theorem :: IDEAL_1:39
+    for R being non empty multLoopStr,
+      A being non empty Subset of R,
+      L be RightLinearCombination of A
+   ex E be FinSequence of [:the carrier of R, the carrier of R:]
+    st E represents L;
+
+theorem :: IDEAL_1:40
+    for R, S being non empty multLoopStr,
+      F being non empty Subset of R,
+      lc being RightLinearCombination of F,
+      G being non empty Subset of S,
+      P being Function of the carrier of R, the carrier of S,
+      E being FinSequence of [:the carrier of R, the carrier of R:]
+    st P.:F c= G & E represents lc
+    holds ex LC being RightLinearCombination of G st len lc = len LC &
+          for i being set st i in dom LC
+           holds LC.i = (P.(E/.i)`1)*(P.(E/.i)`2);
+
+theorem :: IDEAL_1:41
+  for R being non empty multLoopStr,
+    A being non empty Subset of R,
+    l being LinearCombination of A, n being Nat
+ holds l|Seg n is LinearCombination of A;
+
+theorem :: IDEAL_1:42
+  for R being non empty multLoopStr,
+    A being non empty Subset of R,
+    l being LeftLinearCombination of A, n being Nat
+ holds l|Seg n is LeftLinearCombination of A;
+
+theorem :: IDEAL_1:43
+  for R being non empty multLoopStr,
+    A being non empty Subset of R,
+    l being RightLinearCombination of A, n being Nat
+ holds l|Seg n is RightLinearCombination of A;
+
+begin :: Generated ideals
+
+definition
+  let L be non empty doubleLoopStr,
+      F be Subset of L;
+  assume  F is non empty;
+  func F-Ideal -> Ideal of L means
+:: IDEAL_1:def 15
+     F c= it & for I being Ideal of L st F c= I holds it c= I;
+  func F-LeftIdeal -> LeftIdeal of L means
+:: IDEAL_1:def 16
+
+     F c= it & for I being LeftIdeal of L st F c= I holds it c= I;
+  func F-RightIdeal -> RightIdeal of L means
+:: IDEAL_1:def 17
+
+     F c= it & for I being RightIdeal of L st F c= I holds it c= I;
+end;
+
+theorem :: IDEAL_1:44
+ for L being non empty doubleLoopStr, I being Ideal of L holds I-Ideal = I;
+
+theorem :: IDEAL_1:45
+ for L being non empty doubleLoopStr, I being LeftIdeal of L
+  holds I-LeftIdeal = I;
+
+theorem :: IDEAL_1:46
+ for L being non empty doubleLoopStr, I being RightIdeal of L
+  holds I-RightIdeal = I;
+
+definition
+let L be non empty doubleLoopStr,
+    I be Ideal of L;
+mode Basis of I -> non empty Subset of L means
+:: IDEAL_1:def 18
+    it-Ideal = I;
+end;
+
+theorem :: IDEAL_1:47
+for L being add-associative right_zeroed right_complementable
+             distributive (non empty doubleLoopStr)
+   holds {0.L}-Ideal = {0.L};
+
+theorem :: IDEAL_1:48
+   for L being left_zeroed right_zeroed add-cancelable
+             distributive (non empty doubleLoopStr)
+   holds {0.L}-Ideal = {0.L};
+
+theorem :: IDEAL_1:49
+   for L being left_zeroed right_zeroed add-right-cancelable
+             right-distributive (non empty doubleLoopStr)
+   holds {0.L}-LeftIdeal = {0.L};
+
+theorem :: IDEAL_1:50
+   for L being right_zeroed add-left-cancelable
+             left-distributive (non empty doubleLoopStr)
+   holds {0.L}-RightIdeal = {0.L};
+
+theorem :: IDEAL_1:51
+   for L being well-unital (non empty doubleLoopStr)
+  holds {1_ L}-Ideal = the carrier of L;
+
+theorem :: IDEAL_1:52
+   for L being right_unital (non empty doubleLoopStr)
+  holds {1_ L}-LeftIdeal = the carrier of L;
+
+theorem :: IDEAL_1:53
+   for L being left_unital (non empty doubleLoopStr)
+  holds {1_ L}-RightIdeal = the carrier of L;
+
+theorem :: IDEAL_1:54
+   for L being non empty doubleLoopStr holds ([#] L)-Ideal = the carrier of L;
+
+theorem :: IDEAL_1:55
+   for L being non empty doubleLoopStr holds ([#] L)-LeftIdeal = the carrier of
+L;
+
+theorem :: IDEAL_1:56
+   for L being non empty doubleLoopStr holds ([#]
+ L)-RightIdeal = the carrier of L;
+
+theorem :: IDEAL_1:57
+  for L being non empty doubleLoopStr,
+      A, B being non empty Subset of L
+  st A c= B holds A-Ideal c= B-Ideal;
+
+theorem :: IDEAL_1:58
+  for L being non empty doubleLoopStr,
+      A, B being non empty Subset of L
+  st A c= B holds A-LeftIdeal c= B-LeftIdeal;
+
+theorem :: IDEAL_1:59
+  for L being non empty doubleLoopStr,
+      A, B being non empty Subset of L
+  st A c= B holds A-RightIdeal c= B-RightIdeal;
+
+theorem :: IDEAL_1:60
+  for L being add-associative left_zeroed right_zeroed add-cancelable
+              associative distributive well-unital (non empty doubleLoopStr),
+      F being non empty Subset of L, x being set
+  holds x in F-Ideal iff ex f being LinearCombination of F st x = Sum f;
+
+theorem :: IDEAL_1:61
+for L being add-associative left_zeroed right_zeroed add-cancelable
+            associative distributive well-unital (non empty doubleLoopStr),
+    F being non empty Subset of L, x being set
+  holds x in F-LeftIdeal iff ex f being LeftLinearCombination of F st x = Sum f
+;
+
+theorem :: IDEAL_1:62
+  for L being add-associative left_zeroed right_zeroed add-cancelable
+              associative distributive well-unital (non empty doubleLoopStr),
+      F being non empty Subset of L, x being set
+  holds x in F-RightIdeal iff ex f being RightLinearCombination of F st x = Sum
+ f;
+
+theorem :: IDEAL_1:63
+for R being add-associative left_zeroed right_zeroed add-cancelable well-unital
+            associative commutative distributive (non empty doubleLoopStr),
+    F being non empty Subset of R
+holds F-Ideal = F-LeftIdeal & F-Ideal = F-RightIdeal;
+
+theorem :: IDEAL_1:64
+for R being add-associative left_zeroed right_zeroed add-cancelable well-unital
+            associative commutative distributive (non empty doubleLoopStr),
+    a being Element of R
+holds {a}-Ideal = {a*r where r is Element of R : not contradiction};
+
+theorem :: IDEAL_1:65
+for R being Abelian left_zeroed right_zeroed
+            add-cancelable well-unital add-associative
+            associative commutative distributive (non empty doubleLoopStr),
+    a,b being Element of R
+holds {a,b}-Ideal = {a*r + b*s where r,s is Element of R : not contradiction};
+
+theorem :: IDEAL_1:66
+for R being non empty doubleLoopStr, a being Element of R
+ holds a in {a}-Ideal;
+
+theorem :: IDEAL_1:67
+  for R being Abelian left_zeroed right_zeroed right_complementable
+            add-associative associative commutative
+            distributive well-unital (non empty doubleLoopStr),
+    A being non empty Subset of R, a being Element of R
+holds a in A-Ideal implies {a}-Ideal c= A-Ideal;
+
+theorem :: IDEAL_1:68
+  for R being non empty doubleLoopStr, a,b being Element of R
+ holds a in {a,b}-Ideal & b in {a,b}-Ideal;
+
+theorem :: IDEAL_1:69
+  for R being non empty doubleLoopStr, a,b being Element of R
+ holds {a}-Ideal c= {a,b}-Ideal & {b}-Ideal c= {a,b}-Ideal;
+
+begin :: Some Operations on Ideals
+
+definition
+let R be non empty HGrStr, I be Subset of R, a be Element of R;
+func a*I -> Subset of R equals
+:: IDEAL_1:def 19
+  {a*i where i is Element of R : i in I};
+end;
+
+definition
+let R be non empty multLoopStr, I be non empty Subset of R, a be Element of R;
+cluster a*I -> non empty;
+end;
+
+definition
+let R be distributive (non empty doubleLoopStr),
+    I be add-closed Subset of R, a be Element of R;
+cluster a*I -> add-closed;
+end;
+
+definition
+let R be associative (non empty doubleLoopStr),
+    I be right-ideal Subset of R, a be Element of R;
+cluster a*I -> right-ideal;
+end;
+
+theorem :: IDEAL_1:70
+for R being right_zeroed add-left-cancelable left-distributive
+            (non empty doubleLoopStr), I being non empty Subset of R
+ holds 0.R*I = {0.R};
+
+theorem :: IDEAL_1:71
+  for R being left_unital (non empty doubleLoopStr), I being Subset of R
+ holds 1_ R*I = I;
+
+definition
+let R be non empty LoopStr, I,J be Subset of R;
+func I + J -> Subset of R equals
+:: IDEAL_1:def 20
+ {a + b where a,b is Element of R : a in I & b in J};
+end;
+
+definition
+let R be non empty LoopStr, I,J be non empty Subset of R;
+cluster I + J -> non empty;
+end;
+
+definition
+let R be Abelian (non empty LoopStr), I,J be Subset of R;
+redefine func I + J;
+commutativity;
+end;
+
+definition
+let R be Abelian add-associative (non empty LoopStr),
+    I,J be add-closed Subset of R;
+cluster I + J -> add-closed;
+end;
+
+definition
+let R be left-distributive (non empty doubleLoopStr),
+    I,J be right-ideal Subset of R;
+cluster I + J -> right-ideal;
+end;
+
+definition
+let R be right-distributive (non empty doubleLoopStr),
+    I,J be left-ideal Subset of R;
+cluster I + J -> left-ideal;
+end;
+
+theorem :: IDEAL_1:72
+  for R being add-associative (non empty LoopStr), I,J,K being Subset of R
+ holds I + (J + K) = (I + J) + K;
+
+theorem :: IDEAL_1:73
+for R being left_zeroed right_zeroed add-right-cancelable
+            right-distributive (non empty doubleLoopStr),
+    I,J being right-ideal (non empty Subset of R)
+ holds I c= I + J;
+
+theorem :: IDEAL_1:74
+for R being left_zeroed add-right-cancelable
+            right-distributive (non empty doubleLoopStr),
+    I,J being right-ideal (non empty Subset of R)
+ holds J c= I + J;
+
+theorem :: IDEAL_1:75
+  for R being non empty LoopStr, I,J being Subset of R,
+    K being add-closed Subset of R
+st I c= K & J c= K holds I + J c= K;
+
+theorem :: IDEAL_1:76
+  for R being Abelian left_zeroed right_zeroed add-cancelable
+            well-unital add-associative associative
+            commutative distributive (non empty doubleLoopStr),
+    a,b being Element of R
+ holds {a,b}-Ideal = {a}-Ideal + {b}-Ideal;
+
+definition
+let R be non empty 1-sorted, I,J be Subset of R;
+func I /\ J -> Subset of R equals
+:: IDEAL_1:def 21
+  { x where x is Element of R : x in I & x in J };
+end;
+
+definition
+let R be right_zeroed add-left-cancelable
+         left-distributive (non empty doubleLoopStr),
+    I,J be left-ideal (non empty Subset of R);
+cluster I /\ J -> non empty;
+end;
+
+definition
+let R be non empty LoopStr, I,J be add-closed Subset of R;
+cluster I /\ J -> add-closed;
+end;
+
+definition
+let R be non empty multLoopStr, I,J be left-ideal Subset of R;
+cluster I /\ J -> left-ideal;
+end;
+
+definition
+let R be non empty multLoopStr, I,J be right-ideal Subset of R;
+cluster I /\ J -> right-ideal;
+end;
+
+theorem :: IDEAL_1:77
+for R being non empty 1-sorted, I,J being Subset of R
+ holds I /\ J c= I & I /\ J c= J;
+
+theorem :: IDEAL_1:78
+  for R being non empty 1-sorted, I,J,K being Subset of R
+ holds I /\ (J /\ K) = (I /\ J) /\ K;
+
+theorem :: IDEAL_1:79
+  for R being non empty 1-sorted, I,J,K being Subset of R
+ st K c= I & K c= J holds K c= I /\ J;
+
+theorem :: IDEAL_1:80
+  for R being Abelian left_zeroed right_zeroed right_complementable left_unital
+            add-associative left-distributive (non empty doubleLoopStr),
+    I being add-closed left-ideal (non empty Subset of R),
+    J being Subset of R, K being non empty Subset of R
+st J c= I holds I /\ (J + K) = J + (I /\ K);
+
+definition
+let R be non empty doubleLoopStr, I,J be Subset of R;
+func I *' J -> Subset of R equals
+:: IDEAL_1:def 22
+  { Sum s where s is FinSequence of the carrier of R :
+       for i being Nat st 1 <= i & i <= len s
+       ex a,b being Element of R st s.i = a*b & a in I & b in J};
+end;
+
+definition
+let R be non empty doubleLoopStr, I,J be Subset of R;
+cluster I *' J -> non empty;
+end;
+
+definition
+let R be commutative (non empty doubleLoopStr), I,J be Subset of R;
+redefine func I *' J;
+commutativity;
+end;
+
+definition
+let R be right_zeroed add-associative (non empty doubleLoopStr),
+    I,J be Subset of R;
+cluster I *' J -> add-closed;
+end;
+
+definition
+let R be right_zeroed add-left-cancelable associative
+         left-distributive (non empty doubleLoopStr),
+    I,J be right-ideal Subset of R;
+cluster I *' J -> right-ideal;
+end;
+
+definition
+let R be left_zeroed add-right-cancelable associative
+         right-distributive (non empty doubleLoopStr),
+    I,J be left-ideal Subset of R;
+cluster I *' J -> left-ideal;
+end;
+
+theorem :: IDEAL_1:81
+  for R being left_zeroed right_zeroed add-left-cancelable
+            left-distributive (non empty doubleLoopStr),
+    I being non empty Subset of R
+ holds {0.R} *' I = {0.R};
+
+theorem :: IDEAL_1:82
+for R being left_zeroed right_zeroed add-cancelable
+            distributive (non empty doubleLoopStr),
+    I being add-closed right-ideal (non empty Subset of R),
+    J being add-closed left-ideal (non empty Subset of R)
+holds I *' J c= I /\ J;
+
+theorem :: IDEAL_1:83
+for R being Abelian left_zeroed right_zeroed add-cancelable add-associative
+            associative distributive (non empty doubleLoopStr),
+    I,J,K being right-ideal (non empty Subset of R)
+holds I *' (J + K) = (I *' J) + (I *' K);
+
+theorem :: IDEAL_1:84
+for R being Abelian left_zeroed right_zeroed add-cancelable add-associative
+            commutative associative distributive (non empty doubleLoopStr),
+    I,J being right-ideal (non empty Subset of R)
+holds (I + J) *' (I /\ J) c= I *' J;
+
+theorem :: IDEAL_1:85
+  for R being right_zeroed add-left-cancelable
+            left-distributive (non empty doubleLoopStr),
+    I,J being add-closed left-ideal (non empty Subset of R)
+holds (I + J) *' (I /\ J) c= I /\ J;
+
+definition
+let R be non empty LoopStr, I,J be Subset of R;
+pred I,J are_co-prime means
+:: IDEAL_1:def 23
+ I + J = the carrier of R;
+end;
+
+theorem :: IDEAL_1:86
+for R being left_zeroed left_unital (non empty doubleLoopStr),
+    I,J being non empty Subset of R
+ st I,J are_co-prime holds I /\ J c= (I + J) *' (I /\ J);
+
+theorem :: IDEAL_1:87
+  for R being Abelian left_zeroed right_zeroed add-cancelable
+            add-associative left_unital commutative associative
+            distributive (non empty doubleLoopStr),
+    I being add-closed left-ideal right-ideal (non empty Subset of R),
+    J being add-closed left-ideal (non empty Subset of R)
+st I,J are_co-prime holds I *' J = I /\ J;
+
+definition
+let R be non empty HGrStr, I,J be Subset of R;
+func I % J -> Subset of R equals
+:: IDEAL_1:def 24
+  {a where a is Element of R: a*J c= I};
+end;
+
+definition
+let R be right_zeroed add-left-cancelable left-distributive
+         (non empty doubleLoopStr),
+    I,J be left-ideal (non empty Subset of R);
+cluster I % J -> non empty;
+end;
+
+definition
+let R be right_zeroed add-left-cancelable left-distributive
+         (non empty doubleLoopStr),
+    I,J be add-closed left-ideal (non empty Subset of R);
+cluster I % J -> add-closed;
+end;
+
+definition
+let R be right_zeroed add-left-cancelable left-distributive
+         associative commutative (non empty doubleLoopStr),
+    I,J be left-ideal (non empty Subset of R);
+cluster I % J -> left-ideal;
+cluster I % J -> right-ideal;
+end;
+
+theorem :: IDEAL_1:88
+  for R being (non empty multLoopStr),
+    I being right-ideal (non empty Subset of R),
+    J being Subset of R
+ holds I c= I % J;
+
+theorem :: IDEAL_1:89
+  for R being right_zeroed add-left-cancelable
+            left-distributive (non empty doubleLoopStr),
+    I being add-closed left-ideal (non empty Subset of R),
+    J being Subset of R
+ holds (I % J) *' J c= I;
+
+theorem :: IDEAL_1:90
+for R being left_zeroed add-right-cancelable
+            right-distributive (non empty doubleLoopStr),
+    I being add-closed right-ideal (non empty Subset of R),
+    J being Subset of R
+ holds (I % J) *' J c= I;
+
+theorem :: IDEAL_1:91
+  for R being left_zeroed add-right-cancelable right-distributive
+            commutative associative (non empty doubleLoopStr),
+    I being add-closed right-ideal (non empty Subset of R),
+    J,K being Subset of R
+holds (I % J) % K = I % (J *' K);
+
+theorem :: IDEAL_1:92
+  for R being non empty multLoopStr, I,J,K being Subset of R
+holds (J /\ K) % I = (J % I) /\ (K % I);
+
+theorem :: IDEAL_1:93
+  for R being left_zeroed right_zeroed add-right-cancelable
+            right-distributive (non empty doubleLoopStr),
+    I being add-closed Subset of R,
+    J,K being right-ideal (non empty Subset of R)
+holds I % (J + K) = (I % J) /\ (I % K);
+
+definition
+let R be unital (non empty doubleLoopStr),
+    I be Subset of R;
+func sqrt I -> Subset of R equals
+:: IDEAL_1:def 25
+  {a where a is Element of R: ex n being Nat st a|^n in I};
+end;
+
+definition
+let R be unital (non empty doubleLoopStr), I be non empty Subset of R;
+cluster sqrt I -> non empty;
+end;
+
+definition
+let R be Abelian add-associative left_zeroed right_zeroed
+         commutative associative add-cancelable distributive
+         unital (non empty doubleLoopStr),
+    I be add-closed right-ideal (non empty Subset of R);
+cluster sqrt I -> add-closed;
+end;
+
+definition
+let R be unital commutative associative (non empty doubleLoopStr),
+    I be left-ideal (non empty Subset of R);
+cluster sqrt I -> left-ideal;
+cluster sqrt I -> right-ideal;
+end;
+
+theorem :: IDEAL_1:94
+  for R being unital associative (non empty doubleLoopStr),
+    I being non empty Subset of R, a being Element of R
+holds a in sqrt I iff ex n being Nat st a|^n in sqrt I;
+
+theorem :: IDEAL_1:95
+  for R being left_zeroed right_zeroed add-cancelable distributive
+            unital associative (non empty doubleLoopStr),
+    I being add-closed right-ideal (non empty Subset of R),
+    J being add-closed left-ideal (non empty Subset of R)
+holds sqrt (I *' J) = sqrt (I /\ J);
+
+begin :: Noetherian ideals
+
+definition
+ let L be non empty doubleLoopStr, I be Ideal of L;
+ attr I is finitely_generated means
+:: IDEAL_1:def 26
+
+  ex F being non empty finite Subset of L st I = F-Ideal;
+end;
+
+definition
+ let L be non empty doubleLoopStr;
+ cluster finitely_generated Ideal of L;
+end;
+
+definition
+let L be non empty doubleLoopStr,
+    F be non empty finite Subset of L;
+cluster F-Ideal -> finitely_generated;
+end;
+
+definition
+ let L be non empty doubleLoopStr;
+ attr L is Noetherian means
+:: IDEAL_1:def 27
+  for I being Ideal of L holds I is finitely_generated;
+end;
+
+definition
+  cluster Euclidian Abelian add-associative right_zeroed right_complementable
+          well-unital distributive commutative associative non degenerated
+          (non empty doubleLoopStr);
+end;
+
+definition
+  let L be non empty doubleLoopStr;
+  let I be Ideal of L;
+  attr I is principal means
+:: IDEAL_1:def 28
+    ex e being Element of L st I = {e}-Ideal;
+end;
+
+definition
+  let L be non empty doubleLoopStr;
+  attr L is PID means
+:: IDEAL_1:def 29
+
+    for I being Ideal of L holds I is principal;
+end;
+
+theorem :: IDEAL_1:96
+  for L being non empty doubleLoopStr,
+      F being non empty Subset of L st F <> {0.L}
+    ex x being Element of L st x <> 0.L & x in F;
+
+theorem :: IDEAL_1:97
+ for R being add-associative left_zeroed right_zeroed right_complementable
+             distributive left_unital Euclidian (non empty doubleLoopStr)
+ holds R is PID;
+
+theorem :: IDEAL_1:98
+ for L being non empty doubleLoopStr st L is PID holds L is Noetherian;
+
+definition
+ cluster INT.Ring -> Noetherian;
+end;
+
+definition
+  cluster Noetherian Abelian add-associative right_zeroed right_complementable
+          well-unital distributive commutative associative non degenerated
+          (non empty doubleLoopStr);
+end;
+
+theorem :: IDEAL_1:99 :: Lemma_4_5_i_ii:
+   for R being Noetherian add-associative left_zeroed right_zeroed
+add-cancelable
+             associative distributive well-unital (non empty doubleLoopStr)
+   for B being non empty Subset of R
+     ex C being non empty finite Subset of R
+       st C c= B & C-Ideal = B-Ideal;
+
+theorem :: IDEAL_1:100 :: Lemma_4_5_ii_iii:
+   for R being (non empty doubleLoopStr)
+   st for B being non empty Subset of R
+        ex C being non empty finite Subset of R
+          st C c= B & C-Ideal = B-Ideal
+   for a being sequence of R
+     ex m being Nat st a.(m+1) in (rng (a|Segm(m+1)))-Ideal;
+
+definition
+ let X, Y be non empty set, f be Function of X, Y, A be non empty Subset of X;
+ cluster f|A -> non empty;
+end;
+
+theorem :: IDEAL_1:101 :: Lemma_4_5_iii_iv:
+    for R being (non empty doubleLoopStr)
+   st for a being sequence of R
+       ex m being Nat st a.(m+1) in (rng (a|Segm(m+1)))-Ideal
+   holds not ex F being Function of NAT, bool (the carrier of R)
+        st (for i being Nat holds F.i is Ideal of R) &
+           (for j,k being Nat st j < k holds F.j c< F.k);
+
+theorem :: IDEAL_1:102 :: Lemma_4_5_iv_i:
+    for R being (non empty doubleLoopStr)
+   st not ex F being Function of NAT, bool (the carrier of R)
+           st (for i being Nat holds F.i is Ideal of R) &
+              (for j,k being Nat st j < k holds F.j c< F.k)
+  holds R is Noetherian;

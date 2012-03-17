@@ -1,0 +1,215 @@
+:: Improvement of Radix-$2^k$ Signed-Digit Number for High Speed Circuit
+::  by Masaaki Niimura and Yasushi Fuwa
+::
+:: Received January 3, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary INT_1, NAT_1, ARYTM_1, ARYTM_3, POWER, MIDSP_3, FINSEQ_1, FUNCT_1,
+      RELAT_1, RLVECT_1, RADIX_1, FINSEQ_4, RADIX_3, GROUP_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, XREAL_0, INT_1, NAT_1, FUNCT_1,
+      POWER, FINSEQ_1, FINSEQ_4, BINARITH, TREES_4, WSIERP_1, MIDSP_3, RADIX_1;
+ constructors REAL_1, POWER, BINARITH, FINSEQ_4, EULER_2, RADIX_1, MEMBERED;
+ clusters INT_1, RELSET_1, GROUP_2, NAT_1, XREAL_0, MEMBERED;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Definition for Radix-2^k SD_Sub number
+
+ reserve i,n,m,k,x for Nat,
+         i1,i2 for Integer;
+
+theorem :: RADIX_3:1
+  Radix(k) |^ n * Radix(k) = Radix(k) |^ (n+1);
+
+definition let k;
+  func k-SD_Sub_S equals
+:: RADIX_3:def 1
+
+    {e where e is Element of INT:
+         e >= -Radix(k -' 1) & e <= Radix(k -' 1) - 1 };
+end;
+
+definition let k;
+  func k-SD_Sub equals
+:: RADIX_3:def 2
+
+    {e where e is Element of INT:
+         e >= -Radix(k -' 1) - 1 & e <= Radix(k -' 1) };
+end;
+
+theorem :: RADIX_3:2
+  i1 in k-SD_Sub implies -Radix(k-'1) - 1 <= i1 & i1 <= Radix(k-'1);
+
+theorem :: RADIX_3:3
+  for k being Nat holds k-SD_Sub_S c= k-SD_Sub;
+
+theorem :: RADIX_3:4
+  k-SD_Sub_S c= (k+1)-SD_Sub_S;
+
+theorem :: RADIX_3:5
+     for k being Nat st 2 <= k holds k-SD_Sub c= k-SD;
+
+theorem :: RADIX_3:6
+  0 in 0-SD_Sub_S;
+
+theorem :: RADIX_3:7
+  0 in k-SD_Sub_S;
+
+theorem :: RADIX_3:8
+  0 in k-SD_Sub;
+
+theorem :: RADIX_3:9
+  for e being set st e in k-SD_Sub holds e is Integer;
+
+theorem :: RADIX_3:10
+  k-SD_Sub c= INT;
+
+theorem :: RADIX_3:11
+  k-SD_Sub_S c= INT;
+
+definition let k;
+  cluster k-SD_Sub_S -> non empty;
+  cluster k-SD_Sub -> non empty;
+end;
+
+definition let k;
+  redefine func k-SD_Sub_S -> non empty Subset of INT;
+end;
+
+definition let k;
+  redefine func k-SD_Sub -> non empty Subset of INT;
+end;
+
+reserve a for Tuple of n,k-SD;
+reserve a_Sub for Tuple of n,k-SD_Sub;
+
+theorem :: RADIX_3:12
+  i in Seg n implies a_Sub.i is Element of k-SD_Sub;
+
+begin :: Definition for new carry calculation method
+
+definition let x be Integer, k be Nat;
+    func SDSub_Add_Carry(x,k) -> Integer equals
+:: RADIX_3:def 3
+
+      1 if Radix(k -' 1) <= x,
+      -1 if x < -Radix(k -' 1)
+      otherwise 0;
+end;
+
+definition let x be Integer, k be Nat;
+  func SDSub_Add_Data(x,k) -> Integer equals
+:: RADIX_3:def 4
+
+    x - Radix(k) * SDSub_Add_Carry(x,k);
+end;
+
+theorem :: RADIX_3:13
+  for x be Integer, k be Nat st 2 <= k holds
+    -1 <= SDSub_Add_Carry(x,k) & SDSub_Add_Carry(x,k) <= 1;
+
+theorem :: RADIX_3:14
+  2 <= k & i1 in k-SD implies
+    SDSub_Add_Data(i1,k) >= -Radix(k-'1) &
+      SDSub_Add_Data(i1,k) <= Radix(k-'1) - 1;
+
+theorem :: RADIX_3:15
+  for x be Integer, k be Nat st 2 <= k holds
+    SDSub_Add_Carry(x,k) in k-SD_Sub_S;
+
+theorem :: RADIX_3:16
+  2 <= k & i1 in k-SD & i2 in k-SD implies
+    SDSub_Add_Data(i1,k) + SDSub_Add_Carry(i2,k) in k-SD_Sub;
+
+theorem :: RADIX_3:17
+  2 <= k implies SDSub_Add_Carry(0,k) = 0;
+
+begin :: Definition for translation from Radix-2^k SD number
+
+definition let i,k,n be Nat, x be Tuple of n,(k-SD_Sub);
+  func DigA_SDSub(x,i) -> Integer equals
+:: RADIX_3:def 5
+
+    x.i if i in Seg n,
+    0 if i = 0;
+end;
+
+definition let i,k,n be Nat, x be Tuple of n,(k-SD);
+  func SD2SDSubDigit(x,i,k) -> Integer equals
+:: RADIX_3:def 6
+
+    SDSub_Add_Data(DigA(x,i),k)+SDSub_Add_Carry(DigA(x,i-'1),k) if i in Seg n,
+    SDSub_Add_Carry(DigA(x,i-'1), k) if i = n + 1
+    otherwise 0;
+end;
+
+theorem :: RADIX_3:18
+  2 <= k & i in Seg (n+1) implies
+    SD2SDSubDigit(a,i,k) is Element of k-SD_Sub;
+
+definition let i,k,n be Nat, x be Tuple of n,(k-SD);
+  assume
+   2 <= k & i in Seg (n+1);
+  func SD2SDSubDigitS(x,i,k) -> Element of k-SD_Sub equals
+:: RADIX_3:def 7
+
+    SD2SDSubDigit(x,i,k);
+end;
+
+definition let n,k be Nat, x be Tuple of n,(k-SD);
+  func SD2SDSub(x) -> Tuple of (n+1),(k-SD_Sub) means
+:: RADIX_3:def 8
+
+    for i be Nat st i in Seg (n+1) holds
+      DigA_SDSub(it,i) = SD2SDSubDigitS(x,i,k);
+end;
+
+theorem :: RADIX_3:19
+    i in Seg n implies DigA_SDSub(a_Sub,i) is Element of k-SD_Sub;
+
+theorem :: RADIX_3:20
+    2 <= k & i1 in k-SD & i2 in k-SD_Sub implies
+     SDSub_Add_Data(i1+i2,k) in k-SD_Sub_S;
+
+begin :: Definiton for Translation from Radix-2^k SD_Sub number to INT
+
+definition let i,k,n be Nat, x be Tuple of n,(k-SD_Sub);
+  func DigB_SDSub(x,i) -> Element of INT equals
+:: RADIX_3:def 9
+
+    DigA_SDSub(x,i);
+end;
+
+definition let i,k,n be Nat, x be Tuple of n, k-SD_Sub;
+  func SDSub2INTDigit(x,i,k) -> Element of INT equals
+:: RADIX_3:def 10
+
+    (Radix(k) |^ (i -'1)) * DigB_SDSub(x,i);
+end;
+
+definition let n,k be Nat, x be Tuple of n, k-SD_Sub;
+  func SDSub2INT(x) -> Tuple of n,INT means
+:: RADIX_3:def 11
+
+    for i be Nat st i in Seg n holds it/.i = SDSub2INTDigit(x,i,k);
+end;
+
+definition let n,k be Nat, x be Tuple of n,(k-SD_Sub);
+  func SDSub2IntOut(x) -> Integer equals
+:: RADIX_3:def 12
+
+    Sum SDSub2INT(x);
+end;
+
+theorem :: RADIX_3:21
+  for i st i in Seg n holds 2 <= k implies
+    DigA_SDSub(SD2SDSub(DecSD(m,n+1,k)),i)
+      = DigA_SDSub(SD2SDSub(DecSD((m mod (Radix(k) |^ n)),n,k)),i);
+
+theorem :: RADIX_3:22
+    for n st n >= 1 holds
+    for k,x st
+      k >= 2 & x is_represented_by n,k holds
+        x = SDSub2IntOut( SD2SDSub(DecSD(x,n,k)) );

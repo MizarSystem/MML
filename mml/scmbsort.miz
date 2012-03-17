@@ -1,0 +1,3537 @@
+:: Bubble Sort on SCM+FSA
+::  by JingChao Chen and Yatsuka Nakamura
+::
+:: Received June 17, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_3, AMI_1, SCMFSA_2, SCMFSA6A, SCMFSA7B, SCMFSA8B, CARD_1,
+      SCMFSA8A, SCMFSA_4, SCMFSA8C, FUNCT_1, FUNCT_4, CAT_1, RELAT_1, RFINSEQ,
+      BOOLE, ABSVALUE, SCMFSA6C, SF_MASTR, SCMFSA6B, ORDINAL2, AMI_2, AMI_5,
+      ARYTM_1, NAT_1, FINSEQ_1, FINSEQ_2, FINSUB_1, PROB_1, INT_1, RELOC,
+      PARTFUN1, SCM_HALT, SCMBSORT, FINSEQ_4, ARYTM;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS,
+      XCMPLX_0, XREAL_0, NAT_1, INT_1, RELAT_1, ABSVALUE, FINSEQ_1, FUNCT_1,
+      FUNCT_2, FUNCT_4, FINSEQ_2, SEQ_1, FINSEQ_4, FUNCT_7, STRUCT_0, AMI_1,
+      AMI_3, AMI_5, SCMFSA_2, CQC_LANG, CARD_1, SCMFSA_4, FINSUB_1, PROB_1,
+      PARTFUN1, SCMFSA6B, SCMFSA6C, SCMFSA6A, SF_MASTR, SCMFSA8A, SCMFSA8B,
+      SCMFSA8C, RFINSEQ, SCMFSA7B, BINARITH, SCM_HALT;
+ constructors AMI_5, SCMFSA6A, SCMFSA6B, SCMFSA6C, SF_MASTR, SETWISEO,
+      CQC_SIM1, SCMFSA8B, SCMFSA8C, RFINSEQ, BINARITH, SCM_HALT, SCMFSA8A,
+      FINSEQ_4, SEQ_1, PROB_1, MEMBERED;
+ clusters RELSET_1, FUNCT_1, AMI_1, SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6C,
+      SCMFSA8A, FINSUB_1, SCMFSA8B, RFINSEQ, SCM_HALT, SCMFSA_9, INT_1,
+      CQC_LANG, NAT_1, FRAENKEL, XREAL_0, MEMBERED;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, AMI_1, AMI_3, XBOOLE_0;
+ theorems SF_MASTR, FUNCT_1, FUNCT_7, CQC_LANG, RELAT_1, AMI_1, FUNCT_2,
+      ZFMISC_1, SCMFSA6A, FUNCT_4, AMI_5, FINSEQ_3, AXIOMS, ENUMSET1, AMI_3,
+      REAL_1, NAT_1, FINSEQ_1, RELSET_1, TARSKI, INT_1, PARTFUN1, GRFUNC_1,
+      BINARITH, RFINSEQ, SCMFSA_2, SCMFSA6B, SCMFSA7B, SCMFSA8B, SCMFSA8A,
+      SCMFSA8C, SCMFSA_4, SCMFSA6C, SCM_HALT, ABSVALUE, FINSEQ_4, FINSEQ_2,
+      CQC_THE1, XBOOLE_0, XBOOLE_1, SCMFSA9A, XCMPLX_0, XCMPLX_1;
+ schemes AMI_3, FUNCT_1, NAT_1;
+
+begin :: Preliminaries
+
+reserve p for programmed FinPartState of SCM+FSA,
+        ic for Instruction of SCM+FSA,
+        i,j,k for Nat,
+        fa,f for FinSeq-Location,
+        a,b,da,db for Int-Location,
+        la,lb for Instruction-Location of SCM+FSA;
+
+canceled 2;
+
+theorem Th3:   ::PR006
+ for I being Macro-Instruction,a,b being Int-Location st
+ I does_not_destroy b & a<>b holds Times(a,I) does_not_destroy b
+proof
+    let I be Macro-Instruction,a,b be Int-Location;
+    assume that A1: I does_not_destroy b and
+                A2: a <> b;
+    set Gi= Goto insloc 2,
+        Si= SubFrom(a,intloc 0),
+        SS= SCM+FSA-Stop,
+        if0=if=0(a,Gi,I ';'Si);
+A3: Gi does_not_destroy b by SCMFSA8C:86;
+      Si does_not_destroy b by A2,SCMFSA7B:14;
+    then I ';' Si does_not_destroy b by A1,SCMFSA8C:83;
+    then if0 does_not_destroy b by A3,SCMFSA8C:121;
+then A4: loop if0 does_not_destroy b by SCMFSA8C:105;
+      SS does_not_destroy b by SCMFSA8C:85;
+    then if>0(a,loop if0 ,SS) does_not_destroy b by A4,SCMFSA8C:121;
+    hence thesis by SCMFSA8C:def 5;
+end;
+
+theorem Th4:  ::PR010
+ for f be Function, a,b,n,m be set holds (f +* (a .--> b) +* (m .--> n)).m=n
+proof
+    let f be Function, a,b,n,m be set;
+    set mn=m .--> n;
+   dom mn ={ m } by CQC_LANG:5;
+    then m in dom mn by TARSKI:def 1;
+    hence (f +* (a .--> b) +* mn).m=mn.m by FUNCT_4:14
+    .=n by CQC_LANG:6;
+end;
+
+theorem Th5:  ::PR012
+ for f be Function, n,m be set holds (f +* (n .--> m) +* (m .--> n)).n=m
+proof
+    let f be Function,n,m be set;
+    set mn=m .--> n,
+        nm=n .--> m;
+A1: dom mn ={ m } by CQC_LANG:5;
+then A2: m in dom mn by TARSKI:def 1;
+    per cases;
+    suppose A3: n=m;
+       hence (f +* nm +* mn).n=mn.m by A2,FUNCT_4:14
+      .=m by A3,CQC_LANG:6;
+    suppose n<>m;
+then A4:    not n in dom mn by A1,TARSKI:def 1;
+         dom nm ={ n } by CQC_LANG:5;
+then A5:    n in dom nm by TARSKI:def 1;
+       thus (f +* nm +* mn).n=(f +* nm).n by A4,FUNCT_4:12
+       .=nm.n by A5,FUNCT_4:14
+       .=m by CQC_LANG:6;
+end;
+
+theorem Th6:  ::PR014
+ for f be Function, a,b,n,m,x be set st x <> m & x <> a
+   holds (f +* (a .--> b) +* (m .--> n)).x=f.x
+proof
+    let f be Function, a,b,n,m,x be set;
+    assume A1:x<>m & x<>a;
+    set mn=m .--> n,
+        nm=a .--> b;
+      dom mn ={ m } by CQC_LANG:5;
+then A2: not x in dom mn by A1,TARSKI:def 1;
+      dom nm ={ a } by CQC_LANG:5;
+then A3: not x in dom nm by A1,TARSKI:def 1;
+    thus (f +* nm +* mn).x=(f +* nm).x by A2,FUNCT_4:12
+       .=f.x by A3,FUNCT_4:12;
+end;
+
+theorem Th7:  ::PR016
+for f,g be Function,m,n be set st f.m=g.n & f.n=g.m & m in dom f
+& n in dom f & dom f = dom g &
+   (for k be set st k<>m & k<>n & k in dom f holds f.k=g.k) holds
+    f,g are_fiberwise_equipotent
+proof
+    let f,g be Function,m,n be set;
+    assume that
+A1: f.m=g.n and
+A2: f.n=g.m and
+A3: m in dom f and
+A4: n in dom f and
+A5: dom f = dom g and
+A6: for k be set st k<>m & k<>n & k in dom f holds f.k=g.k;
+    set t=id dom f, nm=n .--> m,mn=m .--> n,
+         p=t +* nm +* mn;
+A7: dom mn ={ m } by CQC_LANG:5;
+A8: dom nm ={ n } by CQC_LANG:5;
+A9: dom p = dom (t +* nm) \/ {m} by A7,FUNCT_4:def 1
+    .= dom t \/ {n} \/ {m} by A8,FUNCT_4:def 1
+    .= dom f \/ {n} \/ {m} by FUNCT_1:34
+    .= dom f \/ {m} by A4,ZFMISC_1:46
+    .= dom f by A3,ZFMISC_1:46;
+A10: dom t = dom f by FUNCT_1:34;
+A11: rng nm ={m} by CQC_LANG:5;
+      t is one-to-one by FUNCT_1:52;
+then A12: rng t = dom (t") by FUNCT_1:55
+    .= dom f by A10,FUNCT_1:67;
+    then rng t \/ rng nm =dom f by A3,A11,ZFMISC_1:46;
+    then rng(t +* nm) c= dom f by FUNCT_4:18;
+then A13: rng(t +* nm) \/ rng mn c= dom f \/ rng mn by XBOOLE_1:9;
+      rng p c= rng(t +* nm) \/ rng mn by FUNCT_4:18;
+then A14: rng p c= dom f \/ rng mn by A13,XBOOLE_1:1;
+    A15: rng mn ={n} by CQC_LANG:5;
+    then A16: dom f \/ rng mn =dom p by A4,A9,ZFMISC_1:46;
+A17: rng p c= dom p by A4,A9,A14,A15,ZFMISC_1:46;
+A18: dom (p*p) =dom f by A9,A14,A16,RELAT_1:46;
+    A19: now let x be set;
+      assume A20:x in dom f;
+then A21:   (p*p).x=p.(p.x) by A9,FUNCT_1:23;
+      per cases;
+      suppose A22:x=m;
+        hence (p*p).x=p.n by A21,Th4
+              .=x by A22,Th5;
+      suppose A23:x<>m;
+            now
+            per cases;
+            suppose A24:x=n;
+            hence (p*p).x=p.m by A21,Th5
+              .=x by A24,Th4;
+            suppose A25:x<>n;
+             hence (p*p).x=p.(t.x) by A21,A23,Th6
+                 .=p.x by A20,FUNCT_1:34
+                 .=t.x by A23,A25,Th6
+                 .=x by A20,FUNCT_1:34;
+          end;
+          hence (p*p).x=x;
+   end;
+then A26: p*p=t by A18,FUNCT_1:34;
+A27: rng(p*p)=dom f by A12,A18,A19,FUNCT_1:34;
+A28: p is one-to-one by A9,A26,FUNCT_1:53;
+      for z be set st z in rng(p*p) holds z in rng p by FUNCT_1:25;
+    then rng(p*p) c= rng p by TARSKI:def 3;
+then A29: rng p = dom g by A5,A9,A17,A27,XBOOLE_0:def 10;
+A30: dom (g*p) =dom f by A5,A9,A17,RELAT_1:46;
+      now let x be set;
+       assume A31:x in dom f;
+then A32:    (g*p).x=g.(p.x) by A30,FUNCT_1:22;
+       per cases;
+       suppose x=m;
+        hence (g*p).x=f.x by A1,A32,Th4;
+       suppose A33:x<>m;
+          now
+          per cases;
+          suppose x=n;
+            hence (g*p).x=f.x by A2,A32,Th5;
+         suppose A34:x<>n;
+             hence (g*p).x=g.(t.x) by A32,A33,Th6
+                 .=g.x by A31,FUNCT_1:34
+                 .=f.x by A6,A31,A33,A34;
+        end;
+        hence (g*p).x=f.x;
+   end;
+   then f=g*p by A30,FUNCT_1:9;
+   hence thesis by A9,A28,A29,RFINSEQ:3;
+end;
+
+theorem Th8:
+ for s be State of SCM+FSA,f be FinSeq-Location,a,b be Int-Location
+ holds Exec(b:=(f,a), s).b = (s.f)/.abs(s.a)
+proof let s be State of SCM+FSA,f be FinSeq-Location,a,b be Int-Location;
+    consider k be Nat such that
+A1:  k = abs(s.a) & Exec(b:=(f,a), s).b = (s.f)/.k by SCMFSA_2:98;
+    thus thesis by A1;
+end;
+
+theorem Th9:
+for s be State of SCM+FSA,f be FinSeq-Location,a,b be Int-Location
+holds Exec((f,a):=b, s).f = s.f+*(abs(s.a),s.b)
+proof let s be State of SCM+FSA,f be FinSeq-Location,a,b be Int-Location;
+    consider k be Nat such that
+A1:  k = abs(s.a) & Exec((f,a):=b, s).f = s.f+*(k,s.b) by SCMFSA_2:99;
+    thus thesis by A1;
+end;
+
+theorem Th10:   ::PR022
+ for s be State of SCM+FSA,f be FinSeq-Location,m,n be Nat,a be Int-Location
+ st m<>n+1 holds Exec(intloc m:=(f,a), Initialize s).intloc (n+1)
+ =s.intloc (n+1)
+proof
+ let s be State of SCM+FSA,f be FinSeq-Location,m,n be Nat,a be Int-Location;
+   assume m<>n+1;
+   then intloc m<>intloc (n+1) by SCMFSA_2:16;
+   hence Exec(intloc m:=(f,a), Initialize s).intloc (n+1)
+    =(Initialize s).intloc (n+1) by SCMFSA_2:98
+   .=s.intloc (n+1) by SCMFSA6C:3;
+end;
+
+theorem Th11:   ::PR024
+ for s be State of SCM+FSA,m,n be Nat,a be Int-Location
+ st m<>n+1 holds Exec(intloc m:=a, Initialize s).intloc (n+1)
+ =s.intloc (n+1)
+proof
+ let s be State of SCM+FSA,m,n be Nat,a be Int-Location;
+   assume m<>n+1;
+   then intloc m<>intloc (n+1) by SCMFSA_2:16;
+   hence Exec(intloc m:=a, Initialize s).intloc (n+1)
+    =(Initialize s).intloc (n+1) by SCMFSA_2:89
+   .=s.intloc (n+1) by SCMFSA6C:3;
+end;
+
+theorem Th12:   ::PR026
+for s be State of SCM+FSA, f be FinSeq-Location, a be read-write Int-Location
+ holds IExec(SCM+FSA-Stop,s).a =s.a & IExec(SCM+FSA-Stop,s).f =s.f
+proof
+let s be State of SCM+FSA ,f be FinSeq-Location,a be read-write Int-Location;
+   set SA0=Start-At insloc 0;
+A1: IExec(SCM+FSA-Stop,s) = Initialize s +* SA0 by SCMFSA8C:38
+   .= s +* ((intloc 0) .--> 1) +* SA0 +* SA0 by SCMFSA6C:def 3
+   .= s +* ((intloc 0) .--> 1) +*(SA0 +* SA0) by FUNCT_4:15
+   .=Initialize s by SCMFSA6C:def 3;
+   hence IExec(SCM+FSA-Stop,s).a =s.a by SCMFSA6C:3;
+   thus IExec(SCM+FSA-Stop,s).f =s.f by A1,SCMFSA6C:3;
+end;
+
+reserve n for natural number;
+
+theorem Th13:  ::PR028
+  n <= 10 implies n = 0 or n = 1 or n = 2 or n = 3 or n = 4 or n = 5
+  or n = 6 or n = 7 or n = 8 or n = 9 or n = 10
+proof
+  assume n <= 10;
+  then n <= 9+1;
+  then n <= 9 or n= 10 by NAT_1:26;
+  hence thesis by CQC_THE1:10;
+end;
+
+theorem Th14:  ::PR030
+  n <= 12 implies n = 0 or n = 1 or n = 2 or n = 3 or n = 4 or n = 5
+  or n = 6 or n = 7 or n = 8 or n = 9 or n = 10 or n = 11 or n = 12
+proof
+  assume n <= 12;
+  then A1: n <= 11+1;
+      n <= 10+1 implies n <= 10 or n = 11 by NAT_1:26;
+    hence thesis by A1,Th13,NAT_1:26;
+end;
+
+theorem Th15:  ::PR032
+ for f,g being Function, X being set st dom f = dom g
+ & (for x being set st x in X holds f.x = g.x) holds f|X = g|X
+proof
+  let f,g be Function, X be set such that
+A1: dom f = dom g and
+A2: (for x being set st x in X holds f.x = g.x);
+A3:  dom (f|X) =dom f /\ X by RELAT_1:90;
+then A4:  dom (f|X) = dom (g|X) by A1,RELAT_1:90;
+      now let x be set;
+       assume A5: x in dom (f|X);
+then A6:    (f|X).x = f.x by FUNCT_1:70;
+A7:    (g|X).x = g.x by A4,A5,FUNCT_1:70;
+         x in X by A3,A5,XBOOLE_0:def 3;
+       hence (f|X).x = (g|X).x by A2,A6,A7;
+    end;
+    hence thesis by A4,FUNCT_1:9;
+end;
+
+theorem Th16:   ::PR034
+  (ic in rng p) & (ic = a:=b or ic = AddTo(a, b) or ic = SubFrom(a, b) or
+   ic = MultBy(a, b) or ic = Divide(a, b))
+   implies a in UsedIntLoc p & b in UsedIntLoc p
+proof assume
+A1: (ic in rng p) & (ic = a:=b or ic = AddTo(a, b) or ic = SubFrom(a, b) or
+    ic = MultBy(a, b) or ic = Divide(a, b));
+then A2: UsedIntLoc ic = {a, b} by SF_MASTR:18;
+      UsedIntLoc ic c= UsedIntLoc p by A1,SF_MASTR:23;
+    hence thesis by A2,ZFMISC_1:38;
+end;
+
+theorem Th17:   ::PR036
+  (ic in rng p) & (ic = a=0_goto la or ic = a>0_goto la)
+   implies a in UsedIntLoc p
+proof assume
+A1: (ic in rng p) & (ic = a=0_goto la or ic = a>0_goto la);
+then A2: UsedIntLoc ic = {a} by SF_MASTR:20;
+      UsedIntLoc ic c= UsedIntLoc p by A1,SF_MASTR:23;
+    hence thesis by A2,ZFMISC_1:37;
+end;
+
+theorem Th18:   ::PR038
+  (ic in rng p) & ( ic = b := (fa, a) or ic = (fa, a) := b)
+   implies a in UsedIntLoc p & b in UsedIntLoc p
+proof assume
+A1: (ic in rng p) & ( ic = b := (fa, a) or ic = (fa, a) := b);
+then A2: UsedIntLoc ic = {a,b} by SF_MASTR:21;
+      UsedIntLoc ic c= UsedIntLoc p by A1,SF_MASTR:23;
+    hence thesis by A2,ZFMISC_1:38;
+end;
+
+theorem Th19:   ::PR040
+  (ic in rng p) & ( ic = b := (fa, a) or ic = (fa, a) := b)
+   implies fa in UsedInt*Loc p
+proof assume
+A1: (ic in rng p) & ( ic = b := (fa, a) or ic = (fa, a) := b);
+then A2: UsedInt*Loc ic = {fa} by SF_MASTR:37;
+      UsedInt*Loc ic c= UsedInt*Loc p by A1,SF_MASTR:39;
+    hence thesis by A2,ZFMISC_1:37;
+end;
+
+theorem Th20:   ::PR042
+  (ic in rng p) & (ic = a :=len fa or ic = fa :=<0,...,0>a)
+   implies a in UsedIntLoc p
+proof assume
+A1:  (ic in rng p) & (ic = a :=len fa or ic = fa :=<0,...,0>a);
+then A2: UsedIntLoc ic = {a} by SF_MASTR:22;
+      UsedIntLoc ic c= UsedIntLoc p by A1,SF_MASTR:23;
+    hence thesis by A2,ZFMISC_1:37;
+end;
+
+theorem Th21:   ::PR044
+  (ic in rng p) & (ic = a :=len fa or ic = fa :=<0,...,0>a)
+  implies fa in UsedInt*Loc p
+proof assume
+A1: (ic in rng p) & (ic = a :=len fa or ic = fa :=<0,...,0>a);
+then A2: UsedInt*Loc ic = {fa} by SF_MASTR:38;
+      UsedInt*Loc ic c= UsedInt*Loc p by A1,SF_MASTR:39;
+    hence thesis by A2,ZFMISC_1:37;
+end;
+
+theorem Th22:   ::PR048
+ for N being with_non-empty_elements set,
+     S being steady-programmed IC-Ins-separated definite
+       (non empty non void AMI-Struct over N),
+     p being programmed FinPartState of S,
+     s1,s2 being State of S
+  st p c= s1 & p c= s2
+ holds (Computation s1).i | dom p = (Computation s2).i | dom p
+proof
+ let N be with_non-empty_elements set,
+     S be steady-programmed IC-Ins-separated definite
+      (non empty non void AMI-Struct over N),
+     p be programmed FinPartState of S,
+     s1,s2 be State of S such that
+A1: p c= s1 & p c= s2;
+    set Cs1=(Computation s1).i;
+    set Cs2=(Computation s2).i;
+    A2: now let x be set;
+      assume A3:x in dom p;
+      A4: dom p c= the Instruction-Locations of S by AMI_3:def 13;
+then A5:   s1.x = Cs1.x by A3,AMI_1:54;
+A6:   s2.x = Cs2.x by A3,A4,AMI_1:54;
+    p.x=s1.x by A1,A3,GRFUNC_1:8;
+      hence Cs1.x = Cs2.x by A1,A3,A5,A6,GRFUNC_1:8;
+    end;
+   dom Cs1 = the carrier of S by AMI_3:36
+    .=dom Cs2 by AMI_3:36;
+    hence thesis by A2,Th15;
+end;
+
+theorem Th23:   ::PR050
+ for t being FinPartState of SCM+FSA,p being Macro-Instruction,
+  x being set st dom t c= Int-Locations \/ FinSeq-Locations &
+  x in dom t \/ UsedInt*Loc p \/ UsedIntLoc p
+  holds x is Int-Location or x is FinSeq-Location
+proof
+     let t be FinPartState of SCM+FSA,p be Macro-Instruction,x be set;
+     set D1=UsedInt*Loc p;
+     set D2=UsedIntLoc p;
+     assume
+A1: dom t c= Int-Locations \/ FinSeq-Locations &
+     x in dom t \/ D1 \/ D2;
+     then x in dom t \/ D1 or x in D2 by XBOOLE_0:def 2;
+     then A2: x in dom t or x in D1 or x in D2 by XBOOLE_0:def 2;
+     per cases by A1,A2,XBOOLE_0:def 2;
+     suppose x in Int-Locations;
+           hence thesis by SCMFSA_2:11;
+     suppose x in FinSeq-Locations;
+           hence thesis by SCMFSA_2:12;
+     suppose x in D1;
+           hence thesis by SCMFSA_2:12;
+     suppose x in D2;
+           hence thesis by SCMFSA_2:11;
+end;
+
+canceled;
+
+theorem Th25:   ::PR060
+ for i,k being Nat,t being FinPartState of SCM+FSA,p being Macro-Instruction,
+  s1,s2 being State of SCM+FSA
+  st k <= i & p c= s1 & p c= s2 &
+  dom t c= Int-Locations \/ FinSeq-Locations &
+  (for j holds IC (Computation s1).j in dom p &
+  IC (Computation s2).j in dom p) &
+  (Computation s1).k.IC SCM+FSA = (Computation s2).k.IC SCM+FSA &
+  (Computation s1).k |(dom t \/ UsedInt*Loc p \/ UsedIntLoc p) =
+  (Computation s2).k |(dom t \/ UsedInt*Loc p \/ UsedIntLoc p)
+ holds
+  (Computation s1).i.IC SCM+FSA = (Computation s2).i.IC SCM+FSA &
+  (Computation s1).i |(dom t \/ UsedInt*Loc p \/ UsedIntLoc p) =
+  (Computation s2).i |(dom t \/ UsedInt*Loc p \/ UsedIntLoc p)
+proof
+    let i,k;
+    let t be FinPartState of SCM+FSA,p be Macro-Instruction,
+    s1,s2 be State of SCM+FSA;
+    set Dloc=dom t \/ UsedInt*Loc p \/ UsedIntLoc p;
+    assume A1: k <= i & p c= s1 & p c= s2 &
+  dom t c= Int-Locations \/ FinSeq-Locations &
+  (for j holds IC (Computation s1).j in dom p &
+  IC (Computation s2).j in dom p) &
+  (Computation s1).k.IC SCM+FSA = (Computation s2).k.IC SCM+FSA &
+  (Computation s1).k |Dloc = (Computation s2).k|Dloc;
+
+    then consider m being Nat such that
+A2: i=k+m by NAT_1:28;
+A3: UsedIntLoc p c= Dloc by XBOOLE_1:7;
+      Dloc=dom t \/ UsedIntLoc p \/ UsedInt*Loc p by XBOOLE_1:4;
+then A4: UsedInt*Loc p c= Dloc by XBOOLE_1:7;
+   defpred P[Nat] means
+  (Computation s1).(k+$1).IC SCM+FSA = (Computation s2).(k+$1).IC SCM+FSA &
+  (Computation s1).(k+$1) |Dloc = (Computation s2).(k+$1)|Dloc;
+A5: P[0] by A1;
+A6: now let m be Nat;
+       assume A7: P[m];
+       set sk1=(Computation s1).(k+m);
+       set sk11=(Computation s1).(k+(m+1));
+       set i1=CurInstr sk1;
+       set sk2=(Computation s2).(k+m);
+       set sk12=(Computation s2).(k+(m+1));
+       set i2=CurInstr sk2;
+
+A8:    IC sk1 = sk2.IC SCM+FSA by A7,AMI_1:def 15
+       .= IC sk2 by AMI_1:def 15;
+A9:   IC sk1 in dom p by A1;            :: SCMFSA6B:def 2,C1=paraclosed;
+A10:    i1 =sk1.IC sk1 by AMI_1:def 17
+         .=(sk1 |dom p).IC sk1 by A9,FUNCT_1:72;
+
+          i1 =sk1.IC sk1 by AMI_1:def 17
+         .=s1.IC sk1 by AMI_1:54
+         .=p.IC sk1 by A1,A9,GRFUNC_1:8;
+then A11:    i1 in rng p by A9,FUNCT_1:def 5;
+
+A12:    IC sk2 in dom p by A1;              :: paraclosed
+A13:    i2 =sk2.IC sk2 by AMI_1:def 17
+         .=(sk2 |dom p).IC sk2 by A12,FUNCT_1:72
+         .=i1 by A1,A8,A10,Th22;
+A14:    sk11=(Computation s1).(k+m+1) by XCMPLX_1:1
+       .=Following sk1 by AMI_1:def 19
+       .= Exec(i1,sk1) by AMI_1:def 18;
+A15:    sk12=(Computation s2).(k+m+1) by XCMPLX_1:1
+       .=Following sk2 by AMI_1:def 19
+       .= Exec(i2,sk2) by AMI_1:def 18;
+A16:    dom sk11 = the carrier of SCM+FSA by AMI_3:36
+       .= dom sk12 by AMI_3:36;
+
+A17:    InsCode i1 <= 12 by SCMFSA_2:35;
+       per cases by A17,Th14;
+       suppose InsCode i1 = 0;
+then A18:       i1=halt SCM+FSA by SCMFSA_2:122;
+then sk11=sk1 by A14,AMI_1:def 8;
+           hence P[m+1] by A7,A13,A15,A18,AMI_1:def 8;
+       suppose InsCode i1 = 1;
+          then consider da,db such that
+A19:        i1 = da:=db by SCMFSA_2:54;
+A20:        sk11.IC SCM+FSA= Next IC sk1 by A14,A19,SCMFSA_2:89
+           .= sk12.IC SCM+FSA by A8,A13,A15,A19,SCMFSA_2:89;
+             now let x be set;
+             assume A21:x in Dloc;
+             per cases by A1,A21,Th23;
+             suppose A22: x is Int-Location;
+                 now
+                per cases;
+                case A23:x = da;
+then A24:               sk12.x=sk2.db by A13,A15,A19,SCMFSA_2:89;
+                  A25: db in UsedIntLoc p by A11,A19,Th16;
+                  then sk1.db=(sk2 | Dloc).db by A3,A7,FUNCT_1:72
+                  .=sk2.db by A3,A25,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A19,A23,A24,SCMFSA_2:89;
+                case A26:x<> da;
+then A27:               sk12.x=sk2.x by A13,A15,A19,A22,SCMFSA_2:89;
+                    sk1.x=(sk2 | Dloc).x by A7,A21,FUNCT_1:72
+                  .=sk2.x by A21,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A19,A22,A26,A27,SCMFSA_2:89;
+                end;
+                hence sk11.x=sk12.x;
+             suppose A28:x is FinSeq-Location;
+then A29:              sk12.x=sk2.x by A13,A15,A19,SCMFSA_2:89;
+                    sk1.x=(sk2 | Dloc).x by A7,A21,FUNCT_1:72
+                  .=sk2.x by A21,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A19,A28,A29,SCMFSA_2:89;
+            end;
+            hence P[m+1] by A16,A20,Th15;
+       suppose InsCode i1 = 2;
+          then consider da,db such that
+A30:        i1 = AddTo(da,db) by SCMFSA_2:55;
+A31:        sk11.IC SCM+FSA= Next IC sk1 by A14,A30,SCMFSA_2:90
+           .= sk12.IC SCM+FSA by A8,A13,A15,A30,SCMFSA_2:90;
+             now let x be set;
+             assume A32:x in Dloc;
+             per cases by A1,A32,Th23;
+             suppose A33: x is Int-Location;
+                 now
+                per cases;
+                case A34:x = da;
+then A35:               sk12.x=sk2.da+sk2.db by A13,A15,A30,SCMFSA_2:90;
+                  A36: da in UsedIntLoc p by A11,A30,Th16;
+then A37:              sk1.da=(sk2 | Dloc).da by A3,A7,FUNCT_1:72
+                  .=sk2.da by A3,A36,FUNCT_1:72;
+                  A38: db in UsedIntLoc p by A11,A30,Th16;
+              then sk1.db=(sk2 | Dloc).db by A3,A7,FUNCT_1:72
+                  .=sk2.db by A3,A38,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A30,A34,A35,A37,SCMFSA_2:90;
+                case A39:x<> da;
+then A40:               sk12.x=sk2.x by A13,A15,A30,A33,SCMFSA_2:90;
+                    sk1.x=(sk2 | Dloc).x by A7,A32,FUNCT_1:72
+                  .=sk2.x by A32,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A30,A33,A39,A40,SCMFSA_2:90;
+                end;
+                hence sk11.x=sk12.x;
+             suppose A41:x is FinSeq-Location;
+then A42:              sk12.x=sk2.x by A13,A15,A30,SCMFSA_2:90;
+                    sk1.x=(sk2 | Dloc).x by A7,A32,FUNCT_1:72
+                  .=sk2.x by A32,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A30,A41,A42,SCMFSA_2:90;
+            end;
+            hence P[m+1] by A16,A31,Th15;
+       suppose InsCode i1 = 3;
+          then consider da,db such that
+A43:        i1 = SubFrom(da,db) by SCMFSA_2:56;
+A44:        sk11.IC SCM+FSA= Next IC sk1 by A14,A43,SCMFSA_2:91
+           .= sk12.IC SCM+FSA by A8,A13,A15,A43,SCMFSA_2:91;
+             now let x be set;
+             assume A45:x in Dloc;
+             per cases by A1,A45,Th23;
+             suppose A46: x is Int-Location;
+                 now
+                per cases;
+                case A47:x = da;
+then A48:               sk12.x=sk2.da-sk2.db by A13,A15,A43,SCMFSA_2:91;
+                  A49: da in UsedIntLoc p by A11,A43,Th16;
+then A50:              sk1.da=(sk2 | Dloc).da by A3,A7,FUNCT_1:72
+                  .=sk2.da by A3,A49,FUNCT_1:72;
+                  A51: db in UsedIntLoc p by A11,A43,Th16;
+              then sk1.db=(sk2 | Dloc).db by A3,A7,FUNCT_1:72
+                  .=sk2.db by A3,A51,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A43,A47,A48,A50,SCMFSA_2:91;
+                case A52:x<> da;
+then A53:               sk12.x=sk2.x by A13,A15,A43,A46,SCMFSA_2:91;
+                    sk1.x=(sk2 | Dloc).x by A7,A45,FUNCT_1:72
+                  .=sk2.x by A45,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A43,A46,A52,A53,SCMFSA_2:91;
+                end;
+                hence sk11.x=sk12.x;
+             suppose A54:x is FinSeq-Location;
+then A55:              sk12.x=sk2.x by A13,A15,A43,SCMFSA_2:91;
+                    sk1.x=(sk2 | Dloc).x by A7,A45,FUNCT_1:72
+                  .=sk2.x by A45,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A43,A54,A55,SCMFSA_2:91;
+            end;
+            hence P[m+1] by A16,A44,Th15;
+       suppose InsCode i1 = 4;
+          then consider da,db such that
+A56:        i1 = MultBy(da,db) by SCMFSA_2:57;
+A57:        sk11.IC SCM+FSA= Next IC sk1 by A14,A56,SCMFSA_2:92
+           .= sk12.IC SCM+FSA by A8,A13,A15,A56,SCMFSA_2:92;
+             now let x be set;
+             assume A58:x in Dloc;
+             per cases by A1,A58,Th23;
+             suppose A59: x is Int-Location;
+                 now
+                per cases;
+                case A60:x = da;
+then A61:               sk12.x=sk2.da*sk2.db by A13,A15,A56,SCMFSA_2:92;
+                  A62: da in UsedIntLoc p by A11,A56,Th16;
+then A63:              sk1.da=(sk2 | Dloc).da by A3,A7,FUNCT_1:72
+                  .=sk2.da by A3,A62,FUNCT_1:72;
+                  A64: db in UsedIntLoc p by A11,A56,Th16;
+              then sk1.db=(sk2 | Dloc).db by A3,A7,FUNCT_1:72
+                  .=sk2.db by A3,A64,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A56,A60,A61,A63,SCMFSA_2:92;
+                case A65:x<> da;
+then A66:               sk12.x=sk2.x by A13,A15,A56,A59,SCMFSA_2:92;
+                    sk1.x=(sk2 | Dloc).x by A7,A58,FUNCT_1:72
+                  .=sk2.x by A58,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A56,A59,A65,A66,SCMFSA_2:92;
+                end;
+                hence sk11.x=sk12.x;
+             suppose A67:x is FinSeq-Location;
+then A68:              sk12.x=sk2.x by A13,A15,A56,SCMFSA_2:92;
+                    sk1.x=(sk2 | Dloc).x by A7,A58,FUNCT_1:72
+                  .=sk2.x by A58,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A56,A67,A68,SCMFSA_2:92;
+            end;
+            hence P[m+1] by A16,A57,Th15;
+       suppose InsCode i1 = 5;
+          then consider da,db such that
+A69:        i1 = Divide(da,db) by SCMFSA_2:58;
+A70:        sk11.IC SCM+FSA= Next IC sk1 by A14,A69,SCMFSA_2:93
+           .= sk12.IC SCM+FSA by A8,A13,A15,A69,SCMFSA_2:93;
+             now let x be set;
+             assume A71:x in Dloc;
+             per cases by A1,A71,Th23;
+             suppose A72: x is Int-Location;
+                A73: da in UsedIntLoc p by A11,A69,Th16;
+then A74:            sk1.da=(sk2 | Dloc).da by A3,A7,FUNCT_1:72
+                .=sk2.da by A3,A73,FUNCT_1:72;
+                A75: db in UsedIntLoc p by A11,A69,Th16;
+then A76:            sk1.db=(sk2 | Dloc).db by A3,A7,FUNCT_1:72
+               .=sk2.db by A3,A75,FUNCT_1:72;
+A77:           sk1.x=(sk2 | Dloc).x by A7,A71,FUNCT_1:72
+              .=sk2.x by A71,FUNCT_1:72;
+                 now
+                per cases;
+                suppose A78: da <> db;
+                     now
+                     per cases;
+                     suppose A79:x = da;
+then sk11.x=sk1.da div sk1.db by A14,A69,A78,SCMFSA_2:93;
+                       hence sk11.x=sk12.x by A13,A15,A69,A74,A76,A78,A79,
+SCMFSA_2:93;
+                     suppose A80:x = db;
+then sk11.x=sk1.da mod sk1.db by A14,A69,SCMFSA_2:93;
+                       hence sk11.x=sk12.x by A13,A15,A69,A74,A76,A80,SCMFSA_2:
+93;
+                     suppose A81:x <> da & x <> db;
+then sk11.x=sk1.x by A14,A69,A72,SCMFSA_2:93;
+                       hence sk11.x=sk12.x by A13,A15,A69,A72,A77,A81,SCMFSA_2:
+93;
+                  end;
+                  hence sk11.x=sk12.x;
+                suppose A82: da = db;
+                     now
+                     per cases;
+                     case A83:x = da;
+then sk11.x=sk1.da mod sk1.da by A14,A69,A82,SCMFSA_2:94;
+                       hence sk11.x=sk12.x by A13,A15,A69,A74,A82,A83,SCMFSA_2:
+94;
+                     case A84:x <> da;
+then sk11.x=sk1.x by A14,A69,A72,A82,SCMFSA_2:94;
+                       hence sk11.x=sk12.x by A13,A15,A69,A72,A77,A82,A84,
+SCMFSA_2:94;
+                  end;
+                  hence sk11.x=sk12.x;
+               end;
+               hence sk11.x=sk12.x;
+             suppose A85:x is FinSeq-Location;
+then A86:              sk12.x=sk2.x by A13,A15,A69,SCMFSA_2:93;
+                    sk1.x=(sk2 | Dloc).x by A7,A71,FUNCT_1:72
+                  .=sk2.x by A71,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A69,A85,A86,SCMFSA_2:93;
+            end;
+            hence P[m+1] by A16,A70,Th15;
+       suppose InsCode i1 = 6;
+          then consider lb such that
+A87:        i1 = goto lb by SCMFSA_2:59;
+A88:        sk11.IC SCM+FSA=lb by A14,A87,SCMFSA_2:95
+           .= sk12.IC SCM+FSA by A13,A15,A87,SCMFSA_2:95;
+             now let x be set;
+             assume A89:x in Dloc;
+then A90:         sk1.x=(sk2 | Dloc).x by A7,FUNCT_1:72
+             .=sk2.x by A89,FUNCT_1:72;
+             per cases by A1,A89,Th23;
+             suppose A91: x is Int-Location;
+then sk11.x=sk1.x by A14,A87,SCMFSA_2:95;
+                  hence sk11.x=sk12.x by A13,A15,A87,A90,A91,SCMFSA_2:95;
+             suppose A92:x is FinSeq-Location;
+then sk11.x=sk1.x by A14,A87,SCMFSA_2:95;
+                  hence sk11.x=sk12.x by A13,A15,A87,A90,A92,SCMFSA_2:95;
+            end;
+            hence P[m+1] by A16,A88,Th15;
+       suppose InsCode i1 = 7;
+          then consider lb,da such that
+A93:        i1 = da=0_goto lb by SCMFSA_2:60;
+           A94: da in UsedIntLoc p by A11,A93,Th17;
+then A95:       sk1.da=(sk2 | Dloc).da by A3,A7,FUNCT_1:72
+           .=sk2.da by A3,A94,FUNCT_1:72;
+A96:        now
+              per cases;
+              suppose A97:sk1.da=0;hence
+                   sk11.IC SCM+FSA=lb by A14,A93,SCMFSA_2:96
+                .= sk12.IC SCM+FSA by A13,A15,A93,A95,A97,SCMFSA_2:96;
+              suppose A98:sk1.da<>0;hence
+                   sk11.IC SCM+FSA= Next IC sk2 by A8,A14,A93,SCMFSA_2:96
+                .= sk12.IC SCM+FSA by A13,A15,A93,A95,A98,SCMFSA_2:96;
+           end;
+             now let x be set;
+             assume A99:x in Dloc;
+then A100:         sk1.x=(sk2 | Dloc).x by A7,FUNCT_1:72
+             .=sk2.x by A99,FUNCT_1:72;
+             per cases by A1,A99,Th23;
+             suppose A101: x is Int-Location;
+then sk11.x=sk1.x by A14,A93,SCMFSA_2:96;
+                  hence sk11.x=sk12.x by A13,A15,A93,A100,A101,SCMFSA_2:96;
+             suppose A102:x is FinSeq-Location;
+then sk11.x=sk1.x by A14,A93,SCMFSA_2:96;
+                  hence sk11.x=sk12.x by A13,A15,A93,A100,A102,SCMFSA_2:96;
+            end;
+            hence P[m+1] by A16,A96,Th15;
+       suppose InsCode i1 = 8;
+          then consider lb,da such that
+A103:        i1 = da>0_goto lb by SCMFSA_2:61;
+           A104: da in UsedIntLoc p by A11,A103,Th17;
+then A105:       sk1.da=(sk2 | Dloc).da by A3,A7,FUNCT_1:72
+           .=sk2.da by A3,A104,FUNCT_1:72;
+A106:        now
+              per cases;
+              suppose A107:sk1.da > 0;hence
+                   sk11.IC SCM+FSA=lb by A14,A103,SCMFSA_2:97
+                .= sk12.IC SCM+FSA by A13,A15,A103,A105,A107,SCMFSA_2:97;
+              suppose A108:sk1.da <= 0;hence
+                   sk11.IC SCM+FSA=Next IC sk2 by A8,A14,A103,SCMFSA_2:97
+                .= sk12.IC SCM+FSA by A13,A15,A103,A105,A108,SCMFSA_2:97;
+           end;
+             now let x be set;
+             assume A109:x in Dloc;
+then A110:         sk1.x=(sk2 | Dloc).x by A7,FUNCT_1:72
+             .=sk2.x by A109,FUNCT_1:72;
+             per cases by A1,A109,Th23;
+             suppose A111: x is Int-Location;
+then sk11.x=sk1.x by A14,A103,SCMFSA_2:97;
+                  hence sk11.x=sk12.x by A13,A15,A103,A110,A111,SCMFSA_2:97;
+             suppose A112:x is FinSeq-Location;
+then sk11.x=sk1.x by A14,A103,SCMFSA_2:97;
+                  hence sk11.x=sk12.x by A13,A15,A103,A110,A112,SCMFSA_2:97;
+            end;
+            hence P[m+1] by A16,A106,Th15;
+       suppose InsCode i1 = 9;
+          then consider a,b,fa such that
+A113:        i1 = b:=(fa,a) by SCMFSA_2:62;
+A114:        sk11.IC SCM+FSA= Next IC sk2 by A8,A14,A113,SCMFSA_2:98
+           .= sk12.IC SCM+FSA by A13,A15,A113,SCMFSA_2:98;
+             now let x be set;
+             assume A115:x in Dloc;
+             per cases by A1,A115,Th23;
+             suppose A116: x is Int-Location;
+                 now
+                per cases;
+                case A117:x = b;
+                  consider k1 being Nat such that
+A118:               k1=abs(sk1.a) & Exec(b:=(fa,a), sk1).b=(sk1.fa)/.k1
+                  by SCMFSA_2:98;
+                  consider k2 being Nat such that
+A119:               k2=abs(sk2.a) & Exec(b:=(fa,a), sk2).b=(sk2.fa)/.k2
+                  by SCMFSA_2:98;
+                  A120: a in UsedIntLoc p by A11,A113,Th18;
+                  then A121: sk1.a=(sk2 | Dloc).a by A3,A7,FUNCT_1:72
+                  .=sk2.a by A3,A120,FUNCT_1:72;
+                  A122: fa in UsedInt*Loc p by A11,A113,Th19;
+              then sk1.fa=(sk2 | Dloc).fa by A4,A7,FUNCT_1:72
+                  .=sk2.fa by A4,A122,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A13,A14,A15,A113,A117,A118,A119,A121;
+                case A123:x<> b;
+then A124:               sk12.x=sk2.x by A13,A15,A113,A116,SCMFSA_2:98;
+                    sk1.x=(sk2 | Dloc).x by A7,A115,FUNCT_1:72
+                  .=sk2.x by A115,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A113,A116,A123,A124,SCMFSA_2:98;
+                end;
+                hence sk11.x=sk12.x;
+             suppose A125:x is FinSeq-Location;
+then A126:              sk12.x=sk2.x by A13,A15,A113,SCMFSA_2:98;
+                    sk1.x=(sk2 | Dloc).x by A7,A115,FUNCT_1:72
+                  .=sk2.x by A115,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A113,A125,A126,SCMFSA_2:98;
+            end;
+            hence P[m+1] by A16,A114,Th15;
+       suppose InsCode i1 = 10;
+          then consider a,b,fa such that
+A127:        i1 = (fa,a):=b by SCMFSA_2:63;
+A128:        sk11.IC SCM+FSA= Next IC sk2 by A8,A14,A127,SCMFSA_2:99
+           .= sk12.IC SCM+FSA by A13,A15,A127,SCMFSA_2:99;
+             now let x be set;
+             assume A129:x in Dloc;
+             per cases by A1,A129,Th23;
+             suppose A130: x is FinSeq-Location;
+                 now
+                per cases;
+                case A131:x = fa;
+                  consider k1 being Nat such that
+A132:               k1=abs(sk1.a) & Exec((fa,a):=b,sk1).fa=sk1.fa+*(k1,sk1.b)
+                  by SCMFSA_2:99;
+                  consider k2 being Nat such that
+A133:               k2=abs(sk2.a) & Exec((fa,a):=b,sk2).fa=sk2.fa+*(k2,sk2.b)
+                  by SCMFSA_2:99;
+                  A134: a in UsedIntLoc p by A11,A127,Th18;
+                  then A135: sk1.a=(sk2 | Dloc).a by A3,A7,FUNCT_1:72
+                  .=sk2.a by A3,A134,FUNCT_1:72;
+                  A136: b in UsedIntLoc p by A11,A127,Th18;
+then A137:              sk1.b=(sk2 | Dloc).b by A3,A7,FUNCT_1:72
+                  .=sk2.b by A3,A136,FUNCT_1:72;
+                  A138: fa in UsedInt*Loc p by A11,A127,Th19;
+              then sk1.fa=(sk2 | Dloc).fa by A4,A7,FUNCT_1:72
+                  .=sk2.fa by A4,A138,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A13,A14,A15,A127,A131,A132,A133,A135,
+A137;
+                case A139:x<> fa;
+then A140:               sk12.x=sk2.x by A13,A15,A127,A130,SCMFSA_2:99;
+                    sk1.x=(sk2 | Dloc).x by A7,A129,FUNCT_1:72
+                  .=sk2.x by A129,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A127,A130,A139,A140,SCMFSA_2:99;
+                end;
+                hence sk11.x=sk12.x;
+             suppose A141:x is Int-Location;
+then A142:              sk12.x=sk2.x by A13,A15,A127,SCMFSA_2:99;
+                    sk1.x=(sk2 | Dloc).x by A7,A129,FUNCT_1:72
+                  .=sk2.x by A129,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A127,A141,A142,SCMFSA_2:99;
+            end;
+            hence P[m+1] by A16,A128,Th15;
+       suppose InsCode i1 = 11;
+          then consider a,fa such that
+A143:        i1 = a:=len fa by SCMFSA_2:64;
+A144:        sk11.IC SCM+FSA= Next IC sk2 by A8,A14,A143,SCMFSA_2:100
+           .= sk12.IC SCM+FSA by A13,A15,A143,SCMFSA_2:100;
+             now let x be set;
+             assume A145:x in Dloc;
+             per cases by A1,A145,Th23;
+             suppose A146: x is Int-Location;
+                 now
+                per cases;
+                case A147:x = a;
+then A148:              sk12.x= len(sk2.fa) by A13,A15,A143,SCMFSA_2:100;
+                  A149: fa in UsedInt*Loc p by A11,A143,Th21;
+              then sk1.fa=(sk2 | Dloc).fa by A4,A7,FUNCT_1:72
+                  .=sk2.fa by A4,A149,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A143,A147,A148,SCMFSA_2:100;
+                case A150:x<> a;
+then A151:               sk12.x=sk2.x by A13,A15,A143,A146,SCMFSA_2:100;
+                    sk1.x=(sk2 | Dloc).x by A7,A145,FUNCT_1:72
+                  .=sk2.x by A145,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A143,A146,A150,A151,SCMFSA_2:100;
+                end;
+                hence sk11.x=sk12.x;
+             suppose A152:x is FinSeq-Location;
+then A153:              sk12.x=sk2.x by A13,A15,A143,SCMFSA_2:100;
+                    sk1.x=(sk2 | Dloc).x by A7,A145,FUNCT_1:72
+                  .=sk2.x by A145,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A143,A152,A153,SCMFSA_2:100;
+            end;
+          hence P[m+1] by A16,A144,Th15;
+       suppose InsCode i1 = 12;
+          then consider a,fa such that
+A154:        i1 = fa:=<0,...,0>a by SCMFSA_2:65;
+A155:        sk11.IC SCM+FSA=Next IC sk2 by A8,A14,A154,SCMFSA_2:101
+           .= sk12.IC SCM+FSA by A13,A15,A154,SCMFSA_2:101;
+             now let x be set;
+             assume A156:x in Dloc;
+             per cases by A1,A156,Th23;
+             suppose A157: x is FinSeq-Location;
+                 now
+                per cases;
+                case A158:x = fa;
+                  consider k1 being Nat such that
+A159:               k1 = abs(sk1.a) & Exec(fa:=<0,...,0>a, sk1).fa = k1 |-> 0
+                  by SCMFSA_2:101;
+                  consider k2 being Nat such that
+A160:               k2 = abs(sk2.a) & Exec(fa:=<0,...,0>a, sk2).fa = k2 |-> 0
+                  by SCMFSA_2:101;
+                  A161: a in UsedIntLoc p by A11,A154,Th20;
+                  then sk1.a=(sk2 | Dloc).a by A3,A7,FUNCT_1:72
+                  .=sk2.a by A3,A161,FUNCT_1:72;
+                   hence sk11.x=sk12.x by A13,A14,A15,A154,A158,A159,A160;
+                case A162:x<> fa;
+then A163:               sk12.x=sk2.x by A13,A15,A154,A157,SCMFSA_2:101;
+                    sk1.x=(sk2 | Dloc).x by A7,A156,FUNCT_1:72
+                  .=sk2.x by A156,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A154,A157,A162,A163,SCMFSA_2:101;
+                end;
+                hence sk11.x=sk12.x;
+             suppose A164:x is Int-Location;
+then A165:              sk12.x=sk2.x by A13,A15,A154,SCMFSA_2:101;
+                    sk1.x=(sk2 | Dloc).x by A7,A156,FUNCT_1:72
+                  .=sk2.x by A156,FUNCT_1:72;
+                  hence sk11.x=sk12.x by A14,A154,A164,A165,SCMFSA_2:101;
+            end;
+            hence P[m+1] by A16,A155,Th15;
+    end;
+      for m being Nat holds P[m] from Ind(A5,A6);
+    hence thesis by A2;
+end;
+
+theorem Th26:   ::PR062
+ for i,k being Nat,p being Macro-Instruction, s1,s2 being State of SCM+FSA
+  st k <= i & p c= s1 & p c= s2 &
+  (for j holds IC (Computation s1).j in dom p &
+  IC (Computation s2).j in dom p) &
+  (Computation s1).k.IC SCM+FSA = (Computation s2).k.IC SCM+FSA &
+  (Computation s1).k | (UsedInt*Loc p \/ UsedIntLoc p) =
+  (Computation s2).k | (UsedInt*Loc p \/ UsedIntLoc p)
+ holds
+  (Computation s1).i.IC SCM+FSA = (Computation s2).i.IC SCM+FSA &
+  (Computation s1).i |(UsedInt*Loc p \/ UsedIntLoc p) =
+  (Computation s2).i |(UsedInt*Loc p \/ UsedIntLoc p)
+proof
+  let i,k be Nat,p be Macro-Instruction,s1,s2 be State of SCM+FSA;
+  set Cs1=Computation s1,Cs2=Computation s2,
+      D= UsedInt*Loc p \/ UsedIntLoc p;
+  assume A1:k <= i & p c= s1 & p c= s2 &
+  (for j holds IC Cs1.j in dom p & IC Cs2.j in dom p) &
+  Cs1.k.IC SCM+FSA = Cs2.k.IC SCM+FSA & Cs1.k | D = Cs2.k | D;
+     reconsider t={} as FinPartState of SCM+FSA by AMI_1:63;
+    set D1= dom t \/ UsedInt*Loc p \/ UsedIntLoc p;
+A2: dom t c= Int-Locations \/ FinSeq-Locations by RELAT_1:60,XBOOLE_1:2;
+A3: D1 = D by RELAT_1:60;
+    hence Cs1.i.IC SCM+FSA = Cs2.i.IC SCM+FSA by A1,A2,Th25;
+    thus Cs1.i | D = Cs2.i | D by A1,A2,A3,Th25;
+end;
+
+canceled 2;
+
+theorem Th29: ::PR068
+ for I,J being Macro-Instruction, a being Int-Location holds
+  UsedIntLoc if=0(a,I,J) = {a} \/ UsedIntLoc I \/ UsedIntLoc J &
+  UsedIntLoc if>0(a,I,J) = {a} \/ UsedIntLoc I \/ UsedIntLoc J
+proof
+    let I,J be Macro-Instruction, a be Int-Location;
+    set g1= a=0_goto insloc (card J + 3),
+        g2= Goto insloc (card I + 1),
+        g3= a>0_goto insloc (card J + 3),
+        SS=SCM+FSA-Stop;
+   thus UsedIntLoc if=0(a,I,J) =UsedIntLoc (g1 ';' J ';' g2 ';'I ';' SS)
+        by SCMFSA8B:def 1
+        .=UsedIntLoc (g1 ';' J ';' g2 ';'I) \/ {} by SCMFSA9A:9,SF_MASTR:31
+        .=UsedIntLoc (g1 ';' J ';' g2) \/ UsedIntLoc I by SF_MASTR:31
+        .=UsedIntLoc (g1 ';' J) \/ UsedIntLoc g2 \/ UsedIntLoc I by SF_MASTR:31
+        .=UsedIntLoc (g1 ';' J) \/ {} \/ UsedIntLoc I by SCMFSA9A:11
+        .=UsedIntLoc g1 \/ UsedIntLoc J \/ UsedIntLoc I by SF_MASTR:33
+        .={a} \/ UsedIntLoc J \/ UsedIntLoc I by SF_MASTR:20
+        .={a} \/ UsedIntLoc I \/ UsedIntLoc J by XBOOLE_1:4;
+   thus UsedIntLoc if>0(a,I,J) =UsedIntLoc (g3 ';' J ';' g2 ';'I ';' SS)
+        by SCMFSA8B:def 2
+        .=UsedIntLoc (g3 ';' J ';' g2 ';'I) \/ {} by SCMFSA9A:9,SF_MASTR:31
+        .=UsedIntLoc (g3 ';' J ';' g2) \/ UsedIntLoc I by SF_MASTR:31
+        .=UsedIntLoc (g3 ';' J) \/ UsedIntLoc g2 \/ UsedIntLoc I by SF_MASTR:31
+        .=UsedIntLoc (g3 ';' J) \/ {} \/ UsedIntLoc I by SCMFSA9A:11
+        .=UsedIntLoc g3 \/ UsedIntLoc J \/ UsedIntLoc I by SF_MASTR:33
+        .={a} \/ UsedIntLoc J \/ UsedIntLoc I by SF_MASTR:20
+        .={a} \/ UsedIntLoc I \/ UsedIntLoc J by XBOOLE_1:4;
+end;
+
+theorem Th30:  ::PR070
+ for I be Macro-Instruction,l be Instruction-Location of SCM+FSA holds
+  UsedIntLoc (Directed(I,l)) = UsedIntLoc I
+proof
+  let I be Macro-Instruction,l be Instruction-Location of SCM+FSA;
+ consider UIL being Function of the Instructions of SCM+FSA,
+ Fin Int-Locations such that
+A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedIntLoc i) &
+   UsedIntLoc I = Union (UIL * I) by SF_MASTR:def 2;
+  consider UIL2 being Function of the Instructions of SCM+FSA,
+  Fin Int-Locations such that
+A2: (for i being Instruction of SCM+FSA holds UIL2.i = UsedIntLoc i) &
+   UsedIntLoc Directed(I,l) = Union (UIL2 * Directed(I,l))
+    by SF_MASTR:def 2;
+    A3: for c be Element of the Instructions of SCM+FSA holds UIL.c = UIL2.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA;
+      thus UIL.c = UsedIntLoc d by A1
+        .= UIL2.c by A2;
+    end;
+A4: dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
+      dom id the Instructions of SCM+FSA = the Instructions of SCM+FSA
+         by RELAT_1:71;
+then A5: (id the Instructions of SCM+FSA) +*(halt SCM+FSA .--> goto l)
+    =(id the Instructions of SCM+FSA)+*(halt SCM+FSA, goto l)
+       by FUNCT_7:def 3;
+A6: UIL.halt SCM+FSA = {} by A1,SF_MASTR:17;
+    A7: UIL.goto l = UsedIntLoc goto l by A1
+     .= {} by SF_MASTR:19;
+      UIL * Directed(I,l) = UIL * (((id the Instructions of SCM+FSA) +*
+           (halt SCM+FSA .--> goto l))*I) by SCMFSA8A:def 1
+    .= UIL * ((id the Instructions of SCM+FSA) +*
+          (halt SCM+FSA .--> goto l)) * I by RELAT_1:55
+    .= UIL * I by A4,A5,A6,A7,SF_MASTR:2;
+    hence thesis by A1,A2,A3,FUNCT_2:113;
+end;
+
+theorem Th31:  ::PR072
+ for a being Int-Location,I being Macro-Instruction holds
+  UsedIntLoc Times(a,I) = UsedIntLoc I \/ {a,intloc 0}
+proof
+    let a be Int-Location,I be Macro-Instruction;
+      set g1=Goto insloc 2,
+          SF=SubFrom(a,intloc 0),
+          SS=SCM+FSA-Stop,
+          if0=if=0(a,g1,I ';' SF);
+   thus
+     UsedIntLoc Times(a,I) = UsedIntLoc if>0(a,loop if0, SS)
+     by SCMFSA8C:def 5
+   .={a} \/ UsedIntLoc loop if0 \/ {} by Th29,SCMFSA9A:9
+   .={a} \/ UsedIntLoc Directed(if0,insloc 0) by SCMFSA8C:104
+   .={a} \/ UsedIntLoc if0 by Th30
+   .={a} \/ ({a} \/ UsedIntLoc g1 \/ UsedIntLoc (I ';' SF)) by Th29
+   .={a} \/ ({a} \/ {} \/ UsedIntLoc (I ';' SF)) by SCMFSA9A:11
+   .={a} \/ {a} \/ UsedIntLoc (I ';' SF) by XBOOLE_1:4
+   .=UsedIntLoc I \/ UsedIntLoc SF \/ {a} by SF_MASTR:34
+   .=UsedIntLoc I \/ {a,intloc 0} \/ {a} by SF_MASTR:18
+   .=UsedIntLoc I \/ ({a} \/ {a,intloc 0}) by XBOOLE_1:4
+   .=UsedIntLoc I \/ {a,a,intloc 0} by ENUMSET1:42
+   .=UsedIntLoc I \/ {a,intloc 0} by ENUMSET1:70;
+end;
+
+theorem Th32:  ::PR074
+ for x1,x2,x3 being set holds
+  {x2,x1} \/ {x3,x1} ={x1,x2,x3}
+proof
+  let x1,x2,x3 be set;
+  thus {x2,x1} \/ {x3,x1} ={x2,x1,x3,x1} by ENUMSET1:45
+    .= {x1,x1,x2,x3} by ENUMSET1:112
+    .= {x1,x2,x3} by ENUMSET1:71;
+end;
+
+canceled 2;
+
+theorem  ::PR080
+  for I,J being Macro-Instruction, a being Int-Location holds
+  UsedInt*Loc if=0(a,I,J) = UsedInt*Loc I \/ UsedInt*Loc J &
+  UsedInt*Loc if>0(a,I,J) = UsedInt*Loc I \/ UsedInt*Loc J
+    by SCMFSA9A:14,16;
+
+theorem Th36:  ::PR082
+ for I be Macro-Instruction,l be Instruction-Location of SCM+FSA holds
+  UsedInt*Loc (Directed(I,l)) = UsedInt*Loc I
+proof
+  let I be Macro-Instruction,l be Instruction-Location of SCM+FSA;
+  consider UIL being Function of the Instructions of SCM+FSA,
+   Fin FinSeq-Locations such that
+A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedInt*Loc i) &
+   UsedInt*Loc I = Union (UIL * I) by SF_MASTR:def 4;
+ consider UIL2 being Function of the Instructions of SCM+FSA,
+                                 Fin FinSeq-Locations such that
+A2: (for i being Instruction of SCM+FSA holds UIL2.i = UsedInt*Loc i) &
+   UsedInt*Loc Directed(I,l) = Union (UIL2 * Directed(I,l))
+   by SF_MASTR:def 4;
+    A3: for c be Element of the Instructions of SCM+FSA holds UIL.c = UIL2.c
+    proof
+      let c be Element of the Instructions of SCM+FSA;
+      reconsider d = c as Instruction of SCM+FSA;
+      thus UIL.c = UsedInt*Loc d by A1
+        .= UIL2.c by A2;
+    end;
+A4: dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
+      dom id the Instructions of SCM+FSA = the Instructions of SCM+FSA
+         by RELAT_1:71;
+then A5: (id the Instructions of SCM+FSA) +*(halt SCM+FSA .--> goto l)
+    =(id the Instructions of SCM+FSA)+*(halt SCM+FSA, goto l)
+       by FUNCT_7:def 3;
+A6: UIL.halt SCM+FSA = UsedInt*Loc halt SCM+FSA by A1
+     .= {} by SF_MASTR:36;
+    A7: UIL.goto l = UsedInt*Loc goto l by A1
+     .= {} by SF_MASTR:36;
+      UIL * Directed(I,l) = UIL * (((id the Instructions of SCM+FSA) +*
+           (halt SCM+FSA .--> goto l))*I) by SCMFSA8A:def 1
+    .= UIL * ((id the Instructions of SCM+FSA) +*
+          (halt SCM+FSA .--> goto l)) * I by RELAT_1:55
+    .= UIL * I by A4,A5,A6,A7,SF_MASTR:2;
+    hence thesis by A1,A2,A3,FUNCT_2:113;
+end;
+
+theorem Th37: ::PR084
+ for a being Int-Location,I being Macro-Instruction holds
+  UsedInt*Loc Times(a,I) = UsedInt*Loc I
+proof
+    let a be Int-Location,I be Macro-Instruction;
+      set g1=Goto insloc 2,
+          SF=SubFrom(a,intloc 0),
+          SS=SCM+FSA-Stop,
+          if0=if=0(a,g1,I ';' SF);
+   thus
+     UsedInt*Loc Times(a,I) = UsedInt*Loc if>0(a,loop if0, SS)
+     by SCMFSA8C:def 5
+   .=UsedInt*Loc loop if0 \/ {} by SCMFSA9A:10,16
+   .=UsedInt*Loc Directed(if0,insloc 0) by SCMFSA8C:104
+   .=UsedInt*Loc if0 by Th36
+   .=UsedInt*Loc g1 \/ UsedInt*Loc (I ';' SF) by SCMFSA9A:14
+   .={} \/ UsedInt*Loc (I ';' SF) by SCMFSA9A:12
+   .=UsedInt*Loc I \/ UsedInt*Loc SF by SF_MASTR:50
+   .=UsedInt*Loc I \/ {} by SF_MASTR:36
+   .=UsedInt*Loc I;
+end;
+
+definition
+ let f be FinSeq-Location,t be FinSequence of INT;
+ redefine func f .--> t -> FinPartState of SCM+FSA;
+ coherence
+proof
+    t is Element of INT* & ObjectKind f = INT* by FINSEQ_1:def 11,SCMFSA_2:27;
+    hence thesis by AMI_1:59;
+  end;
+end;
+
+theorem Th38: ::PR086
+ for t be FinSequence of INT holds t is FinSequence of REAL
+proof
+   let t be FinSequence of INT;
+     now let i be Nat;
+      assume i in dom t;
+      then t.i in INT by FINSEQ_2:13;
+      hence t.i in REAL by INT_1:11;
+   end;
+   hence thesis by FINSEQ_2:14;
+end;
+
+theorem Th39: ::PR088
+ for t being FinSequence of INT holds
+     ex u being FinSequence of REAL
+    st t,u are_fiberwise_equipotent & u is FinSequence of INT
+    & u is non-increasing
+proof
+    let t be FinSequence of INT;
+   t is FinSequence of REAL by Th38;
+    then consider u be non-increasing FinSequence of REAL such that
+A1: t,u are_fiberwise_equipotent by RFINSEQ:35;
+    take u;
+    thus t,u are_fiberwise_equipotent by A1;
+A2: rng t = rng u by A1,RFINSEQ:1;
+      rng t c= INT by FINSEQ_1:def 4;
+    hence u is FinSequence of INT by A2,FINSEQ_1:def 4;
+    thus u is non-increasing;
+end;
+
+theorem Th40: ::PR090
+   dom( ((intloc 0) .--> 1) +* Start-At(insloc 0) ) ={intloc 0,IC SCM+FSA}
+proof
+   thus dom( ((intloc 0) .--> 1) +* Start-At(insloc 0) )
+   =dom ((intloc 0) .--> 1) \/ dom Start-At(insloc 0) by FUNCT_4:def 1
+   .=dom ((intloc 0) .--> 1) \/ {IC SCM+FSA} by AMI_3:34
+   .={intloc 0} \/ {IC SCM+FSA} by CQC_LANG:5
+   .={intloc 0,IC SCM+FSA} by ENUMSET1:41;
+end;
+
+theorem Th41:  ::PR092
+  for I be Macro-Instruction holds
+ dom (Initialized I) = dom I \/ {intloc 0,IC SCM+FSA}
+proof
+    let I be Macro-Instruction;
+    thus dom(Initialized I)=dom(I +* ((intloc 0) .--> 1)
+         +* Start-At(insloc 0) ) by SCMFSA6A:def 3
+    .=dom(I +* (((intloc 0) .--> 1) +* Start-At(insloc 0))) by FUNCT_4:15
+    .=dom I \/ { intloc 0,IC SCM+FSA } by Th40,FUNCT_4:def 1;
+end;
+
+theorem Th42:  ::PR094
+for w being FinSequence of INT,f be FinSeq-Location,I be Macro-Instruction
+holds dom (Initialized I +* (f.--> w)) = dom I \/ {intloc 0,IC SCM+FSA,f}
+proof
+    let w be FinSequence of INT,f be FinSeq-Location,
+    I be Macro-Instruction;
+      dom (Initialized I +* (f .--> w)) =
+    dom(Initialized I ) \/ dom (f.--> w) by FUNCT_4:def 1
+    .=dom(Initialized I ) \/ {f} by CQC_LANG:5
+    .=dom I \/ { intloc 0,IC SCM+FSA } \/ {f} by Th41
+    .=dom I \/ ({ intloc 0,IC SCM+FSA } \/ {f}) by XBOOLE_1:4;
+    hence thesis by ENUMSET1:43;
+end;
+
+theorem   ::PR100 ???
+   for l being Instruction-Location of SCM+FSA holds IC SCM+FSA <> l
+proof
+   let l be Instruction-Location of SCM+FSA;
+     ObjectKind l = the Instructions of SCM+FSA &
+    ObjectKind IC SCM+FSA = the Instruction-Locations of SCM+FSA
+     by AMI_1:def 11,def 14;
+   hence thesis by SCMFSA_2:6;
+end;
+
+theorem Th44:   ::PR102
+   for a being Int-Location,I being Macro-Instruction holds
+   card Times(a,I) = card I + 12
+proof
+    let a be Int-Location,I be Macro-Instruction;
+      set g1=Goto insloc 2,
+          SF=SubFrom(a,intloc 0),
+          SS=SCM+FSA-Stop,
+          if0=if=0(a,g1,I ';' SF);
+ thus
+      card Times(a,I)= card if>0(a,loop if0, SS) by SCMFSA8C:def 5
+   .= card (loop if0)+1+4 by SCMFSA8A:17,SCMFSA8B:15
+   .= card (loop if0)+(1+4) by XCMPLX_1:1
+   .= card Directed(if0,insloc 0)+5 by SCMFSA8C:104
+   .= card if0 +5 by SCMFSA8A:33
+   .= card (I ';' SF)+card g1+4+5 by SCMFSA8B:14
+   .= card (I ';' SF)+1+4+5 by SCMFSA8A:29
+   .= card (I ';' Macro SF)+1+4+5 by SCMFSA6A:def 6
+   .= card I + card (Macro SF)+1+4+5 by SCMFSA6A:61
+   .= card I+2+1+4+5 by SCMFSA7B:6
+   .= card I+(2+1)+4+5 by XCMPLX_1:1
+   .= card I+(3+4)+5 by XCMPLX_1:1
+   .= card I+(7+5) by XCMPLX_1:1
+   .= card I+12;
+end;
+
+theorem Th45: ::PR104
+ for i1,i2,i3 be Instruction of SCM+FSA holds
+ card (i1 ';' i2 ';' i3)=6
+proof
+     let i1,i2,i3 be Instruction of SCM+FSA;
+     thus card (i1 ';' i2 ';' i3)
+     = card (i1 ';' i2 ';' Macro i3) by SCMFSA6A:def 6
+     .= card (i1 ';' i2) + card Macro i3 by SCMFSA6A:61
+     .= card (i1 ';' i2) + 2 by SCMFSA7B:6
+     .= card (Macro i1 ';' Macro i2) +2 by SCMFSA6A:def 7
+     .= card Macro i1 + card Macro i2 +2 by SCMFSA6A:61
+     .= 2 + card Macro i2 +2 by SCMFSA7B:6
+     .= 2 + 2 +2 by SCMFSA7B:6
+     .= 6;
+end;
+
+theorem Th46:  ::PR106
+ for t be FinSequence of INT,f be FinSeq-Location,I be Macro-Instruction
+  holds dom (Initialized I) misses dom (f .--> t)
+proof
+    let t be FinSequence of INT,f be FinSeq-Location,I be Macro-Instruction;
+    set x = f .--> t;
+A1: dom x ={f} by CQC_LANG:5;
+    set DB= dom I,
+        DI=dom (Initialized I);
+A2: DI=DB \/ { intloc 0,IC SCM+FSA } by Th41;
+    assume DI /\ dom x <> {};
+    then consider y being set such that
+A3: y in DI /\ dom x by XBOOLE_0:def 1;
+A4: y in DI & y in dom x by A3,XBOOLE_0:def 3;
+then A5: y=f by A1,TARSKI:def 1;
+  DB c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
+   then not y in DB by A5,SCMFSA_2:85;
+   then y in {intloc 0,IC SCM+FSA } by A2,A4,XBOOLE_0:def 2;
+then y=intloc 0 or y=IC SCM+FSA by TARSKI:def 2;
+    hence contradiction by A5,SCMFSA_2:82,83;
+end;
+
+theorem Th47:   ::PR108
+ for w be FinSequence of INT,f be FinSeq-Location,I be Macro-Instruction
+holds Initialized I +* (f .--> w) starts_at insloc 0
+proof let w be FinSequence of INT,f be FinSeq-Location,
+       I be Macro-Instruction;
+   set p = Initialized I,
+       s = f .--> w;
+A1:    dom p misses dom s by Th46;
+then A2:    p c= p +* s by FUNCT_4:33;
+A3:  dom p = dom I \/ {intloc 0,IC SCM+FSA} by Th41;
+A4:   dom p c= dom(p +* s) by A2,RELAT_1:25;
+         IC SCM+FSA in {intloc 0,IC SCM+FSA } by TARSKI:def 2;
+       then A5:     IC SCM+FSA in dom p by A3,XBOOLE_0:def 2;
+then A6:     not IC SCM+FSA in dom s by A1,XBOOLE_0:3;
+       thus
+      IC SCM+FSA in dom(p +* s) by A4,A5;
+       thus IC(p +* s) = (p +* s).IC SCM+FSA by A4,A5,AMI_3:def 16
+        .= p.IC SCM+FSA by A6,FUNCT_4:12
+        .= insloc 0 by SCMFSA6A:46;
+end;
+
+theorem Th48:  ::PR110
+ for I,J being Macro-Instruction, k being Nat,i being Instruction of SCM+FSA
+ st k< card J & i = J.insloc k holds
+  (I ';' J).(insloc (card I +k)) =IncAddr( i, card I )
+proof
+    let I,J be Macro-Instruction, k be Nat,
+     i be Instruction of SCM+FSA such that
+A1: k< card J and
+A2: i = J.insloc k;
+    set m=card I +k;
+A3: card I <= m by NAT_1:29;
+A4: m < card I + card J by A1,REAL_1:53;
+      insloc(m -' card I) =insloc k by BINARITH:39;
+    hence thesis by A2,A3,A4,SCMFSA8C:13;
+end;
+
+theorem Th49:  ::PR112
+ ic = a:=b or ic = AddTo(a, b) or ic = SubFrom(a, b) or
+ ic = MultBy(a, b) or ic = Divide(a, b) or ic = goto la or ic = a=0_goto la
+ or ic = a>0_goto la or ic = b := (f, a) or ic = (f, a) := b or
+ ic = a :=len f or ic = f :=<0,...,0>a implies ic <> halt SCM+FSA
+proof
+   assume
+   ic = a:=b or ic = AddTo(a, b) or ic = SubFrom(a, b) or
+ ic = MultBy(a, b) or ic = Divide(a, b) or ic = goto la or ic = a=0_goto la
+ or ic = a>0_goto la or ic = b := (f, a) or ic = (f, a) := b or
+ ic = a :=len f or ic = f :=<0,...,0>a;
+   hence thesis by SCMFSA_2:42,43,44,45,46,47,48,49,50,51,52,53,124;
+end;
+
+theorem Th50:  ::PR114
+ for I,J be Macro-Instruction,k be Nat,i be Instruction of SCM+FSA st
+ (for n be Nat holds IncAddr( i, n)=i) & i <> halt SCM+FSA & k= card I
+ holds (I ';' i ';' J).(insloc k) = i &
+        (I ';' i ';' J).(insloc (k+1)) = goto insloc (card I+2)
+proof
+    let I,J be Macro-Instruction, k be Nat,i be Instruction of SCM+FSA;
+    assume A1:
+  (for n be Nat holds IncAddr( i, n)=i) & i <> halt SCM+FSA & k= card I;
+    set x1=insloc k;
+A2: I ';' i =I ';' Macro i by SCMFSA6A:def 6;
+then A3: card (I ';' i) = card I + card Macro i by SCMFSA6A:61
+    .= card I +2 by SCMFSA7B:6;
+      card I + 0 < card I + 2 by REAL_1:53;
+then A4: x1 in dom (I ';' i) by A1,A3,SCMFSA6A:15;
+A5: (Macro i).(insloc 0) = i by SCMFSA6B:33;
+A6: card (Macro i) = 2 by SCMFSA7B:6;
+A7: (I ';' i).x1 = (I ';' Macro i).insloc (card I+0) by A1,SCMFSA6A:def 6
+    .=IncAddr( i, card I ) by A5,A6,Th48
+    .=i by A1;
+    thus (I ';' i ';' J).x1 = (Directed (I ';' i)).x1 by A4,SCMFSA8A:28
+    .=i by A1,A4,A7,SCMFSA8A:30;
+    set x2=insloc (k+1);
+      card I + 1 < card I + 2 by REAL_1:53;
+then A8: x2 in dom (I ';' i) by A1,A3,SCMFSA6A:15;
+  (Macro i).(insloc 1) = halt SCM+FSA by SCMFSA6B:33;
+then A9: (I ';' i).x2 =IncAddr( halt SCM+FSA, card I ) by A1,A2,A6,Th48
+    .=halt SCM+FSA by SCMFSA_4:8;
+    thus (I ';' i ';' J).x2 = (Directed (I ';' i)).x2 by A8,SCMFSA8A:28
+    .= goto insloc (card I+2) by A3,A8,A9,SCMFSA8A:30;
+end;
+
+theorem Th51:  ::PR116
+ for I,J being Macro-Instruction, k being Nat holds
+     k= card I implies (I ';'(a:=b) ';' J).(insloc k) = a:= b
+     & (I ';'(a:=b) ';' J).(insloc (k+1)) = goto insloc (card I+2)
+proof let I,J be Macro-Instruction,k be Nat;
+     assume A1:k= card I;
+     set i=a:=b;
+A2:  for n be Nat holds IncAddr(i, n)=i by SCMFSA_4:9;
+       i <> halt SCM+FSA by Th49;
+     hence thesis by A1,A2,Th50;
+end;
+
+theorem Th52:  ::PR118
+ for I,J being Macro-Instruction, k being Nat holds
+     k= card I implies (I ';'(a:=len f) ';' J).(insloc k) = a:=len f
+     & (I ';'(a:=len f) ';' J).(insloc (k+1)) = goto insloc (card I+2)
+proof let I,J be Macro-Instruction,k be Nat;
+     assume A1:k= card I;
+     set i=a:=len f;
+A2:  for n be Nat holds IncAddr(i, n)=i by SCMFSA_4:19;
+       i <> halt SCM+FSA by Th49;
+     hence thesis by A1,A2,Th50;
+end;
+
+theorem Th53:   ::PR120
+ for w being FinSequence of INT,f be FinSeq-Location,s being State of SCM+FSA,
+  I be Macro-Instruction st Initialized I +* (f.--> w) c= s
+  holds I c= s
+proof
+     let w be FinSequence of INT,f be FinSeq-Location,s be State of SCM+FSA,
+     I be Macro-Instruction;
+     set t= f .--> w ,
+         p=Initialized I;
+     assume A1:  p +* t c= s;
+    dom p misses dom t by Th46;
+then A2:  p c= p +* t by FUNCT_4:33;
+       I c= p by SCMFSA6A:26;
+     then I c= p +* t by A2,XBOOLE_1:1;
+     hence I c= s by A1,XBOOLE_1:1;
+end;
+
+theorem Th54:   ::PR122
+  for w being FinSequence of INT,f be FinSeq-Location,s be State of SCM+FSA,
+  I be Macro-Instruction st Initialized I +* (f .--> w) c= s
+  holds s.f = w & s.(intloc 0) = 1
+proof let w be FinSequence of INT,f be FinSeq-Location,
+      s be State of SCM+FSA,I be Macro-Instruction;
+      set t= f.--> w ,
+       p=Initialized I;
+    assume A1: p +* t c= s;
+A2: dom t = { f} by CQC_LANG:5;
+then A3: f in dom t by TARSKI:def 1;
+       intloc 0 <> f by SCMFSA_2:83;
+then A4: not intloc 0 in dom t by A2,TARSKI:def 1;
+       intloc 0 in dom p by SCMFSA6A:45;
+then A5: intloc 0 in dom (p +* t) by FUNCT_4:13;
+      t c= p +* t by FUNCT_4:26;
+ then t c= s by A1,XBOOLE_1:1;
+    hence s.f = t.f by A3,GRFUNC_1:8
+      .= w by CQC_LANG:6;
+    thus s.intloc 0 = (p +* t).intloc 0 by A1,A5,GRFUNC_1:8
+    .=p.intloc 0 by A4,FUNCT_4:12
+    .= 1 by SCMFSA6A:46;
+end;
+
+theorem Th55:   ::PR124
+ for f being FinSeq-Location,a being Int-Location,s being State of SCM+FSA
+ holds {a,IC SCM+FSA,f} c= dom s
+proof
+     let f be FinSeq-Location,a be Int-Location,s be State of SCM+FSA;
+A1:  a in dom s by SCMFSA_2:66;
+       IC SCM+FSA in dom s by SCMFSA8B:1;
+then A2:  {a,IC SCM+FSA} c= dom s by A1,ZFMISC_1:38;
+       f in dom s by SCMFSA_2:67;
+     then { f } c= dom s by ZFMISC_1:37;
+     then {a,IC SCM+FSA} \/ {f} c= dom s by A2,XBOOLE_1:8;
+     hence thesis by ENUMSET1:43;
+end;
+
+theorem Th56:   ::PR126
+ for p being Macro-Instruction,s being State of SCM+FSA holds
+  UsedInt*Loc p \/ UsedIntLoc p c= dom s
+proof
+      let p be Macro-Instruction,s be State of SCM+FSA;
+        Int-Locations c= dom(s) by SCMFSA_2:69;
+then A1:   UsedIntLoc p c= dom(s) by XBOOLE_1:1;
+        FinSeq-Locations c= dom (s) by SCMFSA_2:70;
+      then UsedInt*Loc p c= dom(s) by XBOOLE_1:1;
+      hence thesis by A1,XBOOLE_1:8;
+end;
+
+theorem Th57:  ::PR128
+ for s be State of SCM+FSA,I be Macro-Instruction,f be FinSeq-Location
+ holds (Result (s +* Initialized I)).f = IExec(I,s).f
+proof
+ let s be State of SCM+FSA,I be Macro-Instruction,f be FinSeq-Location;
+     set D= Int-Locations \/ FinSeq-Locations;
+       f in FinSeq-Locations by SCMFSA_2:10;
+then A1:  f in D by XBOOLE_0:def 2;
+     hence (Result (s +* Initialized I)).f
+      = ((Result (s +* Initialized I))| D).f by FUNCT_1:72
+     .=(IExec(I,s) | D).f by SCMFSA8B:35
+     .= IExec(I,s).f by A1,FUNCT_1:72;
+end;
+
+:: ------   Bubble Sort Algorithm -----------------
+set a0 = intloc 0;
+set a1 = intloc 1;
+set a2 = intloc 2;
+set a3 = intloc 3;
+set a4 = intloc 4;
+set a5 = intloc 5;
+set a6 = intloc 6;
+set initializeWorkMem= (a2:= a0) ';' (a3:= a0) ';'
+                   (a4:= a0) ';' (a5:= a0) ';' (a6:= a0);
+
+:: set a0 = intloc 0;
+:: set a1 = intloc 1;
+:: set a2 = intloc 2;
+:: set a3 = intloc 3;
+:: set a4 = intloc 4;
+:: set a5 = intloc 5;
+:: set a6 = intloc 6;
+:: set initializeWorkMem= (a2:= a0) ';' (a3:= a0) ';'
+::                  (a4:= a0) ';' (a5:= a0) ';' (a6:= a0);
+
+definition
+ let f be FinSeq-Location;
+ func bubble-sort f -> Macro-Instruction means
+:Def1:  ::def1
+   it= initializeWorkMem ';'
+       (a1:=len f) ';'
+       Times(a1,
+          a2 := a1 ';'
+          SubFrom(a2,a0) ';'
+          (a3:=len f) ';'
+          Times(a2,
+                  a4:=a3 ';'
+                  SubFrom(a3,a0) ';'
+                  (a5:=(f,a3)) ';'
+                  (a6:=(f,a4)) ';' SubFrom(a6,a5) ';'
+                  if>0(a6,(a6:=(f,a4)) ';'
+                     ((f,a3):=a6) ';'((f,a4):=a5),SCM+FSA-Stop)
+          )
+       );
+  correctness;
+end;
+
+definition
+ func Bubble-Sort-Algorithm -> Macro-Instruction means
+:Def2:  ::def2
+  it = bubble-sort fsloc 0;
+  correctness;
+end;
+
+set b1=intloc (0+1),b2=intloc (1+1),b3=intloc (2+1),b4=intloc (3+1),
+     b5=intloc (4+1),b6=intloc (5+1);
+
+  set f0=fsloc 0,
+       i1= b4:=b3,
+       i2= SubFrom(b3,a0),
+       i3= b5:=(f0,b3),
+       i4= b6:=(f0,b4),
+       i5= SubFrom(b6,b5),
+       i6= (f0,b3):=b6,
+       i7= (f0,b4):=b5,
+       SS= SCM+FSA-Stop,
+       ifc=if>0(b6,i4 ';' i6 ';' i7,SS),
+       body2= i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' ifc,
+       T2=Times(b2,body2),
+      j1= b2 := b1 ,
+      j2= SubFrom(b2,a0) ,
+      j3= b3:=len f0,
+      Sb= j1 ';' j2 ';' j3,
+      body1= Sb ';' T2,
+      T1=Times(b1,body1),
+       w2= b2:= a0, w3= b3:= a0, w4= b4:= a0,
+       w5= b5:= a0, w6= b6:= a0, w7= b1:=len f0;
+
+theorem Th58:   ::BS002
+ for f being FinSeq-Location holds
+  UsedIntLoc (bubble-sort f) = {a0,a1,a2,a3,a4,a5,a6}
+proof
+  let f be FinSeq-Location;
+  set i1= a4:=a3,
+       i2= SubFrom(a3,a0),
+       i3= (a5:=(f,a3)),
+       i4= (a6:=(f,a4)),
+       i5= SubFrom(a6,a5),
+       i6= ((f,a3):=a6),
+       i7= ((f,a4):=a5),
+       ifc=if>0(a6,i4 ';' i6 ';' i7,SCM+FSA-Stop),
+       Sif= UsedIntLoc ifc,
+       body2= i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' ifc;
+
+A1:  Sif = {a4,a3,a6,a5}
+     proof thus
+       Sif = {a6} \/ UsedIntLoc (i4 ';' i6 ';' i7) \/ {} by Th29,SCMFSA9A:9
+     .= {a6} \/ (UsedIntLoc (i4 ';' i6) \/ UsedIntLoc i7) by SF_MASTR:34
+     .= {a6} \/ (UsedIntLoc (i4 ';' i6) \/ {a4,a5}) by SF_MASTR:21
+     .= {a6} \/ (UsedIntLoc i4 \/ UsedIntLoc i6 \/ {a4,a5}) by SF_MASTR:35
+     .= {a6} \/ (UsedIntLoc i4 \/ {a3,a6} \/ {a4,a5}) by SF_MASTR:21
+     .= {a6} \/ ({a4,a6} \/ {a3,a6} \/ {a4,a5}) by SF_MASTR:21
+     .= {a6} \/ ({a4,a6,a3,a6} \/ {a4,a5}) by ENUMSET1:45
+     .= {a6} \/ ({a6,a6,a3,a4} \/ {a4,a5}) by ENUMSET1:123
+     .= {a6} \/ {a6,a6,a3,a4} \/ {a4,a5} by XBOOLE_1:4
+     .= {a6,a6,a6,a3,a4} \/ {a4,a5} by ENUMSET1:47
+     .= {a6,a3,a4} \/ {a4,a5} by ENUMSET1:78
+     .= {a6,a3} \/ {a4} \/ {a4,a5} by ENUMSET1:43
+     .= {a6,a3} \/ ({a4} \/ {a4,a5}) by XBOOLE_1:4
+     .= {a6,a3} \/ {a4,a4,a5} by ENUMSET1:42
+     .= {a4,a5} \/ {a6,a3} by ENUMSET1:70
+     .= {a4,a5,a6,a3} by ENUMSET1:45
+     .= {a4,a3,a6,a5} by ENUMSET1:107;
+    end;
+     set ui12=UsedIntLoc(i1 ';' i2);
+A2: UsedIntLoc body2 = {a0} \/ {a4,a3,a6,a5}
+    proof thus
+      UsedIntLoc body2 = (UsedIntLoc (i1 ';' i2 ';'i3 ';'i4 ';' i5) )
+         \/ Sif by SF_MASTR:31
+     .= (UsedIntLoc (i1 ';' i2 ';'i3 ';' i4)) \/ (UsedIntLoc i5) \/ Sif
+         by SF_MASTR:34
+     .= (UsedIntLoc (i1 ';' i2 ';'i3 ';' i4)) \/ {a6,a5} \/ Sif
+         by SF_MASTR:18
+     .= (UsedIntLoc (i1 ';' i2 ';'i3 )) \/ (UsedIntLoc i4) \/ {a6,a5} \/ Sif
+        by SF_MASTR:34
+     .= (UsedIntLoc (i1 ';' i2 ';'i3)) \/ {a6,a4} \/ {a6,a5} \/ Sif
+     by SF_MASTR:21
+     .= ui12 \/ UsedIntLoc i3 \/ {a6,a4} \/ {a6,a5} \/ Sif by SF_MASTR:34
+     .= ui12 \/ {a5,a3} \/ {a6,a4} \/ {a6,a5} \/ Sif by SF_MASTR:21
+     .= ui12 \/ ({a5,a3} \/ {a6,a4}) \/ {a6,a5} \/ Sif by XBOOLE_1:4
+     .= ui12 \/ {a5,a3,a6,a4} \/ {a6,a5} \/ Sif by ENUMSET1:45
+     .= ui12 \/ {a4,a3,a6,a5} \/ {a6,a5} \/ Sif by ENUMSET1:123
+     .= ui12 \/ ({a4,a3} \/ {a6,a5}) \/ {a6,a5} \/ Sif by ENUMSET1:45
+     .= ui12 \/ {a4,a3} \/ {a6,a5} \/ {a6,a5} \/ Sif by XBOOLE_1:4
+     .= ui12 \/ {a4,a3} \/ ({a6,a5} \/ {a6,a5}) \/ Sif by XBOOLE_1:4
+     .= ui12 \/ ({a4,a3} \/ {a6,a5}) \/ Sif by XBOOLE_1:4
+     .= ui12 \/ {a4,a3,a6,a5} \/ Sif by ENUMSET1:45
+     .= ui12 \/ ({a4,a3,a6,a5} \/ Sif) by XBOOLE_1:4
+     .= (UsedIntLoc i1 ) \/ (UsedIntLoc i2) \/ {a4,a3,a6,a5} by A1,SF_MASTR:35
+     .= (UsedIntLoc i1 ) \/ {a3,a0} \/ {a4,a3,a6,a5} by SF_MASTR:18
+     .= {a3,a4} \/ {a3,a0} \/ {a4,a3,a6,a5} by SF_MASTR:18
+     .= {a3,a4,a3,a0} \/ {a4,a3,a6,a5} by ENUMSET1:45
+     .= {a3,a3,a4,a0} \/ {a4,a3,a6,a5} by ENUMSET1:104
+     .= {a3,a4,a0} \/ {a4,a3,a6,a5} by ENUMSET1:71
+     .= {a0,a4,a3} \/ {a4,a3,a6,a5} by ENUMSET1:102
+     .= {a0} \/ {a4,a3} \/ {a4,a3,a6,a5} by ENUMSET1:42
+     .= {a0} \/ {a4,a3} \/ ({a4,a3} \/ {a6,a5}) by ENUMSET1:45
+     .= {a0} \/ {a4,a3} \/ {a4,a3} \/ {a6,a5} by XBOOLE_1:4
+     .= {a0} \/ ({a4,a3} \/ {a4,a3}) \/ {a6,a5} by XBOOLE_1:4
+     .= {a0} \/ ({a4,a3} \/ {a6,a5}) by XBOOLE_1:4
+     .= {a0} \/ {a4,a3,a6,a5} by ENUMSET1:45;
+     end;
+
+   set j1= a2 := a1 ,
+       j2= SubFrom(a2,a0) ,
+       j3= (a3:=len f) ,
+       Sfor= UsedIntLoc Times(a2,body2),
+       body1= j1 ';' j2 ';' j3 ';' Times(a2,body2);
+A3:  Sfor= {a4,a5,a6} \/ {a0,a2,a3}
+     proof thus
+       Sfor={a4,a3,a6,a5} \/ {a0} \/ {a2,a0} by A2,Th31
+     .={a4,a3,a6,a5} \/ ({a0} \/ {a2,a0}) by XBOOLE_1:4
+     .={a4,a3,a6,a5} \/ {a0,a0,a2} by ENUMSET1:42
+     .={a4,a3,a6,a5} \/ {a0,a2} by ENUMSET1:70
+     .={a4,a5,a6,a3} \/ {a0,a2} by ENUMSET1:107
+     .={a4,a5,a6} \/ {a3} \/ {a0,a2} by ENUMSET1:46
+     .={a4,a5,a6} \/ ({a3} \/ {a0,a2}) by XBOOLE_1:4
+     .={a4,a5,a6} \/ {a0,a2,a3} by ENUMSET1:43;
+     end;
+
+A4:  UsedIntLoc body1 = {a0,a1,a2,a3,a4,a5,a6}
+    proof thus
+      UsedIntLoc body1 = UsedIntLoc (j1 ';' j2 ';'j3) \/ Sfor by SF_MASTR:31
+     .= UsedIntLoc (j1 ';' j2) \/ UsedIntLoc j3 \/ Sfor by SF_MASTR:34
+     .= UsedIntLoc (j1 ';' j2) \/ {a3} \/ Sfor by SF_MASTR:22
+     .= UsedIntLoc j1 \/ UsedIntLoc j2 \/ {a3} \/ Sfor by SF_MASTR:35
+     .= UsedIntLoc j1 \/ {a2,a0} \/ {a3} \/ Sfor by SF_MASTR:18
+     .= {a2,a1} \/ {a2,a0} \/ {a3} \/ Sfor by SF_MASTR:18
+     .= {a2,a1} \/ ({a0,a2} \/ {a3}) \/ Sfor by XBOOLE_1:4
+     .= {a2,a1} \/ {a0,a2,a3} \/ Sfor by ENUMSET1:43
+     .= {a2,a1} \/ {a0,a2,a3} \/ {a0,a2,a3} \/ {a4,a5,a6} by A3,XBOOLE_1:4
+     .= {a2,a1} \/ ({a0,a2,a3} \/ {a0,a2,a3}) \/ {a4,a5,a6} by XBOOLE_1:4
+     .= {a2,a1} \/ ({a0,a2} \/ {a3}) \/ {a4,a5,a6} by ENUMSET1:43
+     .= {a2,a1} \/ {a0,a2} \/ {a3} \/ {a4,a5,a6} by XBOOLE_1:4
+     .= {a2,a1,a0,a2} \/ {a3} \/ {a4,a5,a6} by ENUMSET1:45
+     .= {a2,a2,a0,a1} \/ {a3} \/ {a4,a5,a6} by ENUMSET1:107
+     .= {a2,a0,a1} \/ {a3} \/ {a4,a5,a6} by ENUMSET1:71
+     .= {a0,a1,a2} \/ {a3} \/ {a4,a5,a6} by ENUMSET1:100
+     .= {a0,a1,a2,a3} \/ {a4,a5,a6} by ENUMSET1:46
+     .= {a0,a1,a2,a3,a4,a5,a6} by ENUMSET1:59;
+    end;
+
+     set k2= a2:= a0,
+          k3= a3:= a0,
+          k4= a4:= a0,
+          k5= a5:= a0;
+A5:  UsedIntLoc initializeWorkMem = UsedIntLoc (k2 ';' k3 ';' k4 ';' k5)
+     \/ UsedIntLoc (a6:= a0) by SF_MASTR:34
+    .= UsedIntLoc (k2 ';' k3 ';' k4 ';' k5) \/ {a6,a0} by SF_MASTR:18
+    .= UsedIntLoc (k2 ';' k3 ';' k4 ) \/ UsedIntLoc k5 \/ {a6,a0}
+        by SF_MASTR:34
+    .= UsedIntLoc (k2 ';' k3 ';' k4 ) \/ {a5,a0} \/ {a6,a0} by SF_MASTR:18
+    .= UsedIntLoc (k2 ';' k3 ) \/ UsedIntLoc k4 \/ {a5,a0} \/
+ {a6,a0} by SF_MASTR:34
+    .= UsedIntLoc (k2 ';' k3 ) \/ {a4,a0} \/ {a5,a0} \/ {a6,a0} by SF_MASTR:18
+    .= UsedIntLoc k2 \/ UsedIntLoc k3 \/ {a4,a0} \/ {a5,a0} \/ {a6,a0}
+       by SF_MASTR:35
+    .= UsedIntLoc k2 \/ {a3,a0} \/ {a4,a0} \/ {a5,a0} \/
+ {a6,a0} by SF_MASTR:18
+    .= {a2,a0} \/ {a3,a0} \/ {a4,a0} \/ {a5,a0} \/ {a6,a0} by SF_MASTR:18
+    .= {a2,a0} \/ {a3,a0} \/ {a4,a0} \/ ({a5,a0} \/ {a6,a0}) by XBOOLE_1:4
+    .= {a2,a0} \/ {a3,a0} \/ {a4,a0} \/ {a0,a5,a6} by Th32
+    .= {a0,a2,a3} \/ {a4,a0} \/ {a0,a5,a6} by Th32
+    .= {a0,a2,a3} \/ {a4,a0} \/ ({a0} \/ {a5,a6}) by ENUMSET1:42
+    .= {a0,a2,a3} \/ {a4,a0} \/ {a0} \/ {a5,a6} by XBOOLE_1:4
+    .= {a0,a2,a3} \/ ({a4,a0} \/ {a0}) \/ {a5,a6} by XBOOLE_1:4
+    .= {a0,a2,a3} \/ {a4,a0,a0} \/ {a5,a6} by ENUMSET1:43
+    .= {a0,a2,a3} \/ ({a0,a0} \/ {a4}) \/ {a5,a6} by ENUMSET1:42
+    .= {a0,a2,a3} \/ {a0,a0} \/ {a4} \/ {a5,a6} by XBOOLE_1:4
+    .= {a0,a0,a0,a2,a3} \/ {a4} \/ {a5,a6} by ENUMSET1:48
+    .= {a0,a2,a3} \/ {a4} \/ {a5,a6} by ENUMSET1:78
+    .= {a0,a2,a3,a4} \/ {a5,a6} by ENUMSET1:46
+    .= {a0,a2,a3,a4,a5,a6} by ENUMSET1:54
+    .= {a0} \/ {a2,a3,a4,a5,a6} by ENUMSET1:51;
+
+    set k7=(a1:=len f) ,
+        Ut=UsedIntLoc Times(a1,body1);
+ thus UsedIntLoc (bubble-sort f)
+     = UsedIntLoc ( initializeWorkMem ';' k7 ';' Times(a1,body1) ) by Def1
+    .=UsedIntLoc ( initializeWorkMem ';' k7 ) \/ Ut by SF_MASTR:31
+    .=UsedIntLoc initializeWorkMem \/ UsedIntLoc k7 \/ Ut by SF_MASTR:34
+    .={a0} \/ {a2,a3,a4,a5,a6} \/ {a1} \/ Ut by A5,SF_MASTR:22
+    .={a0} \/ {a1} \/ {a2,a3,a4,a5,a6} \/ Ut by XBOOLE_1:4
+    .={a0,a1} \/ {a2,a3,a4,a5,a6} \/ Ut by ENUMSET1:41
+    .={a0,a1,a2,a3,a4,a5,a6} \/ Ut by ENUMSET1:57
+    .={a0,a1,a2,a3,a4,a5,a6} \/ ({a1,a0} \/ {a0,a1,a2,a3,a4,a5,a6}) by A4,Th31
+    .={a0,a1,a2,a3,a4,a5,a6} \/ {a0,a1,a2,a3,a4,a5,a6} \/ {a1,a0} by XBOOLE_1:4
+    .={a2,a3,a4,a5,a6} \/ {a0,a1} \/ {a0,a1} by ENUMSET1:57
+    .={a2,a3,a4,a5,a6} \/ ({a0,a1} \/ {a0,a1}) by XBOOLE_1:4
+    .={a0,a1,a2,a3,a4,a5,a6} by ENUMSET1:57;
+end;
+
+theorem Th59:   ::BS004
+ for f being FinSeq-Location holds
+  UsedInt*Loc (bubble-sort f) = {f}
+proof
+  let f be FinSeq-Location;
+  set i1= a4:=a3,
+       i2= SubFrom(a3,a0),
+       i3= (a5:=(f,a3)),
+       i4= (a6:=(f,a4)),
+       i5= SubFrom(a6,a5),
+       i6= ((f,a3):=a6),
+       i7= ((f,a4):=a5),
+       ifc=if>0(a6,i4 ';' i6 ';' i7,SCM+FSA-Stop),
+       Sif= UsedInt*Loc ifc,
+       body2= i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' ifc;
+
+A1: Sif = UsedInt*Loc (i4 ';' i6 ';' i7) \/ {} by SCMFSA9A:10,16
+    .= UsedInt*Loc (i4 ';' i6) \/ UsedInt*Loc i7 by SF_MASTR:50
+    .= UsedInt*Loc (i4 ';' i6) \/ {f} by SF_MASTR:37
+    .= UsedInt*Loc i4 \/ UsedInt*Loc i6 \/ {f} by SF_MASTR:51
+    .= UsedInt*Loc i4 \/ {f} \/ {f} by SF_MASTR:37
+    .= {f} \/ {f} \/ {f} by SF_MASTR:37
+    .= {f};
+
+A2: UsedInt*Loc body2 = UsedInt*Loc (i1 ';' i2 ';'i3 ';'i4 ';' i5)
+         \/ Sif by SF_MASTR:47
+     .= UsedInt*Loc (i1 ';' i2 ';'i3 ';' i4) \/ UsedInt*Loc i5 \/ Sif
+         by SF_MASTR:50
+     .= UsedInt*Loc (i1 ';' i2 ';'i3 ';' i4) \/ {} \/ Sif by SF_MASTR:36
+     .= UsedInt*Loc (i1 ';' i2 ';'i3 ) \/ UsedInt*Loc i4 \/ Sif by SF_MASTR:50
+     .= UsedInt*Loc (i1 ';' i2 ';'i3 ) \/ {f} \/ Sif by SF_MASTR:37
+     .= UsedInt*Loc (i1 ';' i2 ';'i3 ) \/ ({f} \/ {f}) by A1,XBOOLE_1:4
+     .= UsedInt*Loc (i1 ';' i2 ) \/ UsedInt*Loc i3 \/ {f} by SF_MASTR:50
+     .= UsedInt*Loc (i1 ';' i2 ) \/ {f} \/ {f} by SF_MASTR:37
+     .= UsedInt*Loc i1 \/ UsedInt*Loc i2 \/ {f} \/ {f} by SF_MASTR:51
+     .= UsedInt*Loc i1 \/ {} \/ {f} \/ {f} by SF_MASTR:36
+     .= {} \/ {} \/ {f} \/ {f} by SF_MASTR:36
+     .= {f};
+
+   set j1= a2 := a1 ,
+       j2= SubFrom(a2,a0) ,
+       j3= (a3:=len f) ,
+       Sfor= UsedInt*Loc Times(a2,body2),
+       body1= j1 ';' j2 ';' j3 ';' Times(a2,body2);
+A3:  Sfor={f} by A2,Th37;
+
+A4: UsedInt*Loc body1 = UsedInt*Loc (j1 ';' j2 ';'j3) \/ Sfor by SF_MASTR:47
+     .= UsedInt*Loc (j1 ';' j2) \/ UsedInt*Loc j3 \/ Sfor by SF_MASTR:50
+     .= UsedInt*Loc (j1 ';' j2) \/ {f} \/ Sfor by SF_MASTR:38
+     .= UsedInt*Loc j1 \/ UsedInt*Loc j2 \/ {f} \/ Sfor by SF_MASTR:51
+     .= {} \/ UsedInt*Loc j2 \/ {f} \/ Sfor by SF_MASTR:36
+     .= {} \/ {} \/ {f} \/ Sfor by SF_MASTR:36
+     .= {f} by A3;
+
+     set k2= a2:= a0,
+          k3= a3:= a0,
+          k4= a4:= a0,
+          k5= a5:= a0;
+A5:  UsedInt*Loc initializeWorkMem = UsedInt*Loc (k2 ';' k3 ';' k4 ';' k5)
+     \/ UsedInt*Loc (a6:= a0) by SF_MASTR:50
+    .= UsedInt*Loc (k2 ';' k3 ';' k4 ';' k5) \/ {} by SF_MASTR:36
+    .= UsedInt*Loc (k2 ';' k3 ';' k4) \/ UsedInt*Loc k5 by SF_MASTR:50
+    .= UsedInt*Loc (k2 ';' k3 ';' k4) \/ {} by SF_MASTR:36
+    .= UsedInt*Loc (k2 ';' k3 ) \/ UsedInt*Loc k4 by SF_MASTR:50
+    .= UsedInt*Loc (k2 ';' k3 ) \/ {} by SF_MASTR:36
+    .= UsedInt*Loc k2 \/ UsedInt*Loc k3 by SF_MASTR:51
+    .= UsedInt*Loc k2 \/ {} by SF_MASTR:36
+    .= {} by SF_MASTR:36;
+
+    set k7=(a1:=len f) ,
+        Ut=UsedInt*Loc Times(a1,body1);
+ thus UsedInt*Loc (bubble-sort f)
+     = UsedInt*Loc ( initializeWorkMem ';' k7 ';' Times(a1,body1) ) by Def1
+    .=UsedInt*Loc ( initializeWorkMem ';' k7 ) \/ Ut by SF_MASTR:47
+    .=UsedInt*Loc initializeWorkMem \/ UsedInt*Loc k7 \/ Ut by SF_MASTR:50
+    .={f} \/ Ut by A5,SF_MASTR:38
+    .={f} \/ {f} by A4,Th37
+    .={f};
+end;
+
+definition
+ func Sorting-Function -> PartFunc of FinPartSt SCM+FSA,FinPartSt SCM+FSA
+     means
+:Def3:  ::def3
+  for p,q being FinPartState of SCM+FSA holds [p,q] in it
+   iff ex t being FinSequence of INT,u being FinSequence of REAL
+    st t,u are_fiberwise_equipotent & u is FinSequence of INT &
+       u is non-increasing &
+      p = fsloc 0 .--> t & q = fsloc 0 .--> u;
+ existence
+proof
+ defpred X[set,set] means
+  ex t being FinSequence of INT,u being FinSequence of REAL
+  st t,u are_fiberwise_equipotent & u is FinSequence of INT &
+   u is non-increasing &
+   $1 = fsloc 0 .--> t & $2 = fsloc 0 .--> u;
+A1: for x,y1,y2 being set st X[x,y1] & X[x,y2] holds y1 = y2
+  proof let p,q1,q2 be set;
+     given t1 being FinSequence of INT,u1 being FinSequence of REAL
+     such that
+A2:  t1,u1 are_fiberwise_equipotent & u1 is FinSequence of INT &
+     u1 is non-increasing &
+       p = fsloc 0 .--> t1 & q1 = fsloc 0 .--> u1;
+     given t2 being FinSequence of INT,u2 being FinSequence of REAL
+     such that
+A3:  t2,u2 are_fiberwise_equipotent & u2 is FinSequence of INT &
+     u2 is non-increasing &
+       p = fsloc 0 .--> t2 & q2 = fsloc 0 .--> u2;
+        t1=(fsloc 0 .--> t1).(fsloc 0) by CQC_LANG:6
+        .=t2 by A2,A3,CQC_LANG:6;
+      then u1,u2 are_fiberwise_equipotent by A2,A3,RFINSEQ:2;
+     hence q1 = q2 by A2,A3,RFINSEQ:36;
+    end;
+    consider f being Function such that
+A4:   for p,q being set holds [p,q] in f iff p in FinPartSt SCM+FSA &
+                 X[p,q] from GraphFunc(A1);
+A5:  dom f c= FinPartSt SCM+FSA
+     proof let e be set;
+      assume e in dom f;
+       then [e,f.e] in f by FUNCT_1:8;
+      hence e in FinPartSt SCM+FSA by A4;
+     end;
+      rng f c= FinPartSt SCM+FSA
+    proof let q be set;
+      assume q in rng f;
+       then consider p being set such that
+A6:     [p,q] in f by RELAT_1:def 5;
+       consider t being FinSequence of INT,u being FinSequence of REAL
+       such that
+A7:    t,u are_fiberwise_equipotent & u is FinSequence of INT &
+       u is non-increasing &
+       p = fsloc 0 .--> t & q = fsloc 0 .--> u by A4,A6;
+       reconsider u as FinSequence of INT by A7;
+         fsloc 0 .--> u is FinPartState of SCM+FSA;
+      hence q in FinPartSt SCM+FSA by A7,AMI_3:31;
+     end;
+     then reconsider f as PartFunc of FinPartSt SCM+FSA, FinPartSt SCM+FSA
+     by A5,RELSET_1:11;
+     take f;
+     let p,q be FinPartState of SCM+FSA;
+     thus [p,q] in f implies
+     ex t being FinSequence of INT,u being FinSequence of REAL
+     st t,u are_fiberwise_equipotent & u is FinSequence of INT &
+      u is non-increasing &
+      p = fsloc 0 .--> t & q = fsloc 0 .--> u by A4;
+    given t being FinSequence of INT,u being FinSequence of REAL
+    such that
+A8:   t,u are_fiberwise_equipotent & u is FinSequence of INT &
+      u is non-increasing &
+      p = fsloc 0 .--> t & q = fsloc 0 .--> u;
+        p in FinPartSt SCM+FSA by AMI_3:31;
+      hence [p,q] in f by A4,A8;
+ end;
+
+ uniqueness
+proof let IT1,IT2 be PartFunc of FinPartSt SCM+FSA, FinPartSt SCM+FSA
+  such that
+A9:  for p,q being FinPartState of SCM+FSA holds [p,q] in IT1
+   iff ex t being FinSequence of INT,u being FinSequence of REAL
+    st t,u are_fiberwise_equipotent & u is FinSequence of INT &
+       u is non-increasing &
+      p = fsloc 0 .--> t & q = fsloc 0 .--> u and
+A10:  for p,q being FinPartState of SCM+FSA holds [p,q] in IT2
+   iff ex t being FinSequence of INT,u being FinSequence of REAL
+    st t,u are_fiberwise_equipotent & u is FinSequence of INT &
+       u is non-increasing &
+      p = fsloc 0 .--> t & q = fsloc 0 .--> u;
+   defpred X[set,set] means
+    ex t being FinSequence of INT,u being FinSequence of REAL
+    st t,u are_fiberwise_equipotent & u is FinSequence of INT &
+       u is non-increasing &
+      $1 = fsloc 0 .--> t & $2 = fsloc 0 .--> u;
+A11:  for p,q being FinPartState of SCM+FSA holds [p,q] in IT1 iff X[p,q] by A9
+;
+A12:  for p,q being FinPartState of SCM+FSA holds [p,q] in IT2 iff X[p,q] by
+A10;
+    thus IT1 = IT2 from EqFPSFunc(A11,A12);
+  end;
+end;
+
+theorem Th60:   ::BS006
+ for p being set holds p in dom Sorting-Function iff
+   ex t being FinSequence of INT st
+      p = fsloc 0 .--> t
+proof
+    set f=Sorting-Function;
+    let p be set;
+    hereby
+       set q=f.p;
+       assume A1:p in dom f;
+       then A2: [p,f.p] in f by FUNCT_1:8;
+         dom f c=FinPartSt SCM+FSA by RELSET_1:12;
+       then A3: p is FinPartState of SCM+FSA by A1,AMI_3:32;
+         q in FinPartSt SCM+FSA by A1,PARTFUN1:27;
+        then q is FinPartState of SCM+FSA by AMI_3:32;
+    then consider t be FinSequence of INT,u being FinSequence of REAL such that
+    A4: t,u are_fiberwise_equipotent & u is FinSequence of INT &
+       u is non-increasing & p = fsloc 0 .--> t & q = fsloc 0 .--> u
+       by A2,A3,Def3;
+       take t;
+       thus p = fsloc 0 .--> t by A4;
+    end;
+    given t be FinSequence of INT such that
+A5:  p = fsloc 0 .--> t;
+    consider u be FinSequence of REAL such that
+A6: t,u are_fiberwise_equipotent & u is FinSequence of INT
+    & u is non-increasing by Th39;
+    reconsider u1=u as FinSequence of INT by A6;
+    set q=fsloc 0 .--> u1;
+      [p,q] in f by A5,A6,Def3;
+    hence thesis by FUNCT_1:8;
+end;
+
+theorem Th61:  ::BS008
+ for t being FinSequence of INT holds
+     ex u being FinSequence of REAL st t,u are_fiberwise_equipotent &
+     u is non-increasing & u is FinSequence of INT &
+      Sorting-Function.(fsloc 0 .--> t ) = fsloc 0 .--> u
+proof let t be FinSequence of INT;
+    consider u being FinSequence of REAL
+     such that
+A1:  t,u are_fiberwise_equipotent & u is FinSequence of INT &
+     u is non-increasing by Th39;
+     reconsider u as FinSequence of INT by A1;
+     set p = fsloc 0 .--> t;
+     set q = fsloc 0 .--> u;
+       [p, q] in Sorting-Function by A1,Def3;
+     then Sorting-Function.p = q by FUNCT_1:8;
+     hence thesis by A1;
+end;
+
+theorem Th62:  :: BS010
+ for f being FinSeq-Location holds card (bubble-sort f) = 63
+proof
+  let f be FinSeq-Location;
+  set i1= a4:=a3,
+       i2= SubFrom(a3,a0),
+       i3= (a5:=(f,a3)),
+       i4= (a6:=(f,a4)),
+       i5= SubFrom(a6,a5),
+       i6= ((f,a3):=a6),
+       i7= ((f,a4):=a5),
+       ifc=if>0(a6,i4 ';' i6 ';' i7,SCM+FSA-Stop),
+       Cif= card ifc,
+       body2= i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' ifc;
+A1:   Cif=card (i4 ';' i6 ';' i7) + 1 + 4 by SCMFSA8A:17,SCMFSA8B:15
+       .=6 + 1 + 4 by Th45
+       .=11;
+A2:    card body2
+       = card (i1 ';' i2 ';' i3 ';' i4 ';' i5) + Cif by SCMFSA6A:61
+       .= card (i1 ';' i2 ';' i3 ';' (i4 ';' i5))+Cif by SCMFSA6A:65
+       .= card (i1 ';' i2 ';' i3) + card (i4 ';' i5)+Cif by SCMFSA6A:61
+       .= 6 + card (i4 ';' i5)+Cif by Th45
+       .= 6 + card (Macro i4 ';' Macro i5)+Cif by SCMFSA6A:def 7
+       .= 6 + (card Macro i4 + card Macro i5) + Cif by SCMFSA6A:61
+       .= 6 + (2 + card Macro i5) + Cif by SCMFSA7B:6
+       .= 6 + (2 +2)+ Cif by SCMFSA7B:6
+       .=21 by A1;
+
+   set j1= a2 := a1 ,
+       j2= SubFrom(a2,a0) ,
+       j3= (a3:=len f) ,
+       body1= j1 ';' j2 ';' j3 ';' Times(a2,body2);
+A3:    card body1
+       = card (j1 ';' j2 ';' j3) + card Times(a2,body2) by SCMFSA6A:61
+       .= 6 + card Times(a2,body2) by Th45
+       .= 6 + (21 +12) by A2,Th44
+       .= 39;
+
+     set k2= a2:= a0,
+          k3= a3:= a0,
+          k4= a4:= a0,
+          k5= a5:= a0,
+          k6= a6:= a0;
+A4:  card initializeWorkMem =
+     card( k2 ';' k3 ';' k4 ';' k5 ';' Macro k6) by SCMFSA6A:def 6
+    .= card (k2 ';' k3 ';' k4 ';' k5)+ card Macro k6 by SCMFSA6A:61
+    .= card (k2 ';' k3 ';' k4 ';' k5)+ 2 by SCMFSA7B:6
+    .= card (k2 ';' k3 ';' k4 ';' Macro k5)+ 2 by SCMFSA6A:def 6
+    .= card (k2 ';' k3 ';' k4 ) + card Macro k5+ 2 by SCMFSA6A:61
+    .= 6 + card Macro k5+ 2 by Th45
+    .= 6 + 2+ 2 by SCMFSA7B:6
+    .= 10;
+
+    set k7=(a1:=len f) ,
+        Ct=card Times(a1,body1);
+A5:     Ct=39 +12 by A3,Th44;
+       thus card (bubble-sort f) =
+       card ( initializeWorkMem ';' k7 ';' Times(a1,body1) ) by Def1
+       .= card (initializeWorkMem ';' k7)+ Ct by SCMFSA6A:61
+       .= card (initializeWorkMem ';' Macro k7)+ Ct by SCMFSA6A:def 6
+       .= card initializeWorkMem + card Macro k7 + Ct by SCMFSA6A:61
+       .= 10 + 2 + Ct by A4,SCMFSA7B:6
+       .=63 by A5;
+end;
+
+theorem Th63:  :: BS012
+ for f being FinSeq-Location, k being Nat st
+   k < 63 holds insloc k in dom (bubble-sort f)
+proof
+    let f be FinSeq-Location, k be Nat;
+    assume A1: k < 63;
+      card (bubble-sort f) = 63 by Th62;
+    hence thesis by A1,SCMFSA6A:15;
+end;
+
+Lm1:  ::Lem02
+  for s being State of SCM+FSA st Bubble-Sort-Algorithm c= s holds
+     s.insloc 0= a2:=a0 &
+     s.insloc 1= goto insloc 2 &
+     s.insloc 2= a3:=a0 &
+     s.insloc 3= goto insloc 4 &
+     s.insloc 4= a4:=a0 &
+     s.insloc 5= goto insloc 6 &
+     s.insloc 6= a5:=a0 &
+     s.insloc 7= goto insloc 8 &
+     s.insloc 8= a6:=a0 &
+     s.insloc 9= goto insloc 10 &
+     s.insloc 10= a1:=len fsloc 0 &
+     s.insloc 11= goto insloc 12
+proof
+   set f0=fsloc 0,
+        TT=Times(a1,
+           a2 := a1 ';'
+           SubFrom(a2,a0) ';'
+           (a3:=len f0) ';'
+             Times(a2,
+                  a4:=a3 ';'
+                  SubFrom(a3,a0) ';'
+                  (a5:=(f0,a3)) ';'
+                  (a6:=(f0,a4)) ';' SubFrom(a6,a5) ';'
+                  if>0(a6,(a6:=(f0,a4)) ';'
+                     ((f0,a3):=a6) ';'((f0,a4):=a5),SCM+FSA-Stop)
+             )
+         );
+     set q=Bubble-Sort-Algorithm,
+         q0=bubble-sort f0;
+     let s be State of SCM+FSA such that
+A1:  q c= s;
+     A2: q=q0 by Def2;
+A3:  now let i be Nat;
+       assume i< 63;
+       then insloc i in dom q0 by Th63;
+       hence q0.insloc i= s.insloc i by A1,A2,GRFUNC_1:8;
+     end;
+     set W2=a2:= a0,
+         W3=a3:= a0,
+         W4=a4:= a0,
+         W5=a5:= a0,
+         W6=a6:= a0,
+         W7=a1:=len f0,
+
+         T7=W7 ';' TT,
+         T6=W6 ';' T7,
+         T5=W5 ';' T6,
+         T4=W4 ';' T5,
+         T3=W3 ';' T4,
+
+         X3=W2 ';' W3,
+         X4=X3 ';' W4,
+         X5=X4 ';' W5,
+         X6=X5 ';' W6;
+A4:  q0=X6 ';' W7 ';' TT by Def1;
+then A5:  q0=X5 ';' W6 ';' T7 by SCMFSA6A:64;
+then A6:  q0=X4 ';' W5 ';' T6 by SCMFSA6A:64;
+then A7:  q0=X3 ';' W4 ';' T5 by SCMFSA6A:64;
+then A8:  q0=W2 ';' W3 ';' T4 by SCMFSA6A:64;
+     then q0=W2 ';' T3 by SCMFSA6A:68;
+then A9:  q0=Macro W2 ';' T3 by SCMFSA6A:def 5;
+A10:  q0=Macro W2 ';' Macro W3 ';' T4 by A8,SCMFSA6A:def 7
+      .=Macro W2 ';' W3 ';' T4 by SCMFSA6A:def 6;
+       dom Macro W2 = {insloc 0, insloc 1} by SCMFSA7B:4;
+then A11:  insloc 0 in dom Macro W2 & insloc 1 in dom Macro W2 by TARSKI:def 2;
+A12:  W2 <> halt SCM+FSA by Th49;
+     thus s.insloc 0=q0.insloc 0 by A3
+    .= (Directed Macro W2).insloc 0 by A9,A11,SCMFSA8A:28
+    .= W2 by A12,SCMFSA7B:7;
+     thus s.insloc 1=q0.insloc 1 by A3
+    .= (Directed Macro W2).insloc 1 by A9,A11,SCMFSA8A:28
+    .= goto insloc 2 by SCMFSA7B:8;
+A13:  card Macro W2=2 by SCMFSA7B:6;
+     thus s.insloc 2=q0.insloc 2 by A3
+    .= W3 by A10,A13,Th51;
+     thus s.insloc 3=q0.insloc (2+1) by A3
+     .=goto insloc (2+2) by A10,A13,Th51
+     .=goto insloc 4;
+A14:  card X3=card (Macro W2 ';' Macro W3) by SCMFSA6A:def 7
+     .= card Macro W2 + card Macro W3 by SCMFSA6A:61
+     .= 2 + card Macro W3 by SCMFSA7B:6
+     .= 2 + 2 by SCMFSA7B:6
+     .=4;
+     thus s.insloc 4=q0.insloc 4 by A3
+    .= W4 by A7,A14,Th51;
+     thus s.insloc 5=q0.insloc (4+1) by A3
+     .=goto insloc (4+2) by A7,A14,Th51
+     .=goto insloc 6;
+A15:  card X4=6 by Th45;
+     thus s.insloc 6=q0.insloc 6 by A3
+    .= W5 by A6,A15,Th51;
+     thus s.insloc 7=q0.insloc (6+1) by A3
+     .=goto insloc (6+2) by A6,A15,Th51
+     .=goto insloc 8;
+A16:  card X5=card (X4 ';' Macro W5) by SCMFSA6A:def 6
+     .= 6 + card Macro W5 by A15,SCMFSA6A:61
+     .= 6 + 2 by SCMFSA7B:6;
+     thus s.insloc 8=q0.insloc 8 by A3
+    .= W6 by A5,A16,Th51;
+     thus s.insloc 9=q0.insloc (8+1) by A3
+     .=goto insloc (8+2) by A5,A16,Th51
+     .=goto insloc 10;
+A17:  card X6=card (X5 ';' Macro W6) by SCMFSA6A:def 6
+     .= 8 + card Macro W6 by A16,SCMFSA6A:61
+     .= 8 + 2 by SCMFSA7B:6;
+     thus s.insloc 10=q0.insloc 10 by A3
+    .= W7 by A4,A17,Th52;
+     thus s.insloc 11=q0.insloc (10+1) by A3
+     .=goto insloc (10+2) by A4,A17,Th52
+     .=goto insloc 12;
+end;
+
+Lm2:   ::Lem04
+  for s being State of SCM+FSA st Bubble-Sort-Algorithm c= s &
+   s starts_at insloc 0 holds
+   (Computation s).1.IC SCM+FSA = insloc 1 &
+   (Computation s).1.a0=s.a0 & (Computation s).1.fsloc 0=s.fsloc 0 &
+   (Computation s).2.IC SCM+FSA = insloc 2 &
+   (Computation s).2.a0=s.a0 & (Computation s).2.fsloc 0=s.fsloc 0 &
+   (Computation s).3.IC SCM+FSA = insloc 3 &
+   (Computation s).3.a0=s.a0 & (Computation s).3.fsloc 0=s.fsloc 0 &
+   (Computation s).4.IC SCM+FSA = insloc 4 &
+   (Computation s).4.a0=s.a0 & (Computation s).4.fsloc 0=s.fsloc 0 &
+   (Computation s).5.IC SCM+FSA = insloc 5 &
+   (Computation s).5.a0=s.a0 & (Computation s).5.fsloc 0=s.fsloc 0 &
+   (Computation s).6.IC SCM+FSA = insloc 6 &
+   (Computation s).6.a0=s.a0 & (Computation s).6.fsloc 0=s.fsloc 0 &
+   (Computation s).7.IC SCM+FSA = insloc 7 &
+   (Computation s).7.a0=s.a0 & (Computation s).7.fsloc 0=s.fsloc 0 &
+   (Computation s).8.IC SCM+FSA = insloc 8 &
+   (Computation s).8.a0=s.a0 & (Computation s).8.fsloc 0=s.fsloc 0 &
+   (Computation s).9.IC SCM+FSA = insloc 9 &
+   (Computation s).9.a0=s.a0 & (Computation s).9.fsloc 0=s.fsloc 0 &
+   (Computation s).10.IC SCM+FSA = insloc 10 &
+   (Computation s).10.a0=s.a0 & (Computation s).10.fsloc 0=s.fsloc 0 &
+   (Computation s).11.IC SCM+FSA = insloc 11 &
+   (Computation s).11.a0=s.a0 & (Computation s).11.fsloc 0=s.fsloc 0 &
+   (Computation s).11.a1=len(s.fsloc 0) &
+   (Computation s).11.a2=s.a0 & (Computation s).11.a3=s.a0 &
+   (Computation s).11.a4=s.a0 & (Computation s).11.a5=s.a0 &
+   (Computation s).11.a6=s.a0
+proof
+   let s be State of SCM+FSA such that
+A1:  Bubble-Sort-Algorithm c= s and
+A2:  s starts_at insloc 0;
+     set Cs= Computation s;
+A3:  Cs.0 = s by AMI_1:def 19;
+then A4:  IC Cs.0 = insloc 0 by A2,AMI_3:def 14;
+then A5:  Cs.(0+1) = Exec(s.insloc 0,Cs.0) by AMI_1:55
+    .= Exec(a2:=a0,Cs.0) by A1,Lm1;
+hence Cs.1.IC SCM+FSA = Next IC Cs.0 by SCMFSA_2:89
+     .= insloc (0+1) by A4,SCMFSA_2:32
+     .= insloc 1;
+then A6: IC Cs.1= insloc 1 by AMI_1:def 15;
+A7:  Cs.1.a2 =s.a0 by A3,A5,SCMFSA_2:89;
+      a2<>a0 by SCMFSA_2:16;
+hence A8: Cs.1.a0 =s.a0 by A3,A5,SCMFSA_2:89;
+thus A9: Cs.1.(fsloc 0) =s.(fsloc 0) by A3,A5,SCMFSA_2:89;
+
+A10:  Cs.(1+1) = Exec(s.insloc 1,Cs.1) by A6,AMI_1:55
+    .= Exec(goto insloc 2,Cs.1) by A1,Lm1;
+hence Cs.2.IC SCM+FSA = insloc 2 by SCMFSA_2:95;
+then A11: IC Cs.2= insloc 2 by AMI_1:def 15;
+thus A12: Cs.2.a0 =s.a0 by A8,A10,SCMFSA_2:95;
+thus A13: Cs.2.(fsloc 0) =s.(fsloc 0) by A9,A10,SCMFSA_2:95;
+A14: Cs.2.a2 =s.a0 by A7,A10,SCMFSA_2:95;
+
+A15:  Cs.(2+1) = Exec(s.insloc 2,Cs.2) by A11,AMI_1:55
+    .= Exec(a3:=a0,Cs.2) by A1,Lm1;
+hence Cs.3.IC SCM+FSA = Next IC Cs.2 by SCMFSA_2:89
+     .= insloc (2+1) by A11,SCMFSA_2:32
+     .= insloc 3;
+then A16: IC Cs.3= insloc 3 by AMI_1:def 15;
+A17: Cs.3.a3 =s.a0 by A12,A15,SCMFSA_2:89;
+      a3<>a0 by SCMFSA_2:16;
+hence A18: Cs.3.a0 =s.a0 by A12,A15,SCMFSA_2:89;
+thus A19: Cs.3.(fsloc 0) =s.(fsloc 0) by A13,A15,SCMFSA_2:89;
+      a2<>a3 by SCMFSA_2:16;
+then A20: Cs.3.a2 =s.a0 by A14,A15,SCMFSA_2:89;
+
+A21:  Cs.(3+1) = Exec(s.insloc 3,Cs.3) by A16,AMI_1:55
+    .= Exec(goto insloc 4,Cs.3) by A1,Lm1;
+hence Cs.4.IC SCM+FSA = insloc 4 by SCMFSA_2:95;
+then A22: IC Cs.4= insloc 4 by AMI_1:def 15;
+thus A23: Cs.4.a0 =s.a0 by A18,A21,SCMFSA_2:95;
+thus A24: Cs.4.(fsloc 0) =s.(fsloc 0) by A19,A21,SCMFSA_2:95;
+A25: Cs.4.a2 =s.a0 by A20,A21,SCMFSA_2:95;
+A26: Cs.4.a3 =s.a0 by A17,A21,SCMFSA_2:95;
+
+A27:  Cs.(4+1) = Exec(s.insloc 4,Cs.4) by A22,AMI_1:55
+    .= Exec(a4:=a0,Cs.4) by A1,Lm1;
+hence Cs.5.IC SCM+FSA = Next IC Cs.4 by SCMFSA_2:89
+     .= insloc (4+1) by A22,SCMFSA_2:32
+     .= insloc 5;
+then A28: IC Cs.5= insloc 5 by AMI_1:def 15;
+A29: Cs.5.a4 =s.a0 by A23,A27,SCMFSA_2:89;
+      a4<>a0 by SCMFSA_2:16;
+hence A30: Cs.5.a0 =s.a0 by A23,A27,SCMFSA_2:89;
+thus A31: Cs.5.(fsloc 0) =s.(fsloc 0) by A24,A27,SCMFSA_2:89;
+      a2<>a4 by SCMFSA_2:16;
+then A32: Cs.5.a2 =s.a0 by A25,A27,SCMFSA_2:89;
+      a3<>a4 by SCMFSA_2:16;
+then A33: Cs.5.a3 =s.a0 by A26,A27,SCMFSA_2:89;
+
+A34:  Cs.(5+1) = Exec(s.insloc 5,Cs.5) by A28,AMI_1:55
+    .= Exec(goto insloc 6,Cs.5) by A1,Lm1;
+hence Cs.6.IC SCM+FSA = insloc 6 by SCMFSA_2:95;
+then A35: IC Cs.6= insloc 6 by AMI_1:def 15;
+thus A36: Cs.6.a0 =s.a0 by A30,A34,SCMFSA_2:95;
+thus A37: Cs.6.(fsloc 0) =s.(fsloc 0) by A31,A34,SCMFSA_2:95;
+A38: Cs.6.a2 =s.a0 by A32,A34,SCMFSA_2:95;
+A39: Cs.6.a3 =s.a0 by A33,A34,SCMFSA_2:95;
+A40: Cs.6.a4 =s.a0 by A29,A34,SCMFSA_2:95;
+
+A41:  Cs.(6+1) = Exec(s.insloc 6,Cs.6) by A35,AMI_1:55
+    .= Exec(a5:=a0,Cs.6) by A1,Lm1;
+hence Cs.7.IC SCM+FSA = Next IC Cs.6 by SCMFSA_2:89
+     .= insloc (6+1) by A35,SCMFSA_2:32
+     .= insloc 7;
+then A42: IC Cs.7= insloc 7 by AMI_1:def 15;
+A43: Cs.7.a5 =s.a0 by A36,A41,SCMFSA_2:89;
+      a5<>a0 by SCMFSA_2:16;
+hence A44: Cs.7.a0 =s.a0 by A36,A41,SCMFSA_2:89;
+thus A45: Cs.7.(fsloc 0) =s.(fsloc 0) by A37,A41,SCMFSA_2:89;
+      a2<>a5 by SCMFSA_2:16;
+then A46: Cs.7.a2 =s.a0 by A38,A41,SCMFSA_2:89;
+      a3<>a5 by SCMFSA_2:16;
+then A47: Cs.7.a3 =s.a0 by A39,A41,SCMFSA_2:89;
+      a4<>a5 by SCMFSA_2:16;
+then A48: Cs.7.a4 =s.a0 by A40,A41,SCMFSA_2:89;
+
+A49:  Cs.(7+1) = Exec(s.insloc 7,Cs.7) by A42,AMI_1:55
+    .= Exec(goto insloc 8,Cs.7) by A1,Lm1;
+hence Cs.8.IC SCM+FSA = insloc 8 by SCMFSA_2:95;
+then A50: IC Cs.8= insloc 8 by AMI_1:def 15;
+thus A51: Cs.8.a0 =s.a0 by A44,A49,SCMFSA_2:95;
+thus A52: Cs.8.(fsloc 0) =s.(fsloc 0) by A45,A49,SCMFSA_2:95;
+A53: Cs.8.a2 =s.a0 by A46,A49,SCMFSA_2:95;
+A54: Cs.8.a3 =s.a0 by A47,A49,SCMFSA_2:95;
+A55: Cs.8.a4 =s.a0 by A48,A49,SCMFSA_2:95;
+A56: Cs.8.a5 =s.a0 by A43,A49,SCMFSA_2:95;
+
+A57:  Cs.(8+1) = Exec(s.insloc 8,Cs.8) by A50,AMI_1:55
+    .= Exec(a6:=a0,Cs.8) by A1,Lm1;
+hence Cs.9.IC SCM+FSA = Next IC Cs.8 by SCMFSA_2:89
+     .= insloc (8+1) by A50,SCMFSA_2:32
+     .= insloc 9;
+then A58: IC Cs.9= insloc 9 by AMI_1:def 15;
+A59: Cs.9.a6 =s.a0 by A51,A57,SCMFSA_2:89;
+      a6<>a0 by SCMFSA_2:16;
+hence A60: Cs.9.a0 =s.a0 by A51,A57,SCMFSA_2:89;
+thus A61: Cs.9.(fsloc 0) =s.(fsloc 0) by A52,A57,SCMFSA_2:89;
+      a2<>a6 by SCMFSA_2:16;
+then A62: Cs.9.a2 =s.a0 by A53,A57,SCMFSA_2:89;
+      a3<>a6 by SCMFSA_2:16;
+then A63: Cs.9.a3 =s.a0 by A54,A57,SCMFSA_2:89;
+      a4<>a6 by SCMFSA_2:16;
+then A64: Cs.9.a4 =s.a0 by A55,A57,SCMFSA_2:89;
+      a5<>a6 by SCMFSA_2:16;
+then A65: Cs.9.a5 =s.a0 by A56,A57,SCMFSA_2:89;
+
+A66:  Cs.(9+1) = Exec(s.insloc 9,Cs.9) by A58,AMI_1:55
+    .= Exec(goto insloc 10,Cs.9) by A1,Lm1;
+hence Cs.10.IC SCM+FSA = insloc 10 by SCMFSA_2:95;
+then A67: IC Cs.10= insloc 10 by AMI_1:def 15;
+thus A68: Cs.10.a0 =s.a0 by A60,A66,SCMFSA_2:95;
+thus A69: Cs.10.(fsloc 0) =s.(fsloc 0) by A61,A66,SCMFSA_2:95;
+A70: Cs.10.a2 =s.a0 by A62,A66,SCMFSA_2:95;
+A71: Cs.10.a3 =s.a0 by A63,A66,SCMFSA_2:95;
+A72: Cs.10.a4 =s.a0 by A64,A66,SCMFSA_2:95;
+A73: Cs.10.a5 =s.a0 by A65,A66,SCMFSA_2:95;
+A74: Cs.10.a6 =s.a0 by A59,A66,SCMFSA_2:95;
+
+A75:  Cs.(10+1) = Exec(s.insloc 10,Cs.10) by A67,AMI_1:55
+    .= Exec(a1:=len fsloc 0,Cs.10) by A1,Lm1;
+hence Cs.11.IC SCM+FSA = Next IC Cs.10 by SCMFSA_2:100
+     .= insloc (10+1) by A67,SCMFSA_2:32
+     .= insloc 11;
+      a1<>a0 by SCMFSA_2:16;
+hence Cs.11.a0 =s.a0 by A68,A75,SCMFSA_2:100;
+thus Cs.11.(fsloc 0) =s.(fsloc 0) by A69,A75,SCMFSA_2:100;
+
+thus Cs.11.a1 =len(s.fsloc 0) by A69,A75,SCMFSA_2:100;
+      a2<>a1 by SCMFSA_2:16;
+hence Cs.11.a2 =s.a0 by A70,A75,SCMFSA_2:100;
+      a3<>a1 by SCMFSA_2:16;
+hence Cs.11.a3 =s.a0 by A71,A75,SCMFSA_2:100;
+      a4<>a1 by SCMFSA_2:16;
+hence Cs.11.a4 =s.a0 by A72,A75,SCMFSA_2:100;
+      a5<>a1 by SCMFSA_2:16;
+hence Cs.11.a5 =s.a0 by A73,A75,SCMFSA_2:100;
+      a6<>a1 by SCMFSA_2:16;
+hence Cs.11.a6 =s.a0 by A74,A75,SCMFSA_2:100;
+end;
+
+Lm3:   ::Lem06
+       body2 does_not_destroy b2
+proof
+         b2 <> b4 by SCMFSA_2:16;
+then A1:    i1 does_not_destroy b2 by SCMFSA7B:12;
+         b2 <> b3 by SCMFSA_2:16;
+then A2:    i2 does_not_destroy b2 by SCMFSA7B:14;
+         b2 <> b5 by SCMFSA_2:16;
+then A3:    i3 does_not_destroy b2 by SCMFSA7B:20;
+A4:    b2 <> b6 by SCMFSA_2:16;
+then A5:    i4 does_not_destroy b2 by SCMFSA7B:20;
+A6:    i5 does_not_destroy b2 by A4,SCMFSA7B:14;
+A7:    i6 does_not_destroy b2 by SCMFSA7B:21;
+A8:    i7 does_not_destroy b2 by SCMFSA7B:21;
+A9:    SS does_not_destroy b2 by SCMFSA8C:85;
+         i4 ';' i6 does_not_destroy b2 by A5,A7,SCMFSA8C:84;
+       then i4 ';' i6 ';' i7 does_not_destroy b2 by A8,SCMFSA8C:83;
+then A10:    ifc does_not_destroy b2 by A9,SCMFSA8C:121;
+         i1 ';' i2 does_not_destroy b2 by A1,A2,SCMFSA8C:84;
+       then i1 ';' i2 ';' i3 does_not_destroy b2 by A3,SCMFSA8C:83;
+       then i1 ';' i2 ';' i3 ';' i4 does_not_destroy b2 by A5,SCMFSA8C:83;
+       then i1 ';' i2 ';' i3 ';' i4 ';' i5 does_not_destroy b2
+                by A6,SCMFSA8C:83;
+       hence thesis by A10,SCMFSA8C:81;
+end;
+
+Lm4:   ::Lem08
+  Times(b2,body2) is good InitHalting Macro-Instruction
+proof
+         Initialized Times(b2,body2) is halting by Lm3,SCM_HALT:76;
+       hence thesis by SCM_HALT:def 2;
+end;
+
+Lm5:   ::Lem10
+      body2 does_not_destroy b1
+proof
+         b1 <> b4 by SCMFSA_2:16;
+then A1:    i1 does_not_destroy b1 by SCMFSA7B:12;
+         b1 <> b3 by SCMFSA_2:16;
+then A2:    i2 does_not_destroy b1 by SCMFSA7B:14;
+         b1 <> b5 by SCMFSA_2:16;
+then A3:    i3 does_not_destroy b1 by SCMFSA7B:20;
+A4:    b1 <> b6 by SCMFSA_2:16;
+then A5:    i4 does_not_destroy b1 by SCMFSA7B:20;
+A6:    i5 does_not_destroy b1 by A4,SCMFSA7B:14;
+A7:    i6 does_not_destroy b1 by SCMFSA7B:21;
+A8:    i7 does_not_destroy b1 by SCMFSA7B:21;
+A9:    SS does_not_destroy b1 by SCMFSA8C:85;
+         i4 ';' i6 does_not_destroy b1 by A5,A7,SCMFSA8C:84;
+       then i4 ';' i6 ';' i7 does_not_destroy b1 by A8,SCMFSA8C:83;
+then A10:    ifc does_not_destroy b1 by A9,SCMFSA8C:121;
+         i1 ';' i2 does_not_destroy b1 by A1,A2,SCMFSA8C:84;
+       then i1 ';' i2 ';' i3 does_not_destroy b1 by A3,SCMFSA8C:83;
+       then i1 ';' i2 ';' i3 ';' i4 does_not_destroy b1 by A5,SCMFSA8C:83;
+       then i1 ';' i2 ';' i3 ';' i4 ';' i5 does_not_destroy b1
+                by A6,SCMFSA8C:83;
+       hence thesis by A10,SCMFSA8C:81;
+end;
+
+Lm6:   ::Lem12
+   body1 does_not_destroy b1
+proof
+A1:    b1 <> b2 by SCMFSA_2:16;
+then A2:    j1 does_not_destroy b1 by SCMFSA7B:12;
+A3:    j2 does_not_destroy b1 by A1,SCMFSA7B:14;
+         b1 <> b3 by SCMFSA_2:16;
+then A4:    j3 does_not_destroy b1 by SCMFSA7B:22;
+A5:    T2 does_not_destroy b1 by A1,Lm5,Th3;
+         j1 ';' j2 does_not_destroy b1 by A2,A3,SCMFSA8C:84;
+       then j1 ';' j2 ';' j3 does_not_destroy b1 by A4,SCMFSA8C:83;
+       hence thesis by A5,SCMFSA8C:81;
+end;
+
+Lm7:   ::Lem14
+    body1 is good InitHalting Macro-Instruction
+proof
+      reconsider TT=T2 as good InitHalting Macro-Instruction by Lm4;
+        body1= j1 ';' j2 ';' j3 ';' TT;
+      hence thesis;
+end;
+
+Lm8:   ::Lem16
+  Times(b1,body1) is good InitHalting Macro-Instruction
+proof
+      reconsider TT=T2 as good InitHalting Macro-Instruction by Lm4;
+        body1= j1 ';' j2 ';' j3 ';' TT;
+      then Initialized Times(b1,body1) is halting by Lm6,SCM_HALT:76;
+      hence thesis by SCM_HALT:def 2;
+end;
+
+theorem Th64:   ::BS014
+  bubble-sort (fsloc 0) is keepInt0_1 InitHalting
+proof
+   reconsider T1 as good InitHalting Macro-Instruction by Lm8;
+     initializeWorkMem= w2 ';' w3 ';' w4 ';' w5 ';' w6;
+   then reconsider initializeWorkMem as keepInt0_1 InitHalting
+Macro-Instruction;
+     bubble-sort f0 = initializeWorkMem ';' w7 ';' T1 by Def1;
+   hence thesis;
+end;
+
+Lm9:   ::Lem18
+ for s be State of SCM+FSA holds
+     (s.b6 > 0 implies IExec(ifc,s).f0 =
+             s.f0+*(abs(s.b3),(s.f0)/.abs(s.b4)) +*(abs(s.b4),s.b5)) &
+     (s.b6 <= 0 implies IExec(ifc,s).f0=s.f0)
+proof
+  let s be State of SCM+FSA;
+  set s0=Initialize s,
+      s1=Exec(i4, s0),
+      s2=IExec(i4 ';' i6, s);
+A1: s0.f0=s.f0 by SCMFSA6C:3;
+  s0.b4=s.b4 by SCMFSA6C:3;
+then A2: s1.b6=(s.f0)/.abs(s.b4) by A1,Th8;
+A3:s1.f0=s.f0 by A1,SCMFSA_2:98;
+A4: s1.b3=s.b3 by Th10;
+A5: s1.b4=s.b4 by Th10;
+A6: s1.b5=s.b5 by Th10;
+A7: s2.f0 =Exec(i6, s1).f0 by SCMFSA6C:10
+   .=s.f0+*(abs(s.b3),(s.f0)/.abs(s.b4)) by A2,A3,A4,Th9;
+A8: s2.b4=Exec(i6, s1).b4 by SCMFSA6C:9
+   .=s.b4 by A5,SCMFSA_2:99;
+A9: s2.b5=Exec(i6, s1).b5 by SCMFSA6C:9
+   .=s.b5 by A6,SCMFSA_2:99;
+   set I=i4 ';' i6 ';' i7,
+       J=SCM+FSA-Stop;
+   hereby assume s.b6 >0;
+   hence IExec(if>0(b6,I,J),s).f0 = IExec(I,s).f0 by SCM_HALT:54
+       .=Exec(i7, s2).f0 by SCMFSA6C:8
+       .=s.f0+*(abs(s.b3),(s.f0)/.abs(s.b4)) +*(abs(s.b4),s.b5)
+         by A7,A8,A9,Th9;
+   end;
+   assume s.b6 <= 0;
+   hence IExec(if>0(b6,I,J),s).f0 = IExec(J,s).f0 by SCM_HALT:54
+         .=s.f0 by Th12;
+end;
+
+Lm10:   ::Lem20
+ for s be State of SCM+FSA holds IExec(ifc,s).b3 = s.b3
+proof
+  let s be State of SCM+FSA;
+  set s1=Exec(i4, Initialize s),
+      s2=IExec(i4 ';' i6, s);
+A1: s1.b3=s.b3 by Th10;
+A2: s2.b3=Exec(i6, s1).b3 by SCMFSA6C:9
+   .=s.b3 by A1,SCMFSA_2:99;
+    per cases;
+    suppose s.b6 >0;
+     hence IExec(ifc,s).b3 = IExec(i4 ';' i6 ';' i7,s).b3 by SCM_HALT:54
+         .=Exec(i7, s2).b3 by SCMFSA6C:7
+         .=s.b3 by A2,SCMFSA_2:99;
+    suppose s.b6 <= 0;
+     hence IExec(ifc,s).b3 = IExec(SCM+FSA-Stop,s).b3 by SCM_HALT:54
+         .=s.b3 by Th12;
+end;
+
+Lm11:  ::Lem22
+for s be State of SCM+FSA st s.b3 <= len (s.f0) & s.b3 >= 2 holds
+   (IExec(body2,s).b3=s.b3-1) &
+   (s.f0, IExec(body2,s).f0 are_fiberwise_equipotent) &
+    ( s.f0.(s.b3)=IExec(body2,s).f0.(s.b3) or
+      s.f0.(s.b3)=IExec(body2,s).f0.(s.b3-1)) &
+    ( s.f0.(s.b3)=IExec(body2,s).f0.(s.b3) or
+      s.f0.(s.b3-1)=IExec(body2,s).f0.(s.b3)) &
+    ( s.f0.(s.b3)=IExec(body2,s).f0.(s.b3-1) or
+      s.f0.(s.b3-1)=IExec(body2,s).f0.(s.b3-1)) &
+    (for k be set st k<>(s.b3-1) & k<>s.b3 & k in dom (s.f0) holds
+       s.f0.k=IExec(body2,s).f0.k) &
+    (ex x1,x2 be Integer st x1=IExec(body2,s).f0.(s.b3-1) &
+      x2=IExec(body2,s).f0.(s.b3) & x1 >= x2)
+proof
+ let s be State of SCM+FSA;
+ assume A1: s.b3 <= len (s.f0) & s.b3 >= 2;
+     then A2: s.b3-1 >= 2-1 by REAL_1:49;
+then A3:  s.b3-1>= 0 by AXIOMS:22;
+then A4:  abs((s.b3-1))=s.b3-1 by ABSVALUE:def 1;
+       s.b3-1<s.b3 by INT_1:26;
+then A5:  s.b3-1<=len (s.f0) by A1,AXIOMS:22;
+A6:  s.b3>= 1 by A1,AXIOMS:22;
+A7:  s.b3>= 0 by A1,AXIOMS:22;
+then A8:  abs(s.b3)=s.b3 by ABSVALUE:def 1;
+     reconsider k1=s.b3-1 as Nat by A3,INT_1:16;
+     reconsider k2=s.b3 as Nat by A7,INT_1:16;
+A9:  k1 in dom (s.f0) by A2,A5,FINSEQ_3:27;
+     then s.f0.k1 in INT by FINSEQ_2:13;
+     then reconsider n1=s.f0.k1 as Integer by INT_1:12;
+A10:  k2 in dom (s.f0) by A1,A6,FINSEQ_3:27;
+     then s.f0.k2 in INT by FINSEQ_2:13;
+     then reconsider n2=s.f0.k2 as Integer by INT_1:12;
+  set s0=Initialize s,
+      s1=Exec(i1, s0),
+      s2=IExec(i1 ';' i2, s),
+      s3=IExec(i1 ';' i2 ';' i3,s),
+      s4=IExec(i1 ';' i2 ';' i3 ';' i4,s),
+      s5=IExec(i1 ';' i2 ';' i3 ';' i4 ';'i5,s),
+      s6=IExec(body2,s);
+A11: s1.b4=s0.b3 by SCMFSA_2:89
+    .=s.b3 by SCMFSA6C:3;
+A12: s1.f0=s0.f0 by SCMFSA_2:89
+    .=s.f0 by SCMFSA6C:3;
+A13: s1.b3=s.b3 by Th11;
+A14: s1.a0=s0.a0 by SCMFSA_2:89
+    .=1 by SCMFSA6C:3;
+A15: s2.f0 =Exec(i2, s1).f0 by SCMFSA6C:10
+    .=s.f0 by A12,SCMFSA_2:91;
+A16: s2.b3 =Exec(i2, s1).b3 by SCMFSA6C:9
+    .=s.b3-1 by A13,A14,SCMFSA_2:91;
+A17:  b4<>b3 by SCMFSA_2:16;
+A18: s2.b4=Exec(i2, s1).b4 by SCMFSA6C:9
+    .=s.b3 by A11,A17,SCMFSA_2:91;
+A19: s3.f0 = Exec(i3, s2).f0 by SCMFSA6C:8
+    .=s.f0 by A15,SCMFSA_2:98;
+A20: (s.f0)/.k1=n1 by A2,A5,FINSEQ_4:24;
+A21: s3.b5=Exec(i3, s2).b5 by SCMFSA6C:7
+    .=n1 by A4,A15,A16,A20,Th8;
+A22: b5 <> b4 by SCMFSA_2:16;
+A23: s3.b4=Exec(i3, s2).b4 by SCMFSA6C:7
+    .=s.b3 by A18,A22,SCMFSA_2:98;
+A24: b5 <> b3 by SCMFSA_2:16;
+A25: s3.b3=Exec(i3, s2).b3 by SCMFSA6C:7
+    .=s.b3-1 by A16,A24,SCMFSA_2:98;
+A26: s4.f0 = Exec(i4, s3).f0 by SCMFSA6C:8
+    .=s.f0 by A19,SCMFSA_2:98;
+A27: (s.f0)/.k2=n2 by A1,A6,FINSEQ_4:24;
+A28: s4.b6=Exec(i4, s3).b6 by SCMFSA6C:7
+    .=n2 by A8,A19,A23,A27,Th8;
+A29: b6 <> b3 by SCMFSA_2:16;
+A30: s4.b3=Exec(i4, s3).b3 by SCMFSA6C:7
+    .=s.b3-1 by A25,A29,SCMFSA_2:98;
+A31: b6 <> b4 by SCMFSA_2:16;
+A32: s4.b4=Exec(i4, s3).b4 by SCMFSA6C:7
+    .=s.b3 by A23,A31,SCMFSA_2:98;
+A33: b6 <> b5 by SCMFSA_2:16;
+A34: s4.b5=Exec(i4, s3).b5 by SCMFSA6C:7
+    .=s.f0.(s.b3-1) by A21,A33,SCMFSA_2:98;
+A35: s5.f0=Exec(i5, s4).f0 by SCMFSA6C:8
+    .=s.f0 by A26,SCMFSA_2:91;
+A36: s5.b3=Exec(i5, s4).b3 by SCMFSA6C:7
+    .=s.b3-1 by A29,A30,SCMFSA_2:91;
+A37: s5.b4=Exec(i5, s4).b4 by SCMFSA6C:7
+    .=s.b3 by A31,A32,SCMFSA_2:91;
+A38: s5.b5=Exec(i5, s4).b5 by SCMFSA6C:7
+    .=n1 by A33,A34,SCMFSA_2:91;
+A39: s5.b6=Exec(i5, s4).b6 by SCMFSA6C:7
+    .=n2- n1 by A28,A34,SCMFSA_2:91;
+A40: s6.f0 = IExec(ifc,s5).f0 by SCMFSA6C:2;
+A41: n2-n1+n1=n2+(-n1)+n1 by XCMPLX_0:def 8
+    .=n2 by XCMPLX_1:139;
+    thus s6.b3 = IExec(ifc,s5).b3 by SCMFSA6C:1
+    .=s.b3-1 by A36,Lm10;
+    per cases;
+     suppose A42: s5.b6 >0;
+     then A43:  s6.f0=s.f0+*(k1,n2) +*(k2,n1)
+     by A4,A8,A27,A35,A36,A37,A38,A40,Lm9;
+     A44: dom (s.f0+*(k1,n2))=dom (s.f0) by FUNCT_7:32;
+     then A45: dom (s6.f0)=dom (s.f0) by A43,FUNCT_7:32;
+      A46: k2 in dom (s.f0+*(k1,n2)) by A1,A6,A44,FINSEQ_3:27;
+     A47: s6.f0.k2=s.f0.k1 by A10,A43,A44,FUNCT_7:33;
+     A48:now per cases;
+         suppose k1=k2;
+         hence s6.f0.k1=s.f0.k2 by A43,A46,FUNCT_7:33;
+         suppose k1<>k2;
+         hence s6.f0.k1=(s.f0+*(k1,n2)).k1 by A43,FUNCT_7:34
+               .=s.f0.k2 by A9,FUNCT_7:33;
+       end;
+    A49:now let k be set;
+         assume A50:k<>k1 & k<>k2 & k in dom (s.f0);
+         hence s6.f0.k= (s.f0+*(k1,n2)).k by A43,FUNCT_7:34
+               .= s.f0.k by A50,FUNCT_7:34;
+        end;
+    hence s.f0, s6.f0 are_fiberwise_equipotent by A9,A10,A45,A47,A48,Th7;
+    thus s.f0.(s.b3)=IExec(body2,s).f0.(s.b3) or
+           s.f0.(s.b3)=IExec(body2,s).f0.(s.b3-1) by A48;
+    thus s.f0.(s.b3)=IExec(body2,s).f0.(s.b3) or
+         s.f0.(s.b3-1)=IExec(body2,s).f0.(s.b3) by A43,A46,FUNCT_7:33;
+    thus s.f0.(s.b3)=IExec(body2,s).f0.(s.b3-1) or
+          s.f0.(s.b3-1)=IExec(body2,s).f0.(s.b3-1) by A48;
+    thus for k be set st k<>(s.b3-1) & k<>s.b3 & k in dom (s.f0) holds
+         s.f0.k=s6.f0.k by A49;
+      A51: n2-n1+n1 > 0+n1 by A39,A42,REAL_1:53;
+    take n2,n1;
+    thus thesis by A10,A41,A43,A44,A48,A51,FUNCT_7:33;
+    suppose A52: s5.b6 <=0;
+      hence s.f0,s6.f0 are_fiberwise_equipotent by A35,A40,Lm9;
+      thus s.f0.(s.b3)=IExec(body2,s).f0.(s.b3) or
+            s.f0.(s.b3)=IExec(body2,s).f0.(s.b3-1) by A35,A40,A52,Lm9;
+      thus s.f0.(s.b3)=IExec(body2,s).f0.(s.b3) or
+            s.f0.(s.b3-1)=IExec(body2,s).f0.(s.b3) by A35,A40,A52,Lm9;
+      thus s.f0.(s.b3)=IExec(body2,s).f0.(s.b3-1) or
+           s.f0.(s.b3-1)=IExec(body2,s).f0.(s.b3-1) by A35,A40,A52,Lm9;
+      thus for k be set st
+         k<>(s.b3-1) & k<>s.b3 & k in dom (s.f0) holds
+         s.f0.k=s6.f0.k by A35,A40,A52,Lm9;
+      A53: n2-n1+n1 <= 0+n1 by A39,A52,AXIOMS:24;
+    take n1,n2;
+    thus thesis by A35,A40,A41,A52,A53,Lm9;
+end;
+
+Lm12:  ::Lem24
+for s be State of SCM+FSA st s.b2>=0 & s.b2<s.b3 & s.b3 <= len (s.f0)
+holds ex k be Nat st k<=s.b3 & k>=s.b3-s.b2 & IExec(T2,s).f0.k = s.f0.(s.b3)
+proof
+  let s be State of SCM+FSA;
+  assume A1:s.b2>=0 & s.b2<s.b3 & s.b3 <= len (s.f0);
+   defpred P[Nat] means
+   for t be State of SCM+FSA st t.b2=$1 & t.b2<t.b3 & t.b3 <= len (t.f0)
+   holds (for m be Nat st m>t.b3 & m <= len (t.f0) holds
+          t.f0.m=IExec(T2,t).f0.m) &
+   ex n be Nat st n<=t.b3 &
+     n>=t.b3-$1 & IExec(T2,t).f0.n = t.f0.(t.b3);
+A2: P[0]
+    proof let t be State of SCM+FSA;
+       assume A3:t.b2=0 & t.b2<t.b3 & t.b3 <= len (t.f0);
+       set If0=IExec(T2,t).f0;
+       thus (for m be Nat st m>t.b3 & m <= len (t.f0) holds
+          t.f0.m=If0.m) by A3,SCM_HALT:80;
+        reconsider n=t.b3 as Nat by A3,INT_1:16;
+        take n;
+        thus n<=t.b3;
+        thus n>=t.b3-0;
+        thus IExec(T2,t).f0.n = t.f0.(t.b3) by A3,SCM_HALT:80;
+    end;
+     set sb2=SubFrom(b2,a0);
+A4: now let k be Nat;
+        assume A5:P[k];
+          now let t be State of SCM+FSA;
+            assume A6:t.b2=k+1 & t.b2<t.b3 & t.b3 <= len (t.f0);
+           set t1=IExec(body2 ';'sb2,t),
+               IB=IExec(body2,t),
+               t2=IExec(T2,t1);
+               A7: k+1 > 0 by NAT_1:19;
+          A8: t.b2>0 by A6,NAT_1:19;
+          A9: t1.b2= Exec(sb2, IB).b2 by SCM_HALT:33
+             .=IB.b2-IB.a0 by SCMFSA_2:91
+             .=IB.b2-1 by SCM_HALT:17
+             .=(Initialize t).b2-1 by Lm3,SCM_HALT:63
+             .=t.b2-1 by SCMFSA6C:3;
+         then A10: t1.b2=k by A6,XCMPLX_1:26;
+         A11: b2<>b3 by SCMFSA_2:16;
+         A12: 2 <= k+2 by NAT_1:29;
+               k+1+1 <= t.b3 by A6,INT_1:20;
+             then k+(1+1) <= t.b3 by XCMPLX_1:1;
+        then A13: 2 <= t.b3 by A12,AXIOMS:22;
+        A14: t1.b3=Exec(sb2, IB).b3 by SCM_HALT:33
+           .=IB.b3 by A11,SCMFSA_2:91
+           .=t.b3-1 by A6,A13,Lm11;
+            A15: t.b2-1 < t.b3-1 by A6,REAL_1:54;
+        A16: t1.b2 < t1.b3 by A6,A9,A14,REAL_1:54;
+        A17: t1.f0= Exec(sb2, IB).f0 by SCM_HALT:34
+             .=IB.f0 by SCMFSA_2:91;
+         A18: t.f0,IB.f0 are_fiberwise_equipotent by A6,A13,Lm11;
+        then A19: len (t.f0) = len (t1.f0) by A17,RFINSEQ:16;
+        A20: t1.b3 < t.b3 by A14,INT_1:26;
+         then A21: t1.b3 <= len (t1.f0) by A6,A19,AXIOMS:22;
+        A22: IExec(T2,t).f0=t2.f0 by A6,A7,Lm3,SCM_HALT:82;
+        A23: IB.f0 =Exec(sb2, IB).f0 by SCMFSA_2:91
+           .=t1.f0 by SCM_HALT:34;
+         thus for m be Nat st m>t.b3 & m <= len (t.f0) holds
+             t.f0.m=IExec(T2,t).f0.m
+         proof let m be Nat;
+            assume A24: m>t.b3 & m <= len (t.f0);
+              A25: t.b3>t.b3-1 by INT_1:26;
+          then A26: m > t1.b3 by A14,A24,AXIOMS:22;
+          A27: m <= len (t1.f0) by A17,A18,A24,RFINSEQ:16;
+                m>=2 by A13,A24,AXIOMS:22;
+              then m>=1 by AXIOMS:22;
+              then m in dom (t.f0) by A24,FINSEQ_3:27;
+              hence t.f0.m=t1.f0.m by A6,A13,A23,A24,A25,Lm11
+                   .=IExec(T2,t).f0.m by A5,A10,A16,A21,A22,A26,A27;
+         end;
+         hereby
+               t.b3>=0 by A13,AXIOMS:22;
+             then reconsider n=t.b3 as Nat by INT_1:16;
+           per cases by A6,A13,Lm11;
+           suppose A28: t.f0.(t.b3)=IExec(body2,t).f0.(t.b3);
+             take n;
+             thus n<=t.b3;
+               n<=n+(k+1) by NAT_1:29;
+             hence n>=t.b3-(k+1) by REAL_1:86;
+             thus IExec(T2,t).f0.n=t.f0.(t.b3)
+              by A5,A6,A9,A10,A14,A15,A19,A20,A21,A22,A23,A28;
+           suppose A29: t.f0.(t.b3)=IExec(body2,t).f0.(t.b3-1);
+             A30: t.b3-(k+1)=t.b3+-(1+k) by XCMPLX_0:def 8
+                 .=t.b3+(-1+-k) by XCMPLX_1:140
+                 .=t.b3+-1+-k by XCMPLX_1:1
+                 .=t1.b3+-k by A14,XCMPLX_0:def 8
+                 .=t1.b3-k by XCMPLX_0:def 8;
+             consider m be Nat such that
+             A31: m<=t1.b3 & m>=t1.b3-k &
+                 IExec(T2,t1).f0.m = t1.f0.(t1.b3) by A5,A10,A16,A21;
+             take m;
+             thus m<=t.b3 by A20,A31,AXIOMS:22;
+             thus m>=t.b3-(k+1) by A30,A31;
+             thus IExec(T2,t).f0.m =t.f0.(t.b3)
+              by A8,A14,A23,A29,A31,Lm3,SCM_HALT:82;
+         end;
+       end;
+        hence P[k+1];
+    end;
+A32: for k be Nat holds P[k] from Ind(A2,A4);
+    reconsider i=s.b2 as Nat by A1,INT_1:16;
+      P[i] by A32;
+    hence thesis by A1;
+end;
+
+Lm13:  ::Lem26
+for k be Nat holds (
+ for t be State of SCM+FSA st k=t.b2 & k< t.b3 & t.b3 <= len (t.f0) holds
+    (t.f0, IExec(T2,t).f0 are_fiberwise_equipotent) &
+    (for m be Nat st m <(t.b3-k) & m>=1 or (m>t.b3 & m in dom (t.f0)) holds
+      t.f0.m=IExec(T2,t).f0.m) &
+    (for m be Nat st m >= (t.b3-k) & m<=t.b3 holds (ex x1,x2 be Integer st
+    x1 =IExec(T2,t).f0.(t.b3-k) & x2=IExec(T2,t).f0.m & x1 >= x2)) &
+     for i be Nat st i>=t.b3-k & i<=t.b3 holds
+                ex n be Nat st n>=t.b3-k & n<=t.b3 &
+                IExec(T2,t).f0.i=t.f0.n
+)
+proof
+   defpred P[Nat] means
+ for t be State of SCM+FSA st $1=t.b2 & $1 < t.b3 & t.b3 <= len (t.f0) holds
+    (t.f0, IExec(T2,t).f0 are_fiberwise_equipotent) &
+    (for m be Nat st m <(t.b3-$1) & m>=1 or (m>t.b3 & m in dom (t.f0)) holds
+      t.f0.m=IExec(T2,t).f0.m) &
+    (for m be Nat st m >= (t.b3-$1) & m<=t.b3 holds (ex x1,x2 be Integer st
+    x1 =IExec(T2,t).f0.(t.b3-$1) & x2=IExec(T2,t).f0.m & x1 >= x2)) &
+     for i be Nat st i>=t.b3-$1 & i<=t.b3 holds
+          ex n be Nat st n>=t.b3-$1 & n<=t.b3 & IExec(T2,t).f0.i=t.f0.n;
+      now let t be State of SCM+FSA;
+      assume A1: 0=t.b2 & 0 < t.b3 & t.b3 <= len (t.f0);
+      set If0=IExec(T2,t).f0;
+        thus t.f0, If0 are_fiberwise_equipotent by A1,SCM_HALT:80;
+       thus for m be Nat st m < (t.b3-0) & m>=1 or (m>t.b3 & m in dom (t.f0))
+         holds t.f0.m=IExec(T2,t).f0.m by A1,SCM_HALT:80;
+        hereby let m be Nat;
+         assume m >= (t.b3-0) & m<=t.b3;
+        then A2: m=t.b3 by AXIOMS:21;
+          then m>=0+1 by A1,INT_1:20;
+          then m in dom (t.f0) by A1,A2,FINSEQ_3:27;
+          then t.f0.m in INT by FINSEQ_2:13;
+          then reconsider n1=t.f0.m as Integer by INT_1:12;
+          take x1=n1,x2=n1;
+          thus x1=IExec(T2,t).f0.(t.b3-0) by A1,A2,SCM_HALT:80;
+         thus x2=If0.m by A1,SCM_HALT:80;
+         thus x1 >= x2;
+        end;
+        let i be Nat;
+           assume A3:i>=t.b3-0 & i<=t.b3;
+           take n=i;
+           thus n>=t.b3-0 & n<=t.b3 by A3;
+           thus IExec(T2,t).f0.i=t.f0.n by A1,SCM_HALT:80;
+    end;
+then A4: P[0];
+     set sb2=SubFrom(b2,a0);
+A5: now let k be Nat;
+       assume A6: P[k];
+           now let t be State of SCM+FSA;
+           set t1=IExec(body2 ';'sb2,t),
+               IB=IExec(body2,t),
+               t2=IExec(T2,t1);
+          assume A7: k+1=t.b2 & k+1 < t.b3 & t.b3 <= len (t.f0);
+       A8:  k+1 > 0 by NAT_1:19;
+         A9: t.b2>0 by A7,NAT_1:19;
+         A10: t1.b2= Exec(sb2, IB).b2 by SCM_HALT:33
+             .=IB.b2-IB.a0 by SCMFSA_2:91
+             .=IB.b2-1 by SCM_HALT:17
+             .=(Initialize t).b2-1 by Lm3,SCM_HALT:63
+             .=k+1-1 by A7,SCMFSA6C:3
+             .=k by XCMPLX_1:26;
+         A11: b2<>b3 by SCMFSA_2:16;
+         A12: 2 <= k+2 by NAT_1:29;
+               k+1+1 <= t.b3 by A7,INT_1:20;
+             then k+(1+1) <= t.b3 by XCMPLX_1:1;
+        then A13: 2 <= t.b3 by A12,AXIOMS:22;
+        A14: t1.b3=Exec(sb2, IB).b3 by SCM_HALT:33
+           .=IB.b3 by A11,SCMFSA_2:91
+           .=t.b3-1 by A7,A13,Lm11;
+              k+1-1 < t.b3-1 by A7,REAL_1:54;
+        then A15: k < t1.b3 by A14,XCMPLX_1:26;
+        A16: t1.f0= Exec(sb2, IB).f0 by SCM_HALT:34
+             .=IB.f0 by SCMFSA_2:91;
+        A17: t.f0,IB.f0 are_fiberwise_equipotent by A7,A13,Lm11;
+        then A18: len (t.f0) = len (t1.f0) by A16,RFINSEQ:16;
+        A19: t.b3 <= len (t1.f0) by A7,A16,A17,RFINSEQ:16;
+              t1.b3 < t.b3 by A14,INT_1:26;
+        then A20: t1.b3 <= len (t1.f0) by A7,A18,AXIOMS:22;
+        A21: t1.b2>=0 by A10,NAT_1:18;
+        A22: t.b3=t1.b3+1 by A14,XCMPLX_1:27;
+        A23: (t1.f0, t2.f0 are_fiberwise_equipotent) &
+            (for m be Nat st m < (t1.b3-k) & m>=1 or (m>t1.b3
+              & m in dom (t1.f0)) holds t1.f0.m=t2.f0.m) &
+            (for m be Nat st m >= (t1.b3-k) & m<=t1.b3 holds (ex x1,x2
+             be Integer st x1 =t2.f0.(t1.b3-k) & x2=t2.f0.m & x1 >= x2)) &
+              for i be Nat st i>=t1.b3-k & i<=t1.b3 holds
+                ex n be Nat st n>=t1.b3-k & n<=t1.b3 &
+                t2.f0.i=t1.f0.n by A6,A10,A15,A20;
+        A24: IExec(T2,t).f0=t2.f0 by A7,A8,Lm3,SCM_HALT:82;
+          t1.f0, IExec(T2,t).f0 are_fiberwise_equipotent by A9,A23,Lm3,SCM_HALT
+:82;
+        hence t.f0,IExec(T2,t).f0 are_fiberwise_equipotent by A16,A17,RFINSEQ:2
+;
+        A25: t.b3-(k+1)=t.b3+-(1+k) by XCMPLX_0:def 8
+            .=t.b3+(-1+-k) by XCMPLX_1:140
+            .=t.b3+-1+-k by XCMPLX_1:1
+            .=t1.b3+-k by A14,XCMPLX_0:def 8
+            .=t1.b3-k by XCMPLX_0:def 8;
+            consider n1,n2 be Integer such that
+       A26:  n1=IB.f0.(t.b3-1) & n2=IB.f0.(t.b3) & n1 >= n2 by A7,A13,Lm11;
+       A27: IB.f0 =Exec(sb2, IB).f0 by SCMFSA_2:91
+           .=t1.f0 by SCM_HALT:34;
+            A28: t.b3 >= 0 by A13,AXIOMS:22;
+       then A29:  t.b3 is Nat by INT_1:16;
+       A30: t.b3 >= 1 by A13,AXIOMS:22;
+       then A31:  t.b3 in dom (t1.f0) by A7,A18,A29,FINSEQ_3:27;
+       hereby let m be Nat;
+            assume A32: m <(t.b3-(k+1)) & m>=1 or (m>t.b3 & m in dom (t.f0));
+              per cases by A32;
+              suppose A33: m < (t.b3-(k+1)) & m>=1;
+               A34: t.b3-(k+1)+(k+1)=t.b3+(k+1)-(k+1) by XCMPLX_1:29
+                   .=t.b3 by XCMPLX_1:26;
+                   A35: m+(k+1) < t.b3-(k+1)+(k+1) by A33,REAL_1:53;
+               A36: m+(k+1) < t.b3 by A33,A34,REAL_1:53;
+                    m<=m+(k+1) by NAT_1:29;
+                  then m<=t.b3 by A34,A35,AXIOMS:22;
+                  then m<=len(t1.f0) by A7,A18,AXIOMS:22;
+              then A37: m in dom (t.f0) by A18,A33,FINSEQ_3:27;
+              A38: m<>t.b3 by A8,A33,A34,REAL_1:69;
+                   m<>t.b3-1
+                  proof assume m=t.b3-1;
+                   then A39:t.b3=m+1 by XCMPLX_1:27;
+                      m+(k+1)=m+1+k by XCMPLX_1:1;
+                    hence contradiction by A36,A39,NAT_1:29;
+                  end;
+                  hence t.f0.m=t1.f0.m by A7,A13,A27,A37,A38,Lm11
+                  .=IExec(T2,t).f0.m by A6,A10,A15,A20,A24,A25,A33;
+              suppose A40: m>t.b3 & m in dom (t.f0);
+               then A41: m in dom (t1.f0) by A16,A17,RFINSEQ:16;
+                  A42: t.b3>t.b3-1 by INT_1:26;
+               then A43:m >t1.b3 by A14,A40,AXIOMS:22;
+                  thus t.f0.m=t1.f0.m by A7,A13,A27,A40,A42,Lm11
+                  .=IExec(T2,t).f0.m by A6,A10,A15,A20,A24,A41,A43;
+            end;
+            hereby let m be Nat;
+              assume A44: m >= (t.b3-(k+1)) & m<=t.b3;
+                  consider nn be Nat such that
+              A45: nn<=t1.b3 & nn>=t1.b3-t1.b2 & t2.f0.nn = t1.f0.(t1.b3)
+                   by A10,A15,A20,A21,Lm12;
+                   consider y1,y2 be Integer such that
+              A46:  y1 =t2.f0.(t1.b3-k) & y2=t2.f0.nn & y1 >= y2
+                    by A6,A10,A15,A20,A45;
+              per cases;
+              suppose A47: m>t1.b3;
+                    then m>=t1.b3+1 by INT_1:20;
+                    then A48: m=t.b3 by A22,A44,AXIOMS:21;
+                   take y1,n2;
+                   thus y1=IExec(T2,t).f0.(t.b3-(k+1)) by A9,A25,A46,Lm3,
+SCM_HALT:82;
+                   thus n2=IExec(T2,t).f0.m by A6,A10,A15,A20,A24,A26,A27,A31,
+A47,A48;
+                   thus y1 >= n2 by A14,A26,A27,A45,A46,AXIOMS:22;
+              suppose m<=t1.b3;
+                 then consider y1,y2 be Integer such that
+               A49: y1 =t2.f0.(t1.b3-k) & y2=t2.f0.m & y1 >= y2
+                    by A6,A10,A15,A20,A25,A44;
+                 take y1,y2;
+                 thus y1=IExec(T2,t).f0.(t.b3-(k+1)) by A9,A25,A49,Lm3,SCM_HALT
+:82;
+                 thus y2=IExec(T2,t).f0.m by A9,A49,Lm3,SCM_HALT:82;
+                 thus y1>=y2 by A49;
+            end;
+            thus for i be Nat st i>=t.b3-(k+1) & i<=t.b3 holds
+                ex n be Nat st n>=t.b3-(k+1) & n<=t.b3 &
+                IExec(T2,t).f0.i=t.f0.n
+            proof let i be Nat;
+              assume A50:i>=t.b3-(k+1) & i<=t.b3;
+              per cases;
+              suppose A51:i=t.b3;
+                 then A52:i>t1.b3 by A22,REAL_1:69;
+                 A53:i in dom (t1.f0) by A19,A30,A51,FINSEQ_3:27;
+                 hereby
+                   per cases by A7,A13,Lm11;
+                   suppose A54: t.f0.(t.b3)=IExec(body2,t).f0.(t.b3);
+                    reconsider n=t.b3 as Nat by A28,INT_1:16;
+                    take n;
+                    thus n>=t.b3-(k+1) & n<=t.b3 by A50,A51;
+                    thus IExec(T2,t).f0.i=t.f0.n by A6,A10,A15,A20,A24,A27,A51,
+A52,A53,A54;
+                  suppose A55: t.f0.(t.b3-1)=IExec(body2,t).f0.(t.b3);
+                      t.b3-1>=1-1 by A30,REAL_1:49;
+                    then reconsider n=t.b3-1 as Nat by INT_1:16;
+                    take n;
+                         n<=n+k by NAT_1:29;
+                    hence n>=t.b3-(k+1) by A14,A25,REAL_1:86;
+                    thus n<=t.b3 by INT_1:26;
+                    thus IExec(T2,t).f0.i=t.f0.n by A6,A10,A15,A20,A24,A27,A51,
+A52,A53,A55;
+                end;
+           suppose i<>t.b3;
+                 then i < t.b3 by A50,REAL_1:def 5;
+                 then i+1 <= t.b3 by INT_1:20;
+              then i<=t1.b3 by A14,REAL_1:84;
+              then consider n be Nat such that
+              A56: n>=t1.b3-k & n<=t1.b3 & t2.f0.i=t1.f0.n by A6,A10,A15,A20,
+A25,A50;
+              thus ex n be Nat st n>=t.b3-(k+1) & n<=t.b3 &
+                   IExec(T2,t).f0.i=t.f0.n
+              proof
+                per cases;
+                suppose A57:n=t1.b3;
+                  hereby
+                  per cases by A7,A13,Lm11;
+                   suppose A58: t.f0.(t.b3)=IExec(body2,t).f0.(t.b3-1);
+                    reconsider m=t.b3 as Nat by A28,INT_1:16;
+                    take m;
+                      m <= m +(k+1) by NAT_1:29;
+                    hence m >= t.b3-(k+1) by REAL_1:86;
+                    thus m <= t.b3;
+                    thus IExec(T2,t).f0.i=t.f0.m by A7,A8,A14,A27,A56,A57,A58,
+Lm3,SCM_HALT:82;
+                   suppose A59: t.f0.(t.b3-1)=IExec(body2,t).f0.(t.b3-1);
+                    take n;
+                    thus n>=t.b3-(k+1) by A25,A56;
+                    thus n<=t.b3 by A14,A57,INT_1:26;
+                    thus IExec(T2,t).f0.i=t.f0.n by A7,A8,A14,A27,A56,A57,A59,
+Lm3,SCM_HALT:82;
+                  end;
+                  suppose A60:n<>t1.b3;
+                  A61: t1.b3 < t.b3 by A14,INT_1:26;
+                  then A62: n<t.b3 by A56,AXIOMS:22;
+                     k-k < t1.b3-k by A15,REAL_1:54;
+                   then 1+(k-k)<=t1.b3-k by INT_1:20;
+                   then 1<=t1.b3-k by XCMPLX_1:25;
+                  then A63: n>=1 by A56,AXIOMS:22;
+                      n<= len (t1.f0) by A7,A18,A62,AXIOMS:22;
+                 then A64:n in dom (t.f0) by A18,A63,FINSEQ_3:27;
+                   take n;
+                   thus n>=t.b3-(k+1) by A25,A56;
+                   thus n<=t.b3 by A56,A61,AXIOMS:22;
+                   thus IExec(T2,t).f0.i=t.f0.n by A7,A13,A14,A24,A27,A56,A60,
+A61,A64,Lm11;
+              end;
+           end;
+       end;
+       hence P[k + 1];
+    end;
+      for k be Nat holds P[k] from Ind(A4,A5);
+    hence thesis;
+end;
+
+Lm14:  ::Lem28
+ for s be State of SCM+FSA holds IExec(Sb,s).b2=s.b1-1 &
+ IExec(Sb,s).b3=len (s.f0) & IExec(Sb,s).f0=s.f0
+proof
+    let s be State of SCM+FSA;
+    set s0=Initialize s,
+        s1=Exec(j1,s0),
+        s2=IExec(j1 ';'j2,s),
+        s3=IExec(j1 ';' j2 ';' j3,s);
+A1: s1.b2=s0.b1 by SCMFSA_2:89
+    .=s.b1 by SCMFSA6C:3;
+A2: s1.f0=s0.f0 by SCMFSA_2:89
+    .=s.f0 by SCMFSA6C:3;
+A3: s1.a0=s0.a0 by SCMFSA_2:89
+    .=1 by SCMFSA6C:3;
+A4: s2.f0 =Exec(j2, s1).f0 by SCMFSA6C:10
+    .=s.f0 by A2,SCMFSA_2:91;
+A5: s2.b2 =Exec(j2, s1).b2 by SCMFSA6C:9
+    .=s.b1-1 by A1,A3,SCMFSA_2:91;
+A6: b3<>b2 by SCMFSA_2:16;
+    thus s3.b2 = Exec(j3, s2).b2 by SCMFSA6C:7
+      .=s.b1-1 by A5,A6,SCMFSA_2:100;
+    thus s3.b3 = Exec(j3, s2).b3 by SCMFSA6C:7
+      .=len(s.f0) by A4,SCMFSA_2:100;
+    thus s3.f0 = Exec(j3, s2).f0 by SCMFSA6C:8
+      .=s.f0 by A4,SCMFSA_2:100;
+end;
+
+Lm15:  ::Lem30
+ for s be State of SCM+FSA st s.b1=len (s.f0) holds
+    (s.f0, IExec(T1,s).f0 are_fiberwise_equipotent) &
+    (for i,j be Nat st i>=1 & j<=len (s.f0) & i<j
+     for x1,x2 be Integer st x1 =IExec(T1,s).f0.i &
+        x2=IExec(T1,s).f0.j holds x1 >= x2)
+proof
+    let s be State of SCM+FSA;
+    assume A1: s.b1=len (s.f0);
+    per cases;
+    suppose A2:len (s.f0)=0;
+     hence s.f0, IExec(T1,s).f0 are_fiberwise_equipotent by A1,Lm7,SCM_HALT:80;
+     thus thesis by A2,NAT_1:18;
+    suppose A3:len (s.f0)<>0;
+     defpred P[Nat] means
+     for t be State of SCM+FSA st t.b1=$1+1 & t.b1<=len (t.f0) holds
+       (t.f0, IExec(T1,t).f0 are_fiberwise_equipotent) &
+    (for i,j be Nat st i>=len(t.f0)-$1 & j<=len (t.f0) & i<j
+       for x1,x2 be Integer st x1 =IExec(T1,t).f0.i & x2=IExec(T1,t).f0.j
+         holds x1 >= x2) &
+    (for i be Nat st i<len(t.f0)-$1 & i>=1 holds IExec(T1,t).f0.i=t.f0.i) &
+    (for i be Nat st i>=len(t.f0)-$1 & i<=len (t.f0) holds
+      ex n be Nat st n>=len(t.f0)-$1 & n<=len (t.f0) &
+          IExec(T1,t).f0.i=t.f0.n);
+     set B1_1=SubFrom(b1,a0);
+A4: P[0]
+    proof let t be State of SCM+FSA;
+       assume A5:t.b1=0+1 & t.b1 <= len (t.f0);
+       set IB=IExec(body1 ';' B1_1,t);
+    A6: IB.b1=1-1 by A5,Lm6,Lm7,SCM_HALT:79;
+    A7: IExec(Sb,t).b2=1-1 by A5,Lm14;
+   A8:  IExec(T1,t).f0=IExec(T1,IB).f0 by A5,Lm6,Lm7,SCM_HALT:82
+       .=IB.f0 by A6,Lm7,SCM_HALT:80
+       .=Exec(B1_1,IExec(body1,t)).f0 by Lm7,SCM_HALT:34
+       .=IExec(body1,t).f0 by SCMFSA_2:91
+       .=IExec(T2,IExec(Sb,t)).f0 by Lm4,SCM_HALT:31
+       .=IExec(Sb,t).f0 by A7,SCM_HALT:80
+       .=t.f0 by Lm14;
+       hence t.f0, IExec(T1,t).f0 are_fiberwise_equipotent;
+       thus for i,j be Nat st i>=len(t.f0)-0 & j<=len (t.f0) & i<j
+         for x1,x2 be Integer st x1 =IExec(T1,t).f0.i &
+         x2=IExec(T1,t).f0.j holds x1 >= x2 by AXIOMS:22;
+      thus for i be Nat st i<len(t.f0)-0 & i>=1 holds
+          IExec(T1,t).f0.i=t.f0.i by A8;
+      let i be Nat;
+       assume A9:i>=len(t.f0)-0 & i<=len (t.f0);
+       take n=i;
+       thus n>=len(t.f0)-0 & n<=len (t.f0) by A9;
+       thus IExec(T1,t).f0.i=t.f0.n by A8;
+    end;
+A10: now let k be Nat;
+       assume A11: P[k];
+           now let t be State of SCM+FSA;
+           set t1=IExec(body1 ';'B1_1,t),
+               IB=IExec(body1,t),
+               t2=IExec(T1,t1);
+          assume A12: t.b1=(k+1)+1 & t.b1<=len (t.f0);
+          A13: t1.b1= Exec(B1_1, IB).b1 by Lm7,SCM_HALT:33
+             .=IB.b1-IB.a0 by SCMFSA_2:91
+             .=IB.b1-1 by Lm7,SCM_HALT:17
+             .=(Initialize t).b1-1 by Lm6,Lm7,SCM_HALT:63
+             .=(k+1)+1-1 by A12,SCMFSA6C:3
+             .=k+1 by XCMPLX_1:26;
+             then t1.b1 < t.b1 by A12,REAL_1:69;
+          then A14: t1.b1 <= len (t.f0) by A12,AXIOMS:22;
+             set Ts=IExec(Sb,t);
+          A15: Ts.b2=(k+1)+1-1 by A12,Lm14
+              .=k+1 by XCMPLX_1:26;
+          A16: Ts.b3=len (t.f0) by Lm14;
+          then A17: Ts.b3=len (Ts.f0) by Lm14;
+              A18: k+1 < (k+1)+1 by REAL_1:69;
+              A19: k+1 < t.b1 by A12,REAL_1:69;
+              A20: k+1 < len (t.f0) by A12,A18,AXIOMS:22;
+           A21: k+1 < Ts.b3 by A12,A16,A19,AXIOMS:22;
+          A22:(Ts.f0, IExec(T2,Ts).f0 are_fiberwise_equipotent) &
+       (for m be Nat st m <(Ts.b3-(k+1)) & m>=1 or (m>Ts.b3 & m in dom (Ts.f0))
+          holds Ts.f0.m=IExec(T2,Ts).f0.m) &
+    (for m be Nat st m >= (Ts.b3-(k+1)) & m<=Ts.b3 holds
+      (ex x1,x2 be Integer st x1 =IExec(T2,Ts).f0.(Ts.b3-(k+1)) &
+     x2=IExec(T2,Ts).f0.m & x1 >= x2)) &
+      for i be Nat st i>=Ts.b3-(k+1) & i<=Ts.b3 holds
+                ex n be Nat st n>=Ts.b3-(k+1) & n<=Ts.b3 &
+                IExec(T2,Ts).f0.i=Ts.f0.n by A15,A16,A17,A20,Lm13;
+          A23: Ts.f0=t.f0 by Lm14;
+          A24: t1.f0= Exec(B1_1,IB).f0 by Lm7,SCM_HALT:34
+             .=IB.f0 by SCMFSA_2:91
+             .=IExec(T2,Ts).f0 by Lm4,SCM_HALT:31;
+          then A25:t.f0,t1.f0 are_fiberwise_equipotent by A15,A16,A21,A23,Lm13;
+          A26: len (t.f0) = len (t1.f0) by A22,A23,A24,RFINSEQ:16;
+           A27: t1.b1 <= len (t1.f0) by A14,A25,RFINSEQ:16;
+          A28: (t1.f0, IExec(T1,t1).f0 are_fiberwise_equipotent) &
+    (for i,j be Nat st i>=len(t1.f0)-k & j<=len (t1.f0) & i<j
+       for x1,x2 be Integer st x1 =IExec(T1,t1).f0.i & x2=IExec(T1,t1).f0.j
+       holds x1 >= x2) &
+   (for i be Nat st i<len(t1.f0)-k & i>=1 holds IExec(T1,t1).f0.i=t1.f0.i)&
+    (for i be Nat st i>=len(t1.f0)-k & i<=len (t1.f0) holds
+      ex n be Nat st n>=len(t1.f0)-k & n<=len (t1.f0) &
+          IExec(T1,t1).f0.i=t1.f0.n) by A11,A13,A14,A26;
+            0 <t.b1 by A12,NAT_1:19;
+         then A29: IExec(T1,t).f0=t2.f0 by Lm6,Lm7,SCM_HALT:82;
+         hence t.f0,IExec(T1,t).f0 are_fiberwise_equipotent
+          by A25,A28,RFINSEQ:2;
+          set lk=len(t.f0)-(k+1);
+          A30:lk+1=len (t.f0)+-(k+1)+1 by XCMPLX_0:def 8
+            .=len (t.f0)+(-k+-1)+1 by XCMPLX_1:140
+            .=len (t.f0)+-k+-1+1 by XCMPLX_1:1
+            .=len (t.f0)+-k+(-1+1) by XCMPLX_1:1
+            .=len (t1.f0)-k by A26,XCMPLX_0:def 8;
+          thus for i,j be Nat st i>=len(t.f0)-(k+1) & j<=len (t.f0) & i<j
+                for x1,x2 be Integer st x1 =IExec(T1,t).f0.i &
+                x2=IExec(T1,t).f0.j holds x1 >= x2
+           proof let i,j be Nat;
+               assume A31:i>=lk & j<=len (t.f0) & i<j;
+               then j > lk by AXIOMS:22;
+               then j >= len (t1.f0)-k by A30,INT_1:20;
+                  then consider n be Nat such that
+               A32: n>=len(t1.f0)-k & n<=len (t1.f0) &
+                   IExec(T1,t1).f0.j=t1.f0.n by A11,A13,A14,A26,A31;
+                 lk < lk +1 by REAL_1:69;
+               then A33: n >= Ts.b3-(k+1) by A16,A30,A32,AXIOMS:22;
+               A34: n <= Ts.b3 by A26,A32,Lm14;
+               hereby let x1,x2 be Integer;
+                 assume A35:x1 =IExec(T1,t).f0.i & x2=IExec(T1,t).f0.j;
+                 per cases;
+              suppose A36:i=lk;
+                   consider y1,y2 be Integer such that
+               A37: y1 =IExec(T2,Ts).f0.(Ts.b3-(k+1)) & y2=IExec(T2,Ts).f0.n
+                   & y1 >= y2 by A15,A17,A21,A33,A34,Lm13;
+               A38: i<len(t1.f0)-k by A30,A36,REAL_1:69;
+               A39: 1<=i by A12,A36,REAL_1:84;
+                 i=Ts.b3-(k+1) by A36,Lm14;
+               hence x1 >= x2 by A11,A13,A14,A24,A26,A29,A32,A35,A37,A38,A39;
+              suppose i<>lk;
+                  then i>lk by A31,REAL_1:def 5;
+             then i>=len (t1.f0)-k by A30,INT_1:20;
+                  hence x1 >= x2 by A11,A13,A14,A26,A29,A31,A35;
+              end;
+            end;
+           thus for i be Nat st i<len(t.f0)-(k+1) & i>=1 holds
+                  IExec(T1,t).f0.i=t.f0.i
+          proof let i be Nat;
+             assume A40:i<lk & i>=1;
+                lk < lk+1 by REAL_1:69;
+           then i < len (t1.f0)-k by A30,A40,AXIOMS:22;
+             hence IExec(T1,t).f0.i=t1.f0.i by A11,A13,A27,A29,A40
+             .=t.f0.i by A15,A16,A21,A23,A24,A40,Lm13;
+          end;
+          thus for i be Nat st i>=len(t.f0)-(k+1) & i<=len (t.f0) holds
+                ex n be Nat st n>=len(t.f0)-(k+1) & n<=len (t.f0) &
+                IExec(T1,t).f0.i=t.f0.n
+          proof let i be Nat;
+            assume A41:i>=len(t.f0)-(k+1) & i<=len (t.f0);
+           per cases;
+           suppose A42:i=lk;
+            then A43:i < len(t1.f0)-k by A30,REAL_1:69;
+            A44:i >= 1 by A12,A42,REAL_1:84;
+            consider n be Nat such that
+            A45:n>=Ts.b3-(k+1) & n<=Ts.b3 & IExec(T2,Ts).f0.i=Ts.f0.n
+                  by A15,A16,A17,A20,A41,Lm13;
+            take n;
+            thus n>=len(t.f0)-(k+1) by A45,Lm14;
+            thus n<=len(t.f0) by A45,Lm14;
+            thus IExec(T1,t).f0.i=t.f0.n by A11,A13,A23,A24,A27,A29,A43,A44,A45
+;
+          suppose i<>lk;
+               then i >lk by A41,REAL_1:def 5;
+            then i >= len (t1.f0)-k by A30,INT_1:20;
+            then consider m be Nat such that
+            A46: m>=len(t1.f0)-k & m<=len (t1.f0) & IExec(T1,t1).f0.i=t1.f0.m
+                by A11,A13,A14,A26,A41;
+             lk+1 > lk by REAL_1:69;
+            then m>Ts.b3-(k+1) by A16,A30,A46,AXIOMS:22;
+            then consider n be Nat such that
+            A47:n>=Ts.b3-(k+1) & n<=Ts.b3 & IExec(T2,Ts).f0.m=Ts.f0.n
+                  by A15,A16,A17,A20,A26,A46,Lm13;
+            take n;
+            thus n>=len(t.f0)-(k+1) by A47,Lm14;
+            thus n<=len(t.f0) by A47,Lm14;
+            thus IExec(T1,t).f0.i=t.f0.n by A24,A29,A46,A47,Lm14;
+          end;
+        end;
+        hence P[k+1];
+     end;
+A48:  for k be Nat holds P[k] from Ind(A4,A10);
+       len (s.f0)>0 by A3,NAT_1:19;
+     then s.b1>=1+0 by A1,INT_1:20;
+     then reconsider m=s.b1-1 as Nat by INT_1:18;
+A49:  m+1=s.b1+1-1 by XCMPLX_1:29
+     .=s.b1 by XCMPLX_1:26;
+     hence s.f0, IExec(T1,s).f0 are_fiberwise_equipotent by A1,A48;
+    len (s.f0)-m=1 by A1,XCMPLX_1:18;
+      hence thesis by A1,A48,A49;
+end;
+
+theorem Th65:  ::BS016
+for s be State of SCM+FSA holds
+    (s.f0, IExec(bubble-sort f0,s).f0 are_fiberwise_equipotent) &
+    (for i,j be Nat st i>=1 & j<=len (s.f0) & i<j
+     for x1,x2 be Integer st x1 =IExec(bubble-sort f0,s).f0.i &
+        x2=IExec(bubble-sort f0,s).f0.j holds x1 >= x2)
+proof let s be State of SCM+FSA;
+  set W2_7=w2 ';' w3 ';' w4 ';' w5 ';' w6 ';' w7,
+      s0=Initialize s,
+      s1=Exec(w2, s0),
+      s2=IExec(w2 ';' w3, s),
+      s3=IExec(w2 ';' w3 ';' w4,s),
+      s4=IExec(w2 ';' w3 ';' w4 ';' w5,s),
+      s5=IExec(w2 ';' w3 ';' w4 ';' w5 ';' w6,s),
+      s6=IExec(W2_7,s);
+A1:  s5.f0 =Exec(w6, s4).f0 by SCMFSA6C:8
+     .=s4.f0 by SCMFSA_2:89
+     .=Exec(w5, s3).f0 by SCMFSA6C:8
+     .=s3.f0 by SCMFSA_2:89
+     .=Exec(w4, s2).f0 by SCMFSA6C:8
+     .=s2.f0 by SCMFSA_2:89
+     .=Exec(w3, s1).f0 by SCMFSA6C:10
+     .=s1.f0 by SCMFSA_2:89
+     .=s0.f0 by SCMFSA_2:89
+     .=s.f0 by SCMFSA6C:3;
+A2:  s6.f0 =Exec(w7, s5).f0 by SCMFSA6C:8
+     .=s.f0 by A1,SCMFSA_2:100;
+A3:  s6.b1=Exec(w7, s5).b1 by SCMFSA6C:7
+    .=len (s6.f0) by A1,A2,SCMFSA_2:100;
+A4:  IExec(bubble-sort f0,s).f0=IExec(W2_7 ';' T1,s).f0 by Def1
+     .=IExec(T1,s6).f0 by Lm8,SCM_HALT:31;
+     hence s.f0, IExec(bubble-sort f0,s).f0 are_fiberwise_equipotent by A2,A3,
+Lm15;
+     let i,j be Nat;
+       assume i>=1 & j<=len (s.f0) & i<j;
+       hence thesis by A2,A3,A4,Lm15;
+end;
+
+theorem Th66:   ::BS018
+ for i being Nat, s being State of SCM+FSA,w being FinSequence of INT
+  st Initialized Bubble-Sort-Algorithm +* ((fsloc 0) .--> w) c= s
+  holds IC (Computation s).i in dom Bubble-Sort-Algorithm
+proof
+   set Ba=Bubble-Sort-Algorithm,
+       Ib=Initialized Ba;
+   let i be Nat, s be State of SCM+FSA,w be FinSequence of INT;
+   set x=((fsloc 0) .--> w);
+   assume A1: Ib +* x c= s;
+     dom Ib misses dom x by Th46;
+   then Ib c= Ib +* x by FUNCT_4:33;
+then A2:Ib c= s by A1,XBOOLE_1:1;
+     Ba is InitHalting Macro-Instruction by Def2,Th64;
+   hence thesis by A2,SCM_HALT:def 1;
+end;
+
+theorem Th67:  ::BS020
+  for s be State of SCM+FSA,t be FinSequence of INT st
+  Initialized Bubble-Sort-Algorithm +*(fsloc 0 .--> t) c= s
+  holds ex u being FinSequence of REAL
+    st t,u are_fiberwise_equipotent & u is non-increasing &
+     u is FinSequence of INT & (Result s).(fsloc 0) = u
+proof
+  let s be State of SCM+FSA,t be FinSequence of INT;
+  set Ba=Bubble-Sort-Algorithm,
+      p=Initialized Ba,
+      x=fsloc 0 .--> t,
+      z=IExec(bubble-sort f0,s).f0;
+  assume A1: p+*x c= s;
+      dom x = { f0} by CQC_LANG:5;
+then A2: f0 in dom x by TARSKI:def 1;
+ then f0 in dom (p+*x) by FUNCT_4:13;
+then A3: s.f0=(p+*x).f0 by A1,GRFUNC_1:8
+    .=x.f0 by A2,FUNCT_4:14
+    .=t by CQC_LANG:6;
+A4: (s.f0, z are_fiberwise_equipotent) &
+    (for i,j be Nat st i>=1 & j<=len (s.f0) & i<j
+     for x1,x2 be Integer st x1 =z.i & x2=z.j holds x1 >= x2) by Th65;
+     reconsider u=z as FinSequence of REAL by Th38;
+     take u;
+     thus t, u are_fiberwise_equipotent by A3,Th65;
+A5:  dom (s.f0) = dom u by A4,RFINSEQ:16;
+       now let i,j be Nat;
+        assume A6:i in dom u & j in dom u & i<j;
+        then A7: i>=1 by FINSEQ_3:27;
+        A8: j<=len (s.f0) by A5,A6,FINSEQ_3:27;
+        A9: z.i in INT & z.j in INT by A6,FINSEQ_2:13;
+            then reconsider y1=z.i as Integer by INT_1:12;
+            reconsider y2=z.j as Integer by A9,INT_1:12;
+          y1 >= y2 by A6,A7,A8,Th65;
+           hence u.i>=u.j;
+     end;
+     hence u is non-increasing by RFINSEQ:32;
+     thus u is FinSequence of INT;
+       dom p misses dom x by Th46;
+     then p c=p+*x by FUNCT_4:33;
+     then p c= s by A1,XBOOLE_1:1;
+    then s=s+*p by AMI_5:10;
+    hence (Result s).f0 =IExec(Ba,s).f0 by Th57
+    .=u by Def2;
+end;
+
+theorem Th68:   ::BS022
+ for w being FinSequence of INT holds
+  Initialized Bubble-Sort-Algorithm +* ((fsloc 0) .--> w) is autonomic
+proof
+     let w be FinSequence of INT;
+     set p=Initialized Bubble-Sort-Algorithm +* ((fsloc 0) .--> w),
+         q=Bubble-Sort-Algorithm;
+A1: for s1,s2 being State of SCM+FSA,i st p c= s1 & p c= s2 & i <= 10
+     holds
+      (Computation s1).i.intloc 0 = (Computation s2).i.intloc 0 &
+      (Computation s1).i.IC SCM+FSA = (Computation s2).i.IC SCM+FSA &
+      (Computation s1).i.fsloc 0 = (Computation s2).i.fsloc 0
+    proof
+      let s1,s2 be State of SCM+FSA,i;
+      assume A2: p c= s1 & p c=s2 & i <= 10;
+      set Cs1=Computation s1, Cs2=Computation s2;
+A3:    Cs1.0 = s1 & Cs2.0 = s2 by AMI_1:def 19;
+A4:  p starts_at insloc 0 by Th47;
+then A5:  s1 starts_at insloc 0 by A2,AMI_3:49;
+A6:  s2 starts_at insloc 0 by A2,A4,AMI_3:49;
+A7:  q c= s1 & q c=s2 by A2,Th53;
+
+A8:  s1.intloc 0 =1 by A2,Th54
+     .= s2.intloc 0 by A2,Th54;
+A9:  s1.fsloc 0 =w by A2,Th54
+     .=s2.fsloc 0 by A2,Th54;
+A10:  IC s1 = insloc 0 by A5,AMI_3:def 14
+     .= IC s2 by A6,AMI_3:def 14;
+     per cases by A2,Th13;
+     suppose A11:i = 0;
+       hence Cs1.i.intloc 0 = Cs2.i.intloc 0 by A3,A8;
+       thus (Cs1.i).IC SCM+FSA = IC s2 by A3,A10,A11,AMI_1:def 15
+       .= (Cs2.i).IC SCM+FSA by A3,A11,AMI_1:def 15;
+       thus Cs1.i.fsloc 0 = Cs2.i.fsloc 0 by A3,A9,A11;
+     suppose A12:i = 1;
+       hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
+          .= Cs2.i.intloc 0 by A6,A7,A8,A12,Lm2;
+       thus (Cs1.i).IC SCM+FSA = insloc 1 by A5,A7,A12,Lm2
+       .= (Cs2.i).IC SCM+FSA by A6,A7,A12,Lm2;
+       thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A12,Lm2
+          .= Cs2.i.fsloc 0 by A6,A7,A9,A12,Lm2;
+     suppose A13:i = 2;
+       hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
+          .= Cs2.i.intloc 0 by A6,A7,A8,A13,Lm2;
+       thus (Cs1.i).IC SCM+FSA = insloc 2 by A5,A7,A13,Lm2
+       .= (Cs2.i).IC SCM+FSA by A6,A7,A13,Lm2;
+       thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A13,Lm2
+          .= Cs2.i.fsloc 0 by A6,A7,A9,A13,Lm2;
+     suppose A14:i = 3;
+       hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
+          .= Cs2.i.intloc 0 by A6,A7,A8,A14,Lm2;
+       thus (Cs1.i).IC SCM+FSA = insloc 3 by A5,A7,A14,Lm2
+       .= (Cs2.i).IC SCM+FSA by A6,A7,A14,Lm2;
+       thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A14,Lm2
+          .= Cs2.i.fsloc 0 by A6,A7,A9,A14,Lm2;
+     suppose A15:i = 4;
+       hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
+          .= Cs2.i.intloc 0 by A6,A7,A8,A15,Lm2;
+       thus (Cs1.i).IC SCM+FSA = insloc 4 by A5,A7,A15,Lm2
+       .= (Cs2.i).IC SCM+FSA by A6,A7,A15,Lm2;
+       thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A15,Lm2
+          .= Cs2.i.fsloc 0 by A6,A7,A9,A15,Lm2;
+     suppose A16:i = 5;
+       hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
+          .= Cs2.i.intloc 0 by A6,A7,A8,A16,Lm2;
+       thus (Cs1.i).IC SCM+FSA = insloc 5 by A5,A7,A16,Lm2
+       .= (Cs2.i).IC SCM+FSA by A6,A7,A16,Lm2;
+       thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A16,Lm2
+          .= Cs2.i.fsloc 0 by A6,A7,A9,A16,Lm2;
+    suppose A17:i = 6;
+       hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
+          .= Cs2.i.intloc 0 by A6,A7,A8,A17,Lm2;
+       thus (Cs1.i).IC SCM+FSA = insloc 6 by A5,A7,A17,Lm2
+       .= (Cs2.i).IC SCM+FSA by A6,A7,A17,Lm2;
+       thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A17,Lm2
+          .= Cs2.i.fsloc 0 by A6,A7,A9,A17,Lm2;
+    suppose A18:i = 7;
+       hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
+          .= Cs2.i.intloc 0 by A6,A7,A8,A18,Lm2;
+       thus (Cs1.i).IC SCM+FSA = insloc 7 by A5,A7,A18,Lm2
+       .= (Cs2.i).IC SCM+FSA by A6,A7,A18,Lm2;
+       thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A18,Lm2
+          .= Cs2.i.fsloc 0 by A6,A7,A9,A18,Lm2;
+    suppose A19:i = 8;
+       hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
+          .= Cs2.i.intloc 0 by A6,A7,A8,A19,Lm2;
+       thus (Cs1.i).IC SCM+FSA = insloc 8 by A5,A7,A19,Lm2
+       .= (Cs2.i).IC SCM+FSA by A6,A7,A19,Lm2;
+       thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A19,Lm2
+          .= Cs2.i.fsloc 0 by A6,A7,A9,A19,Lm2;
+    suppose A20:i = 9;
+       hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
+          .= Cs2.i.intloc 0 by A6,A7,A8,A20,Lm2;
+       thus (Cs1.i).IC SCM+FSA = insloc 9 by A5,A7,A20,Lm2
+       .= (Cs2.i).IC SCM+FSA by A6,A7,A20,Lm2;
+       thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A20,Lm2
+          .= Cs2.i.fsloc 0 by A6,A7,A9,A20,Lm2;
+    suppose A21:i = 10;
+       hence Cs1.i.intloc 0 = s1.intloc 0 by A5,A7,Lm2
+          .= Cs2.i.intloc 0 by A6,A7,A8,A21,Lm2;
+       thus (Cs1.i).IC SCM+FSA = insloc 10 by A5,A7,A21,Lm2
+       .= (Cs2.i).IC SCM+FSA by A6,A7,A21,Lm2;
+       thus Cs1.i.fsloc 0 = s1.fsloc 0 by A5,A7,A21,Lm2
+          .= Cs2.i.fsloc 0 by A6,A7,A9,A21,Lm2;
+   end;
+    set UD={fsloc 0,a0,a1,a2,a3,a4,a5,a6},
+        Us=UsedInt*Loc q \/ UsedIntLoc q;
+A22: UsedInt*Loc q = UsedInt*Loc bubble-sort fsloc 0 by Def2
+    .={fsloc 0} by Th59;
+    A23: UsedIntLoc q = UsedIntLoc bubble-sort fsloc 0 by Def2
+    .={a0,a1,a2,a3,a4,a5,a6} by Th58;
+then A24: Us = UD by A22,ENUMSET1:62;
+A25:   for i being Nat,s1,s2 being State of SCM+FSA
+       st 11 <= i & p c= s1 & p c= s2
+       holds (Computation s1).i | Us = (Computation s2).i | Us &
+    (Computation s1).i.IC SCM+FSA = (Computation s2).i.IC SCM+FSA
+    proof
+     let i be Nat,s1,s2 be State of SCM+FSA such that
+A26:  11 <= i and
+A27:  p c= s1 and
+A28:  p c= s2;
+     set Cs11=(Computation s1).11, Cs21=(Computation s2).11;
+A29:   p starts_at insloc 0 by Th47;
+then A30:   s1 starts_at insloc 0 by A27,AMI_3:49;
+A31:   s2 starts_at insloc 0 by A28,A29,AMI_3:49;
+A32:   q c= s1 by A27,Th53;
+A33:   q c= s2 by A28,Th53;
+A34:  s1.intloc 0 =1 by A27,Th54
+     .= s2.intloc 0 by A28,Th54;
+A35:  s1.fsloc 0 =w by A27,Th54
+     .=s2.fsloc 0 by A28,Th54;
+A36:   Us c= dom(Cs11) by Th56;
+A37:   Us c= dom(Cs21) by Th56;
+        now
+        let x be set;
+        assume x in Us;
+        then A38: x in UD by A22,A23,ENUMSET1:62;
+      per cases by A38,ENUMSET1:38;
+      suppose A39: x = fsloc 0;
+        hence Cs11.x =s1.fsloc 0 by A30,A32,Lm2
+        .=Cs21.x by A31,A33,A35,A39,Lm2;
+      suppose A40: x = a0;
+        hence Cs11.x =s1.a0 by A30,A32,Lm2
+        .=Cs21.x by A31,A33,A34,A40,Lm2;
+      suppose A41: x = a1;
+        hence Cs11.x=len(s1.fsloc 0) by A30,A32,Lm2
+        .=Cs21.x by A31,A33,A35,A41,Lm2;
+      suppose A42: x = a2;
+        hence Cs11.x=s1.a0 by A30,A32,Lm2
+        .=Cs21.x by A31,A33,A34,A42,Lm2;
+      suppose A43: x = a3;
+        hence Cs11.x=s1.a0 by A30,A32,Lm2
+        .=Cs21.x by A31,A33,A34,A43,Lm2;
+      suppose A44: x = a4;
+        hence Cs11.x=s1.a0 by A30,A32,Lm2
+        .=Cs21.x by A31,A33,A34,A44,Lm2;
+      suppose A45: x = a5;
+        hence Cs11.x=s1.a0 by A30,A32,Lm2
+        .=Cs21.x by A31,A33,A34,A45,Lm2;
+      suppose A46: x = a6;
+        hence Cs11.x=s1.a0 by A30,A32,Lm2
+        .=Cs21.x by A31,A33,A34,A46,Lm2;
+     end;
+then A47:  Cs11 | Us = Cs21 | Us by A36,A37,SCMFSA6A:9;
+A48:  Cs11.IC SCM+FSA = insloc 11 by A30,A32,Lm2
+     .=Cs21.IC SCM+FSA by A31,A33,Lm2;
+A49:  for i holds IC (Computation s1).i in dom q by A27,Th66;
+       for i holds IC (Computation s2).i in dom q by A28,Th66;
+     hence thesis by A26,A32,A33,A47,A48,A49,Th26;
+   end;
+    set DD={intloc 0,IC SCM+FSA,fsloc 0};
+A50: dom p = dom q \/ DD by Th42;
+      now
+      let s1,s2 be State of SCM+FSA,i;
+      assume A51: p c= s1 & p c=s2;
+      set Cs1i=(Computation s1).i, Cs2i=(Computation s2).i;
+        q c= s1 & q c=s2 by A51,Th53;
+then A52:   Cs1i | dom q = Cs2i| dom q by Th22;
+A53:   DD c= dom Cs1i by Th55;
+A54:   DD c= dom Cs2i by Th55;
+    Cs1i | DD = Cs2i| DD
+      proof
+A55:     intloc 0 in Us by A24,ENUMSET1:39;
+A56:     fsloc 0 in Us by A24,ENUMSET1:39;
+A57:     Us c= dom(Cs1i) by Th56;
+A58:     Us c= dom(Cs2i) by Th56;
+A59:     i>10 implies 10+1 < i+1 by REAL_1:53;
+          now let x be set;
+         assume A60: x in DD;
+         per cases by A60,ENUMSET1:13;
+         suppose A61: x=intloc 0;
+              now per cases;
+             suppose i<=10;
+              hence Cs1i.x=Cs2i.x by A1,A51,A61;
+             suppose i>10;
+              then 11 <= i by A59,NAT_1:38;
+              then Cs1i | Us = Cs2i | Us by A25,A51;
+              hence Cs1i.x=Cs2i.x by A55,A57,A58,A61,SCMFSA6A:9;
+           end;
+           hence Cs1i.x=Cs2i.x;
+         suppose A62: x=IC SCM+FSA;
+              now per cases;
+             suppose i<=10;
+              hence Cs1i.x=Cs2i.x by A1,A51,A62;
+             suppose i>10;
+              then 11 <= i by A59,NAT_1:38;
+              hence Cs1i.x=Cs2i.x by A25,A51,A62;
+           end;
+           hence Cs1i.x=Cs2i.x;
+         suppose A63: x=fsloc 0;
+              now per cases;
+             suppose i<=10;
+              hence Cs1i.x=Cs2i.x by A1,A51,A63;
+             suppose i>10;
+              then 11 <= i by A59,NAT_1:38;
+              then Cs1i | Us = Cs2i | Us by A25,A51;
+              hence Cs1i.x=Cs2i.x by A56,A57,A58,A63,SCMFSA6A:9;
+           end;
+           hence Cs1i.x=Cs2i.x;
+         end;
+         hence thesis by A53,A54,SCMFSA6A:9;
+      end;
+      hence Cs1i| dom p = Cs2i | dom p by A50,A52,AMI_3:20;
+    end;
+    then for s1,s2 being State of SCM+FSA st p c= s1 & p c= s2
+    for i holds (Computation s1).i|dom p = (Computation s2).i|dom p;
+    hence thesis by AMI_1:def 25;
+end;
+
+theorem   :: BS026
+   Initialized Bubble-Sort-Algorithm computes Sorting-Function
+proof let x be set;
+  assume x in dom Sorting-Function;
+     then consider w being FinSequence of INT such that
+A1:  x = fsloc 0 .--> w by Th60;
+     reconsider s = x as FinPartState of SCM+FSA by A1;
+   set p = Initialized Bubble-Sort-Algorithm;
+A2:  dom s = { fsloc 0 } by A1,CQC_LANG:5;
+     take s;
+thus x = s;
+A3:  p +* s is autonomic by A1,Th68;
+A4:  dom p misses dom s by A1,Th46;
+     A5: now let t be State of SCM+FSA;
+       assume A6:p+*s c= t;
+        set bf=bubble-sort fsloc 0;
+          p c=p+*s by A4,FUNCT_4:33;
+        then p c= t by A6,XBOOLE_1:1;
+then A7:     Initialized bf c=t by Def2;
+          Initialized bf is halting by Th64,SCM_HALT:def 2;
+       hence t is halting by A7,AMI_1:def 26;
+     end;
+     then A8: p +* s is halting by AMI_1:def 26;
+   thus
+   p +* s is pre-program of SCM+FSA by A1,A5,Th68,AMI_1:def 26;
+     consider z being FinSequence of REAL such that
+A9:  w,z are_fiberwise_equipotent & z is non-increasing &
+     z is FinSequence of INT &
+     Sorting-Function.s = fsloc 0 .--> z by A1,Th61;
+     consider t being State of SCM+FSA such that
+A10:  p +* s c= t by AMI_3:39;
+     consider u being FinSequence of REAL such that
+A11:  w,u are_fiberwise_equipotent & u is non-increasing &
+     u is FinSequence of INT & (Result t).(fsloc 0) = u by A1,A10,Th67;
+       u,z are_fiberwise_equipotent by A9,A11,RFINSEQ:2;
+then A12:  u=z by A9,A11,RFINSEQ:36;
+       fsloc 0 in the carrier of SCM+FSA;
+then fsloc 0 in dom Result t by AMI_3:36;
+then A13:  Sorting-Function.s c= Result t by A9,A11,A12,AMI_3:27;
+       s c= p +* s by FUNCT_4:26;
+then A14:  dom s c= dom(p +* s) by RELAT_1:25;
+     A15: dom(fsloc 0 .--> z) = { fsloc 0 } by CQC_LANG:5;
+       Result(p +* s) = (Result t)|dom(p +* s) by A3,A8,A10,AMI_1:def 28;
+ hence Sorting-Function.s c= Result(p +* s) by A2,A9,A13,A14,A15,AMI_3:21;
+end;

@@ -1,0 +1,202 @@
+:: On the Monoid of Endomorphisms of Universal Algebra \& Many
+:: Sorted Algebra
+::  by Jaros{\l}aw Gryko
+::
+:: Received October 17, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary UNIALG_1, FUNCT_1, FRAENKEL, ALG_1, FUNCT_2, BINOP_1, VECTSP_1,
+      VECTSP_2, AMI_1, MSUALG_1, ZF_REFLE, AUTALG_1, PRALG_1, CARD_3, NATTRA_1,
+      MSUALG_3, FUNCOP_1, MSUHOM_1, RELAT_1, PRE_TOPC, COHSP_1, GROUP_6,
+      WELLORD1, ENDALG;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, PRE_TOPC, RELAT_1, FUNCT_1,
+      CARD_3, STRUCT_0, MONOID_0, VECTSP_1, BINOP_1, PARTFUN1, FUNCT_2,
+      FRAENKEL, FINSEQ_1, UNIALG_1, MSUALG_1, ALG_1, MSUALG_3, MSUHOM_1,
+      AUTALG_1;
+ constructors TEX_2, BINOP_1, ALG_1, MSUALG_3, MSUHOM_1, AUTALG_1, MONOID_0,
+      MEMBERED;
+ clusters FRAENKEL, MONOID_0, RELSET_1, MSUALG_1, STRUCT_0, SUBSET_1, MEMBERED,
+      FUNCT_2, PARTFUN1, NUMBERS, ORDINAL2;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+ reserve UA for Universal_Algebra;
+
+definition let UA;
+  func UAEnd UA -> FUNCTION_DOMAIN of the carrier of UA, the carrier of UA
+  means
+:: ENDALG:def 1
+  for h be Function of UA, UA holds h in it iff h is_homomorphism UA, UA;
+end;
+
+theorem :: ENDALG:1
+   UAEnd UA c= Funcs (the carrier of UA, the carrier of UA);
+
+canceled;
+
+theorem :: ENDALG:3
+ id the carrier of UA in UAEnd UA;
+
+theorem :: ENDALG:4
+ for f1, f2 be Element of UAEnd UA holds f1 * f2 in UAEnd UA;
+
+definition let UA;
+  func UAEndComp UA -> BinOp of UAEnd UA means
+:: ENDALG:def 2
+   for x, y be Element of UAEnd UA holds it.(x, y) = y * x;
+end;
+
+definition let UA;
+  func UAEndMonoid UA -> strict multLoopStr means
+:: ENDALG:def 3
+          the carrier of it = UAEnd UA &
+          the mult of it = UAEndComp UA &
+          the unity of it = id the carrier of UA;
+end;
+
+definition let UA;
+  cluster UAEndMonoid UA -> non empty;
+end;
+
+definition let UA;
+  cluster UAEndMonoid UA -> left_unital well-unital associative;
+end;
+
+theorem :: ENDALG:5
+ for x, y be Element of UAEndMonoid UA
+  for f, g be Element of UAEnd UA st x = f & y = g holds x * y = g * f;
+
+theorem :: ENDALG:6
+ id the carrier of UA = 1_ UAEndMonoid UA;
+
+ reserve S for non void non empty ManySortedSign,
+         U1 for non-empty MSAlgebra over S;
+
+definition let S, U1;
+  func MSAEnd U1 -> MSFunctionSet of the Sorts of U1, the Sorts of U1 means
+:: ENDALG:def 4
+ (for f be Element of it holds f is ManySortedFunction of U1, U1) &
+  for h be ManySortedFunction of U1, U1 holds
+      h in it iff h is_homomorphism U1, U1;
+end;
+
+canceled 2;
+
+theorem :: ENDALG:9
+   MSAEnd U1 c= product MSFuncs (the Sorts of U1, the Sorts of U1);
+
+theorem :: ENDALG:10
+ id the Sorts of U1 in MSAEnd U1;
+
+theorem :: ENDALG:11
+ for f1, f2 be Element of MSAEnd U1 holds f1 ** f2 in MSAEnd U1;
+
+theorem :: ENDALG:12
+ for F be ManySortedFunction of MSAlg UA, MSAlg UA
+  for f be Element of UAEnd UA st F = {0} --> f holds F in MSAEnd MSAlg UA;
+
+definition let S, U1;
+  func MSAEndComp U1 -> BinOp of MSAEnd U1 means
+:: ENDALG:def 5
+ for x, y be Element of MSAEnd U1 holds it.(x, y) = y ** x;
+end;
+
+definition let S, U1;
+  func MSAEndMonoid U1 -> strict multLoopStr means
+:: ENDALG:def 6
+     the carrier of it = MSAEnd U1 &
+        the mult of it = MSAEndComp U1 &
+       the unity of it = id the Sorts of U1;
+end;
+
+definition let S, U1;
+ cluster MSAEndMonoid U1 -> non empty;
+end;
+
+definition let S,U1;
+  cluster MSAEndMonoid U1 -> left_unital well-unital associative;
+end;
+
+theorem :: ENDALG:13
+ for x, y be Element of MSAEndMonoid U1
+  for f, g be Element of MSAEnd U1 st x = f & y = g holds x * y = g ** f;
+
+theorem :: ENDALG:14
+ id the Sorts of U1 = 1_ MSAEndMonoid U1;
+
+canceled;
+
+theorem :: ENDALG:16
+ for f be Element of UAEnd UA
+  holds {0} --> f is ManySortedFunction of MSAlg UA, MSAlg UA;
+
+definition
+  let G,H be non empty HGrStr;
+  let IT be map of G,H;
+  attr IT is multiplicative means
+:: ENDALG:def 7
+ for x,y being Element of G holds
+       IT.(x*y) = (IT.x)*(IT.y);
+end;
+
+definition let G,H be non empty multLoopStr;
+  let IT be map of G,H;
+ attr IT is unity-preserving means
+:: ENDALG:def 8
+ IT.1_ G = 1_ H;
+end;
+
+definition
+ cluster left_unital (non empty multLoopStr);
+end;
+
+definition let G,H be left_unital (non empty multLoopStr);
+ cluster multiplicative unity-preserving map of G,H;
+end;
+
+definition let G,H be left_unital (non empty multLoopStr);
+  mode Homomorphism of G,H is multiplicative unity-preserving map of G,H;
+end;
+
+definition let G,H be left_unital (non empty multLoopStr),h be map of G,H;
+  pred h is_monomorphism means
+:: ENDALG:def 9
+   h is one-to-one;
+
+  pred h is_epimorphism means
+:: ENDALG:def 10
+   rng h = the carrier of H;
+end;
+
+definition let G,H be left_unital (non empty multLoopStr),h be map of G,H;
+  pred h is_isomorphism means
+:: ENDALG:def 11
+  h is_epimorphism & h is_monomorphism;
+end;
+
+theorem :: ENDALG:17
+ for G be left_unital (non empty multLoopStr) holds
+  id the carrier of G is Homomorphism of G,G;
+
+definition let G,H be left_unital (non empty multLoopStr);
+  pred G,H are_isomorphic means
+:: ENDALG:def 12
+  ex h be Homomorphism of G,H st h is_isomorphism;
+ reflexivity;
+end;
+
+theorem :: ENDALG:18
+ for h be Function st (dom h = UAEnd UA &
+  for x be set st x in UAEnd UA holds h.x = {0} --> x)
+   holds h is Homomorphism of UAEndMonoid UA, MSAEndMonoid (MSAlg UA);
+
+theorem :: ENDALG:19
+ for h be Homomorphism of UAEndMonoid UA, MSAEndMonoid (MSAlg UA) st
+  for x be set st x in UAEnd UA holds h.x = {0} --> x holds h is_isomorphism;
+
+theorem :: ENDALG:20
+   UAEndMonoid UA, MSAEndMonoid (MSAlg UA) are_isomorphic;

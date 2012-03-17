@@ -1,0 +1,559 @@
+:: Characterization and Existence of {G}r\"obner Bases
+::  by Christoph Schwarzweller
+::
+:: Received June 11, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary POLYNOM1, POLYNOM7, BOOLE, FUNCT_1, RELAT_1, VECTSP_1, RLVECT_1,
+      ORDINAL1, LATTICES, ANPROJ_1, VECTSP_2, ALGSTR_1, ARYTM_1, REALSET1,
+      GROUP_1, BINOP_1, ARYTM_3, TERMORD, IDEAL_1, RELAT_2, DICKSON, MCART_1,
+      FINSEQ_1, FINSEQ_4, BHSP_3, REWRITE1, ORDERS_1, INT_1, BINOM, TARSKI,
+      FINSET_1, FUNCOP_1, FILTER_2, PBOOLE, POLYRED, RLVECT_2, CARD_3, CAT_3,
+      SQUARE_1, FUNCT_4, CARD_1, BAGORDER, GROEB_1, PARTFUN1;
+ notation TARSKI, RELAT_1, XBOOLE_0, RELAT_2, XREAL_0, RELSET_1, FUNCT_1,
+      ORDINAL1, ALGSTR_1, RLVECT_1, PARTFUN1, FINSEQ_4, FINSET_1, DICKSON,
+      CARD_3, CARD_1, SUBSET_1, MCART_1, REALSET1, FINSEQ_1, YELLOW_1, PRALG_1,
+      VECTSP_2, VECTSP_1, POLYNOM7, REAL_1, BINOM, PBOOLE, PRE_CIRC, ORDERS_1,
+      POLYNOM1, IDEAL_1, REWRITE1, BAGORDER, STRUCT_0, TERMORD, GROUP_1,
+      NUMBERS, NAT_1, POLYRED;
+ constructors REWRITE1, REAL_1, IDEAL_1, DICKSON, TERMORD, YELLOW_1, PRE_CIRC,
+      MONOID_0, DOMAIN_1, POLYRED, BAGORDER;
+ clusters STRUCT_0, RELAT_1, FINSET_1, RELSET_1, VECTSP_1, ORDINAL1, VECTSP_2,
+      CARD_1, GCD_1, ALGSTR_1, POLYNOM1, POLYNOM2, NAT_1, INT_1, REWRITE1,
+      BINOM, ORDERS_1, POLYNOM7, TERMORD, IDEAL_1, YELLOW_1, SUBSET_1, DICKSON,
+      POLYRED, MEMBERED, NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Preliminaries
+
+definition
+let n be Ordinal,
+    L be right_zeroed add-associative right_complementable
+         unital distributive (non trivial doubleLoopStr),
+    p be Polynomial of n,L;
+redefine func {p} -> non empty finite Subset of Polynom-Ring(n,L);
+end;
+
+theorem :: GROEB_1:1
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like (non trivial doubleLoopStr),
+    f,p,g being Polynomial of n,L
+holds f reduces_to g,p,T implies
+      ex m being Monomial of n,L st g = f - m *' p;
+
+theorem :: GROEB_1:2
+ for n being Ordinal,
+    T being admissible connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Abelian Field-like non degenerated (non empty doubleLoopStr),
+    f,p,g being Polynomial of n,L
+holds f reduces_to g,p,T implies
+      ex m being Monomial of n,L
+      st g = f - m *' p &
+         not(HT(m*'p,T) in Support g) & HT(m*'p,T) <= HT(f,T),T;
+
+theorem :: GROEB_1:3
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like (non trivial doubleLoopStr),
+    f,g being Polynomial of n,L,
+    P,Q being Subset of Polynom-Ring(n,L) st P c= Q
+holds f reduces_to g,P,T implies f reduces_to g,Q,T;
+
+theorem :: GROEB_1:4
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like (non trivial doubleLoopStr),
+    P,Q being Subset of Polynom-Ring(n,L)
+holds P c= Q implies PolyRedRel(P,T) c= PolyRedRel(Q,T);
+
+theorem :: GROEB_1:5
+for n being Ordinal,
+    L being right_zeroed add-associative right_complementable
+            (non empty doubleLoopStr),
+    p being Polynomial of n,L
+holds Support(-p) = Support(p);
+
+theorem :: GROEB_1:6
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being right_zeroed add-associative right_complementable
+            unital distributive non trivial (non empty doubleLoopStr),
+    p being Polynomial of n,L
+holds HT(-p,T) = HT(p,T);
+
+theorem :: GROEB_1:7
+for n being Ordinal,
+    T being admissible connected TermOrder of n,
+    L being right_zeroed add-associative right_complementable
+            unital distributive non trivial (non empty doubleLoopStr),
+    p,q being Polynomial of n,L
+holds HT(p-q,T) <= max(HT(p,T),HT(q,T),T), T;
+
+theorem :: GROEB_1:8
+for n being Ordinal,
+    T being admissible connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like (non trivial doubleLoopStr),
+    p,q being Polynomial of n,L
+holds Support(q) c= Support(p) implies q <= p,T;
+
+theorem :: GROEB_1:9
+for n being Ordinal,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like non degenerated (non empty doubleLoopStr),
+    f,p being non-zero Polynomial of n,L
+holds f is_reducible_wrt p,T implies HT(p,T) <= HT(f,T),T;
+
+begin :: Characterization of Groebner Bases
+
+theorem :: GROEB_1:10
+::: proposition 5.33, p. 205
+for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Abelian Field-like (non trivial doubleLoopStr),
+    p being Polynomial of n,L
+holds PolyRedRel({p},T) is locally-confluent;
+
+theorem :: GROEB_1:11
+::: corollary 5.34, p. 205
+ for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being Abelian add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like non degenerated (non empty doubleLoopStr),
+    P being Subset of Polynom-Ring(n,L) st
+      ex p being Polynomial of n,L st p in P & P-Ideal = {p}-Ideal
+holds PolyRedRel(P,T) is locally-confluent;
+
+definition
+let n be Ordinal,
+    T be connected TermOrder of n,
+    L be right_zeroed add-associative right_complementable
+         unital distributive non trivial (non empty doubleLoopStr),
+    P be Subset of Polynom-Ring(n,L);
+func HT(P,T) -> Subset of Bags n equals
+:: GROEB_1:def 1
+  { HT(p,T) where p is Polynomial of n,L : p in P & p <> 0_(n,L) };
+end;
+
+definition
+let n be Ordinal,
+    S be Subset of Bags n;
+func multiples(S) -> Subset of Bags n equals
+:: GROEB_1:def 2
+  { b where b is Element of Bags n :
+         ex b' being bag of n st b' in S & b' divides b };
+end;
+
+theorem :: GROEB_1:12
+::: theorem 5.35 (i) ==> (ii), p. 206
+for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive Abelian
+            Field-like non degenerated (non empty doubleLoopStr),
+    P being Subset of Polynom-Ring(n,L)
+holds PolyRedRel(P,T) is locally-confluent implies
+      PolyRedRel(P,T) is confluent;
+
+theorem :: GROEB_1:13
+::: theorem 5.35 (ii) ==> (iii), p. 206
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like (non trivial doubleLoopStr),
+    P being Subset of Polynom-Ring(n,L)
+holds PolyRedRel(P,T) is confluent implies
+      PolyRedRel(P,T) is with_UN_property;
+
+theorem :: GROEB_1:14
+::: theorem 5.35 (iii) ==> (iv), p. 206
+for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive Abelian
+            Field-like non degenerated (non empty doubleLoopStr),
+    P being Subset of Polynom-Ring(n,L)
+holds PolyRedRel(P,T) is with_UN_property implies
+      PolyRedRel(P,T) is with_Church-Rosser_property;
+
+theorem :: GROEB_1:15
+::: theorem 5.35 (iv) ==> (v), p. 206
+for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive Abelian
+            Field-like non degenerated (non empty doubleLoopStr),
+    P being non empty Subset of Polynom-Ring(n,L)
+holds PolyRedRel(P,T) is with_Church-Rosser_property implies
+      (for f being Polynomial of n,L
+       st f in P-Ideal holds PolyRedRel(P,T) reduces f,0_(n,L));
+
+theorem :: GROEB_1:16
+::: theorem 5.35 (v) ==> (vi), p. 206
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like (non trivial doubleLoopStr),
+    P being Subset of Polynom-Ring(n,L)
+holds (for f being Polynomial of n,L
+       st f in P-Ideal holds PolyRedRel(P,T) reduces f,0_(n,L)) implies
+      (for f being non-zero Polynomial of n,L
+       st f in P-Ideal holds f is_reducible_wrt P,T);
+
+theorem :: GROEB_1:17
+::: theorem 5.35 (vi) ==> (vii), p. 206
+for n being Nat,
+    T being admissible connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive Abelian
+            Field-like non degenerated (non empty doubleLoopStr),
+    P being Subset of Polynom-Ring(n,L)
+holds (for f being non-zero Polynomial of n,L
+       st f in P-Ideal holds f is_reducible_wrt P,T) implies
+      (for f being non-zero Polynomial of n,L
+       st f in P-Ideal holds f is_top_reducible_wrt P,T);
+
+theorem :: GROEB_1:18
+::: theorem 5.35 (vii) ==> (viii), p. 206
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like (non trivial doubleLoopStr),
+    P being Subset of Polynom-Ring(n,L)
+holds (for f being non-zero Polynomial of n,L
+       st f in P-Ideal holds f is_top_reducible_wrt P,T) implies
+      (for b being bag of n st b in HT(P-Ideal,T)
+       ex b' being bag of n st b' in HT(P,T) & b' divides b);
+
+theorem :: GROEB_1:19
+::: theorem 5.35 (viii) ==> (ix), p. 206
+ for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like (non trivial doubleLoopStr),
+    P being Subset of Polynom-Ring(n,L)
+holds (for b being bag of n st b in HT(P-Ideal,T)
+       ex b' being bag of n st b' in HT(P,T) & b' divides b) implies
+      HT(P-Ideal,T) c= multiples(HT(P,T));
+
+theorem :: GROEB_1:20
+::: theorem 5.35 (ix) ==> (i), p. 206
+ for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being Abelian add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like non degenerated (non empty doubleLoopStr),
+    P being Subset of Polynom-Ring(n,L)
+holds HT(P-Ideal,T) c= multiples(HT(P,T)) implies
+      PolyRedRel(P,T) is locally-confluent;
+
+definition
+::: definition 5.37, p. 207
+let n be Ordinal,
+    T be connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative well-unital distributive
+         Field-like (non trivial doubleLoopStr),
+    G be Subset of Polynom-Ring(n,L);
+pred G is_Groebner_basis_wrt T means
+:: GROEB_1:def 3
+  PolyRedRel(G,T) is locally-confluent;
+end;
+
+definition
+::: definition 5.37, p. 207
+let n be Ordinal,
+    T be connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         commutative associative well-unital distributive
+         Field-like (non trivial doubleLoopStr),
+    G,I be Subset of Polynom-Ring(n,L);
+pred G is_Groebner_basis_of I,T means
+:: GROEB_1:def 4
+  G-Ideal = I & PolyRedRel(G,T) is locally-confluent;
+end;
+
+theorem :: GROEB_1:21
+ for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being Abelian add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like non degenerated (non empty doubleLoopStr),
+    G,P being non empty Subset of Polynom-Ring(n,L)
+       st G is_Groebner_basis_of P,T
+holds PolyRedRel(G,T) is Completion of PolyRedRel(P,T);
+
+theorem :: GROEB_1:22
+ for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being Abelian add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like non degenerated (non empty doubleLoopStr),
+    p,q being Element of Polynom-Ring(n,L),
+    G being non empty Subset of Polynom-Ring(n,L) st G is_Groebner_basis_wrt T
+holds p,q are_congruent_mod G-Ideal iff
+      nf(p,PolyRedRel(G,T)) = nf(q,PolyRedRel(G,T));
+
+theorem :: GROEB_1:23
+ for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive Abelian
+            Field-like non degenerated (non empty doubleLoopStr),
+    f being Polynomial of n,L,
+    P being non empty Subset of Polynom-Ring(n,L) st P is_Groebner_basis_wrt T
+holds f in P-Ideal iff PolyRedRel(P,T) reduces f,0_(n,L);
+
+theorem :: GROEB_1:24
+::: theorem 5.38 (o) ==> (i), p. 207
+for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive Abelian
+            Field-like non degenerated (non empty doubleLoopStr),
+    I being Subset of Polynom-Ring(n,L),
+    G being non empty Subset of Polynom-Ring(n,L)
+holds G is_Groebner_basis_of I,T implies
+      (for f being Polynomial of n,L
+       st f in I holds PolyRedRel(G,T) reduces f,0_(n,L));
+
+theorem :: GROEB_1:25
+::: theorem 5.38 (i) ==> (ii), p. 207
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like (non trivial doubleLoopStr),
+    G,I being Subset of Polynom-Ring(n,L)
+holds (for f being Polynomial of n,L
+       st f in I holds PolyRedRel(G,T) reduces f,0_(n,L)) implies
+      (for f being non-zero Polynomial of n,L
+       st f in I holds f is_reducible_wrt G,T);
+
+theorem :: GROEB_1:26
+::: theorem 5.38 (ii) ==> (iii), p. 207
+for n being Nat,
+    T being admissible connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive Abelian
+            Field-like non degenerated (non empty doubleLoopStr),
+    I being add-closed left-ideal Subset of Polynom-Ring(n,L),
+    G being Subset of Polynom-Ring(n,L) st G c= I
+holds (for f being non-zero Polynomial of n,L
+       st f in I holds f is_reducible_wrt G,T) implies
+      (for f being non-zero Polynomial of n,L
+       st f in I holds f is_top_reducible_wrt G,T);
+
+theorem :: GROEB_1:27
+::: theorem 5.38 (iii) ==> (iv), p. 207
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like (non trivial doubleLoopStr),
+    G,I being Subset of Polynom-Ring(n,L)
+holds (for f being non-zero Polynomial of n,L
+       st f in I holds f is_top_reducible_wrt G,T) implies
+      (for b being bag of n st b in HT(I,T)
+       ex b' being bag of n st b' in HT(G,T) & b' divides b);
+
+theorem :: GROEB_1:28
+::: theorem 5.38 (iv) ==> (v), p. 207
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like (non trivial doubleLoopStr),
+    G,I being Subset of Polynom-Ring(n,L)
+holds (for b being bag of n st b in HT(I,T)
+       ex b' being bag of n st b' in HT(G,T) & b' divides b) implies
+      HT(I,T) c= multiples(HT(G,T));
+
+theorem :: GROEB_1:29
+::: theorem 5.38 (v) ==> (o), p. 207
+for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being Abelian add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like non degenerated (non empty doubleLoopStr),
+    I being add-closed left-ideal non empty Subset of Polynom-Ring(n,L),
+    G being non empty Subset of Polynom-Ring(n,L) st G c= I
+holds HT(I,T) c= multiples(HT(G,T)) implies
+      G is_Groebner_basis_of I,T;
+
+begin :: Existence of Groebner Bases
+
+theorem :: GROEB_1:30
+for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Abelian Field-like (non trivial doubleLoopStr)
+holds {0_(n,L)} is_Groebner_basis_of {0_(n,L)},T;
+
+theorem :: GROEB_1:31
+ for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Abelian Field-like (non trivial doubleLoopStr),
+    p being Polynomial of n,L
+holds {p} is_Groebner_basis_of {p}-Ideal,T;
+
+theorem :: GROEB_1:32
+ for T being admissible connected TermOrder of {},
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive Abelian
+            Field-like non degenerated (non empty doubleLoopStr),
+    I being add-closed left-ideal non empty Subset of Polynom-Ring({},L),
+    P being non empty Subset of Polynom-Ring({},L) st P c= I & P <> {0_({},L)}
+holds P is_Groebner_basis_of I,T;
+
+theorem :: GROEB_1:33
+ for n being non empty Ordinal,
+    T being admissible connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like non degenerated (non empty doubleLoopStr)
+ex P be Subset of Polynom-Ring(n,L) st not(P is_Groebner_basis_wrt T);
+
+definition
+::: definition preceeding 5.1, p. 189
+let n be Ordinal;
+func DivOrder(n) -> Order of Bags n means
+:: GROEB_1:def 5
+  for b1,b2 being bag of n holds [b1,b2] in it iff b1 divides b2;
+end;
+
+definition
+::: theorem 5.2, p. 189
+let n be Nat;
+cluster RelStr(#Bags n, DivOrder n#) -> Dickson;
+end;
+
+theorem :: GROEB_1:34
+::: theorem 5.2, p. 189
+for n being Nat,
+    N being Subset of RelStr(#Bags n, DivOrder n#)
+ex B being finite Subset of Bags n
+  st B is_Dickson-basis_of N,RelStr(#Bags n, DivOrder n#);
+
+theorem :: GROEB_1:35
+::: theorem 5.41, p. 208
+for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being Abelian add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like non degenerated (non empty doubleLoopStr),
+    I being add-closed left-ideal non empty Subset of Polynom-Ring(n,L)
+ex G being finite Subset of Polynom-Ring(n,L) st G is_Groebner_basis_of I,T;
+
+theorem :: GROEB_1:36
+ for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being Abelian add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like non degenerated (non empty doubleLoopStr),
+    I being add-closed left-ideal non empty Subset of Polynom-Ring(n,L)
+     st I <> {0_(n,L)}
+ex G being finite Subset of Polynom-Ring(n,L)
+  st G is_Groebner_basis_of I,T & not(0_(n,L) in G);
+
+definition
+let n be Ordinal,
+    T be connected TermOrder of n,
+    L be non empty multLoopStr_0,
+    p be Polynomial of n,L;
+pred p is_monic_wrt T means
+:: GROEB_1:def 6
+  HC(p,T) = 1_ L;
+end;
+
+definition
+::: definition 5.29, p. 203
+let n be Ordinal,
+    T be connected TermOrder of n,
+    L be right_zeroed add-associative right_complementable
+         commutative associative well-unital distributive
+         Field-like non trivial (non empty doubleLoopStr),
+    P be Subset of Polynom-Ring(n,L);
+pred P is_reduced_wrt T means
+:: GROEB_1:def 7
+  for p being Polynomial of n,L st p in P
+  holds p is_monic_wrt T & p is_irreducible_wrt P\{p},T;
+synonym P is_autoreduced_wrt T;
+end;
+
+theorem :: GROEB_1:37
+::: lemma 5.42, p. 208
+for n being Ordinal,
+    T being admissible connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive Abelian
+            Field-like non degenerated (non empty doubleLoopStr),
+    I being add-closed left-ideal Subset of Polynom-Ring(n,L),
+    m being Monomial of n,L,
+    f,g being Polynomial of n,L st f in I & g in I & HM(f,T) = m & HM(g,T) = m
+holds not(ex p being Polynomial of n,L st p in I & p < f,T & HM(p,T) = m) &
+      not(ex p being Polynomial of n,L st p in I & p < g,T & HM(p,T) = m)
+implies f = g;
+
+theorem :: GROEB_1:38
+ for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being Abelian add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like non degenerated (non empty doubleLoopStr),
+    I being add-closed left-ideal non empty Subset of Polynom-Ring(n,L),
+    G being Subset of Polynom-Ring(n,L),
+    p being Polynomial of n,L,
+    q being non-zero Polynomial of n,L
+      st p in G & q in G & p <> q & HT(q,T) divides HT(p,T)
+holds G is_Groebner_basis_of I,T implies G\{p} is_Groebner_basis_of I,T;
+
+theorem :: GROEB_1:39
+::: theorem 5.43, p. 209
+ for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being Abelian add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like non degenerated (non empty doubleLoopStr),
+    I being add-closed left-ideal non empty Subset of Polynom-Ring(n,L)
+     st I <> {0_ (n,L)}
+ex G being finite Subset of Polynom-Ring(n,L)
+  st G is_Groebner_basis_of I,T & G is_reduced_wrt T;
+
+theorem :: GROEB_1:40
+::: theorem 5.43, p. 209
+ for n being Nat,
+    T being connected admissible TermOrder of n,
+    L being Abelian add-associative right_complementable right_zeroed
+            commutative associative well-unital distributive
+            Field-like non degenerated (non empty doubleLoopStr),
+    I being add-closed left-ideal non empty Subset of Polynom-Ring(n,L),
+    G1,G2 being non empty finite Subset of Polynom-Ring(n,L)
+     st G1 is_Groebner_basis_of I,T & G1 is_reduced_wrt T &
+        G2 is_Groebner_basis_of I,T & G2 is_reduced_wrt T
+holds G1 = G2;

@@ -1,0 +1,1768 @@
+:: Boolean Posets, Posets under Inclusion and Products of Relational
+:: Structures
+::  by Adam Grabowski and Robert Milewski
+::
+:: Received September 20, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary LATTICES, LATTICE3, ORDERS_1, FILTER_1, BOOLE, BHSP_3, WELLORD2,
+      RELAT_1, RELAT_2, CAT_1, YELLOW_0, WELLORD1, TARSKI, SETFAM_1, ORDINAL2,
+      PRE_TOPC, REALSET1, PRALG_1, FUNCT_1, PBOOLE, FUNCOP_1, CARD_3, RLVECT_2,
+      GROUP_1, FUNCT_2, SEQM_3, ORDERS_3, YELLOW_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, RELSET_1,
+      SETFAM_1, REALSET1, FUNCT_1, STRUCT_0, TOPS_2, WELLORD2, TOLER_1,
+      PARTFUN1, FUNCT_2, ORDERS_1, LATTICES, ORDERS_3, LATTICE3, PRE_TOPC,
+      PRE_CIRC, PBOOLE, CARD_3, PRALG_1, YELLOW_0;
+ constructors YELLOW_0, WELLORD2, TOLER_1, ORDERS_3, TOPS_2, PRE_CIRC, KNASTER;
+ clusters STRUCT_0, LATTICES, LATTICE3, YELLOW_0, ORDERS_1, RELSET_1, CANTOR_1,
+      PRE_TOPC, KNASTER, FUNCOP_1, SUBSET_1, PARTFUN1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions LATTICE3, XBOOLE_0, TOPS_2, TARSKI, RELAT_1, PRALG_1;
+ theorems REALSET1, TARSKI, LATTICES, LATTICE3, YELLOW_0, STRUCT_0, RELAT_1,
+      ORDERS_1, RELAT_2, RELSET_1, ZFMISC_1, WELLORD2, SETFAM_1, PRE_TOPC,
+      TOPS_2, FUNCT_1, FUNCOP_1, PBOOLE, CARD_3, FUNCT_2, PRALG_1, FUNCT_4,
+      ORDERS_3, XBOOLE_0, XBOOLE_1, PARTFUN1;
+ schemes RELSET_1, FUNCT_2;
+
+begin :: Boolean Posets and Posets under Inclusion
+
+ reserve X for set;
+
+definition let L be Lattice;
+ cluster LattPOSet L -> with_suprema with_infima;
+ coherence by LATTICE3:11;
+end;
+
+definition let L be upper-bounded Lattice;
+ cluster LattPOSet L -> upper-bounded;
+ coherence
+  proof
+      ex x being Element of LattPOSet L st
+     x is_>=_than the carrier of LattPOSet L
+    proof
+     A1: the carrier of LattPOSet L = the carrier of RelStr(#the carrier of L,
+          LattRel L#) by LATTICE3:def 2
+       .= the carrier of L;
+     consider z be Element of L such that
+      A2: for v being Element of L holds z"\/"v = z & v"\/"z = z
+                                                          by LATTICES:def 14;
+     reconsider z' = z as Element of LattPOSet L by A1;
+     A3: z' is_<=_than {} by YELLOW_0:6;
+     A4: z = Top L by A2,LATTICES:def 17;
+       now let b' be Element of LattPOSet L;
+      reconsider b = b' as Element of L by A1;
+      assume b' is_<=_than {};
+      A5: b% = b & z% = z by LATTICE3:def 3;
+        b [= z by A4,LATTICES:45;
+      hence z' >= b' by A5,LATTICE3:7;
+     end;
+     then A6: z' = "/\"({},LattPOSet L) by A3,YELLOW_0:31;
+     take x = Top (LattPOSet L);
+       now let a be Element of LattPOSet L;
+      assume a in the carrier of LattPOSet L;
+      reconsider a' = a as Element of L by A1;
+      reconsider x' = x as Element of L by A1;
+      A7: a'% = a' & x'% = x' by LATTICE3:def 3;
+        Top (LattPOSet L) = Top L by A4,A6,YELLOW_0:def 12;
+      then a' [= x' by LATTICES:45;
+      hence a <= x by A7,LATTICE3:7;
+     end;
+     hence x is_>=_than the carrier of LattPOSet L by LATTICE3:def 9;
+    end;
+    hence LattPOSet L is upper-bounded by YELLOW_0:def 5;
+   end;
+end;
+
+definition
+ let L be lower-bounded Lattice;
+ cluster LattPOSet L -> lower-bounded;
+ coherence
+ proof
+    ex x being Element of LattPOSet L st
+   x is_<=_than the carrier of LattPOSet L
+  proof
+   A1: the carrier of LattPOSet L = the carrier of RelStr(#the carrier of L,
+        LattRel L#) by LATTICE3:def 2
+     .= the carrier of L;
+   consider z be Element of L such that
+    A2: for v being Element of L holds z"/\"v = z & v"/\"z = z
+                                                        by LATTICES:def 13;
+   reconsider z' = z as Element of LattPOSet L by A1;
+   A3: z' is_>=_than {} by YELLOW_0:6;
+   A4: z = Bottom L by A2,LATTICES:def 16;
+     now let b' be Element of LattPOSet L;
+    reconsider b = b' as Element of L by A1;
+    assume b' is_>=_than {};
+    A5: b% = b & z% = z by LATTICE3:def 3;
+      z [= b by A4,LATTICES:41;
+    hence z' <= b' by A5,LATTICE3:7;
+   end;
+   then A6: z' = "\/"({},LattPOSet L) by A3,YELLOW_0:30;
+   take x = Bottom (LattPOSet L);
+     now let a be Element of LattPOSet L;
+    assume a in the carrier of LattPOSet L;
+    reconsider a' = a as Element of L by A1;
+    reconsider x' = x as Element of L by A1;
+    A7: a'% = a' & x'% = x' by LATTICE3:def 3;
+      Bottom (LattPOSet L) = Bottom L by A4,A6,YELLOW_0:def 11;
+    then x' [= a' by LATTICES:41;
+    hence x <= a by A7,LATTICE3:7;
+   end;
+   hence x is_<=_than the carrier of LattPOSet L by LATTICE3:def 8;
+  end;
+  hence LattPOSet L is lower-bounded by YELLOW_0:def 4;
+ end;
+end;
+
+definition let L be complete Lattice;
+ cluster LattPOSet L -> complete;
+ coherence
+ proof
+    for X be set ex a be Element of LattPOSet L st X is_<=_than a &
+   for b being Element of LattPOSet L st X is_<=_than b holds a <= b
+  proof
+   A1: the carrier of LattPOSet L = the carrier of RelStr(#the carrier of L,
+        LattRel L#) by LATTICE3:def 2
+     .= the carrier of L;
+   let X be set;
+   take a = "\/"(X,LattPOSet L);
+   A2: a = "\/"(X,L) by YELLOW_0:29;
+     X is_less_than "\/"(X,L) by LATTICE3:def 21;
+   then X is_<=_than "\/"(X,L)% by LATTICE3:30;
+   hence X is_<=_than a by A2,LATTICE3:def 3;
+   let b be Element of LattPOSet L;
+   reconsider b' = b as Element of L by A1;
+   A3: "\/"(X,L)% = a & b'% = b by A2,LATTICE3:def 3;
+   assume X is_<=_than b;
+   then X is_<=_than b'% by LATTICE3:def 3;
+   then X is_less_than b' by LATTICE3:30;
+   then "\/"(X,L) [= b' by LATTICE3:def 21;
+   hence a <= b by A3,LATTICE3:7;
+  end;
+  hence thesis by LATTICE3:def 12;
+ end;
+end;
+
+definition let X be set;
+ redefine func RelIncl X -> Order of X;
+ coherence
+ proof
+    now let x be set;
+   assume A1: x in RelIncl X;
+   then consider y,z be set such that
+    A2: x = [y,z] by RELAT_1:def 1;
+     y in field RelIncl X & z in field RelIncl X by A1,A2,RELAT_1:30;
+   then y in X & z in X by WELLORD2:def 1;
+   hence x in [:X,X:] by A2,ZFMISC_1:106;
+  end;
+  then RelIncl X c= [:X,X:] by TARSKI:def 3;
+  then reconsider R = RelIncl X as Relation of X by RELSET_1:def 1;
+  A3: field R = X by WELLORD2:def 1;
+ R is reflexive by WELLORD2:2;
+  then
+A4: R is_reflexive_in X by A3,RELAT_2:def 9;
+A5: R is antisymmetric by WELLORD2:5;
+A6: R is transitive by WELLORD2:3;
+   dom R = X by A4,ORDERS_1:98;
+  hence thesis by A5,A6,PARTFUN1:def 4,WELLORD2:2;
+ end;
+end;
+
+definition
+ let X be set;
+ func InclPoset X -> strict RelStr equals :Def1:
+   RelStr(#X, RelIncl X#);
+ correctness;
+end;
+
+definition
+ let X be set;
+ cluster InclPoset X -> reflexive antisymmetric transitive;
+ coherence
+  proof InclPoset X = RelStr(#X, RelIncl X#) by Def1;
+   hence thesis;
+  end;
+end;
+
+definition
+ let X be non empty set;
+ cluster InclPoset X -> non empty;
+ coherence
+  proof InclPoset X = RelStr(#X, RelIncl X#) by Def1;
+   hence thesis;
+  end;
+end;
+
+theorem Th1:
+ the carrier of InclPoset X = X &
+  the InternalRel of InclPoset X = RelIncl X
+proof
+    InclPoset X = RelStr (#X, RelIncl X#) by Def1;
+  hence thesis;
+end;
+
+definition let X be set;
+ func BoolePoset X -> strict RelStr equals :Def2:
+   LattPOSet BooleLatt X;
+ correctness;
+end;
+
+definition let X be set;
+ cluster BoolePoset X -> non empty reflexive antisymmetric transitive;
+ coherence
+  proof BoolePoset X = LattPOSet BooleLatt X by Def2;
+   hence thesis;
+  end;
+end;
+
+definition let X be set;
+ cluster BoolePoset X -> complete;
+ coherence
+  proof BoolePoset X = LattPOSet BooleLatt X by Def2;
+   hence thesis;
+  end;
+end;
+
+theorem Th2:
+ for x,y be Element of BoolePoset X holds
+  x <= y iff x c= y
+ proof
+  let x,y be Element of BoolePoset X;
+  set B = BoolePoset X, L = BooleLatt X;
+   the carrier of LattPOSet L = the carrier of L
+  proof
+     LattPOSet BooleLatt X = RelStr (#the carrier of L, LattRel L#)
+     by LATTICE3:def 2;
+   hence thesis;
+  end;
+  then reconsider x' = x, y' = y as Element of BooleLatt X by
+Def2;
+A1:  the InternalRel of B = the InternalRel of LattPOSet L by Def2;
+  A2: x'% = x & y'% = y by LATTICE3:def 3;
+  thus x <= y implies x c= y
+  proof
+   assume x <= y;
+   then [x,y] in the InternalRel of B by ORDERS_1:def 9;
+   then x'% <= y'% by A1,A2,ORDERS_1:def 9;
+   then x' [= y' by LATTICE3:7;
+   hence x c= y by LATTICE3:2;
+  end;
+  thus x c= y implies x <= y
+  proof
+   assume x c= y;
+   then x' [= y' by LATTICE3:2;
+   then x'% <= y'% by LATTICE3:7;
+   hence x <= y by A2,Def2;
+  end;
+ end;
+
+theorem Th3:
+ for X be non empty set, x,y be Element of InclPoset X holds
+  x <= y iff x c= y
+ proof
+  let X be non empty set;
+  let x,y be Element of InclPoset X;
+    x in the carrier of InclPoset X & y in the carrier of InclPoset X;
+then A1:  x in X & y in X by Th1;
+  thus x <= y implies x c= y
+  proof
+   assume x <= y;
+   then [x,y] in the InternalRel of InclPoset X by ORDERS_1:def 9;
+   then [x,y] in RelIncl X by Th1;
+   hence x c= y by A1,WELLORD2:def 1;
+  end;
+  thus x c= y implies x <= y
+  proof
+   assume x c= y;
+   then [x,y] in RelIncl X by A1,WELLORD2:def 1;
+   then [x,y] in the InternalRel of InclPoset X by Th1;
+   hence x <= y by ORDERS_1:def 9;
+  end;
+ end;
+
+theorem Th4:
+ BoolePoset X = InclPoset bool X
+ proof
+  set B = BoolePoset X;
+  A1: the carrier of B = the carrier of LattPOSet BooleLatt X by Def2
+      .= the carrier of RelStr(#the carrier of BooleLatt X,
+          LattRel BooleLatt X#) by LATTICE3:def 2
+     .= bool X by LATTICE3:def 1;
+  then reconsider In = the InternalRel of B as Relation of bool X;
+    for x be set st x in bool X
+   ex y be set st [x,y] in In
+  proof
+   let x be set;
+   assume x in bool X;
+   then reconsider x' = x as Element of B by A1;
+   take y = x';
+     x' <= y;
+   hence [x,y] in In by ORDERS_1:def 9;
+  end;
+  then A2: dom In = bool X by RELSET_1:22;
+    for y be set st y in bool X
+   ex x be set st [x,y] in In
+  proof
+   let y be set;
+   assume y in bool X;
+   then reconsider y' = y as Element of B by A1;
+   take x = y';
+     x <= y';
+   hence [x,y] in In by ORDERS_1:def 9;
+  end;
+  then rng In = bool X by RELSET_1:23;
+  then A3: field the InternalRel of B = bool X \/ bool X by A2,RELAT_1:def 6;
+    now let Y,Z be set;
+   assume Y in bool X & Z in bool X;
+   then reconsider Y' = Y , Z' = Z as Element of B by A1;
+   thus [Y,Z] in the InternalRel of B implies Y c= Z
+   proof
+    assume [Y,Z] in the InternalRel of B;
+    then Y' <= Z' by ORDERS_1:def 9;
+    hence Y c= Z by Th2;
+   end;
+   thus Y c= Z implies [Y,Z] in the InternalRel of B
+   proof
+    assume Y c= Z;
+    then Y' <= Z' by Th2;
+    hence [Y,Z] in the InternalRel of B by ORDERS_1:def 9;
+   end;
+  end;
+then A4:the InternalRel of B = RelIncl bool X by A3,WELLORD2:def 1;
+    the carrier of B = the carrier of InclPoset bool X by A1,Th1;
+  hence thesis by A4,Th1;
+ end;
+
+theorem
+   for Y be Subset of bool X holds
+  InclPoset Y is full SubRelStr of BoolePoset X
+ proof
+  set L = BoolePoset X;
+  let Y be Subset of bool X;
+  A1: the carrier of L = the carrier of LattPOSet BooleLatt X by Def2
+      .= the carrier of RelStr(#the carrier of BooleLatt X,
+          LattRel BooleLatt X#) by LATTICE3:def 2
+     .= bool X by LATTICE3:def 1;
+  then reconsider Y' = Y as Subset of L;
+  reconsider In = the InternalRel of L as Relation of bool X by A1;
+    for x be set st x in bool X ex y be set st [x,y] in In
+  proof
+   let x be set;
+   assume x in bool X;
+   then reconsider x' = x as Element of L by A1;
+   take y = x';
+     x' <= y;
+   hence [x,y] in In by ORDERS_1:def 9;
+  end;
+  then A2: dom In = bool X by RELSET_1:22;
+    for y be set st y in bool X
+   ex x be set st [x,y] in In
+  proof
+   let y be set;
+   assume y in bool X;
+   then reconsider y' = y as Element of L by A1;
+   take x = y';
+     x <= y';
+   hence [x,y] in In by ORDERS_1:def 9;
+  end;
+  then rng In = bool X by RELSET_1:23;
+  then A3: field the InternalRel of L = bool X \/ bool X by A2,RELAT_1:def 6;
+    now let Y,Z be set;
+   assume Y in bool X & Z in bool X;
+   then reconsider Y' = Y , Z' = Z as Element of L by A1;
+   thus [Y,Z] in the InternalRel of L implies Y c= Z
+   proof
+    assume [Y,Z] in the InternalRel of L;
+    then Y' <= Z' by ORDERS_1:def 9;
+    hence Y c= Z by Th2;
+   end;
+   thus Y c= Z implies [Y,Z] in the InternalRel of L
+   proof
+    assume Y c= Z;
+    then Y' <= Z' by Th2;
+    hence [Y,Z] in the InternalRel of L by ORDERS_1:def 9;
+   end;
+  end;
+then A4: the InternalRel of L = RelIncl bool X by A3,WELLORD2:def 1;
+    RelStr(#Y',(the InternalRel of L) |_2 Y'#) is full SubRelStr of L
+    by YELLOW_0:57;
+  then RelStr(#Y',RelIncl Y'#) is full SubRelStr of L by A4,WELLORD2:8;
+  hence InclPoset Y is full SubRelStr of L by Def1;
+ end;
+
+theorem
+   for X be non empty set holds
+  InclPoset X is with_suprema implies
+   for x,y be Element of InclPoset X holds x \/ y c= x "\/" y
+ proof
+  let X be non empty set;
+  assume A1: InclPoset X is with_suprema;
+  let x,y be Element of InclPoset X;
+    x <= x "\/" y & y <= x "\/" y by A1,YELLOW_0:22;
+  then x c= x "\/" y & y c= x "\/" y by Th3;
+  hence x \/ y c= x "\/" y by XBOOLE_1:8;
+ end;
+
+theorem
+   for X be non empty set holds
+  InclPoset X is with_infima implies
+  for x,y be Element of InclPoset X holds x "/\" y c= x /\ y
+ proof
+  let X be non empty set;
+  assume A1: InclPoset X is with_infima;
+  let x,y be Element of InclPoset X;
+    x "/\" y <= x & x "/\" y <= y by A1,YELLOW_0:23;
+  then x "/\" y c= x & x "/\" y c= y by Th3;
+  hence x "/\" y c= x /\ y by XBOOLE_1:19;
+ end;
+
+theorem Th8:
+ for X be non empty set holds
+ for x,y be Element of InclPoset X st x \/ y in X holds
+  x "\/" y = x \/ y
+ proof
+  let X be non empty set;
+  let x,y be Element of InclPoset X;
+  assume x \/ y in X;
+  then x \/ y in the carrier of InclPoset X by Th1;
+  then reconsider z = x \/ y as Element of InclPoset X;
+    x c= z & y c= z by XBOOLE_1:7;
+  then A1: x <= z & y <= z by Th3;
+    now let c be Element of InclPoset X;
+   assume x <= c & y <= c;
+   then x c= c & y c= c by Th3;
+   then z c= c by XBOOLE_1:8;
+   hence z <= c by Th3;
+  end;
+  hence thesis by A1,LATTICE3:def 13;
+ end;
+
+theorem Th9:
+ for X be non empty set
+ for x,y be Element of InclPoset X st x /\ y in X holds
+  x "/\" y = x /\ y
+ proof
+  let X be non empty set;
+  let x,y be Element of InclPoset X;
+  assume x /\ y in X;
+  then x /\ y in the carrier of InclPoset X by Th1;
+  then reconsider z = x /\ y as Element of InclPoset X;
+    z c= x & z c= y by XBOOLE_1:17;
+  then A1: z <= x & z <= y by Th3;
+    now let c be Element of InclPoset X;
+   assume c <= x & c <= y;
+   then c c= x & c c= y by Th3;
+   then c c= z by XBOOLE_1:19;
+   hence c <= z by Th3;
+  end;
+  hence thesis by A1,LATTICE3:def 14;
+ end;
+
+theorem
+   for L be RelStr st for x,y be Element of L holds x <= y iff x c= y holds
+  the InternalRel of L = RelIncl the carrier of L
+ proof
+  let L be RelStr;
+  assume A1: for x,y be Element of L holds x <= y iff x c= y;
+    for x be set st x in the carrier of L
+   ex y be set st [x,y] in the InternalRel of L
+  proof
+   let x be set;
+   assume x in the carrier of L;
+   then reconsider x' = x as Element of L;
+   take y = x';
+     x' <= y by A1;
+   hence [x,y] in the InternalRel of L by ORDERS_1:def 9;
+  end;
+  then A2: dom the InternalRel of L = the carrier of L by RELSET_1:22;
+    for y be set st y in the carrier of L
+   ex x be set st [x,y] in the InternalRel of L
+  proof
+   let y be set;
+   assume y in the carrier of L;
+   then reconsider y' = y as Element of L;
+   take x = y';
+     x <= y' by A1;
+   hence [x,y] in the InternalRel of L by ORDERS_1:def 9;
+  end;
+  then rng the InternalRel of L = the carrier of L by RELSET_1:23;
+  then A3: field the InternalRel of L = (the carrier of L) \/ the carrier of L
+                                                          by A2,RELAT_1:def 6;
+    now let Y,Z be set;
+   assume Y in the carrier of L & Z in the carrier of L;
+   then reconsider Y' = Y , Z' = Z as Element of L;
+   thus [Y,Z] in the InternalRel of L implies Y c= Z
+   proof
+    assume [Y,Z] in the InternalRel of L;
+    then Y' <= Z' by ORDERS_1:def 9;
+    hence Y c= Z by A1;
+   end;
+   thus Y c= Z implies [Y,Z] in the InternalRel of L
+   proof
+    assume Y c= Z;
+    then Y' <= Z' by A1;
+    hence [Y,Z] in the InternalRel of L by ORDERS_1:def 9;
+   end;
+  end;
+  hence the InternalRel of L = RelIncl the carrier of L by A3,WELLORD2:def 1;
+ end;
+
+theorem
+  for X be non empty set st
+ (for x,y be set st (x in X & y in X) holds x \/ y in X)
+   holds InclPoset X is with_suprema
+ proof
+  let X be non empty set;
+  set L = InclPoset X;
+  assume A1: for x,y be set st (x in X & y in X) holds x \/ y in X;
+    now let a,b be Element of L;
+     a in the carrier of L & b in the carrier of L;
+   then a in X & b in X by Th1;
+   then A2: a \/ b in X by A1;
+     ex c be Element of L st {a,b} is_<=_than c &
+    for d be Element of L st {a,b} is_<=_than d holds c <= d
+   proof
+    take c = a "\/" b;
+      a \/ b = c by A2,Th8;
+    then a c= c & b c= c by XBOOLE_1:7;
+    then a <= c & b <= c by Th3;
+    hence {a,b} is_<=_than c by YELLOW_0:8;
+    let d be Element of L;
+    assume A3: {a,b} is_<=_than d;
+      a in {a,b} by TARSKI:def 2;
+    then A4: a <= d by A3,LATTICE3:def 9;
+      b in {a,b} by TARSKI:def 2;
+    then b <= d by A3,LATTICE3:def 9;
+    then a c= d & b c= d by A4,Th3;
+    then a \/ b c= d by XBOOLE_1:8;
+    then c c= d by A2,Th8;
+    hence c <= d by Th3;
+   end;
+   hence ex_sup_of {a,b}, L by YELLOW_0:15;
+  end;
+  hence L is with_suprema by YELLOW_0:20;
+ end;
+
+theorem
+   for X be non empty set st
+  for x,y be set st (x in X & y in X) holds x /\ y in X holds
+   InclPoset X is with_infima
+ proof
+  let X be non empty set;
+  set L = InclPoset X;
+  assume A1: for x,y be set st (x in X & y in X) holds x /\ y in X;
+    now let a,b be Element of L;
+     a in the carrier of L & b in the carrier of L;
+   then a in X & b in X by Th1;
+   then A2: a /\ b in X by A1;
+     ex c be Element of L st {a,b} is_>=_than c &
+    for d be Element of L st {a,b} is_>=_than d holds c >= d
+   proof
+    take c = a "/\" b;
+      a /\ b = c by A2,Th9;
+    then c c= a & c c= b by XBOOLE_1:17;
+    then c <= a & c <= b by Th3;
+    hence {a,b} is_>=_than c by YELLOW_0:8;
+    let d be Element of L;
+    assume A3: {a,b} is_>=_than d;
+      a in {a,b} by TARSKI:def 2;
+    then A4: d <= a by A3,LATTICE3:def 8;
+      b in {a,b} by TARSKI:def 2;
+    then d <= b by A3,LATTICE3:def 8;
+    then d c= a & d c= b by A4,Th3;
+    then d c= a /\ b by XBOOLE_1:19;
+    then d c= c by A2,Th9;
+    hence c >= d by Th3;
+   end;
+   hence ex_inf_of {a,b},L by YELLOW_0:16;
+  end;
+  hence L is with_infima by YELLOW_0:21;
+ end;
+
+theorem Th13:
+for X be non empty set holds
+  {} in X implies Bottom InclPoset X = {}
+ proof
+  let X be non empty set;
+  assume {} in X;
+  then {} in the carrier of InclPoset X by Th1;
+  then reconsider a = {} as Element of InclPoset X;
+A1: {} is_<=_than a by YELLOW_0:6;
+    now let b be Element of InclPoset X;
+   assume b in X;
+     {} c= b by XBOOLE_1:2;
+   hence a <= b by Th3;
+  end;
+  then a is_<=_than X by LATTICE3:def 8;
+  then a is_<=_than the carrier of InclPoset X by Th1;
+  then InclPoset X is lower-bounded by YELLOW_0:def 4;
+  then ex_sup_of {},InclPoset X by YELLOW_0:42;
+  then "\/"({},InclPoset X) <= a by A1,YELLOW_0:def 9;
+then A2: "\/"({},InclPoset X) c= a by Th3;
+  thus Bottom InclPoset X = "\/"({},InclPoset X) by YELLOW_0:def 11
+     .= {} by A2,XBOOLE_1:3;
+ end;
+
+theorem Th14:
+ for X be non empty set holds
+  union X in X implies Top InclPoset X = union X
+ proof
+  let X be non empty set;
+  assume union X in X;
+  then union X in the carrier of InclPoset X by Th1;
+  then reconsider a = union X as Element of InclPoset X;
+    "/\"({},InclPoset X) in the carrier of InclPoset X;
+  then "/\"({},InclPoset X) in X by Th1;
+  then A1: "/\"({},InclPoset X) c= a by ZFMISC_1:92;
+  A2: {} is_>=_than a by YELLOW_0:6;
+    now let b be Element of InclPoset X;
+   assume b in X;
+   then b c= union X by ZFMISC_1:92;
+   hence b <= a by Th3;
+  end;
+  then a is_>=_than X by LATTICE3:def 9;
+  then a is_>=_than the carrier of InclPoset X by Th1;
+  then InclPoset X is upper-bounded by YELLOW_0:def 5;
+  then ex_inf_of {},InclPoset X by YELLOW_0:43;
+  then a <= "/\"({},InclPoset X) by A2,YELLOW_0:def 10;
+  then A3: a c= "/\"({},InclPoset X) by Th3;
+  thus Top InclPoset X = "/\"({},InclPoset X) by YELLOW_0:def 12
+     .= union X by A1,A3,XBOOLE_0:def 10;
+ end;
+
+theorem
+   for X being non empty set holds
+  InclPoset X is upper-bounded implies union X in X
+ proof
+  let X be non empty set;
+  assume InclPoset X is upper-bounded;
+  then consider x be Element of InclPoset X such that
+   A1: x is_>=_than the carrier of InclPoset X by YELLOW_0:def 5;
+    x in the carrier of InclPoset X;
+then A2:x in X by Th1;
+    now let y be set;
+   assume y in union X;
+   then consider Y be set such that
+    A3: y in Y & Y in X by TARSKI:def 4;
+     Y in the carrier of InclPoset X by A3,Th1;
+   then reconsider Y as Element of InclPoset X;
+     Y <= x by A1,LATTICE3:def 9;
+   then Y c= x by Th3;
+   hence y in x by A3;
+  end;
+then A4: union X c= x by TARSKI:def 3;
+    x c= union X by A2,ZFMISC_1:92;
+  hence union X in X by A2,A4,XBOOLE_0:def 10;
+ end;
+
+theorem
+   for X be non empty set holds
+  InclPoset X is lower-bounded implies meet X in X
+ proof
+  let X be non empty set;
+  assume InclPoset X is lower-bounded;
+  then consider x be Element of InclPoset X such that
+A1: x is_<=_than the carrier of InclPoset X by YELLOW_0:def 4;
+    x in the carrier of InclPoset X;
+then A2:  x in X by Th1;
+  then A3: meet X c= x by SETFAM_1:4;
+    now let y be set;
+   assume A4: y in x;
+     now let Y be set;
+    assume Y in X;
+    then Y in the carrier of InclPoset X by Th1;
+    then reconsider Y' = Y as Element of InclPoset X;
+      x <= Y' by A1,LATTICE3:def 8;
+    then x c= Y by Th3;
+    hence y in Y by A4;
+   end;
+   hence y in meet X by SETFAM_1:def 1;
+  end;
+  then x c= meet X by TARSKI:def 3;
+  hence meet X in X by A2,A3,XBOOLE_0:def 10;
+ end;
+
+Lm1:
+  the carrier of BoolePoset X = bool X
+proof
+  thus the carrier of BoolePoset X =
+    the carrier of LattPOSet BooleLatt X by Def2
+    .= the carrier of RelStr (#the carrier of BooleLatt X,
+       LattRel BooleLatt X#) by LATTICE3:def 2
+    .= bool X by LATTICE3:def 1;
+end;
+
+Lm2:
+  for x,y be Element of BoolePoset X holds x /\ y in bool X & x \/ y in bool X
+  proof
+   let x,y be Element of BoolePoset X;
+     x in the carrier of BoolePoset X & y in the carrier of BoolePoset X;
+then A1: x in bool X & y in bool X by Lm1;
+    then x /\ y c= X by XBOOLE_1:108;
+   hence x /\ y in bool X;
+      x \/ y c= X by A1,XBOOLE_1:8;
+   hence x \/ y in bool X;
+  end;
+
+theorem
+   for x,y be Element of BoolePoset X holds
+  x "\/" y = x \/ y & x "/\" y = x /\ y
+ proof
+  let x,y be Element of BoolePoset X;
+  reconsider x, y as Element of InclPoset bool X by Th4;
+    x /\ y in bool X by Lm2;
+then A1:  x "/\" y = x /\ y by Th9;
+    x \/ y in bool X by Lm2;
+  then x "\/" y = x \/ y by Th8;
+  hence thesis by A1,Th4;
+ end;
+
+theorem
+   Bottom BoolePoset X = {}
+ proof
+  thus Bottom BoolePoset X = "\/"({},BoolePoset X) by YELLOW_0:def 11
+     .= "\/"({},LattPOSet BooleLatt X) by Def2
+     .= "\/"({},BooleLatt X) by YELLOW_0:29
+     .= Bottom BooleLatt X by LATTICE3:50
+     .= {} by LATTICE3:3;
+ end;
+
+theorem
+   Top BoolePoset X = X
+ proof
+A1:  BoolePoset X = InclPoset bool X by Th4;
+    X in bool X by ZFMISC_1:def 1;
+  then union bool X in bool X by ZFMISC_1:99;
+  then Top InclPoset bool X = union bool X by Th14;
+  hence thesis by A1,ZFMISC_1:99;
+ end;
+
+theorem
+   for Y being non empty Subset of BoolePoset X holds
+  inf Y = meet Y
+ proof
+  set L = BoolePoset X;
+  let Y be non empty Subset of L;
+  A1: the carrier of L = the carrier of LattPOSet BooleLatt X by Def2
+      .= the carrier of RelStr(#the carrier of BooleLatt X,
+           LattRel BooleLatt X#) by LATTICE3:def 2
+     .= bool X by LATTICE3:def 1;
+  consider y being Element of Y;
+    y c= X by A1;
+  then meet Y c= X by SETFAM_1:8;
+  then reconsider Me = meet Y as Element of L by A1;
+    now let b be Element of L;
+   assume b in Y;
+   then Me c= b by SETFAM_1:4;
+   hence Me <= b by Th2;
+  end;
+  then A2: Me is_<=_than Y by LATTICE3:def 8;
+    now let b be Element of L;
+   assume A3: b is_<=_than Y;
+     now let Z be set;
+    assume A4: Z in Y;
+    then reconsider Z' = Z as Element of L;
+      b <= Z' by A3,A4,LATTICE3:def 8;
+    hence b c= Z by Th2;
+   end;
+   then b c= Me by SETFAM_1:6;
+   hence Me >= b by Th2;
+  end;
+  hence inf Y = meet Y by A2,YELLOW_0:33;
+ end;
+
+theorem
+   for Y being Subset of BoolePoset X holds
+  sup Y = union Y
+ proof
+  set L = BoolePoset X;
+  let Y be Subset of L;
+  A1: the carrier of L = the carrier of LattPOSet BooleLatt X by Def2
+      .= the carrier of RelStr(#the carrier of BooleLatt X,
+          LattRel BooleLatt X#) by LATTICE3:def 2
+     .= bool X by LATTICE3:def 1;
+  then union Y c= union bool X by ZFMISC_1:95;
+  then union Y c= X by ZFMISC_1:99;
+  then reconsider Un = union Y as Element of L by A1;
+    now let b be Element of L;
+   assume b in Y;
+   then b c= Un by ZFMISC_1:92;
+   hence b <= Un by Th2;
+  end;
+  then A2: Un is_>=_than Y by LATTICE3:def 9;
+    now let b be Element of L;
+   assume A3: b is_>=_than Y;
+     now let Z be set;
+    assume A4: Z in Y;
+    then reconsider Z' = Z as Element of L;
+      Z' <= b by A3,A4,LATTICE3:def 9;
+    hence Z c= b by Th2;
+   end;
+   then Un c= b by ZFMISC_1:94;
+   hence Un <= b by Th2;
+  end;
+  hence sup Y = union Y by A2,YELLOW_0:30;
+ end;
+
+theorem
+   for T being non empty TopSpace, X being Subset of InclPoset the topology of
+T
+  holds sup X = union X
+  proof
+  let T be non empty TopSpace;
+  set L = InclPoset the topology of T;
+    reconsider t = the topology of T as non empty set;
+    let X be Subset of L;
+      X c= the carrier of L;
+then A1:  X c= the topology of T by Th1;
+    then reconsider X as Subset of bool the carrier of T by XBOOLE_1:1;
+    reconsider X as Subset-Family of T by SETFAM_1:def 7;
+A2: the carrier of L = the carrier of RelStr(#t, RelIncl t#) by Def1
+       .= t;
+      union X in t by A1,PRE_TOPC:def 1;
+    then reconsider Un = union X as Element of L by A2;
+      now let b be Element of L;
+     assume b in X;
+     then b c= Un by ZFMISC_1:92;
+     hence b <= Un by Th3;
+    end;
+then A3: Un is_>=_than X by LATTICE3:def 9;
+      now let b be Element of L;
+     assume
+A4:    b is_>=_than X;
+       now let Z be set;
+      assume
+A5:    Z in X;
+      then reconsider Z' = Z as Element of L;
+        Z' <= b by A4,A5,LATTICE3:def 9;
+      hence Z c= b by Th3;
+     end;
+     then Un c= b by ZFMISC_1:94;
+     hence Un <= b by Th3;
+    end;
+    hence thesis by A3,YELLOW_0:30;
+end;
+
+theorem
+   for T be non empty TopSpace holds Bottom InclPoset the topology of T = {}
+  proof
+   let T be non empty TopSpace;
+     {} in the topology of T by PRE_TOPC:5;
+   hence thesis by Th13;
+  end;
+
+Lm3:
+for T be non empty TopSpace holds InclPoset the topology of T is lower-bounded
+  proof
+   let T be non empty TopSpace;
+   set L = InclPoset the topology of T;
+     {} in the topology of T by PRE_TOPC:5;
+   then {} in the carrier of L by Th1;
+   then reconsider x = {} as Element of L;
+     now take x;
+   thus x is_<=_than the carrier of L
+    proof
+     let b be Element of L;
+     assume b in the carrier of L;
+       x c= b by XBOOLE_1:2;
+     hence thesis by Th3;
+    end;
+   end;
+   hence thesis by YELLOW_0:def 4;
+  end;
+
+theorem
+    for T be non empty TopSpace
+   holds Top InclPoset the topology of T = the carrier of T
+  proof
+   let T be non empty TopSpace;
+   set L = InclPoset the topology of T, C = the carrier of T;
+     the carrier of T = "/\"({},L)
+  proof
+     C in the topology of T by PRE_TOPC:def 1;
+   then C in the carrier of L by Th1;
+   then reconsider C as Element of L;
+A1: C is_<=_than {} by YELLOW_0:6;
+     for b being Element of L st b is_<=_than {} holds C >= b
+   proof
+    let b be Element of L;
+    assume b is_<=_than {};
+      b in the carrier of L;
+    then b in the topology of T by Th1;
+    hence thesis by Th3;
+   end;
+   hence thesis by A1,YELLOW_0:31;
+  end;
+  hence thesis by YELLOW_0:def 12;
+ end;
+
+Lm4:
+for T being non empty TopSpace holds InclPoset the topology of T is complete
+ proof
+  let T be non empty TopSpace;
+  set A = the topology of T;
+  reconsider IA = InclPoset A as lower-bounded Poset by Lm3;
+    for X be Subset of IA holds ex_sup_of X, InclPoset A
+  proof
+   let X be Subset of IA;
+   set N = union X;
+     X c= the carrier of IA;
+   then X c= the topology of T by Th1;
+   then reconsider X' = X as Subset of bool the carrier of T by XBOOLE_1:1;
+   reconsider X' as Subset-Family of T by SETFAM_1:def 7;
+     X' c= the carrier of InclPoset A;
+   then X' c= the topology of T by Th1;
+   then N in the topology of T by PRE_TOPC:def 1;
+   then N in the carrier of InclPoset A by Th1;
+   then reconsider N as Element of InclPoset A;
+A1: X is_<=_than N
+   proof
+    let b be Element of InclPoset A;
+    assume b in X;
+    then b c= N by ZFMISC_1:92;
+    hence N >= b by Th3;
+   end;
+     for b being Element of InclPoset A st X is_<=_than b holds N <= b
+   proof
+    let b be Element of InclPoset A;
+    assume A2: X is_<=_than b;
+      now let Z1 be set; assume A3: Z1 in X;
+     then reconsider Z1' = Z1 as Element of InclPoset A;
+       Z1' <= b by A2,A3,LATTICE3:def 9;
+     hence Z1 c= b by Th3;
+    end;
+    then union X c= b by ZFMISC_1:94;
+    hence thesis by Th3;
+   end;
+   hence thesis by A1,YELLOW_0:15;
+  end;
+  hence thesis by YELLOW_0:53;
+ end;
+
+Lm5:
+for T being non empty TopSpace holds InclPoset the topology of T is non trivial
+proof
+ let T be non empty TopSpace;
+ set L = InclPoset the topology of T;
+   {} in the topology of T & the carrier of T in
+ the topology of T by PRE_TOPC:5,def 1;
+ then {} in the carrier of L & the carrier of T in the carrier of L
+   by Th1;
+ then reconsider E = {}, S = the carrier of T as Element of L
+  ;
+   E <> S;
+ hence thesis by REALSET1:def 20;
+end;
+
+definition let T be non empty TopSpace;
+  cluster InclPoset the topology of T -> complete non trivial;
+  coherence by Lm4,Lm5;
+end;
+
+theorem
+   for T being TopSpace, F being Subset-Family of T holds
+  F is open iff F is Subset of InclPoset the topology of T
+  proof
+    let T be TopSpace;
+    let F be Subset-Family of T;
+    hereby assume A1: F is open;
+      F c= the topology of T
+     proof
+      let a be set; assume A2: a in F;
+      then reconsider a' = a as Subset of T;
+        a' is open by A1,A2,TOPS_2:def 1;
+      hence thesis by PRE_TOPC:def 5;
+     end;
+     then F c= the carrier of InclPoset the topology of T by Th1;
+     hence F is Subset of InclPoset the topology of T;
+    end;
+    assume F is Subset of InclPoset the topology of T;
+    then F c= the carrier of InclPoset the topology of T;
+then A3:  F c= the topology of T by Th1;
+    let P be Subset of T;
+    assume P in F;
+    hence thesis by A3,PRE_TOPC:def 5;
+   end;
+
+begin  :: Products of Relational Structures
+
+reserve x,y,z for set;
+
+definition let R be Relation;
+ attr R is RelStr-yielding means
+:Def3: for v being set st v in rng R holds v is RelStr;
+end;
+
+definition
+ cluster RelStr-yielding -> 1-sorted-yielding Function;
+ coherence
+  proof let F be Function such that
+A1:  F is RelStr-yielding;
+   let x be set;
+   assume x in dom F;
+   then F.x in rng F by FUNCT_1:def 5;
+   hence F.x is 1-sorted by A1,Def3;
+  end;
+end;
+
+definition let I be set;
+ cluster RelStr-yielding ManySortedSet of I;
+ existence
+  proof consider R being RelStr;
+   take I --> R;
+   let v be set;
+A1:  rng(I-->R) c= {R} by FUNCOP_1:19;
+   assume v in rng(I-->R);
+   hence thesis by A1,TARSKI:def 1;
+  end;
+end;
+
+definition
+ let J be non empty set,
+     A be RelStr-yielding ManySortedSet of J,
+     j be Element of J;
+ redefine func A.j -> RelStr;
+ coherence
+  proof dom A = J by PBOOLE:def 3;
+    then A.j in rng A by FUNCT_1:def 5;
+   hence thesis by Def3;
+  end;
+end;
+
+definition let I be set;
+ let J be RelStr-yielding ManySortedSet of I;
+ func product J -> strict RelStr means
+:Def4: the carrier of it = product Carrier J &
+  for x,y being Element of it st x in product Carrier J
+   holds x <= y iff ex f,g being Function st f = x & g = y &
+    for i be set st i in I
+     ex R being RelStr, xi,yi being Element of R
+       st R = J.i & xi = f.i & yi = g.i & xi <= yi;
+ existence
+  proof
+    defpred P[set, set] means
+    ex f,g being Function st f = $1 & g = $2 &
+    for i be set st i in I
+     ex R being RelStr, xi,yi being Element of R st
+        R = J.i & xi = f.i & yi = g.i & xi <= yi;
+    consider R being Relation of product Carrier J such that
+A1:   for x,y being set holds [x,y] in R iff
+       x in product Carrier J & y in product Carrier J & P[x, y]
+        from Rel_On_Set_Ex;
+   take RS = RelStr(#product Carrier J,R#);
+   thus
+     the carrier of RS = product Carrier J;
+   let x,y be Element of RS such that
+A2: x in product Carrier J;
+   hereby assume x <= y;
+     then [x,y] in the InternalRel of RS by ORDERS_1:def 9;
+    hence ex f,g being Function st f = x & g = y &
+    for i be set st i in I
+     ex R being RelStr, xi,yi being Element of R st
+      R = J.i & xi = f.i & yi = g.i & xi <= yi by A1;
+   end;
+   assume
+    ex f,g being Function st f = x & g = y &
+    for i be set st i in I
+     ex R being RelStr, xi,yi being Element of R st
+       R = J.i & xi = f.i & yi = g.i & xi <= yi;
+    then [x,y] in the InternalRel of RS by A1,A2;
+   hence x <= y by ORDERS_1:def 9;
+  end;
+ uniqueness
+  proof let S1,S2 be strict RelStr such that
+A3: the carrier of S1 = product Carrier J and
+A4:  for x,y being Element of S1 st x in product Carrier J holds
+   x <= y iff ex f,g being Function st f = x & g = y &
+    for i be set st i in I
+     ex R being RelStr, xi,yi being Element of R st
+      R = J.i & xi = f.i & yi = g.i & xi <= yi and
+A5: the carrier of S2 = product Carrier J and
+A6:  for x,y being Element of S2 st x in product Carrier J holds
+   x <= y iff ex f,g being Function st f = x & g = y &
+    for i be set st i in I
+     ex R being RelStr, xi,yi being Element of R st
+        R = J.i & xi = f.i & yi = g.i & xi <= yi;
+     the InternalRel of S1 = the InternalRel of S2
+     proof let a,b be set;
+      hereby assume
+A7:      [a,b] in the InternalRel of S1;
+        then reconsider x=a, y=b as Element of S1 by ZFMISC_1:
+106;
+A8:      a in the carrier of S1 by A7,ZFMISC_1:106;
+        reconsider x'=x, y'=y as Element of S2 by A3,A5;
+          x <= y by A7,ORDERS_1:def 9;
+        then ex f,g being Function st f = x & g = y &
+         for i be set st i in I
+          ex R being RelStr, xi,yi being Element of R st
+            R = J.i & xi = f.i & yi = g.i & xi <= yi by A3,A4,A8;
+        then x' <= y' by A3,A6,A8;
+       hence [a,b] in the InternalRel of S2 by ORDERS_1:def 9;
+      end;
+      assume
+A9:     [a,b] in the InternalRel of S2;
+        then reconsider x=a, y=b as Element of S2 by ZFMISC_1:
+106;
+A10:      a in the carrier of S2 by A9,ZFMISC_1:106;
+        reconsider x'=x, y'=y as Element of S1 by A3,A5;
+          x <= y by A9,ORDERS_1:def 9;
+        then ex f,g being Function st f = x & g = y &
+         for i be set st i in I
+          ex R being RelStr, xi,yi being Element of R st
+            R = J.i & xi = f.i & yi = g.i & xi <= yi by A5,A6,A10;
+        then x' <= y' by A4,A5,A10;
+      hence [a,b] in the InternalRel of S1 by ORDERS_1:def 9;
+     end;
+   hence S1 = S2 by A3,A5;
+  end;
+end;
+
+definition
+ let X be set;
+ let L be RelStr;
+ cluster X --> L -> RelStr-yielding;
+ coherence
+ proof
+   let v be set;
+A1:  rng(X-->L) c= {L} by FUNCOP_1:19;
+   assume v in rng(X-->L);
+   hence thesis by A1,TARSKI:def 1;
+ end;
+end;
+
+definition
+ let I be set;
+ let T be RelStr;
+ func T|^I -> strict RelStr equals :Def5:
+   product (I --> T);
+ correctness;
+end;
+
+theorem Th26:
+  for J be RelStr-yielding ManySortedSet of {} holds
+   product J = RelStr (#{{}}, id {{}}#)
+ proof
+  let J be RelStr-yielding ManySortedSet of {};
+  set IT = product J;
+A1:the carrier of IT = product Carrier J by Def4
+      .= {{}} by CARD_3:19,PBOOLE:134;
+A2:product Carrier J = {{}} by CARD_3:19,PBOOLE:134;
+    the InternalRel of product J = id {{}}
+  proof
+   let a,b be set;
+   hereby assume [a,b] in the InternalRel of IT;
+    then a in the carrier of IT & b in the carrier of IT by ZFMISC_1:106;
+   then a = {} & b = {} by A1,TARSKI:def 1;
+   then a = b & a in {{}} by TARSKI:def 1;
+    hence [a,b] in id {{}} by RELAT_1:def 10;
+   end;
+   assume [a,b] in id {{}};
+then A3:  a in {{}} & a = b by RELAT_1:def 10;
+then A4:  a = {} by TARSKI:def 1;
+    reconsider x = {}, y = {} as Element of IT
+      by A1,TARSKI:def 1;
+      x = {} --> {{}} & y = {} --> {{}} by FUNCT_4:3;
+    then reconsider f = x, g = y as Function;
+      for i be set st i in {}
+     ex R being RelStr, xi,yi being Element of R
+      st R = J.i & xi = f.i & yi = g.i & xi <= yi;
+   then x <= y by A1,A2,Def4;
+   hence thesis by A3,A4,ORDERS_1:def 9;
+  end;
+  hence thesis by A1;
+ end;
+
+theorem Th27:
+ for Y be RelStr holds
+  Y|^{} = RelStr (#{{}}, id {{}}#)
+proof
+  let Y be RelStr;
+    Y|^{} = product ({} --> Y) by Def5;
+  hence thesis by Th26;
+end;
+
+theorem Th28:
+ for X be set, Y be RelStr holds
+  Funcs (X, the carrier of Y) = the carrier of Y|^X
+  proof
+   let X be set;
+   let Y be RelStr;
+   set YY = the carrier of Y, f = Carrier (X --> Y);
+     for x be set st x in X holds f.x = YY
+   proof
+     let x be set; assume A1: x in X;
+     then consider R being 1-sorted such that
+A2:    R = (X --> Y).x & f.x = the carrier of R by PRALG_1:def 13;
+     thus thesis by A1,A2,FUNCOP_1:13;
+   end;
+then A3:  dom f = X & for x be set st x in X holds f.x = YY by PBOOLE:def 3;
+     Funcs(X,YY) = product f
+   proof
+    thus Funcs(X,YY) c= product f
+     proof let x be set; assume x in Funcs(X,YY);
+      then consider g be Function such that
+A4:     x = g & dom g = X & rng g c= YY by FUNCT_2:def 2;
+         now let y be set; assume y in dom f;
+         then f.y = YY & YY = YY & g.y in rng g by A3,A4,FUNCT_1:def 5;
+        hence g.y in f.y by A4;
+       end;
+      hence thesis by A3,A4,CARD_3:def 5;
+     end;
+   let x; assume x in product f;
+   then consider g be Function such that
+A5:  x = g & dom g = dom f & for x st x in dom f holds g.x in f.x
+      by CARD_3:def 5;
+      rng g c= YY
+    proof let y; assume y in rng g;
+     then consider z such that
+A6:    z in dom g & y = g.z by FUNCT_1:def 5;
+        y in f.z & f.z = YY & YY = YY by A3,A5,A6;
+     hence thesis;
+    end;
+   hence thesis by A3,A5,FUNCT_2:def 2;
+  end;
+  then Funcs(X,YY) = the carrier of product (X --> Y) by Def4;
+  hence thesis by Def5;
+  end;
+
+definition let X be set;
+ let Y be non empty RelStr;
+ cluster Y|^X -> non empty;
+ coherence
+ proof
+  consider f be Function of X, the carrier of Y;
+    f in Funcs (X, the carrier of Y) by FUNCT_2:11;
+  then f in the carrier of Y|^X by Th28;
+  hence thesis by STRUCT_0:def 1;
+ end;
+end;
+
+Lm6:
+ for X be set, Y be non empty RelStr
+  for x be Element of Y|^X
+   holds x in the carrier of product (X --> Y) &
+         x is Function of X, the carrier of Y
+proof
+ let X be set, Y be non empty RelStr,
+    x be Element of Y|^X;
+A1:  x in the carrier of Y|^X;
+    then x in Funcs (X, the carrier of Y) by Th28;
+ hence thesis by A1,Def5,FUNCT_2:121;
+end;
+
+definition let X be set;
+ let Y be reflexive non empty RelStr;
+ cluster Y|^X -> reflexive;
+ coherence
+ proof
+  per cases;
+  suppose X is empty;
+   hence thesis by Th27;
+  suppose X is non empty;
+  then reconsider X as non empty set;
+    for x being Element of Y|^X holds x <= x
+  proof
+   let x be Element of Y|^X;
+     x in the carrier of Y|^X;
+then A1: x in the carrier of product (X --> Y) by Def5;
+   reconsider x' = x as Element of product (X --> Y)
+     by Def5;
+A2: x' in product Carrier (X --> Y) by A1,Def4;
+   reconsider x1 = x as Function of X, the carrier of Y by Lm6;
+     ex f,g being Function st f = x' & g = x' &
+    for i be set st i in X
+     ex R being RelStr, xi,yi being Element of R
+       st R = (X --> Y).i & xi = f.i & yi = g.i & xi <= yi
+   proof
+    take x1, x1;
+    thus x1 = x' & x1 = x';
+    let i be set; assume i in X;
+    then reconsider i as Element of X;
+    take R = (X --> Y).i;
+   R = Y by FUNCOP_1:13;
+    then reconsider xi = x1.i, yi = x1.i as Element of R;
+    take xi, yi;
+    reconsider xi1 = xi, yi1 = xi as Element of Y;
+      xi1 <= yi1;
+    hence thesis by FUNCOP_1:13;
+   end;
+   then x' <= x' by A2,Def4;
+   then [x',x'] in the InternalRel of product (X --> Y) by ORDERS_1:def 9;
+   then [x,x] in the InternalRel of Y|^X by Def5;
+   hence thesis by ORDERS_1:def 9;
+  end;
+  hence thesis by YELLOW_0:def 1;
+ end;
+end;
+
+definition let Y be non empty RelStr;
+ cluster Y|^{} -> trivial;
+ coherence by Th27;
+end;
+
+definition
+ let Y be non empty reflexive RelStr;
+ cluster Y|^{} -> with_infima with_suprema antisymmetric;
+ coherence;
+end;
+
+definition let X be set;
+ let Y be transitive non empty RelStr;
+ cluster Y|^X -> transitive;
+ coherence
+ proof
+  set IT = Y|^X;
+    now let x,y,z be Element of IT;
+A1:x in the carrier of IT & y in the carrier of IT & z in the carrier of IT;
+  reconsider x1 = x, y1 = y, z1 = z as
+    Element of product (X --> Y) by Def5;
+     x1 in the carrier of product (X --> Y) &
+    y1 in the carrier of product (X --> Y) by A1,Def5;
+then A2:  x1 in product Carrier (X --> Y) & y1 in product Carrier (X --> Y)
+    by Def4;
+   assume x <= y & y <= z;
+   then [x,y] in the InternalRel of IT & [y,z] in the InternalRel of IT
+     by ORDERS_1:def 9;
+   then [x1,y1] in the InternalRel of product (X --> Y) &
+     [y1,z1] in the InternalRel of product (X --> Y) by Def5;
+then A3: x1 <= y1 & y1 <= z1 by ORDERS_1:def 9;
+   then consider f,g being Function such that A4: f = x1 & g = y1 &
+    for i be set st i in X
+     ex R being RelStr, xi,yi being Element of R
+       st R = (X --> Y).i & xi = f.i & yi = g.i & xi <= yi by A2,Def4;
+   consider f1,g1 being Function such that A5: f1 = y1 & g1 = z1 &
+    for i be set st i in X
+     ex R being RelStr, xi,yi being Element of R
+       st R = (X --> Y).i & xi = f1.i & yi = g1.i & xi <= yi by A2,A3,Def4;
+     ex f2,g2 being Function st f2 = x1 & g2 = z1 &
+    for i be set st i in X
+     ex R being RelStr, xi,yi being Element of R
+       st R = (X --> Y).i & xi = f2.i & yi = g2.i & xi <= yi
+proof
+ reconsider f2 = x, g2 = z as Function of X, the carrier of Y by Lm6;
+ take f2, g2;
+ thus f2 = x1 & g2 = z1;
+ let i be set; assume A6: i in X;
+ then reconsider X as non empty set;
+ reconsider i as Element of X by A6;
+ reconsider R = (X --> Y).i as RelStr;
+A7:  R = Y by FUNCOP_1:13;
+ then f2.i in the carrier of R & g2.i in the carrier of R by FUNCT_2:7;
+ then reconsider xi = f2.i, yi = g2.i as Element of R;
+ take R, xi, yi;
+ consider R1 being RelStr, xi1,yi1 being Element of R1 such that
+A8:   R1 = (X --> Y).i & xi1 = f.i & yi1 = g.i & xi1 <= yi1 by A4;
+ consider R2 being RelStr, xi2,yi2 being Element of R2 such that
+A9:   R2 = (X --> Y).i & xi2 = f1.i & yi2 = g1.i & xi2 <= yi2 by A5;
+ thus thesis by A4,A5,A7,A8,A9,YELLOW_0:def 2;
+end;
+   then x1 <= z1 by A2,Def4;
+   then [x1, z1] in the InternalRel of product (X --> Y) by ORDERS_1:def 9;
+   then [x, z] in the InternalRel of IT by Def5;
+   hence x <= z by ORDERS_1:def 9;
+  end;
+  hence thesis by YELLOW_0:def 2;
+ end;
+end;
+
+definition let X be set;
+ let Y be antisymmetric non empty RelStr;
+ cluster Y|^X -> antisymmetric;
+ coherence
+ proof
+  set IT = Y|^X;
+    now let x,y be Element of IT;
+A1:x in the carrier of IT & y in the carrier of IT;
+  reconsider x1 = x, y1 = y as
+    Element of product (X --> Y) by Def5;
+     x1 in the carrier of product (X --> Y) &
+    y1 in the carrier of product (X --> Y) by A1,Def5;
+then A2:  x1 in product Carrier (X --> Y) & y1 in product Carrier (X --> Y)
+    by Def4;
+   assume x <= y & y <= x;
+   then [x,y] in the InternalRel of IT & [y,x] in the InternalRel of IT
+     by ORDERS_1:def 9;
+   then [x1,y1] in the InternalRel of product (X --> Y) &
+     [y1,x1] in the InternalRel of product (X --> Y) by Def5;
+then A3: x1 <= y1 & y1 <= x1 by ORDERS_1:def 9;
+   then consider f,g being Function such that A4: f = x1 & g = y1 &
+    for i be set st i in X
+     ex R being RelStr, xi,yi being Element of R
+       st R = (X --> Y).i & xi = f.i & yi = g.i & xi <= yi by A2,Def4;
+   consider f1,g1 being Function such that A5: f1 = y1 & g1 = x1 &
+    for i be set st i in X
+     ex R being RelStr, xi,yi being Element of R
+       st R = (X --> Y).i & xi = f1.i & yi = g1.i & xi <= yi by A2,A3,Def4;
+   reconsider x1' = x, y1' = y as Function of X, the carrier of Y by Lm6;
+A6: dom x1' = X & dom y1' = X by FUNCT_2:def 1;
+     now
+     let i be set; assume A7: i in X;
+     then consider R1 being RelStr, xi1,yi1 being Element of R1 such that
+A8:     R1 = (X --> Y).i & xi1 = f.i & yi1 = g.i & xi1 <= yi1 by A4;
+     consider R2 being RelStr, xi2,yi2 being Element of R2 such that
+A9:     R2 = (X --> Y).i & xi2 = f1.i & yi2 = g1.i & xi2 <= yi2 by A5,A7;
+    Y = R1 & Y = R2 by A7,A8,A9,FUNCOP_1:13;
+     hence x1'.i = y1'.i by A4,A5,A8,A9,ORDERS_1:25;
+   end;
+   hence x = y by A6,FUNCT_1:9;
+  end;
+  hence thesis by YELLOW_0:def 3;
+ end;
+end;
+
+definition let X be non empty set;
+ let Y be non empty with_infima antisymmetric RelStr;
+ cluster Y|^X -> with_infima;
+ coherence
+ proof
+    set IT = Y|^X;
+    let x, y be Element of IT;
+    reconsider x' = x as Function of X, the carrier of Y by Lm6;
+    reconsider y' = y as Function of X, the carrier of Y by Lm6;
+    defpred P[set, set] means ex xa, ya be Element of Y
+      st xa = x'.$1 & ya = y'.$1 & $2 = xa "/\" ya;
+A1:  for x be set st x in X ex y be set st y in the carrier of Y & P[x,y]
+    proof
+     let a be set; assume a in X;
+     then x'.a in the carrier of Y & y'.a in the carrier of Y by FUNCT_2:7;
+     then reconsider xa = x'.a, ya = y'.a as Element of Y;
+     take y = xa "/\" ya;
+     thus y in the carrier of Y;
+     take xa, ya;
+     thus thesis;
+    end;
+    consider f be Function of X, the carrier of Y such that
+A2:    for a be set st a in X holds P[a,f.a] from FuncEx1(A1);
+      f in Funcs (X, the carrier of Y) by FUNCT_2:11;
+    then f in the carrier of IT by Th28;
+    then reconsider z = f as Element of IT;
+    take z;
+A3:  z <= x
+    proof
+     reconsider x1 = x, z1 = z as Element of
+       product (X --> Y) by Lm6;
+       z1 in the carrier of IT;
+     then z1 in the carrier of product (X --> Y) by Def5;
+then A4:   z1 in product Carrier (X --> Y) by Def4;
+      ex f,g being Function st f = z1 & g = x1 &
+      for i be set st i in X
+       ex R being RelStr, xi,yi being Element of R
+        st R = (X --> Y).i & xi = f.i & yi = g.i & xi <= yi
+     proof
+      take f, x';
+      thus f = z1 & x' = x1;
+      let i be set; assume i in X;
+      then reconsider i as Element of X;
+      reconsider R = (X --> Y).i as RelStr;
+A5:    R = Y by FUNCOP_1:13;
+      then reconsider xi = f.i, yi = x'.i as Element of R;
+      take R, xi, yi;
+      consider xa, ya be Element of Y such that
+A6:     xa = x'.i & ya = y'.i & f.i = xa "/\" ya by A2;
+      thus thesis by A5,A6,YELLOW_0:23;
+     end;
+     then z1 <= x1 by A4,Def4;
+     then [z1,x1] in the InternalRel of product (X --> Y) by ORDERS_1:def 9;
+     then [z1,x1] in the InternalRel of IT by Def5;
+     hence thesis by ORDERS_1:def 9;
+    end;
+A7:  z <= y
+    proof
+     reconsider y1 = y, z1 = z as Element of
+       product (X --> Y) by Lm6;
+       z1 in the carrier of IT;
+     then z1 in the carrier of product (X --> Y) by Def5;
+then A8:   z1 in product Carrier (X --> Y) by Def4;
+      ex f,g being Function st f = z1 & g = y1 &
+      for i be set st i in X
+       ex R being RelStr, xi,yi being Element of R
+        st R = (X --> Y).i & xi = f.i & yi = g.i & xi <= yi
+     proof
+      take f, y';
+      thus f = z1 & y' = y1;
+      let i be set; assume i in X;
+      then reconsider i as Element of X;
+      reconsider R = (X --> Y).i as RelStr;
+A9:    R = Y by FUNCOP_1:13;
+      then reconsider xi = f.i, yi = y'.i as Element of R;
+      take R, xi, yi;
+      consider xa, ya be Element of Y such that
+A10:     xa = x'.i & ya = y'.i & f.i = xa "/\" ya by A2;
+      thus thesis by A9,A10,YELLOW_0:23;
+     end;
+     then z1 <= y1 by A8,Def4;
+     then [z1,y1] in the InternalRel of product (X --> Y) by ORDERS_1:def 9;
+     then [z1,y1] in the InternalRel of IT by Def5;
+     hence thesis by ORDERS_1:def 9;
+    end;
+      for z' being Element of IT st z' <= x & z' <= y holds z' <= z
+    proof
+     let z' be Element of IT; assume A11: z' <= x & z' <= y;
+       z' <= z
+     proof
+    reconsider z2 = z', z3 = z, z4 = y, z5 = x as Element of the carrier
+        of product (X --> Y) by Lm6;
+    reconsider J = z2, K = z3 as Function of X, the carrier of Y by Lm6;
+      z' in the carrier of product (X --> Y) by Lm6;
+then A12:  z2 in product Carrier (X --> Y) by Def4;
+      [z',x] in the InternalRel of IT by A11,ORDERS_1:def 9;
+then A13: [z2,z5] in the InternalRel of product (X --> Y) by Def5;
+      [z',y] in the InternalRel of IT by A11,ORDERS_1:def 9;
+    then [z2,z4] in the InternalRel of product (X --> Y) by Def5;
+then A14:  z2 <= z5 & z2 <= z4 by A13,ORDERS_1:def 9;
+    then consider f1,g1 being Function such that
+A15:     f1 = z2 & g1 = z5 &
+    for i be set st i in X
+     ex R being RelStr, xi,yi being Element of R
+       st R = (X --> Y).i & xi = f1.i & yi = g1.i & xi <= yi by A12,Def4;
+    consider f2,g2 being Function such that
+A16:     f2 = z2 & g2 = z4 &
+    for i be set st i in X
+     ex R being RelStr, xi,yi being Element of R
+       st R = (X --> Y).i & xi = f2.i & yi = g2.i & xi <= yi by A12,A14,Def4;
+      ex f,g being Function st f = z2 & g = z3 &
+      for i be set st i in X
+       ex R being RelStr, xi,yi being Element of R
+        st R = (X --> Y).i & xi = f.i & yi = g.i & xi <= yi
+      proof
+      take J, K;
+      thus J = z2 & K = z3;
+      let i be set; assume i in X;
+      then reconsider i as Element of X;
+      reconsider R = (X --> Y).i as RelStr;
+A17:    R = Y by FUNCOP_1:13;
+      then reconsider xi = J.i, yi = K.i as Element of R;
+      take R, xi, yi;
+      consider xa, ya be Element of Y such that
+A18:        xa = x'.i & ya = y'.i & f.i = xa "/\" ya by A2;
+     consider R1 being RelStr, xi1,yi1 being Element of R1 such that
+A19:     R1 = (X --> Y).i &
+      xi1 = f1.i & yi1 = g1.i & xi1 <= yi1 by A15;
+     consider R2 being RelStr, xi2,yi2 being Element of R2 such that
+A20:     R2 = (X --> Y).i & xi2 = f2.i & yi2 = g2.i & xi2 <= yi2 by A16;
+      thus thesis by A15,A16,A17,A18,A19,A20,YELLOW_0:23;
+      end;
+      then z2 <= z3 by A12,Def4;
+      then [z2,z3] in the InternalRel of product (X --> Y) by ORDERS_1:def 9;
+      then [z2,z3] in the InternalRel of IT by Def5;
+      hence thesis by ORDERS_1:def 9;
+     end;
+     hence thesis;
+    end;
+    hence thesis by A3,A7;
+ end;
+end;
+
+definition let X be non empty set;
+ let Y be non empty with_suprema antisymmetric RelStr;
+ cluster Y|^X -> with_suprema;
+ coherence
+ proof
+    set IT = Y|^X;
+    let x, y be Element of IT;
+    reconsider x' = x as Function of X, the carrier of Y by Lm6;
+    reconsider y' = y as Function of X, the carrier of Y by Lm6;
+    defpred P[set, set] means ex xa, ya be Element of Y
+      st xa = x'.$1 & ya = y'.$1 & $2 = xa "\/" ya;
+A1:  for x be set st x in X ex y be set st y in the carrier of Y & P[x,y]
+    proof
+     let a be set; assume a in X;
+     then x'.a in the carrier of Y & y'.a in the carrier of Y by FUNCT_2:7;
+     then reconsider xa = x'.a, ya = y'.a as Element of Y;
+     take y = xa "\/" ya;
+     thus y in the carrier of Y;
+     take xa, ya;
+     thus thesis;
+    end;
+    consider f be Function of X, the carrier of Y such that
+A2:    for a be set st a in X holds P[a,f.a] from FuncEx1(A1);
+      f in Funcs (X, the carrier of Y) by FUNCT_2:11;
+    then f in the carrier of IT by Th28;
+    then reconsider z = f as Element of IT;
+    take z;
+A3:  x <= z
+    proof
+     reconsider x1 = x, z1 = z as Element of
+       product (X --> Y) by Lm6;
+      x1 in the carrier of product (X --> Y) by Lm6;
+then A4:  x1 in product Carrier (X --> Y) by Def4;
+      ex f,g being Function st f = x1 & g = z1 &
+      for i be set st i in X
+       ex R being RelStr, xi,yi being Element of R
+        st R = (X --> Y).i & xi = f.i & yi = g.i & xi <= yi
+     proof
+      take x',f;
+      thus x' = x1 & f = z1;
+      let i be set; assume i in X;
+      then reconsider i as Element of X;
+      reconsider R = (X --> Y).i as RelStr;
+A5:    R = Y by FUNCOP_1:13;
+      then reconsider yi = f.i, xi = x'.i as Element of R;
+      take R, xi, yi;
+      consider xa, ya be Element of Y such that
+A6:     xa = x'.i & ya = y'.i & f.i = xa "\/" ya by A2;
+      thus thesis by A5,A6,YELLOW_0:22;
+     end;
+     then x1 <= z1 by A4,Def4;
+     then [x1,z1] in the InternalRel of product (X --> Y) by ORDERS_1:def 9;
+     then [x1,z1] in the InternalRel of IT by Def5;
+     hence thesis by ORDERS_1:def 9;
+    end;
+A7:  y <= z
+    proof
+     reconsider y1 = y, z1 = z as Element of
+       product (X --> Y) by Lm6;
+      y1 in the carrier of product (X --> Y) by Lm6;
+then A8:  y1 in product Carrier (X --> Y) by Def4;
+      ex f,g being Function st f = y1 & g = z1 &
+      for i be set st i in X
+       ex R being RelStr, xi,yi being Element of R
+        st R = (X --> Y).i & xi = f.i & yi = g.i & xi <= yi
+     proof
+      take y', f;
+      thus y' = y1 & f = z1;
+      let i be set; assume i in X;
+      then reconsider i as Element of X;
+      reconsider R = (X --> Y).i as RelStr;
+A9:    R = Y by FUNCOP_1:13;
+      then reconsider yi = f.i, xi = y'.i as Element of R;
+      take R, xi, yi;
+      consider xa, ya be Element of Y such that
+A10:     xa = x'.i & ya = y'.i & f.i = xa "\/" ya by A2;
+      thus thesis by A9,A10,YELLOW_0:22;
+     end;
+     then y1 <= z1 by A8,Def4;
+     then [y1,z1] in the InternalRel of product (X --> Y) by ORDERS_1:def 9;
+     then [y1,z1] in the InternalRel of IT by Def5;
+     hence thesis by ORDERS_1:def 9;
+    end;
+      for z' being Element of IT st z' >= x & z' >= y holds z' >= z
+    proof
+     let z' be Element of IT; assume A11: z' >= x & z' >= y;
+       z' >= z
+     proof
+    reconsider z2 = z', z3 = z, z4 = y, z5 = x as Element of the carrier
+        of product (X --> Y) by Lm6;
+    reconsider K = z3, J = z2 as Function of X, the carrier of Y by Lm6;
+       z5 in the carrier of product (X --> Y) &
+     z3 in the carrier of product (X --> Y) &
+     z4 in the carrier of product (X --> Y) by Lm6;
+then A12:  z5 in product Carrier (X --> Y) &
+     z3 in product Carrier (X --> Y) &
+     z4 in product Carrier (X --> Y) by Def4;
+      [x, z'] in the InternalRel of IT by A11,ORDERS_1:def 9;
+then A13: [z5,z2] in the InternalRel of product (X --> Y) by Def5;
+      [y, z'] in the InternalRel of IT by A11,ORDERS_1:def 9;
+    then [z4,z2] in the InternalRel of product (X --> Y) by Def5;
+then A14:  z5 <= z2 & z4 <= z2 by A13,ORDERS_1:def 9;
+    then consider f1,g1 being Function such that
+A15:     f1 = z5 & g1 = z2 &
+    for i be set st i in X
+     ex R being RelStr, xi,yi being Element of R
+       st R = (X --> Y).i & xi = f1.i & yi = g1.i & xi <= yi by A12,Def4;
+    consider f2,g2 being Function such that
+A16:     f2 = z4 & g2 = z2 &
+    for i be set st i in X
+     ex R being RelStr, xi,yi being Element of R
+       st R = (X --> Y).i & xi = f2.i & yi = g2.i & xi <= yi by A12,A14,Def4;
+      ex f,g being Function st f = z3 & g = z2 &
+    for i be set st i in X
+       ex R being RelStr, xi,yi being Element of R
+        st R = (X --> Y).i & xi = f.i & yi = g.i & xi <= yi
+      proof
+      take K, J;
+      thus K = z3 & J = z2;
+      let i be set; assume i in X;
+      then reconsider i as Element of X;
+      reconsider R = (X --> Y).i as RelStr;
+A17:    R = Y by FUNCOP_1:13;
+      then reconsider yi = J.i, xi = K.i as Element of R;
+      take R, xi, yi;
+      consider xa, ya be Element of Y such that
+A18:      xa = x'.i & ya = y'.i & f.i = xa "\/" ya by A2;
+     consider R1 being RelStr, xi1,yi1 being Element of R1 such that
+A19:     R1 = (X --> Y).i &
+      xi1 = f1.i & yi1 = g1.i & xi1 <= yi1 by A15;
+     consider R2 being RelStr, xi2,yi2 being Element of R2 such that
+A20:     R2 = (X --> Y).i & xi2 = f2.i & yi2 = g2.i & xi2 <= yi2 by A16;
+      thus thesis by A15,A16,A17,A18,A19,A20,YELLOW_0:22;
+      end;
+      then z3 <= z2 by A12,Def4;
+      then [z3,z2] in the InternalRel of product (X --> Y) by ORDERS_1:def 9;
+      then [z3,z2] in the InternalRel of IT by Def5;
+      hence thesis by ORDERS_1:def 9;
+     end;
+     hence thesis;
+    end;
+    hence thesis by A3,A7;
+ end;
+end;
+
+definition let S,T be RelStr;
+ func MonMaps (S,T) -> strict full SubRelStr of T|^the carrier of S means
+     for f being map of S,T holds f in the carrier of it iff
+    f in Funcs (the carrier of S, the carrier of T) &
+  f is monotone;
+ existence
+ proof
+  set X = MonFuncs (S,T);
+    X c= Funcs (the carrier of S, the carrier of T) by ORDERS_3:11;
+  then reconsider X as Subset of T|^the carrier of S by Th28;
+  take SX = subrelstr X;
+  let f be map of S,T;
+  hereby assume f in the carrier of SX;
+   then f in X by YELLOW_0:def 15;
+   then consider f' be map of S, T such that A1: f' = f &
+    f' in Funcs (the carrier of S, the carrier of T) &
+    f' is monotone by ORDERS_3:def 6;
+   thus f in Funcs (the carrier of S, the carrier of T) &
+    f is monotone by A1;
+  end;
+  assume f in Funcs (the carrier of S, the carrier of T) &
+  f is monotone;
+  then f in X by ORDERS_3:def 6;
+  hence f in the carrier of SX by YELLOW_0:def 15;
+ end;
+ uniqueness
+ proof
+  let A1, A2 be strict full SubRelStr of T|^the carrier of S;
+  assume that
+A2: for f being map of S,T holds f in the carrier of A1 iff
+    f in Funcs (the carrier of S, the carrier of T) &
+   f is monotone and
+A3: for f being map of S,T holds f in the carrier of A2 iff
+    f in Funcs (the carrier of S, the carrier of T) & f is monotone;
+      the carrier of A1 c=
+     the carrier of T|^the carrier of S by YELLOW_0:def 13;
+then A4:the carrier of A1 c= Funcs (the carrier of S, the carrier of T) by Th28
+;
+   the carrier of A2 c= the carrier of T|^the carrier of S
+   by YELLOW_0:def 13;
+  then A5:the carrier of A2 c=
+     Funcs (the carrier of S, the carrier of T) by Th28;
+  set X = the carrier of S, Y = the carrier of T;
+    the carrier of A1 = the carrier of A2
+  proof
+   thus the carrier of A1 c= the carrier of A2
+   proof
+    let a be set; assume A6: a in the carrier of A1;
+    then a is Function of X, Y by A4,FUNCT_2:121;
+    then reconsider f = a as map of S, T;
+      f is monotone by A2,A6;
+    hence a in the carrier of A2 by A3,A4,A6;
+   end;
+   thus the carrier of A2 c= the carrier of A1
+   proof
+    let a be set; assume A7: a in the carrier of A2;
+    then a is Function of X, Y by A5,FUNCT_2:121;
+    then reconsider f = a as map of S, T;
+      f is monotone by A3,A7;
+    hence a in the carrier of A1 by A2,A5,A7;
+   end;
+  end;
+  hence thesis by YELLOW_0:58;
+ end;
+end;
+

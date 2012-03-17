@@ -1,0 +1,323 @@
+:: Correctness of Binary Counter Circuits
+::  by Yuguang Yang , Wasaki Katsumi , Yasushi Fuwa and Yatsuka Nakamura
+::
+:: Received March 13, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary GATE_1;
+ notation GATE_1;
+ constructors GATE_1, XBOOLE_0;
+ requirements BOOLE;
+ theorems GATE_1;
+
+begin :: Correctness of Binary Counter Circuits
+reserve a,b,c,d for set;
+
+::Correctness of 3-bit binary counter without reset input
+::state transition: s0 (000) -> s1 (001)-> s2 (010) -> ... ->s7 (111) -> s0 (000).
+
+theorem
+  for s0,s1,s2,s3,s4,s5,s6,s7,ns0,ns1,ns2,ns3,ns4,ns5,ns6,ns7,q1,q2,q3,nq1,
+nq2,nq3 being set holds
+  ($s0 iff $AND3(NOT1 q3,NOT1 q2,NOT1 q1))&
+  ($s1 iff $AND3(NOT1 q3,NOT1 q2,q1))&
+  ($s2 iff $AND3(NOT1 q3,q2,NOT1 q1))&
+  ($s3 iff $AND3(NOT1 q3,q2,q1))&
+  ($s4 iff $AND3(q3,NOT1 q2,NOT1 q1))&
+  ($s5 iff $AND3(q3,NOT1 q2,q1))&
+  ($s6 iff $AND3(q3,q2,NOT1 q1))&
+  ($s7 iff $AND3(q3,q2,q1))&
+  ($ns0 iff $AND3(NOT1 nq3,NOT1 nq2,NOT1 nq1))&
+  ($ns1 iff $AND3(NOT1 nq3,NOT1 nq2,nq1))&
+  ($ns2 iff $AND3(NOT1 nq3,nq2,NOT1 nq1))&
+  ($ns3 iff $AND3(NOT1 nq3,nq2,nq1))&
+  ($ns4 iff $AND3(nq3,NOT1 nq2,NOT1 nq1))&
+  ($ns5 iff $AND3(nq3,NOT1 nq2,nq1))&
+  ($ns6 iff $AND3(nq3,nq2,NOT1 nq1))&
+  ($ns7 iff $AND3(nq3,nq2,nq1))&
+  ($nq1 iff $(NOT1 q1))&
+  ($nq2 iff $XOR2(q1,q2))&
+  ($nq3 iff $OR2(AND2(q3, NOT1 q1), AND2(q1, XOR2(q2,q3))))
+implies ($ns1 iff $s0)&
+  ($ns2 iff $s1)&
+  ($ns3 iff $s2)&
+  ($ns4 iff $s3)&
+  ($ns5 iff $s4)&
+  ($ns6 iff $s5)&
+  ($ns7 iff $s6)&
+  ($ns0 iff $s7)
+proof
+let s0,s1,s2,s3,s4,s5,s6,s7,ns0,ns1,ns2,ns3,ns4,ns5,ns6,ns7,q1,q2,q3,nq1,
+nq2,nq3 be set;
+  assume that A1:($s0 iff $AND3(NOT1 q3,NOT1 q2,NOT1 q1))and
+  A2:($s1 iff $AND3(NOT1 q3,NOT1 q2,q1))and
+  A3:($s2 iff $AND3(NOT1 q3,q2,NOT1 q1))and
+  A4:($s3 iff $AND3(NOT1 q3,q2,q1))and
+  A5:($s4 iff $AND3(q3,NOT1 q2,NOT1 q1))and
+  A6:($s5 iff $AND3(q3,NOT1 q2,q1))and
+  A7:($s6 iff $AND3(q3,q2,NOT1 q1))and
+  A8:($s7 iff $AND3(q3,q2,q1))and
+  A9:($ns0 iff $AND3(NOT1 nq3,NOT1 nq2,NOT1 nq1))and
+  A10:($ns1 iff $AND3(NOT1 nq3,NOT1 nq2,nq1))and
+  A11:($ns2 iff $AND3(NOT1 nq3,nq2,NOT1 nq1))and
+  A12:($ns3 iff $AND3(NOT1 nq3,nq2,nq1))and
+  A13:($ns4 iff $AND3(nq3,NOT1 nq2,NOT1 nq1))and
+  A14:($ns5 iff $AND3(nq3,NOT1 nq2,nq1))and
+  A15:($ns6 iff $AND3(nq3,nq2,NOT1 nq1))and
+  A16:($ns7 iff $AND3(nq3,nq2,nq1))and
+  A17:($nq1 iff $NOT1 q1)and
+  A18:($nq2 iff $XOR2(q1,q2))and
+  A19:($nq3 iff $OR2(AND2(q3, NOT1 q1), AND2(q1, XOR2(q2,q3))));
+    $ns1 iff $NOT1 nq3 & $NOT1 nq2 & $nq1 by A10,GATE_1:16;
+  then $ns1 iff $NOT1 nq3 & not $XOR2(q1,q2) & not $q1 by A17,A18,GATE_1:4;
+
+  then $ns1 iff not $AND2(q3, NOT1 q1) & not $AND2(q1, XOR2(q2,q3))
+    & not $q2 & not $q1 by A19,GATE_1:4,7,8;
+  then $ns1 iff (not $q3 or not $NOT1 q1) & (not $q1 or not $XOR2(q2,q3))
+   & not $q2 & not $q1 by GATE_1:6;
+  then $ns1 iff $NOT1 q3 & $NOT1 q2 & $NOT1 q1 by GATE_1:4;
+hence $ns1 iff $s0 by A1,GATE_1:16;
+      $ns2 iff $NOT1 nq3 & $nq2 & $NOT1 nq1 by A11,GATE_1:16;
+
+    then $ns2 iff not $AND2(q3, NOT1 q1) & not $AND2(q1, XOR2(q2,q3))
+      & not $q2 & $q1 by A17,A18,A19,GATE_1:4,7,8;
+    then $ns2 iff (not $q3 or not $NOT1 q1) & (not $q1 or not $XOR2(q2,q3))
+     & not $q2 & $q1 by GATE_1:6;
+    then $ns2 iff (not $q3 or $q1) & not $q3 & not $q2 & $q1 by GATE_1:8;
+    then $ns2 iff $NOT1 q3 & $NOT1 q2 & $q1 by GATE_1:4;
+hence $ns2 iff $s1 by A2,GATE_1:16;
+      $ns3 iff $NOT1 nq3 & $XOR2(q1,q2) & not $q1 by A12,A17,A18,GATE_1:4,16;
+
+    then $ns3 iff not $AND2(q3, NOT1 q1) & not $AND2(q1, XOR2(q2,q3))
+      & $q2 & not $q1 by A19,GATE_1:4,7,8;
+    then $ns3 iff (not $q3 or not $NOT1 q1) & (not $q1 or not $XOR2(q2,q3))
+     & $q2 & not $q1 by GATE_1:6;
+    then $ns3 iff $NOT1 q3 & $q2 & $NOT1 q1 by GATE_1:4;
+hence $ns3 iff $s2 by A3,GATE_1:16;
+        $ns4 iff $nq3 & $NOT1 nq2 & $NOT1 nq1 by A13,GATE_1:16;
+
+      then $ns4 iff ($AND2(q3, NOT1 q1) or $AND2(q1, XOR2(q2,q3)))
+        & $q2 & $q1 by A17,A18,A19,GATE_1:4,7,8;
+      then $ns4 iff (($q3 & $NOT1 q1) or ($q1 & $XOR2(q2,q3)))
+       & $q2 & $q1 by GATE_1:6;
+      then $ns4 iff not $q3 & $q2 & $q1 by GATE_1:4,8;
+      then $ns4 iff $NOT1 q3 & $q2 & $q1 by GATE_1:4;
+ hence $ns4 iff $s3 by A4,GATE_1:16;
+        $ns5 iff $nq3 & $NOT1 nq2 & $nq1 by A14,GATE_1:16;
+      then $ns5 iff $nq3 & not $XOR2(q1,q2) & not $q1 by A17,A18,GATE_1:4;
+   then $ns5 iff ($AND2(q3, NOT1 q1) or $AND2(q1, XOR2(q2,q3)))
+     & not $q2 & not $q1 by A19,GATE_1:7,8;
+   then $ns5 iff $q3 & $NOT1 q2 & $NOT1 q1 by GATE_1:4,6;
+hence $ns5 iff $s4 by A5,GATE_1:16;
+          $ns6 iff $nq3 & $nq2 & $NOT1 nq1 by A15,GATE_1:16;
+
+        then $ns6 iff ($AND2(q3, NOT1 q1) or $AND2(q1, XOR2(q2,q3)))
+          & not $q2 & $q1 by A17,A18,A19,GATE_1:4,7,8;
+        then $ns6 iff (($q3 & $NOT1 q1) or ($q1 & $XOR2(q2,q3)))
+         & not $q2 & $q1 by GATE_1:6;
+        then $ns6 iff $q3 & not $q2 & $q1 by GATE_1:8;
+        then $ns6 iff $q3 & $NOT1 q2 & $q1 by GATE_1:4;
+ hence $ns6 iff $s5 by A6,GATE_1:16;
+         $ns7 iff $nq3 & $XOR2(q1,q2) & not $q1 by A16,A17,A18,GATE_1:4,16;
+    then $ns7 iff ($AND2(q3, NOT1 q1) or $AND2(q1, XOR2(q2,q3)))
+      & $q2 & not $q1 by A19,GATE_1:7,8;
+    then $ns7 iff $q3 & $q2 & $NOT1 q1 by GATE_1:4,6;
+hence $ns7 iff $s6 by A7,GATE_1:16;
+        $ns0 iff $NOT1 nq3 & $NOT1 nq2 & $NOT1 nq1 by A9,GATE_1:16;
+
+      then $ns0 iff not $AND2(q3, NOT1 q1) & not $AND2(q1, XOR2(q2,q3))
+        & $q2 & $q1 by A17,A18,A19,GATE_1:4,7,8;
+      then $ns0 iff (not $q3 or not $NOT1 q1) & (not $q1 or not $XOR2(q2,q3))
+       & $q2 & $q1 by GATE_1:6;
+      then $ns0 iff (not $q3 or $q1) & $q3 & $q2 & $q1 by GATE_1:4,8;
+
+hence $ns0 iff $s7 by A8,GATE_1:16;
+end;
+
+theorem
+  $AND3(AND2(a,d),AND2(b,d),AND2(c,d)) iff $AND2(AND3(a,b,c),d)
+proof
+A1: $AND3(AND2(a,d),AND2(b,d),AND2(c,d)) iff
+    $AND2(a,d) & $AND2(b,d) & $AND2(c,d) by GATE_1:16;
+
+ $a & $b & $c & $d iff $AND3(a,b,c) & $d by GATE_1:16;
+
+hence thesis by A1,GATE_1:6;
+end;
+
+theorem
+  (not $AND2(a,b) iff $OR2(NOT1 a, NOT1 b))&
+( $OR2(a,b) & $OR2(c,b) iff $OR2(AND2(a,c),b)) &
+($OR2(a,b) & $OR2(c,b) & $OR2(d,b) iff $OR2(AND3(a,c,d),b))&
+($OR2(a,b) & ($a iff $c) implies $OR2(c,b) )
+proof
+  not $AND2(a,b) iff not ($a & $b) by GATE_1:6;
+then A1: not $AND2(a,b) iff $NOT1 a or $NOT1 b by GATE_1:4;
+  $OR2(a,b) & $OR2(c,b) iff ($a or $b) & ($c or $b) by GATE_1:7;
+then A2: $OR2(a,b) & $OR2(c,b) iff $AND2(a,c) or $b by GATE_1:6;
+  $OR2(a,b) & $OR2(c,b) & $OR2(d,b) iff
+  ($a or $b) & ($c or $b) & ($d or $b) by GATE_1:7;
+then $OR2(a,b) & $OR2(c,b) & $OR2(d,b) iff $AND3(a,c,d) or $b by GATE_1:16;
+
+hence thesis by A1,A2,GATE_1:7;
+end;
+
+::Correctness of 3-bit binary counter with  reset input R
+::initial state s*(xxx) -> s0(000) [reset]
+::state transition: s0 (000) -> s1 (001)-> s2 (010) -> ... ->s7 (111) -> s0 (000).
+
+theorem
+  for s0,s1,s2,s3,s4,s5,s6,s7,ns0,ns1,ns2,ns3,ns4,ns5,ns6,ns7,q1,q2,q3,nq1,
+nq2,nq3,R being set holds
+  ($s0 iff $AND3(NOT1 q3,NOT1 q2,NOT1 q1))&
+  ($s1 iff $AND3(NOT1 q3,NOT1 q2,q1))&
+  ($s2 iff $AND3(NOT1 q3,q2,NOT1 q1))&
+  ($s3 iff $AND3(NOT1 q3,q2,q1))&
+  ($s4 iff $AND3(q3,NOT1 q2,NOT1 q1))&
+  ($s5 iff $AND3(q3,NOT1 q2,q1))&
+  ($s6 iff $AND3(q3,q2,NOT1 q1))&
+  ($s7 iff $AND3(q3,q2,q1))&
+  ($ns0 iff $AND3(NOT1 nq3,NOT1 nq2,NOT1 nq1))&
+  ($ns1 iff $AND3(NOT1 nq3,NOT1 nq2,nq1))&
+  ($ns2 iff $AND3(NOT1 nq3,nq2,NOT1 nq1))&
+  ($ns3 iff $AND3(NOT1 nq3,nq2,nq1))&
+  ($ns4 iff $AND3(nq3,NOT1 nq2,NOT1 nq1))&
+  ($ns5 iff $AND3(nq3,NOT1 nq2,nq1))&
+  ($ns6 iff $AND3(nq3,nq2,NOT1 nq1))&
+  ($ns7 iff $AND3(nq3,nq2,nq1))&
+  ($nq1 iff $AND2(NOT1 q1,R))&
+  ($nq2 iff $AND2(XOR2(q1,q2),R))&
+  ($nq3 iff $AND2(OR2(AND2(q3, NOT1 q1), AND2(q1, XOR2(q2,q3))),R))
+implies ($ns1 iff $AND2(s0,R))&
+  ($ns2 iff $AND2(s1,R))&
+  ($ns3 iff $AND2(s2,R))&
+  ($ns4 iff $AND2(s3,R))&
+  ($ns5 iff $AND2(s4,R))&
+  ($ns6 iff $AND2(s5,R))&
+  ($ns7 iff $AND2(s6,R))&
+  ($ns0 iff $OR2(s7,NOT1 R))
+proof
+let s0,s1,s2,s3,s4,s5,s6,s7,ns0,ns1,ns2,ns3,ns4,ns5,ns6,ns7,q1,q2,q3,nq1,
+nq2,nq3,R  be set;
+  assume that
+  A1:($s0 iff $AND3(NOT1 q3,NOT1 q2,NOT1 q1))and
+  A2:($s1 iff $AND3(NOT1 q3,NOT1 q2,q1))and
+  A3:($s2 iff $AND3(NOT1 q3,q2,NOT1 q1))and
+  A4:($s3 iff $AND3(NOT1 q3,q2,q1))and
+  A5:($s4 iff $AND3(q3,NOT1 q2,NOT1 q1))and
+  A6:($s5 iff $AND3(q3,NOT1 q2,q1))and
+  A7:($s6 iff $AND3(q3,q2,NOT1 q1))and
+  A8:($s7 iff $AND3(q3,q2,q1))and
+  A9:($ns0 iff $AND3(NOT1 nq3,NOT1 nq2,NOT1 nq1))and
+  A10:($ns1 iff $AND3(NOT1 nq3,NOT1 nq2,nq1))and
+  A11:($ns2 iff $AND3(NOT1 nq3,nq2,NOT1 nq1))and
+  A12:($ns3 iff $AND3(NOT1 nq3,nq2,nq1))and
+  A13:($ns4 iff $AND3(nq3,NOT1 nq2,NOT1 nq1))and
+  A14:($ns5 iff $AND3(nq3,NOT1 nq2,nq1))and
+  A15:($ns6 iff $AND3(nq3,nq2,NOT1 nq1))and
+  A16:($ns7 iff $AND3(nq3,nq2,nq1))and
+  A17:($nq1 iff $AND2(NOT1 q1,R))and
+  A18:($nq2 iff $AND2(XOR2(q1,q2),R))and
+  A19:($nq3 iff $AND2(OR2(AND2(q3, NOT1 q1), AND2(q1, XOR2(q2,q3))),R));
+    $ns1 iff $NOT1 nq3 & $NOT1 nq2 & $NOT1 q1 & $R by A10,A17,GATE_1:6,16;
+  then $ns1 iff not $nq3 & ( not $XOR2(q1,q2) or not $R)
+   & not $q1 & $R by A18,GATE_1:4,6;
+  then $ns1 iff not $OR2(AND2(q3, NOT1 q1), AND2(q1, XOR2(q2,q3)))
+   & not $q2 & not $q1 & $R by A19,GATE_1:6,8;
+  then $ns1 iff (not $AND2(q3, NOT1 q1) & not $AND2(q1, XOR2(q2,q3)))
+   & not $q2 & not $q1 & $R by GATE_1:7;
+  then $ns1 iff ((not $q3 or not $NOT1 q1) & (not $q1 or not $XOR2(q2,q3)))
+   & not $q2 & not $q1 & $R by GATE_1:6;
+  then $ns1 iff $NOT1 q3 & $NOT1 q2 & $NOT1 q1 & $R by GATE_1:4;
+hence $ns1 iff $AND2(s0,R) by A1,GATE_1:6,16;
+    $ns2 iff $NOT1 nq3 & $nq2 & $NOT1 nq1 by A11,GATE_1:16;
+  then $ns2 iff not $nq3 & $XOR2(q1,q2) & $R &
+   (not $NOT1 q1 or not $R) by A17,A18,GATE_1:4,6;
+  then $ns2 iff not $nq3 & $XOR2(q1,q2) & $R & $q1 by GATE_1:4;
+
+  then $ns2 iff not $OR2(AND2(q3, NOT1 q1), AND2(q1, XOR2(q2,q3)))
+   & not $q2 & $q1 & $R by A19,GATE_1:6,8;
+  then $ns2 iff (not $AND2(q3, NOT1 q1) & not $AND2(q1, XOR2(q2,q3)))
+   & not $q2 & $q1 & $R by GATE_1:7;
+  then $ns2 iff ((not $q3 or not $NOT1 q1) & (not $q1 or not $XOR2(q2,q3)))
+   & not $q2 & $q1 & $R by GATE_1:6;
+  then $ns2 iff (not $q3 or $q1) & not $q3
+   & not $q2 & $q1 & $R by GATE_1:8;
+  then $ns2 iff $NOT1 q3 & $NOT1 q2 & $q1 & $R by GATE_1:4;
+hence $ns2 iff $AND2(s1,R) by A2,GATE_1:6,16;
+    $ns3 iff $NOT1 nq3 & $nq2 & $NOT1 q1 & $R by A12,A17,GATE_1:6,16;
+  then $ns3 iff not $nq3 & $XOR2(q1,q2) & $R
+   & not $q1 & $R by A18,GATE_1:4,6;
+  then $ns3 iff not $OR2(AND2(q3, NOT1 q1), AND2(q1, XOR2(q2,q3)))
+   & $q2 & not $q1 & $R by A19,GATE_1:6,8;
+  then $ns3 iff (not $AND2(q3, NOT1 q1) & not $AND2(q1, XOR2(q2,q3)))
+   & $q2 & not $q1 & $R by GATE_1:7;
+  then $ns3 iff ((not $q3 or not $NOT1 q1) & (not $q1 or not $XOR2(q2,q3)))
+   & $q2 & not $q1 & $R by GATE_1:6;
+  then $ns3 iff $NOT1 q3 & $q2 & $NOT1 q1 & $R by GATE_1:4;
+hence $ns3 iff $AND2(s2,R) by A3,GATE_1:6,16;
+    $ns4 iff $nq3 & $NOT1 nq2 & $NOT1 nq1 by A13,GATE_1:16;
+  then $ns4 iff $OR2(AND2(q3, NOT1 q1), AND2(q1, XOR2(q2,q3))) & $R
+   & not $nq2 & not $AND2(NOT1 q1,R) by A17,A19,GATE_1:4,6;
+  then $ns4 iff $OR2(AND2(q3, NOT1 q1), AND2(q1, XOR2(q2,q3))) & $R
+   & not $nq2 & not $NOT1 q1 by GATE_1:6;
+  then $ns4 iff $OR2(AND2(q3, NOT1 q1), AND2(q1, XOR2(q2,q3))) & $R
+   & not $XOR2(q1,q2) & $q1 by A18,GATE_1:4,6;
+  then $ns4 iff ($AND2(q3, NOT1 q1) or $AND2(q1, XOR2(q2,q3))) & $R
+   & $q2 & $q1 by GATE_1:7,8;
+  then $ns4 iff (($q3 & $NOT1 q1) or ($q1 & $XOR2(q2,q3))) & $R
+   & $q2 & $q1 by GATE_1:6;
+  then $ns4 iff not $q3 & $R & $q2 & $q1 by GATE_1:4,8;
+  then $ns4 iff $NOT1 q3 & $q2 & $q1 & $R by GATE_1:4;
+hence $ns4 iff $AND2(s3,R) by A4,GATE_1:6,16;
+    $ns5 iff $nq3 & $NOT1 nq2 & $NOT1 q1 & $R by A14,A17,GATE_1:6,16;
+  then $ns5 iff $nq3 & (not $XOR2(q1,q2) or not $R)
+   & not $q1 & $R by A18,GATE_1:4,6;
+  then $ns5 iff $OR2(AND2(q3, NOT1 q1), AND2(q1, XOR2(q2,q3)))
+   & not $q2 & not $q1 & $R by A19,GATE_1:6,8;
+  then $ns5 iff ( $AND2(q3, NOT1 q1) or $AND2(q1, XOR2(q2,q3)))
+   & not $q2 & not $q1 & $R by GATE_1:7;
+
+  then $ns5 iff $q3 & $NOT1 q2 & $NOT1 q1 & $R by GATE_1:4,6;
+hence $ns5 iff $AND2(s4,R) by A5,GATE_1:6,16;
+    $ns6 iff $nq3 & $nq2 & $NOT1 nq1 by A15,GATE_1:16;
+  then $ns6 iff $nq3 & $XOR2(q1,q2) & $R &
+   (not $NOT1 q1 or not $R) by A17,A18,GATE_1:4,6;
+  then $ns6 iff $nq3 & $XOR2(q1,q2) & $R & $q1 by GATE_1:4;
+  then $ns6 iff $OR2(AND2(q3, NOT1 q1), AND2(q1, XOR2(q2,q3)))
+   & not $q2 & $R & $q1 by A19,GATE_1:6,8;
+  then $ns6 iff ($AND2(q3, NOT1 q1) or $AND2(q1, XOR2(q2,q3)))
+   & not $q2 & $R & $q1 by GATE_1:7;
+  then $ns6 iff (($q3 & $NOT1 q1) or ($q1 & $XOR2(q2,q3))) & $R
+     & not $q2 & $q1 by GATE_1:6;
+  then $ns6 iff $q3 & $R & not $q2 & $q1 by GATE_1:8;
+  then $ns6 iff $q3 & $NOT1 q2 & $q1 & $R by GATE_1:4;
+hence $ns6 iff $AND2(s5,R) by A6,GATE_1:6,16;
+      $ns7 iff $nq3 & $nq2 & $NOT1 q1 & $R by A16,A17,GATE_1:6,16;
+    then $ns7 iff $nq3 & $XOR2(q1,q2)
+     & not $q1 & $R by A18,GATE_1:4,6;
+    then $ns7 iff $OR2(AND2(q3, NOT1 q1), AND2(q1, XOR2(q2,q3)))
+     & $q2 & not $q1 & $R by A19,GATE_1:6,8;
+    then $ns7 iff ( $AND2(q3, NOT1 q1) or $AND2(q1, XOR2(q2,q3)))
+     & $q2 & not $q1 & $R by GATE_1:7;
+
+    then $ns7 iff $q3 & $q2 & $NOT1 q1 & $R by GATE_1:4,6;
+  hence $ns7 iff $AND2(s6,R) by A7,GATE_1:6,16;
+    $ns0 iff $NOT1 nq3 & $NOT1 nq2 & $NOT1 nq1 by A9,GATE_1:16;
+  then $ns0 iff ($q1 & not $XOR2(q1,q2) &
+  not $OR2(AND2(q3, NOT1 q1), AND2(q1, XOR2(q2,q3)))) or not $R by A17,A18,A19,
+GATE_1:4,6;
+  then $ns0 iff ($q1 & $q2 & not $AND2(q3, NOT1 q1) & not $AND2(q1, XOR2(q2,q3
+)))
+  or not $R by GATE_1:7,8;
+  then $ns0 iff ($q1 & $q2 & not $AND2(q3, NOT1 q1) & not $XOR2(q2,q3))
+  or not $R by GATE_1:6;
+  then $ns0 iff (($q1 & $q2 & not $q3 & $q3) or ($q1 & $q2 & not $NOT1 q1 & $
+q3))
+  or not $R by GATE_1:6,8;
+  then $ns0 iff ($q1 & $q2 & $q1 & $q3) or not $R by GATE_1:4;
+  then $ns0 iff $s7 or $NOT1 R by A8,GATE_1:4,16;
+  hence $ns0 iff $OR2(s7,NOT1 R) by GATE_1:7;
+end;

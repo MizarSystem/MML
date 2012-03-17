@@ -1,0 +1,261 @@
+:: On Cosets in Segre's Product of Partial Linear Spaces
+::  by Adam Naumowicz
+::
+:: Received August 14, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, MATRIX_2, RELAT_1, ARYTM_1, RFINSEQ, BOOLE, FUNCT_1,
+      FINSEQ_4, PRALG_1, PBOOLE, MSUALG_2, RLVECT_2, FUNCT_4, PENCIL_1, CARD_3,
+      INTEGRA1, SUBSET_1, PRE_TOPC, REALSET1, CARD_1, SGRAPH1, CAT_1, AMI_1,
+      RELAT_2, TARSKI, PENCIL_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1,
+      RELAT_1, BINARITH, STRUCT_0, FUNCT_1, PARTFUN1, FUNCT_2, REALSET1,
+      RFINSEQ, CARD_1, FINSEQ_1, CARD_3, PRE_TOPC, PBOOLE, MSUALG_1, MSUALG_2,
+      PZFMISC1, TOPS_2, T_0TOPSP, GRCAT_1, PRALG_1, POLYNOM1, TOPREAL1,
+      FINSEQ_4, PENCIL_1;
+ constructors BINARITH, REAL_1, MSUALG_2, POLYNOM1, PZFMISC1, TOPS_2, T_0TOPSP,
+      TOPGRP_1, RFINSEQ, TOPREAL1, PENCIL_1, MEMBERED;
+ clusters STRUCT_0, RELSET_1, SUBSET_1, PRALG_1, FINSEQ_5, REALSET1, BORSUK_2,
+      PENCIL_1, XREAL_0, ARYTM_3, TREES_9, FUNCT_2, PARTFUN1, XBOOLE_0;
+ requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
+
+
+begin :: Preliminaries on finite sequences
+
+definition
+ let D be set;
+ let p be FinSequence of D;
+ let i,j be Nat;
+func Del(p,i,j) -> FinSequence of D equals
+:: PENCIL_2:def 1
+ (p|(i -' 1))^(p/^j);
+end;
+
+theorem :: PENCIL_2:1
+for D being set,p being FinSequence of D,i,j being Nat
+holds rng Del(p,i,j) c= rng p;
+
+theorem :: PENCIL_2:2
+for D being set,p being FinSequence of D,i,j being Nat st
+i in dom p & j in dom p holds len Del(p,i,j) = len p - j + i - 1;
+
+theorem :: PENCIL_2:3
+for D being set,p being FinSequence of D,i,j being Nat st
+i in dom p & j in dom p holds len Del(p,i,j) = 0 implies i=1 & j=len p;
+
+theorem :: PENCIL_2:4
+for D being set,p being FinSequence of D,i,j,k being Nat st
+i in dom p & 1 <= k & k <= i-1 holds Del(p,i,j).k = p.k;
+
+theorem :: PENCIL_2:5
+for p,q being FinSequence, k being Nat holds
+len p + 1 <= k implies (p^q).k=q.(k-len p);
+
+theorem :: PENCIL_2:6
+for D being set,p being FinSequence of D,i,j,k being Nat st
+i in dom p & j in dom p & i <= j & i <= k & k <= len p - j + i - 1
+holds Del(p,i,j).k = p.(j -'i + k + 1);
+
+scheme FinSeqOneToOne{X,Y,D()->set,f()-> FinSequence of D(),P[set,set]}:
+ ex g being one-to-one FinSequence of D() st
+ X() = g.1 & Y()=g.len g & rng g c= rng f() &
+ for j being Nat st 1 <= j & j < len g holds P[g.j,g.(j+1)]
+provided
+  X() = f().1 & Y()=f().len f() and
+  for i being Nat, d1,d2 being set
+ st 1 <= i & i < len f() & d1 =f().i & d2 = f().(i+1) holds P[d1,d2];
+
+begin :: Segre cosets
+
+theorem :: PENCIL_2:7
+for I being non empty set
+for A being 1-sorted-yielding ManySortedSet of I
+for L being ManySortedSubset of Carrier A
+for i being Element of I
+for S being Subset of A.i holds
+L+*(i,S) is ManySortedSubset of Carrier A;
+
+definition
+ let I be non empty set;
+ let A be non-Trivial-yielding (TopStruct-yielding ManySortedSet of I);
+mode Segre-Coset of A -> Subset of Segre_Product A means
+:: PENCIL_2:def 2
+ ex L being Segre-like non trivial-yielding ManySortedSubset of Carrier A st
+ it = product L & L.indx(L) = [#](A.indx(L));
+end;
+
+theorem :: PENCIL_2:8
+for I being non empty set
+for A being non-Trivial-yielding (TopStruct-yielding ManySortedSet of I)
+for B1,B2 being Segre-Coset of A st 2 c= Card(B1 /\ B2) holds B1 = B2;
+
+definition
+ let S be TopStruct;
+ let X,Y be Subset of S;
+pred X,Y are_joinable means
+:: PENCIL_2:def 3
+ ex f being FinSequence of bool the carrier of S st
+ X = f.1 & Y = f.(len f) &
+ (for W being Subset of S st W in rng f holds
+ W is closed_under_lines strong) &
+ for i being Nat st 1 <= i & i < len f holds
+ 2 c= Card((f.i) /\ (f.(i+1)));
+end;
+
+theorem :: PENCIL_2:9
+  for S being TopStruct
+for X,Y being Subset of S st
+X,Y are_joinable
+ex f being one-to-one FinSequence of bool the carrier of S st
+(X = f.1 & Y = f.(len f) &
+(for W being Subset of S st W in rng f holds
+W is closed_under_lines strong) &
+for i being Nat st 1 <= i & i < len f holds 2 c= Card((f.i) /\ (f.(i+1))));
+
+theorem :: PENCIL_2:10
+for S being TopStruct
+for X being Subset of S st X is closed_under_lines strong
+holds X,X are_joinable;
+
+theorem :: PENCIL_2:11
+for I being non empty set
+for A being PLS-yielding ManySortedSet of I
+for X,Y being Subset of Segre_Product A st
+X is non trivial closed_under_lines strong &
+Y is non trivial closed_under_lines strong & X,Y are_joinable
+for X1,Y1 being Segre-like non trivial-yielding ManySortedSubset
+of Carrier A st X = product X1 & Y = product Y1 holds
+indx(X1) = indx(Y1) & for i being set st i <> indx(X1) holds X1.i = Y1.i;
+
+begin :: Collineations of Segre product
+
+theorem :: PENCIL_2:12
+  for S being 1-sorted
+for T being non empty 1-sorted
+for f being map of S,T st f is bijective holds f" is bijective;
+
+definition
+ let S,T be TopStruct;
+ let f be map of S,T;
+attr f is isomorphic means
+:: PENCIL_2:def 4
+ f is bijective open & f" is bijective open;
+end;
+
+definition
+ let S be non empty TopStruct;
+cluster isomorphic map of S,S;
+end;
+
+definition
+ let S be non empty TopStruct;
+mode Collineation of S is isomorphic map of S,S;
+end;
+
+definition
+ let S be non empty non void TopStruct;
+ let f be Collineation of S;
+ let l be Block of S;
+redefine func f.:l -> Block of S;
+end;
+
+definition
+ let S be non empty non void TopStruct;
+ let f be Collineation of S;
+ let l be Block of S;
+redefine func f"l -> Block of S;
+end;
+
+theorem :: PENCIL_2:13
+for S being non empty TopStruct
+for f being Collineation of S holds f" is Collineation of S;
+
+theorem :: PENCIL_2:14
+for S being non empty TopStruct
+for f being Collineation of S
+for X being Subset of S st
+X is non trivial holds f.:X is non trivial;
+
+theorem :: PENCIL_2:15
+  for S being non empty TopStruct
+for f being Collineation of S
+for X being Subset of S st
+X is non trivial holds f"X is non trivial;
+
+theorem :: PENCIL_2:16
+for S being non empty non void TopStruct
+for f being Collineation of S
+for X being Subset of S st
+X is strong holds f.:X is strong;
+
+theorem :: PENCIL_2:17
+  for S being non empty non void TopStruct
+for f being Collineation of S
+for X being Subset of S st
+X is strong holds f"X is strong;
+
+theorem :: PENCIL_2:18
+for S being non empty non void TopStruct
+for f being Collineation of S
+for X being Subset of S st
+X is closed_under_lines holds
+f.:X is closed_under_lines;
+
+theorem :: PENCIL_2:19
+  for S being non empty non void TopStruct
+for f being Collineation of S
+for X being Subset of S st
+X is closed_under_lines holds f"X is closed_under_lines;
+
+theorem :: PENCIL_2:20
+for S being non empty non void TopStruct
+for f being Collineation of S
+for X,Y being Subset of S st
+X is non trivial & Y is non trivial & X,Y are_joinable holds
+f.:X,f.:Y are_joinable;
+
+theorem :: PENCIL_2:21
+  for S being non empty non void TopStruct
+for f being Collineation of S
+for X,Y being Subset of S st
+X is non trivial & Y is non trivial & X,Y are_joinable holds
+f"X,f"Y are_joinable;
+
+theorem :: PENCIL_2:22
+for I being non empty set
+for A being PLS-yielding ManySortedSet of I st
+for i being Element of I holds A.i is strongly_connected
+for W being Subset of Segre_Product A st
+W is non trivial strong closed_under_lines holds
+union {Y where Y is Subset of Segre_Product A :
+Y is non trivial strong closed_under_lines & W,Y are_joinable}
+is Segre-Coset of A;
+
+theorem :: PENCIL_2:23
+for I being non empty set
+for A being PLS-yielding ManySortedSet of I st
+for i being Element of I holds A.i is strongly_connected
+for B being set holds B is Segre-Coset of A iff
+ex W being Subset of Segre_Product A st
+W is non trivial strong closed_under_lines &
+B = union {Y where Y is Subset of Segre_Product A :
+           Y is non trivial strong closed_under_lines & W,Y are_joinable};
+
+theorem :: PENCIL_2:24
+for I being non empty set
+for A being PLS-yielding ManySortedSet of I st
+for i being Element of I holds A.i is strongly_connected
+for B being Segre-Coset of A
+for f being Collineation of Segre_Product A holds
+f.:B is Segre-Coset of A;
+
+theorem :: PENCIL_2:25
+  for I being non empty set
+for A being PLS-yielding ManySortedSet of I st
+for i being Element of I holds A.i is strongly_connected
+for B being Segre-Coset of A
+for f being Collineation of Segre_Product A holds
+f"B is Segre-Coset of A;
+

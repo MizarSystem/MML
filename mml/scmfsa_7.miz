@@ -1,0 +1,2176 @@
+:: Some Multi-instructions defined by sequence of instructions of SCM+FSA
+::  by Noriko Asamoto
+::
+:: Received April 24, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_3, FINSET_1, AMI_1, SCMFSA_2, FINSEQ_1, FUNCT_4, RELAT_1,
+      ABSVALUE, ARYTM_1, INT_1, TARSKI, BOOLE, FUNCT_1, DTCONSTR, BINOP_1,
+      FINSOP_1, SETWISEO, CARD_1, FINSEQ_2, AMI_2, SCMFSA_7, ORDINAL2,
+      FINSEQ_4, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, NAT_1, ABSVALUE, BINARITH, ORDINAL2, INT_1, RELAT_1, BINOP_1,
+      CARD_1, SETWISEO, FINSEQ_1, FINSET_1, FINSEQ_4, DTCONSTR, FINSOP_1,
+      FUNCT_1, FUNCT_7, STRUCT_0, AMI_1, SCMFSA_2;
+ constructors WELLORD2, REAL_1, BINARITH, BINOP_1, FINSOP_1, FUNCT_7, SETWISEO,
+      AMI_2, SCMFSA_2, FINSEQ_4, MEMBERED;
+ clusters XBOOLE_0, AMI_1, RELSET_1, PRELAMB, FINSEQ_5, FINSEQ_6, SCMFSA_2,
+      INT_1, DTCONSTR, FINSEQ_1, NAT_1, FRAENKEL, XREAL_0, MEMBERED, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI;
+ theorems AMI_1, FUNCT_1, FUNCT_2, SCMFSA_2, PRE_CIRC, BINARITH, REAL_1, INT_1,
+      NAT_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FINSEQ_5, FINSEQ_6,
+      RELAT_1, GOBOARD9, CARD_1, TARSKI, GRFUNC_1, AXIOMS, DTCONSTR, FINSOP_1,
+      BINOP_1, SETWISEO, ABSVALUE, FUNCT_7, RELSET_1, SQUARE_1, XBOOLE_0,
+      XBOOLE_1, XCMPLX_0, XCMPLX_1;
+ schemes ZFREFLE1, FRAENKEL, FUNCT_7, NAT_1, GOBOARD1, FINSEQ_1;
+
+begin
+
+reserve m for Nat;
+
+definition
+ cluster -> finite FinPartState of SCM+FSA;
+ coherence by AMI_1:def 24;
+end;
+
+definition
+ let p be FinSequence, x,y be set;
+ cluster p +*(x,y) -> FinSequence-like;
+ coherence
+  proof
+   dom (p +*(x,y)) = dom p by FUNCT_7:32
+   .= Seg len p by FINSEQ_1:def 3;
+   hence thesis by FINSEQ_1:def 2;
+  end;
+end;
+
+theorem Th1:
+ for k being natural number holds abs(k) = k
+ proof
+   let k be natural number;
+     0 <= k by NAT_1:18;
+   hence thesis by ABSVALUE:def 1;
+ end;
+
+theorem Th2:
+ for a,b,c being Nat st
+     a >= c & b >= c & a -' c = b -' c holds a = b
+ proof
+    let a,b,c be Nat;
+    assume A1: a >= c & b >= c & a -' c = b -' c;
+    then a - c >= 0 by SQUARE_1:12;
+then A2: a -' c = a - c by BINARITH:def 3;
+      b - c >= 0 by A1,SQUARE_1:12;
+    then A3: b -' c = b - c by BINARITH:def 3;
+      a + (-c) = a - c by XCMPLX_0:def 8
+    .= b + (-c) by A1,A2,A3,XCMPLX_0:def 8;
+    hence thesis by XCMPLX_1:2;
+ end;
+
+theorem Th3:
+ for a,b being natural number st
+     a >= b holds a -' b = a - b
+ proof
+    let a,b be natural number;
+    assume a >= b;
+    then a - b >= 0 by SQUARE_1:12;
+    hence thesis by BINARITH:def 3;
+ end;
+
+theorem Th4:
+ for a,b being Integer st a < b holds a <= b - 1
+ proof
+    let a,b be Integer;
+    assume a < b;
+    then a - 1 < b - 1 by REAL_1:54;
+    then a - 1 + 1 <= b - 1 by INT_1:20;
+    hence thesis by XCMPLX_1:27;
+ end;
+
+scheme CardMono''{ A() -> set, D() -> non empty set, G(set) -> set }:
+ A(),{ G(d) where d is Element of D() : d in A() } are_equipotent
+provided
+A1: A() c= D() and
+A2: for d1,d2 being Element of D() st d1 in A() & d2 in A() & G(d1) = G(d2)
+     holds d1 = d2
+proof
+ per cases;
+ suppose A() <> {};
+    then reconsider D = A() as non empty set;
+    deffunc U(set) = G($1);
+    set X = { U(d) where d is Element of D : d in A() };
+    set Y = { U(d) where d is Element of D() : d in A() };
+A3: A() c= D;
+A4: now let d1,d2 be Element of D;
+       assume A5: U(d1) = U(d2);
+         d1 in A() & d2 in A();
+       then reconsider d = d1, dd = d2 as Element of D() by A1;
+         d = dd by A2,A5;
+       hence d1 = d2;
+      end;
+A6: A(),X are_equipotent from CardMono'(A3,A4);
+      now let x be set;
+       hereby assume x in X;
+          then consider d being Element of D such that
+      A7:  G(d) = x & d in A();
+          consider d being Element of D() such that
+      A8: G(d) = x & d in A() by A1,A7;
+          thus x in Y by A8;
+         end;
+       hereby assume x in Y;
+          then consider d being Element of D() such that
+      A9:  G(d) = x & d in A();
+          consider d being Element of D such that
+      A10: G(d) = x & d in A() by A9;
+          thus x in X by A10;
+         end;
+      end;
+    hence thesis by A6,TARSKI:2;
+ suppose
+A11:  A() = {};
+      now consider a being
+       Element of { G(d) where d is Element of D() : d in A() };
+     assume { G(d) where d is Element of D() : d in A() } <> {};
+     then a in { G(d) where d is Element of D() : d in A() };
+     then ex d being Element of D() st a = G(d) & d in A();
+     hence contradiction by A11;
+    end;
+  hence thesis by A11,CARD_1:46;
+ end;
+
+theorem
+   for p1,p2,q being FinSequence st
+     p1 c= q & p2 c= q & len p1 = len p2 holds p1 = p2
+ proof
+   let p1,p2,q be FinSequence;
+   assume that
+A1: p1 c= q and
+A2: p2 c= q and
+A3: len p1 = len p2;
+   reconsider i = len p1 as Nat;
+A4: dom p1 = Seg i by FINSEQ_1:def 3;
+A5: dom p2 = Seg i by A3,FINSEQ_1:def 3;
+     now let j be Nat; assume
+   A6: j in Seg i;
+      hence p1.j = q.j by A1,A4,GRFUNC_1:8
+      .= p2.j by A2,A5,A6,GRFUNC_1:8;
+     end;
+   hence p1 = p2 by A3,FINSEQ_2:10;
+ end;
+
+canceled 2;
+
+theorem Th8:
+ for p,q being FinSequence st
+     p c= q holds len p <= len q
+ proof
+   let p,q be FinSequence;
+   assume p c= q;
+   then dom p c= dom q by GRFUNC_1:8;
+   then Seg len p c= dom q by FINSEQ_1:def 3;
+   then Seg len p c= Seg len q by FINSEQ_1:def 3;
+   hence len p <= len q by FINSEQ_1:7;
+ end;
+
+theorem Th9:
+ for p,q being FinSequence, i being Nat st
+     1 <= i & i <= len p holds (p ^ q).i = p.i
+ proof
+   let p,q be FinSequence, i be Nat;
+   assume A1: 1 <= i & i <= len p;
+     Seg len p = dom p by FINSEQ_1:def 3;
+   then i in dom p by A1,FINSEQ_1:3;
+   hence thesis by FINSEQ_1:def 7;
+ end;
+
+theorem Th10:
+ for p,q being FinSequence, i being Nat st
+     1 <= i & i <= len q holds (p ^ q).(len p + i) = q.i
+ proof
+   let p,q be FinSequence, i be Nat;
+   assume 1 <= i & i <= len q;
+   then len p + 1 <= len p + i & len p + i <= len p + len q by AXIOMS:24;
+   hence (p ^ q).(len p + i) = q.(len p + i - len p) by FINSEQ_1:36
+   .= q.i by XCMPLX_1:26;
+ end;
+
+Lm1:
+ for p1,p2,p3 being FinSequence holds
+  len p1 + len p2 + len p3 = len (p1 ^ p2 ^ p3) &
+  len p1 + len p2 + len p3 = len (p1 ^ (p2 ^ p3)) &
+  len p1 + (len p2 + len p3) = len (p1 ^ (p2 ^ p3)) &
+  len p1 + (len p2 + len p3) = len (p1 ^ p2 ^ p3)
+ proof
+   let p1,p2,p3 be FinSequence;
+   thus len p1 + len p2 + len p3 = len (p1 ^ p2) + len p3 by FINSEQ_1:35
+   .= len (p1 ^ p2 ^ p3) by FINSEQ_1:35;
+   hence len p1 + len p2 + len p3 = len (p1 ^ (p2 ^ p3)) by FINSEQ_1:45;
+   hence len p1 + (len p2 + len p3) = len (p1 ^ (p2 ^ p3)) by XCMPLX_1:1;
+   hence thesis by FINSEQ_1:45;
+ end;
+
+Lm2:
+ for a,b,c,d being Real holds
+  a + b + c + d = a + b + (c + d) &
+  a + b + c + d = a + (b + c + d) &
+  a + b + c + d = a + (b + (c + d)) &
+  a + b + c + d = a + (b + c) + d
+ proof
+   let a,b,c,d be Real;
+   thus a + b + c + d = a + b + (c + d) by XCMPLX_1:1;
+   thus a + b + c + d = a + (b + c) + d by XCMPLX_1:1
+   .= a + (b + c + d) by XCMPLX_1:1;
+   hence a + b + c + d = a + (b + (c + d)) by XCMPLX_1:1;
+   thus a + b + c + d = a + (b + c) + d by XCMPLX_1:1;
+ end;
+
+Lm3:
+ for p1,p2,p3,p4 being FinSequence holds
+  p1 ^ p2 ^ p3 ^ p4 = p1 ^ p2 ^ (p3 ^ p4) &
+  p1 ^ p2 ^ p3 ^ p4 = p1 ^ (p2 ^ p3 ^ p4) &
+  p1 ^ p2 ^ p3 ^ p4 = p1 ^ (p2 ^ (p3 ^ p4)) &
+  p1 ^ p2 ^ p3 ^ p4 = p1 ^ (p2 ^ p3) ^ p4
+ proof
+   let p1,p2,p3,p4 be FinSequence;
+   thus p1 ^ p2 ^ p3 ^ p4 = p1 ^ p2 ^ (p3 ^ p4) by FINSEQ_1:45;
+   thus p1 ^ p2 ^ p3 ^ p4 = p1 ^ (p2 ^ p3) ^ p4 by FINSEQ_1:45
+   .= p1 ^ (p2 ^ p3 ^ p4) by FINSEQ_1:45;
+   hence p1 ^ p2 ^ p3 ^ p4 = p1 ^ (p2 ^ (p3 ^ p4)) by FINSEQ_1:45;
+   thus p1 ^ p2 ^ p3 ^ p4 = p1 ^ (p2 ^ p3) ^ p4 by FINSEQ_1:45;
+ end;
+
+Lm4:
+ for p1,p2,p3,p4,p5 being FinSequence holds
+  p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ p2 ^ p3 ^ (p4 ^ p5) &
+  p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ p2 ^ (p3 ^ p4 ^ p5) &
+  p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ p2 ^ (p3 ^ (p4 ^ p5)) &
+  p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ p3 ^ p4 ^ p5) &
+  p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ p3 ^ (p4 ^ p5)) &
+  p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ (p3 ^ p4 ^ p5)) &
+  p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ (p3 ^ (p4 ^ p5))) &
+  p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ p2 ^ (p3 ^ p4) ^ p5 &
+  p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ p3 ^ p4) ^ p5 &
+  p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ (p3 ^ p4)) ^ p5 &
+  p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ (p3 ^ p4) ^ p5)
+ proof
+   let p1,p2,p3,p4,p5 be FinSequence;
+   thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ p2 ^ p3 ^ (p4 ^ p5) by FINSEQ_1:45;
+   thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ p2 ^ (p3 ^ p4 ^ p5) by Lm3;
+   thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ p2 ^ (p3 ^ (p4 ^ p5)) by Lm3;
+   thus A1: p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ p3 ^ p4) ^ p5 by Lm3
+       .= p1 ^ (p2 ^ p3 ^ p4 ^ p5) by FINSEQ_1:45;
+   hence p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ p3 ^ (p4 ^ p5)) by FINSEQ_1:45;
+   thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ (p3 ^ p4 ^ p5)) by A1,Lm3;
+   thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ (p3 ^ (p4 ^ p5))) by A1,Lm3;
+   thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ p2 ^ (p3 ^ p4) ^ p5 by Lm3;
+   thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ p3 ^ p4) ^ p5 by Lm3;
+   thus p1 ^ p2 ^ p3 ^ p4 ^ p5 = p1 ^ (p2 ^ (p3 ^ p4)) ^ p5 by Lm3;
+   thus thesis by A1,Lm3;
+ end;
+
+canceled;
+
+theorem
+   for p being FinSequence st
+     p <> {} holds len p in dom p
+ proof
+   let p be FinSequence;
+   assume p <> {};
+   then len p <> 0 by FINSEQ_1:25;
+   then 0 < len p by NAT_1:19;
+then A1: 0 + 1 <= len p by NAT_1:38;
+     Seg len p = dom p by FINSEQ_1:def 3;
+   hence len p in dom p by A1,FINSEQ_1:3;
+ end;
+
+theorem Th13:
+ for D being set holds
+     FlattenSeq <*>(D*) = <*>D
+ proof
+    let D be set;
+    consider g being BinOp of D* such that
+A1: for d1,d2 being Element of D* holds g.(d1,d2) = d1^d2 and
+A2: FlattenSeq <*>(D*) = g "**" <*>(D*) by DTCONSTR:def 14;
+A3: {} is Element of D* by FINSEQ_1:66;
+    reconsider p = {} as Element of D* by FINSEQ_1:66;
+      now let a be Element of D*;
+       thus g.({},a) = {} ^ a by A1,A3
+       .= a by FINSEQ_1:47;
+       thus g.(a,{}) = a ^ {} by A1,A3
+       .= a by FINSEQ_1:47;
+      end;
+then A4: p is_a_unity_wrt g by BINOP_1:11;
+ then g has_a_unity by SETWISEO:def 2;
+    then g "**" <*>(D*) = the_unity_wrt g by FINSOP_1:11;
+    hence thesis by A2,A4,BINOP_1:def 8;
+ end;
+
+theorem Th14:
+ for D being set, F,G be FinSequence of D* holds
+     FlattenSeq (F ^ G) = FlattenSeq F ^ FlattenSeq G
+ proof
+    let D be set, F,G be FinSequence of D*;
+    consider g being BinOp of D* such that
+A1:     for d1,d2 being Element of D* holds g.(d1,d2) = d1^d2 and
+A2:     FlattenSeq (F ^ G) = g "**" F ^ G by DTCONSTR:def 14;
+      now let a,b,c be Element of D*;
+       thus g.(a,g.(b,c)) = a ^ g.(b,c) by A1
+       .= a ^ (b ^ c) by A1
+       .= a ^ b ^ c by FINSEQ_1:45
+       .= g.(a,b) ^ c by A1
+       .= g.(g.(a,b),c) by A1;
+      end;
+then A3: g is associative by BINOP_1:def 3;
+A4: {} is Element of D* by FINSEQ_1:66;
+    reconsider p = {} as Element of D* by FINSEQ_1:66;
+      now let a be Element of D*;
+       thus g.({},a) = {} ^ a by A1,A4
+       .= a by FINSEQ_1:47;
+       thus g.(a,{}) = a ^ {} by A1,A4
+       .= a by FINSEQ_1:47;
+      end;
+    then p is_a_unity_wrt g by BINOP_1:11;
+then g has_a_unity or len F >= 1 & len G >= 1 by SETWISEO:def 2;
+    hence FlattenSeq (F ^ G) = g.(g "**" F,g "**" G) by A2,A3,FINSOP_1:6
+    .= (g "**" F) ^ (g "**" G) by A1
+    .= FlattenSeq F ^ (g "**" G) by A1,DTCONSTR:def 14
+    .= FlattenSeq F ^ FlattenSeq G by A1,DTCONSTR:def 14;
+ end;
+
+theorem
+   for D being set, p,q be Element of D* holds
+     FlattenSeq <* p,q *> = p ^ q
+ proof
+    let D be set, p,q be Element of D*;
+    consider g being BinOp of D* such that
+A1:     for d1,d2 being Element of D* holds g.(d1,d2) = d1^d2 and
+A2:     FlattenSeq <* p,q *> = g "**" <* p,q *> by DTCONSTR:def 14;
+    thus FlattenSeq <* p,q *> = g.(p,q) by A2,FINSOP_1:13
+    .= p ^ q by A1;
+ end;
+
+theorem
+   for D being set, p,q,r be Element of D* holds
+     FlattenSeq <* p,q,r *> = p ^ q ^ r
+ proof
+    let D be set, p,q,r be Element of D*;
+    consider g being BinOp of D* such that
+A1:     for d1,d2 being Element of D* holds g.(d1,d2) = d1^d2 and
+A2:     FlattenSeq <* p,q,r *> = g "**" <* p,q,r *> by DTCONSTR:def 14;
+    thus FlattenSeq <* p,q,r *> = g.(g.(p,q),r) by A2,FINSOP_1:15
+    .= g.(p,q) ^ r by A1
+    .= p ^ q ^ r by A1;
+ end;
+
+theorem Th17:
+ for D being non empty set, p,q being FinSequence of D st
+     p c= q holds ex p' being FinSequence of D st p ^ p' = q
+ proof
+   let D be non empty set, p,q be FinSequence of D;
+   assume A1: p c= q;
+   defpred P[Nat,set] means q/.(len p + $1) = $2;
+A2: dom p = Seg len p by FINSEQ_1:def 3;
+     dom q = Seg len q by FINSEQ_1:def 3;
+   then Seg len p c= Seg len q by A1,A2,GRFUNC_1:8;
+   then len p <= len q by FINSEQ_1:7;
+   then len q - len p >= 0 by SQUARE_1:12;
+   then reconsider N = len q - len p as Nat by INT_1:16;
+A3: for n being Nat st n in Seg N ex d being Element of D st P[n,d];
+     ex f being FinSequence of D st len f = N &
+     for n being Nat st n in Seg N holds P[n,f/.n] from FinSeqDChoice(A3
+);
+   then consider f being FinSequence of D such that
+A4: len f = N and
+A5: for n being Nat st n in Seg N holds P[n,f/.n];
+   take f;
+A6: len (p ^ f) = len p + N by A4,FINSEQ_1:35
+   .= len q by XCMPLX_1:27;
+     now let k be Nat; assume A7: 1 <= k & k <= len (p ^ f);
+      then k in Seg len q by A6,FINSEQ_1:3;
+ then A8: k in dom q by FINSEQ_1:def 3;
+      per cases;
+      suppose k <= len p;
+       then k in Seg len p by A7,FINSEQ_1:3;
+ then A9:    k in dom p by FINSEQ_1:def 3;
+       hence (p ^ f).k = p.k by FINSEQ_1:def 7
+       .= q.k by A1,A9,GRFUNC_1:8;
+      suppose A10: len p < k;
+ then A11:    k - len p > 0 by SQUARE_1:11;
+ then A12:   k - len p >= 0 + 1 by INT_1:20;
+       reconsider kk = k - len p as Nat by A11,INT_1:16;
+         k <= len p + len f by A7,FINSEQ_1:35;
+       then kk <= len p + len f - len p by REAL_1:49;
+       then kk <= len f by XCMPLX_1:26;
+ then A13: kk in Seg len f by A12,FINSEQ_1:3;
+ then A14:  kk in dom f by FINSEQ_1:def 3;
+       thus (p ^ f).k = f.kk by A7,A10,FINSEQ_1:37
+       .= f/.kk by A14,FINSEQ_4:def 4
+       .= q/.(len p + kk) by A4,A5,A13
+       .= q/.k by XCMPLX_1:27
+       .= q.k by A8,FINSEQ_4:def 4;
+     end;
+   hence p ^ f = q by A6,FINSEQ_1:18;
+ end;
+
+theorem Th18:
+ for D being non empty set, p,q being FinSequence of D, i being Nat st
+     p c= q & 1 <= i & i <= len p holds q.i = p.i
+ proof
+   let D be non empty set, p,q be FinSequence of D, i be Nat;
+   assume p c= q;
+   then consider p' being FinSequence of D such that A1: p ^ p' = q by Th17;
+   assume 1 <= i & i <= len p;
+   hence thesis by A1,Th9;
+ end;
+
+theorem Th19:
+ for D being set, F,G be FinSequence of D* holds
+     F c= G implies FlattenSeq F c= FlattenSeq G
+ proof
+   let D be set, F,G be FinSequence of D*;
+   assume F c= G;
+   then consider F' being FinSequence of D* such that A1: F ^ F' = G by Th17;
+     FlattenSeq F ^ FlattenSeq F' = FlattenSeq G by A1,Th14;
+   hence FlattenSeq F c= FlattenSeq G by FINSEQ_6:12;
+ end;
+
+theorem Th20:
+ for p being FinSequence holds
+     p | Seg 0 = {}
+ proof
+   let p be FinSequence;
+     (dom p) /\ Seg 0 = {} by FINSEQ_1:4;
+   then (dom p) misses Seg 0 by XBOOLE_0:def 7;
+   hence p | Seg 0 = {} by RELAT_1:95;
+ end;
+
+theorem Th21:
+ for f,g being FinSequence holds
+     f | Seg 0 = g | Seg 0
+ proof
+   let f,g be FinSequence;
+  f | Seg 0 = {} by Th20;
+   hence thesis by Th20;
+ end;
+
+theorem Th22:
+ for D being non empty set, x being Element of D holds
+     <* x *> is FinSequence of D;
+
+theorem Th23:
+ for D being set, p,q being FinSequence of D holds
+     p ^ q is FinSequence of D;
+
+ deffunc U(Nat) = insloc ($1-'1);
+
+definition
+ let f be FinSequence of the Instructions of SCM+FSA;
+ func Load f->FinPartState of SCM+FSA means
+:Def1: dom it = {insloc (m-'1): m in dom f} &
+     for k being Nat st insloc k in dom it holds it.insloc k = f/.(k+1);
+ existence
+   proof
+    set X={ U(m): m in dom f};
+    defpred P[set,set] means
+        ex k being Nat st $1 = insloc (k-'1) & $2 = f/.k & k in dom f;
+A1: for e being set st e in X ex u being set st P[e,u]
+      proof
+       let e be set;
+       assume e in X;
+       then consider k being Nat such that
+   A2: e = insloc (k-'1) & k in dom f;
+       take f/.k, k;
+       thus thesis by A2;
+      end;
+    consider g being Function such that
+A3: dom g = X & for e being set st e in
+ X holds P[e,g.e] from NonUniqFuncEx(A1);
+A4: dom f is finite;
+  X is finite from FraenkelFin(A4);
+then A5: g is finite by A3,AMI_1:21;
+A6: dom the Object-Kind of SCM+FSA = the carrier of SCM+FSA by FUNCT_2:def 1;
+A7: dom g c= dom the Object-Kind of SCM+FSA
+      proof
+       let x be set;
+       assume x in dom g;
+       then consider k being Nat such that
+   A8: x = insloc (k-'1) & k in dom f by A3;
+       thus x in dom the Object-Kind of SCM+FSA by A6,A8;
+      end;
+      now let x be set;
+       assume x in dom g;
+       then consider k being Nat such that
+   A9: x = insloc (k-'1) & g.x = f/.k & k in dom f by A3;
+         (the Object-Kind of SCM+FSA).x = ObjectKind insloc (k-'1)
+           by A9,AMI_1:def 6
+       .= the Instructions of SCM+FSA by AMI_1:def 14;
+       hence g.x in (the Object-Kind of SCM+FSA).x by A9;
+      end;
+    then g in sproduct the Object-Kind of SCM+FSA by A7,AMI_1:def 16;
+    then reconsider g as FinPartState of SCM+FSA by A5,AMI_1:def 24;
+    take g;
+    thus dom g = {insloc (m-'1): m in dom f} by A3;
+
+    let k be Nat;
+    assume insloc k in dom g;
+    then consider a being Nat such that
+A10: insloc k = insloc (a-'1) & g.insloc k = f/.a & a in dom f by A3;
+    consider n being Nat such that
+A11: dom f = Seg n by FINSEQ_1:def 2;
+A12: a >= 1 by A10,A11,FINSEQ_1:3;
+A13: k + 1 >= 1 by NAT_1:29;
+      k + 1 -' 1 = k by BINARITH:39
+    .= a -' 1 by A10,SCMFSA_2:18;
+    hence g.insloc k = f/.(k+1) by A10,A12,A13,Th2;
+   end;
+ uniqueness
+   proof
+    let g1,g2 be FinPartState of SCM+FSA such that
+A14: dom g1 ={insloc (m-'1): m in dom f} &
+        for k being Nat st insloc k in dom g1 holds g1.insloc k = f/.(k+1) and
+A15: dom g2 ={insloc (m-'1): m in dom f} &
+        for k being Nat st insloc k in dom g2 holds g2.insloc k = f/.(k+1);
+      now let x be set;
+       assume A16: x in dom g1;
+       then consider k1 being Nat such that
+   A17: x = insloc (k1-'1) & k1 in dom f by A14;
+       reconsider k = k1 -' 1 as Nat;
+         g2.insloc k = f/.(k+1) by A14,A15,A16,A17;
+       hence g1.x = g2.x by A14,A16,A17;
+      end;
+    hence g1 = g2 by A14,A15,FUNCT_1:9;
+   end;
+ end;
+
+canceled;
+
+theorem
+   for f being FinSequence of the Instructions of SCM+FSA holds
+     card Load f = len f
+ proof
+    let f be FinSequence of the Instructions of SCM+FSA;
+A1: dom f c= NAT by RELSET_1:12;
+A2: now let i,j be Nat;
+       assume
+A3:    i in dom f & j in dom f & U(i) = U(j);
+then A4:    i-'1 = j-'1 by SCMFSA_2:18;
+       consider n being Nat such that
+A5:    dom f = Seg n by FINSEQ_1:def 2;
+A6:    1 <= i & i <= n by A3,A5,FINSEQ_1:3;
+         1 <= j & j <= n by A3,A5,FINSEQ_1:3;
+       hence i = j by A4,A6,Th2;
+      end;
+    set X={ U(m): m in dom f};
+A7:  dom f,X are_equipotent from CardMono''(A1,A2);
+    reconsider T = dom f as finite set;
+    A8:  T = Seg len f by FINSEQ_1:def 3;
+A9: dom f is finite;
+      X is finite from FraenkelFin(A9);
+    then reconsider X as finite set;
+A10: dom Load f = X by Def1;
+    thus card Load f = card dom Load f by PRE_CIRC:21
+    .= card T by A7,A10,CARD_1:81
+    .= len Sgm Seg len f by A8,FINSEQ_3:44
+    .= len f by FINSEQ_3:52;
+ end;
+
+theorem Th26:
+ for p being FinSequence of the Instructions of SCM+FSA, k being Nat holds
+     insloc k in dom Load p iff k + 1 in dom p
+ proof
+   let p be FinSequence of the Instructions of SCM+FSA, k be Nat;
+A1: dom Load p = {insloc (m-'1): m in dom p} by Def1;
+   hereby assume insloc k in dom Load p;
+      then consider m such that
+A2:   insloc (m-'1) = insloc k and
+A3:   m in dom p by A1;
+A4:   k = m-'1 by A2,SCMFSA_2:18;
+        dom p = Seg len p by FINSEQ_1:def 3;
+      then 1 <= m by A3,FINSEQ_1:3;
+      then k + 1 = m - 1 + 1 by A4,Th3
+      .= m by XCMPLX_1:27;
+      hence k + 1 in dom p by A3;
+     end;
+   assume k + 1 in dom p;
+   then insloc (k+1-'1) in dom Load p by A1;
+   hence insloc k in dom Load p by BINARITH:39;
+ end;
+
+theorem
+   for k,n being Nat holds
+     k < n iff 0 < k + 1 & k + 1 <= n
+ proof
+   let k,n be Nat;
+   hereby assume k < n;
+      hence 0 < k + 1 & k + 1 <= n by NAT_1:18,38;
+     end;
+   assume 0 < k + 1 & k + 1 <= n;
+   hence k < n by NAT_1:38;
+ end;
+
+theorem Th28:
+ for k, n being Nat holds
+     k < n iff 1 <= k + 1 & k + 1 <= n
+ proof
+   let k,n be Nat;
+   hereby assume A1: k < n;
+        0 <= k by NAT_1:18;
+      then 0 + 1 <= k + 1 by AXIOMS:24;
+      hence 1 <= k + 1 & k + 1 <= n by A1,NAT_1:38;
+     end;
+   assume 1 <= k + 1 & k + 1 <= n;
+   hence k < n by NAT_1:38;
+ end;
+
+theorem Th29:
+ for p being FinSequence of the Instructions of SCM+FSA, k being Nat holds
+     insloc k in dom Load p iff k < len p
+ proof
+   let p be FinSequence of the Instructions of SCM+FSA, k be Nat;
+A1: dom p = Seg len p by FINSEQ_1:def 3;
+   hereby assume insloc k in dom Load p;
+      then k + 1 in dom p by Th26;
+      then 0 + 1 <= k + 1 & k + 1 <= len p by A1,FINSEQ_1:3;
+      hence k < len p by Th28;
+     end;
+   assume k < len p;
+   then 1 <= k + 1 & k + 1 <= len p by Th28;
+   then k + 1 in Seg len p by FINSEQ_1:3;
+   hence insloc k in dom Load p by A1,Th26;
+ end;
+
+theorem
+   for f being non empty FinSequence of the Instructions of SCM+FSA holds
+     1 in dom f & insloc 0 in dom Load f
+ proof
+  let f be non empty FinSequence of the Instructions of SCM+FSA;
+A1:  dom Load f = {insloc (m-'1): m in dom f} by Def1;
+  thus 1 in dom f by FINSEQ_5:6;
+  then insloc (1-'1) in dom Load f by A1;
+  hence insloc 0 in dom Load f by GOBOARD9:1;
+ end;
+
+theorem Th31:
+ for p,q being FinSequence of the Instructions of SCM+FSA holds
+     Load p c= Load (p ^ q)
+ proof
+   let p,q be FinSequence of the Instructions of SCM+FSA;
+A1: dom Load p = {insloc (m-'1): m in dom p} by Def1;
+A2: dom Load (p ^ q) = {insloc (m-'1): m in dom (p ^ q)} by Def1;
+   A3: dom p c= dom (p ^ q) by FINSEQ_1:39;
+     now let x be set;
+      assume x in dom Load p;
+      then consider m such that A4: x = insloc (m-'1) & m in dom p by A1;
+      thus x in dom Load (p ^ q) by A2,A3,A4;
+     end;
+then A5: dom Load p c= dom Load (p ^ q) by TARSKI:def 3;
+A6: now let k be Nat such that A7: insloc k in dom Load p;
+A8:   dom p c= dom (p ^ q) by FINSEQ_1:39;
+A9:    k + 1 in dom p by A7,Th26;
+      thus (Load (p ^ q)).insloc k = (p ^ q)/.(k + 1) by A5,A7,Def1
+      .= (p ^ q).(k + 1) by A8,A9,FINSEQ_4:def 4
+      .= p.(k + 1) by A9,FINSEQ_1:def 7
+      .= p/.(k + 1) by A9,FINSEQ_4:def 4
+      .= (Load p).insloc k by A7,Def1;
+     end;
+     now let x be set; assume A10: x in dom Load p;
+      then x in {insloc (m-'1): m in dom p} by Def1;
+      then ex m being Nat st x = insloc (m-'1) & m in dom p;
+      hence (Load p).x = (Load (p ^ q)).x by A6,A10;
+     end;
+   hence thesis by A5,GRFUNC_1:8;
+ end;
+
+theorem
+   for p,q being FinSequence of the Instructions of SCM+FSA holds
+     p c= q implies Load p c= Load q
+ proof
+   let p,q be FinSequence of the Instructions of SCM+FSA;
+   assume p c= q;
+   then consider p' being FinSequence of the Instructions of SCM+FSA such that
+A1: p ^ p' = q by Th17;
+   thus thesis by A1,Th31;
+ end;
+
+definition
+ let a be Int-Location;
+ let k be Integer;
+ func a := k -> FinPartState of SCM+FSA means
+:Def2:   ex k1 being Nat st k1 + 1 = k &
+   it = Load(<* a:= intloc 0 *> ^
+             ( k1 |-> AddTo(a,intloc 0) ) ^
+             <* halt SCM+FSA *> )
+ if k > 0
+ otherwise
+   ex k1 being Nat st k1 + k = 1 &
+   it = Load(<* a:= intloc 0 *> ^
+             ( k1 |-> SubFrom(a,intloc 0) ) ^
+             <* halt SCM+FSA *> );
+
+ existence
+  proof
+   thus k > 0 implies ex f being FinPartState of SCM+FSA st
+      ex k1 being Nat st k1 + 1 = k &
+          f = Load(<* a:= intloc 0 *> ^ ( k1 |-> AddTo(a,intloc 0) ) ^
+                   <* halt SCM+FSA *> )
+     proof
+      assume k > 0;
+      then 0 + 1 <= k by INT_1:20;
+      then reconsider k1 = k - 1 as Nat by INT_1:18;
+      take Load(<* a:= intloc 0 *> ^ ( k1 |-> AddTo(a,intloc 0) ) ^
+                <* halt SCM+FSA *> ), k1;
+      thus k1 + 1 = k by XCMPLX_1:27;
+      thus thesis;
+     end;
+   assume k <= 0;
+   then k + 0 < 0 + 1 by REAL_1:67;
+   then reconsider k1 = 1 - k as Nat by INT_1:18;
+   take Load(<* a:= intloc 0 *> ^ ( k1 |-> SubFrom(a,intloc 0) ) ^
+             <* halt SCM+FSA *> ), k1;
+   thus k1 + k = 1 by XCMPLX_1:27;
+   thus thesis;
+  end;
+ uniqueness by XCMPLX_1:2;
+ correctness;
+end;
+
+definition
+ let a be Int-Location;
+ let k be Integer;
+ func aSeq(a,k) -> FinSequence of the Instructions of SCM+FSA means
+:Def3:   ex k1 being Nat st k1 + 1 = k &
+   it = <* a:= intloc 0 *> ^ (k1 |-> AddTo(a,intloc 0))
+ if k > 0
+ otherwise
+   ex k1 being Nat st k1 + k = 1 &
+   it = <* a:= intloc 0 *> ^ (k1 |-> SubFrom(a,intloc 0));
+ existence
+  proof
+   thus k > 0 implies ex s being FinSequence of the Instructions of SCM+FSA st
+       ex k1 being Nat st k1 + 1 = k &
+           s = <* a:= intloc 0 *> ^ ( k1 |-> AddTo(a,intloc 0) )
+     proof
+      assume k > 0;
+      then 0 + 1 <= k by INT_1:20;
+      then reconsider k1 = k - 1 as Nat by INT_1:18;
+      take <* a:= intloc 0 *> ^ ( k1 |-> AddTo(a,intloc 0) ),k1;
+      thus k1 + 1 = k by XCMPLX_1:27;
+      thus thesis;
+     end;
+   assume k <= 0;
+   then k + 0 < 0 + 1 by REAL_1:67;
+   then reconsider k1 = 1 - k as Nat by INT_1:18;
+   take <* a:= intloc 0 *> ^ ( k1 |-> SubFrom(a,intloc 0) ), k1;
+   thus k1 + k = 1 by XCMPLX_1:27;
+   thus thesis;
+  end;
+ uniqueness by XCMPLX_1:2;
+ correctness;
+end;
+
+theorem
+   for a being Int-Location, k being Integer holds
+     a:=k = Load (aSeq(a,k) ^ <* halt SCM+FSA *>)
+ proof
+   let a be Int-Location, k be Integer;
+   per cases;
+   suppose A1: k > 0;
+    then consider k1 being Nat such that
+A2:    k1 + 1 = k and
+A3:    a:=k = Load (<* a:=intloc 0 *>
+        ^ (k1|->AddTo(a,intloc 0)) ^ <*halt SCM+FSA*>) by Def2;
+    thus thesis by A1,A2,A3,Def3;
+   suppose A4: k <= 0;
+    then consider k1 being Nat such that
+A5:    k1 + k = 1 and
+A6:    a:=k = Load (<* a:=intloc 0 *>
+        ^ (k1|->SubFrom(a,intloc 0)) ^ <* halt SCM+FSA *>) by Def2;
+    thus thesis by A4,A5,A6,Def3;
+ end;
+
+definition
+ let f be FinSeq-Location;
+ let p be FinSequence of INT;
+ func aSeq(f,p) -> FinSequence of the Instructions of SCM+FSA means
+:Def4: ex pp being FinSequence of (the Instructions of SCM+FSA)* st
+     len pp = len p &
+     (for k being Nat st 1 <= k & k <= len p holds
+         ex i being Integer st
+         i = p.k &
+         pp.k = (aSeq(intloc 1,k) ^
+                aSeq(intloc 2,i) ^
+                <* (f,intloc 1):=intloc 2 *>)) &
+     it = FlattenSeq pp;
+  existence
+   proof
+    set D = (the Instructions of SCM+FSA)*;
+    defpred P[Integer,set] means ex i being Integer st
+       (i = p.$1 &
+       $2 = (aSeq(intloc 1,$1) ^
+              aSeq(intloc 2,i) ^
+              <* (f,intloc 1):=intloc 2 *>));
+A1: for k being Nat st k in Seg len p ex d being Element of D st P[k,d]
+      proof
+       let k be Nat;
+       assume k in Seg len p;
+     then k in dom p by FINSEQ_1:def 3;
+       then p.k in INT by FINSEQ_2:13;
+       then reconsider i = p.k as Integer by INT_1:12;
+       reconsider d = aSeq(intloc 1,k) ^ aSeq(intloc 2,i) ^
+         <* (f,intloc 1):=intloc 2 *> as Element of D by FINSEQ_1:def 11;
+       take d;
+       thus thesis;
+      end;
+    consider pp being FinSequence of D such that
+A2: len pp = len p and
+A3: for k being Nat st k in
+ Seg len p holds P[k,pp/.k] from FinSeqDChoice(A1);
+    take FlattenSeq pp;
+    take pp;
+    thus len pp = len p by A2;
+      hereby
+       let k be Nat;
+       assume A4: 1 <= k & k <= len p;
+       then k in dom p by FINSEQ_3:27;
+       then p.k in INT by FINSEQ_2:13;
+       then reconsider i = p.k as Integer by INT_1:12;
+       take i;
+       thus i = p.k;
+A5:    k in Seg len p by A4,FINSEQ_1:3;
+then A6:     k in dom pp by A2,FINSEQ_1:def 3;
+         P[k,pp/.k] by A3,A5;
+       hence
+         (aSeq(intloc 1,k) ^ aSeq(intloc 2,i) ^ <* (f,intloc 1):=intloc 2 *>)
+       = pp.k by A6,FINSEQ_4:def 4;
+      end;
+    thus thesis;
+   end;
+  uniqueness
+   proof
+    let s1,s2 be FinSequence of the Instructions of SCM+FSA such that
+A7: (ex pp being FinSequence of (the Instructions of SCM+FSA)* st
+    len pp = len p &
+    (for k being Nat st 1 <= k & k <= len p holds
+        ex i being Integer st
+        i = p.k &
+        pp.k = (aSeq(intloc 1,k) ^
+               aSeq(intloc 2,i) ^
+               <* (f,intloc 1):=intloc 2 *>)) &
+    s1 = FlattenSeq pp) and
+A8: (ex pp being FinSequence of (the Instructions of SCM+FSA)* st
+    len pp = len p &
+    (for k being Nat st 1 <= k & k <= len p holds
+        ex i being Integer st
+        i = p.k &
+        pp.k = (aSeq(intloc 1,k) ^
+               aSeq(intloc 2,i) ^
+               <* (f,intloc 1):=intloc 2 *>)) &
+    s2 = FlattenSeq pp);
+    consider pp1 being FinSequence of (the Instructions of SCM+FSA)* such that
+A9: len pp1 = len p and
+A10: for k being Nat st 1 <= k & k <= len p holds
+        ex i being Integer st
+        i = p.k &
+        pp1.k = (aSeq(intloc 1,k) ^
+               aSeq(intloc 2,i) ^
+               <* (f,intloc 1):=intloc 2 *>) and
+A11: s1 = FlattenSeq pp1 by A7;
+    consider pp2 being FinSequence of (the Instructions of SCM+FSA)* such that
+A12: len pp2 = len p and
+A13: for k being Nat st 1 <= k & k <= len p holds
+        (ex i being Integer st
+        i = p.k &
+        pp2.k = (aSeq(intloc 1,k) ^
+               aSeq(intloc 2,i) ^
+               <* (f,intloc 1):=intloc 2 *>)) and
+A14: s2 = FlattenSeq pp2 by A8;
+    reconsider i = len p as Nat;
+      len pp1=i & len pp2=i & (for k being Nat st k in Seg i holds pp1.k = pp2.
+k
+)
+      proof
+       thus len pp1 = i & len pp2 = i by A9,A12;
+       hereby let k be Nat;
+          assume k in Seg i;
+then A15:        1 <= k & k <= len p by FINSEQ_1:3;
+          then consider i1 being Integer such that
+A16:           (i1 = p.k &
+              pp1.k = (aSeq(intloc 1,k) ^
+                  aSeq(intloc 2,i1) ^
+                  <* (f,intloc 1):=intloc 2 *>)) by A10;
+          consider i2 being Integer such that
+A17:           (i2 = p.k &
+              pp2.k = (aSeq(intloc 1,k) ^
+                  aSeq(intloc 2,i2) ^
+                  <* (f,intloc 1):=intloc 2 *>)) by A13,A15;
+          thus pp1.k = pp2.k by A16,A17;
+         end;
+      end;
+    hence s1 = s2 by A11,A14,FINSEQ_2:10;
+   end;
+  correctness;
+ end;
+
+definition
+ let f be FinSeq-Location;
+ let p be FinSequence of INT;
+ func f := p -> FinPartState of SCM+FSA equals
+:Def5: Load (aSeq(intloc 1,len p) ^
+            <* f:=<0,...,0>intloc 1 *> ^
+            aSeq(f,p) ^
+            <* halt SCM+FSA *> );
+ correctness;
+end;
+
+theorem
+   for a being Int-Location holds
+     a:=1 = Load ( <* a:= intloc 0 *> ^ <* halt SCM+FSA *> )
+ proof
+    let a be Int-Location;
+A1: 0 |-> AddTo(a,intloc 0) = {} by FINSEQ_2:72;
+A2: <* a:= intloc 0 *> ^ {} ^ <* halt SCM+FSA *>
+        = <* a:= intloc 0 *> ^ <* halt SCM+FSA *> by FINSEQ_1:47;
+      0 + 1 = 1;
+    hence thesis by A1,A2,Def2;
+ end;
+
+theorem
+   for a being Int-Location holds
+     a:=0 = Load (<* a:= intloc 0 *>^<*SubFrom(a,intloc 0)*>^<*halt SCM+FSA*>)
+ proof
+    let a be Int-Location;
+A1: 1 |-> SubFrom(a,intloc 0) = <*SubFrom(a,intloc 0)*> by FINSEQ_2:73;
+      1 + 0 = 1;
+    hence thesis by A1,Def2;
+ end;
+
+theorem Th36:
+ for s being State of SCM+FSA st s.intloc 0 = 1
+ for c0 being Nat st IC s = insloc c0
+ for a being Int-Location,
+     k being Integer st
+     a <> intloc 0 &
+     (for c being Nat st c in dom aSeq(a,k) holds
+         aSeq(a,k).c = s.insloc (c0 + c -' 1))
+ holds
+     (for i being Nat st i <= len aSeq(a,k) holds
+         IC (Computation s).i = insloc (c0 + i) &
+         (for b being Int-Location st b <> a holds (Computation s).i.b = s.b) &
+         (for f being FinSeq-Location holds (Computation s).i.f = s.f)) &
+     (Computation s).(len aSeq(a,k)).a = k
+ proof
+   let s be State of SCM+FSA; assume
+A1: s.intloc 0 = 1;
+   let c0 be Nat; assume
+A2: IC s = insloc c0;
+   let a be Int-Location;
+   let k be Integer;
+   assume that
+A3: a <> intloc 0 and
+A4: for c being Nat st c in dom aSeq(a,k) holds
+       aSeq(a,k).c = s.insloc (c0 + c -' 1);
+   per cases;
+   suppose
+A5:   k > 0;
+    then reconsider k'= k as Nat by INT_1:16;
+    consider k1 being Nat such that
+A6: k1 + 1 = k' and
+A7: aSeq(a,k') = <*a:=intloc 0*> ^ (k1 |-> AddTo(a,intloc 0)) by A5,Def3;
+A8: len aSeq(a,k') = len <*a:=intloc 0*> + len (k1|->AddTo(a,intloc 0)) by A7,
+FINSEQ_1:35
+    .= 1 + len(k1|->AddTo(a,intloc 0)) by FINSEQ_1:56
+    .= k' by A6,FINSEQ_2:69;
+    defpred Q[Nat] means $1 <= k' implies
+        IC (Computation s).$1 = insloc (c0 + $1) &
+        (1 <= $1 implies (Computation s).$1.a = $1) &
+        (for b being Int-Location st b <> a holds (Computation s).$1.b=s.b) &
+        (for f being FinSeq-Location holds (Computation s).$1.f = s.f);
+A9: (for i being Nat st i <= len aSeq(a,k') holds
+       IC (Computation s).i = insloc (c0 + i) &
+       (1 <= i implies (Computation s).i.a = i) &
+       (for b being Int-Location st b <> a holds (Computation s).i.b = s.b) &
+       (for f being FinSeq-Location holds (Computation s).i.f = s.f))
+     proof
+   let i be Nat such that
+A10: i <= len aSeq(a,k');
+A11: now let i be Nat;
+       assume i < k';
+       then insloc i in dom Load aSeq(a,k') by A8,Th29;
+       hence i + 1 in dom aSeq(a,k') by Th26;
+      end;
+A12: now let i be Nat;
+       assume i < k';
+then A13:     i + 1 in dom aSeq(a,k') by A11;
+       thus s.insloc (c0 + i) = s.insloc (c0 + i + 1 -' 1) by BINARITH:39
+       .= s.insloc (c0 + (i + 1) -' 1) by XCMPLX_1:1
+       .= aSeq(a,k').(i + 1) by A4,A13;
+      end;
+then A14: s.insloc (c0 + 0) = aSeq(a,k').(0 + 1) by A5
+    .= a:= intloc 0 by A7,FINSEQ_1:58;
+A15: now let i be Nat; assume
+    A16: 1 < i & i <= k';
+then A17:   1 <= i - 1 by Th4;
+       then 0 <= i - 1 by AXIOMS:22;
+       then reconsider i1 = i - 1 as Nat by INT_1:16;
+         i - 1 <= k' - 1 by A16,REAL_1:49;
+       then i - 1 <= k1 by A6,XCMPLX_1:26;
+then A18:   i1 in Seg k1 by A17,FINSEQ_1:3;
+    len <* a:= intloc 0 *> = 1 by FINSEQ_1:56;
+       hence aSeq(a,k').i
+        = (k1 |-> AddTo(a,intloc 0)).(i - 1) by A7,A8,A16,FINSEQ_1:37
+       .= AddTo(a,intloc 0) by A18,FINSEQ_2:70;
+      end;
+A19: now let i be Nat;
+       assume A20: 0 < i & i < k';
+then A21:   0 + 1 < i + 1 by REAL_1:53;
+A22:   i + 1 <= k' by A20,NAT_1:38;
+       thus s.insloc (c0 + i) = aSeq(a,k').(i+1) by A12,A20
+       .=AddTo(a,intloc 0) by A15,A21,A22;
+      end;
+A23: now let n be Nat;
+       assume n = 0; hence
+A24:   (Computation s).n = s by AMI_1:def 19; hence
+A25:   CurInstr (Computation s).n = a:= intloc 0 by A2,A14,AMI_1:def 17;
+       thus (Computation s).(n+1) = Following (Computation s).n by AMI_1:def 19
+       .= Exec(a:= intloc 0,s) by A24,A25,AMI_1:def 18;
+      end;
+A26:  Q[0] by A2,AMI_1:def 19;
+A27:  for n being Nat st Q[n] holds Q[n + 1]
+       proof
+        let n be Nat;
+        assume A28: Q[n];
+        assume A29: n + 1 <= k';
+        per cases by NAT_1:19;
+          suppose A30: n = 0;
+           hence IC (Computation s).(n+1) = IC Exec(a:= intloc 0,s) by A23
+           .= Exec(a:= intloc 0,s).IC SCM+FSA by AMI_1:def 15
+           .= Next insloc (c0 + n) by A2,A30,SCMFSA_2:89
+           .= insloc (c0 + n + 1) by SCMFSA_2:32
+           .= insloc (c0 + (n + 1)) by XCMPLX_1:1;
+           hereby assume 1 <= n + 1;
+              thus (Computation s).(n+1).a = Exec(a:= intloc 0,s).a by A23,A30
+              .= n + 1 by A1,A30,SCMFSA_2:89;
+             end;
+           hereby let b be Int-Location;
+              assume A31: b <> a;
+              thus (Computation s).(n+1).b = Exec(a:= intloc 0,s).b by A23,A30
+              .= s.b by A31,SCMFSA_2:89;
+             end;
+           let f be FinSeq-Location;
+           thus (Computation s).(n+1).f = Exec(a:= intloc 0,s).f by A23,A30
+           .= s.f by SCMFSA_2:89;
+          suppose A32: n > 0;
+then A33:       0 + 1 <= n by INT_1:20;
+           A34: n + 0 <= n + 1 by REAL_1:55;
+A35:       0 < n & n < k' by A29,A32,NAT_1:38;
+A36:       CurInstr (Computation s).n
+           = ((Computation s).n).IC (Computation s).n by AMI_1:def 17
+           .= s.insloc (c0 + n) by A28,A29,A34,AMI_1:54,AXIOMS:22
+           .= AddTo(a,intloc 0) by A19,A35;
+A37:       (Computation s).(n+1) = Following (Computation s).n by AMI_1:def 19
+           .= Exec(AddTo(a,intloc 0),(Computation s).n) by A36,AMI_1:def 18;
+           thus IC (Computation s).(n+1) = (Computation s).(n+1).IC SCM+FSA
+               by AMI_1:def 15
+           .= Next IC (Computation s).n by A37,SCMFSA_2:90
+           .= insloc (c0 + n + 1) by A28,A29,A34,AXIOMS:22,SCMFSA_2:32
+           .= insloc (c0 + (n + 1)) by XCMPLX_1:1;
+           hereby assume 1 <= n + 1;
+              thus (Computation s).(n+1).a = n + (Computation s).n.intloc 0
+by A28,A29,A33,A34,A37,AXIOMS:22,SCMFSA_2:90
+              .= n + 1 by A1,A3,A28,A29,A34,AXIOMS:22;
+             end;
+           hereby let b be Int-Location;
+              assume A38: b <> a;
+              hence (Computation s).(n+1).b = (Computation s).n.b
+                  by A37,SCMFSA_2:90
+              .= s.b by A28,A29,A34,A38,AXIOMS:22;
+             end;
+           let f be FinSeq-Location;
+           thus ((Computation s).(n+1)).f = (Computation s).n.f
+               by A37,SCMFSA_2:90
+           .= s.f by A28,A29,A34,AXIOMS:22;
+       end;
+       for i being Nat holds Q[i] from Ind(A26,A27);
+     hence thesis by A8,A10;
+    end;
+   hence for i being Nat st i <= len aSeq(a,k) holds
+       IC (Computation s).i = insloc (c0 + i) &
+       (for b being Int-Location st b <> a holds (Computation s).i.b = s.b) &
+       (for f being FinSeq-Location holds (Computation s).i.f = s.f);
+     1 <= len aSeq(a,k) by A6,A8,NAT_1:29;
+   hence (Computation s).(len aSeq(a,k)).a = k by A8,A9;
+   suppose
+A39:  k <= 0;
+then A40:  0 <= - k by REAL_1:26,50;
+    then reconsider mk = - k as Nat by INT_1:16;
+      0 + 0 <= mk + (1+1) by A40,REAL_1:55;
+then A41: 0 <= mk+1+1 by XCMPLX_1:1;
+    consider k1 being Nat such that
+A42: k1 + k = 1 and
+A43: aSeq(a,k) = <*a:=intloc 0*> ^ (k1 |-> SubFrom(a,intloc 0)) by A39,Def3;
+A44: k1 = 1 - k by A42,XCMPLX_1:26
+     .= 1 + mk by XCMPLX_0:def 8;
+A45: len aSeq(a,k)
+     = len <* a:=intloc 0 *> + len (k1|->SubFrom(a,intloc 0)) by A43,FINSEQ_1:
+35
+    .= 1 + len (k1|->SubFrom(a,intloc 0)) by FINSEQ_1:56
+    .= mk+1+1 by A44,FINSEQ_2:69;
+     defpred Q[Nat] means $1 <= mk+1+1 implies
+        IC (Computation s).$1 = insloc (c0 + $1) &
+        (1 <= $1 implies (Computation s).$1.a = -$1+1+1) &
+        (for b being Int-Location st b <> a holds (Computation s).$1.b=s.b) &
+        (for f being FinSeq-Location holds (Computation s).$1.f = s.f);
+A46:  for i being Nat st i <= len aSeq(a,k) holds
+        IC (Computation s).i = insloc (c0 + i) &
+        (1 <= i implies (Computation s).i.a = -i+1+1) &
+        (for b being Int-Location st b <> a holds (Computation s).i.b = s.b) &
+        (for f being FinSeq-Location holds (Computation s).i.f = s.f)
+      proof
+   let i be Nat such that
+A47: i <= len aSeq(a,k);
+A48: now let i be Nat;
+       assume i < mk+1+1;
+       then insloc i in dom Load aSeq(a,k) by A45,Th29;
+       hence i + 1 in dom aSeq(a,k) by Th26;
+      end;
+A49: now let i be Nat;
+       assume i < mk+1+1;
+then A50:     i + 1 in dom aSeq(a,k) by A48;
+       thus s.insloc (c0 + i) = s.insloc(c0 + i + 1 -' 1) by BINARITH:39
+       .= s.insloc(c0 + (i + 1) -' 1) by XCMPLX_1:1
+       .= aSeq(a,k).(i+1) by A4,A50;
+      end;
+then A51: s.insloc (c0 + 0) = aSeq(a,k).(0+1) by A41
+    .= a:= intloc 0 by A43,FINSEQ_1:58;
+A52: now let i be Nat;
+       assume A53: 1 < i & i <= mk+1+1;
+       then A54: 1 - 1 < i - 1 by REAL_1:54;
+       then A55: 1 - 1 + 1 <= i - 1 by INT_1:20;
+       reconsider i1 = i - 1 as Nat by A54,INT_1:16;
+         i - 1 <= mk+1+1 - 1 by A53,REAL_1:49;
+       then i - 1 <= k1 by A44,XCMPLX_1:26;
+then A56:   i1 in Seg k1 by A55,FINSEQ_1:3;
+    len <* a:= intloc 0 *> = 1 by FINSEQ_1:56;
+       hence aSeq(a,k).i
+        = (k1|->SubFrom(a,intloc 0)).(i - 1) by A43,A45,A53,FINSEQ_1:37
+       .= SubFrom(a,intloc 0) by A56,FINSEQ_2:70;
+      end;
+A57: now let i be Nat;
+       assume A58: 0 < i & i < mk+1+1;
+then A59:   0 + 1 < i + 1 by REAL_1:53;
+A60:   i + 1 <= mk+1+1 by A58,NAT_1:38;
+       thus s.insloc (c0 + i) = aSeq(a,k).(i+1) by A49,A58
+       .=SubFrom(a,intloc 0) by A52,A59,A60;
+      end;
+A61: for n being Nat st n = 0 holds
+          ((Computation s).n = s &
+          CurInstr (Computation s).n = a:= intloc 0 &
+          (Computation s).(n+1) = Exec(a:= intloc 0,s))
+      proof
+       let n be Nat;
+       assume n = 0; hence
+A62:   (Computation s).n = s by AMI_1:def 19; hence
+A63:   CurInstr (Computation s).n = a:= intloc 0 by A2,A51,AMI_1:def 17;
+       thus (Computation s).(n+1) = Following (Computation s).n by AMI_1:def 19
+       .= Exec(a:= intloc 0,s) by A62,A63,AMI_1:def 18;
+      end;
+A64:  Q[0] by A2,AMI_1:def 19;
+A65:  for n being Nat st Q[n] holds Q[n + 1]
+       proof
+        let n be Nat;
+        assume A66: Q[n];
+        assume A67: n + 1 <= mk+1+1;
+        per cases by NAT_1:19;
+          suppose A68: n = 0;
+           hence IC (Computation s).(n+1) = IC Exec(a:= intloc 0,s) by A61
+           .= Exec(a:= intloc 0,s).IC SCM+FSA by AMI_1:def 15
+           .= Next insloc (c0 + n) by A2,A68,SCMFSA_2:89
+           .= insloc (c0 + n + 1) by SCMFSA_2:32
+           .= insloc (c0 + (n + 1)) by XCMPLX_1:1;
+           hereby assume 1 <= n + 1;
+              thus (Computation s).(n+1).a = Exec(a:= intloc 0,s).a by A61,A68
+              .= -(n + 1)+1+1 by A1,A68,SCMFSA_2:89;
+             end;
+           hereby let b be Int-Location;
+              assume A69: b <> a;
+              thus (Computation s).(n+1).b = Exec(a:= intloc 0,s).b by A61,A68
+              .= s.b by A69,SCMFSA_2:89;
+             end;
+           let f be FinSeq-Location;
+           thus (Computation s).(n+1).f = Exec(a:= intloc 0,s).f by A61,A68
+           .= s.f by SCMFSA_2:89;
+          suppose A70: n > 0;
+           then A71: 0 + 1 < n + 1 by REAL_1:53;
+           A72: n + 0 <= n + 1 by REAL_1:55;
+A73:       0 < n & n < mk+1+1 by A67,A70,NAT_1:38;
+A74:       CurInstr (Computation s).n
+            = ((Computation s).n).insloc (c0 + n) by A66,A67,A72,AMI_1:def 17,
+AXIOMS:22
+           .= s.insloc (c0 + n) by AMI_1:54
+           .= SubFrom(a,intloc 0) by A57,A73;
+A75:       (Computation s).(n+1) = Following (Computation s).n by AMI_1:def 19
+           .= Exec(SubFrom(a,intloc 0),(Computation s).n) by A74,AMI_1:def 18;
+           thus IC (Computation s).(n+1) = (Computation s).(n+1).IC SCM+FSA
+               by AMI_1:def 15
+           .= Next IC (Computation s).n by A75,SCMFSA_2:91
+           .= insloc (c0 + n + 1) by A66,A67,A72,AXIOMS:22,SCMFSA_2:32
+           .= insloc (c0 + (n + 1)) by XCMPLX_1:1;
+           hereby assume 1 <= n + 1;
+              thus (Computation s).(n+1).a =
+ -n+1+1 - (Computation s).n.intloc 0 by A66,A67,A71,A75,NAT_1:38,SCMFSA_2:91
+              .= -n+1+1 - s.intloc 0 by A3,A66,A67,A72,AXIOMS:22
+              .= -n + 1 by A1,XCMPLX_1:26
+              .= -n-1+1 + 1 by XCMPLX_1:27
+              .= -(n+1)+1+1 by XCMPLX_1:161;
+             end;
+           hereby let b be Int-Location;
+              assume A76: b <> a;
+              hence (Computation s).(n+1).b = (Computation s).n.b
+                  by A75,SCMFSA_2:91
+              .= s.b by A66,A67,A72,A76,AXIOMS:22;
+             end;
+           let f be FinSeq-Location;
+           thus ((Computation s).(n+1)).f = (Computation s).n.f
+               by A75,SCMFSA_2:91
+           .= s.f by A66,A67,A72,AXIOMS:22;
+       end;
+       for i being Nat holds Q[i] from Ind(A64,A65);
+     hence thesis by A45,A47;
+     end;
+   hence for i being Nat st i <= len aSeq(a,k) holds
+       IC (Computation s).i = insloc (c0 + i) &
+       (for b being Int-Location st b <> a holds (Computation s).i.b = s.b) &
+       (for f being FinSeq-Location holds (Computation s).i.f = s.f);
+     1 <= len aSeq(a,k) by A45,NAT_1:29;
+   hence (Computation s).(len aSeq(a,k)).a = -len aSeq(a,k)+1+1 by A46
+   .= -(-k+(1+1))+1+1 by A45,XCMPLX_1:1
+   .= -(-k+(1+1))+(1+1) by XCMPLX_1:1
+   .= --k-(1+1)+(1+1) by XCMPLX_1:161
+   .= k by XCMPLX_1:27;
+ end;
+
+theorem Th37:
+ for s being State of SCM+FSA st IC s = insloc 0 & s.intloc 0 = 1
+ for a being Int-Location
+ for k being Integer st Load aSeq(a,k) c= s & a<>intloc 0
+ holds
+     (for i being Nat st i <= len aSeq(a,k) holds
+         IC (Computation s).i = insloc i &
+         (for b being Int-Location st b <> a holds (Computation s).i.b = s.b) &
+         (for f being FinSeq-Location holds (Computation s).i.f = s.f)) &
+     (Computation s).(len aSeq(a,k)).a = k
+ proof
+    let s be State of SCM+FSA; assume that
+A1: IC s = insloc 0 and
+A2: s.intloc 0 = 1;
+    let a be Int-Location;
+    let k be Integer; assume that
+A3: Load aSeq(a,k) c= s and
+A4: a <> intloc 0;
+A5: dom Load aSeq(a,k) = {insloc (m-'1): m in dom aSeq(a,k)} &
+        for m being Nat st insloc m in dom Load aSeq(a,k) holds
+            (Load aSeq(a,k)).insloc m = (aSeq(a,k))/.(m+1) by Def1;
+   A6: now let c be Nat;
+      assume A7: c in dom aSeq(a,k);
+      then c in Seg len aSeq(a,k) by FINSEQ_1:def 3;
+      then 1 <= c by FINSEQ_1:3;
+then A8:   c -' 1 = c - 1 by Th3;
+A9:   insloc (c-'1) in dom Load aSeq(a,k) by A5,A7;
+      then (Load aSeq(a,k)).insloc (c-'1) = (aSeq(a,k))/.(c-'1+1) by Def1
+      .= (aSeq(a,k))/.c by A8,XCMPLX_1:27
+      .= aSeq(a,k).c by A7,FINSEQ_4:def 4;
+      hence aSeq(a,k).c = s.insloc (0 + c -' 1) by A3,A9,GRFUNC_1:8;
+     end;
+   hereby let i be Nat;
+   assume i <= len aSeq(a,k);
+   then IC (Computation s).i = insloc (0 + i) &
+       (for b being Int-Location st b <> a holds (Computation s).i.b = s.b) &
+       (for f being FinSeq-Location holds (Computation s).i.f = s.f) by A1,A2,
+A4,A6,Th36;
+   hence IC (Computation s).i = insloc i &
+       (for b being Int-Location st b <> a holds (Computation s).i.b = s.b) &
+       (for f being FinSeq-Location holds (Computation s).i.f = s.f);
+   end;
+   thus thesis by A1,A2,A4,A6,Th36;
+ end;
+
+:: Users' guide
+
+theorem
+   for s being State of SCM+FSA st IC s = insloc 0 & s.intloc 0 = 1
+ for a being Int-Location, k being Integer st a:=k c= s & a<>intloc 0 holds
+     s is halting &
+     (Result s).a = k &
+     (for b being Int-Location st b <> a holds (Result s).b = s.b) &
+     (for f being FinSeq-Location holds (Result s).f = s.f)
+ proof
+   let s be State of SCM+FSA;
+   assume that
+A1:  IC s = insloc 0 and
+A2:  s.intloc 0 = 1;
+   let a be Int-Location, k be Integer;
+   assume that
+A3:  a:=k c= s and
+A4:  a <> intloc 0;
+    per cases;
+    suppose
+A5:   k > 0;
+    then consider k1 being Nat such that
+A6:     k1 + 1 = k &
+        a:=k = Load (<*a:=intloc 0*> ^ (k1 |-> AddTo(a,intloc 0)) ^
+            <*halt SCM+FSA*>) by Def2;
+    set f = <*a:=intloc 0*> ^ (k1 |-> AddTo(a,intloc 0)) ^ <*halt SCM+FSA*>;
+A7: len(<*a:=intloc 0*>^(k1|->AddTo(a,intloc 0)))
+        = len<*a:=intloc 0*> + len(k1|->AddTo(a,intloc 0)) by FINSEQ_1:35
+    .= 1 + len(k1|->AddTo(a,intloc 0)) by FINSEQ_1:56
+    .= k by A6,FINSEQ_2:69;
+    reconsider k as Nat by A5,INT_1:16;
+A8: len f = len(<*a:=intloc 0*>^(k1|->AddTo(a,intloc 0)))+len<*halt SCM+FSA*>
+        by FINSEQ_1:35
+    .= k + 1 by A7,FINSEQ_1:56;
+then A9: dom f = Seg (k + 1) by FINSEQ_1:def 3;
+A10: now let i be Nat;
+       assume A11: 1 <= i & i <= k + 1;
+A12:   dom Load f = {insloc (m-'1): m in dom f} by Def1;
+       thus i in dom f by A9,A11,FINSEQ_1:3;
+       hence insloc (i-'1) in dom Load f by A12;
+      end;
+A13: now let i be Nat;
+       assume 0 <= i & i <= k;
+then A14:     0 + 1 <= i + 1 & i + 1 <= k + 1 by AXIOMS:24;
+       hence i + 1 in dom f by A10;
+         insloc (i + 1 -' 1) in dom Load f by A10,A14;
+       hence insloc i in dom Load f by BINARITH:39;
+      end;
+A15: now let i be Nat;
+       assume 0 <= i & i <= k;
+then A16:     i + 1 in dom f & insloc i in dom Load f by A13;
+       hence s.insloc i = (Load f).insloc i by A3,A6,GRFUNC_1:8
+       .= f/.(i+1) by A16,Def1
+       .= f.(i+1) by A16,FINSEQ_4:def 4;
+      end;
+A17: f.1 = (<*a:=intloc 0*>^((k1 |-> AddTo(a,intloc 0))^<*halt SCM+FSA*>)).1
+        by FINSEQ_1:45
+    .= a:= intloc 0 by FINSEQ_1:58;
+A18: s.insloc 0 = f.(0+1) by A5,A15
+    .= a:= intloc 0 by A17;
+A19: now let i be Nat;
+       assume A20: 1 < i & i <= k;
+then A21:   1 <= i - 1 by Th4;
+       then 0 <= i - 1 by AXIOMS:22;
+       then reconsider i1 = i - 1 as Nat by INT_1:16;
+         i - 1 <= k - 1 by A20,REAL_1:49;
+       then i - 1 <= k1 by A6,XCMPLX_1:26;
+then A22:   i1 in Seg k1 by A21,FINSEQ_1:3;
+A23:   len <*a:= intloc 0*> = 1 by FINSEQ_1:56;
+         dom (<*a:=intloc 0*>^(k1|->AddTo(a,intloc 0))) = Seg k
+           by A7,FINSEQ_1:def 3;
+       then i in dom (<*a:=intloc 0*>^(k1|->AddTo(a,intloc 0))) by A20,FINSEQ_1
+:3;
+       hence f.i=(<*a:=intloc 0*>^(k1|->AddTo(a,intloc 0))).i by FINSEQ_1:def 7
+       .= (k1|->AddTo(a,intloc 0)).(i - 1) by A7,A20,A23,FINSEQ_1:37
+       .= AddTo(a,intloc 0) by A22,FINSEQ_2:70;
+      end;
+A24: now let i be Nat;
+       assume A25: 0 < i & i < k;
+then A26:   0 + 1 < i + 1 by REAL_1:53;
+A27:   i + 1 <= k by A25,NAT_1:38;
+       thus s.insloc i = f.(i+1) by A15,A25
+       .=AddTo(a,intloc 0) by A19,A26,A27;
+      end;
+      k < k+1 by REAL_1:69;
+then f.(k+1) = <* halt SCM+FSA *>.(k+1 - k) by A7,A8,FINSEQ_1:37
+    .= <* halt SCM+FSA *>.1 by XCMPLX_1:26
+    .= halt SCM+FSA by FINSEQ_1:def 8;
+then A28: s.insloc k = halt SCM+FSA by A5,A15;
+A29: now let n be Nat;
+       assume n = 0; hence
+A30:   (Computation s).n = s by AMI_1:def 19; hence
+A31:   CurInstr (Computation s).n = a:= intloc 0 by A1,A18,AMI_1:def 17;
+       thus (Computation s).(n+1) = Following (Computation s).n by AMI_1:def 19
+       .= Exec(a:= intloc 0,s) by A30,A31,AMI_1:def 18;
+      end;
+A32: for i being Nat st i <= k holds IC (Computation s).i = insloc i
+      proof
+       let i be Nat;
+       assume A33: i <= k;
+       defpred P[Nat] means $1 <= k implies IC (Computation s).$1 = insloc $1;
+A34:    P[0] by A1,AMI_1:def 19;
+A35:    for n being Nat st P[n] holds P[n + 1]
+         proof
+          let n be Nat;
+          assume A36: P[n];
+          assume A37: n+1 <= k;
+then A38:      n < k by NAT_1:38;
+          per cases by NAT_1:19;
+          suppose A39: n=0;
+           hence IC (Computation s).(n+1) = IC Exec(a:= intloc 0,s) by A29
+           .= Exec(a:= intloc 0,s).IC SCM+FSA by AMI_1:def 15
+           .= Next insloc n by A1,A39,SCMFSA_2:89
+           .= insloc (n+1) by SCMFSA_2:32;
+          suppose A40: n>0;
+             n + 0 <= n + 1 by REAL_1:55;
+then A41:       CurInstr (Computation s).n
+            = ((Computation s).n).insloc n by A36,A37,AMI_1:def 17,AXIOMS:22
+           .= s.insloc n by AMI_1:54
+           .= AddTo(a,intloc 0) by A24,A38,A40;
+A42:       (Computation s).(n+1) = Following (Computation s).n by AMI_1:def 19
+           .= Exec(AddTo(a,intloc 0),(Computation s).n) by A41,AMI_1:def 18;
+           thus IC (Computation s).(n+1) = (Computation s).(n+1).IC SCM+FSA
+               by AMI_1:def 15
+           .= Next IC (Computation s).n by A42,SCMFSA_2:90
+           .= insloc (n+1) by A36,A37,NAT_1:38,SCMFSA_2:32;
+         end;
+         for i being Nat holds P[i] from Ind(A34,A35);
+       hence IC (Computation s).i = insloc i by A33;
+      end;
+     defpred Q[Nat] means $1 <= k implies
+        (1 <= $1 implies (Computation s).$1.a = $1) &
+        (for b being Int-Location st b <> a holds (Computation s).$1.b=s.b) &
+        (for f being FinSeq-Location holds (Computation s).$1.f = s.f);
+A43:  Q[0] by AMI_1:def 19;
+A44:  for n being Nat st Q[n] holds Q[n + 1]
+       proof
+        let n be Nat;
+        assume A45: Q[n];
+        assume A46: n + 1 <= k;
+        per cases by NAT_1:19;
+          suppose A47: n = 0;
+           hereby assume 1 <= n + 1;
+              thus (Computation s).(n+1).a = Exec(a:= intloc 0,s).a by A29,A47
+              .= n + 1 by A2,A47,SCMFSA_2:89;
+             end;
+           hereby let b be Int-Location;
+              assume A48: b <> a;
+              thus (Computation s).(n+1).b = Exec(a:= intloc 0,s).b by A29,A47
+              .= s.b by A48,SCMFSA_2:89;
+             end;
+           let f be FinSeq-Location;
+           thus (Computation s).(n+1).f = Exec(a:= intloc 0,s).f by A29,A47
+           .= s.f by SCMFSA_2:89;
+          suppose A49: n > 0;
+then A50:       0 + 1 <= n by INT_1:20;
+           A51: n + 0 <= n + 1 by REAL_1:55;
+then A52:       n <= k by A46,AXIOMS:22;
+A53:       0 < n & n < k by A46,A49,NAT_1:38;
+A54:       CurInstr (Computation s).n
+           = ((Computation s).n).IC (Computation s).n by AMI_1:def 17
+           .= ((Computation s).n).insloc n by A32,A52
+           .= s.insloc n by AMI_1:54
+           .= AddTo(a,intloc 0) by A24,A53;
+A55:       (Computation s).(n+1) = Following (Computation s).n by AMI_1:def 19
+           .= Exec(AddTo(a,intloc 0),(Computation s).n) by A54,AMI_1:def 18;
+           hereby assume 1 <= n + 1;
+              thus (Computation s).(n+1).a = n + (Computation s).n.intloc 0
+by A45,A46,A50,A51,A55,AXIOMS:22,SCMFSA_2:90
+              .= n + 1 by A2,A4,A45,A46,A51,AXIOMS:22;
+             end;
+           hereby let b be Int-Location;
+              assume A56: b <> a;
+              hence (Computation s).(n+1).b = (Computation s).n.b
+                  by A55,SCMFSA_2:90
+              .= s.b by A45,A46,A51,A56,AXIOMS:22;
+             end;
+           let f be FinSeq-Location;
+           thus ((Computation s).(n+1)).f = (Computation s).n.f
+               by A55,SCMFSA_2:90
+           .= s.f by A45,A46,A51,AXIOMS:22;
+       end;
+A57: for i being Nat holds Q[i] from Ind(A43,A44);
+A58:   CurInstr (Computation s).k
+      = ((Computation s).k).IC (Computation s).k by AMI_1:def 17
+     .= ((Computation s).k).insloc k by A32
+     .= halt SCM+FSA by A28,AMI_1:54;
+     hence s is halting by AMI_1:def 20;
+then A59: (Computation s).k = Result s by A58,AMI_1:def 22;
+       0 + 1 < k + 1 by A5,REAL_1:53;
+     then 1 <= k by NAT_1:38;
+     hence thesis by A57,A59;
+    suppose
+A60:  k <= 0;
+then A61:  0 <= - k by REAL_1:26,50;
+    then reconsider mk = - k as Nat by INT_1:16;
+      0 + 0 <= mk + (1+1) by A61,REAL_1:55;
+then A62: 0 <= mk+1+1 by XCMPLX_1:1;
+    consider k1 being Nat such that
+A63:     k1 + k = 1 &
+        a:=k = Load (<*a:=intloc 0*> ^ (k1 |-> SubFrom(a,intloc 0)) ^
+            <*halt SCM+FSA*>) by A60,Def2;
+A64: k1 = 1 - k by A63,XCMPLX_1:26
+     .= 1 + mk by XCMPLX_0:def 8;
+    set f = <*a:=intloc 0*> ^ (k1 |-> SubFrom(a,intloc 0)) ^ <*halt SCM+FSA*>;
+A65: len (<*a:=intloc 0*>^(k1|->SubFrom(a,intloc 0)))
+        = len<*a:=intloc 0*> + len(k1|->SubFrom(a,intloc 0)) by FINSEQ_1:35
+    .= 1 + len(k1|->SubFrom(a,intloc 0)) by FINSEQ_1:56
+    .= mk+1+1 by A64,FINSEQ_2:69;
+A66: len f = len(<*a:=intloc 0*>^(k1|->SubFrom(a,intloc 0)))+len<*halt SCM+FSA
+*>
+        by FINSEQ_1:35
+    .= mk+1+1 + 1 by A65,FINSEQ_1:56;
+then A67: dom f = Seg (mk+1+1 + 1) by FINSEQ_1:def 3;
+A68: now let i be Nat;
+       assume A69: 1 <= i & i <= mk+1+1 + 1;
+A70:   dom Load f = {insloc (m-'1): m in dom f} by Def1;
+       thus i in dom f by A67,A69,FINSEQ_1:3;
+       hence insloc (i-'1) in dom Load f by A70;
+      end;
+A71: now let i be Nat;
+       assume 0 <= i & i <= mk+1+1;
+       then A72: 0 + 1 <= i + 1 & i + 1 <= mk+1+1 + 1 by AXIOMS:24;
+       hence i + 1 in dom f by A68;
+         insloc (i + 1 -' 1) in dom Load f by A68,A72;
+       hence insloc i in dom Load f by BINARITH:39;
+      end;
+A73: now let i be Nat;
+       assume 0 <= i & i <= mk+1+1;
+then A74:     i + 1 in dom f & insloc i in dom Load f by A71;
+       hence s.insloc i = (Load f).insloc i by A3,A63,GRFUNC_1:8
+       .= f/.(i+1) by A74,Def1
+       .= f.(i+1) by A74,FINSEQ_4:def 4;
+      end;
+A75: f.1 = (<*a:=intloc 0*>^((k1|->SubFrom(a,intloc 0))^<*halt SCM+FSA*>)).1
+        by FINSEQ_1:45
+    .= a:= intloc 0 by FINSEQ_1:58;
+A76: s.insloc 0 = f.(0+1) by A62,A73
+    .= a:= intloc 0 by A75;
+A77: now let i be Nat;
+       assume A78: 1 < i & i <= mk+1+1;
+       then A79: 1 - 1 < i - 1 by REAL_1:54;
+       then A80: 1 - 1 + 1 <= i - 1 by INT_1:20;
+       reconsider i1 = i - 1 as Nat by A79,INT_1:16;
+         i - 1 <= mk+1+1 - 1 by A78,REAL_1:49;
+       then i - 1 <= k1 by A64,XCMPLX_1:26;
+then A81:   i1 in Seg k1 by A80,FINSEQ_1:3;
+A82:   len <*a:= intloc 0*> = 1 by FINSEQ_1:56;
+         dom (<*a:=intloc 0*>^(k1|->SubFrom(a,intloc 0))) = Seg (mk+1+1)
+           by A65,FINSEQ_1:def 3;
+       then i in dom (<*a:=intloc 0*>^(k1|->SubFrom(a,intloc 0))) by A78,
+FINSEQ_1:3;
+       hence f.i = (<*a:=intloc 0*>^(k1|->SubFrom(a,intloc 0))).i
+           by FINSEQ_1:def 7
+       .= (k1|->SubFrom(a,intloc 0)).(i - 1) by A65,A78,A82,FINSEQ_1:37
+       .= SubFrom(a,intloc 0) by A81,FINSEQ_2:70;
+      end;
+A83: now let i be Nat;
+       assume A84: 0 < i & i < mk+1+1;
+then A85:   0 + 1 < i + 1 by REAL_1:53;
+A86:   i + 1 <= mk+1+1 by A84,NAT_1:38;
+       thus s.insloc i = f.(i+1) by A73,A84
+       .=SubFrom(a,intloc 0) by A77,A85,A86;
+      end;
+      mk+1+1 < mk+1+1 + 1 by REAL_1:69;
+then A87: f.(mk+1+1+1) = <*halt SCM+FSA*>.(mk+1+1+1-(mk+1+1)) by A65,A66,
+FINSEQ_1:37
+    .= <*halt SCM+FSA*>.1 by XCMPLX_1:26
+    .= halt SCM+FSA by FINSEQ_1:def 8;
+      0 <= mk+1+1 by NAT_1:18;
+then A88: s.insloc (mk+1+1) = halt SCM+FSA by A73,A87;
+A89: now let n be Nat;
+       assume n = 0; hence
+A90:   (Computation s).n = s by AMI_1:def 19; hence
+A91:   CurInstr (Computation s).n = a:= intloc 0 by A1,A76,AMI_1:def 17;
+       thus (Computation s).(n+1) = Following (Computation s).n by AMI_1:def 19
+       .= Exec(a:= intloc 0,s) by A90,A91,AMI_1:def 18;
+      end;
+A92: for i being Nat st i <= mk+1+1 holds IC (Computation s).i = insloc i
+      proof
+       let i be Nat;
+       assume A93: i <= mk+1+1;
+       defpred P[Nat] means $1<=mk+1+1 implies IC (Computation s).$1=insloc $1;
+A94:    P[0] by A1,AMI_1:def 19;
+A95:    for n being Nat st P[n] holds P[n + 1]
+         proof
+          let n be Nat;
+          assume A96: P[n];
+          assume A97: n+1 <= mk+1+1;
+then A98:      n < mk+1+1 by NAT_1:38;
+          per cases by NAT_1:19;
+          suppose A99: n=0;
+           hence IC (Computation s).(n+1) = IC Exec(a:= intloc 0,s) by A89
+           .= Exec(a:= intloc 0,s).IC SCM+FSA by AMI_1:def 15
+           .= Next insloc n by A1,A99,SCMFSA_2:89
+           .= insloc (n+1) by SCMFSA_2:32;
+          suppose A100: n>0;
+             n + 0 <= n + 1 by REAL_1:55;
+then A101:       CurInstr (Computation s).n
+            = ((Computation s).n).insloc n by A96,A97,AMI_1:def 17,AXIOMS:22
+           .= s.insloc n by AMI_1:54
+           .= SubFrom(a,intloc 0) by A83,A98,A100;
+A102:       (Computation s).(n+1) = Following (Computation s).n by AMI_1:def 19
+           .= Exec(SubFrom(a,intloc 0),(Computation s).n) by A101,AMI_1:def 18;
+           thus IC (Computation s).(n+1) = (Computation s).(n+1).IC SCM+FSA
+               by AMI_1:def 15
+           .= Next IC (Computation s).n by A102,SCMFSA_2:91
+           .= insloc (n+1) by A96,A97,NAT_1:38,SCMFSA_2:32;
+         end;
+         for i being Nat holds P[i] from Ind(A94,A95);
+       hence IC (Computation s).i = insloc i by A93;
+      end;
+     defpred Q[Nat] means $1 <= mk+1+1 implies
+        (1 <= $1 implies (Computation s).$1.a = -$1+1+1) &
+        (for b being Int-Location st b <> a holds (Computation s).$1.b=s.b) &
+        (for f being FinSeq-Location holds (Computation s).$1.f = s.f);
+A103:  Q[0] by AMI_1:def 19;
+A104:  for n being Nat st Q[n] holds Q[n + 1]
+       proof
+        let n be Nat;
+        assume A105: Q[n];
+        assume A106: n + 1 <= mk+1+1;
+        per cases by NAT_1:19;
+          suppose A107: n = 0;
+           hereby assume 1 <= n + 1;
+              thus (Computation s).(n+1).a = Exec(a:= intloc 0,s).a by A89,A107
+              .= -(n + 1)+1+1 by A2,A107,SCMFSA_2:89;
+             end;
+           hereby let b be Int-Location;
+              assume A108: b <> a;
+              thus (Computation s).(n+1).b = Exec(a:= intloc 0,s).b by A89,A107
+              .= s.b by A108,SCMFSA_2:89;
+             end;
+           let f be FinSeq-Location;
+           thus (Computation s).(n+1).f = Exec(a:= intloc 0,s).f by A89,A107
+           .= s.f by SCMFSA_2:89;
+          suppose A109: n > 0;
+           then A110: 0 + 1 < n + 1 by REAL_1:53;
+           A111: n + 0 <= n + 1 by REAL_1:55;
+then A112:       n <= mk+1+1 by A106,AXIOMS:22;
+A113:       0 < n & n < mk+1+1 by A106,A109,NAT_1:38;
+A114:       CurInstr (Computation s).n
+           = ((Computation s).n).IC (Computation s).n by AMI_1:def 17
+           .= ((Computation s).n).insloc n by A92,A112
+           .= s.insloc n by AMI_1:54
+           .= SubFrom(a,intloc 0) by A83,A113;
+A115:       (Computation s).(n+1) = Following (Computation s).n by AMI_1:def 19
+           .= Exec(SubFrom(a,intloc 0),(Computation s).n) by A114,AMI_1:def 18;
+           hereby assume 1 <= n + 1;
+              thus (Computation s).(n+1).a =
+ -n+1+1 - (Computation s).n.intloc 0 by A105,A106,A110,A115,NAT_1:38,SCMFSA_2:
+91
+              .= -n+1+1 - s.intloc 0 by A4,A105,A106,A111,AXIOMS:22
+              .= -n + 1 by A2,XCMPLX_1:26
+              .= -n-1+1 + 1 by XCMPLX_1:27
+              .= -(n+1)+1+1 by XCMPLX_1:161;
+             end;
+           hereby let b be Int-Location;
+              assume A116: b <> a;
+              hence (Computation s).(n+1).b = (Computation s).n.b
+                  by A115,SCMFSA_2:91
+              .= s.b by A105,A106,A111,A116,AXIOMS:22;
+             end;
+           let f be FinSeq-Location;
+           thus ((Computation s).(n+1)).f = (Computation s).n.f
+               by A115,SCMFSA_2:91
+           .= s.f by A105,A106,A111,AXIOMS:22;
+       end;
+A117: for i being Nat holds Q[i] from Ind(A103,A104);
+A118:   CurInstr (Computation s).(mk+1+1)
+      = ((Computation s).(mk+1+1)).IC (Computation s).(mk+1+1) by AMI_1:def 17
+     .= ((Computation s).(mk+1+1)).insloc (mk+1+1) by A92
+     .= halt SCM+FSA by A88,AMI_1:54;
+     hence s is halting by AMI_1:def 20;
+then A119: (Computation s).(mk+1+1) = Result s by A118,AMI_1:def 22;
+A120:   -(mk+1+1)+1+1 = -(mk+(1+1))+1+1 by XCMPLX_1:1
+     .= -(mk+(1+1))+(1+1) by XCMPLX_1:1
+     .= -mk-(1+1)+(1+1) by XCMPLX_1:161
+     .= k by XCMPLX_1:27;
+       0 + 1 <= mk+(1+1) by A61,REAL_1:55;
+     then 1 <= mk+1+1 by XCMPLX_1:1;
+     hence thesis by A117,A119,A120;
+ end;
+
+theorem
+   for s being State of SCM+FSA st IC s = insloc 0 & s.intloc 0 = 1
+ for f being FinSeq-Location, p being FinSequence of INT st f:=p c= s holds
+     s is halting &
+     (Result s).f = p &
+     (for b being Int-Location st b <> intloc 1 & b <> intloc 2
+         holds (Result s).b = s.b) &
+     (for g being FinSeq-Location st g <> f holds (Result s).g = s.g)
+ proof
+   set O = intloc 0;    :: one
+   set I = intloc 1;    :: location in p
+   set V = intloc 2;    :: value
+   set D = the Instructions of SCM+FSA;
+A1: I <> O & V <> O & I <> V by SCMFSA_2:16;
+   let s be State of SCM+FSA such that
+A2: IC s = insloc 0 and
+A3: s.O = 1;
+   let f be FinSeq-Location, p be FinSequence of INT such that
+A4: f:=p c= s;
+   set q = aSeq(I,len p)^<* f:=<0,...,0>I *>^aSeq(f,p)^<* halt SCM+FSA *>;
+   set q0 = aSeq(I,len p) ^ <* f:=<0,...,0>I *>;
+A5: f:=p = Load q by Def5;
+A6: dom Load q = {insloc (m-'1): m in dom q} by Def1;
+A7: now let k be Nat;
+      assume A8: insloc k in dom Load q;
+ then A9:   k + 1 in dom q by Th26;
+      thus (Load q).insloc k = q/.(k+1) by A8,Def1
+      .= q.(k+1) by A9,FINSEQ_4:def 4;
+   end;
+   consider pp being FinSequence of D* such that
+A10: len pp = len p and
+A11: for k being Nat st 1 <= k & k <= len p holds
+       ex i being Integer st
+       i = p.k &
+       pp.k = (aSeq(I,k) ^ aSeq(V,i) ^ <* (f,I):=V *>) and
+A12: aSeq(f,p) = FlattenSeq pp by Def4;
+   set k = len aSeq(I,len p);
+A13: len q0 = k + 1 by FINSEQ_2:19;
+A14: q = aSeq(I,len p)^<* f:=<0,...,0>I *>^(aSeq(f,p)^<* halt SCM+FSA *>)
+       by FINSEQ_1:45;
+   then q = aSeq(I,len p)^(<* f:=<0,...,0>I *>^(aSeq(f,p)^<* halt SCM+FSA *>))
+       by FINSEQ_1:45;
+   then Load aSeq(I,len p) c= f:=p by A5,Th31;
+   then A15: Load aSeq(I,len p) c= s by A4,XBOOLE_1:1;
+then A16: (for i being Nat st i <= len aSeq(I,len p) holds
+        IC (Computation s).i = insloc i &
+        (for b being Int-Location st b <> I holds (Computation s).i.b = s.b) &
+        (for f being FinSeq-Location holds (Computation s).i.f = s.f)) &
+    (Computation s).(len aSeq(I,len p)).I = len p
+             by A1,A2,A3,Th37;
+A17: now let i be Nat;
+      assume A18: insloc i in dom Load q;
+ then A19:   i + 1 in dom q by Th26;
+        s.insloc i = (Load q).insloc i by A4,A5,A18,GRFUNC_1:8;
+      then s.insloc i = q/.(i + 1) by A18,Def1;
+      hence s.insloc i = q.(i + 1) by A19,FINSEQ_4:def 4;
+     end;
+A20: now let i,k be Nat;
+      assume i < len q;
+ then A21:   insloc i in dom Load q by Th29;
+      thus ((Computation s).k).insloc i = s.insloc i by AMI_1:54
+      .= q.(i + 1) by A17,A21;
+     end;
+   defpred P[FinSequence] means $1 c= pp implies
+       (ex pp0 being FinSequence of D* st
+       (pp0 = $1 &
+       (for i being Nat st i <= len (q0 ^ FlattenSeq pp0) holds
+           IC (Computation s).i = insloc i) &
+       (((Computation s).(len (q0 ^ FlattenSeq pp0)).f) | Seg len pp0
+           = p | Seg len pp0) &
+       len ((Computation s).(len (q0 ^ FlattenSeq pp0)).f) = len p &
+       (for b being Int-Location st b <> I & b <> V
+           holds (Computation s).(len (q0 ^ FlattenSeq pp0)).b = s.b) &
+       (for g being FinSeq-Location st g <> f
+           holds (Computation s).(len (q0 ^ FlattenSeq pp0)).g = s.g)));
+A22: P[{}]
+     proof
+A23:   q0 ^ FlattenSeq <*>(D*) = q0 ^ <*>D by Th13
+      .= q0 by FINSEQ_1:47;
+      assume {} c= pp;
+      take <*>(D*);
+      thus <*>(D*) = {};
+A24:   now let i be Nat such that A25: i < len q0;
+           i < len q0 implies i <= len aSeq(I,len p) by A13,NAT_1:38;
+         hence IC (Computation s).i = insloc i by A1,A2,A3,A15,A25,Th37;
+        end;
+    k < len q0 by A13,NAT_1:38;
+then A26:  IC (Computation s).k = insloc k by A24;
+        len q = len q0 + len ((aSeq(f,p) ^ <* halt SCM+FSA *>))
+      by A14,FINSEQ_1:35;
+      then len q0 <= len q by NAT_1:29;
+then A27:   k < len q by A13,NAT_1:38;
+A28:  1 <= len q0 by A13,NAT_1:29;
+A29:   CurInstr (Computation s).k
+       = ((Computation s).k).insloc k by A26,AMI_1:def 17
+      .= q.len q0 by A13,A20,A27
+      .= q0.len q0 by A14,A28,Th9
+      .= f:=<0,...,0>I by A13,FINSEQ_1:59;
+A30:   (Computation s).len q0
+       = Following (Computation s).k by A13,AMI_1:def 19
+      .= Exec(f:=<0,...,0>I,(Computation s).k) by A29,AMI_1:def 18;
+A31:  IC (Computation s).len q0
+       = (Computation s).len q0.IC SCM+FSA by AMI_1:def 15
+      .= Next IC (Computation s).k by A30,SCMFSA_2:101
+      .= insloc len q0 by A13,A26,SCMFSA_2:32;
+        now let i be Nat; assume i <= len q0;
+         then i < len q0 or i = len q0 by REAL_1:def 5;
+         hence IC (Computation s).i = insloc i by A24,A31;
+        end;
+      hence for i being Nat st i <= len (q0 ^ FlattenSeq <*>(D*)) holds
+          IC (Computation s).i = insloc i by A23;
+        len <*>(D*) = 0 by FINSEQ_1:32;
+      hence ((Computation s).(len (q0 ^ FlattenSeq <*>(D*))).f)|Seg len <*>(D
+*)
+          = p | Seg len <*>(D*) by Th21;
+      consider ki being Nat such that A32: ki = abs((Computation s).k.I) &
+      Exec(f:=<0,...,0>I, (Computation s).k).f = ki |-> 0 by SCMFSA_2:101;
+    ki = len p by A16,A32,Th1;
+      hence len ((Computation s).(len (q0 ^ FlattenSeq <*>(D*))).f)
+       = len p by A23,A30,A32,FINSEQ_2:69;
+        now let b be Int-Location such that A33: b <> I & b <> V;
+         thus (Computation s).(len q0).b
+          = (Computation s).k.b by A30,SCMFSA_2:101
+         .= s.b by A1,A2,A3,A15,A33,Th37;
+        end;
+      hence for b being Int-Location st b <> I & b <> V
+          holds (Computation s).(len (q0 ^ FlattenSeq <*>(D*
+))).b = s.b by A23;
+        now let g be FinSeq-Location such that A34: g <> f;
+         thus (Computation s).(len q0).g
+          = (Computation s).k.g by A30,A34,SCMFSA_2:101
+         .= s.g by A1,A2,A3,A15,Th37;
+        end;
+      hence thesis by A23;
+     end;
+A35: for r being FinSequence, x being set st P[r] holds P[r ^ <* x *>]
+     proof
+      let r be FinSequence, x be set; assume
+A36:  P[r]; assume
+A37:  r ^ <* x *> c= pp;
+        r c= r ^ <* x *> by FINSEQ_6:12;
+      then consider pp0 being FinSequence of D* such that
+A38:  pp0 = r and
+A39:  for i being Nat st i <= len (q0 ^ FlattenSeq pp0) holds
+          IC (Computation s).i = insloc i and
+A40:  ((Computation s).(len (q0 ^ FlattenSeq pp0)).f) | Seg len pp0
+          = p | Seg len pp0 and
+A41: len ((Computation s).(len (q0 ^ FlattenSeq pp0)).f) = len p and
+A42:  for b being Int-Location st b <> I & b <> V
+          holds (Computation s).(len (q0 ^ FlattenSeq pp0)).b = s.b and
+A43:  for h being FinSeq-Location st h <> f
+          holds (Computation s).(len (q0 ^ FlattenSeq pp0)).h = s.h by A36,A37,
+XBOOLE_1:1;
+      set r1 = len r + 1;
+        len (r ^ <* x *>) = r1 by FINSEQ_2:19;
+      then r1 in Seg len (r ^ <* x *>) by FINSEQ_1:6;
+then A44:    r1 in dom (r ^ <* x *>) by FINSEQ_1:def 3;
+      A45: dom (r ^ <* x *>) c= dom pp by A37,GRFUNC_1:8;
+then r1 in dom pp by A44;
+then A46:  r1 in Seg len pp by FINSEQ_1:def 3;
+      then 1 <= r1 & r1 <= len pp by FINSEQ_1:3;
+      then consider pr1 being Integer such that
+A47:  pr1 = p.r1 and
+A48:  pp.r1 = aSeq(I,r1) ^ aSeq(V,pr1) ^ <* (f,I):=V *> by A10,A11;
+A49: now thus x = (r ^ <* x *>).r1 by FINSEQ_1:59
+      .= pp.r1 by A37,A44,GRFUNC_1:8;
+      end;
+      then x in D* by A44,A45,FINSEQ_2:13;
+      then <* x *> is FinSequence of D* by Th22;
+      then reconsider pp1 = pp0 ^ <* x *> as FinSequence of D* by Th23;
+      take pp1;
+      thus pp1 = r ^ <* x *> by A38;
+      reconsider x as Element of D* by A44,A45,A49,FINSEQ_2:13;
+A50:  x = aSeq(I,r1) ^ (aSeq(V,pr1) ^ <* (f,I):=V *>) by A48,A49,FINSEQ_1:45;
+A51:  FlattenSeq pp1 c= FlattenSeq pp by A37,A38,Th19;
+A52:   now thus FlattenSeq pp1 = FlattenSeq pp0 ^ FlattenSeq <* x *> by Th14
+      .= FlattenSeq pp0 ^ x by DTCONSTR:13;
+      end;
+then A53:  q0 ^ FlattenSeq pp1 = q0 ^ FlattenSeq pp0 ^ x by FINSEQ_1:45;
+      set c1 = len (q0 ^ FlattenSeq pp0);
+      set s1 = (Computation s).c1;
+      set c2 = len (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1));
+      set s2 = (Computation s).c2;
+      set c3 = len (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1) ^ aSeq(V,pr1));
+A54:   c2 = c1 + len aSeq(I,r1) by FINSEQ_1:35;
+then A55:  s2 = (Computation (Computation s).c1).len aSeq(I,r1) by AMI_1:51;
+A56:   c3 = c1 + len aSeq(I,r1) + len aSeq(V,pr1) by A54,FINSEQ_1:35;
+A57:  c3 = c2 + len aSeq(V,pr1) by FINSEQ_1:35;
+A58:  now let p be FinSequence; assume p c= x;
+         then FlattenSeq pp0 ^ p c= FlattenSeq pp0 ^ x by FINSEQ_6:15;
+         then FlattenSeq pp0 ^ p c= FlattenSeq pp by A51,A52,XBOOLE_1:1;
+         then q0 ^ (FlattenSeq pp0 ^ p) c= q0 ^ FlattenSeq pp by FINSEQ_6:15;
+ then A59:     q0 ^ FlattenSeq pp0 ^ p c= q0 ^ FlattenSeq pp by FINSEQ_1:45;
+           q0 ^ FlattenSeq pp c= q by A12,FINSEQ_6:12;
+         hence q0 ^ FlattenSeq pp0 ^ p c= q by A59,XBOOLE_1:1;
+        end;
+A60:  s1.O = 1 & IC s1 = insloc c1 & I <> O &
+      for c being Nat st c in dom aSeq(I,r1) holds
+          aSeq(I,r1).c = s1.insloc (c1 + c -' 1)
+        proof
+           aSeq(I,r1) c= x by A50,FINSEQ_6:12;
+ then A61:     q0 ^ FlattenSeq pp0 ^ aSeq(I,r1) c= q by A58;
+ then A62:      dom (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1)) c= dom q by GRFUNC_1:8;
+         thus s1.O = 1 by A1,A3,A42;
+         thus IC s1 = insloc c1 by A39;
+         thus I <> O by SCMFSA_2:16;
+         let c be Nat;
+         assume A63: c in dom aSeq(I,r1);
+ then A64:     c1 + c in dom (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1)) by FINSEQ_1:41;
+ then A65:    insloc (c1 + c -' 1) in dom Load q by A6,A62;
+           c1 + c >= 1 by A64,FINSEQ_3:27;
+         then c1 + c -' 1 = c1 + c - 1 by Th3;
+ then A66:   c1 + c -' 1 + 1 = c1 + c by XCMPLX_1:27;
+         thus aSeq(I,r1).c
+          = (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1)).(c1 + c) by A63,FINSEQ_1:def 7
+         .= q.(c1 + c) by A61,A64,GRFUNC_1:8
+         .= (Load q).insloc (c1 + c -' 1) by A7,A65,A66
+         .= s.insloc (c1 + c -' 1) by A4,A5,A65,GRFUNC_1:8
+         .= s1.insloc (c1 + c -' 1) by AMI_1:54;
+        end;
+then A67: (for i being Nat st i <= len aSeq(I,r1) holds
+        IC (Computation s1).i = insloc (c1 + i) &
+        (for b being Int-Location st b <> I holds (Computation s1).i.b = s1.b)&
+        (for f being FinSeq-Location holds (Computation s1).i.f = s1.f)) &
+      (Computation s1).(len aSeq(I,r1)).I = r1 by Th36;
+A68: now let i be Nat;
+         assume i <= len aSeq(I,r1);
+         hence insloc (c1 + i) = IC (Computation s1).i by A60,Th36
+         .= IC (Computation s).(c1 + i) by AMI_1:51;
+        end;
+      A69: s2.O = 1 & IC s2 = insloc c2 & V <> O &
+          (for c being Nat st c in dom aSeq(V,pr1) holds
+          aSeq(V,pr1).c = s2.insloc (c2 + c -' 1))
+        proof
+         thus s2.O = 1 by A55,A60,Th36;
+         thus IC s2 = insloc c2 by A54,A55,A60,Th36;
+         thus V <> O by SCMFSA_2:16;
+         let c be Nat;
+         assume A70: c in dom aSeq(V,pr1);
+ then A71:     c2 + c in dom (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1) ^ aSeq(V,pr1))
+             by FINSEQ_1:41;
+           aSeq(I,r1) ^ aSeq(V,pr1) c= x by A48,A49,FINSEQ_6:12;
+         then q0 ^ FlattenSeq pp0 ^ (aSeq(I,r1) ^ aSeq(V,pr1)) c= q by A58;
+ then A72:      q0 ^FlattenSeq pp0^aSeq(I,r1) ^ aSeq(V,pr1) c= q by FINSEQ_1:45
+;
+         then dom (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1) ^ aSeq(V,pr1)) c= dom q
+             by GRFUNC_1:8;
+ then A73:    insloc (c2 + c -' 1) in dom Load q by A6,A71;
+           c2 + c >= 1 by A71,FINSEQ_3:27;
+         then c2 + c -' 1 = c2 + c - 1 by Th3;
+ then A74:   c2 + c -' 1 + 1 = c2 + c by XCMPLX_1:27;
+         thus aSeq(V,pr1).c
+          = (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1) ^ aSeq(V,pr1)).(c2 + c)
+             by A70,FINSEQ_1:def 7
+         .= q.(c2 + c) by A71,A72,GRFUNC_1:8
+         .= (Load q).insloc (c2 + c -' 1) by A7,A73,A74
+         .= s.insloc (c2 + c -' 1) by A4,A5,A73,GRFUNC_1:8
+         .= s2.insloc (c2 + c -' 1) by AMI_1:54;
+        end;
+then A75: (for i being Nat st i <= len aSeq(V,pr1) holds
+        IC (Computation s2).i = insloc (c2 + i) &
+        (for b being Int-Location st b <> V holds (Computation s2).i.b = s2.b)&
+        (for f being FinSeq-Location holds (Computation s2).i.f = s2.f)) &
+      (Computation s2).(len aSeq(V,pr1)).V = pr1 by Th36;
+A76: now let i be Nat;
+         assume i <= len aSeq(V,pr1);
+         hence insloc (c2 + i) = IC (Computation s2).i by A69,Th36
+         .= IC (Computation s).(c2 + i) by AMI_1:51;
+        end;
+A77:    len q0 + len FlattenSeq pp1
+        = len q0 + len (FlattenSeq pp0 ^ aSeq(I,r1) ^ (aSeq(V,pr1) ^
+           <* (f,I):=V *>)) by A50,A52,FINSEQ_1:45
+       .= len (q0 ^ (FlattenSeq pp0 ^ aSeq(I,r1) ^ (aSeq(V,pr1) ^
+           <* (f,I):=V *>))) by FINSEQ_1:35
+       .= len (q0 ^ FlattenSeq pp0 ^ aSeq(I,r1) ^ (aSeq(V,pr1) ^
+           <* (f,I):=V *>)) by Lm4
+       .= c2 + len (aSeq(V,pr1) ^ <* (f,I):=V *>) by FINSEQ_1:35
+       .= c2 + (len aSeq(V,pr1) + len <* (f,I):=V *>) by FINSEQ_1:35
+       .= c2 + (len aSeq(V,pr1) + 1) by FINSEQ_1:56
+       .= c2 + len aSeq(V,pr1) + 1 by XCMPLX_1:1;
+A78:    for i being Nat st i < len (q0 ^ FlattenSeq pp1) holds
+          IC (Computation s).i = insloc i
+        proof
+         let i be Nat;
+         assume A79: i < len (q0 ^ FlattenSeq pp1);
+ A80:      now assume A81: not i <= c1;
+            assume A82: not (c1 + 1 <= i & i <= c2);
+              i < len q0 + len FlattenSeq pp1 by A79,FINSEQ_1:35;
+            hence c2 + 1 <= i & i <= c2 + len aSeq(V,pr1) by A77,A81,A82,NAT_1:
+38;
+           end;
+         per cases by A80;
+         suppose i <= len (q0 ^ FlattenSeq pp0);
+           hence thesis by A39;
+          suppose A83: c1 + 1 <= i & i <= c2;
+           then c1 + 1 - c1 <= i - c1 by REAL_1:49;
+           then 1 <= i - c1 by XCMPLX_1:26;
+ then A84:       0 <= i - c1 by AXIOMS:22;
+             i - c1 <= c2 - c1 by A83,REAL_1:49;
+ then A85:        i - c1 <= len aSeq(I,r1) by A54,XCMPLX_1:26;
+           reconsider ii = i - c1 as Nat by A84,INT_1:16;
+           thus insloc i = insloc (c1 + ii) by XCMPLX_1:27
+           .= IC (Computation s).(c1 + ii) by A68,A85
+           .= IC (Computation s).i by XCMPLX_1:27;
+          suppose A86: c2 + 1 <= i & i <= c2 + len aSeq(V,pr1);
+           then c2 + 1 - c2 <= i - c2 by REAL_1:49;
+           then 1 <= i - c2 by XCMPLX_1:26;
+ then A87:       0 <= i - c2 by AXIOMS:22;
+             i - c2 <= c2 + len aSeq(V,pr1) - c2 by A86,REAL_1:49;
+ then A88:        i - c2 <= len aSeq(V,pr1) by XCMPLX_1:26;
+           reconsider ii = i - c2 as Nat by A87,INT_1:16;
+           thus insloc i = insloc (c2 + ii) by XCMPLX_1:27
+           .= IC (Computation s).(c2 + ii) by A76,A88
+           .= IC (Computation s).i by XCMPLX_1:27;
+        end;
+      A89: len (q0 ^ FlattenSeq pp1) = c2 + len aSeq(V,pr1) + 1
+           by A77,FINSEQ_1:35;
+ A90: len (q0 ^ FlattenSeq pp1) = c2 + len aSeq(V,pr1) + 1 &
+          1 <= c2 + len aSeq(V,pr1) + 1 by A77,FINSEQ_1:35,NAT_1:29;
+ A91:  len (q0 ^ FlattenSeq pp1) > c2 + len aSeq(V,pr1) by A89,NAT_1:38;
+      A92: q0 ^ FlattenSeq pp0 ^ x c= q by A58;
+      then len (q0 ^ FlattenSeq pp1) <= len q by A53,Th8;
+ then A93: c2 + len aSeq(V,pr1) < len q by A90,NAT_1:38;
+ A94:  1 <= len <* (f,I):=V *> by FINSEQ_1:57;
+        len <* (f,I):=V *> <= len (aSeq(I,r1) ^ aSeq(V,pr1)) + len <* (f,I):=V
+*>
+          by NAT_1:37;
+      then len <* (f,I):=V *> <= len (aSeq(I,r1) ^ aSeq(V,pr1) ^ <* (f,I):=V
+*>)
+          by FINSEQ_1:35;
+ then A95:   1 <= len x by A48,A49,FINSEQ_1:57;
+        now thus CurInstr (Computation s).c3
+       = (Computation s).c3.IC (Computation s).c3 by AMI_1:def 17
+      .= (Computation s).c3.insloc c3 by A57,A78,A91
+      .= q.(c3 + 1) by A20,A57,A93
+      .= (q0 ^ FlattenSeq pp0 ^ x).(c3 + 1) by A53,A57,A90,A92,Th18
+      .= (q0 ^ FlattenSeq pp0 ^ x).(c3 + len <* (f,I):=V *>) by FINSEQ_1:57
+      .= (q0 ^ FlattenSeq pp0 ^ x).(c1 + (len aSeq(I,r1) + (len aSeq(V,pr1) +
+          len <* (f,I):=V *>))) by A56,Lm2;
+      end;
+ then A96:   CurInstr (Computation s).c3
+      = (q0 ^ FlattenSeq pp0 ^ x).(c1 + len (aSeq(I,r1) ^ aSeq(V,pr1) ^
+          <* (f,I):=V *>)) by Lm1
+      .= (aSeq(I,r1) ^ aSeq(V,pr1) ^ <* (f,I):=V *>).
+          len (aSeq(I,r1) ^ aSeq(V,pr1) ^ <* (f,I):=V *>) by A48,A49,A95,Th10
+      .= (aSeq(I,r1) ^ aSeq(V,pr1) ^ <* (f,I):=V *>).
+          (len (aSeq(I,r1) ^ aSeq(V,pr1)) + len <* (f,I):=V *>) by FINSEQ_1:35
+      .= <* (f,I):=V *>.len <* (f,I):=V *> by A94,Th10
+      .= <* (f,I):=V *>.1 by FINSEQ_1:57
+      .= (f,I):=V by FINSEQ_1:57;
+ A97: now thus (Computation s).(c3 + 1)
+       = Following (Computation s).c3 by AMI_1:def 19
+      .= Exec((f,I):=V,(Computation s).c3) by A96,AMI_1:def 18;
+      end;
+ A98:   now thus IC (Computation s).len (q0 ^ FlattenSeq pp1)
+       = Exec((f,I):=V,(Computation s).c3).IC SCM+FSA by A57,A90,A97,AMI_1:def
+15
+      .= Next IC (Computation s).c3 by SCMFSA_2:99
+      .= Next insloc c3 by A57,A78,A91
+      .= insloc len (q0 ^ FlattenSeq pp1) by A57,A89,SCMFSA_2:32;
+      end;
+      thus for i being Nat st i <= len (q0 ^ FlattenSeq pp1) holds
+          IC (Computation s).i = insloc i
+        proof
+         let i be Nat;
+         assume A99: i <= len (q0 ^ FlattenSeq pp1);
+         per cases by A99,REAL_1:def 5;
+         suppose i < len (q0 ^ FlattenSeq pp1);
+          hence IC (Computation s).i = insloc i by A78;
+         suppose i = len (q0 ^ FlattenSeq pp1);
+          hence IC (Computation s).i = insloc i by A98;
+        end;
+      consider ki being Nat such that A100: ki = abs((Computation s).c3.I) &
+          Exec((f,I):=V, (Computation s).c3).f
+          = (Computation s).c3.f +*(ki,(Computation s).c3.V) by SCMFSA_2:99;
+ A101:   now thus ki = abs( (Computation s).(c2 + len aSeq(V,pr1)).I ) by A100,
+FINSEQ_1:35
+      .= abs( (Computation s2).(len aSeq(V,pr1)).I ) by AMI_1:51
+      .= abs( s2.I ) by A1,A69,Th36
+      .= r1 by A55,A67,Th1;
+      end;
+ A102:  now thus (Computation s).c3.V
+       = (Computation s).(c2 + len aSeq(V,pr1)).V by FINSEQ_1:35
+      .= p.r1 by A47,A75,AMI_1:51;
+      end;
+ A103: now thus (Computation s).c3.f
+       = (Computation s).(c2 + len aSeq(V,pr1)).f by FINSEQ_1:35
+      .= (Computation s2).(len aSeq(V,pr1)).f by AMI_1:51
+      .= s2.f by A69,Th36
+      .= s1.f by A55,A60,Th36;
+      end;
+A104:   dom (s1.f) = Seg len p by A41,FINSEQ_1:def 3;
+      A105: dom (s1.f +*(r1,p.r1)) = dom (s1.f) by FUNCT_7:32;
+ then A106:   len (s1.f +*(r1,p.r1)) = len (s1.f) by FINSEQ_3:31;
+        len pp1 <= len pp by A37,A38,Th8;
+ then A107:  Seg len pp1 c= Seg len p by A10,FINSEQ_1:7;
+        dom ((Computation s).(len (q0 ^ FlattenSeq pp1)).f) =
+          Seg len p by A41,A57,A90,A97,A100,A101,A102,A103,A105,FINSEQ_1:def 3;
+ then A108:  dom (((Computation s).(len (q0 ^ FlattenSeq pp1)).f) | Seg len pp1
+)
+          = Seg len pp1 by A107,RELAT_1:91;
+        Seg len pp1 c= dom p by A107,FINSEQ_1:def 3;
+ then A109:  dom (p | Seg len pp1) = Seg len pp1 by RELAT_1:91;
+        for i being Nat st i in Seg len pp1 holds
+         (((Computation s).(len (q0 ^ FlattenSeq pp1)).f) | Seg len pp1).i
+         = (p | Seg len pp1).i
+        proof
+         let i be Nat; assume A110: i in Seg len pp1;
+ then A111:     1 <= i & i <= len pp1 by FINSEQ_1:3;
+         per cases;
+         suppose A112: i = len pp1;
+ then A113:    i = len pp0 + 1 by FINSEQ_2:19;
+ then A114:     i in Seg len pp1 by A112,FINSEQ_1:6;
+        hence (((Computation s).(len (q0 ^ FlattenSeq pp1))).f | Seg len pp1).
+i
+           = (s1.f +*(r1,p.r1)).i by A57,A89,A97,A100,A101,A102,A103,FUNCT_1:72
+          .= p.i by A10,A38,A46,A104,A113,FUNCT_7:33
+          .= (p | Seg len pp1).i by A114,FUNCT_1:72;
+         suppose A115: i <> len pp1;
+ then A116:     i <> r1 by A38,FINSEQ_2:19;
+            1 <= i & i < len pp1 by A111,A115,REAL_1:def 5;
+          then 1 <= i & i < len pp0 + 1 by FINSEQ_2:19;
+ then 1 <= i & i <= len pp0 by NAT_1:38;
+ then A117:       i in Seg len pp0 by FINSEQ_1:3;
+            now thus (((Computation s).(len (q0 ^ FlattenSeq pp1))).f |
+              Seg len pp1).i
+           = (s1.f +*(r1,p.r1)).i by A57,A89,A97,A100,A101,A102,A103,A110,
+FUNCT_1:72
+          .= s1.f.i by A116,FUNCT_7:34;
+          end;
+        hence (((Computation s).(len (q0 ^ FlattenSeq pp1))).f | Seg len pp1).
+i
+           = (p | Seg len pp0).i by A40,A117,FUNCT_1:72
+          .= p.i by A117,FUNCT_1:72
+          .= (p | Seg len pp1).i by A110,FUNCT_1:72;
+       end;
+   then for i being set st i in Seg len pp1 holds
+         (((Computation s).(len (q0 ^ FlattenSeq pp1)).f) | Seg len pp1).i
+         = (p | Seg len pp1).i;
+      hence ((Computation s).(len (q0 ^ FlattenSeq pp1)).f) | Seg len pp1
+          = p | Seg len pp1 by A108,A109,FUNCT_1:9;
+      thus len ((Computation s).(len (q0^FlattenSeq pp1)).f) = len p by A41,A90
+,A97,A100,A101,A102,A103,A106,FINSEQ_1:35;
+      hereby let b be Int-Location; assume
+      A118: b <> I & b <> V;
+         thus (Computation s).(len (q0 ^ FlattenSeq pp1)).b
+          = (Computation s).(c2 + len aSeq(V,pr1)).b by A57,A90,A97,SCMFSA_2:99
+         .= (Computation s2).(len aSeq(V,pr1)).b by AMI_1:51
+         .= s2.b by A69,A118,Th36
+         .= s1.b by A55,A60,A118,Th36
+         .= s.b by A42,A118;
+        end;
+      hereby let h be FinSeq-Location; assume
+      A119: h <> f;
+         hence (Computation s).(len (q0 ^ FlattenSeq pp1)).h
+          = (Computation s).(c2 + len aSeq(V,pr1)).h by A57,A90,A97,SCMFSA_2:99
+         .= (Computation s2).(len aSeq(V,pr1)).h by AMI_1:51
+         .= s2.h by A69,Th36
+         .= s1.h by A55,A60,Th36
+         .= s.h by A43,A119;
+        end;
+     end;
+     for r being FinSequence holds P[r] from IndSeq(A22,A35);
+   then consider pp0 being FinSequence of D* such that
+A120: pp0 = pp and
+A121: for i being Nat st i <= len (q0 ^ FlattenSeq pp0) holds
+       IC (Computation s).i = insloc i and
+A122: ((Computation s).(len (q0 ^ FlattenSeq pp0)).f) | Seg len pp0
+       = p | Seg len pp0 and
+A123: len ((Computation s).(len (q0 ^ FlattenSeq pp0)).f) = len p and
+A124: for b being Int-Location st b <> I & b <> V
+       holds (Computation s).(len (q0 ^ FlattenSeq pp0)).b = s.b and
+A125: for g being FinSeq-Location st g <> f
+           holds (Computation s).(len (q0 ^ FlattenSeq pp0)).g = s.g;
+A126: IC (Computation s).len (q0 ^ FlattenSeq pp)
+       = insloc len (q0 ^ FlattenSeq pp) by A120,A121;
+     len q = len (q0 ^ FlattenSeq pp) + 1 by A12,FINSEQ_2:19;
+then A127: len (q0 ^ FlattenSeq pp) < len q by NAT_1:38;
+A128: CurInstr (Computation s).len (q0 ^ FlattenSeq pp)
+    = ((Computation s).len (q0 ^ FlattenSeq pp)).
+        insloc len (q0 ^ FlattenSeq pp) by A126,AMI_1:def 17
+   .= q.(len (q0 ^ FlattenSeq pp) + 1) by A20,A127
+   .= halt SCM+FSA by A12,FINSEQ_1:59;
+   hence s is halting by AMI_1:def 20;
+   then A129: (Computation s).len (q0^FlattenSeq pp) = Result s by A128,AMI_1:
+def 22;
+     dom ((Computation s).(len (q0 ^ FlattenSeq pp0)).f)
+    = Seg len pp0 by A10,A120,A123,FINSEQ_1:def 3;
+then A130: (Result s).f = p | Seg len pp0 by A120,A122,A129,RELAT_1:97;
+     dom p = Seg len pp0 by A10,A120,FINSEQ_1:def 3;
+   hence (Result s).f = p by A130,RELAT_1:97;
+   thus thesis by A120,A124,A125,A129;
+ end;

@@ -1,0 +1,1920 @@
+:: Convex Sets and Convex Combinations
+::  by Noboru Endou , Takashi Mitsuishi and Yasunari Shidama
+::
+:: Received November 5, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, FUNCT_1, PROB_2, ARYTM_1, RELAT_1, BHSP_1, FINSEQ_1,
+      BOOLE, JORDAN1, SETFAM_1, CONNSP_3, ARYTM_3, RUSUB_4, RLSUB_1, CONVEX1,
+      FINSEQ_4, SEQ_1, CARD_1, RLVECT_2;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, PRE_TOPC, STRUCT_0, NUMBERS,
+      XCMPLX_0, XREAL_0, FUNCT_1, CARD_1, NAT_1, REAL_1, FUNCT_2, FINSEQ_1,
+      RLVECT_1, RLSUB_1, FINSEQ_4, RLVECT_2, RVSUM_1, BHSP_1, RUSUB_4, RUSUB_5;
+ constructors REAL_1, EUCLID, SEQ_1, RUSUB_5, FINSEQ_4, RLVECT_2, MEMBERED;
+ clusters STRUCT_0, XREAL_0, RELSET_1, ARYTM_3, RLVECT_1, SEQ_1, RUSUB_4,
+      MEMBERED;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ theorems BHSP_1, SUBSET_1, RLVECT_1, RVSUM_1, FUNCT_1, FINSEQ_1, TARSKI,
+      ZFMISC_1, REAL_1, XBOOLE_0, REAL_2, SETFAM_1, AXIOMS, RLSUB_1, RUSUB_4,
+      RUSUB_5, XBOOLE_1, RLVECT_2, CARD_1, FINSEQ_3, FINSEQ_4, CARD_2,
+      ENUMSET1, WAYBEL18, XCMPLX_1;
+ schemes COMPLSP1, SETFAM_1;
+
+begin  :: Convex Sets
+
+definition
+let V be non empty RLSStruct, M be Subset of V, r be Real;
+  func r*M -> Subset of V equals :Def1:
+  {r * v where v is Element of V: v in M};
+coherence
+proof
+  defpred P[set] means $1 in M;
+  deffunc F(Element of V) = r * $1;
+  {F(v) where v is Element of V: P[v]}
+    is Subset of V from SubsetFD;
+   hence thesis;
+end;
+end;
+
+definition
+let V be non empty RLSStruct, M be Subset of V;
+  attr M is convex means :Def2:
+for u,v being VECTOR of V,
+  r be Real st 0 < r & r < 1 & u in M & v in M holds
+  r*u + (1-r)*v in M;
+end;
+
+theorem
+  for V being RealLinearSpace-like (non empty RLSStruct),
+ M being Subset of V, r being Real st
+  M is convex holds r*M is convex
+proof
+   let V be RealLinearSpace-like (non empty RLSStruct);
+   let M be Subset of V;
+   let r be Real;
+   assume
+A1:M is convex;
+     for u,v being VECTOR of V, p being Real st
+    0 < p & p < 1 & u in r*M & v in r*M holds
+    p*u + (1-p)*v in r*M
+   proof
+     let u,v be VECTOR of V;
+     let p be Real;
+     assume
+A2:  0 < p & p < 1 & u in r*M & v in r*M;
+     then u in {r * w where w is Element of V: w in M} by Def1;
+     then consider u' be Element of V such that
+A3:  u = r * u' & u' in M;
+       v in {r * w where w is Element of V: w in M}
+      by A2,Def1;
+     then consider v' be Element of V such that
+A4:  v = r*v' & v' in M;
+A5:  p*u + (1-p)*v = r*p*u' + (1-p)*(r*v') by A3,A4,RLVECT_1:def 9
+      .= r*p*u' + r*(1-p)*v' by RLVECT_1:def 9
+      .= r*(p*u') + r*(1-p)*v' by RLVECT_1:def 9
+      .= r*(p*u') + r*((1-p)*v') by RLVECT_1:def 9
+      .= r*(p*u' + (1-p)*v') by RLVECT_1:def 9;
+       p*u' + (1-p)*v' in M by A1,A2,A3,A4,Def2;
+     then p*u + (1-p)*v in {r * w where w is Element of V: w in
+M}
+      by A5;
+     hence thesis by Def1;
+   end;
+   hence thesis by Def2;
+end;
+
+theorem
+  for V being Abelian add-associative
+            RealLinearSpace-like (non empty RLSStruct),
+ M,N being Subset of V st
+  M is convex & N is convex holds M + N is convex
+proof
+   let V be Abelian add-associative
+            RealLinearSpace-like (non empty RLSStruct);
+   let M,N be Subset of V;
+   assume that
+A1:M is convex and
+A2:N is convex;
+     for u,v being VECTOR of V, r being Real st
+    0 < r & r < 1 & u in M+N & v in M+N holds
+     r*u + (1-r)*v in M+N
+   proof
+     let u,v be VECTOR of V;
+     let r be Real;
+     assume
+A3:  0 < r & r < 1 & u in M+N & v in M+N;
+     then u in {x + y where x,y is Element of V
+           : x in M & y in N} by RUSUB_4:def 10;
+     then consider x1,y1 being Element of V such that
+A4:  u = x1 + y1 & x1 in M & y1 in N;
+       v in {x + y where x,y is Element of V
+           : x in M & y in N} by A3,RUSUB_4:def 10;
+     then consider x2,y2 being Element of V such that
+A5:  v = x2 + y2 & x2 in M & y2 in N;
+A6:  r*x1 + (1-r)*x2 in M by A1,A3,A4,A5,Def2;
+A7:  r*y1 + (1-r)*y2 in N by A2,A3,A4,A5,Def2;
+       r*u + (1-r)*v = r*x1 + r*y1 + (1-r)*(x2+y2) by A4,A5,RLVECT_1:def 9
+      .= r*x1 + r*y1 + ((1-r)*x2 + (1-r)*y2) by RLVECT_1:def 9
+      .= r*x1 + r*y1 + (1-r)*x2 + (1-r)*y2 by RLVECT_1:def 6
+      .= r*x1 + (1-r)*x2 + r*y1 + (1-r)*y2 by RLVECT_1:def 6
+      .= (r*x1 + (1-r)*x2) + (r*y1 + (1-r)*y2) by RLVECT_1:def 6;
+     then r*u + (1-r)*v in {x + y where x,y is Element of V
+           : x in M & y in N} by A6,A7;
+     hence thesis by RUSUB_4:def 10;
+   end;
+   hence thesis by Def2;
+end;
+
+theorem
+  for V being RealLinearSpace, M,N being Subset of V st
+ M is convex & N is convex holds M - N is convex
+proof
+   let V be RealLinearSpace;
+   let M,N be Subset of V;
+   assume that
+A1:M is convex and
+A2:N is convex;
+     for u,v being VECTOR of V, r being Real st
+    0 < r & r < 1 & u in M-N & v in M-N holds
+     r*u + (1-r)*v in M-N
+   proof
+     let u,v be VECTOR of V;
+     let r be Real;
+     assume
+A3:  0 < r & r < 1 & u in M-N & v in M-N;
+     then u in {x - y where x,y is Element of V
+           : x in M & y in N} by RUSUB_5:def 2;
+     then consider x1,y1 being Element of V such that
+A4:  u = x1 - y1 & x1 in M & y1 in N;
+       v in {x - y where x,y is Element of V
+           : x in M & y in N} by A3,RUSUB_5:def 2;
+     then consider x2,y2 being Element of V such that
+A5:  v = x2 - y2 & x2 in M & y2 in N;
+A6:  r*x1 + (1-r)*x2 in M by A1,A3,A4,A5,Def2;
+A7:  r*y1 + (1-r)*y2 in N by A2,A3,A4,A5,Def2;
+       r*u + (1-r)*v = r*x1 - r*y1 + (1-r)*(x2-y2) by A4,A5,RLVECT_1:48
+      .= r*x1 - r*y1 + ((1-r)*x2 - (1-r)*y2) by RLVECT_1:48
+      .= r*x1 - r*y1 + (1-r)*x2 - (1-r)*y2 by RLVECT_1:42
+      .= r*x1 - (r*y1 - (1-r)*x2) - (1-r)*y2 by RLVECT_1:43
+      .= r*x1 + (- (r*y1 - (1-r)*x2)) - (1-r)*y2 by RLVECT_1:def 11
+      .= r*x1 + ((1-r)*x2 + (- r*y1)) - (1-r)*y2 by RLVECT_1:47
+      .= r*x1 + (1-r)*x2 + (- r*y1) - (1-r)*y2 by RLVECT_1:def 6
+      .= r*x1 + (1-r)*x2 + ((- r*y1) - (1-r)*y2) by RLVECT_1:42
+      .= r*x1 + (1-r)*x2 + - (r*y1 + (1-r)*y2) by RLVECT_1:44
+      .= (r*x1 + (1-r)*x2) - (r*y1 + (1-r)*y2) by RLVECT_1:def 11;
+     then r*u + (1-r)*v in {x - y where x,y is Element of V
+           : x in M & y in N} by A6,A7;
+     hence thesis by RUSUB_5:def 2;
+   end;
+   hence thesis by Def2;
+end;
+
+theorem Th4:
+for V being non empty RLSStruct, M being Subset of V holds
+ M is convex iff
+  (for r being Real st 0 < r & r < 1 holds r*M + (1-r)*M c= M)
+proof
+   let V be non empty RLSStruct;
+   let M be Subset of V;
+A1:M is convex implies
+    (for r being Real st 0 < r & r < 1 holds r*M + (1-r)*M c= M)
+   proof
+     assume
+A2:  M is convex;
+     let r be Real;
+     assume
+A3:  0 < r & r < 1;
+       for x being Element of V st
+      x in r*M + (1-r)*M holds x in M
+     proof
+       let x be Element of V;
+       assume x in r*M + (1-r)*M;
+       then x in {u + v where u,v is Element of V :
+             u in r*M & v in (1-r)*M} by RUSUB_4:def 10;
+       then consider u,v be Element of V such that
+A4:    x = u + v & u in r*M & v in (1-r)*M;
+         u in {r * w where w is Element of V
+             : w in M} by A4,Def1;
+       then consider w1 be Element of V such that
+A5:    u = r * w1 & w1 in M;
+         v in {(1-r) * w where w is Element of V
+             : w in M} by A4,Def1;
+       then consider w2 be Element of V such that
+A6:    v = (1-r)*w2 & w2 in M;
+       thus thesis by A2,A3,A4,A5,A6,Def2;
+     end;
+     hence thesis by SUBSET_1:7;
+   end;
+     (for r being Real st 0 < r & r < 1 holds r*M + (1-r)*M c= M)
+    implies M is convex
+   proof
+     assume
+A7:  for r being Real st 0 < r & r < 1 holds r*M + (1-r)*M c= M;
+     let u,v be VECTOR of V;
+     let r be Real;
+     assume
+A8:  0 < r & r < 1;
+     assume
+A9:  u in M & v in M;
+     then r*u in {r*w where w is Element of V: w in M};
+then A10: r*u in r*M by Def1;
+       (1-r)*v in {(1-r)*w where w is Element of V: w in M}
+      by A9;
+     then (1-r)*v in (1-r)*M by Def1;
+     then r*u + (1-r)*v in {p+q where p,q is Element of V:
+                       p in r*M & q in (1-r)*M} by A10;
+then A11: r*u + (1-r)*v in r*M + (1-r)*M by RUSUB_4:def 10;
+       r*M + (1-r)*M c= M by A7,A8;
+     hence thesis by A11;
+   end;
+   hence thesis by A1;
+end;
+
+theorem
+  for V being Abelian (non empty RLSStruct), M being Subset of V st
+ M is convex holds
+  (for r being Real st 0 < r & r < 1 holds (1-r)*M + r*M c= M)
+proof
+   let V be Abelian (non empty RLSStruct);
+   let M be Subset of V;
+   assume
+A1:M is convex;
+   let r be Real;
+   assume
+A2:0 < r & r < 1;
+     for x being Element of V st
+    x in (1-r)*M + r*M holds x in M
+   proof
+     let x be Element of V;
+     assume x in (1-r)*M + r*M;
+     then x in {u + v where u,v is Element of V :
+           u in (1-r)*M & v in r*M} by RUSUB_4:def 10;
+     then consider u,v be Element of V such that
+A3:  x = u + v & u in (1-r)*M & v in r*M;
+
+       u in {(1-r) * w where w is Element of V
+           : w in M} by A3,Def1;
+     then consider w1 be Element of V such that
+A4:  u = (1-r) * w1 & w1 in M;
+
+       v in {r * w where w is Element of V
+           : w in M} by A3,Def1;
+     then consider w2 be Element of V such that
+A5:  v = r*w2 & w2 in M;
+     thus thesis by A1,A2,A3,A4,A5,Def2;
+   end;
+   hence thesis by SUBSET_1:7;
+end;
+
+theorem
+  for V being Abelian add-associative RealLinearSpace-like (non empty RLSStruct
+)
+,
+ M,N being Subset of V st M is convex & N is convex holds
+  for r being Real holds r*M + (1-r)*N is convex
+proof
+   let V be Abelian add-associative RealLinearSpace-like (non empty RLSStruct);
+   let M,N be Subset of V;
+   assume that
+A1:M is convex and
+A2:N is convex;
+   let r be Real;
+   let u,v be VECTOR of V;
+   let p be Real;
+   assume that
+A3:0 < p & p < 1 and
+A4:u in r*M + (1-r)*N and
+A5:v in r*M + (1-r)*N;
+
+     u in {x1 + y1 where x1,y1 is VECTOR of V : x1 in r*M & y1 in (1-r)*N}
+    by A4,RUSUB_4:def 10;
+   then consider x1,y1 be VECTOR of V such that
+A6:u = x1 + y1 & x1 in r*M & y1 in (1-r)*N;
+
+     v in {x2 + y2 where x2,y2 is VECTOR of V : x2 in r*M & y2 in (1-r)*N}
+    by A5,RUSUB_4:def 10;
+   then consider x2,y2 be VECTOR of V such that
+A7:v = x2 + y2 & x2 in r*M & y2 in (1-r)*N;
+
+     x1 in {r*mx1 where mx1 is VECTOR of V : mx1 in M} by A6,Def1;
+   then consider mx1 be VECTOR of V such that
+A8:x1 = r*mx1 & mx1 in M;
+
+     y1 in {(1-r)*ny1 where ny1 is VECTOR of V : ny1 in N} by A6,Def1;
+   then consider ny1 be VECTOR of V such that
+A9:y1 = (1-r)*ny1 & ny1 in N;
+
+     x2 in {r*mx2 where mx2 is VECTOR of V : mx2 in M} by A7,Def1;
+   then consider mx2 be VECTOR of V such that
+A10:x2 = r*mx2 & mx2 in M;
+
+     y2 in {(1-r)*ny2 where ny2 is VECTOR of V : ny2 in N} by A7,Def1;
+   then consider ny2 be VECTOR of V such that
+A11:y2 = (1-r)*ny2 & ny2 in N;
+
+A12:p*mx1 + (1-p)*mx2 in M by A1,A3,A8,A10,Def2;
+
+A13:p*ny1 + (1-p)*ny2 in N by A2,A3,A9,A11,Def2;
+
+     p*x1 + (1-p)*x2 = p*r*mx1 + (1-p)*(r*mx2) by A8,A10,RLVECT_1:def 9
+    .= p*r*mx1 + (1-p)*r*mx2 by RLVECT_1:def 9
+    .= r*(p*mx1) + (1-p)*r*mx2 by RLVECT_1:def 9
+    .= r*(p*mx1) + r*((1-p)*mx2) by RLVECT_1:def 9
+    .= r*(p*mx1 + (1-p)*mx2) by RLVECT_1:def 9;
+   then p*x1 + (1-p)*x2 in {r*w where w is VECTOR of V : w in M} by A12;
+then A14:p*x1 + (1-p)*x2 in r*M by Def1;
+
+     p*y1 + (1-p)*y2 = p*(1-r)*ny1 + (1-p)*((1-r)*ny2) by A9,A11,RLVECT_1:def 9
+    .= p*(1-r)*ny1 + (1-p)*(1-r)*ny2 by RLVECT_1:def 9
+    .= (1-r)*(p*ny1) + (1-p)*(1-r)*ny2 by RLVECT_1:def 9
+    .= (1-r)*(p*ny1) + (1-r)*((1-p)*ny2) by RLVECT_1:def 9
+    .= (1-r)*(p*ny1 + (1-p)*ny2) by RLVECT_1:def 9;
+   then p*y1 + (1-p)*y2 in {(1-r)*w where w is VECTOR of V : w in N} by A13;
+then A15:p*y1 + (1-p)*y2 in (1-r)*N by Def1;
+
+     p*u + (1-p)*v = p*x1 + p*y1 + (1-p)*(x2 + y2) by A6,A7,RLVECT_1:def 9
+    .= p*x1 + p*y1 + ((1-p)*x2 + (1-p)*y2) by RLVECT_1:def 9
+    .= p*x1 + p*y1 + (1-p)*x2 + (1-p)*y2 by RLVECT_1:def 6
+    .= p*x1 + (1-p)*x2 + p*y1 + (1-p)*y2 by RLVECT_1:def 6
+    .= (p*x1 + (1-p)*x2) + (p*y1 + (1-p)*y2) by RLVECT_1:def 6;
+
+   then p*u + (1-p)*v in {w1 + w2 where w1,w2 is VECTOR of V
+                     : w1 in r*M & w2 in (1-r)*N} by A14,A15;
+   hence thesis by RUSUB_4:def 10;
+end;
+
+Lm1:
+for V being RealLinearSpace-like (non empty RLSStruct),
+ M be Subset of V holds 1*M = M
+proof
+   let V be RealLinearSpace-like (non empty RLSStruct);
+   let M be Subset of V;
+     for v being Element of V st v in 1*M holds v in M
+   proof
+     let v be Element of V;
+     assume v in 1*M;
+     then v in {1*x where x is Element of V: x in M} by Def1;
+     then consider x be Element of V such that
+A1:  v = 1*x & x in M;
+     thus thesis by A1,RLVECT_1:def 9;
+   end;
+then A2:1*M c= M by SUBSET_1:7;
+     for v being Element of V st v in M holds v in 1*M
+   proof
+     let v be Element of V;
+     assume
+A3:  v in M;
+       v = 1*v by RLVECT_1:def 9;
+     then v in {1*x where x is Element of V: x in M} by A3;
+     hence thesis by Def1;
+   end;
+   then M c= 1*M by SUBSET_1:7;
+   hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+Lm2:
+for V being RealLinearSpace, M be non empty Subset of V holds 0 * M = {0.V}
+proof
+   let V be RealLinearSpace;
+   let M be non empty Subset of V;
+     for v being Element of V st v in 0 * M holds v in {0.V}
+   proof
+     let v be Element of V;
+     assume v in 0 * M;
+     then v in {0 * x where x is Element of V: x in M} by Def1;
+     then consider x be Element of V such that
+A1:  v = 0 * x & x in M;
+       v = 0.V by A1,RLVECT_1:23;
+     hence thesis by TARSKI:def 1;
+   end;
+then A2:0 * M c= {0.V} by SUBSET_1:7;
+     for v being Element of V st v in {0.V} holds v in 0 * M
+   proof
+     let v be Element of V;
+     assume v in {0.V};
+then A3:  v = 0.V by TARSKI:def 1;
+     consider x be set such that
+A4:  x in M by XBOOLE_0:def 1;
+     reconsider x as Element of V by A4;
+       v = 0 * x by A3,RLVECT_1:23;
+     then v in {0 * y where y is Element of V: y in M} by A4;
+     hence thesis by Def1;
+   end;
+   then {0.V} c= 0 * M by SUBSET_1:7;
+   hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+Lm3:
+for V be add-associative (non empty LoopStr),
+ M1,M2,M3 be Subset of V holds (M1 + M2) + M3 = M1 + (M2 + M3)
+proof
+   let V be add-associative (non empty LoopStr);
+   let M1,M2,M3 be Subset of V;
+     for x being Element of V st x in (M1 + M2) + M3
+    holds x in M1 + (M2 + M3)
+   proof
+     let x be Element of V;
+     assume x in (M1 + M2) + M3;
+     then x in {u + v where u,v is Element of V :
+       u in M1 + M2 & v in M3} by RUSUB_4:def 10;
+     then consider x',x3 be Element of V such that
+A1:  x = x' + x3 & x' in M1 + M2 & x3 in M3;
+       x' in {u + v where u,v is Element of V :
+       u in M1 & v in M2}
+       by A1,RUSUB_4:def 10;
+     then consider x1,x2 be Element of V such that
+A2:  x' = x1 + x2 & x1 in M1 & x2 in M2;
+
+A3:  x = x1 + (x2 + x3) by A1,A2,RLVECT_1:def 6;
+
+       x2 + x3 in {u + v where u,v is Element of V :
+       u in M2 & v in M3}
+       by A1,A2;
+     then x2 + x3 in M2 + M3 by RUSUB_4:def 10;
+     then x in {u + v where u,v is Element of V :
+       u in M1 & v in M2 + M3} by A2,A3;
+     hence thesis by RUSUB_4:def 10;
+   end;
+then A4:(M1 + M2) + M3 c= M1 + (M2 + M3) by SUBSET_1:7;
+
+     for x being Element of V st x in M1 + (M2 + M3)
+    holds x in (M1 + M2) + M3
+   proof
+     let x be Element of V;
+     assume x in M1 + (M2 + M3);
+     then x in {u + v where u,v is Element of V :
+       u in M1 & v in M2 + M3} by RUSUB_4:def 10;
+     then consider x1,x' be Element of V such that
+A5:  x = x1 + x' & x1 in M1 & x' in M2+M3;
+
+       x' in {u + v where u,v is Element of V :
+       u in M2 & v in M3} by A5,RUSUB_4:def 10;
+     then consider x2,x3 be Element of V such that
+A6:  x' = x2 + x3 & x2 in M2 & x3 in M3;
+
+A7:  x= (x1 + x2) + x3 by A5,A6,RLVECT_1:def 6;
+
+       x1 + x2 in {u + v where u,v is Element of V :
+       u in M1 & v in M2} by A5,A6;
+     then x1 + x2 in M1 + M2 by RUSUB_4:def 10;
+     then x in {u + v where u,v is Element of V :
+       u in M1+M2 & v in M3} by A6,A7;
+     hence thesis by RUSUB_4:def 10;
+   end;
+   then M1 + (M2 + M3) c= (M1 + M2) + M3 by SUBSET_1:7;
+   hence thesis by A4,XBOOLE_0:def 10;
+end;
+
+Lm4:
+for V being RealLinearSpace-like (non empty RLSStruct),
+ M being Subset of V, r1,r2 being Real holds
+  r1*(r2*M) = (r1*r2)*M
+proof
+   let V be RealLinearSpace-like (non empty RLSStruct);
+   let M be Subset of V;
+   let r1,r2 be Real;
+
+     for x being VECTOR of V st x in r1*(r2*M) holds x in (r1*r2)*M
+   proof
+     let x be VECTOR of V;
+     assume x in r1*(r2*M);
+     then x in {r1 * w where w is VECTOR of V : w in r2*M} by Def1;
+     then consider w1 be VECTOR of V such that
+A1:  x = r1*w1 & w1 in r2*M;
+       w1 in {r2 * w where w is VECTOR of V : w in M} by A1,Def1;
+     then consider w2 be VECTOR of V such that
+A2:  w1 = r2*w2 & w2 in M;
+       x = (r1*r2)*w2 by A1,A2,RLVECT_1:def 9;
+     then x in {(r1*r2) * w where w is VECTOR of V : w in M} by A2;
+     hence thesis by Def1;
+   end;
+then A3:r1*(r2*M) c= (r1*r2)*M by SUBSET_1:7;
+     for x being VECTOR of V st x in (r1*r2)*M holds x in r1*(r2*M)
+   proof
+     let x be VECTOR of V;
+     assume x in (r1*r2)*M;
+     then x in {(r1*r2) * w where w is VECTOR of V : w in M} by Def1;
+     then consider w1 be VECTOR of V such that
+A4:  x = (r1*r2)*w1 & w1 in M;
+
+A5:  x = r1*(r2*w1) by A4,RLVECT_1:def 9;
+
+       r2*w1 in {r2 * w where w is VECTOR of V : w in M} by A4;
+     then r2*w1 in r2*M by Def1;
+     then x in {r1*w where w is VECTOR of V : w in r2*M} by A5;
+     hence thesis by Def1;
+   end;
+   then (r1*r2)*M c= r1*(r2*M) by SUBSET_1:7;
+   hence thesis by A3,XBOOLE_0:def 10;
+end;
+
+Lm5:
+for V being RealLinearSpace-like (non empty RLSStruct),
+ M1,M2 being Subset of V, r being Real holds
+  r*(M1 + M2) = r*M1 + r*M2
+proof
+   let V be RealLinearSpace-like (non empty RLSStruct);
+   let M1,M2 be Subset of V;
+   let r be Real;
+     for x being VECTOR of V st x in r*(M1+M2) holds x in r*M1 + r*M2
+   proof
+     let x be VECTOR of V;
+     assume x in r*(M1+M2);
+     then x in {r * w where w is VECTOR of V : w in M1+M2} by Def1;
+     then consider w' be VECTOR of V such that
+A1:  x = r*w' & w' in M1 + M2;
+
+       w' in {u + v where u,v is VECTOR of V : u in M1 & v in M2}
+       by A1,RUSUB_4:def 10;
+     then consider w1,w2 be VECTOR of V such that
+A2:  w' = w1 + w2 & w1 in M1 & w2 in M2;
+
+A3:  x = r*w1 + r*w2 by A1,A2,RLVECT_1:def 9;
+
+       r*w1 in {r*w where w is VECTOR of V : w in M1} by A2;
+then A4:  r*w1 in r*M1 by Def1;
+
+       r*w2 in {r*w where w is VECTOR of V : w in M2} by A2;
+then r*w2 in r*M2 by Def1;
+     then x in {u + v where u,v is VECTOR of V : u in r*M1 & v in r*M2}
+       by A3,A4;
+     hence thesis by RUSUB_4:def 10;
+   end;
+then A5:r*(M1 + M2) c= r*M1 + r*M2 by SUBSET_1:7;
+     for x being VECTOR of V st x in r*M1 + r*M2 holds x in r*(M1+M2)
+   proof
+     let x be VECTOR of V;
+     assume x in r*M1 + r*M2;
+     then x in {u + v where u,v is VECTOR of V : u in r*M1 & v in r*M2}
+       by RUSUB_4:def 10;
+     then consider w1,w2 be VECTOR of V such that
+A6:  x = w1 + w2 & w1 in r*M1 & w2 in r*M2;
+       w1 in {r * w where w is VECTOR of V : w in M1} by A6,Def1;
+     then consider v1 be VECTOR of V such that
+A7:  w1 = r * v1 & v1 in M1;
+       w2 in {r * w where w is VECTOR of V : w in M2} by A6,Def1;
+     then consider v2 be VECTOR of V such that
+A8:  w2 = r * v2 & v2 in M2;
+
+A9: x = r*(v1 + v2) by A6,A7,A8,RLVECT_1:def 9;
+       v1 + v2 in {u + v where u,v is VECTOR of V : u in M1 & v in M2}
+      by A7,A8;
+     then v1 + v2 in M1 + M2 by RUSUB_4:def 10;
+     then x in {r * w where w is VECTOR of V : w in M1+M2} by A9;
+     hence thesis by Def1;
+   end;
+   then r*M1 + r*M2 c= r*(M1+M2) by SUBSET_1:7;
+   hence thesis by A5,XBOOLE_0:def 10;
+end;
+
+theorem
+  for V being RealLinearSpace, M being Subset of V, v being VECTOR of V holds
+  M is convex iff v + M is convex
+proof
+   let V be RealLinearSpace;
+   let M be Subset of V;
+   let v be VECTOR of V;
+A1:M is convex implies v + M is convex
+   proof
+     assume
+A2:  M is convex;
+     let w1,w2 be VECTOR of V;
+     let r be Real;
+     assume that
+A3:  0 < r & r < 1 and
+A4:  w1 in v + M & w2 in v + M;
+       w1 in {v + w where w is VECTOR of V : w in M} by A4,RUSUB_4:def 9;
+     then consider x1 be VECTOR of V such that
+A5:  w1 = v + x1 & x1 in M;
+
+       w2 in {v + w where w is VECTOR of V : w in M} by A4,RUSUB_4:def 9;
+     then consider x2 be VECTOR of V such that
+A6:  w2 = v + x2 & x2 in M;
+
+A7:  r*x1 + (1-r)*x2 in M by A2,A3,A5,A6,Def2;
+
+       r*w1 + (1-r)*w2 = r*v + r*x1 + (1-r)*(v+x2) by A5,A6,RLVECT_1:def 9
+      .= r*v + r*x1 + ((1-r)*v + (1-r)*x2) by RLVECT_1:def 9
+      .= r*v + r*x1 + (1-r)*v + (1-r)*x2 by RLVECT_1:def 6
+      .= r*v + (1-r)*v + r*x1 + (1-r)*x2 by RLVECT_1:def 6
+      .= (r+(1-r))*v + r*x1 + (1-r)*x2 by RLVECT_1:def 9
+      .= (r+1-r)*v + r*x1 + (1-r)*x2 by XCMPLX_1:29
+      .= 1*v + r*x1 + (1-r)*x2 by XCMPLX_1:26
+      .= v + r*x1 + (1-r)*x2 by RLVECT_1:def 9
+      .= v + (r*x1 + (1-r)*x2) by RLVECT_1:def 6;
+     then r*w1 + (1-r)*w2 in {v + w where w is VECTOR of V : w in M} by A7;
+     hence thesis by RUSUB_4:def 9;
+   end;
+     v + M is convex implies M is convex
+   proof
+     assume
+A8:  v + M is convex;
+     let w1,w2 be VECTOR of V;
+     let r be Real;
+     assume that
+A9:  0 < r & r < 1 and
+A10:  w1 in M & w2 in M;
+     set x1 = v + w1;
+     set x2 = v + w2;
+
+       x1 in {v + w where w is VECTOR of V : w in M} by A10;
+then A11: x1 in v + M by RUSUB_4:def 9;
+
+       x2 in {v + w where w is VECTOR of V : w in M} by A10;
+then x2 in v + M by RUSUB_4:def 9;
+then A12: r*x1 + (1-r)*x2 in v + M by A8,A9,A11,Def2;
+
+       r*x1 + (1-r)*x2 = r*v + r*w1 + (1-r)*(v + w2) by RLVECT_1:def 9
+      .= r*v + r*w1 + ((1-r)*v + (1-r)*w2) by RLVECT_1:def 9
+      .= r*v + r*w1 + (1-r)*v + (1-r)*w2 by RLVECT_1:def 6
+      .= r*v + (1-r)*v + r*w1 + (1-r)*w2 by RLVECT_1:def 6
+      .= (r+(1-r))*v + r*w1 + (1-r)*w2 by RLVECT_1:def 9
+      .= (r+1-r)*v + r*w1 + (1-r)*w2 by XCMPLX_1:29
+      .= 1*v + r*w1 + (1-r)*w2 by XCMPLX_1:26
+      .= v + r*w1 + (1-r)*w2 by RLVECT_1:def 9
+      .= v + (r*w1 + (1-r)*w2) by RLVECT_1:def 6;
+     then v + (r*w1 + (1-r)*w2)
+       in {v + w where w is VECTOR of V : w in M} by A12,RUSUB_4:def 9;
+     then consider w be VECTOR of V such that
+A13: v + (r*w1 + (1-r)*w2) = v + w & w in M;
+     thus thesis by A13,RLVECT_1:21;
+   end;
+   hence thesis by A1;
+end;
+
+theorem
+  for V being RealLinearSpace holds Up((0).V) is convex
+proof
+   let V be RealLinearSpace;
+   let u,v be VECTOR of V;
+   let r be Real;
+   assume that
+     0 < r & r < 1 and
+A1:u in Up((0).V) & v in Up((0).V);
+     u in the carrier of (0).V by A1,RUSUB_4:def 6;
+   then u in {0.V} by RLSUB_1:def 3;
+then A2:u = 0.V by TARSKI:def 1;
+
+     v in the carrier of (0).V by A1,RUSUB_4:def 6;
+   then v in {0.V} by RLSUB_1:def 3;
+then v = 0.V by TARSKI:def 1;
+   then r * u + (1-r) * v = 0.V + (1-r) * 0.V by A2,RLVECT_1:23
+    .= 0.V + 0.V by RLVECT_1:23
+    .= 0.V by RLVECT_1:10;
+   then r * u + (1-r) * v in {0.V} by TARSKI:def 1;
+   then r * u + (1-r) * v in the carrier of (0).V by RLSUB_1:def 3;
+   hence thesis by RUSUB_4:def 6;
+end;
+
+theorem
+  for V being RealLinearSpace holds Up((Omega).V) is convex
+proof
+   let V be RealLinearSpace;
+   let u,v be VECTOR of V;
+   let r be Real;
+   assume that
+     0 < r & r < 1 and
+     u in Up((Omega).V) & v in Up((Omega).V);
+ (Omega).V = the RLSStruct of V by RLSUB_1:def 4;
+   then r * u + (1-r) * v in the carrier of (Omega).V;
+   hence thesis by RUSUB_4:def 6;
+end;
+
+theorem Th10:
+for V being non empty RLSStruct, M being Subset of V st
+ M = {} holds M is convex
+proof
+   let V be non empty RLSStruct;
+   let M be Subset of V;
+   assume
+A1:M = {};
+     for u,v being VECTOR of V,
+    r be Real st 0 < r & r < 1 & u in {} & v in {} holds
+    r*u + (1-r)*v in {};
+   hence thesis by A1,Def2;
+end;
+
+
+theorem Th11:
+for V being Abelian add-associative RealLinearSpace-like (non empty RLSStruct),
+ M1,M2 being Subset of V, r1,r2 being Real st
+  M1 is convex & M2 is convex holds r1*M1 + r2*M2 is convex
+proof
+   let V be Abelian add-associative RealLinearSpace-like (non empty RLSStruct);
+   let M1,M2 be Subset of V;
+   let r1,r2 be Real;
+   assume that
+A1:M1 is convex and
+A2:M2 is convex;
+
+   let u,v be VECTOR of V;
+   let p be Real;
+   assume that
+A3:0 < p & p < 1 and
+A4:u in r1*M1 + r2*M2 and
+A5:v in r1*M1 + r2*M2;
+
+     u in {x+y where x,y is VECTOR of V : x in r1*M1 & y in r2*M2}
+    by A4,RUSUB_4:def 10;
+   then consider u1,u2 be VECTOR of V such that
+A6:u = u1 + u2 & u1 in r1*M1 & u2 in r2*M2;
+
+     u1 in {r1*x where x is VECTOR of V : x in M1} by A6,Def1;
+   then consider x1 be VECTOR of V such that
+A7:u1 = r1*x1 & x1 in M1;
+
+     u2 in {r2*x where x is VECTOR of V : x in M2} by A6,Def1;
+   then consider x2 be VECTOR of V such that
+A8:u2 = r2*x2 & x2 in M2;
+
+     v in {x+y where x,y is VECTOR of V : x in r1*M1 & y in r2*M2}
+    by A5,RUSUB_4:def 10;
+   then consider v1,v2 be VECTOR of V such that
+A9:v = v1 + v2 & v1 in r1*M1 & v2 in r2*M2;
+
+     v1 in {r1*x where x is VECTOR of V : x in M1} by A9,Def1;
+   then consider y1 be VECTOR of V such that
+A10:v1 = r1*y1 & y1 in M1;
+
+     v2 in {r2*x where x is VECTOR of V : x in M2} by A9,Def1;
+   then consider y2 be VECTOR of V such that
+A11:v2 = r2*y2 & y2 in M2;
+
+A12:p*x1 + (1-p)*y1 in M1 & p*x2 + (1-p)*y2 in M2
+    by A1,A2,A3,A7,A8,A10,A11,Def2;
+
+     p*u1 + (1-p)*v1 = r1*p*x1 + (1-p)*(r1*y1) by A7,A10,RLVECT_1:def 9
+    .= r1*p*x1 + r1*(1-p)*y1 by RLVECT_1:def 9
+    .= r1*(p*x1) + r1*(1-p)*y1 by RLVECT_1:def 9
+    .= r1*(p*x1) + r1*((1-p)*y1) by RLVECT_1:def 9
+    .= r1*(p*x1 + (1-p)*y1) by RLVECT_1:def 9;
+   then p*u1 + (1-p)*v1 in {r1*x where x is VECTOR of V: x in M1} by A12;
+then A13:p*u1 + (1-p)*v1 in r1*M1 by Def1;
+
+     p*u2 + (1-p)*v2 = r2*p*x2 + (1-p)*(r2*y2) by A8,A11,RLVECT_1:def 9
+    .= r2*p*x2 + r2*(1-p)*y2 by RLVECT_1:def 9
+    .= r2*(p*x2) + r2*(1-p)*y2 by RLVECT_1:def 9
+    .= r2*(p*x2) + r2*((1-p)*y2) by RLVECT_1:def 9
+    .= r2*(p*x2 + (1-p)*y2) by RLVECT_1:def 9;
+   then p*u2 + (1-p)*v2 in {r2*x where x is VECTOR of V: x in M2} by A12;
+then A14:p*u2 + (1-p)*v2 in r2*M2 by Def1;
+
+     p*(u1+u2) + (1-p)*(v1+v2)
+     = p*u1 + p*u2 + (1-p)*(v1+v2) by RLVECT_1:def 9
+    .= p*u1 + p*u2 + ((1-p)*v1 + (1-p)*v2) by RLVECT_1:def 9
+    .= p*u1 + p*u2 + (1-p)*v1 + (1-p)*v2 by RLVECT_1:def 6
+    .= p*u1 + (1-p)*v1 + p*u2 + (1-p)*v2 by RLVECT_1:def 6
+    .= p*u1 + (1-p)*v1 + (p*u2 + (1-p)*v2) by RLVECT_1:def 6;
+   then p*(u1+u2) + (1-p)*(v1+v2) in {x+y where x,y is VECTOR of V:
+      x in r1*M1 & y in r2*M2} by A13,A14;
+   hence thesis by A6,A9,RUSUB_4:def 10;
+end;
+
+theorem
+  for V being RealLinearSpace-like (non empty RLSStruct),
+ M being Subset of V, r1,r2 being Real holds
+   (r1 + r2)*M c= r1*M + r2*M
+proof
+   let V be RealLinearSpace-like (non empty RLSStruct);
+   let M be Subset of V;
+   let r1,r2 be Real;
+     for x being VECTOR of V st x in (r1+r2)*M holds x in r1*M + r2*M
+   proof
+     let x be VECTOR of V;
+     assume x in (r1+r2)*M;
+     then x in {(r1+r2)*w where w is VECTOR of V : w in M} by Def1;
+     then consider w be VECTOR of V such that
+A1:  x = (r1 + r2)*w & w in M;
+A2:  x = r1*w + r2*w by A1,RLVECT_1:def 9;
+       r1*w in {r1*u where u is VECTOR of V : u in M} by A1;
+then A3:  r1*w in r1*M by Def1;
+       r2*w in {r2*u where u is VECTOR of V : u in M} by A1;
+     then r2*w in r2*M by Def1;
+     then x in {u + v where u,v is VECTOR of V : u in r1*M & v in r2*M} by A2,
+A3;
+     hence thesis by RUSUB_4:def 10;
+   end;
+   hence thesis by SUBSET_1:7;
+end;
+
+Lm6:
+for V being non empty RLSStruct, M,N being Subset of V, r being Real st
+ M c= N holds r*M c= r*N
+proof
+   let V be non empty RLSStruct;
+   let M,N be Subset of V;
+   let r be Real;
+   assume
+A1:M c= N;
+     for x being VECTOR of V st x in r*M holds x in r*N
+   proof
+     let x be VECTOR of V;
+     assume x in r*M;
+     then x in {r * w where w is VECTOR of V: w in M} by Def1;
+     then consider w be VECTOR of V such that
+A2:  x = r*w & w in M;
+       x in {r * v where v is VECTOR of V: v in N} by A1,A2;
+     hence thesis by Def1;
+   end;
+   hence thesis by SUBSET_1:7;
+end;
+
+Lm7:
+for V being non empty RLSStruct, M being empty Subset of V,
+ r being Real holds r * M = {}
+proof
+   let V be non empty RLSStruct;
+   let M be empty Subset of V;
+   let r be Real;
+A1:r * M = {r * v where v is VECTOR of V : v in {}} by Def1;
+     for x being VECTOR of V st x in r * M holds x in {}
+   proof
+     let x be VECTOR of V;
+     assume x in r * M;
+     then consider v be VECTOR of V such that
+A2:  x = r * v & v in {} by A1;
+     thus thesis by A2;
+   end;
+   then r * M c= {} by SUBSET_1:7;
+   hence thesis by XBOOLE_1:3;
+end;
+
+Lm8:
+for V being non empty LoopStr, M being empty Subset of V,
+ N being Subset of V holds M + N = {}
+proof
+   let V be non empty LoopStr;
+   let M be empty Subset of V;
+   let N be Subset of V;
+A1:M + N = {u + v where u,v is Element of V
+           : u in {} & v in N} by RUSUB_4:def 10;
+     for x being Element of V st x in M + N holds x in {}
+   proof
+     let x be Element of V;
+     assume x in M+N;
+     then consider u,v be Element of V such that
+A2:  x = u + v & u in {} & v in N by A1;
+     thus thesis by A2;
+   end;
+   then M + N c= {} by SUBSET_1:7;
+   hence thesis by XBOOLE_1:3;
+end;
+
+Lm9:
+for V being right_zeroed (non empty LoopStr), M being Subset of V holds
+ M + {0.V} = M
+proof
+   let V be right_zeroed (non empty LoopStr);
+   let M be Subset of V;
+     for x being Element of V st x in M + {0.V} holds x in M
+   proof
+     let x be Element of V;
+     assume x in M + {0.V};
+     then x in {u + v where u,v is Element of V :
+           u in M & v in {0.V}} by RUSUB_4:def 10;
+     then consider u,v be Element of V such that
+A1:  x = u + v & u in M & v in {0.V};
+       v = 0.V by A1,TARSKI:def 1;
+     hence thesis by A1,RLVECT_1:def 7;
+   end;
+then A2:M + {0.V} c= M by SUBSET_1:7;
+     for x being Element of V st x in M holds x in M + {0.V}
+   proof
+     let x be Element of V;
+     assume
+A3:  x in M;
+A4:  x = x + 0.V by RLVECT_1:def 7;
+       0.V in {0.V} by TARSKI:def 1;
+     then x in {u + v where u,v is Element of V :
+           u in M & v in {0.V}} by A3,A4;
+     hence thesis by RUSUB_4:def 10;
+   end;
+   then M c= M + {0.V} by SUBSET_1:7;
+   hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+theorem
+  for V being RealLinearSpace,
+ M being Subset of V, r1,r2 being Real st
+  r1 >= 0 & r2 >= 0 & M is convex holds r1*M + r2*M c= (r1 + r2)*M
+proof
+   let V be RealLinearSpace;
+   let M be Subset of V;
+   let r1,r2 be Real;
+   assume that
+A1:r1 >= 0 & r2 >= 0 and
+A2:M is convex;
+
+     now per cases;
+     suppose M is empty;
+     then r1*M = {} & r2*M = {} & (r1+r2)*M = {} by Lm7;
+     hence thesis by Lm8;
+     suppose
+A3:  M is non empty;
+       now per cases;
+       suppose
+A4:    r1 = 0;
+       then r1*M = {0.V} by A3,Lm2;
+       hence thesis by A4,Lm9;
+
+       suppose
+A5:    r2 = 0;
+       then r2*M = {0.V} by A3,Lm2;
+       hence thesis by A5,Lm9;
+
+       suppose A6: r1 <> 0 & r2 <> 0;
+then A7:    r1 + r2 > 0 + 0 & r1 + r2 > r1 & r1 + r2 > r2 by A1,REAL_1:69;
+then A8:    0 < r1/(r1+r2) & r1/(r1+r2) < 1 & 0 < r2/(r1+r2) & r2/(r1+r2) < 1
+        by A1,A6,REAL_2:127,142;
+A9:   1-r1/(r1+r2) = (r1+r2)/(r1+r2) - r1/(r1+r2) by A7,XCMPLX_1:60
+        .= (r1+r2-r1)/(r1+r2) by XCMPLX_1:121
+        .= r2/(r1+r2) by XCMPLX_1:26;
+         r1/(r1+r2) * M + (1 - r1/(r1+r2)) * M c= M by A2,A8,Th4;
+then A10:   (r1+r2)*(r1/(r1+r2)*M + (1-r1/(r1+r2))*M) c= (r1+r2)*M by Lm6;
+A11:   (r1+r2)*(r1/(r1+r2)*M) = (r1/(r1+r2))*(r1+r2)*M by Lm4
+        .= r1*M by A7,XCMPLX_1:88;
+         (r1+r2)*((1-r1/(r1+r2))*M) = r2/(r1+r2)*(r1+r2)*M by A9,Lm4
+        .= r2*M by A7,XCMPLX_1:88;
+       hence thesis by A10,A11,Lm5;
+     end;
+     hence thesis;
+   end;
+   hence thesis;
+end;
+
+theorem
+  for V being Abelian add-associative RealLinearSpace-like (non empty RLSStruct
+)
+,
+ M1,M2,M3 being Subset of V, r1,r2,r3 being Real st
+  M1 is convex & M2 is convex & M3 is convex holds
+   r1*M1 + r2*M2 + r3*M3 is convex
+proof
+   let V be Abelian add-associative RealLinearSpace-like (non empty RLSStruct);
+   let M1,M2,M3 be Subset of V;
+   let r1,r2,r3 be Real;
+   assume that
+A1:M1 is convex and
+A2:M2 is convex and
+A3:M3 is convex;
+     r1*M1 + r2*M2 is convex by A1,A2,Th11;
+   then 1*(r1*M1 + r2*M2) + r3*M3 is convex by A3,Th11;
+   hence thesis by Lm1;
+end;
+
+theorem Th15:
+for V being non empty RLSStruct, F being Subset-Family of V st
+ (for M being Subset of V st M in F holds M is convex) holds
+  meet F is convex
+proof
+   let V be non empty RLSStruct;
+   let F be Subset-Family of V;
+   assume
+A1:for M being Subset of V st M in F holds M is convex;
+     now per cases;
+     suppose F = {};
+     then meet F = {} by SETFAM_1:def 1;
+     hence meet F is convex by Th10;
+
+     suppose
+A2:  F <> {};
+       meet F is convex
+     proof
+       let u,v be VECTOR of V;
+       let r be Real;
+       assume that
+A3:    0 < r & r < 1 and
+A4:    u in meet F & v in meet F;
+         for M being set st M in F holds r*u + (1-r)*v in M
+       proof
+         let M be set;
+         assume
+A5:      M in F;
+         then reconsider M as Subset of V;
+A6:      M is convex by A1,A5;
+           u in M & v in M by A4,A5,SETFAM_1:def 1;
+         hence thesis by A3,A6,Def2;
+       end;
+       hence thesis by A2,SETFAM_1:def 1;
+     end;
+     hence thesis;
+   end;
+   hence thesis;
+end;
+
+theorem Th16:
+for V being non empty RLSStruct, M being Subset of V st
+ M is Affine holds M is convex
+proof
+   let V be non empty RLSStruct;
+   let M be Subset of V;
+   assume
+A1:M is Affine;
+   let u,v be VECTOR of V;
+   let r be Real;
+   assume that
+     0 < r & r < 1 and
+A2:u in M & v in M;
+   set p = 1-r;
+     1-p = r by XCMPLX_1:18;
+   hence thesis by A1,A2,RUSUB_4:def 5;
+end;
+
+definition
+let V be non empty RLSStruct;
+  cluster convex Subset of V;
+existence
+proof
+   consider M be non empty Affine Subset of V;
+     M is convex by Th16;
+   hence thesis;
+end;
+end;
+
+definition
+let V be non empty RLSStruct;
+  cluster empty convex Subset of V;
+existence
+proof
+  consider M being empty Subset of V;
+    M is convex by Th10;
+  hence thesis;
+end;
+end;
+
+definition
+let V be non empty RLSStruct;
+  cluster non empty convex Subset of V;
+existence
+proof
+   consider M be non empty Affine Subset of V;
+     M is convex by Th16;
+   hence thesis;
+end;
+end;
+
+theorem
+  for V being RealUnitarySpace-like (non empty UNITSTR),
+ M being Subset of V, v being VECTOR of V, r being Real st
+  M = {u where u is VECTOR of V : u .|. v >= r} holds
+   M is convex
+proof
+   let V be RealUnitarySpace-like (non empty UNITSTR);
+   let M be Subset of V;
+   let v be VECTOR of V;
+   let r be Real;
+   assume
+A1:M = {u where u is VECTOR of V : u.|.v >= r};
+   let x,y be VECTOR of V;
+   let p be Real;
+   assume that
+A2:0 < p & p < 1 and
+A3:x in M & y in M;
+
+   consider u1 be VECTOR of V such that
+A4:x = u1 & u1.|.v >= r by A1,A3;
+   consider u2 be VECTOR of V such that
+A5:y = u2 & u2.|.v >= r by A1,A3;
+
+     (p*x).|.v = p*(u1.|.v) by A4,BHSP_1:def 2;
+then A6:(p*x).|.v >= p*r by A2,A4,AXIOMS:25;
+     0 + p < 1 by A2;
+then A7:0 < 1-p by REAL_1:86;
+     ((1-p)*y).|.v = (1-p)*(u2.|.v) by A5,BHSP_1:def 2;
+then A8:((1-p)*y).|.v >= (1-p)*r by A5,A7,AXIOMS:25;
+
+     (p*x + (1-p)*y).|.v = (p*x).|.v + ((1-p)*y).|.v by BHSP_1:def 2;
+   then (p*x + (1-p)*y).|.v >= p*r + (1-p)*r by A6,A8,REAL_1:55;
+   then (p*x + (1-p)*y).|.v >= (p+(1-p))*r by XCMPLX_1:8;
+   then (p*x + (1-p)*y).|.v >= (p+1-p)*r by XCMPLX_1:29;
+   then (p*x + (1-p)*y).|.v >= 1*r by XCMPLX_1:26;
+   hence thesis by A1;
+end;
+
+theorem
+  for V being RealUnitarySpace-like (non empty UNITSTR),
+ M being Subset of V, v being VECTOR of V, r being Real st
+  M = {u where u is VECTOR of V : u .|. v > r} holds
+   M is convex
+proof
+   let V be RealUnitarySpace-like (non empty UNITSTR);
+   let M be Subset of V;
+   let v be VECTOR of V;
+   let r be Real;
+   assume
+A1:M = {u where u is VECTOR of V : u.|.v > r};
+   let x,y be VECTOR of V;
+   let p be Real;
+   assume that
+A2:0 < p & p < 1 and
+A3:x in M & y in M;
+
+   consider u1 be VECTOR of V such that
+A4:x = u1 & u1.|.v > r by A1,A3;
+   consider u2 be VECTOR of V such that
+A5:y = u2 & u2.|.v > r by A1,A3;
+
+     (p*x).|.v = p*(u1.|.v) by A4,BHSP_1:def 2;
+then A6:(p*x).|.v > p*r by A2,A4,REAL_1:70;
+     0 + p < 1 by A2;
+then A7:0 < 1-p by REAL_1:86;
+     ((1-p)*y).|.v = (1-p)*(u2.|.v) by A5,BHSP_1:def 2;
+then A8:((1-p)*y).|.v > (1-p)*r by A5,A7,REAL_1:70;
+
+     (p*x + (1-p)*y).|.v = (p*x).|.v + ((1-p)*y).|.v by BHSP_1:def 2;
+   then (p*x + (1-p)*y).|.v > p*r + (1-p)*r by A6,A8,REAL_1:67;
+   then (p*x + (1-p)*y).|.v > (p+(1-p))*r by XCMPLX_1:8;
+   then (p*x + (1-p)*y).|.v > (p+1-p)*r by XCMPLX_1:29;
+   then (p*x + (1-p)*y).|.v > 1*r by XCMPLX_1:26;
+   hence thesis by A1;
+end;
+
+theorem
+  for V being RealUnitarySpace-like (non empty UNITSTR),
+ M being Subset of V, v being VECTOR of V, r being Real st
+  M = {u where u is VECTOR of V : u .|. v <= r} holds
+   M is convex
+proof
+   let V be RealUnitarySpace-like (non empty UNITSTR);
+   let M be Subset of V;
+   let v be VECTOR of V;
+   let r be Real;
+   assume
+A1:M = {u where u is VECTOR of V : u.|.v <= r};
+   let x,y be VECTOR of V;
+   let p be Real;
+   assume that
+A2:0 < p & p < 1 and
+A3:x in M & y in M;
+
+   consider u1 be VECTOR of V such that
+A4:x = u1 & u1.|.v <= r by A1,A3;
+   consider u2 be VECTOR of V such that
+A5:y = u2 & u2.|.v <= r by A1,A3;
+
+     (p*x).|.v = p*(u1.|.v) by A4,BHSP_1:def 2;
+then A6:(p*x).|.v <= p*r by A2,A4,AXIOMS:25;
+     0 + p < 1 by A2;
+then A7:0 < 1-p by REAL_1:86;
+     ((1-p)*y).|.v = (1-p)*(u2.|.v) by A5,BHSP_1:def 2;
+then A8:((1-p)*y).|.v <= (1-p)*r by A5,A7,AXIOMS:25;
+
+     (p*x + (1-p)*y).|.v = (p*x).|.v + ((1-p)*y).|.v by BHSP_1:def 2;
+   then (p*x + (1-p)*y).|.v <= p*r + (1-p)*r by A6,A8,REAL_1:55;
+   then (p*x + (1-p)*y).|.v <= (p+(1-p))*r by XCMPLX_1:8;
+   then (p*x + (1-p)*y).|.v <= (p+1-p)*r by XCMPLX_1:29;
+   then (p*x + (1-p)*y).|.v <= 1*r by XCMPLX_1:26;
+   hence thesis by A1;
+end;
+
+theorem
+  for V being RealUnitarySpace-like (non empty UNITSTR),
+ M being Subset of V, v being VECTOR of V, r being Real st
+  M = {u where u is VECTOR of V : u .|. v < r} holds
+   M is convex
+proof
+   let V be RealUnitarySpace-like (non empty UNITSTR);
+   let M be Subset of V;
+   let v be VECTOR of V;
+   let r be Real;
+   assume
+A1:M = {u where u is VECTOR of V : u.|.v < r};
+   let x,y be VECTOR of V;
+   let p be Real;
+   assume that
+A2:0 < p & p < 1 and
+A3:x in M & y in M;
+
+   consider u1 be VECTOR of V such that
+A4:x = u1 & u1.|.v < r by A1,A3;
+   consider u2 be VECTOR of V such that
+A5:y = u2 & u2.|.v < r by A1,A3;
+
+     (p*x).|.v = p*(u1.|.v) by A4,BHSP_1:def 2;
+then A6:(p*x).|.v < p*r by A2,A4,REAL_1:70;
+     0 + p < 1 by A2;
+then A7:0 < 1-p by REAL_1:86;
+     ((1-p)*y).|.v = (1-p)*(u2.|.v) by A5,BHSP_1:def 2;
+then A8:((1-p)*y).|.v < (1-p)*r by A5,A7,REAL_1:70;
+
+     (p*x + (1-p)*y).|.v = (p*x).|.v + ((1-p)*y).|.v by BHSP_1:def 2;
+   then (p*x + (1-p)*y).|.v < p*r + (1-p)*r by A6,A8,REAL_1:67;
+   then (p*x + (1-p)*y).|.v < (p+(1-p))*r by XCMPLX_1:8;
+   then (p*x + (1-p)*y).|.v < (p+1-p)*r by XCMPLX_1:29;
+   then (p*x + (1-p)*y).|.v < 1*r by XCMPLX_1:26;
+   hence thesis by A1;
+end;
+
+begin  :: Convex Combinations
+
+definition
+let V be RealLinearSpace, L be Linear_Combination of V;
+  attr L is convex means :Def3:
+  ex F being FinSequence of the carrier of V st
+   (F is one-to-one & rng F = Carrier L &
+    (ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 &
+      (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0)));
+end;
+
+theorem Th21:
+for V being RealLinearSpace, L being Linear_Combination of V st
+ L is convex holds Carrier(L) <> {}
+proof
+   let V be RealLinearSpace;
+   let L be Linear_Combination of V;
+   assume
+A1:L is convex;
+   assume
+A2:Carrier(L) = {};
+   consider F being FinSequence of the carrier of V such that
+A3:(F is one-to-one & rng F = Carrier L &
+    (ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 &
+     (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0)))
+       by A1,Def3;
+   consider f be FinSequence of REAL such that
+A4:len f = len F & Sum(f) = 1 &
+   (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0) by A3;
+     len F = 0 by A2,A3,CARD_1:78,FINSEQ_4:77;
+   hence contradiction by A4,FINSEQ_1:32,RVSUM_1:102;
+end;
+
+theorem
+  for V being RealLinearSpace, L being Linear_Combination of V,
+ v being VECTOR of V st
+  L is convex & L.v <= 0 holds not v in Carrier(L)
+proof
+   let V be RealLinearSpace;
+   let L be Linear_Combination of V;
+   let v be VECTOR of V;
+   assume that
+A1:L is convex and
+A2:L.v <= 0;
+     now per cases by A2;
+     suppose L.v = 0;
+     hence not v in Carrier(L) by RLVECT_2:28;
+     suppose
+A3:  L.v < 0;
+       now
+       assume
+A4:    v in Carrier(L);
+       consider F being FinSequence of the carrier of V such that
+         F is one-to-one and
+A5:    rng F = Carrier L and
+A6:    ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 &
+        for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
+          by A1,Def3;
+       consider f being FinSequence of REAL such that
+A7:    len f = len F and
+         Sum(f) = 1 and
+A8:   for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0 by A6;
+
+       consider n be set such that
+A9:   n in dom F & F.n = v by A4,A5,FUNCT_1:def 5;
+       reconsider n as Nat by A9;
+         n in Seg len F by A9,FINSEQ_1:def 3;
+then A10:   n in dom f by A7,FINSEQ_1:def 3;
+       then L.v = f.n by A8,A9;
+       hence contradiction by A3,A8,A10;
+     end;
+     hence not v in Carrier(L);
+   end;
+   hence thesis;
+end;
+
+theorem
+  for V being RealLinearSpace, L being Linear_Combination of V st
+ L is convex holds L <> ZeroLC(V)
+proof
+   let V be RealLinearSpace;
+   let L be Linear_Combination of V;
+   assume
+A1:L is convex;
+   assume
+A2:L = ZeroLC(V);
+     Carrier(L) <> {} by A1,Th21;
+   hence contradiction by A2,RLVECT_2:def 7;
+end;
+
+Lm10:
+for V being RealLinearSpace, v being VECTOR of V,
+ L being Linear_Combination of V st L is convex & Carrier(L) = {v} holds
+  L.v = 1 & Sum(L) = L.v * v
+proof
+   let V be RealLinearSpace;
+   let v be VECTOR of V;
+   let L be Linear_Combination of V;
+   assume that
+A1:L is convex and
+A2:Carrier(L) = {v};
+   reconsider L as Linear_Combination of {v} by A2,RLVECT_2:def 8;
+
+   consider F being FinSequence of the carrier of V such that
+A3:(F is one-to-one & rng F = Carrier L &
+    (ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 &
+      (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0)))
+       by A1,Def3;
+   consider f be FinSequence of REAL such that
+A4:len f = len F & Sum(f) = 1 &
+   (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0) by A3;
+
+     card Carrier(L) = 1 by A2,CARD_1:79;
+   then len F = 1 by A3,FINSEQ_4:77;
+then A5:dom f = Seg 1 by A4,FINSEQ_1:def 3;
+then A6:1 in dom f by FINSEQ_1:4,TARSKI:def 1;
+then A7:f.1 = L.(F.1) by A4;
+A8:f.1 = f/.1 by A6,FINSEQ_4:def 4;
+
+   reconsider r = f/.1 as Element of REAL;
+     f = <* r *> by A5,A8,FINSEQ_1:def 8;
+then A9:Sum f = r by RVSUM_1:103;
+     F = <*v*> by A2,A3,FINSEQ_3:106;
+   hence thesis by A4,A7,A8,A9,FINSEQ_1:def 8,RLVECT_2:50;
+end;
+
+Lm11:
+for V being RealLinearSpace, v1,v2 being VECTOR of V,
+ L being Linear_Combination of V st
+  L is convex & Carrier(L) = {v1,v2} & v1 <> v2 holds
+  L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 & Sum(L) = L.v1 * v1 + L.v2 * v2
+proof
+   let V be RealLinearSpace;
+   let v1,v2 be VECTOR of V;
+   let L be Linear_Combination of V;
+   assume that
+A1:L is convex and
+A2:Carrier(L) = {v1,v2} and
+A3:v1 <> v2;
+   reconsider L as Linear_Combination of {v1,v2} by A2,RLVECT_2:def 8;
+
+   consider F being FinSequence of the carrier of V such that
+A4:(F is one-to-one & rng F = Carrier L &
+    (ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 &
+      (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0)))
+        by A1,Def3;
+   consider f be FinSequence of REAL such that
+A5:len f = len F & Sum(f) = 1 &
+   (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0) by A4;
+
+     len F = card {v1,v2} by A2,A4,FINSEQ_4:77;
+then A6:len f = 2 by A3,A5,CARD_2:76;
+   then dom f = {1,2} by FINSEQ_1:4,def 3;
+then A7:1 in dom f & 2 in dom f by TARSKI:def 2;
+then A8:f.1 = L.(F.1) & f.1 >= 0 by A5;
+   then f/.1 = L.(F.1) & L.(F.1) >= 0 by A7,FINSEQ_4:def 4;
+   then reconsider r1 = L.(F.1) as Element of REAL;
+
+A9:f.2 = L.(F.2) & f.2 >= 0 by A5,A7;
+   then f/.2 = L.(F.2) & L.(F.2) >= 0 by A7,FINSEQ_4:def 4;
+   then reconsider r2 = L.(F.2) as Element of REAL;
+
+   A10: f = <*r1,r2*> by A6,A8,A9,FINSEQ_1:61;
+
+     now per cases by A2,A3,A4,FINSEQ_3:108;
+     suppose F = <*v1,v2*>;
+     then F.1 = v1 & F.2 = v2 by FINSEQ_1:61;
+     hence L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 by A5,A8,A9,A10,RVSUM_1:107
+;
+     suppose F = <*v2,v1*>;
+     then F.1 = v2 & F.2 = v1 by FINSEQ_1:61;
+     hence L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 by A5,A8,A9,A10,RVSUM_1:107
+;
+   end;
+   hence thesis by A3,RLVECT_2:51;
+end;
+
+Lm12:
+for p being FinSequence, x,y,z being set st
+ p is one-to-one & rng p = {x,y,z} & x <> y & y <> z & z <> x holds
+  p = <* x,y,z *> or p = <* x,z,y *> or p = <* y,x,z *> or
+  p = <* y,z,x *> or p = <* z,x,y *> or p = <* z,y,x *>
+proof
+   let p be FinSequence;
+   let x,y,z be set;
+   assume that
+A1:p is one-to-one and
+A2:rng p = {x,y,z} and
+A3:x <> y & y <> z & z <> x;
+A4:len p = 3 by A1,A2,A3,FINSEQ_3:110;
+   then dom p = {1,2,3} by FINSEQ_1:def 3,FINSEQ_3:1;
+then A5:1 in dom p & 2 in dom p & 3 in dom p by ENUMSET1:14;
+   then p.1 in rng p & p.2 in rng p & p.3 in rng p & 1 <> 2 & 2 <> 3 & 3 <> 1
+     by FUNCT_1:def 5;
+   then (p.1 = x & p.2 = x & p.3 = x or p.1 = x & p.2 = x & p.3 = y or
+    p.1 = x & p.2 = x & p.3 = z or p.1 = x & p.2 = y & p.3 = x or
+    p.1 = x & p.2 = y & p.3 = y or p.1 = x & p.2 = y & p.3 = z or
+    p.1 = x & p.2 = z & p.3 = x or p.1 = x & p.2 = z & p.3 = y or
+    p.1 = x & p.2 = z & p.3 = z or p.1 = y & p.2 = x & p.3 = x or
+    p.1 = y & p.2 = x & p.3 = y or p.1 = y & p.2 = x & p.3 = z or
+    p.1 = y & p.2 = y & p.3 = x or p.1 = y & p.2 = y & p.3 = y or
+    p.1 = y & p.2 = y & p.3 = z or p.1 = y & p.2 = z & p.3 = x or
+    p.1 = y & p.2 = z & p.3 = y or p.1 = y & p.2 = z & p.3 = z or
+    p.1 = z & p.2 = x & p.3 = x or p.1 = z & p.2 = x & p.3 = y or
+    p.1 = z & p.2 = x & p.3 = z or p.1 = z & p.2 = y & p.3 = x or
+    p.1 = z & p.2 = y & p.3 = y or p.1 = z & p.2 = y & p.3 = z or
+    p.1 = z & p.2 = z & p.3 = x or p.1 = z & p.2 = z & p.3 = y or
+    p.1 = z & p.2 = z & p.3 = z) & (p.1 <> p.2 & p.2 <> p.3 & p.3 <> p.1)
+      by A1,A2,A5,ENUMSET1:13,FUNCT_1:def 8;
+    hence thesis by A4,FINSEQ_1:62;
+end;
+
+Lm13:
+for V being RealLinearSpace, v1,v2,v3 being VECTOR of V,
+ L being Linear_Combination of {v1,v2,v3} st
+  v1 <> v2 & v2 <> v3 & v3 <> v1 holds
+   Sum(L) = L.v1 * v1 + L.v2 * v2 + L.v3 * v3
+proof
+   let V be RealLinearSpace;
+   let v1,v2,v3 be VECTOR of V;
+   let L be Linear_Combination of {v1,v2,v3};
+   assume that
+A1:v1 <> v2 & v2 <> v3 & v3 <> v1;
+A2:Carrier(L) c= {v1,v2,v3} by RLVECT_2:def 8;
+     Sum(L) = L.v1 * v1 + L.v2 * v2 + L.v3 * v3
+   proof
+       now per cases by A2,WAYBEL18:1;
+       suppose Carrier(L) = {};
+then A3:    L = ZeroLC(V) by RLVECT_2:def 7;
+       then Sum(L) = 0.V by RLVECT_2:48
+             .= 0.V + 0.V by RLVECT_1:10
+             .= 0.V + 0.V + 0.V by RLVECT_1:10
+             .= 0 * v1 + 0.V + 0.V by RLVECT_1:23
+             .= 0 * v1 + 0 * v2 + 0.V by RLVECT_1:23
+             .= 0 * v1 + 0 * v2 + 0 * v3 by RLVECT_1:23
+             .= L.v1 * v1 + 0 * v2 + 0 * v3 by A3,RLVECT_2:30
+             .= L.v1 * v1 + L.v2 * v2 + 0 * v3 by A3,RLVECT_2:30
+             .= L.v1 * v1 + L.v2 * v2 + L.v3 * v3 by A3,RLVECT_2:30;
+       hence thesis;
+
+       suppose
+A4:    Carrier(L) = {v1};
+       then reconsider L as Linear_Combination of {v1} by RLVECT_2:def 8;
+A5:    not v2 in Carrier(L) & not v3 in Carrier(L) by A1,A4,TARSKI:def 1;
+         Sum(L) = L.v1 * v1 by RLVECT_2:50
+              .= L.v1 * v1 + 0.V by RLVECT_1:10
+              .= L.v1 * v1 + 0.V + 0.V by RLVECT_1:10
+              .= L.v1 * v1 + 0 * v2 + 0.V by RLVECT_1:23
+              .= L.v1 * v1 + 0 * v2 + 0 * v3 by RLVECT_1:23
+              .= L.v1 * v1 + L.v2 * v2 + 0 * v3 by A5,RLVECT_2:28
+              .= L.v1 * v1 + L.v2 * v2 + L.v3 * v3 by A5,RLVECT_2:28;
+       hence thesis;
+
+       suppose
+A6:    Carrier(L) = {v2};
+       then reconsider L as Linear_Combination of {v2} by RLVECT_2:def 8;
+A7:    not v1 in Carrier(L) & not v3 in Carrier(L) by A1,A6,TARSKI:def 1;
+         Sum(L) = L.v2 * v2 by RLVECT_2:50
+             .= 0.V + L.v2 * v2 by RLVECT_1:10
+             .= 0.V + L.v2 * v2 + 0.V by RLVECT_1:10
+             .= 0 * v1 + L.v2 * v2 + 0.V by RLVECT_1:23
+             .= 0 * v1 + L.v2 * v2 + 0 * v3 by RLVECT_1:23
+             .= L.v1 * v1 + L.v2 * v2 + 0 * v3 by A7,RLVECT_2:28
+             .= L.v1 * v1 + L.v2 * v2 + L.v3 * v3 by A7,RLVECT_2:28;
+       hence thesis;
+
+       suppose
+A8:    Carrier(L) = {v3};
+       then reconsider L as Linear_Combination of {v3} by RLVECT_2:def 8;
+A9:    not v1 in Carrier(L) & not v2 in Carrier(L) by A1,A8,TARSKI:def 1;
+         Sum(L) = L.v3 * v3 by RLVECT_2:50
+             .= 0.V + L.v3 * v3 by RLVECT_1:10
+             .= 0.V + 0.V + L.v3 * v3 by RLVECT_1:10
+             .= 0 * v1 + 0.V + L.v3 * v3 by RLVECT_1:23
+             .= 0 * v1 + 0 * v2 + L.v3 * v3 by RLVECT_1:23
+             .= L.v1 * v1 + 0 * v2 + L.v3 * v3 by A9,RLVECT_2:28
+             .= L.v1 * v1 + L.v2 * v2 + L.v3 * v3 by A9,RLVECT_2:28;
+       hence thesis;
+
+       suppose
+A10:   Carrier(L) = {v1,v2};
+then A11:   not v3 in Carrier(L) by A1,TARSKI:def 2;
+         Sum(L) = L.v1 * v1 + L.v2 * v2 by A1,A10,RLVECT_2:54
+             .= L.v1 * v1 + L.v2 * v2 + 0.V by RLVECT_1:10
+             .= L.v1 * v1 + L.v2 * v2 + 0 * v3 by RLVECT_1:23;
+       hence thesis by A11,RLVECT_2:28;
+
+       suppose
+A12:   Carrier(L) = {v1,v3};
+then A13:   not v2 in Carrier(L) by A1,TARSKI:def 2;
+         Sum(L) = L.v1 * v1 + L.v3 * v3 by A1,A12,RLVECT_2:54
+             .= L.v1 * v1 + 0.V + L.v3 * v3 by RLVECT_1:10
+             .= L.v1 * v1 + 0 * v2 + L.v3 * v3 by RLVECT_1:23;
+       hence thesis by A13,RLVECT_2:28;
+
+       suppose
+A14:   Carrier(L) = {v2,v3};
+then A15:   not v1 in Carrier(L) by A1,TARSKI:def 2;
+         Sum(L) = L.v2 * v2 + L.v3 * v3 by A1,A14,RLVECT_2:54
+             .= 0.V + L.v2 * v2 + L.v3 * v3 by RLVECT_1:10
+             .= 0 * v1 + L.v2 * v2 + L.v3 * v3 by RLVECT_1:23;
+       hence thesis by A15,RLVECT_2:28;
+
+       suppose Carrier(L) = {v1,v2,v3};
+       then consider F be FinSequence of the carrier of V such that
+A16:    F is one-to-one & rng F = {v1,v2,v3} and
+A17:    Sum(L) = Sum(L (#) F) by RLVECT_2:def 10;
+         F = <* v1,v2,v3 *> or F = <* v1,v3,v2 *> or F = <* v2,v1,v3 *> or
+       F = <* v2,v3,v1 *> or F = <* v3,v1,v2 *> or F = <* v3,v2,v1 *>
+         by A1,A16,Lm12;
+       then L (#) F = <* L.v1 * v1, L.v2 * v2, L.v3 * v3 *> or
+       L (#) F = <* L.v1 * v1, L.v3 * v3, L.v2 * v2 *> or
+       L (#) F = <* L.v2 * v2, L.v1 * v1, L.v3 * v3 *> or
+       L (#) F = <* L.v2 * v2, L.v3 * v3, L.v1 * v1 *> or
+       L (#) F = <* L.v3 * v3, L.v1 * v1, L.v2 * v2 *> or
+       L (#) F = <* L.v3 * v3, L.v2 * v2, L.v1 * v1 *> by RLVECT_2:44;
+       then Sum(L) = L.v1 * v1 + L.v2 * v2 + L.v3 * v3 or
+       Sum(L) = L.v1 * v1 + (L.v2 * v2 + L.v3 * v3) or
+       Sum(L) = L.v2 * v2 + (L.v1 * v1 + L.v3 * v3)
+         by A17,RLVECT_1:63;
+       hence thesis by RLVECT_1:def 6;
+     end;
+     hence thesis;
+   end;
+   hence thesis;
+end;
+
+Lm14:
+for V being RealLinearSpace, v1,v2,v3 being VECTOR of V,
+ L being Linear_Combination of V st
+  L is convex & Carrier(L) = {v1,v2,v3} &
+   v1 <> v2 & v2 <> v3 & v3 <> v1 holds
+    L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0 &
+     Sum(L) = L.v1 * v1 + L.v2 * v2 + L.v3 * v3
+proof
+   let V be RealLinearSpace;
+   let v1,v2,v3 be VECTOR of V;
+   let L be Linear_Combination of V;
+   assume that
+A1:L is convex and
+A2:Carrier(L) = {v1,v2,v3} and
+A3:v1 <> v2 & v2 <> v3 & v3 <> v1;
+   reconsider L as Linear_Combination of {v1,v2,v3} by A2,RLVECT_2:def 8;
+
+   consider F being FinSequence of the carrier of V such that
+A4:(F is one-to-one & rng F = Carrier L &
+    (ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 &
+      (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0)))
+        by A1,Def3;
+   consider f be FinSequence of REAL such that
+A5:len f = len F & Sum(f) = 1 &
+   (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0) by A4;
+
+     len F = card {v1,v2,v3} by A2,A4,FINSEQ_4:77;
+then A6:len f = 3 by A3,A5,CARD_2:77;
+   then dom f = {1,2,3} by FINSEQ_1:def 3,FINSEQ_3:1;
+then A7:1 in dom f & 2 in dom f & 3 in dom f by ENUMSET1:14;
+then A8:f.1 = L.(F.1) & f.1 >= 0 by A5;
+   then f/.1 = L.(F.1) & L.(F.1) >= 0 by A7,FINSEQ_4:def 4;
+   then reconsider r1 = L.(F.1) as Element of REAL;
+
+A9:f.2 = L.(F.2) & f.2 >= 0 by A5,A7;
+   then f/.2 = L.(F.2) & L.(F.2) >= 0 by A7,FINSEQ_4:def 4;
+   then reconsider r2 = L.(F.2) as Element of REAL;
+
+A10:f.3 = L.(F.3) & f.3 >= 0 by A5,A7;
+   then f/.3 = L.(F.3) & L.(F.3) >= 0 by A7,FINSEQ_4:def 4;
+   then reconsider r3 = L.(F.3) as Element of REAL;
+
+   A11: f = <*r1,r2,r3*> by A6,A8,A9,A10,FINSEQ_1:62;
+then A12:L.(F.1) + L.(F.2) + L.(F.3) = 1 by A5,RVSUM_1:108;
+
+     now per cases by A2,A3,A4,Lm12;
+     suppose F = <*v1,v2,v3*>;
+     then F.1 = v1 & F.2 = v2 & F.3 = v3 by FINSEQ_1:62;
+     hence L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0
+       by A5,A8,A9,A10,A11,RVSUM_1:108;
+     suppose F = <*v1,v3,v2*>;
+     then F.1 = v1 & F.2 = v3 & F.3 = v2 by FINSEQ_1:62;
+     hence L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0
+       by A8,A9,A10,A12,XCMPLX_1:1;
+
+     suppose F = <*v2,v1,v3*>;
+     then F.1 = v2 & F.2 = v1 & F.3 = v3 by FINSEQ_1:62;
+     hence L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0
+       by A5,A8,A9,A10,A11,RVSUM_1:108;
+
+     suppose F = <*v2,v3,v1*>;
+     then F.1 = v2 & F.2 = v3 & F.3 = v1 by FINSEQ_1:62;
+     hence L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0
+       by A8,A9,A10,A12,XCMPLX_1:1;
+
+     suppose F = <*v3,v1,v2*>;
+     then F.1 = v3 & F.2 = v1 & F.3 = v2 by FINSEQ_1:62;
+     hence L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0
+       by A8,A9,A10,A12,XCMPLX_1:1;
+
+     suppose F = <*v3,v2,v1*>;
+     then F.1 = v3 & F.2 = v2 & F.3 = v1 by FINSEQ_1:62;
+     hence L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0
+       by A8,A9,A10,A12,XCMPLX_1:1;
+   end;
+   hence thesis by A3,Lm13;
+end;
+
+theorem
+  for V being RealLinearSpace, v being VECTOR of V,
+ L being Linear_Combination of {v} st L is convex holds
+  L.v = 1 & Sum(L) = L.v * v
+proof
+   let V be RealLinearSpace;
+   let v be VECTOR of V;
+   let L be Linear_Combination of {v};
+   assume
+A1:L is convex;
+     Carrier(L) c= {v} by RLVECT_2:def 8;
+   then Carrier(L) = {} or Carrier(L) = {v} by ZFMISC_1:39;
+   hence thesis by A1,Lm10,Th21;
+end;
+
+theorem
+  for V being RealLinearSpace, v1,v2 being VECTOR of V,
+ L being Linear_Combination of {v1,v2} st v1 <> v2 & L is convex holds
+  L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 & Sum(L) = L.v1 * v1 + L.v2 * v2
+proof
+   let V be RealLinearSpace;
+   let v1,v2 be VECTOR of V;
+   let L be Linear_Combination of {v1,v2};
+   assume that
+A1:v1 <> v2 and
+A2:L is convex;
+
+A3:Carrier(L) c= {v1,v2} by RLVECT_2:def 8;
+A4:Carrier(L) <> {} by A2,Th21;
+     now per cases by A3,A4,ZFMISC_1:42;
+     suppose
+A5:  Carrier(L) = {v1};
+then A6:  L.v1 = 1 & Sum(L) = L.v1 * v1 by A2,Lm10;
+
+       not v2 in Carrier(L) by A1,A5,TARSKI:def 1;
+     then not v2 in {v where v is Element of V : L.v <> 0}
+       by RLVECT_2:def 6;
+     then L.v2 = 0;
+     hence L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 by A6;
+
+     suppose
+A7:  Carrier(L) = {v2};
+then A8: L.v2 = 1 & Sum(L) = L.v2 * v2 by A2,Lm10;
+
+       not v1 in Carrier(L) by A1,A7,TARSKI:def 1;
+     then not v1 in {v where v is Element of V : L.v <> 0}
+       by RLVECT_2:def 6;
+     then L.v1 = 0;
+     hence L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 by A8;
+
+     suppose
+       Carrier(L) = {v1,v2};
+     hence L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 by A1,A2,Lm11;
+   end;
+   hence thesis by A1,RLVECT_2:51;
+end;
+
+theorem
+  for V being RealLinearSpace, v1,v2,v3 being VECTOR of V,
+ L being Linear_Combination of {v1,v2,v3} st
+  v1 <> v2 & v2 <> v3 & v3 <> v1 & L is convex holds
+  L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0 &
+  Sum(L) = L.v1 * v1 + L.v2 * v2 + L.v3 * v3
+proof
+   let V be RealLinearSpace;
+   let v1,v2,v3 be VECTOR of V;
+   let L be Linear_Combination of {v1,v2,v3};
+   assume that
+A1:v1 <> v2 & v2 <> v3 & v3 <> v1 and
+A2:L is convex;
+
+A3:Carrier(L) c= {v1,v2,v3} by RLVECT_2:def 8;
+A4:Carrier(L) <> {} by A2,Th21;
+
+     now per cases by A3,A4,WAYBEL18:1;
+     suppose
+A5:  Carrier(L) = {v1};
+then A6:  L.v1 = 1 by A2,Lm10;
+       not v2 in Carrier(L) & not v3 in Carrier(L) by A1,A5,TARSKI:def 1;
+     then not v2 in {v where v is Element of V : L.v <> 0} &
+     not v3 in {v where v is Element of V : L.v <> 0}
+       by RLVECT_2:def 6;
+     then L.v2 = 0 & L.v3 = 0;
+     hence L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0 by A6;
+
+     suppose
+A7:  Carrier(L) = {v2};
+then A8: L.v2 = 1 by A2,Lm10;
+       not v1 in Carrier(L) & not v3 in Carrier(L) by A1,A7,TARSKI:def 1;
+     then not v1 in {v where v is Element of V : L.v <> 0} &
+     not v3 in {v where v is Element of V : L.v <> 0}
+       by RLVECT_2:def 6;
+     then L.v1 = 0 & L.v3 = 0;
+     hence L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0 by A8;
+
+     suppose
+A9: Carrier(L) = {v3};
+then A10: L.v3 = 1 by A2,Lm10;
+       not v1 in Carrier(L) & not v2 in Carrier(L) by A1,A9,TARSKI:def 1;
+     then not v1 in {v where v is Element of V : L.v <> 0} &
+     not v2 in {v where v is Element of V : L.v <> 0}
+       by RLVECT_2:def 6;
+     then L.v1 = 0 & L.v2 = 0;
+     hence L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0 by A10;
+
+     suppose
+A11: Carrier(L) = {v1,v2};
+     then not v3 in Carrier(L) by A1,TARSKI:def 2;
+     then not v3 in {v where v is Element of V : L.v <> 0}
+       by RLVECT_2:def 6;
+     then L.v3 = 0;
+     hence L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0
+      by A1,A2,A11,Lm11;
+
+     suppose
+A12: Carrier(L) = {v2,v3};
+     then not v1 in Carrier(L) by A1,TARSKI:def 2;
+     then not v1 in {v where v is Element of V : L.v <> 0}
+       by RLVECT_2:def 6;
+     then L.v1 = 0;
+     hence L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0
+       by A1,A2,A12,Lm11;
+
+     suppose
+A13: Carrier(L) = {v1,v3};
+     then not v2 in Carrier(L) by A1,TARSKI:def 2;
+     then not v2 in {v where v is Element of V : L.v <> 0}
+       by RLVECT_2:def 6;
+     then L.v2 = 0;
+     hence L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0
+       by A1,A2,A13,Lm11;
+
+     suppose Carrier(L) = {v1,v2,v3};
+     hence L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0
+       by A1,A2,Lm14;
+   end;
+   hence thesis by A1,Lm13;
+end;
+
+theorem
+  for V being RealLinearSpace, v being VECTOR of V,
+ L being Linear_Combination of V st
+  L is convex & Carrier(L) = {v} holds L.v = 1 by Lm10;
+
+theorem
+  for V being RealLinearSpace, v1,v2 being VECTOR of V,
+ L being Linear_Combination of V st
+  L is convex & Carrier(L) = {v1,v2} & v1 <> v2 holds
+   L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 by Lm11;
+
+theorem
+  for V being RealLinearSpace, v1,v2,v3 being VECTOR of V,
+ L being Linear_Combination of V st
+  L is convex & Carrier(L) = {v1,v2,v3} &
+   v1 <> v2 & v2 <> v3 & v3 <> v1 holds
+    L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0 &
+     Sum(L) = L.v1 * v1 + L.v2 * v2 + L.v3 * v3 by Lm14;
+
+begin  :: Convex Hull
+
+scheme SubFamExRLS {A() -> RLSStruct, P[Subset of A()]}:
+   ex F being Subset-Family of A() st
+   for B being Subset of A() holds B in F iff P[B]
+proof
+  defpred R[Subset of A()] means P[$1];
+   consider F being Subset-Family of A() such that
+A1: for B being Subset of A() holds B in F iff R[B]
+     from SubFamEx;
+   thus thesis by A1;
+end;
+
+scheme SubFamExRLS2 {A() -> RLSStruct, P[Subset of A()]}:
+   ex F being Subset-Family of A() st
+   for B being Subset of A() holds B in F iff P[B]
+proof
+   defpred R[Subset of A()] means
+    ex B be Subset of A() st B = $1 & P[B];
+   consider F being Subset-Family of A() such that
+A1: for B' being Subset of A() holds B' in F iff R[B']
+     from SubFamEx;
+   reconsider F as Subset-Family of A();
+   take F;
+     for B being Subset of A() holds B in F iff P[B]
+   proof
+     let B be Subset of A();
+       B in F implies P[B]
+     proof
+       assume
+A2:    B in F;
+       reconsider B as Subset of A();
+     ex B' be Subset of A() st B' = B & P[B'] by A1,A2;
+       hence thesis;
+     end;
+     hence thesis by A1;
+   end;
+   hence thesis;
+end;
+
+definition let V be non empty RLSStruct, M be Subset of V;
+  func Convex-Family M -> Subset-Family of V means :Def4:
+   for N being Subset of V holds N in it iff (N is convex & M c= N);
+existence
+proof
+   defpred P[Subset of V] means $1 is convex & M c= $1;
+   thus ex F be Subset-Family of V st
+    for N being Subset of V holds N in F iff P[N] from SubFamExRLS2;
+end;
+uniqueness
+proof
+   let SF,SG be Subset-Family of V;
+   assume
+A1:for N being Subset of V holds N in SF iff N is convex & M c= N;
+   assume
+A2:for N being Subset of V holds N in SG iff N is convex & M c= N;
+
+A3:for Y being Subset of V holds Y in SF iff Y in SG
+   proof
+     let Y be Subset of V;
+A4:  now
+       assume Y in SF;
+       then Y is convex & M c= Y by A1;
+       hence Y in SG by A2;
+     end;
+       now
+       assume Y in SG;
+       then Y is convex & M c= Y by A2;
+       hence Y in SF by A1;
+     end;
+     hence thesis by A4;
+   end;
+     for Y being Subset of V holds Y in SF iff Y in SG by A3;
+   hence SF = SG by SETFAM_1:44;
+end;
+end;
+
+definition
+let V be non empty RLSStruct, M being Subset of V;
+  func conv(M) -> convex Subset of V equals :Def5:
+  meet (Convex-Family M);
+coherence
+proof
+     for N being Subset of V st N in Convex-Family M holds N is convex
+     by Def4;
+   hence thesis by Th15;
+end;
+end;
+
+theorem
+  for V being non empty RLSStruct, M being Subset of V,
+ N being convex Subset of V st M c= N holds conv(M) c= N
+proof
+   let V be non empty RLSStruct;
+   let M be Subset of V;
+   let N be convex Subset of V;
+   assume M c= N;
+   then N in Convex-Family M by Def4;
+   then meet (Convex-Family M) c= N by SETFAM_1:4;
+   hence thesis by Def5;
+end;
+
+begin  :: Miscellaneous
+
+theorem
+  for p being FinSequence, x,y,z being set st
+ p is one-to-one & rng p = {x,y,z} & x <> y & y <> z & z <> x holds
+  p = <* x,y,z *> or p = <* x,z,y *> or p = <* y,x,z *> or
+  p = <* y,z,x *> or p = <* z,x,y *> or p = <* z,y,x *> by Lm12;
+
+theorem
+  for V being RealLinearSpace-like (non empty RLSStruct),
+ M be Subset of V holds 1*M = M by Lm1;
+
+theorem
+  for V being non empty RLSStruct, M being empty Subset of V,
+ r be Real holds r * M = {} by Lm7;
+
+theorem
+  for V being RealLinearSpace, M be non empty Subset of V
+ holds 0 * M = {0.V} by Lm2;
+
+theorem
+  for V being right_zeroed (non empty LoopStr), M being Subset of V holds
+ M + {0.V} = M by Lm9;
+
+theorem
+  for V be add-associative (non empty LoopStr),
+ M1,M2,M3 be Subset of V holds (M1 + M2) + M3 = M1 + (M2 + M3) by Lm3;
+
+theorem
+  for V being RealLinearSpace-like (non empty RLSStruct),
+ M being Subset of V, r1,r2 being Real holds
+  r1*(r2*M) = (r1*r2)*M by Lm4;
+
+theorem
+  for V being RealLinearSpace-like (non empty RLSStruct),
+ M1,M2 being Subset of V, r being Real holds
+  r*(M1 + M2) = r*M1 + r*M2 by Lm5;
+
+theorem
+  for V being non empty RLSStruct, M,N being Subset of V, r being Real st
+ M c= N holds r*M c= r*N by Lm6;
+
+theorem
+  for V being non empty LoopStr, M being empty Subset of V,
+ N being Subset of V holds M + N = {} by Lm8;
+

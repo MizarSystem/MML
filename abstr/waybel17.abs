@@ -1,0 +1,324 @@
+:: Scott-Continuous Functions
+::  by Adam Grabowski
+::
+:: Received February 13, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, RELAT_1, WAYBEL_9, WAYBEL_0, RELAT_2, ORDERS_1, PRE_TOPC,
+      SEQM_3, BOOLE, WAYBEL11, QUANTAL1, YELLOW_0, LATTICE3, ORDINAL2,
+      FUNCOP_1, WAYBEL_3, BHSP_3, GROUP_1, CARD_3, CAT_1, YELLOW_1, FUNCT_2,
+      SUBSET_1, LATTICES, WELLORD1, YELLOW_2, CANTOR_1, SETFAM_1, TOPS_1,
+      TARSKI, WAYBEL_8, COMPTS_1, WAYBEL17, RLVECT_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
+      RELSET_1, RELAT_1, STRUCT_0, FUNCT_1, PARTFUN1, FUNCT_2, PRE_TOPC,
+      TOPS_1, TOLER_1, ORDERS_1, LATTICE3, YELLOW_0, ORDERS_3, WAYBEL_0,
+      YELLOW_1, YELLOW_2, NATTRA_1, WAYBEL_3, PRE_CIRC, WAYBEL_8, WAYBEL_9,
+      WAYBEL11, WAYBEL_2, CANTOR_1, YELLOW_8;
+ constructors NAT_1, TOPS_1, ORDERS_3, WAYBEL_3, WAYBEL_5, TOLER_1, NATTRA_1,
+      WAYBEL_8, WAYBEL_1, WAYBEL11, ABIAN, YELLOW_8, CANTOR_1, INT_1, LATTICE3,
+      MEMBERED;
+ clusters SUBSET_1, STRUCT_0, WAYBEL_0, WAYBEL_2, WAYBEL_3, RELSET_1, YELLOW_1,
+      WAYBEL_9, LATTICE3, BORSUK_2, INT_1, WAYBEL10, WAYBEL11, ABIAN, MEMBERED,
+      ZFMISC_1, FUNCT_1, FUNCT_2, PARTFUN1, NUMBERS, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Preliminaries
+
+definition let S be non empty set;
+  let a, b be Element of S;
+  func (a,b),... -> Function of NAT, S means
+:: WAYBEL17:def 1
+ for i being Nat holds
+   ((ex k being Nat st i = 2*k) implies it.i = a) &
+   ((not ex k being Nat st i = 2*k) implies it.i = b);
+end;
+
+theorem :: WAYBEL17:1
+ for S, T being non empty reflexive RelStr,
+     f being map of S, T,
+     P being lower Subset of T st f is monotone holds
+  f"P is lower;
+
+theorem :: WAYBEL17:2
+   for S, T being non empty reflexive RelStr,
+     f being map of S, T,
+     P being upper Subset of T st f is monotone holds
+  f"P is upper;
+
+theorem :: WAYBEL17:3
+ for S, T being reflexive antisymmetric non empty RelStr,
+    f being map of S, T st
+  f is directed-sups-preserving holds f is monotone;
+
+definition let S, T be reflexive antisymmetric non empty RelStr;
+ cluster directed-sups-preserving -> monotone map of S, T;
+end;
+
+theorem :: WAYBEL17:4
+ for S, T being up-complete Scott TopLattice,
+     f being map of S, T holds f is continuous implies f is monotone;
+
+definition let S, T be up-complete Scott TopLattice;
+  cluster continuous -> monotone map of S, T;
+end;
+
+begin :: Poset of continuous maps
+
+definition let S be set; let T be reflexive RelStr;
+  cluster S --> T -> reflexive-yielding;
+end;
+
+definition let S be non empty set, T be complete LATTICE;
+  cluster T |^ S -> complete;
+end;
+
+definition let S, T be up-complete Scott TopLattice;
+ func SCMaps (S,T) -> strict full SubRelStr of MonMaps (S, T) means
+:: WAYBEL17:def 2
+  for f being map of S, T holds f in the carrier of it iff
+   f is continuous;
+end;
+
+definition let S, T be up-complete Scott TopLattice;
+ cluster SCMaps (S,T) -> non empty;
+end;
+
+begin :: Some special nets
+
+definition let S be non empty RelStr;
+  let a, b be Element of S;
+  func Net-Str (a,b) -> strict non empty NetStr over S means
+:: WAYBEL17:def 3
+    the carrier of it = NAT &
+    the mapping of it = (a,b),... &
+    for i, j being Element of it,
+        i', j' being Nat st i = i' & j = j' holds i <= j iff i' <= j';
+end;
+
+definition let S be non empty RelStr;
+           let a, b be Element of S;
+ cluster Net-Str (a,b) -> reflexive transitive directed antisymmetric;
+end;
+
+theorem :: WAYBEL17:5
+ for S being non empty RelStr,
+     a, b being Element of S,
+     i being Element of Net-Str (a, b) holds
+  Net-Str (a, b).i = a or Net-Str (a, b).i = b;
+
+theorem :: WAYBEL17:6
+ for S being non empty RelStr,
+     a, b being Element of S,
+     i, j being Element of Net-Str (a,b),
+     i', j' being Nat st i' = i & j' = i' + 1 & j' = j holds
+       (Net-Str (a, b).i = a implies Net-Str (a, b).j = b) &
+       (Net-Str (a, b).i = b implies Net-Str (a, b).j = a);
+
+theorem :: WAYBEL17:7
+ for S being with_infima Poset,
+     a, b being Element of S holds
+  lim_inf Net-Str (a,b) = a "/\" b;
+
+theorem :: WAYBEL17:8
+  for S, T being with_infima Poset,
+      a, b being Element of S,
+      f being map of S, T holds
+    lim_inf (f*Net-Str (a,b)) = f.a "/\" f.b;
+
+definition let S be non empty RelStr; let D be non empty Subset of S;
+ func Net-Str D -> strict NetStr over S equals
+:: WAYBEL17:def 4
+   NetStr (#D, (the InternalRel of S)|_2 D, (id the carrier of S)|D#);
+end;
+
+theorem :: WAYBEL17:9
+ for S being non empty reflexive RelStr,
+     D being non empty Subset of S holds
+   Net-Str D = Net-Str (D, (id the carrier of S)|D);
+
+definition let S be non empty reflexive RelStr;
+           let D be directed non empty Subset of S;
+ cluster Net-Str D -> non empty directed reflexive;
+end;
+
+definition let S be non empty reflexive transitive RelStr;
+           let D be directed non empty Subset of S;
+ cluster Net-Str D -> transitive;
+end;
+
+definition let S be non empty reflexive RelStr;
+           let D be directed non empty Subset of S;
+ cluster Net-Str D -> monotone;
+end;
+
+theorem :: WAYBEL17:10
+ for S being up-complete LATTICE,
+     D being directed non empty Subset of S holds
+  lim_inf Net-Str D = sup D;
+
+begin :: Monotone maps
+
+theorem :: WAYBEL17:11
+ for S, T being LATTICE,
+     f being map of S, T holds
+ (for N being net of S holds f.(lim_inf N) <= lim_inf (f*N)) implies
+  f is monotone;
+
+theorem :: WAYBEL17:12
+ for S, T being continuous lower-bounded LATTICE,
+     f being map of S, T holds
+  ( f is directed-sups-preserving implies
+    ( for x being Element of S holds
+      f.x = "\/"({ f.w where w is Element of S : w << x },T) ));
+
+theorem :: WAYBEL17:13
+ for S being LATTICE,
+     T being up-complete lower-bounded LATTICE,
+     f being map of S, T holds
+  ( ( for x being Element of S holds
+    f.x = "\/"({ f.w where w is Element of S : w << x },T) ) implies
+      f is monotone);
+
+theorem :: WAYBEL17:14
+ for S being up-complete lower-bounded LATTICE,
+     T being continuous lower-bounded LATTICE,
+     f being map of S, T holds
+ ( ( for x being Element of S holds
+    f.x = "\/"({ f.w where w is Element of S : w << x },T) ) implies
+    ( for x being Element of S, y being Element of T
+     holds y << f.x iff ex w being Element of S st
+       w << x & y << f.w ));
+
+theorem :: WAYBEL17:15
+ for S, T being non empty RelStr,
+     D being Subset of S,
+     f being map of S, T st
+   ex_sup_of D,S & ex_sup_of f.:D,T or
+   S is complete antisymmetric & T is complete antisymmetric holds
+  f is monotone implies sup (f.:D) <= f.(sup D);
+
+theorem :: WAYBEL17:16
+ for S, T being non empty reflexive antisymmetric RelStr,
+     D being directed non empty Subset of S,
+     f being map of S, T st
+   ex_sup_of D,S & ex_sup_of f.:D,T or
+   S is up-complete & T is up-complete holds
+  f is monotone implies sup (f.:D) <= f.(sup D);
+
+theorem :: WAYBEL17:17
+   for S, T being non empty RelStr,
+     D being Subset of S,
+     f being map of S, T st
+   ex_inf_of D,S & ex_inf_of f.:D,T or
+   S is complete antisymmetric & T is complete antisymmetric holds
+  f is monotone implies f.(inf D) <= inf (f.:D);
+
+theorem :: WAYBEL17:18
+ for S, T being up-complete LATTICE,
+     f being map of S, T,
+     N being monotone (non empty NetStr over S) holds
+   f is monotone implies f * N is monotone;
+
+definition let S, T be up-complete LATTICE;
+ let f be monotone map of S, T;
+ let N be monotone (non empty NetStr over S);
+ cluster f * N -> monotone;
+end;
+
+theorem :: WAYBEL17:19
+   for S, T being up-complete LATTICE,
+     f being map of S, T holds
+ (for N being net of S holds f.(lim_inf N) <= lim_inf (f*N)) implies
+  for D being directed non empty Subset of S holds sup (f.:D) = f.(sup D);
+
+theorem :: WAYBEL17:20
+ for S, T being complete LATTICE,
+     f being map of S, T,
+     N being net of S,
+     j being Element of N,
+     j' being Element of (f*N) st j' = j
+  holds f is monotone implies
+   f."/\"({N.k where k is Element of N: k >= j},S)
+     <= "/\"({(f*N).l where l is Element of (f*N) : l >= j'},T);
+
+begin :: Necessary and sufficient conditions of Scott-continuity
+
+:: Proposition 2.1, p. 112, (1) <=> (2)
+theorem :: WAYBEL17:21
+   for S, T being complete Scott TopLattice,
+     f being map of S, T holds
+ f is continuous iff
+  for N be net of S holds f.(lim_inf N) <= lim_inf (f*N);
+
+:: Proposition 2.1, p. 112, (1) <=> (3)
+theorem :: WAYBEL17:22
+ for S, T being complete Scott TopLattice,
+     f being map of S, T holds
+ f is continuous iff f is directed-sups-preserving;
+
+definition let S, T be complete Scott TopLattice;
+ cluster continuous -> directed-sups-preserving map of S, T;
+ cluster directed-sups-preserving -> continuous map of S, T;
+end;
+
+:: Proposition 2.1, p. 112, (1) <=> (4)
+theorem :: WAYBEL17:23
+ for S, T being continuous complete Scott TopLattice,
+     f being map of S, T holds
+  ( f is continuous iff
+  ( for x being Element of S, y being Element of T
+    holds y << f.x iff ex w being Element of S st
+     w << x & y << f.w ));
+
+:: Proposition 2.1, p. 112, (1) <=> (5)
+theorem :: WAYBEL17:24
+ for S, T being continuous complete Scott TopLattice,
+     f being map of S, T holds
+  ( f is continuous iff
+   for x being Element of S holds
+      f.x = "\/"({ f.w where w is Element of S : w << x },T) );
+
+theorem :: WAYBEL17:25
+ for S being LATTICE, T being complete LATTICE,
+     f being map of S, T holds
+  ( for x being Element of S holds
+   f.x = "\/"({ f.w where w is Element of S : w <= x & w is compact },T ) )
+    implies f is monotone;
+
+theorem :: WAYBEL17:26
+ for S, T being complete Scott TopLattice,
+     f being map of S, T holds
+ (( for x being Element of S holds
+  f.x = "\/"({ f.w where w is Element of S : w <= x & w is compact },T ) )
+    implies
+  for x being Element of S holds
+   f.x = "\/"({ f.w where w is Element of S : w << x },T) );
+
+:: Proposition 2.1, p. 112, (1) <=> (6)
+theorem :: WAYBEL17:27
+   for S, T being complete Scott TopLattice,
+     f being map of S, T holds
+  S is algebraic & T is algebraic implies
+ ( f is continuous iff
+  for x being Element of S, k being Element of T st
+      k in the carrier of CompactSublatt T
+    holds (k <= f.x iff ex j being Element of S st
+      j in the carrier of CompactSublatt S & j <= x & k <= f.j) );
+
+:: Proposition 2.1, p. 112, (1) <=> (7)
+theorem :: WAYBEL17:28
+   for S, T being complete Scott TopLattice,
+     f being map of S, T holds
+  S is algebraic & T is algebraic implies
+ ( f is continuous iff
+  for x being Element of S holds
+  f.x = "\/"({ f.w where w is Element of S : w <= x & w is compact },T ) );
+
+theorem :: WAYBEL17:29
+   for S, T being up-complete Scott (non empty
+  reflexive transitive antisymmetric TopSpace-like TopRelStr),
+     f be map of S, T holds
+  f is directed-sups-preserving implies f is continuous;

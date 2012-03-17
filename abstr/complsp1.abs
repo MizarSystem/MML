@@ -1,0 +1,575 @@
+:: Complex Spaces
+::  by Czes{\l}aw Byli\'nski and Andrzej Trybulec
+::
+:: Received September 27, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary COMPLEX1, FUNCT_1, BINOP_1, SETWISEO, ARYTM_1, FINSEQOP, FUNCOP_1,
+      FINSEQ_1, RELAT_1, ABSVALUE, FINSEQ_2, SQUARE_1, RLVECT_1, RVSUM_1,
+      PRE_TOPC, BOOLE, SETFAM_1, TARSKI, METRIC_1, SEQ_4, ARYTM, SEQ_2,
+      ARYTM_3, SUBSET_1, COMPTS_1, COMPLSP1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, NAT_1, SETFAM_1, REAL_1, SQUARE_1, COMPLEX1, FUNCT_1, PARTFUN1,
+      FUNCT_2, BINOP_1, STRUCT_0, PRE_TOPC, COMPTS_1, FINSEQ_1, FUNCOP_1,
+      SETWISEO, FINSEQ_2, FINSEQOP, RVSUM_1, SEQ_4;
+ constructors REAL_1, SQUARE_1, COMPLEX1, BINOP_1, COMPTS_1, SETWISEO,
+      FINSEQOP, RVSUM_1, SEQ_4, SEQ_1, MEMBERED, PARTFUN1, XBOOLE_0;
+ clusters SUBSET_1, PRE_TOPC, RELSET_1, FINSEQ_2, XREAL_0, COMPLEX1, ARYTM_3,
+      SEQ_1, MEMBERED, ZFMISC_1, PARTFUN1, FUNCT_1, FUNCT_2, XBOOLE_0;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+reserve i,j,k,n for Nat, r,r',r1,r2 for Real;
+reserve c,c',c1,c2,c3 for Element of COMPLEX;
+
+scheme FuncDefUniq{C, D()->non empty set,
+                   F((Element of C()))->set}:
+ for f1,f2 being Function of C(),D() st
+   (for x being Element of C() holds f1.x = F(x)) &
+   (for x being Element of C() holds f2.x = F(x))
+  holds f1 = f2;
+
+scheme BinOpDefuniq{A()->non empty set,
+                   O((Element of A()),Element of A())->set}:
+  for o1,o2 being BinOp of A() st
+    (for a,b being Element of A() holds o1.(a,b) = O(a,b)) &
+    (for a,b being Element of A() holds o2.(a,b) = O(a,b))
+  holds o1 = o2;
+ func addcomplex -> BinOp of COMPLEX means
+:: COMPLSP1:def 1
+ for c1,c2 holds it.(c1,c2) = c1 + c2;
+end;
+
+theorem :: COMPLSP1:1
+   addcomplex is commutative;
+
+theorem :: COMPLSP1:2
+   addcomplex is associative;
+
+theorem :: COMPLSP1:3
+   0c is_a_unity_wrt addcomplex;
+
+theorem :: COMPLSP1:4
+   the_unity_wrt addcomplex = 0c;
+
+theorem :: COMPLSP1:5
+   addcomplex has_a_unity;
+ func compcomplex -> UnOp of COMPLEX means
+:: COMPLSP1:def 2
+ for c holds it.c = -c;
+end;
+
+theorem :: COMPLSP1:6
+   compcomplex is_an_inverseOp_wrt addcomplex;
+
+theorem :: COMPLSP1:7
+   addcomplex has_an_inverseOp;
+
+theorem :: COMPLSP1:8
+ the_inverseOp_wrt addcomplex = compcomplex;
+
+definition
+ func diffcomplex -> BinOp of COMPLEX equals
+:: COMPLSP1:def 3
+  addcomplex*(id COMPLEX,compcomplex);
+end;
+
+
+theorem :: COMPLSP1:9
+ diffcomplex.(c1,c2) = c1 - c2;
+ func multcomplex -> BinOp of COMPLEX means
+:: COMPLSP1:def 4
+ for c1,c2 holds it.(c1,c2) = c1 * c2;
+end;
+
+theorem :: COMPLSP1:10
+     multcomplex is commutative;
+
+theorem :: COMPLSP1:11
+   multcomplex is associative;
+
+theorem :: COMPLSP1:12
+   1r is_a_unity_wrt multcomplex;
+
+theorem :: COMPLSP1:13
+   the_unity_wrt multcomplex = 1r;
+
+theorem :: COMPLSP1:14
+   multcomplex has_a_unity;
+
+theorem :: COMPLSP1:15
+   multcomplex is_distributive_wrt addcomplex;
+
+definition let c;
+ func c multcomplex -> UnOp of COMPLEX equals
+:: COMPLSP1:def 5
+  multcomplex[;](c,id COMPLEX);
+end;
+
+theorem :: COMPLSP1:16
+   (c multcomplex).c' = c*c';
+
+theorem :: COMPLSP1:17
+   c multcomplex is_distributive_wrt addcomplex;
+ func abscomplex -> Function of COMPLEX,REAL means
+:: COMPLSP1:def 6
+ for c holds it.c = |.c.|;
+end;
+
+reserve z,z1,z2 for FinSequence of COMPLEX;
+
+definition let z1,z2;
+  func z1 + z2 -> FinSequence of COMPLEX equals
+:: COMPLSP1:def 7
+  addcomplex.:(z1,z2);
+  func z1 - z2 -> FinSequence of COMPLEX equals
+:: COMPLSP1:def 8
+  diffcomplex.:(z1,z2);
+end;
+
+definition let z;
+  func -z -> FinSequence of COMPLEX equals
+:: COMPLSP1:def 9
+  compcomplex*z;
+end;
+
+definition let c,z;
+  func c*z -> FinSequence of COMPLEX equals
+:: COMPLSP1:def 10
+   (c multcomplex)*z;
+end;
+
+definition let z;
+  func abs z -> FinSequence of REAL equals
+:: COMPLSP1:def 11
+  abscomplex*z;
+end;
+
+definition let n;
+  func COMPLEX n -> FinSequence-DOMAIN of COMPLEX equals
+:: COMPLSP1:def 12
+  n-tuples_on COMPLEX;
+end;
+
+definition let n;
+ cluster COMPLEX n -> non empty;
+end;
+
+reserve x,z,z1,z2,z3 for Element of COMPLEX n,
+        A,B for Subset of COMPLEX n;
+
+theorem :: COMPLSP1:18
+   len z = n;
+
+theorem :: COMPLSP1:19
+     for z being Element of COMPLEX 0 holds z = <*>COMPLEX;
+
+theorem :: COMPLSP1:20
+     <*>COMPLEX is Element of COMPLEX 0;
+
+theorem :: COMPLSP1:21
+   k in Seg n implies z.k in COMPLEX;
+
+canceled;
+
+theorem :: COMPLSP1:23
+   (for k st k in Seg n holds z1.k = z2.k) implies z1 = z2;
+
+definition let n,z1,z2;
+  redefine
+ func z1 + z2 -> Element of COMPLEX n;
+end;
+
+theorem :: COMPLSP1:24
+   k in Seg n & c1 = z1.k & c2 = z2.k implies (z1 + z2).k = c1 + c2;
+
+theorem :: COMPLSP1:25
+   z1 + z2 = z2 + z1;
+
+theorem :: COMPLSP1:26
+   z1 + (z2 + z3) = z1 + z2 + z3;
+
+definition let n;
+  func 0c n -> FinSequence of COMPLEX equals
+:: COMPLSP1:def 13
+  n |-> 0c;
+end;
+
+definition let n;
+ redefine func 0c n -> Element of COMPLEX n;
+end;
+
+theorem :: COMPLSP1:27
+     k in Seg n implies (0c n).k = 0c;
+
+theorem :: COMPLSP1:28
+   z + 0c n = z & z = 0c n + z;
+
+definition let n,z;
+   redefine func -z -> Element of COMPLEX n;
+end;
+
+theorem :: COMPLSP1:29
+   k in Seg n & c = z.k implies (-z).k = -c;
+
+theorem :: COMPLSP1:30
+   z + -z = 0c n & -z + z = 0c n;
+
+theorem :: COMPLSP1:31
+   z1 + z2 = 0c n implies z1 = -z2 & z2 = -z1;
+
+theorem :: COMPLSP1:32
+   --z = z;
+
+theorem :: COMPLSP1:33
+     -z1 = -z2 implies z1 = z2;
+
+theorem :: COMPLSP1:34
+     z1 + z = z2 + z or z1 + z = z + z2 implies z1 = z2;
+
+theorem :: COMPLSP1:35
+   -(z1 + z2) = -z1 + -z2;
+
+
+definition let n,z1,z2;
+  redefine func z1 - z2 -> Element of COMPLEX n;
+end;
+
+theorem :: COMPLSP1:36
+     k in Seg n & c1 = z1.k & c2 = z2.k implies (z1 - z2).k = c1 - c2;
+
+theorem :: COMPLSP1:37
+   z1 - z2 = z1 + - z2;
+
+theorem :: COMPLSP1:38
+     z - 0c n = z;
+
+theorem :: COMPLSP1:39
+     0c n - z = -z;
+
+theorem :: COMPLSP1:40
+     z1 - -z2 = z1 + z2;
+
+theorem :: COMPLSP1:41
+   -(z1 - z2) = z2 - z1;
+
+theorem :: COMPLSP1:42
+   -(z1 - z2) = -z1 + z2;
+
+theorem :: COMPLSP1:43
+   z - z = 0c n;
+
+theorem :: COMPLSP1:44
+   z1 - z2 = 0c n implies z1 = z2;
+
+theorem :: COMPLSP1:45
+   z1 - z2 - z3 = z1 - (z2 + z3);
+
+theorem :: COMPLSP1:46
+   z1 + (z2 - z3) = z1 + z2 - z3;
+
+theorem :: COMPLSP1:47
+   z1 - (z2 - z3) = z1 - z2 + z3;
+
+theorem :: COMPLSP1:48
+  z1 - z2 + z3 = z1 + z3 - z2;
+
+theorem :: COMPLSP1:49
+   z1 = z1 + z - z;
+
+theorem :: COMPLSP1:50
+   z1 + (z2 - z1) = z2;
+
+theorem :: COMPLSP1:51
+   z1 = z1 - z + z;
+
+
+definition let n,c,z;
+ redefine func c*z -> Element of COMPLEX n;
+end;
+
+theorem :: COMPLSP1:52
+   k in Seg n & c' = z.k implies (c*z).k = c*c';
+
+theorem :: COMPLSP1:53
+     c1*(c2*z) = (c1*c2)*z;
+
+theorem :: COMPLSP1:54
+     (c1 + c2)*z = c1*z + c2*z;
+
+theorem :: COMPLSP1:55
+     c*(z1+z2) = c*z1 + c*z2;
+
+theorem :: COMPLSP1:56
+     1r*z = z;
+
+theorem :: COMPLSP1:57
+     0c*z = 0c n;
+
+theorem :: COMPLSP1:58
+     (-1r)*z = -z;
+
+definition let n,z;
+ redefine func abs z -> Element of n-tuples_on REAL;
+end;
+
+theorem :: COMPLSP1:59
+   k in Seg n & c = z.k implies (abs z).k = |.c.|;
+
+theorem :: COMPLSP1:60
+   abs 0c n = n |-> 0;
+
+theorem :: COMPLSP1:61
+   abs -z = abs z;
+
+theorem :: COMPLSP1:62
+   abs(c*z) = |.c.|*(abs z);
+
+definition let z be FinSequence of COMPLEX;
+  func |.z.| -> Real equals
+:: COMPLSP1:def 14
+   sqrt Sum sqr abs z;
+end;
+
+theorem :: COMPLSP1:63
+   |.0c n.| = 0;
+
+theorem :: COMPLSP1:64
+   |.z.| = 0 implies z = 0c n;
+
+theorem :: COMPLSP1:65
+   0 <= |.z.|;
+
+theorem :: COMPLSP1:66
+   |.-z.| = |.z.|;
+
+theorem :: COMPLSP1:67
+     |.c*z.| = |.c.|*|.z.|;
+
+theorem :: COMPLSP1:68
+   |.z1 + z2.| <= |.z1.| + |.z2.|;
+
+theorem :: COMPLSP1:69
+   |.z1 - z2.| <= |.z1.| + |.z2.|;
+
+theorem :: COMPLSP1:70
+     |.z1.| - |.z2.| <= |.z1 + z2.|;
+
+theorem :: COMPLSP1:71
+     |.z1.| - |.z2.| <= |.z1 - z2.|;
+
+theorem :: COMPLSP1:72
+   |.z1 - z2.| = 0 iff z1 = z2;
+
+theorem :: COMPLSP1:73
+   z1 <> z2 implies 0 < |.z1 - z2.|;
+
+theorem :: COMPLSP1:74
+   |.z1 - z2.| = |.z2 - z1.|;
+
+theorem :: COMPLSP1:75
+   |.z1 - z2.| <= |.z1 - z.| + |.z - z2.|;
+
+definition let n; let A be Element of bool COMPLEX n;
+  attr A is open means
+:: COMPLSP1:def 15
+ for x st x in A ex r st 0 < r & for z st |.z.| < r holds x + z in A;
+end;
+
+definition let n; let A be Element of bool COMPLEX n;
+  attr A is closed means
+:: COMPLSP1:def 16
+   for x st for r st r > 0 ex z st |.z.| < r & x + z in A
+          holds x in A;
+end;
+
+theorem :: COMPLSP1:76
+   for A being Element of bool COMPLEX n st A = {} holds A is open;
+
+theorem :: COMPLSP1:77
+ for A being Element of bool COMPLEX n st A = COMPLEX n holds A is open;
+
+theorem :: COMPLSP1:78
+ for AA being Subset-Family of COMPLEX n st
+   for A being Element of bool COMPLEX n st A in AA holds A is open
+  for A being Element of bool COMPLEX n st A = union AA
+   holds A is open;
+
+theorem :: COMPLSP1:79
+ for A,B being Subset of COMPLEX n st A is open & B is open
+  for C being Element of bool COMPLEX n st C = A /\ B holds C is open;
+
+definition let n,x,r;
+ func Ball(x,r) -> Subset of COMPLEX n equals
+:: COMPLSP1:def 17
+   { z : |.z - x.| < r };
+end;
+
+theorem :: COMPLSP1:80
+ z in Ball(x,r) iff |.x - z.| < r;
+
+theorem :: COMPLSP1:81
+ 0 < r implies x in Ball(x,r);
+
+theorem :: COMPLSP1:82
+ Ball(z1,r1) is open;
+
+scheme SubsetFD { A, D() -> non empty set, F(set) -> Element of D(), P[set] }:
+ { F(x) where x is Element of A(): P[x]} is Subset of D();
+
+scheme SubsetFD2 { A, B, D() -> non empty set, F(set,set) -> Element of D(),
+ P[set,set] }:
+ { F(x,y) where x is Element of A(), y is Element of B():
+     P[x,y]} is Subset of D();
+
+definition let n,x,A;
+ func dist(x,A) -> Real means
+:: COMPLSP1:def 18
+ for X being Subset of REAL st X = {|.x - z.| : z in A}
+        holds it = lower_bound X;
+end;
+
+definition let n,A,r;
+ func Ball(A,r) -> Subset of COMPLEX n equals
+:: COMPLSP1:def 19
+   { z : dist(z,A) < r };
+end;
+
+theorem :: COMPLSP1:83
+(for r' st r' > 0 holds r + r' > r1) implies r >= r1;
+
+theorem :: COMPLSP1:84
+ for X being Subset of REAL, r st
+  X <> {} & for r' st r' in X holds r <= r'
+  holds lower_bound X >= r;
+
+theorem :: COMPLSP1:85
+ A <> {} implies dist(x,A) >= 0;
+
+theorem :: COMPLSP1:86
+ A <> {} implies dist(x + z,A) <= dist(x,A) + |.z.|;
+
+theorem :: COMPLSP1:87
+ x in A implies dist(x,A) = 0;
+
+theorem :: COMPLSP1:88
+ not x in A & A <> {} & A is closed implies dist(x,A) > 0;
+
+theorem :: COMPLSP1:89
+ A <> {} implies |.z1 - x.| + dist(x,A) >= dist(z1,A);
+
+theorem :: COMPLSP1:90
+ z in Ball(A,r) iff dist(z,A) < r;
+
+theorem :: COMPLSP1:91
+ 0 < r & x in A implies x in Ball(A,r);
+
+theorem :: COMPLSP1:92
+ 0 < r implies A c= Ball(A,r);
+
+theorem :: COMPLSP1:93
+ A <> {} implies Ball(A,r1) is open;
+
+definition let n,A,B;
+ func dist(A,B) -> Real means
+:: COMPLSP1:def 20
+ for X being Subset of REAL st X = {|.x - z.| : x in A & z in B}
+        holds it = lower_bound X;
+end;
+
+definition let X,Y be Subset of REAL;
+ func X + Y -> Subset of REAL equals
+:: COMPLSP1:def 21
+  { r + r1 : r in X & r1 in Y};
+end;
+
+theorem :: COMPLSP1:94
+ for X,Y being Subset of REAL holds
+ X <> {} & Y <> {} implies X + Y <> {};
+
+theorem :: COMPLSP1:95
+ for X,Y being Subset of REAL holds
+   X is bounded_below & Y is bounded_below
+ implies X+Y is bounded_below;
+
+theorem :: COMPLSP1:96
+ for X,Y being Subset of REAL
+   st X <> {} & X is bounded_below & Y <> {} & Y is bounded_below
+  holds lower_bound (X + Y) = lower_bound X + lower_bound Y;
+
+theorem :: COMPLSP1:97
+ for X,Y being Subset of REAL st
+  Y is bounded_below & X <> {} & for r st r in X ex r1 st r1 in Y & r1 <= r
+ holds lower_bound X >= lower_bound Y;
+
+theorem :: COMPLSP1:98
+ A <> {} & B <> {} implies dist(A,B) >= 0;
+
+theorem :: COMPLSP1:99
+   dist(A,B) = dist(B,A);
+
+theorem :: COMPLSP1:100
+A <> {} & B <> {} implies dist(x,A) + dist(x,B) >= dist(A,B);
+
+theorem :: COMPLSP1:101
+   A meets B implies dist(A,B) = 0;
+
+definition let n;
+ func ComplexOpenSets(n) -> Subset-Family of COMPLEX n equals
+:: COMPLSP1:def 22
+  {A where A is Element of bool COMPLEX n: A is open};
+end;
+
+theorem :: COMPLSP1:102
+ for A being Element of bool COMPLEX n holds
+   A in ComplexOpenSets n iff A is open;
+
+definition let A be non empty set, t be Subset-Family of A;
+ cluster TopStruct(#A,t#) -> non empty;
+end;
+
+definition let n;
+ func the_Complex_Space n -> strict TopSpace equals
+:: COMPLSP1:def 23
+   TopStruct(#COMPLEX n,ComplexOpenSets(n)#);
+end;
+
+definition let n;
+ cluster the_Complex_Space n -> non empty;
+end;
+
+theorem :: COMPLSP1:103
+  the topology of the_Complex_Space n = ComplexOpenSets n;
+
+theorem :: COMPLSP1:104
+  the carrier of the_Complex_Space n = COMPLEX n;
+
+reserve p,q for Point of the_Complex_Space n,
+        V for Subset of the_Complex_Space n;
+
+theorem :: COMPLSP1:105
+   p is Element of COMPLEX n;
+
+canceled 2;
+
+theorem :: COMPLSP1:108
+   for A being Subset of COMPLEX n st A = V holds
+    A is open iff V is open;
+
+theorem :: COMPLSP1:109
+  for A being Subset of COMPLEX n holds
+    A is closed iff A` is open;
+
+theorem :: COMPLSP1:110
+   for A being Subset of COMPLEX n st A = V holds
+    A is closed iff V is closed;
+
+theorem :: COMPLSP1:111
+     the_Complex_Space n is_T2;
+
+theorem :: COMPLSP1:112
+     the_Complex_Space n is_T3;

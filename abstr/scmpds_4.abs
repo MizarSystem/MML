@@ -1,0 +1,594 @@
+:: The Construction and shiftability of Program Blocks for SCMPDS
+::  by JingChao Chen
+::
+:: Received June 15, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_3, CAT_1, AMI_1, SCMPDS_2, SCMFSA_7, SCMPDS_3, RELAT_1,
+      FINSET_1, FUNCT_1, CARD_1, TARSKI, AMI_5, BOOLE, RELOC, FUNCT_4, INT_1,
+      SCMFSA6A, AMI_2, FUNCT_7, SCMPDS_1, ABSVALUE, NAT_1, ARYTM_1, SCMFSA6B,
+      FUNCOP_1, SCMPDS_4;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      RELAT_1, FUNCT_1, FUNCT_4, INT_1, NAT_1, CQC_LANG, FINSET_1, STRUCT_0,
+      AMI_1, AMI_2, AMI_3, AMI_5, FUNCT_7, SCMPDS_1, SCMPDS_2, GROUP_1,
+      SCMFSA_4, SCMPDS_3, CARD_1;
+ constructors DOMAIN_1, NAT_1, AMI_5, FUNCT_7, SCMPDS_1, SCMFSA_4, SCMPDS_3,
+      WELLORD2, MEMBERED;
+ clusters AMI_1, INT_1, FUNCT_1, RELSET_1, XBOOLE_0, SCMPDS_2, FUNCT_7,
+      PRELAMB, SCMFSA_4, SCMPDS_3, FRAENKEL, XREAL_0, MEMBERED, NUMBERS,
+      ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Definition of a program block and its basic properties
+
+definition
+  mode Program-block is initial programmed FinPartState of SCMPDS;
+end;
+
+reserve l, m, n for Nat,
+        i,j,k for Instruction of SCMPDS,
+        I,J,K for Program-block;
+
+definition let i;
+ func Load i -> Program-block equals
+:: SCMPDS_4:def 1
+ (inspos 0).--> i;
+end;
+
+definition let i;
+ cluster Load i -> non empty;
+end;
+
+theorem :: SCMPDS_4:1   ::SCMFSA6A=SCMPDS_4,Th15
+ for P being Program-block, n holds
+  n < card P iff inspos n in dom P;
+
+definition let I be initial FinPartState of SCMPDS;
+ cluster ProgramPart I -> initial;
+end;
+
+theorem :: SCMPDS_4:2    ::S6A02,Th16
+ dom I misses dom Shift(J,card I);
+
+theorem :: SCMPDS_4:3     :: S6A03,Th17
+for I being programmed FinPartState of SCMPDS
+ holds card Shift(I,m) = card I;
+
+theorem :: SCMPDS_4:4    :: S6A04,Th20
+for I,J being FinPartState of SCMPDS holds
+ ProgramPart(I +* J) = ProgramPart I +* ProgramPart J;
+
+theorem :: SCMPDS_4:5    ::Th21
+  for I,J being FinPartState of SCMPDS holds
+ Shift(ProgramPart(I +* J),n) =
+    Shift(ProgramPart I,n) +* Shift(ProgramPart J,n);
+
+reserve a,b,c for Int_position,
+        s,s1,s2 for State of SCMPDS,
+        k1,k2 for Integer;
+
+definition let I;
+ func Initialized I -> FinPartState of SCMPDS equals
+:: SCMPDS_4:def 2
+ I +* Start-At(inspos 0);
+end;
+
+theorem :: SCMPDS_4:6    ::S6A06,Th23
+ InsCode i in {0,1,4,5,6} or Exec(i,s).IC SCMPDS = Next IC s;
+
+theorem :: SCMPDS_4:7    :: Th24 SF_65
+ IC SCMPDS in dom Initialized I;
+
+theorem :: SCMPDS_4:8    :: S6A08
+   IC Initialized I = inspos 0;
+
+theorem :: SCMPDS_4:9    :: Th26
+ I c= Initialized I;
+
+canceled;
+
+theorem :: SCMPDS_4:11   :: Th28
+ for s1,s2 being State of SCMPDS
+   st IC s1 = IC s2 & for a being Int_position holds s1.a = s2.a
+  holds s1,s2 equal_outside the Instruction-Locations of SCMPDS;
+
+canceled;
+
+theorem :: SCMPDS_4:13   :: Th30
+ s1,s2 equal_outside the Instruction-Locations of SCMPDS implies
+  for a being Int_position holds s1.a = s2.a;
+
+theorem :: SCMPDS_4:14   :: Lm1
+    s1,s2 equal_outside the Instruction-Locations of SCMPDS implies
+     s1.DataLoc(s1.a,k1)=s2.DataLoc(s2.a,k1);
+
+theorem :: SCMPDS_4:15    ::Th32
+ s1,s2 equal_outside the Instruction-Locations of SCMPDS implies
+  Exec(i,s1),Exec(i,s2) equal_outside the Instruction-Locations of SCMPDS;
+
+theorem :: SCMPDS_4:16
+   (Initialized I)|the Instruction-Locations of SCMPDS = I;
+
+theorem :: SCMPDS_4:17    :: SF2_16
+ for k1,k2 be Nat st k1 <> k2 holds DataLoc(k1,0) <> DataLoc(k2,0);
+
+theorem :: SCMPDS_4:18   :: SF2_19:
+ for dl being Int_position ex i being Nat
+  st dl = DataLoc(i,0);
+
+scheme SCMPDSEx{ F(set) -> Instruction of SCMPDS,
+                 G(set) -> Integer,
+                 I() -> Instruction-Location of SCMPDS }:
+ ex S being State of SCMPDS st IC S = I() &
+  for i being Nat holds
+    S.inspos i = F(i) & S.DataLoc(i,0) = G(i);
+
+theorem :: SCMPDS_4:19    :: Th34
+  for s being State of SCMPDS holds
+     dom s = {IC SCMPDS} \/ SCM-Data-Loc \/
+         the Instruction-Locations of SCMPDS;
+
+theorem :: SCMPDS_4:20    :: T12'
+   for s being State of SCMPDS, x being set st x in dom s holds
+     x is Int_position or x = IC SCMPDS or
+     x is Instruction-Location of SCMPDS;
+
+theorem :: SCMPDS_4:21     :: T29
+   for s1,s2 being State of SCMPDS holds
+     (for l being Instruction-Location of SCMPDS holds s1.l = s2.l)
+ iff s1 | the Instruction-Locations of SCMPDS =
+     s2 | the Instruction-Locations of SCMPDS;
+
+theorem :: SCMPDS_4:22  :: T32
+   for i being Instruction-Location of SCMPDS holds
+     not i in SCM-Data-Loc;
+
+theorem :: SCMPDS_4:23     :: Th38
+ for s1,s2 being State of SCMPDS holds
+     (for a being Int_position holds s1.a = s2.a)
+ iff s1 | SCM-Data-Loc = s2 | SCM-Data-Loc;
+
+theorem :: SCMPDS_4:24     :: T19
+   for s1,s2 being State of SCMPDS st
+     s1,s2 equal_outside the Instruction-Locations of SCMPDS holds
+     s1 | SCM-Data-Loc = s2 | SCM-Data-Loc;
+
+theorem :: SCMPDS_4:25     :: T21
+   for s,ss being State of SCMPDS, A being set holds
+     (ss +* s | A) | A = s | A;
+
+theorem :: SCMPDS_4:26    :: T18
+   for I,J being Program-block holds
+     I,J equal_outside the Instruction-Locations of SCMPDS;
+
+theorem :: SCMPDS_4:27    :: Th43
+ for I being Program-block holds
+     dom Initialized I = dom I \/ {IC SCMPDS};
+
+theorem :: SCMPDS_4:28    :: Th44
+ for I being Program-block, x being set st x in dom Initialized I holds
+     x in dom I or x = IC SCMPDS;
+
+theorem :: SCMPDS_4:29     :: Th46
+ for I being Program-block holds
+     (Initialized I).IC SCMPDS = inspos 0;
+
+theorem :: SCMPDS_4:30   :: Th47
+  for I being Program-block holds not IC SCMPDS in dom I;
+
+theorem :: SCMPDS_4:31   :: Th48
+ for I being Program-block, a being Int_position holds
+     not a in dom Initialized I;
+
+reserve x for set;
+
+theorem :: SCMPDS_4:32    ::TN32
+ x in dom I implies I.x = (I +* Start-At inspos n).x;
+
+theorem :: SCMPDS_4:33   :: Th50
+ for I being Program-block, x being set st x in dom I holds
+     I.x = (Initialized I).x;
+
+theorem :: SCMPDS_4:34    :: Th51
+ for I,J being Program-block
+ for s being State of SCMPDS st Initialized J c= s holds
+     s +* Initialized I = s +* I;
+
+theorem :: SCMPDS_4:35
+   for I,J being Program-block
+ for s being State of SCMPDS st Initialized J c= s holds
+     Initialized I c= s +* I;
+
+theorem :: SCMPDS_4:36
+   for I,J being Program-block
+ for s being State of SCMPDS holds
+     s +* Initialized I, s +* Initialized J
+         equal_outside the Instruction-Locations of SCMPDS;
+
+begin :: Combining two consecutive blocks into one program block
+
+definition let I,J be Program-block;
+ func I ';' J -> Program-block equals
+:: SCMPDS_4:def 3
+  I +* Shift(J, card I);
+end;
+
+theorem :: SCMPDS_4:37
+ for I,J being Program-block, l being Instruction-Location of SCMPDS
+  st l in dom I holds (I ';' J).l = I.l;
+
+theorem :: SCMPDS_4:38
+ for I,J being Program-block, l being Instruction-Location of SCMPDS
+  st l in dom J holds (I ';' J).(l+card I)= J.l;
+
+theorem :: SCMPDS_4:39    :: Th56
+ for I,J being Program-block holds
+     dom I c= dom (I ';' J);
+
+theorem :: SCMPDS_4:40
+   for I,J being Program-block holds
+     I c= I ';' J;
+
+theorem :: SCMPDS_4:41
+   for I,J being Program-block holds
+     I +* (I ';' J) = (I ';' J);
+
+theorem :: SCMPDS_4:42
+   for I,J being Program-block holds
+     Initialized I +* (I ';' J) = Initialized (I ';' J);
+
+begin :: Combining a block and a instruction into one program block
+
+definition let i, J;
+ func i ';' J -> Program-block equals
+:: SCMPDS_4:def 4
+  Load i ';' J;
+end;
+
+definition let I, j;
+ func I ';' j -> Program-block equals
+:: SCMPDS_4:def 5
+  I ';' Load j;
+end;
+
+definition let i,j;
+ func i ';' j -> Program-block equals
+:: SCMPDS_4:def 6
+  Load i ';' Load j;
+end;
+
+theorem :: SCMPDS_4:43   :: Th59
+ i ';' j = Load i ';' j;
+
+theorem :: SCMPDS_4:44    :: Th60
+  i ';' j = i ';' Load j;
+
+theorem :: SCMPDS_4:45    :: Th61
+ card(I ';' J) = card I + card J;
+
+theorem :: SCMPDS_4:46   :: Th62
+ I ';' J ';' K = I ';' (J ';' K);
+
+theorem :: SCMPDS_4:47   :: Th63
+ I ';' J ';' k = I ';' (J ';' k);
+
+theorem :: SCMPDS_4:48
+   I ';' j ';' K = I ';' (j ';' K);
+
+theorem :: SCMPDS_4:49
+   I ';' j ';' k = I ';' (j ';' k);
+
+theorem :: SCMPDS_4:50   :: Th66
+ i ';' J ';' K = i ';' (J ';' K);
+
+theorem :: SCMPDS_4:51
+   i ';' J ';' k = i ';' (J ';' k);
+
+theorem :: SCMPDS_4:52    :: Th68
+ i ';' j ';' K = i ';' (j ';' K);
+
+theorem :: SCMPDS_4:53
+   i ';' j ';' k = i ';' (j ';' k);
+
+theorem :: SCMPDS_4:54    :: SFM Th64:
+  dom I misses dom Start-At inspos n;
+
+theorem :: SCMPDS_4:55   :: TN55
+   Start-At inspos 0 c= Initialized I;
+
+theorem :: SCMPDS_4:56   ::TN56
+ I +* Start-At inspos n c= s implies I c= s;
+
+theorem :: SCMPDS_4:57    ::S6B_5
+   Initialized I c= s implies I c= s;
+
+theorem :: SCMPDS_4:58   ::TN58
+ (I +* Start-At inspos n)|the Instruction-Locations of SCMPDS = I;
+
+ reserve l,l1,loc for Instruction-Location of SCMPDS;
+
+theorem :: SCMPDS_4:59    ::TN59
+ not a in dom Start-At l;
+
+theorem :: SCMPDS_4:60
+   not l1 in dom Start-At l;
+
+theorem :: SCMPDS_4:61     ::TN61
+   not a in dom (I+*Start-At l);
+
+theorem :: SCMPDS_4:62    ::TN62
+   s+*I+*Start-At inspos 0 = s+*Start-At inspos 0+*I;
+
+definition
+ let s be State of SCMPDS, li be Int_position, k be Integer;
+ redefine func s+*(li,k) -> State of SCMPDS;
+end;
+
+begin :: The notions of paraclosed,parahalting and their basic properties
+
+definition let I be Program-block;
+ func stop(I) -> Program-block equals
+:: SCMPDS_4:def 7
+  I ';' SCMPDS-Stop;
+end;
+
+definition let I be Program-block, s be State of SCMPDS;
+ func IExec(I,s) -> State of SCMPDS equals
+:: SCMPDS_4:def 8
+      Result(s+*Initialized stop(I))
+    +* s|the Instruction-Locations of SCMPDS;
+end;
+
+definition let I be Program-block;
+ attr I is paraclosed means
+:: SCMPDS_4:def 9
+ for s being State of SCMPDS, n being Nat
+    st Initialized stop(I) c= s
+   holds IC (Computation s).n in dom stop(I);
+
+ attr I is parahalting means
+:: SCMPDS_4:def 10
+ Initialized stop(I) is halting;
+end;
+
+definition
+ cluster parahalting Program-block;
+end;
+
+theorem :: SCMPDS_4:63     ::TN63
+ for I being parahalting Program-block
+   st Initialized stop I c= s holds s is halting;
+
+definition let I be parahalting Program-block;
+ cluster Initialized stop(I) -> halting;
+end;
+
+definition
+ let la,lb be Instruction-Location of SCMPDS;
+ let a, b be Instruction of SCMPDS;
+ redefine func (la,lb) --> (a,b) -> FinPartState of SCMPDS;
+end;
+
+canceled;
+
+theorem :: SCMPDS_4:65
+    IC s <> Next IC s;
+
+theorem :: SCMPDS_4:66     ::TN66
+ s2 +*((IC s2,Next IC s2) --> (goto 1, goto -1)) is not halting;
+
+theorem :: SCMPDS_4:67    ::Th21
+ s1,s2 equal_outside the Instruction-Locations of SCMPDS &
+  I c= s1 & I c= s2 &
+  (for m st m < n holds IC ((Computation s2).m) in dom I)
+ implies
+ for m st m <= n holds
+  (Computation s1).m, (Computation s2 ).m equal_outside
+     the Instruction-Locations of SCMPDS;
+
+theorem :: SCMPDS_4:68
+ for s being State of SCMPDS,l being Instruction-Location of SCMPDS
+  holds l in dom s;
+
+reserve l1,l2 for Instruction-Location of SCMPDS,
+         i1,i2 for Instruction of SCMPDS;
+
+theorem :: SCMPDS_4:69
+    s +*((l1,l2) --> (i1, i2)) = s +* (l1,i1) +* (l2,i2);
+
+theorem :: SCMPDS_4:70
+ Next inspos n = inspos(n+1);
+
+theorem :: SCMPDS_4:71
+    not IC s in dom I implies not Next IC s in dom I;
+
+definition
+ cluster parahalting -> paraclosed Program-block;
+end;
+
+theorem :: SCMPDS_4:72    :: SCMFSA8A_15
+     dom SCMPDS-Stop = {inspos 0};
+
+theorem :: SCMPDS_4:73    ::S8A_16
+    inspos 0 in dom SCMPDS-Stop & SCMPDS-Stop.inspos 0 = halt SCMPDS;
+
+theorem :: SCMPDS_4:74
+     card SCMPDS-Stop = 1;
+
+theorem :: SCMPDS_4:75  ::Th26 T9
+ inspos 0 in dom stop (I);
+
+theorem :: SCMPDS_4:76
+ for p being programmed FinPartState of SCMPDS,k being Nat,
+ il be Instruction-Location of SCMPDS st il in dom p holds
+ il+k in dom Shift(p,k);
+
+begin :: Shiftability of program blocks and instructions
+
+definition
+ let i be Instruction of SCMPDS;
+ let n be Nat;
+ pred i valid_at n means
+:: SCMPDS_4:def 11
+  (InsCode i= 0 implies ex k1 st i = goto k1 & n+k1 >= 0) &
+   (InsCode i= 4 implies ex a,k1,k2 st i = (a,k1)<>0_goto k2 & n+k2 >= 0 ) &
+   (InsCode i= 5 implies ex a,k1,k2 st i = (a,k1)<=0_goto k2 & n+k2 >= 0 ) &
+   (InsCode i= 6 implies ex a,k1,k2 st i = (a,k1)>=0_goto k2 & n+k2 >= 0);
+end;
+
+reserve l for Nat;
+
+theorem :: SCMPDS_4:77
+  for i be Instruction of SCMPDS,m,n be Nat st i valid_at m & m <= n
+ holds i valid_at n;
+
+definition let IT be FinPartState of SCMPDS;
+ attr IT is shiftable means
+:: SCMPDS_4:def 12
+ for n,i st inspos n in dom IT & i=IT.(inspos n) holds
+      InsCode i <> 1 & InsCode i <> 3 &   :: return  and save
+      i valid_at n;
+end;
+
+definition
+ cluster parahalting shiftable Program-block;
+end;
+
+definition let i be Instruction of SCMPDS;
+ attr i is shiftable means
+:: SCMPDS_4:def 13
+ InsCode i = 2 or InsCode i > 6;
+end;
+
+definition
+ cluster shiftable Instruction of SCMPDS;
+end;
+
+definition
+ let a,k1;
+ cluster a := k1 -> shiftable;
+end;
+
+definition
+ let a,k1,k2;
+ cluster (a,k1) := k2 -> shiftable;
+end;
+
+definition
+ let a,k1,k2;
+ cluster AddTo(a,k1,k2) -> shiftable;
+end;
+
+definition
+ let a,b,k1,k2;
+ cluster AddTo(a,k1,b,k2) -> shiftable;
+
+cluster SubFrom(a,k1,b,k2) -> shiftable;
+
+cluster MultBy(a,k1,b,k2) -> shiftable;
+
+cluster Divide(a,k1,b,k2) -> shiftable;
+
+cluster (a,k1) := (b,k2) -> shiftable;
+end;
+
+definition
+ let I,J be shiftable Program-block;
+ cluster I ';' J -> shiftable;
+end;
+
+definition
+ let i be shiftable Instruction of SCMPDS;
+ cluster Load i -> shiftable;
+end;
+
+definition
+  let i be shiftable Instruction of SCMPDS,
+      J be shiftable Program-block;
+ cluster i ';' J -> shiftable;
+end;
+
+definition
+ let I be shiftable Program-block,
+     j be shiftable Instruction of SCMPDS;
+ cluster I ';' j -> shiftable;
+end;
+
+definition
+ let i,j be shiftable Instruction of SCMPDS;
+ cluster i ';' j -> shiftable;
+end;
+
+definition
+ cluster SCMPDS-Stop -> parahalting shiftable;
+end;
+
+definition
+ let I be shiftable Program-block;
+ cluster stop I -> shiftable;
+end;
+
+theorem :: SCMPDS_4:78
+    for I being shiftable Program-block,k1 be Integer st
+  card I + k1 >= 0 holds I ';' goto k1 is shiftable;
+
+definition
+ let n be Nat;
+ cluster Load goto n -> shiftable;
+end;
+
+theorem :: SCMPDS_4:79
+    for I being shiftable Program-block,k1,k2 be Integer,a be Int_position st
+  card I + k2 >= 0 holds I ';' (a,k1)<>0_goto k2 is shiftable;
+
+definition
+  let k1 be Integer,a be Int_position,n be Nat;
+  cluster Load (a,k1)<>0_goto n -> shiftable;
+end;
+
+theorem :: SCMPDS_4:80
+    for I being shiftable Program-block,k1,k2 be Integer,a be Int_position st
+  card I + k2 >= 0 holds I ';' (a,k1)<=0_goto k2 is shiftable;
+
+definition
+  let k1 be Integer,a be Int_position,n be Nat;
+  cluster Load (a,k1)<=0_goto n -> shiftable;
+end;
+
+theorem :: SCMPDS_4:81
+    for I being shiftable Program-block,k1,k2 be Integer,a be Int_position st
+  card I + k2 >= 0 holds I ';' (a,k1)>=0_goto k2 is shiftable;
+
+definition
+  let k1 be Integer,a be Int_position,n be Nat;
+  cluster Load (a,k1)>=0_goto n -> shiftable;
+end;
+
+theorem :: SCMPDS_4:82
+ for s1,s2 being State of SCMPDS, n,m being Nat,k1 be Integer st
+     IC s1=inspos m & m+k1>=0 & IC s1 + n = IC s2
+holds ICplusConst(s1,k1) +n = ICplusConst(s2,k1);
+
+theorem :: SCMPDS_4:83   ::S6A_41
+ for s1,s2 being State of SCMPDS, n,m being Nat,
+     i being Instruction of SCMPDS holds
+     IC s1=inspos m & i valid_at m & InsCode i <> 1 & InsCode i <> 3 &
+     IC s1 + n = IC s2 &
+     s1 | SCM-Data-Loc = s2 | SCM-Data-Loc
+ implies
+     IC Exec(i,s1) + n = IC Exec(i,s2) &
+     Exec(i,s1) | SCM-Data-Loc = Exec(i,s2) | SCM-Data-Loc;
+
+theorem :: SCMPDS_4:84  ::Th27 T0
+   for J being parahalting shiftable Program-block st Initialized stop J c= s1
+ for n being Nat st Shift(stop J,n) c= s2 &
+   IC s2 = inspos n &
+   s1 | SCM-Data-Loc = s2 | SCM-Data-Loc
+   for i being Nat holds
+     IC (Computation s1).i + n = IC (Computation s2).i &
+     CurInstr ((Computation s1).i) = CurInstr ((Computation s2).i) &
+     (Computation s1).i | SCM-Data-Loc = (Computation s2).i | SCM-Data-Loc;
+

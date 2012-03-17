@@ -1,0 +1,1586 @@
+:: Indexed Category
+::  by Grzegorz Bancerek
+::
+:: Received June 8, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary MATRIX_1, PBOOLE, ZF_REFLE, FUNCT_1, CAT_5, CAT_1, MCART_1,
+      COMMACAT, GRCAT_1, RELAT_1, BOOLE, FUNCOP_1, PRALG_1, FRAENKEL, PARTFUN1,
+      OPPCAT_1, GROUP_6, CAT_2, FUNCT_3, INDEX_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, FUNCT_1,
+      FUNCT_2, PARTFUN1, PBOOLE, FRAENKEL, MSUALG_1, PRALG_1, DTCONSTR, CAT_1,
+      CAT_2, OPPCAT_1, COMMACAT, PRE_CIRC, CAT_5;
+ constructors MSUALG_3, PRE_CIRC, OPPCAT_1, CAT_5, ISOCAT_1, DOMAIN_1;
+ clusters FUNCT_1, RELSET_1, PRVECT_1, CAT_2, PBOOLE, PRALG_1, CAT_5, FUNCOP_1,
+      CIRCCOMB, RELAT_1;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, FRAENKEL, UNIALG_1, PBOOLE, PRALG_1, CAT_5;
+ theorems MCART_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, PARTFUN1, FUNCT_4,
+      DTCONSTR, CAT_1, CAT_2, OPPCAT_1, ISOCAT_1, COMMACAT, CAT_5, PBOOLE,
+      RELSET_1;
+ schemes ZFREFLE1, MSUALG_1, CAT_5;
+
+begin :: Category Yielding Functions
+
+definition let A be non empty set;
+ cluster non empty-yielding ManySortedSet of A;
+  existence
+   proof consider f being non-empty ManySortedSet of A;
+    take f; consider a being Element of A;
+    take a; thus a in A & f.a is not empty;
+   end;
+end;
+
+definition let A be non empty set;
+ cluster non-empty -> non empty-yielding ManySortedSet of A;
+  coherence
+   proof let f be ManySortedSet of A; assume
+     A1: f is non-empty;
+    consider a being Element of A;
+    take a; thus a in A & f.a is not empty by A1,PBOOLE:def 16;
+   end;
+end;
+
+definition
+ let C be Categorial Category;
+ let f be Morphism of C;
+ redefine func f`2 -> Functor of f`11, f`12;
+ coherence
+  proof
+      f`11 = cat f`11 & f`12 = cat f`12 & dom f = f`11 & cod f = f`12
+     by CAT_5:2,def 7;
+   hence f`2 is Functor of f`11, f`12;
+  end;
+end;
+
+theorem
+   for C being Categorial Category, f,g being Morphism of C st
+   dom g = cod f holds g*f = [[dom f, cod g], g`2*f`2]
+ proof let C be Categorial Category;
+  let f,g be Morphism of C; assume
+A1: dom g = cod f;
+A2: g`11 = dom g & g`12 = cod g & f`11 = dom f & f`12 = cod f by CAT_5:13;
+  then consider gg being Functor of g`11, g`12 such that
+A3: g = [[dom g, cod g], gg] by CAT_5:def 6;
+  consider ff being Functor of f`11, g`11 such that
+A4: f = [[dom f, cod f], ff] by A1,A2,CAT_5:def 6;
+  thus g*f = [[dom f, cod g], gg*ff] by A1,A2,A3,A4,CAT_5:def 6
+   .= [[dom f, cod g], gg*f`2] by A4,MCART_1:7
+   .= [[dom f, cod g], g`2*f`2] by A3,MCART_1:7;
+ end;
+
+theorem Th2:
+ for C being Category, D,E being Categorial Category
+ for F being Functor of C,D for G being Functor of C,E
+   st F = G holds Obj F = Obj G
+  proof let C be Category, D,E be Categorial Category;
+   let F be Functor of C,D; let G be Functor of C,E such that
+A1:  F = G;
+A2:  dom Obj F = the Objects of C & dom Obj G = the Objects of C by FUNCT_2:def
+1;
+      now let x be set; assume x in the Objects of C;
+     then reconsider a = x as Object of C;
+A3:    a = dom id a by CAT_1:44;
+     hence (Obj F).x = dom (F.(id a qua Morphism of C)) by CAT_1:105
+                   .= (F.(id a qua Morphism of C))`11 by CAT_5:13
+                   .= dom (G.(id a qua Morphism of C)) by A1,CAT_5:13
+                   .= (Obj G).x by A3,CAT_1:105;
+    end;
+   hence Obj F = Obj G by A2,FUNCT_1:9;
+  end;
+
+definition let IT be Function;
+ attr IT is Category-yielding means:
+Def1:
+  for x being set st x in dom IT holds IT.x is Category;
+end;
+
+definition
+ cluster Category-yielding Function;
+ existence
+  proof take f = {} --> 1Cat(0,1);
+   let x be set; assume x in dom f; hence thesis by FUNCOP_1:19;
+  end;
+end;
+
+definition let X be set;
+ cluster Category-yielding ManySortedSet of X;
+ existence
+  proof take f = X --> 1Cat(0,1);
+   let x be set; assume x in dom f;
+    then x in X by FUNCOP_1:19;
+   hence thesis by FUNCOP_1:13;
+  end;
+end;
+
+definition let A be set;
+ mode ManySortedCategory of A is Category-yielding ManySortedSet of A;
+end;
+
+definition let C be Category;
+ mode ManySortedSet of C is ManySortedSet of the Objects of C;
+ mode ManySortedCategory of C is ManySortedCategory of the Objects of C;
+end;
+
+definition let X be set, x be Category;
+ cluster X --> x -> Category-yielding;
+  coherence
+   proof let a be set; assume a in dom (X --> x);
+     then a in X by FUNCOP_1:19; hence thesis by FUNCOP_1:13;
+   end;
+end;
+
+definition let X be non empty set;
+ cluster -> non empty ManySortedSet of X;
+  coherence
+   proof let f be ManySortedSet of X;
+    consider x be Element of X;
+       dom f = X by PBOOLE:def 3;
+     then [x,f.x] in f by FUNCT_1:def 4;
+    hence f is non empty;
+   end;
+end;
+
+definition
+ let f be Category-yielding Function;
+ cluster rng f -> categorial;
+  coherence
+   proof let x be set; assume x in rng f;
+     then ex y being set st y in dom f & x = f.y by FUNCT_1:def 5;
+    hence x is Category by Def1;
+   end;
+end;
+
+definition let X be non empty set;
+ let f be ManySortedCategory of X;
+ let x be Element of X;
+ redefine func f.x -> Category;
+  coherence
+   proof dom f = X by PBOOLE:def 3;
+    hence thesis by Def1;
+   end;
+end;
+
+definition
+ let f be Function;
+ let g be Category-yielding Function;
+ cluster g*f -> Category-yielding;
+  coherence
+   proof let x be set; assume x in dom (g*f);
+     then (g*f).x = g.(f.x) & f.x in dom g by FUNCT_1:21,22;
+    hence (g*f).x is Category by Def1;
+   end;
+end;
+
+:: Objects and Morphisms
+
+definition let F be Category-yielding Function;
+ func Objs F -> non-empty Function means:
+Def2:
+  dom it = dom F &
+  for x being set st x in dom F
+   for C being Category st C = F.x holds it.x = the Objects of C;
+ existence
+  proof
+defpred P[set,set] means
+for C being Category st C = F.$1 holds $2 = the Objects of C;
+A1:  now let x be set; assume x in dom F;
+     then reconsider C = F.x as Category by Def1;
+     reconsider y = the Objects of C as set;
+     take y;
+     thus P[x,y];
+    end;
+   consider f being Function such that
+A2:  dom f = dom F &
+    for x being set st x in dom F holds P[x,f.x]
+      from NonUniqFuncEx(A1);
+      f is non-empty
+     proof let x be set; assume
+A3:     x in dom f;
+      then reconsider C = F.x as Category by A2,Def1;
+         f.x = the Objects of C by A2,A3;
+      hence thesis;
+     end;
+   hence thesis by A2;
+  end;
+ uniqueness
+  proof let f1, f2 be non-empty Function such that
+A4: dom f1 = dom F and
+A5: for x being set st x in dom F
+     for C being Category st C = F.x holds f1.x = the Objects of C and
+A6: dom f2 = dom F and
+A7: for x being set st x in dom F
+     for C being Category st C = F.x holds f2.x = the Objects of C;
+      now let x be set; assume
+A8:    x in dom F;
+     then reconsider C = F.x as Category by Def1;
+     thus f1.x = the Objects of C by A5,A8 .= f2.x by A7,A8;
+    end;
+   hence thesis by A4,A6,FUNCT_1:9;
+  end;
+
+ func Mphs F -> non-empty Function means:
+Def3:
+  dom it = dom F &
+  for x being set st x in dom F
+   for C being Category st C = F.x holds it.x = the Morphisms of C;
+ existence
+  proof
+    defpred P[set,set] means
+    for C being Category st C = F.$1 holds $2 = the Morphisms of C;
+A9:  now let x be set; assume x in dom F;
+     then reconsider C = F.x as Category by Def1;
+     reconsider y = the Morphisms of C as set;
+     take y;
+     thus P[x,y];
+    end;
+   consider f being Function such that
+A10:  dom f = dom F &
+    for x being set st x in dom F holds P[x,f.x]
+      from NonUniqFuncEx(A9);
+      f is non-empty
+     proof let x be set; assume
+A11:     x in dom f;
+      then reconsider C = F.x as Category by A10,Def1;
+         f.x = the Morphisms of C by A10,A11;
+      hence thesis;
+     end;
+   hence thesis by A10;
+  end;
+ uniqueness
+  proof let f1, f2 be non-empty Function such that
+A12: dom f1 = dom F and
+A13: for x being set st x in dom F
+     for C being Category st C = F.x holds f1.x = the Morphisms of C and
+A14: dom f2 = dom F and
+A15: for x being set st x in dom F
+     for C being Category st C = F.x holds f2.x = the Morphisms of C;
+      now let x be set; assume
+A16:    x in dom F;
+     then reconsider C = F.x as Category by Def1;
+     thus f1.x = the Morphisms of C by A13,A16 .= f2.x by A15,A16;
+    end;
+   hence thesis by A12,A14,FUNCT_1:9;
+  end;
+end;
+
+definition let A be non empty set;
+ let F be ManySortedCategory of A;
+ redefine
+  func Objs F -> non-empty ManySortedSet of A;
+ coherence
+  proof dom Objs F = dom F by Def2 .= A by PBOOLE:def 3; hence thesis by PBOOLE
+:def 3;
+  end;
+  func Mphs F -> non-empty ManySortedSet of A;
+ coherence
+  proof dom Mphs F = dom F by Def3 .= A by PBOOLE:def 3; hence thesis by PBOOLE
+:def 3;
+  end;
+end;
+
+theorem
+   for X being set, C being Category holds
+  Objs (X --> C) = X --> the Objects of C &
+  Mphs (X --> C) = X --> the Morphisms of C
+  proof let X be set, C be Category;
+A1:  dom Objs (X --> C) = dom (X --> C) & dom Mphs (X --> C) = dom (X --> C) &
+    dom (X --> C) = X by Def2,Def3,FUNCOP_1:19;
+      now let a be set; assume
+A2:    a in dom Objs (X --> C);
+      then (X --> C).a = C by A1,FUNCOP_1:13;
+     hence (Objs (X --> C)).a = the Objects of C by A1,A2,Def2;
+    end;
+   hence Objs (X --> C) = X --> the Objects of C by A1,FUNCOP_1:17;
+      now let a be set; assume
+A3:    a in dom Mphs (X --> C);
+      then (X --> C).a = C by A1,FUNCOP_1:13;
+     hence (Mphs (X --> C)).a = the Morphisms of C by A1,A3,Def3;
+    end;
+   hence thesis by A1,FUNCOP_1:17;
+  end;
+
+begin :: Pairs of Many Sorted Sets
+
+definition let A,B be set;
+ mode ManySortedSet of A,B means:
+Def4:
+  ex f being (ManySortedSet of A), g being ManySortedSet of B st it = [f,g];
+ existence
+  proof consider f being (ManySortedSet of A), g being ManySortedSet of B;
+   take [f,g], f, g; thus thesis;
+  end;
+end;
+
+definition let A,B be set;
+ let f be ManySortedSet of A;
+ let g be ManySortedSet of B;
+ redefine func [f,g] -> ManySortedSet of A,B;
+  coherence proof take f,g; thus thesis; end;
+end;
+
+definition let A, B be set;
+ let X be ManySortedSet of A,B;
+ redefine
+  func X`1 -> ManySortedSet of A;
+  coherence
+   proof consider f being (ManySortedSet of A), g being ManySortedSet of B
+    such that
+A1:   X = [f,g] by Def4;
+     thus thesis by A1,MCART_1:7;
+   end;
+  func X`2 -> ManySortedSet of B;
+  coherence
+   proof consider f being (ManySortedSet of A), g being ManySortedSet of B
+    such that
+A2:   X = [f,g] by Def4;
+     thus thesis by A2,MCART_1:7;
+   end;
+end;
+
+definition let A,B be set;
+ let IT be ManySortedSet of A,B;
+ attr IT is Category-yielding_on_first means:
+Def5:
+  IT`1 is Category-yielding;
+ attr IT is Function-yielding_on_second means:
+Def6:
+  IT`2 is Function-yielding;
+end;
+
+definition let A,B be set;
+ cluster Category-yielding_on_first Function-yielding_on_second
+         ManySortedSet of A,B;
+  existence
+   proof consider f being ManySortedCategory of A;
+    consider g being ManySortedFunction of B;
+    reconsider X = [f,g] as ManySortedSet of A,B;
+    take X; thus X`1 is Category-yielding & X`2 is Function-yielding by MCART_1
+:7;
+   end;
+end;
+
+definition let A, B be set;
+ let X be Category-yielding_on_first ManySortedSet of A,B;
+ redefine func X`1 -> ManySortedCategory of A;
+  coherence by Def5;
+end;
+
+definition let A, B be set;
+ let X be Function-yielding_on_second ManySortedSet of A,B;
+ redefine func X`2 -> ManySortedFunction of B;
+  coherence by Def6;
+end;
+
+definition let f be Function-yielding Function;
+ cluster rng f -> functional;
+  coherence
+   proof let x be set; assume x in rng f;
+     then ex y being set st y in dom f & x = f.y by FUNCT_1:def 5;
+    hence x is Function;
+   end;
+end;
+
+definition let A,B be set;
+ let f be ManySortedCategory of A;
+ let g be ManySortedFunction of B;
+ redefine func [f,g] ->
+  Category-yielding_on_first Function-yielding_on_second ManySortedSet of A,B;
+  coherence
+   proof [f,g]`1 = f & [f,g]`2 = g by MCART_1:7;
+    hence thesis by Def5,Def6;
+   end;
+end;
+
+definition
+ let A be non empty set;
+ let F,G be ManySortedCategory of A;
+ mode ManySortedFunctor of F,G -> ManySortedFunction of A means:
+Def7:
+  for a being Element of A holds it.a is Functor of F.a, G.a;
+  existence
+   proof
+     defpred P[set,set] means
+     ex a' being Element of A, t being Functor of F.a', G.a' st
+       $1 = a' & $2 = t;
+A1:   now let a be set; assume a in A;
+      then reconsider a' = a as Element of A;
+      consider f being Functor of F.a', G.a';
+      reconsider f' = f as set;
+      take f';
+      thus P[a,f'];
+     end;
+    consider f being Function such that
+A2:   dom f = A & for a being set st a in A
+      holds P[a,f.a] from NonUniqFuncEx(A1);
+       f is Function-yielding
+      proof let a be set; assume a in dom f;
+        then ex a' being Element of A, t being Functor of F.a', G.a' st
+         a = a' & f.a = t by A2;
+       hence thesis;
+      end;
+    then reconsider f as ManySortedFunction of A by A2,PBOOLE:def 3;
+    take f; let a be Element of A;
+       ex a' being Element of A, t being Functor of F.a', G.a' st
+      a = a' & f.a = t by A2;
+    hence thesis;
+   end;
+end;
+
+scheme LambdaMSFr
+ {A() -> non empty set, C1, C2() -> ManySortedCategory of A(),
+  F(set) -> set}:
+ ex F being ManySortedFunctor of C1(), C2() st
+  for a being Element of A() holds F.a = F(a)
+ provided
+A1:  for a being Element of A() holds F(a) is Functor of C1().a, C2().a
+  proof
+    deffunc G(set)=F($1);
+    consider f being ManySortedSet of A() such that
+A2:  for a being set st a in A() holds f.a = G(a) from MSSLambda;
+      f is Function-yielding
+     proof let a be set; assume a in dom f;
+      then reconsider a as Element of A() by PBOOLE:def 3;
+         f.a = F(a) by A2;
+      hence thesis by A1;
+     end;
+   then reconsider f as ManySortedFunction of A();
+      f is ManySortedFunctor of C1(), C2()
+     proof let a be Element of A();
+         f.a = F(a) by A2;
+      hence thesis by A1;
+     end;
+   then reconsider f as ManySortedFunctor of C1(), C2();
+   take f; thus thesis by A2;
+  end;
+
+definition
+ let A be non empty set;
+ let F,G be ManySortedCategory of A;
+ let f be ManySortedFunctor of F,G;
+ let a be Element of A;
+ redefine func f.a -> Functor of F.a, G.a;
+  coherence by Def7;
+end;
+
+begin :: Indexing
+
+definition
+ let A,B be non empty set;
+ let F,G be Function of B,A;
+ mode Indexing of F,G -> Category-yielding_on_first ManySortedSet of A,B
+  means:
+Def8:
+   it`2 is ManySortedFunctor of it`1*F, it`1*G;
+  existence
+   proof consider g being ManySortedCategory of A;
+    consider f being ManySortedFunctor of g*F, g*G;
+    take I = [g,f];
+       I`1 = g & I`2 = f by MCART_1:7;
+    hence thesis;
+   end;
+end;
+
+theorem Th4:
+ for A,B being non empty set, F,G being Function of B,A
+  for I being Indexing of F,G
+   for m being Element of B holds I`2.m is Functor of I`1.(F.m), I`1.(G.m)
+  proof let A,B be non empty set, F,G be Function of B,A;
+   let I be Indexing of F,G;
+   let m be Element of B;
+   reconsider H = I`2 as ManySortedFunctor of I`1*F, I`1*G by Def8;
+A1:  H.m is Functor of (I`1*F).m, (I`1*G).m;
+      dom (I`1*F) = B & dom (I`1*G) = B by PBOOLE:def 3;
+    then (I`1*F).m = I`1.(F.m) & (I`1*G).m = I`1.(G.m) by FUNCT_1:22;
+   hence I`2.m is Functor of I`1.(F.m), I`1.(G.m) by A1;
+  end;
+
+theorem Th5:
+ for C being Category, I being Indexing of the Dom of C, the Cod of C
+  for m being Morphism of C holds I`2.m is Functor of I`1.dom m, I`1.cod m
+  proof let C be Category, I be Indexing of the Dom of C, the Cod of C;
+   let m be Morphism of C;
+      dom m = (the Dom of C).m & cod m = (the Cod of C).m by CAT_1:def 2,def 3;
+   hence thesis by Th4;
+  end;
+
+definition
+ let A,B be non empty set;
+ let F,G be Function of B,A;
+ let I be Indexing of F,G;
+ redefine func I`2 -> ManySortedFunctor of I`1*F,I`1*G;
+  coherence by Def8;
+end;
+
+Lm1:
+ now
+  let A,B be non empty set;
+  let F,G be Function of B,A;
+  let I be Indexing of F,G;
+A1: dom I`1 = A by PBOOLE:def 3;
+  consider C being full (strict Categorial Category) such that
+A2: the Objects of C = rng I`1 by CAT_5:20;
+  take C;
+  thus for a be Element of A holds
+    I`1.a is Object of C by A1,A2,FUNCT_1:def 5;
+  let b be Element of B;
+     I`1.(F.b) is Object of C & I`1.(G.b) is Object of C &
+   I`2.b is Functor of I`1.(F.b), I`1.(G.b)
+     by A1,A2,Th4,FUNCT_1:def 5;
+  hence [[I`1.(F.b),I`1.(G.b)],I`2.b] is Morphism of C by CAT_5:def 8;
+ end;
+
+definition
+ let A,B be non empty set;
+ let F,G be Function of B,A;
+ let I be Indexing of F,G;
+ mode TargetCat of I -> Categorial Category means:
+Def9:
+  (for a being Element of A holds I`1.a is Object of it) &
+  (for b being Element of B holds
+       [[I`1.(F.b),I`1.(G.b)],I`2.b] is Morphism of it);
+  existence
+   proof
+       ex C being full (strict Categorial Category) st
+      (for a being Element of A holds I`1.a is Object of C) &
+      (for b being Element of B holds
+        [[I`1.(F.b),I`1.(G.b)],I`2.b] is Morphism of C) by Lm1;
+    hence thesis;
+   end;
+end;
+
+definition
+ let A,B be non empty set;
+ let F,G be Function of B,A;
+ let I be Indexing of F,G;
+ cluster full strict TargetCat of I;
+  existence
+   proof consider C being full (strict Categorial Category) such that
+A1:   (for a being Element of A holds I`1.a is Object of C) &
+      (for b being Element of B holds
+        [[I`1.(F.b),I`1.(G.b)],I`2.b] is Morphism of C) by Lm1;
+       C is TargetCat of I by A1,Def9;
+    hence thesis;
+   end;
+end;
+
+Lm2:
+ now let C be Category;
+     id C = id the Morphisms of C by CAT_1:def 21;
+  hence id C = (id C)* id C by FUNCT_2:23;
+ end;
+
+definition
+    :: This is very technical definition made for having the indexing and
+    :: coindexing as the same mode.
+ let A,B be non empty set;
+ let F,G be Function of B,A;
+ let c be PartFunc of [:B,B:], B;
+ let i be Function of A,B;
+ given C being Category such that
+A1: C = CatStr(#A, B, F, G, c, i#);
+ set I1 = A --> C;
+ set I2 = B --> id C;
+A2: [I1,I2]`1 = I1 & [I1,I2]`2 = I2 by MCART_1:7;
+    I2 is ManySortedFunctor of I1*F, I1*G
+   proof let a be Element of B;
+       I1.(F.a) = C & I1.(G.a) = C & dom (I1*F) = B & dom (I1*G) = B
+      by FUNCOP_1:13,PBOOLE:def 3;
+     then I2.a = id C & (I1*F).a = C & (I1*G).a = C
+      by FUNCOP_1:13,FUNCT_1:22;
+    hence thesis;
+   end;
+ then reconsider I = [I1,I2] as Indexing of F,G by A2,Def8;
+
+ mode Indexing of F, G, c, i -> Indexing of F,G means:
+Def10:
+  (for a being Element of A holds it`2.(i.a) = id (it`1.a)) &
+  for m1, m2 being Element of B st F.m2 = G.m1 holds
+   it`2.(c.[m2,m1]) = (it`2.m2)*(it`2.m1);
+  existence
+   proof take I;
+    hereby let a be Element of A;
+     thus I`2.(i.a) = id C by A2,FUNCOP_1:13 .= id (I`1.a) by A2,FUNCOP_1:13;
+    end;
+    let m1, m2 be Element of B; assume F.m2 = G.m1;
+     then [m2,m1] in dom c by A1,CAT_1:def 8;
+     then c.[m2,m1] in B by PARTFUN1:27;
+     then I`2.(c.[m2,m1]) = id C & I`2.m1 = id C & I`2.m2 = id C by A2,FUNCOP_1
+:13;
+    hence thesis by Lm2;
+   end;
+end;
+
+definition let C be Category;
+ mode Indexing of C is
+   Indexing of the Dom of C, the Cod of C, the Comp of C, the Id of C;
+ mode coIndexing of C is
+   Indexing of the Cod of C, the Dom of C, ~(the Comp of C), the Id of C;
+end;
+
+theorem Th6:
+ for C being Category, I being Indexing of the Dom of C, the Cod of C holds
+  I is Indexing of C iff
+   (for a being Object of C holds I`2.id a = id (I`1.a)) &
+   for m1, m2 being Morphism of C st dom m2 = cod m1 holds
+    I`2.(m2*m1) = (I`2.m2)*(I`2.m1)
+  proof let C be Category;
+   reconsider D = the CatStr of C as Category by CAT_5:1;
+A1:  D = CatStr(# the Objects of C, the Morphisms of C,
+                the Dom of C, the Cod of C, the Comp of C, the Id of C#);
+   let I be Indexing of the Dom of C, the Cod of C;
+   hereby assume A2: I is Indexing of C;
+    hereby let a be Object of C;
+     thus I`2.id a = I`2.((the Id of C).a) by CAT_1:def 5
+                  .= id (I`1.a) by A1,A2,Def10;
+    end;
+    let m1, m2 be Morphism of C; assume
+A3:   dom m2 = cod m1;
+       dom m2 = (the Dom of C).m2 & cod m1 = (the Cod of C).m1
+      by CAT_1:def 2,def 3;
+     then I`2.((the Comp of C).[m2,m1]) = (I`2.m2)*(I`2.m1) by A1,A2,A3,Def10;
+    hence I`2.(m2*m1) = (I`2.m2)*(I`2.m1) by A3,CAT_1:41;
+   end;
+   assume
+A4:  (for a being Object of C holds I`2.id a = id (I`1.a)) &
+    for m1, m2 being Morphism of C st dom m2 = cod m1 holds
+     I`2.(m2*m1) = (I`2.m2)*(I`2.m1);
+   thus ex D being Category st
+     D = CatStr(# the Objects of C, the Morphisms of C,
+                the Dom of C, the Cod of C, the Comp of C, the Id of C#) by A1;
+   hereby let a be Object of C;
+    thus I`2.((the Id of C).a) = I`2.id a by CAT_1:def 5
+                .= id (I`1.a) by A4;
+   end;
+   let m1, m2 be Morphism of C; assume
+      (the Dom of C).m2 = (the Cod of C).m1;
+    then (the Dom of C).m2 = cod m1 by CAT_1:def 3;
+then A5:  dom m2 = cod m1 by CAT_1:def 2;
+    then I`2.(m2*m1) = (I`2.m2)*(I`2.m1) by A4;
+   hence I`2.((the Comp of C).[m2,m1]) = (I`2.m2)*(I`2.m1) by A5,CAT_1:41;
+  end;
+
+theorem Th7:
+ for C being Category, I being Indexing of the Cod of C, the Dom of C holds
+  I is coIndexing of C iff
+   (for a being Object of C holds I`2.id a = id (I`1.a)) &
+   for m1, m2 being Morphism of C st dom m2 = cod m1 holds
+    I`2.(m2*m1) = (I`2.m1)*(I`2.m2)
+  proof let C be Category;
+A1:  C opp = CatStr(# the Objects of C, the Morphisms of C,
+                the Cod of C, the Dom of C, ~the Comp of C, the Id of C#)
+     by OPPCAT_1:def 1;
+   let I be Indexing of the Cod of C, the Dom of C;
+   hereby assume A2: I is coIndexing of C;
+    hereby let a be Object of C;
+     thus I`2.id a = I`2.((the Id of C).a) by CAT_1:def 5
+                  .= id (I`1.a) by A1,A2,Def10;
+    end;
+    let m1, m2 be Morphism of C; assume
+A3:   dom m2 = cod m1;
+       dom m2 = (the Dom of C).m2 & cod m1 = (the Cod of C).m1
+      by CAT_1:def 2,def 3;
+     then I`2.((~the Comp of C).[m1,m2]) = (I`2.m1)*(I`2.m2) &
+     [m2,m1] in dom the Comp of C by A1,A2,A3,Def10,CAT_1:40;
+     then I`2.((the Comp of C).[m2,m1]) = (I`2.m1)*(I`2.m2) by FUNCT_4:def 2;
+    hence I`2.(m2*m1) = (I`2.m1)*(I`2.m2) by A3,CAT_1:41;
+   end;
+   assume
+A4:  (for a being Object of C holds I`2.id a = id (I`1.a)) &
+    for m1, m2 being Morphism of C st dom m2 = cod m1 holds
+     I`2.(m2*m1) = (I`2.m1)*(I`2.m2);
+   thus ex D being Category st
+     D = CatStr(# the Objects of C, the Morphisms of C,
+             the Cod of C, the Dom of C, ~the Comp of C, the Id of C#) by A1;
+   hereby let a be Object of C;
+    thus I`2.((the Id of C).a) = I`2.id a by CAT_1:def 5
+                .= id (I`1.a) by A4;
+   end;
+   let m1, m2 be Morphism of C; assume
+      (the Cod of C).m2 = (the Dom of C).m1;
+    then (the Dom of C).m1 = cod m2 by CAT_1:def 3;
+then A5:  dom m1 = cod m2 by CAT_1:def 2;
+    then I`2.(m1*m2) = (I`2.m2)*(I`2.m1) by A4;
+    then I`2.((the Comp of C).[m1,m2]) = (I`2.m2)*(I`2.m1) &
+    [m1,m2] in dom the Comp of C by A5,CAT_1:40,41;
+   hence I`2.((~the Comp of C).[m2,m1]) = (I`2.m2)*(I`2.m1) by FUNCT_4:def 2;
+  end;
+
+theorem
+   for C being Category, x be set holds
+  x is coIndexing of C iff x is Indexing of C opp
+  proof let C be Category, x be set;
+      C opp = CatStr(# the Objects of C, the Morphisms of C,
+                the Cod of C, the Dom of C, ~the Comp of C, the Id of C#)
+     by OPPCAT_1:def 1;
+   hence thesis;
+  end;
+
+
+theorem
+   for C being Category, I being Indexing of C
+  for c1,c2 being Object of C st Hom(c1,c2) is non empty
+   for m being Morphism of c1,c2 holds I`2.m is Functor of I`1.c1, I`1.c2
+  proof let C be Category, I be Indexing of C;
+   let c1,c2 be Object of C such that
+A1:  Hom(c1,c2) is non empty;
+   let m be Morphism of c1,c2;
+      dom (I`1*(the Dom of C)) = the Morphisms of C &
+    dom (I`1*(the Cod of C)) = the Morphisms of C &
+    dom m = c1 & cod m = c2 by A1,CAT_1:23,PBOOLE:def 3;
+    then (I`1*(the Dom of C)).m = I`1.((the Dom of C).m) &
+    (I`1*(the Cod of C)).m = I`1.((the Cod of C).m) &
+    (the Dom of C).m = c1 & (the Cod of C).m = c2
+     by CAT_1:def 2,def 3,FUNCT_1:22;
+   hence I`2.m is Functor of I`1.c1, I`1.c2;
+  end;
+
+theorem
+   for C being Category, I being coIndexing of C
+  for c1,c2 being Object of C st Hom(c1,c2) is non empty
+   for m being Morphism of c1,c2 holds I`2.m is Functor of I`1.c2, I`1.c1
+  proof let C be Category, I be coIndexing of C;
+   let c1,c2 be Object of C such that
+A1:  Hom(c1,c2) is non empty;
+   let m be Morphism of c1,c2;
+      dom (I`1*(the Dom of C)) = the Morphisms of C &
+    dom (I`1*(the Cod of C)) = the Morphisms of C &
+    dom m = c1 & cod m = c2 by A1,CAT_1:23,PBOOLE:def 3;
+    then (I`1*(the Dom of C)).m = I`1.((the Dom of C).m) &
+    (I`1*(the Cod of C)).m = I`1.((the Cod of C).m) &
+    (the Dom of C).m = c1 & (the Cod of C).m = c2
+     by CAT_1:def 2,def 3,FUNCT_1:22;
+   hence I`2.m is Functor of I`1.c2, I`1.c1;
+  end;
+
+definition let C be Category;
+ let I be Indexing of C;
+ let T be TargetCat of I;
+ func I-functor(C,T) -> Functor of C,T means:
+Def11:
+  for f being Morphism of C holds it.f = [[I`1.dom f, I`1.cod f], I`2.f];
+  existence
+   proof
+A1:   dom I`1 = the Objects of C by PBOOLE:def 3;
+       rng I`1 c= the Objects of T
+      proof let x be set; assume x in rng I`1;
+       then consider a being set such that
+A2:      a in dom I`1 & x = I`1.a by FUNCT_1:def 5;
+       reconsider a as Object of C by A2,PBOOLE:def 3;
+          I`1.a is Object of T by Def9;
+       hence thesis by A2;
+      end;
+    then reconsider I1 = I`1 as Function of the Objects of C, the Objects of T
+      by A1,FUNCT_2:def 1,RELSET_1:11;
+    deffunc F(Morphism of C) = [[I`1.dom $1, I`1.cod $1], I`2.$1];
+    deffunc O(Object of C) = I1.$1;
+A3:  now let f be Morphism of C;
+         dom f = (the Dom of C).f & cod f = (the Cod of C).f
+        by CAT_1:def 2,def 3;
+      hence F(f) is Morphism of T by Def9;
+      let g be Morphism of T; assume
+A4:     g = F(f);
+      hence dom g = F(f)`11 by CAT_5:13 .= O(dom f) by COMMACAT:1;
+      thus cod g = F(f)`12 by A4,CAT_5:13 .= O(cod f) by COMMACAT:1;
+     end;
+A5:  now let a be Object of C;
+         dom id a = a & cod id a = a by CAT_1:44;
+      hence F(id a) = [[I1.a, I1.a], id (I`1.a)] by Th6
+                   .= id O(a) by CAT_5:def 6;
+     end;
+A6:  now let f1,f2 be Morphism of C; let g1,g2 be Morphism of T; assume
+A7:     g1 = F(f1) & g2 = F(f2) & dom f2 = cod f1;
+       A8: I`2.f1 is Functor of I`1.dom f1, I`1.cod f1 &
+       I`2.f2 is Functor of I`1.dom f2, I`1.cod f2 by Th5;
+         dom (f2*f1) = dom f1 & cod (f2*f1) = cod f2 &
+       I`2.(f2*f1) = (I`2.f2)*(I`2.f1) by A7,Th6,CAT_1:42;
+      hence F(f2*f1) = g2*g1 by A7,A8,CAT_5:def 6;
+     end;
+   thus ex F being Functor of C,T st
+    for f being Morphism of C holds F.f = F(f) from FunctorEx(A3,A5,A6);
+   end;
+  uniqueness
+   proof let F1, F2 be Functor of C,T such that
+A9:  for f being Morphism of C holds F1.f = [[I`1.dom f, I`1.cod f], I`2.f] and
+A10:  for f being Morphism of C holds F2.f = [[I`1.dom f, I`1.cod f], I`2.f];
+       now let f be Morphism of C;
+      thus F1.f = [[I`1.dom f, I`1.cod f], I`2.f] by A9 .= F2.f by A10;
+     end;
+    hence thesis by FUNCT_2:113;
+   end;
+end;
+
+Lm3: for C being Category, I being Indexing of C
+  for T being TargetCat of I holds Obj (I-functor(C,T)) = I`1
+  proof let C be Category, I be Indexing of C;
+   let T be TargetCat of I;
+A1:  dom Obj (I-functor(C,T)) = the Objects of C &
+    dom I`1 = the Objects of C by FUNCT_2:def 1,PBOOLE:def 3;
+      now let x be set; assume x in the Objects of C;
+     then reconsider a = x as Object of C;
+A2:    dom id a = a & cod id a = a by CAT_1:44;
+        (Obj (I-functor(C,T))).a = dom id ((Obj (I-functor(C,T))).a) by CAT_1:
+44
+               .= dom ((I-functor(C,T)).(id a qua Morphism of C)) by CAT_1:104
+               .= ((I-functor(C,T) qua Function).id a)`11 by CAT_5:2
+               .= [[I`1.a, I`1.a], I`2.id a]`11 by A2,Def11;
+     hence (Obj (I-functor(C,T))).x = I`1.x by COMMACAT:1;
+    end;
+   hence Obj (I-functor(C,T)) = I`1 by A1,FUNCT_1:9;
+  end;
+
+theorem Th11:
+ for C being Category, I being Indexing of C
+  for T1,T2 being TargetCat of I holds
+   I-functor(C,T1) = I-functor(C,T2) &
+   Obj (I-functor(C,T1)) = Obj (I-functor(C,T2))
+  proof let C be Category, I be Indexing of C;
+   let T1,T2 be TargetCat of I;
+A1:  dom (I-functor(C,T1)) = the Morphisms of C &
+    dom (I-functor(C,T2)) = the Morphisms of C by FUNCT_2:def 1;
+      now let x be set; assume x in the Morphisms of C;
+     then reconsider f = x as Morphism of C;
+     thus (I-functor(C,T1)).x = [[I`1.dom f, I`1.cod f], I`2.f] by Def11
+                             .= (I-functor(C,T2)).x by Def11;
+    end;
+   hence I-functor(C,T1) = I-functor(C,T2) by A1,FUNCT_1:9;
+A2:  dom Obj (I-functor(C,T1)) = the Objects of C &
+    dom Obj (I-functor(C,T2)) = the Objects of C by FUNCT_2:def 1;
+      now let x be set; assume x in the Objects of C;
+     then reconsider a = x as Object of C;
+     thus (Obj (I-functor(C,T1))).x = I`1.a by Lm3
+               .= (Obj (I-functor(C,T2))).x by Lm3;
+    end;
+   hence thesis by A2,FUNCT_1:9;
+  end;
+
+theorem
+  for C being Category, I being Indexing of C
+  for T being TargetCat of I holds Obj (I-functor(C,T)) = I`1 by Lm3;
+
+theorem
+   for C being Category, I being Indexing of C
+  for T being TargetCat of I, x being Object of C holds
+   (I-functor(C,T)).x = I`1.x
+  proof let C be Category, I be Indexing of C;
+   let T be TargetCat of I, x be Object of C;
+   thus (I-functor(C,T)).x = (Obj (I-functor(C,T))).x by CAT_1:def 20
+          .= I`1.x by Lm3;
+  end;
+
+definition let C be Category;
+ let I be Indexing of C;
+ func rng I -> strict TargetCat of I means:
+Def12:
+  for T being TargetCat of I holds it = Image (I-functor(C,T));
+  uniqueness
+   proof let T1,T2 be strict TargetCat of I such that
+A1:  for T being TargetCat of I holds T1 = Image (I-functor(C,T)) and
+A2:  for T being TargetCat of I holds T2 = Image (I-functor(C,T));
+    consider T being TargetCat of I;
+    thus T1 = Image (I-functor(C,T)) by A1 .= T2 by A2;
+   end;
+  existence
+   proof consider S being TargetCat of I;
+    reconsider T = Image (I-functor(C,S)) as strict Subcategory of S;
+    reconsider F = I-functor(C,S) as Functor of C,T by CAT_5:8;
+       T is TargetCat of I
+      proof the Objects of T = rng Obj (I-functor(C,S)) by CAT_5:def 3;
+      then the Objects of T = rng I`1 & dom I`1 = the Objects of C
+         by Lm3,PBOOLE:def 3;
+       hence for a being Object of C holds I`1.a is Object of T
+         by FUNCT_1:def 5;
+       let b be Morphism of C;
+          F.b = [[I`1.dom b, I`1.cod b], I`2.b] & dom b = (the Dom of C).b &
+        cod b = (the Cod of C).b by Def11,CAT_1:def 2,def 3;
+       hence [[I`1.((the Dom of C).b),I`1.((the Cod of C).b)],I`2.b]
+         is Morphism of T;
+     end;
+    then reconsider T as strict TargetCat of I;
+    take T; let T' be TargetCat of I;
+       I-functor(C,S) = I-functor(C,T') by Th11;
+    hence thesis by CAT_5:22;
+   end;
+end;
+
+theorem Th14:
+ for C being Category, I be Indexing of C
+  for D being Categorial Category holds
+   rng I is Subcategory of D iff D is TargetCat of I
+  proof let C be Category, I be Indexing of C;
+   let D be Categorial Category;
+   hereby assume
+A1:   rng I is Subcategory of D;
+    thus D is TargetCat of I
+     proof
+      hereby let a be Object of C;
+          I`1.a is Object of rng I by Def9;
+       hence I`1.a is Object of D by A1,CAT_2:12;
+      end;
+      let b be Morphism of C;
+         [[I`1.((the Dom of C).b),I`1.((the Cod of C).b)],I`2.b]
+         is Morphism of rng I by Def9;
+      hence [[I`1.((the Dom of C).b),I`1.((the Cod of C).b)],I`2.b]
+         is Morphism of D by A1,CAT_2:14;
+     end;
+   end;
+   assume D is TargetCat of I;
+   then reconsider T = D as TargetCat of I;
+      rng I = Image (I-functor(C,T)) by Def12;
+   hence thesis;
+  end;
+
+definition
+ let C be Category;
+ let I be Indexing of C;
+ let m be Morphism of C;
+ func I.m -> Functor of I`1.dom m, I`1.cod m equals
+     I`2.m;
+  coherence
+   proof
+       dom (I`1*(the Dom of C)) = the Morphisms of C &
+     dom (I`1*(the Cod of C)) = the Morphisms of C by PBOOLE:def 3;
+then A1:   (I`1*(the Dom of C)).m = I`1.((the Dom of C).m) &
+     (I`1*(the Cod of C)).m = I`1.((the Cod of C).m) by FUNCT_1:22;
+       dom m = (the Dom of C).m & cod m = (the Cod of C).m
+      by CAT_1:def 2,def 3; hence thesis by A1;
+   end;
+end;
+
+definition
+ let C be Category;
+ let I be coIndexing of C;
+ let m be Morphism of C;
+ func I.m -> Functor of I`1.cod m, I`1.dom m equals
+     I`2.m;
+  coherence
+   proof
+       dom (I`1*(the Dom of C)) = the Morphisms of C &
+     dom (I`1*(the Cod of C)) = the Morphisms of C by PBOOLE:def 3;
+then A1:   (I`1*(the Dom of C)).m = I`1.((the Dom of C).m) &
+     (I`1*(the Cod of C)).m = I`1.((the Cod of C).m) by FUNCT_1:22;
+       dom m = (the Dom of C).m & cod m = (the Cod of C).m
+      by CAT_1:def 2,def 3; hence thesis by A1;
+   end;
+end;
+
+Lm4:
+ now let C,D be Category;
+  set F = (the Objects of C) --> D, G = (the Morphisms of C) --> id D;
+  set H = [F,G];
+  let m be Morphism of C;
+     dom (H`1*(the Dom of C)) = the Morphisms of C by PBOOLE:def 3;
+then A1: (H`1*(the Dom of C)).m = H`1.((the Dom of C).m) by FUNCT_1:22
+     .= F.((the Dom of C).m) by MCART_1:7
+     .= D by FUNCOP_1:13;
+     dom (H`1*(the Cod of C)) = the Morphisms of C by PBOOLE:def 3;
+then A2: (H`1*(the Cod of C)).m = H`1.((the Cod of C).m) by FUNCT_1:22
+     .= F.((the Cod of C).m) by MCART_1:7
+     .= D by FUNCOP_1:13;
+     H`2.m = G.m by MCART_1:7 .= id D by FUNCOP_1:13;
+  hence H`2.m is Functor of (H`1*(the Dom of C)).m, (H`1*(the Cod of C)).m
+    by A1,A2;
+ end;
+
+Lm5:
+ now let C,D be Category;
+  set F = (the Objects of C) --> D, G = (the Morphisms of C) --> id D;
+  set H = [F,G];
+  let m be Morphism of C;
+     dom (H`1*(the Dom of C)) = the Morphisms of C by PBOOLE:def 3;
+then A1: (H`1*(the Dom of C)).m = H`1.((the Dom of C).m) by FUNCT_1:22
+     .= F.((the Dom of C).m) by MCART_1:7
+     .= D by FUNCOP_1:13;
+     dom (H`1*(the Cod of C)) = the Morphisms of C by PBOOLE:def 3;
+then A2: (H`1*(the Cod of C)).m = H`1.((the Cod of C).m) by FUNCT_1:22
+     .= F.((the Cod of C).m) by MCART_1:7
+     .= D by FUNCOP_1:13;
+     H`2.m = G.m by MCART_1:7 .= id D by FUNCOP_1:13;
+  hence H`2.m is Functor of (H`1*(the Cod of C)).m, (H`1*(the Dom of C)).m
+    by A1,A2;
+ end;
+
+theorem
+   for C,D being Category holds
+ [(the Objects of C) --> D, (the Morphisms of C) --> id D] is Indexing of C &
+ [(the Objects of C) --> D, (the Morphisms of C) --> id D] is coIndexing of C
+  proof let C,D be Category;
+   set H = [(the Objects of C) --> D, (the Morphisms of C) --> id D], I = H;
+A1:  H`1 = (the Objects of C) --> D & H`2 = (the Morphisms of C) --> id D
+     by MCART_1:7;
+A2:  now let a be Object of C;
+     thus H`2.id a = id D by A1,FUNCOP_1:13 .= id (H`1.a) by A1,FUNCOP_1:13;
+    end;
+      H is Indexing of the Dom of C, the Cod of C
+     proof
+      thus H`2 is ManySortedFunctor of H`1*(the Dom of C), H`1*(the Cod of C)
+      proof
+       thus for m being Morphism of C holds
+        H`2.m is Functor of (H`1*(the Dom of C)).m, (H`1*(the Cod of C)).m
+         by Lm4;
+      end;
+     end;
+   then reconsider H as Indexing of the Dom of C, the Cod of C;
+    now let m1, m2 be Morphism of C; assume dom m2 = cod m1;
+        H`2.(m2*m1) = id D & H`2.m2 = id D & H`2.m1 = id D by A1,FUNCOP_1:13;
+     hence H`2.(m2*m1) = (H`2.m2)*(H`2.m1) by ISOCAT_1:4;
+    end;
+   hence I is Indexing of C by A2,Th6;
+      H is Indexing of the Cod of C, the Dom of C
+     proof
+      thus H`2 is ManySortedFunctor of H`1*(the Cod of C), H`1*(the Dom of C)
+      proof
+       thus for m being Morphism of C holds
+        H`2.m is Functor of (H`1*(the Cod of C)).m, (H`1*(the Dom of C)).m
+         by Lm5;
+      end;
+     end;
+   then reconsider H as Indexing of the Cod of C, the Dom of C;
+      now let m1, m2 be Morphism of C; assume dom m2 = cod m1;
+        H`2.(m2*m1) = id D & H`2.m2 = id D & H`2.m1 = id D by A1,FUNCOP_1:13;
+     hence H`2.(m2*m1) = (H`2.m1)*(H`2.m2) by ISOCAT_1:4;
+    end;
+   hence thesis by A2,Th7;
+  end;
+
+begin :: Indexing vs Functor into Categorial Categories
+
+definition let C be Category, D be Categorial Category;
+ let F be Functor of C,D;
+ cluster Obj F -> Category-yielding;
+ coherence
+  proof
+A1:  rng Obj F c= the Objects of D by RELSET_1:12;
+   let x be set; assume x in dom Obj F;
+    then (Obj F).x in rng Obj F by FUNCT_1:def 5; hence thesis by A1,CAT_5:12;
+  end;
+end;
+
+theorem Th16:
+ for C being Category, D being Categorial Category, F being Functor of C,D
+ holds [Obj F, pr2 F] is Indexing of C
+  proof let C be Category, D be Categorial Category, F be Functor of C,D;
+   set I = [Obj F, pr2 F];
+A1:  I`1 = Obj F & I`2 = pr2 F by MCART_1:7;
+      dom Obj F = the Objects of C by FUNCT_2:def 1;
+    then A2: Obj F is ManySortedSet of the Objects of C by PBOOLE:def 3;
+  A3:  dom pr2 F = dom F & dom F = the Morphisms of C
+        by DTCONSTR:def 3,FUNCT_2:def 1;
+   then pr2 F is ManySortedSet of the Morphisms of C by PBOOLE:def 3;
+   then reconsider I as ManySortedSet of the Objects of C, the Morphisms of C
+         by A2,Def4;
+     I`1 is Category-yielding by MCART_1:7;
+   then reconsider I as Category-yielding_on_first
+       ManySortedSet of the Objects of C, the Morphisms of C by Def5;
+      pr2 F is Function-yielding
+    proof let x be set; assume x in dom pr2 F;
+      then reconsider x as Morphism of C by A3;
+      reconsider m = F.x as Morphism of D;
+         (pr2 F).x = m`2 by A3,DTCONSTR:def 3;
+      hence thesis;
+     end;
+   then reconsider FF = pr2 F as ManySortedFunction of the Morphisms of C
+     by A3,PBOOLE:def 3;
+      FF is ManySortedFunctor of I`1*the Dom of C, I`1*the Cod of C
+    proof let m be Morphism of C; reconsider x = F.m as Morphism of D;
+A4:     x`11 = dom (F.m) & x`12 = cod (F.m) by CAT_5:13;
+      then consider f being Functor of x`11, x`12 such that
+A5:     F.m = [[x`11, x`12], f] by CAT_5:def 6;
+A6:     FF.m = x`2 by A3,DTCONSTR:def 3 .= f by A5,MCART_1:7;
+         (the Dom of C).m = dom m by CAT_1:def 2;
+then A7:     ((Obj F)*the Dom of C).m = (Obj F).dom m by FUNCT_2:21
+          .= dom (F.m) by CAT_1:105;
+         (the Cod of C).m = cod m by CAT_1:def 3;
+       then ((Obj F)*the Cod of C).m = (Obj F).cod m by FUNCT_2:21
+          .= cod (F.m) by CAT_1:105;
+      hence thesis by A1,A4,A6,A7;
+     end;
+     then reconsider I as Indexing of the Dom of C, the Cod of C by A1,Def8;
+A8:  dom F = the Morphisms of C by FUNCT_2:def 1;
+A9:  now let a be Object of C;
+     reconsider i = (Obj F).a as Object of D;
+     thus I`2.id a = (F.(id a qua Morphism of C))`2 by A1,A8,DTCONSTR:def 3
+                .= (id i qua Morphism of D)`2 by CAT_1:104
+                .= [[I`1.a, I`1.a], id (I`1.a)]`2 by A1,CAT_5:def 6
+                .= id (I`1.a) by MCART_1:7;
+    end;
+      now let m1, m2 be Morphism of C; assume
+A10:    dom m2 = cod m1;
+     set h1 = F.m1, h2 = F.m2;
+A11:    dom h2 = h2`11 & cod h2 = h2`12 & dom h1 = h1`11 & cod h1 = h1`12
+       by CAT_5:13;
+     then consider f2 being Functor of h2`11, h2`12 such that
+A12:    h2 = [[h2`11, h2`12], f2] by CAT_5:def 6;
+     consider f1 being Functor of h1`11, h1`12 such that
+A13:    h1 = [[h1`11, h1`12], f1] by A11,CAT_5:def 6;
+A14:    dom h2 = F.dom m2 by CAT_1:109 .= cod h1 by A10,CAT_1:109;
+     thus I`2.(m2*m1) = (F.(m2*m1))`2 by A1,A8,DTCONSTR:def 3
+          .= (h2*h1)`2 by A10,CAT_1:99
+          .= [[h1`11, h2`12], f2*f1]`2 by A11,A12,A13,A14,CAT_5:def 6
+          .= f2*f1 by MCART_1:7
+          .= h2`2*f1 by A12,MCART_1:7
+          .= h2`2*h1`2 by A13,MCART_1:7
+          .= (I`2.m2)*h1`2 by A1,A8,DTCONSTR:def 3
+          .= (I`2.m2)*(I`2.m1) by A1,A8,DTCONSTR:def 3;
+    end; hence thesis by A9,Th6;
+  end;
+
+definition let C be Category;
+ let D be Categorial Category;
+ let F be Functor of C,D;
+ func F-indexing_of C -> Indexing of C equals:
+Def15:
+   [Obj F, pr2 F];
+  coherence by Th16;
+end;
+
+theorem
+   for C being Category, D being Categorial Category, F being Functor of C,D
+   holds D is TargetCat of F-indexing_of C
+  proof let C be Category, D be Categorial Category, F be Functor of C,D;
+   set I = F-indexing_of C; I = [Obj F, pr2 F] by Def15;
+then A1:  I`1 = Obj F & I`2 = pr2 F by MCART_1:7;
+A2:  dom F = the Morphisms of C & dom Obj F = the Objects of C by FUNCT_2:def 1
+;
+   thus for a being Object of C holds I`1.a is Object of D by A1,FUNCT_2:7;
+   let b be Morphism of C; set h = F.b;
+A3:  dom h = h`11 & cod h = h`12 by CAT_5:13;
+   then consider f being Functor of h`11, h`12 such that
+A4:  h = [[h`11, h`12], f] by CAT_5:def 6;
+A5:  dom h = (Obj F).dom b by CAT_1:105
+         .= (Obj F).((the Dom of C).b) by CAT_1:def 2;
+A6:  cod h = (Obj F).cod b by CAT_1:105
+         .= (Obj F).((the Cod of C).b) by CAT_1:def 3;
+      I`2.b = h`2 by A1,A2,DTCONSTR:def 3 .= f by A4,MCART_1:7;
+   hence thesis by A1,A3,A4,A5,A6;
+  end;
+
+
+theorem Th18:
+ for C being Category, D being Categorial Category, F being Functor of C,D
+ for T being TargetCat of F-indexing_of C holds
+     F = (F-indexing_of C)-functor(C,T)
+  proof let C be Category, D be Categorial Category, F be Functor of C,D;
+   set I = F-indexing_of C; let T be TargetCat of I;
+      I = [Obj F, pr2 F] by Def15;
+then A1:  I`1 = Obj F & I`2 = pr2 F by MCART_1:7;
+A2:  dom F = the Morphisms of C & dom Obj F = the Objects of C by FUNCT_2:def 1
+;
+A3:  dom (I-functor(C,T)) = the Morphisms of C by FUNCT_2:def 1;
+      now let x be set; assume x in the Morphisms of C;
+     then reconsider f = x as Morphism of C;
+     set h = F.f;
+A4:    dom h = h`11 & cod h = h`12 by CAT_5:13;
+     then consider g being Functor of h`11, h`12 such that
+A5:    h = [[h`11, h`12], g] by CAT_5:def 6;
+A6:    dom h = (Obj F).dom f & cod h = (Obj F).cod f by CAT_1:105;
+        I`2.f = h`2 by A1,A2,DTCONSTR:def 3 .= g by A5,MCART_1:7;
+     hence F.x = (I-functor(C,T)).x by A1,A4,A5,A6,Def11;
+    end;
+   hence thesis by A2,A3,FUNCT_1:9;
+  end;
+
+theorem Th19:
+ for C being Category, D,E being Categorial Category
+ for F being Functor of C,D for G being Functor of C,E st F = G
+   holds F-indexing_of C = G-indexing_of C
+  proof let C be Category, D,E be Categorial Category;
+   let F be Functor of C,D;
+   let G be Functor of C,E; assume
+A1:  F = G;
+   thus F-indexing_of C = [Obj F, pr2 F] by Def15
+     .= [Obj G, pr2 G] by A1,Th2
+     .= G-indexing_of C by Def15;
+  end;
+
+
+theorem Th20:
+ for C being Category, I being (Indexing of C), T being TargetCat of I holds
+    pr2 (I-functor(C,T)) = I`2
+  proof let C be Category, I be Indexing of C;
+   let T be TargetCat of I;
+A1:  dom pr2 (I-functor(C,T)) = dom (I-functor(C,T)) by DTCONSTR:def 3;
+A2:  dom (I-functor(C,T)) = the Morphisms of C by FUNCT_2:def 1;
+A3:  dom I`2 = the Morphisms of C by PBOOLE:def 3;
+      now let x be set; assume x in the Morphisms of C;
+     then reconsider f = x as Morphism of C;
+        (I-functor(C,T)).f = [[I`1.dom f, I`1.cod f], I`2.f] by Def11;
+      then ((I-functor(C,T)).x)`2 = I`2.f by MCART_1:7;
+     hence (pr2 (I-functor(C,T))).x = I`2.x by A2,DTCONSTR:def 3;
+    end;
+   hence thesis by A1,A2,A3,FUNCT_1:9;
+  end;
+
+theorem
+   for C being Category, I being (Indexing of C), T being TargetCat of I holds
+  (I-functor(C,T))-indexing_of C = I
+  proof let C be Category, I be Indexing of C;
+   let T be TargetCat of I; set F = I-functor(C,T);
+A1:  ex f being (ManySortedSet of the Objects of C),
+       g being ManySortedSet of the Morphisms of C st I = [f,g] by Def4;
+   thus F-indexing_of C = [Obj F, pr2 F] by Def15
+       .= [I`1, pr2 F] by Lm3
+       .= [I`1, I`2] by Th20
+       .= I by A1,MCART_1:8;
+  end;
+
+begin :: Composing Indexings and Functors
+
+Lm6:
+ now let c,d be Category, e be Subcategory of d;
+  let f be Functor of c,e;
+       (incl e)*f = (id e)*f by CAT_2:def 5
+        .= (id the Morphisms of e)*f by CAT_1:def 21
+        .= f by FUNCT_2:23;
+  hence f is Functor of c,d;
+ end;
+
+definition
+ let C,D,E be Category;
+ let F be Functor of C,D;
+ let I be Indexing of E; assume
+     Image F is Subcategory of E;
+    then reconsider A = Image F as Subcategory of E;
+    reconsider G = F as Functor of C, A by CAT_5:8;
+    reconsider G as Functor of C, E by Lm6;
+ func I*F -> Indexing of C means:
+Def16:
+ for F' being Functor of C,E st F' = F holds
+  it = (I-functor(E,rng I)*F')-indexing_of C;
+ existence
+  proof take (I-functor(E,rng I)*G)-indexing_of C;
+   thus thesis;
+  end;
+ uniqueness
+  proof let J1, J2 be Indexing of C such that
+A1: for F' being Functor of C,E st F' = F holds
+     J1 = (I-functor(E,rng I)*F')-indexing_of C and
+A2: for F' being Functor of C,E st F' = F holds
+     J2 = (I-functor(E,rng I)*F')-indexing_of C;
+   thus J1 = (I-functor(E,rng I)*G)-indexing_of C by A1 .= J2 by A2;
+  end;
+end;
+
+theorem Th22:
+ for C,D1,D2,E being Category, I being Indexing of E
+ for F being Functor of C,D1 for G being Functor of C,D2
+  st Image F is Subcategory of E & Image G is Subcategory of E & F = G
+  holds I*F = I*G
+  proof let C,D1,D2,E be Category, I be Indexing of E;
+   let F be Functor of C,D1, G be Functor of C,D2; assume
+A1:  Image F is Subcategory of E & Image G is Subcategory of E & F = G;
+   reconsider F' = F as Functor of C, Image F by CAT_5:8;
+   reconsider G' = G as Functor of C, Image G by CAT_5:8;
+   reconsider F', G' as Functor of C,E by A1,Lm6;
+    I*F = (I-functor(E,rng I)*F')-indexing_of C &
+    I*G = (I-functor(E,rng I)*G')-indexing_of C by A1,Def16;
+   hence I*F = I*G by A1;
+  end;
+
+theorem Th23:
+ for C,D being Category, F being Functor of C,D, I being Indexing of D
+ for T being TargetCat of I holds
+   I*F = ((I-functor(D,T))*F)-indexing_of C
+  proof let C,D be Category; let F be Functor of C,D; let I be Indexing of D;
+   let T be TargetCat of I;
+      Image F is Subcategory of D &
+    I-functor(D,rng I) = I-functor(D,T) by Th11;
+    then (I-functor(D,rng I))*F = (I-functor(D,T))*F &
+    I*F = (I-functor(D,rng I)*F)-indexing_of C by Def16;
+   hence thesis by Th19;
+  end;
+
+theorem Th24:
+ for C,D being Category, F being Functor of C,D, I being Indexing of D
+ for T being TargetCat of I holds
+   T is TargetCat of I*F
+  proof let C,D be Category; let F be Functor of C,D; let I be Indexing of D;
+   let T be TargetCat of I;
+   consider T' being TargetCat of I*F;
+A1:  rng (I*F) = Image ((I*F)-functor(C,T')) by Def12;
+      I*F = ((I-functor(D,T))*F)-indexing_of C by Th23;
+    then (I*F)-functor(C,T') = (I-functor(D,T))*F by Th18;
+    then rng (I*F) = Image ((I-functor(D,T))*F) by A1,CAT_5:22;
+   hence thesis by Th14;
+  end;
+
+theorem
+   for C,D being Category, F being Functor of C,D, I being Indexing of D
+ for T being TargetCat of I holds
+   rng (I*F) is Subcategory of T
+  proof let C,D be Category; let F be Functor of C,D; let I be Indexing of D;
+   let T be TargetCat of I;
+      T is TargetCat of I*F by Th24;
+   hence thesis by Th14;
+  end;
+
+theorem Th26:
+ for C,D,E being Category, F being Functor of C,D
+ for G being Functor of D,E, I being Indexing of E holds
+  (I*G)*F = I*(G*F)
+  proof let C,D,E be Category; let F be Functor of C,D;
+   let G be Functor of D,E; let I be Indexing of E;
+   set T = rng I; reconsider T' = T as TargetCat of I*G by Th24;
+      I*G = ((I-functor(E,T))*G)-indexing_of D by Th23;
+then (I*G)-functor(D,T') = (I-functor(E,T))*G by Th18;
+   hence (I*G)*F
+      = ((I-functor(E,T))*G*F)-indexing_of C by Th23
+     .= ((I-functor(E,T))*(G*F))-indexing_of C by RELAT_1:55
+     .= I*(G*F) by Th23;
+  end;
+
+definition
+ let C be Category;
+ let I be Indexing of C;
+ let D be Categorial Category such that
+A1:   D is TargetCat of I;
+ let E be Categorial Category;
+ let F be Functor of D,E;
+     reconsider T = D as TargetCat of I by A1;
+     reconsider G = F as Functor of T,E;
+ func F*I -> Indexing of C means:
+Def17:
+ for T being TargetCat of I, G being Functor of T,E st T = D & G = F holds
+  it = (G*(I-functor(C,T)))-indexing_of C;
+ existence
+  proof take (G*(I-functor(C,T)))-indexing_of C;
+   thus thesis;
+  end;
+ uniqueness
+  proof let J1, J2 be Indexing of C; assume
+A2:  not thesis;
+    then J1 = (G*(I-functor(C,T)))-indexing_of C;
+   hence thesis by A2;
+  end;
+end;
+
+theorem Th27:
+ for C being Category, I being Indexing of C
+ for T being TargetCat of I, D,E being Categorial Category
+ for F being Functor of T,D for G being Functor of T,E
+  st F = G holds F*I = G*I
+  proof let C be Category; let I be Indexing of C;
+   let T be TargetCat of I, D,E be Categorial Category;
+   let F be Functor of T,D; let G be Functor of T,E;
+   assume
+A1:  F = G;
+   thus F*I = (F*(I-functor(C,T)))-indexing_of C by Def17
+           .= (G*(I-functor(C,T)))-indexing_of C by A1,Th19
+           .= G*I by Def17;
+  end;
+
+theorem Th28:
+ for C being Category, I being Indexing of C
+ for T being TargetCat of I, D being Categorial Category
+ for F being Functor of T,D holds
+   Image F is TargetCat of F*I
+  proof let C be Category; let I be Indexing of C;
+   let T be TargetCat of I, D be Categorial Category;
+   let F be Functor of T,D;
+   reconsider F' = F as Functor of T, Image F by CAT_5:8;
+   consider T' being TargetCat of F*I;
+A1:  rng (F*I) = Image ((F*I)-functor(C,T')) by Def12;
+      F*I = F'*I by Th27 .= (F'*(I-functor(C,T)))-indexing_of C by Def17;
+    then (F*I)-functor(C,T') = F'*(I-functor(C,T)) by Th18;
+    then rng (F*I) = Image (F'*(I-functor(C,T))) by A1,CAT_5:22;
+   hence thesis by Th14;
+  end;
+
+theorem Th29:
+ for C being Category, I being Indexing of C
+ for T being TargetCat of I, D being Categorial Category
+ for F being Functor of T,D holds
+   D is TargetCat of F*I
+  proof let C be Category; let I be Indexing of C;
+   let T be TargetCat of I, D be Categorial Category;
+   let F be Functor of T,D;
+      Image F is TargetCat of F*I by Th28;
+    then rng (F*I) is Subcategory of Image F by Th14;
+    then rng (F*I) is Subcategory of D by CAT_5:4;
+   hence thesis by Th14;
+  end;
+
+
+theorem
+   for C being Category, I being Indexing of C
+ for T being TargetCat of I, D being Categorial Category
+ for F being Functor of T,D holds
+   rng (F*I) is Subcategory of Image F
+  proof let C be Category; let I be Indexing of C;
+   let T be TargetCat of I, D be Categorial Category;
+   let F be Functor of T,D;
+      Image F is TargetCat of F*I by Th28;
+   hence thesis by Th14;
+  end;
+
+theorem
+   for C be Category, I being Indexing of C for T being TargetCat of I
+ for D,E being Categorial Category, F being Functor of T,D
+ for G being Functor of D,E holds
+  (G*F)*I = G*(F*I)
+  proof let C be Category; let I be Indexing of C;
+   let T be TargetCat of I; let D,E be Categorial Category;
+   let F be Functor of T,D; let G be Functor of D,E;
+   reconsider D' = D as TargetCat of F*I by Th29;
+   reconsider G' = G as Functor of D', E;
+      F*I = (F*(I-functor(C,T)))-indexing_of C by Def17;
+then A1:  (F*I)-functor(C,D') = F*(I-functor(C,T)) by Th18;
+   thus (G*F)*I
+      = ((G*F)*(I-functor(C,T)))-indexing_of C by Def17
+     .= (G'*((F*I)-functor(C,D')))-indexing_of C by A1,RELAT_1:55
+     .= G*(F*I) by Def17;
+  end;
+
+definition
+ let C,D be Category;
+ let I1 be Indexing of C;
+ let I2 be Indexing of D;
+ func I2*I1 -> Indexing of C equals:
+Def18:
+   I2*(I1-functor(C,rng I1));
+ correctness;
+end;
+
+theorem Th32:
+ for C being Category, D being Categorial Category, I1 being Indexing of C
+ for I2 being Indexing of D for T being TargetCat of I1
+   st D is TargetCat of I1 holds I2*I1 = I2*(I1-functor(C,T))
+  proof let C be Category, D be Categorial Category; let I1 be Indexing of C;
+   let I2 be Indexing of D; let T be TargetCat of I1; assume
+      D is TargetCat of I1;
+   then reconsider D' = D as TargetCat of I1;
+A1:  Image (I1-functor(C,D')) = rng I1 & Image (I1-functor(C,T)) = rng I1 &
+    Image (I1-functor(C,rng I1)) = rng I1 by Def12;
+A2:  I1-functor(C,rng I1) = I1-functor(C,T) by Th11;
+   thus I2*I1 = I2*(I1-functor(C,rng I1)) by Def18
+     .= I2*(I1-functor(C,T)) by A1,A2,Th22;
+  end;
+
+theorem
+   for C being Category, D being Categorial Category, I1 being Indexing of C
+ for I2 being Indexing of D for T being TargetCat of I2
+   st D is TargetCat of I1 holds I2*I1 = (I2-functor(D,T))*I1
+  proof let C be Category, D be Categorial Category; let I1 be Indexing of C;
+   let I2 be Indexing of D; let T be TargetCat of I2; assume
+      D is TargetCat of I1;
+   then reconsider D' = D as TargetCat of I1;
+   reconsider I2' = I2 as Indexing of D';
+   reconsider T' = T as TargetCat of I2';
+A1:  I1-functor(C,D') = I1-functor(C,rng I1) by Th11;
+A2:  Image (I1-functor(C,D')) = rng I1 & Image (I1-functor(C,rng I1)) = rng I1
+     by Def12;
+   thus I2*I1 = I2*(I1-functor(C,rng I1)) by Def18
+           .= I2*(I1-functor(C,D')) by A1,A2,Th22
+           .= (I2'-functor(D',T')*(I1-functor(C,D')))-indexing_of C by Th23
+           .= (I2-functor(D,T))*I1 by Def17;
+  end;
+
+theorem Th34:
+ for C,D being Category, F being Functor of C,D, I being Indexing of D
+ for T being TargetCat of I, E being Categorial Category
+ for G being Functor of T,E holds
+  (G*I)*F = G*(I*F)
+::  C --F-> D --I-> T --G-> E
+  proof
+   let C,D be Category, F be Functor of C,D, I be Indexing of D;
+   let T be TargetCat of I;
+   let E be Categorial Category, G be Functor of T,E;
+A1:  G*I = (G*(I-functor(D,T)))-indexing_of D by Def17;
+   then reconsider GI = rng (G*I) as
+     TargetCat of (G*(I-functor(D,T)))-indexing_of D;
+A2:  I*F = ((I-functor(D,T))*F)-indexing_of C by Th23;
+   reconsider T' = T as TargetCat of I*F by Th24;
+   reconsider G' = G as Functor of T', E;
+A3:  ((G*(I-functor(D,T)))-indexing_of D)-functor(D,GI) = G*(I-functor(D,T))
+     by Th18;
+      Image F is Subcategory of D;
+   hence (G*I)*F
+     = (((G*(I-functor(D,T)))-indexing_of D)-functor(D,GI)*F)-indexing_of C
+       by A1,Def16
+    .= ((G*(I-functor(D,T))) * F) -indexing_of C by A3,Th19
+    .= (G * ((I-functor(D,T))*F)) -indexing_of C by RELAT_1:55
+    .= (G'*((I*F)-functor(C,T')))-indexing_of C by A2,Th18
+    .= G*(I*F) by Def17;
+  end;
+
+theorem
+   for C being Category, I being Indexing of C
+ for T being TargetCat of I, D being Categorial Category
+ for F being Functor of T,D, J being Indexing of D holds
+  (J*F)*I = J*(F*I)
+::  C --I-> T --F-> D --J-> (?) CAT
+  proof
+   let C be Category, I be Indexing of C;
+   let T be TargetCat of I;
+   let D be Categorial Category, F be Functor of T,D;
+   let J be Indexing of D;
+      F*I = (F*(I-functor(C,T)))-indexing_of C by Def17;
+then A1:  (F*I)-functor(C, rng (F*I)) = F*(I-functor(C,T)) by Th18;
+A2:  Image (F*(I-functor(C,T))) is Subcategory of D;
+      D is TargetCat of F*I by Th29;
+    then rng (F*I) is Subcategory of D by Th14;
+then A3:  Image ((F*I)-functor(C, rng (F*I))) is Subcategory of D by CAT_5:4;
+   thus (J*F)*I
+      = (J*F)*(I-functor(C,T)) by Th32
+     .= J*(F*(I-functor(C,T))) by Th26
+     .= J*((F*I)-functor(C, rng (F*I))) by A1,A2,A3,Th22
+     .= J*(F*I) by Def18;
+  end;
+
+theorem
+   for C being Category, I being Indexing of C
+ for T1 being TargetCat of I, J being Indexing of T1
+ for T2 being TargetCat of J
+ for D being Categorial Category, F being Functor of T2,D holds
+  (F*J)*I = F*(J*I)
+::  C --I-> T1 --J-> T2 --F-> D
+  proof
+   let C be Category, I be Indexing of C;
+   let T1 be TargetCat of I;
+   let J be Indexing of T1;
+   let T2 be TargetCat of J;
+   let D be Categorial Category, F be Functor of T2,D;
+   thus (F*J)*I
+      = (F*J)*(I-functor(C,T1)) by Th32
+     .= F*(J*(I-functor(C,T1))) by Th34
+     .= F*(J*I) by Th32;
+  end;
+
+theorem Th37:
+ for C,D being Category, F being Functor of C,D, I being Indexing of D
+ for T being TargetCat of I, J being Indexing of T holds
+  (J*I)*F = J*(I*F)
+::  C --F-> D --I-> T --J-> (?) CAT
+  proof let C,D be Category, F be Functor of C,D, I be Indexing of D;
+   let T be TargetCat of I, J be Indexing of T;
+      I*F = ((I-functor(D,T))*F)-indexing_of C by Th23;
+then A1:  (I*F)-functor(C, rng (I*F)) = (I-functor(D,T))*F by Th18;
+A2:  Image ((I-functor(D,T))*F) is Subcategory of T;
+      T is TargetCat of I*F by Th24;
+    then rng (I*F) is Subcategory of T by Th14;
+then A3:  Image ((I*F)-functor(C, rng (I*F))) is Subcategory of T by CAT_5:4;
+   thus (J*I)*F
+      = (J*(I-functor(D,T)))*F by Th32
+     .= J*((I-functor(D,T))*F) by Th26
+     .= J*((I*F)-functor(C, rng (I*F))) by A1,A2,A3,Th22
+     .= J*(I*F) by Def18;
+  end;
+
+theorem
+   for C being Category, I being Indexing of C
+ for D being TargetCat of I, J being Indexing of D
+ for E being TargetCat of J, K being Indexing of E holds
+  (K*J)*I = K*(J*I)
+::  C --I-> D --J-> E --K-> (?) CAT
+  proof let C be Category, I be Indexing of C;
+   let D be TargetCat of I, J be Indexing of D;
+   let E be TargetCat of J, K be Indexing of E;
+   thus (K*J)*I
+      = (K*J)*(I-functor(C,D)) by Th32
+     .= K*(J*(I-functor(C,D))) by Th37
+     .= K*(J*I) by Th32;
+  end;
+
+

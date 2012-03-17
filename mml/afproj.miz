@@ -1,0 +1,1845 @@
+:: A Projective Closure and Projective Horizon of an Affine Space
+::  by Henryk Oryszczyszyn and Krzysztof Pra\.zmowski
+::
+:: Received December 17, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary DIRAF, AFF_4, INCSP_1, AFF_1, ANALOAF, PARSP_1, BOOLE, SETFAM_1,
+      EQREL_1, RELAT_1, RELAT_2, ANPROJ_1, INCPROJ, MCART_1, ANPROJ_2, AFF_2,
+      VECTSP_1, AFPROJ, PARTFUN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, EQREL_1, RELSET_1, RELAT_1,
+      RELAT_2, PARTFUN1, MCART_1, STRUCT_0, ANALOAF, DIRAF, AFF_1, AFF_4,
+      PAPDESAF, INCSP_1, INCPROJ;
+ constructors DOMAIN_1, AFF_2, TRANSLAC, EQREL_1, RELAT_2, AFF_1, AFF_4,
+      INCPROJ, XBOOLE_0;
+ clusters INCPROJ, RELSET_1, STRUCT_0, SUBSET_1, XBOOLE_0, ZFMISC_1, PARTFUN1;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI;
+ theorems RELSET_1, RELAT_1, RELAT_2, TARSKI, ZFMISC_1, MCART_1, EQREL_1,
+      AFF_1, AFF_4, INCPROJ, PAPDESAF, AFF_2, DIRAF, INCSP_1, SETFAM_1,
+      XBOOLE_0, ORDERS_1, PARTFUN1;
+ schemes RELSET_1;
+
+begin
+
+reserve AS for AffinSpace;
+reserve A,K,M,X,Y,Z,X',Y' for Subset of AS;
+reserve zz for Element of AS;
+reserve x,y for set;
+
+:: The aim of this article is to formalize the well known construction of
+:: the projective closure of an affine space. We begin with some evident
+:: properties of planes in affine planes.
+
+theorem Th1: AS is AffinPlane & X=the carrier of AS implies X is_plane
+proof assume that A1: AS is AffinPlane and A2: X=the carrier of AS;
+consider a,b,c being Element of AS such that
+A3: not LIN a,b,c by AFF_1:21;
+A4: a<>b & a<>c by A3,AFF_1:16; set P=Line(a,b),K=Line(a,c);
+A5: a in P & a in K & b in P & c in K & P is_line & K is_line
+ by A4,AFF_1:26,def 3;
+A6: not K // P proof assume K // P;
+ then c in P by A5,AFF_1:59; hence contradiction by A3,A5,AFF_1:33; end;
+set Y=Plane(K,P);
+A7: Y is_plane by A5,A6,AFF_4:def 2;
+  now let x; assume x in X;
+ then reconsider a=x as Element of AS; set K'=a*K;
+  A8: K' is_line & K // K' & a in K' by A5,AFF_4:27,def 3;
+  then not K' // P by A6,AFF_1:58;
+  then consider b being Element of AS such that
+  A9: b in K' & b in P by A1,A5,A8,AFF_1:72;
+    K' // K by A5,AFF_4:def 3; then a,b // K by A8,A9,AFF_1:54;
+then a in {zz: ex b being Element of the carrier
+     of AS st zz,b // K & b in P} by A9;
+ hence x in Y by AFF_4:def 1; end; then X c= Y by TARSKI:def 3;
+hence thesis by A2,A7,XBOOLE_0:def 10; end;
+
+theorem Th2:
+  AS is AffinPlane & X is_plane implies X = the carrier of AS
+proof
+ assume that A1: AS is AffinPlane and A2: X is_plane;
+   the carrier of AS c= the carrier of AS;
+ then reconsider Z=the carrier of AS as Subset of AS;
+   X c= Z & Z is_plane by A1,Th1;
+ hence thesis by A2,AFF_4:33;
+end;
+
+theorem Th3: AS is AffinPlane & X is_plane & Y is_plane implies X=Y
+proof assume AS is AffinPlane & X is_plane & Y is_plane;
+then X=the carrier of AS & Y=the carrier of AS by Th2; hence thesis; end;
+
+theorem X=the carrier of AS & X is_plane implies AS is AffinPlane
+proof assume that A1: X=the carrier of AS and A2: X is_plane;
+ assume AS is not AffinPlane; then ex zz st not zz in X by A2,AFF_4:48;
+hence contradiction by A1; end;
+
+theorem Th5:
+ not A // K & A '||' X & A '||' Y & K '||' X & K '||' Y & A is_line &
+ K is_line & X is_plane & Y is_plane implies X '||' Y
+proof assume that
+A1: not A // K and A2: A '||' X & A '||' Y & K '||' X & K '||' Y and
+A3: A is_line & K is_line & X is_plane & Y is_plane;
+A4: X <> {} & Y <> {} by A3,AFF_4:59;
+consider x being Element of X;
+consider y being Element of Y;
+reconsider a=x,b=y as Element of AS by A4,TARSKI:def 3;
+   a*A c= a+X & a*K c= a+X & b*A c= b+Y & b*K c= b+Y by A2,A3,AFF_4:68;
+then A5: a*A c= X & a*K c= X & b*A c= Y & b*K c= Y by A3,A4,AFF_4:66;
+A6: A // a*A & A // b*A & K // a*K & K // b*K by A3,AFF_4:def 3;
+A7: not a*A // a*K proof assume not thesis; then a*A // K by A6,AFF_1:58;
+ hence contradiction by A1,A6,AFF_1:58; end;
+  a*A // b*A & a*K // b*K by A6,AFF_1:58;
+hence X '||' Y by A3,A5,A7,AFF_4:55;end;
+
+theorem Th6: X is_plane & A '||' X & X '||' Y implies A '||' Y
+proof assume that A1: X is_plane and A2: A '||' X
+& X '||' Y; X<>{} by A1,AFF_4:59; hence thesis by A2,AFF_4:60; end;
+
+:: Next we distinguish two sets, one consisting of the lines, the second
+:: consisting of the planes of a given affine space and we consider two
+:: equivalence relations defined on each of these sets; theses relations
+:: are in fact the relation of parallelity restricted to suitable area.
+:: Their equivalence classes are called directions (of lines and planes,
+:: respectively); they are intended to be considered as new objects which
+:: extend the given affine space to a projective space.
+
+definition let AS; func AfLines(AS) -> Subset-Family of AS equals :Def1:
+  {A: A is_line};
+coherence proof set X={A: A is_line};
+  X c= bool the carrier of AS
+proof let x; assume x in X;
+ then ex A st x=A & A is_line;
+ hence x in bool the carrier of AS; end;
+ then X is Subset-Family of AS by SETFAM_1:def 7;
+ hence X is Subset-Family of AS;
+end; end;
+
+definition let AS; func AfPlanes(AS) -> Subset-Family of AS equals :Def2:
+  {A: A is_plane};
+coherence proof set X={A: A is_plane};
+  X c= bool the carrier of AS
+proof let x; assume x in X;
+ then ex A st x=A & A is_plane;
+                hence x in bool(the carrier of AS); end;
+ then X is Subset-Family of AS by SETFAM_1:def 7;
+ hence X is Subset-Family of AS;
+end; end;
+
+theorem Th7: for x holds (x in AfLines(AS) iff ex X st x=X & X is_line)
+proof let x; AfLines(AS)={X: X is_line} by Def1; hence thesis; end;
+
+theorem Th8: for x holds (x in AfPlanes(AS) iff ex X st x=X & X is_plane)
+proof let x; AfPlanes(AS)={X: X is_plane} by Def2; hence thesis; end;
+
+definition let AS;
+ func LinesParallelity(AS) -> Equivalence_Relation of AfLines(AS)
+equals :Def3: {[K,M]: K is_line & M is_line & K '||' M};
+coherence proof set R1={[X,Y]: X is_line & Y is_line & X '||' Y};
+set AFL=AfLines(AS),AFL2=[:AfLines(AS),AfLines(AS):];
+A1: X is_line & Y is_line implies ([X,Y] in R1 iff X '||' Y) proof
+ assume A2: X is_line & Y is_line;
+    now assume [X,Y] in R1;
+ then consider X',Y' such that A3: [X,Y]=[X',Y'] and X' is_line & Y' is_line
+ and A4: X' '||' Y'; X=X' & Y=Y' by A3,ZFMISC_1:33;
+ hence X '||' Y by A4; end;
+ hence thesis by A2; end;
+  now let x; assume x in R1; then consider X,Y such that
+  A5: x=[X,Y] and A6: X is_line & Y is_line & X '||' Y;
+    X in AFL & Y in AFL by A6,Th7;
+  hence x in AFL2 by A5,ZFMISC_1:def 2; end; then R1 c= AFL2 by TARSKI:def 3
+;
+then reconsider R2=R1 as Relation of AFL,AFL by RELSET_1:def 1;
+  now let x; assume x in AFL; then consider X such that A7: x=X & X is_line
+ by Th7; X // X by A7,AFF_1:55; then X '||' X by A7,AFF_4:40;
+hence [x,x] in R2 by A7; end;
+then R2 is_reflexive_in AFL by RELAT_2:def 1;
+  then
+A8: dom R2 = AFL & field R2 = AFL by ORDERS_1:98;
+   then
+A9: R2 is total by PARTFUN1:def 4;
+  now let x,y; assume that A10: x in AFL & y in AFL and A11: [x,y] in R2;
+ consider X such that A12: x=X & X is_line by A10,Th7;
+ consider Y such that A13: y=Y & Y is_line by A10,Th7;
+   X '||' Y by A1,A11,A12,A13;
+ then X // Y by A12,A13,AFF_4:40;
+ then Y '||' X by A12,A13,AFF_4:40;
+ hence [y,x] in R2 by A12,A13; end;
+then A14: R2 is_symmetric_in AFL by RELAT_2:def 3;
+  now let x,y,z be set; assume that A15: x in AFL & y in AFL & z in AFL and
+ A16: [x,y] in R2 & [y,z] in R2;
+ consider X such that A17: x=X & X is_line by A15,Th7;
+ consider Y such that A18: y=Y & Y is_line by A15,Th7;
+ consider Z such that A19: z=Z & Z is_line by A15,Th7;
+   X '||' Y & Y '||' Z by A1,A16,A17,A18,A19; then X // Y & Y // Z by A17,A18,
+A19,AFF_4:40;
+ then X // Z by AFF_1:58; then X '||' Z by A17,A19,AFF_4:40;
+hence [x,z] in R2 by A17,A19; end;
+then R2 is_transitive_in AFL by RELAT_2:def 8;
+ hence R1 is Equivalence_Relation of AFL
+                   by A8,A9,A14,RELAT_2:def 11,def 16;
+end; end;
+
+definition let AS;
+ func PlanesParallelity(AS) -> Equivalence_Relation of AfPlanes(AS)
+equals :Def4: {[X,Y]: X is_plane & Y is_plane & X '||' Y};
+coherence proof set R1={[X,Y]: X is_plane & Y is_plane & X '||' Y};
+set AFP=AfPlanes(AS),AFP2=[:AfPlanes(AS),AfPlanes(AS):];
+A1: X is_plane & Y is_plane implies ([X,Y] in R1 iff X '||' Y) proof
+ assume A2: X is_plane & Y is_plane;
+    now assume [X,Y] in R1;
+ then consider X',Y' such that A3: [X,Y]=[X',Y'] and X' is_plane & Y' is_plane
+ and A4: X' '||' Y'; X=X' & Y=Y' by A3,ZFMISC_1:33; hence X '||' Y by A4;
+end
+;
+ hence thesis by A2; end;
+  now let x; assume x in R1; then consider X,Y such that
+  A5: x=[X,Y] and A6: X is_plane & Y is_plane & X '||' Y;
+    X in AFP & Y in AFP by A6,Th8;
+  hence x in AFP2 by A5,ZFMISC_1:def 2; end; then R1 c= AFP2 by TARSKI:def 3
+;
+then reconsider R2=R1 as Relation of AFP,AFP by RELSET_1:def 1;
+  now let x; assume x in AFP; then consider X such that A7: x=X & X is_plane
+ by Th8; X '||' X by A7,AFF_4:57;
+hence [x,x] in R2 by A7; end; then
+R2 is_reflexive_in AFP by RELAT_2:def 1;
+  then
+A8: dom R2 = AFP & field R2 = AFP by ORDERS_1:98;
+   then
+A9: R2 is total by PARTFUN1:def 4;
+  now let x,y; assume that A10: x in AFP & y in AFP and A11: [x,y] in R2;
+ consider X such that A12: x=X & X is_plane by A10,Th8;
+ consider Y such that A13: y=Y & Y is_plane by A10,Th8;
+   X '||' Y by A1,A11,A12,A13;
+ then Y '||' X by A12,A13,AFF_4:58;
+ hence [y,x] in
+ R2 by A12,A13; end; then A14: R2 is_symmetric_in AFP by RELAT_2:def 3;
+  now let x,y,z be set; assume that A15: x in AFP & y in AFP & z in AFP and
+ A16: [x,y] in R2 & [y,z] in R2;
+ consider X such that A17: x=X & X is_plane by A15,Th8;
+ consider Y such that A18: y=Y & Y is_plane by A15,Th8;
+ consider Z such that A19: z=Z & Z is_plane by A15,Th8;
+   X '||' Y & Y '||' Z by A1,A16,A17,A18,A19;
+ then X '||' Z by A17,A18,A19,AFF_4:61;
+hence [x,z] in R2 by A17,A19; end;
+then R2 is_transitive_in AFP by RELAT_2:def 8;
+ hence R1 is Equivalence_Relation of AFP
+                  by A8,A9,A14,RELAT_2:def 11,def 16;
+end; end;
+
+definition let AS,X such that X is_line; func LDir(X) -> Subset of AfLines(AS)
+equals :Def5: Class(LinesParallelity(AS),X);
+correctness; end;
+
+definition let AS,X such that
+   X is_plane; func PDir(X) -> Subset of AfPlanes(AS)
+equals :Def6: Class(PlanesParallelity(AS),X);
+correctness; end;
+
+theorem Th9: X is_line implies for x holds x in LDir(X) iff ex Y st x=Y
+ & Y is_line & X '||' Y
+proof assume A1: X is_line; let x;
+A2: now assume x in LDir(X);
+ then x in Class(LinesParallelity(AS),X) by A1,Def5;
+ then [x,X] in LinesParallelity(AS) by EQREL_1:27;
+ then [x,X] in {[K,M]: K is_line & M is_line & K '||' M} by Def3;
+then consider K,M
+ such that A3: [x,X]=[K,M] and A4: K is_line & M is_line & K '||' M;
+ A5: x=K & X=M by A3,ZFMISC_1:33; take Y=K;
+   K // M by A4,AFF_4:40;
+ hence x=Y & Y is_line & X '||' Y by A4,A5,AFF_4:40; end;
+   now given Y such that
+ A6: x=Y & Y is_line & X '||' Y; X // Y by A1,A6,AFF_4:40; then Y '||' X by A1,
+A6,AFF_4:40;
+ then [Y,X] in {[K,M]: K is_line & M is_line & K '||' M} by A1,A6;
+ then [Y,X] in LinesParallelity(AS) by Def3;
+ then Y in Class(LinesParallelity(AS),X) by EQREL_1:27;
+ hence x in LDir(X) by A1,A6,Def5; end;
+hence thesis by A2; end;
+
+theorem Th10: X is_plane implies for x holds x in PDir(X) iff ex Y st x=Y
+ & Y is_plane & X '||' Y
+proof assume A1: X is_plane; let x;
+A2: now assume x in PDir(X); then x in
+ Class(PlanesParallelity(AS),X) by A1,Def6;
+then [x,X] in PlanesParallelity(AS) by EQREL_1:27;
+then [x,X] in {[K,M]: K is_plane & M is_plane & K '||' M} by Def4;
+then consider K,M
+such that A3: [x,X]=[K,M] and A4: K is_plane & M is_plane & K '||' M;
+A5: x=K & X=M by A3,ZFMISC_1:33; take Y=K;
+thus x=Y & Y is_plane & X '||' Y by A4,A5,AFF_4:58; end;
+   now given Y such that
+ A6: x=Y & Y is_plane & X '||' Y; Y '||' X by A1,A6,AFF_4:58; then [Y,X] in
+{
+[K,M]: K is_plane & M is_plane & K '||' M} by A1,A6;
+then [Y,X] in PlanesParallelity(AS) by Def4; then Y in
+ Class(PlanesParallelity(AS),X)
+by EQREL_1:27; hence x in PDir(X) by A1,A6,Def6; end;
+hence thesis by A2; end;
+
+theorem Th11: X is_line & Y is_line implies (LDir(X)=LDir(Y) iff X // Y)
+proof assume A1: X is_line & Y is_line;
+then A2: Y in AfLines(AS) & X in AfLines(AS) by Th7;
+A3: LDir(X)=Class(LinesParallelity(AS),X) & LDir(Y)=
+  Class(LinesParallelity(AS),Y) by A1,Def5;
+A4: now assume LDir(X)=LDir(Y);
+ then X in Class(LinesParallelity(AS),Y) by A2,A3,EQREL_1:31;
+ then ex Y' st X=Y' & Y' is_line & Y '||' Y'
+ by A1,A3,Th9;
+hence X // Y by A1,AFF_4:40; end;
+   now assume X // Y; then X '||' Y by A1,AFF_4:40;
+ then Y in Class(LinesParallelity(AS),X) by A1,A3,Th9;
+hence LDir(X)=LDir(Y) by A2,A3,EQREL_1:31; end;
+hence thesis by A4; end;
+
+theorem Th12: X is_line & Y is_line implies (LDir(X)=LDir(Y) iff X '||' Y)
+proof assume X is_line & Y is_line; then (LDir(X)=LDir(Y) iff X // Y) &
+(X // Y iff X '||' Y) by Th11,AFF_4:40;
+
+hence thesis; end;
+
+theorem Th13: X is_plane & Y is_plane implies (PDir(X)=PDir(Y) iff X '||' Y)
+proof assume A1: X is_plane & Y is_plane;
+then A2: Y in AfPlanes(AS) & X in AfPlanes(AS) by Th8;
+A3: PDir(X)=Class(PlanesParallelity(AS),X) & PDir(Y)=
+  Class(PlanesParallelity(AS),Y) by A1,Def6;
+A4: now assume PDir(X)=PDir(Y);
+ then X in Class(PlanesParallelity(AS),Y) by A2,A3,EQREL_1:31;
+ then ex Y' st X=Y' & Y' is_plane & Y '||' Y'
+ by A1,A3,Th10; hence X '||' Y by A1,AFF_4:58; end;
+   now assume X '||' Y;
+ then Y in Class(PlanesParallelity(AS),X) by A1,A3,Th10;
+hence PDir(X)=PDir(Y) by A2,A3,EQREL_1:31; end;
+hence thesis by A4; end;
+
+definition let AS; func Dir_of_Lines(AS) -> non empty set
+equals :Def7: Class LinesParallelity(AS);
+coherence proof consider a,b being Element
+of the carrier of AS such that A1: a<>b by DIRAF:47; set A=Line(a,b); A
+is_line
+by A1,AFF_1:def 3; then A in AfLines(AS) by Th7;
+ then (Class(LinesParallelity(AS),A))
+ in Class LinesParallelity(AS) by EQREL_1:def 5;
+ hence (Class LinesParallelity(AS)) is non empty set;
+ end; end;
+
+definition let AS; func Dir_of_Planes(AS) -> non empty set
+equals :Def8: Class PlanesParallelity(AS);
+coherence proof
+consider a,b,c being Element of AS
+; consider A such that a in A & b in A & c in A and
+A1: A is_plane by AFF_4:37; A in AfPlanes(AS) by A1,Th8;
+ then (Class(PlanesParallelity(AS),A))
+ in Class PlanesParallelity(AS) by EQREL_1:def 5;
+ hence (Class PlanesParallelity(AS)) is non empty set;
+ end; end;
+
+theorem Th14: for x holds x in Dir_of_Lines(AS) iff ex X st x=LDir(X)
+   & X is_line proof let x;
+A1: now assume A2: x in Dir_of_Lines(AS);
+    Dir_of_Lines(AS)=Class LinesParallelity(AS) by Def7;
+ then reconsider x''=x as Subset of AfLines(AS) by A2;
+   x'' in Class(LinesParallelity(AS)) by A2,Def7; then consider x' being set
+such
+ that A3: x' in AfLines(AS) and A4: x''=Class(LinesParallelity(AS),x') by
+EQREL_1:def 5; consider X such that A5: x'=X and A6: X is_line by A3,Th7;
+ take X;thus x=LDir(X) by A4,A5,A6,Def5; thus X is_line by A6; end;
+   now given X such that A7: x=LDir(X) and A8: X is_line;
+ A9: x=Class(LinesParallelity(AS),X) by A7,A8,Def5;
+    X in AfLines(AS) by A8,Th7; then x in Class(LinesParallelity(AS)) by A9,
+EQREL_1:def 5; hence x in Dir_of_Lines(AS) by Def7; end;
+hence thesis by A1; end;
+
+theorem Th15: for x holds x in Dir_of_Planes(AS) iff ex X st x=PDir(X)
+  & X is_plane proof let x;
+A1: now assume A2: x in Dir_of_Planes(AS);
+    Dir_of_Planes(AS)=Class PlanesParallelity(AS) by Def8;
+ then reconsider x''= x as Subset of AfPlanes(AS) by A2;
+   x'' in
+ Class(PlanesParallelity(AS)) by A2,Def8; then consider x' being set such
+ that A3: x' in AfPlanes(AS) and A4: x''=Class(PlanesParallelity(AS),x') by
+EQREL_1:def 5; consider X such that A5: x'=X and A6: X is_plane by A3,Th8;
+ take X;thus x=PDir(X) by A4,A5,A6,Def6; thus X is_plane by A6; end;
+   now given X such that A7: x=PDir(X) and A8: X is_plane;
+ A9: x=Class(PlanesParallelity(AS),X) by A7,A8,Def6;
+    X in AfPlanes(AS) by A8,Th8; then x in Class(PlanesParallelity(AS)) by A9,
+EQREL_1:def 5; hence x in Dir_of_Planes(AS) by Def8; end;
+hence thesis by A1; end;
+
+:: The point is to guarantee that the classes of new objects consist of really
+:: new objects. Clearly the set of directions of lines and the set of affine
+:: points do not intersect. However we cannot claim, in general, that the set
+:: of affine lines and the set of directions of planes do not intersect; this
+:: is evidently true only in the case of affine planes. Therefore we have to
+:: modify (slightly) a construction of the set of lines of the projective
+:: closure of affine space, when compared with (naive) intuitions.
+
+theorem Th16: the carrier of AS misses Dir_of_Lines(AS)
+proof assume not thesis;
+ then consider x being set such that
+A1: x in (the carrier of AS) & x in Dir_of_Lines(AS) by XBOOLE_0:3;
+consider X such that A2: x=LDir(X) & X is_line by A1,Th14;
+reconsider a=x as Element of AS by A1; set A=a*X;
+A3: A is_line & X // A by A2,AFF_4:27,def 3; then X '||' A by A2,AFF_4:40;
+then A in x by A2,A3,Th9;
+hence contradiction by A2,AFF_4:def 3; end;
+
+theorem
+    AS is AffinPlane implies AfLines(AS) misses Dir_of_Planes(AS)
+proof
+  assume A1: AS is AffinPlane; assume not thesis;
+  then consider x being set such that
+A2:x in AfLines(AS) & x in Dir_of_Planes(AS) by XBOOLE_0:3;
+    the carrier of AS c= the carrier of AS;
+  then reconsider X'=the carrier of AS as Subset of AS;
+A3: X' is_plane by A1,Th1;
+  consider X such that A4: x=PDir(X) and A5: X is_plane by A2,Th15;
+  consider Y such that A6: x=Y and A7: Y is_line by A2,Th7;
+  consider a,b being Element of AS such that
+A8: a in Y and b in Y & a<>b by A7,AFF_1:31;
+  consider Y' such that
+A9: a = Y' and A10: Y' is_plane and X '||' Y' by A4,A5,A6,A8,Th10;
+A11: Y' = X' by A3,A10,AFF_4:33;
+    not Y' in Y';
+  hence contradiction by A9,A11;
+end;
+
+theorem Th18: for x holds (x in [:AfLines(AS),{1}:] iff
+ ex X st x=[X,1] & X is_line) proof let x;
+A1: now assume x in [:AfLines(AS),{1}:]; then consider x1,x2 being set such
+ that A2: x1 in AfLines(AS) and A3: x2 in {1} and A4: x=[x1,x2]
+   by ZFMISC_1:def 2;
+ consider X such that A5: x1=X and A6: X is_line by A2,Th7;
+ take X; thus x=[X,1] by A3,A4,A5,TARSKI:def 1; thus X is_line by A6; end;
+   now given X such that A7: x=[X,1] and A8: X is_line; X in AfLines(AS)
+ by A8,Th7;
+ hence x in [:AfLines(AS),{1}:] by A7,ZFMISC_1:129; end;
+hence thesis by A1; end;
+
+theorem Th19: for x holds (x in [:Dir_of_Planes(AS),{2}:] iff
+ ex X st x=[PDir(X),2] & X is_plane) proof let x;
+A1: now assume x in [:Dir_of_Planes(AS),{2}:]; then consider x1,x2 being set
+ such that A2: x1 in Dir_of_Planes(AS) and A3: x2 in {2} and A4: x=[x1,x2]
+ by ZFMISC_1:def 2;
+ consider X such that A5:x1=PDir(X) and A6: X is_plane by A2,Th15; take X; thus
+ x=[PDir(X),2] by A3,A4,A5,TARSKI:def 1; thus X is_plane by A6; end;
+   now given X such that A7: x=[PDir(X),2] and A8: X is_plane;
+   PDir(X) in Dir_of_Planes(AS) by A8,Th15;
+ hence x in [:Dir_of_Planes(AS),{2}:] by A7,ZFMISC_1:129; end;
+hence thesis by A1; end;
+
+definition let AS;
+  func ProjectivePoints(AS) -> non empty set equals :Def9:
+    (the carrier of AS) \/ Dir_of_Lines(AS);
+  correctness;
+end;
+
+definition let AS;
+  func ProjectiveLines(AS) -> non empty set equals
+:Def10: [:AfLines(AS),{1}:] \/ [:Dir_of_Planes(AS),{2}:];
+  coherence;
+end;
+
+definition let AS;
+  func Proj_Inc(AS) -> Relation of ProjectivePoints(AS),ProjectiveLines(AS)
+means :Def11: for x,y holds [x,y] in it iff
+(ex K st K is_line & y=[K,1] & (x in the carrier of AS & x in K or
+                     x = LDir(K))) or
+(ex K,X st K is_line & X is_plane & x=LDir(K) & y=[PDir(X),2] & K '||' X);
+existence proof set VV1 = ProjectivePoints(AS), VV2 = ProjectiveLines(AS);
+  defpred P[set,set] means
+  ((ex K st K is_line & $2=[K,1] & ($1 in the carrier of AS & $1 in K or
+                     $1 = LDir(K))) or
+ (ex K,X st K is_line & X is_plane & $1=LDir(K) & $2=[PDir(X),2] & K '||' X));
+  consider P being Relation of VV1,VV2 such that
+A1: [x,y] in P iff x in VV1 & y in VV2 & P[x,y] from Rel_On_Set_Ex;
+  take P; let x,y; thus [x,y] in P implies
+(ex K st K is_line & y=[K,1] & (x in the carrier of AS & x in K or
+                     x = LDir(K))) or
+(ex K,X st K is_line & X is_plane & x=LDir(K) & y=[PDir(X),2] & K '||' X)
+by A1;
+ assume A2:
+(ex K st K is_line & y=[K,1] & (x in the carrier of AS & x in K or
+                     x = LDir(K))) or
+(ex K,X st K is_line & X is_plane & x=LDir(K) & y=[PDir(X),2] & K '||' X);
+   x in VV1 & y in VV2 proof
+ A3: VV1 = (the carrier of AS) \/ Dir_of_Lines(AS) &
+     VV2 = [:AfLines(AS),{1}:] \/ [:Dir_of_Planes(AS),{2}:] by Def9,Def10;
+  A4: now given K such that A5: K is_line & y=[K,1] and
+   A6: x in the carrier of AS & x in K or x = LDir(K);
+A7:   y in [:AfLines(AS),{1}:] by A5,Th18;
+      now assume x=LDir(K); then x in Dir_of_Lines(AS) by A5,Th14;
+    hence x in VV1 by A3,XBOOLE_0:def 2; end;
+   hence x in VV1 & y in VV2 by A3,A6,A7,XBOOLE_0:def 2; end;
+     now given K,X such that A8: K is_line & X is_plane & x=LDir(K) &
+     y=[PDir(X),2] & K '||' X; x in Dir_of_Lines(AS) by A8,Th14;
+hence x in VV1 by A3,XBOOLE_0:def 2;
+     y in [:Dir_of_Planes(AS),{2}:] by A8,Th19;
+   hence y in VV2 by A3,XBOOLE_0:def 2; end; hence x in VV1 & y in
+ VV2 by A2,A4; end;
+   hence [x,y] in P by A1,A2; end;
+uniqueness
+ proof let P,Q be Relation of ProjectivePoints(AS),ProjectiveLines(AS)
+   such that A9:  [x,y] in P iff
+(ex K st K is_line & y=[K,1] & (x in the carrier of AS & x in K or
+                     x = LDir(K))) or
+(ex K,X st K is_line & X is_plane & x=LDir(K) & y=[PDir(X),2] & K '||' X) and
+  A10:  [x,y] in Q iff
+(ex K st K is_line & y=[K,1] & (x in the carrier of AS & x in K or
+                     x = LDir(K))) or
+(ex K,X st K is_line & X is_plane & x=LDir(K) & y=[PDir(X),2] & K '||' X);
+    for x,y holds [x,y] in P iff [x,y] in Q proof let x,y; [x,y] in P iff
+(ex K st K is_line & y=[K,1] & (x in the carrier of AS & x in K or
+                     x = LDir(K))) or
+(ex K,X st K is_line & X is_plane & x=LDir(K) & y=[PDir(X),2] & K '||' X)
+ by A9;
+ hence thesis by A10; end; hence thesis by RELAT_1:def 2; end; end;
+
+definition let AS; func
+ Inc_of_Dir(AS) -> Relation of Dir_of_Lines(AS),Dir_of_Planes(AS) means
+ :Def12: for x,y holds [x,y] in it iff ex A,X st x=LDir(A) & y=PDir(X) &
+    A is_line & X is_plane & A '||' X;
+existence proof set VV1 = Dir_of_Lines(AS), VV2 = Dir_of_Planes(AS);
+  defpred P[set,set] means
+  ex A,X st $1=LDir(A) & $2=PDir(X) & A is_line & X is_plane & A '||' X;
+  consider P being Relation of VV1,VV2 such that
+A1: [x,y] in P iff x in VV1 & y in VV2 & P[x,y]
+ from Rel_On_Set_Ex; take P; let x,y; thus [x,y] in P implies
+ ex A,X st x=LDir(A) & y=PDir(X) & A is_line & X is_plane & A '||' X by A1;
+ assume A2:ex A,X st x=LDir(A) & y=PDir(X) & A is_line & X is_plane & A '||' X;
+  then x in VV1 & y in VV2 by Th14,Th15;
+ hence [x,y] in P by A1,A2; end;
+uniqueness proof let P,Q be Relation of Dir_of_Lines(AS),Dir_of_Planes(AS)
+ such that A3: [x,y] in P iff
+ ex A,X st x=LDir(A) & y=PDir(X) & A is_line & X is_plane & A '||' X and
+ A4: [x,y] in Q iff
+ ex A,X st x=LDir(A) & y=PDir(X) & A is_line & X is_plane & A '||' X;
+   for x,y holds [x,y] in P iff [x,y] in Q proof let x,y; [x,y] in P iff
+ ex A,X st x=LDir(A) & y=PDir(X) & A is_line & X is_plane & A '||' X by A3;
+ hence thesis by A4; end; hence thesis by RELAT_1:def 2; end; end;
+
+definition let AS; func
+ IncProjSp_of(AS) -> strict IncProjStr
+equals :Def13: IncProjStr (# ProjectivePoints(AS),
+ ProjectiveLines(AS), Proj_Inc(AS) #);
+correctness; end;
+
+definition let AS; func ProjHorizon(AS) -> strict IncProjStr equals
+:Def14: IncProjStr (#Dir_of_Lines(AS),
+  Dir_of_Planes(AS), Inc_of_Dir(AS) #);
+correctness; end;
+
+:: So we have associated with every affine space AS two incidence structures.
+:: One, denoted by IncProjSp_of(AS), is the projective closure of this
+:: (the closure with help of the directions), and the second, denoted by
+:: ProjHorizon(AS), consisting of directions - the projective horizon of the
+:: given affine space.
+:: In the last part of the article we shall prove that the projective closure
+:: of affine space is always a projective space (defined in terms of lines and
+:: incidence), the projective horizon is a projective space provided the
+:: underlying affine space is at least 3 dimensional, and the projective
+:: horizon is a strong subspace of the projective closure.
+:: We close the article with several evident observations concerning relation-
+:: ships between clasical properties (like being Pappian) of the space AS and
+:: its projective closure.
+
+Lm1: the Points of IncProjSp_of(AS)=ProjectivePoints(AS) &
+ the Lines of IncProjSp_of(AS)=ProjectiveLines(AS) &
+ the Inc of IncProjSp_of(AS)=Proj_Inc(AS)
+proof IncProjSp_of(AS) =
+IncProjStr (# ProjectivePoints(AS),
+ ProjectiveLines(AS), Proj_Inc(AS) #) by Def13; hence thesis; end;
+
+Lm2: the Points of ProjHorizon(AS)=Dir_of_Lines(AS) &
+ the Lines of ProjHorizon(AS)=Dir_of_Planes(AS) &
+ the Inc of ProjHorizon(AS)=Inc_of_Dir(AS)
+proof ProjHorizon(AS)=IncProjStr (#Dir_of_Lines(AS),
+  Dir_of_Planes(AS), Inc_of_Dir(AS) #) by Def14; hence thesis; end;
+
+theorem
+Th20: for x holds (x is POINT of IncProjSp_of(AS)
+ iff (x is Element of AS or ex X st x=LDir(X) & X is_line))
+proof let x;
+A1: now assume x is POINT of IncProjSp_of(AS);
+ then x in the Points of IncProjSp_of(AS);
+ then x in ProjectivePoints(AS) by Lm1;
+then A2: x in (the carrier of AS) \/ Dir_of_Lines(AS) by Def9;
+     x in Dir_of_Lines(AS) implies ( ex X st x=LDir(X) & X is_line) by Th14;
+ hence x is Element of AS or ex X st x=LDir(X) & X is_line
+ by A2,XBOOLE_0:def 2; end;
+   now assume A3: x is Element of AS or ex X st x=LDir(X) &
+ X is_line;
+ A4: now assume x is Element of AS;
+then x in (the carrier of AS) \/ Dir_of_Lines(AS) by XBOOLE_0:def 2;
+  then x in ProjectivePoints(AS) by Def9;
+  hence x is POINT of IncProjSp_of(AS) by Lm1; end;
+    now given X such that A5: x=LDir(X) & X is_line; x in Dir_of_Lines(AS)
+  by A5,Th14; then x in (the carrier of AS) \/ Dir_of_Lines(AS) by XBOOLE_0:def
+2;
+  then x in ProjectivePoints(AS) by Def9;
+  hence x is POINT of IncProjSp_of(AS) by Lm1; end;
+ hence x is POINT of IncProjSp_of(AS) by A3,A4; end;
+hence thesis by A1; end;
+
+theorem Th21: x is Element of the Points of ProjHorizon(AS) iff
+       ex X st x=LDir(X) & X is_line
+proof A1: now assume x is Element of the Points of ProjHorizon(AS);
+ then x in the Points of ProjHorizon(AS);
+ then x in Dir_of_Lines(AS) by Lm2; hence ex X st x=LDir(X) & X is_line
+ by Th14; end;
+   now assume ex X st x=LDir(X) & X is_line; then x in Dir_of_Lines(AS) by Th14
+;
+ hence x is Element of the Points of ProjHorizon(AS) by Lm2; end;
+hence thesis by A1; end;
+
+theorem Th22: x is Element of the Points of ProjHorizon(AS) implies
+  x is POINT of IncProjSp_of(AS)
+proof assume x is Element of the Points of ProjHorizon(AS); then ex X st
+ x=LDir(X) & X is_line by Th21; hence thesis by Th20; end;
+
+theorem
+Th23: for x holds (x is LINE of IncProjSp_of(AS) iff
+ ex X st (x=[X,1] & X is_line or x=[PDir(X),2] & X is_plane))
+proof let x;
+A1: now assume x is LINE of IncProjSp_of(AS);
+ then x in the Lines of IncProjSp_of(AS);
+ then x in ProjectiveLines(AS) by Lm1;
+then A2: x in [:AfLines(AS),{1}:] \/ [:Dir_of_Planes(AS),{2}:] by Def10;
+ A3: x in [:AfLines(AS),{1}:] implies
+  ex X st x=[X,1] & X is_line or x=[PDir(X),2] & X is_plane by Th18;
+    x in [:Dir_of_Planes(AS),{2}:] implies
+ ex X st x=[X,1] & X is_line or x=[PDir(X),2] & X is_plane by Th19;
+ hence ex X st x=[X,1] & X is_line or x=[PDir(X),2] & X is_plane
+ by A2,A3,XBOOLE_0:def 2; end;
+   now given X such that A4:x=[X,1] & X is_line or x=[PDir(X),2] & X is_plane;
+ A5: now assume x=[X,1] & X is_line; then x in [:AfLines(AS),{1}:] by Th18;
+  then x in [:AfLines(AS),{1}:] \/ [:Dir_of_Planes(AS),{2}:] by XBOOLE_0:def 2
+;
+  then x in ProjectiveLines(AS) by Def10;
+  hence x is LINE of IncProjSp_of(AS) by Lm1; end;
+    now assume x=[PDir(X),2] & X is_plane;
+  then x in [:Dir_of_Planes(AS),{2}:] by Th19;
+  then x in [:AfLines(AS),{1}:] \/ [:Dir_of_Planes(AS),{2}:] by XBOOLE_0:def 2
+;
+  then x in ProjectiveLines(AS) by Def10;
+  hence x is LINE of IncProjSp_of(AS) by Lm1; end;
+ hence x is LINE of IncProjSp_of(AS) by A4,A5; end;
+hence thesis by A1; end;
+
+theorem Th24: x is Element of the Lines of ProjHorizon(AS) iff
+       ex X st x=PDir(X) & X is_plane
+proof A1: now assume x is Element of the Lines of ProjHorizon(AS);
+ then x in the Lines of ProjHorizon(AS);
+ then x in Dir_of_Planes(AS) by Lm2; hence ex X st x=PDir(X) & X is_plane
+ by Th15; end;
+   now assume ex X st x=PDir(X) & X is_plane; then x in Dir_of_Planes(AS) by
+Th15;
+ hence x is Element of the Lines of ProjHorizon(AS) by Lm2; end;
+hence thesis by A1; end;
+
+theorem Th25: x is Element of the Lines of ProjHorizon(AS) implies
+  [x,2] is LINE of IncProjSp_of(AS)
+proof assume x is Element of the Lines of ProjHorizon(AS); then ex X
+st x=PDir(X) & X is_plane by Th24;
+hence thesis by Th23; end;
+
+reserve x,y,z,t,u,w for Element of AS;
+reserve K,X,Y,Z,X',Y' for Subset of AS;
+reserve a,b,c,d,p,q,r,p' for POINT of IncProjSp_of(AS);
+reserve A for LINE of IncProjSp_of(AS);
+
+theorem Th26: x=a & [X,1]=A implies (a on A iff X is_line & x in X)
+proof assume A1: x=a & [X,1]=A;
+A2: now assume a on A; then [a,A] in the Inc of IncProjSp_of(AS) by INCSP_1:def
+1;
+ then A3: [x,[X,1]] in Proj_Inc(AS) by A1,Lm1;
+A4: now given K such that A5: K is_line & [X,1]=[K,1] and
+  A6: x in the carrier of AS & x in K or x = LDir(K);
+  A7: X=[K,1]`1 by A5,MCART_1:7 .= K by MCART_1:7;
+    now assume x=LDir(K); then x in Dir_of_Lines(AS) by A5,Th14;
+  then (the carrier of AS) /\ Dir_of_Lines(AS) <> {} by XBOOLE_0:def 3;
+  then (the carrier of AS) meets Dir_of_Lines(AS) by XBOOLE_0:def 7;
+  hence contradiction by Th16; end;
+ hence X is_line & x in X by A5,A6,A7; end;
+   not ex K,X' st K is_line & X' is_plane & x=LDir(K) &
+ [X,1]=[PDir(X'),2] & K '||' X' by ZFMISC_1:33;
+hence X is_line & x in X by A3,A4,Def11; end;
+   now assume X is_line & x in X; then [x,[X,1]] in Proj_Inc(AS) by Def11;
+then [a,A] in the Inc of IncProjSp_of(AS)
+ by A1,Lm1; hence a on A by INCSP_1:def 1; end;
+hence thesis by A2; end;
+
+theorem Th27: x=a & [PDir(X),2]=A & X is_plane implies not a on A
+proof assume A1: x=a & [PDir(X),2]=A & X is_plane; assume a on A;
+then [a,A] in the Inc of IncProjSp_of(AS) by INCSP_1:def 1;
+ then A2: [x,[PDir(X),2]] in Proj_Inc(AS) by A1,Lm1;
+A3: now given K such that K is_line and A4: [PDir(X),2]=[K,1] and
+   (x in the carrier of AS & x in K or x = LDir(K));
+    2 = [K,1]`2 by A4,MCART_1:7 .= 1 by MCART_1:7;
+  hence contradiction; end;
+   now given K,X' such that A5: K is_line & X' is_plane & x=LDir(K) &
+ [PDir(X),2]=[PDir(X'),2] & K '||' X';
+    x in Dir_of_Lines(AS) by A5,Th14;
+ then (the carrier of AS) /\ Dir_of_Lines(AS) <> {} by XBOOLE_0:def 3;
+ then (the carrier of AS) meets Dir_of_Lines(AS) by XBOOLE_0:def 7;
+ hence contradiction by Th16; end;
+hence contradiction by A2,A3,Def11; end;
+
+theorem
+Th28: a=LDir(Y) & [X,1]=A & Y is_line & X is_line implies (a on A iff Y '||' X)
+proof assume A1: a=LDir(Y) & [X,1]=A & Y is_line & X is_line;
+A2: now assume a on A; then [a,A] in the Inc of IncProjSp_of(AS) by INCSP_1:def
+1;
+ then A3: [LDir(Y),[X,1]] in Proj_Inc(AS) by A1,Lm1;
+
+A4: now given K such that A5: K is_line & [X,1]=[K,1] and
+  A6: LDir(Y) in the carrier of AS & LDir(Y) in K or LDir(Y) = LDir(K);
+  A7: K is_line & X=K by A5,ZFMISC_1:33;
+ A8: K in AfLines(AS) by A5,Th7;
+ A9: now assume A10: LDir(Y) in the carrier of AS & LDir(Y) in K;
+     a in Dir_of_Lines(AS) by A1,Th14;
+  then (the carrier of AS) /\ Dir_of_Lines(AS) <> {} by A1,A10,XBOOLE_0:def 3;
+  then (the carrier of AS) meets Dir_of_Lines(AS) by XBOOLE_0:def 7;
+  hence contradiction by Th16; end;
+    now assume A11: LDir(Y)=LDir(K); A12:LDir(Y)=Class(LinesParallelity(AS),Y)
+ & LDir(K)=Class(LinesParallelity(AS),K) by A1,A5,Def5;
+ then Y in Class(LinesParallelity(AS),K) by A8,A11,EQREL_1:31;
+then consider K' being Subset of AS
+ such that A13: Y=K' & K' is_line & K '||' K' by A5,A12,Th9;
+   K // K' by A5,A13,AFF_4:40;hence Y '||' X by A7,A13,AFF_4:40; end;
+ hence Y '||' X by A6,A9; end;
+   not ex K,X' st K is_line & X' is_plane & LDir(Y)=LDir(K) &
+ [X,1]=[PDir(X'),2] & K '||' X' by ZFMISC_1:33;
+hence Y '||' X by A3,A4,Def11; end;
+   now assume Y '||' X; then X in LDir(Y) by A1,Th9;
+ then X in Class(LinesParallelity(AS),Y) & Y in AfLines(AS) by A1,Def5,Th7;
+ then A14:Class(LinesParallelity(AS),X)=Class(LinesParallelity(AS),Y)
+ by EQREL_1:31; LDir(X)=Class(LinesParallelity(AS),X) & LDir(Y)=
+ Class(LinesParallelity(AS),Y) by A1,Def5; then [a,A] in Proj_Inc(AS) by A1,A14
+,Def11;
+ then [a,A] in the Inc of IncProjSp_of(AS) by Lm1;
+ hence a on A by INCSP_1:def 1; end;
+hence thesis by A2; end;
+
+theorem
+Th29: a=LDir(Y) & A=[PDir(X),2] & Y is_line & X is_plane implies (a on A iff
+  Y '||' X)
+proof assume A1: a=LDir(Y) & A=[PDir(X),2] & Y is_line & X is_plane;
+A2: now assume a on A; then [a,A] in the Inc of IncProjSp_of(AS) by INCSP_1:def
+1;
+ then A3: [LDir(Y),[PDir(X),2]] in Proj_Inc(AS) by A1,Lm1;
+A4: (ex K st K is_line & [PDir(X),2]=[K,1] &
+ (LDir(Y) in the carrier of AS & LDir(Y) in K or LDir(Y) = LDir(K))) implies
+ contradiction by ZFMISC_1:33;
+   now given K,X' such that A5: K is_line & X' is_plane & LDir(Y)=LDir(K) &
+ [PDir(X),2]=[PDir(X'),2] & K '||' X';
+ A6: K is_line & X' is_plane & LDir(Y)=LDir(K) &
+ PDir(X)=PDir(X') & K '||' X' by A5,ZFMISC_1:33;
+ A7: K in AfLines(AS) & X' in AfPlanes(AS) by A5,Th7,Th8;
+ A8:LDir(Y)=Class(LinesParallelity(AS),Y) & Class(LinesParallelity(AS),K)=
+  LDir(K) by A1,A5,Def5;
+ then Y in Class(LinesParallelity(AS),K) by A5,A7,EQREL_1:31;
+then consider K' being Subset of AS
+ such that A9: Y=K' & K' is_line & K '||' K' by A5,A8,Th9;
+ A10:Class(PlanesParallelity(AS),X)=PDir(X) & Class(PlanesParallelity(AS),X')=
+ PDir(X') by A1,A5,Def6;
+ then X in Class(PlanesParallelity(AS),X') by A6,A7,EQREL_1:31;
+then A11: ex X'' being Subset of AS
+ st X=X'' & X'' is_plane & X' '||' X'' by A5,A10,Th10;
+   K // K' by A5,A9,AFF_4:40; then A12:K' '||' X' by A5,AFF_4:56; X'<>{} by A5,
+AFF_4:59
+;hence Y '||' X by A9,A11,A12,AFF_4:60; end;
+hence Y '||' X by A3,A4,Def11; end;
+   now assume Y '||' X;
+ then [LDir(Y),[PDir(X),2]] in Proj_Inc(AS) by A1,Def11;
+then [a,A] in the Inc of IncProjSp_of(AS) by A1,Lm1;
+hence a on A by INCSP_1:def 1; end;
+hence thesis by A2; end;
+
+theorem Th30: X is_line & a=LDir(X) & A=[X,1] implies a on A
+proof assume that A1: X is_line and A2: a=LDir(X) & A=[X,1];
+  X // X by A1,AFF_1:55; then X '||' X by A1,AFF_4:40; hence thesis by A1,A2,
+Th28; end;
+
+theorem Th31: X is_line & Y is_plane & X c= Y & a=LDir(X) & A=[PDir(Y),2]
+ implies a on A
+proof assume that A1: X is_line & Y is_plane and A2: X c= Y and
+A3: a=LDir(X) & A=[PDir(Y),2]; X '||' Y by A1,A2,AFF_4:42; hence
+  thesis by A1,A3,Th29; end;
+
+theorem Th32: Y is_plane & X c= Y & X' // X & a=LDir(X') & A=[PDir(Y),2]
+ implies a on A
+proof assume that A1:Y is_plane and A2: X c= Y & X' // X and A3: a=LDir(X') &
+A=[PDir(Y),2]; A4: X' is_line & X is_line by A2,AFF_1:50; then X '||' Y
+by A1,A2,AFF_4:42; then X' '||' Y by A2,AFF_4:56; hence thesis by A1,A3,A4,Th29
+; end;
+
+theorem A=[PDir(X),2] & X is_plane & a on A
+   implies a is not Element of AS by Th27;
+
+theorem Th34:
+ A=[X,1] & X is_line & p on A & p is not Element of AS
+   implies p=LDir(X)
+proof assume that A1: A=[X,1] & X is_line & p on A and
+A2: not p is Element of AS;
+consider Xp being Subset of AS such that
+A3: p=LDir(Xp) & Xp is_line by A2,Th20; Xp '||' X by A1,A3,Th28;hence thesis
+by A1,A3,Th12; end;
+
+theorem Th35: A=[X,1] & X is_line & p on A & a on A & a<>p &
+not p is Element of
+ the carrier of AS implies a is Element of AS
+proof assume that A1: A=[X,1] & X is_line and A2: p on A & a on A & a<>p and
+A3: not p is Element of AS; assume not thesis;
+then a=LDir(X) & p=LDir(X) by A1,A2,A3,Th34; hence contradiction by A2; end;
+
+theorem
+Th36: for a being Element of the Points of ProjHorizon(AS),A being Element
+ of the Lines of ProjHorizon(AS) st a=LDir(X) & A=PDir(Y) & X is_line
+ & Y is_plane holds (a on A iff X '||' Y)
+proof let a be Element of the Points of ProjHorizon(AS),A be Element of the
+Lines of ProjHorizon(AS) such that A1: a=LDir(X) & A=PDir(Y) and
+A2: X is_line & Y is_plane;
+A3: now assume X '||' Y; then [a,A] in Inc_of_Dir(AS) by A1,A2,Def12;
+ then [a,A] in the Inc of ProjHorizon(AS) by Lm2;
+ hence a on A by INCSP_1:def 1; end;
+   now assume a on A; then [a,A] in the Inc of ProjHorizon(AS) by INCSP_1:def 1
+;
+ then [a,A] in Inc_of_Dir(AS) by Lm2; then consider X',Y' such that
+ A4: a=LDir(X') & A=PDir(Y') & X' is_line & Y' is_plane & X' '||' Y' by Def12;
+ A5: X // X' & Y' '||' Y by A1,A2,A4,Th11,Th13;
+ then A6: X '||' Y' by A4,AFF_4:56;
+   Y' <> {} by A4,AFF_4:59; hence X '||' Y by A5,A6,AFF_4:60; end;
+hence thesis by A3; end;
+
+theorem
+Th37: for a being Element of the Points of ProjHorizon(AS),a' being Element of
+ the Points of IncProjSp_of(AS),A being Element of the Lines of
+ ProjHorizon(AS),A' being LINE of IncProjSp_of(AS)
+ st a'=a & A'=[A,2] holds (a on A iff a' on A') proof
+let a be Element of the Points of ProjHorizon(AS),a' be Element of the Points
+of IncProjSp_of(AS),A be Element of the Lines of ProjHorizon(AS),A' be
+LINE of IncProjSp_of(AS) such that A1: a'=a & A'=[A,2];
+consider X such that A2: a=LDir(X) & X is_line by Th21;
+consider Y such that A3: A=PDir(Y) & Y is_plane by Th24;
+A4: now assume a on A; then X '||' Y by A2,A3,Th36; hence a' on A'
+by A1,A2,A3,Th29;
+end; now assume a' on A'; then X '||' Y by A1,A2,A3,Th29;
+hence a on A by A2,A3,Th36; end; hence thesis by A4; end;
+
+reserve A,K,M,N,P,Q for LINE of IncProjSp_of(AS);
+
+theorem
+Th38: for a,b being Element of the Points of ProjHorizon(AS),
+          A,K being Element
+ of the Lines of ProjHorizon(AS) st a on A & a on K & b on A & b on K holds
+ a=b or A=K
+proof let a,b be Element of the Points of ProjHorizon(AS), A,K be Element of
+the Lines of ProjHorizon(AS) such that A1: a on A & a on K and A2: b on A &
+b on K;
+assume A3: a<>b; consider Y such that A4: a=LDir(Y) & Y is_line by Th21;
+consider Y' such that A5: b=LDir(Y') & Y' is_line by Th21;
+consider X such that A6: A=PDir(X) & X is_plane by Th24;
+consider X' such that A7: K=PDir(X') & X' is_plane by Th24;
+A8: not Y // Y' by A3,A4,A5,Th11;
+    Y '||' X & Y '||' X' & Y' '||' X & Y' '||' X' by A1,A2,A4,A5,A6,A7,Th36;
+   then X '||' X' by A4,A5,A6,A7,A8,Th5;
+hence A = K by A6,A7,Th13; end;
+
+theorem Th39: for A being Element of the Lines of ProjHorizon(AS) ex a,b,c
+ being Element of the Points of ProjHorizon(AS) st a on A & b on A & c on A &
+ a<>b & b<>c & c <>a
+proof let A be Element of the Lines of ProjHorizon(AS);
+consider X such that A1: A=PDir(X) and A2: X is_plane by Th24;
+ consider x,y,z such that A3: x in X & y in X & z in X and A4: not LIN x,y,z
+ by A2,AFF_4:34; A5: x<>y & y<>z & z<>x by A4,AFF_1:16;
+ then A6: Line(x,y) is_line & Line(y,z) is_line & Line(x,z) is_line by AFF_1:
+def 3;
+ then reconsider a=LDir(Line(x,y)),b=LDir(Line(y,z)),c =LDir(Line(x,z)) as
+ Element of the Points of ProjHorizon(AS) by Th21; take a,b,c;
+   Line(x,y) c= X & Line(y,z) c= X & Line(x,z) c= X by A2,A3,A5,AFF_4:19;
+ then Line(x,y) '||' X & Line(y,z) '||' X & Line(x,z) '||' X by A2,A6,AFF_4:42
+;
+ hence a on A & b on A & c on A by A1,A2,A6,Th36;
+ A7: x in Line(x,y) & y in Line(x,y) & y in Line(y,z) & z in Line(y,z) &
+  x in Line(x,z) & z in Line(x,z) by AFF_1:26;
+ thus a<>b proof assume not thesis;
+  then Line(x,y) // Line(y,z) by A6,Th11; then z in Line(x,y) by A7,AFF_1:59;
+  hence contradiction by A4,A6,A7,AFF_1:33; end;
+ thus b<>c proof assume not thesis;
+  then Line(y,z) // Line(x,z) by A6,Th11; then x in Line(y,z) by A7,AFF_1:59;
+  hence contradiction by A4,A6,A7,AFF_1:33; end;
+ thus c <>a proof assume not thesis;
+  then Line(x,y) // Line(x,z) by A6,Th11; then z in Line(x,y) by A7,AFF_1:59;
+  hence contradiction by A4,A6,A7,AFF_1:33; end; end;
+
+theorem Th40: for a,b being Element of the Points of ProjHorizon(AS)
+ex A being
+ Element of the Lines of ProjHorizon(AS) st a on A & b on A proof
+let a,b be Element of the Points of ProjHorizon(AS);
+consider X such that A1: a=LDir(X) & X is_line by Th21;
+consider X' such that A2: b=LDir(X') & X' is_line by Th21;
+consider x,y being Element of AS such that
+ A3: x in X' and y in X' & x<>y by A2,AFF_1:31;
+ A4: x*X is_line & x in x*X & X // x*X by A1,AFF_4:27,def 3;
+then consider Z such that A5: X' c= Z & x*X c= Z & Z is_plane by A2,A3,AFF_4:38
+;
+reconsider A=PDir(Z) as Element of the Lines of ProjHorizon(AS) by A5,Th24;
+take A; X '||' Z & X' '||' Z by A1,A2,A4,A5,AFF_4:41,42;
+hence a on A & b on A by A1,A2,A5,Th36; end;
+
+Lm3: AS is not AffinPlane implies (ex a being Element of the Points of
+ ProjHorizon(AS),A being Element of the Lines of ProjHorizon(AS) st not a on A)
+proof assume A1: AS is not AffinPlane;
+consider x,y,z;
+consider X such that A2: x in X and y in X & z in X and
+ A3: X is_plane by AFF_4:37;
+consider t such that A4: not t in X by A1,A3,AFF_4:48; set Y=Line(x,t);
+A5: Y is_line & x in Y & t in Y by A2,A4,AFF_1:26,def 3;
+then reconsider a=LDir(Y) as Element of the Points of ProjHorizon(AS) by Th21;
+reconsider A=PDir(X) as Element of the Lines of ProjHorizon(AS) by A3,Th24;
+take a,A; thus not a on A proof assume not thesis; then Y '||' X by A3,A5,Th36;
+then Y c= X by A2,A3,A5,AFF_4:43;
+hence contradiction by A4,A5; end; end;
+
+Lm4: a on A & a on K & b on A & b on K implies a=b or A=K
+proof assume that A1: a on A & a on K and A2: b on A & b on K; assume A3:a<>b;
+consider X such that
+A4:A=[X,1] & X is_line or A=[PDir(X),2] & X is_plane by Th23;
+consider X' such that
+A5: K=[X',1] & X' is_line or K=[PDir(X'),2] & X' is_plane by Th23;
+A6: now assume a is Element of AS; then reconsider x=a as
+ Element of AS; A7: x=a;
+ A8: x in X & x in X' by A1,A4,A5,Th26,Th27;
+ A9: now assume b is Element of AS; then reconsider y=b as
+  Element of AS; y in X & y in X' by A2,A4,A5,Th26,Th27;
+  hence A=K by A1,A3,A4,A5,A8,Th27,AFF_1:30; end;
+    now given Y such that A10: b=LDir(Y) & Y is_line;
+    Y '||' X & Y '||' X' by A1,A2,A4,A5,A7,A10,Th27,Th28; then Y // X & Y //
+X'
+by A1,A4,A5,A7,A10,Th27,AFF_4:40;
+  then X // X' by AFF_1:58;hence A=K by A1,A4,A5,A8,Th27,AFF_1:59
+; end; hence thesis by A9,Th20; end;
+   now given Y such that A11: a=LDir(Y) & Y is_line;
+ A12: now assume b is Element of AS; then reconsider y=b as
+  Element of AS; A13: y=b;
+  A14: y in X & y in X' by A2,A4,A5,Th26,Th27
+; Y '||' X & Y '||' X' by A1,A2,A4,A5,A11,A13,Th27,Th28;
+  then Y // X & Y // X' by A2,A4,A5,A11,A13,Th27,AFF_4:40; then X // X' by
+AFF_1:58;
+hence A=K by A2,A4,A5,A14,Th27,AFF_1:59; end;
+    now given Y' such that A15: b=LDir(Y') & Y' is_line;
+A16:  M=[Z,1] & Z is_line implies not (a on M & b on M) proof
+assume A17: M=[Z,1] &
+  Z is_line; assume not thesis; then Y '||' Z & Y' '||' Z by A11,A15,A17,Th28
+; then Y // Z & Y' // Z by A11,A15,A17,AFF_4:40;
+  then Y // Y' by AFF_1:58;
+  hence contradiction by A3,A11,A15,Th11; end;
+  A18: not Y // Y' by A3,A11,A15,Th11;
+    Y '||' X & Y '||' X' & Y' '||' X & Y' '||' X' by A1,A2,A4,A5,A11,A15,A16,
+Th29
+;
+   then X '||' X' by A1,A2,A4,A5,A11,A15,A16,A18,Th5;
+  hence A=K by A1,A2,A4,A5,A16,Th13; end;
+hence thesis by A12,Th20; end; hence thesis by A6,Th20; end;
+
+Lm5: ex a,b,c st a on A & b on A & c on A & a<>b & b<>c & c <>a proof
+consider X such that
+A1: A=[X,1] & X is_line or A=[PDir(X),2] & X is_plane by Th23;
+A2: now assume that A3: A=[X,1] and A4: X is_line; consider x,y such that
+ A5:x in X & y in
+ X and A6:x<>y by A4,AFF_1:31; reconsider a=x,b=y as Element of
+ the Points of IncProjSp_of(AS) by Th20; reconsider c =LDir(X) as
+ POINT of IncProjSp_of(AS) by A4,Th20; take a,b,c;
+   X // X by A4,AFF_1:55; then X '||' X by A4,AFF_4:40; hence
+   a on A & b on A & c on A by A3,A4,A5,Th26,Th28; thus a<>b by A6;
+ thus b<>c & c <>a proof assume not thesis;
+then c in the carrier of AS & c in Dir_of_Lines(AS) by A4,Th14;
+ then (the carrier of AS) /\ Dir_of_Lines(AS) <> {} by XBOOLE_0:def 3;
+ then (the carrier of AS) meets Dir_of_Lines(AS) by XBOOLE_0:def 7;
+ hence contradiction by Th16; end; end;
+   now assume that A7: A=[PDir(X),2] and A8: X is_plane;
+ consider x,y,z such that A9: x in X & y in X & z in X and A10: not LIN x,y,z
+ by A8,AFF_4:34; A11: x<>y & y<>z & z<>x by A10,AFF_1:16;
+ then A12: Line(x,y) is_line & Line(y,z) is_line & Line(x,z) is_line by AFF_1:
+def 3;
+ then reconsider a=LDir(Line(x,y)),b=LDir(Line(y,z)),c =LDir(Line(x,z)) as
+ POINT of IncProjSp_of(AS) by Th20; take a,b,c;
+   Line(x,y) c= X & Line(y,z) c= X & Line(x,z) c= X by A8,A9,A11,AFF_4:19;
+ then Line(x,y) '||' X & Line(y,z) '||' X & Line(x,z) '||' X by A8,A12,AFF_4:42
+;
+ hence a on A & b on A & c on A by A7,A8,A12,Th29;
+ A13: x in Line(x,y) & y in Line(x,y) & y in Line(y,z) & z in Line(y,z) &
+  x in Line(x,z) & z in Line(x,z) by AFF_1:26;
+ thus a<>b proof assume not thesis;
+  then Line(x,y) // Line(y,z) by A12,Th11; then z in Line(x,y) by A13,AFF_1:59;
+  hence contradiction by A10,A12,A13,AFF_1:33; end;
+ thus b<>c proof assume not thesis;
+  then Line(y,z) // Line(x,z) by A12,Th11; then x in Line(y,z) by A13,AFF_1:59;
+  hence contradiction by A10,A12,A13,AFF_1:33; end;
+ thus c <>a proof assume not thesis;
+  then Line(x,y) // Line(x,z) by A12,Th11; then z in Line(x,y) by A13,AFF_1:59;
+  hence contradiction by A10,A12,A13,AFF_1:33; end; end;
+hence thesis by A1,A2; end;
+
+Lm6: ex A st a on A & b on A proof
+A1: now
+  assume a is Element of AS; then reconsider x=a as Element
+ of the carrier of AS;
+ A2: now assume b is Element of AS; then reconsider y=b as
+  Element of AS; consider Y such that
+  A3: x in Y & y in Y & Y is_line by AFF_4:11;
+  reconsider A=[Y,1]
+ as LINE of IncProjSp_of(AS) by A3,Th23;
+  take A; thus a on A & b on A by A3,Th26; end;
+    now given X' such that A4: b=LDir(X') & X' is_line;
+ A5: x*X' is_line & x in x*X' by A4,AFF_4:27,def 3;
+  then reconsider A=[x*X',1]
+ as LINE of IncProjSp_of(AS) by Th23;
+  take A; thus a on A by A5,Th26; X' // x*X' by A4,AFF_4:def 3;
+  then X' '||' x*X' by A4,A5,AFF_4:40; hence b on A by A4,A5,Th28; end;
+hence thesis by A2,Th20; end;
+   now given X such that A6: a=LDir(X) & X is_line;
+ A7: now assume b is Element of AS; then reconsider y=b as
+  Element of AS;
+ A8: y*X is_line & y in y*X by A6,AFF_4:27,def 3;
+  then reconsider A=[y*X,1]
+ as LINE of IncProjSp_of(AS) by Th23;
+  take A; X // y*X by A6,AFF_4:def 3; then X '||' y*X by A6,A8,AFF_4:40;
+  hence a on A by A6,A8,Th28; thus b on A by A8,Th26; end;
+    now given X' such that A9: b=LDir(X') & X' is_line;
+  consider x,y being Element of AS such that
+  A10: x in X' and y in X' & x<>y by A9,AFF_1:31;
+  A11: x*X is_line & x in x*X & X // x*X by A6,AFF_4:27,def 3;
+  then consider Z such that A12: X' c= Z & x*X c= Z & Z is_plane
+  by A9,A10,AFF_4:38; reconsider A=[PDir(Z),2] as LINE of
+  IncProjSp_of(AS) by A12,Th23; take A; X '||' Z & X' '||' Z by A6,A9,A11,A12,
+AFF_4:41,42; hence a on A & b on A by A6,A9,A12,Th29; end;
+hence thesis by A7,Th20; end; hence thesis by A1,Th20; end;
+
+Lm7: AS is AffinPlane implies ex a st a on A & a on K
+proof assume A1: AS is AffinPlane; consider X such that
+A2:A=[X,1] & X is_line or A=[PDir(X),2] & X is_plane by Th23; consider X'
+such that A3: K=[X',1] & X' is_line or K=[PDir(X'),2] & X' is_plane by Th23;
+A4: now assume A5: A=[PDir(X),2] & X is_plane;
+ then A6: X=the carrier of AS by A1,Th2;
+ A7: now assume A8: K=[PDir(X'),2] & X' is_plane;
+  consider a,b,c such that A9: a on A and b on A & c on A & a<>b & b<>c &
+  c <>a by Lm5;
+  take a; thus a on A & a on K by A1,A5,A8,A9,Th3; end;
+    now assume A10: K=[X',1] & X' is_line;
+  then A11: X' '||' X by A5,A6,AFF_4:42; X' // X' by A10,AFF_1:55; then A12:
+X' '||' X' by A10,AFF_4:40; reconsider a=LDir(X') as
+  POINT of IncProjSp_of(AS) by A10,Th20; take a;
+  thus a on A & a on K by A5,A10,A11,A12,Th28,Th29; end;
+hence thesis by A3,A7; end;
+   now assume A13: A=[X,1] & X is_line;
+ A14: now assume A15: K=[PDir(X'),2] & X' is_plane;
+  then X'=the carrier of AS by A1,Th2;
+  then A16: X '||' X' by A13,A15,AFF_4:42; X // X by A13,AFF_1:55;
+  then A17: X '||' X by A13,AFF_4:40; reconsider a=LDir(X) as Element of the
+  Points of IncProjSp_of(AS) by A13,Th20; take a;
+  thus a on A & a on K by A13,A15,A16,A17,Th28,Th29; end;
+    now assume A18: K=[X',1] & X' is_line;
+  A19: now assume A20: X // X'; reconsider a=LDir(X),b=LDir(X') as Element of
+   the Points of IncProjSp_of(AS) by A13,A18,Th20; take a;
+   A21: a=b by A13,A18,A20,Th11;
+     X // X & X' // X' by A13,A18,AFF_1:55; then X '||' X & X' '||' X' by A13,
+A18,AFF_4:40;
+   hence a on A & a on K by A13,A18,A21,Th28; end;
+     now assume not X // X'; then consider x such that
+   A22: x in X & x in
+ X' by A1,A13,A18,AFF_1:72; reconsider a=x as Element of the
+   Points of IncProjSp_of(AS) by Th20; take a;
+   thus a on A & a on K by A13,A18,A22,Th26; end; hence thesis by A19; end;
+hence thesis by A3,A14; end; hence thesis by A2,A4; end;
+
+Lm8: ex a,A st not a on A proof
+consider x,y,z such that A1: not LIN x,y,z by AFF_1:21; y<>z by A1,AFF_1:16;
+then A2: Line(y,z) is_line by AFF_1:def 3;
+reconsider a=x as POINT of IncProjSp_of(AS) by Th20;
+reconsider A=[Line(y,z),1] as LINE of IncProjSp_of(AS)
+ by A2,Th23; take a,A;
+thus not a on A proof assume not thesis; then A3: x in Line(y,z) by Th26;
+  y in Line(y,z) & z in Line(y,z) by AFF_1:26;
+hence contradiction by A1,A2,A3,AFF_1:33; end; end;
+
+theorem
+Th41: for x,y being Element of the Points of ProjHorizon(AS), X being Element
+ of the Lines of IncProjSp_of(AS) st x<>y & [x,X] in the Inc of
+ IncProjSp_of(AS) & [y,X] in the Inc of IncProjSp_of(AS) ex
+ Y being Element of the Lines of ProjHorizon(AS) st X=[Y,2]
+proof let x,y be Element of the Points of ProjHorizon(AS), X be Element of the
+Lines of IncProjSp_of(AS); assume that A1: x<>y and A2: [x,X] in the Inc
+of IncProjSp_of(AS) & [y,X] in the Inc of IncProjSp_of(AS);
+reconsider a=x,b=y as POINT of IncProjSp_of(AS) by Th22;
+A3: a on X & b on X by A2,INCSP_1:def 1;
+consider X1 being Subset of AS such that
+ A4: x=LDir(X1) & X1 is_line by Th21;
+consider X2 being Subset of AS such that
+ A5: y=LDir(X2) & X2 is_line by Th21;
+consider Y being Element of the Lines of ProjHorizon(AS) such that
+ A6: x on Y & y on Y by Th40; take Y;
+consider Z being Subset of AS such that
+ A7: Y=PDir(Z) & Z is_plane by Th24;
+reconsider A=[Y,2] as LINE of IncProjSp_of(AS) by Th25;
+   X1 '||' Z & X2 '||' Z by A4,A5,A6,A7,Th36;
+then a on A & b on A by A4,A5,A7,Th29;
+hence thesis by A1,A3,Lm4; end;
+
+theorem
+Th42: for x being POINT of IncProjSp_of(AS),X being
+ Element of the Lines of ProjHorizon(AS) st [x,[X,2]] in the Inc of
+ IncProjSp_of(AS) holds x is Element of the Points of ProjHorizon(AS)
+proof let x be POINT of IncProjSp_of(AS), X be Element
+of the Lines of ProjHorizon(AS) such that A1: [x,[X,2]] in the Inc of
+IncProjSp_of(AS);
+reconsider A=[X,2] as LINE of IncProjSp_of(AS) by Th25;
+A2:ex Y st X=PDir(Y) & Y is_plane by Th24;
+  not x is Element of AS proof assume not thesis;
+then reconsider
+ a=x as Element of AS; A3: a=x;
+    x on A by A1,INCSP_1:def 1; hence contradiction by A2,A3,Th27;
+end; then ex Y' st x=LDir(Y') & Y' is_line by Th20;
+hence thesis by Th21; end;
+
+Lm9: X is_line & X' is_line & Y is_plane & X c= Y & X' c= Y &
+ x=p & A=[X,1] & K=[X',1] & A<>K & b on A & c on K & b on M &
+ c on M & b<>c
+ & M=[Y',1] & Y' is_line implies Y' c= Y
+proof assume that A1: X is_line & X' is_line & Y is_plane and A2: X c= Y &
+X' c= Y and A3: x=p & A=[X,1] & K=[X',1] & A<>K and
+A4: b on A & c on K & b on M & c on M & b<>c and A5: M=[Y',1] & Y' is_line;
+A6: now assume b is Element of AS; then reconsider y=b as
+ Element of AS;
+ A7: now assume c is Element of AS; then reconsider z=c as
+  Element of AS; A8: y in Y' & z in Y' by A4,A5,Th26;
+  A9: y in X & z in X' by A3,A4,Th26;
+   Y'=Line(y,z) by A4,A5,A8,AFF_1:71;
+  hence Y' c= Y by A1,A2,A4,A9,AFF_4:19; end;
+    now given Xc being Subset of AS such that
+  A10: c =LDir(Xc) & Xc is_line; A11: y in Y' & y in X by A3,A4,A5,Th26; Xc
+'||' Y' by A4,A5,A10,Th28; then A12: Xc // Y'
+  by A5,A10,AFF_4:40; Xc '||' X' by A1,A3,A4,A10,Th28;
+  then Xc // X' by A1,A10,AFF_4:40; then X' // Y' by A12,AFF_1:58; then Y'=
+y*X' by A1,A11,AFF_4:def 3;
+  hence Y' c= Y by A1,A2,A11,AFF_4:28; end; hence thesis by A7,Th20; end;
+   now given Xb being Subset of AS such that
+ A13: b=LDir(Xb) & Xb is_line;
+ A14: now assume c is Element of AS; then reconsider y=c as
+  Element of AS; A15: y in Y' & y in X' by A3,A4,A5,Th26; Xb
+'||' Y' by A4,A5,A13,Th28; then A16: Xb // Y'
+  by A5,A13,AFF_4:40; Xb '||' X by A1,A3,A4,A13,Th28; then Xb // X by A1,A13,
+AFF_4:40; then X // Y' by A16,AFF_1:58; then Y'=y*X by A1,A15,AFF_4:def 3;
+  hence Y' c= Y by A1,A2,A15,AFF_4:28; end;
+    now given Xc being Subset of AS such that
+  A17: c =LDir(Xc) & Xc is_line; Xc '||' Y' & Xb '||' Y' by A4,A5,A13,A17,Th28
+;
+  then Xc // Y' & Xb // Y' by A5,A13,A17,AFF_4:40; then Xc // Xb by AFF_1:58;
+  hence contradiction by A4,A13,A17,Th11; end; hence thesis by A14,Th20; end;
+hence thesis by A6,Th20; end;
+
+Lm10: X is_line & X' is_line & Y is_plane & X c= Y & X' c= Y &
+ x=p & A=[X,1] & K=[X',1] & A<>K & b on A & c on K & b on M &
+ c on M & b<>c
+ & M=[PDir(Y'),2] & Y' is_plane implies (Y' '||' Y & Y '||' Y')
+proof assume that A1: X is_line & X' is_line & Y is_plane and A2: X c= Y &
+X' c= Y and A3: x=p & A=[X,1] & K=[X',1] & A<>K and
+A4: b on A & c on K & b on M & c on M & b<>c and A5: M=[PDir(Y'),2] &
+Y' is_plane;
+A6: b is Element of AS or ex Xb being Subset of
+  AS st b=LDir(Xb) & Xb is_line by Th20;
+A7: c is Element of AS or ex Xc being Subset of
+  AS st c =LDir(Xc) & Xc is_line by Th20;
+consider Xb being Subset of AS such that A8: b=LDir(Xb) &
+ Xb is_line by A4,A5,A6,Th27;
+consider Xc being Subset of AS such that A9: c =LDir(Xc) &
+ Xc is_line by A4,A5,A7,Th27;
+A10: not Xb // Xc by A4,A8,A9,Th11;
+A11: Xb '||' Y' & Xc '||' Y' by A4,A5,A8,A9,Th29;
+A12: X '||' Y & X' '||' Y by A1,A2,AFF_4:42;
+  Xb '||' X & Xc '||' X' by A1,A3,A4,A8,A9,Th28; then Xb // X & Xc // X' by A1,
+A8,A9,AFF_4:40; then Xb '||' Y & Xc '||' Y by A12,AFF_4:56;
+hence thesis by A1,A5,A8,A9,A10,A11,Th5; end;
+
+theorem Th43: Y is_plane & X is_line & X' is_line & X c= Y & X' c= Y &
+ P=[X,1] & Q=[X',1] implies ex q st q on P & q on Q
+proof assume that A1: Y is_plane & X is_line & X' is_line & X c= Y & X' c= Y
+and A2: P=[X,1] & Q=[X',1];
+ A3: now assume X // X'; then A4: LDir(X)=LDir(X') by A1,Th11;
+  reconsider q=LDir(X) as POINT of
+  IncProjSp_of(AS) by A1,Th20;take q;
+  thus q on P & q on Q by A1,A2,A4,Th30; end;
+    now given y such that A5: y in X & y in X'; reconsider q=y as Element of
+  the Points of IncProjSp_of(AS) by Th20; take q;
+  thus q on P & q on Q by A1,A2,A5,Th26; end;
+hence thesis by A1,A3,AFF_4:22; end;
+
+Lm11: a on M & b on M & c on N & d on N & p on M & p on N & a on P & c on P &
+b on Q & d on Q
+ & not p on P & not p on Q & M<>N & p is Element of AS
+ implies ex q st q on P & q on Q
+proof assume that A1: a on M & b on M & c on N & d on N and A2: p on M &
+p on N and
+A3: a on P & c on P & b on Q & d on Q and A4: not p on P & not p on Q and
+A5: M<>N and
+A6: p is Element of AS;
+A7: a<>c & b<>d by A1,A2,A3,A4,A5,Lm4;
+consider XM being Subset of AS such that
+A8: M=[XM,1] & XM is_line or M=[PDir(XM),2] & XM is_plane by Th23;
+consider XN being Subset of AS such that
+A9: N=[XN,1] & XN is_line or N=[PDir(XN),2] & XN is_plane by Th23;
+consider XP being Subset of AS such that
+A10: P=[XP,1] & XP is_line or P=[PDir(XP),2] & XP is_plane by Th23;
+consider XQ being Subset of AS such that
+A11: Q=[XQ,1] & XQ is_line or Q=[PDir(XQ),2] & XQ is_plane by Th23;
+reconsider x=p as Element of AS by A6;
+ A12: x in XM & x in XN by A2,A8,A9,Th26,Th27; then consider Y such that
+ A13: XM c= Y & XN c= Y and A14: Y is_plane by A2,A8,A9,Th27,AFF_4:38;
+A15: now assume A16: P=[XP,1] & XP is_line;
+ then A17: XP c= Y by A1,A2,A3,A5,A7,A8,A9,A12,A13,A14,Lm9,Th27;
+ A18: now assume A19: Q=[XQ,1] & XQ is_line; then XQ c= Y by A1,A2,A3,A5,A7,A8,
+A9,A12,A13,A14,Lm9,Th27; hence thesis by A14,A16,A17,A19,Th43; end;
+    now assume A20: Q=[PDir(XQ),2] & XQ is_plane;
+ then A21: Y '||' XQ by A1,A2,A3,A5,A7,A8,A9,A12,A13,A14,Lm10,Th27;
+  reconsider q=LDir(XP) as POINT of IncProjSp_of(AS)
+  by A16,Th20; take q; thus q on P by A16,Th30;
+    XP '||' Y by A14,A16,A17,AFF_4:42;
+  then XP '||' XQ by A14,A21,Th6; hence q on Q by A16,A20,Th29; end;
+hence thesis by A11,A18; end;
+   now assume A22: P=[PDir(XP),2] & XP is_plane;
+ then A23: Y '||' XP by A1,A2,A3,A5,A7,A8,A9,A12,A13,A14,Lm10,Th27;
+ A24: now assume A25: Q=[PDir(XQ),2] & XQ is_plane;
+  then Y '||' XQ by A1,A2,A3,A5,A7,A8,A9,A12,A13,A14,Lm10,Th27;
+ then A26: XP '||' XQ by A14,A22,A23,A25,AFF_4:61;
+  consider q,r,p' such that A27: q on P and r on P & p' on P & q<>r & r<>p' &
+  p'<>q
+  by Lm5; take q; thus q on P by A27; thus q on Q by A22,A25,A26,A27,Th13;
+end;
+    now assume A28: Q=[XQ,1] & XQ is_line;
+  then A29: XQ c= Y by A1,A2,A3,A5,A7,A8,A9,A12,A13,A14,Lm9,Th27;
+  reconsider q=LDir(XQ) as POINT of IncProjSp_of(AS)
+  by A28,Th20; take q; XQ '||' Y by A14,A28,A29,AFF_4:42;
+  then XQ '||' XP by A14,A23,Th6; hence q on P by A22,A28,Th29; thus q on Q
+by A28,Th30; end;
+hence thesis by A11,A24; end; hence thesis by A10,A15; end;
+
+Lm12: a on M & b on M & c on N & d on N & p on M & p on N & a on P & c on P &
+b on Q & d on Q
+ & not p on P & not p on Q & M<>N & not p is Element of AS
+ & a is Element of AS implies ex q st q on P & q on Q
+proof assume that A1: a on M & b on M & c on N & d on N and
+A2: p on M & p on N and
+A3: a on P & c on P & b on Q & d on Q and A4: not p on P & not p on Q and
+A5: M<>N and
+A6: not p is Element of AS and A7: a is Element of the carrier
+of AS;consider X such that A8: p=LDir(X) and A9: X is_line by A6,Th20;
+A10: a<>c & b<>d by A1,A2,A3,A4,A5,Lm4;
+consider XM being Subset of AS such that
+A11: M=[XM,1] & XM is_line or M=[PDir(XM),2] & XM is_plane by Th23;
+consider XN being Subset of AS such that
+A12: N=[XN,1] & XN is_line or N=[PDir(XN),2] & XN is_plane by Th23;
+consider XP being Subset of AS such that
+A13: P=[XP,1] & XP is_line or P=[PDir(XP),2] & XP is_plane by Th23;
+consider XQ being Subset of AS such that
+A14: Q=[XQ,1] & XQ is_line or Q=[PDir(XQ),2] & XQ is_plane by Th23;
+reconsider x=a as Element of AS by A7; A15: x=a;
+A16: x in XM & x in XP by A1,A3,A11,A13,Th26,Th27; then consider Y such that
+A17: XM c= Y & XP c= Y and A18: Y is_plane by A1,A3,A11,A13,Th27,AFF_4:38;
+A19: XM '||' Y & XP '||' Y by A1,A3,A11,A13,A15,A17,A18,Th27,AFF_4:42;
+A20: X '||' XM by A1,A2,A8,A9,A11,A15,Th27,Th28; then A21: X // XM by A1,A9,A11
+,A15,Th27,AFF_4:40;
+A22: not XM // XP by A1,A2,A3,A4,A11,A13,A16,Th27,AFF_1:59;
+ reconsider
+ y=b as Element of AS by A1,A2,A3,A4,A6,A11,A15,Th27,Th35; A23:
+y=b;
+A24: y in XQ & y in XM by A1,A3,A11,A14,Th26,Th27;
+A25: now assume A26: N=[XN,1] & XN is_line;
+ then A27: X '||' XN by A2,A8,A9,Th28; A28: XM // XN proof X // XM & X // XN
+by A1,A9,A11,A15,A20,A26,A27,Th27,AFF_4:40; hence thesis by AFF_1:58; end;
+    c is Element of AS proof assume not thesis; then c =LDir(
+XN
+)
+  by A1,A26,Th34; then XN '||' XP by A3,A13,A15,A26,Th27,Th28; then XN // XP
+by A3,A13,A15,A26,Th27,AFF_4:40; hence contradiction by A22,A28,AFF_1:58; end;
+ then reconsider z=c as Element of AS;
+ A29: z in XP & z in XN by A1,A3,A13,A26,Th26,Th27;
+ A30: XN c= Y proof XN=z*XM by A1,A11,A15,A28,A29,Th27,AFF_4:def 3; hence
+ thesis by A1,A11,A15,A17,A18,A29,Th27,AFF_4:28; end;
+ A31: not XN // XQ proof assume XN // XQ; then XM // XQ by A28,AFF_1:58;
+   hence contradiction by A1,A2,A3,A4,A11,A14,A24,Th27,AFF_1:59; end;
+   now assume not d is Element of AS; then consider Xd being
+  Subset of AS such that A32: d=LDir(Xd) & Xd is_line by Th20;
+    Xd '||' XN & Xd '||' XQ by A1,A3,A14,A23,A26,A32,Th27,Th28
+; then Xd // XN & Xd // XQ by A3,A14,A23,A26,A32,Th27,AFF_4:40; hence
+ contradiction by A31,AFF_1:58; end;
+ then reconsider w=d as Element of AS; A33: w in XQ & w in XN
+by A1,A3,A14,A26,Th26,Th27;
+ then XQ=Line(y,w) by A3,A10,A14,A24,Th27,AFF_1:71; then XQ c= Y by A10,A17,A18
+,A24,A30,A33,AFF_4:19; hence thesis by A3,A13,A14,A15,A17,A18,A23,Th27,Th43
+; end;
+   now assume A34: N=[PDir(XN),2] & XN is_plane;
+ then X '||' XN by A2,A8,A9,Th29; then A35: XM '||' XN by A21,AFF_4:56;
+    XP '||' XN proof c is not Element of AS
+  by A1,A34,Th27;
+  then c =LDir(XP) by A3,A13,A15,Th27,Th34
+; hence thesis by A1,A3,A13,A15,A34,Th27,Th29; end;
+ then A36: XN '||' Y by A1,A3,A11,A13,A15,A18,A19,A22,A34,A35,Th5,Th27;
+    XQ c= Y proof d is not Element of AS
+  by A1,A34,Th27;
+  then d=LDir(XQ) by A3,A14,A23,Th27,Th34; then A37: XQ '||' XN by A1,A3,A14,
+A23,A34,Th27,Th29;
+    XN <> {} by A34,AFF_4:59; then XQ '||' Y by A36,A37,AFF_4:60; hence
+thesis
+  by A3,A14,A17,A18,A24,Th27,AFF_4:43; end; hence thesis by A3,A13,A14,A15,A17,
+A18,A23,Th27,Th43; end;
+hence thesis by A12,A25; end;
+
+Lm13: a on M & b on M & c on N & d on N & p on M & p on N & a on P & c on P &
+b on Q & d on Q
+ & not p on P & not p on Q & M<>N & not p is Element of AS
+ & (a is Element of AS or b is Element of AS
+ or c is Element of AS or d is Element of AS)
+ implies ex q st q on P & q on Q
+proof assume that A1: a on M & b on M & c on N & d on N & p on M & p on N &
+a on P & c on P & b on Q & d on Q
+ & not p on P & not p on Q & M<>N & not p is Element of AS and
+ A2: a is Element of AS or b is Element of AS
+ or c is Element of AS or d is Element of AS;
+   now assume b is Element of AS or d is Element of the
+ carrier of AS; then ex q st q on Q & q on P by A1,Lm12;
+ hence thesis; end; hence thesis by A1,A2,Lm12; end;
+
+Lm14: a on M & b on M & c on N & d on N & p on M & p on N & a on P & c on P &
+b on Q & d on Q
+ & not p on P & not p on Q & M<>N implies ex q st q on P & q on Q
+proof assume that A1: a on M & b on M & c on N & d on N & p on M & p on N &
+a on P & c on P & b on Q & d on Q
+ and A2: not p on P & not p on Q and A3: M<>N;
+   now assume A4: not p is Element of AS;
+    now assume A5: not a is Element of AS &
+  not b is Element of AS & not c is Element of AS
+  & not d is Element of AS;
+consider Xp being Subset of AS such that
+A6: p=LDir(Xp) & Xp is_line by A4,Th20;
+consider Xa being Subset of AS such that
+A7: a=LDir(Xa) & Xa is_line by A5,Th20;
+consider Xb being Subset of AS such that
+A8: b=LDir(Xb) & Xb is_line by A5,Th20;
+consider Xc being Subset of AS such that
+A9: c =LDir(Xc) & Xc is_line by A5,Th20;
+consider Xd being Subset of AS such that
+A10: d=LDir(Xd) & Xd is_line by A5,Th20;
+A11: a<>c & b<>d by A1,A2,A3,Lm4;
+
+consider x; set Xa'=x*Xa,Xb'=x*Xb,Xc'=x*Xc,Xd'=x*Xd,Xp'=x*Xp;
+A12: Xa' is_line & Xb' is_line & Xc' is_line & Xd' is_line & Xp' is_line &
+ x in Xa' & x in Xb' & x in Xc' & x in Xd' & x in Xp' & Xa // Xa' & Xb // Xb' &
+ Xc // Xc' & Xd // Xd' & Xp // Xp' by A6,A7,A8,A9,A10,AFF_4:27,def 3;
+then consider y such that A13: x<>y & y in Xa' by AFF_1:32;
+consider t such that A14: x<>t & t in Xc' by A12,AFF_1:32;
+set Y1=y*Xp',Y2=t*Xp';
+A15: Y1 is_line & Y2 is_line & y in Y1 & t in Y2 & Xp' // Y1 & Xp' // Y2
+ by A12,AFF_4:27,def 3; then A16: Y1 // Y2 by AFF_1:58; consider X1 being
+Subset of
+the carrier of AS such that
+A17: Xa' c= X1 & Xp' c= X1 & X1 is_plane by A12,AFF_4:38;
+ consider X2 being Subset of AS such that
+A18: Xc' c= X2 & Xp' c= X2 & X2 is_plane by A12,AFF_4:38;
+ consider X3 being Subset of AS such that
+A19: Y1 c= X3 & Y2 c= X3 & X3 is_plane by A16,AFF_4:39;
+A20: Y1 c= X1 & Y2 c= X2 by A12,A13,A14,A17,A18,AFF_4:28;
+A21: M=[PDir(X1),2] proof reconsider M'=[PDir(X1),2] as Element of the Lines
+ of IncProjSp_of(AS) by A17,Th23; p on M' & a on M' by A6,A7,A12,A17,Th32;
+ hence thesis by A1,A2,Lm4; end;
+A22: N=[PDir(X2),2] proof reconsider N'=[PDir(X2),2] as Element of the Lines
+ of IncProjSp_of(AS) by A18,Th23; p on N' & c on N' by A6,A9,A12,A18,Th32;
+ hence thesis by A1,A2,Lm4; end;
+A23: Xb' c= X1 & Xd' c= X2 proof
+  Xb '||' X1 & Xd '||' X2 by A1,A8,A10,A17,A18,A21,A22,Th29; then Xb' '||' X1
+&
+Xd' '||' X2 by A12,AFF_4:56;
+ hence thesis by A12,A17,A18,AFF_4:43; end;
+A24: not Xb' // Y1 proof assume Xb' // Y1; then Xb // Y1 by A12,AFF_1:58;
+ then Xb // Xp' by A15,AFF_1:58; then Xb // Xp by A12,AFF_1:58;
+hence contradiction by A1,A2,A6,A8,Th11; end;
+A25: not Xd' // Y2 proof assume Xd' // Y2; then Xd // Y2 by A12,AFF_1:58;
+ then Xd // Xp' by A15,AFF_1:58; then Xd // Xp by A12,AFF_1:58;
+hence contradiction by A1,A2,A6,A10,Th11; end;
+consider z such that A26: z in Xb' & z in
+ Y1 by A12,A15,A17,A20,A23,A24,AFF_4:22;
+consider u such that A27: u in Xd' & u in
+ Y2 by A12,A15,A18,A20,A23,A25,AFF_4:22; set AC=Line(y,t),BD=Line(z,u);
+A28: Xa'<>Xc' proof assume Xa'=Xc'; then a=LDir(Xc') by A7,A12,Th11 .=
+c by A9,A12,Th11;
+ hence contradiction by A1,A2,A3,Lm4; end;
+then A29: y<>t by A12,A13,A14,AFF_1:30;
+A30: x<>z proof assume A31: not thesis;
+   a = LDir(Xa') by A7,A12,Th11 .= LDir(Y1)
+ by A12,A13,A15,A26,A31,AFF_1:30
+ .= LDir(Xp') by A12,A15,Th11 .= p by A6,A12,Th11;
+ hence contradiction by A1,A2; end;
+A32: z<>u proof assume A33: not thesis;
+   b= LDir(Xb') by A8,A12,Th11 .= LDir(Xd')
+ by A12,A26,A27,A30,A33,AFF_1:30
+ .= d by A10,A12,Th11; hence contradiction by A1,A2,A3,Lm4;
+ end; then A34: AC is_line & BD is_line by A29,AFF_1:def 3;
+A35: AC c= X3 & BD c= X3 by A15,A19,A26,A27,A29,A32,AFF_4:19;
+consider XP being Subset of AS such that
+A36: Xa' c= XP & Xc' c= XP & XP is_plane by A12,AFF_4:38;
+consider XQ being Subset of AS such that
+A37: Xb' c= XQ & Xd' c= XQ & XQ is_plane by A12,AFF_4:38;
+A38: y in AC & t in AC by AFF_1:26;
+A39: P=[PDir(XP),2] & Q=[PDir(XQ),2] proof reconsider P'=[PDir(XP),2],
+ Q'=[PDir(XQ),2] as LINE of IncProjSp_of(AS) by A36,A37,Th23;
+   a on P' & c on P' & b on Q' & d on Q' by A7,A8,A9,A10,A12,A36,A37,Th32;
+hence thesis by A1,A11,Lm4; end;
+A40: AC c= XP & BD c= XQ by A13,A14,A26,A27,A29,A32,A36,A37,AFF_4:19;
+A41: now assume A42: AC // BD; reconsider q=LDir(AC),q'=LDir(BD) as Element of
+the
+ Points of IncProjSp_of(AS) by A34,Th20; take q;
+    q=q' by A34,A42,Th11;
+ hence q on P & q on Q by A34,A36,A37,A39,A40,Th31; end;
+   now given w such that A43: w in AC & w in BD;
+ A44: x<>w proof assume x=w; then Xa'=AC & Xc'=AC by A12,A13,A14,A34,A38,A43,
+AFF_1:30; hence contradiction by A28; end;
+ set R=Line(x,w); A45: R is_line by A44,AFF_1:def 3;
+ then reconsider q=LDir(R) as POINT of IncProjSp_of(AS) by Th20; take q; R
+c=
+XP & R c= XQ by A12,A36,A37,A40,A43,A44,AFF_4:19;
+ hence q on P & q on Q by A36,A37,A39,A45,Th31; end;
+ hence thesis by A19,A34,A35,A41,AFF_4:22; end; hence thesis by A1,A2,A3,A4,
+Lm13; end;
+hence thesis by A1,A2,A3,Lm11; end;
+
+theorem
+Th44: for a,b,c,d,p being Element of the Points of ProjHorizon(AS),M,N,P,Q
+ being Element of the Lines of ProjHorizon(AS) st
+ a on M & b on M & c on N & d on N & p on M &
+ p on N & a on P & c on P & b on Q & d on Q & not p on P & not p on Q & M<>N
+ ex q being Element of
+ the Points of ProjHorizon(AS) st q on P & q on Q
+proof let a,b,c,d,p be Element of the Points of ProjHorizon(AS),M,N,P,Q be
+Element of the Lines of ProjHorizon(AS) such that
+ A1: a on M & b on M & c on N & d on N & p on M
+& p on N & a on P & c on P & b on Q & d on Q & not p on P & not p on Q & M<>N;
+reconsider a'=a,b'=b,c'=c,d'=d,p'=p as POINT of
+IncProjSp_of(AS) by Th22; reconsider M'=[M,2],N'=[N,2],P'=[P,2],Q'=[Q,2]
+as LINE of IncProjSp_of(AS) by Th25;
+A2: a' on M' & b' on M' & c' on N' & d' on N' & p' on M' &
+ p' on N' & a' on P' & c' on P' & b' on Q' & d' on Q' & not p' on P' &
+ not p' on Q' by A1,Th37;
+   M'<>N' proof assume M'=N';
+ then M = [N,2]`1 by MCART_1:7 .= N by MCART_1:7;
+ hence contradiction by A1; end;
+then consider q' being POINT of IncProjSp_of(AS)
+such that A3: q' on P' & q' on Q' by A2,Lm14;
+  [q',[P,2]] in the Inc of IncProjSp_of(AS) by A3,INCSP_1:def 1
+; then reconsider q=q' as
+Element of the Points of ProjHorizon(AS) by Th42; take q;
+thus q on P & q on Q by A3,Th37; end;
+
+definition let AS;
+  cluster IncProjSp_of(AS) -> partial linear up-2-dimensional
+    up-3-rank Vebleian;
+  correctness
+  proof
+    set XX = IncProjSp_of(AS);
+    A1: for a,b being POINT of XX, A,K being LINE of XX st a on A & b on A &
+    a on K & b on K
+      holds a=b or A=K by Lm4;
+    A2: for a,b being POINT of XX ex A being LINE of XX st a on A & b on A by
+Lm6;
+    A3: ex a being POINT of XX, A being LINE of XX st not a on A by Lm8;
+    A4: for A being LINE of XX ex a,b,c being POINT of XX st
+      a<>b & b<>c & c <>a & a on A & b on A & c on A
+    proof
+      let A be LINE of XX;
+      consider a,b,c being POINT of XX such that
+    A5: a on A & b on A & c on A & a<>b & b<>c & c <>a by Lm5;
+      take a,b,c;
+      thus thesis by A5;
+    end;
+      for a,b,c,d,p,q being POINT of XX, M,N,P,Q being LINE of XX st
+      a on M & b on M & c on N & d on N & p on M & p on N & a on P & c on P &
+      b on Q & d on Q & not p on P & not p on Q & M<>N holds
+      ex q being POINT of XX st q on P & q on Q by Lm14;
+    hence thesis by A1,A2,A3,A4,INCPROJ:def 9,def 10,def 11,def 12,def 13;
+  end;
+end;
+
+definition
+ cluster strict 2-dimensional IncProjSp;
+  existence
+ proof consider AS being AffinPlane;
+  set XX=IncProjSp_of(AS);
+    for A,K being LINE of XX
+   ex a being POINT of XX st a on A & a on K by Lm7;
+  then XX is 2-dimensional IncProjSp by INCPROJ:def 14;
+  hence thesis;
+ end;
+end;
+
+definition let AS be AffinPlane;
+ cluster IncProjSp_of(AS) -> 2-dimensional;
+correctness proof set XX=IncProjSp_of(AS);
+   for A,K being LINE of XX ex a being Element of the Points
+ of XX st a on A & a on K by Lm7;
+ hence thesis by INCPROJ:def 14; end; end;
+
+theorem IncProjSp_of(AS) is 2-dimensional implies AS is AffinPlane
+proof assume A1: IncProjSp_of(AS) is 2-dimensional; assume
+A2: AS is not AffinPlane; consider x,y;
+consider X such that A3: x in X & y in X & y in
+ X and A4: X is_plane by AFF_4:37;
+consider z such that A5: not z in X by A2,A4,AFF_4:48; set Y=Line(x,z);
+A6: Y is_line & x in Y & z in Y by A3,A5,AFF_1:26,def 3;
+then reconsider A=[PDir(X),2],K=[Y,1] as LINE of
+ IncProjSp_of(AS) by A4,Th23;
+consider a being POINT of IncProjSp_of(AS) such that
+ A7: a on A & a on K by A1,INCPROJ:def 14;
+  not a is Element of AS by A4,A7,Th27; then consider Y' such
+that A8: a=LDir(Y') & Y' is_line by Th20;
+A9: Y' '||' X & Y' '||' Y by A4,A6,A7,A8,Th28,Th29;
+then Y' // Y by A6,A8,AFF_4:40;
+then Y '||' X by A9,AFF_4:56; then Y c= X by A3,A4,A6,AFF_4:43;
+hence contradiction by A5,A6; end;
+
+theorem
+   AS is not AffinPlane implies ProjHorizon(AS) is IncProjSp
+proof
+  assume
+A1: AS is not AffinPlane;
+  set XX = ProjHorizon(AS);
+  A2: for a,b being Element of the Points of XX,
+   A,K being Element of the Lines of XX st a on A & b on A & a on K & b on K
+     holds a=b or A=K by Th38;
+  A3: for a,b being Element of the Points of XX
+    ex A being Element of the Lines of XX st a on A & b on A by Th40;
+   A4: ex a being Element of the Points of XX, A being Element of the Lines of
+XX
+     st not a on A by A1,Lm3;
+  A5: for A being Element of the Lines of XX
+    ex a,b,c being Element of the Points of XX st
+      a<>b & b<>c & c <>a & a on A & b on A & c on A
+  proof
+    let A be Element of the Lines of XX;
+    consider a,b,c being Element of the Points of XX such that
+  A6: a on A & b on A & c on A & a<>b & b<>c & c <>a by Th39;
+    take a,b,c;
+    thus thesis by A6;
+  end;
+
+    for a,b,c,d,p,q being Element of the Points of XX,
+    M,N,P,Q being Element of the Lines of XX st
+     a on M & b on M & c on N & d on N & p on M & p on N & a on P & c on P &
+     b on Q & d on Q & not p on P & not p on Q & M<>N
+     holds ex q being Element of the Points of XX st q on P & q on Q by Th44;
+  hence XX is IncProjSp by A2,A3,A4,A5,INCPROJ:def 9,def 10,def 11,def 12,def
+13;
+end;
+
+theorem
+   ProjHorizon(AS) is IncProjSp implies AS is not AffinPlane
+proof
+  assume A1: ProjHorizon(AS) is IncProjSp;
+  assume A2: AS is AffinPlane;
+  set XX=ProjHorizon(AS);
+  consider a being Element of the Points of XX,
+    A being Element of the Lines of XX such that
+A3: not a on A by A1,INCPROJ:def 11;
+  consider X such that
+A4: a=LDir(X) & X is_line by Th21;
+  consider Y such that
+A5: A=PDir(Y) & Y is_plane by Th24;
+    Y = the carrier of AS by A2,A5,Th2;
+  then X '||' Y by A4,A5,AFF_4:42;
+  hence contradiction by A3,A4,A5,Th36;
+end;
+
+theorem Th48:
+for M,N being Subset of AS, o,a,b,c,a',b',c' being Element of
+ the carrier of AS st M is_line & N is_line & M<>N &
+   o in M & o in N & o<>a & o<>a' & o<>b & o<>b' & o<>c & o<>c' & a in M &
+   b in M & c in M & a' in N & b' in N & c' in N &
+   a,b' // b,a' & b,c' // c,b' & (a=b or b=c or a=c) holds a,c' // c,a'
+proof let M,N be Subset of AS, o,a,b,c,a',b',c' be Element of
+ the carrier of AS such that A1: M is_line & N is_line and A2: M<>N and
+ A3: o in M & o in N and A4: o<>a & o<>a' & o<>b & o<>b' & o<>c & o<>c' and
+ A5: a in M & b in M & c in M & a' in N & b' in N & c' in N and
+ A6: a,b' // b,a' & b,c' // c,b' and A7: a=b or b=c or a=c;
+A8: c <>b' by A1,A2,A3,A4,A5,AFF_1:30;
+   now assume A9: a=c; then b,c' // b,a' by A6,A8,AFF_1:14; then a'=c' by A1,A2
+,A3,A4,A5,AFF_4:9;
+ hence a,c' // c,a' by A9,AFF_1:11; end;
+hence thesis by A1,A2,A3,A4,A5,A6,A7,AFF_4:9; end;
+
+theorem IncProjSp_of(AS) is Pappian implies AS is Pappian
+proof assume A1: IncProjSp_of(AS) is Pappian;
+set XX = IncProjSp_of(AS);
+  for M,N being Subset of AS, o,a,b,c,a',b',c' being Element of
+ the carrier of AS st M is_line & N is_line & M<>N &
+   o in M & o in N & o<>a & o<>a' & o<>b & o<>b' & o<>c & o<>c' & a in M &
+   b in M & c in M & a' in N & b' in N & c' in N &
+   a,b' // b,a' & b,c' // c,b' holds a,c' // c,a'
+proof let M,N be Subset of AS, o,a,b,c,a',b',c' be Element of
+ the carrier of AS such that A2: M is_line & N is_line and A3: M<>N and
+  A4: o in M & o in N and A5: o<>a & o<>a' & o<>b & o<>b' & o<>c & o<>c' and
+  A6: a in M & b in M & c in M & a' in N & b' in N & c' in N and
+  A7: a,b' // b,a' & b,c' // c,b';
+consider Y such that A8: M c= Y & N c= Y and A9: Y is_plane by A2,A4,AFF_4:38;
+reconsider p=o,a1=a',a2=c',a3=b',b1=a,b2=c,b3=b as
+ Element of the Points of XX by Th20;
+reconsider A3=[M,1],B3=[N,1] as Element of the Lines of XX by A2,Th23;
+reconsider C3'=[PDir(Y),2] as Element of the Lines of XX by A9,Th23;
+A10: a in Line(a,b') & b' in Line(a,b') & b in Line(b,a') & a' in Line(b,a') &
+ b in Line(b,c') & c' in Line(b,c') & c in Line(c,b') & b' in Line(c,b') &
+ a in Line(a,c') & c' in Line(a,c') & c in Line(c,a') & a' in Line(c,a')
+  by AFF_1:26;
+A11: a<>b' & b<>a' & b<>c' & c <>b' & a<>c' & c <>a' by A2,A3,A4,A5,A6,AFF_1:30
+;
+then A12: Line(a,b') is_line & Line(b,a') is_line & Line(b,c') is_line &
+ Line(c,b') is_line & Line(a,c') is_line & Line(c,a') is_line
+  by AFF_1:def 3;
+   Line(a,b') // Line(b,a') & Line(b,c') // Line(c,b') by A7,A11,AFF_1:51;
+then A13: Line(a,b') '||' Line(b,a') & Line(b,c') '||' Line(c,b')
+by A12,AFF_4:40;
+reconsider A1=[Line(b,c'),1],A2=[Line(b,a'),1],B1=[Line(a,b'),1],
+ B2=[Line(c,b'),1],C1=[Line(c,a'),1],C2=[Line(a,c'),1] as
+ Element of the Lines of XX by A12,Th23;
+reconsider c1=LDir(Line(b,c')),c2=LDir(Line(a,b')) as Element of
+ the Points of XX by A12,Th20;
+A14: p on A3 & b1 on A3 & b2 on A3 &
+b3 on A3 & p on B3 & a1 on B3 & a2 on B3 & a3 on B3
+ by A2,A4,A6,Th26;
+A15: a2 on A1 & b3 on A1 & c1 on A1 & a3 on B2 & b2 on B2 & c1 on B2 &
+b1 on B1 & a3 on B1 & c2 on B1
+ & b3 on A2 & a1 on A2 & c2 on A2 by A10,A12,A13,Th26,Th28,Th30;
+A16: b1 on C2 & a2 on C2 & b2 on C1 & a1 on C1 by A10,A12,Th26;
+  Line(b,c') c= Y & Line(a,b') c= Y by A6,A8,A9,A11,AFF_4:19;
+then A17: c1 on C3' & c2 on C3' by A9,A12,Th31;
+   now assume A18: b1<>b2 & b2<>b3 & b3<>b1;
+    a1<>a2 & a2<>a3 & a1<>a3 proof assume A19: not thesis;
+    now assume a'=c'; then a,b' // c,b' by A7,A11,AFF_1:14;
+hence contradiction by A2,A3,A4,A5,A6,A18,AFF_4:9
+; end; hence contradiction by A2,A3,A4,A5,A6,A7,A18,A19,AFF_4:9; end;
+then A20: p,a1,a2,a3 are_mutually_different by A5,INCPROJ:def 6;
+A21: p,b1,b2,b3 are_mutually_different by A5,A18,INCPROJ:def 6;
+A22: A3<>B3 & p on A3 & p on B3 proof thus A3<>B3 proof assume A3=B3;
+then M=[N,1]`1
+ by MCART_1:7 .= N by MCART_1:7; hence
+   contradiction by A3; end; thus p on A3 & p on B3 by A2,A4,Th26; end;
+  not p on C1 & not p on C2 proof assume p on C1 or p on C2; then a1 on A3 or
+a2 on A3 by A5,A14,A16,Lm4;
+  hence contradiction by A5,A14,A22,INCPROJ:def 9;
+end;
+then consider c3 being Element of the Points of XX such that
+A23: c3 on C1 & c3 on C2 by A14,A16,A22,INCPROJ:def 13;
+A24: a2,b3,c1 on A1 & a3,b1,c2 on B1 & a1,b2,c3 on C1 &
+ a1,b3,c2 on A2 & a3,b2,c1 on B2 & a2,b1,c3 on C2 & b1,b2,b3 on A3 &
+ a1,a2,a3 on B3 by A14,A15,A16,A23,INCPROJ:def 8;
+   c1,c2 on C3' by A17,INCPROJ:def 7;
+then c3 on C3' by A1,A20,A21,A22,A24,INCPROJ:def 20;
+then not c3 is Element of AS by A9,Th27; then consider Y
+such that A25: c3=LDir(Y) & Y is_line by Th20
+; Y '||' Line(a,c') & Y '||' Line(c,a')
+by A12,A23,A25,Th28; then Y // Line(a,c') & Y // Line(c,a')
+by A12,A25,AFF_4:40;
+then Line(a,c') // Line(c,a') by AFF_1:58;hence a,c' // c,a'
+by A10,AFF_1:53;end;
+hence a,c' // c,a' by A2,A3,A4,A5,A6,A7,Th48
+; end;
+hence AS is Pappian by AFF_2:def 2; end;
+
+theorem Th50:
+for A,P,C being Subset of AS, o,a,b,c,a',b',c' being Element of
+the carrier of AS st o in A & o in P & o in C &
+   o<>a & o<>b & o<>c & a in A & a' in A & b in P & b' in P &
+   c in C & c' in C & A is_line & P is_line & C is_line &
+   A<>P & A<>C & a,b // a',b' & a,c // a',c' & (o=a' or a=a') holds
+   b,c // b',c'
+proof let A,P,C be Subset of AS, o,a,b,c,a',b',c' be Element of
+the carrier of AS such that A1: o in A & o in P & o in C and
+A2: o<>a & o<>b & o<>c and A3: a in A & a' in A & b in P & b' in P & c in
+ C & c' in C
+and A4:  A is_line & P is_line & C is_line and A5: A<>P & A<>C and
+A6: a,b // a',b' & a,c // a',c' and A7: o=a' or a=a';
+A8: now assume A9: o=a'; then A10: o=b' by A1,A2,A3,A4,A5,A6,AFF_4:8; o=c'
+ by A1,A2,A3,A4,A5,A6,A9,AFF_4:8;
+ hence b,c // b',c' by A10,AFF_1:12; end;
+   now assume A11: a=a'; then A12: b=b' by A1,A2,A3,A4,A5,A6,AFF_4:9;
+    c =c' by A1,A2,A3,A4,A5,A6,A11,AFF_4:9;
+ hence b,c // b',c' by A12,AFF_1:11; end;
+hence thesis by A7,A8; end;
+
+theorem IncProjSp_of(AS) is Desarguesian implies AS is
+ Desarguesian proof assume A1: IncProjSp_of(AS) is Desarguesian;
+set XX= IncProjSp_of(AS);
+  for A,P,C being Subset of AS, o,a,b,c,a',b',c' being Element
+of
+the carrier of AS st o in A & o in P & o in C &
+   o<>a & o<>b & o<>c & a in A & a' in A & b in P & b' in P &
+   c in C & c' in C & A is_line & P is_line & C is_line &
+   A<>P & A<>C & a,b // a',b' & a,c // a',c' holds b,c // b',c'
+proof let A,P,C be Subset of AS, o,a,b,c,a',b',c' be Element of
+the carrier of AS such that A2: o in A & o in P & o in C and
+A3: o<>a & o<>b & o<>c and A4: a in A & a' in A & b in P & b' in P & c in
+ C & c' in C
+and A5:  A is_line & P is_line & C is_line and A6: A<>P & A<>C and
+A7: a,b // a',b' & a,c // a',c';
+   now assume A8: P<>C;
+   now assume A9: a<>a' & o<>a';
+then A10: o<>b' & o<>c' & b<>b' & c <>c' by A2,A3,A4,A5,A6,A7,AFF_4:8,9;
+then A11: a<>b & b<>c & a<>c & a'<>b' & b'<>c' & a'<>c' by A2,A3,A4,A5,A6,A8,
+AFF_1:30;
+then A12: Line(a,b) is_line & Line(b,c) is_line & Line(a,c) is_line &
+ Line(a',b') is_line & Line(b',c') is_line & Line(a',c') is_line
+  by AFF_1:def 3;
+A13: a in Line(a,b) & b in Line(a,b) & b in Line(b,c) & c in Line(b,c) &
+ a in Line(a,c) & c in Line(a,c) & a' in Line(a',b') & b' in Line(a',b') &
+ b' in Line(b',c') & c' in Line(b',c') & a' in Line(a',c') & c' in Line(a',c')
+  by AFF_1:26;
+A14: Line(a,b) // Line(a',b') & Line(a,c) // Line(a',c') by A7,A11,AFF_1:51;
+then A15: Line(a,b) '||' Line(a',b') & Line(a,c) '||' Line(a',c')
+by A12,AFF_4:40;
+reconsider p=o,a1=a,b1=a',a2=b,b2=b',a3=c,b3=c' as
+ Element of the Points of XX by Th20;
+reconsider C1=[A,1],C2=[P,1],C3'=[C,1] as Element of the Lines of XX
+ by A5,Th23;
+reconsider A1=[Line(b,c),1],A2=[Line(a,c),1],A3=[Line(a,b),1],
+ B1=[Line(b',c'),1],B2=[Line(a',c'),1],B3=[Line(a',b'),1] as Element of the
+  Lines of XX by A12,Th23;
+reconsider s=LDir(Line(a,b)),r=LDir(Line(a,c)) as Element of the Points
+  of XX by A12,Th20;
+A16: p on C2 & p on C3' & a2 on C2 & b2 on C2 & a3 on C3' & b3 on C3'
+by A2,A4,A5,Th26;
+A17: a2 on A1 & a3 on A1 & b2 on B1 & b3 on B1 by A12,A13,Th26;
+A18: now assume C2=C3'; then P=[C,1]`1 by MCART_1:7
+ .=C by MCART_1:7; hence contradiction by A8; end;
+   not p on A1 & not p on B1 proof assume p on A1 or p on B1;
+ then a3 on C2 or b3 on C2 by A3,A10,A16,A17,INCPROJ:def 9;hence
+ contradiction by A3,A10,A16,A18,INCPROJ:def 9; end;
+then consider t being Element of the Points of XX such that
+A19: t on A1 & t on B1 by A16,A17,A18,INCPROJ:def 13;
+   p on C1 & b1 on C1 & a1 on C1 by A2,A4,A5,Th26;
+then A20: p,b1,a1 on C1 & p,a2,b2 on C2 & p,a3,b3 on C3' by A16,INCPROJ:def 8;
+A21: a2 on A1 & a3 on A1 & a3 on A2 & r on A2 & a1 on A2 & a2 on A3 &
+s on A3 & a1 on A3
+ by A12,A13,Th26,Th30;
+   b2 on B1 & b3 on B1 & b1 on B2 & r on B2 & b3 on B2 & b1 on B3 & s on B3 &
+ b2 on B3
+ by A12,A13,A15,Th26,Th28;
+then A22: a3,a2,t on A1 & a3,r,a1 on A2 & a2,s,a1 on A3 & t,b2,b3 on B1 &
+ b1,r,b3 on B2 & b1,s,b2 on B3 by A19,A21,INCPROJ:def 8;
+A23: now assume C1=C2; then A=[P,1]`1 by MCART_1:7
+ .=P by MCART_1:7; hence contradiction by A6; end;
+   now assume C1=C3'; then A=[C,1]`1 by MCART_1:7
+ .=C by MCART_1:7; hence contradiction by A6; end;
+then C1,C2,C3' are_mutually_different by A18,A23,INCPROJ:def 5;
+then consider O being Element of the Lines of XX such that
+A24: r,s,t on O by A1,A3,A9,A10,A20,A22,INCPROJ:def 19;
+A25: r on O & s on O & t on O by A24,INCPROJ:def 8;
+A26: now assume r=s; then A27: Line(a,b) // Line(a,c) by A12,Th11;
+ then Line(a,b) // Line(a',c') by A14,AFF_1:58; then Line(a',b') // Line(a',
+c')
+ by A14,AFF_1:58; then c in Line(a,b) & c' in Line(a',b') by A13,A27,AFF_1:59
+;
+ hence b,c // b',c' by A13,A14,AFF_1:53; end;
+   now assume A28: r<>s; ex X st O=[PDir(X),2] & X is_plane proof
+  reconsider x=LDir(Line(a,b)),y=LDir(Line(a,c)) as Element of the Points of
+  ProjHorizon(AS) by A12,Th21;
+    [x,O] in the Inc of IncProjSp_of(AS) &
+  [y,O] in the Inc of IncProjSp_of(AS) by A25,INCSP_1:def 1
+; then consider Z'
+  being Element of the Lines of ProjHorizon(AS) such that
+  A29: O=[Z',2] by A28,Th41; consider X such that
+  A30: Z'=PDir(X) & X is_plane by Th24; take X; thus thesis by A29,A30; end;
+ then not t is Element of AS by A25,Th27; then consider Y
+ such that A31: t=LDir(Y) & Y is_line by Th20;
+   Y '||' Line(b,c) & Y '||' Line(b',c') by A12,A19,A31,Th28;
+ then Y // Line(b,c) & Y // Line(b',c') by A12,A31,AFF_4:40;
+ then Line(b,c) // Line(b',c') by AFF_1:58;hence b,c // b',c' by A13,AFF_1:53
+;end;
+hence b,c // b',c' by A26; end; hence b,c // b',c' by A2,A3,A4,A5,A6,A7,Th50
+; end;
+hence b,c // b',c' by A4,A5,AFF_1:65
+; end;
+hence AS is Desarguesian by AFF_2:def 4; end;
+
+theorem IncProjSp_of(AS) is Fanoian implies AS is Fanoian
+proof assume A1: IncProjSp_of(AS) is Fanoian;
+set XX=IncProjSp_of(AS); for a,b,c,d being Element of AS
+st a,b // c,d & a,c // b,d & a,d // b,c holds a,b // a,c
+proof let a,b,c,d be Element of AS such that
+A2: a,b // c,d & a,c // b,d and A3: a,d // b,c; assume A4: not a,b // a,c;
+reconsider p=a,q=d,r=c,s=b as Element of the Points of XX by Th20;
+A5: a<>b & a<>c & b<>c by A4,AFF_1:11,12;
+A6: a in Line(a,b) & b in Line(a,b) & c in Line(c,d) & d in Line(c,d) &
+ b in Line(b,d) & d in Line(b,d) & a in Line(a,c) & c in Line(a,c) & a in
+ Line(a,d)
+ & d in Line(a,d) & b in Line(b,c) & c in Line(b,c) by AFF_1:26;
+A7: Line(a,b)<>Line(c,d) & Line(a,c)<>Line(b,d)
+ proof A8: now assume Line(a,b)=Line(c,d);
+ then LIN a,b,c by A6,AFF_1:def 2; hence contradiction by A4,AFF_1:def 1; end
+;
+    now assume Line(a,c)=Line(b,d); then LIN a,c,b by A6,AFF_1:def 2
+; then LIN a,b,c by AFF_1:15; hence contradiction by A4,AFF_1:def 1
+;end;
+ hence thesis by A8; end;
+A9: c <>d & b<>d & a<>d
+ proof A10: now assume c =d; then c,a // c,b by A2,AFF_1:13;
+ then LIN c,a,b by AFF_1:def 1
+; then LIN a,b,c by AFF_1:15; hence contradiction by A4,AFF_1:def 1
+; end; now assume b=d; then b,a // b,c by A2,AFF_1:13; then LIN b,a,c by AFF_1:
+def 1; then LIN a,b,c by AFF_1:15; hence
+   contradiction by A4,AFF_1:def 1
+; end;
+ hence thesis by A2,A4,A10,AFF_1:13; end;
+then A11: Line(a,b) is_line & Line(c,d) is_line & Line(b,d) is_line &
+ Line(a,c) is_line & Line(a,d) is_line & Line(b,c) is_line
+ by A5,AFF_1:def 3;
+A12: Line(a,b) // Line(c,d) & Line(a,c) // Line(b,d) & Line(a,d) // Line(b,c)
+ by A2,A3,A5,A9,AFF_1:51;
+then A13: Line(a,b) '||' Line(c,d) & Line(a,c) '||' Line(b,d) &
+Line(a,d) '||' Line(b,c)
+ by A11,AFF_4:40;
+reconsider L1=[Line(a,b),1],Q1=[Line(c,d),1],R1=[Line(b,d),1],S1=[Line(a,c),1],
+ A1=[Line(a,d),1],B1=[Line(b,c),1] as Element of the Lines of XX by A11,Th23;
+reconsider a'=LDir(Line(a,b)),b'=LDir(Line(a,c)),c'=LDir(Line(a,d))
+ as Element of the Points of XX by A11,Th20;
+consider Y such that A14: Line(a,b) c= Y & Line(a,c) c= Y and A15: Y is_plane
+ by A6,A11,AFF_4:38;
+reconsider C1=[PDir(Y),2] as Element of the Lines of XX by A15,Th23;
+A16: Line(a,b) c= Y & Line(a,c) c= Y & Line(a,d) c= Y
+ proof
+ thus Line(a,b) c= Y & Line(a,c) c= Y by A14;
+   Line(b,d)=b*Line(a,c) by A6,A11,A12,AFF_4:def 3; then Line(b,d) c= Y by A6,
+A11,A14,A15,AFF_4:28; hence Line(a,d) c= Y
+ by A6,A9,A14,A15,AFF_4:19; end;
+A17: p on L1 & s on L1 & a' on L1 & r on Q1 & q on Q1 & a' on Q1 & p on S1 &
+r on S1 & b' on S1 &
+ s on R1 & q on R1 & b' on R1 by A6,A11,A13,Th26,Th28,Th30;
+A18: p on A1 & q on A1 & c' on A1 & r on B1 & s on B1 & c' on B1
+ by A6,A11,A13,Th26,Th28,Th30;
+A19: a' on C1 & b' on C1 & c' on C1 by A11,A15,A16,Th31;
+A20: not q on L1 & not r on L1 & not p on Q1 & not s on Q1 & not p on R1 &
+not r on R1 & not q on S1
+  & not s on S1 proof
+  A21: now assume q on L1 or r on L1; then d in Line(a,b) or c in Line(a,b)
+  by Th26;
+   hence contradiction by A6,A7,A12,AFF_1:59; end;
+  A22: now assume q on S1 or s on S1; then d in Line(a,c) or b in Line(a,c)
+  by Th26;
+   hence contradiction by A6,A7,A12,AFF_1:59; end;
+  A23: now assume p on Q1 or s on Q1; then a in Line(c,d) or b in Line(c,d)
+  by Th26;
+   hence contradiction by A6,A7,A12,AFF_1:59; end;
+     now assume p on R1 or r on R1; then a in Line(b,d) or c in
+ Line(b,d) by Th26;
+   hence contradiction by A6,A7,A12,AFF_1:59
+; end; hence thesis by A21,A22,A23; end;
+A24: a',p,s on L1 & a',q,r on Q1 & b',q,s on R1 & b',p,r on S1 & c',p,q on A1 &
+  c',r,s on B1 by A17,A18,INCPROJ:def 8; a',b' on C1 by A19,INCPROJ:def 7;
+hence contradiction by A1,A19,A20,A24,INCPROJ:def 18; end;
+hence AS is Fanoian by PAPDESAF:def 5; end;

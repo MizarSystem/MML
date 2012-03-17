@@ -1,0 +1,171 @@
+:: Non negative real numbers. Part I
+::  by Andrzej Trybulec
+::
+:: Received March 7, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM_3, BOOLE, ORDINAL2, ORDINAL1, ARYTM_2, HAHNBAN;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, ORDINAL2, ARYTM_3;
+ constructors ARYTM_3, XBOOLE_0;
+ clusters ARYTM_3, SUBSET_1, ORDINAL1, ORDINAL2, ZFMISC_1, XBOOLE_0;
+ requirements BOOLE, SUBSET;
+
+
+begin
+
+reserve r,s,t,x',y',z',p,q for Element of RAT+;
+
+definition
+ func DEDEKIND_CUTS -> Subset of bool RAT+ equals
+:: ARYTM_2:def 1
+ { A where A is Subset of RAT+: r in A implies
+      (for s st s <=' r holds s in A) & ex s st s in A & r < s }
+   \ { RAT+};
+end;
+
+definition
+ cluster DEDEKIND_CUTS -> non empty;
+end;
+
+definition
+ func REAL+ equals
+:: ARYTM_2:def 2
+ RAT+ \/ DEDEKIND_CUTS \ {{ s: s < t}: t <> {}};
+end;
+
+reserve x,y,z for Element of REAL+;
+
+theorem :: ARYTM_2:1
+ RAT+ c= REAL+;
+
+
+theorem :: ARYTM_2:2
+ omega c= REAL+;
+
+definition
+ cluster REAL+ -> non empty;
+end;
+
+definition let x;
+ func DEDEKIND_CUT x -> Element of DEDEKIND_CUTS means
+:: ARYTM_2:def 3
+ ex r st x = r & it = { s : s < r } if x in RAT+
+  otherwise it = x;
+end;
+
+theorem :: ARYTM_2:3
+   not ex y being set st [{},y] in REAL+;
+
+definition let x be Element of DEDEKIND_CUTS;
+ func GLUED x -> Element of REAL+ means
+:: ARYTM_2:def 4
+ ex r st it = r & for s holds s in x iff s < r
+   if ex r st for s holds s in x iff s < r
+  otherwise it = x;
+end;
+
+definition let x,y be Element of REAL+;
+ pred x <=' y means
+:: ARYTM_2:def 5
+  ex x',y' st x = x' & y = y' & x' <=' y'
+   if x in RAT+ & y in RAT+,
+  x in y if x in RAT+ & not y in RAT+,
+  not y in x if not x in RAT+ & y in RAT+
+   otherwise x c= y;
+ connectedness;
+ antonym y < x;
+end;
+
+definition let A,B be Element of DEDEKIND_CUTS;
+ func A + B -> Element of DEDEKIND_CUTS equals
+:: ARYTM_2:def 6
+ { r + s : r in A & s in B};
+ commutativity;
+end;
+
+definition let A,B be Element of DEDEKIND_CUTS;
+ func A *' B -> Element of DEDEKIND_CUTS equals
+:: ARYTM_2:def 7
+ { r *' s : r in A & s in B};
+ commutativity;
+end;
+
+definition let x,y be Element of REAL+;
+ func x + y -> Element of REAL+ equals
+:: ARYTM_2:def 8
+
+   x if y = {},
+   y if x = {}
+  otherwise GLUED(DEDEKIND_CUT x + DEDEKIND_CUT y);
+ commutativity;
+ func x *' y -> Element of REAL+ equals
+:: ARYTM_2:def 9
+ GLUED(DEDEKIND_CUT x *' DEDEKIND_CUT y);
+ commutativity;
+end;
+
+theorem :: ARYTM_2:4
+ x = {} implies x *' y = {};
+
+canceled;
+
+theorem :: ARYTM_2:6
+ x + y = {} implies x = {};
+
+theorem :: ARYTM_2:7
+ x + (y + z) = (x + y) + z;
+
+theorem :: ARYTM_2:8
+   IR is c=-linear;
+
+theorem :: ARYTM_2:9
+   for X,Y being Subset of REAL+ st
+  (ex x st x in X) & (ex x st x in Y) &
+   for x,y st x in X & y in Y holds x <=' y
+  ex z st
+   for x,y st x in X & y in Y holds x <=' z & z <=' y;
+
+theorem :: ARYTM_2:10
+ x <=' y implies ex z st x + z = y;
+
+theorem :: ARYTM_2:11
+ ex z st x + z = y or y + z = x;
+
+theorem :: ARYTM_2:12
+ x + y = x + z implies y = z;
+
+theorem :: ARYTM_2:13
+   x *' (y *' z) = x *' y *' z;
+
+theorem :: ARYTM_2:14
+   x *' (y + z) = (x *' y) + (x *' z);
+
+theorem :: ARYTM_2:15
+   x <> {} implies ex y st x *' y = one;
+
+theorem :: ARYTM_2:16
+   x = one implies x *' y = y;
+
+theorem :: ARYTM_2:17
+   x in omega & y in omega implies y + x in omega;
+
+theorem :: ARYTM_2:18
+   for A being Subset of REAL+
+   st {} in A & for x,y st x in A & y = one holds x + y in A
+ holds omega c= A;
+
+theorem :: ARYTM_2:19
+   for x st x in omega holds
+  for y holds y in x iff y in omega & y <> x & y <=' x;
+
+theorem :: ARYTM_2:20
+   x = y + z implies z <=' x;
+
+theorem :: ARYTM_2:21
+   {} in REAL+ & one in REAL+;
+
+theorem :: ARYTM_2:22
+   x in RAT+ & y in RAT+ implies
+  ex x',y' st x = x' & y = y' & x *' y = x' *' y';

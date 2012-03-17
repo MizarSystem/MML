@@ -1,0 +1,1141 @@
+:: Binary Operations on Finite Sequences
+::  by Wojciech A. Trybulec
+::
+:: Received August 10, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, FUNCT_1, BINOP_1, FUNCT_2, RELAT_1, FINSEQ_2, SETWISEO,
+      FUNCOP_1, FUNCT_4, BOOLE, FINSUB_1, ARYTM_1, FINSEQ_4, FINSOP_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, BINOP_1,
+      FINSEQ_2, FINSEQ_1, FINSEQ_4, RELAT_1, RELSET_1, FUNCT_1, FINSUB_1,
+      SETWISEO, FUNCT_2, NAT_1, FUNCOP_1, FUNCT_4;
+ constructors BINOP_1, FINSEQ_4, SETWISEO, REAL_1, NAT_1, FUNCOP_1, FUNCT_4,
+      FINSEQ_2, XREAL_0, MEMBERED, XBOOLE_0;
+ clusters FUNCT_1, RELSET_1, XREAL_0, FINSEQ_1, ARYTM_3, FUNCT_2, MEMBERED,
+      ZFMISC_1, XBOOLE_0, ORDINAL2, SUBSET_1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions FUNCT_1, TARSKI, XBOOLE_0;
+ theorems BINOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FUNCT_1, FUNCT_2,
+      NAT_1, REAL_1, RLVECT_1, RLVECT_2, SETWISEO, TARSKI, AXIOMS, RELAT_1,
+      FUNCOP_1, FUNCT_4, FINSUB_1, RELSET_1, XBOOLE_0, XBOOLE_1, INT_1,
+      XCMPLX_0, XCMPLX_1;
+ schemes FINSEQ_1, FINSEQ_2, FUNCT_1, NAT_1, RLVECT_2;
+
+begin
+
+reserve x,y,y1,y2 for set,
+        D for non empty set,
+        d,d1,d2,d3 for Element of D,
+        F,G,H,H1,H2 for FinSequence of D,
+        f,f1,f2 for Function of NAT,D,
+        g for BinOp of D,
+        k,n,i,j,l for Nat,
+        P for Permutation of dom F;
+
+definition let D,n,d;
+ redefine func n |-> d -> FinSequence of D;
+ coherence by FINSEQ_2:77;
+end;
+
+definition let D,F,g;
+ assume A1: g has_a_unity or len F >= 1;
+ func g "**" F -> Element of D means
+  :Def1: it = the_unity_wrt g if g has_a_unity & len F = 0 otherwise
+    ex f st f.1 = F.1 &
+     (for n st 0 <> n & n < len F holds
+       f.(n + 1) = g.(f.n,F.(n + 1))) & it = f.(len F);
+ existence
+  proof
+      now per cases;
+     suppose len F = 0;
+      hence thesis by A1;
+     suppose A2: len F <> 0;
+       defpred P[Nat] means for F st len F = $1 & len F <> 0
+        ex d,f st f.1 = F.1 &
+         (for n st 0 <> n & n < len F holds
+           f.(n + 1) = g.(f.n,F.(n + 1))) & d = f.(len F);
+        A3: P[0];
+        A4: for k st P[k] holds P[k + 1]
+         proof let k;
+           assume A5: P[k];
+          let F;
+           assume that A6: len F = k + 1 and len F <> 0;
+            reconsider G = F | Seg k as FinSequence of D by FINSEQ_1:23;
+             A7: len G = k by A6,FINSEQ_3:59;
+               now per cases;
+              suppose A8: len G = 0;
+                deffunc F(set) = F.1;
+                consider f being Function such that A9: dom f = NAT and
+                 A10: for x st x in NAT holds f.x = F(x) from Lambda;
+                    rng f c= D
+                  proof let x;
+                    assume x in rng f;
+                     then ex y st y in dom f & f.y = x by FUNCT_1:def 5;
+                      then A11: x = F.1 by A9,A10;
+                        1 in dom F by A6,A7,A8,FINSEQ_3:27;
+                      then x in rng F & rng F c= D by A11,FINSEQ_1:def 4,
+FUNCT_1:def 5;
+                   hence thesis;
+                  end;
+                then reconsider f as Function of NAT,D by A9,FUNCT_2:def 1,
+RELSET_1:11;
+               take d = f.1,f;
+               thus f.1 = F.1 by A10;
+               thus for n st 0 <> n & n < len F holds
+                     f.(n + 1) = g.(f.n,F.(n + 1)) by A6,A7,A8,RLVECT_1:98;
+               thus d = f.(len F) by A6,A7,A8;
+              suppose A12: len G <> 0;
+                then consider d,f such that A13: f.1 = G.1 and
+                 A14: for n st 0 <> n & n < len G holds
+                     f.(n + 1) = g.(f.n,G.(n + 1)) and A15: d = f.(len G) by A5
+,A7;
+                   1 <= len F by A6,NAT_1:37;
+                 then len F in dom F by FINSEQ_3:27;
+                 then F.(len F) in
+ rng F & rng F c= D by FINSEQ_1:def 4,FUNCT_1:def 5;
+                then reconsider t = F.(len F) as Element of D;
+                reconsider j = len F as Element of NAT qua non empty set;
+                deffunc F(Nat) = f.$1;
+                consider h being Function of NAT qua non empty set,D such that
+                 A16: h.j = g.(d,t) and
+                 A17: for n being Element of NAT qua non empty set
+                    st n <> j holds h.n = F(n) from LambdaSep1;
+               take a = h.j,h;
+                  len G >= 1 by A12,RLVECT_1:98;
+                then A18: 1 in dom G by FINSEQ_3:27;
+                  now assume 1 = j;
+                  then 0 + 1 = len G + 1 by A6,FINSEQ_3:59;
+                 hence contradiction by A12,XCMPLX_1:2;
+                end;
+               hence h.1 = G.1 by A13,A17
+                        .= F.1 by A18,FUNCT_1:70;
+               thus for n st 0 <> n & n < len F holds
+                     h.(n + 1) = g.(h.n,F.(n + 1))
+                proof let n;
+                  assume A19: n <> 0 & n < len F;
+                     now per cases;
+                    suppose A20: n + 1 = len F;
+                       then A21: len G = n by A6,A7,XCMPLX_1:2;
+                         len G <> len F by A6,A7,REAL_1:69;
+                     hence thesis by A15,A16,A17,A20,A21;
+                    suppose A22: n + 1 <> len F;
+                       now
+                          n + 1 <= len F by A19,NAT_1:38;
+                        then A23: n + 1 < len F by A22,REAL_1:def 5;
+                        then A24: n < len G by A6,A7,AXIOMS:24;
+                        A25: 1 <= n + 1 by NAT_1:37;
+                          n + 1 <= len G by A6,A7,A23,NAT_1:38;
+                        then A26: n + 1 in dom G by A25,FINSEQ_3:27;
+                       thus h.(n + 1) = f.(n + 1) by A17,A22
+                                     .= g.(f.n,G.(n + 1)) by A14,A19,A24
+                                     .= g.(f.n,F.(n + 1)) by A26,FUNCT_1:70
+                                     .= g.(h.n,F.(n + 1)) by A17,A19;
+                     end;
+                    hence thesis;
+                   end;
+                 hence thesis;
+                end;
+               thus a = h.(len F);
+             end;
+          hence thesis;
+         end;
+           for k holds P[k] from Ind(A3,A4);
+      hence thesis by A2;
+    end;
+   hence thesis;
+  end;
+ uniqueness
+  proof let d1,d2;
+   thus g has_a_unity & len F = 0 & d1 = the_unity_wrt g & d2 = the_unity_wrt
+g
+         implies d1 = d2;
+    assume A27: not g has_a_unity or len F <> 0;
+    given f1 such that A28: f1.1 = F.1 and
+     A29: for n st 0 <> n & n < len F holds f1.(n + 1) = g.(f1.n,F.(n + 1)) and
+     A30: d1 = f1.(len F);
+    given f2 such that A31: f2.1 = F.1 and
+     A32: for n st 0 <> n & n < len F holds f2.(n + 1) = g.(f2.n,F.(n + 1)) and
+     A33: d2 = f2.(len F);
+     A34:  len F <> 0 by A1,A27;
+    defpred P[Nat] means $1 <> 0 & $1 <= len F implies f1.$1 = f2.$1;
+     A35: P[0];
+     A36: for n st P[n] holds P[n + 1]
+      proof let n;
+        assume A37: n <> 0 & n <= len F implies f1.n = f2.n;
+        assume A38: n + 1 <> 0 & n + 1 <= len F;
+           now per cases;
+          suppose n = 0;
+           hence thesis by A28,A31;
+          suppose A39: n <> 0;
+              n < len F by A38,NAT_1:38;
+           then f1.(n + 1) = g.(f1.n,F.(n + 1)) &
+                   f2.(n + 1) = g.(f2.n,F.(n + 1)) by A29,A32,A39;
+          hence thesis by A37,A38,A39,NAT_1:38;
+         end;
+       hence f1.(n + 1) = f2.(n + 1);
+      end;
+    for n holds P[n] from Ind(A35,A36);
+   hence d1 = d2 by A30,A33,A34;
+  end;
+ consistency;
+end;
+
+canceled;
+
+theorem Th2:
+ len F >= 1 implies ex f st f.1 = F.1 & (for n st 0 <> n & n < len F holds
+  f.(n + 1) = g.(f.n,F.(n + 1))) & g "**" F = f.(len F)
+   proof assume len F >= 1;
+     then (g has_a_unity or len F >= 1) & (not g has_a_unity or len F <> 0);
+    hence thesis by Def1;
+   end;
+
+theorem
+   len F >= 1 & (ex f st f.1 = F.1 & (for n st 0 <> n & n < len F holds
+  f.(n + 1) = g.(f.n,F.(n + 1))) & d = f.(len F)) implies d = g "**" F
+   proof assume len F >= 1;
+     then (g has_a_unity or len F >= 1) & (not g has_a_unity or len F <> 0);
+    hence thesis by Def1;
+   end;
+
+definition let B,A be non empty set, b be Element of B;
+ redefine func A --> b -> Function of A,B;
+ coherence by FUNCOP_1:58;
+end;
+
+definition let A be non empty set,
+   F be Function of NAT,A, p be FinSequence of A;
+ redefine func F +* p -> Function of NAT,A;
+ coherence
+  proof
+A1:  dom F = NAT by FUNCT_2:def 1;
+A2: dom(F +* p) = dom F \/ dom p by FUNCT_4:def 1
+       .= NAT by A1,XBOOLE_1:12;
+A3:  rng(F +* p) c= rng F \/ rng p by FUNCT_4:18;
+A4:  rng F c= A by RELSET_1:12;
+      rng p c= A by FINSEQ_1:def 4;
+    then rng F \/ rng p c= A by A4,XBOOLE_1:8;
+    then rng(F +* p) c= A by A3,XBOOLE_1:1;
+    hence thesis by A2,FUNCT_2:def 1,RELSET_1:11;
+  end;
+end;
+
+definition let f be FinSequence;
+ redefine func dom f -> Element of Fin NAT;
+ coherence
+ proof dom f = Seg len f by FINSEQ_1:def 3;
+  hence thesis by FINSUB_1:def 5;
+ end;
+end;
+
+Lm1: len F >= 1 & g is associative & g is commutative
+       implies g "**" F = g $$(dom F,(NAT-->the_unity_wrt g)+*F)
+ proof assume that A1: len F >= 1 and A2: g is associative & g is commutative;
+   consider f such that A3: f.1 = F.1 and
+    A4: for n st 0 <> n & n < len F holds f.(n + 1) = g.(f.n,F.(n + 1)) and
+    A5: g "**" F = f.(len F) by A1,Th2;
+   set h = (NAT-->the_unity_wrt g)+*F;
+   set A = dom F;
+A6: dom F = Seg len F by FINSEQ_1:def 3;
+     len F <> 0 by A1;
+   then dom F <> {} by A6,FINSEQ_1:5;
+   then consider G being Function of Fin NAT,D such that
+    A7: g $$ (A,h) = G.A and
+       for d st d is_a_unity_wrt g holds G.{} = d and
+    A8: for n holds G.{n} = h.n and
+    A9: for B being Element of Fin NAT st B c= A & B <> {}
+     for n st n in A \ B holds G.(B \/ {n}) = g.(G.B,h.n) by A2,SETWISEO:def 3;
+   defpred P[Nat] means $1 <> 0 & $1 <= len F implies f.$1 = G.(Seg $1);
+    A10: P[0];
+    A11: for n st P[n] holds P[n + 1]
+     proof let n;
+       assume A12: n <> 0 & n <= len F implies f.n = G.(Seg n);
+       assume A13: n + 1 <> 0 & n + 1 <= len F;
+          now per cases;
+         suppose A14: n = 0;
+             1 in dom F by A1,A6,FINSEQ_1:3;
+then h.1 = F.1 by FUNCT_4:14;
+           hence thesis by A3,A8,A14,FINSEQ_1:4;
+         suppose A15: n <> 0;
+            A16: n < len F by A13,NAT_1:38;
+            then A17: f.(n + 1) = g.(f.n,F.(n + 1)) by A4,A15;
+            A18: Seg n <> {} by A15,FINSEQ_1:5;
+            A19: Seg n c= A by A6,A16,FINSEQ_1:7;
+              n + 1 >= 1 by NAT_1:37;
+            then A20: n + 1 in dom F by A13,FINSEQ_3:27;
+            reconsider B = Seg n as Element of Fin NAT by FINSUB_1:def 5;
+              not n + 1 in Seg n by FINSEQ_3:11;
+            then A21: n + 1 in A \ Seg n by A20,XBOOLE_0:def 4;
+              G.(Seg(n + 1)) = G.(Seg n \/ {n + 1}) by FINSEQ_1:11
+                              .= g.(G.B,h.(n + 1)) by A9,A18,A19,A21;
+          hence f.(n+1) = G.(Seg(n+1)) by A12,A13,A15,A17,A20,FUNCT_4:14,NAT_1:
+38;
+        end;
+      hence thesis;
+     end;
+    A22: for n holds P[n] from Ind(A10,A11);
+      len F <> 0 by A1;
+  hence g "**" F = g $$(dom F,(NAT-->the_unity_wrt g)+*F) by A5,A6,A7,A22;
+ end;
+
+Lm2: len F = 0 & g has_a_unity & g is associative & g is commutative implies
+ g "**" F = g $$(dom F,(NAT-->the_unity_wrt g)+*F)
+  proof assume A1: len F = 0 & g has_a_unity & g is associative &
+                  g is commutative;
+    then F = {} by FINSEQ_1:25;
+then A2:  dom F = {}.NAT by FINSEQ_1:26;
+   thus g "**" F = the_unity_wrt g by A1,Def1
+               .= g $$(dom F,(NAT-->the_unity_wrt g)+*F) by A1,A2,SETWISEO:40;
+  end;
+
+theorem
+   (g has_a_unity or len F >= 1) & g is associative & g is commutative implies
+  g "**" F = g $$(dom F,(NAT-->the_unity_wrt g)+*F)
+   proof len F = 0 or len F >= 1 by RLVECT_1:98;
+    hence thesis by Lm1,Lm2;
+   end;
+
+Lm3: g has_a_unity implies g "**" <*>D = the_unity_wrt g
+ proof assume A1: g has_a_unity;
+     len <*>D = 0 by FINSEQ_1:32;
+  hence thesis by A1,Def1;
+ end;
+
+Lm4: g "**" <* d *> = d
+ proof A1: len<* d *> = 1 by FINSEQ_1:56;
+   then ex f st f.1 = <* d *>.1 &
+    (for n st 0 <> n & n < len<* d *> holds
+     f.(n + 1) = g.(f.n,<* d *>.(n + 1))) &
+ g "**" <* d *> = f.len<* d *> by Th2;
+  hence thesis by A1,FINSEQ_1:def 8;
+ end;
+
+Lm5: len F >= 1 implies g "**" (F ^ <* d *>) = g.(g "**" F,d)
+ proof assume A1: len F >= 1;
+   then consider f such that A2: f.1 = F.1 and
+    A3: for n st 0 <> n & n < len F holds f.(n + 1) = g.(f.n,F.(n + 1)) and
+    A4: g "**" F = f.(len F) by Th2;
+   set G = F ^ <* d *>;
+    A5: len G = len F + len<* d *> by FINSEQ_1:35
+            .= len F + 1 by FINSEQ_1:56;
+    then 1 <= len G by NAT_1:37;
+   then consider f1 such that A6: f1.1 = G.1 and
+    A7: for n st 0 <> n & n < len G holds f1.(n + 1) = g.(f1.n,G.(n + 1)) and
+    A8: g "**" G = f1.(len G) by Th2;
+    A9: 0 <> len F & len F < len G by A1,A5,REAL_1:69;
+    then A10: g "**" G = g.(f1.(len F),G.(len F + 1)) by A5,A7,A8;
+    A11: G.(len F + 1) = d by FINSEQ_1:59;
+   defpred P[Nat] means 0 <> $1 & $1 < len G implies f.$1 = f1.$1;
+    A12: P[0];
+    A13: for n st P[n] holds P[n + 1]
+     proof let n;
+       assume A14: P[n];
+       assume that A15: 0 <> n + 1 and A16: n + 1 < len G;
+        A17: n + 1 >= 1 by A15,RLVECT_1:98;
+          now per cases by A17,REAL_1:def 5;
+         suppose A18: n + 1 = 1;
+             1 in dom F by A1,FINSEQ_3:27;
+          hence thesis by A2,A6,A18,FINSEQ_1:def 7;
+         suppose A19: n + 1 > 1;
+          then A20: n + 1 > 0 + 1;
+            n <> 0 & n < len G by A16,A19,NAT_1:37;
+          then A21: f.n = f1.n & f1.(n + 1) = g.(f1.n,G.(n + 1)) by A7,A14;
+          A22: n + 1 <= len F by A5,A16,NAT_1:38;
+          then n < len F by NAT_1:38;
+          then A23: f.(n + 1) = g.(f.n,F.(n + 1)) by A3,A20;
+            1 <= n + 1 by NAT_1:37;
+          then n + 1 in dom F by A22,FINSEQ_3:27;
+         hence thesis by A21,A23,FINSEQ_1:def 7;
+        end;
+      hence thesis;
+     end;
+      for n holds P[n] from Ind(A12,A13);
+  hence thesis by A4,A9,A10,A11;
+ end;
+
+Lm6: g has_a_unity & len F = 0 implies g "**" (F ^ <* d *>) = g.(g "**" F,d)
+ proof assume A1: g has_a_unity & len F = 0;
+   then F = <*>D & {} = <*>D by FINSEQ_1:32;
+  hence g "**" (F ^ <* d *>) = g "**" <* d *> by FINSEQ_1:47
+                          .= d by Lm4
+                          .= g.(the_unity_wrt g,d) by A1,SETWISEO:23
+                          .= g.(g "**" F,d) by A1,Def1;
+ end;
+
+theorem Th5:
+ g has_a_unity or len F >= 1 implies g "**" (F ^ <* d *>) = g.(g "**" F,d)
+  proof len F >= 1 or len F = 0 by RLVECT_1:98;
+   hence thesis by Lm5,Lm6;
+  end;
+
+theorem Th6:
+ g is associative & (g has_a_unity or len F >= 1 & len G >= 1) implies
+  g "**" (F ^ G) = g.(g "**" F,g "**" G)
+   proof defpred P[FinSequence of D] means
+          for F,g st g is associative &
+                     (g has_a_unity or len F >= 1 & len $1 >= 1) holds
+           g "**" (F ^ $1) = g.(g "**" F,g "**" $1);
+     A1: P[<*>D]
+      proof let F,g;
+        assume A2: g is associative &
+                  (g has_a_unity or len F >= 1 & len <*>D >= 1);
+A3:         len <*>D = 0 by FINSEQ_1:32;
+       thus g "**" (F ^ <*>D) = g "**" F by FINSEQ_1:47
+                            .= g.(g "**"
+ F,the_unity_wrt g) by A2,A3,SETWISEO:23
+                            .= g.(g "**" F,g "**" <*>D) by A2,A3,Lm3;
+      end;
+     A4: for G,d st P[G] holds P[G ^ <* d *>]
+      proof let G,d;
+        assume A5: P[G];
+       let F,g;
+        assume A6: g is associative &
+                  (g has_a_unity or len F >= 1 & len(G ^ <* d *>) >= 1);
+         A7: now assume not g has_a_unity;
+           then len F >= 1 & len(F ^ G) = len F + len G & len F + len G >=
+ len F
+                                                 by A6,FINSEQ_1:35,NAT_1:37;
+          hence len(F ^ G) >= 1 by AXIOMS:22;
+         end;
+         A8: g "**" (F ^ (G ^ <* d *>)) = g "**"
+ (F ^ G ^ <* d *>) by FINSEQ_1:45
+                                    .= g.(g "**" (F ^ G),d) by A7,Th5;
+           now per cases;
+          suppose len G <> 0;
+            then A9: len G >= 1 by RLVECT_1:98;
+           hence g "**" (F ^ (G ^ <* d *>)) = g.(g.(g "**" F,g "**"
+ G),d) by A5,A6,A8
+                  .= g.(g "**" F,g.(g "**" G,d)) by A6,BINOP_1:def 3
+                  .= g.(g "**" F,g "**" (G ^ <* d *>)) by A9,Th5;
+          suppose len G = 0;
+            then A10: G = {} by FINSEQ_1:25;
+           hence g "**" (F ^ (G ^ <* d *>)) = g "**"
+ (F ^ <* d *>) by FINSEQ_1:47
+                  .= g.(g "**" F,d) by A6,Th5
+                  .= g.(g "**" F,g "**" <* d *>) by Lm4
+                  .= g.(g "**" F,g "**" (G ^ <* d *>)) by A10,FINSEQ_1:47;
+         end;
+       hence thesis;
+      end;
+        for G holds P[G] from IndSeqD(A1,A4);
+    hence thesis;
+   end;
+
+theorem Th7:
+ g is associative & (g has_a_unity or len F >= 1) implies
+  g "**" (<* d *> ^ F) = g.(d,g "**" F)
+   proof assume A1: g is associative & (g has_a_unity or len F >= 1);
+       len<* d *> = 1 by FINSEQ_1:56;
+    hence g "**" (<* d *> ^ F) = g.(g "**" <* d *>,g "**" F) by A1,Th6
+                            .= g.(d,g "**" F) by Lm4;
+   end;
+
+Lm7: g is associative & g is commutative implies
+ for f being Permutation of dom F st
+  len F >= 1 & len F = len G & (for i st i in dom G holds G.i = F.(f.i)) holds
+   g "**" F = g "**" G
+    proof assume that A1: g is associative and A2: g is commutative;
+     let f be Permutation of dom F;
+     defpred P[Nat] means
+      for H1,H2 st len H1 >= 1 & len H1 = $1 & len H1 = len H2
+       for f being Permutation of dom H1 st
+    (for i st i in dom H2 holds H2.i = H1.(f.i)) holds g "**" H1 = g "**" H2;
+      A3: P[0];
+      A4: now let k;
+        assume A5: P[k];
+        thus P[k+1]
+        proof
+       let H1,H2;
+        assume that len H1 >= 1 and A6: len H1 = k + 1 and
+                    A7: len H1 = len H2;
+       let f be Permutation of dom H1;
+        assume A8: for i st i in dom H2 holds H2.i = H1.(f.i);
+        reconsider p = H2 | (Seg k) as FinSequence of D by FINSEQ_1:23;
+         A9: k + 1 in Seg(k + 1) by FINSEQ_1:6;
+         A10: dom H2 = Seg(k + 1) & dom H1 = Seg(k + 1) by A6,A7,FINSEQ_1:def 3
+;
+           Seg(k + 1) = {} implies Seg(k + 1) = {};
+         then A11:      dom f = Seg(k + 1) & rng f = Seg(k + 1)
+                                by A10,FUNCT_2:def 1,def 3;
+         then A12: f.(k + 1) in Seg(k + 1) by A9,FUNCT_1:def 5;
+        then reconsider n = f.(k + 1) as Nat;
+         A13: H2.(k + 1) = H1.(f.(k + 1)) by A8,A9,A10;
+           H2.(k + 1) in
+ rng H2 & rng H2 c= D by A9,A10,FINSEQ_1:def 4,FUNCT_1:def 5;
+        then reconsider d = H2.(k + 1) as Element of D;
+            1 <= n by A12,FINSEQ_1:3;
+        then consider m1 being Nat such that A14: 1 + m1 = n by NAT_1:28;
+         A15: n <= k + 1 by A12,FINSEQ_1:3;
+        then consider m2 being Nat such that A16: n + m2 = k + 1 by NAT_1:28;
+        reconsider q1 = H1 | (Seg m1) as FinSequence of D by FINSEQ_1:23;
+        defpred P[Nat,set] means $2 = H1.(n + $1);
+         A17: for j,y1,y2 st j in Seg m2 & P[j,y1] & P[j,y2] holds y1 = y2;
+         A18: for j st j in Seg m2 ex x st P[j,x];
+        consider q2 being FinSequence such that A19: dom q2 = Seg m2 and
+         A20: for k st k in Seg m2 holds P[k,q2.k] from SeqEx(A17,A18);
+           rng q2 c= D
+          proof let x;
+            assume x in rng q2;
+             then consider y such that A21: y in dom q2 and A22: x = q2.y
+                                            by FUNCT_1:def 5;
+             reconsider y as Nat by A21,SETWISEO:14;
+                1 <= y & y <= n + y by A19,A21,FINSEQ_1:3,NAT_1:37;
+              then A23: 1 <= n + y by AXIOMS:22;
+                y <= m2 by A19,A21,FINSEQ_1:3;
+              then n + y <= len H1 by A6,A16,REAL_1:55;
+              then n + y in Seg(len H1) by A23,FINSEQ_1:3;
+              then n + y in dom H1 by FINSEQ_1:def 3;
+              then H1.(n + y) in
+ rng H1 & rng H1 c= D by FINSEQ_1:def 4,FUNCT_1:def 5;
+             then reconsider xx = H1.(n + y) as Element of D;
+                xx in D;
+           hence thesis by A19,A20,A21,A22;
+          end;
+         then reconsider q2 as FinSequence of D by FINSEQ_1:def 4;
+         set q = q1 ^ q2;
+         A24: k <= k + 1 by NAT_1:37;
+         then A25: len p = k by A6,A7,FINSEQ_1:21;
+           m1 <= n by A14,NAT_1:29;
+         then A26: m1 <= k + 1 by A15,AXIOMS:22;
+         then A27: len q1 = m1 & len q2 = m2
+                                     by A6,A19,FINSEQ_1:21,def 3;
+         then A28: len q = m1 + m2 by FINSEQ_1:35;
+         A29: 1 + k = 1 + (m1 + m2) by A14,A16,XCMPLX_1:1;
+         then A30: len q = k by A28,XCMPLX_1:2;
+           len(q1 ^ <* d *>) + len q2 = len q1 + len<* d *> + m2
+                                                            by A27,FINSEQ_1:35
+                                   .= k + 1 by A14,A16,A27,FINSEQ_1:57;
+         then A31: dom H1 = Seg(len(q1 ^ <* d *>) + len q2)
+                                                  by A6,FINSEQ_1:def 3;
+         A32: now let j;
+           assume A33: j in dom(q1 ^ <* d *>);
+              len(q1 ^ <* d *>) = m1 + len <* d *> by A27,FINSEQ_1:35
+                             .= m1 + 1 by FINSEQ_1:57;
+            then j in Seg(m1 + 1) by A33,FINSEQ_1:def 3;
+            then A34: j in Seg m1 \/ {n} by A14,FINSEQ_1:11;
+
+            A35: now assume j in Seg m1;
+              then A36: j in dom q1 by A6,A26,FINSEQ_1:21;
+              then q1.j = H1.j by FUNCT_1:70;
+             hence H1.j = (q1 ^ <* d *>).j by A36,FINSEQ_1:def 7;
+            end;
+              now assume j in {n};
+              then A37: j = n by TARSKI:def 1;
+                1 in Seg 1 & len<* d *> = 1 by FINSEQ_1:3,56;
+              then 1 in dom <* d *> by FINSEQ_1:def 3;
+              then (q1 ^ <* d *>).(len q1 + 1) = <* d *>.1 by FINSEQ_1:def 7;
+             hence (q1 ^ <* d *>).j = H1.j by A13,A14,A27,A37,FINSEQ_1:57;
+            end;
+          hence H1.j = (q1 ^ <* d *>).j by A34,A35,XBOOLE_0:def 2;
+         end;
+           now let j;
+           assume A38: j in dom q2;
+              len(q1 ^ <* d *>) = m1 + len<* d *> by A27,FINSEQ_1:35
+                             .= n by A14,FINSEQ_1:56;
+          hence H1.(len(q1 ^ <* d *>) + j) = q2.j by A19,A20,A38;
+         end;
+         then A39: H1 = q1 ^ <* d *> ^ q2 by A31,A32,FINSEQ_1:def 7;
+           k = m1 + m2 by A29,XCMPLX_1:2;
+         then A40: m1 <= k by NAT_1:29;
+         A41: Seg k c= Seg(k + 1) by A24,FINSEQ_1:7;
+         A42: now let n;
+           assume n in dom f;
+            then f.n in Seg(k + 1) by A11,FUNCT_1:def 5;
+          hence f.n is Nat;
+         end;
+         A43: dom q1 = Seg m1 by A6,A26,FINSEQ_1:21;
+         A44: dom p = Seg k & dom q = Seg k by A6,A7,A24,A30,FINSEQ_1:21,def 3;
+         defpred P[Nat,set] means
+              (f.$1 in dom q1 implies $2 = f.$1) &
+              (not f.$1 in dom q1 implies
+                for l st l = f.$1 holds $2 = l - 1);
+         A45: for i st i in Seg k ex y st P[i,y]
+          proof let i;
+            assume
+A46:         i in Seg k;
+               now assume A47: not f.i in dom q1;
+                  f.i in Seg(k + 1) by A11,A41,A46,FUNCT_1:def 5;
+               then reconsider j = f.i as Nat;
+              take y = j - 1;
+              thus f.i in dom q1 implies y = f.i by A47;
+               assume not f.i in dom q1;
+              let t be Nat; assume t = f.i;
+              hence y = t - 1;
+             end;
+           hence thesis;
+          end;
+         A48: for i,y1,y2 st i in Seg k & P[i,y1] & P[i,y2]
+                holds y1 = y2
+          proof let i,y1,y2;
+            assume that A49: i in Seg k and A50: f.i in dom q1 implies y1 = f.i
+and
+             A51: not f.i in dom q1 implies for l st l = f.i holds y1 = l - 1
+and
+             A52: f.i in dom q1 implies y2 = f.i and
+             A53: not f.i in dom q1 implies for l st l = f.i holds y2 = l - 1;
+               now assume A54: not f.i in dom q1;
+                  f.i in Seg(k + 1) by A11,A41,A49,FUNCT_1:def 5;
+               then reconsider j = f.i as Nat;
+                  y1 = j - 1 & y2 = j - 1 by A51,A53,A54;
+              hence thesis;
+             end;
+           hence y1 = y2 by A50,A52;
+          end;
+        consider gg being FinSequence such that A55: dom gg = Seg k and
+         A56: for i st i in Seg k holds P[i,gg.i]
+                from SeqEx(A48,A45);
+         A57: now let i,l;
+           assume that A58: l = f.i and A59: not f.i in dom q1 and A60: i in
+dom gg;
+            A61: f.i in rng f by A11,A41,A55,A60,FUNCT_1:def 5;
+              l < 1 or m1 < l by A43,A58,A59,FINSEQ_1:3;
+            then A62: m1 + 1 <= l by A11,A58,A61,FINSEQ_1:3,NAT_1:38;
+              now assume m1 + 1 = l;
+              then k + 1 = i by A9,A11,A14,A41,A55,A58,A60,FUNCT_1:def 8;
+              then k + 1 <= k + 0 by A55,A60,FINSEQ_1:3;
+             hence contradiction by REAL_1:53;
+            end;
+            then m1 + 1 < l by A62,REAL_1:def 5;
+            then m1 + 1 + 1 <= l by NAT_1:38;
+            then m1 + (1 + 1) <= l by XCMPLX_1:1;
+          hence m1 + 2 <= l;
+         end;
+         A63: rng gg c= dom p
+          proof let y;
+            assume y in rng gg;
+             then consider x such that A64: x in dom gg and A65: gg.x = y
+                                                          by FUNCT_1:def 5;
+             reconsider x as Nat by A64,SETWISEO:14;
+                now per cases;
+               suppose A66: f.x in dom q1;
+                  then A67: f.x = gg.x by A55,A56,A64;
+                    dom q1 c= dom p by A40,A43,A44,FINSEQ_1:7;
+                hence thesis by A65,A66,A67;
+               suppose A68: not f.x in dom q1;
+                 reconsider j = f.x as Nat by A11,A41,A42,A55,A64;
+                    j < 1 or m1 < j by A43,A68,FINSEQ_1:3;
+                  then A69: (j = 0 or m1 < j) & f.x in Seg(k + 1)
+                             by A11,A41,A55,A64,FUNCT_1:def 5,RLVECT_1:98;
+                 then reconsider l = j - 1 as Nat by FINSEQ_1:3,RLVECT_2:103;
+                  A70: gg.x = j - 1 by A55,A56,A64,A68;
+                    m1 + 2 <= j by A57,A64,A68;
+                  then m1 + 2 - 1 <= l by REAL_1:49;
+                  then m1 + (1 + 1 - 1) <= l by XCMPLX_1:29;
+                  then m1 + 1 <= l & 1 <= m1 + 1 by NAT_1:37;
+                  then A71: 1 <= l by AXIOMS:22;
+                    j <= k + 1 by A69,FINSEQ_1:3;
+                  then l <= (k + 1) - 1 by REAL_1:49;
+                  then l <= k + (1 - 1) by XCMPLX_1:29;
+                  hence thesis by A44,A65,A70,A71,FINSEQ_1:3;
+              end;
+           hence thesis;
+          end;
+           dom p = {} implies dom p = {};
+        then reconsider gg as Function of dom q, dom q
+             by A44,A55,A63,FUNCT_2:def 1,RELSET_1:11;
+         A72: rng gg = dom q
+          proof
+           thus rng gg c= dom q by A44,A63;
+           let y;
+            assume A73: y in dom q;
+              then consider x such that A74: x in dom f and A75: f.x = y
+                                        by A11,A41,A44,FUNCT_1:def 5;
+             reconsider x as Nat by A11,A74;
+             reconsider j = y as Nat by A73,SETWISEO:14;
+                now per cases;
+               suppose A76: x in dom gg;
+                   now per cases;
+                  suppose f.x in dom q1;
+                    then gg.x = f.x by A55,A56,A76;
+                   hence thesis by A75,A76,FUNCT_1:def 5;
+                  suppose A77: not f.x in dom q1;
+                       j <= k by A44,A73,FINSEQ_1:3;
+                     then 1 <= j + 1 & j + 1 <= k + 1 by NAT_1:37,REAL_1:55;
+                     then j + 1 in rng f by A11,FINSEQ_1:3;
+                    then consider x1 being set such that A78: x1 in dom f and
+                     A79: f.x1 = j + 1 by FUNCT_1:def 5;
+                     A80: now assume not x1 in dom gg;
+                       then x1 in Seg(k + 1) \ Seg k
+                         by A10,A55,A78,XBOOLE_0:def 4;
+                       then x1 in {k + 1} by FINSEQ_3:16;
+                       then j + 1 = m1 +1 by A14,A79,TARSKI:def 1;
+                       then 1 <= j & j <= m1 by A44,A73,FINSEQ_1:3,XCMPLX_1:2;
+                      hence contradiction by A43,A75,A77,FINSEQ_1:3;
+                     end;
+                       j < 1 or m1 < j by A43,A75,A77,FINSEQ_1:3;
+                     then not j + 1 <= m1 by A44,A73,FINSEQ_1:3,NAT_1:38;
+                     then not f.x1 in dom q1 & x1 is Nat
+                                       by A11,A43,A78,A79,FINSEQ_1:3;
+                     then gg.x1 = j + 1 - 1 by A55,A56,A79,A80
+                              .= y by XCMPLX_1:26;
+                   hence thesis by A80,FUNCT_1:def 5;
+                 end;
+                hence thesis;
+               suppose not x in dom gg;
+                  then x in Seg(k + 1) \ Seg k by A10,A55,A74,XBOOLE_0:def 4;
+                  then x in {k + 1} by FINSEQ_3:16;
+                  then A81: x = k + 1 by TARSKI:def 1;
+                    j <= k by A44,A73,FINSEQ_1:3;
+                  then 1 <= j + 1 & j + 1 <= k + 1 by NAT_1:37,REAL_1:55;
+                  then j + 1 in rng f by A11,FINSEQ_1:3;
+                 then consider x1 being set such that A82: x1 in dom f and
+                  A83: f.x1 = j + 1 by FUNCT_1:def 5;
+                  A84: now assume not x1 in dom gg;
+                    then x1 in Seg(k + 1) \ Seg k by A10,A55,A82,XBOOLE_0:def 4
+;
+                    then x1 in {k + 1} by FINSEQ_3:16;
+                    then j + 1 = j + 0 by A75,A81,A83,TARSKI:def 1;
+                    hence contradiction by XCMPLX_1:2;
+                  end;
+                    m1 <= j by A14,A75,A81,REAL_1:69;
+                  then not j + 1 <= m1 by NAT_1:38;
+                  then not f.x1 in dom q1 & x1 is Nat
+                                         by A11,A43,A82,A83,FINSEQ_1:3;
+                  then gg.x1 = j + 1 - 1 by A55,A56,A83,A84
+                           .= y by XCMPLX_1:26;
+                hence thesis by A84,FUNCT_1:def 5;
+              end;
+           hence y in rng gg;
+          end;
+           gg is one-to-one
+          proof let y1,y2;
+            assume that A85: y1 in dom gg & y2 in dom gg and
+            A86: gg.y1 = gg.y2;
+             reconsider j1 = y1, j2 = y2 as Nat by A55,A85;
+              A87: f.y1 in Seg(k + 1) & f.y2 in Seg(k + 1)
+                by A11,A41,A55,A85,FUNCT_1:def 5;
+            then reconsider a = f.y1, b = f.y2 as Nat;
+                now per cases;
+               suppose f.y1 in dom q1 & f.y2 in dom q1;
+                 then gg.j1 = f.y1 & gg.j2 = f.y2 by A55,A56,A85;
+                hence thesis by A11,A41,A55,A85,A86,FUNCT_1:def 8;
+               suppose A88: f.y1 in dom q1 & not f.y2 in dom q1;
+                  then A89: gg.j1 = a & gg.j2 = b - 1 by A55,A56,A85;
+                    a <= m1 & 1 <= b by A43,A87,A88,FINSEQ_1:3;
+                  then (b - 1) + 1 <= m1 + 1 & 1 <= b by A86,A89,AXIOMS:24;
+                  then 1 <= b & b <= m1 + 1 by XCMPLX_1:27;
+                  then b in Seg(m1 + 1) & not b in Seg m1
+                    by A6,A26,A88,FINSEQ_1:3,21;
+                  then b in Seg(m1 + 1) \ Seg m1 by XBOOLE_0:def 4;
+                  then b in {m1 + 1} by FINSEQ_3:16;
+                  then b = m1 + 1 by TARSKI:def 1;
+                  then y2 = k + 1
+                   by A9,A11,A14,A41,A55,A85,FUNCT_1:def 8;
+                hence thesis by A55,A85,FINSEQ_3:9;
+               suppose A90: not f.y1 in dom q1 & f.y2 in dom q1;
+                  then A91: gg.j1 = a - 1 & gg.j2 = b by A55,A56,A85;
+                    b <= m1 & 1 <= a by A43,A87,A90,FINSEQ_1:3;
+                  then (a - 1) + 1 <= m1 + 1 & 1 <= a by A86,A91,AXIOMS:24;
+                  then 1 <= a & a <= m1 + 1 by XCMPLX_1:27;
+                  then a in Seg(m1 + 1) & not a in Seg m1
+                                by A6,A26,A90,FINSEQ_1:3,21;
+                  then a in Seg(m1 + 1) \ Seg m1 by XBOOLE_0:def 4;
+                  then a in {m1 + 1} by FINSEQ_3:16;
+                  then a = m1 + 1 by TARSKI:def 1;
+                  then y1 = k + 1
+                    by A9,A11,A14,A41,A55,A85,FUNCT_1:def 8;
+                hence thesis by A55,A85,FINSEQ_3:9;
+               suppose not f.y1 in dom q1 & not f.y2 in dom q1;
+                 then gg.j1 = a - 1 & gg.j2 = b - 1 by A55,A56,A85;
+                 then gg.j1 = a + (- 1) & gg.y2 = b + (- 1) by XCMPLX_0:def 8;
+                 then a = b by A86,XCMPLX_1:2;
+                hence thesis by A11,A41,A55,A85,FUNCT_1:def 8;
+              end;
+           hence thesis;
+          end;
+        then reconsider gg as Permutation of dom q by A72,FUNCT_2:83;
+         A92: now let i;
+           assume A93: i in dom p;
+             then f.i in rng f by A11,A41,A44,FUNCT_1:def 5;
+            then reconsider j = f.i as Nat by A11;
+               now per cases;
+              suppose f.i in dom q1;
+                then f.i = gg.i & H2.i = p.i & H1.(j) = q1.(j) &
+                         H2.i = H1.(f.i) & q1.j = q.j
+                     by A8,A10,A41,A44,A56,A93,FINSEQ_1:def 7,FUNCT_1:70;
+               hence p.i = q.(gg.i);
+              suppose A94: not f.i in dom q1;
+                then A95: gg.i = j - 1 & H2.i = p.i & H2.i = H1.(f.i)
+                                        by A8,A10,A41,A44,A56,A93,FUNCT_1:70;
+                then A96: j - 1 in dom q by A44,A55,A72,A93,FUNCT_1:def 5;
+                  m1 + 2 <= j by A44,A55,A57,A93,A94;
+                then m1 + 2 - 1 <= j - 1 by REAL_1:49;
+                then m1 + (1 + 1 - 1) <= j - 1 by XCMPLX_1:29;
+                then m1 < m1 + 1 & m1 + 1 <= j - 1
+                                         by REAL_1:69;
+                then A97: m1 < j - 1 & j - 1 < j by AXIOMS:22,INT_1:26;
+                then m1 < j by AXIOMS:22;
+               then reconsider j1 = j - 1 as Nat by RLVECT_2:103;
+                  not j1 in dom q1 by A43,A97,FINSEQ_1:3;
+               then consider a being Nat such that A98: a in dom q2 and
+                A99: j1 = len q1 + a by A96,FINSEQ_1:38;
+                A100: H1 = q1 ^ (<* d *> ^ q2) & j in dom H1
+                            by A10,A11,A39,A41,A44,A93,FINSEQ_1:45,FUNCT_1:def
+5;
+               then consider b being Nat such that
+                A101: b in dom(<* d *> ^ q2) and A102: j = len q1 + b
+                                                        by A94,FINSEQ_1:38;
+                A103: q.(j - 1) = q2.a & H1.j = (<* d *> ^ q2).b by A98,A99,
+A100,A101,A102,FINSEQ_1:def 7;
+                A104: len q1 = j1 - a by A99,XCMPLX_1:26;
+                A105: b = j - len q1 by A102,XCMPLX_1:26
+                     .= j - (j - 1) + a by A104,XCMPLX_1:37
+                     .= j - j + 1 + a by XCMPLX_1:37
+                     .= 0 + 1 + a by XCMPLX_1:14
+                     .= 1 + a;
+                  len<* d *> = 1 by FINSEQ_1:56;
+               hence p.i = q.(gg.i) by A95,A98,A103,A105,FINSEQ_1:def 7;
+             end;
+          hence p.i = q.(gg.i);
+         end;
+           now per cases;
+          suppose A106: len p <> 0;
+            then A107: len p >= 1 by RLVECT_1:98;
+            then A108: g "**" p = g "**" q by A5,A25,A30,A92;
+              H2 = p ^ <* d *> by A6,A7,FINSEQ_3:61;
+            then A109: g "**" H2 = g.(g "**" q,d) by A107,A108,Th5;
+              now per cases;
+             suppose len q1 <> 0 & len q2 <> 0;
+               then A110: len q1 >= 1 & len q2 >= 1 by RLVECT_1:98;
+                 len(<* d *> ^ q2) = len<* d *> + len q2 &
+               len<* d *> = 1 by FINSEQ_1:35,57;
+               then A111: len(<* d *> ^ q2) >= 1 by NAT_1:37;
+                 g "**" H2 =
+                    g.(g.(g "**" q1,g "**" q2),d) by A1,A109,A110,Th6
+                 .= g.(g "**" q1,g.(g "**" q2,d)) by A1,BINOP_1:def 3
+                 .= g.(g "**" q1,g.(d,g "**" q2)) by A2,BINOP_1:def 2
+                 .= g.(g "**" q1,g "**" (<* d *> ^ q2)) by A1,A110,Th7
+                 .= g "**" (q1 ^ (<* d *> ^ q2)) by A1,A110,A111,Th6
+                 .= g "**" H1 by A39,FINSEQ_1:45;
+              hence g "**" H1 = g "**" H2;
+             suppose len q1 = 0 & len q2 <> 0;
+               then A112: q1 = {} by FINSEQ_1:25;
+               then A113: H1 = <* d *> ^ q2 by A39,FINSEQ_1:47
+                         .= <* d *> ^ q by A112,FINSEQ_1:47;
+                 g "**" H2 = g.(d,g "**" q) by A2,A109,BINOP_1:def 2
+                      .= g "**" (<* d *> ^ q) by A1,A25,A30,A107,Th7;
+              hence g "**" H1 = g "**" H2 by A113;
+             suppose len q1 <> 0 & len q2 = 0;
+               then A114: q2 = {} by FINSEQ_1:25;
+               then H1 = q1 ^ <* d *> by A39,FINSEQ_1:47
+                         .= q ^ <* d *> by A114,FINSEQ_1:47;
+              hence g "**" H1 = g "**" H2 by A25,A30,A107,A109,Th5;
+             suppose len q1 = 0 & len q2 = 0;
+               then len q = 0 + 0 by FINSEQ_1:35;
+              hence g "**" H1 = g "**" H2 by A6,A7,A30,A106,FINSEQ_1:21;
+            end;
+           hence g "**" H1 = g "**" H2;
+          suppose A115: len p = 0;
+            then dom H1 = {1} & {1} <> {} by A6,A25,FINSEQ_1:4,def 3;
+            then dom f = {1} & rng f = {1} & 1 in {1}
+                                 by FUNCT_2:def 1,def 3,TARSKI:def 1;
+            then f.1 in {1} by FUNCT_1:def 5;
+            then H1.1 = H2.1 & H2.1 = d by A13,A25,A115,TARSKI:def 1;
+            then H1 = <* d *> & H2 = <* d *> & g "**" <* d *> = d
+                                          by A6,A7,A25,A115,Lm4,FINSEQ_1:57;
+           hence g "**" H1 = g "**" H2;
+         end;
+      hence g "**" H1 = g "**" H2;
+      end;
+     end;
+     for k holds P[k] from Ind(A3,A4);
+    hence thesis;
+   end;
+
+Lm8: g has_a_unity & len F = 0 & G = F * P implies g "**" F = g "**" G
+ proof assume A1: g has_a_unity & len F = 0;
+    then A2: F = {} by FINSEQ_1:25;
+   assume G = F * P;
+    then G = {} by A2,RELAT_1:62;
+    then A3: len G = 0 by FINSEQ_1:25;
+  thus g "**" F = the_unity_wrt g by A1,Def1
+             .= g "**" G by A1,A3,Def1;
+ end;
+
+theorem Th8:
+ g is commutative associative & (g has_a_unity or len F >= 1) &
+  G = F * P implies g "**" F = g "**" G
+  proof assume A1: g is commutative associative &
+                  (g has_a_unity or len F >= 1);
+    assume A2: G = F * P;
+       now per cases;
+      suppose len F = 0;
+       hence thesis by A1,A2,Lm8;
+      suppose len F <> 0;
+        then A3: len F >= 1 by RLVECT_1:98;
+          len F = len G & for i st i in dom G holds G.i = F.(P.i)
+                                               by A2,FINSEQ_2:48,FUNCT_1:22;
+       hence thesis by A1,A3,Lm7;
+     end;
+   hence thesis;
+  end;
+
+Lm9: g is associative commutative &
+     F is one-to-one & G is one-to-one & rng F = rng G & len F >= 1 implies
+      g "**" F = g "**" G
+ proof assume that A1: g is associative commutative and
+                   A2: F is one-to-one and A3: G is one-to-one and
+                   A4: rng F = rng G and A5: len F >= 1;
+   set P = F" * G;
+    A6: len F = len G by A2,A3,A4,RLVECT_1:106;
+    A7: dom(F") = rng F by A2,FUNCT_1:55;
+    then A8: dom P = dom G by A4,RELAT_1:46
+                  .= Seg len F by A6,FINSEQ_1:def 3
+                  .= dom F by FINSEQ_1:def 3;
+      rng(F") = dom F by A2,FUNCT_1:55;
+    then A9: rng P c= dom F by RELAT_1:45;
+A10: dom F = Seg len F by FINSEQ_1:def 3;
+      now assume dom F = {};
+      then len F = 0 by A10,FINSEQ_1:5;
+     hence contradiction by A5;
+    end;
+   then reconsider P as Function of dom F, dom F by A8,A9,FUNCT_2:def 1,
+RELSET_1:11;
+    A11: rng P = rng(F") by A4,A7,RELAT_1:47
+             .= dom F by A2,FUNCT_1:55;
+      F" is one-to-one by A2,FUNCT_1:62;
+    then P is one-to-one by A3,FUNCT_1:46;
+   then reconsider P as Permutation of dom F by A11,FUNCT_2:83;
+      F * P = (F * F") * G by RELAT_1:55
+         .= id(rng G) * G by A2,A4,FUNCT_1:61
+         .= G by FUNCT_1:42;
+  hence thesis by A1,A5,Th8;
+ end;
+
+Lm10: len F = 0 & g has_a_unity &
+  F is one-to-one & G is one-to-one & rng F = rng G
+  implies g "**" F = g "**" G
+ proof assume that A1: len F = 0 & g has_a_unity and
+                   A2: F is one-to-one & G is one-to-one & rng F = rng G;
+     len G = len F by A2,RLVECT_1:106;
+   then g "**" F = the_unity_wrt g & g "**" G = the_unity_wrt g by A1,Def1;
+  hence thesis;
+ end;
+
+theorem
+   (g has_a_unity or len F >= 1) & g is associative commutative &
+  F is one-to-one & G is one-to-one & rng F = rng G implies g "**" F = g "**" G
+ proof len F >= 1 or len F = 0 by RLVECT_1:98;
+  hence thesis by Lm9,Lm10;
+ end;
+
+Lm11: len F = 1 implies g "**" F = F.1
+ proof assume A1: len F = 1;
+   then F = <* F.1 *> by FINSEQ_1:57
+         .= <* F/.1 *> by A1,FINSEQ_4:24;
+  hence g "**" F = F/.1 by Lm4
+              .= F.1 by A1,FINSEQ_4:24;
+ end;
+
+Lm12: g is associative & g is commutative & len F >= 1 &
+     len F = len G & len F = len H &
+      (for k st k in dom F holds H.k = g.(F.k,G.k)) implies
+       g "**" H = g.(g "**" F,g "**" G)
+ proof assume that A1: g is associative and A2: g is commutative;
+   defpred P[Nat] means for F,G,H st
+       len F >= 1 & len F = $1 & len F = len G & len F = len H &
+        (for k st k in dom F holds H.k = g.(F.k,G.k)) holds
+          g "**" H = g.(g "**" F,g "**" G);
+   A3: P[0];
+   A4: now let k;
+     assume A5: P[k];
+     thus P[k+1]
+     proof
+    let F,G,H;
+     assume that len F >= 1 and
+A6:    len F = k + 1 and
+A7:    len F = len G and A8: len F = len H and
+A9:    for k st k in dom F holds H.k = g.(F.k,G.k);
+      reconsider f = F | Seg k,gg = G | Seg k,h = H | Seg k
+ as FinSequence of D by FINSEQ_1:23;
+       A10: len f = k & len gg = k & len h = k by A6,A7,A8,FINSEQ_3:59;
+       A11: now let i;
+         assume A12: i in dom f;
+          then i in Seg len f & i in Seg len gg & i in Seg len h by A10,
+FINSEQ_1:def 3;
+          then i in dom f & i in dom gg & i in dom h by FINSEQ_1:def 3;
+          then A13: F.i = f.i & G.i = gg.i & H.i = h.i by FUNCT_1:70;
+            k <= k + 1 by NAT_1:37;
+          then Seg len f c= Seg len F by A6,A10,FINSEQ_1:7;
+          then Seg len f c= dom F by FINSEQ_1:def 3;
+          then dom f c= dom F by FINSEQ_1:def 3;
+          hence h.i = g.(f.i,gg.i) by A9,A12,A13;
+       end;
+         now per cases by RLVECT_1:98;
+        suppose A14: len f >= 1;
+          then A15: g "**" h = g.(g "**" f,g "**" gg) by A5,A10,A11;
+             k + 1 in Seg(k + 1) by FINSEQ_1:6;
+          then A16:k + 1 in dom F & k + 1 in dom G & k + 1 in dom H
+                                                 by A6,A7,A8,FINSEQ_1:def 3;
+          then (F.(k + 1)) in rng F & (G.(k + 1)) in rng G & (H.(k + 1))
+ in rng H & rng F c= D &
+           rng G c= D & rng H c= D by FINSEQ_1:def 4,FUNCT_1:def 5;
+         then reconsider d = F.(k + 1),d1 = G.(k + 1),d2 = H.(k + 1)
+ as Element of D;
+          A17: G = gg ^ <* d1 *> & F = f ^ <* d *> & H = h ^ <* d2 *>
+                                                      by A6,A7,A8,FINSEQ_3:61;
+          then A18: g "**" G = g.(g "**" gg,d1) &
+                   g "**" F = g.(g "**" f,d) & g "**" <* d *> = d &
+                   g "**" <* d1 *> = d1 by A10,A14,Lm4,Th5;
+             d2 = g.(F.(k + 1),G.(k + 1)) by A9,A16;
+        hence g "**" H = g.(g.(g "**" f,g "**"
+ gg),g.(d,d1)) by A10,A14,A15,A17,Th5
+                   .= g.(g.(g.(g "**" f,g "**" gg),d),d1) by A1,BINOP_1:def 3
+                   .= g.(g.(g "**" f,g.(g "**" gg,d)),d1) by A1,BINOP_1:def 3
+                   .= g.(g.(g "**" f,g.(d,g "**" gg)),d1) by A2,BINOP_1:def 2
+                   .= g.(g.(g "**" F,g "**" gg),d1) by A1,A18,BINOP_1:def 3
+                   .= g.(g "**" F,g "**" G) by A1,A18,BINOP_1:def 3;
+        suppose len f = 0;
+          then g "**" H = H.1 & g "**" F = F.1 & g "**" G = G.1 & 1 in dom F
+                                         by A6,A7,A8,A10,Lm11,FINSEQ_3:27;
+         hence g "**" H = g.(g "**" F,g "**" G) by A9;
+       end;
+     hence g "**" H = g.(g "**" F,g "**" G);
+    end;
+   end;
+   A19: for k holds P[k] from Ind(A3,A4);
+   assume len F >= 1 & len F = len G & len F = len H;
+  hence thesis by A19;
+ end;
+
+Lm13: g has_a_unity & len F = 0 & len F = len G & len F = len H implies
+ g "**" F = g.(g "**" G,g "**" H)
+  proof assume that A1: g has_a_unity and
+                    A2: len F = 0 & len F = len G & len F = len H;
+   thus g "**" F = the_unity_wrt g by A1,A2,Def1
+              .= g.(the_unity_wrt g,the_unity_wrt g) by A1,SETWISEO:23
+              .= g.(g "**" G,the_unity_wrt g) by A1,A2,Def1
+              .= g.(g "**" G,g "**" H) by A1,A2,Def1;
+  end;
+
+theorem
+   g is associative commutative & (g has_a_unity or len F >= 1) &
+ len F = len G & len F = len H &
+ (for k st k in dom F holds F.k = g.(G.k,H.k)) implies
+  g "**" F = g.(g "**" G,g "**" H)
+   proof assume A1: g is associative commutative &
+                   (g has_a_unity or len F >= 1);
+A2:   dom F = Seg len F & dom G = Seg len G & dom H = Seg len H
+               by FINSEQ_1:def 3;
+       len F = 0 or len F >= 1 by RLVECT_1:98;
+    hence thesis by A1,A2,Lm12,Lm13;
+   end;
+
+theorem
+   g has_a_unity implies g "**" <*>D = the_unity_wrt g by Lm3;
+
+theorem
+   g "**" <* d *> = d by Lm4;
+
+theorem Th13:
+ g "**" <* d1,d2 *> = g.(d1,d2)
+  proof A1: len<* d1 *> = 1 & len<* d2 *> = 1 by FINSEQ_1:56;
+   thus g "**" <* d1,d2 *> = g "**" (<* d1 *> ^ <* d2 *>) by FINSEQ_1:def 9
+                        .= g.(g "**" <* d1 *>,d2) by A1,Th5
+                        .= g.(d1,d2) by Lm4;
+  end;
+
+theorem
+   g is commutative implies g "**" <* d1,d2 *> = g "**" <* d2,d1 *>
+  proof assume A1: g is commutative;
+   thus g "**" <* d1,d2 *> = g.(d1,d2) by Th13
+                        .= g.(d2,d1) by A1,BINOP_1:def 2
+                        .= g "**" <* d2,d1 *> by Th13;
+  end;
+
+theorem Th15:
+ g "**" <* d1,d2,d3 *> = g.(g.(d1,d2),d3)
+  proof A1: 2 >= 1 & len<* d1,d2 *> = 2 & len<* d3 *> = 1
+                                        by FINSEQ_1:56,61;
+   thus g "**" <* d1,d2,d3 *> = g "**" (<* d1,d2 *> ^ <* d3 *>) by FINSEQ_1:60
+                           .= g.(g "**" <* d1,d2 *>,d3) by A1,Th5
+                           .= g.(g.(d1,d2),d3) by Th13;
+  end;
+
+theorem
+   g is commutative implies g "**" <* d1,d2,d3 *> = g "**" <* d2,d1,d3 *>
+  proof assume A1: g is commutative;
+   thus g "**" <* d1,d2,d3 *> = g.(g.(d1,d2),d3) by Th15
+                           .= g.(g.(d2,d1),d3) by A1,BINOP_1:def 2
+                           .= g "**" <* d2,d1,d3 *> by Th15;
+  end;
+
+theorem Th17:
+ g "**" (1 |-> d) = d
+  proof
+   thus g "**" (1 |-> d) = g "**" <* d *> by FINSEQ_2:73
+                      .= d by Lm4;
+  end;
+
+theorem
+   g "**" (2 |-> d) = g.(d,d)
+  proof
+   thus g "**" (2 |-> d) = g "**" <* d,d *> by FINSEQ_2:75
+                      .= g.(d,d) by Th13;
+  end;
+
+theorem Th19:
+ g is associative & (g has_a_unity or k <> 0 & l <> 0) implies
+  g "**" ((k + l) |-> d) = g.(g "**" (k |-> d),g "**" (l |-> d))
+   proof k <> 0 & l <> 0 implies len(k |-> d) <> 0 & len(l |-> d) <> 0
+                                                           by FINSEQ_2:69;
+     then A1: k <> 0 & l <> 0 implies len(k |-> d) >= 1 & len(l |-> d) >= 1
+                                                               by RLVECT_1:98;
+       (k + l) |-> d = (k |-> d) ^ (l |-> d) by FINSEQ_2:143;
+    hence thesis by A1,Th6;
+   end;
+
+theorem
+   g is associative & (g has_a_unity or k <> 0 & l <> 0) implies
+  g "**" (k * l |-> d) = g "**" (l |-> (g "**" (k |-> d)))
+   proof defpred P[Nat] means
+     for g,k,d st g is associative & (g has_a_unity or k <> 0 & $1 <> 0) holds
+      g "**" (k * $1 |-> d) = g "**" ($1 |-> (g "**" (k |-> d)));
+     A1: P[0]
+      proof let g,k,d;
+       assume g is associative & (g has_a_unity or k <> 0 & 0 <> 0);
+       thus g "**" (k * 0 |-> d) = g "**" <*>D by FINSEQ_2:72
+                .= g "**" (0 |-> (g "**" (k |-> d))) by FINSEQ_2:72;
+      end;
+     A2: for l st P[l] holds P[l + 1]
+      proof let l;
+        assume A3: P[l];
+       let g,k,d;
+        assume that A4: g is associative and
+                    A5: g has_a_unity or (k <> 0 & l + 1 <> 0);
+           now per cases;
+          suppose l = 0;
+           hence g "**" (k * (l + 1) |-> d) =
+ g "**" ((l + 1) |-> (g "**" (k |-> d))) by Th17;
+          suppose A6: l <> 0;
+            then A7: k <> 0 implies k * l <> 0 by XCMPLX_1:6;
+             g "**" (k * (l + 1) |-> d) = g "**" ((k * l + k * 1) |-> d)
+                                                            by XCMPLX_1:8
+             .= g.(g "**" (k * l |-> d),g "**" (k |-> d)) by A4,A5,A7,Th19
+             .= g.(g "**" (l |-> (g "**" (k |-> d))),g "**"
+ (k |-> d)) by A3,A4,A5,A6
+             .= g.(g "**" (l |-> (g "**" (k |-> d))),g "**" (1 |-> (g "**"
+ (k |-> d)))) by Th17;
+          hence thesis by A4,A6,Th19;
+         end;
+       hence thesis;
+      end;
+       for l holds P[l] from Ind(A1,A2);
+    hence thesis;
+   end;
+
+theorem
+   len F = 1 implies g "**" F = F.1 by Lm11;
+
+theorem
+   len F = 2 implies g "**" F = g.(F.1,F.2)
+  proof assume A1: len F = 2;
+     then F = <* F.1,F.2 *> by FINSEQ_1:61
+      .= <* F/.1,F.2 *> by A1,FINSEQ_4:24
+      .= <* F/.1,F/.2 *> by A1,FINSEQ_4:24;
+   hence g "**" F = g.(F/.1,F/.2) by Th13
+               .= g.(F.1,F/.2) by A1,FINSEQ_4:24
+               .= g.(F.1,F.2) by A1,FINSEQ_4:24;
+  end;

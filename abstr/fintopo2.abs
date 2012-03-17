@@ -1,0 +1,419 @@
+:: Formal topological spaces
+::  by Gang Liu , Yasushi Fuwa and Masayoshi Eguchi
+::
+:: Received October 13, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary FIN_TOPO, BOOLE, SUBSET_1, PRE_TOPC, MARGREL1, FUNCT_1, FINTOPO2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, FUNCT_1, FUNCT_2,
+      FIN_TOPO, PRE_TOPC, MARGREL1;
+ constructors DOMAIN_1, FIN_TOPO, PRE_TOPC, MARGREL1;
+ clusters SUBSET_1, RELSET_1, STRUCT_0, FIN_TOPO, PRE_TOPC, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin
+::
+::     SECTION1 : Some Useful Theorems on Finite Topological Spaces
+::
+
+reserve FT for non empty FT_Space_Str;
+reserve A for Subset of FT;
+
+theorem :: FINTOPO2:1
+    for FT being non empty FT_Space_Str,
+      A,B being Subset of FT holds
+    A c= B implies A^i c= B^i;
+
+theorem :: FINTOPO2:2
+  A^delta = (A^b) /\ ((A^i)`);
+
+theorem :: FINTOPO2:3
+    A^delta = A^b \ A^i;
+
+theorem :: FINTOPO2:4
+    A` is open implies A is closed;
+
+theorem :: FINTOPO2:5
+    A` is closed implies A is open;
+
+definition
+  let FT be non empty FT_Space_Str;
+  let x be Element of FT;
+  let y be Element of FT;
+  let A be Subset of FT;
+  func P_1(x,y,A) -> Element of BOOLEAN equals
+:: FINTOPO2:def 1
+
+    TRUE if (y in U_FT x) & (y in A)
+    otherwise FALSE;
+end;
+
+definition
+  let FT be non empty FT_Space_Str;
+  let x be Element of FT;
+  let y be Element of FT;
+  let A be Subset of FT;
+  func P_2(x,y,A) -> Element of BOOLEAN equals
+:: FINTOPO2:def 2
+
+    TRUE if (y in U_FT x) & (y in A`)
+    otherwise FALSE;
+end;
+
+theorem :: FINTOPO2:6
+    for x,y be Element of FT, A be Subset of FT
+   holds P_1(x,y,A) = TRUE iff (y in U_FT x) & (y in A);
+
+theorem :: FINTOPO2:7
+    for x,y be Element of FT, A be Subset of FT
+   holds P_2(x,y,A) = TRUE iff (y in U_FT x) & (y in A`);
+
+theorem :: FINTOPO2:8
+  for x be Element of FT, A be Subset of FT
+   holds x in A^delta iff ex y1,y2 being Element of FT
+      st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE;
+
+definition
+  let FT be non empty FT_Space_Str;
+  let x be Element of FT;
+  let y be Element of FT;
+  func P_0(x,y) -> Element of BOOLEAN equals
+:: FINTOPO2:def 3
+
+    TRUE if y in U_FT x
+    otherwise FALSE;
+end;
+
+theorem :: FINTOPO2:9
+    for x,y be Element of FT holds
+      P_0(x,y)=TRUE iff y in U_FT x;
+
+theorem :: FINTOPO2:10
+    for x be Element of FT, A be Subset of FT
+   holds x in A^i iff (for y be Element of FT holds
+        (P_0(x,y)=TRUE implies P_1(x,y,A)=TRUE));
+
+theorem :: FINTOPO2:11
+    for x be Element of FT, A be Subset of FT
+   holds
+    x in A^b iff
+    ex y1 being Element of FT
+      st P_1(x,y1,A)=TRUE;
+
+definition
+  let FT be non empty FT_Space_Str;
+  let x be Element of FT;
+  let A be Subset of FT;
+  func P_A(x,A) -> Element of BOOLEAN equals
+:: FINTOPO2:def 4
+
+    TRUE if x in A
+    otherwise FALSE;
+end;
+
+theorem :: FINTOPO2:12
+    for x be Element of FT, A be Subset of FT
+    holds P_A(x,A)=TRUE iff x in A;
+
+theorem :: FINTOPO2:13
+    for x be Element of FT, A be Subset of FT
+   holds
+    x in A^deltai iff
+    (ex y1,y2 being Element of FT
+      st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE) & P_A(x,A) = TRUE;
+
+theorem :: FINTOPO2:14
+    for x be Element of FT, A be Subset of FT
+   holds
+    x in A^deltao iff
+    (ex y1,y2 being Element of FT
+      st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE) & P_A(x,A) = FALSE;
+
+definition
+  let FT be non empty FT_Space_Str;
+  let x be Element of FT;
+  let y be Element of FT;
+  func P_e(x,y) -> Element of BOOLEAN equals
+:: FINTOPO2:def 5
+
+    TRUE if x = y
+    otherwise FALSE;
+end;
+
+theorem :: FINTOPO2:15
+    for x,y be Element of FT
+    holds P_e(x,y)=TRUE iff x = y;
+
+theorem :: FINTOPO2:16
+    for x be Element of FT, A be Subset of FT
+   holds
+    x in A^s iff
+      P_A(x,A)=TRUE &
+       not(ex y being Element of FT
+            st (P_1(x,y,A)=TRUE & P_e(x,y)=FALSE));
+
+theorem :: FINTOPO2:17
+    for x be Element of FT, A be Subset of FT
+   holds
+    x in A^n iff
+      P_A(x,A)=TRUE &
+       ex y being Element of FT
+          st (P_1(x,y,A)=TRUE & P_e(x,y)=FALSE);
+
+theorem :: FINTOPO2:18
+    for x be Element of FT, A be Subset of FT
+   holds
+    x in A^f iff
+     (ex y being Element of FT st P_A(y,A)=TRUE & P_0(y,x)=TRUE);
+
+
+begin
+::
+::          SECTION2: Formal Topological Spaces
+::
+
+definition
+ struct ( 1-sorted ) FMT_Space_Str
+   (# carrier -> set,
+   BNbd -> Function of the carrier, bool bool the carrier #);
+end;
+
+definition
+ cluster non empty strict FMT_Space_Str;
+end;
+
+reserve T for non empty TopStruct;
+reserve FMT for non empty FMT_Space_Str;
+reserve x, y for Element of FMT;
+
+definition
+  let FMT;
+  let x be Element of FMT;
+  func U_FMT x -> Subset of bool the carrier of FMT equals
+:: FINTOPO2:def 6
+
+   ( the BNbd of FMT ).x;
+end;
+
+definition
+ let T;
+ func NeighSp T -> non empty strict FMT_Space_Str means
+:: FINTOPO2:def 7
+        the carrier of it = the carrier of T &
+      for x being Point of it holds
+       U_FMT x = {V where V is Subset of T: V in the topology of T & x in V};
+end;
+
+reserve A, B, W, V for Subset of FMT;
+
+definition let IT be non empty FMT_Space_Str;
+   attr IT is Fo_filled means
+:: FINTOPO2:def 8
+
+   for x being Element of IT
+   for D being Subset of IT st D in U_FMT x holds x in D;
+end;
+
+definition
+  let FMT;
+  let A;
+  func A^Fodelta -> Subset of FMT equals
+:: FINTOPO2:def 9
+{x:for W st W in U_FMT x holds W meets A & W meets A`};
+end;
+
+canceled;
+
+theorem :: FINTOPO2:20
+  x in A^Fodelta iff for W st W in U_FMT x holds W meets A & W meets A`;
+
+definition
+  let FMT,A;
+  func A^Fob -> Subset of FMT equals
+:: FINTOPO2:def 10
+
+  {x:for W st W in U_FMT x holds W meets A};
+end;
+
+theorem :: FINTOPO2:21
+  x in A^Fob iff for W st W in U_FMT x holds W meets A;
+
+definition
+  let FMT,A;
+  func A^Foi -> Subset of FMT equals
+:: FINTOPO2:def 11
+
+  {x:ex V st V in U_FMT x & V c= A};
+end;
+
+theorem :: FINTOPO2:22
+  x in A^Foi iff ex V st V in U_FMT x & V c= A;
+
+definition
+  let FMT,A;
+  func A^Fos -> Subset of FMT equals
+:: FINTOPO2:def 12
+
+  {x:x in A & (ex V st V in U_FMT x & V \ {x} misses A)};
+end;
+
+theorem :: FINTOPO2:23
+  x in A^Fos iff x in A & (ex V st V in U_FMT x & V \ {x} misses A);
+
+definition
+  let FMT,A;
+func A^Fon -> Subset of FMT equals
+:: FINTOPO2:def 13
+
+   A\(A^Fos);
+end;
+
+theorem :: FINTOPO2:24
+    x in A^Fon iff x in A & (for V st V in U_FMT x holds (V \ {x}) meets A);
+
+theorem :: FINTOPO2:25
+  for FMT being non empty FMT_Space_Str,
+    A, B being Subset of FMT holds
+      A c= B implies A^Fob c= B^Fob;
+
+theorem :: FINTOPO2:26
+  for FMT being non empty FMT_Space_Str,
+      A,B being Subset of FMT holds
+         A c= B implies A^Foi c= B^Foi;
+
+theorem :: FINTOPO2:27
+   ((A^Fob) \/ (B^Fob)) c= (A \/ B)^Fob;
+
+theorem :: FINTOPO2:28
+    (A /\ B)^Fob c= (A^Fob) /\ (B^Fob);
+
+theorem :: FINTOPO2:29
+     ((A^Foi) \/ (B^Foi)) c= (A \/ B)^Foi;
+
+theorem :: FINTOPO2:30
+   (A /\ B)^Foi c= ((A^Foi) /\ (B^Foi));
+
+theorem :: FINTOPO2:31
+  for FMT being non empty FMT_Space_Str holds
+    (for x being Element of FMT,
+           V1,V2 being Subset of FMT
+              st ((V1 in U_FMT x) & (V2 in U_FMT x)) holds
+              ex W being Subset of FMT
+                 st ((W in U_FMT x) & (W c= (V1 /\ V2))))
+ iff for A,B being Subset of FMT holds
+     (A \/ B)^Fob = ((A^Fob) \/ (B^Fob));
+
+theorem :: FINTOPO2:32
+  for FMT being non empty FMT_Space_Str holds
+(for x being Element of FMT,
+     V1,V2 being Subset of FMT
+        st V1 in U_FMT x & V2 in U_FMT x holds
+        ex W being Subset of FMT
+            st (W in U_FMT x & W c= V1 /\ V2))
+ iff for A,B being Subset of FMT holds
+      (A^Foi) /\ (B^Foi) = (A /\ B)^Foi;
+
+theorem :: FINTOPO2:33
+  for FMT being non empty FMT_Space_Str,
+    A,B being Subset of FMT holds
+         (for x being Element of FMT,
+             V1,V2 being Subset of FMT
+                st ((V1 in U_FMT x) & V2 in U_FMT x) holds
+          ex W being Subset of FMT
+                st ((W in U_FMT x) & (W c= (V1 /\ V2))))
+ implies (A \/ B)^Fodelta c= ((A^Fodelta) \/ (B^Fodelta));
+
+theorem :: FINTOPO2:34
+  for FMT being non empty FMT_Space_Str st FMT is Fo_filled
+   holds (for A,B being Subset of FMT holds
+          (A \/ B)^Fodelta = ((A^Fodelta) \/ (B^Fodelta)))
+   implies (for x being Element of FMT,
+     V1,V2 being Subset of FMT
+ st (V1 in U_FMT x & V2 in U_FMT x) holds
+     ex W being Subset of FMT
+         st (W in U_FMT x & W c= (V1 /\ V2)));
+
+theorem :: FINTOPO2:35
+    for x be Element of FMT, A being Subset of
+FMT
+   holds x in A^Fos iff x in A & not x in (A\{x})^Fob;
+
+theorem :: FINTOPO2:36
+  for FMT being non empty FMT_Space_Str holds FMT is Fo_filled
+    iff for A being Subset of FMT holds A c= A^Fob;
+
+theorem :: FINTOPO2:37
+  for FMT being non empty FMT_Space_Str holds FMT is Fo_filled
+  iff for A being Subset of FMT holds A^Foi c= A;
+
+theorem :: FINTOPO2:38
+  ((A`)^Fob)` =A^Foi;
+
+theorem :: FINTOPO2:39
+  ((A`)^Foi)` = A^Fob;
+
+theorem :: FINTOPO2:40
+  A^Fodelta = (A^Fob) /\ ((A`)^Fob);
+
+theorem :: FINTOPO2:41
+    A^Fodelta = (A^Fob) /\ (A^Foi)`;
+
+theorem :: FINTOPO2:42
+    A^Fodelta = (A`)^Fodelta;
+
+theorem :: FINTOPO2:43
+    A^Fodelta = A^Fob \ A^Foi;
+
+definition
+  let FMT;
+  let A;
+  func A^Fodel_i -> Subset of FMT equals
+:: FINTOPO2:def 14
+
+  A /\ (A^Fodelta);
+
+   func A^Fodel_o -> Subset of FMT equals
+:: FINTOPO2:def 15
+
+  A` /\ (A^Fodelta);
+end;
+
+theorem :: FINTOPO2:44
+    A^Fodelta = (A^Fodel_i) \/ (A^Fodel_o);
+
+definition let FMT;
+  let G be Subset of FMT;
+  attr G is Fo_open means
+:: FINTOPO2:def 16
+
+    G = G^Foi;
+
+   attr G is Fo_closed means
+:: FINTOPO2:def 17
+
+    G = G^Fob;
+end;
+
+theorem :: FINTOPO2:45
+    A` is Fo_open implies A is Fo_closed;
+
+theorem :: FINTOPO2:46
+    A` is Fo_closed implies A is Fo_open;
+
+theorem :: FINTOPO2:47
+  for FMT being non empty FMT_Space_Str,
+    A,B being Subset of FMT st FMT is Fo_filled
+    holds (for x being Element of FMT holds
+       {x} in U_FMT x )
+ implies (A /\ B)^Fob = ((A^Fob) /\ (B^Fob));
+
+theorem :: FINTOPO2:48
+  for FMT being non empty FMT_Space_Str,
+    A,B being Subset of FMT st FMT is Fo_filled
+    holds (for x being Element of FMT holds
+       {x} in U_FMT x )
+ implies (A^Foi) \/ (B^Foi) = (A \/ B)^Foi;
+

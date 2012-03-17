@@ -1,0 +1,234 @@
+:: On the Category of Posets
+::  by Adam Grabowski
+::
+:: Received January 22, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary ORDERS_1, NATTRA_1, RELAT_1, RELAT_2, BOOLE, WELLORD1, SUBSET_1,
+      PRE_TOPC, SEQM_3, FUNCT_1, FUNCT_2, UNIALG_3, FRAENKEL, CAT_5, CAT_1,
+      ALTCAT_1, PBOOLE, PRALG_1, BINOP_1, ORDERS_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1,
+      CAT_5, STRUCT_0, MCART_1, WELLORD1, PARTFUN1, BINOP_1, MULTOP_1,
+      RELSET_1, PRE_TOPC, ORDERS_1, CAT_1, ENS_1, FRAENKEL, PBOOLE, GRCAT_1,
+      FUNCT_2, PRALG_1, ALTCAT_1;
+ constructors RELAT_2, ORDERS_1, WELLORD1, ALTCAT_1, ENS_1, CAT_5, DOMAIN_1,
+      TOPS_2, GRCAT_1;
+ clusters SUBSET_1, RELSET_1, ORDERS_1, STRUCT_0, FUNCT_1, FRAENKEL, CAT_5,
+      ALTCAT_1, ENS_1, PARTFUN1, XBOOLE_0;
+ requirements BOOLE, SUBSET;
+
+
+begin :: Preliminaries
+
+definition let IT be RelStr;
+  attr IT is discrete means
+:: ORDERS_3:def 1
+  the InternalRel of IT = id (the carrier of IT);
+end;
+
+definition
+  cluster strict discrete non empty Poset;
+
+  cluster strict discrete empty Poset;
+end;
+
+definition
+  cluster RelStr (#{},id {}#) -> empty;
+
+  let P be empty RelStr;
+  cluster the InternalRel of P -> empty;
+end;
+
+definition
+  cluster empty -> discrete RelStr;
+end;
+
+definition let P be RelStr;
+  let IT be Subset of P;
+  attr IT is disconnected means
+:: ORDERS_3:def 2
+   ex A,B be Subset of P st A <> {} & B <> {}
+  & IT = A \/ B & A misses B &
+    the InternalRel of P =
+     (the InternalRel of P) |_2 A \/ (the InternalRel of P) |_2 B;
+  antonym IT is connected;
+end;
+
+definition let IT be RelStr;
+  attr IT is disconnected means
+:: ORDERS_3:def 3
+   [#] IT is disconnected;
+  antonym IT is connected;
+end;
+
+reserve T for non empty RelStr,
+        a for Element of T;
+
+theorem :: ORDERS_3:1
+    for DP be discrete non empty RelStr, x,y be Element of DP holds
+   x <= y iff x = y;
+
+theorem :: ORDERS_3:2
+    for R be Relation, a be set st R is Order of {a} holds R = id {a};
+
+theorem :: ORDERS_3:3
+    T is reflexive & [#] T = {a} implies T is discrete;
+
+ reserve a for set;
+
+theorem :: ORDERS_3:4
+  [#] T = {a} implies T is connected;
+
+theorem :: ORDERS_3:5
+  for DP be discrete non empty Poset st
+   (ex a,b be Element of DP st a <> b) holds DP is disconnected;
+
+definition
+  cluster strict connected (non empty Poset);
+
+  cluster strict disconnected discrete (non empty Poset);
+end;
+
+begin  :: Category of Posets
+
+definition let IT be set;
+  attr IT is POSet_set-like means
+:: ORDERS_3:def 4
+   for a be set st a in IT holds a is non empty Poset;
+end;
+
+definition
+  cluster non empty POSet_set-like set;
+end;
+
+definition
+  mode POSet_set is POSet_set-like set;
+end;
+
+definition let P be non empty POSet_set;
+  redefine mode Element of P -> non empty Poset;
+end;
+
+definition
+ let L1,L2 be RelStr;
+ let f be map of L1, L2;
+ attr f is monotone means
+:: ORDERS_3:def 5
+  for x,y being Element of L1 st x <= y
+   for a,b being Element of L2 st a = f.x & b = f.y holds a <= b;
+end;
+
+ reserve P for non empty POSet_set, A,B for Element of P;
+
+definition let A,B be RelStr;
+ func MonFuncs (A,B) means
+:: ORDERS_3:def 6
+   a in it iff ex f be map of A, B st a = f &
+    f in Funcs (the carrier of A, the carrier of B) & f is monotone;
+end;
+
+theorem :: ORDERS_3:6
+for A,B,C be non empty RelStr
+ for f,g be Function st f in MonFuncs (A,B) & g in MonFuncs (B,C) holds
+  (g*f) in MonFuncs (A,C);
+
+theorem :: ORDERS_3:7
+  id the carrier of T in MonFuncs (T,T);
+
+definition let T;
+  cluster MonFuncs (T,T) -> non empty;
+end;
+
+definition let X be set;
+  func Carr X -> set means
+:: ORDERS_3:def 7
+    a in it iff ex s be 1-sorted st s in X & a = the carrier of s;
+end;
+
+definition let P;
+  cluster Carr P -> non empty;
+end;
+
+theorem :: ORDERS_3:8
+    for f be 1-sorted holds Carr {f} = {the carrier of f};
+
+theorem :: ORDERS_3:9
+    for f,g be 1-sorted holds Carr {f,g} = {the carrier of f, the carrier of g}
+;
+
+theorem :: ORDERS_3:10
+  MonFuncs (A,B) c= Funcs Carr P;
+
+theorem :: ORDERS_3:11
+  for A,B be RelStr holds
+   MonFuncs (A,B) c= Funcs (the carrier of A,the carrier of B);
+
+definition let A,B be non empty Poset;
+  cluster MonFuncs (A,B) -> functional;
+end;
+
+definition let P be non empty POSet_set;
+  func POSCat P -> strict with_triple-like_morphisms Category means
+:: ORDERS_3:def 8
+    the Objects of it = P &
+  (for a,b be Element of P, f be Element of Funcs Carr P st
+    f in MonFuncs (a,b) holds [[a,b],f] is Morphism of it) &
+  (for m be Morphism of it
+    ex a,b be Element of P, f be Element of Funcs (Carr P) st
+     m = [[a,b],f] & f in MonFuncs (a,b)) &
+   for m1,m2 be (Morphism of it), a1,a2,a3 be Element of P,
+   f1,f2 be Element of Funcs (Carr P) st
+   m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
+    holds m2*m1 = [[a1,a3], f2*f1];
+end;
+
+begin   :: Alternative Category of Posets
+
+scheme AltCatEx
+ {A() -> non empty set, F(set,set) -> functional set }:
+  ex C be strict AltCatStr st
+   the carrier of C = A() &
+   for i,j be Element of A() holds (the Arrows of C).(i,j) = F (i,j) &
+   for i,j,k be Element of A() holds
+    (the Comp of C).(i,j,k) = FuncComp ( F(i,j) , F(j,k) )
+   provided
+ for i,j,k be Element of A() for f,g be Function st
+     f in F(i,j) & g in F(j,k) holds g * f in F (i,k);
+
+scheme AltCatUniq
+   {A() -> non empty set, F(set,set) -> functional set } :
+  for C1,C2 be strict AltCatStr st
+  ( the carrier of C1 = A() &
+   for i,j be Element of A() holds (the Arrows of C1).(i,j) = F (i,j) &
+   for i,j,k be Element of A() holds
+    (the Comp of C1).(i,j,k) = FuncComp ( F(i,j) , F(j,k) ) ) &
+  ( the carrier of C2 = A() &
+   for i,j be Element of A() holds (the Arrows of C2).(i,j) = F (i,j) &
+   for i,j,k be Element of A() holds
+    (the Comp of C2).(i,j,k) = FuncComp ( F(i,j) , F(j,k) ) )
+    holds C1 = C2;
+
+definition let P be non empty POSet_set;
+  func POSAltCat P -> strict AltCatStr means
+:: ORDERS_3:def 9
+   the carrier of it = P &
+   for i,j be Element of P holds
+    (the Arrows of it).(i,j) = MonFuncs (i,j) &
+   for i,j,k be Element of P holds
+    (the Comp of it).(i,j,k) = FuncComp ( MonFuncs (i,j) , MonFuncs (j,k) );
+end;
+
+definition let P be non empty POSet_set;
+  cluster POSAltCat P -> transitive non empty;
+end;
+
+definition let P be non empty POSet_set;
+  cluster POSAltCat P -> associative with_units;
+end;
+
+theorem :: ORDERS_3:12
+   for o1,o2 be object of POSAltCat P, A,B be Element of P st o1 = A & o2 = B
+  holds <^ o1 , o2 ^> c= Funcs (the carrier of A, the carrier of B);
+

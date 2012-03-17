@@ -1,0 +1,292 @@
+:: Analytical Ordered Affine Spaces
+::  by Henryk Oryszczyszyn and Krzysztof Pra\.zmowski
+::
+:: Received April 11, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, ARYTM_1, RELAT_1, REALSET1, ANALOAF;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, DOMAIN_1, REAL_1, RELSET_1, STRUCT_0,
+      RLVECT_1, REALSET1;
+ constructors DOMAIN_1, REAL_1, REALSET1, XREAL_0, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, RELSET_1, STRUCT_0, XREAL_0, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+reserve V for RealLinearSpace;
+reserve p,q,u,v,w,y for VECTOR of V;
+reserve a,b,c,d for Real;
+
+definition let V; let u,v,w,y;
+ pred u,v // w,y means
+:: ANALOAF:def 1
+  u=v or w=y or ex a,b st 0<a & 0<b & a*(v-u)=b*(y-w);
+end;
+
+canceled;
+
+theorem :: ANALOAF:2
+ 0<a & 0<b implies 0<a+b;
+
+theorem :: ANALOAF:3
+ a<>b implies 0<a-b or 0<b-a;
+
+theorem :: ANALOAF:4
+ (w-v)+(v-u) = w-u;
+
+canceled;
+
+theorem :: ANALOAF:6
+ w-(u-v) = w+(v-u);
+
+canceled 2;
+
+theorem :: ANALOAF:9
+ y+u = v+w implies y-w = v-u;
+
+theorem :: ANALOAF:10
+ a*(u-v) = -(a*(v-u));
+
+theorem :: ANALOAF:11
+ (a-b)*(u-v) = (b-a)*(v-u);
+
+theorem :: ANALOAF:12
+ a<>0 & a*u=v implies u=a"*v;
+
+theorem :: ANALOAF:13
+ (a<>0 & a*u=v implies u=a"*v) &
+      (a<>0 & u=a"*v implies a*u=v);
+
+canceled 2;
+
+theorem :: ANALOAF:16
+  u,v // w,y & u<>v & w<>y implies ex a,b st
+                                   a*(v-u)=b*(y-w) & 0<a & 0<b;
+
+theorem :: ANALOAF:17
+  u,v // u,v;
+
+theorem :: ANALOAF:18
+   u,v // w,w & u,u // v,w;
+
+theorem :: ANALOAF:19
+  u,v // v,u implies u=v;
+
+theorem :: ANALOAF:20
+  p<>q & p,q // u,v & p,q // w,y implies u,v // w,y;
+
+theorem :: ANALOAF:21
+  u,v // w,y implies v,u // y,w & w,y // u,v;
+
+theorem :: ANALOAF:22
+  u,v // v,w implies u,v // u,w;
+
+theorem :: ANALOAF:23
+  u,v // u,w implies u,v // v,w or u,w // w,v;
+
+theorem :: ANALOAF:24
+  v-u=y-w implies u,v // w,y;
+
+theorem :: ANALOAF:25
+  y=(v+w)-u implies u,v // w,y & u,w // v,y;
+
+theorem :: ANALOAF:26
+ (ex p,q st p<>q) implies
+  (for u,v,w ex y st u,v // w,y & u,w // v,y & v<>y);
+
+theorem :: ANALOAF:27
+  p<>v & v,p // p,w implies ex y st u,p // p,y & u,v // w,y;
+
+theorem :: ANALOAF:28
+ (for a,b st a*u + b*v=0.V holds a=0 & b=0) implies u<>v & u<>0.V & v<>0.V;
+
+theorem :: ANALOAF:29
+  (ex u,v st (for a,b st a*u + b*v=0.V holds a=0 & b=0)) implies
+    (ex u,v,w,y st not u,v // w,y & not u,v // y,w);
+
+canceled;
+
+ theorem :: ANALOAF:31
+  (ex p,q st (for w ex a,b st a*p + b*q=w)) implies
+  (for u,v,w,y st not u,v // w,y & not u,v // y,w
+    ex z being VECTOR of V st
+      (u,v // u,z or u,v // z,u) & (w,y // w,z or w,y // z,w));
+
+definition
+  struct(1-sorted) AffinStruct (#carrier -> set,
+                   CONGR -> Relation of [:the carrier,the carrier:]#);
+end;
+
+definition
+ cluster non empty strict AffinStruct;
+end;
+
+reserve AS for non empty AffinStruct;
+reserve a,b,c,d for Element of AS;
+reserve x,z for set;
+
+definition let AS,a,b,c,d;
+  pred a,b // c,d means
+:: ANALOAF:def 2
+ [[a,b],[c,d]] in the CONGR of AS;
+end;
+
+definition let V;
+ func DirPar(V) -> Relation of [:the carrier of V,the carrier of V:]
+means
+:: ANALOAF:def 3
+ [x,z] in it iff ex u,v,w,y st x=[u,v] & z=[w,y] & u,v // w,y;
+end;
+
+canceled;
+
+theorem :: ANALOAF:33
+   [[u,v],[w,y]] in DirPar(V) iff u,v // w,y;
+
+definition let V; func OASpace(V) -> strict AffinStruct equals
+:: ANALOAF:def 4
+   AffinStruct (#the carrier of V, DirPar(V)#);
+end;
+
+definition let V;
+ cluster OASpace V -> non empty;
+end;
+
+canceled;
+
+theorem :: ANALOAF:35
+    (ex u,v st
+     for a,b being Real st a*u + b*v = 0.V holds a=0 & b=0)
+ implies
+  ((ex a,b being Element of OASpace(V) st a<>b) &
+   (for a,b,c,d,p,q,r,s being Element of OASpace(V) holds
+     a,b // c,c &
+     (a,b // b,a implies a=b) &
+     (a<>b & a,b // p,q & a,b // r,s implies p,q // r,s) &
+     (a,b // c,d implies b,a // d,c) &
+     (a,b // b,c implies a,b // a,c) &
+     (a,b // a,c implies a,b // b,c or a,c // c,b)) &
+    (ex a,b,c,d  being Element of OASpace(V)
+         st not a,b // c,d & not a,b // d,c) &
+    (for a,b,c  being Element of OASpace(V)
+      ex d  being Element of OASpace(V)
+         st a,b // c,d & a,c // b,d & b<>d) &
+    (for p,a,b,c  being Element of OASpace(V)
+      st p<>b & b,p // p,c
+       ex d being Element of OASpace(V)
+                         st a,p // p,d & a,b // c,d));
+
+theorem :: ANALOAF:36
+ (ex p,q being VECTOR of V st
+  (for w being VECTOR of V ex a,b being Real st a*p + b*q=w))
+  implies
+  (for a,b,c,d being Element of OASpace(V) st
+                               not a,b // c,d & not a,b // d,c
+    ex t being Element of OASpace(V) st
+      (a,b // a,t or a,b // t,a) & (c,d // c,t or c,d // t,c));
+
+definition let IT be non empty AffinStruct;
+ attr IT is OAffinSpace-like means
+:: ANALOAF:def 5
+   (for a,b,c,d,p,q,r,s being Element of IT holds
+     a,b // c,c &
+     (a,b // b,a implies a=b) &
+     (a<>b & a,b // p,q & a,b // r,s implies p,q // r,s) &
+     (a,b // c,d implies b,a // d,c) &
+     (a,b // b,c implies a,b // a,c) &
+     (a,b // a,c implies a,b // b,c or a,c // c,b)) &
+    (ex a,b,c,d  being Element of IT
+         st not a,b // c,d & not a,b // d,c) &
+    (for a,b,c  being Element of IT
+      ex d  being Element of IT
+         st a,b // c,d & a,c // b,d & b<>d) &
+    for p,a,b,c  being Element of IT
+      st p<>b & b,p // p,c
+       ex d being Element of IT st a,p // p,d & a,b // c,d;
+end;
+
+definition
+ cluster strict non trivial OAffinSpace-like (non empty AffinStruct);
+end;
+
+definition
+ mode OAffinSpace is non trivial OAffinSpace-like (non empty AffinStruct);
+end;
+
+theorem :: ANALOAF:37
+    ((ex a,b being Element of AS st a<>b) &
+   (for a,b,c,d,p,q,r,s being Element of AS holds
+     a,b // c,c &
+     (a,b // b,a implies a=b) &
+     (a<>b & a,b // p,q & a,b // r,s implies p,q // r,s) &
+     (a,b // c,d implies b,a // d,c) &
+     (a,b // b,c implies a,b // a,c) &
+     (a,b // a,c implies a,b // b,c or a,c // c,b)) &
+    (ex a,b,c,d  being Element of AS
+         st not a,b // c,d & not a,b // d,c) &
+    (for a,b,c  being Element of AS
+      ex d  being Element of AS
+         st a,b // c,d & a,c // b,d & b<>d) &
+    (for p,a,b,c  being Element of AS
+      st p<>b & b,p // p,c ex d being
+             Element of AS st a,p // p,d & a,b // c,d))
+      iff AS is OAffinSpace;
+
+theorem :: ANALOAF:38
+ (ex u,v st
+   for a,b being Real st a*u + b*v = 0.V holds a=0 & b=0)
+    implies OASpace(V) is OAffinSpace;
+
+
+
+
+definition let IT be OAffinSpace;
+ attr IT is 2-dimensional means
+:: ANALOAF:def 6
+   for a,b,c,d being Element of IT st
+     not a,b // c,d & not a,b // d,c holds
+      ex p being Element of IT st
+      (a,b // a,p or a,b // p,a) & (c,d // c,p or c,d // p,c);
+ end;
+
+definition
+ cluster strict 2-dimensional OAffinSpace;
+end;
+
+definition
+ mode OAffinPlane is 2-dimensional OAffinSpace;
+end;
+
+canceled 11;
+
+theorem :: ANALOAF:50
+    ((ex a,b being Element of AS st a<>b) &
+   (for a,b,c,d,p,q,r,s being Element of AS holds
+     a,b // c,c &
+     (a,b // b,a implies a=b) &
+     (a<>b & a,b // p,q & a,b // r,s implies p,q // r,s) &
+     (a,b // c,d implies b,a // d,c) &
+     (a,b // b,c implies a,b // a,c) &
+     (a,b // a,c implies a,b // b,c or a,c // c,b)) &
+    (ex a,b,c,d  being Element of AS
+         st not a,b // c,d & not a,b // d,c) &
+    (for a,b,c  being Element of AS
+      ex d  being Element of AS
+         st a,b // c,d & a,c // b,d & b<>d) &
+    (for p,a,b,c  being Element of AS
+      st p<>b & b,p // p,c
+       ex d being Element of AS st a,p // p,d & a,b // c,d) &
+    (for a,b,c,d being Element of AS st
+     not a,b // c,d & not a,b // d,c holds
+      ex p being Element of AS st
+      (a,b // a,p or a,b // p,a) & (c,d // c,p or c,d // p,c)) )
+   iff AS is OAffinPlane;
+
+theorem :: ANALOAF:51
+   (ex u,v st
+     (for a,b being Real st a*u + b*v = 0.V holds a=0 & b=0) &
+     (for w ex a,b being Real st w = a*u + b*v))
+     implies OASpace(V) is OAffinPlane;

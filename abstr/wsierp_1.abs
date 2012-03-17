@@ -1,0 +1,252 @@
+:: The Chinese Remainder Theorem
+::  by Andrzej Kondracki
+::
+:: Received December 30, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, INT_1, RAT_1, ARYTM_3, GROUP_1, ARYTM_1, PREPOWER, SQUARE_1,
+      ABSVALUE, NAT_1, INT_2, FINSEQ_1, FUNCT_1, RELAT_1, BOOLE, RLVECT_1,
+      MATRIX_2, CARD_3;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      INT_1, NAT_1, RAT_1, INT_2, PREPOWER, SQUARE_1, RELAT_1, FUNCT_1,
+      FINSEQ_1, RVSUM_1, FINSEQ_4, MATRIX_2, GROUP_1, TREES_4, GOBOARD1;
+ constructors REAL_1, NAT_1, INT_2, PREPOWER, SQUARE_1, FINSEQ_4, GROUP_1,
+      GOBOARD1, TREES_4, MATRIX_2, CARD_4, MEMBERED;
+ clusters SUBSET_1, INT_1, FINSEQ_1, RELSET_1, XREAL_0, NEWTON, RAT_1,
+      SQUARE_1, NAT_1, MEMBERED, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: PRELIMINARIES
+
+ reserve x,y,z for real number,
+         a,b,c,d,e,f,g,h for Nat,
+         k,l,m,n,m1,n1,m2,n2 for Integer,
+         q for Rational;
+
+canceled;
+
+theorem :: WSIERP_1:2
+ x|^2=x*x & (-x)|^2=x|^2;
+
+theorem :: WSIERP_1:3
+ (-x)|^(2*a)=x|^(2*a) & (-x)|^(2*a+1)=-(x|^(2*a+1));
+
+canceled;
+
+theorem :: WSIERP_1:5
+ x>=0 & y>=0 & d>0 & x|^d=y|^d implies x=y;
+
+theorem :: WSIERP_1:6
+ x>max(y,z) iff (x>y & x>z);
+
+theorem :: WSIERP_1:7
+   (x<=0 & y>=z) implies (y-x>=z & y>=z+x);
+
+theorem :: WSIERP_1:8
+   (x<=0 & y>z or x<0 & y>=z) implies (y>z+x & y-x>z);
+
+definition let k, a;
+  cluster k |^ a -> integer;
+end;
+
+definition let a,b;
+  redefine func a|^b -> Nat;
+end;
+
+theorem :: WSIERP_1:9
+ k divides m & k divides n implies k divides m+n;
+
+theorem :: WSIERP_1:10
+ k divides m & k divides n implies k divides m*m1+n*n1;
+
+theorem :: WSIERP_1:11
+ m gcd n = 1 & k gcd n = 1 implies m*k gcd n = 1;
+
+theorem :: WSIERP_1:12
+ a hcf b=1 & c hcf b=1 implies a*c hcf b=1;
+
+theorem :: WSIERP_1:13
+ 0 gcd m = abs m & 1 gcd m = 1;
+
+theorem :: WSIERP_1:14
+ 1,k are_relative_prime;
+
+theorem :: WSIERP_1:15
+ k,l are_relative_prime implies k|^a,l are_relative_prime;
+
+theorem :: WSIERP_1:16
+ k,l are_relative_prime implies k|^a,l|^b are_relative_prime;
+
+theorem :: WSIERP_1:17
+ k gcd l = 1 implies k gcd l|^b = 1 & k|^a gcd l|^b = 1;
+
+theorem :: WSIERP_1:18
+   abs m divides k iff m divides k;
+
+theorem :: WSIERP_1:19
+ a divides b implies (a|^c) divides (b|^c);
+
+theorem :: WSIERP_1:20
+ a divides 1 implies a=1;
+
+theorem :: WSIERP_1:21
+ d divides a & a hcf b = 1 implies d hcf b = 1;
+
+theorem :: WSIERP_1:22
+   k<>0 implies (k divides l iff l/k is Integer);
+
+theorem :: WSIERP_1:23
+   a<=b-c implies a<=b & c <=b;
+
+reserve fs,fs1,fs2,fs3 for FinSequence;
+
+definition let f be FinSequence of INT; let a be set;
+ cluster f.a -> integer;
+end;
+
+definition let fp be FinSequence of NAT;
+ let a;
+ redefine func fp.a -> Nat;
+end;
+
+definition
+ let D be non empty set;
+ let D1 be non empty Subset of D;
+ let f1,f2 be FinSequence of D1;
+redefine func f1^f2 -> FinSequence of D1;
+end;
+
+definition
+ let D be non empty set;
+ let D1 be non empty Subset of D;
+ redefine func <*>D1 -> empty FinSequence of D1;
+end;
+
+definition
+ redefine func INT -> non empty Subset of REAL;
+end;
+
+ reserve D for non empty set,
+         v,v1,v2,v3 for set,
+         fp for FinSequence of NAT,
+         fr,fr1,fr2 for FinSequence of INT,
+         ft for FinSequence of REAL;
+
+definition let fr;
+ redefine func Sum(fr) -> Element of INT;
+ redefine func Product(fr) -> Element of INT;
+end;
+
+definition let fp;
+  redefine func Sum(fp) -> Nat;
+  redefine func Product(fp) -> Nat;
+end;
+
+definition let a,fs;
+ redefine func Del (fs,a) means
+:: WSIERP_1:def 1
+ it=fs if not a in dom fs
+  otherwise len it + 1 = len fs & for b holds
+      (b<a implies it.b=fs.b) & (b>=a implies it.b=fs.(b+1));
+end;
+
+definition
+ let D; let a;
+ let fs be FinSequence of D;
+redefine func Del(fs,a) -> FinSequence of D;
+end;
+
+definition
+ let D; let D1 be non empty Subset of D;
+ let a; let fs be FinSequence of D1;
+redefine func Del(fs,a) -> FinSequence of D1;
+end;
+
+canceled 2;
+
+theorem :: WSIERP_1:26
+   Del(<*v1*>,1) = {} & Del(<*v1,v2*>,1) = <*v2*> & Del(<*v1,v2*>,2) = <*v1*> &
+ Del(<*v1,v2,v3*>,1) = <*v2,v3*> & Del(<*v1,v2,v3*>,2) = <*v1,v3*> &
+ Del(<*v1,v2,v3*>,3) = <*v1,v2*>;
+
+theorem :: WSIERP_1:27
+   a in dom ft implies Sum Del(ft,a)+(ft.a)=Sum(ft);
+
+theorem :: WSIERP_1:28
+   a in dom fp implies Product(fp)/fp.a is Nat;
+
+::  BEGINING
+
+theorem :: WSIERP_1:29
+ numerator(q),denominator(q) are_relative_prime;
+
+theorem :: WSIERP_1:30
+   q<>0 & q=k/a & a<>0 & k,a are_relative_prime
+         implies k=numerator(q) & a=denominator(q);
+
+theorem :: WSIERP_1:31
+ (ex q st a=q|^b) implies ex k st a=k|^b;
+
+theorem :: WSIERP_1:32
+ (ex q st a=q|^d) implies ex b st a=b|^d;
+
+theorem :: WSIERP_1:33
+   e>0 & (a|^e) divides (b|^e) implies a divides b;
+
+theorem :: WSIERP_1:34
+ ex m,n st a hcf b = a*m+b*n;
+
+theorem :: WSIERP_1:35
+ ex m1,n1 st m gcd n = m*m1+n*n1;
+
+theorem :: WSIERP_1:36
+ m divides n*k & m gcd n=1 implies m divides k;
+
+theorem :: WSIERP_1:37
+ a hcf b=1 & a divides b*c implies a divides c;
+
+theorem :: WSIERP_1:38
+ a<>0 & b<>0 implies ex c,d st a hcf b=a*c-b*d;
+
+theorem :: WSIERP_1:39
+   f>0 & g>0 & (f hcf g)=1 & a|^f=b|^g implies ex e st a=e|^g & b=e|^f;
+
+reserve x,y,t for Integer;
+
+theorem :: WSIERP_1:40
+ (ex x,y st m*x+n*y=k) iff (m gcd n) divides k;
+
+theorem :: WSIERP_1:41
+   m<>0 & n<>0 & m*m1+n*n1=k implies
+   for x,y st m*x+n*y=k ex t st x=m1+t*(n/(m gcd n)) & y=n1-t*(m/(m gcd n));
+
+theorem :: WSIERP_1:42
+   a hcf b=1 & a*b=c|^d implies ex e,f st a=e|^d & b=f|^d;
+
+:: Chinese remainder theorem
+
+theorem :: WSIERP_1:43
+ for d holds
+   (for a st a in dom fp holds fp.a hcf d=1) implies (Product(fp) hcf d)=1;
+
+theorem :: WSIERP_1:44
+   len fp>=2 &
+ (for b,c st b in dom fp & c in dom fp & b<>c holds (fp.b hcf fp.c)=1)
+           implies
+ for fr st len fr=len fp holds ex fr1 st (len fr1=len fp &
+ for b st b in dom fp holds (fp.b)*(fr1.b)+(fr.b)=(fp.1)*(fr1.1)+(fr.1));
+
+canceled;
+
+theorem :: WSIERP_1:46
+    a<>0 & a gcd k=1 implies ex b,e st 0<>b & 0<>e & b<=sqrt a & e<=sqrt a
+         & (a divides (k*b+e) or a divides (k*b-e));
+
+theorem :: WSIERP_1:47
+    dom Del(fs,a) c= dom fs;
+
+theorem :: WSIERP_1:48
+    Del (<*v*>^fs, 1) = fs & Del (fs^<*v*>, len fs + 1) = fs;

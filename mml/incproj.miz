@@ -1,0 +1,1070 @@
+:: Incidence Projective Spaces
+::  by Wojciech Leo\'nczuk and Krzysztof Pra\.zmowski
+::
+:: Received October 4, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary COLLSP, PRE_TOPC, INCSP_1, RELAT_1, ANPROJ_2, ANALOAF, VECTSP_1,
+      AFF_2, INCPROJ;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELSET_1, STRUCT_0, PRE_TOPC,
+      INCSP_1, COLLSP, ANPROJ_2;
+ constructors INCSP_1, ANPROJ_2, DOMAIN_1, XBOOLE_0;
+ clusters ANPROJ_2, RELSET_1, STRUCT_0, SUBSET_1, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ theorems COLLSP, ANPROJ_2, TARSKI, RELAT_1, INCSP_1;
+ schemes RELSET_1;
+
+begin
+
+reserve CPS for proper CollSp,
+        B for Element of bool the carrier of CPS,
+        p for Point of CPS,
+        x, y, z, Y for set;
+
+definition let CPS;
+  redefine mode LINE of CPS -> Element of bool the carrier of CPS;
+  coherence
+  proof
+    let x be LINE of CPS;
+      x c= the carrier of CPS
+    proof
+      consider a,b being Point of CPS such that
+    A1: a <> b & x = Line(a,b) by COLLSP:def 7;
+        now
+        let z;
+        assume z in x;
+        then z in {p: a,b,p is_collinear} by A1,COLLSP:def 5;
+        then ex p being Point of CPS st z = p & a, b, p is_collinear;
+        hence z in the carrier of CPS;
+      end;
+      hence thesis by TARSKI:def 3;
+    end;
+    hence x is Element of bool the carrier of CPS;
+  end;
+end;
+
+definition let CPS;
+  func ProjectiveLines(CPS) -> set equals :Def1:
+   {B : B is LINE of CPS};
+  coherence;
+end;
+
+definition let CPS;
+ cluster ProjectiveLines(CPS) -> non empty;
+  coherence
+  proof
+A1: ProjectiveLines(CPS) = {B : B is LINE of CPS} by Def1;
+    consider x being LINE of CPS;
+      x in ProjectiveLines(CPS) by A1;
+    hence thesis;
+  end;
+end;
+
+canceled;
+
+theorem Th2:
+  x is LINE of CPS iff x is Element of ProjectiveLines(CPS)
+proof
+  hereby
+    assume x is LINE of CPS;
+    then x in {B : B is LINE of CPS};
+    hence x is Element of ProjectiveLines(CPS) by Def1;
+  end;
+  assume x is Element of ProjectiveLines(CPS);
+  then x in ProjectiveLines(CPS);
+  then x in {B : B is LINE of CPS} by Def1;
+  then ex B st x=B & B is LINE of CPS;
+  hence x is LINE of CPS;
+end;
+
+definition let CPS;
+  func Proj_Inc(CPS) -> Relation of the carrier of CPS, ProjectiveLines(CPS)
+  means :Def2:
+  for x,y holds [x,y] in it iff x in the carrier of CPS &
+   y in ProjectiveLines(CPS) & ex Y st y=Y & x in Y;
+  existence
+   proof
+     defpred P[set,set] means ex Y st $2=Y & $1 in Y;
+     ex IT being Relation of the carrier of CPS, ProjectiveLines(CPS) st
+       for x,y holds [x,y] in IT iff x in the carrier of CPS &
+   y in ProjectiveLines(CPS) & P[x,y] from Rel_On_Set_Ex;
+   hence thesis;
+   end;
+  uniqueness
+  proof
+    let R1,R2 be Relation of the carrier of CPS,ProjectiveLines(CPS) such that
+  A1: for x,y holds [x,y] in R1 iff x in the carrier of CPS &
+     y in ProjectiveLines(CPS) & ex Y st y=Y & x in Y and
+  A2: for x,y holds [x,y] in R2 iff x in the carrier of CPS &
+     y in ProjectiveLines(CPS) & ex Y st y=Y & x in Y;
+      now let x,y be set;
+    A3:now
+        assume [x,y] in R1;
+        then x in the carrier of CPS & y in ProjectiveLines(CPS) &
+         ex Y st y=Y & x in Y by A1;
+        hence [x,y] in R2 by A2;
+      end;
+        now assume [x,y] in R2;
+        then x in the carrier of CPS & y in ProjectiveLines(CPS)
+         & ex Y st y=Y & x in Y by A2;
+        hence [x,y] in R1 by A1;
+      end;
+      hence [x,y] in R1 iff [x,y] in R2 by A3;
+    end;
+    hence R1 = R2 by RELAT_1:def 2;
+  end;
+end;
+
+definition let CPS;
+  func IncProjSp_of(CPS) -> IncProjStr equals :Def3:
+   IncProjStr (# the carrier of CPS, ProjectiveLines(CPS), Proj_Inc(CPS) #);
+  coherence;
+end;
+
+definition let CPS;
+  cluster IncProjSp_of(CPS) -> strict;
+  coherence
+  proof
+     IncProjSp_of(CPS) =
+   IncProjStr (# the carrier of CPS, ProjectiveLines(CPS), Proj_Inc(CPS) #)
+   by Def3; hence thesis;
+  end;
+end;
+
+canceled;
+
+theorem Th4:
+  the Points of IncProjSp_of(CPS) = the carrier of CPS &
+  the Lines of IncProjSp_of(CPS) = ProjectiveLines(CPS) &
+  the Inc of IncProjSp_of(CPS) = Proj_Inc(CPS)
+proof
+    IncProjSp_of(CPS) = IncProjStr
+   (# the carrier of CPS, ProjectiveLines(CPS), Proj_Inc(CPS) #) by Def3;
+  hence thesis;
+end;
+
+theorem
+   x is Point of CPS iff x is POINT of IncProjSp_of(CPS) by Th4;
+
+theorem Th6:
+  x is LINE of CPS iff x is LINE of IncProjSp_of(CPS)
+proof
+  hereby
+    assume x is LINE of CPS;
+    then x is Element of ProjectiveLines(CPS) by Th2;
+hence x is LINE of IncProjSp_of(CPS) by Th4;
+  end;
+  assume x is LINE of IncProjSp_of(CPS);
+  then x is Element of ProjectiveLines(CPS) by Th4;
+  hence x is LINE of CPS by Th2;
+end;
+
+reserve a,b,c,p,q,s for POINT of IncProjSp_of(CPS),
+        P,Q,S for LINE of IncProjSp_of(CPS),
+        a',b',c',p',q',r' for Point of CPS,
+        P' for LINE of CPS;
+
+canceled;
+
+theorem Th8:
+  s on S iff [s,S] in Proj_Inc(CPS)
+proof
+    the Inc of IncProjSp_of(CPS) = Proj_Inc(CPS) by Th4;
+  hence thesis by INCSP_1:def 1;
+end;
+
+theorem Th9:
+  p = p' & P = P' implies (p on P iff p' in P')
+proof
+  assume
+A1: p = p' & P = P';
+  hereby
+    assume p on P;
+    then [p',P'] in Proj_Inc(CPS) by A1,Th8;
+    then ex Y st P'= Y & p' in Y by Def2;
+    hence p' in P';
+  end;
+  assume
+A2: p' in P';
+  reconsider P''= P' as LINE of IncProjSp_of(CPS) by Th6;
+  reconsider P'''= P'' as Element of ProjectiveLines(CPS) by Th4;
+    [p',P'''] in Proj_Inc(CPS) by A2,Def2;
+  hence p on P by A1,Th8;
+end;
+
+theorem Th10:
+  ex a', b', c' st a'<>b' & b'<>c' & c'<>a'
+proof
+  consider a'', b'', c'' being Point of CPS such that
+A1: not a'',b'',c'' is_collinear by COLLSP:def 6;
+    a''<>b'' & b''<>c'' & c''<>a'' by A1,COLLSP:7;
+  hence thesis;
+end;
+
+theorem Th11:
+  ex b' st a'<>b'
+proof
+  consider p',q',r' such that
+A1: p'<>q' & q'<>r' & r'<>p' by Th10;
+    a'<>p' or a'<>q' by A1;
+  hence thesis;
+end;
+
+theorem Th12:
+  p on P & q on P & p on Q & q on Q implies p = q or P = Q
+proof
+  assume that
+A1: p on P & q on P & p on Q & q on Q and
+A2: p<>q;
+  reconsider p'= p, q'= q as Point of CPS by Th4;
+  reconsider P'= P, Q'= Q as LINE of CPS by Th6;
+    p' in P' & q' in P' & p' in Q' & q' in Q' by A1,Th9;
+  hence thesis by A2,COLLSP:29;
+end;
+
+theorem Th13:
+  ex P st p on P & q on P
+proof
+  reconsider p'= p,q'= q as Point of CPS by Th4;
+A1:
+  now
+    assume p'<>q';
+    then consider P' being LINE of CPS such that
+  A2: p' in P' & q' in P' by COLLSP:24;
+    reconsider P = P' as LINE of IncProjSp_of(CPS) by Th6;
+      p on P & q on P by A2,Th9;
+    hence thesis;
+  end;
+    now assume
+  A3: p'=q';
+    consider r' such that A4:
+    p'<>r' by Th11;
+    consider P' being LINE of CPS such that
+  A5: p' in P' & r' in P' by A4,COLLSP:24;
+    reconsider P = P' as LINE of IncProjSp_of(CPS) by Th6;
+      p on P & q on P by A3,A5,Th9;
+    hence thesis;
+  end;
+  hence thesis by A1;
+end;
+
+theorem Th14:
+  a = a' & b = b' & c = c'
+    implies
+   (a',b',c' is_collinear iff ex P st a on P & b on P & c on P)
+proof
+  assume
+A1: a = a' & b = b' & c = c';
+  hereby assume
+  A2: a',b',c' is_collinear;
+  A3:now assume
+    A4: a'<>b'; set X = Line(a',b');
+    A5: a' in X & b' in X & c' in X by A2,COLLSP:16,17;
+      reconsider P'= X as LINE of CPS by A4,COLLSP:def 7;
+      reconsider P = P' as LINE of IncProjSp_of(CPS) by Th6;
+        a on P & b on P & c on P by A1,A5,Th9;
+      hence ex P st a on P & b on P & c on P;
+    end;
+      now
+      assume
+    A6: a'=b';
+        ex P st b on P & c on P by Th13;
+      hence ex P st a on P & b on P & c on P by A1,A6;
+    end;
+    hence ex P st a on P & b on P & c on P by A3;
+  end;
+  given P such that
+A7: a on P & b on P & c on P;
+  reconsider P'=P as LINE of CPS by Th6;
+    a' in P' & b' in P' & c' in P' by A1,A7,Th9;
+  hence a',b',c' is_collinear by COLLSP:25;
+end;
+
+theorem Th15:
+  ex p, P st not p on P
+proof
+  consider p',q',r' such that
+A1: not p',q',r' is_collinear by COLLSP:def 6;
+  set X = Line(p',q');
+    p' <> q' by A1,COLLSP:7;
+  then reconsider P'= X as LINE of CPS by COLLSP:def 7;
+  reconsider P = P' as LINE of IncProjSp_of(CPS) by Th6;
+  reconsider r = r' as POINT of IncProjSp_of(CPS) by Th4;
+    not r on P
+  proof
+    assume not thesis;
+    then r' in X by Th9;
+    hence contradiction by A1,COLLSP:17;
+  end;
+  hence thesis;
+end;
+
+reserve CPS for CollProjectiveSpace;
+
+reserve a,b,c,d,p,q for POINT of IncProjSp_of(CPS),
+        P,Q,S,M,N for LINE of IncProjSp_of(CPS),
+        a',b',c',d',p',q' for Point of CPS;
+
+theorem Th16:
+  ex a, b, c st a<>b & b<>c & c <>a & a on P & b on P & c on P
+proof
+  reconsider P'= P as LINE of CPS by Th6;
+  consider a'', b'' being Point of CPS such that
+A1: a''<>b'' & P' = Line(a'',b'') by COLLSP:def 7;
+  consider c' such that
+A2: a''<>c' & b''<>c' and
+A3: a'', b'', c' is_collinear by ANPROJ_2:def 10;
+  reconsider a=a'', b=b'', c =c' as POINT of IncProjSp_of(CPS) by Th4;
+  take a,b,c;
+  thus a<>b & b<>c & c <>a by A1,A2;
+    a'' in P' & b'' in P' by A1,COLLSP:16;
+then A4: a on P & b on P by Th9;
+    ex Q st a on Q & b on Q & c on Q by A3,Th14;
+  hence a on P & b on P & c on P by A1,A4,Th12;
+end;
+
+theorem Th17:
+  a on M & b on M & c on N & d on N & p on M & p on N &
+  a on P & c on P & b on Q & d on Q &
+   not p on P & not p on Q & M<>N
+     implies
+    ex q st q on P & q on Q
+proof
+  assume that
+A1: a on M & b on M and
+A2: c on N & d on N and
+A3: p on M & p on N and
+A4: a on P & c on P and
+A5: b on Q & d on Q and
+A6: not p on P & not p on Q and
+A7: M<>N;
+  reconsider a'=a,b'=b,c'=c,d'=d,p'=p as Point of CPS by Th4;
+    b',p',a' is_collinear & p',d',c' is_collinear by A1,A2,A3,Th14;
+  then consider q' such that
+A8: b',d',q' is_collinear & a',c',q' is_collinear by ANPROJ_2:def 9;
+  reconsider q = q' as POINT of IncProjSp_of(CPS) by Th4;
+A9: a<>c by A1,A2,A3,A4,A6,A7,Th12;
+A10: b<>d by A1,A2,A3,A5,A6,A7,Th12;
+A11: ex P1 being LINE of IncProjSp_of(CPS) st a on P1 & c on P1 & q on P1
+   by A8,Th14;
+    ex P2 being LINE of IncProjSp_of(CPS) st b on P2 & d on P2 & q on P2
+   by A8,Th14;
+  then q on P & q on Q by A4,A5,A9,A10,A11,Th12;
+  hence thesis;
+end;
+
+theorem Th18:
+  (for a',b',c',d' ex p' st a', b', p' is_collinear & c', d', p' is_collinear)
+    implies
+   for M, N ex q st q on M & q on N
+proof
+  assume
+A1: for a',b',c',d' ex p' st a', b', p' is_collinear & c', d', p' is_collinear;
+  let M, N;
+  reconsider M'= M, N'= N as LINE of CPS by Th6;
+  consider a', b' such that
+A2: a'<>b' & M'= Line(a',b') by COLLSP:def 7;
+  consider c', d' such that
+A3: c'<>d' & N'= Line(c',d') by COLLSP:def 7;
+  consider p' such that
+A4: a', b', p' is_collinear & c', d', p' is_collinear by A1;
+A5: p' in M' & p' in N' by A2,A3,A4,COLLSP:17;
+  reconsider q = p' as POINT of IncProjSp_of(CPS) by Th4;
+    q on M & q on N by A5,Th9;
+  hence thesis;
+end;
+
+theorem Th19:
+  (ex p, p1, r, r1 being Point of CPS st not ex s being Point of CPS st
+   (p, p1, s is_collinear & r, r1, s is_collinear))
+     implies
+    (ex M, N st not ex q st q on M & q on N)
+proof
+  given p, p1, r, r1 being Point of CPS such that
+A1: not ex s being Point of CPS st (p,p1,s is_collinear & r,r1,s is_collinear);
+  set M''= Line(p,p1), N''= Line(r,r1);
+    p<>p1 & r<>r1
+  proof
+    assume
+  A2: not thesis;
+  A3:
+    now
+      assume p = p1;
+      then p,p1,r1 is_collinear & r,r1,r1 is_collinear by COLLSP:7;
+      hence contradiction by A1;
+    end;
+      now
+      assume r = r1;
+      then p,p1,p1 is_collinear & r,r1,p1 is_collinear by COLLSP:7;
+      hence contradiction by A1;
+    end;
+    hence contradiction by A2,A3;
+  end;
+  then reconsider M'= M'', N'= N'' as LINE of CPS by COLLSP:def 7;
+  reconsider M = M', N = N' as LINE of IncProjSp_of(CPS) by Th6;
+  take M, N;
+  thus not ex q st q on M & q on N
+  proof
+    assume not thesis;
+    then consider q such that
+  A4: q on M & q on N;
+    reconsider q'=q as Point of CPS by Th4;
+      q' in M'' & q' in N'' by A4,Th9;
+    then p,p1,q' is_collinear & r,r1,q' is_collinear by COLLSP:17;
+    hence contradiction by A1;
+  end;
+end;
+
+theorem Th20:
+  (for p, p1, q, q1, r2 being Point of CPS
+   ex r, r1 being Point of CPS st
+    p,q,r is_collinear & p1,q1,r1 is_collinear & r2,r,r1 is_collinear)
+      implies
+    (for a, M, N ex b, c, S st a on S & b on S & c on S & b on M & c on N)
+proof
+  assume
+A1: for p, p1, q, q1, r2 being Point of CPS ex r, r1 being Point of CPS st
+    p,q,r is_collinear & p1,q1,r1 is_collinear & r2,r,r1 is_collinear;
+  let a, M, N;
+  reconsider a'= a as Point of CPS by Th4;
+  reconsider M'= M, N'= N as LINE of CPS by Th6;
+  consider p, q being Point of CPS such that
+A2: p<>q & M'= Line(p,q) by COLLSP:def 7;
+  consider p1, q1 being Point of CPS such that
+A3: p1<>q1 & N' = Line(p1,q1) by COLLSP:def 7;
+  consider b', c' such that
+A4: p,q,b' is_collinear & p1,q1,c' is_collinear and
+A5: a',b',c' is_collinear by A1;
+  reconsider b = b', c = c' as POINT of IncProjSp_of(CPS) by Th4;
+    b' in M' & c' in N' by A2,A3,A4,COLLSP:17;
+then A6: b on M & c on N by Th9;
+    ex S st a on S & b on S & c on S by A5,Th14;
+  hence thesis by A6;
+end;
+
+definition let x, y, z be set;
+ canceled;
+
+  pred x,y,z are_mutually_different means
+:Def5:
+  x <> y & y <> z & z <> x;
+
+  let u be set;
+  pred x, y, z, u are_mutually_different means
+:Def6:
+  x <> y & y <> z & z <> x & u <> x & u <> y & u <> z;
+end;
+
+definition
+  let CS be IncProjStr, a,b be POINT of CS,
+   M be LINE of CS;
+  pred a,b on M means
+:Def7:
+  a on M & b on M;
+
+  let c be POINT of CS;
+  pred a,b,c on M means
+:Def8:
+  a on M & b on M & c on M;
+end;
+
+theorem Th21:
+  (for p1, r2, q, r1, q1, p, r being Point of CPS holds
+   (p1,r2,q is_collinear & r1,q1,q is_collinear &
+    p1,r1,p is_collinear & r2,q1,p is_collinear &
+    p1,q1,r is_collinear & r2,r1,r is_collinear & p,q,r is_collinear
+      implies
+     (p1,r2,q1 is_collinear or p1,r2,r1 is_collinear or
+      p1,r1,q1 is_collinear or r2,r1,q1 is_collinear)))
+   implies
+    (for p, q, r, s, a, b, c being POINT of IncProjSp_of(CPS)
+     for L, Q, R, S, A, B, C being LINE of IncProjSp_of(CPS) st
+      not q on L & not r on L & not p on Q & not s on Q & not p on R &
+      not r on R &
+      not q on S & not s on S & a,p,s on L & a,q,r on Q & b,q,s on R &
+      b,p,r on S &
+      c,p,q on A & c,r,s on B & a,b on C holds not c on C)
+proof
+  assume
+A1: for p1, r2, q, r1, q1, p, r being Element of CPS
+ holds
+ (p1,r2,q is_collinear & r1,q1,q is_collinear & p1,r1,p is_collinear &
+  r2,q1,p is_collinear & p1,q1,r is_collinear & r2,r1,r is_collinear &
+  p,q,r is_collinear implies
+ (p1,r2,q1 is_collinear or p1,r2,r1 is_collinear or p1,r1,q1 is_collinear
+     or r2,r1,q1 is_collinear));
+  let p, q, r, s, a, b, c be POINT of IncProjSp_of(CPS);
+  let L, Q, R, S, A, B, C be LINE of IncProjSp_of(CPS) such that
+A2: not q on L & not r on L & not p on Q & not s on Q & not p on R &
+   not r on R & not q on S & not s on S and
+A3: a,p,s on L & a,q,r on Q & b,q,s on R & b,p,r on S & c,p,q on A &
+c,r,s on B & a,b on C;
+  assume
+A4: not thesis;
+  reconsider p'=p, q'=q, r'=r, s'=s, a'=a, b'=b, c'=c as Point of CPS by Th4;
+    a on C & b on C by A3,Def7;
+then A5: a',b',c' is_collinear by A4,Th14;
+A6: a on L & p on L & s on L & a on Q & q on Q & r on Q & b on R & q on R &
+   s on R & b on S & p on S & r on S &
+   c on A & p on A & q on A & c on B & r on B & s on B by A3,Def8;
+then A7: p',r',b' is_collinear & s',q',b' is_collinear & p',s',a' is_collinear
+&
+   r',q',a' is_collinear & p',q',c' is_collinear & r',s',c' is_collinear
+    by Th14;
+A8:
+  now
+    assume p',r',q' is_collinear;
+    then A9: ex K being LINE of IncProjSp_of(CPS) st p on K & r on K & q on K
+by Th14;
+    hence q on S by A2,A6,Th12;
+    thus contradiction by A2,A6,A9,Th12;
+  end;
+A10:
+  now
+    assume p',r',s' is_collinear;
+    then A11: ex K being LINE of IncProjSp_of(CPS) st p on K & r on K & s on K
+by Th14;
+    hence s on S by A2,A6,Th12;
+    thus contradiction by A2,A6,A11,Th12;
+  end;
+A12:
+  now
+    assume p',s',q' is_collinear;
+    then A13: ex K being LINE of IncProjSp_of(CPS) st p on K & s on K & q on K
+by Th14;
+    hence p on R by A2,A6,Th12;
+    thus contradiction by A2,A6,A13,Th12;
+  end;
+    now
+    assume r',s',q' is_collinear;
+    then A14: ex K being LINE of IncProjSp_of(CPS) st r on K & s on K & q on K
+by Th14;
+    hence r on R by A2,A6,Th12;
+    thus contradiction by A2,A6,A14,Th12;
+  end;
+  hence contradiction by A1,A5,A7,A8,A10,A12;
+end;
+
+theorem Th22:
+  (for o,p1,p2,p3,q1,q2,q3,r1,r2,r3 being Point of CPS st
+   o<>q1 & p1<>q1 & o<>q2 & p2<>q2 & o<>q3 & p3<>q3 &
+   not o,p1,p2 is_collinear & not o,p1,p3 is_collinear &
+   not o,p2,p3 is_collinear &
+   p1,p2,r3 is_collinear & q1,q2,r3 is_collinear &
+   p2,p3,r1 is_collinear & q2,q3,r1 is_collinear &
+   p1,p3,r2 is_collinear & q1,q3,r2 is_collinear &
+   o,p1,q1 is_collinear & o,p2,q2 is_collinear & o,p3,q3 is_collinear
+     holds
+    r1,r2,r3 is_collinear)
+ implies
+  (for o,b1,a1,b2,a2,b3,a3,r,s,t being POINT of IncProjSp_of(CPS)
+   for C1,C2,C3,A1,A2,A3,B1,B2,B3 being LINE of IncProjSp_of(CPS) st
+    o,b1,a1 on C1 & o,a2,b2 on C2 & o,a3,b3 on C3 &
+    a3,a2,t on A1 & a3,r,a1 on A2 & a2,s,a1 on A3 &
+    t,b2,b3 on B1 & b1,r,b3 on B2 & b1,s,b2 on B3 &
+    C1,C2,C3 are_mutually_different &
+    o<>a1 & o<>a2 & o<>a3 & o<>b1 & o<>b2 & o<>b3 & a1<>b1 & a2<>b2 & a3<>b3
+      holds
+     ex O being LINE of IncProjSp_of(CPS) st r,s,t on O)
+proof
+  assume
+A1: for o,p1,p2,p3,q1,q2,q3,r1,r2,r3 being Element of CPS
+ st o<>q1 & p1<>q1 & o<>q2 & p2<>q2 & o<>q3 & p3<>q3 & not o,p1,p2 is_collinear
+ & not o,p1,p3 is_collinear & not o,p2,p3 is_collinear & p1,p2,r3 is_collinear
+ & q1,q2,r3 is_collinear & p2,p3,r1 is_collinear & q2,q3,r1 is_collinear &
+ p1,p3,r2 is_collinear & q1,q3,r2 is_collinear & o,p1,q1 is_collinear &
+ o,p2,q2 is_collinear & o,p3,q3 is_collinear holds r1,r2,r3 is_collinear;
+
+ let o,b1,a1,b2,a2,b3,a3,r,s,t be POINT of IncProjSp_of(CPS);
+ let C1,C2,C3,A1,A2,A3,B1,B2,B3 be LINE of IncProjSp_of(CPS) such that
+A2: o,b1,a1 on C1 & o,a2,b2 on C2 & o,a3,b3 on C3 & a3,a2,t on A1 &
+a3,r,a1 on A2 &
+  a2,s,a1 on A3 & t,b2,b3 on B1 & b1,r,b3 on B2 & b1,s,b2 on B3 and
+A3: C1,C2,C3 are_mutually_different and
+A4: o<>a1 & o<>a2 & o<>a3 & o<>b1 & o<>b2 & o<>b3 & a1<>b1 & a2<>b2 & a3<>b3;
+
+  reconsider o'=o,b1'=b1,a1'=a1,b2'=b2,a2'=a2,b3'=b3,a3'=a3,r'=r,s'=s,t'=t
+ as Element of CPS by Th4;
+A5: o on C1 & b1 on C1 & a1 on C1 & o on C2 & b2 on C2 & a2 on C2 & o on C3 &
+   b3 on C3 & a3 on C3 &
+   a3 on A1 & a2 on A1 & t on A1 & a3 on A2 & a1 on A2 & r on A2 & a2 on A3 &
+   a1 on A3 & s on A3 &
+   b3 on B1 & b2 on B1 & t on B1 & b3 on B2 & b1 on B2 & r on B2 & b2 on B3 &
+   b1 on B3 & s on B3 by A2,Def8;
+then A6: b1',b2',s' is_collinear & a1',a2',s' is_collinear &
+   b1',b3',r' is_collinear & a1',a3',r' is_collinear &
+   b2',b3',t' is_collinear & a2',a3',t' is_collinear by Th14;
+A7: o',b1',a1' is_collinear & o',b2',a2' is_collinear &
+   o',b3',a3' is_collinear by A5,Th14;
+    not o',b1',b2' is_collinear & not o',b1',b3' is_collinear &
+   not o',b2',b3' is_collinear
+  proof
+    assume
+  A8: not thesis;
+  A9:
+    now
+      assume o',b1',b2' is_collinear;
+      then consider K being LINE of IncProjSp_of(CPS) such that
+    A10: o on K & b1 on K & b2 on K by Th14;
+        K = C1 & K = C2 by A4,A5,A10,Th12;
+      hence contradiction by A3,Def5;
+    end;
+  A11:
+    now
+      assume o',b1',b3' is_collinear;
+      then consider K being LINE of IncProjSp_of(CPS) such that
+    A12: o on K & b1 on K & b3 on K by Th14;
+        K = C1 & K = C3 by A4,A5,A12,Th12;
+      hence contradiction by A3,Def5;
+    end;
+      now
+      assume o',b2',b3' is_collinear;
+      then consider K being LINE of IncProjSp_of(CPS) such that
+    A13: o on K & b2 on K & b3 on K by Th14;
+        K = C2 & K = C3 by A4,A5,A13,Th12;
+      hence contradiction by A3,Def5;
+    end;
+    hence contradiction by A8,A9,A11;
+  end;
+  then t',r',s' is_collinear by A1,A4,A6,A7;
+  then consider O being LINE of IncProjSp_of(CPS) such that
+A14: t on O & r on O & s on O by Th14;
+    r,s,t on O by A14,Def8;
+  hence thesis;
+end;
+
+theorem Th23:
+  (for o,p1,p2,p3,q1,q2,q3,r1,r2,r3 being Point of CPS st
+   o<>p2 & o<>p3 & p2<>p3 & p1<>p2 & p1<>p3 & o<>q2 & o<>q3 & q2<>q3 &
+   q1<>q2 & q1<>q3 & not o,p1,q1 is_collinear & o,p1,p2 is_collinear &
+   o,p1,p3 is_collinear & o,q1,q2 is_collinear & o,q1,q3 is_collinear &
+   p1,q2,r3 is_collinear & q1,p2,r3 is_collinear & p1,q3,r2 is_collinear &
+   p3,q1,r2 is_collinear & p2,q3,r1 is_collinear & p3,q2,r1 is_collinear
+     holds
+    r1,r2,r3 is_collinear)
+ implies
+  (for o,a1,a2,a3,b1,b2,b3,c1,c2,c3 being POINT of IncProjSp_of(CPS)
+   for A1,A2,A3,B1,B2,B3,C1,C2,C3 being LINE of IncProjSp_of(CPS) st
+    o,a1,a2,a3 are_mutually_different & o,b1,b2,b3 are_mutually_different &
+    A3<>B3 & o on A3 & o on B3 & a2,b3,c1 on A1 & a3,b1,c2 on B1 &
+    a1,b2,c3 on C1 &
+    a1,b3,c2 on A2 & a3,b2,c1 on B2 & a2,b1,c3 on C2 &
+    b1,b2,b3 on A3 & a1,a2,a3 on B3 & c1,c2 on C3 holds c3 on C3)
+proof
+  assume
+A1: for o,p1,p2,p3,q1,q2,q3,r1,r2,r3 being Point of CPS st
+   o<>p2 & o<>p3 & p2<>p3 & p1<>p2 & p1<>p3 & o<>q2 & o<>q3 & q2<>q3 &
+   q1<>q2 & q1<>q3 & not o,p1,q1 is_collinear & o,p1,p2 is_collinear &
+   o,p1,p3 is_collinear & o,q1,q2 is_collinear & o,q1,q3 is_collinear &
+   p1,q2,r3 is_collinear & q1,p2,r3 is_collinear & p1,q3,r2 is_collinear &
+   p3,q1,r2 is_collinear & p2,q3,r1 is_collinear & p3,q2,r1 is_collinear
+    holds r1,r2,r3 is_collinear;
+
+  let o,a1,a2,a3,b1,b2,b3,c1,c2,c3 be POINT of IncProjSp_of(CPS);
+  let A1,A2,A3,B1,B2,B3,C1,C2,C3 be LINE of IncProjSp_of(CPS) such that
+A2: o,a1,a2,a3 are_mutually_different & o,b1,b2,b3 are_mutually_different and
+A3: A3<>B3 and A4: o on A3 & o on B3 and
+A5: a2,b3,c1 on A1 & a3,b1,c2 on B1 & a1,b2,c3 on C1 & a1,b3,c2 on A2 &
+a3,b2,c1 on B2 &
+   a2,b1,c3 on C2 & b1,b2,b3 on A3 & a1,a2,a3 on B3 & c1,c2 on C3;
+A6: o<>b3 & o<>a3 & a1<>a2 & b1<>b2 by A2,Def6;
+A7: a2 on A1 & b3 on A1 & c1 on A1 & a3 on B1 & b1 on B1 & c2 on B1 &
+   a1 on C1 & b2 on C1 & c3 on C1 &
+   a1 on A2 & b3 on A2 & c2 on A2 & a3 on B2 & b2 on B2 & c1 on B2 &
+   a2 on C2 & b1 on C2 & c3 on C2 &
+   b1 on A3 & b2 on A3 & b3 on A3 & a1 on B3 & a2 on B3 & a3 on B3 &
+   c1 on C3 & c2 on C3 by A5,Def7,Def8;
+   reconsider o'= o, a1'= a1, a2'= a2, a3'= a3, b1'= b1, b2'= b2, b3'= b3,
+    c1'= c1, c2'= c2, c3'= c3 as Point of CPS by Th4;
+A8: c1<>c2
+  proof
+    assume
+  A9: not thesis;
+  A10: not a3 on A3 by A3,A4,A6,A7,Th12;
+      not b3 on B3 by A3,A4,A6,A7,Th12;
+  then A11: A1<>A2 by A6,A7,Th12;
+  A12: B1<>B2 by A6,A7,A10,Th12;
+  A13: c1 = b3 by A7,A9,A11,Th12;
+      c1 = a3 by A7,A9,A12,Th12;
+    hence contradiction by A3,A4,A6,A7,A13,Th12;
+  end;
+
+A14: o'<>a2' & o'<>a3' & a2'<>a3' & a1'<>a2' & a1'<>a3' & o'<>b2' & o'<>b3' &
+   b2'<>b3' & b1'<>b2' & b1'<>b3' by A2,Def6;
+
+A15: not o',a1',b1' is_collinear
+  proof
+    assume not thesis;
+    then consider K being LINE of IncProjSp_of(CPS) such that
+  A16: o on K & a1 on K & b1 on K by Th14;
+      o<>a1 & o<>b1 by A2,Def6;
+    then K = A3 & K = B3 by A4,A7,A16,Th12;
+    hence contradiction by A3;
+  end;
+
+    o',a1',a2' is_collinear & o',a1',a3' is_collinear &
+  o',b1',b2' is_collinear & o',b1',b3' is_collinear &
+  a1',b2',c3' is_collinear & b1',a2',c3' is_collinear &
+  a1',b3',c2' is_collinear & a3',b1',c2' is_collinear &
+  a2',b3',c1' is_collinear & a3',b2',c1' is_collinear by A4,A7,Th14;
+  then c1',c2',c3' is_collinear by A1,A14,A15;
+  then ex K being LINE of IncProjSp_of(CPS) st c1 on K & c2 on K & c3 on K by
+Th14;
+  hence thesis by A7,A8,Th12;
+end;
+
+definition let IT be IncProjStr;
+  attr IT is partial means
+:Def9:
+  for p, q being POINT of IT, P, Q being LINE of IT st
+   p on P & q on P & p on Q & q on Q holds
+   p = q or P = Q;
+
+  attr IT is linear means
+:Def10:
+  for p,q being POINT of IT ex P being LINE of IT st p on P & q on P;
+
+  attr IT is up-2-dimensional means
+:Def11:
+  ex p being POINT of IT, P being LINE of IT st not p on P;
+
+  attr IT is up-3-rank means
+:Def12:
+  for P being LINE of IT ex a, b, c being POINT of IT st
+   a <> b & b <> c & c <> a & a on P & b on P & c on P;
+
+  attr IT is Vebleian means
+:Def13:
+  for a, b, c, d, p, q being POINT of IT
+  for M, N, P, Q being LINE of IT st a on M & b on M & c on N & d on N &
+   p on M & p on N & a on P & c on P & b on Q & d on Q & not p on P &
+   not p on Q & M<>N
+     holds
+    ex q being POINT of IT st q on P & q on Q;
+end;
+
+definition
+  let CPS be CollProjectiveSpace;
+  cluster IncProjSp_of(CPS) -> partial linear up-2-dimensional
+   up-3-rank Vebleian;
+  coherence
+  proof
+    set PS = IncProjSp_of(CPS);
+    A1: for p, q being POINT of PS
+    for P, Q being LINE of PS st p on P & q on P & p on Q & q on Q
+     holds p = q or P = Q by Th12;
+
+    A2: for p, q being POINT of PS
+     ex P being LINE of PS st p on P & q on P by Th13;
+
+    A3: ex p being POINT of PS, P being LINE of PS
+     st not p on P by Th15;
+
+    A4: for P being LINE of PS
+     ex a,b,c being POINT of PS
+      st a <> b & b <> c & c <> a & a on P & b on P & c on P by Th16;
+
+      for a, b, c, d, p, q being POINT of PS
+    for M, N, P, Q being LINE of PS st a on M & b on M & c on N & d on N &
+     p on M & p on N & a on P & c on P & b on Q & d on Q & not p on P &
+     not p on Q & M<>N
+      holds ex q being POINT of PS st q on P & q on Q by Th17;
+hence thesis by A1,A2,A3,A4,Def9,Def10,Def11,Def12,Def13;
+  end;
+end;
+
+definition
+  cluster strict partial linear up-2-dimensional up-3-rank
+   Vebleian IncProjStr;
+  existence
+  proof
+    consider CPS;
+      IncProjSp_of(CPS) is strict partial linear up-2-dimensional
+     up-3-rank Vebleian;
+    hence thesis;
+  end;
+end;
+
+definition
+ mode IncProjSp is partial linear up-2-dimensional up-3-rank Vebleian
+   IncProjStr;
+end;
+
+definition
+  let CPS be CollProjectiveSpace;
+  cluster IncProjSp_of(CPS) -> partial linear up-2-dimensional up-3-rank
+    Vebleian;
+  coherence;
+end;
+
+definition let IT be IncProjSp;
+  attr IT is 2-dimensional means
+:Def14:
+  for M,N being LINE of IT ex q being POINT of IT st q on M & q on N;
+  antonym IT is up-3-dimensional;
+end;
+
+definition
+  let IT be IncProjSp;
+ canceled;
+
+  attr IT is at_most-3-dimensional means
+  :Def16:
+  for a being POINT of IT, M, N being LINE of IT
+   ex b,c being POINT of IT, S being LINE of IT st
+    a on S & b on S & c on S & b on M & c on N;
+end;
+
+definition let IT be IncProjSp;
+  attr IT is 3-dimensional means
+    IT is at_most-3-dimensional up-3-dimensional;
+end;
+
+definition let IT be IncProjSp;
+  attr IT is Fanoian means
+:Def18:
+  for p,q,r,s,a,b,c being POINT of IT
+  for L,Q,R,S,A,B,C being LINE of IT st not q on L & not r on L &
+   not p on Q & not s on Q & not p on R & not r on R & not q on S &
+   not s on S &
+   a,p,s on L & a,q,r on Q & b,q,s on R & b,p,r on S & c,p,q on A &
+   c,r,s on B & a,b on C
+     holds
+    not c on C;
+end;
+
+definition let IT be IncProjSp;
+  attr IT is Desarguesian means
+:Def19:
+  for o,b1,a1,b2,a2,b3,a3,r,s,t being POINT of IT
+  for C1,C2,C3,A1,A2,A3,B1,B2,B3 being LINE of IT st
+   o,b1,a1 on C1 & o,a2,b2 on C2 & o,a3,b3 on C3 &
+   a3,a2,t on A1 & a3,r,a1 on A2 & a2,s,a1 on A3 &
+   t,b2,b3 on B1 & b1,r,b3 on B2 & b1,s,b2 on B3 &
+   C1,C2,C3 are_mutually_different &
+   o<>a1 & o<>a2 & o<>a3 & o<>b1 & o<>b2 & o<>b3 & a1<>b1 & a2<>b2 & a3<>b3
+     holds
+   ex O being LINE of IT st r,s,t on O;
+end;
+
+definition let IT be IncProjSp;
+  attr IT is Pappian means
+:Def20:
+  for o,a1,a2,a3,b1,b2,b3,c1,c2,c3 being POINT of IT
+  for A1,A2,A3,B1,B2,B3,C1,C2,C3 being LINE of IT st
+   o,a1,a2,a3 are_mutually_different & o,b1,b2,b3 are_mutually_different &
+   A3<>B3 & o on A3 & o on B3 & a2,b3,c1 on A1 & a3,b1,c2 on B1 &
+   a1,b2,c3 on C1 &
+   a1,b3,c2 on A2 & a3,b2,c1 on B2 & a2,b1,c3 on C2 &
+   b1,b2,b3 on A3 & a1,a2,a3 on B3 & c1,c2 on C3
+     holds
+   c3 on C3;
+end;
+
+definition
+  cluster Desarguesian Fanoian at_most-3-dimensional up-3-dimensional
+    IncProjSp;
+  existence
+  proof
+    consider CPS being Fanoian Desarguesian
+     at_most-3-dimensional up-3-dimensional CollProjectiveSpace;
+    reconsider CPS' = CPS as CollProjectiveSpace;
+    take X = IncProjSp_of(CPS');
+      for p1,r2,q,r1,q1,p,r being Point of CPS' holds
+     (p1,r2,q is_collinear & r1,q1,q is_collinear & p1,r1,p is_collinear &
+     r2,q1,p is_collinear & p1,q1,r is_collinear & r2,r1,r is_collinear &
+     p,q,r is_collinear
+      implies
+    (p1,r2,q1 is_collinear or p1,r2,r1 is_collinear or p1,r1,q1 is_collinear or
+     r2,r1,q1 is_collinear)) by ANPROJ_2:def 11;
+  then A1: for p,q,r,s,a,b,c being POINT of X
+      for L,Q,R,S,A,B,C being LINE of X st
+       not q on L & not r on L & not p on Q & not s on Q & not p on R &
+       not r on R & not q on S &
+       not s on S & a,p,s on L & a,q,r on Q & b,q,s on R & b,p,r on S &
+       c,p,q on A &
+       c,r,s on B & a,b on C holds not c on C by Th21;
+      for o,p1,p2,p3,q1,q2,q3,r1,r2,r3 being Point of CPS' st
+     o<>q1 & p1<>q1 & o<>q2 & p2<>q2 & o<>q3 & p3<>q3 &
+     not o,p1,p2 is_collinear & not o,p1,p3 is_collinear &
+     not o,p2,p3 is_collinear &
+     p1,p2,r3 is_collinear & q1,q2,r3 is_collinear &
+     p2,p3,r1 is_collinear & q2,q3,r1 is_collinear &
+     p1,p3,r2 is_collinear & q1,q3,r2 is_collinear &
+     o,p1,q1 is_collinear & o,p2,q2 is_collinear & o,p3,q3 is_collinear
+      holds r1,r2,r3 is_collinear by ANPROJ_2:def 12;
+  then A2: for o,b1,a1,b2,a2,b3,a3,r,s,t being POINT of X
+      for C1,C2,C3,A1,A2,A3,B1,B2,B3 being LINE of X st
+       o,b1,a1 on C1 & o,a2,b2 on C2 & o,a3,b3 on C3 &
+       a3,a2,t on A1 & a3,r,a1 on A2 & a2,s,a1 on A3 &
+       t,b2,b3 on B1 & b1,r,b3 on B2 & b1,s,b2 on B3 &
+       C1,C2,C3 are_mutually_different &
+       o<>a1 & o<>a2 & o<>a3 & o<>b1 & o<>b2 & o<>b3 & a1<>b1 & a2<>b2 & a3<>b3
+         holds
+        ex O being LINE of X st r,s,t on O by Th22;
+      ex p,p1,r,r1 being Point of CPS' st
+     not ex s being Point of CPS' st
+      (p,p1,s is_collinear & r,r1,s is_collinear) by ANPROJ_2:def 14;
+  then A3: ex M,N being LINE of X st not ex q being POINT of X st q on M &
+  q on N by Th19;
+      for p,p1,q,q1,r2 being Point of CPS'
+     ex r,r1 being Point of CPS' st p,q,r is_collinear &
+      p1,q1,r1 is_collinear & r2,r,r1 is_collinear by ANPROJ_2:def 15;
+    then for a being POINT of X, M,N being LINE of X
+     ex b,c being POINT of X, S being LINE of X st
+      a on S & b on S & c on S & b on M & c on N by Th20;
+    hence thesis by A1,A2,A3,Def14,Def16,Def18,Def19;
+  end;
+end;
+
+definition
+  cluster Pappian Fanoian at_most-3-dimensional up-3-dimensional
+    IncProjSp;
+  existence
+  proof
+    consider CPS being Fanoian Pappian at_most-3-dimensional up-3-dimensional
+     CollProjectiveSpace;
+    reconsider CPS' = CPS as CollProjectiveSpace;
+    take X = IncProjSp_of(CPS');
+      for p1,r2,q,r1,q1,p,r being Point of CPS' holds
+     (p1,r2,q is_collinear & r1,q1,q is_collinear &
+     p1,r1,p is_collinear & r2,q1,p is_collinear &
+     p1,q1,r is_collinear & r2,r1,r is_collinear & p,q,r is_collinear
+       implies
+     (p1,r2,q1 is_collinear or p1,r2,r1 is_collinear or
+     p1,r1,q1 is_collinear or r2,r1,q1 is_collinear)) by ANPROJ_2:def 11;
+      then A1: for p,q,r,s,a,b,c being POINT of X
+      for L,Q,R,S,A,B,C being LINE of X st
+       not q on L & not r on L & not p on Q & not s on Q & not p on R &
+       not r on R &
+       not q on S & not s on S & a,p,s on L & a,q,r on Q & b,q,s on R &
+       b,p,r on S &
+       c,p,q on A & c,r,s on B & a,b on C holds not c on C by Th21;
+       for o,p1,p2,p3,q1,q2,q3,r1,r2,r3 being Point of CPS' st
+      o<>p2 & o<>p3 & p2<>p3 & p1<>p2 & p1<>p3 & o<>q2 & o<>q3 &
+      q2<>q3 & q1<>q2 & q1<>q3 & not o,p1,q1 is_collinear &
+      o,p1,p2 is_collinear & o,p1,p3 is_collinear &
+      o,q1,q2 is_collinear & o,q1,q3 is_collinear &
+      p1,q2,r3 is_collinear & q1,p2,r3 is_collinear &
+      p1,q3,r2 is_collinear & p3,q1,r2 is_collinear &
+      p2,q3,r1 is_collinear & p3,q2,r1 is_collinear
+        holds
+       r1,r2,r3 is_collinear by ANPROJ_2:def 13;
+  then A2: for o,a1,a2,a3,b1,b2,b3,c1,c2,c3 being POINT of X
+      for A1,A2,A3,B1,B2,B3,C1,C2,C3 being LINE of X st
+       o,a1,a2,a3 are_mutually_different & o,b1,b2,b3 are_mutually_different &
+       A3<>B3 & o on A3 & o on B3 & a2,b3,c1 on A1 & a3,b1,c2 on B1 &
+       a1,b2,c3 on C1 &
+       a1,b3,c2 on A2 & a3,b2,c1 on B2 & a2,b1,c3 on C2 & b1,b2,b3 on A3 &
+       a1,a2,a3 on B3 & c1,c2 on C3 holds c3 on C3 by Th23;
+      ex p,p1,r,r1 being Point of CPS' st
+     not ex s being Point of CPS' st
+      (p,p1,s is_collinear & r,r1,s is_collinear) by ANPROJ_2:def 14;
+  then A3: ex M,N being LINE of X st not ex q being POINT of X st q on M &
+  q on N by Th19;
+
+      for p,p1,q,q1,r2 being Point of CPS' ex r,r1 being Point of CPS' st
+     p,q,r is_collinear & p1,q1,r1 is_collinear &
+     r2,r,r1 is_collinear by ANPROJ_2:def 15;
+    then for a being POINT of X, M,N being LINE of X
+     ex b,c being POINT of X, S being LINE of X st
+      a on S & b on S & c on S & b on M & c on N by Th20;
+    hence thesis by A1,A2,A3,Def14,Def16,Def18,Def20;
+  end;
+end;
+
+definition
+  cluster Desarguesian Fanoian 2-dimensional IncProjSp;
+  existence
+  proof
+    consider CPS being Fanoian Desarguesian CollProjectivePlane;
+    reconsider CPS' = CPS as CollProjectiveSpace;
+    take X = IncProjSp_of(CPS');
+      for p1,r2,q,r1,q1,p,r being Point of CPS' holds
+     (p1,r2,q is_collinear & r1,q1,q is_collinear &
+     p1,r1,p is_collinear & r2,q1,p is_collinear &
+     p1,q1,r is_collinear & r2,r1,r is_collinear & p,q,r is_collinear
+       implies
+     (p1,r2,q1 is_collinear or p1,r2,r1 is_collinear or
+     p1,r1,q1 is_collinear or r2,r1,q1 is_collinear)) by ANPROJ_2:def 11;
+  then A1: for p,q,r,s,a,b,c being POINT of X
+      for L,Q,R,S,A,B,C being LINE of X st
+       not q on L & not r on L & not p on Q & not s on Q & not p on R & not
+       r on R & not q on S &
+       not s on S & a,p,s on L & a,q,r on Q & b,q,s on R & b,p,r on S &
+       c,p,q on A &
+       c,r,s on B & a,b on C holds not c on C by Th21;
+      for o,p1,p2,p3,q1,q2,q3,r1,r2,r3 being Point of CPS' st
+     o<>q1 & p1<>q1 & o<>q2 & p2<>q2 & o<>q3 & p3<>q3 &
+     not o,p1,p2 is_collinear & not o,p1,p3 is_collinear &
+     not o,p2,p3 is_collinear &
+     p1,p2,r3 is_collinear & q1,q2,r3 is_collinear &
+     p2,p3,r1 is_collinear & q2,q3,r1 is_collinear &
+     p1,p3,r2 is_collinear & q1,q3,r2 is_collinear &
+     o,p1,q1 is_collinear & o,p2,q2 is_collinear & o,p3,q3 is_collinear
+       holds
+     r1,r2,r3 is_collinear by ANPROJ_2:def 12;
+  then A2: for o,b1,a1,b2,a2,b3,a3,r,s,t being POINT of X
+      for C1,C2,C3,A1,A2,A3,B1,B2,B3 being LINE of X st
+       o,b1,a1 on C1 & o,a2,b2 on C2 & o,a3,b3 on C3 &
+       a3,a2,t on A1 & a3,r,a1 on A2 & a2,s,a1 on A3 &
+       t,b2,b3 on B1 & b1,r,b3 on B2 & b1,s,b2 on B3 &
+       C1,C2,C3 are_mutually_different &
+       o<>a1 & o<>a2 & o<>a3 & o<>b1 & o<>b2 & o<>b3 & a1<>b1 & a2<>b2 & a3<>b3
+         holds
+        ex O being LINE of X st r,s,t on O by Th22;
+      for a,b,c,d being Point of CPS' ex p being Point of CPS' st
+     a,b,p is_collinear & c,d,p is_collinear by ANPROJ_2:def 14;
+    then for M,N being LINE of X ex q being POINT of X st q on M & q on N
+    by Th18;
+    hence thesis by A1,A2,Def14,Def18,Def19;
+  end;
+end;
+
+definition
+  cluster Pappian Fanoian 2-dimensional IncProjSp;
+  existence
+  proof
+    consider CPS being Fanoian Pappian CollProjectivePlane;
+    reconsider CPS' = CPS as CollProjectiveSpace;
+    take X = IncProjSp_of(CPS');
+      for p1,r2,q,r1,q1,p,r being Point of CPS' holds
+     (p1,r2,q is_collinear & r1,q1,q is_collinear & p1,r1,p is_collinear &
+     r2,q1,p is_collinear & p1,q1,r is_collinear & r2,r1,r is_collinear &
+     p,q,r is_collinear
+       implies
+     (p1,r2,q1 is_collinear or p1,r2,r1 is_collinear or
+     p1,r1,q1 is_collinear or r2,r1,q1 is_collinear)) by ANPROJ_2:def 11;
+  then A1: for p,q,r,s,a,b,c being POINT of X
+      for L,Q,R,S,A,B,C being LINE of X st
+       not q on L & not r on L & not p on Q & not s on Q & not p on R &
+       not r on R &
+       not q on S & not s on S & a,p,s on L & a,q,r on Q & b,q,s on R &
+       b,p,r on S &
+       c,p,q on A & c,r,s on B & a,b on C holds not c on C by Th21;
+      for o,p1,p2,p3,q1,q2,q3,r1,r2,r3 being Point of CPS' st
+     o<>p2 & o<>p3 & p2<>p3 & p1<>p2 & p1<>p3 & o<>q2 & o<>q3 & q2<>q3 &
+     q1<>q2 & q1<>q3 & not o,p1,q1 is_collinear & o,p1,p2 is_collinear &
+     o,p1,p3 is_collinear & o,q1,q2 is_collinear & o,q1,q3 is_collinear &
+     p1,q2,r3 is_collinear & q1,p2,r3 is_collinear & p1,q3,r2 is_collinear &
+     p3,q1,r2 is_collinear & p2,q3,r1 is_collinear & p3,q2,r1 is_collinear
+       holds
+      r1,r2,r3 is_collinear by ANPROJ_2:def 13;
+  then A2: for o,a1,a2,a3,b1,b2,b3,c1,c2,c3 being POINT of X
+      for A1,A2,A3,B1,B2,B3,C1,C2,C3 being LINE of X st
+       o,a1,a2,a3 are_mutually_different & o,b1,b2,b3 are_mutually_different &
+       A3<>B3 & o on A3 & o on B3 & a2,b3,c1 on A1 & a3,b1,c2 on B1 &
+       a1,b2,c3 on C1 &
+       a1,b3,c2 on A2 & a3,b2,c1 on B2 & a2,b1,c3 on C2 &
+       b1,b2,b3 on A3 & a1,a2,a3 on B3 & c1,c2 on C3
+         holds
+        c3 on C3 by Th23;
+      for a,b,c,d being Point of CPS' ex p being Point of CPS' st
+     a,b,p is_collinear & c,d,p is_collinear by ANPROJ_2:def 14;
+    then for M,N being LINE of X ex q being POINT of X st q on M & q on N by
+Th18;
+    hence thesis by A1,A2,Def14,Def18,Def20;
+  end;
+end;

@@ -1,0 +1,1573 @@
+:: On the Trivial Many Sorted Algebras and Many Sorted Congruences
+::  by Artur Korni\l owicz
+::
+:: Received June 11, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_1, MSUALG_1, PBOOLE, FUNCT_1, PRE_CIRC, CLOSURE2, CAT_4,
+      MSUALG_2, ZF_REFLE, FINSET_1, FINSEQ_1, RELAT_1, QC_LANG1, PRALG_2,
+      CARD_3, RLVECT_2, MSAFREE, PRELAMB, PRALG_1, FUNCT_3, MCART_1, EQREL_1,
+      FUNCOP_1, BOOLE, MSUALG_3, TREES_4, LANG1, BORSUK_1, ALG_1, GROUP_6,
+      WELLORD1, TDGROUP, FINSEQ_4, NATTRA_1, FUNCT_6, MSUALG_4, MSUALG_5,
+      SETFAM_1, FUNCT_4, CANTOR_1, RELAT_2, MSUALG_9;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
+      RELAT_2, STRUCT_0, SETFAM_1, RELSET_1, FUNCT_1, EQREL_1, FUNCT_2,
+      FINSEQ_1, LANG1, MCART_1, FINSET_1, CARD_3, FINSEQ_4, CANTOR_1, TREES_4,
+      DTCONSTR, PBOOLE, MSUALG_1, MSUALG_2, PRALG_3, MSUALG_3, MSAFREE,
+      PRALG_2, PRE_CIRC, MSAFREE2, MSUALG_4, AUTALG_1, EXTENS_1, PZFMISC1,
+      MSSUBFAM, CLOSURE1, CLOSURE2, MSUALG_5;
+ constructors AUTALG_1, BINOP_1, CANTOR_1, CLOSURE1, CLOSURE2, EXTENS_1,
+      MSAFREE2, MSUALG_5, PRALG_3, PRE_CIRC, PZFMISC1, FINSEQ_4;
+ clusters CANTOR_1, CLOSURE2, EQREL_1, FINSET_1, MSAFREE, MSSUBFAM, MSUALG_1,
+      MSUALG_2, MSUALG_3, MSUALG_4, MSUALG_5, PRALG_1, PRALG_2, PRE_CIRC,
+      PZFMISC1, RELSET_1, STRUCT_0, ARYTM_3, XBOOLE_0, MEMBERED, PARTFUN1,
+      NUMBERS, ORDINAL2;
+ requirements SUBSET, BOOLE;
+ definitions AUTALG_1, FINSEQ_1, FUNCT_1, MSAFREE2, MSUALG_1, MSUALG_2,
+      MSUALG_3, MSUALG_4, PBOOLE, PRE_CIRC, TARSKI, XBOOLE_0;
+ theorems AUTALG_1, CANTOR_1, CARD_3, CLOSURE1, CLOSURE2, DTCONSTR, EXTENS_1,
+      EQREL_1, FINSEQ_1, FUNCOP_1, FUNCT_1, FUNCT_2, MCART_1, MSAFREE,
+      MSAFREE2, MSSUBFAM, MSUALG_1, MSUALG_2, MSUALG_3, MSUALG_4, MSUALG_5,
+      MSUALG_6, MSUALG_7, PARTFUN1, PBOOLE, PRALG_1, PRALG_2, PRALG_3,
+      PRE_CIRC, PZFMISC1, RELAT_2, SETFAM_1, TARSKI, RELSET_1, XBOOLE_0,
+      XBOOLE_1, ORDERS_1;
+ schemes MSSUBFAM, MSUALG_1, MSUALG_8, FUNCT_2;
+
+begin :: Preliminaries
+
+reserve a, I for set,
+        S for non empty non void ManySortedSign;
+
+scheme MSSExD { I() -> non empty set, P[set,set] }:
+ ex f being ManySortedSet of I() st for i being Element of I() holds P[i,f.i]
+  provided
+A1: for i being Element of I() ex j being set st P[i,j]
+  proof
+    defpred Z[set,set] means P[ $1,$2];
+A2: for i being set st i in I() ex j being set st Z[i,j] by A1;
+    consider f being ManySortedSet of I() such that
+A3:   for i being set st i in I() holds Z[i,f.i] from MSSEx(A2);
+    take f;
+    let i be Element of I();
+    thus thesis by A3;
+  end;
+
+definition let I be set,
+               M be ManySortedSet of I;
+ cluster locally-finite Element of Bool M;
+existence
+  proof
+      [0]I c= M by PBOOLE:49;
+    then [0]I is ManySortedSubset of M by MSUALG_2:def 1;
+    then reconsider A = [0]I as Element of Bool M by CLOSURE2:def 1;
+    take A;
+    thus thesis;
+  end;
+end;
+
+definition let I be set,
+               M be non-empty ManySortedSet of I;
+ cluster non-empty locally-finite ManySortedSubset of M;
+existence
+  proof
+defpred P[set,set] means
+ ex a being Element of M.$1 st $2 = {a};
+A1: now
+      let i be set such that i in I;
+      consider a being Element of M.i;
+      take j = {a};
+      thus P[i,j];
+    end;
+    consider C being ManySortedSet of I such that
+A2:   for i be set st i in I holds P[i,C.i] from MSSEx(A1);
+      C is ManySortedSubset of M
+    proof
+      let i be set; assume
+A3:     i in I;
+      then consider a being Element of M.i such that
+A4:     C.i = {a} by A2;
+A5:   M.i is non empty by A3,PBOOLE:def 16;
+      let q be set;
+      assume q in C.i;
+      then q = a by A4,TARSKI:def 1;
+      hence q in M.i by A5;
+    end;
+    then reconsider C as ManySortedSubset of M;
+    take C;
+    thus C is non-empty
+    proof
+      let i be set;
+      assume i in I;
+      then consider a being Element of M.i such that
+A6:     C.i = {a} by A2;
+      thus C.i is non empty by A6;
+    end;
+    let i be set;
+    assume i in I;
+    then consider a being Element of M.i such that
+A7:   C.i = {a} by A2;
+    thus C.i is finite by A7;
+  end;
+end;
+
+definition let S be non empty non void ManySortedSign,
+               A be non-empty MSAlgebra over S,
+               o be OperSymbol of S;
+ cluster -> FinSequence-like Element of Args(o,A);
+coherence
+  proof
+    let x be Element of Args(o,A);
+      dom x = dom the_arity_of o by MSUALG_6:2;
+    then consider n being Nat such that
+A1:   dom x = Seg n by FINSEQ_1:def 2;
+    take n;
+    thus dom x = Seg n by A1;
+  end;
+end;
+
+definition let S be non void non empty ManySortedSign,
+               I be set,
+               s be SortSymbol of S,
+               F be MSAlgebra-Family of I, S;
+ cluster -> Function-like Relation-like Element of (SORTS F).s;
+coherence
+  proof
+    let x be Element of (SORTS F).s;
+      x is Element of product Carrier(F,s) by PRALG_2:def 17;
+    hence x is Function-like Relation-like;
+  end;
+end;
+
+definition let S be non void non empty ManySortedSign,
+               X be non-empty ManySortedSet of the carrier of S;
+ cluster FreeGen X -> free non-empty;
+coherence by MSAFREE:15,17;
+end;
+
+definition let S be non void non empty ManySortedSign,
+               X be non-empty ManySortedSet of the carrier of S;
+ cluster FreeMSA X -> free;
+coherence by MSAFREE:18;
+end;
+
+definition let S be non empty non void ManySortedSign,
+               A, B be non-empty MSAlgebra over S;
+ cluster [:A,B:] -> non-empty;
+coherence
+  proof
+    thus the Sorts of [:A,B:] is non-empty
+    proof
+        [:A,B:] = MSAlgebra (# [|the Sorts of A,the Sorts of B|],
+             [[:the Charact of A,the Charact of B:]] #) by PRALG_2:def 15;
+      hence thesis;
+    end;
+  end;
+end;
+
+theorem
+  for X, Y being set, f being Function st a in dom f & f.a in [:X,Y:]
+ holds f.a = [(pr1 f).a, (pr2 f).a]
+  proof
+    let X, Y be set,
+        f be Function such that
+A1:   a in dom f and
+A2:   f.a in [:X,Y:];
+A3: (pr1 f).a = (f.a)`1 by A1,DTCONSTR:def 2;
+      (pr2 f).a = (f.a)`2 by A1,DTCONSTR:def 3;
+    hence thesis by A2,A3,MCART_1:23;
+  end;
+
+theorem Th2:
+for X being non empty set, Y being set, f being Function of X, {Y}
+ holds rng f = {Y}
+  proof
+    let X be non empty set,
+        Y be set,
+        f be Function of X, {Y};
+A1: dom f = X by FUNCT_2:def 1;
+    thus rng f c= {Y} by RELSET_1:12;
+    let q be set;
+    assume q in {Y};
+then A2: q = Y by TARSKI:def 1;
+    consider x being set such that
+A3:   x in X by XBOOLE_0:def 1;
+      f.x = Y by A3,FUNCT_2:65;
+    hence q in rng f by A1,A2,A3,FUNCT_1:def 5;
+  end;
+
+theorem Th3:
+for A being non empty finite set ex f being Function of NAT, A st rng f = A
+  proof
+    let A be non empty finite set;
+    consider p being FinSequence such that
+A1:   rng p = A by FINSEQ_1:73;
+      p is FinSequence of A
+    proof
+      thus rng p c= A by A1;
+    end;
+    then reconsider p as FinSequence of A;
+defpred P[set,set] means
+ ($1 in dom p implies $2 = p.$1) &
+   (not $1 in dom p implies ex a being Element of A st $2 = a);
+A2: for x being Element of NAT ex y being Element of A st P[x,y]
+    proof
+      let x be Element of NAT;
+      per cases;
+      suppose x in dom p;
+        then reconsider px = p.x as Element of A by PARTFUN1:27;
+        take px;
+        thus x in dom p implies px = p.x;
+        thus thesis;
+      suppose
+A3:       not x in dom p;
+        consider a being Element of A;
+        take a;
+        thus x in dom p implies a = p.x by A3;
+        thus thesis;
+    end;
+    consider f being Function of NAT, A such that
+A4:   for x being Element of NAT holds P[x,f.x] from FuncExD(A2);
+    take f;
+    thus rng f c= A by RELSET_1:12;
+    let q be set;
+    assume q in A;
+    then consider x being Element of NAT such that
+A5:   x in dom p and
+A6:   q = p.x by A1,PARTFUN1:26;
+A7: f.x = p.x by A4,A5;
+      dom f = NAT by FUNCT_2:def 1;
+    hence q in rng f by A6,A7,FUNCT_1:def 5;
+  end;
+
+theorem Th4:
+Class(nabla I) c= {I}
+  proof
+    let q be set;
+    assume q in Class(nabla I);
+    then consider x being set such that
+A1:   x in I & q = Class(nabla I,x) by EQREL_1:def 5;
+      Class(nabla I,x) = I by A1,EQREL_1:34;
+    hence q in {I} by A1,TARSKI:def 1;
+  end;
+
+theorem Th5:
+for I being non empty set holds Class(nabla I) = {I}
+  proof
+    let I be non empty set;
+    thus Class(nabla I) c= {I} by Th4;
+    let q be set;
+    assume q in {I};
+then A1: q = I by TARSKI:def 1;
+    consider a being set such that
+A2:   a in I by XBOOLE_0:def 1;
+      Class(nabla I,a) = I by A2,EQREL_1:34;
+    hence q in Class(nabla I) by A1,A2,EQREL_1:def 5;
+  end;
+
+theorem Th6:
+ex A being ManySortedSet of I st {A} = I --> {a}
+  proof
+    deffunc F(set) = a;
+    consider A being ManySortedSet of I such that
+A1:   for i being set st i in I holds A.i = F(i) from MSSLambda;
+    take A;
+      now
+      let i be set; assume
+A2:     i in I;
+      hence {A}.i = {A.i} by PZFMISC1:def 1
+                .= {a} by A1,A2
+                .= (I --> {a}).i by A2,FUNCOP_1:13;
+    end;
+    hence thesis by PBOOLE:3;
+  end;
+
+theorem
+  for A being ManySortedSet of I
+ ex B being non-empty ManySortedSet of I st A c= B
+  proof
+    let A be ManySortedSet of I;
+    consider a being set;
+    deffunc F(set) = {a} \/ A.$1;
+    consider f being ManySortedSet of I such that
+A1:   for i be set st i in I holds f.i = F(i) from MSSLambda;
+      f is non-empty
+    proof
+      let i be set;
+      assume i in I;
+      then f.i = {a} \/ A.i by A1;
+      hence f.i is non empty;
+    end;
+    then reconsider f as non-empty ManySortedSet of I;
+    take f;
+    let i be set;
+    assume i in I;
+    then f.i = A.i \/ {a} by A1;
+    hence A.i c= f.i by XBOOLE_1:7;
+  end;
+
+theorem
+  for M being non-empty ManySortedSet of I
+ for B being locally-finite ManySortedSubset of M
+  ex C being non-empty locally-finite ManySortedSubset of M st B c= C
+  proof
+    let M be non-empty ManySortedSet of I,
+        B be locally-finite ManySortedSubset of M;
+defpred P[set,set] means
+ ex a being Element of M.$1 st $2 = {a} \/ B.$1;
+A1: now
+      let i be set such that i in I;
+      consider a being Element of M.i;
+      take j = {a} \/ B.i;
+      thus P[i,j];
+    end;
+    consider C being ManySortedSet of I such that
+A2:   for i be set st i in I holds P[i,C.i] from MSSEx(A1);
+A3: C is ManySortedSubset of M
+    proof
+      let i be set; assume
+A4:     i in I;
+      then consider a being Element of M.i such that
+A5:     C.i = {a} \/ B.i by A2;
+        B c= M by MSUALG_2:def 1;
+then A6:   B.i c= M.i by A4,PBOOLE:def 5;
+A7:   M.i is non empty by A4,PBOOLE:def 16;
+      let q be set;
+      assume q in C.i;
+      then q in {a} or q in B.i by A5,XBOOLE_0:def 2;
+      then q = a or q in M.i by A6,TARSKI:def 1;
+      hence q in M.i by A7;
+    end;
+A8: C is non-empty
+    proof
+      let i be set;
+      assume i in I;
+      then consider a being Element of M.i such that
+A9:     C.i = {a} \/ B.i by A2;
+      thus C.i is non empty by A9;
+    end;
+      C is locally-finite
+    proof
+      let i be set; assume
+A10:     i in I;
+      then consider a being Element of M.i such that
+A11:     C.i = {a} \/ B.i by A2;
+      reconsider b = B.i as finite set by A10,PRE_CIRC:def 3;
+        {a} \/ b is finite;
+      hence C.i is finite by A11;
+    end;
+    then reconsider C as non-empty locally-finite ManySortedSubset of M
+      by A3,A8;
+    take C;
+    let i be set;
+    assume i in I;
+    then consider a being Element of M.i such that
+A12:   C.i = {a} \/ B.i by A2;
+    thus B.i c= C.i by A12,XBOOLE_1:7;
+  end;
+
+theorem
+  for A, B being ManySortedSet of I
+ for F, G being ManySortedFunction of A, {B} holds F = G
+  proof
+    let A, B be ManySortedSet of I,
+        F, G be ManySortedFunction of A, {B};
+      now
+      let i be set; assume
+A1:     i in I;
+      then A2:     F.i is Function of A.i, {B}.i & G.i is Function of A.i, {B}.
+i
+        by MSUALG_1:def 2;
+        {B}.i = {B.i} by A1,PZFMISC1:def 1;
+      hence F.i = G.i by A2,FUNCT_2:66;
+    end;
+    hence F = G by PBOOLE:3;
+  end;
+
+theorem Th10:
+for A being non-empty ManySortedSet of I, B being ManySortedSet of I
+ for F being ManySortedFunction of A, {B} holds F is "onto"
+  proof
+    let A be non-empty ManySortedSet of I,
+        B be ManySortedSet of I,
+        F be ManySortedFunction of A, {B};
+    let i be set; assume
+A1:   i in I;
+then A2: A.i <> {} by PBOOLE:def 16;
+A3: {B}.i = {B.i} by A1,PZFMISC1:def 1;
+      F.i is Function of A.i, {B}.i by A1,MSUALG_1:def 2;
+    hence rng(F.i) = {B}.i by A2,A3,Th2;
+  end;
+
+theorem Th11:
+for A being ManySortedSet of I, B being non-empty ManySortedSet of I
+ for F being ManySortedFunction of {A}, B holds F is "1-1"
+  proof
+    let A be ManySortedSet of I,
+        B be non-empty ManySortedSet of I,
+        F be ManySortedFunction of {A}, B;
+      now
+      let i be set; assume
+A1:   i in I;
+then A2:   {A}.i = {A.i} by PZFMISC1:def 1;
+        F.i is Function of {A}.i, B.i by A1,MSUALG_1:def 2;
+      hence F.i is one-to-one by A2,PARTFUN1:70;
+    end;
+    hence F is "1-1" by MSUALG_3:1;
+  end;
+
+theorem
+  for X being non-empty ManySortedSet of the carrier of S
+ holds Reverse X is "1-1"
+  proof
+    let X be non-empty ManySortedSet of the carrier of S;
+      for i being set st i in the carrier of S
+      holds (Reverse X).i is one-to-one
+    proof
+      let i be set;
+      assume i in the carrier of S;
+      then reconsider s = i as SortSymbol of S;
+      set f = (Reverse X).s;
+      let x1,x2 be set such that
+A1:     x1 in dom ((Reverse X).i) and
+A2:     x2 in dom ((Reverse X).i) and
+A3:     ((Reverse X).i).x1 = ((Reverse X).i).x2;
+A4:   f = Reverse(s,X) by MSAFREE:def 20;
+then A5:   dom f = FreeGen(s,X) by FUNCT_2:def 1;
+      then consider a1 being set such that
+A6:     a1 in X.s and
+A7:     x1 = root-tree [a1,s] by A1,MSAFREE:def 17;
+      consider a2 being set such that
+A8:     a2 in X.s and
+A9:     x2 = root-tree [a2,s] by A2,A5,MSAFREE:def 17;
+      set D = DTConMSA X;
+A10:   [a1,s] in Terminals D by A6,MSAFREE:7;
+      then reconsider t1 = [a1,s] as Symbol of D;
+        t1`2 = s by MCART_1:7;
+      then root-tree t1 in {root-tree tt where tt is Symbol of D :
+                             tt in Terminals D & tt`2 = s} by A10;
+      then root-tree t1 in FreeGen(s,X) by MSAFREE:14;
+then A11:   f.x1 = [a1,s]`1 by A4,A7,MSAFREE:def 19
+          .= a1 by MCART_1:7;
+A12:   [a2,s] in Terminals D by A8,MSAFREE:7;
+      then reconsider t2 = [a2,s] as Symbol of D;
+        t2`2 = s by MCART_1:7;
+      then root-tree t2 in {root-tree tt where tt is Symbol of D :
+                             tt in Terminals D & tt`2 = s} by A12;
+      then root-tree t2 in FreeGen(s,X) by MSAFREE:14;
+      then f.x2 = [a2,s]`1 by A4,A9,MSAFREE:def 19
+          .= a2 by MCART_1:7;
+      hence x1 = x2 by A3,A7,A9,A11;
+    end;
+    hence Reverse X is "1-1" by MSUALG_3:1;
+  end;
+
+theorem
+  for A being non-empty locally-finite ManySortedSet of I
+ ex F being ManySortedFunction of I --> NAT, A st F is "onto"
+  proof
+    let A be non-empty locally-finite ManySortedSet of I;
+defpred P[set,set] means
+ ex f being Function of NAT, A.$1 st $2 = f & rng f = A.$1;
+A1: for i being set st i in I ex j being set st P[i,j]
+    proof
+      let i be set;
+      assume i in I;
+      then A.i is non empty & A.i is finite by PBOOLE:def 16,PRE_CIRC:def 3;
+        then consider f being Function of NAT, A.i such that
+A2:     rng f = A.i by Th3;
+      take j = f;
+      thus P[i,j] by A2;
+    end;
+    consider F being ManySortedSet of I such that
+A3:   for i being set st i in I holds P[i,F.i] from MSSEx(A1);
+      F is ManySortedFunction of I --> NAT, A
+    proof
+      let i be set; assume
+A4:     i in I;
+      then consider f being Function of NAT, A.i such that
+A5:     F.i = f and rng f = A.i by A3;
+         (I --> NAT).i = NAT by A4,FUNCOP_1:13;
+     hence F.i is Function of (I --> NAT).i, A.i by A5;
+    end;
+    then reconsider F as ManySortedFunction of I --> NAT, A;
+    take F;
+    let i be set;
+    assume i in I;
+    then consider f being Function of NAT, A.i such that
+A6:   F.i = f & rng f = A.i by A3;
+    thus rng (F.i) = A.i by A6;
+  end;
+
+theorem
+  for S being non empty ManySortedSign
+ for A being non-empty MSAlgebra over S
+  for f, g being Element of product the Sorts of A st
+ for i being set holds proj(the Sorts of A,i).f = proj(the Sorts of A,i).g
+   holds f = g
+  proof
+    let S be non empty ManySortedSign,
+        A be non-empty MSAlgebra over S,
+        f, g be Element of product the Sorts of A such that
+A1:  for i being set holds proj(the Sorts of A,i).f =
+       proj(the Sorts of A,i).g;
+    set X = the Sorts of A;
+      now
+      thus dom f = dom X by CARD_3:18
+                .= dom g by CARD_3:18;
+      let x be set such that x in dom f;
+A2:   dom (proj(X,x)) = product X by PRALG_3:def 2;
+      hence f.x = proj(X,x).f by PRALG_3:def 2
+               .= proj(X,x).g by A1
+               .= g.x by A2,PRALG_3:def 2;
+    end;
+    hence f = g by FUNCT_1:9;
+  end;
+
+theorem
+  for I being non empty set
+ for s being Element of S
+  for A being MSAlgebra-Family of I,S
+   for f, g being Element of product Carrier(A,s) st
+    for a being Element of I
+     holds proj(Carrier(A,s),a).f = proj(Carrier(A,s),a).g
+  holds f = g
+  proof
+    let I be non empty set,
+        s be Element of S,
+        A be MSAlgebra-Family of I,S,
+        f, g be Element of product Carrier(A,s) such that
+A1:  for a being Element of I
+       holds proj(Carrier(A,s),a).f = proj(Carrier(A,s),a).g;
+      now
+A2:   dom f = dom Carrier(A,s) by CARD_3:18;
+      hence dom f = dom g by CARD_3:18;
+      let x be set such that
+A3:     x in dom f;
+A4:   dom f = I by A2,PBOOLE:def 3;
+A5:   dom (proj(Carrier(A,s),x)) = product Carrier(A,s) by PRALG_3:def 2;
+      hence f.x = proj(Carrier(A,s),x).f by PRALG_3:def 2
+               .= proj(Carrier(A,s),x).g by A1,A3,A4
+               .= g.x by A5,PRALG_3:def 2;
+    end;
+    hence f = g by FUNCT_1:9;
+  end;
+
+theorem
+  for A, B being non-empty MSAlgebra over S
+ for C being non-empty MSSubAlgebra of A
+  for h1 being ManySortedFunction of B, C st h1 is_homomorphism B, C
+   for h2 being ManySortedFunction of B, A st h1 = h2
+ holds h2 is_homomorphism B, A
+  proof
+    let A, B be non-empty MSAlgebra over S,
+        C be non-empty MSSubAlgebra of A,
+        h1 be ManySortedFunction of B, C such that
+A1:   h1 is_homomorphism B, C;
+    let h2 be ManySortedFunction of B, A such that
+A2:   h1 = h2;
+      the Sorts of C is ManySortedSubset of the Sorts of A
+             by MSUALG_2:def 10;
+    then id (the Sorts of C) is ManySortedFunction of C, A
+             by EXTENS_1:9;
+    then consider G be ManySortedFunction of C, A such that
+A3:   G = id (the Sorts of C);
+A4: G ** h1 = h1 by A3,MSUALG_3:4;
+      G is_monomorphism C, A by A3,MSUALG_3:22;
+    then G is_homomorphism C, A by MSUALG_3:def 11;
+    hence h2 is_homomorphism B, A by A1,A2,A4,MSUALG_3:10;
+  end;
+
+theorem
+  for A, B being non-empty MSAlgebra over S
+ for F being ManySortedFunction of A, B st F is_monomorphism A, B
+  holds A, Image F are_isomorphic
+  proof
+    let A, B be non-empty MSAlgebra over S,
+        F be ManySortedFunction of A, B; assume
+A1:   F is_monomorphism A, B;
+    then F is_homomorphism A, B by MSUALG_3:def 11;
+    then consider G being ManySortedFunction of A, Image F such that
+A2:   G = F and
+A3:   G is_epimorphism A, Image F by MSUALG_3:21;
+    take G;
+    thus G is_epimorphism A, Image F by A3;
+    thus G is_homomorphism A, Image F by A3,MSUALG_3:def 10;
+    thus G is "1-1" by A1,A2,MSUALG_3:def 11;
+  end;
+
+theorem Th18:
+for A, B being non-empty MSAlgebra over S
+ for F being ManySortedFunction of A, B st F is "onto"
+  for o being OperSymbol of S
+   for x being Element of Args(o,B) holds
+ ex y being Element of Args(o,A) st F # y = x
+  proof
+    let A, B be non-empty MSAlgebra over S,
+        F be ManySortedFunction of A, B such that
+A1:   F is "onto";
+    let o be OperSymbol of S,
+        t be Element of Args(o,B);
+    set D = len (the_arity_of o);
+    reconsider E = (the Sorts of B)*(the_arity_of o)
+      as non-empty ManySortedSet of dom (the_arity_of o);
+A2: Args(o,B) = product E by PRALG_2:10;
+A3: Seg D = dom the_arity_of o by FINSEQ_1:def 3
+         .= dom ((the Sorts of B)*(the_arity_of o)) by PRALG_2:10
+         .= dom t by A2,CARD_3:18;
+defpred P[set,set] means
+ ex y1 being Element of (the Sorts of A).((the_arity_of o)/.$1)
+  st (F.((the_arity_of o)/.$1)).y1 = t.$1 & $2 = y1;
+A4: for k being Nat st k in Seg D ex x being set st P[k,x]
+    proof
+      let k be Nat such that
+A5:     k in Seg D;
+      set s = (the_arity_of o)/.k;
+A6:   rng (F.s) = (the Sorts of B).s by A1,MSUALG_3:def 3;
+        k in dom the_arity_of o by A5,FINSEQ_1:def 3;
+      then t.k in (the Sorts of B).s by MSUALG_6:2;
+      then consider y1 being set such that
+A7:     y1 in (the Sorts of A).s & F.s.y1 = t.k by A6,FUNCT_2:17;
+      take y1;
+      reconsider y2 = y1 as Element of (the Sorts of A).s by A7;
+      take y2;
+      thus thesis by A7;
+    end;
+    consider p being FinSequence such that
+A8:   dom p = Seg D and
+A9:   for k being Nat st k in Seg D holds P[k,p.k] from NonUniqSeqEx(A4);
+A10: len p = len the_arity_of o by A8,FINSEQ_1:def 3;
+      for k being Nat st k in dom p holds
+      p.k in (the Sorts of A).((the_arity_of o)/.k)
+    proof
+      let k be Nat;
+      assume k in dom p;
+      then consider y1 being Element of (the Sorts of A).((the_arity_of o)/.k)
+      such that
+          F.((the_arity_of o)/.k).y1 = t.k and
+A11:     p.k = y1 by A8,A9;
+      thus p.k in (the Sorts of A).((the_arity_of o)/.k) by A11;
+    end;
+    then reconsider p as Element of Args(o,A) by A10,MSAFREE2:7;
+    set fp = F # p;
+    take p;
+A12: dom fp = dom ((the Sorts of B)*(the_arity_of o)) by A2,CARD_3:18
+          .= dom t by A2,CARD_3:18;
+      for k being Nat st k in dom t holds fp.k = t.k
+    proof
+      let k be Nat; assume
+A13:     k in dom t;
+     then consider y1 being Element of (the Sorts of A).((the_arity_of o)/.k)
+          such that
+A14:     (F.((the_arity_of o)/.k)).y1 = t.k & p.k = y1 by A3,A9;
+      thus fp.k = t.k by A3,A8,A13,A14,MSUALG_3:def 8;
+    end;
+    hence F # p = t by A12,FINSEQ_1:17;
+  end;
+
+theorem Th19:
+for A being non-empty MSAlgebra over S, o being OperSymbol of S
+ for x being Element of Args(o,A) holds
+  Den(o,A).x in (the Sorts of A).(the_result_sort_of o)
+  proof
+    let A be non-empty MSAlgebra over S,
+        o be OperSymbol of S,
+        x be Element of Args(o,A);
+      Den(o,A).x is Element of ((the Sorts of A) * the ResultSort of S).o
+       by MSUALG_1:def 10;
+    then Den(o,A).x is Element of (the Sorts of A).((the ResultSort of S).o)
+       by FUNCT_2:21;
+    then Den(o,A).x is Element of (the Sorts of A).(the_result_sort_of o)
+      by MSUALG_1:def 7;
+    hence thesis;
+  end;
+
+theorem Th20:
+for A, B, C being non-empty MSAlgebra over S
+ for F1 being ManySortedFunction of A, B
+  for F2 being ManySortedFunction of A, C st
+    F1 is_epimorphism A, B & F2 is_homomorphism A, C
+ for G being ManySortedFunction of B, C st G ** F1 = F2
+  holds G is_homomorphism B, C
+  proof
+    let A, B, C be non-empty MSAlgebra over S,
+        F1 be ManySortedFunction of A, B,
+        F2 be ManySortedFunction of A, C such that
+A1:   F1 is_epimorphism A, B and
+A2:   F2 is_homomorphism A, C;
+    let G be ManySortedFunction of B, C such that
+A3:   G ** F1 = F2;
+    let o be OperSymbol of S such that Args(o,B) <> {};
+    let x be Element of Args(o,B);
+    set r = the_result_sort_of o;
+      F1 is "onto" by A1,MSUALG_3:def 10;
+    then consider y being Element of Args(o,A) such that
+A4:   F1 # y = x by Th18;
+      F1 is_homomorphism A, B by A1,MSUALG_3:def 10;
+then A5: (F1.r).(Den(o,A).y) = Den(o,B).x by A4,MSUALG_3:def 9;
+A6: Den(o,A).y is Element of (the Sorts of A).r by Th19;
+A7: (F2.r).(Den(o,A).y) = Den(o,C).((G ** F1) # y) by A2,A3,MSUALG_3:def 9
+                       .= Den(o,C).(G # x) by A4,MSUALG_3:8;
+      (F2.r).(Den(o,A).y) = (G.r * F1.r).(Den(o,A).y) by A3,MSUALG_3:2
+                       .= (G.r).(Den(o,B).x) by A5,A6,FUNCT_2:21;
+    hence (G.(the_result_sort_of o)).(Den(o,B).x) = Den(o,C).(G#x) by A7;
+  end;
+
+reserve A, M for ManySortedSet of I,
+        B, C for non-empty ManySortedSet of I;
+
+definition let I be set;
+           let A be ManySortedSet of I;
+           let B, C be non-empty ManySortedSet of I;
+           let F be ManySortedFunction of A, [|B,C|];
+ func Mpr1 F -> ManySortedFunction of A, B means :Def1:
+  for i being set st i in I holds it.i = pr1 (F.i);
+existence
+  proof
+    deffunc G(set) = pr1 (F.$1);
+    consider X be ManySortedSet of I such that
+A1:  for i be set st i in I holds X.i = G(i) from MSSLambda;
+      X is ManySortedFunction of A, B
+    proof
+      let i be set; assume
+A2:     i in I;
+then A3:   [|B,C|].i <> {} by PBOOLE:def 16;
+A4:   X.i = pr1 (F.i) by A1,A2;
+      reconsider Bi = B.i as non empty set by A2,PBOOLE:def 16;
+      reconsider Xi = X.i as Function by A4;
+A5:     F.i is Function of A.i, [|B,C|].i by A2,MSUALG_1:def 2;
+        then dom (F.i) = A.i by A3,FUNCT_2:def 1;
+then A6:     dom Xi = A.i by A4,DTCONSTR:def 2;
+       rng Xi c= Bi
+        proof
+          let q be set such that
+A7:         q in rng Xi;
+          assume
+A8:         not q in Bi;
+          consider x be set such that
+A9:         x in dom Xi and
+A10:         Xi.x = q by A7,FUNCT_1:def 5;
+A11:       x in dom (F.i) by A4,A9,DTCONSTR:def 2;
+then A12:       Xi.x = (F.i.x)`1 by A4,DTCONSTR:def 2;
+            rng (F.i) c= [|B,C|].i by A5,RELSET_1:12;
+then A13:       rng (F.i) c= [:B.i,C.i:] by A2,PRALG_2:def 9;
+            F.i.x in rng (F.i) by A11,FUNCT_1:def 5;
+          hence contradiction by A8,A10,A12,A13,MCART_1:10;
+        end;
+      hence X.i is Function of A.i, B.i by A6,FUNCT_2:def 1,RELSET_1:11;
+    end;
+    then reconsider X as ManySortedFunction of A, B;
+    take X;
+    thus thesis by A1;
+  end;
+uniqueness
+  proof
+    let M, N be ManySortedFunction of A, B such that
+A14:   (for i be set st i in I holds M.i = pr1 (F.i)) and
+A15:   (for i be set st i in I holds N.i = pr1 (F.i));
+      now
+      let i be set; assume
+A16:     i in I;
+      hence M.i = pr1 (F.i) by A14
+              .= N.i by A15,A16;
+    end;
+    hence M = N by PBOOLE:3;
+  end;
+
+ func Mpr2 F -> ManySortedFunction of A, C means :Def2:
+  for i being set st i in I holds it.i = pr2 (F.i);
+existence
+  proof
+    deffunc G(set) =pr2 (F.$1);
+    consider X be ManySortedSet of I such that
+A17:  for i be set st i in I holds X.i = G(i) from MSSLambda;
+      X is ManySortedFunction of A, C
+    proof
+      let i be set; assume
+A18:     i in I;
+then A19:   [|B,C|].i <> {} by PBOOLE:def 16;
+A20:   X.i = pr2 (F.i) by A17,A18;
+      reconsider Ci = C.i as non empty set by A18,PBOOLE:def 16;
+      reconsider Xi = X.i as Function by A20;
+A21:     F.i is Function of A.i, [|B,C|].i by A18,MSUALG_1:def 2;
+        then dom (F.i) = A.i by A19,FUNCT_2:def 1;
+then A22:   dom Xi = A.i by A20,DTCONSTR:def 3;
+     rng Xi c= Ci
+        proof
+          let q be set such that
+A23:         q in rng Xi;
+          assume
+A24:         not q in Ci;
+          consider x be set such that
+A25:         x in dom Xi and
+A26:         Xi.x = q by A23,FUNCT_1:def 5;
+A27:       x in dom (F.i) by A20,A25,DTCONSTR:def 3;
+then A28:       Xi.x = (F.i.x)`2 by A20,DTCONSTR:def 3;
+            rng (F.i) c= [|B,C|].i by A21,RELSET_1:12;
+then A29:       rng (F.i) c= [:B.i,C.i:] by A18,PRALG_2:def 9;
+            F.i.x in rng (F.i) by A27,FUNCT_1:def 5;
+          hence contradiction by A24,A26,A28,A29,MCART_1:10;
+        end;
+      hence X.i is Function of A.i, C.i by A22,FUNCT_2:def 1,RELSET_1:11;
+    end;
+    then reconsider X as ManySortedFunction of A, C;
+    take X;
+    thus thesis by A17;
+  end;
+uniqueness
+  proof
+    let M, N be ManySortedFunction of A, C such that
+A30:   (for i be set st i in I holds M.i = pr2 (F.i)) and
+A31:   (for i be set st i in I holds N.i = pr2 (F.i));
+      now
+      let i be set; assume
+A32:     i in I;
+      hence M.i = pr2 (F.i) by A30
+              .= N.i by A31,A32;
+    end;
+    hence M = N by PBOOLE:3;
+  end;
+end;
+
+theorem
+  for F being ManySortedFunction of A, [| I-->{a} , I-->{a} |]
+ holds Mpr1 F = Mpr2 F
+  proof
+    let F be ManySortedFunction of A, [| I-->{a} , I-->{a} |];
+      now
+      let i be set; assume
+A1:     i in I;
+then A2:     (Mpr1 F).i = pr1 (F.i) by Def1;
+A3:     (Mpr2 F).i = pr2 (F.i) by A1,Def2;
+A4:   dom (pr2 (F.i)) = dom (F.i) by DTCONSTR:def 3;
+        now
+        let y be set such that
+A5:       y in dom (F.i);
+A6:     (F.i) is Function of A.i, [| I-->{a} , I-->{a} |].i
+                 by A1,MSUALG_1:def 2;
+A7:     (F.i).y in rng (F.i) by A5,FUNCT_1:def 5;
+          rng (F.i) c= [| I-->{a} , I-->{a} |].i by A6,RELSET_1:12;
+then A8:     rng (F.i) c= [: (I-->{a}).i , (I-->{a}).i :] by A1,PRALG_2:def 9;
+        then ((F.i).y)`1 in (I-->{a}).i by A7,MCART_1:10;
+then A9:     ((F.i).y)`1 in {a} by A1,FUNCOP_1:13;
+          ((F.i).y)`2 in (I-->{a}).i by A7,A8,MCART_1:10;
+then A10:     ((F.i).y)`2 in {a} by A1,FUNCOP_1:13;
+        thus (pr2 (F.i)).y = ((F.i).y)`2 by A5,DTCONSTR:def 3
+                          .= a by A10,TARSKI:def 1
+                          .= ((F.i).y)`1 by A9,TARSKI:def 1;
+      end;
+      hence (Mpr1 F).i = (Mpr2 F).i by A2,A3,A4,DTCONSTR:def 2;
+    end;
+    hence Mpr1 F = Mpr2 F by PBOOLE:3;
+  end;
+
+theorem
+  for F being ManySortedFunction of A, [|B,C|] st F is "onto"
+ holds Mpr1 F is "onto"
+  proof
+    let F be ManySortedFunction of A, [|B,C|] such that
+A1:   F is "onto";
+    let i be set; assume
+A2:   i in I;
+    then reconsider m = (Mpr1 F).i as Function of A.i, B.i by MSUALG_1:def 2;
+      rng m = B.i
+    proof
+        A is_transformable_to B
+      proof
+        let j be set;
+        assume j in I;
+        hence B.j = {} implies A.j = {} by PBOOLE:def 16;
+      end;
+      then rngs Mpr1 F c= B by MSSUBFAM:17;
+      then (rngs Mpr1 F).i c= B.i by A2,PBOOLE:def 5;
+      hence rng m c= B.i by A2,MSSUBFAM:13;
+      let a be set such that
+A3:     a in B.i;
+A4:   (F.i) is Function of A.i, [|B,C|].i by A2,MSUALG_1:def 2;
+A5:   rng (F.i) = [|B,C|].i by A1,A2,MSUALG_3:def 3;
+A6:   [|B,C|].i <> {} by A2,PBOOLE:def 16;
+      then consider z be set such that
+A7:     z in [|B,C|].i by XBOOLE_0:def 1;
+A8:   z in [:B.i,C.i:] by A2,A7,PRALG_2:def 9;
+      set p = [a,z`2];
+A9:   p`1 in B.i by A3,MCART_1:7;
+        p`2 = z`2 by MCART_1:7;
+      then p`2 in C.i by A8,MCART_1:10;
+      then p in [:B.i,C.i:] by A9,MCART_1:11;
+      then p in [|B,C|].i by A2,PRALG_2:def 9;
+      then consider b be set such that
+A10:     b in A.i and
+A11:     (F.i).b = p by A4,A5,FUNCT_2:17;
+A12:   dom (F.i) = A.i by A4,A6,FUNCT_2:def 1;
+        B.i <> {} by A2,PBOOLE:def 16;
+then A13:   dom m = A.i by FUNCT_2:def 1;
+        m.b = (pr1 (F.i)).b by A2,Def1
+         .= p`1 by A10,A11,A12,DTCONSTR:def 2
+         .= a by MCART_1:7;
+      hence a in rng m by A10,A13,FUNCT_1:def 5;
+    end;
+    hence thesis;
+  end;
+
+theorem
+  for F being ManySortedFunction of A, [|B,C|] st F is "onto"
+ holds Mpr2 F is "onto"
+  proof
+    let F be ManySortedFunction of A, [|B,C|] such that
+A1:   F is "onto";
+    let i be set; assume
+A2:   i in I;
+    then reconsider m = (Mpr2 F).i as Function of A.i, C.i by MSUALG_1:def 2;
+      rng m = C.i
+    proof
+        A is_transformable_to C
+      proof
+        let j be set;
+        assume j in I;
+        hence C.j = {} implies A.j = {} by PBOOLE:def 16;
+      end;
+      then rngs Mpr2 F c= C by MSSUBFAM:17;
+      then (rngs Mpr2 F).i c= C.i by A2,PBOOLE:def 5;
+      hence rng m c= C.i by A2,MSSUBFAM:13;
+      let a be set such that
+A3:     a in C.i;
+A4:   (F.i) is Function of A.i, [|B,C|].i by A2,MSUALG_1:def 2;
+A5:   rng (F.i) = [|B,C|].i by A1,A2,MSUALG_3:def 3;
+A6:   [|B,C|].i <> {} by A2,PBOOLE:def 16;
+      then consider z be set such that
+A7:     z in [|B,C|].i by XBOOLE_0:def 1;
+A8:   z in [:B.i,C.i:] by A2,A7,PRALG_2:def 9;
+      set p = [z`1,a];
+A9:   p`2 in C.i by A3,MCART_1:7;
+        p`1 = z`1 by MCART_1:7;
+      then p`1 in B.i by A8,MCART_1:10;
+      then p in [:B.i,C.i:] by A9,MCART_1:11;
+      then p in [|B,C|].i by A2,PRALG_2:def 9;
+      then consider b be set such that
+A10:     b in A.i and
+A11:     (F.i).b = p by A4,A5,FUNCT_2:17;
+A12:   dom (F.i) = A.i by A4,A6,FUNCT_2:def 1;
+        C.i <> {} by A2,PBOOLE:def 16;
+then A13:   dom m = A.i by FUNCT_2:def 1;
+        m.b = (pr2 (F.i)).b by A2,Def2
+         .= p`2 by A10,A11,A12,DTCONSTR:def 3
+         .= a by MCART_1:7;
+      hence a in rng m by A10,A13,FUNCT_1:def 5;
+    end;
+    hence thesis;
+  end;
+
+theorem
+  for F being ManySortedFunction of A, [|B,C|] st M in doms F holds
+ for i be set st i in I holds (F..M).i = [((Mpr1 F)..M).i, ((Mpr2 F)..M).i]
+  proof
+    let F be ManySortedFunction of A, [|B,C|] such that
+A1:   M in doms F;
+    let i be set; assume
+A2:   i in I;
+then A3: (Mpr1 F).i = pr1 (F.i) by Def1;
+A4: (Mpr2 F).i = pr2 (F.i) by A2,Def2;
+A5: dom F = I by PBOOLE:def 3;
+      A is_transformable_to [|B,C|]
+    proof
+      let i be set;
+      assume i in I;
+      hence [|B,C|].i = {} implies A.i = {} by PBOOLE:def 16;
+    end;
+    then M in A by A1,MSSUBFAM:17;
+    then F..M in [|B,C|] by CLOSURE1:3;
+    then (F..M).i in [|B,C|].i by A2,PBOOLE:def 4;
+    then (F..M).i in [:B.i,C.i:] by A2,PRALG_2:def 9;
+then A6: (F.i).(M.i) in [:B.i,C.i:] by A2,A5,PRALG_1:def 18;
+    set z = (F.i).(M.i);
+      M.i in (doms F).i by A1,A2,PBOOLE:def 4;
+then A7: M.i in dom (F.i) by A2,MSSUBFAM:14;
+      dom (Mpr1 F) = I by PBOOLE:def 3;
+then A8: ((Mpr1 F)..M).i = (pr1 (F.i)).(M.i) by A2,A3,PRALG_1:def 18
+                   .= z`1 by A7,DTCONSTR:def 2;
+      dom (Mpr2 F) = I by PBOOLE:def 3;
+    then ((Mpr2 F)..M).i = (pr2 (F.i)).(M.i) by A2,A4,PRALG_1:def 18
+                   .= z`2 by A7,DTCONSTR:def 3;
+    then z = [((Mpr1 F)..M).i, ((Mpr2 F)..M).i] by A6,A8,MCART_1:23;
+    hence thesis by A2,A5,PRALG_1:def 18;
+  end;
+
+
+begin :: On the Trivial Many Sorted Algebras
+
+definition let S be non empty ManySortedSign;
+ cluster the Sorts of Trivial_Algebra S -> locally-finite non-empty;
+coherence
+  proof
+    consider A being ManySortedSet of the carrier of S such that
+A1:   {A} = (the carrier of S) --> {0} by Th6;
+    thus thesis by A1,MSAFREE2:def 12;
+  end;
+end;
+
+definition let S be non empty ManySortedSign;
+ cluster Trivial_Algebra S -> locally-finite non-empty;
+coherence
+  proof
+    thus the Sorts of Trivial_Algebra S is locally-finite;
+    let i be set such that
+A1:   i in the carrier of S;
+      the Sorts of Trivial_Algebra S = (the carrier of S) --> {0}
+      by MSAFREE2:def 12;
+    hence (the Sorts of Trivial_Algebra S).i is non empty by A1,FUNCOP_1:13;
+  end;
+end;
+
+theorem Th25:
+for A being non-empty MSAlgebra over S
+ for F being ManySortedFunction of A, Trivial_Algebra S
+  for o being OperSymbol of S
+   for x being Element of Args(o,A) holds
+ (F.the_result_sort_of o).(Den(o,A).x) = 0 &
+  Den(o,Trivial_Algebra S).(F#x) = 0
+  proof
+    let A be non-empty MSAlgebra over S,
+        F be ManySortedFunction of A, Trivial_Algebra S;
+    let o be OperSymbol of S;
+    let x be Element of Args(o,A);
+    set I = the carrier of S,
+        SA = the Sorts of A,
+        T = Trivial_Algebra S,
+        ST = the Sorts of T;
+    consider XX being ManySortedSet of I such that
+A1:   {XX} = I --> {0} by Th6;
+A2: ST = {XX} by A1,MSAFREE2:def 12;
+    set r = the_result_sort_of o;
+    consider i being set such that
+A3:   i in I and
+A4:   Result(o,T) = ST.i by MSUALG_1:2;
+A5: ST.i = {0} by A1,A2,A3,FUNCOP_1:13;
+      Den(o,A).x in Result(o,A);
+    then Den(o,A).x in ((the Sorts of A) * the ResultSort of S).o
+       by MSUALG_1:def 10;
+    then Den(o,A).x in (the Sorts of A).((the ResultSort of S).o)
+       by FUNCT_2:21;
+    then reconsider d = Den(o,A).x as Element of SA.r by MSUALG_1:def 7;
+A6: ST.r = {0} by A1,A2,FUNCOP_1:13;
+    thus (F.r).(Den(o,A).x) = (F.r).d
+                           .= 0 by A6,TARSKI:def 1;
+    thus Den(o,T).(F#x) = 0 by A4,A5,TARSKI:def 1;
+  end;
+
+theorem Th26:
+for A being non-empty MSAlgebra over S
+ for F being ManySortedFunction of A, Trivial_Algebra S holds
+  F is_epimorphism A, Trivial_Algebra S
+  proof
+    let A be non-empty MSAlgebra over S,
+        F be ManySortedFunction of A, Trivial_Algebra S;
+    set I = the carrier of S;
+    consider XX being ManySortedSet of I such that
+A1:   {XX} = I --> {0} by Th6;
+A2: the Sorts of Trivial_Algebra S = {XX} by A1,MSAFREE2:def 12;
+    thus F is_homomorphism A, Trivial_Algebra S
+    proof
+      let o be OperSymbol of S such that Args(o,A) <> {};
+      let x be Element of Args(o,A);
+      thus (F.the_result_sort_of o).(Den(o,A).x) = 0 by Th25
+        .= Den(o,Trivial_Algebra S).(F#x) by Th25;
+    end;
+    thus F is "onto" by A2,Th10;
+  end;
+
+theorem
+  for A being MSAlgebra over S st
+ ex X being ManySortedSet of the carrier of S st the Sorts of A = {X}
+  holds A, Trivial_Algebra S are_isomorphic
+  proof
+    let A be MSAlgebra over S such that
+A1:   ex X being ManySortedSet of the carrier of S st the Sorts of A = {X};
+    set I = the carrier of S,
+        SB = the Sorts of A,
+        ST = the Sorts of Trivial_Algebra S;
+    consider X being ManySortedSet of I such that
+A2:   the Sorts of A = {X} by A1;
+    consider F being ManySortedFunction of SB, ST;
+    take F;
+    reconsider F1 = F as ManySortedFunction of {X}, ST by A2;
+      A is non-empty by A2,MSUALG_1:def 8;
+    hence F is_epimorphism A, Trivial_Algebra S by Th26;
+    hence F is_homomorphism A, Trivial_Algebra S by MSUALG_3:def 10;
+      F1 is "1-1" by Th11;
+    hence F is "1-1";
+  end;
+
+
+begin :: On the Many Sorted Congruences
+
+theorem
+  for A being non-empty MSAlgebra over S
+ for C being MSCongruence of A holds
+  C is ManySortedSubset of [|the Sorts of A, the Sorts of A|]
+  proof
+    let A be non-empty MSAlgebra over S,
+        C be MSCongruence of A;
+    let i be set such that
+A1:   i in the carrier of S;
+    set SF = the Sorts of A;
+      C.i is Relation of SF.i, SF.i by A1,MSUALG_4:def 2;
+    then C.i c= [:SF.i, SF.i:];
+    hence C.i c= [|SF,SF|].i by A1,PRALG_2:def 9;
+  end;
+
+theorem
+  for A being non-empty MSAlgebra over S
+ for R being Subset of CongrLatt A
+  for F being SubsetFamily of [|the Sorts of A, the Sorts of A|]
+   st R = F holds meet |:F:| is MSCongruence of A
+  proof
+    let A be non-empty MSAlgebra over S,
+        R be Subset of CongrLatt A,
+        F be SubsetFamily of [|the Sorts of A, the Sorts of A|]
+        such that
+A1:   R = F;
+    set R0 = meet |:F:|,
+        SF = the Sorts of A,
+        I = the carrier of S;
+    per cases;
+    suppose F is non empty;
+    then reconsider F1 = F as non empty SubsetFamily of [|SF,SF|];
+      F1 c= the carrier of EqRelLatt SF
+    proof
+      let q be set;
+      assume q in F1;
+      then q is MSCongruence of A by A1,MSUALG_5:def 6;
+      hence q in the carrier of EqRelLatt SF by MSUALG_5:def 5;
+    end;
+then A2: R0 is MSEquivalence_Relation-like ManySortedRelation of SF
+       by MSUALG_7:9;
+    then reconsider R0 as ManySortedRelation of A;
+      R0 is MSEquivalence-like
+    proof
+      let i be set,
+          R be Relation of SF.i;
+      assume i in I & R0.i = R;
+      hence R is Equivalence_Relation of SF.i by A2,MSUALG_4:def 3;
+    end;
+    then reconsider R0 as MSEquivalence-like ManySortedRelation of A;
+      now
+      let o be OperSymbol of S;
+      let a,b be Element of Args(o,A) such that
+A3:     for n being Nat st n in dom a holds [a.n,b.n] in
+ R0.((the_arity_of o)/.n);
+      set r = the_result_sort_of o;
+      consider Q being Subset-Family of ([|SF,SF|].r) such that
+A4:     Q = |:F1:|.r and
+A5:     R0.r = Intersect Q by MSSUBFAM:def 2;
+A6:   Q = { s.r where s is Element of Bool [|SF,SF|] : s in F1 }
+        by A4,CLOSURE2:15;
+        now
+        let Y be set;
+        assume Y in Q;
+        then consider s being Element of Bool [|SF,SF|] such that
+A7:       Y = s.r and
+A8:       s in F1 by A6;
+        reconsider s as MSCongruence of A by A1,A8,MSUALG_5:def 6;
+          now
+          let n be Nat such that
+A9:         n in dom a;
+          set t = (the_arity_of o)/.n;
+          consider G being Subset-Family of ([|SF,SF|].t) such that
+A10:         G = |:F1:|.t and
+A11:         R0.t = Intersect G by MSSUBFAM:def 2;
+            [a.n,b.n] in Intersect G by A3,A9,A11;
+then A12:       [a.n,b.n] in meet G by A10,CANTOR_1:def 3;
+            G = { j.t where j is Element of Bool [|SF,SF|] : j in F1 }
+                 by A10,CLOSURE2:15;
+          then s.t in G by A8;
+          hence [a.n,b.n] in s.t by A12,SETFAM_1:def 1;
+        end;
+        hence [Den(o,A).a,Den(o,A).b] in Y by A7,MSUALG_4:def 6;
+      end;
+      then [Den(o,A).a,Den(o,A).b] in meet Q by A4,SETFAM_1:def 1;
+      hence [Den(o,A).a,Den(o,A).b] in R0.(the_result_sort_of o)
+         by A4,A5,CANTOR_1:def 3;
+    end;
+    hence thesis by MSUALG_4:def 6;
+    suppose F is empty;
+    then |:F:| = [0]I by CLOSURE2:def 4;
+    then meet |:F:| = [|the Sorts of A, the Sorts of A|] by MSSUBFAM:41;
+    hence thesis by MSUALG_5:20;
+  end;
+
+theorem
+  for A being non-empty MSAlgebra over S
+ for C being MSCongruence of A st C = [|the Sorts of A, the Sorts of A|]
+  holds the Sorts of QuotMSAlg (A,C) = {the Sorts of A}
+  proof
+    let A be non-empty MSAlgebra over S,
+        C be MSCongruence of A such that
+A1:   C = [|the Sorts of A, the Sorts of A|];
+      now
+      let i be set;
+      assume i in the carrier of S;
+      then reconsider s = i as Element of S;
+A2:   QuotMSAlg (A,C) = MSAlgebra (# Class C, QuotCharact C #)
+        by MSUALG_4:def 16;
+A3:   C.s = [:(the Sorts of A).s, (the Sorts of A).s:] by A1,PRALG_2:def 9
+         .= nabla (the Sorts of A).s by EQREL_1:def 1;
+      thus (the Sorts of QuotMSAlg (A,C)).i
+          = Class (C.s) by A2,MSUALG_4:def 8
+         .= {(the Sorts of A).s} by A3,Th5
+         .= {the Sorts of A}.i by PZFMISC1:def 1;
+    end;
+    hence thesis by PBOOLE:3;
+  end;
+
+theorem Th31:
+for A, B being non-empty MSAlgebra over S
+ for F being ManySortedFunction of A, B st F is_homomorphism A, B
+  holds MSHomQuot F ** MSNat_Hom(A,MSCng F) = F
+  proof
+    let A, B be non-empty MSAlgebra over S,
+        F be ManySortedFunction of A, B such that
+A1:   F is_homomorphism A, B;
+      now
+      let i be set;
+      assume i in the carrier of S;
+      then reconsider s = i as SortSymbol of S;
+        QuotMSAlg (A,MSCng F) = MSAlgebra(# Class MSCng F, QuotCharact MSCng F
+#)
+          by MSUALG_4:def 16;
+      then reconsider h = MSHomQuot(F,s) as Function of (Class MSCng F).s,
+                                            (the Sorts of B).s;
+      reconsider f = h * MSNat_Hom(A,MSCng F,s) as Function of
+        (the Sorts of A).s, (the Sorts of B).s;
+A2:   for c being Element of (the Sorts of A).s holds f.c = F.s.c
+      proof
+        let c be Element of (the Sorts of A).s;
+        thus f.c
+            = h.((MSNat_Hom(A,MSCng F,s)).c) by FUNCT_2:21
+           .= h.(Class((MSCng F).s,c)) by MSUALG_4:def 17
+           .= h.(Class(MSCng(F,s),c)) by A1,MSUALG_4:def 20
+           .= F.s.c by A1,MSUALG_4:def 21;
+      end;
+      thus (MSHomQuot F ** MSNat_Hom(A,MSCng F)).i
+         = ((MSHomQuot F).s) * ((MSNat_Hom(A,MSCng F)).s) by MSUALG_3:2
+        .= MSHomQuot(F,s) * ((MSNat_Hom(A,MSCng F)).s) by MSUALG_4:def 22
+        .= MSHomQuot(F,s) * MSNat_Hom(A,MSCng F,s) by MSUALG_4:def 18
+        .= F.i by A2,FUNCT_2:113;
+    end;
+    hence MSHomQuot F ** MSNat_Hom(A,MSCng F) = F by PBOOLE:3;
+  end;
+
+theorem Th32:
+for A being non-empty MSAlgebra over S
+ for C being MSCongruence of A
+  for s being SortSymbol of S
+   for a being Element of (the Sorts of QuotMSAlg (A,C)).s
+ ex x being Element of (the Sorts of A).s st a = Class(C,x)
+  proof
+    let A be non-empty MSAlgebra over S,
+        C be MSCongruence of A,
+        s be SortSymbol of S,
+        a be Element of (the Sorts of QuotMSAlg (A,C)).s;
+      QuotMSAlg (A,C) = MSAlgebra (#Class C, QuotCharact C#)
+      by MSUALG_4:def 16;
+    then a in (Class C).s;
+    then a in Class (C.s) by MSUALG_4:def 8;
+    then consider t being set such that
+A1:   t in (the Sorts of A).s and
+A2:   a = Class(C.s,t) by EQREL_1:def 5;
+    reconsider t as Element of (the Sorts of A).s by A1;
+    take t;
+    thus thesis by A2,MSUALG_4:def 7;
+  end;
+
+theorem
+  for A being MSAlgebra over S
+ for C1, C2 being MSEquivalence-like ManySortedRelation of A st C1 c= C2
+  for i being Element of S
+   for x, y being Element of (the Sorts of A).i st [x,y] in C1.i
+ holds Class (C1,x) c= Class (C2,y) &
+  (A is non-empty implies Class (C1,y) c= Class (C2,x))
+  proof
+    let A be MSAlgebra over S,
+        C1, C2 be MSEquivalence-like ManySortedRelation of A such that
+A1:   C1 c= C2;
+    let i be Element of S,
+        x, y be Element of (the Sorts of A).i such that
+A2:   [x,y] in C1.i;
+A3: C1.i c= C2.i by A1,PBOOLE:def 5;
+    field(C1.i) = (the Sorts of A).i by ORDERS_1:97;
+    then
+A4: C1.i is_transitive_in (the Sorts of A).i by RELAT_2:def 16;
+    thus Class (C1,x) c= Class (C2,y)
+    proof
+      let q be set; assume
+A5:     q in Class (C1,x);
+      then q in Class(C1.i,x) by MSUALG_4:def 7;
+      then [q,x] in C1.i by EQREL_1:27;
+      then [q,y] in C1.i by A2,A4,A5,RELAT_2:def 8;
+      then q in Class(C2.i,y) by A3,EQREL_1:27;
+      hence q in Class (C2,y) by MSUALG_4:def 7;
+    end;
+    assume A is non-empty;
+    then reconsider B = A as non-empty MSAlgebra over S;
+    let q be set such that
+A6:   q in Class (C1,y);
+    field(C1.i) = (the Sorts of A).i by ORDERS_1:97;
+    then C1.i is_symmetric_in (the Sorts of B).i by RELAT_2:def 11;
+then A7: [y,x] in C1.i by A2,RELAT_2:def 3;
+      q in Class(C1.i,y) by A6,MSUALG_4:def 7;
+    then [q,y] in C1.i by EQREL_1:27;
+    then [q,x] in C1.i by A4,A6,A7,RELAT_2:def 8;
+    then q in Class(C2.i,x) by A3,EQREL_1:27;
+    hence q in Class (C2,x) by MSUALG_4:def 7;
+  end;
+
+theorem
+  for A being non-empty MSAlgebra over S, C being MSCongruence of A
+ for s being SortSymbol of S, x, y being Element of (the Sorts of A).s holds
+  (MSNat_Hom(A,C)).s.x = (MSNat_Hom(A,C)).s.y iff [x,y] in C.s
+  proof
+    let A be non-empty MSAlgebra over S,
+        C be MSCongruence of A,
+        s be SortSymbol of S,
+        x, y be Element of (the Sorts of A).s;
+    set f = (MSNat_Hom(A,C)).s,
+        g = MSNat_Hom(A,C,s);
+A1: f = g by MSUALG_4:def 18;
+    hereby
+      assume
+A2:     (MSNat_Hom(A,C)).s.x = (MSNat_Hom(A,C)).s.y;
+        Class(C.s,x) = g.x by MSUALG_4:def 17
+                  .= Class(C.s,y) by A1,A2,MSUALG_4:def 17;
+      hence [x,y] in C.s by EQREL_1:44;
+    end;
+    assume
+A3:   [x,y] in C.s;
+    thus (MSNat_Hom(A,C)).s.x = Class(C.s,x) by A1,MSUALG_4:def 17
+                             .= Class(C.s,y) by A3,EQREL_1:44
+                             .= (MSNat_Hom(A,C)).s.y by A1,MSUALG_4:def 17;
+  end;
+
+Lm1:
+  now
+    let S be non empty non void ManySortedSign,
+        A be non-empty MSAlgebra over S,
+        C1, C2 be MSCongruence of A;
+    let G be ManySortedFunction of QuotMSAlg (A,C1), QuotMSAlg (A,C2) such that
+A1: for i being Element of S
+     for x being Element of (the Sorts of QuotMSAlg (A,C1)).i
+      for xx being Element of (the Sorts of A).i st x = Class(C1,xx) holds
+       G.i.x = Class(C2, xx);
+    thus G is "onto"
+    proof
+      set sL = the Sorts of QuotMSAlg (A,C1),
+          sP = the Sorts of QuotMSAlg (A,C2);
+      let i be set;
+      assume i in the carrier of S;
+      then reconsider s = i as SortSymbol of S;
+        rng(G.s) c= sP.s by RELSET_1:12;
+      hence rng(G.i) c= sP.i;
+      let q be set such that
+A2:     q in sP.i;
+        QuotMSAlg (A,C2) = MSAlgebra (#Class C2, QuotCharact C2#)
+        by MSUALG_4:def 16;
+      then q in Class(C2.s) by A2,MSUALG_4:def 8;
+      then consider a being set such that
+A3:     a in (the Sorts of A).s and
+A4:     q = Class(C2.s,a) by EQREL_1:def 5;
+      reconsider a as Element of (the Sorts of A).s by A3;
+A5:   dom (G.s) = sL.s by FUNCT_2:def 1;
+A6:   QuotMSAlg (A,C1) = MSAlgebra (#Class C1, QuotCharact C1#)
+        by MSUALG_4:def 16;
+        Class(C1.s,a) in Class (C1.s) by EQREL_1:def 5;
+      then Class(C1,a) in Class (C1.s) by MSUALG_4:def 7;
+      then reconsider x = Class(C1,a) as Element of sL.s by A6,MSUALG_4:def 8;
+        G.s.x = Class(C2,a) by A1
+           .= Class(C2.s,a) by MSUALG_4:def 7;
+      hence q in rng(G.i) by A4,A5,FUNCT_1:def 5;
+    end;
+  end;
+
+theorem Th35:
+for A being non-empty MSAlgebra over S
+ for C1, C2 being MSCongruence of A
+  for G being ManySortedFunction of QuotMSAlg (A,C1), QuotMSAlg (A,C2) st
+   for i being Element of S
+    for x being Element of (the Sorts of QuotMSAlg (A,C1)).i
+     for xx being Element of (the Sorts of A).i st x = Class(C1,xx) holds
+      G.i.x = Class(C2,xx) holds
+ G ** MSNat_Hom(A,C1) = MSNat_Hom(A,C2)
+  proof
+    let A be non-empty MSAlgebra over S,
+        C1, C2 be MSCongruence of A;
+    let G be ManySortedFunction of QuotMSAlg (A,C1), QuotMSAlg (A,C2) such that
+A1:  for i being Element of S
+      for x being Element of (the Sorts of QuotMSAlg (A,C1)).i
+       for xx being Element of (the Sorts of A).i st x = Class(C1,xx) holds
+        G.i.x = Class(C2,xx);
+    set sL = the Sorts of QuotMSAlg (A,C1);
+      now
+      let i be set;
+      assume i in the carrier of S;
+      then reconsider s = i as SortSymbol of S;
+A2:   for c being Element of (the Sorts of A).s holds
+        ((G.s) * (MSNat_Hom(A,C1).s)).c = MSNat_Hom(A,C2).s.c
+      proof
+        let c be Element of (the Sorts of A).s;
+A3:     QuotMSAlg (A,C1) = MSAlgebra (#Class C1, QuotCharact C1#)
+          by MSUALG_4:def 16;
+          Class(C1.s,c) in Class (C1.s) by EQREL_1:def 5;
+        then Class(C1,c) in Class (C1.s) by MSUALG_4:def 7;
+then A4:     Class(C1,c) is Element of sL.s by A3,MSUALG_4:def 8;
+        thus ((G.s) * (MSNat_Hom(A,C1).s)).c
+           = (G.s).(MSNat_Hom(A,C1).s.c) by FUNCT_2:21
+          .= (G.s).(MSNat_Hom(A,C1,s).c) by MSUALG_4:def 18
+          .= (G.s).Class(C1.s,c) by MSUALG_4:def 17
+          .= (G.s).Class(C1,c) by MSUALG_4:def 7
+          .= Class(C2,c) by A1,A4
+          .= Class(C2.s,c) by MSUALG_4:def 7
+          .= MSNat_Hom(A,C2,s).c by MSUALG_4:def 17
+          .= MSNat_Hom(A,C2).s.c by MSUALG_4:def 18;
+      end;
+      thus (G ** MSNat_Hom(A,C1)).i
+         = (G.s) * (MSNat_Hom(A,C1).s) by MSUALG_3:2
+        .= MSNat_Hom(A,C2).i by A2,FUNCT_2:113;
+    end;
+    hence G ** MSNat_Hom(A,C1) = MSNat_Hom(A,C2) by PBOOLE:3;
+  end;
+
+theorem Th36:
+for A being non-empty MSAlgebra over S
+ for C1, C2 being MSCongruence of A
+  for G being ManySortedFunction of QuotMSAlg (A,C1), QuotMSAlg (A,C2) st
+   for i being Element of S
+    for x being Element of (the Sorts of QuotMSAlg (A,C1)).i
+     for xx being Element of (the Sorts of A).i st x = Class(C1,xx) holds
+      G.i.x = Class(C2,xx) holds
+  G is_epimorphism QuotMSAlg (A,C1), QuotMSAlg (A,C2)
+  proof
+    let A be non-empty MSAlgebra over S,
+        C1, C2 be MSCongruence of A;
+    let G be ManySortedFunction of QuotMSAlg (A,C1), QuotMSAlg (A,C2) such that
+A1:  for i being Element of S
+      for x being Element of (the Sorts of QuotMSAlg (A,C1)).i
+       for xx being Element of (the Sorts of A).i st x = Class(C1,xx) holds
+        G.i.x = Class(C2,xx);
+A2: MSNat_Hom(A,C1) is_epimorphism A, QuotMSAlg (A,C1) by MSUALG_4:3;
+      MSNat_Hom(A,C2) is_epimorphism A, QuotMSAlg (A,C2) by MSUALG_4:3;
+then A3: MSNat_Hom(A,C2) is_homomorphism A, QuotMSAlg (A,C2) by MSUALG_3:def 10
+;
+      G ** MSNat_Hom(A,C1) = MSNat_Hom(A,C2) by A1,Th35;
+    hence G is_homomorphism QuotMSAlg (A,C1), QuotMSAlg (A,C2) by A2,A3,Th20;
+    thus G is "onto" by A1,Lm1;
+  end;
+
+theorem
+  for A, B being non-empty MSAlgebra over S
+ for F being ManySortedFunction of A, B st F is_homomorphism A, B
+  for C1 being MSCongruence of A st C1 c= MSCng F
+ ex H being ManySortedFunction of QuotMSAlg (A,C1), B st
+  H is_homomorphism QuotMSAlg (A,C1), B & F = H ** MSNat_Hom(A,C1)
+  proof
+    let A, B be non-empty MSAlgebra over S,
+        F be ManySortedFunction of A, B such that
+A1:   F is_homomorphism A, B;
+    let C1 be MSCongruence of A such that
+A2:   C1 c= MSCng F;
+    set G = MSNat_Hom(A,C1),
+        I = the carrier of S,
+        sQ = the Sorts of QuotMSAlg (A,C1),
+        sF = the Sorts of QuotMSAlg (A,MSCng F);
+defpred P[set,set,set] means
+ ex s being Element of I, xx being Element of (the Sorts of A).s st
+  $3 = s & $2 = Class(C1,xx) & $1 = Class(MSCng F,xx);
+A3: for i being set st i in I holds
+     for x being set st x in sQ.i ex y being set st y in sF.i & P[y,x,i]
+    proof
+      let i be set;
+      assume i in I;
+      then reconsider s = i as Element of I;
+      let x be set;
+      assume x in sQ.i;
+      then consider x1 being Element of (the Sorts of A).s such that
+A4:     x = Class(C1,x1) by Th32;
+      take y = Class(MSCng F,x1);
+        y = Class((MSCng F).s,x1) by MSUALG_4:def 7;
+then A5:   y in Class ((MSCng F).s) by EQREL_1:def 5;
+        QuotMSAlg (A,MSCng F) = MSAlgebra (#Class MSCng F, QuotCharact MSCng F
+#)
+        by MSUALG_4:def 16;
+      hence y in sF.i by A5,MSUALG_4:def 8;
+      thus P[y,x,i] by A4;
+    end;
+    consider C12 being ManySortedFunction of sQ, sF such that
+A6:  for i being set st i in I holds
+      ex f being Function of sQ.i, sF.i st f = C12.i &
+       for x being set st x in sQ.i holds P[f.x,x,i] from MSFExFunc(A3);
+A7: for i being Element of S
+     for x being Element of (the Sorts of QuotMSAlg (A,C1)).i
+      for xx being Element of (the Sorts of A).i st x = Class(C1,xx) holds
+       C12.i.x = Class(MSCng F,xx)
+     proof
+       let i be Element of S,
+           x be Element of (the Sorts of QuotMSAlg (A,C1)).i,
+           xx be Element of (the Sorts of A).i such that
+A8:      x = Class(C1,xx);
+       consider f being Function of sQ.i, sF.i such that
+A9:      f = C12.i and
+A10:      for x being set st x in sQ.i holds P[f.x,x,i] by A6;
+       consider s being Element of I,
+                x1 being Element of (the Sorts of A).s such that
+A11:      i = s and
+A12:      x = Class(C1,x1) and
+A13:      f.x = Class(MSCng F,x1) by A10;
+A14:    C1.s c= (MSCng F).s by A2,PBOOLE:def 5;
+         Class(C1.s,x1) = Class(C1,x1) by MSUALG_4:def 7
+                     .= Class(C1.s,xx) by A8,A11,A12,MSUALG_4:def 7;
+         then xx in Class(C1.s,x1) by EQREL_1:31;
+       then [xx,x1] in C1.s by EQREL_1:27;
+then A15:    xx in Class((MSCng F).s,x1) by A14,EQREL_1:27;
+       thus C12.i.x = Class((MSCng F).s, x1) by A9,A13,MSUALG_4:def 7
+                   .= Class((MSCng F).i, xx) by A11,A15,EQREL_1:31
+                   .= Class(MSCng F, xx) by MSUALG_4:def 7;
+    end;
+    then C12 is_epimorphism QuotMSAlg (A,C1), QuotMSAlg (A,MSCng F) by Th36;
+then A16: C12 is_homomorphism QuotMSAlg (A,C1), QuotMSAlg (A,MSCng F)
+       by MSUALG_3:def 10;
+    reconsider H = MSHomQuot F**C12
+      as ManySortedFunction of QuotMSAlg (A,C1), B;
+    take H;
+      MSHomQuot F is_monomorphism QuotMSAlg (A,MSCng F), B by A1,MSUALG_4:4;
+    then MSHomQuot F is_homomorphism QuotMSAlg (A,MSCng F), B by MSUALG_3:def
+11;
+    hence H is_homomorphism QuotMSAlg (A,C1), B by A16,MSUALG_3:10;
+A17: now
+      let i be set;
+      assume i in the carrier of S;
+      then reconsider s = i as SortSymbol of S;
+A18:   for x being Element of (the Sorts of A).s holds
+        (C12.s * G.s).x = (MSNat_Hom(A,MSCng F)).s.x
+      proof
+        let x be Element of (the Sorts of A).s;
+          Class(C1.s,x) in Class (C1.s) by EQREL_1:def 5;
+        then Class(C1,x) in Class (C1.s) by MSUALG_4:def 7;
+then A19:     Class(C1,x) in (Class C1).s by MSUALG_4:def 8;
+A20:     QuotMSAlg (A,C1) = MSAlgebra (#Class C1, QuotCharact C1#)
+          by MSUALG_4:def 16;
+        thus (C12.s * G.s).x
+          = C12.s.(G.s.x) by FUNCT_2:21
+         .= C12.s.(MSNat_Hom(A,C1,s).x) by MSUALG_4:def 18
+         .= C12.s.(Class(C1.s,x)) by MSUALG_4:def 17
+         .= C12.s.(Class(C1,x)) by MSUALG_4:def 7
+         .= Class(MSCng F,x) by A7,A19,A20
+         .= Class((MSCng F).s,x) by MSUALG_4:def 7
+         .= MSNat_Hom(A,MSCng F,s).x by MSUALG_4:def 17
+         .= (MSNat_Hom(A,MSCng F)).s.x by MSUALG_4:def 18;
+      end;
+      thus (C12 ** G).i = C12.s * G.s by MSUALG_3:2
+                       .= (MSNat_Hom(A,MSCng F)).i by A18,FUNCT_2:113;
+    end;
+    thus F = MSHomQuot F ** MSNat_Hom(A,MSCng F) by A1,Th31
+          .= MSHomQuot F ** (C12 ** G) by A17,PBOOLE:3
+          .= H ** MSNat_Hom(A,C1) by AUTALG_1:13;
+  end;

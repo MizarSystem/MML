@@ -1,0 +1,285 @@
+:: Introduction to Banach and Hilbert spaces - Part II
+::  by Jan Popio{\l}ek
+::
+:: Received July 19, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary BHSP_1, PRE_TOPC, NORMSP_1, RLVECT_1, SEQ_2, METRIC_1, FUNCT_1,
+      SEQM_3, ARYTM_3, ARYTM_1, ABSVALUE, RELAT_1, ORDINAL2, SEQ_1, BOOLE,
+      ARYTM;
+ notation TARSKI, ORDINAL1, NUMBERS, XREAL_0, REAL_1, NAT_1, SEQ_1, SEQ_2,
+      RELAT_1, ABSVALUE, STRUCT_0, PRE_TOPC, RLVECT_1, BHSP_1, NORMSP_1;
+ constructors REAL_1, NAT_1, SEQ_2, ABSVALUE, BHSP_1, MEMBERED, XBOOLE_0;
+ clusters STRUCT_0, XREAL_0, RELSET_1, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0,
+      NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+ reserve X for RealUnitarySpace;
+ reserve x, y, z, g, g1, g2 for Point of X;
+ reserve a, q, r for Real;
+ reserve seq, seq1, seq2, seq' for sequence of X;
+ reserve k, n, m, m1, m2 for Nat;
+
+definition let X, seq;
+  attr seq is convergent means
+:: BHSP_2:def 1
+   ex g st for r st r > 0 ex m st for n st n >= m holds dist(seq.n, g) < r;
+end;
+
+theorem :: BHSP_2:1
+  seq is constant implies seq is convergent;
+
+theorem :: BHSP_2:2
+  seq is convergent & (ex k st for n st k <= n holds seq'.n = seq.n)
+    implies seq' is convergent;
+
+theorem :: BHSP_2:3
+  seq1 is convergent & seq2 is convergent implies
+    seq1 + seq2 is convergent;
+
+theorem :: BHSP_2:4
+  seq1 is convergent & seq2 is convergent implies
+    seq1 - seq2 is convergent;
+
+theorem :: BHSP_2:5
+  seq is convergent implies a * seq is convergent;
+
+theorem :: BHSP_2:6
+  seq is convergent implies - seq is convergent;
+
+theorem :: BHSP_2:7
+  seq is convergent implies seq + x is convergent;
+
+theorem :: BHSP_2:8
+  seq is convergent implies seq - x is convergent;
+
+theorem :: BHSP_2:9
+  seq is convergent iff ex g st for r st r > 0 ex m st for n
+    st n >= m holds ||.(seq.n) - g.|| < r;
+
+definition let X, seq;
+  assume  seq is convergent;
+   func lim seq -> Point of X means
+:: BHSP_2:def 2
+    for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , it) < r;
+end;
+
+theorem :: BHSP_2:10
+  seq is constant & x in rng seq implies lim seq = x;
+
+theorem :: BHSP_2:11
+    seq is constant & (ex n st seq.n = x) implies lim seq = x;
+
+theorem :: BHSP_2:12
+    seq is convergent & (ex k st for n st n >= k holds seq'.n = seq.n)
+   implies lim seq = lim seq';
+
+theorem :: BHSP_2:13
+  seq1 is convergent & seq2 is convergent implies
+    lim (seq1 + seq2) = (lim seq1) + (lim seq2);
+
+theorem :: BHSP_2:14
+  seq1 is convergent & seq2 is convergent implies
+    lim (seq1 - seq2) = (lim seq1) - (lim seq2);
+
+theorem :: BHSP_2:15
+  seq is convergent implies lim (a * seq) = a * (lim seq);
+
+theorem :: BHSP_2:16
+  seq is convergent implies lim (- seq) = - (lim seq);
+
+theorem :: BHSP_2:17
+  seq is convergent implies lim (seq + x) = (lim seq) + x;
+
+theorem :: BHSP_2:18
+    seq is convergent implies lim (seq - x) = (lim seq) - x;
+
+theorem :: BHSP_2:19
+  seq is convergent implies
+    ( lim seq = g iff for r st r > 0 ex m st for n st n >= m
+       holds ||.(seq.n) - g.|| < r );
+
+definition let X, seq;
+  func ||.seq.|| -> Real_Sequence means
+:: BHSP_2:def 3
+  for n holds it.n =||.(seq.n).||;
+end;
+
+theorem :: BHSP_2:20
+  seq is convergent implies ||.seq.|| is convergent;
+
+theorem :: BHSP_2:21
+  seq is convergent & lim seq = g implies
+    ||.seq.|| is convergent & lim ||.seq.|| = ||.g.||;
+
+theorem :: BHSP_2:22
+  seq is convergent & lim seq = g implies
+    ( ||.seq - g.|| is convergent & lim ||.seq - g.|| = 0 );
+
+definition
+          let X;
+          let seq;
+          let x;
+          func dist(seq , x) -> Real_Sequence means
+:: BHSP_2:def 4
+      for n holds it.n =dist((seq.n) , x);
+end;
+
+theorem :: BHSP_2:23
+     ( seq is convergent & lim seq = g ) implies
+     dist(seq , g) is convergent;
+
+theorem :: BHSP_2:24
+     seq is convergent & lim seq = g implies
+     ( dist(seq , g) is convergent & lim dist(seq , g) = 0 );
+
+theorem :: BHSP_2:25
+       seq1 is convergent & lim seq1 = g1 &
+     seq2 is convergent & lim seq2 = g2 implies
+     ||.seq1 + seq2.|| is convergent &
+     lim ||.seq1 + seq2.|| = ||.g1 + g2.||;
+
+theorem :: BHSP_2:26
+       seq1 is convergent & lim seq1 = g1 &
+     seq2 is convergent & lim seq2 = g2 implies
+     ||.(seq1 + seq2) - (g1 + g2).|| is convergent
+     & lim ||.(seq1 + seq2) - (g1 + g2).|| = 0;
+
+theorem :: BHSP_2:27
+       seq1 is convergent & lim seq1 = g1 &
+     seq2 is convergent & lim seq2 = g2 implies
+     ||.seq1 - seq2.|| is convergent &
+     lim ||.seq1 - seq2.|| = ||.g1 - g2.||;
+
+theorem :: BHSP_2:28
+       seq1 is convergent & lim seq1 = g1 &
+     seq2 is convergent & lim seq2 = g2 implies
+     ||.(seq1 - seq2) - (g1 - g2).|| is convergent
+     & lim ||.(seq1 - seq2) - (g1 - g2).|| = 0;
+
+theorem :: BHSP_2:29
+       seq is convergent & lim seq = g implies
+     ||.a * seq.|| is convergent &
+     lim ||.a * seq.|| = ||.a * g.||;
+
+theorem :: BHSP_2:30
+       seq is convergent & lim seq = g implies
+     ||.(a * seq) - (a * g).|| is convergent
+     & lim ||.(a * seq) - (a * g).|| = 0;
+
+theorem :: BHSP_2:31
+       seq is convergent & lim seq = g implies
+     ||.- seq.|| is convergent &
+     lim ||.- seq.|| = ||.- g.||;
+
+theorem :: BHSP_2:32
+       seq is convergent & lim seq = g implies
+     ||.(- seq) - (- g).|| is convergent
+     & lim ||.(- seq) - (- g).|| = 0;
+
+theorem :: BHSP_2:33
+     seq is convergent & lim seq = g implies
+     ||.(seq + x) - (g + x).|| is convergent
+     & lim ||.(seq + x) - (g + x).|| = 0;
+
+theorem :: BHSP_2:34
+       seq is convergent & lim seq = g implies
+     ||.seq - x.|| is convergent &
+     lim ||.seq - x.|| = ||.g - x.||;
+
+theorem :: BHSP_2:35
+       seq is convergent & lim seq = g implies
+     ||.(seq - x) - (g - x).|| is convergent
+     & lim ||.(seq - x) - (g - x).|| = 0;
+
+theorem :: BHSP_2:36
+       seq1 is convergent & lim seq1 = g1 &
+     seq2 is convergent & lim seq2 = g2 implies
+     dist((seq1 + seq2) , (g1 + g2)) is convergent &
+     lim dist((seq1 + seq2) , (g1 + g2)) = 0;
+
+theorem :: BHSP_2:37
+       seq1 is convergent & lim seq1 = g1 &
+     seq2 is convergent & lim seq2 = g2 implies
+     dist((seq1 - seq2) , (g1 - g2)) is convergent &
+     lim dist((seq1 - seq2) , (g1 - g2)) = 0;
+
+theorem :: BHSP_2:38
+       seq is convergent & lim seq = g implies
+     dist((a * seq) , (a * g)) is convergent &
+     lim dist((a * seq) , (a * g)) = 0;
+
+theorem :: BHSP_2:39
+       seq is convergent & lim seq = g implies
+     dist((seq + x) , (g + x)) is convergent &
+     lim dist((seq + x) , (g + x)) = 0;
+
+definition let X, x, r;
+  func Ball(x,r) -> Subset of X equals
+:: BHSP_2:def 5
+  {y where y is Point of X : ||.x - y.|| < r};
+
+  func cl_Ball(x,r) -> Subset of X equals
+:: BHSP_2:def 6
+  {y where y is Point of X : ||.x - y.|| <= r};
+
+  func Sphere(x,r) -> Subset of X equals
+:: BHSP_2:def 7
+  {y where y is Point of X : ||.x - y.|| = r};
+end;
+
+theorem :: BHSP_2:40
+     z in Ball(x,r) iff ||.x - z.|| < r;
+
+theorem :: BHSP_2:41
+     z in Ball(x,r) iff dist(x,z) < r;
+
+theorem :: BHSP_2:42
+       r > 0 implies x in Ball(x,r);
+
+theorem :: BHSP_2:43
+       y in Ball(x,r) & z in Ball(x,r) implies dist(y,z) < 2 * r;
+
+theorem :: BHSP_2:44
+       y in Ball(x,r) implies y - z in Ball(x - z,r);
+
+theorem :: BHSP_2:45
+        y in Ball(x,r) implies (y - x) in Ball (0.(X),r);
+
+theorem :: BHSP_2:46
+       y in Ball(x,r) & r <= q implies y in Ball(x,q);
+
+theorem :: BHSP_2:47
+     z in cl_Ball(x,r) iff ||.x - z.|| <= r;
+
+theorem :: BHSP_2:48
+     z in cl_Ball(x,r) iff dist(x,z) <= r;
+
+theorem :: BHSP_2:49
+       r >= 0 implies x in cl_Ball(x,r);
+
+theorem :: BHSP_2:50
+     y in Ball(x,r) implies y in cl_Ball(x,r);
+
+theorem :: BHSP_2:51
+     z in Sphere(x,r) iff ||.x - z.|| = r;
+
+theorem :: BHSP_2:52
+       z in Sphere(x,r) iff dist(x,z) = r;
+
+theorem :: BHSP_2:53
+       y in Sphere(x,r) implies y in cl_Ball(x,r);
+
+theorem :: BHSP_2:54
+     Ball(x,r) c= cl_Ball(x,r);
+
+theorem :: BHSP_2:55
+     Sphere(x,r) c= cl_Ball(x,r);
+
+theorem :: BHSP_2:56
+       Ball(x,r) \/ Sphere(x,r) = cl_Ball(x,r);

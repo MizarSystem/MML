@@ -1,0 +1,1560 @@
+:: Examples of Category Structures.Subcategories
+::  by Andrzej Trybulec
+::
+:: Received January 22, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCOP_1, RELAT_1, FUNCT_1, CAT_4, PRALG_1, BOOLE, PBOOLE,
+      NATTRA_1, MSUALG_3, CAT_1, MCART_1, ALTCAT_1, BINOP_1, RELAT_2, ALTCAT_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, MCART_1, FUNCT_1,
+      STRUCT_0, FUNCT_2, BINOP_1, MULTOP_1, FUNCT_3, FUNCT_4, CQC_LANG, CAT_4,
+      CAT_1, PBOOLE, PRALG_1, ALTCAT_1, MSUALG_1, AUTALG_1, MSUALG_3;
+ constructors ALTCAT_1, CAT_4, CQC_LANG, MSUALG_3, AUTALG_1;
+ clusters STRUCT_0, ALTCAT_1, MSUALG_1, FUNCT_1, RELAT_1, PRALG_1, RELSET_1,
+      CQC_LANG, SUBSET_1;
+ requirements SUBSET, BOOLE;
+ definitions STRUCT_0, PBOOLE, MSUALG_1, ALTCAT_1, PRALG_1, FUNCT_1, RELAT_1,
+      TARSKI;
+ theorems MCART_1, ALTCAT_1, PBOOLE, TARSKI, GRFUNC_1, ZFMISC_1, MULTOP_1,
+      BINOP_1, RELAT_1, FUNCT_2, CQC_LANG, STRUCT_0, FUNCOP_1, FUNCT_4,
+      MSUALG_1, FUNCT_1, FUNCT_3, MSUALG_3, DOMAIN_1, MSSUBFAM, AUTALG_1,
+      FUNCT_7, PRALG_1, CAT_1, RELSET_1, XBOOLE_0, XBOOLE_1;
+ schemes ALTCAT_1, FUNCT_1;
+
+begin :: Preliminaries
+
+ reserve e for set;
+
+theorem
+   for X1,X2 being set, a1,a2 being set
+  holds [:X1 -->a1,X2-->a2:] = [:X1,X2:] --> [a1,a2]
+ proof let X1,X2 be set, a1,a2 be set;
+A1: dom(X1 -->a1) = X1 & dom(X2-->a2) = X2 by FUNCOP_1:19;
+then A2: dom([:X1,X2:] --> [a1,a2]) = [:dom(X1 -->a1), dom(X2-->a2):] by
+FUNCOP_1:19;
+     now let x,y be set;
+    assume
+A3:   x in dom(X1-->a1) & y in dom(X2-->a2);
+     then A4:   (X1-->a1).x = a1 & (X2-->a2).y = a2 by A1,FUNCOP_1:13;
+       [x,y] in dom([:X1,X2:] --> [a1,a2]) by A2,A3,ZFMISC_1:106;
+     then [x,y] in [:X1,X2:] by FUNCOP_1:19;
+    hence ([:X1,X2:] --> [a1,a2]).[x,y] = [(X1-->a1).x,(X2-->a2).y]
+                            by A4,FUNCOP_1:13;
+   end;
+  hence [:X1 -->a1,X2-->a2:] = [:X1,X2:] --> [a1,a2] by A2,FUNCT_3:def 9;
+ end;
+
+definition let I be set;
+ cluster [0]I -> Function-yielding;
+ coherence
+  proof let x be set;
+   assume x in dom[0]I;
+    then x in I by PBOOLE:def 3;
+   hence [0]I.x is Function by PBOOLE:5;
+  end;
+end;
+
+theorem
+   for f,g being Function holds ~(g*f) = g*~f
+proof let f,g be Function;
+A1: now let x be set;
+    hereby assume
+A2:     x in dom(g*~f);
+      then x in dom~f by FUNCT_1:21;
+      then consider y1,z1 being set such that
+A3:    x = [z1,y1] and
+A4:    [y1,z1] in dom f by FUNCT_4:def 2;
+     take y1,z1;
+     thus x = [z1,y1] by A3;
+        ~f.x in dom g by A2,FUNCT_1:21;
+      then f.[y1,z1] in dom g by A3,A4,FUNCT_4:def 2;
+     hence [y1,z1] in dom(g*f) by A4,FUNCT_1:21;
+    end;
+    given y,z being set such that
+A5:  x = [z,y] and
+A6:  [y,z] in dom(g*f);
+A7:   [y,z] in dom f by A6,FUNCT_1:21;
+       f.[y,z] in dom g by A6,FUNCT_1:21;
+then A8:   ~f.x in dom g by A5,A7,FUNCT_4:def 2;
+       x in dom ~f by A5,A7,FUNCT_4:def 2;
+    hence x in dom(g*~f) by A8,FUNCT_1:21;
+   end;
+    now let y,z be set; assume
+A9: [y,z] in dom(g*f);
+    then [y,z] in dom f by FUNCT_1:21;
+then A10:  [z,y] in dom ~f by FUNCT_4:43;
+   hence (g*~f).[z,y] = g.(~f.[z,y]) by FUNCT_1:23
+     .= g.(f.[y,z]) by A10,FUNCT_4:44
+     .= (g*f).[y,z] by A9,FUNCT_1:22;
+  end;
+ hence ~(g*f) = g*~f by A1,FUNCT_4:def 2;
+end;
+
+theorem
+   for f,g,h being Function holds ~(f*[:g,h:]) = ~f*[:h,g:]
+proof let f,g,h be Function;
+A1: now let x be set;
+    hereby assume
+A2:     x in dom(~f*[:h,g:]);
+      then x in dom[:h,g:] by FUNCT_1:21;
+      then x in [:dom h, dom g:] by FUNCT_3:def 9;
+      then consider y1,z1 being set such that
+A3:    y1 in dom h and
+A4:    z1 in dom g and
+A5:    x = [y1,z1] by ZFMISC_1:103;
+     take z1,y1;
+     thus x = [y1,z1] by A5;
+        dom[:g,h:] = [:dom g,dom h:] by FUNCT_3:def 9;
+then A6:    [z1,y1] in dom[:g,h:] by A3,A4,ZFMISC_1:106;
+A7:    [:h,g:].x = [h.y1,g.z1] by A3,A4,A5,FUNCT_3:def 9;
+A8:    [:g,h:].[z1,y1] = [g.z1,h.y1] by A3,A4,FUNCT_3:def 9;
+        [:h,g:].x in dom~f by A2,FUNCT_1:21;
+      then [:g,h:].[z1,y1] in dom f by A7,A8,FUNCT_4:43;
+     hence [z1,y1] in dom(f*[:g,h:]) by A6,FUNCT_1:21;
+    end;
+    given y,z being set such that
+A9:  x = [z,y] and
+A10:  [y,z] in dom(f*[:g,h:]);
+A11:   [y,z] in dom [:g,h:] by A10,FUNCT_1:21;
+       dom [:g,h:] = [:dom g, dom h:] by FUNCT_3:def 9;
+then A12:  y in dom g & z in dom h by A11,ZFMISC_1:106;
+       dom[:h,g:] = [:dom h, dom g:] by FUNCT_3:def 9;
+then A13:   x in dom[:h,g:] by A9,A12,ZFMISC_1:106;
+A14:   [:g,h:].[y,z] = [g.y,h.z] by A12,FUNCT_3:def 9;
+A15:   [:h,g:].x = [h.z,g.y] by A9,A12,FUNCT_3:def 9;
+       [:g,h:].[y,z] in dom f by A10,FUNCT_1:21;
+     then [:h,g:].x in dom~f by A14,A15,FUNCT_4:43;
+    hence x in dom(~f*[:h,g:]) by A13,FUNCT_1:21;
+   end;
+    now let y,z be set; assume
+A16:  [y,z] in dom(f*[:g,h:]);
+    then [y,z] in dom[:g,h:] by FUNCT_1:21;
+    then [y,z] in [:dom g, dom h:] by FUNCT_3:def 9;
+    then A17:   y in dom g & z in dom h by ZFMISC_1:106;
+      [:g,h:].[y,z] in dom f by A16,FUNCT_1:21;
+then A18:  [g.y,h.z] in dom f by A17,FUNCT_3:def 9;
+      [z,y] in [:dom h, dom g:] by A17,ZFMISC_1:106;
+    then [z,y] in dom[:h,g:] by FUNCT_3:def 9;
+   hence (~f*[:h,g:]).[z,y] = ~f.([:h,g:].[z,y]) by FUNCT_1:23
+       .= ~f.[h.z,g.y] by A17,FUNCT_3:def 9
+       .= f.[g.y,h.z] by A18,FUNCT_4:def 2
+       .= f.([:g,h:].[y,z]) by A17,FUNCT_3:def 9
+       .= (f*[:g,h:]).[y,z] by A16,FUNCT_1:22;
+  end;
+ hence ~(f*[:g,h:]) = ~f*[:h,g:] by A1,FUNCT_4:def 2;
+end;
+
+definition let f be Function-yielding Function;
+ cluster ~f -> Function-yielding;
+ coherence
+  proof let x be set;
+   assume x in dom~f;
+    then consider z,y being set such that
+A1:  x = [y,z] and
+A2:  [z,y] in dom f by FUNCT_4:def 2;
+      f.[z,y] = (~f).x by A1,A2,FUNCT_4:def 2;
+   hence (~f).x is Function;
+  end;
+end;
+
+theorem
+   for I being set, A,B,C being ManySortedSet of I st A is_transformable_to B
+
+ for F being ManySortedFunction of A,B, G being ManySortedFunction of B,C
+ holds G**F is ManySortedFunction of A,C
+proof let I be set, A,B,C be ManySortedSet of I such that
+A1: A is_transformable_to B;
+ let F be ManySortedFunction of A,B, G be ManySortedFunction of B,C;
+  reconsider GF = G**F as ManySortedFunction of I by MSSUBFAM:15;
+    GF is ManySortedFunction of A,C
+   proof let i be set;
+    assume
+A2:   i in I;
+     then A3:    B.i = {} implies A.i = {} by A1,AUTALG_1:def 4;
+     reconsider Gi = G.i as Function of B.i,C.i by A2,MSUALG_1:def 2;
+     reconsider Fi = F.i as Function of A.i,B.i by A2,MSUALG_1:def 2;
+       i in dom GF by A2,PBOOLE:def 3;
+   then (G**F).i = (Gi)*(Fi) by MSUALG_3:def 4;
+    hence GF.i is Function of A.i,C.i by A3,FUNCT_2:19;
+   end;
+ hence thesis;
+end;
+
+definition let I be set; let A be ManySortedSet of [:I,I:];
+ redefine func ~A -> ManySortedSet of [:I,I:];
+ coherence
+  proof
+   thus dom~A = [:I,I:] by PBOOLE:def 3;
+  end;
+end;
+
+theorem
+   for I1 being set, I2 being non empty set,
+     f being Function of I1,I2, B,C being ManySortedSet of I2,
+     G being ManySortedFunction of B,C
+holds G*f is ManySortedFunction of B*f,C*f
+proof
+ let I1 be set, I2 be non empty set,
+     f be Function of I1,I2, B,C be ManySortedSet of I2,
+     G be ManySortedFunction of B,C;
+ let i be set;
+ assume
+A1: i in I1;
+then A2: i in dom f by FUNCT_2:def 1;
+then A3: B.(f.i) = (B*f).i & C.(f.i) = (C*f).i by FUNCT_1:23;
+    f.i in I2 by A1,FUNCT_2:7;
+  then G.(f.i) is Function of B.(f.i),C.(f.i) by MSUALG_1:def 2;
+ hence (G*f).i is Function of (B*f).i, (C*f).i by A2,A3,FUNCT_1:23;
+end;
+
+definition let I be set, A,B be ManySortedSet of [:I,I:],
+     F be ManySortedFunction of A,B;
+ redefine func ~F -> ManySortedFunction of ~A,~B;
+ coherence
+  proof reconsider G = ~F as ManySortedSet of [:I,I:];
+          :: dlaczego ten "reconsider" jest potrzebny ???
+     G is ManySortedFunction of ~A,~B
+   proof
+   let ii be set;
+   assume
+    ii in [:I,I:];
+    then consider i1,i2 being set such that
+A1: i1 in I & i2 in I and
+A2: ii = [i1,i2] by ZFMISC_1:103;
+A3:  [i2,i1] in [:I,I:] by A1,ZFMISC_1:106;
+      dom F = [:I,I:] by PBOOLE:def 3;
+then A4:  F.[i2,i1] = G.ii by A2,A3,FUNCT_4:def 2;
+      dom A = [:I,I:] by PBOOLE:def 3;
+then A5:  A.[i2,i1] = ~A.ii by A2,A3,FUNCT_4:def 2;
+      dom B = [:I,I:] by PBOOLE:def 3;
+     then B.[i2,i1] = ~B.ii by A2,A3,FUNCT_4:def 2;
+   hence G.ii is Function of ~A.ii, ~B.ii by A3,A4,A5,MSUALG_1:def 2;
+   end;
+   hence thesis;
+  end;
+end;
+
+theorem
+   for I1,I2 being non empty set, M being ManySortedSet of [:I1,I2:],
+  o1 being Element of I1, o2 being Element of I2
+  holds (~M).(o2,o1) = M.(o1,o2)
+proof
+ let I1,I2 be non empty set, M be ManySortedSet of [:I1,I2:],
+  o1 be Element of I1, o2 be Element of I2;
+     [o1,o2] in [:I1,I2:] by ZFMISC_1:106;
+then A1: [o1,o2] in dom M by PBOOLE:def 3;
+ thus (~M).(o2,o1) = (~M).[o2,o1] by BINOP_1:def 1
+           .= M.[o1,o2] by A1,FUNCT_4:def 2
+           .= M.(o1,o2) by BINOP_1:def 1;
+end;
+
+definition let I1 be set,
+ f,g be ManySortedFunction of I1;
+ redefine func g**f -> ManySortedFunction of I1;
+ coherence
+  proof
+A1:  dom f = I1 & dom g = I1 by PBOOLE:def 3;
+      dom(g**f) = dom g /\ dom f by MSUALG_3:def 4
+       .= I1 by A1;
+   hence thesis by PBOOLE:def 3;
+  end;
+ end;
+
+begin :: An auxiliary notion
+
+definition let f,g be Function;
+ pred f cc= g means
+:Def1: dom f c= dom g & for i being set st i in dom f holds f.i c= g.i;
+ reflexivity;
+end;
+
+definition let I,J be set, A be ManySortedSet of I, B be ManySortedSet of J;
+ redefine
+ pred A cc= B means
+:Def2: I c= J & for i being set st i in I holds A.i c= B.i;
+ compatibility
+  proof
+A1:  dom A = I & dom B = J by PBOOLE:def 3;
+   hence A cc= B implies I c= J & for i being set st i in I holds A.i c= B.i
+                 by Def1;
+   assume that
+A2: I c= J and
+A3: for i being set st i in I holds A.i c= B.i;
+   thus dom A c= dom B by A1,A2;
+   let i be set;
+   assume i in dom A;
+   hence A.i c= B.i by A1,A3;
+  end;
+end;
+
+canceled;
+
+theorem Th8:
+ for I,J being set,
+     A being ManySortedSet of I, B being ManySortedSet of J
+ holds A cc= B & B cc= A implies A = B
+proof let I,J be set, A be ManySortedSet of I, B be ManySortedSet of J;
+ assume that
+A1: A cc= B and
+A2: B cc= A;
+A3: I c= J & J c= I by A1,A2,Def2;
+  then reconsider B' = B as ManySortedSet of I by XBOOLE_0:def 10;
+    now let i be set;
+   assume i in I;
+    then A.i c= B.i & B.i c= A.i by A1,A2,A3,Def2;
+   hence A.i = B'.i by XBOOLE_0:def 10;
+  end;
+ hence thesis by PBOOLE:3;
+end;
+
+theorem Th9:
+ for I,J,K being set, A being ManySortedSet of I,
+     B being ManySortedSet of J, C being ManySortedSet of K
+ holds A cc= B & B cc= C implies A cc= C
+proof let I,J,K be set,
+   A be ManySortedSet of I, B be ManySortedSet of J, C be ManySortedSet of K;
+ assume that
+A1: A cc= B and
+A2: B cc= C;
+A3: I c= J by A1,Def2;
+     J c= K by A2,Def2;
+  hence I c= K by A3,XBOOLE_1:1;
+  let i be set;
+  assume i in I;
+   then A.i c= B.i & B.i c= C.i by A1,A2,A3,Def2;
+  hence thesis by XBOOLE_1:1;
+end;
+
+theorem
+   for I being set, A being ManySortedSet of I, B being ManySortedSet of I
+ holds A cc= B iff A c= B
+ proof let I be set, A be ManySortedSet of I, B be ManySortedSet of I;
+  thus A cc= B implies A c= B
+   proof assume
+A1:   A cc= B;
+    let i be set; thus thesis by A1,Def2;
+   end;
+  assume
+A2: A c= B;
+  thus I c= I;
+  thus thesis by A2,PBOOLE:def 5;
+ end;
+
+begin :: A bit of lambda calculus
+
+scheme OnSingletons{X()-> non empty set, F(set)-> set, P[set]}:
+ { [o,F(o)] where o is Element of X(): P[o] } is Function
+proof
+  set f = { [o,F(o)] where o is Element of X(): P[o] };
+A1: f is Relation-like
+   proof let x be set;
+    assume x in f;
+     then consider o being Element of X() such that
+A2:   x = [o,F(o)] and P[o];
+    take o,F(o);
+    thus x = [o,F(o)] by A2;
+   end;
+    f is Function-like
+   proof let x,y1,y2 be set;
+    assume [x,y1] in f;
+     then consider o1 being Element of X() such that
+A3:   [x,y1] = [o1,F(o1)] and P[o1];
+    assume [x,y2] in f;
+     then consider o2 being Element of X() such that
+A4:   [x,y2] = [o2,F(o2)] and P[o2];
+       o1 = x & o2 = x by A3,A4,ZFMISC_1:33;
+    hence y1 = y2 by A3,A4,ZFMISC_1:33;
+   end;
+ hence f is Function by A1;
+end;
+
+scheme DomOnSingletons
+  {X()-> non empty set,f()-> Function, F(set)-> set, P[set]}:
+ dom f() = { o where o is Element of X(): P[o]}
+provided
+A1: f() = { [o,F(o)] where o is Element of X(): P[o] }
+proof
+ set A = { o where o is Element of X(): P[o]};
+     now let x be set;
+    hereby assume x in A;
+      then consider o being Element of X() such that
+A2:    x = o and
+A3:    P[o];
+     take y = F(o);
+     thus [x,y] in f() by A1,A2,A3;
+    end;
+    given y being set such that
+A4:   [x,y] in f();
+     consider o being Element of X() such that
+A5:   [x,y] = [o,F(o)] and
+A6:   P[o] by A1,A4;
+       x = o by A5,ZFMISC_1:33;
+    hence x in A by A6;
+   end;
+ hence dom f() = A by RELAT_1:def 4;
+end;
+
+scheme ValOnSingletons
+  {X()-> non empty set,f()-> Function,
+   x()-> Element of X(), F(set)-> set, P[set]}:
+ f().x() = F(x())
+provided
+A1: f() = { [o,F(o)] where o is Element of X(): P[o] } and
+A2: P[x()]
+proof deffunc _F(set) = F($1); defpred _P[set] means P[($1)];
+A3: f() = { [o,_F(o)] where o is Element of X(): _P[o] } by A1;
+    dom f() = { o where o is Element of X(): _P[o] } from DomOnSingletons(A3);
+  then A4: x() in dom f() by A2;
+     [x(),F(x())] in { [o,F(o)] where o is Element of X(): P[o] } by A2;
+ hence thesis by A1,A4,FUNCT_1:def 4;
+end;
+
+begin :: More on old categories
+
+theorem Th11:
+ for C being Category, i,j,k being Object of C
+  holds [:Hom(j,k),Hom(i,j):] c= dom the Comp of C
+ proof let C be Category, i,j,k be Object of C;
+  let e be set;
+  assume
+A1: e in [:Hom(j,k),Hom(i,j):];
+then A2: e`1 in Hom(j,k) & e`2 in Hom(i,j) by MCART_1:10;
+   reconsider y = e`1, x = e`2 as Morphism of C by A1,MCART_1:10;
+A3: e = [y,x] by A1,MCART_1:23;
+     dom y = j by A2,CAT_1:18 .= cod x by A2,CAT_1:18;
+  hence e in dom the Comp of C by A3,CAT_1:40;
+ end;
+
+theorem Th12:
+ for C being Category, i,j,k being Object of C
+  holds (the Comp of C).:[:Hom(j,k),Hom(i,j):] c= Hom(i,k)
+ proof let C be Category, i,j,k be Object of C;
+  let e be set;
+  assume e in (the Comp of C).:[:Hom(j,k),Hom(i,j):];
+   then consider x being set such that
+A1: x in dom the Comp of C and
+A2: x in [:Hom(j,k),Hom(i,j):] and
+A3: e = (the Comp of C).x by FUNCT_1:def 12;
+A4: x`1 in Hom(j,k) & x`2 in Hom(i,j) by A2,MCART_1:10;
+   reconsider y = x`1, z = x`2 as Morphism of C by A2,MCART_1:10;
+A5: x = [y,z] by A2,MCART_1:23;
+     y is Morphism of j,k & z is Morphism of i,j by A4,CAT_1:def 7;
+   then y*z in Hom(i,k) by A4,CAT_1:51;
+  hence e in Hom(i,k) by A1,A3,A5,CAT_1:def 4;
+ end;
+
+ definition let C be CatStr;
+  func the_hom_sets_of C
+    -> ManySortedSet of [:the Objects of C, the Objects of C:] means
+:Def3: for i,j being Object of C holds it.(i,j) = Hom(i,j);
+  existence proof
+    deffunc _H(Object of C, Object of C) = Hom($1,$2);
+    thus ex M being ManySortedSet of [:the Objects of C, the Objects of C:]
+     st for i,j being Object of C holds M.(i,j) = _H(i,j)
+      from MSSLambda2D;
+  end;
+  uniqueness
+   proof
+    let M1,M2 be ManySortedSet of [:the Objects of C, the Objects of C:]
+    such that
+A1:  for i,j being Object of C holds M1.(i,j) = Hom(i,j) and
+A2:  for i,j being Object of C holds M2.(i,j) = Hom(i,j);
+      now let i,j be Object of C;
+     thus M1.(i,j) = Hom(i,j) by A1 .= M2.(i,j) by A2;
+    end;
+    hence thesis by ALTCAT_1:9;
+   end;
+ end;
+
+theorem Th13:
+ for C be Category, i be Object of C holds
+  id i in (the_hom_sets_of C).(i,i)
+ proof let C be Category, i be Object of C;
+     id i in Hom(i,i) by CAT_1:55;
+  hence id i in (the_hom_sets_of C).(i,i) by Def3;
+ end;
+
+ definition let C be Category;
+  func the_comps_of C -> BinComp of the_hom_sets_of C means
+:Def4:  for i,j,k being Object of C holds it.(i,j,k)
+   = (the Comp of C)|[:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):];
+  existence
+   proof
+     set Ob3 = [:the Objects of C,the Objects of C,the Objects of C:],
+         G = the_hom_sets_of C;
+     deffunc _F(set) = (the Comp of C)| [:(the_hom_sets_of C).($1`1`2,$1`2),
+                                         (the_hom_sets_of C).($1`1`1,$1`1`2):];
+     consider o being Function such that
+A1:   dom o = Ob3 and
+A2:   for e st e in Ob3 holds o.e = _F(e) from Lambda;
+     reconsider o as ManySortedSet of Ob3 by A1,PBOOLE:def 3;
+     now let e;
+      assume e in dom o;
+       then o.e = (the Comp of C)|
+        [:(the_hom_sets_of C).(e`1`2,e`2),(the_hom_sets_of C).(e`1`1,e`1`2):]
+          by A1,A2;
+      hence o.e is Function;
+     end;
+     then reconsider o as ManySortedFunction of Ob3 by PRALG_1:def 15;
+       now let e;
+      assume
+A3:     e in Ob3;
+       reconsider f = o.e as Function;
+       consider i,j,k being Object of C such that
+A4:     e = [i,j,k] by A3,DOMAIN_1:15;
+      reconsider e' = e as Element of Ob3 by A3;
+A5:  [i,j,k] qua set `1`1 = e'`1 by A4,MCART_1:50 .= i by A4,MCART_1:47;
+A6:  [i,j,k] qua set `1`2 = e'`2 by A4,MCART_1:50 .= j by A4,MCART_1:47;
+A7:  [i,j,k] qua set `2 = e'`3 by A4,MCART_1:50 .= k by A4,MCART_1:47;
+A8:   G.(i,j) = Hom(i,j) & G.(j,k) = Hom(j,k) by Def3;
+A9:     f = (the Comp of C)|[:G.(j,k),G.(i,j):] by A2,A3,A4,A5,A6,A7;
+A10:     {|G|}.e = {|G|}.(i,j,k) by A4,MULTOP_1:def 1
+              .= G.(i,k) by ALTCAT_1:def 5
+              .= Hom(i,k) by Def3;
+A11:     {|G,G|}.e = {|G,G|}.(i,j,k) by A4,MULTOP_1:def 1
+                .= [:Hom(j,k),Hom(i,j):] by A8,ALTCAT_1:def 6;
+A12:     now assume {|G|}.e = {};
+         then Hom(i,j) = {} or Hom(j,k) = {} by A10,CAT_1:52;
+        hence {|G,G|}.e = {} by A11,ZFMISC_1:113;
+       end;
+         [:Hom(j,k),Hom(i,j):] c= dom the Comp of C by Th11;
+       then A13:     dom f = {|G,G|}.e by A8,A9,A11,RELAT_1:91;
+         (the Comp of C).:[:Hom(j,k),Hom(i,j):] c= Hom(i,k) by Th12;
+       then rng f c= {|G|}.e by A8,A9,A10,RELAT_1:148;
+      hence o.e is Function of {|G,G|}.e,{|G|}.e by A12,A13,FUNCT_2:def 1,
+RELSET_1:11;
+     end;
+     then reconsider o as BinComp of G by MSUALG_1:def 2;
+    take o;
+    let i,j,k be Object of C;
+A14:  [i,j,k] in Ob3 by DOMAIN_1:15;
+     reconsider e = [i,j,k] as Element of Ob3 by DOMAIN_1:15;
+A15:  [i,j,k] qua set `1`1 = e`1 by MCART_1:50 .= i by MCART_1:47;
+A16:  [i,j,k] qua set `1`2 = e`2 by MCART_1:50 .= j by MCART_1:47;
+A17:  [i,j,k] qua set `2 = e`3 by MCART_1:50 .= k by MCART_1:47;
+    thus o.(i,j,k) = o.[i,j,k] by MULTOP_1:def 1
+      .= (the Comp of C)|
+           [:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):]
+            by A2,A14,A15,A16,A17;
+   end;
+  uniqueness
+   proof let o1,o2 be BinComp of the_hom_sets_of C such that
+A18: for i,j,k being Object of C holds o1.(i,j,k) =
+     (the Comp of C)|[:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):]
+    and
+A19: for i,j,k being Object of C holds o2.(i,j,k) =
+     (the Comp of C)|[:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):];
+      now let a be set;
+     assume a in [:the Objects of C,the Objects of C,the Objects of C:];
+      then consider i,j,k being Object of C such that
+A20:     a = [i,j,k] by DOMAIN_1:15;
+     thus o1.a = o1.(i,j,k) by A20,MULTOP_1:def 1
+         .= (the Comp of C)|
+                [:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):] by A18
+         .= o2.(i,j,k) by A19
+         .= o2.a by A20,MULTOP_1:def 1;
+    end;
+    hence o1 = o2 by PBOOLE:3;
+   end;
+ end;
+
+theorem Th14:
+ for C being Category, i,j,k being Object of C
+   st Hom(i,j) <> {} & Hom(j,k) <> {}
+ for f being Morphism of i,j, g being Morphism of j,k
+  holds (the_comps_of C).(i,j,k).(g,f) = g*f
+ proof let C be Category, i,j,k be Object of C such that
+A1: Hom(i,j) <> {} and
+A2: Hom(j,k) <> {};
+  let f be Morphism of i,j, g be Morphism of j,k;
+A3: f in Hom(i,j) by A1,CAT_1:def 7;
+A4: g in Hom(j,k) by A2,CAT_1:def 7;
+then A5: dom g = j by CAT_1:18 .= cod f by A3,CAT_1:18;
+A6: f in (the_hom_sets_of C).(i,j) by A3,Def3;
+      g in (the_hom_sets_of C).(j,k) by A4,Def3;
+then A7: [g,f] in [:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):]
+     by A6,ZFMISC_1:106;
+  thus (the_comps_of C).(i,j,k).(g,f)
+   = ((the Comp of C)|[:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):])
+          .(g,f) by Def4
+  .= ((the Comp of C)|[:(the_hom_sets_of C).(j,k),(the_hom_sets_of C).(i,j):])
+          .[g,f] by BINOP_1:def 1
+  .= (the Comp of C).[g,f] by A7,FUNCT_1:72
+  .= g*(f qua Morphism of C) by A5,CAT_1:41
+  .= g*f by A1,A2,CAT_1:def 13;
+ end;
+
+theorem Th15:
+ for C being Category holds the_comps_of C is associative
+ proof let C be Category;
+  let i,j,k,l be Object of C;
+  let f,g,h be set;
+  assume f in (the_hom_sets_of C).(i,j);
+then A1: f in Hom(i,j) by Def3;
+   then reconsider f' = f as Morphism of i,j by CAT_1:def 7;
+  assume g in (the_hom_sets_of C).(j,k);
+then A2: g in Hom(j,k) by Def3;
+   then reconsider g' = g as Morphism of j,k by CAT_1:def 7;
+  assume h in (the_hom_sets_of C).(k,l);
+then A3: h in Hom(k,l) by Def3;
+   then reconsider h' = h as Morphism of k,l by CAT_1:def 7;
+A4: Hom(i,k) <> {} by A1,A2,CAT_1:52;
+A5: Hom(j,l) <> {} by A2,A3,CAT_1:52;
+A6: (the_comps_of C).(i,j,k).(g,f) = g'*f' by A1,A2,Th14;
+A7: (the_comps_of C).(j,k,l).(h,g) = h'*g' by A2,A3,Th14;
+  thus (the_comps_of C).(i,k,l).(h,(the_comps_of C).(i,j,k).(g,f))
+     = h'*(g'*f') by A3,A4,A6,Th14
+    .= h'*g'*f' by A1,A2,A3,CAT_1:54
+    .= (the_comps_of C).(i,j,l).((the_comps_of C).(j,k,l).(h,g),f)
+         by A1,A5,A7,Th14;
+ end;
+
+theorem Th16:
+ for C being Category holds
+  the_comps_of C is with_left_units with_right_units
+ proof let C be Category;
+  thus the_comps_of C is with_left_units
+   proof let i be Object of C;
+    take id i;
+    thus id i in (the_hom_sets_of C).(i,i) by Th13;
+A1:   Hom(i,i) <> {} by CAT_1:56;
+    let j be Object of C, f be set;
+    assume f in (the_hom_sets_of C).(j,i);
+     then A2:    f in Hom(j,i) by Def3;
+     then reconsider m = f as Morphism of j,i by CAT_1:def 7;
+    thus (the_comps_of C).(j,i,i).(id i,f) = (id i)*m by A1,A2,Th14
+         .= f by A2,CAT_1:57;
+   end;
+  let j be Object of C;
+  take id j;
+  thus id j in (the_hom_sets_of C).(j,j) by Th13;
+A3: Hom(j,j) <> {} by CAT_1:56;
+  let i be Object of C, f be set;
+  assume f in (the_hom_sets_of C).(j,i);
+   then A4:  f in Hom(j,i) by Def3;
+   then reconsider m = f as Morphism of j,i by CAT_1:def 7;
+  thus (the_comps_of C).(j,j,i).(f,id j) = m*(id j) by A3,A4,Th14
+          .= f by A4,CAT_1:58;
+ end;
+
+begin :: Transforming an old category into new one
+
+ definition let C be Category;
+  func Alter C -> strict non empty AltCatStr equals
+:Def5: AltCatStr(#the Objects of C,the_hom_sets_of C, the_comps_of C#);
+  correctness;
+ end;
+
+theorem Th17:
+ for C being Category holds Alter C is associative
+  proof let C be Category;
+      Alter C = AltCatStr(#the Objects of C,the_hom_sets_of C, the_comps_of C#)
+     by Def5;
+   hence the Comp of Alter C is associative by Th15;
+  end;
+
+theorem Th18:
+ for C being Category holds Alter C is with_units
+  proof let C be Category;
+      Alter C = AltCatStr(#the Objects of C,the_hom_sets_of C, the_comps_of C#)
+     by Def5;
+   hence the Comp of Alter C is with_left_units with_right_units by Th16;
+  end;
+
+theorem Th19:
+ for C being Category holds Alter C is transitive
+  proof let C be Category;
+A1:  Alter C = AltCatStr(#the Objects of C,the_hom_sets_of C, the_comps_of C#)
+     by Def5;
+   let o1,o2,o3 be object of Alter C such that
+A2:  <^o1,o2^> <> {} & <^o2,o3^> <> {};
+    reconsider x1 = o1, x2 = o2, x3 = o3 as Object of C by A1;
+A3:  <^o1,o2^> = (the_hom_sets_of C).(x1,x2) by A1,ALTCAT_1:def 2
+       .= Hom(x1,x2) by Def3;
+A4:  <^o2,o3^> = (the_hom_sets_of C).(x2,x3) by A1,ALTCAT_1:def 2
+       .= Hom(x2,x3) by Def3;
+      <^o1,o3^> = (the_hom_sets_of C).(x1,x3) by A1,ALTCAT_1:def 2
+       .= Hom(x1,x3) by Def3;
+   hence <^o1,o3^> <> {} by A2,A3,A4,CAT_1:52;
+  end;
+
+definition let C be Category;
+ cluster Alter C -> transitive associative with_units;
+ coherence by Th17,Th18,Th19;
+end;
+
+begin :: More on new categories
+
+definition
+ cluster non empty strict AltGraph;
+ existence
+  proof consider M being ManySortedSet of [:1,1:];
+   take A = AltGraph(#1,M#);
+   thus the carrier of A is non empty;
+   thus thesis;
+  end;
+end;
+
+definition let C be AltGraph;
+ attr C is reflexive means
+:Def6:  for x being set st x in the carrier of C
+   holds (the Arrows of C).(x,x) <> {};
+end;
+
+definition let C be non empty AltGraph;
+ redefine attr C is reflexive means
+     for o being object of C holds <^o,o^> <> {};
+ compatibility
+  proof
+   hereby assume
+A1:    C is reflexive;
+    let o be object of C;
+       <^o,o^> = (the Arrows of C).(o,o) by ALTCAT_1:def 2;
+    hence <^o,o^> <> {} by A1,Def6;
+   end;
+   assume
+A2:  for o being object of C holds <^o,o^> <> {};
+   let x be set;
+   assume x in the carrier of C;
+    then reconsider o=x as object of C;
+      (the Arrows of C).(x,x) = <^o,o^> by ALTCAT_1:def 2;
+   hence (the Arrows of C).(x,x) <> {} by A2;
+   thus thesis;
+  end;
+end;
+
+definition let C be non empty transitive AltCatStr;
+ redefine attr C is associative means
+:Def8: for o1,o2,o3,o4 being object of C
+  for f being Morphism of o1,o2, g being Morphism of o2,o3,
+      h being Morphism of o3,o4
+    st <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,o4^> <> {}
+   holds h*g*f = h*(g*f);
+ compatibility
+  proof
+   thus C is associative implies
+    for o1,o2,o3,o4 being object of C
+     for f being Morphism of o1,o2, g being Morphism of o2,o3,
+         h being Morphism of o3,o4
+       st <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,o4^> <> {}
+      holds h*g*f = h*(g*f) by ALTCAT_1:25;
+   assume
+A1: for o1,o2,o3,o4 being object of C
+   for f being Morphism of o1,o2, g being Morphism of o2,o3,
+      h being Morphism of o3,o4
+    st <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,o4^> <> {}
+   holds h*g*f = h*(g*f);
+ let i,j,k,l be Element of C;
+  reconsider o1=i, o2=j, o3=k, o4=l as object of C;
+ let f,g,h be set;
+ assume f in (the Arrows of C).(i,j);
+then A2: f in <^o1,o2^> by ALTCAT_1:def 2;
+  then reconsider ff = f as Morphism of o1,o2 ;
+ assume g in (the Arrows of C).(j,k);
+then A3: g in <^o2,o3^> by ALTCAT_1:def 2;
+  then reconsider gg = g as Morphism of o2,o3 ;
+ assume h in (the Arrows of C).(k,l);
+then A4: h in <^o3,o4^> by ALTCAT_1:def 2;
+  then reconsider hh = h as Morphism of o3,o4 ;
+A5: <^o1,o3^> <> {} by A2,A3,ALTCAT_1:def 4;
+A6: <^o2,o4^> <> {} by A3,A4,ALTCAT_1:def 4;
+A7:(the Comp of C).(j,k,l).(h,g) = hh*gg by A3,A4,ALTCAT_1:def 10;
+    (the Comp of C).(i,j,k).(g,f) = gg*ff by A2,A3,ALTCAT_1:def 10;
+ hence (the Comp of C).(i,k,l).(h,(the Comp of C).(i,j,k).(g,f))
+      = hh*(gg*ff) by A4,A5,ALTCAT_1:def 10
+     .= hh*gg*ff by A1,A2,A3,A4
+     .= (the Comp of C).(i,j,l).((the Comp of C).(j,k,l).(h,g),f)
+                             by A2,A6,A7,ALTCAT_1:def 10;
+end;
+end;
+
+definition let C be non empty AltCatStr;
+ redefine attr C is with_units means
+      for o being object of C holds <^o,o^> <> {} &
+   ex i being Morphism of o,o st
+    for o' being object of C,
+        m' being Morphism of o',o, m'' being Morphism of o,o'
+    holds
+     (<^o',o^> <> {} implies i*m' = m') &
+     (<^o,o'^> <> {} implies m''*i = m'');
+ compatibility
+  proof
+   hereby assume
+A1:  C is with_units;
+     then reconsider C' = C as with_units (non empty AltCatStr);
+    let o be object of C;
+    thus <^o,o^> <> {} by A1,ALTCAT_1:21;
+     reconsider p = o as object of C';
+     reconsider i = idm p as Morphism of o,o;
+    take i;
+    let o' be object of C,
+       m' be Morphism of o',o, m'' be Morphism of o,o';
+    thus <^o',o^> <> {} implies i*m' = m' by ALTCAT_1:24;
+    thus <^o,o'^> <> {} implies m''*i = m'' by ALTCAT_1:def 19;
+   end;
+   assume
+A2: for o being object of C holds <^o,o^> <> {} &
+   ex i being Morphism of o,o st
+     for o' being object of C,
+         m' being Morphism of o',o, m'' being Morphism of o,o' holds
+    (<^o',o^> <> {} implies i*m' = m') &
+    (<^o,o'^> <> {} implies m''*i = m'');
+   hereby
+    let j be Element of C;
+     reconsider o = j as object of C;
+     consider m being Morphism of o,o such that
+A3:    for o' being object of C,
+         m' being Morphism of o',o, m'' being Morphism of o,o' holds
+       (<^o',o^> <> {} implies m*m' = m') &
+       (<^o,o'^> <> {} implies m''*m = m'') by A2;
+     reconsider e = m as set;
+     take e;
+A4:    <^o,o^> <> {} by A2;
+      then m in <^o,o^>;
+     hence e in (the Arrows of C).(j,j) by ALTCAT_1:def 2;
+    let i be Element of C, f be set such that
+A5:  f in (the Arrows of C).(i,j);
+     reconsider o' = i as object of C;
+A6:   f in <^o',o^> by A5,ALTCAT_1:def 2;
+     then reconsider m' = f as Morphism of o',o ;
+    thus (the Comp of C).(i,j,j).(e,f) = m*m' by A4,A6,ALTCAT_1:def 10
+       .= f by A3,A6;
+   end;
+    let i be Element of C;
+     reconsider o = i as object of C;
+     consider m being Morphism of o,o such that
+A7:    for o' being object of C,
+         m' being Morphism of o',o, m'' being Morphism of o,o' holds
+       (<^o',o^> <> {} implies m*m' = m') &
+       (<^o,o'^> <> {} implies m''*m = m'') by A2;
+    take e = m;
+A8:   <^o,o^> <> {} by A2;
+     then m in <^o,o^>;
+    hence e in (the Arrows of C).(i,i) by ALTCAT_1:def 2;
+    let j be Element of C, f be set such that
+A9:  f in (the Arrows of C).(i,j);
+    reconsider o' = j as object of C;
+A10:  f in <^o,o'^> by A9,ALTCAT_1:def 2;
+    then reconsider m' = f as Morphism of o,o' ;
+   thus (the Comp of C).(i,i,j).(f,e) = m'*m by A8,A10,ALTCAT_1:def 10
+        .= f by A7,A10;
+  end;
+end;
+
+definition
+ cluster with_units -> reflexive (non empty AltCatStr);
+ coherence
+  proof let C be non empty AltCatStr;
+   assume
+A1:  C is with_units;
+   let o be object of C;
+   thus <^o,o^> <> {} by A1,ALTCAT_1:21;
+  end;
+end;
+
+definition
+ cluster non empty reflexive AltGraph;
+ existence
+  proof consider C being with_units (non empty AltCatStr);
+   take C;
+   thus thesis;
+  end;
+end;
+
+definition
+ cluster non empty reflexive AltCatStr;
+ existence
+  proof consider C being category;
+   take C;
+   thus thesis;
+  end;
+end;
+
+begin :: The empty category
+
+Lm1: for E1,E2 being strict AltCatStr st
+  the carrier of E1 is empty & the carrier of E2 is empty
+  holds E1 = E2
+ proof let E1,E2 be strict AltCatStr;
+  set C1 = the carrier of E1, C2 = the carrier of E2;
+  assume
+A1: C1 is empty & C2 is empty;
+then A2: [:C2,C2:] = {} by ZFMISC_1:113;
+     [:C1,C1:] = {} by A1,ZFMISC_1:113;
+then A3: the Arrows of E1 = {} by PBOOLE:134
+       .= the Arrows of E2 by A2,PBOOLE:134;
+A4: [:C2,C2,C2:] = {} by A1,MCART_1:35;
+     [:C1,C1,C1:] = {} by A1,MCART_1:35;
+   then the Comp of E1 = {} by PBOOLE:134
+        .= the Comp of E2 by A4,PBOOLE:134;
+  hence E1 = E2 by A1,A3;
+ end;
+
+definition
+ func the_empty_category -> strict AltCatStr means
+:Def10: the carrier of it is empty;
+ existence
+  proof
+    reconsider a = {} as set;
+    consider m being ManySortedSet of [:a,a:];
+    consider c being BinComp of m;
+   take AltCatStr(#a,m,c#);
+   thus thesis;
+  end;
+ uniqueness by Lm1;
+end;
+
+definition
+ cluster the_empty_category -> empty;
+ coherence
+  proof
+      the carrier of the_empty_category is empty by Def10;
+   hence the_empty_category is empty by STRUCT_0:def 1;
+  end;
+end;
+
+definition
+ cluster empty strict AltCatStr;
+ existence
+  proof take the_empty_category; thus thesis; end;
+end;
+
+theorem
+   for E being empty strict AltCatStr holds
+  E = the_empty_category
+ proof let E be empty strict AltCatStr;
+     the carrier of E is empty & the carrier of the_empty_category is empty
+                  by STRUCT_0:def 1;
+  hence E = the_empty_category by Lm1;
+ end;
+
+begin :: Subcategories
+      :: Semadeni Wiweger 1.6.1 str. 24
+
+definition let C be AltCatStr;
+ mode SubCatStr of C -> AltCatStr means
+:Def11: the carrier of it c= the carrier of C &
+     the Arrows of it cc= the Arrows of C &
+     the Comp of it cc= the Comp of C;
+ existence;
+end;
+
+reserve C,C1,C2,C3 for AltCatStr;
+
+theorem Th21:
+ C is SubCatStr of C
+proof thus
+   the carrier of C c= the carrier of C;
+ thus the Arrows of C cc= the Arrows of C &
+      the Comp of C cc= the Comp of C;
+end;
+
+theorem
+   C1 is SubCatStr of C2 & C2 is SubCatStr of C3 implies C1 is SubCatStr of C3
+ proof
+  assume the carrier of C1 c= the carrier of C2 &
+   the Arrows of C1 cc= the Arrows of C2 &
+   the Comp of C1 cc= the Comp of C2 &
+   the carrier of C2 c= the carrier of C3 &
+   the Arrows of C2 cc= the Arrows of C3 &
+   the Comp of C2 cc= the Comp of C3;
+  hence
+     the carrier of C1 c= the carrier of C3 &
+   the Arrows of C1 cc= the Arrows of C3 &
+   the Comp of C1 cc= the Comp of C3 by Th9,XBOOLE_1:1;
+ end;
+
+theorem Th23:
+ for C1,C2 being AltCatStr st
+  C1 is SubCatStr of C2 & C2 is SubCatStr of C1
+    holds the AltCatStr of C1 = the AltCatStr of C2
+proof let C1,C2 be AltCatStr;
+  assume the carrier of C1 c= the carrier of C2 &
+   the Arrows of C1 cc= the Arrows of C2 &
+   the Comp of C1 cc= the Comp of C2 &
+   the carrier of C2 c= the carrier of C1 &
+   the Arrows of C2 cc= the Arrows of C1 &
+   the Comp of C2 cc= the Comp of C1;
+  then the carrier of C1 = the carrier of C2 &
+   the Arrows of C1 = the Arrows of C2 &
+   the Comp of C1 = the Comp of C2 by Th8,XBOOLE_0:def 10;
+ hence thesis;
+end;
+
+
+
+definition let C be AltCatStr;
+ cluster strict SubCatStr of C;
+ existence
+  proof
+    set D = the AltCatStr of C;
+    reconsider D as SubCatStr of C by Def11;
+   take D;
+   thus thesis;
+  end;
+end;
+
+definition let C be non empty AltCatStr, o be object of C;
+ func ObCat o -> strict SubCatStr of C means
+:Def12: the carrier of it = { o } &
+   the Arrows of it = (o,o):-> <^o,o^> &
+   the Comp of it = [o,o,o] .--> (the Comp of C).(o,o,o);
+ existence
+  proof
+    set a = (o,o):-> <^o,o^>;
+      dom a = [:{o},{o}:] by FUNCT_2:def 1;
+    then reconsider a as ManySortedSet of [:{o},{o}:] by PBOOLE:def 3;
+    set m = [o,o,o] .--> (the Comp of C).(o,o,o);
+      dom m = {[o,o,o]} by CQC_LANG:5
+         .= [:{o},{o},{o}:] by MCART_1:39;
+    then reconsider m as ManySortedSet of [:{o},{o},{o}:] by PBOOLE:def 3;
+A1:  a.(o,o) = <^o,o^> by ALTCAT_1:12
+           .= (the Arrows of C).(o,o) by ALTCAT_1:def 2;
+      m is ManySortedFunction of {|a,a|},{|a|}
+     proof let i be set;
+      assume i in [:{o},{o},{o}:];
+       then i in {[o,o,o]} by MCART_1:39;
+       then A2:      i = [o,o,o] by TARSKI:def 1;
+A3:     o in {o} by TARSKI:def 1;
+A4:     {|a,a|}.i = {|a,a|}.(o,o,o) by A2,MULTOP_1:def 1
+                .= [:(the Arrows of C).(o,o),(the Arrows of C).(o,o):]
+                         by A1,A3,ALTCAT_1:def 6;
+         {|a|}.i = {|a|}.(o,o,o) by A2,MULTOP_1:def 1
+                .= (the Arrows of C).(o,o) by A1,A3,ALTCAT_1:def 5;
+      hence m.i is Function of {|a,a|}.i, {|a|}.i by A2,A4,CQC_LANG:6;
+     end;
+    then reconsider m as BinComp of a;
+    set D = AltCatStr(#{o},a,m#);
+      D is SubCatStr of C
+     proof
+      thus
+       the carrier of D c= the carrier of C;
+      thus the Arrows of D cc= the Arrows of C
+       proof
+        thus [:the carrier of D,the carrier of D:]
+                c= [:the carrier of C,the carrier of C:];
+        let i be set;
+        assume i in [:the carrier of D,the carrier of D:];
+         then i in {[o,o]} by ZFMISC_1:35;
+         then A5:        i = [o,o] by TARSKI:def 1;
+         then (the Arrows of D).i = a.(o,o) by BINOP_1:def 1;
+        hence (the Arrows of D).i c= (the Arrows of C).i by A1,A5,BINOP_1:def 1
+;
+       end;
+      thus [:the carrier of D,the carrier of D,the carrier of D:]
+              c= [:the carrier of C,the carrier of C,the carrier of C:];
+      let i be set;
+      assume i in [:the carrier of D,the carrier of D,the carrier of D:];
+       then i in {[o,o,o]} by MCART_1:39;
+       then A6:      i = [o,o,o] by TARSKI:def 1;
+       then (the Comp of D).i = (the Comp of C).(o,o,o) by CQC_LANG:6
+                  .= (the Comp of C).i by A6,MULTOP_1:def 1;
+      hence (the Comp of D).i c= (the Comp of C).i;
+     end;
+    then reconsider D as strict SubCatStr of C;
+   take D;
+   thus thesis;
+  end;
+ uniqueness;
+end;
+
+reserve C for non empty AltCatStr,
+        o for object of C;
+
+theorem Th24:
+ for o' being object of ObCat o holds o' = o
+  proof let o' be object of ObCat o;
+      the carrier of ObCat o = {o} by Def12;
+   hence o' = o by TARSKI:def 1;
+  end;
+
+definition let C be non empty AltCatStr, o be object of C;
+ cluster ObCat o -> transitive non empty;
+  coherence
+   proof
+    thus ObCat o is transitive
+     proof let o1,o2,o3 be object of ObCat o;
+      assume
+A1:     <^o1,o2^> <> {} & <^o2,o3^> <> {};
+          o1 = o & o2 = o by Th24;
+      hence <^o1,o3^> <> {} by A1;
+     end;
+       the carrier of ObCat o = {o} by Def12;
+    hence the carrier of ObCat o is non empty;
+   end;
+end;
+
+definition let C be non empty AltCatStr;
+ cluster transitive non empty strict SubCatStr of C;
+ existence
+  proof consider o being object of C;
+   take ObCat o;
+   thus thesis;
+  end;
+end;
+
+theorem Th25:
+ for C being transitive non empty AltCatStr,
+     D1,D2 being transitive non empty SubCatStr of C
+  st the carrier of D1 c= the carrier of D2 &
+     the Arrows of D1 cc= the Arrows of D2
+ holds D1 is SubCatStr of D2
+proof let C be transitive non empty AltCatStr,
+   D1,D2 be transitive non empty SubCatStr of C
+ such that
+A1: the carrier of D1 c= the carrier of D2 and
+A2: the Arrows of D1 cc= the Arrows of D2;
+ thus the carrier of D1 c= the carrier of D2 by A1;
+ thus the Arrows of D1 cc= the Arrows of D2 by A2;
+ thus [: the carrier of D1, the carrier of D1, the carrier of D1:]
+       c= [: the carrier of D2, the carrier of D2, the carrier of D2:]
+         by A1,MCART_1:77;
+ let x be set;
+  assume
+A3: x in [:the carrier of D1,the carrier of D1,the carrier of D1:];
+   then consider i1,i2,i3 being set such that
+A4: i1 in the carrier of D1 & i2 in the carrier of D1 & i3 in the carrier of D1
+   and
+A5: x = [i1,i2,i3] by MCART_1:72;
+   reconsider i1,i2,i3 as object of D1 by A4;
+   <^i1,i3^> = {} implies <^i2,i3^> = {} or <^i1,i2^> = {} by ALTCAT_1:def 4;
+    then A6: <^i1,i3^> = {} implies [:<^i2,i3^>,<^i1,i2^>:] = {} by ZFMISC_1:
+113;
+   reconsider c1 = (the Comp of D1).(i1,i2,i3)
+      as Function of [:<^i2,i3^>,<^i1,i2^>:],<^i1,i3^> by ALTCAT_1:17;
+A7: dom c1 = [:<^i2,i3^>,<^i1,i2^>:] by A6,FUNCT_2:def 1;
+   reconsider j1=i1, j2=i2, j3=i3 as object of D2 by A1,A4;
+   <^j1,j3^> = {} implies <^j2,j3^> = {} or <^j1,j2^> = {} by ALTCAT_1:def 4;
+    then A8: <^j1,j3^> = {} implies [:<^j2,j3^>,<^j1,j2^>:] = {} by ZFMISC_1:
+113;
+   reconsider c2 = (the Comp of D2).(j1,j2,j3)
+      as Function of [:<^j2,j3^>,<^j1,j2^>:],<^j1,j3^> by ALTCAT_1:17;
+A9: (the Arrows of D1).[i1,i2] = (the Arrows of D1).(i1,i2) by BINOP_1:def 1
+           .= <^i1,i2^> by ALTCAT_1:def 2;
+A10: (the Arrows of D1).[i2,i3] = (the Arrows of D1).(i2,i3) by BINOP_1:def 1
+           .= <^i2,i3^> by ALTCAT_1:def 2;
+A11: (the Arrows of D2).[j1,j2] = (the Arrows of D2).(j1,j2) by BINOP_1:def 1
+           .= <^j1,j2^> by ALTCAT_1:def 2;
+A12: (the Arrows of D2).[j2,j3] = (the Arrows of D2).(j2,j3) by BINOP_1:def 1
+           .= <^j2,j3^> by ALTCAT_1:def 2;
+     [i1,i2] in [:the carrier of D1,the carrier of D1:] &
+   [i2,i3] in [:the carrier of D1,the carrier of D1:] by ZFMISC_1:106;
+   then A13: <^i1,i2^> c= <^j1,j2^> & <^i2,i3^> c= <^j2,j3^> by A2,A9,A10,A11,
+A12,Def2
+;
+     dom c2 = [:<^j2,j3^>,<^j1,j2^>:] by A8,FUNCT_2:def 1;
+   then A14: dom c1 c= dom c2 by A7,A13,ZFMISC_1:119;
+A15:
+  now let y be set;
+     the carrier of D1 c= the carrier of C by Def11;
+   then reconsider o1=i1, o2=i2, o3=i3 as object of C by A4;
+   reconsider c = (the Comp of C).(o1,o2,o3)
+      as Function of [:<^o2,o3^>,<^o1,o2^>:],<^o1,o3^> by ALTCAT_1:17;
+A16:  c = (the Comp of C).[o1,o2,o3] by MULTOP_1:def 1;
+A17: [o1,o2,o3] in [:the carrier of D2,the carrier of D2,the carrier of D2:]
+         by A1,A4,MCART_1:73;
+   assume
+A18:  y in dom c1;
+A19: the Comp of D2 cc= the Comp of C by Def11;
+      c2 = (the Comp of D2).[o1,o2,o3] by MULTOP_1:def 1;
+    then A20:  c2 c= c by A16,A17,A19,Def2;
+A21: the Comp of D1 cc= the Comp of C by Def11;
+      c1 = (the Comp of D1).[o1,o2,o3] by MULTOP_1:def 1;
+    then c1 c= c by A3,A5,A16,A21,Def2;
+   hence c1.y = c.y by A18,GRFUNC_1:8
+         .= c2.y by A14,A18,A20,GRFUNC_1:8;
+  end;
+    c1 = (the Comp of D1).x & c2 = (the Comp of D2).x by A5,MULTOP_1:def 1;
+ hence (the Comp of D1).x c= (the Comp of D2).x by A14,A15,GRFUNC_1:8;
+end;
+
+definition let C be AltCatStr, D be SubCatStr of C;
+ attr D is full means
+:Def13: the Arrows of D
+    = (the Arrows of C)|[:the carrier of D, the carrier of D:];
+end;
+
+definition let C be with_units (non empty AltCatStr), D be SubCatStr of C;
+ attr D is id-inheriting means
+:Def14: for o being object of D, o' being object of C st o = o'
+       holds idm o' in <^o,o^> if D is non empty
+       otherwise not contradiction;
+ consistency;
+end;
+
+definition let C be AltCatStr;
+ cluster full strict SubCatStr of C;
+ existence
+  proof
+    set D = the AltCatStr of C;
+      D is SubCatStr of C
+     proof
+      thus the carrier of D c= the carrier of C &
+           the Arrows of D cc= the Arrows of C &
+           the Comp of D cc= the Comp of C;
+     end;
+    then reconsider D as SubCatStr of C;
+   take D;
+      dom(the Arrows of C) =[:the carrier of D, the carrier of D:]
+       by PBOOLE:def 3;
+   hence the Arrows of D
+    = (the Arrows of C)|[:the carrier of D, the carrier of D:] by RELAT_1:98;
+   thus thesis;
+  end;
+end;
+
+definition let C be non empty AltCatStr;
+ cluster full non empty strict SubCatStr of C;
+ existence
+  proof
+    set D = the AltCatStr of C;
+      D is SubCatStr of C
+     proof
+      thus the carrier of D c= the carrier of C &
+           the Arrows of D cc= the Arrows of C &
+           the Comp of D cc= the Comp of C;
+     end;
+    then reconsider D as SubCatStr of C;
+   take D;
+      dom(the Arrows of C) =[:the carrier of D, the carrier of D:]
+       by PBOOLE:def 3;
+   hence the Arrows of D
+    = (the Arrows of C)|[:the carrier of D, the carrier of D:] by RELAT_1:98;
+   thus the carrier of D is non empty;
+   thus thesis;
+  end;
+end;
+
+definition let C be category, o be object of C;
+ cluster ObCat o -> full id-inheriting;
+ coherence
+  proof
+A1:  the carrier of ObCat o = {o} by Def12;
+   thus ObCat o is full
+    proof
+     thus the Arrows of ObCat o
+       = (o,o):-> <^o,o^> by Def12
+      .= (o,o):-> ((the Arrows of C).(o,o)) by ALTCAT_1:def 2
+      .= (the Arrows of C)|[:the carrier of ObCat o, the carrier of ObCat o:]
+              by A1,FUNCT_7:8;
+    end;
+     now let o1 be object of ObCat o, o2 be object of C;
+A2:  o1 = o by Th24;
+   assume
+A3:  o1 = o2;
+      <^o1,o1^> = (the Arrows of ObCat o).(o,o) by A2,ALTCAT_1:def 2
+         .= ((o,o):-> <^o,o^>).(o,o) by Def12
+         .= <^o2,o2^> by A2,A3,ALTCAT_1:12;
+   hence idm o2 in <^o1,o1^> by ALTCAT_1:23;
+   end;
+   hence thesis by Def14;
+  end;
+end;
+
+definition let C be category;
+ cluster full id-inheriting non empty strict SubCatStr of C;
+ existence
+  proof consider o being object of C;
+   take ObCat o;
+   thus thesis;
+  end;
+end;
+
+reserve C for non empty transitive AltCatStr;
+
+theorem Th26:
+for D being SubCatStr of C
+ st the carrier of D = the carrier of C & the Arrows of D = the Arrows of C
+holds the AltCatStr of D = the AltCatStr of C
+proof let D be SubCatStr of C such that
+A1: the carrier of D = the carrier of C and
+A2: the Arrows of D = the Arrows of C;
+A3: D is non empty by A1,STRUCT_0:def 1;
+A4: D is transitive
+    proof let o1,o2,o3 be object of D;
+      reconsider p1 = o1, p2 = o2, p3 = o3 as object of C by A1;
+A5:  <^o1,o2^> = (the Arrows of D).(o1,o2) by ALTCAT_1:def 2
+            .= <^p1,p2^> by A2,ALTCAT_1:def 2;
+A6:  <^o2,o3^> = (the Arrows of D).(o2,o3) by ALTCAT_1:def 2
+            .= <^p2,p3^> by A2,ALTCAT_1:def 2;
+A7:  <^o1,o3^> = (the Arrows of D).(o1,o3) by ALTCAT_1:def 2
+            .= <^p1,p3^> by A2,ALTCAT_1:def 2;
+     assume <^o1,o2^> <> {} & <^o2,o3^> <> {};
+     hence <^o1,o3^> <> {} by A5,A6,A7,ALTCAT_1:def 4;
+    end;
+    C is SubCatStr of C by Th21;
+  then C is SubCatStr of D by A1,A2,A3,A4,Th25;
+ hence the AltCatStr of D = the AltCatStr of C by Th23;
+end;
+
+theorem Th27:
+for D1,D2 being non empty transitive SubCatStr of C
+ st the carrier of D1 = the carrier of D2 & the Arrows of D1 = the Arrows of D2
+holds the AltCatStr of D1 = the AltCatStr of D2
+proof let D1,D2 be non empty transitive SubCatStr of C such that
+A1: the carrier of D1 = the carrier of D2 and
+A2: the Arrows of D1 = the Arrows of D2;
+A3: D1 is SubCatStr of D2 by A1,A2,Th25;
+     D2 is SubCatStr of D1 by A1,A2,Th25;
+ hence the AltCatStr of D1 = the AltCatStr of D2 by A3,Th23;
+end;
+
+theorem
+   for D being full SubCatStr of C st the carrier of D = the carrier of C
+   holds the AltCatStr of D = the AltCatStr of C
+proof let D be full SubCatStr of C such that
+A1: the carrier of D = the carrier of C;
+A2: dom the Arrows of C = [:the carrier of C, the carrier of C:]
+                            by PBOOLE:def 3;
+    the Arrows of D = (the Arrows of C)|[:the carrier of D, the carrier of D:]
+                            by Def13
+      .= the Arrows of C by A1,A2,RELAT_1:98;
+ hence the AltCatStr of D = the AltCatStr of C by A1,Th26;
+end;
+
+theorem Th29:
+ for C being non empty AltCatStr, D being full non empty SubCatStr of C,
+     o1,o2 being object of C, p1,p2 being object of D st o1 = p1 & o2 = p2
+ holds <^o1,o2^> = <^p1,p2^>
+proof
+ let C be non empty AltCatStr, D be full non empty SubCatStr of C,
+     o1,o2 be object of C, p1,p2 be object of D such that
+A1: o1 = p1 & o2 = p2;
+A2: [p1,p2] in [:the carrier of D, the carrier of D:] by ZFMISC_1:106;
+ thus <^o1,o2^> = (the Arrows of C).(o1,o2) by ALTCAT_1:def 2
+      .= (the Arrows of C).[o1,o2] by BINOP_1:def 1
+      .= ((the Arrows of C)|[:the carrier of D, the carrier of D:]).[p1,p2]
+                             by A1,A2,FUNCT_1:72
+      .= ((the Arrows of C)|[:the carrier of D, the carrier of D:]).(p1,p2)
+                           by BINOP_1:def 1
+      .= (the Arrows of D).(p1,p2) by Def13
+      .= <^p1,p2^> by ALTCAT_1:def 2;
+end;
+
+theorem Th30:
+ for C being non empty AltCatStr, D being non empty SubCatStr of C
+ for o being object of D holds o is object of C
+proof let C be non empty AltCatStr, D be non empty SubCatStr of C;
+ let o be object of D;
+A1: o in the carrier of D;
+    the carrier of D c= the carrier of C by Def11;
+ hence o is object of C by A1;
+end;
+
+definition let C be transitive non empty AltCatStr;
+ cluster full non empty -> transitive SubCatStr of C;
+ coherence
+  proof let D be SubCatStr of C;
+   assume
+A1:  D is full non empty;
+   let o1,o2,o3 be object of D such that
+A2:  <^o1,o2^> <> {} & <^o2,o3^> <> {};
+    reconsider p1 = o1, p2 = o2, p3 = o3 as object of C by A1,Th30;
+      <^p1,p2^> <> {} & <^p2,p3^> <> {} by A1,A2,Th29;
+    then <^p1,p3^> <> {} by ALTCAT_1:def 4;
+   hence <^o1,o3^> <> {} by A1,Th29;
+  end;
+end;
+
+theorem
+  for D1,D2 being full non empty SubCatStr of C
+ st the carrier of D1 = the carrier of D2
+holds the AltCatStr of D1 = the AltCatStr of D2
+proof let D1,D2 be full non empty SubCatStr of C;
+ assume
+A1: the carrier of D1 = the carrier of D2;
+  then the Arrows of D1
+         =(the Arrows of C)|[:the carrier of D2, the carrier of D2:] by Def13
+        .= the Arrows of D2 by Def13;
+ hence the AltCatStr of D1 = the AltCatStr of D2 by A1,Th27;
+end;
+
+theorem Th32:
+ for C being non empty AltCatStr, D being non empty SubCatStr of C,
+     o1,o2 being object of C, p1,p2 being object of D st o1 = p1 & o2 = p2
+  holds <^p1,p2^> c= <^o1,o2^>
+proof
+ let C be non empty AltCatStr, D be non empty SubCatStr of C,
+     o1,o2 be object of C, p1,p2 be object of D such that
+A1: o1 = p1 & o2 = p2;
+A2: [p1,p2] in [:the carrier of D, the carrier of D:] by ZFMISC_1:106;
+A3: <^o1,o2^> = (the Arrows of C).(o1,o2) by ALTCAT_1:def 2
+      .= (the Arrows of C).[o1,o2] by BINOP_1:def 1;
+A4: <^p1,p2^> = (the Arrows of D).(p1,p2) by ALTCAT_1:def 2
+      .= (the Arrows of D).[p1,p2] by BINOP_1:def 1;
+    the Arrows of D cc= the Arrows of C by Def11;
+ hence thesis by A1,A2,A3,A4,Def2;
+end;
+
+theorem Th33:
+ for C being non empty transitive AltCatStr,
+     D being non empty transitive SubCatStr of C,
+      p1,p2,p3 being object of D st <^p1,p2^> <> {} & <^p2,p3^> <> {}
+ for o1,o2,o3 being object of C st o1 = p1 & o2 = p2 & o3 = p3
+ for f being Morphism of o1,o2, g being Morphism of o2,o3,
+     ff being Morphism of p1,p2, gg being Morphism of p2,p3 st f = ff & g = gg
+  holds g*f = gg*ff
+proof
+ let C be non empty transitive AltCatStr,
+     D be non empty transitive SubCatStr of C;
+ let p1,p2,p3 be object of D such that
+A1: <^p1,p2^> <> {} & <^p2,p3^> <> {};
+ let o1,o2,o3 be object of C such that
+A2: o1 = p1 & o2 = p2 & o3 = p3;
+ let f be Morphism of o1,o2, g be Morphism of o2,o3,
+     ff be Morphism of p1,p2, gg be Morphism of p2,p3 such that
+A3: f = ff & g = gg;
+A4: (the Arrows of D).(p2,p3) = <^p2,p3^> &
+   (the Arrows of D).(p1,p2) = <^p1,p2^> by ALTCAT_1:def 2;
+   <^p1,p3^> <> {} by A1,ALTCAT_1:def 4;
+   then (the Arrows of D).(p1,p3) <> {} by ALTCAT_1:def 2;
+   then dom((the Comp of D).(p1,p2,p3)) = [:<^p2,p3^>,<^p1,p2^>:]
+                             by A4,FUNCT_2:def 1;
+   then A5: [gg,ff] in dom((the Comp of D).(p1,p2,p3)) by A1,ZFMISC_1:106;
+A6: [p1,p2,p3] in [:the carrier of D,the carrier of D,the carrier of D:]
+             by MCART_1:73;
+A7: (the Comp of D).(p1,p2,p3) = (the Comp of D).[p1,p2,p3] &
+   (the Comp of C).(o1,o2,o3) = (the Comp of C).[o1,o2,o3] by MULTOP_1:def 1;
+     the Comp of D cc= the Comp of C by Def11;
+   then A8: (the Comp of D).(p1,p2,p3) c= (the Comp of C).(o1,o2,o3) by A2,A6,
+A7,Def2;
+
+     <^p1,p2^> c= <^o1,o2^> & <^p2,p3^> c= <^o2,o3^> by A2,Th32;
+then <^o1,o2^> <> {} & <^o2,o3^> <> {} by A1,XBOOLE_1:3;
+ hence g*f = (the Comp of C).(o1,o2,o3).(g,f) by ALTCAT_1:def 10
+    .= (the Comp of C).(o1,o2,o3).[g,f] by BINOP_1:def 1
+    .= (the Comp of D).(p1,p2,p3).[gg,ff] by A3,A5,A8,GRFUNC_1:8
+    .= (the Comp of D).(p1,p2,p3).(gg,ff) by BINOP_1:def 1
+    .= gg*ff by A1,ALTCAT_1:def 10;
+end;
+
+definition let C be associative transitive (non empty AltCatStr);
+ cluster transitive -> associative (non empty SubCatStr of C);
+ coherence
+  proof let D be non empty SubCatStr of C;
+   assume D is transitive;
+    then reconsider D as transitive non empty SubCatStr of C;
+      D is associative
+    proof
+    let o1,o2,o3,o4 be object of D;
+A1:    o1 in the carrier of D & o2 in the carrier of D &
+      o3 in the carrier of D & o4 in the carrier of D;
+       the carrier of D c= the carrier of C by Def11;
+     then reconsider p1=o1, p2=o2, p3=o3, p4=o4 as object of C
+             by A1;
+    let f be Morphism of o1,o2, g be Morphism of o2,o3,
+      h be Morphism of o3,o4 such that
+A2:  <^o1,o2^> <> {} and
+A3:  <^o2,o3^> <> {} and
+A4:  <^o3,o4^> <> {};
+A5:  <^o1,o2^> c= <^p1,p2^> by Th32;
+then A6:  <^p1,p2^> <> {} by A2,XBOOLE_1:3;
+A7:  <^o2,o3^> c= <^p2,p3^> by Th32;
+then A8:  <^p2,p3^> <> {} by A3,XBOOLE_1:3;
+A9:  <^o3,o4^> c= <^p3,p4^> by Th32;
+then A10:  <^p3,p4^> <> {} by A4,XBOOLE_1:3;
+A11:  <^o1,o3^> <> {} by A2,A3,ALTCAT_1:def 4;
+A12:  <^o2,o4^> <> {} by A3,A4,ALTCAT_1:def 4;
+       f in <^o1,o2^> by A2;
+     then reconsider ff = f as Morphism of p1,p2 by A5;
+       g in <^o2,o3^> by A3;
+     then reconsider gg = g as Morphism of p2,p3 by A7;
+       h in <^o3,o4^> by A4;
+     then reconsider hh = h as Morphism of p3,p4 by A9;
+A13:   g*f = gg*ff by A2,A3,Th33;
+       h*g = hh* gg by A3,A4,Th33;
+    hence h*g*f =hh*gg*ff by A2,A12,Th33
+        .= hh*(gg*ff) by A6,A8,A10,Def8
+        .= h*(g*f) by A4,A11,A13,Th33;
+   end;
+  hence thesis;
+ end;
+end;
+
+theorem Th34:
+ for C being non empty AltCatStr, D being non empty SubCatStr of C,
+     o1,o2 being object of C, p1,p2 being object of D st
+      o1 = p1 & o2 = p2 & <^p1,p2^> <> {}
+ for n being Morphism of p1,p2 holds n is Morphism of o1,o2
+proof
+ let C be non empty AltCatStr, D be non empty SubCatStr of C,
+     o1,o2 be object of C, p1,p2 be object of D such that
+A1:  o1 = p1 & o2 = p2 and
+A2:  <^p1,p2^> <> {};
+ let n be Morphism of p1,p2;
+A3: n in <^p1,p2^> by A2;
+    <^p1,p2^> c= <^o1,o2^> by A1,Th32;
+ hence n is Morphism of o1,o2 by A3;
+end;
+
+definition let C be transitive with_units (non empty AltCatStr);
+ cluster id-inheriting transitive -> with_units (non empty SubCatStr of C);
+ coherence
+  proof let D be non empty SubCatStr of C such that
+A1:  D is id-inheriting and
+A2:  D is transitive;
+   let o be object of D;
+    reconsider p = o as object of C by Th30;
+A3:  idm p in <^o,o^> by A1,Def14;
+   hence <^o,o^> <> {};
+    reconsider i = idm p as Morphism of o,o by A3;
+   take i;
+   let o' be object of D,
+       m' be Morphism of o',o, m'' be Morphism of o,o';
+   hereby assume
+A4:    <^o',o^> <> {};
+     reconsider p' = o' as object of C by Th30;
+       <^o',o^> c= <^p',p^> by Th32;
+then A5:  <^p',p^> <> {} by A4,XBOOLE_1:3;
+     reconsider n' = m' as Morphism of p',p by A4,Th34;
+    thus i*m' = (idm p)*n' by A2,A3,A4,Th33
+          .= m' by A5,ALTCAT_1:24;
+   end;
+   assume
+A6:   <^o,o'^> <> {};
+     reconsider p' = o' as object of C by Th30;
+       <^o,o'^> c= <^p,p'^> by Th32;
+then A7:  <^p,p'^> <> {} by A6,XBOOLE_1:3;
+     reconsider n'' = m'' as Morphism of p,p' by A6,Th34;
+   thus m''*i = n'' * idm p by A2,A3,A6,Th33
+          .= m'' by A7,ALTCAT_1:def 19;
+  end;
+end;
+
+definition let C be category;
+ cluster id-inheriting transitive (non empty SubCatStr of C);
+ existence
+ proof consider o being object of C;
+  take D = ObCat o;
+  thus D is id-inheriting transitive;
+ end;
+end;
+
+definition let C be category;
+ mode subcategory of C is id-inheriting transitive SubCatStr of C;
+end;
+
+theorem
+  for C being category, D being non empty subcategory of C
+ for o being object of D, o' being object of C st o = o'
+holds idm o = idm o'
+proof let C be category, D be non empty subcategory of C;
+ let o be object of D, o' be object of C; assume
+A1: o = o';
+then A2: idm o' in <^o,o^> by Def14;
+  then reconsider m = idm o' as Morphism of o,o ;
+    now let p be object of D such that
+A3: <^o,p^> <> {};
+   let a be Morphism of o,p;
+    reconsider p' = p as object of C by Th30;
+      <^o,p^> c= <^o',p'^> by A1,Th32;
+then A4:  <^o',p'^> <> {} by A3,XBOOLE_1:3;
+    reconsider n = a as Morphism of o',p' by A1,A3,Th34;
+   thus a*m = n*(idm o') by A1,A2,A3,Th33
+        .= a by A4,ALTCAT_1:def 19;
+  end;
+ hence idm o = idm o' by ALTCAT_1:def 19;
+end;
+

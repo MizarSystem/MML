@@ -1,0 +1,516 @@
+:: Basic Properties of Genetic Algorithm
+::  by Akihiko Uchibori and Noboru Endou
+::
+:: Received April 24, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, RFINSEQ, ARYTM_1, FUNCT_1, RELAT_1, ZF_REFLE, PROB_1,
+      TARSKI, BOOLE, SUBSET_1, GENEALG1, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1, FUNCT_1,
+      RELAT_1, FINSEQ_1, PROB_1, FINSEQ_4, RFINSEQ, BINARITH, TOPREAL1;
+ constructors REAL_1, FINSEQ_4, AMI_1, GOBOARD9, BINARITH, RFINSEQ, PROB_1,
+      MEMBERED;
+ clusters RELSET_1, FINSEQ_1, PRVECT_1, MSAFREE1, PUA2MSS1, XREAL_0, ARYTM_3,
+      TOPREAL1, RELAT_1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Preliminaries
+
+ reserve D for non empty set;
+ reserve f1,f2 for FinSequence of D;
+ reserve i,k,n,n1,n2,n3,n4,n5,n6 for Nat;
+
+theorem :: GENEALG1:1
+n <= len f1 implies (f1^f2)/^n = (f1/^n)^f2;
+
+theorem :: GENEALG1:2
+(f1^f2)|(len f1 + i) = f1^(f2|i);
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Definitions of Gene-Set,GA-Space and Individual ::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+  mode Gene-Set is non-empty non empty FinSequence;
+end;
+
+definition let S be Gene-Set;
+  redefine func Union S;
+  synonym GA-Space S;
+end;
+
+definition let f be non-empty non empty Function;
+  cluster Union f -> non empty;
+end;
+
+definition let S be Gene-Set;
+  mode Individual of S -> FinSequence of GA-Space S means
+:: GENEALG1:def 1
+  len it = len S & for i st i in dom it holds it.i in S.i;
+end;
+
+begin
+::::::::::::::::::::::::::::::::::::::::::::::
+:: Definitions of several genetic operators ::
+::::::::::::::::::::::::::::::::::::::::::::::
+
+definition let S be Gene-Set, p1,p2 be FinSequence of GA-Space S, n;
+func crossover(p1,p2,n) -> FinSequence of GA-Space S equals
+:: GENEALG1:def 2
+(p1|n)^(p2/^n);
+end;
+
+definition let S be Gene-Set, p1,p2 be FinSequence of GA-Space S, n1,n2;
+func crossover(p1,p2,n1,n2) -> FinSequence of GA-Space S equals
+:: GENEALG1:def 3
+crossover(crossover(p1,p2,n1),crossover(p2,p1,n1),n2);
+end;
+
+definition let S be Gene-Set, p1,p2 be FinSequence of GA-Space S,
+n1,n2,n3;
+func crossover(p1,p2,n1,n2,n3) -> FinSequence of GA-Space S equals
+:: GENEALG1:def 4
+crossover(crossover(p1,p2,n1,n2),crossover(p2,p1,n1,n2),n3);
+end;
+
+definition let S be Gene-Set, p1,p2 be FinSequence of GA-Space S,
+n1,n2,n3,n4;
+func crossover(p1,p2,n1,n2,n3,n4) -> FinSequence of GA-Space S equals
+:: GENEALG1:def 5
+crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4);
+end;
+
+definition let S be Gene-Set, p1,p2 be FinSequence of GA-Space S,
+n1,n2,n3,n4,n5;
+func crossover(p1,p2,n1,n2,n3,n4,n5) -> FinSequence of GA-Space S equals
+:: GENEALG1:def 6
+
+crossover(crossover(p1,p2,n1,n2,n3,n4),crossover(p2,p1,n1,n2,n3,n4),n5);
+end;
+
+definition let S be Gene-Set, p1,p2 be FinSequence of GA-Space S,
+n1,n2,n3,n4,n5,n6;
+func crossover(p1,p2,n1,n2,n3,n4,n5,n6) -> FinSequence of GA-Space S equals
+:: GENEALG1:def 7
+
+crossover(crossover(p1,p2,n1,n2,n3,n4,n5),
+   crossover(p2,p1,n1,n2,n3,n4,n5),n6);
+end;
+
+begin
+:::::::::::::::::::::::::::::::::::::
+:: Properties of 1-point crossover ::
+:::::::::::::::::::::::::::::::::::::
+
+reserve S for Gene-Set;
+reserve p1,p2 for Individual of S;
+
+theorem :: GENEALG1:3
+crossover(p1,p2,n) is Individual of S;
+
+definition let S be Gene-Set, p1,p2 be Individual of S, n;
+  redefine func crossover(p1,p2,n) -> Individual of S;
+end;
+
+theorem :: GENEALG1:4
+crossover(p1,p2,0) = p2;
+
+theorem :: GENEALG1:5
+n >= len p1 implies crossover(p1,p2,n) = p1;
+
+begin
+::::::::::::::::::::::::::::::::::::::
+:: Properties of 2-points crossover ::
+:::::::::::::::::::::::: :::::::::::::
+
+theorem :: GENEALG1:6
+crossover(p1,p2,n1,n2) is Individual of S;
+
+definition let S be Gene-Set, p1,p2 be Individual of S, n1,n2;
+redefine func crossover(p1,p2,n1,n2) -> Individual of S;
+end;
+
+theorem :: GENEALG1:7
+crossover(p1,p2,0,n) = crossover(p2,p1,n);
+
+theorem :: GENEALG1:8
+crossover(p1,p2,n,0) = crossover(p2,p1,n);
+
+theorem :: GENEALG1:9
+n1 >= len p1 implies crossover(p1,p2,n1,n2)=crossover(p1,p2,n2);
+
+theorem :: GENEALG1:10
+n2 >= len p1 implies crossover(p1,p2,n1,n2)=crossover(p1,p2,n1);
+
+theorem :: GENEALG1:11
+n1 >= len p1 & n2 >= len p1 implies crossover(p1,p2,n1,n2)=p1;
+
+theorem :: GENEALG1:12
+crossover(p1,p2,n1,n1) = p1;
+
+theorem :: GENEALG1:13
+crossover(p1,p2,n1,n2) = crossover(p1,p2,n2,n1);
+
+begin
+::::::::::::::::::::::::::::::::::::::
+:: Properties of 3-points crossover ::
+:::::::::::::::::::::::: :::::::::::::
+
+theorem :: GENEALG1:14
+crossover(p1,p2,n1,n2,n3) is Individual of S;
+
+definition let S be Gene-Set, p1,p2 be Individual of S, n1,n2,n3;
+redefine func crossover(p1,p2,n1,n2,n3) -> Individual of S;
+end;
+
+theorem :: GENEALG1:15
+crossover(p1,p2,0,n2,n3) = crossover(p2,p1,n2,n3) &
+crossover(p1,p2,n1,0,n3) = crossover(p2,p1,n1,n3) &
+crossover(p1,p2,n1,n2,0) = crossover(p2,p1,n1,n2);
+
+theorem :: GENEALG1:16
+crossover(p1,p2,0,0,n3) = crossover(p1,p2,n3) &
+crossover(p1,p2,n1,0,0) = crossover(p1,p2,n1) &
+crossover(p1,p2,0,n2,0) = crossover(p1,p2,n2);
+
+theorem :: GENEALG1:17
+crossover(p1,p2,0,0,0) = p2;
+
+theorem :: GENEALG1:18
+n1 >= len p1 implies
+crossover(p1,p2,n1,n2,n3) = crossover(p1,p2,n2,n3);
+
+theorem :: GENEALG1:19
+n2 >= len p1 implies
+crossover(p1,p2,n1,n2,n3) = crossover(p1,p2,n1,n3);
+
+theorem :: GENEALG1:20
+n3 >= len p1 implies
+crossover(p1,p2,n1,n2,n3) = crossover(p1,p2,n1,n2);
+
+theorem :: GENEALG1:21
+n1 >= len p1 & n2 >= len p1 implies
+crossover(p1,p2,n1,n2,n3) = crossover(p1,p2,n3);
+
+theorem :: GENEALG1:22
+n1 >= len p1 & n3 >= len p1 implies
+crossover(p1,p2,n1,n2,n3) = crossover(p1,p2,n2);
+
+theorem :: GENEALG1:23
+n2 >= len p1 & n3 >= len p1 implies
+crossover(p1,p2,n1,n2,n3) = crossover(p1,p2,n1);
+
+theorem :: GENEALG1:24
+n1 >= len p1 & n2 >= len p1 & n3 >= len p1 implies
+crossover(p1,p2,n1,n2,n3) = p1;
+
+theorem :: GENEALG1:25
+crossover(p1,p2,n1,n2,n3) = crossover(p1,p2,n2,n1,n3)
+& crossover(p1,p2,n1,n2,n3) = crossover(p1,p2,n1,n3,n2);
+
+theorem :: GENEALG1:26
+crossover(p1,p2,n1,n2,n3) = crossover(p1,p2,n3,n1,n2);
+
+theorem :: GENEALG1:27
+crossover(p1,p2,n1,n1,n3)=crossover(p1,p2,n3) &
+crossover(p1,p2,n1,n2,n1)=crossover(p1,p2,n2) &
+crossover(p1,p2,n1,n2,n2)=crossover(p1,p2,n1);
+
+begin
+::::::::::::::::::::::::::::::::::::::
+:: Properties of 4-points crossover ::
+:::::::::::::::::::::::: :::::::::::::
+
+theorem :: GENEALG1:28
+crossover(p1,p2,n1,n2,n3,n4) is Individual of S;
+
+definition let S be Gene-Set, p1,p2 be Individual of S, n1,n2,n3,n4;
+redefine func crossover(p1,p2,n1,n2,n3,n4) -> Individual of S;
+end;
+
+theorem :: GENEALG1:29
+crossover(p1,p2,0,n2,n3,n4) = crossover(p2,p1,n2,n3,n4) &
+crossover(p1,p2,n1,0,n3,n4) = crossover(p2,p1,n1,n3,n4) &
+crossover(p1,p2,n1,n2,0,n4) = crossover(p2,p1,n1,n2,n4) &
+crossover(p1,p2,n1,n2,n3,0) = crossover(p2,p1,n1,n2,n3);
+
+theorem :: GENEALG1:30
+crossover(p1,p2,0,0,n3,n4) = crossover(p1,p2,n3,n4) &
+crossover(p1,p2,0,n2,0,n4) = crossover(p1,p2,n2,n4) &
+crossover(p1,p2,0,n2,n3,0) = crossover(p1,p2,n2,n3) &
+crossover(p1,p2,n1,0,n3,0) = crossover(p1,p2,n1,n3) &
+crossover(p1,p2,n1,0,0,n4) = crossover(p1,p2,n1,n4) &
+crossover(p1,p2,n1,n2,0,0) = crossover(p1,p2,n1,n2);
+
+theorem :: GENEALG1:31
+crossover(p1,p2,n1,0,0,0) = crossover(p2,p1,n1) &
+crossover(p1,p2,0,n2,0,0) = crossover(p2,p1,n2) &
+crossover(p1,p2,0,0,n3,0) = crossover(p2,p1,n3) &
+crossover(p1,p2,0,0,0,n4) = crossover(p2,p1,n4);
+
+theorem :: GENEALG1:32
+crossover(p1,p2,0,0,0,0) = p1;
+
+theorem :: GENEALG1:33
+(n1 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n2,n3,n4)) &
+(n2 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n3,n4)) &
+(n3 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n2,n4)) &
+(n4 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n2,n3));
+
+theorem :: GENEALG1:34
+(n1 >= len p1 & n2 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n3,n4)) &
+(n1 >= len p1 & n3 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n2,n4)) &
+(n1 >= len p1 & n4 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n2,n3)) &
+(n2 >= len p1 & n3 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n4)) &
+(n2 >= len p1 & n4 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n3)) &
+(n3 >= len p1 & n4 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n2));
+
+theorem :: GENEALG1:35
+(n1 >= len p1 & n2 >= len p1 & n3 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n4)) &
+(n1 >= len p1 & n2 >= len p1 & n4 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n3)) &
+(n1 >= len p1 & n3 >= len p1 & n4 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n2)) &
+(n2 >= len p1 & n3 >= len p1 & n4 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1));
+
+theorem :: GENEALG1:36
+n1 >= len p1 & n2 >= len p1 & n3 >= len p1 & n4 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4) = p1;
+
+theorem :: GENEALG1:37
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n2,n4,n3) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n3,n2,n4) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n3,n4,n2) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n4,n2,n3) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n4,n3,n2) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n2,n1,n3,n4) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n2,n1,n4,n3) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n2,n3,n1,n4) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n2,n3,n4,n1) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n2,n4,n1,n3) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n2,n4,n3,n1) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n3,n1,n2,n4) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n3,n1,n4,n2) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n3,n2,n1,n4) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n3,n2,n4,n1) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n3,n4,n1,n2) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n3,n4,n2,n1) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n4,n1,n2,n3) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n4,n1,n3,n2) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n4,n2,n1,n3) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n4,n2,n3,n1) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n4,n3,n1,n2) &
+crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n4,n3,n2,n1);
+
+theorem :: GENEALG1:38
+crossover(p1,p2,n1,n1,n3,n4) = crossover(p1,p2,n3,n4) &
+crossover(p1,p2,n1,n2,n1,n4) = crossover(p1,p2,n2,n4) &
+crossover(p1,p2,n1,n2,n3,n1) = crossover(p1,p2,n2,n3) &
+crossover(p1,p2,n1,n2,n2,n4) = crossover(p1,p2,n1,n4) &
+crossover(p1,p2,n1,n2,n3,n2) = crossover(p1,p2,n1,n3) &
+crossover(p1,p2,n1,n2,n3,n3) = crossover(p1,p2,n1,n2);
+
+theorem :: GENEALG1:39
+  crossover(p1,p2,n1,n1,n3,n3) = p1 &
+crossover(p1,p2,n1,n2,n1,n2) = p1 &
+crossover(p1,p2,n1,n2,n2,n1) = p1;
+
+begin
+::::::::::::::::::::::::::::::::::::::
+:: Properties of 5-points crossover ::
+:::::::::::::::::::::::: :::::::::::::
+
+theorem :: GENEALG1:40
+crossover(p1,p2,n1,n2,n3,n4,n5) is Individual of S;
+
+definition let S be Gene-Set, p1,p2 be Individual of S, n1,n2,n3,n4,n5;
+redefine func crossover(p1,p2,n1,n2,n3,n4,n5) -> Individual of S;
+end;
+
+theorem :: GENEALG1:41
+crossover(p1,p2,0,n2,n3,n4,n5)=crossover(p2,p1,n2,n3,n4,n5) &
+crossover(p1,p2,n1,0,n3,n4,n5) = crossover(p2,p1,n1,n3,n4,n5) &
+crossover(p1,p2,n1,n2,0,n4,n5) = crossover(p2,p1,n1,n2,n4,n5) &
+crossover(p1,p2,n1,n2,n3,0,n5) = crossover(p2,p1,n1,n2,n3,n5) &
+crossover(p1,p2,n1,n2,n3,n4,0) = crossover(p2,p1,n1,n2,n3,n4);
+
+theorem :: GENEALG1:42
+crossover(p1,p2,0,0,n3,n4,n5)=crossover(p1,p2,n3,n4,n5) &
+crossover(p1,p2,0,n2,0,n4,n5)=crossover(p1,p2,n2,n4,n5) &
+crossover(p1,p2,0,n2,n3,0,n5)=crossover(p1,p2,n2,n3,n5) &
+crossover(p1,p2,0,n2,n3,n4,0)=crossover(p1,p2,n2,n3,n4) &
+crossover(p1,p2,n1,0,0,n4,n5)=crossover(p1,p2,n1,n4,n5) &
+crossover(p1,p2,n1,0,n3,0,n5)=crossover(p1,p2,n1,n3,n5) &
+crossover(p1,p2,n1,0,n3,n4,0)=crossover(p1,p2,n1,n3,n4) &
+crossover(p1,p2,n1,n2,0,0,n5)=crossover(p1,p2,n1,n2,n5) &
+crossover(p1,p2,n1,n2,0,n4,0)=crossover(p1,p2,n1,n2,n4) &
+crossover(p1,p2,n1,n2,n3,0,0)=crossover(p1,p2,n1,n2,n3);
+
+theorem :: GENEALG1:43
+crossover(p1,p2,0,0,0,n4,n5)=crossover(p2,p1,n4,n5) &
+crossover(p1,p2,0,0,n3,0,n5)=crossover(p2,p1,n3,n5) &
+crossover(p1,p2,0,0,n3,n4,0)=crossover(p2,p1,n3,n4) &
+crossover(p1,p2,0,n2,0,0,n5)=crossover(p2,p1,n2,n5) &
+crossover(p1,p2,0,n2,0,n4,0)=crossover(p2,p1,n2,n4) &
+crossover(p1,p2,0,n2,n3,0,0)=crossover(p2,p1,n2,n3) &
+crossover(p1,p2,n1,0,0,0,n5)=crossover(p2,p1,n1,n5) &
+crossover(p1,p2,n1,0,0,n4,0)=crossover(p2,p1,n1,n4) &
+crossover(p1,p2,n1,0,n3,0,0)=crossover(p2,p1,n1,n3) &
+crossover(p1,p2,n1,n2,0,0,0)=crossover(p2,p1,n1,n2);
+
+theorem :: GENEALG1:44
+crossover(p1,p2,0,0,0,0,n5)=crossover(p1,p2,n5) &
+crossover(p1,p2,0,0,0,n4,0)=crossover(p1,p2,n4) &
+crossover(p1,p2,0,0,n3,0,0)=crossover(p1,p2,n3) &
+crossover(p1,p2,0,n2,0,0,0)=crossover(p1,p2,n2) &
+crossover(p1,p2,n1,0,0,0,0)=crossover(p1,p2,n1);
+
+theorem :: GENEALG1:45
+crossover(p1,p2,0,0,0,0,0)=p2;
+
+theorem :: GENEALG1:46
+(n1>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n2,n3,n4,n5)) &
+(n2>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n1,n3,n4,n5)) &
+(n3>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n1,n2,n4,n5)) &
+(n4>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n1,n2,n3,n5)) &
+(n5>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n1,n2,n3,n4));
+
+theorem :: GENEALG1:47
+(n1>=len p1 & n2>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n3,n4,n5)) &
+(n1>=len p1 & n3>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n2,n4,n5)) &
+(n1>=len p1 & n4>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n2,n3,n5)) &
+(n1>=len p1 & n5>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n2,n3,n4)) &
+(n2>=len p1 & n3>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n1,n4,n5)) &
+(n2>=len p1 & n4>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n1,n3,n5)) &
+(n2>=len p1 & n5>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n1,n3,n4)) &
+(n3>=len p1 & n4>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n1,n2,n5)) &
+(n3>=len p1 & n5>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n1,n2,n4)) &
+(n4>=len p1 & n5>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n1,n2,n3));
+
+theorem :: GENEALG1:48
+(n1>=len p1 & n2>=len p1 & n3>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n4,n5)) &
+(n1>=len p1 & n2>=len p1 & n4>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n3,n5)) &
+(n1>=len p1 & n2>=len p1 & n5>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n3,n4)) &
+(n1>=len p1 & n3>=len p1 & n4>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n2,n5)) &
+(n1>=len p1 & n3>=len p1 & n5>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n2,n4)) &
+(n1>=len p1 & n4>=len p1 & n5>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n2,n3)) &
+(n2>=len p1 & n3>=len p1 & n4>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n1,n5)) &
+(n2>=len p1 & n3>=len p1 & n5>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n1,n4)) &
+(n2>=len p1 & n4>=len p1 & n5>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n1,n3)) &
+(n3>=len p1 & n4>=len p1 & n5>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n1,n2));
+
+theorem :: GENEALG1:49
+(n1>=len p1 & n2>=len p1 & n3>=len p1 & n4>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n5)) &
+(n1>=len p1 & n2>=len p1 & n3>=len p1 & n5>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n4)) &
+(n1>=len p1 & n2>=len p1 & n4>=len p1 & n5>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n3)) &
+(n1>=len p1 & n3>=len p1 & n4>=len p1 & n5>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n2)) &
+(n2>=len p1 & n3>=len p1 & n4>=len p1 & n5>=len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n1));
+
+theorem :: GENEALG1:50
+n1>=len p1 & n2>=len p1 & n3>=len p1 & n4>=len p1 & n5>=len p1
+implies crossover(p1,p2,n1,n2,n3,n4,n5)=p1;
+
+theorem :: GENEALG1:51
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n2,n1,n3,n4,n5) &
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n3,n2,n1,n4,n5) &
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n4,n2,n3,n1,n5) &
+crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n5,n2,n3,n4,n1);
+
+theorem :: GENEALG1:52
+crossover(p1,p2,n1,n1,n3,n4,n5)=crossover(p1,p2,n3,n4,n5) &
+crossover(p1,p2,n1,n2,n1,n4,n5)=crossover(p1,p2,n2,n4,n5) &
+crossover(p1,p2,n1,n2,n3,n1,n5)=crossover(p1,p2,n2,n3,n5) &
+crossover(p1,p2,n1,n2,n3,n4,n1)=crossover(p1,p2,n2,n3,n4);
+
+begin
+::::::::::::::::::::::::::::::::::::::
+:: Properties of 6-points crossover ::
+::::::::::::::::::::::::::::::::::::::
+
+theorem :: GENEALG1:53
+crossover(p1,p2,n1,n2,n3,n4,n5,n6) is Individual of S;
+
+definition let S be Gene-Set,p1,p2 be Individual of S,n1,n2,n3,n4,n5,n6;
+redefine func crossover(p1,p2,n1,n2,n3,n4,n5,n6) -> Individual of S;
+end;
+
+theorem :: GENEALG1:54
+  crossover(p1,p2,0,n2,n3,n4,n5,n6)=crossover(p2,p1,n2,n3,n4,n5,n6) &
+crossover(p1,p2,n1,0,n3,n4,n5,n6)=crossover(p2,p1,n1,n3,n4,n5,n6) &
+crossover(p1,p2,n1,n2,0,n4,n5,n6)=crossover(p2,p1,n1,n2,n4,n5,n6) &
+crossover(p1,p2,n1,n2,n3,0,n5,n6)=crossover(p2,p1,n1,n2,n3,n5,n6) &
+crossover(p1,p2,n1,n2,n3,n4,0,n6)=crossover(p2,p1,n1,n2,n3,n4,n6) &
+crossover(p1,p2,n1,n2,n3,n4,n5,0)=crossover(p2,p1,n1,n2,n3,n4,n5);
+
+theorem :: GENEALG1:55
+(n1 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5,n6)=crossover(p1,p2,n2,n3,n4,n5,n6)) &
+(n2 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5,n6)=crossover(p1,p2,n1,n3,n4,n5,n6)) &
+(n3 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5,n6)=crossover(p1,p2,n1,n2,n4,n5,n6)) &
+(n4 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5,n6)=crossover(p1,p2,n1,n2,n3,n5,n6)) &
+(n5 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5,n6)=crossover(p1,p2,n1,n2,n3,n4,n6)) &
+(n6 >= len p1 implies
+crossover(p1,p2,n1,n2,n3,n4,n5,n6)=crossover(p1,p2,n1,n2,n3,n4,n5));
+
+theorem :: GENEALG1:56
+crossover(p1,p2,n1,n2,n3,n4,n5,n6)=crossover(p1,p2,n2,n1,n3,n4,n5,n6) &
+crossover(p1,p2,n1,n2,n3,n4,n5,n6)=crossover(p1,p2,n3,n2,n1,n4,n5,n6) &
+crossover(p1,p2,n1,n2,n3,n4,n5,n6)=crossover(p1,p2,n4,n2,n3,n1,n5,n6) &
+crossover(p1,p2,n1,n2,n3,n4,n5,n6)=crossover(p1,p2,n5,n2,n3,n4,n1,n6) &
+crossover(p1,p2,n1,n2,n3,n4,n5,n6)=crossover(p1,p2,n6,n2,n3,n4,n5,n1);
+
+theorem :: GENEALG1:57
+  crossover(p1,p2,n1,n1,n3,n4,n5,n6)=crossover(p1,p2,n3,n4,n5,n6) &
+crossover(p1,p2,n1,n2,n1,n4,n5,n6)=crossover(p1,p2,n2,n4,n5,n6) &
+crossover(p1,p2,n1,n2,n3,n1,n5,n6)=crossover(p1,p2,n2,n3,n5,n6) &
+crossover(p1,p2,n1,n2,n3,n4,n1,n6)=crossover(p1,p2,n2,n3,n4,n6) &
+crossover(p1,p2,n1,n2,n3,n4,n5,n1)=crossover(p1,p2,n2,n3,n4,n5);

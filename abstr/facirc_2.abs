@@ -1,0 +1,371 @@
+:: Full Adder Circuit. Part { II }
+::  by Grzegorz Bancerek , Shin'nosuke Yamaguchi and Katsumi Wasaki
+::
+:: Received March 22, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, MCART_1, RELAT_1, AMI_1, CARD_1, FUNCT_1, FINSEQ_1,
+      FINSEQ_2, FUNCT_4, FUNCT_5, FUNCOP_1, PBOOLE, MARGREL1, BINARITH,
+      CLASSES1, PARTFUN1, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, LATTICES,
+      CIRCCOMB, FACIRC_1, ZF_REFLE, ZF_LANG, FACIRC_2;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
+      MCART_1, RELAT_1, CARD_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2,
+      FUNCT_4, FUNCT_5, PBOOLE, MARGREL1, BINARITH, CLASSES1, PARTFUN1,
+      MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB, FACIRC_1;
+ constructors ENUMSET1, MCART_1, CLASSES1, FUNCT_5, CIRCUIT1, CIRCUIT2,
+      FACIRC_1, BINARITH;
+ clusters RELSET_1, FINSEQ_1, FINSEQ_2, MARGREL1, MSUALG_1, PRE_CIRC, CIRCCOMB,
+      FACIRC_1, SUBSET_1, STRUCT_0, RELAT_1, CIRCCMB2, MEMBERED, NUMBERS,
+      ORDINAL2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+theorem :: FACIRC_2:1
+ for x,y,z being set st
+   x <> z & y <> z holds {x,y} \ {z} = {x,y};
+
+canceled;
+
+theorem :: FACIRC_2:3
+    for x,y,z being set
+   holds x <> [<*x,y*>, z] & y <> [<*x,y*>, z];
+
+definition
+ cluster void -> unsplit gate`1=arity gate`2isBoolean ManySortedSign;
+end;
+
+definition
+ cluster strict void ManySortedSign;
+end;
+
+definition
+ let x be set;
+ func SingleMSS(x) -> strict void ManySortedSign means
+:: FACIRC_2:def 1
+  the carrier of it = {x};
+end;
+
+definition
+ let x be set;
+ cluster SingleMSS(x) -> non empty;
+end;
+
+definition
+ let x be set;
+ func SingleMSA(x) -> Boolean strict MSAlgebra over SingleMSS(x) means
+:: FACIRC_2:def 2
+    not contradiction;
+end;
+
+theorem :: FACIRC_2:4
+   for x being set, S being ManySortedSign holds SingleMSS x tolerates S;
+
+theorem :: FACIRC_2:5
+ for x being set, S being non empty ManySortedSign st x in the carrier of S
+   holds (SingleMSS x) +* S = the ManySortedSign of S;
+
+theorem :: FACIRC_2:6
+   for x being set, S being non empty strict ManySortedSign
+ for A being Boolean MSAlgebra over S st x in the carrier of S holds
+  (SingleMSA x) +* A = the MSAlgebra of A;
+
+definition
+ redefine func {} -> FinSeqLen of 0;
+ synonym <*>;
+end;
+
+definition
+ let n be Nat;
+ let x,y be FinSequence;
+ func n-BitAdderStr(x,y) ->
+      unsplit gate`1=arity gate`2isBoolean non void strict
+      non empty ManySortedSign
+ means
+:: FACIRC_2:def 3
+  ex f,g being ManySortedSet of NAT st
+   it = f.n & f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
+   g.0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE] &
+   for n being Nat, S being non empty ManySortedSign, z be set
+    st S = f.n & z = g.n
+    holds f.(n+1) = S +* BitAdderWithOverflowStr(x .(n+1), y.(n+1), z) &
+          g.(n+1) = MajorityOutput(x .(n+1), y.(n+1), z);
+end;
+
+definition
+ let n be Nat;
+ let x,y be FinSequence;
+ func n-BitAdderCirc(x,y) ->
+      Boolean gate`2=den strict Circuit of n-BitAdderStr(x,y) means
+:: FACIRC_2:def 4
+  ex f,g,h being ManySortedSet of NAT st
+   n-BitAdderStr(x,y) = f.n & it = g.n &
+   f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
+   g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
+   h.0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE] &
+   for n being Nat, S being non empty ManySortedSign,
+       A being non-empty MSAlgebra over S
+   for z being set st S = f.n & A = g.n & z = h.n holds
+     f.(n+1) = S +* BitAdderWithOverflowStr(x .(n+1), y.(n+1), z) &
+     g.(n+1) = A +* BitAdderWithOverflowCirc(x .(n+1), y.(n+1), z) &
+     h.(n+1) = MajorityOutput(x .(n+1), y.(n+1), z);
+end;
+
+definition
+ let n be Nat;
+ let x,y be FinSequence;
+ func n-BitMajorityOutput(x,y) ->
+      Element of InnerVertices (n-BitAdderStr(x,y)) means
+:: FACIRC_2:def 5
+  ex h being ManySortedSet of NAT st
+   it = h.n & h.0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE] &
+   for n being Nat, z be set st z = h.n holds
+    h.(n+1) = MajorityOutput(x .(n+1), y.(n+1), z);
+end;
+
+theorem :: FACIRC_2:7
+ for x,y being FinSequence, f,g,h being ManySortedSet of NAT st
+   f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
+   g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
+   h.0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE] &
+   for n being Nat, S being non empty ManySortedSign,
+       A being non-empty MSAlgebra over S
+   for z being set st S = f.n & A = g.n & z = h.n holds
+     f.(n+1) = S +* BitAdderWithOverflowStr(x .(n+1), y.(n+1), z) &
+     g.(n+1) = A +* BitAdderWithOverflowCirc(x .(n+1), y.(n+1), z) &
+     h.(n+1) = MajorityOutput(x .(n+1), y.(n+1), z)
+ for n being Nat holds
+   n-BitAdderStr(x,y) = f.n & n-BitAdderCirc(x,y) = g.n &
+   n-BitMajorityOutput(x,y) = h.n;
+
+theorem :: FACIRC_2:8
+  for a,b being FinSequence holds
+  0-BitAdderStr(a,b) = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
+  0-BitAdderCirc(a,b) = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
+  0-BitMajorityOutput(a,b) = [<*>, (0-tuples_on BOOLEAN)-->FALSE];
+
+theorem :: FACIRC_2:9
+for a,b being FinSequence, c being set st
+  c = [<*>, (0-tuples_on BOOLEAN)-->FALSE]
+ holds
+  1-BitAdderStr(a,b) = 1GateCircStr(<*>, (0-tuples_on BOOLEAN)-->FALSE)+*
+      BitAdderWithOverflowStr(a.1, b.1, c) &
+  1-BitAdderCirc(a,b) = 1GateCircuit(<*>, (0-tuples_on BOOLEAN)-->FALSE)+*
+      BitAdderWithOverflowCirc(a.1, b.1, c) &
+  1-BitMajorityOutput(a,b) = MajorityOutput(a.1, b.1, c);
+
+theorem :: FACIRC_2:10
+   for a,b,c being set st
+   c = [<*>, (0-tuples_on BOOLEAN)-->FALSE]
+  holds
+  1-BitAdderStr(<*a*>,<*b*>) =
+   1GateCircStr(<*>, (0-tuples_on BOOLEAN)-->FALSE)+*
+    BitAdderWithOverflowStr(a, b, c) &
+  1-BitAdderCirc(<*a*>,<*b*>) =
+   1GateCircuit(<*>, (0-tuples_on BOOLEAN)-->FALSE)+*
+    BitAdderWithOverflowCirc(a, b, c) &
+  1-BitMajorityOutput(<*a*>,<*b*>) = MajorityOutput(a, b, c);
+
+theorem :: FACIRC_2:11
+ for n be Nat
+ for p,q being FinSeqLen of n
+ for p1,p2, q1,q2 being FinSequence holds
+  n-BitAdderStr(p^p1, q^q1) = n-BitAdderStr(p^p2, q^q2) &
+  n-BitAdderCirc(p^p1, q^q1) = n-BitAdderCirc(p^p2, q^q2) &
+  n-BitMajorityOutput(p^p1, q^q1) = n-BitMajorityOutput(p^p2, q^q2);
+
+theorem :: FACIRC_2:12
+   for n be Nat for x,y being FinSeqLen of n for a,b being set holds
+  (n+1)-BitAdderStr(x^<*a*>, y^<*b*>) = n-BitAdderStr(x, y) +*
+      BitAdderWithOverflowStr(a, b, n-BitMajorityOutput(x, y)) &
+  (n+1)-BitAdderCirc(x^<*a*>, y^<*b*>) = n-BitAdderCirc(x, y) +*
+      BitAdderWithOverflowCirc(a, b, n-BitMajorityOutput(x, y)) &
+  (n+1)-BitMajorityOutput(x^<*a*>, y^<*b*>) =
+    MajorityOutput(a, b, n-BitMajorityOutput(x, y));
+
+theorem :: FACIRC_2:13
+ for n be Nat for x,y being FinSequence holds
+  (n+1)-BitAdderStr(x, y) = n-BitAdderStr(x, y) +*
+    BitAdderWithOverflowStr(x .(n+1), y.(n+1), n-BitMajorityOutput(x, y)) &
+  (n+1)-BitAdderCirc(x, y) = n-BitAdderCirc(x, y) +*
+    BitAdderWithOverflowCirc(x .(n+1), y.(n+1), n-BitMajorityOutput(x, y)) &
+  (n+1)-BitMajorityOutput(x, y) =
+    MajorityOutput(x .(n+1), y.(n+1), n-BitMajorityOutput(x, y));
+
+theorem :: FACIRC_2:14
+ for n,m be Nat st n <= m
+ for x,y being FinSequence holds
+  InnerVertices (n-BitAdderStr(x,y)) c= InnerVertices (m-BitAdderStr(x,y));
+
+theorem :: FACIRC_2:15
+   for n be Nat
+ for x,y being FinSequence holds
+  InnerVertices ((n+1)-BitAdderStr(x,y)) =
+    InnerVertices (n-BitAdderStr(x,y)) \/
+     InnerVertices BitAdderWithOverflowStr(x .(n+1), y.(n+1),
+         n-BitMajorityOutput(x,y));
+
+definition
+ let k,n be Nat such that
+    k >= 1 & k <= n;
+ let x,y be FinSequence;
+ func (k,n)-BitAdderOutput(x,y) ->
+      Element of InnerVertices (n-BitAdderStr(x,y)) means
+:: FACIRC_2:def 6
+  ex i being Nat st k = i+1 &
+   it = BitAdderOutput(x .k, y.k, i-BitMajorityOutput(x,y));
+end;
+
+theorem :: FACIRC_2:16
+   for n,k being Nat st k < n
+ for x,y being FinSequence holds
+  (k+1,n)-BitAdderOutput(x,y) =
+     BitAdderOutput(x .(k+1), y.(k+1), k-BitMajorityOutput(x,y));
+
+theorem :: FACIRC_2:17
+   for n being Nat
+ for x,y being FinSequence holds
+  InnerVertices (n-BitAdderStr(x,y)) is Relation;
+
+theorem :: FACIRC_2:18
+ for x,y,c being set
+  holds InnerVertices MajorityIStr(x,y,c) =
+    {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']};
+
+theorem :: FACIRC_2:19
+ for x,y,c being set st
+   x <> [<*y,c*>, '&'] & y <> [<*c,x*>, '&'] & c <> [<*x,y*>, '&']
+  holds InputVertices MajorityIStr(x,y,c) = {x,y,c};
+
+theorem :: FACIRC_2:20
+ for x,y,c being set
+  holds InnerVertices MajorityStr(x,y,c) =
+    {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/ {MajorityOutput(x,y,c)};
+
+theorem :: FACIRC_2:21
+ for x,y,c being set st
+   x <> [<*y,c*>, '&'] & y <> [<*c,x*>, '&'] & c <> [<*x,y*>, '&']
+  holds InputVertices MajorityStr(x,y,c) = {x,y,c};
+
+theorem :: FACIRC_2:22
+ for S1,S2 being non empty ManySortedSign
+  st S1 tolerates S2 & InputVertices S1 = InputVertices S2
+  holds InputVertices (S1+*S2) = InputVertices S1;
+
+theorem :: FACIRC_2:23
+ for x,y,c being set st
+   x <> [<*y,c*>, '&'] & y <> [<*c,x*>, '&'] & c <> [<*x,y*>, '&'] &
+   c <> [<*x,y*>, 'xor']
+  holds
+   InputVertices BitAdderWithOverflowStr(x,y,c) = {x,y,c};
+
+theorem :: FACIRC_2:24
+ for x,y,c being set holds
+   InnerVertices BitAdderWithOverflowStr(x,y,c) =
+     {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} \/
+     {[<*x,y*>,'&'], [<*y,c*>,'&'], [<*c,x*>,'&']} \/ {MajorityOutput(x,y,c)};
+
+definition
+ cluster empty -> non pair set;
+end;
+
+definition
+ cluster {} -> nonpair-yielding;
+ let f be nonpair-yielding Function; let x be set;
+ cluster f.x -> non pair;
+end;
+
+definition
+ let n be Nat;
+ let x,y be FinSequence;
+ cluster n-BitMajorityOutput(x,y) -> pair;
+end;
+
+theorem :: FACIRC_2:25
+ for x,y being FinSequence, n being Nat
+  holds
+   (n-BitMajorityOutput(x,y))`1 = <*> &
+   (n-BitMajorityOutput(x,y))`2 = (0-tuples_on BOOLEAN)-->FALSE &
+   proj1 (n-BitMajorityOutput(x,y))`2 = 0-tuples_on BOOLEAN
+  or
+   Card (n-BitMajorityOutput(x,y))`1 = 3 &
+   (n-BitMajorityOutput(x,y))`2 = or3 &
+   proj1 (n-BitMajorityOutput(x,y))`2 = 3-tuples_on BOOLEAN;
+
+theorem :: FACIRC_2:26
+ for n being Nat, x,y being FinSequence, p being set
+  holds
+   n-BitMajorityOutput(x,y) <> [p, '&'] &
+   n-BitMajorityOutput(x,y) <> [p, 'xor'];
+
+theorem :: FACIRC_2:27
+ for f,g being nonpair-yielding FinSequence
+ for n being Nat holds
+  InputVertices ((n+1)-BitAdderStr(f,g)) =
+    (InputVertices (n-BitAdderStr(f,g)))\/
+     ((InputVertices BitAdderWithOverflowStr(f.(n+1),g.(n+1),
+        n-BitMajorityOutput(f,g)) \ {n-BitMajorityOutput(f,g)})) &
+  InnerVertices (n-BitAdderStr(f,g)) is Relation &
+  InputVertices (n-BitAdderStr(f,g)) is without_pairs;
+
+theorem :: FACIRC_2:28
+   for n being Nat
+ for x,y being nonpair-yielding FinSeqLen of n holds
+  InputVertices (n-BitAdderStr(x,y)) = rng x \/ rng y;
+
+theorem :: FACIRC_2:29
+ for x,y,c being set
+ for s being State of MajorityCirc(x,y,c)
+  for a1,a2,a3 being Element of BOOLEAN st
+    a1 = s.[<*x,y*>,'&'] & a2 = s.[<*y,c*>,'&'] & a3 = s.[<*c,x*>,'&']
+  holds (Following s).MajorityOutput(x,y,c) = a1 'or' a2 'or' a3;
+
+theorem :: FACIRC_2:30
+ for x,y,c being set st
+   x <> [<*y,c*>, '&'] & y <> [<*c,x*>, '&'] & c <> [<*x,y*>, '&'] &
+   c <> [<*x,y*>, 'xor']
+ for s being State of MajorityCirc(x,y,c)
+  holds Following(s,2) is stable;
+
+theorem :: FACIRC_2:31
+   for x,y,c being set st
+   x <> [<*y,c*>, '&'] & y <> [<*c,x*>, '&'] & c <> [<*x,y*>, '&'] &
+   c <> [<*x,y*>, 'xor']
+ for s being State of BitAdderWithOverflowCirc(x,y,c)
+ for a1,a2,a3 being Element of BOOLEAN st a1 = s.x & a2 = s.y & a3 = s.c holds
+   (Following(s,2)).BitAdderOutput(x,y,c) = a1 'xor' a2 'xor' a3 &
+   (Following(s,2)).MajorityOutput(x,y,c)
+           = a1 '&' a2 'or' a2 '&' a3 'or' a3 '&' a1;
+
+theorem :: FACIRC_2:32
+ for x,y,c being set st
+   x <> [<*y,c*>, '&'] & y <> [<*c,x*>, '&'] & c <> [<*x,y*>, '&'] &
+   c <> [<*x,y*>, 'xor']
+ for s being State of BitAdderWithOverflowCirc(x,y,c)
+  holds Following(s,2) is stable;
+
+theorem :: FACIRC_2:33
+   for n being Nat
+ for x,y being nonpair-yielding FinSeqLen of n
+ for s being State of n-BitAdderCirc(x,y)
+  holds Following(s,1+2*n) is stable;
+
+theorem :: FACIRC_2:34
+   for i being Nat, x being FinSeqLen of i+1
+  ex y being FinSeqLen of i, a being set st
+   x = y^<*a*>;
+
+theorem :: FACIRC_2:35
+   for p,q being FinSequence holds (p^q)|dom p = p;
+
+theorem :: FACIRC_2:36
+   for i being Nat, x being nonpair-yielding FinSeqLen of i+1
+  ex y being nonpair-yielding FinSeqLen of i,
+     a being non pair set st x = y^<*a*>;
+
+theorem :: FACIRC_2:37
+   for n being Nat
+  ex N being Function of NAT,NAT st N.0 = 1 & N.1 = 2 & N.2 = n;

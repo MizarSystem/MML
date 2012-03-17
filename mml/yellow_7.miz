@@ -1,0 +1,1462 @@
+:: Duality in Relation Structures
+::  by Grzegorz Bancerek
+::
+:: Received November 12, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary ORDERS_1, RELAT_1, OPPCAT_1, RELAT_2, LATTICE3, YELLOW_0, LATTICES,
+      BHSP_3, WAYBEL_0, FINSET_1, QUANTAL1, BOOLE, ZF_LANG, PRE_TOPC, FUNCT_1,
+      CAT_1, WELLORD1, SEQM_3, WAYBEL_1, PBOOLE, WAYBEL_5, FUNCT_6, FUNCOP_1,
+      ZF_REFLE, FINSEQ_4, YELLOW_2, ORDINAL2, CARD_3, PRALG_1, REALSET1,
+      YELLOW_7;
+ notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, RELAT_2, RELSET_1, FUNCT_1,
+      FUNCT_2, FINSET_1, CARD_3, FUNCT_6, REALSET1, PRE_TOPC, PRALG_1, PBOOLE,
+      STRUCT_0, ORDERS_1, LATTICE3, YELLOW_0, YELLOW_2, WAYBEL_1, WAYBEL_0,
+      WAYBEL_5;
+ constructors LATTICE3, WAYBEL_1, ORDERS_3, WAYBEL_5, PRALG_2;
+ clusters RELSET_1, STRUCT_0, PRALG_1, MSUALG_1, LATTICE3, YELLOW_0, WAYBEL_0,
+      WAYBEL_1, WAYBEL_5, FINSET_1, PBOOLE, PRVECT_1, CANTOR_1, SUBSET_1,
+      FRAENKEL, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, RELAT_2, ORDERS_1, LATTICE3, YELLOW_0, WAYBEL_0, WAYBEL_1,
+      WAYBEL_5, XBOOLE_0;
+ theorems RELAT_1, RELAT_2, FUNCT_1, FUNCT_2, CARD_3, STRUCT_0, ORDERS_1,
+      LATTICE3, YELLOW_0, WAYBEL_0, YELLOW_2, WAYBEL_1, WAYBEL_5, PBOOLE,
+      FUNCT_6, FUNCOP_1, MSUALG_1, PRALG_2, YELLOW_5, PRALG_1, XBOOLE_0;
+ schemes ZFREFLE1, YELLOW_2;
+
+begin
+
+definition
+ let L be RelStr;
+ redefine func L~; synonym L opp;
+end;
+
+theorem Th1:
+ for L being RelStr, x,y being Element of L opp holds x <= y iff ~x >= ~y
+  proof let L be RelStr, x,y be Element of L opp;
+      ~x = x & (~x)~ = ~x & ~y = y & (~y)~ = ~y by LATTICE3:def 6,def 7;
+   hence thesis by LATTICE3:9;
+  end;
+
+theorem Th2:
+ for L being RelStr, x being Element of L, y being Element of L opp holds
+  (x <= ~y iff x~ >= y) & (x >= ~y iff x~ <= y)
+  proof let L be RelStr, x be Element of L, y be Element of L opp;
+      ~(x~) = x~ & x~ = x by LATTICE3:def 6,def 7;
+   hence thesis by Th1;
+  end;
+
+theorem
+   for L being RelStr holds L is empty iff L opp is empty
+  proof let L be RelStr;
+      (L is empty iff the carrier of L is empty) &
+    L opp = RelStr(#the carrier of L, (the InternalRel of L)~#)
+     by LATTICE3:def 5,STRUCT_0:def 1;
+   hence thesis by STRUCT_0:def 1;
+  end;
+
+theorem Th4:
+ for L being RelStr holds L is reflexive iff L opp is reflexive
+  proof let L be RelStr;
+A1:  L opp = RelStr(#the carrier of L, (the InternalRel of L)~#)
+     by LATTICE3:def 5;
+   thus L is reflexive implies L opp is reflexive
+    proof assume L is reflexive;
+then A2:    the InternalRel of L is_reflexive_in the carrier of L by ORDERS_1:
+def 4;
+     let x be set; assume x in the carrier of L opp;
+      then [x,x] in the InternalRel of L by A1,A2,RELAT_2:def 1;
+     hence thesis by A1,RELAT_1:def 7;
+    end;
+   assume L opp is reflexive;
+then A3:  the InternalRel of L opp is_reflexive_in the carrier of L opp
+     by ORDERS_1:def 4;
+    let x be set; assume x in the carrier of L;
+     then [x,x] in the InternalRel of L opp by A1,A3,RELAT_2:def 1;
+    hence thesis by A1,RELAT_1:def 7;
+  end;
+
+theorem Th5:
+ for L being RelStr holds L is antisymmetric iff L opp is antisymmetric
+  proof let L be RelStr;
+   thus L is antisymmetric implies L opp is antisymmetric
+    proof assume
+A1:    L is antisymmetric;
+     let x,y be Element of L opp;
+     assume x <= y & x >= y;
+      then ~x >= ~y & ~x <= ~y by Th1;
+      then ~x = ~y by A1,YELLOW_0:def 3;
+     hence x = ~y by LATTICE3:def 7 .= y by LATTICE3:def 7;
+    end;
+   assume
+A2:  L opp is antisymmetric;
+   let x,y be Element of L;
+   assume x <= y & x >= y;
+    then x~ >= y~ & x~ <= y~ by LATTICE3:9;
+    then x~ = y~ by A2,YELLOW_0:def 3;
+   hence x = y~ by LATTICE3:def 6 .= y by LATTICE3:def 6;
+  end;
+
+theorem Th6:
+ for L being RelStr holds L is transitive iff L opp is transitive
+  proof let L be RelStr;
+   thus L is transitive implies L opp is transitive
+    proof assume
+A1:    L is transitive;
+     let x,y,z be Element of L opp;
+     assume x <= y & z >= y;
+      then ~x >= ~y & ~z <= ~y by Th1;
+      then ~x >= ~z by A1,YELLOW_0:def 2;
+     hence thesis by Th1;
+    end;
+   assume
+A2:  L opp is transitive;
+   let x,y,z be Element of L;
+   assume x <= y & z >= y;
+    then x~ >= y~ & z~ <= y~ by LATTICE3:9;
+    then x~ >= z~ by A2,YELLOW_0:def 2;
+   hence thesis by LATTICE3:9;
+  end;
+
+theorem Th7:
+ for L being non empty RelStr holds L is connected iff L opp is connected
+  proof let L be non empty RelStr;
+   thus L is connected implies L opp is connected
+     proof assume
+A1:     for x,y being Element of L holds x <= y or x >= y;
+      let x,y be Element of L opp;
+         ~x <= ~y or ~x >= ~y by A1;
+      hence thesis by Th1;
+     end;
+   assume
+A2:  for x,y being Element of L opp holds x <= y or x >= y;
+   let x,y be Element of L;
+      x~ <= y~ or x~ >= y~ by A2;
+   hence thesis by LATTICE3:9;
+  end;
+
+definition
+ let L be reflexive RelStr;
+ cluster L opp -> reflexive;
+ coherence by Th4;
+end;
+
+definition
+ let L be transitive RelStr;
+ cluster L opp -> transitive;
+ coherence by Th6;
+end;
+
+definition
+ let L be antisymmetric RelStr;
+ cluster L opp -> antisymmetric;
+ coherence by Th5;
+end;
+
+definition
+ let L be connected (non empty RelStr);
+ cluster L opp -> connected;
+ coherence by Th7;
+end;
+
+theorem Th8:
+ for L being RelStr, x being Element of L, X being set holds
+   (x is_<=_than X iff x~ is_>=_than X) &
+   (x is_>=_than X iff x~ is_<=_than X)
+  proof
+A1: now let L be RelStr, x be Element of L, X be set; assume
+A2:   x is_<=_than X;
+    thus x~ is_>=_than X
+     proof let a be Element of L opp; assume
+A3:     a in X;
+A4:     (~a)~ = ~a & ~a = a by LATTICE3:def 6,def 7;
+       then x <= ~a by A2,A3,LATTICE3:def 8;
+      hence thesis by A4,LATTICE3:9;
+     end;
+   end;
+A5: now let L be RelStr, x be Element of L, X be set; assume
+A6:   x is_>=_than X;
+    thus x~ is_<=_than X
+     proof let a be Element of L opp; assume
+A7:     a in X;
+A8:     (~a)~ = ~a & ~a = a by LATTICE3:def 6,def 7;
+       then x >= ~a by A6,A7,LATTICE3:def 9;
+      hence thesis by A8,LATTICE3:9;
+     end;
+   end;
+   let L be RelStr, x be Element of L, X be set;
+A9:  x~~ = x~ & x~ = x by LATTICE3:def 6;
+A10:  L opp~ = the RelStr of L by LATTICE3:8;
+    then x~~ is_<=_than X implies x is_<=_than X by A9,YELLOW_0:2;
+   hence x is_<=_than X iff x~ is_>=_than X by A1,A5;
+      x~~ is_>=_than X implies x is_>=_than X by A9,A10,YELLOW_0:2;
+   hence thesis by A1,A5;
+  end;
+
+theorem Th9:
+ for L being RelStr, x being Element of L opp, X being set holds
+   (x is_<=_than X iff ~x is_>=_than X) &
+   (x is_>=_than X iff ~x is_<=_than X)
+  proof let L be RelStr, x be Element of L opp, X be set;
+      (~x)~ = ~x & ~x = x by LATTICE3:def 6,def 7;
+   hence thesis by Th8;
+  end;
+
+theorem Th10:
+ for L being RelStr, X being set holds ex_sup_of X,L iff ex_inf_of X,L opp
+  proof let L be RelStr, X be set;
+   hereby assume ex_sup_of X,L;
+    then consider a being Element of L such that
+A1:   X is_<=_than a and
+A2:   for b being Element of L st X is_<=_than b holds b >= a and
+A3:   for c being Element of L st X is_<=_than c &
+      for b being Element of L st X is_<=_than b holds b >= c
+     holds c = a by YELLOW_0:def 7;
+    thus ex_inf_of X,L opp
+     proof take a~;
+      thus X is_>=_than a~ by A1,Th8;
+      hereby let b be Element of L opp; assume
+          X is_>=_than b;
+        then X is_<=_than ~b by Th9;
+        then ~b >= a by A2;
+       hence b <= a~ by Th2;
+      end;
+      let c be Element of L opp; assume
+         X is_>=_than c;
+then A4:     X is_<=_than ~c by Th9;
+      assume
+A5:     for b being Element of L opp st X is_>=_than b holds b <= c;
+         now let b be Element of L; assume
+           X is_<=_than b;
+         then X is_>=_than b~ by Th8;
+         then b~ <= c by A5;
+        hence b >= ~c by Th2;
+       end;
+       then ~c = a & ~c = c by A3,A4,LATTICE3:def 7;
+      hence thesis by LATTICE3:def 6;
+     end;
+   end;
+   assume ex_inf_of X,L opp;
+   then consider a being Element of L opp such that
+A6:  X is_>=_than a and
+A7:  for b being Element of L opp st X is_>=_than b holds b <= a and
+A8:  for c being Element of L opp st X is_>=_than c &
+     for b being Element of L opp st X is_>=_than b holds b <= c
+    holds c = a by YELLOW_0:def 8;
+   take ~a;
+   thus X is_<=_than ~a by A6,Th9;
+   hereby let b be Element of L; assume
+       X is_<=_than b;
+     then X is_>=_than b~ by Th8;
+     then b~ <= a by A7;
+    hence b >= ~a by Th2;
+   end;
+   let c be Element of L; assume
+      X is_<=_than c;
+then A9:  X is_>=_than c~ by Th8;
+   assume
+A10:  for b being Element of L st X is_<=_than b holds b >= c;
+      now let b be Element of L opp; assume
+        X is_>=_than b;
+      then X is_<=_than ~b by Th9;
+      then ~b >= c by A10;
+     hence b <= c~ by Th2;
+    end;
+    then c~ = a & c~ = c by A8,A9,LATTICE3:def 6;
+   hence thesis by LATTICE3:def 7;
+  end;
+
+theorem Th11:
+ for L being RelStr, X being set holds ex_sup_of X,L opp iff ex_inf_of X,L
+  proof let L be RelStr, X be set;
+      L opp~ = the RelStr of L by LATTICE3:8;
+    then ex_inf_of X,L iff ex_inf_of X,L opp~ by YELLOW_0:14;
+   hence thesis by Th10;
+  end;
+
+theorem Th12:
+ for L being non empty RelStr, X being set
+  st ex_sup_of X,L or ex_inf_of X,L opp
+  holds "\/"(X,L) = "/\"(X,L opp)
+  proof let L be non empty RelStr, X be set; assume
+      ex_sup_of X,L or ex_inf_of X,L opp;
+then A1:  ex_sup_of X,L & ex_inf_of X,L opp by Th10;
+    then "\/"(X,L) is_>=_than X by YELLOW_0:def 9;
+then A2:  "\/"(X,L)~ is_<=_than X by Th8;
+      now let x be Element of L opp; assume x is_<=_than X;
+      then ~x is_>=_than X by Th9;
+      then ~x >= "\/"(X,L) by A1,YELLOW_0:def 9;
+     hence x <= "\/"(X,L)~ by Th2;
+    end;
+    then "/\"(X,L opp) = "\/"(X,L)~ by A1,A2,YELLOW_0:def 10;
+   hence thesis by LATTICE3:def 6;
+  end;
+
+theorem Th13:
+ for L being non empty RelStr, X being set
+  st ex_inf_of X,L or ex_sup_of X,L opp
+  holds "/\"(X,L) = "\/"(X,L opp)
+  proof let L be non empty RelStr, X be set; assume
+      ex_inf_of X,L or ex_sup_of X,L opp;
+then A1:  ex_inf_of X,L & ex_sup_of X,L opp by Th11;
+    then "/\"(X,L) is_<=_than X by YELLOW_0:def 10;
+then A2:  "/\"(X,L)~ is_>=_than X by Th8;
+      now let x be Element of L opp; assume x is_>=_than X;
+      then ~x is_<=_than X by Th9;
+      then ~x <= "/\"(X,L) by A1,YELLOW_0:def 10;
+     hence x >= "/\"(X,L)~ by Th2;
+    end;
+    then "\/"(X,L opp) = "/\"(X,L)~ by A1,A2,YELLOW_0:def 9;
+   hence thesis by LATTICE3:def 6;
+  end;
+
+theorem Th14:
+ for L1,L2 being RelStr
+  st the RelStr of L1 = the RelStr of L2 & L1 is with_infima
+  holds L2 is with_infima
+   proof let L1,L2 be RelStr such that
+A1:   the RelStr of L1 = the RelStr of L2 and
+A2:   for x,y being Element of L1
+      ex z being Element of L1 st z <= x & z <= y &
+       for z' being Element of L1 st z' <= x & z' <= y holds z' <= z;
+    let a,b be Element of L2;
+    reconsider x = a, y = b as Element of L1 by A1;
+    consider z being Element of L1 such that
+A3:   z <= x & z <= y and
+A4:   for z' being Element of L1 st z' <= x & z' <= y holds z' <= z by A2;
+    reconsider c = z as Element of L2 by A1;
+    take c; thus c <= a & c <= b by A1,A3,YELLOW_0:1;
+    let d be Element of L2;
+    reconsider z' = d as Element of L1 by A1;
+    assume d <= a & d <= b;
+     then z' <= x & z' <= y by A1,YELLOW_0:1;
+     then z' <= z by A4;
+    hence thesis by A1,YELLOW_0:1;
+   end;
+
+theorem
+   for L1,L2 being RelStr
+  st the RelStr of L1 = the RelStr of L2 & L1 is with_suprema
+  holds L2 is with_suprema
+   proof let L1,L2 be RelStr such that
+A1:   the RelStr of L1 = the RelStr of L2 and
+A2:   for x,y being Element of L1
+      ex z being Element of L1 st z >= x & z >= y &
+       for z' being Element of L1 st z' >= x & z' >= y holds z' >= z;
+    let a,b be Element of L2;
+    reconsider x = a, y = b as Element of L1 by A1;
+    consider z being Element of L1 such that
+A3:   z >= x & z >= y and
+A4:   for z' being Element of L1 st z' >= x & z' >= y holds z' >= z by A2;
+    reconsider c = z as Element of L2 by A1;
+    take c; thus c >= a & c >= b by A1,A3,YELLOW_0:1;
+    let d be Element of L2;
+    reconsider z' = d as Element of L1 by A1;
+    assume d >= a & d >= b;
+     then z' >= x & z' >= y by A1,YELLOW_0:1;
+     then z' >= z by A4;
+    hence thesis by A1,YELLOW_0:1;
+   end;
+
+theorem Th16:
+ for L being RelStr holds
+  L is with_infima iff L opp is with_suprema
+  proof let L be RelStr;
+      L opp~ = the RelStr of L by LATTICE3:8;
+    then L is with_infima iff L opp~ is with_infima by Th14;
+   hence thesis by LATTICE3:10;
+  end;
+
+:: LATTICE3:10
+:: for L being RelStr holds L opp is with_infima iff L is with_suprema;
+
+theorem Th17:
+ for L being non empty RelStr holds
+  L is complete iff L opp is complete
+  proof
+A1: now let L be non empty RelStr; assume
+A2:   L is complete;
+    thus L opp is complete
+     proof let X be set;
+      set Y = {x where x is Element of L: x is_<=_than X};
+      consider a being Element of L such that
+A3:     Y is_<=_than a & for b being Element of L st Y is_<=_than b holds a <=
+ b
+        by A2,LATTICE3:def 12;
+      take x = a~;
+      thus X is_<=_than x
+       proof let y be Element of L opp; assume
+A4:       y in X;
+           Y is_<=_than ~y
+          proof let b be Element of L; assume b in Y;
+            then y = ~y & ex z being Element of L st b = z & z is_<=_than X
+             by LATTICE3:def 7;
+           hence b <= ~y by A4,LATTICE3:def 8;
+          end;
+         then a <= ~y by A3;
+        hence thesis by Th2;
+       end;
+      let y be Element of L opp; assume X is_<=_than y;
+       then X is_>=_than ~y by Th9;
+       then ~y in Y;
+       then a >= ~y & ~x = x & x = a by A3,LATTICE3:def 6,def 7,def 9;
+      hence thesis by Th1;
+     end;
+   end;
+   let L be non empty RelStr;
+      L opp~ = the RelStr of L by LATTICE3:8;
+    then L opp~ is complete implies L is complete by YELLOW_0:3;
+   hence thesis by A1;
+  end;
+
+definition
+ let L be with_infima RelStr;
+ cluster L opp -> with_suprema;
+ coherence by Th16;
+end;
+
+definition
+ let L be with_suprema RelStr;
+ cluster L opp -> with_infima;
+ coherence by LATTICE3:10;
+end;
+
+definition
+ let L be complete (non empty RelStr);
+ cluster L opp -> complete;
+ coherence by Th17;
+end;
+
+theorem
+   for L being non empty RelStr
+ for X being Subset of L, Y being Subset of L opp st X = Y
+  holds fininfs X = finsups Y & finsups X = fininfs Y
+  proof let L be non empty RelStr;
+   let X be Subset of L, Y be Subset of L opp such that
+A1:  X = Y;
+A2:  fininfs X = {"/\"(Z,L) where Z is finite Subset of X: ex_inf_of Z,L}
+     by WAYBEL_0:def 28;
+A3:  finsups Y = {"\/"
+(Z,L opp) where Z is finite Subset of Y: ex_sup_of Z,L opp}
+     by WAYBEL_0:def 27;
+   thus fininfs X c= finsups Y
+     proof let x be set; assume x in fininfs X;
+      then consider Z being finite Subset of X such that
+A4:     x = "/\"(Z,L) & ex_inf_of Z,L by A2;
+         x = "\/"(Z,L opp) & ex_sup_of Z, L opp by A4,Th11,Th13;
+      hence thesis by A1,A3;
+     end;
+   thus finsups Y c= fininfs X
+     proof let x be set; assume x in finsups Y;
+      then consider Z being finite Subset of Y such that
+A5:     x = "\/"(Z,L opp) & ex_sup_of Z,L opp by A3;
+         x = "/\"(Z,L) & ex_inf_of Z, L by A5,Th11,Th13;
+      hence thesis by A1,A2;
+     end;
+A6:  fininfs Y = {"/\"
+(Z,L opp) where Z is finite Subset of Y: ex_inf_of Z,L opp}
+     by WAYBEL_0:def 28;
+A7:  finsups X = {"\/"(Z,L) where Z is finite Subset of X: ex_sup_of Z,L}
+     by WAYBEL_0:def 27;
+   thus finsups X c= fininfs Y
+     proof let x be set; assume x in finsups X;
+      then consider Z being finite Subset of X such that
+A8:     x = "\/"(Z,L) & ex_sup_of Z,L by A7;
+         x = "/\"(Z,L opp) & ex_inf_of Z, L opp by A8,Th10,Th12;
+      hence thesis by A1,A6;
+     end;
+   let x be set; assume x in fininfs Y;
+   then consider Z being finite Subset of Y such that
+A9:  x = "/\"(Z,L opp) & ex_inf_of Z,L opp by A6;
+      x = "\/"(Z,L) & ex_sup_of Z, L by A9,Th10,Th12;
+   hence thesis by A1,A7;
+  end;
+
+theorem Th19:
+ for L being RelStr
+ for X being Subset of L, Y being Subset of L opp st X = Y
+  holds downarrow X = uparrow Y & uparrow X = downarrow Y
+  proof let L be RelStr;
+   let X be Subset of L, Y be Subset of L opp such that
+A1:  X = Y;
+   thus downarrow X c= uparrow Y
+     proof let x be set; assume
+A2:     x in downarrow X;
+      then reconsider x as Element of L;
+      consider y being Element of L such that
+A3:     y >= x & y in X by A2,WAYBEL_0:def 15;
+         y~ <= x~ & y~ = y & x~ = x by A3,LATTICE3:9,def 6;
+      hence thesis by A1,A3,WAYBEL_0:def 16;
+     end;
+   thus uparrow Y c= downarrow X
+     proof let x be set; assume
+A4:     x in uparrow Y;
+      then reconsider x as Element of L opp;
+      consider y being Element of L opp such that
+A5:     y <= x & y in Y by A4,WAYBEL_0:def 16;
+         ~y >= ~x & ~y = y & ~x = x by A5,Th1,LATTICE3:def 7;
+      hence thesis by A1,A5,WAYBEL_0:def 15;
+     end;
+   thus uparrow X c= downarrow Y
+     proof let x be set; assume
+A6:     x in uparrow X;
+      then reconsider x as Element of L;
+      consider y being Element of L such that
+A7:     y <= x & y in X by A6,WAYBEL_0:def 16;
+         y~ >= x~ & y~ = y & x~ = x by A7,LATTICE3:9,def 6;
+      hence thesis by A1,A7,WAYBEL_0:def 15;
+     end;
+   let x be set; assume
+A8:  x in downarrow Y;
+   then reconsider x as Element of L opp;
+   consider y being Element of L opp such that
+A9:  y >= x & y in Y by A8,WAYBEL_0:def 15;
+      ~y <= ~x & ~y = y & ~x = x by A9,Th1,LATTICE3:def 7;
+   hence thesis by A1,A9,WAYBEL_0:def 16;
+  end;
+
+theorem
+   for L being non empty RelStr
+ for x being Element of L, y being Element of L opp st x = y
+  holds downarrow x = uparrow y & uparrow x = downarrow y
+  proof let L be non empty RelStr;
+   let x be Element of L, y be Element of L opp;
+      downarrow x = downarrow {x} & downarrow y = downarrow {y} &
+    uparrow x = uparrow {x} & uparrow y = uparrow {y}
+     by WAYBEL_0:def 17,def 18;
+   hence thesis by Th19;
+  end;
+
+theorem Th21:
+ for L being with_infima Poset, x,y being Element of L
+   holds x"/\"y = (x~)"\/"(y~)
+  proof let L be with_infima Poset, x,y be Element of L;
+      x"/\"y <= x & x"/\"y <= y by YELLOW_0:23;
+then A1:  (x"/\"y)~ >= x~ & (x"/\"y)~ >= y~ by LATTICE3:9;
+A2:  x~ = x & ~(x~) = x~ & y~ = y & ~(y~) = y~ by LATTICE3:def 6,def 7;
+      now let d be Element of L opp; assume d >= x~ & d >= y~;
+      then ~d <= x & ~d <= y by A2,Th1;
+      then ~d <= x"/\"y & (~d)~ = ~d & ~d = d by LATTICE3:def 6,def 7,YELLOW_0:
+23;
+     hence (x"/\"y)~ <= d by LATTICE3:9;
+    end;
+    then (x"/\"y)~ = (x~)"\/"(y~) by A1,YELLOW_0:22;
+   hence thesis by LATTICE3:def 6;
+  end;
+
+theorem Th22:
+ for L being with_infima Poset, x,y being Element of L opp
+   holds (~x)"/\"(~y) = x"\/"y
+  proof let L be with_infima Poset, x,y be Element of L opp;
+      ~x = x & (~x)~ = ~x & ~y = y & (~y)~ = ~y by LATTICE3:def 6,def 7;
+   hence thesis by Th21;
+  end;
+
+theorem Th23:
+ for L being with_suprema Poset, x,y being Element of L
+   holds x"\/"y = (x~)"/\"(y~)
+  proof let L be with_suprema Poset, x,y be Element of L;
+      x"\/"y >= x & x"\/"y >= y by YELLOW_0:22;
+then A1:  (x"\/"y)~ <= x~ & (x"\/"y)~ <= y~ by LATTICE3:9;
+A2:  x~ = x & ~(x~) = x~ & y~ = y & ~(y~) = y~ by LATTICE3:def 6,def 7;
+      now let d be Element of L opp; assume d <= x~ & d <= y~;
+      then ~d >= x & ~d >= y by A2,Th1;
+      then ~d >= x"\/"y & (~d)~ = ~d & ~d = d by LATTICE3:def 6,def 7,YELLOW_0:
+22;
+     hence (x"\/"y)~ >= d by LATTICE3:9;
+    end;
+    then (x"\/"y)~ = (x~)"/\"(y~) by A1,YELLOW_0:23;
+   hence thesis by LATTICE3:def 6;
+  end;
+
+theorem Th24:
+ for L being with_suprema Poset, x,y being Element of L opp
+   holds (~x)"\/"(~y) = x"/\"y
+  proof let L be with_suprema Poset, x,y be Element of L opp;
+      ~x = x & (~x)~ = ~x & ~y = y & (~y)~ = ~y by LATTICE3:def 6,def 7;
+   hence thesis by Th23;
+  end;
+
+theorem Th25:
+ for L being LATTICE holds
+  L is distributive iff L opp is distributive
+  proof let L be LATTICE;
+   hereby assume
+A1:   L is distributive;
+    thus L opp is distributive
+     proof let x,y,z be Element of L opp;
+A2:     ~(y"\/"z) = y"\/"z & ~(x"/\"y) = x"/\"y & ~(x"/\"z) = x"/\"
+z by LATTICE3:def 7;
+      thus x "/\" (y "\/" z)
+         = (~x)"\/"~(y "\/" z) by Th24
+        .= (~x)"\/"((~y)"/\"~z) by A2,Th22
+        .= ((~x)"\/"(~y))"/\"((~x)"\/"~z) by A1,WAYBEL_1:6
+        .= (~(x"/\"y))"/\"((~x)"\/"~z) by A2,Th24
+        .= (~(x"/\"y))"/\"~(x"/\"z) by A2,Th24
+        .= (x "/\" y) "\/" (x "/\" z) by Th22;
+     end;
+   end;
+   assume
+A3:  L opp is distributive;
+   let x,y,z be Element of L;
+A4:  (y"\/"z)~ = y"\/"z & (x"/\"y)~ = x"/\"y & (x"/\"z)~ = x"/\"
+z by LATTICE3:def 6;
+   thus x "/\" (y "\/" z)
+      = (x~)"\/"((y "\/" z)~) by Th21
+     .= (x~)"\/"((y~)"/\"(z~)) by A4,Th23
+     .= ((x~)"\/"(y~))"/\"((x~)"\/"(z~)) by A3,WAYBEL_1:6
+     .= ((x"/\"y)~)"/\"((x~)"\/"(z~)) by A4,Th21
+     .= ((x"/\"y)~)"/\"((x"/\"z)~) by A4,Th21
+     .= (x "/\" y) "\/" (x "/\" z) by Th23;
+  end;
+
+definition
+ let L be distributive LATTICE;
+ cluster L opp -> distributive;
+ coherence by Th25;
+end;
+
+theorem Th26:
+ for L being RelStr, x be set holds
+   x is directed Subset of L iff x is filtered Subset of L opp
+  proof let L be RelStr, x be set;
+A1:  L opp = RelStr(#the carrier of L, (the InternalRel of L)~#)
+     by LATTICE3:def 5;
+   hereby assume x is directed Subset of L;
+    then reconsider X = x as directed Subset of L;
+    reconsider Y = X as Subset of L opp by A1;
+       Y is filtered
+      proof let x,y be Element of L opp; assume
+A2:      x in Y & y in Y;
+          x = ~x & y = ~y by LATTICE3:def 7;
+       then consider z being Element of L such that
+A3:      z in X & z >= ~x & z >= ~y by A2,WAYBEL_0:def 1;
+       take z~; z = z~ & ~(z~) = z~ by LATTICE3:def 6,def 7;
+       hence thesis by A3,Th1;
+      end;
+    hence x is filtered Subset of L opp;
+   end;
+   assume x is filtered Subset of L opp;
+   then reconsider X = x as filtered Subset of L opp;
+   reconsider Y = X as Subset of L by A1;
+      Y is directed
+     proof let x,y be Element of L; assume
+A4:     x in Y & y in Y;
+         x = x~ & y = y~ by LATTICE3:def 6;
+      then consider z being Element of L opp such that
+A5:     z in X & z <= x~ & z <= y~ by A4,WAYBEL_0:def 2;
+      take ~z; z = ~z & (~z)~ = ~z by LATTICE3:def 6,def 7;
+      hence thesis by A5,LATTICE3:9;
+     end;
+   hence thesis;
+  end;
+
+theorem
+   for L being RelStr, x be set holds
+   x is directed Subset of L opp iff x is filtered Subset of L
+  proof let L be RelStr, x be set;
+      L opp~ = the RelStr of L by LATTICE3:8;
+    then x is filtered Subset of L iff x is filtered Subset of L opp~
+     by WAYBEL_0:4;
+   hence thesis by Th26;
+  end;
+
+theorem Th28:
+ for L being RelStr, x be set holds
+   x is lower Subset of L iff x is upper Subset of L opp
+  proof let L be RelStr, x be set;
+A1:  L opp = RelStr(#the carrier of L, (the InternalRel of L)~#)
+     by LATTICE3:def 5;
+   hereby assume x is lower Subset of L;
+    then reconsider X = x as lower Subset of L;
+    reconsider Y = X as Subset of L opp by A1;
+       Y is upper
+      proof let x,y be Element of L opp; assume
+A2:      x in Y & x <= y;
+        then x = ~x & y = ~y & ~x >= ~y by Th1,LATTICE3:def 7;
+       hence thesis by A2,WAYBEL_0:def 19;
+      end;
+    hence x is upper Subset of L opp;
+   end;
+   assume x is upper Subset of L opp;
+   then reconsider X = x as upper Subset of L opp;
+   reconsider Y = X as Subset of L by A1;
+      Y is lower
+     proof let x,y be Element of L; assume
+A3:     x in Y & x >= y;
+       then x = x~ & y = y~ & x~ <= y~ by LATTICE3:9,def 6;
+      hence thesis by A3,WAYBEL_0:def 20;
+     end;
+   hence thesis;
+  end;
+
+theorem
+   for L being RelStr, x be set holds
+   x is lower Subset of L opp iff x is upper Subset of L
+  proof let L be RelStr, x be set;
+      L opp~ = the RelStr of L by LATTICE3:8;
+    then x is upper Subset of L iff x is upper Subset of L opp~
+     by WAYBEL_0:25;
+   hence thesis by Th28;
+  end;
+
+theorem Th30:
+ for L being RelStr holds L is lower-bounded iff L opp is upper-bounded
+  proof let L be RelStr;
+A1:  L opp = RelStr(#the carrier of L, (the InternalRel of L)~#)
+     by LATTICE3:def 5;
+   thus L is lower-bounded implies L opp is upper-bounded
+     proof given x being Element of L such that
+A2:     x is_<=_than the carrier of L;
+      take x~; thus thesis by A1,A2,Th8;
+     end;
+   given x being Element of L opp such that
+A3:  x is_>=_than the carrier of L opp;
+   take ~x; thus thesis by A1,A3,Th9;
+  end;
+
+theorem Th31:
+ for L being RelStr holds L opp is lower-bounded iff L is upper-bounded
+  proof let L be RelStr;
+A1:  L opp = RelStr(#the carrier of L, (the InternalRel of L)~#)
+     by LATTICE3:def 5;
+   thus L opp is lower-bounded implies L is upper-bounded
+     proof given x being Element of L opp such that
+A2:     x is_<=_than the carrier of L opp;
+      take ~x; thus thesis by A1,A2,Th9;
+     end;
+   given x being Element of L such that
+A3:  x is_>=_than the carrier of L;
+   take x~; thus thesis by A1,A3,Th8;
+  end;
+
+theorem
+   for L being RelStr holds L is bounded iff L opp is bounded
+  proof let L be RelStr;
+   thus L is bounded implies L opp is bounded
+    proof assume L is lower-bounded upper-bounded;
+     hence L opp is lower-bounded upper-bounded by Th30,Th31;
+    end;
+   assume L opp is lower-bounded upper-bounded;
+   hence L is lower-bounded upper-bounded by Th30,Th31;
+  end;
+
+theorem Th33:
+ for L being lower-bounded antisymmetric non empty RelStr holds
+   (Bottom L)~ = Top (L opp) & ~Top (L opp) = Bottom L
+  proof let L be lower-bounded antisymmetric non empty RelStr;
+      ex_sup_of {},L by YELLOW_0:42;
+then A1:  "\/"({},L) = "/\"({},L opp) & (Bottom L)~ = Bottom
+L by Th12,LATTICE3:def 6;
+   hence (Bottom L)~ = "/\"({}
+,L opp) by YELLOW_0:def 11 .= Top (L opp) by YELLOW_0:def 12;
+   hence ~Top (L opp) = Bottom L by A1,LATTICE3:def 7;
+  end;
+
+theorem Th34:
+ for L being upper-bounded antisymmetric non empty RelStr holds
+   (Top L)~ = Bottom (L opp) & ~Bottom (L opp) = Top L
+  proof let L be upper-bounded antisymmetric non empty RelStr;
+      ex_inf_of {},L by YELLOW_0:43;
+then A1:  "/\"({},L) = "\/"({},L opp) & (Top L)~ = Top L by Th13,LATTICE3:def 6
+;
+   hence (Top L)~ = "\/"({}
+,L opp) by YELLOW_0:def 12 .= Bottom (L opp) by YELLOW_0:def 11;
+   hence thesis by A1,LATTICE3:def 7;
+  end;
+
+theorem Th35:
+ for L being bounded LATTICE, x,y being Element of L holds
+  y is_a_complement_of x iff y~ is_a_complement_of x~
+  proof let L be bounded LATTICE, x,y be Element of L;
+   hereby assume y is_a_complement_of x;
+then A1:   x "\/" y = Top L & x "/\" y = Bottom L by WAYBEL_1:def 23;
+    thus y~ is_a_complement_of x~
+     proof
+      thus (x~)"\/"(y~) = x"/\"y by Th21 .= (Bottom L)~ by A1,LATTICE3:def 6
+                     .= Top (L opp) by Th33;
+      thus (x~)"/\"(y~) = x"\/"y by Th23 .= (Top L)~ by A1,LATTICE3:def 6
+                     .= Bottom (L opp) by Th34;
+     end;
+   end;
+   assume
+A2:  (x~)"\/"(y~) = Top (L opp) & (x~)"/\"(y~) = Bottom (L opp);
+   thus x "\/" y = (x~)"/\"(y~) by Th23 .= (Top L)~ by A2,Th34
+ .= Top L by LATTICE3:def 6;
+   thus x "/\" y = (x~)"\/"(y~) by Th21 .= (Bottom L)~ by A2,Th33
+ .= Bottom L by LATTICE3:def 6;
+  end;
+
+theorem Th36:
+ for L being bounded LATTICE holds L is complemented iff L opp is complemented
+  proof let L be bounded LATTICE;
+   thus L is complemented implies L opp is complemented
+    proof assume
+A1:    for x being Element of L ex y being Element of L st
+       y is_a_complement_of x;
+     let x be Element of L opp;
+     consider y being Element of L such that
+A2:    y is_a_complement_of ~x by A1;
+     take y~; ~x = x & (~x)~ = ~x by LATTICE3:def 6,def 7;
+     hence y~ is_a_complement_of x by A2,Th35;
+    end;
+   assume
+A3:  for x being Element of L opp ex y being Element of L opp st
+     y is_a_complement_of x;
+   let x be Element of L;
+   consider y being Element of L opp such that
+A4:  y is_a_complement_of x~ by A3;
+   take ~y; ~y = y & (~y)~ = ~y by LATTICE3:def 6,def 7;
+   hence thesis by A4,Th35;
+  end;
+
+definition
+ let L be lower-bounded RelStr;
+ cluster L opp -> upper-bounded;
+ coherence by Th30;
+end;
+
+definition
+ let L be upper-bounded RelStr;
+ cluster L opp -> lower-bounded;
+ coherence by Th31;
+end;
+
+definition
+ let L be complemented (bounded LATTICE);
+ cluster L opp -> complemented;
+ coherence by Th36;
+end;
+
+:: Collorary:  L is Boolean -> L opp is Boolean
+
+theorem
+   for L being Boolean LATTICE, x being Element of L holds
+  'not'(x~) = 'not' x
+  proof let L be Boolean LATTICE, x be Element of L;
+      for x being Element of L holds 'not' 'not' x = x by WAYBEL_1:90;
+    then 'not' x is_a_complement_of x by WAYBEL_1:89;
+    then ('not' x)~ is_a_complement_of x~ by Th35;
+    then 'not'(x~) = ('not' x)~ by YELLOW_5:11;
+   hence thesis by LATTICE3:def 6;
+  end;
+
+definition
+ let L be non empty RelStr;
+ func ComplMap L -> map of L, L opp means:
+Def1:
+  for x being Element of L holds it.x = 'not' x;
+ existence
+  proof deffunc N(Element of L) = 'not' $1;
+    consider f being map of L,L such that
+A1:  for x being Element of L holds f.x = N(x) from LambdaMD;
+      L opp = RelStr(#the carrier of L, (the InternalRel of L)~#)
+     by LATTICE3:def 5;
+   then reconsider f as map of L,L opp;
+   take f; thus thesis by A1;
+  end;
+ correctness
+  proof let f1,f2 be map of L,L opp such that
+A2:  not thesis;
+      now let x be Element of L;
+     thus f1.x = 'not' x by A2 .= f2.x by A2;
+    end;
+   hence thesis by A2,YELLOW_2:9;
+  end;
+end;
+
+definition
+ let L be Boolean LATTICE;
+ cluster ComplMap L -> one-to-one;
+ coherence
+  proof set f = ComplMap L;
+   let a,b be Element of L;
+      f.a = 'not' a & f.b = 'not' b & 'not' 'not' a = a & 'not' 'not'
+b = b by Def1,WAYBEL_1:90;
+   hence thesis;
+  end;
+end;
+
+definition
+ let L be Boolean LATTICE;
+ cluster ComplMap L -> isomorphic;
+ coherence
+  proof set f = ComplMap L;
+A1:  L opp = RelStr(#the carrier of L, (the InternalRel of L)~#)
+     by LATTICE3:def 5;
+A2:  dom f = the carrier of L by FUNCT_2:def 1;
+A3:  rng f = the carrier of L opp
+     proof thus rng f c= the carrier of L opp;
+      let x be set; assume x in the carrier of L opp;
+      then reconsider x as Element of L by A1;
+         x = 'not' 'not' x by WAYBEL_1:90;
+       then f.'not' x = x by Def1;
+      hence thesis by A2,FUNCT_1:def 5;
+     end;
+      now let x,y be Element of L;
+        f.x = 'not' x & f.y = 'not' y by Def1;
+      then f.x = ('not' x)~ & f.y = ('not' y)~ by LATTICE3:def 6;
+      then ('not' x >= 'not' y iff f.x <= f.y) & x = 'not' 'not' x &
+      y = 'not' 'not'
+y by LATTICE3:9,WAYBEL_1:90;
+     hence x <= y iff f.x <= f.y by WAYBEL_1:86;
+    end;
+   hence thesis by A3,WAYBEL_0:66;
+  end;
+end;
+
+theorem
+   for L being Boolean LATTICE holds L, L opp are_isomorphic
+  proof let L be Boolean LATTICE;
+   take ComplMap L; thus thesis;
+  end;
+
+theorem
+   for S,T being non empty RelStr, f be set holds
+   (f is map of S,T iff f is map of S opp,T) &
+   (f is map of S,T iff f is map of S,T opp) &
+   (f is map of S,T iff f is map of S opp,T opp)
+  proof let S,T be non empty RelStr;
+      S~ = RelStr(#the carrier of S, (the InternalRel of S)~#) &
+    T~ = RelStr(#the carrier of T, (the InternalRel of T)~#) by LATTICE3:def 5;
+   hence thesis;
+  end;
+
+theorem
+   for S,T being non empty RelStr
+ for f being map of S,T, g being map of S,T opp st f = g holds
+  (f is monotone iff g is antitone) &
+  (f is antitone iff g is monotone)
+  proof let S,T be non empty RelStr;
+   let f be map of S,T, g be map of S,T~ such that
+A1:  f = g;
+   thus f is monotone implies g is antitone
+    proof assume
+A2:    for x,y being Element of S st x <= y holds f.x <= f.y;
+     let x,y be Element of S; assume x <= y;
+      then f.x <= f.y & (f.x)~ = f.x & (f.y)~ = f.y by A2,LATTICE3:def 6;
+     hence thesis by A1,LATTICE3:9;
+    end;
+   thus g is antitone implies f is monotone
+    proof assume
+A3:    for x,y being Element of S st x <= y
+      for a,b being Element of T opp st a = g.x & b = g.y holds a >= b;
+     let x,y be Element of S; assume x <= y;
+      then g.y <= g.x & ~(g.x) = g.x & ~(g.y) = g.y by A3,LATTICE3:def 7;
+     hence thesis by A1,Th1;
+    end;
+   thus f is antitone implies g is monotone
+    proof assume
+A4:    for x,y being Element of S st x <= y
+      for a,b being Element of T st a = f.x & b = f.y holds a >= b;
+     let x,y be Element of S; assume x <= y;
+      then f.y <= f.x & (f.x)~ = f.x & (f.y)~ = f.y by A4,LATTICE3:def 6;
+     hence thesis by A1,LATTICE3:9;
+    end;
+   thus g is monotone implies f is antitone
+    proof assume
+A5:    for x,y being Element of S st x <= y holds g.x <= g.y;
+     let x,y be Element of S; assume x <= y;
+      then g.y >= g.x & ~(g.x) = g.x & ~(g.y) = g.y by A5,LATTICE3:def 7;
+     hence thesis by A1,Th1;
+    end;
+  end;
+
+theorem
+   for S,T being non empty RelStr
+ for f being map of S,T opp, g being map of S opp,T st f = g holds
+  (f is monotone iff g is monotone) &
+  (f is antitone iff g is antitone)
+  proof let S,T be non empty RelStr;
+   let f be map of S,T~, g be map of S~,T such that
+A1:  f = g;
+   thus f is monotone implies g is monotone
+    proof assume
+A2:    for x,y being Element of S st x <= y holds f.x <= f.y;
+     let x,y be Element of S~; assume x <= y;
+      then ~y <= ~x by Th1;
+      then f.~y <= f.~x & ~y = y & ~x = x & ~(f.~x) = f.~x & ~(f.~y) = f.~y
+       by A2,LATTICE3:def 7;
+     hence thesis by A1,Th1;
+    end;
+   thus g is monotone implies f is monotone
+    proof assume
+A3:    for x,y being Element of S opp st x <= y holds g.x <= g.y;
+     let x,y be Element of S; assume x <= y;
+      then y~ <= x~ by LATTICE3:9;
+      then g.(y~) <= g.(x~) & y~ = y & x~ = x & (g.(x~))~ = g.(x~) &
+      (g.(y~))~ = g.(y~) by A3,LATTICE3:def 6;
+     hence thesis by A1,LATTICE3:9;
+    end;
+   thus f is antitone implies g is antitone
+    proof assume
+A4:    for x,y being Element of S st x <= y
+      for a,b being Element of T~ st a = f.x & b = f.y holds a >= b;
+     let x,y be Element of S~; assume x <= y;
+      then ~y <= ~x by Th1;
+      then f.~y >= f.~x & ~y = y & ~x = x & ~(f.~x) = f.~x & ~(f.~y) = f.~y
+       by A4,LATTICE3:def 7;
+     hence thesis by A1,Th1;
+    end;
+   thus g is antitone implies f is antitone
+    proof assume
+A5:    for x,y being Element of S opp st x <= y
+      for a,b being Element of T st a = g.x & b = g.y holds a >= b;
+     let x,y be Element of S; assume x <= y;
+      then y~ <= x~ by LATTICE3:9;
+      then g.(y~) >= g.(x~) & y~ = y & x~ = x & (g.(x~))~ = g.(x~) &
+      (g.(y~))~ = g.(y~) by A5,LATTICE3:def 6;
+     hence thesis by A1,LATTICE3:9;
+    end;
+  end;
+
+theorem Th42:
+ for S,T being non empty RelStr
+ for f being map of S,T, g being map of S opp,T opp st f = g holds
+  (f is monotone iff g is monotone) &
+  (f is antitone iff g is antitone)
+  proof let S,T be non empty RelStr;
+   let f be map of S,T, g be map of S~,T~ such that
+A1:  f = g;
+   thus f is monotone implies g is monotone
+    proof assume
+A2:    for x,y being Element of S st x <= y holds f.x <= f.y;
+     let x,y be Element of S~; assume x <= y;
+      then ~y <= ~x by Th1;
+      then f.~y <= f.~x & ~y = y & ~x = x & (f.~x)~ = f.~x & (f.~y)~ = f.~y
+       by A2,LATTICE3:def 6,def 7;
+     hence thesis by A1,LATTICE3:9;
+    end;
+   thus g is monotone implies f is monotone
+    proof assume
+A3:    for x,y being Element of S~ st x <= y holds g.x <= g.y;
+     let x,y be Element of S; assume x <= y;
+      then y~ <= x~ by LATTICE3:9;
+      then g.(y~) <= g.(x~) & y~ = y & x~ = x & ~(g.(x~)) = g.(x~) &
+      ~(g.(y~)) = g.(y~) by A3,LATTICE3:def 6,def 7;
+     hence thesis by A1,Th1;
+    end;
+   thus f is antitone implies g is antitone
+    proof assume
+A4:    for x,y being Element of S st x <= y
+      for a,b being Element of T st a = f.x & b = f.y holds a >= b;
+     let x,y be Element of S~; assume x <= y;
+      then ~y <= ~x by Th1;
+      then f.~y >= f.~x & ~y = y & ~x = x & (f.~x)~ = f.~x & (f.~y)~ = f.~y
+       by A4,LATTICE3:def 6,def 7;
+     hence thesis by A1,LATTICE3:9;
+    end;
+   thus g is antitone implies f is antitone
+    proof assume
+A5:    for x,y being Element of S opp st x <= y
+      for a,b being Element of T opp st a = g.x & b = g.y holds a >= b;
+     let x,y be Element of S; assume x <= y;
+      then y~ <= x~ by LATTICE3:9;
+      then g.(y~) >= g.(x~) & y~ = y & x~ = x & ~(g.(x~)) = g.(x~) &
+      ~(g.(y~)) = g.(y~) by A5,LATTICE3:def 6,def 7;
+     hence thesis by A1,Th1;
+    end;
+  end;
+
+theorem
+   for S,T being non empty RelStr, f be set holds
+   (f is Connection of S,T iff f is Connection of S~,T) &
+   (f is Connection of S,T iff f is Connection of S,T~) &
+   (f is Connection of S,T iff f is Connection of S~,T~)
+  proof let S,T be non empty RelStr;
+A1:  S~ = RelStr(#the carrier of S, (the InternalRel of S)~#) &
+    T~ = RelStr(#the carrier of T, (the InternalRel of T)~#) by LATTICE3:def 5;
+      now let S,S1,T,T1 be RelStr; assume
+A2:    the carrier of S = the carrier of S1 &
+      the carrier of T = the carrier of T1;
+     let a be Connection of S,T;
+     consider f being map of S,T, g being map of T,S such that
+A3:    a = [f,g] by WAYBEL_1:def 9;
+     reconsider f as map of S1,T1 by A2;
+     reconsider g as map of T1,S1 by A2;
+        a = [f,g] by A3;
+     hence a is Connection of S1,T1;
+    end;
+   hence thesis by A1;
+  end;
+
+theorem
+   for S,T being non empty Poset
+ for f1 being map of S,T, g1 being map of T,S
+ for f2 being map of S~,T~, g2 being map of T~,S~ st f1 = f2 & g1 = g2 holds
+   [f1,g1] is Galois iff [g2,f2] is Galois
+  proof let S,T be non empty Poset;
+   let f1 be map of S,T, g1 be map of T,S;
+   let f2 be map of S~,T~, g2 be map of T~,S~ such that
+A1:  f1 = f2 & g1 = g2;
+   hereby assume A2: [f1,g1] is Galois;
+then g1 is monotone & f1 is monotone &
+     for t being Element of T, s being Element of S holds t <= f1.s iff g1.t <=
+ s
+      by WAYBEL_1:9;
+then A3:   g2 is monotone & f2 is monotone by A1,Th42;
+       now let s be Element of S~, t be Element of T~;
+       ~s = s & ~t = t & (f1.~s)~ = f1.~s & (g1.~t)~ = g1.~t &
+       (~t <= f1.~s iff g1.~t <= ~s) by A2,LATTICE3:def 6,def 7,WAYBEL_1:9;
+      hence g2.t >= s iff t >= f2.s by A1,Th2;
+     end;
+    hence [g2,f2] is Galois by A3,WAYBEL_1:9;
+   end;
+   assume A4: [g2,f2] is Galois;
+then g2 is monotone & f2 is monotone &
+    for s being Element of S~, t being Element of T~ holds
+      s <= g2.t iff f2.s <= t by WAYBEL_1:9;
+then A5:  g1 is monotone & f1 is monotone by A1,Th42;
+       now let t be Element of T, s be Element of S;
+       s~ = s & t~ = t & ~(f2.(s~)) = f2.(s~) & ~(g2.(t~)) = g2.(t~) &
+       (s~ <= g2.(t~) iff f2.(s~) <= t~) by A4,LATTICE3:def 6,def 7,WAYBEL_1:9;
+      hence t <= f1.s iff g1.t <= s by A1,Th2;
+     end;
+   hence [f1,g1] is Galois by A5,WAYBEL_1:9;
+  end;
+
+theorem Th45:
+ for J being set, D being non empty set, K being ManySortedSet of J
+ for F being DoubleIndexedSet of K,D holds doms F = K
+  proof let J be set, D be non empty set, K be ManySortedSet of J;
+   let F be DoubleIndexedSet of K,D;
+A1:  dom F = J & dom K = J & F"rng F = dom F & dom doms F = F"SubFuncs rng F
+     by FUNCT_6:def 2,PBOOLE:def 3,RELAT_1:169;
+A2:  SubFuncs rng F = rng F
+     proof thus SubFuncs rng F c= rng F by FUNCT_6:27;
+      let x be set; assume
+A3:     x in rng F;
+       then ex y being set st y in dom F & x = F.y by FUNCT_1:def 5;
+      hence thesis by A3,FUNCT_6:def 1;
+     end;
+      now let j be set; assume
+A4:    j in J; set f = F.j;
+        (J --> D).j = D by A4,FUNCOP_1:13;
+      then (doms F).j = dom f & f is Function of K.j,D
+       by A1,A4,FUNCT_6:31,MSUALG_1:def 2;
+     hence (doms F).j = K.j by FUNCT_2:def 1;
+    end;
+   hence thesis by A1,A2,FUNCT_1:9;
+  end;
+
+definition
+ let J, D be non empty set, K be non-empty ManySortedSet of J;
+ let F be DoubleIndexedSet of K, D;
+ let j be Element of J;
+ let k be Element of K.j;
+ redefine func F..(j,k) -> Element of D;
+ coherence
+  proof dom (F.j) = K.j & dom F = J by FUNCT_2:def 1,PBOOLE:def 3;
+    then F..(j,k) = (F.j).k by FUNCT_6:44;
+   hence thesis;
+  end;
+end;
+
+theorem Th46:
+ for L being non empty RelStr
+ for J being set, K being ManySortedSet of J
+ for x being set holds
+   x is DoubleIndexedSet of K,L iff x is DoubleIndexedSet of K,L opp
+  proof let L be non empty RelStr;
+      L opp = RelStr(#the carrier of L, (the InternalRel of L)~#)
+     by LATTICE3:def 5;
+   hence thesis;
+  end;
+
+theorem Th47:
+ for L being complete LATTICE
+ for J being non empty set, K being non-empty ManySortedSet of J
+ for F being DoubleIndexedSet of K,L holds Sup Infs F <= Inf Sups Frege F
+  proof let L be complete LATTICE;
+   let J be non empty set, K be non-empty ManySortedSet of J;
+   let F be DoubleIndexedSet of K, L;
+      Inf Sups Frege F is_>=_than rng Infs F
+     proof let x be Element of L; assume
+         x in rng Infs F;
+      then consider a being Element of J such that
+A1:     x = Inf (F.a) by WAYBEL_5:14;
+A2:    x = inf rng (F.a) by A1,YELLOW_2:def 6;
+         x is_<=_than rng Sups Frege F
+        proof let y be Element of L; assume
+A3:        y in rng Sups Frege F;
+         reconsider J' = product doms F as non empty set;
+         reconsider K' = J' --> J as ManySortedSet of J';
+         reconsider G = Frege F as DoubleIndexedSet of K', L;
+         consider f being Element of J' such that
+A4:        y = Sup (G.f) by A3,WAYBEL_5:14;
+         reconsider f as Element of product doms F;
+A5:       y = sup rng ((Frege F).f) by A4,YELLOW_2:def 5;
+A6:        dom F = J & dom Frege F = product doms F by PBOOLE:def 3;
+          then f.a in dom (F.a) by WAYBEL_5:9;
+         then reconsider j = f.a as Element of K.a;
+            j in dom (F.a) by A6,WAYBEL_5:9;
+          then (F.a).j in rng (F.a) & (F.a).j in rng ((Frege F).f)
+           by A6,FUNCT_1:def 5,WAYBEL_5:9;
+          then x <= (F.a).j & (F.a).j <= y by A2,A5,YELLOW_2:24;
+         hence x <= y by ORDERS_1:26;
+        end;
+       then x <= inf rng Sups Frege F by YELLOW_0:33;
+      hence thesis by YELLOW_2:def 6;
+     end;
+    then sup rng Infs F <= Inf Sups Frege F by YELLOW_0:32;
+   hence thesis by YELLOW_2:def 5;
+  end;
+
+theorem Th48:
+ for L being complete LATTICE holds
+   L is completely-distributive
+  iff
+   for J being non empty set, K being non-empty ManySortedSet of J
+   for F being DoubleIndexedSet of K,L holds Sup Infs F = Inf Sups Frege F
+  proof let L be complete LATTICE;
+   thus L is completely-distributive implies
+    for J being non empty set, K being non-empty ManySortedSet of J
+     for F being DoubleIndexedSet of K,L holds Sup Infs F = Inf Sups Frege F
+    proof assume that L is complete and
+A1:    for J being non empty set, K being non-empty ManySortedSet of J
+      for F being DoubleIndexedSet of K, L holds
+       Inf Sups F = Sup Infs Frege F;
+      let J be non empty set, K be non-empty ManySortedSet of J;
+      let F be DoubleIndexedSet of K,L;
+A2:     Sup Infs F <= Inf Sups Frege F by Th47;
+A3:     Inf Sups Frege F = Sup Infs Frege Frege F by A1;
+A4:     dom Frege F = product doms F & doms F = K & dom K = J &
+       doms Frege F = (product doms F) --> J & dom F = J &
+       dom Frege Frege F = product doms Frege F by Th45,PBOOLE:def 3;
+         rng Infs Frege Frege F is_<=_than Sup Infs F
+        proof let a be Element of L; assume
+A5:        a in rng Infs Frege Frege F;
+         reconsider J' = product doms Frege F as non empty set;
+         reconsider K' = J' --> product doms F as ManySortedSet of J';
+         reconsider G = Frege Frege F as DoubleIndexedSet of K', L;
+         consider g being Element of J' such that
+A6:        a = Inf (G.g) by A5,WAYBEL_5:14;
+            ex g' being Function st g = g' & dom g' = dom doms Frege F &
+          for x being set st x in dom doms Frege F holds g'.x in
+ (doms Frege F).x
+           by CARD_3:def 5;
+         then reconsider g' = g as Function;
+         deffunc XX(set) = {f.(g'.f) where f is Element of product doms F:
+                   g'.f = $1};
+A7:        (J' --> J).g = J & dom ((product doms F) --> J) = product doms F
+            by FUNCOP_1:13,19;
+            now assume
+A8:          for j being Element of J holds (K.j) \ XX(j) <> {};
+             defpred P[set,set] means $2 in (K.$1) \ XX($1);
+A9:          now let j be set; assume j in J;
+             then reconsider i = j as Element of J;
+             consider k being Element of (K.i)\XX(j);
+                (K.i)\XX(i) <> {} by A8;
+              then k in (K.i)\XX(i);
+             hence ex k being set st P[j,k];
+            end;
+           consider h being Function such that
+A10:          dom h = J & for j being set st j in J holds P[j,h.j]
+             from NonUniqFuncEx(A9);
+              now let j be set; assume j in J;
+              then h.j in (K.j) \ XX(j) by A10;
+             hence h.j in (doms F).j by A4,XBOOLE_0:def 4;
+            end;
+           then reconsider h as Element of product doms F by A4,A10,CARD_3:18;
+              g'.h in (doms Frege F).h by A4,A7,CARD_3:18;
+           then reconsider j = g'.h as Element of J by A4,FUNCOP_1:13;
+              h.(g'.h) in XX(j) & h.j in (K.j) \ XX(j) by A10;
+           hence contradiction by XBOOLE_0:def 4;
+          end;
+         then consider j being Element of J such that
+A11:        (K.j) \ XX(j) = {};
+A12:        ex_inf_of rng (G.g), L & ex_inf_of rng (F.j),L
+           by YELLOW_0:17;
+            rng (F.j) c= rng (G.g)
+           proof let z be set; assume z in rng (F.j);
+            then consider u being set such that
+A13:           u in dom (F.j) & z = (F.j).u by FUNCT_1:def 5;
+            reconsider u as Element of K.j by A13;
+               u in XX(j) by A11,XBOOLE_0:def 4;
+            then consider f being Element of product doms F such that
+A14:           u = f.(g'.f) & g'.f = j;
+A15:           dom (G.g) = K'.g & K'.g = product doms F
+              by FUNCOP_1:13,FUNCT_2:def 1;
+               G.g = (Frege F)..g' & (Frege F).f = F..f by PRALG_2:def 8;
+             then (G.g).f = (F..f).j by A4,A14,PRALG_1:def 18;
+             then (G.g).f = z by A4,A13,A14,PRALG_1:def 18;
+            hence thesis by A15,FUNCT_1:def 5;
+           end;
+          then inf rng (G.g) <= inf rng (F.j) by A12,YELLOW_0:35;
+          then a <= inf rng (F.j) & Inf (F.j) in rng Infs F
+            by A6,WAYBEL_5:14,YELLOW_2:def 6;
+          then a <= Inf (F.j) & Inf (F.j) <=
+ sup rng Infs F by YELLOW_2:24,def 6;
+          then a <= sup rng Infs F by ORDERS_1:26;
+         hence thesis by YELLOW_2:def 5;
+        end;
+       then sup rng Infs Frege Frege F <= Sup Infs F by YELLOW_0:32;
+       then Sup Infs Frege Frege F <= Sup Infs F by YELLOW_2:def 5;
+      hence Sup Infs F = Inf Sups Frege F by A2,A3,ORDERS_1:25;
+    end;
+   assume
+A16:  for J being non empty set, K being non-empty ManySortedSet of J
+    for F being DoubleIndexedSet of K, L holds
+     Sup Infs F = Inf Sups Frege F;
+   thus L is complete;
+   let J be non empty set, K be non-empty ManySortedSet of J;
+   let F be DoubleIndexedSet of K,L;
+A17:  Inf Sups F >= Sup Infs Frege F by WAYBEL_5:16;
+A18:  Sup Infs Frege F = Inf Sups Frege Frege F by A16;
+A19:  dom Frege F = product doms F & doms F = K & dom K = J &
+    doms Frege F = (product doms F) --> J & dom F = J &
+    dom Frege Frege F = product doms Frege F by Th45,PBOOLE:def 3;
+      rng Sups Frege Frege F is_>=_than Inf Sups F
+     proof let a be Element of L; assume
+A20:     a in rng Sups Frege Frege F;
+      reconsider J' = product doms Frege F as non empty set;
+      reconsider K' = J' --> product doms F as ManySortedSet of J';
+      reconsider G = Frege Frege F as DoubleIndexedSet of K', L;
+      consider g being Element of J' such that
+A21:     a = Sup (G.g) by A20,WAYBEL_5:14;
+         ex g' being Function st g = g' & dom g' = dom doms Frege F &
+       for x being set st x in dom doms Frege F holds g'.x in (doms Frege F).x
+        by CARD_3:def 5;
+      then reconsider g' = g as Function;
+      deffunc XX(set) = {f.(g'.f) where f is Element of product doms F:
+                g'.f = $1};
+A22:     (J' --> J).g = J & dom ((product doms F) --> J) = product doms F
+         by FUNCOP_1:13,19;
+         now assume
+A23:       for j being Element of J holds (K.j) \ XX(j) <> {};
+          defpred P[set,set] means $2 in (K.$1) \ XX($1);
+A24:       now let j be set; assume j in J;
+          then reconsider i = j as Element of J;
+          consider k being Element of (K.i)\XX(j);
+             (K.i)\XX(i) <> {} by A23;
+           then k in (K.i)\XX(i);
+          hence ex k being set st P[j,k];
+         end;
+        consider h being Function such that
+A25:       dom h = J & for j being set st j in J holds P[j,h.j]
+          from NonUniqFuncEx(A24);
+           now let j be set; assume j in J;
+           then h.j in (K.j) \ XX(j) by A25;
+          hence h.j in (doms F).j by A19,XBOOLE_0:def 4;
+         end;
+        then reconsider h as Element of product doms F by A19,A25,CARD_3:18;
+           g'.h in (doms Frege F).h by A19,A22,CARD_3:18;
+        then reconsider j = g'.h as Element of J by A19,FUNCOP_1:13;
+           h.(g'.h) in XX(j) & h.j in (K.j) \ XX(j) by A25;
+        hence contradiction by XBOOLE_0:def 4;
+       end;
+      then consider j being Element of J such that
+A26:     (K.j) \ XX(j) = {};
+A27:     ex_sup_of rng (G.g), L & ex_sup_of rng (F.j),L
+        by YELLOW_0:17;
+         rng (F.j) c= rng (G.g)
+        proof let z be set; assume z in rng (F.j);
+         then consider u being set such that
+A28:        u in dom (F.j) & z = (F.j).u by FUNCT_1:def 5;
+         reconsider u as Element of K.j by A28;
+            u in XX(j) by A26,XBOOLE_0:def 4;
+         then consider f being Element of product doms F such that
+A29:        u = f.(g'.f) & g'.f = j;
+A30:        dom (G.g) = K'.g & K'.g = product doms F
+           by FUNCOP_1:13,FUNCT_2:def 1;
+            G.g = (Frege F)..g' & (Frege F).f = F..f by PRALG_2:def 8;
+          then (G.g).f = (F..f).j by A19,A29,PRALG_1:def 18;
+          then (G.g).f = z by A19,A28,A29,PRALG_1:def 18;
+         hence thesis by A30,FUNCT_1:def 5;
+        end;
+       then sup rng (G.g) >= sup rng (F.j) by A27,YELLOW_0:34;
+       then a >= sup rng (F.j) & Sup (F.j) in rng Sups F
+         by A21,WAYBEL_5:14,YELLOW_2:def 5;
+       then a >= Sup (F.j) & Sup (F.j) >= inf rng Sups F by YELLOW_2:24,def 5;
+       then a >= inf rng Sups F by ORDERS_1:26;
+      hence thesis by YELLOW_2:def 6;
+     end;
+    then inf rng Sups Frege Frege F >= Inf Sups F by YELLOW_0:33;
+    then Inf Sups Frege Frege F >= Inf Sups F by YELLOW_2:def 6;
+   hence Inf Sups F = Sup Infs Frege F by A17,A18,ORDERS_1:25;
+  end;
+
+theorem Th49:
+ for L being complete antisymmetric (non empty RelStr), F be Function holds
+   \\/(F, L) = //\(F, L opp) & //\(F, L) = \\/(F, L opp)
+  proof let L be complete antisymmetric (non empty RelStr), F be Function;
+A1:  ex_sup_of rng F,L & ex_inf_of rng F, L by YELLOW_0:17;
+   thus \\/(F, L) = "\/"(rng F, L) by YELLOW_2:def 5
+        .= "/\"(rng F, L opp) by A1,Th12
+        .= //\(F, L opp) by YELLOW_2:def 6;
+   thus //\(F,L) = "/\"(rng F, L) by YELLOW_2:def 6
+        .= "\/"(rng F, L opp) by A1,Th13
+        .= \\/(F, L opp) by YELLOW_2:def 5;
+  end;
+
+theorem Th50:
+ for L being complete antisymmetric (non empty RelStr)
+ for F be Function-yielding Function holds
+   \//(F, L) = /\\(F, L opp) & /\\(F, L) = \//(F, L opp)
+  proof let L be complete antisymmetric (non empty RelStr);
+   let F be Function-yielding Function;
+A1:  dom \//(F,L) = dom F & dom /\\(F,L opp) = dom F by FUNCT_2:def 1;
+      now let x be set; assume x in dom F;
+      then \//(F,L).x = \\/(F.x,L) & /\\(F,L opp).x = //\(F.x,L opp)
+       by WAYBEL_5:def 1,def 2;
+     hence \//(F,L).x = /\\(F,L opp).x by Th49;
+    end;
+   hence \//(F,L) = /\\(F,L opp) by A1,FUNCT_1:9;
+A2:  dom /\\(F,L) = dom F & dom \//(F,L opp) = dom F by FUNCT_2:def 1;
+      now let x be set; assume x in dom F;
+      then /\\(F,L).x = //\(F.x,L) & \//(F,L opp).x = \\/(F.x,L opp)
+       by WAYBEL_5:def 1,def 2;
+     hence /\\(F,L).x = \//(F,L opp).x by Th49;
+    end;
+   hence /\\(F,L) = \//(F,L opp) by A2,FUNCT_1:9;
+  end;
+
+definition
+ cluster completely-distributive -> complete (non empty RelStr);
+ coherence by WAYBEL_5:def 3;
+end;
+
+definition
+ cluster completely-distributive trivial strict (non empty Poset);
+ existence
+  proof consider R being trivial strict (non empty Poset);
+   take R; thus thesis;
+  end;
+end;
+
+theorem
+   for L being non empty Poset holds
+   L is completely-distributive iff L opp is completely-distributive
+  proof let L be non empty Poset;
+   thus L is completely-distributive implies L opp is completely-distributive
+    proof assume L is completely-distributive;
+then A1:    L is completely-distributive (non empty Poset);
+     hence L opp is complete by Th17;
+     let J be non empty set, K be non-empty ManySortedSet of J;
+     let F be DoubleIndexedSet of K, L opp;
+     reconsider G = F as DoubleIndexedSet of K, L by Th46;
+     thus Inf Sups F
+        = \\/(Sups F, L) by A1,Th49
+       .= Sup Infs G by A1,Th50
+       .= Inf Sups Frege G by A1,Th48
+       .= //\(Infs Frege F, L) by A1,Th50
+       .= Sup Infs Frege F by A1,Th49;
+    end;
+   assume L opp is completely-distributive;
+then A2:  L opp is completely-distributive (non empty Poset);
+then A3:  L is complete (non empty Poset) by Th17;
+   thus L is complete by A2,Th17;
+   let J be non empty set, K be non-empty ManySortedSet of J;
+   let F be DoubleIndexedSet of K, L;
+   reconsider G = F as DoubleIndexedSet of K, L opp by Th46;
+   thus Inf Sups F
+      = \\/(Sups F, L opp) by A3,Th49
+     .= Sup Infs G by A3,Th50
+     .= Inf Sups Frege G by A2,Th48
+     .= //\(Infs Frege F, L opp) by A3,Th50
+     .= Sup Infs Frege F by A3,Th49;
+  end;
+

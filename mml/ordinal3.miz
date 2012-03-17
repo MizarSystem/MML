@@ -1,0 +1,1347 @@
+:: Ordinal Arithmetics
+::  by Grzegorz Bancerek
+::
+:: Received March 1, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL2, ORDINAL1, BOOLE, TARSKI, SETFAM_1, FUNCT_1, RELAT_1,
+      ORDINAL3;
+ notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, SETFAM_1,
+      ORDINAL2;
+ constructors SETFAM_1, ORDINAL2, XBOOLE_0;
+ clusters ORDINAL1, ZFMISC_1, XBOOLE_0, ORDINAL2;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, XBOOLE_0;
+ theorems TARSKI, XBOOLE_0, FUNCT_1, ORDINAL1, SETFAM_1, ORDINAL2, XBOOLE_1;
+ schemes ORDINAL1, ORDINAL2, XBOOLE_0;
+
+begin
+
+ reserve fi,psi for Ordinal-Sequence,
+         A,B,C,D for Ordinal,
+         X,Y for set,
+         x,y for set;
+
+theorem
+ Th1: X c= succ X
+  proof succ X = X \/ {X} by ORDINAL1:def 1;
+   hence thesis by XBOOLE_1:7;
+  end;
+
+theorem
+    succ X c= Y implies X c= Y
+  proof X c= succ X by Th1;
+   hence thesis by XBOOLE_1:1;
+  end;
+
+canceled 2;
+
+theorem
+   A in B iff succ A in succ B
+  proof
+      (A in B iff succ A c= B) & (succ A c= B iff succ A in succ B)
+      by ORDINAL1:33,34;
+   hence thesis;
+  end;
+
+theorem
+   X c= A implies union X is Ordinal
+  proof assume
+    X c= A;
+   then for x st x in X holds x is Ordinal by ORDINAL1:23;
+   hence thesis by ORDINAL1:35;
+  end;
+
+theorem
+   union On X is Ordinal
+  proof
+      x in On X implies x is Ordinal by ORDINAL2:def 2;
+   hence thesis by ORDINAL1:35;
+  end;
+
+theorem
+ Th8: X c= A implies On X = X
+  proof assume
+A1:  X c= A;
+   defpred P[set] means $1 in X & $1 is Ordinal;
+A2: x in On X iff P[x] by ORDINAL2:def 2;
+A3: x in X iff P[x] by A1,ORDINAL1:23;
+   thus thesis from Extensionality(A2,A3);
+  end;
+
+theorem
+ Th9: On {A} = {A}
+  proof
+      succ A = A \/ {A} by ORDINAL1:def 1;
+    then {A} c= succ A by XBOOLE_1:7;
+   hence thesis by Th8;
+  end;
+
+theorem
+ Th10: A <> {} implies {} in A
+  proof assume A1: A <> {};
+     {} c= A by XBOOLE_1:2;
+   then {} c< A by A1,XBOOLE_0:def 8;
+   hence thesis by ORDINAL1:21;
+  end;
+
+theorem
+   inf A = {}
+  proof
+A1:  inf A = meet On A by ORDINAL2:def 6 .= meet A by ORDINAL2:10;
+      now assume A <> {};
+      then {} in A by Th10;
+     hence thesis by A1,SETFAM_1:5;
+    end;
+   hence thesis by A1,SETFAM_1:def 1;
+  end;
+
+theorem
+   inf {A} = A
+  proof
+   thus inf {A} = meet On {A} by ORDINAL2:def 6 .= meet {A} by Th9
+               .= A by SETFAM_1:11;
+  end;
+
+theorem
+   X c= A implies meet X is Ordinal
+  proof assume X c= A; then On X = X by Th8;
+    then inf X = meet X by ORDINAL2:def 6;
+   hence thesis;
+  end;
+
+definition let A,B;
+ cluster A \/ B -> ordinal;
+  coherence
+   proof A c= B or B c= A;
+    hence thesis by XBOOLE_1:12;
+   end;
+ cluster A /\ B -> ordinal;
+  coherence
+   proof A c= B or B c= A;
+    hence thesis by XBOOLE_1:28;
+   end;
+end;
+
+canceled;
+
+theorem
+    A \/ B = A or A \/ B = B
+  proof A c= B or B c= A;
+   hence thesis by XBOOLE_1:12;
+  end;
+
+theorem
+    A /\ B = A or A /\ B = B
+  proof A c= B or B c= A;
+   hence thesis by XBOOLE_1:28;
+  end;
+
+theorem
+ Th17: A in one implies A = {}
+  proof assume A in one;
+   hence A c= {} & {} c= A
+    by ORDINAL1:34,ORDINAL2:def 4,XBOOLE_1:2;
+  end;
+
+theorem
+   one = {{}}
+  proof
+      now let x;
+     thus x in one implies x = {}
+       proof assume A1: x in one;
+        then reconsider x as Ordinal by ORDINAL1:23;
+           x = {} by A1,Th17;
+        hence thesis;
+       end;
+     thus x = {} implies x in one by ORDINAL1:10,ORDINAL2:def 4;
+    end;
+   hence thesis by TARSKI:def 1;
+  end;
+
+theorem
+ Th19: A c= one implies A = {} or A = one
+  proof assume
+A1:  A c= one & A <> {} & A <> one;
+    then A c< one by XBOOLE_0:def 8;
+    then A in one by ORDINAL1:21;
+   hence contradiction by A1,Th17;
+  end;
+
+theorem
+    (A c= B or A in B) & C in D implies A+^C in B+^D
+  proof assume
+A1:  (A c= B or A in B) & C in D;
+    then A c= B by ORDINAL1:def 2;
+    then A+^C c= B+^C & B+^C in B+^D by A1,ORDINAL2:49,51;
+   hence A+^C in B+^D by ORDINAL1:22;
+  end;
+
+theorem
+    A c= B & C c= D implies A+^C c= B+^D
+  proof assume
+    A c= B & C c= D;
+    then A+^C c= B+^C & B+^C c= B+^D by ORDINAL2:50,51;
+   hence A+^C c= B+^D by XBOOLE_1:1;
+  end;
+
+theorem
+ Th22: A in B & (C c= D & D <> {} or C in D) implies A*^C in B*^D
+  proof assume
+A1:  A in B & (C c= D & D <> {} or C in D);
+    then C c= D & D <> {} by ORDINAL1:def 2;
+    then A*^C c= A*^D & A*^D in B*^D by A1,ORDINAL2:57,59;
+   hence A*^C in B*^D by ORDINAL1:22;
+  end;
+
+theorem
+    A c= B & C c= D implies A*^C c= B*^D
+  proof assume A c= B & C c= D;
+    then A*^C c= B*^C & B*^C c= B*^D by ORDINAL2:58,59;
+   hence A*^C c= B*^D by XBOOLE_1:1;
+  end;
+
+theorem
+ Th24: B+^C = B+^D implies C = D
+  proof assume
+A1:  B+^C = B+^D & C <> D;
+  then C in D or D in C by ORDINAL1:24;
+    then B+^C in B+^C by A1,ORDINAL2:49;
+   hence contradiction;
+  end;
+
+theorem
+ Th25: B+^C in B+^D implies C in D
+  proof assume
+A1:  B+^C in B+^D & not C in D;
+    then D c= C by ORDINAL1:26;
+    then B+^D c= B+^C by ORDINAL2:50;
+   hence contradiction by A1,ORDINAL1:7;
+  end;
+
+theorem
+ Th26: B+^C c= B+^D implies C c= D
+  proof
+A1:  B+^C c= B+^D & B+^C <> B+^D iff B+^C c< B+^D by XBOOLE_0:def 8;
+    assume B+^C c= B+^D;
+    then B+^C = B+^D or B+^C in B+^D by A1,ORDINAL1:21;
+    then C = D or C in D by Th24,Th25;
+   hence thesis by ORDINAL1:def 2;
+  end;
+
+theorem
+ Th27: A c= A+^B & B c= A+^B
+  proof
+      {} c= A & {} c= B by XBOOLE_1:2;
+    then A+^{} c= A+^B & {}+^B c= A+^B & A+^{} = A & {}+^B = B
+     by ORDINAL2:44,47,50,51;
+   hence thesis;
+  end;
+
+theorem
+    A in B implies A in B+^C & A in C+^B
+  proof assume
+A1:  A in B;
+      B c= B+^C & B c= C+^B by Th27;
+   hence thesis by A1;
+  end;
+
+theorem
+ Th29: A+^B = {} implies A = {} & B = {}
+  proof assume A+^B = {};
+    then A c= {} & B c= {} by Th27;
+   hence thesis by XBOOLE_1:3;
+  end;
+
+theorem
+ Th30: A c= B implies ex C st B = A+^C
+  proof
+    defpred P[Ordinal] means A c= $1 implies ex C st $1 = A+^C;
+A1:  P[{}]
+     proof assume A c= {};
+      then A = {} by XBOOLE_1:3;
+      then {} = A+^{} by ORDINAL2:47;
+     hence ex C st {} = A+^C;
+    end;
+A2: for B st P[B] holds P[succ B]
+     proof let B such that
+A3:   A c= B implies ex C st B = A+^C and
+A4:   A c= succ B;
+A5:   A = succ B implies succ B = A+^{} by ORDINAL2:44;
+        now assume A <> succ B;
+        then A c< succ B by A4,XBOOLE_0:def 8;
+        then A in succ B by ORDINAL1:21;
+       then consider C such that
+A6:     B = A+^C by A3,ORDINAL1:34;
+          succ B = A+^succ C by A6,ORDINAL2:45;
+       hence ex C st succ B = A+^C;
+      end;
+     hence ex C st succ B = A+^C by A5;
+    end;
+A7: for B st B <> {} & B is_limit_ordinal & for C st C in B holds P[C] holds
+     P[B]
+     proof let B such that
+A8:   B <> {} & B is_limit_ordinal and
+     for C st C in B holds A c= C implies ex D st C = A+^D and
+A9:   A c= B;
+     defpred P[Ordinal] means B c= A+^$1;
+        {} c= A by XBOOLE_1:2;
+      then {}+^B c= A+^B & B = {}+^B by ORDINAL2:47,51;
+then A10:   ex C st P[C];
+     consider C such that
+A11:   P[C] & for D st P[D] holds C c= D from Ordinal_Min(A10);
+     deffunc F(Ordinal) = A +^ $1;
+     consider L being Ordinal-Sequence such that
+A12:   dom L = C & for D st D in C holds L.D = F(D) from OS_Lambda;
+A13:   now assume C = {};
+        then A+^C = A by ORDINAL2:44;
+       hence B = A by A9,A11,XBOOLE_0:def 10 .= A+^{} by ORDINAL2:44;
+      end;
+        now assume
+A14:     C <> {};
+       C is_limit_ordinal
+         proof assume not thesis;
+          then consider D such that
+A15:        C = succ D by ORDINAL1:42;
+             D in C by A15,ORDINAL1:10;
+           then not C c= D by ORDINAL1:7;
+           then not B c= A+^D by A11;
+           then A+^D in B by ORDINAL1:26;
+           then succ(A+^D) = A+^succ D & succ(A+^D) c= B
+            by ORDINAL1:33,ORDINAL2:45;
+           then B = succ(A+^D) by A11,A15,XBOOLE_0:def 10;
+          hence contradiction by A8,ORDINAL1:42;
+         end;
+then A16:     A+^C = sup L by A12,A14,ORDINAL2:46 .= sup rng L by ORDINAL2:35;
+          for D st D in rng L holds D in B
+         proof let D; assume D in rng L;
+          then consider y such that
+A17:        y in dom L & D = L.y by FUNCT_1:def 5;
+          reconsider y as Ordinal by A17,ORDINAL1:23;
+A18:        L.y = A+^y & not C c= y by A12,A17,ORDINAL1:7;
+           then not B c= A+^y by A11;
+          hence D in B by A17,A18,ORDINAL1:26;
+         end;
+        then sup rng L c= B by ORDINAL2:28;
+        then B = A+^C by A11,A16,XBOOLE_0:def 10;
+       hence ex C st B = A+^C;
+      end;
+     hence ex C st B = A+^C by A13;
+    end;
+    for B holds P[B] from Ordinal_Ind(A1,A2,A7);
+   hence thesis;
+  end;
+
+theorem
+ Th31: A in B implies ex C st B = A+^C & C <> {}
+  proof assume
+A1:  A in B; then A c= B by ORDINAL1:def 2;
+   then consider C such that
+A2:  B = A+^C by Th30;
+   take C; thus B = A+^C by A2;
+   assume C = {}; then B = A by A2,ORDINAL2:44;
+   hence contradiction by A1;
+  end;
+
+theorem
+ Th32: A <> {} & A is_limit_ordinal implies B+^A is_limit_ordinal
+  proof assume
+A1:  A <> {} & A is_limit_ordinal;
+      {} c= A by XBOOLE_1:2;
+    then {} c< A by A1,XBOOLE_0:def 8;
+then A2:  {} in A by ORDINAL1:21;
+   deffunc F(Ordinal) = B +^ $1;
+   consider L being Ordinal-Sequence such that
+A3:  dom L = A & for C st C in A holds L.C = F(C) from OS_Lambda;
+A4:  B+^A = sup L by A1,A3,ORDINAL2:46 .= sup rng L by ORDINAL2:35;
+      for C st C in B+^A holds succ C in B+^A
+     proof let C such that
+A5:     C in B+^A;
+A6:     now assume C in B;
+         then succ C c= B by ORDINAL1:33;
+         then (succ C)+^{} = succ C & (succ C)+^{} c= B+^{} & B+^{} in B+^A
+           by A2,ORDINAL2:44,49,51;
+        hence succ C in B+^A by ORDINAL1:22;
+       end;
+         now assume not C in B;
+         then B c= C by ORDINAL1:26;
+        then consider D such that
+A7:       C = B+^D by Th30;
+           now assume not D in A;
+           then A c= D by ORDINAL1:26;
+           then B+^A c= B+^D by ORDINAL2:50;
+           then C in C by A5,A7;
+          hence contradiction;
+         end;
+then A8:       succ D in A & L.D = B+^D by A1,A3,ORDINAL1:41;
+         then L.(succ D) = B+^succ D by A3 .= succ(B+^D) by ORDINAL2:45;
+         then succ C in rng L by A3,A7,A8,FUNCT_1:def 5;
+        hence succ C in B+^A by A4,ORDINAL2:27;
+       end;
+      hence thesis by A6;
+     end;
+   hence B+^A is_limit_ordinal by ORDINAL1:41;
+  end;
+
+theorem
+ Th33: A+^B+^C = A+^(B+^C)
+  proof
+   defpred Sigma[Ordinal] means A+^B+^$1 = A+^(B+^$1);
+A1:  Sigma[{}]
+     proof thus A+^B+^{} = A+^B by ORDINAL2:44
+                        .= A+^(B+^{}) by ORDINAL2:44;
+     end;
+A2:  for C st Sigma[C] holds Sigma[succ C]
+     proof let C such that
+A3:    A+^B+^C = A+^(B+^C);
+      thus A+^B+^succ C = succ(A+^B+^C) by ORDINAL2:45
+            .= A+^succ(B+^C) by A3,ORDINAL2:45
+            .= A+^(B+^succ C) by ORDINAL2:45;
+     end;
+A4:  for C st C <> {} & C is_limit_ordinal & for D st D in C holds Sigma[D]
+       holds Sigma[C]
+     proof let C such that
+A5:    C <> {} & C is_limit_ordinal & for D st D in C holds Sigma[D];
+     deffunc F(Ordinal) = A +^ B +^ $1;
+     consider L being Ordinal-Sequence such that
+A6:   dom L = C & for D st D in C holds L.D = F(D) from OS_Lambda;
+A7:   A+^B+^C = sup L by A5,A6,ORDINAL2:46 .= sup rng L by ORDINAL2:35;
+     deffunc F(Ordinal) = A +^ $1;
+     consider L1 being Ordinal-Sequence such that
+A8:   dom L1 = B+^C & for D st D in B+^C holds L1.D = F(D) from OS_Lambda;
+     B+^C is_limit_ordinal & B+^C <> {} by A5,Th29,Th32;
+then A9:   A+^(B+^C) = sup L1 by A8,ORDINAL2:46 .= sup rng L1 by ORDINAL2:35;
+        rng L c= rng L1
+       proof let x; assume x in rng L;
+        then consider y such that
+A10:      y in dom L & x = L.y by FUNCT_1:def 5;
+        reconsider y as Ordinal by A10,ORDINAL1:23;
+           L.y = A+^B+^y & Sigma[y] by A5,A6,A10;
+then A11:      L.y = A+^(B+^y) & B+^y in B+^C by A6,A10,ORDINAL2:49;
+         then L1.(B+^y) = A+^(B+^y) by A8;
+        hence x in rng L1 by A8,A10,A11,FUNCT_1:def 5;
+       end;
+     hence A+^B+^C c= A+^(B+^C) by A7,A9,ORDINAL2:30;
+     let x; assume
+A12:   x in A+^(B+^C);
+     then reconsider x' = x as Ordinal by ORDINAL1:23;
+        {} c= C by XBOOLE_1:2;
+then A13:      A+^B+^{} c= A+^B+^C & A+^B+^{} = A+^B by ORDINAL2:44,50;
+        now assume
+A14:    not x in A+^B;
+     then A c= A+^B & A+^B c= x' by Th27,ORDINAL1:26;
+        then A c= x' by XBOOLE_1:1;
+       then consider E being Ordinal such that
+A15:     x' = A+^E by Th30;
+       now assume not B c= E;
+          then E in B by ORDINAL1:26;
+         hence contradiction by A14,A15,ORDINAL2:49;
+        end;
+       then consider F being Ordinal such that
+A16:     E = B+^F by Th30;
+       now assume not F in C;
+          then C c= F by ORDINAL1:26;
+          then B+^C c= B+^F by ORDINAL2:50;
+          then A+^(B+^C) c= A+^(B+^F) by ORDINAL2:50;
+          then x' in x' by A12,A15,A16;
+         hence contradiction;
+        end;
+        then x = A+^B+^F & A+^B+^F in A+^B+^C by A5,A15,A16,ORDINAL2:49;
+       hence x in A+^B+^C;
+      end;
+     hence x in A+^B+^C by A13;
+    end;
+      for C holds Sigma[C] from Ordinal_Ind(A1,A2,A4);
+   hence Sigma[C];
+  end;
+
+theorem
+    A*^B = {} implies A = {} or B = {}
+  proof assume
+A1:  A*^B = {} & A <> {} & B <> {};
+      {} c= A by XBOOLE_1:2;
+    then {} c< A by A1,XBOOLE_0:def 8;
+    then {} in A by ORDINAL1:21;
+   hence contradiction by A1,ORDINAL2:57;
+  end;
+
+theorem
+    A in B & C <> {} implies A in B*^C & A in C*^B
+  proof assume
+A1:  A in B & C <> {};
+      {} c= C by XBOOLE_1:2;
+    then {} c< C by A1,XBOOLE_0:def 8;
+    then {} in C by ORDINAL1:21;
+    then one c= C by ORDINAL1:33,ORDINAL2:def 4;
+    then B*^one c= B*^C & one*^B c= C*^B & B*^one = B & one*^B = B
+     by ORDINAL2:56,58,59;
+   hence thesis by A1;
+  end;
+
+theorem
+ Th36: B*^A = C*^A & A <> {} implies B = C
+  proof assume
+A1:  B*^A = C*^A & A <> {} & B <> C;
+  then B in C or C in B by ORDINAL1:24;
+    then B*^A in B*^A by A1,ORDINAL2:57;
+   hence contradiction;
+  end;
+
+theorem
+ Th37: B*^A in C*^A implies B in C
+  proof assume
+A1:  B*^A in C*^A & not B in C;
+    then C c= B by ORDINAL1:26;
+    then C*^A c= B*^A by ORDINAL2:58;
+   hence contradiction by A1,ORDINAL1:7;
+  end;
+
+theorem
+ Th38: B*^A c= C*^A & A <> {} implies B c= C
+  proof
+A1:  B*^A c= C*^A & B*^A <> C*^A iff B*^A c< C*^A by XBOOLE_0:def 8;
+    assume B*^A c= C*^A;
+    then B*^A = C*^A or B*^A in C*^A by A1,ORDINAL1:21;
+    then (A <> {} implies B = C) or B in C by Th36,Th37;
+   hence thesis by ORDINAL1:def 2;
+  end;
+
+theorem
+ Th39: B <> {} implies A c= A*^B & A c= B*^A
+  proof assume B <> {};
+    then {} in B by Th10;
+    then one c= B by ORDINAL1:33,ORDINAL2:def 4;
+    then one*^A c= B*^A & A*^one c= A*^B & A*^one = A & one*^A = A
+      by ORDINAL2:56,58,59;
+   hence thesis;
+  end;
+
+canceled;
+
+theorem
+    A*^B = one implies A = one & B = one
+  proof assume
+A1:  A*^B = one;
+then A2:  B <> {} by ORDINAL2:55;
+      {} c= B by XBOOLE_1:2;
+    then {} c< B by A2,XBOOLE_0:def 8;
+    then {} in B by ORDINAL1:21;
+then A3:  one c= B by ORDINAL1:33,ORDINAL2:def 4;
+A4:  now assume A in one;
+      then A c= {} by ORDINAL1:34,ORDINAL2:def 4;
+      then A = {} by XBOOLE_1:3;
+     hence contradiction by A1,ORDINAL2:52;
+    end;
+      now assume
+      one in A;
+      then one*^B in A*^B & B = one*^B by A2,ORDINAL2:56,57;
+     hence contradiction by A1,A3,ORDINAL1:7;
+    end;
+   hence A = one by A4,ORDINAL1:24;
+   hence thesis by A1,ORDINAL2:56;
+  end;
+
+theorem
+ Th42: A in B+^C implies A in B or ex D st D in C & A = B+^D
+  proof assume
+A1:  A in B+^C & not A in B;
+    then B c= A by ORDINAL1:26;
+   then consider D such that
+A2:  A = B+^D by Th30;
+   take D; assume not thesis;
+    then C c= D by A2,ORDINAL1:26;
+    then B+^C c= A by A2,ORDINAL2:50;
+   hence contradiction by A1,ORDINAL1:7;
+  end;
+
+definition let C,fi;
+ canceled;
+
+ func C+^fi -> Ordinal-Sequence means:
+Def2:   dom it = dom fi & for A st A in dom fi holds it.A = C+^(fi.A);
+  existence
+  proof
+    deffunc F(Ordinal) = C+^(fi.$1);
+    thus ex F being Ordinal-Sequence st
+    dom F = dom fi & for A st A in dom fi holds
+      F.A = F(A) from OS_Lambda;
+  end;
+  uniqueness
+   proof let f1,f2 be Ordinal-Sequence such that
+A1:  dom f1 = dom fi & for A st A in dom fi holds f1.A = C+^(fi.A) and
+A2:  dom f2 = dom fi & for A st A in dom fi holds f2.A = C+^(fi.A);
+       now let x; assume
+A3:    x in dom fi;
+      then reconsider A = x as Ordinal by ORDINAL1:23;
+      thus f1.x = C+^(fi.A) by A1,A3 .= f2.x by A2,A3;
+     end;
+    hence thesis by A1,A2,FUNCT_1:9;
+   end;
+ func fi+^C -> Ordinal-Sequence means
+     dom it = dom fi & for A st A in dom fi holds it.A = (fi.A)+^C;
+  existence
+  proof
+    deffunc F(Ordinal) = (fi.$1)+^C;
+    thus ex F being Ordinal-Sequence st
+    dom F = dom fi & for A st A in dom fi holds
+      F.A = F(A) from OS_Lambda;
+  end;
+  uniqueness
+   proof let f1,f2 be Ordinal-Sequence such that
+A4:  dom f1 = dom fi & for A st A in dom fi holds f1.A = (fi.A)+^C and
+A5:  dom f2 = dom fi & for A st A in dom fi holds f2.A = (fi.A)+^C;
+       now let x; assume
+A6:    x in dom fi;
+      then reconsider A = x as Ordinal by ORDINAL1:23;
+      thus f1.x = (fi.A)+^C by A4,A6 .= f2.x by A5,A6;
+     end;
+    hence thesis by A4,A5,FUNCT_1:9;
+   end;
+ func C*^fi -> Ordinal-Sequence means
+     dom it = dom fi & for A st A in dom fi holds it.A = C*^(fi.A);
+  existence
+  proof
+    deffunc F(Ordinal) = C*^(fi.$1);
+    thus ex F being Ordinal-Sequence st
+    dom F = dom fi & for A st A in dom fi holds
+      F.A = F(A) from OS_Lambda;
+  end;
+  uniqueness
+   proof let f1,f2 be Ordinal-Sequence such that
+A7:  dom f1 = dom fi & for A st A in dom fi holds f1.A = C*^(fi.A) and
+A8:  dom f2 = dom fi & for A st A in dom fi holds f2.A = C*^(fi.A);
+       now let x; assume
+A9:    x in dom fi;
+      then reconsider A = x as Ordinal by ORDINAL1:23;
+      thus f1.x = C*^(fi.A) by A7,A9 .= f2.x by A8,A9;
+     end;
+    hence thesis by A7,A8,FUNCT_1:9;
+   end;
+ func fi*^C -> Ordinal-Sequence means:
+Def5:   dom it = dom fi & for A st A in dom fi holds it.A = (fi.A)*^C;
+  existence
+  proof
+    deffunc F(Ordinal) = (fi.$1)*^C;
+    thus ex F being Ordinal-Sequence st
+    dom F = dom fi & for A st A in dom fi holds
+      F.A = F(A) from OS_Lambda;
+  end;
+  uniqueness
+   proof let f1,f2 be Ordinal-Sequence such that
+A10:  dom f1 = dom fi & for A st A in dom fi holds f1.A = (fi.A)*^C and
+A11:  dom f2 = dom fi & for A st A in dom fi holds f2.A = (fi.A)*^C;
+       now let x; assume
+A12:    x in dom fi;
+      then reconsider A = x as Ordinal by ORDINAL1:23;
+      thus f1.x = (fi.A)*^C by A10,A12 .= f2.x by A11,A12;
+     end;
+    hence thesis by A10,A11,FUNCT_1:9;
+   end;
+end;
+
+canceled 4;
+
+theorem
+ Th47: {} <> dom fi & dom fi = dom psi &
+  (for A,B st A in dom fi & B = fi.A holds psi.A = C+^B) implies
+     sup psi = C+^sup fi
+  proof assume that
+A1: {} <> dom fi and
+A2: dom fi = dom psi and
+A3: for A,B st A in dom fi & B = fi.A holds psi.A = C+^B;
+A4: sup rng psi c= C+^sup rng fi
+     proof let x; assume
+A5:     x in sup rng psi;
+      then reconsider A = x as Ordinal by ORDINAL1:23;
+      consider B such that
+A6:     B in rng psi & A c= B by A5,ORDINAL2:29;
+      consider y such that
+A7:     y in dom psi & B = psi.y by A6,FUNCT_1:def 5;
+      reconsider y as Ordinal by A7,ORDINAL1:23;
+      reconsider y' = fi.y as Ordinal;
+A8:     B = C+^y' & y' in rng fi by A2,A3,A7,FUNCT_1:def 5;
+       then y' in sup rng fi by ORDINAL2:27;
+       then B in C+^sup rng fi by A8,ORDINAL2:49;
+      hence thesis by A6,ORDINAL1:22;
+     end;
+   consider z being Element of dom fi;
+   reconsider z as Ordinal by A1,ORDINAL1:23;
+   reconsider z' = fi.z as Ordinal;
+A9: C+^sup rng fi c= sup rng psi
+     proof let x; assume
+A10:     x in C+^sup rng fi;
+      then reconsider A = x as Ordinal by ORDINAL1:23;
+A11:     now assume A12: A in C;
+           C c= C+^z' & C+^z' = psi.z by A1,A3,Th27;
+then A13:      C+^z' in rng psi & A c= C+^z' by A1,A2,A12,FUNCT_1:def 5,
+ORDINAL1:def 2;
+         then C+^z' in sup rng psi by ORDINAL2:27;
+        hence A in sup rng psi by A13,ORDINAL1:22;
+       end;
+         now given B such that
+A14:      B in sup rng fi & A = C+^B;
+        consider D such that
+A15:      D in rng fi & B c= D by A14,ORDINAL2:29;
+        consider x such that
+A16:      x in dom fi & D = fi.x by A15,FUNCT_1:def 5;
+        reconsider x as Ordinal by A16,ORDINAL1:23;
+           psi.x = C+^D by A3,A16;
+then A17:      C+^D in rng psi & A c= C+^D by A2,A14,A15,A16,FUNCT_1:def 5,
+ORDINAL2:50;
+         then C+^D in sup rng psi by ORDINAL2:27;
+        hence A in sup rng psi by A17,ORDINAL1:22;
+       end;
+      hence thesis by A10,A11,Th42;
+     end;
+      sup fi = sup rng fi & sup psi = sup rng psi by ORDINAL2:35;
+   hence sup psi = C+^sup fi by A4,A9,XBOOLE_0:def 10;
+  end;
+
+theorem
+ Th48: A is_limit_ordinal implies A*^B is_limit_ordinal
+  proof assume
+A1:  A is_limit_ordinal;
+      now assume
+A2:    A <> {} & A is_limit_ordinal;
+     deffunc F(Ordinal) = $1 *^ B;
+     consider fi such that
+A3:    dom fi = A & for C st C in A holds fi.C = F(C) from OS_Lambda;
+A4:    A*^B = union sup fi by A2,A3,ORDINAL2:54 .= union sup rng fi
+      by ORDINAL2:35;
+        for C st C in A*^B holds succ C in A*^B
+       proof let C; assume
+A5:       C in A*^B;
+        then consider X such that
+A6:       C in X & X in sup rng fi by A4,TARSKI:def 4;
+        reconsider X as Ordinal by A6,ORDINAL1:23;
+        consider D such that
+A7:       D in rng fi & X c= D by A6,ORDINAL2:29;
+        consider x such that
+A8:       x in dom fi & D = fi.x by A7,FUNCT_1:def 5;
+        reconsider x as Ordinal by A8,ORDINAL1:23;
+           B<>{} by A5,ORDINAL2:55;
+         then {} in B by Th10;
+         then succ {} c= B & x*^B+^succ {} = succ(x*^B+^{}) &
+         x*^B+^{} = x*^B
+           by ORDINAL1:33,ORDINAL2:44,45;
+then A9:       succ(x*^B) c= x*^B+^B & x*^B = fi.x by A3,A8,ORDINAL2:50;
+A10:       succ x in dom fi by A2,A3,A8,ORDINAL1:41;
+         then fi.succ x = (succ x)*^B by A3 .= x*^B+^B by ORDINAL2:53;
+         then x*^B+^B in rng fi & C in D by A6,A7,A10,FUNCT_1:def 5;
+         then x*^B+^B in sup rng fi & succ C c= D by ORDINAL1:33,ORDINAL2:27;
+         then succ C in succ D & succ D in sup rng fi by A8,A9,ORDINAL1:22,34;
+        hence succ C in A*^B by A4,TARSKI:def 4;
+       end;
+     hence thesis by ORDINAL1:41;
+    end;
+   hence thesis by A1,ORDINAL2:52;
+  end;
+
+theorem
+ Th49: A in B*^C & B is_limit_ordinal implies ex D st D in B & A in D*^C
+  proof assume
+A1:  A in B*^C & B is_limit_ordinal;
+then A2:  B <> {} & C <> {} by ORDINAL2:52,55;
+   deffunc F(Ordinal) = $1 *^ C;
+   consider fi such that
+A3:  dom fi = B & for D st D in B holds fi.D = F(D) from OS_Lambda;
+    B*^C = union sup fi by A1,A2,A3,ORDINAL2:54
+       .= union sup rng fi by ORDINAL2:35;
+   then consider X such that
+A4:  A in X & X in sup rng fi by A1,TARSKI:def 4;
+   reconsider X as Ordinal by A4,ORDINAL1:23;
+   consider D such that
+A5:  D in rng fi & X c= D by A4,ORDINAL2:29;
+   consider x such that
+A6:  x in dom fi & D = fi.x by A5,FUNCT_1:def 5;
+   reconsider x as Ordinal by A6,ORDINAL1:23;
+   take E = succ x;
+   thus E in B by A1,A3,A6,ORDINAL1:41;
+A7:  E*^C = x*^C+^C by ORDINAL2:53 .= D+^C by A3,A6;
+      D+^{} = D & {} in C by A2,Th10,ORDINAL2:44;
+    then D in E*^C & A in D by A4,A5,A7,ORDINAL2:49;
+   hence A in E*^C by ORDINAL1:19;
+  end;
+
+theorem
+ Th50: {} <> dom fi & dom fi = dom psi & C <> {} & sup fi is_limit_ordinal &
+  (for A,B st A in dom fi & B = fi.A holds psi.A = B*^C) implies
+     sup psi = (sup fi)*^C
+  proof assume that
+   {} <> dom fi and
+A1: dom fi = dom psi and
+A2: C <> {} and
+A3: sup fi is_limit_ordinal and
+A4: for A,B st A in dom fi & B = fi.A holds psi.A = B*^C;
+A5: sup rng psi c= (sup rng fi)*^C
+     proof let x; assume
+A6:     x in sup rng psi;
+      then reconsider A = x as Ordinal by ORDINAL1:23;
+      consider B such that
+A7:     B in rng psi & A c= B by A6,ORDINAL2:29;
+      consider y such that
+A8:     y in dom psi & B = psi.y by A7,FUNCT_1:def 5;
+      reconsider y as Ordinal by A8,ORDINAL1:23;
+      reconsider y' = fi.y as Ordinal;
+A9:     B = y'*^C & y' in rng fi by A1,A4,A8,FUNCT_1:def 5;
+       then y' in sup rng fi by ORDINAL2:27;
+       then B in (sup rng fi)*^C by A2,A9,ORDINAL2:57;
+      hence thesis by A7,ORDINAL1:22;
+     end;
+A10: sup fi = sup rng fi & sup psi = sup rng psi by ORDINAL2:35;
+      (sup rng fi)*^C c= sup rng psi
+     proof let x; assume
+A11:     x in (sup rng fi)*^C;
+      then reconsider A = x as Ordinal by ORDINAL1:23;
+      consider B such that
+A12:     B in sup rng fi & A in B*^C by A3,A10,A11,Th49;
+      consider D such that
+A13:     D in rng fi & B c= D by A12,ORDINAL2:29;
+      consider y such that
+A14:     y in dom fi & D = fi.y by A13,FUNCT_1:def 5;
+      reconsider y as Ordinal by A14,ORDINAL1:23;
+      reconsider y' = psi.y as Ordinal;
+         y' in rng psi & y' = D*^C by A1,A4,A14,FUNCT_1:def 5;
+       then D*^C in sup rng psi & B*^C c= D*^C by A13,ORDINAL2:27,58;
+hence thesis by A12,ORDINAL1:19;
+     end;
+   hence sup psi = (sup fi)*^C by A5,A10,XBOOLE_0:def 10;
+  end;
+
+theorem
+ Th51: {} <> dom fi implies sup (C+^fi) = C+^sup fi
+  proof
+A1: dom (C+^fi) = dom fi by Def2;
+      for A,B st A in dom fi & B = fi.A holds (C+^fi).A = C+^B by Def2;
+   hence thesis by A1,Th47;
+  end;
+
+theorem
+ Th52: {} <> dom fi & C <> {} & sup fi is_limit_ordinal implies
+   sup (fi*^C) = (sup fi)*^C
+  proof
+A1: dom (fi*^C) = dom fi by Def5;
+      for A,B st A in dom fi & B = fi.A holds (fi*^C).A = B*^C by Def5;
+   hence thesis by A1,Th50;
+  end;
+
+theorem
+ Th53: B <> {} implies union(A+^B) = A+^union B
+  proof assume
+A1:  B <> {};
+A2:  now given C such that
+A3:   B = succ C;
+     thus union(A+^B) = union succ (A+^C) by A3,ORDINAL2:45
+                    .= A+^C by ORDINAL2:2
+                    .= A+^union B by A3,ORDINAL2:2;
+    end;
+      now assume not ex C st B = succ C;
+then A4:   B is_limit_ordinal by ORDINAL1:42;
+      then A+^B is_limit_ordinal by A1,Th32;
+      then union(A+^B) = A+^B & union B = B by A4,ORDINAL1:def 6;
+     hence thesis;
+    end;
+   hence thesis by A2;
+  end;
+
+theorem
+ Th54: (A+^B)*^C = A*^C +^ B*^C
+  proof
+   defpred S[Ordinal] means (A+^$1)*^C = A*^C +^ $1*^C;
+A1:  S[{}]
+     proof
+      thus (A+^{})*^C = A*^C by ORDINAL2:44 .= A*^C +^ {} by ORDINAL2:44
+                     .= A*^C +^ {}*^C by ORDINAL2:52;
+     end;
+A2:  for B st S[B] holds S[succ B]
+     proof let B such that
+A3:    (A+^B)*^C = A*^C +^ B*^C;
+      thus (A+^succ B)*^C = (succ(A+^B))*^C by ORDINAL2:45
+         .= A*^C +^ B*^C +^ C by A3,ORDINAL2:53 .= A*^C +^ (B*^C +^ C) by Th33
+         .= A*^C +^ (succ B)*^C by ORDINAL2:53;
+     end;
+A4:  for B st B <> {} & B is_limit_ordinal & for D st D in B holds S[D]
+       holds S[B]
+     proof let B such that
+A5:    B <> {} & B is_limit_ordinal & for D st D in B holds S[D];
+      deffunc F(Ordinal) = A +^ $1;
+      consider fi such that
+A6:    dom fi = B & for D st D in B holds fi.D = F(D) from OS_Lambda;
+      deffunc F(Ordinal) = $1 *^ C;
+      consider psi such that
+A7:    dom psi = B & for D st D in B holds psi.D = F(D) from OS_Lambda;
+A8:    A+^B = sup fi & A+^B is_limit_ordinal by A5,A6,Th32,ORDINAL2:46;
+A9:    dom (fi*^C) = dom fi & dom (A*^C+^psi) = dom psi by Def2,Def5;
+         now let x; assume
+A10:      x in B;
+        then reconsider k = x as Ordinal by ORDINAL1:23;
+        reconsider m = fi.k, n = psi.k as Ordinal;
+        thus (fi*^C).x = m*^C by A6,A10,Def5
+                .= (A+^k)*^C by A6,A10 .= A*^C+^k*^C by A5,A10
+                .= A*^C+^n by A7,A10
+                .= (A*^C+^psi).x by A7,A10,Def2;
+       end;
+then A11:    fi*^C = A*^C+^psi by A6,A7,A9,FUNCT_1:9;
+A12:    {} in B by A5,Th10;
+      reconsider k = psi.{} as Ordinal;
+         k in rng psi by A7,A12,FUNCT_1:def 5;
+       then k in sup rng psi by ORDINAL2:27;
+then A13:    sup psi <> {} & (A+^B)*^C is_limit_ordinal by A8,Th48,ORDINAL2:35;
+A14:     now assume C <> {};
+         then (A+^B)*^C = sup(fi*^C) by A5,A6,A8,Th52
+                .= A*^C+^sup psi by A5,A7,A11,Th51;
+        hence (A+^B)*^C = union(A*^C+^sup psi) by A13,ORDINAL1:def 6
+                .= A*^C+^union sup psi by A13,Th53
+                .= A*^C+^B*^C by A5,A7,ORDINAL2:54;
+       end;
+         now assume C = {};
+         then (A+^B)*^C = {} & A*^C = {} & B*^C = {} & {}+^{} = {}
+           by ORDINAL2:44,55;
+        hence thesis;
+       end;
+      hence thesis by A14;
+     end;
+      for B holds S[B] from Ordinal_Ind(A1,A2,A4);
+   hence S[B];
+  end;
+
+theorem
+ Th55: A <> {} implies ex C,D st B = C*^A+^D & D in A
+  proof assume
+A1:  A <> {};
+   defpred I[Ordinal] means ex C,D st $1 = C*^A+^D & D in A;
+A2:  I[{}]
+     proof
+      take C = {}, D = {};
+      thus {} = {}+^{} by ORDINAL2:44 .= C*^A+^D by ORDINAL2:52;
+      thus thesis by A1,Th10;
+     end;
+A3:  for B st I[B] holds I[succ B]
+     proof let B; given C,D such that
+A4:    B = C*^A+^D & D in A;
+A5:    now assume
+A6:      succ D in A;
+        take C1 = C, D1 = succ D;
+        thus C1*^A+^D1 = succ B by A4,ORDINAL2:45;
+        thus D1 in A by A6;
+       end;
+         now assume not succ D in A;
+         then A c= succ D & succ D c= A by A4,ORDINAL1:26,33;
+then A7:      A = succ D by XBOOLE_0:def 10;
+        take C1 = succ C, D1 = {};
+        thus C1*^A+^D1 = C1*^A by ORDINAL2:44 .= C*^A+^A by ORDINAL2:53
+                    .= succ B by A4,A7,ORDINAL2:45;
+        thus D1 in A by A1,Th10;
+       end;
+      hence thesis by A5;
+     end;
+A8:  for B st B <> {} & B is_limit_ordinal & for A st A in B holds I[A]
+       holds I[B]
+     proof let B such that
+A9:    B <> {} & B is_limit_ordinal & for A st A in B holds I[A];
+      {} in A by A1,Th10;
+       then succ {} c= A & B*^one = B by ORDINAL1:33,ORDINAL2:56;
+then A10:    B c= B*^A by ORDINAL2:59,def 4;
+A11:    B = B*^A implies B = B*^A+^{} & {} in A by A1,Th10,ORDINAL2:44;
+        defpred P[Ordinal] means $1 in B & B in $1*^A;
+         now assume B <> B*^A;
+         then B c< B*^A by A10,XBOOLE_0:def 8;
+         then B in B*^A by ORDINAL1:21;
+then A12:      ex C st P[C] by A9,Th49;
+        consider C such that
+A13:      P[C] and
+A14:      for C1 being Ordinal st P[C1] holds C c= C1
+           from Ordinal_Min(A12);
+           now assume C is_limit_ordinal;
+          then consider C1 being Ordinal such that
+A15:         C1 in C & B in C1*^A by A13,Th49;
+             C1 in B by A13,A15,ORDINAL1:19;
+           then C c= C1 by A14,A15;
+          hence contradiction by A15,ORDINAL1:7;
+         end;
+        then consider C1 being Ordinal such that
+A16:       C = succ C1 by ORDINAL1:42;
+           C1 in C by A16,ORDINAL1:10;
+         then C1 in B & not C c= C1 by A13,ORDINAL1:7,19;
+         then not B in C1*^A by A14;
+         then C1*^A c= B by ORDINAL1:26;
+        then consider D such that
+A17:       B = C1*^A+^D by Th30;
+        thus I[B]
+          proof take C1,D;
+           thus B = C1*^A+^D by A17;
+              C1*^A+^D in C1*^A+^A by A13,A16,A17,ORDINAL2:53;
+           hence thesis by Th25;
+          end;
+       end;
+      hence thesis by A11;
+     end;
+      for B holds I[B] from Ordinal_Ind(A2,A3,A8);
+   hence I[B];
+  end;
+
+theorem
+ Th56: for C1,D1,C2,D2 being Ordinal st C1*^A+^D1 = C2*^A+^D2 & D1 in A & D2 in
+ A
+   holds C1 = C2 & D1 = D2
+  proof
+   let C1,D1,C2,D2 be Ordinal such that
+A1:  C1*^A+^D1 = C2*^A+^D2 & D1 in A & D2 in A;
+   set B = C1*^A+^D1;
+A2: now assume C1 in C2;
+     then consider C such that
+A3:    C2 = C1+^C & C <> {} by Th31;
+        B = C1*^A+^C*^A+^D2 by A1,A3,Th54 .= C1*^A+^(C*^A+^D2) by Th33;
+      then D1 = C*^A+^D2 & A c= C*^A & C*^A c= C*^A+^D2 by A3,Th24,Th27,Th39;
+hence contradiction by A1,ORDINAL1:7;
+    end;
+      now assume C2 in C1;
+     then consider C such that
+A4:    C1 = C2+^C & C <> {} by Th31;
+        B = C2*^A+^C*^A+^D1 by A4,Th54 .= C2*^A+^(C*^A+^D1) by Th33;
+      then D2 = C*^A+^D1 & A c= C*^A & C*^A c= C*^A+^D1 by A1,A4,Th24,Th27,Th39
+;
+hence contradiction by A1,ORDINAL1:7;
+    end;
+   hence C1 = C2 by A2,ORDINAL1:24;
+   hence D1 = D2 by A1,Th24;
+  end;
+
+theorem
+ Th57: one in B & A <> {} & A is_limit_ordinal implies
+   for fi st dom fi = A & for C st C in A holds fi.C = C*^B holds A*^B = sup fi
+  proof assume
+A1:  one in B & A <> {} & A is_limit_ordinal;
+   let fi; assume
+A2:  dom fi = A & for C st C in A holds fi.C = C*^B;
+then A3:  A*^B = union sup fi by A1,ORDINAL2:54;
+      now given C such that
+A4:    sup fi = succ C;
+A5:    C in sup fi & sup fi = sup rng fi by A4,ORDINAL1:10,ORDINAL2:35;
+     then consider D such that
+A6:    D in rng fi & C c= D by ORDINAL2:29;
+        D in sup fi by A5,A6,ORDINAL2:27;
+      then succ D c= succ C & succ C c= succ D by A4,A6,ORDINAL1:33,ORDINAL2:1
+;
+      then succ C = succ D by XBOOLE_0:def 10;
+      then C = D by ORDINAL1:12;
+     then consider x such that
+A7:    x in dom fi & C = fi.x by A6,FUNCT_1:def 5;
+     reconsider x as Ordinal by A7,ORDINAL1:23;
+A8:    succ x in dom fi by A1,A2,A7,ORDINAL1:41;
+      then C = x*^B & fi.succ x = (succ x)*^B & C+^one in C+^B &
+      (succ x)*^B = x*^B+^B
+       by A1,A2,A7,ORDINAL2:49,53;
+    then C+^B in rng fi & sup fi in C+^B by A4,A8,FUNCT_1:def 5,ORDINAL2:48;
+     hence contradiction by A5,ORDINAL2:27;
+    end;
+    then sup fi is_limit_ordinal by ORDINAL1:42;
+   hence A*^B = sup fi by A3,ORDINAL1:def 6;
+  end;
+
+theorem
+    (A*^B)*^C = A*^(B*^C)
+  proof
+     defpred P[Ordinal] means ($1*^B)*^C = $1*^(B*^C);
+      {}*^B = {} & {}*^C = {} & {}*^(B*^C) = {} by ORDINAL2:52;
+then A1:  P[{}];
+A2:  for A st P[A] holds P[succ A]
+     proof let A such that
+A3:    (A*^B)*^C = A*^(B*^C);
+      thus ((succ A)*^B)*^C = (A*^B+^B)*^C by ORDINAL2:53
+            .= A*^(B*^C)+^B*^C by A3,Th54
+            .= A*^(B*^C)+^one*^(B*^C) by ORDINAL2:56
+            .= (A+^one)*^(B*^C) by Th54
+            .= (succ A)*^(B*^C) by ORDINAL2:48;
+     end;
+A4:  for A st A <> {} & A is_limit_ordinal &
+      for D st D in A holds P[D] holds P[A]
+     proof let A such that
+A5:    A <> {} & A is_limit_ordinal and
+A6:    for D st D in A holds (D*^B)*^C = D*^(B*^C);
+A7:     now assume not (one in B & one in C);
+         then B c= one or C c= one by ORDINAL1:26;
+then A8:       B = {} or B = one or C = {} or C = one by Th19;
+           A*^{} = {} & {}*^C = {} & A*^one = A & one*^C = C &
+          (A*^B)*^{} = {} & B*^{} = {} & A*^B*^one = A*^B & B*^one = B
+          by ORDINAL2:52,55,56;
+        hence (A*^B)*^C = A*^(B*^C) by A8;
+       end;
+         now assume
+A9:      one in B & one in C;
+           one = one*^one by ORDINAL2:56;
+then A10:     one in B*^C & C <> {} by A9,Th22;
+        deffunc F(Ordinal) = $1 *^ B;
+        consider fi such that
+A11:     dom fi = A & for D st D in A holds fi.D = F(D) from OS_Lambda;
+           dom(fi*^C) = A & for D st D in A holds (fi*^C).D = D*^(B*^C)
+          proof thus dom(fi*^C) = A by A11,Def5;
+           let D; assume D in A;
+            then (fi*^C).D = (fi.D)*^C & fi.D = D*^B & D*^B*^C = D*^(B*^C)
+             by A6,A11,Def5;
+           hence (fi*^C).D = D*^(B*^C);
+          end;
+         then A*^B = sup fi & A*^(B*^C) = sup(fi*^C) & A*^B is_limit_ordinal
+          by A5,A9,A10,A11,Th48,Th57;
+        hence A*^B*^C = A*^(B*^C) by A5,A9,A11,Th52;
+       end;
+      hence (A*^B)*^C = A*^(B*^C) by A7;
+     end;
+     for A holds P[A] from Ordinal_Ind(A1,A2,A4);
+   hence thesis;
+  end;
+
+definition let A,B;
+ func A -^ B -> Ordinal means:
+Def6:   A = B+^it if B c= A otherwise it = {};
+  existence by Th30;
+  uniqueness by Th24;
+  consistency;
+ func A div^ B -> Ordinal means:
+Def7:   ex C st A = it*^B+^C & C in B if B <> {} otherwise it = {};
+  consistency;
+  existence by Th55;
+  uniqueness by Th56;
+end;
+
+definition let A,B;
+ func A mod^ B -> Ordinal equals:
+Def8:    A-^(A div^ B)*^B;
+  correctness;
+end;
+
+canceled;
+
+theorem
+    A in B implies B = A+^(B-^A)
+  proof assume A in B;
+    then A c= B by ORDINAL1:def 2;
+   hence thesis by Def6;
+  end;
+
+canceled 4;
+
+theorem
+ Th65: A+^B-^A = B
+  proof
+      A c= A+^B by Th27;
+   hence thesis by Def6;
+  end;
+
+theorem
+ Th66: A in B & (C c= A or C in A) implies A-^C in B-^C
+  proof assume
+A1:  A in B & (C c= A or C in A);
+    then A c= B & C c= A by ORDINAL1:def 2;
+then A2:  A = C+^(A-^C) & C c= B by Def6,XBOOLE_1:1;
+    then B = C+^(B-^C) by Def6;
+   hence A-^C in B-^C by A1,A2,Th25;
+  end;
+
+theorem
+ Th67: A-^A = {}
+  proof A+^{} = A & A c= A by ORDINAL2:44;
+   hence thesis by Def6;
+  end;
+
+theorem
+    A in B implies B-^A <> {} & {} in B-^A
+  proof assume
+    A in B;
+
+    then A-^A in B-^A & A-^A = {} by Th66,Th67;
+   hence thesis;
+  end;
+
+theorem
+ Th69: A-^{} = A & {}-^A = {}
+  proof A1: {} c= A & {}+^A = A by ORDINAL2:47,XBOOLE_1:2;
+   hence
+   A-^{} = A by Def6;
+      not A c= {} or A c= {};
+    then thesis or A = {} by Def6,XBOOLE_1:3;
+   hence thesis by A1,Def6;
+  end;
+
+theorem
+    A-^(B+^C) = (A-^B)-^C
+  proof
+      now per cases;
+     suppose B+^C c= A;
+       then A = B+^C+^(A-^(B+^C)) by Def6;
+       then A = B+^(C+^(A-^(B+^C))) by Th33;
+       then C+^(A-^(B+^C)) = A-^B by Th65;
+      hence thesis by Th65;
+     suppose
+A1:     not B+^C c= A;
+then A2:     A-^(B+^C) = {} by Def6;
+         B c= A or not B c= A;
+then A3:     A = B+^(A-^B) or A-^B = {} by Def6;
+         now assume A = B+^(A-^B); then not C c= A-^B by A1,ORDINAL2:50;
+        hence A-^B-^C = {} by Def6;
+       end;
+      hence thesis by A2,A3,Th69;
+    end;
+   hence thesis;
+  end;
+
+theorem
+   A c= B implies C-^B c= C-^A
+  proof assume
+A1:  A c= B;
+then A2:  B = A+^(B-^A) by Def6;
+A3:  now assume B c= C;
+      then A c= C & C = B+^(C-^B) by A1,Def6,XBOOLE_1:1;
+      then B+^(C-^B) = A+^(C-^A) by Def6;
+      then A+^((B-^A)+^(C-^B)) = A+^(C-^A) by A2,Th33;
+      then (B-^A)+^(C-^B) = C-^A by Th24;
+     hence thesis by Th27;
+    end;
+      now assume not B c= C;
+      then C-^B = {} by Def6;
+     hence thesis by XBOOLE_1:2;
+    end;
+   hence thesis by A3;
+  end;
+
+theorem
+   A c= B implies A-^C c= B-^C
+  proof assume
+A1:  A c= B;
+A2:  now assume C c= A;
+      then C c= B & A = C+^(A-^C) by A1,Def6,XBOOLE_1:1;
+      then C+^(A-^C) c= C+^(B-^C) by A1,Def6;
+     hence thesis by Th26;
+    end;
+      now assume not C c= A;
+      then A-^C = {} by Def6;
+     hence thesis by XBOOLE_1:2;
+    end;
+   hence thesis by A2;
+  end;
+
+theorem
+    C <> {} & A in B+^C implies A-^B in C
+  proof assume A1: C <> {};
+A2:  (B c= A implies A = B+^(A-^B)) & (not B c= A implies A-^B = {}) by Def6;
+      B+^C-^B = C by Th65;
+   hence thesis by A1,A2,Th10,Th66;
+  end;
+
+theorem
+    A+^B in C implies B in C-^A
+  proof A c= A+^B & A+^B-^A = B by Th27,Th65;
+   hence thesis by Th66;
+  end;
+
+theorem
+    A c= B+^(A-^B)
+  proof
+      now per cases;
+     suppose B c= A;
+      hence thesis by Def6;
+     suppose not B c= A;
+       then A-^B = {} & A in B & B+^{} = B by Def6,ORDINAL1:26,ORDINAL2:44;
+      hence thesis by ORDINAL1:def 2;
+    end;
+   hence thesis;
+  end;
+
+theorem
+   A*^C -^ B*^C = (A-^B)*^C
+  proof
+A1:  now assume B c= A;
+      then A = B+^(A-^B) by Def6;
+      then A*^C = B*^C+^(A-^B)*^C by Th54;
+     hence thesis by Th65;
+    end;
+      now assume not B c= A;
+      then A-^B = {} & (not B*^C c= A*^C or C = {}) & A*^{} = {} &
+       {}*^C = {} by Def6,Th38,ORDINAL2:52,55;
+     hence thesis by Def6,Th69;
+    end;
+   hence thesis by A1;
+  end;
+
+theorem
+ Th77: (A div^ B)*^B c= A
+  proof
+      now per cases;
+     suppose B <> {}; then ex C st A = (A div^ B)*^B+^C & C in B by Def7
+;
+      hence thesis by Th27;
+     suppose B = {}; then A div^ B = {} by Def7;
+       then (A div^ B)*^B = {} by ORDINAL2:52;
+      hence thesis by XBOOLE_1:2;
+    end;
+   hence thesis;
+  end;
+
+theorem
+ Th78: A = (A div^ B)*^B+^(A mod^ B)
+  proof
+      (A div^ B)*^B c= A & A mod^ B = A-^(A div^ B)*^B by Def8,Th77;
+   hence thesis by Def6;
+  end;
+
+theorem
+    A = B*^C+^D & D in C implies B = A div^ C & D = A mod^ C
+  proof assume
+A1:  A = B*^C+^D & D in C;
+   hence B = A div^ C by Def7;
+    then A-^(A div^ C)*^C = D by A1,Th65;
+   hence D = A mod^ C by Def8;
+  end;
+
+theorem
+   A in B*^C implies A div^ C in B & A mod^ C in C
+  proof assume
+A1:  A in B*^C;
+    then C <> {} by ORDINAL2:55;
+ then A2:   ex D st A = (A div^ C)*^C+^D & D in C by Def7;
+   assume
+A3:  not thesis;
+      A = (A div^ C)*^C+^(A mod^ C) by Th78;
+    then B c= A div^ C by A2,A3,Th24,ORDINAL1:26;
+    then B*^C c= (A div^ C)*^C & (A div^ C)*^C c= A by A2,Th27,ORDINAL2:58;
+hence contradiction by A1,ORDINAL1:7;
+  end;
+
+theorem
+ Th81: B <> {} implies A*^B div^ B = A
+  proof assume
+    B <> {};
+    then {} in B & A*^B = A*^B+^{} by Th10,ORDINAL2:44;
+   hence thesis by Def7;
+  end;
+
+theorem
+   A*^B mod^ B = {}
+  proof
+      A*^{} = {} & {} div^ {} = {} &
+    A*^B mod^ B = A*^B-^(A*^B div^ B)*^B &
+     {}-^(A*^B div^ B)*^B = {} & (B = {} or B <> {}) &
+     A*^B-^A*^B = {}
+      by Def7,Def8,Th67,Th69,ORDINAL2:55;
+   hence thesis by Th81;
+  end;
+
+theorem
+   {} div^ A = {} & {} mod^ A = {} & A mod^ {} = A
+  proof {} = {}*^A & (A = {} or A <> {}) by ORDINAL2:52;
+   hence
+    {} div^ A = {} by Def7,Th81;
+   thus {} mod^ A = {}-^({} div^ A)*^A by Def8 .= {} by Th69;
+   thus A mod^ {} = A-^(A div^ {})*^{} by Def8 .= A-^{} by ORDINAL2:55
+                  .= A by Th69;
+  end;
+
+theorem
+   A div^ one = A & A mod^ one = {}
+  proof
+      A = A*^one & A = A+^{} & {} in one by Th10,ORDINAL2:44,56;
+   hence A div^ one = A by Def7;
+   hence A mod^ one = A-^A*^one by Def8 .= A-^A by ORDINAL2:56 .= {} by Th67;
+  end;

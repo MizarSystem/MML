@@ -1,0 +1,289 @@
+:: Real Normed Space
+::  by Jan Popio{\l}ek
+::
+:: Received September 20, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, BINOP_1, FUNCT_1, PRE_TOPC, RLSUB_1, ABSVALUE, ARYTM_1,
+      ARYTM_3, RELAT_1, SEQM_3, SEQ_2, SEQ_1, ORDINAL2, NORMSP_1, ARYTM;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0,
+      REAL_1, NAT_1, FUNCT_1, FUNCT_2, BINOP_1, RELAT_1, SEQ_1, SEQ_2, SEQM_3,
+      ABSVALUE, STRUCT_0, PRE_TOPC, RLVECT_1, RLSUB_1;
+ constructors REAL_1, NAT_1, DOMAIN_1, SEQ_2, SEQM_3, ABSVALUE, RLSUB_1,
+      MEMBERED, XBOOLE_0;
+ clusters STRUCT_0, XREAL_0, RELSET_1, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0,
+      NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+definition
+ struct(RLSStruct) NORMSTR (# carrier -> set,
+                 Zero -> Element of the carrier,
+                  add -> BinOp of the carrier,
+                 Mult -> Function of [:REAL, the carrier:], the carrier,
+                 norm -> Function of the carrier, REAL #);
+end;
+
+definition
+ cluster non empty NORMSTR;
+end;
+
+ reserve X for non empty NORMSTR;
+ reserve a, b for Real;
+ reserve x for Point of X;
+
+definition let X, x;
+          func ||.x.|| -> Real equals
+:: NORMSP_1:def 1
+   ( the norm of X ).x;
+end;
+
+definition let IT be non empty NORMSTR;
+          attr IT is RealNormSpace-like means
+:: NORMSP_1:def 2
+   for x , y being Point of IT , a holds
+          ( ||.x.|| = 0 iff x = 0.IT ) &
+          ||.a * x.|| = abs(a) * ||.x.|| &
+          ||.x + y.|| <= ||.x.|| + ||.y.||;
+end;
+
+definition
+ cluster RealNormSpace-like RealLinearSpace-like Abelian
+    add-associative right_zeroed right_complementable strict
+      (non empty NORMSTR);
+end;
+
+definition
+ mode RealNormSpace is RealNormSpace-like RealLinearSpace-like
+      Abelian add-associative right_zeroed right_complementable
+          (non empty NORMSTR);
+end;
+
+ reserve RNS for RealNormSpace;
+ reserve x, y, z, g, g1, g2 for Point of RNS;
+
+canceled 4;
+
+theorem :: NORMSP_1:5
+     ||.0.RNS.|| = 0;
+
+theorem :: NORMSP_1:6
+    ||.-x.|| = ||.x.||;
+
+theorem :: NORMSP_1:7
+    ||.x - y.|| <= ||.x.|| + ||.y.||;
+
+theorem :: NORMSP_1:8
+    0 <= ||.x.||;
+
+theorem :: NORMSP_1:9
+      ||.a * x + b * y.|| <= abs(a) * ||.x.|| + abs(b) * ||.y.||;
+
+theorem :: NORMSP_1:10
+     ||.x - y.|| = 0 iff x = y;
+
+theorem :: NORMSP_1:11
+     ||.x - y.|| = ||.y - x.||;
+
+theorem :: NORMSP_1:12
+     ||.x.|| - ||.y.|| <= ||.x - y.||;
+
+theorem :: NORMSP_1:13
+     abs(||.x.|| - ||.y.||) <= ||.x - y.||;
+
+theorem :: NORMSP_1:14
+     ||.x - z.|| <= ||.x - y.|| + ||.y - z.||;
+
+theorem :: NORMSP_1:15
+      x <> y implies ||.x - y.|| <> 0;
+
+definition let RNS be 1-sorted;
+          mode sequence of RNS means
+:: NORMSP_1:def 3
+   it is Function of NAT, the carrier of RNS;
+end;
+
+definition let RNS be 1-sorted;
+ cluster -> Function-like Relation-like sequence of RNS;
+end;
+
+definition let RNS be non empty 1-sorted;
+ redefine mode sequence of RNS -> Function of NAT, the carrier of RNS;
+end;
+
+reserve S, S1, S2 for sequence of RNS;
+reserve k, n, m, m1, m2 for Nat;
+reserve r for Real;
+reserve f for Function;
+reserve d, s, t for set;
+
+canceled;
+
+theorem :: NORMSP_1:17
+ for RNS being non empty 1-sorted, x being Element of RNS
+   holds f is sequence of RNS iff ( dom f = NAT &
+    for d st d in NAT holds f.d is Element of RNS );
+
+canceled;
+
+theorem :: NORMSP_1:19
+ for RNS being non empty 1-sorted, x being Element of RNS
+       ex S being sequence of RNS st rng S = {x};
+
+theorem :: NORMSP_1:20
+ for RNS being non empty 1-sorted, S being sequence of RNS st
+     (ex x being Element of RNS st for n holds S.n = x)
+      ex x being Element of RNS st rng S={x};
+
+theorem :: NORMSP_1:21
+ for RNS being non empty 1-sorted, S being sequence of RNS st
+     ex x being Element of RNS
+      st rng S = {x} holds for n holds S.n = S.(n+1);
+
+theorem :: NORMSP_1:22
+ for RNS being non empty 1-sorted, S being sequence of RNS st
+      for n holds S.n = S.(n+1)
+   holds for n , k holds S.n = S.(n+k);
+
+theorem :: NORMSP_1:23
+ for RNS being non empty 1-sorted, S being sequence of RNS st
+      for n , k holds S.n = S.(n+k)
+   holds for n , m holds S.n = S.m;
+
+theorem :: NORMSP_1:24
+ for RNS being non empty 1-sorted, S being sequence of RNS st
+     for n , m holds S.n = S.m
+   ex x being Element of RNS st for n holds S.n = x;
+
+theorem :: NORMSP_1:25
+       ex S st rng S = {0.RNS};
+
+definition let RNS be non empty 1-sorted;
+          let S be sequence of RNS;
+ redefine attr S is constant means
+:: NORMSP_1:def 4
+   ex x being Element of RNS st for n holds S.n = x;
+end;
+
+canceled;
+
+theorem :: NORMSP_1:27
+   for RNS being non empty 1-sorted, S being sequence of RNS holds
+     S is constant iff ex x being Element of RNS st rng S = {x};
+
+definition let RNS be non empty 1-sorted;
+          let S be sequence of RNS;
+          let n;
+redefine func S.n -> Element of RNS;
+end;
+
+scheme ExRNSSeq{RNS()->RealNormSpace, F(Nat) -> ( Point of RNS() ) } :
+       ex S be sequence of RNS() st for n holds S.n = F(n);
+
+scheme ExRLSSeq{RNS()->RealLinearSpace,
+                F(Nat) -> Element of RNS() } :
+       ex S be sequence of RNS() st for n holds S.n = F(n);
+
+definition let RNS be RealLinearSpace;
+           let S1, S2 be sequence of RNS;
+           func S1 + S2 -> sequence of RNS means
+:: NORMSP_1:def 5
+     for n holds it.n = S1.n + S2.n;
+end;
+
+definition let RNS be RealLinearSpace;
+          let S1 , S2 be sequence of RNS;
+          func S1 - S2 -> sequence of RNS means
+:: NORMSP_1:def 6
+    for n holds it.n = S1.n - S2.n;
+end;
+
+definition let RNS be RealLinearSpace;
+          let S be sequence of RNS;
+          let x be Element of RNS;
+          func S - x -> sequence of RNS means
+:: NORMSP_1:def 7
+     for n holds it.n = S.n - x;
+end;
+
+definition let RNS be RealLinearSpace;
+          let S be sequence of RNS;
+          let a;
+          func a * S -> sequence of RNS means
+:: NORMSP_1:def 8
+     for n holds it.n = a * S.n;
+end;
+
+definition let RNS;
+          let S;
+          attr S is convergent means
+:: NORMSP_1:def 9
+    ex g st for r st 0 < r ex m st for n st m <= n holds
+          ||.(S.n) - g.|| < r;
+end;
+
+canceled 6;
+
+theorem :: NORMSP_1:34
+     S1 is convergent & S2 is convergent implies
+               S1 + S2 is convergent;
+
+theorem :: NORMSP_1:35
+     S1 is convergent & S2 is convergent implies
+                 S1 - S2 is convergent;
+
+theorem :: NORMSP_1:36
+     S is convergent implies
+     S - x is convergent;
+
+theorem :: NORMSP_1:37
+     S is convergent implies
+     a * S is convergent;
+
+definition let RNS;
+          let S;
+          func ||.S.|| -> Real_Sequence means
+:: NORMSP_1:def 10
+      for n holds it.n =||.(S.n).||;
+end;
+
+canceled;
+
+theorem :: NORMSP_1:39
+     S is convergent implies ||.S.|| is convergent;
+
+definition let RNS;
+          let S;
+          assume
+        S is convergent;
+          func lim S -> Point of RNS means
+:: NORMSP_1:def 11
+   for r st 0 < r ex m st for n st m <= n
+          holds ||.(S.n) - it.|| < r;
+end;
+
+canceled;
+
+theorem :: NORMSP_1:41
+       S is convergent & lim S = g implies
+     ( ||.S - g.|| is convergent & lim ||.S - g.|| = 0 );
+
+theorem :: NORMSP_1:42
+       S1 is convergent & S2 is convergent implies
+     lim (S1 + S2) = (lim S1) + (lim S2);
+
+theorem :: NORMSP_1:43
+       S1 is convergent & S2 is convergent implies
+     lim (S1 - S2) = (lim S1) - (lim S2);
+
+theorem :: NORMSP_1:44
+       S is convergent implies
+     lim (S - x) = (lim S) - x;
+
+theorem :: NORMSP_1:45
+       S is convergent implies
+     lim (a * S) = a * (lim S);

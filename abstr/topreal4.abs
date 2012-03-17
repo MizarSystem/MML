@@ -1,0 +1,212 @@
+:: Connectedness Conditions Using Polygonal Arcs
+::  by Yatsuka Nakamura and Jaros{\l}aw Kotowicz
+::
+:: Received August 24, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary EUCLID, PRE_TOPC, FINSEQ_1, RELAT_1, FUNCT_1, TOPREAL1, BOOLE,
+      RELAT_2, TOPREAL2, MCART_1, METRIC_1, ARYTM_3, ARYTM_1, TARSKI, PCOMPS_1,
+      SUBSET_1, TOPREAL4, FINSEQ_4, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XREAL_0, REAL_1, NAT_1,
+      RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_4, STRUCT_0, PRE_TOPC, CONNSP_1,
+      METRIC_1, PCOMPS_1, EUCLID, TOPREAL1, TOPREAL2;
+ constructors REAL_1, NAT_1, CONNSP_1, PCOMPS_1, TOPREAL1, TOPREAL2, FINSEQ_4,
+      INT_1, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, FUNCT_1, PRE_TOPC, RELSET_1, STRUCT_0, EUCLID, XREAL_0,
+      TOPREAL1, INT_1, XBOOLE_0, MEMBERED, ZFMISC_1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+ reserve P,P1,P2,R for Subset of TOP-REAL 2,
+         W for non empty Subset of TOP-REAL 2,
+         p,p1,p2,p3,p11,p22,q,q1,q2,q3,q4 for Point of TOP-REAL 2,
+         f,h for FinSequence of TOP-REAL 2,
+         r for Real,
+         u for Point of Euclid 2,
+         n,m,i,j,k for Nat,
+         x,y for set;
+
+theorem :: TOPREAL4:1
+ for D being non empty set, f being FinSequence of D, p being Element of D
+  holds (f^<*p*>)/.(len f + 1) = p;
+
+definition let P,p,q;
+ pred P is_S-P_arc_joining p,q means
+:: TOPREAL4:def 1
+   ex f st f is_S-Seq & P = L~f & p=f/.1 & q=f/.len f;
+end;
+
+definition let P;
+ attr P is being_special_polygon means
+:: TOPREAL4:def 2
+   ex p1,p2,P1,P2 st p1 <> p2 & p1 in P & p2 in P &
+   P1 is_S-P_arc_joining p1,p2 & P2 is_S-P_arc_joining p1,p2 &
+    P1 /\ P2 = {p1,p2} & P = P1 \/ P2;
+  synonym P is_special_polygon;
+ end;
+
+definition let P be Subset of TOP-REAL 2;
+ attr P is being_Region means
+:: TOPREAL4:def 3
+  P is open & P is connected;
+  synonym P is_Region;
+end;
+
+theorem :: TOPREAL4:2
+P is_S-P_arc_joining p,q implies P is_S-P_arc;
+
+theorem :: TOPREAL4:3
+W is_S-P_arc_joining p,q implies W is_an_arc_of p,q;
+
+theorem :: TOPREAL4:4
+W is_S-P_arc_joining p,q implies p in W & q in W;
+
+theorem :: TOPREAL4:5
+  P is_S-P_arc_joining p,q implies p<>q;
+
+theorem :: TOPREAL4:6
+  W is_special_polygon implies W is_simple_closed_curve;
+
+theorem :: TOPREAL4:7
+p`1 = q`1 & p`2 <> q`2 & p in Ball(u,r) & q in Ball(u,r) &
+f =<* p,|[p`1,(p`2+q`2)/2]|,q *> implies
+f is_S-Seq & f/.1 =p & f/.len f = q & L~f is_S-P_arc_joining p,q &
+L~f c= Ball(u,r);
+
+theorem :: TOPREAL4:8
+p`1 <> q`1 & p`2 = q`2 & p in Ball(u,r) & q in Ball(u,r) &
+f = <* p,|[(p`1+q`1)/2,p`2]|,q *> implies
+f is_S-Seq & f/.1 =p & f/.len f = q & L~f is_S-P_arc_joining p,q &
+L~f c= Ball(u,r);
+
+theorem :: TOPREAL4:9
+p`1 <> q`1 & p`2 <> q`2 & p in Ball(u,r) & q in Ball(u,r) &
+|[p`1,q`2]| in Ball(u,r) & f =<* p,|[p`1,q`2]|,q *> implies
+f is_S-Seq & f/.1 =p & f/.len f = q & L~f is_S-P_arc_joining p,q &
+L~f c= Ball(u,r);
+
+theorem :: TOPREAL4:10
+p`1 <> q`1 & p`2 <> q`2 & p in Ball(u,r) & q in Ball(u,r) &
+|[q`1,p`2]| in Ball(u,r) & f =<* p,|[q`1,p`2]|,q *> implies
+f is_S-Seq & f/.1 =p & f/.len f = q & L~f is_S-P_arc_joining p,q &
+L~f c= Ball(u,r);
+
+theorem :: TOPREAL4:11
+p <> q & p in Ball(u,r) & q in Ball(u,r) implies
+ex P st P is_S-P_arc_joining p,q & P c= Ball(u,r);
+
+theorem :: TOPREAL4:12
+p<>f/.1 & (f/.1)`2 = p`2 & f is_S-Seq &
+p in LSeg(f,1) & h = <* f/.1,|[((f/.1)`1+p`1)/2,(f/.1)`2]|,p *> implies
+h is_S-Seq & h/.1=f/.1 & h/.len h=p & L~h is_S-P_arc_joining f/.1,p &
+L~h c= L~f & L~h = L~(f|1) \/ LSeg(f/.1,p);
+
+theorem :: TOPREAL4:13
+p<>f/.1 & (f/.1)`1 = p`1 & f is_S-Seq &
+p in LSeg(f,1) & h = <* f/.1,|[(f/.1)`1,((f/.1)`2+p`2)/2]|,p *> implies
+h is_S-Seq & h/.1=f/.1 & h/.len h=p & L~h is_S-P_arc_joining f/.1,p &
+L~h c= L~f & L~h = L~(f|1) \/ LSeg(f/.1,p);
+
+theorem :: TOPREAL4:14
+p<>f/.1 & f is_S-Seq & i in dom f & i+1 in dom f &
+i>1 & p in LSeg(f,i) & p<>f/.i & p<>f/.(i+1) & h = (f|i)^<*p*> implies
+h is_S-Seq & h/.1=f/.1 & h/.len h=p & L~h is_S-P_arc_joining f/.1,p &
+L~h c= L~f & L~h = L~(f|i) \/ LSeg(f/.i,p);
+
+theorem :: TOPREAL4:15
+f/.2<>f/.1 & f is_S-Seq & (f/.2)`2 = (f/.1)`2 &
+h = <* f/.1,|[((f/.1)`1+(f/.2)`1)/2,(f/.1)`2]|,f/.2 *> implies
+h is_S-Seq & h/.1=f/.1 & h/.len h=f/.2 &
+L~h is_S-P_arc_joining f/.1,f/.2 & L~h c= L~f &
+L~h = L~(f|1) \/ LSeg(f/.1,f/.2) & L~h = L~(f|2) \/ LSeg(f/.2,f/.2);
+
+theorem :: TOPREAL4:16
+f/.2<>f/.1 & f is_S-Seq & (f/.2)`1 = (f/.1)`1 &
+h = <* f/.1,|[(f/.1)`1,((f/.1)`2+(f/.2)`2)/2]|,f/.2 *> implies
+h is_S-Seq & h/.1=f/.1 & h/.len h=f/.2 &
+L~h is_S-P_arc_joining f/.1,f/.2 & L~h c= L~f &
+L~h = L~(f|1) \/ LSeg(f/.1,f/.2) & L~h = L~(f|2) \/ LSeg(f/.2,f/.2);
+
+theorem :: TOPREAL4:17
+f/.i<>f/.1 & f is_S-Seq & i>2 & i in dom f & h = f|i implies
+h is_S-Seq & h/.1=f/.1 & h/.len h=f/.i &
+L~h is_S-P_arc_joining f/.1,f/.i &
+L~h c= L~f & L~h = L~(f|i) \/ LSeg(f/.i,f/.i);
+
+theorem :: TOPREAL4:18
+p<>f/.1 & f is_S-Seq & p in LSeg(f,n) implies
+  ex h st h is_S-Seq & h/.1=f/.1 & h/.len h = p &
+          L~h is_S-P_arc_joining f/.1,p & L~h c= L~f &
+          L~h = L~(f|n) \/ LSeg(f/.n,p);
+
+theorem :: TOPREAL4:19
+p<>f/.1 & f is_S-Seq & p in L~f implies
+ex h st h is_S-Seq & h/.1=f/.1 & h/.len h = p &
+        L~h is_S-P_arc_joining f/.1,p & L~h c= L~f;
+
+theorem :: TOPREAL4:20
+( p`1=(f/.len f)`1 & p`2<>(f/.len f)`2 or
+  p`1<>(f/.len f)`1 & p`2=(f/.len f)`2 ) &
+ not f/.1 in Ball(u,r) & f/.len f in Ball(u,r) &
+ p in Ball(u,r) & f is_S-Seq &
+LSeg(f/.len f,p) /\ L~f = {f/.len f} & h=f^<*p*> implies
+h is_S-Seq & L~h is_S-P_arc_joining f/.1,p & L~h c= L~f \/ Ball(u,r);
+
+theorem :: TOPREAL4:21
+not f/.1 in Ball(u,r) & f/.len f in Ball(u,r) & p in Ball(u,r) &
+|[p`1,(f/.len f)`2]| in Ball(u,r) & f is_S-Seq &
+p`1<>(f/.len f)`1 & p`2<>(f/.len f)`2 & h=f^<*|[p`1,(f/.len f)`2]|,p*> &
+(LSeg(f/.len f,|[p`1,(f/.len f)`2]|) \/
+ LSeg(|[p`1,(f/.len f)`2]|,p)) /\ L~f = {f/.len f} implies
+L~h is_S-P_arc_joining f/.1,p & L~h c= L~f \/ Ball(u,r);
+
+theorem :: TOPREAL4:22
+not f/.1 in Ball(u,r) & f/.len f in Ball(u,r) & p in Ball(u,r) &
+|[(f/.len f)`1,p`2]| in Ball(u,r) & f is_S-Seq &
+p`1<>(f/.len f)`1 & p`2<>(f/.len f)`2 & h=f^<*|[(f/.len f)`1,p`2]|,p*> &
+(LSeg(f/.len f,|[(f/.len f)`1,p`2]|) \/
+ LSeg(|[(f/.len f)`1,p`2]|,p)) /\ L~f = {f/.len f} implies
+L~h is_S-P_arc_joining f/.1,p & L~h c= L~f \/ Ball(u,r);
+
+theorem :: TOPREAL4:23
+not f/.1 in Ball(u,r) & f/.len f in Ball(u,r) & p in Ball(u,r) &
+f is_S-Seq & not p in L~f implies
+ex h st L~h is_S-P_arc_joining f/.1,p & L~h c= L~f \/ Ball(u,r);
+
+theorem :: TOPREAL4:24
+for R,p,p1,p2,P,r,u st p<>p1 & P is_S-P_arc_joining p1,p2 & P c= R &
+                       p in Ball(u,r) & p2 in Ball(u,r) & Ball(u,r) c= R
+ ex P1 being Subset of TOP-REAL 2 st P1 is_S-P_arc_joining p1,p & P1 c= R;
+
+ reserve P, R for Subset of TOP-REAL 2;
+
+theorem :: TOPREAL4:25
+for p st R is_Region &
+P = {q: q<>p & q in R & not ex P1 being Subset of TOP-REAL 2
+  st P1 is_S-P_arc_joining p,q & P1 c=R} holds P is open;
+
+theorem :: TOPREAL4:26
+R is_Region & p in R &
+P = {q: q=p or ex P1 being Subset of TOP-REAL 2 st
+  P1 is_S-P_arc_joining p,q & P1 c=R} implies P is open;
+
+theorem :: TOPREAL4:27
+p in R & P={q: q=p or ex P1 being Subset of TOP-REAL 2 st
+  P1 is_S-P_arc_joining p,q & P1 c=R} implies P c= R;
+
+theorem :: TOPREAL4:28
+R is_Region & p in R & P={q: q=p or ex P1 be Subset of TOP-REAL 2
+  st P1 is_S-P_arc_joining p,q & P1 c=R}
+implies R c= P;
+
+theorem :: TOPREAL4:29
+  R is_Region & p in R & P={q: q=p or ex P1 being Subset of TOP-REAL 2 st
+  P1 is_S-P_arc_joining p,q & P1 c=R} implies R = P;
+
+theorem :: TOPREAL4:30
+  R is_Region & p in R & q in R & p<>q implies
+  ex P st P is_S-P_arc_joining p,q & P c=R;

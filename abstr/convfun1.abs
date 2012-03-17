@@ -1,0 +1,243 @@
+:: Definition of Convex Function and {J}ensen's Inequality
+::  by Grigory E. Ivanov
+::
+:: Received July 17, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, SUPINF_1, FUNCT_1, FUNCT_2, ARYTM_3, MEASURE6, JORDAN1,
+      BINOP_1, VECTSP_1, ARYTM_1, RELAT_1, PARTFUN1, RFUNCT_3, FINSEQ_1,
+      FINSEQ_4, BOOLE, FINSET_1, CARD_1, SGRAPH1, RFINSEQ, SQUARE_1, CONVFUN1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, NUMBERS, XREAL_0, FUNCT_1,
+      REAL_1, FUNCT_2, FINSEQ_1, RLVECT_1, CONVEX1, SUPINF_1, RELSET_1,
+      ZFMISC_1, MEASURE6, BINOP_1, SEQ_1, DOMAIN_1, VECTSP_1, EXTREAL1,
+      SUPINF_2, PARTFUN1, RFUNCT_3, MESFUNC1, NAT_1, RVSUM_1, FINSEQ_4,
+      TOPREAL1, FINSET_1, CARD_1, RFINSEQ, BINARITH;
+ constructors REAL_1, MEASURE6, CONVEX1, DOMAIN_1, VECTSP_1, EXTREAL1,
+      SUPINF_2, RFUNCT_3, MESFUNC1, TOPREAL1, FINSEQ_4, BINARITH, MEMBERED,
+      INT_1;
+ clusters STRUCT_0, RLVECT_1, FUNCT_2, SUPINF_1, XREAL_0, RELSET_1, SUBSET_1,
+      BINARITH, FINSET_1, FINSEQ_1, INT_1, FUNCT_1, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Product of Two Real Linear Spaces
+
+definition let X,Y be non empty RLSStruct;
+ func Add_in_Prod_of_RLS(X,Y) ->
+  BinOp of [:the carrier of X, the carrier of Y:] means
+:: CONVFUN1:def 1
+ for z1, z2 being Element of [:the carrier of X, the carrier of Y:],
+     x1, x2 being VECTOR of X,
+     y1, y2 being VECTOR of Y
+  st
+   z1 = [x1,y1] & z2 = [x2,y2]
+  holds
+   it.(z1,z2) = [(the add of X).[x1,x2],(the add of Y).[y1,y2]];
+end;
+
+definition let X,Y be non empty RLSStruct;
+ func Mult_in_Prod_of_RLS(X,Y) ->
+      Function of [:REAL, [:the carrier of X, the carrier of Y:]:],
+       [:the carrier of X, the carrier of Y:] means
+:: CONVFUN1:def 2
+ for a being Real,
+     z being Element of [:the carrier of X, the carrier of Y:],
+     x being VECTOR of X, y being VECTOR of Y
+  st
+   z = [x,y]
+  holds
+   it.[a,z] = [(the Mult of X).[a,x],(the Mult of Y).[a,y]];
+end;
+
+definition let X,Y be non empty RLSStruct;
+ func Prod_of_RLS(X,Y) -> RLSStruct equals
+:: CONVFUN1:def 3
+ RLSStruct(# [:the carrier of X, the carrier of Y:],
+             [0.X,0.Y],
+             Add_in_Prod_of_RLS(X,Y),
+             Mult_in_Prod_of_RLS(X,Y) #);
+end;
+
+definition let X,Y be non empty RLSStruct;
+ cluster Prod_of_RLS(X,Y) -> non empty;
+end;
+
+theorem :: CONVFUN1:1
+ for X,Y being non empty RLSStruct,
+     x being VECTOR of X, y being VECTOR of Y,
+     u being VECTOR of Prod_of_RLS(X,Y),
+     p being Real st
+     u = [x,y] holds
+     p*u = [p*x,p*y];
+
+theorem :: CONVFUN1:2
+ for X,Y being non empty RLSStruct,
+     x1, x2 being VECTOR of X,
+     y1, y2 being VECTOR of Y,
+     u1, u2 being VECTOR of Prod_of_RLS(X,Y) st
+     u1 = [x1,y1] & u2 = [x2,y2] holds
+     u1+u2 = [x1+x2,y1+y2];
+
+definition
+ let X,Y be Abelian (non empty RLSStruct);
+ cluster Prod_of_RLS(X,Y) -> Abelian;
+end;
+
+definition
+ let X,Y be add-associative (non empty RLSStruct);
+ cluster Prod_of_RLS(X,Y) -> add-associative;
+end;
+
+definition
+ let X,Y be right_zeroed (non empty RLSStruct);
+ cluster Prod_of_RLS(X,Y) -> right_zeroed;
+end;
+
+definition
+ let X,Y be right_complementable (non empty RLSStruct);
+ cluster Prod_of_RLS(X,Y) -> right_complementable;
+end;
+
+definition
+ let X,Y be RealLinearSpace-like (non empty RLSStruct);
+ cluster Prod_of_RLS(X,Y) -> RealLinearSpace-like;
+end;
+
+theorem :: CONVFUN1:3
+for X,Y being RealLinearSpace, n being Nat,
+    x being FinSequence of the carrier of X,
+    y being FinSequence of the carrier of Y,
+    z being FinSequence of the carrier of Prod_of_RLS(X,Y) st
+    len x = n & len y = n & len z = n &
+    (for i being Nat st i in Seg n holds z.i = [x.i,y.i]) holds
+    Sum z = [Sum x, Sum y];
+
+begin :: Real Linear Space of Real Numbers
+
+definition
+ func RLS_Real -> non empty RLSStruct equals
+:: CONVFUN1:def 4
+ RLSStruct(# REAL,0,addreal,multreal #);
+end;
+
+definition
+ cluster RLS_Real -> Abelian add-associative right_zeroed
+    right_complementable RealLinearSpace-like;
+end;
+
+begin :: Sum of Finite Sequence of Extended Real Numbers
+
+definition
+ let F be FinSequence of ExtREAL;
+ func Sum(F) -> R_eal means
+:: CONVFUN1:def 5
+  ex f being Function of NAT, ExtREAL st
+  it = f.(len F) & f.0 = 0. &
+    for i being Nat st i < len F holds f.(i+1)=f.i+F.(i+1);
+end;
+
+theorem :: CONVFUN1:4
+ Sum(<*> ExtREAL) = 0.;
+
+theorem :: CONVFUN1:5
+ for a being R_eal holds Sum<*a*> = a;
+
+theorem :: CONVFUN1:6
+ for a,b being R_eal holds Sum<*a,b*> = a+b;
+
+theorem :: CONVFUN1:7
+ for F,G being FinSequence of ExtREAL st
+  not -infty in rng F & not -infty in rng G holds Sum(F^G) = Sum(F)+Sum(G);
+
+theorem :: CONVFUN1:8
+ for F,G being FinSequence of ExtREAL, s being Permutation of dom F st
+  G = F*s & not -infty in rng F holds Sum(F) = Sum(G);
+
+begin :: Definition of Convex Function
+
+definition
+let X be non empty RLSStruct, f be Function of the carrier of X,ExtREAL;
+ func epigraph f -> Subset of Prod_of_RLS(X,RLS_Real) equals
+:: CONVFUN1:def 6
+
+  {[x,y] where x is Element of X, y is Element of REAL:
+   f.x <=' R_EAL(y)};
+end;
+
+definition
+let X be non empty RLSStruct, f be Function of the carrier of X,ExtREAL;
+ attr f is convex means
+:: CONVFUN1:def 7
+ epigraph f is convex;
+end;
+
+theorem :: CONVFUN1:9
+for X being non empty RLSStruct,
+    f being Function of the carrier of X,ExtREAL st
+    (for x being VECTOR of X holds f.x <> -infty) holds
+    f is convex iff
+    for x1, x2 being VECTOR of X,
+        p being Real st 0<p & p<1 holds
+        f.(p*x1+(1-p)*x2) <=' R_EAL(p)*f.x1+R_EAL(1-p)*f.x2;
+
+theorem :: CONVFUN1:10
+for X being RealLinearSpace,
+    f being Function of the carrier of X,ExtREAL st
+    (for x being VECTOR of X holds f.x <> -infty) holds
+    f is convex iff
+    for x1, x2 being VECTOR of X,
+        p being Real st 0<=p & p<=1 holds
+        f.(p*x1+(1-p)*x2) <=' R_EAL(p)*f.x1+R_EAL(1-p)*f.x2;
+
+begin :: Relation between notions "function is convex" and "function is convex on set"
+
+theorem :: CONVFUN1:11
+for f being PartFunc of REAL,REAL,
+    g being Function of the carrier of RLS_Real,ExtREAL,
+    X being Subset of RLS_Real st
+    X c= dom f &
+    for x being Real holds
+    (x in X implies g.x=f.x) & (not x in X implies g.x=+infty)
+    holds g is convex iff f is_convex_on X & X is convex;
+
+begin :: CONVEX2:6 in other words
+
+theorem :: CONVFUN1:12
+for X being RealLinearSpace,
+    M being Subset of X holds
+    M is convex iff
+    (for n being non empty Nat, p being FinSequence of REAL,
+     y,z being FinSequence of the carrier of X st
+     len p = n & len y = n & len z = n & Sum p = 1 &
+     (for i being Nat st i in Seg n holds p.i>0 & z.i=p.i*y/.i & y/.i in M)
+     holds Sum(z) in M);
+
+begin
+
+theorem :: CONVFUN1:13
+for X being RealLinearSpace,
+    f being Function of the carrier of X,ExtREAL st
+    (for x being VECTOR of X holds f.x <> -infty) holds
+    f is convex iff
+    (for n being non empty Nat, p being FinSequence of REAL,
+         F being FinSequence of ExtREAL,
+         y,z being FinSequence of the carrier of X st
+     len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
+     (for i being Nat st i in Seg n holds
+       p.i>0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
+     f.Sum(z) <=' Sum F);
+
+theorem :: CONVFUN1:14
+for X being RealLinearSpace,
+    f being Function of the carrier of X,ExtREAL st
+    (for x being VECTOR of X holds f.x <> -infty) holds
+    f is convex iff
+    (for n being non empty Nat, p being FinSequence of REAL,
+         F being FinSequence of ExtREAL,
+         y,z being FinSequence of the carrier of X st
+     len p = n & len F = n & len y = n & len z = n & Sum p = 1 &
+     (for i being Nat st i in Seg n holds
+       p.i>=0 & z.i=p.i*y/.i & F.i = R_EAL(p.i)*f.(y/.i)) holds
+     f.Sum(z) <=' Sum F);

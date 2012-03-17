@@ -1,0 +1,134 @@
+:: Fibonacci Numbers
+::  by Robert M. Solovay
+::
+:: Received April 19, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, ARYTM_1, ARYTM_3, SQUARE_1, FUNCT_1, PRE_FF, FILTER_0,
+      FUNCT_3, RELAT_1, ORDINAL2, FIB_NUM, ABSVALUE, POWER, SEQ_1, SEQ_2,
+      SEQM_3, LATTICES, GROUP_1;
+ notation ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, SQUARE_1, SEQ_1, NAT_1, INT_2,
+      PRE_FF, SEQ_2, SEQM_3, LIMFUNC1, QUIN_1, ABSVALUE, PREPOWER, POWER;
+ constructors REAL_1, NAT_1, PREPOWER, INT_2, SEQ_2, SEQM_3, PRE_FF, LIMFUNC1,
+      QUIN_1, POWER, PARTFUN1, MEMBERED;
+ clusters XREAL_0, SQUARE_1, QUIN_1, NEWTON, SEQ_1, RELSET_1, MEMBERED,
+      ORDINAL2;
+ requirements SUBSET, NUMERALS, REAL, ARITHM;
+
+
+begin
+
+:: Fibonacci commutes with gcd
+
+:: The proof we present is a slight adaptation of the one found in
+:: ``The Fibonacci Numbers'' by N. N. Vorobyov
+
+reserve a,k,m, n, p,r,s for Nat;
+
+
+:: Preliminary lemmas
+
+theorem :: FIB_NUM:1
+for m, n being Nat holds m hcf n = m hcf (n + m);
+
+theorem :: FIB_NUM:2
+ for k, m, n being Nat st k hcf m = 1 holds k hcf m * n = k hcf n;
+
+theorem :: FIB_NUM:3
+ for s being real number st s > 0
+ex n being Nat st
+(n > 0 & 0 < 1/n & 1/n <= s);
+
+scheme Fib_Ind {P[Nat] } :
+for k being Nat holds P[k]
+    provided
+ P[0] and
+ P[1] and
+ for k being Nat st P[k] & P[k+1] holds P[k+2];
+
+scheme Bin_Ind { P[Nat,Nat] } :
+for m, n  being Nat holds P[m, n]
+    provided
+     for m, n being Nat st P[m,n] holds P[n,m] and
+     for k  being Nat st
+        (for m, n  being Nat st (m < k & n < k) holds P[m,n])
+        holds
+        (for m  being Nat st m <= k holds P[k,m]);
+
+theorem :: FIB_NUM:4
+ for m, n being Nat holds
+Fib(m + (n + 1)) = (Fib(n) * Fib (m)) +
+                  (Fib(n + 1) * Fib (m + 1));
+
+theorem :: FIB_NUM:5
+  for m, n being Nat holds Fib(m) hcf Fib(n) = Fib(m hcf n);
+
+begin
+
+:: The relationship between the Fibonacci numbers and the
+:: roots of the equation x^2 = x + 1
+
+:: The formula for the roots of a quadratic equation
+
+reserve x, a, b, c for real number;
+
+theorem :: FIB_NUM:6
+ for x, a, b, c being real number st
+  (a <> 0 & delta(a,b,c) >= 0) holds
+
+  (a * x^2 + b * x + c = 0) iff
+
+   (x = (- b - sqrt delta(a,b,c))/(2 * a) or
+    x = (- b + sqrt delta(a,b,c))/(2 * a));
+
+:: The roots of x^2 - x - 1 = 0
+
+:: The value of tau is approximately 1.618
+
+definition
+  func tau -> real number equals
+:: FIB_NUM:def 1
+   (1 + sqrt 5)/2;
+end;
+
+:: The value of tau_bar is approximately -.618
+
+definition
+  func tau_bar -> real number equals
+:: FIB_NUM:def 2
+   (1 - sqrt 5)/2;
+end;
+
+theorem :: FIB_NUM:7
+   for n being Nat holds
+  Fib(n) = ((tau to_power n) - (tau_bar to_power n))/(sqrt 5);
+
+theorem :: FIB_NUM:8
+   for n being Nat holds
+     abs(Fib(n) - (tau to_power n)/(sqrt 5)) < 1;
+
+reserve F, G, f, g, h for Real_Sequence;
+
+:: Preliminary facts on real sequences
+
+theorem :: FIB_NUM:9
+ for F, G being Real_Sequence st
+(for n being Nat holds F.n = G.n) holds F = G;
+
+theorem :: FIB_NUM:10
+ for f, g, h being Real_Sequence st g is_not_0 holds
+(f /" g) (#) (g /" h) = (f /" h);
+
+theorem :: FIB_NUM:11
+ for f, g being Real_Sequence for n being Nat holds
+(f /" g) . n = (f .n) / (g.n)
+&
+(f /" g) . n = (f.n) * (g.n)";
+
+theorem :: FIB_NUM:12
+  for F being Real_Sequence st
+(for n being Nat holds F.n = Fib(n+1)/Fib(n))
+holds
+ F is convergent & lim F = tau;

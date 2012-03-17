@@ -1,0 +1,1929 @@
+:: Connectedness Conditions Using Polygonal Arcs
+::  by Yatsuka Nakamura and Jaros{\l}aw Kotowicz
+::
+:: Received August 24, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary EUCLID, PRE_TOPC, FINSEQ_1, RELAT_1, FUNCT_1, TOPREAL1, BOOLE,
+      RELAT_2, TOPREAL2, MCART_1, METRIC_1, ARYTM_3, ARYTM_1, TARSKI, PCOMPS_1,
+      SUBSET_1, TOPREAL4, FINSEQ_4, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XREAL_0, REAL_1, NAT_1,
+      RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_4, STRUCT_0, PRE_TOPC, CONNSP_1,
+      METRIC_1, PCOMPS_1, EUCLID, TOPREAL1, TOPREAL2;
+ constructors REAL_1, NAT_1, CONNSP_1, PCOMPS_1, TOPREAL1, TOPREAL2, FINSEQ_4,
+      INT_1, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, FUNCT_1, PRE_TOPC, RELSET_1, STRUCT_0, EUCLID, XREAL_0,
+      TOPREAL1, INT_1, XBOOLE_0, MEMBERED, ZFMISC_1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, TOPREAL1, XBOOLE_0;
+ theorems TARSKI, AXIOMS, REAL_1, NAT_1, ZFMISC_1, FUNCT_1, FINSEQ_1, PRE_TOPC,
+      CONNSP_1, SQUARE_1, EUCLID, TOPMETR, TOPREAL1, TOPREAL2, TOPREAL3,
+      FINSEQ_4, FINSEQ_3, TBSP_1, GROUP_5, PARTFUN2, RELAT_1, INT_1, XBOOLE_0,
+      XBOOLE_1, XREAL_0, XCMPLX_0, XCMPLX_1;
+ schemes NAT_1;
+
+begin
+
+ reserve P,P1,P2,R for Subset of TOP-REAL 2,
+         W for non empty Subset of TOP-REAL 2,
+         p,p1,p2,p3,p11,p22,q,q1,q2,q3,q4 for Point of TOP-REAL 2,
+         f,h for FinSequence of TOP-REAL 2,
+         r for Real,
+         u for Point of Euclid 2,
+         n,m,i,j,k for Nat,
+         x,y for set;
+
+theorem Th1:
+ for D being non empty set, f being FinSequence of D, p being Element of D
+  holds (f^<*p*>)/.(len f + 1) = p
+ proof let D be non empty set, f be FinSequence of D, p be Element of D;
+     len(f^<*p*>) = len f + len<*p*> by FINSEQ_1:35;
+   then 1 <= len f + 1 & len f + 1 <= len(f^<*p*>) by FINSEQ_1:56,NAT_1:29;
+   then len f + 1 in dom(f^<*p*>) by FINSEQ_3:27;
+  hence (f^<*p*>)/.(len f + 1) = (f^<*p*>).(len f + 1) by FINSEQ_4:def 4
+                            .= p by FINSEQ_1:59;
+ end;
+
+definition let P,p,q;
+ pred P is_S-P_arc_joining p,q means :Def1:
+   ex f st f is_S-Seq & P = L~f & p=f/.1 & q=f/.len f;
+end;
+
+definition let P;
+ attr P is being_special_polygon means
+   ex p1,p2,P1,P2 st p1 <> p2 & p1 in P & p2 in P &
+   P1 is_S-P_arc_joining p1,p2 & P2 is_S-P_arc_joining p1,p2 &
+    P1 /\ P2 = {p1,p2} & P = P1 \/ P2;
+  synonym P is_special_polygon;
+ end;
+
+definition let P be Subset of TOP-REAL 2;
+ attr P is being_Region means :Def3:
+  P is open & P is connected;
+  synonym P is_Region;
+end;
+
+theorem Th2:
+P is_S-P_arc_joining p,q implies P is_S-P_arc
+ proof
+  assume P is_S-P_arc_joining p,q;
+  then ex f st f is_S-Seq & P = L~f & p=f/.1 & q=f/.len f by Def1;
+  hence P is_S-P_arc by TOPREAL1:def 11;
+ end;
+
+theorem Th3:
+W is_S-P_arc_joining p,q implies W is_an_arc_of p,q
+ proof
+  assume W is_S-P_arc_joining p,q;
+  then ex h st h is_S-Seq & W = L~h & p=h/.1 & q=h/.len h by Def1;
+  hence W is_an_arc_of p,q by TOPREAL1:31;
+ end;
+
+theorem Th4:
+W is_S-P_arc_joining p,q implies p in W & q in W
+ proof assume W is_S-P_arc_joining p,q;
+  then W is_an_arc_of p,q by Th3;
+  hence thesis by TOPREAL1:4;
+ end;
+
+theorem
+  P is_S-P_arc_joining p,q implies p<>q
+ proof assume A1: P is_S-P_arc_joining p,q & p=q; then consider f such that
+  A2: f is_S-Seq & P = L~f & p=f/.1 & q=f/.len f by Def1;
+  A3: Seg len f = dom f by FINSEQ_1:def 3;
+  A4: f is one-to-one & len f >= 2 by A2,TOPREAL1:def 10;
+  then len f >= 1 by AXIOMS:22;
+  then A5: len f in dom f & 1 in dom f by A3,FINSEQ_1:3;
+    1 <> len f by A2,TOPREAL1:def 10;
+  hence contradiction by A1,A2,A4,A5,PARTFUN2:17;
+ end;
+
+theorem
+  W is_special_polygon implies W is_simple_closed_curve
+ proof
+  given p1,p2,P1,P2 such that
+A1:  p1 <> p2 & p1 in W & p2 in W and
+A2:  P1 is_S-P_arc_joining p1,p2 & P2 is_S-P_arc_joining p1,p2 and
+A3:  P1 /\ P2 = {p1,p2} & W = P1 \/ P2;
+   reconsider P1, P2 as non empty Subset of TOP-REAL 2 by A3;
+     P1 is_an_arc_of p1,p2 & P2 is_an_arc_of p1,p2 by A2,Th3;
+   hence W is_simple_closed_curve by A1,A3,TOPREAL2:6;
+ end;
+
+theorem Th7:
+p`1 = q`1 & p`2 <> q`2 & p in Ball(u,r) & q in Ball(u,r) &
+f =<* p,|[p`1,(p`2+q`2)/2]|,q *> implies
+f is_S-Seq & f/.1 =p & f/.len f = q & L~f is_S-P_arc_joining p,q &
+L~f c= Ball(u,r)
+ proof assume
+  A1: p`1 = q`1 & p`2 <> q`2 & p in Ball(u,r) & q in Ball(u,r) &
+      f =<* p,|[p`1,(p`2+q`2)/2]|,q *>;
+  hence f is_S-Seq & f/.1 =p & f/.len f = q by TOPREAL3:43;
+  hence L~f is_S-P_arc_joining p,q by Def1;
+    p=|[p`1,p`2]| & q=|[q`1,q`2]| by EUCLID:57;
+  then A2: L~f=LSeg(p,|[p`1,(p`2+q`2)/2]|) \/ LSeg(|[p`1,(p`2+q`2)/2]|,q) &
+  |[p`1,(p`2+q`2)/2]| in Ball(u,r) by A1,TOPREAL3:23,30;
+  then LSeg(p,|[p`1,(p`2+q`2)/2]|) c= Ball(u,r) &
+     LSeg(|[p`1,(p`2+q`2)/2]|,q) c= Ball(u,r) by A1,TOPREAL3:28;
+  hence thesis by A2,XBOOLE_1:8;
+ end;
+
+theorem Th8:
+p`1 <> q`1 & p`2 = q`2 & p in Ball(u,r) & q in Ball(u,r) &
+f = <* p,|[(p`1+q`1)/2,p`2]|,q *> implies
+f is_S-Seq & f/.1 =p & f/.len f = q & L~f is_S-P_arc_joining p,q &
+L~f c= Ball(u,r)
+ proof assume
+  A1: p`1 <> q`1 & p`2 = q`2 & p in Ball(u,r) & q in Ball(u,r) &
+      f = <* p,|[(p`1+q`1)/2,p`2]|,q *>;
+  hence f is_S-Seq & f/.1 =p & f/.len f = q by TOPREAL3:44;
+  hence L~f is_S-P_arc_joining p,q by Def1;
+     p=|[p`1,p`2]| & q=|[q`1,q`2]| by EUCLID:57;
+  then A2: L~f=LSeg(p,|[(p`1+q`1)/2,p`2]|) \/ LSeg(|[(p`1+q`1)/2,p`2]|,q) &
+  |[(p`1+q`1)/2,p`2]| in Ball(u,r) by A1,TOPREAL3:23,31;
+  then LSeg(p,|[(p`1+q`1)/2,p`2]|) c= Ball(u,r) &
+      LSeg(|[(p`1+q`1)/2,p`2]|,q) c= Ball(u,r) by A1,TOPREAL3:28;
+  hence thesis by A2,XBOOLE_1:8;
+ end;
+
+theorem Th9:
+p`1 <> q`1 & p`2 <> q`2 & p in Ball(u,r) & q in Ball(u,r) &
+|[p`1,q`2]| in Ball(u,r) & f =<* p,|[p`1,q`2]|,q *> implies
+f is_S-Seq & f/.1 =p & f/.len f = q & L~f is_S-P_arc_joining p,q &
+L~f c= Ball(u,r)
+ proof assume
+  A1: p`1 <> q`1 & p`2 <> q`2 & p in Ball(u,r) & q in Ball(u,r) &
+     |[p`1,q`2]| in Ball(u,r) & f =<* p,|[p`1,q`2]|,q *>;
+  hence f is_S-Seq & f/.1 =p & f/.len f = q by TOPREAL3:41;
+  hence L~f is_S-P_arc_joining p,q by Def1;
+  A2: L~f=LSeg(p,|[p`1,q`2]|) \/ LSeg(|[p`1,q`2]|,q) by A1,TOPREAL3:23;
+    LSeg(p,|[p`1,q`2]|) c= Ball(u,r) &
+      LSeg(|[p`1,q`2]|,q) c= Ball(u,r) by A1,TOPREAL3:28;
+  hence thesis by A2,XBOOLE_1:8;
+ end;
+
+theorem Th10:
+p`1 <> q`1 & p`2 <> q`2 & p in Ball(u,r) & q in Ball(u,r) &
+|[q`1,p`2]| in Ball(u,r) & f =<* p,|[q`1,p`2]|,q *> implies
+f is_S-Seq & f/.1 =p & f/.len f = q & L~f is_S-P_arc_joining p,q &
+L~f c= Ball(u,r)
+ proof assume
+  A1: p`1 <> q`1 & p`2 <> q`2 & p in Ball(u,r) & q in Ball(u,r) &
+     |[q`1,p`2]| in Ball(u,r) & f =<* p,|[q`1,p`2]|,q *>;
+  hence f is_S-Seq & f/.1 =p & f/.len f = q by TOPREAL3:42;
+  hence L~f is_S-P_arc_joining p,q by Def1;
+  A2: L~f=LSeg(p,|[q`1,p`2]|) \/ LSeg(|[q`1,p`2]|,q) by A1,TOPREAL3:23;
+    LSeg(p,|[q`1,p`2]|) c= Ball(u,r) &
+      LSeg(|[q`1,p`2]|,q) c= Ball(u,r) by A1,TOPREAL3:28;
+  hence thesis by A2,XBOOLE_1:8;
+ end;
+
+theorem Th11:
+p <> q & p in Ball(u,r) & q in Ball(u,r) implies
+ex P st P is_S-P_arc_joining p,q & P c= Ball(u,r)
+ proof assume
+  A1: p<>q & p in Ball(u,r) & q in Ball(u,r);
+     now per cases by A1,TOPREAL3:11;
+   suppose A2: p`1 <> q`1;
+      now per cases;
+    suppose A3: p`2 = q`2;
+     reconsider P = L~<* p,|[(p`1+q`1)/2,p`2]|,q *>
+      as Subset of TOP-REAL 2;
+     take P;
+     thus P is_S-P_arc_joining p,q & P c= Ball(u,r) by A1,A2,A3,Th8;
+    suppose A4: p`2 <> q`2;
+A5:     p = |[p`1,p`2]| & q=|[q`1,q`2]| by EUCLID:57;
+        now per cases by A1,A5,TOPREAL3:32;
+      suppose A6: |[p`1,q`2]| in Ball(u,r);
+       reconsider P = L~<* p,|[p`1,q`2]|,q *>
+        as Subset of TOP-REAL 2;
+       take P;
+       thus P is_S-P_arc_joining p,q & P c= Ball(u,r) by A1,A2,A4,A6,Th9;
+      suppose A7: |[q`1,p`2]| in Ball(u,r);
+       reconsider P = L~<* p,|[q`1,p`2]|,q *>
+        as Subset of TOP-REAL 2;
+       take P;
+       thus P is_S-P_arc_joining p,q & P c= Ball(u,r) by A1,A2,A4,A7,Th10;
+      end;
+     hence thesis;
+    end;
+    hence thesis;
+   suppose A8: p`2 <> q`2;
+      now per cases;
+    suppose A9: p`1 = q`1;
+     reconsider P = L~<* p,|[p`1,(p`2+q`2)/2]|,q *>
+      as Subset of TOP-REAL 2;
+     take P;
+     thus P is_S-P_arc_joining p,q & P c= Ball(u,r) by A1,A8,A9,Th7;
+    suppose A10: p`1 <> q`1;
+A11:     p = |[p`1,p`2]| & q=|[q`1,q`2]| by EUCLID:57;
+        now per cases by A1,A11,TOPREAL3:32;
+      suppose A12: |[p`1,q`2]| in Ball(u,r);
+       reconsider P = L~<* p,|[p`1,q`2]|,q *>
+        as Subset of TOP-REAL 2;
+       take P;
+       thus P is_S-P_arc_joining p,q & P c= Ball(u,r) by A1,A8,A10,A12,Th9;
+      suppose A13: |[q`1,p`2]| in Ball(u,r);
+       reconsider P = L~<* p,|[q`1,p`2]|,q *>
+        as Subset of TOP-REAL 2;
+       take P;
+       thus P is_S-P_arc_joining p,q & P c= Ball(u,r) by A1,A8,A10,A13,Th10;
+      end;
+     hence thesis;
+    end;
+    hence thesis;
+   end;
+  hence thesis;
+ end;
+
+theorem Th12:
+p<>f/.1 & (f/.1)`2 = p`2 & f is_S-Seq &
+p in LSeg(f,1) & h = <* f/.1,|[((f/.1)`1+p`1)/2,(f/.1)`2]|,p *> implies
+h is_S-Seq & h/.1=f/.1 & h/.len h=p & L~h is_S-P_arc_joining f/.1,p &
+L~h c= L~f & L~h = L~(f|1) \/ LSeg(f/.1,p)
+ proof assume
+  A1: p<>f/.1 & (f/.1)`2 = p`2 & f is_S-Seq &
+      p in LSeg(f,1) & h = <* f/.1,|[((f/.1)`1+p`1)/2,
+(f/.1)`2]|,p *>;
+  then A2: len f >= 2 by TOPREAL1:def 10;
+  set p1 = f/.1, q = f/.(1+1);
+  A3: len f >= 1 by A2,AXIOMS:22;
+  A4: LSeg(f,1) = LSeg(p1,q) &
+      p1 in LSeg(p1,q) by A2,TOPREAL1:6,def 5;
+  then A5: LSeg(p1,p) c= LSeg(p1,q) & p1`1 <> p`1 by A1,TOPREAL1:12,TOPREAL3:11
+;
+  hence h is_S-Seq & h/.1 = p1 & h/.len h = p by A1,TOPREAL3:44;
+  hence L~h is_S-P_arc_joining p1,p by Def1;
+  A6: L~h=LSeg(p1,|[(p1`1 + p`1)/2,p1`2]|) \/ LSeg(|[(p1`1 + p`1)/2,p1`2]|,p) &
+  |[(p1`1 + p`1)/2,p1`2]| in LSeg(p1,p) by A1,A5,TOPREAL3:19,23;
+  then LSeg(p1,|[(p1`1 + p`1)/2,p1`2]|) \/ LSeg(|[(p1`1 + p`1)/2,p1`2]|,p) =
+   LSeg(p1,p) & LSeg(f,1) c= L~f by TOPREAL1:11,TOPREAL3:26;
+  hence L~h c= L~f by A4,A5,A6,XBOOLE_1:1;
+  A7: Seg 1 c= Seg len f & Seg len f = dom f & f|1 = f|Seg 1
+ by A3,FINSEQ_1:7,def 3,TOPREAL1:def 1;
+  then dom f /\ Seg 1 = Seg 1 by XBOOLE_1:28;
+  then dom(f|1) = Seg 1 by A7,FUNCT_1:68;
+  then len (f|1) = 1 by FINSEQ_1:def 3;
+  then L~(f|1)={} by TOPREAL1:28;
+  hence thesis by A6,TOPREAL1:11;
+ end;
+
+theorem Th13:
+p<>f/.1 & (f/.1)`1 = p`1 & f is_S-Seq &
+p in LSeg(f,1) & h = <* f/.1,|[(f/.1)`1,((f/.1)`2+p`2)/2]|,p *> implies
+h is_S-Seq & h/.1=f/.1 & h/.len h=p & L~h is_S-P_arc_joining f/.1,p &
+L~h c= L~f & L~h = L~(f|1) \/ LSeg(f/.1,p)
+ proof set p1 = f/.1;
+  assume
+  A1: p<>p1 & p1`1 = p`1 & f is_S-Seq &
+      p in LSeg(f,1) & h = <* p1,|[p1`1,(p1`2+p`2)/2]|,p *>;
+  then A2: len f >= 2 by TOPREAL1:def 10;
+  set q = f/.(1+1);
+  A3: len f >= 1 by A2,AXIOMS:22;
+  A4: LSeg(f,1) = LSeg(p1,q) &
+      p1 in LSeg(p1,q) by A2,TOPREAL1:6,def 5;
+  then A5: LSeg(p1,p) c= LSeg(p1,q) & p1`2 <> p`2 by A1,TOPREAL1:12,TOPREAL3:11
+;
+  hence h is_S-Seq & h/.1 = p1 & h/.len h = p by A1,TOPREAL3:43;
+  hence L~h is_S-P_arc_joining p1,p by Def1;
+  A6: L~h = LSeg(p1,|[p1`1,(p1`2+p`2)/2]|) \/ LSeg(|[p1`1,(p1`2+p`2)/2]|,p) &
+  |[p1`1,(p1`2+p`2)/2]| in LSeg(p1,p) by A1,A5,TOPREAL3:20,23;
+  then LSeg(p1,|[p1`1,(p1`2+p`2)/2]|) \/ LSeg(|[p1`1,(p1`2+p`2)/2]|,p) =
+   LSeg(p1,p) & LSeg(f,1) c= L~f by TOPREAL1:11,TOPREAL3:26;
+  hence L~h c= L~f by A4,A5,A6,XBOOLE_1:1;
+  A7: Seg 1 c= Seg len f & Seg len f = dom f & f|1 = f|Seg 1
+ by A3,FINSEQ_1:7,def 3,TOPREAL1:def 1;
+  then dom f /\ Seg 1 = Seg 1 by XBOOLE_1:28;
+  then dom(f|1) = Seg 1 by A7,FUNCT_1:68;
+  then len (f|1) = 1 by FINSEQ_1:def 3;
+  then L~(f|1)={} by TOPREAL1:28;
+  hence thesis by A6,TOPREAL1:11;
+ end;
+
+theorem Th14:
+p<>f/.1 & f is_S-Seq & i in dom f & i+1 in dom f &
+i>1 & p in LSeg(f,i) & p<>f/.i & p<>f/.(i+1) & h = (f|i)^<*p*> implies
+h is_S-Seq & h/.1=f/.1 & h/.len h=p & L~h is_S-P_arc_joining f/.1,p &
+L~h c= L~f & L~h = L~(f|i) \/ LSeg(f/.i,p)
+proof set p1 = f/.1, q = f/.i;
+  assume
+  A1: p<>p1 & f is_S-Seq & i in dom f &
+      i+1 in dom f & i>1 & p in LSeg(f,i) & p<>f/.i & p<>f/.(i+1) &
+      h = (f|i)^<*p*>;
+then A2: f is s.n.c. by TOPREAL1:def 10;
+A3: f is unfolded by A1,TOPREAL1:def 10;
+A4: f is special by A1,TOPREAL1:def 10;
+  set v = f|i;
+  A5: v = f|Seg i & Seg len f = dom f & Seg len h = dom h & Seg len v = dom v
+     by FINSEQ_1:def 3,TOPREAL1:def 1;
+  then A6: 1<=i & i<=len f by A1,FINSEQ_1:3;
+  then Seg i c= dom f & dom v=dom f /\ Seg i by A5,FINSEQ_1:7,RELAT_1:90;
+  then A7: dom v = Seg i by XBOOLE_1:28;
+  then A8: len v = i by FINSEQ_1:def 3;
+  then A9: len h = i + len <*p*> by A1,FINSEQ_1:35
+           .= i+1 by FINSEQ_1:56;
+  A10: 1 in dom v by A1,A7,FINSEQ_1:3;
+  then A11: h/.1 = v/.1 by A1,GROUP_5:95
+    .= p1 by A10,TOPREAL1:1;
+  A12: h/.len h = p by A1,A8,A9,Th1;
+  set q1 = f/.i, q2 = f/.(i+1);
+  A13: i+1<=len f by A1,A5,FINSEQ_1:3;
+  then A14: LSeg(f,i) = LSeg(q1,q2) & q1 in LSeg(q1,q2) & p in LSeg(q1,q2)
+     by A1,TOPREAL1:6,def 5;
+  A15: LSeg(f,i) = LSeg(q2,q1) &
+      q1 = |[q1`1,q1`2]| & q2 = |[q2`1,q2`2]| by A1,A13,EUCLID:57,TOPREAL1:def
+5;
+  A16: f is one-to-one & i<>i+1 by A1,NAT_1:38,TOPREAL1:def 10;
+  then A17: q1 <> q2 & i in dom v by A1,A7,FINSEQ_1:3,PARTFUN2:17;
+  then A18: h/.i=v/.i by A1,GROUP_5:95
+    .= q1 by A17,TOPREAL1:1;
+  A19: i<=i+1 by NAT_1:29;
+  A20: LSeg(h,i) = LSeg(q1,p) by A1,A9,A12,A18,TOPREAL1:def 5;
+  then A21: LSeg(h,i) c= LSeg(f,i) by A14,TOPREAL1:12;
+A22: 1+1<=i by A1,NAT_1:38;
+  thus
+A23: h is_S-Seq
+   proof
+     now
+    set Z = {m: 1<=m & m<=len h};
+    given x,y such that
+    A24: x in dom h & y in dom h & h.x = h.y & x<>y;
+      x in Z by A5,A24,FINSEQ_1:def 1;
+    then consider k1 be Nat such that
+    A25: k1=x & 1<=k1 & k1<=len h;
+      y in Z by A5,A24,FINSEQ_1:def 1;
+    then consider k2 be Nat such that
+    A26: k2=y & 1<=k2 & k2<=len h;
+A27: h/.k1 = h.y by A24,A25,FINSEQ_4:def 4 .= h/.k2 by A24,A26,FINSEQ_4:def 4;
+       k1<=len f & k2<=len f by A9,A13,A25,A26,AXIOMS:22;
+    then A28: k1 in dom f & k2 in dom f &
+        k2+(1+1) = k2+1+1 & k1+(1+1) = k1+1+1 by A5,A25,A26,FINSEQ_1:3,XCMPLX_1
+:1;
+       now per cases by A9,A25,A26,REAL_1:def 5;
+     suppose k1=i+1 & k2=i+1; hence contradiction by A24,A25,A26;
+     suppose A29: k1=i+1 & k2<i+1; then A30: k2+1<=k1 by NAT_1:38;
+         now per cases by A30,REAL_1:def 5;
+       suppose k2 + 1 = k1;
+        then k2 + 1 - 1= i by A29,XCMPLX_1:26;
+        hence contradiction by A1,A9,A12,A18,A27,A29,XCMPLX_1:26;
+       suppose k2 + 1 < k1;
+        then k2<i+1-1 by A29,REAL_1:86; then k2<i by XCMPLX_1:26;
+then A31:        k2+1<=i by NAT_1:38;
+           now per cases by A31,REAL_1:def 5;
+         suppose A32: k2+1=i;
+          then A33: LSeg(f,k2) /\ LSeg(f,i) = {f/.i}
+               by A3,A13,A26,A28,TOPREAL1:def 8;
+            k2+1 <= len f by A1,A5,A32,FINSEQ_1:3;
+          then A34: f/.k2 in LSeg(f,k2) & k2<=i
+           by A26,A32,NAT_1:29,TOPREAL1:27;
+          then A35: k2 in dom v by A7,A26,FINSEQ_1:3;
+           then h/.k2 = v/.k2 by A1,GROUP_5:95
+            .= f/.k2 by A35,TOPREAL1:1;
+          then f/.k2 in {f/.i} by A1,A9,A12,A27,A29,A33,A34,XBOOLE_0:def 3;
+          then f/.k2 = f/.i & k2<i by A32,NAT_1:38,TARSKI:def 1;
+          hence contradiction by A1,A16,A28,PARTFUN2:17;
+         suppose A36: k2+1<i;
+          then A37: LSeg(f,k2) misses LSeg(f,i) & k2<=k2+1
+             by A2,NAT_1:29,TOPREAL1:def 9;
+           then k2<=i by A36,AXIOMS:22;
+          then A38: k2 in dom v by A7,A26,FINSEQ_1:3;
+          then A39: h/.k2 = v/.k2 by A1,GROUP_5:95
+            .= f/.k2 by A38,TOPREAL1:1;
+             k2+1<=len f by A6,A36,AXIOMS:22;
+          then p in LSeg(f,k2) by A9,A12,A26,A27,A29,A39,TOPREAL1:27;
+          hence contradiction by A1,A37,XBOOLE_0:3;
+         end;
+        hence contradiction;
+       end;
+      hence contradiction;
+     suppose A40: k1<i+1 & k2=i+1; then A41: k1+1<=k2 by NAT_1:38;
+         now per cases by A41,REAL_1:def 5;
+       suppose k1 + 1 = k2;
+        then k1 + 1 - 1= i by A40,XCMPLX_1:26;
+        hence contradiction by A1,A9,A12,A18,A27,A40,XCMPLX_1:26;
+       suppose k1 + 1 < k2;
+        then k1<i+1-1 by A40,REAL_1:86; then k1<i by XCMPLX_1:26;
+then A42:        k1+1<=i by NAT_1:38;
+           now per cases by A42,REAL_1:def 5;
+         suppose A43: k1+1=i;
+          then A44: LSeg(f,k1) /\ LSeg(f,i) = {f/.i}
+               by A3,A13,A25,A28,TOPREAL1:def 8;
+            k1+1 <= len f by A1,A5,A43,FINSEQ_1:3;
+          then A45: f/.k1 in LSeg(f,k1) & k1<=i
+            by A25,A43,NAT_1:29,TOPREAL1:27;
+          then A46: k1 in dom v by A7,A25,FINSEQ_1:3;
+           then h/.k1 = v/.k1 by A1,GROUP_5:95
+            .= f/.k1 by A46,TOPREAL1:1;
+          then f/.k1 in {f/.i} by A1,A9,A12,A27,A40,A44,A45,XBOOLE_0:def 3;
+          then f/.k1 = f/.i & k1<i by A43,NAT_1:38,TARSKI:def 1;
+          hence contradiction by A1,A16,A28,PARTFUN2:17;
+         suppose A47: k1+1<i;
+          then A48: LSeg(f,k1) misses LSeg(f,i) & k1<=k1+1
+             by A2,NAT_1:29,TOPREAL1:def 9;
+           then k1<=i by A47,AXIOMS:22;
+          then A49: k1 in dom v by A7,A25,FINSEQ_1:3;
+          then A50: h/.k1 = v/.k1 by A1,GROUP_5:95
+            .= f/.k1 by A49,TOPREAL1:1;
+             k1+1<=len f by A6,A47,AXIOMS:22;
+          then p in LSeg(f,k1) by A9,A12,A25,A27,A40,A50,TOPREAL1:27;
+          hence contradiction by A1,A48,XBOOLE_0:3;
+         end;
+        hence contradiction;
+       end;
+      hence contradiction;
+     suppose k1<i+1 & k2<i+1;
+      then k1<=i & k2<=i by NAT_1:38;
+      then A51: k1 in dom v & k2 in dom v by A7,A25,A26,FINSEQ_1:3;
+      then f.k1 = v.k1 by A5,FUNCT_1:70
+       .= h.k1 by A1,A51,FINSEQ_1:def 7
+       .= v.k2 by A1,A24,A25,A26,A51,FINSEQ_1:def 7
+       .= f.k2 by A5,A51,FUNCT_1:70;
+      hence contradiction by A16,A24,A25,A26,A28,FUNCT_1:def 8;
+     end;
+    hence contradiction;
+   end;
+  hence h is one-to-one by FUNCT_1:def 8;
+  thus len h >= 2 by A1,A9,A22,AXIOMS:24;
+  thus h is unfolded
+   proof let j such that
+    A52: 1 <= j & j + 2 <= len h;
+      i+1 in Seg len f by A1,FINSEQ_1:def 3;
+    then len h <= len f by A9,FINSEQ_1:3;
+then A53:    j+2 <= len f by A52,AXIOMS:22;
+    then A54: LSeg(f,j) /\ LSeg(f,j+1) = {f/.(j+1)} by A3,A52,TOPREAL1:def 8;
+      i+1+1 = i+(1+1) by XCMPLX_1:1;
+    then len h <= i+2 by A9,NAT_1:29;
+    then j+2 <= i+2 by A52,AXIOMS:22;
+    then A55: j<=i by REAL_1:53;
+A56: j+1+1 = j+(1+1) by XCMPLX_1:1;
+then A57:  1<=j+1 & j+1<=i by A9,A52,NAT_1:29,REAL_1:53;
+    then A58: j in dom v & j+1 in dom v by A7,A52,A55,FINSEQ_1:3;
+    then A59: LSeg(h,j) = LSeg(v,j) by A1,TOPREAL3:25
+      .= LSeg(f,j) by A1,A58,TOPREAL3:24;
+    A60: h/.(j+1) = v/.(j+1) by A1,A58,GROUP_5:95
+     .= f/.(j+1) by A58,TOPREAL1:1;
+       j<=j+2 by NAT_1:29;
+    then A61: 1<=j+(1+1) by A52,AXIOMS:22;
+    A62: j+(1+1) = j+1+1 by XCMPLX_1:1;
+       now per cases by A52,REAL_1:def 5;
+     suppose j+2 = len h;
+      then j+1 = i by A9,A56,XCMPLX_1:2;
+then A63:   LSeg(h,j) /\ LSeg(h,j+1) c= {h/.(j+1)}
+         by A21,A54,A59,A60,XBOOLE_1:26;
+        j +1 <= j+1+1 by NAT_1:29;
+      then j+1 <= len h by A52,A56,AXIOMS:22;
+then A64:   h/.(j+1) in LSeg(h,j)
+         by A52,TOPREAL1:27;
+    h/.(j+1) in LSeg(h,j+1)
+         by A52,A57,A62,TOPREAL1:27;
+      then h/.(j+1) in LSeg(h,j) /\ LSeg(h,j+1) by A64,XBOOLE_0:def 3;
+      then {h/.(j+1)} c= LSeg(h,j) /\ LSeg(h,j+1) by ZFMISC_1:37;
+      hence LSeg(h,j) /\ LSeg(h,j+1) = {h/.(j+1)} by A63,XBOOLE_0:def 10;
+     suppose j+2 < len h;
+      then j+(1+1)<=i by A9,NAT_1:38;
+      then A65: j+1+1 in dom v by A7,A61,A62,FINSEQ_1:3;
+      then LSeg(h,j+1) = LSeg(v,j+1) by A1,A58,TOPREAL3:25
+      .= LSeg(f,j+1) by A1,A58,A65,TOPREAL3:24;
+      hence LSeg(h,j) /\ LSeg(h,j+1) = {h/.(j+1)}
+       by A3,A52,A53,A59,A60,TOPREAL1:def 8;
+     end;
+    hence LSeg(h,j) /\ LSeg(h,j+1) = {h/.(j+1)};
+   end;
+  thus h is s.n.c.
+   proof let n,m; assume A66: m>n+1;
+      then n+1<m & n<=n+1 by NAT_1:29;
+      then A67: n<=m & n+1<=m & 1<=n+1 & LSeg(f,n) misses LSeg(f,m)
+         by A2,AXIOMS:22,NAT_1:29,TOPREAL1:def 9;
+         now per cases by REAL_1:def 5;
+       suppose m+1<len h;
+        then A68: m<=i & m+1<=i & m<=m+1 & 1<m by A9,A66,A67,AXIOMS:22,24,NAT_1
+:38;
+        then A69: m in dom v & 1<=m+1 by A7,AXIOMS:22,FINSEQ_1:3;
+        then A70: m+1 in dom v by A7,A68,FINSEQ_1:3;
+        then A71: LSeg(h,m)=LSeg(v,m) by A1,A69,TOPREAL3:25
+           .= LSeg(f,m) by A1,A69,A70,TOPREAL3:24;
+           now per cases by NAT_1:18;
+         suppose 0<n;
+          then A72: 0+1<=n by NAT_1:38;
+            n<=i & n+1<=i by A67,A68,AXIOMS:22;
+          then A73:n in dom v & n+1 in dom v by A7,A67,A72,FINSEQ_1:3;
+          then LSeg(h,n)=LSeg(v,n) by A1,TOPREAL3:25
+           .= LSeg(f,n) by A1,A73,TOPREAL3:24;
+          then LSeg(h,n) misses LSeg(h,m) by A2,A66,A71,TOPREAL1:def 9;
+          hence LSeg(h,n) /\ LSeg(h,m) = {} by XBOOLE_0:def 7;
+         suppose 0=n; then LSeg(h,n)={} by TOPREAL1:def 5;
+          hence LSeg(h,n) /\ LSeg(h,m) = {};
+         end;
+        hence LSeg(h,n) /\ LSeg(h,m) = {};
+       suppose m+1=len h; then m = i+1 - 1 by A9,XCMPLX_1:26;
+        then A74: m=i by XCMPLX_1:26;
+        then A75: LSeg(h,m) c= LSeg(f,m) by A14,A20,TOPREAL1:12;
+A76:      LSeg(f,n) /\ LSeg(f,m) = {} by A67,XBOOLE_0:def 7;
+           now per cases by NAT_1:18;
+         suppose 0<n;
+          then 0+1<=n by NAT_1:38;
+          then A77: n in dom v & n+1 in dom v by A7,A67,A74,FINSEQ_1:3;
+          then LSeg(h,n)=LSeg(v,n) by A1,TOPREAL3:25
+           .= LSeg(f,n) by A1,A77,TOPREAL3:24;
+          hence {} = LSeg(h,m) /\ (LSeg(f,m) /\ LSeg(h,n)) by A76
+          .= LSeg(h,m) /\ LSeg(f,m) /\ LSeg(h,n) by XBOOLE_1:16
+          .= LSeg(h,n) /\ LSeg(h,m) by A75,XBOOLE_1:28;
+         suppose 0=n; then LSeg(h,n)={} by TOPREAL1:def 5;
+          hence LSeg(h,n) /\ LSeg(h,m) = {};
+         end;
+        hence LSeg(h,n) /\ LSeg(h,m) = {};
+       suppose m+1>len h;
+        then LSeg(h,m) = {} by TOPREAL1:def 5;
+        hence LSeg(h,n) /\ LSeg(h,m) = {};
+       end;
+    hence LSeg(h,n) /\ LSeg(h,m) = {};
+   end;
+    let n such that
+    A78: 1 <= n & n + 1 <= len h;
+     set p3 = h/.n, p4 = h/.(n+1);
+       now per cases by A78,REAL_1:def 5;
+     suppose A79: n+1 = len h;
+      then A80: n = i by A9,XCMPLX_1:2;
+      A81: p4 = p & i in dom v by A1,A5,A8,A9,A79,Th1,FINSEQ_1:3;
+      then A82: p3 = v/.i by A1,A80,GROUP_5:95
+        .= q1 by A81,TOPREAL1:1;
+         now per cases by A1,A4,A13,TOPREAL1:def 7;
+       suppose A83: q1`1 = q2`1; then A84: q1`2<> q2`2 by A17,TOPREAL3:11;
+           now per cases by A84,REAL_1:def 5;
+         suppose q1`2<q2`2;
+          then p in {p11: p11`1 = q1`1 & q1`2 <= p11`2 & p11`2<=q2`2}
+            by A1,A15,A83,TOPREAL3:15;
+          then ex p11 st p=p11 & p11`1 = q1`1 & q1`2 <= p11`2 & p11`2<=q2`2;
+          hence p3`1 = p4`1 or p3`2 = p4`2 by A1,A8,A9,A79,A82,Th1;
+         suppose q2`2<q1`2;
+          then p in {p22: p22`1 = q1`1 & q2`2 <= p22`2 & p22`2<=q1`2}
+             by A1,A15,A83,TOPREAL3:15;
+          then ex p11 st p=p11 & p11`1 = q1`1 & q2`2 <= p11`2 & p11`2<=q1`2;
+          hence p3`1 = p4`1 or p3`2 = p4`2 by A1,A8,A9,A79,A82,Th1;
+         end;
+        hence p3`1 = p4`1 or p3`2 = p4`2;
+       suppose A85: q1`2 = q2`2; then A86: q1`1<> q2`1 by A17,TOPREAL3:11;
+           now per cases by A86,REAL_1:def 5;
+         suppose q1`1<q2`1;
+          then p in {p11: p11`2 = q1`2 & q1`1 <= p11`1 & p11`1<=q2`1}
+             by A1,A15,A85,TOPREAL3:16;
+          then ex p11 st p=p11 & p11`2 = q1`2 & q1`1 <= p11`1 & p11`1<=q2`1;
+          hence p3`1 = p4`1 or p3`2 = p4`2 by A1,A8,A9,A79,A82,Th1;
+         suppose q2`1<q1`1;
+          then p in {p22: p22`2 = q1`2 & q2`1 <= p22`1 & p22`1<=q1`1}
+             by A1,A15,A85,TOPREAL3:16;
+           then ex p11 st p=p11 & p11`2 = q1`2 & q2`1 <= p11`1 & p11`1<=q1`1;
+          hence p3`1 = p4`1 or p3`2 = p4`2 by A1,A8,A9,A79,A82,Th1;
+         end;
+        hence p3`1 = p4`1 or p3`2 = p4`2;
+       end;
+      hence p3`1 = p4`1 or p3`2 = p4`2;
+     suppose n+1 < len h;
+      then n<=i & n+1<=i & n<=n+1 by A9,AXIOMS:24,NAT_1:38;
+      then n in dom v & n+1<=i & 1<=n+1 by A7,A78,AXIOMS:22,FINSEQ_1:3;
+      then A87: n in dom v & n+1 in dom v by A7,FINSEQ_1:3;
+A88:   n+1 <= len f by A9,A13,A78,AXIOMS:22;
+        h/.n=v/.n & h/.(n+1)=v/.(n+1) by A1,A87,GROUP_5:95;
+      then p3=f/.n & p4=f/.(n+1) by A87,TOPREAL1:1;
+      hence p3`1 = p4`1 or p3`2 = p4`2 by A4,A78,A88,TOPREAL1:def 7;
+     end;
+    hence p3`1 = p4`1 or p3`2 = p4`2;
+   end;
+  thus h/.1=p1 & h/.len h=p by A1,A8,A9,A11,Th1;
+  hence L~h is_S-P_arc_joining p1,p by A23,Def1;
+  set Mf = {LSeg(f,j): 1<=j & j+1<=len f},
+      Mv = {LSeg(v,n): 1<=n & n+1<=len v},
+      Mh = {LSeg(h,m): 1<=m & m+1<=len h};
+  A89: now
+    let x; assume x in L~h; then x in union Mh by TOPREAL1:def 6;
+    then consider X be set such that
+    A90: x in X & X in Mh by TARSKI:def 4;
+    consider k such that
+    A91: X=LSeg(h,k) & 1<=k & k+1<=len h by A90;
+    A92: k+1<= len f by A9,A13,A91,AXIOMS:22;
+       now per cases by A91,REAL_1:def 5;
+     suppose
+       k+1 = len h;
+      then A93: k=i & LSeg(h,i) c= LSeg(f,i)
+       by A9,A14,A20,TOPREAL1:12,XCMPLX_1:2;
+      then x in LSeg(f,k) & LSeg(f,k) in Mf by A13,A90,A91;
+      then x in union Mf by TARSKI:def 4;
+      hence x in L~f by TOPREAL1:def 6;
+      thus x in L~v \/ LSeg(q1,p) by A20,A90,A91,A93,XBOOLE_0:def 2;
+     suppose A94: k+1 < len h;
+      then A95: k+1<i+1 & k<=k+1 by A9,NAT_1:29;
+         k+1<=i & 1<=k+1 by A9,A91,A94,NAT_1:38;
+      then A96: k+1 in dom v & k<=i by A7,A95,AXIOMS:22,FINSEQ_1:3;
+      then A97: k in dom v by A7,A91,FINSEQ_1:3;
+      then A98: X=LSeg(v,k) by A1,A91,A96,TOPREAL3:25
+      .= LSeg(f,k) by A1,A96,A97,TOPREAL3:24;
+      then X in Mf by A91,A92;
+      then x in union Mf by A90,TARSKI:def 4;
+      hence x in L~f by TOPREAL1:def 6;
+        X=LSeg(v,k) & k+1<=len v
+        by A1,A8,A9,A94,A96,A97,A98,NAT_1:38,TOPREAL3:24;
+      then X in Mv by A91;
+      then x in union Mv by A90,TARSKI:def 4;
+      then x in L~v by TOPREAL1:def 6;
+      hence x in L~v \/ LSeg(q1,p) by XBOOLE_0:def 2;
+     end;
+    hence x in L~f & x in L~v \/ LSeg(q1,p);
+   end;
+  thus L~h c= L~f
+   proof let x; assume x in L~h; hence x in L~f by A89; end;
+  thus L~h c= L~(f|i) \/ LSeg(q,p)
+   proof let x; assume x in L~h; hence thesis by A89; end;
+  let x such that A99: x in L~v \/ LSeg(q,p);
+     now per cases by A99,XBOOLE_0:def 2;
+   suppose x in L~v; then x in union Mv by TOPREAL1:def 6;
+    then consider X be set such that
+    A100: x in X & X in Mv by TARSKI:def 4;
+    consider k such that
+    A101: X=LSeg(v,k) & 1<=k & k+1<=len v by A100;
+      k<=k+1 by NAT_1:29;
+   then 1<=k & k<=len v & 1<=k+1 & k+1<=len v by A101,AXIOMS:22;
+    then A102: k in Seg len v & k+1 in Seg len v by FINSEQ_1:3;
+A103:    k+1<=len h by A8,A9,A19,A101,AXIOMS:22;
+      X=LSeg(h,k) by A1,A5,A101,A102,TOPREAL3:25;
+    then X in Mh by A101,A103;
+    then x in union Mh by A100,TARSKI:def 4;
+    hence thesis by TOPREAL1:def 6;
+   suppose A104: x in LSeg(q,p);
+      LSeg(h,i) in Mh by A1,A9;
+    then x in union Mh by A20,A104,TARSKI:def 4;
+    hence thesis by TOPREAL1:def 6;
+   end;
+  hence thesis;
+ end;
+
+theorem Th15:
+f/.2<>f/.1 & f is_S-Seq & (f/.2)`2 = (f/.1)`2 &
+h = <* f/.1,|[((f/.1)`1+(f/.2)`1)/2,(f/.1)`2]|,f/.2 *> implies
+h is_S-Seq & h/.1=f/.1 & h/.len h=f/.2 &
+L~h is_S-P_arc_joining f/.1,f/.2 & L~h c= L~f &
+L~h = L~(f|1) \/ LSeg(f/.1,f/.2) & L~h = L~(f|2) \/ LSeg(f/.2,f/.2)
+ proof set p1 = f/.1, p = f/.2;
+  assume
+  A1: p<>p1 & f is_S-Seq &
+      p`2 = p1`2 & h = <* p1,|[(p1`1+p`1)/2,p1`2]|,p *>;
+  then A2: len f >= 2 by TOPREAL1:def 10;
+  then A3: 1+1 in Seg len f & len f >= 1 by AXIOMS:22,FINSEQ_1:3;
+  then A4: LSeg(f,1) = LSeg(p1,p) & p1`1 <> p`1
+     by A1,A2,TOPREAL1:def 5,TOPREAL3:11;
+  hence h is_S-Seq & h/.1 = p1 & h/.len h = p by A1,TOPREAL3:44;
+  hence A5: L~h is_S-P_arc_joining p1,p by Def1;
+  A6: L~h=LSeg(p1,|[(p1`1 + p`1)/2,p1`2]|) \/ LSeg(|[(p1`1 + p`1)/2,p1`2]|,p) &
+  |[(p1`1 + p`1)/2,p1`2]| in LSeg(p1,p) by A1,A4,TOPREAL3:19,23;
+  then A7: LSeg(p1,|[(p1`1 + p`1)/2,p1`2]|) \/ LSeg(|[(p1`1 + p`1)/2,p1`2]|,p)
+=
+   LSeg(p1,p) & LSeg(f,1) c= L~f by TOPREAL1:11,TOPREAL3:26;
+  hence L~h c= L~f by A1,A4,TOPREAL3:23;
+  A8: Seg 1 c= Seg len f & Seg len f = dom f & f|1 = f|Seg 1
+ by A3,FINSEQ_1:7,def 3,TOPREAL1:def 1;
+  then dom f /\ Seg 1 = Seg 1 by XBOOLE_1:28;
+  then dom(f|1) = Seg 1 by A8,FUNCT_1:68;
+  then len (f|1) = 1 by FINSEQ_1:def 3;
+  then L~(f|1)={} by TOPREAL1:28;
+  hence L~h = L~(f|1) \/ LSeg(p1,p) by A6,TOPREAL1:11;
+  A9: Seg 2 c= Seg len f & f|2 = f|Seg 2
+    by A2,FINSEQ_1:7,TOPREAL1:def 1;
+  then dom f /\ Seg 2 = Seg 2 by A8,XBOOLE_1:28;
+  then A10: dom(f|2) = Seg 2 by A9,FUNCT_1:68;
+  then A11: 1+1<=len(f|2) by FINSEQ_1:def 3;
+A12:  1 in dom(f|2) & 2 in dom(f|2) by A10,FINSEQ_1:3;
+  then A13: LSeg(f|2,1) = LSeg(p1,p) by A3,A4,A8,TOPREAL3:24;
+  set M = {LSeg(f|2,k): 1<=k & k+1<=len(f|2)};
+    LSeg(p1,p) in M by A11,A13;
+  then LSeg(p1,p) c= union M by ZFMISC_1:92;
+  then L~h c=L~(f|2) & L~(f|2) c=L~(f|2) \/ LSeg(p,p)
+   by A6,A7,TOPREAL1:def 6,XBOOLE_1:7;
+  then A14: L~h c= L~(f|2) \/ LSeg(p,p) by XBOOLE_1:1;
+    L~(f|2) \/ LSeg(p,p) c= L~h
+   proof let x such that A15: x in L~(f|2) \/ LSeg(p,p);
+       now per cases by A15,XBOOLE_0:def 2;
+     suppose x in L~(f|2); then x in union M by TOPREAL1:def 6;
+      then consider X be set such that
+      A16: x in X & X in M by TARSKI:def 4;
+      consider m such that
+      A17: X=LSeg(f|2,m) & 1<=m & m+1<=len(f|2) by A16;
+        len(f|2) - 1 =1+1 - 1 by A10,FINSEQ_1:def 3
+       .= 1;
+      then m+1-1 <= 1 by A17,REAL_1:49;
+      then m <= 1 by XCMPLX_1:26;
+      then m=1 by A17,AXIOMS:21;
+      hence thesis by A3,A4,A6,A7,A8,A12,A16,A17,TOPREAL3:24;
+     suppose x in LSeg(p,p);
+     then x in {p} & p in L~h by A5,A6,Th4,TOPREAL1:7;
+      hence x in L~h by TARSKI:def 1;
+     end;
+    hence thesis;
+   end;
+  hence thesis by A14,XBOOLE_0:def 10;
+ end;
+
+theorem Th16:
+f/.2<>f/.1 & f is_S-Seq & (f/.2)`1 = (f/.1)`1 &
+h = <* f/.1,|[(f/.1)`1,((f/.1)`2+(f/.2)`2)/2]|,f/.2 *> implies
+h is_S-Seq & h/.1=f/.1 & h/.len h=f/.2 &
+L~h is_S-P_arc_joining f/.1,f/.2 & L~h c= L~f &
+L~h = L~(f|1) \/ LSeg(f/.1,f/.2) & L~h = L~(f|2) \/ LSeg(f/.2,f/.2)
+ proof set p1 = f/.1, p = f/.2;
+  assume
+  A1: p<>p1 & f is_S-Seq &
+      p`1 = p1`1 & h = <* p1,|[p1`1,(p1`2+p`2)/2]|,p *>;
+  then A2: len f >= 1+1 by TOPREAL1:def 10;
+  then A3: 1+1 in Seg len f & len f >= 1 by AXIOMS:22,FINSEQ_1:3;
+  A4: LSeg(f,1) = LSeg(p1,p) & p1`2 <> p`2
+       by A1,A2,TOPREAL1:def 5,TOPREAL3:11;
+  hence h is_S-Seq & h/.1 = p1 & h/.len h = p by A1,TOPREAL3:43;
+  hence A5: L~h is_S-P_arc_joining p1,p by Def1;
+  A6: L~h = LSeg(p1,|[p1`1,(p1`2+p`2)/2]|) \/ LSeg(|[p1`1,(p1`2+p`2)/2]|,p) &
+  |[p1`1,(p1`2+p`2)/2]| in LSeg(p1,p) by A1,A4,TOPREAL3:20,23;
+  then A7: LSeg(p1,|[p1`1,(p1`2+p`2)/2]|) \/ LSeg(|[p1`1,(p1`2+p`2)/2]|,p) =
+   LSeg(p1,p) & LSeg(f,1) c= L~f by TOPREAL1:11,TOPREAL3:26;
+  hence L~h c= L~f by A1,A4,TOPREAL3:23;
+  A8: Seg 1 c= Seg len f & Seg len f = dom f & f|1 = f|Seg 1
+ by A3,FINSEQ_1:7,def 3,TOPREAL1:def 1;
+  then dom f /\ Seg 1 = Seg 1 by XBOOLE_1:28;
+  then dom(f|1) = Seg 1 by A8,FUNCT_1:68;
+  then len (f|1) = 1 by FINSEQ_1:def 3;
+  then L~(f|1)={} by TOPREAL1:28;
+  hence L~h = L~(f|1) \/ LSeg(p1,p) by A6,TOPREAL1:11;
+  A9: Seg 2 c= Seg len f & f|2 = f|Seg 2
+    by A2,FINSEQ_1:7,TOPREAL1:def 1;
+  then dom f /\ Seg 2 = Seg 2 by A8,XBOOLE_1:28;
+  then A10: dom(f|2) = Seg 2 by A9,FUNCT_1:68;
+  then A11: 1+1<=len(f|2) by FINSEQ_1:def 3;
+A12:  1 in dom(f|2) & 2 in dom(f|2) by A10,FINSEQ_1:3;
+  then A13: LSeg(f|2,1) = LSeg(p1,p) by A3,A4,A8,TOPREAL3:24;
+  set M = {LSeg(f|2,k): 1<=k & k+1<=len(f|2)};
+    LSeg(p1,p) in M by A11,A13;
+  then LSeg(p1,p) c= union M by ZFMISC_1:92;
+  then L~h c=L~(f|2) & L~(f|2) c=L~(f|2) \/ LSeg(p,p)
+    by A6,A7,TOPREAL1:def 6,XBOOLE_1:7;
+  then A14: L~h c= L~(f|2) \/ LSeg(p,p) by XBOOLE_1:1;
+    L~(f|2) \/ LSeg(p,p) c= L~h
+   proof let x such that A15: x in L~(f|2) \/ LSeg(p,p);
+       now per cases by A15,XBOOLE_0:def 2;
+     suppose x in L~(f|2); then x in union M by TOPREAL1:def 6;
+      then consider X be set such that
+      A16: x in X & X in M by TARSKI:def 4;
+      consider m such that
+      A17: X=LSeg(f|2,m) & 1<=m & m+1<=len(f|2) by A16;
+        len(f|2) - 1 =1+1 - 1 by A10,FINSEQ_1:def 3
+       .= 1;
+      then m+1-1 <= 1 by A17,REAL_1:49;
+      then m <= 1 by XCMPLX_1:26;
+      then m=1 by A17,AXIOMS:21;
+      hence thesis by A3,A4,A6,A7,A8,A12,A16,A17,TOPREAL3:24;
+     suppose x in LSeg(p,p);
+     then x in {p} & p in L~h by A5,A6,Th4,TOPREAL1:7;
+      hence x in L~h by TARSKI:def 1;
+     end;
+    hence thesis;
+   end;
+  hence thesis by A14,XBOOLE_0:def 10;
+ end;
+
+theorem Th17:
+f/.i<>f/.1 & f is_S-Seq & i>2 & i in dom f & h = f|i implies
+h is_S-Seq & h/.1=f/.1 & h/.len h=f/.i &
+L~h is_S-P_arc_joining f/.1,f/.i &
+L~h c= L~f & L~h = L~(f|i) \/ LSeg(f/.i,f/.i)
+ proof assume
+  A1: f/.i<>f/.1 & f is_S-Seq & i>2 &
+      i in dom f & h = f|i;
+  then A2: h is_S-Seq & h = f|Seg i & Seg len f = dom f & Seg len h = dom h
+    by FINSEQ_1:def 3,TOPREAL1:def 1,TOPREAL3:40;
+  then i<=len f by A1,FINSEQ_1:3;
+  then Seg i c= Seg len f & dom h=Seg(len f) /\ Seg i
+    by A2,FINSEQ_1:7,RELAT_1:90;
+  then dom h = Seg i & 1<=i by A1,A2,FINSEQ_1:3,XBOOLE_1:28;
+  then 1 in dom h & i in dom h & len h = i by FINSEQ_1:3,def 3;
+  hence h is_S-Seq & h/.1=f/.1 & h/.len h = f/.i by A1,TOPREAL1:1,TOPREAL3:40;
+  hence A3: L~h is_S-P_arc_joining f/.1,f/.i &
+     L~h c= L~f by A1,Def1,TOPREAL3:27;
+  A4: LSeg(f/.i,f/.i) = {f/.i} by TOPREAL1:7;
+    L~h is_S-P_arc by A3,Th2;
+  then L~(f|i) <> {} by A1,TOPREAL1:32;
+  then f/.i in L~(f|i) by A1,A3,Th4; then {f/.i} c= L~(f|i) by ZFMISC_1:37;
+  hence thesis by A1,A4,XBOOLE_1:12;
+ end;
+
+theorem Th18:
+p<>f/.1 & f is_S-Seq & p in LSeg(f,n) implies
+  ex h st h is_S-Seq & h/.1=f/.1 & h/.len h = p &
+          L~h is_S-P_arc_joining f/.1,p & L~h c= L~f &
+          L~h = L~(f|n) \/ LSeg(f/.n,p)
+ proof set p1 = f/.1, q = f/.n;
+  assume
+  A1: p<>p1 & f is_S-Seq & p in LSeg(f,n);
+then A2: f is special by TOPREAL1:def 10;
+A3:   n <= n+1 by NAT_1:29;
+    A4: now assume
+       A5: not n in dom f or not n+1 in dom f;
+          now per cases by A5;
+        suppose not n in dom f;
+         then not(1 <= n & n <= len f) by FINSEQ_3:27;
+         then not(1 <= n & n+1 <= len f) by A3,AXIOMS:22;
+         hence contradiction by A1,TOPREAL1:def 5;
+        suppose not n+1 in dom f;
+         then not(1 <= n+1 & n+1<= len f) by FINSEQ_3:27;
+         hence contradiction by A1,NAT_1:29,TOPREAL1:def 5;
+        end;
+       hence contradiction;
+      end;
+  A6:f is one-to-one & Seg len f=dom f by A1,FINSEQ_1:def 3,TOPREAL1:def 10;
+  then A7: 1<=n & n<=len f & n+1<=len f by A4,FINSEQ_1:3;
+     now per cases;
+   case f/.n = p & f/.(n+1) = p;
+    then n+1 = n by A4,A6,PARTFUN2:17; hence contradiction by XCMPLX_1:3;
+   case A8: f/.n = p & f/.(n+1) <> p;
+    then 1<n by A1,A7,REAL_1:def 5;
+then A9:    1+1<=n by NAT_1:38;
+       now per cases by A9,REAL_1:def 5;
+     suppose A10: n=1+1;
+         now per cases by A2,A7,A8,A10,TOPREAL1:def 7;
+       suppose A11: p1`1=p`1;
+        take h = <* p1,|[p1`1,(p1`2+p`2)/2]|,p *>;
+        thus h is_S-Seq & h/.1=p1 & h/.len h = p &
+             L~h is_S-P_arc_joining p1,p & L~h c= L~f &
+             L~h = L~(f|n) \/ LSeg(q,p) by A1,A8,A10,A11,Th16;
+       suppose A12: p1`2=p`2;
+        take h = <* p1,|[(p1`1+p`1)/2,p1`2]|,p *>;
+        thus h is_S-Seq & h/.1=p1 & h/.len h = p &
+             L~h is_S-P_arc_joining p1,p & L~h c= L~f &
+             L~h = L~(f|n) \/ LSeg(q,p) by A1,A8,A10,A12,Th15;
+       end;
+      hence thesis;
+     suppose A13: n>2;
+      take h=f|n;
+      thus h is_S-Seq & h/.1=p1 & h/.len h = p &
+           L~h is_S-P_arc_joining p1,p & L~h c= L~f & L~h = L~(f|n) \/
+ LSeg(q,p)
+           by A1,A4,A8,A13,Th17;
+     end;
+    hence thesis;
+   case A14: f/.n <> p & f/.(n+1) = p;
+       now per cases by A7,REAL_1:def 5;
+     suppose A15: n=1;
+         now per cases by A2,A7,A14,A15,TOPREAL1:def 7;
+       suppose A16: p1`1= p`1;
+        take h=<* p1,|[p1`1,(p1`2+p`2)/2]|,p *>;
+        thus h is_S-Seq & h/.1=p1 & h/.len h = p &
+             L~h is_S-P_arc_joining p1,p & L~h c= L~f &
+             L~h = L~(f|n) \/ LSeg(q,p) by A1,A14,A15,A16,Th16;
+       suppose A17: p1`2=p`2;
+        take h=<* p1,|[(p1`1+p`1)/2,p1`2]|,p *>;
+        thus h is_S-Seq & h/.1=p1 & h/.len h = p &
+             L~h is_S-P_arc_joining p1,p & L~h c= L~f &
+             L~h = L~(f|n) \/ LSeg(q,p) by A1,A14,A15,A17,Th15;
+       end;
+      hence thesis;
+     suppose 1<n;
+      then A18: 1+1<n+1 by REAL_1:53;
+      take h=f|(n+1);
+      thus h is_S-Seq & h/.1=p1 & h/.len h=p & L~h is_S-P_arc_joining p1,p
+       & L~h c= L~f & L~h = L~(f|n) \/ LSeg(q,p)
+        by A1,A4,A14,A18,Th17,TOPREAL3:45;
+     end;
+    hence thesis;
+   case A19: f/.n <> p & f/.(n+1) <> p;
+       now per cases by A7,REAL_1:def 5;
+     suppose A20: n=1;
+      A21: len f >= 1+1 by A1,TOPREAL1:def 10;
+      set q1 = f/.(1+1);
+      A22: LSeg(f,n) = LSeg(p1,q1)
+         by A20,A21,TOPREAL1:def 5;
+         now per cases by A2,A21,TOPREAL1:def 7;
+       suppose A23: p1`1=q1`1;
+        then p1`1 <= p`1 & p`1 <= q1`1 by A1,A22,TOPREAL1:9;
+        then A24: p1`1 = p`1 by A23,AXIOMS:21;
+        take h = <* p1,|[p1`1,(p1`2+p`2)/2]|,p *>;
+        thus h is_S-Seq & h/.1=p1 & h/.len h = p &
+             L~h is_S-P_arc_joining p1,p & L~h c= L~f &
+             L~h = L~(f|n) \/ LSeg(q,p) by A1,A20,A24,Th13;
+
+       suppose A25: p1`2=q1`2;
+        then p1`2 <= p`2 & p`2 <= q1`2 by A1,A22,TOPREAL1:10;
+        then A26: p1`2 = p`2 by A25,AXIOMS:21;
+        take h = <* p1,|[(p1`1+p`1)/2,p1`2]|,p *>;
+        thus h is_S-Seq & h/.1=p1 & h/.len h = p &
+             L~h is_S-P_arc_joining p1,p & L~h c= L~f &
+             L~h = L~(f|n) \/ LSeg(q,p) by A1,A20,A26,Th12;
+       end;
+      hence thesis;
+     suppose A27: 1<n;
+      take h = (f|n)^<*p*>;
+      thus h is_S-Seq & h/.1 = p1 & h/.len h = p &
+       L~h is_S-P_arc_joining p1,p & L~h c= L~f &
+        L~h =L~(f|n) \/ LSeg(q,p) by A1,A4,A19,A27,Th14;
+     end;
+    hence thesis;
+   end;
+  hence thesis;
+ end;
+
+theorem Th19:
+p<>f/.1 & f is_S-Seq & p in L~f implies
+ex h st h is_S-Seq & h/.1=f/.1 & h/.len h = p &
+        L~h is_S-P_arc_joining f/.1,p & L~h c= L~f
+ proof
+  set M = {LSeg(f,i): 1<=i & i+1<=len f}, p1 = f/.1;
+  assume
+  A1: p<>p1 & f is_S-Seq & p in L~f;
+  then p in union M by TOPREAL1:def 6; then consider X be set such that
+  A2: p in X & X in M by TARSKI:def 4;
+  consider n such that
+  A3: X=LSeg(f,n) & 1<=n & n+1<=len f by A2;
+  consider h such that
+  A4: h is_S-Seq & h/.1=p1 & h/.len h = p & L~h is_S-P_arc_joining p1,p &
+      L~h c= L~f & L~h = L~(f|n) \/ LSeg(f/.n,p) by A1,A2,A3,Th18;
+  take h;
+  thus thesis by A4;
+ end;
+
+theorem Th20:
+( p`1=(f/.len f)`1 & p`2<>(f/.len f)`2 or
+  p`1<>(f/.len f)`1 & p`2=(f/.len f)`2 ) &
+ not f/.1 in Ball(u,r) & f/.len f in Ball(u,r) &
+ p in Ball(u,r) & f is_S-Seq &
+LSeg(f/.len f,p) /\ L~f = {f/.len f} & h=f^<*p*> implies
+h is_S-Seq & L~h is_S-P_arc_joining f/.1,p & L~h c= L~f \/ Ball(u,r)
+ proof set p1 = f/.1, p2 = f/.len f;
+  assume
+  A1: p`1=p2`1 & p`2<>p2`2 or p`1<>p2`1 & p`2=p2`2; assume
+  A2: not p1 in Ball(u,r) & p2 in Ball(u,r) & p in Ball(u,r) &
+      f is_S-Seq &
+      LSeg(p2,p) /\ L~f = {p2} & h=f^<*p*>;
+  then A3: len h = len f + len <*p*> by FINSEQ_1:35
+   .= len f + 1 by FINSEQ_1:56;
+A4: f is s.n.c. by A2,TOPREAL1:def 10;
+A5: f is unfolded by A2,TOPREAL1:def 10;
+A6: f is special by A2,TOPREAL1:def 10;
+  A7: Seg len f = dom f & Seg len h = dom h by FINSEQ_1:def 3;
+  A8: 2<=len f by A2,TOPREAL1:def 10;
+  then A9: 1<=len f & 2<=len f by AXIOMS:22;
+  then 1 in dom f by A7,FINSEQ_1:3;
+  then A10: h/.1 = p1 & h/.len h = p & f is one-to-one & p<>p2
+     by A1,A2,A3,Th1,GROUP_5:95,TOPREAL1:def 10;
+  A11: not p in L~f & len f in dom f
+  by A1,A2,A7,A9,FINSEQ_1:3,TOPREAL3:47;
+  then A12: h/.len f = p2 by A2,GROUP_5:95;
+  then A13: LSeg(h,len f) = LSeg(p2,p) by A3,A9,A10,TOPREAL1:def 5;
+  set Mf = {LSeg(f,i): 1<=i & i+1<=len f},
+      Mh = {LSeg(h,m): 1<=m & m+1<=len h};
+  A14: L~f = union Mf & f is one-to-one by A2,TOPREAL1:def 6,def 10;
+  thus h is_S-Seq
+   proof
+     now
+    set Z = {m: 1<=m & m<=len h};
+    given x,y such that
+    A15: x in dom h & y in dom h & h.x = h.y & x<>y;
+      x in Z by A7,A15,FINSEQ_1:def 1;
+    then consider k1 be Nat such that
+    A16: k1=x & 1<=k1 & k1<=len h;
+      y in Z by A7,A15,FINSEQ_1:def 1;
+    then consider k2 be Nat such that
+    A17: k2=y & 1<=k2 & k2<=len h;
+A18: h/.k1 = h.y by A15,A16,FINSEQ_4:def 4 .= h/.k2 by A15,A17,FINSEQ_4:def 4;
+       now per cases by A3,A16,A17,REAL_1:def 5;
+     suppose k1=len f+1 & k2=len f+1; hence contradiction by A15,A16,A17;
+     suppose A19: k1=len f+1 & k2<len f+1; then A20: k2+1<=k1 by NAT_1:38;
+         now per cases by A20,REAL_1:def 5;
+       suppose k2 + 1 = k1;
+        then k2 + 1 - 1= len f by A19,XCMPLX_1:26;
+        hence contradiction by A3,A10,A12,A18,A19,XCMPLX_1:26;
+       suppose k2 + 1 < k1;
+        then k2<len f+1-1 by A19,REAL_1:86;
+        then A21: k2<=len f by XCMPLX_1:26;
+        then k2 in dom f by A7,A17,FINSEQ_1:3;
+        then f/.k2 <> p & h/.k2 = f/.k2 & h/.k1 = p
+          by A2,A8,A11,A17,A19,A21,Th1,GROUP_5:95,TOPREAL3:46;
+        hence contradiction by A18;
+       end;
+      hence contradiction;
+     suppose A22: k1<len f+1 & k2=len f+1; then A23: k1+1<=k2 by NAT_1:38;
+         now per cases by A23,REAL_1:def 5;
+       suppose k1 + 1 = k2;
+        then k1 + 1 - 1= len f by A22,XCMPLX_1:26;
+        hence contradiction by A3,A10,A12,A18,A22,XCMPLX_1:26;
+       suppose k1 + 1 < k2;
+        then k1<len f+1-1 by A22,REAL_1:86;
+        then A24: k1<=len f by XCMPLX_1:26;
+        then k1 in dom f by A7,A16,FINSEQ_1:3;
+        then f/.k1 <> p & h/.k1 = f/.k1 &
+         h/.k2 = p by A2,A8,A11,A16,A22,A24,Th1,GROUP_5:95,TOPREAL3:46;
+        hence contradiction by A18;
+       end;
+      hence contradiction;
+     suppose k1<len f+1 & k2<len f+1;
+      then k1<=len f & k2<=len f by NAT_1:38;
+      then A25: k1 in dom f & k2 in dom f by A7,A16,A17,FINSEQ_1:3;
+      then f.k1 = h.k1 by A2,FINSEQ_1:def 7
+       .= f.k2 by A2,A15,A16,A17,A25,FINSEQ_1:def 7;
+      hence contradiction by A10,A15,A16,A17,A25,FUNCT_1:def 8;
+     end;
+    hence contradiction;
+   end;
+   hence h is one-to-one by FUNCT_1:def 8;
+      2+1<=len f +1 by A8,AXIOMS:24;
+   hence len h >= 2 by A3,AXIOMS:22;
+   thus h is unfolded
+    proof let j such that
+    A26: 1 <= j & j + 2 <= len h;
+    A27: j+(1+1) = j+1+1 by XCMPLX_1:1;
+      j+1 <= j+2 by AXIOMS:24;
+then A28:   j+1 <= len h by A26,AXIOMS:22;
+       now per cases by A26,REAL_1:def 5;
+     suppose j+2 = len h;
+      then j+2 - 1= len f by A3,XCMPLX_1:26;
+      then A29: j+(1+1 - 1)= len f by XCMPLX_1:29; then j<=len f by NAT_1:38;
+      then j in dom f by A7,A26,FINSEQ_1:3;
+      then A30: LSeg(h,j) = LSeg(f,j) & LSeg(h,j+1) = LSeg(p2,p)
+       by A2,A3,A9,A10,A11,A12,A29,TOPREAL1:def 5,TOPREAL3:25;
+        h/.(j+1) in LSeg(h,j) by A26,A28,TOPREAL1:27;
+      then A31: {h/.(j+1)} c= LSeg(h,j)
+        by ZFMISC_1:37;
+        LSeg(h,j) in Mf by A26,A29,A30;
+      then LSeg(h,j) c= L~f by A14,ZFMISC_1:92;
+      then LSeg(h,j) = LSeg(h,j) /\ L~f by XBOOLE_1:28;
+      hence LSeg(h,j) /\ LSeg(h,j+1)
+        = LSeg(h,j) /\ {h/.(j+1)} by A2,A12,A29,A30,XBOOLE_1:16
+       .= {h/.(j+1)} by A31,XBOOLE_1:28;
+     suppose j+2 < len h;
+      then j+2+1<=len f +1 by A3,NAT_1:38;
+      then j+(2+1)<=len f +1 by XCMPLX_1:1;
+then A32:    j+(2+1)-1<=len f by REAL_1:86;
+        3-1=2;
+      then A33: j+2<=len f by A32,XCMPLX_1:29;
+      then A34: LSeg(f,j) /\
+ LSeg(f,j+1) = {f/.(j+1)} by A5,A26,TOPREAL1:def 8;
+        j<=j+1 & j+1<=j+2 by A27,NAT_1:29;
+      then 1<=j+1 & j<=j+1 & j+1<=j+2 & j+1<=len f by A26,A33,AXIOMS:22;
+      then 1<=j+1 & 1<=j+2 & j<=len f & j+1<=len f by AXIOMS:22;
+      then A35: j in dom f & j+1 in dom f & j+1+1 in dom f
+      by A7,A26,A27,A33,FINSEQ_1:3;
+      then h/.(j+1) = f/.(j+1) & LSeg(h,j) = LSeg(f,j)
+        by A2,GROUP_5:95,TOPREAL3:25;
+      hence LSeg(h,j) /\ LSeg(h,j+1) = {h/.(j+1)}
+        by A2,A34,A35,TOPREAL3:25;
+     end;
+    hence LSeg(h,j) /\ LSeg(h,j+1) = {h/.(j+1)};
+   end;
+   thus h is s.n.c.
+   proof let n,m such that
+    A36: m>n+1;
+    A37: n+1+1=n+(1+1) by XCMPLX_1:1;
+A38:   n+1<m & n<=n+1 by A36,NAT_1:29;
+        LSeg(f,n) misses LSeg(f,m) by A4,A36,TOPREAL1:def 9;
+      then A39: n<=m & n+1<=m & 1<=n+1 & LSeg(f,n) /\ LSeg(f,m) = {}
+        by A38,AXIOMS:22,NAT_1:29,XBOOLE_0:def 7;
+         now per cases by REAL_1:def 5;
+       suppose m+1<len h;
+        then A40: m<=len f & m+1<=len f & m<=m+1 & 1<m
+           by A3,A36,A39,AXIOMS:22,24,NAT_1:38;
+        then A41: m in dom f & 1<=m+1 by A7,AXIOMS:22,FINSEQ_1:3;
+        then m+1 in dom f by A7,A40,FINSEQ_1:3;
+        then A42: LSeg(h,m)=LSeg(f,m) by A2,A41,TOPREAL3:25;
+           now per cases by NAT_1:18;
+         suppose 0<n;
+          then A43: 0+1<=n by NAT_1:38;
+            n<=len f & n+1<=len f by A39,A40,AXIOMS:22;
+          then n in dom f & n+1 in dom f by A7,A39,A43,FINSEQ_1:3;
+          hence LSeg(h,n) /\ LSeg(h,m) = {} by A2,A39,A42,TOPREAL3:25;
+         suppose 0=n; then LSeg(h,n)={} by TOPREAL1:def 5;
+          hence LSeg(h,n) /\ LSeg(h,m) = {};
+         end;
+        hence LSeg(h,n) /\ LSeg(h,m) = {};
+       suppose m+1=len h; then m = len f+1 - 1 by A3,XCMPLX_1:26;
+        then A44: m=len f by XCMPLX_1:26;
+           now per cases by NAT_1:18;
+         suppose 0<n;
+          then A45: 0+1<=n by NAT_1:38;
+          then A46: n in dom f & n+1 in dom f by A7,A39,A44,FINSEQ_1:3;
+          then A47: LSeg(h,n)=LSeg(f,n) by A2,TOPREAL3:25;
+             now assume
+A48:         LSeg(h,n) /\ LSeg(h,m) <> {};
+            consider x being Element of LSeg(h,n) /\ LSeg(h,m);
+            set L = LSeg(f,n);
+            A49: x in LSeg(p2,p) & x in L & n+1<=len f
+              by A13,A36,A44,A47,A48,XBOOLE_0:def 3;
+              L in Mf by A36,A44,A45;
+            then x in L~f by A14,A49,TARSKI:def 4;
+            then x in {p2} by A2,A49,XBOOLE_0:def 3;
+            then A50: x=p2 & n+1+1<=len f by A36,A44,NAT_1:38,TARSKI:def 1;
+               now per cases by A50,REAL_1:def 5;
+             suppose A51: n+1+1 = len f;
+              then A52: LSeg(f,n) /\ LSeg(f,n+1) = {f/.(n+1)}
+ by A5,A37,A45,TOPREAL1:def 8;
+                1 <= n+1 by NAT_1:29;
+              then p2 in LSeg(f,n+1) by A51,TOPREAL1:27;
+              then p2 in {f/.(n+1)} by A49,A50,A52,XBOOLE_0:def 3;
+              then f/.len f=f/.(n+1) by TARSKI:def 1;
+              then len f + 1 = len f by A11,A14,A46,A51,PARTFUN2:17;
+              hence contradiction by XCMPLX_1:3;
+             suppose n+1+1<len f;
+              then n+2+1<=len f by A37,NAT_1:38;
+              then A53: n+2<=len f - 1 by REAL_1:84;
+              reconsider j=len f - 1 as Nat by A9,INT_1:18;
+                n+1<j by A37,A53,NAT_1:38;
+              then A54: LSeg(f,n) misses LSeg(f,j) & j+1 = len f
+                by A4,TOPREAL1:def 9,XCMPLX_1:27;
+              then A55: LSeg(f,n) /\ LSeg(f,j) = {} & j+1 = len f
+                by XBOOLE_0:def 7;
+                (1+1)-1 = 1;
+              then 1<=j by A8,REAL_1:92;
+              then p2 in LSeg(f,j) by A54,TOPREAL1:27;
+              hence contradiction by A49,A50,A55,XBOOLE_0:def 3;
+             end;
+            hence contradiction;
+           end;
+          hence LSeg(h,n) /\ LSeg(h,m) = {};
+         suppose 0=n; then LSeg(h,n)={} by TOPREAL1:def 5;
+          hence LSeg(h,n) /\ LSeg(h,m) = {};
+         end;
+        hence LSeg(h,n) /\ LSeg(h,m) = {};
+       suppose m+1>len h;
+        then LSeg(h,m) = {} by TOPREAL1:def 5;
+        hence LSeg(h,n) /\ LSeg(h,m) = {};
+       end;
+    hence LSeg(h,n) /\ LSeg(h,m) = {};
+   end;
+   hereby let n such that
+    A56: 1 <= n & n + 1 <= len h;
+     set p3 = h/.n, p4 = h/.(n+1);
+       now per cases by A56,REAL_1:def 5;
+     suppose
+     n+1 = len h;
+      hence p3`1=p4`1 or p3`2=p4`2 by A1,A3,A10,A12,XCMPLX_1:2;
+     suppose
+A57:   n+1 < len h;
+      then n<=len f & n+1<=len f & n<=n+1 by A3,AXIOMS:24,NAT_1:38;
+      then n in dom f & n+1<=len f & 1<=n+1 by A7,A56,AXIOMS:22,FINSEQ_1:3;
+      then n in dom f & n+1 in dom f by A7,FINSEQ_1:3;
+       then p3=f/.n & p4=f/.(n+1) & n+1<= len f by A2,A3,A57,GROUP_5:95,NAT_1:
+38;
+      hence p3`1 = p4`1 or p3`2 = p4`2 by A6,A56,TOPREAL1:def 7;
+     end;
+    hence p3`1 = p4`1 or p3`2 = p4`2;
+   end;
+   end;
+  hence L~h is_S-P_arc_joining p1,p by A10,Def1;
+  let x; assume x in L~h; then x in union Mh by TOPREAL1:def 6;
+  then consider X be set such that
+  A58: x in X & X in Mh by TARSKI:def 4;
+  consider k such that
+  A59: X=LSeg(h,k) & 1<=k & k+1<=len h by A58;
+   per cases by A59,REAL_1:def 5;
+   suppose k+1 = len h;
+    then k=len f by A3,XCMPLX_1:2;
+    then X c= Ball(u,r) & Ball(u,r) c= L~f \/ Ball(u,r)
+      by A2,A13,A59,TOPREAL3:28,XBOOLE_1:7; hence thesis by A58,TARSKI:def 3;
+   suppose A60: k+1 < len h;
+    then A61: k+1<len f+1 & k<=k+1 by A3,NAT_1:29;
+    A62: k+1<=len f & 1<=k+1 by A3,A59,A60,NAT_1:38;
+    then A63: k+1 in dom f & k<=len f by A7,A61,AXIOMS:22,FINSEQ_1:3;
+    then k in dom f by A7,A59,FINSEQ_1:3;
+    then X=LSeg(f,k) by A2,A59,A63,TOPREAL3:25;
+    then X in Mf by A59,A62;
+    then x in union Mf by A58,TARSKI:def 4;
+    then x in L~f by TOPREAL1:def 6;
+    hence thesis by XBOOLE_0:def 2;
+ end;
+
+theorem Th21:
+not f/.1 in Ball(u,r) & f/.len f in Ball(u,r) & p in Ball(u,r) &
+|[p`1,(f/.len f)`2]| in Ball(u,r) & f is_S-Seq &
+p`1<>(f/.len f)`1 & p`2<>(f/.len f)`2 & h=f^<*|[p`1,(f/.len f)`2]|,p*> &
+(LSeg(f/.len f,|[p`1,(f/.len f)`2]|) \/
+ LSeg(|[p`1,(f/.len f)`2]|,p)) /\ L~f = {f/.len f} implies
+L~h is_S-P_arc_joining f/.1,p & L~h c= L~f \/ Ball(u,r)
+ proof set p1 = f/.1, p2 = f/.len f;
+  assume
+  A1: not p1 in Ball(u,r) & p2 in Ball(u,r) & p in Ball(u,r) &
+      |[p`1,p2`2]| in Ball(u,r) & f is_S-Seq &
+      p`1<>p2`1 & p`2<>p2`2 & h=f^<*|[p`1,p2`2]|,p*> &
+      (LSeg(p2,|[p`1,p2`2]|) \/ LSeg(|[p`1,p2`2]|,p)) /\ L~f = {p2};
+  set p3 = |[p`1,p2`2]|,
+      f1 = f^<* p3 *>,
+      h1 = f1^<* p *>;
+  A2: p3`2 = p2`2 & p3`1 = p`1 & p=|[p`1,p`2]| by EUCLID:56,57;
+A3:  {p2} = (LSeg(p2,p3) /\ L~f) \/ (LSeg(p3,p) /\ L~f) &
+  LSeg(p2,p3) /\ L~f c= (LSeg(p2,p3) /\ L~f) \/ (LSeg(p3,p) /\ L~f)
+    by A1,XBOOLE_1:7,23;
+  reconsider Lf = L~f as non empty Subset of TOP-REAL 2 by A1;
+     L~f is_S-P_arc_joining p1,p2 by A1,Def1;
+  then Lf is_an_arc_of p1,p2 by Th3;
+  then p2 in L~f & p2 in LSeg(p2,p3) by TOPREAL1:4,6;
+  then p2 in LSeg(p2,p3) /\ L~f by XBOOLE_0:def 3;
+  then {p2} c= LSeg(p2,p3) /\ L~f by ZFMISC_1:37;
+then A4:  LSeg(p2,p3) /\ L~f = {p2} by A3,XBOOLE_0:def 10;
+  then A5: L~f1 is_S-P_arc_joining p1,p3 & L~f1 c= L~f \/ Ball(u,r)
+    by A1,A2,Th20;
+  A6: Seg len f = dom f & len f>=2
+    by A1,FINSEQ_1:def 3,TOPREAL1:def 10;
+  then A7: 1<=len f by AXIOMS:22;
+then A8:  1 in dom f by A6,FINSEQ_1:3;
+    L~f1 is_S-P_arc by A5,Th2;
+  then reconsider Lf1 = L~f1 as non empty Subset of TOP-REAL 2
+   by TOPREAL1:32;
+  A9: len f1 = len f + len <*p3*> by FINSEQ_1:35
+   .= len f + 1 by FINSEQ_1:56;
+  then A10: f1/.len f1 = p3 & Lf1 is_an_arc_of p1,p3 by A5,Th1,Th3;
+  then p3 in L~f1 & p3 in LSeg(p3,p) by TOPREAL1:4,6;
+  then p3 in LSeg(p3,p) /\ L~f1 by XBOOLE_0:def 3;
+  then A11: {p3} c= LSeg(p3,p) /\ L~f1 &len f in dom f
+    by A6,A7,FINSEQ_1:3,ZFMISC_1:37;
+  then A12: f1/.len f = p2 by GROUP_5:95;
+    LSeg(p3,p) /\ L~f1 c= {p3}
+   proof assume not thesis; then consider x such that
+    A13: x in LSeg(p3,p) /\ L~f1 & not x in {p3} by TARSKI:def 3;
+    set M1 = {LSeg(f1,i): 1<=i & i+1<=len f1},
+        Mf = {LSeg(f,j): 1<=j & j+1<=len f};
+    A14: x in LSeg(p3,p) & x in L~f1 by A13,XBOOLE_0:def 3;
+    then x in union M1 by TOPREAL1:def 6;
+    then consider X be set such that
+    A15: x in X & X in M1 by TARSKI:def 4;
+    consider k such that
+    A16: X=LSeg(f1,k) & 1<=k & k+1<=len f1 by A15;
+       now per cases by A16,REAL_1:def 5;
+     suppose k+1 = len f1;
+       then k+1=len f1 & k=len f
+        by A9,XCMPLX_1:2;
+      then LSeg(f1,k) = LSeg(p2,p3) by A10,A12,A16,TOPREAL1:def 5;
+      then x in LSeg(p2,p3) /\ LSeg(p3,p) &
+       LSeg(p2,p3) /\ LSeg(p3,p) = {p3} by A14,A15,A16,TOPREAL3:37,XBOOLE_0:def
+3;
+      hence contradiction by A13;
+     suppose A17: k+1 < len f1;
+      then A18: k+1<len f+1 & k<=k+1 by A9,NAT_1:29;
+      A19: k+1<=len f & 1<=k+1 by A9,A16,A17,NAT_1:38;
+      then A20: k+1 in dom f & k<=len f by A6,A18,AXIOMS:22,FINSEQ_1:3;
+      then k in dom f by A6,A16,FINSEQ_1:3;
+      then X=LSeg(f,k) by A16,A20,TOPREAL3:25;
+      then X in Mf by A16,A19;
+      then x in union Mf by A15,TARSKI:def 4;
+      then x in LSeg(p2,p3) \/ LSeg(p3,p) & x in L~f
+      by A14,TOPREAL1:def 6,XBOOLE_0:def 2;
+      then x in {p2} by A1,XBOOLE_0:def 3;
+      then x = p2 by TARSKI:def 1;
+      hence contradiction by A1,A2,A14,TOPREAL3:17;
+     end;
+    hence contradiction;
+   end;
+then A21:  ((p`1=p3`1 & p`2<>p3`2) or (p`1<>p3`1 & p`2=p3`2)) &
+  not p1 in Ball(u,r) & p3 in Ball(u,r) & p in Ball(u,r) & f1 is_S-Seq &
+  f1/.1=p1 & f1/.len f1=p3 & LSeg(p3,p) /\ L~f1 = {p3}
+    by A1,A2,A4,A8,A9,A11,Th1,Th20,GROUP_5:95,XBOOLE_0:def 10;
+  then A22: L~h1 c= L~f1 \/ Ball(u,r)
+       by Th20;
+  A23: h1 = f^(<*p3*>^<*p*>) by FINSEQ_1:45
+    .= h by A1,FINSEQ_1:def 9;
+  hence L~h is_S-P_arc_joining p1,p by A21,Th20;
+    L~f1 \/ Ball(u,r) c= L~f \/ Ball(u,r) \/ Ball(u,r) by A5,XBOOLE_1:9;
+  then L~f1 \/ Ball(u,r) c= L~f \/ (Ball(u,r) \/ Ball(u,r)) by XBOOLE_1:4;
+  hence L~h c= L~f \/ Ball(u,r) by A22,A23,XBOOLE_1:1;
+ end;
+
+theorem Th22:
+not f/.1 in Ball(u,r) & f/.len f in Ball(u,r) & p in Ball(u,r) &
+|[(f/.len f)`1,p`2]| in Ball(u,r) & f is_S-Seq &
+p`1<>(f/.len f)`1 & p`2<>(f/.len f)`2 & h=f^<*|[(f/.len f)`1,p`2]|,p*> &
+(LSeg(f/.len f,|[(f/.len f)`1,p`2]|) \/
+ LSeg(|[(f/.len f)`1,p`2]|,p)) /\ L~f = {f/.len f} implies
+L~h is_S-P_arc_joining f/.1,p & L~h c= L~f \/ Ball(u,r)
+ proof set p1 = f/.1, p2 = f/.len f;
+  assume
+  A1: not p1 in Ball(u,r) & p2 in Ball(u,r) & p in Ball(u,r) &
+      |[p2`1,p`2]| in Ball(u,r) & f is_S-Seq &
+      p`1<>p2`1 & p`2<>p2`2 & h=f^<*|[p2`1,p`2]|,p*> &
+      (LSeg(p2,|[p2`1,p`2]|) \/ LSeg(|[p2`1,p`2]|,p)) /\ L~f = {p2};
+  set p3 = |[p2`1,p`2]|,
+      f1 = f^<* p3 *>,
+      h1 = f1^<* p *>;
+  A2: p3`2 = p`2 & p3`1 = p2`1 & p=|[p`1,p`2]| by EUCLID:56,57;
+A3:  {p2} = (LSeg(p2,p3) /\ L~f) \/ (LSeg(p3,p) /\ L~f) &
+  LSeg(p2,p3) /\ L~f c= (LSeg(p2,p3) /\ L~f) \/ (LSeg(p3,p) /\ L~f)
+    by A1,XBOOLE_1:7,23;
+  reconsider Lf = L~f as non empty Subset of TOP-REAL 2 by A1;
+     L~f is_S-P_arc_joining p1,p2 by A1,Def1;
+  then Lf is_an_arc_of p1,p2 by Th3;
+  then p2 in L~f & p2 in LSeg(p2,p3) by TOPREAL1:4,6;
+  then p2 in LSeg(p2,p3) /\ L~f by XBOOLE_0:def 3;
+  then {p2} c= LSeg(p2,p3) /\ L~f by ZFMISC_1:37;
+then A4:  LSeg(p2,p3) /\ L~f = {p2} by A3,XBOOLE_0:def 10;
+  then A5: L~f1 is_S-P_arc_joining p1,p3 & L~f1 c= L~f \/ Ball(u,r)
+& Seg len f = dom f & len f>=2
+        by A1,A2,Th20,FINSEQ_1:def 3,TOPREAL1:def 10;
+  then A6: 1<=len f by AXIOMS:22;
+then A7:  1 in dom f by A5,FINSEQ_1:3;
+    L~f1 is_S-P_arc by A5,Th2;
+  then reconsider Lf1 = L~f1 as non empty Subset of TOP-REAL 2
+   by TOPREAL1:32;
+  A8: len f1 = len f + len <*p3*> by FINSEQ_1:35
+   .= len f + 1 by FINSEQ_1:56;
+  then A9: f1/.len f1 = p3 & Lf1 is_an_arc_of p1,p3 by A5,Th1,Th3;
+  then p3 in L~f1 & p3 in LSeg(p3,p) by TOPREAL1:4,6;
+  then p3 in LSeg(p3,p) /\ L~f1 by XBOOLE_0:def 3;
+  then A10: {p3} c= LSeg(p3,p) /\ L~f1 by ZFMISC_1:37;
+    len f in dom f by A5,A6,FINSEQ_1:3;
+  then A11: f1/.len f = p2 by GROUP_5:95;
+    LSeg(p3,p) /\ L~f1 c= {p3}
+   proof assume not thesis; then consider x such that
+    A12: x in LSeg(p3,p) /\ L~f1 & not x in {p3} by TARSKI:def 3;
+    set M1 = {LSeg(f1,i): 1<=i & i+1<=len f1},
+        Mf = {LSeg(f,j): 1<=j & j+1<=len f};
+    A13: x in LSeg(p3,p) & x in L~f1 by A12,XBOOLE_0:def 3;
+    then x in union M1 by TOPREAL1:def 6;
+    then consider X be set such that
+    A14: x in X & X in M1 by TARSKI:def 4;
+    consider k such that
+    A15: X=LSeg(f1,k) & 1<=k & k+1<=len f1 by A14;
+       now per cases by A15,REAL_1:def 5;
+     suppose k+1 = len f1;
+       then k+1=len f1 & k=len f
+        by A8,XCMPLX_1:2;
+      then LSeg(f1,k) = LSeg(p2,p3) by A9,A11,A15,TOPREAL1:def 5;
+      then x in LSeg(p2,p3) /\ LSeg(p3,p) &
+       LSeg(p2,p3) /\ LSeg(p3,p) = {p3} by A13,A14,A15,TOPREAL3:36,XBOOLE_0:def
+3;
+      hence contradiction by A12;
+     suppose A16: k+1 < len f1;
+      then A17: k+1<len f+1 & k<=k+1 by A8,NAT_1:29;
+      A18: k+1<=len f & 1<=k+1 by A8,A15,A16,NAT_1:38;
+      then A19: k+1 in dom f & k<=len f by A5,A17,AXIOMS:22,FINSEQ_1:3;
+      then k in dom f by A5,A15,FINSEQ_1:3;
+       then X=LSeg(f,k) by A15,A19,TOPREAL3:25;
+      then X in Mf by A15,A18;
+      then x in union Mf by A14,TARSKI:def 4;
+      then x in LSeg(p2,p3) \/ LSeg(p3,p) & x in L~f
+      by A13,TOPREAL1:def 6,XBOOLE_0:def 2;
+      then x in {p2} by A1,XBOOLE_0:def 3;
+      then x = p2 by TARSKI:def 1;
+      hence contradiction by A1,A2,A13,TOPREAL3:18;
+     end;
+    hence contradiction;
+   end;
+then A20:  ((p`1=p3`1 & p`2<>p3`2) or (p`1<>p3`1 & p`2=p3`2)) &
+  not p1 in Ball(u,r) & p3 in Ball(u,r) & p in Ball(u,r) & f1 is_S-Seq &
+  f1/.1=p1 & f1/.len f1=p3 & LSeg(p3,p) /\ L~f1 = {p3}
+    by A1,A2,A4,A7,A8,A10,Th1,Th20,GROUP_5:95,XBOOLE_0:def 10;
+  then A21: L~h1 c= L~f1 \/ Ball(u,r)
+       by Th20;
+  A22: h1 = f^(<*p3*>^<*p*>) by FINSEQ_1:45
+    .= h by A1,FINSEQ_1:def 9;
+  hence L~h is_S-P_arc_joining p1,p by A20,Th20;
+    L~f1 \/ Ball(u,r) c= L~f \/ Ball(u,r) \/ Ball(u,r) by A5,XBOOLE_1:9;
+  then L~f1 \/ Ball(u,r) c= L~f \/ (Ball(u,r) \/ Ball(u,r)) by XBOOLE_1:4;
+  hence L~h c= L~f \/ Ball(u,r) by A21,A22,XBOOLE_1:1;
+ end;
+
+theorem Th23:
+not f/.1 in Ball(u,r) & f/.len f in Ball(u,r) & p in Ball(u,r) &
+f is_S-Seq & not p in L~f implies
+ex h st L~h is_S-P_arc_joining f/.1,p & L~h c= L~f \/ Ball(u,r)
+ proof
+  set p1 = f/.1;
+  set Mf= {LSeg(f,k):1<=k & k+1<=len f}; assume
+  A1: not p1 in Ball(u,r) & f/.len f in Ball(u,r) & p in Ball(u,r) &
+      f is_S-Seq & not p in L~f;
+  then len f>= 2 & 2=1+1 by TOPREAL1:def 10;
+  then A2: len f>=1 & 1<=len f - 1 by AXIOMS:22,REAL_1:84;
+  then reconsider n=len f - 1 as Nat by INT_1:18;
+   defpred X[Nat] means 1<=$1 & $1<=len f - 1 & LSeg(f,$1) meets Ball(u,r);
+A3: f is special by A1,TOPREAL1:def 10;
+    n+1=len f by XCMPLX_1:27;
+  then f/.len f in LSeg(f,n) by A2,TOPREAL1:27;
+  then LSeg(f,n) meets Ball(u,r) by A1,XBOOLE_0:3;
+  then A4: ex n st X[n] by A2;
+  consider m such that
+  A5: X[m] and
+  A6: for i st X[i] holds m<=i
+   from Min(A4);
+A7: LSeg(f,m) /\ Ball(u,r) <> {} by A5,XBOOLE_0:def 7;
+A8: now let i; assume 1<=i & i<=len f - 1 & LSeg(f,i) /\ Ball(u,r) <> {};
+       then 1<=i & i<=len f - 1 & LSeg(f,i) meets Ball(u,r) by XBOOLE_0:def 7;
+     hence m<=i by A6;
+   end;
+    m+1 <= n+1 by A5,AXIOMS:24;
+  then m+1 <= len f by XCMPLX_1:27;
+  then LSeg(f,m) in Mf by A5;
+  then LSeg(f,m) c= union Mf by ZFMISC_1:92;
+  then A9: LSeg(f,m) c= L~f by TOPREAL1:def 6;
+  set A=LSeg(f,m) /\ Ball(u,r);
+  A10: m+1<=len f & m<=m+1 by A5,NAT_1:29,REAL_1:84;
+  then A11: 1<=m & m<=len f & m+1<=len f by A5,AXIOMS:22;
+  then A12: m in Seg len f & Seg len f=dom f by FINSEQ_1:3,def 3;
+  consider q1,q2 such that
+  A13: f/.m = q1 & f/.(m+1) = q2;
+  A14: not q1 in Ball(u,r) by A1,A5,A8,A13,TOPREAL3:33;
+  A15: now set M = {LSeg(f|m,i):1<=i & i+1<=len(f|m)};
+       assume A16: Ball(u,r) /\ L~(f|m) <> {};
+       consider x being Element of Ball(u,r) /\ L~(f|m);
+       A17: x in L~(f|m) & x in Ball(u,r) by A16,XBOOLE_0:def 3;
+       then x in union M by TOPREAL1:def 6; then consider X be set such that
+       A18: x in X & X in M by TARSKI:def 4; consider k such that
+       A19: X=LSeg(f|m,k) & 1<=k & k+1<=len(f|m) by A18;
+         k+1-1 <= len(f|m)-1 by A19,REAL_1:49;
+       then A20: k <= len(f|m)-1 by XCMPLX_1:26;
+         k<=k+1 by NAT_1:29;
+       then 1<=k & k<=len(f|m) & 1<=k+1 & k+1<=len(f|m) by A19,AXIOMS:22;
+       then A21: k in Seg len(f|m) & k+1 in Seg len(f|m) & Seg len(f|m) = dom(f
+|m)
+           by FINSEQ_1:3,def 3;
+       then x in LSeg(f,k) by A12,A18,A19,TOPREAL3:24;
+       then A22: LSeg(f,k) meets Ball(u,r) by A17,XBOOLE_0:3;
+         Seg m c= Seg len f by A11,FINSEQ_1:7;
+then A23:       Seg m = dom f /\ (Seg m) by A12,XBOOLE_1:28
+       .= dom(f|(Seg m)) by FUNCT_1:68
+       .= Seg len(f|m) by A21,TOPREAL1:def 1;
+        then m = len(f|m) by FINSEQ_1:8;
+       then len(f|m) -1<=len f - 1 by A11,REAL_1:49;
+       then k<=len f - 1 by A20,AXIOMS:22;
+       then m<=k & k<=m-1 by A6,A19,A20,A22,A23,FINSEQ_1:8;
+       then m<=m-1 by AXIOMS:22;
+       then 0<=m-1-m by SQUARE_1:12;
+       then 0<=m+-1-m by XCMPLX_0:def 8;
+       then 0<=-1 by XCMPLX_1:26; hence contradiction;
+      end;
+  A24: q1=|[q1`1,q1`2]| & q2=|[q2`1,q2`2]| by EUCLID:57;
+  A25: LSeg(f,m) = LSeg(q1,q2) by A5,A10,A13,TOPREAL1:def 5;
+     now per cases;
+   suppose ex q st q in A & (p`1=q`1 or p`2=q`2); then consider q such that
+    A26: q in A and
+    A27: p`1=q`1 or p`2=q`2;
+    A28: q in LSeg(f,m) & q in Ball(u,r) by A26,XBOOLE_0:def 3;
+    then A29: q in L~f by A9;
+A30:     now per cases by A27;
+     suppose p`1=q`1;
+      hence (p`1=q`1 & p`2<>q`2) or (p`1<>q`1 & p`2=q`2) by A1,A29,TOPREAL3:11
+;
+     suppose p`2=q`2;
+      hence (p`1=q`1 & p`2<>q`2) or (p`1<>q`1 & p`2=q`2) by A1,A29,TOPREAL3:11
+;
+     end;
+    consider h such that
+    A31: h is_S-Seq & h/.1=p1 &
+    h/.len h=q & L~h is_S-P_arc_joining p1,q &
+        L~h c= L~f & L~h = L~(f|m) \/ LSeg(q1,q) by A1,A13,A28,Th18;
+    take g = h^<* p *>;
+      q in L~h & q in LSeg(q,p) by A31,Th4,TOPREAL1:6;
+    then q in LSeg(q,p) /\ L~h by XBOOLE_0:def 3;
+    then A32: {q} c= LSeg(q,p) /\ L~h by ZFMISC_1:37;
+      LSeg(q,p) /\ L~h c= {q}
+     proof let x such that
+      A33: x in LSeg(q,p) /\ L~h;
+        LSeg(q,p) c= Ball(u,r) by A1,A28,TOPREAL3:28;
+       then LSeg(q,p) = LSeg(q,p) /\ Ball(u,r) by XBOOLE_1:28;
+      then A34: LSeg(q,p) /\ (L~(f|m) \/ LSeg(q1,q)) =
+      LSeg(q,p) /\ Ball(u,r) /\ L~(f|m) \/ LSeg(q,p) /\ LSeg(q1,q) by XBOOLE_1:
+23
+      .= LSeg(q,p) /\(Ball(u,r) /\ L~(f|m))\/ LSeg(q,p) /\
+ LSeg(q1,q) by XBOOLE_1:16
+      .= LSeg(q1,q) /\ LSeg(q,p) by A15;
+      A35: now
+          q1 in LSeg(q1,q2) & q in LSeg(q1,q2)
+         by A5,A10,A13,A28,TOPREAL1:6,def 5;
+        then A36: LSeg(q1,q) c= LSeg(f,m) by A25,TOPREAL1:12; assume
+          p in LSeg(q1,q); hence contradiction by A1,A9,A36,TARSKI:def 3;
+       end;
+         now per cases by A3,A5,A10,A13,TOPREAL1:def 7;
+       suppose q1`1=q2`1;
+        hence q1`1 = q`1 or q1`2=q`2 by A24,A25,A28,TOPREAL3:17;
+       suppose q1`2=q2`2;
+        hence q1`1 = q`1 or q1`2=q`2 by A24,A25,A28,TOPREAL3:18;
+       end;
+      hence x in {q} by A1,A14,A28,A30,A31,A33,A34,A35,TOPREAL3:49;
+     end;
+    then LSeg(q,p) /\ L~h = {q} by A32,XBOOLE_0:def 10;
+    then A37: L~g is_S-P_arc_joining p1,p & L~g c=L~h \/ Ball(u,r)
+         by A1,A28,A30,A31,Th20;
+      L~h \/ Ball(u,r) c= L~f \/ Ball(u,r) by A31,XBOOLE_1:9;
+    hence L~g is_S-P_arc_joining p1,p & L~g c=L~f \/ Ball(u,r) by A37,XBOOLE_1:
+1;
+   suppose A38: for q st q in A holds p`1<>q`1 & p`2<>q`2;
+    consider x being Element of A;
+    A39: x in LSeg(f,m) & LSeg(f,m) c= the carrier of TOP-REAL 2
+      by A7,XBOOLE_0:def 3;
+    then reconsider q=x as Point of TOP-REAL 2;
+    A40: q in Ball(u,r) & q`1<>p`1 & q`2<>p`2 &
+    q=|[q`1,q`2]| & p=|[p`1,p`2]| by A7,A38,EUCLID:57,XBOOLE_0:def 3;
+      q <> p1 by A1,A7,XBOOLE_0:def 3;
+    then consider h such that
+    A41: h is_S-Seq & h/.1=p1 &
+    h/.len h=q & L~h is_S-P_arc_joining p1,q &
+        L~h c= L~f & L~h = L~(f|m) \/ LSeg(q1,q) by A1,A13,A39,Th18;
+       now per cases by A1,A40,TOPREAL3:32;
+     suppose A42: |[q`1,p`2]| in Ball(u,r);
+      take g = h^<* |[q`1,p`2]|,p *>;
+      set v = |[q`1,p`2]|;
+        q in LSeg(q,v) & q in L~h by A41,Th4,TOPREAL1:6;
+      then q in (LSeg(q,v) \/ LSeg(v,p)) & q in L~h by XBOOLE_0:def 2;
+      then q in (LSeg(q,v) \/ LSeg(v,p)) /\ L~h by XBOOLE_0:def 3;
+      then A43: {q} c= (LSeg(q,v) \/ LSeg(v,p)) /\ L~h by ZFMISC_1:37;
+        (LSeg(q,v) \/ LSeg(v,p)) /\ L~h c= {q}
+       proof
+        set L = LSeg(q,v) \/ LSeg(v,p);
+          LSeg(q,v) c=Ball(u,r) & LSeg(v,p) c=Ball(u,r) by A1,A40,A42,TOPREAL3:
+28
+;
+        then L c= Ball(u,r) by XBOOLE_1:8;
+         then L = L /\ Ball(u,r) by XBOOLE_1:28;
+then A44:L /\ (L~(f|m) \/ LSeg(q1,q)) = L /\ Ball(u,r) /\ L~(f|m) \/ L /\ LSeg(
+q1,q)
+            by XBOOLE_1:23
+        .= L /\ (Ball(u,r) /\ L~(f|m)) \/ L /\ LSeg(q1,q) by XBOOLE_1:16
+        .= {} \/ L /\ LSeg(q1,q) by A15;
+        let x; assume A45: x in L /\ L~h;
+        A46: now per cases by A3,A5,A10,A13,TOPREAL1:def 7;
+         suppose q1`1=q2`1;
+          hence q1`1 = q`1 or q1`2=q`2 by A24,A25,A39,TOPREAL3:17;
+         suppose q1`2=q2`2;
+          hence q1`1 = q`1 or q1`2=q`2 by A24,A25,A39,TOPREAL3:18;
+         end;
+           now per cases by A46;
+         suppose A47: q1`1 = q`1;
+             now
+              q1 in LSeg(q1,q2) & q in LSeg(q1,q2)
+             by A5,A10,A13,A39,TOPREAL1:6,def 5;
+            then A48: LSeg(q1,q) c= LSeg(f,m) by A25,TOPREAL1:12; assume
+              v in LSeg(q1,q);
+            then v in LSeg(f,m) /\ Ball(u,r) & v`2=p`2
+               by A42,A48,EUCLID:56,XBOOLE_0:def 3;
+            hence contradiction by A38;
+           end;
+          hence x in {q} by A1,A14,A40,A41,A42,A44,A45,A47,TOPREAL3:50;
+         suppose q1`2 = q`2;
+          hence x in {q} by A40,A41,A44,A45,TOPREAL3:34;
+         end;
+        hence thesis;
+       end;
+      then (LSeg(q,|[q`1,p`2]|) \/ LSeg(|[q`1,p`2]|,p)) /\
+ L~h={q} by A43,XBOOLE_0:def 10;
+      then A49: L~g is_S-P_arc_joining p1,p & L~g c= L~h \/ Ball(u,r)
+        by A1,A40,A41,A42,Th22;
+        L~h \/ Ball(u,r) c= L~f \/ Ball(u,r) by A41,XBOOLE_1:9;
+      hence L~g is_S-P_arc_joining p1,p & L~g c=L~f \/
+ Ball(u,r) by A49,XBOOLE_1:1;
+     suppose A50: |[p`1,q`2]| in Ball(u,r);
+      take g = h^<* |[p`1,q`2]|,p *>;
+      set v = |[p`1,q`2]|;
+        q in LSeg(q,v) & q in L~h by A41,Th4,TOPREAL1:6;
+      then q in (LSeg(q,v) \/ LSeg(v,p)) & q in L~h by XBOOLE_0:def 2;
+      then q in (LSeg(q,v) \/ LSeg(v,p)) /\ L~h by XBOOLE_0:def 3;
+      then A51: {q} c= (LSeg(q,v) \/ LSeg(v,p)) /\ L~h by ZFMISC_1:37;
+        (LSeg(q,v) \/ LSeg(v,p)) /\ L~h c= {q}
+       proof
+        set L = LSeg(q,v) \/ LSeg(v,p);
+          LSeg(q,v) c=Ball(u,r) & LSeg(v,p) c= Ball(u,r) by A1,A40,A50,TOPREAL3
+:28;
+        then L c= Ball(u,r) by XBOOLE_1:8;
+         then L = L /\ Ball(u,r) by XBOOLE_1:28;
+     then A52:L /\ (L~(f|m) \/ LSeg(q1,q)) = L /\ Ball(u,r) /\ L~(f|m) \/ L /\
+ LSeg(q1,q)
+            by XBOOLE_1:23
+        .= L /\ (Ball(u,r) /\ L~(f|m)) \/ L /\ LSeg(q1,q) by XBOOLE_1:16
+        .= {} \/ L /\ LSeg(q1,q) by A15;
+        let x; assume A53: x in L /\ L~h;
+        A54: now per cases by A3,A5,A10,A13,TOPREAL1:def 7;
+         suppose q1`1=q2`1;
+          hence q1`1 = q`1 or q1`2=q`2 by A24,A25,A39,TOPREAL3:17;
+         suppose q1`2=q2`2;
+          hence q1`1 = q`1 or q1`2=q`2 by A24,A25,A39,TOPREAL3:18;
+         end;
+           now per cases by A54;
+         suppose q1`1 = q`1;
+          hence x in {q} by A40,A41,A52,A53,TOPREAL3:35;
+         suppose A55: q1`2 = q`2;
+             now
+              q1 in LSeg(q1,q2) & q in LSeg(q1,q2)
+             by A5,A10,A13,A39,TOPREAL1:6,def 5;
+            then A56: LSeg(q1,q) c= LSeg(f,m) by A25,TOPREAL1:12; assume
+              v in LSeg(q1,q);
+            then v in LSeg(f,m) /\ Ball(u,r) & v`1=p`1
+             by A50,A56,EUCLID:56,XBOOLE_0:def 3;
+            hence contradiction by A38;
+           end;
+          hence x in {q} by A1,A14,A40,A41,A50,A52,A53,A55,TOPREAL3:51;
+         end;
+        hence thesis;
+       end;
+      then (LSeg(q,|[p`1,q`2]|) \/ LSeg(|[p`1,q`2]|,p)) /\
+ L~h={q} by A51,XBOOLE_0:def 10
+;
+      then A57: L~g is_S-P_arc_joining p1,p & L~g c= L~h \/ Ball(u,r)
+         by A1,A40,A41,A50,Th21;
+        L~h \/ Ball(u,r) c= L~f \/ Ball(u,r) by A41,XBOOLE_1:9;
+      hence L~g is_S-P_arc_joining p1,p & L~g c=L~f \/
+ Ball(u,r) by A57,XBOOLE_1:1
+;
+     end;
+    hence thesis;
+   end;
+  hence thesis;
+ end;
+
+theorem Th24:
+for R,p,p1,p2,P,r,u st p<>p1 & P is_S-P_arc_joining p1,p2 & P c= R &
+                       p in Ball(u,r) & p2 in Ball(u,r) & Ball(u,r) c= R
+ ex P1 being Subset of TOP-REAL 2 st P1 is_S-P_arc_joining p1,p & P1 c= R
+ proof let R,p,p1,p2,P,r,u; assume that
+  A1: p<>p1 and
+  A2: P is_S-P_arc_joining p1,p2 and
+  A3: P c= R and
+  A4: p in Ball(u,r) and
+  A5: p2 in Ball(u,r) and
+  A6: Ball(u,r) c= R;
+  consider f such that
+  A7: f is_S-Seq & P = L~f & p1=f/.1 & p2=f/.len f by A2,Def1;
+     now per cases;
+   suppose p1 in Ball(u,r); then consider P1 such that
+    A8: P1 is_S-P_arc_joining p1,p & P1 c= Ball(u,r) by A1,A4,Th11;
+    reconsider P1 as Subset of TOP-REAL 2;
+    take P1;
+    thus P1 is_S-P_arc_joining p1,p & P1 c= R by A6,A8,XBOOLE_1:1;
+   suppose A9: not p1 in Ball(u,r);
+       now per cases;
+     suppose p in P; then consider h such that
+A10: h is_S-Seq & h/.1=p1 & h/.len h=p & L~h is_S-P_arc_joining p1,p &
+          L~h c= L~f by A1,A7,Th19;
+      reconsider P1=L~h as Subset of TOP-REAL 2;
+      take P1;
+      thus P1 is_S-P_arc_joining p1,p & P1 c= R by A3,A7,A10,XBOOLE_1:1;
+     suppose not p in P; then consider h such that
+      A11: L~h is_S-P_arc_joining p1,p & L~h c= L~f \/ Ball(u,r)
+          by A4,A5,A7,A9,Th23;
+      reconsider P1=L~h as Subset of TOP-REAL 2;
+      take P1;
+      thus P1 is_S-P_arc_joining p1,p by A11;
+        L~f \/ Ball(u,r) c= R by A3,A6,A7,XBOOLE_1:8;
+      hence P1 c= R by A11,XBOOLE_1:1;
+     end;
+    hence thesis;
+   end;
+  hence thesis;
+ end;
+
+Lm1:   TopSpaceMetr(Euclid 2)=TOP-REAL 2 by EUCLID:def 8;
+
+ reserve P, R for Subset of TOP-REAL 2;
+
+theorem Th25:
+for p st R is_Region &
+P = {q: q<>p & q in R & not ex P1 being Subset of TOP-REAL 2
+  st P1 is_S-P_arc_joining p,q & P1 c=R} holds P is open
+ proof let p; assume that
+  A1: R is_Region and
+  A2: P = {q: q<>p & q in R & not ex P1 being Subset of TOP-REAL 2
+    st P1 is_S-P_arc_joining p,q & P1 c=R};
+  A3: R is open by A1,Def3;
+     now let u;
+    reconsider p2=u as Point of TOP-REAL 2 by TOPREAL3:13; assume
+    A4: u in P;
+    then ex q1 st q1 = u &
+ q1<>p & q1 in R & not ex P1 being Subset of TOP-REAL 2
+  st P1 is_S-P_arc_joining p,q1 & P1 c=R by A2;
+    then consider r being real number such that
+    A5: r>0 & Ball(u,r) c= R by A3,Lm1,TOPMETR:22;
+    reconsider r' = r as Real by XREAL_0:def 1;
+    A6: p2 in Ball(u,r') by A5,TBSP_1:16;
+    take r;
+    thus r>0 by A5;
+    thus Ball(u,r) c= P
+     proof assume not thesis;
+      then consider x such that
+      A7: x in Ball(u,r) & not x in P by TARSKI:def 3;
+        x in R by A5,A7;
+      then reconsider q=x as Point of TOP-REAL 2;
+         now per cases by A2,A5,A7;
+       suppose A8: q=p;
+          now assume A9: q=p2;
+           ex p3 st p3=p2 &
+ p3<>p & p3 in R & not ex P1 being Subset of TOP-REAL 2 st
+          P1 is_S-P_arc_joining p,p3 & P1 c=R by A2,A4;
+         hence contradiction by A8,A9;
+        end;
+       then q<>p2 & u in Ball(u,r') by A5,TBSP_1:16;
+       then consider P2 being Subset of TOP-REAL 2 such that
+       A10: P2 is_S-P_arc_joining q,p2 & P2 c= Ball(u,r') by A7,Th11;
+       reconsider P2 as Subset of TOP-REAL 2;
+       A11: P2 is_S-P_arc_joining p,p2 & P2 c= R by A5,A8,A10,XBOOLE_1:1;
+         not p2 in P
+        proof assume p2 in P;
+         then ex q4 st q4=p2 &
+ q4<>p & q4 in R & not ex P1 being Subset of TOP-REAL 2 st
+          P1 is_S-P_arc_joining p,q4 & P1 c=R by A2;
+         hence contradiction by A11;
+        end;
+       hence contradiction by A4;
+      suppose A12: ex P1 being Subset of TOP-REAL 2 st
+       P1 is_S-P_arc_joining p,q & P1 c=R;
+         not p2 in P
+        proof assume p2 in P;
+         then ex q4 st q4=p2 &
+ q4<>p & q4 in R & not ex P1 being Subset of TOP-REAL 2 st
+         P1 is_S-P_arc_joining p,q4 & P1 c=R by A2;
+         hence contradiction by A5,A6,A7,A12,Th24;
+        end;
+       hence contradiction by A4;
+      end;
+     hence contradiction;
+    end;
+   end;
+  hence thesis by Lm1,TOPMETR:22;
+ end;
+
+theorem Th26:
+R is_Region & p in R &
+P = {q: q=p or ex P1 being Subset of TOP-REAL 2 st
+  P1 is_S-P_arc_joining p,q & P1 c=R} implies P is open
+ proof assume that
+  A1: R is_Region and
+  A2: p in R and
+  A3: P = {q: q=p or ex P1 being Subset of TOP-REAL 2 st
+    P1 is_S-P_arc_joining p,q & P1 c=R};
+  A4: R is open by A1,Def3;
+     now let u;
+    reconsider p2=u as Point of TOP-REAL 2 by TOPREAL3:13; assume
+      u in P;
+    then consider q1 such that
+    A5: q1=u and
+    A6: q1=p or ex P1 being Subset of TOP-REAL 2 st
+      P1 is_S-P_arc_joining p,q1 & P1 c=R by A3;
+       now per cases by A6;
+      suppose q1=p; hence p2 in R by A2,A5;
+      suppose ex P1 being Subset of TOP-REAL 2 st
+       P1 is_S-P_arc_joining p,q1 & P1 c=R;
+       then consider P2 being Subset of TOP-REAL 2 such that
+       A7: P2 is_S-P_arc_joining p,q1 and
+       A8: P2 c=R;
+         P2 is_S-P_arc by A7,Th2;
+       then P2 <> {} by TOPREAL1:32;
+       then p2 in P2 by A5,A7,Th4;
+       hence p2 in R by A8;
+      end;
+    then consider r being real number such that
+    A9: r>0 & Ball(u,r) c= R by A4,Lm1,TOPMETR:22;
+    take r;
+    reconsider r'= r as Real by XREAL_0:def 1;
+    A10: p2 in Ball(u,r') by A9,TBSP_1:16;
+    thus r>0 by A9;
+    thus Ball(u,r) c= P
+     proof let x; assume
+      A11: x in Ball(u,r);
+      then reconsider q=x as Point of TOP-REAL 2 by A9,TARSKI:def 3;
+         now per cases;
+       suppose q=p; hence x in P by A3;
+       suppose A12:q<>p;
+        A13: now assume
+            q1<>p;
+          then ex P1 being Subset of TOP-REAL 2 st P1 is_S-P_arc_joining p,q &
+          P1 c=R by A5,A6,A9,A10,A11,A12,Th24;
+          hence x in P by A3;
+         end;
+            now assume
+             q1=p;
+           then p in Ball(u,r') by A5,A9,TBSP_1:16;
+           then consider P2 being Subset of TOP-REAL 2 such that
+           A14: P2 is_S-P_arc_joining p,q & P2 c= Ball(u,r') by A11,A12,Th11;
+           reconsider P2 as Subset of TOP-REAL 2;
+             P2 is_S-P_arc_joining p,q & P2 c= R by A9,A14,XBOOLE_1:1;
+           hence x in P by A3;
+          end;
+         hence x in P by A13;
+        end;
+       hence thesis;
+      end;
+   end;
+  hence thesis by Lm1,TOPMETR:22;
+ end;
+
+theorem Th27:
+p in R & P={q: q=p or ex P1 being Subset of TOP-REAL 2 st
+  P1 is_S-P_arc_joining p,q & P1 c=R} implies P c= R
+ proof assume that
+  A1: p in R and
+  A2: P = {q: q=p or ex P1 being Subset of TOP-REAL 2 st
+     P1 is_S-P_arc_joining p,q & P1 c=R};
+  let x; assume x in P; then consider q such that
+  A3: q=x and
+  A4: q=p or ex P1 being Subset of TOP-REAL 2 st
+     P1 is_S-P_arc_joining p,q & P1 c=R by A2;
+     now per cases by A4;
+   suppose q=p; hence x in R by A1,A3;
+   suppose ex P1 being Subset of TOP-REAL 2 st
+     P1 is_S-P_arc_joining p,q & P1 c=R;
+    then consider P1 being Subset of TOP-REAL 2 such that
+    A5: P1 is_S-P_arc_joining p,q and
+    A6: P1 c=R;
+       P1 is_S-P_arc by A5,Th2;
+     then P1 <> {} by TOPREAL1:32;
+    then q in P1 by A5,Th4;
+    hence x in R by A3,A6;
+   end;
+  hence x in R;
+ end;
+
+theorem Th28:
+R is_Region & p in R & P={q: q=p or ex P1 be Subset of TOP-REAL 2
+  st P1 is_S-P_arc_joining p,q & P1 c=R}
+implies R c= P
+ proof assume that
+  A1: R is_Region and
+  A2: p in R and
+  A3: P = {q: q=p or ex P1 be Subset of TOP-REAL 2 st
+    P1 is_S-P_arc_joining p,q & P1 c=R};
+  reconsider R' = R as non empty Subset of TOP-REAL 2 by A2;
+  A4: P c= R by A2,A3,Th27;
+  set P2 = R \ P;
+  A5: P2 c= R by XBOOLE_1:36;
+     now let x;
+     A6: now assume
+       A7: x in P2;
+      then A8: x in R & not x in P by XBOOLE_0:def 4;
+      reconsider q2=x as Point of TOP-REAL 2 by A7;
+        q2<>p & q2 in R & not ex P1 being Subset of TOP-REAL 2
+        st P1 is_S-P_arc_joining p,q2 & P1 c=R by A3,A8;
+      hence x in {q: q<>p & q in R & not ex P1 being Subset of TOP-REAL 2
+         st P1 is_S-P_arc_joining p,q & P1 c= R};
+     end;
+       now assume
+        x in {q: q<>p & q in R & not ex P1 being Subset of TOP-REAL 2
+       st P1 is_S-P_arc_joining p,q & P1 c=R};
+then A9:      ex q3 st q3=x &
+ q3<>p & q3 in R & not ex P1 being Subset of TOP-REAL 2
+  st P1 is_S-P_arc_joining p,q3 & P1 c=R;
+then not ex q st q=x & (q=p or ex P1 being Subset of TOP-REAL 2
+    st P1 is_S-P_arc_joining p,q & P1 c=R);
+      then x in R & not x in P by A3,A9;
+      hence x in P2 by XBOOLE_0:def 4;
+     end;
+    hence x in P2 iff
+    x in {q: q<>p & q in R & not ex P1 being Subset of TOP-REAL 2
+      st P1 is_S-P_arc_joining p,q & P1 c=R} by A6;
+   end;
+  then A10: P2={q: q<>p & q in R & not ex P1 being Subset of TOP-REAL 2
+    st P1 is_S-P_arc_joining p,q & P1 c=R}
+          by TARSKI:2;
+  reconsider P22=P2 as Subset of TOP-REAL 2;
+  A11: P22 is open by A1,A10,Th25;
+  A12: P is open by A1,A2,A3,Th26;
+  A13: p in P by A3;
+    R is connected by A1,Def3;
+then A14:  (TOP-REAL 2)|R' is connected by CONNSP_1:def 3;
+  A15: [#]((TOP-REAL 2)|R) = R by PRE_TOPC:def 10;
+then reconsider P11 = P, P12 = P22 as Subset of (TOP-REAL 2)|R
+    by A4,A5,PRE_TOPC:16;
+A16:  P11 misses P12 by XBOOLE_1:79;
+  then A17: P11 /\ P12 = {}((TOP-REAL 2)|R) by XBOOLE_0:def 7;
+    P \/ (R \ P) = P \/ R by XBOOLE_1:39;
+  then A18: [#]((TOP-REAL 2)|R) = P11 \/ P12 by A4,A15,XBOOLE_1:12;
+  A19: P22 in the topology of TOP-REAL 2 & P in the topology of TOP-REAL 2
+          by A11,A12,PRE_TOPC:def 5;
+    P11 = P /\ [#]((TOP-REAL 2)|R) & P12 = P22 /\ [#]((TOP-REAL 2)|R)
+          by A4,A5,A15,XBOOLE_1:28;
+  then P11 in the topology of (TOP-REAL 2)|R & P12 in the topology of (
+TOP-REAL 2)|R
+    by A19,PRE_TOPC:def 9;
+  then P11 is open & P12 is open by PRE_TOPC:def 5;
+  then P2 = {} by A13,A14,A16,A17,A18,CONNSP_1:12;
+  hence thesis by XBOOLE_1:37;
+ end;
+
+theorem
+  R is_Region & p in R & P={q: q=p or ex P1 being Subset of TOP-REAL 2 st
+  P1 is_S-P_arc_joining p,q & P1 c=R} implies R = P
+ proof assume
+  A1: R is_Region & p in R &
+     P={q: q=p or ex P1 being Subset of TOP-REAL 2 st
+       P1 is_S-P_arc_joining p,q & P1 c=R};
+  hence R c= P by Th28;
+  thus P c= R by A1,Th27;
+ end;
+
+theorem
+  R is_Region & p in R & q in R & p<>q implies
+  ex P st P is_S-P_arc_joining p,q & P c=R
+ proof assume that
+  A1: R is_Region and
+  A2: p in R and
+  A3: q in R and
+  A4: p<>q;
+  set RR={q2: q2=p or ex P1 be Subset of TOP-REAL 2 st
+    P1 is_S-P_arc_joining p,q2 & P1 c=R};
+   RR c= the carrier of TOP-REAL 2
+   proof let x; assume x in RR;
+    then ex q2 st q2=x & (q2=p or ex P1 be Subset of TOP-REAL 2 st
+      P1 is_S-P_arc_joining p,q2 & P1 c=R);
+    hence thesis;
+   end;
+   then reconsider RR as Subset of TOP-REAL 2;
+    R c= RR by A1,A2,Th28;
+  then q in RR by A3;
+  then ex q1 st q1=q & (q1=p or ex P1 be Subset of TOP-REAL 2 st
+    P1 is_S-P_arc_joining p,q1 & P1 c=R);
+  hence thesis by A4;
+ end;

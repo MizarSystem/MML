@@ -1,0 +1,1719 @@
+:: The Lattice of Natural Numbers and The Sublattice of it.
+:: The Set of Prime Numbers
+::  by Marek Chmur
+::
+:: Received April 26, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM_3, QC_LANG1, ARYTM_1, BINOP_1, FUNCT_1, LATTICES, ARYTM,
+      RELAT_1, BOOLE, FILTER_0, FINSEQ_1, FINSET_1, CARD_1, TARSKI, NAT_1,
+      NAT_LAT;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      STRUCT_0, CARD_1, INT_2, NAT_1, LATTICES, BINOP_1, FINSEQ_1, FINSET_1,
+      RELAT_1, FUNCT_1, NEWTON;
+ constructors WELLORD2, INT_2, NAT_1, LATTICES, BINOP_1, NEWTON, PARTFUN1,
+      MEMBERED, XBOOLE_0;
+ clusters FINSET_1, RLSUB_2, STRUCT_0, XREAL_0, FINSEQ_1, RELSET_1, INT_1,
+      LATTICES, NAT_1, MEMBERED, ZFMISC_1, XBOOLE_0, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, LATTICES;
+ theorems INT_2, NEWTON, AXIOMS, CARD_1, ZFMISC_1, LATTICES, BINOP_1, NAT_1,
+      REAL_2, REAL_1, FUNCT_1, FINSEQ_1, FINSET_1, FUNCT_2, TARSKI, CARD_2,
+      RLVECT_1, INT_1, CQC_THE1, XBOOLE_0, XBOOLE_1, RELAT_1, XCMPLX_1;
+ schemes NAT_1, SETWISEO, BINOP_1, COMPLSP1, SUBSET_1;
+
+begin :: Auxiliary Theorems
+
+reserve n,m,l,k,i,j,s,r,t for Nat;
+
+canceled;
+
+theorem Th2:
+  l >= 1 implies k*l>=k
+proof
+assume A1: l>=1;
+   for k holds k*l>=k
+  proof
+   defpred _P[Nat] means $1*l>=$1;
+   A2:_P[0];
+   A3:for k st _P[k] holds _P[k+1]
+    proof let k;
+     assume A4:k*l>=k;
+       (k + 1)*l = k * l + 1*l by XCMPLX_1:8;
+     then A5:(k+1)*l>=k+l by A4,REAL_1:55;
+       k+l>=k+1 by A1,REAL_1:55;
+     hence (k+1)*l>=k+1 by A5,AXIOMS:22;
+    end;
+   thus for k holds _P[k] from Ind(A2,A3);
+  end;
+ hence thesis;
+end;
+
+definition let n;
+ redefine func n! -> Nat;
+ coherence by NEWTON:22;
+end;
+
+theorem Th3:
+ l >= 1 & n >= k*l implies n>=k
+proof
+ assume that A1: l>=1 and A2: n>=k*l;
+   k*l>=k by A1,Th2;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+canceled;
+
+theorem Th5:
+ l <> 0 implies l divides l!
+proof
+ assume l<>0;
+ then consider n such that A1: l = n+1 by NAT_1:22;
+   (n+1) divides (n+1)!
+  proof
+    (n+1)! = (n+1) * (n!) by NEWTON:21;
+  hence thesis by NAT_1:def 3;
+  end;
+ hence thesis by A1;
+end;
+
+canceled 2;
+
+theorem
+   n <> 0 implies (n+1)/n > 1
+  proof
+   assume A1: n<>0;
+   then A2: n>0 by NAT_1:19;
+   A3: (n+1)/n=n/n+1/n by XCMPLX_1:63
+         .=1+1/n by A1,XCMPLX_1:60;
+      1/n>0 by A2,REAL_2:127;
+   hence thesis by A3,REAL_1:69;
+  end;
+
+theorem Th9:
+  k/(k+1) < 1
+  proof
+    defpred _P[Nat] means $1/($1+1)<1;
+A1: _P[0];
+A2: _P[m] implies _P[m+1] proof
+     assume m/(m+1)<1;
+     set r=m+1;
+     A3: 0 < r by NAT_1:19;
+       (m+1) < ((m+1)+1) by REAL_1:69;
+    hence thesis by A3,REAL_2:142;
+   end;
+    for m holds _P[m] from Ind(A1,A2);
+  hence thesis;
+ end;
+
+theorem Th10:
+  for l being Nat holds l! >= l
+  proof
+    defpred _P[Nat] means $1! >= $1;
+  A1: _P[0] by NEWTON:18;
+  A2:for l st _P[l] holds _P[l+1] proof let l;
+    assume A3:l!>=l;
+A4:    l!*(l+1)=(l+1)! by NEWTON:21;
+    A5:     l+1>=0 by NAT_1:18;
+      l=0 & (l+1)!>=(l+1) or l>=1 & (l+1)!>=(l+1)
+     proof
+      per cases by RLVECT_1:98;
+       case l=0;
+       hence thesis by NEWTON:19;
+       case A6: l>=1; (l+1)!>=(l+1)*l by A3,A4,A5,AXIOMS:25;
+       hence (l+1)!>=(l+1) by A6,Th3;
+     end;
+    hence (l+1)!>=(l+1);
+   end;
+   thus   for l being Nat holds _P[l] from Ind(A1,A2);
+  end;
+
+canceled;
+
+theorem Th12:
+  for m,n st m<>1 holds m divides n implies not m divides (n+1)
+   proof let m,n;
+    assume that A1:m<>1 and A2:m divides n and A3: m divides (n+1);
+    consider t such that A4: n = m * t by A2,NAT_1:def 3;
+    consider s such that A5: n+1 = m * s by A3,NAT_1:def 3;
+A6:    1=m*s-m*t by A4,A5,XCMPLX_1:26;
+    A7: s<>0 by A5;
+    A8: t<>0 by A1,A4,A5,NAT_1:40;
+       t <= s
+     proof
+      assume A9: t > s;
+         n+1= n/t*s by A4,A5,A8,XCMPLX_1:90;
+       then n+1= n*s/t by XCMPLX_1:75;
+       then (n+1)*t=n*s by A8,XCMPLX_1:88;
+then A10:       t=n*s/(n+1) by XCMPLX_1:90
+           .=s*(n/(n+1)) by XCMPLX_1:75;
+       A11: s>0 by A7,NAT_1:19;
+         n/(n+1)<1 by Th9;
+      hence contradiction by A9,A10,A11,REAL_2:145;
+     end;
+    then reconsider r =s-t as Nat by INT_1:18;
+       1=m*r by A6,XCMPLX_1:40;
+      hence contradiction by A1,NAT_1:40;
+end;
+
+theorem
+    j divides l & j divides l+1 iff j=1 by Th12,NAT_1:53;
+
+canceled;
+
+theorem Th15:
+ for k,j st j<>0 holds j divides (j+k)!
+  proof
+    defpred _P[Nat] means for j st j<>0 holds j divides (j+$1)!;
+A1: _P[0] by Th5;
+A2: for k st _P[k] holds _P[k+1]  proof let k;
+    assume A3: for j st j<>0 holds j divides (j+k)!;
+    let j;
+    assume j<>0;
+     then j divides (j+k)! by A3;
+      then j divides ((j+k)!)*((j+k)+1) by NAT_1:56;
+     then j divides ((j+k)+1)! by NEWTON:21;
+     hence thesis by XCMPLX_1:1;
+    end;
+   thus  for k holds _P[k] from Ind(A1,A2);
+  end;
+
+theorem Th16:
+  j<=l & j<>0 implies j divides l!
+     proof
+      assume that A1: j<=l and A2: j<>0;
+         ex k st l=j+k by A1,NAT_1:28;
+      hence thesis by A2,Th15;
+     end;
+
+theorem Th17:
+  for l,j st j<>1 & j<>0 holds j divides (l!+1) implies j>l
+    proof let l,j;
+     assume that A1: j<>1 and A2: j<>0 and A3: j divides (l!+1);
+       not j divides l! by A1,A3,Th12;
+     hence thesis by A2,Th16;
+    end;
+
+:: The fundamental properties of lcm, hcf
+
+canceled;
+
+theorem Th19:
+  m lcm (n lcm k) = (m lcm n) lcm k
+ proof
+  set M = n lcm k;
+  set K = m lcm M;
+  set N = m lcm n;
+  set L = N lcm k;
+     K = L
+  proof
+  A1: n divides M & k divides M & for l st n divides l & k divides
+ l holds M divides l by NAT_1:def 4;
+  A2: m divides K & M divides K & for i st m divides i & M divides
+ i holds K divides i by NAT_1:def 4;
+  A3: m divides N & n divides N & for s st m divides s & n divides
+ s holds N divides s by NAT_1:def 4;
+  A4: N divides L & k divides L & for j st N divides j & k divides
+ j holds L divides j by NAT_1:def 4;
+  A5: K divides L
+   proof
+   A6: m divides L by A3,A4,NAT_1:51;
+      n divides L by A3,A4,NAT_1:51;
+   then M divides L by A4,NAT_1:def 4;
+   hence thesis by A6,NAT_1:def 4;
+   end;
+     L divides K
+   proof
+   A7: k divides K by A1,A2,NAT_1:51;
+      n divides K by A1,A2,NAT_1:51;
+   then N divides K by A2,NAT_1:def 4;
+   hence thesis by A7,NAT_1:def 4;
+   end;
+  hence thesis by A5,NAT_1:52;
+  end;
+ hence thesis;
+end;
+
+theorem Th20:
+   m divides n iff m lcm n = n
+proof
+thus m divides n implies m lcm n = n
+proof
+ set M = m lcm n;
+ assume A1: m divides n;
+  A2: m divides M & n divides M & for s st m divides s & n divides
+ s holds M divides s by NAT_1:def 4;
+     M = n
+   proof
+      M divides n by A1,NAT_1:def 4;
+    hence thesis by A2,NAT_1:52;
+   end;
+ hence thesis;
+end;
+thus m lcm n = n implies m divides n by NAT_1:def 4;
+end;
+
+canceled 2;
+
+theorem
+   n divides m & k divides m iff n lcm k divides m
+ proof
+    n lcm k divides m implies (n divides m & k divides m)
+   proof
+    set M = n lcm k;
+    assume A1: n lcm k divides m;
+       n divides M & k divides M & for l st n divides l & k divides
+ l holds M divides l by NAT_1:def 4;
+    hence thesis by A1,NAT_1:51;
+   end;
+   hence thesis by NAT_1:def 4;
+  end;
+
+canceled 2;
+
+theorem
+    m lcm 1 = m
+proof
+set M = m lcm 1;
+A1: m divides M & 1 divides M & for l st m divides l & 1 divides
+ l holds M divides l by NAT_1:def 4;
+   M divides m
+ proof
+    1 divides m by NAT_1:53;
+ hence thesis by NAT_1:def 4; end;
+hence thesis by A1,NAT_1:52; end;
+
+theorem Th27:
+ m lcm n divides m*n
+ proof
+  set s=m*n;
+  A1: m divides s by NAT_1:56;
+      n divides s by NAT_1:56;
+  hence thesis by A1,NAT_1:def 4; end;
+
+theorem Th28:
+  m hcf (n hcf k) = (m hcf n) hcf k
+ proof
+  set M = n hcf k;
+  set K = m hcf M;
+  set N = m hcf n;
+  set L = N hcf k;
+     K = L
+  proof
+  A1: M divides n & M divides k & for l st l divides n & l divides
+ k holds l divides M by NAT_1:def 5;
+  A2: K divides m & K divides M & for i st i divides m & i divides
+ M holds i divides K by NAT_1:def 5;
+  A3: N divides m & N divides n & for s st s divides m & s divides
+ n holds s divides N by NAT_1:def 5;
+  A4: L divides N & L divides k & for j st j divides N & j divides
+ k holds j divides L by NAT_1:def 5;
+  A5: K divides L
+   proof
+   A6: K divides k by A1,A2,NAT_1:51;
+   A7: K divides m by NAT_1:def 5;
+      K divides n by A1,A2,NAT_1:51;
+   then K divides N by A7,NAT_1:def 5;
+   hence thesis by A6,NAT_1:def 5;
+   end;
+     L divides K
+   proof
+   A8: L divides n by A3,A4,NAT_1:51;
+   A9: L divides m by A3,A4,NAT_1:51;
+      L divides M by A4,A8,NAT_1:def 5;
+   hence thesis by A9,NAT_1:def 5;
+   end;
+  hence thesis by A5,NAT_1:52;
+  end;
+ hence thesis;
+ end;
+
+canceled;
+
+theorem Th30:
+  n divides m implies n hcf m = n
+proof
+ set N = n hcf m;
+ assume A1: n divides m;
+ A2: N divides n & N divides m & for k st k divides n & k divides
+ m holds k divides N by NAT_1:def 5;
+   N = n
+ proof
+     n divides N by A1,NAT_1:def 5;
+  hence thesis by A2,NAT_1:52;
+ end;
+ hence thesis;
+end;
+
+canceled;
+
+theorem
+    m divides n & m divides k iff m divides n hcf k
+ proof
+    m divides n hcf k implies (m divides n & m divides k)
+   proof
+    set M = n hcf k;
+    assume A1: m divides n hcf k;
+       M divides n & M divides k & for l st l divides n & l divides
+ k holds l divides M by NAT_1:def 5;
+    hence thesis by A1,NAT_1:51;
+   end;
+   hence thesis by NAT_1:def 5;
+  end;
+
+canceled 2;
+
+theorem Th35:
+  m hcf 1 = 1
+proof set M = m hcf 1;
+A1: M divides m & M divides 1 & for l st l divides m & l divides
+ 1 holds l divides M by NAT_1:def 5;
+   1 divides M by NAT_1:53;
+hence thesis by A1,NAT_1:52;end;
+
+theorem
+    m hcf 0 = m
+proof set M = m hcf 0;
+A1: m divides M
+ proof
+   m divides 0 by NAT_1:53;
+hence thesis by NAT_1:def 5;end;
+     M divides m by NAT_1:def 5;
+hence thesis by A1,NAT_1:52;end;
+
+theorem Th37:
+  (m hcf n) lcm n = n
+proof
+ set M = m hcf n;
+    M divides m & M divides n & for k st k divides m & k divides
+ n holds k divides M by NAT_1:def 5;
+ hence thesis by Th20;
+end;
+
+theorem Th38:
+  m hcf (m lcm n) = m
+proof
+ set M = m lcm n;
+    m divides M & n divides M & for k st m divides k & n divides
+ k holds M divides k by NAT_1:def 4;
+ hence m hcf (m lcm n) = m by Th30;
+end;
+
+theorem
+    m hcf (m lcm n) = (n hcf m) lcm m
+proof
+   m hcf (m lcm n) = m by Th38;
+ hence thesis by Th37;
+ end;
+
+theorem
+    m divides n implies m hcf k divides n hcf k
+proof
+ set M = m hcf k;
+ A1: M divides m & M divides k & for i st i divides m & i divides
+ k holds i divides M by NAT_1:def 5;
+ assume m divides n;
+  then M divides n by A1,NAT_1:51;
+ hence thesis by A1,NAT_1:def 5;
+end;
+
+theorem
+    m divides n implies k hcf m divides k hcf n
+proof
+ set M = k hcf m;
+ A1: M divides k & M divides m & for i st i divides m & i divides
+ k holds i divides M by NAT_1:def 5;
+ assume m divides n;
+  then M divides n by A1,NAT_1:51;
+ hence thesis by A1,NAT_1:def 5;
+end;
+
+theorem
+    m > 0 implies 0 hcf m > 0
+proof
+ assume A1: m>0;
+ A2: m divides 0 by NAT_1:53;
+   for n st n divides 0 & n divides m holds n divides m;
+ hence 0 hcf m > 0 by A1,A2,NAT_1:def 5;
+end;
+
+theorem Th43:
+  n > 0 implies n hcf m > 0
+proof
+ assume that A1: n>0 and A2: n hcf m <= 0;
+ A3: (n hcf m) divides n by NAT_1:def 5;
+   n hcf m = 0 or n hcf m < 0 by A2;
+  then ex r st n = 0*r by A3,NAT_1:18,def 3;
+ hence contradiction by A1;
+end;
+
+theorem Th44:
+  m > 0 & n > 0 implies m lcm n > 0
+proof
+ assume that A1: m>0 and A2: n>0 and A3: m lcm n <= 0;
+ A4: (m lcm n) divides m*n by Th27;
+   m lcm n = 0 or m lcm n < 0 by A3;
+  then ex r st m*n = 0*r by A4,NAT_1:18,def 3;
+ hence contradiction by A1,A2,REAL_2:122;
+end;
+
+theorem
+    (n hcf m) lcm (n hcf k) divides n hcf (m lcm k)
+proof
+  set M = m lcm k;
+  set N = n hcf k;
+  set P = n hcf m;
+  set L = P lcm N;
+  A1: m divides M & k divides M & for l st m divides l & k divides
+ l holds M divides l by NAT_1:def 4;
+  A2: N divides n & N divides k & for s st s divides n & s divides
+ k holds s divides N by NAT_1:def 5;
+  A3: P divides n & P divides m & for j st j divides n & j divides
+ m holds j divides P by NAT_1:def 5;
+      L divides (n hcf M)
+    proof
+     A4: L divides n by A2,A3,NAT_1:def 4;
+     A5: P divides M by A1,A3,NAT_1:51;
+        N divides M by A1,A2,NAT_1:51;
+      then L divides M by A5,NAT_1:def 4;
+     hence thesis by A4,NAT_1:def 5;
+    end;
+hence thesis;
+end;
+
+theorem
+    m divides l implies m lcm (n hcf l) divides (m lcm n) hcf l
+proof
+  assume A1: m divides l;
+  set M = m lcm n;
+  set K = M hcf l;
+  set N = n hcf l;
+  A2: m divides M & n divides M & for j st m divides j & n divides
+ j holds M divides j by NAT_1:def 4;
+  A3: N divides n & N divides l & for s st s divides n & s divides
+ l holds s divides N by NAT_1:def 5;
+     (m lcm N) divides K
+    proof
+     A4: m divides K by A1,A2,NAT_1:def 5;
+        N divides M by A2,A3,NAT_1:51;
+      then N divides K by A3,NAT_1:def 5;
+     hence thesis by A4,NAT_1:def 4;
+    end;
+hence thesis;
+end;
+
+theorem
+     n hcf m divides n lcm m
+proof
+  set K = n hcf m;
+  set N = n lcm m;
+  A1: K divides n & K divides m & for i st i divides n & i divides
+ m holds i divides K by NAT_1:def 5;
+     n divides N & m divides N & for r st n divides r & m divides
+ r holds N divides r by NAT_1:def 4;
+hence thesis by A1,NAT_1:51;
+end;
+
+definition
+ canceled 2;
+
+ func hcflat-> BinOp of NAT means
+ :Def3: it.(m,n)=m hcf n;
+ existence proof
+   deffunc O(Nat,Nat)= $1 hcf $2;
+  thus ex o being BinOp of NAT st
+    for a,b being Element of NAT holds o.(a,b) = O(a,b) from BinOpLambda;
+ end;
+ uniqueness proof
+    deffunc O(Nat,Nat)= $1 hcf $2;
+  thus for o1,o2 being BinOp of NAT st
+    (for a,b being Element of NAT holds o1.(a,b) = O(a,b)) &
+    (for a,b being Element of NAT holds o2.(a,b) = O(a,b))
+  holds o1 = o2 from BinOpDefuniq;
+ end;
+
+ func lcmlat-> BinOp of NAT means
+ :Def4: it.(m,n)=m lcm n;
+ existence proof
+   deffunc O(Nat,Nat)= $1 lcm $2;
+  thus ex o being BinOp of NAT st
+    for a,b being Element of NAT holds o.(a,b) = O(a,b) from BinOpLambda;
+ end;
+ uniqueness proof
+    deffunc O(Nat,Nat)= $1 lcm $2;
+  thus for o1,o2 being BinOp of NAT st
+    (for a,b being Element of NAT holds o1.(a,b) = O(a,b)) &
+    (for a,b being Element of NAT holds o2.(a,b) = O(a,b))
+  holds o1 = o2 from BinOpDefuniq;
+ end;
+end;
+
+reserve p,q,r for Element of LattStr (# NAT, lcmlat, hcflat #);
+
+definition
+ let m be Element of LattStr (# NAT, lcmlat, hcflat #);
+ func @m -> Nat equals
+ :Def5: m;
+ coherence;
+ end;
+
+theorem
+Th48: p"\/"q =@p lcm @q
+ proof
+     p"\/"q = lcmlat.(p,q) & p=@p & q=@q by Def5,LATTICES:def 1;
+  hence p"\/"q=@p lcm @q by Def4;
+ end;
+
+theorem
+Th49: p"/\"q = @p hcf @q
+ proof
+     p"/\"q = hcflat.(p,q) & p=@p & q=@q by Def5,LATTICES:def 2;
+  hence p"/\"q=@p hcf @q by Def3;
+ end;
+
+Lm1:
+ for a,b being Element of LattStr (# NAT, lcmlat, hcflat #)
+       holds a"\/"b = b"\/"a
+ proof
+  let a,b be Element of LattStr (# NAT, lcmlat, hcflat #);
+  thus a"\/"b = @a lcm @b by Th48
+           .= b"\/"a by Th48;
+ end;
+
+Lm2:
+ for a,b being Element of LattStr (# NAT, lcmlat, hcflat #)
+      holds a"/\"b = b"/\"a
+ proof
+  let a,b be Element of LattStr (# NAT, lcmlat, hcflat #);
+  thus a"/\"b = @a hcf @b by Th49
+           .= b"/\"a by Th49;
+ end;
+
+Lm3:
+ for a,b,c being Element of LattStr (# NAT, lcmlat, hcflat #)
+      holds a"/\"(b"/\"c) = (a"/\"b)"/\"c
+ proof
+  let a,b,c be Element of LattStr (# NAT, lcmlat, hcflat #);
+  set l=b"/\"c;
+  set k=a"/\"b;
+  A1:(@b hcf @c)=l & @l=l by Def5,Th49;
+  A2:@a hcf @b=k & @k=k by Def5,Th49;
+  thus a"/\"(b"/\"c) = @a hcf (@b hcf @c) by A1,Th49
+                .= @k hcf @c by A2,Th28
+                .= (a"/\"b)"/\"c by Th49;
+ end;
+
+Lm4:
+ for a,b,c being Element of LattStr (# NAT, lcmlat, hcflat #)
+      holds a"\/"(b"\/"c) = (a"\/"b)"\/"c
+ proof
+  let a,b,c be Element of LattStr (# NAT, lcmlat, hcflat #);
+  set l=b"\/"c;
+  set k=a"\/"b;
+  A1:(@b lcm @c)=l & @l=l by Def5,Th48;
+  A2:@a lcm @b=k & @k=k by Def5,Th48;
+  thus a"\/"(b"\/"c) = @a lcm (@b lcm @c) by A1,Th48
+                .= @k lcm @c by A2,Th19
+                .= (a"\/"b)"\/"c by Th48;
+ end;
+
+Lm5:
+ for a,b being Element of LattStr (# NAT, lcmlat, hcflat #)
+      holds (a"/\"b)"\/"b = b
+ proof
+ let a,b be Element of LattStr (# NAT, lcmlat, hcflat #);
+  set k=a"/\"b;
+  A1: @b=b by Def5;
+     @a hcf @b=k & @k=k by Def5,Th49;
+ hence (a"/\"b)"\/"b = (@a hcf @b) lcm @b by Th48
+               .= b by A1,Th37;
+end;
+
+Lm6:
+ for a,b being Element of LattStr (# NAT, lcmlat, hcflat #)
+      holds a"/\"(a"\/"b) = a
+ proof
+  let a,b be Element of LattStr (# NAT, lcmlat, hcflat #);
+  set l=a"\/"b;
+  A1: @a=a by Def5;
+     @a lcm @b=l & @l=l by Def5,Th48;
+  hence a"/\"(a"\/"b) = @a hcf (@a lcm @b) by Th49
+                .= a by A1,Th38;
+ end;
+
+canceled 2;
+
+theorem
+   for a,b being Element of LattStr (# NAT, lcmlat, hcflat #)
+           holds a[=b implies @a divides @b
+       proof
+  let a,b be Element of LattStr (# NAT, lcmlat, hcflat #);
+        assume a[=b;
+        then a"\/"b=b by LATTICES:def 3;
+        then @a lcm @b = b by Th48;
+        then @a lcm @b = @b by Def5;
+        hence thesis by Th20;
+        end;
+
+definition
+ func 0_NN -> Element of LattStr (# NAT, lcmlat, hcflat #)
+  equals
+ :Def6: 1;
+ coherence;
+
+ func 1_NN -> Element of LattStr (# NAT, lcmlat, hcflat #)
+  equals 0;
+ coherence;
+ end;
+
+canceled 2;
+
+theorem Th55:
+  @0_NN=1 by Def5,Def6;
+
+theorem Th56:
+ for a being Element of LattStr (# NAT, lcmlat, hcflat #) holds
+                0_NN"/\"a = 0_NN & a"/\"0_NN = 0_NN
+proof let a be Element of LattStr (# NAT, lcmlat, hcflat #);
+  thus 0_NN"/\"a = 1 hcf @a by Th49,Th55
+              .= 0_NN by Def6,Th35;
+  thus a"/\"0_NN = @a hcf 1 by Th49,Th55
+              .= 0_NN by Def6,Th35;
+end;
+
+definition
+ func Nat_Lattice -> Lattice equals
+ :Def8: LattStr (# NAT, lcmlat, hcflat #);
+ coherence
+  proof
+      LattStr (# NAT, lcmlat, hcflat #) is Lattice-like
+     proof
+      thus (for p,q holds p"\/"q = q"\/"p) &
+      (for p,q,r holds p"\/"(q"\/"r) = (p"\/"q)"\/"r) &
+      (for p,q holds (p"/\"q)"\/"q = q) &
+      (for p,q holds p"/\"q = q"/\"p) &
+      (for p,q,r holds p"/\"(q"/\"r) = (p"/\"q)"/\"r) &
+      (for p,q holds p"/\"(p"\/"q) = p) by Lm1,Lm2,Lm3,Lm4,Lm5,Lm6;
+     end;
+   hence thesis;
+  end;
+end;
+
+definition
+ cluster Nat_Lattice -> strict;
+ coherence by Def8;
+end;
+
+reserve p,q,r for Element of Nat_Lattice;
+
+canceled 3;
+
+theorem
+    Nat_Lattice is 0_Lattice by Def8,Th56,LATTICES:def 13;
+
+theorem Th61:
+  lcmlat.(p,q)=lcmlat.(q,p)
+proof
+ thus lcmlat.(p,q)=q"\/"p by Def8,LATTICES:def 1
+                 .=lcmlat.(q,p) by Def8,LATTICES:def 1;
+end;
+
+theorem Th62:
+  hcflat.(q,p)=hcflat.(p,q)
+proof
+ thus hcflat.(q,p)=p"/\"q by Def8,LATTICES:def 2
+                 .=hcflat.(p,q) by Def8,LATTICES:def 2;
+end;
+
+theorem Th63:
+  lcmlat.(p,lcmlat.(q,r)) = lcmlat.(lcmlat.(p,q),r)
+proof
+ set s=q"\/"r;
+ thus lcmlat.(p,lcmlat.(q,r))=lcmlat.(p,s) by Def8,LATTICES:def 1
+                       .=p"\/"s by Def8,LATTICES:def 1
+                       .=(p"\/"q)"\/"r by Def8,Lm4
+                       .=lcmlat.((p"\/"q),r) by Def8,LATTICES:def 1
+                       .=lcmlat.(lcmlat.(p,q),r) by Def8,LATTICES:def 1;
+end;
+
+theorem
+    lcmlat.(p,lcmlat.(q,r)) = lcmlat.(lcmlat.(q,p),r) &
+  lcmlat.(p,lcmlat.(q,r)) = lcmlat.(lcmlat.(p,r),q) &
+  lcmlat.(p,lcmlat.(q,r)) = lcmlat.(lcmlat.(r,q),p) &
+  lcmlat.(p,lcmlat.(q,r)) = lcmlat.(lcmlat.(r,p),q)
+proof
+set s=r"\/"q;
+thus lcmlat.(p,lcmlat.(q,r)) =lcmlat.(lcmlat.(p,q),r) by Th63
+                       .= lcmlat.(lcmlat.(q,p),r) by Th61;
+thus A1:lcmlat.(p,lcmlat.(q,r)) = lcmlat.(p,lcmlat.(r,q)) by Th61
+                       .=lcmlat.(lcmlat.(p,r),q) by Th63;
+thus lcmlat.(p,lcmlat.(q,r)) = lcmlat.(p,s) by Def8,LATTICES:def 1
+                       .=lcmlat.(s,p) by Th61
+                       .=lcmlat.(lcmlat.(r,q),p) by Def8,LATTICES:def 1;
+thus lcmlat.(p,lcmlat.(q,r)) = lcmlat.(lcmlat.(r,p),q) by A1,Th61;
+end;
+
+theorem Th65:
+  hcflat.(p,hcflat.(q,r)) = hcflat.(hcflat.(p,q),r)
+proof
+ set s=q"/\"r;
+ thus hcflat.(p,hcflat.(q,r))=hcflat.(p,s) by Def8,LATTICES:def 2
+                       .=p"/\"s by Def8,LATTICES:def 2
+                       .=(p"/\"q)"/\"r by Def8,Lm3
+                       .=hcflat.((p"/\"q),r) by Def8,LATTICES:def 2
+                       .=hcflat.(hcflat.(p,q),r) by Def8,LATTICES:def 2;
+end;
+
+theorem
+    hcflat.(p,hcflat.(q,r)) = hcflat.(hcflat.(q,p),r) &
+  hcflat.(p,hcflat.(q,r)) = hcflat.(hcflat.(p,r),q) &
+  hcflat.(p,hcflat.(q,r)) = hcflat.(hcflat.(r,q),p) &
+  hcflat.(p,hcflat.(q,r)) = hcflat.(hcflat.(r,p),q)
+proof
+set s=r"/\"q;
+thus hcflat.(p,hcflat.(q,r)) =hcflat.(hcflat.(p,q),r) by Th65
+                       .= hcflat.(hcflat.(q,p),r) by Th62;
+thus A1:hcflat.(p,hcflat.(q,r)) = hcflat.(p,hcflat.(r,q)) by Th62
+                       .=hcflat.(hcflat.(p,r),q) by Th65;
+thus hcflat.(p,hcflat.(q,r)) = hcflat.(p,s) by Def8,LATTICES:def 2
+                       .=hcflat.(s,p) by Th62
+                       .=hcflat.(hcflat.(r,q),p) by Def8,LATTICES:def 2;
+thus hcflat.(p,hcflat.(q,r)) = hcflat.(hcflat.(r,p),q) by A1,Th62;
+end;
+
+theorem
+    hcflat.(q,lcmlat.(q,p))=q & hcflat.(lcmlat.(p,q),q)=q &
+  hcflat.(q,lcmlat.(p,q))=q & hcflat.(lcmlat.(q,p),q)=q
+ proof
+ set s=q"\/"p;
+ thus A1:hcflat.(q,lcmlat.(q,p))=hcflat.(q,s) by Def8,LATTICES:def 1
+                              .=q"/\"s by Def8,LATTICES:def 2
+                              .=q by Def8,Lm6;
+ thus A2:hcflat.(lcmlat.(p,q),q)=hcflat.(p"\/"q,q) by Def8,LATTICES:def 1
+                              .=q"/\"(q"\/"p) by Def8,LATTICES:def 2
+                              .=q by Def8,Lm6;
+ thus hcflat.(q,lcmlat.(p,q))=q by A1,Th61;
+ thus hcflat.(lcmlat.(q,p),q)=q by A2,Th61;
+end;
+
+theorem
+    lcmlat.(q,hcflat.(q,p))=q & lcmlat.(hcflat.(p,q),q)=q &
+  lcmlat.(q,hcflat.(p,q))=q & lcmlat.(hcflat.(q,p),q)=q
+ proof
+ set r=p"/\"q;
+ thus A1:lcmlat.(q,hcflat.(q,p))=lcmlat.(q,q"/\"p) by Def8,LATTICES:def 2
+                              .=(p"/\"q)"\/"q by Def8,LATTICES:def 1
+                              .=q by Def8,Lm5;
+ thus A2:lcmlat.(hcflat.(p,q),q)=lcmlat.(r,q) by Def8,LATTICES:def 2
+                              .=r"\/"q by Def8,LATTICES:def 1
+                              .=q by Def8,Lm5;
+ thus lcmlat.(q,hcflat.(p,q))=q by A1,Th62;
+ thus lcmlat.(hcflat.(q,p),q)=q by A2,Th62;
+end;
+
+:: NATPLUS
+
+definition
+  func NATPLUS -> Subset of NAT means
+:Def9: for n being Nat holds n in it iff 0 < n;
+existence
+ proof
+  defpred _P[Nat] means 0 < $1;
+  consider X being Subset of NAT such that
+A1: for n being Nat holds n in X iff _P[n] from SubsetEx;
+  take X;
+  thus thesis by A1;
+  end;
+uniqueness proof
+    defpred P[Nat] means 0 < $1;
+thus for X1,X2 being Subset of NAT st
+   (for y being Element of NAT holds y in X1 iff P[y]) &
+   (for y being Element of NAT holds y in X2 iff P[y]) holds
+  X1 = X2 from Subset_Eq;
+  end;
+end;
+
+definition
+  cluster NATPLUS -> non empty;
+  coherence
+ proof
+     0 < 1;
+   hence thesis by Def9;
+  end;
+  end;
+
+definition let D be non empty set, S be non empty Subset of D,
+               N be non empty Subset of S;
+redefine mode Element of N -> Element of S;
+ coherence
+  proof let x be Element of N;
+  thus thesis;
+  end;
+end;
+
+definition let D be Subset of REAL;
+  cluster -> real Element of D;
+coherence;
+end;
+
+definition let D be Subset of NAT;
+  cluster -> real Element of D;
+coherence;
+end;
+
+definition
+  mode NatPlus is Element of NATPLUS;
+end;
+
+:: LATTICE of NATURAL NUMBERS > 0
+
+definition
+ let k be Nat such that
+ A1: k>0;
+ func @k->Element of NATPLUS equals
+ :Def10: k;
+ coherence by A1,Def9;
+end;
+
+definition
+ let k be Element of NATPLUS;
+ func @k -> NatPlus equals :Def11:
+  k;
+ coherence;
+ end;
+
+reserve m,n for NatPlus;
+
+definition
+ func hcflatplus -> BinOp of NATPLUS means
+ :Def12: it.(m,n) = m hcf n;
+ existence
+  proof
+     deffunc O(Element of NATPLUS,Element of NATPLUS)= @(@$1 hcf @$2);
+  consider f being BinOp of NATPLUS such that
+  A1: for m,n being Element of NATPLUS holds
+  f.(m,n)=O(m,n) from BinOpLambda;
+  take f;
+  let m,n be Element of NATPLUS;
+  A2: n>0 by Def9;
+  A3: @n = n & @@n = @n by Def11;
+     @m = m & @@m = @m by Def11;
+  then A4: f.(m,n)=@(m hcf n) by A1,A3;
+     m hcf n >0 by A2,Th43;
+  hence thesis by A4,Def10;
+  end;
+ uniqueness proof  deffunc O(Element of NATPLUS,Element of NATPLUS)= $1 hcf $2;
+  thus for o1,o2 being BinOp of NATPLUS st
+    (for a,b being Element of NATPLUS holds o1.(a,b) = O(a,b)) &
+    (for a,b being Element of NATPLUS holds o2.(a,b) = O(a,b))
+  holds o1 = o2 from BinOpDefuniq;
+  end;
+
+ func lcmlatplus-> BinOp of NATPLUS means
+ :Def13: it.(m,n)=m lcm n;
+ existence
+  proof
+     deffunc O(Element of NATPLUS,Element of NATPLUS)= @(@$1 lcm @$2);
+  consider f being BinOp of NATPLUS such that
+  A5: for m,n being Element of NATPLUS holds
+  f.(m,n)=O(m,n) from BinOpLambda;
+  take f;
+  let m,n be Element of NATPLUS;
+  A6: m>0 by Def9;
+  A7: n>0 by Def9;
+  A8: @n = n & @@n = @n by Def11;
+     @m = m & @@m = @m by Def11;
+  then A9: f.(m,n)=@(m lcm n) by A5,A8;
+     m lcm n >0 by A6,A7,Th44;
+  hence thesis by A9,Def10;
+  end;
+ uniqueness proof  deffunc O(Element of NATPLUS,Element of NATPLUS)= $1 lcm $2;
+  thus for o1,o2 being BinOp of NATPLUS st
+    (for a,b being Element of NATPLUS holds o1.(a,b) = O(a,b)) &
+    (for a,b being Element of NATPLUS holds o2.(a,b) = O(a,b))
+  holds o1 = o2 from BinOpDefuniq;
+  end;
+end;
+
+reserve p,q,r for Element of LattStr
+                            (# NATPLUS, lcmlatplus, hcflatplus #);
+
+definition
+ let m be Element of LattStr
+                            (# NATPLUS, lcmlatplus, hcflatplus #);
+ func @m->NatPlus equals
+ :Def14: m;
+ coherence;
+ end;
+
+theorem
+Th69: p"\/"q =@p lcm @q
+ proof
+     p"\/"q = lcmlatplus.(p,q) & p=@p & q=@q by Def14,LATTICES:def 1;
+  hence p"\/"q=@p lcm @q by Def13;
+ end;
+
+theorem
+Th70: p"/\"q = @p hcf @q
+ proof
+     p"/\"q = hcflatplus.(p,q) & p=@p & q=@q by Def14,LATTICES:def 2;
+  hence p"/\"q=@p hcf @q by Def12;
+ end;
+
+Lm7:
+ for a,b being Element of LattStr
+                      (# NATPLUS, lcmlatplus, hcflatplus #)
+       holds a"\/"b = b"\/"a
+ proof
+  let a,b be Element of LattStr
+                      (# NATPLUS, lcmlatplus, hcflatplus #);
+  thus a"\/"b = @a lcm @b by Th69
+           .= b"\/"a by Th69;
+ end;
+
+Lm8:
+ for a,b,c being Element of LattStr
+                         (# NATPLUS, lcmlatplus, hcflatplus #)
+      holds a"\/"(b"\/"c) = (a"\/"b)"\/"c
+ proof
+  let a,b,c be Element of LattStr
+                         (# NATPLUS, lcmlatplus, hcflatplus #);
+  set l=b"\/"c;
+  set k=a"\/"b;
+  A1:(@b lcm @c)=l & @l=l by Def14,Th69;
+  A2:@a lcm @b=k & @k=k by Def14,Th69;
+  thus a"\/"(b"\/"c) = @a lcm (@b lcm @c) by A1,Th69
+                .= @k lcm @c by A2,Th19
+                .= (a"\/"b)"\/"c by Th69;
+ end;
+
+Lm9:
+ for a,b being Element of LattStr
+                         (# NATPLUS, lcmlatplus, hcflatplus #)
+      holds (a"/\"b)"\/"b = b
+ proof
+ let a,b be Element of LattStr
+                          (# NATPLUS, lcmlatplus, hcflatplus #);
+  set k=a"/\"b;
+  A1: @b=b by Def14;
+     @a hcf @b=k & @k=k by Def14,Th70;
+ hence (a"/\"b)"\/"b = (@a hcf @b) lcm @b by Th69
+               .= b by A1,Th37;
+end;
+
+Lm10:
+ for a,b being Element of LattStr
+                       (# NATPLUS, lcmlatplus, hcflatplus #)
+      holds a"/\"b = b"/\"a
+ proof
+  let a,b be Element of LattStr
+                       (# NATPLUS, lcmlatplus, hcflatplus #);
+  thus a"/\"b = @a hcf @b by Th70
+           .= b"/\"a by Th70;
+ end;
+
+Lm11:
+ for a,b,c being Element of LattStr
+                        (# NATPLUS, lcmlatplus, hcflatplus #)
+      holds a"/\"(b"/\"c) = (a"/\"b)"/\"c
+ proof
+  let a,b,c be Element of LattStr
+                        (# NATPLUS, lcmlatplus, hcflatplus #);
+  set l=b"/\"c;
+  set k=a"/\"b;
+  A1:(@b hcf @c)=l & @l=l by Def14,Th70;
+  A2:@a hcf @b=k & @k=k by Def14,Th70;
+  thus a"/\"(b"/\"c) = @a hcf (@b hcf @c) by A1,Th70
+                .= @k hcf @c by A2,Th28
+                .= (a"/\"b)"/\"c by Th70;
+ end;
+
+Lm12:
+ for a,b being Element of LattStr
+                        (# NATPLUS, lcmlatplus, hcflatplus #)
+      holds a"/\"(a"\/"b) = a
+ proof
+  let a,b be Element of LattStr
+                        (# NATPLUS, lcmlatplus, hcflatplus #);
+  set l=a"\/"b;
+  A1: @a=a by Def14;
+     @a lcm @b=l & @l=l by Def14,Th69;
+  hence a"/\"(a"\/"b) = @a hcf (@a lcm @b) by Th70
+                .= a by A1,Th38;
+ end;
+
+definition
+ func NatPlus_Lattice -> Lattice equals
+ :Def15: LattStr (# NATPLUS, lcmlatplus, hcflatplus #);
+ coherence
+  proof
+      LattStr (# NATPLUS, lcmlatplus, hcflatplus #) is Lattice-like
+     proof
+      thus (for p,q holds p"\/"q = q"\/"p) &
+      (for p,q,r holds p"\/"(q"\/"r) = (p"\/"q)"\/"r) &
+      (for p,q holds (p"/\"q)"\/"q = q) &
+      (for p,q holds p"/\"q = q"/\"p) &
+      (for p,q,r holds p"/\"(q"/\"r) = (p"/\"q)"/\"r) &
+      (for p,q holds p"/\"(p"\/"q) = p) by Lm7,Lm8,Lm9,Lm10,Lm11,Lm12;
+     end;
+   hence thesis;
+  end;
+end;
+
+definition
+ cluster NatPlus_Lattice -> strict;
+ coherence by Def15;
+end;
+
+reserve x,y1,y2 for set;
+
+Lm13: now let L be Lattice;
+ thus the L_join of L = (the L_join of L) | [:the carrier of L,
+ the carrier of L:]
+  proof
+     [:the carrier of L, the carrier of L:]
+   = dom (the L_join of L) by FUNCT_2:def 1;
+   hence thesis by RELAT_1:97;
+  end;
+  thus the L_meet of L = (the L_meet of L) | [:the carrier of L,
+  the carrier of L:]
+   proof
+      [:the carrier of L, the carrier of L:]
+     = dom (the L_meet of L) by FUNCT_2:def 1;
+    hence thesis by RELAT_1:97;
+   end;
+end;
+
+definition let L be Lattice;
+ mode SubLattice of L -> Lattice means
+ :Def16: the carrier of it c= the carrier of L &
+   the L_join of it = (the L_join of L) | [:the carrier of it,
+   the carrier of it:] &
+   the L_meet of it = (the L_meet of L) | [:the carrier of it,
+   the carrier of it:];
+ existence proof take L; thus thesis by Lm13; end;
+end;
+
+definition let L be Lattice;
+ cluster strict SubLattice of L;
+  existence
+   proof set S =
+     LattStr(#the carrier of L, the L_join of L, the L_meet of L#);
+A1:  now let a,b be Element of S,
+         a',b' be Element of L;
+      assume
+A2:     a = a' & b = b';
+      hence a"\/"b = (the L_join of L).(a',b') by LATTICES:def 1
+               .= a'"\/"b' by LATTICES:def 1;
+      thus a"/\"b = (the L_meet of L).(a',b') by A2,LATTICES:def 2
+               .= a'"/\"b' by LATTICES:def 2;
+     end;
+A3:  now let a,b be Element of S;
+       reconsider a' = a, b' = b as Element of L;
+      thus a"\/"b = b'"\/"a' by A1
+        .= b"\/"a by A1;
+     end;
+A4:  now let a,b,c be Element of S;
+       reconsider a' = a, b' = b, c' = c as Element of L;
+A5:    a'"\/"b' = a"\/"b by A1;
+         b"\/"c = b'"\/"c' by A1;
+      hence a"\/"(b"\/"c) = a'"\/"(b'"\/"c') by A1
+        .= (a'"\/"b')"\/"c' by LATTICES:def 5
+        .= (a"\/"b)"\/"c by A1,A5;
+     end;
+A6:  now let a,b be Element of S;
+       reconsider a' = a, b' = b as Element of L;
+         a"/\"b = a'"/\"b' by A1;
+      hence (a"/\"b)"\/"b = (a'"/\"b')"\/"b' by A1
+         .= b by LATTICES:def 8;
+     end;
+A7:  now let a,b be Element of S;
+       reconsider a' = a, b' = b as Element of L;
+      thus a"/\"b = b'"/\"a' by A1
+          .= b"/\"a by A1;
+     end;
+A8:  now let a,b,c be Element of S;
+       reconsider a' = a, b' = b, c' = c as Element of L;
+A9:    a'"/\"b' = a"/\"b by A1;
+         b"/\"c = b'"/\"c' by A1;
+      hence a"/\"(b"/\"c) = a'"/\"(b'"/\"c') by A1
+          .= (a'"/\"b')"/\"c' by LATTICES:def 7
+          .= (a"/\"b)"/\"c by A1,A9;
+     end;
+    now let a,b be Element of S;
+       reconsider a' = a, b' = b as Element of L;
+         a"\/"b = a'"\/"b' by A1;
+      hence a"/\"(a"\/"b) = a'"/\"(a'"\/"b') by A1
+          .=a by LATTICES:def 9;
+     end;
+     then S is join-commutative join-associative meet-absorbing
+          meet-commutative meet-associative join-absorbing
+     by A3,A4,A6,A7,A8,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+     then reconsider S as Lattice by LATTICES:def 10;
+       the L_join of S = (the L_join of L) | [:the carrier of S,
+     the carrier of S:] &
+     the L_meet of S = (the L_meet of L) | [:the carrier of S,
+     the carrier of S:] by FUNCT_2:40;
+     then S is SubLattice of L by Def16;
+    hence thesis;
+   end;
+end;
+
+canceled 4;
+
+theorem
+  for L being Lattice holds L is SubLattice of L
+proof let L be Lattice;
+ thus the carrier of L c= the carrier of L;
+ thus thesis by Lm13;
+end;
+
+theorem
+  NatPlus_Lattice is SubLattice of Nat_Lattice
+proof
+ A1: lcmlatplus = lcmlat | [: NATPLUS, NATPLUS :]
+  proof
+   A2: dom lcmlatplus = dom lcmlat /\ [:NATPLUS,NATPLUS:]
+    proof
+     A3: dom lcmlatplus = [:NATPLUS,NATPLUS:] by FUNCT_2:def 1;
+     A4: dom lcmlat = [:NAT,NAT:] by FUNCT_2:def 1;
+       [:NATPLUS,NATPLUS:] c= [:NAT,NAT:] by ZFMISC_1:119;
+     hence thesis by A3,A4,XBOOLE_1:28;
+    end;
+     for x st x in dom lcmlatplus holds lcmlatplus.(x) = lcmlat.(x)
+    proof let x;
+    assume x in dom lcmlatplus;
+    then A5: x in [:NATPLUS,NATPLUS:] by FUNCT_2:def 1;
+    then consider y1,y2 such that A6: [y1,y2]=x by ZFMISC_1:102;
+       y1 in NATPLUS & y2 in NATPLUS by A5,A6,ZFMISC_1:106;
+    then reconsider n=y1,k=y2 as Nat;
+    A7: lcmlat.(n,k) = n lcm k by Def4;
+    reconsider n=y1,k=y2 as NatPlus by A5,A6,ZFMISC_1:106;
+    A8: lcmlatplus.(n,k)= lcmlat.(n,k) by A7,Def13;
+       lcmlatplus.(n,k)= lcmlatplus.[n,k] by BINOP_1:def 1;
+    hence thesis by A6,A8,BINOP_1:def 1;
+   end;
+   hence thesis by A2,FUNCT_1:68;
+  end;
+    hcflatplus = hcflat | [:NATPLUS,NATPLUS:]
+  proof
+   A9: dom hcflatplus = dom hcflat /\ [:NATPLUS,NATPLUS:]
+    proof
+     A10: dom hcflatplus = [:NATPLUS,NATPLUS:] by FUNCT_2:def 1;
+     A11: dom hcflat = [:NAT,NAT:] by FUNCT_2:def 1;
+       [:NATPLUS,NATPLUS:] c= [:NAT,NAT:] by ZFMISC_1:119;
+     hence thesis by A10,A11,XBOOLE_1:28;
+    end;
+     for x st x in dom hcflatplus holds hcflatplus.(x) = hcflat.(x)
+    proof let x;
+    assume x in dom hcflatplus;
+    then A12: x in [:NATPLUS,NATPLUS:] by FUNCT_2:def 1;
+    then consider y1,y2 such that A13: [y1,y2]=x by ZFMISC_1:102;
+       y1 in NATPLUS & y2 in NATPLUS by A12,A13,ZFMISC_1:106;
+    then reconsider n=y1,k=y2 as Nat;
+    A14: hcflat.(n,k) = n hcf k by Def3;
+    reconsider n=y1,k=y2 as NatPlus by A12,A13,ZFMISC_1:106;
+    A15: hcflatplus.(n,k)= hcflat.(n,k) by A14,Def12;
+       hcflatplus.(n,k)= hcflatplus.[n,k] by BINOP_1:def 1;
+    hence thesis by A13,A15,BINOP_1:def 1;
+   end;
+   hence thesis by A9,FUNCT_1:68;
+  end;
+ hence thesis by A1,Def8,Def15,Def16;
+end;
+
+:: SET OF PRIME NUMBERS
+
+
+ reserve n,j,i,k,k1,k2,k3,k4,m,l,s for Nat;
+
+definition
+  func SetPrimes -> Subset of NAT means
+:Def17: for n being Nat holds n in it iff n is prime;
+existence
+ proof
+  defpred _P[Nat] means $1 is prime;
+  consider X being Subset of NAT such that
+A1: for n being Nat holds n in X iff _P[n] from SubsetEx;
+  take X;
+  let n be Nat;
+  thus n in X implies n is prime by A1;
+  assume n is prime;
+  hence thesis by A1;
+  end;
+uniqueness proof
+    defpred P[Nat] means $1 is prime;
+thus for X1,X2 being Subset of NAT st
+   (for y being Element of NAT holds y in X1 iff P[y]) &
+   (for y being Element of NAT holds y in X2 iff P[y]) holds
+  X1 = X2 from Subset_Eq;
+  end;
+end;
+
+definition
+  cluster prime Nat;
+existence by INT_2:44;
+end;
+
+definition
+  mode Prime is prime Nat;
+end;
+
+reserve p,f for Prime;
+reserve x for set;
+
+definition let p;
+ canceled;
+
+  func SetPrimenumber p -> Subset of NAT means
+:Def19: for q being Nat holds q in it iff (q < p & q is prime);
+existence
+ proof     defpred P[Nat] means ($1 < p & $1 is prime);
+  consider X being Subset of NAT such that
+A1: for q being Nat holds q in X iff P[q] from SubsetEx;
+  take X;
+  let q be Nat;
+  thus q in X implies q < p & q is prime by A1;
+  assume q < p & q is prime;
+  hence thesis by A1;
+  end;
+uniqueness proof
+    defpred P[Nat] means ($1 < p & $1 is prime);
+thus for X1,X2 being Subset of NAT st
+   (for y being Element of NAT holds y in X1 iff P[y]) &
+   (for y being Element of NAT holds y in X2 iff P[y]) holds
+  X1 = X2 from Subset_Eq;
+  end;
+end;
+
+theorem Th77:
+ SetPrimenumber p c= SetPrimes
+proof
+   for x holds x in SetPrimenumber p implies x in SetPrimes
+  proof let x;
+   assume A1: x in SetPrimenumber p;
+   then reconsider x' = x as Nat;
+     x' < p & x' is prime by A1,Def19;
+   hence thesis by Def17;
+ end;
+ hence thesis by TARSKI:def 3;
+end;
+
+theorem
+   for q being Prime st p < q holds
+       SetPrimenumber p c= SetPrimenumber q
+proof let q be Prime;
+ assume A1: p < q;
+   for x holds x in SetPrimenumber p implies x in SetPrimenumber q
+  proof let x;
+   assume A2: x in SetPrimenumber p;
+   then reconsider x' = x as Nat;
+     x' < p & x' is prime by A2,Def19;
+   then x' < q & x' is prime by A1,AXIOMS:22;
+   hence thesis by Def19;
+  end;
+ hence thesis by TARSKI:def 3;
+end;
+
+theorem Th79:
+ SetPrimenumber p c= Seg p
+proof let x be set;
+   assume A1: x in SetPrimenumber p;
+   then reconsider q = x as Nat;
+   A2: q < p & q is prime by A1,Def19;
+   then 1 <= q by INT_2:def 5;
+   hence thesis by A2,FINSEQ_1:3;
+end;
+
+theorem
+   SetPrimenumber p is finite
+proof
+   SetPrimenumber p c= Seg p by Th79;
+ hence thesis by FINSET_1:13;
+end;
+
+Lm14:
+k=0 or k=1 or 2<=k
+ proof
+  assume k<>0 & k<>1;
+  then 1<k by CQC_THE1:2;
+  then 1+1<=k by NAT_1:38;
+ hence thesis;
+ end;
+
+theorem Th81:
+   for l holds ex p st p is prime & p>l
+  proof let l;
+   reconsider two = 2 as Prime by INT_2:44;
+     l=0 & (ex p st p is prime & p>l) or (l=1 & (ex p st p is prime & p>l)) or
+   (2<=l & (ex p st p is prime & p>l))
+   proof
+    per cases by Lm14;
+     case A1: l=0; take two; thus thesis by A1;
+     case A2: l=1; take two; thus thesis by A2;
+     case A3: 2<=l;
+         l<=l! by Th10;
+      then 2<=l! by A3,AXIOMS:22;
+       then (2+0) <= (l!+1) by REAL_1:55;
+      then consider j such that
+      A4: j is prime and A5: j divides (l!+1) by INT_2:48;
+      A6: j<>1 by A4,INT_2:def 5;
+A7:      j<>0 by A4,INT_2:def 5;
+      reconsider j'=j as Prime by A4;
+      take j';
+    thus thesis by A5,A6,A7,Th17;
+   end;
+   hence thesis;
+  end;
+
+canceled 2;
+
+theorem
+   SetPrimes <> {} by Def17,INT_2:44;
+
+theorem Th85:
+    {k:k<2 & k is prime}={}
+    proof
+      consider x being Element of {k:k<2 & k is prime};
+      assume {k:k<2 & k is prime}<>{};
+       then x in {k:k<2 & k is prime};
+       then ex n st x=n & n<2 & n is prime;
+      then 0 is prime or 1 is prime by Lm14;
+     hence contradiction by INT_2:def 5;
+    end;
+
+theorem
+   for p holds {k:k<p & k is prime} c= NAT
+proof let p;
+ let x be set;
+ assume x in {k:k<p & k is prime};
+ then ex k st x = k & k<p & k is prime;
+ hence x in NAT;
+end;
+
+theorem Th87:
+ for m holds {k:k<m & k is prime} c= Seg m
+proof let m;
+   for x holds x in {k:k<m & k is prime} implies x in Seg m
+  proof let x be set;
+   assume x in {k:k<m & k is prime};
+   then consider k such that A1: x = k & k<m & k is prime;
+     1 <= k by A1,INT_2:def 5;
+   hence thesis by A1,FINSEQ_1:3;
+  end;
+ hence thesis by TARSKI:def 3;
+end;
+
+theorem Th88:
+ for m holds {k:k<m & k is prime} is finite
+proof let m;
+    {k:k<m & k is prime} c= Seg m by Th87;
+ hence thesis by FINSET_1:13;
+end;
+
+theorem Th89:
+ for f being Prime holds not f in {k: k<f & k is prime}
+  proof let f;
+   assume f in {k: k<f & k is prime};
+    then ex k st f=k & k<f & k is prime;
+   hence contradiction;
+  end;
+
+theorem
+   for f holds {k: k<f & k is prime}\/{f} is finite
+proof let f;
+   {k:k<f & k is prime} is finite by Th88;
+ hence thesis by FINSET_1:14;
+end;
+
+theorem Th91:
+ for f,g being Prime st f<g holds
+   {k1: k1<f & k1 is prime}\/{f} c={k2: k2<g & k2 is prime}
+proof let f,g be Prime;
+ assume A1: f<g;
+   for x holds
+       x in {k1:k1<f & k1 is prime}\/{f} implies x in {k2: k2<g & k2 is prime}
+  proof let x be set;
+   assume A2: x in {k1:k1<f & k1 is prime}\/{f};
+     x in {k1:k1<f & k1 is prime} & x in {k2:k2<g & k2 is prime} or
+   x in {f} & x in {k3:k3<g & k3 is prime}
+    proof
+     per cases by A2,XBOOLE_0:def 2;
+     case x in {k1:k1<f & k1 is prime};
+      then consider k such that A3: x = k & k<f & k is prime;
+         k < g by A1,A3,AXIOMS:22;
+      hence thesis by A3;
+     case x in {f};
+       then x = f by TARSKI:def 1;
+      hence thesis by A1;
+    end;
+   hence thesis;
+  end;
+ hence thesis by TARSKI:def 3;
+end;
+
+theorem
+   for k st k>m holds not k in {k1:k1<m & k1 is prime}
+       proof let k;
+        assume that A1: k>m and A2: k in {k1:k1<m & k1 is prime};
+           ex k1 st k=k1 & k1<m & k1 is prime by A2;
+        hence contradiction by A1;
+       end;
+
+definition let n;
+  func primenumber n -> Prime means
+:Def20:
+ ex B being finite set st B = {k:k<it & k is prime} & n = card B;
+existence
+proof
+  defpred _P1[Nat] means ex m st
+   ex B being finite set st B = {k:k<m & k is prime} & $1=card B & m is Prime;
+  A1: _P1[0] by Th85,CARD_1:78,INT_2:44;
+ A2: for n st _P1[n] holds _P1[n+1]
+    proof let n;
+     given m being Nat, B being finite set such that
+      A3:  B = {k1:k1<m & k1 is prime} & n=card B & m is Prime;
+      defpred _P[Nat] means $1 is prime & $1>m;
+        ex p st p is prime & p>m by Th81;
+     then A4: ex k st _P[k];
+     consider k such that A5: _P[k] & for l st _P[l] holds k <= l from Min(A4);
+     take k;
+     A6: {k2: k2<k & k2 is prime}={k1: k1<m & k1 is prime}\/{m}
+      proof
+      A7: {k2: k2<k & k2 is prime}c={k1: k1<m & k1 is prime}\/{m}
+       proof
+          for x holds x in {k2: k2<k & k2 is prime} implies
+            x in {k1: k1<m & k1 is prime}\/{m}
+         proof let x;
+          assume x in {k2: k2<k & k2 is prime};
+          then consider s such that A8: x = s & s<k & s is prime;
+A9:            s<=m by A5,A8;
+             s=m & x in {k1:k1<m & k1 is prime}\/{m} or
+              s<m & x in {k3:k3<m & k3 is prime}\/{m}
+          proof
+           per cases by A9,REAL_1:def 5;
+            case s=m;
+            then s in {m} by TARSKI:def 1;
+            hence thesis by A8,XBOOLE_0:def 2;
+            case s<m;
+            then A10: x in {k2: k2<m & k2 is prime} by A8;
+     {k1: k1<m & k1 is prime}c={k3: k3<m & k3 is prime}\/{m} by XBOOLE_1:7;
+            hence thesis by A10;
+           end;
+          hence thesis;
+         end;
+        hence thesis by TARSKI:def 3;
+       end;
+        {k1: k1<m & k1 is prime}\/{m}c={k2: k2<k & k2 is prime} by A3,A5,Th91;
+      hence thesis by A7,XBOOLE_0:def 10;
+      end;
+     reconsider C = {k1:k1<k & k1 is prime} as finite set by Th88;
+    take C;
+     reconsider x=m as set;
+    thus C = {k1:k1<k & k1 is prime};
+       not x in {k1:k1<m & k1 is prime} by A3,Th89;
+    hence n + 1 = card C by A3,A6,CARD_2:54;
+    thus k is Prime by A5;
+    end;
+    for n holds _P1[n] from Ind(A1,A2);
+  then ex m st ex B being finite set st
+   B = {k1:k1<m & k1 is prime} & n=card B & m is Prime;
+ hence thesis;
+end;
+uniqueness
+ proof let f,g be Prime;
+  given B being finite set such that
+A11: B = {k:k<f & k is prime} & n = card B;
+  given B being finite set such that
+A12: B = {k:k<g & k is prime} & n = card B;
+  assume
+A13: f<>g;
+    f<g & n+1 <= n or g<f & n+1 <= n
+  proof
+   per cases by A13,AXIOMS:21;
+    case f<g;
+    then A14: {k1: k1<f & k1 is prime}\/{f}c={k2: k2<g & k2 is prime} by Th91;
+    A15: {k2: k2<g & k2 is prime} is finite by Th88;
+    A16: not f in {k1:k1<f & k1 is prime} by Th89;
+      reconsider x=f as set;
+      reconsider B1 = {k4: k4<f & k4 is prime}\/{x},
+                 B2 = {k3: k3<g & k3 is prime} as finite set
+                                     by A14,A15,FINSET_1:13;
+       card B1 <= card B2 by A14,CARD_1:80;
+    hence thesis by A11,A12,A16,CARD_2:54;
+    case g<f;
+    then A17: {k2: k2<g & k2 is prime}\/{g}c={k1: k1<f & k1 is prime} by Th91;
+    A18: {k1: k1<f & k1 is prime} is finite by Th88;
+    A19: not g in {k2:k2<g & k2 is prime} by Th89;
+      reconsider x=g as set;
+      reconsider B3 = {k4: k4<g & k4 is prime}\/{x},
+                 B4 = {k3: k3<f & k3 is prime} as finite set
+                                     by A17,A18,FINSET_1:13;
+       card B3 <= card B4 by A17,CARD_1:80;
+    hence thesis by A11,A12,A19,CARD_2:54;
+   end;
+  hence contradiction by NAT_1:38;
+ end;
+end;
+
+theorem Th93:
+  SetPrimenumber p = {k:k<p & k is prime}
+proof
+   for x holds x in SetPrimenumber p iff x in {k:k<p & k is prime}
+  proof
+   A1: for x holds x in SetPrimenumber p implies x in {k:k<p & k is prime}
+   proof let x;
+    assume A2: x in SetPrimenumber p;
+    then reconsider x' = x as Nat;
+      x' < p & x' is prime by A2,Def19;
+    hence thesis;
+   end;
+     for x holds x in {k:k<p & k is prime} implies x in SetPrimenumber p
+   proof let x;
+    assume x in {k:k<p & k is prime};
+    then ex n st n=x & n < p & n is prime;
+    hence thesis by Def19;
+   end;
+   hence thesis by A1;
+  end;
+ hence thesis by TARSKI:2;
+end;
+
+theorem ::Euklidesa::
+   SetPrimes is infinite
+proof
+ assume A1: SetPrimes is finite;
+ then reconsider SP = SetPrimes as finite set;
+ consider n such that A2: SetPrimes,Seg n are_equipotent by A1,FINSEQ_1:77;
+ set p=primenumber (n+1);
+    Card SetPrimes = Card Seg n by A2,CARD_1:21;
+  then Card SetPrimes = Card n by FINSEQ_1:76;
+ then A3: card SP = n by CARD_1:def 11;
+A4: SetPrimenumber p c= SP by Th77;
+  then reconsider SPp = SetPrimenumber p as finite set by FINSET_1:13;
+ A5: card SPp <= card SP by A4,CARD_1:80;
+  consider B being finite set such that
+A6: B = {k:k< p & k is prime} & n + 1 = card B by Def20;
+   n+1 <= n by A3,A5,A6,Th93;
+ hence contradiction by NAT_1:38;
+end;
+
+:: Slawek Bialecki;
+reserve m',m1,p',p1 for Nat;
+
+Lm15: n is prime implies n > 0
+        proof
+        assume n is prime;
+        then 1 < n by INT_2:def 5;
+        hence 0 < n by AXIOMS:22;
+        end;
+
+theorem :: divisibility
+          for i st i is prime holds
+   for m,n holds i divides m * n implies (i divides m or i divides n)
+proof
+  let i;
+  assume A1: i is prime;
+   given m,n such that
+   A2: not ( i divides m * n implies (i divides m or i divides n) );
+   defpred _P[Nat] means
+   $1 is prime &
+   ex m,n st $1 divides m * n & (not $1 divides m) & (not $1 divides n);
+   A3: ex i st _P[i] by A1,A2;
+   consider p' such that
+     A4: _P[p'] and
+     A5: for p1 st _P[p1] holds p' <= p1 from Min(A3);
+    defpred _Q[Nat] means
+    ex n st p' divides $1 * n & (not p' divides $1) & (not p' divides n);
+A6: ex m st _Q[m] by A4;
+   consider m' such that
+     A7: _Q[m'] and
+     A8: for m1 st _Q[m1] holds m' <= m1 from Min(A6);
+     m' <> 0 by A7;
+   then A9: m' > 0 by NAT_1:19;
+   consider n such that
+   A10: p' divides m' * n & (not p' divides m') & (not p' divides n) by A7;
+
+   A11: m' < p'
+       proof
+        assume A12: m' >= p';
+        set m1 = m' mod p';
+        A13: p' > 0 by A4,Lm15;
+        then m1 < p' by NAT_1:46;
+        then A14: m1 < m' by A12,AXIOMS:22;
+           A15: p' divides p' * (m' div p') by NAT_1:def 3;
+           A16: m' = p'* (m' div p') + m1 by A13,NAT_1:47;
+        A17: p' divides m1 * n
+          proof
+           A18: p' divides p' * ((m' div p') * n) by NAT_1:def 3;
+              m' = p'* (m' div p') + m1 by A13,NAT_1:47;
+
+           then m' * n = p' * (m' div p') * n + m1 * n by XCMPLX_1:8;
+           then m' * n = p' * ((m' div p') * n) + m1 * n by XCMPLX_1:4;
+           hence thesis by A10,A18,NAT_1:57;
+          end;
+           not p' divides m1 by A10,A15,A16,NAT_1:55;
+        hence contradiction by A8,A10,A14,A17;
+       end;
+
+   A19: m' < 2
+   proof
+      assume m' >= 2;
+      then consider p1 such that
+             A20: p1 is prime & p1 divides m' by INT_2:48;
+           A21:p1 > 1 by A20,INT_2:def 5;
+           A22:p1 <> 0 by A20,INT_2:def 5;
+         p1 <= m' by A9,A20,NAT_1:54;
+then A23:      not p' <= p1 by A11,AXIOMS:22;
+      A24: not p1 divides p'
+          proof
+           assume p1 divides p';
+            then p1 = 1 or p1 = p' by A4,INT_2:def 5;
+           hence contradiction by A9,A11,A20,INT_2:def 5,NAT_1:54;
+          end;
+      consider k such that
+      A25: m' * n = p' * k by A10,NAT_1:def 3;
+         p1 divides p' * k by A20,A25,NAT_1:56;
+      then p1 divides k by A5,A20,A23,A24;
+      then consider k1 such that A26: k = p1 * k1 by NAT_1:def 3;
+      consider m1 such that A27: m' = p1 * m1 by A20,NAT_1:def 3;
+      A28: m1 > 0
+      proof
+        m1 <> 0 by A7,A27;
+       hence thesis by NAT_1:18;
+      end;
+      A29: m1 < m'
+           proof
+               m1 divides m' by A27,NAT_1:def 3;
+             then A30: m1 <= m' by A9,NAT_1:54;
+               m1 <> m'
+               proof
+                assume m1 = m';
+                then m' = 1 * m1;
+                hence contradiction by A21,A27,A28,REAL_1:70;
+               end;
+             hence thesis by A30,REAL_1:def 5;
+           end;
+      A31: p' divides m1 * n
+        proof
+            m' * n = p1 *( m1 * n) by A27,XCMPLX_1:4;
+             then p1 *( m1 * n) = p1 *(p' * k1) by A25,A26,XCMPLX_1:4;
+             then m1 * n = p' * k1 by A22,XCMPLX_1:5;
+             hence thesis by NAT_1:def 3;
+        end;
+         not p' divides m1 by A10,A27,NAT_1:56;
+      hence contradiction by A8,A10,A29,A31;
+   end;
+
+      m' >= 2
+   proof
+     assume m' < 2;
+     then A32: m' <= 1 + 1 & m' <> 2;
+       m' >= 0 + 1 by A9,NAT_1:38;
+     then m' = 1 by A32,NAT_1:27;
+     hence contradiction by A10;
+   end;
+   hence thesis by A19;
+   end;

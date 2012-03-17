@@ -1,0 +1,1840 @@
+:: The canonical formulae
+::  by Andrzej Trybulec
+::
+:: Received July 4, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary INT_1, MATRIX_2, ARYTM_1, REALSET1, FUNCT_1, KNASTER, RELAT_1,
+      PRALG_1, FUNCT_2, FUNCT_6, BOOLE, FUNCOP_1, HILBERT1, FRAENKEL, FUNCT_3,
+      SUBSET_1, CARD_3, PARTFUN1, FINSEQ_4, FUNCT_5, ZF_LANG, ZF_REFLE, PBOOLE,
+      QC_LANG1, HILBERT2, FUNCT_4, CAT_1, HILBERT3, SGRAPH1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      NAT_1, INT_1, RELAT_1, FUNCT_1, REALSET1, CARD_3, ABIAN, PARTFUN1,
+      FUNCT_2, FUNCT_3, FRAENKEL, CQC_LANG, FUNCT_4, FUNCT_5, FUNCT_6,
+      EXTENS_1, PRALG_1, PRALG_2, PBOOLE, MSUALG_1, PRE_CIRC, MSUALG_3,
+      KNASTER, HILBERT1, HILBERT2;
+ constructors MSUALG_3, CQC_LANG, HILBERT2, KNASTER, PRALG_2, EXTENS_1,
+      PRE_CIRC, DOMAIN_1, CAT_2, INT_1, ABIAN, XCMPLX_0;
+ clusters PRALG_1, RELSET_1, PBOOLE, FUNCT_4, FUNCT_1, HILBERT1, CQC_LANG,
+      FRAENKEL, TEX_2, RELAT_1, SUBSET_1, INT_1, ABIAN, FUNCT_2, MEMBERED,
+      PARTFUN1, NUMBERS, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET;
+ definitions FUNCT_1, FUNCT_2, TARSKI, HILBERT1, FRAENKEL, MSUALG_1, KNASTER,
+      PRALG_1, RELAT_1, XBOOLE_0;
+ theorems PBOOLE, ZFMISC_1, MSUALG_3, FUNCT_2, RELAT_1, RELSET_1, FUNCT_1,
+      CARD_5, FUNCT_3, TARSKI, FUNCOP_1, PARTFUN2, PRALG_2, REALSET1, CARD_3,
+      FUNCT_6, MSSUBFAM, ALTCAT_1, FUNCT_5, FUNCTOR0, CAT_2, KNASTER, FRAENKEL,
+      HILBERT1, CQC_LANG, FUNCT_4, INT_1, REAL_1, AMI_1, TOPREAL6, SUBSET_1,
+      AXIOMS, PRALG_1, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+ schemes HILBERT2, SUPINF_2, FUNCT_2;
+
+begin :: Preliminaries
+
+theorem
+   for i being Integer holds
+  i is even iff i-1 is odd
+ proof let i be Integer;
+  hereby assume i is even;
+    then reconsider i0 = i as even Integer;
+      i0 -1 is odd;
+   hence i-1 is odd;
+  end;
+  assume i-1 is odd;
+   then reconsider i1 = i-1 as odd Integer;
+     i1+1 is even;
+  hence i is even by XCMPLX_1:27;
+ end;
+
+theorem Th2:
+ for i being Integer holds
+  i is odd iff i-1 is even
+ proof let i be Integer;
+  hereby assume i is odd;
+    then reconsider i0 = i as odd Integer;
+      i0 -1 is even;
+   hence i-1 is even;
+  end;
+  assume i-1 is even;
+   then reconsider i1 = i-1 as even Integer;
+     i1+1 is odd;
+  hence i is odd by XCMPLX_1:27;
+ end;
+
+theorem Th3:
+ for X being trivial set, x being set st x in X
+ for f being Function of X,X holds x is_a_fixpoint_of f
+ proof let X be trivial set, x be set;
+  assume
+A1: x in X;
+   then consider y being set such that
+A2:  X = {y} by REALSET1:def 12;
+  let f be Function of X,X;
+  thus x in dom f by A1,FUNCT_2:67;
+   then A3:  f.x in rng f by FUNCT_1:def 5;
+A4:  rng f c= X by FUNCT_2:67;
+  thus x = y by A1,A2,TARSKI:def 1 .= f.x by A2,A3,A4,TARSKI:def 1;
+ end;
+
+definition let A,B,C be set;
+ cluster -> Function-yielding Function of A, Funcs(B,C);
+ coherence
+  proof let f be Function of A, Funcs(B,C);
+   let x be set;
+   assume x in dom f;
+    then A1:   f.x in rng f by FUNCT_1:def 5;
+      rng f c= Funcs(B,C) by RELSET_1:12;
+   hence f.x is Function by A1,FUNCT_2:121;
+  end;
+end;
+
+theorem Th4:
+ for f being Function-yielding Function holds SubFuncs rng f = rng f
+  proof let f be Function-yielding Function;
+      for x being set holds x in rng f implies x is Function
+     proof let x be set;
+      assume x in rng f;
+       then ex y being set st y in dom f & x = f.y by FUNCT_1:def 5;
+      hence x is Function;
+     end;
+    then for x being set holds x in rng f iff x in rng f & x is Function;
+   hence SubFuncs rng f = rng f by FUNCT_6:def 1;
+  end;
+
+theorem Th5:
+ for A,B,x being set, f being Function st x in A & f in Funcs(A,B)
+  holds f.x in B
+proof let A,B,x be set, f be Function such that
+A1: x in A;
+ assume
+A2: f in Funcs(A,B);
+  then A3: B = {} implies A = {} by FUNCT_2:14;
+    f is Function of A,B by A2,FUNCT_2:121;
+ hence f.x in B by A1,A3,FUNCT_2:7;
+end;
+
+theorem Th6:
+ for A,B,C being set st C = {} implies B = {} or A = {}
+ for f being Function of A, Funcs(B,C)
+  holds doms f = A --> B
+proof let A,B,C be set such that
+A1: C = {} implies B = {} or A = {};
+ let f be Function of A, Funcs(B,C);
+A2: Funcs(B,C) = {} implies A = {} by A1,FUNCT_2:11;
+  then dom f = A by FUNCT_2:def 1;
+  then reconsider g = f as ManySortedFunction of A by PBOOLE:def 3;
+    now let i be set;
+   assume
+A3: i in A;
+    then A4:   g.i in Funcs(B,C) by A2,FUNCT_2:7;
+   thus (doms g).i = dom(g.i) by A3,MSSUBFAM:14
+       .= B by A4,ALTCAT_1:6 .= (A-->B).i by A3,FUNCOP_1:13;
+  end;
+ hence doms f = A --> B by PBOOLE:3;
+end;
+
+definition
+ cluster {} -> Function-yielding;
+ coherence proof let x be set; thus thesis; end;
+end;
+
+ reserve n for Nat,
+         p,q,r,s for Element of HP-WFF;
+
+theorem Th7:
+ for x being set holds ({}).x = {}
+proof let x be set;
+    not x in dom {};
+ hence thesis by FUNCT_1:def 4;
+end;
+
+definition let A be set, B be functional set;
+ cluster -> Function-yielding Function of A,B;
+ coherence
+  proof let f be Function of A,B, x be set;
+   assume x in dom f;
+    then A1:   f.x in rng f by FUNCT_1:def 5;
+      rng f c= B by RELSET_1:12;
+   hence f.x is Function by A1,FRAENKEL:def 1;
+  end;
+end;
+
+
+
+theorem Th8:
+ for X being set, A being Subset of X
+  holds ((0,1) --> (1,0))*chi(A,X) = chi(A`,X)
+proof let X be set, A be Subset of X;
+  set f = ((0,1) --> (1,0))*chi(A,X);
+    dom((0,1) --> (1,0)) = {0,1} by FUNCT_4:65;
+  then A1: rng chi(A,X) c= dom((0,1) --> (1,0)) by FUNCT_3:48;
+A2: dom chi(A,X) = X by FUNCT_3:def 3;
+  then A3: dom f = X by A1,RELAT_1:46;
+     for x being set st x in X
+     holds (x in A` implies f.x = 1) & (not x in A` implies f.x = 0)
+   proof let x be set such that
+A4:   x in X;
+    thus x in A` implies f.x = 1
+     proof assume x in A`;
+       then not x in A by SUBSET_1:54;
+       then chi(A,X).x = 0 by A4,FUNCT_3:def 3;
+       then f.x = ((0,1) --> (1,0)).0 by A2,A4,FUNCT_1:23;
+      hence f.x = 1 by FUNCT_4:66;
+     end;
+    assume not x in A`;
+     then not x in X \ A by SUBSET_1:def 5;
+     then x in A by A4,XBOOLE_0:def 4;
+     then chi(A,X).x = 1 by FUNCT_3:def 3;
+     then f.x = ((0,1) --> (1,0)).1 by A2,A4,FUNCT_1:23;
+    hence f.x = 0 by FUNCT_4:66;
+   end;
+ hence f = chi(A`,X) by A3,FUNCT_3:def 3;
+end;
+
+theorem Th9:
+ for X being set, A being Subset of X
+  holds ((0,1) --> (1,0))*chi(A`,X) = chi(A,X)
+proof let X be set, A be Subset of X;
+ thus ((0,1) --> (1,0))*chi(A`,X) = chi(A``,X) by Th8
+        .= chi(A,X);
+end;
+
+theorem Th10:
+ for a,b,x,y,x',y' being set
+  st a <> b & (a,b) --> (x,y) = (a,b) --> (x',y')
+  holds x = x' & y = y'
+proof let a,b,x,y,x',y' be set such that
+A1: a <> b and
+A2: (a,b) --> (x,y) = (a,b) --> (x',y');
+ thus x = ((a,b) --> (x,y)).a by A1,FUNCT_4:66
+         .= x' by A1,A2,FUNCT_4:66;
+ thus y = ((a,b) --> (x,y)).b by A1,FUNCT_4:66
+         .= y' by A1,A2,FUNCT_4:66;
+end;
+
+theorem Th11:
+ for a,b,x,y,X,Y being set st a<>b & x in X & y in Y
+  holds (a,b) --> (x,y) in product((a,b) --> (X,Y))
+proof let a,b,x,y,X,Y be set such that
+A1: a<>b and
+A2: x in X & y in Y;
+      {x} c= X & {y} c= Y by A2,ZFMISC_1:37;
+    then product((a,b) --> ({x},{y})) c= product((a,b) --> (X,Y))
+                          by TOPREAL6:29;
+    then {(a,b) -->(x,y)} c= product((a,b) --> (X,Y)) by A1,AMI_1:5;
+ hence (a,b) --> (x,y) in product((a,b) --> (X,Y)) by ZFMISC_1:37;
+end;
+
+theorem Th12:
+ for D being non empty set
+ for f being Function of 2, D
+  ex d1,d2 being Element of D st f = (0,1) --> (d1,d2)
+proof let D be non empty set;
+ let f be Function of 2, D;
+    0 in 2 & 1 in 2 by CARD_5:1,TARSKI:def 2;
+  then reconsider d1 = f.0, d2 = f.1 as Element of D by FUNCT_2:7;
+ take d1,d2;
+    dom f = {0,1} by CARD_5:1,FUNCT_2:def 1;
+ hence f = (0,1) --> (d1,d2) by FUNCT_4:69;
+end;
+
+theorem Th13:
+ for a,b,c,d being set st a <> b holds
+  ((a,b) --> (c,d))*((a,b) --> (b,a)) = (a,b) --> (d,c)
+ proof let a,b,c,d be set such that
+A1: a <> b;
+  set f = ((a,b) --> (c,d))*((a,b) --> (b,a));
+A2: dom((a,b) --> (b,a)) = {a,b} by FUNCT_4:65;
+A3: rng((a,b) --> (b,a)) = {a,b} by A1,FUNCT_4:67
+          .= dom((a,b) --> (c,d)) by FUNCT_4:65;
+     a in {a,b} by TARSKI:def 2;
+   then A4: f.a = ((a,b) --> (c,d)).(((a,b) --> (b,a)).a) by A2,FUNCT_1:23
+      .= ((a,b) --> (c,d)).b by A1,FUNCT_4:66
+      .= d by A1,FUNCT_4:66;
+     b in {a,b} by TARSKI:def 2;
+   then A5: f.b = ((a,b) --> (c,d)).(((a,b) --> (b,a)).b) by A2,FUNCT_1:23
+      .= ((a,b) --> (c,d)).a by A1,FUNCT_4:66
+      .= c by A1,FUNCT_4:66;
+     dom f = {a,b} by A2,A3,RELAT_1:46;
+  hence thesis by A4,A5,FUNCT_4:69;
+ end;
+
+theorem Th14:
+ for a,b,c,d being set, f being Function
+    st a <> b & c in dom f & d in dom f
+  holds f*((a,b) --> (c,d)) = (a,b) --> (f.c,f.d)
+proof let a,b,c,d be set, f be Function such that
+A1: a <> b and
+A2: c in dom f & d in dom f;
+A3: dom((a,b) --> (c,d)) = {a,b} by FUNCT_4:65;
+   then a in dom((a,b) --> (c,d)) by TARSKI:def 2;
+   then A4: (f*((a,b) --> (c,d))).a = f.(((a,b) --> (c,d)).a) by FUNCT_1:23
+          .= f.c by A1,FUNCT_4:66;
+     b in dom((a,b) --> (c,d)) by A3,TARSKI:def 2;
+   then A5: (f*((a,b) --> (c,d))).b = f.(((a,b) --> (c,d)).b) by FUNCT_1:23
+          .= f.d by A1,FUNCT_4:66;
+A6: {c,d} c= dom f by A2,ZFMISC_1:38;
+     rng((a,b) --> (c,d)) c= {c,d} by FUNCT_4:65;
+   then rng((a,b) --> (c,d)) c= dom f by A6,XBOOLE_1:1;
+   then dom(f*((a,b) --> (c,d))) = {a,b} by A3,RELAT_1:46;
+ hence f*((a,b) --> (c,d)) = (a,b) --> (f.c,f.d) by A4,A5,FUNCT_4:69;
+end;
+
+begin :: the Cartesian product of functions and the Frege function
+
+definition let f,g be one-to-one Function;
+ cluster [:f,g:] -> one-to-one;
+ coherence
+  proof let x,y be set such that
+A1: x in dom[:f,g:] & y in dom[:f,g:] and
+A2: [:f,g:].x = [:f,g:].y;
+A3: dom[:f,g:] = [:dom f, dom g:] by FUNCT_3:def 9;
+   then consider x1,x2 being set such that
+A4: x1 in dom f & x2 in dom g and
+A5: x = [x1,x2] by A1,ZFMISC_1:def 2;
+   consider y1,y2 being set such that
+A6: y1 in dom f & y2 in dom g and
+A7: y = [y1,y2] by A1,A3,ZFMISC_1:def 2;
+      [:f,g:].x = [f.x1,g.x2] & [:f,g:].y = [f.y1,g.y2]
+      by A4,A5,A6,A7,FUNCT_3:def 9;
+    then f.x1 = f.y1 & g.x2 = g.y2 by A2,ZFMISC_1:33;
+    then x1 = y1 & x2 = y2 by A4,A6,FUNCT_1:def 8;
+   hence x = y by A5,A7;
+  end;
+end;
+
+theorem Th15:
+ for A,B being non empty set, C,D being set,
+     f being Function of C,A, g being Function of D,B
+ holds pr1(A,B)*[:f,g:] = f*pr1(C,D)
+ proof let A,B be non empty set, C,D be set;
+  let f be Function of C,A, g be Function of D,B;
+   :: powinny wystarczyc klastry z BORSUK_3
+     C = {} implies A = {} or [:C,D:] = {} by ZFMISC_1:113;
+   then reconsider F = f*pr1(C,D) as Function of [:C,D:], A by FUNCT_2:19;
+     D = {} implies A = {} or [:C,D:] = {} by ZFMISC_1:113;
+   then reconsider G = g*pr2(C,D) as Function of [:C,D:], B by FUNCT_2:19;
+  thus pr1(A,B)*[:f,g:] = pr1(A,B)*<:F,G:> by FUNCT_3:98
+    .= f*pr1(C,D) by FUNCT_3:82;
+ end;
+
+theorem Th16:
+ for A,B being non empty set, C,D being set,
+     f being Function of C,A, g being Function of D,B
+ holds pr2(A,B)*[:f,g:] = g*pr2(C,D)
+ proof let A,B be non empty set, C,D be set;
+  let f be Function of C,A, g be Function of D,B;
+   :: powinny wystarczyc klastry z BORSUK_3
+     C = {} implies A = {} or [:C,D:] = {} by ZFMISC_1:113;
+   then reconsider F = f*pr1(C,D) as Function of [:C,D:], A by FUNCT_2:19;
+     D = {} implies A = {} or [:C,D:] = {} by ZFMISC_1:113;
+   then reconsider G = g*pr2(C,D) as Function of [:C,D:], B by FUNCT_2:19;
+  thus pr2(A,B)*[:f,g:] = pr2(A,B)*<:F,G:> by FUNCT_3:98
+    .= g*pr2(C,D) by FUNCT_3:82;
+ end;
+
+theorem
+  for g being Function holds ({})..g = {}
+ proof let g be Function;
+     dom {} = {};
+   then dom(({})..g) = {} by PRALG_1:def 18;
+  hence ({})..g = {} by RELAT_1:64;
+ end;
+
+theorem Th18:
+ for f being Function-yielding Function, g,h being Function holds
+ (f..g)*h = (f*h)..(g*h)
+proof let f be Function-yielding Function, g,h be Function;
+     dom(f..g) = dom f by PRALG_1:def 18;
+then A1: dom((f..g)*h) = dom(f*h) by FUNCOP_1:3;
+    for x being set st x in dom(f*h) holds ((f..g)*h).x = ((f*h).x).((g*h).x)
+   proof let x be set;
+    assume
+A2:   x in dom(f*h);
+     then A3:   x in dom h by FUNCT_1:21;
+A4:   h.x in dom f by A2,FUNCT_1:21;
+    thus ((f..g)*h).x = (f..g).(h.x) by A3,FUNCT_1:23
+           .= (f.(h.x)).(g.(h.x)) by A4,PRALG_1:def 18
+           .= ((f*h).x).(g.(h.x)) by A3,FUNCT_1:23
+           .= (f*h).x .((g*h).x) by A3,FUNCT_1:23;
+   end;
+ hence (f..g)*h = (f*h)..(g*h) by A1,PRALG_1:def 18;
+end;
+
+theorem
+   for C being set, A being non empty set
+ for f being Function of A, Funcs({} qua set,C), g being Function of A,{}
+  holds rng(f..g) = {{}}
+proof
+ let C be set, A be non empty set;
+ let f be Function of A, Funcs({} qua set,C), g be Function of A,{};
+A1: Funcs({} qua set,C) = {{}} by FUNCT_5:64;
+A2: dom(f..g) = dom f by PRALG_1:def 18;
+A3: rng(f..g) c= {{}}
+ proof
+  let x be set;
+  assume x in rng(f..g);
+   then consider y being set such that
+A4: y in dom(f..g) and
+A5: (f..g).y = x by FUNCT_1:def 5;
+A6: x = (f.y).(g.y) by A2,A4,A5,PRALG_1:def 18;
+A7: f.y in rng f by A2,A4,FUNCT_1:def 5;
+     rng f c= Funcs({} qua set,C) by RELSET_1:12;
+   then f.y = {} by A1,A7,TARSKI:def 1;
+   then x = {} by A6,Th7;
+  hence x in {{}} by TARSKI:def 1;
+ end;
+  consider a being Element of A;
+A8: dom f = A by A1,FUNCT_2:def 1;
+    f.a = {} by A1,TARSKI:def 1;
+  then (f..g).a = ({}).(g.a) by A8,PRALG_1:def 18
+               .= {} by Th7;
+  then {} in rng(f..g) by A2,A8,FUNCT_1:def 5;
+ hence thesis by A3,ZFMISC_1:39;
+end;
+
+theorem Th20:
+ for A,B,C being set st B = {} implies A = {}
+ for f being Function of A, Funcs(B,C), g being Function of A,B
+  holds rng(f..g) c= C
+proof
+ let A,B,C be set such that
+A1: B = {} implies A = {};
+ let f be Function of A, Funcs(B,C), g be Function of A,B;
+ let x be set;
+ assume x in rng(f..g);
+  then consider y being set such that
+A2: y in dom(f..g) and
+A3: (f..g).y = x by FUNCT_1:def 5;
+A4: dom(f..g) = dom f by PRALG_1:def 18;
+  then A5: rng f <> {} by A2,RELAT_1:60,64;
+    rng f c= Funcs(B,C) by RELSET_1:12;
+  then A6: Funcs(B,C) <> {} by A5,XBOOLE_1:3;
+  then A7: dom f = A by FUNCT_2:def 1;
+then f.y in Funcs(B,C) by A2,A4,A6,FUNCT_2:7;
+  then reconsider fy = f.y as Function of B,C by FUNCT_2:121;
+A8: C <> {} by A1,A2,A6,A7,FUNCT_2:14,PRALG_1:def 18;
+    g.y in B by A1,A2,A4,A7,FUNCT_2:7;
+  then fy.(g.y) in C by A8,FUNCT_2:7;
+ hence x in C by A2,A3,A4,PRALG_1:def 18;
+end;
+
+
+theorem Th21:
+ for A,B,C being set st C = {} implies B = {} or A = {}
+ for f being Function of A, Funcs(B,C)
+  holds dom Frege f = Funcs(A,B)
+proof let A,B,C be set such that
+A1: C = {} implies B = {} or A = {};
+ let f be Function of A, Funcs(B,C);
+ thus dom Frege f = product doms f by PBOOLE:def 3
+        .= product(A --> B) by A1,Th6
+        .= Funcs(A,B) by CARD_3:20;
+end;
+
+canceled;
+
+theorem Th23:
+ for A,B,C being set st C = {} implies B = {} or A = {}
+ for f being Function of A, Funcs(B,C)
+  holds rng Frege f c= Funcs(A,C)
+proof let A,B,C be set such that
+A1: C = {} implies B = {} or A = {};
+ let f be Function of A, Funcs(B,C);
+A2: Funcs(B,C) = {} implies A = {} by A1,FUNCT_2:11;
+A3: SubFuncs rng f = rng f by Th4;
+then A4: dom rngs f = f"rng f by FUNCT_6:def 3;
+then A5: dom rngs f = dom f by RELAT_1:169
+       .= A by A2,FUNCT_2:def 1;
+then A6:  dom rngs f = dom(A-->C) by FUNCOP_1:19;
+    for x being set st x in dom rngs f holds (rngs f).x c= (A-->C).x
+   proof let x be set such that
+A7:   x in dom rngs f;
+A8:   f.x in Funcs(B,C) by A2,A5,A7,FUNCT_2:7;
+       (rngs f).x = proj2(f.x) by A3,A4,A7,FUNCT_6:def 3
+             .= rng(f.x) by FUNCT_5:21;
+     then (rngs f).x c= C by A8,ALTCAT_1:6;
+    hence (rngs f).x c= (A-->C).x by A5,A7,FUNCOP_1:13;
+   end;
+  then product rngs f c= product(A --> C) by A6,CARD_3:38;
+  then product rngs f c= Funcs(A,C) by CARD_3:20;
+ hence rng Frege f c= Funcs(A,C) by FUNCT_6:58;
+end;
+
+theorem Th24:
+ for A,B,C being set st C = {} implies B = {} or A = {}
+ for f being Function of A, Funcs(B,C)
+  holds Frege f is Function of Funcs(A,B), Funcs(A,C)
+proof let A,B,C be set;
+ assume
+A1: C = {} implies B = {} or A = {};
+  then A2: Funcs(A,C) = {} implies Funcs(A,B) = {} by FUNCT_2:11;
+ let f be Function of A, Funcs(B,C);
+    dom Frege f = Funcs(A,B) & rng Frege f c= Funcs(A,C) by A1,Th21,Th23;
+ hence Frege f is Function of Funcs(A,B), Funcs(A,C)
+      by A2,FUNCT_2:def 1,RELSET_1:11;
+end;
+
+begin :: about permutations
+
+theorem Th25:
+ for A,B being set, P being Permutation of A, Q being Permutation of B
+  holds [:P,Q:] is bijective
+ proof let A,B be set, P be Permutation of A, Q be Permutation of B;
+  thus [:P,Q:] is one-to-one;
+     rng P = A & rng Q = B by FUNCT_2:def 3;
+  hence rng [:P,Q:] = [:A,B:] by FUNCT_3:88;
+ end;
+
+definition let A,B be non empty set;
+ let P be Permutation of A, Q be Function of B,B;
+ func P => Q -> Function of Funcs(A,B), Funcs(A,B) means
+:Def1: for f being Function of A,B holds it.f = Q*f*P";
+ existence
+  proof
+ deffunc F1(Element of Funcs(A,B))=Q*$1*P";
+A1:  for f being Element of Funcs(A,B) holds F1(f) in
+ Funcs(A,B) by FUNCT_2:11;
+   consider F being Function of Funcs(A,B), Funcs(A,B) such that
+A2:  for f being Element of Funcs(A,B) holds F.f = F1(f)
+from FunctR_ealEx(A1);
+   take F;
+   let f be Function of A,B;
+      f in Funcs(A,B) by FUNCT_2:11;
+   hence F.f = Q*f*P" by A2;
+  end;
+ uniqueness
+  proof let F,G be Function of Funcs(A,B), Funcs(A,B) such that
+A3: for f being Function of A,B holds F.f = Q*f*P" and
+A4: for f being Function of A,B holds G.f = Q*f*P";
+      now let f be Element of Funcs(A,B);
+     thus F.f = Q*f*P" by A3 .= G.f by A4;
+    end;
+   hence F = G by FUNCT_2:113;
+  end;
+end;
+
+definition let A,B be non empty set;
+ let P be Permutation of A, Q be Permutation of B;
+ cluster P => Q -> bijective;
+ coherence
+  proof
+    thus P => Q is one-to-one
+     proof let x1,x2 be set;
+      assume x1 in dom(P => Q) & x2 in dom(P => Q);
+       then reconsider f1 = x1, f2 = x2 as Element of Funcs(A,B)
+           by FUNCT_2:def 1;
+      assume (P => Q).x1 = (P => Q).x2;
+       then A1:      Q*f1*P" = (P => Q).f2 by Def1 .= Q*f2*P" by Def1;
+A2:     Q*f1 = Q*f1*id A by FUNCT_2:23
+            .= Q*f1*(P"*P) by FUNCT_2:88
+            .= Q*f2*P"*P by A1,RELAT_1:55
+            .= Q*f2*(P"*P) by RELAT_1:55
+            .= Q*f2*id A by FUNCT_2:88
+            .= Q*f2 by FUNCT_2:23;
+         f1 = (id B)*f1 by FUNCT_2:23
+         .= Q"*Q*f1 by FUNCT_2:88
+         .= Q"*(Q*f2) by A2,RELAT_1:55
+         .= Q"*Q*f2 by RELAT_1:55
+         .= (id B)*f2 by FUNCT_2:88
+         .= f2 by FUNCT_2:23;
+      hence thesis;
+     end;
+    thus rng(P => Q) c= Funcs(A,B) by RELSET_1:12;
+    let x be set;
+    assume x in Funcs(A,B);
+     then x is Element of Funcs(A,B);
+     then reconsider f = x as Function of A,B;
+    dom(P => Q) = Funcs(A,B) by FUNCT_2:def 1;
+then A3:    Q"*f*P in dom(P => Q) by FUNCT_2:11;
+       (P => Q).(Q"*f*P) = Q*(Q"*f*P)*P" by Def1
+             .= Q*(Q"*f)*P*P" by RELAT_1:55
+             .= Q*Q"*f*P*P" by RELAT_1:55
+             .= (id B)*f*P*P" by FUNCT_2:88
+             .= f*P*P" by FUNCT_2:23
+             .= f*(P*P") by RELAT_1:55
+             .= f*id A by FUNCT_2:88
+             .= f by FUNCT_2:23;
+    hence x in rng(P => Q) by A3,FUNCT_1:def 5;
+  end;
+end;
+
+theorem Th26:
+ for A,B being non empty set
+ for P being Permutation of A, Q being Permutation of B
+ for f being Function of A,B
+  holds (P => Q)".f = Q"*f*P
+proof let A,B be non empty set;
+ let P be Permutation of A, Q be Permutation of B;
+ let f be Function of A,B;
+  reconsider h = f as Element of Funcs(A,B) by FUNCT_2:11;
+A1: (P => Q)".h in Funcs(A,B);
+  reconsider g = Q"*f*P as Function of A,B;
+A2: g in Funcs(A,B) by FUNCT_2:11;
+    f in Funcs(A,B) by FUNCT_2:11;
+  then (P => Q)"".((P => Q)".f) = f by FUNCT_2:32
+    .= f*id A by FUNCT_2:23
+    .= f*(P*P") by FUNCT_2:88
+    .= f*P*P" by RELAT_1:55
+    .= (id B)*f*P*P" by FUNCT_2:23
+    .= Q*Q"*f*P*P" by FUNCT_2:88
+    .= Q*(Q"*f)*P*P" by RELAT_1:55
+    .= Q*(Q"*f*P)*P" by RELAT_1:55
+    .= (P => Q).g by Def1
+    .= (P => Q)"".(Q"*f*P) by FUNCT_1:65;
+ hence (P => Q)".f = Q"*f*P by A1,A2,FUNCT_2:25;
+end;
+
+theorem Th27:
+ for A,B being non empty set
+ for P being Permutation of A, Q being Permutation of B
+  holds (P => Q)" = P" => (Q")
+proof let A,B be non empty set;
+ let P be Permutation of A, Q be Permutation of B;
+    now let f be Element of Funcs(A,B);
+   thus (P => Q)".f = Q"*f*P by Th26
+       .= Q"*f*P"" by FUNCT_1:65
+       .= (P" => (Q")).f by Def1;
+  end;
+ hence (P => Q)" = P" => (Q") by FUNCT_2:113;
+end;
+
+theorem Th28:
+  for A,B,C being non empty set,
+      f being Function of A, Funcs(B,C),
+      g being Function of A,B,
+      P being Permutation of B,
+      Q being Permutation of C
+  holds ((P => Q)*f)..(P*g) = Q*(f..g)
+proof let A,B,C be non empty set;
+ let f be Function of A, Funcs(B,C), g be Function of A,B,
+     P be Permutation of B, Q be Permutation of C;
+A1: dom Q = C by FUNCT_2:def 1;
+A2: rng(f..g) c= C by Th20;
+A3: dom f = A by FUNCT_2:def 1;
+   then dom(f..g) = A by PRALG_1:def 18;
+then A4: dom(Q*(f..g)) = A by A1,A2,RELAT_1:46;
+   A5: dom((P => Q)*f) = A by FUNCT_2:def 1;
+    for x be set st x in dom((P => Q)*f)
+     holds (Q*(f..g)).x = (((P => Q)*f).x).((P*g).x)
+   proof let x be set such that
+A6:   x in dom((P => Q)*f);
+       f.x in Funcs(B,C) by A5,A6,FUNCT_2:7;
+     then reconsider fx = f.x as Function of B,C by FUNCT_2:121;
+       g.x in B by A5,A6,FUNCT_2:7;
+     then A7:  g.x in dom fx by FUNCT_2:def 1;
+       (P*g).x in B by A5,A6,FUNCT_2:7;
+     then A8:  (P*g).x in dom(P") by FUNCT_2:def 1;
+    thus (Q*(f..g)).x = Q.((f..g).x) by A4,A5,A6,FUNCT_1:22
+       .= Q.(fx.(g.x)) by A3,A5,A6,PRALG_1:def 18
+       .= (Q*fx).(g.x) by A7,FUNCT_1:23
+       .= (Q*fx).(((id B)*g).x) by FUNCT_2:23
+       .= (Q*fx).((P"*P*g).x) by FUNCT_2:88
+       .= (Q*fx).((P"*(P*g)).x) by RELAT_1:55
+       .= (Q*fx).(P".((P*g).x)) by A5,A6,FUNCT_2:21
+       .= (Q*fx*P").((P*g).x) by A8,FUNCT_1:23
+       .= ((P => Q).fx).((P*g).x) by Def1
+       .= (((P => Q)*f).x).((P*g).x) by A5,A6,FUNCT_2:21;
+   end;
+ hence ((P => Q)*f)..(P*g) = Q*(f..g) by A4,A5,PRALG_1:def 18;
+end;
+
+
+begin ::  set valuations
+
+definition
+ mode SetValuation is non-empty ManySortedSet of NAT;
+end;
+
+reserve V for SetValuation;
+
+definition let V;
+ func SetVal V -> ManySortedSet of HP-WFF means
+:Def2: it.VERUM = 1 &
+  (for n holds it.prop n = V.n) &
+  for p,q holds it.(p '&' q) = [:it.p, it.q:]
+    & it.(p => q) = Funcs(it.p,it.q);
+ existence
+  proof
+    deffunc F(Nat)=V.$1;
+    deffunc C(set,set)=[:$1,$2:];
+    deffunc I(set,set)=Funcs($1,$2);
+    consider M being ManySortedSet of HP-WFF such that
+A1:  M.VERUM = 1 and
+A2:  for n holds M.prop n = F(n) and
+A3:  for p,q holds M.(p '&' q) = C(M.p,M.q) & M.(p => q) = I(M.p,M.q)
+       from HP_MSSLambda;
+   take M;
+   thus thesis by A1,A2,A3;
+  end;
+ uniqueness
+  proof let M1,M2 be ManySortedSet of HP-WFF such that
+A4: M1.VERUM = 1 and
+A5: for n holds M1.prop n = V.n and
+A6:  for p,q holds M1.(p '&' q) = [:M1.p, M1.q:]
+     & M1.(p => q) = Funcs(M1.p,M1.q) and
+A7: M2.VERUM = 1 and
+A8: for n holds M2.prop n = V.n and
+A9: for p,q holds M2.(p '&' q) = [:M2.p, M2.q:]
+    & M2.(p => q) = Funcs(M2.p,M2.q);
+    defpred P[Element of HP-WFF] means M1.$1 = M2.$1;
+A10: P[VERUM] by A4,A7;
+A11: for n holds P[prop n]
+     proof let n;
+      thus M1.prop n = V.n by A5 .= M2.prop n by A8;
+     end;
+A12: for r,s st P[r] & P[s]
+       holds P[r '&' s] & P[r => s]
+    proof let r,s such that
+A13:    M1.r=M2.r & M1.s = M2.s;
+     thus M1.(r '&' s) = [:M2.r, M2.s:] by A6,A13 .= M2.(r '&' s) by A9;
+     thus M1.(r => s) = Funcs(M2.r,M2.s) by A6,A13 .= M2.(r => s) by A9;
+    end;
+      for r holds P[r] from HP_Ind(A10,A11,A12);
+    then for r being set st r in HP-WFF holds M1.r = M2.r;
+   hence M1 = M2 by PBOOLE:3;
+  end;
+end;
+
+definition let V,p;
+ func SetVal(V,p) equals
+:Def3:  (SetVal V).p;
+ correctness;
+end;
+
+definition let V,p;
+ cluster SetVal(V,p) -> non empty;
+ coherence
+  proof
+defpred P[Element of HP-WFF] means (SetVal V).$1 is non empty;
+A1: P[VERUM] by Def2;
+A2: for n holds P[prop n]
+     proof let n;
+         (SetVal V).prop n = V.n by Def2;
+      hence (SetVal V).prop n is non empty;
+     end;
+A3: for r,s st P[r] & P[s]
+      holds P[r '&' s] & P[r => s]
+     proof let r,s such that
+A4:    (SetVal V).r is non empty and
+A5:    (SetVal V).s is non empty;
+         (SetVal V).(r '&' s) = [:(SetVal V).r,(SetVal V).s:] by Def2;
+      hence (SetVal V).(r '&' s) is non empty by A4,A5,ZFMISC_1:113;
+         (SetVal V).(r => s) = Funcs((SetVal V).r,(SetVal V).s) by Def2;
+      hence (SetVal V).(r => s) is non empty by A5,FUNCT_2:11;
+     end;
+      for r holds P[r] from HP_Ind(A1,A2,A3);
+    then (SetVal V).p is non empty;
+   hence SetVal(V,p) is non empty by Def3;
+  end;
+end;
+
+theorem Th29:
+ SetVal(V,VERUM) = 1
+ proof
+  thus SetVal(V,VERUM) = (SetVal V).VERUM by Def3 .= 1 by Def2;
+ end;
+
+theorem Th30:
+ SetVal(V,prop n) = V.n
+ proof
+  thus SetVal(V,prop n) = (SetVal V).prop n by Def3 .= V.n by Def2;
+ end;
+
+theorem Th31:
+ SetVal(V,p '&' q) = [:SetVal(V,p), SetVal(V,q):]
+ proof
+  thus SetVal(V,p '&' q) = (SetVal V).(p '&' q) by Def3
+          .= [:(SetVal V).p, (SetVal V).q:] by Def2
+          .= [:(SetVal V).p, SetVal(V,q):] by Def3
+          .= [:SetVal(V,p), SetVal(V,q):] by Def3;
+ end;
+
+theorem Th32:
+ SetVal(V,p => q) = Funcs(SetVal(V,p),SetVal(V,q))
+ proof
+  thus SetVal(V,p => q) = (SetVal V).(p => q) by Def3
+          .= Funcs((SetVal V).p, (SetVal V).q) by Def2
+          .= Funcs((SetVal V).p, SetVal(V,q)) by Def3
+          .= Funcs(SetVal(V,p), SetVal(V,q)) by Def3;
+ end;
+
+definition let V,p,q;
+ cluster SetVal(V,p => q) -> functional;
+ coherence
+  proof let x be set;
+   assume x in SetVal(V,p => q);
+    then x in Funcs(SetVal(V,p),SetVal(V,q)) by Th32;
+   hence x is Function by FUNCT_2:121;
+  end;
+end;
+
+definition let V,p,q,r;
+ cluster -> Function-yielding Element of SetVal(V,p => (q => r));
+ coherence
+  proof let e be Element of SetVal(V,p => (q => r)), x be set such that
+A1: x in dom e;
+      e in SetVal(V,p => (q => r));
+    then e in Funcs(SetVal(V,p),SetVal(V,q => r)) by Th32;
+    then A2:   e is Function of SetVal(V,p),SetVal(V,q => r) by FUNCT_2:121;
+    then x in SetVal(V,p) by A1,FUNCT_2:def 1;
+    then e.x in SetVal(V,q => r) by A2,FUNCT_2:7;
+    then e.x in Funcs(SetVal(V,q),SetVal(V,r)) by Th32;
+   hence e.x is Function by FUNCT_2:121;
+  end;
+end;
+
+definition let V,p,q,r;
+ cluster Function-yielding Function of SetVal(V,p => q),SetVal(V,p => r);
+ existence
+  proof consider e being Function of SetVal(V,p => q),SetVal(V,p => r);
+      e is Function-yielding;
+   hence thesis;
+  end;
+ cluster Function-yielding Element of SetVal(V,p => (q => r));
+ existence
+  proof consider e being Element of SetVal(V,p => (q => r));
+      e is Function-yielding;
+   hence thesis;
+  end;
+end;
+
+
+begin :: permuting set valuations
+
+definition let V;
+ mode Permutation of V -> Function means
+:Def4:  dom it = NAT &
+  for n holds it.n is Permutation of V.n;
+ existence
+  proof
+   take id V;
+   thus dom id V = NAT by PBOOLE:def 3;
+   let n;
+      (id V).n = id (V.n) by MSUALG_3:def 1;
+   hence thesis;
+  end;
+end;
+
+reserve P for Permutation of V;
+
+
+definition let V,P;
+ func Perm P -> ManySortedFunction of SetVal V, SetVal V means
+:Def5: it.VERUM = id 1 &
+  (for n holds it.prop n = P.n) &
+  for p,q ex p' being Permutation of SetVal(V,p),
+             q' being Permutation of SetVal(V,q) st
+    p' = it.p & q' = it.q &
+    it.(p '&' q) = [:p',q':] &
+    it.(p => q) = p' => q';
+ existence
+  proof
+   defpred C[Element of HP-WFF,Element of HP-WFF,set,set,set] means
+     ($3 is Permutation of SetVal(V,$1) &
+     $4 is Permutation of SetVal(V,$2) implies
+     ex p' being Permutation of SetVal(V,$1),
+        q' being Permutation of SetVal(V,$2) st
+      p' = $3 & q' = $4 & $5 = [:p',q':]) &
+      ($3 is not Permutation of SetVal(V,$1) or
+      $4 is not Permutation of SetVal(V,$2) implies $5 = {});
+   defpred I[Element of HP-WFF,Element of HP-WFF,set,set,set] means
+     ($3 is Permutation of SetVal(V,$1) &
+     $4 is Permutation of SetVal(V,$2) implies
+     ex p' being Permutation of SetVal(V,$1),
+        q' being Permutation of SetVal(V,$2) st
+      p' = $3 & q' = $4 & $5 = p' => q') &
+      ($3 is not Permutation of SetVal(V,$1) or
+      $4 is not Permutation of SetVal(V,$2) implies $5 = {});
+A1: for p,q for a,b being set ex c being set st C[p,q,a,b,c]
+     proof let p,q; let a,b be set;
+      per cases;
+      suppose that
+A2:     a is Permutation of SetVal(V,p) and
+A3:     b is Permutation of SetVal(V,q);
+       reconsider p' = a as Permutation of SetVal(V,p) by A2;
+       reconsider q' = b as Permutation of SetVal(V,q) by A3;
+      take [:p',q':];
+      thus thesis;
+      suppose a is not Permutation of SetVal(V,p) or
+        b is not Permutation of SetVal(V,q);
+      hence thesis;
+     end;
+A4: for p,q for a,b being set ex d being set st I[p,q,a,b,d]
+     proof let p,q; let a,b be set;
+      per cases;
+      suppose that
+A5:     a is Permutation of SetVal(V,p) and
+A6:     b is Permutation of SetVal(V,q);
+       reconsider p' = a as Permutation of SetVal(V,p) by A5;
+       reconsider q' = b as Permutation of SetVal(V,q) by A6;
+      take p' => q';
+      thus thesis;
+      suppose a is not Permutation of SetVal(V,p) or
+        b is not Permutation of SetVal(V,q);
+      hence thesis;
+     end;
+A7: for p,q for a,b,c,d being set st C[p,q,a,b,c] & C[p,q,a,b,d] holds c = d;
+A8: for p,q for a,b,c,d being set st I[p,q,a,b,c] & I[p,q,a,b,d] holds c = d;
+deffunc F(Nat)=P.$1;
+    consider M being ManySortedSet of HP-WFF such that
+A9:  M.VERUM = id 1 and
+A10:  for n holds M.prop n = F(n) and
+A11:  for p,q holds C[p,q,M.p,M.q,M.(p '&' q)] & I[p,q,M.p,M.q,M.(p => q)]
+           from HP_MSSExL(A1,A4,A7,A8);
+   take M;
+defpred P[Element of HP-WFF] means M.$1 is Permutation of (SetVal V).$1;
+       (SetVal V).VERUM = 1 by Def2;
+then A12:  P[VERUM] by A9;
+A13: for n holds P[prop n]
+     proof let n;
+         M.prop n = P.n & (SetVal V).prop n = V.n by A10,Def2;
+      hence thesis by Def4;
+     end;
+A14: for r,s st P[r] & P[s]
+      holds P[r '&' s] & P[r => s]
+      proof let r,s such that
+A15:     M.r is Permutation of (SetVal V).r and
+A16:     M.s is Permutation of (SetVal V).s;
+A17:      (SetVal V).r = SetVal(V,r) & (SetVal V).s = SetVal(V,s) by Def3;
+        consider p' being Permutation of SetVal(V,r),
+             q' being Permutation of SetVal(V,s) such that
+A19:       p' = M.r & q' = M.s & M.(r '&' s) = [:p',q':] by A11,A15,A16,A17;
+          (SetVal V).(r '&' s) = [:SetVal(V,r),SetVal(V,s):] by A17,Def2;
+       hence M.(r '&' s) is Permutation of (SetVal V).(r '&' s) by A19,Th25;
+        consider p' being Permutation of SetVal(V,r),
+             q' being Permutation of SetVal(V,s) such that
+A20:       p' = M.r & q' = M.s & M.(r => s) = p' => q' by A11,A15,A16,A17;
+          (SetVal V).(r => s) = Funcs(SetVal(V,r),SetVal(V,s)) by A17,Def2;
+       hence M.(r => s) is Permutation of (SetVal V).(r => s) by A20;
+      end;
+A21:  for p holds P[p] from HP_Ind(A12,A13,A14);
+   thus M is ManySortedFunction of SetVal V, SetVal V
+    proof let p be set;
+     thus thesis by A21;
+    end;
+   thus M.VERUM = id 1 by A9;
+   thus for n holds M.prop n = P.n by A10;
+   let p,q;
+A22:  (SetVal V).p = SetVal(V,p) & (SetVal V).q = SetVal(V,q) by Def3;
+A23: M.p is Permutation of (SetVal V).p &
+    M.q is Permutation of (SetVal V).q by A21;
+    consider p' being Permutation of SetVal(V,p),
+            q' being Permutation of SetVal(V,q) such that
+A25:   p' = M.p & q' = M.q & M.(p '&' q) = [:p',q':] by A11,A22,A23;
+   take p',q';
+   thus p' = M.p & q' = M.q & M.(p '&' q) = [:p',q':] by A25;
+      ex p' being Permutation of SetVal(V,p),
+       q' being Permutation of SetVal(V,q) st
+    p' = M.p & q' = M.q & M.(p => q) = p' => q' by A11,A22,A23;
+   hence M.(p => q) = p' => q' by A25;
+  end;
+ uniqueness
+  proof let M1,M2 be ManySortedFunction of SetVal V, SetVal V such that
+A26: M1.VERUM = id 1 and
+A27: for n holds M1.prop n = P.n and
+A28: for p,q ex p' being Permutation of SetVal(V,p),
+             q' being Permutation of SetVal(V,q) st
+    p' = M1.p & q' = M1.q &
+    M1.(p '&' q) = [:p',q':] &
+    M1.(p => q) = p' => q' and
+A29: M2.VERUM = id 1 and
+A30: for n holds M2.prop n = P.n and
+A31:  for p,q ex p' being Permutation of SetVal(V,p),
+             q' being Permutation of SetVal(V,q) st
+    p' = M2.p & q' = M2.q &
+    M2.(p '&' q) = [:p',q':] &
+    M2.(p => q) = p' => q';
+defpred P[Element of HP-WFF] means M1.$1=M2.$1;
+A32: P[VERUM] by A26,A29;
+A33: for n holds P[prop n]
+     proof let n;
+      thus M1.prop n = P.n by A27 .= M2.prop n by A30;
+     end;
+A34: for r,s st P[r] & P[s]
+     holds P[r '&' s] & P[r => s]
+     proof let r,s such that
+A35:    M1.r=M2.r & M1.s=M2.s;
+       consider p' being Permutation of SetVal(V,r),
+                q' being Permutation of SetVal(V,s) such that
+A36:     p' = M1.r & q' = M1.s and
+A37:     M1.(r '&' s) = [:p',q':] and
+A38:     M1.(r => s) = p' => q' by A28;
+       consider p' being Permutation of SetVal(V,r),
+                q' being Permutation of SetVal(V,s) such that
+A39:     p' = M2.r & q' = M2.s and
+A40:     M2.(r '&' s) = [:p',q':] and
+A41:     M2.(r => s) = p' => q' by A31;
+
+      thus M1.(r '&' s) = M2.(r '&' s) by A35,A36,A37,A39,A40;
+      thus M1.(r => s) = M2.(r => s) by A35,A36,A38,A39,A41;
+     end;
+      for r holds P[r] from HP_Ind(A32,A33,A34);
+    then for r being set st r in HP-WFF holds M1.r=M2.r;
+   hence M1 = M2 by PBOOLE:3;
+  end;
+end;
+
+definition let V,P,p;
+ func Perm(P,p) -> Function of SetVal(V,p), SetVal(V,p) equals
+:Def6:  (Perm P).p;
+  correctness
+   proof
+defpred P[Element of HP-WFF] means
+(Perm P).$1 is Function of SetVal(V,$1), SetVal(V,$1);
+(Perm P).VERUM = id 1 & SetVal(V,VERUM) = 1 by Def5,Th29;
+then A1:  P[VERUM];
+A2: for n holds
+     P[prop n]
+    proof let n;
+A3:    SetVal(V,prop n) = V.n by Th30;
+        P.n is Function of V.n, V.n by Def4;
+     hence (Perm P).prop n is Function of SetVal(V,prop n), SetVal(V,prop n)
+                   by A3,Def5;
+    end;
+A4: for r,s st
+         P[r] & P[s] holds P[r '&' s] & P[r => s]
+     proof let r,s such that
+         (Perm P).r is Function of SetVal(V,r), SetVal(V,r) and
+         (Perm P).s is Function of SetVal(V,s), SetVal(V,s);
+A5:     SetVal(V,r '&' s) = [:SetVal(V,r), SetVal(V,s):] by Th31;
+A6:     SetVal(V,r => s) = Funcs(SetVal(V,r),SetVal(V,s)) by Th32;
+         ex r' being Permutation of SetVal(V,r),
+                s' being Permutation of SetVal(V,s) st
+       r' = (Perm P).r & s' = (Perm P).s &
+       (Perm P).(r '&' s) = [:r',s':] &
+       (Perm P).(r => s) = r' => s' by Def5;
+      hence thesis by A5,A6;
+     end;
+       for p holds P[p] from HP_Ind(A1,A2,A4);
+    hence thesis;
+   end;
+end;
+
+theorem Th33:
+ Perm(P,VERUM) = id SetVal(V,VERUM)
+ proof
+  thus Perm(P,VERUM) = (Perm P).VERUM by Def6
+     .= id 1 by Def5
+     .= id SetVal(V,VERUM) by Th29;
+ end;
+
+theorem Th34:
+ Perm(P,prop n) = P.n
+ proof
+  thus Perm(P,prop n) = (Perm P).prop n by Def6 .= P.n by Def5;
+ end;
+
+theorem Th35:
+ Perm(P,p '&' q) = [:Perm(P,p),Perm(P,q):]
+ proof
+   consider p' being Permutation of SetVal(V,p),
+            q' being Permutation of SetVal(V,q) such that
+A1: p' = (Perm P).p & q' = (Perm P).q and
+A2: (Perm P).(p '&' q) = [:p',q':] and
+      (Perm P).(p => q) = p' => q' by Def5;
+  thus Perm(P,p '&' q) = [:p',q':] by A2,Def6
+      .= [:Perm(P,p),q':] by A1,Def6
+      .= [:Perm(P,p),Perm(P,q):] by A1,Def6;
+ end;
+
+theorem Th36:
+  for p' being Permutation of SetVal(V,p), q' being Permutation of SetVal(V,q)
+   st p' = Perm(P,p) & q' = Perm(P,q)
+  holds Perm(P,p => q) = p' => q'
+proof
+ let p' be Permutation of SetVal(V,p),
+     q' be Permutation of SetVal(V,q) such that
+A1: p' = Perm(P,p) & q' = Perm(P,q);
+A2: ex p' being Permutation of SetVal(V,p),
+      q' being Permutation of SetVal(V,q) st
+    p' = (Perm P).p & q' = (Perm P).q &
+    (Perm P).(p '&' q) = [:p',q':] &
+    (Perm P).(p => q) = p' => q' by Def5;
+  (Perm P).p = Perm(P,p) & (Perm P).q = Perm(P,q) by Def6;
+ hence Perm(P,p => q) = p' => q' by A1,A2,Def6;
+end;
+
+definition let V,P,p;
+ cluster Perm(P,p) -> bijective;
+ coherence
+  proof
+defpred P[Element of HP-WFF] means Perm(P,$1) is bijective;
+      Perm(P,VERUM) = id SetVal(V,VERUM) by Th33;
+then A1:  P[VERUM];
+A2:  for n holds P[prop n]
+    proof let n;
+A3:    SetVal(V,prop n) = V.n by Th30;
+        Perm(P,prop n) = P.n by Th34;
+     hence thesis by A3,Def4;
+    end;
+A4: for r,s st P[r] & P[s]
+        holds
+         P[r '&' s] & P[r => s]
+     proof let r,s;
+A5:    SetVal(V,r '&' s) = [:SetVal(V,r), SetVal(V,s):] by Th31;
+A6:    SetVal(V,r => s) = Funcs(SetVal(V,r),SetVal(V,s)) by Th32;
+      assume Perm(P,r) is bijective;
+       then reconsider r' = Perm(P,r) as Permutation of SetVal(V,r);
+      assume Perm(P,s) is bijective;
+       then reconsider s' = Perm(P,s) as Permutation of SetVal(V,s);
+         Perm(P,r '&' s) = [:r',s':] by Th35;
+      hence Perm(P,r '&' s) is bijective by A5,Th25;
+         Perm(P,r => s) = r' => s' by Th36;
+      hence Perm(P,r => s) is bijective by A6;
+     end;
+      for p holds P[p] from HP_Ind(A1,A2,A4);
+   hence thesis;
+    end;
+end;
+
+theorem Th37:
+ for g being Function of SetVal(V,p), SetVal(V,q)
+ holds Perm(P,p => q).g = Perm(P,q)*g*Perm(P,p)"
+proof let g be Function of SetVal(V,p), SetVal(V,q);
+ thus Perm(P,p => q).g = (Perm(P,p) => Perm(P,q)).g by Th36
+       .= Perm(P,q)*g*Perm(P,p)" by Def1;
+end;
+
+theorem Th38:
+ for g being Function of SetVal(V,p), SetVal(V,q)
+ holds Perm(P,p => q)".g = Perm(P,q)"*g*Perm(P,p)
+proof let g be Function of SetVal(V,p), SetVal(V,q);
+ thus Perm(P,p => q)".g = (Perm(P,p) => Perm(P,q))".g by Th36
+       .= Perm(P,q)"*g*Perm(P,p) by Th26;
+end;
+
+theorem Th39:
+ for f,g being Function of SetVal(V,p), SetVal(V,q) st f = Perm(P,p => q).g
+ holds Perm(P,q)*g = f*Perm(P,p)
+proof let f,g be Function of SetVal(V,p), SetVal(V,q) such that
+A1: f = Perm(P,p => q).g;
+ thus Perm(P,q)*g = Perm(P,q)*g*(id SetVal(V,p)) by FUNCT_2:23
+        .= Perm(P,q)*g*(Perm(P,p)"*Perm(P,p)) by FUNCT_2:88
+        .= Perm(P,q)*g*Perm(P,p)"*Perm(P,p) by RELAT_1:55
+        .= f*Perm(P,p) by A1,Th37;
+end;
+
+theorem Th40:
+ for V for P being Permutation of V
+ for x being set st x is_a_fixpoint_of Perm(P,p)
+ for f being Function st f is_a_fixpoint_of Perm(P,p => q)
+  holds f.x is_a_fixpoint_of Perm(P,q)
+proof
+ let V; let P be Permutation of V;
+  let x be set such that
+A1: x is_a_fixpoint_of Perm(P,p);
+  let f be Function such that
+A2: f is_a_fixpoint_of Perm(P,p => q);
+    dom Perm(P,p => q) = SetVal(V,p => q) by FUNCT_2:67
+                     .= Funcs(SetVal(V,p),SetVal(V,q)) by Th32;
+  then f in Funcs(SetVal(V,p),SetVal(V,q)) by A2,KNASTER:def 1;
+  then reconsider g = f as Function of SetVal(V,p), SetVal(V,q) by FUNCT_2:121;
+    dom Perm(P,p => q) = SetVal(V,p => q) by FUNCT_2:67
+                     .= Funcs(SetVal(V,p),SetVal(V,q)) by Th32;
+  then A3:  f in Funcs(SetVal(V,p),SetVal(V,q)) by A2,KNASTER:def 1;
+      dom Perm(P,p) = SetVal(V,p) by FUNCT_2:67;
+  then A4:  x in SetVal(V,p) by A1,KNASTER:def 1;
+  then f.x in SetVal(V,q) by A3,Th5;
+ hence f.x in dom Perm(P,q) by FUNCT_2:67;
+  set h = Perm(P,p => q).f;
+    h = Perm(P,q)*g*Perm(P,p)" by Th37;
+  then reconsider h as Function of SetVal(V,p), SetVal(V,q);
+A5: h = f by A2,KNASTER:def 1;
+ thus Perm(P,q).(f.x) = (Perm(P,q)*g).x by A4,FUNCT_2:21
+         .= (f*Perm(P,p)).x by A5,Th39
+         .= f.(Perm(P,p).x) by A4,FUNCT_2:21
+         .= f.x by A1,KNASTER:def 1;
+end;
+
+
+begin :: canonical formulae
+
+definition let p;
+ attr p is canonical means
+:Def7:  for V ex x being set st
+   for P being Permutation of V holds x is_a_fixpoint_of Perm(P,p);
+end;
+
+definition
+ cluster VERUM -> canonical;
+ coherence
+  proof let V;
+   take 0;
+   let P be Permutation of V;
+A1:  SetVal(V,VERUM) = 1 by Th29;
+      0 in 1 by CARD_5:1,TARSKI:def 1;
+   hence 0 is_a_fixpoint_of Perm(P,VERUM) by A1,Th3,CARD_5:1;
+  end;
+end;
+
+theorem Th41:
+ p => (q => p) is canonical
+proof let V;
+  deffunc F(set)=SetVal(V,q) --> $1;
+A1: for x being Element of SetVal(V,p)
+     holds F(x) in SetVal(V,q => p)
+  proof let x be Element of SetVal(V,p);
+      SetVal(V,q) --> x is Function of SetVal(V,q),SetVal(V,p) by FUNCOP_1:57;
+    then SetVal(V,q) --> x in Funcs(SetVal(V,q),SetVal(V,p)) by FUNCT_2:11;
+   hence SetVal(V,q) --> x in SetVal(V,q => p) by Th32;
+  end;
+  consider f being Function of SetVal(V,p), SetVal(V,q => p) such that
+A2: for x being Element of SetVal(V,p) holds
+     f.x = F(x) from FunctR_ealEx(A1);
+ take f;
+ let P be Permutation of V;
+    f in Funcs(SetVal(V,p),SetVal(V,q => p)) by FUNCT_2:11;
+  then f in SetVal(V,p => (q => p)) by Th32;
+ hence f in dom Perm(P,p => (q => p)) by FUNCT_2:def 1;
+    now let x be Element of SetVal(V,p);
+     x in SetVal(V,p);
+   then x in rng Perm(P,p) by FUNCT_2:def 3;
+then A3: Perm(P,p)".x in dom Perm(P,p) by PARTFUN2:79;
+    reconsider g = SetVal(V,q)-->(Perm(P,p)".x)
+         as Function of SetVal(V,q), SetVal(V,p) by FUNCOP_1:57;
+   thus f.x = SetVal(V,q) --> x by A2
+       .= (SetVal(V,q)-->(id SetVal(V,p)).x) by FUNCT_1:34
+       .= (SetVal(V,q)-->((Perm(P,p)*Perm(P,p)").x)) by FUNCT_2:88
+       .= (SetVal(V,q)-->(Perm(P,p).(Perm(P,p)".x))) by FUNCT_2:21
+       .= Perm(P,p)*(SetVal(V,q)-->(Perm(P,p)".x)) by A3,FUNCOP_1:23
+       .= Perm(P,p)*(Perm(P,q)""SetVal(V,q)-->(Perm(P,p)".x)) by FUNCT_2:48
+       .= Perm(P,p)*(g*Perm(P,q)") by FUNCOP_1:25
+       .= Perm(P,p)*g*Perm(P,q)" by RELAT_1:55
+       .= Perm(P,q => p).g by Th37
+       .= (Perm(P,q => p).(f.(Perm(P,p)".x))) by A2
+       .= (Perm(P,q => p)*f).(Perm(P,p)".x) by FUNCT_2:21
+       .= (Perm(P,q => p)*f*Perm(P,p)").x by FUNCT_2:21;
+  end;
+ hence f = Perm(P,q => p)*f*Perm(P,p)" by FUNCT_2:113
+    .= Perm(P,p => (q => p)).f by Th37;
+end;
+
+theorem Th42:
+ (p => (q => r)) => ((p => q) => (p => r)) is canonical
+proof let V;
+A1:  SetVal(V,p => q) = Funcs(SetVal(V,p),SetVal(V,q)) &
+    SetVal(V,p => r) = Funcs(SetVal(V,p),SetVal(V,r)) by Th32;
+deffunc G(Function)=Frege $1;
+A2: for x being Element of SetVal(V,p => (q => r))
+     holds G(x) in SetVal(V,(p => q) => (p => r))
+  proof let x be Element of SetVal(V,p => (q => r));
+      x is Element of Funcs(SetVal(V,p),SetVal(V,q => r)) by Th32;
+    then x is Element of Funcs(SetVal(V,p),Funcs(SetVal(V,q),SetVal(V,r)))
+                              by Th32;
+    then Frege x is Function of SetVal(V,p => q),SetVal(V,p => r)
+                              by A1,Th24;
+    then Frege x in Funcs(SetVal(V,p => q),SetVal(V,p => r)) by FUNCT_2:11;
+   hence Frege x in SetVal(V,(p => q) => (p => r)) by Th32;
+  end;
+  consider F being Function of SetVal(V,p => (q => r)),
+                  SetVal(V,(p => q) => (p => r)) such that
+A3: for x being Element of SetVal(V,p => (q => r)) holds
+     F.x = G(x) from FunctR_ealEx(A2);
+ take F;
+ let P be Permutation of V;
+    F in Funcs(SetVal(V,p => (q => r)), SetVal(V,(p => q) => (p => r)))
+                by FUNCT_2:11;
+  then F in SetVal(V,(p => (q => r)) => ((p => q) => (p => r))) by Th32;
+ hence F in dom Perm(P,(p => (q => r)) => ((p => q) => (p => r)))
+             by FUNCT_2:def 1;
+    now let f be Element of SetVal(V,p => (q => r));
+    reconsider X = Perm(P,q => r)" as
+            Function of SetVal(V,q => r), SetVal(V,q => r);
+      f in SetVal(V,p => (q => r));
+    then f in Funcs(SetVal(V,p),SetVal(V,q => r)) by Th32;
+    then reconsider ff = f as Function of SetVal(V,p),SetVal(V,q => r)
+            by FUNCT_2:121;
+A4:  SetVal(V,q => r) =Funcs(SetVal(V,q),SetVal(V,r)) by Th32;
+    then A5:  product doms ff = product(SetVal(V,p) --> SetVal(V,q)) by Th6
+       .= Funcs(SetVal(V,p),SetVal(V,q)) by CARD_3:20;
+     then A6:    product doms ff = SetVal(V,p => q) by Th32;
+    set Yf = Perm(P,p => (q => r))".f;
+      Yf = Perm(P,q => r)"*ff*Perm(P,p) by Th38;
+    then reconsider h = Frege Yf
+      as Function-yielding Function of SetVal(V,p => q),SetVal(V,p => r)
+                  by A1,A4,Th24;
+    set M = Perm(P,p => r)*h*Perm(P,p => q)";
+      dom M = SetVal(V,p => q) by FUNCT_2:def 1;
+    then reconsider M as ManySortedFunction of product doms f
+                          by A6,PBOOLE:def 3;
+A7: for g be Function st g in product doms f holds M.g = f..g
+    proof let g be Function such that
+A8:    g in product doms f;
+      reconsider G = g as Function of SetVal(V,p),SetVal(V,q)
+                 by A5,A8,FUNCT_2:121;
+      reconsider FF = ff
+       as Function of SetVal(V,p),Funcs(SetVal(V,q),SetVal(V,r)) by A4;
+       dom FF = SetVal(V,p) by FUNCT_2:def 1;
+     then A9:  dom(FF..G) = SetVal(V,p) by PRALG_1:def 18;
+     A10: rng(FF..G) c= SetVal(V,r) by Th20;
+     then FF..G is Function of SetVal(V,p),SetVal(V,r)
+         by A9,FUNCT_2:def 1,RELSET_1:11;
+     then FF..G in Funcs(SetVal(V,p),SetVal(V,r)) by FUNCT_2:11;
+     then A11:  FF..G in SetVal(V,p => r) by Th32;
+     reconsider GG = FF..G as Function of SetVal(V,p), SetVal(V,r)
+                                   by A9,A10,FUNCT_2:def 1,RELSET_1:11;
+       Yf in SetVal(V,p => (q => r));
+     then Yf in Funcs(SetVal(V,p),SetVal(V,q => r)) by Th32;
+     then Yf is Function of SetVal(V,p), Funcs(SetVal(V,q),SetVal(V,r))
+                      by A4,FUNCT_2:121;
+     then A12:  product doms Yf
+         = product(SetVal(V,p) --> SetVal(V,q)) by Th6
+        .= Funcs(SetVal(V,p),SetVal(V,q)) by CARD_3:20
+        .= SetVal(V,p => q) by Th32;
+        Perm(P,q)"*G*Perm(P,p) in Funcs(SetVal(V,p),SetVal(V,q)) by FUNCT_2:11;
+      then A13:    Perm(P,q)"*g*Perm(P,p) in product doms Yf by A12,Th32;
+      then A14:    Perm(P,p => q)".G in SetVal(V,p => q) by A12,Th38;
+A15:  X = (Perm(P,q) => Perm(P,r))" by Th36
+      .= Perm(P,q)" => (Perm(P,r)") by Th27;
+A16:   h.(Perm(P,p => q)".g) = h.(Perm(P,q)"*G*Perm(P,p)) by Th38
+         .= Yf..(Perm(P,q)"*g*Perm(P,p)) by A13,PRALG_2:def 8
+         .= (X*ff*Perm(P,p))..(Perm(P,q)"*g*Perm(P,p)) by Th38
+         .= (X*FF)..(Perm(P,q)"*g)*Perm(P,p) by Th18
+         .= (Perm(P,r)"*(FF..G))*Perm(P,p) by A15,Th28
+         .= Perm(P,p => r)".GG by Th38;
+     thus M.g
+         = (Perm(P,p => r)*h).(Perm(P,p => q)".g) by A6,A8,FUNCT_2:21
+        .= Perm(P,p => r).(Perm(P,p => r)".GG) by A14,A16,FUNCT_2:21
+        .= (Perm(P,p => r)*(Perm(P,p => r)")).GG by A11,FUNCT_2:21
+        .= (id SetVal(V,p => r)).GG by FUNCT_2:88
+        .= f..g by A11,FUNCT_1:35;
+    end;
+   thus F.f = Frege f by A3
+    .= Perm(P,p => r)*h*Perm(P,p => q)" by A7,PRALG_2:def 8
+    .= Perm(P,p => q => (p=>r)).h by Th37
+    .= Perm(P,p => q => (p=>r)).(F.(Perm(P,p => (q=>r))".f)) by A3
+    .= (Perm(P,p => q => (p=>r))*F).(Perm(P,p => (q=>r))".f) by FUNCT_2:21
+    .= (Perm(P,(p => q) => (p => r))*F*Perm(P,p => (q => r))").f by FUNCT_2:21;
+  end;
+ hence F = Perm(P,(p => q) => (p => r))*F*Perm(P,p => (q => r))" by FUNCT_2:113
+    .= Perm(P,(p => (q => r)) => ((p => q) => (p => r))).F by Th37;
+end;
+
+theorem Th43:
+ (p '&' q) => p is canonical
+proof let V;
+ take f = pr1(SetVal(V,p),SetVal(V,q));
+ let P be Permutation of V;
+A1: dom Perm(P,(p '&' q) => p) = SetVal(V,(p '&' q) => p) by FUNCT_2:def 1
+      .= Funcs(SetVal(V,p '&' q), SetVal(V,p)) by Th32
+      .= Funcs([:SetVal(V,p), SetVal(V,q):], SetVal(V,p)) by Th31;
+ hence f in dom Perm(P,(p '&' q) => p) by FUNCT_2:11;
+  then f in Funcs(SetVal(V,p '&' q), SetVal(V,p)) by A1,Th31;
+  then reconsider F = f as Function of SetVal(V,p '&' q), SetVal(V,p)
+                            by FUNCT_2:121;
+ thus Perm(P,(p '&' q) => p).f = Perm(P,p)*F*Perm(P,p '&' q)" by Th37
+            .= Perm(P,p)*F*[:Perm(P,p),Perm(P,q):]" by Th35
+            .= Perm(P,p)*F*[:Perm(P,p)",Perm(P,q)":] by FUNCTOR0:7
+            .= Perm(P,p)*(F*[:Perm(P,p)",Perm(P,q)":]) by RELAT_1:55
+            .= Perm(P,p)*(Perm(P,p)"*F) by Th15
+            .= Perm(P,p)*Perm(P,p)"*F by RELAT_1:55
+            .= (id SetVal(V,p))*F by FUNCT_2:88
+            .= f by FUNCT_2:23;
+end;
+
+theorem Th44:
+ (p '&' q) => q is canonical
+proof let V;
+ take f = pr2(SetVal(V,p),SetVal(V,q));
+ let P be Permutation of V;
+A1: dom Perm(P,(p '&' q) => q) = SetVal(V,(p '&' q) => q) by FUNCT_2:def 1
+      .= Funcs(SetVal(V,p '&' q), SetVal(V,q)) by Th32
+      .= Funcs([:SetVal(V,p), SetVal(V,q):], SetVal(V,q)) by Th31;
+ hence f in dom Perm(P,(p '&' q) => q) by FUNCT_2:11;
+  then f in Funcs(SetVal(V,p '&' q), SetVal(V,q)) by A1,Th31;
+  then reconsider F = f as Function of SetVal(V,p '&' q), SetVal(V,q)
+                            by FUNCT_2:121;
+ thus Perm(P,(p '&' q) => q).f = Perm(P,q)*F*Perm(P,p '&' q)" by Th37
+            .= Perm(P,q)*F*[:Perm(P,p),Perm(P,q):]" by Th35
+            .= Perm(P,q)*F*[:Perm(P,p)",Perm(P,q)":] by FUNCTOR0:7
+            .= Perm(P,q)*(F*[:Perm(P,p)",Perm(P,q)":]) by RELAT_1:55
+            .= Perm(P,q)*(Perm(P,q)"*F) by Th16
+            .= Perm(P,q)*Perm(P,q)"*F by RELAT_1:55
+            .= (id SetVal(V,q))*F by FUNCT_2:88
+            .= f by FUNCT_2:23;
+end;
+
+theorem Th45:
+ p => (q => (p '&' q)) is canonical
+proof let V;
+ take f = curry [:id SetVal(V,p),id SetVal(V,q):];
+ let P be Permutation of V;
+    f is Function of SetVal(V,p), Funcs(SetVal(V,q),[:SetVal(V,p),SetVal(V,q):]
+)
+          by CAT_2:1;
+  then f in
+ Funcs(SetVal(V,p), Funcs(SetVal(V,q), [:SetVal(V,p), SetVal(V,q):]))
+          by FUNCT_2:11;
+  then f in Funcs(SetVal(V,p), Funcs(SetVal(V,q), SetVal(V,p '&' q))) by Th31;
+  then A1: f in Funcs(SetVal(V,p), SetVal(V,q => (p '&' q))) by Th32;
+  then f in SetVal(V,p => (q => (p '&' q))) by Th32;
+ hence f in dom Perm(P,p => (q => (p '&' q))) by FUNCT_2:def 1;
+  reconsider F = f as Function of SetVal(V,p), SetVal(V,q => (p '&' q))
+                    by A1,FUNCT_2:121;
+A2:now let x be Element of SetVal(V,p);
+   set Fx = F.(Perm(P,p)".x);
+     Fx in SetVal(V,q => (p '&' q));
+   then Fx in Funcs(SetVal(V,q),SetVal(V,p '&' q)) by Th32;
+   then reconsider Fx as Function of SetVal(V,q), SetVal(V,p '&' q)
+              by FUNCT_2:121;
+   set fx = f.x;
+     F.x in SetVal(V,q => (p '&' q));
+   then fx in Funcs(SetVal(V,q),SetVal(V,p '&' q)) by Th32;
+   then reconsider fx as Function of SetVal(V,q), SetVal(V,p '&' q)
+               by FUNCT_2:121;
+      now let y be Element of SetVal(V,q);
+     thus fx.y = [:id SetVal(V,p),id SetVal(V,q):].[x,y] by CAT_2:3
+       .= [(id SetVal(V,p)).x,(id SetVal(V,q)).y] by FUNCT_3:96
+       .= [(id SetVal(V,p)).x,(Perm(P,q)*Perm(P,q)").y] by FUNCT_2:88
+       .= [(id SetVal(V,p)).x,Perm(P,q).(Perm(P,q)".y)] by FUNCT_2:21
+       .= [(Perm(P,p)*Perm(P,p)").x,Perm(P,q).(Perm(P,q)".y)] by FUNCT_2:88
+       .= [Perm(P,p).(Perm(P,p)".x),Perm(P,q).(Perm(P,q)".y)] by FUNCT_2:21
+       .= [:Perm(P,p),Perm(P,q):].[Perm(P,p)".x,Perm(P,q)".y] by FUNCT_3:96
+       .= Perm(P,p '&' q).[Perm(P,p)".x,Perm(P,q)".y] by Th35
+       .= Perm(P,p '&' q).[Perm(P,p)".x,(id SetVal(V,q)).(Perm(P,q)".y)]
+             by FUNCT_1:35
+       .= Perm(P,p '&' q).
+          [(id SetVal(V,p)).(Perm(P,p)".x),(id SetVal(V,q)).(Perm(P,q)".y)]
+              by FUNCT_1:35
+       .= Perm(P,p '&' q).([:id SetVal(V,p),id SetVal(V,q):].
+                       [Perm(P,p)".x,Perm(P,q)".y]) by FUNCT_3:96
+       .= Perm(P,p '&' q).(Fx.(Perm(P,q)".y)) by CAT_2:3
+       .= (Perm(P,p '&' q)*Fx).(Perm(P,q)".y) by FUNCT_2:21
+       .= (Perm(P,p '&' q)*Fx*Perm(P,q)").y by FUNCT_2:21;
+    end;
+   hence f.x = Perm(P,p '&' q)*Fx*Perm(P,q)" by FUNCT_2:113
+       .= Perm(P,q => (p '&' q)).(F.(Perm(P,p)".x)) by Th37
+       .= (Perm(P,q => (p '&' q))*F).(Perm(P,p)".x) by FUNCT_2:21
+       .= (Perm(P,q => (p '&' q))*F*Perm(P,p)").x by FUNCT_2:21;
+  end;
+ thus Perm(P,p => (q => (p '&' q))).f
+        = Perm(P,q => (p '&' q))*F*Perm(P,p)" by Th37
+       .= f by A2,FUNCT_2:113;
+end;
+
+theorem Th46:
+  p is canonical & p => q is canonical implies q is canonical
+proof assume that
+A1: p is canonical and
+A2: p => q is canonical;
+ let V;
+  consider x being set such that
+A3: for P being Permutation of V holds x is_a_fixpoint_of Perm(P,p) by A1,Def7;
+  consider f being set such that
+A4: for P being Permutation of V holds f is_a_fixpoint_of Perm(P,p => q)
+        by A2,Def7;
+  consider P being Permutation of V;
+A5: f is_a_fixpoint_of Perm(P,p => q) by A4;
+    dom Perm(P,p => q) = SetVal(V,p => q) by FUNCT_2:67
+                     .= Funcs(SetVal(V,p),SetVal(V,q)) by Th32;
+  then f in Funcs(SetVal(V,p),SetVal(V,q)) by A5,KNASTER:def 1;
+  then reconsider f as Function of SetVal(V,p), SetVal(V,q) by FUNCT_2:121;
+ take f.x;
+ let P be Permutation of V;
+A6: x is_a_fixpoint_of Perm(P,p) by A3;
+    f is_a_fixpoint_of Perm(P,p => q) by A4;
+ hence f.x is_a_fixpoint_of Perm(P,q) by A6,Th40;
+end;
+
+theorem
+   p in HP_TAUT implies p is canonical
+proof assume
+A1: p in HP_TAUT;
+  set X = {q: q is canonical};
+    X c= HP-WFF
+   proof let x be set;
+    assume x in X;
+     then ex p st p = x & p is canonical;
+    hence thesis;
+   end;
+  then reconsider X as Subset of HP-WFF;
+    X is Hilbert_theory
+   proof thus VERUM in X;
+    let p,q,r;
+       p => (q => p) is canonical by Th41;
+    hence p => (q => p) in X;
+       (p => (q => r)) => ((p => q) => (p => r)) is canonical by Th42;
+    hence (p => (q => r)) => ((p => q) => (p => r)) in X;
+       (p '&' q) => p is canonical by Th43;
+    hence (p '&' q) => p in X;
+       (p '&' q) => q is canonical by Th44;
+    hence (p '&' q) => q in X;
+       p => (q => (p '&' q)) is canonical by Th45;
+    hence p => (q => (p '&' q)) in X;
+    assume p in X;
+     then A2:   ex s st s = p & s is canonical;
+    assume p => q in X;
+     then ex s st s = p => q & s is canonical;
+     then q is canonical by A2,Th46;
+    hence q in X;
+   end;
+  then HP_TAUT c= X by HILBERT1:13;
+  then p in X by A1;
+  then ex q st p = q & q is canonical;
+ hence thesis;
+end;
+
+definition
+ cluster canonical Element of HP-WFF;
+  existence
+   proof take VERUM;
+    thus thesis;
+   end;
+end;
+
+
+begin :: pseudo-canonical formulae
+
+definition let p;
+ attr p is pseudo-canonical means
+:Def8:  for V for P being Permutation of V
+    ex x being set st x is_a_fixpoint_of Perm(P,p);
+end;
+
+definition
+ cluster canonical -> pseudo-canonical Element of HP-WFF;
+ coherence
+  proof let p;
+   assume
+A1:  p is canonical;
+   let V;
+    consider x being set such that
+A2:   for P being Permutation of V holds x is_a_fixpoint_of Perm(P,p) by A1,
+Def7;
+   let P be Permutation of V;
+   take x;
+   thus x is_a_fixpoint_of Perm(P,p) by A2;
+  end;
+end;
+
+theorem
+   p => (q => p) is pseudo-canonical
+proof reconsider s = p => (q => p) as canonical Element of HP-WFF by Th41;
+    s is pseudo-canonical;
+ hence thesis;
+end;
+
+theorem
+   (p => (q => r)) => ((p => q) => (p => r)) is pseudo-canonical
+proof
+ reconsider s = (p => (q => r)) => ((p => q) => (p => r))
+      as canonical Element of HP-WFF by Th42;
+    s is pseudo-canonical;
+ hence thesis;
+end;
+
+theorem
+   (p '&' q) => p is pseudo-canonical
+proof reconsider s = (p '&' q) => p as canonical Element of HP-WFF by Th43;
+    s is pseudo-canonical;
+ hence thesis;
+end;
+
+theorem
+   (p '&' q) => q is pseudo-canonical
+proof reconsider s = (p '&' q) => q as canonical Element of HP-WFF by Th44;
+    s is pseudo-canonical;
+ hence thesis;
+end;
+
+theorem
+   p => (q => (p '&' q)) is pseudo-canonical
+proof
+ reconsider s = p => (q => (p '&' q)) as canonical Element of HP-WFF by Th45;
+    s is pseudo-canonical;
+ hence thesis;
+end;
+
+theorem
+    p is pseudo-canonical & p => q is pseudo-canonical
+    implies q is pseudo-canonical
+proof assume that
+A1: p is pseudo-canonical and
+A2: p => q is pseudo-canonical;
+ let V; let P be Permutation of V;
+  consider x being set such that
+A3: x is_a_fixpoint_of Perm(P,p) by A1,Def8;
+  consider f being set such that
+A4: f is_a_fixpoint_of Perm(P,p => q) by A2,Def8;
+    dom Perm(P,p => q) = SetVal(V,p => q) by FUNCT_2:67
+                     .= Funcs(SetVal(V,p),SetVal(V,q)) by Th32;
+  then f in Funcs(SetVal(V,p),SetVal(V,q)) by A4,KNASTER:def 1;
+  then reconsider f as Function of SetVal(V,p), SetVal(V,q) by FUNCT_2:121;
+ take f.x;
+ thus f.x is_a_fixpoint_of Perm(P,q) by A3,A4,Th40;
+end;
+
+theorem Th54:
+ for p,q for V for P being Permutation of V
+  st (ex f being set st f is_a_fixpoint_of Perm(P,p))
+   & not (ex f being set st f is_a_fixpoint_of Perm(P,q))
+ holds p => q is not pseudo-canonical
+proof let p,q; let V; let P be Permutation of V;
+ given x being set such that
+A1: x is_a_fixpoint_of Perm(P,p);
+ assume
+A2: for x being set holds not x is_a_fixpoint_of Perm(P,q);
+ assume p => q is pseudo-canonical;
+  then consider f being set such that
+A3: f is_a_fixpoint_of Perm(P,p => q) by Def8;
+    f in dom Perm(P,p => q) by A3,KNASTER:def 1;
+  then f in SetVal(V,p => q) by FUNCT_2:def 1;
+  then f in Funcs(SetVal(V,p),SetVal(V,q)) by Th32;
+  then reconsider f as Function by FUNCT_2:121;
+    f.x is_a_fixpoint_of Perm(P,q) by A1,A3,Th40;
+ hence contradiction by A2;
+end;
+
+theorem
+   (prop 0) => (prop 1) => (prop 0) => prop 0 is not pseudo-canonical
+proof
+defpred P[set,set] means ex i being Integer st $1 = i & $2 = i+1;
+A1: for e being Element of INT holds ex u being Element of INT
+      st P[e,u]
+   proof let e be Element of INT;
+     reconsider e as Integer;
+     reconsider u = e+1 as Element of INT by INT_1:12;
+    take u; thus thesis;
+   end;
+  consider p0 being Function of INT, INT such that
+A2: for e being Element of INT holds P[e,p0.e] from FuncExD(A1);
+A3: dom p0 = INT by FUNCT_2:def 1;
+A4:p0 is one-to-one
+   proof let x1,x2 be set;
+    assume x1 in dom p0 & x2 in dom p0;
+     then reconsider I1 = x1, I2 = x2 as Element of INT by FUNCT_2:def 1;
+     consider i1 being Integer such that
+A5:   I1 = i1 & p0.I1 = i1 + 1 by A2;
+     consider i2 being Integer such that
+A6:   I2 = i2 & p0.I2 = i2 + 1 by A2;
+    assume p0.x1 = p0.x2;
+    hence x1 = x2 by A5,A6,XCMPLX_1:2;
+   end;
+    for y being set holds y in INT iff
+    ex x being set st x in dom p0 & y = p0.x
+   proof let y be set;
+    hereby assume y in INT;
+      then reconsider i = y as Integer by INT_1:12;
+      reconsider x = i-1 as set;
+     take x;
+     thus x in dom p0 by A3,INT_1:12;
+      then ex j being Integer st x = j & p0.x = j+1 by A2,A3;
+     hence y = p0.x by XCMPLX_1:27;
+    end;
+    given x being set such that
+A7:  x in dom p0 and
+A8:  y = p0.x;
+       ex i being Integer st x = i & p0.x = i + 1 by A2,A3,A7;
+    hence y in INT by A8,INT_1:12;
+   end;
+  then A9: rng p0 = INT by FUNCT_1:def 5;
+  then reconsider p0 as Permutation of INT by A4,FUNCT_2:83;
+  set p1 = (0,1) --> (1,0);
+A10: dom p1 = 2 & rng p1 = 2 by CARD_5:1,FUNCT_4:65,67;
+    p1 is one-to-one
+   proof let x1,x2 be set;
+    assume x1 in dom p1 & x2 in dom p1;
+     then A11:    (x1 = 0 or x1 = 1) & (x2 = 0 or x2 = 1) by A10,CARD_5:1,
+TARSKI:def 2;
+       p1.0 = 1 & p1.1 = 0 by FUNCT_4:66;
+    hence thesis by A11;
+   end;
+  then reconsider p1 as Permutation of 2
+      by A10,FUNCT_2:83,def 1,RELSET_1:11;
+  set V = (NAT --> INT) +* (0 .--> 2);
+     dom V = dom(NAT --> INT) \/ dom(0 .--> 2) by FUNCT_4:def 1
+       .= dom(NAT --> INT) \/ {0} by CQC_LANG:5
+       .= NAT \/ {0} by FUNCOP_1:19
+       .= NAT by ZFMISC_1:46;
+  then reconsider V as ManySortedSet of NAT by PBOOLE:def 3;
+    V is non-empty
+   proof
+       rng(NAT --> INT) = { INT } & rng(0 .--> 2) = { 2 }
+        by CQC_LANG:5,FUNCOP_1:14;
+     then A12:   rng V c= { INT } \/ { 2 } by FUNCT_4:18;
+    assume {} in rng V;
+     then {} in { INT } or 0 in { 2 } by A12,XBOOLE_0:def 2;
+    hence contradiction by TARSKI:def 1;
+   end;
+  then reconsider V as SetValuation;
+  set P = (NAT --> p0) +* (0 .--> p1);
+A13: dom P = dom(NAT --> p0) \/ dom(0 .--> p1) by FUNCT_4:def 1
+       .= dom(NAT --> p0) \/ {0} by CQC_LANG:5
+       .= NAT \/ {0} by FUNCOP_1:19
+       .= NAT by ZFMISC_1:46;
+    for n holds P.n is Permutation of V.n
+   proof let n;
+    per cases;
+    suppose
+A14:    n = 0;
+     then A15:    n in {0} by TARSKI:def 1;
+     then n in dom(0 .--> p1) by CQC_LANG:5;
+     then A16:    P.n = (0 .--> p1).0 by A14,FUNCT_4:14
+        .= p1 by CQC_LANG:6;
+       n in dom(0 .--> 2) by A15,CQC_LANG:5;
+     then V.n = (0 .--> 2).0 by A14,FUNCT_4:14
+        .= 2 by CQC_LANG:6;
+    hence P.n is Permutation of V.n by A16;
+    suppose n <> 0;
+     then A17:    not n in {0} by TARSKI:def 1;
+      then not n in dom(0 .--> p1) by CQC_LANG:5;
+      then A18:    P.n = (NAT --> p0).n by FUNCT_4:12
+        .= p0 by FUNCOP_1:13;
+       not n in dom(0 .--> 2) by A17,CQC_LANG:5;
+     then V.n = (NAT --> INT).n by FUNCT_4:12
+          .= INT by FUNCOP_1:13;
+    hence P.n is Permutation of V.n by A18;
+   end;
+  then reconsider P as Permutation of V by A13,Def4;
+  set A = { (0,1) -->(i,j) where i,j is Element of INT:
+    i < j or i is even & i = j},
+      X = product ((0,1) --> (INT,INT));
+    A c= X
+  proof let x be set;
+   assume x in A;
+    then consider i,j being Element of INT such that
+A19:  x = (0,1) -->(i,j) and i < j or i is even & i = j;
+   thus thesis by A19,Th11;
+  end;
+  then reconsider A as Subset of X;
+A20: dom(0 .--> 2) = {0} by CQC_LANG:5;
+   then A21: 0 in dom(0 .--> 2) by TARSKI:def 1;
+A22: 2 = (0 .--> 2).0 by CQC_LANG:6
+       .= V.0 by A21,FUNCT_4:14
+       .= SetVal(V,prop 0) by Th30;
+A23: not 1 in dom(0 .--> 2) by A20,TARSKI:def 1;
+A24: SetVal(V,prop 1) = V.1 by Th30
+         .= (NAT --> INT).1 by A23,FUNCT_4:12
+         .= INT by FUNCOP_1:13;
+A25:  X = product(2 --> INT) by CARD_5:1,FUNCT_4:68
+    .= Funcs(2,INT) by CARD_3:20
+    .= SetVal(V,(prop 0) => prop 1) by A22,A24,Th32;
+  then reconsider f = chi(A,X)
+    as Function of SetVal(V,(prop 0) => prop 1), SetVal(V,prop 0)
+         by A22,CARD_5:1;
+    dom(0 .--> p1) = {0} by CQC_LANG:5;
+  then A26:  0 in dom(0 .--> p1) by TARSKI:def 1;
+A27: Perm(P,prop 0) = P.0 by Th34
+           .= (0 .--> p1).0 by A26,FUNCT_4:14
+           .= p1 by CQC_LANG:6;
+A28: f is_a_fixpoint_of Perm(P,(prop 0) => (prop 1) => prop 0)
+    proof set Q = Perm(P,(prop 0) => (prop 1) => prop 0);
+        f in Funcs(SetVal(V,(prop 0) => prop 1),SetVal(V,prop 0)) by FUNCT_2:11
+;
+      then f in SetVal(V,(prop 0) => (prop 1) => prop 0) by Th32;
+     hence f in dom Q by FUNCT_2:def 1;
+        rng(Perm(P,(prop 0) => prop 1)")
+                 = dom(Perm(P,(prop 0) => prop 1)"") by FUNCT_1:54
+                .= X by A25,FUNCT_2:def 1
+                .= dom f by FUNCT_2:def 1;
+      then A29:    dom(f*Perm(P,(prop 0) => prop 1)")
+                 = dom(Perm(P,(prop 0) => prop 1)") by RELAT_1:46
+                .= rng Perm(P,(prop 0) => prop 1) by FUNCT_1:54
+                .= X by A25,FUNCT_2:def 3
+                .= dom chi(A`,X) by FUNCT_3:def 3;
+        for x being set st x in dom chi(A`,X)
+         holds (f*Perm(P,(prop 0) => prop 1)").x = chi(A`,X).x
+       proof let x be set;
+        assume
+A30:       x in dom chi(A`,X);
+         then x in X by FUNCT_3:def 3;
+         then x in Funcs(SetVal(V,prop 0),SetVal(V,prop 1)) by A25,Th32;
+         then reconsider g = x
+          as Function of SetVal(V,prop 0), SetVal(V,prop 1) by FUNCT_2:121;
+         consider i0,j0 being Element of INT such that
+A31:       g = (0,1) --> (i0,j0) by A22,A24,Th12;
+         reconsider i0, j0 as Integer;
+           dom(0 .--> p1) = {0} by CQC_LANG:5;
+         then A32:      not 1 in dom(0 .--> p1) by TARSKI:def 1;
+A33:       Perm(P,prop 1) = P.1 by Th34
+               .= (NAT --> p0).1 by A32,FUNCT_4:12
+               .= p0 by FUNCOP_1:13;
+A34:      i0-1 in dom p0 by A3,INT_1:12;
+         then ex i being Integer st i0-1 = i & p0.(i0-1) = i+1 by A2,A3;
+         then p0.(i0-1) = i0 by XCMPLX_1:27;
+         then A35:      p0".i0 = i0-1 by A34,FUNCT_1:56;
+A36:      j0-1 in dom p0 by A3,INT_1:12;
+         then ex i being Integer st j0-1 = i & p0.(j0-1) = i+1 by A2,A3;
+         then A37:       p0.(j0-1) = j0 by XCMPLX_1:27;
+           dom(p0") = INT by A9,FUNCT_1:54;
+         then A38:       Perm(P,prop 1)"*g = (0,1) --> (p0".i0,p0".j0) by A31,
+A33,Th14
+                  .= (0,1) --> (i0-1,j0-1) by A35,A36,A37,FUNCT_1:56;
+A39:        (f*Perm(P,(prop 0) => prop 1)").x
+                 = f.((Perm(P,(prop 0) => prop 1)").x) by A29,A30,FUNCT_1:22
+                .= f.(Perm(P,prop 1)"*g*Perm(P,prop 0)) by Th38
+                .= f.((0,1) --> (j0-1,i0-1)) by A27,A38,Th13;
+         per cases;
+         suppose
+A40:        x in A;
+          then consider i,j being Element of INT such that
+A41:        x = (0,1) -->(i,j) and
+A42:        i < j or i is even & i = j;
+A43:        i = i0 & j = j0 by A31,A41,Th10;
+             x in A`` by A40;
+           then A44:       x in X \ A` by SUBSET_1:def 5;
+             j0-1 in INT & i0-1 in INT by INT_1:12;
+           then A45:        (0,1) --> (j0-1,i0-1) in X by Th11;
+             now assume (0,1) --> (j0-1,i0-1) in A;
+             then consider i,j being Element of INT such that
+A46:          (0,1) --> (j0-1,i0-1) = (0,1) --> (i,j) and
+A47:          i < j or i is even & i = j;
+A48:          i = j0-1 & j = i0-1 by A46,Th10;
+            per cases by A47;
+            suppose i < j;
+            hence contradiction by A42,A43,A48,REAL_1:49;
+            suppose i is even & i = j;
+            hence contradiction by A42,A43,A48,Th2,XCMPLX_1:19;
+           end;
+           then (0,1) --> (j0-1,i0-1) in X \ A by A45,XBOOLE_0:def 4;
+          hence (f*Perm(P,(prop 0) => prop 1)").x
+                      = 0 by A39,FUNCT_3:43
+                     .= chi(A`,X).x by A44,FUNCT_3:43;
+         suppose
+A49:        not x in A;
+            x in X by A31,Th11;
+          then x in X \ A by A49,XBOOLE_0:def 4;
+          then A50:      x in A` by SUBSET_1:def 5;
+A51:       i0 >= j0 & (i0 is odd or i0 <> j0) by A31,A49;
+A52:      j0-1 is Element of INT & i0-1 is Element of INT by INT_1:def 2;
+       now per cases by A51,AXIOMS:21;
+           suppose i0 > j0;
+            then j0-1 < i0-1 by REAL_1:54;
+           hence (0,1) --> (j0-1,i0-1) in A by A52;
+           suppose i0 = j0 & i0 is odd;
+            then i0-1 = j0-1 & j0-1 is even by Th2;
+           hence (0,1) --> (j0-1,i0-1) in A by A52;
+          end;
+          hence (f*Perm(P,(prop 0) => prop 1)").x
+                      = 1 by A39,FUNCT_3:def 3
+                     .= chi(A`,X).x by A50,FUNCT_3:def 3;
+       end;
+      then f*Perm(P,(prop 0) => prop 1)" = chi(A`,X) by A29,FUNCT_1:9;
+     hence f = Perm(P,prop 0)*(f*Perm(P,(prop 0) => prop 1)") by A27,Th9
+           .= Perm(P,prop 0)*f*Perm(P,(prop 0) => prop 1)" by RELAT_1:55
+           .= Q.f by Th37;
+    end;
+    for x being set holds not x is_a_fixpoint_of Perm(P,prop 0)
+   proof let x be set;
+    assume x in dom Perm(P,prop 0);
+     then x in SetVal(V,prop 0) by FUNCT_2:def 1;
+     then A53:    x in V.0 by Th30;
+      dom(0 .--> 2) = {0} by CQC_LANG:5;
+    then 0 in dom(0 .--> 2) by TARSKI:def 1;
+    then V.0 = (0 .--> 2).0 by FUNCT_4:14;
+    then A54:     V.0 = 2 by CQC_LANG:6;
+    assume
+A55:  Perm(P,prop 0).x = x;
+    per cases by A53,A54,CARD_5:1,TARSKI:def 2;
+    suppose
+    x = 0;
+    hence contradiction by A27,A55,FUNCT_4:66;
+    suppose
+    x = 1;
+    hence contradiction by A27,A55,FUNCT_4:66;
+   end;
+ hence thesis by A28,Th54;
+end;
+

@@ -1,0 +1,495 @@
+:: Segments of Natural Numbers and Finite Sequences
+::  by Grzegorz Bancerek and Krzysztof Hryniewiecki
+::
+:: Received April 1, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL2, ARYTM, FUNCT_1, BOOLE, RELAT_1, FINSET_1, TARSKI,
+      ORDINAL1, CARD_1, PARTFUN1, ARYTM_1, FINSEQ_1, MCART_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL2, XCMPLX_0, XREAL_0,
+      RELAT_1, FUNCT_1, WELLORD2, ORDINAL1, REAL_1, NAT_1, NUMBERS, PARTFUN1,
+      MCART_1, FINSET_1, CARD_1;
+ constructors NAT_1, RELSET_1, WELLORD2, CARD_1, XREAL_0, MEMBERED, XBOOLE_0,
+      DOMAIN_1;
+ clusters FUNCT_1, RELAT_1, RELSET_1, CARD_1, SUBSET_1, NAT_1, XREAL_0,
+      MEMBERED, ZFMISC_1, XBOOLE_0, ORDINAL2, FINSET_1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+ reserve k,l,m,n,k1,k2 for Nat,
+         a,b,c for natural number,
+         x,y,z,y1,y2,X,Y for set,
+         f,g for Function;
+
+::::::::::::::::::::::::::::::::::::::
+::                                  ::
+::   Segments of Natural Numbers    ::
+::                                  ::
+::::::::::::::::::::::::::::::::::::::
+
+ definition let n be natural number;
+  func Seg n -> set equals
+:: FINSEQ_1:def 1
+  { k : 1 <= k & k <= n };
+ end;
+
+ definition let n be natural number;
+  redefine func Seg n -> Subset of NAT;
+ end;
+
+canceled 2;
+
+theorem :: FINSEQ_1:3
+  a in Seg b iff 1 <= a & a <= b;
+
+theorem :: FINSEQ_1:4
+  Seg 0 = {} & Seg 1 = { 1 } & Seg 2 = { 1,2 };
+
+theorem :: FINSEQ_1:5
+  a = 0 or a in Seg a;
+
+theorem :: FINSEQ_1:6
+   a+1 in Seg(a+1);
+
+theorem :: FINSEQ_1:7
+  a <= b iff Seg a c= Seg b;
+
+theorem :: FINSEQ_1:8
+  Seg a = Seg b implies a = b;
+
+theorem :: FINSEQ_1:9
+   c <= a implies
+    Seg c = Seg c /\ Seg a & Seg c = Seg a /\ Seg c;
+
+theorem :: FINSEQ_1:10
+    (Seg c = Seg c /\ Seg a or Seg c = Seg a /\ Seg c )
+    implies c <= a;
+
+theorem :: FINSEQ_1:11
+    Seg a \/ { a+1 } = Seg (a+1);
+
+::::::::::::::::::::::::::::::::
+::                            ::
+::  Finite FinSequences       ::
+::                            ::
+::::::::::::::::::::::::::::::::
+
+ definition let IT be Relation;
+  attr IT is FinSequence-like means
+:: FINSEQ_1:def 2
+ ex n st dom IT = Seg n;
+ end;
+
+ definition
+  cluster FinSequence-like Function;
+ end;
+
+definition
+  mode FinSequence is FinSequence-like Function;
+end;
+
+ reserve p,q,r,s,t for FinSequence;
+
+definition let n;
+ cluster Seg n -> finite;
+end;
+
+definition
+ cluster FinSequence-like -> finite Function;
+end;
+
+definition let p;
+ redefine func Card p -> Nat means
+:: FINSEQ_1:def 3
+ Seg it = dom p;
+ synonym len p;
+end;
+
+ definition let p;
+  redefine func dom p -> Subset of NAT;
+ end;
+
+canceled 2;
+
+theorem :: FINSEQ_1:14
+    {} is FinSequence;
+
+theorem :: FINSEQ_1:15
+    (ex k st dom f c= Seg k) implies ex p st f c= p;
+
+scheme SeqEx{A()->Nat,P[set,set]}:
+ ex p st dom p = Seg A() & for k st k in Seg A() holds P[k,p.k]
+ provided
+  for k,y1,y2 st k in Seg A() & P[k,y1] & P[k,y2] holds y1=y2
+   and
+  for k st k in Seg A() ex x st P[k,x];
+
+scheme SeqLambda{A()->Nat,F(set) -> set}:
+ ex p being FinSequence st len p = A() & for k st k in Seg A() holds p.k=F(k);
+
+theorem :: FINSEQ_1:16
+    z in p implies ex k st k in dom p & z=[k,p.k];
+
+theorem :: FINSEQ_1:17
+  dom p = dom q & (for k st k in dom p holds p.k = q.k) implies p=q;
+
+theorem :: FINSEQ_1:18
+      ( (len p = len q) & for k st 1 <=k & k <= len p holds p.k=q.k )
+         implies p=q;
+
+theorem :: FINSEQ_1:19
+   p|(Seg a) is FinSequence;
+
+theorem :: FINSEQ_1:20
+   rng p c= dom f implies f*p is FinSequence;
+
+theorem :: FINSEQ_1:21
+    a <= len p & q = p|(Seg a) implies len q = a & dom q = Seg a;
+
+:::::::::::::::::::::::::::::::::
+::                             ::
+::    FinSequences of D        ::
+::                             ::
+:::::::::::::::::::::::::::::::::
+
+ definition let D be set;
+  mode FinSequence of D -> FinSequence means
+:: FINSEQ_1:def 4
+ rng it c= D;
+ end;
+
+definition
+ cluster {} -> FinSequence-like;
+end;
+
+definition let D be set;
+ cluster FinSequence-like PartFunc of NAT,D;
+end;
+
+definition let D be set;
+ redefine mode FinSequence of D -> FinSequence-like PartFunc of NAT,D;
+end;
+
+ reserve D for set;
+
+canceled;
+
+theorem :: FINSEQ_1:23
+    for p being FinSequence of D holds p|(Seg a) is FinSequence of D;
+
+theorem :: FINSEQ_1:24
+   for D being non empty set
+  ex p being FinSequence of D st len p = a;
+
+definition
+  cluster empty FinSequence;
+end;
+
+theorem :: FINSEQ_1:25
+    len p = 0 iff p = {};
+
+theorem :: FINSEQ_1:26
+    p={} iff dom p = {};
+
+theorem :: FINSEQ_1:27
+    p={} iff rng p= {};
+
+canceled;
+
+theorem :: FINSEQ_1:29
+  for D be set holds {} is FinSequence of D;
+
+definition
+  let D be set;
+  cluster empty FinSequence of D;
+end;
+
+definition let x;
+  func <*x*> -> set equals
+:: FINSEQ_1:def 5
+    { [1,x] };
+end;
+
+definition let D be set;
+  func <*>D -> empty FinSequence of D equals
+:: FINSEQ_1:def 6
+     {};
+end;
+
+canceled 2;
+
+theorem :: FINSEQ_1:32
+    p=<*>(D) iff len p = 0;
+
+ definition let p,q;
+  func p^q -> FinSequence means
+:: FINSEQ_1:def 7
+ dom it = Seg (len p + len q) &
+       (for k st k in dom p holds it.k=p.k) &
+       (for k st k in dom q holds it.(len p + k) = q.k);
+ end;
+
+canceled 2;
+
+theorem :: FINSEQ_1:35
+  len(p^q) = len p + len q;
+
+theorem :: FINSEQ_1:36
+  (len p + 1 <= k & k <= len p + len q) implies (p^q).k=q.(k-len p);
+
+theorem :: FINSEQ_1:37
+    len p < k & k <= len(p^q) implies (p^q).k = q.(k - len p);
+
+theorem :: FINSEQ_1:38
+  k in dom (p^q) implies
+    (k in dom p or (ex n st n in dom q & k=len p + n));
+
+theorem :: FINSEQ_1:39
+  dom p c= dom(p^q);
+
+theorem :: FINSEQ_1:40
+  x in dom q implies ex k st k=x & len p + k in dom(p^q);
+
+theorem :: FINSEQ_1:41
+  k in dom q implies len p + k in dom(p^q);
+
+theorem :: FINSEQ_1:42
+   rng p c= rng(p^q);
+
+theorem :: FINSEQ_1:43
+  rng q c= rng(p^q);
+
+theorem :: FINSEQ_1:44
+  rng(p^q) = rng p \/ rng q;
+
+theorem :: FINSEQ_1:45
+  p^q^r = p^(q^r);
+
+theorem :: FINSEQ_1:46
+    p^r = q^r or r^p = r^q implies p = q;
+
+theorem :: FINSEQ_1:47
+  p^{} = p & {}^p = p;
+
+theorem :: FINSEQ_1:48
+     p^q = {} implies p={} & q={};
+
+ definition let D be set;let p,q be FinSequence of D;
+ redefine func p^q -> FinSequence of D;
+ end;
+
+ definition let x;
+  redefine func <*x*> -> Function means
+:: FINSEQ_1:def 8
+  dom it = Seg 1 & it.1 = x;
+ end;
+
+ definition let x;
+  cluster <*x*> -> Function-like Relation-like;
+ end;
+
+ definition let x;
+  cluster <*x*> -> FinSequence-like;
+ end;
+
+canceled;
+
+theorem :: FINSEQ_1:50
+  p^q is FinSequence of D implies
+     p is FinSequence of D & q is FinSequence of D;
+
+definition let x,y;
+  func <*x,y*> -> set equals
+:: FINSEQ_1:def 9
+    <*x*>^<*y*>;
+
+  let z;
+  func <*x,y,z*> -> set equals
+:: FINSEQ_1:def 10
+    <*x*>^<*y*>^<*z*>;
+
+end;
+
+definition let x,y;
+  cluster <*x,y*> -> Function-like Relation-like;
+
+  let z;
+  cluster <*x,y,z*> -> Function-like Relation-like;
+
+end;
+
+definition let x,y;
+  cluster <*x,y*> -> FinSequence-like;
+
+  let z;
+  cluster <*x,y,z*> -> FinSequence-like;
+
+end;
+
+canceled;
+
+theorem :: FINSEQ_1:52
+    <*x*> = { [1,x] };
+
+canceled 2;
+
+theorem :: FINSEQ_1:55
+   p=<*x*> iff dom p = Seg 1 & rng p = {x};
+
+theorem :: FINSEQ_1:56
+  p=<*x*> iff len p = 1 & rng p = {x};
+
+theorem :: FINSEQ_1:57
+  p = <*x*> iff len p = 1 & p.1 = x;
+
+theorem :: FINSEQ_1:58
+    (<*x*>^p).1 = x;
+
+theorem :: FINSEQ_1:59
+  (p^<*x*>).(len p + 1)=x;
+
+theorem :: FINSEQ_1:60
+  <*x,y,z*>=<*x*>^<*y,z*> &
+  <*x,y,z*>=<*x,y*>^<*z*>;
+
+theorem :: FINSEQ_1:61
+  p = <*x,y*> iff len p = 2 & p.1=x & p.2=y;
+
+theorem :: FINSEQ_1:62
+    p = <*x,y,z*> iff len p = 3 & p.1 = x & p.2 = y & p.3 = z;
+
+theorem :: FINSEQ_1:63
+   p <> {} implies ex q,x st p=q^<*x*>;
+
+definition let D be non empty set; let x be Element of D;
+ redefine func <*x*> -> FinSequence of D;
+ end;
+
+::::::::::::::::::::::::::::::::::::::::::::::
+:: scheme of induction for finite sequences ::
+::::::::::::::::::::::::::::::::::::::::::::::
+
+scheme IndSeq{P[FinSequence]}:
+ for p holds P[p]
+  provided
+  P[{}] and
+  for p,x st P[p] holds P[p^<*x*>];
+
+theorem :: FINSEQ_1:64
+    for p,q,r,s being FinSequence st p^q = r^s & len p <= len r
+  ex t being FinSequence st p^t = r;
+
+ definition let D be set;
+  func D* -> set means
+:: FINSEQ_1:def 11
+ x in it iff x is FinSequence of D;
+ end;
+
+ definition let D be set;
+  cluster D* -> non empty;
+ end;
+
+canceled;
+
+theorem :: FINSEQ_1:66
+    {} in D*;
+
+scheme SepSeq{D()->non empty set, P[FinSequence]}:
+ ex X st (for x holds x in X iff
+            ex p st (p in D()* & P[p] & x=p));
+
+:::::::::::::::::::::::::::::::
+::                           ::
+::        Subsequences       ::
+::                           ::
+:::::::::::::::::::::::::::::::
+
+definition let IT be Function;
+    attr IT is FinSubsequence-like means
+:: FINSEQ_1:def 12
+   ex k st dom IT c= Seg k;
+end;
+
+definition
+    cluster FinSubsequence-like Function;
+end;
+
+definition
+    mode FinSubsequence is FinSubsequence-like Function;
+end;
+
+canceled;
+
+theorem :: FINSEQ_1:68
+    for p being FinSequence holds p is FinSubsequence;
+
+theorem :: FINSEQ_1:69
+    p|X is FinSubsequence & X|p is FinSubsequence;
+
+reserve p' for FinSubsequence;
+
+definition let X;
+  given k such that  X c= Seg k;
+  func Sgm X -> FinSequence of NAT means
+:: FINSEQ_1:def 13
+ rng it = X & for l,m,k1,k2 st
+               ( 1 <= l & l < m & m <= len it &
+                    k1=it.l & k2=it.m) holds k1 < k2;
+end;
+
+canceled;
+
+theorem :: FINSEQ_1:71
+  rng Sgm dom p' = dom p';
+
+definition let p';
+  func Seq p' -> Function equals
+:: FINSEQ_1:def 14
+  p'* Sgm(dom p');
+end;
+
+definition let p';
+ cluster Seq p' -> FinSequence-like;
+end;
+
+theorem :: FINSEQ_1:72
+    for X st ex k st X c= Seg k holds Sgm X = {} iff X = {};
+
+begin :: Moved from FINSET_1, 1998
+
+theorem :: FINSEQ_1:73 :: FINSET_1:def 1
+ D is finite iff ex p st D = rng p;
+
+definition
+ cluster finite empty Function;
+end;
+
+definition
+ cluster finite non empty Function;
+end;
+
+definition let R be finite Relation;
+ cluster rng R -> finite;
+end;
+
+begin :: Moved from CARD_1, 1999
+
+theorem :: FINSEQ_1:74
+   Seg n,Seg m are_equipotent implies n = m;
+
+theorem :: FINSEQ_1:75
+   Seg n,n are_equipotent;
+
+theorem :: FINSEQ_1:76
+   Card Seg n = Card n;
+
+theorem :: FINSEQ_1:77
+    X is finite implies ex n st X,Seg n are_equipotent;
+
+theorem :: FINSEQ_1:78
+    for n being Nat holds
+  card Seg n = n & card n = n & card Card n = n;

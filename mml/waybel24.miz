@@ -1,0 +1,1921 @@
+:: Scott-Continuous Functions, Part II
+::  by Adam Grabowski
+::
+:: Received June 22, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary WAYBEL_0, WAYBEL11, WAYBEL_9, WAYBEL17, LATTICES, ORDINAL2,
+      PRE_TOPC, YELLOW_1, ORDERS_1, RELAT_2, SEQM_3, FUNCT_1, RELAT_1,
+      FUNCOP_1, LATTICE3, BOOLE, GROUP_1, BHSP_3, YELLOW_0, FUNCT_2, BORSUK_1,
+      FUNCT_5, MCART_1, QUANTAL1, CAT_1, MONOID_0, WAYBEL_3, PBOOLE, CARD_3,
+      FUNCT_4, WAYBEL24;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, RELAT_1, FUNCT_1,
+      FUNCT_2, FUNCT_5, SEQM_3, MONOID_0, CARD_3, FUNCOP_1, BORSUK_1, PRE_TOPC,
+      ORDERS_1, LATTICE3, PBOOLE, FUNCT_7, YELLOW_0, ORDERS_3, WAYBEL_0,
+      YELLOW_1, YELLOW_2, WAYBEL_3, WAYBEL_9, WAYBEL11, WAYBEL17, YELLOW_3;
+ constructors FUNCT_7, SEQM_3, ORDERS_3, WAYBEL_3, WAYBEL_5, WAYBEL_1,
+      WAYBEL17, MONOID_0, BORSUK_1;
+ clusters STRUCT_0, WAYBEL_0, WAYBEL_3, RELSET_1, YELLOW_1, LATTICE3, BORSUK_2,
+      WAYBEL10, WAYBEL11, WAYBEL17, YELLOW_3, YELLOW_0, MONOID_0, SUBSET_1,
+      FUNCT_2, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, WAYBEL_0, LATTICE3, ORDERS_1, MONOID_0, XBOOLE_0;
+ theorems WAYBEL_0, TARSKI, FUNCT_1, FUNCT_2, YELLOW_0, STRUCT_0, YELLOW_2,
+      WAYBEL_1, ZFMISC_1, LATTICE3, WAYBEL10, CAT_2, WAYBEL17, YELLOW_3,
+      MCART_1, FUNCT_5, YELLOW_5, YELLOW10, WAYBEL_9, FUNCOP_1, BORSUK_1,
+      YELLOW_1, SEQM_3, ORDERS_1, WAYBEL_3, PBOOLE, CARD_3, FUNCT_7, RELAT_1,
+      WAYBEL15, RELSET_1, XBOOLE_0, XBOOLE_1;
+ schemes XBOOLE_0;
+
+begin :: Preliminaries
+
+theorem
+   for S, T being up-complete Scott TopLattice
+ for M being Subset of SCMaps (S,T) holds
+  "\/" (M, SCMaps (S,T)) is continuous map of S, T
+proof
+ let S, T be up-complete Scott TopLattice;
+ let M be Subset of SCMaps (S,T);
+A1: the carrier of SCMaps (S,T) c= the carrier of MonMaps (S,T)
+   by YELLOW_0:def 13;
+   "\/"
+ (M, SCMaps (S,T)) in the carrier of MonMaps (S,T) by A1,TARSKI:def 3;
+ then "\/" (M, SCMaps (S,T)) is Element of MonMaps (S,T);
+ hence thesis by WAYBEL10:10,WAYBEL17:def 2;
+end;
+
+definition let S be non empty RelStr,
+               T be non empty reflexive RelStr;
+  cluster constant -> monotone map of S, T;
+  coherence
+  proof
+    let f be map of S, T;
+    assume A1: f is constant;
+      for x,y being Element of S st x <= y holds f.x <= f.y
+    proof
+      let x,y be Element of S;
+      assume x <= y;
+        x in the carrier of S & y in the carrier of S;
+      then x in dom f & y in dom f by FUNCT_2:def 1;
+      hence thesis by A1,SEQM_3:def 5;
+    end;
+    hence f is monotone by WAYBEL_1:def 2;
+  end;
+end;
+
+definition let S be non empty RelStr,
+               T be reflexive non empty RelStr,
+               a be Element of T;
+  cluster S --> a -> monotone;
+  coherence
+  proof
+    set f = S --> a;
+      for x, y being Element of S st x <= y holds f.x <= f.y
+    proof
+      let x, y be Element of S;
+      assume x <= y;
+        f.x = ((the carrier of S) --> a). x by BORSUK_1:def 3
+         .= a by FUNCOP_1:13
+         .= ((the carrier of S) --> a). y by FUNCOP_1:13
+         .= f.y by BORSUK_1:def 3;
+      hence thesis;
+    end;
+    hence thesis by WAYBEL_1:def 2;
+  end;
+end;
+
+theorem
+   for S being non empty RelStr,
+     T being lower-bounded antisymmetric reflexive non empty RelStr holds
+  Bottom MonMaps(S, T) = S --> Bottom T
+proof
+  let S be non empty RelStr,
+      T be lower-bounded antisymmetric reflexive non empty RelStr;
+  set L = MonMaps(S, T);
+  reconsider f = S --> Bottom T as Element of L by WAYBEL10:10;
+A1: f is_>=_than {} by YELLOW_0:6;
+  reconsider f' = f as map of S, T;
+    for b being Element of L st b is_>=_than {} holds f <= b
+  proof
+    let b be Element of L;
+    assume b is_>=_than {};
+    reconsider b' = b as map of S, T by WAYBEL10:10;
+    reconsider b'' = b', f'' = f as Element of T|^ the carrier of S
+      by YELLOW_0:59;
+      for x being Element of S holds f'.x <= b'.x
+    proof
+      let x be Element of S;
+        f'. x = ((the carrier of S) --> Bottom T). x by BORSUK_1:def 3
+           .= Bottom T by FUNCOP_1:13;
+      hence thesis by YELLOW_0:44;
+    end;
+    then f' <= b' by YELLOW_2:10;
+    then f'' <= b'' by WAYBEL10:12;
+    hence thesis by YELLOW_0:61;
+  end;
+  then f = "\/"({}, L) by A1,YELLOW_0:30;
+  hence thesis by YELLOW_0:def 11;
+end;
+
+theorem
+   for S being non empty RelStr,
+     T being upper-bounded antisymmetric reflexive non empty RelStr holds
+  Top MonMaps(S, T) = S --> Top T
+proof
+  let S be non empty RelStr,
+      T be upper-bounded antisymmetric reflexive non empty RelStr;
+  set L = MonMaps(S, T);
+  reconsider f = S --> Top T as Element of L by WAYBEL10:10;
+A1: f is_<=_than {} by YELLOW_0:6;
+  reconsider f' = f as map of S, T;
+    for b being Element of L st b is_<=_than {} holds f >= b
+  proof
+    let b be Element of L;
+    assume b is_<=_than {};
+    reconsider b' = b as map of S, T by WAYBEL10:10;
+    reconsider b'' = b', f'' = f as Element of T|^ the carrier of S
+      by YELLOW_0:59;
+      for x being Element of S holds f'.x >= b'.x
+    proof
+      let x be Element of S;
+        f'. x = ((the carrier of S) --> Top T). x by BORSUK_1:def 3
+           .= Top T by FUNCOP_1:13;
+      hence thesis by YELLOW_0:45;
+    end;
+    then f' >= b' by YELLOW_2:10;
+    then f'' >= b'' by WAYBEL10:12;
+    hence thesis by YELLOW_0:61;
+  end;
+  then f = "/\"({}, L) by A1,YELLOW_0:31;
+  hence thesis by YELLOW_0:def 12;
+end;
+
+FuncFraenkelSL{ B, C() -> non empty RelStr,
+        A(set) -> Element of C(), f() -> Function, P[set]}:
+  f().:{A(x) where x is Element of B(): P[x]} =
+   {f().A(x) where x is Element of B(): P[x]}
+  provided A1: the carrier of C() c= dom f()
+  proof set f = f();
+   thus f.:{A(x) where x is Element of B(): P[x]} c=
+      {f.A(x) where x is Element of B(): P[x]}
+     proof let y be set; assume
+         y in f.:{A(x) where x is Element of B(): P[x]};
+      then consider z being set such that
+A2:     z in dom f & z in {A(x) where x is Element of B(): P[x]}
+       & y = f.z by FUNCT_1:def 12;
+         ex x being Element of B() st z = A(x) & P[x] by A2;
+      hence thesis by A2;
+     end;
+   let y be set;
+   assume y in {f.A(x) where x is Element of B(): P[x]};
+   then consider x being Element of B() such that
+A3:   y = f.A(x) & P[x];
+     A(x) in the carrier of C();
+   then A(x) in dom f &
+    A(x) in {A(z) where z is Element of B(): P[z]} by A1,A3;
+   hence thesis by A3,FUNCT_1:def 12;
+  end;
+
+Fraenkel6A{ B() -> LATTICE, F(set) -> set, P[set], Q[set] } :
+  { F(v1) where v1 is Element of B() : P[v1] }
+  = { F(v2) where v2 is Element of B() : Q[v2] }
+ provided
+A1: for v being Element of B() holds P[v] iff Q[v]
+proof
+  thus { F(v1) where v1 is Element of B() : P[v1] } c=
+    { F(v2) where v2 is Element of B() : Q[v2] }
+  proof
+    let a be set;
+    assume a in { F(v1) where v1 is Element of B() : P[v1] };
+    then consider V1 being Element of B() such that
+A2:    a = F(V1) & P[V1];
+      Q[V1] by A1,A2;
+    hence thesis by A2;
+  end;
+  thus { F(v2) where v2 is Element of B() : Q[v2] } c=
+    { F(v1) where v1 is Element of B() : P[v1] }
+  proof
+    let a be set;
+    assume a in { F(v1) where v1 is Element of B() : Q[v1] };
+    then consider V1 being Element of B() such that
+A3:    a = F(V1) & Q[V1];
+      P[V1] by A1,A3;
+    hence thesis by A3;
+  end;
+end;
+
+theorem Th4:
+ for S, T being complete LATTICE,
+     f being monotone map of S, T holds
+   for x being Element of S holds f.x = sup (f.:downarrow x)
+proof
+ let S, T be complete LATTICE,
+     f be monotone map of S, T;
+ let x be Element of S;
+A1: ex_sup_of downarrow x, S by WAYBEL_0:34;
+   sup downarrow x = x by WAYBEL_0:34;
+ then downarrow x is_<=_than x by A1,YELLOW_0:30;
+then A2: f.:downarrow x is_<=_than f.x by YELLOW_2:16;
+   for b being Element of T st b is_>=_than f.:downarrow x holds f.x <= b
+ proof
+   let b be Element of T;
+   assume A3: b is_>=_than f.:downarrow x;
+A4: dom f = the carrier of S by FUNCT_2:def 1;
+     x <= x;
+   then x in downarrow x by WAYBEL_0:17;
+   then f.x in f.:downarrow x by A4,FUNCT_1:def 12;
+   hence thesis by A3,LATTICE3:def 9;
+ end;
+ hence thesis by A2,YELLOW_0:30;
+end;
+
+theorem
+   for S, T being complete lower-bounded LATTICE,
+     f being monotone map of S, T holds
+    ( for x being Element of S holds
+      f.x = "\/"({ f.w where w is Element of S : w <= x },T) )
+proof
+  let S, T be complete lower-bounded LATTICE;
+  let f be monotone map of S, T;
+  let x be Element of S;
+A1: sup (f.:downarrow x) = f. x by Th4
+                     .= f.sup downarrow x by WAYBEL_0:34;
+A2: the carrier of S c= dom f by FUNCT_2:def 1;
+  deffunc A(Element of S) = $1;
+  defpred P[Element of S] means $1 <= x;
+A3:f.:{ A(w) where w is Element of S: P[w]} =
+   {f.A(w) where w is Element of S: P[w]} from FuncFraenkelSL(A2);
+  defpred R[Element of S] means
+    ex y1 being Element of S st $1 <= y1 & y1 in {x};
+A4: for x2 be Element of S holds P[x2] iff R[x2]
+::     (ex y1 being Element of S st x2 <= y1 & y1 in {x})
+   proof
+     let x2 be Element of S;
+     hereby assume A5: x2 <= x;
+         x in {x} by TARSKI:def 1;
+       hence ex y1 being Element of S st x2 <= y1 & y1 in {x} by A5;
+     end;
+     given y1 being Element of S such that
+A6:     x2 <= y1 & y1 in {x};
+     thus thesis by A6,TARSKI:def 1;
+   end;
+A7: { A(w) where w is Element of S : P[w]}
+      = {A(x1) where x1 is Element of S : R[x1]} from Fraenkel6A (A4);
+ downarrow x = downarrow {x} by WAYBEL_0:def 17
+   .= { w where w is Element of S : w <= x } by A7,WAYBEL_0:14;
+  hence thesis by A1,A3,WAYBEL_0:34;
+end;
+
+theorem Th6:
+  for S being RelStr, T being non empty RelStr,
+      F being Subset of (T |^ the carrier of S) holds sup F is map of S, T
+proof
+  let S be RelStr, T be non empty RelStr;
+  let F be Subset of (T |^ the carrier of S);
+  set f = sup F;
+    f in the carrier of (T |^ the carrier of S);
+  then f in Funcs (the carrier of S, the carrier of T) by YELLOW_1:28;
+  then consider f' being Function such that
+A1:  f' = f & dom f' = the carrier of S & rng f' c= the carrier of T
+      by FUNCT_2:def 2;
+    f' is Function of the carrier of S, the carrier of T
+    by A1,FUNCT_2:def 1,RELSET_1:11;
+  hence thesis by A1;
+end;
+
+begin  :: On the Scott continuity of maps
+
+definition let X1, X2, Y be non empty RelStr;
+           let f be map of [:X1, X2:], Y;
+           let x be Element of X1;
+  func Proj (f, x) -> map of X2, Y equals :Def1:
+    (curry f).x;
+  correctness
+  proof
+      [:the carrier of X1, the carrier of X2:] = the carrier of [:X1, X2:]
+      by YELLOW_3:def 2;
+  then curry f is Function of the carrier of X1,
+      Funcs(the carrier of X2, the carrier of Y) by CAT_2:1;
+    then (curry f).x in Funcs(the carrier of X2, the carrier of Y)
+      by FUNCT_2:7;
+    then (curry f).x is Function of the carrier of X2, the carrier of Y
+      by FUNCT_2:121;
+    hence thesis;
+  end;
+end;
+
+reserve X1, X2, Y for non empty RelStr,
+        f for map of [:X1, X2:], Y,
+        x for Element of X1,
+        y for Element of X2;
+
+theorem Th7:
+  for y being Element of X2 holds
+    (Proj (f, x)). y = f. [x, y]
+proof
+  let y be Element of X2;
+A1:Proj (f, x) = (curry f). x by Def1;
+  dom f = the carrier of [:X1, X2:] by FUNCT_2:def 1
+       .= [:the carrier of X1, the carrier of X2:] by YELLOW_3:def 2;
+  then [x,y] in dom f by ZFMISC_1:106;
+  hence thesis by A1,FUNCT_5:27;
+end;
+
+definition let X1, X2, Y be non empty RelStr;
+           let f be map of [:X1, X2:], Y;
+           let y be Element of X2;
+  func Proj (f, y) -> map of X1, Y equals :Def2:
+    (curry' f).y;
+  correctness
+  proof
+      [:the carrier of X1, the carrier of X2:] = the carrier of [:X1, X2:]
+      by YELLOW_3:def 2;
+  then curry' f is Function of the carrier of X2,
+      Funcs(the carrier of X1, the carrier of Y) by CAT_2:2;
+    then (curry' f).y in Funcs(the carrier of X1, the carrier of Y)
+      by FUNCT_2:7;
+    then (curry' f).y is Function of the carrier of X1, the carrier of Y
+      by FUNCT_2:121;
+    hence thesis;
+  end;
+end;
+
+theorem Th8:
+  for x being Element of X1 holds
+    (Proj (f, y)). x = f. [x, y]
+proof
+  let x be Element of X1;
+A1:Proj (f, y) = (curry' f). y by Def2;
+  dom f = the carrier of [:X1, X2:] by FUNCT_2:def 1
+       .= [:the carrier of X1, the carrier of X2:] by YELLOW_3:def 2;
+  then [x,y] in dom f by ZFMISC_1:106;
+  hence thesis by A1,FUNCT_5:29;
+end;
+
+theorem Th9:
+  for R, S, T being non empty RelStr,
+      f being map of [:R,S:], T,
+      a being Element of R,
+      b being Element of S holds
+    Proj (f, a). b = Proj (f, b). a
+proof
+  let R, S, T be non empty RelStr,
+      f be map of [:R,S:], T,
+      a be Element of R,
+      b be Element of S;
+    Proj (f, a). b = f. [a, b] by Th7
+                 .= Proj (f, b). a by Th8;
+  hence thesis;
+end;
+
+definition
+ let S be non empty RelStr, T be non empty reflexive RelStr;
+ cluster antitone map of S, T;
+ existence
+  proof consider c being Element of T;
+   take f = S --> c;
+   let x, y be Element of S;
+     assume
+       [x, y] in the InternalRel of S;
+A1:  f = (the carrier of S) --> c by BORSUK_1:def 3;
+   let a, b be Element of T; assume a = f.x & b = f.y;
+   then a = c & b = c by A1,FUNCOP_1:13;
+   hence b <= a;
+  end;
+end;
+
+theorem Th10:
+  for R, S, T being non empty reflexive RelStr,
+      f being map of [:R,S:], T,
+      a being Element of R,
+      b being Element of S st
+    f is monotone holds Proj (f, a) is monotone & Proj (f, b) is monotone
+proof
+  let R, S, T be non empty reflexive RelStr,
+      f be map of [:R,S:], T;
+  let a be Element of R,
+      b be Element of S;
+  reconsider a as Element of R;
+  reconsider b as Element of S;
+  set g = Proj (f, b), h = Proj (f, a);
+  assume A1: f is monotone;
+A2:now let x, y be Element of S;
+    assume A3: x <= y;
+A4: h. x = f. [a, x] by Th7;
+A5: h. y = f. [a, y] by Th7;
+      a <= a;
+    then [a, x] <= [a, y] by A3,YELLOW_3:11;
+    hence h.x <= h.y by A1,A4,A5,WAYBEL_1:def 2;
+  end;
+    now let x, y be Element of R;
+    assume A6: x <= y;
+A7: g. x = f. [x, b] by Th8;
+A8: g. y = f. [y, b] by Th8;
+      b <= b;
+    then [x, b] <= [y, b] by A6,YELLOW_3:11;
+    hence g.x <= g.y by A1,A7,A8,WAYBEL_1:def 2;
+  end;
+  hence thesis by A2,WAYBEL_1:def 2;
+end;
+
+theorem Th11:
+  for R, S, T being non empty reflexive RelStr,
+      f being map of [:R,S:], T,
+      a being Element of R,
+      b being Element of S st
+    f is antitone holds Proj (f, a) is antitone & Proj (f, b) is antitone
+proof
+  let R, S, T be non empty reflexive RelStr,
+      f be map of [:R,S:], T;
+  let a be Element of R,
+      b be Element of S;
+  reconsider a' = a as Element of R;
+  set g = Proj (f, b), h = Proj (f, a);
+  assume A1: f is antitone;
+A2:now let x, y be Element of S;
+    assume A3: x <= y;
+A4: h. x = f. [a, x] by Th7;
+A5: h. y = f. [a, y] by Th7;
+      a' <= a';
+    then [a', x] <= [a', y] by A3,YELLOW_3:11;
+    hence h.x >= h.y by A1,A4,A5,WAYBEL_0:def 5;
+  end;
+    now let x, y be Element of R;
+    assume A6: x <= y;
+A7: g. x = f. [x, b] by Th8;
+A8: g. y = f. [y, b] by Th8;
+    reconsider b' = b as Element of S;
+      b' <= b';
+    then [x, b'] <= [y, b'] by A6,YELLOW_3:11;
+    hence g.x >= g.y by A1,A7,A8,WAYBEL_0:def 5;
+  end;
+  hence thesis by A2,WAYBEL_9:def 1;
+end;
+
+definition let R, S, T be non empty reflexive RelStr;
+  let f be monotone map of [:R, S:], T;
+  let a be Element of R;
+  cluster Proj (f, a) -> monotone;
+  coherence by Th10;
+end;
+
+definition let R, S, T be non empty reflexive RelStr;
+  let f be monotone map of [:R, S:], T;
+  let b be Element of S;
+  cluster Proj (f, b) -> monotone;
+  coherence by Th10;
+end;
+
+definition let R, S, T be non empty reflexive RelStr;
+  let f be antitone map of [:R, S:], T;
+  let a be Element of R;
+  cluster Proj (f, a) -> antitone;
+  coherence by Th11;
+end;
+
+definition let R, S, T be non empty reflexive RelStr;
+  let f be antitone map of [:R, S:], T;
+  let b be Element of S;
+  cluster Proj (f, b) -> antitone;
+  coherence by Th11;
+end;
+
+theorem Th12:
+  for R, S, T being LATTICE,
+      f being map of [:R,S:], T st
+  ( for a being Element of R, b being Element of S holds
+    Proj (f, a) is monotone & Proj (f, b) is monotone)
+      holds f is monotone
+proof
+  let R, S, T be LATTICE,
+      f be map of [:R,S:], T;
+  assume
+A1: for a being Element of R,
+       b being Element of S holds
+    Proj (f, a) is monotone & Proj (f, b) is monotone;
+    now let x, y be Element of [:R, S:];
+    assume x <= y;
+then A2: x`1 <= y`1 & x`2 <= y`2 by YELLOW_3:12;
+A3: Proj (f, y`2) is monotone by A1;
+A4: f. [x`1, y`2] = Proj (f, y`2). x`1 by Th8;
+   f. [y`1, y`2] = Proj (f, y`2). y`1 by Th8;
+then A5: f. [x`1, y`2] <= f. [y`1, y`2] by A2,A3,A4,WAYBEL_1:def 2;
+A6: Proj (f, x`1) is monotone by A1;
+A7: f. [x`1, x`2] = Proj (f, x`1). x`2 by Th7;
+   f. [x`1, y`2] = Proj (f, x`1). y`2 by Th7;
+    then f. [x`1, x`2] <= f. [x`1, y`2] by A2,A6,A7,WAYBEL_1:def 2;
+then A8: f. [x`1, x`2] <= f. [y`1, y`2] by A5,YELLOW_0:def 2;
+A9: [:the carrier of R, the carrier of S:] = the carrier of [:R, S:]
+      by YELLOW_3:def 2;
+ then f. [y`1, y`2] = f. y by MCART_1:23;
+    hence f.x <= f.y by A8,A9,MCART_1:23;
+  end;
+  hence thesis by WAYBEL_1:def 2;
+end;
+
+theorem
+    for R, S, T being LATTICE,
+      f being map of [:R,S:], T st
+  ( for a being Element of R, b being Element of S holds
+    Proj (f, a) is antitone & Proj (f, b) is antitone)
+      holds f is antitone
+proof
+  let R, S, T be LATTICE,
+      f be map of [:R,S:], T;
+  assume
+A1: for a being Element of R,
+       b being Element of S holds
+    Proj (f, a) is antitone & Proj (f, b) is antitone;
+    now let x, y be Element of [:R, S:];
+    assume x <= y;
+then A2: x`1 <= y`1 & x`2 <= y`2 by YELLOW_3:12;
+A3: Proj (f, y`2) is antitone by A1;
+A4: f. [x`1, y`2] = Proj (f, y`2). x`1 by Th8;
+   f. [y`1, y`2] = Proj (f, y`2). y`1 by Th8;
+then A5: f. [x`1, y`2] >= f. [y`1, y`2] by A2,A3,A4,WAYBEL_9:def 1;
+A6: Proj (f, x`1) is antitone by A1;
+A7: f. [x`1, x`2] = Proj (f, x`1). x`2 by Th7;
+   f. [x`1, y`2] = Proj (f, x`1). y`2 by Th7;
+    then f. [x`1, x`2] >= f. [x`1, y`2] by A2,A6,A7,WAYBEL_9:def 1;
+then A8: f. [x`1, x`2] >= f. [y`1, y`2] by A5,YELLOW_0:def 2;
+A9: [:the carrier of R, the carrier of S:] = the carrier of [:R, S:]
+      by YELLOW_3:def 2;
+    then f. [y`1, y`2] = f. y by MCART_1:23;
+    hence f.x >= f.y by A8,A9,MCART_1:23;
+  end;
+  hence thesis by WAYBEL_9:def 1;
+end;
+
+theorem Th14:
+  for R, S, T being LATTICE,
+      f being map of [:R,S:], T,
+      b being Element of S,
+      X being Subset of R holds
+   Proj (f, b).:X = f.:[:X, {b}:]
+proof
+  let R, S, T be LATTICE,
+      f be map of [:R,S:], T,
+      b be Element of S,
+      X be Subset of R;
+    Proj (f, b).:X = f.:[:X, {b}:]
+  proof
+    thus Proj (f, b).:X c= f.:[:X, {b}:]
+    proof
+      let c be set;
+      assume c in Proj (f, b).:X;
+      then consider k be set such that
+A1:     k in dom Proj (f, b) & k in X & c = Proj (f, b).k by FUNCT_1:def 12;
+A2:   c = f. [k, b] by A1,Th8;
+        b in {b} by TARSKI:def 1;
+then A3:   [k, b] in [:X, {b}:] by A1,ZFMISC_1:106;
+        [:the carrier of R, the carrier of S:] = the carrier of [:R, S:]
+        by YELLOW_3:def 2;
+      then dom f = [:the carrier of R, the carrier of S:]
+        by FUNCT_2:def 1;
+      then [k, b] in dom f by A1,ZFMISC_1:106;
+      hence thesis by A2,A3,FUNCT_1:def 12;
+    end;
+    thus f.:[:X, {b}:] c= Proj (f, b).:X
+    proof
+      let c be set;
+      assume c in f.:[:X, {b}:];
+      then consider k be set such that
+A4:     k in dom f & k in [:X, {b}:] & c = f.k by FUNCT_1:def 12;
+      consider k1, k2 be set such that
+A5:     k1 in X & k2 in {b} & k = [k1, k2] by A4,ZFMISC_1:def 2;
+A6:   dom Proj (f, b) = the carrier of R by FUNCT_2:def 1;
+        k2 = b by A5,TARSKI:def 1;
+      then c = Proj (f, b). k1 by A4,A5,Th8;
+      hence thesis by A5,A6,FUNCT_1:def 12;
+    end;
+  end;
+  hence thesis;
+end;
+
+theorem Th15:
+  for R, S, T being LATTICE,
+      f being map of [:R,S:], T,
+      b being Element of R,
+      X being Subset of S holds
+   Proj (f, b).:X = f.:[:{b}, X:]
+proof
+  let R, S, T be LATTICE,
+      f be map of [:R,S:], T,
+      b be Element of R,
+      X be Subset of S;
+    Proj (f, b).:X = f.:[:{b}, X:]
+  proof
+    thus Proj (f, b).:X c= f.:[:{b}, X:]
+    proof
+      let c be set;
+      assume c in Proj (f, b).:X;
+      then consider k be set such that
+A1:     k in dom Proj (f, b) & k in X & c = Proj (f, b).k by FUNCT_1:def 12;
+A2:   c = f. [b, k] by A1,Th7;
+        b in {b} by TARSKI:def 1;
+then A3:   [b, k] in [:{b}, X:] by A1,ZFMISC_1:106;
+        [:the carrier of R, the carrier of S:] = the carrier of [:R, S:]
+        by YELLOW_3:def 2;
+      then dom f = [:the carrier of R, the carrier of S:]
+        by FUNCT_2:def 1;
+      then [b, k] in dom f by A1,ZFMISC_1:106;
+      hence thesis by A2,A3,FUNCT_1:def 12;
+    end;
+    thus f.:[:{b}, X:] c= Proj (f, b).:X
+    proof
+      let c be set;
+      assume c in f.:[:{b}, X:];
+      then consider k be set such that
+A4:     k in dom f & k in [:{b}, X:] & c = f.k by FUNCT_1:def 12;
+      consider k1, k2 be set such that
+A5:     k1 in {b} & k2 in X & k = [k1, k2] by A4,ZFMISC_1:def 2;
+A6:    dom Proj (f, b) = the carrier of S by FUNCT_2:def 1;
+        k1 = b by A5,TARSKI:def 1;
+      then c = Proj (f, b). k2 by A4,A5,Th7;
+      hence thesis by A5,A6,FUNCT_1:def 12;
+    end;
+  end;
+  hence thesis;
+end;
+
+theorem :: Lemma 2.9 p. 116  (1) => (2)
+    for R, S, T being LATTICE,
+      f being map of [:R,S:], T,
+      a being Element of R,
+      b being Element of S st
+    f is directed-sups-preserving holds
+     Proj (f, a) is directed-sups-preserving &
+      Proj (f, b) is directed-sups-preserving
+proof
+  let R, S, T be LATTICE,
+      f be map of [:R,S:], T,
+      a be Element of R,
+      b be Element of S;
+  assume A1: f is directed-sups-preserving;
+A2:for X being Subset of R st X is non empty directed
+    holds Proj (f, b) preserves_sup_of X
+  proof
+    let X be Subset of R;
+    assume X is non empty directed;
+    then reconsider X' = X as non empty directed Subset of R;
+    reconsider Y' = {b} as non empty directed Subset of S by WAYBEL_0:5;
+      Proj (f, b) preserves_sup_of X
+    proof
+      assume A3: ex_sup_of X, R;
+A4:   ex_sup_of Y', S by YELLOW_0:38;
+then A5:   ex_sup_of [:X', Y':], [:R, S:] by A3,YELLOW_3:39;
+A6:    f preserves_sup_of [:X', Y':] by A1,WAYBEL_0:def 37;
+A7:   Proj (f, b).:X = f.:[:X', Y':] by Th14;
+A8:   sup Y' = b by YELLOW_0:39;
+        sup (Proj (f, b).:X) = sup (f.:[:X', Y':]) by Th14
+                          .= f.(sup [:X', Y':]) by A5,A6,WAYBEL_0:def 31
+                          .= f. [sup X', sup Y'] by A3,A4,YELLOW_3:43
+                          .= Proj (f, b).sup X by A8,Th8;
+      hence thesis by A5,A6,A7,WAYBEL_0:def 31;
+    end;
+    hence thesis;
+  end;
+    for X being Subset of S st X is non empty directed
+    holds Proj (f, a) preserves_sup_of X
+  proof
+    let X be Subset of S;
+    assume X is non empty directed;
+    then reconsider X' = X as non empty directed Subset of S;
+    reconsider Y' = {a} as non empty directed Subset of R by WAYBEL_0:5;
+      Proj (f, a) preserves_sup_of X
+    proof
+      assume A9: ex_sup_of X, S;
+A10:   ex_sup_of Y', R by YELLOW_0:38;
+then A11:   ex_sup_of [:Y', X':], [:R, S:] by A9,YELLOW_3:39;
+A12:    f preserves_sup_of [:Y', X':] by A1,WAYBEL_0:def 37;
+A13:   Proj (f, a).:X = f.:[:Y', X':] by Th15;
+A14:   sup Y' = a by YELLOW_0:39;
+        sup (Proj (f, a).:X) = sup (f.:[:Y', X':]) by Th15
+                          .= f.(sup [:Y', X':]) by A11,A12,WAYBEL_0:def 31
+                          .= f. [sup Y', sup X'] by A9,A10,YELLOW_3:43
+                          .= Proj (f, a).sup X by A14,Th7;
+      hence thesis by A11,A12,A13,WAYBEL_0:def 31;
+    end;
+    hence thesis;
+  end;
+  hence thesis by A2,WAYBEL_0:def 37;
+end;
+
+theorem Th17:
+  for R, S, T being LATTICE,
+      f being monotone map of [:R, S:], T,
+      a being Element of R, b being Element of S,
+      X being directed Subset of [:R, S:] st
+    ex_sup_of f.:X, T & a in proj1 X & b in proj2 X holds
+       f. [a, b] <= sup (f.:X)
+proof
+  let R, S, T be LATTICE,
+      f be monotone map of [:R, S:], T,
+      a be Element of R, b be Element of S,
+      X be directed Subset of [:R, S:];
+  assume that
+A1: ex_sup_of f.:X, T and
+A2: a in proj1 X and
+A3: b in proj2 X;
+  consider c being set such that
+A4: [a, c] in X by A2,FUNCT_5:def 1;
+    c in proj2 X by A4,FUNCT_5:def 2;
+  then reconsider c as Element of S;
+  consider d being set such that
+A5: [d, b] in X by A3,FUNCT_5:def 2;
+    d in proj1 X by A5,FUNCT_5:def 1;
+  then reconsider d as Element of R;
+  consider z being Element of [:R, S:] such that
+A6: z in X & [a, c] <= z & [d, b] <= z by A4,A5,WAYBEL_0:def 1;
+    [a, c] "\/" [d, b] <= z "\/" z by A6,YELLOW_3:3;
+  then [a, c] "\/" [d, b] <= z by YELLOW_5:1;
+then A7: [a "\/" d, c "\/" b] <= z by YELLOW10:16;
+    a <= a "\/" d & b <= c "\/" b by YELLOW_0:22;
+  then [a, b] <= [a "\/" d, c "\/" b] by YELLOW_3:11;
+then A8: f. [a, b] <= f. [a "\/" d, c "\/" b] by WAYBEL_1:def 2;
+    f. [a "\/" d, c "\/" b] <= f. z by A7,WAYBEL_1:def 2;
+then A9: f. [a, b] <= f. z by A8,YELLOW_0:def 2;
+    dom f = the carrier of [:R, S:] by FUNCT_2:def 1;
+then A10: f.z in f.:X by A6,FUNCT_1:def 12;
+    f.:X is_<=_than sup (f.:X) by A1,YELLOW_0:30;
+  then f. z <= sup (f.:X) by A10,LATTICE3:def 9;
+  hence thesis by A9,YELLOW_0:def 2;
+end;
+
+theorem :: Lemma 2.9 p. 116  (2) => (1)
+    for R, S, T being complete LATTICE,
+      f being map of [:R, S:], T st
+  ( for a being Element of R, b being Element of S holds
+    Proj (f, a) is directed-sups-preserving &
+     Proj (f, b) is directed-sups-preserving ) holds
+       f is directed-sups-preserving
+proof
+  let R, S, T be complete LATTICE,
+      f be map of [:R,S:], T;
+  assume
+A1: for a being Element of R, b being Element of S holds
+    Proj (f, a) is directed-sups-preserving &
+    Proj (f, b) is directed-sups-preserving;
+    for X being Subset of [:R, S:] st X is non empty directed holds
+    f preserves_sup_of X
+  proof
+    let X be Subset of [:R, S:];
+    assume X is non empty directed;
+    then reconsider X as non empty directed Subset of [:R, S:];
+      now let a be Element of R, b be Element of S;
+        Proj (f, a) is directed-sups-preserving by A1;
+      hence Proj (f, a) is monotone by WAYBEL17:3;
+        Proj (f, b) is directed-sups-preserving by A1;
+      hence Proj (f, b) is monotone by WAYBEL17:3;
+    end;
+then A2: f is monotone by Th12;
+      f preserves_sup_of X
+    proof
+      assume A3: ex_sup_of X, [:R, S:];
+A4:    ex_sup_of f.:X, T by YELLOW_0:17;
+A5:   proj1 X is directed non empty by YELLOW_3:21,22;
+A6:   ex_sup_of proj1 X, R by A3,YELLOW_3:41;
+A7:  ex_sup_of proj2 X, S by A3,YELLOW_3:41;
+        Proj (f, "\/"(proj2 X, S)) is directed-sups-preserving by A1;
+then A8:    Proj (f, "\/"(proj2 X, S)) preserves_sup_of proj1 X
+        by A5,WAYBEL_0:def 37;
+A9:   f.sup X = f. [sup proj1 X, sup proj2 X] by YELLOW_3:46
+             .= Proj (f, sup proj2 X). sup proj1 X by Th8
+             .= sup (Proj (f, sup proj2 X).:proj1 X)
+               by A6,A8,WAYBEL_0:def 31;
+        for b being Element of T st b in Proj (f, sup proj2 X).:proj1 X holds
+        b <= sup (f.:X)
+      proof
+        let b be Element of T;
+        assume b in Proj (f, sup proj2 X).:proj1 X;
+        then consider b1 being set such that
+A10:       b1 in dom Proj (f, sup proj2 X) & b1 in proj1 X &
+            b = (Proj (f, sup proj2 X)).b1 by FUNCT_1:def 12;
+        reconsider b1 as Element of R by A10;
+A11:     proj2 X is non empty directed by YELLOW_3:21,22;
+          Proj (f, b1) is directed-sups-preserving by A1;
+then A12:      Proj (f, b1) preserves_sup_of proj2 X
+          by A11,WAYBEL_0:def 37;
+A13:     b = (Proj (f, b1)). sup proj2 X by A10,Th9
+         .= sup (Proj (f, b1).:proj2 X) by A7,A12,WAYBEL_0:def 31;
+          b <= sup (f.:X)
+        proof
+A14:       ex_sup_of (Proj (f, b1).:proj2 X), T by YELLOW_0:17;
+            (Proj (f, b1).:proj2 X) is_<=_than sup (f.:X)
+          proof
+            let k be Element of T;
+            assume k in (Proj (f, b1).:proj2 X);
+            then consider k1 being set such that
+A15:           k1 in dom Proj (f, b1) & k1 in proj2 X &
+               k = (Proj (f, b1)).k1 by FUNCT_1:def 12;
+            reconsider k1 as Element of S by A15;
+          k = f. [b1, k1] by A15,Th7;
+            hence thesis by A2,A4,A10,A15,Th17;
+          end;
+          hence thesis by A13,A14,YELLOW_0:def 9;
+        end;
+        hence thesis;
+      end;
+then A16:   Proj (f, sup proj2 X).:proj1 X is_<=_than sup (f.:X) by LATTICE3:
+def 9;
+        ex_sup_of (Proj (f, sup proj2 X).:proj1 X), T by YELLOW_0:17;
+then A17:   f.sup X <= sup (f.:X) by A9,A16,YELLOW_0:def 9;
+        sup (f.:X) <= f.sup X by A2,WAYBEL17:16;
+      hence thesis by A17,YELLOW_0:17,def 3;
+    end;
+    hence thesis;
+  end;
+  hence thesis by WAYBEL_0:def 37;
+end;
+
+theorem Th19:
+  for S being non empty 1-sorted,
+      T being non empty RelStr,
+      f be set holds
+    f is Element of (T |^ the carrier of S) iff f is map of S, T
+proof
+  let S be non empty 1-sorted,
+      T be non empty RelStr,
+      f be set;
+  hereby assume f is Element of (T |^ the carrier of S);
+  then f in the carrier of (T |^ the carrier of S);
+  then f in Funcs (the carrier of S, the carrier of T) by YELLOW_1:28;
+  then consider a being Function such that
+A1: a = f & dom a = the carrier of S & rng a c= the carrier of T
+      by FUNCT_2:def 2;
+    f is Function of the carrier of S, the carrier of T
+    by A1,FUNCT_2:def 1,RELSET_1:11;
+  hence f is map of S, T;
+  end;
+  assume f is map of S, T;
+  then f in Funcs (the carrier of S, the carrier of T) by FUNCT_2:11;
+  then f in the carrier of (T |^ the carrier of S) by YELLOW_1:28;
+  hence thesis;
+end;
+
+begin  :: The poset of continuous maps
+
+definition let S be TopStruct,
+               T be non empty TopRelStr;
+  func ContMaps (S, T) -> strict RelStr means :Def3:
+    it is full SubRelStr of T |^ the carrier of S &
+    for x being set holds
+      x in the carrier of it iff
+        ex f being map of S, T st x = f & f is continuous;
+  existence
+  proof defpred P[set] means
+    ex f be map of S, T st $1 = f & f is continuous;
+    consider X be set such that
+A1: for a be set holds a in X iff a in the carrier of (T |^ the carrier of S) &
+     P[a] from Separation;
+      X c= the carrier of T |^ the carrier of S
+    proof
+      let a be set;
+      assume a in X;
+      hence thesis by A1;
+    end;
+    then reconsider X as Subset of (T |^ the carrier of S);
+    take SX = subrelstr X;
+    thus SX is full SubRelStr of T |^ the carrier of S;
+    let f be set;
+    hereby assume f in the carrier of SX;
+     then f in X by YELLOW_0:def 15;
+     then consider f' be map of S, T such that A2: f' = f &
+      f' is continuous by A1;
+     take f';
+     thus f' = f & f' is continuous by A2;
+    end;
+    given f' being map of S, T such that
+A3:  f = f' & f' is continuous;
+      f in Funcs (the carrier of S, the carrier of T) by A3,FUNCT_2:11;
+    then f in the carrier of (T |^ the carrier of S) by YELLOW_1:28;
+    then f in X by A1,A3;
+    hence f in the carrier of SX by YELLOW_0:def 15;
+  end;
+  uniqueness
+  proof
+    let A1, A2 be strict RelStr;
+    assume that
+A4:  A1 is full SubRelStr of T |^ the carrier of S &
+    for x being set holds
+      x in the carrier of A1 iff
+        ex f being map of S, T st x = f & f is continuous and
+A5:  A2 is full SubRelStr of T |^ the carrier of S &
+    for x being set holds
+      x in the carrier of A2 iff
+        ex f being map of S, T st x = f & f is continuous;
+      the carrier of A1 = the carrier of A2
+    proof
+     hereby let x be set;
+       assume x in the carrier of A1;
+       then consider f being map of S, T such that
+A6:    x = f & f is continuous by A4;
+       thus x in the carrier of A2 by A5,A6;
+      end;
+      let x be set; assume x in the carrier of A2;
+      then consider f being map of S, T such that
+A7:   x = f & f is continuous by A5;
+      thus x in the carrier of A1 by A4,A7;
+    end;
+    hence thesis by A4,A5,YELLOW_0:58;
+  end;
+end;
+
+definition let S be non empty TopSpace,
+               T be non empty TopSpace-like TopRelStr;
+  cluster ContMaps (S, T) -> non empty;
+  coherence
+  proof
+    consider f being continuous map of S, T;
+      f in the carrier of ContMaps(S,T) by Def3;
+    hence thesis by STRUCT_0:def 1;
+  end;
+end;
+
+definition let S be non empty TopSpace,
+               T be non empty TopSpace-like TopRelStr;
+  cluster ContMaps (S, T) -> constituted-Functions;
+  coherence
+  proof
+    let a be Element of ContMaps (S, T);
+    consider a' being map of S, T such that
+A1:    a' = a & a' is continuous by Def3;
+    thus thesis by A1;
+  end;
+end;
+
+theorem Th20:
+  for S being non empty TopSpace,
+      T being non empty reflexive TopSpace-like TopRelStr,
+      x, y being Element of ContMaps (S, T) holds
+   x <= y iff for i being Element of S holds
+     [x.i, y.i] in the InternalRel of T
+proof
+  let S be non empty TopSpace,
+      T be non empty reflexive TopSpace-like TopRelStr,
+      x, y be Element of ContMaps (S, T);
+A1:ContMaps (S, T) is full SubRelStr of T |^ the carrier of S by Def3;
+  then reconsider x' = x, y' = y as Element of (T |^ the carrier of S)
+     by YELLOW_0:59;
+  reconsider xa = x', ya = y' as map of S, T by Th19;
+  hereby assume x <= y;
+then x' <= y' by A1,YELLOW_0:60;
+then A2: xa <= ya by WAYBEL10:12;
+    let i be Element of S;
+    consider a, b being Element of T such that
+A3:   a = xa.i & b = ya.i & a <= b by A2,YELLOW_2:def 1;
+    thus [x.i, y.i] in the InternalRel of T by A3,ORDERS_1:def 9;
+  end;
+  assume A4: for i being Element of S holds [x.i, y.i] in the InternalRel of T;
+    now let j be set;
+    assume j in the carrier of S;
+    then reconsider i = j as Element of S;
+    reconsider a = xa.i, b = ya.i as Element of T;
+    take a, b;
+    thus a = xa.j & b = ya.j;
+      [a, b] in the InternalRel of T by A4;
+    hence a <= b by ORDERS_1:def 9;
+  end;
+  then xa <= ya by YELLOW_2:def 1;
+  then x' <= y' by WAYBEL10:12;
+  hence thesis by A1,YELLOW_0:61;
+end;
+
+theorem Th21:
+  for S being non empty TopSpace,
+      T being non empty reflexive TopSpace-like TopRelStr,
+      x being set holds
+    x is continuous map of S, T iff x is Element of ContMaps (S, T)
+proof
+  let S be non empty TopSpace,
+      T be non empty reflexive TopSpace-like TopRelStr,
+      x be set;
+  thus x is continuous map of S, T implies
+    x is Element of ContMaps (S, T) by Def3;
+  assume x is Element of ContMaps (S, T);
+  then x in the carrier of ContMaps (S, T);
+  then consider f being map of S, T such that
+A1:  x = f & f is continuous by Def3;
+  thus thesis by A1;
+end;
+
+definition let S be non empty TopSpace,
+               T be non empty reflexive TopSpace-like TopRelStr;
+  cluster ContMaps (S, T) -> reflexive;
+  coherence
+  proof
+    reconsider CS = ContMaps (S, T) as full SubRelStr of
+      T |^ the carrier of S by Def3;
+      CS is reflexive;
+    hence thesis;
+  end;
+end;
+
+definition let S be non empty TopSpace,
+               T be non empty transitive TopSpace-like TopRelStr;
+  cluster ContMaps (S, T) -> transitive;
+  coherence
+  proof
+    reconsider CS = ContMaps (S, T) as full SubRelStr of
+      T |^ the carrier of S by Def3;
+      CS is transitive;
+    hence thesis;
+  end;
+end;
+
+definition let S be non empty TopSpace,
+               T be non empty antisymmetric TopSpace-like TopRelStr;
+  cluster ContMaps (S, T) -> antisymmetric;
+  coherence
+  proof
+    reconsider CS = ContMaps (S, T) as full SubRelStr of
+      T |^ the carrier of S by Def3;
+      CS is antisymmetric;
+    hence thesis;
+  end;
+end;
+
+definition let S be non empty 1-sorted,
+               T be non empty TopSpace-like TopRelStr;
+  cluster T |^ the carrier of S -> constituted-Functions;
+  coherence
+  proof
+    let a be Element of (T |^ the carrier of S);
+    thus thesis by Th19;
+  end;
+end;
+
+theorem
+    for S being non empty 1-sorted,
+      T being complete LATTICE
+  for f, g, h being map of S, T,
+      i being Element of S st h = "\/" ({f, g}, T |^ the carrier of S) holds
+   h.i = sup {f.i, g.i}
+proof
+  let S be non empty 1-sorted,
+      T be complete LATTICE;
+  let f, g, h be map of S, T,
+      i be Element of S;
+  assume A1: h = "\/" ({f, g}, T |^ the carrier of S);
+    dom ((the carrier of S) --> T) = the carrier of S by FUNCOP_1:19;
+  then reconsider SYT = (the carrier of S) --> T as non-Empty
+    RelStr-yielding ManySortedSet of the carrier of S
+      by PBOOLE:def 3;
+  reconsider SYT as non-Empty reflexive-yielding
+    RelStr-yielding ManySortedSet of the carrier of S;
+A2:for i being Element of S holds SYT.i is complete LATTICE
+    by FUNCOP_1:13;
+  reconsider f' = f, g' = g as Element of (T |^ the carrier of S) by Th19;
+  reconsider f', g' as Element of product SYT by YELLOW_1:def 5;
+  reconsider DU = {f', g'} as Subset of product SYT;
+    h.i = (sup DU).i by A1,YELLOW_1:def 5
+     .= "\/" (pi({f,g},i), SYT.i) by A2,WAYBEL_3:32
+     .= "\/" (pi({f,g},i), T) by FUNCOP_1:13
+     .= sup {f.i, g.i} by CARD_3:26;
+  hence thesis;
+end;
+
+theorem Th23:
+ for I being non empty set
+ for J being RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I
+  st for i being Element of I holds J.i is complete LATTICE
+ for X being Subset of product J, i being Element of I holds
+   (inf X).i = inf pi(X,i)
+  proof let I be non empty set;
+   let J be RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I;
+   assume
+A1:  for i being Element of I holds J.i is complete LATTICE;
+   then reconsider L = product J as complete LATTICE by WAYBEL_3:31;
+A2:  L is complete;
+   let X be Subset of product J, i be Element of I;
+A3:  inf X is_<=_than X by A2,YELLOW_0:33;
+A4:  (inf X).i is_<=_than pi(X,i)
+     proof let a be Element of J.i; assume
+         a in pi(X,i);
+      then consider f being Function such that
+A5:     f in X & a = f.i by CARD_3:def 6;
+      reconsider f as Element of product J by A5;
+        inf X <= f by A3,A5,LATTICE3:def 8;
+      hence thesis by A5,WAYBEL_3:28;
+     end;
+A6:  J.i is complete LATTICE by A1;
+      now let a be Element of J.i; assume
+A7:    a is_<=_than pi(X,i);
+     set f = (inf X)+*(i,a);
+A8:    dom f = dom inf X & dom inf X = I by FUNCT_7:32,WAYBEL_3:27;
+        now let j be Element of I;
+          j = i or j <> i;
+        then f.j = (inf X).j or f.j = a & j = i by A8,FUNCT_7:33,34;
+       hence f.j is Element of J.j;
+      end;
+     then reconsider f as Element of product J by A8,WAYBEL_3:27;
+        f is_<=_than X
+       proof let g be Element of product J;
+        assume g in X;
+then A9:       g >= inf X & g.i in pi(X,i) by A2,CARD_3:def 6,YELLOW_2:24;
+           now let j be Element of I;
+             j = i or j <> i;
+           then f.j = (inf X).j or f.j = a & j = i by A8,FUNCT_7:33,34;
+          hence f.j <= g.j by A7,A9,LATTICE3:def 8,WAYBEL_3:28;
+         end;
+        hence f <= g by WAYBEL_3:28;
+       end;
+      then f <= inf X & f.i = a by A2,A8,FUNCT_7:33,YELLOW_0:33;
+     hence (inf X).i >= a by WAYBEL_3:28;
+    end;
+   hence thesis by A4,A6,YELLOW_0:33;
+  end;
+
+theorem
+    for S being non empty 1-sorted,
+      T being complete LATTICE
+  for f, g, h being map of S, T,
+      i being Element of S st h = "/\" ({f, g}, T |^ the carrier of S) holds
+   h.i = inf {f.i, g.i}
+proof
+  let S be non empty 1-sorted,
+      T be complete LATTICE;
+  let f, g, h be map of S, T,
+      i be Element of S;
+  assume A1: h = "/\" ({f, g}, T |^ the carrier of S);
+    dom ((the carrier of S) --> T) = the carrier of S by FUNCOP_1:19;
+  then reconsider SYT = (the carrier of S) --> T as non-Empty
+    RelStr-yielding ManySortedSet of the carrier of S
+      by PBOOLE:def 3;
+  reconsider SYT as non-Empty reflexive-yielding
+    RelStr-yielding ManySortedSet of the carrier of S;
+A2:for i being Element of S holds SYT.i is complete LATTICE
+    by FUNCOP_1:13;
+  reconsider f' = f, g' = g as Element of (T |^ the carrier of S) by Th19;
+  reconsider f', g' as Element of product SYT by YELLOW_1:def 5;
+  reconsider DU = {f', g'} as Subset of product SYT;
+    h.i = (inf DU).i by A1,YELLOW_1:def 5
+     .= "/\" (pi({f,g},i), SYT.i) by A2,Th23
+     .= "/\" (pi({f,g},i), T) by FUNCOP_1:13
+     .= inf {f.i, g.i} by CARD_3:26;
+  hence thesis;
+end;
+
+definition let S be non empty 1-sorted, T be LATTICE;
+  cluster -> Function-like Relation-like Element of (T |^ the carrier of S);
+  coherence by Th19;
+end;
+
+definition let S, T be TopLattice;
+  cluster -> Function-like Relation-like Element of ContMaps (S, T);
+  coherence;
+end;
+
+theorem Th25:
+  for S being non empty RelStr,
+      T being complete LATTICE
+  for F being non empty Subset of (T |^ the carrier of S),
+      i being Element of S holds
+    (sup F).i = "\/" ({ f.i where f is Element of (T |^ the carrier of S) :
+      f in F }, T )
+proof
+  let S be non empty RelStr,
+      T be complete LATTICE;
+  let F be non empty Subset of (T |^ the carrier of S),
+      i be Element of S;
+    dom ((the carrier of S) --> T) = the carrier of S by FUNCOP_1:19;
+  then reconsider SYT = (the carrier of S) --> T as non-Empty
+    RelStr-yielding ManySortedSet of the carrier of S
+      by PBOOLE:def 3;
+  reconsider SYT as non-Empty reflexive-yielding
+    RelStr-yielding ManySortedSet of the carrier of S;
+A1:T |^ the carrier of S = product SYT by YELLOW_1:def 5;
+  then reconsider X = F as Subset of product SYT;
+A2:pi(X,i) = { f.i where f is Element of (T |^ the carrier of S) : f in F }
+  proof
+    thus pi(X,i) c= { f.i where f is Element of (T |^ the carrier of S) :
+      f in F }
+    proof
+      let a be set;
+      assume a in pi(X,i);
+      then consider g being Function such that
+A3:    g in X & a = g.i by CARD_3:def 6;
+      thus thesis by A3;
+    end;
+    thus { f.i where f is Element of (T |^ the carrier of S) : f in F } c=
+      pi(X,i)
+    proof
+      let a be set;
+      assume a in { f.i where f is Element of (T |^ the carrier of S) :
+        f in F };
+      then consider g being Element of (T |^ the carrier of S) such that
+A4:    a = g.i & g in F;
+      thus thesis by A4,CARD_3:def 6;
+    end;
+  end;
+    for i being Element of S holds SYT.i is complete LATTICE
+    by FUNCOP_1:13;
+   then (sup F).i = "\/" (pi(X,i), SYT.i) by A1,WAYBEL_3:32
+    .= "\/"
+ ({ f.i where f is Element of (T |^ the carrier of S) : f in F }, T )
+      by A2,FUNCOP_1:13;
+  hence thesis;
+end;
+
+theorem Th26:
+  for S, T being complete TopLattice
+  for F being non empty Subset of ContMaps (S, T),
+      i being Element of S holds
+    "\/" (F, (T |^ the carrier of S)).i =
+     "\/" ({ f.i where f is Element of (T |^ the carrier of S) : f in F }, T )
+proof
+  let S, T be complete TopLattice;
+  let F be non empty Subset of ContMaps (S, T),
+      i be Element of S;
+    dom ((the carrier of S) --> T) = the carrier of S by FUNCOP_1:19;
+  then reconsider SYT = (the carrier of S) --> T as non-Empty
+    RelStr-yielding ManySortedSet of the carrier of S
+      by PBOOLE:def 3;
+  reconsider SYT as non-Empty reflexive-yielding
+    RelStr-yielding ManySortedSet of the carrier of S;
+    ContMaps (S, T) is full SubRelStr of (T |^ the carrier of S) by Def3;
+  then the carrier of ContMaps (S, T) c= the carrier of (T |^ the carrier of S
+)
+    by YELLOW_0:def 13;
+then A1:F c= the carrier of (T |^ the carrier of S) by XBOOLE_1:1;
+A2:T |^ the carrier of S = product SYT by YELLOW_1:def 5;
+  then reconsider X = F as Subset of product SYT by A1;
+A3:pi(X,i) = { f.i where f is Element of (T |^ the carrier of S) : f in F }
+  proof
+    thus pi(X,i) c= { f.i where f is Element of (T |^ the carrier of S) :
+      f in F }
+    proof
+      let a be set;
+      assume a in pi(X,i);
+      then consider g being Function such that
+A4:    g in X & a = g.i by CARD_3:def 6;
+        g is Element of (T |^ the carrier of S) by A1,A4;
+      hence thesis by A4;
+    end;
+    thus { f.i where f is Element of (T |^ the carrier of S) : f in F } c=
+      pi(X,i)
+    proof
+      let a be set;
+      assume
+        a in { f.i where f is Element of (T |^ the carrier of S) :
+        f in F };
+      then consider g being Element of (T |^ the carrier of S) such that
+A5:    a = g.i & g in F;
+      thus thesis by A5,CARD_3:def 6;
+    end;
+  end;
+    for i being Element of S holds SYT.i is complete LATTICE
+    by FUNCOP_1:13;
+   then "\/" (F, (T |^ the carrier of S)).i = "\/"
+ (pi(X,i), SYT.i) by A2,WAYBEL_3:32
+    .= "\/"
+ ({ f.i where f is Element of (T |^ the carrier of S) : f in F }, T )
+      by A3,FUNCOP_1:13;
+  hence thesis;
+end;
+
+reserve S for non empty RelStr, T for complete LATTICE;
+
+
+theorem Th27:
+  for F being non empty Subset of (T |^ the carrier of S),
+      D being non empty Subset of S holds
+  (sup F).:D =
+    { "\/" ({ f.i where f is Element of (T |^ the carrier of S) : f in F }, T )
+     where i is Element of S : i in D }
+proof
+  let F be non empty Subset of (T |^ the carrier of S),
+      D be non empty Subset of S;
+  thus (sup F).:D c=
+    { "\/" ({ f.i where f is Element of (T |^ the carrier of S) : f in F }, T )
+    where i is Element of S: i in D }
+  proof
+    let a be set;
+    assume a in (sup F).:D;
+    then consider x being set such that
+A1: x in dom (sup F) & x in D & a = (sup F).x by FUNCT_1:def 12;
+    reconsider x' = x as Element of S by A1;
+      a = "\/" ({ f.x' where f is Element of (T |^ the carrier of S) :
+      f in F }, T ) by A1,Th25;
+    hence thesis by A1;
+  end;
+  thus
+      { "\/" ({ f.i where f is Element of (T |^ the carrier of S) : f in F }, T
+)
+    where i is Element of S: i in D }
+    c= (sup F).:D
+  proof
+    let a be set;
+    assume a in { "\/" ({ f.i where f is Element of (T |^ the carrier of S) :
+      f in F }, T ) where i is Element of S: i in D };
+    then consider i1 being Element of S such that
+A2:  a = "\/" ({ f.i1 where f is Element of (T |^ the carrier of S) :
+      f in F }, T ) & i1 in D;
+A3: a = (sup F).i1 by A2,Th25;
+      sup F is map of S, T by Th6;
+    then dom (sup F) = the carrier of S by FUNCT_2:def 1;
+    hence thesis by A2,A3,FUNCT_1:def 12;
+  end;
+end;
+
+theorem Th28:
+ for S, T being complete Scott TopLattice,
+     F being non empty Subset of ContMaps (S, T),
+     D being non empty Subset of S holds
+  ("\/" (F, (T |^ the carrier of S))).:D =
+    { "\/" ({ f.i where f is Element of (T |^ the carrier of S) : f in F }, T )
+     where i is Element of S : i in D }
+proof
+  let S, T be complete Scott TopLattice,
+      F be non empty Subset of ContMaps (S, T),
+      D be non empty Subset of S;
+  thus ("\/" (F, (T |^ the carrier of S))).:D c=
+    { "\/" ({ f.i where f is Element of (T |^ the carrier of S) : f in F }, T )
+    where i is Element of S: i in D }
+  proof
+    let a be set;
+    assume a in ("\/" (F, (T |^ the carrier of S))).:D;
+    then consider x being set such that
+A1: x in dom ("\/" (F, (T |^ the carrier of S))) & x in D &
+     a = ("\/" (F, (T |^ the carrier of S))).x by FUNCT_1:def 12;
+    reconsider x' = x as Element of S by A1;
+      a = "\/" ({ f.x' where f is Element of (T |^ the carrier of S) :
+      f in F }, T ) by A1,Th26;
+    hence thesis by A1;
+  end;
+  thus
+      { "\/" ({ f.i where f is Element of (T |^ the carrier of S) : f in F }, T
+)
+    where i is Element of S: i in D }
+    c= ("\/" (F, (T |^ the carrier of S))).:D
+  proof
+    let a be set;
+    assume a in { "\/" ({ f.i where f is Element of (T |^ the carrier of S) :
+      f in F }, T ) where i is Element of S: i in D };
+    then consider i1 being Element of S such that
+A2:  a = "\/" ({ f.i1 where f is Element of (T |^ the carrier of S) :
+      f in F }, T ) & i1 in D;
+A3: a = ("\/" (F, (T |^ the carrier of S))).i1 by A2,Th26;
+      ("\/" (F, (T |^ the carrier of S))) is map of S, T by Th19;
+    then dom ("\/" (F, (T |^ the carrier of S))) =
+      the carrier of S by FUNCT_2:def 1;
+    hence thesis by A2,A3,FUNCT_1:def 12;
+  end;
+end;
+
+FraenkelF'RS{ B() -> non empty TopRelStr, F(set) -> set, G(set) -> set,
+  P[set] } :
+  { F(v1) where v1 is Element of B() : P[v1] }
+  = { G(v2) where v2 is Element of B() : P[v2] }
+ provided
+A1: for v being Element of B() st P[v] holds F(v) = G(v)
+proof
+  set X = { F(v1) where v1 is Element of B() : P[v1] },
+      Y = { G(v2) where v2 is Element of B() : P[v2] };
+A2: X c= Y
+   proof let x be set;
+    assume x in X;
+     then consider v1 being Element of B() such that
+A3:   x = F(v1) & P[v1];
+       x = G(v1) by A1,A3;
+    hence x in Y by A3;
+   end;
+    Y c= X
+   proof let x be set;
+    assume x in Y;
+     then consider v1 being Element of B() such that
+A4:   x = G(v1) & P[v1];
+       x = F(v1) by A1,A4;
+    hence x in X by A4;
+   end;
+ hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+scheme FraenkelF'RSS{ B() -> non empty RelStr, F(set) -> set, G(set) -> set,
+  P[set] } :
+  { F(v1) where v1 is Element of B() : P[v1] }
+  = { G(v2) where v2 is Element of B() : P[v2] }
+ provided
+A1: for v being Element of B() st P[v] holds F(v) = G(v)
+proof
+  set X = { F(v1) where v1 is Element of B() : P[v1] },
+      Y = { G(v2) where v2 is Element of B() : P[v2] };
+A2: X c= Y
+   proof let x be set;
+    assume x in X;
+     then consider v1 being Element of B() such that
+A3:   x = F(v1) & P[v1];
+       x = G(v1) by A1,A3;
+    hence x in Y by A3;
+   end;
+    Y c= X
+   proof let x be set;
+    assume x in Y;
+     then consider v1 being Element of B() such that
+A4:   x = G(v1) & P[v1];
+       x = F(v1) by A1,A4;
+    hence x in X by A4;
+   end;
+ hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+FuncFraenkelS{ B, C() -> non empty TopRelStr,
+        A(set) -> Element of C(), f() -> Function, P[set]}:
+  f().:{A(x) where x is Element of B(): P[x]} =
+   {f().A(x) where x is Element of B(): P[x]}
+  provided A1: the carrier of C() c= dom f()
+  proof set f = f();
+   thus f.:{A(x) where x is Element of B(): P[x]} c=
+      {f.A(x) where x is Element of B(): P[x]}
+     proof let y be set; assume
+         y in f.:{A(x) where x is Element of B(): P[x]};
+      then consider z being set such that
+A2:     z in dom f & z in {A(x) where x is Element of B(): P[x]}
+       & y = f.z by FUNCT_1:def 12;
+         ex x being Element of B() st z = A(x) & P[x] by A2;
+      hence thesis by A2;
+     end;
+   let y be set;
+   assume y in {f.A(x) where x is Element of B(): P[x]};
+   then consider x being Element of B() such that
+A3:   y = f.A(x) & P[x];
+     A(x) in the carrier of C();
+   then A(x) in dom f &
+    A(x) in {A(z) where z is Element of B(): P[z]} by A1,A3;
+   hence thesis by A3,FUNCT_1:def 12;
+  end;
+
+Lm1:for S being non empty RelStr,
+       D being non empty Subset of S holds
+   D = { i where i is Element of S: i in D }
+  proof
+   let S be non empty RelStr,
+       D be non empty Subset of S;
+    thus D c= { i where i is Element of S: i in D }
+    proof
+      let a be set; assume A1: a in D;
+      then reconsider a' = a as Element of S;
+        a' in { i where i is Element of S: i in D } by A1;
+      hence thesis;
+    end;
+    thus { i where i is Element of S: i in D } c= D
+    proof
+      let a be set; assume a in { i where i is Element of S: i in D };
+      then consider j being Element of S such that
+A2:    j = a & j in D;
+      thus thesis by A2;
+    end;
+  end;
+
+theorem Th29:
+ for S, T being complete Scott TopLattice,
+     F being non empty Subset of ContMaps (S, T) holds
+  "\/" (F, (T |^ the carrier of S)) is monotone map of S, T
+proof
+  let S, T be complete Scott TopLattice,
+      F be non empty Subset of ContMaps (S, T);
+    ContMaps (S, T) is full SubRelStr of (T |^ the carrier of S) by Def3;
+  then the carrier of ContMaps (S, T) c= the carrier of (T |^ the carrier of S
+)
+    by YELLOW_0:def 13;
+  then F c= the carrier of (T |^ the carrier of S) by XBOOLE_1:1;
+  then reconsider F' = F as Subset of (T |^ the carrier of S);
+  reconsider sF = sup F' as map of S, T by Th6;
+    now let x, y be Element of S;
+    assume A1: x <= y;
+    set G1 = { f.x where f is Element of (T |^ the carrier of S) : f in F' };
+A2: sF.x = "\/" (G1, T) by Th25;
+      G1 is_<=_than sF.y
+    proof
+      let a be Element of T;
+      assume a in { f.x where f is Element of (T |^ the carrier of S) :
+        f in F' };
+      then consider f' being Element of (T |^ the carrier of S) such that
+A3:      a = f'.x & f' in F';
+        f' is Element of ContMaps (S, T) by A3;
+      then reconsider f1 = f' as continuous map of S, T by Th21;
+      reconsider f1 as monotone map of S, T;
+        f' <= sup F' by A3,YELLOW_2:24;
+      then f1 <= sF by WAYBEL10:12;
+then A4:   f1.y <= sF.y by YELLOW_2:10;
+        f1.x <= f1.y by A1,WAYBEL_1:def 2;
+      hence thesis by A3,A4,YELLOW_0:def 2;
+    end;
+    hence sF.x <= sF.y by A2,YELLOW_0:32;
+  end;
+  hence thesis by WAYBEL_1:def 2;
+end;
+
+theorem Th30:
+ for S, T being complete Scott TopLattice,
+     F being non empty Subset of ContMaps (S, T),
+     D being directed non empty Subset of S holds
+  "\/"({ "\/"({g.i where i is Element of S : i in D }, T )
+   where g is Element of (T |^ the carrier of S) : g in F }, T ) =
+    "\/"({ "\/"
+({g'.i' where g' is Element of (T |^ the carrier of S) : g' in F },
+      T ) where i' is Element of S : i' in D }, T)
+proof
+  let S, T be complete Scott TopLattice,
+      F be non empty Subset of ContMaps (S, T),
+      D be directed non empty Subset of S;
+  set F' = F;
+  set L = "\/"({ "\/"({g.i where i is Element of S : i in D }, T )
+   where g is Element of (T |^ the carrier of S) : g in F }, T );
+  set P =
+   "\/"({ "\/"
+({g'.i' where g' is Element of (T |^ the carrier of S) : g' in F },
+      T ) where i' is Element of S : i' in D }, T);
+  set L1 = { "\/"({g.i where i is Element of S : i in D }, T)
+    where g is Element of (T |^ the carrier of S) : g in F };
+  set P1 = { "\/"({g2.i3 where g2 is Element of (T |^ the carrier of S) :
+    g2 in F }, T ) where i3 is Element of S : i3 in D };
+  reconsider L, P as Element of T;
+  reconsider sF = "\/" (F, (T |^ the carrier of S)) as map of S, T by Th19;
+A1: P = sup (sF.:D) by Th28;
+    deffunc A(Element of S) = $1;
+    defpred P[set] means $1 in D;
+ L1 is_<=_than P
+  proof
+    let b be Element of T;
+    assume b in L1;
+    then consider g' being Element of T |^ the carrier of S such that
+A2:    b = "\/"({g'.i where i is Element of S : i in D }, T) & g' in F;
+      g' is Element of ContMaps (S, T) by A2;
+    then reconsider g1 = g' as continuous map of S, T by Th21;
+      the carrier of S c= dom g1 by FUNCT_2:def 1;
+    then
+A3: the carrier of S c= dom g';
+   g'.:{A(i2) where i2 is Element of S : P[i2]} =
+      {g'.A(i) where i is Element of S : P[i]} from FuncFraenkelS (A3);
+then A4: b = "\/" (g'.:D, T) by A2,Lm1;
+      g' <= "\/" (F, (T |^ the carrier of S)) by A2,YELLOW_2:24;
+then A5: g1 <= sF by WAYBEL10:12;
+      g1.:D is_<=_than sup (sF.:D)
+    proof
+      let a be Element of T;
+      assume a in g1.:D;
+      then consider x be set such that
+A6:   x in dom g1 & x in D & a = g1.x by FUNCT_1:def 12;
+A7:   x in the carrier of S by A6;
+      reconsider x' = x as Element of S by A6;
+A8:   g1.x' <= sF.x' by A5,YELLOW_2:10;
+        x' in dom sF by A7,FUNCT_2:def 1;
+      then sF.x' in sF.:D by A6,FUNCT_1:def 12;
+      then sF.x' <= sup (sF.:D) by YELLOW_2:24;
+      hence thesis by A6,A8,YELLOW_0:def 2;
+    end;
+    hence thesis by A1,A4,YELLOW_0:32;
+  end;
+then A9: L <= P by YELLOW_0:32;
+  deffunc F(Element of (T |^ the carrier of S)) =
+    "\/"({$1.i4 where i4 is Element of S : i4 in D }, T );
+  deffunc G(Element of (T |^ the carrier of S)) = $1.sup D;
+  defpred Q[set] means $1 in F';
+A10: for g8 being Element of (T |^ the carrier of S) st Q[g8] holds
+      F(g8) = G(g8)
+    proof
+      let g1 be Element of (T |^ the carrier of S); assume
+        g1 in F';
+      then g1 is Element of ContMaps (S, T);
+      then reconsider g' = g1 as continuous map of S, T by Th21;
+A11:   g' preserves_sup_of D by WAYBEL_0:def 37;
+A12:    ex_sup_of D,S by YELLOW_0:17;
+        the carrier of S c= dom g' by FUNCT_2:def 1;
+      then
+A13:   the carrier of S c= dom g1;
+     g1.:{A(i2) where i2 is Element of S : P[i2]} =
+       {g1.A(i) where i is Element of S : P[i]} from FuncFraenkelS (A13);
+      then
+     "\/"({g1.i where i is Element of S : i in D }, T ) = sup (g'.:D) by Lm1
+         .= g1.sup D by A11,A12,WAYBEL_0:def 31;
+      hence thesis;
+    end;
+     {F(g3) where g3 is Element of (T |^ the carrier of S): Q[g3]}
+    = {G(g4) where g4 is Element of (T |^ the carrier of S): Q[g4]}
+      from FraenkelF'RSS (A10);
+then A14: L = sF.sup D by Th26;
+    P1 is_<=_than L
+  proof
+    let b be Element of T;
+    assume b in P1;
+    then consider i' being Element of S such that
+A15:  b = "\/"({g'.i' where g' is Element of (T |^ the carrier of S) :
+      g' in F }, T ) & i' in D;
+A16: b = sF.i' by A15,Th26;
+      sF is monotone by Th29;
+then A17:sup (sF.:D) <= L by A14,WAYBEL17:15;
+  i' in the carrier of S;
+    then i' in dom sF by FUNCT_2:def 1;
+    then b in sF.:D by A15,A16,FUNCT_1:def 12;
+    then b <= sup (sF.:D) by YELLOW_2:24;
+    hence thesis by A17,YELLOW_0:def 2;
+  end;
+  then P <= L by YELLOW_0:32;
+  hence thesis by A9,YELLOW_0:def 3;
+end;
+
+theorem Th31:
+ for S, T being complete Scott TopLattice,
+     F being non empty Subset of ContMaps (S, T),
+     D being directed non empty Subset of S holds
+   "\/" (("\/"(F, (T |^ the carrier of S))).:D, T) =
+     "\/" (F, (T |^ the carrier of S)).sup D
+proof
+ let S, T be complete Scott TopLattice,
+     F be non empty Subset of ContMaps (S, T),
+     D be directed non empty Subset of S;
+    ContMaps (S, T) is full SubRelStr of (T |^ the carrier of S) by Def3;
+  then the carrier of ContMaps (S, T) c= the carrier of (T |^ the carrier of S
+)
+    by YELLOW_0:def 13;
+  then F c= the carrier of (T |^ the carrier of S) by XBOOLE_1:1;
+    then reconsider F' = F as non empty Subset of (T |^ the carrier of S)
+     ;
+    reconsider sF = sup F' as map of S, T by Th19;
+  set L = "\/"({ "\/"({g.i where i is Element of S : i in D }, T )
+   where g is Element of (T |^ the carrier of S) : g in F }, T );
+  set P =
+   "\/"({ "\/"
+({g'.i' where g' is Element of (T |^ the carrier of S) : g' in F },
+      T ) where i' is Element of S : i' in D }, T);
+    deffunc F(Element of (T |^ the carrier of S))
+     = "\/"({$1.i4 where i4 is Element of S : i4 in D }, T );
+    deffunc G(Element of (T |^ the carrier of S)) = $1.sup D;
+    defpred Q[set] means $1 in F';
+A1: for g8 being Element of (T |^ the carrier of S) st Q[g8] holds
+     F(g8) = G(g8)
+    proof
+      let g1 be Element of (T |^ the carrier of S); assume
+        g1 in F';
+      then g1 is Element of ContMaps (S, T);
+      then reconsider g' = g1 as continuous map of S, T by Th21;
+A2:   g' preserves_sup_of D by WAYBEL_0:def 37;
+A3:    ex_sup_of D,S by YELLOW_0:17;
+        the carrier of S c= dom g' by FUNCT_2:def 1;
+      then
+A4:   the carrier of S c= dom g1;
+     deffunc A(Element of S) = $1;
+     defpred P[set] means $1 in D;
+     g1.:{A(i2) where i2 is Element of S : P[i2]} =
+       {g1.A(i) where i is Element of S : P[i]} from FuncFraenkelS (A4);
+      then "\/"({g1.i where i is Element of S : i in
+ D }, T ) = sup (g'.:D) by Lm1
+         .= g1.sup D by A2,A3,WAYBEL_0:def 31;
+      hence thesis;
+    end;
+     {F(g3) where g3 is Element of (T |^ the carrier of S) : Q[g3]}
+    = {G(g4) where g4 is Element of (T |^ the carrier of S): Q[g4]}
+     from FraenkelF'RSS (A1);
+then A5: L = sF.sup D by Th25;
+      P = sup (sF.:D) by Th27;
+    hence thesis by A5,Th30;
+end;
+
+theorem Th32:
+ for S, T being complete Scott TopLattice,
+     F being non empty Subset of ContMaps (S, T) holds
+ "\/"(F, (T |^ the carrier of S)) in the carrier of ContMaps (S, T)
+proof
+  let S, T be complete Scott TopLattice,
+      F be non empty Subset of ContMaps (S, T);
+  reconsider Ex = "\/"(F, (T |^ the carrier of S)) as map of S, T by Th19;
+    for X being Subset of S st X is non empty directed
+   holds Ex preserves_sup_of X
+   proof
+     let X be Subset of S; assume X is non empty directed;
+     then reconsider X' = X as directed non empty Subset of S;
+       Ex preserves_sup_of X'
+     proof
+       assume ex_sup_of X',S;
+       thus ex_sup_of Ex.:X',T by YELLOW_0:17;
+       thus sup (Ex.:X') = Ex.sup X' by Th31;
+     end;
+     hence thesis;
+   end;
+  then Ex is directed-sups-preserving by WAYBEL_0:def 37;
+  then Ex is continuous by WAYBEL17:22;
+  hence thesis by Def3;
+end;
+
+theorem Th33:
+ for S being non empty RelStr,
+     T being lower-bounded antisymmetric non empty RelStr holds
+  Bottom (T |^ the carrier of S) = S --> Bottom T
+proof
+  let S be non empty RelStr,
+      T be lower-bounded antisymmetric non empty RelStr;
+  set L = (T |^ the carrier of S);
+  reconsider f = S --> Bottom T as Element of L by Th19;
+A1: f is_>=_than {} by YELLOW_0:6;
+  reconsider f' = f as map of S, T;
+    for b being Element of L st b is_>=_than {} holds f <= b
+  proof
+    let b be Element of L;
+    assume b is_>=_than {};
+    reconsider b' = b as map of S, T by Th19;
+      for x being Element of S holds f'.x <= b'.x
+    proof
+      let x be Element of S;
+        f'. x = ((the carrier of S) --> Bottom T). x by BORSUK_1:def 3
+           .= Bottom T by FUNCOP_1:13;
+      hence thesis by YELLOW_0:44;
+    end;
+    then f' <= b' by YELLOW_2:10;
+    hence thesis by WAYBEL10:12;
+  end;
+  then f = "\/"({}, L) by A1,YELLOW_0:30;
+  hence thesis by YELLOW_0:def 11;
+end;
+
+theorem
+   for S being non empty RelStr,
+     T being upper-bounded antisymmetric non empty RelStr holds
+  Top (T |^ the carrier of S) = S --> Top T
+proof
+  let S be non empty RelStr,
+      T be upper-bounded antisymmetric non empty RelStr;
+  set L = (T |^ the carrier of S);
+  reconsider f = S --> Top T as Element of L by Th19;
+A1: f is_<=_than {} by YELLOW_0:6;
+  reconsider f' = f as map of S, T;
+    for b being Element of L st b is_<=_than {} holds f >= b
+  proof
+    let b be Element of L;
+    assume b is_<=_than {};
+    reconsider b' = b as map of S, T by Th19;
+      for x being Element of S holds f'.x >= b'.x
+    proof
+      let x be Element of S;
+        f'. x = ((the carrier of S) --> Top T). x by BORSUK_1:def 3
+           .= Top T by FUNCOP_1:13;
+      hence thesis by YELLOW_0:45;
+    end;
+    then f' >= b' by YELLOW_2:10;
+    hence thesis by WAYBEL10:12;
+  end;
+  then f = "/\"({}, L) by A1,YELLOW_0:31;
+  hence thesis by YELLOW_0:def 12;
+end;
+
+definition let S be non empty reflexive RelStr,
+               T be complete LATTICE,
+               a be Element of T;
+  cluster S --> a -> directed-sups-preserving;
+  coherence
+  proof
+    set f = S --> a;
+      for X being Subset of S st X is non empty directed holds
+      f preserves_sup_of X
+    proof
+      let X be Subset of S;
+      assume X is non empty directed;
+      then reconsider X' = X as non empty directed Subset of S;
+        f preserves_sup_of X
+      proof
+        assume ex_sup_of X,S;
+        thus ex_sup_of f.:X, T by YELLOW_0:17;
+A1:     f .: X c= rng f by RELAT_1:144;
+A2:     f = (the carrier of S) --> a by BORSUK_1:def 3;
+then A3:     f .: X c= {a} by A1,FUNCOP_1:14;
+          {a} c= f .: X
+        proof
+          let b be set; assume b in {a};
+then A4:       b = a by TARSKI:def 1;
+          consider n being Element of X';
+A5:       dom f = the carrier of S by A2,FUNCOP_1:19;
+            a = ((the carrier of S) --> a).n by FUNCOP_1:13
+           .= f.n by BORSUK_1:def 3;
+          hence thesis by A4,A5,FUNCT_1:def 12;
+        end;
+        hence sup (f.:X) = sup {a} by A3,XBOOLE_0:def 10
+                      .= a by YELLOW_0:39
+                     .= ((the carrier of S) --> a). sup X by FUNCOP_1:13
+                     .= f.sup X by BORSUK_1:def 3;
+      end;
+      hence thesis;
+    end;
+    hence f is directed-sups-preserving by WAYBEL_0:def 37;
+  end;
+end;
+
+theorem Th35: :: Lemma 2.4, p. 115
+ for S, T being complete Scott TopLattice holds
+  ContMaps (S, T) is sups-inheriting SubRelStr of (T |^ the carrier of S)
+  proof
+    let S, T be complete Scott TopLattice;
+    set L = T |^ the carrier of S;
+    reconsider CS = ContMaps (S, T) as full SubRelStr of L by Def3;
+      now let X be Subset of CS;
+      assume ex_sup_of X,L;
+      per cases;
+      suppose X is non empty;
+      hence "\/"(X,L) in the carrier of CS by Th32;
+      suppose X is empty;
+      then "\/"(X,L) = Bottom L by YELLOW_0:def 11;
+    then "\/"(X,L) = S --> Bottom T by Th33;
+      hence "\/"(X,L) in the carrier of CS by Def3;
+    end;
+    hence thesis by YELLOW_0:def 19;
+  end;
+
+definition let S, T be complete Scott TopLattice;
+  cluster ContMaps (S, T) -> complete;
+  coherence
+  proof
+      ContMaps (S, T) is sups-inheriting non empty full
+      SubRelStr of (T |^ the carrier of S) by Def3,Th35;
+    hence thesis by YELLOW_2:33;
+  end;
+end;
+
+theorem
+   for S, T being non empty Scott complete TopLattice holds
+  Bottom ContMaps (S, T) = S --> Bottom T
+proof
+  let S, T be non empty Scott complete TopLattice;
+  set L = ContMaps (S, T);
+  reconsider f = S --> Bottom T as Element of L by Th21;
+A1: f is_>=_than {} by YELLOW_0:6;
+  reconsider f' = f as map of S, T;
+    for b being Element of L st b is_>=_than {} holds f <= b
+  proof
+    let b be Element of L;
+    assume b is_>=_than {};
+    reconsider b' = b as map of S, T by Th21;
+      for i being Element of S holds [f.i, b.i] in the InternalRel of T
+    proof
+      let i be Element of S;
+        f. i = ((the carrier of S) --> Bottom T). i by BORSUK_1:def 3
+           .= Bottom T by FUNCOP_1:13;
+      then f'.i <= b'.i by YELLOW_0:44;
+      hence thesis by ORDERS_1:def 9;
+    end;
+    hence thesis by Th20;
+  end;
+  then f = "\/"({}, L) by A1,YELLOW_0:30;
+  hence thesis by YELLOW_0:def 11;
+end;
+
+theorem
+   for S, T being non empty Scott complete TopLattice holds
+  Top ContMaps (S, T) = S --> Top T
+proof
+  let S, T be non empty Scott complete TopLattice;
+  set L = ContMaps (S, T);
+  reconsider f = S --> Top T as Element of L by Th21;
+A1: f is_<=_than {} by YELLOW_0:6;
+  reconsider f' = f as map of S, T;
+    for b being Element of L st b is_<=_than {} holds f >= b
+  proof
+    let b be Element of L;
+    assume b is_<=_than {};
+    reconsider b' = b as map of S, T by Th21;
+      for i being Element of S holds [b.i, f.i] in the InternalRel of T
+    proof
+      let i be Element of S;
+        f. i = ((the carrier of S) --> Top T). i by BORSUK_1:def 3
+           .= Top T by FUNCOP_1:13;
+      then f'.i >= b'.i by YELLOW_0:45;
+      hence thesis by ORDERS_1:def 9;
+    end;
+    hence thesis by Th20;
+  end;
+  then f = "/\"({}, L) by A1,YELLOW_0:31;
+  hence thesis by YELLOW_0:def 12;
+end;
+
+theorem
+    for S, T being Scott complete TopLattice holds
+    SCMaps (S, T) = ContMaps (S, T)
+proof
+  let S, T be Scott complete TopLattice;
+  reconsider Sm = ContMaps (S, T) as full non empty SubRelStr of
+    (T |^ the carrier of S) by Def3;
+  reconsider SC = SCMaps (S, T) as full non empty SubRelStr of
+    (T |^ the carrier of S) by WAYBEL15:1;
+A1:the carrier of SC c= the carrier of MonMaps (S, T) by YELLOW_0:def 13;
+    the carrier of SC = the carrier of Sm
+  proof
+    thus the carrier of SC c= the carrier of Sm
+    proof
+      let a be set; assume A2: a in the carrier of SC;
+      then a is Element of MonMaps (S, T) by A1;
+      then reconsider f = a as map of S, T by WAYBEL10:10;
+        f is continuous map of S, T by A2,WAYBEL17:def 2;
+      then a is Element of Sm by Th21;
+      hence thesis;
+    end;
+    thus the carrier of Sm c= the carrier of SC
+    proof
+      let a be set; assume a in the carrier of Sm;
+      then a is Element of Sm;
+      then a is continuous map of S, T by Th21;
+      hence thesis by WAYBEL17:def 2;
+    end;
+  end;
+  hence thesis by YELLOW_0:58;
+end;
+

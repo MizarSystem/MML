@@ -1,0 +1,1530 @@
+:: Universal Classes
+::  by Bogdan Nowak and Grzegorz Bancerek
+::
+:: Received April 10, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary CARD_1, ORDINAL1, FUNCT_1, CLASSES1, TARSKI, BOOLE, RELAT_1,
+      ORDINAL2, CARD_3, FUNCT_2, PROB_1, RLVECT_1, ZF_LANG, ZFMISC_1, SETFAM_1,
+      FINSET_1, CLASSES2, HAHNBAN;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, WELLORD2, FINSET_1,
+      SETFAM_1, RELAT_1, FUNCT_1, FUNCT_2, ORDINAL1, ORDINAL2, CARD_1,
+      CLASSES1, PROB_1, CARD_3;
+ constructors WELLORD2, PROB_1, CLASSES1, CARD_3, XCMPLX_0, MEMBERED, PARTFUN1,
+      RELAT_2, XBOOLE_0;
+ clusters ORDINAL1, CARD_1, CLASSES1, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1,
+      FUNCT_2, PARTFUN1, XBOOLE_0, ORDINAL2;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, ORDINAL1, CLASSES1, XBOOLE_0;
+ theorems TARSKI, ZFMISC_1, SETFAM_1, ORDINAL1, WELLORD2, ORDINAL2, ORDINAL3,
+      FUNCT_1, FUNCT_2, CARD_1, CLASSES1, CARD_2, FRAENKEL, CARD_3, RELAT_1,
+      PROB_1, XBOOLE_0, XBOOLE_1;
+ schemes FUNCT_1, PARTFUN1, CARD_3, ORDINAL1, ORDINAL2, XBOOLE_0;
+
+begin
+
+ reserve m for Cardinal,
+         n for Nat,
+         A,B,C for Ordinal,
+         x,y,z,X,Y,Z,W for set,
+         f for Function;
+
+Lm1: Tarski-Class X is_Tarski-Class
+  proof
+      Tarski-Class X is_Tarski-Class_of X by CLASSES1:def 4;
+   hence thesis by CLASSES1:def 3;
+  end;
+
+definition
+ cluster being_Tarski-Class -> subset-closed set;
+ coherence by CLASSES1:def 2;
+end;
+
+definition let X be set;
+  cluster Tarski-Class X -> being_Tarski-Class;
+  coherence by Lm1;
+end;
+
+theorem
+ Th1: W is subset-closed & X in W implies
+      not X,W are_equipotent & Card X <` Card W
+  proof assume A1: W is subset-closed;
+   assume
+A2:  X in W;
+      bool X c= W
+     proof let x;
+      assume x in bool X;
+      hence x in W by A1,A2,CLASSES1:def 1;
+     end;
+then A3:    Card X <` Card bool X & Card bool X <=` Card W by CARD_1:27,30;
+  then Card X <` Card W;
+    then Card X <> Card W;
+   hence thesis by A3,CARD_1:21;
+  end;
+
+canceled;
+
+theorem
+ Th3: W is_Tarski-Class & x in W & y in W implies {x} in W & {x,y} in W
+  proof assume that
+A1:  W is_Tarski-Class and
+A2:  x in W & y in W;
+A3:  W is subset-closed by A1,CLASSES1:def 2;
+      bool x in W & {x} c= bool x by A1,A2,CLASSES1:def 2,ZFMISC_1:80;
+   hence {x} in W by A3,CLASSES1:def 1;
+    then bool {x} in W & bool {x} = {{},{x}} by A1,CLASSES1:def 2,ZFMISC_1:30;
+then A4:  Card {{},{x}} <` Card W by A3,Th1;
+  defpred C[set] means $1 = {};
+  deffunc f(set) = y;
+  deffunc g(set) = x;
+   consider f such that
+A5:  dom f = {{},{x}} & for z st z in {{},{x}} holds
+     (C[z] implies f.z = f(z)) & (not C[z] implies f.z = g(z)) from LambdaC;
+      {x,y} c= rng f
+     proof let z; assume z in {x,y};
+then A6:     (z = x or z = y) & {} in {{},{x}} & {x} in {{},{x}} & {x} <> {}
+        by TARSKI:def 2;
+       then f.{} = z or f.{x} = z by A5;
+      hence z in rng f by A5,A6,FUNCT_1:def 5;
+     end;
+    then Card {x,y} <=` Card {{},{x}} by A5,CARD_1:28;
+then A7:  Card {x,y} <` Card W by A4,ORDINAL1:22;
+      {x,y} c= W
+     proof let z; assume z in {x,y};
+      hence thesis by A2,TARSKI:def 2;
+     end;
+   hence {x,y} in W by A1,A7,CLASSES1:2;
+  end;
+
+theorem
+ Th4: W is_Tarski-Class & x in W & y in W implies [x,y] in W
+  proof assume
+A1:  W is_Tarski-Class;
+   assume x in W & y in W;
+    then {x} in W & {x,y} in W & [x,y] = {{x,y},{x}} by A1,Th3,TARSKI:def 5;
+   hence [x,y] in W by A1,Th3;
+  end;
+
+theorem
+ Th5: W is_Tarski-Class & X in W implies Tarski-Class X c= W
+  proof assume
+A1:  W is_Tarski-Class & X in W;
+   then reconsider D = W as non empty set;
+      D is_Tarski-Class_of X by A1,CLASSES1:def 3;
+   hence thesis by CLASSES1:def 4;
+  end;
+
+scheme TC {P[set]}:
+ for X holds P[Tarski-Class X] provided
+A1: for X st X is_Tarski-Class holds P[X] by A1;
+
+theorem
+ Th6: W is_Tarski-Class & A in W implies succ A in W & A c= W
+  proof assume that
+A1: for X,Y st X in W & Y c= X holds Y in W and
+A2: for X st X in W holds bool X in W and
+   for X st X c= W holds X,W are_equipotent or X in W and
+A3:  A in W;
+      bool A in W & succ A c= bool A by A2,A3,ORDINAL2:3;
+   hence succ A in W by A1;
+   let x; assume
+A4:  x in A;
+   then reconsider B = x as Ordinal by ORDINAL1:23;
+      B c= A by A4,ORDINAL1:def 2;
+   hence thesis by A1,A3;
+  end;
+
+theorem
+   A in Tarski-Class W implies succ A in Tarski-Class W &
+   A c= Tarski-Class W by Th6;
+
+theorem
+ Th8: W is subset-closed & X is epsilon-transitive & X in W implies X c= W
+  proof assume that
+A1: for X,Y st X in W & Y c= X holds Y in W and
+A2:  Y in X implies Y c= X and
+A3:  X in W;
+   let x;
+   assume x in X;
+    then x c= X by A2;
+   hence thesis by A1,A3;
+  end;
+
+theorem
+   X is epsilon-transitive & X in Tarski-Class W implies X c= Tarski-Class W
+ by Th8;
+
+theorem
+ Th10: W is_Tarski-Class implies On W = Card W
+  proof assume
+A1: W is_Tarski-Class;
+then A2: W is subset-closed by CLASSES1:def 2;
+      now let X; assume A3: X in On W;
+then A4:    X in W & X is Ordinal by ORDINAL2:def 2;
+     thus X is Ordinal by A3,ORDINAL2:def 2;
+     reconsider A = X as Ordinal by A3,ORDINAL2:def 2;
+     thus X c= On W
+       proof let x; assume
+A5:       x in X; then x in A;
+        then reconsider B = x as Ordinal by ORDINAL1:23;
+           B c= A by A5,ORDINAL1:def 2;
+         then B in W by A2,A4,CLASSES1:def 1;
+        hence thesis by ORDINAL2:def 2;
+       end;
+    end;
+   then reconsider ON = On W as Ordinal by ORDINAL1:31;
+      ON c= W by ORDINAL2:9;
+then A6:  ON,W are_equipotent or ON in W by A1,CLASSES1:def 2;
+A7:    now assume ON in W;
+      then ON in ON by ORDINAL2:def 2;
+     hence contradiction;
+    end;
+      now let A; assume A,ON are_equipotent & not ON c= A;
+then A8:    A,W are_equipotent & A in ON by A6,A7,ORDINAL1:26,WELLORD2:22;
+      then A in W by ORDINAL2:def 2;
+     hence contradiction by A2,A8,Th1;
+    end;
+   then reconsider ON as Cardinal by CARD_1:def 1;
+      ON = Card ON by CARD_1:def 5;
+   hence thesis by A6,A7,CARD_1:21;
+  end;
+
+theorem
+ Th11: On Tarski-Class W = Card Tarski-Class W by Th10;
+
+theorem
+ Th12: W is_Tarski-Class & X in W implies Card X in W
+  proof assume
+A1: W is_Tarski-Class & X in W;
+    then W is subset-closed by CLASSES1:def 2;
+    then Card X <` Card W & Card W = On W by A1,Th1,Th10;
+   hence thesis by ORDINAL2:def 2;
+  end;
+
+theorem
+    X in Tarski-Class W implies Card X in Tarski-Class W by Th12;
+
+theorem
+ Th14: W is_Tarski-Class & x in Card W implies x in W
+  proof assume
+A1:  W is_Tarski-Class;
+   assume x in Card W;
+    then x in On W by A1,Th10;
+   hence x in W by ORDINAL2:def 2;
+  end;
+
+theorem
+   x in Card Tarski-Class W implies x in Tarski-Class W by Th14;
+
+theorem
+    W is_Tarski-Class & m <` Card W implies m in W
+  proof assume
+A1:  W is_Tarski-Class;
+   assume m in Card W;
+    then m in On W by A1,Th10;
+   hence thesis by ORDINAL2:def 2;
+  end;
+
+theorem
+    m <` Card Tarski-Class W implies m in Tarski-Class W
+  proof assume m in Card Tarski-Class W;
+    then m in On Tarski-Class W by Th11;
+   hence thesis by ORDINAL2:def 2;
+  end;
+
+theorem
+   W is_Tarski-Class & m in W implies m c= W by Th6;
+
+theorem
+    m in Tarski-Class W implies m c= Tarski-Class W by Th6;
+
+theorem
+ Th20: W is_Tarski-Class implies Card W is_limit_ordinal
+  proof assume
+A1:  W is_Tarski-Class;
+      now let A; assume A in Card W;
+      then A in W by A1,Th14;
+      then succ A in W by A1,Th6;
+      then succ A in On W by ORDINAL2:def 2;
+     hence succ A in Card W by A1,Th10;
+    end;
+   hence thesis by ORDINAL1:41;
+  end;
+
+theorem
+ Th21: W is_Tarski-Class & W <> {} implies Card W <> 0 & Card W <> {} &
+    Card W is_limit_ordinal
+  proof assume
+A1:  W is_Tarski-Class & W <> {};
+    then A2: not W,{} are_equipotent by CARD_1:46;
+   hence Card W <> 0 by CARD_1:21,47;
+   thus thesis by A1,A2,Th20,CARD_1:21,47;
+  end;
+
+theorem
+ Th22: Card Tarski-Class W <> 0 & Card Tarski-Class W <> {} &
+    Card Tarski-Class W is_limit_ordinal
+  proof
+    A1: not Tarski-Class W,{} are_equipotent by CARD_1:46;
+   hence Card Tarski-Class W <> 0 by CARD_1:21,47;
+   thus Card Tarski-Class W <> {} by A1,CARD_1:21,47;
+      now let A; assume A in Card Tarski-Class W;
+      then A in Tarski-Class W by Th14;
+      then succ A in Tarski-Class W by Th6;
+      then succ A in On Tarski-Class W by ORDINAL2:def 2;
+     hence succ A in Card Tarski-Class W by Th11;
+    end;
+   hence thesis by ORDINAL1:41;
+  end;
+
+ reserve f,g for Function,
+         L,L1 for T-Sequence,
+         F for Cardinal-Function;
+
+theorem
+ Th23: W is_Tarski-Class &
+  (X in W & W is epsilon-transitive or X in W & X c= W or
+   Card X <` Card W & X c= W) implies Funcs(X,W) c= W
+  proof assume
+A1:  W is_Tarski-Class;
+then A2:  W is subset-closed by CLASSES1:def 2;
+   assume X in W & W is epsilon-transitive or X in W & X c= W or
+     Card X <` Card W & X c= W;
+then A3:  X c= W & Card X <` Card W by A2,Th1,ORDINAL1:def 2;
+   let x; assume
+A4:  x in Funcs(X,W);
+   then consider f such that
+A5:  x = f & dom f = X & rng f c= W by FUNCT_2:def 2;
+A6:   f c= W
+     proof let y; assume
+A7:    y in f;
+      then consider y1,y2 being set such that
+A8:    [y1,y2] = y by RELAT_1:def 1;
+A9:    y1 in dom f & y2 = f.y1 by A7,A8,FUNCT_1:8;
+       then y2 in rng f by FUNCT_1:def 5; hence y in W by A1,A3,A5,A8,A9,Th4
+;
+     end;
+      Card (f qua set) = Card X by A4,A5,CARD_2:7;
+   hence x in W by A1,A3,A5,A6,CLASSES1:2;
+  end;
+
+theorem
+    X in Tarski-Class W & W is epsilon-transitive or
+  X in Tarski-Class W & X c= Tarski-Class W or
+   Card X <` Card Tarski-Class W & X c= Tarski-Class W
+    implies Funcs(X,Tarski-Class W) c= Tarski-Class W
+  proof assume
+A1:  X in Tarski-Class W & W is epsilon-transitive or
+     X in Tarski-Class W & X c= Tarski-Class W or
+      Card X <` Card Tarski-Class W & X c= Tarski-Class W;
+      W is epsilon-transitive implies Tarski-Class W is epsilon-transitive
+     by CLASSES1:27;
+then A2:  X c= Tarski-Class W & Card X <` Card Tarski-Class W
+     by A1,CLASSES1:28,ORDINAL1:def 2;
+   let x; assume
+A3:  x in Funcs(X,Tarski-Class W);
+   then consider f such that
+A4:  x = f & dom f = X & rng f c= Tarski-Class W by FUNCT_2:def 2;
+A5:   f c= Tarski-Class W
+     proof let y; assume
+A6:    y in f;
+      then consider y1,y2 being set such that
+A7:    [y1,y2] = y by RELAT_1:def 1;
+A8:    y1 in dom f & y2 = f.y1 by A6,A7,FUNCT_1:8;
+       then y2 in rng f by FUNCT_1:def 5; hence y in
+ Tarski-Class W by A2,A4,A7,A8,CLASSES1:31;
+     end;
+      Card (f qua set) = Card X by A3,A4,CARD_2:7;
+   hence x in Tarski-Class W by A2,A4,A5,CLASSES1:9;
+  end;
+
+theorem
+ Th25: dom L is_limit_ordinal & (for A st A in
+ dom L holds L.A = Rank A) implies
+   Rank dom L = Union L
+  proof assume that
+A1:  dom L is_limit_ordinal and
+A2:  for A st A in dom L holds L.A = Rank A;
+A3:  union rng L = Union L by PROB_1:def 3;
+      now assume
+A4:    dom L <> {};
+     thus Rank dom L c= Union L
+       proof let x; assume x in Rank dom L;
+        then consider A such that
+A5:       A in dom L & x in Rank A by A1,A4,CLASSES1:35;
+           L.A = Rank A by A2,A5;
+         then Rank A in rng L by A5,FUNCT_1:def 5;
+        hence thesis by A3,A5,TARSKI:def 4;
+       end;
+     thus Union L c= Rank dom L
+       proof let x; assume x in Union L;
+        then consider X such that
+A6:       x in X & X in rng L by A3,TARSKI:def 4;
+        consider y such that
+A7:       y in dom L & X = L.y by A6,FUNCT_1:def 5;
+        reconsider y as Ordinal by A7,ORDINAL1:23;
+           X = Rank y by A2,A7;
+        hence x in Rank dom L by A1,A6,A7,CLASSES1:35;
+       end;
+    end;
+   hence thesis by A3,CLASSES1:33,RELAT_1:65,XBOOLE_0:def 10,ZFMISC_1:2;
+  end;
+
+ defpred PQ[Ordinal] means
+  W is_Tarski-Class & $1 in On W implies Card Rank $1 <` Card W & Rank $1 in W;
+
+ Lm2: PQ[{}] by Th10,CARD_1:47,CLASSES1:33,ORDINAL2:def 2;
+
+ Lm3: PQ[A] implies PQ[succ A]
+  proof assume
+A1:  PQ[A];
+   let W; assume
+A2:  W is_Tarski-Class & succ A in On W;
+then A3:  A in succ A & Card W = On W & W is subset-closed
+     by Th10,CLASSES1:def 2,ORDINAL1:10;
+    then A in On W by A2,ORDINAL1:19;
+    then Rank A in W by A1,A2;
+    then bool Rank A in W & Rank succ A = bool Rank A by A2,CLASSES1:34,def 2;
+   hence thesis by A3,Th1;
+  end;
+
+ Lm4: A <> {} & A is_limit_ordinal &
+   (for B st B in A holds PQ[B]) implies PQ[A]
+  proof assume that
+A1:  A <> {} & A is_limit_ordinal and
+A2:  for B st B in A holds PQ[B];
+   let W; assume
+A3:  W is_Tarski-Class & A in On W;
+then A4: W is subset-closed by CLASSES1:def 2;
+   deffunc f(Ordinal) = Rank $1;
+   consider L such that
+A5:  dom L = A & for B st B in A holds L.B = f(B) from TS_Lambda;
+   deffunc g(set) = Card bool (L.$1);
+   consider F such that
+A6:  dom F = A & for x st x in A holds F.x = g(x) from CF_Lambda;
+A7:  for x st x in dom Card L holds (Card L).x in F.x
+     proof let x; assume x in dom Card L;
+       then x in dom L by CARD_3:def 2;
+       then F.x = Card bool (L.x) & Card (L.x) <` Card bool (L.x) &
+        Card (L.x) = (Card L).x by A5,A6,CARD_1:30,CARD_3:def 2;
+      hence thesis;
+     end;
+      dom Card L = dom L & Rank A = Union L by A1,A5,Th25,CARD_3:def 2;
+    then A8: Card Rank A <=` Sum Card L & Sum
+ Card L <` Product F by A5,A6,A7,CARD_3:54,56;
+    then A9:  Card Rank A <` Product F by ORDINAL1:22;
+A10:  product F c= Funcs(A,W)
+     proof let x; assume x in product F;
+      then consider f such that
+A11:    x = f & dom f = dom F & for x st x in dom F holds f.x in F.x
+        by CARD_3:def 5;
+         rng f c= W
+        proof let z; assume z in rng f;
+         then consider y such that
+A12:       y in dom f & z = f.y by FUNCT_1:def 5;
+         reconsider y as Ordinal by A6,A11,A12,ORDINAL1:23;
+            y c= A & A in W by A3,A6,A11,A12,ORDINAL1:def 2,ORDINAL2:def 2;
+then A13:       f.y in F.y & F.y = F.y & F.y = Card bool (L.y) & L.y = Rank y &
+           L.y = L.y & y in W by A4,A5,A6,A11,A12,CLASSES1:def 1;
+          then PQ[y] & y in On W by A2,A6,A11,A12,ORDINAL2:def 2;
+          then L.y in W by A3,A13;
+          then bool (L.y) in W by A3,CLASSES1:def 2;
+          then Card bool (L.y) = Card bool (L.y) &
+           Card bool (L.y) in W by A3,Th12;
+          then F.y c= W by A3,A13,Th6;
+         hence thesis by A12,A13;
+        end;
+      hence thesis by A6,A11,FUNCT_2:def 2;
+     end;
+A14:  A in W by A3,ORDINAL2:def 2;
+    then A c= W by A3,Th6;
+    then Funcs(A,W) c= W by A3,A14,Th23;
+    then product F c= W & Product F = Card product F
+     by A10,CARD_3:def 8,XBOOLE_1:1;
+    then A15: Product F <=` Card W by CARD_1:27;
+   hence
+   Card Rank A <` Card W by A8,ORDINAL1:22;
+      Rank A c= W
+     proof let x; assume x in Rank A;
+      then consider B such that
+A16:     B in A & x in Rank B by A1,CLASSES1:35;
+         B c= A by A16,ORDINAL1:def 2;
+       then B in W by A4,A14,CLASSES1:def 1;
+       then B in On W by ORDINAL2:def 2;
+       then Rank B in W & Rank B is epsilon-transitive
+        by A2,A3,A16,CLASSES1:37;
+       then Rank B c= W by A4,Th8;
+      hence x in W by A16;
+     end;
+   hence thesis by A3,A9,A15,CLASSES1:2;
+  end;
+
+theorem Th26:
+  W is_Tarski-Class & A in On W implies Card Rank A <` Card W & Rank A in W
+  proof PQ[B] from Ordinal_Ind(Lm2,Lm3,Lm4);
+   hence thesis;
+  end;
+
+theorem
+   A in On Tarski-Class W implies
+   Card Rank A <` Card Tarski-Class W & Rank A in Tarski-Class W by Th26;
+
+theorem
+ Th28: W is_Tarski-Class implies Rank Card W c= W
+  proof assume
+A1:  W is_Tarski-Class;
+then A2:   W is subset-closed by CLASSES1:def 2;
+      now assume
+A3:    W <> {};
+     thus thesis
+       proof let x such that
+A4:       x in Rank Card W;
+            Card W <> {} &
+           Card W is_limit_ordinal by A1,A3,Th21;
+        then consider A such that
+A5:       A in Card W & x in Rank A by A4,CLASSES1:35;
+           A in On W by A1,A5,Th10;
+         then Rank A in W & Rank A is epsilon-transitive
+           by A1,Th26,CLASSES1:37;
+         then Rank A c= W by A2,Th8;
+        hence x in W by A5;
+       end;
+    end;
+   hence thesis by CARD_1:47,CLASSES1:33;
+  end;
+
+theorem
+ Th29: Rank Card Tarski-Class W c= Tarski-Class W
+  proof let x such that
+A1:  x in Rank Card Tarski-Class W;
+       Card Tarski-Class W <> {} &
+      Card Tarski-Class W is_limit_ordinal by Th22;
+   then consider A such that
+A2:  A in Card Tarski-Class W & x in Rank A by A1,CLASSES1:35;
+      A in On Tarski-Class W by A2,Th11;
+    then Rank A in Tarski-Class W & Rank A is epsilon-transitive
+     by Th26,CLASSES1:37;
+    then Rank A c= Tarski-Class W by Th8;
+   hence x in Tarski-Class W by A2;
+  end;
+
+  deffunc f(set) = the_rank_of $1;
+  deffunc g(set) = Card bool $1;
+
+theorem Th30:
+ W is_Tarski-Class & W is epsilon-transitive & X in W implies
+ the_rank_of X in W
+  proof assume
+A1:  W is_Tarski-Class & W is epsilon-transitive;
+then A2: W is subset-closed by CLASSES1:def 2;
+defpred P[Ordinal] means ex X st $1 = the_rank_of X & X in W & not $1 in W;
+   assume X in W & not the_rank_of X in W;
+then A3:  ex A st P[A];
+   consider A such that
+A4:  P[A] and
+A5:  for B st P[B] holds A c= B from Ordinal_Min(A3);
+   consider X such that
+A6:  A = the_rank_of X & X in W & not A in W by A4;
+A7:  On W = Card W & X c= W by A1,A6,Th10,ORDINAL1:def 2;
+A8:  On W = A
+     proof
+         not A in On W by A6,ORDINAL2:def 2;
+      hence On W c= A by A7,ORDINAL1:26;
+         X c= Rank Card W
+        proof let x;
+         assume
+A9:       x in X;
+          then the_rank_of x in A by A6,CLASSES1:76;
+          then x in W & not A c= the_rank_of x by A7,A9,ORDINAL1:7;
+          then the_rank_of x in W by A5;
+          then the_rank_of x in Card W by A7,ORDINAL2:def 2;
+          then x c= Rank the_rank_of x & Rank the_rank_of x in Rank Card W
+           by CLASSES1:42,def 8;
+         hence thesis by CLASSES1:47;
+        end;
+      hence thesis by A6,A7,CLASSES1:73;
+     end;
+A10: Card X <` Card W by A2,A6,Th1;
+defpred P[set] means ex Y st Y in X & $1 = the_rank_of Y;
+   consider LL being set such that
+A11:  x in LL iff x in On W & P[x] from Separation;
+A12: LL c= On W proof let x; thus thesis by A11; end;
+      now let Z; assume Z in union LL;
+     then consider Y such that
+A13:   Z in Y & Y in LL by TARSKI:def 4;
+        Y in On W by A11,A13;
+     then reconsider Y as Ordinal by ORDINAL2:def 2;
+A14:      Z in Y by A13;
+     hence Z is Ordinal by ORDINAL1:23;
+     reconsider A = Z as Ordinal by A14,ORDINAL1:23;
+        A c= Y & Y c= union LL by A13,ORDINAL1:def 2,ZFMISC_1:92;
+     hence Z c= union LL by XBOOLE_1:1;
+    end;
+   then reconsider ULL = union LL as Ordinal by ORDINAL1:31;
+   consider f such that
+A15: dom f = X & for x st x in X holds f.x = f(x) from Lambda;
+      LL c= rng f
+     proof let x; assume x in LL;
+      then consider Y such that
+A16:    Y in X & x = the_rank_of Y by A11;
+         f.Y = x by A15,A16;
+      hence thesis by A15,A16,FUNCT_1:def 5;
+     end;
+    then Card LL <=` Card X by A15,CARD_1:28;
+    then Card LL <> Card W &
+     On W c= W by A10,ORDINAL1:22,ORDINAL2:9;
+ then not LL,W are_equipotent & LL c= W by A12,CARD_1:21,XBOOLE_1:1;
+    then LL in W by A1,CLASSES1:def 2;
+then A17: Funcs(LL,W) c= W by A1,Th23;
+      ULL = Union id LL
+     proof Union id LL = union rng id LL by PROB_1:def 3 .= ULL by RELAT_1:71;
+      hence thesis;
+     end;
+then A18: Card ULL <=` Sum Card id LL by CARD_3:54;
+   consider ff being Cardinal-Function such that
+A19: dom ff = LL & for x st x in LL holds ff.x = g(x) from CF_Lambda;
+A20: dom id LL = LL & dom Card id LL = dom id LL by CARD_3:def 2,RELAT_1:71;
+      now let x; assume x in dom Card id LL;
+   then (id LL).x = x & (Card id LL).x = Card ((id LL).x) & x = x &
+       ff.x = Card bool x by A19,A20,CARD_3:def 2,FUNCT_1:35;
+     hence (Card id LL).x in ff.x by CARD_1:30;
+    end;
+    then Sum Card id LL <` Product ff by A19,A20,CARD_3:56;
+then A21: Card ULL <` Product ff by A18,ORDINAL1:22;
+      product ff c= Funcs(LL,W)
+     proof let x; assume x in product ff;
+      then consider g such that
+A22:    x = g & dom g = dom ff & for x st x in dom ff holds g.x in ff.x
+        by CARD_3:def 5;
+         rng g c= W
+        proof let y; assume y in rng g;
+         then consider x such that
+A23:       x in dom g & y = g.x by FUNCT_1:def 5;
+A24:       y in ff.x & ff.x = ff.x & x = x & ff.x = Card bool x &
+           x in On W by A12,A19,A22,A23;
+            x in W by A12,A19,A22,A23,ORDINAL2:def 2;
+          then bool x in W by A1,CLASSES1:def 2;
+          then Card bool x in W by A1,Th12;
+          then Card bool x c= W by A1,Th6;
+         hence y in W by A24;
+        end;
+      hence thesis by A19,A22,FUNCT_2:def 2;
+     end;
+    then product ff c= W & Card product ff = Product ff
+     by A17,CARD_3:def 8,XBOOLE_1:1;
+    then A25: Product ff <=` Card W by CARD_1:27;
+      On W c= ULL
+     proof let x; assume
+A26:     x in On W;
+      then reconsider B = x as Ordinal by ORDINAL2:def 2;
+         now assume
+A27:      for Y st Y in X holds the_rank_of Y c= B;
+           X c= Rank succ B
+          proof let y;
+           assume y in X;
+            then the_rank_of y c= B by A27;
+            then the_rank_of y in succ B by ORDINAL1:34;
+           hence thesis by CLASSES1:74;
+          end;
+         then A c= succ B & B in W by A6,A26,CLASSES1:73,ORDINAL2:def 2;
+         then A c= succ B & succ B in W by A1,Th6;
+        hence contradiction by A2,A6,CLASSES1:def 1;
+       end;
+      then consider Y such that
+A28:    Y in X & not the_rank_of Y c= B;
+         the_rank_of Y in A by A6,A28,CLASSES1:76;
+       then the_rank_of Y in LL by A8,A11,A28;
+       then B in the_rank_of Y & the_rank_of Y c= ULL
+        by A28,ORDINAL1:26,ZFMISC_1:92;
+      hence x in ULL;
+     end;
+    then Card On W <=` Card ULL & On W = Card W & Card W = Card Card W
+     by A1,Th10,CARD_1:27,def 5;
+   hence contradiction by A21,A25,CARD_1:14;
+  end;
+
+theorem
+ Th31: W is_Tarski-Class & W is epsilon-transitive implies W c= Rank Card W
+  proof assume
+A1:  W is_Tarski-Class & W is epsilon-transitive;
+   let x;
+   assume x in W;
+    then the_rank_of x in W by A1,Th30;
+    then the_rank_of x in On W & On W = Card W by A1,Th10,ORDINAL2:def 2;
+    then x c= Rank the_rank_of x & Rank the_rank_of x in Rank Card W
+     by CLASSES1:42,def 8;
+   hence thesis by CLASSES1:47;
+  end;
+
+theorem
+ Th32: W is_Tarski-Class & W is epsilon-transitive implies Rank Card W = W
+  proof assume
+    W is_Tarski-Class & W is epsilon-transitive;
+   hence Rank Card W c= W & W c= Rank Card W by Th28,Th31;
+  end;
+
+theorem
+    W is_Tarski-Class & A in On W implies Card Rank A <=` Card W
+  proof assume W is_Tarski-Class & A in On W;
+    then Card Rank A <` Card W by Th26;
+   hence thesis by CARD_1:13;
+  end;
+
+theorem
+    A in On Tarski-Class W implies Card Rank A <=` Card Tarski-Class W
+  proof assume A in On Tarski-Class W;
+    then Card Rank A <` Card Tarski-Class W by Th26;
+   hence thesis by CARD_1:13;
+  end;
+
+theorem
+ Th35: W is_Tarski-Class implies Card W = Card Rank Card W
+  proof assume W is_Tarski-Class;
+    then Rank Card W c= W by Th28;
+then A1:  Card Rank Card W <=` Card W by CARD_1:27;
+       Card W = Card W & Card W c= Rank Card W
+     by CLASSES1:44;
+    then Card Card W = Card W & Card Card W <=` Card Rank Card W
+     by CARD_1:27,def 5;
+   hence thesis by A1,XBOOLE_0:def 10;
+  end;
+
+theorem
+  Card Tarski-Class W = Card Rank Card Tarski-Class W by Th35;
+
+theorem
+ Th37: W is_Tarski-Class & X c= Rank Card W implies
+   X,Rank Card W are_equipotent or X in Rank Card W
+  proof assume that
+A1: W is_Tarski-Class and
+A2: X c= Rank Card W & not X,Rank Card W are_equipotent;
+A3: W <> {} by A2,CARD_1:47,CLASSES1:33,XBOOLE_1:3;
+      Card W = Card Rank Card W by A1,Th35;
+    then Card X <=` Card W & Card X <> Card W by A2,CARD_1:21,27;
+then A4: Card X <` Card W by CARD_1:13;
+defpred P[set] means ex Y st Y in X & $1 = the_rank_of Y;
+   consider LL being set such that
+A5: x in LL iff x in On W & P[x] from Separation;
+A6: LL c= On W proof let x; thus thesis by A5; end;
+      now let Z; assume Z in union LL;
+     then consider Y such that
+A7:   Z in Y & Y in LL by TARSKI:def 4;
+        Y in On W by A5,A7;
+     then reconsider Y as Ordinal by ORDINAL2:def 2;
+A8:      Z in Y by A7;
+     hence Z is Ordinal by ORDINAL1:23;
+     reconsider A = Z as Ordinal by A8,ORDINAL1:23;
+        A c= Y & Y c= union LL by A7,ORDINAL1:def 2,ZFMISC_1:92;
+     hence Z c= union LL by XBOOLE_1:1;
+    end;
+   then reconsider ULL = union LL as Ordinal by ORDINAL1:31;
+   consider f such that
+A9: dom f = X & for x st x in X holds f.x = f(x) from Lambda;
+      LL c= rng f
+     proof let x; assume x in LL;
+      then consider Y such that
+A10:    Y in X & x = the_rank_of Y by A5;
+         f.Y = x by A9,A10;
+      hence thesis by A9,A10,FUNCT_1:def 5;
+     end;
+    then Card LL <=` Card X by A9,CARD_1:28;
+    then Card LL <> Card W &
+     On W c= W by A4,ORDINAL1:22,ORDINAL2:9;
+then A11: not LL,W are_equipotent & LL c= W by A6,CARD_1:21,XBOOLE_1:1;
+    then LL in W by A1,CLASSES1:def 2;
+then A12: Funcs(LL,W) c= W by A1,A11,Th23;
+      ULL = Union id LL
+     proof Union id LL = union rng id LL by PROB_1:def 3 .= ULL by RELAT_1:71;
+      hence thesis;
+     end;
+then A13: Card ULL <=` Sum Card id LL by CARD_3:54;
+   consider ff being Cardinal-Function such that
+A14: dom ff = LL & for x st x in LL holds ff.x = g(x) from CF_Lambda;
+A15: dom id LL = LL & dom Card id LL = dom id LL by CARD_3:def 2,RELAT_1:71;
+      now let x; assume x in dom Card id LL;
+   then (id LL).x = x & (Card id LL).x = Card ((id LL).x) & x = x &
+       ff.x = Card bool x by A14,A15,CARD_3:def 2,FUNCT_1:35;
+     hence (Card id LL).x in ff.x by CARD_1:30;
+    end;
+    then A16: Sum Card id LL <` Product ff by A14,A15,CARD_3:56;
+      product ff c= Funcs(LL,W)
+     proof let x; assume x in product ff;
+      then consider g such that
+A17:    x = g & dom g = dom ff & for x st x in dom ff holds g.x in ff.x
+        by CARD_3:def 5;
+         rng g c= W
+        proof let y; assume y in rng g;
+         then consider x such that
+A18:       x in dom g & y = g.x by FUNCT_1:def 5;
+A19:       y in ff.x & ff.x = ff.x & x = x & ff.x = Card bool x &
+           x in On W by A6,A14,A17,A18;
+            x in W by A6,A14,A17,A18,ORDINAL2:def 2;
+          then bool x in W by A1,CLASSES1:def 2;
+          then Card bool x in W by A1,Th12;
+          then Card bool x c= W by A1,Th6;
+         hence y in W by A19;
+        end;
+      hence thesis by A14,A17,FUNCT_2:def 2;
+     end;
+    then product ff c= W & Card product ff = Product ff
+     by A12,CARD_3:def 8,XBOOLE_1:1;
+    then Product ff <=` Card W by CARD_1:27;
+then A20: Card ULL <` Card W by A13,A16,ORDINAL1:22;
+      not W,{} are_equipotent by A3,CARD_1:46;
+then A21:   Card W = On W & Card W <> {} &
+      Card W is_limit_ordinal by A1,Th10,Th20,CARD_1:21,47;
+    then union Card W = Card W &
+     Card ULL <> Card W &
+      Card Card W = Card W
+       by A20,CARD_1:def 5,ORDINAL1:def 6;
+    then ULL c= On W & ULL <> On W by A6,A21,ZFMISC_1:95;
+    then ULL c< On W by XBOOLE_0:def 8;
+    then ULL in Card W by A21,ORDINAL1:21;
+    then succ ULL in Card W by A21,ORDINAL1:41;
+then A22: succ succ ULL in Card W by A21,ORDINAL1:41;
+      X c= Rank succ ULL
+     proof let x; assume
+A23:    x in X;
+then A24:    f.x = the_rank_of x & f.x in rng f & x = x &
+        x in Rank Card W
+         by A2,A9,FUNCT_1:def 5;
+      consider A such that
+A25:    A in Card W & x in Rank A by A2,A21,A23,CLASSES1:35;
+defpred P[Ordinal] means $1 in Card W & x c= Rank $1;
+         x c= Rank A by A25,CLASSES1:38;
+then A26:    ex A st P[A] by A25;
+      consider A such that
+A27:    P[A] and
+A28:    for B st P[B] holds A c= B from Ordinal_Min(A26);
+         now let B; assume x c= Rank B;
+         then not B in Card W or A c= B by A28;
+         then A c= Card W & Card W c= B or A c= B
+          by A27,ORDINAL1:26;
+        hence A c= B by XBOOLE_1:1;
+       end;
+       then A = the_rank_of x by A27,CLASSES1:def 8;
+       then f.x in LL by A5,A21,A23,A24,A27;
+       then the_rank_of x c= ULL by A24,ZFMISC_1:92;
+       then x c= Rank the_rank_of x & Rank the_rank_of x c= Rank ULL
+        by CLASSES1:43,def 8;
+       then x c= Rank ULL by XBOOLE_1:1;
+      hence x in Rank succ ULL by CLASSES1:36;
+     end;
+    then X in Rank succ succ ULL by CLASSES1:36;
+   hence X in Rank Card W by A21,A22,CLASSES1:35;
+  end;
+
+theorem
+    X c= Rank Card Tarski-Class W implies
+   X,Rank Card Tarski-Class W are_equipotent or
+   X in Rank Card Tarski-Class W by Th37;
+
+theorem
+ Th39: W is_Tarski-Class implies Rank Card W is_Tarski-Class
+  proof assume
+A1:  W is_Tarski-Class;
+   set B = Rank Card W;
+   thus for X,Y holds X in B & Y c= X implies Y in B by CLASSES1:47;
+      now assume W <> {};
+      then not W,{} are_equipotent by CARD_1:46;
+then A2:     Card W <> {} &
+        Card W is_limit_ordinal by A1,Th20,CARD_1:21,47;
+     thus for X holds X in B implies bool X in B
+       proof let X; assume X in B;
+        then consider A such that
+A3:       A in Card W & X in Rank A by A2,CLASSES1:35;
+           succ A in Card W & bool X in Rank succ A
+           by A2,A3,CLASSES1:48,ORDINAL1:41;
+        hence thesis by A2,CLASSES1:35;
+       end;
+    end;
+   hence thesis by A1,Th37,CARD_1:47,CLASSES1:33;
+  end;
+
+theorem
+ Th40: Rank Card Tarski-Class W is_Tarski-Class by Th39;
+
+theorem
+ Th41: X is epsilon-transitive & A in the_rank_of X implies
+   ex Y st Y in X & the_rank_of Y = A
+  proof assume
+A1:  X is epsilon-transitive & A in the_rank_of X;
+   assume
+A2:  not thesis;
+     defpred P[Ordinal] means ex Y st A in $1 & Y in X & the_rank_of Y = $1;
+A3:  ex B st P[B]
+     proof assume
+A4:    for B,Y st A in B & Y in X holds the_rank_of Y <> B;
+         X c= Rank A
+        proof let x;
+         assume
+A5:       x in X;
+          then not A in the_rank_of x by A4;
+          then the_rank_of x c= A & the_rank_of x <> A by A2,A5,ORDINAL1:26;
+          then the_rank_of x c< A by XBOOLE_0:def 8;
+          then the_rank_of x in A by ORDINAL1:21;
+         hence thesis by CLASSES1:74;
+        end;
+       then the_rank_of X c= A by CLASSES1:73;
+      hence contradiction by A1,ORDINAL1:7;
+     end;
+   consider B such that
+A6:  P[B] and
+A7:  for C st P[C] holds B c= C from Ordinal_Min(A3);
+   consider Y such that
+A8:  A in B & Y in X & the_rank_of Y = B by A6;
+      Y c= Rank A
+     proof let x;
+      assume
+A9:     x in Y;
+       then A10: the_rank_of x in B & Y c= X
+        by A1,A8,CLASSES1:76,ORDINAL1:def 2;
+then x in X & not B c= the_rank_of x by A9,ORDINAL1:7;
+       then not A in the_rank_of x by A7;
+       then the_rank_of x c= A & the_rank_of x <> A by A2,A9,A10,ORDINAL1:26;
+       then the_rank_of x c< A by XBOOLE_0:def 8;
+       then the_rank_of x in A by ORDINAL1:21;
+      hence thesis by CLASSES1:74;
+     end;
+    then the_rank_of Y c= A by CLASSES1:73;
+   hence contradiction by A8,ORDINAL1:7;
+  end;
+
+theorem
+ Th42: X is epsilon-transitive implies Card the_rank_of X <=` Card X
+  proof assume
+A1:  X is epsilon-transitive;
+   consider f such that
+A2:  dom f = X & for x st x in X holds f.x = f(x) from Lambda;
+      the_rank_of X c= rng f
+     proof let x; assume
+A3:     x in the_rank_of X;
+      then reconsider x' = x as Ordinal by ORDINAL1:23;
+      consider Y such that
+A4:     Y in X & the_rank_of Y = x' by A1,A3,Th41;
+         f.Y = x by A2,A4;
+      hence thesis by A2,A4,FUNCT_1:def 5;
+     end;
+   hence Card the_rank_of X <=` Card X by A2,CARD_1:28;
+  end;
+
+theorem
+ Th43: W is_Tarski-Class & X is epsilon-transitive & X in W implies
+   X in Rank Card W
+  proof assume W is_Tarski-Class;
+then A1:  W is subset-closed by CLASSES1:def 2;
+   assume X is epsilon-transitive;
+then A2:  Card the_rank_of X <=` Card X by Th42;
+   assume X in W;
+    then Card X <` Card W by A1,Th1;
+    then Card the_rank_of X <` Card W & Card Card W = Card W &
+     Card W = Card W by A2,CARD_1:def 5,ORDINAL1:22;
+    then the_rank_of X in Card W by CARD_3:59;
+    then Rank the_rank_of X in Rank Card W & X c= Rank the_rank_of X
+     by CLASSES1:42,def 8;
+   hence thesis by CLASSES1:47;
+  end;
+
+theorem
+   X is epsilon-transitive & X in Tarski-Class W implies
+   X in Rank Card Tarski-Class W by Th43;
+
+theorem
+ Th45: W is epsilon-transitive implies
+   Rank Card Tarski-Class W is_Tarski-Class_of W
+  proof assume
+A1:  W is epsilon-transitive;
+      W in Tarski-Class W by CLASSES1:5;
+   hence W in Rank Card Tarski-Class W &
+     Rank Card Tarski-Class W is_Tarski-Class by A1,Th40,Th43;
+  end;
+
+theorem
+    W is epsilon-transitive implies
+   Rank Card Tarski-Class W = Tarski-Class W
+  proof
+A1:  W in Tarski-Class W by CLASSES1:5;
+   assume W is epsilon-transitive;
+  then W in Rank Card Tarski-Class W &
+     Rank Card Tarski-Class W is_Tarski-Class_of W by A1,Th43,Th45;
+   hence Rank Card Tarski-Class W c= Tarski-Class W &
+     Tarski-Class W c= Rank Card Tarski-Class W by Th29,CLASSES1:def 4;
+  end;
+
+ definition let IT be set;
+  attr IT is universal means
+:Def1:   IT is epsilon-transitive & IT is_Tarski-Class;
+ end;
+
+ definition
+  cluster universal -> epsilon-transitive being_Tarski-Class set;
+  coherence by Def1;
+  cluster epsilon-transitive being_Tarski-Class -> universal set;
+  coherence by Def1;
+ end;
+
+ definition
+  cluster universal non empty set;
+   existence
+    proof consider X;
+     set Y = the_transitive-closure_of X;
+     take V = Tarski-Class Y;
+        Y is epsilon-transitive by CLASSES1:58;
+     hence V is epsilon-transitive by CLASSES1:27;
+     thus thesis;
+    end;
+ end;
+
+definition
+  mode Universe is universal non empty set;
+end;
+
+ reserve U1,U2,U3,Universum for Universe;
+
+canceled 3;
+
+theorem
+ Th50: On Universum is Ordinal
+  proof
+      On Universum = Card Universum by Th10;
+   hence thesis;
+  end;
+
+theorem
+ Th51: X is epsilon-transitive implies Tarski-Class X is universal
+  proof assume X is epsilon-transitive;
+   hence Tarski-Class X is epsilon-transitive &
+    Tarski-Class X is_Tarski-Class by CLASSES1:27;
+  end;
+
+theorem
+   Tarski-Class Universum is Universe by Th51;
+
+ definition let Universum;
+   cluster On Universum -> ordinal;
+    coherence by Th50;
+   cluster Tarski-Class Universum -> universal;
+    coherence by Th51;
+ end;
+
+theorem
+ Th53: Tarski-Class A is universal
+  proof set M = Tarski-Class A;
+   thus M is epsilon-transitive & M is_Tarski-Class by CLASSES1:27;
+  end;
+
+ definition let A;
+   cluster Tarski-Class A -> universal;
+    coherence by Th53;
+ end;
+
+theorem
+ Th54: Universum = Rank On Universum
+  proof
+       Card Universum = On Universum & Rank Card Universum = Universum
+     by Th10,Th32;
+   hence thesis;
+  end;
+
+theorem
+ Th55: On Universum <> {} & On Universum is_limit_ordinal
+  proof
+       Card Universum = On Universum by Th10;
+   hence thesis by Th21;
+  end;
+
+theorem
+    U1 in U2 or U1 = U2 or U2 in U1
+  proof
+      (On U1 in On U2 or On U1 = On U2 or On U2 in On U1) &
+     U1 = Rank On U1 & U2 = Rank On U2 by Th54,ORDINAL1:24;
+   hence thesis by CLASSES1:42;
+  end;
+
+theorem
+ Th57: U1 c= U2 or U2 in U1
+  proof
+      (On U1 c= On U2 or On U2 in On U1) &
+     U1 = Rank On U1 & U2 = Rank On U2 by Th54,ORDINAL1:26;
+   hence thesis by CLASSES1:42,43;
+  end;
+
+theorem
+ Th58: U1,U2 are_c=-comparable
+  proof
+      (On U1 c= On U2 or On U2 c= On U1) &
+     U1 = Rank On U1 & U2 = Rank On U2 by Th54;
+   hence U1 c= U2 or U2 c= U1 by CLASSES1:43;
+  end;
+
+theorem
+ Th59: U1 in U2 & U2 in U3 implies U1 in U3
+  proof assume
+A1:  U1 in U2 & U2 in U3;
+A2:  U1 = Rank On U1 & U2 = Rank On U2 & U3 = Rank On U3 by Th54;
+    then On U1 in On U2 & On U2 in On U3 by A1,CLASSES1:42;
+    then On U1 in On U3 by ORDINAL1:19;
+   hence thesis by A2,CLASSES1:42;
+  end;
+
+canceled;
+
+theorem
+   U1 \/ U2 is Universe & U1 /\ U2 is Universe
+  proof
+     U1,U2 are_c=-comparable by Th58;
+   then U1 c= U2 or U2 c= U1 by XBOOLE_0:def 9;
+   hence thesis by XBOOLE_1:12,28;
+  end;
+
+theorem Th62:
+ {} in Universum
+  proof consider x being Element of Universum;
+      {} c= x by XBOOLE_1:2;
+   hence thesis by CLASSES1:def 1;
+  end;
+
+theorem
+  x in Universum implies {x} in Universum by Th3;
+
+theorem
+  x in Universum & y in Universum implies {x,y} in Universum & [x,y] in
+ Universum
+  by Th3,Th4;
+
+theorem Th65:
+ X in Universum implies
+   bool X in Universum & union X in Universum & meet X in Universum
+  proof assume
+A1:  X in Universum;
+   hence bool X in Universum by CLASSES1:def 2;
+      Universum = Rank On Universum &
+    On Universum <> {} & On Universum is_limit_ordinal by Th54,Th55;
+   hence
+A2:  union X in Universum by A1,CLASSES1:41;
+      meet X c= union X by SETFAM_1:3;
+   hence thesis by A2,CLASSES1:def 1;
+  end;
+
+theorem Th66:
+ X in Universum & Y in Universum implies
+   X \/ Y in Universum & X /\ Y in Universum &
+   X \ Y in Universum & X \+\ Y in Universum
+  proof assume
+A1:  X in Universum & Y in Universum;
+    then {X,Y} in Universum & union {X,Y} = X \/ Y & meet {X,Y} = X /\ Y
+     by Th3,SETFAM_1:12,ZFMISC_1:93;
+   hence
+A2:  X \/ Y in Universum & X /\ Y in Universum by Th65;
+      X \ Y c= X & X \+\ Y = (X \/ Y)\(X /\ Y) & (X \/ Y)\(X /\ Y) c= (X \/ Y)
+     by XBOOLE_1:36,101;
+   hence thesis by A1,A2,CLASSES1:def 1;
+  end;
+
+theorem Th67:
+ X in Universum & Y in Universum implies
+   [:X,Y:] in Universum & Funcs(X,Y) in Universum
+  proof assume X in Universum & Y in Universum;
+    then X \/ Y in Universum by Th66;
+    then bool(X \/ Y) in Universum by Th65;
+    then [:X,Y:] c= bool bool(X \/ Y) & bool bool(X \/ Y) in Universum
+     by Th65,ZFMISC_1:105;
+   hence [:X,Y:] in Universum by CLASSES1:def 1;
+    then bool [:X,Y:] in Universum & Funcs(X,Y) c= bool [:X,Y:] by Th65,
+FRAENKEL:5;
+   hence Funcs(X,Y) in Universum by CLASSES1:def 1;
+  end;
+
+ reserve u,v for Element of Universum;
+
+ definition let U1;
+  cluster non empty Element of U1;
+  existence
+   proof {} in U1 by Th62;
+     then reconsider x = bool {} as Element of U1 by Th65;
+    take x; thus thesis;
+   end;
+ end;
+
+ definition let Universum,u;
+  redefine
+   func {u} -> Element of Universum;
+    coherence by Th3;
+   func bool u -> non empty Element of Universum;
+    coherence by Th65;
+   func union u -> Element of Universum;
+    coherence by Th65;
+   func meet u -> Element of Universum;
+    coherence by Th65;
+   let v;
+   func {u,v} -> Element of Universum;
+    coherence by Th3;
+   func [u,v] -> Element of Universum;
+    coherence by Th4;
+   func u \/ v -> Element of Universum;
+    coherence by Th66;
+   func u /\ v -> Element of Universum;
+    coherence by Th66;
+   func u \ v -> Element of Universum;
+    coherence by Th66;
+   func u \+\ v -> Element of Universum;
+    coherence by Th66;
+   func [:u,v:] -> Element of Universum;
+    coherence by Th67;
+   func Funcs(u,v) -> Element of Universum;
+    coherence by Th67;
+ end;
+
+ definition
+  func FinSETS -> Universe equals:
+Def2:     Tarski-Class {};
+   correctness;
+ end;
+
+canceled;
+
+theorem
+ Th69: Card Rank omega = Card omega
+  proof
+    deffunc h(Ordinal) = Rank $1;
+    consider L such that
+A1:  dom L = omega & for A st A in omega holds L.A = h(A) from TS_Lambda;
+A2:  Rank omega = Union L by A1,Th25,ORDINAL2:19
+               .= union rng L by PROB_1:def 3;
+A3:  omega c= Rank omega by CLASSES1:44;
+       now let X,Y; assume X in rng L;
+     then consider x such that
+A4:   x in dom L & X = L.x by FUNCT_1:def 5;
+     assume Y in rng L;
+     then consider y such that
+A5:   y in dom L & Y = L.y by FUNCT_1:def 5;
+     reconsider x,y as Ordinal by A4,A5,ORDINAL1:23;
+        X = Rank x & Y = Rank y & (x c= y or y c= x) by A1,A4,A5;
+     then X c= Y or Y c= X by CLASSES1:43;
+     hence X,Y are_c=-comparable by XBOOLE_0:def 9;
+    end;
+then A6: rng L is c=-linear by ORDINAL1:def 9;
+      now let X; assume X in rng L;
+     then consider x such that
+A7:   x in dom L & X = L.x by FUNCT_1:def 5;
+     reconsider x as Ordinal by A7,ORDINAL1:23;
+        X = Rank x by A1,A7;
+      then X is finite by A1,A7,CARD_3:57;
+     hence Card X <` Card omega by CARD_3:58;
+    end;
+    then Card Rank omega <=` Card omega & Card omega <=` Card Rank omega
+     by A2,A3,A6,CARD_1:27,CARD_3:62;
+   hence thesis by XBOOLE_0:def 10;
+  end;
+
+theorem
+ Th70: Rank omega is_Tarski-Class
+  proof
+   thus X in Rank omega & Y c= X implies Y in Rank omega by CLASSES1:47;
+   thus X in Rank omega implies bool X in Rank omega
+     proof assume X in Rank omega;
+      then consider A such that
+A1:     A in omega & X in Rank A by CLASSES1:35,ORDINAL2:19;
+         succ A in omega & bool X in Rank succ A
+        by A1,CLASSES1:48,ORDINAL1:41,ORDINAL2:19;
+      hence thesis by CLASSES1:35,ORDINAL2:19;
+     end;
+   thus X c= Rank omega implies X,Rank omega are_equipotent or
+   X in Rank omega
+     proof assume
+A2:     X c= Rank omega & not X,Rank omega are_equipotent &
+        not X in Rank omega;
+       then Card X <=` Card omega & Card X <> Card omega
+        by Th69,CARD_1:21,27;
+      then Card X = Card X & Card X in omega by CARD_1:13,84;
+      then consider n such that
+A3:      n = Card X;
+A4:       Card X = Card n & omega c= Rank omega
+        by A3,CARD_1:def 5,CLASSES1:44;
+    then X,n are_equipotent & n is finite & {} in Rank omega
+        by CARD_1:21,ORDINAL2:19;
+      then reconsider X as finite set by CARD_1:68;
+      defpred P[set,set] means the_rank_of $2 c= the_rank_of $1;
+A5:     X <> {} by A2,A4,ORDINAL2:19;
+A6:     for x,y holds P[x,y] or P[y,x];
+A7:     for x,y,z st P[x,y] & P[y,z] holds P[x,z] by XBOOLE_1:1;
+      consider x such that
+A8:     x in X & for y st y in X holds P[x,y] from MaxFinSetElem(A5,A6,A7);
+      set A = the_rank_of x;
+         now let Y; assume Y in X;
+         then the_rank_of Y c= A & Y = Y by A8;
+        hence the_rank_of Y in succ A by ORDINAL1:34;
+       end;
+then A9:     the_rank_of X c= succ A by CLASSES1:77;
+         A in omega by A2,A8,CLASSES1:74;
+       then succ A in omega by ORDINAL1:41,ORDINAL2:19;
+       then the_rank_of X in omega by A9,ORDINAL1:22;
+      hence thesis by A2,CLASSES1:74;
+     end;
+  end;
+
+theorem
+   FinSETS = Rank omega
+  proof
+A1:    omega c= Rank omega by CLASSES1:44;
+   then reconsider M = Rank omega as non empty set by ORDINAL2:19;
+      M is epsilon-transitive & M is_Tarski-Class by Th70,CLASSES1:37;
+then M is Universe & M is_Tarski-Class_of {} by A1,Def1,CLASSES1:def 3,ORDINAL2
+:19;
+    hence FinSETS c= Rank omega by Def2,CLASSES1:def 4;
+A2:  On FinSETS <> {} & On FinSETS is_limit_ordinal by Th55;
+    then {} in On FinSETS by ORDINAL3:10;
+    then omega c= On FinSETS & FinSETS = Rank On FinSETS by A2,Th54,ORDINAL2:
+def 5;
+   hence thesis by CLASSES1:43;
+  end;
+
+ definition
+  func SETS -> Universe equals:
+Def3:     Tarski-Class FinSETS;
+   correctness;
+ end;
+
+definition
+ let X be set;
+ cluster the_transitive-closure_of X -> epsilon-transitive;
+ coherence by CLASSES1:58;
+end;
+
+definition
+ let X be epsilon-transitive set;
+ cluster Tarski-Class X -> epsilon-transitive;
+ coherence by CLASSES1:27;
+end;
+
+definition
+ let A be Ordinal;
+ cluster Rank A -> epsilon-transitive;
+ coherence by CLASSES1:37;
+end;
+
+definition
+ let X be set;
+ func Universe_closure X -> Universe means
+:Def4:
+  X c= it &
+  for Y being Universe st X c= Y holds it c= Y;
+ uniqueness
+  proof let T1, T2 be Universe; assume
+A1:  not thesis;
+    then T1 c= T2 & T2 c= T1;
+   hence thesis by A1,XBOOLE_0:def 10;
+  end;
+ existence
+  proof per cases;
+   suppose Rank the_rank_of X is Universe;
+    then reconsider R = Rank the_rank_of X as Universe;
+    take R; thus X c= R by CLASSES1:def 8;
+    let Y be Universe; assume X c= Y;
+     then the_rank_of X c= the_rank_of Y by CLASSES1:75;
+then A2:   R c= Rank the_rank_of Y by CLASSES1:43;
+A3:   Rank Card Y = Y by Th32;
+     then the_rank_of Y c= Card Y by CLASSES1:def 8;
+     then Rank the_rank_of Y c= Y by A3,CLASSES1:43;
+    hence thesis by A2,XBOOLE_1:1;
+   suppose
+A4:   Rank the_rank_of X is not Universe;
+    take R = Tarski-Class Rank the_rank_of X;
+       X c= Rank the_rank_of X &
+     Rank the_rank_of X in R by CLASSES1:5,def 8;
+     then X in R by CLASSES1:def 1;
+    hence X c= R by ORDINAL1:def 2;
+    let Y be Universe; assume X c= Y;
+then A5:   the_rank_of X c= the_rank_of Y by CLASSES1:75;
+A6:   Rank Card Y = Y & Y c= Rank the_rank_of Y by Th32,CLASSES1:def 8;
+     then Card Y c= the_rank_of Y & the_rank_of Y c= Card Y
+      by CLASSES1:43,def 8;
+     then Card Y = the_rank_of Y by XBOOLE_0:def 10;
+     then the_rank_of X c< Card Y by A4,A5,A6,XBOOLE_0:def 8;
+     then the_rank_of X in Card Y by ORDINAL1:21;
+     then Rank the_rank_of X in Y by A6,CLASSES1:42;
+     then Y is_Tarski-Class_of Rank the_rank_of X by CLASSES1:def 3;
+    hence thesis by CLASSES1:def 4;
+  end;
+end;
+
+deffunc C(Ordinal,set) = Tarski-Class $2;
+deffunc D(Ordinal,T-Sequence) = Universe_closure Union $2;
+
+definition
+  mode FinSet is Element of FinSETS;
+  mode Set is Element of SETS;
+  let A;
+  func UNIVERSE A means: Def5:
+   ex L st it = last L & dom L = succ A & L.{} = FinSETS &
+    (for C st succ C in succ A holds L.succ C = Tarski-Class(L.C)) &
+     for C st C in succ A & C <> {} & C is_limit_ordinal
+           holds L.C = Universe_closure Union(L|C);
+   correctness
+   proof
+     thus (ex x,L st x = last L & dom L = succ A & L.{} = FinSETS &
+     (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+      for C st C in succ A & C <> {} & C is_limit_ordinal
+             holds L.C = D(C,L|C) ) &
+   for x1,x2 being set st
+    (ex L st x1 = last L & dom L = succ A & L.{} = FinSETS &
+      (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+       for C st C in succ A & C <> {} & C is_limit_ordinal
+              holds L.C = D(C,L|C) ) &
+    (ex L st x2 = last L & dom L = succ A & L.{} = FinSETS &
+      (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+       for C st C in succ A & C <> {} & C is_limit_ordinal
+              holds L.C = D(C,L|C) )
+     holds x1 = x2 from TS_Def;
+   end;
+end;
+
+ deffunc u(Ordinal) = UNIVERSE $1;
+
+Lm5:
+ now
+A1:  for A,x holds x = u(A) iff
+      ex L st x = last L & dom L = succ A & L.{} = FinSETS &
+    (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+     for C st C in succ A & C <> {} & C is_limit_ordinal
+           holds L.C = D(C,L|C) by Def5;
+  thus u({}) = FinSETS from TS_Result0(A1);
+  thus for A holds u(succ A) = C(A,u(A)) from TS_ResultS(A1);
+  let A,L; assume that
+A2: A <> {} & A is_limit_ordinal and
+A3: dom L = A and
+A4: for B st B in A holds L.B = u(B);
+  thus u(A) = D(A,L) from TS_ResultL(A1,A2,A3,A4);
+ end;
+
+definition let A;
+  cluster UNIVERSE A -> universal non empty;
+   coherence
+    proof
+       defpred P[Ordinal] means UNIVERSE $1 is Universe;
+A1:    P[{}] by Lm5;
+A2:    P[B] implies P[succ B]
+       proof assume P[B];
+        then reconsider UU = UNIVERSE B as Universe;
+           UNIVERSE succ B = Tarski-Class UU by Lm5;
+        hence P[succ B];
+       end;
+A3:   for A st A <> {} & A is_limit_ordinal &
+       for B st B in A holds P[B] holds P[A]
+       proof let A such that
+A4:      A <> {} & A is_limit_ordinal and
+           for B st B in A holds P[B];
+        consider L such that
+A5:      dom L = A & for B st B in A holds L.B = u(B) from TS_Lambda;
+        UNIVERSE A = Universe_closure Union L by A4,A5,Lm5
+                   .= Universe_closure union rng L by PROB_1:def 3;
+        hence thesis;
+       end;
+       for A holds P[A] from Ordinal_Ind(A1,A2,A3);
+     hence thesis;
+    end;
+ end;
+
+canceled 3;
+
+theorem
+   UNIVERSE {} = FinSETS by Lm5;
+
+theorem
+   UNIVERSE succ A = Tarski-Class UNIVERSE A by Lm5;
+
+theorem
+   UNIVERSE one = SETS by Def3,Lm5,ORDINAL2:def 4;
+
+theorem
+   A <> {} & A is_limit_ordinal & dom L = A &
+  (for B st B in A holds L.B = UNIVERSE B) implies
+   UNIVERSE A = Universe_closure Union L by Lm5;
+
+theorem
+    FinSETS c= Universum & Tarski-Class {} c= Universum &
+   UNIVERSE {} c= Universum
+  proof
+      {} <> On Universum by Th55;
+    then {} in On Universum & Rank On Universum = Universum &
+     On Universum c= Rank On Universum by Th54,CLASSES1:44,ORDINAL3:10;
+hence thesis by Def2,Lm5,Th5;
+  end;
+
+theorem
+ Th80: A in B iff UNIVERSE A in UNIVERSE B
+  proof
+defpred P[Ordinal] means for A st A in $1 holds UNIVERSE A in UNIVERSE $1;
+A1:  P[{}];
+A2:  for B st P[B] holds P[succ B]
+     proof let B such that
+A3:    P[B];
+      let A;
+A4:    A c< B iff A c= B & A <> B by XBOOLE_0:def 8;
+      assume A in succ B;
+       then UNIVERSE succ B = Tarski-Class UNIVERSE B & A c= B
+        by Lm5,ORDINAL1:34;
+then A5:    UNIVERSE B in UNIVERSE succ B & (A in B or A = B)
+        by A4,CLASSES1:5,ORDINAL1:21;
+       then UNIVERSE A in UNIVERSE B or UNIVERSE A = UNIVERSE B by A3;
+      hence thesis by A5,Th59;
+     end;
+A6:   for A st A <> {} & A is_limit_ordinal & for B st B in A holds P[B]
+       holds P[A]
+     proof let B; assume that
+A7:    B <> {} & B is_limit_ordinal and
+         for C st C in B for A st A in C holds UNIVERSE A in UNIVERSE C;
+      let A; assume A in B;
+then A8:    succ A in B by A7,ORDINAL1:41;
+      consider L such that
+A9:    dom L = B & for C st C in B holds L.C = u(C) from TS_Lambda;
+A10:    UNIVERSE B = Universe_closure Union L by A7,A9,Lm5
+                 .= Universe_closure union rng L by PROB_1:def 3;
+         L.succ A = UNIVERSE succ A by A8,A9;
+       then UNIVERSE succ A in rng L by A8,A9,FUNCT_1:def 5;
+       then UNIVERSE succ A c= union rng L & union rng L c= UNIVERSE B
+        by A10,Def4,ZFMISC_1:92;
+       then UNIVERSE A in Tarski-Class UNIVERSE A &
+       UNIVERSE succ A = Tarski-Class UNIVERSE A &
+       UNIVERSE succ A c= UNIVERSE B by Lm5,CLASSES1:5,XBOOLE_1:1;
+      hence thesis;
+    end;
+A11:for B holds P[B] from Ordinal_Ind(A1,A2,A6);
+   hence A in B implies UNIVERSE A in UNIVERSE B;
+   assume
+A12:  UNIVERSE A in UNIVERSE B & not A in B;
+      B c< A iff B c= A & B <> A by XBOOLE_0:def 8;
+    then B in A or B = A by A12,ORDINAL1:21,26;
+   hence contradiction by A11,A12;
+  end;
+
+theorem
+    UNIVERSE A = UNIVERSE B implies A = B
+  proof assume
+A1:  UNIVERSE A = UNIVERSE B & A <> B;
+    then A in B or B in A by ORDINAL1:24;
+    then UNIVERSE A in UNIVERSE B or UNIVERSE B in UNIVERSE A by Th80;
+   hence contradiction by A1;
+  end;
+
+theorem
+    A c= B iff UNIVERSE A c= UNIVERSE B
+  proof
+   thus A c= B implies UNIVERSE A c= UNIVERSE B
+     proof assume
+A1:     A c= B;
+      assume not UNIVERSE A c= UNIVERSE B;
+       then UNIVERSE B in UNIVERSE A by Th57;
+       then B in A by Th80;
+      hence contradiction by A1,ORDINAL1:7;
+     end;
+   assume
+A2:  UNIVERSE A c= UNIVERSE B;
+   assume not A c= B;
+    then B in A by ORDINAL1:26;
+    then UNIVERSE B in UNIVERSE A by Th80;
+   hence contradiction by A2,ORDINAL1:7;
+  end;
+

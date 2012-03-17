@@ -1,0 +1,1809 @@
+:: Scalar Multiple of Riemann Definite Integral
+::  by Noboru Endou , Katsumi Wasaki and Yasunari Shidama
+::
+:: Received December 7, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, INTEGRA1, ARYTM, ORDINAL2, RCOMP_1, PROB_1, RELAT_1,
+      FUNCT_1, RFINSEQ, FINSEQ_5, ARYTM_1, BOOLE, CARD_1, JORDAN3, PARTFUN1,
+      RFUNCT_1, SEQ_2, ARYTM_3, SEQ_1, MEASURE5, RLVECT_1, FUNCT_3, SQUARE_1,
+      FINSET_1, INTEGRA2;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, NAT_1, FUNCT_1, RELSET_1, SEQ_4, PARTFUN1, FUNCT_2, PSCOMP_1,
+      FINSEQ_1, TOPREAL1, RFUNCT_1, RVSUM_1, INTEGRA1, SEQ_1, JORDAN3,
+      PRE_CIRC, CQC_SIM1, RCOMP_1, FINSET_1, CARD_1, FINSEQ_5, RFINSEQ,
+      BINARITH;
+ constructors REAL_1, INTEGRA1, PRE_CIRC, CQC_SIM1, PARTFUN1, RFUNCT_1,
+      FINSEQ_5, RFINSEQ, TOPREAL1, BINARITH, JORDAN3, PSCOMP_1;
+ clusters XREAL_0, RELAT_1, RELSET_1, FINSEQ_1, GROUP_2, INTEGRA1, RFINSEQ,
+      ARYTM_3, FUNCT_2, MEMBERED, ORDINAL2, NUMBERS;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, XBOOLE_0;
+ theorems AXIOMS, REAL_1, SEQ_4, SUBSET_1, REAL_2, PARTFUN1, PSCOMP_1,
+      INTEGRA1, RFUNCT_1, FUNCT_1, FINSEQ_1, RVSUM_1, NEWTON, SEQ_1, PRE_CIRC,
+      RCOMP_1, NAT_1, GOBOARD2, RFINSEQ, GOBOARD1, CQC_SIM1, CARD_1, FINSEQ_5,
+      TOPREAL1, FINSEQ_3, JORDAN3, RELAT_1, FUNCT_2, XREAL_0, SCMFSA_7,
+      XBOOLE_0, XBOOLE_1, SQUARE_1, XCMPLX_0, XCMPLX_1;
+ schemes SUBSET_1, SEQ_1, NAT_1, REAL_1;
+
+begin :: Lemmas of Finite Sequence
+
+reserve a,b,r,x,y,z for Real,
+        i,j,k,n,m for Nat,
+        x1 for set,
+        p for FinSequence of REAL;
+
+theorem for A be closed-interval Subset of REAL, x being real number
+holds x in A iff inf A <= x & x <= sup A
+proof
+   let A be closed-interval Subset of REAL;
+   let x be real number;
+   hereby
+    assume x in A;
+    then x in [.inf A,sup A.] by INTEGRA1:5;
+    then x in {a: inf A <= a & a <= sup A} by RCOMP_1:def 1;
+    then ex a st a=x & inf A <= a & a <= sup A;
+    hence inf A <= x & x <= sup A;
+   end;
+A1: x is Real by XREAL_0:def 1;
+   assume inf A <= x & x <= sup A;
+   then x in {a: inf A <= a & a <= sup A} by A1;
+   then x in [.inf A,sup A.] by RCOMP_1:def 1;
+   hence thesis by INTEGRA1:5;
+end;
+
+definition let IT be FinSequence of REAL;
+attr IT is non-decreasing means :Def1:
+ for n be Nat st n in dom IT & n+1 in dom IT holds IT.n <= IT.(n+1);
+end;
+
+definition
+cluster non-decreasing FinSequence of REAL;
+existence
+proof
+   take f = <*>REAL;
+   let n; assume n in dom f & n+1 in dom f;
+   hence f.n <= f.(n+1);
+end;
+end;
+
+theorem for p be non-decreasing FinSequence of REAL,
+i,j st i in dom p & j in dom p & i <= j holds p.i <= p.j
+proof
+   let p be non-decreasing FinSequence of REAL;
+   let i,j;
+   assume A1:i in dom p;
+   assume A2:j in dom p;
+   assume i <= j;
+   then consider n such that
+A3:j = i + n by NAT_1:28;
+   defpred P[Nat] means
+   for i,j st j = i + $1 & i in dom p & j in dom p
+   holds p.i <= p.j;
+A4:P[0];
+A5:for k st P[k] holds P[k+1]
+   proof
+     let k;
+     assume A6:P[k];
+       P[k+1]
+     proof
+       let i,j;
+       assume A7:j=i+(k+1);
+       assume A8:i in dom p;
+       assume A9:j in dom p;
+       reconsider l=i+k as Nat;
+A10:   j=l+1 by A7,XCMPLX_1:1;
+         1 <= i & 0 <= k by A8,FINSEQ_3:27,NAT_1:18;
+then A11:   1+0 <= l by REAL_1:55;
+         j <= len p by A9,FINSEQ_3:27;
+       then l < len p by A10,NAT_1:38;
+then A12:   l in dom p by A11,FINSEQ_3:27;
+then A13:   p.i <= p.l by A6,A8;
+         p.l <= p.j by A9,A10,A12,Def1;
+       hence thesis by A13,AXIOMS:22;
+     end;
+     hence thesis;
+   end;
+     for k holds P[k] from Ind(A4,A5);
+   hence thesis by A1,A2,A3;
+end;
+
+theorem for p ex q be non-decreasing FinSequence of REAL
+st p,q are_fiberwise_equipotent
+proof
+   let p;
+   consider q being non-increasing FinSequence of REAL
+   such that
+A1:p,q are_fiberwise_equipotent by RFINSEQ:35;
+A2:Rev q is non-decreasing FinSequence of REAL
+   proof
+       for n be Nat st n in dom Rev q & n+1 in dom Rev q holds
+      (Rev q).n <= (Rev q).(n+1)
+     proof
+       let n; assume A3:n in dom Rev q & n+1 in dom Rev q;
+         (Rev q).n <= (Rev q).(n+1)
+       proof
+         set x=(Rev q).n, y=(Rev q).(n+1);
+A4:      x = q.(len q - n + 1) by A3,FINSEQ_5:def 3;
+A5:      y = q.(len q - (n+1) + 1) by A3,FINSEQ_5:def 3;
+           n in Seg len Rev q by A3,FINSEQ_1:def 3;
+         then n in Seg len q by FINSEQ_5:def 3;
+         then n <= len q by FINSEQ_1:3;
+         then consider m such that
+A6:     len q = n + m by NAT_1:28;
+A7:     m = len q - n by A6,XCMPLX_1:26;
+A8:     m + 1 = len q - n + 1 by A6,XCMPLX_1:26;
+A9:      len q - n + 1 in dom q
+         proof
+             1 <= len q - n + 1 & len q - n + 1 <= len q
+           proof
+             thus 1<=len q-n+1 by A7,NAT_1:29;
+               n in Seg len Rev q by A3,FINSEQ_1:def 3;
+             then 1 <= n by FINSEQ_1:3;
+             then n - 1 >= 0 by SQUARE_1:12;
+             then len q + 0 <= len q + (n - 1) by REAL_1:55;
+             then len q - (n - 1) <= len q by REAL_1:86;
+             hence thesis by XCMPLX_1:37;
+           end;
+           then len q - n + 1 in Seg len q by A8,FINSEQ_1:3;
+           hence thesis by FINSEQ_1:def 3;
+         end;
+A10:     len q - (n+1) + 1 = len q-n-1+1 by XCMPLX_1:36
+          .= len q-n-(1-1) by XCMPLX_1:37 .= len q-n;
+           n+1 in Seg len Rev q by A3,FINSEQ_1:def 3;
+         then n+1 in Seg len q by FINSEQ_5:def 3;
+         then n+1 <= len q by FINSEQ_1:3;
+then A11:     1 <= len q - (n+1) + 1 by A10,REAL_1:84;
+           len q <= len q + n by NAT_1:29;
+         then len q - (n+1) + 1 <= len q by A10,REAL_1:86;
+         then len q - (n+1) + 1 in Seg len q by A7,A10,A11,FINSEQ_1:3;
+         then len q - (n+1) + 1 in dom q by FINSEQ_1:def 3;
+         hence thesis by A4,A5,A9,A10,RFINSEQ:def 4;
+       end;
+       hence thesis;
+     end;
+     hence thesis by Def1;
+   end;
+A12:p,Rev q are_fiberwise_equipotent
+   proof
+     defpred P[Nat] means
+     for p be FinSequence of REAL,q be non-increasing FinSequence of REAL
+     st len p = $1 & p,q are_fiberwise_equipotent holds
+     p,Rev q are_fiberwise_equipotent;
+A13: P[0]
+     proof
+       let p be FinSequence of REAL;
+       let q be non-increasing FinSequence of REAL;
+       assume A14:len p = 0;
+       assume A15:p,q are_fiberwise_equipotent;
+         p = {} by A14,FINSEQ_1:25;
+then A16:   rng p = {} by FINSEQ_1:27;
+         len q = 0 by A14,A15,RFINSEQ:16;
+       then len Rev q = 0 by FINSEQ_5:def 3;
+       then Rev q = {} by FINSEQ_1:25;
+then A17:   rng Rev q = {} by FINSEQ_1:27;
+         for x be set holds card (p"{x}) = card((Rev q)"{x})
+       proof
+         let x be set;
+           card (p"{x}) = 0 by A16,CARD_1:78,FUNCT_1:142;
+         hence thesis by A17,CARD_1:78,FUNCT_1:142;
+       end;
+       hence thesis by RFINSEQ:def 1;
+     end;
+A18: for k st P[k] holds P[k+1]
+     proof
+       let k; assume A19:P[k];
+         P[k+1]
+       proof
+         let p be FinSequence of REAL;
+         let q be non-increasing FinSequence of REAL;
+         assume A20:len p = k+1;
+         assume A21:p,q are_fiberwise_equipotent;
+A22:     k <= len p by A20,NAT_1:29;
+         consider q1 being non-increasing FinSequence of REAL such that
+A23:     p,q1 are_fiberwise_equipotent by RFINSEQ:35;
+           len p = len q1 by A23,RFINSEQ:16;
+then A24:     len(q1|k) = k by A22,TOPREAL1:3;
+           q,q1 are_fiberwise_equipotent by A21,A23,RFINSEQ:2;
+then A25:     q=q1 by RFINSEQ:36;
+         reconsider q1k = q1|k as non-increasing FinSequence of REAL
+           by RFINSEQ:33;
+           q1|k,Rev(q1k) are_fiberwise_equipotent by A19,A24;
+then A26:     (q1|k)^<*q1.(k+1)*>,Rev(q1k)^<*q1.(k+1)*>
+are_fiberwise_equipotent
+by RFINSEQ:14;
+A27:     len q1= k+1 by A20,A23,RFINSEQ:16;
+then A28:     q1,Rev(q1k)^<*q1.(k+1)*> are_fiberwise_equipotent
+by A26,RFINSEQ:20;
+           Rev(q1k)^<*q1.(k+1)*>,<*q1.(k+1)*>^Rev(q1k) are_fiberwise_equipotent
+by RFINSEQ:15;
+then A29:     q1,<*q1.(k+1)*>^Rev(q1k) are_fiberwise_equipotent by A28,RFINSEQ:
+2;
+           <*q1.(k+1)*>^Rev(q1k) = Rev((q1|k)^<*q1.(k+1)*>) by FINSEQ_5:66
+          .= Rev(q1) by A27,RFINSEQ:20;
+         hence thesis by A23,A25,A29,RFINSEQ:2;
+       end;
+       hence thesis;
+     end;
+A30: for k holds P[k] from Ind(A13,A18);
+       len p = len p;
+     hence thesis by A1,A30;
+   end;
+   reconsider r=Rev q as non-decreasing FinSequence of REAL by A2;
+   take r;
+   thus thesis by A12;
+end;
+
+theorem for D be non empty set, f be FinSequence of D, k1,k2,k3 be Nat st
+1<=k1 & k3<=len f & k1<=k2 & k2<k3 holds
+mid(f,k1,k2)^mid(f,k2+1,k3)=mid(f,k1,k3)
+proof
+   let D be non empty set;
+   let f be FinSequence of D;
+   let k1,k2,k3 be Nat;
+   assume A1:1<=k1 & k3<=len f & k1<=k2 & k2<k3;
+then A2:1 <= k2 & k2 <= len f by AXIOMS:22;
+then A3:1<=k1 & k1<=len f & 1<=k2 & k2<=len f & 1<=k3 & k3<=len f
+   & k1<=k2 & k2<k3 by A1,AXIOMS:22;
+A4:1<=k2+1 & k2+1<=k3 & k1<k3 by A1,A2,AXIOMS:22,NAT_1:38;
+then A5:1<=k2+1 & k2+1<=k3 & k2+1<=len f & k1<=k3 & k1 <= k2+1
+   by A1,AXIOMS:22,NAT_1:37;
+A6:len mid(f,k1,k2)=k2-'k1+1 by A3,JORDAN3:27
+    .=k2-k1+1 by A1,SCMFSA_7:3;
+A7:len mid(f,k2+1,k3)=k3-'(k2+1)+1 by A3,A5,JORDAN3:27
+    .=k3-(k2+1)+1 by A4,SCMFSA_7:3
+    .=k3-((k2+1)-1) by XCMPLX_1:37
+    .=k3-(k2+(1-1)) by XCMPLX_1:29
+    .=k3-k2;
+then A8:len(mid(f,k1,k2)^mid(f,k2+1,k3))=(k2-k1+1)+(k3-k2) by A6,FINSEQ_1:35
+    .=(k3-k2)+(k2-k1)+1 by XCMPLX_1:1
+    .=k3-k1+1 by XCMPLX_1:39;
+A9:len mid(f,k1,k3)=k3-'k1+1 by A3,A4,JORDAN3:27
+    .=k3-k1+1 by A4,SCMFSA_7:3;
+     for k st 1<=k & k<=len(mid(f,k1,k2)^mid(f,k2+1,k3)) holds
+   (mid(f,k1,k2)^mid(f,k2+1,k3)).k = mid(f,k1,k3).k
+   proof
+    let k;
+    assume A10:1<=k & k<=len(mid(f,k1,k2)^mid(f,k2+1,k3));
+    then k in Seg len(mid(f,k1,k2)^mid(f,k2+1,k3)) by FINSEQ_1:3;
+then A11: k in dom(mid(f,k1,k2)^mid(f,k2+1,k3)) by FINSEQ_1:def 3;
+      now per cases by A11,FINSEQ_1:38;
+     suppose A12:k in dom mid(f,k1,k2);
+     then k in Seg len mid(f,k1,k2) by FINSEQ_1:def 3;
+then A13:  1 <= k & k <= k2-k1+1 by A6,FINSEQ_1:3;
+       k2-k1 <= k3-k1 by A1,REAL_1:49;
+     then k2-k1+1 <= k3-k1+1 by AXIOMS:24;
+then A14:  k <= k3-k1+1 by A13,AXIOMS:22;
+       (mid(f,k1,k2)^mid(f,k2+1,k3)).k=mid(f,k1,k2).k by A12,FINSEQ_1:def 7
+      .=f.(k-1+k1) by A1,A2,A13,JORDAN3:31;
+     hence (mid(f,k1,k2)^mid(f,k2+1,k3)).k = mid(f,k1,k3).k
+     by A1,A4,A13,A14,JORDAN3:31;
+     suppose ex n st n in dom mid(f,k2+1,k3)&k=len mid(f,k1,k2)+n;
+     then consider n such that
+A15:  n in dom mid(f,k2+1,k3) & k=len mid(f,k1,k2)+n;
+       k3-k2-1=k3-(k2+1) by XCMPLX_1:36;
+then A16:  k3-k2=k3-(k2+1)+1 by XCMPLX_1:27;
+       n in Seg len mid(f,k2+1,k3) by A15,FINSEQ_1:def 3;
+then A17:  1 <= n & n <= k3-(k2+1)+1 by A7,A16,FINSEQ_1:3;
+A18:  (mid(f,k1,k2)^mid(f,k2+1,k3)).k=mid(f,k2+1,k3).n by A15,FINSEQ_1:def 7
+      .=f.(n+(k2+1)-1) by A1,A4,A17,JORDAN3:31
+      .=f.(n+k2+1-1) by XCMPLX_1:1
+      .=f.(n+k2+(1-1)) by XCMPLX_1:29
+      .=f.(n+k2+0);
+       mid(f,k1,k3).k=f.(len mid(f,k1,k2)+n+k1-1) by A1,A4,A8,A10,A15,JORDAN3:
+31
+      .=f.(k2-(k1-1)+n+k1-1) by A6,XCMPLX_1:37
+      .=f.(k2-(k1-1)+n+(k1-1)) by XCMPLX_1:29
+      .=f.(k2-(k1-1)+(n+(k1-1))) by XCMPLX_1:1
+      .=f.(n+k2) by XCMPLX_1:28;
+     hence thesis by A18;
+    end;
+    hence thesis;
+   end;
+   hence thesis by A8,A9,FINSEQ_1:18;
+end;
+
+begin :: Scalar Product of Real Subset
+
+definition
+   let A be Subset of REAL;
+   let x be real number;
+   func x * A -> Subset of REAL means
+:Def2:for y being Real holds
+       y in it iff ex z being Real st z in A & y = x * z;
+existence
+proof
+  defpred P[set] means ex z being Real st z in A & $1 = x * z;
+   consider B being Subset of REAL such that
+A1:for y being Real holds y in B iff
+   P[y] from SepReal;
+   reconsider B as Subset of REAL;
+   take B;
+   thus thesis by A1;
+end;
+uniqueness
+proof
+   let A1,A2 being Subset of REAL such that
+A2:for y being Real holds
+   y in A1 iff ex z being Real st z in A & y = x * z and
+A3:for y being Real holds
+   y in A2 iff ex z being Real st z in A & y = x * z;
+A4:A1 c= A2
+   proof
+      let y be set;
+      assume
+   A5:y in A1;
+      then reconsider y as Real;
+        ex z being Real st (z in A & y = x * z) by A2,A5;
+      hence thesis by A3;
+   end;
+     A2 c= A1
+   proof
+      let y be set;
+      assume
+   A6:y in A2;
+      then reconsider y as Real;
+        ex z being Real st z in A & y = x * z by A3,A6;
+      hence thesis by A2;
+   end;
+   hence thesis by A4,XBOOLE_0:def 10;
+end;
+end;
+
+theorem for X,Y be non empty set, f be PartFunc of X,REAL
+st f is_bounded_above_on X & Y c= X holds f|Y is_bounded_above_on Y
+proof
+   let X,Y be non empty set;
+   let f be PartFunc of X,REAL;
+   assume A1:f is_bounded_above_on X;
+   assume A2:Y c= X;
+    consider a be real number such that
+A3:for x being Element of X st x in X /\ dom f holds a>=f.x
+    by A1,RFUNCT_1:def 9;
+      for x being Element of X st x in Y /\ dom (f|Y) holds a>=(f|Y).x
+    proof
+     let x be Element of X; assume x in Y /\ dom (f|Y);
+then A4: x in dom (f|Y) by XBOOLE_0:def 3;
+then A5: x in dom f /\ Y by FUNCT_1:68;
+     reconsider x as Element of X;
+       dom f /\ Y c= dom f /\ X by A2,XBOOLE_1:26;
+     then a >= f.x by A3,A5;
+     hence thesis by A4,FUNCT_1:68;
+    end;
+    hence thesis by RFUNCT_1:def 9;
+end;
+
+theorem for X,Y be non empty set, f be PartFunc of X,REAL
+st f is_bounded_below_on X & Y c= X holds f|Y is_bounded_below_on Y
+proof
+   let X,Y be non empty set;
+   let f be PartFunc of X,REAL;
+   assume A1:f is_bounded_below_on X;
+   assume A2:Y c= X;
+    consider a be real number such that
+A3:for x being Element of X st x in X /\ dom f holds f.x>=a
+    by A1,RFUNCT_1:def 10;
+      for x being Element of X st x in Y /\ dom (f|Y) holds (f|Y).x>=a
+    proof
+     let x be Element of X; assume x in Y /\ dom (f|Y);
+then A4: x in dom (f|Y) by XBOOLE_0:def 3;
+then A5: x in dom f /\ Y by FUNCT_1:68;
+     reconsider x as Element of X;
+       dom f /\ Y c= dom f /\ X by A2,XBOOLE_1:26;
+     then a <= f.x by A3,A5;
+     hence thesis by A4,FUNCT_1:68;
+    end;
+    hence thesis by RFUNCT_1:def 10;
+end;
+
+theorem Th7: for X be non empty Subset of REAL holds r*X is non empty
+ proof
+   let X be non empty Subset of REAL;
+   consider x such that
+A1:x in X by SUBSET_1:10;
+   reconsider x as Real;
+     ex z being Real st z in X & r * x = r * z by A1;
+   hence thesis by Def2;
+ end;
+
+theorem Th8:
+  for X be Subset of REAL holds r*X = {r*x : x in X}
+  proof
+    let X be Subset of REAL;
+    thus r*X c= {r*x : x in X}
+    proof
+      let y be set; assume y in r*X;
+      then consider z being Real such that
+A1:   z in X & y = r * z by Def2;
+      thus thesis by A1;
+    end;
+    let y be set; assume y in {r*x : x in X};
+    then consider z being Real such that
+A2: y = r * z & z in X;
+    thus thesis by A2,Def2;
+  end;
+
+theorem for X be non empty Subset of REAL st
+X is bounded_above & 0<=r holds r*X is bounded_above
+proof
+   let X be non empty Subset of REAL;
+   assume A1:X is bounded_above & 0<=r;
+   then consider b be real number such that
+A2:for x be real number st x in X holds x <= b by SEQ_4:def 1;
+     for y be real number st y in r*X holds y <= r*b
+   proof
+     let y be real number; assume y in r*X;
+     then y in {r*x : x in X} by Th8;
+     then consider x such that
+A3:  y=r*x & x in X;
+       x <= b by A2,A3;
+     hence thesis by A1,A3,AXIOMS:25;
+   end;
+   hence thesis by SEQ_4:def 1;
+ end;
+
+theorem for X be non empty Subset of REAL st
+ X is bounded_above & r<=0 holds r*X is bounded_below
+ proof
+   let X be non empty Subset of REAL;
+   assume A1:X is bounded_above & r<=0;
+   then consider b be real number such that
+A2:for x be real number st x in X holds x <= b by SEQ_4:def 1;
+     for y be real number st y in r*X holds r*b <= y
+   proof
+     let y be real number; assume y in r*X;
+     then y in {r*x : x in X} by Th8;
+     then consider x such that
+A3:  y=r*x & x in X;
+       x <= b by A2,A3;
+     hence thesis by A1,A3,REAL_1:52;
+   end;
+   hence thesis by SEQ_4:def 2;
+ end;
+
+theorem for X be non empty Subset of REAL st
+X is bounded_below & 0<=r holds r*X is bounded_below
+proof
+   let X be non empty Subset of REAL;
+   assume A1:X is bounded_below & 0<=r;
+   then consider b be real number such that
+A2:for x be real number st x in X holds b <= x by SEQ_4:def 2;
+     for y be real number st y in r*X holds r*b <= y
+   proof
+     let y be real number; assume y in r*X;
+     then y in {r*x : x in X} by Th8;
+     then consider x such that
+A3:  y=r*x & x in X;
+       b <= x by A2,A3;
+     hence thesis by A1,A3,AXIOMS:25;
+   end;
+   hence thesis by SEQ_4:def 2;
+ end;
+
+theorem for X be non empty Subset of REAL st
+ X is bounded_below & r<=0 holds r*X is bounded_above
+ proof
+   let X be non empty Subset of REAL;
+   assume A1:X is bounded_below & r<=0;
+   then consider b be real number such that
+A2:for x be real number st x in X holds b <= x by SEQ_4:def 2;
+     for y be real number st y in r*X holds y <= r*b
+   proof
+     let y be real number; assume y in r*X;
+     then y in {r*x : x in X} by Th8;
+     then consider x such that
+A3:  y=r*x & x in X;
+       b <= x by A2,A3;
+     hence thesis by A1,A3,REAL_1:52;
+   end;
+   hence thesis by SEQ_4:def 1;
+ end;
+
+theorem Th13:for X be non empty Subset of REAL st
+X is bounded_above & 0<=r holds sup(r*X) = r*(sup X)
+proof
+   let X be non empty Subset of REAL;
+   assume A1:X is bounded_above & 0<=r;
+A2:for a be real number st a in r*X holds a <= r*(sup X)
+   proof
+     let a be real number; assume a in r*X;
+     then a in {r*x : x in X} by Th8;
+     then consider x such that
+A3:  a=r*x & x in X;
+       x <= sup X by A1,A3,SEQ_4:def 4;
+     hence thesis by A1,A3,AXIOMS:25;
+   end;
+A4:for b be real number st
+   for a be real number st a in r*X holds a <= b holds r*(sup X) <= b
+   proof
+     let b be real number; assume
+A5:for a be real number st a in r*X holds a <= b;
+     consider x such that
+A6:  x in X by SUBSET_1:10;
+       r*x in {r*y : y in X} by A6;
+then A7:  r*x in r*X by Th8;
+       now per cases by A1;
+       suppose r=0;
+         hence r*(sup X) <= b by A5,A7;
+       suppose A8:r>0;
+           for z be real number st z in X holds z <= b/r
+         proof
+           let z be real number; assume z in X;
+           then r*z in {r*y : y in X};
+           then r*z in r*X by Th8;
+           then r*z <= b by A5;
+           hence thesis by A8,REAL_2:177;
+         end;
+         then sup X <= b/r by PSCOMP_1:10;
+         then r*(sup X) <= b/r*r by A8,AXIOMS:25;
+         hence r*(sup X) <= b by A8,XCMPLX_1:88;
+     end;
+     hence thesis;
+   end;
+     r*X is non empty Subset of REAL by Th7;
+   hence thesis by A2,A4,PSCOMP_1:11;
+ end;
+
+theorem Th14:for X be non empty Subset of REAL st
+ X is bounded_above & r<=0 holds inf(r*X) = r*(sup X)
+ proof
+   let X be non empty Subset of REAL;
+   assume A1:X is bounded_above & r<=0;
+A2:for a be real number st a in r*X holds r*(sup X) <= a
+   proof
+     let a be real number; assume a in r*X;
+     then a in {r*x : x in X} by Th8;
+     then consider x such that
+A3:  a=r*x & x in X;
+       x <= sup X by A1,A3,SEQ_4:def 4;
+     hence thesis by A1,A3,REAL_1:52;
+   end;
+A4:for b be real number st
+    for a be real number st a in r*X holds a >= b holds r*(sup X) >= b
+   proof
+     let b be real number; assume
+A5:for a be real number st a in r*X holds a >= b;
+     consider x such that
+A6:  x in X by SUBSET_1:10;
+       r*x in {r*y : y in X} by A6;
+then A7:  r*x in r*X by Th8;
+       now per cases by A1;
+       suppose r=0;
+         hence r*(sup X) >= b by A5,A7;
+       suppose A8:r<0;
+           for z be real number st z in X holds z <= b/r
+         proof
+           let z be real number; assume z in X;
+           then r*z in {r*y : y in X};
+           then r*z in r*X by Th8;
+           then r*z >= b by A5;
+           hence thesis by A8,REAL_2:177;
+         end;
+         then sup X <= b/r by PSCOMP_1:10;
+         then r*(sup X) >= b/r*r by A8,REAL_1:52;
+         hence r*(sup X) >= b by A8,XCMPLX_1:88;
+     end;
+     hence thesis;
+   end;
+     r*X is non empty Subset of REAL by Th7;
+   hence thesis by A2,A4,PSCOMP_1:9;
+ end;
+
+theorem Th15:for X be non empty Subset of REAL st
+ X is bounded_below & 0<=r holds inf(r*X) = r*(inf X)
+ proof
+   let X be non empty Subset of REAL;
+   assume A1:X is bounded_below & 0<=r;
+A2:for a being real number st a in r*X holds r*(inf X) <= a
+   proof
+     let a be real number; assume a in r*X;
+     then a in {r*x : x in X} by Th8;
+     then consider x such that
+A3:  a=r*x & x in X;
+       inf X <= x by A1,A3,SEQ_4:def 5;
+     hence thesis by A1,A3,AXIOMS:25;
+   end;
+A4:for b be real number st
+   for a be real number st a in r*X holds a >= b holds r*(inf X) >= b
+   proof
+     let b be real number; assume
+A5:for a be real number st a in r*X holds a >= b;
+     consider x such that
+A6:  x in X by SUBSET_1:10;
+       r*x in {r*y : y in X} by A6;
+then A7:  r*x in r*X by Th8;
+       now per cases by A1;
+       suppose r=0;
+         hence r*(inf X) >= b by A5,A7;
+       suppose A8:r>0;
+           for z be real number st z in X holds z >= b/r
+         proof
+           let z be real number; assume z in X;
+           then r*z in {r*y : y in X};
+           then r*z in r*X by Th8;
+           then r*z >= b by A5;
+           hence thesis by A8,REAL_2:177;
+         end;
+         then inf X >= b/r by PSCOMP_1:8;
+         then r*(inf X) >= b/r*r by A8,AXIOMS:25;
+         hence r*(inf X) >= b by A8,XCMPLX_1:88;
+     end;
+     hence thesis;
+   end;
+     r*X is non empty Subset of REAL by Th7;
+   hence thesis by A2,A4,PSCOMP_1:9;
+ end;
+
+theorem Th16:for X be non empty Subset of REAL st
+ X is bounded_below & r<=0 holds sup(r*X) = r*(inf X)
+ proof
+   let X be non empty Subset of REAL;
+   assume A1:X is bounded_below & r<=0;
+A2:for a be real number st a in r*X holds r*(inf X) >= a
+   proof
+     let a be real number; assume a in r*X;
+     then a in {r*x : x in X} by Th8;
+     then consider x such that
+A3:  a=r*x & x in X;
+       inf X <= x by A1,A3,SEQ_4:def 5;
+     hence thesis by A1,A3,REAL_1:52;
+   end;
+A4:for b be real number st
+   for a be real number st a in r*X holds a <= b holds r*(inf X) <= b
+   proof
+     let b be real number; assume
+A5: for a being real number st a in r*X holds a <= b;
+     consider x such that
+A6:  x in X by SUBSET_1:10;
+       r*x in {r*y : y in X} by A6;
+then A7:  r*x in r*X by Th8;
+       now per cases by A1;
+       suppose r=0;
+         hence r*(inf X) <= b by A5,A7;
+       suppose A8:r<0;
+           for z be real number st z in X holds z >= b/r
+         proof
+           let z be real number; assume z in X;
+           then r*z in {r*y : y in X};
+           then r*z in r*X by Th8;
+           then r*z <= b by A5;
+           hence thesis by A8,REAL_2:177;
+         end;
+         then inf X >= b/r by PSCOMP_1:8;
+         then r*(inf X) <= b/r*r by A8,REAL_1:52;
+         hence r*(inf X) <= b by A8,XCMPLX_1:88;
+     end;
+     hence thesis;
+   end;
+     r*X is non empty Subset of REAL by Th7;
+   hence thesis by A2,A4,PSCOMP_1:11;
+ end;
+
+begin :: Scalar Multiple of Integral
+
+theorem Th17:
+for X be non empty set, f be Function of X,REAL holds
+rng(r(#)f) = r*rng f
+proof
+   let X be non empty set;
+   let f be Function of X,REAL;
+A1:rng(r(#)f) c= r*rng f
+   proof
+       for y holds y in rng(r(#)f) implies y in r*rng f
+     proof
+       let y; assume y in rng(r(#)f);
+       then consider x being Element of X such that
+A2:    x in dom(r(#)f) & y=(r(#)f).x by PARTFUN1:26;
+A3:    y = r*(f.x) by A2,RFUNCT_1:73;
+         x in dom f by A2,SEQ_1:def 6;
+       then f.x in rng f by FUNCT_1:def 5;
+       then y in {r*b : b in rng f} by A3;
+       hence thesis by Th8;
+     end;
+     hence thesis by SUBSET_1:7;
+   end;
+     r*rng f c= rng(r(#)f)
+   proof
+       for y holds y in r*rng f implies y in rng(r(#)f)
+     proof
+       let y; assume y in r*rng f;
+       then y in {r*b : b in rng f} by Th8;
+       then consider b such that
+A4:    y=r*b & b in rng f;
+       consider x being Element of X such that
+A5:    x in dom f & b=f.x by A4,PARTFUN1:26;
+         x in dom(r(#)f) by A5,SEQ_1:def 6;
+       then (r(#)f).x in rng(r(#)f) by FUNCT_1:def 5;
+       hence thesis by A4,A5,RFUNCT_1:73;
+     end;
+     hence thesis by SUBSET_1:7;
+   end;
+   hence thesis by A1,XBOOLE_0:def 10;
+end;
+
+theorem Th18:
+for X,Z be non empty set, f be PartFunc of X,REAL
+holds rng(r(#)(f|Z)) = r*rng(f|Z)
+proof
+   let X,Z be non empty set;
+   let f be PartFunc of X,REAL;
+A1:rng(r(#)f|Z) c= r*rng(f|Z)
+   proof
+       for y holds y in rng(r(#)f|Z) implies y in r*rng(f|Z)
+     proof
+       let y;
+       assume y in rng(r(#)f|Z);
+       then consider x be Element of X such that
+A2:    x in dom(r(#)f|Z) & y=(r(#)f|Z).x by PARTFUN1:26;
+A3:    y=r*(f|Z).x by A2,SEQ_1:def 6;
+         x in dom(f|Z) by A2,SEQ_1:def 6;
+       then (f|Z).x in rng(f|Z) by FUNCT_1:def 5;
+       then y in {r*b : b in rng(f|Z)} by A3;
+       hence thesis by Th8;
+     end;
+     hence thesis by SUBSET_1:7;
+   end;
+     r*rng(f|Z) c= rng(r(#)f|Z)
+   proof
+       for y holds y in r*rng(f|Z) implies y in rng(r(#)f|Z)
+     proof
+       let y; assume y in r*rng(f|Z);
+       then y in {r*b : b in rng(f|Z)} by Th8;
+       then consider b such that
+A4:    y=r*b & b in rng(f|Z);
+       consider x being Element of X such that
+A5:    x in dom(f|Z) & b=(f|Z).x by A4,PARTFUN1:26;
+A6:    x in dom(r(#)f|Z) by A5,SEQ_1:def 6;
+       then y= (r(#)f|Z).x by A4,A5,SEQ_1:def 6;
+       hence thesis by A6,FUNCT_1:def 5;
+     end;
+     hence thesis by SUBSET_1:7;
+   end;
+   hence thesis by A1,XBOOLE_0:def 10;
+end;
+
+theorem Th19:
+for A be closed-interval Subset of REAL, f be Function of A,REAL,
+D be Element of divs A st f is_bounded_on A & r >= 0
+holds (upper_sum_set(r(#)f)).D >= r*(inf rng f)*vol(A)
+proof
+   let A be closed-interval Subset of REAL;
+   let f be Function of A,REAL;
+   let D be Element of divs A;
+   assume that A1:f is_bounded_on A and A2:r >= 0;
+A3:dom(upper_sum_set(r(#)f))=divs A by INTEGRA1:def 11;
+   r(#)f is total by RFUNCT_1:67;
+then A4: r(#)f is Function of A, REAL by FUNCT_2:131;
+A5:r(#)f is_bounded_on A by A1,RFUNCT_1:97;
+then A6:r(#)f is_bounded_below_on A & r(#)
+f is_bounded_above_on A by RFUNCT_1:def 11;
+  f is_bounded_below_on A & f is_bounded_above_on A by A1,RFUNCT_1:def 11;
+then A7:rng f is bounded_below by INTEGRA1:13;
+     (upper_sum_set(r(#)f)).D = upper_sum(r(#)f,D) by A3,INTEGRA1:def 11;
+then A8:(upper_sum_set(r(#)f)).D >= lower_sum(r(#)f,D) by A4,A5,INTEGRA1:30;
+A9:lower_sum(r(#)f,D) >= (inf rng(r(#)f))*vol(A) by A4,A6,INTEGRA1:27;
+     (inf rng(r(#)f))=inf (r*(rng f)) by Th17
+    .=r*(inf rng f) by A2,A7,Th15;
+   hence thesis by A8,A9,AXIOMS:22;
+end;
+
+theorem Th20:
+for A be closed-interval Subset of REAL, f be Function of A,REAL,
+D be Element of divs A st f is_bounded_on A & r <= 0
+holds (upper_sum_set(r(#)f)).D >= r*(sup rng f)*vol(A)
+proof
+   let A be closed-interval Subset of REAL;
+   let f be Function of A,REAL;
+   let D be Element of divs A;
+   assume that A1:f is_bounded_on A and A2:r <= 0;
+A3:dom(upper_sum_set(r(#)f))=divs A by INTEGRA1:def 11;
+  r(#)f is total by RFUNCT_1:67;
+then A4: r(#)f is Function of A, REAL by FUNCT_2:131;
+A5:r(#)f is_bounded_on A by A1,RFUNCT_1:97;
+then A6:r(#)f is_bounded_below_on A & r(#)
+f is_bounded_above_on A by RFUNCT_1:def 11;
+  f is_bounded_below_on A & f is_bounded_above_on A by A1,RFUNCT_1:def 11;
+then A7:rng f is bounded_above by INTEGRA1:15;
+     (upper_sum_set(r(#)f)).D = upper_sum(r(#)f,D) by A3,INTEGRA1:def 11;
+then A8:(upper_sum_set(r(#)f)).D >= lower_sum(r(#)f,D) by A4,A5,INTEGRA1:30;
+A9:lower_sum(r(#)f,D) >= (inf rng(r(#)f))*vol(A) by A4,A6,INTEGRA1:27;
+     (inf rng(r(#)f))=inf (r*(rng f)) by Th17
+    .=r*(sup rng f) by A2,A7,Th14;
+   hence thesis by A8,A9,AXIOMS:22;
+end;
+
+theorem Th21:
+for A be closed-interval Subset of REAL, f be Function of A,REAL,
+D be Element of divs A st f is_bounded_on A & r >= 0
+holds (lower_sum_set(r(#)f)).D <= r*(sup rng f)*vol(A)
+proof
+   let A be closed-interval Subset of REAL;
+   let f be Function of A,REAL;
+   let D be Element of divs A;
+   assume that A1:f is_bounded_on A and A2:r >= 0;
+A3:dom(lower_sum_set(r(#)f))=divs A by INTEGRA1:def 12;
+   r(#)f is total by RFUNCT_1:67;
+then A4: r(#)f is Function of A, REAL by FUNCT_2:131;
+A5:r(#)f is_bounded_on A by A1,RFUNCT_1:97;
+then A6:r(#)f is_bounded_below_on A & r(#)
+f is_bounded_above_on A by RFUNCT_1:def 11;
+  f is_bounded_below_on A & f is_bounded_above_on A by A1,RFUNCT_1:def 11;
+then A7:rng f is bounded_above by INTEGRA1:15;
+     (lower_sum_set(r(#)f)).D = lower_sum(r(#)f,D) by A3,INTEGRA1:def 12;
+then A8:(lower_sum_set(r(#)f)).D <= upper_sum(r(#)f,D) by A4,A5,INTEGRA1:30;
+A9:upper_sum(r(#)f,D) <= (sup rng(r(#)f))*vol(A) by A4,A6,INTEGRA1:29;
+     (sup rng(r(#)f))=sup (r*(rng f)) by Th17
+    .=r*(sup rng f) by A2,A7,Th13;
+   hence thesis by A8,A9,AXIOMS:22;
+end;
+
+theorem Th22:
+for A be closed-interval Subset of REAL, f be Function of A,REAL,
+D be Element of divs A st f is_bounded_on A & r <= 0
+holds (lower_sum_set(r(#)f)).D <= r*(inf rng f)*vol(A)
+proof
+   let A be closed-interval Subset of REAL;
+   let f be Function of A,REAL;
+   let D be Element of divs A;
+   assume that A1:f is_bounded_on A and A2:r <= 0;
+A3:dom(lower_sum_set(r(#)f))=divs A by INTEGRA1:def 12;
+   r(#)f is total by RFUNCT_1:67;
+then A4: r(#)f is Function of A, REAL by FUNCT_2:131;
+A5:r(#)f is_bounded_on A by A1,RFUNCT_1:97;
+then A6:r(#)f is_bounded_below_on A & r(#)
+f is_bounded_above_on A by RFUNCT_1:def 11;
+  f is_bounded_below_on A & f is_bounded_above_on A by A1,RFUNCT_1:def 11;
+then A7:rng f is bounded_below by INTEGRA1:13;
+     (lower_sum_set(r(#)f)).D = lower_sum(r(#)f,D) by A3,INTEGRA1:def 12;
+then A8:(lower_sum_set(r(#)f)).D <= upper_sum(r(#)f,D) by A4,A5,INTEGRA1:30;
+A9:upper_sum(r(#)f,D) <= (sup rng(r(#)f))*vol(A) by A4,A6,INTEGRA1:29;
+     (sup rng(r(#)f))=sup (r*(rng f)) by Th17
+    .=r*(inf rng f) by A2,A7,Th16;
+   hence thesis by A8,A9,AXIOMS:22;
+end;
+
+theorem Th23:
+for A be closed-interval Subset of REAL, f be Function of A,REAL,
+S be non empty Division of A, D be Element of S, i st i in Seg(len D) &
+f is_bounded_above_on A & r >= 0 holds
+upper_volume(r(#)f,D).i = r*upper_volume(f,D).i
+proof
+   let A be closed-interval Subset of REAL; let f be Function of A,REAL;
+   let S be non empty Division of A; let D be Element of S;
+   let i; assume that A1:i in Seg(len D) and A2:f is_bounded_above_on A and
+   A3:r >= 0;
+     i in dom D by A1,FINSEQ_1:def 3;
+then A4:divset(D,i) c= A by INTEGRA1:10;
+     dom(f|divset(D,i)) = dom f /\ divset(D,i) by FUNCT_1:68
+    .= A /\ divset(D,i) by FUNCT_2:def 1
+    .= divset(D,i) by A4,XBOOLE_1:28;
+then A5:rng(f|divset(D,i)) is non empty by RELAT_1:65;
+A6:rng(f|divset(D,i)) c= rng f by FUNCT_1:76;
+     rng f is bounded_above by A2,INTEGRA1:15;
+then A7:rng(f|divset(D,i)) is bounded_above by A6,RCOMP_1:4;
+     upper_volume(r(#)f,D).i
+    =(sup(rng((r(#)f)|divset(D,i))))*vol(divset(D,i)) by A1,INTEGRA1:def 7
+   .=(sup(rng(r(#)f|divset(D,i))))*vol(divset(D,i)) by RFUNCT_1:65
+   .=(sup(r*rng(f|divset(D,i))))*vol(divset(D,i)) by Th18
+   .=(r*sup(rng(f|divset(D,i))))*vol(divset(D,i)) by A3,A5,A7,Th13
+   .=r*(sup(rng(f|divset(D,i)))*vol(divset(D,i))) by XCMPLX_1:4
+   .=r*upper_volume(f,D).i by A1,INTEGRA1:def 7;
+   hence thesis;
+end;
+
+theorem Th24:
+for A be closed-interval Subset of REAL, f be Function of A,REAL,
+S be non empty Division of A, D be Element of S, i st i in Seg(len D) &
+f is_bounded_above_on A & r <= 0 holds
+lower_volume(r(#)f,D).i = r*upper_volume(f,D).i
+proof
+   let A be closed-interval Subset of REAL; let f be Function of A,REAL;
+   let S be non empty Division of A; let D be Element of S;
+   let i; assume that A1:i in Seg(len D) and A2:f is_bounded_above_on A and
+   A3:r <= 0;
+     i in dom D by A1,FINSEQ_1:def 3;
+then A4:divset(D,i) c= A by INTEGRA1:10;
+     dom(f|divset(D,i)) = dom f /\ divset(D,i) by FUNCT_1:68
+    .= A /\ divset(D,i) by FUNCT_2:def 1
+    .= divset(D,i) by A4,XBOOLE_1:28;
+then A5:rng(f|divset(D,i)) is non empty by RELAT_1:65;
+A6:rng(f|divset(D,i)) c= rng f by FUNCT_1:76;
+     rng f is bounded_above by A2,INTEGRA1:15;
+then A7:rng(f|divset(D,i)) is bounded_above by A6,RCOMP_1:4;
+     lower_volume(r(#)f,D).i
+    =(inf(rng((r(#)f)|divset(D,i))))*vol(divset(D,i)) by A1,INTEGRA1:def 8
+   .=(inf(rng(r(#)f|divset(D,i))))*vol(divset(D,i)) by RFUNCT_1:65
+   .=(inf(r*rng(f|divset(D,i))))*vol(divset(D,i)) by Th18
+   .=(r*sup(rng(f|divset(D,i))))*vol(divset(D,i)) by A3,A5,A7,Th14
+   .=r*(sup(rng(f|divset(D,i)))*vol(divset(D,i))) by XCMPLX_1:4
+   .=r*upper_volume(f,D).i by A1,INTEGRA1:def 7;
+   hence thesis;
+end;
+
+theorem Th25:
+for A be closed-interval Subset of REAL, f be Function of A,REAL,
+S be non empty Division of A, D be Element of S, i st i in Seg(len D) &
+f is_bounded_below_on A & r >= 0 holds
+lower_volume(r(#)f,D).i = r*lower_volume(f,D).i
+proof
+   let A be closed-interval Subset of REAL; let f be Function of A,REAL;
+   let S be non empty Division of A; let D be Element of S;
+   let i; assume that A1:i in Seg(len D) and A2:f is_bounded_below_on A and
+   A3:r >= 0;
+     i in dom D by A1,FINSEQ_1:def 3;
+then A4:divset(D,i) c= A by INTEGRA1:10;
+     dom(f|divset(D,i)) = dom f /\ divset(D,i) by FUNCT_1:68
+    .= A /\ divset(D,i) by FUNCT_2:def 1
+    .= divset(D,i) by A4,XBOOLE_1:28;
+then A5:rng(f|divset(D,i)) is non empty by RELAT_1:65;
+A6:rng(f|divset(D,i)) c= rng f by FUNCT_1:76;
+     rng f is bounded_below by A2,INTEGRA1:13;
+then A7:rng(f|divset(D,i)) is bounded_below by A6,RCOMP_1:3;
+     lower_volume(r(#)f,D).i
+    =(inf(rng((r(#)f)|divset(D,i))))*vol(divset(D,i)) by A1,INTEGRA1:def 8
+   .=(inf(rng(r(#)f|divset(D,i))))*vol(divset(D,i)) by RFUNCT_1:65
+   .=(inf(r*rng(f|divset(D,i))))*vol(divset(D,i)) by Th18
+   .=(r*inf(rng(f|divset(D,i))))*vol(divset(D,i)) by A3,A5,A7,Th15
+   .=r*(inf(rng(f|divset(D,i)))*vol(divset(D,i))) by XCMPLX_1:4
+   .=r*lower_volume(f,D).i by A1,INTEGRA1:def 8;
+   hence thesis;
+end;
+
+theorem Th26:
+for A be closed-interval Subset of REAL, f be Function of A,REAL,
+S be non empty Division of A, D be Element of S, i st i in Seg(len D) &
+f is_bounded_below_on A & r <= 0 holds
+upper_volume(r(#)f,D).i = r*lower_volume(f,D).i
+proof
+   let A be closed-interval Subset of REAL; let f be Function of A,REAL;
+   let S be non empty Division of A; let D be Element of S;
+   let i; assume that A1:i in Seg(len D) and A2:f is_bounded_below_on A and
+   A3:r <= 0;
+     i in dom D by A1,FINSEQ_1:def 3;
+then A4:divset(D,i) c= A by INTEGRA1:10;
+     dom(f|divset(D,i)) = dom f /\ divset(D,i) by FUNCT_1:68
+    .= A /\ divset(D,i) by FUNCT_2:def 1
+    .= divset(D,i) by A4,XBOOLE_1:28;
+then A5:rng(f|divset(D,i)) is non empty by RELAT_1:65;
+A6:rng(f|divset(D,i)) c= rng f by FUNCT_1:76;
+     rng f is bounded_below by A2,INTEGRA1:13;
+then A7:rng(f|divset(D,i)) is bounded_below by A6,RCOMP_1:3;
+     upper_volume(r(#)f,D).i
+    =(sup(rng((r(#)f)|divset(D,i))))*vol(divset(D,i)) by A1,INTEGRA1:def 7
+   .=(sup(rng(r(#)f|divset(D,i))))*vol(divset(D,i)) by RFUNCT_1:65
+   .=(sup(r*rng(f|divset(D,i))))*vol(divset(D,i)) by Th18
+   .=(r*inf(rng(f|divset(D,i))))*vol(divset(D,i)) by A3,A5,A7,Th16
+   .=r*(inf(rng(f|divset(D,i)))*vol(divset(D,i))) by XCMPLX_1:4
+   .=r*lower_volume(f,D).i by A1,INTEGRA1:def 8;
+   hence thesis;
+end;
+
+theorem Th27:
+for A be closed-interval Subset of REAL, f be Function of A,REAL,
+S be non empty Division of A, D be Element of S st
+f is_bounded_above_on A & r >= 0 holds
+upper_sum(r(#)f,D) = r*upper_sum(f,D)
+proof
+   let A be closed-interval Subset of REAL;
+   let f be Function of A,REAL;
+   let S be non empty Division of A;
+   let D be Element of S;
+   assume that A1:f is_bounded_above_on A and A2:r >= 0;
+ upper_volume(r(#)f,D)=r*upper_volume(f,D)
+   proof
+A3:  len upper_volume(r(#)f,D) = len D by INTEGRA1:def 7
+      .= len upper_volume(f,D) by INTEGRA1:def 7
+      .= len(r*upper_volume(f,D)) by NEWTON:6;
+       for i st 1 <= i & i <= len upper_volume(r(#)f,D) holds
+     upper_volume(r(#)f,D).i = (r*upper_volume(f,D)).i
+     proof
+       let i; assume 1 <= i & i <= len upper_volume(r(#)f,D);
+       then i in Seg(len upper_volume(r(#)f,D)) by FINSEQ_1:3;
+       then i in Seg(len D) by INTEGRA1:def 7;
+       then upper_volume(r(#)f,D).i = r*upper_volume(f,D).i by A1,A2,Th23
+        .= (r*upper_volume(f,D)).i by RVSUM_1:66;
+       hence thesis;
+     end;
+     hence thesis by A3,FINSEQ_1:18;
+   end;
+   then upper_sum(r(#)f,D) =Sum(r*upper_volume(f,D)) by INTEGRA1:def 9
+    .=r*Sum(upper_volume(f,D)) by RVSUM_1:117
+    .=r*upper_sum(f,D) by INTEGRA1:def 9;
+   hence thesis;
+end;
+
+theorem Th28:
+for A be closed-interval Subset of REAL, f be Function of A,REAL,
+S be non empty Division of A, D be Element of S st
+f is_bounded_above_on A & r <= 0 holds
+lower_sum(r(#)f,D) = r*upper_sum(f,D)
+proof
+   let A be closed-interval Subset of REAL;
+   let f be Function of A,REAL;
+   let S be non empty Division of A;
+   let D be Element of S;
+   assume that A1:f is_bounded_above_on A and A2:r <= 0;
+ lower_volume(r(#)f,D)=r*upper_volume(f,D)
+   proof
+A3:  len lower_volume(r(#)f,D) = len D by INTEGRA1:def 8
+      .= len upper_volume(f,D) by INTEGRA1:def 7
+      .= len(r*upper_volume(f,D)) by NEWTON:6;
+       for i st 1 <= i & i <= len lower_volume(r(#)f,D) holds
+     lower_volume(r(#)f,D).i = (r*upper_volume(f,D)).i
+     proof
+       let i; assume 1 <= i & i <= len lower_volume(r(#)f,D);
+       then i in Seg(len lower_volume(r(#)f,D)) by FINSEQ_1:3;
+       then i in Seg(len D) by INTEGRA1:def 8;
+       then lower_volume(r(#)f,D).i = r*upper_volume(f,D).i by A1,A2,Th24
+        .= (r*upper_volume(f,D)).i by RVSUM_1:66;
+       hence thesis;
+     end;
+     hence thesis by A3,FINSEQ_1:18;
+   end;
+   then lower_sum(r(#)f,D) =Sum(r*upper_volume(f,D)) by INTEGRA1:def 10
+    .=r*Sum(upper_volume(f,D)) by RVSUM_1:117
+    .=r*upper_sum(f,D) by INTEGRA1:def 9;
+   hence thesis;
+end;
+
+theorem Th29:
+for A be closed-interval Subset of REAL, f be Function of A,REAL,
+S be non empty Division of A, D be Element of S st
+f is_bounded_below_on A & r >= 0 holds
+lower_sum(r(#)f,D) = r*lower_sum(f,D)
+proof
+   let A be closed-interval Subset of REAL;
+   let f be Function of A,REAL;
+   let S be non empty Division of A;
+   let D be Element of S;
+   assume that A1:f is_bounded_below_on A and A2:r >= 0;
+ lower_volume(r(#)f,D)=r*lower_volume(f,D)
+   proof
+A3:  len lower_volume(r(#)f,D) = len D by INTEGRA1:def 8
+      .= len lower_volume(f,D) by INTEGRA1:def 8
+      .= len(r*lower_volume(f,D)) by NEWTON:6;
+       for i st 1 <= i & i <= len lower_volume(r(#)f,D) holds
+     lower_volume(r(#)f,D).i = (r*lower_volume(f,D)).i
+     proof
+       let i; assume 1 <= i & i <= len lower_volume(r(#)f,D);
+       then i in Seg(len lower_volume(r(#)f,D)) by FINSEQ_1:3;
+       then i in Seg(len D) by INTEGRA1:def 8;
+       then lower_volume(r(#)f,D).i = r*lower_volume(f,D).i by A1,A2,Th25
+        .= (r*lower_volume(f,D)).i by RVSUM_1:66;
+       hence thesis;
+     end;
+     hence thesis by A3,FINSEQ_1:18;
+   end;
+   then lower_sum(r(#)f,D) =Sum(r*lower_volume(f,D)) by INTEGRA1:def 10
+    .=r*Sum(lower_volume(f,D)) by RVSUM_1:117
+    .=r*lower_sum(f,D) by INTEGRA1:def 10;
+   hence thesis;
+end;
+
+theorem Th30:
+for A be closed-interval Subset of REAL, f be Function of A,REAL,
+S be non empty Division of A, D be Element of S st
+f is_bounded_below_on A & r <= 0 holds
+upper_sum(r(#)f,D) = r*lower_sum(f,D)
+proof
+   let A be closed-interval Subset of REAL;
+   let f be Function of A,REAL;
+   let S be non empty Division of A;
+   let D be Element of S;
+   assume that A1:f is_bounded_below_on A and A2:r <= 0;
+ upper_volume(r(#)f,D)=r*lower_volume(f,D)
+   proof
+A3:  len upper_volume(r(#)f,D) = len D by INTEGRA1:def 7
+      .= len lower_volume(f,D) by INTEGRA1:def 8
+      .= len(r*lower_volume(f,D)) by NEWTON:6;
+       for i st 1 <= i & i <= len upper_volume(r(#)f,D) holds
+     upper_volume(r(#)f,D).i = (r*lower_volume(f,D)).i
+     proof
+       let i; assume 1 <= i & i <= len upper_volume(r(#)f,D);
+       then i in Seg(len upper_volume(r(#)f,D)) by FINSEQ_1:3;
+       then i in Seg(len D) by INTEGRA1:def 7;
+       then upper_volume(r(#)f,D).i = r*lower_volume(f,D).i by A1,A2,Th26
+        .= (r*lower_volume(f,D)).i by RVSUM_1:66;
+       hence thesis;
+     end;
+     hence thesis by A3,FINSEQ_1:18;
+   end;
+   then upper_sum(r(#)f,D) =Sum(r*lower_volume(f,D)) by INTEGRA1:def 9
+    .=r*Sum(lower_volume(f,D)) by RVSUM_1:117
+    .=r*lower_sum(f,D) by INTEGRA1:def 10;
+   hence thesis;
+end;
+
+theorem Th31:
+for A be closed-interval Subset of REAL, f be Function of A,REAL
+st f is_bounded_on A & f is_integrable_on A
+holds r(#)f is_integrable_on A & integral(r(#)f) = r*integral(f)
+proof
+   let A be closed-interval Subset of REAL;
+   let f be Function of A,REAL;
+   assume that A1:f is_bounded_on A and
+   A2:f is_integrable_on A;
+A3:r(#)f is_upper_integrable_on A
+   proof
+       rng upper_sum_set(r(#)f) is bounded_below
+     proof
+         upper_sum_set(r(#)f) is_bounded_below_on divs A
+       proof
+           ex a st for D be Element of divs A st
+         D in divs A /\ dom(upper_sum_set(r(#)f))
+         holds a <= (upper_sum_set(r(#)f)).D
+         proof
+             now per cases;
+            suppose r>=0;
+            then for D be Element of divs A st D in divs A /\ dom(
+upper_sum_set(r(#)f))
+            holds r*(inf rng f)*vol(A) <= (upper_sum_set(r(#)f)).D
+            by A1,Th19;
+            hence thesis;
+            suppose r<0;
+            then for D be Element of divs A st D in divs A /\ dom(
+upper_sum_set(r(#)
+f))
+            holds r*(sup rng f)*vol(A) <= (upper_sum_set(r(#)f)).D
+            by A1,Th20;
+            hence thesis;
+           end;
+           hence thesis;
+         end;
+         hence thesis by RFUNCT_1:def 10;
+       end;
+       hence thesis by INTEGRA1:13;
+     end;
+     hence thesis by INTEGRA1:def 13;
+   end;
+A4:r(#)f is_lower_integrable_on A
+   proof
+       rng lower_sum_set(r(#)f) is bounded_above
+     proof
+         lower_sum_set(r(#)f) is_bounded_above_on divs A
+       proof
+           ex a st for D be Element of divs A st
+         D in divs A /\ dom(lower_sum_set(r(#)f))
+         holds a >= (lower_sum_set(r(#)f)).D
+         proof
+             now per cases;
+            suppose r>=0;
+            then for D be Element of divs A st D in divs A /\ dom(
+lower_sum_set(r(#)f))
+            holds r*(sup rng f)*vol(A) >= (lower_sum_set(r(#)f)).D
+            by A1,Th21;
+            hence thesis;
+            suppose r<0;
+            then for D be Element of divs A st D in divs A /\ dom(
+lower_sum_set(r(#)
+f))
+            holds r*(inf rng f)*vol(A) >= (lower_sum_set(r(#)f)).D
+            by A1,Th22;
+            hence thesis;
+           end;
+           hence thesis;
+         end;
+         hence thesis by RFUNCT_1:def 9;
+       end;
+       hence thesis by INTEGRA1:15;
+     end;
+     hence thesis by INTEGRA1:def 14;
+   end;
+     upper_integral(r(#)f)=lower_integral(r(#)f) &
+   upper_integral(r(#)f)=r*integral(f)
+   proof
+A5:dom upper_sum_set(f) = divs A by INTEGRA1:def 11;
+then A6:upper_sum_set(f) is total by PARTFUN1:def 4;
+then A7: upper_sum_set(f) is Function of divs A,REAL by FUNCT_2:131;
+A8:rng(upper_sum_set(f)) is non empty by A5,RELAT_1:65;
+     f is_upper_integrable_on A & f is_lower_integrable_on A
+   by A2,INTEGRA1:def 17;
+then A9:rng(upper_sum_set(f)) is bounded_below &
+   rng(lower_sum_set(f)) is bounded_above by INTEGRA1:def 13,def 14;
+A10:dom lower_sum_set(f) = divs A by INTEGRA1:def 12;
+then A11:lower_sum_set(f) is total by PARTFUN1:def 4;
+then A12:  lower_sum_set(f) is Function of divs A,REAL by FUNCT_2:131;
+A13:rng(lower_sum_set(f)) is non empty by A10,RELAT_1:65;
+A14:f is_bounded_above_on A & f is_bounded_below_on A by A1,RFUNCT_1:def 11;
+       now per cases;
+       suppose A15:r >= 0;
+A16:      upper_sum_set(r(#)f) = r(#)upper_sum_set(f)
+         proof
+A17:       divs A = dom upper_sum_set(r(#)f) by INTEGRA1:def 11;
+A18:       divs A = dom(upper_sum_set(f)) by INTEGRA1:def 11
+            .= dom(r(#)upper_sum_set(f)) by SEQ_1:def 6;
+             for D be set st D in divs A holds
+           (upper_sum_set(r(#)f)).D = (r(#)(upper_sum_set(f))).D
+           proof
+             let D be set; assume A19:D in divs A;
+             then reconsider D as Element of divs A;
+A20:         D in dom upper_sum_set(r(#)f) by A19,INTEGRA1:def 11;
+A21:         D in dom upper_sum_set(f) by A19,INTEGRA1:def 11;
+               (upper_sum_set(r(#)f)).D = upper_sum(r(#)
+f,D) by A20,INTEGRA1:def 11
+              .= r*upper_sum(f,D) by A14,A15,Th27
+              .= r*(upper_sum_set(f)).D by A21,INTEGRA1:def 11
+              .= (r(#)(upper_sum_set(f))).D by A6,RFUNCT_1:73;
+              hence thesis;
+           end;
+           hence thesis by A17,A18,FUNCT_1:9;
+         end;
+A22:     lower_sum_set(r(#)f) = r(#)lower_sum_set(f)
+         proof
+A23:       divs A = dom lower_sum_set(r(#)f) by INTEGRA1:def 12;
+A24:       divs A = dom(lower_sum_set(f)) by INTEGRA1:def 12
+            .= dom(r(#)lower_sum_set(f)) by SEQ_1:def 6;
+             for D be set st D in divs A holds
+           (lower_sum_set(r(#)f)).D = (r(#)(lower_sum_set(f))).D
+           proof
+             let D be set; assume A25:D in divs A;
+             then reconsider D as Element of divs A;
+A26:         D in dom lower_sum_set(r(#)f) by A25,INTEGRA1:def 12;
+A27:         D in dom lower_sum_set(f) by A25,INTEGRA1:def 12;
+               (lower_sum_set(r(#)f)).D = lower_sum(r(#)
+f,D) by A26,INTEGRA1:def 12
+              .= r*lower_sum(f,D) by A14,A15,Th29
+              .= r*(lower_sum_set(f)).D by A27,INTEGRA1:def 12
+              .= (r(#)(lower_sum_set(f))).D by A11,RFUNCT_1:73;
+              hence thesis;
+           end;
+           hence thesis by A23,A24,FUNCT_1:9;
+         end;
+A28:     upper_integral(r(#)f) = inf rng(r(#)
+upper_sum_set(f)) by A16,INTEGRA1:def 15
+          .= inf(r*(rng(upper_sum_set(f)))) by A7,Th17
+          .= r*inf(rng(upper_sum_set(f))) by A8,A9,A15,Th15
+          .= r*upper_integral(f) by INTEGRA1:def 15;
+           lower_integral(r(#)f) = sup rng(r(#)
+lower_sum_set(f)) by A22,INTEGRA1:def 16
+          .= sup(r*(rng(lower_sum_set(f)))) by A12,Th17
+          .= r*sup(rng(lower_sum_set(f))) by A9,A13,A15,Th13
+          .= r*lower_integral(f) by INTEGRA1:def 16
+          .= r*upper_integral(f) by A2,INTEGRA1:def 17;
+         hence upper_integral(r(#)f) = lower_integral(r(#)f) by A28;
+         thus upper_integral(r(#)f) = r*integral(f) by A28,INTEGRA1:def 18;
+       suppose A29:r < 0;
+A30:     upper_sum_set(r(#)f) = r(#)lower_sum_set(f)
+         proof
+A31:      divs A = dom upper_sum_set(r(#)f) by INTEGRA1:def 11;
+A32:      divs A = dom(lower_sum_set(f)) by INTEGRA1:def 12
+            .= dom(r(#)lower_sum_set(f)) by SEQ_1:def 6;
+             for D be set st D in divs A holds
+           (upper_sum_set(r(#)f)).D = (r(#)(lower_sum_set(f))).D
+           proof
+             let D be set; assume A33:D in divs A;
+             then reconsider D as Element of divs A;
+A34:        D in dom upper_sum_set(r(#)f) by A33,INTEGRA1:def 11;
+A35:        D in dom lower_sum_set(f) by A33,INTEGRA1:def 12;
+               (upper_sum_set(r(#)f)).D=upper_sum(r(#)f,D) by A34,INTEGRA1:def
+11
+              .= r*lower_sum(f,D) by A14,A29,Th30
+              .= r*(lower_sum_set(f)).D by A35,INTEGRA1:def 12
+              .= (r(#)(lower_sum_set(f))).D by A11,RFUNCT_1:73;
+             hence thesis;
+           end;
+           hence thesis by A31,A32,FUNCT_1:9;
+         end;
+A36:     lower_sum_set(r(#)f) = r(#)upper_sum_set(f)
+         proof
+A37:       divs A = dom lower_sum_set(r(#)f) by INTEGRA1:def 12;
+A38:       divs A = dom(upper_sum_set(f)) by INTEGRA1:def 11
+            .= dom(r(#)upper_sum_set(f)) by SEQ_1:def 6;
+             for D be set st D in divs A holds
+           (lower_sum_set(r(#)f)).D = (r(#)(upper_sum_set(f))).D
+           proof
+             let D be set; assume A39:D in divs A;
+             then reconsider D as Element of divs A;
+A40:         D in dom lower_sum_set(r(#)f) by A39,INTEGRA1:def 12;
+A41:         D in dom upper_sum_set(f) by A39,INTEGRA1:def 11;
+               (lower_sum_set(r(#)f)).D=lower_sum(r(#)f,D) by A40,INTEGRA1:def
+12
+              .= r*upper_sum(f,D) by A14,A29,Th28
+              .= r*(upper_sum_set(f)).D by A41,INTEGRA1:def 11
+              .= (r(#)(upper_sum_set(f))).D by A6,RFUNCT_1:73;
+              hence thesis;
+           end;
+           hence thesis by A37,A38,FUNCT_1:9;
+         end;
+A42:     upper_integral(r(#)f) = inf rng(r(#)
+lower_sum_set(f)) by A30,INTEGRA1:def 15
+          .= inf(r*(rng(lower_sum_set(f)))) by A12,Th17
+          .= r*sup(rng(lower_sum_set(f))) by A9,A13,A29,Th14
+          .= r*lower_integral(f) by INTEGRA1:def 16;
+           lower_integral(r(#)f) = sup rng(r(#)
+upper_sum_set(f)) by A36,INTEGRA1:def 16
+          .= sup(r*(rng(upper_sum_set(f)))) by A7,Th17
+          .= r*inf(rng(upper_sum_set(f))) by A8,A9,A29,Th16
+          .= r*upper_integral(f) by INTEGRA1:def 15
+          .= r*lower_integral(f) by A2,INTEGRA1:def 17;
+         hence upper_integral(r(#)f) = lower_integral(r(#)f) by A42;
+           upper_integral(r(#)f) = r*upper_integral(f) by A2,A42,INTEGRA1:def
+17
+          .= r*integral(f) by INTEGRA1:def 18;
+         hence upper_integral(r(#)f) = r*integral(f);
+     end;
+     hence thesis;
+   end;
+   hence thesis by A3,A4,INTEGRA1:def 17,def 18;
+end;
+
+begin :: Monotonicity of Integral
+
+theorem Th32:for A be closed-interval Subset of REAL,
+f be Function of A,REAL st f is_bounded_on A &
+f is_integrable_on A &(for x st x in A holds f.x >= 0) holds
+integral(f) >= 0
+proof
+   let A be closed-interval Subset of REAL;
+   let f be Function of A,REAL;
+   assume A1:f is_bounded_on A & f is_integrable_on A &
+   (for x st x in A holds f.x >= 0);
+A2:upper_integral(f) = inf rng upper_sum_set(f) by INTEGRA1:def 15;
+     dom upper_sum_set(f) is non empty by INTEGRA1:def 11;
+then A3:rng upper_sum_set(f) is non empty by RELAT_1:65;
+     for a be real number st a in rng upper_sum_set(f) holds a >= 0
+   proof
+     let a be real number; assume a in rng upper_sum_set(f);
+     then consider D being Element of divs A such that
+A4:  D in dom upper_sum_set(f) & a=(upper_sum_set(f)).D by PARTFUN1:26;
+A5:  a = upper_sum(f,D) by A4,INTEGRA1:def 11
+      .= Sum(upper_volume(f,D)) by INTEGRA1:def 9;
+       for i st i in dom upper_volume(f,D) holds 0 <= upper_volume(f,D).i
+     proof
+       let i;
+        set r = upper_volume(f,D).i;
+       assume i in dom upper_volume(f,D);
+       then i in Seg len upper_volume(f,D) by FINSEQ_1:def 3;
+then A6:   i in Seg len D by INTEGRA1:def 7;
+then A7:    r = (sup (rng (f|divset(D,i))))*vol(divset(D,i)) by INTEGRA1:def 7;
+A8:    vol(divset(D,i)) >= 0 by INTEGRA1:11;
+         sup (rng(f|divset(D,i))) >= 0
+       proof
+A9:     dom(f|divset(D,i)) is non empty Subset of REAL
+         proof
+A10:       dom(f|divset(D,i)) = dom f /\ divset(D,i) by RELAT_1:90;
+A11:       i in dom D by A6,FINSEQ_1:def 3;
+         dom f = A by FUNCT_2:def 1;
+           then divset(D,i) c= dom f by A11,INTEGRA1:10;
+           hence thesis by A10,XBOOLE_1:28;
+         end;
+A12:     rng(f|divset(D,i)) is bounded_above
+         proof
+             f is_bounded_above_on A by A1,RFUNCT_1:def 11;
+then A13:       rng f is bounded_above by INTEGRA1:15;
+             rng(f|divset(D,i)) c= rng f by FUNCT_1:76;
+           hence thesis by A13,RCOMP_1:4;
+         end;
+         consider x such that
+A14:     x in dom(f|divset(D,i)) by A9,SUBSET_1:10;
+           f.x >= 0 by A1,A14;
+then A15:     (f|divset(D,i)).x >= 0 by A14,FUNCT_1:70;
+           (f|divset(D,i)).x in rng(f|divset(D,i)) by A14,FUNCT_1:def 5;
+         hence thesis by A12,A15,SEQ_4:def 4;
+       end;
+       hence thesis by A7,A8,REAL_2:121;
+     end;
+     hence thesis by A5,RVSUM_1:114;
+   end;
+   then upper_integral(f) >= 0 by A2,A3,PSCOMP_1:8;
+   hence thesis by INTEGRA1:def 18;
+end;
+
+theorem Th33:for A be closed-interval Subset of REAL,
+f,g be Function of A,REAL st f is_bounded_on A &
+f is_integrable_on A & g is_bounded_on A &
+g is_integrable_on A holds
+f-g is_integrable_on A & integral(f-g) = integral(f)-integral(g)
+proof
+   let A be closed-interval Subset of REAL;
+   let f,g be Function of A,REAL;
+   assume A1:f is_bounded_on A & f is_integrable_on A
+   & g is_bounded_on A & g is_integrable_on A;
+   -g is total by RFUNCT_1:68;
+then A2:  -g is Function of A,REAL by FUNCT_2:131;
+A3: -g is_bounded_on A by A1,RFUNCT_1:99;
+   -g = (-1)(#)g by RFUNCT_1:38;
+then A4: -g is_integrable_on A & integral(-g) = (-1)*integral(g) by A1,Th31;
+A5:f-g = f+-g by RFUNCT_1:40;
+   hence f-g is_integrable_on A by A1,A2,A3,A4,INTEGRA1:59;
+     integral(f-g)=integral(f)+(-1)*integral(g) by A1,A2,A3,A4,A5,INTEGRA1:59
+    .=integral(f)+-integral(g) by XCMPLX_1:180;
+   hence thesis by XCMPLX_0:def 8;
+end;
+
+theorem for A be closed-interval Subset of REAL,
+f,g be Function of A,REAL st f is_bounded_on A &
+f is_integrable_on A & g is_bounded_on A &
+g is_integrable_on A & (for x st x in A holds f.x >= g.x) holds
+integral(f) >= integral(g)
+proof
+   let A be closed-interval Subset of REAL;
+   let f,g be Function of A,REAL;
+   assume A1:f is_bounded_on A & f is_integrable_on A
+   & g is_bounded_on A & g is_integrable_on A &
+   (for x st x in A holds f.x >= g.x);
+then A2:f-g is_integrable_on A & integral(f-g)=integral(f)-integral(g) by Th33;
+A3:dom g = A by FUNCT_2:def 1;
+A4:dom (f-g)=dom f /\ dom g by SEQ_1:def 4 .= A /\ A by A3,FUNCT_2:def 1
+    .= A;
+A5:for x st x in A holds (f-g).x >= 0
+   proof
+     let x; assume A6:x in A;
+then A7:  (f-g).x = f.x - g.x by A4,SEQ_1:def 4;
+       f.x >= g.x by A1,A6;
+     hence thesis by A7,SQUARE_1:12;
+   end;
+   f-g is total by RFUNCT_1:66;
+then A8: f-g is Function of A,REAL by FUNCT_2:131;
+     f-g is_bounded_on A /\ A by A1,RFUNCT_1:101;
+   then integral(f)-integral(g) >= 0 by A2,A5,A8,Th32;
+   hence thesis by REAL_2:105;
+end;
+
+begin :: Definition of Division Sequence
+
+theorem
+  for A be closed-interval Subset of REAL, f be Function of A,REAL
+st f is_bounded_on A
+holds rng upper_sum_set(f) is bounded_below
+proof
+   let A be closed-interval Subset of REAL;
+   let f be Function of A,REAL;
+   assume that A1:f is_bounded_on A;
+   consider D1 be Element of divs A;
+     for a be real number st a in rng upper_sum_set(f) holds a >= lower_sum(f,
+D1
+)
+   proof
+     let a be real number; assume a in rng upper_sum_set(f);
+     then consider D be Element of divs A such that
+A2:  D in dom upper_sum_set(f) & a = (upper_sum_set(f)).D by PARTFUN1:26;
+       a = upper_sum(f,D) by A2,INTEGRA1:def 11;
+     hence thesis by A1,INTEGRA1:50;
+   end;
+   hence thesis by SEQ_4:def 2;
+end;
+
+theorem
+  for A be closed-interval Subset of REAL, f be Function of A,REAL
+st f is_bounded_on A
+holds rng lower_sum_set(f) is bounded_above
+proof
+   let A be closed-interval Subset of REAL;
+   let f be Function of A,REAL;
+   assume that A1:f is_bounded_on A;
+   consider D1 be Element of divs A;
+     for a be real number st a in rng lower_sum_set(f) holds a <= upper_sum(f,
+D1
+)
+   proof
+     let a be real number; assume a in rng lower_sum_set(f);
+     then consider D be Element of divs A such that
+A2:  D in dom lower_sum_set(f) & a = (lower_sum_set(f)).D by PARTFUN1:26;
+       a = lower_sum(f,D) by A2,INTEGRA1:def 12;
+     hence thesis by A1,INTEGRA1:50;
+   end;
+   hence thesis by SEQ_4:def 1;
+end;
+
+definition let A be closed-interval Subset of REAL;
+ mode DivSequence of A is Function of NAT,divs A;
+end;
+
+definition let A be closed-interval Subset of REAL,
+T be DivSequence of A;
+func delta(T) -> Real_Sequence means
+  for i holds it.i = delta(T.i);
+existence
+ proof
+   deffunc F(Nat)=delta(T.$1);
+   thus ex IT being Real_Sequence st
+  for i holds IT.i = F(i) from ExRealSeq;
+ end;
+uniqueness
+proof
+   let F1,F2 be Real_Sequence such that
+A1:for i holds F1.i = delta(T.i) and
+A2:for i holds F2.i = delta(T.i);
+     for i holds F1.i = F2.i
+   proof
+     let i;
+       F1.i = delta(T.i) by A1 .= F2.i by A2;
+     hence thesis;
+   end;
+   hence thesis by FUNCT_2:113;
+end;
+end;
+
+definition let A be closed-interval Subset of REAL, f be PartFunc of A,REAL,
+T be DivSequence of A;
+func upper_sum(f,T) -> Real_Sequence means
+  for i holds it.i = upper_sum(f,T.i);
+existence
+ proof
+   deffunc F(Nat)=upper_sum(f,T.$1);
+   thus ex IT being Real_Sequence st
+  for i holds IT.i = F(i) from ExRealSeq;
+ end;
+uniqueness
+proof
+   let F1,F2 be Real_Sequence such that
+A1:for i holds F1.i = upper_sum(f,T.i) and
+A2:for i holds F2.i = upper_sum(f,T.i);
+     for i holds F1.i = F2.i
+   proof
+     let i;
+       F1.i = upper_sum(f,T.i) by A1 .= F2.i by A2;
+     hence thesis;
+   end;
+   hence thesis by FUNCT_2:113;
+end;
+
+func lower_sum(f,T) -> Real_Sequence means
+  for i holds it.i = lower_sum(f,T.i);
+existence
+ proof
+   deffunc F(Nat)=lower_sum(f,T.$1);
+   thus ex IT being Real_Sequence st
+  for i holds IT.i = F(i) from ExRealSeq;
+ end;
+uniqueness
+proof
+   let F1,F2 be Real_Sequence such that
+A3:for i holds F1.i = lower_sum(f,T.i) and
+A4:for i holds F2.i = lower_sum(f,T.i);
+     for i holds F1.i = F2.i
+   proof
+     let i;
+       F1.i = lower_sum(f,T.i) by A3 .= F2.i by A4;
+     hence thesis;
+   end;
+   hence thesis by FUNCT_2:113;
+end;
+end;
+
+theorem Th37:for A be closed-interval Subset of REAL,
+D1,D2 be Element of divs A st D1 <= D2 holds
+(for j st j in dom D2 holds ex i st i in dom D1 & divset(D2,j) c= divset(D1,i))
+proof
+   let A be closed-interval Subset of REAL;
+   let D1,D2 be Element of divs A;
+   assume A1:D1 <= D2;
+   let j; assume A2:j in dom D2;
+   defpred P[set] means D2.$1 in rng D1 & D2.$1 >= D2.j;
+   consider X being Subset of dom D2 such that
+A3:for x1 holds x1 in X iff x1 in dom D2 & P[x1]
+   from Subset_Ex;
+   reconsider X as Subset of NAT by XBOOLE_1:1;
+     X is non empty
+   proof
+       ex n st n in dom D2 & D2.n in rng D1 & D2.n >= D2.j
+     proof
+A4:    len D2 in dom D2 & D2.(len D2) in rng D1 & D2.(len D2) >= D2.j
+       proof
+           len D2 <> 0 by FINSEQ_1:25;
+         then len D2 in Seg len D2 by FINSEQ_1:5;
+         hence A5:len D2 in dom D2 by FINSEQ_1:def 3;
+           len D1 <> 0 by FINSEQ_1:25;
+         then len D1 in Seg len D1 by FINSEQ_1:5;
+then A6:      len D1 in dom D1 by FINSEQ_1:def 3;
+           D2.(len D2) = sup A by INTEGRA1:def 2;
+         then D1.(len D1) = D2.(len D2) by INTEGRA1:def 2;
+         hence D2.(len D2) in rng D1 by A6,FUNCT_1:def 5;
+           j in Seg len D2 by A2,FINSEQ_1:def 3;
+         then j <= len D2 by FINSEQ_1:3;
+         hence thesis by A2,A5,GOBOARD2:18;
+       end;
+       take len D2;
+       thus thesis by A4;
+     end;
+     hence thesis by A3;
+   end;
+   then reconsider X as non empty Subset of NAT;
+A7:min X in X by CQC_SIM1:def 8;
+then A8:min X in dom D2 & D2.(min X) in rng D1 & D2.(min X) >= D2.j by A3;
+   then consider i such that
+A9:i in dom D1 & D2.(min X)=D1.i by PARTFUN1:26;
+A10:D1.i >= D2.j by A3,A7,A9;
+A11:divset(D2,j) c= divset(D1,i)
+   proof
+       now per cases;
+       suppose i=1;
+        then inf divset(D1,i) = inf A & sup divset(D1,i) = D1.i
+        by A9,INTEGRA1:def 5;
+then A12:     divset(D1,i) = [.inf A,D1.i .] by INTEGRA1:5;
+          now per cases;
+          suppose j=1;
+           then inf divset(D2,j) = inf A & sup divset(D2,j) = D2.j
+           by A2,INTEGRA1:def 5;
+then A13:        divset(D2,j) = [.inf A,D2.j .] by INTEGRA1:5;
+A14:        inf A in [.inf A,D1.i .]
+           proof
+A15:          D1.i in rng D1 by A9,FUNCT_1:def 5;
+               rng D1 c= A by INTEGRA1:def 2;
+then A16:          D1.i in A by A15;
+               A = [.inf A,sup A.] by INTEGRA1:5;
+             then D1.i in {r:inf A<=r & r<=sup A} by A16,RCOMP_1:def 1;
+             then ex x st x=D1.i & inf A<=x & x<=sup A;
+             then inf A in {r:inf A <= r & r <= D1.i};
+             hence thesis by RCOMP_1:def 1;
+           end;
+             D2.j in [.inf A,D1.i .]
+           proof
+A17:          D2.j in rng D2 by A2,FUNCT_1:def 5;
+               rng D2 c= A by INTEGRA1:def 2;
+then A18:          D2.j in A by A17;
+               A = [.inf A,sup A.] by INTEGRA1:5;
+             then D2.j in {r:inf A<=r & r<=sup A} by A18,RCOMP_1:def 1;
+             then ex x st x=D2.j & inf A<=x & x<=sup A;
+             then D2.j in {r:inf A <= r & r <= D1.i} by A8,A9;
+             hence thesis by RCOMP_1:def 1;
+           end;
+           hence thesis by A12,A13,A14,RCOMP_1:16;
+          suppose A19:j<>1;
+           then inf divset(D2,j) = D2.(j-1) & sup divset(D2,j) = D2.j
+           by A2,INTEGRA1:def 5;
+then A20:        divset(D2,j) = [. D2.(j-1),D2.j .] by INTEGRA1:5;
+A21:        D2.(j-1) in [.inf A,D1.i .]
+           proof
+A22:          j-1 in dom D2 by A2,A19,INTEGRA1:9;
+then A23:          D2.(j-1) in rng D2 by FUNCT_1:def 5;
+               A = [.inf A,sup A.] by INTEGRA1:5;
+then A24:          A = {r:inf A<=r & r<=sup A} by RCOMP_1:def 1;
+               rng D2 c= A by INTEGRA1:def 2;
+             then D2.(j-1) in {r:inf A<=r & r<=sup A} by A23,A24;
+then A25:          ex x st x=D2.(j-1) & inf A <= x & x <= sup A;
+               j <= j+1 by NAT_1:29;
+             then j-1 <= j by REAL_1:86;
+             then D2.(j-1) <= D2.j by A2,A22,GOBOARD2:18;
+             then inf A <= D2.(j-1) & D2.(j-1) <= D1.i by A8,A9,A25,AXIOMS:22;
+             then D2.(j-1) in {r:inf A <= r & r <= D1.i};
+             hence thesis by RCOMP_1:def 1;
+           end;
+             D2.j in [.inf A,D1.i .]
+           proof
+A26:          D2.j in rng D2 by A2,FUNCT_1:def 5;
+               A = [.inf A,sup A.] by INTEGRA1:5;
+then A27:          A = {r:inf A<=r & r<=sup A} by RCOMP_1:def 1;
+               rng D2 c= A by INTEGRA1:def 2;
+             then D2.j in {r:inf A<=r & r<=sup A} by A26,A27;
+             then ex x st x=D2.j & inf A <= x & x <= sup A;
+             then D2.j in {r:inf A <= r & r <= D1.i} by A8,A9;
+             hence thesis by RCOMP_1:def 1;
+           end;
+           hence thesis by A12,A20,A21,RCOMP_1:16;
+        end;
+        hence thesis;
+       suppose A28:i<>1;
+        then inf divset(D1,i) = D1.(i-1) & sup divset(D1,i) = D1.i
+        by A9,INTEGRA1:def 5;
+then A29:     divset(D1,i) = [. D1.(i-1),D1.i .] by INTEGRA1:5;
+A30:     j <> 1
+        proof
+          assume A31:j=1;
+             i in Seg len D1 by A9,FINSEQ_1:def 3;
+then A32:        1 <= i & i <= len D1 by FINSEQ_1:3;
+then A33:        i > 1 by A28,REAL_1:def 5;
+             1 <= 1 & 1 <= len D1 by A32,AXIOMS:22;
+           then 1 in Seg len D1 by FINSEQ_1:3;
+then A34:        1 in dom D1 by FINSEQ_1:def 3;
+then A35:        D1.1 in rng D1 by FUNCT_1:def 5;
+             rng D1 c= rng D2 by A1,INTEGRA1:def 20;
+           then consider n such that
+A36:        n in dom D2 & D1.1 = D2.n by A35,PARTFUN1:26;
+             n in Seg len D2 by A36,FINSEQ_1:def 3;
+then A37:        1 <= n & n <= len D2 by FINSEQ_1:3;
+           then 1 <= len D2 by AXIOMS:22;
+           then 1 in Seg len D2 by FINSEQ_1:3;
+           then 1 in dom D2 by FINSEQ_1:def 3;
+        then D2.j <= D2.n by A31,A36,A37,GOBOARD2:18;
+           then n in X by A3,A35,A36;
+           then n >= min X by CQC_SIM1:def 8;
+           then D1.1 >= D1.i by A7,A9,A36,GOBOARD2:18;
+           hence contradiction by A9,A33,A34,GOBOARD1:def 1;
+        end;
+        then inf divset(D2,j) = D2.(j-1) & sup divset(D2,j) = D2.j
+        by A2,INTEGRA1:def 5;
+then A38:     divset(D2,j) = [. D2.(j-1),D2.j .] by INTEGRA1:5;
+A39:     j-1 in dom D2 by A2,A30,INTEGRA1:9;
+          j <= j+1 by NAT_1:29;
+        then j-1 <= j by REAL_1:86;
+then A40:     D2.(j-1) <= D2.j by A2,A39,GOBOARD2:18;
+then A41:     D2.(j-1) <= D1.i by A10,AXIOMS:22;
+A42:     D1.(i-1) <= D2.(j-1)
+        proof
+          assume A43:D1.(i-1) > D2.(j-1);
+A44:       rng D1 c= rng D2 by A1,INTEGRA1:def 20;
+A45:       i-1 in dom D1 by A9,A28,INTEGRA1:9;
+then A46:       D1.(i-1) in rng D1 by FUNCT_1:def 5;
+          then consider n such that
+A47:       n in dom D2 & D1.(i-1) = D2.n by A44,PARTFUN1:26;
+            n > j-1 by A39,A43,A47,GOBOARD2:18;
+          then n+1 > j by REAL_1:84;
+          then n >= j by NAT_1:38;
+          then D1.(i-1) >= D2.j by A2,A47,GOBOARD2:18;
+          then n in X by A3,A46,A47;
+          then n >= min X by CQC_SIM1:def 8;
+          then D1.(i-1) >= D1.i by A7,A9,A47,GOBOARD2:18;
+          then i-1 >= i by A9,A45,GOBOARD1:def 1;
+then A48:      i >= i+1 by REAL_1:84;
+            i <= i+1 by NAT_1:29;
+          then i = i+1 by A48,AXIOMS:21;
+          then i-i=1 by XCMPLX_1:26; hence contradiction by XCMPLX_1:14;
+        end;
+        then D2.(j-1) in {r:D1.(i-1)<=r & r<=D1.i} by A41;
+then A49:     D2.(j-1) in [. D1.(i-1),D1.i .] by RCOMP_1:def 1;
+          D1.(i-1) <= D2.j & D2.j <= D1.i by A3,A7,A9,A40,A42,AXIOMS:22;
+        then D2.j in {r:D1.(i-1) <= r & r <= D1.i};
+        then D2.j in [. D1.(i-1),D1.i .] by RCOMP_1:def 1;
+        hence thesis by A29,A38,A49,RCOMP_1:16;
+     end;
+     hence thesis;
+   end;
+   take i;
+   thus thesis by A9,A11;
+end;
+
+theorem for X,Y be finite non empty Subset of REAL st
+X c= Y holds max X <= max Y
+proof
+   let X,Y be finite non empty Subset of REAL;
+   assume A1:X c= Y;
+     max X in X by PRE_CIRC:def 1;
+   hence thesis by A1,PRE_CIRC:def 1;
+end;
+
+theorem Th39:for X,Y be finite non empty Subset of REAL st
+(ex y st y in Y & max X <= y) holds max X <= max Y
+proof
+   let X,Y be finite non empty Subset of REAL;
+   given y such that A1:y in Y & max X <= y;
+     y <= max Y by A1,PRE_CIRC:def 1;
+   hence thesis by A1,AXIOMS:22;
+end;
+
+theorem Th40:for A,B be closed-interval Subset of REAL st
+A c= B holds vol(A) <= vol(B)
+proof
+   let A,B be closed-interval Subset of REAL;
+   assume A1:A c= B;
+     B is bounded_above & B is bounded_below by INTEGRA1:3;
+then A2:inf A >= inf B & sup A <= sup B by A1,PSCOMP_1:12,13;
+     vol(A) = sup A - inf A by INTEGRA1:def 6;
+   then sup B >= vol(A) + inf A by A2,XCMPLX_1:27;
+   then sup B - vol(A) >= inf A by REAL_1:84;
+   then sup B - vol(A) >= inf B by A2,AXIOMS:22;
+   then sup B - inf B >= vol(A) by REAL_2:165;
+   hence thesis by INTEGRA1:def 6;
+end;
+
+theorem for A be closed-interval Subset of REAL,
+D1,D2 be Element of divs A st D1 <= D2 holds delta(D1) >= delta(D2)
+proof
+   let A be closed-interval Subset of REAL;
+   let D1,D2 be Element of divs A;
+   assume A1:D1 <= D2;
+A2:delta(D2) = max
+rng upper_volume(chi(A,A),D2) by INTEGRA1:def 19;
+   then delta(D2) in rng upper_volume(chi(A,A),D2) by PRE_CIRC:def 1;
+   then consider j such that
+A3:j in dom upper_volume(chi(A,A),D2) & delta(D2) = upper_volume(chi(A,A),D2).j
+   by PARTFUN1:26;
+     j in Seg len upper_volume(chi(A,A),D2) by A3,FINSEQ_1:def 3;
+then A4:j in Seg len D2 by INTEGRA1:def 7;
+then A5:j in dom D2 by FINSEQ_1:def 3;
+A6:delta(D2) = vol(divset(D2,j)) by A3,A4,INTEGRA1:22;
+   consider i such that
+A7:i in dom D1 & divset(D2,j) c= divset(D1,i) by A1,A5,Th37;
+A8:i in Seg len D1 by A7,FINSEQ_1:def 3;
+   then i in Seg len upper_volume(chi(A,A),D1) by INTEGRA1:def 7;
+then A9:i in dom upper_volume(chi(A,A),D1) by FINSEQ_1:def 3;
+A10:delta(D2) <= vol(divset(D1,i)) by A6,A7,Th40;
+     vol(divset(D1,i)) = upper_volume(chi(A,A),D1).i by A8,INTEGRA1:22;
+   then vol(divset(D1,i)) in rng upper_volume(chi(A,A),D1)
+       by A9,FUNCT_1:def 5;
+   then delta(D2) <= max rng upper_volume(chi(A,A),D1) by A2,A10,Th39;
+   hence thesis by INTEGRA1:def 19;
+end;

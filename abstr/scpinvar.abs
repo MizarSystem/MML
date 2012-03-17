@@ -1,0 +1,339 @@
+:: Justifying the Correctness of Fibonacci Sequence and Euclide
+:: Algorithm by Loop Invariant
+::  by JingChao Chen
+::
+:: Received June 14, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_3, AMI_1, SCMPDS_2, SCMPDS_4, ARYTM_3, ARYTM_1, NAT_1, INT_1,
+      ABSVALUE, INT_2, SCMFSA6A, FUNCT_1, SCMPDS_3, SCMFSA_7, RELAT_1, CARD_1,
+      CARD_3, SQUARE_1, AMI_2, SCMPDS_5, SCMPDS_8, SCMFSA6B, SCMFSA_9,
+      UNIALG_2, SCMFSA7B, SCMP_GCD, SEMI_AF1, FINSEQ_1, SCPISORT, RLVECT_1,
+      SFMASTR2, PRE_FF, FUNCT_4, RELOC, FUNCT_7, SCM_1, BOOLE, AMI_5, SCMFSA8B,
+      SCPINVAR;
+ notation XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, GROUP_1, RELAT_1,
+      FUNCT_1, FUNCT_4, INT_1, INT_2, NAT_1, STRUCT_0, AMI_1, AMI_2, AMI_3,
+      FUNCT_7, SCMPDS_2, SCMPDS_3, CARD_1, SCMPDS_4, SCM_1, SCMPDS_6, SCMP_GCD,
+      SCMPDS_5, SCMPDS_8, SQUARE_1, FUNCT_2, AMI_5, CARD_3, DOMAIN_1, FINSEQ_1,
+      TREES_4, WSIERP_1, PRE_FF, SCPISORT;
+ constructors REAL_1, DOMAIN_1, AMI_5, RECDEF_1, SCMPDS_4, SCM_1, SCMPDS_6,
+      SCMP_GCD, SCMPDS_8, SCMPDS_5, SQUARE_1, PRE_FF, SCPISORT, INT_2, NAT_1,
+      WSIERP_1, MEMBERED, RAT_1;
+ clusters AMI_1, INT_1, FUNCT_1, SCMPDS_2, SCMFSA_4, SCMPDS_4, SCMPDS_6,
+      SCMPDS_8, SCMPDS_5, RELSET_1, WSIERP_1, FRAENKEL, MEMBERED, NUMBERS,
+      ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve m,n for Nat,
+        i,j for Instruction of SCMPDS,
+        I for Program-block,
+        a for Int_position;
+
+theorem :: SCPINVAR:1
+ for n,m,l be Nat st n divides m & n divides l holds n divides m-l;
+
+theorem :: SCPINVAR:2
+   m divides n iff m divides (n qua Integer);
+
+theorem :: SCPINVAR:3
+  m hcf n= m hcf abs(n-m);
+
+theorem :: SCPINVAR:4
+  for a,b be Integer st a>=0 & b>=0 holds a gcd b = a gcd (b-a);
+
+theorem :: SCPINVAR:5
+   (i ';' j ';' I).inspos 0=i & (i ';' j ';' I).inspos 1=j;
+
+theorem :: SCPINVAR:6
+ for a,b be Int_position holds
+ (ex f be Function of product the Object-Kind of SCMPDS,NAT st
+     for s being State of SCMPDS holds
+ (s.a = s.b implies f.s =0) & (s.a <> s.b implies f.s=max(abs(s.a),abs(s.b))));
+
+theorem :: SCPINVAR:7
+ ex f be Function of product the Object-Kind of SCMPDS,NAT st
+     for s being State of SCMPDS holds
+ (s.a >= 0 implies f.s =0) & (s.a < 0 implies f.s=-s.a);
+
+begin :: Computing directly the result of "while<0" program by loop-invariant
+
+scheme WhileLEnd { F(State of SCMPDS)-> Nat,
+ s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
+ a() -> Int_position,i() -> Integer,P[set]}:
+   F(Dstate IExec(while<0(a(),i(),I()),s()))=0 &
+   P[Dstate IExec(while<0(a(),i(),I()),s())]
+provided
+ card I() > 0 and
+ for t be State of SCMPDS st P[Dstate t] holds
+    F(Dstate(t))=0 iff t.DataLoc(s().a(),i()) >= 0 and
+ P[Dstate s()] and
+ for t be State of SCMPDS st
+       P[Dstate t] & t.a()=s().a() & t.DataLoc(s().a(),i()) < 0
+    holds IExec(I(),t).a()=t.a() & I() is_closed_on t &
+        I() is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) &
+        P[Dstate(IExec(I(),t))];
+
+begin :: An Example : Summing directly n integers by loop-invariant
+
+:: sum=Sum=x1+x2+...+xn
+
+definition
+ let n, p0 be Nat;
+ func sum(n,p0) -> Program-block equals
+:: SCPINVAR:def 1
+
+  (GBP:=0) ';' (intpos 1:=0) ';'
+  (intpos 2:=-n) ';' (intpos 3:=(p0+1)) ';'
+  while<0(GBP,2,AddTo(GBP,1,intpos 3,0) ';'
+      AddTo(GBP,2,1) ';' AddTo(GBP,3,1));
+end;
+
+theorem :: SCPINVAR:8         :: SCMPDS_7:73
+  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+  a,b,c being Int_position,n,i,p0 be Nat,f be FinSequence of INT
+  st card I >0 & f is_FinSequence_on s,p0 & len f=n & s.b=0 & s.a=0 &
+  s.intpos i=-n & s.c = p0+1 &
+  (for t be State of SCMPDS st
+       (ex g be FinSequence of INT st g is_FinSequence_on s,p0 &
+       len g=t.intpos i+n & t.b=Sum g & t.c = p0+1+len g) & t.a=0 &
+       t.intpos i < 0 & for i be Nat st i > p0 holds t.intpos i=s.intpos i
+    holds IExec(I,t).a=0 & I is_closed_on t & I is_halting_on t &
+       IExec(I,t).intpos i=t.intpos i+1 &
+       (ex g be FinSequence of INT st g is_FinSequence_on s,p0 &
+       len g=t.intpos i+n+1 & IExec(I,t).c = p0+1+len g &
+       IExec(I,t).b=Sum g) &
+       for i be Nat st i > p0 holds IExec(I,t).intpos i=s.intpos i)
+holds IExec(while<0(a,i,I),s).b=Sum f & while<0(a,i,I) is_closed_on s &
+      while<0(a,i,I) is_halting_on s;
+
+theorem :: SCPINVAR:9
+    for s being State of SCMPDS,n,p0 be Nat,f be FinSequence of INT
+  st p0 >= 3 & f is_FinSequence_on s,p0 & len f=n
+  holds IExec(sum(n,p0),s).intpos 1=Sum f & sum(n,p0) is parahalting;
+
+begin :: Computing directly the result of "while>0" program by loop-invariant
+
+scheme WhileGEnd { F(State of SCMPDS)-> Nat,
+ s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
+ a() -> Int_position,i() -> Integer,P[set]}:
+   F(Dstate IExec(while>0(a(),i(),I()),s()))=0 &
+   P[Dstate IExec(while>0(a(),i(),I()),s())]
+provided
+ card I() > 0 and
+ for t be State of SCMPDS st P[Dstate t] holds
+    F(Dstate(t))=0 iff t.DataLoc(s().a(),i()) <= 0 and
+ P[Dstate s()] and
+ for t be State of SCMPDS st
+       P[Dstate t] & t.a()=s().a() & t.DataLoc(s().a(),i()) > 0
+    holds IExec(I(),t).a()=t.a() & I() is_closed_on t &
+        I() is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) &
+        P[Dstate(IExec(I(),t))];
+
+begin :: An Example : Computing directly Fibonacci sequence by loop-invariant
+
+definition
+ let n be Nat;
+ func Fib-macro(n) -> Program-block equals
+:: SCPINVAR:def 2
+
+  (GBP:=0) ';' (intpos 1:=0) ';'
+  (intpos 2:=1) ';' (intpos 3:=n) ';'
+  while>0(GBP,3,((GBP,4):=(GBP,2)) ';' AddTo(GBP,2,GBP,1) ';'
+      ((GBP,1):=(GBP,4)) ';' AddTo(GBP,3,-1));
+end;
+
+theorem :: SCPINVAR:10
+  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+  a,f0,f1 being Int_position,n,i be Nat
+  st card I >0 & s.a=0 & s.f0=0 & s.f1=1 & s.intpos i=n &
+  (for t be State of SCMPDS,k be Nat st
+     n=t.intpos i+k & t.f0=Fib k & t.f1 = Fib (k+1) & t.a=0 & t.intpos i > 0
+    holds IExec(I,t).a=0 & I is_closed_on t & I is_halting_on t &
+     IExec(I,t).intpos i=t.intpos i-1 &
+     IExec(I,t).f0=Fib (k+1) & IExec(I,t).f1 = Fib (k+1+1))
+  holds
+    IExec(while>0(a,i,I),s).f0=Fib n & IExec(while>0(a,i,I),s).f1=Fib (n+1) &
+    while>0(a,i,I) is_closed_on s & while>0(a,i,I) is_halting_on s;
+
+theorem :: SCPINVAR:11
+    for s being State of SCMPDS,n be Nat
+  holds IExec(Fib-macro(n),s).intpos 1=Fib n &
+  IExec(Fib-macro(n),s).intpos 2=Fib (n+1) & Fib-macro(n) is parahalting;
+
+begin :: The construction of while<>0 loop program
+:: while (a,i)<>0 do I
+definition
+ let a be Int_position, i be Integer;
+ let I be Program-block;
+ func while<>0(a,i,I) -> Program-block equals
+:: SCPINVAR:def 3
+
+   (a,i)<>0_goto 2 ';' goto (card I+2) ';' I ';' goto -(card I+2);
+end;
+
+begin :: The basic property of "while<>0" program
+
+theorem :: SCPINVAR:12
+ for a be Int_position,i be Integer,I be Program-block holds
+  card while<>0(a,i,I)= card I +3;
+
+theorem :: SCPINVAR:13
+ for a be Int_position,i be Integer,m be Nat,I be Program-block holds
+   m < card I+3 iff inspos m in dom while<>0(a,i,I);
+
+theorem :: SCPINVAR:14
+  for a be Int_position,i be Integer,I be Program-block holds
+     inspos 0 in dom while<>0(a,i,I) & inspos 1 in dom while<>0(a,i,I);
+
+theorem :: SCPINVAR:15
+ for a be Int_position,i be Integer,I be Program-block holds
+    while<>0(a,i,I).inspos 0=(a,i)<>0_goto 2 &
+    while<>0(a,i,I).inspos 1= goto (card I +2) &
+    while<>0(a,i,I).inspos (card I+2)=goto -(card I+2);
+
+theorem :: SCPINVAR:16
+ for s being State of SCMPDS,I being Program-block,a being Int_position,
+ i being Integer st s.DataLoc(s.a,i) = 0 holds
+ while<>0(a,i,I) is_closed_on s & while<>0(a,i,I) is_halting_on s;
+
+theorem :: SCPINVAR:17
+ for s being State of SCMPDS,I being Program-block,a,c being Int_position,
+ i being Integer st s.DataLoc(s.a,i) = 0 holds
+ IExec(while<>0(a,i,I),s) = s +* Start-At inspos (card I + 3);
+
+theorem :: SCPINVAR:18
+   for s being State of SCMPDS,I being Program-block,a being Int_position,
+ i being Integer st s.DataLoc(s.a,i) = 0
+ holds IC IExec(while<>0(a,i,I),s) = inspos (card I + 3);
+
+theorem :: SCPINVAR:19
+ for s being State of SCMPDS,I being Program-block,a,b being Int_position,
+ i being Integer st s.DataLoc(s.a,i) = 0
+ holds IExec(while<>0(a,i,I),s).b = s.b;
+
+definition
+   let I be shiftable Program-block,
+   a be Int_position,i be Integer;
+   cluster while<>0(a,i,I) -> shiftable;
+end;
+
+definition
+   let I be No-StopCode Program-block,
+   a be Int_position,i be Integer;
+   cluster while<>0(a,i,I) -> No-StopCode;
+end;
+
+begin :: Computing directly the result of "while<>0" program by loop-invariant
+
+scheme WhileNHalt { F(State of SCMPDS)-> Nat,
+ s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
+ a() -> Int_position,i() -> Integer,P[set]}:
+   while<>0(a(),i(),I()) is_closed_on s() &
+   while<>0(a(),i(),I()) is_halting_on s()
+provided
+ card I() > 0 and
+ (for t be State of SCMPDS st P[Dstate t] & F(Dstate(t))=0 holds
+    t.DataLoc(s().a(),i()) = 0) and
+ P[Dstate s()] and
+ for t be State of SCMPDS st
+       P[Dstate t] & t.a()=s().a() & t.DataLoc(s().a(),i()) <> 0
+    holds IExec(I(),t).a()=t.a() & I() is_closed_on t &
+        I() is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) &
+        P[Dstate(IExec(I(),t))];
+
+scheme WhileNExec { F(State of SCMPDS)-> Nat,
+ s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
+ a() -> Int_position,i() -> Integer,P[set]}:
+   IExec(while<>0(a(),i(),I()),s()) =
+   IExec(while<>0(a(),i(),I()),IExec(I(),s()))
+provided
+ card I() > 0 and
+ s().DataLoc(s().a(),i()) <> 0 and
+ (for t be State of SCMPDS st P[Dstate t] & F(Dstate(t))=0 holds
+    t.DataLoc(s().a(),i()) = 0) and
+ P[Dstate s()] and
+ for t be State of SCMPDS st
+       P[Dstate t] & t.a()=s().a() & t.DataLoc(s().a(),i()) <> 0
+    holds IExec(I(),t).a()=t.a() & I() is_closed_on t &
+        I() is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) &
+        P[Dstate(IExec(I(),t))];
+
+scheme WhileNEnd { F(State of SCMPDS)-> Nat,
+ s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
+ a() -> Int_position,i() -> Integer,P[set]}:
+   F(Dstate IExec(while<>0(a(),i(),I()),s()))=0 &
+   P[Dstate IExec(while<>0(a(),i(),I()),s())]
+provided
+ card I() > 0 and
+ for t be State of SCMPDS st P[Dstate t] holds
+    F(Dstate(t))=0 iff t.DataLoc(s().a(),i()) = 0 and
+ P[Dstate s()] and
+ for t be State of SCMPDS st
+       P[Dstate t] & t.a()=s().a() & t.DataLoc(s().a(),i()) <> 0
+    holds IExec(I(),t).a()=t.a() & I() is_closed_on t &
+        I() is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) &
+        P[Dstate(IExec(I(),t))];
+
+theorem :: SCPINVAR:20
+ for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+ a,b,c be Int_position,i,d be Integer st
+ card I > 0 & s.a=d & s.b > 0 & s.c > 0 & s.DataLoc(d,i)=s.b-s.c &
+   (for t be State of SCMPDS st
+    t.b > 0 & t.c > 0 & t.a=d & t.DataLoc(d,i)=t.b-t.c & t.b<>t.c
+  holds IExec(I,t).a=d & I is_closed_on t & I is_halting_on t &
+   (t.b > t.c implies IExec(I,t).b=t.b-t.c & IExec(I,t).c = t.c) &
+   (t.b <= t.c implies IExec(I,t).c = t.c-t.b & IExec(I,t).b=t.b) &
+   IExec(I,t).DataLoc(d,i)=IExec(I,t).b-IExec(I,t).c)
+ holds
+    while<>0(a,i,I) is_closed_on s & while<>0(a,i,I) is_halting_on s &
+    (s.DataLoc(s.a,i) <> 0 implies
+    IExec(while<>0(a,i,I),s) =IExec(while<>0(a,i,I),IExec(I,s)));
+
+begin :: An example: computing Greatest Common Divisor(Euclide algorithm)
+::   by loop-invariant
+
+:: gcd(x,y)     < x=(GBP,1) y=(GBP,2),(GBP,3)=x-y >
+:: while x<>y do
+:: if x>y then x=x-y else y=y-x
+
+definition
+ func GCD-Algorithm -> Program-block equals
+:: SCPINVAR:def 4
+
+     (GBP:=0) ';' (GBP,3):=(GBP,1) ';'
+     SubFrom(GBP,3,GBP,2) ';'
+     while<>0(GBP,3,
+           if>0(GBP,3,Load SubFrom(GBP,1,GBP,2),
+           Load SubFrom(GBP,2,GBP,1)) ';'
+           (GBP,3):=(GBP,1) ';' SubFrom(GBP,3,GBP,2)
+     );
+end;
+
+theorem :: SCPINVAR:21
+ for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+ a,b,c be Int_position,i,d be Integer st
+ card I > 0 & s.a=d & s.b > 0 & s.c > 0 & s.DataLoc(d,i)=s.b-s.c &
+   (for t be State of SCMPDS st
+    t.b > 0 & t.c > 0 & t.a=d & t.DataLoc(d,i)=t.b-t.c & t.b<>t.c
+  holds IExec(I,t).a=d & I is_closed_on t & I is_halting_on t &
+   (t.b > t.c implies IExec(I,t).b=t.b-t.c & IExec(I,t).c = t.c) &
+   (t.b <= t.c implies IExec(I,t).c = t.c-t.b & IExec(I,t).b=t.b) &
+   IExec(I,t).DataLoc(d,i)=IExec(I,t).b-IExec(I,t).c)
+ holds
+     IExec(while<>0(a,i,I),s).b = s.b gcd s.c &
+     IExec(while<>0(a,i,I),s).c = s.b gcd s.c;
+
+theorem :: SCPINVAR:22
+   card GCD-Algorithm=12;
+
+theorem :: SCPINVAR:23      :: SCMP_GCD:18
+    for s being State of SCMPDS,x, y being Integer st
+  s.intpos 1 = x & s.intpos 2 = y & x > 0 & y > 0 holds
+  IExec(GCD-Algorithm,s).intpos 1 = x gcd y &
+  IExec(GCD-Algorithm,s).intpos 2 = x gcd y &
+  GCD-Algorithm is_closed_on s & GCD-Algorithm is_halting_on s;

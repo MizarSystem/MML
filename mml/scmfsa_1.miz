@@ -1,0 +1,1244 @@
+:: An Extension of { \bf SCM }
+::  by Andrzej Trybulec , Yatsuka Nakamura and Piotr Rudnicki
+::
+:: Received February 3, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary INT_1, AMI_2, BOOLE, GR_CY_1, TARSKI, FINSEQ_1, AMI_5, MCART_1,
+      FUNCT_1, FUNCOP_1, FUNCT_4, CAT_1, RELAT_1, AMI_3, AMI_1, ORDINAL2,
+      CARD_3, ZF_REFLE, PBOOLE, ABSVALUE, FINSEQ_2, FUNCT_2, FUNCT_5, SCMFSA_1,
+      FINSEQ_4, ARYTM;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL2, ORDINAL1, NUMBERS,
+      XREAL_0, NAT_1, MCART_1, ABSVALUE, PBOOLE, RELAT_1, FUNCT_1, FUNCT_2,
+      FRAENKEL, FUNCOP_1, INT_1, FINSEQ_1, FUNCT_4, CAT_2, FINSOP_1, CARD_3,
+      GR_CY_1, CQC_LANG, FINSEQ_4, AMI_1, AMI_2, AMI_3, FUNCT_7;
+ constructors DOMAIN_1, CAT_2, NAT_1, FINSOP_1, FUNCT_7, AMI_2, AMI_3,
+      FINSEQ_4, MEMBERED;
+ clusters NUMBERS, SUBSET_1, FUNCT_1, INT_1, AMI_1, RELSET_1, AMI_3, PBOOLE,
+      FINSEQ_1, AMI_2, FUNCOP_1, CQC_LANG, ARYTM_3, XBOOLE_0, FRAENKEL,
+      ZFMISC_1, ORDINAL2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, XBOOLE_0;
+ theorems ZFMISC_1, FUNCT_2, TARSKI, CAT_2, CQC_LANG, GR_CY_1, INT_1, CARD_3,
+      FINSEQ_1, FINSEQ_4, MCART_1, FUNCT_4, AMI_1, FUNCOP_1, RELAT_1, FUNCT_1,
+      AMI_3, AMI_5, INT_2, FINSEQ_2, PRE_CIRC, PBOOLE, NAT_1, AMI_2, FUNCT_7,
+      RELSET_1, ORDINAL2, XBOOLE_0, XBOOLE_1;
+ schemes FUNCT_2;
+
+begin
+
+ reserve x,y,z for set,
+         k for Nat;
+
+definition
+ func SCM+FSA-Data-Loc -> Subset of INT equals
+:Def1:  SCM-Data-Loc;
+  coherence by INT_1:14,XBOOLE_1:1;
+ func SCM+FSA-Data*-Loc -> Subset of INT equals
+:Def2:  INT \ NAT;
+  coherence by XBOOLE_1:36;
+ func SCM+FSA-Instr-Loc -> Subset of INT equals
+:Def3:  SCM-Instr-Loc;
+  coherence by INT_1:14,XBOOLE_1:1;
+end;
+
+definition
+ cluster SCM+FSA-Data*-Loc -> non empty;
+ coherence
+  proof not INT c= NAT by AMI_1:1,INT_1:14,XBOOLE_0:def 10;
+   hence thesis by Def2,XBOOLE_1:37;
+  end;
+ cluster SCM+FSA-Data-Loc -> non empty;
+ coherence by Def1;
+ cluster SCM+FSA-Instr-Loc -> non empty;
+ coherence by Def3;
+end;
+
+reserve J,K for Element of Segm 13,
+        a for Element of SCM+FSA-Instr-Loc,
+        b,b1,b2,c,c1,c2 for Element of SCM+FSA-Data-Loc,
+        f,f1,f2 for Element of SCM+FSA-Data*-Loc;
+
+definition
+ func SCM+FSA-Instr -> Subset of [: Segm 13, (union {INT,INT*} \/ INT)* :]
+ equals
+:Def4: SCM-Instr \/ { [J,<*c,f,b*>] : J in {9,10} } \/
+                { [K,<*c1,f1*>] : K in {11,12} };
+ coherence
+  proof
+A1: INT c= union {INT,INT*} \/ INT by XBOOLE_1:7;
+A2: { [J,<*c,f,b*>] : J in {9,10} } c= [: Segm 13, (union {INT,INT*} \/
+ INT)* :]
+     proof let x be set;
+      assume x in { [J,<*c,f,b*>] : J in {9,10} };
+       then consider J,c,b,f such that
+A3:       x = [J,<*c,f,b*>] & J in {9,10};
+       reconsider c,f,b as Element of union {INT,INT*} \/ INT
+              by A1,TARSKI:def 3;
+         <*c,f,b*> in (union {INT,INT*} \/ INT)* by FINSEQ_1:def 11;
+      hence x in [: Segm 13, (union {INT,INT*} \/ INT)*
+ :] by A3,ZFMISC_1:106;
+     end;
+A4: { [K,<*c1,f1*>] : K in
+ {11,12} } c= [: Segm 13, (union {INT,INT*} \/ INT)* :]
+     proof let x be set;
+      assume x in { [K,<*c,f*>] : K in {11,12} };
+       then consider K,c,f such that
+A5:       x = [K,<*c,f*>] & K in { 11,12 };
+       reconsider c,f as Element of union {INT,INT*} \/ INT
+            by A1,TARSKI:def 3;
+         <*c,f*> in (union {INT,INT*} \/ INT)* by FINSEQ_1:def 11;
+      hence x in [: Segm 13, (union {INT,INT*} \/ INT)*
+ :] by A5,ZFMISC_1:106;
+     end;
+A6:  Segm 9 c= Segm 13 by FUNCT_7:17;
+      {INT} c= {INT,INT*} by ZFMISC_1:12;
+    then union {INT} c= union {INT,INT*} by ZFMISC_1:95;
+    then union {INT} \/ NAT c= union {INT,INT*} \/ INT by INT_1:14,XBOOLE_1:13
+;
+    then (union {INT} \/ NAT)* c= (union {INT,INT*} \/ INT)* by FUNCT_7:21;
+    then [: Segm 9, (union {INT} \/ NAT)* :]
+        c= [: Segm 13, (union {INT,INT*} \/ INT)* :] by A6,ZFMISC_1:119;
+    then SCM-Instr c= [: Segm 13, (union {INT,INT*} \/ INT)* :] by XBOOLE_1:1;
+    then SCM-Instr \/ { [J,<*c,f,b*>] : J in {9,10} }
+      c= [: Segm 13, (union {INT,INT*} \/ INT)* :] by A2,XBOOLE_1:8;
+   hence thesis by A4,XBOOLE_1:8;
+  end;
+end;
+
+canceled;
+
+theorem Th2:
+ SCM-Instr c= SCM+FSA-Instr
+proof
+A1: SCM-Instr \/ { [J,<*c,f,b*>] : J in {9,10} } c= SCM+FSA-Instr by Def4,
+XBOOLE_1:7;
+    SCM-Instr c= SCM-Instr \/ { [J,<*c,f,b*>] : J in {9,10} } by XBOOLE_1:7;
+ hence thesis by A1,XBOOLE_1:1;
+end;
+
+definition
+ cluster SCM+FSA-Instr -> non empty;
+ coherence by Th2,AMI_2:2;
+end;
+
+definition
+ let I be Element of SCM+FSA-Instr;
+ func InsCode I -> Nat equals
+:Def5: I `1;
+ coherence
+  proof
+      I`1 in Segm 13 by MCART_1:10;
+   hence thesis;
+  end;
+end;
+
+theorem Th3:
+ for I being Element of SCM+FSA-Instr st InsCode I <= 8
+  holds I in SCM-Instr
+proof let I be Element of SCM+FSA-Instr such that
+A1: InsCode I <= 8;
+A2: I in SCM-Instr \/ { [J,<*c,f,b*>] : J in {9,10} } or
+   I in { [K,<*c1,f1*>] : K in {11,12} } by Def4,XBOOLE_0:def 2;
+A3: now assume I in { [K,<*c1,f1*>] : K in {11,12} };
+    then consider K,c,f such that
+A4:  I = [K,<*c,f*>] and
+A5:  K in {11,12};
+       I`1 = K by A4,MCART_1:7;
+     then I`1 = 11 or I`1 = 12 by A5,TARSKI:def 2;
+     then InsCode I = 11 or InsCode I = 12 by Def5;
+    hence contradiction by A1;
+   end;
+     now assume I in { [J,<*c,f,b*>] : J in {9,10} };
+    then consider J,c,b,f such that
+A6:  I = [J,<*c,f,b*>] and
+A7: J in {9,10};
+      I`1 = J by A6,MCART_1:7;
+     then I`1 = 9 or I`1 = 10 by A7,TARSKI:def 2;
+     then InsCode I = 9 or InsCode I = 10 by Def5;
+    hence contradiction by A1;
+   end;
+ hence I in SCM-Instr by A2,A3,XBOOLE_0:def 2;
+end;
+
+theorem
+   [0,{}] in SCM+FSA-Instr by Th2,AMI_2:2;
+
+definition
+ func SCM+FSA-OK ->
+  Function of INT, {INT,INT*} \/ { SCM+FSA-Instr, SCM+FSA-Instr-Loc } equals
+:Def6: (INT --> INT*) +* SCM-OK +*
+              ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc));
+ coherence
+  proof
+A1: dom SCM-OK c= INT by FUNCT_2:def 1,INT_1:14;
+     dom(SCM-OK|SCM-Instr-Loc) c= dom SCM-OK by RELAT_1:89;
+   then A2: dom(SCM-OK|SCM-Instr-Loc) c= INT by A1,XBOOLE_1:1;
+     dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))
+       c= dom(SCM-OK|SCM-Instr-Loc) by RELAT_1:44;
+   then A3: dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)) c= INT
+            by A2,XBOOLE_1:1;
+     dom((INT --> INT*) +* SCM-OK)
+        = dom(INT --> INT*) \/ dom SCM-OK by FUNCT_4:def 1
+       .= INT \/ dom SCM-OK by FUNCOP_1:19
+       .= INT \/ NAT by FUNCT_2:def 1
+       .= INT by INT_1:14,XBOOLE_1:12;
+   then A4: dom((INT --> INT*) +* SCM-OK +*
+       ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)))
+        = INT \/ dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))
+                                by FUNCT_4:def 1
+       .= INT by A3,XBOOLE_1:12;
+A5: (INT --> INT*) +* (SCM-OK +*
+       ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)))
+    = (INT --> INT*) +* SCM-OK +*
+      ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)) by FUNCT_4:15;
+
+      rng(((INT --> INT*) +* SCM-OK)
+      +* ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)))
+     c= {INT,INT*} \/ { SCM+FSA-Instr, SCM+FSA-Instr-Loc }
+    proof let y;
+     assume y in rng(((INT --> INT*) +* SCM-OK)
+      +* ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)));
+      then consider z such that
+A6:    z in dom(((INT --> INT*) +* SCM-OK)
+         +* ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))) and
+A7:   (((INT --> INT*) +* SCM-OK)
+         +* ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))).z = y
+               by FUNCT_1:def 5;
+A8:   dom((INT --> INT*) +* SCM-OK +*
+       ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)))
+        = dom(INT --> INT*) \/ dom(SCM-OK +*
+       ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)))
+               by A5,FUNCT_4:def 1
+       .= dom(INT --> INT*)
+         \ dom(SCM-OK +* ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)))
+         \/ dom(SCM-OK +*((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)))
+             by XBOOLE_1:39;
+A9:     dom(SCM-OK +*((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)))
+        = dom SCM-OK \/
+           dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))
+                   by FUNCT_4:def 1
+       .= (dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)) \/
+           (dom SCM-OK \
+           dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))))
+                   by XBOOLE_1:39;
+      A10: z in dom(INT --> INT*)
+         \ dom(SCM-OK +* ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)))
+        or
+      z in dom(SCM-OK +*((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)))
+             by A6,A8,XBOOLE_0:def 2;
+      per cases by A9,A10,XBOOLE_0:def 2;
+      suppose
+A11:    z in dom(INT --> INT*) \
+        dom(SCM-OK +* ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)));
+      then A12:     z in dom(INT --> INT*) by XBOOLE_0:def 4;
+       not z in
+       dom(SCM-OK +* ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)))
+        by A11,XBOOLE_0:def 4;
+       then (INT --> INT*).z = y by A5,A7,FUNCT_4:12;
+       then A13:      y in rng(INT --> INT*) by A12,FUNCT_1:def 5;
+A14:     {INT*} c= {INT,INT*} by ZFMISC_1:12;
+          rng(INT --> INT*) c= {INT*} by FUNCOP_1:19;
+       then rng(INT --> INT*) c= {INT,INT*} by A14,XBOOLE_1:1;
+     hence y in {INT,INT*} \/
+ { SCM+FSA-Instr, SCM+FSA-Instr-Loc } by A13,XBOOLE_0:def 2;
+      suppose
+A15:     z in dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc));
+       then ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)).z = y
+                by A7,FUNCT_4:14;
+then A16:     y in rng((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))
+               by A15,FUNCT_1:def 5;
+      rng((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))
+        c= rng(SCM-Instr.-->SCM+FSA-Instr) by RELAT_1:45;
+      then A17:     rng((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))
+         c= { SCM+FSA-Instr } by CQC_LANG:5;
+        { SCM+FSA-Instr } c= { SCM+FSA-Instr, SCM+FSA-Instr-Loc } by ZFMISC_1:
+12
+;
+      then rng((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))
+       c= { SCM+FSA-Instr, SCM+FSA-Instr-Loc } by A17,XBOOLE_1:1;
+     hence y in {INT,INT*} \/
+ { SCM+FSA-Instr, SCM+FSA-Instr-Loc } by A16,XBOOLE_0:def 2;
+      suppose
+A18:      z in dom SCM-OK \
+       dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc));
+       then A19:    not z in dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|
+SCM-Instr-Loc))
+        by XBOOLE_0:def 4;
+A20:     z in dom SCM-OK by A18,XBOOLE_0:def 4;
+       then z in dom SCM-OK \/
+      dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)) by XBOOLE_0:def
+2;
+       then z in dom(SCM-OK +*
+        ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)))
+         by FUNCT_4:def 1;
+then A21:      y = (SCM-OK +*
+        ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))).z
+                   by A5,A7,FUNCT_4:14
+            .= SCM-OK.z by A19,FUNCT_4:12;
+A22:      z in NAT by A20,FUNCT_2:def 1;
+        A23: dom SCM-OK = NAT by FUNCT_2:def 1;
+          rng(SCM-OK|SCM-Instr-Loc) c= dom(SCM-Instr.-->SCM+FSA-Instr)
+         proof let e be set;
+          assume e in rng(SCM-OK|SCM-Instr-Loc);
+           then consider u be set such that
+A24:       u in dom(SCM-OK|SCM-Instr-Loc) and
+A25:       (SCM-OK|SCM-Instr-Loc).u = e by FUNCT_1:def 5;
+             dom(SCM-OK|SCM-Instr-Loc) c= SCM-Instr-Loc by RELAT_1:87;
+           then reconsider u as Element of SCM-Instr-Loc by A24;
+             e = SCM-OK.u by A24,A25,FUNCT_1:70
+              .= SCM-Instr by AMI_2:11;
+           then e in { SCM-Instr } by TARSKI:def 1;
+          hence e in dom(SCM-Instr.-->SCM+FSA-Instr) by CQC_LANG:5;
+         end;
+        then dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))
+              = dom(SCM-OK|SCM-Instr-Loc) by RELAT_1:46
+             .= SCM-Instr-Loc by A23,RELAT_1:91;
+        then not z in SCM-Instr-Loc by A18,XBOOLE_0:def 4;
+        then z in {IC SCM} \/ SCM-Data-Loc by A22,AMI_3:def 1,AMI_5:23,XBOOLE_0
+:def 2;
+        then A26:      z in {IC SCM} or z in SCM-Data-Loc by XBOOLE_0:def 2;
+         now per cases by A26,AMI_3:4,TARSKI:def 1;
+       suppose z = 0;
+        then y = SCM+FSA-Instr-Loc by A21,Def3,AMI_2:7;
+        then y in { SCM+FSA-Instr, SCM+FSA-Instr-Loc } by TARSKI:def 2;
+       hence thesis by XBOOLE_0:def 2;
+       suppose z in SCM-Data-Loc;
+        then y = INT by A21,AMI_2:10;
+        then y in {INT,INT*} by TARSKI:def 2;
+       hence thesis by XBOOLE_0:def 2;
+      end;
+     hence thesis;
+    end;
+   hence thesis by A4,FUNCT_2:def 1,RELSET_1:11;
+  end;
+end;
+
+Lm1:
+ dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)) c= SCM-Instr-Loc
+proof let x;
+ assume
+A1: x in dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc));
+    dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))
+      c= dom(SCM-OK|SCM-Instr-Loc) by RELAT_1:44;
+ hence x in SCM-Instr-Loc by A1,RELAT_1:86;
+end;
+
+Lm2:
+ rng(SCM-OK|SCM-Instr-Loc) c= {SCM-Instr}
+proof let x;
+ assume x in rng(SCM-OK|SCM-Instr-Loc);
+  then consider y such that
+A1: y in dom(SCM-OK|SCM-Instr-Loc) and
+A2: (SCM-OK|SCM-Instr-Loc).y = x by FUNCT_1:def 5;
+A3:  y in SCM-Instr-Loc by A1,RELAT_1:86;
+     x = SCM-OK.y by A1,A2,FUNCT_1:70
+        .= SCM-Instr by A3,AMI_2:11;
+ hence x in {SCM-Instr} by TARSKI:def 1;
+end;
+
+Lm3:
+ SCM-Instr-Loc c= dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))
+proof let x;
+A1:  dom(SCM-Instr.-->SCM+FSA-Instr) = {SCM-Instr} by CQC_LANG:5;
+ assume
+A2: x in SCM-Instr-Loc;
+  then x in NAT;
+  then x in dom SCM-OK by FUNCT_2:def 1;
+  then x in dom(SCM-OK|SCM-Instr-Loc) by A2,RELAT_1:86;
+ hence x in dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))
+          by A1,Lm2,RELAT_1:46;
+end;
+
+canceled;
+
+theorem
+   x in {9,10} implies [x,<*c,f,b*>] in SCM+FSA-Instr
+proof assume
+A1: x in {9,10};
+  then x = 9 or x = 10 by TARSKI:def 2;
+  then reconsider x as Element of Segm 13 by GR_CY_1:10;
+    [x,<*c,f,b*>] in { [K,<*c1,f1,b1*>] : K in {9,10}} by A1;
+  then [x,<*c,f,b*>] in SCM-Instr \/
+ { [K,<*c1,f1,b1*>] : K in {9,10}} by XBOOLE_0:def 2;
+ hence thesis by Def4,XBOOLE_0:def 2;
+end;
+
+theorem
+   x in {11,12} implies [x,<*c,f*>] in SCM+FSA-Instr
+proof assume
+A1: x in {11,12};
+  then x = 11 or x = 12 by TARSKI:def 2;
+  then reconsider x as Element of Segm 13 by GR_CY_1:10;
+    [x,<*c,f*>] in { [K,<*c1,f1*>] : K in {11,12}} by A1;
+ hence thesis by Def4,XBOOLE_0:def 2;
+end;
+
+theorem Th8:
+ INT = {0} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc \/ SCM+FSA-Instr-Loc
+proof
+thus INT c= {0} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc \/ SCM+FSA-Instr-Loc
+ proof let x;
+ assume
+A1:  x in INT;
+  then reconsider x as Integer by INT_1:12;
+ per cases;
+ suppose x < 0;
+  then not x is natural number by NAT_1:18;
+  then not x in NAT by ORDINAL2:def 21;
+  then x in INT \ NAT by A1,XBOOLE_0:def 4;
+  then x in {0} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc by Def2,XBOOLE_0:def 2
+;
+ hence thesis by XBOOLE_0:def 2;
+ suppose x >= 0;
+  then x is Nat by INT_1:16;
+  then x in {0} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Instr-Loc \/ SCM+FSA-Data*-Loc
+        by Def1,Def3,AMI_3:4,def 1,AMI_5:23,XBOOLE_0:def 2;
+ hence thesis by XBOOLE_1:4;
+ end;
+    0 in INT by INT_1:12;
+ then {0} c= INT by ZFMISC_1:37;
+then {0} \/ SCM+FSA-Data-Loc c= INT by XBOOLE_1:8;
+   then {0} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc c= INT by XBOOLE_1:8;
+ hence {0} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc \/ SCM+FSA-Instr-Loc c=
+INT
+               by XBOOLE_1:8;
+end;
+
+theorem Th9:
+ SCM+FSA-OK.0 = SCM+FSA-Instr-Loc
+ proof
+A1: not 0 in dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))
+     by Lm1,AMI_1:48,AMI_3:4,def 1;
+     0 in NAT;
+then A2:  0 in dom SCM-OK by FUNCT_2:def 1;
+   thus SCM+FSA-OK.0 = ((INT --> INT*) +* SCM-OK).0 by A1,Def6,FUNCT_4:12
+        .= SCM-OK.0 by A2,FUNCT_4:14
+        .= SCM+FSA-Instr-Loc by Def3,AMI_2:7;
+ end;
+
+theorem Th10:
+ SCM+FSA-OK.b = INT
+proof
+A1: b in SCM-Data-Loc by Def1;
+then A2: b in NAT;
+  b is Data-Location by A1,AMI_3:def 1,def 2;
+then A3: not b in dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))
+      by Lm1,AMI_3:def 1,AMI_5:22;
+A4:  b in dom SCM-OK by A2,FUNCT_2:def 1;
+   thus SCM+FSA-OK.b = ((INT --> INT*) +* SCM-OK).b by A3,Def6,FUNCT_4:12
+        .= SCM-OK.b by A4,FUNCT_4:14
+        .= INT by Def1,AMI_2:10;
+end;
+
+theorem Th11:
+ SCM+FSA-OK.a = SCM+FSA-Instr
+proof
+A1: a in SCM-Instr-Loc by Def3;
+  then A2: a in dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)) by Lm3
+;
+  A3: dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))
+   c=dom(SCM-OK|SCM-Instr-Loc) by RELAT_1:44;
+ thus SCM+FSA-OK.a
+         = ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc)).a
+                    by A1,Def6,Lm3,FUNCT_4:14
+        .= (SCM-Instr.-->SCM+FSA-Instr).((SCM-OK|SCM-Instr-Loc).a)
+                    by A1,Lm3,FUNCT_1:22
+        .= (SCM-Instr.-->SCM+FSA-Instr).(SCM-OK.a) by A2,A3,FUNCT_1:70
+        .= (SCM-Instr.-->SCM+FSA-Instr).SCM-Instr by Def3,AMI_2:11
+        .= SCM+FSA-Instr by CQC_LANG:6;
+end;
+
+theorem Th12:
+ SCM+FSA-OK.f = INT*
+proof
+A1: not f in NAT by Def2,XBOOLE_0:def 4;
+A2: now assume
+A3: f in dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc));
+       dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc))
+       c= dom(SCM-OK|SCM-Instr-Loc) by RELAT_1:44;
+     then f in dom SCM-OK by A3,RELAT_1:86;
+    hence contradiction by A1,FUNCT_2:def 1;
+   end;
+A4: not f in dom SCM-OK by A1,FUNCT_2:def 1;
+   thus SCM+FSA-OK.f = ((INT --> INT*) +* SCM-OK).f by A2,Def6,FUNCT_4:12
+        .= (INT --> INT*).f by A4,FUNCT_4:12
+        .= INT* by FUNCOP_1:13;
+end;
+
+theorem Th13:
+   SCM+FSA-Instr-Loc <> INT & SCM+FSA-Instr <> INT &
+   SCM+FSA-Instr-Loc <> SCM+FSA-Instr &
+   SCM+FSA-Instr-Loc <> INT* & SCM+FSA-Instr <> INT*
+ proof
+  thus SCM+FSA-Instr-Loc <> INT by Def3,AMI_2:6;
+A1: not 2 in SCM+FSA-Instr by AMI_1:3,ZFMISC_1:102;
+     2 in NAT;
+  hence SCM+FSA-Instr <> INT by A1,INT_1:14;
+   A2: 2*1 in { 2*k : k > 0 };
+  hence
+  SCM+FSA-Instr-Loc <> SCM+FSA-Instr by Def3,AMI_1:3,AMI_2:def 3,ZFMISC_1:102;
+  {} in INT* by FINSEQ_1:66;
+  hence SCM+FSA-Instr-Loc <> INT* by A1,A2,Def3,Th9,Th11,AMI_2:def 3;
+     now assume {} in SCM+FSA-Instr;
+     then consider x,y such that
+A3:    {} = [x,y] by ZFMISC_1:102;
+    thus contradiction by A3;
+   end;
+  hence SCM+FSA-Instr <> INT* by FINSEQ_1:66;
+ end;
+
+theorem
+   for i being Integer st SCM+FSA-OK.i = SCM+FSA-Instr-Loc
+  holds i = 0
+proof let i be Integer such that
+A1: SCM+FSA-OK.i = SCM+FSA-Instr-Loc;
+   A2: i in INT by INT_1:12;
+     not i in SCM+FSA-Instr-Loc by A1,Th11,Th13;
+then A3: i in {0} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc by A2,Th8,XBOOLE_0:
+def 2;
+     not i in SCM+FSA-Data*-Loc by A1,Th12,Th13;
+then A4: i in {0} \/ SCM+FSA-Data-Loc by A3,XBOOLE_0:def 2;
+     not i in SCM+FSA-Data-Loc by A1,Th10,Th13;
+  then i in {0} by A4,XBOOLE_0:def 2;
+ hence i = 0 by TARSKI:def 1;
+end;
+
+theorem
+   for i being Integer st SCM+FSA-OK.i = INT
+  holds i in SCM+FSA-Data-Loc
+proof let i be Integer such that
+A1: SCM+FSA-OK.i = INT;
+   A2: i in INT by INT_1:12;
+     not i in SCM+FSA-Instr-Loc by A1,Th11,Th13;
+then A3: i in {0} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc by A2,Th8,XBOOLE_0:
+def 2;
+     not i in SCM+FSA-Data*-Loc by A1,Th12,FUNCT_7:18;
+then A4: i in {0} \/ SCM+FSA-Data-Loc by A3,XBOOLE_0:def 2;
+     not i in {0} by A1,Th9,Th13,TARSKI:def 1;
+ hence i in SCM+FSA-Data-Loc by A4,XBOOLE_0:def 2;
+end;
+
+theorem
+   for i being Integer st SCM+FSA-OK.i = SCM+FSA-Instr
+  holds i in SCM+FSA-Instr-Loc
+proof let i be Integer such that
+A1: SCM+FSA-OK.i = SCM+FSA-Instr;
+   A2: i in INT by INT_1:12;
+    now assume
+A3: i in {0} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc;
+     not i in SCM+FSA-Data*-Loc by A1,Th12,Th13;
+then A4: i in {0} \/ SCM+FSA-Data-Loc by A3,XBOOLE_0:def 2;
+     not i in SCM+FSA-Data-Loc by A1,Th10,Th13;
+    then i in{0} by A4,XBOOLE_0:def 2;
+   hence contradiction by A1,Th9,Th13,TARSKI:def 1;
+  end;
+ hence i in SCM+FSA-Instr-Loc by A2,Th8,XBOOLE_0:def 2;
+end;
+
+theorem
+   for i being Integer st SCM+FSA-OK.i = INT*
+  holds i in SCM+FSA-Data*-Loc
+proof let i be Integer such that
+A1: SCM+FSA-OK.i = INT*;
+   A2: i in INT by INT_1:12;
+    not i in SCM+FSA-Instr-Loc by A1,Th11,Th13;
+then A3: i in {0} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc by A2,Th8,XBOOLE_0:
+def 2;
+    now assume
+A4: i in {0} \/ SCM+FSA-Data-Loc;
+      not i in {0} by A1,Th9,Th13,TARSKI:def 1;
+    then i in SCM+FSA-Data-Loc by A4,XBOOLE_0:def 2;
+   hence contradiction by A1,Th10,FUNCT_7:18;
+  end;
+ hence i in SCM+FSA-Data*-Loc by A3,XBOOLE_0:def 2;
+end;
+
+definition
+ mode SCM+FSA-State is Element of product SCM+FSA-OK;
+end;
+
+theorem Th18:
+ for s being SCM+FSA-State, I being Element of SCM-Instr
+  holds s|NAT +* (SCM-Instr-Loc --> I) is SCM-State
+proof let s be SCM+FSA-State, I be Element of SCM-Instr;
+A1:  dom(SCM+FSA-OK) = INT by FUNCT_2:def 1;
+A2: dom(s|NAT) = dom s /\ NAT by RELAT_1:90
+       .= INT /\ NAT by A1,CARD_3:18
+       .= NAT by INT_1:14,XBOOLE_1:28;
+A3: dom(s|NAT +* (SCM-Instr-Loc --> I))
+          = dom(s|NAT) \/ dom(SCM-Instr-Loc --> I) by FUNCT_4:def 1
+         .= NAT \/ SCM-Instr-Loc by A2,FUNCOP_1:19
+         .= NAT by XBOOLE_1:12
+         .= dom SCM-OK by FUNCT_2:def 1;
+    now let x;
+   assume
+     x in dom SCM-OK;
+     then A4:    x in NAT by FUNCT_2:def 1;
+     then A5:   x in {IC SCM} \/ SCM-Data-Loc or x in SCM-Instr-Loc
+  by AMI_3:def 1,AMI_5:23,XBOOLE_0:def 2;
+A6:   SCM-Instr-Loc = dom(SCM-Instr-Loc --> I) by FUNCOP_1:19;
+    per cases by A5,XBOOLE_0:def 2;
+    suppose x in {IC SCM};
+      then A7:     x = IC SCM by TARSKI:def 1;
+then A8:     SCM-OK.x = SCM-Instr-Loc by AMI_2:7,AMI_3:4;
+        now assume x in SCM-Instr-Loc;
+       hence contradiction by A8,AMI_2:6,11;
+      end;
+then A9:     (s|NAT +* (SCM-Instr-Loc --> I)).x = (s|NAT).x by A6,FUNCT_4:12
+           .= s.x by A2,A4,FUNCT_1:70;
+      reconsider a = x as Element of INT by A4,INT_1:14;
+        dom SCM+FSA-OK = INT by FUNCT_2:def 1;
+  then A10:  pi(product SCM+FSA-OK,a) = SCM-Instr-Loc by A7,Def3,Th9,AMI_3:4,
+CARD_3:22;
+        s.a in pi(product SCM+FSA-OK,a) by CARD_3:def 6;
+     hence (s|NAT +* (SCM-Instr-Loc --> I)).x in SCM-OK.x by A7,A9,A10,AMI_2:7,
+AMI_3:4;
+    suppose
+A11:    x in SCM-Data-Loc;
+then A12:    SCM-OK.x = INT by AMI_2:10;
+        now assume x in SCM-Instr-Loc;
+       hence contradiction by A12,AMI_2:6,11;
+      end;
+then A13:     (s|NAT +* (SCM-Instr-Loc --> I)).x = (s|NAT).x by A6,FUNCT_4:12
+           .= s.x by A2,A4,FUNCT_1:70;
+      reconsider a = x as Element of INT by A4,INT_1:14;
+        dom SCM+FSA-OK = INT by FUNCT_2:def 1;
+  then A14:  pi
+(product SCM+FSA-OK,a) = SCM+FSA-OK.a by CARD_3:22 .= INT by A11,Def1,Th10;
+        s.a in pi(product SCM+FSA-OK,a) by CARD_3:def 6;
+     hence (s|NAT +* (SCM-Instr-Loc --> I)).x in SCM-OK.x by A11,A13,A14,AMI_2:
+10;
+    suppose
+A15:   x in SCM-Instr-Loc;
+      then A16:     (s|NAT +* (SCM-Instr-Loc --> I)).x = (SCM-Instr-Loc --> I).
+x
+           by A6,FUNCT_4:14 .= I by A15,FUNCOP_1:13;
+         SCM-OK.x = SCM-Instr by A15,AMI_2:11;
+     hence (s|NAT +* (SCM-Instr-Loc --> I)).x in SCM-OK.x by A16;
+  end;
+ hence s|NAT +* (SCM-Instr-Loc --> I) is SCM-State by A3,CARD_3:18;
+end;
+
+theorem Th19:
+ for s being SCM+FSA-State, s' being SCM-State
+  holds s +* s' +* s|SCM+FSA-Instr-Loc is SCM+FSA-State
+proof let s be SCM+FSA-State, s' be SCM-State;
+  rng SCM+FSA-OK c= {INT,INT*} \/ { SCM+FSA-Instr, SCM+FSA-Instr-Loc }
+    by RELSET_1:12;
+  then A1: not {} in rng SCM+FSA-OK by AMI_1:def 1;
+A2: dom SCM+FSA-OK = INT by FUNCT_2:def 1;
+then reconsider f = SCM+FSA-OK as non-empty ManySortedSet of INT by A1,PBOOLE:
+def 3,RELAT_1:def 9;
+A3: dom s' = dom SCM-OK by CARD_3:18 .= NAT by FUNCT_2:def 1;
+     now let x be set;
+    assume
+A4:   x in dom s';
+then A5:   x in {IC SCM} \/ SCM-Data-Loc or x in SCM-Instr-Loc by A3,AMI_3:def
+1,AMI_5:23,XBOOLE_0:def 2;
+    per cases by A5,XBOOLE_0:def 2;
+    suppose A6: x in {IC SCM};
+      then A7:     x = IC SCM by TARSKI:def 1;
+      reconsider a = x as Element of NAT by A3,A4;
+        dom SCM-OK = NAT by FUNCT_2:def 1;
+  then A8:  pi(product SCM-OK,a) = SCM-OK.a by CARD_3:22 .= SCM-Instr-Loc
+             by A7,AMI_2:7,AMI_3:4;
+        s'.a in pi(product SCM-OK,a) by CARD_3:def 6;
+     hence s'.x in f.x by A6,A8,Def3,Th9,AMI_3:4,TARSKI:def 1;
+    suppose
+A9:    x in SCM-Data-Loc;
+then A10:    SCM+FSA-OK.x = INT by Def1,Th10;
+      reconsider a = x as Element of NAT by A3,A4;
+        dom SCM-OK = NAT by FUNCT_2:def 1;
+  then A11:  pi(product SCM-OK,a) = SCM-OK.a by CARD_3:22;
+        s'.a in pi(product SCM-OK,a) by CARD_3:def 6;
+     hence s'.x in f.x by A9,A10,A11,AMI_2:10;
+    suppose
+A12:   x in SCM-Instr-Loc;
+then A13:    SCM-OK.x = SCM-Instr by AMI_2:11;
+A14:    SCM+FSA-OK.x = SCM+FSA-Instr by A12,Def3,Th11;
+        SCM+FSA-Instr = SCM-Instr \/ ({ [J,<*c,f2,b*>] : J in {9,10} } \/
+                { [K,<*c1,f1*>] : K in {11,12} }) by Def4,XBOOLE_1:4;
+then A15:    SCM-Instr c= SCM+FSA-Instr by XBOOLE_1:7;
+      reconsider a = x as Element of NAT by A3,A4;
+        dom SCM-OK = NAT by FUNCT_2:def 1;
+  then A16:  pi(product SCM-OK,a) = SCM-OK.a by CARD_3:22;
+        s'.a in pi(product SCM-OK,a) by CARD_3:def 6;
+     hence s'.x in f.x by A13,A14,A15,A16;
+   end;
+then A17: s +* s' is SCM+FSA-State by A2,A3,INT_1:14,PRE_CIRC:9;
+A18: s in product SCM+FSA-OK;
+     product SCM+FSA-OK c= sproduct SCM+FSA-OK by AMI_1:27;
+   then s|SCM+FSA-Instr-Loc in sproduct SCM+FSA-OK by A18,AMI_1:41;
+ hence s +* s' +* s|SCM+FSA-Instr-Loc is SCM+FSA-State by A17,AMI_1:29;
+end;
+
+
+
+definition let s be SCM+FSA-State, u be Element of SCM+FSA-Instr-Loc;
+ func SCM+FSA-Chg(s,u) -> SCM+FSA-State equals
+:Def7:  s +* (0 .--> u);
+ coherence
+  proof
+    A1: 0 in NAT;
+A2:  dom(SCM+FSA-OK) = INT by FUNCT_2:def 1;
+    then dom s = INT by CARD_3:18;
+then A3:  dom(s +* (0 .--> u)) = INT \/ dom(0 .--> u) by FUNCT_4:def 1
+      .= INT \/ {0} by CQC_LANG:5
+      .= dom(SCM+FSA-OK) by A1,A2,INT_1:14,ZFMISC_1:46;
+      now let x be set;
+     assume
+A4:    x in dom(SCM+FSA-OK);
+       now per cases;
+      suppose
+A5:     x = 0;
+          {0} = dom(0 .--> u) by CQC_LANG:5;
+        then 0 in dom(0 .--> u) by TARSKI:def 1;
+        then (s +* (0 .--> u)).0 = (0 .--> u).0 by FUNCT_4:14
+          .= u by CQC_LANG:6;
+       hence (s +* (0 .--> u)).x in SCM+FSA-OK.x by A5,Th9;
+      suppose
+A6:     x <> 0;
+          {0} = dom(0 .--> u) by CQC_LANG:5;
+        then not x in dom(0 .--> u) by A6,TARSKI:def 1;
+         then (s +* (0 .--> u)).x = s.x by FUNCT_4:12;
+       hence (s +* (0 .--> u)).x in SCM+FSA-OK.x by A4,CARD_3:18;
+     end;
+     hence (s +* (0 .--> u)).x in SCM+FSA-OK.x;
+    end;
+   hence thesis by A3,CARD_3:18;
+  end;
+end;
+
+definition
+ let s be SCM+FSA-State, t be Element of SCM+FSA-Data-Loc, u be Integer;
+ func SCM+FSA-Chg(s,t,u) -> SCM+FSA-State equals
+:Def8:  s +* (t .--> u);
+ coherence
+  proof
+A1:  dom(SCM+FSA-OK) = INT by FUNCT_2:def 1;
+    then dom s = INT by CARD_3:18;
+then A2:  dom(s +* (t .--> u)) = INT \/ dom(t .--> u) by FUNCT_4:def 1
+      .= INT \/ {t} by CQC_LANG:5
+      .= dom(SCM+FSA-OK) by A1,ZFMISC_1:46;
+      now let x be set;
+     assume
+A3:    x in dom(SCM+FSA-OK);
+       now per cases;
+      suppose
+A4:     x = t;
+          {t} = dom(t .--> u) by CQC_LANG:5;
+        then t in dom(t .--> u) by TARSKI:def 1;
+        then (s +* (t .--> u)).t = (t .--> u).t by FUNCT_4:14
+          .= u by CQC_LANG:6;
+        then (s +* (t .--> u)).t in INT by INT_1:12;
+       hence (s +* (t .--> u)).x in SCM+FSA-OK.x by A4,Th10;
+      suppose
+A5:     x <> t;
+          {t} = dom(t .--> u) by CQC_LANG:5;
+        then not x in dom(t .--> u) by A5,TARSKI:def 1;
+        then (s +* (t .--> u)).x = s.x by FUNCT_4:12;
+       hence (s +* (t .--> u)).x in SCM+FSA-OK.x by A3,CARD_3:18;
+     end;
+     hence (s +* (t .--> u)).x in SCM+FSA-OK.x;
+    end;
+   hence thesis by A2,CARD_3:18;
+  end;
+end;
+
+definition
+ let s be SCM+FSA-State, t be Element of SCM+FSA-Data*-Loc,
+     u be FinSequence of INT;
+ func SCM+FSA-Chg(s,t,u) -> SCM+FSA-State equals
+:Def9:  s +* (t .--> u);
+ coherence
+  proof
+A1:  dom(SCM+FSA-OK) = INT by FUNCT_2:def 1;
+    then dom s = INT by CARD_3:18;
+then A2:  dom(s +* (t .--> u)) = INT \/ dom(t .--> u) by FUNCT_4:def 1
+      .= INT \/ {t} by CQC_LANG:5
+      .= dom(SCM+FSA-OK) by A1,ZFMISC_1:46;
+      now let x be set;
+     assume
+A3:    x in dom(SCM+FSA-OK);
+       now per cases;
+      suppose
+A4:     x = t;
+          {t} = dom(t .--> u) by CQC_LANG:5;
+        then t in dom(t .--> u) by TARSKI:def 1;
+        then (s +* (t .--> u)).t = (t .--> u).t by FUNCT_4:14
+          .= u by CQC_LANG:6;
+        then (s +* (t .--> u)).t in INT* by FINSEQ_1:def 11;
+       hence (s +* (t .--> u)).x in SCM+FSA-OK.x by A4,Th12;
+      suppose
+A5:     x <> t;
+          {t} = dom(t .--> u) by CQC_LANG:5;
+        then not x in dom(t .--> u) by A5,TARSKI:def 1;
+        then (s +* (t .--> u)).x = s.x by FUNCT_4:12;
+       hence (s +* (t .--> u)).x in SCM+FSA-OK.x by A3,CARD_3:18;
+     end;
+     hence (s +* (t .--> u)).x in SCM+FSA-OK.x;
+    end;
+   hence thesis by A2,CARD_3:18;
+  end;
+end;
+
+definition let s be SCM+FSA-State, a be Element of SCM+FSA-Data-Loc;
+ redefine
+  func s.a -> Integer;
+ coherence
+  proof
+      dom SCM+FSA-OK = INT by FUNCT_2:def 1;
+then A1:  pi(product SCM+FSA-OK,a) = SCM+FSA-OK.a by CARD_3:22 .= INT by Th10;
+      s.a in pi(product SCM+FSA-OK,a) by CARD_3:def 6;
+   hence s.a is Integer by A1,INT_1:12;
+  end;
+end;
+
+definition let s be SCM+FSA-State, a be Element of SCM+FSA-Data*-Loc;
+ redefine
+  func s.a -> FinSequence of INT;
+ coherence
+  proof
+      dom SCM+FSA-OK = INT by FUNCT_2:def 1;
+then A1:  pi(product SCM+FSA-OK,a) = SCM+FSA-OK.a by CARD_3:22 .= INT* by Th12;
+      s.a in pi(product SCM+FSA-OK,a) by CARD_3:def 6;
+   hence s.a is FinSequence of INT by A1,FINSEQ_1:def 11;
+  end;
+end;
+
+definition let x be Element of SCM+FSA-Instr;
+ given c,f,b,J such that
+A1: x = [ J, <*c,f,b*>];
+ func x int_addr1 -> Element of SCM+FSA-Data-Loc means
+     ex c,f,b st <*c,f,b*> = x`2 & it = c;
+  existence
+   proof take c,c,f,b;
+    thus thesis by A1,MCART_1:7;
+   end;
+  uniqueness
+   proof let a1,a2 be Element of SCM+FSA-Data-Loc;
+    given c1,f1,b1 such that
+A2:  <*c1,f1,b1*> = x`2 and
+A3:  a1 = c1;
+    given c2,f2,b2 such that
+A4:  <*c2,f2,b2*> = x`2 and
+A5:  a2 = c2;
+    thus a1 = <*c1,f1,b1*>/.1 by A3,FINSEQ_4:27
+     .= a2 by A2,A4,A5,FINSEQ_4:27;
+   end;
+ func x int_addr2 -> Element of SCM+FSA-Data-Loc means
+     ex c,f,b st <*c,f,b*> = x`2 & it = b;
+  existence
+   proof take b,c,f,b;
+    thus thesis by A1,MCART_1:7;
+   end;
+  correctness
+   proof let a1,a2 be Element of SCM+FSA-Data-Loc;
+    given c1,f1,b1 such that
+A6:  <*c1,f1,b1*> = x`2 and
+A7:  a1 = b1;
+    given c2,f2,b2 such that
+A8:  <*c2,f2,b2*> = x`2 and
+A9:  a2 = b2;
+    thus a1 = <*c1,f1,b1*>/.3 by A7,FINSEQ_4:27
+     .= a2 by A6,A8,A9,FINSEQ_4:27;
+   end;
+ func x coll_addr1 -> Element of SCM+FSA-Data*-Loc means
+     ex c,f,b st <*c,f,b*> = x`2 & it = f;
+  existence
+   proof take f,c,f,b;
+    thus thesis by A1,MCART_1:7;
+   end;
+  correctness
+   proof let a1,a2 be Element of SCM+FSA-Data*-Loc;
+    given c1,f1,b1 such that
+A10:  <*c1,f1,b1*> = x`2 and
+A11:  a1 = f1;
+    given c2,f2,b2 such that
+A12:  <*c2,f2,b2*> = x`2 and
+A13:  a2 = f2;
+    thus a1 = <*c1,f1,b1*>/.2 by A11,FINSEQ_4:27
+     .= a2 by A10,A12,A13,FINSEQ_4:27;
+   end;
+end;
+
+definition let x be Element of SCM+FSA-Instr;
+ given c,f,J such that
+A1: x = [ J, <*c,f*>];
+ func x int_addr3 -> Element of SCM+FSA-Data-Loc means
+     ex c,f st <*c,f*> = x`2 & it = c;
+  existence
+   proof take c,c,f;
+    thus thesis by A1,MCART_1:7;
+   end;
+  uniqueness
+   proof let a1,a2 be Element of SCM+FSA-Data-Loc;
+    given c1,f1 such that
+A2:  <*c1,f1*> = x`2 and
+A3:  a1 = c1;
+    given c2,f2 such that
+A4:  <*c2,f2*> = x`2 and
+A5:  a2 = c2;
+    thus a1 = <*c1,f1*>/.1 by A3,FINSEQ_4:26
+     .= a2 by A2,A4,A5,FINSEQ_4:26;
+   end;
+ func x coll_addr2 -> Element of SCM+FSA-Data*-Loc means
+    ex c,f st <*c,f*> = x`2 & it = f;
+  existence
+   proof take f,c,f;
+    thus thesis by A1,MCART_1:7;
+   end;
+  correctness
+   proof let a1,a2 be Element of SCM+FSA-Data*-Loc;
+    given c1,f1 such that
+A6:  <*c1,f1*> = x`2 and
+A7:  a1 = f1;
+    given c2,f2 such that
+A8:  <*c2,f2*> = x`2 and
+A9:  a2 = f2;
+    thus a1 = <*c1,f1*>/.2 by A7,FINSEQ_4:26
+     .= a2 by A6,A8,A9,FINSEQ_4:26;
+   end;
+end;
+
+definition let l be Element of SCM+FSA-Instr-Loc;
+ func Next l -> Element of SCM+FSA-Instr-Loc means
+     ex L being Element of SCM-Instr-Loc st L = l & it = Next L;
+ existence
+  proof reconsider L = l as Element of SCM-Instr-Loc by Def3;
+      Next L in SCM+FSA-Instr-Loc by Def3;
+   hence thesis;
+  end;
+ correctness;
+end;
+
+definition let s be SCM+FSA-State;
+ func IC(s) -> Element of SCM+FSA-Instr-Loc equals
+     s.0;
+ coherence
+  proof reconsider z = 0 as Element of INT by INT_1:12;
+     dom SCM+FSA-OK = INT by FUNCT_2:def 1;
+then pi(product SCM+FSA-OK,0) = SCM+FSA-OK.z by CARD_3:22
+     .= SCM+FSA-Instr-Loc by Th9;
+   hence thesis by CARD_3:def 6;
+  end;
+end;
+
+definition let x be Element of SCM+FSA-Instr, s be SCM+FSA-State;
+ func SCM+FSA-Exec-Res(x,s) -> SCM+FSA-State means
+     ex x' being Element of SCM-Instr, s' being SCM-State st
+    x = x' & s' = s|NAT +* (SCM-Instr-Loc --> x')
+           & it = s +* SCM-Exec-Res(x',s') +* s|SCM+FSA-Instr-Loc
+      if InsCode x <= 8,
+ ex i being Integer, k st k = abs(s.(x int_addr2)) & i = (s.(x coll_addr1))/.k
+   & it = SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr1,i),Next IC s)
+    if InsCode x = 9,
+    ex f being FinSequence of INT,k st k = abs(s.(x int_addr2)) &
+     f = s.(x coll_addr1)+*(k,s.(x int_addr1)) &
+     it = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr1,f),Next IC s)
+    if InsCode x = 10,
+  it = SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr3,len(s.(x coll_addr2))),Next IC s)
+    if InsCode x = 11,
+  ex f being FinSequence of INT,k st k = abs(s.(x int_addr3)) & f = k |-> 0
+    & it = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr2,f),Next IC s)
+    if InsCode x = 12
+     otherwise it = s;
+ existence
+  proof
+   hereby assume InsCode x <= 8;
+     then reconsider x' = x as Element of SCM-Instr by Th3;
+     reconsider s' = s|NAT +* (SCM-Instr-Loc --> x') as SCM-State by Th18;
+     reconsider s1 = s +* SCM-Exec-Res(x',s') +* s|SCM+FSA-Instr-Loc
+        as SCM+FSA-State by Th19;
+    take s1,x',s';
+    thus x = x';
+    thus s' = s|NAT +* (SCM-Instr-Loc --> x');
+    thus s1 = s +* SCM-Exec-Res(x',s') +* s|SCM+FSA-Instr-Loc;
+   end;
+   hereby assume InsCode x = 9;
+     reconsider k = abs(s.(x int_addr2)) as Nat by INT_2:20;
+     reconsider i = (s.(x coll_addr1))/.k as Integer;
+    take s1 = SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr1,i),Next IC s);
+    take i,k;
+    thus k = abs(s.(x int_addr2)) & i = (s.(x coll_addr1))/.k
+      & s1 = SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr1,i),Next IC s);
+   end;
+   hereby assume InsCode x = 10;
+     reconsider k = abs(s.(x int_addr2)) as Nat by INT_2:20;
+    per cases;
+    suppose
+A1:   k in dom( s.(x coll_addr1));
+then A2:   {k} c= dom( s.(x coll_addr1)) by ZFMISC_1:37;
+     set f = s.(x coll_addr1) +* (k.-->s.(x int_addr1));
+       dom f = dom(s.(x coll_addr1)) \/ dom((k.-->s.(x int_addr1)))
+                    by FUNCT_4:def 1
+          .= dom(s.(x coll_addr1)) \/ {k} by CQC_LANG:5
+          .= dom(s.(x coll_addr1)) by A2,XBOOLE_1:12
+          .= Seg len(s.(x coll_addr1)) by FINSEQ_1:def 3;
+     then reconsider f as FinSequence by FINSEQ_1:def 2;
+A3:   rng f c= rng(s.(x coll_addr1)) \/ rng((k.-->s.(x int_addr1)))
+           by FUNCT_4:18;
+A4:   rng(s.(x coll_addr1)) c= INT by FINSEQ_1:def 4;
+A5:   s.(x int_addr1) in INT by INT_1:12;
+       rng((k.-->s.(x int_addr1))) = {s.(x int_addr1)} by CQC_LANG:5;
+     then rng((k.-->s.(x int_addr1))) c= INT by A5,ZFMISC_1:37;
+     then rng(s.(x coll_addr1)) \/ rng((k.-->s.(x int_addr1))) c= INT
+               by A4,XBOOLE_1:8;
+     then rng f c= INT by A3,XBOOLE_1:1;
+     then reconsider f as FinSequence of INT by FINSEQ_1:def 4;
+     take s1 = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr1,f),Next IC s);
+     take f,k;
+     thus k = abs(s.(x int_addr2));
+     thus f = s.(x coll_addr1) +* (k,s.(x int_addr1)) by A1,FUNCT_7:def 3;
+     thus s1 = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr1,f),Next IC s);
+    suppose
+A6:   not k in dom( s.(x coll_addr1));
+     reconsider f = s.(x coll_addr1) as FinSequence of INT;
+     take s1 = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr1,f),Next IC s);
+     take f,k;
+     thus k = abs(s.(x int_addr2));
+    thus f = s.(x coll_addr1) +* (k,s.(x int_addr1)) by A6,FUNCT_7:def 3;
+    thus s1 = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr1,f),Next IC s);
+   end;
+   thus InsCode x = 11 implies ex s1 being SCM+FSA-State st
+    s1 = SCM+FSA-Chg(
+               SCM+FSA-Chg(s,x int_addr3,len(s.(x coll_addr2))),Next IC s);
+   hereby assume InsCode x = 12;
+    reconsider k = abs(s.(x int_addr3)) as Nat by INT_2:20;
+      k |-> 0 = Seg k --> 0 by FINSEQ_2:def 2;
+then A7:  rng(k |-> 0) c= {0} by FUNCOP_1:19;
+      0 in INT by INT_1:12;
+    then {0} c= INT by ZFMISC_1:37;
+    then rng(k |-> 0) c= INT by A7,XBOOLE_1:1;
+    then reconsider f = k |-> 0 as FinSequence of INT by FINSEQ_1:def 4;
+    take s1 = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr2,f),Next IC s);
+    take f,k;
+    thus k = abs(s.(x int_addr3)) & f = k |-> 0
+        & s1 = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr2,f),Next IC s);
+   end;
+   thus thesis;
+  end;
+ uniqueness;
+ consistency;
+end;
+
+definition
+ func SCM+FSA-Exec ->
+  Function of SCM+FSA-Instr, Funcs(product SCM+FSA-OK, product SCM+FSA-OK)
+         means
+    for x being Element of SCM+FSA-Instr, y being SCM+FSA-State holds
+    (it.x qua Element of Funcs(product SCM+FSA-OK, product SCM+FSA-OK)).y =
+    SCM+FSA-Exec-Res(x,y);
+ existence
+  proof
+   deffunc
+    U(Element of SCM+FSA-Instr, SCM+FSA-State) = SCM+FSA-Exec-Res($1,$2);
+   consider f being
+    Function of [:SCM+FSA-Instr,product SCM+FSA-OK:], product SCM+FSA-OK
+   such that
+A1:   for x being Element of SCM+FSA-Instr, y being SCM+FSA-State holds
+    f.[x,y] = U(x,y) from Lambda2D;
+   take curry f;
+   let x be Element of SCM+FSA-Instr, y be SCM+FSA-State;
+   thus (curry f).x.y = f.[x,y] by CAT_2:3 .= SCM+FSA-Exec-Res(x,y) by A1;
+  end;
+ uniqueness
+  proof
+   let f,g be
+      Function of SCM+FSA-Instr, Funcs(product SCM+FSA-OK, product SCM+FSA-OK)
+   such that
+A2:   for x being Element of SCM+FSA-Instr, y being SCM+FSA-State holds
+      (f.x qua Element of Funcs(product SCM+FSA-OK, product SCM+FSA-OK)).y =
+      SCM+FSA-Exec-Res(x,y) and
+A3:   for x being Element of SCM+FSA-Instr, y being SCM+FSA-State holds
+      (g.x qua Element of Funcs(product SCM+FSA-OK, product SCM+FSA-OK)).y =
+      SCM+FSA-Exec-Res(x,y);
+      now let x be Element of SCM+FSA-Instr;
+     reconsider gx=g.x, fx=f.x as
+       Function of product SCM+FSA-OK, product SCM+FSA-OK;
+       now let y be SCM+FSA-State;
+      thus
+         fx.y = SCM+FSA-Exec-Res(x,y) by A2
+      .= gx.y by A3;
+     end;
+     hence f.x = g.x by FUNCT_2:113;
+    end;
+   hence f = g by FUNCT_2:113;
+  end;
+end;
+
+theorem
+   for s being SCM+FSA-State, u being Element of SCM+FSA-Instr-Loc
+  holds SCM+FSA-Chg(s,u).0 = u
+ proof let s be SCM+FSA-State, u be Element of SCM+FSA-Instr-Loc;
+    {0} = dom(0 .--> u) by CQC_LANG:5;
+  then A1: 0 in dom(0 .--> u) by TARSKI:def 1;
+  thus SCM+FSA-Chg(s,u).0 = (s +* (0 .--> u)).0 by Def7
+    .= (0 .--> u).0 by A1,FUNCT_4:14
+    .= u by CQC_LANG:6;
+ end;
+
+theorem
+   for s being SCM+FSA-State, u being Element of SCM+FSA-Instr-Loc,
+     mk being Element of SCM+FSA-Data-Loc
+  holds SCM+FSA-Chg(s,u).mk = s.mk
+proof let s be SCM+FSA-State, u be Element of SCM+FSA-Instr-Loc,
+     mk be Element of SCM+FSA-Data-Loc;
+A1:  SCM+FSA-OK.0 = SCM+FSA-Instr-Loc & SCM+FSA-OK.mk = INT by Th9,Th10;
+    {0} = dom(0 .--> u) by CQC_LANG:5;
+then A2:  not mk in dom(0 .--> u) by A1,Th13,TARSKI:def 1;
+  thus SCM+FSA-Chg(s,u).mk = (s +* (0 .--> u)).mk by Def7
+   .= s.mk by A2,FUNCT_4:12;
+end;
+
+theorem
+   for s being SCM+FSA-State, u being Element of SCM+FSA-Instr-Loc,
+     p being Element of SCM+FSA-Data*-Loc
+  holds SCM+FSA-Chg(s,u).p = s.p
+proof let s be SCM+FSA-State, u be Element of SCM+FSA-Instr-Loc,
+     mk be Element of SCM+FSA-Data*-Loc;
+A1:  SCM+FSA-OK.0 = SCM+FSA-Instr-Loc & SCM+FSA-OK.mk = INT* by Th9,Th12;
+    {0} = dom(0 .--> u) by CQC_LANG:5;
+then A2:  not mk in dom(0 .--> u) by A1,Th13,TARSKI:def 1;
+  thus SCM+FSA-Chg(s,u).mk = (s +* (0 .--> u)).mk by Def7
+   .= s.mk by A2,FUNCT_4:12;
+end;
+
+theorem
+   for s being SCM+FSA-State, u,v being Element of SCM+FSA-Instr-Loc
+  holds SCM+FSA-Chg(s,u).v = s.v
+proof let s be SCM+FSA-State, u,v be Element of SCM+FSA-Instr-Loc;
+A1:  SCM+FSA-OK.0 = SCM+FSA-Instr-Loc & SCM+FSA-OK.v = SCM+FSA-Instr
+       by Th9,Th11;
+    {0} = dom(0 .--> u) by CQC_LANG:5;
+then A2:  not v in dom(0 .--> u) by A1,Th13,TARSKI:def 1;
+  thus SCM+FSA-Chg(s,u).v = (s +* (0 .--> u)).v by Def7
+          .= s.v by A2,FUNCT_4:12;
+end;
+
+theorem
+   for s being SCM+FSA-State,
+     t being Element of SCM+FSA-Data-Loc, u being Integer
+  holds SCM+FSA-Chg(s,t,u).0 = s.0
+proof let s be SCM+FSA-State, t be Element of SCM+FSA-Data-Loc, u be Integer;
+A1:  SCM+FSA-OK.0 = SCM+FSA-Instr-Loc & SCM+FSA-OK.t = INT by Th9,Th10;
+    {t} = dom(t .--> u) by CQC_LANG:5;
+then A2:  not 0 in dom(t .--> u) by A1,Th13,TARSKI:def 1;
+ thus SCM+FSA-Chg(s,t,u).0 = (s +* (t .--> u)).0 by Def8
+         .= s.0 by A2,FUNCT_4:12;
+end;
+
+theorem
+   for s being SCM+FSA-State,
+     t being Element of SCM+FSA-Data-Loc, u being Integer
+  holds SCM+FSA-Chg(s,t,u).t = u
+proof let s be SCM+FSA-State, t be Element of SCM+FSA-Data-Loc, u be Integer;
+   {t} = dom(t .--> u) by CQC_LANG:5;
+then A1: t in dom(t .--> u) by TARSKI:def 1;
+ thus SCM+FSA-Chg(s,t,u).t = (s +* (t .--> u)).t by Def8
+   .= (t .--> u).t by A1,FUNCT_4:14
+   .= u by CQC_LANG:6;
+end;
+
+theorem
+   for s being SCM+FSA-State,
+     t being Element of SCM+FSA-Data-Loc, u being Integer,
+     mk being Element of SCM+FSA-Data-Loc st mk <> t
+  holds SCM+FSA-Chg(s,t,u).mk = s.mk
+proof let s be SCM+FSA-State, t be Element of SCM+FSA-Data-Loc, u be Integer,
+     mk be Element of SCM+FSA-Data-Loc such that
+A1:   mk <> t;
+    {t} = dom(t .--> u) by CQC_LANG:5;
+then A2: not mk in dom(t .--> u) by A1,TARSKI:def 1;
+ thus SCM+FSA-Chg(s,t,u).mk = (s +* (t .--> u)).mk by Def8
+         .= s.mk by A2,FUNCT_4:12;
+end;
+
+theorem
+   for s being SCM+FSA-State,
+     t being Element of SCM+FSA-Data-Loc, u being Integer,
+     f being Element of SCM+FSA-Data*-Loc
+  holds SCM+FSA-Chg(s,t,u).f = s.f
+proof let s be SCM+FSA-State, t be Element of SCM+FSA-Data-Loc, u be Integer,
+     mk be Element of SCM+FSA-Data*-Loc;
+A1:  SCM+FSA-OK.t = INT & SCM+FSA-OK.mk = INT* by Th10,Th12;
+    {t} = dom(t .--> u) by CQC_LANG:5;
+then A2:  not mk in dom(t .--> u) by A1,FUNCT_7:18,TARSKI:def 1;
+ thus SCM+FSA-Chg(s,t,u).mk = (s +* (t .--> u)).mk by Def8
+         .= s.mk by A2,FUNCT_4:12;
+end;
+
+theorem
+   for s being SCM+FSA-State,
+     t being Element of SCM+FSA-Data-Loc, u being Integer,
+     v being Element of SCM+FSA-Instr-Loc
+  holds SCM+FSA-Chg(s,t,u).v = s.v
+proof let s be SCM+FSA-State, t be Element of SCM+FSA-Data-Loc, u be Integer,
+     v be Element of SCM+FSA-Instr-Loc;
+A1:     SCM+FSA-OK.v = SCM+FSA-Instr & SCM+FSA-OK.t = INT by Th10,Th11;
+    {t} = dom(t .--> u) by CQC_LANG:5;
+then A2: not v in dom(t .--> u) by A1,Th13,TARSKI:def 1;
+ thus SCM+FSA-Chg(s,t,u).v = (s +* (t .--> u)).v by Def8
+         .= s.v by A2,FUNCT_4:12;
+end;
+
+theorem
+   for s being SCM+FSA-State,
+     t being Element of SCM+FSA-Data*-Loc, u being FinSequence of INT
+  holds SCM+FSA-Chg(s,t,u).t = u
+proof let s be SCM+FSA-State, t be Element of SCM+FSA-Data*-Loc,
+     u be FinSequence of INT;
+   {t} = dom(t .--> u) by CQC_LANG:5;
+then A1: t in dom(t .--> u) by TARSKI:def 1;
+ thus SCM+FSA-Chg(s,t,u).t = (s +* (t .--> u)).t by Def9
+   .= (t .--> u).t by A1,FUNCT_4:14
+   .= u by CQC_LANG:6;
+end;
+
+theorem
+   for s being SCM+FSA-State,
+     t being Element of SCM+FSA-Data*-Loc, u being FinSequence of INT,
+     mk being Element of SCM+FSA-Data*-Loc st mk <> t
+  holds SCM+FSA-Chg(s,t,u).mk = s.mk
+proof let s be SCM+FSA-State, t be Element of SCM+FSA-Data*-Loc,
+        u be FinSequence of INT,
+     mk be Element of SCM+FSA-Data*-Loc such that
+A1:   mk <> t;
+    {t} = dom(t .--> u) by CQC_LANG:5;
+then A2:  not mk in dom(t .--> u) by A1,TARSKI:def 1;
+ thus SCM+FSA-Chg(s,t,u).mk = (s +* (t .--> u)).mk by Def9
+         .= s.mk by A2,FUNCT_4:12;
+end;
+
+theorem
+   for s being SCM+FSA-State,
+     t being Element of SCM+FSA-Data*-Loc, u being FinSequence of INT,
+     a being Element of SCM+FSA-Data-Loc
+  holds SCM+FSA-Chg(s,t,u).a = s.a
+proof let s be SCM+FSA-State, t be Element of SCM+FSA-Data*-Loc,
+          u be FinSequence of INT,
+     mk be Element of SCM+FSA-Data-Loc;
+A1:  SCM+FSA-OK.t = INT* & SCM+FSA-OK.mk = INT by Th10,Th12;
+    {t} = dom(t .--> u) by CQC_LANG:5;
+then A2:  not mk in dom(t .--> u) by A1,FUNCT_7:18,TARSKI:def 1;
+ thus SCM+FSA-Chg(s,t,u).mk = (s +* (t .--> u)).mk by Def9
+         .= s.mk by A2,FUNCT_4:12;
+end;
+
+theorem
+   for s being SCM+FSA-State,
+     t being Element of SCM+FSA-Data*-Loc, u being FinSequence of INT,
+     v being Element of SCM+FSA-Instr-Loc
+  holds SCM+FSA-Chg(s,t,u).v = s.v
+proof let s be SCM+FSA-State, t be Element of SCM+FSA-Data*-Loc,
+     u be FinSequence of INT,
+     v be Element of SCM+FSA-Instr-Loc;
+A1:     SCM+FSA-OK.v = SCM+FSA-Instr & SCM+FSA-OK.t = INT* by Th11,Th12;
+    {t} = dom(t .--> u) by CQC_LANG:5;
+then A2: not v in dom(t .--> u) by A1,Th13,TARSKI:def 1;
+ thus SCM+FSA-Chg(s,t,u).v = (s +* (t .--> u)).v by Def9
+         .= s.v by A2,FUNCT_4:12;
+end;

@@ -1,0 +1,1383 @@
+:: Some Properties of Isomorphism between Relational Structures. On
+:: the Product of Topological Spaces
+::  by Jaros{\l}aw Gryko and Artur Korni{\l}owicz
+::
+:: Received June 22, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, FUNCT_1, BOOLE, FUNCT_4, CAT_1, ORDERS_1, PRE_TOPC,
+      SUBSET_1, RELAT_2, WAYBEL_0, QUANTAL1, PRALG_1, MONOID_0, FUNCOP_1,
+      SEQM_3, WAYBEL_9, WAYBEL24, YELLOW_0, GROUP_1, CARD_3, SGRAPH1, WELLORD1,
+      LATTICE3, LATTICES, T_0TOPSP, TOPS_2, ORDINAL2, WAYBEL11, WAYBEL_6,
+      YELLOW_8, COMPTS_1, SETFAM_1, FINSET_1, TARSKI, WAYBEL_3, TOPS_1,
+      WAYBEL18, PBOOLE, RLVECT_2, BORSUK_1, CANTOR_1, WAYBEL_1, FUNCT_3,
+      GROUP_6, TSP_1, URYSOHN1, SEQ_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELSET_1, FINSET_1,
+      TOPS_2, FUNCT_1, PARTFUN1, FUNCT_4, CQC_LANG, FUNCT_7, CARD_3, MONOID_0,
+      PBOOLE, PRALG_1, PRE_CIRC, STRUCT_0, PRE_TOPC, GRCAT_1, TOPS_1, COMPTS_1,
+      T_0TOPSP, TSP_1, URYSOHN1, CANTOR_1, TMAP_1, ORDERS_1, LATTICE3,
+      WAYBEL18, YELLOW_0, WAYBEL_0, WAYBEL_1, FUNCT_2, YELLOW_1, YELLOW_2,
+      WAYBEL_3, YELLOW_6, YELLOW_8, WAYBEL_9, WAYBEL11, WAYBEL24;
+ constructors BORSUK_3, CANTOR_1, CQC_LANG, FUNCT_7, GRCAT_1, ORDERS_3,
+      PRE_CIRC, TMAP_1, TOLER_1, TOPS_1, TOPS_2, URYSOHN1, WAYBEL_1, WAYBEL17,
+      WAYBEL18, WAYBEL24, YELLOW_8, MONOID_0;
+ clusters BORSUK_3, FUNCT_1, TEX_4, PRE_TOPC, RELAT_1, YELLOW_8, CQC_LANG,
+      RELSET_1, STRUCT_0, TEX_1, TSP_1, TOPGRP_1, YELLOW_0, YELLOW_1, YELLOW_6,
+      YELLOW12, WAYBEL_0, WAYBEL_3, WAYBEL_7, WAYBEL12, WAYBEL18, WAYBEL19,
+      WAYBEL24, SUBSET_1, PARTFUN1, FUNCT_2;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, MONOID_0, PRALG_1, STRUCT_0, PRE_TOPC, TOPS_2, COMPTS_1,
+      T_0TOPSP, LATTICE3, YELLOW_0, WAYBEL_0, WAYBEL_1, WAYBEL_3, YELLOW_8,
+      FUNCT_2, XBOOLE_0;
+ theorems TARSKI, PRE_TOPC, ZFMISC_1, STRUCT_0, T_0TOPSP, FUNCT_1, FUNCT_2,
+      FUNCT_7, PBOOLE, PRALG_1, FUNCOP_1, CARD_3, BORSUK_1, CANTOR_1, TOPS_2,
+      TOPS_3, YELLOW_0, YELLOW_1, YELLOW_2, YELLOW_9, YELLOW12, WAYBEL_0,
+      WAYBEL_1, WAYBEL_9, WAYBEL11, WAYBEL10, WAYBEL13, WAYBEL18, WAYBEL24,
+      CARD_5, MONOID_0, YELLOW_8, COMPTS_1, TOPMETR, GRCAT_1, TOPGRP_1, TMAP_1,
+      TSP_1, CQC_LANG, FUNCT_4, URYSOHN1, XBOOLE_0, XBOOLE_1, PARTFUN1;
+
+begin  :: Preliminaries
+
+theorem
+   bool 1 = {0,1} by CARD_5:1,ZFMISC_1:30;
+
+theorem Th2:
+ for X being set, Y being Subset of X holds rng ((id X)|Y) = Y
+  proof
+    let X be set,
+        Y be Subset of X;
+    set f = id X;
+A1: X = {} implies Y = {} by XBOOLE_1:3;
+      X = {} implies X = {};
+then A2: f|Y is Function of Y,X by FUNCT_2:38;
+then A3: dom (f|Y) = Y by A1,FUNCT_2:def 1;
+    hereby
+      let y be set;
+      assume y in rng (f|Y);
+      then consider x being set such that
+A4:     x in dom (f|Y) and
+A5:     y = (f|Y).x by FUNCT_1:def 5;
+        (f|Y).x = f.x by A4,FUNCT_1:70
+             .= x by A4,FUNCT_1:34;
+      hence y in Y by A2,A4,A5,FUNCT_2:def 1;
+    end;
+    let y be set;
+    assume
+A6:   y in Y;
+    then (f|Y).y = f.y by FUNCT_1:72
+           .= y by A6,FUNCT_1:35;
+    hence y in rng (f|Y) by A3,A6,FUNCT_1:def 5;
+  end;
+
+theorem Th3:
+ for f being Function, a, b being set holds (f +* (a .--> b)).a = b
+  proof
+    let f be Function,
+        a, b be set;
+      dom (a .--> b) = {a} by CQC_LANG:5;
+    then a in dom (a .--> b) by TARSKI:def 1;
+    hence (f +* (a .--> b)).a = (a .--> b).a by FUNCT_4:14
+      .= b by CQC_LANG:6;
+  end;
+
+definition
+ cluster strict empty RelStr;
+existence
+  proof
+    consider a being Relation of {};
+    take RelStr (#{},a#);
+    thus RelStr (#{},a#) is strict;
+    thus the carrier of RelStr (#{},a#) is empty;
+  end;
+end;
+
+theorem Th4:
+ for S being empty 1-sorted, T being 1-sorted, f being map of S, T st
+  rng f = [#]T holds T is empty
+  proof
+    let S be empty 1-sorted,
+        T be 1-sorted,
+        f be map of S, T such that
+A1: rng f = [#]T;
+    assume the carrier of T is non empty;
+    then consider y being set such that
+A2:   y in the carrier of T by XBOOLE_0:def 1;
+      y in rng f by A1,A2,PRE_TOPC:12;
+    then ex x being set st x in dom f & f.x = y by FUNCT_1:def 5;
+    hence contradiction;
+  end;
+
+theorem Th5:
+ for S being 1-sorted, T being empty 1-sorted, f being map of S, T st
+  dom f = [#]S holds S is empty
+  proof
+    let S be 1-sorted,
+        T be empty 1-sorted,
+        f be map of S, T such that
+A1: dom f = [#]S;
+    assume the carrier of S is non empty;
+    then consider x being set such that
+A2:   x in the carrier of S by XBOOLE_0:def 1;
+      x in dom f by A1,A2,PRE_TOPC:12;
+    then f.x in rng f by FUNCT_1:def 5;
+    hence thesis;
+  end;
+
+theorem
+   for S being non empty 1-sorted, T being 1-sorted, f being map of S, T st
+  dom f = [#]S holds T is non empty
+  proof
+    let S be non empty 1-sorted,
+        T be 1-sorted,
+        f be map of S, T such that
+A1: dom f = [#]S;
+    consider x being set such that
+A2:   x in the carrier of S by XBOOLE_0:def 1;
+      x in dom f by A1,A2,PRE_TOPC:12;
+    then f.x in rng f by FUNCT_1:def 5;
+    hence the carrier of T is non empty;
+  end;
+
+theorem
+   for S being 1-sorted, T being non empty 1-sorted, f being map of S, T st
+  rng f = [#]T holds S is non empty
+  proof
+    let S be 1-sorted,
+        T be non empty 1-sorted,
+        f be map of S, T such that
+A1: rng f = [#]T;
+    consider y being set such that
+A2:   y in the carrier of T by XBOOLE_0:def 1;
+      y in rng f by A1,A2,PRE_TOPC:12;
+    then ex x being set st x in dom f & f.x = y by FUNCT_1:def 5;
+    hence the carrier of S is non empty;
+  end;
+
+definition let S be non empty reflexive RelStr, T be non empty RelStr,
+               f be map of S, T;
+ redefine attr f is directed-sups-preserving means
+    for X being non empty directed Subset of S holds f preserves_sup_of X;
+compatibility
+  proof
+    thus f is directed-sups-preserving implies
+     for X being non empty directed Subset of S holds f preserves_sup_of X
+      by WAYBEL_0:def 37;
+    assume
+A1:  for X being non empty directed Subset of S holds f preserves_sup_of X;
+    let X be Subset of S;
+    thus thesis by A1;
+  end;
+end;
+
+definition let R be 1-sorted, N be NetStr over R;
+ attr N is Function-yielding means :Def2:
+  the mapping of N is Function-yielding;
+end;
+
+definition
+ cluster strict non empty constituted-Functions 1-sorted;
+existence
+  proof
+    take A = 1-sorted (#{{}}#);
+    thus A is strict non empty;
+    let a be Element of A;
+    thus a is Function by TARSKI:def 1;
+  end;
+end;
+
+definition
+ cluster strict non empty constituted-Functions RelStr;
+existence
+  proof
+    take A = RelStr (#{{}}, id {{}}#);
+    thus A is strict non empty;
+    let a be Element of A;
+    thus a is Function by TARSKI:def 1;
+  end;
+end;
+
+definition let R be constituted-Functions 1-sorted;
+ cluster -> Function-yielding NetStr over R;
+coherence
+  proof
+    let N be NetStr over R;
+    let x be set;
+    assume x in dom the mapping of N;
+then (the mapping of N).x in rng the mapping of N by FUNCT_1:def 5;
+    hence (the mapping of N).x is Function by MONOID_0:def 1;
+  end;
+end;
+
+definition let R be constituted-Functions 1-sorted;
+ cluster strict Function-yielding NetStr over R;
+existence
+  proof
+    take A = NetStr (#the carrier of R, id the carrier of R,
+                     id the carrier of R#);
+    thus A is strict;
+    let x be set;
+    assume
+A1:   x in dom the mapping of A;
+    then (the mapping of A).x = x by FUNCT_1:35;
+    hence (the mapping of A).x is Function by A1,MONOID_0:def 1;
+  end;
+end;
+
+definition let R be non empty constituted-Functions 1-sorted;
+ cluster strict non empty Function-yielding NetStr over R;
+existence
+  proof
+    take A = NetStr (#the carrier of R, id the carrier of R,
+                     id the carrier of R#);
+    thus A is strict non empty;
+    let x be set;
+    assume
+A1:   x in dom the mapping of A;
+    then (the mapping of A).x = x by FUNCT_1:35;
+    hence (the mapping of A).x is Function by A1,MONOID_0:def 1;
+  end;
+end;
+
+definition let R be constituted-Functions 1-sorted,
+               N be Function-yielding NetStr over R;
+ cluster the mapping of N -> Function-yielding;
+coherence by Def2;
+end;
+
+definition let R be non empty constituted-Functions 1-sorted;
+ cluster strict Function-yielding net of R;
+existence
+  proof
+    consider N being net of R;
+    consider p being Element of R;
+    take N --> p;
+    thus thesis;
+  end;
+end;
+
+definition let S be non empty 1-sorted,
+               N be non empty NetStr over S;
+ cluster rng the mapping of N -> non empty;
+coherence;
+end;
+
+definition let S be non empty 1-sorted,
+               N be non empty NetStr over S;
+ cluster rng netmap (N,S) -> non empty;
+coherence;
+end;
+
+theorem
+   for A, B, C being non empty RelStr, f being map of B, C,
+     g, h being map of A, B st g <= h & f is monotone holds f * g <= f * h
+  proof
+    let A, B, C be non empty RelStr,
+        f be map of B, C,
+        g, h be map of A, B such that
+A1:   g <= h and
+A2:   for x, y being Element of B st x <= y holds f.x <= f.y;
+      for x being Element of A holds (f*g).x <= (f*h).x
+    proof
+      let x be Element of A;
+A3:   (f*g).x = f.(g.x) & (f*h).x = f.(h.x) by FUNCT_2:21;
+        g.x <= h.x by A1,YELLOW_2:10;
+      hence thesis by A2,A3;
+    end;
+    hence f * g <= f * h by YELLOW_2:10;
+  end;
+
+theorem
+   for S being non empty TopSpace,
+     T being non empty TopSpace-like TopRelStr,
+     f, g being map of S, T,
+     x, y being Element of ContMaps(S,T) st x = f & y = g holds
+  x <= y iff f <= g
+  proof
+    let S be non empty TopSpace,
+        T be non empty TopSpace-like TopRelStr,
+        f, g be map of S, T,
+        x, y be Element of ContMaps(S,T) such that
+A1:  x = f & y = g;
+A2: ContMaps(S,T) is full SubRelStr of T |^ the carrier of S by WAYBEL24:def 3;
+    then reconsider x1 = x, y1 = y as Element of T |^ the carrier of S
+      by YELLOW_0:59;
+    hereby
+      assume x <= y;
+      then x1 <= y1 by A2,YELLOW_0:60;
+      hence f <= g by A1,WAYBEL10:12;
+    end;
+    assume f <= g;
+    then x1 <= y1 by A1,WAYBEL10:12;
+    hence x <= y by A2,YELLOW_0:61;
+  end;
+
+definition let I be set,
+               R be non empty RelStr;
+ cluster -> Function-like Relation-like Element of R |^ I;
+coherence
+  proof
+    let x be Element of R |^ I;
+      R |^ I = product (I --> R) by YELLOW_1:def 5;
+    then reconsider y = x as Element of product (I --> R);
+      y is Function;
+    hence thesis;
+  end;
+end;
+
+definition let I be non empty set,
+               R be non empty RelStr,
+               f be Element of R |^ I,
+               i be Element of I;
+ redefine func f.i -> Element of R;
+coherence
+  proof
+      R |^ I = product (I --> R) by YELLOW_1:def 5;
+    then reconsider g = f as Element of product (I --> R);
+      g.i is Element of (I --> R).i;
+    hence thesis by FUNCOP_1:13;
+  end;
+end;
+
+begin  :: Some properties of isomorphism between relational structures
+
+theorem Th10:
+ for S, T being RelStr, f being map of S, T st f is isomorphic holds
+  f is onto
+  proof
+    let S, T be RelStr,
+        f be map of S, T such that
+A1:   f is isomorphic;
+    per cases;
+    suppose S is non empty & T is non empty;
+    hence rng f = the carrier of T by A1,WAYBEL_0:66;
+    suppose S is empty or T is empty;
+    then S is empty & T is empty by A1,WAYBEL_0:def 38;
+    then the carrier of S = {} & the carrier of T = {} by STRUCT_0:def 1;
+    hence rng f = the carrier of T by PARTFUN1:54;
+  end;
+
+definition let S, T be RelStr;
+ cluster isomorphic -> onto map of S, T;
+coherence by Th10;
+end;
+
+theorem Th11:
+ for S, T being non empty RelStr, f being map of S, T st f is isomorphic holds
+  f/" is isomorphic
+  proof
+    let S, T be non empty RelStr,
+        f be map of S, T;
+    assume
+A1:   f is isomorphic;
+    then consider g being map of T, S such that
+A2:   g = f qua Function" and g is monotone by WAYBEL_0:def 38;
+A3: the carrier of T = [#]T by PRE_TOPC:12;
+      rng f = the carrier of T & f is one-to-one by A1,WAYBEL_0:66;
+    then g = f/" by A2,A3,TOPS_2:def 4;
+    hence thesis by A1,A2,WAYBEL_0:68;
+  end;
+
+theorem
+   for S, T being non empty RelStr st S, T are_isomorphic & S is with_infima
+  holds T is with_infima
+  proof
+    let S, T be non empty RelStr;
+    given f being map of S, T such that
+A1:   f is isomorphic;
+    assume
+A2:   for a, b being Element of S
+       ex c being Element of S st c <= a & c <= b &
+        for c' being Element of S st c' <= a & c' <= b holds c' <= c;
+    let x, y be Element of T;
+    consider c being Element of S such that
+A3:   c <= f/".x & c <= f/".y and
+A4:   for c' being Element of S st c' <= f/".x & c' <= f/".y holds c' <= c
+     by A2;
+A5: f is one-to-one & rng f = the carrier of T by A1,WAYBEL_0:66;
+ then rng f = [#]T by PRE_TOPC:12;
+then A6: f/" = (f qua Function)" by A5,TOPS_2:def 4;
+    take f.c;
+      f.c <= f.(f/".x) & f.c <= f.(f/".y) by A1,A3,WAYBEL_0:66;
+    hence f.c <= x & f.c <= y by A5,A6,FUNCT_1:57;
+    let z' be Element of T;
+    assume
+A7:   z' <= x & z' <= y;
+      ex g being map of T, S st g = f qua Function" & g is monotone
+      by A1,WAYBEL_0:def 38;
+    then f/".z' <= f/".x & f/".z' <= f/".y by A6,A7,WAYBEL_1:def 2;
+    then f/".z' <= c by A4;
+    then f.(f/".z') <= f.c by A1,WAYBEL_0:66;
+    hence z' <= f.c by A5,A6,FUNCT_1:57;
+  end;
+
+theorem
+   for S, T being non empty RelStr st S, T are_isomorphic & S is with_suprema
+  holds T is with_suprema
+  proof
+    let S, T be non empty RelStr;
+    given f being map of S, T such that
+A1:   f is isomorphic;
+    assume
+A2:   for a, b being Element of S
+       ex c being Element of S st a <= c & b <= c &
+        for c' being Element of S st a <= c' & b <= c' holds c <= c';
+    let x, y be Element of T;
+    consider c being Element of S such that
+A3:   f/".x <= c & f/".y <= c and
+A4:   for c' being Element of S st f/".x <= c' & f/".y <= c' holds c <= c'
+       by A2;
+A5: f is one-to-one & rng f = the carrier of T by A1,WAYBEL_0:66;
+ then rng f = [#]T by PRE_TOPC:12;
+then A6: f/" = (f qua Function)" by A5,TOPS_2:def 4;
+    take f.c;
+      f.(f/".x) <= f.c & f.(f/".y) <= f.c by A1,A3,WAYBEL_0:66;
+    hence x <= f.c & y <= f.c by A5,A6,FUNCT_1:57;
+    let z' be Element of T;
+    assume
+A7:   x <= z' & y <= z';
+      ex g being map of T, S st g = f qua Function" & g is monotone
+      by A1,WAYBEL_0:def 38;
+    then f/".x <= f/".z' & f/".y <= f/".z' by A6,A7,WAYBEL_1:def 2;
+    then c <= f/".z' by A4;
+    then f.c <= f.(f/".z') by A1,WAYBEL_0:66;
+    hence f.c <= z' by A5,A6,FUNCT_1:57;
+  end;
+
+theorem Th14:
+ for L being RelStr st L is empty holds L is bounded
+  proof
+    let L be RelStr such that
+A1:   L is empty;
+    consider x being Element of L;
+    thus L is lower-bounded
+    proof
+      take x;
+      let a be Element of L;
+      assume a in the carrier of L;
+      hence thesis by A1,STRUCT_0:def 1;
+    end;
+    take x;
+    let a be Element of L;
+    assume a in the carrier of L;
+    hence thesis by A1,STRUCT_0:def 1;
+  end;
+
+definition
+ cluster empty -> bounded RelStr;
+coherence by Th14;
+end;
+
+theorem
+   for S, T being RelStr st S, T are_isomorphic & S is lower-bounded
+  holds T is lower-bounded
+  proof
+    let S, T be RelStr;
+    given f being map of S, T such that
+A1:   f is isomorphic;
+    per cases;
+    suppose S is non empty & T is non empty;
+    then reconsider s = S, t = T as non empty RelStr;
+    given X being Element of S such that
+A2:   X is_<=_than the carrier of S;
+    reconsider g = f as map of s, t;
+    reconsider x = X as Element of s;
+A3: x is_<=_than [#]S by A2,PRE_TOPC:12;
+    reconsider y = g.x as Element of T;
+    take y;
+      g is monotone by A1,WAYBEL_0:def 38;
+    then y is_<=_than g.:[#]S by A3,YELLOW_2:15;
+    then y is_<=_than g.:the carrier of S by PRE_TOPC:12;
+    then y is_<=_than rng g by FUNCT_2:45;
+    hence y is_<=_than the carrier of T by A1,WAYBEL_0:66;
+    suppose S is empty or T is empty;
+    then S is empty & T is empty by A1,WAYBEL_0:def 38;
+    then reconsider T as bounded RelStr by Th14;
+      T is lower-bounded;
+    hence thesis;
+  end;
+
+theorem
+   for S, T being RelStr st S, T are_isomorphic & S is upper-bounded
+  holds T is upper-bounded
+  proof
+    let S, T be RelStr;
+    given f being map of S, T such that
+A1:   f is isomorphic;
+    per cases;
+    suppose S is non empty & T is non empty;
+    then reconsider s = S, t = T as non empty RelStr;
+    given X being Element of S such that
+A2:   X is_>=_than the carrier of S;
+    reconsider g = f as map of s, t;
+    reconsider x = X as Element of s;
+A3: x is_>=_than [#]S by A2,PRE_TOPC:12;
+    reconsider y = g.x as Element of T;
+    take y;
+      g is monotone by A1,WAYBEL_0:def 38;
+    then y is_>=_than g.:[#]S by A3,YELLOW_2:16;
+    then y is_>=_than g.:the carrier of S by PRE_TOPC:12;
+    then y is_>=_than rng g by FUNCT_2:45;
+    hence y is_>=_than the carrier of T by A1,WAYBEL_0:66;
+    suppose S is empty or T is empty;
+    then S is empty & T is empty by A1,WAYBEL_0:def 38;
+    then reconsider T as bounded RelStr by Th14;
+      T is lower-bounded;
+    hence thesis;
+  end;
+
+theorem
+   for S, T being non empty RelStr, A being Subset of S, f being map of S, T st
+  f is isomorphic & ex_sup_of A, S holds ex_sup_of f.:A, T
+  proof
+    let S, T be non empty RelStr,
+        A be Subset of S,
+        f be map of S, T such that
+A1:   f is isomorphic;
+    given a being Element of S such that
+A2:   A is_<=_than a and
+A3:   for b being Element of S st A is_<=_than b holds b >= a and
+A4:   for c being Element of S st A is_<=_than c &
+       for b being Element of S st A is_<=_than b holds b >= c
+        holds c = a;
+A5: f/" is isomorphic by A1,Th11;
+A6: rng f = the carrier of T by A1,WAYBEL_0:66;
+then A7: f is one-to-one & rng f = [#]T by A1,PRE_TOPC:12,WAYBEL_0:66;
+then A8: f/" = f qua Function " by TOPS_2:def 4;
+    take f.a;
+    thus f.:A is_<=_than f.a by A1,A2,WAYBEL13:19;
+A9: dom f = the carrier of S by FUNCT_2:def 1;
+A10: f"(f.:A) = A
+    proof
+      thus f"(f.:A) c= A by A7,FUNCT_1:152;
+      thus thesis by A9,FUNCT_1:146;
+    end;
+    hereby
+      let b be Element of T;
+      assume f.:A is_<=_than b;
+      then f/".:(f.:A) is_<=_than f/".b by A5,WAYBEL13:19;
+      then f"(f.:A) is_<=_than f/".b by A7,TOPS_2:68;
+      then f/".b >= a by A3,A10;
+      then f.(f/".b) >= f.a by A1,WAYBEL_0:66;
+      hence b >= f.a by A6,A7,A8,FUNCT_1:57;
+    end;
+    let c be Element of T;
+    assume f.:A is_<=_than c;
+    then f/".:(f.:A) is_<=_than f/".c by A5,WAYBEL13:19;
+then A11: A is_<=_than f/".c by A7,A10,TOPS_2:68;
+    assume
+A12:   for b being Element of T st f.:A is_<=_than b holds b >= c;
+      for b being Element of S st A is_<=_than b holds b >= f/".c
+    proof
+      let b be Element of S;
+      assume A is_<=_than b;
+      then f.:A is_<=_than f.b by A1,WAYBEL13:19;
+      then f.b >= c by A12;
+      then f/".(f.b) >= f/".c by A5,WAYBEL_0:66;
+      hence b >= f/".c by A7,A8,A9,FUNCT_1:56;
+    end;
+    then f/".c = a by A4,A11;
+    hence c = f.a by A6,A7,A8,FUNCT_1:57;
+  end;
+
+theorem
+   for S, T being non empty RelStr, A being Subset of S, f being map of S, T st
+  f is isomorphic & ex_inf_of A, S holds ex_inf_of f.:A, T
+  proof
+    let S, T be non empty RelStr,
+        A be Subset of S,
+        f be map of S, T such that
+A1:   f is isomorphic;
+    given a being Element of S such that
+A2:   A is_>=_than a and
+A3:   for b being Element of S st A is_>=_than b holds b <= a and
+A4:   for c being Element of S st A is_>=_than c &
+       for b being Element of S st A is_>=_than b holds b <= c
+        holds c = a;
+A5: f/" is isomorphic by A1,Th11;
+A6: rng f = the carrier of T by A1,WAYBEL_0:66;
+then A7: f is one-to-one & rng f = [#]T by A1,PRE_TOPC:12,WAYBEL_0:66;
+then A8: f/" = f qua Function " by TOPS_2:def 4;
+    take f.a;
+    thus f.:A is_>=_than f.a by A1,A2,WAYBEL13:18;
+A9: dom f = the carrier of S by FUNCT_2:def 1;
+A10: f"(f.:A) = A
+    proof
+      thus f"(f.:A) c= A by A7,FUNCT_1:152;
+      thus thesis by A9,FUNCT_1:146;
+    end;
+    hereby
+      let b be Element of T;
+      assume f.:A is_>=_than b;
+      then f/".:(f.:A) is_>=_than f/".b by A5,WAYBEL13:18;
+      then f"(f.:A) is_>=_than f/".b by A7,TOPS_2:68;
+      then f/".b <= a by A3,A10;
+      then f.(f/".b) <= f.a by A1,WAYBEL_0:66;
+      hence b <= f.a by A6,A7,A8,FUNCT_1:57;
+    end;
+    let c be Element of T;
+    assume f.:A is_>=_than c;
+    then f/".:(f.:A) is_>=_than f/".c by A5,WAYBEL13:18;
+then A11: A is_>=_than f/".c by A7,A10,TOPS_2:68;
+    assume
+A12:   for b being Element of T st f.:A is_>=_than b holds b <= c;
+      for b being Element of S st A is_>=_than b holds b <= f/".c
+    proof
+      let b be Element of S;
+      assume A is_>=_than b;
+      then f.:A is_>=_than f.b by A1,WAYBEL13:18;
+      then f.b <= c by A12;
+      then f/".(f.b) <= f/".c by A5,WAYBEL_0:66;
+      hence b <= f/".c by A7,A8,A9,FUNCT_1:56;
+    end;
+    then f/".c = a by A4,A11;
+    hence c = f.a by A6,A7,A8,FUNCT_1:57;
+  end;
+
+begin  :: On the product of topological spaces
+
+theorem
+   for S, T being TopStruct st
+  (S,T are_homeomorphic or
+   ex f being map of S,T st dom f = [#]S & rng f = [#]T) holds
+  S is empty iff T is empty
+  proof
+    let S, T be TopStruct;
+    assume
+A1:  S,T are_homeomorphic or
+     ex f being map of S,T st dom f = [#]S & rng f = [#]T;
+    per cases by A1;
+    suppose S,T are_homeomorphic;
+    then consider f being map of S, T such that
+A2:   f is_homeomorphism by T_0TOPSP:def 1;
+      rng f = [#]T & dom f = [#]S by A2,TOPS_2:def 5;
+    hence thesis by Th4,Th5;
+    suppose ex f being map of S,T st dom f = [#]S & rng f = [#]T;
+    hence thesis by Th4,Th5;
+  end;
+
+theorem
+   for T being non empty TopSpace holds T, the TopStruct of T are_homeomorphic
+  proof
+    let T be non empty TopSpace;
+    reconsider f = id T as map of T, the TopStruct of T;
+    take f;
+    thus dom f = the carrier of T by FUNCT_2:def 1
+              .= [#]T by PRE_TOPC:12;
+    thus
+A1:   rng f = [#]T by TOPS_2:def 5
+           .= the carrier of T by PRE_TOPC:12
+           .= [#]the TopStruct of T by PRE_TOPC:12;
+    thus f is one-to-one;
+A2: rng id T = [#]T by TOPGRP_1:1;
+    thus f is continuous by YELLOW12:36;
+      f/" = f qua Function" by A1,TOPS_2:def 4
+      .= (id T)/" by A2,TOPS_2:def 4;
+    hence f/" is continuous by YELLOW12:36;
+  end;
+
+definition let T be Scott (reflexive non empty TopRelStr);
+ cluster open -> inaccessible upper Subset of T;
+coherence by WAYBEL11:def 4;
+ cluster inaccessible upper -> open Subset of T;
+coherence by WAYBEL11:def 4;
+end;
+
+theorem
+   for T being TopStruct, x, y being Point of T,
+     X, Y being Subset of T st X = {x} & Cl X c= Cl Y holds
+  x in Cl Y
+  proof
+    let T be TopStruct,
+        x, y be Point of T,
+        X, Y be Subset of T such that
+A1:   X = {x} and
+A2:    Cl X c= Cl Y;
+      X c= Cl X by PRE_TOPC:48;
+then A3: X c= Cl Y by A2,XBOOLE_1:1;
+      x in X by A1,TARSKI:def 1;
+    hence x in Cl Y by A3;
+  end;
+
+theorem
+   for T being TopStruct, x, y being Point of T,
+     Y, V being Subset of T st Y = {y} & x in Cl Y & V is open & x in V holds
+  y in V
+  proof
+    let T be TopStruct,
+        x, y be Point of T,
+        Y, V be Subset of T such that
+A1:   Y = {y};
+    assume x in Cl Y & V is open & x in V;
+    then Y meets V by PRE_TOPC:def 13;
+    hence y in V by A1,ZFMISC_1:56;
+  end;
+
+theorem
+   for T being TopStruct, x, y being Point of T,
+     X, Y being Subset of T st X = {x} & Y = {y} holds
+  (for V being Subset of T st V is open holds (x in V implies y in V)) implies
+ Cl X c= Cl Y
+  proof
+    let T be TopStruct,
+        x, y be Point of T,
+        X, Y be Subset of T;
+    assume that
+A1:    X = {x} & Y = {y} and
+A2:    for V being Subset of T st V is open holds x in V implies y in V;
+    let z be set;
+    assume
+A3:    z in Cl X;
+      for V being Subset of T st V is open holds
+      z in V implies Y meets V
+    proof
+      let V be Subset of T;
+      assume that
+A4:      V is open and
+A5:      z in V;
+        X meets V by A3,A4,A5,PRE_TOPC:def 13;
+      then x in V by A1,ZFMISC_1:56;
+      then y in V by A2,A4;
+      hence Y meets V by A1,ZFMISC_1:54;
+    end;
+    hence z in Cl Y by A3,PRE_TOPC:def 13;
+  end;
+
+theorem Th24:
+ for S, T being non empty TopSpace, A being irreducible Subset of S,
+     B being Subset of T st A = B & the TopStruct of S = the TopStruct of T
+  holds B is irreducible
+  proof
+    let S, T be non empty TopSpace,
+        A be irreducible Subset of S,
+        B be Subset of T such that
+A1:   A = B and
+A2:   the TopStruct of S = the TopStruct of T;
+      A is non empty closed by YELLOW_8:def 4;
+    hence B is non empty closed by A1,A2,TOPS_3:79;
+    let B1, B2 be Subset of T such that
+A3:   B1 is closed & B2 is closed & B = B1 \/ B2;
+    reconsider A1 = B1, A2 = B2 as Subset of S by A2;
+      A1 is closed & A2 is closed & A = A1 \/ A2 by A1,A2,A3,TOPS_3:79;
+    hence B1 = B or B2 = B by A1,YELLOW_8:def 4;
+  end;
+
+theorem Th25:
+ for S, T being non empty TopSpace, a being Point of S, b being Point of T,
+     A being Subset of S, B being Subset of T st
+   a = b & A = B & the TopStruct of S = the TopStruct of T &
+   a is_dense_point_of A
+  holds b is_dense_point_of B
+  proof
+    let S, T be non empty TopSpace,
+        a be Point of S,
+        b be Point of T,
+        A be Subset of S,
+        B be Subset of T;
+    assume a = b & A = B & the TopStruct of S = the TopStruct of T &
+      a in A & A c= Cl{a};
+    hence b in B & B c= Cl{b} by TOPS_3:80;
+  end;
+
+theorem Th26:
+ for S, T being TopStruct, A being Subset of S, B being Subset of T st
+   A = B & the TopStruct of S = the TopStruct of T & A is compact
+  holds B is compact
+  proof
+    let S, T be TopStruct,
+        A be Subset of S,
+        B be Subset of T such that
+A1:   A = B and
+A2:   the TopStruct of S = the TopStruct of T and
+A3:   for F being Subset-Family of S st
+       F is_a_cover_of A & F is open
+        ex G being Subset-Family of S st G c= F & G is_a_cover_of A &
+         G is finite;
+    let F be Subset-Family of T such that
+A4:   F is_a_cover_of B & F is open;
+    reconsider K = F as Subset-Family of S by A2;
+A5: K is_a_cover_of A
+    proof
+      thus A c= union K by A1,A4,COMPTS_1:def 1;
+    end;
+      K is open by A2,A4,WAYBEL_9:19;
+    then consider L being Subset-Family of S such that
+A6:   L c= K & L is_a_cover_of A & L is finite by A3,A5;
+    reconsider G = L as Subset-Family of T by A2;
+    take G;
+      G is_a_cover_of B
+    proof
+      thus B c= union G by A1,A6,COMPTS_1:def 1;
+    end;
+    hence G c= F & G is_a_cover_of B & G is finite by A6;
+  end;
+
+theorem
+   for S, T being non empty TopSpace st
+  the TopStruct of S = the TopStruct of T & S is sober holds T is sober
+  proof
+    let S, T be non empty TopSpace such that
+A1:   the TopStruct of S = the TopStruct of T and
+A2:   for A be irreducible Subset of S
+       ex a being Point of S st a is_dense_point_of A &
+        for b being Point of S st b is_dense_point_of A holds a = b;
+    let B be irreducible Subset of T;
+    reconsider A = B as irreducible Subset of S by A1,Th24;
+    consider a being Point of S such that
+A3:  a is_dense_point_of A and
+A4:  for b being Point of S st b is_dense_point_of A holds a = b by A2;
+    reconsider p = a as Point of T by A1;
+    take p;
+    thus p is_dense_point_of B by A1,A3,Th25;
+    let q be Point of T;
+    reconsider b = q as Point of S by A1;
+    assume q is_dense_point_of B;
+    then b is_dense_point_of A by A1,Th25;
+    hence p = q by A4;
+  end;
+
+theorem
+   for S, T being non empty TopSpace st
+  the TopStruct of S = the TopStruct of T & S is locally-compact holds
+ T is locally-compact
+  proof
+    let S, T be non empty TopSpace such that
+A1:   the TopStruct of S = the TopStruct of T and
+A2:   for x being Point of S, X being Subset of S st x in X & X is open
+        ex Y being Subset of S st x in Int Y & Y c= X & Y is compact;
+    let x be Point of T,
+        X be Subset of T such that
+A3:   x in X and
+A4:   X is open;
+    reconsider A = X as Subset of S by A1;
+      A is open by A1,A4,TOPS_3:76;
+    then consider B being Subset of S such that
+A5:   x in Int B & B c= A & B is compact by A2,A3;
+    reconsider Y = B as Subset of T by A1;
+    take Y;
+    thus x in Int Y & Y c= X & Y is compact by A1,A5,Th26,TOPS_3:77;
+  end;
+
+theorem
+   for S, T being TopStruct st
+  the TopStruct of S = the TopStruct of T & S is compact holds
+ T is compact
+  proof
+     let S, T be TopStruct such that
+A1:    the TopStruct of S = the TopStruct of T and
+A2:    for F being Subset-Family of S st F is_a_cover_of S &
+        F is open
+        ex G being Subset-Family of S st G c= F & G is_a_cover_of S &
+         G is finite;
+    let F be Subset-Family of T such that
+A3:   F is_a_cover_of T & F is open;
+    reconsider K = F as Subset-Family of S by A1;
+A4: K is_a_cover_of S
+    proof
+      thus [#]S = the carrier of S by PRE_TOPC:12
+             .= [#]T by A1,PRE_TOPC:12
+             .= union K by A3,PRE_TOPC:def 8;
+    end;
+      K is open by A1,A3,WAYBEL_9:19;
+    then consider L being Subset-Family of S such that
+A5:   L c= K & L is_a_cover_of S & L is finite by A2,A4;
+    reconsider G = L as Subset-Family of T by A1;
+    take G;
+      G is_a_cover_of T
+    proof
+      thus [#]T = the carrier of T by PRE_TOPC:12
+             .= [#]S by A1,PRE_TOPC:12
+             .= union G by A5,PRE_TOPC:def 8;
+    end;
+    hence G c= F & G is_a_cover_of T & G is finite by A5;
+  end;
+
+definition let I be non empty set,
+               T be non empty TopSpace,
+               x be Point of product (I --> T),
+               i be Element of I;
+ redefine func x.i -> Element of T;
+coherence
+  proof
+      x.i is Point of T by FUNCOP_1:13;
+    hence thesis;
+  end;
+end;
+
+theorem Th30:
+ for M being non empty set,
+     J being TopSpace-yielding non-Empty ManySortedSet of M,
+     x, y being Point of product J holds
+  x in Cl {y} iff for i being Element of M holds x.i in Cl {y.i}
+  proof
+    let M be non empty set,
+        J be TopSpace-yielding non-Empty ManySortedSet of M,
+        x, y be Point of product J;
+    hereby
+      assume
+A1:     x in Cl {y};
+      let i be Element of M;
+        x in the carrier of product J;
+      then x in product Carrier J by WAYBEL18:def 3;
+      then consider f being Function such that
+A2:     x = f and
+A3:     dom f = dom Carrier J and
+A4:     for z being set st z in dom Carrier J
+         holds f.z in (Carrier J).z by CARD_3:def 5;
+A5:   i in M;
+        for G being Subset of J.i st G is open holds
+        x.i in G implies {y.i} meets G
+      proof
+        let G be Subset of J.i;
+        assume that
+A6:       G is open and
+A7:       x.i in G;
+A8:     dom f = dom ((Carrier J) +* (i,G)) by A3,FUNCT_7:32;
+          for z being set st z in dom ((Carrier J)+*(i,G))
+          holds f.z in ((Carrier J)+*(i,G)).z
+        proof
+          let z be set;
+          assume z in dom ((Carrier J)+*(i,G));
+then A9:       z in dom Carrier J by FUNCT_7:32;
+          per cases;
+          suppose z = i;
+          hence f.z in ((Carrier J)+*(i,G)).z by A2,A7,A9,FUNCT_7:33;
+          suppose z <> i;
+          then ((Carrier J)+*(i,G)).z
+               = (Carrier J).z by FUNCT_7:34;
+          hence f.z in ((Carrier J)+*(i,G)).z by A4,A9;
+        end;
+then A10:     x in product ((Carrier J) +* (i,G)) by A2,A8,CARD_3:def 5;
+        reconsider G' = G as Subset of J.i;
+          proj(J,i) is continuous by WAYBEL18:6;
+then A11:     proj(J,i)"G' is open by A6,TOPS_2:55;
+A12:     product ((Carrier J) +* (i,G'))
+            = proj(J,i)"G' by WAYBEL18:5;
+        then {y} meets proj(J,i)"G'
+          by A1,A10,A11,PRE_TOPC:def 13;
+        then y in product ((Carrier J) +* (i,G)) by A12,ZFMISC_1:56;
+        then consider g being Function such that
+A13:       y = g and
+            dom g = dom ((Carrier J) +* (i,G)) and
+A14:     for z being set st z in dom ((Carrier J) +* (i,G))
+          holds g.z in ((Carrier J) +* (i,G)).z by CARD_3:def 5;
+A15:     i in dom Carrier J by A5,PBOOLE:def 3;
+        then i in dom ((Carrier J) +* (i,G)) by FUNCT_7:32;
+        then g.i in ((Carrier J) +* (i,G)).i by A14;
+        then g.i in G by A15,FUNCT_7:33;
+        hence {y.i} meets G by A13,ZFMISC_1:54;
+      end;
+      hence x.i in Cl {y.i} by PRE_TOPC:def 13;
+    end;
+    assume
+A16:   for i being Element of M holds x.i in Cl {y.i};
+    reconsider K = product_prebasis J as prebasis of product J
+      by WAYBEL18:def 3;
+      for Z being finite Subset-Family of product J
+      st Z c= K & x in Intersect Z holds Intersect Z meets {y}
+    proof
+      let Z be finite Subset-Family of product J;
+      assume that
+A17:     Z c= K and
+A18:     x in Intersect Z;
+A19:   y in {y} by TARSKI:def 1;
+        for Y being set st Y in Z holds y in Y
+      proof
+        let Y be set;
+        assume
+A20:       Y in Z;
+        then Y in K by A17;
+        then consider i being set, W being TopStruct,
+                 V being Subset of W such that
+A21:       i in M and
+A22:       V is open and
+A23:       W = J.i and
+A24:       Y = product ((Carrier J)+*(i,V)) by WAYBEL18:def 2;
+        reconsider i as Element of M by A21;
+        reconsider V as Subset of (J.i) by A23;
+       x.i in Cl {y.i} by A16;
+then A25:     x.i in V implies {y.i} meets V by A22,A23,PRE_TOPC:def 13;
+          x in Y by A18,A20,CANTOR_1:10;
+        then consider f being Function such that
+A26:       x = f and
+            dom f = dom ((Carrier J)+*(i,V)) and
+A27:       for z being set st z in dom ((Carrier J)+*(i,V))
+           holds f.z in ((Carrier J)+*(i,V)).z by A24,CARD_3:def 5;
+          y in the carrier of product J;
+        then y in product Carrier J by WAYBEL18:def 3;
+        then consider g being Function such that
+A28:       y = g and
+A29:       dom g = dom Carrier J and
+A30:       for z being set st z in dom Carrier J
+            holds g.z in (Carrier J).z by CARD_3:def 5;
+A31:       dom g = dom ((Carrier J)+*(i,V)) by A29,FUNCT_7:32;
+          for z being set st z in dom ((Carrier J)+*(i,V))
+          holds g.z in ((Carrier J)+*(i,V)).z
+        proof
+          let z be set;
+          assume
+A32:         z in dom ((Carrier J)+*(i,V));
+then A33:       z in dom Carrier J by FUNCT_7:32;
+          per cases;
+          suppose
+A34:         z = i;
+          then ((Carrier J)+*(i,V)).z = V by A33,FUNCT_7:33;
+          hence g.z in ((Carrier J)+*(i,V)).z
+             by A25,A26,A27,A28,A32,A34,ZFMISC_1:56;
+          suppose z <> i;
+            then ((Carrier J)+*(i,V)).z
+                    = (Carrier J).z by FUNCT_7:34;
+          hence g.z in ((Carrier J)+*(i,V)).z by A30,A33;
+        end;
+        hence y in Y by A24,A28,A31,CARD_3:def 5;
+      end;
+      then y in Intersect Z by CANTOR_1:10;
+      hence Intersect Z meets {y} by A19,XBOOLE_0:3;
+    end;
+    hence x in Cl {y} by YELLOW_9:38;
+  end;
+
+theorem
+   for M being non empty set, T being non empty TopSpace,
+     x, y being Point of product (M --> T) holds
+  x in Cl {y} iff for i being Element of M holds x.i in Cl {y.i}
+  proof
+    let M be non empty set,
+        T be non empty TopSpace,
+        x, y be Point of product (M --> T);
+    reconsider J = M --> T as TopSpace-yielding non-Empty ManySortedSet of M;
+    reconsider x' = x, y' = y as Point of product J;
+    thus x in Cl {y} implies for i being Element of M holds x.i in Cl {y.i}
+    proof
+      assume
+A1:     x in Cl {y};
+      let i be Element of M;
+        x'.i in Cl {y'.i} by A1,Th30;
+      hence thesis by FUNCOP_1:13;
+    end;
+    assume
+A2:   for i being Element of M holds x.i in Cl {y.i};
+      for i being Element of M holds x'.i in Cl {y'.i}
+    proof
+      let i be Element of M;
+        x.i in Cl {y.i} by A2;
+      hence thesis by FUNCOP_1:13;
+    end;
+    hence thesis by Th30;
+  end;
+
+theorem Th32:
+ for M being non empty set, i being Element of M,
+     J being TopSpace-yielding non-Empty ManySortedSet of M,
+     x being Point of product J holds
+  pi(Cl {x}, i) = Cl {x.i}
+  proof
+    let M be non empty set,
+        i be Element of M,
+        J be TopSpace-yielding non-Empty ManySortedSet of M,
+        x be Point of product J;
+    thus pi(Cl {x}, i) c= Cl {x.i}
+    proof
+      let a be set;
+      assume a in pi(Cl {x}, i);
+      then ex f being Function st f in Cl {x} & a = f.i by CARD_3:def 6;
+      hence a in Cl {x.i} by Th30;
+    end;
+    let a be set;
+    assume
+A1:   a in Cl {x.i};
+    consider f being set such that
+A2:   f in Cl {x} by XBOOLE_0:def 1;
+A3: f in the carrier of product J by A2;
+    reconsider f as Element of product J by A2;
+    set y = f +* (i .--> a);
+A4: f in product Carrier J by A3,WAYBEL18:def 3;
+A5: dom Carrier J = M by PBOOLE:def 3;
+then A6: dom f = M by A4,CARD_3:18;
+A7: dom y = dom f \/ dom (i .--> a) by FUNCT_4:def 1
+      .= M \/ {i} by A6,CQC_LANG:5
+      .= M by ZFMISC_1:46;
+A8: dom (i .--> a) = {i} by CQC_LANG:5;
+      for m being set st m in dom Carrier J holds
+     y.m in (Carrier J).m
+    proof
+      let m be set; assume
+A9:     m in dom Carrier J;
+      then consider R being 1-sorted such that
+A10:     R = J.m & Carrier J.m = the carrier of R by A5,PRALG_1:def 13;
+      per cases;
+      suppose
+A11:     m = i;
+      then y.m = a by Th3;
+      hence y.m in (Carrier J).m by A1,A10,A11;
+      suppose
+      m <> i;
+      then not m in dom (i .--> a) by A8,TARSKI:def 1;
+      then y.m = f.m by FUNCT_4:12;
+      hence y.m in (Carrier J).m by A4,A9,CARD_3:18;
+    end;
+    then y in product Carrier J by A5,A7,CARD_3:18;
+    then y in the carrier of product J by WAYBEL18:def 3;
+    then reconsider y = f +* (i .--> a) as Element of product J
+     ;
+      for m being Element of M holds y.m in Cl {x.m}
+    proof
+      let m be Element of M;
+      per cases;
+      suppose m = i;
+      hence y.m in Cl {x.m} by A1,Th3;
+      suppose
+      m <> i;
+      then not m in dom (i .--> a) by A8,TARSKI:def 1;
+      then y.m = f.m by FUNCT_4:12;
+      hence y.m in Cl {x.m} by A2,Th30;
+    end;
+then A12: f +* (i .--> a) in Cl {x} by Th30;
+      (f +* (i .--> a)).i = a by Th3;
+    hence a in pi(Cl {x}, i) by A12,CARD_3:def 6;
+  end;
+
+theorem
+   for M being non empty set, i being Element of M,
+     T being non empty TopSpace, x being Point of product (M --> T) holds
+  pi(Cl {x}, i) = Cl {x.i}
+  proof
+    let M be non empty set,
+        i be Element of M,
+        T be non empty TopSpace,
+        x be Point of product (M --> T);
+      (M --> T).i = T by FUNCOP_1:13;
+    hence thesis by Th32;
+  end;
+
+theorem
+   for X, Y being non empty TopStruct, f being map of X, Y, g being map of Y, X
+  st f = id X & g = id X & f is continuous & g is continuous holds
+ the TopStruct of X = the TopStruct of Y
+  proof
+    let X, Y be non empty TopStruct,
+        f be map of X, Y,
+        g be map of Y, X such that
+A1:   f = id X and
+A2:   g = id X and
+A3:   f is continuous and
+A4:   g is continuous;
+A5: g = id the carrier of X by A2,GRCAT_1:def 11;
+A6: f = id the carrier of X by A1,GRCAT_1:def 11;
+A7: the carrier of X = dom f by FUNCT_2:def 1
+       .= the carrier of Y by A1,A2,FUNCT_2:def 1;
+      the topology of X = the topology of Y
+    proof
+      hereby
+        let A be set;
+        assume
+A8:       A in the topology of X;
+        then reconsider B = A as Subset of X;
+          B is open by A8,PRE_TOPC:def 5;
+then A9:     g"B is open by A4,TOPS_2:55;
+          g"B = B by A5,BORSUK_1:4;
+        hence A in the topology of Y by A9,PRE_TOPC:def 5;
+      end;
+      let A be set;
+      assume
+A10:     A in the topology of Y;
+      then reconsider B = A as Subset of Y;
+        B is open by A10,PRE_TOPC:def 5;
+then A11:   f"B is open by A3,TOPS_2:55;
+        f"B = B by A6,A7,BORSUK_1:4;
+      hence A in the topology of X by A11,PRE_TOPC:def 5;
+    end;
+    hence the TopStruct of X = the TopStruct of Y by A7;
+  end;
+
+theorem
+   for X, Y being non empty TopSpace, f being map of X, Y st
+  corestr f is continuous holds f is continuous
+  proof
+    let X, Y be non empty TopSpace,
+        f be map of X, Y such that
+A1:   corestr f is continuous;
+      corestr f = f by WAYBEL18:def 7;
+    hence thesis by A1,TOPMETR:7;
+  end;
+
+definition let X be non empty TopSpace,
+               Y be non empty SubSpace of X;
+ cluster incl Y -> continuous;
+coherence by TMAP_1:98;
+end;
+
+theorem
+   for T being non empty TopSpace, f being map of T, T st f*f = f
+  holds corestr f * incl Image f = id Image f
+  proof
+    let T be non empty TopSpace,
+        f be map of T, T such that
+A1:   f*f = f;
+    set cf = corestr f,
+        i = incl Image f;
+      for x being set st x in the carrier of Image f holds
+      (cf*i).x = (id Image f).x
+    proof
+      let x be set;
+      assume
+A2:     x in the carrier of Image f;
+        the carrier of Image f = rng f by WAYBEL18:10;
+      then consider y being set such that
+A3:     y in dom f and
+A4:     f.y = x by A2,FUNCT_1:def 5;
+A5:   the carrier of Image f c= the carrier of T by BORSUK_1:35;
+      thus (cf*i).x = cf.(i.x) by A2,FUNCT_2:21
+              .= cf.x by A2,A5,TMAP_1:95
+              .= f.x by WAYBEL18:def 7
+              .= x by A1,A3,A4,FUNCT_2:21
+              .= (id Image f).x by A2,GRCAT_1:11;
+    end;
+    hence corestr f * incl Image f = id Image f by FUNCT_2:18;
+  end;
+
+theorem
+   for Y being non empty TopSpace, W being non empty SubSpace of Y holds
+  corestr incl W is_homeomorphism
+  proof
+    let Y be non empty TopSpace,
+        W be non empty SubSpace of Y;
+    set ci = corestr incl W;
+    thus dom ci = the carrier of W by FUNCT_2:def 1
+        .= [#]W by PRE_TOPC:12;
+    thus
+A1:   rng ci = the carrier of Image incl W by FUNCT_2:def 3
+        .= [#]Image incl W by PRE_TOPC:12;
+A2:   ci = incl W by WAYBEL18:def 7
+        .= (id Y)|W by TMAP_1:def 6
+        .= (id Y)|the carrier of W by TMAP_1:def 3
+        .= (id the carrier of Y)|the carrier of W by GRCAT_1:def 11;
+    hence
+A3:   ci is one-to-one by FUNCT_1:84;
+    thus ci is continuous by WAYBEL18:11;
+      for P being Subset of W st P is open holds ci/""P is open
+    proof
+      let P be Subset of W;
+      assume P in the topology of W;
+      then consider Q being Subset of Y such that
+A4:       Q in the topology of Y & P = Q /\ [#]W by PRE_TOPC:def 9;
+A5:     the carrier of W is non empty Subset of Y
+        by BORSUK_1:35;
+then A6:     P is Subset of Y by XBOOLE_1:1;
+A7:     [#]W = the carrier of W by PRE_TOPC:12
+        .= rng ((id the carrier of Y)|the carrier of W) by A5,Th2
+        .= rng ((id Y)|the carrier of W) by GRCAT_1:def 11
+        .= rng ((id Y)|W) by TMAP_1:def 3
+        .= rng incl W by TMAP_1:def 6
+        .= the carrier of Image incl W by WAYBEL18:10
+        .= [#]Image incl W by PRE_TOPC:12;
+        ci/""P = ((id the carrier of Y)|the carrier of W).:P
+             by A1,A2,A3,TOPS_2:
+67
+           .= (id the carrier of Y).:P by A5,A6,TMAP_1:4
+           .= P by A6,BORSUK_1:3;
+      hence ci/""P in the topology of Image incl W by A4,A7,PRE_TOPC:def 9;
+    end;
+    hence ci/" is continuous by TOPS_2:55;
+  end;
+
+theorem Th38:
+ for M being non empty set,
+     J being TopSpace-yielding non-Empty ManySortedSet of M st
+   for i being Element of M holds J.i is T_0 TopSpace holds
+ product J is T_0
+  proof
+    let M be non empty set,
+        J be TopSpace-yielding non-Empty ManySortedSet of M such that
+A1:   for i be Element of M holds J.i is T_0 TopSpace;
+      for x, y being Point of product J st x <> y holds Cl {x} <> Cl {y}
+    proof
+      let x, y be Point of product J such that
+A2:     x <> y and
+A3:     Cl {x} = Cl {y};
+        x in the carrier of product J &
+        y in the carrier of product J;
+      then x in product Carrier J & y in product Carrier J
+        by WAYBEL18:def 3;
+      then dom x = dom Carrier J & dom y = dom Carrier J
+        by CARD_3:18;
+      then dom x = M & dom y = M by PBOOLE:def 3;
+      then consider i being set such that
+A4:     i in M and
+A5:     x.i <> y.i by A2,FUNCT_1:9;
+      reconsider i as Element of M by A4;
+A6:   J.i is T_0 TopSpace by A1;
+        pi(Cl {x}, i) = Cl {x.i} & pi(Cl {y}, i) = Cl {y.i} by Th32;
+      hence contradiction by A3,A5,A6,TSP_1:def 5;
+    end;
+    hence thesis by TSP_1:def 5;
+  end;
+
+definition let I be non empty set,
+               T be non empty T_0 TopSpace;
+ cluster product (I --> T) -> T_0;
+coherence
+  proof
+      for i being Element of I holds (I --> T).i is T_0 TopSpace by FUNCOP_1:13
+;
+    hence thesis by Th38;
+  end;
+end;
+
+theorem Th39:
+ for M being non empty set,
+     J being TopSpace-yielding non-Empty ManySortedSet of M st
+   for i being Element of M holds J.i is being_T1 TopSpace-like holds
+ product J is_T1
+  proof
+    let M be non empty set,
+        J be TopSpace-yielding non-Empty ManySortedSet of M such that
+A1:   for i be Element of M holds J.i is being_T1 TopSpace-like;
+      for p being Point of product J holds {p} is closed
+    proof
+      let p be Point of product J;
+        {p} = Cl {p}
+      proof
+        thus {p} c= Cl {p} by PRE_TOPC:48;
+        let a be set;
+        assume
+A2:       a in Cl {p};
+        then reconsider a, p as Element of product J;
+          a in the carrier of product J &
+          p in the carrier of product J;
+        then a in product Carrier J &
+          p in product Carrier J by WAYBEL18:def 3;
+        then dom a = dom Carrier J & dom p = dom Carrier J
+          by CARD_3:18;
+then A3:     dom a = M & dom p = M by PBOOLE:def 3;
+          for i being set st i in M holds a.i = p.i
+        proof
+          let i be set;
+          assume i in M;
+          then reconsider i as Element of M;
+A4:        J.i is TopSpace by A1;
+            J.i is_T1 by A1;
+then A5:       {p.i} is closed by A4,URYSOHN1:27;
+            a.i in Cl {p.i} by A2,Th30;
+          then a.i in {p.i} by A5,PRE_TOPC:52;
+          hence thesis by TARSKI:def 1;
+        end;
+        then a = p by A3,FUNCT_1:9;
+        hence thesis by TARSKI:def 1;
+      end;
+      hence {p} is closed;
+    end;
+    hence thesis by URYSOHN1:27;
+  end;
+
+definition let I be non empty set,
+               T be non empty being_T1 TopSpace;
+ cluster product (I --> T) -> being_T1;
+coherence
+  proof
+      for i being Element of I holds (I --> T).i is being_T1 TopSpace-like
+      by FUNCOP_1:13;
+    hence thesis by Th39;
+  end;
+end;

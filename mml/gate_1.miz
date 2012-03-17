@@ -1,0 +1,673 @@
+:: Logic Gates and Logical Equivalence of Adders
+::  by Yatsuka Nakamura
+::
+:: Received February 4, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, GATE_1;
+ notation XBOOLE_0;
+ constructors XBOOLE_0;
+ clusters XBOOLE_0;
+ requirements BOOLE;
+
+begin :: Definition of Logical Values and Logic Gates
+
+definition let a be set;
+  redefine attr a is empty;
+  antonym $a;
+end;
+
+theorem Th1: for a being set st a={{}:not contradiction} holds $a
+proof let a be set;
+ assume A1:a={{}:not contradiction};
+   now assume A2:a={};
+     {} in a by A1;
+  hence contradiction by A2;
+ end;
+ hence $a;
+end;
+
+theorem ex a being set st $a
+proof
+   now assume A1:{{}:not contradiction}={};
+     {} in {{}:not contradiction};
+   hence contradiction by A1;
+ end;
+ hence thesis;
+end;
+
+definition let a be set;
+  func NOT1 a equals
+  :Def1: {} if $a
+   otherwise {{}:not contradiction};
+ correctness;
+end;
+
+canceled;
+
+theorem Th4:
+  for a being set holds $NOT1 a iff not($a)
+proof let a be set;
+ per cases;
+ suppose $a;
+  hence $(NOT1 a) iff not($a) by Def1;
+ suppose A1:not $a;
+  then NOT1 a= {{}:not contradiction} by Def1;
+  hence $(NOT1 a) iff not($a) by A1,Th1;
+end;
+
+ reserve a,b,c,d,e,f,g,h for set;
+
+theorem Th5:
+  $ NOT1 {} by Th4;
+
+definition let a,b be set;
+  func AND2(a,b) equals
+  :Def2: NOT1 {} if $a & $b
+   otherwise {};
+  correctness;
+ end;
+
+theorem
+   $AND2(a,b) iff ($a & $b) by Def2,Th5;
+
+definition let a,b be set;
+  func OR2(a, b) equals
+  :Def3: NOT1 {} if ($a or $b)
+      otherwise {};
+ correctness;
+end;
+
+theorem Th7:
+  $OR2(a,b) iff ($a or $b) by Def3,Th5;
+
+definition let a,b be set;
+ func XOR2(a,b) equals
+  :Def4: NOT1 {} if ($a & not $b) or (not $a & $b)
+  otherwise {};
+ correctness;
+end;
+
+theorem
+   $XOR2(a, b) iff ($a & not $b) or (not $a & $b) by Def4,Th5;
+
+theorem
+    $XOR2(a,a) iff contradiction
+proof $XOR2(a,a) iff ($a & not $a) or (not $a & $a) by Def4;
+ hence thesis;
+end;
+
+theorem
+    $XOR2(a,{}) iff $a by Def4,Th5;
+
+theorem
+    $XOR2(a,b) iff $XOR2(b,a)
+proof
+    $XOR2(a,b) iff ($a & not $b) or (not $a & $b) by Def4,Th5;
+  hence thesis by Def4,Th5;
+end;
+
+definition let a,b be set;
+  func EQV2(a, b) equals
+  :Def5: NOT1 {} if ($a iff $b)
+  otherwise {};
+ correctness;
+end;
+
+theorem
+   $EQV2(a, b) iff ($a iff $b) by Def5,Th5;
+
+theorem
+    $EQV2(a,b) iff not $XOR2(a,b)
+proof
+    $EQV2(a,b) iff ($a iff $b) by Def5,Th5;
+  hence thesis by Def4,Th5;
+end;
+
+definition let a,b be set;
+  func NAND2(a, b) equals
+  :Def6: NOT1 {} if not ($a & $b)
+  otherwise {};
+ correctness;
+end;
+
+theorem
+   $NAND2(a, b) iff not ($a & $b) by Def6,Th5;
+
+definition let a,b be set;
+  func NOR2(a, b) equals
+  :Def7: NOT1 {} if not ($a or $b)
+  otherwise {};
+ correctness;
+end;
+
+theorem
+   $NOR2(a,b) iff not ($a or $b) by Def7,Th5;
+
+definition let a,b,c be set;
+  func AND3(a,b,c) equals
+  :Def8: NOT1 {} if $a & $b & $c
+  otherwise {};
+ correctness;
+end;
+
+theorem
+   $AND3(a,b,c) iff $a & $b & $c by Def8,Th5;
+
+definition let a,b,c be set;
+  func OR3(a,b,c) equals
+  :Def9: NOT1 {} if $a or $b or $c
+  otherwise {};
+ correctness;
+end;
+
+theorem
+    $OR3(a,b,c) iff $a or $b or $c by Def9,Th5;
+
+definition let a,b,c be set;
+  func XOR3(a,b,c) equals
+  :Def10: NOT1 {} if
+  (($a & not $b) or (not $a & $b)) & not $c or
+  not (($a & not $b) or (not $a & $b)) & $c
+  otherwise {};
+ correctness;
+end;
+
+theorem Th18:
+  $XOR3(a,b,c) iff
+  (($a & not $b) or (not $a & $b)) & not $c or
+  not (($a & not $b) or (not $a & $b)) & $c by Def10,Th5;
+
+definition let a,b,c be set;
+  func MAJ3(a,b,c) equals
+  :Def11: NOT1 {} if $a & $b or $b & $c or $c & $a
+  otherwise {};
+ correctness;
+end;
+
+theorem Th19:
+  $MAJ3(a,b,c) iff $a & $b or $b & $c or $c & $a by Def11,Th5;
+
+definition let a,b,c be set;
+  func NAND3(a,b,c) equals
+  :Def12: NOT1 {} if not ($a & $b & $c)
+  otherwise {};
+ correctness;
+end;
+
+theorem
+    $NAND3(a,b,c) iff not ($a & $b & $c) by Def12,Th5;
+
+definition let a,b,c be set;
+  func NOR3(a,b,c) equals
+  :Def13: NOT1 {} if not ($a or $b or $c)
+  otherwise {};
+ correctness;
+end;
+
+theorem
+   $NOR3(a,b,c) iff not ($a or $b or $c) by Def13,Th5;
+
+definition let a,b,c,d be set;
+  func AND4(a,b,c,d) equals
+  :Def14:  NOT1 {} if $a & $b & $c & $d
+  otherwise {};
+ correctness;
+end;
+
+theorem
+   $AND4(a,b,c,d) iff $a & $b & $c & $d by Def14,Th5;
+
+definition let a,b,c,d be set;
+  func OR4(a,b,c,d) equals
+  :Def15: NOT1 {} if $a or $b or $c or $d
+  otherwise {};
+ correctness;
+end;
+
+theorem
+    $OR4(a,b,c,d) iff $a or $b or $c or $d by Def15,Th5;
+
+definition let a,b,c,d be set;
+  func NAND4(a,b,c,d) equals
+  :Def16: NOT1 {} if not ($a & $b & $c & $d)
+  otherwise {};
+ correctness;
+end;
+
+theorem
+    $NAND4(a,b,c,d) iff not ($a & $b & $c & $d) by Def16,Th5;
+
+definition let a,b,c,d be set;
+  func NOR4(a,b,c,d) equals
+  :Def17: NOT1 {} if not ($a or $b or $c or $d)
+  otherwise {};
+ correctness;
+end;
+
+theorem
+   $NOR4(a,b,c,d) iff not ($a or $b or $c or $d) by Def17,Th5;
+
+definition let a,b,c,d,e be set;
+  func AND5(a,b,c,d,e) equals
+  :Def18: NOT1 {} if $a & $b & $c & $d & $e
+  otherwise {};
+ correctness;
+end;
+
+theorem
+   $AND5(a,b,c,d,e) iff $a & $b & $c & $d & $e by Def18,Th5;
+
+definition let a,b,c,d,e be set;
+  func OR5(a,b,c,d,e) equals
+  :Def19: NOT1 {} if $a or $b or $c or $d or $e
+  otherwise {};
+ correctness;
+end;
+
+theorem
+    $OR5(a,b,c,d,e) iff $a or $b or $c or $d or $e by Def19,Th5;
+
+definition let a,b,c,d,e be set;
+  func NAND5(a,b,c,d,e) equals
+  :Def20: NOT1 {} if not ($a & $b & $c & $d & $e)
+  otherwise {};
+ correctness;
+end;
+
+theorem
+  $NAND5(a,b,c,d,e) iff not ($a & $b & $c & $d & $e) by Def20,Th5;
+
+definition let a,b,c,d,e be set;
+  func NOR5(a,b,c,d,e) equals
+  :Def21: NOT1 {} if not ($a or $b or $c or $d or $e)
+  otherwise {};
+ correctness;
+end;
+
+theorem
+  $NOR5(a,b,c,d,e) iff not ($a or $b or $c or $d or $e) by Def21,Th5;
+
+definition let a,b,c,d,e,f be set;
+  func AND6(a,b,c,d,e,f) equals
+  :Def22: NOT1 {} if $a & $b & $c & $d & $e &$f
+  otherwise {};
+ correctness;
+end;
+
+theorem
+  $AND6(a,b,c,d,e,f) iff $a & $b & $c & $d & $e &$f by Def22,Th5;
+
+definition let a,b,c,d,e,f be set;
+  func OR6(a,b,c,d,e,f) equals
+  :Def23: NOT1 {} if $a or $b or $c or $d or $e or $f
+  otherwise {};
+ correctness;
+ end;
+
+theorem
+  $OR6(a,b,c,d,e,f) iff $a or $b or $c or $d or $e or $f by Def23,Th5;
+
+definition let a,b,c,d,e,f be set;
+  func NAND6(a,b,c,d,e,f) equals
+  :Def24: NOT1 {} if not ($a & $b & $c & $d & $e &$f)
+  otherwise {};
+ correctness;
+end;
+
+theorem
+  $NAND6(a,b,c,d,e,f) iff not ($a & $b & $c & $d & $e &$f) by Def24,Th5;
+
+definition let a,b,c,d,e,f be set;
+  func NOR6(a,b,c,d,e,f) equals
+  :Def25: NOT1 {} if not ($a or $b or $c or $d or $e or $f)
+  otherwise {};
+ correctness;
+end;
+
+theorem
+  $NOR6(a,b,c,d,e,f) iff not ($a or $b or $c or $d or $e or $f) by Def25,Th5;
+
+definition let a,b,c,d,e,f,g be set;
+  func AND7(a,b,c,d,e,f,g) equals
+  :Def26: NOT1 {} if $a & $b & $c & $d & $e & $f & $g
+  otherwise {};
+ correctness;
+end;
+
+theorem
+  $AND7(a,b,c,d,e,f,g) iff $a & $b & $c & $d & $e & $f & $g by Def26,Th5;
+
+definition let a,b,c,d,e,f,g be set;
+  func OR7(a,b,c,d,e,f,g) equals
+  :Def27: NOT1 {} if $a or $b or $c or $d or $e or $f or $g
+  otherwise {};
+ correctness;
+end;
+
+theorem
+  $OR7(a,b,c,d,e,f,g) iff $a or $b or $c or $d or $e or $f or $g by Def27,Th5;
+
+definition let a,b,c,d,e,f,g be set;
+  func NAND7(a,b,c,d,e,f,g) equals
+  :Def28: NOT1 {} if not ($a & $b & $c & $d & $e & $f & $g)
+  otherwise {};
+ correctness;
+end;
+
+theorem
+    $NAND7(a,b,c,d,e,f,g) iff
+   not ($a & $b & $c & $d & $e & $f & $g) by Def28,Th5;
+
+definition let a,b,c,d,e,f,g be set;
+  func NOR7(a,b,c,d,e,f,g) equals
+  :Def29: NOT1 {} if not ($a or $b or $c or $d or $e or $f or $g)
+  otherwise {};
+ correctness;
+end;
+
+theorem
+    $NOR7(a,b,c,d,e,f,g) iff
+   not ($a or $b or $c or $d or $e or $f or $g) by Def29,Th5;
+
+definition let a,b,c,d,e,f,g,h be set;
+  func AND8(a,b,c,d,e,f,g,h) equals
+  :Def30: NOT1 {} if $a & $b & $c & $d & $e & $f & $g & $h
+  otherwise {};
+ correctness;
+end;
+
+theorem
+    $AND8(a,b,c,d,e,f,g,h) iff $a & $b & $c & $d & $e & $f & $g & $h
+   by Def30,Th5;
+
+definition let a,b,c,d,e,f,g,h be set;
+  func OR8(a,b,c,d,e,f,g,h) equals
+  :Def31: NOT1 {} if
+  $a or $b or $c or $d or $e or $f or $g or $h
+  otherwise {};
+ correctness;
+end;
+
+theorem
+    $OR8(a,b,c,d,e,f,g,h) iff
+  $a or $b or $c or $d or $e or $f or $g or $h by Def31,Th5;
+
+definition let a,b,c,d,e,f,g,h be set;
+  func NAND8(a,b,c,d,e,f,g,h) equals
+  :Def32: NOT1 {} if
+  not ($a & $b & $c & $d & $e & $f & $g & $h)
+  otherwise {};
+ correctness;
+end;
+
+theorem
+    $NAND8(a,b,c,d,e,f,g,h) iff
+   not ($a & $b & $c & $d & $e & $f & $g & $h) by Def32,Th5;
+
+definition let a,b,c,d,e,f,g,h be set;
+  func NOR8(a,b,c,d,e,f,g,h) equals
+  :Def33: NOT1 {} if not ($a or $b or $c or $d or $e or $f or $g or $h)
+  otherwise {};
+ correctness;
+end;
+
+theorem
+    $NOR8(a,b,c,d,e,f,g,h) iff
+    not ($a or $b or $c or $d or $e or $f or $g or $h) by Def33,Th5;
+
+begin :: Logical Equivalence of 4 Bits Adders
+
+:: The following theorem shows that an MSB carry of '4 Bit Carry Skip Adder'
+:: is equivalent to an MSB carry of a normal 4 bit adder.
+:: We assume that there is no feedback loop in adders.
+theorem
+   for c1,x1,x2,x3,x4,y1,y2,y3,y4,c2,c3,c4,c5,n1,n2,n3,n4,n,c5b being set holds
+        ::Specification of Normal 4 Bit Adder
+        ($c2 iff $MAJ3(x1,y1,c1)) &
+        ($c3 iff $MAJ3(x2,y2,c2)) &
+        ($c4 iff $MAJ3(x3,y3,c3)) &
+        ($c5 iff $MAJ3(x4,y4,c4)) &
+        ::Specification of Carry Skip Adder
+        ($n1 iff $OR2(x1,y1))&
+        ($n2 iff $OR2(x2,y2))&
+        ($n3 iff $OR2(x3,y3))&
+        ($n4 iff $OR2(x4,y4))&
+        ($n iff $AND5(c1,n1,n2,n3,n4))&
+        ($c5b iff $OR2(c5,n))
+        implies ($c5 iff $c5b)
+ proof let c1,x1,x2,x3,x4,y1,y2,y3,y4,c2,c3,c4,c5,n1,n2,n3,n4,n,c5b be set;
+       assume that A1:($c2 iff $MAJ3(x1,y1,c1)) &
+        ($c3 iff $MAJ3(x2,y2,c2)) &
+        ($c4 iff $MAJ3(x3,y3,c3)) &
+        ($c5 iff $MAJ3(x4,y4,c4)) &
+        ($n1 iff $OR2(x1,y1)) &
+        ($n2 iff $OR2(x2,y2)) &
+        ($n3 iff $OR2(x3,y3)) &
+        ($n4 iff $OR2(x4,y4)) and
+A2:     ($n iff $AND5(c1,n1,n2,n3,n4)) and
+A3:     ($c5b implies $OR2(c5,n)) and
+A4:     ($OR2(c5,n) implies $c5b);
+    A5: $MAJ3(x1,y1,c1) iff $x1 & $y1 or $y1 & $c1 or $c1 & $x1 by Def11,Th5;
+    A6: $MAJ3(x2,y2,c2) iff $x2 & $y2 or $y2 & $c2 or $c2 & $x2 by Def11,Th5;
+    A7: $MAJ3(x3,y3,c3) iff $x3 & $y3 or $y3 & $c3 or $c3 & $x3 by Def11,Th5;
+    A8: $MAJ3(x4,y4,c4) iff $x4 & $y4 or $y4 & $c4 or $c4 & $x4 by Def11,Th5;
+    A9: $AND5(c1,n1,n2,n3,n4) iff $c1 & $n1 & $n2 & $n3 & $n4 by Def18,Th5;
+    thus $c5 implies $c5b by A4,Def3,Th5;
+    thus thesis by A1,A2,A3,A5,A6,A7,A8,A9,Th7;
+ end;
+
+::Definition of mod 2 adder used in 'Carry Look Ahead Adder'
+definition let a,b be set;
+  func MODADD2(a,b) equals
+  :Def34: NOT1 {} if not not ($a or $b) & not($a & $b)
+  otherwise {};
+ correctness;
+end;
+
+theorem
+   $MODADD2(a,b) iff not not ($a or $b) & not($a & $b) by Def34,Th5;
+
+::The following two definitions are for normal 1 bit adder.
+definition let a,b,c be set;
+  redefine func XOR3(a,b,c);
+  synonym ADD1(a,b,c);
+  redefine func MAJ3(a,b,c);
+  synonym CARR1(a,b,c);
+end;
+
+::The following two definitions are for normal 2 bit adder.
+definition let a1,b1,a2,b2,c be set;
+ canceled 2;
+
+  func ADD2(a2,b2,a1,b1,c) equals
+  :Def37: XOR3(a2,b2,CARR1(a1,b1,c));
+  correctness;
+end;
+
+definition let a1,b1,a2,b2,c be set;
+  func CARR2(a2,b2,a1,b1,c) equals
+  :Def38: MAJ3(a2,b2,CARR1(a1,b1,c));
+ correctness;
+end;
+
+::The following two definitions are for normal 3 bit adder.
+definition let a1,b1,a2,b2,a3,b3,c be set;
+  func ADD3(a3,b3,a2,b2,a1,b1,c) equals
+  :Def39: XOR3(a3,b3,CARR2(a2,b2,a1,b1,c));
+ correctness;
+end;
+
+definition let a1,b1,a2,b2,a3,b3,c be set;
+  func CARR3(a3,b3,a2,b2,a1,b1,c) equals
+  :Def40: MAJ3(a3,b3,CARR2(a2,b2,a1,b1,c));
+ correctness;
+end;
+
+::The following two definitions are for normal 4 bit adder.
+definition let a1,b1,a2,b2,a3,b3,a4,b4,c be set;
+  func ADD4(a4,b4,a3,b3,a2,b2,a1,b1,c) equals
+  :Def41: XOR3(a4,b4,CARR3(a3,b3,a2,b2,a1,b1,c));
+ correctness;
+end;
+
+definition let a1,b1,a2,b2,a3,b3,a4,b4,c be set;
+  func CARR4(a4,b4,a3,b3,a2,b2,a1,b1,c) equals
+  :Def42: MAJ3(a4,b4,CARR3(a3,b3,a2,b2,a1,b1,c));
+ correctness;
+end;
+
+::The following theorem shows that outputs of
+:: '4 Bit Carry Look Ahead Adder'
+:: are equivalent to outputs of normal 4 bits adder.
+:: We assume that there is no feedback loop in adders.
+theorem for c1,x1,y1,x2,y2,x3,y3,x4,y4,c4,
+ q1,p1,sd1,q2,p2,sd2,q3,p3,sd3,q4,p4,sd4,cb1,cb2,l2,t2,l3,m3,
+ t3,l4,m4,n4,t4,l5,m5,n5,o5,s1,s2,s3,s4 being set holds
+       ($q1 iff $NOR2(x1,y1))&($p1 iff $NAND2(x1,y1))&
+        ($sd1 iff $MODADD2(x1,y1))&
+        ($q2 iff $NOR2(x2,y2))&($p2 iff $NAND2(x2,y2))&
+        ($sd2 iff $MODADD2(x2,y2))&
+        ($q3 iff $NOR2(x3,y3))&($p3 iff $NAND2(x3,y3))&
+        ($sd3 iff $MODADD2(x3,y3))&
+        ($q4 iff $NOR2(x4,y4))&($p4 iff $NAND2(x4,y4))&
+        ($sd4 iff $MODADD2(x4,y4))&
+        ($cb1 iff $NOT1 c1)&($cb2 iff $ NOT1 cb1)&
+        ($s1 iff $XOR2(cb2,sd1))&
+        ($l2 iff $AND2(cb1,p1))&
+        ($t2 iff $NOR2(l2,q1))&
+        ($s2 iff $XOR2(t2,sd2))&
+        ($l3 iff $AND2(q1,p2))&
+        ($m3 iff $AND3(p2,p1,cb1))&
+        ($t3 iff $NOR3(l3,m3,q2))&
+        ($s3 iff $XOR2(t3,sd3))&
+        ($l4 iff $AND2(q2,p3))&
+        ($m4 iff $AND3(q1,p3,p2))&
+        ($n4 iff $AND4(p3,p2,p1,cb1))&
+        ($t4 iff $NOR4(l4,m4,n4,q3))&
+        ($s4 iff $XOR2(t4,sd4))&
+        ($l5 iff $AND2(q3,p4))&
+        ($m5 iff $AND3(q2,p4,p3))&
+        ($n5 iff $AND4(q1,p4,p3,p2))&
+        ($o5 iff $AND5(p4,p3,p2,p1,cb1))&
+        ($c4 iff $NOR5(q4,l5,m5,n5,o5))
+ implies ($s1 iff $ADD1(x1,y1,c1))&($s2 iff $ADD2(x2,y2,x1,y1,c1))&
+      ($s3 iff $ADD3(x3,y3,x2,y2,x1,y1,c1))&
+      ($s4 iff $ADD4(x4,y4,x3,y3,x2,y2,x1,y1,c1))&
+      ($c4 iff $CARR4(x4,y4,x3,y3,x2,y2,x1,y1,c1))
+ proof let c1,x1,y1,x2,y2,x3,y3,x4,y4,c4,
+       q1,p1,sd1,q2,p2,sd2,q3,p3,sd3,q4,p4,sd4,cb1,cb2,l2,t2,l3,m3,
+       t3,l4,m4,n4,t4,l5,m5,n5,o5,s1,s2,s3,s4 be set;
+  assume that A1:($q1 iff $NOR2(x1,y1))
+         and A2:($p1 iff $NAND2(x1,y1)) and
+        A3:($sd1 iff $MODADD2(x1,y1))and
+        A4:($q2 iff $NOR2(x2,y2))and
+        A5:($p2 iff $NAND2(x2,y2))and
+        A6:($sd2 iff $MODADD2(x2,y2))and
+        A7:($q3 iff $NOR2(x3,y3))and
+        A8:($p3 iff $NAND2(x3,y3))and
+        A9:($sd3 iff $MODADD2(x3,y3))and
+        A10:($q4 iff $NOR2(x4,y4))and
+        A11:($p4 iff $NAND2(x4,y4))and
+        A12:($sd4 iff $MODADD2(x4,y4))and
+        A13:($cb1 iff $NOT1 c1)and
+        A14: ($cb2 iff $NOT1 cb1) and
+        A15:($s1 iff $XOR2(cb2,sd1))and
+        A16:($l2 iff $AND2(cb1,p1))and
+        A17:($t2 iff $NOR2(l2,q1))and
+        A18:($s2 iff $XOR2(t2,sd2))and
+        A19:($l3 iff $AND2(q1,p2))and
+        A20:($m3 iff $AND3(p2,p1,cb1))and
+        A21:($t3 iff $NOR3(l3,m3,q2))and
+        A22:($s3 iff $XOR2(t3,sd3))and
+        A23:($l4 iff $AND2(q2,p3))and
+        A24:($m4 iff $AND3(q1,p3,p2))and
+        A25:($n4 iff $AND4(p3,p2,p1,cb1))and
+        A26:($t4 iff $NOR4(l4,m4,n4,q3))and
+        A27:($s4 iff $XOR2(t4,sd4))and
+        A28:($l5 iff $ AND2(q3,p4))and
+        A29:($m5 iff $AND3(q2,p4,p3))and
+        A30:($n5 iff $AND4(q1,p4,p3,p2))and
+        A31:($o5 iff $AND5( p4,p3,p2,p1,cb1))and
+        A32:($c4 iff $NOR5( q4,l5,m5,n5,o5));
+        A33: $q1 iff not ($x1 or $y1) by A1,Def7,Th5;
+        A34: $p1 iff not ($x1 & $y1) by A2,Def6,Th5;
+        A35: $sd1 iff not not ($x1 or $y1) & not($x1 & $y1) by A3,Def34,Th5;
+        A36: $q2 iff not($x2 or $y2) by A4,Def7,Th5;
+        A37: $p2 iff not($x2 & $y2) by A5,Def6,Th5;
+        A38: $sd2 iff not not ($x2 or $y2) & not($x2 & $y2) by A6,Def34,Th5;
+        A39: $q3 iff not($x3 or $y3) by A7,Def7,Th5;
+        A40: $p3 iff not($x3 & $y3) by A8,Def6,Th5;
+        A41: $sd3 iff not not ($x3 or $y3) & not($x3 & $y3) by A9,Def34,Th5;
+        A42: $q4 iff not($x4 or $y4) by A10,Def7,Th5;
+        A43: $p4 iff not($x4 & $y4) by A11,Def6,Th5;
+        A44: $sd4 iff not not ($x4 or $y4) & not($x4 & $y4) by A12,Def34,Th5;
+        A45: $cb1 iff not $c1 by A13,Th4;
+        A46: $cb2 iff not $cb1 by A14,Th4;
+        A47: $s1 iff ($cb2 & not $sd1) or (not $cb2 & $sd1) by A15,Def4,Th5;
+        A48: $l2 iff $cb1 & $p1 by A16,Def2,Th5;
+        A49: $t2 iff not($l2 or $q1) by A17,Def7,Th5;
+        A50: $s2 iff ($t2 & not $sd2) or (not $t2 & $sd2) by A18,Def4,Th5;
+        A51:($l3 iff $q1 & $p2) by A19,Def2,Th5;
+        A52:($m3 iff $p2 & $p1 & $cb1) by A20,Def8,Th5;
+        A53:($t3 iff not($l3 or $m3 or $q2)) by A21,Def13,Th5;
+        A54:($s3 iff $t3 & not $sd3 or not $t3 & $sd3) by A22,Def4,Th5;
+        A55:($l4 iff $q2 & $p3) by A23,Def2,Th5;
+        A56:($m4 iff $q1 & $p3 & $p2) by A24,Def8,Th5;
+        A57:($n4 iff $p3 & $p2 & $p1 & $cb1) by A25,Def14,Th5;
+        A58:($t4 iff not($l4 or $m4 or $n4 or $q3)) by A26,Def17,Th5;
+        A59:($s4 iff $t4 & not $sd4 or not $t4 & $sd4) by A27,Def4,Th5;
+        A60:($l5 iff $q3 & $p4) by A28,Def2,Th5;
+        A61:($m5 iff $q2 & $p4 & $p3) by A29,Def8,Th5;
+        A62:($n5 iff $q1 & $p4 & $p3 & $p2) by A30,Def14,Th5;
+        A63:($o5 iff $p4 & $p3 & $p2 & $p1 & $cb1) by A31,Def18,Th5;
+        A64:($c4 iff not($q4 or $l5 or $m5 or $n5 or $o5)) by A32,Def21,Th5;
+    thus ($s1 iff $ADD1(x1,y1,c1)) by A35,A45,A46,A47,Th18;
+        A65:$MAJ3(x1,y1,c1) iff $x1 & $y1 or $y1 & $c1 or $c1 & $x1 by Def11,
+Th5;
+    then $s2 iff $XOR3(x2,y2,CARR1(x1,y1,c1)) by A33,A34,A38,A45,A48,A49,A50,
+Th18;
+    hence ($s2 iff $ADD2(x2,y2,x1,y1,c1)) by Def37;
+        A66:$MAJ3(x2,y2,CARR1(x1,y1,c1)) iff
+        $x2 & $y2 or $y2 & $CARR1(x1,y1,c1) or $CARR1(x1,y1,c1) & $x2 by Def11,
+Th5;
+        then A67:$CARR2(x2,y2,x1,y1,c1) iff
+        $x2 & $y2 or $y2 & ($x1 & $y1 or $y1 & $c1 or $c1 & $x1)
+         or ($x1 & $y1 or $y1 & $c1 or $c1 & $x1) & $x2
+         by Def38,Th19;
+        then $s3 iff $XOR3(x3,y3,CARR2(x2,y2,x1,y1,c1)) by A33,A34,A36,A37,A41,
+A45,A51,A52,A53,A54,Th18;
+    hence ($s3 iff $ADD3(x3,y3,x2,y2,x1,y1,c1)) by Def39;
+        A68:$MAJ3(x3,y3,CARR2(x2,y2,x1,y1,c1)) iff
+        $x3 & $y3 or $y3 & $CARR2(x2,y2,x1,y1,c1)
+        or $CARR2(x2,y2,x1,y1,c1) & $x3 by Def11,Th5;
+        set b=CARR3(x3,y3,x2,y2,x1,y1,c1);
+        A69:$b iff $x3 & $y3 or $y3 & (
+        $x2 & $y2 or $y2 & ($x1 & $y1 or $y1 & $c1 or $c1 & $x1)
+         or ($x1 & $y1 or $y1 & $c1 or $c1 & $x1) & $x2)
+        or ($x2 & $y2 or $y2 & ($x1 & $y1 or $y1 & $c1 or $c1 & $x1)
+         or ($x1 & $y1 or $y1 & $c1 or $c1 & $x1) & $x2) & $x3
+            by A65,A66,A68,Def38,Def40;
+          (not($q2 & $p3 or ($q1 & $p3 & $p2) or
+        ($p3 & $p2 & $p1 & not $c1) or $q3))
+        & not (not not ($x4 or $y4) & not($x4 & $y4)) or
+        not (not($q2 & $p3 or ($q1 & $p3 & $p2) or
+        ($p3 & $p2 & $p1 & not $c1)
+        or $q3)) & (not not ($x4 or $y4) & not($x4 & $y4)) iff
+  (($x4 & not $y4) or (not $x4 & $y4)) & not $b or
+  not (($x4 & not $y4) or (not $x4 & $y4)) & $b
+            by A33,A34,A36,A37,A39,A40,A67,A68,Def40;
+        then $s4 iff $XOR3(x4,y4,CARR3(x3,y3,x2,y2,x1,y1,c1)) by A44,A45,A55,
+A56,A57,A58,A59,Th18;
+    hence ($s4 iff $ADD4(x4,y4,x3,y3,x2,y2,x1,y1,c1)) by Def41;
+          not($q4 or ($q3 & $p4) or ($q2 & $p4 & $p3) or
+        ($q1 & $p4 & $p3 & $p2) or
+        ($p4 & $p3 & $p2 & $p1 & $cb1)) iff
+        $x4 & $y4 or $y4 & $b or $b & $x4
+           by A13,A33,A34,A36,A37,A39,A40,A42,A43,A69,Th4;
+  then $c4 iff $MAJ3(x4,y4,CARR3(x3,y3,x2,y2,x1,y1,c1)) by A60,A61,A62,A63,A64,
+Th19;
+ hence thesis by Def42;
+ end;

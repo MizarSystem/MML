@@ -1,0 +1,2463 @@
+:: Segments of Natural Numbers and Finite Sequences
+::  by Grzegorz Bancerek and Krzysztof Hryniewiecki
+::
+:: Received April 1, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL2, ARYTM, FUNCT_1, BOOLE, RELAT_1, FINSET_1, TARSKI,
+      ORDINAL1, CARD_1, PARTFUN1, ARYTM_1, FINSEQ_1, MCART_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL2, XCMPLX_0, XREAL_0,
+      RELAT_1, FUNCT_1, WELLORD2, ORDINAL1, REAL_1, NAT_1, NUMBERS, PARTFUN1,
+      MCART_1, FINSET_1, CARD_1;
+ constructors NAT_1, RELSET_1, WELLORD2, CARD_1, XREAL_0, MEMBERED, XBOOLE_0,
+      DOMAIN_1;
+ clusters FUNCT_1, RELAT_1, RELSET_1, CARD_1, SUBSET_1, NAT_1, XREAL_0,
+      MEMBERED, ZFMISC_1, XBOOLE_0, ORDINAL2, FINSET_1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, FINSET_1, FUNCT_1, WELLORD2, XBOOLE_0;
+ theorems TARSKI, AXIOMS, FUNCT_1, REAL_1, NAT_1, ZFMISC_1, RELAT_1, RELSET_1,
+      PARTFUN1, WELLORD2, ORDINAL1, CARD_1, FINSET_1, ORDINAL2, XBOOLE_0,
+      XBOOLE_1, XCMPLX_1, MCART_1, GRFUNC_1;
+ schemes FUNCT_1, REAL_1, NAT_1, XBOOLE_0, FRAENKEL;
+
+begin
+
+ reserve k,l,m,n,k1,k2 for Nat,
+         a,b,c for natural number,
+         x,y,z,y1,y2,X,Y for set,
+         f,g for Function;
+
+::::::::::::::::::::::::::::::::::::::
+::                                  ::
+::   Segments of Natural Numbers    ::
+::                                  ::
+::::::::::::::::::::::::::::::::::::::
+
+ definition let n be natural number;
+  func Seg n -> set equals
+:Def1:  { k : 1 <= k & k <= n };
+   correctness;
+ end;
+
+ definition let n be natural number;
+  redefine func Seg n -> Subset of NAT;
+   coherence
+    proof
+     set X = Seg n;
+        X c= NAT
+       proof let x; assume
+           x in X;
+         then x in { k : 1 <= k & k <= n } by Def1;
+         then (ex k st x = k & 1 <= k & k <= n) &
+         ex x st x in NAT;
+        hence x in NAT;
+       end;
+     hence thesis;
+    end;
+ end;
+
+canceled 2;
+
+theorem
+ Th3: a in Seg b iff 1 <= a & a <= b
+  proof
+   A1: a is Nat by ORDINAL2:def 21;
+        a in { m : 1 <= m & m <= b } iff
+         ex m st a = m & ( 1 <= m & m <= b );
+      hence thesis by A1,Def1;
+  end;
+
+theorem
+ Th4: Seg 0 = {} & Seg 1 = { 1 } & Seg 2 = { 1,2 }
+  proof
+   hereby consider x being Element of Seg 0;
+    assume
+A1:   Seg 0 <> {};
+     then reconsider x as Nat by TARSKI:def 3;
+        1 <= x & x <= 0 by A1,Th3;
+     hence contradiction by AXIOMS:22;
+    end;
+
+     now let x;
+     thus x in Seg 1 implies x in { 1 }
+       proof assume
+A2:       x in Seg 1;
+           Seg 1 = { k : 1 <= k & k <= 1 } by Def1;
+        then consider k such that
+A3:       x = k & (1 <= k & k <= 1) by A2;
+           k = 1 by A3,AXIOMS:21;
+        hence thesis by A3,TARSKI:def 1;
+       end;
+     assume x in { 1 };
+then A4:    x = 1 by TARSKI:def 1;
+        1 in { k : 1 <= k & k <= 1 };
+     hence x in Seg 1 by A4,Def1;
+    end;
+   hence Seg 1 = { 1 } by TARSKI:2;
+     now let x;
+     thus x in Seg 2 implies x in { 1,2 }
+       proof assume
+A5:       x in Seg 2;
+           Seg 2 = { k : 1 <= k & k <= 2 } by Def1;
+        then consider k such that
+A6:       x = k & (1 <= k & k <= 2 ) by A5;
+           k <= 1 + 1 by A6;
+         then k = 1 or k = 2 by A6,NAT_1:27;
+        hence x in { 1,2 } by A6,TARSKI:def 2;
+       end;
+     assume x in { 1,2 };
+    then x = 1 or x = 2 by TARSKI:def 2;
+      then x in { m : 1 <= m & m <= 2 };
+     hence x in Seg 2 by Def1;
+    end;
+   hence Seg 2 = { 1,2 } by TARSKI:2;
+  end;
+
+theorem
+ Th5: a = 0 or a in Seg a
+  proof assume
+      a <> 0;
+   then consider b be Nat such that
+A1:  a = b + 1 by NAT_1:22;
+A2: a is Nat by ORDINAL2:def 21;
+      1 <= a & a <= a by A1,NAT_1:29;
+    then a in { k : 1 <= k & k <= a } by A2;
+   hence a in Seg a by Def1;
+  end;
+
+theorem
+   a+1 in Seg(a+1) by Th5;
+
+theorem
+ Th7: a <= b iff Seg a c= Seg b
+  proof
+   thus a <= b implies Seg a c= Seg b
+     proof assume
+A1:     a <= b;
+      let x; assume
+A2:     x in Seg a;
+      then reconsider c = x as Nat;
+A3:     1 <= c & c <= a by A2,Th3;
+       then c <= b by A1,AXIOMS:22;
+       then x in { l : 1 <= l & l <= b } by A3;
+      hence x in Seg b by Def1;
+     end;
+   assume
+A4:  Seg a c= Seg b;
+     now assume a <> 0; then a in Seg a by Th5; hence a <= b by A4,Th3;
+    end;
+   hence thesis by NAT_1:18;
+  end;
+
+theorem
+ Th8: Seg a = Seg b implies a = b
+  proof assume
+      Seg a = Seg b;
+    then a <= b & b <= a by Th7;
+   hence a = b by AXIOMS:21;
+  end;
+
+theorem Th9:
+   c <= a implies
+    Seg c = Seg c /\ Seg a & Seg c = Seg a /\ Seg c
+proof
+   assume c <= a;
+     then Seg c c= Seg a by Th7;
+   hence thesis by XBOOLE_1:28;
+end;
+
+theorem
+    (Seg c = Seg c /\ Seg a or Seg c = Seg a /\ Seg c )
+    implies c <= a
+proof
+    now assume A1: Seg c = Seg c /\ Seg a;
+         assume not c <= a;
+          then Seg a = Seg c by A1,Th9;
+         hence c <= a by Th8;
+     end;
+    hence thesis;
+end;
+
+theorem Th11:
+    Seg a \/ { a+1 } = Seg (a+1)
+proof
+ thus Seg a \/ { a+1 } c= Seg (a+1)
+    proof
+         a+0<=a+1 by REAL_1:55;
+       then A1:   Seg a c= Seg(a+1) by Th7;
+       let x;
+       assume x in Seg a \/ { a+1 };
+       then x in Seg a or x in { a+1 } by XBOOLE_0:def 2;
+       then x in Seg (a+1) or x = a+1 by A1,TARSKI:def 1;
+       hence thesis by Th5;
+    end;
+    let x;
+    assume A2:x in Seg (a+1);
+    then reconsider x as Nat;
+      1<=x & x<=a+1 by A2,Th3;
+    then 1<=x & (x<=a or x=a+1) by NAT_1:26;
+    then x in Seg a or x in {a+1} by Th3,TARSKI:def 1;
+    hence thesis by XBOOLE_0:def 2;
+end;
+
+::::::::::::::::::::::::::::::::
+::                            ::
+::  Finite FinSequences       ::
+::                            ::
+::::::::::::::::::::::::::::::::
+
+ definition let IT be Relation;
+  attr IT is FinSequence-like means
+:Def2: ex n st dom IT = Seg n;
+ end;
+
+ definition
+  cluster FinSequence-like Function;
+   existence
+    proof
+     deffunc F(set) = 0;
+     consider f such that
+ A1: dom f = {} & for x st x in {} holds f.x = F(x) from Lambda;
+     take f, 0;
+     thus thesis by A1,Th4;
+    end;
+ end;
+
+definition
+  mode FinSequence is FinSequence-like Function;
+end;
+
+ reserve p,q,r,s,t for FinSequence;
+
+ defpred P[set,set] means ex k st $1 = k & $2 = k+1;
+
+definition let n;
+ cluster Seg n -> finite;
+ coherence
+  proof
+     Seg n is finite
+   proof
+A1: n = { k : k < n } by AXIOMS:30;
+A2: for x,y1,y2 st x in n & P[x,y1] & P[x,y2] holds y1 = y2;
+A3:   for x st x in n ex y st P[x,y]
+      proof let x;
+       assume x in n;
+        then ex k st x = k & k < n by A1;
+        then reconsider k = x as Nat;
+       take k+1;
+       thus thesis;
+      end;
+     consider f such that
+A4:   dom f = n and
+A5:   for x st x in n holds P[x,f.x] from FuncEx(A2,A3);
+    take f;
+A6:  Seg n = { k : 1 <= k & k <= n } by Def1;
+    thus rng f = Seg n
+     proof
+      thus rng f c= Seg n
+       proof let x;
+        assume x in rng f;
+         then consider y being set such that
+A7:       y in dom f and
+A8:       x = f.y by FUNCT_1:def 5;
+         consider k such that
+A9:       y = k and
+A10:       x = k+1 by A4,A5,A7,A8;
+A11:       1 <= k+1 by NAT_1:29;
+           ex m st m = y & m < n by A1,A4,A7;
+         then k+1 <= n by A9,NAT_1:38;
+        hence x in Seg n by A6,A10,A11;
+       end;
+      let x;
+      assume x in Seg n;
+       then consider k such that
+A12:     x = k and
+A13:     1 <= k and
+A14:     k <= n by A6;
+       consider i being Nat such that
+A15:     1+i = k by A13,NAT_1:28;
+         i < n by A14,A15,NAT_1:38;
+       then A16:     i in n by A1;
+       then P[i,f.i] by A5;
+       hence x in rng f by A4,A12,A15,A16,FUNCT_1:def 5;
+     end;
+    thus thesis by A4;
+   end;
+   hence thesis;
+  end;
+end;
+
+definition
+ cluster FinSequence-like -> finite Function;
+ coherence
+  proof let f be Function;
+   given n such that
+A1: dom f = Seg n;
+       rng f is finite by A1,FINSET_1:26;
+     then A2:    [:dom f, rng f:] is finite by A1,FINSET_1:19;
+       f c= [:dom f, rng f:] by RELAT_1:21;
+    hence f is finite by A2,FINSET_1:13;
+  end;
+end;
+
+ Lm1: Seg n,n are_equipotent
+  proof
+     defpred P[Nat] means Seg $1,$1 are_equipotent;
+A1:  P[0] by Th4;
+A2:  for n st P[n] holds P[n+1]
+     proof let n such that
+A3:    Seg n,n are_equipotent;
+A4:    Seg(n+1) = Seg n \/ { n+1 } by Th11;
+A5:    (n+1) = succ n by CARD_1:52 .= n \/ { n } by ORDINAL1:def 1;
+A6:    { n+1 },{ n } are_equipotent by CARD_1:48;
+A7:   now assume n meets { n };
+        then consider x being set such that
+A8:      x in n & x in { n } by XBOOLE_0:3;
+           x = n by A8,TARSKI:def 1;
+        hence contradiction by A8;
+       end;
+        now assume Seg n meets { n+1 };
+        then consider x being set such that
+A9:      x in Seg n & x in { n+1 } by XBOOLE_0:3;
+A10:      x = n+1 & n <= n by A9,TARSKI:def 1;
+          not n+1 <= n by NAT_1:38;
+        hence contradiction by A9,A10,Th3;
+       end;
+      hence thesis by A3,A4,A5,A6,A7,CARD_1:58;
+     end;
+     for n holds P[n] from Ind(A1,A2);
+   hence thesis;
+  end;
+
+ Lm2: Card Seg n = Card n
+  proof Seg n,n are_equipotent by Lm1;
+   hence Card Seg n = Card n by CARD_1:21;
+  end;
+
+definition let p;
+ redefine func Card p -> Nat means
+:Def3: Seg it = dom p;
+ coherence
+  proof Card p = card p;
+   hence thesis;
+  end;
+ compatibility
+  proof let k;
+    consider n such that
+A1:   dom p = Seg n by Def2;
+      dom p,p are_equipotent
+     proof
+      deffunc F(set) = [$1,p.$1];
+      consider g being Function such that
+A2:    dom g = dom p and
+A3:    for x st x in dom p holds g.x = F(x) from Lambda;
+      take g;
+      thus g is one-to-one
+       proof let x,y;
+        assume
+A4:        x in dom g & y in dom g;
+        assume g.x = g.y;
+         then [x,p.x] = g.y by A2,A3,A4 .= [y,p.y] by A2,A3,A4;
+        hence x = y by ZFMISC_1:33;
+       end;
+      thus dom g = dom p by A2;
+      thus rng g c= p
+       proof let i be set;
+        assume i in rng g;
+         then consider x such that
+A5:       x in dom g and
+A6:       g.x = i by FUNCT_1:def 5;
+           g.x = [x,p.x] by A2,A3,A5;
+        hence i in p by A2,A5,A6,FUNCT_1:8;
+       end;
+      let i be set;
+      assume
+A7:      i in p;
+       then consider x,y such that
+A8:      i = [x,y] by RELAT_1:def 1;
+A9:     x in dom p & y = p.x by A7,A8,FUNCT_1:8;
+       then g.x = i by A3,A8;
+      hence i in rng g by A2,A9,FUNCT_1:def 5;
+     end;
+   then A10:  Card p = Card dom p by CARD_1:21;
+   thus k = Card p implies Seg k = dom p
+    proof assume k = Card p;
+      then k = Card n by A1,A10,Lm2;
+     hence thesis by A1,CARD_1:def 5;
+    end;
+   assume
+A11:  Seg k = dom p;
+   thus k = Card k by CARD_1:def 5 .= Card p by A10,A11,Lm2;
+  end;
+ synonym len p;
+end;
+
+ definition let p;
+  redefine func dom p -> Subset of NAT;
+   coherence
+  proof dom p = Seg len p by Def3;
+   hence thesis;
+  end;
+ end;
+
+canceled 2;
+
+theorem Th14:
+    {} is FinSequence
+ proof
+   deffunc F(set) = 0;
+   consider f such that
+  A1: dom f = {} & for x st x in {} holds f.x = F(x) from Lambda;
+      now consider x being Element of f;
+      assume
+A2:     f <> {};
+      then consider y,z such that A3: [y,z] = x by RELAT_1:def 1;
+      thus contradiction by A1,A2,A3,FUNCT_1:8;
+     end;
+  hence thesis by A1,Def2,Th4;
+ end;
+
+theorem
+    (ex k st dom f c= Seg k) implies ex p st f c= p
+proof
+  given k such that
+A1: dom f c= Seg k;
+  deffunc F(set) = f.$1;
+  consider g such that
+A2: dom g = Seg k & for x st x in Seg k holds g.x = F(x) from Lambda;
+  reconsider g as FinSequence by A2,Def2;
+  take g;
+  let x; assume
+A3: x in f;
+  then consider y,z such that
+A4: [y,z] = x by RELAT_1:def 1;
+     y in dom f by A3,A4,RELAT_1:def 4;
+   then y in dom g & f.y = z by A1,A2,A3,A4,FUNCT_1:def 4;
+   then [y,g.y] in g & g.y = z by A2,FUNCT_1:8;
+  hence thesis by A4;
+end;
+
+scheme SeqEx{A()->Nat,P[set,set]}:
+ ex p st dom p = Seg A() & for k st k in Seg A() holds P[k,p.k]
+ provided
+ A1: for k,y1,y2 st k in Seg A() & P[k,y1] & P[k,y2] holds y1=y2
+   and
+ A2: for k st k in Seg A() ex x st P[k,x]
+ proof
+   defpred R[set,set] means P[$1,$2];
+   A3: for x,y1,y2 st x in Seg A() & R[x,y1] & R[x,y2] holds y1=y2 by A1;
+   A4: for x st x in Seg A() ex y st R[x,y] by A2;
+    consider f being Function such that A5: dom f = Seg A() &
+        (for x st x in Seg A() holds R[x,f.x]) from FuncEx(A3,A4);
+    reconsider p=f as FinSequence by A5,Def2;
+    take p;
+    thus thesis by A5;
+ end;
+
+scheme SeqLambda{A()->Nat,F(set) -> set}:
+ ex p being FinSequence st len p = A() & for k st k in Seg A() holds p.k=F(k)
+ proof
+   deffunc G(set) = F($1);
+   consider f being Function such that
+    A1: dom f = Seg A() & for x st x in Seg A() holds f.x=G(x) from Lambda;
+   reconsider p=f as FinSequence by A1,Def2;
+   take p;
+  thus thesis by A1,Def3;
+ end;
+
+theorem
+    z in p implies ex k st k in dom p & z=[k,p.k]
+ proof
+   assume A1: z in p;
+   then consider x,y such that A2: z=[x,y] by RELAT_1:def 1;
+     x in dom p by A1,A2,FUNCT_1:8;
+   then reconsider k = x as Nat;
+   take k;
+   thus thesis by A1,A2,FUNCT_1:8;
+ end;
+
+theorem Th17:
+  dom p = dom q & (for k st k in dom p holds p.k = q.k) implies p=q
+proof
+  assume A1: dom p = dom q & (for k st k in dom p holds p.k = q.k);
+  then for x st x in dom p holds p.x=q.x;
+  hence thesis by A1,FUNCT_1:9;
+end;
+
+theorem
+      ( (len p = len q) & for k st 1 <=k & k <= len p holds p.k=q.k )
+         implies p=q
+proof
+   assume
+A1: len p = len q & for k st 1<=k & k<=len p holds p.k = q.k;
+A2:   dom p = Seg len p & dom q = Seg len q by Def3;
+    now let x;
+     assume
+A3:    x in dom p;
+     then reconsider k=x as Nat;
+        1 <= k & k <= len p by A2,A3,Th3;
+     hence p.x = q.x by A1;
+   end;
+   hence thesis by A1,A2,FUNCT_1:9;
+end;
+
+theorem Th19:
+   p|(Seg a) is FinSequence
+proof
+A1: a is Nat by ORDINAL2:def 21;
+ A2: dom(p|Seg a) = dom p /\ Seg a by RELAT_1:90
+                .=Seg len p /\ Seg a by Def3;
+     len p <= a or a <= len p;
+   then dom(p|Seg a) = Seg len p or dom(p|Seg a) = Seg a by A2,Th9;
+  hence thesis by A1,Def2;
+end;
+
+theorem
+   rng p c= dom f implies f*p is FinSequence
+proof
+  assume rng p c= dom f;
+  then dom(f*p) = dom p by RELAT_1:46 .= Seg len p by Def3;
+  hence thesis by Def2;
+end;
+
+theorem
+    a <= len p & q = p|(Seg a) implies len q = a & dom q = Seg a
+proof
+A1: a is Nat by ORDINAL2:def 21;
+   assume A2: a <= len p & q = p|(Seg a);
+   then Seg a c= Seg len p by Th7;
+   then Seg a c= dom p by Def3;
+   then dom q = Seg a by A2,RELAT_1:91;
+  hence thesis by A1,Def3;
+end;
+
+:::::::::::::::::::::::::::::::::
+::                             ::
+::    FinSequences of D        ::
+::                             ::
+:::::::::::::::::::::::::::::::::
+
+ definition let D be set;
+  mode FinSequence of D -> FinSequence means
+:Def4: rng it c= D;
+   existence
+    proof
+       deffunc F(set) = $1;
+       consider p such that
+          A1: len p = 0 & for k st k in Seg 0 holds p.k=F(k) from SeqLambda;
+         dom p = {} by A1,Def3,Th4;
+       then rng p = {} by RELAT_1:65;
+       then rng p c= D by XBOOLE_1:2;
+      hence thesis;
+    end;
+ end;
+
+Lm3: for D being set, f being FinSequence of D holds f is PartFunc of NAT,D
+ proof let D be set, f be FinSequence of D;
+A1: dom f c= NAT;
+    rng f c= D by Def4;
+  hence thesis by A1,RELSET_1:11;
+ end;
+
+definition
+ cluster {} -> FinSequence-like;
+ coherence by Th14;
+end;
+
+definition let D be set;
+ cluster FinSequence-like PartFunc of NAT,D;
+  existence proof {} is PartFunc of NAT,D by PARTFUN1:56; hence thesis;end;
+end;
+
+definition let D be set;
+ redefine mode FinSequence of D -> FinSequence-like PartFunc of NAT,D;
+  coherence by Lm3;
+end;
+
+ reserve D for set;
+
+canceled;
+
+theorem
+    for p being FinSequence of D holds p|(Seg a) is FinSequence of D
+proof
+  let p be FinSequence of D;
+A1: p|(Seg a) is FinSequence by Th19;
+     rng(p|(Seg a)) c= rng p & rng p c= D by Def4,FUNCT_1:76;
+   then rng(p|(Seg a)) c= D by XBOOLE_1:1;
+ hence thesis by A1,Def4;
+end;
+
+theorem
+   for D being non empty set
+  ex p being FinSequence of D st len p = a
+proof let D be non empty set;
+    reconsider a as Nat by ORDINAL2:def 21;
+    consider y being Element of D;
+    deffunc F(Nat) = y;
+    consider p such that A1:
+      len p = a & for n st n in Seg a holds p.n=F(n) from SeqLambda;
+      rng p c= D
+      proof let z;
+          assume z in rng p;
+          then consider x such that A2: x in dom p & z=p.x by FUNCT_1:def 5;
+     A3:  x in Seg len p by A2,Def3;
+          reconsider m = x as Nat by A2;
+            p.m = y by A1,A3;
+        hence z in D by A2;
+      end;
+   then reconsider q=p as FinSequence of D by Def4;
+   take q;
+  thus thesis by A1;
+end;
+
+::::::::::::::::::::::::::::::::::::
+::                                ::
+::    The Empty FinSequence       ::
+::                                ::
+::::::::::::::::::::::::::::::::::::
+
+Lm4: q = {} iff len q = 0
+ proof
+   thus q = {} implies len q = 0
+     proof
+        assume A1:q = {};
+        assume len q <> 0;
+        then len q in Seg len q by Th5;
+        then len q in dom q by Def3;
+        then [len q,q.(len q)] in {} by A1,FUNCT_1:def 4;
+       hence contradiction;
+     end;
+ assume len q = 0;
+ then A2: dom q = {} by Def3,Th4;
+  consider x being Element of q;
+  assume
+A3: not q={};
+   then consider y,z such that A4: [y,z]=x by RELAT_1:def 1;
+  thus contradiction by A2,A3,A4,RELAT_1:def 4;
+ end;
+
+definition
+  cluster empty FinSequence;
+  existence by Th14;
+end;
+
+theorem
+    len p = 0 iff p = {} by Lm4;
+
+theorem
+    p={} iff dom p = {} by RELAT_1:60,64;
+
+theorem
+    p={} iff rng p= {} by RELAT_1:60,64;
+
+canceled;
+
+theorem Th29:
+  for D be set holds {} is FinSequence of D
+proof let D be set;
+    rng {} c= D by XBOOLE_1:2;
+ hence thesis by Def4;
+end;
+
+definition
+  let D be set;
+  cluster empty FinSequence of D;
+existence
+ proof
+     {} is FinSequence of D by Th29;
+   hence thesis;
+ end;
+end;
+
+definition let x;
+  func <*x*> -> set equals :Def5:
+    { [1,x] };
+  coherence;
+end;
+
+definition let D be set;
+  func <*>D -> empty FinSequence of D equals
+     {};
+coherence by Th29;
+end;
+
+canceled 2;
+
+theorem
+    p=<*>(D) iff len p = 0 by Lm4;
+
+ definition let p,q;
+  func p^q -> FinSequence means
+:Def7: dom it = Seg (len p + len q) &
+       (for k st k in dom p holds it.k=p.k) &
+       (for k st k in dom q holds it.(len p + k) = q.k);
+   existence
+    proof
+       defpred P[set,set] means
+         (for k st k=$1 & 1 <= k & k <= len p holds $2=p.k) &
+         (for k st k=$1 & len p + 1 <= k & k <= len p + len q
+                   holds $2=q.(k-len p));
+A1:    for x,y1,y2 st x in Seg(len p + len q) & P[x,y1] & P[x,y2] holds y1=y2
+       proof let x,y1,y2;
+         assume A2: x in Seg(len p + len q) & P[x,y1] & P[x,y2];
+          then reconsider m=x as Nat;
+      A3: now assume A4: len p + 1 <= m;
+                 m <= len p + len q by A2,Th3;
+               then y1 = q.(m-len p) & y2 = q.(m-len p) by A2,A4;
+            hence thesis;
+          end;
+           now assume not len p + 1 <= m;
+                then A5: m <= len p by NAT_1:26;
+            A6: 1 <= m by A2,Th3;
+             then y1=p.m by A2,A5;
+            hence thesis by A2,A5,A6;
+          end;
+         hence thesis by A3;
+       end;
+A7:   for x st x in Seg(len p + len q) ex y st P[x,y]
+       proof let x;
+          assume x in Seg(len p + len q);
+           then reconsider m=x as Nat;
+      A8: now assume A9: len p + 1 <= m;
+               set y = q.(m-len p);
+               A10: for k st k=x & 1 <= k & k <= len p holds y=p.k
+                     proof let k;
+                       assume k=x & 1 <= k & k <= len p;
+                         then m + (len p + 1) <= m + len p by A9,REAL_1:55;
+                         then m + len p + 1 <= m + len p + 0 by XCMPLX_1:1;
+                       hence thesis by REAL_1:53;
+                     end;
+                     for k st k=x & len p + 1 <= k & k <= len p + len q
+                       holds y=q.(k-len p);
+            hence thesis by A10;
+          end;
+           now assume A11: not len p + 1 <= m;
+                set y=p.m;
+            A12: for k st k=x & 1 <= k & k <= len p holds y=p.k;
+                  for k st k=x & len p + 1 <= k & k <= len p + len q
+                     holds y=q.(k-len p) by A11;
+            hence thesis by A12;
+          end;
+         hence thesis by A8;
+       end;
+     consider f such that A13: dom f=Seg(len p + len q) &
+          for x st x in Seg(len p + len q) holds P[x,f.x] from FuncEx(A1,A7);
+A14:   for k st k in dom p holds f.k=p.k
+     proof let k;
+           assume k in dom p;
+       then A15: k in Seg len p by Def3;
+       then A16: 1 <= k & k <= len p by Th3;
+             len p <= len p + len q by NAT_1:29;
+          then Seg len p c= Seg(len p + len q) by Th7; hence f.k=p.k by A13,A15
+,A16;
+     end;
+
+A17:  for n st n in dom q holds f.(len p+n)=q.n
+     proof let n;
+         assume n in dom q;
+          then n in Seg len q by Def3;
+           then 1 <= n & n <= len q by Th3;
+       then A18: len p + 1 <= len p + n & len p + n <= len p + len q by REAL_1:
+55;
+             len p + n <= len p + n + len p by NAT_1:29;
+           then len p + 1 <= len p + n + len p by A18,AXIOMS:22;
+           then 1 <= len p + n by REAL_1:53;
+           then (len p + n) in Seg(len p + len q) by A18,Th3;
+           then f.(len p + n)=q.(n + len p - len p) by A13,A18;
+           then f.(len p + n)=q.(n + (len p - len p)) by XCMPLX_1:29;
+           then f.(len p + n)=q.(n + 0) by XCMPLX_1:14;
+         hence thesis;
+       end;
+      reconsider r=f as FinSequence by A13,Def2;
+      take r;
+     thus thesis by A13,A14,A17;
+   end;
+
+   uniqueness
+    proof let f,g be FinSequence such that
+    A19: dom f = Seg(len p + len q) &
+        (for k st k in dom p holds f.k=p.k ) &
+        (for k st k in dom q holds f.(len p + k)=q.k)
+       and
+    A20: dom g = Seg(len p + len q) &
+        (for k st k in dom p holds g.k=p.k) &
+        (for k st k in dom q holds g.(len p + k)=q.k);
+
+         for x st x in Seg(len p + len q) holds f.x=g.x
+        proof let x;
+          assume A21: x in Seg(len p + len q);
+          then reconsider k=x as Nat;
+          A22: 1 <= k & k <= len p + len q by A21,Th3;
+
+      A23: now assume len p + 1 <= k;
+               then consider m such that A24: len p + 1 + m = k by NAT_1:28;
+                 0<=m by NAT_1:18;
+then A25:               1+0<=1+m by REAL_1:55;
+                 len p + (1 + m) <= len p + len q by A22,A24,XCMPLX_1:1;
+               then 1 + m <= len q by REAL_1:53;
+               then (1+m) in Seg len q by A25,Th3;
+           then A26: (1+m) in dom q by Def3;
+               then f.(len p + (1+m)) = q.(1+m) by A19;
+           then A27: f.k=q.(1+m) by A24,XCMPLX_1:1;
+                 g.(len p +(1+m)) = q.(1+m) by A20,A26;
+             hence f.x=g.x by A24,A27,XCMPLX_1:1;
+          end;
+
+           now assume not len p + 1 <= k;
+                then k <= len p by NAT_1:26;
+                then k in Seg len p by A22,Th3;
+            then A28: k in dom p by Def3;
+             then f.k=p.k by A19;
+             hence f.x=g.x by A20,A28;
+          end;
+         hence thesis by A23;
+       end;
+      hence f=g by A19,A20,FUNCT_1:9;
+    end;
+ end;
+
+canceled 2;
+
+theorem
+ Th35: len(p^q) = len p + len q
+  proof
+      dom(p^q) = Seg(len p + len q) by Def7;
+   hence thesis by Def3;
+  end;
+
+theorem Th36:
+  (len p + 1 <= k & k <= len p + len q) implies (p^q).k=q.(k-len p)
+proof
+    assume A1:len p + 1 <= k & k <= len p + len q;
+    then consider m such that A2: (len p + 1)+m=k by NAT_1:28;
+A3:    len p+(1+m) = k by A2,XCMPLX_1:1;
+ then A4: 1+m = k - len p by XCMPLX_1:26;
+ then A5: 1 <= 1+m by A1,REAL_1:84;
+      k-len p <= len q by A1,REAL_1:86;
+
+    then 1+m in Seg len q by A4,A5,Th3;
+    then 1+m in dom q by Def3;
+    then (p^q).(len p + (1+m))=q.(1+m) by Def7;
+   hence thesis by A3,XCMPLX_1:26;
+end;
+
+theorem
+    len p < k & k <= len(p^q) implies (p^q).k = q.(k - len p)
+proof
+  assume A1: len p < k & k <= len(p^q);
+ then A2:  len p + 1 <= k by NAT_1:38;
+     k <= len p + len q by A1,Th35;
+  hence thesis by A2,Th36;
+end;
+
+theorem Th38:
+  k in dom (p^q) implies
+    (k in dom p or (ex n st n in dom q & k=len p + n))
+proof assume k in dom(p^q);
+    then k in Seg len (p^q) by Def3;
+    then k in Seg(len p + len q) by Th35;
+then A1:  1 <= k & k <= len p + len q by Th3;
+
+A2: now assume not len p+1 <= k;
+            then k <= len p by NAT_1:26;
+            then k in Seg len p by A1,Th3;
+        hence thesis by Def3;
+    end;
+
+     now assume len p + 1 <= k;
+        then consider n such that A3: k=len p + 1 + n by NAT_1:28;
+          len p + (1 + n) <= len p + len q by A1,A3,XCMPLX_1:1;
+    then A4: 1+n <= len q by REAL_1:53;
+          1 <= 1+n by NAT_1:29;
+        then 1+n in Seg len q by A4,Th3;
+    then A5: 1+n in dom q by Def3;
+          k=len p + (1+n) by A3,XCMPLX_1:1;
+      hence thesis by A5;
+    end;
+  hence thesis by A2;
+end;
+
+theorem Th39:
+  dom p c= dom(p^q)
+proof
+    len p <= len p + len q by NAT_1:29;
+  then Seg len p c= Seg(len p + len q) by Th7;
+  then Seg len p c= dom(p^q) by Def7;
+ hence thesis by Def3;
+end;
+
+theorem Th40:
+  x in dom q implies ex k st k=x & len p + k in dom(p^q)
+proof
+    assume A1: x in dom q;
+    then A2: x in Seg len q by Def3;
+    reconsider k=x as Nat by A1;
+    take k;
+A3:  1 <= k & k <= len q by A2,Th3;
+      k <= len p + k by NAT_1:29;
+then A4:  1 <= len p + k by A3,AXIOMS:22;
+      len p + k <= len p + len q by A3,REAL_1:55;
+    then len p + k in Seg(len p + len q) by A4,Th3;
+  hence thesis by Def7;
+end;
+
+theorem Th41:
+  k in dom q implies len p + k in dom(p^q)
+proof
+  assume k in dom q;
+   then ex n st n=k & len p + n in dom(p^q) by Th40;
+ hence thesis;
+end;
+
+theorem Th42:
+   rng p c= rng(p^q)
+proof
+   now let x; assume x in rng p;
+       then consider y such that A1: y in dom p & x=p.y by FUNCT_1:def 5;
+       reconsider k=y as Nat by A1;
+A2:    k in dom p & dom p c= dom(p^q) by A1,Th39;
+         (p^q).k=p.k by A1,Def7;
+     hence x in rng(p^q) by A1,A2,FUNCT_1:def 5;
+  end;
+ hence thesis by TARSKI:def 3;
+end;
+
+theorem Th43:
+  rng q c= rng(p^q)
+proof
+     now let x; assume x in rng q;
+         then consider y such that A1: y in dom q & x=q.y by FUNCT_1:def 5;
+         reconsider k=y as Nat by A1;
+   A2:    len p + k in dom(p^q) by A1,Th41;
+           (p^q).(len p + k) = q.k by A1,Def7;
+       hence x in rng(p^q) by A1,A2,FUNCT_1:def 5;
+    end;
+  hence thesis by TARSKI:def 3;
+end;
+
+theorem
+ Th44: rng(p^q) = rng p \/ rng q
+ proof
+        now let x; assume x in rng(p^q);
+             then consider y such that A1: y in dom(p^q) & x=(p^q).y by FUNCT_1
+:def 5;
+        A2:  y in Seg(len p + len q) by A1,Def7;
+             reconsider k=y as Nat by A1;
+        A3:  1 <= k & k <= len p + len q by A2,Th3;
+
+     A4:   now assume A5: len p + 1 <= k;
+               then A6: q.(k-len p) = x by A1,A3,Th36;
+                  consider m such that A7: (len p+1)+m = k by A5,NAT_1:28;
+A8:                  len p +(1+m) = k by A7,XCMPLX_1:1;
+               then A9:1+m = k-len p by XCMPLX_1:26;
+                     1<=1 & 0 <= m by NAT_1:18;
+then A10:                   1+0<=1+m by REAL_1:55;
+                     1+m <= len q by A3,A8,REAL_1:53;
+                   then 1+m in Seg len q by A10,Th3;
+                   then k-len p in dom q by A9,Def3;
+               hence x in rng q by A6,FUNCT_1:def 5;
+             end;
+
+              now assume not len p + 1 <= k;
+                    then k <= len p by NAT_1:26;
+                    then k in Seg len p by A3,Th3;
+                 then A11: k in dom p by Def3;
+                    then p.k = x by A1,Def7;
+                hence x in rng p by A11,FUNCT_1:def 5;
+             end;
+          hence x in rng p \/ rng q by A4,XBOOLE_0:def 2;
+       end;
+
+     then A12: rng(p^q) c= rng p \/ rng q by TARSKI:def 3;
+
+       rng p c= rng(p^q) & rng q c= rng(p^q) by Th42,Th43;
+        then (rng p \/ rng q) c= rng(p^q) by XBOOLE_1:8;
+   hence thesis by A12,XBOOLE_0:def 10;
+ end;
+
+theorem
+ Th45: p^q^r = p^(q^r)
+  proof
+ A1:     dom ((p^q)^r) = Seg(len (p^q) + len r) by Def7
+       .= Seg(len p + len q + len r) by Th35
+       .= Seg(len p + (len q + len r)) by XCMPLX_1:1
+       .= Seg(len p + len(q^r)) by Th35;
+
+ A2:  for k st k in dom p holds ((p^q)^r).k=p.k
+        proof let k;
+            assume A3: k in dom p;
+               dom p c= dom(p^q) by Th39;
+           hence (p^q^r).k=(p^q).k by A3,Def7
+              .=p.k by A3,Def7;
+        end;
+
+     for k st k in dom(q^r) holds ((p^q)^r).(len p + k)=(q^r).k
+        proof let k;
+          assume A4: k in dom(q^r);
+            A5: now assume A6: k in dom q;
+                     then (len p + k) in dom(p^q) by Th41;
+                  hence (p^q^r).(len p + k) = (p^q).(len p + k) by Def7
+                        .=q.k by A6,Def7
+                        .=(q^r).k by A6,Def7;
+                end;
+                 now assume not k in dom q;
+                   then consider n such that
+                      A7: n in dom r & k=len q + n by A4,Th38;
+                    thus (p^q^r).(len p + k) =(p^q^r).(len p + len q + n) by A7
+,XCMPLX_1:1
+                      .=(p^q^r).(len(p^q) + n) by Th35
+                      .=r.n by A7,Def7
+                      .=(q^r).k by A7,Def7;
+                end;
+            hence (p^q^r).(len p + k)=(q^r).k by A5;
+        end;
+     hence (p^q)^r=p^(q^r) by A1,A2,Def7;
+  end;
+
+theorem
+    p^r = q^r or r^p = r^q implies p = q
+  proof assume
+A1:  p^r = q^r or r^p = r^q;
+A2: now assume A3: p^r = q^r;
+       then len p + len r = len(q^r) by Th35;
+       then len p + len r = len q + len r by Th35;
+       then Seg len p = Seg len q by XCMPLX_1:2;
+then A4:    dom p = Seg len q by Def3
+         .= dom q by Def3;
+
+         for k st k in dom p holds p.k=q.k
+          proof let k; assume A5: k in dom p;
+            hence p.k=(q^r).k by A3,Def7
+                 .=q.k by A4,A5,Def7;
+          end;
+       hence thesis by A4,Th17;
+    end;
+
+      now assume A6: r^p=r^q;
+       then len r + len p = len(r^q) by Th35
+       .=len r + len q by Th35;
+       then Seg len p = Seg len q by XCMPLX_1:2;
+    then A7: dom p = Seg len q by Def3
+        .= dom q by Def3;
+
+         for k st k in dom p holds p.k=q.k
+         proof let k;
+            assume A8: k in dom p;
+          hence p.k = (r^q).(len r + k) by A6,Def7
+                 .= q.k by A7,A8,Def7;
+         end;
+      hence thesis by A7,Th17;
+    end;
+   hence thesis by A1,A2;
+  end;
+
+theorem
+ Th47: p^{} = p & {}^p = p
+ proof
+    A1: dom(p^{}) = Seg len (p^{}) by Def3
+       .= Seg (len p + len {}) by Th35
+       .= Seg (len p + 0) by Lm4
+       .= dom p by Def3;
+     thus
+        p^{} = p
+       proof
+            for k st k in dom p holds p.k=(p^{}).k by Def7;
+         hence p^{}=p by A1,Th17;
+       end;
+
+   A2: dom({}^p) = Seg len ({}^p) by Def3
+      .= Seg (len {} + len p) by Th35
+      .= Seg (0 + len p) by Lm4
+      .= dom p by Def3;
+   thus
+       {}^p=p
+      proof
+           for k st k in dom p holds p.k = ({}^p).k
+           proof let k;
+               assume A3: k in dom p;
+             thus
+                 ({}^p).k = ({}^p).(0 + k)
+               .=({}^p).(len {} + k) by Lm4
+               .=p.k by A3,Def7;
+           end;
+         hence {}^p=p by A2,Th17;
+      end;
+
+ end;
+
+theorem
+     p^q = {} implies p={} & q={}
+proof
+ assume p^q={};
+    then 0 = len (p^q) by Lm4
+      .= len p + len q by Th35;
+   then len p = 0 & len q = 0 by NAT_1:23;
+  hence thesis by Lm4;
+end;
+
+ definition let D be set;let p,q be FinSequence of D;
+ redefine func p^q -> FinSequence of D;
+   coherence
+    proof
+A1:    rng(p^q) = rng p \/ rng q by Th44;
+        rng p c= D & rng q c= D by Def4;
+     hence rng(p^q) c= D by A1,XBOOLE_1:8;
+    end;
+ end;
+
+Lm5:
+  {[x,y]} is Function
+ proof
+   now let a be set;
+   thus a in {[x,y]} implies ex x,y st [x,y] = a
+    proof assume a in {[x,y]};
+      then a = [x,y] by TARSKI:def 1;
+      hence thesis;
+    end;
+   let z,y1,y2;
+   assume [z,y1] in {[x,y]} & [z,y2] in {[x,y]};
+   then [z,y1] = [x,y] & [z,y2] = [x,y] by TARSKI:def 1;
+   hence y1 = y2 by ZFMISC_1:33;
+  end;
+  hence thesis by FUNCT_1:2;
+ end;
+
+Lm6:
+ for x1, y1 being set holds
+ [x,y] in {[x1,y1]} implies x = x1 & y = y1
+  proof
+  let x1, y1 be set;
+  assume [x,y] in {[x1,y1]};
+   then [x,y] = [x1,y1] by TARSKI:def 1;
+   hence x = x1 & y = y1 by ZFMISC_1:33;
+  end;
+
+ definition let x;
+  redefine func <*x*> -> Function means
+:Def8:  dom it = Seg 1 & it.1 = x;
+   coherence
+   proof
+      set p = <*x*>;
+A1:   p = {[1,x]} by Def5;
+      then reconsider p as Function by Lm5;
+        dom p = Seg 1 by A1,Th4,RELAT_1:23;
+     hence thesis;
+   end;
+   compatibility
+   proof
+     let f be Function;
+     hereby assume f = <*x*>;
+then A2:    f = { [1,x] } by Def5;
+       hence dom f = Seg 1 by Th4,RELAT_1:23;
+         [1,x] in f by A2,TARSKI:def 1;
+       hence f.1 = x by FUNCT_1:8;
+     end;
+     assume A3: dom f = Seg 1 & f.1 = x;
+     reconsider g = { [1,f.1] } as Function by Lm5;
+       f = { [1,f.1] }
+     proof
+        [y,z] in f iff [y,z] in g
+      proof
+        hereby assume [y,z] in f;
+         then y in {1} & z in rng f & rng f = {f.1}
+            by A3,Th4,FUNCT_1:14,RELAT_1:def 4,def 5;
+         then y = 1 & z = f.1 by TARSKI:def 1;
+         hence [y,z] in g by TARSKI:def 1;
+        end;
+        assume [y,z] in g;
+        then y = 1 & z = f.1 & 1 in dom f by A3,Lm6,Th4,TARSKI:def 1;
+        hence [y,z] in f by FUNCT_1:def 4;
+      end;
+      hence thesis by RELAT_1:def 2;
+     end;
+    hence thesis by A3,Def5;
+  end;
+ end;
+
+ definition let x;
+  cluster <*x*> -> Function-like Relation-like;
+  coherence;
+ end;
+
+ definition let x;
+  cluster <*x*> -> FinSequence-like;
+ coherence
+    proof
+     take n =1;
+     thus dom <*x*> = Seg n by Def8;
+    end;
+ end;
+
+canceled;
+
+theorem Th50:
+  p^q is FinSequence of D implies
+     p is FinSequence of D & q is FinSequence of D
+proof
+  assume p^q is FinSequence of D;
+  then rng(p^q) c= D by Def4;
+ then A1: rng p \/ rng q c= D by Th44;
+     rng p c= rng p \/ rng q by XBOOLE_1:7;
+   then rng p c= D by A1,XBOOLE_1:1;
+  hence p is FinSequence of D by Def4;
+     rng q c= rng p \/ rng q by XBOOLE_1:7;
+   then rng q c= D by A1,XBOOLE_1:1;
+  hence q is FinSequence of D by Def4;
+end;
+
+definition let x,y;
+  func <*x,y*> -> set equals
+  :Def9:  <*x*>^<*y*>;
+  correctness;
+
+  let z;
+  func <*x,y,z*> -> set equals
+  :Def10:  <*x*>^<*y*>^<*z*>;
+  correctness;
+
+end;
+
+definition let x,y;
+  cluster <*x,y*> -> Function-like Relation-like;
+  coherence
+  proof
+      <*x*>^<*y*> = <*x,y*> by Def9;
+    hence thesis;
+  end;
+
+  let z;
+  cluster <*x,y,z*> -> Function-like Relation-like;
+  coherence
+  proof
+      <*x*>^<*y*>^<*z*> = <*x,y,z*> by Def10;
+    hence thesis;
+  end;
+
+end;
+
+definition let x,y;
+  cluster <*x,y*> -> FinSequence-like;
+  coherence
+  proof
+      <*x*>^<*y*> = <*x,y*> by Def9;
+    hence thesis;
+  end;
+
+  let z;
+  cluster <*x,y,z*> -> FinSequence-like;
+  coherence
+  proof
+      <*x*>^<*y*>^<*z*> = <*x,y,z*> by Def10;
+    hence thesis;
+  end;
+
+end;
+
+canceled;
+
+theorem
+    <*x*> = { [1,x] }
+proof
+   for z holds z in <*x*> iff z=[1,x]
+   proof let z;
+      thus z in <*x*> implies z=[1,x]
+           proof assume A1: z in <*x*>;
+              then consider y1,y2 such that A2: [y1,y2]=z by RELAT_1:def 1;
+           A3: y1 in dom <*x*> & y2=<*x*>.y1 by A1,A2,FUNCT_1:8;
+then A4:              y1 in {1} by Def8,Th4;
+            then y2 = <*x*>.1 by A3,TARSKI:def 1
+              .= x by Def8;
+             hence z = [1,x] by A2,A4,TARSKI:def 1;
+           end;
+        assume A5: z=[1,x];
+            1 in Seg 1 by Th5;
+      then A6:  1 in dom <*x*> by Def8;
+            <*x*>.1=x by Def8;
+       hence z in <*x*> by A5,A6,FUNCT_1:8;
+   end;
+  hence thesis by TARSKI:def 1;
+end;
+
+canceled 2;
+
+theorem Th55:
+   p=<*x*> iff dom p = Seg 1 & rng p = {x}
+proof
+      thus p = <*x*> implies dom p = Seg 1 & rng p = {x}
+            proof
+               assume A1: p = <*x*>;
+              hence dom p = Seg 1 by Def8;
+                  dom p = {1} by A1,Def8,Th4;
+             then rng p = {p.1} by FUNCT_1:14;
+              hence thesis by A1,Def8;
+            end;
+        assume A2: dom p = Seg 1 & rng p = {x};
+           then 1 in dom p by Th5;
+           then p.1 in {x} by A2,FUNCT_1:def 5;
+           then p.1 = x by TARSKI:def 1;
+       hence p=<*x*> by A2,Def8;
+end;
+
+theorem Th56:
+  p=<*x*> iff len p = 1 & rng p = {x}
+proof
+    len p = 1 iff dom p = Seg 1 by Def3;
+ hence thesis by Th55;
+end;
+
+theorem Th57:
+  p = <*x*> iff len p = 1 & p.1 = x
+proof
+    len p = 1 iff dom p = Seg 1 by Def3;
+ hence thesis by Def8;
+end;
+
+theorem
+    (<*x*>^p).1 = x
+  proof
+     1 in Seg 1 by Th4,TARSKI:def 1;
+   then 1 in dom <*x*> by Def8;
+   then (<*x*>^p).1 = <*x*>.1 by Def7;
+   hence thesis by Def8;
+  end;
+
+theorem Th59:
+  (p^<*x*>).(len p + 1)=x
+proof
+      dom <*x*> = Seg 1 & 1<>0 by Def8;
+    then 1 in dom <*x*> by Th5;
+  hence
+     (p^<*x*>).(len p + 1) = <*x*>.1 by Def7
+   .=x by Def8;
+end;
+
+theorem Th60:
+  <*x,y,z*>=<*x*>^<*y,z*> &
+  <*x,y,z*>=<*x,y*>^<*z*>
+proof
+  thus <*x,y,z*>=<*x*>^<*y*>^<*z*> by Def10
+          .=<*x*>^(<*y*>^<*z*>) by Th45
+          .=<*x*>^<*y,z*> by Def9;
+  thus <*x,y,z*>=<*x*>^<*y*>^<*z*> by Def10
+         .=<*x,y*>^<*z*> by Def9;
+end;
+
+theorem Th61:
+  p = <*x,y*> iff len p = 2 & p.1=x & p.2=y
+proof
+  thus
+       p = <*x,y*> implies len p = 2 & p.1=x & p.2=y
+      proof
+         assume A1: p=<*x,y*>;
+          hence
+             len p = len(<*x*>^<*y*>) by Def9
+           .= len <*x*> + len <*y*> by Th35
+           .= 1 + len <*y*> by Th56
+           .= 1 + 1 by Th56
+           .=2;
+A2:          1 in {1} by TARSKI:def 1;
+          then A3: 1 in dom <*x*> by Def8,Th4;
+         thus
+               p.1 = (<*x*>^<*y*>).1 by A1,Def9
+              .= <*x*>.1 by A3,Def7
+              .= x by Def8;
+         A4: 1 in dom <*y*> by A2,Def8,Th4;
+         thus
+             p.2 = (<*x*>^<*y*>).(1+1) by A1,Def9
+           .= (<*x*>^<*y*>).(len <*x*> + 1) by Th56
+           .= <*y*>.1 by A4,Def7
+           .= y by Def8;
+       end;
+    assume A5: len p = 2 & p.1=x & p.2=y;
+      then A6: dom p = Seg(1+1) by Def3
+          .= Seg(len <*x*> + 1) by Th56
+          .= Seg(len <*x*> + len <*y*>) by Th56;
+
+      A7: for k st k in dom <*x*> holds p.k=<*x*>.k
+         proof let k; assume k in dom <*x*>;
+            then k in {1} by Def8,Th4;
+           then k=1 by TARSKI:def 1;
+          hence p.k = <*x*>.k by A5,Def8;
+         end;
+
+         for k st k in dom <*y*> holds p.((len <*x*>)+k)=<*y*>.k
+         proof let k; assume k in dom <*y*>;
+then A8:              k in {1} by Def8,Th4;
+            thus p.((len <*x*>) + k) = p.(1+k) by Th56
+              .=p.(1+1) by A8,TARSKI:def 1
+              .=<*y*>.1 by A5,Def8
+              .= <*y*>.k by A8,TARSKI:def 1;
+         end;
+    hence p=<*x*>^<*y*> by A6,A7,Def7
+          .= <*x,y*> by Def9;
+end;
+
+theorem
+    p = <*x,y,z*> iff len p = 3 & p.1 = x & p.2 = y & p.3 = z
+proof
+   thus
+       p = <*x,y,z*> implies len p = 3 & p.1 = x & p.2 = y & p.3 = z
+      proof
+         assume A1: p =<*x,y,z*>;
+           hence
+              len p = len (<*x,y*>^<*z*>) by Th60
+            .=len <*x,y*> + len <*z*> by Th35
+            .=2 + len <*z*> by Th61
+            .=2+1 by Th56
+            .=3;
+A2:              1 in {1} by TARSKI:def 1;
+              then A3:   1 in dom <*x*> by Def8,Th4;
+
+         thus p.1 = (<*x*>^<*y,z*>).1 by A1,Th60
+            .=<*x*>.1 by A3,Def7
+            .=x by Def8;
+          A4: 2 in Seg 2 by Th5;
+               len <*x,y*> = 2 by Th61;
+          then A5: 2 in dom <*x,y*> by A4,Def3;
+        thus p.2 = (<*x,y*>^<*z*>).2 by A1,Th60
+           .=<*x,y*>.2 by A5,Def7
+           .=y by Th61;
+
+         A6: 1 in dom <*z*> by A2,Def8,Th4;
+        thus p.3 = (<*x,y*>^<*z*>).(2+1) by A1,Th60
+          .=(<*x,y*>^<*z*>).(len (<*x,y*>) + 1) by Th61
+          .= <*z*>.1 by A6,Def7
+          .= z by Def8;
+
+      end;
+
+    assume A7: len p = 3 & p.1 = x & p.2 = y & p.3 = z;
+      then A8: dom p = Seg(2+1) by Def3
+          .= Seg((len <*x,y*>) + 1) by Th61
+          .= Seg((len <*x,y*>) + len <*z*>) by Th56;
+     A9: for k st k in dom <*x,y*> holds p.k=<*x,y*>.k
+           proof let k such that A10: k in dom <*x,y*>;
+                  len <*x,y*> = 2 by Th61;
+then A11:             k in Seg 2 by A10,Def3;
+           A12:    k=1 implies p.k=<*x,y*>.k by A7,Th61;
+                    k=2 implies p.k=<*x,y*>.k by A7,Th61;
+              hence thesis by A11,A12,Th4,TARSKI:def 2;
+           end;
+        for k st k in dom <*z*> holds p.( (len <*x,y*>) + k) = <*z*>.k
+         proof let k; assume k in dom <*z*>;
+            then k in {1} by Def8,Th4;
+       then A13:  k = 1 by TARSKI:def 1;
+          hence
+              p.( (len <*x,y*>) + k) = p.(2+1) by Th61
+            .=<*z*>.k by A7,A13,Def8;
+         end;
+     hence p=<*x,y*>^<*z*> by A8,A9,Def7
+           .=<*x,y,z*> by Th60;
+end;
+
+theorem Th63:
+   p <> {} implies ex q,x st p=q^<*x*>
+proof
+ assume p <> {};
+ then len p <> 0 by Lm4;
+ then consider n such that A1: len p = n + 1 by NAT_1:22;
+ reconsider q=p|Seg n as FinSequence by Th19;
+ take q;
+ take p.(len p);
+A2: dom q = Seg n
+      proof
+       A3: dom q = dom p /\ Seg n by RELAT_1:90
+            .= Seg len p /\ Seg n by Def3;
+          n <=len p by A1,NAT_1:29;
+         then Seg n c= Seg len p by Th7;
+        hence
+           dom q = Seg n by A3,XBOOLE_1:28;
+      end;
+
+thus q^<*p.(len p)*>=p
+   proof
+     A4: dom(q^<*p.(len p)*>) = Seg len (q^<*p.(len p)*>) by Def3
+         .= Seg(len q + len <*p.(len p)*>) by Th35
+         .= Seg(len q + 1) by Th56
+         .= Seg len p by A1,A2,Def3
+         .= dom p by Def3;
+
+        for x st x in dom p holds p.x = (q^<*p.(len p)*>).x
+         proof let x; assume A5:  x in dom p;
+            then reconsider k = x as Nat;
+              k in Seg(n+1) by A1,A5,Def3;
+then A6:            k in Seg n \/ {n+1} by Th11;
+       A7: now assume A8: k in Seg n;
+              hence
+                   p.k=q.k by A2,FUNCT_1:70
+                  .=(q^<*p.(len p)*>).k by A2,A8,Def7;
+            end;
+             now assume A9: k in {n+1};
+                    1 in Seg 1 by Th5;
+              then A10: 1 in dom <*p.(len p)*> by Def8;
+               thus
+                  (q^<*p.(len p)*>).k =(q^<*p.(len p)*>).(n+1) by A9,TARSKI:def
+1
+                .=(q^<*p.(len p)*>).(len q + 1) by A2,Def3
+                .=<*p.(len p)*>.1 by A10,Def7
+                .=p.(n+1) by A1,Def8
+                .=p.k by A9,TARSKI:def 1;
+            end;
+         hence thesis by A6,A7,XBOOLE_0:def 2;
+       end;
+     hence q^<*p.(len p)*>=p by A4,FUNCT_1:9;
+   end;
+end;
+
+definition let D be non empty set; let x be Element of D;
+ redefine func <*x*> -> FinSequence of D;
+   coherence
+    proof let y; assume y in rng <*x*>;
+      then y in {x} by Th56;
+      then y = x by TARSKI:def 1;
+     hence y in D;
+    end;
+ end;
+
+::::::::::::::::::::::::::::::::::::::::::::::
+:: scheme of induction for finite sequences ::
+::::::::::::::::::::::::::::::::::::::::::::::
+
+scheme IndSeq{P[FinSequence]}:
+ for p holds P[p]
+  provided
+ A1: P[{}] and
+ A2: for p,x st P[p] holds P[p^<*x*>]
+ proof let p;
+    defpred R[set] means for p st len p = $1 holds P[p];
+    consider X being Subset of REAL such that
+      A3:  for x being Real holds x in X iff R[x] from SepReal;
+     for k holds k in X
+       proof
+          defpred S[Nat] means $1 in X;
+      A4: S[0]
+          proof
+           for q st len q = 0 holds P[q] by A1,Lm4;
+           hence 0 in X by A3;
+          end;
+         now let n such that A5:n in X;
+             now let q;
+              assume A6: len q = n+1;
+              then q <> {} by Lm4;
+              then consider r,x such that A7: q=r^<*x*> by Th63;
+                len q = len r + len <*x*> by A7,Th35
+              .= len r + 1 by Th56;
+              then len r = n + 1 - 1 by A6,XCMPLX_1:26;
+              then len r = n +(1-1) by XCMPLX_1:29;
+              then P[r] by A3,A5;
+             hence P[q] by A2,A7;
+            end;
+           hence n+1 in X by A3;
+          end;
+    then A8:   for n st S[n] holds S[n+1];
+         thus for n holds S[n] from Ind(A4,A8);
+       end;
+      then len p in X;
+      hence P[p] by A3;
+ end;
+
+theorem
+    for p,q,r,s being FinSequence st p^q = r^s & len p <= len r
+  ex t being FinSequence st p^t = r
+ proof
+     defpred S[FinSequence] means
+     for p,q,s st p^q=$1^s & len p <= len $1 holds ex t st p^t=$1;
+    A1: S[{}]
+         proof
+            let p,q,s; assume p^q={}^s & len p <= len {};
+       then len p <= 0 by Lm4;
+then A2:            len p = 0 by NAT_1:18;
+            take {};
+            thus p^{} = p by Th47
+              .= {} by A2,Lm4;
+         end;
+     A3:  for r,x st S[r] holds S[r^<*x*>]
+        proof let r,x;
+           assume A4: for p,q,s st p^q=r^s & len p <= len r
+                     ex t st p^t=r;
+           let p,q,s;
+           assume A5: p^q=(r^<*x*>)^s & len p <= len (r^<*x*>);
+             A6: now assume len p = len(r^<*x*>);
+                    then A7: dom p = Seg len(r^<*x*>) by Def3
+                        .= dom(r^<*x*>) by Def3;
+A8:                     for k st k in dom p holds p.k=(r^<*x*>).k
+                        proof let k; assume A9: k in dom p;
+                          hence
+                              p.k = (r^<*x*>^s).k by A5,Def7
+                            .=(r^<*x*>).k by A7,A9,Def7;
+                        end;
+                        p^{} = p by Th47
+                         .=r^<*x*> by A7,A8,Th17;
+                      hence thesis;
+                end;
+                 now assume len p <> len(r^<*x*>);
+                        then len p <> len r + len <*x*> by Th35;
+                    then A10: len p <> len r + 1 by Th56;
+                          len p <= len r + len <*x*> by A5,Th35;
+                        then len p <= len r + 1 by Th56;
+                    then A11: len p <= len r by A10,NAT_1:26;
+                          p^q=r^(<*x*>^s) by A5,Th45;
+                        then consider t being FinSequence such that
+                           A12: p^t = r by A4,A11;
+                          p^(t^<*x*>) = r^<*x*> by A12,Th45;
+                   hence thesis;
+                end;
+              hence thesis by A6;
+        end;
+     for r holds S[r] from IndSeq(A1,A3);
+   hence thesis;
+ end;
+
+ definition let D be set;
+  func D* -> set means
+:Def11: x in it iff x is FinSequence of D;
+   existence
+    proof
+     defpred P[set] means $1 is FinSequence of D;
+     consider X such that
+A1:    x in X iff x in bool [:NAT,D:] & P[x] from Separation;
+     take X;
+     let x;
+     thus x in X implies x is FinSequence of D by A1;
+     assume x is FinSequence of D;
+     then reconsider p = x as FinSequence of D;
+     p c= [:NAT,D:];
+     hence x in X by A1;
+    end;
+   uniqueness
+    proof let D1,D2 be set such that
+A2:   x in D1 iff x is FinSequence of D and
+A3:   x in D2 iff x is FinSequence of D;
+       now let x;
+       thus x in D1 implies x in D2
+         proof assume x in D1;
+           then x is FinSequence of D by A2;
+          hence x in D2 by A3;
+         end;
+       assume x in D2;
+        then x is FinSequence of D by A3;
+       hence x in D1 by A2;
+      end;
+     hence thesis by TARSKI:2;
+    end;
+ end;
+
+ definition let D be set;
+  cluster D* -> non empty;
+  coherence
+  proof
+    consider f being FinSequence of D;
+      f in D* by Def11;
+    hence thesis;
+  end;
+ end;
+
+canceled;
+
+theorem
+    {} in D*
+proof
+    {} = <*>D;
+ hence {} in D* by Def11;
+end;
+
+scheme SepSeq{D()->non empty set, P[FinSequence]}:
+ ex X st (for x holds x in X iff
+            ex p st (p in D()* & P[p] & x=p))
+proof
+     defpred R[set] means ex p st P[p] & $1=p;
+     consider Y such that A1: x in Y iff x in D()* & R[x]
+            from Separation;
+     take Y;
+       x in Y iff ex p st p in D()* & P[p] & x=p
+  proof
+     now assume x in Y;
+       then x in D()* & ex p st P[p] & x=p by A1;
+       hence ex p st p in D()* & P[p] & x=p;
+      end;
+  hence thesis by A1;
+ end;
+hence thesis;
+end;
+
+:::::::::::::::::::::::::::::::
+::                           ::
+::        Subsequences       ::
+::                           ::
+:::::::::::::::::::::::::::::::
+
+definition let IT be Function;
+    attr IT is FinSubsequence-like means
+  :Def12: ex k st dom IT c= Seg k;
+end;
+
+definition
+    cluster FinSubsequence-like Function;
+ existence
+   proof
+    take {},len {};
+    thus thesis by Def3;
+   end;
+end;
+
+definition
+    mode FinSubsequence is FinSubsequence-like Function;
+end;
+
+canceled;
+
+theorem
+    for p being FinSequence holds p is FinSubsequence
+proof
+  let p be FinSequence;
+     dom p = Seg len p by Def3;
+ hence thesis by Def12;
+end;
+
+theorem
+    p|X is FinSubsequence & X|p is FinSubsequence
+ proof
+A1: dom p = Seg len p by Def3;
+A2:   dom(p|X) c= dom p by FUNCT_1:76;
+     dom(X|p) c= dom p by FUNCT_1:89;
+  hence thesis by A1,A2,Def12;
+ end;
+
+reserve p' for FinSubsequence;
+
+definition let X;
+  given k such that A1: X c= Seg k;
+  func Sgm X -> FinSequence of NAT means
+:Def13: rng it = X & for l,m,k1,k2 st
+               ( 1 <= l & l < m & m <= len it &
+                    k1=it.l & k2=it.m) holds k1 < k2;
+existence
+proof
+    defpred P[Nat] means
+      for X st X c= Seg $1 ex p being FinSequence of NAT st
+       rng p = X & for l,m,k1,k2 st
+               ( 1 <= l & l < m & m <= len p &
+                    k1=p.l & k2=p.m) holds k1 < k2;
+A2: P[0]
+    proof let X;
+       assume A3: X c= Seg 0;
+       take <*>(NAT);
+       thus rng <*>(NAT) = X by A3,Th4,XBOOLE_1:3;
+       thus for l,m,k1,k2 st
+               ( 1 <= l & l < m & m <= len <*>(NAT) &
+                    k1=<*>(NAT).l & k2=<*>(NAT).m) holds k1 < k2
+          proof let l,m,k1,k2;
+            assume A4: 1 <= l & l < m & m <= len <*>(NAT) &
+                    k1=<*>(NAT).l & k2=<*>(NAT).m;
+              then 1 < m by AXIOMS:22;
+              then 1 < len {} by A4,AXIOMS:22;
+              then 1 < 0 by Lm4;
+             hence thesis;
+          end;
+    end;
+
+A5:  for k st P[k] holds P[k+1]
+    proof let k such that A6:
+       for X st X c= Seg k holds ex p being FinSequence of NAT st
+       rng p = X & for l,m,k1,k2 st
+               ( 1 <= l & l < m & m <= len p &
+                    k1=p.l & k2=p.m) holds k1 < k2;
+       let X;
+       assume A7: X c= Seg(k+1);
+            now assume not X c= Seg k;
+                then consider x such that A8: x in X & not x in
+ Seg k by TARSKI:def 3;
+                  x in Seg(k+1) by A7,A8;
+                then reconsider n=x as Nat;
+         A9:   n=k+1
+                  proof
+                    assume A10: n <> k+1;
+                      1 <= n & n <= k+1 by A7,A8,Th3;
+                    then 1 <= n & n <= k by A10,NAT_1:26;
+                   hence contradiction by A8,Th3;
+                  end;
+                set Y=X\{k+1};
+          A11:   Y c= Seg k
+                  proof let x;
+                    assume x in Y;
+                    then A12: x in X & not x in {k+1} by XBOOLE_0:def 4;
+              then A13:   x in Seg(k+1) & x<>k+1 by A7,TARSKI:def 1;
+                    then reconsider m=x as Nat;
+                      1 <= m & m <= k+1 by A7,A12,Th3;
+                    then 1 <= m & m <= k by A13,NAT_1:26;
+                   hence x in Seg k by Th3;
+                  end;
+                then consider p being FinSequence of NAT such that A14:
+                   rng p = Y & for l,m,k1,k2 st
+                      ( 1 <= l & l < m & m <= len p &
+                            k1=p.l & k2=p.m) holds k1 < k2 by A6;
+                consider q such that A15: q=p^<*k+1*>;
+                reconsider q as FinSequence of NAT by A15;
+           A16:  {k+1} c= X by A8,A9,ZFMISC_1:37;
+           A17:  rng q = rng p \/ rng <*k+1*> by A15,Th44
+                    .= Y \/ {k+1} by A14,Th55
+                    .= X \/ {k+1} by XBOOLE_1:39
+                    .= X by A16,XBOOLE_1:12;
+                  for l,m,k1,k2 st ( 1 <= l & l < m & m <= len q &
+                    k1=q.l & k2=q.m) holds k1 < k2
+                 proof let l,m,k1,k2;
+                    assume A18: 1 <= l & l < m & m <= len q & k1=q.l & k2=q.m;
+                      A19: l in dom p
+                            proof
+                                l < len (p^<*k+1*>) by A15,A18,AXIOMS:22;
+                              then l < len p + len <*k+1*> by Th35;
+                              then l < len p + 1 by Th56;
+                              then l <= len p by NAT_1:38;
+                              then l in Seg len p by A18,Th3;
+                             hence l in dom p by Def3;
+                            end;
+                      A20: 1 <= m by A18,AXIOMS:22;
+                      A21: now assume A22: m=len q;
+                                k1 = p.l by A15,A18,A19,Def7;
+                              then k1 in Y by A14,A19,FUNCT_1:def 5;
+                         then A23:  k1 <= k by A11,Th3;
+                        q.m = (p^<*k+1*>).(len p + len <*k+1*>) by A15,A22,Th35
+                                .=(p^<*k+1*>).(len p + 1) by Th56
+                                .= k+1 by Th59;
+                            hence k1 < k2 by A18,A23,NAT_1:38;
+                          end;
+                           now assume m <> len q;
+                             then m < len (p^<*k+1*>) by A15,A18,REAL_1:def 5;
+                             then m < len p + len <*k+1*> by Th35;
+                             then m < len p + 1 by Th56;
+                      then A24:    m <= len p by NAT_1:38;
+                             then m in Seg len p by A20,Th3;
+                             then m in dom p by Def3;
+                      then A25:    k2 = p.m by A15,A18,Def7;
+                            k1 = p.l by A15,A18,A19,Def7;
+                           hence k1 < k2 by A14,A18,A24,A25;
+                          end;
+                       hence thesis by A21;
+                 end;
+            hence thesis by A17;
+        end;
+      hence thesis by A6;
+    end;
+    for k holds P[k] from Ind(A2,A5);
+   hence thesis by A1;
+end;
+
+uniqueness
+proof
+  let p,q be FinSequence of NAT such that
+A26: rng p = X & for l,m,k1,k2 st
+               ( 1 <= l & l < m & m <= len p &
+                    k1=p.l & k2=p.m) holds k1 < k2
+        and
+A27: rng q = X & for l,m,k1,k2 st
+               ( 1 <= l & l < m & m <= len q &
+                    k1=q.l & k2=q.m) holds k1 < k2;
+
+      defpred S[FinSequence] means
+      for X st ex k st X c= Seg k holds
+            ($1 is FinSequence of NAT & rng $1 = X &
+               for l,m,k1,k2 st ( 1 <= l & l < m & m <= len $1 &
+                       k1=$1.l & k2=$1.m) holds k1 < k2)
+             implies
+                for q being FinSequence of NAT st rng q = X &
+                   for l,m,k1,k2 st ( 1 <= l & l < m & m <= len q &
+                      k1=q.l & k2=q.m) holds k1 < k2
+                holds q=$1;
+  A28: S[{}] by RELAT_1:64;
+   A29: for p,x st S[p] holds S[p^<*x*>]
+       proof let p,x;
+         assume A30: S[p];
+         let X;
+         given k such that A31: X c= Seg k;
+         assume A32: (p^<*x*> is FinSequence of NAT & rng (p^<*x*>) = X &
+               for l,m,k1,k2 st ( 1 <= l & l < m & m <= len(p^<*x*>) &
+                       k1=(p^<*x*>).l & k2=(p^<*x*>).m) holds k1 < k2);
+         let q be FinSequence of NAT;
+         assume A33: rng q = X &
+                   for l,m,k1,k2 st ( 1 <= l & l < m & m <= len q &
+                      k1=q.l & k2=q.m) holds k1 < k2;
+          1 in Seg 1 by Th4,TARSKI:def 1;
+        then A34: 1 in dom <*x*> by Def8;
+
+     A35: ex m st m=x & for l st l in X & l <> x holds l < m
+         proof
+             <*x*> is FinSequence of NAT by A32,Th50;
+           then rng <*x*> c= NAT by Def4;
+           then {x} c= NAT by Th55;
+           then reconsider m=x as Nat by ZFMISC_1:37;
+           take m;
+        thus m=x;
+        thus for l st l in X & l <> x holds l < m
+          proof
+           let l;
+           assume A36: l in X & l <> x;
+           then consider y such that
+              A37: y in dom (p^<*x*>) & l=(p^<*x*>).y by A32,FUNCT_1:def 5;
+        A38: y in Seg len (p^<*x*>) by A37,Def3;
+           reconsider k=y as Nat by A37;
+             1 <= k & k <= len (p^<*x*>) by A38,Th3;
+           then 1 <= k & k <= len p + len <*x*> by Th35;
+        then A39: 1 <= k & k <= len p + 1 by Th56;
+               k <> len p + 1
+              proof
+                assume k = len p + 1;
+                then (p^<*x*>).k = <*x*>.1 by A34,Def7
+                  .= x by Def8;
+                hence contradiction by A36,A37;
+              end;
+            then 1 <= k & k < len p + 1 by A39,REAL_1:def 5;
+            then 1 <= k & k < len p + len <*x*> by Th56;
+         then A40: 1 <= k & k < len(p^<*x*>) &
+             len(p^<*x*>) <= len(p^<*x*>) by Th35;
+                m=(p^<*x*>).(len p + 1) by Th59
+               .= (p^<*x*>).(len p + len <*x*>) by Th56
+               .= (p^<*x*>).(len(p^<*x*>)) by Th35;
+           hence l < m by A32,A37,A40;
+          end;
+         end;
+        then reconsider m = x as Nat;
+
+        len q <> 0
+            proof
+               assume len q = 0;
+               then X = {} by A33,Lm4,RELAT_1:60;
+               then p^<*x*> = {} by A32,RELAT_1:64;
+               then 0 = len (p^<*x*>) by Lm4
+                 .= len p + len <*x*> by Th35
+                 .= 1 + len p by Th56;
+              hence contradiction;
+            end;
+         then consider n such that A41: len q = n+1 by NAT_1:22;
+         deffunc F(Nat) = q.$1;
+           ex q' being FinSequence st len q' = n &
+            for m st m in Seg n holds q'.m = F(m) from SeqLambda;
+         then consider q' being FinSequence such that A42: len q' = n &
+            for m st m in Seg n holds q'.m = q.m;
+           q' is FinSequence of NAT
+           proof
+              now let x;
+                 assume x in rng q';
+                 then consider y such that A43: y in dom q' & x=q'.y by FUNCT_1
+:def 5;
+             A44: y in Seg len q' by A43,Def3;
+                 reconsider y as Nat by A43;
+             A45: 1 <= y & y <= n by A42,A44,Th3;
+                  n <= n + 1 by NAT_1:29;
+                 then 1 <= y & y <= n+1 by A45,AXIOMS:22;
+                 then y in Seg (n+1) by Th3;
+                 then y in dom q by A41,Def3;
+             then A46: q.y in rng q by FUNCT_1:def 5;
+                   rng q c= NAT by Def4;
+              then q.y in NAT by A46;
+                hence x in NAT by A42,A43,A44;
+              end;
+             then rng q' c= NAT by TARSKI:def 3;
+            hence thesis by Def4;
+           end;
+         then reconsider f=q' as FinSequence of NAT;
+     A47: q'^<*x*> = q
+          proof
+            A48: dom q = Seg (n+1) by A41,Def3
+                 .= Seg (len q' + len <*x*>) by A42,Th56;
+            A49: for m st m in dom q' holds q'.m = q.m
+                 proof let m;
+                     assume m in dom q';
+                     then m in Seg n by A42,Def3;
+                    hence thesis by A42;
+                 end;
+                  for m st m in dom <*x*> holds q.(len q' + m) = <*x*>.m
+                  proof let m;
+                      assume m in dom <*x*>;
+then A50:                       m in {1} by Def8,Th4;
+                   then A51: m=1 by TARSKI:def 1;
+                        q.(len q' + m) = x
+                        proof
+                          assume q.(len q' + m) <> x;
+                          then A52: q.len q <> x by A41,A42,A50,TARSKI:def 1;
+                            consider d being Nat such that
+                             A53: d=x & for l st l in
+ X & l<>x holds l<d by A35;
+                             x in rng q
+                             proof
+                                 x in {x} by TARSKI:def 1;
+                               then x in rng <*x*> by Th55;
+                               then x in rng p \/ rng <*x*> by XBOOLE_0:def 2;
+                              hence x in rng q by A32,A33,Th44;
+                             end;
+                           then consider y such that A54:
+                             y in dom q & x=q.y by FUNCT_1:def 5;
+                       A55: y in Seg len q by A54,Def3;
+                           reconsider y as Nat by A54;
+                       A56: 1 <= y & y <= len q by A55,Th3;
+                             then A57:   1 <= y & y < len q & len q <= len q
+by A52,A54,REAL_1:def 5;
+                       A58: q.len q is Nat & q.len q in X
+                               proof
+                                 A59: rng q c= NAT by Def4;
+                                     1 <= len q & len q <= len q
+                                          by A56,AXIOMS:22;
+                                   then len q in Seg len q by Th3;
+then A60:                                   len q in dom q by Def3;
+                                then q.len q in rng q by FUNCT_1:def 5;
+                                 hence q.len q is Nat by A59;
+                                 thus q.len q in X by A33,A60,FUNCT_1:def 5;
+                               end;
+                           then reconsider k = q.len q as Nat;
+                          k < d by A52,A53,A58;
+                          hence contradiction by A33,A53,A54,A57;
+                        end;
+                     hence q.(len q' + m) = <*x*>.m by A51,Th57;
+                  end;
+               hence thesis by A48,A49,Def7;
+          end;
+        q' = p
+           proof
+              A61: (ex m st (X\{x}) c= Seg m)
+                     proof take k;
+                            X\{x} c= X by XBOOLE_1:36;
+                        hence X\{x} c= Seg k by A31,XBOOLE_1:1;
+                     end;
+
+              A62: (p is FinSequence of NAT & rng p = X\{x} &
+                    for l,m,k1,k2 st ( 1 <= l & l < m & m <= len p &
+                        k1=p.l & k2=p.m) holds k1 < k2)
+                     proof
+                       thus p is FinSequence of NAT by A32,Th50;
+                       thus rng p = X\{x}
+                          proof
+                            A63: not x in rng p
+                                  proof
+                                    assume x in rng p;
+                                    then consider y such that A64:
+                                       y in dom p & x=p.y by FUNCT_1:def 5;
+                                A65: y in Seg len p by A64,Def3;
+                                    reconsider y as Nat by A64;
+                                A66: 1 <= y & y <= len p by A65,Th3;
+                            A67:    1 <= y & y < len p + 1 &
+                                       len p + 1 <= len (p^<*x*>)
+                                     proof
+                                      thus 1 <= y by A65,Th3;
+                                      thus
+                                          y < len p + 1 by A66,NAT_1:38;
+                                         len p + 1 = len p + len <*x*>
+                                             by Th56
+                                          .= len (p^<*x*>) by Th35;
+                                        hence
+                                            len p + 1 <= len (p^<*x*>);
+                                     end;
+                             A68:   m = (p^<*x*>).y by A64,Def7;
+                                     m = (p^<*x*>).(len p + 1 ) by Th59;
+                                   hence contradiction by A32,A67,A68;
+                                  end;
+A69:                               X = rng p \/ rng <*x*> by A32,Th44
+                                  .= rng p \/ {x} by Th56;
+
+                                  for z holds
+                                    z in rng p \/ {x} \ {x} iff z in rng p
+                                  proof let z;
+                                    thus z in rng p \/ {x} \ {x} implies
+                                       z in rng p
+                                     proof
+                                       assume z in rng p \/ {x} \ {x};
+                                       then (z in rng p \/ {x}) & not z in {x}
+                                          by XBOOLE_0:def 4;
+                                       hence z in rng p by XBOOLE_0:def 2;
+                                     end;
+                                    assume A70: z in rng p;
+                                    then A71: not z in {x} by A63,TARSKI:def 1;
+                                      z in rng p \/ {x} by A70,XBOOLE_0:def 2;
+                                   hence z in rng p \/ {x} \ {x} by A71,
+XBOOLE_0:def 4;
+                                  end;
+                              hence rng p = X\{x} by A69,TARSKI:2;
+                          end;
+                       thus
+                            for l,m,k1,k2 st 1 <= l & l < m & m <= len p &
+                            k1=p.l & k2=p.m holds k1 < k2
+                          proof let l,m,k1,k2;
+                            assume A72: 1 <= l & l < m & m <= len p &
+                                          k1=p.l & k2=p.m;
+                            then 1 <= l & l <= len p by AXIOMS:22;
+                            then l in Seg len p by Th3;
+                            then l in dom p by Def3;
+                          then A73: k1 = (p^<*x*>).l by A72,Def7;
+                              1 <= m & m <= len p by A72,AXIOMS:22;
+                            then m in Seg len p by Th3;
+                            then m in dom p by Def3;
+                          then A74: k2 = (p^<*x*>).m by A72,Def7;
+                              len p <= len p + 1 by NAT_1:29;
+                            then m <= len p + 1 by A72,AXIOMS:22;
+                            then m <= len p + len <*x*> by Th56;
+                            then 1 <= l & l < m & m <= len (p^<*x*>) by A72,
+Th35;
+                           hence k1 < k2 by A32,A73,A74;
+                         end;
+                     end;
+                  rng f = X\{x} & for l,m,k1,k2 st
+                        ( 1 <= l & l < m & m <= len f &
+                          k1=f.l & k2=f.m) holds k1 < k2
+                      proof
+                        thus rng f = X\{x}
+                            proof
+                            A75: not x in rng f
+                                  proof
+                                    assume x in rng f;
+                                    then consider y such that A76:
+                                       y in dom f & x=f.y by FUNCT_1:def 5;
+                                A77: y in Seg len f by A76,Def3;
+                                    reconsider y as Nat by A76;
+                                A78: 1 <= y & y <= len f by A77,Th3;
+
+A79:                                   1 <= y & y < len f + 1 &
+                                       len f + 1 <= len (f^<*x*>)
+                                     proof
+                                      thus 1 <= y by A77,Th3;
+                                      thus
+                                          y < len f + 1 by A78,NAT_1:38;
+
+                                         len f + 1 = len f + len <*x*>
+                                             by Th56
+                                          .= len (f^<*x*>) by Th35;
+                                        hence
+                                            len f + 1 <= len (f^<*x*>);
+                                     end;
+                             A80:   m = q.y by A47,A76,Def7;
+                                     m = q.(len f + 1) by A47,Th59;
+                                   hence contradiction by A33,A47,A79,A80;
+                                  end;
+A81:                               X = rng f \/ rng <*x*> by A33,A47,Th44
+                                  .= rng f \/ {x} by Th56;
+                                  for z holds
+                                    z in rng f \/ {x} \ {x} iff z in rng f
+                                  proof let z;
+                                    thus z in rng f \/ {x} \ {x} implies
+                                       z in rng f
+                                     proof
+                                       assume z in rng f \/ {x} \ {x};
+                                       then (z in rng f \/ {x}) & not z in {x}
+                                          by XBOOLE_0:def 4;
+                                       hence z in rng f by XBOOLE_0:def 2;
+                                     end;
+                                    assume A82: z in rng f;
+                                    then A83: not z in {x} by A75,TARSKI:def 1;
+                                      z in rng f \/ {x} by A82,XBOOLE_0:def 2;
+                                   hence z in rng f \/ {x} \ {x} by A83,
+XBOOLE_0:def 4;
+                                  end;
+                              hence rng f = X\{x} by A81,TARSKI:2;
+                            end;
+                        thus for l,m,k1,k2 st
+                           ( 1 <= l & l < m & m <= len f &
+                             k1=f.l & k2=f.m) holds k1 < k2
+                            proof let l,m,k1,k2;
+                              assume A84: 1 <= l & l < m & m <= len f &
+                                   k1=f.l & k2=f.m;
+                               then A85:      1 <= l & l < m & m <=
+ len q by A41,A42,NAT_1:38;
+                                 l in Seg n & m in Seg n
+                                  proof
+                                      l <= n by A42,A84,AXIOMS:22;
+                                   hence l in Seg n by A84,Th3;
+                                      1 <= m by A84,AXIOMS:22;
+                                   hence m in Seg n by A42,A84,Th3;
+                                  end;
+                               then k1 = q.l & k2 = q.m by A42,A84;
+                              hence k1 < k2 by A33,A85;
+                            end;
+                      end;
+              hence q'=p by A30,A61,A62;
+           end;
+        hence q = p^<*x*> by A47;
+       end;
+      for p holds S[p] from IndSeq(A28,A29);
+ hence p = q by A1,A26,A27;
+end;
+end;
+
+canceled;
+
+theorem Th71:
+  rng Sgm dom p' = dom p'
+proof
+    ex k st dom p' c= Seg k by Def12;
+ hence thesis by Def13;
+end;
+
+definition let p';
+  func Seq p' -> Function equals
+:Def14:  p'* Sgm(dom p');
+ coherence;
+end;
+
+definition let p';
+ cluster Seq p' -> FinSequence-like;
+ coherence
+ proof
+       rng Sgm dom p' = dom p' by Th71;
+     then dom(p'*Sgm(dom p')) = dom Sgm dom p' by RELAT_1:46
+     .=Seg len Sgm dom p' by Def3;
+     then p'*Sgm(dom p') is FinSequence by Def2;
+    hence thesis by Def14;
+ end;
+end;
+
+theorem
+    for X st ex k st X c= Seg k holds Sgm X = {} iff X = {}
+proof let X;
+  given k such that A1: X c= Seg k;
+  thus Sgm X = {} implies X = {}
+       proof
+          assume Sgm X = {};
+        hence X = rng {} by A1,Def13
+          .= {};
+       end;
+    assume X={};
+     then rng Sgm X = {} by A1,Def13;
+     then dom Sgm X = Seg 0 by Th4,RELAT_1:65;
+     then len Sgm X = 0 by Def3;
+   hence thesis by Lm4;
+end;
+
+begin :: Moved from FINSET_1, 1998
+
+theorem :: FINSET_1:def 1
+ D is finite iff ex p st D = rng p
+proof
+ thus D is finite implies ex p st D = rng p
+  proof given g being Function such that
+A1: rng g = D and
+A2: dom g in omega;
+    reconsider n = dom g as Nat by A2;
+    defpred R[set,set] means P[$2,$1];
+A3:   for x,y1,y2 st x in Seg n & R[x,y1] & R[x,y2] holds y1 = y2 by XCMPLX_1:2
+;
+A4:   for x st x in Seg n ex y st R[x,y]
+      proof let x;
+       assume
+A5:        x in Seg n;
+        then reconsider x as Nat;
+          x >= 1 by A5,Th3;
+        then ex k st x = 1+k by NAT_1:28;
+       hence thesis;
+      end;
+     consider f such that
+A6:   dom f = Seg n and
+A7:   for x st x in Seg n holds R[x,f.x] from FuncEx(A3,A4);
+A8:  rng f = dom g
+     proof
+A9: n = { k : k < n } by AXIOMS:30;
+      thus rng f c= dom g
+       proof let x;
+        assume x in rng f;
+         then consider y such that
+A10:       y in dom f and
+A11:       x = f.y by FUNCT_1:def 5;
+         consider k such that
+A12:       x = k and
+A13:       y = k+1 by A6,A7,A10,A11;
+           k + 1 <= n by A6,A10,A13,Th3;
+         then k < n by NAT_1:38;
+        hence x in dom g by A9,A12;
+       end;
+      let x;
+      assume x in dom g;
+       then consider k such that
+A14:     x = k and
+A15:     k < n by A9;
+         1 <= k+1 & k+1 <= n by A15,NAT_1:29,38;
+       then A16:      k+1 in Seg n by Th3;
+       then consider k1 such that
+A17:     f.(k+1) = k1 and
+A18:     k+1 = k1+1 by A7;
+         k = k1 by A18,XCMPLX_1:2;
+      hence x in rng f by A6,A14,A16,A17,FUNCT_1:def 5;
+     end;
+    then dom(g*f) = Seg n by A6,RELAT_1:46;
+    then reconsider p = g*f as FinSequence by Def2;
+   take p;
+   thus D = rng p by A1,A8,RELAT_1:47;
+  end;
+ given p such that
+A19: D = rng p;
+   consider n such that
+A20:  dom p = Seg n by Def2;
+A21: n = { k : k < n } by AXIOMS:30;
+A22: for x,y1,y2 st x in n & P[x,y1] & P[x,y2] holds y1 = y2;
+A23: for x st x in n ex y st P[x,y]
+    proof let x;
+     assume x in n;
+      then ex k st x = k & k < n by A21;
+      then reconsider k = x as Nat;
+     take k+1;
+     thus thesis;
+    end;
+   consider f such that
+A24: dom f = n and
+A25: for x st x in n holds P[x,f.x] from FuncEx(A22,A23);
+ take p*f;
+A26: rng f = dom p
+    proof
+     thus rng f c= dom p
+      proof let x;
+       assume x in rng f;
+        then consider y such that
+A27:      y in dom f and
+A28:      x = f.y by FUNCT_1:def 5;
+        consider k such that
+A29:      y = k and
+A30:      x = k+1 by A24,A25,A27,A28;
+          ex m st k = m & m < n by A21,A24,A27,A29;
+        then 1 <= k+1 & k+1 <= n by NAT_1:29,38;
+       hence x in dom p by A20,A30,Th3;
+      end;
+     let x;
+     assume
+A31:    x in dom p;
+      then reconsider x as Nat;
+        1 <= x by A20,A31,Th3;
+      then consider m such that
+A32:    x = 1+m by NAT_1:28;
+        x <= n by A20,A31,Th3;
+      then m < n by A32,NAT_1:38;
+      then A33:      m in n by A21;
+      then ex k st m = k & f.m = k+1 by A25;
+     hence thesis by A24,A32,A33,FUNCT_1:def 5;
+    end;
+ hence rng(p*f) = D by A19,RELAT_1:47;
+    dom(p*f) = dom f by A26,RELAT_1:46;
+ hence dom(p*f) in omega by A24;
+end;
+
+definition
+ cluster finite empty Function;
+ existence
+  proof
+   take {};
+   thus thesis;
+  end;
+end;
+
+definition
+ cluster finite non empty Function;
+ existence
+  proof
+    {[{},{}]} is Function by GRFUNC_1:15;
+   hence thesis;
+  end;
+end;
+
+definition let R be finite Relation;
+ cluster rng R -> finite;
+ coherence
+  proof per cases;
+   suppose R = {};
+    hence thesis by RELAT_1:60;
+   suppose R <> {};
+    then reconsider R as finite non empty Relation;
+    set X = { x`2 where x is Element of R: x in R };
+A:  rng R = X
+     proof
+      thus rng R c= X
+       proof let z be set;
+        assume z in rng R;
+         then consider y being set such that
+W1:       [y,z] in R by RELAT_1:def 5;
+         [y,z]`2 = z by MCART_1:7;
+        hence z in X by W1;
+       end;
+      let e be set;
+      assume e in X;
+       then consider x being Element of R such that
+W1:     e = x`2 and x in R;
+       consider y,z being set such that
+W3:     x = [y,z] by RELAT_1:def 1;
+       z = e by W1,W3,MCART_1:7;
+      hence e in rng R by W3,RELAT_1:def 5;
+     end;
+B:  R is finite;
+    X is finite from FraenkelFin(B);
+   hence thesis by A;
+  end;
+end;
+
+begin :: Moved from CARD_1, 1999
+
+theorem
+   Seg n,Seg m are_equipotent implies n = m
+  proof
+   defpred P[Nat] means ex n st Seg n,Seg $1 are_equipotent & n <> $1;
+   assume Seg n,Seg m are_equipotent & n <> m;
+then A1:  ex m st P[m];
+   consider m such that
+A2:  P[m] and
+A3:  for k st P[k] holds m <= k from Min(A1);
+   consider n such that
+A4:  Seg n,Seg m are_equipotent & n <> m by A2;
+ A5:   ex f st
+  f is one-to-one & dom f = Seg n & rng f = Seg m by A4,WELLORD2:def 4;
+A6: now assume m = 0;
+      then Seg m = Seg n by A5,Th4,RELAT_1:65;
+     hence contradiction by A4,Th8;
+    end;
+   then consider m1 being Nat such that
+A7:  m = m1+1 by NAT_1:22;
+A8: now assume n = 0;
+      then Seg m = Seg n by A5,Th4,RELAT_1:65;
+     hence contradiction by A4,Th8;
+    end;
+   then consider n1 being Nat such that
+A9: n = n1+1 by NAT_1:22;
+     n in Seg n & m in Seg m by A6,A8,Th5;
+then A10:  (Seg n) \ { n },(Seg m) \ { m } are_equipotent by A4,CARD_1:61;
+A11: not n1+1 <= n1 & not m1+1 <= m1 by NAT_1:38;
+then A12: not n in Seg n1 & not m in Seg m1 by A7,A9,Th3;
+A13:  (Seg n1) /\ { n } c= {}
+     proof let x; assume x in (Seg n1) /\ { n };
+       then x in Seg n1 & x in { n } by XBOOLE_0:def 3;
+      hence thesis by A12,TARSKI:def 1;
+     end;
+      (Seg m1) /\ { m } c= {}
+     proof let x; assume x in (Seg m1) /\ { m };
+       then x in Seg m1 & x in { m } by XBOOLE_0:def 3;
+      hence thesis by A12,TARSKI:def 1;
+     end;
+then A14:  Seg n = (Seg n1) \/ { n } & Seg m = (Seg m1) \/ { m } &
+     (Seg n1) \ { n } = ((Seg n1) \/ { n }) \ { n } &
+      (Seg m1) \ { m } = ((Seg m1) \/ { m }) \ { m } &
+       (Seg n1) /\ { n } = {} & (Seg m1) /\ { m } = {}
+        by A7,A9,A13,Th11,XBOOLE_1:3,40;
+  then (Seg n1) misses { n } & (Seg m1) misses { m } by XBOOLE_0:def 7;
+  then (Seg n) \ { n } = Seg n1 & (Seg m) \ { m } = Seg m1 by A14,XBOOLE_1:83;
+   hence contradiction by A3,A4,A7,A9,A10,A11;
+  end;
+
+theorem
+   Seg n,n are_equipotent by Lm1;
+
+theorem
+   Card Seg n = Card n by Lm2;
+
+theorem
+    X is finite implies ex n st X,Seg n are_equipotent
+  proof assume X is finite;
+   then consider n such that
+A1:  X,n are_equipotent by CARD_1:74;
+   take n;
+     n,Seg n are_equipotent by Lm1;
+   hence X,Seg n are_equipotent by A1,WELLORD2:22;
+  end;
+
+theorem
+    for n being Nat holds
+  card Seg n = n & card n = n & card Card n = n
+  proof let n be Nat;
+    Seg n is finite & n is finite & Card n is finite & Seg n,n are_equipotent
+     by Lm1;
+    then Card card n = Card n & card Seg n = card n &
+     Card n = n & Card n = n & Card card Card n = Card Card n &
+      Card Card n = Card n by CARD_1:81,def 11;
+   hence thesis;
+  end;

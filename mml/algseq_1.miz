@@ -1,0 +1,587 @@
+:: Construction of Finite Sequences over Ring and Left-, Right-,
+:: and Bi-Modules over a Ring
+::  by Micha{\l} Muzalewski and Les{\l}aw W. Szczerba
+::
+:: Received September 13, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, NORMSP_1, FUNCT_1, RLVECT_1, RELAT_1, FINSEQ_1, ALGSEQ_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XREAL_0, NAT_1, RELAT_1,
+      FUNCT_1, RLVECT_1, STRUCT_0, FUNCT_2, NORMSP_1;
+ constructors NAT_1, NORMSP_1, XREAL_0, MEMBERED, XBOOLE_0;
+ clusters STRUCT_0, XREAL_0, RELSET_1, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0,
+      NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, XBOOLE_0;
+ theorems TARSKI, AXIOMS, ZFMISC_1, FUNCT_1, FUNCT_2, REAL_1, NAT_1, RLVECT_1,
+      NORMSP_1, XBOOLE_0, XBOOLE_1;
+ schemes FUNCT_1, FUNCT_2, NAT_1;
+
+begin
+
+ reserve i,k,l,m,n for Nat,
+         x for set;
+
+canceled;
+
+theorem
+Th2: m<n+1 implies m<n or m=n
+ proof
+  assume m<n+1;
+  then m<=n by NAT_1:38;
+  hence thesis by REAL_1:def 5;
+ end;
+
+canceled;
+
+theorem
+Th4: k<2 implies k=0 or k=1
+ proof
+  assume k<2;
+  then k<1+1;
+  then k<1 or k=1 by Th2;
+  hence thesis by RLVECT_1:98;
+ end;
+
+ definition let n;
+  func PSeg n -> set equals
+:Def1: { k : k < n };
+   correctness;
+ end;
+
+ definition let n;
+  redefine func PSeg n -> Subset of NAT;
+   coherence
+    proof
+     set X = PSeg n;
+        X c= NAT
+       proof let x; assume
+           x in X;
+         then x in { k : k < n } by Def1;
+         then (ex k st x = k & k < n) & ex x st x in NAT;
+        hence x in NAT;
+       end;
+     hence thesis;
+    end;
+ end;
+
+  Lm1: x in PSeg n implies x is Nat;
+
+canceled 5;
+
+theorem
+ Th10: k in PSeg n iff k < n
+  proof
+        k in { m : m < n } iff
+         ex m st k = m & ( m < n );
+      hence thesis by Def1;
+  end;
+
+theorem
+ Th11: PSeg 0 = {} & PSeg 1 = { 0 } & PSeg 2 = { 0,1 }
+  proof
+   hereby assume
+A1:   PSeg 0 <> {};
+     consider x being Element of PSeg 0;
+     reconsider x as Nat by A1,Lm1;
+        x < 0 by A1,Th10;
+     hence contradiction by NAT_1:18;
+   end;
+
+      now let x;
+     thus x in PSeg 1 implies x in { 0 }
+       proof assume
+A2:       x in PSeg 1;
+           PSeg 1 = { k : k < 1 } by Def1;
+        then consider k such that
+A3:       x = k & (k < 1) by A2;
+           k < 0 + 1 by A3;
+         then k <= 0 by NAT_1:38;
+         then k = 0 by NAT_1:18;
+        hence thesis by A3,TARSKI:def 1;
+       end;
+     assume x in { 0 };
+then A4:    x = 0 by TARSKI:def 1;
+        0 in { k : k < 1 };
+     hence x in PSeg 1 by A4,Def1;
+    end;
+   hence PSeg 1 = { 0 } by TARSKI:2;
+      now let x;
+     thus x in PSeg 2 implies x in { 0,1 }
+       proof assume
+A5:       x in PSeg 2;
+           PSeg 2 = { k : k < 2 } by Def1;
+        then consider k such that
+A6:       x = k & (k < 2 ) by A5;
+           k = 0 or k = 1 by A6,Th4;
+        hence x in { 0,1 } by A6,TARSKI:def 2;
+       end;
+     assume x in { 0,1 };
+    then x = 0 or x = 1 by TARSKI:def 2;
+      then x in { m : m < 2 };
+     hence x in PSeg 2 by Def1;
+    end;
+   hence PSeg 2 = { 0,1 } by TARSKI:2;
+  end;
+
+theorem
+ Th12: n in PSeg(n+1)
+  proof
+      n<n+1 by REAL_1:69;
+    then n in {k:k<n+1};
+    hence thesis by Def1;
+  end;
+
+theorem
+ Th13: n <= m iff PSeg n c= PSeg m
+  proof
+   thus n <= m implies PSeg n c= PSeg m
+     proof assume
+A1:     n <= m;
+      let x; assume
+A2:     x in PSeg n;
+      then reconsider k = x as Nat;
+       k < n by A2,Th10;
+       then k < m by A1,AXIOMS:22;
+       then x in { l : l < m };
+      hence x in PSeg m by Def1;
+     end;
+
+     now assume not n <= m;
+     then m in PSeg n by Th10;
+     hence thesis by Th10;
+   end;
+   hence thesis;
+  end;
+
+theorem
+ Th14: PSeg n = PSeg m implies n = m
+  proof assume
+      PSeg n = PSeg m;
+    then n <= m & m <= n by Th13;
+   hence n = m by AXIOMS:21;
+  end;
+
+theorem Th15:
+   k <= n implies
+    PSeg k = PSeg k /\ PSeg n & PSeg k = PSeg n /\ PSeg k
+proof
+   assume k <= n;
+     then PSeg k c= PSeg n by Th13;
+   hence thesis by XBOOLE_1:28;
+end;
+
+theorem
+    (PSeg k = PSeg k /\ PSeg n or PSeg k = PSeg n /\ PSeg k )
+    implies k <= n
+proof
+     now assume A1: PSeg k = PSeg k /\ PSeg n;
+         assume not k <= n;
+          then PSeg n = PSeg k by A1,Th15;
+         hence k <= n by Th14;
+     end;
+    hence thesis;
+end;
+
+theorem
+     PSeg n \/ { n } = PSeg (n+1)
+proof
+ thus PSeg n \/ { n } c= PSeg (n+1)
+    proof
+         n+0<=n+1 by REAL_1:55;
+then A1:     PSeg n c= PSeg(n+1) by Th13;
+       let x;
+       assume x in PSeg n \/ { n };
+       then x in PSeg n or x in { n } by XBOOLE_0:def 2;
+       then x in PSeg (n+1) or x = n by A1,TARSKI:def 1;
+       hence thesis by Th12;
+    end;
+    let x;
+    assume A2:x in PSeg (n+1);
+    then reconsider x as Nat;
+      x<n+1 by A2,Th10;
+    then x<n or x=n by Th2;
+    then x in PSeg n or x in {n} by Th10,TARSKI:def 1;
+    hence thesis by XBOOLE_0:def 2;
+end;
+
+::
+::    Algebraic Sequences
+::
+
+reserve R for non empty ZeroStr;
+
+ definition let R;
+  let F be sequence of R;
+  attr F is finite-Support means
+:Def2: ex n st for i st i >= n holds F.i = 0.R;
+ end;
+
+ definition let R;
+  cluster finite-Support sequence of R;
+  existence
+  proof
+   deffunc F(set) = 0.R;
+   consider f be Function such that
+    A1: dom f = NAT and
+    A2: for x st x in NAT holds f.x = F(x) from Lambda;
+     for x st x in NAT holds f.x in the carrier of R
+     proof
+      let x;
+        0.R in the carrier of R;
+      hence thesis by A2;
+     end;
+   then reconsider f as Function of NAT,the carrier of R by A1,FUNCT_2:5;
+   reconsider f as sequence of R by NORMSP_1:def 3;
+   take f, 0;
+   thus thesis by A2;
+  end;
+ end;
+
+ definition let R;
+  mode AlgSequence of R is finite-Support sequence of R;
+ end;
+
+reserve p,q for AlgSequence of R;
+
+Lm2: dom p = NAT
+ proof
+  thus thesis by FUNCT_2:def 1;
+ end;
+
+definition let R,p,k;
+  pred k is_at_least_length_of p means :Def3:
+  for i st i>=k holds p.i=0.R;
+end;
+
+Lm3:
+  ex m st m is_at_least_length_of p
+    proof
+      consider n such that A1:for i st i >= n holds p.i = 0.R by Def2;
+      take n;
+      thus thesis by A1,Def3;
+    end;
+
+Lm4:
+  ex k st k is_at_least_length_of p
+     & (for n st n is_at_least_length_of p holds k<=n)
+    proof
+      defpred P[Nat] means $1 is_at_least_length_of p;
+      A1:ex m st P[m] by Lm3;
+        ex k st P[k]
+        & (for n st P[n] holds k<=n) from Min(A1);
+      then consider k such that A2:k is_at_least_length_of p
+        & (for n st n is_at_least_length_of p holds k<=n);
+      take k;
+      thus thesis by A2;
+    end;
+
+Lm5:
+  (k is_at_least_length_of p)
+  & (for m st m is_at_least_length_of p holds k<=m)
+  & (l is_at_least_length_of p)
+  & (for m st m is_at_least_length_of p holds l<=m)
+  implies k=l
+     proof
+       assume (k is_at_least_length_of p)
+         & (for m st m is_at_least_length_of p holds k<=m)
+         & (l is_at_least_length_of p)
+         & (for m st m is_at_least_length_of p holds l<=m);
+       then k<=l & l<=k;
+       hence k=l by AXIOMS:21;
+     end;
+
+ definition let R,p;
+  func len p -> Nat means :Def4:
+   it is_at_least_length_of p
+    & for m st m is_at_least_length_of p holds it<=m;
+   existence by Lm4;
+   uniqueness by Lm5;
+ end;
+
+canceled 4;
+
+theorem
+Th22: i>=len p implies p.i=0.R
+ proof
+  assume A1:i>=len p;
+    len p is_at_least_length_of p by Def4;
+  hence thesis by A1,Def3;
+ end;
+
+canceled;
+
+theorem Th24:
+  (for i st i < k holds p.i<>0.R) implies len p>=k
+    proof
+      assume A1:for i st i < k holds p.i<>0.R;
+        for i st i<k holds len p>i
+        proof
+          let i;
+          assume i<k;
+          then p.i<>0.R by A1;
+          hence thesis by Th22;
+        end;
+      hence thesis;
+    end;
+
+theorem Th25:
+  len p=k+1 implies p.k<>0.R
+    proof
+      assume A1:len p=k+1;
+      then k<len p by REAL_1:69;
+      then not k is_at_least_length_of p by Def4;
+      then consider i such that A2:i>=k & p.i<>0.R by Def3;
+        i<k+1 by A1,A2,Th22;
+      then i<=k by NAT_1:38;
+      hence thesis by A2,AXIOMS:21;
+    end;
+
+::
+:: SUPPORT
+::
+
+definition let R,p;
+  func support p -> Subset of NAT equals
+  :Def5: PSeg (len p);
+    correctness;
+end;
+
+canceled;
+
+theorem
+    k = len p iff PSeg k = support p
+ proof
+    now assume PSeg k = support p;
+   then PSeg k = PSeg(len p) by Def5;
+   hence k = len p by Th14;
+  end;
+  hence thesis by Def5;
+ end;
+
+ scheme AlgSeqLambdaF{R()->non empty ZeroStr,A()->Nat,
+                      F(Nat)->Element of R()}:
+   ex p being AlgSequence of R()
+     st len p <= A() & for k st k < A() holds p.k=F(k)
+ proof
+   defpred P[Element of NAT, Element of R()] means
+     $1<A() & $2=F($1) or $1>=A() & $2=0.R();
+   A1:for x being Element of NAT ex y being Element of R() st
+     P[x,y]
+      proof
+       let x be Element of NAT;
+         x <A() implies x < A() & (F(x)) = F(x);
+       hence thesis;
+      end;
+     ex f being Function of NAT,the carrier of R()
+     st for x being Element of NAT holds P[x,f.x] from FuncExD(A1);
+   then consider f being Function of NAT,the carrier of R() such that
+     A2: for x being Element of NAT holds
+          x<A()&f.x=F(x) or x>=A()&f.x=0.R();
+   reconsider f as sequence of R() by NORMSP_1:def 3;
+     ex n st for i st i >= n holds f.i = 0.R()
+     proof
+       take A();
+       thus thesis by A2;
+     end;
+   then reconsider f as AlgSequence of R() by Def2;
+   A3:len f <= A()
+     proof
+         for i st i>=A() holds f.i=0.R() by A2;
+       then A() is_at_least_length_of f by Def3;
+       hence thesis by Def4;
+     end;
+   take f;
+   thus thesis by A2,A3;
+ end;
+
+theorem Th28:
+  len p = len q & (for k st k < len p holds p.k = q.k)
+   implies p=q
+proof
+  assume A1: len p = len q & (for k st k < len p holds p.k = q.k);
+  A2: dom p = NAT & dom q = NAT by Lm2;
+    for x st x in NAT holds p.x=q.x
+     proof let x;
+        assume x in NAT;
+        then reconsider k=x as Nat;
+          p.k=q.k
+         proof
+            k >= len p implies p.k = q.k
+           proof
+            assume k >= len p;
+            then p.k = 0.R & q.k = 0.R by A1,Th22;
+            hence thesis;
+           end;
+          hence thesis by A1;
+         end;
+        hence p.x=q.x;
+     end;
+  hence thesis by A2,FUNCT_1:9;
+end;
+
+theorem
+    the carrier of R <> {0.R} implies
+    for k ex p being AlgSequence of R st len p = k
+proof
+    set D = the carrier of R;
+    assume A1:D <> {0.R};
+    let k;
+    consider t being set such that A2: t in D & t <> 0.R by A1,ZFMISC_1:41;
+    reconsider y=t as Element of R by A2;
+    deffunc F(Element of NAT) = y;
+    consider p being AlgSequence of R such that
+     A3: len p <= k & for i st i < k holds p.i=F(i) from AlgSeqLambdaF;
+       for i st i < k holds p.i<>0.R by A2,A3;
+     then len p >= k by Th24;
+     then len p = k by A3,AXIOMS:21;
+  hence thesis;
+end;
+
+::
+::      The SHORT AlgSequence of R
+::
+
+reserve x for Element of R;
+
+ definition let R,x;
+  func <%x%> -> AlgSequence of R means
+:Def6:  len it <= 1 & it.0 = x;
+   existence
+    proof
+      deffunc F(Element of NAT) = x;
+      consider p such that
+      A1: len p <= 1 & for k st k < 1 holds p.k=F(k) from AlgSeqLambdaF;
+      take p;
+     thus thesis by A1;
+    end;
+   uniqueness
+   proof let p,q such that
+      A2: len p <= 1 & p.0 = x and
+      A3: len q <= 1 & q.0 = x;
+      A4:1 = 0 + 1;
+      A5:now assume x=0.R;
+        then len p <>1 & len q<>1 by A2,A3,A4,Th25;
+        then len p<1 & len q<1 by A2,A3,REAL_1:def 5;
+        then len p=0 & len q=0 by RLVECT_1:98;
+        hence len p=len q;
+      end;
+A6:      now assume x<>0.R;
+        then len p>0 & len q>0 by A2,A3,Th22;
+        then len p=1 & len q=1 by A2,A3,A4,NAT_1:26;
+        hence len p=len q;
+      end;
+        for k st k < len p holds p.k = q.k
+        proof
+          let k;
+          assume k<len p;
+          then k<1 by A2,AXIOMS:22;
+          then k=0 by RLVECT_1:98;
+          hence thesis by A2,A3;
+        end;
+      hence thesis by A5,A6,Th28;
+   end;
+ end;
+
+Lm6:
+  p=<%0.R%> implies len p = 0
+    proof
+      A1:0+1=1;
+      assume p=<%0.R%>;
+      then len p<=1 & p.0=0.R by Def6;
+      then len p<=1 & len p<>1 by A1,Th25;
+      then len p<1 by REAL_1:def 5;
+      hence thesis by RLVECT_1:98;
+    end;
+
+canceled;
+
+theorem Th31:
+  p=<%0.R%> iff len p = 0
+    proof
+      thus p=<%0.R%> implies len p = 0 by Lm6;
+      thus len p=0 implies p=<%0.R%>
+        proof
+          assume A1:len p=0;
+          then A2:len p=len <%0.R%> by Lm6;
+            for k st k < len p holds p.k = <%0.R%>.k by A1,NAT_1:18;
+          hence thesis by A2,Th28;
+        end;
+    end;
+
+theorem
+    p=<%0.R%> iff support p = {}
+proof
+ thus
+    p=<%0.R%> implies support p = {}
+   proof
+    assume p=<%0.R%>;
+    then len p = 0 by Lm6;
+    hence support p = {} by Def5,Th11;
+   end;
+  assume A1: support p = {};
+     support p=PSeg len p by Def5;
+   then len p = 0 by A1,Th11,Th14;
+   hence p=<%0.R%> by Th31;
+end;
+
+theorem Th33:
+  <%0.R%>.i=0.R
+    proof
+      set p0=<%0.R%>;
+        now assume i<>0;
+        then i>0 by NAT_1:19;
+        then i>=len p0 by Th31;
+        hence p0.i=0.R by Th22;
+      end;
+      hence thesis by Def6;
+    end;
+
+theorem
+    p=<%0.R%> iff rng p = {0.R}
+proof
+  thus p=<%0.R%> implies rng p= {0.R}
+    proof
+    assume A1: p=<%0.R%>;
+      thus rng p c= {0.R}
+        proof
+          let x be set;
+          assume x in rng p;
+          then consider i being set such that A2:i in dom p & x = p.i by
+FUNCT_1:def 5;
+          reconsider i as Nat by A2,Lm2;
+            p.i=0.R by A1,Th33;
+          hence x in {0.R} by A2,TARSKI:def 1;
+      end;
+      thus {0.R} c= rng p
+        proof
+          let x be set;
+          assume x in {0.R};
+          then x = 0.R by TARSKI:def 1;
+          then A3: p.0 = x by A1,Def6;
+            dom p = NAT by Lm2;
+          hence x in rng p by A3,FUNCT_1:def 5;
+        end;
+      end;
+  thus rng p={0.R} implies p=<%0.R%>
+    proof
+      assume A4: rng p={0.R};
+        len p=0
+        proof
+            for k st k>=0 holds p.k=0.R
+            proof
+              let k; k in NAT;
+              then k in dom p by Lm2;
+              then p.k in rng p by FUNCT_1:def 5;
+              hence thesis by A4,TARSKI:def 1;
+            end;
+          then A5:0 is_at_least_length_of p by Def3;
+            for m st m is_at_least_length_of p holds 0<=m by NAT_1:18;
+          hence thesis by A5,Def4;
+        end;
+      hence p=<%0.R%> by Th31;
+    end;
+end;
+

@@ -1,0 +1,1296 @@
+:: Properties of Fields
+::  by J\'ozef Bia{\l}as
+::
+:: Received June 20, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, REALSET1, FUNCT_1, RELAT_1, BINOP_1, RLVECT_1, QC_LANG1,
+      VECTSP_1, REALSET2;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
+      FUNCT_2, BINOP_1, STRUCT_0, RLVECT_1, VECTSP_1, REALSET1;
+ constructors ENUMSET1, REALSET1, MEMBERED, XBOOLE_0;
+ clusters REALSET1, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ theorems TARSKI, FUNCT_1, FUNCT_2, ZFMISC_1, ENUMSET1, REALSET1, RELAT_1,
+      VECTSP_1, RELSET_1, XBOOLE_0;
+ schemes FUNCT_2;
+
+begin
+
+:: Properties of fields
+
+     consider x,y being set such that
+Lm1:  x<>y by VECTSP_1:78;
+     set Z = {x,y};
+Lm2:  x in Z by TARSKI:def 2;
+Lm3:  y in Z by TARSKI:def 2;
+       for s being Element of Z holds Z\{s} is non empty set
+     proof
+         let s be Element of Z;
+         per cases by TARSKI:def 2;
+         suppose
+       s=x;
+         then not y in {s} by Lm1,TARSKI:def 1;
+         hence thesis by Lm3,XBOOLE_0:def 4;
+         suppose
+          s=y;
+         then not x in {s} by Lm1,TARSKI:def 1;
+         hence thesis by Lm2,XBOOLE_0:def 4;
+     end;
+     then reconsider A = Z as non trivial set by REALSET1:34;
+     reconsider nd = x as Element of A by TARSKI:def 2;
+Lm4:  for t being set holds t in [:A,A:] iff
+     (t=[x,x] or t=[x,y] or t=[y,x] or t=[y,y])
+     proof
+        let t be set;
+          t in [:A,A:] implies (t=[x,x] or t=[x,y] or t=[y,x] or t=[y,y])
+        proof
+           assume t in [:A,A:];
+           then consider t1,t2 being set such that
+        A1:t1 in A & t2 in A & t=[t1,t2] by ZFMISC_1:def 2;
+          (t1=x or t1=y) & (t2=x or t2=y) by A1,TARSKI:def 2;
+           hence thesis by A1;
+        end;
+        hence thesis by Lm2,Lm3,ZFMISC_1:def 2;
+     end;
+       for t being set holds t in [:A,A:] iff t in {[x,x],[x,y],[y,x],[y,y]}
+     proof
+         let t be set;
+           t in {[x,x],[x,y],[y,x],[y,y]} iff
+         (t=[x,x] or t=[x,y] or t=[y,x] or t=[y,y]) by ENUMSET1:18,19;
+         hence thesis by Lm4;
+     end;
+then Lm5: [:A,A:] = {[x,x],[x,y],[y,x],[y,y]} by TARSKI:2;
+     set x1=[[x,x],x], x2=[[x,y],y], x3=[[y,x],y], x4=[[y,y],x];
+     set F={x1,x2,x3,x4};
+Lm6: for p being set st p in F ex q,r being set st [q,r] = p
+     proof
+         let p be set;
+         assume p in F;
+         then p=[[x,x],x] or p=[[x,y],y] or p=[[y,x],y] or p=[[y,y],x]
+           by ENUMSET1:18;
+         hence thesis;
+     end;
+       for q,r1,r2 being set st [q,r1] in F & [q,r2] in F holds r1 = r2
+     proof
+         let q,r1,r2 be set;
+         assume
+      A1:[q,r1] in F & [q,r2] in F;
+         then A2:[q,r1]=[[x,x],x] or [q,r1]=[[x,y],y] or
+         [q,r1]=[[y,x],y] or [q,r1]=[[y,y],x] by ENUMSET1:18;
+           [q,r2]=[[x,x],x] or [q,r2]=[[x,y],y] or
+         [q,r2]=[[y,x],y] or [q,r2]=[[y,y],x] by A1,ENUMSET1:18;
+         then ((q=[x,x] & r1=x) or (q=[x,y] & r1=y) or
+         (q=[y,x] & r1=y) or (q=[y,y] & r1=x)) &
+         ((q=[x,x] & r2=x) or (q=[x,y] & r2=y) or
+         (q=[y,x] & r2=y) or (q=[y,y] & r2=x)) by A2,ZFMISC_1:33;
+         hence thesis by ZFMISC_1:33;
+     end;
+     then reconsider od = F as Function by Lm6,FUNCT_1:2;
+       for t being set holds t in [:A,A:] iff ex r being set st [t,r] in F
+     proof
+         let t be set;
+      A1:t in [:A,A:] implies ex r being set st [t,r] in F
+         proof
+             assume
+A2:          t in [:A,A:];
+         A3:(t=[x,x] or t=[y,y]) implies ex r being set st [t,r] in F
+             proof
+                 assume t=[x,x] or t=[y,y];
+                 then [t,x] in F by ENUMSET1:19;
+                 hence thesis;
+             end;
+               (t=[x,y] or t=[y,x]) implies ex r being set st [t,r] in F
+             proof
+                 assume t=[x,y] or t=[y,x];
+                 then [t,y] in F by ENUMSET1:19;
+                 hence thesis;
+             end;
+             hence thesis by A2,A3,Lm5,ENUMSET1:18;
+         end;
+           (ex r being set st [t,r] in F) implies t in [:A,A:]
+         proof
+            given r being set such that
+         A4:[t,r] in F;
+              [t,r]=[[x,x],x] or [t,r]=[[x,y],y] or
+            [t,r]=[[y,x],y] or [t,r]=[[y,y],x] by A4,ENUMSET1:18;
+            then t=[x,x] or t=[x,y] or t=[y,x] or t=[y,y] by ZFMISC_1:33;
+            hence thesis by Lm4;
+         end;
+         hence thesis by A1;
+     end;
+then Lm7:[:A,A:] = dom od by RELAT_1:def 4;
+ then Lm8: [x,x] in dom od by Lm4;
+     Lm9: [[x,x],x] in od by ENUMSET1:19;
+then Lm10: od.[x,x]=x by Lm8,FUNCT_1:def 4;
+ Lm11: [x,y] in dom od by Lm4,Lm7;
+     Lm12: [[x,y],y] in od by ENUMSET1:19;
+then Lm13:od.[x,y]=y by Lm11,FUNCT_1:def 4;
+ Lm14: [y,x] in dom od by Lm4,Lm7;
+     Lm15: [[y,x],y] in od by ENUMSET1:19;
+then Lm16:od.[y,x]=y by Lm14,FUNCT_1:def 4;
+ Lm17: [y,y] in dom od by Lm4,Lm7;
+       [[y,y],x] in od by ENUMSET1:19;
+then Lm18:od.[y,y]=x by Lm17,FUNCT_1:def 4;
+then Lm19:for t being set st t in [:A,A:] holds od.t in A
+     by Lm2,Lm3,Lm4,Lm10,Lm13,Lm16;
+     set s2=[[x,y],x], s3=[[y,x],x], s4=[[y,y],y];
+     set D={x1,s2,s3,s4};
+Lm20:for p being set st p in D ex q,r being set st [q,r] = p
+     proof
+         let p be set;
+         assume p in D;
+         then p=[[x,x],x] or p=[[x,y],x] or p=[[y,x],x] or p=[[y,y],y]
+         by ENUMSET1:18;
+         hence thesis;
+     end;
+       for q,r1,r2 being set st [q,r1] in D & [q,r2] in D holds r1 = r2
+     proof
+         let q,r1,r2 be set;
+         assume
+      A1:[q,r1] in D & [q,r2] in D;
+      then A2:[q,r1]=[[x,x],x] or [q,r1]=[[x,y],x] or
+         [q,r1]=[[y,x],x] or [q,r1]=[[y,y],y] by ENUMSET1:18;
+           [q,r2]=[[x,x],x] or [q,r2]=[[x,y],x] or
+         [q,r2]=[[y,x],x] or [q,r2]=[[y,y],y] by A1,ENUMSET1:18;
+         then ((q=[x,x] & r1=x) or (q=[x,y] & r1=x) or
+         (q=[y,x] & r1=x) or (q=[y,y] & r1=y)) &
+         ((q=[x,x] & r2=x) or (q=[x,y] & r2=x) or
+         (q=[y,x] & r2=x) or (q=[y,y] & r2=y)) by A2,ZFMISC_1:33;
+         hence thesis by ZFMISC_1:33;
+     end;
+     then reconsider om = D as Function by Lm20,FUNCT_1:2;
+       for t being set holds t in [:A,A:] iff ex r being set st [t,r] in D
+     proof
+         let t be set;
+     A1:t in [:A,A:] implies ex r being set st [t,r] in D
+         proof
+           assume
+A2:        t in [:A,A:];
+        A3:(t=[x,x] or t=[x,y] or t=[y,x]) implies
+           ex r being set st [t,r] in D
+             proof
+                 assume t=[x,x] or t=[x,y] or t=[y,x];
+                 then [t,x] in D by ENUMSET1:19;
+                 hence thesis;
+             end;
+               t=[y,y] implies ex r being set st [t,r] in D
+             proof
+                 assume t=[y,y];
+                 then [t,y] in D by ENUMSET1:19;
+                 hence thesis;
+             end;
+             hence thesis by A2,A3,Lm5,ENUMSET1:18;
+         end;
+           (ex r being set st [t,r] in D) implies t in [:A,A:]
+         proof
+            given r being set such that
+         A4:[t,r] in D;
+              [t,r]=[[x,x],x] or [t,r]=[[x,y],x] or
+            [t,r]=[[y,x],x] or [t,r]=[[y,y],y] by A4,ENUMSET1:18;
+            then t=[x,x] or t=[x,y] or t=[y,x] or t=[y,y] by ZFMISC_1:33;
+            hence thesis by Lm4;
+         end;
+         hence thesis by A1;
+     end;
+then Lm21: [:A,A:] = dom om by RELAT_1:def 4;
+ then Lm22: [x,x] in dom om by Lm4;
+       [[x,x],x] in om by ENUMSET1:19;
+then Lm23:om.[x,x]=x by Lm22,FUNCT_1:def 4;
+ Lm24: [x,y] in dom om by Lm4,Lm21;
+       [[x,y],x] in om by ENUMSET1:19;
+then Lm25: om.[x,y]=x by Lm24,FUNCT_1:def 4;
+ Lm26: [y,x] in dom om by Lm4,Lm21;
+       [[y,x],x] in om by ENUMSET1:19;
+then Lm27:om.[y,x]=x by Lm26,FUNCT_1:def 4;
+ Lm28: [y,y] in dom om by Lm4,Lm21;
+       [[y,y],y] in om by ENUMSET1:19;
+then Lm29:om.[y,y]=y by Lm28,FUNCT_1:def 4;
+then Lm30:for t being set st t in [:A,A:] holds om.t in A
+         by Lm2,Lm3,Lm4,Lm23,Lm25,Lm27;
+then Lm31:om is BinOp of A by Lm21,FUNCT_2:5;
+Lm32:A\{x}={y} by Lm1,ZFMISC_1:23;
+  then Lm33:[:A\{x},A\{x}:] = {[y,y]} by ZFMISC_1:35;
+Lm34: for t being set holds t in [:A\{x},A\{x}:] implies om.t in A\{x}
+     proof
+        let t be set;
+        assume t in [:A\{x},A\{x}:];
+        then t=[y,y] by Lm33,TARSKI:def 1;
+        hence thesis by Lm29,Lm32,TARSKI:def 1;
+     end;
+     reconsider nm = y as Element of A\{nd} by Lm32,TARSKI:def 1;
+     reconsider od0=od as BinOp of A by Lm7,Lm19,FUNCT_2:5;
+     reconsider om0=om as BinOp of A by Lm21,Lm30,FUNCT_2:5;
+Lm35: for a,b,d being Element of A holds
+     od0.[od0.[a,b],d] = od0.[a,od0.[b,d]]
+     proof
+       let a,b,d be Element of A;
+         (a=x & b=x & d=x) or (a=x & b=x & d=y) or (a=x & b=y & d=x) or
+       (a=x & b=y & d=y) or (a=y & b=x & d=x) or (a=y & b=x & d=y) or
+       (a=y & b=y & d=x) or (a=y & b=y & d=y) by TARSKI:def 2;
+       hence thesis by Lm10,Lm13,Lm16,Lm18;
+     end;
+Lm36: for a being Element of A holds od0.[a,nd] = a & od0.[nd,a] = a
+     proof
+       let a be Element of A;
+         a=x or a=y by TARSKI:def 2;
+       hence thesis by Lm8,Lm9,Lm11,Lm12,Lm14,Lm15,FUNCT_1:def 4;
+     end;
+Lm37: for a being Element of A ex b being Element of A st
+     od0.[a,b] = nd & od0.[b,a] = nd
+     proof
+       let a be Element of A;
+         a=x or a=y by TARSKI:def 2;
+       hence thesis by Lm10,Lm18;
+     end;
+       for a,b being Element of A holds od0.[a,b] = od0.[b,a]
+     proof
+       let a,b be Element of A;
+         (a=x & b=x) or (a=x & b=y) or (a=y & b=x) or (a=y & b=y)
+         by TARSKI:def 2;
+       hence thesis by Lm11,Lm12,Lm16,FUNCT_1:def 4;
+     end;
+then Lm38: LoopStr(#A,od0,nd#) is Group
+      by Lm35,Lm36,Lm37,REALSET1:def 5,def 6,def 7,def 8;
+     reconsider om1=om as DnT of nd,A by Lm31,Lm34,REALSET1:def 18;
+Lm39:for B being non empty set, P being BinOp of B,
+         e being Element of B st
+     B = A\{nd} & e = nm & P = om1!(A,nd) holds LoopStr(#B,P,e#) is Group
+     proof
+        let B be non empty set,
+            P be BinOp of B,
+            e be Element of B;
+        assume
+    A1: B = A\{nd} & e = nm & P = om1!(A,nd);
+    A2: dom P = [:B,B:] & rng P c= B by FUNCT_2:def 1,RELSET_1:12;
+          [y,y] in [:B,B:] by A1,ZFMISC_1:def 2;
+        then A3: P.[y,y] in rng P by A2,FUNCT_1:def 5;
+    then A4: P.[y,y] = y by A1,A2,Lm32,TARSKI:def 1;
+    A5: for a,b,c being Element of B holds P.[P.[a,b],c] = P.[a,P.[b,c]]
+        proof
+          let a,b,c be Element of B;
+            a = y & b = y & c = y by A1,Lm32,TARSKI:def 1;
+          hence thesis by A4;
+        end;
+    A6: for a being Element of B holds P.[a,e] = a & P.[e,a] = a
+        proof
+          let a be Element of B;
+            a = y by A1,Lm32,TARSKI:def 1;
+          hence thesis by A1,A2,A3,Lm32,TARSKI:def 1;
+        end;
+    A7: for a being Element of B ex b being Element of B st
+        P.[a,b] = e & P.[b,a] = e
+        proof
+          let a be Element of B;
+          take e;
+          thus thesis by A1,A4,Lm32,TARSKI:def 1;
+        end;
+          for a,b being Element of B holds P.[a,b] = P.[b,a]
+        proof
+          let a,b be Element of B;
+            a = y & b = y by A1,Lm32,TARSKI:def 1;
+          hence thesis;
+        end;
+        hence thesis by A5,A6,A7,REALSET1:def 5,def 6,def 7,def 8;
+     end;
+Lm40: for a,b,d being Element of A holds
+         (om0.[a,od0.[b,d]] = od0.[om0.[a,b],om0.[a,d]] &
+          om0.[od0.[a,b],d] = od0.[om0.[a,d],om0.[b,d]])
+     proof
+       let a,b,d be Element of A;
+         (a=x & b=x & d=x) or (a=x & b=x & d=y) or
+       (a=x & b=y & d=x) or (a=x & b=y & d=y) or
+       (a=y & b=x & d=x) or (a=y & b=x & d=y) or
+       (a=y & b=y & d=x) or (a=y & b=y & d=y) by TARSKI:def 2;
+       hence thesis by Lm10,Lm13,Lm16,Lm18,Lm23,Lm25,Lm27,Lm29;
+     end;
+
+definition
+  let IT be doubleLoopStr;
+  attr IT is Field-like means
+:Def1:   ex A being non trivial set,
+            od being BinOp of A, nd being Element of A,
+            om being DnT of nd,A, nm being Element of A\{nd} st
+           (IT = field(A,od,om,nd,nm) & LoopStr(#A,od,nd#) is Group &
+           (for B being non empty set, P being BinOp of B,
+                e being Element of B holds
+               (B = A\{nd} & e = nm & P = om!(A,nd) implies
+           LoopStr(#B,P,e#) is Group)) &
+           for x,y,z being Element of A holds
+            om.[x,od.[y,z]] = od.[om.[x,y],om.[x,z]] &
+            om.[od.[x,y],z] = od.[om.[x,z],om.[y,z]]);
+end;
+
+definition
+ cluster strict Field-like doubleLoopStr;
+  existence
+   proof
+      field(A,od0,om0,nd,nm) is Field-like by Def1,Lm38,Lm39,Lm40;
+    hence thesis;
+   end;
+end;
+
+definition ::field
+  mode Field is Field-like doubleLoopStr;
+end;
+
+definition ::supp projection
+   let F be Field;
+   func suppf(F) -> non trivial set means
+:Def2:    ex od being BinOp of it,
+             nd being Element of it,
+             om being DnT of nd,it,
+             nm being Element of it\{nd} st
+           F = field(it,od,om,nd,nm);
+existence
+proof
+     ex A being non trivial set st
+   ex od being BinOp of A,
+      nd being Element of A,
+      om being DnT of nd,A,
+      nm being Element of A\{nd} st
+      (F = field(A,od,om,nd,nm) &
+      LoopStr(#A,od,nd#) is Group &
+      (for B being non empty set,
+           P being BinOp of B,
+           e being Element of B holds
+           (B = A\{nd} & e = nm & P = om!(A,nd) implies
+           LoopStr(#B,P,e#) is Group)) &
+           for x,y,z being Element of A holds
+           om.[x,od.[y,z]] = od.[om.[x,y],om.[x,z]] &
+           om.[od.[x,y],z] = od.[om.[x,z],om.[y,z]]) by Def1;
+   then consider A being non trivial set,
+                 od being BinOp of A,
+                 nd being Element of A,
+                 om being DnT of nd,A,
+                 nm being Element of A\{nd} such that
+A1: F = field(A,od,om,nd,nm);
+   take A;
+   take od, nd, om, nm;
+   thus thesis by A1;
+end;
+uniqueness
+proof
+    let A1,A2 be non trivial set such that
+A2: ex od1 being BinOp of A1,
+       nd1 being Element of A1,
+       om1 being DnT of nd1,A1,
+       nm1 being Element of A1\{nd1} st
+     F = field(A1,od1,om1,nd1,nm1) and
+A3: ex od2 being BinOp of A2,
+       nd2 being Element of A2,
+       om2 being DnT of nd2,A2,
+       nm2 being Element of A2\{nd2} st
+     F = field(A2,od2,om2,nd2,nm2);
+      A1 = the carrier of F by A2,REALSET1:def 14
+      .= A2 by A3,REALSET1:def 14;
+    hence thesis;
+end;
+end;
+
+definition ::add projection
+   let F be Field;
+   func odf(F) -> BinOp of suppf(F) means
+:Def3:     ex nd being Element of suppf(F),
+              om being DnT of nd, suppf(F),
+              nm being Element of suppf(F)\{nd} st
+           F = field(suppf(F),it,om,nd,nm);
+existence by Def2;
+uniqueness
+proof
+    let od1,od2 be BinOp of suppf(F) such that
+A1: ex nd1 being Element of suppf(F),
+       om1 being DnT of nd1, suppf(F),
+       nm1 being Element of suppf(F)\{nd1} st
+     F = field(suppf(F),od1,om1,nd1,nm1) and
+A2: ex nd2 being Element of suppf(F),
+       om2 being DnT of nd2, suppf(F),
+       nm2 being Element of suppf(F)\{nd2} st
+     F = field(suppf(F),od2,om2,nd2,nm2);
+      od1 = the add of F by A1,REALSET1:def 14
+      .= od2 by A2,REALSET1:def 14;
+    hence thesis;
+end;
+end;
+
+definition ::nadd projection
+   let F be Field;
+   func ndf(F) -> Element of suppf(F) means
+:Def4:    ex om being DnT of it,suppf(F),
+             nm being Element of suppf(F)\{it} st
+           F = field(suppf(F),odf(F),om,it,nm);
+existence by Def3;
+uniqueness
+proof
+    let nd1,nd2 be Element of suppf(F) such that
+A1: ex om1 being DnT of nd1,suppf(F),
+       nm1 being Element of suppf(F)\{nd1} st
+           F = field(suppf(F),odf(F),om1,nd1,nm1) and
+A2: ex om2 being DnT of nd2,suppf(F),
+       nm2 being Element of suppf(F)\{nd2} st
+           F = field(suppf(F),odf(F),om2,nd2,nm2);
+      nd1 = the Zero of F by A1,REALSET1:def 14
+      .= nd2 by A2,REALSET1:def 14;
+    hence thesis;
+end;
+end;
+
+definition ::mply projection
+   let F be Field;
+   func omf(F) -> DnT of ndf(F),suppf(F) means
+:Def5:   ex nm being Element of suppf(F)\{ndf(F)} st
+           F = field(suppf(F),odf(F),it,ndf(F),nm);
+existence by Def4;
+uniqueness
+proof
+    let om1,om2 be DnT of ndf(F),suppf(F) such that
+A1: ex nm1 being Element of suppf(F)\{ndf(F)} st
+           F = field(suppf(F),odf(F),om1,ndf(F),nm1) and
+A2: ex nm2 being Element of suppf(F)\{ndf(F)} st
+           F = field(suppf(F),odf(F),om2,ndf(F),nm2);
+      om1 = the mult of F by A1,REALSET1:def 14
+      .= om2 by A2,REALSET1:def 14;
+    hence thesis;
+end;
+end;
+
+definition ::nom projection
+   let F be Field;
+   func nmf(F) -> Element of suppf(F)\{ndf(F)} means
+:Def6:       F = field(suppf(F),odf(F),omf(F),ndf(F),it);
+existence by Def5;
+uniqueness
+proof
+    let nm1,nm2 be Element of suppf(F)\{ndf(F)} such that
+A1: F = field(suppf(F),odf(F),omf(F),ndf(F),nm1) and
+A2: F = field(suppf(F),odf(F),omf(F),ndf(F),nm2);
+      nm1 = (the unity of F) by A1,REALSET1:def 14
+       .= nm2 by A2,REALSET1:def 14;
+    hence thesis;
+end;
+end;
+
+canceled 7;
+
+theorem Th8:
+   for F being Field holds LoopStr(#suppf(F),odf(F),ndf(F)#) is Group
+proof
+   let F be Field;
+     ex A being non trivial set st
+   ex od being BinOp of A, nd being Element of A,
+   om being DnT of nd,A, nm being Element of A\{nd} st
+     (F = field(A,od,om,nd,nm) & LoopStr(#A,od,nd#) is Group &
+                (for B being non empty set,
+                     P being BinOp of B,
+                     e being Element of B holds
+                (B = A\{nd} & e = nm & P = om!(A,nd) implies
+                     LoopStr(#B,P,e#) is Group)) &
+                for x,y,z being Element of A holds
+                 om.[x,od.[y,z]] = od.[om.[x,y],om.[x,z]] &
+                 om.[od.[x,y],z] = od.[om.[x,z],om.[y,z]]) by Def1;
+   then consider A being non trivial set,
+                 od being BinOp of A,
+                 nd being Element of A,
+                 om being DnT of nd,A,
+                 nm being Element of A\{nd} such that
+A1:F = field(A,od,om,nd,nm) and
+A2:LoopStr(#A,od,nd#) is Group;
+A3:A = suppf(F) by A1,Def2;
+   then od = odf(F) by A1,Def3;
+   hence thesis by A1,A2,A3,Def4;
+end;
+
+theorem Th9:
+   for F being Field, B being non empty set,
+       P being BinOp of B, e being Element of B st
+   B = suppf(F)\{ndf(F)} & e = nmf(F) & P = omf(F)!(suppf(F),ndf(F)) holds
+    LoopStr(#B,P,e#) is Group
+proof
+   let F be Field, B be non empty set, P be BinOp of B, e be Element of B;
+  ex A being non trivial set st ex od being BinOp of A,
+                   nd being Element of A,
+                   om being DnT of nd,A,
+                   nm being Element of A\{nd} st
+      (F = field(A,od,om,nd,nm) & LoopStr(#A,od,nd#) is Group &
+                (for B being non empty set,
+                     P being BinOp of B,
+                     e being Element of B holds
+                 (B = A\{nd} & e = nm & P = om!(A,nd) implies
+                  LoopStr(#B,P,e#) is Group)) &
+                for x,y,z being Element of A holds
+                 om.[x,od.[y,z]] = od.[om.[x,y],om.[x,z]] &
+                 om.[od.[x,y],z] = od.[om.[x,z],om.[y,z]]) by Def1;
+      then consider A being non trivial set,
+               od being BinOp of A,
+               nd being Element of A,
+               om being DnT of nd,A,
+               nm being Element of A\{nd} such that
+A1:         F = field(A,od,om,nd,nm) and
+A2:         for B being non empty set,
+                P being BinOp of B,
+                e being Element of B st
+                B = A\{nd} & e = nm & P = om!(A,nd) holds
+                  LoopStr(#B,P,e#) is Group;
+A3: A = suppf(F) by A1,Def2;
+   then reconsider od as BinOp of suppf(F);
+   reconsider nd as Element of suppf(F) by A1,Def2;
+   reconsider om as DnT of nd, suppf(F) by A1,Def2;
+   reconsider nm as Element of suppf(F)\{nd} by A1,Def2;
+A4:od = odf(F) by A1,A3,Def3;
+A5:F = field(suppf(F),odf(F),om,nd,nm) by A1,A3,Def3;
+A6:nd=ndf(F) by A1,A3,A4,Def4;
+   reconsider om as DnT of ndf(F),suppf(F) by A1,A3,A4,Def4;
+   reconsider nm as Element of suppf(F)\{ndf(F)} by A1,A3,A4,Def4;
+A7:om=omf(F) by A5,A6,Def5;
+   then A8:nm=nmf(F) by A5,A6,Def6;
+   assume B = suppf(F)\{ndf(F)} & e = nmf(F) & P = omf(F)!(suppf(F),ndf(F));
+   hence thesis by A2,A3,A6,A7,A8;
+end;
+
+theorem Th10:
+   for F being Field, x,y,z being Element of suppf(F) holds
+   (omf(F).[x,odf(F).[y,z]] = odf(F).[omf(F).[x,y],omf(F).[x,z]] &
+    omf(F).[odf(F).[x,y],z] = odf(F).[omf(F).[x,z],omf(F).[y,z]] )
+proof
+   let F be Field;
+     ex A being non trivial set,
+      od being BinOp of A,
+      nd being Element of A,
+      om being DnT of nd, A,
+      nm being Element of A\{nd} st
+      (F = field(A,od,om,nd,nm) & LoopStr(#A,od,nd#) is Group &
+      (for B being non empty set,
+           P being BinOp of B,
+           e being Element of B holds
+         (B = A\{nd} & e = nm & P = om!(A,nd) implies
+                     LoopStr(#B,P,e#) is Group)) &
+                for x,y,z being Element of A holds
+                 om.[x,od.[y,z]] = od.[om.[x,y],om.[x,z]] &
+                 om.[od.[x,y],z] = od.[om.[x,z],om.[y,z]]) by Def1;
+   then consider A being non trivial set,
+                 od being BinOp of A,
+                 nd being Element of A,
+                 om being DnT of nd,A,
+                 nm being Element of A\{nd} such that
+A1: F = field(A,od,om,nd,nm) and
+A2:for x,y,z being Element of A holds
+   (om.[x,od.[y,z]] = od.[om.[x,y],om.[x,z]] &
+    om.[od.[x,y],z] = od.[om.[x,z],om.[y,z]]);
+A3: A = suppf(F) by A1,Def2;
+   then reconsider od as BinOp of suppf(F);
+   reconsider nd as Element of suppf(F) by A1,Def2;
+   reconsider om as DnT of nd, suppf(F) by A1,Def2;
+   reconsider nm as Element of suppf(F)\{nd} by A1,Def2;
+A4:od = odf(F) by A1,A3,Def3;
+A5:F = field(suppf(F),odf(F),om,nd,nm) by A1,A3,Def3;
+A6:nd=ndf(F) by A1,A3,A4,Def4;
+    reconsider om as DnT of ndf(F),suppf(F) by A1,A3,A4,Def4;
+      om=omf(F) by A5,A6,Def5;
+    hence thesis by A2,A3,A4;
+end;
+
+theorem Th11:
+   for F being Field,
+       a,b,c being Element of suppf(F) holds
+   odf(F).[odf(F).[a,b],c] = odf(F).[a,odf(F).[b,c]]
+proof
+   let F be Field, a,b,c be Element of suppf(F);
+     LoopStr(#suppf(F),odf(F),ndf(F)#) is Group by Th8;
+   then consider D being strict Group such that
+A1:D = LoopStr(#suppf(F),odf(F),ndf(F)#);
+   thus thesis by A1,REALSET1:def 7;
+end;
+
+theorem Th12:
+   for F being Field,
+       a,b being Element of suppf(F) holds
+   odf(F).[a,b] = odf(F).[b,a]
+proof
+   let F be Field, a,b be Element of suppf(F);
+     LoopStr(#suppf(F),odf(F),ndf(F)#) is Group by Th8;
+   then consider D being strict Group such that
+A1:D = LoopStr(#suppf(F),odf(F),ndf(F)#);
+   thus thesis by A1,REALSET1:def 8;
+end;
+
+theorem Th13:
+   for F being Field,
+       a being Element of suppf(F) holds
+   odf(F).[a,ndf(F)] = a & odf(F).[ndf(F),a] = a
+proof
+   let F be Field, a be Element of suppf(F);
+     LoopStr(#suppf(F),odf(F),ndf(F)#) is Group by Th8;
+   then consider D being strict Group such that
+A1:D = LoopStr(#suppf(F),odf(F),ndf(F)#);
+   thus thesis by A1,REALSET1:def 5;
+end;
+
+theorem Th14:
+   for F being Field holds
+   for a being Element of suppf(F) ex b being Element of suppf(F) st
+   odf(F).[a,b] = ndf(F) & odf(F).[b,a] = ndf(F)
+proof
+   let F be Field;
+   let a be Element of suppf(F);
+     LoopStr(#suppf(F),odf(F),ndf(F)#) is Group by Th8;
+   then consider D being strict Group such that
+A1:D = LoopStr(#suppf(F),odf(F),ndf(F)#);
+   thus thesis by A1,REALSET1:def 6;
+end;
+
+definition
+   let F be non trivial set;
+   mode OnePoint of F -> set means
+:Def7:ex x being Element of F st it = {x};
+existence
+proof
+   consider y being Element of F;
+   take {y};
+   thus thesis;
+end;
+end;
+
+theorem Th15:
+   for F being non trivial set holds
+   for A being OnePoint of F holds
+   F\A is non empty set
+proof
+   let F be non trivial set;
+   let A be OnePoint of F;
+     ex x being Element of F st A = {x} by Def7;
+   hence thesis by REALSET1:32;
+end;
+
+definition
+   let F be non trivial set;
+   let A be OnePoint of F;
+   cluster F\A -> non empty;
+coherence by Th15;
+end;
+
+definition
+   let F be non trivial set;
+ cluster non empty OnePoint of F;
+ existence
+  proof consider x being Element of F;
+     {x} is OnePoint of F by Def7;
+   hence thesis;
+  end;
+end;
+
+definition
+   let F be non trivial set;
+   let x be Element of F;
+   redefine func {x} -> OnePoint of F;
+coherence by Def7;
+end;
+
+canceled 4;
+
+theorem Th20:
+   for F being Field holds
+   for a,b,c being Element of suppf(F)\{ndf(F)} holds
+   omf(F).[omf(F).[a,b],c] = omf(F).[a,omf(F).[b,c]]
+proof
+   let F be Field;
+   let a,b,c be Element of suppf(F)\{ndf(F)};
+   set B = suppf(F)\{ndf(F)};
+   set P = omf(F)!(suppf(F),ndf(F));
+   set e = nmf(F);
+   reconsider D = LoopStr(#B,P,e#) as strict Group by Th9;
+   reconsider a,b,c as Element of D;
+A1:omf(F)!(suppf(F),ndf(F)) =
+   omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by REALSET1:def 19;
+A2:omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:]
+    is Function of [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:],
+    (suppf(F)\{ndf(F)}) by REALSET1:45;
+then A3:dom(omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:]) =
+    [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by FUNCT_2:def 1;
+A4:for s,t being Element of (suppf(F)\{ndf(F)}) holds
+    (the add of D).[s,t] is Element of (suppf(F)\{ndf(F)}) &
+    omf(F).[s,t] is Element of (suppf(F)\{ndf(F)})
+    proof
+        let s,t be Element of (suppf(F)\{ndf(F)});
+     A5:[s,t] in [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by ZFMISC_1:def 2;
+        consider W being Function of
+        [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:],
+        (suppf(F)\{ndf(F)}) such that
+    A6: W = omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by A2;
+          W.[s,t] is Element of (suppf(F)\{ndf(F)}) by A5,FUNCT_2:7;
+        hence thesis by A3,A5,A6,FUNCT_1:70,REALSET1:def 19;
+    end;
+A7:for x,y being Element of suppf(F)\{ndf(F)} holds
+    omf(F).[x,y] = (the add of D).[x,y]
+    proof
+      let x,y be Element of suppf(F)\{ndf(F)};
+        [x,y] in [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by ZFMISC_1:def 2;
+      hence thesis by A1,A3,FUNCT_1:70;
+    end;
+A8:for x,y,z being Element of suppf(F)\{ndf(F)} holds
+  omf(F).[(the add of D).[x,y],z] = (the add of D).[(the add of D).[x,y],z] &
+    (the add of D).[x,omf(F).[y,z]] = omf(F).[x,omf(F).[y,z]]
+    proof
+        let x,y,z be Element of suppf(F)\{ndf(F)};
+    A9:(the add of D).[x,y] is Element of suppf(F)\{ndf(F)} by A4;
+          omf(F).[y,z] is Element of suppf(F)\{ndf(F)} by A4;
+        hence thesis by A7,A9;
+    end;
+      omf(F).[omf(F).[a,b],c] = omf(F).[(the add of D).[a,b],c] by A7
+                           .= (the add of D).[(the add of D).[a,b],c] by A8
+                           .= (the add of D).[a,(the add of D).[b,c]]
+                            by REALSET1:def 7
+                           .= (the add of D).[a,omf(F).[b,c]] by A7
+                           .= omf(F).[a,omf(F).[b,c]] by A8;
+   hence thesis;
+end;
+
+theorem Th21:
+   for F being Field holds
+   for a,b being Element of suppf(F)\{ndf(F)} holds
+   omf(F).[a,b] = omf(F).[b,a]
+proof
+   let F be Field;
+   let a,b be Element of suppf(F)\{ndf(F)};
+   set B = suppf(F)\{ndf(F)};
+   set P = omf(F)!(suppf(F),ndf(F));
+   set e = nmf(F);
+   reconsider D = LoopStr(#B,P,e#) as strict Group by Th9;
+   reconsider a,b as Element of D;
+A1:omf(F)!(suppf(F),ndf(F)) =
+   omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by REALSET1:def 19;
+     omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:]
+    is Function of [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:],
+    (suppf(F)\{ndf(F)}) by REALSET1:45;
+then A2: dom(omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:]) =
+    [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by FUNCT_2:def 1;
+A3:for x,y being Element of suppf(F)\{ndf(F)} holds
+    omf(F).[x,y] = (the add of D).[x,y]
+    proof
+        let x,y be Element of suppf(F)\{ndf(F)};
+          [x,y] in [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by ZFMISC_1:def 2;
+        hence thesis by A1,A2,FUNCT_1:70;
+    end;
+    then omf(F).[a,b] = (the add of D).[a,b]
+                .= (the add of D).[b,a] by REALSET1:def 8
+                .= omf(F).[b,a] by A3;
+   hence thesis;
+end;
+
+theorem Th22:
+   for F being Field holds
+   for a being Element of suppf(F)\{ndf(F)} holds
+   omf(F).[a,nmf(F)] = a & omf(F).[nmf(F),a] = a
+proof
+   let F be Field;
+   let a be Element of suppf(F)\{ndf(F)};
+   set B = suppf(F)\{ndf(F)};
+   set P = omf(F)!(suppf(F),ndf(F));
+   set e = nmf(F);
+   reconsider D = LoopStr(#B,P,e#) as strict Group by Th9;
+   reconsider a as Element of D;
+A1:omf(F)!(suppf(F),ndf(F)) =
+   omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by REALSET1:def 19;
+  omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:]
+    is Function of [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:],
+    (suppf(F)\{ndf(F)}) by REALSET1:45;
+then A2: dom(omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:]) =
+    [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by FUNCT_2:def 1;
+A3:for x,y being Element of suppf(F)\{ndf(F)} holds
+    omf(F).[x,y] = (the add of D).[x,y]
+    proof
+        let x,y be Element of suppf(F)\{ndf(F)};
+      [x,y] in [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by ZFMISC_1:def 2;
+        hence thesis by A1,A2,FUNCT_1:70;
+    end;
+    reconsider a as Element of suppf(F)\{ndf(F)};
+A4:omf(F).[a,nmf(F)] = (the add of D).[a,the Zero of D] by A3
+                     .= a by REALSET1:def 5;
+     omf(F).[nmf(F),a] = (the add of D).[the Zero of D,a] by A3
+                     .= a by REALSET1:def 5;
+   hence thesis by A4;
+end;
+
+theorem Th23:
+   for F being Field holds
+   for a being Element of suppf(F)\{ndf(F)}
+   ex b being Element of suppf(F)\{ndf(F)} st
+   omf(F).[a,b] = nmf(F) & omf(F).[b,a] = nmf(F)
+proof
+   let F be Field;
+   let a be Element of suppf(F)\{ndf(F)};
+   set B = suppf(F)\{ndf(F)};
+   set P = omf(F)!(suppf(F),ndf(F));
+   set e = nmf(F);
+     LoopStr(#B,P,e#) is Group by Th9;
+   then consider D being strict Group such that
+A1:D = LoopStr(#B,P,e#);
+   reconsider a as Element of D by A1;
+   consider b being Element of D such that
+A2:(the add of D).[a,b] = the Zero of D & (the add of D).[b,a] = the Zero of D
+    by REALSET1:def 6;
+A3:omf(F)!(suppf(F),ndf(F)) =
+   omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:]
+   by REALSET1:def 19;
+  omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:]
+    is Function of [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:],
+    (suppf(F)\{ndf(F)}) by REALSET1:45;
+then A4: dom(omf(F)|[:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:]) =
+    [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by FUNCT_2:def 1;
+A5:for x,y being Element of suppf(F)\{ndf(F)} holds
+    omf(F).[x,y] = (the add of D).[x,y]
+    proof
+        let x,y be Element of suppf(F)\{ndf(F)};
+      [x,y] in [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:]
+        by ZFMISC_1:def 2;
+        hence thesis by A1,A3,A4,FUNCT_1:70;
+    end;
+    reconsider b as Element of suppf(F)\{ndf(F)} by A1;
+   take b;
+   thus thesis by A1,A2,A5;
+end;
+
+definition ::complement element
+   let F be Field;
+   func compf(F) -> Function of suppf(F),suppf(F) means
+:Def8: for x being Element of suppf(F) holds odf(F).[x,it.x] = ndf(F);
+existence
+proof
+  defpred Z[set,set] means odf(F).[$1,$2] = ndf(F);
+   A1:for x being set st x in suppf(F) ex y being set st
+          y in suppf(F) & Z[x,y]
+      proof
+         let x be set;
+         assume x in suppf(F);
+         then consider y being Element of suppf(F) such that
+      A2:odf(F).[x,y] = ndf(F) & odf(F).[y,x] = ndf(F) by Th14;
+         take y;
+         thus thesis by A2;
+      end;
+        ex C being Function of suppf(F),suppf(F) st
+      for x being set st x in suppf(F) holds Z[x,C.x] from FuncEx1(A1);
+      then consider C being Function of suppf(F),suppf(F) such that
+A3:   for x being set st x in suppf(F) holds odf(F).[x,C.x] = ndf(F);
+      take C;
+      thus thesis by A3;
+end;
+uniqueness
+proof
+   let C1,C2 be Function of suppf(F),suppf(F) such that
+A4:for x being Element of suppf(F) holds odf(F).[x,C1.x] = ndf(F) and
+A5:for x being Element of suppf(F) holds odf(F).[x,C2.x] = ndf(F);
+     for x being set st x in suppf(F) holds C1.x = C2.x
+   proof
+     let x be set;
+     assume
+ A6:x in suppf(F);
+ then A7:C1.x is Element of suppf(F) by FUNCT_2:7;
+ A8:C2.x is Element of suppf(F) by A6,FUNCT_2:7;
+     thus C1.x = odf(F).[C1.x,ndf(F)] by A7,Th13
+             .= odf(F).[C1.x,odf(F).[x,C2.x]] by A5,A6
+             .= odf(F).[odf(F).[C1.x,x],C2.x] by A6,A7,A8,Th11
+             .= odf(F).[odf(F).[x,C1.x],C2.x] by A6,A7,Th12
+             .= odf(F).[ndf(F),C2.x] by A4,A6
+             .= C2.x by A8,Th13;
+      end;
+      hence thesis by FUNCT_2:18;
+end;
+end;
+
+canceled 2;
+
+theorem Th26:
+   for F being Field holds
+   for x,y being Element of suppf(F) holds
+   odf(F).[x,y] = ndf(F) implies y = compf(F).x
+proof
+   let F be Field;
+   let x,y be Element of suppf(F);
+   assume
+A1:odf(F).[x,y] = ndf(F);
+     y = odf(F).[y,ndf(F)] by Th13
+         .= odf(F).[y,odf(F).[x,compf(F).x]] by Def8
+         .= odf(F).[odf(F).[y,x],compf(F).x] by Th11
+         .= odf(F).[ndf(F),compf(F).x] by A1,Th12
+         .= compf(F).x by Th13;
+   hence thesis;
+end;
+
+theorem
+     for F being Field holds
+   for x being Element of suppf(F) holds
+   x = compf(F).(compf(F).x)
+proof
+   let F be Field;
+   let x be Element of suppf(F);
+     x = odf(F).[x,ndf(F)] by Th13
+         .= odf(F).[x,odf(F).[compf(F).x,compf(F).(compf(F).x)]] by Def8
+         .= odf(F).[odf(F).[x,compf(F).x],compf(F).(compf(F).x)] by Th11
+         .= odf(F).[ndf(F),compf(F).(compf(F).x)] by Def8
+         .= compf(F).(compf(F).x) by Th13;
+   hence thesis;
+end;
+
+theorem Th28:
+    for F being Field holds
+    for a,b being Element of suppf(F) holds
+    (odf(F).[a,b] is Element of suppf(F) &
+    omf(F).[a,b] is Element of suppf(F) &
+    compf(F).a is Element of suppf(F))
+proof
+    let F be Field;
+    let a,b be Element of suppf(F);
+      [a,b] in [:suppf(F),suppf(F):] by ZFMISC_1:def 2;
+    hence thesis by REALSET1:10;
+end;
+
+theorem Th29:
+   for F being Field holds
+   for a,b,c being Element of suppf(F) holds
+   omf(F).[a,odf(F).[b,compf(F).c]] =
+   odf(F).[omf(F).[a,b],compf(F).(omf(F).[a,c])]
+proof
+   let F be Field;
+   let a,b,c be Element of suppf(F);
+     omf(F).[a,c] is Element of suppf(F) by Th28;
+then A1:odf(F).[omf(F).[a,c],compf(F).(omf(F).[a,c])] = ndf(F) by Def8;
+A2:odf(F).[b,compf(F).c] is Element of suppf(F) by Th28;
+then A3:omf(F).[a,odf(F).[b,compf(F).c]] is Element of suppf(F) by Th28;
+A4:omf(F).[a,c] is Element of suppf(F) by Th28;
+then A5:compf(F).(omf(F).[a,c]) is Element of suppf(F) by Th28;
+A6:odf(F).[odf(F).[b,compf(F).c],c] =
+   odf(F).[b,odf(F).[compf(F).c,c]] by Th11
+   .= odf(F).[b,odf(F).[c,compf(F).c]] by Th12
+   .= odf(F).[b,ndf(F)] by Def8
+   .= b by Th13;
+     omf(F).[a,odf(F).[b,compf(F).c]] =odf(F).[omf(F).[a,odf(F).[b,compf(F).c]]
+,
+      odf(F).[omf(F).[a,c],compf(F).(omf(F).[a,c])]] by A1,A3,Th13
+   .= odf(F).[odf(F).[omf(F).[a,odf(F).[b,compf(F).c]],
+      omf(F).[a,c]],compf(F).(omf(F).[a,c])] by A3,A4,A5,Th11
+   .= odf(F).[omf(F).[a,b],compf(F).(omf(F).[a,c])] by A2,A6,Th10;
+   hence thesis;
+end;
+
+theorem Th30:
+   for F being Field holds
+   for a,b,c being Element of suppf(F) holds
+   omf(F).[odf(F).[a,compf(F).b],c] =
+   odf(F).[omf(F).[a,c],compf(F).(omf(F).[b,c])]
+proof
+   let F be Field;
+   let a,b,c be Element of suppf(F);
+     omf(F).[b,c] is Element of suppf(F) by Th28;
+then A1:odf(F).[omf(F).[b,c],compf(F).(omf(F).[b,c])] = ndf(F) by Def8;
+A2:odf(F).[a,compf(F).b] is Element of suppf(F) by Th28;
+then A3:omf(F).[odf(F).[a,compf(F).b],c] is Element of suppf(F) by Th28;
+A4:omf(F).[b,c] is Element of suppf(F) by Th28;
+then A5:compf(F).(omf(F).[b,c]) is Element of suppf(F) by Th28;
+A6:odf(F).[odf(F).[a,compf(F).b],b] =
+   odf(F).[a,odf(F).[compf(F).b,b]] by Th11
+   .= odf(F).[a,odf(F).[b,compf(F).b]] by Th12
+   .= odf(F).[a,ndf(F)] by Def8
+   .= a by Th13;
+     omf(F).[odf(F).[a,compf(F).b],c] =odf(F).[omf(F).[odf(F).[a,compf(F).b],c]
+,
+      odf(F).[omf(F).[b,c],compf(F).(omf(F).[b,c])]] by A1,A3,Th13
+   .= odf(F).[odf(F).[omf(F).[odf(F).[a,compf(F).b],c],
+      omf(F).[b,c]],compf(F).(omf(F).[b,c])] by A3,A4,A5,Th11
+   .= odf(F).[omf(F).[a,c],compf(F).(omf(F).[b,c])] by A2,A6,Th10;
+   hence thesis;
+end;
+
+theorem Th31:
+   for F being Field holds
+   for a being Element of suppf(F) holds omf(F).[a,ndf(F)] = ndf(F)
+proof
+   let F be Field;
+   let a be Element of suppf(F);
+     nmf(F) in (suppf(F)\{ndf F});
+then A1:nmf(F) is Element of suppf(F) by XBOOLE_0:def 4;
+then A2:omf(F).[a,nmf(F)] is Element of suppf(F) by Th28;
+      omf(F).[a,ndf(F)] = omf(F).[a,odf(F).[nmf(F),compf(F).nmf(F)]]
+            by A1,Def8
+    .= odf(F).[omf(F).[a,nmf(F)],compf(F).(omf(F).[a,nmf(F)])] by A1,Th29
+    .= ndf(F) by A2,Def8;
+    hence thesis;
+end;
+
+theorem Th32:
+   for F being Field holds
+   for a being Element of suppf(F) holds omf(F).[ndf(F),a] = ndf(F)
+proof
+   let F be Field;
+   let a be Element of suppf(F);
+     nmf(F) in suppf(F)\{ndf(F)};
+then A1:nmf(F) is Element of suppf(F) by XBOOLE_0:def 4;
+   then A2:omf(F).[nmf(F),a] is Element of suppf(F) by Th28;
+     omf(F).[ndf(F),a] = omf(F).[odf(F).[nmf(F),compf(F).nmf(F)],a] by A1,Def8
+    .= odf(F).[omf(F).[nmf(F),a],compf(F).(omf(F).[nmf(F),a])] by A1,Th30
+    .= ndf(F) by A2,Def8;
+   hence thesis;
+end;
+
+theorem
+     for F being Field,
+       a,b being Element of suppf(F) holds
+   compf(F).(omf(F).[a,b]) = omf(F).[a,compf(F).b]
+   proof
+      let F be Field,
+          a,b be Element of suppf(F);
+   A1:omf(F).[a,b] is Element of suppf(F) by Th28;
+   A2:omf(F).[a,compf(F).b] is Element of suppf(F) by Th28;
+        odf(F).[omf(F).[a,b],omf(F).[a,compf(F).b]]
+         = omf(F).[a,odf(F).[b,compf(F).b]] by Th10
+        .= omf(F).[a,ndf(F)] by Def8
+        .= ndf(F) by Th31;
+      hence thesis by A1,A2,Th26;
+   end;
+
+theorem Th34:
+   for F being Field holds omf(F).[nmf(F),ndf(F)] = ndf(F)
+proof
+   let F be Field;
+     nmf(F) in suppf(F)\{ndf(F)};
+   then nmf(F) is Element of suppf(F) by XBOOLE_0:def 4;
+   hence thesis by Th31;
+end;
+
+theorem Th35:
+   for F being Field holds omf(F).[ndf(F),nmf(F)] = ndf(F)
+proof
+   let F be Field;
+     nmf(F) in suppf(F)\{ndf(F)};
+   then nmf(F) is Element of suppf(F) by XBOOLE_0:def 4;
+   hence thesis by Th32;
+end;
+
+theorem
+    for F being Field,
+       a,b being Element of suppf(F) holds
+   omf(F).[a,b] is Element of suppf(F) by Th28;
+
+theorem Th37:
+   for F being Field,
+       a,b,c being Element of suppf(F) holds
+   omf(F).[omf(F).[a,b],c] = omf(F).[a,omf(F).[b,c]]
+proof
+   let F be Field,
+       a,b,c be Element of suppf(F);
+A1:a = ndf(F) or b = ndf(F) or c = ndf(F) or
+   (a is Element of suppf(F)\{ndf(F)} &
+    b is Element of suppf(F)\{ndf(F)} &
+    c is Element of suppf(F)\{ndf(F)}) by ZFMISC_1:64;
+A2: omf(F).[a,b] is Element of suppf(F) by Th28;
+A3: omf(F).[b,c] is Element of suppf(F) by Th28;
+A4:a = ndf(F) implies omf(F).[omf(F).[a,b],c] = omf(F).[a,omf(F).[b,c]]
+   proof
+      assume
+   A5:a = ndf(F);
+      hence omf(F).[omf(F).[a,b],c] = omf(F).[ndf(F),c] by Th32
+                            .= ndf(F) by Th32
+                            .= omf(F).[a,omf(F).[b,c]] by A3,A5,Th32;
+   end;
+A6:b = ndf(F) implies omf(F).[omf(F).[a,b],c] = omf(F).[a,omf(F).[b,c]]
+   proof
+      assume
+   A7:b = ndf(F);
+      hence omf(F).[omf(F).[a,b],c] = omf(F).[ndf(F),c] by Th31
+                            .= ndf(F) by Th32
+                            .= omf(F).[a,ndf(F)] by Th31
+                            .= omf(F).[a,omf(F).[b,c]] by A7,Th32;
+   end;
+     c = ndf(F) implies omf(F).[omf(F).[a,b],c] = omf(F).[a,omf(F).[b,c]]
+   proof
+      assume
+   A8:c = ndf(F);
+      hence omf(F).[omf(F).[a,b],c] = ndf(F) by A2,Th31
+                            .= omf(F).[a,ndf(F)] by Th31
+                            .= omf(F).[a,omf(F).[b,c]] by A8,Th31;
+   end;
+   hence thesis by A1,A4,A6,Th20;
+end;
+
+theorem
+     for F being Field,
+       a,b being Element of suppf(F) holds
+   omf(F).[a,b] = omf(F).[b,a]
+proof
+   let F be Field,
+       a,b be Element of suppf(F);
+A1:a = ndf(F) or b = ndf(F) or
+   (a is Element of suppf(F)\{ndf(F)} &
+    b is Element of suppf(F)\{ndf(F)}) by ZFMISC_1:64;
+A2:a = ndf(F) implies omf(F).[a,b] = omf(F).[b,a]
+   proof
+      assume
+   A3:a = ndf(F);
+      then omf(F).[a,b] = ndf(F) by Th32
+                  .= omf(F).[b,a] by A3,Th31;
+      hence thesis;
+   end;
+     b = ndf(F) implies omf(F).[a,b] = omf(F).[b,a]
+   proof
+      assume
+   A4:b = ndf(F);
+      then omf(F).[a,b] = ndf(F) by Th31
+                  .= omf(F).[b,a] by A4,Th32;
+      hence thesis;
+   end;
+   hence thesis by A1,A2,Th21;
+end;
+
+theorem Th39:
+   for F being Field,
+       a being Element of suppf(F) holds
+   omf(F).[a,nmf(F)] = a & omf(F).[nmf(F),a] = a
+proof
+   let F be Field,
+       a be Element of suppf(F);
+     a = ndf(F) or a is Element of suppf(F)\{ndf(F)} by ZFMISC_1:64;
+   hence thesis by Th22,Th34,Th35;
+end;
+
+definition :: reverse element
+  let F be Field;
+  func revf(F) -> Function of suppf(F)\{ndf(F)},suppf(F)\{ndf(F)} means
+:Def9: for x being Element of suppf(F)\{ndf(F)} holds
+        omf(F).[x,it.x] = nmf(F);
+existence
+proof
+  defpred Z[set,set] means omf(F).[$1,$2] = nmf(F);
+   A1:for x being set st x in suppf(F)\{ndf(F)} ex y being set st
+          y in suppf(F)\{ndf(F)} & Z[x,y]
+      proof
+         let x be set;
+         assume x in suppf(F)\{ndf(F)};
+         then consider y being Element of suppf(F)\{ndf(F)} such that
+      A2:omf(F).[x,y] = nmf(F) & omf(F).[y,x] = nmf(F) by Th23;
+         reconsider y as set;
+         take y;
+         thus thesis by A2;
+      end;
+      ex C being Function of suppf(F)\{ndf(F)},suppf(F)\{ndf(F)} st
+    for x being set st x in suppf(F)\{ndf(F)} holds Z[x,C.x] from FuncEx1(A1);
+    then consider C being Function of suppf(F)\{ndf(F)},suppf(F)\{ndf(F)} such
+that
+A3:for x being set st x in suppf(F)\{ndf(F)} holds omf(F).[x,C.x] = nmf(F);
+    take C;
+    thus thesis by A3;
+end;
+uniqueness
+proof
+   let C1,C2 be Function of suppf(F)\{ndf(F)},suppf(F)\{ndf(F)} such that
+A4:for x being Element of suppf(F)\{ndf(F)} holds
+       omf(F).[x,C1.x] = nmf(F) and
+A5:for x being Element of suppf(F)\{ndf(F)} holds
+       omf(F).[x,C2.x] = nmf(F);
+     for x being set st x in suppf(F)\{ndf(F)} holds C1.x = C2.x
+      proof
+         let x be set;
+         assume
+     A6:x in suppf(F)\{ndf(F)};
+      then A7:C1.x is Element of suppf(F)\{ndf(F)} by FUNCT_2:7;
+      A8:C2.x is Element of suppf(F)\{ndf(F)} by A6,FUNCT_2:7;
+           C1.x = omf(F).[C1.x,nmf(F)] by A7,Th22
+             .= omf(F).[C1.x,omf(F).[x,C2.x]] by A5,A6
+             .= omf(F).[omf(F).[C1.x,x],C2.x] by A6,A7,A8,Th20
+             .= omf(F).[omf(F).[x,C1.x],C2.x] by A6,A7,Th21
+             .= omf(F).[nmf(F),C2.x] by A4,A6
+             .= C2.x by A8,Th22;
+         hence thesis;
+      end;
+      hence thesis by FUNCT_2:18;
+end;
+end;
+
+canceled 2;
+
+theorem
+     for F being Field holds
+   for x,y being Element of suppf(F)\{ndf(F)} holds
+      omf(F).[x,y] = nmf(F) implies y = revf(F).x
+proof
+   let F be Field;
+   let x,y be Element of suppf(F)\{ndf(F)};
+   assume
+A1:omf(F).[x,y] = nmf(F);
+     y = omf(F).[y,nmf(F)] by Th22
+         .= omf(F).[y,omf(F).[x,revf(F).x]] by Def9
+         .= omf(F).[omf(F).[y,x],revf(F).x] by Th20
+         .= omf(F).[nmf(F),revf(F).x] by A1,Th21
+         .= revf(F).x by Th22;
+   hence thesis;
+end;
+
+theorem
+     for F being Field holds
+   for x being Element of suppf(F)\{ndf(F)} holds
+      x =revf(F).(revf(F).x)
+proof
+   let F be Field;
+   let x be Element of suppf(F)\{ndf(F)};
+     x = omf(F).[x,nmf(F)] by Th22
+         .= omf(F).[x,omf(F).[revf(F).x,revf(F).(revf(F).x)]] by Def9
+         .= omf(F).[omf(F).[x,revf(F).x],revf(F).(revf(F).x)] by Th20
+         .= omf(F).[nmf(F),revf(F).(revf(F).x)] by Def9
+         .= revf(F).(revf(F).x) by Th22;
+   hence thesis;
+end;
+
+theorem
+     for F being Field holds
+   for a,b being Element of suppf(F)\{ndf(F)} holds
+   omf(F).[a,b] is Element of suppf(F)\{ndf(F)} &
+   revf(F).a is Element of suppf(F)\{ndf(F)}
+proof
+   let F be Field;
+   let a,b be Element of suppf(F)\{ndf(F)};
+     [a,b] in [:suppf(F)\{ndf(F)},suppf(F)\{ndf(F)}:] by ZFMISC_1:def 2;
+   hence thesis by REALSET1:def 18;
+end;
+
+theorem
+     for F being Field holds
+   for a,b,c being Element of suppf(F) holds
+   odf(F).[a,b] = odf(F).[a,c] implies b = c
+proof
+   let F be Field;
+   let a,b,c be Element of suppf(F);
+   assume
+A1:odf(F).[a,b] = odf(F).[a,c];
+     b = odf(F).[ndf(F),b] by Th13
+    .= odf(F).[odf(F).[a,compf(F).a],b] by Def8
+    .= odf(F).[odf(F).[compf(F).a,a],b] by Th12
+    .= odf(F).[compf(F).a,odf(F).[a,c]] by A1,Th11
+    .= odf(F).[odf(F).[compf(F).a,a],c] by Th11
+    .= odf(F).[odf(F).[a,compf(F).a],c] by Th12
+    .= odf(F).[ndf(F),c] by Def8
+    .= c by Th13;
+   hence thesis;
+end;
+
+theorem
+     for F being Field holds
+   for a being Element of suppf(F)\{ndf(F)} holds
+   for b,c being Element of suppf(F) holds
+   omf(F).[a,b] = omf(F).[a,c] implies b = c
+proof
+   let F be Field;
+   let a be Element of suppf(F)\{ndf(F)};
+   let b,c be Element of suppf(F);
+   assume
+A1:omf(F).[a,b] = omf(F).[a,c];
+A2:revf(F).a is Element of suppf(F) by XBOOLE_0:def 4;
+A3:a is Element of suppf(F) by XBOOLE_0:def 4;
+     b = omf(F).[nmf(F),b] by Th39
+    .= omf(F).[omf(F).[a,revf(F).a],b] by Def9
+    .= omf(F).[omf(F).[revf(F).a,a],b] by Th21
+    .= omf(F).[(revf(F).a),omf(F).[a,c]] by A1,A2,A3,Th37
+    .= omf(F).[omf(F).[revf(F).a,a],c] by A2,A3,Th37
+    .= omf(F).[omf(F).[a,revf(F).a],c] by Th21
+    .= omf(F).[nmf(F),c] by Def9
+    .= c by Th39;
+   hence thesis;
+end;

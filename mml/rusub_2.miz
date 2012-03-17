@@ -1,0 +1,2311 @@
+:: Operations on Subspaces in Real Unitary Space
+::  by Noboru Endou , Takashi Mitsuishi and Yasunari Shidama
+::
+:: Received October 9, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, BINOP_1, FUNCT_1, ARYTM_1, RELAT_1, BHSP_1, BOOLE,
+      RLSUB_1, RLSUB_2, TARSKI, MCART_1, LATTICES;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, STRUCT_0, FUNCT_1,
+      BINOP_1, LATTICES, RELSET_1, REAL_1, DOMAIN_1, RLVECT_1, RLSUB_1, BHSP_1,
+      RUSUB_1;
+ constructors REAL_1, DOMAIN_1, RUSUB_1, BINOP_1, LATTICES, RLSUB_2, MEMBERED;
+ clusters SUBSET_1, STRUCT_0, RELSET_1, BHSP_1, RUSUB_1, LATTICES, RLSUB_2,
+      MEMBERED;
+ requirements NUMERALS, SUBSET, BOOLE;
+ definitions TARSKI, XBOOLE_0;
+ theorems RLVECT_1, FUNCT_1, TARSKI, FUNCT_2, ZFMISC_1, XBOOLE_0, RELAT_1,
+      RLSUB_1, XBOOLE_1, RUSUB_1, RLSUB_2, ORDERS_1, MCART_1, BINOP_1,
+      LATTICES, XCMPLX_0;
+ schemes XBOOLE_0, FUNCT_1, RELSET_1, ORDERS_2, BINOP_1;
+
+begin :: Definitions of sum and intersection of subspaces.
+
+definition
+let V be RealUnitarySpace, W1,W2 be Subspace of V;
+func W1 + W2 -> strict Subspace of V means
+:Def1:
+     the carrier of it = {v + u where v,u is VECTOR of V: v in W1 & u in W2};
+existence
+proof
+   set VS = {v + u where v,u is VECTOR of V: v in W1 & u in W2};
+     VS c= the carrier of V
+   proof
+     let x be set;
+     assume x in VS;
+     then ex v1,v2 being VECTOR of V st x = v1 + v2 & v1 in W1 & v2 in W2;
+     hence thesis;
+   end;
+   then reconsider VS as Subset of V;
+     0.V in W1 & 0.V in W2 & 0.V = 0.V + 0.V by RLVECT_1:10,RUSUB_1:11;
+then A1:0.V in VS;
+   reconsider V1 = the carrier of W1, V2 = the carrier of W2 as
+       Subset of V by RUSUB_1:def 1;
+A2:VS = {v + u where v,u is VECTOR of V: v in V1 & u in V2}
+   proof
+     thus VS c= {v + u where v,u is VECTOR of V: v in V1 & u in V2}
+     proof
+       let x be set;
+       assume x in VS;
+       then consider v,u being VECTOR of V such that
+A3:    x = v + u and
+A4:    v in W1 & u in W2;
+         v in V1 & u in V2 by A4,RLVECT_1:def 1;
+       hence thesis by A3;
+     end;
+     let x be set;
+     assume x in {v + u where v,u is VECTOR of V: v in V1 & u in V2};
+     then consider v,u being VECTOR of V such that
+A5:  x = v + u and
+A6:  v in V1 & u in V2;
+       v in W1 & u in W2 by A6,RLVECT_1:def 1;
+     hence thesis by A5;
+   end;
+     V1 is lineary-closed & V2 is lineary-closed by RUSUB_1:28;
+   then VS is lineary-closed by A2,RLSUB_1:9;
+   hence thesis by A1,RUSUB_1:29;
+end;
+
+uniqueness by RUSUB_1:24;
+end;
+
+definition
+let V be RealUnitarySpace, W1,W2 be Subspace of V;
+func W1 /\ W2 -> strict Subspace of V means
+:Def2:
+     the carrier of it = (the carrier of W1) /\ (the carrier of W2);
+existence
+proof
+   set VV = the carrier of V;
+   set VW1 = the carrier of W1;
+   set VW2 = the carrier of W2;
+     VW1 c= VV & VW2 c= VV by RUSUB_1:def 1;
+   then VW1 /\ VW2 c= VV /\ VV by XBOOLE_1:27;
+   then reconsider V1 = VW1, V2 = VW2, V3 = VW1 /\ VW2
+       as Subset of V by RUSUB_1:def 1;
+     0.V in W1 & 0.V in W2 by RUSUB_1:11;
+   then 0.V in VW1 & 0.V in VW2 by RLVECT_1:def 1;
+then A1:VW1 /\ VW2 <> {} by XBOOLE_0:def 3;
+     V1 is lineary-closed & V2 is lineary-closed by RUSUB_1:28;
+   then V3 is lineary-closed by RLSUB_1:10;
+   hence thesis by A1,RUSUB_1:29;
+end;
+
+uniqueness by RUSUB_1:24;
+end;
+
+begin :: Theorems of sum and intersection of subspaces.
+
+theorem Th1:
+for V being RealUnitarySpace, W1,W2 being Subspace of V, x being set holds
+ x in W1 + W2 iff
+  (ex v1,v2 being VECTOR of V st v1 in W1 & v2 in W2 & x = v1 + v2)
+proof
+   let V be RealUnitarySpace;
+   let W1,W2 be Subspace of V;
+   let x be set;
+   thus x in W1 + W2 implies
+       (ex v1,v2 being VECTOR of V st v1 in W1 & v2 in W2 & x = v1 + v2)
+   proof
+     assume x in W1 + W2;
+     then x in the carrier of W1 + W2 by RLVECT_1:def 1;
+     then x in {v + u where v,u is VECTOR of V : v in W1 & u in W2} by Def1;
+     then consider v1,v2 being VECTOR of V such that
+A1:  x = v1 + v2 & v1 in W1 & v2 in W2;
+     take v1,v2;
+     thus thesis by A1;
+   end;
+   given v1,v2 be VECTOR of V such that
+A2:v1 in W1 & v2 in W2 & x = v1 + v2;
+     x in {v + u where v,u is VECTOR of V : v in W1 & u in W2} by A2;
+   then x in the carrier of W1 + W2 by Def1;
+   hence thesis by RLVECT_1:def 1;
+end;
+
+theorem Th2:
+for V being RealUnitarySpace, W1,W2 being Subspace of V,
+ v being VECTOR of V st
+  v in W1 or v in W2 holds v in W1 + W2
+proof
+   let V be RealUnitarySpace;
+   let W1,W2 be Subspace of V;
+   let v be VECTOR of V;
+   assume
+A1:v in W1 or v in W2;
+     now per cases by A1;
+     suppose
+A2:  v in W1;
+       v = v + 0.V & 0.V in W2 by RLVECT_1:10,RUSUB_1:11;
+     hence thesis by A2,Th1;
+
+     suppose
+A3:  v in W2;
+       v = 0.V + v & 0.V in W1 by RLVECT_1:10,RUSUB_1:11;
+     hence thesis by A3,Th1;
+   end;
+   hence thesis;
+end;
+
+theorem Th3:
+for V being RealUnitarySpace, W1,W2 being Subspace of V,
+ x being set holds
+  x in W1 /\ W2 iff x in W1 & x in W2
+proof
+   let V be RealUnitarySpace;
+   let W1,W2 be Subspace of V;
+   let x be set;
+     x in W1 /\ W2 iff x in the carrier of W1 /\ W2 by RLVECT_1:def 1;
+   then x in W1 /\ W2 iff x in
+       (the carrier of W1) /\ (the carrier of W2) by Def2;
+   then x in W1 /\ W2 iff x in the carrier of W1 & x in the carrier of W2
+       by XBOOLE_0:def 3;
+   hence thesis by RLVECT_1:def 1;
+end;
+
+Lm1:
+for V being RealUnitarySpace, W1,W2 being Subspace of V holds
+ W1 + W2 = W2 + W1
+proof
+   let V be RealUnitarySpace;
+   let W1,W2 be Subspace of V;
+   set A = {v + u where v,u is VECTOR of V : v in W1 & u in W2};
+   set B = {v + u where v,u is VECTOR of V : v in W2 & u in W1};
+A1:the carrier of W1 + W2 = A & the carrier of W2 + W1 = B by Def1;
+A2:A c= B
+   proof
+     let x be set;
+     assume x in A;
+     then consider v,u being VECTOR of V such that
+A3:  x = v + u and
+A4:  v in W1 & u in W2;
+     thus thesis by A3,A4;
+   end;
+     B c= A
+   proof
+     let x be set;
+     assume x in B;
+     then consider v,u being VECTOR of V such that
+A5:  x = v + u and
+A6:  v in W2 & u in W1;
+     thus thesis by A5,A6;
+   end;
+   then A = B by A2,XBOOLE_0:def 10;
+   hence thesis by A1,RUSUB_1:24;
+end;
+
+Lm2:
+for V being RealUnitarySpace, W1,W2 being Subspace of V holds
+ the carrier of W1 c= the carrier of W1 + W2
+proof
+   let V be RealUnitarySpace;
+   let W1,W2 be Subspace of V;
+   let x be set;
+   set A = {v + u where v,u is VECTOR of V : v in W1 & u in W2};
+   assume x in the carrier of W1;
+   then reconsider v = x as Element of W1;
+   reconsider v as VECTOR of V by RUSUB_1:3;
+     v in W1 & 0.V in W2 & v = v + 0.V
+       by RLVECT_1:10,def 1,RUSUB_1:11;
+   then x in A;
+   hence thesis by Def1;
+end;
+
+Lm3:
+for V being RealUnitarySpace, W1 being Subspace of V,
+ W2 being strict Subspace of V st
+  the carrier of W1 c= the carrier of W2 holds W1 + W2 = W2
+proof
+   let V be RealUnitarySpace;
+   let W1 be Subspace of V;
+   let W2 be strict Subspace of V;
+   assume
+A1:the carrier of W1 c= the carrier of W2;
+     the carrier of W1 + W2 = the carrier of W2
+   proof
+     thus the carrier of W1 + W2 c= the carrier of W2
+     proof
+       let x be set;
+       assume x in the carrier of W1 + W2;
+       then x in {v + u where v,u is VECTOR of V : v in W1 & u in W2} by Def1;
+       then consider v,u being VECTOR of V such that
+A2:    x = v + u and
+A3:    v in W1 and
+A4:    u in W2;
+         W1 is Subspace of W2 by A1,RUSUB_1:22;
+       then v in W2 by A3,RUSUB_1:1;
+       then v + u in W2 by A4,RUSUB_1:14;
+       hence thesis by A2,RLVECT_1:def 1;
+     end;
+       W1 + W2 = W2 + W1 by Lm1;
+     hence thesis by Lm2;
+   end;
+   hence thesis by RUSUB_1:24;
+end;
+
+theorem
+  for V being RealUnitarySpace, W being strict Subspace of V holds
+ W + W = W by Lm3;
+
+theorem
+  for V being RealUnitarySpace, W1,W2 being Subspace of V holds
+ W1 + W2 = W2 + W1 by Lm1;
+
+theorem Th6:
+for V being RealUnitarySpace, W1,W2,W3 being Subspace of V holds
+ W1 + (W2 + W3) = (W1 + W2) + W3
+proof
+   let V be RealUnitarySpace;
+   let W1,W2,W3 be Subspace of V;
+   set A = {v + u where v,u is VECTOR of V : v in W1 & u in W2};
+   set B = {v + u where v,u is VECTOR of V : v in W2 & u in W3};
+   set C = {v + u where v,u is VECTOR of V : v in W1 + W2 & u in W3};
+   set D = {v + u where v,u is VECTOR of V : v in W1 & u in W2 + W3};
+A1:the carrier of W1 + (W2 + W3) = D & the carrier of (W1 + W2) + W3 = C
+       by Def1;
+A2:D c= C
+   proof
+     let x be set;
+     assume x in D;
+     then consider v,u being VECTOR of V such that
+A3:  x = v + u and
+A4:  v in W1 and
+A5:  u in W2 + W3;
+       u in the carrier of W2 + W3 by A5,RLVECT_1:def 1;
+     then u in B by Def1;
+     then consider u1,u2 being VECTOR of V such that
+A6:  u = u1 + u2 and
+A7:  u1 in W2 and
+A8:  u2 in W3;
+A9:  v + u = (v + u1) + u2 by A6,RLVECT_1:def 6;
+       v + u1 in A by A4,A7;
+     then v + u1 in the carrier of W1 + W2 by Def1;
+     then v + u1 in W1 + W2 by RLVECT_1:def 1;
+     hence thesis by A3,A8,A9;
+   end;
+     C c= D
+   proof
+     let x be set;
+     assume x in C;
+     then consider v,u being VECTOR of V such that
+A10: x = v + u and
+A11: v in W1 + W2 and
+A12: u in W3;
+       v in the carrier of W1 + W2 by A11,RLVECT_1:def 1;
+     then v in A by Def1;
+     then consider u1,u2 being VECTOR of V such that
+A13: v = u1 + u2 and
+A14: u1 in W1 and
+A15: u2 in W2;
+A16: v + u =u1 + (u2 + u) by A13,RLVECT_1:def 6;
+       u2 + u in B by A12,A15;
+     then u2 + u in the carrier of W2 + W3 by Def1;
+     then u2 + u in W2 + W3 by RLVECT_1:def 1;
+     hence thesis by A10,A14,A16;
+   end;
+   then D = C by A2,XBOOLE_0:def 10;
+   hence thesis by A1,RUSUB_1:24;
+end;
+
+theorem Th7:
+for V being RealUnitarySpace, W1,W2 being Subspace of V holds
+ W1 is Subspace of W1 + W2 & W2 is Subspace of W1 + W2
+proof
+   let V be RealUnitarySpace;
+   let W1,W2 be Subspace of V;
+     the carrier of W1 c= the carrier of W1 + W2 by Lm2;
+   hence W1 is Subspace of W1 + W2 by RUSUB_1:22;
+     the carrier of W2 c= the carrier of W2 + W1 by Lm2;
+   then the carrier of W2 c= the carrier of W1 + W2 by Lm1;
+   hence thesis by RUSUB_1:22;
+end;
+
+theorem Th8:
+for V being RealUnitarySpace, W1 being Subspace of V,
+ W2 being strict Subspace of V holds
+  W1 is Subspace of W2 iff W1 + W2 = W2
+proof
+   let V be RealUnitarySpace;
+   let W1 be Subspace of V;
+   let W2 be strict Subspace of V;
+   thus W1 is Subspace of W2 implies W1 + W2 = W2
+   proof
+     assume W1 is Subspace of W2;
+     then the carrier of W1 c= the carrier of W2 by RUSUB_1:def 1;
+     hence thesis by Lm3;
+   end;
+   thus thesis by Th7;
+end;
+
+theorem Th9:
+for V being RealUnitarySpace, W being strict Subspace of V holds
+ (0).V + W = W & W + (0).V = W
+proof
+   let V be RealUnitarySpace;
+   let W be strict Subspace of V;
+     (0).V is Subspace of W by RUSUB_1:33;
+   then the carrier of (0).V c= the carrier of W by RUSUB_1:def 1;
+   hence (0).V + W = W by Lm3;
+   hence thesis by Lm1;
+end;
+
+theorem Th10:
+for V being RealUnitarySpace holds
+ (0).V + (Omega).V = the UNITSTR of V &
+  (Omega).V + (0).V = the UNITSTR of V
+proof
+   let V be RealUnitarySpace;
+   thus (0).V + (Omega).V = (Omega).V by Th9
+                     .= the UNITSTR of V by RUSUB_1:def 3;
+   hence thesis by Lm1;
+end;
+
+theorem Th11:
+for V being RealUnitarySpace, W being Subspace of V holds
+ (Omega).V + W = the UNITSTR of V &
+  W + (Omega).V = the UNITSTR of V
+proof
+   let V be RealUnitarySpace;
+   let W be Subspace of V;
+A1:the carrier of V = the carrier of the UNITSTR of V;
+     the carrier of W c= the carrier of V by RUSUB_1:def 1;
+   then the carrier of W c= the carrier of (Omega).V by A1,RUSUB_1:def 3;
+   then W + (Omega).V = (Omega).V by Lm3
+                .= the UNITSTR of V by RUSUB_1:def 3;
+   hence thesis by Lm1;
+end;
+
+theorem
+  for V being strict RealUnitarySpace holds
+ (Omega).V + (Omega).V = V by Th11;
+
+theorem
+  for V being RealUnitarySpace, W being strict Subspace of V holds
+ W /\ W = W
+proof
+   let V be RealUnitarySpace;
+   let W be strict Subspace of V;
+     the carrier of W = (the carrier of W) /\ (the carrier of W);
+   hence thesis by Def2;
+end;
+
+theorem Th14:
+for V being RealUnitarySpace, W1,W2 being Subspace of V holds
+ W1 /\ W2 = W2 /\ W1
+proof
+   let V be RealUnitarySpace;
+   let W1,W2 be Subspace of V;
+     the carrier of W1 /\ W2 = (the carrier of W2) /\ (the carrier of W1)
+       by Def2;
+   hence thesis by Def2;
+end;
+
+theorem Th15:
+for V being RealUnitarySpace, W1,W2,W3 being Subspace of V holds
+ W1 /\ (W2 /\ W3) = (W1 /\ W2) /\ W3
+proof
+   let V be RealUnitarySpace;
+   let W1,W2,W3 be Subspace of V;
+   set V1 = the carrier of W1;
+   set V2 = the carrier of W2;
+   set V3 = the carrier of W3;
+     the carrier of W1 /\ (W2 /\ W3) = V1 /\ (the carrier of W2 /\ W3) by Def2
+        .= V1 /\ (V2 /\ V3) by Def2
+        .= (V1 /\ V2) /\ V3 by XBOOLE_1:16
+        .= (the carrier of W1 /\ W2) /\ V3 by Def2;
+   hence thesis by Def2;
+end;
+
+Lm4:
+for V being RealUnitarySpace, W1,W2 being Subspace of V holds
+ the carrier of W1 /\ W2 c= the carrier of W1
+proof
+   let V be RealUnitarySpace;
+   let W1,W2 be Subspace of V;
+     the carrier of W1 /\ W2 = (the carrier of W1) /\ (the carrier of W2)
+       by Def2;
+   hence thesis by XBOOLE_1:17;
+end;
+
+theorem Th16:
+for V being RealUnitarySpace, W1,W2 being Subspace of V holds
+ W1 /\ W2 is Subspace of W1 & W1 /\ W2 is Subspace of W2
+proof
+   let V be RealUnitarySpace;
+   let W1,W2 be Subspace of V;
+     the carrier of W1 /\ W2 c= the carrier of W1 by Lm4;
+   hence W1 /\ W2 is Subspace of W1 by RUSUB_1:22;
+     the carrier of W2 /\ W1 c= the carrier of W2 by Lm4;
+   then the carrier of W1 /\ W2 c= the carrier of W2 by Th14;
+   hence thesis by RUSUB_1:22;
+end;
+
+theorem Th17:
+for V being RealUnitarySpace, W2 being Subspace of V,
+ W1 being strict Subspace of V holds
+  W1 is Subspace of W2 iff W1 /\ W2 = W1
+proof
+   let V be RealUnitarySpace;
+   let W2 be Subspace of V;
+   let W1 be strict Subspace of V;
+   thus W1 is Subspace of W2 implies W1 /\ W2 = W1
+   proof
+     assume W1 is Subspace of W2;
+then A1:  the carrier of W1 c= the carrier of W2 by RUSUB_1:def 1;
+       the carrier of W1 /\ W2 = (the carrier of W1) /\ (the carrier of W2)
+         by Def2;
+     then the carrier of W1 /\ W2 = the carrier of W1 by A1,XBOOLE_1:28;
+     hence thesis by RUSUB_1:24;
+   end;
+   thus thesis by Th16;
+end;
+
+theorem Th18:
+for V being RealUnitarySpace, W being Subspace of V holds
+ (0).V /\ W = (0).V & W /\ (0).V = (0).V
+proof
+   let V be RealUnitarySpace;
+   let W be Subspace of V;
+A1:the carrier of (0).V /\ W
+           = (the carrier of (0).V) /\ (the carrier of W) by Def2
+          .= {0.V} /\ (the carrier of W) by RUSUB_1:def 2;
+     0.V in W by RUSUB_1:11;
+   then 0.V in the carrier of W by RLVECT_1:def 1;
+   then {0.V} c= the carrier of W by ZFMISC_1:37;
+   then {0.V} /\ (the carrier of W) = {0.V} & the carrier of (0).V = {0.V}
+        by RUSUB_1:def 2,XBOOLE_1:28;
+   hence (0).V /\ W = (0).V by A1,RUSUB_1:24;
+   hence thesis by Th14;
+end;
+
+theorem
+  for V being RealUnitarySpace holds
+ (0).V /\ (Omega).V = (0).V & (Omega).V /\ (0).V = (0).V by Th18;
+
+theorem Th20:
+for V being RealUnitarySpace, W being strict Subspace of V holds
+ (Omega).V /\ W = W & W /\ (Omega).V = W
+proof
+   let V be RealUnitarySpace;
+   let W be strict Subspace of V;
+     (Omega).V = the UNITSTR of V by RUSUB_1:def 3;
+then A1:the carrier of (Omega).V /\ W = (the carrier of V) /\ (the carrier of W
+)
+       by Def2;
+     the carrier of W c= the carrier of V by RUSUB_1:def 1;
+   then the carrier of (Omega).V /\ W = the carrier of W by A1,XBOOLE_1:28;
+   hence (Omega).V /\ W = W by RUSUB_1:24;
+   hence thesis by Th14;
+end;
+
+theorem
+  for V being strict RealUnitarySpace holds
+ (Omega).V /\ (Omega).V = V
+proof
+   let V be strict RealUnitarySpace;
+   thus (Omega).V /\ (Omega).V = (Omega).V by Th20
+                     .= V by RUSUB_1:def 3;
+end;
+
+Lm5:
+for V being RealUnitarySpace, W1,W2 being Subspace of V holds
+the carrier of W1 /\ W2 c= the carrier of W1 + W2
+proof
+   let V be RealUnitarySpace;
+   let W1,W2 be Subspace of V;
+     the carrier of W1 /\ W2 c= the carrier of W1 &
+   the carrier of W1 c= the carrier of W1 + W2 by Lm2,Lm4;
+   hence thesis by XBOOLE_1:1;
+end;
+
+theorem
+  for V being RealUnitarySpace, W1,W2 being Subspace of V holds
+ W1 /\ W2 is Subspace of W1 + W2
+proof
+   let V be RealUnitarySpace;
+   let W1,W2 be Subspace of V;
+     the carrier of W1 /\ W2 c= the carrier of W1 + W2 by Lm5;
+   hence thesis by RUSUB_1:22;
+end;
+
+Lm6:
+for V being RealUnitarySpace, W1,W2 being Subspace of V holds
+ the carrier of (W1 /\ W2) + W2 = the carrier of W2
+proof
+   let V be RealUnitarySpace;
+   let W1,W2 be Subspace of V;
+   thus the carrier of (W1 /\ W2) + W2 c= the carrier of W2
+   proof
+     let x be set;
+     assume x in the carrier of (W1 /\ W2) + W2;
+     then x in {u + v where u,v is VECTOR of V : u in W1 /\ W2 & v in W2}
+         by Def1;
+     then consider u,v being VECTOR of V such that
+A1:  x = u + v and
+A2:  u in W1 /\ W2 and
+A3:  v in W2;
+       u in W2 by A2,Th3;
+     then u + v in W2 by A3,RUSUB_1:14;
+     hence thesis by A1,RLVECT_1:def 1;
+   end;
+   let x be set;
+   assume
+A4:x in the carrier of W2;
+     the carrier of W2 c= the carrier of W2 + (W1 /\ W2) by Lm2;
+   then the carrier of W2 c= the carrier of (W1 /\ W2) + W2 by Lm1;
+   hence thesis by A4;
+end;
+
+theorem Th23:
+for V being RealUnitarySpace, W1 being Subspace of V,
+ W2 being strict Subspace of V holds
+  (W1 /\ W2) + W2 = W2
+proof
+   let V be RealUnitarySpace;
+   let W1 be Subspace of V;
+   let W2 be strict Subspace of V;
+     the carrier of (W1 /\ W2) + W2 = the carrier of W2 by Lm6;
+   hence thesis by RUSUB_1:24;
+end;
+
+Lm7:
+for V being RealUnitarySpace, W1,W2 being Subspace of V holds
+ the carrier of W1 /\ (W1 + W2) = the carrier of W1
+proof
+   let V be RealUnitarySpace;
+   let W1,W2 be Subspace of V;
+   thus the carrier of W1 /\ (W1 + W2) c= the carrier of W1
+   proof
+     let x be set;
+     assume
+A1:  x in the carrier of W1 /\ (W1 + W2);
+       the carrier of W1 /\ (W1 + W2) =
+         (the carrier of W1) /\ (the carrier of W1 + W2) by Def2;
+     hence thesis by A1,XBOOLE_0:def 3;
+   end;
+   let x be set;
+   assume
+A2:x in the carrier of W1;
+     the carrier of W1 c= the carrier of V by RUSUB_1:def 1;
+   then reconsider x1 = x as Element of V by A2;
+     x1 + 0.V = x1 & 0.V in W2 & x in W1
+       by A2,RLVECT_1:10,def 1,RUSUB_1:11;
+   then x in {u + v where u,v is VECTOR of V : u in W1 & v in W2};
+   then x in the carrier of W1 + W2 by Def1;
+   then x in (the carrier of W1) /\ (the carrier of W1 + W2) by A2,XBOOLE_0:def
+3;
+   hence thesis by Def2;
+end;
+
+theorem Th24:
+for V being RealUnitarySpace, W1 being Subspace of V,
+ W2 being strict Subspace of V holds
+  W2 /\ (W2 + W1) = W2
+proof
+   let V be RealUnitarySpace;
+   let W1 being Subspace of V;
+   let W2 be strict Subspace of V;
+     the carrier of W2 /\ (W2 + W1) = the carrier of W2 by Lm7;
+   hence thesis by RUSUB_1:24;
+end;
+
+Lm8:
+for V being RealUnitarySpace, W1,W2,W3 being Subspace of V holds
+ the carrier of (W1 /\ W2) + (W2 /\ W3) c= the carrier of W2 /\ (W1 + W3)
+proof
+   let V be RealUnitarySpace;
+   let W1,W2,W3 be Subspace of V;
+   let x be set;
+   assume x in the carrier of (W1 /\ W2) + (W2 /\ W3);
+   then x in {u + v where u,v is VECTOR of V: u in W1 /\ W2 & v in W2 /\ W3}
+       by Def1;
+   then consider u,v being VECTOR of V such that
+A1:x = u + v and
+A2:u in W1 /\ W2 & v in W2 /\ W3;
+     u in W1 & u in W2 & v in W2 & v in W3 by A2,Th3;
+   then x in W1 + W3 & x in W2 by A1,Th1,RUSUB_1:14;
+   then x in W2 /\ (W1 + W3) by Th3;
+   hence thesis by RLVECT_1:def 1;
+end;
+
+theorem
+  for V being RealUnitarySpace, W1,W2,W3 being Subspace of V holds
+ (W1 /\ W2) + (W2 /\ W3) is Subspace of W2 /\ (W1 + W3)
+proof
+   let V be RealUnitarySpace;
+   let W1,W2,W3 be Subspace of V;
+     the carrier of (W1 /\ W2) + (W2 /\ W3) c= the carrier of W2 /\ (W1 + W3)
+        by Lm8;
+   hence thesis by RUSUB_1:22;
+end;
+
+Lm9:
+for V being RealUnitarySpace, W1,W2,W3 being Subspace of V st
+ W1 is Subspace of W2 holds
+  the carrier of W2 /\ (W1 + W3) = the carrier of (W1 /\ W2) + (W2 /\ W3)
+proof
+   let V be RealUnitarySpace;
+   let W1,W2,W3 be Subspace of V;
+   assume
+A1:W1 is Subspace of W2;
+   thus the carrier of W2 /\ (W1 + W3)
+          c= the carrier of (W1 /\ W2) + (W2 /\ W3)
+   proof
+     let x be set;
+     assume x in the carrier of W2 /\ (W1 + W3);
+then A2:  x in (the carrier of W2) /\ (the carrier of W1 + W3) by Def2;
+     then x in the carrier of W1 + W3 by XBOOLE_0:def 3;
+     then x in {u + v where u,v is VECTOR of V : u in W1 & v in W3} by Def1;
+     then consider u1,v1 being VECTOR of V such that
+A3:  x = u1 + v1 and
+A4:  u1 in W1 and
+A5:  v1 in W3;
+A6:  u1 in W2 by A1,A4,RUSUB_1:1;
+then A7:  u1 in W1 /\ W2 by A4,Th3;
+       x in the carrier of W2 by A2,XBOOLE_0:def 3;
+     then u1 + v1 in W2 by A3,RLVECT_1:def 1;
+     then (v1 + u1) - u1 in W2 by A6,RUSUB_1:17;
+     then v1 + (u1 - u1) in W2 by RLVECT_1:42;
+     then v1 + 0.V in W2 by RLVECT_1:28;
+     then v1 in W2 by RLVECT_1:10;
+     then v1 in W2 /\ W3 by A5,Th3;
+     then x in (W1 /\ W2) + (W2 /\ W3) by A3,A7,Th1;
+     hence thesis by RLVECT_1:def 1;
+   end;
+   thus thesis by Lm8;
+end;
+
+theorem Th26:
+for V being RealUnitarySpace, W1,W2,W3 being Subspace of V st
+ W1 is Subspace of W2 holds
+  W2 /\ (W1 + W3) = (W1 /\ W2) + (W2 /\ W3)
+proof
+   let V be RealUnitarySpace;
+   let W1,W2,W3 be Subspace of V;
+   assume W1 is Subspace of W2;
+   then the carrier of W2 /\ (W1 + W3)
+       = the carrier of (W1 /\ W2) + (W2 /\ W3) by Lm9;
+   hence thesis by RUSUB_1:24;
+end;
+
+Lm10:
+for V being RealUnitarySpace, W1,W2,W3 being Subspace of V holds
+ the carrier of W2 + (W1 /\ W3) c= the carrier of (W1 + W2) /\ (W2 + W3)
+proof
+   let V be RealUnitarySpace;
+   let W1,W2,W3 be Subspace of V;
+   let x be set;
+   assume x in the carrier of W2 + (W1 /\ W3);
+   then x in {u + v where u,v is VECTOR of V: u in W2 & v in W1 /\ W3} by Def1
+;
+   then consider u,v being VECTOR of V such that
+A1:x = u + v and
+A2:u in W2 and
+A3:v in W1 /\ W3;
+     v in W1 & v in W3 & x = v + u by A1,A3,Th3;
+   then x in {v1 + v2 where v1,v2 is VECTOR of V : v1 in W1 & v2 in W2} &
+   x in {u1 + u2 where u1,u2 is VECTOR of V : u1 in W2 & u2 in W3} by A2;
+   then x in the carrier of W1 + W2 & x in the carrier of W2 + W3 by Def1;
+   then x in (the carrier of W1 + W2) /\ (the carrier of W2 + W3) by XBOOLE_0:
+def 3;
+   hence thesis by Def2;
+end;
+
+theorem
+  for V being RealUnitarySpace, W1,W2,W3 being Subspace of V holds
+ W2 + (W1 /\ W3) is Subspace of (W1 + W2) /\ (W2 + W3)
+proof
+   let V be RealUnitarySpace;
+   let W1,W2,W3 be Subspace of V;
+     the carrier of W2 + (W1 /\ W3) c= the carrier of (W1 + W2) /\ (W2 + W3)
+       by Lm10;
+   hence thesis by RUSUB_1:22;
+end;
+
+Lm11:
+for V being RealUnitarySpace, W1,W2,W3 being Subspace of V st
+ W1 is Subspace of W2 holds
+  the carrier of W2 + (W1 /\ W3) = the carrier of (W1 + W2) /\ (W2 + W3)
+proof
+   let V be RealUnitarySpace;
+   let W1,W2,W3 be Subspace of V;
+   assume
+A1:W1 is Subspace of W2;
+   reconsider V2 = the carrier of W2 as Subset of V
+       by RUSUB_1:def 1;
+   thus the carrier of W2 + (W1 /\ W3) c= the carrier of (W1 + W2) /\ (W2 + W3
+)
+       by Lm10;
+   let x be set;
+   assume x in the carrier of (W1 + W2) /\ (W2 + W3);
+   then x in (the carrier of W1 + W2) /\ (the carrier of W2 + W3) by Def2;
+   then x in the carrier of W1 + W2 by XBOOLE_0:def 3;
+   then x in {u1 + u2 where u1,u2 is VECTOR of V : u1 in W1 & u2 in W2} by Def1
+;
+   then consider u1,u2 being VECTOR of V such that
+A2:x = u1 + u2 and
+A3:u1 in W1 and
+A4:u2 in W2;
+A5:u1 in the carrier of W1 by A3,RLVECT_1:def 1;
+A6:u2 in the carrier of W2 by A4,RLVECT_1:def 1;
+     the carrier of W1 c= the carrier of W2 by A1,RUSUB_1:def 1;
+   then u1 in the carrier of W2 & V2 is lineary-closed by A5,RUSUB_1:28;
+   then u1 + u2 in V2 by A6,RLSUB_1:def 1;
+then A7:u1 + u2 in W2 by RLVECT_1:def 1;
+A8:0.V in W1 /\ W3 by RUSUB_1:11;
+     (u1 + u2) + 0.V = u1 + u2 by RLVECT_1:10;
+   then x in {u + v where u,v is VECTOR of V : u in W2 & v in W1 /\ W3} by A2,
+A7,A8;
+   hence thesis by Def1;
+end;
+
+theorem
+  for V being RealUnitarySpace, W1,W2,W3 being Subspace of V st
+ W1 is Subspace of W2 holds
+  W2 + (W1 /\ W3) = (W1 + W2) /\ (W2 + W3)
+proof
+   let V be RealUnitarySpace;
+   let W1,W2,W3 be Subspace of V;
+   assume W1 is Subspace of W2;
+   then the carrier of W2 + (W1 /\ W3) = the carrier of (W1 + W2) /\ (W2 + W3)
+                                                                      by Lm11;
+   hence thesis by RUSUB_1:24;
+end;
+
+theorem Th29:
+for V being RealUnitarySpace, W1,W2,W3 being Subspace of V st
+ W1 is strict Subspace of W3 holds
+  W1 + (W2 /\ W3) = (W1 + W2) /\ W3
+proof
+   let V be RealUnitarySpace;
+   let W1,W2,W3 be Subspace of V;
+   assume
+A1:W1 is strict Subspace of W3;
+   thus (W1 + W2) /\ W3 = W3 /\ (W1 + W2) by Th14
+                      .= (W1 /\ W3) + (W3 /\ W2) by A1,Th26
+                      .= W1 + (W3 /\ W2) by A1,Th17
+                      .= W1 + (W2 /\ W3) by Th14;
+end;
+
+theorem
+  for V being RealUnitarySpace, W1,W2 being strict Subspace of V holds
+ W1 + W2 = W2 iff W1 /\ W2 = W1
+proof
+   let V be RealUnitarySpace;
+   let W1,W2 be strict Subspace of V;
+     (W1 + W2 = W2 iff W1 is Subspace of W2) &
+   (W1 /\ W2 = W1 iff W1 is Subspace of W2) by Th8,Th17;
+   hence thesis;
+end;
+
+theorem
+  for V being RealUnitarySpace, W1 being Subspace of V,
+ W2,W3 being strict Subspace of V holds
+  W1 is Subspace of W2 implies W1 + W3 is Subspace of W2 + W3
+proof
+   let V be RealUnitarySpace;
+   let W1 be Subspace of V;
+   let W2,W3 be strict Subspace of V;
+   assume
+A1:W1 is Subspace of W2;
+     (W1 + W3) + (W2 + W3) = (W1 + W3) + (W3 + W2) by Lm1
+                        .= ((W1 + W3) + W3) + W2 by Th6
+                        .= (W1 + (W3 + W3)) + W2 by Th6
+                        .= (W1 + W3) + W2 by Lm3
+                        .= W1 + (W3 + W2) by Th6
+                        .= W1 + (W2 + W3) by Lm1
+                        .= (W1 + W2) + W3 by Th6
+                        .= W2 + W3 by A1,Th8;
+   hence thesis by Th8;
+end;
+
+theorem
+  for V being RealUnitarySpace, W1,W2 being Subspace of V holds
+ (ex W being Subspace of V st the carrier of W
+  = (the carrier of W1) \/ (the carrier of W2)) iff
+   W1 is Subspace of W2 or W2 is Subspace of W1
+proof
+   let V be RealUnitarySpace;
+   let W1,W2 be Subspace of V;
+   set VW1 = the carrier of W1;
+   set VW2 = the carrier of W2;
+   thus (ex W being Subspace of V st
+         the carrier of W = (the carrier of W1) \/ (the carrier of W2))
+          implies W1 is Subspace of W2 or W2 is Subspace of W1
+   proof
+     given W be Subspace of V such that
+A1:    the carrier of W = (the carrier of W1) \/ (the carrier of W2);
+       set VW = the carrier of W;
+       assume not W1 is Subspace of W2 & not W2 is Subspace of W1;
+then A2:    not VW1 c= VW2 & not VW2 c= VW1 by RUSUB_1:22;
+       then consider x being set such that
+A3:    x in VW1 and
+A4:    not x in VW2 by TARSKI:def 3;
+       consider y being set such that
+A5:    y in VW2 and
+A6:    not y in VW1 by A2,TARSKI:def 3;
+       reconsider x as Element of VW1 by A3;
+
+       reconsider x as VECTOR of V by RUSUB_1:3;
+       reconsider y as Element of VW2 by A5;
+
+       reconsider y as VECTOR of V by RUSUB_1:3;
+       reconsider A1 = VW as Subset of V by RUSUB_1:def 1;
+         x in VW & y in VW & A1 is lineary-closed
+           by A1,RUSUB_1:28,XBOOLE_0:def 2;
+then A7:    x + y in VW by RLSUB_1:def 1;
+
+A8:    now
+         assume
+A9:      x + y in VW1;
+         reconsider A2 = VW1 as Subset of V by RUSUB_1:def 1;
+           A2 is lineary-closed by RUSUB_1:28;
+         then (y + x) - x in VW1 by A9,RLSUB_1:6;
+         then y + (x - x) in VW1 by RLVECT_1:42;
+         then y + 0.V in VW1 by RLVECT_1:28;
+         hence contradiction by A6,RLVECT_1:10;
+       end;
+         now
+         assume
+A10:     x + y in VW2;
+         reconsider A2 = VW2 as Subset of V by RUSUB_1:def 1;
+           A2 is lineary-closed by RUSUB_1:28;
+         then (x + y) - y in VW2 by A10,RLSUB_1:6;
+         then x + (y - y) in VW2 by RLVECT_1:42;
+         then x + 0.V in VW2 by RLVECT_1:28;
+         hence contradiction by A4,RLVECT_1:10;
+       end;
+       hence thesis by A1,A7,A8,XBOOLE_0:def 2;
+    end;
+    assume
+A11: W1 is Subspace of W2 or W2 is Subspace of W1;
+A12: now assume W1 is Subspace of W2;
+     then VW1 c= VW2 by RUSUB_1:def 1;
+     then VW1 \/ VW2 = VW2 by XBOOLE_1:12;
+     hence thesis;
+   end;
+     now
+     assume W2 is Subspace of W1;
+     then VW2 c= VW1 by RUSUB_1:def 1;
+     then VW1 \/ VW2 = VW1 by XBOOLE_1:12;
+     hence thesis;
+   end;
+   hence thesis by A11,A12;
+end;
+
+begin ::  Introduction of a set of subspaces of real unitary space.
+
+definition let V be RealUnitarySpace;
+func Subspaces(V) -> set means
+:Def3:
+  for x being set holds x in it iff x is strict Subspace of V;
+existence
+proof
+  defpred P[set] means
+     ex W being strict Subspace of V st $1 = the carrier of W;
+   consider B being set such that
+A1:for x being set holds x in B iff x in bool(the carrier of V) & P[x]
+       from Separation;
+   defpred P[set,set] means
+     (ex W being strict Subspace of V st $2 = W & $1 = the carrier of W);
+A2:for x,y1,y2 being set st P[x,y1] & P[x,y2] holds y1 = y2 by RUSUB_1:24;
+   consider f being Function such that
+A3:for x,y being set holds [x,y] in f iff x in B & P[x,y] from GraphFunc(A2);
+     for x being set holds x in B iff ex y being set st [x,y] in f
+   proof let x be set;
+     thus x in B implies ex y being set st [x,y] in f
+     proof
+       assume
+A4:    x in B;
+       then consider W being strict Subspace of V such that
+A5:    x = the carrier of W by A1;
+       reconsider y = W as set;
+       take y;
+       thus thesis by A3,A4,A5;
+     end;
+     given y be set such that
+A6:  [x,y] in f;
+     thus thesis by A3,A6;
+   end;
+then A7:B = dom f by RELAT_1:def 4;
+     for y being set holds y in rng f iff y is strict Subspace of V
+   proof let y be set;
+     thus y in rng f implies y is strict Subspace of V
+     proof
+       assume y in rng f;
+       then consider x being set such that
+A8:    x in dom f & y = f.x by FUNCT_1:def 5;
+         [x,y] in f by A8,FUNCT_1:def 4;
+       then ex W being strict Subspace of V st y = W &
+       x = the carrier of W by A3;
+       hence thesis;
+     end;
+     assume y is strict Subspace of V;
+     then reconsider W = y as strict Subspace of V;
+     reconsider x = the carrier of W as set;
+       the carrier of W c= the carrier of V by RUSUB_1:def 1;
+then A9:  x in dom f by A1,A7;
+     then [x,y] in f by A3,A7;
+     then y = f.x by A9,FUNCT_1:def 4;
+     hence thesis by A9,FUNCT_1:def 5;
+   end;
+   hence thesis;
+end;
+uniqueness
+proof
+   let D1,D2 be set;
+   assume
+A10:for x being set holds x in D1 iff x is strict Subspace of V;
+   assume
+A11:for x being set holds x in D2 iff x is strict Subspace of V;
+     now
+     let x be set;
+     thus x in D1 implies x in D2
+     proof
+       assume x in D1;
+       then x is strict Subspace of V by A10;
+       hence thesis by A11;
+     end;
+     assume x in D2;
+     then x is strict Subspace of V by A11;
+     hence x in D1 by A10;
+   end;
+   hence thesis by TARSKI:2;
+end;
+end;
+
+definition let V be RealUnitarySpace;
+cluster Subspaces(V) -> non empty;
+coherence
+proof
+   consider x being strict Subspace of V;
+     x in Subspaces(V) by Def3;
+   hence thesis;
+end;
+end;
+
+theorem
+   for V being strict RealUnitarySpace holds
+ V in Subspaces(V)
+proof
+   let V be strict RealUnitarySpace;
+     (Omega).V in Subspaces(V) by Def3;
+   hence thesis by RUSUB_1:def 3;
+end;
+
+begin ::  Definition of the direct sum and linear complement of subspace
+
+definition
+let V be RealUnitarySpace;
+let W1,W2 be Subspace of V;
+ pred V is_the_direct_sum_of W1,W2 means
+  :Def4: the UNITSTR of V = W1 + W2 & W1 /\ W2 = (0).V;
+end;
+
+Lm12:
+for V being RealUnitarySpace, W being strict Subspace of V st
+ (for v being VECTOR of V holds v in W) holds W = the UNITSTR of V
+proof
+   let V be RealUnitarySpace, W be strict Subspace of V;
+   assume
+A1:for v being VECTOR of V holds v in W;
+     now let v be VECTOR of V;
+     thus v in W implies v in (Omega).V
+     proof
+       assume v in W;
+         v in the UNITSTR of V by RLVECT_1:3;
+       hence v in (Omega).V by RUSUB_1:def 3;
+     end;
+     assume v in (Omega).V;
+     thus v in W by A1;
+   end;
+   then W = (Omega).V by RUSUB_1:25;
+   hence thesis by RUSUB_1:def 3;
+end;
+
+Lm13:
+for V being RealUnitarySpace, W1,W2 being Subspace of V holds
+ W1 + W2 = the UNITSTR of V iff
+  for v being VECTOR of V
+   ex v1,v2 being VECTOR of V st v1 in W1 & v2 in W2 & v = v1 + v2
+proof
+   let V be RealUnitarySpace, W1,W2 be Subspace of V;
+   thus W1 + W2 = the UNITSTR of V implies
+    for v being VECTOR of V
+     ex v1,v2 being VECTOR of V st v1 in W1 & v2 in W2 & v = v1 + v2
+   proof
+     assume
+A1:  W1 + W2 = the UNITSTR of V;
+     let v be VECTOR of V;
+       v in the UNITSTR of V by RLVECT_1:3;
+     hence thesis by A1,Th1;
+   end;
+   assume
+A2:for v being VECTOR of V
+    ex v1,v2 being VECTOR of V st v1 in W1 & v2 in W2 & v = v1 + v2;
+     now
+     let u be VECTOR of V;
+       ex v1,v2 being VECTOR of V st v1 in W1 & v2 in W2 & u = v1 + v2 by A2;
+     hence u in W1 + W2 by Th1;
+   end;
+   hence thesis by Lm12;
+end;
+
+Lm14:
+for V being RealUnitarySpace, W being Subspace of V
+ ex C being strict Subspace of V st V is_the_direct_sum_of C,W
+proof
+   let V be RealUnitarySpace;
+   let W be Subspace of V;
+   defpred P[set] means
+      ex W1 being strict Subspace of V st $1 = W1 & W /\ W1 = (0).V;
+   consider X being set such that
+A1:for x being set holds x in X iff (x in Subspaces(V) & P[x])
+     from Separation;
+     W /\ (0).V = (0).V & (0).V in Subspaces(V) by Def3,Th18;
+   then reconsider X as non empty set by A1;
+A2:now
+     let x be Element of X;
+       x in Subspaces(V) by A1;
+     hence x is strict Subspace of V by Def3;
+   end;
+   defpred P[set,set] means
+     ex W1,W2 being strict Subspace of V st
+     $1 = W1 & $2 = W2 & W1 is Subspace of W2;
+   consider R being Relation of X such that
+A3:for x,y being Element of X holds [x,y] in R iff P[x,y]  from Rel_On_Dom_Ex;
+   defpred Q[set,set] means [$1,$2] in R;
+A4:now
+     let x be Element of X;
+     reconsider W = x as strict Subspace of V by A2;
+       W is Subspace of W by RUSUB_1:19;
+     hence Q[x,x] by A3;
+   end;
+A5:now
+     let x,y be Element of X;
+     assume that
+A6:  Q[x,y] and
+A7:  Q[y,x];
+A8:  ex W1,W2 being strict Subspace of V st
+     x = W1 & y = W2 & W1 is Subspace of W2 by A3,A6;
+       ex W3,W4 being strict Subspace of V st
+     y = W3 & x = W4 & W3 is Subspace of W4 by A3,A7;
+     hence x = y by A8,RUSUB_1:20;
+   end;
+A9:now
+     let x,y,z be Element of X;
+     assume that
+A10: Q[x,y] and
+A11: Q[y,z];
+     consider W1,W2 being strict Subspace of V such that
+A12: x = W1 & y = W2 & W1 is Subspace of W2 by A3,A10;
+     consider W3,W4 being strict Subspace of V such that
+A13: y = W3 & z = W4 & W3 is Subspace of W4 by A3,A11;
+       W1 is strict Subspace of W4 by A12,A13,RUSUB_1:21;
+     hence Q[x,z] by A3,A12,A13;
+   end;
+A14:for Y being set st Y c= X &
+    (for x,y being Element of X st x in Y & y in Y holds
+       Q[x,y] or Q[y,x])
+    ex y being Element of X st
+    for x being Element of X st x in Y holds Q[x,y]
+   proof
+     let Y be set;
+     assume that
+A15: Y c= X and
+A16: for x,y being Element of X st x in Y & y in Y holds
+       [x,y] in R or [y,x] in R;
+       now per cases;
+       suppose
+A17:   Y = {};
+       consider y being Element of X;
+       take y' = y;
+       let x be Element of X;
+       assume x in Y;
+       hence [x,y'] in R by A17;
+
+       suppose
+A18:   Y <> {};
+       defpred P[set,set] means
+         ex W1 being strict Subspace of V st $1 = W1 & $2 = the carrier of W1;
+A19:   for x,y1,y2 being set st x in Y & P[x,y1] & P[x,y2]
+           holds y1 = y2;
+A20:   for x being set st x in Y ex y be set st P[x,y]
+       proof
+         let x be set;
+         assume x in Y;
+         then consider W1 being strict Subspace of V such that
+A21:     x = W1 and W /\ W1 = (0).V by A1,A15;
+         reconsider y = the carrier of W1 as set;
+         take y;
+         take W1;
+         thus thesis by A21;
+       end;
+       consider f being Function such that
+A22:   dom f = Y and
+A23:   for x being set st x in Y holds P[x,f.x] from FuncEx(A19,A20);
+       set Z = union(rng f);
+         now
+         let x be set;
+         assume x in Z;
+         then consider Y' being set such that
+A24:     x in Y' and
+A25:     Y' in rng f by TARSKI:def 4;
+         consider y being set such that
+A26:     y in dom f and
+A27:     f.y = Y' by A25,FUNCT_1:def 5;
+         consider W1 being strict Subspace of V such that y = W1 and
+A28:     f.y = the carrier of W1 by A22,A23,A26;
+           the carrier of W1 c= the carrier of V & x in the carrier of W1
+                                              by A24,A27,A28,RUSUB_1:def 1;
+         hence x in the carrier of V;
+       end;
+       then reconsider Z as Subset of V by TARSKI:def 3;
+A29:   rng f <> {} by A18,A22,RELAT_1:65;
+       consider z being Element of rng f;
+       consider z1 being set such that
+A30:   z1 in dom f and
+A31:   f.z1 = z by A29,FUNCT_1:def 5;
+       consider W3 being strict Subspace of V such that
+A32:   z1 = W3 & f.z1 = the carrier of W3 by A22,A23,A30;
+
+
+A33:   Z <> {} by A29,A31,A32,ORDERS_1:91;
+         Z is lineary-closed
+       proof
+A34:      for v1,v2 being VECTOR of V st
+           v1 in Z & v2 in Z holds v1 + v2 in Z
+         proof
+           let v1,v2 be VECTOR of V;
+           assume that
+A35:       v1 in Z and
+A36:       v2 in Z;
+           consider Y1 being set such that
+A37:       v1 in Y1 and
+A38:       Y1 in rng f by A35,TARSKI:def 4;
+           consider Y2 being set such that
+A39:       v2 in Y2 and
+A40:       Y2 in rng f by A36,TARSKI:def 4;
+           consider y1 being set such that
+A41:       y1 in dom f and
+A42:       f.y1 = Y1 by A38,FUNCT_1:def 5;
+           consider y2 being set such that
+A43:       y2 in dom f and
+A44:       f.y2 = Y2 by A40,FUNCT_1:def 5;
+           consider W1 being strict Subspace of V such that
+A45:       y1 = W1 and
+A46:       f.y1 = the carrier of W1 by A22,A23,A41;
+           consider W2 being strict Subspace of V such that
+A47:       y2 = W2 and
+A48:       f.y2 = the carrier of W2 by A22,A23,A43;
+           reconsider y1,y2 as Element of X by A15,A22,A41,A43;
+             now per cases by A16,A22,A41,A43;
+             suppose [y1,y2] in R;
+             then ex W3,W4 being strict Subspace of V
+               st y1 = W3 & y2 = W4 & W3 is Subspace of W4 by A3;
+             then the carrier of W1 c= the carrier of W2
+               by A45,A47,RUSUB_1:def 1;
+             then v1 in W2 & v2 in W2 by A37,A39,A42,A44,A46,A48,RLVECT_1:def 1
+;
+             then v1 + v2 in W2 by RUSUB_1:14;
+then A49:         v1 + v2 in the carrier of W2 by RLVECT_1:def 1;
+               f.y2 in rng f by A43,FUNCT_1:def 5;
+             hence v1 + v2 in Z by A48,A49,TARSKI:def 4;
+
+             suppose [y2,y1] in R;
+             then ex W3,W4 being strict Subspace of V
+               st y2 = W3 & y1 = W4 & W3 is Subspace of W4 by A3;
+             then the carrier of W2 c= the carrier of W1
+               by A45,A47,RUSUB_1:def 1;
+             then v1 in W1 & v2 in W1 by A37,A39,A42,A44,A46,A48,RLVECT_1:def 1
+;
+             then v1 + v2 in W1 by RUSUB_1:14;
+then A50:         v1 + v2 in the carrier of W1 by RLVECT_1:def 1;
+               f.y1 in rng f by A41,FUNCT_1:def 5;
+             hence v1 + v2 in Z by A46,A50,TARSKI:def 4;
+           end;
+           hence v1 + v2 in Z;
+         end;
+           for a being Real, v1 being VECTOR of V st v1 in Z holds a * v1 in Z
+         proof
+           let a be Real;
+           let v1 being VECTOR of V;
+           assume v1 in Z;
+           then consider Y1 being set such that A51: v1 in Y1 and
+A52:       Y1 in rng f by TARSKI:def 4;
+           consider y1 being set such that
+A53:       y1 in dom f and
+A54:       f.y1 = Y1 by A52,FUNCT_1:def 5;
+           consider W1 being strict Subspace of V such that
+             y1 = W1 and
+A55:       f.y1 = the carrier of W1 by A22,A23,A53;
+             v1 in W1 by A51,A54,A55,RLVECT_1:def 1;
+           then a * v1 in W1 by RUSUB_1:15;
+then A56:       a * v1 in the carrier of W1 by RLVECT_1:def 1;
+             f.y1 in rng f by A53,FUNCT_1:def 5;
+           hence a * v1 in Z by A55,A56,TARSKI:def 4;
+         end;
+         hence thesis by A34,RLSUB_1:def 1;
+       end;
+          then consider E being strict Subspace of V such that
+           A57: Z = the carrier of E by A33,RUSUB_1:29;
+             now let u be VECTOR of V;
+            thus u in W /\ E implies u in (0).V
+             proof assume A58: u in W /\ E;
+                then u in E by Th3;
+                then u in Z by A57,RLVECT_1:def 1;
+               then consider Y1 being set such that A59: u in Y1 and
+                A60: Y1 in rng f by TARSKI:def 4;
+               consider y1 being set such that A61: y1 in dom f and
+                                     A62: f.y1 = Y1 by A60,FUNCT_1:def 5;
+               consider W1 being strict Subspace of V such that
+                A63: y1 = W1 and
+                A64: f.y1 = the carrier of W1 by A22,A23,A61;
+A65:                u in W1 & u in W by A58,A59,A62,A64,Th3,RLVECT_1:def 1;
+
+                  ex W2 being strict Subspace of V st
+ y1 = W2 & W /\ W2 = (0).V by A1,A15,A22,A61;
+              hence u in (0).V by A63,A65,Th3;
+             end;
+             assume u in (0).V;
+              then u in the carrier of (0).V by RLVECT_1:def 1;
+              then u in {0.V} by RUSUB_1:def 2;
+              then u = 0.V by TARSKI:def 1;
+            hence u in W /\ E by RUSUB_1:11;
+           end;
+           then A66: W /\ E = (0).V by RUSUB_1:25;
+             E in Subspaces(V) by Def3;
+          then reconsider y' = E as Element of X by A1,A66;
+        take y = y';
+        let x be Element of X;
+         assume A67: x in Y;
+          then consider W1 being strict Subspace of V such that
+           A68: x = W1 and
+           A69: f.x = the carrier of W1 by A23;
+             now let u be VECTOR of V;
+             assume u in W1;
+              then A70: u in the carrier of W1 by RLVECT_1:def 1;
+                the carrier of W1 in rng f by A22,A67,A69,FUNCT_1:def 5;
+              then u in Z by A70,TARSKI:def 4;
+            hence u in E by A57,RLVECT_1:def 1;
+           end;
+           then W1 is strict Subspace of E by RUSUB_1:23;
+        hence [x,y] in R by A3,A68;
+       end;
+      hence thesis;
+     end;
+  consider x being Element of X such that
+   A71: for y being Element of X st x <> y holds not Q[x,y]
+                                                from Zorn_Max(A4,A5,A9,A14);
+  consider L being strict Subspace of V such that A72: x = L and
+   A73: W /\ L = (0).V by A1;
+ take L;
+ thus the UNITSTR of V = L + W
+  proof assume not thesis;
+    then consider v being VECTOR of V such that
+     A74: for v1,v2 being VECTOR of V holds
+      not v1 in L or not v2 in W or v <> v1 + v2 by Lm13;
+     A75: not v in L + W by A74,Th1;
+    set A = {a * v where a is Real : not contradiction};
+    A76: 1 * v in A;
+       now let x be set;
+       assume x in A;
+        then ex a being Real st x = a * v;
+      hence x in the carrier of V;
+     end;
+    then reconsider A as Subset of V by TARSKI:def 3;
+       A is lineary-closed
+     proof
+A77:    for v1,v2 being VECTOR of V st
+         v1 in A & v2 in A holds v1 + v2 in A
+       proof
+         let v1,v2 be VECTOR of V;
+         assume v1 in A;
+         then consider a1 being Real such that A78: v1 = a1 * v;
+         assume v2 in A;
+         then consider a2 being Real such that A79: v2 = a2 * v;
+           v1 + v2 = (a1 + a2) * v by A78,A79,RLVECT_1:def 9;
+         hence v1 + v2 in A;
+       end;
+         for a being Real, v1 being VECTOR of V st
+         v1 in A holds a * v1 in A
+       proof
+         let a be Real; let v1 be VECTOR of V;
+         assume v1 in A;
+         then consider a1 being Real such that A80: v1 = a1 * v;
+           a * v1 = (a * a1) * v by A80,RLVECT_1:def 9;
+         hence thesis;
+       end;
+       hence thesis by A77,RLSUB_1:def 1;
+     end;
+    then consider Z being strict Subspace of V such that
+    A81: the carrier of Z = A by A76,RUSUB_1:29;
+       now let u be VECTOR of V;
+      thus u in Z /\ (W + L) implies u in (0).V
+       proof assume A82: u in Z /\ (W + L);
+          then u in Z by Th3;
+          then u in A by A81,RLVECT_1:def 1;
+         then consider a be Real such that A83: u = a * v;
+            now assume A84: a <> 0;
+              u in W + L by A82,Th3;
+            then a" * (a * v) in W + L by A83,RUSUB_1:15;
+            then (a" * a) * v in W + L by RLVECT_1:def 9;
+            then 1 * v in W + L by A84,XCMPLX_0:def 7;
+            then 1 * v in L + W by Lm1;
+           hence contradiction by A75,RLVECT_1:def 9;
+          end;
+         then u = 0.V by A83,RLVECT_1:23;
+        hence thesis by RUSUB_1:11;
+       end;
+       assume u in (0).V;
+        then u in the carrier of (0).V by RLVECT_1:def 1;
+        then u in {0.V} by RUSUB_1:def 2;
+        then u = 0.V by TARSKI:def 1;
+      hence u in Z /\ (W + L) by RUSUB_1:11;
+     end;
+     then A85: Z /\ (W + L) = (0).V by RUSUB_1:25;
+       now let u be VECTOR of V;
+      thus u in (Z + L) /\ W implies u in (0).V
+       proof assume A86: u in (Z + L) /\ W;
+          then u in Z + L by Th3;
+         then consider v1,v2 being VECTOR of V such that
+         A87: v1 in Z and A88: v2 in L and
+                                       A89: u = v1 + v2 by Th1;
+          A90: v1 = u - v2 by A89,RLSUB_2:78;
+          A91: u in W by A86,Th3;
+          then u in W + L & v2 in W + L by A88,Th2;
+          then v1 in W + L by A90,RUSUB_1:17;
+          then v1 in Z /\ (W + L) by A87,Th3;
+          then v1 in the carrier of (0).V by A85,RLVECT_1:def 1;
+          then v1 in {0.V} by RUSUB_1:def 2;
+          then v1 = 0.V by TARSKI:def 1;
+          then v2 = u by A89,RLVECT_1:10;
+        hence u in (0).V by A73,A88,A91,Th3;
+       end;
+       assume u in (0).V;
+        then u in the carrier of (0).V by RLVECT_1:def 1;
+        then u in {0.V} by RUSUB_1:def 2;
+        then u = 0.V by TARSKI:def 1;
+      hence u in (Z + L) /\ W by RUSUB_1:11;
+     end;
+     then (Z + L) /\ W = (0).V by RUSUB_1:25;
+     then W /\ (Z + L) = (0).V & (Z + L) in Subspaces(V) by Def3,Th14;
+    then reconsider x1 = Z + L as Element of X by A1;
+       v = 0.V + v & v = v + 0.V & 0.V in W & 0.V in L by RLVECT_1:10,RUSUB_1:
+11
+;
+     then A92: not v in L by A74;
+       v in A by A76,RLVECT_1:def 9;
+     then v in Z by A81,RLVECT_1:def 1;
+     then A93: Z + L <> L by A92,Th2;
+       L is Subspace of Z + L by Th7;
+     then [x,x1] in R by A3,A72;
+   hence contradiction by A71,A72,A93;
+  end;
+ thus L /\ W = (0).V by A73,Th14;
+end;
+
+definition
+let V be RealUnitarySpace; let W be Subspace of V;
+mode Linear_Compl of W -> Subspace of V means
+:Def5:
+  V is_the_direct_sum_of it,W;
+existence
+proof
+     ex C being strict Subspace of V st V is_the_direct_sum_of C,W by Lm14;
+   hence thesis;
+end;
+end;
+
+definition
+let V be RealUnitarySpace; let W be Subspace of V;
+cluster strict Linear_Compl of W;
+existence
+proof
+   consider C being strict Subspace of V such that
+A1:V is_the_direct_sum_of C,W by Lm14;
+     C is Linear_Compl of W by A1,Def5;
+   hence thesis;
+end;
+end;
+
+Lm15:
+for V being RealUnitarySpace, W1,W2 being Subspace of V st
+ V is_the_direct_sum_of W1,W2 holds V is_the_direct_sum_of W2,W1
+proof
+   let V be RealUnitarySpace;
+   let W1,W2 be Subspace of V;
+   assume V is_the_direct_sum_of W1,W2;
+   then the UNITSTR of V = W1 + W2 & W1 /\ W2 = (0).V by Def4;
+   then the UNITSTR of V = W2 + W1 & W2 /\ W1 = (0).V by Lm1,Th14;
+   hence thesis by Def4;
+end;
+
+theorem
+  for V being RealUnitarySpace, W1,W2 being Subspace of V holds
+ V is_the_direct_sum_of W1,W2 implies W2 is Linear_Compl of W1
+proof
+   let V be RealUnitarySpace, W1,W2 be Subspace of V;
+   assume V is_the_direct_sum_of W1,W2;
+   then V is_the_direct_sum_of W2,W1 &
+    the UNITSTR of V = W1 + W2 by Def4,Lm15;
+   hence thesis by Def5;
+end;
+
+theorem Th35:
+for V being RealUnitarySpace, W being Subspace of V,
+ L being Linear_Compl of W holds
+  V is_the_direct_sum_of L,W & V is_the_direct_sum_of W,L
+proof
+   let V be RealUnitarySpace, W be Subspace of V,
+       L be Linear_Compl of W;
+   thus V is_the_direct_sum_of L,W by Def5;
+   hence thesis by Lm15;
+end;
+
+begin
+:: Theorems concerning the direct sum, linear complement
+:: and coset of a subspace
+
+theorem Th36:
+for V being RealUnitarySpace, W being Subspace of V,
+ L being Linear_Compl of W holds
+  W + L = the UNITSTR of V & L + W = the UNITSTR of V
+proof
+   let V be RealUnitarySpace, W be Subspace of V,
+       L be Linear_Compl of W;
+     V is_the_direct_sum_of W,L by Th35;
+   hence W + L = the UNITSTR of V by Def4;
+   hence thesis by Lm1;
+end;
+
+theorem Th37:
+for V being RealUnitarySpace, W being Subspace of V,
+ L being Linear_Compl of W holds
+  W /\ L = (0).V & L /\ W = (0).V
+proof
+   let V be RealUnitarySpace, W be Subspace of V,
+       L be Linear_Compl of W;
+     V is_the_direct_sum_of W,L by Th35;
+   hence W /\ L = (0).V by Def4;
+   hence thesis by Th14;
+end;
+
+theorem
+  for V being RealUnitarySpace, W1,W2 being Subspace of V st
+ V is_the_direct_sum_of W1,W2 holds V is_the_direct_sum_of W2,W1 by Lm15;
+
+theorem Th39:
+for V being RealUnitarySpace holds
+ V is_the_direct_sum_of (0).V,(Omega).V &
+  V is_the_direct_sum_of (Omega).V,(0).V
+proof
+   let V be RealUnitarySpace;
+     (0).V + (Omega).V = the UNITSTR of V & (0).V = (0).V /\ (Omega).V
+       by Th10,Th18;
+   hence V is_the_direct_sum_of (0).V,(Omega).V by Def4;
+   hence thesis by Lm15;
+end;
+
+theorem
+  for V being RealUnitarySpace, W being Subspace of V,
+ L being Linear_Compl of W holds W is Linear_Compl of L
+proof
+   let V be RealUnitarySpace, W be Subspace of V,
+       L be Linear_Compl of W;
+     V is_the_direct_sum_of L,W by Def5;
+   then V is_the_direct_sum_of W,L by Lm15;
+   hence thesis by Def5;
+end;
+
+theorem
+  for V being RealUnitarySpace holds
+ (0).V is Linear_Compl of (Omega).V & (Omega).V is Linear_Compl of (0).V
+proof
+   let V be RealUnitarySpace;
+     V is_the_direct_sum_of (0).V,(Omega).V &
+   V is_the_direct_sum_of (Omega).V,(0).V by Th39;
+   hence thesis by Def5;
+end;
+
+Lm16:
+for V being RealUnitarySpace, W being Subspace of V,
+ v being VECTOR of V, x being set holds
+  x in v + W iff ex u being VECTOR of V st u in W & x = v + u
+proof
+   let V be RealUnitarySpace;
+   let W be Subspace of V;
+   let v be VECTOR of V;
+   let x be set;
+   thus x in v + W implies ex u being VECTOR of V st u in W & x = v + u
+   proof
+     assume x in v + W;
+     then x in {v + u where u is VECTOR of V : u in W} by RUSUB_1:def 4;
+     then consider u being VECTOR of V such that
+A1:  x = v + u & u in W;
+     take u;
+     thus thesis by A1;
+   end;
+   given u be VECTOR of V such that
+A2:u in W & x = v + u;
+     x in {v + v1 where v1 is VECTOR of V : v1 in W} by A2;
+   hence thesis by RUSUB_1:def 4;
+end;
+
+theorem Th42:
+for V being RealUnitarySpace, W1,W2 being Subspace of V,
+ C1 being Coset of W1, C2 being Coset of W2 st
+  C1 meets C2 holds C1 /\ C2 is Coset of W1 /\ W2
+proof
+   let V be RealUnitarySpace;
+   let W1,W2 be Subspace of V;
+   let C1 be Coset of W1;
+   let C2 be Coset of W2;
+   assume
+A1:C1 /\ C2 <> {};
+   consider v being Element of C1 /\ C2;
+   reconsider v as Element of V by A1,TARSKI:def 3;
+
+   set C = C1 /\ C2;
+     v in C1 by A1,XBOOLE_0:def 3;
+then A2:C1 = v + W1 by RUSUB_1:72;
+     v in C2 by A1,XBOOLE_0:def 3;
+then A3:C2 = v + W2 by RUSUB_1:72;
+   reconsider v as VECTOR of V;
+     C is Coset of W1 /\ W2
+   proof
+A4:  C c= v + W1 /\ W2
+     proof
+       let x be set;
+       assume
+A5:    x in C;
+       then x in C1 by XBOOLE_0:def 3;
+       then consider u1 being VECTOR of V such that
+A6:    u1 in W1 and
+A7:    x = v + u1 by A2,Lm16;
+         x in C2 by A5,XBOOLE_0:def 3;
+       then consider u2 being VECTOR of V such that
+A8:    u2 in W2 and
+A9:    x = v + u2 by A3,Lm16;
+         u1 = u2 by A7,A9,RLVECT_1:21;
+       then u1 in W1 /\ W2 by A6,A8,Th3;
+       then x in {v + u where u is VECTOR of V : u in W1 /\ W2} by A7;
+       hence thesis by RUSUB_1:def 4;
+     end;
+       v + W1 /\ W2 c= C
+     proof
+       let x be set;
+       assume x in v + (W1 /\ W2);
+       then consider u being VECTOR of V such that
+A10:    u in W1 /\ W2 and
+A11:   x = v + u by Lm16;
+         u in W1 & u in W2 by A10,Th3;
+       then x in {v + u1 where u1 is VECTOR of V: u1 in W1} &
+       x in {v + u2 where u2 is VECTOR of V: u2 in W2} by A11;
+       then x in C1 & x in C2 by A2,A3,RUSUB_1:def 4;
+       hence thesis by XBOOLE_0:def 3;
+     end;
+     then C = v + W1 /\ W2 by A4,XBOOLE_0:def 10;
+     hence thesis by RUSUB_1:def 5;
+   end;
+   hence thesis;
+end;
+
+Lm17:
+for V being RealUnitarySpace, W being Subspace of V,
+ v being VECTOR of V holds ex C being Coset of W st v in C
+proof
+   let V be RealUnitarySpace;
+   let W be Subspace of V;
+   let v be VECTOR of V;
+   reconsider C = v + W as Coset of W by RUSUB_1:def 5;
+   take C;
+   thus thesis by RUSUB_1:37;
+end;
+
+theorem Th43:
+for V being RealUnitarySpace, W1,W2 being Subspace of V holds
+ V is_the_direct_sum_of W1,W2 iff
+  for C1 being Coset of W1, C2 being Coset of W2
+   ex v being VECTOR of V st C1 /\ C2 = {v}
+proof
+   let V be RealUnitarySpace, W1,W2 be Subspace of V;
+   set VW1 = the carrier of W1; set VW2 = the carrier of W2;
+A1:VW1 is Coset of W1 & VW2 is Coset of W2 by RUSUB_1:68;
+   thus V is_the_direct_sum_of W1,W2 implies
+    for C1 being Coset of W1, C2 being Coset of W2
+     ex v being VECTOR of V st C1 /\ C2 = {v}
+   proof
+     assume
+A2:  V is_the_direct_sum_of W1,W2;
+     let C1 be Coset of W1, C2 be Coset of W2;
+     consider v1 being VECTOR of V such that
+A3:  C1 = v1 + W1 by RUSUB_1:def 5;
+     consider v2 being VECTOR of V such that
+A4:  C2 = v2 + W2 by RUSUB_1:def 5;
+A5:  the UNITSTR of V = W1 + W2 by A2,Def4;
+       v1 in the UNITSTR of V by RLVECT_1:3;
+     then consider v11,v12 being VECTOR of V such that
+A6:  v11 in W1 and
+A7:  v12 in W2 and
+A8:  v1 = v11 + v12 by A5,Th1;
+       v2 in the UNITSTR of V by RLVECT_1:3;
+     then consider v21,v22 being VECTOR of V such that
+A9:  v21 in W1 and
+A10: v22 in W2 and
+A11: v2 = v21 + v22 by A5,Th1;
+     take v = v12 + v21;
+       {v} = C1 /\ C2
+     proof
+       thus A12: {v} c= C1 /\ C2
+       proof
+         let x be set;
+         assume x in {v};
+then A13:     x = v by TARSKI:def 1;
+           v12 = v1 - v11 by A8,RLSUB_2:78;
+         then v12 in C1 by A3,A6,RUSUB_1:58;
+         then C1 = v12 + W1 by RUSUB_1:72;
+then A14:     x in C1 by A9,A13,RUSUB_1:57;
+           v21 = v2 - v22 by A11,RLSUB_2:78;
+         then v21 in C2 by A4,A10,RUSUB_1:58;
+         then C2 = v21 + W2 & v = v21 + v12 by RUSUB_1:72;
+         then x in C2 by A7,A13,RUSUB_1:57;
+         hence thesis by A14,XBOOLE_0:def 3;
+       end;
+       let x be set;
+       assume
+A15:   x in C1 /\ C2;
+       then C1 meets C2 by XBOOLE_0:4;
+       then reconsider C = C1 /\ C2 as Coset of W1 /\ W2 by Th42;
+         W1 /\ W2 = (0).V by A2,Def4;
+then A16:   ex u being VECTOR of V st C = {u} by RUSUB_1:67;
+         v in {v} by TARSKI:def 1;
+       hence thesis by A12,A15,A16,TARSKI:def 1;
+       thus thesis;
+     end;
+     hence C1 /\ C2 = {v};
+   end;
+   assume
+A17:for C1 being Coset of W1, C2 being Coset of W2
+     ex v being VECTOR of V st C1 /\ C2 = {v};
+     now
+     let u be VECTOR of V;
+     consider C1 being Coset of W1 such that
+A18: u in C1 by Lm17;
+     consider v being VECTOR of V such that
+A19: C1 /\ VW2 = {v} by A1,A17;
+A20: v in {v} by TARSKI:def 1;
+     then v in VW2 by A19,XBOOLE_0:def 3;
+then A21: v in W2 by RLVECT_1:def 1;
+       v in C1 by A19,A20,XBOOLE_0:def 3;
+     then consider v1 being VECTOR of V such that
+A22: v1 in W1 and
+A23: u - v1 = v by A18,RUSUB_1:74;
+       u = v1 + v by A23,RLSUB_2:78;
+     hence u in W1 + W2 by A21,A22,Th1;
+   end;
+   hence the UNITSTR of V = W1 + W2 by Lm12;
+   consider v being VECTOR of V such that
+A24:VW1 /\ VW2 = {v} by A1,A17;
+     0.V in W1 & 0.V in W2 by RUSUB_1:11;
+   then 0.V in VW1 & 0.V in VW2 by RLVECT_1:def 1;
+then A25:0.V in {v} by A24,XBOOLE_0:def 3;
+     the carrier of (0).V = {0.V} by RUSUB_1:def 2
+                       .= VW1 /\ VW2 by A24,A25,TARSKI:def 1
+                       .= the carrier of W1 /\ W2 by Def2;
+   hence thesis by RUSUB_1:24;
+end;
+
+begin :: Decomposition of a vector of real unitary space
+
+theorem
+  for V being RealUnitarySpace, W1,W2 being Subspace of V holds
+ W1 + W2 = the UNITSTR of V iff
+  for v being VECTOR of V
+   ex v1,v2 being VECTOR of V st v1 in W1 & v2 in W2 & v = v1 + v2 by Lm13;
+
+theorem Th45:
+for V being RealUnitarySpace, W1,W2 being Subspace of V,
+ v,v1,v2,u1,u2 being VECTOR of V st
+  V is_the_direct_sum_of W1,W2 & v = v1 + v2 &
+   v = u1 + u2 & v1 in W1 & u1 in W1 & v2 in W2 & u2 in W2 holds
+    v1 = u1 & v2 = u2
+proof
+   let V be RealUnitarySpace;
+   let W1,W2 be Subspace of V;
+   let v,v1,v2,u1,u2 be VECTOR of V;
+   assume
+A1:V is_the_direct_sum_of W1,W2;
+   assume that
+A2:v = v1 + v2 & v = u1 + u2 and
+A3:v1 in W1 & u1 in W1 and
+A4:v2 in W2 & u2 in W2;
+   reconsider C2 = v1 + W2 as Coset of W2 by RUSUB_1:def 5;
+   reconsider C1 = the carrier of W1 as Coset of W1 by RUSUB_1:68;
+A5:u1 = (v1 + v2) - u2 by A2,RLSUB_2:78
+     .= v1 + (v2 - u2) by RLVECT_1:42;
+     v2 - u2 in W2 by A4,RUSUB_1:17;
+   then v1 in C1 & v1 in C2 & u1 in C1 & u1 in C2
+         by A3,A5,Lm16,RLVECT_1:def 1,RUSUB_1:37;
+then A6:v1 in C1 /\ C2 & u1 in C1 /\ C2 by XBOOLE_0:def 3;
+   consider u being VECTOR of V such that
+A7:C1 /\ C2 = {u} by A1,Th43;
+A8:v1 = u & u1 = u by A6,A7,TARSKI:def 1;
+   hence v1 = u1;
+   thus v2 = u2 by A2,A8,RLVECT_1:21;
+end;
+
+theorem
+  for V being RealUnitarySpace, W1,W2 being Subspace of V st
+ V = W1 + W2 &
+  (ex v being VECTOR of V st
+   for v1,v2,u1,u2 being VECTOR of V st
+    v = v1 + v2 & v = u1 + u2 & v1 in W1 & u1 in W1 & v2 in W2 & u2 in W2 holds
+     v1 = u1 & v2 = u2) holds V is_the_direct_sum_of W1,W2
+proof
+   let V be RealUnitarySpace;
+   let W1,W2 be Subspace of V;
+   assume
+A1:V = W1 + W2;
+   given v be VECTOR of V such that
+A2:for v1,v2,u1,u2 being VECTOR of V st v = v1 + v2 & v = u1 + u2 &
+   v1 in W1 & u1 in W1 & v2 in W2 & u2 in W2 holds v1 = u1 & v2 = u2;
+A3:the carrier of (0).V = {0.V} by RUSUB_1:def 2;
+   assume not thesis;
+   then W1 /\ W2 <> (0).V by A1,Def4;
+   then the carrier of W1 /\ W2 <> the carrier of (0).V &
+   (0).V is Subspace of W1 /\ W2 by RUSUB_1:24,33;
+   then the carrier of W1 /\ W2 <> {0.V} & {0.V} c= the carrier of W1 /\ W2
+       by A3,RUSUB_1:def 1;
+   then {0.V} c< the carrier of W1 /\ W2 by XBOOLE_0:def 8;
+   then consider x being set such that
+A4:x in the carrier of W1 /\ W2 and
+A5:not x in {0.V} by RLSUB_2:77;
+A6:x in W1 /\ W2 by A4,RLVECT_1:def 1;
+then A7:x in W1 & x in W2 by Th3;
+A8:x <> 0.V by A5,TARSKI:def 1;
+     x in V by A6,RUSUB_1:2;
+   then reconsider u = x as VECTOR of V by RLVECT_1:def 1;
+   consider v1,v2 being VECTOR of V such that
+A9:v1 in W1 & v2 in W2 and
+A10:v = v1 + v2 by A1,Lm13;
+A11:v = v1 + v2 + 0.V by A10,RLVECT_1:10
+     .= (v1 + v2) + (u - u) by RLVECT_1:28
+     .= ((v1 + v2) + u) - u by RLVECT_1:42
+     .= ((v1 + u) + v2) - u by RLVECT_1:def 6
+     .= (v1 + u) + (v2 - u) by RLVECT_1:42;
+     v1 + u in W1 & v2 - u in W2 by A7,A9,RUSUB_1:14,17;
+   then v2 - u = v2 by A2,A9,A10,A11
+         .= v2 - 0.V by RLVECT_1:26;
+   hence thesis by A8,RLVECT_1:37;
+end;
+
+definition
+let V be RealUnitarySpace; let v be VECTOR of V;
+let W1,W2 be Subspace of V;
+assume A1: V is_the_direct_sum_of W1,W2;
+ func v |-- (W1,W2) -> Element of [:the carrier of V, the carrier of V:] means
+:Def6:
+   v = it`1 + it`2 & it`1 in W1 & it`2 in W2;
+existence
+proof
+     W1 + W2 = the UNITSTR of V by A1,Def4;
+   then consider v1,v2 being VECTOR of V such that
+A2:v1 in W1 & v2 in W2 & v = v1 + v2 by Lm13;
+   take [v1,v2];
+     [v1,v2]`1 = v1 & [v1,v2]`2 = v2 by MCART_1:7;
+   hence thesis by A2;
+end;
+
+uniqueness
+proof
+   let t1,t2 be Element of [:the carrier of V, the carrier of V:];
+   assume v = t1`1 + t1`2 & t1`1 in W1 & t1`2 in W2 &
+          v = t2`1 + t2`2 & t2`1 in W1 & t2`2 in W2;
+   then t1`1 = t2`1 & t1`2 = t2`2 & t1 = [t1`1,t1`2] & t2 = [t2`1,t2`2]
+                                                    by A1,Th45,MCART_1:23;
+   hence thesis;
+end;
+end;
+
+theorem Th47:
+for V being RealUnitarySpace, v being VECTOR of V,
+ W1,W2 being Subspace of V st V is_the_direct_sum_of W1,W2 holds
+  (v |-- (W1,W2))`1 = (v |-- (W2,W1))`2
+proof
+   let V be RealUnitarySpace;
+   let v be VECTOR of V;
+   let W1,W2 be Subspace of V;
+   assume
+A1:V is_the_direct_sum_of W1,W2;
+then A2:v = (v |-- (W1,W2))`1 + (v |-- (W1,W2))`2 & (v |-- (W1,W2))`1 in W1 &
+     (v |-- (W1,W2))`2 in W2 by Def6;
+A3:V is_the_direct_sum_of W2,W1 by A1,Lm15;
+then A4:v = (v |-- (W2,W1))`2 + (v |-- (W2,W1))`1 by Def6;
+     (v |-- (W2,W1))`1 in W2 & (v |-- (W2,W1))`2 in W1 by A3,Def6;
+   hence thesis by A1,A2,A4,Th45;
+end;
+
+theorem Th48:
+for V being RealUnitarySpace, v being VECTOR of V, W1,W2 being Subspace of V st
+ V is_the_direct_sum_of W1,W2 holds (v |-- (W1,W2))`2 = (v |-- (W2,W1))`1
+proof
+   let V be RealUnitarySpace;
+   let v be VECTOR of V;
+   let W1,W2 be Subspace of V;
+   assume
+A1:V is_the_direct_sum_of W1,W2;
+then A2:v = (v |-- (W1,W2))`1 + (v |-- (W1,W2))`2 & (v |-- (W1,W2))`1 in W1 &
+     (v |-- (W1,W2))`2 in W2 by Def6;
+A3:V is_the_direct_sum_of W2,W1 by A1,Lm15;
+then A4:v = (v |-- (W2,W1))`2 + (v |-- (W2,W1))`1 by Def6;
+     (v |-- (W2,W1))`1 in W2 & (v |-- (W2,W1))`2 in W1 by A3,Def6;
+   hence thesis by A1,A2,A4,Th45;
+end;
+
+theorem
+  for V being RealUnitarySpace, W being Subspace of V,
+    L being Linear_Compl of W, v being VECTOR of V,
+    t being Element of [:the carrier of V, the carrier of V:] st
+ t`1 + t`2 = v & t`1 in W & t`2 in L holds t = v |-- (W,L)
+proof
+   let V be RealUnitarySpace, W be Subspace of V,
+       L be Linear_Compl of W;
+     V is_the_direct_sum_of W,L by Th35;
+   hence thesis by Def6;
+end;
+
+theorem
+  for V being RealUnitarySpace, W being Subspace of V,
+    L being Linear_Compl of W, v being VECTOR of V holds
+ (v |-- (W,L))`1 + (v |-- (W,L))`2 = v
+proof
+   let V be RealUnitarySpace, W be Subspace of V,
+       L be Linear_Compl of W;
+     V is_the_direct_sum_of W,L by Th35;
+   hence thesis by Def6;
+end;
+
+theorem
+  for V being RealUnitarySpace, W being Subspace of V,
+    L being Linear_Compl of W, v being VECTOR of V holds
+ (v |-- (W,L))`1 in W & (v |-- (W,L))`2 in L
+proof
+   let V be RealUnitarySpace, W be Subspace of V,
+       L be Linear_Compl of W;
+     V is_the_direct_sum_of W,L by Th35;
+   hence thesis by Def6;
+end;
+
+theorem
+  for V being RealUnitarySpace, W being Subspace of V,
+    L being Linear_Compl of W, v being VECTOR of V holds
+ (v |-- (W,L))`1 = (v |-- (L,W))`2
+proof
+   let V be RealUnitarySpace, W be Subspace of V,
+       L be Linear_Compl of W;
+     V is_the_direct_sum_of W,L by Th35;
+   hence thesis by Th47;
+end;
+
+theorem
+  for V being RealUnitarySpace, W being Subspace of V,
+    L being Linear_Compl of W, v being VECTOR of V holds
+ (v |-- (W,L))`2 = (v |-- (L,W))`1
+proof
+   let V be RealUnitarySpace, W be Subspace of V,
+       L be Linear_Compl of W;
+     V is_the_direct_sum_of W,L by Th35;
+   hence thesis by Th48;
+end;
+
+begin :: Introduction of operations on set of subspaces
+
+ definition let V be RealUnitarySpace;
+func SubJoin(V) -> BinOp of Subspaces(V) means
+:Def7:
+  for A1,A2 being Element of Subspaces(V),
+      W1,W2 being Subspace of V st
+   A1 = W1 & A2 = W2 holds it.(A1,A2) = W1 + W2;
+existence
+proof
+  defpred
+  P[Element of Subspaces(V),Element of Subspaces(V),Element of Subspaces(V)]
+    means
+    for W1,W2 being Subspace of V st
+    $1 = W1 & $2 = W2 holds $3 = W1 + W2;
+A1:for A1,A2 being Element of Subspaces(V)
+     ex B being Element of Subspaces(V) st P[A1,A2,B]
+   proof
+     let A1,A2 be Element of Subspaces(V);
+     reconsider W1 = A1, W2 = A2 as Subspace of V by Def3;
+     reconsider C = W1 + W2 as Element of Subspaces(V) by Def3;
+     take C;
+     thus thesis;
+   end;
+   consider o being BinOp of Subspaces(V) such that
+A2:     for a,b being Element of Subspaces(V) holds P[a,b,o.(a,b)]
+      from  BinOpEx(A1);
+   thus thesis by A2;
+end;
+
+uniqueness
+proof
+   let o1,o2 be BinOp of Subspaces(V);
+   assume
+A3:for A1,A2 being Element of Subspaces(V),
+     W1,W2 being Subspace of V st A1 = W1 & A2 = W2 holds o1.(A1,A2) = W1 + W2;
+   assume
+A4:for A1,A2 being Element of Subspaces(V),
+     W1,W2 being Subspace of V st A1 = W1 & A2 = W2 holds o2.(A1,A2) = W1 + W2;
+     now
+     let x,y be set;
+     assume
+A5:  x in Subspaces(V) & y in Subspaces(V);
+     then reconsider A = x, B = y as Element of Subspaces(V);
+     reconsider W1 = x, W2 = y as Subspace of V by A5,Def3;
+       o1.(A,B) = W1 + W2 & o2.(A,B) = W1 + W2 by A3,A4;
+     then o1.(x,y) = o2.(x,y) & o1.[x,y] = o1.(x,y) & o2.[x,y] = o2.(x,y)
+         by BINOP_1:def 1;
+     hence o1.[x,y] = o2.[x,y];
+   end;
+   hence thesis by FUNCT_2:118;
+end;
+end;
+
+ definition let V be RealUnitarySpace;
+func SubMeet(V) -> BinOp of Subspaces(V) means
+:Def8:
+  for A1,A2 being Element of Subspaces(V),
+      W1,W2 being Subspace of V st
+    A1 = W1 & A2 = W2 holds it.(A1,A2) = W1 /\ W2;
+existence
+proof
+  defpred
+  P[Element of Subspaces(V),Element of Subspaces(V),Element of Subspaces(V)]
+    means
+    for W1,W2 being Subspace of V st
+    $1 = W1 & $2 = W2 holds $3 = W1 /\ W2;
+A1:for A1,A2 being Element of Subspaces(V)
+    ex B being Element of Subspaces(V) st P[A1,A2,B]
+   proof
+     let A1,A2 be Element of Subspaces(V);
+     reconsider W1 = A1, W2 = A2 as Subspace of V by Def3;
+     reconsider C = W1 /\ W2 as Element of Subspaces(V) by Def3;
+     take C;
+     thus thesis;
+   end;
+   consider o being BinOp of Subspaces(V) such that
+A2:     for a,b being Element of Subspaces(V) holds P[a,b,o.(a,b)]
+      from  BinOpEx(A1);
+   thus thesis by A2;
+end;
+
+uniqueness
+proof
+   let o1,o2 be BinOp of Subspaces(V);
+   assume
+A3:for A1,A2 being Element of Subspaces(V),
+       W1,W2 being Subspace of V st
+    A1 = W1 & A2 = W2 holds o1.(A1,A2) = W1 /\ W2;
+   assume
+A4:for A1,A2 being Element of Subspaces(V),
+       W1,W2 being Subspace of V st
+    A1 = W1 & A2 = W2 holds o2.(A1,A2) = W1 /\ W2;
+     now
+     let x,y be set;
+     assume
+A5:  x in Subspaces(V) & y in Subspaces(V);
+     then reconsider A = x, B = y as Element of Subspaces(V);
+     reconsider W1 = x, W2 = y as Subspace of V by A5,Def3;
+       o1.(A,B) = W1 /\ W2 & o2.(A,B) = W1 /\ W2 by A3,A4;
+     then o1.(x,y) = o2.(x,y) & o1.[x,y] = o1.(x,y) & o2.[x,y] = o2.(x,y)
+         by BINOP_1:def 1;
+     hence o1.[x,y] = o2.[x,y];
+   end;
+   hence thesis by FUNCT_2:118;
+end;
+end;
+
+begin :: Theorems of functions SubJoin, SubMeet
+
+theorem Th54:
+for V being RealUnitarySpace holds
+ LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #) is Lattice
+proof
+   let V be RealUnitarySpace;
+   set S = LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #);
+A1:for A,B being Element of S
+         holds A "\/" B = B "\/" A
+   proof
+     let A,B be Element of S;
+     reconsider W1 = A, W2 = B as Subspace of V by Def3;
+     thus A "\/" B = SubJoin(V).(A,B) by LATTICES:def 1
+                  .= W1 + W2 by Def7
+                  .= W2 + W1 by Lm1
+                  .= SubJoin(V).(B,A) by Def7
+                  .= B "\/" A by LATTICES:def 1;
+   end;
+A2:for A,B,C being Element of S
+        holds A "\/" (B "\/" C) = (A "\/" B) "\/" C
+   proof
+     let A,B,C be Element of S;
+     reconsider W1 = A, W2 = B, W3 = C as Subspace of V by Def3;
+     reconsider AB = W1 + W2, BC = W2 + W3 as
+           Element of S by Def3;
+     thus A "\/" (B "\/" C) = SubJoin(V).(A,B "\/" C) by LATTICES:def 1
+                        .= SubJoin(V).(A,SubJoin(V).(B,C)) by LATTICES:def 1
+                        .= SubJoin(V).(A,BC) by Def7
+                        .= W1 + (W2 + W3) by Def7
+                        .= (W1 + W2) + W3 by Th6
+                        .= SubJoin(V).(AB,C) by Def7
+                        .= SubJoin(V).(SubJoin(V).(A,B),C) by Def7
+                        .= SubJoin(V).(A "\/" B,C) by LATTICES:def 1
+                        .= (A "\/" B) "\/" C by LATTICES:def 1;
+   end;
+A3:for A,B being Element of S
+         holds (A "/\" B) "\/" B = B
+   proof
+     let A,B be Element of S;
+     reconsider W1 = A, W2 = B as strict Subspace of V by Def3;
+     reconsider AB = W1 /\ W2 as Element of S by Def3;
+     thus (A "/\" B) "\/" B = SubJoin(V).(A "/\" B,B) by LATTICES:def 1
+                        .= SubJoin(V).(SubMeet(V).(A,B),B) by LATTICES:def 2
+                        .= SubJoin(V).(AB,B) by Def8
+                        .= (W1 /\ W2) + W2 by Def7
+                        .= B by Th23;
+   end;
+A4:for A,B being Element of S
+         holds A "/\" B = B "/\" A
+   proof
+     let A,B be Element of S;
+     reconsider W1 = A, W2 = B as Subspace of V by Def3;
+     thus A "/\" B = SubMeet(V).(A,B) by LATTICES:def 2
+                 .= W1 /\ W2 by Def8
+                 .= W2 /\ W1 by Th14
+                 .= SubMeet(V).(B,A) by Def8
+                 .= B "/\" A by LATTICES:def 2;
+   end;
+A5:for A,B,C being Element of S
+         holds A "/\" (B "/\" C) = (A "/\" B) "/\" C
+   proof
+     let A,B,C be Element of S;
+     reconsider W1 = A, W2 = B, W3 = C as Subspace of V by Def3;
+     reconsider AB = W1 /\ W2, BC = W2 /\ W3 as
+              Element of S by Def3;
+     thus A "/\" (B "/\" C) = SubMeet(V).(A,B "/\" C) by LATTICES:def 2
+                        .= SubMeet(V).(A,SubMeet(V).(B,C)) by LATTICES:def 2
+                        .= SubMeet(V).(A,BC) by Def8
+                        .= W1 /\ (W2 /\ W3) by Def8
+                        .= (W1 /\ W2) /\ W3 by Th15
+                        .= SubMeet(V).(AB,C) by Def8
+                        .= SubMeet(V).(SubMeet(V).(A,B),C) by Def8
+                        .= SubMeet(V).(A "/\" B,C) by LATTICES:def 2
+                        .= (A "/\" B) "/\" C by LATTICES:def 2;
+   end;
+     for A,B being Element of S
+         holds A "/\" (A "\/" B) = A
+   proof
+     let A,B be Element of S;
+     reconsider W1 = A, W2 = B as strict Subspace of V by Def3;
+     reconsider AB = W1 + W2 as Element of S by Def3;
+     thus A "/\" (A "\/" B) = SubMeet(V).(A,A "\/" B) by LATTICES:def 2
+                        .= SubMeet(V).(A,SubJoin(V).(A,B)) by LATTICES:def 1
+                        .= SubMeet(V).(A,AB) by Def7
+                        .= W1 /\ (W1 + W2) by Def8
+                        .= A by Th24;
+   end;
+   then S is join-commutative join-associative meet-absorbing
+        meet-commutative meet-associative join-absorbing
+   by A1,A2,A3,A4,A5,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+   hence thesis by LATTICES:def 10;
+end;
+
+definition let V be RealUnitarySpace;
+  cluster LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #) -> Lattice-like;
+  coherence by Th54;
+end;
+
+theorem Th55:
+for V being RealUnitarySpace holds
+ LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #) is lower-bounded
+proof
+   let V be RealUnitarySpace;
+   set S = LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #);
+     ex C being Element of S st
+     for A being Element of S holds C "/\" A = C & A "/\" C = C
+   proof
+     reconsider C = (0).V as Element of S by Def3;
+     take C;
+     let A be Element of S;
+     reconsider W = A as Subspace of V by Def3;
+     thus C "/\" A = SubMeet(V).(C,A) by LATTICES:def 2
+                  .= (0).V /\ W by Def8
+                  .= C by Th18;
+     hence A "/\" C = C;
+   end;
+   hence thesis by LATTICES:def 13;
+end;
+
+theorem Th56:
+for V being RealUnitarySpace holds
+ LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #) is upper-bounded
+proof
+   let V be RealUnitarySpace;
+   set S = LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #);
+     ex C being Element of S st
+    for A being Element of S holds C "\/" A = C & A "\/" C = C
+   proof
+     reconsider C = (Omega).V as Element of S by Def3;
+     take C;
+     let A be Element of S;
+     reconsider W = A as Subspace of V by Def3;
+     thus C "\/" A = SubJoin(V).(C,A) by LATTICES:def 1
+                  .= (Omega).V + W by Def7
+                  .= the UNITSTR of V by Th11
+                  .= C by RUSUB_1:def 3;
+     hence A "\/" C = C;
+   end;
+   hence thesis by LATTICES:def 14;
+end;
+
+theorem Th57:
+for V being RealUnitarySpace holds
+ LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #) is 01_Lattice
+proof
+   let V be RealUnitarySpace;
+     LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #)
+    is lower-bounded upper-bounded Lattice by Th55,Th56;
+   hence thesis;
+end;
+
+theorem Th58:
+for V being RealUnitarySpace holds
+ LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #) is modular
+proof
+   let V be RealUnitarySpace;
+   set S = LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #);
+     for A,B,C being Element of S st A [= C
+    holds A "\/" (B "/\" C) = (A "\/" B) "/\" C
+   proof
+     let A,B,C be Element of S;
+     assume
+A1:  A [= C;
+     reconsider W1 = A, W2 = B, W3 = C as strict Subspace of V by Def3;
+     reconsider BC = W2 /\ W3 as Element of S by Def3;
+     reconsider AB = W1 + W2 as Element of S by Def3;
+       W1 + W3 = SubJoin(V).(A,C) by Def7
+            .= A "\/" C by LATTICES:def 1
+            .= W3 by A1,LATTICES:def 3;
+then A2:  W1 is Subspace of W3 by Th8;
+     thus A "\/" (B "/\" C) = SubJoin(V).(A,B "/\" C) by LATTICES:def 1
+                         .= SubJoin(V).(A,SubMeet(V).(B,C)) by LATTICES:def 2
+                         .= SubJoin(V).(A,BC) by Def8
+                         .= W1 + (W2 /\ W3) by Def7
+                         .= (W1 + W2) /\ W3 by A2,Th29
+                         .= SubMeet(V).(AB,C) by Def8
+                         .= SubMeet(V).(SubJoin(V).(A,B),C) by Def7
+                         .= SubMeet(V).(A "\/" B,C) by LATTICES:def 1
+                         .= (A "\/" B) "/\" C by LATTICES:def 2;
+   end;
+   hence thesis by LATTICES:def 12;
+end;
+
+theorem Th59:
+for V being RealUnitarySpace holds
+ LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #) is complemented
+proof
+   let V be RealUnitarySpace;
+   reconsider S = LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #) as
+     01_Lattice by Th57;
+   reconsider S0 = S as 0_Lattice;
+   reconsider S1 = S as 1_Lattice;
+   reconsider Z = (0).V, I = (Omega).V as Element of S by Def3;
+   reconsider Z0 = Z as Element of S0;
+   reconsider I1 = I as Element of S1;
+     now
+     let A be Element of S1;
+     reconsider W = A as Subspace of V by Def3;
+     thus A "\/" I1 = SubJoin(V).(A,I1) by LATTICES:def 1
+                  .= W + (Omega).V by Def7
+                  .= the UNITSTR of V by Th11
+                  .= (Omega).V by RUSUB_1:def 3;
+   end;
+then A1:Top S = I by RLSUB_2:85;
+     now
+     let A be Element of S0;
+     reconsider W = A as Subspace of V by Def3;
+     thus A "/\" Z0 = SubMeet(V).(A,Z0) by LATTICES:def 2
+                  .= W /\ (0).V by Def8
+                  .= Z0 by Th18;
+   end;
+then A2:Bottom S = Z by RLSUB_2:84;
+     now
+     let A be Element of S;
+     reconsider W = A as Subspace of V by Def3;
+     consider L being strict Linear_Compl of W;
+     reconsider B' = L as Element of S by Def3;
+     take B = B';
+A3:  B "\/" A = SubJoin(V).(B,A) by LATTICES:def 1
+                 .= L + W by Def7
+                 .= the UNITSTR of V by Th36
+                 .= Top S by A1,RUSUB_1:def 3;
+       B "/\" A = SubMeet(V).(B,A) by LATTICES:def 2
+              .= L /\ W by Def8
+              .= Bottom S by A2,Th37;
+     hence B is_a_complement_of A by A3,LATTICES:def 18;
+   end;
+   hence thesis by LATTICES:def 19;
+end;
+
+definition let V be RealUnitarySpace;
+  cluster LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #) ->
+    lower-bounded upper-bounded modular complemented;
+  coherence by Th55,Th56,Th58,Th59;
+end;
+
+theorem
+  for V being RealUnitarySpace,
+    W1,W2,W3 being strict Subspace of V holds
+ W1 is Subspace of W2 implies W1 /\ W3 is Subspace of W2 /\ W3
+proof
+   let V be RealUnitarySpace,
+       W1,W2,W3 be strict Subspace of V;
+   set S = LattStr (# Subspaces(V), SubJoin(V), SubMeet(V) #);
+   reconsider A = W1, B = W2, C = W3, AC = W1 /\ W3, BC = W2 /\ W3
+        as Element of S by Def3;
+   assume
+A1:W1 is Subspace of W2;
+     A "\/" B = SubJoin(V).(A,B) by LATTICES:def 1
+             .= W1 + W2 by Def7
+             .= B by A1,Th8;
+   then A [= B by LATTICES:def 3;
+   then A "/\" C [= B "/\" C by LATTICES:27;
+then A2:(A "/\" C) "\/" (B "/\" C) = (B "/\" C) by LATTICES:def 3;
+A3:B "/\" C = SubMeet(V).(B,C) by LATTICES:def 2
+             .= W2 /\ W3 by Def8;
+     (A "/\" C) "\/" (B "/\" C) = SubJoin(V).(A "/\" C,B "/\" C)
+       by LATTICES:def 1
+           .= SubJoin(V).(SubMeet(V).(A,C),B "/\" C) by LATTICES:def 2
+           .= SubJoin(V).(SubMeet(V).(A,C),SubMeet(V).(B,C)) by LATTICES:def 2
+           .= SubJoin(V).(SubMeet(V).(A,C),BC) by Def8
+           .= SubJoin(V).(AC,BC) by Def8
+           .= (W1 /\ W3) + (W2 /\ W3) by Def7;
+   hence thesis by A2,A3,Th8;
+end;
+
+begin :: Auxiliary theorems in real unitary space
+
+theorem
+   for V being RealUnitarySpace, W being strict Subspace of V holds
+ (for v being VECTOR of V holds v in W) implies W = the UNITSTR of V by Lm12;
+
+theorem
+  for V being RealUnitarySpace, W being Subspace of V,
+ v being VECTOR of V holds ex C being Coset of W st v in C by Lm17;
+
+theorem
+  for V being RealUnitarySpace, W being Subspace of V,
+ v being VECTOR of V, x being set holds
+  x in v + W iff ex u being VECTOR of V st u in W & x = v + u by Lm16;

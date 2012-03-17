@@ -1,0 +1,619 @@
+:: Introduction to Turing Machines
+::  by Jingchao Chen and Yatsuka Nakamura
+::
+:: Received July 27, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, PARTFUN1, FUNCT_4, RELAT_1, BOOLE, CAT_1, ORDINAL2, ARYTM,
+      FINSET_1, INT_1, RLVECT_1, FINSEQ_1, QC_LANG1, QMAX_1, FSM_1, ARYTM_1,
+      AMI_1, FUNCT_2, LANG1, MCART_1, FINSEQ_4, COMPUT_1, FINSEQ_2, BORSUK_1,
+      ORDINAL1, UNIALG_1, PRALG_3, SCMFSA6A, TURING_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, ORDINAL2, REAL_1, NAT_1, INT_1, FINSET_1, MCART_1, DOMAIN_1,
+      FUNCT_1, FUNCT_2, FUNCT_4, FINSEQ_1, FINSEQ_2, FRAENKEL, CQC_LANG,
+      PARTFUN1, GR_CY_1, FINSEQ_4, GROUP_4, SCMPDS_1, RELAT_1, COMPUT_1;
+ constructors REAL_1, NAT_1, DOMAIN_1, CQC_LANG, FINSEQ_4, GROUP_4, SCMPDS_1,
+      COMPUT_1, MEMBERED;
+ clusters SUBSET_1, FUNCT_1, INT_1, FINSET_1, XBOOLE_0, RELSET_1, CQC_LANG,
+      ARYTM_3, COMPUT_1, MOD_2, MEMBERED, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve n,i,j,k for Nat;
+
+definition
+ let A,B be non empty set, f be Function of A,B, g be PartFunc of A,B;
+ redefine func f +* g -> Function of A,B;
+end;
+
+definition
+ let X,Y be non empty set, a be Element of X, b be Element of Y;
+ redefine func a .--> b -> PartFunc of X,Y;
+end;
+
+definition let n be natural number;
+ func SegM n -> Subset of NAT equals
+:: TURING_1:def 1
+  {k : k <= n};
+end;
+
+definition let n be natural number;
+ cluster SegM n -> finite non empty;
+end;
+
+theorem :: TURING_1:1    :: GR_CY 10
+ k in SegM n iff k <= n;
+
+theorem :: TURING_1:2
+   for f be Function,x,y,z,u,v be set st u <> x holds
+     (f +* ([x,y] .--> z)).[u,v]=f.[u,v];
+
+theorem :: TURING_1:3
+   for f be Function,x,y,z,u,v be set st v <> y holds
+     (f +* ([x,y] .--> z)).[u,v]=f.[u,v];
+
+reserve i1,i2,i3,i4 for Element of INT;
+
+theorem :: TURING_1:4
+ Sum<*i1,i2*>=i1+i2;
+
+theorem :: TURING_1:5
+ Sum<*i1,i2,i3*>=i1+i2+i3;
+
+theorem :: TURING_1:6
+  Sum<*i1,i2,i3,i4*>=i1+i2+i3+i4;
+
+definition let f be FinSequence of NAT,i be Nat;
+ func Prefix(f,i) -> FinSequence of INT equals
+:: TURING_1:def 2
+     f| Seg i;
+end;
+
+theorem :: TURING_1:7
+ for x1,x2 being Nat holds Sum Prefix(<*x1,x2*>,1)=x1 &
+ Sum Prefix(<*x1,x2*>,2)=x1+x2;
+
+theorem :: TURING_1:8
+ for x1,x2,x3 being Nat holds Sum Prefix(<*x1,x2,x3*>,1)=x1 &
+   Sum Prefix(<*x1,x2,x3*>,2)=x1+x2 & Sum Prefix(<*x1,x2,x3*>,3)=x1+x2+x3;
+
+begin :: Definitions and terminology for TURING Machine
+
+definition
+  struct TuringStr (#
+   Symbols, States -> finite non empty set,
+   Tran -> Function of [: the States, the Symbols :],
+           [: the States,the Symbols,{-1,0,1} :],
+   InitS,AcceptS -> Element of the States
+ #);
+end;
+
+definition
+ let T be TuringStr;
+ mode State of T is Element of the States of T;
+ mode Tape of T is Element of Funcs(INT,the Symbols of T);
+ mode Symbol of T is Element of the Symbols of T;
+end;
+
+definition
+ let T be TuringStr,t be Tape of T, h be Integer,s be Symbol of T;
+ func Tape-Chg(t,h,s) -> Tape of T equals
+:: TURING_1:def 3
+  t +* (h .--> s);
+end;
+
+definition let T be TuringStr;
+  mode All-State of T is Element of
+     [: the States of T, INT, Funcs(INT,the Symbols of T) :];
+  mode Tran-Source of T is Element of
+           [: the States of T,the Symbols of T :];
+  mode Tran-Goal of T is Element of
+           [: the States of T,the Symbols of T, {-1,0,1} :];
+end;
+
+definition
+ let T be TuringStr, g be Tran-Goal of T;
+ func offset(g) -> Integer equals
+:: TURING_1:def 4
+  g`3;
+end;
+
+definition
+ let T be TuringStr, s be All-State of T;
+ func Head(s) -> Integer equals
+:: TURING_1:def 5
+   s`2;
+end;
+
+definition
+ let T be TuringStr, s be All-State of T;
+ func TRAN(s) -> Tran-Goal of T equals
+:: TURING_1:def 6
+  (the Tran of T).[s`1, (s`3 qua Tape of T).Head(s)];
+end;
+
+definition
+ let T be TuringStr, s be All-State of T;
+ func Following s -> All-State of T equals
+:: TURING_1:def 7
+  [(TRAN(s))`1, Head(s)+ offset TRAN (s),
+      Tape-Chg(s`3, Head(s),(TRAN(s))`2)] if s`1 <> the AcceptS of T
+      otherwise s;
+end;
+
+definition
+ let T be TuringStr, s be All-State of T;
+ func Computation s -> Function of NAT,
+     [: the States of T, INT, Funcs(INT,the Symbols of T) :] means
+:: TURING_1:def 8
+ it.0 = s & for i holds it.(i+1) = Following(it.i);
+end;
+
+reserve T for TuringStr, s for All-State of T;
+
+theorem :: TURING_1:9
+  for T being TuringStr, s be All-State of T st s`1 = the AcceptS of T
+ holds s = Following s;
+
+theorem :: TURING_1:10
+  (Computation s).0 = s;
+
+theorem :: TURING_1:11
+  (Computation s).(k+1) = Following (Computation s).k;
+
+theorem :: TURING_1:12
+ (Computation s).1 = Following s;
+
+theorem :: TURING_1:13
+ (Computation s).(i+k) = (Computation (Computation s).i).k;
+
+theorem :: TURING_1:14
+ i <= j & Following (Computation s).i = (Computation s).i
+ implies (Computation s).j = (Computation s).i;
+
+theorem :: TURING_1:15
+ i <= j & ((Computation s).i)`1 = the AcceptS of T
+ implies (Computation s).j = (Computation s).i;
+
+definition
+ let T be TuringStr, s be All-State of T;
+ attr s is Accept-Halt means
+:: TURING_1:def 9
+ ex k st ((Computation s).k)`1 = the AcceptS of T;
+end;
+
+definition
+ let T be TuringStr, s be All-State of T such that
+ s is Accept-Halt;
+ func Result s -> All-State of T means
+:: TURING_1:def 10
+  ex k st it = (Computation s).k &
+         ((Computation s).k)`1 = the AcceptS of T;
+end;
+
+theorem :: TURING_1:16
+ for T being TuringStr,s be All-State of T st s is Accept-Halt holds
+  ex k being Nat st ((Computation s).k)`1 = the AcceptS of T &
+   Result s = (Computation s).k & for i be Nat st i < k
+  holds ((Computation s).i)`1 <> the AcceptS of T;
+
+definition
+  let A, B be non empty set, y be set such that  y in B;
+ func id(A, B, y) -> Function of A, [: A, B :] means
+:: TURING_1:def 11
+     for x be Element of A holds it.x=[x,y];
+end;
+
+definition
+ func Sum_Tran -> Function of [: SegM 5,{0,1} :],
+      [: SegM 5,{0,1},{ -1,0,1 } :] equals
+:: TURING_1:def 12
+  id([: SegM 5,{0,1} :],{ -1,0,1 }, 0)
+     +* ([0,0] .--> [0,0,1])
+     +* ([0,1] .--> [1,0,1])
+     +* ([1,1] .--> [1,1,1])
+     +* ([1,0] .--> [2,1,1])
+     +* ([2,1] .--> [2,1,1])
+     +* ([2,0] .--> [3,0,-1])
+     +* ([3,1] .--> [4,0,-1])
+     +* ([4,1] .--> [4,1,-1])
+     +* ([4,0] .--> [5,0,0]);
+end;
+
+theorem :: TURING_1:17
+     Sum_Tran.[0,0]=[0,0,1] & Sum_Tran.[0,1]=[1,0,1] &
+     Sum_Tran.[1,1]=[1,1,1] & Sum_Tran.[1,0]=[2,1,1] &
+     Sum_Tran.[2,1]=[2,1,1] & Sum_Tran.[2,0]=[3,0,-1] &
+     Sum_Tran.[3,1]=[4,0,-1] & Sum_Tran.[4,1]=[4,1,-1] &
+     Sum_Tran.[4,0]=[5,0,0];
+
+definition
+ let T be TuringStr, t be Tape of T, i,j be Integer;
+ pred t is_1_between i,j means
+:: TURING_1:def 13
+ t.i=0 & t.j=0 & for k be Integer st i < k & k < j holds t.k=1;
+end;
+
+definition
+ let f be FinSequence of NAT, T be TuringStr, t be Tape of T;
+ pred t storeData f means
+:: TURING_1:def 14
+ for i be Nat st 1 <= i & i < len f holds
+     t is_1_between Sum Prefix(f,i)+2*(i-1),Sum Prefix(f,i+1)+2*i;
+end;
+
+theorem :: TURING_1:18
+ for T being TuringStr,t be Tape of T, s,n be Nat st t storeData <*s,n*>
+ holds t is_1_between s,s+n+2;
+
+theorem :: TURING_1:19
+ for T being TuringStr, t be Tape of T, s,n be Nat st t is_1_between s,s+n+2
+ holds t storeData <*s,n*>;
+
+theorem :: TURING_1:20
+  for T being TuringStr, t be Tape of T, s,n be Nat st
+  t storeData <*s,n *> holds
+  t.s=0 & t.(s+n+2)=0 & for i be Integer st s < i & i < s+n+2 holds t.i=1;
+
+theorem :: TURING_1:21
+ for T being TuringStr,t be Tape of T,s,n1,n2 be Nat st
+ t storeData <*s,n1,n2*>
+ holds t is_1_between s,s+n1+2 & t is_1_between s+n1+2,s+n1+n2+4;
+
+theorem :: TURING_1:22
+  for T being TuringStr, t be Tape of T, s,n1,n2 be Nat
+ st t storeData <*s,n1,n2 *> holds
+  t.s=0 & t.(s+n1+2)=0 & t.(s+n1+n2+4)=0 &
+ (for i be Integer st s < i & i < s+n1+2 holds t.i=1) &
+ for i be Integer st s+n1+2 < i & i < s+n1+n2+4 holds t.i=1;
+
+theorem :: TURING_1:23
+ for f being FinSequence of NAT,s being Nat st len f >= 1
+  holds Sum Prefix(<*s*>^f,1)=s & Sum Prefix(<*s*>^f,2)=s+f/.1;
+
+theorem :: TURING_1:24
+ for f being FinSequence of NAT,s being Nat st len f >= 3
+  holds Sum Prefix(<*s*>^f,1)=s & Sum Prefix(<*s*>^f,2)=s+f/.1 &
+   Sum Prefix(<*s*>^f,3)=s+f/.1+f/.2 & Sum Prefix(<*s*>^f,4)=s+f/.1+f/.2+f/.3;
+
+theorem :: TURING_1:25
+ for T being TuringStr,t be Tape of T, s be Nat,f be FinSequence of NAT st
+ len f >=1 & t storeData <*s*>^f holds t is_1_between s,s+ f/.1+2;
+
+theorem :: TURING_1:26
+ for T being TuringStr,t be Tape of T, s be Nat,f be FinSequence of NAT st
+ len f >=3 & t storeData <*s*>^f holds
+   t is_1_between s,s+ f/.1+2 &
+   t is_1_between s+f/.1+2, s+f/.1+f/.2+4 &
+   t is_1_between s+f/.1+f/.2+4, s+f/.1+f/.2+f/.3+6;
+
+begin :: Summation of two natural numbers
+
+definition
+ func SumTuring -> strict TuringStr means
+:: TURING_1:def 15
+  the Symbols of it = { 0,1 } &
+   the States of it = SegM 5 &
+   the Tran of it = Sum_Tran &
+   the InitS of it = 0 &
+   the AcceptS of it = 5;
+end;
+
+theorem :: TURING_1:27
+ for T being TuringStr, s be All-State of T,p,h,t be set st s=[p,h,t]
+ holds Head(s)=h;
+
+theorem :: TURING_1:28
+ for T be TuringStr,t be Tape of T, h be Integer,s be Symbol of T
+ st t.h=s holds Tape-Chg(t,h,s) = t;
+
+theorem :: TURING_1:29
+  for T be TuringStr, s be All-State of T, p,h,t be set st s=[p,h,t] &
+  p <> the AcceptS of T holds Following s =
+   [(TRAN(s))`1, Head(s)+offset TRAN(s),Tape-Chg(s`3,Head(s),(TRAN(s))`2)];
+
+theorem :: TURING_1:30
+ for T being TuringStr,t be Tape of T, h be Integer,
+ s be Symbol of T,i be set
+ holds Tape-Chg(t,h,s).h=s & ( i <> h implies Tape-Chg(t,h,s).i=t.i);
+
+theorem :: TURING_1:31
+ for s being All-State of SumTuring, t be Tape of SumTuring,
+  head,n1,n2 be Nat
+ st s=[0,head,t] & t storeData <*head,n1,n2 *> holds
+  s is Accept-Halt & (Result s)`2=1+head &
+  (Result s)`3 storeData <*1+head,n1+n2 *>;
+
+definition
+ let T be TuringStr,F be Function;
+  pred T computes F means
+:: TURING_1:def 16
+  for s being All-State of T,t being Tape of T, a being Nat,
+   x being FinSequence of NAT st x in dom F &
+   s=[the InitS of T,a,t] & t storeData <*a*>^x holds
+   s is Accept-Halt & ex b, y being Nat st (Result s)`2=b &
+   y=F.x & (Result s)`3 storeData <*b*>^<* y *>;
+end;
+
+theorem :: TURING_1:32
+ dom [+] c= 2-tuples_on NAT;
+
+theorem :: TURING_1:33
+     SumTuring computes [+];
+
+begin :: Computing successor function(i.e. s(x)=x+1)
+
+definition
+ func Succ_Tran -> Function of [: SegM 4,{0,1} :],
+      [: SegM 4,{0,1},{ -1,0,1 } :] equals
+:: TURING_1:def 17
+   id([: SegM 4,{0,1} :],{ -1,0,1 }, 0)
+     +* ([0,0] .--> [1,0,1])
+     +* ([1,1] .--> [1,1,1])
+     +* ([1,0] .--> [2,1,1])
+     +* ([2,0] .--> [3,0,-1])
+     +* ([2,1] .--> [3,0,-1])
+     +* ([3,1] .--> [3,1,-1])
+     +* ([3,0] .--> [4,0,0]);
+end;
+
+theorem :: TURING_1:34
+     Succ_Tran.[0,0]=[1,0,1] & Succ_Tran.[1,1]=[1,1,1] &
+     Succ_Tran.[1,0]=[2,1,1] & Succ_Tran.[2,0]=[3,0,-1] &
+     Succ_Tran.[2,1]=[3,0,-1] & Succ_Tran.[3,1]=[3,1,-1] &
+     Succ_Tran.[3,0]=[4,0,0];
+
+definition
+ func SuccTuring -> strict TuringStr means
+:: TURING_1:def 18
+ the Symbols of it = { 0,1 } &
+   the States of it = SegM 4 &
+   the Tran of it = Succ_Tran &
+   the InitS of it = 0 &
+   the AcceptS of it = 4;
+end;
+
+canceled;
+
+theorem :: TURING_1:36
+ for s being All-State of SuccTuring, t be Tape of SuccTuring,head,n be Nat
+ st s=[0,head,t] & t storeData <*head,n*> holds
+  s is Accept-Halt & (Result s)`2=head & (Result s)`3 storeData <*head,n+1*>;
+
+theorem :: TURING_1:37
+     SuccTuring computes 1 succ 1;
+
+begin :: Computing zero function (i.e. O(x)=0)
+
+definition
+ func Zero_Tran -> Function of [: SegM 4,{0,1} :],
+      [: SegM 4,{0,1},{ -1,0,1 } :] equals
+:: TURING_1:def 19
+   id([: SegM 4,{0,1} :],{ -1,0,1 }, 1)
+     +* ([0,0] .--> [1,0,1])
+     +* ([1,1] .--> [2,1,1])
+     +* ([2,0] .--> [3,0,-1])
+     +* ([2,1] .--> [3,0,-1])
+     +* ([3,1] .--> [4,1,-1]);
+end;
+
+theorem :: TURING_1:38
+     Zero_Tran.[0,0]=[1,0,1] & Zero_Tran.[1,1]=[2,1,1] &
+     Zero_Tran.[2,0]=[3,0,-1] & Zero_Tran.[2,1]=[3,0,-1] &
+     Zero_Tran.[3,1]=[4,1,-1];
+
+definition
+ func ZeroTuring -> strict TuringStr means
+:: TURING_1:def 20
+   the Symbols of it = { 0,1 } &
+   the States of it = SegM 4 &
+   the Tran of it = Zero_Tran &
+   the InitS of it = 0 &
+   the AcceptS of it = 4;
+end;
+
+theorem :: TURING_1:39
+ for s being All-State of ZeroTuring, t be Tape of ZeroTuring, head be Nat,
+ f be FinSequence of NAT st len f >= 1 & s=[0,head,t] &
+ t storeData <*head*>^f holds
+ s is Accept-Halt & (Result s)`2=head & (Result s)`3 storeData <*head,0*>;
+
+theorem :: TURING_1:40
+     n >=1 implies ZeroTuring computes n const 0;
+
+begin :: Computing n-ary project function(i.e. U(x1,x2,...,xn)=x3)
+
+definition
+ func U3(n)Tran -> Function of [: SegM 3,{0,1} :],
+      [: SegM 3,{0,1},{ -1,0,1 } :] equals
+:: TURING_1:def 21
+  id([: SegM 3,{0,1} :],{ -1,0,1 }, 0)
+     +* ([0,0] .--> [1,0,1])
+     +* ([1,1] .--> [1,0,1])
+     +* ([1,0] .--> [2,0,1])
+     +* ([2,1] .--> [2,0,1])
+     +* ([2,0] .--> [3,0,0]);
+end;
+
+theorem :: TURING_1:41
+     U3(n)Tran.[0,0]=[1,0,1] & U3(n)Tran.[1,1]=[1,0,1] &
+     U3(n)Tran.[1,0]=[2,0,1] & U3(n)Tran.[2,1]=[2,0,1] &
+     U3(n)Tran.[2,0]=[3,0,0];
+
+definition
+ func U3(n)Turing -> strict TuringStr means
+:: TURING_1:def 22
+   the Symbols of it = { 0,1 } &
+   the States of it = SegM 3 &
+   the Tran of it = U3(n)Tran &
+   the InitS of it = 0 &
+   the AcceptS of it = 3;
+end;
+
+theorem :: TURING_1:42
+ for s being All-State of U3(n)Turing, t be Tape of U3(n)Turing, head be Nat,
+ f be FinSequence of NAT st len f >= 3 & s=[0,head,t] &
+ t storeData <*head*>^f holds
+  s is Accept-Halt & (Result s)`2=head+f/.1+f/.2+4 &
+ (Result s)`3 storeData <*head+f/.1+f/.2+4,f/.3*>;
+
+theorem :: TURING_1:43
+   n >= 3 implies U3(n)Turing computes n proj 3;
+
+begin :: Combining two Turing Machines into one Turing Machine
+
+definition let t1,t2 be TuringStr;
+ func UnionSt(t1,t2) -> finite non empty set equals
+:: TURING_1:def 23
+   [: the States of t1, {the InitS of t2} :] \/
+    [: {the AcceptS of t1}, the States of t2 :];
+end;
+
+theorem :: TURING_1:44
+  for t1,t2 being TuringStr holds
+  [ the InitS of t1, the InitS of t2 ] in UnionSt(t1,t2) &
+  [ the AcceptS of t1,the AcceptS of t2 ] in UnionSt(t1,t2);
+
+theorem :: TURING_1:45
+  for s,t being TuringStr, x be State of s holds
+    [ x, the InitS of t ] in UnionSt(s,t);
+
+theorem :: TURING_1:46
+  for s,t being TuringStr, x be State of t holds
+  [ the AcceptS of s, x] in UnionSt(s,t);
+
+theorem :: TURING_1:47
+  for s,t being TuringStr, x be Element of UnionSt(s,t) holds
+  ex x1 be State of s, x2 be State of t st x=[x1, x2];
+
+definition let s,t be TuringStr, x be Tran-Goal of s;
+ func FirstTuringTran(s,t,x) -> Element of [: UnionSt(s,t),(the Symbols of s)
+     \/ the Symbols of t,{-1,0,1} :] equals
+:: TURING_1:def 24
+ [[x`1,the InitS of t], x`2, x`3];
+end;
+
+definition let s,t be TuringStr, x be Tran-Goal of t;
+ func SecondTuringTran(s,t,x) -> Element of [: UnionSt(s,t),(the Symbols of s)
+    \/ the Symbols of t,{-1,0,1} :] equals
+:: TURING_1:def 25
+ [[the AcceptS of s,x`1], x`2, x`3];
+end;
+
+definition
+ let s,t be TuringStr;
+ let x be Element of UnionSt(s,t);
+ redefine func x`1 -> State of s;
+  func x`2 -> State of t;
+end;
+
+definition let s,t be TuringStr, x be Element of
+ [: UnionSt(s,t), (the Symbols of s) \/ the Symbols of t :];
+ func FirstTuringState x -> State of s equals
+:: TURING_1:def 26
+   x`1`1;
+ func SecondTuringState x -> State of t equals
+:: TURING_1:def 27
+   x`1`2;
+end;
+
+definition
+   let X,Y,Z be non empty set, x be Element of [: X, Y \/ Z :];
+ given u being set,y be Element of Y such that
+      x = [u,y];
+ func FirstTuringSymbol(x) -> Element of Y equals
+:: TURING_1:def 28
+   x`2;
+end;
+
+definition
+  let X,Y,Z be non empty set, x be Element of [: X, Y \/ Z :];
+ given u being set,z be Element of Z such that
+      x = [u, z];
+ func SecondTuringSymbol(x) -> Element of Z equals
+:: TURING_1:def 29
+   x`2;
+end;
+
+definition let s,t be TuringStr, x be Element of
+ [: UnionSt(s,t), (the Symbols of s) \/ the Symbols of t :];
+ func Uniontran(s,t,x) -> Element of
+    [: UnionSt(s,t), (the Symbols of s) \/ the Symbols of t,{-1,0,1} :]
+    equals
+:: TURING_1:def 30
+ FirstTuringTran(s,t,(the Tran of s).[FirstTuringState x,
+    FirstTuringSymbol(x)])
+     if ex p being State of s,y be Symbol of s st
+          x = [ [p,the InitS of t],y] & p <> the AcceptS of s,
+    SecondTuringTran(s,t,(the Tran of t).
+    [SecondTuringState x,SecondTuringSymbol(x)])
+     if ex q being State of t, y be Symbol of t st
+     x = [ [the AcceptS of s,q],y]
+     otherwise [x`1,x`2,-1];
+end;
+
+definition let s,t be TuringStr;
+ func UnionTran(s,t) -> Function of [: UnionSt(s,t), (the Symbols of s)
+  \/ the Symbols of t :], [: UnionSt(s,t), (the Symbols of s)
+  \/ the Symbols of t,{-1,0,1} :] means
+:: TURING_1:def 31
+  for x being Element of
+     [: UnionSt(s,t), (the Symbols of s) \/ the Symbols of t :] holds
+    it.x = Uniontran(s,t,x);
+end;
+
+definition let T1,T2 be TuringStr;
+ func T1 ';' T2 -> strict TuringStr means
+:: TURING_1:def 32
+   the Symbols of it = (the Symbols of T1) \/ the Symbols of T2 &
+   the States of it = UnionSt(T1,T2) &
+   the Tran of it = UnionTran(T1,T2) &
+   the InitS of it = [the InitS of T1,the InitS of T2] &
+   the AcceptS of it = [the AcceptS of T1,the AcceptS of T2];
+end;
+
+theorem :: TURING_1:48
+  for T1,T2 being TuringStr, g be Tran-Goal of T1,p be State of T1,
+  y be Symbol of T1 st p <> the AcceptS of T1 &
+   g = (the Tran of T1).[p, y] holds
+   (the Tran of T1 ';' T2).[ [p,the InitS of T2],y]
+    = [[g`1,the InitS of T2], g`2, g`3];
+
+theorem :: TURING_1:49
+  for T1,T2 being TuringStr, g be Tran-Goal of T2, q be State of T2,
+  y be Symbol of T2 st g = (the Tran of T2).[q, y] holds
+    (the Tran of T1 ';' T2).[ [the AcceptS of T1,q],y]
+     = [[the AcceptS of T1,g`1], g`2, g`3];
+
+theorem :: TURING_1:50
+ for T1,T2 being TuringStr,s1 be All-State of T1,h be Nat,t be Tape of T1,
+ s2 be All-State of T2,s3 be All-State of (T1 ';' T2)
+ st s1 is Accept-Halt & s1=[the InitS of T1,h,t] &
+    s2 is Accept-Halt & s2=[the InitS of T2,(Result s1)`2,(Result s1)`3] &
+    s3=[the InitS of (T1 ';' T2),h,t]
+ holds s3 is Accept-Halt & (Result s3)`2=(Result s2)`2 &
+ (Result s3)`3=(Result s2)`3;
+
+theorem :: TURING_1:51
+   for tm1,tm2 being TuringStr,t be Tape of tm1 st the Symbols of tm1
+ = the Symbols of tm2 holds t is Tape of tm1 ';' tm2;
+
+theorem :: TURING_1:52
+   for tm1,tm2 being TuringStr,t be Tape of tm1 ';' tm2 st the Symbols of tm1
+ = the Symbols of tm2 holds t is Tape of tm1 & t is Tape of tm2;
+
+theorem :: TURING_1:53
+ for f being FinSequence of NAT,tm1,tm2 be TuringStr,t1 be Tape of tm1,
+ t2 be Tape of tm2 st t1=t2 & t1 storeData f
+ holds t2 storeData f;
+
+theorem :: TURING_1:54
+   for s being All-State of ZeroTuring ';' SuccTuring, t be Tape of ZeroTuring,
+ head,n be Nat st s=[[0,0],head,t] & t storeData <*head,n*>
+ holds s is Accept-Halt &
+ (Result s)`2=head & (Result s)`3 storeData <*head,1*>;
+

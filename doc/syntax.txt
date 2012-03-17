@@ -1,0 +1,488 @@
+
+                          Syntax of the Mizar Language
+
+
+Last modified: November 17, 2003
+
+
+
+   Article
+
+Mizar-Article = 
+   "environ" 
+      Environment-Declaration 
+   "begin" 
+      Text-Proper .
+
+
+
+   Environment
+
+Environment-Declaration = { Directive } .
+
+Directive = 
+   Vocabulary-Directive | 
+   Library-Directive | 
+   Requirement-Directive .
+
+Vocabulary-Directive = 
+   "vocabulary" Vocabulary-Name { "," Vocabulary-Name } ";" .
+
+Vocabulary-Name = File-Name .
+
+Library-Directive = 
+   ( "notation" | 
+   "constructors" | 
+   "clusters" | 
+   "definitions" | 
+   "theorems" | 
+   "schemes" ) Article-Name { "," Article-Name } ";" .
+
+Article-Name = File-Name .
+
+Requirement-Directive = "requirements" Requirement { "," Requirement } ";" .
+
+Requirement = File-Name .
+
+
+
+   Text Proper
+
+Text-Proper = 
+   { Text-Item } 
+   { Section } .
+
+Section = 
+   "begin" 
+   { Text-Item } .
+
+Text-Item = 
+   Reservation | 
+   Definitional-Item | 
+   Theorem | 
+   Scheme | 
+   Auxiliary-Item | 
+   Canceled-Theorem .
+
+Reservation = "reserve" Reservation-Segment { "," Reservation-Segment } ";" .
+
+Reservation-Segment = Reserved-Identifiers "for" Type-Expression .
+
+Reserved-Identifiers = Identifier { "," Identifier } .
+
+Definitional-Item = Definitional-Block ";" .
+
+Definitional-Block = 
+   "definition" 
+      { Definition-Item | Definition } 
+   [ "redefine" 
+      { Definition-Item | Definition } ] 
+   "end" .
+
+Definition-Item = Loci-Declaration | Permissive-Assumption | Auxiliary-Item .
+
+Loci-Declaration = "let" Qualified-Variables [ "such" Conditions ] ";" .
+
+Permissive-Assumption = Assumption .
+
+Definition = 
+   Structure-Definition | 
+   Mode-Definition | 
+   Functor-Definition | 
+   Predicate-Definition | 
+   Attribute-Definition | 
+   Canceled-Definition | 
+   Cluster-Registration .
+
+Structure-Definition = 
+   "struct" [ "(" Ancestors ")" ] Structure-Symbol [ "over" Loci ]
+      "(#" Fields "#)" ";" .
+
+Ancestors = Structure-Type-Expression { "," Structure-Type-Expression } .
+
+Structure-Symbol = Symbol .
+
+Loci = Locus { "," Locus } .
+
+Fields = Field-Segment { "," Field-Segment } .
+
+Locus = Variable-Identifier .
+
+Variable-Identifier = Identifier .
+
+Field-Segment = Selector-Symbol { "," Selector-Symbol } Specification .
+
+Selector-Symbol = Symbol .
+
+Specification = "->" Type-Expression .
+
+Mode-Definition =
+   "mode" Mode-Pattern ( [ Specification ] [ "means" Definiens ] ";"
+   Correctness-Conditions { Mode-Synonym } | "is" Type-Expression ";" ) .
+
+Mode-Pattern = Mode-Symbol [ "of" Loci ] .
+
+Mode-Symbol = Symbol .
+
+Mode-Synonym = "synonym" Mode-Pattern ";" .
+
+Definiens = Simple-Definiens | Conditional-Definiens .
+
+Simple-Definiens = 
+   [ ":" Label-Identifier ":" ] ( Sentence | Term-Expression ) .
+
+Label-Identifier = Identifier .
+
+Conditional-Definiens = 
+   [ ":" Label-Identifier ":" ] Partial-Definiens-List 
+      [ "otherwise" ( Sentence | Term-Expression ) ] .
+
+Partial-Definiens-List = Partial-Definiens { "," Partial-Definiens } .
+
+Partial-Definiens = ( Sentence | Term-Expression ) "if" Sentence .
+
+Functor-Definition = 
+   "func" Functor-Pattern [ Specification ]
+          [ ( "means" | "equals" ) Definiens ] ";"
+   Correctness-Conditions 
+   { Functor-Property } 
+   { Functor-Synonym } .
+
+Functor-Pattern = 
+   [ Functor-Loci ] Functor-Symbol [ Functor-Loci ] | 
+   Left-Functor-Bracket Loci Right-Functor-Bracket .
+
+Functor-Property = 
+   ( "commutativity" |
+     "idempotence" |
+     "involutiveness" |
+     "projectivity" )
+   Justification ";" .
+
+Functor-Synonym = "synonym" Functor-Pattern ";" .
+
+Functor-Loci = Locus | "(" Loci ")" .
+
+Functor-Symbol = Symbol .
+
+Left-Functor-Bracket = Symbol .
+
+Right-Functor-Bracket = Symbol .
+
+Predicate-Definition =
+   "pred" Predicate-Pattern [ "means" Definiens ] ";"
+   [ "correctness" Justification ";" ]
+   { Predicate-Property }
+   { Predicate-Synonym } .
+
+Predicate-Pattern = [ Loci ] Predicate-Symbol [ Loci ] .
+
+Predicate-Property = 
+   ( "symmetry" |
+     "asymmetry" |
+     "connectedness" |
+     "reflexivity" |
+     "irreflexivity" )
+   Justification ";" .
+
+Predicate-Synonym = ( "synonym" | "antonym" ) Predicate-Pattern ";" .
+
+Predicate-Symbol = Symbol .
+
+Attribute-Definition = 
+   "attr" Attribute-Pattern "means" Definiens ";"
+   [ "correctness" Justification ";" ]
+   { Attribute-Synonym } .
+
+Attribute-Pattern = Locus "is" Attribute-Symbol .
+
+Attribute-Synonym = 
+   ( "synonym" | "antonym" ) ( Attribute-Pattern | Predicate-Pattern ) ";" .
+
+Attribute-Symbol = Symbol .
+
+Canceled-Definition = "canceled" [ Numeral ] ";" .
+
+Cluster-Registration = 
+   Existential-Registration | 
+   Conditional-Registration | 
+   Functorial-Registration .
+
+Existential-Registration = 
+   "cluster" Adjective-Cluster Type-Expression ";" 
+   Correctness-Conditions .
+
+Adjective-Cluster = { Adjective } .
+
+Adjective = [ "non" ] Attribute-Symbol .
+
+Conditional-Registration = 
+   "cluster" Adjective-Cluster "->" Adjective-Cluster Type-Expression ";" 
+   Correctness-Conditions .
+
+Functorial-Registration = 
+   "cluster" Term-Expression "->" Adjective-Cluster ";" 
+   Correctness-Conditions .
+
+Correctness-Conditions = 
+   { Correctness-Condition } 
+   [ "correctness" Justification ";" ] .
+
+Correctness-Condition = 
+   ( "existence" |
+     "uniqueness" |
+     "coherence" |
+     "compatibility" |
+     "consistency" )
+   Justification ";" .
+
+Theorem = "theorem" Compact-Statement .
+
+Scheme = 
+   [ "scheme" ] Scheme-Identifier "{" Scheme-Parameters "}" ":" 
+      Scheme-Conclusion 
+   [ "provided" 
+      Scheme-Premise 
+      { "and" Scheme-Premise } ]
+   Justification ";" .
+
+Scheme-Identifier = Identifier .
+
+Scheme-Parameters = Scheme-Segment { "," Scheme-Segment } .
+
+Scheme-Conclusion = Sentence .
+
+Scheme-Premise = Proposition .
+
+Scheme-Segment = Predicate-Segment | Functor-Segment .
+
+Predicate-Segment = 
+   Predicate-Identifier { "," Predicate-Identifier }
+     "[" [ Type-Expression-List ] "]" .
+
+Predicate-Identifier = Identifier .
+
+Functor-Segment = 
+   Functor-Identifier { "," Functor-Identifier }
+      "(" [ Type-Expression-List ] ")" Specification .
+
+Functor-Identifier = Identifier .
+
+Auxiliary-Item = Statement | Private-Definition .
+
+Canceled-Theorem = "canceled" [ Numeral ] ";" .
+
+Private-Definition = 
+   Constant-Definition | 
+   Private-Functor-Definition | 
+   Private-Predicate-Definition .
+
+Constant-Definition = "set" Equating-List ";" .
+
+Equating-List = Equating { "," Equating } .
+
+Equating = Variable-Identifier "=" Term-Expression .
+
+Private-Functor-Definition = 
+   "deffunc" Private-Functor-Pattern "=" Term-Expression .
+
+Private-Predicate-Definition = 
+   "defpred" Private-Predicate-Pattern "means" Sentence .
+
+Private-Functor-Pattern = Functor-Identifier "(" [ Type-Expression-List ] ")" .
+
+Private-Predicate-Pattern = 
+   Predicate-Identifier "[" [ Type-Expression-List ] "]" .
+
+Reasoning = 
+   { Reasoning-Item } 
+   [ "per" "cases" Simple-Justification ";" 
+   ( Case-List | Suppose-List ) ] .
+
+Case-List = Case { Case } .
+
+Case = 
+   "case" ( Proposition | Conditions ) ";" 
+   { Reasoning-Item } .
+
+Suppose-List = Suppose { Suppose } .
+
+Suppose = 
+   "suppose" ( Proposition | Conditions ) ";" 
+   { Reasoning-Item } .
+
+Reasoning-Item = Auxiliary-Item | Skeleton-Item .
+
+Skeleton-Item = Generalization | Assumption | Conclusion | Exemplification .
+
+Generalization = "let" Qualified-Variables [ "such" Conditions ] ";" .
+
+Assumption = 
+   Single-Assumption | Collective-Assumption | Existential-Assumption .
+
+Single-Assumption = "assume" Proposition ";" .
+
+Collective-Assumption = "assume" Conditions ";" .
+
+Existential-Assumption = 
+   "given" Qualified-Variables [ "such" Conditions ] ";" .
+
+Conclusion = (( "thus" | "hence" ) Statement ) | Diffuse-Conclusion .
+
+Diffuse-Conclusion =
+   "hereby"
+      Reasoning
+   "end" ";" .
+
+Exemplification = "take" Example { "," Example } ";" .
+
+Example = Term-Expression | Variable-Identifier "=" Term-Expression .
+
+Statement = [ "then" ] Linkable-Statement | Diffuse-Statement .
+
+Linkable-Statement = 
+   Compact-Statement | 
+   Choice-Statement | 
+   Type-Changing-Statement | 
+   Iterative-Equality .
+
+Compact-Statement = Proposition Justification ";" .
+
+Choice-Statement = 
+   "consider" Qualified-Variables [ "such" Conditions ] Simple-Justification ";" .
+
+Type-Changing-Statement = 
+   "reconsider" Type-Change-List "as" Type-Expression Simple-Justification ";" .
+
+Type-Change-List = 
+   ( Equating | Variable-Identifier ) { "," ( Equating | Variable-Identifier ) } .
+
+Iterative-Equality = 
+   Term-Expression "=" Term-Expression Simple-Justification 
+                       ".=" Term-Expression Simple-Justification 
+                     { ".=" Term-Expression Simple-Justification } ";" .
+
+Diffuse-Statement = 
+   [ Label-Identifier ":" ] 
+   "now" 
+      Reasoning 
+   "end" ";" .
+
+Justification = Simple-Justification | Proof .
+
+Simple-Justification = Straightforward-Justification | Scheme-Justification .
+
+Proof = 
+   ( "proof" | "@proof" ) 
+      Reasoning 
+   "end" .
+
+Straightforward-Justification = [ "by" References ] .
+
+Scheme-Justification = "from" Scheme-Identifier [ "(" References ")" ] .
+
+References = Reference { "," Reference } .
+
+Reference = Local-Reference | Library-Reference .
+
+Local-Reference = Label-Identifier .
+
+Library-Reference = 
+   Article-Name ":" ( Theorem-Number | "def" Definition-Number ) 
+      { "," ( Theorem-Number | "def" Definition-Number ) } .
+
+Theorem-Number = Numeral .
+
+Definition-Number = Numeral .
+
+Conditions = "that" Proposition { "and" Proposition } .
+
+Proposition = [ Label-Identifier ":" ] Sentence .
+
+Sentence = Formula-Expression .
+
+
+
+   Expressions
+
+Formula-Expression = 
+   "(" Formula-Expression ")" | 
+   Atomic-Formula-Expression | 
+   Quantified-Formula-Expression | 
+   Formula-Expression "&" Formula-Expression | 
+   Formula-Expression "or" Formula-Expression | 
+   Formula-Expression "implies" Formula-Expression | 
+   Formula-Expression "iff" Formula-Expression | 
+   "not" Formula-Expression | 
+   "contradiction" | 
+   "thesis" .
+
+Atomic-Formula-Expression = 
+   [ Term-Expression-List ] Predicate-Symbol [ Term-Expression-List ] | 
+   Predicate-Identifier [ "[" Term-Expression-List "]" ] | 
+   Term-Expression "is" { Adjective } | 
+   Term-Expression "is" Type-Expression .
+
+Quantified-Formula-Expression = 
+   "for" Qualified-Variables [ "st" Formula-Expression ] 
+      ( "holds" Formula-Expression | Quantified-Formula-Expression ) | 
+   "ex" Qualified-Variables "st" Formula-Expression .
+
+Qualified-Variables = 
+   Implicitly-Qualified-Variables | 
+   Explicitly-Qualified-Variables | 
+   Explicitly-Qualified-Variables "," Implicitly-Qualified-Variables .
+
+Implicitly-Qualified-Variables = Variables .
+
+Explicitly-Qualified-Variables = Qualified-Segment { "," Qualified-Segment } .
+
+Qualified-Segment = Variables Qualification .
+
+Variables = Variable-Identifier { "," Variable-Identifier } .
+
+Qualification = ( "being" | "be" ) Type-Expression .
+
+Type-Expression = Adjective-Cluster ( "(" Type-Expression ")" | Radix-Type ) .
+
+Structure-Type-Expression =
+   "(" Structure-Type-Expression ")" |
+   ( Adjective-Cluster Structure-Symbol [ "over" Term-Expression-List ] ) .
+
+Radix-Type =
+   "(" Radix-Type ")" |
+   Mode-Symbol [ "of" Term-Expression-List ] |
+   Structure-Symbol [ "over" Term-Expression-List ] .
+
+Type-Expression-List = Type-Expression { "," Type-Expression } .
+
+Term-Expression =
+   "(" Term-Expression ")" |
+   [ Arguments ] Functor-Symbol [ Arguments ] | 
+   Left-Functor-Bracket Term-Expression-List Right-Functor-Bracket | 
+   Functor-Identifier "(" [ Term-Expression-List ] ")" | 
+   Structure-Symbol "(#" Term-Expression-List "#)" | 
+   Variable-Identifier | 
+   "{" Term-Expression [ Postqualification ] ":" Sentence "}" | 
+   Numeral | 
+   Term-Expression "qua" Type-Expression | 
+   "the" Selector-Symbol "of" Term-Expression | 
+   "the" Selector-Symbol | 
+   Private-Definition-Parameter | 
+   "it" .
+
+Arguments = Term-Expression | "(" Term-Expression-List ")" .
+
+Term-Expression-List = Term-Expression { "," Term-Expression } .
+
+Postqualification = 
+   "where" Postqualifying-Segment { "," Postqualifying-Segment } .
+
+Postqualifying-Segment = 
+   Postqualified-Variable { "," Postqualified-Variable } "is" Type-Expression .
+
+Postqualified-Variable = Identifier .
+
+Private-Definition-Parameter = 
+   "$1" | "$2" | "$3" | "$4" | "$5" | "$6" | "$7" | "$8"  | "$9"  | "$10" .
+

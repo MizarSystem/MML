@@ -1,0 +1,298 @@
+:: Hilbert Positive Propositional Calculus
+::  by Adam Grabowski
+::
+:: Received February 20, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, RELAT_1, FUNCT_1, QC_LANG1, ZF_LANG, BOOLE, HILBERT1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1, NAT_1,
+      FINSEQ_1;
+ constructors NAT_1, CQC_LANG, MEMBERED;
+ clusters RELSET_1, MEMBERED, NUMBERS, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET;
+
+
+begin :: Definition of the language
+
+definition let D be set;
+  attr D is with_VERUM means
+:: HILBERT1:def 1
+    <*0*> in D;
+end;
+
+definition let D be set;
+  attr D is with_implication means
+:: HILBERT1:def 2
+     for p, q being FinSequence st
+         p in D & q in D holds <*1*>^p^q in D;
+end;
+
+definition let D be set;
+  attr D is with_conjunction means
+:: HILBERT1:def 3
+     for p, q being FinSequence st
+         p in D & q in D holds <*2*>^p^q in D;
+end;
+
+definition let D be set;
+  attr D is with_propositional_variables means
+:: HILBERT1:def 4
+     for n being Nat holds <*3+n*> in D;
+end;
+
+definition let D be set;
+  attr D is HP-closed means
+:: HILBERT1:def 5
+   D c= NAT* &
+   D is with_VERUM with_implication with_conjunction
+     with_propositional_variables;
+end;
+
+definition
+  cluster HP-closed -> with_VERUM with_implication
+     with_conjunction with_propositional_variables non empty set;
+  cluster with_VERUM with_implication
+     with_conjunction with_propositional_variables -> HP-closed Subset of NAT*
+;
+end;
+
+definition
+  func HP-WFF -> set means
+:: HILBERT1:def 6
+   it is HP-closed &
+   for D being set st D is HP-closed holds it c= D;
+end;
+
+definition
+  cluster HP-WFF -> HP-closed;
+end;
+
+definition
+  cluster HP-closed non empty set;
+end;
+
+definition
+  cluster -> Relation-like Function-like Element of HP-WFF;
+end;
+
+definition
+  cluster -> FinSequence-like Element of HP-WFF;
+end;
+
+definition
+  mode HP-formula is Element of HP-WFF;
+end;
+
+definition
+  func VERUM -> HP-formula equals
+:: HILBERT1:def 7
+    <*0*>;
+
+  let p, q be Element of HP-WFF;
+  func p => q -> HP-formula equals
+:: HILBERT1:def 8
+    <*1*>^p^q;
+
+  func p '&' q -> HP-formula equals
+:: HILBERT1:def 9
+    <*2*>^p^q;
+end;
+
+ reserve T, X, Y for Subset of HP-WFF;
+ reserve p, q, r, s for Element of HP-WFF;
+
+definition let T be Subset of HP-WFF;
+  attr T is Hilbert_theory means
+:: HILBERT1:def 10
+   VERUM in T & for p, q, r being Element of HP-WFF holds
+    p => (q => p) in T &
+    (p => (q => r)) => ((p => q) => (p => r)) in T &
+    (p '&' q) => p in T &
+    (p '&' q) => q in T &
+    p => (q => (p '&' q)) in T &
+    (p in T & p => q in T implies q in T);
+end;
+
+definition let X;
+  func CnPos X -> Subset of HP-WFF means
+:: HILBERT1:def 11
+    r in it iff for T st T is Hilbert_theory & X c= T holds r in T;
+end;
+
+definition
+  func HP_TAUT -> Subset of HP-WFF equals
+:: HILBERT1:def 12
+    CnPos({}(HP-WFF));
+end;
+
+theorem :: HILBERT1:1
+  VERUM in CnPos (X);
+
+theorem :: HILBERT1:2
+  p => (q => (p '&' q)) in CnPos (X);
+
+theorem :: HILBERT1:3
+  (p => (q => r)) => ((p => q) => (p => r)) in CnPos (X);
+
+theorem :: HILBERT1:4
+  p => (q => p) in CnPos (X);
+
+theorem :: HILBERT1:5
+  p '&' q => p in CnPos(X);
+
+theorem :: HILBERT1:6
+  p '&' q => q in CnPos(X);
+
+theorem :: HILBERT1:7
+  p in CnPos(X) & p => q in CnPos(X) implies q in CnPos(X);
+
+theorem :: HILBERT1:8
+T is Hilbert_theory & X c= T implies CnPos(X) c= T;
+
+theorem :: HILBERT1:9
+  X c= CnPos(X);
+
+theorem :: HILBERT1:10
+  X c= Y implies CnPos(X) c= CnPos(Y);
+
+theorem :: HILBERT1:11
+    CnPos(CnPos(X)) = CnPos(X);
+
+definition let X be Subset of HP-WFF;
+  cluster CnPos(X) -> Hilbert_theory;
+end;
+
+theorem :: HILBERT1:12
+  T is Hilbert_theory iff CnPos(T) = T;
+
+theorem :: HILBERT1:13
+    T is Hilbert_theory implies HP_TAUT c= T;
+
+definition
+  cluster HP_TAUT -> Hilbert_theory;
+end;
+
+begin  :: The tautologies of the Hilbert calculus - implicational part
+
+theorem :: HILBERT1:14   :: Identity law
+  p => p in HP_TAUT;
+
+theorem :: HILBERT1:15
+  q in HP_TAUT implies p => q in HP_TAUT;
+
+theorem :: HILBERT1:16
+    p => VERUM in HP_TAUT;
+
+theorem :: HILBERT1:17
+    (p => q) => (p => p) in HP_TAUT;
+
+theorem :: HILBERT1:18
+    (q => p) => (p => p) in HP_TAUT;
+
+theorem :: HILBERT1:19
+  (q => r) => ((p => q) => (p => r)) in HP_TAUT;
+
+theorem :: HILBERT1:20
+  p => (q => r) in HP_TAUT implies q => (p => r) in HP_TAUT;
+
+theorem :: HILBERT1:21  :: Hypothetical syllogism
+  (p => q) => ((q => r) => (p => r)) in HP_TAUT;
+
+theorem :: HILBERT1:22
+  p => q in HP_TAUT implies (q => r) => (p => r) in HP_TAUT;
+
+theorem :: HILBERT1:23
+  p => q in HP_TAUT & q => r in HP_TAUT implies p => r in HP_TAUT;
+
+theorem :: HILBERT1:24
+ (p => (q => r)) => ((s => q) => (p => (s => r))) in HP_TAUT;
+
+theorem :: HILBERT1:25
+    ((p => q) => r) => (q => r) in HP_TAUT;
+
+theorem :: HILBERT1:26  :: Contraposition
+  (p => (q => r)) => (q => (p => r)) in HP_TAUT;
+
+theorem :: HILBERT1:27   :: A Hilbert axiom
+  (p => (p => q)) => (p => q) in HP_TAUT;
+
+theorem :: HILBERT1:28  :: Modus ponendo ponens
+    q => ((q => p) => p) in HP_TAUT;
+
+theorem :: HILBERT1:29
+  s => (q => p) in HP_TAUT & q in HP_TAUT implies s => p in HP_TAUT;
+
+begin :: Conjunctional part of the calculus
+
+theorem :: HILBERT1:30
+  p => (p '&' p) in HP_TAUT;
+
+theorem :: HILBERT1:31
+  (p '&' q) in HP_TAUT iff p in HP_TAUT & q in HP_TAUT;
+
+theorem :: HILBERT1:32
+    (p '&' q) in HP_TAUT iff (q '&' p) in HP_TAUT;
+
+theorem :: HILBERT1:33
+  (( p '&' q ) => r ) => ( p => ( q => r )) in HP_TAUT;
+
+theorem :: HILBERT1:34
+  ( p => ( q => r )) => (( p '&' q ) => r ) in HP_TAUT;
+
+theorem :: HILBERT1:35
+  ( r => p ) => (( r => q ) => ( r => ( p '&' q ))) in HP_TAUT;
+
+theorem :: HILBERT1:36
+  ( (p => q) '&' p ) => q in HP_TAUT;
+
+theorem :: HILBERT1:37
+    (( (p => q) '&' p ) '&' s ) => q in HP_TAUT;
+
+theorem :: HILBERT1:38
+    (q => s) => (( p '&' q ) => s) in HP_TAUT;
+
+theorem :: HILBERT1:39
+  (q => s) => (( q '&' p ) => s) in HP_TAUT;
+
+theorem :: HILBERT1:40
+  ( (p '&' s) => q ) => ((p '&' s) => (q '&' s)) in HP_TAUT;
+
+theorem :: HILBERT1:41
+  ( p => q ) => ((p '&' s) => (q '&' s)) in HP_TAUT;
+
+theorem :: HILBERT1:42
+  ( p => q ) '&' ( p '&' s ) => ( q '&' s ) in HP_TAUT;
+
+theorem :: HILBERT1:43
+  ( p '&' q ) => ( q '&' p ) in HP_TAUT;
+
+theorem :: HILBERT1:44
+  ( p => q ) '&' ( p '&' s ) => ( s '&' q ) in HP_TAUT;
+
+theorem :: HILBERT1:45
+  ( p => q ) => (( p '&' s ) => ( s '&' q )) in HP_TAUT;
+
+theorem :: HILBERT1:46
+  ( p => q ) => (( s '&' p ) => ( s '&' q )) in HP_TAUT;
+
+theorem :: HILBERT1:47
+    ( p '&' (s '&' q) ) => ( p '&' (q '&' s) ) in HP_TAUT;
+
+theorem :: HILBERT1:48
+    ( ( p => q ) '&' (p => s) ) => ( p => (q '&' s) ) in HP_TAUT;
+
+theorem :: HILBERT1:49
+    (p '&' q) '&' s => p '&' (q '&' s) in HP_TAUT;
+
+theorem :: HILBERT1:50
+    p '&' (q '&' s) => (p '&' q) '&' s in HP_TAUT;
+
+
+
+
+
+
+
+

@@ -1,0 +1,753 @@
+:: Parallelity Spaces
+::  by Eugeniusz Kusak, Wojciech Leo\'nczuk and Micha{\l} Muzalewski
+::
+:: Received November 23, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary VECTSP_1, RLVECT_1, ARYTM_1, RELAT_1, BINOP_1, FUNCT_1, MCART_1,
+      PARSP_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, DOMAIN_1, FUNCT_2,
+      BINOP_1, STRUCT_0, RLVECT_1, VECTSP_1;
+ constructors DOMAIN_1, BINOP_1, VECTSP_1, MEMBERED, XBOOLE_0;
+ clusters STRUCT_0, SUBSET_1, VECTSP_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, STRUCT_0;
+ theorems MCART_1, VECTSP_1, BINOP_1, FUNCT_2, TARSKI, RLVECT_1;
+ schemes BINOP_1, FUNCT_2, XBOOLE_0;
+
+begin
+
+reserve F for Field, a,b,c,d,e,f,g,h for Element of F;
+
+Lm1:
+ for F being add-associative right_zeroed
+                 right_complementable (non empty LoopStr),
+     a, b being Element of F holds
+  -(a-b) = b-a
+  proof
+ let F be add-associative right_zeroed
+                 right_complementable (non empty LoopStr),
+     a, b be Element of F;
+  thus -(a-b) = b+-a by RLVECT_1:47 .= b-a by RLVECT_1:def 11;
+  end;
+
+Lm2:  (a-b)*(c-d) - (b-a)*(d-c) = 0.F
+ proof -(a-b) = b-a & -(c-d) = d-c by Lm1;
+  then (a-b)*(c-d)-(b-a)*(d-c)=(a-b)*(c-d)-((a-b)*(c-d)) by VECTSP_1:42;
+  hence thesis by RLVECT_1:28;
+ end;
+
+Lm3: a*(b-b) - (c-c)*d = 0.F
+ proof b-b = 0.F & c-c = 0.F by RLVECT_1:28;
+  then a*(b-b) = 0.F & (c-c)*d = 0.F by VECTSP_1:39;
+  hence thesis by RLVECT_1:28;
+ end;
+
+Lm4: a <> 0.F & a*e - d*b = 0.F & a*c - h*b = 0.F implies d*c - h*e = 0.F
+ proof assume a <> 0.F & a*e - d*b = 0.F & a*c - h*b = 0.F;
+  then e = d*b*a" & c = h*b*a" by VECTSP_1:88;
+  then e = d*(b*a") & c = h*(b*a") by VECTSP_1:def 16;
+  then h*e = (h*d)*(b*a") & d*c = (d*h)*(b*a") & d*h =h*d
+   by VECTSP_1:def 16;
+  hence d*c - h*e = 0.F by RLVECT_1:28;
+ end;
+
+Lm5: a*b - c*d = 0.F implies d*c - b*a = 0.F
+   proof
+     assume a*b - c*d = 0.F;
+then A1:   -(a*b - c*d) = 0.F by RLVECT_1:25;
+     thus d*c - b*a = d*c + -(b*a) by RLVECT_1:def 11
+       .= 0.F by A1,RLVECT_1:47;
+   end;
+
+Lm6: b <> 0.F & a*e - d*b = 0.F & a*c - h*b = 0.F implies d*c - h*e = 0.F
+ proof assume b <> 0.F;
+  then b*d - e*a = 0.F & b*h - c*a = 0.F implies e*h - c*d = 0.F by Lm4;
+  hence thesis by Lm5;
+ end;
+
+Lm7: (c*d)*(a*b) = ((a*c)*d)*b
+ proof
+  thus (c*d)*(a*b) = (a*(c*d))*b by VECTSP_1:def 16
+    .= ((a*c)*d)*b by VECTSP_1:def 16;
+ end;
+
+Lm8: a*b - c*d = 0.F implies (a*f*g*b) - (c*f*g*d) = 0.F
+ proof assume A1: a*b - c*d = 0.F;
+    (a*f*g*b) = (f*g)*(a*b) & (c*f*g*d) = (f*g)*(c*d) by Lm7;
+  hence (a*f*g*b) - (c*f*g*d) = (f*g)*(a*b - c*d) by VECTSP_1:43
+     .= 0.F by A1,VECTSP_1:39;
+ end;
+
+Lm9: (a-b)*(c-d) = a*c + (-a*d +-(b*(c-d)))
+  proof
+   thus (a-b)*(c-d) = (a+-b)*(c-d) by RLVECT_1:def 11
+                   .= a*(c-d)+(-b)*(c-d) by VECTSP_1:def 18
+                   .= a*(c-d)+-b*(c-d) by VECTSP_1:41
+                   .= (a*c-a*d)+-b*(c-d) by VECTSP_1:43
+                   .= (a*c+-a*d)+-b*(c-d) by RLVECT_1:def 11
+                   .= a*c + (-a*d +-(b*(c-d))) by RLVECT_1:def 6;
+  end;
+
+Lm10: (a+b)+(c+d) = a+(b+c)+d
+ proof
+   thus (a+b)+(c+d) = (a+b)+c+d by RLVECT_1:def 6 .= a+(b+c)+d by RLVECT_1:def
+6;
+ end;
+
+ Lm11:
+ for F being add-associative right_zeroed
+                     right_complementable (non empty LoopStr),
+     a, b, c being Element of F holds
+  (b+a)-(c+a) = b-c
+ proof let F be add-associative right_zeroed
+                     right_complementable (non empty LoopStr),
+    a,b,c be Element of F;
+    thus (b+a)-(c+a) = (b+a)+-(c+a) by RLVECT_1:def 11
+                    .= (b+a)+(-a+-c) by RLVECT_1:45
+                    .= ((b+a)+-a)+-c by RLVECT_1:def 6
+                    .= (b+(a+-a))+-c by RLVECT_1:def 6
+                    .= (b+0.F)+-c by RLVECT_1:def 10
+                    .= b+-c by RLVECT_1:10
+                    .= b-c by RLVECT_1:def 11;
+ end;
+
+Lm12:
+ for F being add-associative right_zeroed
+                          right_complementable (non empty LoopStr),
+     a, b being Element of F holds
+  a + b = -(-b + -a)
+ proof let F be add-associative right_zeroed
+                         right_complementable (non empty LoopStr),
+   a,b be Element of F;
+  thus a + b = --(a + b) by RLVECT_1:30 .= -(-b + -a) by RLVECT_1:45;
+ end;
+
+Lm13: (a-b)*(c-d)-(a-e)*(c-f) = 0.F implies (b-a)*(f-d)-(b-e)*(f-c) = 0.F
+ proof assume A1: (a-b)*(c-d)-(a-e)*(c-f) = 0.F;
+A2: (a-b)*(c-d) = a*c+(-a*d+-(b*(c-d))) & (a-e)*(c-f) = a*c+(-a*f+-(e*(c-f)))
+     by Lm9;
+    (b-a)*(f-d) = b*f+(-b*d+-(a*(f-d))) & (b-e)*(f-c) = b*f +(-b*c+-(e*(f-c)))
+    by Lm9;
+  hence (b-a)*(f-d)-(b-e)*(f-c)
+       = (-b*d+-(a*(f-d)))-(-b*c+-(e*(f-c))) by Lm11
+      .= (-b*d+-(a*f-a*d))-(-b*c+-(e*(f-c))) by VECTSP_1:43
+      .= (-b*d+(-a*f+a*d))-(-b*c+-(e*(f-c))) by RLVECT_1:47
+      .= ((-b*d+a*d)+-a*f)-(-b*c+-(e*(f-c))) by RLVECT_1:def 6
+      .= ((a*d+-b*d)+-a*f)+-(-b*c+-(e*(f-c))) by RLVECT_1:def 11
+      .= ((a*d+-b*d)+-a*f)+(--b*c+--(e*(f-c))) by RLVECT_1:45
+      .= ((a*d+-b*d)+-a*f)+(b*c+--(e*(f-c))) by RLVECT_1:30
+      .= ((a*d+-b*d)+-a*f)+(b*c+(e*(f-c))) by RLVECT_1:30
+      .= ((a*d+-b*d)+(-a*f+b*c))+(e*(f-c)) by Lm10
+      .= ((a*d+-b*d)+b*c)+(-a*f+(e*(f-c))) by Lm10
+      .= (a*d+(-b*d+b*c))+(-a*f+(e*(f-c))) by RLVECT_1:def 6
+      .= (a*d+(b*c-b*d))+(-a*f+(e*(f-c))) by RLVECT_1:def 11
+      .= (a*d+b*(c-d))+(-a*f+(e*(f-c))) by VECTSP_1:43
+      .= -(-a*d+-b*(c-d))+(-a*f+(e*(f-c))) by Lm12
+      .= -(-a*d+-b*(c-d))+-(--a*f+-(e*(f-c))) by Lm12
+      .= -(-a*d+-b*(c-d))+-(a*f+-(e*(f-c))) by RLVECT_1:30
+      .= -((-a*d+-b*(c-d))+(a*f+-(e*(f-c)))) by RLVECT_1:45
+      .= -((-a*d+-b*(c-d))+-(-a*f+--(e*(f-c)))) by Lm12
+      .= -((-a*d+-b*(c-d))-(-a*f+--(e*(f-c)))) by RLVECT_1:def 11
+      .= -((-a*d+-b*(c-d))-(-a*f+-((-(f-c))*e))) by VECTSP_1:41
+      .= -((-a*d+-b*(c-d))-(-a*f+-(e*(c-f)))) by Lm1
+      .= - 0.F by A1,A2,Lm11
+      .= 0.F by RLVECT_1:25;
+end;
+
+Lm14:  a-(a+b+-c) = c-b
+ proof
+  thus a-(a+b+-c) = a-(a+(b+-c)) by RLVECT_1:def 6
+                 .= a-(a+(b-c)) by RLVECT_1:def 11
+                 .= a+-(a+(b-c)) by RLVECT_1:def 11
+                 .= a+(-a+-(b-c)) by RLVECT_1:45
+                 .= (a+-a)+-(b-c) by RLVECT_1:def 6
+                 .= 0.F + -(b-c) by RLVECT_1:def 10
+                 .= -(b-c) by RLVECT_1:10
+                 .= c-b by Lm1;
+
+ end;
+
+Lm15: (a-b)*(c-(c+h+-g))-(e-(e+b+-a))*(g-h) = 0.F
+ proof c-(c+h+-g) = g-h & e-(e+b+-a) = a-b by Lm14;
+  hence thesis by RLVECT_1:28;
+ end;
+
+::
+::               1. A THREE-DIMENSION CARTESIAN GROUP
+::
+
+reserve x,y
+   for Element of [:the carrier of F,the carrier of F,the carrier of F:];
+
+deffunc 3F(Field) = [:the carrier of $1,the carrier of $1,the carrier of $1:];
+
+ definition let F;
+  func c3add(F) ->
+   BinOp of [:the carrier of F,the carrier of F,the carrier of F:] means
+   :Def1: it.(x,y) = [x`1+y`1,x`2+y`2,x`3+y`3];
+  existence
+  proof
+   deffunc O(Element of 3F(F),Element of 3F(F)) =
+    [$1`1+$2`1,$1`2+$2`2,$1`3+$2`3];
+   consider f be BinOp of 3F(F) such that
+    A1: f.(x,y) = O(x,y) from BinOpLambda;
+   take f;
+   thus thesis by A1;
+  end;
+  uniqueness
+   proof let f,g be BinOp of 3F(F) such that
+    A2: f.(x,y) = [x`1+y`1,x`2+y`2,x`3+y`3] and
+    A3: g.(x,y) = [x`1+y`1,x`2+y`2,x`3+y`3];
+      f.(x,y) = g.(x,y)
+     proof thus f.(x,y)=[x`1+y`1,x`2+y`2,x`3+y`3] by A2 .= g.(x,y) by A3; end;
+    hence f = g by BINOP_1:2;
+   end;
+  end;
+
+definition let F,x,y;
+ func x+y -> Element of
+     [:the carrier of F,the carrier of F,the carrier of F:] equals
+ :Def2:  (c3add(F)).(x,y);
+ coherence;
+end;
+
+canceled 2;
+
+theorem
+Th3: x+y = [x`1+y`1,x`2+y`2,x`3+y`3]
+ proof
+  thus x+y = (c3add(F)).(x,y) by Def2
+          .= [x`1+y`1,x`2+y`2,x`3+y`3] by Def1;
+ end;
+
+theorem
+Th4: [a,b,c]+[f,g,h]=[a+f,b+g,c+h]
+ proof set abc = [a,b,c] ,fgh = [f,g,h];
+    abc`1=a & abc`2=b & abc`3=c & fgh`1=f & fgh`2=g & fgh`3=h by MCART_1:47;
+  hence thesis by Th3;
+ end;
+
+definition let F;
+ func c3compl(F) ->
+  UnOp of [:the carrier of F,the carrier of F,the carrier of F:] means
+  :Def3: it.(x) = [-x`1,-x`2,-x`3];
+ existence
+ proof
+  deffunc O(Element of 3F(F)) = [-$1`1,-$1`2,-$1`3];
+  consider f be UnOp of 3F(F) such that
+   A1: f.(x) = O(x) from LambdaD;
+  take f;
+  thus thesis by A1;
+ end;
+ uniqueness
+  proof let f,g be UnOp of 3F(F) such that
+   A2:  f.(x) = [-x`1,-x`2,-x`3] and A3: g.(x) = [-x`1,-x`2,-x`3];
+     f.(x) = g.(x)
+    proof thus f.(x) = [-x`1,-x`2,-x`3] by A2 .= g.(x) by A3; end;
+   hence f = g by FUNCT_2:113;
+  end;
+ end;
+
+definition let F,x;
+ func -x -> Element of
+   [:the carrier of F,the carrier of F,the carrier of F:] equals
+ :Def4:  (c3compl(F)).(x);
+ coherence;
+end;
+
+canceled 2;
+
+theorem
+Th7: -x = [-x`1,-x`2,-x`3]
+ proof
+  thus -x = (c3compl(F)).(x) by Def4 .= [-x`1,-x`2,-x`3] by Def3;
+ end;
+
+::
+::                      2. PARALLELITY STRUCTURE
+::
+
+
+reserve S for set;
+
+definition let S;
+ mode Relation4 of S -> set means
+ :Def5: it c= [:S,S,S,S:];
+ existence;
+end;
+
+definition
+  struct(1-sorted) ParStr (# carrier -> set,
+                      4_arg_relation -> Relation4 of the carrier #);
+end;
+
+definition
+ cluster non empty ParStr;
+ existence
+  proof
+    consider A being non empty set, R being Relation4 of A;
+   take ParStr(#A,R#);
+   thus the carrier of ParStr(#A,R#) is non empty;
+  end;
+end;
+
+reserve F for Field;
+reserve PS for non empty ParStr;
+
+definition let PS;
+ let a,b,c,d be Element of PS;
+ pred a,b '||' c,d means
+ :Def6: [a,b,c,d] in the 4_arg_relation of PS;
+end;
+
+definition let F;
+ func C3(F) -> set equals
+ :Def7:  [:the carrier of F,the carrier of F,the carrier of F:];
+ coherence;
+end;
+
+definition let F;
+ cluster C3(F) -> non empty;
+ coherence
+ proof
+     C3(F) = [:the carrier of F,the carrier of F,the carrier of F:] by Def7;
+   hence thesis;
+ end;
+end;
+
+definition let F;
+ func 4C3(F) -> set equals
+ :Def8:  [:C3(F),C3(F),C3(F),C3(F):];
+ coherence;
+end;
+
+definition let F;
+ cluster 4C3(F) -> non empty;
+ coherence
+ proof
+     4C3 F = [:C3(F),C3(F),C3(F),C3(F):] by Def8;
+   hence thesis;
+ end;
+end;
+
+reserve x for set, a,b,c,d,e,f,g,h,i,j,k,l for
+   Element of [:the carrier of F,the carrier of F,the carrier of F:];
+
+definition let F;
+ func PRs(F) -> set means
+ :Def9: x in it iff x in 4C3(F) &
+  ex a,b,c,d st x = [a,b,c,d] &
+  (a`1-b`1)*(c`2-d`2) - (c`1-d`1)*(a`2-b`2) = 0.F &
+  (a`1-b`1)*(c`3-d`3) - (c`1-d`1)*(a`3-b`3) = 0.F &
+  (a`2-b`2)*(c`3-d`3) - (c`2-d`2)*(a`3-b`3) = 0.F;
+ existence
+ proof
+  defpred P[set] means
+   ex a,b,c,d st $1 = [a,b,c,d] &
+   (a`1-b`1)*(c`2-d`2) - (c`1-d`1)*(a`2-b`2) = 0.F &
+   (a`1-b`1)*(c`3-d`3) - (c`1-d`1)*(a`3-b`3) = 0.F &
+   (a`2-b`2)*(c`3-d`3) - (c`2-d`2)*(a`3-b`3) = 0.F;
+  thus ex X be set st for x be set holds x in X iff x in 4C3(F) & P[x]
+   from Separation;
+ end;
+ uniqueness
+  proof
+   defpred CB[set] means $1 in 4C3(F) &
+     ex a,b,c,d st $1 = [a,b,c,d] &
+      (a`1-b`1)*(c`2-d`2) - (c`1-d`1)*(a`2-b`2) = 0.F &
+      (a`1-b`1)*(c`3-d`3) - (c`1-d`1)*(a`3-b`3) = 0.F &
+      (a`2-b`2)*(c`3-d`3) - (c`2-d`2)*(a`3-b`3) = 0.F;
+   let H1,H2 be set such that A1: x in H1 iff CB[x] and A2: x in H2 iff CB[x];
+     x in H1 iff x in H2 proof x in H1 iff CB[x] by A1; hence thesis by A2;
+end;
+   hence H1 = H2 by TARSKI:2;
+  end;
+end;
+
+canceled 5;
+
+theorem
+Th13: PRs(F) c= [:C3(F),C3(F),C3(F),C3(F):]
+ proof let x; 4C3(F) = [:C3(F),C3(F),C3(F),C3(F):] by Def8;
+  hence thesis by Def9;
+ end;
+
+definition let F;
+ func PR(F) -> Relation4 of C3(F) equals
+ :Def10:  PRs(F);
+ coherence
+  proof PRs(F) c= [:C3(F),C3(F),C3(F),C3(F):] by Th13;
+   hence thesis by Def5;
+  end;
+end;
+
+definition let F;
+ func MPS(F) -> ParStr equals
+ :Def11:  ParStr (# C3(F),PR(F) #);
+ correctness;
+end;
+
+definition let F;
+ cluster MPS(F) -> strict non empty;
+ coherence
+  proof
+      MPS(F) = ParStr (# C3(F),PR(F) #) by Def11;
+   hence MPS F is strict & the carrier of MPS F is non empty;
+  end;
+end;
+
+canceled 2;
+
+theorem
+Th16: the carrier of MPS(F) = C3(F)
+ proof MPS(F) = ParStr (# C3(F),PR(F) #) by Def11; hence thesis; end;
+
+theorem
+Th17: the 4_arg_relation of MPS(F) = PR(F)
+ proof MPS(F) = ParStr (# C3(F),PR(F) #) by Def11; hence thesis; end;
+
+reserve a,b,c,d,p,q,r,s for Element of MPS(F);
+
+theorem
+Th18: a,b '||' c,d iff [a,b,c,d] in PR(F)
+ proof the 4_arg_relation of MPS(F) = PR(F) by Th17;
+  hence thesis by Def6;
+ end;
+
+theorem
+Th19: [a,b,c,d] in PR(F) iff ([a,b,c,d] in 4C3(F) &
+     ex e,f,g,h st [a,b,c,d] = [e,f,g,h] &
+      (e`1-f`1)*(g`2-h`2) - (g`1-h`1)*(e`2-f`2) = 0.F &
+      (e`1-f`1)*(g`3-h`3) - (g`1-h`1)*(e`3-f`3) = 0.F &
+      (e`2-f`2)*(g`3-h`3) - (g`2-h`2)*(e`3-f`3) = 0.F)
+ proof PR(F) = PRs(F) by Def10; hence thesis by Def9; end;
+
+theorem
+Th20: a,b '||' c,d iff ([a,b,c,d] in 4C3(F) &
+     ex e,f,g,h st [a,b,c,d] = [e,f,g,h] &
+      (e`1-f`1)*(g`2-h`2) - (g`1-h`1)*(e`2-f`2) = 0.F &
+      (e`1-f`1)*(g`3-h`3) - (g`1-h`1)*(e`3-f`3) = 0.F &
+      (e`2-f`2)*(g`3-h`3) - (g`2-h`2)*(e`3-f`3) = 0.F)
+ proof a,b '||' c,d iff [a,b,c,d] in PR(F) by Th18; hence thesis by Th19; end
+;
+
+theorem
+Th21: the carrier of MPS(F) =
+             [:the carrier of F,the carrier of F,the carrier of F:]
+ proof 3F(F) = C3(F) by Def7; hence thesis by Th16; end;
+
+theorem
+Th22: [a,b,c,d] in 4C3(F)
+ proof the carrier of MPS(F) = C3(F) & 4C3(F) = [:C3(F),C3(F),C3(F),C3(F):]
+     by Def8,Th16;
+  hence thesis;
+ end;
+
+theorem
+Th23: a,b '||' c,d iff ex e,f,g,h st [a,b,c,d] = [e,f,g,h] &
+        (e`1-f`1)*(g`2-h`2) - (g`1-h`1)*(e`2-f`2) = 0.F &
+        (e`1-f`1)*(g`3-h`3) - (g`1-h`1)*(e`3-f`3) = 0.F &
+        (e`2-f`2)*(g`3-h`3) - (g`2-h`2)*(e`3-f`3) = 0.F
+ proof [a,b,c,d] in 4C3(F) by Th22; hence thesis by Th20; end;
+
+theorem
+Th24: a,b '||' b,a
+ proof the carrier of MPS(F) = 3F(F) by Th21;
+  then consider e,f such that A1: [e,f,f,e] = [a,b,b,a];
+    (e`1-f`1)*(f`2-e`2) - (f`1-e`1)*(e`2-f`2) = 0.F &
+  (e`1-f`1)*(f`3-e`3) - (f`1-e`1)*(e`3-f`3) = 0.F &
+  (e`2-f`2)*(f`3-e`3) - (f`2-e`2)*(e`3-f`3) = 0.F by Lm2;
+  hence thesis by A1,Th23;
+ end;
+
+theorem
+Th25: a,b '||' c,c
+ proof the carrier of MPS(F) = 3F(F) by Th21;
+  then consider e,f,g such that A1: [e,f,g,g] = [a,b,c,c];
+    (e`1-f`1)*(g`2-g`2) - (g`1-g`1)*(e`2-f`2) = 0.F &
+  (e`1-f`1)*(g`3-g`3) - (g`1-g`1)*(e`3-f`3) = 0.F &
+  (e`2-f`2)*(g`3-g`3) - (g`2-g`2)*(e`3-f`3) = 0.F by Lm3;
+  hence thesis by A1,Th23;
+ end;
+
+theorem
+Th26: a,b '||' p,q & a,b '||' r,s implies p,q '||' r,s or a=b
+ proof
+  defpred CB[(Element of 3F(F)),(Element of 3F(F)),
+          (Element of 3F(F)),Element of 3F(F)]
+    means ($1`1-$2`1)*($3`2-$4`2) - ($3`1-$4`1)*($1`2-$2`2) = 0.F &
+          ($1`1-$2`1)*($3`3-$4`3) - ($3`1-$4`1)*($1`3-$2`3) = 0.F &
+          ($1`2-$2`2)*($3`3-$4`3) - ($3`2-$4`2)*($1`3-$2`3) = 0.F;
+  assume A1: a,b '||' p,q & a,b '||' r,s;
+
+  then consider e,f,g,h such that
+  A2:  [e,f,g,h] = [a,b,p,q] and A3: CB[e,f,g,h] by Th23;
+  consider i,j,k,l such that
+  A4:  [i,j,k,l] = [a,b,r,s] and A5: CB[i,j,k,l] by A1,Th23;
+  A6: e = a & f = b & g = p & h = q & i = a & j = b & k = r & l = s
+    by A2,A4,MCART_1:33;
+  set A = e`1-f`1, B = e`2-f`2, C = e`3-f`3,
+      D = g`1-h`1, E = g`2-h`2, K = g`3-h`3,
+      G = k`1-l`1, H = k`2-l`2, I = k`3-l`3;
+     now assume A7: a <> b;
+      now e = [e`1,e`2,e`3] & f = [f`1,f`2,f`3] by MCART_1:48;
+     then A8: e`1 <> f`1 or e`2 <> f`2 or e`3 <> f`3 by A6,A7;
+     per cases by A8,RLVECT_1:35;
+     case A9: A <> 0.F;
+      hence D*H-G*E = 0.F by A3,A5,A6,Lm4;
+      thus A10: D*I-G*K = 0.F by A3,A5,A6,A9,Lm4;
+        E*I = ((D*B)*A")*I & H*K = ((G*B)*A")*K by A3,A5,A6,A9,VECTSP_1:88;
+      hence E*I-H*K = 0.F by A10,Lm8;
+     case A11: B <> 0.F;
+      hence D*H-G*E = 0.F by A3,A5,A6,Lm6;
+      thus A12: E*I-H*K = 0.F by A3,A5,A6,A11,Lm4;
+        D*I = ((E*A)*B")*I & G*K = ((H*A)*B")*K by A3,A5,A6,A11,VECTSP_1:88;
+      hence D*I-G*K = 0.F by A12,Lm8;
+     case A13: C <> 0.F;
+      hence E*I-H*K = 0.F by A3,A5,A6,Lm6;
+        D*H = ((K*A)*C")*H & G*E = ((I*A)*C")*E & K*H - I*E = 0.F
+        by A3,A5,A6,A13,Lm6,VECTSP_1:88;
+      hence D*H-G*E = 0.F by Lm8;
+      thus D*I-G*K = 0.F by A3,A5,A6,A13,Lm6;
+    end;
+   hence ex g,h,k,l st [g,h,k,l] = [p,q,r,s] & CB[g,h,k,l] by A6;
+  end;
+  hence thesis by Th23;
+ end;
+
+theorem
+Th27: a,b '||' a,c implies b,a '||' b,c
+ proof assume a,b '||' a,c;
+
+  then consider e,f,g,h such that
+  A1:  [e,f,g,h] = [a,b,a,c] and
+  A2:  (e`1-f`1)*(g`2-h`2) - (g`1-h`1)*(e`2-f`2) = 0.F &
+       (e`1-f`1)*(g`3-h`3) - (g`1-h`1)*(e`3-f`3) = 0.F &
+       (e`2-f`2)*(g`3-h`3) - (g`2-h`2)*(e`3-f`3) = 0.F by Th23;
+    e = a & f = b & g = a & h = c by A1,MCART_1:33;
+  then [f,e,f,h] = [b,a,b,c] &
+  (f`1-e`1)*(f`2-h`2) - (f`1-h`1)*(f`2-e`2) = 0.F &
+  (f`1-e`1)*(f`3-h`3) - (f`1-h`1)*(f`3-e`3) = 0.F &
+  (f`2-e`2)*(f`3-h`3) - (f`2-h`2)*(f`3-e`3) = 0.F by A2,Lm13;
+  hence b,a '||' b,c by Th23;
+ end;
+
+theorem
+Th28: ex d st a,b '||' c,d & a,c '||' b,d
+ proof
+     the carrier of MPS(F) = 3F(F) by Th21;
+  then consider e,f,g such that A1: e = a & f = b & g = c;
+  set h = g+f+-e;
+  reconsider d = h as Element of MPS(F) by Th21;
+  take d;
+    g+f = [g`1+f`1,g`2+f`2,g`3+f`3] & -e = [-e`1,-e`2,-e`3] by Th3,Th7;
+  then h = [g`1+f`1+-e`1,g`2+f`2+-e`2,g`3+f`3+-e`3] by Th4;
+  then A2: h`1 = g`1+f`1+-e`1 & h`2 = g`2+f`2+-e`2 & h`3 = g`3+f`3+(-e`3)
+    by MCART_1:47;
+  then [e,f,g,h] = [a,b,c,d] &
+  (e`1-f`1)*(g`2-h`2) - (g`1-h`1)*(e`2-f`2) = 0.F &
+  (e`1-f`1)*(g`3-h`3) - (g`1-h`1)*(e`3-f`3) = 0.F &
+  (e`2-f`2)*(g`3-h`3) - (g`2-h`2)*(e`3-f`3) = 0.F by A1,Lm15;
+  hence a,b '||' c,d by Th23;
+    [e,g,f,h] = [a,c,b,d] &
+  (e`1-g`1)*(f`2-h`2) - (f`1-h`1)*(e`2-g`2) = 0.F &
+  (e`1-g`1)*(f`3-h`3) - (f`1-h`1)*(e`3-g`3) = 0.F &
+  (e`2-g`2)*(f`3-h`3) - (f`2-h`2)*(e`3-g`3) = 0.F by A1,A2,Lm15;
+  hence thesis by Th23;
+ end;
+
+::
+::                  3. DEFINITION OF PARALLELITY SPACE
+::
+
+definition let IT be non empty ParStr;
+ attr IT is ParSp-like means
+ :Def12: for a,b,c,d,p,q,r,s being Element of IT
+          holds a,b '||' b,a & a,b '||' c,c & (a,b '||' p,q & a,b '||' r,s
+          implies p,q '||' r,s or a=b) & (a,b '||' a,c implies b,a '||' b,c)
+          & (ex x being Element of IT st
+          a,b '||' c,x & a,c '||' b,x);
+end;
+
+definition
+ cluster strict ParSp-like (non empty ParStr);
+  existence
+   proof consider F;
+       for a,b,c,d,p,q,r,s being Element of MPS(F)
+     holds a,b '||' b,a & a,b '||' c,c & (a,b '||' p,q & a,b '||' r,s
+     implies p,q '||' r,s or a=b) & (a,b '||' a,c implies b,a '||' b,c)
+     & (ex x being Element of MPS(F) st
+     a,b '||' c,x & a,c '||' b,x) by Th24,Th25,Th26,Th27,Th28;
+     then MPS(F) is ParSp-like by Def12;
+    hence thesis;
+   end;
+end;
+
+definition
+ mode ParSp is ParSp-like (non empty ParStr);
+end;
+
+reserve PS for ParSp, a,b,c,d,p,q,r,s for Element of PS;
+
+canceled 6;
+
+theorem
+Th35: a,b '||' a,b
+proof b,a '||' b,b by Def12; hence a,b '||' a,b by Def12; end;
+
+theorem
+Th36: a,b '||' c,d implies c,d '||' a,b
+proof assume A1: a,b '||' c,d;
+  a,b '||' a,b by Th35; then a<>b implies c,d '||' a,b by A1,Def12;
+hence thesis by Def12; end;
+
+theorem
+Th37: a,a '||' b,c
+proof b,c '||' a,a by Def12; hence a,a '||' b,c by Th36; end;
+
+theorem
+Th38: a,b '||' c,d implies b,a '||' c,d
+proof assume A1: a,b '||' c,d;
+  a,b '||' b,a by Def12; then a<>b implies b,a '||' c,d by A1,Def12;
+hence thesis by A1; end;
+
+theorem
+Th39: a,b '||' c,d implies a,b '||' d,c
+proof assume a,b '||' c,d; then c,d '||' a,b by Th36; then d,c '||'
+ a,b by Th38;
+hence a,b '||' d,c by Th36; end;
+
+theorem
+Th40: a,b '||' c,d implies
+      b,a '||' c,d & a,b '||' d,c & b,a '||' d,c & c,d '||' a,b &
+      d,c '||' a,b & c,d '||' b,a & d,c '||' b,a
+proof assume a,b '||' c,d; then c,d '||' a,b by Th36;
+then A1: d,c '||' a,b by Th38; then A2: d,c '||' b,a by Th39; then c,d '||'
+ b,a by Th38;
+hence thesis by A1,A2,Th36,Th38; end;
+
+theorem
+Th41: a,b '||' a,c implies
+       a,c '||' a,b & b,a '||' a,c & a,b '||' c,a & a,c '||' b,a & b,a '||'
+ c,a &
+       c,a '||' a,b & c,a '||' b,a & b,a '||' b,c & a,b '||' b,c & b,a '||'
+ c,b &
+       b,c '||' b,a & a,b '||' c,b & c,b '||' b,a & b,c '||' a,b & c,b '||'
+ a,b &
+       c,a '||' c,b & a,c '||' c,b & c,a '||' b,c & a,c '||' b,c & c,b '||'
+ c,a &
+       b,c '||' c,a & c,b '||' a,c & b,c '||' a,c
+proof assume A1: a,b '||' a,c; then A2: b,a '||' b,c by Def12;
+     a,c '||' a,b by A1,Th36; then c,a '||' c,b by Def12;
+hence thesis by A1,A2,Th40;end;
+
+theorem
+  a=b or c = d or a=c & b=d or a=d & b=c implies a,b '||' c,d
+  by Def12,Th35,Th37;
+
+theorem
+Th43: a<>b & p,q '||' a,b & a,b '||' r,s implies p,q '||' r,s
+proof assume a<>b & p,q '||' a,b & a,b '||' r,s;
+then a<>b & a,b '||' p,q & a,b '||' r,s by Th40; hence thesis by Def12; end;
+
+theorem
+  not a,b '||' a,c implies a<>b & b<>c & c <>a by Def12,Th35,Th37;
+
+theorem
+    not a,b '||' c,d implies a<>b & c <>d by Def12,Th37;
+
+canceled;
+
+theorem
+Th47: not a,b '||' a,c implies
+ not a,c '||' a,b & not b,a '||' a,c & not a,b '||' c,a & not a,c '||' b,a &
+ not b,a '||' c,a & not c,a '||' a,b & not c,a '||' b,a & not b,a '||' b,c &
+ not a,b '||' b,c & not b,a '||' c,b & not b,c '||' b,a & not b,a '||' c,b &
+ not c,b '||' b,a & not b,c '||' a,b & not c,b '||' a,b & not c,a '||' c,b &
+ not a,c '||' c,b & not c,a '||' b,c & not a,c '||' b,c & not c,b '||' c,a &
+ not b,c '||' c,a & not c,b '||' a,c & not b,c '||' a,c
+proof assume A1: not a,b '||' a,c; assume not thesis;
+ then a,c '||' a,b or a,b '||' a,c or a,b '||' a,c or a,c '||' a,b or a,b '||'
+ a,c or
+ a,c '||' a,b or a,c '||' a,b or b,a '||' b,c or b,a '||' b,c or b,a '||'
+ b,c or
+ b,c '||' b,a or b,a '||' b,c or b,c '||' b,a or b,c '||' b,a or b,c '||'
+ b,a or
+ c,a '||' c,b or c,a '||' c,b or c,a '||' c,b or c,a '||' c,b or c,b '||'
+ c,a or
+ c,b '||' c,a or c,b '||' c,a or c,b '||' c,a by Th40;
+ hence contradiction by A1,Th41; end;
+
+theorem
+Th48: not a,b '||' c,d & a,b '||' p,q & c,d '||' r,s & p<>q & r<>s
+  implies not p,q '||' r,s
+proof assume A1: not a,b '||' c,d & a,b '||' p,q & c,d '||' r,s & p<>q & r<>s;
+assume p,q '||' r,s; then a,b '||' r,s by A1,Th43;
+then r,s '||' a,b & r,s '||' c,d by A1,Th40;
+hence contradiction by A1,Def12; end;
+
+theorem
+Th49: not a,b '||' a,c & a,b '||' p,q & a,c '||' p,r & b,c '||' q,r & p<>q
+implies not p,q '||' p,r
+proof assume A1: not a,b '||' a,c & a,b '||' p,q & a,c '||' p,r & b,c '||'
+ q,r & p<>q;
+  now assume p=r; then p,q '||' b,a & p,q '||' b,c by A1,Th40;
+then b,a '||' b,c by A1,Def12; hence contradiction by A1,Th41; end;
+hence thesis by A1,Th48; end;
+
+theorem
+Th50: not a,b '||' a,c & a,c '||' p,r & b,c '||' p,r implies p=r
+proof assume not a,b '||' a,c & a,c '||' p,r & b,c '||' p,r; then not
+a,c '||' b,c & p,r '||' a,c & p,r '||' b,c by Th40,Th47; hence
+  thesis by Def12; end;
+
+theorem
+Th51: not p,q '||' p,r & p,r '||' p,s & q,r '||' q,s implies r=s
+proof assume not p,q '||' p,r & p,r '||' p,s & q,r '||' q,s;
+then not r,p '||' r,q & r,s '||' r,p & r,s '||' r,q by Th47;
+hence thesis by Def12; end;
+
+theorem
+   not a,b '||' a,c & a,b '||' p,q & a,c '||' p,r & a,c '||' p,s &
+b,c '||' q,r & b,c '||' q,s implies r=s
+proof assume A1:  not a,b '||' a,c & a,b '||' p,q & a,c '||' p,r & a,c '||'
+ p,s &
+b,c '||' q,r & b,c '||' q,s;
+then A2: p=q implies p=r & p=s by Th50;
+  now assume p<>q; then not p,q '||' p,r & a<>c & b<>c by A1,Def12,Th35,Th49;
+then not p,q '||' p,r & p,r '||' p,s & q,r '||' q,s by A1,Def12;
+hence thesis by Th51; end;
+hence thesis by A2; end;
+
+theorem
+Th53: a,b '||' a,c & a,b '||' a,d implies a,b '||' c,d
+proof assume A1:  a,b '||' a,c & a,b '||' a,d;
+  now assume a<>b & a<>c; then a<>c & a,c '||' a,d by A1,Def12;
+then a<>c & a,c '||' c,d by Th41; hence thesis by A1,Th43; end;
+hence thesis by A1,Th37; end;
+
+theorem
+  (for a,b holds a=b) implies for p,q,r,s holds p,q '||' r,s
+proof assume A1: for a,b holds a=b; let p,q,r,s;
+  r=s by A1; hence thesis by Def12; end;
+
+theorem
+  (ex a,b st a<>b & for c holds a,b '||' a,c) implies for p,q,r,s holds p,q
+'||'
+ r,s
+proof assume A1: ex a,b st a<>b & for c holds a,b '||' a,c;
+let p,q,r,s; consider a,b such that A2: a<>b & for c holds a,b '||' a,c
+by A1; a,b '||' a,p & a,b '||' a,q & a,b '||' a,r & a,b '||' a,s by A2;
+then a,b '||' p,q & a,b '||' r,s by Th53; hence thesis by A2,Def12; end;
+
+theorem
+  not a,b '||' a,c & p<>q implies not p,q '||' p,a or not p,q '||'
+ p,b or not p,q '||' p,c
+proof assume A1: not a,b '||' a,c & p<>q;
+assume A2: not thesis; then A3: a<>p by A1,Def12;
+  p,a '||' p,b & p,a '||' p,c by A1,A2,Def12; then a,p '||' a,b & a,p '||'
+ a,c by Th41;
+hence contradiction by A1,A3,Def12; end;

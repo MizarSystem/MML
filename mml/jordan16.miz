@@ -1,0 +1,1066 @@
+:: On the Decomposition of a Simple Closed Curve into Two Arcs
+::  by Andrzej Trybulec and Yatsuka Nakamura
+::
+:: Received September 16, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, PRE_TOPC, SUBSET_1, COMPTS_1, BOOLE, RELAT_1, ORDINAL2,
+      FUNCT_1, RCOMP_1, ARYTM_1, PCOMPS_1, EUCLID, BORSUK_1, ARYTM_3, TOPMETR,
+      PSCOMP_1, JORDAN2C, SQUARE_1, JORDAN6, TOPREAL1, TOPS_2, TOPREAL2,
+      JORDAN3, JGRAPH_2, PARTFUN1, FCONT_1, CONNSP_2, SGRAPH1, REALSET1,
+      FINSET_1;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, NAT_1, REAL_1, RELAT_1, FUNCT_1, PARTFUN1, FINSET_1, FUNCT_2,
+      FCONT_1, REALSET1, PRE_CIRC, STRUCT_0, PRE_TOPC, TOPS_2, COMPTS_1,
+      CONNSP_2, PCOMPS_1, RCOMP_1, TMAP_1, EUCLID, PSCOMP_1, TOPMETR, JORDAN2C,
+      JORDAN6, TOPREAL1, JORDAN5C, TOPREAL2, JORDAN7;
+ constructors REAL_1, DOMAIN_1, TOPS_2, RCOMP_1, JORDAN6, JORDAN5C, PSCOMP_1,
+      CONNSP_1, FCONT_1, TMAP_1, JORDAN7, PRE_CIRC, JORDAN2C, REALSET1,
+      JORDAN9, JORDAN1K;
+ clusters FUNCT_1, PRE_TOPC, STRUCT_0, XREAL_0, RELSET_1, EUCLID, TOPMETR,
+      JORDAN1B, BORSUK_1, SEQ_1, TEX_2, GROUP_2, MEMBERED, FUNCT_2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, TOPS_2, TOPREAL1, FUNCT_1, XBOOLE_0, BORSUK_1;
+ theorems PRE_TOPC, STRUCT_0, TOPMETR, XREAL_0, XBOOLE_0, FUNCT_1, XBOOLE_1,
+      FUNCT_2, TOPREAL5, AXIOMS, TREAL_1, REAL_1, SQUARE_1, REAL_2, BORSUK_1,
+      JORDAN6, TOPREAL1, TOPS_2, TARSKI, RELAT_1, TOPREAL3, JORDAN5B, TOPMETR3,
+      TOPREAL2, ENUMSET1, ZFMISC_1, JORDAN5A, JORDAN5C, FCONT_1, FUNCT_3,
+      CONNSP_2, TMAP_1, RFUNCT_2, RELSET_1, FUNCT_4, RCOMP_1, JORDAN7,
+      SPRECT_1, PRE_CIRC, JORDAN2C, COMPTS_1, XCMPLX_0, XCMPLX_1;
+ schemes FUNCT_2;
+
+begin
+
+theorem
+   for S1 being finite non empty Subset of REAL, e being Real st
+   for r being Real st r in S1 holds r < e
+ holds max S1 < e
+proof let S1 be finite non empty Subset of REAL;
+    max S1 in S1 by PRE_CIRC:def 1;
+ hence thesis;
+end;
+
+reserve C for Simple_closed_curve,
+        A,A1,A2 for Subset of TOP-REAL 2,
+        p,p1,p2,q,q1,q2 for Point of TOP-REAL 2,
+        n for Nat;
+
+definition let n;
+ cluster trivial Subset of TOP-REAL n;
+ existence
+  proof
+    consider A being trivial Subset of TOP-REAL n;
+      A is Subset of TOP-REAL n;
+   hence thesis;
+  end;
+end;
+
+theorem
+  for a,b,c,X being set st a in X & b in X & c in X
+  holds {a,b,c} c= X
+ proof let a,b,c,X be set;
+  assume a in X & b in X & c in X;
+   then {a,b} c= X & {c} c= X by ZFMISC_1:37,38;
+   then {a,b} \/ {c} c= X by XBOOLE_1:8;
+  hence {a,b,c} c= X by ENUMSET1:43;
+ end;
+
+theorem
+   {}TOP-REAL n is Bounded
+ proof
+     {}TOP-REAL n is compact by COMPTS_1:9;
+  hence thesis by JORDAN2C:73;
+ end;
+
+theorem
+   Lower_Arc C <> Upper_Arc C
+proof assume Lower_Arc C = Upper_Arc C;
+  then A1: Lower_Arc C =(C\Lower_Arc C) \/ {W-min C, E-max C} by JORDAN6:66;
+    Lower_Arc C misses C\Lower_Arc C by XBOOLE_1:79;
+  then A2:  Lower_Arc C c= {W-min C, E-max C} by A1,XBOOLE_1:73;
+    Lower_Arc C is_an_arc_of W-min C, E-max C by JORDAN6:65;
+  then ex p3 being Point of TOP-REAL 2 st
+      p3 in Lower_Arc C & p3<>W-min C & p3<>E-max C by JORDAN6:55;
+ hence contradiction by A2,TARSKI:def 2;
+end;
+
+theorem Th5:
+  Segment(A,p1,p2,q1,q2) c= A
+proof
+A1: R_Segment(A,p1,p2,q1) c= A by JORDAN6:21;
+    Segment(A,p1,p2,q1,q2) = R_Segment(A,p1,p2,q1) /\ L_Segment(A,p1,p2,q2)
+                                   by JORDAN6:def 5;
+  then Segment(A,p1,p2,q1,q2) c= R_Segment(A,p1,p2,q1) by XBOOLE_1:17;
+ hence Segment(A,p1,p2,q1,q2) c= A by A1,XBOOLE_1:1;
+end;
+
+theorem Th6:
+ for T being non empty TopSpace,
+     A,B being Subset of T st A c= B
+   holds T|A is SubSpace of T|B
+proof
+ let T be non empty TopSpace, A,B be Subset of T;
+ assume A c= B;
+  then A \/ B = B by XBOOLE_1:12;
+ hence T|A is SubSpace of T|B by TOPMETR:5;
+end;
+
+theorem Th7:
+ A is_an_arc_of p1,p2 & q in A implies q in L_Segment(A,p1,p2,q)
+proof
+A1: L_Segment(A,p1,p2,q) = {q1 : LE q1,q,A,p1,p2} by JORDAN6:def 3;
+ assume A is_an_arc_of p1,p2 & q in A;
+  then LE q,q,A,p1,p2 by JORDAN5C:9;
+ hence thesis by A1;
+end;
+
+theorem Th8:
+ A is_an_arc_of p1,p2 & q in A implies q in R_Segment(A,p1,p2,q)
+proof
+A1: R_Segment(A,p1,p2,q) = {q1 : LE q,q1,A,p1,p2} by JORDAN6:def 4;
+ assume A is_an_arc_of p1,p2 & q in A;
+  then LE q,q,A,p1,p2 by JORDAN5C:9;
+ hence thesis by A1;
+end;
+
+theorem Th9:
+ A is_an_arc_of p1,p2 & LE q1, q2, A, p1, p2
+   implies q1 in Segment(A,p1,p2,q1,q2) & q2 in Segment(A,p1,p2,q1,q2)
+proof
+A1: L_Segment(A,p1,p2,q2) = {q : LE q,q2,A,p1,p2} by JORDAN6:def 3;
+A2: R_Segment(A,p1,p2,q1) = {q : LE q1,q,A,p1,p2} by JORDAN6:def 4;
+A3: Segment(A,p1,p2,q1,q2) = R_Segment(A,p1,p2,q1) /\ L_Segment(A,p1,p2,q2)
+                  by JORDAN6:def 5;
+ assume that
+A4: A is_an_arc_of p1,p2 and
+A5: LE q1, q2, A, p1, p2;
+A6: q1 in A by A5,JORDAN5C:def 3;
+A7: q2 in A by A5,JORDAN5C:def 3;
+A8: q1 in L_Segment(A,p1,p2,q2) by A1,A5;
+    q1 in R_Segment(A,p1,p2,q1) by A4,A6,Th8;
+ hence q1 in Segment(A,p1,p2,q1,q2) by A3,A8,XBOOLE_0:def 3;
+A9: q2 in R_Segment(A,p1,p2,q1) by A2,A5;
+    q2 in L_Segment(A,p1,p2,q2) by A4,A7,Th7;
+ hence q2 in Segment(A,p1,p2,q1,q2) by A3,A9,XBOOLE_0:def 3;
+end;
+
+theorem
+   Segment(p,q,C) c= C
+proof set S =Segment(p,q,C);
+ let e be set such that
+A1: e in S;
+     Upper_Arc C \/ Lower_Arc C = C by JORDAN6:65;
+   then A2: Upper_Arc C c= C & Lower_Arc C c= C by XBOOLE_1:7;
+ per cases;
+ suppose q = W-min C;
+   then S = {p1: LE p,p1,C or p in C & p1=W-min C} by JORDAN7:def 1;
+   then consider p1 such that
+A3: e = p1 and
+A4: LE p,p1,C or p in C & p1=W-min C by A1;
+     now assume LE p,p1,C;
+     then p1 in Upper_Arc C or p1 in Lower_Arc C by JORDAN6:def 10;
+    hence p1 in C by A2;
+   end;
+  hence thesis by A3,A4,SPRECT_1:15;
+ suppose q <> W-min C;
+  then S = {p1: LE p,p1,C & LE p1,q,C} by JORDAN7:def 1;
+   then consider p1 such that
+A5: e = p1 and
+A6: LE p,p1,C and LE p1,q,C by A1;
+     p1 in Upper_Arc C or p1 in Lower_Arc C by A6,JORDAN6:def 10;
+  hence thesis by A2,A5;
+end;
+
+theorem
+   p in C & q in C implies LE p,q,C or LE q,p,C
+proof assume that
+A1: p in C and
+A2: q in C;
+A3: C = Lower_Arc C \/ Upper_Arc C by JORDAN6:65;
+ per cases by A1,A2,A3,JORDAN7:1,XBOOLE_0:def 2;
+ suppose p = q;
+  hence thesis by A1,JORDAN6:71;
+ suppose that
+A4: p in Lower_Arc C & p <> W-min C and
+A5: q in Lower_Arc C & q <> W-min C and
+A6: p <> q;
+    Lower_Arc C is_an_arc_of E-max C,W-min C by JORDAN6:65;
+  then LE p,q,Lower_Arc C, E-max C,W-min C or
+   LE q,p,Lower_Arc C, E-max C,W-min C by A4,A5,A6,JORDAN5C:14;
+ hence LE p,q,C or LE q,p,C by A4,A5,JORDAN6:def 10;
+ suppose p in Lower_Arc C & p <> W-min C & q in Upper_Arc C;
+ hence LE p,q,C or LE q,p,C by JORDAN6:def 10;
+ suppose p in Upper_Arc C & q in Lower_Arc C & q <> W-min C;
+ hence LE p,q,C or LE q,p,C by JORDAN6:def 10;
+ suppose that
+A7: p in Upper_Arc C and
+A8: q in Upper_Arc C and
+A9: p <> q;
+    Upper_Arc C is_an_arc_of W-min C, E-max C by JORDAN6:65;
+  then LE p,q,Upper_Arc C,W-min C, E-max C or
+   LE q,p,Upper_Arc C,W-min C, E-max C by A7,A8,A9,JORDAN5C:14;
+ hence LE p,q,C or LE q,p,C by A7,A8,JORDAN6:def 10;
+end;
+
+theorem Th12:
+ for X,Y being non empty TopSpace, Y0 being non empty SubSpace of Y,
+     f being map of X,Y,
+     g being map of X,Y0 st f = g & f is continuous
+ holds g is continuous
+proof let X,Y be non empty TopSpace, Y0 being non empty SubSpace of Y;
+ let f be map of X,Y, g be map of X,Y0 such that
+A1: f = g and
+A2: f is continuous;
+ let W being Point of X, G being a_neighborhood of g.W;
+  consider V being Subset of Y0 such that
+A3: V is open and
+A4: V c= G and
+A5: g.W in V by CONNSP_2:8;
+  consider C being Subset of Y such that
+A6: C is open and
+A7: C /\ [#]Y0 = V by A3,TOPS_2:32;
+A8: g.W in [#]Y0 by PRE_TOPC:13;
+    [#]Y0 c= [#]Y by PRE_TOPC:def 9;
+  then g.W in [#]Y by A8;
+  then reconsider p = g.W as Point of Y;
+    p in C by A5,A7,XBOOLE_0:def 3;
+  then C is a_neighborhood of p by A6,CONNSP_2:5;
+  then consider H being a_neighborhood of W such that
+A9: f.:H c= C by A1,A2,BORSUK_1:def 2;
+ take H;
+    g.:H c= the carrier of Y0;
+  then g.:H c= [#]Y0 by PRE_TOPC:12;
+  then g.:H c= V by A1,A7,A9,XBOOLE_1:19;
+ hence g.:H c= G by A4,XBOOLE_1:1;
+end;
+
+theorem Th13:
+ for S,T being non empty TopSpace,
+     S0 being non empty SubSpace of S, T0 being non empty SubSpace of T,
+     f being map of S,T st f is_homeomorphism
+ for g being map of S0,T0 st g = f|S0 & g is onto
+  holds g is_homeomorphism
+proof
+ let S,T be non empty TopSpace,
+     S0 be non empty SubSpace of S, T0 be non empty SubSpace of T,
+     f be map of S,T such that
+A1: f is_homeomorphism;
+ let g be map of S0,T0 such that
+A2: g = f|S0 and
+A3: g is onto;
+ thus dom g = the carrier of S0 by FUNCT_2:def 1
+   .= [#]S0 by PRE_TOPC:12;
+ thus
+A4: rng g = the carrier of T0 by A3,FUNCT_2:def 3
+    .= [#]T0 by PRE_TOPC:12;
+A5: f is one-to-one by A1,TOPS_2:def 5;
+A6: g = f|the carrier of S0 by A2,TMAP_1:def 3;
+ hence
+A7: g is one-to-one by A5,FUNCT_1:84;
+    f is continuous by A1,TOPS_2:def 5;
+  then g is continuous map of S0,T by A2,TMAP_1:68;
+ hence g is continuous by Th12;
+A8: rng f = [#]T by A1,TOPS_2:def 5;
+
+A9: f.:the carrier of S0 = rng g by A6,RELAT_1:148
+    .= the carrier of T0 by A3,FUNCT_2:def 3;
+
+A10: g" = (f qua Function|the carrier of S0)" by A4,A6,A7,TOPS_2:def 4
+     .= (f qua Function)"|(f.:the carrier of S0) by A5,RFUNCT_2:40
+     .= f"|(the carrier of T0) by A5,A8,A9,TOPS_2:def 4
+     .= f"|T0 by TMAP_1:def 3;
+    f" is continuous by A1,TOPS_2:def 5;
+  then g" is continuous map of T0,S by A10,TMAP_1:68;
+ hence g" is continuous by Th12;
+end;
+
+theorem Th14:
+ for P1,P2,P3 being Subset of TOP-REAL 2
+ for p1,p2 being Point of TOP-REAL 2
+ st P1 is_an_arc_of p1,p2 & P2 is_an_arc_of p1,p2 & P3 is_an_arc_of p1,p2
+  & P2 /\ P3={p1,p2} & P1 c= P2 \/ P3
+ holds P1=P2 or P1=P3
+proof let P1,P2,P3 be Subset of TOP-REAL 2;
+ let p1,p2 be Point of TOP-REAL 2;
+ assume that
+A1: P1 is_an_arc_of p1,p2 and
+A2: P2 is_an_arc_of p1,p2 and
+A3: P3 is_an_arc_of p1,p2;
+ assume that
+A4: P2 /\ P3={p1,p2} and
+A5: P1 c= P2 \/ P3;
+  set P = P2 \/ P3;
+A6: P2 c= P by XBOOLE_1:7;
+A7: P3 c= P by XBOOLE_1:7;
+   A8: p1 in P2 by A2,TOPREAL1:4;
+     the carrier of Euclid 2=the carrier of TOP-REAL 2 by TOPREAL3:13;
+   then reconsider Q=P as non empty Subset of Euclid 2 by A6,A8;
+   A9: p2 in P2 /\ P3 by A4,TARSKI:def 2;
+   A10: p1 in P2 /\ P3 by A4,TARSKI:def 2;
+   consider f being map of I[01], (TOP-REAL 2)|P1 such that
+   A11: f is_homeomorphism & f.0 = p1 & f.1 = p2
+                            by A1,TOPREAL1:def 2;
+   A12: the carrier of (TOP-REAL 2)|P=[#]((TOP-REAL 2)|P) by PRE_TOPC:12
+                                .=P by PRE_TOPC:def 10;
+   A13: f is one-to-one by A11,TOPS_2:def 5;
+   A14: f is continuous by A11,TOPS_2:def 5;
+A15: dom f=[#](I[01]) by A11,TOPS_2:def 5;
+   then A16: dom f=the carrier of I[01] by PRE_TOPC:12;
+   A17: dom f=[.0,1.] by A15,BORSUK_1:83,PRE_TOPC:12;
+   A18: rng f=[#]((TOP-REAL 2)|P1) by A11,TOPS_2:def 5
+              .=P1 by PRE_TOPC:def 10;
+   reconsider U2=P2 as Subset of (TOP-REAL 2)|P
+                               by A6,A12;
+   A19: U2=P2 /\ P by A6,XBOOLE_1:28;
+     P2 is closed by A2,JORDAN6:12;
+   then A20: U2 is closed by A19,JORDAN6:3;
+   reconsider U3=P3 as Subset of (TOP-REAL 2)|P
+                               by A7,A12;
+   A21: U3=P3 /\ P by A7,XBOOLE_1:28;
+     P3 is closed by A3,JORDAN6:12;
+   then A22: U3 is closed by A21,JORDAN6:3;
+   per cases;
+   suppose A23: for r being Real st 0<r & r<1 holds f.r in P3;
+       P1 c= P3
+     proof let y be set;assume y in P1;
+       then consider x being set such that
+       A24: x in dom f & y=f.x by A18,FUNCT_1:def 5;
+       reconsider r=x as Real by A17,A24;
+         0<=r & r<=1 by A15,A24,BORSUK_1:83,TOPREAL5:1;
+       then r = 0 or r = 1 or 0<r & r <1 by AXIOMS:21;
+      hence y in P3 by A9,A10,A11,A23,A24,XBOOLE_0:def 3;
+     end;
+    hence P1=P2 or P1=P3 by A1,A3,JORDAN6:59;
+   suppose A25: ex r being Real st 0<r & r<1 & not f.r in P3;
+       now per cases;
+     case A26: for r being Real st 0<r & r<1 holds f.r in P2;
+       P1 c= P2
+     proof let y be set;assume y in P1;
+       then consider x being set such that
+       A27: x in dom f & y=f.x by A18,FUNCT_1:def 5;
+       reconsider r=x as Real by A17,A27;
+         0<=r & r<=1 by A15,A27,BORSUK_1:83,TOPREAL5:1;
+       then 0<r & r<1 or r=0 or r=1 by AXIOMS:21;
+      hence y in P2 by A9,A10,A11,A26,A27,XBOOLE_0:def 3;
+     end;
+    hence P1=P2 or P1=P3 by A1,A2,JORDAN6:59;
+     case ex r being Real st 0<r & r<1 & not f.r in P2;
+       then consider r2 being Real such that
+       A28: 0<r2 & r2<1 & not f.r2 in P2;
+       consider r1 being Real such that
+       A29: 0<r1 & r1<1 & not f.r1 in P3 by A25;
+         r2 in [.0,1.] by A28,TOPREAL5:1;
+       then f.r2 in rng f by A17,FUNCT_1:def 5;
+       then A30: f.r2 in P3 by A5,A18,A28,XBOOLE_0:def 2;
+        r1 in [.0,1.] by A29,TOPREAL5:1;
+       then A31: f.r1 in rng f by A17,FUNCT_1:def 5;
+       then A32: f.r1 in P2 by A5,A18,A29,XBOOLE_0:def 2;
+         now per cases;
+       suppose A33: r1<=r2;
+          now per cases by A33,REAL_1:def 5;
+        suppose r1=r2;
+           hence contradiction by A5,A18,A28,A29,A31,XBOOLE_0:def 2;
+        suppose A34: r1<r2;
+         A35: the carrier of (TOP-REAL 2)|P=[#]((TOP-REAL 2)|P)
+                                         by PRE_TOPC:12
+                                     .=P by PRE_TOPC:def 10;
+           the carrier of (TOP-REAL 2)|P1=[#]((TOP-REAL 2)|P1)
+                                          by PRE_TOPC:12
+                                     .=P1 by PRE_TOPC:def 10;
+         then rng f c= the carrier of (TOP-REAL 2)|P by A5,A35,XBOOLE_1:1;
+         then f is Function of the carrier of I[01],
+                  the carrier of (TOP-REAL 2)|P by A16,FUNCT_2:4;
+         then reconsider g=f as map of I[01],(TOP-REAL 2)|P;
+           P=P1 \/ P by A5,XBOOLE_1:12;
+         then (TOP-REAL 2)|P1 is SubSpace of (TOP-REAL 2)|P by TOPMETR:5;
+         then A36: g is continuous by A14,TOPMETR:7;
+         A37: U2 \/ U3 =the carrier of ((Euclid 2)|Q) by TOPMETR:def 2;
+           (TOP-REAL 2)|P=TopSpaceMetr((Euclid 2)|Q) by TOPMETR:20;
+         then consider r0 being Real such that
+         A38: r1<=r0 & r0<=r2 & g.r0 in U2 /\ U3
+                   by A20,A22,A28,A29,A30,A32,A34,A36,A37,TOPMETR3:17;
+         A39: g.r0=p1 or g.r0=p2
+                    by A4,A38,TARSKI:def 2;
+         A40: 0<r0 by A29,A38;
+           r0<1 by A28,A38,AXIOMS:22;
+         then A41: r0 in dom f by A17,A40,TOPREAL5:1;
+         A42: 0 in dom f by A17,TOPREAL5:1;
+            1 in dom f by A17,TOPREAL5:1;
+         hence contradiction by A11,A13,A28,A29,A38,A39,A41,A42,FUNCT_1:def 8;
+        end;
+        hence contradiction;
+       suppose A43: r1>r2;
+         A44: the carrier of (TOP-REAL 2)|P=[#]((TOP-REAL 2)|P)
+                                         by PRE_TOPC:12
+                                     .=P by PRE_TOPC:def 10;
+           the carrier of (TOP-REAL 2)|P1=[#]((TOP-REAL 2)|P1)
+                                          by PRE_TOPC:12
+                                     .=P1 by PRE_TOPC:def 10;
+         then rng f c= the carrier of (TOP-REAL 2)|P by A5,A44,XBOOLE_1:1;
+         then f is Function of the carrier of I[01],
+                  the carrier of (TOP-REAL 2)|P by A16,FUNCT_2:4;
+         then reconsider g=f as map of I[01],(TOP-REAL 2)|P;
+           P=P1 \/ P by A5,XBOOLE_1:12;
+         then (TOP-REAL 2)|P1 is SubSpace of (TOP-REAL 2)|P by TOPMETR:5;
+         then A45: g is continuous by A14,TOPMETR:7;
+         A46: U2 \/ U3 =the carrier of ((Euclid 2)|Q) by TOPMETR:def 2;
+           (TOP-REAL 2)|P=TopSpaceMetr((Euclid 2)|Q) by TOPMETR:20;
+         then consider r0 being Real such that
+         A47: r2<=r0 & r0<=r1 & g.r0 in U2 /\ U3
+                   by A20,A22,A28,A29,A30,A32,A43,A45,A46,TOPMETR3:17;
+         A48: g.r0=p1 or g.r0=p2
+                by A4,A47,TARSKI:def 2;
+         A49: 0<r0 by A28,A47;
+           r0<1 by A29,A47,AXIOMS:22;
+         then A50: r0 in dom f by A17,A49,TOPREAL5:1;
+            0 in dom f & 1 in dom f by A17,TOPREAL5:1;
+         hence contradiction by A11,A13,A28,A29,A47,A48,A50,FUNCT_1:def 8;
+        end;
+        hence contradiction;
+       end;
+      hence P1=P2 or P1=P3;
+     end;
+
+
+theorem Th15:
+ for C being Simple_closed_curve,
+     A1,A2 being Subset of TOP-REAL 2,
+     p1,p2 being Point of TOP-REAL 2
+  st A1 is_an_arc_of p1,p2 & A2 is_an_arc_of p1,p2
+     & A1 c= C & A2 c= C & A1 <> A2
+ holds A1 \/ A2 = C & A1 /\ A2 = {p1,p2}
+proof
+ let C be Simple_closed_curve,
+     A1,A2 be Subset of TOP-REAL 2,
+     p1,p2 be Point of TOP-REAL 2 such that
+A1: A1 is_an_arc_of p1,p2 and
+A2: A2 is_an_arc_of p1,p2 and
+A3: A1 c= C and
+A4: A2 c= C and
+A5: A1 <> A2;
+A6: p1 <> p2 by A1,JORDAN6:49;
+     p1 in A1 & p2 in A1 by A1,TOPREAL1:4;
+   then consider P1,P2 being non empty Subset of TOP-REAL 2
+        such that
+A7: P1 is_an_arc_of p1,p2 and
+A8: P2 is_an_arc_of p1,p2 and
+A9: C = P1 \/ P2 and
+A10: P1 /\ P2 = {p1,p2} by A3,A6,TOPREAL2:5;
+  reconsider P1,P2 as non empty Subset of TOP-REAL 2;
+A11: A1=P1 or A1=P2 by A1,A3,A7,A8,A9,A10,Th14;
+    A2=P1 or A2=P2 by A2,A4,A7,A8,A9,A10,Th14;
+ hence thesis by A5,A9,A10,A11;
+end;
+
+theorem Th16:
+ for A1,A2 being Subset of TOP-REAL 2,
+     p1,p2,q1,q2 being Point of TOP-REAL 2
+  st A1 is_an_arc_of p1,p2 & A1 /\ A2 = {q1,q2}
+ holds A1 <> A2
+proof
+ let A1,A2 be Subset of TOP-REAL 2,
+     p1,p2,q1,q2 be Point of TOP-REAL 2 such that
+A1: A1 is_an_arc_of p1,p2 and
+A2: A1 /\ A2 = {q1,q2} and
+A3: A1 = A2;
+ consider p3 being Point of TOP-REAL 2 such that
+A4: p3 in A1 and
+A5: p3<>p1 & p3<>p2 by A1,JORDAN6:55;
+    p1 in A1 & p2 in A1 by A1,TOPREAL1:4;
+  then (p1= q1 or p1 = q2) & (p2= q1 or p2 = q2) & (p3= q1 or p3 = q2)
+                                              by A2,A3,A4,TARSKI:def 2;
+ hence contradiction by A1,A5,JORDAN6:49;
+end;
+
+
+theorem
+   for C being Simple_closed_curve,
+     A1,A2 being Subset of TOP-REAL 2,
+     p1,p2 being Point of TOP-REAL 2
+  st A1 is_an_arc_of p1,p2 & A2 is_an_arc_of p1,p2
+     & A1 c= C & A2 c= C & A1 /\ A2 = {p1,p2}
+ holds A1 \/ A2 = C
+proof
+ let C be Simple_closed_curve,
+     A1,A2 be Subset of TOP-REAL 2,
+     p1,p2 be Point of TOP-REAL 2 such that
+A1: A1 is_an_arc_of p1,p2 and
+A2: A2 is_an_arc_of p1,p2 and
+A3: A1 c= C and
+A4: A2 c= C and
+A5: A1 /\ A2 = {p1,p2};
+    A1 <> A2 by A2,A5,Th16;
+ hence A1 \/ A2 = C by A1,A2,A3,A4,Th15;
+end;
+
+theorem
+   A1 c= C & A2 c= C & A1 <> A2 &
+ A1 is_an_arc_of p1,p2 & A2 is_an_arc_of p1,p2
+ implies
+  for A st A is_an_arc_of p1,p2 & A c= C holds A = A1 or A = A2
+proof assume that
+A1: A1 c= C and
+A2: A2 c= C and
+A3: A1 <> A2 and
+A4: A1 is_an_arc_of p1,p2 and
+A5: A2 is_an_arc_of p1,p2;
+ let A such that
+A6: A is_an_arc_of p1,p2 and
+A7: A c= C;
+A8: A1 \/ A2 = C by A1,A2,A3,A4,A5,Th15;
+    A1 /\ A2 = {p1,p2} by A1,A2,A3,A4,A5,Th15;
+ hence thesis by A4,A5,A6,A7,A8,Th14;
+end;
+
+theorem Th19:
+ for C being Simple_closed_curve,
+     A being non empty Subset of TOP-REAL 2
+  st A is_an_arc_of W-min C, E-max C & A c= C
+ holds A = Lower_Arc C or A = Upper_Arc C
+proof
+ let C be Simple_closed_curve, A be non empty Subset of TOP-REAL 2 such that
+A1: A is_an_arc_of W-min C, E-max C and
+A2: A c= C;
+    A is compact by A1,JORDAN5A:1;
+ hence A = Lower_Arc C or A = Upper_Arc C by A1,A2,TOPMETR3:19;
+end;
+
+theorem Th20:
+ A is_an_arc_of p1,p2 & LE q1, q2, A, p1, p2
+  implies ex g being map of I[01], (TOP-REAL 2)|A, s1, s2 being Real st
+  g is_homeomorphism & g.0 = p1 & g.1 = p2 & g.s1 = q1 & g.s2 = q2 &
+   0 <= s1 & s1 <= s2 & s2 <= 1
+proof
+ given f being map of I[01], (TOP-REAL 2)|A such that
+A1: f is_homeomorphism and
+A2: f.0 = p1 and
+A3: f.1 = p2;
+ assume
+A4: LE q1, q2, A, p1, p2;
+ then A5: q1 in A by JORDAN5C:def 3;
+A6: q2 in A by A4,JORDAN5C:def 3;
+ take f;
+A7: dom f = [#]I[01] by A1,TOPS_2:def 5
+       .= [.0,1.] by BORSUK_1:83,PRE_TOPC:12;
+A8: rng f = [#]((TOP-REAL 2)|A) by A1,TOPS_2:def 5
+       .= A by PRE_TOPC:def 10;
+  then consider u being set such that
+A9: u in dom f and
+A10: q1 = f.u by A5,FUNCT_1:def 5;
+  reconsider s1 = u as Element of REAL by A7,A9;
+  consider u being set such that
+A11: u in dom f and
+A12: q2 = f.u by A6,A8,FUNCT_1:def 5;
+  reconsider s2 = u as Element of REAL by A7,A11;
+ take s1,s2;
+ thus f is_homeomorphism & f.0 = p1 & f.1 = p2 by A1,A2,A3;
+ thus q1 = f.s1 & q2 = f.s2 by A10,A12;
+A13: 0 <= s1 & s1 <= 1 by A7,A9,TOPREAL5:1;
+ thus 0 <= s1 by A7,A9,TOPREAL5:1;
+     0 <= s2 & s2 <= 1 by A7,A11,TOPREAL5:1;
+ hence s1 <= s2 by A1,A2,A3,A4,A10,A12,A13,JORDAN5C:def 3;
+ thus s2 <= 1 by A7,A11,TOPREAL5:1;
+end;
+
+theorem Th21:
+ A is_an_arc_of p1,p2 & LE q1, q2, A, p1, p2 & q1 <> q2
+  implies ex g being map of I[01], (TOP-REAL 2)|A, s1, s2 being Real st
+  g is_homeomorphism & g.0 = p1 & g.1 = p2 & g.s1 = q1 & g.s2 = q2 &
+   0 <= s1 & s1 < s2 & s2 <= 1
+proof
+ assume that
+A1: A is_an_arc_of p1,p2 and
+A2: LE q1, q2, A, p1, p2 and
+A3: q1 <> q2;
+  consider g being map of I[01], (TOP-REAL 2)|A, s1, s2 being Real such that
+A4: g is_homeomorphism and
+A5: g.0 = p1 & g.1 = p2 and
+A6: g.s1 = q1 and
+A7: g.s2 = q2 and
+A8: 0 <= s1 and
+A9: s1 <= s2 and
+A10: s2 <= 1 by A1,A2,Th20;
+ take g,s1,s2;
+ thus g is_homeomorphism & g.0 = p1 & g.1 = p2 & g.s1 = q1 & g.s2 = q2 &
+   0 <= s1 by A4,A5,A6,A7,A8;
+ thus s1 < s2 by A3,A6,A7,A9,AXIOMS:21;
+ thus thesis by A10;
+end;
+
+theorem
+   A is_an_arc_of p1,p2 & LE q1, q2, A, p1, p2
+   implies Segment(A,p1,p2,q1,q2) is non empty
+proof assume that
+A1: A is_an_arc_of p1,p2 and
+A2: LE q1, q2, A, p1, p2;
+A3: Segment(A,p1,p2,q1,q2)={q:LE q1,q,A,p1,p2 & LE q,q2,A,p1,p2} by JORDAN6:29;
+    q2 in A by A2,JORDAN5C:def 3;
+  then LE q2,q2,A,p1,p2 by A1,JORDAN5C:9;
+  then q2 in Segment(A,p1,p2,q1,q2) by A2,A3;
+ hence Segment(A,p1,p2,q1,q2) is non empty;
+end;
+
+theorem
+   p in C implies
+  p in Segment(p,W-min C,C) & W-min C in Segment(p,W-min C,C)
+proof assume
+A1: p in C;
+A2: Segment(p,W-min C,C) = {p1: LE p,p1,C or p in C & p1=W-min C}
+                         by JORDAN7:def 1;
+    LE p,p,C by A1,JORDAN6:71;
+ hence p in Segment(p,W-min C, C) by A2;
+ thus W-min C in Segment(p,W-min C,C) by A1,A2;
+end;
+
+definition let f be PartFunc of REAL, REAL;
+ attr f is continuous means
+:Def1: f is_continuous_on dom f;
+end;
+
+definition let f be Function of REAL, REAL;
+ redefine attr f is continuous means
+     f is_continuous_on REAL;
+ compatibility
+  proof dom f = REAL by FUNCT_2:def 1;
+   hence thesis by Def1;
+  end;
+end;
+
+definition let a,b be real number;
+ func AffineMap(a,b) -> Function of REAL, REAL means
+:Def3: for x being real number holds it.x = a*x + b;
+ existence
+  proof
+    reconsider a' = a, b' = b as Element of REAL by XREAL_0:def 1;
+    deffunc F(Real)=a'*$1+b';
+    consider f being Function of REAL, REAL such that
+A1:   for x being Element of REAL holds f.x =F(x) from LambdaD;
+   take f;
+   let x be real number;
+    reconsider x' = x as Element of REAL by XREAL_0:def 1;
+      f.x' = a'*x+b' by A1;
+   hence thesis;
+  end;
+ uniqueness
+  proof let f,f' be Function of REAL, REAL such that
+A2: for x being real number holds f.x = a*x + b and
+A3: for x being real number holds f'.x = a*x + b;
+      now let x be Element of REAL;
+     thus f.x = a*x + b by A2 .= f'.x by A3;
+    end;
+   hence f = f' by FUNCT_2:113;
+  end;
+end;
+
+definition let a,b be real number;
+ cluster AffineMap(a,b) -> continuous;
+ coherence
+  proof set f = AffineMap(a,b);
+A1:  REAL c= dom f by FUNCT_2:def 1;
+      for x0 being real number st x0 in REAL holds f.x0 = a*x0+b by Def3;
+   hence AffineMap(a,b) is_continuous_on REAL by A1,FCONT_1:48;
+  end;
+end;
+
+definition
+ cluster continuous Function of REAL, REAL;
+ existence
+  proof take AffineMap(1,1);
+   thus thesis;
+  end;
+end;
+
+theorem
+   for f,g being continuous PartFunc of REAL, REAL
+  holds g*f is continuous PartFunc of REAL, REAL
+proof let f,g be continuous PartFunc of REAL, REAL;
+  reconsider h = g*f as PartFunc of REAL, REAL;
+A1: f is_continuous_on dom f by Def1;
+     dom h c= dom f by RELAT_1:44;
+   then A2: f is_continuous_on dom h by A1,FCONT_1:17;
+A3: g is_continuous_on dom g by Def1;
+     f.:dom h c= dom g by FUNCT_3:2;
+   then g is_continuous_on f.:dom h by A3,FCONT_1:17;
+  then h is_continuous_on dom h by A2,FCONT_1:26;
+ hence g*f is continuous PartFunc of REAL, REAL by Def1;
+end;
+
+theorem Th25:
+ for a,b being real number holds AffineMap(a,b).0 = b
+proof let a,b be real number;
+ thus AffineMap(a,b).0 = a*0 + b by Def3 .= b;
+end;
+
+theorem Th26:
+ for a,b being real number holds AffineMap(a,b).1 = a+b
+proof let a,b be real number;
+ thus AffineMap(a,b).1 = a*1 + b by Def3 .= a + b;
+end;
+
+theorem Th27:
+ for a,b being real number st a<> 0
+    holds AffineMap(a,b) is one-to-one
+proof let a,b be real number such that
+A1: a<> 0;
+  set f = AffineMap(a,b);
+ let x1,x2 be set;
+A2: dom f = REAL by FUNCT_2:def 1;
+ assume x1 in dom f;
+  then reconsider r1 = x1 as real number by A2,XREAL_0:def 1;
+ assume x2 in dom f;
+  then reconsider r2 = x2 as real number by A2,XREAL_0:def 1;
+ assume f.x1 = f.x2;
+  then a*r1+b = f.x2 by Def3 .= a*r2 +b by Def3;
+  then a*r1 = a*r2 by XCMPLX_1:2;
+ hence x1 = x2 by A1,XCMPLX_1:5;
+end;
+
+theorem
+   for a,b,x,y being real number st a > 0 & x < y
+    holds AffineMap(a,b).x < AffineMap(a,b).y
+proof let a,b,x,y be real number such that
+A1: a > 0 and
+A2: x < y;
+A3: AffineMap(a,b).x = a*x + b by Def3;
+A4: AffineMap(a,b).y = a*y + b by Def3;
+    a*x < a*y by A1,A2,REAL_1:70;
+ hence AffineMap(a,b).x < AffineMap(a,b).y by A3,A4,REAL_1:67;
+end;
+
+theorem
+   for a,b,x,y being real number st a < 0 & x < y
+    holds AffineMap(a,b).x > AffineMap(a,b).y
+proof let a,b,x,y be real number such that
+A1: a < 0 and
+A2: x < y;
+A3: AffineMap(a,b).x = a*x + b by Def3;
+A4: AffineMap(a,b).y = a*y + b by Def3;
+    a*x > a*y by A1,A2,REAL_1:71;
+ hence AffineMap(a,b).x > AffineMap(a,b).y by A3,A4,REAL_1:67;
+end;
+
+theorem Th30:
+ for a,b,x,y being real number st a >= 0 & x <= y
+    holds AffineMap(a,b).x <= AffineMap(a,b).y
+proof let a,b,x,y be real number such that
+A1: a >= 0 and
+A2: x <= y;
+A3: AffineMap(a,b).x = a*x + b by Def3;
+A4: AffineMap(a,b).y = a*y + b by Def3;
+    a*x <= a*y by A1,A2,AXIOMS:25;
+ hence AffineMap(a,b).x <= AffineMap(a,b).y by A3,A4,REAL_1:55;
+end;
+
+theorem
+   for a,b,x,y being real number st a <= 0 & x <= y
+    holds AffineMap(a,b).x >= AffineMap(a,b).y
+proof let a,b,x,y be real number such that
+A1: a <= 0 and
+A2: x <= y;
+A3: AffineMap(a,b).x = a*x + b by Def3;
+A4: AffineMap(a,b).y = a*y + b by Def3;
+    a*x >= a*y by A1,A2,REAL_1:52;
+ hence AffineMap(a,b).x >= AffineMap(a,b).y by A3,A4,REAL_1:55;
+end;
+
+theorem Th32:
+ for a,b being real number st a <> 0
+    holds rng AffineMap(a,b) = REAL
+proof let a,b be real number such that
+A1: a <> 0;
+ thus rng AffineMap(a,b) c= REAL;
+ let e be set;
+ assume e in REAL;
+  then reconsider r = e as Element of REAL;
+  set s = (r - b)/a;
+A2: s in REAL by XREAL_0:def 1;
+    AffineMap(a,b).s = a*s + b by Def3
+    .= r - b + b by A1,XCMPLX_1:88
+    .= r by XCMPLX_1:27;
+ hence e in rng AffineMap(a,b) by A2,FUNCT_2:6;
+end;
+
+theorem Th33:
+ for a,b being real number st a <> 0
+    holds AffineMap(a,b)" = AffineMap(a",-b/a)
+proof let a,b be real number such that
+A1: a <> 0;
+A2: rng AffineMap(a,b) = REAL by A1,Th32;
+A3: AffineMap(a,b) is one-to-one by A1,Th27;
+    for x being Element of REAL
+   holds (AffineMap(a",-b/a)*AffineMap(a,b)).x = (id REAL).x
+  proof let x being Element of REAL;
+   thus (AffineMap(a",-b/a)*AffineMap(a,b)).x
+        = AffineMap(a",-b/a).(AffineMap(a,b).x) by FUNCT_2:70
+       .= AffineMap(a",-b/a).(a*x+b) by Def3
+       .= a"*(a*x+b)+-b/a by Def3
+       .= a"*(a*x)+a"*b +-b/a by XCMPLX_1:8
+       .= a"*a*x+a"*b +-b/a by XCMPLX_1:4
+       .= 1 *x+a"*b +-b/a by A1,XCMPLX_0:def 7
+       .= x+a"*b -b/a by XCMPLX_0:def 8
+       .= x+ b/a -b/a by XCMPLX_0:def 9
+       .= x by XCMPLX_1:26
+       .= (id REAL).x by FUNCT_1:35;
+  end;
+  then AffineMap(a",-b/a)*AffineMap(a,b) = id REAL by FUNCT_2:113;
+ hence AffineMap(a,b)" = AffineMap(a",-b/a) by A2,A3,FUNCT_2:36;
+end;
+
+theorem Th34:
+ for a,b being real number st a > 0
+    holds AffineMap(a,b).:[.0,1.] = [.b,a+b.]
+proof let a,b be real number such that
+A1: a > 0;
+ thus AffineMap(a,b).:[.0,1.] c= [.b,a+b.]
+  proof let u be set;
+   assume u in AffineMap(a,b).:[.0,1.];
+    then consider r being Element of REAL such that
+A2:  r in [.0,1.] and
+A3:  u = AffineMap(a,b).r by FUNCT_2:116;
+    reconsider s = u as real number by A3;
+A4:  AffineMap(a,b).0 = b by Th25;
+A5:  AffineMap(a,b).1 = a+b by Th26;
+      0 <= r & r <= 1 by A2,TOPREAL5:1;
+    then b <= s & s <= a+b by A1,A3,A4,A5,Th30;
+   hence u in [.b,a+b.] by TOPREAL5:1;
+  end;
+ let u be set;
+ assume
+A6: u in [.b,a+b.];
+  then reconsider r = u as Element of REAL;
+  set s = (r - b)/a;
+     b <= r by A6,TOPREAL5:1;
+   then 0 <= r - b by SQUARE_1:12;
+   then A7: 0 <= s by A1,REAL_2:125;
+     r <= a+b by A6,TOPREAL5:1;
+   then r-b <= a by REAL_1:86;
+   then s <= a/a by A1,REAL_1:73;
+   then s <= 1 by A1,XCMPLX_1:60;
+   then A8: s in [.0,1.] by A7,TOPREAL5:1;
+    AffineMap(a,b).s = a*s + b by Def3
+    .= r - b + b by A1,XCMPLX_1:88
+    .= r by XCMPLX_1:27;
+ hence u in AffineMap(a,b).:[.0,1.] by A8,FUNCT_2:43;
+end;
+
+theorem Th35:
+ for f being map of R^1, R^1
+ for a,b being Real st a <> 0 & f = AffineMap(a,b)
+  holds f is_homeomorphism
+proof
+ let f be map of R^1, R^1;
+ let a,b be Real such that
+A1: a <> 0 and
+A2: f = AffineMap(a,b);
+A3: [#]R^1 = REAL by PRE_TOPC:12,TOPMETR:24;
+ hence dom f = [#]R^1 by A2,FUNCT_2:def 1;
+ thus
+A4: rng f = [#]R^1 by A1,A2,A3,Th32;
+ thus
+A5: f is one-to-one by A1,A2,Th27;
+    for x being Real holds f.x = a*x + b by A2,Def3;
+ hence f is continuous by TOPMETR:28;
+     f" = (f qua Function)" by A4,A5,TOPS_2:def 4
+     .= AffineMap(a",-b/a) by A1,A2,Th33;
+  then for x being Real holds f".x = a"*x + -b/a by Def3;
+ hence f" is continuous by TOPMETR:28;
+end;
+
+theorem Th36:
+ A is_an_arc_of p1,p2 & LE q1, q2, A, p1, p2 & q1 <> q2
+   implies Segment(A,p1,p2,q1,q2) is_an_arc_of q1,q2
+proof
+ assume that
+A1: A is_an_arc_of p1,p2 and
+A2: LE q1, q2, A, p1, p2 and
+A3: q1 <> q2;
+  consider g being map of I[01], (TOP-REAL 2)|A, s1, s2 being Real such that
+A4: g is_homeomorphism and
+A5: g.0 = p1 and
+A6: g.1 = p2 and
+A7: g.s1 = q1 and
+A8: g.s2 = q2 and
+A9: 0 <= s1 and
+A10: s1 < s2 and
+A11: s2 <= 1 by A1,A2,A3,Th21;
+  reconsider m = AffineMap(s2-s1,s1) as map of R^1,R^1 by TOPMETR:24;
+    for x being Real holds m.x = (s2-s1)*x + s1 by Def3;
+  then reconsider m as continuous map of R^1, R^1 by TOPMETR:28;
+  set h = m | I[01];
+A12: 0 < s2 - s1 by A10,SQUARE_1:11;
+A13: h = m | [. 0,1 .] by BORSUK_1:83,TMAP_1:def 3;
+  then A14: rng h = m.:[. 0,1 .] by RELAT_1:148
+    .= [.s1,s2-s1+s1.] by A12,Th34
+     .= [.s1,s2.] by XCMPLX_1:27;
+  then A15: rng h c= [. 0,1 .] by A9,A11,TREAL_1:1;
+A16: dom m = REAL by FUNCT_2:def 1;
+  then A17: dom h = [.0,1.] by A13,RELAT_1:91;
+  then h is Function of the carrier of I[01], the carrier of I[01]
+                                 by A15,BORSUK_1:83,FUNCT_2:def 1,RELSET_1:11;
+  then reconsider h as map of I[01],I[01];
+  set S = Segment(A,p1,p2,q1,q2);
+  set f = (g*AffineMap(s2-s1,s1))| [.0,1.];
+A18: AffineMap(s2-s1,s1).0 = s1 by Th25;
+A19: AffineMap(s2-s1,s1).1 = s2-s1+s1 by Th26
+                     .= s2 by XCMPLX_1:27;
+A20: [#]I[01] = [.0,1.] by BORSUK_1:83,PRE_TOPC:12;
+  reconsider A' = A as non empty Subset of TOP-REAL 2 by A1,TOPREAL1:4;
+  reconsider g as map of I[01], (TOP-REAL 2)|A';
+A21: [.0,1.] = dom g by BORSUK_1:83,FUNCT_2:def 1;
+     m.: [.0,1.] c= dom g
+    proof let e be set;
+     assume e in m.: [.0,1.];
+      then e in [.s1,s2-s1+s1.] by A12,Th34;
+      then A22:    e in [.s1,s2.] by XCMPLX_1:27;
+        [.s1,s2.] c= [.0,1.] by A9,A11,TREAL_1:1;
+     hence thesis by A21,A22;
+    end;
+   then [.0,1.] c= dom(g*m) by A16,FUNCT_3:3;
+   then A23: dom f = [#]I[01] by A20,RELAT_1:91;
+   then A24: dom f = the carrier of I[01] by PRE_TOPC:12;
+A25: s1 < 1 by A10,A11,AXIOMS:22;
+A26: 0 < s2 by A9,A10;
+A27: S={q:LE q1,q,A,p1,p2 & LE q,q2,A,p1,p2} by JORDAN6:29;
+A28: f = g*h by A13,RELAT_1:112;
+     for y being set holds y in [#]((TOP-REAL 2)|S) iff
+     ex x being set st x in dom f & y = f.x
+   proof let y be set;
+    thus y in [#]((TOP-REAL 2)|S) implies
+     ex x being set st x in dom f & y = f.x
+     proof assume
+         y in [#]((TOP-REAL 2)|S);
+       then y in S by PRE_TOPC:def 10;
+       then consider q0 being Point of TOP-REAL 2 such that
+A29:     y = q0 and
+A30:     LE q1,q0,A,p1,p2 and
+A31:     LE q0,q2,A,p1,p2 by A27;
+         q0 in A by A30,JORDAN5C:def 3;
+       then q0 in [#]((TOP-REAL 2)|A) by PRE_TOPC:def 10;
+       then q0 in rng g by A4,TOPS_2:def 5;
+       then consider s being set such that
+A32:     s in dom g and
+A33:     q0 = g.s by FUNCT_1:def 5;
+       reconsider s as Element of REAL by A21,A32;
+A34:   0 <= s & s <= 1 by A21,A32,TOPREAL5:1;
+       then A35:     s1+0 <= s by A4,A5,A6,A7,A9,A25,A30,A33,JORDAN5C:def 3;
+A36:     s <= s2 by A4,A5,A6,A8,A11,A26,A31,A33,A34,JORDAN5C:def 3;
+      take x = (s-s1)/(s2-s1);
+         0 <= s - s1 by A35,REAL_1:84;
+       then A37:    0 <= x by A12,REAL_2:135;
+         s-s1 <= s2 - s1 by A36,REAL_1:49;
+       then x <= (s2 - s1)/(s2 - s1) by A12,REAL_1:73;
+       then x <= 1 by A12,XCMPLX_1:60;
+      hence
+A38:     x in dom f by A20,A23,A37,TOPREAL5:1;
+         m.x = (s2-s1)*x + s1 by Def3
+          .= s - s1 + s1 by A12,XCMPLX_1:88
+          .= s by XCMPLX_1:27;
+      hence y = (g*m).x by A16,A29,A33,FUNCT_1:23
+          .= f.x by A38,FUNCT_1:70;
+     end;
+    given x be set such that
+A39:  x in dom f and
+A40:  y = f.x;
+     reconsider x as Element of REAL by A20,A23,A39;
+A41:   y in rng f by A39,A40,FUNCT_1:def 5;
+       rng f c= rng g by A28,RELAT_1:45;
+     then y in rng g by A41;
+     then y in the carrier of (TOP-REAL 2)|A;
+     then y in [#]((TOP-REAL 2)|A) by PRE_TOPC:12;
+     then y in A by PRE_TOPC:def 10;
+     then reconsider q = y as Point of TOP-REAL 2;
+       AffineMap(s2-s1,s1).x in REAL;
+     then reconsider s = m.x as Element of REAL;
+A42:   q = (g*m).x by A39,A40,FUNCT_1:70
+      .= g.s by A16,FUNCT_1:23;
+       h.x = m.x by A13,A17,A23,A39,BORSUK_1:83,FUNCT_1:70;
+     then A43:      s in rng h by A17,A23,A39,BORSUK_1:83,FUNCT_1:def 5;
+     then A44:  s1 <= s by A14,TOPREAL5:1;
+A45:  s <= s2 by A14,A43,TOPREAL5:1;
+then A46:  s <= 1 by A11,AXIOMS:22;
+then A47:   LE q1,q,A,p1,p2 by A1,A4,A5,A6,A7,A9,A25,A42,A44,JORDAN5C:8;
+       LE q,q2,A,p1,p2 by A1,A4,A5,A6,A8,A9,A11,A42,A44,A45,A46,JORDAN5C:8;
+     then q in S by A27,A47;
+    hence y in [#]((TOP-REAL 2)|S) by PRE_TOPC:def 10;
+   end;
+   then A48: rng f = [#]((TOP-REAL 2)|S) by FUNCT_1:def 5;
+   then A49: [#]((TOP-REAL 2)|S) <> {} by A23,RELAT_1:65;
+  rng f = the carrier of (TOP-REAL 2)|S by A48,PRE_TOPC:12;
+  then f is Function of the carrier of I[01], the carrier of (TOP-REAL 2)|S
+              by A24,A48,A49,FUNCT_2:def 1,RELSET_1:11;
+  then reconsider f as map of I[01], (TOP-REAL 2)|S;
+ take f;
+  reconsider CIT = Closed-Interval-TSpace(s1,s2)
+          as non empty SubSpace of I[01] by A9,A10,A11,TOPMETR:27,TREAL_1:6;
+A50: S c= A by Th5;
+    the carrier of (TOP-REAL 2)|S <> {} by A49,PRE_TOPC:12;
+  then reconsider TS = (TOP-REAL 2)|S as non empty
+       SubSpace of (TOP-REAL 2)|A' by A50,Th6,STRUCT_0:def 1;
+A51: rng h = the carrier of CIT by A10,A14,TOPMETR:25;
+  then h is Function of the carrier of I[01], the carrier of CIT
+                                by A17,BORSUK_1:83,FUNCT_2:def 1,RELSET_1:11;
+  then reconsider h as map of I[01], CIT;
+  set o = g | CIT;
+       [.s1,s2.] c= [.0,1.] by A9,A11,TREAL_1:1;
+  then A52: the carrier of CIT c= dom g by A10,A21,TOPMETR:25;
+A53: dom o = dom(g|the carrier of CIT) by TMAP_1:def 3
+     .= dom g /\ the carrier of CIT by RELAT_1:90
+     .= the carrier of CIT by A52,XBOOLE_1:28;
+A54: the carrier of CIT = [.s1,s2.] by A10,TOPMETR:25;
+   then o = g|rng h by A14,TMAP_1:def 3;
+   then A55: f = o*h by A28,FUNCT_4:2;
+  then A56: rng o = rng f by A14,A53,A54,RELAT_1:47;
+  then A57:   rng o = the carrier of TS by A48,PRE_TOPC:12;
+    o is Function of the carrier of CIT, the carrier of TS
+                                by A53,A56,FUNCT_2:def 1,RELSET_1:11;
+  then reconsider o as map of CIT, TS;
+    o is onto by A57,FUNCT_2:def 3;
+  then A58:  o is_homeomorphism by A4,Th13;
+A59: m is_homeomorphism by A12,Th35;
+    h is onto by A51,FUNCT_2:def 3;
+  then h is_homeomorphism by A59,Th13;
+ hence f is_homeomorphism by A55,A58,TOPS_2:71;
+A60: dom AffineMap(s2-s1,s1) = REAL by FUNCT_2:def 1;
+    0 in [.0,1.] by RCOMP_1:15;
+ hence f.0 = (g*m).0 by FUNCT_1:72
+        .=q1 by A7,A18,A60,FUNCT_1:23;
+    1 in [.0,1.] by RCOMP_1:15;
+ hence f.1 = (g*m).1 by FUNCT_1:72
+        .= q2 by A8,A19,A60,FUNCT_1:23;
+end;
+
+theorem
+   for p1,p2 being Point of TOP-REAL 2
+ for P being Subset of TOP-REAL 2 st P c= C
+  & P is_an_arc_of p1,p2 & W-min C in P & E-max C in P
+ holds Upper_Arc C c= P or Lower_Arc C c= P
+proof let p1,p2 be Point of TOP-REAL 2;
+ let P being Subset of TOP-REAL 2 such that
+A1: P c= C and
+A2: P is_an_arc_of p1,p2 and
+A3: W-min C in P and
+A4: E-max C in P;
+A5: W-min C <> E-max C by TOPREAL5:25;
+  reconsider P' = P as non empty Subset of TOP-REAL 2 by A3;
+ per cases by A2,A3,A4,A5,JORDAN5C:14;
+ suppose
+A6: LE W-min C, E-max C, P,p1,p2;
+   set S = Segment(P',p1,p2,W-min C, E-max C);
+   reconsider S' = S as non empty Subset of TOP-REAL 2 by A2,A6,Th9;
+  S c= P by Th5;
+  then A7: S c= C by A1,XBOOLE_1:1;
+    S is_an_arc_of W-min C, E-max C by A2,A5,A6,Th36;
+  then S' = Lower_Arc C or S' = Upper_Arc C by A7,Th19;
+ hence Upper_Arc C c= P or Lower_Arc C c= P by Th5;
+ suppose
+A8: LE E-max C, W-min C, P,p1,p2;
+   set S = Segment(P',p1,p2,E-max C, W-min C);
+   reconsider S' = S as non empty Subset of TOP-REAL 2 by A2,A8,Th9;
+A9: S c= P by Th5;
+  then A10: S c= C by A1,XBOOLE_1:1;
+    S is_an_arc_of E-max C, W-min C by A2,A5,A8,Th36;
+  then S' is_an_arc_of W-min C, E-max C by JORDAN5B:14;
+ hence Upper_Arc C c= P or Lower_Arc C c= P by A9,A10,Th19;
+end;

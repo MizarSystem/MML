@@ -1,0 +1,751 @@
+:: Several Properties of Fields. Field Theory
+::  by J\'ozef Bia{\l}as
+::
+:: Received September 27, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary VECTSP_1, REALSET2, FUNCT_1, BOOLE, BINOP_1, REALSET3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, FUNCT_2, REALSET2,
+      BINOP_1;
+ constructors REALSET2, XBOOLE_0;
+ clusters REALSET1, REALSET2, RELSET_1, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ theorems FUNCT_2, ZFMISC_1, REALSET2, TARSKI, XBOOLE_0;
+ schemes FUNCT_2;
+
+begin
+
+:: Properties of fields
+
+theorem Th1:
+   for F being Field holds compf(F).(ndf(F)) = ndf(F)
+proof
+   let F be Field;
+     odf(F).[ndf(F),ndf(F)] = ndf(F) by REALSET2:13;
+   hence thesis by REALSET2:26;
+end;
+
+theorem Th2:
+   for F being Field holds revf(F).(nmf(F)) = nmf(F)
+proof
+   let F be Field;
+     omf(F).[nmf(F),nmf(F)] = nmf(F) by REALSET2:22;
+   hence thesis by REALSET2:42;
+end;
+
+theorem Th3:
+   for F being Field holds
+   for a,b being Element of suppf(F) holds
+   compf(F).(odf(F).[a,compf(F).b]) = odf(F).[b,compf(F).a]
+proof
+   let F be Field;
+   let a,b be Element of suppf(F);
+A1:odf(F).[a,compf(F).b] is Element of suppf(F) by REALSET2:28;
+A2:odf(F).[b,compf(F).a] is Element of suppf(F) by REALSET2:28;
+then odf(F).[compf(F).b,odf(F).[b,compf(F).a]] =
+           odf(F).[odf(F).[b,compf(F).a],compf(F).b] by REALSET2:12
+        .= odf(F).[odf(F).[compf(F).a,b],compf(F).b] by REALSET2:12
+        .= odf(F).[compf(F).a,odf(F).[b,compf(F).b]] by REALSET2:11
+        .= odf(F).[compf(F).a,ndf(F)] by REALSET2:def 8
+        .= compf(F).a by REALSET2:13;
+   then odf(F).[odf(F).[a,compf(F).b],odf(F).[b,compf(F).a]] =
+odf(F).[a,compf(F).a] by A2,REALSET2:11
+        .= ndf(F) by REALSET2:def 8;
+   hence thesis by A1,A2,REALSET2:26;
+end;
+
+theorem Th4:
+   for F being Field holds
+   for a,b being Element of suppf(F)\{ndf(F)} holds
+   revf(F).(omf(F).[a,revf(F).b]) = omf(F).[b,revf(F).a]
+proof
+   let F be Field;
+   let a,b be Element of suppf(F)\{ndf(F)};
+A1:omf(F).[a,revf(F).b] is Element of suppf(F)\{ndf(F)} by REALSET2:44;
+A2:omf(F).[b,revf(F).a] is Element of suppf(F)\{ndf(F)} by REALSET2:44;
+   then omf(F).[revf(F).b,omf(F).[b,revf(F).a]] =
+           omf(F).[omf(F).[b,revf(F).a],revf(F).b] by REALSET2:21
+        .= omf(F).[omf(F).[revf(F).a,b],revf(F).b] by REALSET2:21
+        .= omf(F).[revf(F).a,omf(F).[b,revf(F).b]] by REALSET2:20
+        .= omf(F).[revf(F).a,nmf(F)] by REALSET2:def 9
+        .= revf(F).a by REALSET2:22;
+then omf(F).[omf(F).[a,revf(F).b],omf(F).[b,revf(F).a]] =omf(F).[a,revf(F).a]
+by A2,REALSET2:20
+        .= nmf(F) by REALSET2:def 9;
+   hence thesis by A1,A2,REALSET2:42;
+end;
+
+theorem Th5:
+   for F being Field holds
+   for a,b being Element of suppf(F) holds
+   compf(F).(odf(F).[a,b]) = odf(F).[compf(F).a,compf(F).b]
+proof
+   let F be Field;
+   let a,b be Element of suppf(F);
+   thus compf(F).(odf(F).[a,b]) = compf(F).(odf(F).[a,compf(F).(compf(F).b)])
+     by REALSET2:27
+          .= odf(F).[compf(F).b,compf(F).a] by Th3
+          .= odf(F).[compf(F).a,compf(F).b] by REALSET2:12;
+end;
+
+theorem Th6:
+   for F being Field,
+       a,b being Element of suppf(F)\{ndf(F)} holds
+   revf(F).(omf(F).[a,b]) = omf(F).[revf(F).a,revf(F).b]
+proof
+   let F be Field;
+   let a,b be Element of suppf(F)\{ndf(F)};
+   thus revf(F).(omf(F).[a,b]) = revf(F).(omf(F).[a,revf(F).(revf(F).b)]) by
+REALSET2:43
+          .= omf(F).[revf(F).b,revf(F).a] by Th4
+          .= omf(F).[revf(F).a,revf(F).b] by REALSET2:21;
+end;
+
+theorem Th7:
+   for F being Field holds
+   for a,b,c,d being Element of suppf(F) holds
+   odf(F).[a,compf(F).b] = odf(F).[c,compf(F).d] iff
+   odf(F).[a,d] = odf(F).[b,c]
+proof
+   let F be Field;
+   let a,b,c,d be Element of suppf(F);
+A1:odf(F).[c,compf(F).d] is Element of suppf(F) by REALSET2:28;
+A2:odf(F).[a,compf(F).b] = odf(F).[c,compf(F).d] implies
+   odf(F).[a,d] = odf(F).[b,c]
+   proof
+      assume
+   A3:odf(F).[a,compf(F).b] = odf(F).[c,compf(F).d];
+   A4:a = odf(F).[a,ndf(F)] by REALSET2:13
+       .= odf(F).[a,odf(F).[b,compf(F).b]] by REALSET2:def 8
+       .= odf(F).[a,odf(F).[compf(F).b,b]] by REALSET2:12
+       .= odf(F).[odf(F).[c,compf(F).d],b] by A3,REALSET2:11
+       .= odf(F).[b,odf(F).[c,compf(F).d]] by A1,REALSET2:12;
+     c = odf(F).[c,ndf(F)] by REALSET2:13
+       .= odf(F).[c,odf(F).[d,compf(F).d]] by REALSET2:def 8
+       .= odf(F).[c,odf(F).[compf(F).d,d]] by REALSET2:12
+       .= odf(F).[odf(F).[c,compf(F).d],d] by REALSET2:11;
+      hence thesis by A1,A4,REALSET2:11;
+   end;
+     odf(F).[a,d] = odf(F).[b,c] implies
+   odf(F).[a,compf(F).b] = odf(F).[c,compf(F).d]
+   proof
+      assume
+   A5:odf(F).[a,d] = odf(F).[b,c];
+     a = odf(F).[a,ndf(F)] by REALSET2:13
+       .= odf(F).[a,odf(F).[d,compf(F).d]] by REALSET2:def 8
+       .= odf(F).[odf(F).[b,c],compf(F).d] by A5,REALSET2:11
+       .= odf(F).[b,odf(F).[c,compf(F).d]] by REALSET2:11
+       .= odf(F).[odf(F).[c,compf(F).d],b] by A1,REALSET2:12;
+      hence odf(F).[a,compf(F).b] =
+      odf(F).[odf(F).[c,compf(F).d],odf(F).[b,compf(F).b]]
+               by A1,REALSET2:11
+       .= odf(F).[odf(F).[c,compf(F).d],ndf(F)] by REALSET2:def 8
+       .= odf(F).[c,compf(F).d] by A1,REALSET2:13;
+   end;
+   hence thesis by A2;
+end;
+
+theorem Th8:
+   for F being Field holds
+   for a,c being Element of suppf(F) holds
+   for b,d being Element of suppf(F)\{ndf(F)} holds
+   omf(F).[a,revf(F).b] = omf(F).[c,revf(F).d] iff omf(F).[a,d] = omf(F).[b,c]
+proof
+   let F be Field;
+   let a,c be Element of suppf(F);
+   let b,d be Element of suppf(F)\{ndf(F)};
+A1:d is Element of suppf(F) & b is Element of suppf(F) by XBOOLE_0:def 4;
+A2:revf(F).d is Element of suppf(F) &
+   revf(F).b is Element of suppf(F) by XBOOLE_0:def 4;
+then A3:omf(F).[c,revf(F).d] is Element of suppf(F) by REALSET2:28;
+A4:omf(F).[a,revf(F).b] = omf(F).[c,revf(F).d] implies
+   omf(F).[a,d] = omf(F).[b,c]
+   proof
+      assume
+   A5:omf(F).[a,revf(F).b] = omf(F).[c,revf(F).d];
+   A6:a = omf(F).[a,nmf(F)] by REALSET2:39
+       .= omf(F).[a,omf(F).[b,revf(F).b]] by REALSET2:def 9
+       .= omf(F).[a,omf(F).[revf(F).b,b]] by A1,A2,REALSET2:38
+       .= omf(F).[omf(F).[c,revf(F).d],b] by A1,A2,A5,REALSET2:37
+       .= omf(F).[b,omf(F).[c,revf(F).d]] by A1,A3,REALSET2:38;
+        c = omf(F).[c,nmf(F)] by REALSET2:39
+       .= omf(F).[c,omf(F).[d,revf(F).d]] by REALSET2:def 9
+       .= omf(F).[c,omf(F).[revf(F).d,d]] by A1,A2,REALSET2:38
+       .= omf(F).[omf(F).[c,revf(F).d],d] by A1,A2,REALSET2:37;
+      hence thesis by A1,A3,A6,REALSET2:37;
+   end;
+     omf(F).[a,d] = omf(F).[b,c] implies
+   omf(F).[a,revf(F).b] = omf(F).[c,revf(F).d]
+   proof
+      assume
+   A7:omf(F).[a,d] = omf(F).[b,c];
+        a = omf(F).[a,nmf(F)] by REALSET2:39
+       .= omf(F).[a,omf(F).[d,revf(F).d]] by REALSET2:def 9
+       .= omf(F).[omf(F).[b,c],revf(F).d] by A1,A2,A7,REALSET2:37
+       .= omf(F).[b,omf(F).[c,revf(F).d]] by A1,A2,REALSET2:37
+       .= omf(F).[omf(F).[c,revf(F).d],b] by A1,A3,REALSET2:38;
+      hence omf(F).[a,revf(F).b] =
+          omf(F).[omf(F).[c,revf(F).d],omf(F).[b,revf(F).b]]
+               by A1,A2,A3,REALSET2:37
+       .= omf(F).[omf(F).[c,revf(F).d],nmf(F)] by REALSET2:def 9
+       .= omf(F).[c,revf(F).d] by A3,REALSET2:39;
+   end;
+   hence thesis by A4;
+end;
+
+theorem
+     for F being Field holds
+   for a,b being Element of suppf(F) holds
+   omf(F).[a,b] = ndf(F) iff (a = ndf(F) or b = ndf(F))
+proof
+   let F be Field;
+   let a,b be Element of suppf(F);
+     omf(F).[a,b] = ndf(F) implies (a = ndf(F) or b = ndf(F))
+   proof
+      assume
+   A1:omf(F).[a,b] = ndf(F);
+      assume a <> ndf(F);
+      then not a in {ndf(F)} by TARSKI:def 1;
+      then A2:a is Element of suppf(F)\{ndf(F)} by XBOOLE_0:def 4;
+      then revf(F).a is Element of suppf(F)\{ndf(F)} by REALSET2:44;
+   then A3:revf(F).a is Element of suppf(F) by XBOOLE_0:def 4;
+      thus b = omf(F).[b,nmf(F)] by REALSET2:39
+       .= omf(F).[b,omf(F).[a,revf(F).a]] by A2,REALSET2:def 9
+       .= omf(F).[omf(F).[b,a],revf(F).a] by A3,REALSET2:37
+       .= omf(F).[ndf(F),revf(F).a] by A1,REALSET2:38
+       .= ndf(F) by A3,REALSET2:32;
+   end;
+   hence thesis by REALSET2:31,32;
+end;
+
+theorem
+     for F being Field holds
+   for a,b being Element of suppf(F) holds
+   for c,d being Element of suppf(F)\{ndf(F)} holds
+   omf(F).[omf(F).[a,revf(F).c],omf(F).[b,revf(F).d]] =
+   omf(F).[omf(F).[a,b],revf(F).(omf(F).[c,d])]
+proof
+   let F be Field;
+   let a,b be Element of suppf(F);
+   let c,d be Element of suppf(F)\{ndf(F)};
+A1:revf(F).c is Element of suppf(F) by XBOOLE_0:def 4;
+A2:revf(F).d is Element of suppf(F) by XBOOLE_0:def 4;
+   then A3:omf(F).[b,revf(F).d] is Element of suppf(F) by REALSET2:36;
+     omf(F).[c,d] is Element of suppf(F)\{ndf(F)} by REALSET2:44;
+   then revf(F).(omf(F).[c,d])
+         is Element of suppf(F)\{ndf(F)} by REALSET2:44;
+then A4:revf(F).(omf(F).[c,d]) is Element of suppf(F) by XBOOLE_0:def 4;
+   thus omf(F).[omf(F).[a,revf(F).c],omf(F).[b,revf(F).d]] =
+         omf(F).[a,omf(F).[revf(F).c,omf(F).[b,revf(F).d]]]
+              by A1,A3,REALSET2:37
+      .= omf(F).[a,omf(F).[omf(F).[revf(F).c,b],revf(F).d]]
+              by A1,A2,REALSET2:37
+      .= omf(F).[a,omf(F).[omf(F).[b,revf(F).c],revf(F).d]] by A1,REALSET2:38
+      .= omf(F).[a,omf(F).[b,omf(F).[revf(F).c,revf(F).d]]]
+              by A1,A2,REALSET2:37
+      .= omf(F).[a,omf(F).[b,revf(F).(omf(F).[c,d])]] by Th6
+      .= omf(F).[omf(F).[a,b],revf(F).(omf(F).[c,d])] by A4,REALSET2:37;
+end;
+
+theorem
+     for F being Field holds
+   for a,b being Element of suppf(F) holds
+   for c,d being Element of suppf(F)\{ndf(F)} holds
+   odf(F).[omf(F).[a,revf(F).c],omf(F).[b,revf(F).d]] =
+   omf(F).[odf(F).[omf(F).[a,d],omf(F).[b,c]],revf(F).(omf(F).[c,d])]
+proof
+   let F be Field;
+   let a,b be Element of suppf(F);
+   let c,d be Element of suppf(F)\{ndf(F)};
+A1:revf(F).c is Element of suppf(F) by XBOOLE_0:def 4;
+A2:revf(F).d is Element of suppf(F) by XBOOLE_0:def 4;
+     omf(F).[c,d] is Element of suppf(F)\{ndf(F)} by REALSET2:44;
+   then revf(F).(omf(F).[c,d])
+         is Element of suppf(F)\{ndf(F)} by REALSET2:44;
+then A3:revf(F).(omf(F).[c,d]) is Element of suppf(F) by XBOOLE_0:def 4;
+A4:c is Element of suppf(F) by XBOOLE_0:def 4;
+A5:d is Element of suppf(F) by XBOOLE_0:def 4;
+then A6:omf(F).[a,d] is Element of suppf(F) by REALSET2:36;
+A7:omf(F).[b,c] is Element of suppf(F) by A4,REALSET2:36;
+A8:a = omf(F).[a,nmf(F)] by REALSET2:39
+          .= omf(F).[a,omf(F).[d,revf(F).d]] by REALSET2:def 9
+          .= omf(F).[omf(F).[a,d],revf(F).d] by A2,A5,REALSET2:37;
+A9:b = omf(F).[b,nmf(F)] by REALSET2:39
+          .= omf(F).[b,omf(F).[c,revf(F).c]] by REALSET2:def 9
+          .= omf(F).[omf(F).[b,c],revf(F).c] by A1,A4,REALSET2:37;
+A10:omf(F).[a,revf(F).c] =omf(F).[omf(F).[a,d],omf(F).[revf(F).d,revf(F).c]]
+             by A1,A2,A6,A8,REALSET2:37
+          .= omf(F).[omf(F).[a,d],omf(F).[revf(F).c,revf(F).d]]
+             by A1,A2,REALSET2:38
+          .= omf(F).[omf(F).[a,d],revf(F).(omf(F).[c,d])] by Th6;
+     omf(F).[b,revf(F).d] =omf(F).[omf(F).[b,c],omf(F).[revf(F).c,revf(F).d]]
+             by A1,A2,A7,A9,REALSET2:37
+          .= omf(F).[omf(F).[b,c],revf(F).(omf(F).[c,d])] by Th6;
+   hence thesis by A3,A6,A7,A10,REALSET2:10;
+end;
+
+definition ::subtraction
+   let F be Field;
+   func osf(F) -> BinOp of suppf(F) means
+:Def1: for x,y being Element of suppf(F) holds
+        it.[x,y] = odf(F).[x,compf(F).y];
+existence
+proof
+  defpred P[Element of suppf(F),Element of suppf(F),set]
+          means $3=odf(F).[$1,compf(F).$2];
+
+now let x,y be Element of suppf(F);
+      reconsider z = odf(F).[x,compf(F).y] as Element of suppf(F)
+      by REALSET2:28;
+      take z;
+      thus z = odf(F).[x,compf(F).y];
+   end; then
+A1: for x being Element of suppf(F) for y being Element of suppf(F)
+      ex z being Element of suppf(F) st P[x,y,z];
+     ex f being Function of [:suppf(F),suppf(F):],suppf(F)
+   st for x being Element of suppf(F) for y being Element of suppf(F) holds
+   P[x,y,f.[x,y]] from FuncEx2D(A1);
+   then consider S being BinOp of suppf(F) such that
+A2:for x,y being Element of suppf(F) holds
+   S.[x,y]=odf(F).[x,compf(F).y];
+   take S;
+   thus thesis by A2;
+end;
+uniqueness
+proof
+   let S1,S2 be BinOp of suppf(F) such that
+A3:for x,y being Element of suppf(F) holds
+        S1.[x,y] = odf(F).[x,compf(F).y] and
+A4:for x,y being Element of suppf(F) holds
+        S2.[x,y] = odf(F).[x,compf(F).y];
+     now let p be set;
+      assume p in [:suppf(F),suppf(F):];
+      then consider x,y being set such that
+   A5:x in suppf(F) & y in suppf(F) & p=[x,y] by ZFMISC_1:def 2;
+      thus S1.p = odf(F).[x,compf(F).y] by A3,A5
+          .= S2.p by A4,A5;
+   end;
+   hence thesis by FUNCT_2:18;
+end;
+end;
+
+canceled 2;
+
+theorem
+     for F being Field holds
+   for x being Element of suppf(F) holds osf(F).[x,x] = ndf(F)
+proof
+   let F be Field;
+   let x be Element of suppf(F);
+   thus osf(F).[x,x] = odf(F).[x,compf(F).x] by Def1
+               .= ndf(F) by REALSET2:def 8;
+end;
+
+theorem Th15:
+   for F being Field holds
+   for a,b,c being Element of suppf(F) holds
+   omf(F).[a,osf(F).[b,c]] = osf(F).[omf(F).[a,b],omf(F).[a,c]]
+proof
+   let F be Field;
+   let a,b,c be Element of suppf(F);
+A1:omf(F).[a,b] is Element of suppf(F) by REALSET2:28;
+A2:omf(F).[a,c] is Element of suppf(F) by REALSET2:28;
+   thus omf(F).[a,osf(F).[b,c]] = omf(F).[a,odf(F).[b,compf(F).c]] by Def1
+        .= odf(F).[omf(F).[a,b],compf(F).(omf(F).[a,c])] by REALSET2:29
+        .= osf(F).[omf(F).[a,b],omf(F).[a,c]] by A1,A2,Def1;
+end;
+
+theorem Th16:
+   for F being Field holds
+   for a,b being Element of suppf(F) holds
+   osf(F).[a,b] is Element of suppf(F)
+proof
+   let F be Field;
+   let a,b be Element of suppf(F);
+     osf(F).[a,b] = odf(F).[a,compf(F).b] by Def1;
+   hence thesis by REALSET2:28;
+end;
+
+theorem
+     for F being Field holds
+   for a,b,c being Element of suppf(F) holds
+   omf(F).[osf(F).[a,b],c] =
+   osf(F).[omf(F).[a,c],omf(F).[b,c]]
+proof
+   let F be Field;
+   let a,b,c be Element of suppf(F);
+A1:omf(F).[c,b] = omf(F).[b,c] by REALSET2:38;
+     osf(F).[a,b] is Element of suppf(F) by Th16;
+   hence omf(F).[osf(F).[a,b],c] = omf(F).[c,osf(F).[a,b]] by REALSET2:38
+      .= osf(F).[omf(F).[c,a],omf(F).[c,b]] by Th15
+      .= osf(F).[omf(F).[a,c],omf(F).[b,c]] by A1,REALSET2:38;
+end;
+
+theorem
+     for F being Field holds
+   for a,b being Element of suppf(F) holds
+   osf(F).[a,b] = compf(F).(osf(F).[b,a])
+proof
+   let F be Field;
+   let a,b be Element of suppf(F);
+     osf(F).[a,b] = odf(F).[a,compf(F).b] by Def1
+               .= compf(F).(odf(F).[b,compf(F).a]) by Th3;
+   hence thesis by Def1;
+end;
+
+theorem
+     for F being Field holds
+   for a,b being Element of suppf(F) holds
+   osf(F).[compf(F).a,b] = compf(F).(odf(F).[a,b])
+proof
+   let F be Field;
+   let a,b be Element of suppf(F);
+   thus osf(F).[compf(F).a,b] = odf(F).[compf(F).a,compf(F).b] by Def1
+        .= compf(F).(odf(F).[a,b]) by Th5;
+end;
+
+theorem Th20:
+   for F being Field holds
+   for a,b,c,d being Element of suppf(F) holds
+   osf(F).[a,b] = osf(F).[c,d] iff odf(F).[a,d] = odf(F).[b,c]
+proof
+   let F be Field;
+   let a,b,c,d be Element of suppf(F);
+A1:osf(F).[a,b] = odf(F).[a,compf(F).b] by Def1;
+     osf(F).[c,d] = odf(F).[c,compf(F).d] by Def1;
+   hence thesis by A1,Th7;
+end;
+
+theorem
+     for F being Field holds
+   for a being Element of suppf(F) holds
+   osf(F).[ndf(F),a] = compf(F).a
+proof
+   let F be Field;
+   let a be Element of suppf(F);
+   thus osf(F).[ndf(F),a] = odf(F).[ndf(F),compf(F).a] by Def1
+                    .= compf(F).a by REALSET2:13;
+end;
+
+theorem Th22:
+   for F being Field holds
+   for a being Element of suppf(F) holds
+   osf(F).[a,ndf(F)] = a
+proof
+   let F be Field;
+   let a be Element of suppf(F);
+   thus osf(F).[a,ndf(F)] = odf(F).[a,compf(F).ndf(F)] by Def1
+                    .= odf(F).[a,ndf(F)] by Th1
+                    .= a by REALSET2:13;
+end;
+
+theorem
+     for F being Field holds
+   for a,b,c being Element of suppf(F) holds
+   odf(F).[a,b] = c iff osf(F).[c,a] = b
+proof
+   let F be Field;
+   let a,b,c be Element of suppf(F);
+   set d=ndf(F);
+A1:odf(F).[c,d] = c by REALSET2:13;
+     osf(F).[b,d] = b by Th22;
+   hence thesis by A1,Th20;
+end;
+
+theorem
+     for F being Field holds
+   for a,b,c being Element of suppf(F) holds
+   odf(F).[a,b] = c iff osf(F).[c,b] = a
+proof
+   let F be Field;
+   let a,b,c be Element of suppf(F);
+   set d=ndf(F);
+A1:odf(F).[c,d] = c by REALSET2:13;
+A2:osf(F).[a,d] = a by Th22;
+     odf(F).[b,a] = odf(F).[a,b] by REALSET2:12;
+   hence thesis by A1,A2,Th20;
+end;
+
+theorem
+     for F being Field holds
+   for a,b,c being Element of suppf(F) holds
+   osf(F).[a,osf(F).[b,c]] = odf(F).[osf(F).[a,b],c]
+proof
+   let F be Field;
+   let a,b,c be Element of suppf(F);
+A1:odf(F).[b,compf(F).c] is Element of suppf(F) by REALSET2:28;
+   thus osf(F).[a,osf(F).[b,c]] = osf(F).[a,odf(F).[b,compf(F).c]] by Def1
+        .= odf(F).[a,compf(F).(odf(F).[b,compf(F).c])] by A1,Def1
+        .= odf(F).[a,odf(F).[compf(F).b,compf(F).(compf(F).c)]] by Th5
+        .= odf(F).[a,odf(F).[compf(F).b,c]] by REALSET2:27
+        .= odf(F).[odf(F).[a,compf(F).b],c] by REALSET2:11
+        .= odf(F).[osf(F).[a,b],c] by Def1;
+end;
+
+theorem
+     for F being Field holds
+   for a,b,c being Element of suppf(F) holds
+   osf(F).[a,odf(F).[b,c]] = osf(F).[osf(F).[a,b],c]
+proof
+   let F be Field;
+   let a,b,c be Element of suppf(F);
+A1:odf(F).[b,c] is Element of suppf(F) by REALSET2:28;
+A2:osf(F).[a,b] is Element of suppf(F) by Th16;
+   thus osf(F).[a,odf(F).[b,c]] = odf(F).[a,compf(F).(odf(F).[b,c])]
+     by A1,Def1
+        .= odf(F).[a,odf(F).[compf(F).b,compf(F).c]] by Th5
+        .= odf(F).[odf(F).[a,compf(F).b],compf(F).c] by REALSET2:11
+        .= odf(F).[osf(F).[a,b],compf(F).c] by Def1
+        .= osf(F).[osf(F).[a,b],c] by A2,Def1;
+end;
+
+definition ::division.
+   let F be Field;
+   func ovf(F) -> Function of [:suppf(F),suppf(F)\{ndf(F)}:],suppf(F) means
+:Def2: for x being Element of suppf(F),
+           y being Element of suppf(F)\{ndf(F)} holds
+       it.[x,y] = omf(F).[x,revf(F).y];
+existence
+proof
+  defpred P[Element of suppf(F),Element of suppf(F)\{ndf(F)},set]
+          means $3=omf(F).[$1,revf(F).$2];
+  now let x be Element of suppf(F),
+             y be Element of suppf(F)\{ndf(F)};
+           revf(F).y is Element of suppf(F) by XBOOLE_0:def 4;
+         then reconsider z = omf(F).[x,revf(F).y] as Element of suppf(F)
+         by REALSET2:28;
+         take z;
+         thus z = omf(F).[x,revf(F).y];
+     end; then
+A1:  for x being Element of suppf(F) for y being Element of suppf(F)\{ndf(F)}
+      ex z being Element of suppf(F) st P[x,y,z];
+       ex f being Function of [:suppf(F),suppf(F)\{ndf(F)}:],suppf(F)
+     st for x being Element of suppf(F),
+            y being Element of suppf(F)\{ndf(F)} holds P[x,y,f.[x,y]]
+      from FuncEx2D(A1);
+     hence thesis;
+end;
+uniqueness
+proof
+   let S1,S2 be Function of [:suppf(F),suppf(F)\{ndf(F)}:],suppf(F)
+   such that
+A2:for x being Element of suppf(F),
+       y being Element of suppf(F)\{ndf(F)} holds
+        S1.[x,y] = omf(F).[x,revf(F).y] and
+A3:for x being Element of suppf(F),
+       y being Element of suppf(F)\{ndf(F)} holds
+        S2.[x,y] = omf(F).[x,revf(F).y];
+     now let p be set;
+      assume p in [:suppf(F),suppf(F)\{ndf(F)}:];
+      then consider x,y being set such that
+   A4:x in suppf(F) & y in suppf(F)\{ndf(F)} & p=[x,y] by ZFMISC_1:def 2;
+        S1.p = omf(F).[x,revf(F).y] by A2,A4
+          .= S2.p by A3,A4;
+      hence S1.p = S2.p;
+   end;
+   hence thesis by FUNCT_2:18;
+end;
+end;
+
+canceled 2;
+
+theorem Th29:
+   for F being Field holds
+   for x being Element of suppf(F)\{ndf(F)} holds
+      ovf(F).[x,x] = nmf(F)
+proof
+   let F be Field;
+   let x be Element of suppf(F)\{ndf(F)};
+     x is Element of suppf(F) by XBOOLE_0:def 4;
+   hence ovf(F).[x,x] = omf(F).[x,revf(F).x] by Def2
+               .=nmf(F) by REALSET2:def 9;
+end;
+
+theorem Th30:
+   for F being Field holds
+   for a being Element of suppf(F) holds
+   for b being Element of suppf(F)\{ndf(F)} holds
+   ovf(F).[a,b] is Element of suppf(F)
+proof
+   let F be Field;
+   let a be Element of suppf(F);
+   let b be Element of suppf(F)\{ndf(F)};
+A1:ovf(F).[a,b] = omf(F).[a,revf(F).b] by Def2;
+     revf(F).b is Element of suppf(F) by XBOOLE_0:def 4;
+   hence thesis by A1,REALSET2:28;
+end;
+
+theorem Th31:
+   for F being Field holds
+   for a,b being Element of suppf(F) holds
+   for c being Element of suppf(F)\{ndf(F)} holds
+   omf(F).[a,ovf(F).[b,c]] =
+   ovf(F).[omf(F).[a,b],c]
+proof
+   let F be Field;
+   let a,b be Element of suppf(F);
+   let c be Element of suppf(F)\{ndf(F)};
+A1:omf(F).[a,b] is Element of suppf(F) by REALSET2:28;
+A2:revf(F).c is Element of suppf(F) by XBOOLE_0:def 4;
+   thus omf(F).[a,ovf(F).[b,c]] = omf(F).[a,omf(F).[b,revf(F).c]] by Def2
+        .= omf(F).[omf(F).[a,b],revf(F).c] by A2,REALSET2:37
+        .= ovf(F).[omf(F).[a,b],c] by A1,Def2;
+end;
+
+theorem
+     for F being Field holds
+   for a being Element of suppf(F)\{ndf(F)} holds
+   omf(F).[a,ovf(F).[nmf(F),a]] = nmf(F) &
+   omf(F).[ovf(F).[nmf(F),a],a] = nmf(F)
+proof
+   let F be Field;
+   let a be Element of suppf(F)\{ndf(F)};
+A1:a is Element of suppf(F) by XBOOLE_0:def 4;
+     nmf(F) in suppf(F)\{ndf(F)};
+then A2:nmf(F) is Element of suppf(F) by XBOOLE_0:def 4;
+then A3:omf(F).[a,ovf(F).[nmf(F),a]] = ovf(F).[omf(F).[a,nmf(F)],a] by A1,Th31
+        .= ovf(F).[a,a] by A1,REALSET2:39
+        .= nmf(F) by Th29;
+     ovf(F).[nmf(F),a] is Element of suppf(F) by A2,Th30;
+   hence thesis by A1,A3,REALSET2:38;
+end;
+
+canceled 2;
+
+theorem
+     for F being Field holds
+   for a,b being Element of suppf(F)\{ndf(F)} holds
+   ovf(F).[a,b] = revf(F).(ovf(F).[b,a])
+proof
+   let F be Field;
+   let a,b be Element of suppf(F)\{ndf(F)};
+A1:a is Element of suppf(F) & b is Element of suppf(F) by XBOOLE_0:def 4;
+   then ovf(F).[a,b] = omf(F).[a,revf(F).b] by Def2
+               .= revf(F).(omf(F).[b,revf(F).a]) by Th4;
+   hence thesis by A1,Def2;
+end;
+
+theorem
+     for F being Field holds
+   for a,b being Element of suppf(F)\{ndf(F)} holds
+   ovf(F).[revf(F).a,b] = revf(F).(omf(F).[a,b])
+proof
+   let F be Field;
+   let a,b be Element of suppf(F)\{ndf(F)};
+     revf(F).a is Element of suppf(F) by XBOOLE_0:def 4;
+   hence ovf(F).[revf(F).a,b] = omf(F).[revf(F).a,revf(F).b] by Def2
+        .= revf(F).(omf(F).[a,b]) by Th6;
+end;
+
+theorem Th37:
+   for F being Field holds
+   for a,c being Element of suppf(F) holds
+   for b,d being Element of suppf(F)\{ndf(F)} holds
+   ovf(F).[a,b] = ovf(F).[c,d] iff omf(F).[a,d] = omf(F).[b,c]
+proof
+   let F be Field;
+   let a,c be Element of suppf(F);
+   let b,d be Element of suppf(F)\{ndf(F)};
+A1:ovf(F).[a,b] = omf(F).[a,revf(F).b] by Def2;
+     ovf(F).[c,d] = omf(F).[c,revf(F).d] by Def2;
+   hence thesis by A1,Th8;
+end;
+
+theorem
+     for F being Field holds
+   for a being Element of suppf(F)\{ndf(F)} holds
+   ovf(F).[nmf(F),a] = revf(F).a
+proof
+   let F be Field;
+   let a be Element of suppf(F)\{ndf(F)};
+     nmf(F) in suppf(F)\{ndf(F)};
+   then nmf(F) is Element of suppf(F) by XBOOLE_0:def 4;
+   hence ovf(F).[nmf(F),a] = omf(F).[nmf(F),revf(F).a] by Def2
+                    .= revf(F).a by REALSET2:22;
+end;
+
+theorem Th39:
+   for F being Field holds
+   for a being Element of suppf(F) holds
+   ovf(F).[a,nmf(F)] = a
+proof
+   let F be Field;
+   let a be Element of suppf(F);
+   thus ovf(F).[a,nmf(F)] = omf(F).[a,revf(F).nmf(F)] by Def2
+                    .= omf(F).[a,nmf(F)] by Th2
+                    .= a by REALSET2:39;
+end;
+
+theorem
+     for F being Field holds
+   for a being Element of suppf(F)\{ndf(F)} holds
+   for b,c being Element of suppf(F) holds
+   omf(F).[a,b] = c iff ovf(F).[c,a] = b
+proof
+   let F be Field;
+   let a be Element of suppf(F)\{ndf(F)};
+   let b,c be Element of suppf(F);
+   set d=nmf(F);
+A1:omf(F).[c,d] = c by REALSET2:39;
+     ovf(F).[b,d] = b by Th39;
+   hence thesis by A1,Th37;
+end;
+
+theorem
+     for F being Field holds
+   for a,c being Element of suppf(F) holds
+   for b being Element of suppf(F)\{ndf(F)} holds
+   omf(F).[a,b] = c iff ovf(F).[c,b] = a
+proof
+   let F be Field;
+   let a,c be Element of suppf(F);
+   let b be Element of suppf(F)\{ndf(F)};
+   set d=nmf(F);
+A1:omf(F).[c,d] = c by REALSET2:39;
+A2:ovf(F).[a,d] = a by Th39;
+     b is Element of suppf(F) by XBOOLE_0:def 4;
+   then omf(F).[b,a] = omf(F).[a,b] by REALSET2:38;
+   hence thesis by A1,A2,Th37;
+end;
+
+theorem
+     for F being Field holds
+   for a being Element of suppf(F) holds
+   for b,c being Element of suppf(F)\{ndf(F)} holds
+   ovf(F).[a,ovf(F).[b,c]] = omf(F).[ovf(F).[a,b],c]
+proof
+   let F be Field;
+   let a be Element of suppf(F);
+   let b,c be Element of suppf(F)\{ndf(F)};
+A1:b is Element of suppf(F) & c is Element of suppf(F) by XBOOLE_0:def 4;
+A2:omf(F).[b,revf(F).c] is Element of suppf(F)\{ndf(F)} by REALSET2:44;
+A3:revf(F).b is Element of suppf(F) by XBOOLE_0:def 4;
+   thus ovf(F).[a,ovf(F).[b,c]] = ovf(F).[a,omf(F).[b,revf(F).c]] by A1,Def2
+        .= omf(F).[a,revf(F).(omf(F).[b,revf(F).c])] by A2,Def2
+        .= omf(F).[a,omf(F).[revf(F).b,revf(F).(revf(F).c)]] by Th6
+        .= omf(F).[a,omf(F).[revf(F).b,c]] by REALSET2:43
+        .= omf(F).[omf(F).[a,revf(F).b],c] by A1,A3,REALSET2:37
+        .= omf(F).[ovf(F).[a,b],c] by Def2;
+end;
+
+theorem
+     for F being Field holds
+   for a being Element of suppf(F) holds
+   for b,c being Element of suppf(F)\{ndf(F)} holds
+   ovf(F).[a,omf(F).[b,c]] = ovf(F).[ovf(F).[a,b],c]
+proof
+   let F be Field;
+   let a be Element of suppf(F);
+   let b,c be Element of suppf(F)\{ndf(F)};
+A1:revf(F).b is Element of suppf(F) &
+   revf(F).c is Element of suppf(F) by XBOOLE_0:def 4;
+A2:omf(F).[b,c] is Element of suppf(F)\{ndf(F)} by REALSET2:44;
+A3:ovf(F).[a,b] is Element of suppf(F) by Th30;
+   thus ovf(F).[a,omf(F).[b,c]] = omf(F).[a,revf(F).(omf(F).[b,c])] by A2,Def2
+        .= omf(F).[a,omf(F).[revf(F).b,revf(F).c]] by Th6
+        .= omf(F).[omf(F).[a,revf(F).b],revf(F).c] by A1,REALSET2:37
+        .= omf(F).[ovf(F).[a,b],revf(F).c] by Def2
+        .= ovf(F).[ovf(F).[a,b],c] by A3,Def2;
+end;

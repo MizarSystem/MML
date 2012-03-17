@@ -1,0 +1,1158 @@
+:: Factorial and Newton coeffitients
+::  by Rafa{\l} Kwiatek
+::
+:: Received July 27, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL2, ARYTM, FINSEQ_1, ARYTM_3, ARYTM_1, RELAT_1, FUNCT_1,
+      BOOLE, FINSEQ_2, GROUP_1, QC_LANG1, RLVECT_1, NEWTON, FINSEQ_4, CARD_3;
+ notation TARSKI, XBOOLE_0, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, NAT_1, RVSUM_1;
+ constructors FINSEQOP, INT_1, REAL_1, NAT_1, RVSUM_1, FINSEQ_4, SEQ_1,
+      MEMBERED, XBOOLE_0;
+ clusters RELSET_1, FINSEQ_2, INT_1, XREAL_0, NAT_1, MEMBERED, ZFMISC_1,
+      XBOOLE_0, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, FINSEQ_1;
+ theorems TARSKI, AXIOMS, REAL_1, NAT_1, RVSUM_1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
+      FINSEQ_4, FUNCT_1, INT_1, XREAL_0, ORDINAL2, XBOOLE_0, XCMPLX_0,
+      XCMPLX_1;
+ schemes NAT_1, FINSEQ_1, INT_2;
+
+begin
+
+  reserve i,k,n,m,l for Nat;
+  reserve s,t,r for natural number;
+  reserve a,b,x,y for real number;
+  reserve F,G,H for FinSequence of REAL;
+
+canceled 2;
+
+theorem
+Th3: for F,G being FinSequence st
+     len F = len G & (for i st i in dom F holds F.i = G.i) holds F = G
+  proof
+   let F,G be FinSequence;
+   assume A1: len F = len G & for i st i in dom F holds F.i = G.i;
+   A2: dom F = Seg len F by FINSEQ_1:def 3;
+     dom G = Seg len F by A1,FINSEQ_1:def 3;
+   hence thesis by A1,A2,FINSEQ_1:17;
+  end;
+
+canceled;
+
+theorem
+Th5: for n st n>=1 holds Seg n = {1} \/ {k: 1<k & k<n} \/ {n}
+  proof
+   let n;
+   assume A1: n>=1;
+   A2: Seg n c= {1} \/ {k: 1<k & k<n} \/ {n}
+    proof let d be set;
+     assume A3: d in Seg n;
+        now per cases by A1,REAL_1:def 5;
+      suppose A4: n>1;
+      reconsider l = d as Nat by A3;
+        1 <= l & l <= n by A3,FINSEQ_1:3;
+      then 1 = l or (1<l & l<n) or l = n or 1 = n by REAL_1:def 5;
+      then d in {1} or d in {k: 1<k & k<n} or d in {n} by A4,TARSKI:def 1;
+      then d in {1} \/ {k: 1<k & k<n} or d in {n} by XBOOLE_0:def 2;
+      hence thesis by XBOOLE_0:def 2;
+      suppose n = 1;
+      hence thesis by A3,FINSEQ_1:4,XBOOLE_0:def 2;
+      end;
+     hence d in {1} \/ {k: 1<k & k<n} \/ {n};
+    end;
+     {1} \/ {k: 1<k & k<n} \/ {n} c= Seg n
+    proof
+       for d be set holds d in {1} \/ {k: 1<k & k<n} \/ {n} implies d in Seg n
+      proof
+     A5: for d be set holds d in {1} implies d in Seg n
+      proof
+       let d be set; assume d in {1};
+       then d = 1 by TARSKI:def 1;
+       hence d in Seg n by A1,FINSEQ_1:3;
+      end;
+     A6: for d be set holds d in {k: 1<k & k<n} implies d in Seg n
+      proof
+       let d be set;
+       assume d in {k: 1<k & k<n};
+        then consider k such that A7: d = k & 1<k & k<n;
+        thus d in Seg n by A7,FINSEQ_1:3;
+      end;
+     A8: for d be set holds d in {n} implies d in Seg n
+      proof
+       let d be set; assume d in {n};
+       then A9: d = n by TARSKI:def 1;
+         n<>0 by A1;
+       hence d in Seg n by A9,FINSEQ_1:5;
+      end;
+       let d be set;
+       assume d in ({1} \/ {k: 1<k & k<n} \/ {n});
+       then d in ({1} \/ {k: 1<k & k<n}) or d in {n} by XBOOLE_0:def 2;
+       then d in {1} or d in {k: 1<k & k<n} or d in {n} by XBOOLE_0:def 2;
+       hence thesis by A5,A6,A8;
+      end;
+     hence thesis by TARSKI:def 3;
+    end;
+   hence thesis by A2,XBOOLE_0:def 10;
+  end;
+
+theorem
+Th6: for F holds len (a*F) = len F
+ proof
+  let F;
+  reconsider G = F as Element of (len F)-tuples_on REAL by FINSEQ_2:110;
+    len (a*G) = len G by FINSEQ_2:109;
+  hence thesis;
+ end;
+
+theorem
+Th7: n in dom G iff n in dom (a*G)
+ proof
+     len (a*G) = len G by Th6; hence thesis by FINSEQ_3:31;
+ end;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::    x |^ n  Function                                                      ::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+ definition
+ let i be natural number; let x be real number;
+ redefine func i |-> x -> FinSequence of REAL;
+ coherence
+  proof
+   let z be set;
+   assume z in rng (i |-> x);
+   then consider y be set such that A1: y in dom (i |-> x) and
+    A2: z = (i |-> x).y by FUNCT_1:def 5;
+   A3: y in Seg i by A1,FINSEQ_2:68;
+   reconsider y as Nat by A1;
+   reconsider r1 = (i |-> x).y as real number by A3,FINSEQ_2:70;
+     r1 = z by A2;
+   hence z in REAL by XREAL_0:def 1;
+  end;
+end;
+
+definition
+  let x be real number; let n be natural number;
+  func x|^n equals :Def1:  Product(n |-> x);
+  coherence;
+end;
+
+definition
+  let x be real number; let n be natural number;
+  cluster x|^n -> real;
+coherence
+ proof
+     x|^n = Product(n |-> x) by Def1;
+   hence thesis;
+ end;
+end;
+
+definition
+  let x be Real; let n be natural number;
+  redefine func x|^n -> Real;
+  coherence by XREAL_0:def 1;
+end;
+
+canceled;
+
+theorem
+Th9: for x holds x|^0 = 1
+ proof
+  let x;
+     0 |-> x = <*> REAL by FINSEQ_2:72;
+  hence thesis by Def1,RVSUM_1:124;
+ end;
+
+theorem
+Th10: for x holds x|^1 = x
+ proof
+  let x;
+  reconsider x as Real by XREAL_0:def 1;
+    x|^1 = Product(1 |-> x) by Def1 .= Product(<*x*>) by FINSEQ_2:73
+    .= x by RVSUM_1:125;
+  hence thesis;
+ end;
+
+theorem
+Th11: for s holds x|^(s+1) = x|^s*x
+ proof
+   defpred P[natural number] means x|^($1+1) = x|^$1*x;
+  A1: P[0] proof
+     reconsider x as Real by XREAL_0:def 1;
+        x|^(0+1) = Product(1 |-> x) by Def1 .= Product(<*x*>)
+       by FINSEQ_2:73 .= 1*x by RVSUM_1:125;
+      hence thesis by Th9;
+   end;
+  A2: for s st P[s] holds P[s+1] proof let s;
+    assume x|^(s+1) = x|^s*x;
+     reconsider x as Real by XREAL_0:def 1;
+     A3: s+1 is Nat by ORDINAL2:def 21;
+         x|^(s+1+1) = Product((s+1+1) |-> x) by Def1
+         .= Product(((s+1) |-> x) ^ <*x*>)
+        by A3,FINSEQ_2:74 .= Product((s+1) |-> x)*x by RVSUM_1:126;
+       hence thesis by Def1;
+   end;
+  thus for s holds P[s] from Nat_Ind(A1,A2);
+ end;
+
+theorem
+   (x*y)|^s = x|^s*y|^s
+ proof
+  reconsider x, y as Real by XREAL_0:def 1;
+A1: s is Nat by ORDINAL2:def 21;
+    x|^s*y|^s = Product(s |-> x)*y|^s by Def1
+    .= (Product(s |-> x))*(Product(s |-> y))
+   by Def1 .= Product(s |-> (x*y)) by A1,RVSUM_1:136;
+  hence thesis by Def1;
+ end;
+
+theorem
+   x|^(s+t) = x|^s*x|^t
+ proof
+  reconsider x as Real by XREAL_0:def 1;
+  reconsider s,t as Nat by ORDINAL2:def 21;
+    x|^s*x|^t = (Product(s |->x))*x|^t by Def1
+   .= (Product(s |-> x))*(Product(t |-> x))
+   by Def1 .= Product((s+t) |-> x) by RVSUM_1:134;
+  hence thesis by Def1;
+ end;
+
+theorem
+   (x|^s)|^t = x|^(s*t)
+ proof
+  reconsider x as Real by XREAL_0:def 1;
+  reconsider s,t as Nat by ORDINAL2:def 21;
+    x|^(s*t) = Product((s*t) |-> x) by Def1 .= Product(t |-> Product(s |-> x))
+    by RVSUM_1:135
+  .= Product(t |-> x|^s) by Def1;
+ hence thesis by Def1;
+ end;
+
+theorem
+Th15: for s holds 1|^s = 1
+ proof
+   defpred P[natural number] means 1|^$1 = 1;
+  A1: P[0] by Th9;
+  A2: now
+    let s;
+    assume P[s];
+    then 1|^(s+1) = 1 * 1 by Th11;
+    hence P[s+1];
+   end;
+  thus for s holds P[s] from Nat_Ind(A1,A2);
+ end;
+
+theorem
+   for s st s >=1 holds 0|^s = 0
+ proof
+  let s;
+  A1: s is Nat by ORDINAL2:def 21;
+  defpred P[Nat] means 0|^$1 = 0;
+  A2: P[1] by Th10;
+  A3: now let n; assume n>=1 & P[n]; 0|^(n+1) = 0|^n * 0 by Th11 .= 0;
+       hence P[n+1];
+      end;
+    for n st n >=1 holds P[n] from Ind1(A2,A3);
+  hence thesis by A1;
+ end;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::     n!  Function                                                         ::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition let n be natural number;
+ redefine func idseq n -> FinSequence of REAL;
+ coherence
+  proof
+   let x be set;
+   assume x in rng idseq n;
+   then consider y be set such that
+A1: y in dom idseq n and
+A2: x = idseq n.y by FUNCT_1:def 5;
+A3: n is Nat by ORDINAL2:def 21;
+   A4: y in Seg n by A1,FINSEQ_2:54;
+   reconsider y as Nat by A1;
+     (idseq n).y = y by A3,A4,FINSEQ_2:56;
+   hence x in REAL by A2;
+  end;
+end;
+
+definition
+  let n be natural number;
+  func n! equals :Def2:  Product(idseq n);
+  coherence;
+end;
+
+definition
+  let n be natural number;
+  cluster n! -> real;
+  coherence
+  proof
+      n! = Product(idseq n) by Def2;
+    hence thesis;
+  end;
+end;
+
+definition
+  let n be natural number;
+  redefine func n! -> Real;
+  coherence by XREAL_0:def 1;
+end;
+
+canceled;
+
+theorem
+Th18: 0! = 1 by Def2,FINSEQ_2:58,RVSUM_1:124;
+
+theorem
+   1! = 1
+ proof
+    1! = Product<*1 qua Real*> by Def2,FINSEQ_2:59 .= 1 by RVSUM_1:125;
+  hence thesis;
+ end;
+
+theorem
+   2! = 2
+ proof
+    2! = Product<*1 qua Real,2*> by Def2,FINSEQ_2:61 .= 1*2 by RVSUM_1:129;
+  hence thesis;
+ end;
+
+
+theorem
+Th21: for s holds (s+1)! = (s!) * (s+1)
+ proof
+  let s;
+  reconsider s as Nat by ORDINAL2:def 21;
+  reconsider r1 = s+1 as Real;
+      (s+1)! = (s!) * (s+1)
+    proof
+        idseq (s+1) = idseq s ^ <* r1 *> by FINSEQ_2:60;
+     then Product(idseq (s+1)) = Product(idseq s) * r1 by RVSUM_1:126
+                        .= (s!) * r1 by Def2;
+     hence thesis by Def2;
+    end;
+    hence thesis;
+ end;
+
+theorem
+   for s holds s! is Nat
+ proof
+   defpred P[natural number] means $1! is Nat;
+  A1: P[0] by Def2,FINSEQ_2:58,RVSUM_1:124;
+  A2: now let s; assume P[s]; then reconsider k=s! as Nat;
+       (s+1)! = (s+1) * k by Th21;
+    hence P[s+1] by ORDINAL2:def 21;
+   end;
+  thus for s holds P[s] from Nat_Ind(A1,A2);
+ end;
+
+theorem
+Th23: for s holds s!>0
+ proof
+   defpred P[natural number] means $1!>0;
+  A1: P[0] by Th18;
+  A2: now let s;  A3: s+1>0 by NAT_1:18; assume P[s];
+    then (s+1) * (s!)>(s+1) * 0 by A3,REAL_1:70;
+    hence P[s+1] by Th21;
+   end;
+  thus for s holds P[s] from Nat_Ind(A1,A2);
+ end;
+
+canceled;
+
+theorem
+Th25: for s,t holds (s!) * (t!)<>0
+ proof
+  let s,t;
+    s!<>0 & t!<>0 by Th23;
+  hence thesis by XCMPLX_1:6;
+ end;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::     n choose k  Function                                                 ::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+ let k,n be natural number;
+ func n choose k means :Def3:
+    for l be natural number st l = n-k holds
+     it = (n!)/((k!) * (l!)) if n >= k
+  otherwise it = 0;
+ consistency;
+ existence
+  proof
+   thus n >= k implies ex r1 be set st
+    for l being natural number st l = n-k holds r1 = (n!)/((k!) * (l!))
+    proof
+     assume n >= k;
+     then reconsider m = n-k as Nat by INT_1:18;
+     take (n!)/((k!)*(m!));
+     thus thesis;
+    end;
+   thus thesis;
+  end;
+ uniqueness
+  proof let r1,r2 be set;
+   thus n>=k &
+    (for l being natural number st l = n-k holds r1 = (n!)/((k!) * (l!))) &
+    (for l being natural number st l = n-k holds r2 = (n!)/((k!) * (l!)))
+     implies r1 = r2
+    proof
+     assume A1: n>=k;
+     assume A2: (for l being natural number st l = n-k holds
+      r1 = (n!)/((k!) * (l!)))
+      & (for l being natural number st l = n-k holds
+       r2 = (n!)/((k!) * (l!)));
+
+     reconsider m = n-k as Nat by A1,INT_1:18;
+       r1 = (n!)/((k!) * (m!)) & r2 = (n!)/((k!) * (m!)) by A2;
+     hence thesis;
+    end;
+   thus thesis;
+  end;
+end;
+
+definition
+ let k,n be natural number;
+ cluster n choose k -> real;
+coherence
+  proof
+    per cases;
+    suppose
+A1:   n >= k;
+    then reconsider l = n-k as Nat by INT_1:18;
+      n choose k = (n!)/((k!) * (l!)) by A1,Def3;
+    hence thesis;
+    suppose n < k; hence thesis by Def3;
+  end;
+end;
+
+definition
+ let k,n be natural number;
+ redefine func n choose k -> Real;
+coherence by XREAL_0:def 1;
+end;
+
+canceled;
+
+theorem
+Th27: 0 choose 0 = 1
+ proof
+     reconsider m = 0 - 0 as Nat;
+        m = 0;
+     then (0 choose 0) = 1/(1 * 1) by Def3,Th18 .= 1;
+    hence (0 choose 0) = 1;
+ end;
+
+canceled;
+
+theorem
+Th29: for s holds (s choose 0) = 1
+ proof
+  let s;
+  A1: s >= 0 by NAT_1:18;
+  reconsider m = s-0 as Nat by ORDINAL2:def 21;
+  A2: s!<>0 by Th23;
+    m = s;
+  then (s choose 0) = (s!)/(1 * (s!)) by A1,Def3,Th18
+   .= 1 by A2,XCMPLX_1:60;
+  hence thesis;
+ end;
+
+theorem
+Th30: for s,t st s>=t holds
+       (for r st r = s-t holds (s choose t) = (s choose r))
+ proof
+  let s,t;
+  assume A1: s>=t;
+  let r;
+  assume A2: r = s-t;
+  A3:s>=r
+   proof
+      t>=0 by NAT_1:18;
+    then t-s>=0-s by REAL_1:49;
+    then -(0-s)>=-(t-s) by REAL_1:50;
+    then -(-s)>=-(t-s) by XCMPLX_1:150;
+    then s>=0-(t-s) by XCMPLX_1:150;
+    then s>=0-t+s by XCMPLX_1:37;
+    then s>=s+-t by XCMPLX_1:150;
+    hence thesis by A2,XCMPLX_0:def 8;
+   end;
+    t = s-r
+   proof
+      r+t = s-(t-t) by A2,XCMPLX_1:37;
+    then r+t = s-0 by XCMPLX_1:14;
+    hence thesis by XCMPLX_1:26;
+   end;
+  then s choose r = (s!)/((r!) * (t!)) by A3,Def3;
+  hence thesis by A1,A2,Def3;
+ end;
+
+theorem
+Th31: for s holds s choose s = 1
+ proof
+  let s;
+  reconsider m = s-s as Nat by INT_1:18;
+    m = 0 by XCMPLX_1:14;
+  then s choose s = s choose 0 by Th30;
+  hence thesis by Th29;
+ end;
+
+
+theorem
+Th32: for s,t st s<t holds
+        (((t+1) choose (s+1)) = (t choose (s+1)) + (t choose s)
+        & ((t+1) choose (s+1)) = (t choose s) + (t choose (s+1)))
+ proof
+  let s,t;
+  assume A1: s<t;
+  thus ((t+1) choose (s+1)) = (t choose (s+1)) + (t choose s)
+   proof
+
+    reconsider m1 = t-s as Nat by A1,INT_1:18;
+    A2: s+1<=t by A1,NAT_1:38;
+
+    then reconsider m2 = t-(s+1) as Nat by INT_1:18;
+    A3: m1 = m2+1
+     proof
+        m2+1 = t-s-1+1 by XCMPLX_1:36 .= t-s-(1-1) by XCMPLX_1:37
+       .= m1;
+      hence thesis;
+     end;
+    A4: (t choose (s+1)) = (t!)/(((s+1)!) * (m2!)) by A2,Def3;
+    A5: ((s+1)!) * (m2!)<>0 & ((s!) * (m1!))<>0 by Th25;
+    A6: s!<>0 by Th23;
+    A7: m2!<>0 by Th23;
+    A8: (t choose (s+1)) + (t choose s) =
+     (t!)/(((s+1)!) * (m2!)) + (t!)/((s!) * (m1!)) by A1,A4,Def3 .=
+     ((t!)*((s!)*(m1!))+(t!)*(((s+1)!)*(m2!)))/((((s+1)!)*(m2!))*((s!)*(m1!)))
+      by A5,XCMPLX_1:117 .=
+     (t!*((s!)*(m1!))+(t!)*(s!*(s+1)*(m2!)))/((((s+1)!)*(m2!))*((s!)*(m1!)))
+      by Th21 .=
+     (t!*((s!*(m1!))+(s!*(s+1)*(m2!))))/((((s+1)!)*(m2!))*((s!)*(m1!)))
+      by XCMPLX_1:8 .=
+     (t!*((s!*(m1!))+(s!*((s+1)*(m2!)))))/((((s+1)!)*(m2!))*((s!)*(m1!)))
+      by XCMPLX_1:4 .=
+     ((t!)*((s!)*((m1!)+(s+1)*(m2!))))/((((s+1)!)*(m2!))*((s!)*(m1!)))
+      by XCMPLX_1:8 .=(s!*((t!)*((m1!)+(s+1)*(m2!))))/(s!*(m1!)*((s+1)!*(m2!)))
+      by XCMPLX_1:4 .=
+     (s!*((t!)*((m1!)+(s+1)*(m2!))))/(s!*((m1!)*((s+1)!*(m2!))))
+      by XCMPLX_1:4
+ .=(t!*(((m2+1)!)+(s+1)*(m2!)))/(m1!*((s+1)!*(m2!))) by A3,A6,XCMPLX_1:92
+ .=(t!*((m2!)*(m2+1)+(m2!)*(s+1)))/(m1!*((s+1)!*(m2!))) by Th21 .=
+     (t!*((m2!)*((m2+1)+(s+1))))/(m1!*((s+1)!*(m2!))) by XCMPLX_1:8 .=
+(m2!*(t!)*((m2+1)+(s+1)))/(m1!*((s+1)!*(m2!))) by XCMPLX_1:4 .=
+(m2!*(t!)*((m2+1)+(s+1)))/(m2!*((m1!)*((s+1)!))) by XCMPLX_1:4 .=
+(m2!*((t!)*((m2+1)+(s+1))))/(m2!*(((s+1)!)*(m1!))) by XCMPLX_1:4 .=
+((t!)*((t-(s+1)+1)+(s+1)))/(((s+1)!)*(m1!)) by A7,XCMPLX_1:92 .=
+     ((t!)*((t-s-1+1)+(s+1)))/(((s+1)!)*(m1!)) by XCMPLX_1:36 .=
+     ((t!)*((t-s-(1-1))+(s+1)))/(((s+1)!)*(m1!)) by XCMPLX_1:37 .=
+     ((t!)*(t-(s-(s+1))))/(((s+1)!)*(m1!)) by XCMPLX_1:37 .=
+     ((t!)*(t-(s-s-1)))/(((s+1)!)*(m1!)) by XCMPLX_1:36 .=
+     ((t!)*(t-(0-1)))/(((s+1)!)*(m1!)) by XCMPLX_1:14 .=
+     ((t!)*(t-0+1))/(((s+1)!)*(m1!)) by XCMPLX_1:37 .=
+     ((t+1)!)/(((s+1)!)*(m1!)) by Th21;
+    A9: s+1<=t+1 by A1,AXIOMS:24;
+
+     then reconsider m = (t+1)-(s+1) as Nat by INT_1:18;
+        m = m1
+      proof
+       A10: 1+(t-s-1) = t-s-(1-1) by XCMPLX_1:37 .= t-s;
+         1+(t-(s+1)) = 1+(t+-(s+1)) by XCMPLX_0:def 8 .= 1+t+-(s+1) by XCMPLX_1
+:1
+         .= (t+1)-(s+1) by XCMPLX_0:def 8;
+       hence thesis by A10,XCMPLX_1:36;
+      end;
+     hence thesis by A8,A9,Def3;
+   end;
+  hence thesis;
+ end;
+
+theorem
+Th33: for s st s >= 1 holds s choose 1 = s
+ proof
+  let s;
+  A1: s is Nat by ORDINAL2:def 21;
+      defpred P[Nat] means $1 choose 1 = $1;
+  A2: P[1] by Th31;
+  A3: now let n; assume A4: n>=1 & P[n];
+    then A5: n>0 by AXIOMS:22;
+      (n+1) choose 1 = (n+1) choose (0+1)
+                    .= n + n choose 0 by A4,A5,Th32 .= n+1 by Th29;
+    hence P[n+1];
+   end;
+     for n st n >= 1 holds P[n] from Ind1(A2,A3);
+  hence thesis by A1;
+ end;
+
+theorem
+   for s,t st s>=1 & t = s-1 holds s choose t = s
+ proof
+  let s,t;
+  assume A1: s>=1 & t = s-1;
+   then s choose t = s choose 1 by Th30;
+  hence thesis by A1,Th33;
+ end;
+
+theorem
+   for s holds (for r holds (s choose r) is Nat)
+ proof
+   defpred P[natural number] means for r holds ($1 choose r) is Nat;
+  A1: P[0] proof  let r;
+      r = 0 or r > 0 by NAT_1:19;
+    hence (0 choose r) is Nat by Def3,Th27;
+   end;
+  A2: for s st P[s] holds P[s+1] proof let s;
+    assume A3: P[s];
+A4:    for r st r <> 0 holds ((s+1) choose r) is Nat
+     proof
+      let r;
+      assume A5: r <> 0;
+       A6: r > s+1 implies ((s+1) choose r) is Nat by Def3;
+       A7: r < s+1 implies ((s+1) choose r) is Nat
+        proof
+         assume A8: r<s+1;
+         consider t being Nat such that A9: r = t+1 by A5,NAT_1:22;
+A10:         t<s by A8,A9,AXIOMS:24;
+
+         reconsider m1 = (s choose t), m2 = (s choose (t+1)) as Nat by A3;
+            m1 + m2 =(s choose t) + (s choose (t+1));
+         hence thesis by A9,A10,Th32;
+        end;
+         r = s+1 implies ((s+1) choose r) is Nat
+        proof
+         assume A11: r = s+1;
+         then reconsider m = s+1-r as Nat by INT_1:18;
+            m = 0 by A11,XCMPLX_1:14;
+         then ((s+1) choose r) = ((s+1) choose 0)
+          by A11,Th30 .= 1 by Th29;
+         hence thesis;
+        end;
+       hence thesis by A6,A7,AXIOMS:21;
+      end;
+
+    let r;
+      r = 0 or r<>0;
+    hence thesis by A4,Th29;
+   end;
+  thus for s holds P[s] from Nat_Ind(A1,A2);
+ end;
+
+theorem
+   for m,F st m <> 0 & len F = m & (for i,l st i in dom F & l = n+i-1
+      holds F.i = l choose n) holds Sum F = (n+m) choose (n+1)
+ proof
+   defpred P[Nat] means
+   for F st $1 <> 0 & len F = $1 & (for i,l st i in dom F & l =
+      n+i-1 holds F.i = l choose n) holds Sum F = (n+$1) choose (n+1);
+  A1:  P[0];
+  A2:  for m st P[m] holds P[m+1] proof let m;
+   assume
+      A3:  P[m];
+   let F;
+   assume
+      A4:  m+1 <> 0 & len F = m+1 & (for i,l st i in dom F &
+      l = n+i-1 holds F.i = l choose n);
+
+   then consider G be FinSequence of REAL,
+    x being Real such that A5: F = G^<*x*> by FINSEQ_2:22;
+A6:   m+1 = len G +1 by A4,A5,FINSEQ_2:19;
+   then A7: len G = m by XCMPLX_1:2;
+     now per cases;
+    suppose A8: m = 0;
+     then A9: dom F = Seg 1 by A4,FINSEQ_1:def 3;
+      then A10: 1 in dom F by FINSEQ_1:5;
+        n = n+1-1 by XCMPLX_1:26;
+      then F.1 = n choose n by A4,A10;
+     hence Sum F = Sum<*n choose n*> by A9,FINSEQ_1:def 8
+        .= n choose n by RVSUM_1:103
+        .= 1 by Th31
+        .= (n+(m+1)) choose (n+1) by A8,Th31;
+    suppose A11:m <> 0;
+A12:    for i,l st i in dom G & l = n+i-1 holds G.i = l choose n
+    proof
+     let i,l;
+     assume A13: i in dom G & l = n+i-1;
+     then A14: G.i = F.i by A5,FINSEQ_1:def 7;
+       dom G c= dom F by A5,FINSEQ_1:39;
+     hence G.i = l choose n by A4,A13,A14;
+    end;
+
+     m>0 by A11,NAT_1:19;
+   then A15: n+m>n+0 by REAL_1:53;
+     dom F = Seg (m+1) by A4,FINSEQ_1:def 3;
+   then A16: m+1 in dom F by FINSEQ_1:6;
+      n+m = n+m+1-1 by XCMPLX_1:26
+         .= n +(m+1)-1 by XCMPLX_1:1;
+   then A17: (n+m) choose n = (G^<*x*>).(len G +1) by A4,A5,A6,A16 .= x by
+FINSEQ_1:59;
+   thus Sum F = Sum G + x by A5,RVSUM_1:104
+   .= (n+m) choose (n+1) + (n+m) choose n
+    by A3,A7,A11,A12,A17 .= (n+m+1) choose (n+1) by A15,Th32
+ .= (n+(m+1)) choose (n+1)
+     by XCMPLX_1:1;
+   end;
+  hence thesis;
+  end;
+  thus for m holds P[m] from Ind(A1,A2);
+ end;
+
+definition
+let a,b be real number;
+let n be natural number;
+func (a,b) In_Power n -> FinSequence of REAL means
+ :Def4:  len it = n+1 &
+   (for i,l,m being natural number st i in dom it & m = i - 1 & l = n-m holds
+   it.i = (n choose m)* a|^l * b|^m);
+existence
+ proof
+  reconsider n as Nat by ORDINAL2:def 21;
+  defpred P[Nat,set] means
+   for l,m be natural number st m = $1 - 1 & l = n-m holds
+    $2 = (n choose m)* a|^l * b|^m;
+
+ A1: for k for y1,y2 being set st k in Seg(n+1) & P[k,y1] & P[k,y2] holds y1=y2
+  proof
+   let k;
+   let y1,y2 be set;
+   assume A2: k in Seg (n+1) & P[k,y1] & P[k,y2];
+   then A3: k >= 1 & k <= n+1 by FINSEQ_1:3;
+   then reconsider m1 = k-1 as Nat by INT_1:18;
+     k-1<=n+1-1 by A3,REAL_1:49;
+   then m1<=n by XCMPLX_1:26;
+   then reconsider l1 = n-m1 as Nat by INT_1:18;
+      y1 = (n choose m1)* a|^l1 * b|^m1 by A2;
+   hence thesis by A2;
+  end;
+ A4: for k st k in Seg(n+1) ex x being set st P[k,x]
+  proof
+   let k;
+   assume k in Seg (n+1);
+   then A5: k >= 1 & k <= n+1 by FINSEQ_1:3;
+   then reconsider m1 = k-1 as Nat by INT_1:18;
+     k-1<=n+1-1 by A5,REAL_1:49;
+   then m1<=n by XCMPLX_1:26;
+   then reconsider l1 = n-m1 as Nat by INT_1:18;
+   reconsider z = (n choose m1)*a|^l1*b|^m1 as set;
+   take z;
+   thus thesis;
+  end;
+  consider p being FinSequence such that
+   A6: dom p = Seg(n+1) and
+   A7: for k st k in Seg(n+1) holds P[k,p.k] from SeqEx(A1,A4);
+      rng p c= REAL
+     proof
+      let x be set;
+      assume x in rng p;
+      then consider y be set such that A8: y in dom p & x = p.y by FUNCT_1:def
+5;
+      reconsider y as Nat by A8;
+      A9: y >= 1 & y <= n+1 by A6,A8,FINSEQ_1:3;
+      then reconsider m1 = y-1 as Nat by INT_1:18;
+        y-1<=n+1-1 by A9,REAL_1:49;
+      then m1<=n by XCMPLX_1:26;
+      then reconsider l1 = n-m1 as Nat by INT_1:18;
+        p.y = (n choose m1) *a|^l1*b|^m1 by A6,A7,A8;
+      then reconsider x as Real by A8,XREAL_0:def 1;
+        x in REAL;
+     hence thesis;
+     end;
+    then reconsider p as FinSequence of REAL by FINSEQ_1:def 4;
+    take p;
+    thus thesis by A6,A7,FINSEQ_1:def 3;
+  end;
+uniqueness
+ proof
+  let G,H;
+  assume A10: len G = n+1 &
+   (for i,l,m be natural number st i in dom G & m = i - 1 & l = n-m holds
+   G.i = (n choose m)* a|^l * b|^m);
+  assume A11: len H = n+1 &
+   (for i,l,m be natural number st i in dom H & m = i - 1 & l = n-m holds
+   H.i = (n choose m)* a|^l * b|^m);
+
+    for i st i in dom G holds G.i = H.i
+    proof
+     let i;
+     assume A12: i in dom G;
+     then A13: i in Seg (n+1) by A10,FINSEQ_1:def 3;
+     then A14:i in dom H by A11,FINSEQ_1:def 3;
+     A15: i>=1 & i<=n+1 by A13,FINSEQ_1:3;
+     then reconsider m = i-1 as Nat by INT_1:18;
+       i-1<=n+1-1 by A15,REAL_1:49;
+     then m<=n by XCMPLX_1:26;
+     then reconsider l = n-m as Nat by INT_1:18;
+       H.i = (n choose m)* a|^l *b|^m by A11,A14;
+     hence thesis by A10,A12;
+    end;
+  hence G = H by A10,A11,Th3;
+ end;
+end;
+
+canceled;
+
+theorem
+Th38: (a,b) In_Power 0 = <*1*>
+ proof
+  set F = (a,b) In_Power 0;
+  A1: len F = 0+1 by Def4 .= 1;
+  then A2: dom F = {1} by FINSEQ_1:4,def 3;
+  then 1 in dom F by TARSKI:def 1;
+  then consider i be set such that A3: i in dom F;
+  A4: 1 in dom (a,b) In_Power 0 by A2,TARSKI:def 1;
+  reconsider i as Nat by A3;
+  A5: i = 1 by A2,A3,TARSKI:def 1;
+  then reconsider m1 = i-1 as Nat by INT_1:18;
+   reconsider l1 = 0-m1 as Nat by A5;
+    F.1 = (0 choose 0)*a|^l1*b|^m1
+   by A4,A5,Def4 .=
+   1*a|^0*b|^0 by A5,Th31 .= 1*1*b|^0 by Th9 .= 1 by Th9;
+  hence thesis by A1,FINSEQ_1:57;
+ end;
+
+theorem
+Th39: ((a,b) In_Power s).1 = a|^s
+ proof
+  reconsider m1 = 1-1 as Nat by INT_1:18;
+  A1: s>=0 by NAT_1:18;
+  reconsider l1 = s-m1 as natural number;
+    len ((a,b) In_Power s) = s+1 by Def4;
+  then A2: dom ((a,b) In_Power s) = Seg (s+1) by FINSEQ_1:def 3;
+    s+1>=0+1 by A1,AXIOMS:24;
+  then 1 in dom ((a,b) In_Power s) by A2,FINSEQ_1:3;
+  then ((a,b) In_Power s).1 = (s choose 0)*a|^l1*b|^m1 by Def4
+ .= 1*a|^l1*b|^m1 by Th29
+   .= a|^s by Th9;
+  hence thesis;
+ end;
+
+theorem
+Th40: ((a,b) In_Power s).(s+1) = b|^s
+ proof
+    s+1>=1 by NAT_1:37;
+  then reconsider m1 = s+1-1 as Nat by INT_1:18;
+     m1 = s by XCMPLX_1:26;
+  then reconsider l1 = s-m1 as Nat by INT_1:18;
+  A1: l1 = s-s by XCMPLX_1:26 .= 0 by XCMPLX_1:14;
+    len ((a,b) In_Power s) = s+1 by Def4;
+  then dom ((a,b) In_Power s) = Seg (s+1) by FINSEQ_1:def 3;
+  then s+1 in dom ((a,b) In_Power s) by FINSEQ_1:6;
+  then ((a,b) In_Power s).(s+1) = (s choose m1)*a|^l1*b|^m1 by Def4
+   .= (s choose s)*a|^l1*b|^m1 by XCMPLX_1:26 .= 1*a|^l1*b|^m1 by Th31
+   .= 1*b|^m1 by A1,Th9
+   .= b|^s by XCMPLX_1:26;
+  hence thesis;
+ end;
+
+theorem
+Th41: for s holds (a+b)|^s = Sum((a,b) In_Power s)
+ proof
+   defpred P[Nat] means (a+b)|^$1 = Sum((a,b) In_Power $1);
+   (a+b)|^0 = 1 by Th9 .= Sum<*1 qua Real*> by RVSUM_1:103
+           .= Sum((a,b) In_Power 0) by Th38; then
+A1: P[0];
+  A2: for n st P[n] holds P[n+1]   proof    let n;
+    assume
+A3:   P[n];
+    reconsider a, b as Real by XREAL_0:def 1;
+    A4: (a+b)|^(n+1) = (a+b)*Sum((a,b) In_Power n) by A3,Th11
+     .= a*Sum((a,b) In_Power n) + b*Sum((a,b) In_Power n) by XCMPLX_1:8
+     .= Sum(a*((a,b) In_Power n)) + b*Sum((a,b) In_Power n) by RVSUM_1:117
+     .= Sum(a*((a,b) In_Power n)) + Sum(b*((a,b) In_Power n)) by RVSUM_1:117;
+    set G1 = ((a*((a,b) In_Power n))^<*0 qua Real*>);
+    set G2 = (<*0 qua Real*>^(b*((a,b) In_Power n)));
+      len G1 = len (a*((a,b) In_Power n)) + len <*0*> by FINSEQ_1:35
+          .= len (a*((a,b) In_Power n)) +1 by FINSEQ_1:57
+          .= len ((a,b) In_Power n) +1 by Th6
+          .= n+1+1 by Def4;
+    then reconsider F1 = G1 as Element of (n+1+1)-tuples_on REAL by FINSEQ_2:
+110;
+    A5: len F1 = n+1+1 by FINSEQ_2:109;
+      len G2 = len <*0*> + len (b*((a,b) In_Power n)) by FINSEQ_1:35
+          .= 1+ len (b*((a,b) In_Power n)) by FINSEQ_1:57
+          .= 1+ len ((a,b) In_Power n) by Th6
+          .= n+1+1 by Def4;
+    then reconsider F2 = G2 as Element of (n+1+1)-tuples_on REAL by FINSEQ_2:
+110;
+    A6: len F2 = n+1+1 by FINSEQ_2:109;
+    A7: Sum F1 = Sum(a*((a,b) In_Power n)) +0 by RVSUM_1:104
+       .= Sum(a*((a,b) In_Power n));
+       Sum F2 = 0+ Sum(b*((a,b) In_Power n)) by RVSUM_1:106
+       .= Sum(b*((a,b) In_Power n));
+then A8:    Sum(G1+G2) = Sum(a*((a,b) In_Power n))+ Sum
+(b*((a,b) In_Power n)) by A7,RVSUM_1:119;
+    set F = F1 + F2;
+    A9: len F = n+1+1 by FINSEQ_2:109;
+    A10: for i st i in dom ((a,b) In_Power (n+1))
+         holds F.i = ((a,b) In_Power (n+1)).i
+     proof
+      let i;
+      assume A11: i in dom ((a,b) In_Power (n+1));
+A12:      len ((a,b) In_Power (n+1)) = n+1+1 by Def4;
+      then A13: dom ((a,b) In_Power (n+1)) = Seg (n+1+1) by FINSEQ_1:def 3;
+      A14: i in Seg (n+1+1) by A11,A12,FINSEQ_1:def 3;
+      then i>=1 & n+1+1>=i by FINSEQ_1:3;
+      then reconsider j = i-1 as Nat by INT_1:18;
+A15:   i in dom F by A9,A14,FINSEQ_1:def 3;
+A16:  i in dom F1 by A5,A14,FINSEQ_1:def 3;
+A17:  i in dom F2 by A6,A14,FINSEQ_1:def 3;
+      A18: i = j+1 by XCMPLX_1:27;
+      A19: n+1+1>=1 by NAT_1:37;
+      set x = ((a,b) In_Power n)/.j;
+      set r = ((a,b) In_Power n)/.i;
+      set r1 = F1/.i;
+      set r2 = F2/.i;
+      A20: i in {1} implies F.i = ((a,b) In_Power (n+1)).i
+       proof
+        assume i in {1};
+        then A21: i = 1 by TARSKI:def 1;
+          n>=0 by NAT_1:18;
+        then n+1>=0+1 by AXIOMS:24;
+        then 1 in Seg (n+1) by FINSEQ_1:3;
+        then 1 in Seg len (((a,b) In_Power n)) by Def4;
+        then A22: 1 in dom ((a,b) In_Power n) by FINSEQ_1:def 3;
+        then A23: 1 in dom (a*((a,b) In_Power n)) by Th7;
+         A24:r = ((a,b) In_Power n).i by A21,A22,FINSEQ_4:def 4;
+        A25: r = ((a,b) In_Power n).1 by A21,A22,FINSEQ_4:def 4;
+        A26: r = a|^n by A21,A24,Th39;
+        A27: r1 = F1.i by A16,FINSEQ_4:def 4;
+        A28: r1 = ((a*((a,b) In_Power n))^<*0*>).1 by A16,A21,FINSEQ_4:def 4
+         .= (a*((a,b) In_Power n)).1 by A23,FINSEQ_1:def 7
+         .= a *a|^n by A25,A26,RVSUM_1:66 .= a|^(n+1) by Th11;
+        A29: r2 = F2.i by A17,FINSEQ_4:def 4;
+           r2 = (<*0*>^(b*((a,b) In_Power n))).1 by A17,A21,FINSEQ_4:def 4
+         .= 0 by FINSEQ_1:58;
+        then F.i = r1+0 by A27,A29,RVSUM_1:27
+         .= ((a,b) In_Power (n+1)).i by A21,A28,Th39;
+        hence thesis;
+       end;
+      A30: i in {k: k>1 & k<n+1+1} implies F.i = ((a,b) In_Power (n+1)).i
+       proof
+        assume i in {k: 1<k & k<n+1+1};
+         then A31:ex k st k=i & 1<k & k<n+1+1;
+        then A32: 1<=i & i<=n+1 by NAT_1:38;
+        then i in Seg (n+1) by FINSEQ_1:3;
+        then i in Seg len ((a,b) In_Power n) by Def4;
+        then A33: i in dom ((a,b) In_Power n) by FINSEQ_1:def 3;
+        then A34: i in dom (a*((a,b) In_Power n)) by Th7;
+        reconsider m1 = i-1 as Nat by A31,INT_1:18;
+          i-1<=n+1-1 by A32,REAL_1:49;
+        then m1<=n by XCMPLX_1:26;
+        then reconsider l1 = n-m1 as Nat by INT_1:18;
+A35:        1<=j & j+1<=n+1+1 by A18,A31,NAT_1:38;
+        A36: 1<=j & j<=n+1 by A18,A31,NAT_1:38,REAL_1:53;
+        then j in Seg (n+1) by FINSEQ_1:3;
+        then j in Seg len ((a,b) In_Power n) by Def4;
+        then A37: j in dom ((a,b) In_Power n) by FINSEQ_1:def 3;
+        then A38: j in dom (b*((a,b) In_Power n)) by Th7;
+        reconsider m2 = j-1 as Nat by A35,INT_1:18;
+        A39: m2+1 = i-1 by XCMPLX_1:27;
+          l1 = n-i+1 by XCMPLX_1:37 .= n+1-i by XCMPLX_1:29;
+        then A40: l1+1 = n+1-(m2+1) by A39,XCMPLX_1:37;
+          j<n+1 by A18,A31,AXIOMS:24;
+        then m2<n+1-1 by REAL_1:54;
+        then A41: m2<n+(1-1) by XCMPLX_1:29;
+          j-1<=n+1-1 by A36,REAL_1:49;
+        then m2<=n by XCMPLX_1:26;
+        then reconsider l2 = n-m2 as Nat by INT_1:18;
+        A42: m1 = m2+1 by XCMPLX_1:27;
+        A43: x = ((a,b) In_Power n).j by A37,FINSEQ_4:def 4;
+
+        A44: r = ((a,b) In_Power n).i by A33,FINSEQ_4:def 4;
+
+        A45: r1 = ((a*((a,b) In_Power n))^<*0*>).i by A16,FINSEQ_4:def 4;
+        A46: r2 = (<*0*>^(b*((a,b) In_Power n))).i by A17,FINSEQ_4:def 4;
+        A47: r1 = (a*((a,b) In_Power n)).i by A34,A45,FINSEQ_1:def 7
+         .= a*r by A44,RVSUM_1:66;
+           r2 = (<*0*>^(b*((a,b) In_Power n))).(len <*0*> +j) by A18,A46,
+FINSEQ_1:57
+         .= (b*((a,b) In_Power n)).j by A38,FINSEQ_1:def 7
+         .= b*x by A43,RVSUM_1:66;
+        then F.i = a*r + b*x by A15,A45,A46,A47,RVSUM_1:26
+         .= a*(a|^l1*(n choose m1)*b|^m1) + b*x by A33,A44,Def4
+         .= a*(a|^l1*((n choose m1)*b|^m1)) + b*x by XCMPLX_1:4
+         .= a*a|^l1*((n choose m1)*b|^m1) + b*x by XCMPLX_1:4
+         .= a|^(l1+1)*((n choose m1)*b|^m1) + b*x by Th11
+         .= a|^(l1+1)*((n choose m1)*b|^m1) + b*(b|^m2*((n choose m2)*a|^l2))
+ by A37,A43,Def4
+         .= a|^(l1+1)*((n choose m1)*b|^m1) + b*b|^m2*((n choose m2)*a|^l2)
+           by XCMPLX_1:4
+         .=
+a|^(l1+1)*((n choose (m2+1))*b|^(m2+1)) + b|^(m2+1)*((n choose m2)*a|^l2)
+           by A42,Th11
+         .= b|^(m2+1)*(a|^(l1+1)*(n choose (m2+1))) + b|^(m2+1)*((n choose m2
+)*a|^l2) by XCMPLX_1:4
+         .= ((a|^(l1+1)*(n choose (m2+1))) + ((n choose m2)*a|^l2))*b|^(m2+1)
+ by XCMPLX_1:8
+         .= (((n choose (m2+1))*a|^(l1+1)) + ((n choose m2)*a|^(l1+1)))*b|^(m2
++1)
+          by XCMPLX_1:37
+         .= ((n choose (m2+1)) + (n choose m2))*a|^(l1+1)*b|^(m2+1) by XCMPLX_1
+:8
+         .= ((n+1) choose (m2+1))*a|^(l1+1)*b|^(m2+1) by A41,Th32
+         .= ((a,b) In_Power (n+1)).i by A11,A39,A40,Def4;
+        hence thesis;
+       end;
+      A48: i in {n+1+1} implies F.i = ((a,b) In_Power (n+1)).i
+       proof
+        assume A49: i in {n+1+1};
+        then A50: i = n+1+1 by TARSKI:def 1;
+        A51: j = n+1+1-1 by A49,TARSKI:def 1 .= n+1 by XCMPLX_1:26;
+        A52: n+1 = len ((a,b) In_Power n) by Def4
+         .= len (a*((a,b) In_Power n)) by Th6;
+          n+1 in Seg (n+1) by FINSEQ_1:6;
+        then j in Seg len (((a,b) In_Power n)) by A51,Def4;
+        then A53: j in dom ((a,b) In_Power n) by FINSEQ_1:def 3;
+        then A54: j in dom (b*((a,b) In_Power n)) by Th7;
+        A55: x = ((a,b) In_Power n).j by A53,FINSEQ_4:def 4;
+        A56: x = ((a,b) In_Power n).(n+1) by A51,A53,FINSEQ_4:def 4
+               .= b|^n by Th40;
+        A57: r1 = F1.i by A16,FINSEQ_4:def 4;
+        A58: r1 =
+((a*((a,b) In_Power n))^<*0*>).(len (a*((a,b) In_Power n))+1)
+           by A16,A50,A52,FINSEQ_4:def 4
+         .= 0 by FINSEQ_1:59;
+        A59: r2 = F2.i by A17,FINSEQ_4:def 4;
+        A60: r2 = (<*0*>^(b*((a,b) In_Power n))).(1+n+1) by A17,A50,FINSEQ_4:
+def 4
+         .= (<*0*>^(b*((a,b) In_Power n))).(len <*0*> +j) by A51,FINSEQ_1:56
+         .= (b*((a,b) In_Power n)).j by A54,FINSEQ_1:def 7
+         .= b*b|^n by A55,A56,RVSUM_1:66 .= b|^(n+1) by Th11;
+          F.i = 0+r2 by A57,A58,A59,RVSUM_1:27
+         .= ((a,b) In_Power (n+1)).i by A50,A60,Th40;
+        hence thesis;
+       end;
+        now assume i in {1} \/ {k: 1<k & k<n+1+1} \/ {n+1+1};
+      then i in {1} \/ {k: 1<k & k<n+1+1} or i in {n+1+1} by XBOOLE_0:def 2;
+      hence F.i = ((a,b) In_Power (n+1)).i by A20,A30,A48,XBOOLE_0:def 2;
+      end;
+      hence thesis by A11,A13,A19,Th5;
+     end;
+      len ((a,b) In_Power (n+1)) = len F by A9,Def4;
+    hence thesis by A4,A8,A10,Th3;
+   end;
+A61:  for n holds P[n] from Ind(A1,A2);
+  let s;
+    s is Nat by ORDINAL2:def 21;
+  hence thesis by A61;
+ end;
+
+definition let n be natural number;
+func Newton_Coeff n -> FinSequence of REAL means :Def5: len it = n+1 &
+ (for i,k be natural number st i in dom it & k = i-1 holds it.i = n choose k);
+existence
+ proof
+  reconsider n as Nat by ORDINAL2:def 21;
+ defpred P[natural number,set] means
+ for s st s = $1-1 holds $2 = n choose s;
+
+ A1: for l for r1,r2 being set
+      st l in Seg (n+1) & P[l,r1] & P[l,r2] holds r1 = r2
+   proof
+    let l;
+    let r1,r2 be set;
+    assume A2: l in Seg (n+1) & P[l,r1] & P[l,r2];
+    then l>=1 & l<=n+1 by FINSEQ_1:3;
+    then reconsider k = l-1 as Nat by INT_1:18;
+       r1 = n choose k by A2;
+    hence thesis by A2;
+   end;
+ A3: for l st l in Seg (n+1) ex x being set st P[l,x]
+   proof
+    let l;
+    assume l in Seg (n+1);
+    then l>=1 & l<=n+1 by FINSEQ_1:3;
+    then reconsider k = l-1 as Nat by INT_1:18;
+    reconsider x = n choose k as set;
+    take x;
+    thus thesis;
+   end;
+  consider F being FinSequence such that A4:
+   dom F = Seg (n+1) & for l st l in Seg (n+1) holds
+   P[l,F.l] from SeqEx(A1,A3);
+    rng F c= REAL
+   proof
+      let x be set;
+      assume x in rng F;
+      then consider y be set such that A5: y in dom F & x = F.y by FUNCT_1:def
+5;
+      reconsider y as Nat by A5;
+        y >= 1 & y <= n+1 by A4,A5,FINSEQ_1:3;
+      then reconsider m1 = y-1 as Nat by INT_1:18;
+        F.y = n choose m1 by A4,A5;
+      then reconsider x as Real by A5;
+        x in REAL;
+     hence thesis;
+     end;
+    then reconsider F as FinSequence of REAL by FINSEQ_1:def 4;
+    take F;
+    thus thesis by A4,FINSEQ_1:def 3;
+ end;
+uniqueness
+ proof
+  let G,H;
+  assume A6: len G = n+1 &
+   (for i,m be natural number st i in dom G & m = i - 1 holds
+   G.i = n choose m);
+  assume A7: len H = n+1 &
+   (for i,m be natural number st i in dom H & m = i - 1 holds
+   H.i = n choose m);
+
+    for i st i in dom G holds G.i = H.i
+    proof
+     let i;
+     assume A8: i in dom G;
+     then A9: i in Seg (n+1) by A6,FINSEQ_1:def 3;
+     then A10:i in dom H by A7,FINSEQ_1:def 3;
+        i>=1 & i<=n+1 by A9,FINSEQ_1:3;
+     then reconsider m = i-1 as Nat by INT_1:18;
+       H.i = n choose m by A7,A10;
+     hence thesis by A6,A8;
+    end;
+  hence G = H by A6,A7,Th3;
+ end;
+end;
+
+canceled;
+
+theorem
+Th43: for s holds Newton_Coeff s = (1,1) In_Power s
+ proof
+  let s;
+  A1: len (Newton_Coeff s) = s+1 by Def5 .= len ((1,1) In_Power s) by Def4;
+    for i st i in dom (Newton_Coeff s) holds
+   (Newton_Coeff s).i = ((1,1) In_Power s).i
+  proof
+   let i;
+   assume A2: i in dom (Newton_Coeff s);
+   A3: dom (Newton_Coeff s) = Seg len (Newton_Coeff s) by FINSEQ_1:def 3
+    .= Seg (s+1) by Def5;
+   then A4: dom (Newton_Coeff s) = Seg len ((1,1) In_Power s) by Def4
+     .= dom ((1,1) In_Power s) by FINSEQ_1:def 3;
+
+   A5: i>=1 & i<=(s+1) by A2,A3,FINSEQ_1:3;
+   then reconsider m1 = i-1 as Nat by INT_1:18;
+     s+1-1>=i-1 by A5,REAL_1:49;
+   then s>=m1 by XCMPLX_1:26;
+   then reconsider l1 = s-m1 as Nat by INT_1:18;
+     ((1,1) In_Power s).i = (s choose m1)*1|^l1*1|^m1 by A2,A4,Def4
+    .= (s choose m1)*1*1|^m1 by Th15 .= (s choose m1)*1 by Th15 .=
+ (Newton_Coeff s).i by A2,Def5;
+   hence thesis;
+  end;
+ hence thesis by A1,Th3;
+ end;
+
+theorem
+   for s holds 2|^s = Sum(Newton_Coeff s)
+ proof
+  let s;
+    2|^s = (1+1)|^s .= Sum((1,1) In_Power s) by Th41 .= Sum(Newton_Coeff s)
+   by Th43;
+  hence thesis;
+ end;

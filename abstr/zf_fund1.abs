@@ -1,0 +1,264 @@
+:: Mostowski's Fundamental Operations - Part I
+::  by Andrzej Kondracki
+::
+:: Received December 17, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary CLASSES2, ZF_REFLE, ORDINAL1, ORDINAL2, FINSUB_1, FUNCT_1, ZF_LANG,
+      SEQ_1, RELAT_1, MCART_1, CARD_1, FINSET_1, ZF_MODEL, FUNCT_2, BOOLE,
+      ORDINAL4, TARSKI, FUNCOP_1, ZF_FUND1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, NAT_1, ORDINAL1,
+      ORDINAL2, ORDINAL4, CARD_1, FINSET_1, RELAT_1, CLASSES2, ZF_REFLE,
+      ZF_LANG, ZF_MODEL, FUNCT_1, FUNCT_2, MCART_1, FINSUB_1, FUNCOP_1;
+ constructors WELLORD2, SETWISEO, ORDINAL4, CLASSES1, ZF_MODEL, MCART_1, NAT_1,
+      FUNCOP_1, PARTFUN1, XREAL_0, MEMBERED, XBOOLE_0;
+ clusters ORDINAL1, CARD_1, ZF_LANG, FUNCT_1, FINSUB_1, FINSET_1, RELSET_1,
+      CLASSES2, MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements NUMERALS, SUBSET, BOOLE;
+
+
+begin
+
+ reserve V for Universe,
+         a,b,x,y,z,x',y' for Element of V,
+         X for Subclass of V,
+         o,p,q,r,s,t,u,a1,a2,a3,A,B,C,D for set,
+         K,L,M for Ordinal,
+         n for Element of omega,
+         fs for Finite_Subset of omega,
+         e,g,h for Function,
+         E for non empty set,
+         f for Function of VAR,E,
+         k,k1 for Nat,
+         v1,v2,v3 for Element of VAR,
+         H,H' for ZF-formula;
+
+definition let A,B;
+ func A(#)B -> set means
+:: ZF_FUND1:def 1
+  p in it iff ex q,r,s st p=[q,s] & [q,r] in A & [r,s] in B;
+end;
+
+definition let V,x,y;
+ redefine func x(#)y -> Element of V;
+end;
+ func decode -> Function of omega,VAR means
+:: ZF_FUND1:def 2
+ for p being Element of omega holds it.p = x.card p;
+end;
+
+definition let v1;
+  func x".v1 -> Nat means
+:: ZF_FUND1:def 3
+x.it=v1;
+end;
+
+definition
+  let A be Finite_Subset of VAR;
+ func code A -> Finite_Subset of omega equals
+:: ZF_FUND1:def 4
+ (decode").:A;
+end;
+
+definition let H;
+ redefine func Free H -> Finite_Subset of VAR;
+end;
+
+definition let n;
+ redefine func {n} -> Finite_Subset of omega;
+end;
+
+definition let v1;
+  redefine func {v1} -> Finite_Subset of VAR;
+
+ let v2;
+  func {v1,v2} -> Finite_Subset of VAR;
+end;
+
+definition let H,E;
+ func Diagram(H,E) -> set means
+:: ZF_FUND1:def 5
+p in it iff ex f st p=(f*decode)|code Free(H) & f in St(H,E);
+end;
+
+definition let V,X;
+ attr X is closed_wrt_A1 means
+:: ZF_FUND1:def 6
+ for a st a in X holds
+ {{[0-element_of(V),x],[1-element_of(V),y]}: x in y & x in a & y in a} in X;
+
+ attr X is closed_wrt_A2 means
+:: ZF_FUND1:def 7
+ for a,b st a in X & b in X holds {a,b} in X;
+
+ attr X is closed_wrt_A3 means
+:: ZF_FUND1:def 8
+ for a st a in X holds union a in X;
+
+ attr X is closed_wrt_A4 means
+:: ZF_FUND1:def 9
+ for a,b st a in X & b in X holds {{[x,y]}: x in a & y in b} in X;
+
+ attr X is closed_wrt_A5 means
+:: ZF_FUND1:def 10
+ for a,b st a in X & b in X holds {x \/ y: x in a & y in b} in X;
+
+ attr X is closed_wrt_A6 means
+:: ZF_FUND1:def 11
+ for a,b st a in X & b in X holds {x\y: x in a & y in b} in X;
+
+ attr X is closed_wrt_A7 means
+:: ZF_FUND1:def 12
+ for a,b st a in X & b in X holds {x(#)y: x in a & y in b} in X;
+end;
+
+definition let V,X;
+ attr X is closed_wrt_A1-A7 means
+:: ZF_FUND1:def 13
+ X is closed_wrt_A1 closed_wrt_A2 closed_wrt_A3
+  closed_wrt_A4 closed_wrt_A5 closed_wrt_A6 closed_wrt_A7;
+end;
+
+theorem :: ZF_FUND1:1
+  X c= V & (o in X implies o is Element of V) &
+   (o in A & A in X implies o is Element of V);
+
+theorem :: ZF_FUND1:2
+ X is closed_wrt_A1-A7 implies
+ (o in X iff {o} in X) & (A in X implies union A in X);
+
+theorem :: ZF_FUND1:3
+ X is closed_wrt_A1-A7 implies {} in X;
+
+theorem :: ZF_FUND1:4
+ X is closed_wrt_A1-A7 & A in X & B in X implies
+  A \/ B in X & A\B in X & A(#)B in X;
+
+theorem :: ZF_FUND1:5
+ X is closed_wrt_A1-A7 & A in X & B in X implies A/\B in X;
+
+theorem :: ZF_FUND1:6
+ X is closed_wrt_A1-A7 & o in X & p in X implies {o,p} in X & [o,p] in X;
+
+theorem :: ZF_FUND1:7
+ X is closed_wrt_A1-A7 implies omega c= X;
+
+theorem :: ZF_FUND1:8
+ X is closed_wrt_A1-A7 implies Funcs(fs,omega) c= X;
+
+theorem :: ZF_FUND1:9
+ X is closed_wrt_A1-A7 & a in X implies Funcs(fs,a) in X;
+
+theorem :: ZF_FUND1:10
+ X is closed_wrt_A1-A7 & a in Funcs(fs,omega) &
+  b in X implies {a(#)x: x in b} in X;
+
+theorem :: ZF_FUND1:11
+ X is closed_wrt_A1-A7 & n in fs & a in X & b in X & b c= Funcs(fs,a)
+       implies {x: x in Funcs(fs\{n},a) & ex u st {[n,u]} \/ x in b} in X;
+
+theorem :: ZF_FUND1:12
+ X is closed_wrt_A1-A7 & not n in fs & a in X & b in X & b c= Funcs(fs,a)
+   implies {{[n,x]} \/ y: x in a & y in b} in X;
+
+theorem :: ZF_FUND1:13
+ (X is closed_wrt_A1-A7 & B is finite & for o st o in B holds o in X)
+ implies B in X;
+
+theorem :: ZF_FUND1:14
+ X is closed_wrt_A1-A7 & A c= X & y in Funcs(fs,A) implies y in X;
+
+theorem :: ZF_FUND1:15
+ X is closed_wrt_A1-A7 & not n in fs & a in X & a c= X & y in Funcs(fs,a)
+   implies {{[n,x]} \/ y: x in a} in X;
+
+theorem :: ZF_FUND1:16
+   X is closed_wrt_A1-A7 & not n in fs & a in X & a c= X
+ & y in Funcs(fs,a) & b c= Funcs(fs \/ {n},a) & b in X
+  implies {x: x in a & {[n,x]} \/ y in b} in X;
+
+theorem :: ZF_FUND1:17
+ X is closed_wrt_A1-A7 & a in X implies {{[0-element_of(V),x],
+ [1-element_of(V),x]} : x in a} in X;
+
+theorem :: ZF_FUND1:18
+     X is closed_wrt_A1-A7 & E in X implies
+ for v1,v2 holds Diagram(v1 '=' v2,E) in X & Diagram(v1 'in' v2,E) in X;
+
+theorem :: ZF_FUND1:19
+     X is closed_wrt_A1-A7 & E in X implies
+ for H st Diagram(H,E) in X holds Diagram('not' H,E) in X;
+
+theorem :: ZF_FUND1:20
+     X is closed_wrt_A1-A7 & E in X implies
+ for H,H' st Diagram(H,E) in X &
+ Diagram(H',E) in X holds Diagram(H '&' H',E) in X;
+
+theorem :: ZF_FUND1:21
+     X is closed_wrt_A1-A7 & E in X implies
+ for H,v1 st Diagram(H,E) in X holds Diagram(All(v1,H),E) in X;
+
+theorem :: ZF_FUND1:22
+   X is closed_wrt_A1-A7 & E in X implies Diagram(H,E) in X;
+
+:: Auxiliary theorems
+
+theorem :: ZF_FUND1:23
+   X is closed_wrt_A1-A7 implies
+ n in X & 0-element_of(V) in X & 1-element_of(V) in X;
+
+theorem :: ZF_FUND1:24
+   {[o,p],[p,p]}(#){[p,q]}={[o,q],[p,q]};
+
+theorem :: ZF_FUND1:25
+   p<>r implies {[o,p],[q,r]}(#){[p,s],[r,t]}={[o,s],[q,t]};
+
+canceled;
+
+theorem :: ZF_FUND1:27
+   code {v1} = { x".v1} & code {v1,v2} = { x".v1 , x".v2};
+
+theorem :: ZF_FUND1:28
+   for f being Function holds
+  dom f={o,q} iff f={[o,f.o],[q,f.q]};
+
+theorem :: ZF_FUND1:29
+   dom decode = omega & rng decode = VAR
+ & decode is one-to-one & decode" is one-to-one
+ & dom(decode") = VAR & rng(decode") = omega;
+
+theorem :: ZF_FUND1:30
+   for A being Finite_Subset of VAR holds A,code A are_equipotent;
+
+theorem :: ZF_FUND1:31
+   for A being Element of omega holds A = x".x.card A;
+
+theorem :: ZF_FUND1:32
+   dom((f*decode)|fs)=fs & rng((f*decode)|fs) c= E
+ & (f*decode)|fs in Funcs(fs,E) & dom(f*decode)=omega
+ & rng(f*decode) c= E;
+
+theorem :: ZF_FUND1:33
+   decode.(x".v1)=v1 & (decode").v1= x".v1
+ & (f*decode).(x".v1)=f.v1;
+
+theorem :: ZF_FUND1:34
+   for A being Finite_Subset of VAR holds
+  p in code A iff ex v1 st v1 in A & p= x".v1;
+
+theorem :: ZF_FUND1:35
+   for A,B being Finite_Subset of VAR holds
+   code(A \/ B)=code A \/ code B & code(A\B)=(code A)\(code B);
+
+theorem :: ZF_FUND1:36
+   v1 in Free H implies ((f*decode)|code Free H).( x".v1)=f.v1;
+
+theorem :: ZF_FUND1:37
+   for f,g being Function of VAR,E st
+  (f*decode)|code Free H=(g*decode)|code Free H &
+  f in St(H,E) holds g in St(H,E);
+
+theorem :: ZF_FUND1:38
+   p in Funcs(fs,E) implies ex f st p=(f*decode)|fs;

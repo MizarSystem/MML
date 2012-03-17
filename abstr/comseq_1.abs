@@ -1,0 +1,316 @@
+:: Complex Sequences
+::  by Agnieszka Banachowicz and Anna Winnicka
+::
+:: Received November 5, 1993
+:: Copyright (c) 1993 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, COMPLEX1, RELAT_1, ANPROJ_1, BOOLE, PARTFUN1, FINSEQ_4,
+      SEQ_1, ARYTM_1, ARYTM_3, COMSEQ_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, REAL_1, COMPLEX1,
+      RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FINSEQ_4, SEQ_1;
+ constructors REAL_1, COMPLEX1, SEQ_1, PARTFUN1, FINSEQ_4, MEMBERED, XBOOLE_0;
+ clusters COMPLEX1, RELSET_1, SEQ_1, FUNCT_2, MEMBERED, ZFMISC_1, XBOOLE_0,
+      ORDINAL2;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+  reserve f for Function;
+  reserve n,k,n1 for Nat;
+  reserve r,p for Element of COMPLEX;
+  reserve x,y,z for set;
+
+definition
+ mode Complex_Sequence is Function of NAT,COMPLEX;
+end;
+
+reserve seq,seq1,seq2,seq3,seq',seq1' for Complex_Sequence;
+
+theorem :: COMSEQ_1:1
+ f is Complex_Sequence
+  iff (dom f=NAT & for x st x in NAT holds f.x is Element of COMPLEX);
+
+theorem :: COMSEQ_1:2
+f is Complex_Sequence iff (dom f=NAT & for n holds f.n is Element
+     of COMPLEX);
+
+definition
+ let seq,n;
+redefine func seq.n ->Element of COMPLEX;
+end;
+
+scheme ExComplexSeq{F(Nat)->Element of COMPLEX}:
+ ex seq st for n holds seq.n=F(n);
+
+definition let IT be Complex_Sequence;
+  attr IT is non-zero means
+:: COMSEQ_1:def 1
+ rng IT c= COMPLEX \ {0c};
+end;
+
+theorem :: COMSEQ_1:3
+  seq is non-zero iff for x st x in NAT holds seq.x<>0c;
+
+definition
+  cluster non-zero Complex_Sequence;
+end;
+
+theorem :: COMSEQ_1:4
+  seq is non-zero iff for n holds seq.n<>0c;
+
+canceled;
+
+theorem :: COMSEQ_1:6
+ for seq,seq1 st (for n holds seq.n=seq1.n) holds seq=seq1;
+
+theorem :: COMSEQ_1:7
+   for r ex seq st rng seq={r};
+
+definition let C be non empty set; let f1,f2 be PartFunc of C,COMPLEX;
+func f1+f2 -> PartFunc of C,COMPLEX means
+:: COMSEQ_1:def 2
+ dom it = dom f1 /\ dom f2 &
+  for c being Element of C st c in dom it holds it.c = f1/.c + f2/.c;
+  commutativity;
+func f1(#)f2 -> PartFunc of C,COMPLEX means
+:: COMSEQ_1:def 3
+dom it = dom f1 /\ dom f2 &
+   for c being Element of C st c in dom it holds it.c = f1/.c * f2/.c;
+  commutativity;
+end;
+
+definition let C be non empty set; let f1,f2 be Function of C,COMPLEX;
+ redefine
+func f1+f2 means
+:: COMSEQ_1:def 4
+  dom it = C & for c being Element of C holds it.c = f1.c + f2.c;
+func f1(#)f2 means
+:: COMSEQ_1:def 5
+  dom it = C &
+   for c being Element of C holds it.c = f1.c * f2.c;
+end;
+
+definition let C be non empty set; let seq1,seq2 be Function of C,COMPLEX;
+  cluster seq1+seq2 -> total;
+  cluster seq1(#)seq2 -> total;
+end;
+
+definition let C be non empty set; let f be PartFunc of C,COMPLEX, r;
+func r(#)f -> PartFunc of C,COMPLEX means
+:: COMSEQ_1:def 6
+ dom it = dom f & for c being Element of C st c in dom it holds it.c = r*f/.c;
+end;
+
+definition let C be non empty set; let f be Function of C,COMPLEX, r;
+ redefine func r(#)f means
+:: COMSEQ_1:def 7
+  dom it = C & for n being Element of C holds it.n=r*f.n;
+end;
+
+definition let C be non empty set; let seq be Function of C,COMPLEX, r;
+ cluster r(#)seq -> total;
+end;
+
+definition let C be non empty set; let f be PartFunc of C,COMPLEX;
+func -f ->PartFunc of C,COMPLEX means
+:: COMSEQ_1:def 8
+ dom it = dom f & for c being Element of C st c in dom it holds it.c = -(f/.c);
+end;
+
+definition let C be non empty set; let f be Function of C,COMPLEX;
+ redefine func - f means
+:: COMSEQ_1:def 9
+ dom it = C & for n being Element of C holds it.n=-f.n;
+end;
+
+definition let C be non empty set; let seq be Function of C,COMPLEX;
+ cluster - seq -> total;
+end;
+
+definition let C be non empty set; let f1,f2 be PartFunc of C,COMPLEX;
+func f1-f2 -> PartFunc of C,COMPLEX equals
+:: COMSEQ_1:def 10
+f1 +- f2;
+end;
+
+definition let C be non empty set; let f1,f2 be Function of C,COMPLEX;
+ cluster f1-f2 -> total;
+end;
+
+definition
+ let seq;
+func seq" -> Complex_Sequence means
+:: COMSEQ_1:def 11
+for n holds it.n=(seq.n)";
+end;
+
+definition
+ let seq1,seq;
+func seq1 /" seq ->Complex_Sequence equals
+:: COMSEQ_1:def 12
+seq1(#)(seq");
+end;
+
+definition let C be non empty set; let f be PartFunc of C,COMPLEX;
+func |.f.| -> PartFunc of C,REAL means
+:: COMSEQ_1:def 13
+ dom it = dom f &
+ for c being Element of C st c in dom it holds it.c = |.f/.c.|;
+end;
+
+definition let C be non empty set; let seq be Function of C,COMPLEX;
+ redefine func |.seq.| means
+:: COMSEQ_1:def 14
+  dom it = C & for n being Element of C holds it.n=|.seq.n.|;
+end;
+
+definition let C be non empty set; let seq be Function of C,COMPLEX;
+  cluster |.seq.|-> total;
+end;
+
+canceled;
+
+theorem :: COMSEQ_1:9
+  (seq1+seq2)+seq3=seq1+(seq2+seq3);
+
+canceled;
+
+theorem :: COMSEQ_1:11
+  (seq1(#)seq2)(#)seq3=seq1(#)(seq2(#)seq3);
+
+theorem :: COMSEQ_1:12
+  (seq1+seq2)(#)seq3=seq1(#)seq3+seq2(#)seq3;
+
+theorem :: COMSEQ_1:13
+    seq3(#)(seq1+seq2)=seq3(#)seq1+seq3(#)seq2;
+
+theorem :: COMSEQ_1:14
+  -seq=(-1r)(#)seq;
+
+theorem :: COMSEQ_1:15
+  r(#)(seq1(#)seq2)=r(#)seq1(#)seq2;
+
+theorem :: COMSEQ_1:16
+  r(#)(seq1(#)seq2)=seq1(#)(r(#)seq2);
+
+theorem :: COMSEQ_1:17
+  (seq1-seq2)(#)seq3=seq1(#)seq3-seq2(#)seq3;
+
+theorem :: COMSEQ_1:18
+    seq3(#)seq1-seq3(#)seq2=seq3(#)(seq1-seq2);
+
+theorem :: COMSEQ_1:19
+  r(#)(seq1+seq2)=r(#)seq1+r(#)seq2;
+
+theorem :: COMSEQ_1:20
+  (r*p)(#)seq=r(#)(p(#)seq);
+
+theorem :: COMSEQ_1:21
+  r(#)(seq1-seq2)=r(#)seq1-r(#)seq2;
+
+theorem :: COMSEQ_1:22
+  r(#)(seq1/"seq)=(r(#)seq1)/"seq;
+
+theorem :: COMSEQ_1:23
+    seq1-(seq2+seq3)=seq1-seq2-seq3;
+
+theorem :: COMSEQ_1:24
+   1r(#)seq=seq;
+
+theorem :: COMSEQ_1:25
+   -(-seq)=seq;
+
+theorem :: COMSEQ_1:26
+  seq1-(-seq2)=seq1+seq2;
+
+theorem :: COMSEQ_1:27
+    seq1-(seq2-seq3)=seq1-seq2+seq3;
+
+theorem :: COMSEQ_1:28
+    seq1+(seq2-seq3)=seq1+seq2-seq3;
+
+theorem :: COMSEQ_1:29
+    (-seq1)(#)seq2=-(seq1(#)seq2) & seq1(#)(-seq2)=-(seq1(#)seq2);
+
+theorem :: COMSEQ_1:30
+ seq is non-zero implies seq" is non-zero;
+
+theorem :: COMSEQ_1:31
+ seq""=seq;
+
+theorem :: COMSEQ_1:32
+ seq is non-zero & seq1 is non-zero iff seq(#)seq1 is non-zero;
+
+theorem :: COMSEQ_1:33
+ seq is non-zero & seq1 is non-zero implies seq"(#)seq1"=(seq(#)seq1)";
+
+theorem :: COMSEQ_1:34
+   seq is non-zero implies (seq1/"seq)(#)seq=seq1;
+
+theorem :: COMSEQ_1:35
+   seq is non-zero & seq1 is non-zero implies
+           (seq'/"seq)(#)(seq1'/"seq1)=(seq'(#)seq1')/"(seq(#)seq1);
+
+theorem :: COMSEQ_1:36
+   seq is non-zero & seq1 is non-zero implies seq/"seq1 is non-zero;
+
+theorem :: COMSEQ_1:37
+ seq is non-zero & seq1 is non-zero implies (seq/"seq1)"=seq1/"seq;
+
+theorem :: COMSEQ_1:38
+  seq2(#)(seq1/"seq)=(seq2(#)seq1)/"seq;
+
+theorem :: COMSEQ_1:39
+   seq is non-zero & seq1 is non-zero implies
+                 seq2/"(seq/"seq1)=(seq2(#)seq1)/"seq;
+
+theorem :: COMSEQ_1:40
+ seq is non-zero & seq1 is non-zero implies
+                  seq2/"seq=(seq2(#)seq1)/"(seq(#)seq1);
+
+theorem :: COMSEQ_1:41
+ r<>0c & seq is non-zero implies r(#)seq is non-zero;
+
+theorem :: COMSEQ_1:42
+   seq is non-zero implies -seq is non-zero;
+
+theorem :: COMSEQ_1:43
+ r<>0c & seq is non-zero implies (r(#)seq)"=r"(#)seq";
+
+theorem :: COMSEQ_1:44
+ seq is non-zero implies (-seq)"=(-1r)(#)seq";
+
+theorem :: COMSEQ_1:45
+   seq is non-zero implies -seq1/"seq=(-seq1)/"seq &
+                            seq1/"(-seq)=-seq1/"seq;
+
+theorem :: COMSEQ_1:46
+ seq1/"seq + seq1'/"seq=(seq1+seq1')/"seq &
+                           seq1/"seq - seq1'/"seq=(seq1-seq1')/"seq;
+
+theorem :: COMSEQ_1:47
+   seq is non-zero & seq' is non-zero implies
+       (seq1/"seq + seq1'/"seq'=(seq1(#)seq'+seq1'(#)seq)/"(seq(#)seq')) &
+       (seq1/"seq - seq1'/"seq'=(seq1(#)seq'-seq1'(#)seq)/"(seq(#)seq'));
+
+theorem :: COMSEQ_1:48
+   seq is non-zero & seq' is non-zero & seq1 is non-zero implies
+        (seq1'/"seq)/"(seq'/"seq1)=(seq1'(#)seq1)/"(seq(#)seq');
+
+theorem :: COMSEQ_1:49
+ |.seq(#)seq'.|=|.seq.|(#)|.seq'.|;
+
+theorem :: COMSEQ_1:50
+   seq is non-zero implies |.seq.| is_not_0;
+
+theorem :: COMSEQ_1:51
+ seq is non-zero implies |.seq.|"=|.seq".|;
+
+theorem :: COMSEQ_1:52
+   seq is non-zero implies |.seq'/"seq.|=|.seq'.|/"|.seq.|;
+
+theorem :: COMSEQ_1:53
+   |.r(#)seq.|=|.r.|(#)|.seq.|;

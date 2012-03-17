@@ -1,0 +1,882 @@
+:: Fundamental Types of Metric Affine Spaces
+::  by Henryk Oryszczyszyn and Krzysztof Pra\.zmowski
+::
+:: Received April 17, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary ANALMETR, SYMSP_1, AFF_2, VECTSP_1, TRANSGEO, ANALOAF, DIRAF,
+      AFF_1, INCSP_1, CONAFFM, CONMETR, PAPDESAF, RLVECT_1, ARYTM_1, FUNCT_3,
+      RELAT_1, PARSP_1, EUCLMETR;
+ notation SUBSET_1, STRUCT_0, REAL_1, RLVECT_1, ANALOAF, DIRAF, AFF_1,
+      ANALMETR, GEOMTRAP, PAPDESAF, CONMETR, CONAFFM;
+ constructors AFF_2, TRANSLAC, REAL_1, AFF_1, GEOMTRAP, CONMETR, CONAFFM,
+      MEMBERED, XBOOLE_0;
+ clusters ANALMETR, PAPDESAF, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, SUBSET, ARITHM;
+ theorems RLVECT_1, AFF_1, AFF_4, AFPROJ, ANALOAF, ANALMETR, GEOMTRAP,
+      PAPDESAF, CONMETR, CONAFFM, AFF_2, RLSUB_2, XCMPLX_0, XCMPLX_1;
+
+begin
+
+definition let IT be OrtAfSp;
+ attr IT is Euclidean means :Def1: for a,b,c,d being Element
+ of the carrier of IT st a,b _|_ c,d & b,c _|_ a,d holds b,d _|_ a,c; end;
+
+definition let IT be OrtAfSp;
+ attr IT is Pappian means :Def2: Af(IT) is Pappian; end;
+
+definition let IT be OrtAfSp;
+ attr IT is Desarguesian means
+ :Def3: Af(IT) is Desarguesian; end;
+
+definition let IT be OrtAfSp;
+ attr IT is Fanoian means :Def4: Af(IT) is Fanoian; end;
+
+definition let IT be OrtAfSp;
+ attr IT is Moufangian means
+ :Def5: Af(IT) is Moufangian; end;
+
+definition let IT be OrtAfSp;
+ attr IT is translation means
+ :Def6: Af(IT) is translational; end;
+
+definition let IT be OrtAfSp;
+ attr IT is Homogeneous means :Def7: for o,a,a1,b,b1,c,c1 being
+ Element of IT st o,a _|_ o,a1 & o,b _|_ o,b1 & o,c _|_ o,c1 &
+ a,b _|_ a1,b1 & a,c _|_ a1,c1 & not o,c // o,a & not o,a // o,b holds b,c _|_
+ b1,c1;
+ end;
+
+reserve MS for OrtAfPl;
+reserve MP for OrtAfSp;
+
+theorem Th1: for a,b,c being Element of MP st not LIN a,b,c
+holds a<>b & b<>c & a<>c proof let a,b,c be Element of MP
+ such that A1: not LIN a,b,c; assume A2: not thesis; reconsider b'=b,a'=a,c'=c
+ as Element of Af(MP) by ANALMETR:47; LIN
+ a',b',c' by A2,AFF_1:16;
+ hence contradiction by A1,ANALMETR:55; end;
+
+theorem
+Th2: for a,b,c,d being Element of MS, K being Subset of the
+ carrier of MS st a,b _|_ K & c,d _|_ K holds a,b // c,d & a,b // d,c
+proof let a,b,c,d be Element of MS, K be Subset of the carrier
+of MS such that A1: a,b _|_ K & c,d _|_ K;
+reconsider K'=K as Subset of Af(MS) by ANALMETR:57;
+  K is_line by A1,ANALMETR:62; then K' is_line by ANALMETR:58;
+then consider p',q' being Element of Af(MS) such that
+A2: p' in K' & q' in K' and A3: p' <> q' by AFF_1:31;
+reconsider p=p',q=q' as Element of MS by ANALMETR:47;
+  a,b _|_ p,q & c,d _|_ p,q by A1,A2,ANALMETR:75;
+hence a,b // c,d by A3,ANALMETR:85; hence a,b // d,c by ANALMETR:81; end;
+
+theorem for a,b being Element of MS, A,K being Subset of
+ the carrier of MS st a<>b & (a,b _|_ K or b,a _|_ K) & (a,b _|_ A or b,a _|_
+ A)
+ holds K // A
+proof let a,b be Element of MS, A,K be Subset of
+MS such that A1: a<>b and A2: a,b _|_ K or b,a _|_ K and A3: a,b _|_ A or b,a
+_|_ A;
+A4: a,b _|_ K & a,b _|_ A by A2,A3,ANALMETR:67;
+then consider p,q being Element of MS such that
+A5: p<>q & K = Line(p,q) & a,b _|_ p,q by ANALMETR:def 14;
+consider r,s being Element of MS such that
+A6: r<>s & A = Line(r,s) & a,b _|_ r,s by A4,ANALMETR:def 14;
+  p,q // r,s by A1,A5,A6,ANALMETR:85; hence thesis by A5,A6,ANALMETR:def 16;
+end;
+
+theorem Th4: for x,y,z being Element of MP st LIN x,y,z holds
+ LIN x,z,y & LIN y,x,z & LIN y,z,x & LIN z,x,y & LIN z,y,x
+proof let x,y,z be Element of MP such that A1: LIN x,y,z;
+reconsider x'=x,y'=y,z'=z as Element of Af(MP) by ANALMETR:47;
+  LIN x',y',z' by A1,ANALMETR:55; then LIN x',z',y' & LIN y',x',z' & LIN
+ y',z',x' &
+LIN z',x',y' & LIN z',y',x' by AFF_1:15; hence thesis by ANALMETR:55; end;
+
+theorem Th5: for a,b,c being Element of MS st not LIN a,b,c ex
+ d being Element of MS st d,a _|_ b,c & d,b _|_ a,c
+proof let a,b,c be Element of MS; assume A1: not LIN a,b,c;
+then A2: a<>c & b<>c by Th1; set A=Line(a,c),K=Line(b,c);
+A3: A is_line & K is_line by A2,ANALMETR:def 13;
+then consider P being Subset of MS such that
+A4: b in P & A _|_ P by CONMETR:3;
+consider Q being Subset of MS such that
+A5: a in Q & K _|_ Q by A3,CONMETR:3;
+reconsider P'=P,Q'=Q as Subset of Af(MS) by ANALMETR:57;
+  P is_line & Q is_line by A4,A5,ANALMETR:62;
+then A6: P' is_line & Q' is_line by ANALMETR:58;
+ reconsider A'=A,K'=K as Subset of Af(MS) by ANALMETR:57;
+ reconsider a'=a,b'=b,c'=c as Element of Af(MS) by ANALMETR:47;
+ A7: A'=Line(a',c') & K'=Line(b',c') by ANALMETR:56;
+ then A8: a' in A' & c' in A' & b' in K' & c' in K' by AFF_1:26;
+  not P' // Q' proof assume not thesis; then P // Q by ANALMETR:64;
+ then A _|_ Q by A4,ANALMETR:73; then A // K by A5,ANALMETR:87;
+ then A' // K' by ANALMETR:64; then b' in A' by A8,AFF_1:59;
+ then LIN a',c',b' by A7,AFF_1:def 2; then LIN a',b',c' by AFF_1:15;
+ hence contradiction by A1,ANALMETR:55; end;
+then consider d' being Element of Af(MS) such that
+A9: d' in P' & d' in
+ Q' by A6,AFF_1:72; reconsider d=d' as Element of the carrier
+of MS by ANALMETR:47; take d; thus thesis by A4,A5,A8,A9,ANALMETR:78; end;
+
+theorem Th6: for a,b,c,d1,d2 being Element of MS st
+ not LIN a,b,c & d1,a _|_ b,c & d1,b _|_ a,c & d2,a _|_ b,c & d2,b _|_
+ a,c holds d1=d2
+proof let a,b,c,d1,d2 be Element of MS such that
+A1: not LIN a,b,c and A2: d1,a _|_ b,c & d1,b _|_ a,c and
+A3: d2,a _|_ b,c & d2,b _|_ a,c; assume A4: d1<>d2;
+A5: a<>c & b<>a & b<>c by A1,Th1;
+then A6: d1,a // d2,a & d1,b // d2,b by A2,A3,ANALMETR:85;
+reconsider a'=a,b'=b,c'=c,d1'=d1,d2'=d2 as Element of Af(MS)
+ by ANALMETR:47;
+  d1',a' // d2',a' & d1',b' // d2',b' by A6,ANALMETR:48; then a',d1' // a',d2'
+&
+b',d1' // b',d2' by AFF_1:13; then LIN a',d1',d2' & LIN
+ b',d1',d2' by AFF_1:def 1;
+then A7: LIN d1',d2',a' & LIN d1',d2',b' by AFF_1:15; LIN d1',d2',d1' & LIN
+ d1',d2',d2' by AFF_1:16; then A8: LIN a',b',d1' & LIN a',b',d2' by A4,A7,AFF_1
+:17;
+set X'=Line(a',b'); A9: X' is_line & a' in X' & b' in X' by A5,AFF_1:26,def 3;
+
+reconsider X=X' as Subset of MS by ANALMETR:57;
+A10: d1 in X & d2 in X & a in X & b in
+ X & X is_line by A5,A8,A9,AFF_1:39,ANALMETR:58;
+  (a<>d1 or a<>d2) & (b<>d1 or b<>d2) by A4;
+ then a,c _|_ X & b,c _|_ X by A2,A3,A10,ANALMETR:77; then a,c // b,c by Th2;
+then a',c' // b',c' by ANALMETR:48; then c',b' // c',a' by AFF_1:13;
+then LIN c',b',a' by AFF_1:def 1; then LIN a',b',c' by AFF_1:15;
+hence contradiction by A1,ANALMETR:55; end;
+
+theorem Th7: for a,b,c,d being Element of MS st a,b _|_ c,d &
+ b,c _|_ a,d & LIN a,b,c holds (a=c or a=b or b=c)
+proof let a,b,c,d be Element of MS such that A1: a,b _|_ c,d &
+b,c _|_ a,d and A2: LIN a,b,c; assume A3: not thesis;
+reconsider a'=a,b'=b,c'=c,d'=d as Element of Af(MS)
+ by ANALMETR:47; A4: LIN a',b',c' by A2,ANALMETR:55;
+  LIN c,b,a by A2,Th4; then a,b // a,c & c,b // c,a by A2,ANALMETR:def 11;
+then a,b // a,c & a,c // b,c by ANALMETR:81;
+ then a,c _|_ c,d & a,c _|_ a,d by A1,A3,ANALMETR:84;
+then c,d // a,d by A3,ANALMETR:85; then d,c // d,a by ANALMETR:81;
+then LIN d,c,a by ANALMETR:def 11; then LIN a,c,d by Th4;
+then A5: LIN a',c',d' by ANALMETR:55; consider A' being Subset of the carrier
+of
+Af(MS) such that A6: A' is_line and A7: a' in A' & b' in A' & c' in A' by A4,
+AFF_1:33; reconsider A=A' as Subset of MS by ANALMETR:57;
+A8: A is_line by A6,ANALMETR:58;
+A9: a in A & b in A & c in A & d in A by A3,A5,A6,A7,AFF_1:39;
+  c,d _|_ A & a,d _|_ A by A1,A3,A7,A8,ANALMETR:77; then c =d & a=d by A9,
+ANALMETR:71; hence contradiction by A3; end;
+
+theorem Th8: MS is Euclidean iff 3H_holds_in MS proof
+A1: now assume A2: 3H_holds_in MS;
+   now let a,b,c,d be Element of MS such that
+ A3: a,b _|_ c,d & b,c _|_ a,d;
+ A4: now assume A5: not LIN
+ a,b,c; then consider d1 being Element of the carrier
+  of MS such that A6: d1,a _|_ b,c & d1,b _|_ a,c & d1,c _|_
+ a,b by A2,CONAFFM:def 3;
+  A7: d,a _|_ c,b & d,c _|_ a,b by A3,ANALMETR:83;
+  A8: d1,a _|_ c,b & d1,c _|_ a,b by A6,ANALMETR:83;
+     not LIN a,c,b by A5,Th4;
+  then d,b _|_ a,c by A6,A7,A8,Th6;
+ hence b,d _|_ a,c by ANALMETR:83; end;
+    now assume A9: LIN a,b,c;
+  A10:  a=c implies b,d _|_ a,c by ANALMETR:80;
+  A11:  a=b implies b,d _|_ a,c by A3,ANALMETR:83;
+      b=c implies b,d _|_ a,c by A3,ANALMETR:83;
+ hence b,d _|_ a,c by A3,A9,A10,A11,Th7; end;
+hence b,d _|_ a,c by A4; end; hence MS is Euclidean by Def1; end;
+   now assume A12: MS is Euclidean;
+   now let a,b,c be Element of MS; assume not LIN a,b,c;
+ then consider d being Element of MS such that
+ A13: d,a _|_ b,c & d,b _|_ a,c by Th5; take d;
+   b,c _|_ a,d & c,a _|_ b,d by A13,ANALMETR:83; then c,d _|_ b,a by A12,Def1;
+ hence d,a _|_ b,c & d,b _|_ a,c & d,c _|_ a,b by A13,ANALMETR:83; end;
+hence 3H_holds_in MS by CONAFFM:def 3; end;
+hence thesis by A1; end;
+
+theorem Th9: MS is Homogeneous iff ODES_holds_in MS proof ODES_holds_in MS iff
+for o,a,a1,b,b1,c,c1 being Element of MS st o,a _|_ o,a1 &
+o,b _|_ o,b1 & o,c _|_ o,c1 & a,b _|_ a1,b1 & a,c _|_ a1,c1 & not o,c // o,a &
+not o,a // o,b holds b,c _|_ b1,c1 by CONAFFM:def 4;
+hence thesis by Def7; end;
+
+Lm1: PAP_holds_in MS iff Af(MS) satisfies_PAP' proof set AS=Af(MS);
+A1: now assume A2: PAP_holds_in MS;
+   now let M,N be Subset of AS, o,a,b,c,a',b',c' be Element of
+ the carrier of AS such that A3: M is_line & N is_line and A4: M<>N and
+ A5: o in M & o in N and A6: o<>a & o<>a' & o<>b & o<>b' & o<>c & o<>c' and
+ A7: a in M & b in M & c in M & a' in N & b' in N & c' in N and
+ A8: a,b' // b,a' & b,c' // c,b';
+ reconsider M'=M,N'=N as Subset of MS by ANALMETR:57;
+ A9: M' is_line & N' is_line by A3,ANALMETR:58;
+ reconsider a1=a,b1=b,c1=c,a1'=a',b1'=b',c1'=c' as Element of the
+  carrier of MS by ANALMETR:47;
+ A10: not a1' in M' & not b1 in N' by A4,A5,A6,A7,A9,CONMETR:5;
+   a1,b1' // b1,a1' & b1,c1' // c1,b1' by A8,ANALMETR:48;
+  then b1,a1' // a1,b1' & b1,c1' // c1,b1' by ANALMETR:81;
+ then c1,a1' // a1,c1' by A2,A5,A6,A7,A9,A10,CONMETR:def 2;
+ then a1,c1' // c1,a1' by ANALMETR:81; hence a,c' // c,a' by ANALMETR:48; end
+;
+hence Af(MS) satisfies_PAP' by AFF_2:def 2; end;
+   now assume A11: Af(MS) satisfies_PAP';
+   now let o,a1,a2,a3,b1,b2,b3 be Element of MS, M,N be Subset
+of
+ the carrier of MS such that A12: M is_line & N is_line and
+ A13: o in M & a1 in M & a2 in M & a3 in M & o in N & b1 in N & b2 in N & b3 in
+ N and
+ A14: not b2 in M & not a3 in N and
+ A15: o<>a1 & o<>a2 & o<>a3 & o<>b1 & o<>b2 & o<>b3 and
+ A16: a3,b2 // a2,b1 & a3,b3 // a1,b1;
+  A17: a2,b1 // a3,b2 & a3,b3 // a1,b1 by A16,ANALMETR:81;
+reconsider M'=M,N'=N as Subset of AS by ANALMETR:57;
+A18: M' is_line & N' is_line by A12,ANALMETR:58;
+reconsider a=a1,b=a2,c = a3,a'=b1,b'=b2,c'=b3 as Element of the
+ carrier of AS by ANALMETR:47;
+   b,a' // c,b' & c,c' // a,a' by A17,ANALMETR:48;
+then b,c' // a,b' by A11,A13,A14,A15,A18,AFF_2:def 2;
+then a2,b3 // a1,b2 by ANALMETR:48; hence a1,b2 // a2,b3 by ANALMETR:81; end;
+hence PAP_holds_in MS by CONMETR:def 2; end;
+hence thesis by A1; end;
+
+theorem Th10: MS is Pappian iff PAP_holds_in MS proof set AS=Af(MS);
+A1: now assume MS is Pappian;
+ then AS satisfies_PAP' by Def2; hence PAP_holds_in MS by Lm1;end;
+   now assume PAP_holds_in MS;
+ then AS is Pappian by Lm1; hence MS is Pappian by Def2; end;
+hence thesis by A1; end;
+
+Lm2: DES_holds_in MS iff Af(MS) satisfies_DES' proof set AS=Af(MS);
+A1: now assume A2: DES_holds_in MS;
+  now
+ let A,P,C be Subset of AS, o,a,b,c,a',b',c' be Element of the
+carrier of AS such that A3: o in A & o in P & o in C and
+ A4: o<>a & o<>b & o<>c and A5: a in A & a' in A & b in P & b' in P &
+   c in C & c' in C and A6: A is_line & P is_line & C is_line and
+ A7:  A<>P & A<>C and A8: a,b // a',b' & a,c // a',c';
+   now assume A9: o<>a' & a<>a';
+
+ then A10: b<>b' & c <>c' by A3,A4,A5,A6,A7,A8,AFF_4:9;
+ A11: now assume LIN b,b',a; then a in P by A5,A6,A10,AFF_1:39;
+hence contradiction by A3,A4,A5,A6,A7,AFF_1:30; end;
+ A12: now assume LIN a,a',c; then c in A by A5,A6,A9,AFF_1:39;
+hence contradiction by A3,A4,A5,A6,A7,AFF_1:30; end;
+ reconsider o1=o,a1=a,b1=b,c1=c,a1'=a',b1'=b',c1'=c' as Element of the carrier
+ of MS by ANALMETR:47;
+ A13: o1<>a1 & o1<>b1 & o1<>c1 & o1<>a1' & o1<>b1' & o1<>c1' by A3,A4,A5,A6,A7,
+A8,A9,AFF_4:8;
+    LIN o,a,a' & LIN o,b,b' & LIN o,c,c' by A3,A5,A6,AFF_1:33;
+ then A14: LIN o1,a1,a1' & LIN o1,b1,b1' & LIN o1,c1,c1' by ANALMETR:55;
+ A15: a1,b1 // a1',b1' & a1,c1 // a1',c1' by A8,ANALMETR:48;
+ A16: not LIN b1,b1',a1 by A11,ANALMETR:55;
+    not LIN a1,a1',c1 by A12,ANALMETR:55;
+ then b1,c1 // b1',c1' by A2,A13,A14,A15,A16,CONAFFM:def 1;
+hence b,c // b',c' by ANALMETR:48; end; hence b,c // b',c'
+by A3,A4,A5,A6,A7,A8,AFPROJ:50; end;
+hence AS satisfies_DES' by AFF_2:def 4; end;
+   now assume A17: AS satisfies_DES';
+   now let o,a,a1,b,b1,c,c1 be Element of MS such that
+ A18: o<>a & o<>a1 & o<>b & o<>b1 & o<>c & o<>c1 and
+ A19: not LIN b,b1,a & not LIN a,a1,c and A20: LIN o,a,a1 & LIN o,b,b1 & LIN
+ o,c,c1 and
+ A21: a,b // a1,b1 & a,c // a1,c1;
+ reconsider o'=o,a'=a,b'=b,c'=c,a1'=a1,b1'=b1,
+  c1'=c1 as Element of AS by ANALMETR:47;
+ A22: a',b' // a1',b1' & a',c' // a1',c1' by A21,ANALMETR:48;
+ A23: LIN o',a',a1' & LIN o',b',b1' & LIN o',c',c1' by A20,ANALMETR:55;
+then consider A being Subset of AS such that
+A24: A is_line and A25: o' in A & a' in A & a1' in A by AFF_1:33;
+consider P being Subset of AS such that
+A26: P is_line and A27: o' in P & b' in P & b1' in P by A23,AFF_1:33;
+consider C being Subset of AS such that
+A28: C is_line and A29: o' in C & c' in C & c1' in C by A23,AFF_1:33;
+A30: A<>P proof assume A=P; then LIN b',b1',a' by A25,A26,A27,AFF_1:33
+; hence contradiction by A19,ANALMETR:55; end;
+   A<>C proof assume A=C; then LIN a',a1',c' by A24,A25,A29,AFF_1:33
+; hence contradiction by A19,ANALMETR:55; end;
+then b',c' // b1',c1' by A17,A18,A22,A24,A25,A26,A27,A28,A29,A30,AFF_2:def 4
+; hence
+  b,c // b1,c1 by ANALMETR:48; end; hence DES_holds_in MS by CONAFFM:def 1;
+end
+;
+hence thesis by A1; end;
+
+theorem Th11: MS is Desarguesian iff DES_holds_in MS proof set AS=Af(MS);
+A1: now assume MS is Desarguesian;
+ then AS satisfies_DES' by Def3;
+hence DES_holds_in MS by Lm2; end;
+   now assume DES_holds_in MS; then AS
+ is Desarguesian by Lm2; hence MS is Desarguesian by Def3; end;
+hence thesis by A1; end;
+
+theorem MS is Moufangian iff TDES_holds_in MS proof set AS=Af(MS);
+A1: now assume A2: TDES_holds_in MS;
+   now let K be Subset of AS, o,a,b,c,a',b',c' be Element of the
+ carrier of AS such that A3: K is_line and A4: o in K & c in K & c' in K and
+ A5: not a in K and A6: o<>c & a<>b and A7: LIN o,a,a' & LIN o,b,b' and
+ A8: a,b // a',b' & a,c // a',c' and A9: a,b // K;
+ reconsider o1=o,a1=a,b1=b,c1=c,a1'=a',b1'=b',c1'=c' as Element of the carrier
+ of MS by ANALMETR:47; A10: LIN o,c,c' by A3,A4,AFF_1:33;
+ then A11: LIN o1,a1,a1' & LIN o1,b1,b1' & LIN o1,c1,c1' by A7,ANALMETR:55;
+ A12: o1<>c1 & o1<>a1 & o1<>b1 by A4,A5,A6,A9,AFF_1:49;
+ A13: b1,a1 // b1',a1' proof a1,b1 // a1',b1' by A8,ANALMETR:48; hence
+    thesis by ANALMETR:81; end;
+ A14: b1,a1 // o1,c1 proof a,b // o,c by A3,A4,A6,A9,AFF_1:41;
+  then b,a // o,c by AFF_1:13; hence thesis by ANALMETR:48; end;
+ A15: a1,c1 // a1',c1' by A8,ANALMETR:48;
+ A16: not LIN o,a,c proof assume not thesis; then LIN o,c,a by AFF_1:15;
+hence contradiction by A3,A4,A5,A6,AFF_1:39; end;
+ A17: not LIN o,a,b proof assume not thesis; then A18: LIN a,b,o by AFF_1:15;
+  set M=Line(a,b); A19: a in M & o in M by A18,AFF_1:26,def 2;
+    M // K by A6,A9,AFF_1:def 5; then a in K by A4,A19,AFF_1:59;
+  hence contradiction by A3,A4,A16,AFF_1:33; end;
+A20: now assume A21: a'=o; then A22: b'=o by A7,A8,A17,AFF_1:69; c'=o
+  by A7,A8,A10,A16,A21,AFF_1:69; hence b,c // b',c' by A22,AFF_1:12; end;
+   now assume A23: a'<>o;
+A24: now assume a=a'; then A25: a,b // a',b & a,c // a',c & LIN o,b,b & LIN
+ o,c,c
+  by AFF_1:11,16; then A26: b=b' by A7,A8,A17,AFF_1:70; c =c'
+  by A7,A8,A10,A16,A25,AFF_1:70; hence b,c // b',c' by A26,AFF_1:11; end;
+   now assume A27: a<>a';
+ A28: o1<>a1' & o1<>b1' & o1<>c1' proof thus o1<>a1' by A23;
+  A29: b,a // b',a' & c,a // c',a' by A8,AFF_1:13;
+     not LIN o,b,a & not LIN o,c,a by A16,A17,AFF_1:15;
+  hence o1<>b1' & o1<>c1' by A7,A10,A23,A29,AFF_1:69; end;
+ A30: not LIN a1,a1',c1 proof assume not thesis; then A31: LIN a,a',c by
+ANALMETR:55;
+    LIN a,a',o & LIN a,a',a by A7,AFF_1:15,16;
+  hence contradiction by A16,A27,A31,AFF_1:17; end;
+    not LIN a1,a1',b1 proof assume not thesis; then A32: LIN
+ a,a',b by ANALMETR:55;
+    LIN a,a',o & LIN a,a',a by A7,AFF_1:15,16;
+  hence contradiction by A17,A27,A32,AFF_1:17; end;
+ then b1,c1 // b1',c1' by A2,A11,A12,A13,A14,A15,A28,A30,CONMETR:def 5;
+ hence b,c // b',c' by ANALMETR:48; end; hence b,c // b',c' by A24; end;
+ hence b,c // b',c' by A20; end;
+ then AS is Moufangian by AFF_2:def 7; hence MS is Moufangian by Def5; end;
+   now assume MS is Moufangian;
+ then A33: AS satisfies_TDES' by Def5;
+   now let o,a,a1,b,b1,c,c1 be Element of MS such that
+ A34: o<>a & o<>a1 & o<>b & o<>b1 & o<>c & o<>c1 and
+ A35: not LIN b,b1,a & not LIN b,b1,c and
+ A36: LIN o,a,a1 & LIN o,b,b1 & LIN o,c,c1 and
+ A37: a,b // a1,b1 & a,b // o,c & b,c // b1,c1;
+ reconsider o'=o,a'=a,a1'=a1,b'=b,b1'=b1,c'=c,c1'=c1 as Element of the carrier
+  of AS by ANALMETR:47; set K=Line(o',c');
+ A38: K is_line & o' in K & c' in K by A34,AFF_1:26,def 3;
+   LIN
+ o',c',c1' by A36,ANALMETR:55; then A39: c1' in K & o'<>c' by A34,A38,AFF_1:39
+;
+ A40: LIN o',a',a1' & LIN o',b',b1' by A36,ANALMETR:55;
+ A41: not b' in K proof assume A42: b' in K; then b1' in
+ K by A34,A38,A40,AFF_1:39
+;
+  then LIN
+ b',b1',c' by A38,A42,AFF_1:33; hence contradiction by A35,ANALMETR:55;end;
+ A43: b',a' // K proof a',b' // o',c' by A37,ANALMETR:48; then a',b' // K by
+A34,AFF_1:def 4; hence thesis by AFF_1:48; end;
+ A44: b',a' // b1',a1' proof a',b' // a1',b1' by A37,ANALMETR:48;
+  hence thesis by AFF_1:13; end;
+ A45: b',c' // b1',c1' by A37,ANALMETR:48; b'<>a' by A35,Th1;
+ then a',c' // a1',c1' by A33,A38,A39,A40,A41,A43,A44,A45,AFF_2:def 7;
+ hence a,c // a1,c1 by ANALMETR:48; end;
+ hence TDES_holds_in MS by CONMETR:def 5; end;
+hence thesis by A1; end;
+
+Lm3: des_holds_in MS iff Af(MS) satisfies_des' proof set AS=Af(MS);
+ A1: now assume A2: des_holds_in MS; now let A,P,C be Subset of the carrier
+of
+  AS, a,b,c,a',b',c' be Element of AS such that
+  A3: A // P & A // C and A4: a in A & a' in A & b in P & b' in P &
+   c in C & c' in C and A5: A is_line & P is_line & C is_line and
+  A6: A<>P & A<>C and A7: a,b // a',b' & a,c // a',c';
+  A8: not a in P & not a in C by A3,A4,A6,AFF_1:59;
+ A9: now assume a=a';
+   then LIN a,b,b' & LIN a,c,c' by A7,AFF_1:def 1; then LIN b,b',a & LIN
+ c,c',a by AFF_1:15;
+   then b = b' & c = c' by A4,A5,A8,AFF_1:39;hence b,c // b',c'
+   by AFF_1:11;end;
+    now assume A10: a<>a'; reconsider aa=a,a1=a',bb=b,b1=b',cc=c,c1=c' as
+  Element of MS by ANALMETR:47;
+  A11: not LIN aa,a1,bb proof assume not thesis; then LIN
+ a,a',b by ANALMETR:55;
+  then b in A by A4,A5,A10,AFF_1:39;hence contradiction by A3,A4,A6,AFF_1:59
+;end;
+  A12: not LIN aa,a1,cc proof assume not thesis; then LIN
+ a,a',c by ANALMETR:55;
+  then c in A by A4,A5,A10,AFF_1:39;hence contradiction by A3,A4,A6,AFF_1:59
+;end;
+  A13: aa,a1 // bb,b1 & aa,a1 // cc,c1 proof a,a' // b,b' & a,a' // c,c'
+  by A3,A4,AFF_1:53; hence aa,a1 // bb,b1 & aa,a1 // cc,c1 by ANALMETR:48; end
+;
+     aa,bb // a1,b1 & aa,cc // a1,c1 by A7,ANALMETR:48;
+  then bb,cc // b1,c1 by A2,A11,A12,A13,CONMETR:def 8;
+  hence b,c // b',c' by ANALMETR:48; end; hence b,c // b',c' by A9; end;
+  hence AS satisfies_des' by AFF_2:def 11; end;
+    now assume A14: AS satisfies_des'; now let a,a1,b,b1,c,c1 be Element of
+  the carrier of MS such that A15: not LIN a,a1,b & not LIN a,a1,c and
+  A16: a,a1 // b,b1 & a,a1 // c,c1 and A17: a,b // a1,b1 & a,c // a1,c1;
+   reconsider a'=a,a1'=a1,b'=b,b1'=b1,c'=c,c1'=c1 as Element of
+   AS by ANALMETR:47;
+  A18: not a',a1' // a',b' & not a',a1' // a',c' proof assume not thesis;
+   then a,a1 // a,b or a,a1 // a,c by ANALMETR:48;hence contradiction by A15,
+ANALMETR:def 11; end;
+  A19: a',a1' // b',b1' & a',a1' // c',c1' by A16,ANALMETR:48;
+  A20: a',b' // a1',b1' & a',c' // a1',c1' by A17,ANALMETR:48;
+  A21: a'<>a1' by A18,AFF_1:12; set A=Line(a',a1');
+  A22: A is_line & a' in A & a1' in A by A21,AFF_1:26,def 3;
+  then A23: a',a1' // A by AFF_1:37;
+  consider P being Subset of AS such that
+  A24: b' in P and A25: A // P by A22,AFF_1:63;
+  consider C being Subset of AS such that
+  A26: c' in C and A27: A // C by A22,AFF_1:63;
+  A28: P is_line & C is_line by A25,A27,AFF_1:50;
+    a',a1' // P & a',a1' // C by A23,A25,A27,AFF_1:57;
+  then b',b1' // P & c',c1' // C by A19,A21,AFF_1:46;
+  then A29: b1' in P & c1' in C by A24,A26,A28,AFF_1:37;
+  A30: A<>P by A18,A22,A24,AFF_1:65; A<>C by A18,A22,A26,AFF_1:65;
+ then b',c' // b1',c1' by A14,A20,A22,A24,A25,A26,A27,A28,A29,A30,AFF_2:def 11
+;
+ hence b,c // b1,c1 by ANALMETR:48; end;
+ hence des_holds_in MS by CONMETR:def 8; end;
+ hence thesis by A1; end;
+
+theorem MS is translation iff des_holds_in MS proof set AS=Af(MS);
+ A1: now assume MS is translation;
+  then AS satisfies_des' by Def6; hence des_holds_in MS by Lm3; end;
+    now assume des_holds_in MS; then AS
+  is translational by Lm3; hence MS is translation by Def6; end;
+ hence thesis by A1; end;
+
+theorem Th14: MS is Homogeneous implies MS is Desarguesian
+proof assume MS is Homogeneous; then ODES_holds_in MS by Th9;
+then DES_holds_in MS by CONAFFM:1; hence thesis by Th11; end;
+
+theorem Th15: MS is Euclidean Desarguesian implies MS is Pappian
+proof assume MS is Euclidean Desarguesian; then 3H_holds_in MS & DES_holds_in
+MS by Th8,Th11; then OPAP_holds_in MS & DES_holds_in MS by CONMETR:15;
+then PAP_holds_in MS by CONMETR:13; hence thesis by Th10; end;
+
+reserve V for RealLinearSpace;
+reserve w,y,u,v for VECTOR of V;
+
+theorem Th16: for o,c,c1,a,a1,a2 being Element of MS st
+ not LIN o,c,a & o<>c1 & o,c _|_ o,c1 & o,a _|_ o,a1 & o,a _|_ o,a2 & c,a _|_
+ c1,a1
+ & c,a _|_ c1,a2 holds a1=a2
+proof let o,c,c1,a,a1,a2 be Element of MS such that
+A1: not LIN o,c,a & o<>c1 and A2: o,c _|_ o,c1 and
+A3: o,a _|_ o,a1 & o,a _|_ o,a2 and A4: c,a _|_ c1,a1 & c,a _|_ c1,a2;
+assume A5: a1<>a2; a<>c & o<>a & o<>c by A1,Th1;
+then A6: o,a1 // o,a2 & c1,a1 // c1,a2 by A3,A4,ANALMETR:85;
+reconsider o'=o,a1'=a1,a2'=a2,c1'=c1 as Element of Af(MS)
+by ANALMETR:47;
+  o',a1' // o',a2' & c1',a1' // c1',a2' by A6,ANALMETR:48; then LIN o',a1',a2'
+&
+LIN c1',a1',a2' by AFF_1:def 1; then A7:LIN a1',a2',o' & LIN
+ a1',a2',c1' by AFF_1:15;
+  LIN a1',a2',a1' & LIN a1',a2',a2' by AFF_1:16; then LIN o',c1',a1' & LIN
+ o',c1',a2'
+by A5,A7,AFF_1:17; then o',c1' // o',a1' & o',c1' // o',a2' by AFF_1:def 1;
+then o,c1 // o,a1 & o,c1 // o,a2 by ANALMETR:48; then A8: o,c _|_ o,a1 &
+o,c _|_ o,a2
+by A1,A2,ANALMETR:84; o<>a1 or o<>a2 by A5; then o,c // o,a by A3,A8,ANALMETR:
+85; hence contradiction by A1,ANALMETR:def 11; end;
+
+theorem for o,c,c1,a being Element of MS st not LIN o,c,a
+ & o<>c1 ex a1 being Element of MS
+ st o,a _|_ o,a1 & c,a _|_ c1,a1
+proof let o,c,c1,a be Element of MS such that
+A1: not LIN o,c,a & o<>c1; set X=Line(c,a),Y=Line(o,a);
+   c <>a & o<>a by A1,Th1; then A2: X is_line & Y is_line by ANALMETR:def 13;
+then consider X' being Subset of MS such that
+A3: c1 in X' & X _|_ X' by CONMETR:3;
+consider Y' being Subset of MS such that
+A4: o in Y' & Y _|_ Y' by A2,CONMETR:3;
+A5: X' is_line & Y' is_line by A3,A4,ANALMETR:62;
+reconsider o'=o,c'=c,a'=a as Element of Af(MS)
+ by ANALMETR:47; X=Line(c',a') & Y=Line(o',a') by ANALMETR:56;
+then A6: c in X & a in X & o in Y & a in Y by AFF_1:26;
+A7: not X' // Y' proof assume not thesis; then X' _|_ Y by A4,ANALMETR:73;
+ then A8: X // Y by A3,ANALMETR:87; reconsider X1=X,Y1=Y as Subset of the
+carrier of
+ Af(MS) by ANALMETR:57; X1 // Y1 by A8,ANALMETR:64;
+ then o in X & a in X & c in X by A6,AFF_1:59; hence
+   contradiction by A1,A2,CONMETR:4; end;
+reconsider X1=X',Y1=Y' as Subset of Af(MS) by ANALMETR:57;
+A9: X1 is_line & Y1 is_line by A5,ANALMETR:58;
+  not X1 // Y1 by A7,ANALMETR:64; then consider a1' being Element of the
+carrier
+ of Af(MS) such that A10: a1' in X1 & a1' in Y1 by A9,AFF_1:72;
+reconsider a1=a1' as Element of MS by ANALMETR:47;
+take a1;
+thus thesis by A3,A4,A6,A10,ANALMETR:78; end;
+
+Lm4: for u,v,y being VECTOR of V holds (u-y)-(v-y)=u-v & (u+y)-(v+y)
+ = u-v
+proof let u,v,y be VECTOR of V; thus (u-y)-(v-y) = (u-y)+(y-v) by ANALOAF:6
+ .= u-v by ANALOAF:4; thus (u+y)-(v+y) = (u+ -(-y))-(v+y) by RLVECT_1:30
+ .= (u-(-y))-(v+y) by RLVECT_1:def 11 .= (u-(-y))-(v + -(-y)) by RLVECT_1:30
+ .= (u-(-y))-(v-(-y)) by RLVECT_1:def 11 .= (u-(-y))+((-y)-v) by ANALOAF:6
+ .= u-v by ANALOAF:4; end;
+
+Lm5: Gen w,y implies for a,b,c being Real holds
+ (PProJ(w,y,a*w+b*y,(c*b)*w+(-c*a)*y) = 0 &
+  a*w+b*y,(c*b)*w+(-c*a)*y are_Ort_wrt w,y)
+proof assume A1: Gen w,y; let a,b,c be Real;
+    pr1(w,y,a*w+b*y)=a & pr1(w,y,(c*b)*w+(-c*a)*y) = c*b
+  & pr2(w,y,a*w+b*y)=b & pr2(w,y,(c*b)*w+(-c*a)*y) = -c*a
+  by A1,GEOMTRAP:def 4,def 5;
+ hence PProJ
+(w,y,a*w+b*y,(c*b)*w+(-c*a)*y) = a*(b*c)+b*(-c*a) by GEOMTRAP:def 6
+ .= a*(b*c) + -(b*(c*a)) by XCMPLX_1:175
+ .= a*(b*c) + -(a*(b*c)) by XCMPLX_1:4
+ .= 0 by XCMPLX_0:def 6; hence a*w+b*y,(c*b)*w+(-c*a)*y are_Ort_wrt w,y
+ by A1,GEOMTRAP:34; end;
+
+theorem
+Th18: for a,b being Real st Gen w,y & 0.V<>u & 0.V<>v & u,v are_Ort_wrt w,y
+ & u=a*w+b*y ex c being Real st c <>0 & v=(c*b)*w+(-c*a)*y
+proof let a,b be Real such that A1: Gen w,y and A2: 0.V<>u & 0.V<>v and
+A3: u,v are_Ort_wrt w,y and A4: u=a*w+b*y;
+set v'=b*w+(-a)*y;
+  v'= (1*b)*w+(-1*a)*y;
+then u,v' are_Ort_wrt w,y by A1,A4,Lm5; then consider a1,b1 being Real
+such that A5: a1*v = b1*v' and A6: a1<>0 or b1<>0 by A1,A2,A3,ANALMETR:13;
+A7: now assume A8: b1=0;
+ then 0.V = a1*v by A5,RLVECT_1:23; hence contradiction
+ by A2,A6,A8,RLVECT_1:24; end;
+A9: now assume A10: a1=0;
+ then 0.V = b1*v' by A5,RLVECT_1:23; then v'=0.V by A6,A10,RLVECT_1:24
+; then b=0 & -a=0 by A1,ANALMETR:def 1;
+ then u=0*w+0*y by A4,XCMPLX_1:135
+ .= 0.V + 0*y by RLVECT_1:23 .= 0.V + 0.V by RLVECT_1:23
+ .= 0.V by RLVECT_1:10; hence contradiction by A2; end;
+take c =a1"*b1; now assume c =0; then a1"=0 by A7,XCMPLX_1:6; hence
+  contradiction by A9,XCMPLX_1:203; end; hence c <>0; thus
+  v=(a1")*(b1*v') by A5,A9,ANALOAF:12 .= c*v' by RLVECT_1:def 9 .=
+ c*(b*w) + c*((-a)*y) by RLVECT_1:def 9 .= (c*b)*w + c*((-a)*y)
+ by RLVECT_1:def 9 .= (c*b)*w + (c*(-a))*y by RLVECT_1:def 9
+ .= (c*b)*w + (-c*a)*y
+ by XCMPLX_1:175; end;
+
+theorem
+Th19: Gen w,y & 0.V<>u & 0.V<>v & u,v are_Ort_wrt w,y implies ex c being
+ Real st for a,b being Real holds a*w+b*y,(c*b)*w+(-c*a)*y are_Ort_wrt w,y
+ & (a*w+b*y)-u,((c*b)*w+(-c*a)*y)-v are_Ort_wrt w,y
+proof assume that A1: Gen w,y and A2: 0.V<>u & 0.V<>v and
+A3: u,v are_Ort_wrt w,y;
+consider a1,a2 being Real such that A4: u=a1*w+a2*y by A1,ANALMETR:def 1;
+consider c being Real such that
+    c <>0 and A5: v=(c*a2)*w+(-c*a1)*y by A1,A2,A3,A4,Th18;
+take c; let a,b be Real; set u'=a*w+b*y,v'=(c*b)*w+(-c*a)*y;
+thus a*w+b*y,(c*b)*w+(-c*a)*y are_Ort_wrt w,y by A1,Lm5;
+ A6: pr1(w,y,u')=a & pr1(w,y,v') = c*b
+  & pr2(w,y,u')=b & pr2(w,y,v') = -c*a by A1,GEOMTRAP:def 4,def 5;
+ A7: pr1(w,y,u)=a1 & pr1(w,y,v)=c*a2 & pr2(w,y,u)=a2 & pr2(w,y,v)=-c*a1
+  by A1,A4,A5,GEOMTRAP:def 4,def 5;
+ A8: PProJ(w,y,(a*w+b*y)-u,((c*b)*w+(-c*a)*y)-v) =
+PProJ(w,y,u'-u,v')-PProJ(w,y,u'-u,v) by A1,GEOMTRAP:32 .=
+  (PProJ(w,y,u',v')-PProJ(w,y,u,v')) - PProJ(w,y,u'-u,v) by A1,GEOMTRAP:32 .=
+  (0 - PProJ(w,y,u,v')) - PProJ(w,y,u'-u,v) by A1,Lm5 .=
+  (-PProJ(w,y,u,v')) - PProJ(w,y,u'-u,v) by XCMPLX_1:150 .=
+  (-PProJ(w,y,u,v')) - (PProJ(w,y,u',v) - PProJ(w,y,u,v)) by A1,GEOMTRAP:32 .=
+  (-PProJ(w,y,u,v')) - (PProJ(w,y,u',v) - 0) by A1,A3,GEOMTRAP:34 .=
+  (-1*PProJ(w,y,u,v')) - PProJ(w,y,u',v) .=
+  (-1)*PProJ(w,y,u,v') - PProJ(w,y,u',v) by XCMPLX_1:175 .=
+  (-1)*PProJ(w,y,u,v') + -1*PProJ(w,y,u',v) by XCMPLX_0:def 8 .=
+  (-1)*PProJ(w,y,u,v') + (-1)*PProJ(w,y,u',v) by XCMPLX_1:175 .=
+  (-1)*(PProJ(w,y,u,v') + PProJ(w,y,u',v)) by XCMPLX_1:8;
+ A9: PProJ(w,y,u,v') = a1*(c*b)+a2*(-c*a) by A6,A7,GEOMTRAP:def 6;
+    PProJ(w,y,u',v) = (c*a2)*a+(-c*a1)*b by A6,A7,GEOMTRAP:def 6;
+ then PProJ(w,y,u,v') + PProJ(w,y,u',v) =
+a1*(c*b) + (a2*(-c*a) + ((c*a2)*a+(-c*a1)*b)) by A9,XCMPLX_1:1 .=
+  a1*(c*b) + ((a2*(-c*a) + (c*a2)*a)+(-c*a1)*b) by XCMPLX_1:1 .=
+  a1*(c*b) + ((a2*((-c)*a) + (c*a2)*a)+(-c*a1)*b) by XCMPLX_1:175 .=
+a1*(c*b) + ((((-c)*a2)*a + (c*a2)*a)+(-c*a1)*b) by XCMPLX_1:4 .=
+  a1*(c*b) + ((((-c*a2))*a + (c*a2)*a)+(-c*a1)*b) by XCMPLX_1:175 .=
+  a1*(c*b) + ((-((c*a2)*a) + (c*a2)*a)+(-c*a1)*b) by XCMPLX_1:175 .=
+  a1*(c*b) + (0+(-c*a1)*b) by XCMPLX_0:def 6 .=
+a1*(c*b) + -(a1*c)*b by XCMPLX_1:175 .=
+  a1*(c*b) + -a1*(c*b) by XCMPLX_1:4 .= 0 by XCMPLX_0:def 6;
+ hence (a*w+b*y)-u,((c*b)*w+(-c*a)*y)-v are_Ort_wrt w,y by A1,A8,GEOMTRAP:34;
+end;
+
+Lm6: for w,y being VECTOR of V,a,b,c,d being Real holds
+ (a*w+b*y)-(c*w+d*y) = (a-c)*w+(b-d)*y
+ proof let w,y be VECTOR of V, a,b,c,d be Real;
+  thus (a*w+b*y)-(c*w+d*y) =
+  b*y+(a*w-(c*w+d*y)) by RLVECT_1:42 .= b*y+((a*w-c*w)-d*y) by RLVECT_1:41 .=
+  b*y+((a-c)*w-d*y) by RLVECT_1:49 .=
+  ((a-c)*w+b*y)-d*y by RLVECT_1:42 .= (a-c)*w+(b*y-d*y) by RLVECT_1:42 .=
+  (a-c)*w+(b-d)*y by RLVECT_1:49; end;
+
+Lm7: Gen w,y implies for a,b,c,d being Real st a*w + c*y = b*w + d*y
+                                                holds a = b & c = d
+ proof assume A1: Gen w,y; let a,b,c,d be Real; assume
+     a*w+c*y=b*w+d*y; then 0.V = (a*w+c*y)-(b*w+d*y) by RLVECT_1:28 .=
+  (a-b)*w+(c-d)*y by Lm6; then a-b=0 & c-d=0 by A1,ANALMETR:def 1;
+then -b + a =0 & -d + c = 0 by XCMPLX_0:def 8;
+  then a=-(-b) & c = -(-d) by XCMPLX_0:def 6; hence thesis; end;
+
+canceled;
+
+theorem Th21: Gen w,y & MS = AMSpace(V,w,y) implies LIN_holds_in MS
+proof assume that A1: Gen w,y and A2: MS=AMSpace(V,w,y);
+  now let o,a,a1,b,b1,c,c1 be Element of MS such that
+A3: o<>a & o<>a1 & o<>b & o<>b1 & o<>c & o<>c1 & a<>b and
+A4: o,c _|_ o,c1 & o,a _|_ o,a1 & o,b _|_ o,b1 and
+A5: not LIN o,c,a & LIN o,a,b & LIN
+ o,a1,b1 and A6: a,c _|_ a1,c1 & b,c _|_ b1,c1;
+A7: not LIN o,c,b proof assume A8: LIN o,c,b; reconsider o'=o,a'=a,b'=b,c'=c
+ as Element of Af(MS) by ANALMETR:47; LIN o',c',b' & LIN
+ o',a',b' by A5,A8,ANALMETR:55; then LIN o',b',c' & LIN o',b',a' & LIN
+ o',b',o' by AFF_1:15,16;
+ then LIN o',c',a' by A3,AFF_1:17; hence contradiction by A5,ANALMETR:55; end
+;
+reconsider q=o,u1=a,u2=b,u3=c,v1=a1,v2=b1,v3=c1 as VECTOR of V
+ by A2,ANALMETR:28;
+  q,u3,q,v3 are_Ort_wrt w,y & q,u1,q,v1 are_Ort_wrt w,y &
+ q,u2,q,v2 are_Ort_wrt w,y by A2,A4,ANALMETR:31;
+then A9: u1-q,v1-q are_Ort_wrt w,y & u2-q,v2-q are_Ort_wrt w,y &
+ u3-q,v3-q are_Ort_wrt w,y by ANALMETR:def 3;
+A10: u1-q<>0.V & u2-q<>0.V & u3-q<>0.V & v3-q<>0.V by A3,RLVECT_1:35;
+then consider r being Real such that
+A11: for a',b' being Real holds a'*w+b'*y,(r*b')*w+(-r*a')*y are_Ort_wrt w,y
+ & (a'*w+b'*y)-(u3-q),((r*b')*w+(-r*a')*y)-(v3-q) are_Ort_wrt w,y
+ by A1,A9,Th19;
+consider A1,A2 being Real such that A12:u1-q=A1*w+A2*y by A1,ANALMETR:def 1;
+consider B1,B2 being Real such that A13:u2-q=B1*w+B2*y by A1,ANALMETR:def 1;
+set v1'=((r*A2)*w+(-r*A1)*y)+q,v2'=((r*B2)*w+(-r*B1)*y)+q;
+reconsider a1'=v1',b1'=v2' as Element of MS by A2,ANALMETR:28;
+A14: v1'-q=(r*A2)*w+(-r*A1)*y & v2'-q=(r*B2)*w+(-r*B1)*y by RLSUB_2:78;
+then u1-q,v1'-q are_Ort_wrt w,y & u2-q,v2'-q are_Ort_wrt w,y by A11,A12,A13
+;
+then q,u1,q,v1' are_Ort_wrt w,y & q,u2,q,v2' are_Ort_wrt w,y by ANALMETR:def 3
+;
+then A15: o,a _|_ o,a1' & o,b _|_ o,b1' by A2,ANALMETR:31;
+   (u1-q)-(u3-q)=u1-u3 & (u2-q)-(u3-q)=u2-u3 & (v1'-q)-(v3-q)=v1'-v3 &
+ (v2'-q)-(v3-q)=v2'-v3 by Lm4;
+then u1-u3,v1'-v3 are_Ort_wrt w,y & u2-u3,v2'-v3 are_Ort_wrt w,y by A11,A12,A13
+,A14
+;
+then u3,u1,v3,v1' are_Ort_wrt w,y & u3,u2,v3,v2' are_Ort_wrt w,y by ANALMETR:
+def 3;
+then A16: c,a _|_ c1,a1' & c,b _|_ c1,b1' by A2,ANALMETR:31;
+  c,a _|_ c1,a1 & c,b _|_ c1,b1 by A6,ANALMETR:83;
+then A17: a1=a1' & b1=b1' by A3,A4,A5,A7,A15,A16,Th16;
+  o,a // o,b by A5,ANALMETR:def 11; then q,u1 '||' q,u2 by A2,GEOMTRAP:4;
+then q,u1 // q,u2 or q,u1 // u2,q by GEOMTRAP:def 1; then consider a',b' being
+Real
+such that A18: a'*(u1-q)=b'*(u2-q) and A19: a'<>0 or b'<>0 by ANALMETR:18;
+A20: now assume A21: b'=0; then 0.V = a'*(u1-q) by A18,RLVECT_1:23;
+ hence contradiction by A10,A19,A21,RLVECT_1:24; end; set s=b'"*a';
+A22: u2-q = b'"*(a'*(u1-q)) by A18,A20,ANALOAF:12
+ .= s*(u1-q) by RLVECT_1:def 9;
+then B1*w+B2*y = s*(A1*w)+s*(A2*y) by A12,A13,RLVECT_1:def 9
+ .= (s*A1)*w + s*(A2*y) by RLVECT_1:def 9
+ .= (s*A1)*w+(s*A2)*y by RLVECT_1:def 9;
+then A23: B1=s*A1 & B2=s*A2 by A1,Lm7;
+A24: v2'-q = (r*B2)*w+(-r*B1)*y by RLSUB_2:78
+  .= (r*B2)*w+(r*B1)*(-y) by RLVECT_1:38
+  .= (r*(s*A2))*w + -((r*(s*A1))*y) by A23,RLVECT_1:39
+ .= (r*(s*A2))*w - (r*(s*A1))*y by RLVECT_1:def 11
+ .= r*((s*A2)*w) - (r*(s*A1))*y by RLVECT_1:def 9 .=
+  r*((s*A2)*w) - r*((s*A1)*y) by RLVECT_1:def 9 .= r*((s*A2)*w - (s*A1)*y)
+  by RLVECT_1:48 .= r*(s*(A2*w) - (s*A1)*y) by RLVECT_1:def 9 .=
+  r*(s*(A2*w) - s*(A1*y)) by RLVECT_1:def 9
+ .= r*(s*(A2*w - A1*y)) by RLVECT_1:48
+  .= (s*r)*(A2*w - A1*y) by RLVECT_1:def 9
+  .= s*(r*(A2*w - A1*y)) by RLVECT_1:def 9 .= s*(r*(A2*w) - r*(A1*y)) by
+RLVECT_1:48 .= s*((r*A2)*w - r*(A1*y)) by RLVECT_1:def 9 .=
+  s*((r*A2)*w - (r*A1)*y) by RLVECT_1:def 9 .= s*((r*A2)*w + - (r*A1)*y) by
+RLVECT_1:def 11 .= s*((r*A2)*w + (r*A1)*(-y)) by RLVECT_1:39
+  .= s*((r*A2)*w + (-r*A1)*y) by RLVECT_1:38 .= s*(v1'-q) by RLSUB_2:78;
+   1*(u2-v2') = u2-v2' by RLVECT_1:def 9 .= s*(u1-q)-s*(v1'-q) by A22,A24,Lm4
+ .= s*((u1-q)-(v1'-q)) by RLVECT_1:48
+  .= s*(u1-v1') by Lm4;
+ then v1',u1 // v2',u2 or v1',u1 // u2,v2' by ANALMETR:18;
+ then v1',u1 '||' v2',u2 by GEOMTRAP:def 1; then a1',a // b1',b by A2,GEOMTRAP:
+4;
+ hence a,a1 // b,b1 by A17,ANALMETR:81; end;
+hence thesis by CONAFFM:def 5; end;
+
+theorem Th22: for o,a,a1,b,b1,c,c1 being Element of MS st
+ o,a _|_ o,a1 & o,b _|_ o,b1 & o,c _|_ o,c1 & a,b _|_ a1,b1 & a,c _|_ a1,c1 &
+ not o,c // o,a & not o,a // o,b & o=a1 holds b,c _|_ b1,c1
+proof
+let o,a,a1,b,b1,c,c1 be Element of MS such that
+ A1: o,a _|_ o,a1 & o,b _|_ o,b1 & o,c _|_ o,c1 and A2: a,b _|_ a1,b1 & a,c _|_
+ a1,c1
+ and A3: not o,c // o,a & not o,a // o,b and A4: o=a1;
+A5: o=b1 proof assume o<>b1; then a,b // o,b by A1,A2,A4,ANALMETR:85
+; then b,a // b,o by ANALMETR:81; then LIN b,a,o
+ by ANALMETR:def 11; then LIN o,a,b by Th4;
+ hence contradiction by A3,ANALMETR:def 11; end;
+   o=c1 proof assume o<>c1; then a,c // o,c by A1,A2,A4,ANALMETR:85
+; then c,a // c,o by ANALMETR:81; then LIN c,a,o
+ by ANALMETR:def 11; then LIN o,c,a by Th4;
+ hence contradiction by A3,ANALMETR:def 11; end;
+hence thesis by A5,ANALMETR:80; end;
+
+theorem Th23: Gen w,y & MS = AMSpace(V,w,y) implies MS is Homogeneous
+proof assume that A1: Gen w,y and A2: MS=AMSpace(V,w,y);
+   now let o,a,a1,b,b1,c,c1 be Element of MS such that
+ A3: o,a _|_ o,a1 & o,b _|_ o,b1 & o,c _|_ o,c1 and A4: a,b _|_ a1,b1 & a,c _|_
+ a1,c1
+ and A5: not o,c // o,a & not o,a // o,b;
+reconsider q=o,u1=a,u2=b,u3=c,v1=a1,v2=b1,v3=c1 as VECTOR of V
+ by A2,ANALMETR:28;
+A6: not LIN o,a,b & not LIN o,a,c proof assume not thesis; then o,a // o,b or
+ o,a // o,c by ANALMETR:def 11; hence contradiction by A5,ANALMETR:81; end;
+then A7: o<>a & o<>b & o<>c by Th1;
+   now assume A8: o<>a1;
+  q,u3,q,v3 are_Ort_wrt w,y & q,u1,q,v1 are_Ort_wrt w,y &
+ q,u2,q,v2 are_Ort_wrt w,y by A2,A3,ANALMETR:31;
+then A9: u1-q,v1-q are_Ort_wrt w,y & u2-q,v2-q are_Ort_wrt w,y &
+ u3-q,v3-q are_Ort_wrt w,y by ANALMETR:def 3;
+  u1-q<>0.V & v1-q<>0.V by A7,A8,RLVECT_1:35; then consider r being Real such
+that
+A10: for a',b' being Real holds a'*w+b'*y,(r*b')*w+(-r*a')*y are_Ort_wrt w,y
+ & (a'*w+b'*y)-(u1-q),((r*b')*w+(-r*a')*y)-(v1-q) are_Ort_wrt w,y
+ by A1,A9,Th19;
+consider A1,A2 being Real such that A11:u3-q=A1*w+A2*y by A1,ANALMETR:def 1;
+consider B1,B2 being Real such that A12:u2-q=B1*w+B2*y by A1,ANALMETR:def 1;
+set v3'=((r*A2)*w+(-r*A1)*y)+q,v2'=((r*B2)*w+(-r*B1)*y)+q;
+reconsider c1'=v3',b1'=v2' as Element of MS by A2,ANALMETR:28;
+A13: v3'-q=(r*A2)*w+(-r*A1)*y & v2'-q=(r*B2)*w+(-r*B1)*y by RLSUB_2:78;
+then u3-q,v3'-q are_Ort_wrt w,y & u2-q,v2'-q are_Ort_wrt w,y by A10,A11,A12
+;
+then q,u3,q,v3' are_Ort_wrt w,y & q,u2,q,v2' are_Ort_wrt w,y by ANALMETR:def 3
+;
+then A14: o,c _|_ o,c1' & o,b _|_ o,b1' by A2,ANALMETR:31;
+   (u3-q)-(u1-q)=u3-u1 & (u2-q)-(u1-q)=u2-u1 & (v3'-q)-(v1-q)=v3'-v1 &
+ (v2'-q)-(v1-q)=v2'-v1 by Lm4;
+then u3-u1,v3'-v1 are_Ort_wrt w,y & u2-u1,v2'-v1 are_Ort_wrt w,y by A10,A11,A12
+,A13
+;
+then u1,u3,v1,v3' are_Ort_wrt w,y & u1,u2,v1,v2' are_Ort_wrt w,y by ANALMETR:
+def 3;
+then a,c _|_ a1,c1' & a,b _|_ a1,b1' by A2,ANALMETR:31;
+then A15: c1=c1' & b1=b1' by A3,A4,A6,A8,A14,Th16;
+   u3-u2 = (A1*w+A2*y)-(B1*w+B2*y) by A11,A12,Lm4
+  .= (A1-B1)*w+(A2-B2)*y by Lm6;
+then A16: pr1(w,y,u3-u2)=A1-B1 & pr2(w,y,u3-u2)=A2-B2 by A1,GEOMTRAP:def 4,def
+5;
+  v3'-v2' = ((r*A2)*w+(-r*A1)*y) - ((r*B2)*w+(-r*B1)*y) by Lm4
+ .= ((r*A2)*w+(r*(-A1))*y) - ((r*B2)*w+(-r*B1)*y) by XCMPLX_1:175
+ .= ((r*A2)*w+(r*(-A1))*y) - ((r*B2)*w+(r*(-B1))*y) by XCMPLX_1:175
+ .= (r*A2-r*B2)*w + (r*(-A1)-r*(-B1))*y by Lm6
+ .= (r*A2-r*B2)*w + (r*((-A1)-(-B1)))*y by XCMPLX_1:40
+ .= (r*(A2-B2))*w + (r*((-A1)-(-B1)))*y by XCMPLX_1:40
+ .= (r*(A2-B2))*w + (r*(-(-B1) + (-A1)))*y by XCMPLX_0:def 8
+ .= (r*(A2-B2))*w + (r*(B1 -A1))*y by XCMPLX_0:def 8;
+  then pr1(w,y,v3'-v2')=r*(A2-B2) & pr2(w,y,v3'-v2')=r*(B1-A1)
+  by A1,GEOMTRAP:def 4,def 5;
+ then PProJ
+(w,y,u3-u2,v3'-v2') = (A1-B1)*(r*(A2-B2)) + (A2-B2)*(r*(B1-A1)) by A16,GEOMTRAP
+:def 6 .=(A2-B2)*((A1-B1)*r) + (A2-B2)*(r*(B1-A1)) by XCMPLX_1:4 .=
+(A2-B2)*(r*(A1-B1) + r*(B1-A1)) by XCMPLX_1:8 .=
+  (A2-B2)*(r*((A1-B1) + (B1-A1))) by XCMPLX_1:8 .=
+  ((A2-B2)*r)*((A1-B1) + (B1-A1)) by XCMPLX_1:4 .=
+  ((A2-B2)*r)*((A1-B1) + (B1+-A1)) by XCMPLX_0:def 8 .=
+  ((A2-B2)*r)*((A1+-B1) + (B1+-A1)) by XCMPLX_0:def 8 .=
+  ((A2-B2)*r)*(A1+(-B1 + (B1+-A1))) by XCMPLX_1:1 .=
+  ((A2-B2)*r)*(A1+((-B1 + B1)+-A1)) by XCMPLX_1:1 .=
+  ((A2-B2)*r)*(A1+(0+-A1)) by XCMPLX_0:def 6 .=
+ ((A2-B2)*r)*0 by XCMPLX_0:def 6 .=0;
+ then u3-u2,v3'-v2' are_Ort_wrt w,y by A1,GEOMTRAP:34;
+ then u2,u3,v2',v3' are_Ort_wrt w,y by ANALMETR:def 3;hence b,c _|_ b1,c1 by A2
+,A15,ANALMETR:31; end;
+hence b,c _|_ b1,c1 by A3,A4,A5,Th22; end; hence thesis by Def7; end;
+
+definition cluster Euclidean Pappian Desarguesian Homogeneous translation
+ Fanoian Moufangian OrtAfPl;
+existence proof consider V such that A1: ex w,y st Gen w,y by ANALMETR:7;
+ consider w,y such that A2: Gen w,y by A1;
+ reconsider MS=AMSpace(V,w,y) as OrtAfPl by A2,ANALMETR:46; take MS;
+   LIN_holds_in MS by A2,Th21; then A3: 3H_holds_in MS by CONAFFM:6;
+   (for a,b being Real st a*w + b*y = 0.V holds a=0 & b=0) & (for u being
+VECTOR
+  of V ex a,b being Real st u = a*w + b*y) by A2,ANALMETR:def 1;
+  then reconsider OAS=OASpace(V) as OAffinSpace by ANALOAF:38;
+ A4: Af(MS)=Lambda(OAS) by ANALMETR:30;
+ then A5: Af(MS) is Pappian by PAPDESAF:19;
+ A6: Af(MS) is Desarguesian by A4,PAPDESAF:20;
+ A7: Af(MS) is Moufangian by A4,PAPDESAF:22;
+   Af(MS) is translational by A4,PAPDESAF:23;
+hence thesis by A2,A3,A4,A5,A6,A7,Def2,Def3,Def4,Def5,Def6,Th8,Th23; end; end;
+
+definition cluster Euclidean Pappian Desarguesian Homogeneous translation
+ Fanoian Moufangian OrtAfSp;
+existence proof consider MS being Euclidean Pappian Desarguesian Homogeneous
+translation Fanoian Moufangian OrtAfPl;
+   MS is Euclidean Pappian Desarguesian Homogeneous translation
+Fanoian Moufangian; hence thesis; end; end;
+
+theorem Gen w,y & MS=AMSpace(V,w,y) implies MS is Euclidean Pappian
+Desarguesian Homogeneous translation Fanoian Moufangian OrtAfPl
+proof assume A1: Gen w,y & MS=AMSpace(V,w,y);
+then reconsider MS'=AMSpace(V,w,y) as OrtAfPl; LIN_holds_in MS' by A1,Th21
+;
+then A2: 3H_holds_in MS' by CONAFFM:6;
+   (for a,b being Real st a*w + b*y = 0.V holds a=0 & b=0) & (for u being
+VECTOR
+  of V ex a,b being Real st u = a*w + b*y) by A1,ANALMETR:def 1;
+  then reconsider OAS=OASpace(V) as OAffinSpace by ANALOAF:38;
+ A3: Af(MS')=Lambda(OAS) by ANALMETR:30;
+ then A4: Af(MS') is Pappian by PAPDESAF:19;
+ A5: Af(MS') is Desarguesian by A3,PAPDESAF:20;
+ A6: Af(MS') is Moufangian by A3,PAPDESAF:22;
+   Af(MS') is translational by A3,PAPDESAF:23;
+ hence thesis by A1,A2,A3,A4,A5,A6,Def2,Def3,Def4,Def5,Def6,Th8,Th23; end;
+
+definition let MS be Pappian OrtAfPl;
+ cluster Af(MS) -> Pappian; correctness by Def2; end;
+
+definition let MS be Desarguesian OrtAfPl;
+ cluster Af(MS) -> Desarguesian; correctness by Def3; end;
+
+definition let MS be Moufangian OrtAfPl;
+ cluster Af(MS) -> Moufangian; correctness by Def5; end;
+
+definition let MS be translation OrtAfPl;
+ cluster Af(MS) -> translational; correctness by Def6; end;
+
+definition let MS be Fanoian OrtAfPl;
+ cluster Af(MS) -> Fanoian; correctness by Def4; end;
+
+definition let MS be Homogeneous OrtAfPl;
+ cluster Af(MS) -> Desarguesian;
+correctness proof MS is Desarguesian by Th14;hence thesis by Def3; end; end;
+
+definition let MS be Euclidean Desarguesian OrtAfPl;
+ cluster Af(MS) -> Pappian;
+correctness proof MS is Pappian by Th15;hence thesis by Def2; end; end;
+
+definition let MS be Pappian OrtAfSp;
+ cluster Af(MS) -> Pappian;
+  correctness by Def2;
+end;
+
+definition let MS be Desarguesian OrtAfSp;
+ cluster Af(MS) -> Desarguesian;
+  correctness by Def3;
+end;
+
+definition let MS be Moufangian OrtAfSp;
+ cluster Af(MS) -> Moufangian;
+  correctness by Def5;
+end;
+
+definition let MS be translation OrtAfSp;
+ cluster Af(MS) -> translational;
+  correctness by Def6;
+end;
+
+definition let MS be Fanoian OrtAfSp;
+ cluster Af(MS) -> Fanoian;
+  correctness by Def4;
+end;

@@ -1,0 +1,2191 @@
+:: A Theory of Boolean Valued Functions and Quantifiers with
+:: Respect to Partitions
+::  by Shunichi Kobayashi and Yatsuka Nakamura
+::
+:: Received December 21, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary PARTIT1, T_1TOPSP, EQREL_1, FUNCT_1, SETFAM_1, RELAT_1, CANTOR_1,
+      BOOLE, PARTFUN1, FINSEQ_4, TARSKI, SUBSET_1, GROUP_4, FUNCT_2, MARGREL1,
+      BVFUNC_1, ZF_LANG, BINARITH, BVFUNC_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MARGREL1, VALUAT_1, RELAT_1,
+      FUNCT_1, SETFAM_1, FRAENKEL, RELSET_1, PARTFUN1, FINSEQ_4, EQREL_1,
+      CANTOR_1, T_1TOPSP, BINARITH, PARTIT1, BVFUNC_1;
+ constructors FINSEQ_4, BINARITH, CANTOR_1, PARTIT1, BVFUNC_1, PUA2MSS1;
+ clusters RELSET_1, PARTIT1, T_1TOPSP, SUBSET_1, MARGREL1, VALUAT_1, BINARITH,
+      XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, BVFUNC_1, XBOOLE_0;
+ theorems TARSKI, FUNCT_1, SETFAM_1, EQREL_1, ZFMISC_1, CANTOR_1, FUNCT_2,
+      T_1TOPSP, SUBSET_1, MARGREL1, BINARITH, PARTIT1, BVFUNC_1, FINSEQ_4,
+      RELAT_1, VALUAT_1, XBOOLE_0, XBOOLE_1;
+ schemes COMPLSP1, PARTFUN2, XBOOLE_0;
+
+begin :: Chap. 1  Preliminaries
+
+reserve Y for non empty set,
+        G for Subset of PARTITIONS(Y);
+
+definition let X be set;
+ redefine func PARTITIONS X -> Part-Family of X;
+ coherence
+ proof
+   A1: PARTITIONS X c= bool bool X
+   proof
+     let x be set; assume x in PARTITIONS X;
+     then x is a_partition of X by PARTIT1:def 3;
+     hence thesis;
+   end;
+     for S being set st S in PARTITIONS X holds S is a_partition of X
+    by PARTIT1:def 3;
+   hence thesis by A1,T_1TOPSP:def 2,def 3;
+ end;
+end;
+
+definition let X be set; let F be non empty Part-Family of X;
+ redefine mode Element of F -> a_partition of X;
+  coherence by T_1TOPSP:def 3;
+end;
+
+theorem Th1:
+for y being Element of Y
+  ex X being Subset of Y st y in X &
+     ex h being Function, F being Subset-Family of Y st
+              dom h=G & rng h = F &
+              (for d being set st d in G holds h.d in d) &
+              X=Intersect F & X<>{}
+proof
+  let y be Element of Y;
+  deffunc _F(Element of PARTITIONS(Y)) = EqClass(y,$1);
+  defpred _P[set] means $1 in G;
+  consider h being PartFunc of PARTITIONS(Y), bool Y such that
+A1: for d being Element of PARTITIONS(Y) holds
+        d in dom h iff _P[d] and
+A2: for d being Element of PARTITIONS(Y) st d in dom h
+        holds h/.d = _F(d) from LambdaPFD;
+  A3:dom h c= G
+  proof
+    let x be set;
+    assume x in dom h;
+    hence thesis by A1;
+  end;
+A4:G c= dom h
+  proof
+    let x be set;
+    assume x in G;
+    hence thesis by A1;
+  end;
+  then A5:dom h = G by A3,XBOOLE_0:def 10;
+  A6:for d being set st d in G holds h.d in d
+  proof
+    let d be set;
+    assume A7:d in G;
+    then reconsider d as a_partition of Y by PARTIT1:def 3;
+      h/.d=h.d by A4,A7,FINSEQ_4:def 4;
+    then h.d = EqClass(y,d) by A2,A4,A7;
+    hence thesis;
+  end;
+  A8:for d being Element of PARTITIONS(Y) st d in dom h holds y in h.d
+  proof
+    let d be Element of PARTITIONS(Y);
+    assume A9:d in dom h;
+    then h/.d = EqClass(y,d) by A2;
+    then h.d = EqClass(y,d) by A9,FINSEQ_4:def 4;
+    hence y in h.d by T_1TOPSP:def 1;
+  end;
+  A10:for c being set holds c in rng h implies y in c
+  proof
+    let c be set;
+    assume c in rng h;
+    then consider a being set such that
+      A11:a in dom h & c = h.a by FUNCT_1:def 5;
+    thus thesis by A8,A11;
+  end;
+  reconsider rr = rng h as Subset-Family of Y by SETFAM_1:def 7;
+  per cases;
+  suppose rng h ={};
+  then Intersect rr = Y by CANTOR_1:def 3;
+  hence thesis by A5,A6;
+  suppose A12:rng h <> {};
+  then A13:y in meet (rng h) by A10,SETFAM_1:def 1;
+    Intersect rr = meet (rng h) by A12,CANTOR_1:def 3;
+  hence thesis by A5,A6,A13;
+end;
+
+definition let Y;let G be Subset of PARTITIONS(Y);
+func '/\' G -> a_partition of Y means
+ :Def1: for x being set holds
+    x in it iff ex h being Function, F being Subset-Family of Y st
+              dom h=G & rng h = F &
+              (for d being set st d in G holds h.d in d) &
+              x=Intersect F & x<>{};
+existence
+proof
+   defpred _P[set] means
+   (ex h being Function, F being Subset-Family of Y st
+              dom h=G & rng h = F &
+              (for d being set st d in G holds h.d in d) &
+              $1=Intersect F & $1<>{});
+  consider X being set such that
+     A1:for x being set holds x in X iff
+        (x in bool Y) & _P[x] from Separation;
+  take X;
+  A2:union X = Y
+  proof
+    A3:union X c= Y
+    proof
+      let a be set;
+      assume a in union X;
+      then consider p being set such that
+        A4:a in p & p in X by TARSKI:def 4;
+      consider h being Function, F being Subset-Family of Y such that
+A5:    dom h=G & rng h = F &
+             (for d being set st d in G holds h.d in d) &
+             p=Intersect F & p<>{} by A1,A4;
+      thus thesis by A4,A5;
+    end;
+      Y c= union X
+    proof
+      let y be set;
+      assume y in Y;
+      then reconsider y as Element of Y;
+      consider a being Subset of Y such that
+        A6: y in a & ex h being Function, F being Subset-Family of Y st
+              dom h=G & rng h = F &
+              (for d being set st d in G holds h.d in d) &
+              a=Intersect F & a<>{} by Th1;
+      consider h being Function, F being Subset-Family of Y such that
+        A7:  dom h=G & rng h = F &
+              (for d being set st d in G holds h.d in d) &
+              a=Intersect F & a<>{} by A6;
+        a in X by A1,A7;
+      hence thesis by A6,TARSKI:def 4;
+    end;
+    hence thesis by A3,XBOOLE_0:def 10;
+  end;
+  A8:for A being Subset of Y st A in X holds A<>{} &
+      for B being Subset of Y st B in X holds A=B or A misses B
+  proof
+    let A be Subset of Y;
+    assume A in X;
+    then consider h1 being Function, F1 being Subset-Family of Y such that
+A9:     dom h1=G & rng h1 = F1 &
+              (for d being set st d in G holds h1.d in d) &
+              A=Intersect F1 & A<>{} by A1;
+    thus A<>{} by A9;
+    let B be Subset of Y;
+    assume B in X;
+    then consider h2 being Function, F2 being Subset-Family of Y such that
+A10:     dom h2=G & rng h2 =F2 &
+              (for d being set st d in G holds h2.d in d) &
+              B=Intersect F2 & B<>{} by A1;
+    per cases;
+    suppose G={};
+      then rng h1={} & rng h2={} by A9,A10,RELAT_1:65;
+    hence thesis by A9,A10;
+    suppose
+        G<>{};
+then A11:  rng h1<>{} & rng h2<>{} by A9,A10,RELAT_1:65;
+        now assume A meets B;
+        then consider p being set such that
+          A12: p in A & p in B by XBOOLE_0:3;
+        A13:p in meet (rng h1) by A9,A11,A12,CANTOR_1:def 3;
+        A14:p in meet (rng h2) by A10,A11,A12,CANTOR_1:def 3;
+          for g being set st g in G holds h1.g=h2.g
+        proof
+          let g be set;
+          assume A15:g in G;
+          then reconsider g as a_partition of Y by PARTIT1:def 3;
+          A16:h1.g in g by A9,A15;
+          A17:h2.g in g by A10,A15;
+          A18:h1.g in rng h1 by A9,A15,FUNCT_1:def 5;
+          A19:h2.g in rng h2 by A10,A15,FUNCT_1:def 5;
+          A20:p in h1.g by A13,A18,SETFAM_1:def 1;
+          A21:p in h2.g by A14,A19,SETFAM_1:def 1;
+            h1.g=h2.g or h1.g misses h2.g by A16,A17,EQREL_1:def 6;
+          hence thesis by A20,A21,XBOOLE_0:3;
+        end;
+        hence thesis by A9,A10,FUNCT_1:9;
+      end;
+    hence thesis;
+  end;
+    X c= bool Y
+  proof
+    let a be set;
+    assume a in X;
+    then consider h being Function, F being Subset-Family of Y such that
+A22:     dom h=G & rng h = F &
+              (for d being set st d in G holds h.d in d) &
+              a=Intersect F & a<>{} by A1;
+    thus thesis by A22;
+  end;
+  then reconsider X as Subset-Family of Y by SETFAM_1:def 7;
+    X is a_partition of Y by A2,A8,EQREL_1:def 6;
+  hence thesis by A1;
+end;
+uniqueness
+proof
+  let A1,A2 be a_partition of Y such that
+  A23: for x being set holds x in A1 iff
+        ex h being Function, F being Subset-Family of Y st
+              dom h=G & rng h = F &
+              (for d being set st d in G holds h.d in d)&
+              x=Intersect F & x<>{} and
+  A24: for x being set holds x in A2 iff
+        ex h being Function, F being Subset-Family of Y st
+              dom h=G & rng h = F &
+              (for d being set st d in G holds h.d in d)&
+              x=Intersect F & x<>{};
+    now let y be set;
+      y in A1 iff ex h being Function, F being Subset-Family of Y st
+              dom h=G & rng h =F &
+              (for d being set st d in G holds h.d in d)&
+              y=Intersect F & y<>{} by A23;
+    hence y in A1 iff y in A2 by A24;
+  end;
+  hence A1=A2 by TARSKI:2;
+end;
+end;
+
+definition let Y;let G be Subset of PARTITIONS(Y),b be set;
+pred b is_upper_min_depend_of G means
+:Def2:(for d being a_partition of Y st d in G holds
+b is_a_dependent_set_of d) &
+(for e being set st (e c= b &
+    (for d being a_partition of Y st d in G holds e is_a_dependent_set_of d))
+   holds e=b);
+end;
+
+theorem Th2:
+for y being Element of Y st G<>{} holds
+  (ex X being Subset of Y st y in X &
+     X is_upper_min_depend_of G)
+proof
+  let y be Element of Y;
+  assume G<>{};
+  then consider g being set such that
+    A1:g in G by XBOOLE_0:def 1;
+  reconsider g as a_partition of Y by A1,PARTIT1:def 3;
+  A2:(union g = Y & for A being set st A in g holds A<>{} &
+     for B being set st B in g holds A=B or A misses B) by EQREL_1:def 6;
+  A3:Y c= Y;
+  A4:for d being a_partition of Y st
+      d in G holds Y is_a_dependent_set_of d by PARTIT1:9;
+  deffunc _F(Element of bool Y) = $1;
+  defpred _P[set] means y in $1 &
+    for d being a_partition of Y st d in G holds $1 is_a_dependent_set_of d;
+  reconsider XX={_F(X) where X is Subset of Y: _P[X]}
+      as Subset of bool Y from SubsetFD;
+  reconsider XX as Subset-Family of Y by SETFAM_1:def 7;
+A5:Y in XX by A3,A4;
+    for X1 be set st X1 in XX holds y in X1
+  proof
+    let X1 be set;
+    assume X1 in XX;
+    then consider X be Subset of Y such that
+      A6:X=X1 & y in X &
+      for d being a_partition of Y st d in G holds X is_a_dependent_set_of d;
+    thus thesis by A6;
+  end;
+then A7:y in meet XX by A5,SETFAM_1:def 1;
+  then A8:Intersect(XX)<>{} by A5,CANTOR_1:def 3;
+  take Intersect(XX);
+  A9:for d being a_partition of Y st d in G holds
+      Intersect(XX) is_a_dependent_set_of d
+  proof
+    let d be a_partition of Y;
+    assume A10:d in G;
+      for X1 be set st X1 in XX holds X1 is_a_dependent_set_of d
+    proof
+      let X1 be set;
+      assume X1 in XX;
+      then consider X be Subset of Y such that
+        A11:X=X1 & y in X &
+        for d being a_partition of Y st d in G holds
+          X is_a_dependent_set_of d;
+      thus thesis by A10,A11;
+    end;
+    hence thesis by A8,PARTIT1:10;
+  end;
+    for e being set st ((e c= Intersect(XX)) &
+    (for d being a_partition of Y st d in G holds e is_a_dependent_set_of d))
+   holds e=Intersect(XX)
+  proof
+    let e be set;
+    assume A12:(e c= Intersect(XX)) &
+    (for d being a_partition of Y st d in G holds
+    e is_a_dependent_set_of d);
+    then e is_a_dependent_set_of g by A1;
+    then consider Ad being set such that
+      A13:Ad c= g & Ad<>{} & e = union Ad by PARTIT1:def 1;
+    A14:e c= Y by A2,A13,ZFMISC_1:95;
+    per cases;
+    suppose y in e;
+     then A15:e in XX by A12,A14;
+       Intersect(XX) c= e
+     proof
+       let X1 be set;
+       assume X1 in Intersect(XX);
+       then X1 in meet XX by A5,CANTOR_1:def 3;
+       hence X1 in e by A15,SETFAM_1:def 1;
+     end;
+     hence thesis by A12,XBOOLE_0:def 10;
+    suppose A16:not(y in e);
+     reconsider e as Subset of Y by A2,A13,ZFMISC_1:95;
+       e` = Y \ e by SUBSET_1:def 5;
+     then A17:y in e` by A16,XBOOLE_0:def 4;
+       e misses e` by SUBSET_1:44;
+     then A18:e /\ e` = {} by XBOOLE_0:def 7;
+     A19:e <> Y by A16;
+      for d being a_partition of Y st d in G holds
+             e` is_a_dependent_set_of d
+     proof
+       let d be a_partition of Y;
+       assume d in G;
+       then e is_a_dependent_set_of d by A12;
+       hence thesis by A19,PARTIT1:12;
+     end;
+     then A20:e` in XX by A17;
+       Intersect(XX) c= e`
+     proof
+       let X1 be set;
+       assume X1 in Intersect XX;
+       then X1 in meet XX by A5,CANTOR_1:def 3;
+       hence X1 in e` by A20,SETFAM_1:def 1;
+     end;
+     then e /\ Intersect(XX) c= e /\ e` by XBOOLE_1:26;
+     then A21:e /\ Intersect(XX) = {} by A18,XBOOLE_1:3;
+       e /\ e = e;
+     then e c= {} by A12,A21,XBOOLE_1:26;
+     then A22:union Ad = {} by A13,XBOOLE_1:3;
+     consider ad being set such that
+       A23:ad in Ad by A13,XBOOLE_0:def 1;
+     A24:ad<>{} by A2,A13,A23;
+     A25:ad c= {} by A22,A23,ZFMISC_1:92;
+     consider add being set such that
+       A26:add in ad by A24,XBOOLE_0:def 1;
+     thus thesis by A25,A26;
+  end;
+  hence thesis by A5,A7,A9,Def2,CANTOR_1:def 3;
+end;
+
+definition let Y;let G be Subset of PARTITIONS(Y);
+func '\/' G -> a_partition of Y means
+ :Def3: (for x being set holds x in it iff x is_upper_min_depend_of G) if G<>{}
+  otherwise it = %I(Y);
+existence
+proof
+ thus G<>{} implies ex X being a_partition of Y st
+   for x being set holds x in X iff x is_upper_min_depend_of G
+ proof
+  assume A1:G<>{};
+  then consider g being set such that
+    A2:g in G by XBOOLE_0:def 1;
+  reconsider g as a_partition of Y by A2,PARTIT1:def 3;
+  A3:union g = Y & for A being set st A in g holds A<>{} &
+     for B being set st B in g holds A=B or A misses B by EQREL_1:def 6;
+  defpred _P[set] means $1 is_upper_min_depend_of G;
+  consider X being set such that
+    A4:for x being set holds x in X iff
+        x in bool Y & _P[x] from Separation;
+  A5:for x being set holds x in X iff x is_upper_min_depend_of G
+  proof
+    let x be set;
+      for x being set holds (x is_upper_min_depend_of G) implies (x in bool Y)
+    proof
+      let x be set;
+      assume x is_upper_min_depend_of G;
+      then x is_a_dependent_set_of g by A2,Def2;
+      then consider A being set such that
+         A6:A c= g & A<>{} & x = union A by PARTIT1:def 1;
+        x c= union g by A6,ZFMISC_1:95;
+      hence x in bool Y by A3;
+    end;
+    then x is_upper_min_depend_of G implies
+        x is_upper_min_depend_of G & x in bool Y;
+    hence thesis by A4;
+  end;
+  take X;
+  A7:Y = union X
+  proof
+    thus Y c= union X
+    proof
+      let y be set;
+      assume y in Y;
+      then reconsider y as Element of Y;
+      consider a being Subset of Y such that
+        A8: y in a & a is_upper_min_depend_of G by A1,Th2;
+        a in X by A5,A8;
+      hence thesis by A8,TARSKI:def 4;
+    end;
+    thus union X c= Y
+    proof
+      let y be set;
+      assume y in union X;
+      then consider a being set such that
+        A9:y in a & a in X by TARSKI:def 4;
+        a in bool Y by A4,A9;
+      hence y in Y by A9;
+    end;
+  end;
+  A10:for A being Subset of Y st A in X holds A<>{} &
+      for B being Subset of Y st B in X holds A=B or A misses B
+  proof
+     let A be Subset of Y;
+     assume A in X;
+then A11:   A is_upper_min_depend_of G by A5;
+     then A is_a_dependent_set_of g by A2,Def2;
+     then consider Aa being set such that
+       A12:Aa c= g & Aa<>{} & A = union Aa by PARTIT1:def 1;
+     consider aa being set such that
+       A13:aa in Aa by A12,XBOOLE_0:def 1;
+     A14:aa<>{} by A3,A12,A13;
+     A15:aa c= union Aa by A13,ZFMISC_1:92;
+     consider ax being set such that
+       A16:ax in aa by A14,XBOOLE_0:def 1;
+     thus A<>{} by A12,A15,A16;
+     let B be Subset of Y;
+     assume B in X;
+then A17:   B is_upper_min_depend_of G by A5;
+       now assume A18:A meets B;
+A19:   for d being a_partition of Y st d in G holds
+       A /\ B is_a_dependent_set_of d
+       proof
+         let d be a_partition of Y;
+         assume A20:d in G;
+         then A21:A is_a_dependent_set_of d by A11,Def2;
+           B is_a_dependent_set_of d by A17,A20,Def2;
+         hence thesis by A18,A21,PARTIT1:11;
+       end;
+         A /\ B c= A by XBOOLE_1:17;
+       then A22:A /\ B = A by A11,A19,Def2;
+       A23:A c= B
+       proof
+         let x be set;
+         assume x in A;
+         hence x in B by A22,XBOOLE_0:def 3;
+       end;
+         A /\ B c= B by XBOOLE_1:17;
+       then A24:A /\ B = B by A17,A19,Def2;
+         B c= A
+       proof
+         let x be set;
+         assume x in B;
+         hence x in A by A24,XBOOLE_0:def 3;
+       end;
+       hence A=B by A23,XBOOLE_0:def 10;
+     end;
+     hence thesis;
+  end;
+    X c= bool Y
+  proof
+    let x be set;
+    assume x in X;
+    hence thesis by A4;
+  end;
+  then reconsider X as Subset-Family of Y by SETFAM_1:def 7;
+    X is a_partition of Y by A7,A10,EQREL_1:def 6;
+  hence thesis by A5;
+ end;
+ thus G={} implies ex X being a_partition of Y st X = %I(Y);
+end;
+uniqueness
+proof
+  let A1,A2 be a_partition of Y;
+    now assume that
+    A25: G<>{} &
+        for x being set holds x in A1 iff x is_upper_min_depend_of G and
+    A26: for x being set holds x in A2 iff x is_upper_min_depend_of G;
+      now let y be set;
+        y in A1 iff y is_upper_min_depend_of G by A25;
+      hence y in A1 iff y in A2 by A26;
+    end;
+  hence A1=A2 by TARSKI:2;
+  end;
+  hence thesis;
+end;
+consistency;
+end;
+
+theorem for G being Subset of PARTITIONS(Y),PA being a_partition of Y st
+  PA in G holds PA '>' ('/\' G)
+proof
+  let G be Subset of PARTITIONS(Y);
+  let PA be a_partition of Y;
+  assume A1:PA in G;
+    for x being set st x in ('/\' G) ex a being set st a in PA & x c= a
+  proof
+    let x be set;
+    assume x in ('/\' G);
+    then consider h being Function, F being Subset-Family of Y such that
+    A2: dom h=G & rng h =F and
+    A3: for d being set st d in G holds h.d in d and
+    A4: x=Intersect F & x<>{} by Def1;
+    set a = h.PA;
+    A5: a in PA by A1,A3;
+    A6:a in rng h by A1,A2,FUNCT_1:def 5;
+    then Intersect F = meet F by A2,CANTOR_1:def 3;
+    then x c= a by A2,A4,A6,SETFAM_1:4;
+    hence thesis by A5;
+  end;
+  hence thesis by SETFAM_1:def 2;
+end;
+
+theorem for G being Subset of PARTITIONS(Y),PA being a_partition of Y st
+  PA in G holds PA '<' ('\/' G)
+proof
+  let G be Subset of PARTITIONS(Y);
+  let PA be a_partition of Y;
+  assume A1:PA in G;
+    for a being set st a in PA ex b being set st b in ('\/' G) & a c= b
+  proof
+    let a be set;
+    assume A2:a in PA;
+    then A3: a c= Y & a<>{} by EQREL_1:def 6;
+    consider x being Element of a;
+    A4: x in Y by A3,TARSKI:def 3;
+      union ('\/' G) = Y by EQREL_1:def 6;
+    then consider b being set such that A5:x in b & b in ('\/' G)
+      by A4,TARSKI:def 4;
+      b is_upper_min_depend_of G by A1,A5,Def3;
+    then b is_a_dependent_set_of PA by A1,Def2;
+    then consider B being set such that A6:B c= PA & B<>{} & b = union B
+      by PARTIT1:def 1;
+      a in B
+    proof
+      consider u being set such that A7: x in u & u in B by A5,A6,TARSKI:def 4;
+        a /\ u <> {} by A3,A7,XBOOLE_0:def 3;
+      then A8: not (a misses u) by XBOOLE_0:def 7;
+        u in PA by A6,A7;
+      hence thesis by A2,A7,A8,EQREL_1:def 6;
+    end;
+    then a c= b by A6,ZFMISC_1:92;
+    hence thesis by A5;
+  end;
+  hence thesis by SETFAM_1:def 2;
+end;
+
+begin :: Chap. 2  Coordinate and Quantifiers
+
+definition let Y;let G be Subset of PARTITIONS(Y);
+ attr G is generating means
+    ('/\' G) = %I(Y);
+end;
+
+definition let Y;let G be Subset of PARTITIONS(Y);
+ attr G is independent means
+    for h being Function, F being Subset-Family of Y st
+    dom h=G & rng h=F &
+    (for d being set st d in G holds h.d in d)
+  holds (Intersect F)<>{};
+end;
+
+definition let Y;let G be Subset of PARTITIONS(Y);
+ pred G is_a_coordinate means
+    G is independent generating;
+end;
+
+definition let Y;let PA be a_partition of Y;
+ redefine func {PA} -> Subset of PARTITIONS(Y);
+ coherence
+ proof
+    PA in PARTITIONS(Y) by PARTIT1:def 3;
+  hence thesis by ZFMISC_1:37;
+ end;
+end;
+
+definition let Y;let PA be a_partition of Y;let G be Subset of PARTITIONS(Y);
+ func CompF(PA,G) -> a_partition of Y equals
+     '/\' (G \ {PA});
+correctness;
+end;
+
+definition let Y;let a be Element of Funcs(Y,BOOLEAN);
+ let G be Subset of PARTITIONS(Y),PA be a_partition of Y;
+ pred a is_independent_of PA,G means
+  :Def8: a is_dependent_of CompF(PA,G);
+end;
+
+definition let Y;let a be Element of Funcs(Y,BOOLEAN),
+ G be Subset of PARTITIONS(Y),
+ PA be a_partition of Y;
+ func All(a,PA,G) -> Element of Funcs(Y,BOOLEAN) equals
+  :Def9: B_INF(a,CompF(PA,G));
+correctness;
+end;
+
+definition let Y;let a be Element of Funcs(Y,BOOLEAN),
+ G be Subset of PARTITIONS(Y),
+ PA be a_partition of Y;
+ func Ex(a,PA,G) -> Element of Funcs(Y,BOOLEAN) equals
+  :Def10: B_SUP(a,CompF(PA,G));
+correctness;
+end;
+
+theorem
+   for a being Element of Funcs(Y,BOOLEAN), PA being a_partition of Y holds
+  All(a,PA,G) is_dependent_of CompF(PA,G)
+proof
+  let a be Element of Funcs(Y,BOOLEAN);
+  let PA be a_partition of Y;
+A1:All(a,PA,G) = B_INF(a,CompF(PA,G)) by Def9;
+    let F be set;
+    assume A2:F in CompF(PA,G);
+    thus for x1,x2 being set st x1 in F & x2 in F holds
+    All(a,PA,G).x1=All(a,PA,G).x2
+    proof
+      let x1,x2 be set;
+      assume A3:x1 in F & x2 in F;
+      then reconsider x1,x2 as Element of Y by A2;
+      A4:x2 in EqClass(x2,CompF(PA,G)) &
+             EqClass(x2,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+        F = EqClass(x2,CompF(PA,G)) or
+      F misses EqClass(x2,CompF(PA,G)) by A2,EQREL_1:def 6;
+then A5:  EqClass(x1,CompF(PA,G)) = EqClass(x2,CompF(PA,G))
+       by A3,A4,T_1TOPSP:def 1,XBOOLE_0:3;
+      per cases;
+      suppose A6:
+        (for x being Element of Y st x in EqClass(x1,CompF(PA,G)) holds
+             Pj(a,x)=TRUE) &
+        (for x being Element of Y st x in EqClass(x2,CompF(PA,G)) holds
+             Pj(a,x)=TRUE);
+        then Pj(All(a,PA,G),x2)=TRUE by A1,BVFUNC_1:def 19;
+      hence thesis by A1,A6,BVFUNC_1:def 19;
+      suppose
+          (for x being Element of Y st x in EqClass(x1,CompF(PA,G)) holds
+             Pj(a,x)=TRUE) &
+        not (for x being Element of Y st x in EqClass(x2,CompF(PA,G)) holds
+             Pj(a,x)=TRUE);
+      hence thesis by A5;
+      suppose
+          not (for x being Element of Y st x in EqClass(x1,CompF(PA,G)) holds
+             Pj(a,x)=TRUE) &
+        (for x being Element of Y st x in EqClass(x2,CompF(PA,G)) holds
+             Pj(a,x)=TRUE);
+      hence thesis by A5;
+      suppose A7:
+        not (for x being Element of Y st x in EqClass(x1,CompF(PA,G)) holds
+             Pj(a,x)=TRUE) &
+        not (for x being Element of Y st x in EqClass(x2,CompF(PA,G)) holds
+             Pj(a,x)=TRUE);
+        then Pj(All(a,PA,G),x2)=FALSE by A1,BVFUNC_1:def 19;
+      hence thesis by A1,A7,BVFUNC_1:def 19;
+    end;
+end;
+
+theorem
+   for a being Element of Funcs(Y,BOOLEAN), PA being a_partition of Y holds
+  Ex(a,PA,G) is_dependent_of CompF(PA,G)
+proof
+  let a be Element of Funcs(Y,BOOLEAN);
+  let PA be a_partition of Y;
+A1:Ex(a,PA,G) = B_SUP(a,CompF(PA,G)) by Def10;
+    let F be set;
+    assume A2:F in CompF(PA,G);
+    thus for x1,x2 being set st x1 in F & x2 in F holds
+    Ex(a,PA,G).x1=Ex(a,PA,G).x2
+    proof
+      let x1,x2 be set;
+      assume A3:x1 in F & x2 in F;
+      then reconsider x1, x2 as Element of Y by A2;
+      A4:x2 in EqClass(x2,CompF(PA,G)) &
+             EqClass(x2,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+        F = EqClass(x2,CompF(PA,G)) or
+      F misses EqClass(x2,CompF(PA,G)) by A2,EQREL_1:def 6;
+then A5:  EqClass(x1,CompF(PA,G)) = EqClass(x2,CompF(PA,G))
+        by A3,A4,T_1TOPSP:def 1,XBOOLE_0:3;
+      per cases;
+      suppose A6:
+      (ex x being Element of Y st x in EqClass(x1,CompF(PA,G)) &
+      Pj(a,x)=TRUE) &
+      (ex x being Element of Y st x in EqClass(x2,CompF(PA,G)) &
+      Pj(a,x)=TRUE);
+      then Pj(B_SUP(a,CompF(PA,G)),x1) = TRUE by BVFUNC_1:def 20;
+      hence thesis by A1,A6,BVFUNC_1:def 20;
+      suppose
+        (ex x being Element of Y st x in EqClass(x1,CompF(PA,G)) &
+      Pj(a,x)=TRUE) &
+      not (ex x being Element of Y st
+              x in EqClass(x2,CompF(PA,G)) & Pj(a,x)=TRUE);
+      hence thesis by A5;
+      suppose not (ex x being Element of Y st
+              x in EqClass(x1,CompF(PA,G)) & Pj(a,x)=TRUE) &
+      (ex x being Element of Y st
+              x in EqClass(x2,CompF(PA,G)) & Pj(a,x)=TRUE);
+      hence thesis by A5;
+      suppose A7:
+      not (ex x being Element of Y st
+          x in EqClass(x1,CompF(PA,G)) & Pj(a,x)=TRUE) &
+      not (ex x being Element of Y st
+          x in EqClass(x2,CompF(PA,G)) & Pj(a,x)=TRUE);
+      then Pj(B_SUP(a,CompF(PA,G)),x1) = FALSE by BVFUNC_1:def 20;
+      hence thesis by A1,A7,BVFUNC_1:def 20;
+    end;
+end;
+
+theorem
+   for a being Element of Funcs(Y,BOOLEAN), PA being a_partition of Y holds
+  All(I_el(Y),PA,G) = I_el(Y)
+proof
+  let a be Element of Funcs(Y,BOOLEAN);
+  let PA be a_partition of Y;
+A1:All(I_el(Y),PA,G) = B_INF(I_el(Y),CompF(PA,G)) by Def9;
+    for z being Element of Y holds Pj(All(I_el(Y),PA,G),z)=TRUE
+  proof
+    let z be Element of Y;
+      for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(I_el(Y),x)=TRUE by BVFUNC_1:def 14;
+    hence thesis by A1,BVFUNC_1:def 19;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem
+   for a being Element of Funcs(Y,BOOLEAN), PA being a_partition of Y holds
+  Ex(I_el(Y),PA,G) = I_el(Y)
+proof
+  let a be Element of Funcs(Y,BOOLEAN);
+  let PA be a_partition of Y;
+    for z being Element of Y holds Pj(Ex(I_el(Y),PA,G),z)=TRUE
+  proof
+    let z be Element of Y;
+A1:z in EqClass(z,CompF(PA,G)) &
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      Pj(I_el(Y),z)=TRUE by BVFUNC_1:def 14;
+    then Pj(B_SUP(I_el(Y),CompF(PA,G)),z) = TRUE by A1,BVFUNC_1:def 20;
+    hence thesis by Def10;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem
+   for a being Element of Funcs(Y,BOOLEAN), PA being a_partition of Y holds
+  All(O_el(Y),PA,G) = O_el(Y)
+proof
+  let a be Element of Funcs(Y,BOOLEAN);
+  let PA be a_partition of Y;
+A1:All(O_el(Y),PA,G) = B_INF(O_el(Y),CompF(PA,G)) by Def9;
+    for z being Element of Y holds Pj(All(O_el(Y),PA,G),z)=FALSE
+  proof
+    let z be Element of Y;
+A2:z in EqClass(z,CompF(PA,G)) &
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      Pj(O_el(Y),z)=FALSE by BVFUNC_1:def 13;
+    then Pj(O_el(Y),z)<>TRUE by MARGREL1:43;
+    hence thesis by A1,A2,BVFUNC_1:def 19;
+  end;
+  hence thesis by BVFUNC_1:def 13;
+end;
+
+theorem
+   for a being Element of Funcs(Y,BOOLEAN), PA being a_partition of Y holds
+  Ex(O_el(Y),PA,G) = O_el(Y)
+proof
+  let a be Element of Funcs(Y,BOOLEAN);
+  let PA be a_partition of Y;
+A1:Ex(O_el(Y),PA,G) = B_SUP(O_el(Y),CompF(PA,G)) by Def10;
+    for z being Element of Y holds Pj(Ex(O_el(Y),PA,G),z)=FALSE
+  proof
+    let z be Element of Y;
+      for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(O_el(Y),x)<>TRUE
+    proof
+      let x be Element of Y;
+      assume x in EqClass(z,CompF(PA,G));
+        Pj(O_el(Y),x)=FALSE by BVFUNC_1:def 13;
+      hence thesis by MARGREL1:43;
+    end;
+    hence thesis by A1,BVFUNC_1:def 20;
+  end;
+  hence thesis by BVFUNC_1:def 13;
+end;
+
+theorem
+   for a being Element of Funcs(Y,BOOLEAN), PA being a_partition of Y holds
+  All(a,PA,G) '<' a
+proof
+  let a be Element of Funcs(Y,BOOLEAN);
+  let PA be a_partition of Y;
+    let z be Element of Y;
+    assume Pj(All(a,PA,G),z)= TRUE;
+    then A1:Pj(B_INF(a,CompF(PA,G)),z)= TRUE by Def9;
+A2:  now assume not (for x being Element of Y st x in EqClass(z,CompF(PA,G))
+          holds Pj(a,x)=TRUE);
+      then Pj(B_INF(a,CompF(PA,G)),z) = FALSE by BVFUNC_1:def 19;
+      hence contradiction by A1,MARGREL1:43;
+    end;
+      z in EqClass(z,CompF(PA,G)) &
+            EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+    hence Pj(a,z)=TRUE by A2;
+end;
+
+theorem for a being Element of Funcs(Y,BOOLEAN),
+PA being a_partition of Y holds a '<' Ex(a,PA,G)
+proof
+  let a be Element of Funcs(Y,BOOLEAN);
+  let PA be a_partition of Y;
+    let z be Element of Y;
+    assume A1:Pj(a,z)= TRUE;
+A2:Ex(a,PA,G) = B_SUP(a,CompF(PA,G)) by Def10;
+      z in EqClass(z,CompF(PA,G)) &
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+    hence Pj(Ex(a,PA,G),z)=TRUE by A1,A2,BVFUNC_1:def 20;
+end;
+
+theorem
+   for a,b being Element of Funcs(Y,BOOLEAN), PA being a_partition of Y holds
+  All(a '&' b,PA,G) = All(a,PA,G) '&' All(b,PA,G)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  let PA be a_partition of Y;
+  A1:All(a,PA,G) = B_INF(a,CompF(PA,G)) by Def9;
+  A2:All(b,PA,G) = B_INF(b,CompF(PA,G)) by Def9;
+    All(a '&' b,PA,G) = B_INF(a '&' b,CompF(PA,G)) by Def9;
+  hence All(a '&' b,PA,G)=(All(a,PA,G) '&' All(b,PA,G))
+    by A1,A2,BVFUNC_1:42;
+end;
+
+theorem
+   for a,b being Element of Funcs(Y,BOOLEAN), PA being a_partition of Y holds
+  All(a,PA,G) 'or' All(b,PA,G) '<' All(a 'or' b,PA,G)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  let PA be a_partition of Y;
+A1:All(a 'or' b,PA,G) = B_INF(a 'or' b,CompF(PA,G)) by Def9;
+A2:All(a,PA,G) = B_INF(a,CompF(PA,G)) by Def9;
+A3:All(b,PA,G) = B_INF(b,CompF(PA,G)) by Def9;
+    let z be Element of Y;
+    assume Pj(All(a,PA,G) 'or' All(b,PA,G),z)=TRUE;
+    then A4:Pj(All(a,PA,G),z) 'or' Pj(All(b,PA,G),z)=TRUE by BVFUNC_1:def 7;
+    A5:Pj(All(b,PA,G),z)=TRUE or Pj(All(b,PA,G),z)=FALSE
+      by MARGREL1:39;
+      now per cases by A4,A5,BINARITH:7;
+      case A6:Pj(All(a,PA,G),z)=TRUE;
+A7:    now assume
+          not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a,x)=TRUE);
+        then Pj(All(a,PA,G),z)=FALSE by A2,BVFUNC_1:def 19;
+        hence contradiction by A6,MARGREL1:43;
+      end;
+        for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a 'or' b,x)=TRUE
+      proof
+        let x be Element of Y;
+        assume A8: x in EqClass(z,CompF(PA,G));
+          Pj(a 'or' b,x) =Pj(a,x) 'or' Pj(b,x) by BVFUNC_1:def 7
+        .=TRUE 'or' Pj(b,x) by A7,A8
+        .=TRUE by BINARITH:19;
+        hence thesis;
+      end;
+      hence thesis by A1,BVFUNC_1:def 19;
+      case A9:Pj(All(b,PA,G),z)=TRUE;
+A10:    now assume
+          not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(b,x)=TRUE);
+        then Pj(All(b,PA,G),z)=FALSE by A3,BVFUNC_1:def 19;
+        hence contradiction by A9,MARGREL1:43;
+      end;
+        for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a 'or' b,x)=TRUE
+      proof
+        let x be Element of Y;
+        assume A11: x in EqClass(z,CompF(PA,G));
+          Pj(a 'or' b,x)
+         =Pj(a,x) 'or' Pj(b,x) by BVFUNC_1:def 7
+        .=Pj(a,x) 'or' TRUE by A10,A11
+        .=TRUE by BINARITH:19;
+        hence thesis;
+      end;
+      hence thesis by A1,BVFUNC_1:def 19;
+    end;
+    hence thesis;
+end;
+
+theorem
+   for a,b being Element of Funcs(Y,BOOLEAN), PA being a_partition of Y holds
+All(a 'imp' b,PA,G) '<' All(a,PA,G) 'imp' All(b,PA,G)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  let PA be a_partition of Y;
+A1:All(a 'imp' b,PA,G) = B_INF(a 'imp' b,CompF(PA,G)) by Def9;
+A2:All(a,PA,G) = B_INF(a,CompF(PA,G)) by Def9;
+A3:All(b,PA,G) = B_INF(b,CompF(PA,G)) by Def9;
+    let z be Element of Y;
+    assume A4:Pj(All(a 'imp' b,PA,G),z)=TRUE;
+A5:  now assume
+        not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a 'imp' b,x)=TRUE);
+      then Pj(All(a 'imp' b,PA,G),z)=FALSE by A1,BVFUNC_1:def 19;
+      hence contradiction by A4,MARGREL1:43;
+    end;
+    A6:Pj(All(a,PA,G) 'imp' All(b,PA,G),z)
+     =('not' Pj(All(a,PA,G),z)) 'or' Pj(All(b,PA,G),z) by BVFUNC_1:def 11;
+    per cases;
+    suppose
+        (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a,x)=TRUE) &
+      (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(b,x)=TRUE);
+      then Pj(B_INF(b,CompF(PA,G)),z) = TRUE by BVFUNC_1:def 19;
+      then Pj(All(b,PA,G),z)=TRUE by Def9;
+      then Pj(All(a,PA,G) 'imp' All(b,PA,G),z)
+       =('not' Pj(All(a,PA,G),z)) 'or' TRUE by BVFUNC_1:def 11
+      .=TRUE by BINARITH:19;
+    hence thesis;
+    suppose A7:
+      (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a,x)=TRUE) &
+      not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(b,x)=TRUE);
+      then consider x1 being Element of Y such that
+        A8: x1 in EqClass(z,CompF(PA,G)) & Pj(b,x1)<>TRUE;
+      A9:Pj(a,x1)=TRUE by A7,A8;
+        Pj(a 'imp' b,x1)
+       =('not' Pj(a,x1)) 'or' Pj(b,x1) by BVFUNC_1:def 11
+      .=('not' TRUE) 'or' FALSE by A8,A9,MARGREL1:43
+      .=FALSE 'or' FALSE by MARGREL1:41
+      .=FALSE by BINARITH:7;
+      then Pj(a 'imp' b,x1)<>TRUE by MARGREL1:43;
+    hence thesis by A5,A8;
+    suppose
+        not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a,x)=TRUE) &
+      (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(b,x)=TRUE);
+      then Pj(All(a,PA,G) 'imp' All(b,PA,G),z)
+       =('not' Pj(All(a,PA,G),z)) 'or' TRUE by A3,A6,BVFUNC_1:def 19
+      .=TRUE by BINARITH:19;
+    hence thesis;
+    suppose
+        not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a,x)=TRUE) &
+      not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(b,x)=TRUE);
+      then Pj(All(a,PA,G) 'imp' All(b,PA,G),z)
+       =('not' FALSE) 'or' Pj(All(b,PA,G),z) by A2,A6,BVFUNC_1:def 19
+       .=TRUE 'or' Pj(All(b,PA,G),z) by MARGREL1:41
+       .=TRUE by BINARITH:19;
+    hence thesis;
+end;
+
+theorem
+   for a,b being Element of Funcs(Y,BOOLEAN), PA being a_partition of Y holds
+  Ex(a 'or' b,PA,G) = Ex(a,PA,G) 'or' Ex(b,PA,G)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  let PA be a_partition of Y;
+  A1:Ex(a,PA,G) = B_SUP(a,CompF(PA,G)) by Def10;
+  A2:Ex(b,PA,G) = B_SUP(b,CompF(PA,G)) by Def10;
+   Ex(a 'or' b,PA,G) = B_SUP(a 'or' b,CompF(PA,G)) by Def10;
+  hence (Ex(a 'or' b,PA,G))=(Ex(a,PA,G) 'or' Ex(b,PA,G))
+    by A1,A2,BVFUNC_1:43;
+end;
+
+theorem
+   for a,b being Element of Funcs(Y,BOOLEAN),G being Subset of PARTITIONS(Y),
+     PA being a_partition of Y holds
+  Ex(a '&' b,PA,G) '<' Ex(a,PA,G) '&' Ex(b,PA,G)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  let G be Subset of PARTITIONS(Y);
+  let PA be a_partition of Y;
+A1:Ex(a '&' b,PA,G) = B_SUP(a '&' b,CompF(PA,G)) by Def10;
+A2:Ex(a,PA,G) = B_SUP(a,CompF(PA,G)) by Def10;
+A3:Ex(b,PA,G) = B_SUP(b,CompF(PA,G)) by Def10;
+    let z be Element of Y;
+    assume A4:Pj(Ex(a '&' b,PA,G),z)=TRUE;
+      now assume not (ex x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) & Pj(a '&' b,x)=TRUE);
+      then Pj(Ex(a '&' b,PA,G),z)=FALSE by A1,BVFUNC_1:def 20;
+      hence contradiction by A4,MARGREL1:43;
+    end;
+    then consider x1 being Element of Y such that
+      A5:x1 in EqClass(z,CompF(PA,G)) & Pj(a '&' b,x1)=TRUE;
+      Pj(a,x1) '&' Pj(b,x1)=TRUE by A5,VALUAT_1:def 6;
+    then A6:Pj(a,x1)=TRUE & Pj(b,x1)=TRUE by MARGREL1:45;
+    then A7:Pj(Ex(a,PA,G),z)=TRUE by A2,A5,BVFUNC_1:def 20;
+      Pj(Ex(a,PA,G) '&' Ex(b,PA,G),z)
+     = Pj(Ex(a,PA,G),z) '&' Pj(Ex(b,PA,G),z) by VALUAT_1:def 6
+    .= TRUE '&' TRUE by A3,A5,A6,A7,BVFUNC_1:def 20
+    .= TRUE by MARGREL1:45;
+    hence thesis;
+end;
+
+theorem
+   for a,b being Element of Funcs(Y,BOOLEAN), PA being a_partition of Y holds
+  Ex(a,PA,G) 'xor' Ex(b,PA,G) '<' Ex(a 'xor' b,PA,G)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  let PA be a_partition of Y;
+A1:Ex(a 'xor' b,PA,G) = B_SUP(a 'xor' b,CompF(PA,G)) by Def10;
+A2:Ex(a,PA,G) = B_SUP(a,CompF(PA,G)) by Def10;
+A3:Ex(b,PA,G) = B_SUP(b,CompF(PA,G)) by Def10;
+    let z be Element of Y;
+    assume A4:Pj(Ex(a,PA,G) 'xor' Ex(b,PA,G),z)=TRUE;
+A5:  Pj(Ex(a,PA,G) 'xor' Ex(b,PA,G),z)
+     =Pj(Ex(a,PA,G),z) 'xor' Pj(Ex(b,PA,G),z) by BVFUNC_1:def 8
+    .=('not' Pj(Ex(a,PA,G),z) '&' Pj(Ex(b,PA,G),z)) 'or'
+      (Pj(Ex(a,PA,G),z) '&' 'not' Pj(Ex(b,PA,G),z))
+          by BINARITH:def 2;
+A6:('not' Pj(Ex(a,PA,G),z) '&' Pj(Ex(b,PA,G),z))=TRUE or
+    ('not' Pj(Ex(a,PA,G),z) '&' Pj(Ex(b,PA,G),z))=FALSE
+      by MARGREL1:39;
+    A7:'not' FALSE=TRUE & 'not' TRUE=FALSE by MARGREL1:41;
+    A8:FALSE '&' FALSE =FALSE by MARGREL1:49;
+      now per cases by A4,A5,A6,BINARITH:7;
+      case ('not' Pj(Ex(a,PA,G),z) '&' Pj(Ex(b,PA,G),z))=TRUE;
+  then A9:'not' Pj(Ex(a,PA,G),z)=TRUE & Pj(Ex(b,PA,G),z)=TRUE by MARGREL1:45;
+      then Pj(Ex(a,PA,G),z)=FALSE by MARGREL1:41;
+      then A10:Pj(Ex(a,PA,G),z)<>TRUE by MARGREL1:43;
+        now assume
+          not (ex x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) & Pj(b,x)=TRUE);
+        then Pj(Ex(b,PA,G),z)=FALSE by A3,BVFUNC_1:def 20;
+        hence contradiction by A9,MARGREL1:43;
+      end;
+      then consider x1 being Element of Y such that
+        A11:x1 in EqClass(z,CompF(PA,G)) & Pj(b,x1)=TRUE;
+        Pj(a,x1)<>TRUE by A2,A10,A11,BVFUNC_1:def 20;
+      then A12:Pj(a,x1)=FALSE by MARGREL1:43;
+        Pj(a 'xor' b,x1) =Pj(a,x1) 'xor' Pj(b,x1) by BVFUNC_1:def 8
+      .=('not' Pj(a,x1) '&' Pj(b,x1)) 'or' (Pj(a,x1) '&' 'not' Pj(b,x1))
+           by BINARITH:def 2
+      .=TRUE 'or' FALSE by A7,A8,A11,A12,MARGREL1:50
+      .=TRUE by BINARITH:19;
+      hence thesis by A1,A11,BVFUNC_1:def 20;
+      case (Pj(Ex(a,PA,G),z) '&' 'not' Pj(Ex(b,PA,G),z))=TRUE;
+      then A13:Pj(Ex(a,PA,G),z)=TRUE & 'not'
+Pj(Ex(b,PA,G),z)=TRUE by MARGREL1:45;
+      then Pj(Ex(b,PA,G),z)=FALSE by MARGREL1:41;
+then A14:    Pj(Ex(b,PA,G),z)<>TRUE by MARGREL1:43;
+        now assume
+          not (ex x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) & Pj(a,x)=TRUE);
+        then Pj(Ex(a,PA,G),z)=FALSE by A2,BVFUNC_1:def 20;
+        hence contradiction by A13,MARGREL1:43;
+      end;
+      then consider x1 being Element of Y such that
+        A15:x1 in EqClass(z,CompF(PA,G)) & Pj(a,x1)=TRUE;
+        Pj(b,x1)<>TRUE by A3,A14,A15,BVFUNC_1:def 20;
+      then A16:Pj(b,x1)=FALSE by MARGREL1:43;
+        Pj(a 'xor' b,x1)=Pj(a,x1) 'xor' Pj(b,x1) by BVFUNC_1:def 8
+      .=('not' Pj(a,x1) '&' Pj(b,x1)) 'or' (Pj(a,x1) '&' 'not' Pj(b,x1))
+           by BINARITH:def 2
+      .=FALSE 'or' TRUE by A7,A8,A15,A16,MARGREL1:50
+      .=TRUE by BINARITH:19;
+      hence thesis by A1,A15,BVFUNC_1:def 20;
+    end;
+    hence thesis;
+end;
+
+theorem
+   for a,b being Element of Funcs(Y,BOOLEAN), PA being a_partition of Y holds
+  Ex(a,PA,G) 'imp' Ex(b,PA,G) '<' Ex(a 'imp' b,PA,G)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  let PA be a_partition of Y;
+A1:Ex(a 'imp' b,PA,G) = B_SUP(a 'imp' b,CompF(PA,G)) by Def10;
+A2:Ex(a,PA,G) = B_SUP(a,CompF(PA,G)) by Def10;
+A3:Ex(b,PA,G) = B_SUP(b,CompF(PA,G)) by Def10;
+    let z be Element of Y;
+    assume Pj(Ex(a,PA,G) 'imp' Ex(b,PA,G),z)=TRUE;
+    then A4:('not' Pj(Ex(a,PA,G),z)) 'or' Pj(Ex(b,PA,G),z)=TRUE
+      by BVFUNC_1:def 11;
+A5:  ('not' Pj(Ex(a,PA,G),z))=TRUE or
+    ('not' Pj(Ex(a,PA,G),z))=FALSE by MARGREL1:39;
+    A6:z in EqClass(z,CompF(PA,G)) &
+          EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      now per cases by A4,A5,BINARITH:7;
+      case ('not' Pj(Ex(a,PA,G),z))=TRUE;
+      then Pj(Ex(a,PA,G),z)=FALSE by MARGREL1:41;
+      then Pj(Ex(a,PA,G),z)<>TRUE by MARGREL1:43;
+then A7:   Pj(a,z)<>TRUE by A2,A6,BVFUNC_1:def 20;
+        Pj(a 'imp' b,z)=('not' Pj(a,z)) 'or' Pj(b,z) by BVFUNC_1:def 11
+      .=('not' FALSE) 'or' Pj(b,z) by A7,MARGREL1:43
+      .=TRUE 'or' Pj(b,z) by MARGREL1:41
+      .=TRUE by BINARITH:19;
+      hence thesis by A1,A6,BVFUNC_1:def 20;
+      case A8:Pj(Ex(b,PA,G),z)=TRUE;
+        now assume
+          not (ex x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) & Pj(b,x)=TRUE);
+        then Pj(Ex(b,PA,G),z)=FALSE by A3,BVFUNC_1:def 20;
+        hence contradiction by A8,MARGREL1:43;
+      end;
+      then consider x1 being Element of Y such that
+        A9:x1 in EqClass(z,CompF(PA,G)) & Pj(b,x1)=TRUE;
+        Pj(a 'imp' b,x1) =('not' Pj(a,x1)) 'or' Pj(b,x1) by BVFUNC_1:def 11
+      .=TRUE by A9,BINARITH:19;
+      hence thesis by A1,A9,BVFUNC_1:def 20;
+    end;
+    hence thesis;
+end;
+
+reserve a, u for Element of Funcs(Y,BOOLEAN);
+
+theorem :: De'Morgan's Law
+   for PA being a_partition of Y holds 'not' All(a,PA,G) = Ex('not' a,PA,G)
+proof
+  let PA be a_partition of Y;
+A1:All(a,PA,G) = B_INF(a,CompF(PA,G)) by Def9;
+A2:Ex('not' a,PA,G) = B_SUP('not' a,CompF(PA,G)) by Def10;
+A3:for z being Element of Y holds
+     Pj('not' B_INF(a,CompF(PA,G)),z) = Pj(B_SUP('not' a,CompF(PA,G)),z)
+  proof
+    let z be Element of Y;
+    per cases;
+    suppose A4:
+      (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a,x)=TRUE) &
+      (ex x being Element of Y st
+         x in EqClass(z,CompF(PA,G)) & Pj('not' a,x)=TRUE);
+      then consider x1 being Element of Y such that
+        A5:x1 in EqClass(z,CompF(PA,G)) & Pj('not' a,x1)=TRUE;
+        'not' Pj(a,x1) = TRUE by A5,VALUAT_1:def 5;
+      then Pj(a,x1) = FALSE by MARGREL1:41;
+      then Pj(a,x1) <>TRUE by MARGREL1:43;
+    hence thesis by A4,A5;
+    suppose A6:
+      (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a,x)=TRUE) &
+      not (ex x being Element of Y st
+             x in EqClass(z,CompF(PA,G)) & Pj('not' a,x)=TRUE);
+      then A7:Pj(B_INF(a,CompF(PA,G)),z) = TRUE by BVFUNC_1:def 19;
+      A8:Pj(B_SUP('not' a,CompF(PA,G)),z) = FALSE by A6,BVFUNC_1:def 20;
+        Pj('not' B_INF(a,CompF(PA,G)),z) = 'not' TRUE by A7,VALUAT_1:def 5;
+    hence thesis by A8,MARGREL1:41;
+    suppose A9:
+      not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a,x)=TRUE) &
+      (ex x being Element of Y st
+         x in EqClass(z,CompF(PA,G)) & Pj('not' a,x)=TRUE);
+      then A10:Pj(B_INF(a,CompF(PA,G)),z) = FALSE by BVFUNC_1:def 19;
+      A11:Pj(B_SUP('not' a,CompF(PA,G)),z) = TRUE by A9,BVFUNC_1:def 20;
+        Pj('not' B_INF(a,CompF(PA,G)),z) = 'not' FALSE by A10,VALUAT_1:def 5;
+    hence thesis by A11,MARGREL1:41;
+    suppose A12:
+      not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a,x)=TRUE) &
+      not (ex x being Element of Y st
+             x in EqClass(z,CompF(PA,G)) & Pj('not' a,x)=TRUE);
+      then consider x1 being Element of Y such that
+        A13:x1 in EqClass(z,CompF(PA,G)) & Pj(a,x1)<>TRUE;
+        Pj('not' a,x1)<>TRUE by A12,A13;
+      then 'not' Pj(a,x1)<>TRUE by VALUAT_1:def 5;
+      then 'not' Pj(a,x1)= FALSE by MARGREL1:43;
+    hence thesis by A13,MARGREL1:41;
+  end;
+  consider k3 being Function such that
+A14: ('not' All(a,PA,G))=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A15: Ex('not' a,PA,G)=k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+    for u being set st u in Y holds k3.u=k4.u by A1,A2,A3,A14,A15;
+  hence thesis by A14,A15,FUNCT_1:9;
+end;
+
+theorem :: De'Morgan's Law
+   for PA being a_partition of Y holds 'not' Ex(a,PA,G) = All('not' a,PA,G)
+proof
+  let PA be a_partition of Y;
+A1:All('not' a,PA,G) = B_INF('not' a,CompF(PA,G)) by Def9;
+A2:Ex(a,PA,G) = B_SUP(a,CompF(PA,G)) by Def10;
+A3:for z being Element of Y holds
+     Pj('not' B_SUP(a,CompF(PA,G)),z) = Pj(B_INF('not' a,CompF(PA,G)),z)
+  proof
+    let z be Element of Y;
+    per cases;
+    suppose A4:
+      (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj('not' a,x)=TRUE) &
+      (ex x being Element of Y st
+          x in EqClass(z,CompF(PA,G)) & Pj(a,x)=TRUE);
+       then consider x1 being Element of Y such that
+         A5:x1 in EqClass(z,CompF(PA,G)) & Pj(a,x1)=TRUE;
+         Pj('not' a,x1)='not' TRUE by A5,VALUAT_1:def 5;
+       then Pj('not' a,x1)=FALSE by MARGREL1:41;
+       then Pj('not' a,x1)<>TRUE by MARGREL1:43;
+    hence thesis by A4,A5;
+    suppose A6:
+      (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj('not' a,x)=TRUE) &
+      not (ex x being Element of Y st
+          x in EqClass(z,CompF(PA,G)) & Pj(a,x)=TRUE);
+      then Pj(B_SUP(a,CompF(PA,G)),z) = FALSE by BVFUNC_1:def 20;
+      then 'not' Pj(B_SUP(a,CompF(PA,G)),z) = TRUE by MARGREL1:41;
+      then Pj('not' B_SUP(a,CompF(PA,G)),z) = TRUE by VALUAT_1:def 5;
+    hence thesis by A6,BVFUNC_1:def 19;
+    suppose A7:
+      not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj('not' a,x)=TRUE) &
+      (ex x being Element of Y st
+          x in EqClass(z,CompF(PA,G)) & Pj(a,x)=TRUE);
+      then A8:Pj(B_INF('not' a,CompF(PA,G)),z) = FALSE by BVFUNC_1:def 19;
+        Pj(B_SUP(a,CompF(PA,G)),z) = TRUE by A7,BVFUNC_1:def 20;
+      then Pj('not' B_SUP(a,CompF(PA,G)),z) = 'not' TRUE by VALUAT_1:def 5;
+    hence thesis by A8,MARGREL1:41;
+    suppose A9:
+      not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj('not' a,x)=TRUE) &
+      not (ex x being Element of Y st
+          x in EqClass(z,CompF(PA,G)) & Pj(a,x)=TRUE);
+      then consider x1 being Element of Y such that
+        A10:x1 in EqClass(z,CompF(PA,G)) & Pj('not' a,x1)<>TRUE;
+        Pj('not' a,x1)=FALSE by A10,MARGREL1:43;
+      then 'not' Pj(a,x1)=FALSE by VALUAT_1:def 5;
+      then Pj(a,x1)=TRUE by MARGREL1:41;
+      hence thesis by A9,A10;
+  end;
+  consider k3 being Function such that
+A11: ('not' Ex(a,PA,G))=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A12: All('not' a,PA,G)=k4 & dom k4=Y & rng k4 c= BOOLEAN
+                     by FUNCT_2:def 2;
+    for u being set st u in Y holds k3.u=k4.u by A1,A2,A3,A11,A12;
+  hence thesis by A11,A12,FUNCT_1:9;
+end;
+
+theorem
+   for PA being a_partition of Y st u is_independent_of PA,G holds
+  All(u 'imp' a,PA,G) = u 'imp' All(a,PA,G)
+proof
+  let PA be a_partition of Y;
+  assume u is_independent_of PA,G;
+then A1:u is_dependent_of CompF(PA,G) by Def8;
+A2:All(a,PA,G) = B_INF(a,CompF(PA,G)) by Def9;
+A3:All(u 'imp' a,PA,G) = B_INF(u 'imp' a,CompF(PA,G)) by Def9;
+A4:All(u 'imp' a,PA,G) '<' (u 'imp' All(a,PA,G))
+  proof
+    let z be Element of Y;
+    assume A5:Pj(All(u 'imp' a,PA,G),z)= TRUE;
+A6:  now assume
+        not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(u 'imp' a,x)=TRUE);
+      then Pj(B_INF(u 'imp' a,CompF(PA,G)),z) = FALSE by BVFUNC_1:def 19;
+      hence contradiction by A3,A5,MARGREL1:43;
+    end;
+    A7:z in EqClass(z,CompF(PA,G)) by T_1TOPSP:def 1;
+    A8:Pj(u 'imp' All(a,PA,G),z) = ('not' Pj(u,z)) 'or' Pj(All(a,PA,G),z)
+          by BVFUNC_1:def 11;
+    per cases;
+    suppose
+        (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(a,x)=TRUE);
+      then Pj(All(a,PA,G),z) =TRUE by A2,BVFUNC_1:def 19;
+      hence thesis by A8,BINARITH:19;
+    suppose
+        not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(a,x)=TRUE) &
+      (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           ('not' Pj(u,x))=TRUE);
+      then ('not' Pj(u,z))=TRUE by A7;
+      hence thesis by A8,BINARITH:19;
+    suppose A9:
+      not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(a,x)=TRUE) &
+      not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           ('not' Pj(u,x))=TRUE);
+      then consider x1 being Element of Y such that
+A10:     x1 in EqClass(z,CompF(PA,G)) & ('not' Pj(u,x1))<>TRUE;
+      consider x2 being Element of Y such that
+A11:    x2 in EqClass(z,CompF(PA,G)) & Pj(a,x2)<>TRUE by A9;
+   u.x1 = u.x2 by A1,A10,A11,BVFUNC_1:def 18;
+      then ('not' Pj(u,x2))=FALSE by A10,MARGREL1:43;
+      then A12:Pj(u,x2)=TRUE by MARGREL1:41;
+        Pj(a,x2)=FALSE by A11,MARGREL1:43;
+      then Pj(u 'imp' a,x2) = 'not' TRUE 'or' FALSE by A12,BVFUNC_1:def 11;
+      then Pj(u 'imp' a,x2) = FALSE 'or' FALSE by MARGREL1:41
+                      .= FALSE by BINARITH:7;
+      then Pj(u 'imp' a,x2) <>TRUE by MARGREL1:43;
+      hence thesis by A6,A11;
+  end;
+    (u 'imp' All(a,PA,G)) '<' All(u 'imp' a,PA,G)
+  proof
+    let z be Element of Y;
+    assume Pj(u 'imp' All(a,PA,G),z)= TRUE;
+    then A13:('not' Pj(u,z)) 'or' Pj(All(a,PA,G),z) = TRUE by BVFUNC_1:def 11;
+A14:  Pj(All(a,PA,G),z)=TRUE or Pj(All(a,PA,G),z)=FALSE
+      by MARGREL1:39;
+      now per cases by A13,A14,BINARITH:7;
+    suppose A15:Pj(All(a,PA,G),z)=TRUE;
+A16:    now assume
+          not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a,x)=TRUE);
+        then Pj(B_INF(a,CompF(PA,G)),z) = FALSE by BVFUNC_1:def 19;
+        hence contradiction by A2,A15,MARGREL1:43;
+      end;
+        for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(u 'imp' a,x)=TRUE
+      proof
+        let x be Element of Y;
+        assume A17: x in EqClass(z,CompF(PA,G));
+          Pj(u 'imp' a,x) = ('not' Pj(u,x)) 'or' Pj(a,x) by BVFUNC_1:def 11
+                       .= ('not' Pj(u,x)) 'or' TRUE by A16,A17
+                       .= TRUE by BINARITH:19;
+        hence thesis;
+      end;
+    hence thesis by A3,BVFUNC_1:def 19;
+    suppose A18:Pj(All(a,PA,G),z)<>TRUE & ('not' Pj(u,z))=TRUE;
+      A19:z in EqClass(z,CompF(PA,G)) &
+            EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+        for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(u 'imp' a,x)=TRUE
+      proof
+        let x be Element of Y;
+        assume A20:x in EqClass(z,CompF(PA,G));
+        A21:Pj(u 'imp' a,x)=('not' Pj(u,x)) 'or' Pj(a,x) by BVFUNC_1:def 11;
+         u.x = u.z by A1,A19,A20,BVFUNC_1:def 18;
+        hence Pj(u 'imp' a,x)=TRUE by A18,A21,BINARITH:19;
+      end;
+    hence thesis by A3,BVFUNC_1:def 19;
+    end;
+    hence thesis;
+  end;
+  hence thesis by A4,BVFUNC_1:18;
+end;
+
+theorem
+   for PA being a_partition of Y st u is_independent_of PA,G holds
+  All(a 'imp' u,PA,G) = Ex(a,PA,G) 'imp' u
+proof
+  let PA be a_partition of Y;
+  assume u is_independent_of PA,G;
+then A1:u is_dependent_of CompF(PA,G) by Def8;
+A2:Ex(a,PA,G) = B_SUP(a,CompF(PA,G)) by Def10;
+A3:All(a 'imp' u,PA,G) = B_INF(a 'imp' u,CompF(PA,G)) by Def9;
+A4:All(a 'imp' u,PA,G) '<' (Ex(a,PA,G) 'imp' u)
+  proof
+    let z be Element of Y;
+    assume Pj(All(a 'imp' u,PA,G),z)= TRUE;
+    then A5:Pj(B_INF(a 'imp' u,CompF(PA,G)),z)=TRUE by Def9;
+A6: now assume
+        not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a 'imp' u,x)=TRUE);
+      then Pj(B_INF(a 'imp' u,CompF(PA,G)),z)=FALSE by BVFUNC_1:def 19;
+      hence contradiction by A5,MARGREL1:43;
+    end;
+    A7:z in EqClass(z,CompF(PA,G)) by T_1TOPSP:def 1;
+    A8:Pj(Ex(a,PA,G) 'imp' u,z) = ('not' Pj(Ex(a,PA,G),z)) 'or' Pj(u,z)
+          by BVFUNC_1:def 11;
+    per cases;
+    suppose
+        (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(u,x)=TRUE);
+      then Pj(Ex(a,PA,G) 'imp' u,z) = ('not' Pj(Ex(a,PA,G),z)) 'or' TRUE by A7,
+A8
+                              .= TRUE by BINARITH:19;
+    hence thesis;
+    suppose A9:
+      not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(u,x)=TRUE) &
+      (ex x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) & Pj(a,x)=TRUE);
+      then consider x1 being Element of Y such that
+        A10:x1 in EqClass(z,CompF(PA,G)) & Pj(u,x1)<>TRUE;
+      consider x2 being Element of Y such that
+        A11:x2 in EqClass(z,CompF(PA,G)) & Pj(a,x2)=TRUE by A9;
+      A12:u.x1 = u.x2 by A1,A10,A11,BVFUNC_1:def 18;
+        Pj(a 'imp' u,x2) = ('not' Pj(a,x2)) 'or' Pj(u,x2) by BVFUNC_1:def 11
+                      .= ('not' TRUE) 'or' FALSE by A10,A11,A12,MARGREL1:43
+                      .= FALSE 'or' FALSE by MARGREL1:41
+                      .= FALSE by BINARITH:7;
+      then Pj(a 'imp' u,x2) <> TRUE by MARGREL1:43;
+    hence thesis by A6,A11;
+    suppose
+        not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(u,x)=TRUE) &
+      not (ex x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) & Pj(a,x)=TRUE);
+      then Pj(Ex(a,PA,G) 'imp' u,z) = ('not' FALSE) 'or' Pj(u,z)
+         by A2,A8,BVFUNC_1:def 20
+                              .= TRUE 'or' Pj(u,z) by MARGREL1:41
+                              .= TRUE by BINARITH:19;
+    hence thesis;
+  end;
+    (Ex(a,PA,G) 'imp' u) '<' All(a 'imp' u,PA,G)
+  proof
+    let z be Element of Y;
+    assume Pj(Ex(a,PA,G) 'imp' u,z)= TRUE;
+    then A13:('not' Pj(Ex(a,PA,G),z)) 'or' Pj(u,z) = TRUE by BVFUNC_1:def 11;
+    A14:('not' Pj(Ex(a,PA,G),z))= TRUE or
+        ('not' Pj(Ex(a,PA,G),z))= FALSE by MARGREL1:39;
+    A15:z in EqClass(z,CompF(PA,G)) &
+          EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      now per cases by A13,A14,BINARITH:7,MARGREL1:39;
+      case A16:Pj(u,z)= TRUE;
+        for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a 'imp' u,x)=TRUE
+      proof
+        let x be Element of Y;
+        assume A17:x in EqClass(z,CompF(PA,G));
+        A18:Pj(a 'imp' u,x)=('not' Pj(a,x)) 'or' Pj(u,x) by BVFUNC_1:def 11;
+         u.x = u.z by A1,A15,A17,BVFUNC_1:def 18;
+        hence thesis by A16,A18,BINARITH:19;
+      end;
+      hence thesis by A3,BVFUNC_1:def 19;
+      case ('not' Pj(Ex(a,PA,G),z))= TRUE & Pj(u,z)= FALSE;
+      then A19:Pj(Ex(a,PA,G),z) = FALSE by MARGREL1:41;
+A20:    now assume
+          (ex x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) & Pj(a,x)=TRUE);
+        then Pj(Ex(a,PA,G),z) = TRUE by A2,BVFUNC_1:def 20;
+        hence contradiction by A19,MARGREL1:43;
+      end;
+        for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a 'imp' u,x)=TRUE
+      proof
+        let x be Element of Y;
+        assume A21:x in EqClass(z,CompF(PA,G));
+        A22:Pj(a 'imp' u,x)=('not' Pj(a,x)) 'or' Pj(u,x) by BVFUNC_1:def 11;
+          Pj(a,x)<>TRUE by A20,A21;
+        then Pj(a,x)=FALSE by MARGREL1:43;
+        then Pj(a 'imp' u,x) = TRUE 'or' Pj(u,x) by A22,MARGREL1:41
+                       .= TRUE by BINARITH:19;
+        hence thesis;
+      end;
+      hence thesis by A3,BVFUNC_1:def 19;
+    end;
+    hence thesis;
+  end;
+  hence thesis by A4,BVFUNC_1:18;
+end;
+
+theorem Th24:
+ for PA being a_partition of Y st u is_independent_of PA,G holds
+  All(u 'or' a,PA,G) = u 'or' All(a,PA,G)
+proof
+  let PA be a_partition of Y;
+  assume u is_independent_of PA,G;
+then A1:u is_dependent_of CompF(PA,G) by Def8;
+A2:All(u 'or' a,PA,G) = B_INF(u 'or' a,CompF(PA,G)) by Def9;
+A3:All(a,PA,G) = B_INF(a,CompF(PA,G)) by Def9;
+A4:for z being Element of Y holds
+     Pj(B_INF(u 'or' a,CompF(PA,G)),z) = Pj(u 'or' B_INF(a,CompF(PA,G)),z)
+  proof
+    let z be Element of Y;
+    A5:Pj(u 'or' B_INF(a,CompF(PA,G)),z) =
+    Pj(u,z) 'or' Pj(B_INF(a,CompF(PA,G)),z) by BVFUNC_1:def 7;
+    per cases;
+    suppose A6:
+      (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a,x)=TRUE);
+      then Pj(B_INF(a,CompF(PA,G)),z) = TRUE by BVFUNC_1:def 19;
+      then A7:Pj(u 'or' B_INF(a,CompF(PA,G)),z) = TRUE by A5,BINARITH:19;
+      for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(u 'or' a,x)=TRUE
+      proof
+        let x be Element of Y;
+        assume A8: x in EqClass(z,CompF(PA,G));
+          Pj(u 'or' a,x) = Pj(u,x) 'or' Pj(a,x) by BVFUNC_1:def 7
+                      .= Pj(u,x) 'or' TRUE by A6,A8
+                      .= TRUE by BINARITH:19;
+        hence thesis;
+      end;
+    hence thesis by A7,BVFUNC_1:def 19;
+    suppose A9:
+      not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a,x)=TRUE) &
+      (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(u,x)=TRUE);
+        z in EqClass(z,CompF(PA,G)) by T_1TOPSP:def 1;
+      then Pj(u 'or' B_INF(a,CompF(PA,G)),z) =
+      TRUE 'or' Pj(B_INF(a,CompF(PA,G)),z) by A5,A9;
+  then A10:Pj(u 'or' B_INF(a,CompF(PA,G)),z) = TRUE by BINARITH:19;
+        for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(u 'or' a,x)=TRUE
+      proof
+        let x be Element of Y;
+        assume A11: x in EqClass(z,CompF(PA,G));
+          Pj(u 'or' a,x) = Pj(u,x) 'or' Pj(a,x) by BVFUNC_1:def 7
+                      .= TRUE 'or' Pj(a,x) by A9,A11
+                      .= TRUE by BINARITH:19;
+        hence thesis;
+      end;
+    hence thesis by A10,BVFUNC_1:def 19;
+    suppose A12:
+      not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a,x)=TRUE) &
+      not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(u,x)=TRUE);
+      then A13:Pj(B_INF(a,CompF(PA,G)),z) = FALSE by BVFUNC_1:def 19;
+      consider x1 being Element of Y such that
+A14:    x1 in EqClass(z,CompF(PA,G)) & Pj(a,x1)<>TRUE by A12;
+      consider x2 being Element of Y such that
+A15:    x2 in EqClass(z,CompF(PA,G)) & Pj(u,x2)<>TRUE by A12;
+      A16:z in EqClass(z,CompF(PA,G)) &
+            EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+       u.x1 = u.x2 by A1,A14,A15,BVFUNC_1:def 18;
+      then A17:Pj(u,x1) = FALSE by A15,MARGREL1:43;
+        Pj(a,x1) = FALSE by A14,MARGREL1:43;
+      then Pj(u 'or' a,x1) = FALSE 'or' FALSE by A17,BVFUNC_1:def 7;
+      then Pj(u 'or' a,x1) = FALSE by BINARITH:7;
+      then Pj(u 'or' a,x1) <> TRUE by MARGREL1:43;
+      then A18:Pj(B_INF(u 'or' a,CompF(PA,G)),z) = FALSE by A14,BVFUNC_1:def 19
+;
+        u.x1 = u.z by A1,A14,A16,BVFUNC_1:def 18;
+    hence thesis by A5,A13,A17,A18,BINARITH:7;
+  end;
+  consider k3 being Function such that
+              A19: (All(u 'or' a,PA,G))=k3 & dom k3=Y & rng k3 c= BOOLEAN
+                     by FUNCT_2:def 2;
+  consider k4 being Function such that
+    A20: (u 'or' All(a,PA,G))=k4 & dom k4=Y & rng k4 c= BOOLEAN
+      by FUNCT_2:def 2;
+    for u being set st u in Y holds k3.u=k4.u by A2,A3,A4,A19,A20;
+  hence thesis by A19,A20,FUNCT_1:9;
+end;
+
+theorem
+   for PA being a_partition of Y st u is_independent_of PA,G holds
+  All(a 'or' u,PA,G) = All(a,PA,G) 'or' u by Th24;
+
+theorem
+   for PA being a_partition of Y st u is_independent_of PA,G holds
+  All(a 'or' u,PA,G) '<' Ex(a,PA,G) 'or' u
+proof
+  let PA be a_partition of Y;
+  assume u is_independent_of PA,G;
+then A1:u is_dependent_of CompF(PA,G) by Def8;
+A2:Ex(a,PA,G) = B_SUP(a,CompF(PA,G)) by Def10;
+    let z be Element of Y;
+    assume Pj(All(a 'or' u,PA,G),z)= TRUE;
+    then A3:Pj(B_INF(a 'or' u,CompF(PA,G)),z)=TRUE by Def9;
+A4:  now assume
+        not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a 'or' u,x)=TRUE);
+      then Pj(B_INF(a 'or' u,CompF(PA,G)),z)=FALSE by BVFUNC_1:def 19;
+      hence contradiction by A3,MARGREL1:43;
+    end;
+    A5:for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(a,x)=TRUE or Pj(u,x)=TRUE
+    proof
+      let x be Element of Y;
+      assume x in EqClass(z,CompF(PA,G));
+      then Pj(a 'or' u,x)=TRUE by A4;
+      then A6:Pj(a,x) 'or' Pj(u,x)=TRUE by BVFUNC_1:def 7;
+        Pj(u,x)= TRUE or Pj(u,x)=FALSE by MARGREL1:39;
+      hence thesis by A6,BINARITH:7;
+    end;
+    A7:z in EqClass(z,CompF(PA,G)) by T_1TOPSP:def 1;
+    A8:Pj(Ex(a,PA,G) 'or' u,z) = Pj(Ex(a,PA,G),z) 'or' Pj(u,z)
+          by BVFUNC_1:def 7;
+    per cases;
+    suppose
+        (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(u,x)=TRUE);
+      then Pj(Ex(a,PA,G) 'or' u,z) = Pj(Ex(a,PA,G),z) 'or' TRUE by A7,A8
+                             .= TRUE by BINARITH:19;
+    hence thesis;
+    suppose
+        not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(u,x)=TRUE) &
+      (ex x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) & Pj(a,x)=TRUE);
+      then Pj(Ex(a,PA,G) 'or' u,z) = TRUE 'or' Pj(u,z) by A2,A8,BVFUNC_1:def 20
+                             .= TRUE by BINARITH:19;
+    hence thesis;
+    suppose A9:
+      not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(u,x)=TRUE) &
+      not (ex x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) & Pj(a,x)=TRUE);
+      A10:z in EqClass(z,CompF(PA,G)) &
+            EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      then A11:Pj(a,z)<>TRUE by A9;
+      consider x1 being Element of Y such that
+        A12:x1 in EqClass(z,CompF(PA,G)) & Pj(u,x1)<>TRUE by A9;
+       u.x1=u.z by A1,A10,A12,BVFUNC_1:def 18;
+    hence thesis by A5,A10,A11,A12;
+end;
+
+theorem Th27:
+ for PA being a_partition of Y st u is_independent_of PA,G holds
+  All(u '&' a,PA,G) = u '&' All(a,PA,G)
+proof
+  let PA be a_partition of Y;
+  assume u is_independent_of PA,G;
+then A1:u is_dependent_of CompF(PA,G) by Def8;
+A2:All(u '&' a,PA,G) = B_INF(u '&' a,CompF(PA,G)) by Def9;
+A3:All(a,PA,G) = B_INF(a,CompF(PA,G)) by Def9;
+A4:All(u '&' a,PA,G) '<' (u '&' All(a,PA,G))
+  proof
+    let z be Element of Y;
+    assume A5:Pj(All(u '&' a,PA,G),z)= TRUE;
+A6:  now assume
+        not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(u '&' a,x)=TRUE);
+      then Pj(All(u '&' a,PA,G),z)= FALSE by A2,BVFUNC_1:def 19;
+      hence contradiction by A5,MARGREL1:43;
+    end;
+    A7:for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a,x)=TRUE
+    proof
+      let x be Element of Y;
+      assume x in EqClass(z,CompF(PA,G));
+      then A8:Pj(u '&' a,x)=TRUE by A6;
+        Pj(u '&' a,x)=Pj(u,x) '&' Pj(a,x) by VALUAT_1:def 6;
+      hence thesis by A8,MARGREL1:45;
+    end;
+    A9:for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(u,x)=TRUE
+    proof
+      let x be Element of Y;
+      assume x in EqClass(z,CompF(PA,G));
+      then A10:Pj(u '&' a,x)=TRUE by A6;
+        Pj(u '&' a,x)=Pj(u,x) '&' Pj(a,x) by VALUAT_1:def 6;
+      hence thesis by A10,MARGREL1:45;
+    end;
+    A11:Pj(u '&' All(a,PA,G),z)=
+        Pj(u,z) '&' Pj(All(a,PA,G),z) by VALUAT_1:def 6;
+    A12:Pj(All(a,PA,G),z)=TRUE by A3,A7,BVFUNC_1:def 19;
+      z in EqClass(z,CompF(PA,G)) by T_1TOPSP:def 1;
+    then Pj(u,z)=TRUE by A9;
+    hence thesis by A11,A12,MARGREL1:45;
+  end;
+    (u '&' All(a,PA,G)) '<' All(u '&' a,PA,G)
+  proof
+    let z be Element of Y;
+    assume Pj(u '&' All(a,PA,G),z)= TRUE;
+    then Pj(u,z) '&' Pj(All(a,PA,G),z)= TRUE by VALUAT_1:def 6;
+    then A13:(Pj(u,z)=TRUE & Pj(All(a,PA,G),z)=TRUE ) by MARGREL1:45;
+A14:  now assume
+        not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a,x)=TRUE);
+      then Pj(All(a,PA,G),z)=FALSE by A3,BVFUNC_1:def 19;
+      hence contradiction by A13,MARGREL1:43;
+    end;
+    A15:z in EqClass(z,CompF(PA,G)) &
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(u '&' a,x)=TRUE
+    proof
+      let x be Element of Y;
+      assume A16:x in EqClass(z,CompF(PA,G));
+      then A17:Pj(a,x)=TRUE by A14;
+       u.x=u.z by A1,A15,A16,BVFUNC_1:def 18;
+      then Pj(u '&' a,x) =TRUE '&' TRUE by A13,A17,VALUAT_1:def 6
+                   .=TRUE by MARGREL1:45;
+      hence thesis;
+    end;
+    hence thesis by A2,BVFUNC_1:def 19;
+  end;
+  hence thesis by A4,BVFUNC_1:18;
+end;
+
+theorem
+   for PA being a_partition of Y st u is_independent_of PA,G holds
+  All(a '&' u,PA,G) = All(a,PA,G) '&' u by Th27;
+
+theorem
+   for PA being a_partition of Y holds
+  All(a '&' u,PA,G) '<' Ex(a,PA,G) '&' u
+proof
+  let PA be a_partition of Y;
+A1:Ex(a,PA,G) = B_SUP(a,CompF(PA,G)) by Def10;
+    let z be Element of Y;
+    assume Pj(All(a '&' u,PA,G),z)= TRUE;
+    then A2:Pj(B_INF(a '&' u,CompF(PA,G)),z)=TRUE by Def9;
+A3:  now assume
+        not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(a '&' u,x)=TRUE);
+      then Pj(B_INF(a '&' u,CompF(PA,G)),z)=FALSE by BVFUNC_1:def 19;
+      hence contradiction by A2,MARGREL1:43;
+    end;
+    A4:for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(a,x)=TRUE & Pj(u,x)=TRUE
+    proof
+      let x be Element of Y;
+      assume x in EqClass(z,CompF(PA,G));
+      then Pj(a '&' u,x)=TRUE by A3;
+      then Pj(a,x) '&' Pj(u,x)=TRUE by VALUAT_1:def 6;
+      hence thesis by MARGREL1:45;
+    end;
+    A5:z in EqClass(z,CompF(PA,G)) &
+          EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+    A6:Pj(Ex(a,PA,G) '&' u,z) = Pj(Ex(a,PA,G),z) '&' Pj(u,z)
+          by VALUAT_1:def 6;
+    per cases;
+     suppose A7:
+      (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(u,x)=TRUE);
+        now per cases;
+       suppose (ex x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) & Pj(a,x)=TRUE);
+       then Pj(Ex(a,PA,G),z) = TRUE by A1,BVFUNC_1:def 20;
+       hence Pj(Ex(a,PA,G) '&' u,z) = TRUE '&' TRUE by A5,A6,A7
+                            .= TRUE by MARGREL1:45;
+       suppose not (ex x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) & Pj(a,x)=TRUE);
+       then Pj(a,z)<>TRUE by A5;
+       hence thesis by A4,A5;
+      end;
+    hence thesis;
+    suppose
+     not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(u,x)=TRUE);
+      then consider x1 being Element of Y such that
+        A8:x1 in EqClass(z,CompF(PA,G)) & Pj(u,x1)<>TRUE;
+    thus thesis by A4,A8;
+end;
+
+theorem Th30:
+ for PA being a_partition of Y st u is_independent_of PA,G holds
+  All(u 'xor' a,PA,G) '<' u 'xor' All(a,PA,G)
+proof
+  let PA be a_partition of Y;
+  A1:'not' FALSE=TRUE & 'not' TRUE=FALSE by MARGREL1:41;
+  assume u is_independent_of PA,G;
+then A2:u is_dependent_of CompF(PA,G) by Def8;
+A3:All(a,PA,G) = B_INF(a,CompF(PA,G)) by Def9;
+    let z be Element of Y;
+    assume Pj(All(u 'xor' a,PA,G),z)= TRUE;
+    then A4:Pj(B_INF(u 'xor' a,CompF(PA,G)),z)=TRUE by Def9;
+A5: now assume
+        not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(u 'xor' a,x)=TRUE);
+      then Pj(B_INF(u 'xor' a,CompF(PA,G)),z)=FALSE by BVFUNC_1:def 19;
+      hence contradiction by A4,MARGREL1:43;
+    end;
+    A6:z in EqClass(z,CompF(PA,G)) &
+          EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+    A7:Pj(u 'xor' All(a,PA,G),z)
+      = Pj(All(a,PA,G),z) 'xor' Pj(u,z) by BVFUNC_1:def 8;
+    per cases;
+    suppose A8:
+      (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(u,x)=TRUE) &
+      (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(a,x)=TRUE);
+      then A9:Pj(u,z)=TRUE by A6;
+      A10:Pj(a,z)=TRUE by A6,A8;
+      A11:FALSE '&' TRUE = FALSE & TRUE '&' FALSE =FALSE by MARGREL1:45;
+      A12:Pj(u 'xor' a,z)=TRUE by A5,A6;
+        Pj(u 'xor' a,z)
+        =Pj(a,z) 'xor' Pj(u,z) by BVFUNC_1:def 8
+       .=('not' Pj(a,z) '&' Pj(u,z)) 'or' (Pj(a,z) '&' 'not'
+Pj(u,z)) by BINARITH:def 2
+       .=FALSE by A1,A9,A10,A11,BINARITH:7;
+    hence thesis by A12,MARGREL1:43;
+    suppose A13:
+      (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(u,x)=TRUE) &
+      not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(a,x)=TRUE);
+      then A14:Pj(All(a,PA,G),z) = FALSE by A3,BVFUNC_1:def 19;
+      consider x1 being Element of Y such that
+         A15:x1 in EqClass(z,CompF(PA,G)) & Pj(a,x1)<>TRUE by A13;
+      A16:Pj(u,x1)=TRUE by A13,A15;
+      A17:u.z=u.x1 by A2,A6,A15,BVFUNC_1:def 18;
+      A18:FALSE '&' FALSE =FALSE by MARGREL1:49;
+        Pj(u 'xor' All(a,PA,G),z)
+      =('not' FALSE '&' TRUE) 'or' (FALSE '&' 'not'
+TRUE) by A7,A14,A16,A17,BINARITH:def 2
+       .=TRUE 'or' FALSE by A1,A18,MARGREL1:50
+       .=TRUE by BINARITH:7;
+    hence thesis;
+    suppose
+       not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(u,x)=TRUE);
+      then consider x1 being Element of Y such that
+A19:    x1 in EqClass(z,CompF(PA,G)) & Pj(u,x1)<>TRUE;
+A20:  FALSE '&' TRUE = FALSE & TRUE '&' FALSE =FALSE by MARGREL1:45;
+        now per cases;
+      suppose for x being Element of Y st
+        x in EqClass(z,CompF(PA,G)) holds Pj(a,x)=TRUE;
+      then A21:Pj(All(a,PA,G),z) = TRUE by A3,BVFUNC_1:def 19;
+       u.z=u.x1 by A2,A6,A19,BVFUNC_1:def 18;
+      then A22:Pj(u,z)=FALSE by A19,MARGREL1:43;
+      A23:FALSE '&' FALSE =FALSE by MARGREL1:49;
+        Pj(u 'xor' All(a,PA,G),z)
+        =('not' TRUE '&' FALSE) 'or' (TRUE '&' 'not' FALSE)
+          by A7,A21,A22,BINARITH:def 2
+       .=FALSE 'or' TRUE by A1,A23,MARGREL1:50
+       .=TRUE by BINARITH:7;
+      hence thesis;
+      suppose not (for x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) holds Pj(a,x)=TRUE);
+      then consider x2 being Element of Y such that
+        A24:x2 in EqClass(z,CompF(PA,G)) & Pj(a,x2)<>TRUE;
+       u.x1=u.x2 by A2,A19,A24,BVFUNC_1:def 18;
+      then A25:Pj(u,x2)=FALSE by A19,MARGREL1:43;
+      A26:Pj(a,x2)=FALSE by A24,MARGREL1:43;
+      A27:Pj(u 'xor' a,x2)=TRUE by A5,A24;
+        Pj(u 'xor' a,x2) =Pj(a,x2) 'xor' Pj(u,x2) by BVFUNC_1:def 8
+       .=('not' Pj(a,x2) '&' Pj(u,x2)) 'or' (Pj(a,x2) '&' 'not' Pj(u,x2))
+           by BINARITH:def 2
+       .=FALSE by A1,A20,A25,A26,BINARITH:7;
+      hence thesis by A27,MARGREL1:43;
+    end;
+    hence thesis;
+end;
+
+theorem
+   for PA being a_partition of Y st u is_independent_of PA,G holds
+  All(a 'xor' u,PA,G) '<' All(a,PA,G) 'xor' u by Th30;
+
+theorem Th32:
+ for PA being a_partition of Y st u is_independent_of PA,G holds
+  All(u 'eqv' a,PA,G) '<' u 'eqv' All(a,PA,G)
+proof
+  let PA be a_partition of Y;
+  assume u is_independent_of PA,G;
+then A1:u is_dependent_of CompF(PA,G) by Def8;
+A2:'not' FALSE=TRUE & 'not' TRUE=FALSE by MARGREL1:41;
+A3:All(a,PA,G) = B_INF(a,CompF(PA,G)) by Def9;
+    let z be Element of Y;
+    assume Pj(All(u 'eqv' a,PA,G),z)= TRUE;
+    then A4:Pj(B_INF(u 'eqv' a,CompF(PA,G)),z)=TRUE by Def9;
+A5:  now assume
+        not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+         Pj(u 'eqv' a,x)=TRUE);
+      then Pj(B_INF(u 'eqv' a,CompF(PA,G)),z)=FALSE by BVFUNC_1:def 19;
+      hence contradiction by A4,MARGREL1:43;
+    end;
+    A6:z in EqClass(z,CompF(PA,G)) &
+          EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+    per cases;
+    suppose A7:
+      (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(u,x)=TRUE) &
+      (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(a,x)=TRUE);
+      then A8:Pj(All(a,PA,G),z)=TRUE by A3,BVFUNC_1:def 19;
+      A9:Pj(u,z)=TRUE by A6,A7;
+      A10:FALSE '&' TRUE =FALSE by MARGREL1:49;
+        Pj(u 'eqv' All(a,PA,G),z)
+       ='not'(Pj(u,z) 'xor' Pj(All(a,PA,G),z)) by BVFUNC_1:def 12
+      .='not'(FALSE 'or' FALSE) by A2,A8,A9,A10,BINARITH:def 2
+      .='not' FALSE by BINARITH:7
+      .=TRUE by MARGREL1:41;
+    hence thesis;
+    suppose A11:
+      (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(u,x)=TRUE) &
+      not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(a,x)=TRUE);
+      then consider x1 being Element of Y such that
+         A12:x1 in EqClass(z,CompF(PA,G)) & Pj(a,x1)<>TRUE;
+      A13:Pj(u,x1)=TRUE by A11,A12;
+      A14:Pj(a,x1)=FALSE by A12,MARGREL1:43;
+      A15:FALSE '&' FALSE =FALSE by MARGREL1:49;
+        Pj(u 'eqv' a,x1)
+       ='not'(Pj(u,x1) 'xor' Pj(a,x1)) by BVFUNC_1:def 12
+      .='not'(('not' Pj(u,x1) '&' Pj(a,x1)) 'or' (Pj(u,x1) '&' 'not' Pj(a,x1)))
+         by BINARITH:def 2
+      .='not'(FALSE 'or' TRUE) by A2,A13,A14,A15,MARGREL1:50
+      .='not' TRUE by BINARITH:7
+      .=FALSE by MARGREL1:41;
+      then Pj(u 'eqv' a,x1)<>TRUE by MARGREL1:43;
+    hence thesis by A5,A12;
+    suppose A16:
+      not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(u,x)=TRUE) &
+      (for x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) holds Pj(a,x)=TRUE);
+      then consider x1 being Element of Y such that
+        A17:x1 in EqClass(z,CompF(PA,G)) & Pj(u,x1)<>TRUE;
+      A18:Pj(u,x1)=FALSE by A17,MARGREL1:43;
+      A19:Pj(a,x1)=TRUE by A16,A17;
+      A20:FALSE '&' FALSE =FALSE by MARGREL1:49;
+        Pj(u 'eqv' a,x1)
+       ='not'(Pj(u,x1) 'xor' Pj(a,x1)) by BVFUNC_1:def 12
+      .='not'(('not' Pj(u,x1) '&' Pj(a,x1)) 'or' (Pj(u,x1) '&' 'not' Pj(a,x1)))
+         by BINARITH:def 2
+      .='not'(TRUE 'or' FALSE) by A2,A18,A19,A20,MARGREL1:50
+      .='not' TRUE by BINARITH:7
+      .=FALSE by MARGREL1:41;
+      then Pj(u 'eqv' a,x1)<>TRUE by MARGREL1:43;
+    hence thesis by A5,A17;
+    suppose A21:
+      not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
+           Pj(u,x)=TRUE) &
+      not (for x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) holds Pj(a,x)=TRUE);
+      then A22:Pj(All(a,PA,G),z) = FALSE by A3,BVFUNC_1:def 19;
+      consider x1 being Element of Y such that
+        A23:x1 in EqClass(z,CompF(PA,G)) & Pj(u,x1)<>TRUE by A21;
+       u.x1=u.z by A1,A6,A23,BVFUNC_1:def 18;
+      then A24:Pj(u,z)=FALSE by A23,MARGREL1:43;
+      A25:FALSE '&' TRUE =FALSE by MARGREL1:49;
+        Pj(u 'eqv' All(a,PA,G),z)
+       ='not'(Pj(u,z) 'xor' Pj(All(a,PA,G),z)) by BVFUNC_1:def 12
+      .='not'(FALSE 'or' FALSE) by A2,A22,A24,A25,BINARITH:def 2
+      .='not' FALSE by BINARITH:7
+      .=TRUE by MARGREL1:41;
+    hence thesis;
+end;
+
+theorem
+   for PA being a_partition of Y st u is_independent_of PA,G holds
+  All(a 'eqv' u,PA,G) '<' All(a,PA,G) 'eqv' u by Th32;
+
+theorem Th34:
+ for PA being a_partition of Y st u is_independent_of PA,G holds
+  Ex(u 'or' a,PA,G) = u 'or' Ex(a,PA,G)
+proof
+  let PA be a_partition of Y;
+  assume u is_independent_of PA,G;
+then A1:u is_dependent_of CompF(PA,G) by Def8;
+A2:Ex(u 'or' a,PA,G) = B_SUP(u 'or' a,CompF(PA,G)) by Def10;
+A3:Ex(a,PA,G) = B_SUP(a,CompF(PA,G)) by Def10;
+A4:Ex(u 'or' a,PA,G) '<' u 'or' Ex(a,PA,G)
+  proof
+    let z be Element of Y;
+    assume A5:Pj(Ex(u 'or' a,PA,G),z)= TRUE;
+      now assume
+        not (ex x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) & Pj(u 'or' a,x)=TRUE);
+      then Pj(Ex(u 'or' a,PA,G),z)=FALSE by A2,BVFUNC_1:def 20;
+      hence contradiction by A5,MARGREL1:43;
+    end;
+    then consider x1 being Element of Y such that
+      A6:x1 in EqClass(z,CompF(PA,G)) & Pj(u 'or' a,x1)=TRUE;
+    A7:Pj(u,x1) 'or' Pj(a,x1)=TRUE by A6,BVFUNC_1:def 7;
+A8:  Pj(u,x1)= TRUE or Pj(u,x1)=FALSE by MARGREL1:39;
+    A9:z in EqClass(z,CompF(PA,G)) &
+          EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+    A10:Pj(u 'or' Ex(a,PA,G),z) = Pj(u,z) 'or' Pj(Ex(a,PA,G),z)
+      by BVFUNC_1:def 7;
+      now per cases by A7,A8,BINARITH:7;
+     case A11:Pj(u,x1)=TRUE;
+       u.z=u.x1 by A1,A6,A9,BVFUNC_1:def 18;
+     hence thesis by A10,A11,BINARITH:19;
+     case Pj(a,x1)=TRUE;
+      then Pj(u 'or' Ex(a,PA,G),z) = Pj(u,z) 'or' TRUE
+        by A3,A6,A10,BVFUNC_1:def 20
+      .= TRUE by BINARITH:19;
+     hence thesis;
+    end;
+    hence thesis;
+  end;
+    u 'or' Ex(a,PA,G) '<' Ex(u 'or' a,PA,G)
+  proof
+    let z be Element of Y;
+    assume Pj(u 'or' Ex(a,PA,G),z)= TRUE;
+    then A12:Pj(u,z) 'or' Pj(Ex(a,PA,G),z)=TRUE by BVFUNC_1:def 7;
+    A13:Pj(Ex(a,PA,G),z)= TRUE or Pj(Ex(a,PA,G),z)=FALSE
+      by MARGREL1:39;
+    A14:z in EqClass(z,CompF(PA,G)) &
+          EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      now per cases by A12,A13,BINARITH:7;
+      case Pj(u,z)=TRUE;
+       then Pj(u 'or' a,z) = TRUE 'or' Pj(a,z) by BVFUNC_1:def 7
+       .= TRUE by BINARITH:19;
+      hence thesis by A2,A14,BVFUNC_1:def 20;
+      case A15:Pj(Ex(a,PA,G),z)=TRUE;
+        now assume
+          not (ex x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) & Pj(a,x)=TRUE);
+        then Pj(B_SUP(a,CompF(PA,G)),z) = FALSE by BVFUNC_1:def 20;
+        hence contradiction by A3,A15,MARGREL1:43;
+      end;
+      then consider x1 being Element of Y such that
+        A16:x1 in EqClass(z,CompF(PA,G)) & Pj(a,x1)=TRUE;
+        Pj(u 'or' a,x1) = Pj(u,x1) 'or' Pj(a,x1) by BVFUNC_1:def 7
+      .= TRUE by A16,BINARITH:19;
+      hence thesis by A2,A16,BVFUNC_1:def 20;
+    end;
+    hence thesis;
+  end;
+  hence thesis by A4,BVFUNC_1:18;
+end;
+
+theorem
+   for PA being a_partition of Y st u is_independent_of PA,G holds
+  Ex(a 'or' u,PA,G) = Ex(a,PA,G) 'or' u by Th34;
+
+theorem Th36:
+ for PA being a_partition of Y st u is_independent_of PA,G holds
+  Ex(u '&' a,PA,G) = u '&' Ex(a,PA,G)
+proof
+  let PA be a_partition of Y;
+  assume u is_independent_of PA,G;
+then A1:u is_dependent_of CompF(PA,G) by Def8;
+A2:Ex(u '&' a,PA,G) = B_SUP(u '&' a,CompF(PA,G)) by Def10;
+A3:Ex(a,PA,G) = B_SUP(a,CompF(PA,G)) by Def10;
+A4:Ex(u '&' a,PA,G) '<' (u '&' Ex(a,PA,G))
+  proof
+    let z be Element of Y;
+    assume A5:Pj(Ex(u '&' a,PA,G),z)= TRUE;
+      now assume not (ex x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) & Pj(u '&' a,x)=TRUE);
+      then Pj(Ex(u '&' a,PA,G),z)=FALSE by A2,BVFUNC_1:def 20;
+      hence contradiction by A5,MARGREL1:43;
+    end;
+    then consider x1 being Element of Y such that
+      A6:x1 in EqClass(z,CompF(PA,G)) & Pj(u '&' a,x1)=TRUE;
+      Pj(u,x1) '&' Pj(a,x1)=TRUE by A6,VALUAT_1:def 6;
+then A7:Pj(u,x1)=TRUE & Pj(a,x1)=TRUE by MARGREL1:45;
+    A8:z in EqClass(z,CompF(PA,G)) &
+          EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+    A9:Pj(Ex(a,PA,G),z)=TRUE by A3,A6,A7,BVFUNC_1:def 20;
+     u.z=u.x1 by A1,A6,A8,BVFUNC_1:def 18;
+    then Pj(u '&' Ex(a,PA,G),z)
+     =TRUE '&' TRUE by A7,A9,VALUAT_1:def 6
+    .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+    (u '&' Ex(a,PA,G)) '<' Ex(u '&' a,PA,G)
+  proof
+    let z be Element of Y;
+    assume Pj(u '&' Ex(a,PA,G),z)= TRUE;
+    then Pj(u,z) '&' Pj(Ex(a,PA,G),z)=TRUE by VALUAT_1:def 6;
+then A10:Pj(u,z)=TRUE & Pj(Ex(a,PA,G),z)=TRUE by MARGREL1:45;
+    A11:z in EqClass(z,CompF(PA,G)) &
+          EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      now assume
+        not (ex x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) & Pj(a,x)=TRUE);
+      then Pj(Ex(a,PA,G),z)=FALSE by A3,BVFUNC_1:def 20;
+      hence contradiction by A10,MARGREL1:43;
+    end;
+    then consider x1 being Element of Y such that
+      A12:x1 in EqClass(z,CompF(PA,G)) & Pj(a,x1)=TRUE;
+     u.x1=u.z by A1,A11,A12,BVFUNC_1:def 18;
+    then Pj(u '&' a,x1)=TRUE '&' TRUE by A10,A12,VALUAT_1:def 6
+    .=TRUE by MARGREL1:45;
+    hence thesis by A2,A12,BVFUNC_1:def 20;
+  end;
+  hence thesis by A4,BVFUNC_1:18;
+end;
+
+theorem
+   for PA being a_partition of Y st u is_independent_of PA,G holds
+  Ex(a '&' u,PA,G) = Ex(a,PA,G) '&' u by Th36;
+
+theorem
+   for PA being a_partition of Y holds
+  u 'imp' Ex(a,PA,G) '<' Ex(u 'imp' a,PA,G)
+proof
+  let PA be a_partition of Y;
+A1:Ex(u 'imp' a,PA,G) = B_SUP(u 'imp' a,CompF(PA,G)) by Def10;
+A2:Ex(a,PA,G) = B_SUP(a,CompF(PA,G)) by Def10;
+    let z be Element of Y;
+    assume Pj(u 'imp' Ex(a,PA,G),z)= TRUE;
+    then A3:('not' Pj(u,z)) 'or' Pj(Ex(a,PA,G),z)=TRUE by BVFUNC_1:def 11;
+    A4:Pj(Ex(a,PA,G),z)= TRUE or Pj(Ex(a,PA,G),z)=FALSE
+      by MARGREL1:39;
+A5:z in EqClass(z,CompF(PA,G)) &
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      now per cases by A3,A4,BINARITH:7;
+      case A6: 'not' Pj(u,z)=TRUE;
+        Pj(u 'imp' a,z) = ('not' Pj(u,z)) 'or' Pj(a,z) by BVFUNC_1:def 11
+        .= TRUE by A6,BINARITH:19;
+      hence thesis by A1,A5,BVFUNC_1:def 20;
+      case A7:Pj(Ex(a,PA,G),z)=TRUE;
+          now assume
+            not (ex x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) & Pj(a,x)=TRUE);
+          then Pj(Ex(a,PA,G),z)=FALSE by A2,BVFUNC_1:def 20;
+          hence contradiction by A7,MARGREL1:43;
+        end;
+        then consider x1 being Element of Y such that
+          A8:x1 in EqClass(z,CompF(PA,G)) & Pj(a,x1)=TRUE;
+          Pj(u 'imp' a,x1)
+         =('not' Pj(u,x1)) 'or' Pj(a,x1) by BVFUNC_1:def 11
+        .=TRUE by A8,BINARITH:19;
+      hence thesis by A1,A8,BVFUNC_1:def 20;
+    end;
+    hence thesis;
+end;
+
+theorem
+   for PA being a_partition of Y holds
+  Ex(a,PA,G) 'imp' u '<' Ex(a 'imp' u,PA,G)
+proof
+  let PA be a_partition of Y;
+A1:Ex(a 'imp' u,PA,G) = B_SUP(a 'imp' u,CompF(PA,G)) by Def10;
+A2:Ex(a,PA,G) = B_SUP(a,CompF(PA,G)) by Def10;
+    let z be Element of Y;
+    assume Pj(Ex(a,PA,G) 'imp' u,z)= TRUE;
+    then A3:('not' Pj(Ex(a,PA,G),z)) 'or' Pj(u,z)=TRUE by BVFUNC_1:def 11;
+    A4:Pj(u,z)= TRUE or Pj(u,z)=FALSE by MARGREL1:39;
+A5:z in EqClass(z,CompF(PA,G)) &
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      now per cases by A3,A4,BINARITH:7;
+      case ('not' Pj(Ex(a,PA,G),z))=TRUE;
+       then Pj(Ex(a,PA,G),z)=FALSE by MARGREL1:41;
+       then Pj(Ex(a,PA,G),z)<>TRUE by MARGREL1:43;
+then A6:    Pj(a,z)<>TRUE by A2,A5,BVFUNC_1:def 20;
+          Pj(a 'imp' u,z) =('not' Pj(a,z)) 'or' Pj(u,z) by BVFUNC_1:def 11
+        .= 'not' FALSE 'or' Pj(u,z) by A6,MARGREL1:43
+        .= TRUE 'or' Pj(u,z) by MARGREL1:41
+        .= TRUE by BINARITH:19;
+      hence thesis by A1,A5,BVFUNC_1:def 20;
+      case A7:Pj(u,z)=TRUE;
+          Pj(a 'imp' u,z)
+         =('not' Pj(a,z)) 'or' Pj(u,z) by BVFUNC_1:def 11
+        .=TRUE by A7,BINARITH:19;
+      hence thesis by A1,A5,BVFUNC_1:def 20;
+    end;
+    hence thesis;
+end;
+
+theorem Th40:
+ for PA being a_partition of Y st u is_independent_of PA,G holds
+  u 'xor' Ex(a,PA,G) '<' Ex(u 'xor' a,PA,G)
+proof
+  let PA be a_partition of Y;
+  assume u is_independent_of PA,G;
+then A1:u is_dependent_of CompF(PA,G) by Def8;
+A2:Ex(u 'xor' a,PA,G) = B_SUP(u 'xor' a,CompF(PA,G)) by Def10;
+A3:Ex(a,PA,G) = B_SUP(a,CompF(PA,G)) by Def10;
+    let z be Element of Y;
+    assume A4:Pj(u 'xor' Ex(a,PA,G),z)= TRUE;
+A5:  Pj(u 'xor' Ex(a,PA,G),z)
+     =Pj(u,z) 'xor' Pj(Ex(a,PA,G),z) by BVFUNC_1:def 8
+    .=('not' Pj(u,z) '&' Pj(Ex(a,PA,G),z)) 'or' (Pj(u,z) '&' 'not'
+Pj(Ex(a,PA,G),z))
+        by BINARITH:def 2;
+A6:  (Pj(u,z) '&' 'not' Pj(Ex(a,PA,G),z))=TRUE or
+    (Pj(u,z) '&' 'not' Pj(Ex(a,PA,G),z))=FALSE by MARGREL1:39;
+A7:z in EqClass(z,CompF(PA,G)) &
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+    A8:'not' FALSE=TRUE & 'not' TRUE=FALSE by MARGREL1:41;
+    A9:FALSE '&' FALSE =FALSE by MARGREL1:49;
+      now per cases by A4,A5,A6,BINARITH:7;
+      case 'not' Pj(u,z) '&' Pj(Ex(a,PA,G),z)=TRUE;
+      then A10:'not' Pj(u,z)=TRUE & Pj(Ex(a,PA,G),z)=TRUE by MARGREL1:45;
+      then A11:Pj(u,z)=FALSE by MARGREL1:41;
+        now assume not (ex x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) & Pj(a,x)=TRUE);
+        then Pj(Ex(a,PA,G),z)=FALSE by A3,BVFUNC_1:def 20;
+        hence contradiction by A10,MARGREL1:43;
+      end;
+      then consider x1 being Element of Y such that
+        A12: x1 in EqClass(z,CompF(PA,G)) & Pj(a,x1)=TRUE;
+      A13:u.z=u.x1 by A1,A7,A12,BVFUNC_1:def 18;
+        Pj(u 'xor' a,x1) =Pj(u,x1) 'xor' Pj(a,x1) by BVFUNC_1:def 8
+      .=('not' Pj(u,x1) '&' Pj(a,x1)) 'or' (Pj(u,x1) '&' 'not' Pj(a,x1))
+           by BINARITH:def 2
+      .= TRUE 'or' FALSE by A8,A9,A11,A12,A13,MARGREL1:50
+      .= TRUE by BINARITH:19;
+      hence thesis by A2,A12,BVFUNC_1:def 20;
+      case Pj(u,z) '&' 'not' Pj(Ex(a,PA,G),z)=TRUE;
+then A14:  Pj(u,z)=TRUE & 'not' Pj(Ex(a,PA,G),z)=TRUE by MARGREL1:45;
+      then A15:Pj(Ex(a,PA,G),z)=FALSE by MARGREL1:41;
+        now assume
+          ex x being Element of Y st
+            x in EqClass(z,CompF(PA,G)) & Pj(a,x)=TRUE;
+        then Pj(B_SUP(a,CompF(PA,G)),z) = TRUE by BVFUNC_1:def 20;
+        hence contradiction by A3,A15,MARGREL1:43;
+      end;
+      then Pj(a,z)<>TRUE by A7;
+then A16:  Pj(a,z)=FALSE by MARGREL1:43;
+        Pj(u 'xor' a,z) = Pj(u,z) 'xor' Pj(a,z) by BVFUNC_1:def 8
+      .=('not' Pj(u,z) '&' Pj(a,z)) 'or' (Pj(u,z) '&' 'not' Pj(a,z))
+           by BINARITH:def 2
+      .= FALSE 'or' TRUE by A8,A9,A14,A16,MARGREL1:50
+      .= TRUE by BINARITH:19;
+      hence thesis by A2,A7,BVFUNC_1:def 20;
+    end;
+    hence thesis;
+end;
+
+theorem
+   for PA being a_partition of Y st u is_independent_of PA,G holds
+  Ex(a,PA,G) 'xor' u '<' Ex(a 'xor' u,PA,G) by Th40;

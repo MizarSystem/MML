@@ -1,0 +1,301 @@
+:: Metrics in the Cartesian Product - Part II
+::  by Stanis\l awa Kanas and Adam Lecko
+::
+:: Received July 8, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary METRIC_1, FUNCT_1, SQUARE_1, ARYTM_1, ABSVALUE, METRIC_4;
+ notation ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, REAL_1, FUNCT_2, ABSVALUE,
+      STRUCT_0, METRIC_1, DOMAIN_1, SQUARE_1;
+ constructors REAL_1, ABSVALUE, METRIC_1, DOMAIN_1, SQUARE_1, MEMBERED,
+      XBOOLE_0;
+ clusters SUBSET_1, METRIC_1, METRIC_3, STRUCT_0, RELSET_1, MEMBERED, ZFMISC_1,
+      XBOOLE_0;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin :: METRICS IN THE CARTESIAN PRODUCT OF TWO SETS
+
+reserve X,Y for non empty MetrSpace;
+reserve x1,y1,z1 for Element of X;
+reserve x2,y2,z2 for Element of Y;
+
+definition let X,Y;
+  func dist_cart2S(X,Y) -> Function of [:[:the carrier of X,the carrier of Y:],
+                          [:the carrier of X,the carrier of Y:]:],REAL means
+:: METRIC_4:def 1
+  for x1,y1 being Element of X
+              for x2,y2 being Element of Y
+              for x,y being Element of [:the carrier of X,the carrier of Y:]
+              st ( x = [x1,x2] & y = [y1,y2] ) holds
+              it.(x,y) =sqrt((dist(x1,y1))^2 + (dist(x2,y2)^2));
+   end;
+
+reserve a,b for Element of REAL;
+
+canceled;
+
+   theorem :: METRIC_4:2
+    for a,b being Element of REAL
+         st 0 <= a & 0 <= b holds
+             sqrt(a + b) = 0 iff ( a = 0 & b = 0);
+
+   theorem :: METRIC_4:3
+    for x,y being Element of [:the carrier of X,the carrier of Y:]
+            st (x = [x1,x2] & y = [y1,y2]) holds
+    dist_cart2S(X,Y).(x,y) = 0 iff x = y;
+
+   theorem :: METRIC_4:4
+    for x,y being Element of [:the carrier of X,the carrier of Y:]
+            st (x = [x1,x2] & y = [y1,y2]) holds
+    dist_cart2S(X,Y).(x,y) = dist_cart2S(X,Y).(y,x);
+
+   theorem :: METRIC_4:5
+    for a,b,c,d being Element of REAL
+       st (0 <= a & 0 <= b & 0 <= c & 0 <= d)
+       holds
+    sqrt((a + c)^2 + (b + d)^2) <= sqrt(a^2 + b^2) + sqrt(c^2 + d^2);
+
+   theorem :: METRIC_4:6
+    for x,y,z being Element of [:the carrier of X,the carrier of Y:]
+            st (x = [x1,x2] & y = [y1,y2] & z = [z1,z2]) holds
+    dist_cart2S(X,Y).(x,z) <= dist_cart2S(X,Y).(x,y) + dist_cart2S(X,Y).(y,z);
+
+definition let X,Y;
+  let x,y be Element of [:the carrier of X,the carrier of Y:];
+  func dist2S(x,y) -> Real equals
+:: METRIC_4:def 2
+      dist_cart2S(X,Y).(x,y);
+end;
+
+   definition let X,Y;
+     func MetrSpaceCart2S(X,Y) -> strict non empty MetrSpace equals
+:: METRIC_4:def 3
+      MetrStruct(#[:the carrier of X,the carrier of Y:],dist_cart2S(X,Y)#);
+    end;
+
+canceled;
+
+theorem :: METRIC_4:8
+      MetrStruct(# [:the carrier of X,the carrier of Y:],dist_cart2S(X,Y)#)
+     is MetrSpace;
+
+begin
+:: METRICS IN THE CARTESIAN PRODUCT OF THREE SETS
+
+reserve Z for non empty MetrSpace;
+reserve x3,y3,z3 for Element of Z;
+
+definition let X,Y,Z;
+  func dist_cart3S(X,Y,Z) -> Function of
+   [:[:the carrier of X,the carrier of Y,the carrier of Z:],
+     [:the carrier of X,the carrier of Y,the carrier of Z:]:],REAL means
+:: METRIC_4:def 4
+  for x1,y1 being Element of X
+              for x2,y2 being Element of Y
+              for x3,y3 being Element of Z
+              for x,y being Element of
+              [:the carrier of X,the carrier of Y,the carrier of Z:]
+              st ( x = [x1,x2,x3] & y = [y1,y2,y3] ) holds
+              it.(x,y) =sqrt((dist(x1,y1))^2 + (dist(x2,y2))^2 + (dist(x3,y3))
+^2);
+   end;
+
+canceled;
+
+   theorem :: METRIC_4:10
+    for x,y being Element of
+            [:the carrier of X,the carrier of Y,the carrier of Z:]
+            st (x = [x1,x2,x3] & y = [y1,y2,y3]) holds
+    dist_cart3S(X,Y,Z).(x,y) = 0 iff x = y;
+
+   theorem :: METRIC_4:11
+    for x,y being Element of
+      [:the carrier of X,the carrier of Y,the carrier of Z:]
+            st (x = [x1,x2,x3] & y = [y1,y2,y3]) holds
+    dist_cart3S(X,Y,Z).(x,y) = dist_cart3S(X,Y,Z).(y,x);
+
+   theorem :: METRIC_4:12
+   for a,b,c being Element of REAL holds
+   (a + b + c)^2 = a^2 + b^2 + c^2 + (2*a*b + 2*a*c + 2*b*c);
+
+   theorem :: METRIC_4:13
+    for a,b,c,d,e,f being Element of REAL holds
+      (2*(a*d)*(c*b) + 2*(a*f)*(e*c) + 2*(b*f)*(e*d)) <=
+      (((a*d)^2 + (c*b)^2 + (a*f)^2 + (e*c)^2 + (b*f)^2) + (e*d)^2);
+
+    theorem :: METRIC_4:14
+    for a,b,c,d,e,f being Element of REAL holds
+       (((((a^2*d^2) + ((a^2*f^2) + (c^2*b^2)) + (e^2*c^2) + (b^2*f^2))
+     + (e^2*d^2)) + (e^2*f^2)) + (b^2*d^2)) + (a^2*c^2) =
+       (a^2 + b^2 + e^2)*(c^2 + d^2 + f^2);
+
+   theorem :: METRIC_4:15
+    for a,b,c,d,e,f being Element of REAL holds
+       ((a*c) + (b*d) + (e*f))^2 <= (a^2 + b^2 + e^2)*(c^2 + d^2 + f^2);
+
+   theorem :: METRIC_4:16
+
+    for x,y,z being Element of
+       [:the carrier of X,the carrier of Y,the carrier of Z:]
+            st (x = [x1,x2,x3] & y = [y1,y2,y3] & z = [z1,z2,z3]) holds
+    dist_cart3S(X,Y,Z).(x,z) <=
+                       dist_cart3S(X,Y,Z).(x,y) + dist_cart3S(X,Y,Z).(y,z);
+
+definition let X,Y,Z;
+  let x,y be Element of [:the carrier of X,the carrier of Y,the carrier of Z:];
+  func dist3S(x,y) -> Real equals
+:: METRIC_4:def 5
+      dist_cart3S(X,Y,Z).(x,y);
+end;
+
+   definition let X,Y,Z;
+     func MetrSpaceCart3S(X,Y,Z) -> strict non empty MetrSpace equals
+:: METRIC_4:def 6
+      MetrStruct(#[:the carrier of X,the carrier of Y,the carrier of Z:],
+     dist_cart3S(X,Y,Z)#);
+    end;
+
+canceled;
+
+theorem :: METRIC_4:18
+    MetrStruct(# [:the carrier of X,the carrier of Y,the carrier of Z:],
+  dist_cart3S(X,Y,Z)#)
+  is MetrSpace;
+
+reserve x1,x2,y1,y2,z1,z2 for Element of REAL;
+
+definition
+  func taxi_dist2 -> Function of [:[:REAL,REAL:],[:REAL,REAL:]:],REAL means
+:: METRIC_4:def 7
+   for x1,y1,x2,y2 being Element of REAL
+           for x,y being Element of [:REAL,REAL:]
+           st (x = [x1,x2] & y = [y1,y2]) holds
+           it.(x,y) = real_dist.(x1,y1) + real_dist.(x2,y2);
+  end;
+
+   theorem :: METRIC_4:19
+    for x1,x2,y1,y2 being Element of REAL
+    for x,y being Element of [:REAL,REAL:]
+            st (x = [x1,x2] & y = [y1,y2]) holds
+    taxi_dist2.(x,y) = 0 iff x = y;
+
+   theorem :: METRIC_4:20
+    for x,y being Element of [:REAL,REAL:]
+            st (x = [x1,x2] & y = [y1,y2]) holds
+    taxi_dist2.(x,y) = taxi_dist2.(y,x);
+
+   theorem :: METRIC_4:21
+
+    for x,y,z being Element of [:REAL,REAL:]
+            st (x = [x1,x2] & y = [y1,y2] & z = [z1,z2]) holds
+    taxi_dist2.(x,z) <= taxi_dist2.(x,y) + taxi_dist2.(y,z);
+
+   definition
+     func RealSpaceCart2 -> strict non empty MetrSpace equals
+:: METRIC_4:def 8
+        MetrStruct(#[:REAL,REAL:],taxi_dist2#);
+    end;
+
+definition
+  func Eukl_dist2 -> Function of [:[:REAL,REAL:],[:REAL,REAL:]:],REAL means
+:: METRIC_4:def 9
+   for x1,y1,x2,y2 being Element of REAL
+           for x,y being Element of [:REAL,REAL:]
+           st (x = [x1,x2] & y = [y1,y2]) holds
+           it.(x,y) = sqrt((real_dist.(x1,y1))^2 + (real_dist.(x2,y2)^2));
+  end;
+
+   theorem :: METRIC_4:22
+    for x1,x2,y1,y2 being Element of REAL
+    for x,y being Element of [:REAL,REAL:]
+            st (x = [x1,x2] & y = [y1,y2]) holds
+    Eukl_dist2.(x,y) = 0 iff x = y;
+
+   theorem :: METRIC_4:23
+    for x,y being Element of [:REAL,REAL:]
+            st (x = [x1,x2] & y = [y1,y2]) holds
+    Eukl_dist2.(x,y) = Eukl_dist2.(y,x);
+
+   theorem :: METRIC_4:24
+
+    for x,y,z being Element of [:REAL,REAL:]
+            st (x = [x1,x2] & y = [y1,y2] & z = [z1,z2]) holds
+    Eukl_dist2.(x,z) <= Eukl_dist2.(x,y) + Eukl_dist2.(y,z);
+
+   definition
+     func EuklSpace2 -> strict non empty MetrSpace equals
+:: METRIC_4:def 10
+        MetrStruct(#[:REAL,REAL:],Eukl_dist2#);
+    end;
+
+reserve x3,y3,z3 for Element of REAL;
+
+definition
+  func taxi_dist3 -> Function of [:[:REAL,REAL,REAL:],
+                                   [:REAL,REAL,REAL:]:],REAL means
+:: METRIC_4:def 11
+   for x1,y1,x2,y2,x3,y3 being Element of REAL
+          for x,y being Element of [:REAL,REAL,REAL:]
+          st (x = [x1,x2,x3] & y = [y1,y2,y3]) holds
+          it.(x,y) = real_dist.(x1,y1) + real_dist.(x2,y2) + real_dist.(x3,y3);
+end;
+   theorem :: METRIC_4:25
+
+    for x1,x2,y1,y2,x3,y3 being Element of REAL
+    for x,y being Element of [:REAL,REAL,REAL:]
+            st (x = [x1,x2,x3] & y = [y1,y2,y3]) holds
+    taxi_dist3.(x,y) = 0 iff x = y;
+
+   theorem :: METRIC_4:26
+
+    for x,y being Element of [:REAL,REAL,REAL:]
+            st (x = [x1,x2,x3] & y = [y1,y2,y3]) holds
+    taxi_dist3.(x,y) = taxi_dist3.(y,x);
+
+   theorem :: METRIC_4:27
+
+    for x,y,z being Element of [:REAL,REAL,REAL:]
+            st (x = [x1,x2,x3] & y = [y1,y2,y3] & z = [z1,z2,z3]) holds
+    taxi_dist3.(x,z) <= taxi_dist3.(x,y) + taxi_dist3.(y,z);
+
+   definition
+     func RealSpaceCart3 -> strict non empty MetrSpace equals
+:: METRIC_4:def 12
+        MetrStruct(#[:REAL,REAL,REAL:],taxi_dist3#);
+    end;
+
+definition
+  func Eukl_dist3 -> Function of [:[:REAL,REAL,REAL:],
+                                   [:REAL,REAL,REAL:]:],REAL means
+:: METRIC_4:def 13
+   for x1,y1,x2,y2,x3,y3 being Element of REAL
+           for x,y being Element of [:REAL,REAL,REAL:]
+           st (x = [x1,x2,x3] & y = [y1,y2,y3]) holds
+           it.(x,y) = sqrt((real_dist.(x1,y1))^2 + (real_dist.(x2,y2)^2)
+                      + (real_dist.(x3,y3)^2));
+  end;
+
+   theorem :: METRIC_4:28
+    for x1,x2,y1,y2,x3,y3 being Element of REAL
+    for x,y being Element of [:REAL,REAL,REAL:]
+            st (x = [x1,x2,x3] & y = [y1,y2,y3]) holds
+    Eukl_dist3.(x,y) = 0 iff x = y;
+
+   theorem :: METRIC_4:29
+    for x,y being Element of [:REAL,REAL,REAL:]
+            st (x = [x1,x2,x3] & y = [y1,y2,y3]) holds
+    Eukl_dist3.(x,y) = Eukl_dist3.(y,x);
+
+   theorem :: METRIC_4:30
+    for x,y,z being Element of [:REAL,REAL,REAL:]
+            st (x = [x1,x2,x3] & y = [y1,y2,y3] & z = [z1,z2,z3]) holds
+    Eukl_dist3.(x,z) <= Eukl_dist3.(x,y) + Eukl_dist3.(y,z);
+
+   definition
+     func EuklSpace3 -> strict non empty MetrSpace equals
+:: METRIC_4:def 14
+        MetrStruct(#[:REAL,REAL,REAL:],Eukl_dist3#);
+    end;

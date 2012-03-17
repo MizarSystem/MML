@@ -1,0 +1,606 @@
+:: Categorial Background for Duality Theory
+::  by Grzegorz Bancerek
+::
+:: Received August 1, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary ORDERS_1, FUNCT_1, RELAT_1, PROB_1, AMI_1, ORDERS_3, BOOLE,
+      ALTCAT_1, YELLOW18, WAYBEL_0, BHSP_3, PBOOLE, FUNCT_2, PRE_TOPC, SEQM_3,
+      FILTER_0, CAT_1, QC_LANG1, FUNCTOR0, WELLORD1, ALTCAT_3, CAT_3, ISOCAT_1,
+      SUBSET_1, LATTICES, RELAT_2, ORDINAL1, TARSKI, WELLORD2, CARD_1,
+      LATTICE3, ORDINAL2, COMPTS_1, QUANTAL1, WAYBEL_8, WAYBEL_3, REALSET1,
+      TRIANG_1, ALTCAT_2, FUNCT_5, YELLOW21;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, RELSET_1,
+      FUNCT_1, REALSET1, FUNCT_2, PROB_1, BINOP_1, ORDINAL1, CARD_1, AMI_1,
+      TRIANG_1, STRUCT_0, ORDERS_1, LATTICE3, GRCAT_1, ORDERS_3, FUNCT_5,
+      WELLORD1, WELLORD2, YELLOW_0, WAYBEL_0, YELLOW_1, YELLOW_2, WAYBEL_3,
+      WAYBEL_8, PRE_TOPC, ALTCAT_1, ALTCAT_2, FUNCTOR0, ALTCAT_3, YELLOW18;
+ constructors GRCAT_1, TOPS_2, TRIANG_1, AMI_1, ORDERS_3, WAYBEL_1, WAYBEL_8,
+      YELLOW_9, QUANTAL1, WAYBEL18, ALTCAT_3, YELLOW18, PROB_1;
+ clusters SUBSET_1, RELSET_1, FUNCT_1, ORDINAL1, CARD_1, REALSET1, AMI_1,
+      STRUCT_0, ORDERS_1, LATTICE3, WAYBEL_0, WAYBEL_3, TRIANG_1, WAYBEL_8,
+      YELLOW_9, WAYBEL10, WAYBEL17, ALTCAT_2, FUNCTOR0, FUNCTOR2, ALTCAT_4,
+      YELLOW18;
+ requirements SUBSET, BOOLE;
+
+
+begin :: Lattice-wise categories
+
+reserve x, y for set;
+
+definition
+ let a be set;
+ func a as_1-sorted -> 1-sorted equals
+:: YELLOW21:def 1
+
+  a if a is 1-sorted otherwise 1-sorted(#a#);
+end;
+
+definition
+ let W be set;
+ func POSETS W means
+:: YELLOW21:def 2
+
+  x in it iff x is strict Poset & the carrier of x as_1-sorted in W;
+end;
+
+definition
+ let W be non empty set;
+ cluster POSETS W -> non empty;
+end;
+
+definition
+ let W be with_non-empty_elements set;
+ cluster POSETS W -> POSet_set-like;
+end;
+
+definition
+ let C be category;
+ attr C is carrier-underlaid means
+:: YELLOW21:def 3
+
+  for a being object of C
+   ex S being 1-sorted st a = S & the_carrier_of a = the carrier of S;
+end;
+
+definition
+ let C be category;
+ attr C is lattice-wise means
+:: YELLOW21:def 4
+
+  C is semi-functional set-id-inheriting &
+  (for a being object of C holds a is LATTICE) &
+  (for a,b being object of C
+   for A,B being LATTICE st A = a & B = b holds <^a,b^> c= MonFuncs(A, B));
+end;
+
+definition
+ let C be category;
+ attr C is with_complete_lattices means
+:: YELLOW21:def 5
+
+  C is lattice-wise &
+  for a being object of C holds a is complete LATTICE;
+end;
+
+definition
+ cluster with_complete_lattices -> lattice-wise category;
+ cluster lattice-wise -> concrete carrier-underlaid category;
+end;
+
+definition
+ cluster strict with_complete_lattices category;
+end;
+
+theorem :: YELLOW21:1
+   for C being carrier-underlaid category, a being object of C
+  holds the_carrier_of a = the carrier of a as_1-sorted;
+
+theorem :: YELLOW21:2
+ for C being set-id-inheriting carrier-underlaid category
+ for a being object of C holds idm a = id (a as_1-sorted);
+
+definition
+ let C be lattice-wise category;
+ let a be object of C;
+ redefine func a as_1-sorted -> LATTICE equals
+:: YELLOW21:def 6
+
+  a;
+ synonym latt a;
+end;
+
+definition
+ let C be with_complete_lattices category;
+ let a be object of C;
+ redefine func a as_1-sorted -> complete LATTICE;
+ synonym latt a;
+end;
+
+definition
+ let C be lattice-wise category;
+ let a,b be object of C such that
+  <^a,b^> <> {};
+ let f be Morphism of a,b;
+ func @f -> monotone map of latt a, latt b equals
+:: YELLOW21:def 7
+
+  f;
+end;
+
+theorem :: YELLOW21:3
+ for C being lattice-wise category
+ for a,b,c being object of C st <^a,b^> <> {} & <^b,c^> <> {}
+ for f being Morphism of a,b, g being Morphism of b,c
+  holds g*f = @g*@f;
+
+scheme CLCatEx1
+ { A() -> non empty set, P[set, set, set] }:
+ ex C being lattice-wise strict category st
+  the carrier of C = A() &
+  for a,b being object of C, f being monotone map of latt a, latt b
+    holds f in <^a,b^> iff P[latt a, latt b, f]
+ provided
+  for a being Element of A() holds a is LATTICE
+ and
+  for a,b,c being LATTICE st a in A() & b in A() & c in A()
+     for f being map of a,b, g being map of b,c st
+      P[a,b,f] & P[b,c,g] holds P[a,c,g*f]
+ and
+  for a being LATTICE st a in A() holds P[a,a,id a];
+
+scheme CLCatEx2
+ { A() -> non empty set, L[set], P[set, set, set] }:
+ ex C being lattice-wise strict category st
+  (for x being LATTICE holds
+    x is object of C iff x is strict & L[x] & the carrier of x in A()) &
+  for a,b being object of C, f being monotone map of latt a, latt b
+    holds f in <^a,b^> iff P[latt a, latt b, f]
+ provided
+  ex x being strict LATTICE st L[x] & the carrier of x in A()
+ and
+  for a,b,c being LATTICE st L[a] & L[b] & L[c]
+     for f being map of a,b, g being map of b,c st
+      P[a,b,f] & P[b,c,g] holds P[a,c,g*f]
+ and
+  for a being LATTICE st L[a] holds P[a,a,id a];
+
+scheme CLCatUniq1
+ { A() -> non empty set, P[set, set, set] }:
+ for C1, C2 being lattice-wise category st
+  the carrier of C1 = A() &
+  (for a,b being object of C1, f being monotone map of latt a, latt b
+     holds f in <^a,b^> iff P[a,b,f]) &
+  the carrier of C2 = A() &
+  (for a,b being object of C2, f being monotone map of latt a, latt b
+     holds f in <^a,b^> iff P[a,b,f])
+ holds the AltCatStr of C1 = the AltCatStr of C2;
+
+scheme CLCatUniq2
+ { A() -> non empty set, L[set], P[set, set, set] }:
+ for C1, C2 being lattice-wise category st
+  (for x being LATTICE holds
+    x is object of C1 iff x is strict & L[x] & the carrier of x in A()) &
+  (for a,b being object of C1, f being monotone map of latt a, latt b
+     holds f in <^a,b^> iff P[a,b,f]) &
+  (for x being LATTICE holds
+    x is object of C2 iff x is strict & L[x] & the carrier of x in A()) &
+  (for a,b being object of C2, f being monotone map of latt a, latt b
+     holds f in <^a,b^> iff P[a,b,f])
+ holds the AltCatStr of C1 = the AltCatStr of C2;
+
+scheme CLCovariantFunctorEx
+ { P, Q[set, set, set],
+   A,B() -> lattice-wise category,
+   O(set) -> LATTICE,
+   F(set,set,set) -> Function }:
+ ex F being covariant strict Functor of A(),B() st
+  (for a being object of A() holds F.a = O(latt a)) &
+  for a,b being object of A() st <^a,b^> <> {}
+   for f being Morphism of a,b holds F.f = F(latt a, latt b, @f)
+ provided
+  for a,b being LATTICE, f being map of a,b
+    holds f in (the Arrows of A()).(a,b) iff
+     a in the carrier of A() & b in the carrier of A() & P[a,b,f]
+ and
+  for a,b being LATTICE, f being map of a,b
+    holds f in (the Arrows of B()).(a,b) iff
+     a in the carrier of B() & b in the carrier of B() & Q[a,b,f]
+ and
+  for a being LATTICE st a in the carrier of A()
+    holds O(a) in the carrier of B()
+ and
+  for a,b being LATTICE, f being map of a,b st P[a,b,f]
+    holds F(a,b,f) is map of O(a),O(b) & Q[O(a),O(b),F(a,b,f)]
+ and
+  for a being LATTICE st a in the carrier of A() holds F(a,a,id a) = id O(a)
+ and
+  for a,b,c being LATTICE, f being map of a,b, g being map of b,c
+    st P[a,b,f] & P[b,c,g]
+    holds F(a,c,g*f) = F(b,c,g)*F(a,b,f);
+
+scheme CLContravariantFunctorEx
+ { P, Q[set, set, set],
+   A,B() -> lattice-wise category,
+   O(set) -> LATTICE,
+   F(set,set,set) -> Function }:
+ ex F being contravariant strict Functor of A(),B() st
+  (for a being object of A() holds F.a = O(latt a)) &
+  for a,b being object of A() st <^a,b^> <> {}
+   for f being Morphism of a,b holds F.f = F(latt a, latt b, @f)
+ provided
+  for a,b being LATTICE, f being map of a,b
+    holds f in (the Arrows of A()).(a,b) iff
+     a in the carrier of A() & b in the carrier of A() & P[a,b,f]
+ and
+  for a,b being LATTICE, f being map of a,b
+    holds f in (the Arrows of B()).(a,b) iff
+     a in the carrier of B() & b in the carrier of B() & Q[a,b,f]
+ and
+  for a being LATTICE st a in the carrier of A()
+    holds O(a) in the carrier of B()
+ and
+  for a,b being LATTICE, f being map of a,b st P[a,b,f]
+    holds F(a,b,f) is map of O(b),O(a) & Q[O(b),O(a),F(a,b,f)]
+ and
+  for a being LATTICE st a in the carrier of A() holds F(a,a,id a) = id O(a)
+ and
+  for a,b,c being LATTICE, f being map of a,b, g being map of b,c
+    st P[a,b,f] & P[b,c,g]
+    holds F(a,c,g*f) = F(a,b,f)*F(b,c,g);
+
+scheme CLCatIsomorphism
+ { P, Q[set, set, set],
+   A,B() -> lattice-wise category,
+   O(set) -> LATTICE,
+   F(set,set,set) -> Function }:
+  A(), B() are_isomorphic
+ provided
+  for a,b being LATTICE, f being map of a,b
+    holds f in (the Arrows of A()).(a,b) iff
+     a in the carrier of A() & b in the carrier of A() & P[a,b,f]
+ and
+  for a,b being LATTICE, f being map of a,b
+    holds f in (the Arrows of B()).(a,b) iff
+     a in the carrier of B() & b in the carrier of B() & Q[a,b,f]
+ and
+  ex F being covariant Functor of A(),B() st
+    (for a being object of A() holds F.a = O(a)) &
+    for a,b being object of A() st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = F(a,b,f)
+ and
+  for a,b being LATTICE st a in the carrier of A() & b in the carrier of A()
+    holds O(a) = O(b) implies a = b
+ and
+  for a,b being LATTICE
+   for f,g being map of a,b st P[a,b,f] & P[a,b,g]
+    holds F(a,b,f) = F(a,b,g) implies f = g
+ and
+  for a,b being LATTICE, f being map of a,b st Q[a,b,f]
+    ex c,d being LATTICE, g being map of c,d
+     st c in the carrier of A() & d in the carrier of A() & P[c,d,g] &
+        a = O(c) & b = O(d) & f = F(c,d,g);
+
+scheme CLCatAntiIsomorphism
+ { P, Q[set, set, set],
+   A,B() -> lattice-wise category,
+   O(set) -> LATTICE,
+   F(set,set,set) -> Function }:
+  A(), B() are_anti-isomorphic
+ provided
+  for a,b being LATTICE, f being map of a,b
+    holds f in (the Arrows of A()).(a,b) iff
+     a in the carrier of A() & b in the carrier of A() & P[a,b,f]
+ and
+  for a,b being LATTICE, f being map of a,b
+    holds f in (the Arrows of B()).(a,b) iff
+     a in the carrier of B() & b in the carrier of B() & Q[a,b,f]
+ and
+  ex F being contravariant Functor of A(),B() st
+    (for a being object of A() holds F.a = O(a)) &
+    for a,b being object of A() st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = F(a,b,f)
+ and
+  for a,b being LATTICE st a in the carrier of A() & b in the carrier of A()
+    holds O(a) = O(b) implies a = b
+ and
+  for a,b being LATTICE, f,g being map of a,b st F(a,b,f) = F(a,b,g)
+    holds f = g
+ and
+  for a,b being LATTICE, f being map of a,b st Q[a,b,f]
+    ex c,d being LATTICE, g being map of c,d
+     st c in the carrier of A() & d in the carrier of A() & P[c,d,g] &
+        b = O(c) & a = O(d) & f = F(c,d,g);
+
+begin :: Equivalence of lattice-wise categories
+
+definition
+ let C be lattice-wise category;
+ attr C is with_all_isomorphisms means
+:: YELLOW21:def 8
+
+  for a,b being object of C, f being map of latt a, latt b
+   st f is isomorphic
+   holds f in <^a,b^>;
+end;
+
+definition
+ cluster with_all_isomorphisms (strict lattice-wise category);
+end;
+
+theorem :: YELLOW21:4
+   for C being with_all_isomorphisms (lattice-wise category)
+ for a,b being object of C
+ for f being Morphism of a,b
+  st @f is isomorphic
+  holds f is iso;
+
+theorem :: YELLOW21:5
+   for C being lattice-wise category
+ for a,b being object of C st <^a,b^> <> {} & <^b,a^> <> {}
+ for f being Morphism of a,b
+  st f is iso
+  holds @f is isomorphic;
+
+scheme CLCatEquivalence
+ { P, Q[set, set, set],
+   A,B() -> lattice-wise category,
+   O1, O2(set) -> LATTICE,
+   F1, F2(set,set,set) -> Function,
+   A, B(set) -> Function }:
+  A(), B() are_equivalent
+ provided
+  for a,b being object of A(), f being monotone map of latt a, latt b
+    holds f in <^a,b^> iff P[latt a, latt b, f]
+ and
+  for a,b being object of B(), f being monotone map of latt a, latt b
+    holds f in <^a,b^> iff Q[latt a, latt b, f]
+ and
+  ex F being covariant Functor of A(),B() st
+    (for a being object of A() holds F.a = O1(a)) &
+    for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b holds F.f = F1(a,b,f)
+ and
+  ex G being covariant Functor of B(),A() st
+    (for a being object of B() holds G.a = O2(a)) &
+    for a,b being object of B() st <^a,b^> <> {}
+    for f being Morphism of a,b holds G.f = F2(a,b,f)
+ and
+  for a being LATTICE st a in the carrier of A()
+    ex f being monotone map of O2(O1(a)), a
+     st f = A(a) & f is isomorphic & P[O2(O1(a)), a, f] & P[a, O2(O1(a)), f"]
+ and
+  for a being LATTICE st a in the carrier of B()
+    ex f being monotone map of a, O1(O2(a))
+     st f = B(a) & f is isomorphic & Q[a, O1(O2(a)), f] & Q[O1(O2(a)), a, f"]
+ and
+  for a,b being object of A() st <^a,b^> <> {}
+   for f being Morphism of a,b
+    holds A(b)*F2(O1(a),O1(b),F1(a,b,f)) = @f*A(a)
+ and
+  for a,b being object of B() st <^a,b^> <> {}
+   for f being Morphism of a,b
+    holds F1(O2(a),O2(b),F2(a,b,f))*B(a) = B(b)*@f;
+
+begin :: UPS category
+
+definition
+ let R be Relation;
+ attr R is upper-bounded means
+:: YELLOW21:def 9
+
+  ex x st for y st y in field R holds [y,x] in R;
+end;
+
+definition
+ cluster well-ordering ->
+     reflexive transitive antisymmetric connected well_founded Relation;
+end;
+
+definition
+ cluster well-ordering Relation;
+end;
+
+theorem :: YELLOW21:6
+ for f being one-to-one Function, R being Relation
+  holds [x,y] in f*R*(f") iff x in dom f & y in dom f & [f.x, f.y] in R;
+
+definition
+ let f be one-to-one Function;
+ let R be reflexive Relation;
+ cluster f*R*(f") -> reflexive;
+end;
+
+definition
+ let f be one-to-one Function;
+ let R be antisymmetric Relation;
+ cluster f*R*(f") -> antisymmetric;
+end;
+
+definition
+ let f be one-to-one Function;
+ let R be transitive Relation;
+ cluster f*R*(f") -> transitive;
+end;
+
+theorem :: YELLOW21:7
+ for X being set, A being Ordinal st X,A are_equipotent
+  ex R being Order of X st R well_orders X & order_type_of R = A;
+
+definition
+ let X be non empty set;
+ cluster upper-bounded well-ordering Order of X;
+end;
+
+theorem :: YELLOW21:8
+ for P being reflexive non empty RelStr holds
+  P is upper-bounded iff the InternalRel of P is upper-bounded;
+
+theorem :: YELLOW21:9
+ for P being upper-bounded (non empty Poset)
+  st the InternalRel of P is well-ordering
+  holds P is connected complete continuous;
+
+theorem :: YELLOW21:10
+ for P being upper-bounded (non empty Poset)
+  st the InternalRel of P is well-ordering
+ for x,y being Element of P st y < x
+  ex z being Element of P st z is compact & y <= z & z <= x;
+
+theorem :: YELLOW21:11
+ for P being upper-bounded (non empty Poset)
+  st the InternalRel of P is well-ordering
+  holds P is algebraic;
+
+definition
+ let X be non empty set;
+ let R be upper-bounded well-ordering Order of X;
+ cluster RelStr(#X,R#) -> complete connected continuous algebraic;
+end;
+
+definition
+ cluster non trivial -> with_non-empty_element set;
+end;
+
+definition
+ let W be non empty set;
+ given w being Element of W such that
+    w is non empty;
+
+ func W-UPS_category -> lattice-wise strict category means
+:: YELLOW21:def 10
+
+  (for x being LATTICE holds
+    x is object of it iff x is strict complete & the carrier of x in W) &
+  for a,b being object of it, f being monotone map of latt a, latt b
+    holds f in <^a,b^> iff f is directed-sups-preserving;
+end;
+
+definition
+ let W be with_non-empty_element set;
+ cluster W-UPS_category -> with_complete_lattices with_all_isomorphisms;
+end;
+
+theorem :: YELLOW21:12
+ for W being with_non-empty_element set holds
+   the carrier of W-UPS_category c= POSETS W;
+
+theorem :: YELLOW21:13
+ for W being with_non-empty_element set
+ for x holds
+   x is object of W-UPS_category iff x is complete LATTICE & x in POSETS W;
+
+theorem :: YELLOW21:14
+ for W being with_non-empty_element set
+ for L being LATTICE st the carrier of L in W
+  holds L is object of W-UPS_category iff L is strict complete;
+
+theorem :: YELLOW21:15
+ for W being with_non-empty_element set
+ for a,b being object of W-UPS_category
+ for f being set holds
+   f in <^a,b^> iff f is directed-sups-preserving map of latt a, latt b;
+
+definition
+ let W be with_non-empty_element set;
+ let a,b be object of W-UPS_category;
+ cluster <^a,b^> -> non empty;
+end;
+
+begin :: Lattice-wise subcategories
+
+theorem :: YELLOW21:16
+ for A being category, B being non empty subcategory of A
+ for a being object of A, b being object of B st b = a
+  holds the_carrier_of b = the_carrier_of a;
+
+definition
+ let A be set-id-inheriting category;
+ cluster -> set-id-inheriting (non empty subcategory of A);
+end;
+
+definition
+ let A be para-functional category;
+ cluster -> para-functional (non empty subcategory of A);
+end;
+
+definition
+ let A be semi-functional category;
+ cluster -> semi-functional (non empty transitive SubCatStr of A);
+end;
+
+definition
+ let A be carrier-underlaid category;
+ cluster -> carrier-underlaid (non empty subcategory of A);
+end;
+
+definition
+ let A be lattice-wise category;
+ cluster -> lattice-wise (non empty subcategory of A);
+end;
+
+definition
+ let A be with_all_isomorphisms (lattice-wise category);
+ cluster full -> with_all_isomorphisms (non empty subcategory of A);
+end;
+
+definition
+ let A be with_complete_lattices category;
+ cluster -> with_complete_lattices (non empty subcategory of A);
+end;
+
+definition
+ let W be with_non-empty_element set;
+ func W-CONT_category -> strict full non empty subcategory of W-UPS_category
+    means
+:: YELLOW21:def 11
+
+  for a being object of W-UPS_category holds
+    a is object of it iff latt a is continuous;
+end;
+
+definition
+ let W be with_non-empty_element set;
+ func W-ALG_category -> strict full non empty subcategory of W-CONT_category
+    means
+:: YELLOW21:def 12
+
+  for a being object of W-CONT_category holds
+    a is object of it iff latt a is algebraic;
+end;
+
+theorem :: YELLOW21:17
+ for W being with_non-empty_element set
+ for L being LATTICE st the carrier of L in W
+  holds L is object of W-CONT_category iff L is strict complete continuous;
+
+theorem :: YELLOW21:18
+   for W being with_non-empty_element set
+ for L being LATTICE st the carrier of L in W
+  holds L is object of W-ALG_category iff L is strict complete algebraic;
+
+theorem :: YELLOW21:19
+ for W being with_non-empty_element set
+ for a,b being object of W-CONT_category
+ for f being set holds
+   f in <^a,b^> iff f is directed-sups-preserving map of latt a, latt b;
+
+theorem :: YELLOW21:20
+ for W being with_non-empty_element set
+ for a,b being object of W-ALG_category
+ for f being set holds
+   f in <^a,b^> iff f is directed-sups-preserving map of latt a, latt b;
+
+definition
+ let W be with_non-empty_element set;
+ let a,b be object of W-CONT_category;
+ cluster <^a,b^> -> non empty;
+end;
+
+definition
+ let W be with_non-empty_element set;
+ let a,b be object of W-ALG_category;
+ cluster <^a,b^> -> non empty;
+end;

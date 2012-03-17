@@ -1,0 +1,434 @@
+:: Introduction to Trees
+::  by Grzegorz Bancerek
+::
+:: Received October 25, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, FINSEQ_1, RELAT_1, BOOLE, ARYTM_1, FINSET_1, CARD_1,
+      ZFMISC_1, TARSKI, ORDINAL2, TREES_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1, NUMBERS,
+      RELAT_1, FUNCT_1, FINSEQ_1, FINSET_1, CARD_1;
+ constructors REAL_1, NAT_1, FINSEQ_1, WELLORD2, XREAL_0, MEMBERED, XBOOLE_0;
+ clusters RELSET_1, FINSEQ_1, CARD_1, FINSET_1, NAT_1, XREAL_0, MEMBERED,
+      ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+ reserve D for non empty set,
+         X,x,y,z for set,
+         k,n,m for Nat,
+         f for Function,
+         p,q,r for FinSequence of NAT;
+
+::
+::  Auxiliary theorems on finite sequence
+::
+
+theorem :: TREES_1:1
+    for p,q being FinSequence st q = p|Seg n holds len q <= n;
+
+theorem :: TREES_1:2
+  for p,q being FinSequence st q = p|Seg n holds len q <= len p;
+
+theorem :: TREES_1:3
+  for p,r being FinSequence st r = p|Seg n
+      ex q being FinSequence st p = r^q;
+
+theorem :: TREES_1:4
+  {} <> <*x*>;
+
+theorem :: TREES_1:5
+   for p,q being FinSequence st p = p^q or p = q^p holds q = {};
+
+theorem :: TREES_1:6
+  for p,q being FinSequence st p^q = <*x*> holds
+   p = <*x*> & q = {} or p = {} & q = <*x*>;
+
+::
+:: Relations "is a prefix of", "is a proper prefix of" and
+:: "are comparable" of finite sequences
+::
+
+definition let p,q be FinSequence;
+ redefine pred p c= q means
+:: TREES_1:def 1
+  ex n st p = q|Seg n;
+ synonym p is_a_prefix_of q;
+end;
+
+canceled;
+
+theorem :: TREES_1:8
+  for p,q being FinSequence holds p is_a_prefix_of q iff
+   ex r being FinSequence st q = p^r;
+
+canceled 6;
+
+theorem :: TREES_1:15
+  for p,q being FinSequence st
+   p is_a_prefix_of q & len p = len q holds p = q;
+
+theorem :: TREES_1:16
+    <*x*> is_a_prefix_of <*y*> iff x = y;
+
+definition let p,q be FinSequence;
+ redefine pred p c< q;
+ synonym p is_a_proper_prefix_of q;
+end;
+
+canceled 2;
+
+theorem :: TREES_1:19
+  for p,q being finite set st
+   p,q are_c=-comparable & card p = card q holds
+       p = q;
+
+ reserve p1,p2,p3 for FinSequence;
+
+canceled 3;
+
+theorem :: TREES_1:23
+  <*x*>,<*y*> are_c=-comparable iff x = y;
+
+theorem :: TREES_1:24
+  for p,q being finite set st p c< q holds card p < card q;
+
+theorem :: TREES_1:25 :: BOOLE
+  not ex p being FinSequence st
+   p is_a_proper_prefix_of {} or p is_a_proper_prefix_of <*>D;
+
+theorem :: TREES_1:26 :: BOOLE
+   not ex p,q being FinSequence st
+   p is_a_proper_prefix_of q & q is_a_proper_prefix_of p;
+
+theorem :: TREES_1:27
+    for p,q,r being FinSequence st
+   p is_a_proper_prefix_of q & q is_a_proper_prefix_of r or
+   p is_a_proper_prefix_of q & q is_a_prefix_of r or
+   p is_a_prefix_of q & q is_a_proper_prefix_of r holds
+    p is_a_proper_prefix_of r;
+
+theorem :: TREES_1:28 :: BOOLE
+  p1 is_a_prefix_of p2 implies not p2 is_a_proper_prefix_of p1;
+
+canceled;
+
+theorem :: TREES_1:30
+    p1^<*x*> is_a_prefix_of p2 implies p1 is_a_proper_prefix_of p2;
+
+theorem :: TREES_1:31
+  p1 is_a_prefix_of p2 implies p1 is_a_proper_prefix_of p2^<*x*>;
+
+theorem :: TREES_1:32
+  p1 is_a_proper_prefix_of p2^<*x*> implies p1 is_a_prefix_of p2;
+
+theorem :: TREES_1:33
+    {} is_a_proper_prefix_of p2 or {} <> p2 implies
+   p1 is_a_proper_prefix_of p1^p2;
+
+::
+:: The set of proper prefixes of a finite sequence
+::
+
+definition let p be FinSequence;
+ canceled 2;
+
+ func ProperPrefixes p -> set means
+:: TREES_1:def 4
+  x in
+ it iff ex q being FinSequence st x = q & q is_a_proper_prefix_of p;
+end;
+
+canceled;
+
+theorem :: TREES_1:35
+  for p being FinSequence st x in ProperPrefixes p holds x is FinSequence;
+
+theorem :: TREES_1:36
+  for p,q being FinSequence holds
+   p in ProperPrefixes q iff p is_a_proper_prefix_of q;
+
+theorem :: TREES_1:37
+  for p,q being FinSequence st p in ProperPrefixes q holds len p < len q;
+
+theorem :: TREES_1:38
+    for p,q,r being FinSequence st q^r in ProperPrefixes p holds
+      q in ProperPrefixes p;
+
+theorem :: TREES_1:39
+  ProperPrefixes {} = {};
+
+theorem :: TREES_1:40
+  ProperPrefixes <*x*> = { {} };
+
+theorem :: TREES_1:41
+    for p,q being FinSequence st p is_a_prefix_of q holds
+   ProperPrefixes p c= ProperPrefixes q;
+
+theorem :: TREES_1:42
+  for p,q,r being FinSequence st
+   q in ProperPrefixes p & r in ProperPrefixes p holds q,r are_c=-comparable;
+
+::
+::  Trees and their properties
+::
+
+definition let X;
+ attr X is Tree-like means
+:: TREES_1:def 5
+  X c= NAT* & (for p st p in X holds ProperPrefixes p c= X) &
+      for p,k,n st p^<*k*> in X & n <= k holds p^<*n*> in X;
+end;
+
+definition
+ cluster non empty Tree-like set;
+end;
+
+definition
+ mode Tree is Tree-like non empty set;
+end;
+
+ reserve T,T1 for Tree;
+
+canceled;
+
+theorem :: TREES_1:44
+  x in T implies x is FinSequence of NAT;
+
+definition let T;
+ redefine mode Element of T -> FinSequence of NAT;
+end;
+
+theorem :: TREES_1:45
+  for p,q being FinSequence st p in T & q is_a_prefix_of p holds q in T;
+
+theorem :: TREES_1:46
+  for r being FinSequence st q^r in T holds q in T;
+
+theorem :: TREES_1:47
+  {} in T & <*> NAT in T;
+
+theorem :: TREES_1:48
+  { {} } is Tree;
+
+theorem :: TREES_1:49
+  T \/ T1 is Tree;
+
+theorem :: TREES_1:50
+  T /\ T1 is Tree;
+
+::
+::  Finite trees and their properties
+::
+
+definition
+ cluster finite Tree;
+end;
+
+ reserve fT,fT1 for finite Tree;
+
+canceled;
+
+theorem :: TREES_1:52
+    fT \/ fT1 is finite Tree;
+
+theorem :: TREES_1:53
+    fT /\ T is finite Tree & T /\ fT is finite Tree;
+
+::
+::  Elementary trees
+::
+
+definition let n;
+ canceled;
+
+ func elementary_tree n -> finite Tree equals
+:: TREES_1:def 7
+   { <*k*> : k < n } \/ { {} };
+end;
+
+canceled;
+
+theorem :: TREES_1:55
+   k < n implies <*k*> in elementary_tree n;
+
+theorem :: TREES_1:56
+  elementary_tree 0 = { {} };
+
+theorem :: TREES_1:57
+    p in elementary_tree n implies p = {} or ex k st k < n & p = <*k*>;
+
+::
+::  Leaves and subtrees
+::
+
+definition let T;
+ func Leaves T -> Subset of T means
+:: TREES_1:def 8
+    p in it iff p in T & not ex q st q in T & p is_a_proper_prefix_of q;
+ let p such that
+  p in T;
+ func T|p -> Tree means
+:: TREES_1:def 9  :: subtree of T, which root is in p
+  q in it iff p^q in T;
+end;
+
+canceled 2;
+
+theorem :: TREES_1:60
+   T|(<*> NAT) = T;
+
+definition let T be finite Tree; let p be Element of T;
+ cluster T|p -> finite;
+end;
+
+definition let T;
+ assume  Leaves T <> {};
+ mode Leaf of T -> Element of T means
+:: TREES_1:def 10
+    it in Leaves T;
+end;
+
+definition let T;
+ mode Subtree of T -> Tree means
+:: TREES_1:def 11
+    ex p being Element of T st it = T|p;
+end;
+
+ reserve t for Element of T;
+
+definition let T,p,T1;
+ assume
+   p in T;
+ func T with-replacement (p,T1) -> Tree means
+:: TREES_1:def 12
+ q in it iff q in T & not p is_a_proper_prefix_of q or
+      ex r st r in T1 & q = p^r;
+end;
+
+canceled 3;
+
+theorem :: TREES_1:64
+  p in T implies T with-replacement (p,T1) =
+   { t1 where t1 is Element of T : not p is_a_proper_prefix_of t1 } \/
+   { p^s where s is Element of T1 : s = s };
+
+canceled;
+
+theorem :: TREES_1:66
+   p in T implies T1 = T with-replacement (p,T1)|p;
+
+definition let T be finite Tree, t be Element of T;
+ let T1 be finite Tree;
+ cluster T with-replacement (t,T1) -> finite;
+end;
+
+ reserve w for FinSequence;
+
+theorem :: TREES_1:67
+  for p being FinSequence holds ProperPrefixes p,dom p are_equipotent;
+
+definition let p be FinSequence;
+ cluster ProperPrefixes p -> finite;
+end;
+
+theorem :: TREES_1:68
+   for p being FinSequence holds card ProperPrefixes p = len p;
+
+::
+::  Height and width of finite trees
+::
+
+definition let IT be set;
+ attr IT is AntiChain_of_Prefixes-like means
+:: TREES_1:def 13
+  (for x st x in IT holds x is FinSequence) &
+  for p1,p2 st p1 in IT & p2 in IT & p1 <> p2 holds
+   not p1,p2 are_c=-comparable;
+end;
+
+definition
+ cluster AntiChain_of_Prefixes-like set;
+end;
+
+definition
+ mode AntiChain_of_Prefixes is AntiChain_of_Prefixes-like set;
+end;
+
+canceled;
+
+theorem :: TREES_1:70
+  { w } is AntiChain_of_Prefixes-like;
+
+theorem :: TREES_1:71
+ not p1,p2 are_c=-comparable implies
+  { p1,p2 } is AntiChain_of_Prefixes-like;
+
+definition let T;
+ mode AntiChain_of_Prefixes of T -> AntiChain_of_Prefixes means
+:: TREES_1:def 14
+  it c= T;
+end;
+
+ reserve t1,t2 for Element of T;
+
+canceled;
+
+theorem :: TREES_1:73
+  {} is AntiChain_of_Prefixes of T & { {} } is AntiChain_of_Prefixes of T;
+
+theorem :: TREES_1:74
+    { t } is AntiChain_of_Prefixes of T;
+
+theorem :: TREES_1:75
+    not t1,t2 are_c=-comparable implies { t1,t2 } is AntiChain_of_Prefixes of T
+;
+
+definition let T be finite Tree;
+ cluster -> finite AntiChain_of_Prefixes of T;
+end;
+
+definition let T be finite Tree;
+ func height T -> Nat means
+:: TREES_1:def 15
+  (ex p st p in T & len p = it) & for p st p in T holds len p <= it;
+ func width T -> Nat means
+:: TREES_1:def 16
+  ex X being AntiChain_of_Prefixes of T st it = card X &
+        for Y being AntiChain_of_Prefixes of T holds card Y <= card X;
+end;
+
+canceled 2;
+
+theorem :: TREES_1:78
+   1 <= width fT;
+
+theorem :: TREES_1:79
+   height elementary_tree 0 = 0;
+
+theorem :: TREES_1:80
+   height fT = 0 implies fT = elementary_tree 0;
+
+theorem :: TREES_1:81
+   height elementary_tree(n+1) = 1;
+
+theorem :: TREES_1:82
+   width elementary_tree 0 = 1;
+
+theorem :: TREES_1:83
+   width elementary_tree(n+1) = n+1;
+
+theorem :: TREES_1:84
+    for t being Element of fT holds height(fT|t) <= height fT;
+
+theorem :: TREES_1:85
+  for t being Element of fT st t <> {} holds height(fT|t) < height fT;
+
+scheme Tree_Ind { P[Tree] }:
+ for fT holds P[fT]
+  provided
+ for fT st for n st <*n*> in fT holds P[fT|<*n*>] holds P[fT];

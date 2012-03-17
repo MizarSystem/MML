@@ -1,0 +1,15 @@
+HIDDEN
+TARSKI
+XBOOLE_0
+ZFMISC_1
+SUBSET_1
+#
+«W1 ;;M1 W1 ;;;M2 K10 A1 ;;
+«V1 ;;M1 ;;M2 K10 A1 ;;
+fW1 ;;M1 ;;K10 A1 ;
+fW1 ;;M1 ;;K1 A1 ;
+fW1 ;;M1 ;M1 ;;K2 A1 A2 ;
+fW1 ;;M1 W1 ;;M1 W1 ;;;K11 A1 A2 ;
+fW1 ;;M1 W1 ;;M1 W1 ;;M1 W1 ;;;K12 A1 A2 A3 ;
+fW1 ;;M1 W1 ;;M1 W1 ;;M1 W1 ;;M1 W1 ;;;K13 A1 A2 A3 A4 ;
+!

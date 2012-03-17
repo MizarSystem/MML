@@ -1,0 +1,292 @@
+:: Modifying addresses of instructions of { \bf SCM_FSA }
+::  by Andrzej Trybulec and Yatsuka Nakamura
+::
+:: Received February 14, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_1, FINSET_1, AMI_3, BOOLE, RELAT_1, FUNCT_1, FUNCT_4, SCMFSA_2,
+      ARYTM_1, CAT_1, RELOC, AMI_5, AMI_2, NAT_1, ABSVALUE, FINSEQ_1, FINSEQ_2,
+      SCMFSA_4, CARD_3, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1,
+      BINARITH, ABSVALUE, INT_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, CQC_LANG,
+      FUNCT_7, FINSEQ_1, FINSET_1, FINSEQ_2, FINSEQ_4, STRUCT_0, AMI_1, AMI_3,
+      AMI_5, RELOC, SCMFSA_2;
+ constructors SCMFSA_2, BINARITH, RELOC, DOMAIN_1, AMI_5, FUNCT_7, FINSEQ_4,
+      MEMBERED;
+ clusters AMI_1, SCMFSA_2, FUNCT_7, XBOOLE_0, FUNCT_1, PRELAMB, RELSET_1,
+      INT_1, AMI_3, FRAENKEL, MEMBERED, NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin ::Preliminaries
+
+definition let N be set; let S be AMI-Struct over N;
+ cluster -> finite FinPartState of S;
+end;
+
+definition
+ let N be set,
+     S be AMI-Struct over N;
+ cluster programmed FinPartState of S;
+end;
+
+theorem :: SCMFSA_4:1
+ for N being with_non-empty_elements set,
+     S being definite (non empty non void AMI-Struct over N),
+     p being programmed FinPartState of S
+ holds rng p c= the Instructions of S;
+
+definition let N be set;
+ let S be AMI-Struct over N;
+ let I, J be programmed FinPartState of S;
+ redefine func I +* J -> programmed FinPartState of S;
+end;
+
+theorem :: SCMFSA_4:2
+ for N being with_non-empty_elements set,
+     S being definite (non empty non void AMI-Struct over N),
+     f being Function of the Instructions of S, the Instructions of S,
+     s being programmed FinPartState of S
+  holds dom(f*s) = dom s;
+
+begin  :: Incrementing and decrementing the instruction locations
+
+reserve j, k, l, m, n, p, q for Nat;
+
+definition
+let loc be Instruction-Location of SCM+FSA , k be Nat;
+func loc + k -> Instruction-Location of SCM+FSA means
+:: SCMFSA_4:def 1
+
+ex m being Nat st loc = insloc m & it = insloc(m+k);
+
+func loc -' k -> Instruction-Location of SCM+FSA means
+:: SCMFSA_4:def 2
+
+ex m being Nat st loc = insloc m & it = insloc(m -' k);
+end;
+
+theorem :: SCMFSA_4:3
+ for l being Instruction-Location of SCM+FSA, m,n
+   holds l+m+n = l+(m+n);
+
+theorem :: SCMFSA_4:4
+ for loc being Instruction-Location of SCM+FSA ,k being Nat
+  holds loc + k -' k = loc;
+
+reserve L for Instruction-Location of SCM,
+        A for Data-Location,
+        I for Instruction of SCM;
+
+theorem :: SCMFSA_4:5
+ for l being Instruction-Location of SCM+FSA, L st L = l
+  holds l+k = L+k;
+
+theorem :: SCMFSA_4:6
+   for l1,l2 being Instruction-Location of SCM+FSA , k being Nat
+  holds
+    Start-At(l1 + k) = Start-At(l2 +k) iff Start-At l1 = Start-At l2;
+
+theorem :: SCMFSA_4:7
+   for l1,l2 being Instruction-Location of SCM+FSA , k being Nat
+  st Start-At l1 = Start-At l2
+  holds
+    Start-At(l1 -' k) = Start-At(l2 -' k);
+
+begin :: Incrementing addresses
+
+definition
+  let i be Instruction of SCM+FSA , k be Nat;
+  func IncAddr (i,k) -> Instruction of SCM+FSA means
+:: SCMFSA_4:def 3
+
+   ex I being Instruction of SCM st I = i & it = IncAddr(I,k)
+                   if InsCode i in {6,7,8}
+  otherwise it = i;
+end;
+
+theorem :: SCMFSA_4:8
+  for k being Nat
+   holds IncAddr(halt SCM+FSA,k) = halt SCM+FSA;
+
+theorem :: SCMFSA_4:9
+  for k being Nat, a,b being Int-Location
+   holds IncAddr(a:=b ,k) = a:=b;
+
+theorem :: SCMFSA_4:10
+  for k being Nat, a,b being Int-Location
+   holds IncAddr(AddTo(a,b),k) = AddTo(a,b);
+
+theorem :: SCMFSA_4:11
+  for k being Nat, a,b being Int-Location
+   holds IncAddr(SubFrom(a,b),k) = SubFrom(a,b);
+
+theorem :: SCMFSA_4:12
+  for k being Nat, a,b being Int-Location
+   holds IncAddr(MultBy(a,b),k) = MultBy(a,b);
+
+theorem :: SCMFSA_4:13
+  for k being Nat, a,b being Int-Location
+   holds IncAddr(Divide(a,b),k) = Divide(a,b);
+
+theorem :: SCMFSA_4:14
+  for k being Nat,loc being Instruction-Location of SCM+FSA
+   holds IncAddr(goto loc,k) = goto (loc + k);
+
+theorem :: SCMFSA_4:15
+  for k being Nat,loc being Instruction-Location of SCM+FSA,
+      a being Int-Location
+   holds IncAddr(a=0_goto loc,k) = a=0_goto (loc + k);
+
+theorem :: SCMFSA_4:16
+  for k being Nat,loc being Instruction-Location of SCM+FSA,
+      a being Int-Location
+   holds IncAddr(a>0_goto loc,k) = a>0_goto (loc + k);
+
+theorem :: SCMFSA_4:17
+  for k being Nat, a,b being Int-Location, f being FinSeq-Location
+   holds IncAddr(b:=(f,a),k) = b:=(f,a);
+
+theorem :: SCMFSA_4:18
+  for k being Nat, a,b being Int-Location, f being FinSeq-Location
+   holds IncAddr((f,a):=b,k) = (f,a):=b;
+
+theorem :: SCMFSA_4:19
+  for k being Nat, a being Int-Location, f being FinSeq-Location
+   holds IncAddr(a:=len f,k) = a:=len f;
+
+theorem :: SCMFSA_4:20
+  for k being Nat, a being Int-Location, f being FinSeq-Location
+   holds IncAddr(f:=<0,...,0>a,k) = f:=<0,...,0>a;
+
+theorem :: SCMFSA_4:21
+ for i being Instruction of SCM+FSA, I st i = I holds
+   IncAddr(i,k) = IncAddr(I,k);
+
+theorem :: SCMFSA_4:22
+ for I being Instruction of SCM+FSA, k being Nat
+  holds InsCode (IncAddr (I, k)) = InsCode I;
+
+definition let IT be FinPartState of SCM+FSA;
+ attr IT is initial means
+:: SCMFSA_4:def 4
+    for m,n st insloc n in dom IT & m < n holds insloc m in dom IT;
+end;
+
+definition
+ func SCM+FSA-Stop -> FinPartState of SCM+FSA equals
+:: SCMFSA_4:def 5
+ (insloc 0).--> halt SCM+FSA;
+end;
+
+definition
+ cluster SCM+FSA-Stop -> non empty initial programmed;
+end;
+
+definition
+ cluster initial programmed non empty FinPartState of SCM+FSA;
+end;
+
+definition let f be Function, g be finite Function;
+ cluster f*g ->finite;
+end;
+
+definition let N be non empty with_non-empty_elements set;
+ let S be definite (non empty non void AMI-Struct over N);
+ let s be programmed FinPartState of S;
+ let f be Function of the Instructions of S, the Instructions of S;
+ redefine func f*s -> programmed FinPartState of S;
+end;
+
+reserve i for Instruction of SCM+FSA;
+
+theorem :: SCMFSA_4:23
+ IncAddr(IncAddr(i,m),n) = IncAddr(i,m+n);
+
+begin :: Incrementing Addresses in a finite partial state
+
+definition
+ let p be programmed FinPartState of SCM+FSA, k be Nat;
+ func IncAddr(p,k) -> programmed FinPartState of SCM+FSA means
+:: SCMFSA_4:def 6
+
+ dom it = dom p &
+ for m st insloc m in dom p holds it.insloc m = IncAddr(pi(p,insloc m),k);
+end;
+
+theorem :: SCMFSA_4:24
+  for p being programmed FinPartState of SCM+FSA , k being Nat
+  for l being Instruction-Location of SCM+FSA st l in dom p
+    holds IncAddr (p,k).l = IncAddr(pi(p,l),k);
+
+theorem :: SCMFSA_4:25
+  for I,J being programmed FinPartState of SCM+FSA holds
+ IncAddr(I +* J, n) = IncAddr(I,n) +* IncAddr(J,n);
+
+theorem :: SCMFSA_4:26
+   for f being Function of the Instructions of SCM+FSA,
+                         the Instructions of SCM+FSA
+  st f = (id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> i)
+ for s being programmed FinPartState of SCM+FSA
+ holds IncAddr(f*s,n) =
+  ((id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> IncAddr(i,n)))*
+               IncAddr(s,n);
+
+theorem :: SCMFSA_4:27
+   for I being programmed FinPartState of SCM+FSA
+  holds IncAddr(IncAddr(I,m),n) = IncAddr(I,m+n);
+
+theorem :: SCMFSA_4:28
+   for s being State of SCM+FSA
+  holds Exec(IncAddr(CurInstr s,k),s +* Start-At (IC s + k))
+      = Following(s) +* Start-At (IC Following(s) + k);
+
+theorem :: SCMFSA_4:29
+   for INS being Instruction of SCM+FSA,
+     s being State of SCM+FSA,
+     p being FinPartState of SCM+FSA,
+     i, j, k being Nat
+  st IC s = insloc(j+k)
+ holds Exec(INS, s +* Start-At (IC s -' k))
+     = Exec(IncAddr(INS, k), s) +* Start-At (IC Exec(IncAddr(INS,k), s) -' k);
+
+begin :: Shifting the finite partial state
+
+definition
+ let p be FinPartState of SCM+FSA , k be Nat;
+ func Shift(p,k) -> programmed FinPartState of SCM+FSA means
+:: SCMFSA_4:def 7
+
+ dom it = { insloc(m+k):insloc m in dom p } &
+ for m st insloc m in dom p holds it.insloc(m+k) = p.insloc m;
+end;
+
+theorem :: SCMFSA_4:30
+ for l being Instruction-Location of SCM+FSA , k being Nat,
+     p being FinPartState of SCM+FSA st l in dom p
+   holds Shift(p,k).(l + k) = p.l;
+
+theorem :: SCMFSA_4:31
+   for p being FinPartState of SCM+FSA, k being Nat
+  holds dom Shift(p,k) =
+         { il+k where il is Instruction-Location of SCM+FSA: il in dom p};
+
+theorem :: SCMFSA_4:32
+   for I being FinPartState of SCM+FSA
+  holds Shift(Shift(I,m),n) = Shift(I,m+n);
+
+theorem :: SCMFSA_4:33
+   for s be programmed FinPartState of SCM+FSA,
+     f be Function of the Instructions of SCM+FSA, the Instructions of SCM+FSA
+ for n holds Shift(f*s,n) = f*Shift(s,n);
+
+theorem :: SCMFSA_4:34
+  for I,J being FinPartState of SCM+FSA holds
+ Shift(I +* J, n) = Shift(I,n) +* Shift(J,n);
+
+theorem :: SCMFSA_4:35
+   for i,j being Nat, p being programmed FinPartState of SCM+FSA
+   holds Shift(IncAddr(p,i),j) = IncAddr(Shift(p,j),i);
+

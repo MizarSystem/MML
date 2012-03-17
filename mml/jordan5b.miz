@@ -1,0 +1,1806 @@
+:: The Ordering of Points on a Curve, Part { I }
+::  by Adam Grabowski and Yatsuka Nakamura
+::
+:: Received September 10, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM_1, BORSUK_1, PRE_TOPC, EUCLID, MCART_1, TOPREAL1, RCOMP_1,
+      FINSEQ_1, RELAT_1, TOPS_2, FUNCT_1, TOPMETR, ARYTM_3, SUBSET_1, BOOLE,
+      TREAL_1, SEQ_1, FUNCT_4, COMPTS_1, TARSKI, ORDINAL2, PCOMPS_1, METRIC_1,
+      JORDAN3, RFINSEQ, FINSEQ_5, GROUP_2, SEQM_3, GOBOARD5, GOBOARD2, TREES_1,
+      TOPREAL4, GOBOARD1, MATRIX_1, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, XREAL_0, REAL_1, NAT_1, BINARITH, RCOMP_1, RELAT_1,
+      FINSEQ_1, FUNCT_1, FUNCT_2, TOPMETR, FINSEQ_4, JORDAN3, STRUCT_0,
+      TOPREAL1, RFINSEQ, PRE_TOPC, TOPS_2, COMPTS_1, BORSUK_1, EUCLID, TREAL_1,
+      METRIC_1, GOBOARD1, GOBOARD2, MATRIX_1, TOPREAL4, GOBOARD5, FUNCT_4,
+      FINSEQ_5, PCOMPS_1;
+ constructors REAL_1, FUNCT_4, RFINSEQ, TOPREAL4, SEQM_3, TOPS_2, COMPTS_1,
+      RCOMP_1, TREAL_1, FINSEQ_5, GOBOARD5, JORDAN3, GOBOARD2, BINARITH,
+      FINSEQ_4, INT_1, SEQ_4;
+ clusters BORSUK_1, EUCLID, FUNCT_1, PRE_TOPC, RELSET_1, GOBOARD5, GOBOARD2,
+      STRUCT_0, TOPMETR, TOPREAL1, METRIC_1, INT_1, JORDAN3, XREAL_0, MEMBERED;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, JORDAN3, TOPREAL4, XBOOLE_0;
+ theorems AXIOMS, BORSUK_1, COMPTS_1, EUCLID, FINSEQ_3, FINSEQ_4, FUNCT_1,
+      FUNCT_2, RELAT_1, JORDAN3, GOBOARD1, NAT_1, GOBOARD9, SPPOL_1, FUNCT_4,
+      TOPMETR2, GOBOARD2, PRE_TOPC, RCOMP_1, REAL_1, HEINE, PCOMPS_1, SPPOL_2,
+      TARSKI, TOPMETR, TOPREAL1, TOPREAL3, RFUNCT_2, BINARITH, SCMFSA_7,
+      RFINSEQ, FINSEQ_5, GOBOARD5, GOBOARD7, FINSEQ_1, TOPS_2, TREAL_1,
+      JORDAN5A, ZFMISC_1, JORDAN4, PARTFUN2, INT_1, RELSET_1, FINSEQ_6, AMI_5,
+      XBOOLE_0, XBOOLE_1, XCMPLX_1, FINSEQ_2;
+ schemes NAT_1;
+
+begin :: Preliminaries
+
+theorem Th1:
+ for i1 being Nat st 1 <= i1 holds i1-'1<i1
+proof let i1 be Nat;
+ assume A1: 1 <= i1;
+   i1 - 1 < i1 - 0 by REAL_1:92;
+ hence thesis by A1,SCMFSA_7:3;
+end;
+
+theorem
+   for i, k being Nat holds i+1 <= k implies 1 <= k-'i
+proof
+ let i, k be Nat;
+ assume i+1 <= k;
+ then i+1 -' i <= k -' i by JORDAN3:5;
+ hence thesis by BINARITH:39;
+end;
+
+theorem
+   for i, k being Nat holds 1 <= i & 1 <= k implies (k-'i)+1 <= k
+proof
+ let i, k be Nat;
+ assume A1: 1 <= i & 1 <= k;
+ then (k-'i) <= k -' 1 by JORDAN3:4;
+ then (k-'i)+1 <= k -' 1+1 by AXIOMS:24;
+ hence thesis by A1,AMI_5:4;
+end;
+
+Lm1:
+ for r be Real st 0 <= r & r <= 1 holds 0 <= 1-r & 1-r <= 1
+proof
+ let r be Real; assume 0 <= r & r <= 1;
+ then 1-1 <= 1-r & 1-r <= 1-0 by REAL_1:92;
+ hence thesis;
+end;
+
+theorem
+    for r being Real st r in the carrier of I[01] holds
+   1-r in the carrier of I[01]
+proof
+  let r be Real;
+  assume r in the carrier of I[01];
+  then 0 <= r & r <= 1 by JORDAN5A:2;
+  then 0 <= 1-r & 1-r <= 1 by Lm1;
+  hence thesis by JORDAN5A:2;
+end;
+
+theorem
+    for p, q, p1 being Point of TOP-REAL 2 st p`2 <> q`2 & p1 in LSeg (p, q)
+   holds
+    ( p1`2 = p`2 implies p1 = p )
+proof
+ let p, q, p1 be Point of TOP-REAL 2;
+ assume A1: p`2 <> q`2 & p1 in LSeg (p, q);
+ assume A2: p1`2 = p`2;
+ assume A3: p1 <> p;
+   p1 in { (1-l)*p + l*q where l is Real : 0 <= l & l <= 1 }
+    by A1,TOPREAL1:def 4;
+  then consider l1 be Real such that
+A4:  p1 = (1-l1)*p + l1*q & 0 <= l1 & l1 <= 1;
+A5: (1-l1)*p + l1*q = |[ ((1-l1)*p)`1 + (l1*q)`1 , ((1-l1)*p)`2 + (l1*q)`2 ]|
+       by EUCLID:59;
+A6: (1-l1)*p = |[ (1-l1)*p`1, (1-l1)*p`2 ]| &
+    l1*q = |[ l1*q`1, l1*q`2 ]| by EUCLID:61;
+   p`2 = ( (1-l1)*p )`2 + ( l1*q )`2 by A2,A4,A5,EUCLID:56
+    .= (1-l1)*p`2 + (l1*q)`2 by A6,EUCLID:56
+    .= (1-l1)*p`2 + l1*q`2 by A6,EUCLID:56;
+ then 1*p`2 - (1-l1)*p`2 = l1*q`2 by XCMPLX_1:26;
+ then (1 - (1-l1))*p`2 = l1*q`2 by XCMPLX_1:40;
+ then l1*p`2 = l1*q`2 by XCMPLX_1:18;
+ then l1 = 0 by A1,XCMPLX_1:5;
+ then p1 = 1*p + 0.REAL 2 by A4,EUCLID:33
+   .= p + 0.REAL 2 by EUCLID:33
+   .= p by EUCLID:31;
+ hence thesis by A3;
+end;
+
+theorem
+    for p, q, p1 being Point of TOP-REAL 2 st p`1 <> q`1 & p1 in LSeg (p, q)
+   holds
+    ( p1`1 = p`1 implies p1 = p )
+proof
+ let p, q, p1 be Point of TOP-REAL 2;
+ assume A1: p`1 <> q`1 & p1 in LSeg (p, q);
+ assume A2: p1`1 = p`1;
+ assume A3: p1 <> p;
+   p1 in { (1-l)*p + l*q where l is Real : 0 <= l & l <= 1 }
+                     by A1,TOPREAL1:def 4;
+  then consider l1 be Real such that
+A4:  p1 = (1-l1)*p + l1*q & 0 <= l1 & l1 <= 1;
+A5: (1-l1)*p + l1*q = |[ ((1-l1)*p)`1 + (l1*q)`1 , ((1-l1)*p)`2 + (l1*q)`2 ]|
+       by EUCLID:59;
+A6: (1-l1)*p = |[ (1-l1)*p`1, (1-l1)*p`2 ]| &
+    l1*q = |[ l1*q`1, l1*q`2 ]| by EUCLID:61;
+   p`1 = ( (1-l1)*p )`1 + ( l1*q )`1 by A2,A4,A5,EUCLID:56
+    .= (1-l1)*p`1 + (l1*q)`1 by A6,EUCLID:56
+    .= (1-l1)*p`1 + l1*q`1 by A6,EUCLID:56;
+ then 1*p`1 - (1-l1)*p`1 = l1*q`1 by XCMPLX_1:26;
+ then (1 - (1-l1))*p`1 = l1*q`1 by XCMPLX_1:40;
+ then l1*p`1 = l1*q`1 by XCMPLX_1:18;
+ then l1 = 0 by A1,XCMPLX_1:5;
+ then p1 = 1*p + 0.REAL 2 by A4,EUCLID:33
+   .= p + 0.REAL 2 by EUCLID:33
+   .= p by EUCLID:31;
+ hence thesis by A3;
+end;
+
+Lm2:
+  for P being Point of I[01] holds P is Real
+proof
+ let P be Point of I[01];
+   P in [.0,1.] by BORSUK_1:83;
+ hence thesis;
+end;
+
+theorem Th7:
+ for f being FinSequence of TOP-REAL 2,
+     P being non empty Subset of TOP-REAL 2,
+     F being map of I[01], (TOP-REAL 2) | P,
+     i being Nat st 1 <= i & i+1 <= len f & f is_S-Seq & P = L~f &
+       F is_homeomorphism & F.0 = f/.1 & F.1 = f/.len f
+      ex p1, p2 being Real st p1 < p2 &
+       0 <= p1 & p1 <= 1 & 0 <= p2 & p2 <= 1 &
+       LSeg (f, i) = F.:[.p1, p2.] & F.p1 = f/.i & F.p2 = f/.(i+1)
+proof
+ let f be FinSequence of TOP-REAL 2,
+     P be non empty Subset of TOP-REAL 2,
+     Ff be map of I[01], (TOP-REAL 2)|P,
+     i be Nat;
+ assume A1: 1 <= i & i+1 <= len f & f is_S-Seq & P = L~f &
+            Ff is_homeomorphism & Ff.0 = f/.1 & Ff.1 = f/.len f;
+then A2: f is one-to-one by TOPREAL1:def 10;
+A3: the carrier of Closed-Interval-TSpace(0, 1/2) = [.0,1/2.] &
+      the carrier of Closed-Interval-TSpace(1/2,1) = [.1/2,1.]
+          by TOPMETR:25;
+then A4: [#]Closed-Interval-TSpace(0, 1/2) = [.0,1/2.] &
+      [#]Closed-Interval-TSpace(1/2,1) = [.1/2,1.] by PRE_TOPC:12;
+A5: len f >= 2 by A1,TOPREAL1:def 10;
+ deffunc Q(Nat) = L~(f|($1+2));
+
+ defpred ARC[Nat] means
+ 1 <= $1 + 2 & $1 + 2 <= len f implies
+ ex NE being non empty Subset of TOP-REAL 2 st NE = Q($1) &
+  for j be Nat
+    for F being map of I[01], (TOP-REAL 2)|NE st
+     1 <= j & j+1 <= $1+2 &
+     F is_homeomorphism & F.0 = f/.1 & F.1 = f/.($1+2)
+  ex p1, p2 be Real st p1 < p2 &
+    0 <= p1 & p1 <= 1 & 0 <= p2 & p2 <= 1 & LSeg (f, j) = F.:[.p1, p2.]
+     & F.p1 = f/.j & F.p2 = f/.(j+1);
+
+  reconsider h1 = len f - 2 as Nat by A5,INT_1:18;
+    f|(len f) = f|(Seg len f) by TOPREAL1:def 1
+           .= f|(dom f) by FINSEQ_1:def 3
+           .= f by RELAT_1:97;
+then A6:  Q(h1) = L~f & h1 + 2 = len f by XCMPLX_1:27;
+A7: ARC[0]
+proof
+  assume A8: 1 <= 0 + 2 & 0 + 2 <= len f;
+then A9: 1 <= len (f|2) & 2 <= len (f|2) by TOPREAL1:3;
+  then reconsider NE = Q(0) as non empty Subset of TOP-REAL 2
+by TOPREAL1:29;
+  take NE;
+  thus NE = Q(0);
+  let j be Nat;
+  let F be map of I[01], (TOP-REAL 2)|NE;
+  assume
+A10:   1 <= j & j+1 <= 0+2 &
+     F is_homeomorphism & F.0 = f/.1 & F.1 = f/.(0+2);
+    then j <= 1+1-1 by REAL_1:84;
+then A11: j = 1 by A10,AXIOMS:21;
+A12: len (f|2) = 2 by A8,TOPREAL1:3;
+A13: 1 in dom (f|2) & 2 in dom (f|2) by A9,FINSEQ_3:27;
+then A14: (f|2)/.1 = (f|2).1 & (f|2)/.2 = (f|2).2 by FINSEQ_4:def 4;
+A15: (f|2)/.1 = f/.1 by A13,TOPREAL1:1;
+A16: 1 + 1 <= len f by A8;
+A17: rng F = [#]((TOP-REAL 2)|NE) by A10,TOPS_2:def 5
+       .= L~(f|2) by PRE_TOPC:def 10
+       .= L~<* (f|2)/.1, (f|2)/.2 *> by A12,A14,FINSEQ_1:61
+       .= LSeg ((f|2)/.1, (f|2)/.2) by SPPOL_2:21
+       .= LSeg (f/.1, f/.2) by A13,A15,TOPREAL1:1
+       .= LSeg (f, 1) by A16,TOPREAL1:def 5;
+ take 0, 1;
+ thus thesis by A10,A11,A17,BORSUK_1:83,FUNCT_2:45;
+end;
+A18: for n being Nat st ARC[n] holds ARC[n+1]
+proof
+ let n be Nat; assume
+A19: ARC[n];
+ assume A20: 1 <= n + 1 + 2 & n + 1 + 2 <= len f;
+     A21: 2 <= n + 2 by NAT_1:29;
+     n+2 <= n+2+1 by NAT_1:29;
+   then n+2 <= n+1+2 by XCMPLX_1:1;
+ then consider NE being non empty Subset of TOP-REAL 2 such that
+A22: NE = Q(n) &
+  for j be Nat
+    for F being map of I[01], (TOP-REAL 2)|NE st
+     1 <= j & j+1 <= n+2 &
+     F is_homeomorphism & F.0 = f/.1 & F.1 = f/.(n+2)
+  ex p1, p2 be Real st p1 < p2 &
+    0 <= p1 & p1 <= 1 & 0 <= p2 & p2 <= 1 & LSeg (f, j) = F.:[.p1, p2.]
+     & F.p1 = f/.j & F.p2 = f/.(j+1) by A19,A20,A21,AXIOMS:22;
+A23:  len (f|(n+1+2)) = n+1+2 by A20,TOPREAL1:3;
+A24:  n+1+2 = n+(1+2) by XCMPLX_1:1
+           .= n+3;
+A25:   n + 1 + 2 = n + 2 + 1 by XCMPLX_1:1;
+then A26: 1 <= n + 1 + 1 & n + 1 + 1 <= n + 2 + 1 & n + 2 + 1 <= len f
+      by A20,AXIOMS:24,NAT_1:29;
+then A27:  1 <= n + 1 + 1 & n + 1 + 1 <= len f by AXIOMS:22;
+A28:  n + 1 + 1 = n + (1 + 1) by XCMPLX_1:1;
+then A29:  1 <= n+2 & n+2 <= len f by A26,AXIOMS:22;
+A30: n+2 in dom (f|(n+3)) by A23,A24,A25,A26,A28,FINSEQ_3:27;
+then A31: f/.(n+2) = (f|(n+3))/.(n+2) by TOPREAL1:1;
+A32: len (f|(n+3)) >= 2 by A23,A24,NAT_1:29;
+  then reconsider NE1 = Q(n+1) as non empty Subset of TOP-REAL 2
+by A24,TOPREAL1:29;
+  take NE1;
+  thus NE1 = Q(n+1);
+  let j be Nat, G be map of I[01], (TOP-REAL 2)|NE1;
+  assume
+A33:  1 <= j & j+1 <= n+1+2 &
+       G is_homeomorphism & G.0 = f/.1 & G.1 = f/.(n+1+2);
+then A34: G is one-to-one & rng G = [#]((TOP-REAL 2) | Q(n+1)) &
+       dom G = [#]I[01] by TOPS_2:def 5;
+then A35: rng G = L~(f|(n+3)) by A24,PRE_TOPC:def 10;
+  set pp = G".(f/.(n+2));
+A36:  pp = (G qua Function)".(f/.(n+2)) by A34,TOPS_2:def 4;
+      n+2 <= len (f|(n+2)) & 1 <= len (f|(n+2)) by A29,TOPREAL1:3;
+then A37: n+2 in dom (f|(n+2)) & 1 in dom (f|(n+2))
+          by A26,A28,FINSEQ_3:27;
+A38: dom G = [.0,1.] by A34,BORSUK_1:83,PRE_TOPC:12;
+A39:  f/.(n+2) in rng G by A30,A31,A32,A35,GOBOARD1:16;
+then A40:  pp in dom G & f/.(n+2) = G.pp by A34,A36,FUNCT_1:54;
+  then reconsider pp as Real by A38;
+       n + 1 <> n + 2 by XCMPLX_1:2;
+then A41:  n + 1 + 1 <> n + 2 + 1 by XCMPLX_1:2;
+A42:  n+2 <> n+3 by XCMPLX_1:2;
+A43: n+2 in dom f & n+3 in dom f by A20,A24,A29,FINSEQ_3:27;
+A44:  1 <> pp
+  proof
+   assume pp = 1;
+   then f/.(n+2) = f/.(n+1+2) by A33,A34,A36,A39,FUNCT_1:54;
+   hence thesis by A2,A24,A42,A43,PARTFUN2:17;
+  end;
+A45:  0 <= pp & pp <= 1 by A34,A40,JORDAN5A:2;
+then A46:    pp < 1 by A44,REAL_1:def 5;
+  set pn = f/.(n+2), pn1 = f/.(n+2+1);
+    2 <= n+2 by NAT_1:29;
+then A47:  pn = (f|(n+2))/.(n+2) & (f|(n+2))/.1 = f/.1 &
+      len (f|(n+2)) = n+2 & f|(n+2) is_S-Seq
+        by A1,A29,A37,JORDAN3:37,TOPREAL1:1,3;
+    then NE is_an_arc_of (f|(n+2))/.1, pn by A22,TOPREAL1:31;
+  then consider F be map of I[01], (TOP-REAL 2)|NE such that
+A48:  F is_homeomorphism & F.0 = f/.1 & F.1 = pn by A47,TOPREAL1:def 2;
+A49: n + 1 + 1 in dom f & n + 2 + 1 in dom f by A20,A25,A27,FINSEQ_3:27;
+     then pn <> pn1 by A2,A28,A41,PARTFUN2:17;
+  then LSeg(pn, pn1) is_an_arc_of pn, pn1 by TOPREAL1:15;
+  then consider F' be map of I[01], (TOP-REAL 2)|LSeg(pn, pn1) such that
+A50:   F' is_homeomorphism & F'.0 = pn & F'.1 = pn1 by TOPREAL1:def 2;
+  set Ex1 = P[01]( 0, 1/2, (#)(0,1),(0,1)(#) ),
+      Ex2 = P[01]( 1/2, 1, (#)(0,1),(0,1)(#) );
+  set F1 = F * Ex1, F1' = F' * Ex2;
+A51: Ex1 is_homeomorphism & Ex2 is_homeomorphism by TREAL_1:20;
+then A52:dom Ex1 = [#]Closed-Interval-TSpace(0,1/2) by TOPS_2:def 5;
+then A53:dom Ex1 = the carrier of Closed-Interval-TSpace(0,1/2) by PRE_TOPC:12
+            .= [.0,1/2.] by TOPMETR:25;
+     dom F = [#]I[01] by A48,TOPS_2:def 5;
+then A54: rng Ex1 = dom F by A51,TOPMETR:27,TOPS_2:def 5;
+   then rng F1 = rng F by RELAT_1:47;
+then A55: rng F1 = [#] ((TOP-REAL 2) | NE) by A48,TOPS_2:def 5;
+then A56:rng F1 = Q(n) by A22,PRE_TOPC:def 10;
+A57: dom F1 = [#]Closed-Interval-TSpace(0, 1/2) by A52,A54,RELAT_1:46;
+   then dom F1 = the carrier of Closed-Interval-TSpace(0, 1/2) &
+        rng F1 = the carrier of ((TOP-REAL 2) | NE) by A55,PRE_TOPC:12;
+  then F1 is Function of the carrier of Closed-Interval-TSpace(0, 1/2),
+   the carrier of ((TOP-REAL 2)|NE) by FUNCT_2:def 1,RELSET_1:11;
+  then reconsider F1 as map of Closed-Interval-TSpace (0,1/2), (TOP-REAL 2)|NE;
+A58: F1 is_homeomorphism by A48,A51,TOPMETR:27,TOPS_2:71;
+then A59: rng F1 = [#]((TOP-REAL 2)|NE) by TOPS_2:def 5
+          .= Q(n) by A22,PRE_TOPC:def 10;
+A60:dom Ex2 = [#]Closed-Interval-TSpace(1/2, 1) by A51,TOPS_2:def 5;
+     dom F' = [#]I[01] by A50,TOPS_2:def 5;
+then A61: rng Ex2 = dom F' by A51,TOPMETR:27,TOPS_2:def 5;
+   then rng F1' = rng F' by RELAT_1:47;
+then A62: rng F1' = [#] ((TOP-REAL 2) | LSeg(pn, pn1)) by A50,TOPS_2:def 5;
+A63:dom F1' = [#]Closed-Interval-TSpace(1/2, 1) by A60,A61,RELAT_1:46;
+   then dom F1' = the carrier of Closed-Interval-TSpace(1/2, 1) &
+        rng F1' = the carrier of ((TOP-REAL 2) | LSeg(pn, pn1))
+    by A62,PRE_TOPC:12;
+  then F1' is Function of the carrier of Closed-Interval-TSpace(1/2,1),
+   the carrier of ((TOP-REAL 2) | LSeg(pn, pn1))
+   by FUNCT_2:def 1,RELSET_1:11;
+  then reconsider F1' as map of Closed-Interval-TSpace (1/2,1),
+                 (TOP-REAL 2)|LSeg(pn, pn1);
+A64:  F1' is_homeomorphism by A50,A51,TOPMETR:27,TOPS_2:71;
+then A65: rng F1' = [#]((TOP-REAL 2)|LSeg(pn, pn1)) by TOPS_2:def 5
+           .= LSeg(pn, pn1) by PRE_TOPC:def 10;
+  set FF = F1 +* F1';
+   reconsider T1 = Closed-Interval-TSpace(0,1/2),
+              T2 = Closed-Interval-TSpace(1/2, 1) as SubSpace of I[01]
+        by TOPMETR:27,TREAL_1:6;
+A66: Q(n+1) = Q(n) \/ LSeg(pn, pn1) by A25,A43,A49,TOPREAL3:45;
+A67:the carrier of ((TOP-REAL 2)|Q(n+1)) =
+        [#]((TOP-REAL 2)|Q(n+1)) by PRE_TOPC:12
+            .= Q(n+1) by PRE_TOPC:def 10;
+   then dom F1 = the carrier of T1 &
+  rng F1 c= the carrier of ((TOP-REAL 2)|NE1)
+    by A56,A57,A66,PRE_TOPC:12,XBOOLE_1:7;
+   then F1 is Function of the carrier of T1, the carrier of ((TOP-REAL 2)|NE1)
+     by FUNCT_2:def 1,RELSET_1:11;
+   then reconsider g11 = F1 as map of T1, ((TOP-REAL 2)|NE1);
+     dom F1' = the carrier of T2 &
+    rng F1' c= the carrier of ((TOP-REAL 2)|NE1)
+        by A63,A65,A66,A67,PRE_TOPC:12,XBOOLE_1:7;
+   then F1' is Function of the carrier of T2, the carrier of ((TOP-REAL 2)|Q(n
++1))
+     by FUNCT_2:def 1,RELSET_1:11;
+   then reconsider g22 = F1' as map of T2, ((TOP-REAL 2)|NE1);
+A68: [.0,1/2.] = dom F1 & [.1/2, 1.] = dom F1' by A4,A58,A64,TOPS_2:def 5;
+      1/2 in { l where l is Real : 0 <= l & l <= 1/2 } &
+      1/2 in { l where l is Real : 1/2 <= l & l <= 1 };
+then A69: 1/2 in dom F1 & 1/2 in dom F1' by A68,RCOMP_1:def 1;
+A70:  dom FF = [.0,1/2.] \/ [.1/2,1.] by A68,FUNCT_4:def 1
+       .= [.0,1.] by TREAL_1:2;
+A71:  I[01] is compact by HEINE:11,TOPMETR:27;
+      TOP-REAL 2 is_T2 by SPPOL_1:26;
+then A72:  (TOP-REAL 2)|NE1 is_T2 by TOPMETR:3;
+A73:  dom FF = [#]I[01] by A70,BORSUK_1:83,PRE_TOPC:12;
+A74: Ex1.(1/2) = Ex1.(0,1/2)(#) by TREAL_1:def 2
+             .= (0,1)(#) by TREAL_1:16
+             .= 1 by TREAL_1:def 2;
+A75: Ex2.(1/2) = Ex2.(#)(1/2,1) by TREAL_1:def 1
+             .= (#)(0,1) by TREAL_1:16
+             .= 0 by TREAL_1:def 1;
+A76: F1.(1/2) = f/.(n+2) by A48,A69,A74,FUNCT_1:22;
+A77: F1'.(1/2) = f/.(n+2) by A50,A69,A75,FUNCT_1:22;
+      [.0,1/2.] /\ [.1/2,1.] = [.1/2,1/2.] by TREAL_1:3;
+then A78: dom F1 /\ dom F1' = {1/2} by A68,RCOMP_1:14;
+A79:    for x being set holds x in Q(n) /\ LSeg(pn,pn1) iff x = pn
+        proof
+         let x be set;
+         thus x in Q(n) /\ LSeg(pn,pn1) implies x = pn
+          proof
+           assume x in Q(n) /\ LSeg(pn,pn1);
+           then A80: x in LSeg(pn,pn1) & x in Q(n) by XBOOLE_0:def 3;
+           then x in union { LSeg(f|(n+2),k) where k is Nat :
+             1 <= k & k+1 <= len(f|(n+2)) }
+            by TOPREAL1:def 6;
+           then consider X being set such that
+          A81: x in X and
+          A82: X in { LSeg(f|(n+2),k) where k is Nat :
+                   1 <= k & k+1 <= len(f|(n+2)) }
+             by TARSKI:def 4;
+           consider k be Nat such that
+          A83: X = LSeg(f|(n+2),k) and
+          A84: 1 <= k & k+1 <= len(f|(n+2)) by A82;
+         A85: len(f|(n+2)) = n+(1+1) by A27,A28,TOPREAL1:3;
+A86:      len(f|(n+2)) = n+1+1 by A27,A28,TOPREAL1:3;
+then A87:     k <= n+1 by A84,REAL_1:53;
+A88:    f is s.n.c. by A1,TOPREAL1:def 10;
+A89:    f is unfolded by A1,TOPREAL1:def 10;
+           now assume
+A90:          k < n+1;
+         A91: 1 <= 1+k & k+1 <= n+(1+1)
+             by A27,A28,A84,NAT_1:29,TOPREAL1:3;
+A92:      k+1 <= len f by A27,A84,A86,AXIOMS:22;
+           k+1 < n+1+1 by A90,REAL_1:53;
+then A93:      k+1 < n+(1+1) by XCMPLX_1:1;
+         set p1' = f/.k, p2' = f/.(k+1);
+           n+1 <= n+1+1 & n+1+1 = n+(1+1) by NAT_1:29,XCMPLX_1:1;
+         then k <= n+2 by A90,AXIOMS:22;
+         then k in Seg len(f|(n+2)) & k+1 in Seg len(f|(n+2))
+          by A84,A85,A91,FINSEQ_1:3;
+          then A94: k in dom(f|(n+2)) & k+1 in dom(f|(n+2)) by FINSEQ_1:def 3;
+         then A95: (f|(n+2))/.k = p1' by TOPREAL1:1;
+         A96: (f|(n+2))/.(k+1) = p2' by A94,TOPREAL1:1;
+         A97: LSeg(f,k) = LSeg(p1',p2') by A84,A92,TOPREAL1:def 5
+                      .= LSeg(f|(n+2),k) by A84,A95,A96,TOPREAL1:def 5;
+           LSeg(f,n+2) = LSeg(pn,pn1) by A26,A28,TOPREAL1:def 5;
+         then LSeg(f|(n+2),k) misses LSeg(pn,pn1)
+                  by A88,A93,A97,TOPREAL1:def 9;
+         then LSeg(f|(n+2),k) /\ LSeg(pn,pn1) = {} by XBOOLE_0:def 7;
+          hence contradiction by A80,A81,A83,XBOOLE_0:def 3;
+         end;
+         then A98: k = n + 1 by A87,REAL_1:def 5;
+A99:      1 <= n+1 & 1 <= n+1+1 & n+1+1 <= len f
+              by A26,A84,A87,AXIOMS:22;
+         set p1' = f/.(n+1), p2' = f/.(n+1+1);
+A100:    n+1 <= n+1+1 & n+1+1 = n+(1+1) & 1 <= 1+n & 1 <= 1+(n+1)
+          by NAT_1:29,XCMPLX_1:1;
+         then n+1 in Seg len(f|(n+2)) & n+1+1 in Seg len(f|(n+2))
+          by A85,FINSEQ_1:3;
+         then A101: n+1 in dom(f|(n+2)) & n+1+1 in dom(f|(n+2)) by FINSEQ_1:def
+3;
+         then A102: (f|(n+2))/.(n+1) = p1' by TOPREAL1:1;
+         A103: (f|(n+2))/.(n+1+1) = p2' by A101,TOPREAL1:1;
+         A104: LSeg(f,n+1) = LSeg(p1',p2') by A99,TOPREAL1:def 5
+               .= LSeg(f|(n+2),n+1) by A85,A100,A102,A103,TOPREAL1:def 5;
+           n+1+1 = n+(1+1) & n+1+2 = n+(1+2) by XCMPLX_1:1;
+         then LSeg(pn,pn1) = LSeg(f,n+1+1)
+           by A26,TOPREAL1:def 5;
+         then A105: x in LSeg(f,n+1) /\ LSeg(f,n+1+1)
+           by A80,A81,A83,A98,A104,XBOOLE_0:def 3;
+           1 <= n+1 by NAT_1:29;
+         then LSeg(f,n+1) /\ LSeg(f,n+1+1) = {f/.(n+1+1)}
+            by A20,A89,TOPREAL1:def 8;
+         hence x = f/.(n+1+1) by A105,TARSKI:def 1
+           .= f/.(n+(1+1)) by XCMPLX_1:1
+           .= pn;
+          end;
+         assume A106: x = pn;
+          then A107: x in LSeg(pn,pn1) by TOPREAL1:6;
+          A108: len(f|(n+2)) = n+2 by A27,A28,TOPREAL1:3;
+            then dom(f|(n+2)) = Seg(n+2) & n + 2 in Seg(n+2)
+             by A26,A28,FINSEQ_1:3,def 3;
+            then A109: x = (f|(n+2))/.(n+(1+1)) by A106,TOPREAL1:1
+                      .= (f|(n+2))/.(n+1+1) by XCMPLX_1:1;
+A110:       1 <= n+1 by NAT_1:29;
+              n+1+1 = n+(1+1) by XCMPLX_1:1;
+          then A111: x in LSeg(f|(n+2),n+1) by A108,A109,A110,TOPREAL1:27;
+             1 <= 1 + n & n + 1 + 1 <= n + (1 + 1) & n+2 <= len f
+              by A26,A28,AXIOMS:22,NAT_1:29;
+            then 1 <= n+1 & n+1+1 <= len(f|(n+2)) by TOPREAL1:3;
+            then LSeg(f|(n+2),n+1) in {LSeg(f|(n+2),k) where k is Nat :
+                   1 <= k & k+1 <= len(f|(n+2))};
+          then x in union {LSeg(f|(n+2),k) where k is Nat :
+                   1 <= k & k+1 <= len(f|(n+2))}
+           by A111,TARSKI:def 4;
+          then x in Q(n) by TOPREAL1:def 6;
+         hence x in Q(n) /\ LSeg(pn,pn1) by A107,XBOOLE_0:def 3;
+        end;
+       f/.(n+2) in rng F1' by A69,A77,FUNCT_1:def 5;
+then A112:  {f/.(n+2)} c= rng F1' by ZFMISC_1:37;
+A113:  F1.:(dom F1 /\ dom F1') = {f/.(n+2)} by A69,A76,A78,FUNCT_1:117;
+then A114:  rng FF = Q(n) \/ LSeg(pn, pn1) by A59,A65,A112,TOPMETR2:3;
+then A115:  rng FF = [#]((TOP-REAL 2)|Q(n+1)) by A66,A67,PRE_TOPC:12;
+       dom FF = the carrier of I[01] &
+    rng FF c= the carrier of ((TOP-REAL 2)|Q(n+1))
+      by A59,A65,A66,A67,A70,A112,A113,BORSUK_1:83,TOPMETR2:3;
+  then FF is Function of the carrier of I[01],
+      the carrier of ((TOP-REAL 2)|NE1) by FUNCT_2:4;
+  then reconsider FF as map of I[01], (TOP-REAL 2)|NE1;
+A116: rng Ex1 = [#] Closed-Interval-TSpace(0,1) by A51,TOPS_2:def 5;
+      0 in { l where l is Real : 0 <= l & l <= 1/2 } &
+     1/2 in { l where l is Real : 0 <= l & l <= 1/2 };
+then A117: 0 in dom Ex1 & 1/2 in dom Ex1 & Ex1 is one-to-one continuous
+         by A51,A53,RCOMP_1:def 1,TOPS_2:def 5;
+A118: Ex1.0 = Ex1.(#)(0,1/2) by TREAL_1:def 1
+             .= (#)(0,1) by TREAL_1:16
+             .= 0 by TREAL_1:def 1;
+A119: Ex1".0 = (Ex1 qua Function)".0 by A116,A117,TOPS_2:def 4
+          .= 0 by A117,A118,FUNCT_1:54;
+A120: Ex2.(1/2) = Ex2.(#)(1/2,1) by TREAL_1:def 1
+            .= (#)(0,1) by TREAL_1:16
+            .= 0 by TREAL_1:def 1;
+A121: Ex1".1 = (Ex1 qua Function)".1 by A116,A117,TOPS_2:def 4
+          .= 1/2 by A74,A117,FUNCT_1:54;
+A122: Ex2.1 = Ex2.(1/2,1)(#) by TREAL_1:def 2
+             .= (0,1)(#) by TREAL_1:16
+             .= 1 by TREAL_1:def 2;
+A123: LSeg(pn, pn1) = F1'.:[.1/2,1.] by A3,A65,FUNCT_2:45;
+A124:  FF.(1/2) = f/.(n+2) by A69,A77,FUNCT_4:14;
+A125:  for x be set st x in [.0,1/2.] & x <> 1/2 holds not x in dom F1'
+  proof
+   let x be set; assume A126: x in [.0,1/2.] & x <> 1/2;
+   assume x in dom F1';
+   then x in dom F1 /\ dom F1' by A68,A126,XBOOLE_0:def 3;
+   hence thesis by A78,A126,TARSKI:def 1;
+  end;
+A127: FF.:[.1/2,1.] = F1'.:[.1/2,1.]
+  proof
+   thus FF.:[.1/2,1.] c= F1'.:[.1/2,1.]
+   proof
+    let a be set; assume a in FF.:[.1/2,1.];
+    then consider x be set such that
+A128:   x in dom FF & x in [.1/2,1.] & a = FF.x by FUNCT_1:def 12;
+  FF.x = F1'.x by A68,A128,FUNCT_4:14;
+    hence thesis by A68,A128,FUNCT_1:def 12;
+   end;
+   thus F1'.:[.1/2,1.] c= FF.:[.1/2,1.]
+   proof
+    let a be set; assume a in F1'.:[.1/2,1.];
+    then consider x be set such that
+A129:   x in dom F1' & x in [.1/2,1.] & a = F1'.x by FUNCT_1:def 12;
+A130: x in dom FF by A129,FUNCT_4:13;
+      a = FF.x by A129,FUNCT_4:14;
+    hence thesis by A129,A130,FUNCT_1:def 12;
+   end;
+  end;
+  set GF = G" * FF;
+A131:  0 in dom FF & 1 in dom FF by A70,BORSUK_1:83,JORDAN5A:2;
+       0 in { l where l is Real : 0 <= l & l <= 1/2 };
+     then 0 in [.0,1/2.] by RCOMP_1:def 1;
+     then not 0 in dom F1' by A125;
+then A132:  FF.0 = F1.0 by FUNCT_4:12
+         .= f/.1 by A48,A117,A118,FUNCT_1:23;
+       1 in { l where l is Real : 1/2 <= l & l <= 1 };
+then A133:  1 in dom F1' by A68,RCOMP_1:def 1;
+then A134:  FF.1 = F1'.1 by FUNCT_4:14
+         .= pn1 by A50,A122,A133,FUNCT_1:22;
+A135:  0 in dom G & f/.1 = G.0 by A33,A38,BORSUK_1:83,JORDAN5A:2;
+A136:  G".(f/.1) = (G qua Function)".(f/.1) by A34,TOPS_2:def 4
+              .= 0 by A34,A135,FUNCT_1:54;
+then A137:  GF.0 = 0 by A131,A132,FUNCT_1:23;
+A138:  1 in dom G & pn1 = G.1 by A33,A38,BORSUK_1:83,JORDAN5A:2,XCMPLX_1:1;
+A139:  G".pn1 = (G qua Function)".pn1 by A34,TOPS_2:def 4
+            .= 1 by A34,A138,FUNCT_1:54;
+then A140:  GF.1 = 1 by A131,A134,FUNCT_1:23;
+    reconsider ppp = 1/2 as Point of I[01] by JORDAN5A:2;
+      TopSpaceMetr RealSpace is_T2 by PCOMPS_1:38;
+then A141: I[01] is_T2 by TOPMETR:3,27,def 7;
+A142: T1 is compact & T2 is compact by HEINE:11;
+     F1 is continuous & F1' is continuous &
+   (TOP-REAL 2)|NE is SubSpace of ((TOP-REAL 2)|NE1) &
+    (TOP-REAL 2)|LSeg(pn, pn1) is SubSpace of (TOP-REAL 2)|NE1
+      by A22,A58,A64,A66,TOPMETR:5,TOPS_2:def 5;
+then A143: g11 is continuous & g22 is continuous by TOPMETR:7;
+A144: [#] T1 = the carrier of T1 by PRE_TOPC:12
+        .= [.0,1/2.] by TOPMETR:25;
+A145: [#] T2 = the carrier of T2 by PRE_TOPC:12
+        .= [.1/2,1.] by TOPMETR:25;
+then A146:  ([#] T1) \/ ([#]T2) = [.0,1.] by A144,TREAL_1:2
+      .= [#] I[01] by BORSUK_1:83,PRE_TOPC:12;
+     ([#] T1) /\ ([#]T2) = {ppp} by A144,A145,TOPMETR2:1;
+  then consider hh being map of I[01],(TOP-REAL 2)|NE1 such that
+A147:   hh = g11 +* g22 & hh is continuous
+     by A76,A77,A141,A142,A143,A146,TOPMETR2:4;
+A148:  F1 is one-to-one & F1' is one-to-one by A58,A64,TOPS_2:def 5;
+      for x1,x2 be set st x1 in dom F1' & x2 in dom F1 \ dom F1' holds
+      F1'.x1 <> F1.x2
+    proof
+     let x1,x2 be set; assume A149: x1 in dom F1' & x2 in dom F1 \ dom F1';
+     assume A150: F1'.x1 = F1.x2;
+       x1 in the carrier of Closed-Interval-TSpace(1/2,1)
+        by A68,A149,TOPMETR:25;
+then A151:  F1'.x1 in LSeg(pn, pn1) by A65,FUNCT_2:6;
+A152:  x2 in dom F1 & not x2 in dom F1' by A149,XBOOLE_0:def 4;
+     then x2 in the carrier of Closed-Interval-TSpace(0, 1/2)
+        by A68,TOPMETR:25;
+     then F1.x2 in NE by A22,A59,FUNCT_2:6;
+     then F1.x2 in NE /\ LSeg(pn, pn1) by A150,A151,XBOOLE_0:def 3;
+     then F1.x2 = pn by A22,A79;
+     hence thesis by A69,A76,A148,A152,FUNCT_1:def 8;
+    end;
+ then FF is one-to-one by A148,TOPMETR2:2;
+    then G" is_homeomorphism & FF is_homeomorphism by A33,A71,A72,A73,A115,A147
+,COMPTS_1:26,TOPS_2:70;
+then A153: GF is_homeomorphism by TOPS_2:71;
+then A154:GF is continuous by TOPS_2:def 5;
+A155: [#]I[01] = the carrier of I[01] by PRE_TOPC:12;
+A156: dom GF = [#]I[01] & rng GF = [#]I[01] & GF is one-to-one
+      by A153,TOPS_2:def 5;
+then A157: dom (GF") = [#]I[01] & rng (GF") = [#]I[01] by TOPS_2:62;
+A158: rng G = [#]((TOP-REAL 2)|Q(n+1)) by A33,TOPS_2:def 5
+          .= rng FF by A66,A67,A114,PRE_TOPC:12;
+A159:  G * GF = FF
+  proof
+      G * (G" * FF) = (FF qua Relation) * ( G * (G" qua Function) ) by RELAT_1:
+55
+        .= id rng G * FF by A34,TOPS_2:65
+                .= FF by A158,FUNCT_1:42;
+   hence thesis;
+  end;
+       1/2 in the carrier of I[01] by JORDAN5A:2;
+then A160: 1/2 in dom GF by A156,PRE_TOPC:12;
+then A161: GF.(1/2) in rng GF by FUNCT_1:def 5;
+A162: GF.(1/2) = G".(FF.(1/2)) by A160,FUNCT_1:22
+             .= pp by A69,A77,FUNCT_4:14;
+    [.pp,1.] = GF.:[.1/2,1.]
+  proof
+   thus [.pp,1.] c= GF.:[.1/2,1.]
+   proof
+    let a be set; assume a in [.pp,1.];
+    then a in { l where l is Real : pp <= l & l <= 1 } by RCOMP_1:def 1;
+    then consider l1 be Real such that
+A163:    l1 = a & pp <= l1 & l1 <= 1;
+     A164: 0 <= pp by A156,A161,A162,JORDAN5A:2;
+    set cos = GF".l1;
+      l1 in dom (GF") by A155,A157,A163,A164,JORDAN5A:2;
+then A165:cos in rng (GF") by FUNCT_1:def 5;
+then A166:cos in [.0,1.] by A157,BORSUK_1:83;
+A167: l1 in rng GF by A155,A156,A163,A164,JORDAN5A:2;
+A168: GF.cos = GF.((GF qua Function)".l1) by A156,TOPS_2:def 4
+          .= l1 by A156,A167,FUNCT_1:57;
+    reconsider cos as Real by A166;
+    reconsider A3 = cos, A4 = 1, A5 = 1/2 as Point of I[01]
+       by A157,A165,JORDAN5A:2;
+    reconsider A1 = GF.A3, A2 = GF.A4 as Point of I[01];
+    reconsider Fhc = A1, Fh0 = A2, Fh12 = GF.A5 as Real by Lm2;
+A169:cos <= 1
+    proof
+     assume cos > 1;
+     then Fhc > Fh0 by A137,A140,A154,A156,JORDAN5A:17;
+     hence thesis by A70,A134,A139,A163,A168,BORSUK_1:83,FUNCT_1:23;
+    end;
+      cos >= 1/2
+    proof
+     assume cos < 1/2;
+     then Fhc < Fh12 by A137,A140,A154,A156,JORDAN5A:17;
+     hence thesis by A70,A124,A163,A168,BORSUK_1:83,FUNCT_1:23;
+    end;
+    then cos in { l where l is Real : 1/2 <= l & l <= 1 } by A169;
+    then cos in [.1/2,1.] by RCOMP_1:def 1;
+    hence thesis by A156,A157,A163,A165,A168,FUNCT_1:def 12;
+   end;
+   thus GF.:[.1/2,1.] c= [.pp,1.]
+   proof
+    let a be set; assume a in GF.:[.1/2,1.];
+    then consider x be set such that
+A170:  x in dom GF & x in [.1/2,1.] & a = GF.x by FUNCT_1:def 12;
+      x in { l where l is Real : 1/2 <= l & l <= 1 } by A170,RCOMP_1:def 1;
+    then consider l1 be Real such that
+A171:         l1 = x & 1/2 <= l1 & l1 <= 1;
+      0 <= l1 by A171,AXIOMS:22;
+    then reconsider ll = l1, pol = 1/2 as Point of I[01]
+      by A171,JORDAN5A:2;
+    reconsider A1 = GF.1[01], A2 = GF.ll, A3 = GF.pol as Point of I[01];
+    reconsider A4 = A1, A5 = A2, A6 = A3 as Real by Lm2;
+    A172: A4 >= A5
+    proof
+     per cases;
+     suppose 1 <> l1;
+     then 1 > l1 by A171,REAL_1:def 5;
+     hence thesis by A137,A140,A154,A156,BORSUK_1:def 18,JORDAN5A:17;
+     suppose 1 = l1;
+     hence thesis by BORSUK_1:def 18;
+    end;
+      A5 >= A6
+    proof
+     per cases;
+     suppose l1 <> 1/2;
+     then l1 > 1/2 by A171,REAL_1:def 5;
+     hence thesis by A137,A140,A154,A156,JORDAN5A:17;
+     suppose l1 = 1/2;
+     hence thesis;
+    end;
+    then A5 in { l where l is Real : pp <= l & l <= 1 } by A140,A162,A172,
+BORSUK_1:def 18;
+    hence thesis by A170,A171,RCOMP_1:def 1;
+   end;
+  end;
+then A173: G.:[.pp,1.] = LSeg (pn, pn1) by A123,A127,A159,RELAT_1:159;
+    ex p1, p2 be Real st p1 < p2 &
+    0 <= p1 & p1 <= 1 & 0 <= p2 & p2 <= 1 & LSeg (f, j) = G.:[.p1, p2.]
+     & G.p1 = f/.j & G.p2 = f/.(j+1)
+ proof
+  per cases;
+  suppose j+1 <= n+2;
+  then consider r1, r2 be Real such that
+A174:    r1 < r2 &
+    0 <= r1 & r1 <= 1 & 0 <= r2 & r2 <= 1 & LSeg (f, j) = F.:[.r1, r2.]
+    & F.r1 = f/.j & F.r2 = f/.(j+1) by A22,A33,A48;
+  set f1 = Ex1".r1, f2 = Ex1".r2;
+A175: Ex1 is continuous one-to-one & dom Ex1 = [#]Closed-Interval-TSpace(0,1/2)
+       & rng Ex1 = [#]Closed-Interval-TSpace(0,1) by A51,TOPS_2:def 5;
+then A176:  f1 = (Ex1 qua Function)".r1 & f2 = (Ex1 qua Function)".r2
+         by TOPS_2:def 4;
+     rng Ex1 = [#]I[01] by A51,TOPMETR:27,TOPS_2:def 5
+         .= the carrier of I[01] by PRE_TOPC:12;
+then A177:  r1 in rng Ex1 & r2 in rng Ex1 by A174,JORDAN5A:2;
+  then f1 in [#]Closed-Interval-TSpace(0,1/2) & f2 in [#]
+Closed-Interval-TSpace(0,1/2)
+        by A175,A176,FUNCT_1:54;
+  then f1 in the carrier of Closed-Interval-TSpace(0,1/2) &
+   f2 in the carrier of Closed-Interval-TSpace(0,1/2);
+then A178:  f1 in [.0,1/2.] & f2 in [.0,1/2.] by TOPMETR:25;
+  then reconsider f1, f2 as Real;
+  reconsider r1' = r1, r2' = r2 as Point of Closed-Interval-TSpace(0,1)
+      by A174,JORDAN5A:2,TOPMETR:27;
+    Ex1" is_homeomorphism by A51,TOPS_2:70;
+then A179:f1 = Ex1".r1' & f2 = Ex1".r2' & Ex1".0 = 0 & Ex1".1 = 1/2 &
+     Ex1" is continuous one-to-one by A119,A121,TOPS_2:def 5;
+then A180: f1 < f2 by A174,JORDAN5A:16;
+A181:  [.0,1/2.] c= [.0,1.] by TREAL_1:1;
+A182:  r1 = Ex1.f1 & r2 = Ex1.f2 by A175,A176,A177,FUNCT_1:54;
+A183:    f1 in { l where l is Real : 0 <= l & l <= 1/2 } &
+     f2 in { l where l is Real : 0 <= l & l <=
+ 1/2 } by A178,RCOMP_1:def 1;
+    then consider ff1 be Real such that
+A184:   ff1 = f1 & 0 <= ff1 & ff1 <= 1/2;
+    consider ff2 be Real such that
+A185:   ff2 = f2 & 0 <= ff2 & ff2 <= 1/2 by A183;
+A186: Ex1.:
+[.f1,f2.] = [.r1,r2.] by A51,A74,A118,A180,A182,A184,A185,JORDAN5A:21
+;
+      F1.:[.f1,f2.] = FF.:[.f1, f2.]
+    proof
+     thus F1.:[.f1,f2.] c= FF.:[.f1, f2.]
+    proof
+     let a be set; assume a in F1.:[.f1, f2.];
+     then consider x be set such that
+A187:    x in dom F1 & x in [.f1, f2.] & a = F1.x by FUNCT_1:def 12;
+       now per cases;
+      suppose x <> 1/2;
+      then not x in dom F1' by A68,A125,A187;
+      hence FF.x = F1.x by FUNCT_4:12;
+      suppose x = 1/2;
+      hence FF.x = F1.x by A69,A76,A77,FUNCT_4:14;
+     end;
+     then x in dom FF & x in [.f1, f2.] & a = FF.x by A187,FUNCT_4:13;
+     hence thesis by FUNCT_1:def 12;
+    end;
+     thus FF.:[.f1,f2.] c= F1.:[.f1, f2.]
+     proof
+      let a be set; assume a in FF.:[.f1, f2.];
+     then consider x be set such that
+A188:    x in dom FF & x in [.f1, f2.] & a = FF.x by FUNCT_1:def 12;
+A189:  [.f1, f2.] c= [.0,1/2.] by A178,RCOMP_1:16;
+       now per cases;
+      suppose x <> 1/2;
+      then not x in dom F1' by A125,A188,A189;
+      hence FF.x = F1.x by FUNCT_4:12;
+      suppose x = 1/2;
+      hence FF.x = F1.x by A69,A76,A77,FUNCT_4:14;
+     end;
+     hence thesis by A68,A188,A189,FUNCT_1:def 12;
+     end;
+    end;
+then A190: F.:[.r1, r2.] = FF.:[.f1, f2.] by A186,RELAT_1:159;
+  set e1 = GF.f1, e2 = GF.f2;
+    e1 in the carrier of I[01] & e2 in the carrier of I[01]
+       by A178,A181,BORSUK_1:83,FUNCT_2:7;
+then A191:  e1 in { l where l is Real : 0 <= l & l <= 1 } &
+   e2 in { l where l is Real : 0 <= l & l <= 1 }
+             by BORSUK_1:83,RCOMP_1:def 1;
+  then consider l1 be Real such that
+A192:  l1 = e1 & 0 <= l1 & l1 <= 1;
+  consider l2 be Real such that
+A193: l2 = e2 & 0 <= l2 & l2 <= 1 by A191;
+    reconsider f1' = f1, f2' = f2 as Point of I[01] by A178,A181,BORSUK_1:83;
+   GF.0 = 0 & GF.1 = 1 & l1 = GF.f1' & l2 = GF.f2' by A131,A132,A134,A136,A139,
+A192,A193,FUNCT_1:23;
+then A194:  l1 < l2 & 0 <= l1 & l1 <= 1 & 0 <= l2 & l2 <= 1
+        by A154,A156,A180,A192,A193,JORDAN5A:17;
+A195: GF is one-to-one & GF is continuous &
+    f1 < f2 & l1 = GF.f1 & l2 = GF.f2
+      by A153,A174,A179,A192,A193,JORDAN5A:16,TOPS_2:def 5;
+    0 <= f1 & f2 <= 1 by A178,A181,BORSUK_1:83,JORDAN5A:2;
+then A196: G.:[.l1, l2.] = G.:(GF.:[.f1, f2.])
+          by A137,A140,A153,A195,JORDAN5A:21,TOPMETR:27
+        .= FF.:[.f1, f2.] by A159,RELAT_1:159;
+A197:  FF.f1' = F.r1'
+     proof
+      per cases;
+      suppose A198: f1' = 1/2;
+      then FF.f1' = F1'.(1/2) by A69,FUNCT_4:14
+            .= F'.0 by A69,A120,FUNCT_1:22
+            .= F.r1' by A48,A50,A74,A175,A176,A177,A198,FUNCT_1:54;
+      hence thesis;
+      suppose f1' <> 1/2;
+      then not f1' in dom F1' by A125,A178;
+      then FF.f1' = F1.f1'
+        by FUNCT_4:12
+            .= F.(Ex1.f1') by A53,A178,FUNCT_1:23
+            .= F.r1' by A175,A176,A177,FUNCT_1:54;
+      hence thesis;
+     end;
+A199:  FF.f2' = F.r2'
+     proof
+      per cases;
+      suppose A200: f2' = 1/2;
+      then FF.f2' = F1'.(1/2) by A69,FUNCT_4:14
+            .= F'.0 by A69,A120,FUNCT_1:22
+            .= F.r2' by A48,A50,A74,A175,A176,A177,A200,FUNCT_1:54;
+      hence thesis;
+      suppose f2' <> 1/2;
+      then not f2' in dom F1' by A125,A178;
+      then FF.f2' = F1.f2' by FUNCT_4:12
+            .= F.(Ex1.f2') by A53,A178,FUNCT_1:23
+            .= F.r2' by A175,A176,A177,FUNCT_1:54;
+      hence thesis;
+     end;
+A201: G.l1 = f/.j by A70,A159,A174,A192,A197,BORSUK_1:83,FUNCT_1:22;
+      G.l2 = f/.(j+1) by A70,A159,A174,A193,A199,BORSUK_1:83,FUNCT_1:22;
+  hence thesis by A174,A190,A194,A196,A201;
+  suppose j+1 > n+2;
+  then j+1 = n+3 by A24,A25,A33,NAT_1:27;
+then A202:j = n+3-1 by XCMPLX_1:26;
+    3-1 = 2;
+then A203: j = n+2 by A202,XCMPLX_1:29;
+  then LSeg(f,j) = LSeg (pn, pn1) by A26,A28,TOPREAL1:def 5;
+  hence thesis by A25,A33,A40,A45,A46,A173,A203;
+ end;
+ hence thesis;
+end;
+A204:  for n be Nat holds ARC[n] from Ind(A7,A18);
+    1 <= h1 + 2 & h1 + 2 <= len f by A5,A6,AXIOMS:22;
+ then consider NE being non empty Subset of TOP-REAL 2 such that
+A205:  NE = Q(h1) &
+  for j be Nat
+    for F being map of I[01], (TOP-REAL 2)|NE st
+     1 <= j & j+1 <= h1+2 &
+     F is_homeomorphism & F.0 = f/.1 & F.1 = f/.(h1+2)
+  ex p1, p2 be Real st p1 < p2 &
+    0 <= p1 & p1 <= 1 & 0 <= p2 & p2 <= 1 & LSeg (f, j) = F.:[.p1, p2.]
+     & F.p1 = f/.j & F.p2 = f/.(j+1) by A204;
+ thus thesis by A1,A6,A205;
+end;
+
+theorem
+   for f being FinSequence of TOP-REAL 2,
+     Q, R being non empty Subset of TOP-REAL 2,
+     F being map of I[01], (TOP-REAL 2)|Q,
+     i being Nat,
+     P being non empty Subset of I[01] st
+     f is_S-Seq & F is_homeomorphism & F.0 = f/.1 & F.1 = f/.len f &
+       1 <= i & i+1 <= len f & F.:P = LSeg (f,i) & Q = L~f & R = LSeg(f,i)
+    ex G being map of I[01]|P, (TOP-REAL 2)|R st
+           G = F|P & G is_homeomorphism
+proof
+ let f be FinSequence of TOP-REAL 2,
+     Q, R be non empty Subset of TOP-REAL 2,
+     F be map of I[01], (TOP-REAL 2)|Q,
+     i be Nat,
+     P be non empty Subset of I[01]; assume
+A1: f is_S-Seq & F is_homeomorphism & F.0 = f/.1 & F.1 = f/.len f &
+       1 <= i & i+1 <= len f & F.:P = LSeg (f,i) & Q = L~f & R = LSeg(f,i);
+  then consider ppi, pi1 be Real such that
+A2:   ppi < pi1 & 0 <= ppi & ppi <= 1 & 0 <= pi1 & pi1 <= 1 &
+    LSeg (f, i) = F.:[.ppi, pi1.] & F.ppi = f/.i & F.pi1 = f/.(i+1)
+     by Th7;
+A3:  ppi in { dd where dd is Real : ppi <= dd & dd <= pi1 } &
+   pi1 in { dd where dd is Real : ppi <= dd & dd <= pi1 } by A2;
+     [.ppi,pi1.] c= [.0,1.] by A2,TREAL_1:1;
+  then reconsider Poz = [.ppi, pi1.] as non empty Subset of I[01]
+   by A3,BORSUK_1:83,RCOMP_1:def 1;
+A4: the carrier of (I[01]|Poz) = [#] (I[01]|Poz) by PRE_TOPC:12
+                             .= Poz by PRE_TOPC:def 10;
+A5:  dom F = [#]I[01] by A1,TOPS_2:def 5
+        .= [.0,1.] by BORSUK_1:83,PRE_TOPC:12;
+A6:  F is one-to-one by A1,TOPS_2:def 5;
+A7: P = Poz
+   proof
+    thus P c= Poz by A1,A2,A5,A6,BORSUK_1:83,FUNCT_1:157;
+    thus Poz c= P by A1,A2,A5,A6,BORSUK_1:83,FUNCT_1:157;
+   end;
+  set gg = F | P;
+    gg is Function of the carrier of (I[01]|Poz),
+        the carrier of (TOP-REAL 2)|Q by A4,A7,FUNCT_2:38;
+  then reconsider gg as map of I[01]|Poz, (TOP-REAL 2)| Q;
+    reconsider SEG= LSeg (f, i) as
+    non empty Subset of (TOP-REAL 2)|Q by A1;
+A8: the carrier of (((TOP-REAL 2) | Q) | SEG) =
+    [#](((TOP-REAL 2) | Q) | SEG) by PRE_TOPC:12
+               .= SEG by PRE_TOPC:def 10;
+   rng gg c= SEG
+   proof
+      let ii be set; assume ii in rng gg;
+      then consider j be set such that
+A9:     j in dom gg & ii = gg.j by FUNCT_1:def 5;
+        j in dom F /\ Poz by A7,A9,RELAT_1:90;
+then A10:   j in dom F by XBOOLE_0:def 3;
+A11:   dom gg = Poz by A4,FUNCT_2:def 1;
+      then j in dom F & F.j in LSeg (f,i) by A2,A9,A10,FUNCT_1:def 12;
+      hence thesis by A7,A9,A11,FUNCT_1:72;
+    end;
+then A12:gg is Function of the carrier of (I[01]|Poz), the carrier of
+            (((TOP-REAL 2) | Q) | SEG) by A8,FUNCT_2:8;
+  reconsider SEG as non empty Subset of (TOP-REAL 2)|Q;
+A13:   ((TOP-REAL 2) | Q) | SEG = (TOP-REAL 2) | R by A1,GOBOARD9:4;
+  reconsider hh' = gg as map of I[01]|Poz, ((TOP-REAL 2) | Q)| SEG by A12;
+A14:  F is continuous & F is one-to-one by A1,TOPS_2:def 5;
+ then gg is continuous by A7,TOPMETR:10;
+then A15:  hh' is continuous by TOPMETR:9;
+A16: hh' is one-to-one by A14,FUNCT_1:84;
+    reconsider hh = hh' as map of I[01]|Poz, (TOP-REAL 2) | R
+      by A13;
+A17: dom hh = the carrier of (I[01] | Poz) by FUNCT_2:def 1
+         .= [#] (I[01] | Poz) by PRE_TOPC:12;
+then A18:dom hh = Poz by PRE_TOPC:def 10;
+A19:rng hh = hh.:(the carrier of (I[01]|Poz)) by FUNCT_2:45
+         .= hh.:(dom hh) by A17,PRE_TOPC:12
+         .= SEG by A2,A7,A18,RFUNCT_2:5
+         .= [#](((TOP-REAL 2) | Q) | SEG) by A8,PRE_TOPC:12;
+A20:the carrier of Closed-Interval-TSpace (ppi,pi1) = Poz by A2,TOPMETR:25;
+ reconsider A = Closed-Interval-TSpace (ppi,pi1) as
+        strict SubSpace of I[01] by A2,TOPMETR:27,TREAL_1:6;
+A21:Poz = [#] A by A20,PRE_TOPC:12;
+     Closed-Interval-TSpace (ppi,pi1) is compact by A2,HEINE:11;
+then [#] Closed-Interval-TSpace (ppi,pi1) is compact by COMPTS_1:10;
+   then for P being Subset of A st P=Poz holds P is compact by A20,PRE_TOPC:12
+;
+   then Poz is compact by A21,COMPTS_1:11;
+then A22: I[01]|Poz is compact by COMPTS_1:12;
+      TOP-REAL 2 is_T2 by SPPOL_1:26;
+  then (TOP-REAL 2)|R is_T2 by TOPMETR:3;
+then hh is_homeomorphism by A13,A15,A16,A17,A19,A22,COMPTS_1:26;
+ hence thesis by A7;
+end;
+
+begin :: Some properties of real intervals
+
+theorem Th9:
+ for p1, p2, p being Point of TOP-REAL 2 st
+  p1 <> p2 & p in LSeg(p1,p2) holds LE p,p,p1,p2
+proof
+ let p1, p2, p be Point of TOP-REAL 2;
+ assume A1: p1 <> p2 & p in LSeg(p1,p2);
+ thus LE p,p,p1,p2
+ proof
+  thus p in LSeg(p1,p2) & p in LSeg(p1,p2) by A1;
+  let r1,r2 be Real;
+  assume 0<=r1 & r1<=1 & p=(1-r1)*p1+r1*p2 &
+         0<=r2 & r2<=1 & p=(1-r2)*p1+r2*p2;
+  hence thesis by A1,JORDAN5A:3;
+ end;
+end;
+
+theorem Th10:
+ for p, p1, p2 being Point of TOP-REAL 2 st p1 <> p2 &
+  p in LSeg(p1,p2) holds LE p1,p,p1,p2
+proof
+ let p, p1, p2 be Point of TOP-REAL 2;
+ assume A1: p1 <> p2 & p in LSeg(p1,p2);
+ thus LE p1,p,p1,p2
+ proof
+  thus p1 in LSeg(p1,p2) & p in LSeg(p1,p2) by A1,TOPREAL1:6;
+  let r1,r2 be Real; assume
+A2: 0<=r1 & r1<=1 & p1=(1-r1)*p1+r1*p2 &
+   0<=r2 & r2<=1 & p=(1-r2)*p1+r2*p2;
+  then 0.REAL 2 = (1-r1)*p1+r1*p2+-p1 by EUCLID:40
+          .= (1-r1)*p1+r1*p2-p1 by EUCLID:45
+          .= (1-r1)*p1+(r1*p2-p1) by EUCLID:49
+          .= (1-r1)*p1+(-p1+r1*p2) by EUCLID:45
+          .= (1-r1)*p1+-p1+r1*p2 by EUCLID:30
+          .= ((1-r1)*p1-p1)+r1*p2 by EUCLID:45;
+then -r1*p2=(((1-r1)*p1-p1)+r1*p2)+-r1*p2 by EUCLID:31
+   .=(((1-r1)*p1-p1)+r1*p2)-r1*p2 by EUCLID:45
+   .=((1-r1)*p1-p1)+(r1*p2-r1*p2) by EUCLID:49
+   .=((1-r1)*p1-p1)+0.REAL 2 by EUCLID:46
+   .=(1-r1)*p1-p1 by EUCLID:31
+   .=(1-r1)*p1-1*p1 by EUCLID:33
+   .=(1-r1-1)*p1 by EUCLID:54
+   .=(1-1-r1)*p1 by XCMPLX_1:21
+   .=(-r1)*p1 by XCMPLX_1:150
+   .=-r1*p1 by EUCLID:44;
+  then r1*p1=--r1*p2 by EUCLID:39 .= r1*p2 by EUCLID:39;
+  hence thesis by A1,A2,EUCLID:38;
+ end;
+end;
+
+theorem Th11:
+ for p, p1, p2 being Point of TOP-REAL 2 st p in LSeg(p1,p2) & p1 <> p2
+ holds LE p,p2,p1,p2
+proof
+ let p, p1, p2 be Point of TOP-REAL 2;
+ assume A1: p in LSeg(p1,p2) & p1 <> p2;
+ thus LE p,p2,p1,p2
+ proof
+  thus p in LSeg(p1,p2) & p2 in LSeg(p1,p2) by A1,TOPREAL1:6;
+  let r1,r2 be Real such that
+A2: 0<=r1 & r1<=1 & p=(1-r1)*p1+r1*p2 &
+  0<=r2 & r2<=1 & p2=(1-r2)*p1+r2*p2;
+    p2 = 1*p2 by EUCLID:33
+    .= 0.REAL 2 + 1*p2 by EUCLID:31
+    .= (1-1)*p1 + 1*p2 by EUCLID:33;
+  hence thesis by A1,A2,JORDAN5A:3;
+ end;
+end;
+
+theorem
+   for p1, p2, q1, q2, q3 being Point of TOP-REAL 2 st p1 <> p2 &
+   LE q1,q2,p1,p2 & LE q2,q3,p1,p2 holds LE q1,q3,p1,p2
+proof
+ let p1, p2, q1, q2, q3 be Point of TOP-REAL 2;
+ assume A1: p1<>p2 & LE q1,q2,p1,p2 & LE q2,q3,p1,p2;
+then A2: q1 in LSeg(p1,p2) & q2 in LSeg(p1,p2) & q3 in LSeg(p1,p2)
+   by JORDAN3:def 6;
+  then q1 in { (1-l)*p1 + l*p2 where l is Real : 0 <= l & l <= 1 }
+   by TOPREAL1:def 4;
+ then consider s1 being Real such that
+    A3: q1=(1-s1)*p1+s1*p2 & 0<=s1 & s1<=1;
+   q2 in { (1-l1)*p1 + l1*p2 where l1 is Real : 0 <= l1 & l1 <= 1 }
+  by A2,TOPREAL1:def 4;
+ then consider s2 being Real such that
+    A4: q2=(1-s2)*p1+s2*p2 & 0<=s2 & s2<=1;
+A5: s1 <= s2 by A1,A3,A4,JORDAN3:def 6;
+   q3 in { (1-l2)*p1 + l2*p2 where l2 is Real : 0 <= l2 & l2 <= 1 }
+   by A2,TOPREAL1:def 4;
+ then consider s3 being Real such that
+    A6: q3=(1-s3)*p1+s3*p2 & 0<=s3 & s3<=1;
+   s2 <= s3 by A1,A4,A6,JORDAN3:def 6;
+then A7: s1 <= s3 by A5,AXIOMS:22;
+ thus LE q1,q3,p1,p2
+ proof
+  thus q1 in LSeg(p1,p2) & q3 in LSeg(p1,p2) by A1,JORDAN3:def 6;
+  let r1,r2 be Real;
+  assume A8: 0<=r1 & r1<=1 & q1=(1-r1)*p1+r1*p2 &
+            0<=r2 & r2<=1 & q3=(1-r2)*p1+r2*p2;
+  then s1 = r1 by A1,A3,JORDAN5A:3;
+  hence thesis by A1,A6,A7,A8,JORDAN5A:3;
+ end;
+end;
+
+theorem
+   for p, q being Point of TOP-REAL 2 st p <> q holds
+  LSeg (p, q) =
+   { p1 where p1 is Point of TOP-REAL 2 : LE p, p1, p, q & LE p1, q, p, q }
+proof
+ let p, q be Point of TOP-REAL 2;
+ assume A1: p <> q;
+ thus LSeg (p, q) c=
+   { p1 where p1 is Point of TOP-REAL 2 : LE p, p1, p, q & LE p1, q, p, q }
+ proof
+  let a be set; assume A2: a in LSeg (p, q);
+  then reconsider a' = a as Point of TOP-REAL 2;
+    LE p, a', p, q & LE a', q, p, q by A1,A2,Th10,Th11;
+  hence thesis;
+ end;
+ thus { p1 where p1 is Point of TOP-REAL 2 :
+          LE p, p1, p, q & LE p1, q, p, q } c= LSeg (p, q)
+ proof
+  let a be set; assume a in { p1 where p1 is Point of TOP-REAL 2 :
+         LE p, p1, p, q & LE p1, q, p, q };
+  then consider a' be Point of TOP-REAL 2 such that
+A3:    a' = a & LE p, a', p, q & LE a', q, p, q;
+  thus thesis by A3,JORDAN3:65;
+ end;
+end;
+
+theorem
+   for n being Nat,
+     P being Subset of TOP-REAL n,
+     p1, p2 being Point of TOP-REAL n st
+    P is_an_arc_of p1,p2 holds P is_an_arc_of p2,p1
+proof
+ let n be Nat,
+     P be Subset of TOP-REAL n,
+     p1,p2 be Point of TOP-REAL n;
+ assume
+A1: P is_an_arc_of p1, p2;
+ then consider f being map of I[01], (TOP-REAL n) | P such that
+A2:  f is_homeomorphism & f.0 = p1 & f.1 = p2 by TOPREAL1:def 2;
+ set Ex = L[01]((0,1)(#),(#)(0,1));
+A3:  Ex is_homeomorphism by TREAL_1:21;
+ set g = f * Ex;
+A4: Ex.(0,1)(#) = 0 by BORSUK_1:def 17,TREAL_1:8,12;
+A5: Ex.(#)(0,1) = 1 by BORSUK_1:def 18,TREAL_1:8,12;
+   dom f = [#]I[01] by A2,TOPS_2:def 5;
+then A6: rng Ex = dom f by A3,TOPMETR:27,TOPS_2:def 5;
+then A7: dom g = dom Ex by RELAT_1:46;
+   rng g = rng f by A6,RELAT_1:47;
+then A8: rng g = [#] ((TOP-REAL n) | P) by A2,TOPS_2:def 5;
+ reconsider P as non empty Subset of TOP-REAL n by A1,TOPREAL1:4
+;
+   dom g = [#]I[01] by A3,A7,TOPMETR:27,TOPS_2:def 5;
+then A9: dom g = the carrier of I[01] & rng g = the carrier of ((TOP-REAL n) |
+P)
+  by A8,PRE_TOPC:12;
+ then g is Function of the carrier of I[01], the carrier of ((TOP-REAL n) | P)
+    by FUNCT_2:def 1,RELSET_1:11;
+ then reconsider g as map of I[01], (TOP-REAL n) | P;
+A10: g is_homeomorphism by A2,A3,TOPMETR:27,TOPS_2:71;
+A11: g.0 = p2 by A2,A5,A9,BORSUK_1:def 17,FUNCT_1:22,TREAL_1:8;
+   g.1 = p1 by A2,A4,A9,BORSUK_1:def 18,FUNCT_1:22,TREAL_1:8;
+ hence thesis by A10,A11,TOPREAL1:def 2;
+end;
+
+theorem
+   for i being Nat,
+     f being FinSequence of TOP-REAL 2,
+     P being Subset of TOP-REAL 2 st
+  f is_S-Seq & 1 <= i & i+1 <= len f & P = LSeg(f,i) holds
+   P is_an_arc_of f/.i, f/.(i+1)
+proof
+ let i be Nat,
+     f be FinSequence of TOP-REAL 2,
+     P be Subset of TOP-REAL 2;
+ assume A1: f is_S-Seq & 1 <= i & i+1 <= len f & P = LSeg(f,i);
+then A2: i in dom f & i+1 in dom f by GOBOARD2:3;
+A3: f is one-to-one by A1,TOPREAL1:def 10;
+A4: LSeg (f,i) = LSeg (f/.i, f/.(i+1)) by A1,TOPREAL1:def 5;
+      f/.i <> f/.(i+1)
+    proof
+     assume f/.i = f/.(i+1);
+     then i = i + 1 by A2,A3,PARTFUN2:17;
+     hence thesis by REAL_1:69;
+    end;
+  hence thesis by A1,A4,TOPREAL1:15;
+end;
+
+begin :: Cutting off sequences
+
+theorem
+   for g1 being FinSequence of TOP-REAL 2, i being Nat st 1 <= i & i <= len g1
+   & g1 is_S-Seq holds
+  g1/.1 in L~mid(g1, i, len g1) implies i = 1
+proof
+ let g1 be FinSequence of TOP-REAL 2, i be Nat;
+ assume A1: 1 <= i & i <= len g1 & g1 is_S-Seq;
+ assume g1/.1 in L~mid(g1, i, len g1);
+ then consider j being Nat such that
+A2: 1 <= j & j+1 <= len mid(g1, i, len g1) &
+    g1/.1 in LSeg(mid(g1, i, len g1),j) by SPPOL_2:13;
+A3: j in dom mid(g1, i, len g1) & j+1 in dom mid(g1, i, len g1)
+     by A2,GOBOARD2:3;
+A4: mid(g1, i, len g1) = g1/^(i-'1) by A1,JORDAN3:26;
+      j <= j+1 by NAT_1:29;
+then A5: j <= len (g1/^(i-'1)) by A2,A4,AXIOMS:22;
+then A6: j in dom (g1/^(i-'1)) by A2,FINSEQ_3:27;
+      i-'1 <= i by A1,Th1;
+then A7: i-'1 <= len g1 by A1,AXIOMS:22;
+then A8: j <= len g1 - (i-'1) by A5,RFINSEQ:def 2;
+A9: j <= i-'1+j by NAT_1:29;
+then A10: 1 <= i-'1+j by A2,AXIOMS:22;
+A11: j+(i-'1) <= len g1 by A8,REAL_1:84;
+then A12: i-'1+j in dom g1 by A10,FINSEQ_3:27;
+A13: (g1/^(i-'1))/.j = (g1/^(i-'1)).j by A6,FINSEQ_4:def 4
+                 .= g1.(i-'1+j) by A2,A11,JORDAN3:23
+                 .= g1/.(i-'1+j) by A12,FINSEQ_4:def 4;
+A14: 1 <= j+1 by NAT_1:29;
+      j+1 <= i-'1+(j+1) by NAT_1:29;
+then A15: 1 <= i-'1+(j+1) by A14,AXIOMS:22;
+      j+1 <= len (g1/^(i-'1)) by A1,A2,JORDAN3:26;
+    then j+1 <= len g1 - (i-'1) by A7,RFINSEQ:def 2;
+then A16: 1 <= j+1 & j+1+(i-'1) <= len g1 by A3,FINSEQ_3:27,REAL_1:84;
+then A17: i-'1+(j+1) in dom g1 by A15,FINSEQ_3:27;
+      j+1 in dom (g1/^(i-'1)) by A1,A3,JORDAN3:26;
+then A18: (g1/^(i-'1))/.(j+1) = (g1/^(i-'1)).(j+1) by FINSEQ_4:def 4
+                 .= g1.(i-'1+(j+1)) by A16,JORDAN3:23
+                 .= g1/.(i-'1+(j+1)) by A17,FINSEQ_4:def 4;
+A19: i-'1+j+1 = i-'1+(j+1) by XCMPLX_1:1;
+A20: 1 <= i-'1+j & i-'1+j+1 <= len g1 by A2,A9,A16,AXIOMS:22,XCMPLX_1:1;
+A21: LSeg(mid(g1, i, len g1),j) =
+ LSeg (g1/.(i-'1+j), g1/.(i-'1+(j+1)) ) by A2,A4,A13,A18,TOPREAL1:def 5
+    .= LSeg ( g1, i-'1+j ) by A10,A16,A19,TOPREAL1:def 5;
+A22: 1+1 <= len g1 by A1,TOPREAL1:def 10;
+    then g1/.1 in LSeg ( g1, 1 ) by TOPREAL1:27;
+then A23: g1/.1 in LSeg ( g1, 1 ) /\ LSeg ( g1, i-'1+j ) by A2,A21,XBOOLE_0:def
+3;
+then A24: LSeg (g1, 1) meets LSeg ( g1, i-'1+j ) by XBOOLE_0:4;
+    assume i <> 1;
+    then 1 < i by A1,REAL_1:def 5;
+    then 1+1 <= i by NAT_1:38;
+    then 2-'1 <= i-'1 by JORDAN3:5;
+    then 2-'1+1 <= i-'1+j by A2,REAL_1:55;
+then A25:  i-'1+j >= 2 by AMI_5:4;
+A26:  g1 is s.n.c. unfolded one-to-one by A1,TOPREAL1:def 10;
+A27: 1 in dom g1 & 1+1 in dom g1 by A22,GOBOARD2:3;
+    per cases by A25,REAL_1:def 5;
+    suppose i-'1+j = 2;
+    then g1/.1 in { g1/.(1+1) } by A20,A23,A26,TOPREAL1:def 8;
+    then g1/.1 = g1/.(1+1) by TARSKI:def 1;
+    hence thesis by A26,A27,PARTFUN2:17;
+    suppose i-'1+j > 2;
+    then i-'1+j > 1+1;
+    hence thesis by A24,A26,TOPREAL1:def 9;
+end;
+
+theorem
+   for f being non empty FinSequence of TOP-REAL 2,
+     p being Point of TOP-REAL 2 st f is_S-Seq & p = f.len f holds
+   L_Cut (f,p) = <*p*>
+proof
+ let f be non empty FinSequence of TOP-REAL 2,
+     p be Point of TOP-REAL 2;
+ assume A1: f is_S-Seq & p = f.len f;
+  then len f >= 2 by TOPREAL1:def 10;
+  then p in L~f by A1,JORDAN3:34;
+  then A2: p in L~Rev f by SPPOL_2:22;
+A3: Rev f is_S-Seq by A1,SPPOL_2:47;
+A4: L_Cut(f,p) =L_Cut(Rev Rev f,p) by FINSEQ_6:29
+     .= Rev R_Cut(Rev f,p) by A2,A3,JORDAN3:57;
+     p = (Rev f).1 by A1,FINSEQ_5:65;
+   then R_Cut(Rev f,p) = <*p*> by JORDAN3:def 5;
+  hence L_Cut(f,p) = <*p*> by A4,FINSEQ_5:63;
+end;
+
+canceled 3;
+
+theorem
+   for f being non empty FinSequence of TOP-REAL 2,
+     p being Point of TOP-REAL 2 st
+      p in L~f & p <> f.len f & f is_S-Seq holds
+  Index (p, L_Cut(f,p)) = 1
+proof
+ let f be non empty FinSequence of TOP-REAL 2,
+     p be Point of TOP-REAL 2;
+ assume that
+A1: p in L~f and
+A2: p <> f.len f and
+A3: f is_S-Seq;
+      L_Cut(f,p) is_S-Seq by A1,A2,A3,JORDAN3:69;
+then A4: 2 <= len L_Cut(f,p) by TOPREAL1:def 10;
+    then 1 <= len L_Cut(f,p) by AXIOMS:22;
+  then 1 in dom L_Cut(f,p) by FINSEQ_3:27;
+  then (L_Cut(f,p))/.1 = (L_Cut(f,p)).1 by FINSEQ_4:def 4
+     .= p by A1,JORDAN3:58;
+ hence thesis by A4,JORDAN3:44;
+end;
+
+theorem Th22:
+ for f being non empty FinSequence of TOP-REAL 2,
+     p being Point of TOP-REAL 2 st
+      p in L~f & f is_S-Seq & p <> f.len f holds
+ p in L~L_Cut (f,p)
+proof
+ let f be non empty FinSequence of TOP-REAL 2,
+     p be Point of TOP-REAL 2;
+ assume A1: p in L~f & f is_S-Seq;
+ assume p <> f.len f;
+ then L_Cut (f,p) is_S-Seq by A1,JORDAN3:69;
+then A2: len L_Cut (f,p) >= 2 by TOPREAL1:def 10;
+   L_Cut (f,p).1 = p by A1,JORDAN3:58;
+ hence thesis by A2,JORDAN3:34;
+end;
+
+theorem
+   for f being non empty FinSequence of TOP-REAL 2,
+     p being Point of TOP-REAL 2 st
+      p in L~f & f is_S-Seq & p <> f.1 holds
+ p in L~R_Cut (f,p)
+proof
+ let f be non empty FinSequence of TOP-REAL 2,
+     p be Point of TOP-REAL 2;
+ assume A1: p in L~f & f is_S-Seq;
+ assume p <> f.1;
+ then R_Cut (f,p) is_S-Seq by A1,JORDAN3:70;
+then A2: len R_Cut (f,p) >= 2 by TOPREAL1:def 10;
+   R_Cut (f,p).len R_Cut (f,p) = p by A1,JORDAN3:59;
+ hence thesis by A2,JORDAN3:34;
+end;
+
+theorem Th24:
+ for f being non empty FinSequence of TOP-REAL 2,
+     p being Point of TOP-REAL 2 st p in L~f & f is_S-Seq
+ holds B_Cut(f,p,p) = <*p*>
+proof
+ let f be non empty FinSequence of TOP-REAL 2,
+     p be Point of TOP-REAL 2;
+ assume that
+A1: p in L~f and
+A2: f is_S-Seq;
+A3:Index(p,f) <> Index(p,f)+1 by NAT_1:38;
+A4:f is one-to-one by A2,TOPREAL1:def 10;
+      Index(p,f) < len f by A1,JORDAN3:41;
+then A5:1 <= Index(p,f) & Index(p,f) + 1 <= len f
+          by A1,JORDAN3:41,NAT_1:38;
+   then Index(p,f) in dom f & Index(p,f) + 1 in dom f by GOBOARD2:3;
+then A6:f/.Index(p,f) <> f/.(Index(p,f)+1) by A3,A4,PARTFUN2:17;
+     p in LSeg(f,Index(p,f)) by A1,JORDAN3:42;
+   then p in LSeg(f/.Index(p,f), f/.(Index(p,f)+1)) by A5,TOPREAL1:def 5;
+then A7: LE p,p,f/.Index(p,f),f/.(Index(p,f)+1) by A6,Th9;
+     (L_Cut(f,p)).1 = p by A1,JORDAN3:58;
+  then R_Cut(L_Cut(f,p),p) = <*p*> by JORDAN3:def 5;
+ hence thesis by A7,JORDAN3:def 8;
+end;
+
+theorem Th25:
+ for f being non empty FinSequence of TOP-REAL 2,
+     p, q being Point of TOP-REAL 2 st
+      p in L~f & q in L~f & q <> f.len f & p = f.len f & f is_S-Seq holds
+    p in L~L_Cut(f,q)
+proof
+ let f be non empty FinSequence of TOP-REAL 2,
+     p, q be Point of TOP-REAL 2;
+ assume A1: p in L~f & q in L~f & q <> f.len f & p = f.len f & f is_S-Seq;
+ then 1 + 1 <= len f by TOPREAL1:def 10;
+ then A2: 1 < len f by AXIOMS:22;
+ then A3: Index(p,f) + 1 = len f by A1,JORDAN3:45;
+   Index(q,f) < len f by A1,JORDAN3:41;
+ then A4: Index(q,f) <= Index(p,f) by A3,NAT_1:38;
+ per cases by A4,AXIOMS:21;
+  suppose Index (q,f) = Index (p,f);
+   then A5:  L_Cut(f,q) = <*q*>^mid(f,len f,len f) by A1,A3,JORDAN3:def 4
+           .= <*q*>^<*f/.len f*> by A2,JORDAN4:27
+           .= <*q,f/.len f*> by FINSEQ_1:def 9
+           .= <*q,p*> by A1,A2,FINSEQ_4:24;
+   then rng L_Cut(f,q) = {p,q} by FINSEQ_2:147;
+   then A6:  p in rng L_Cut(f,q) by TARSKI:def 2;
+     len L_Cut(f,q) = 2 by A5,FINSEQ_1:61;
+   then rng L_Cut(f,q) c= L~L_Cut(f,q) by SPPOL_2:18;
+  hence thesis by A6;
+  suppose Index (q,f) < Index (p,f);
+  hence thesis by A1,JORDAN3:64;
+end;
+
+Lm3:
+ for f being non empty FinSequence of TOP-REAL 2,
+     p, q being Point of TOP-REAL 2 st
+      p in L~f & q in L~f & p <> f.len f & q <> f.len f & f is_S-Seq holds
+    p in L~L_Cut(f,q) or q in L~L_Cut(f,p)
+proof
+ let f be non empty FinSequence of TOP-REAL 2,
+     p, q be Point of TOP-REAL 2;
+ assume A1: p in L~f & q in L~f & p <> f.len f & q <> f.len f &
+   f is_S-Seq;
+  then Index (p, f) < len f by JORDAN3:41;
+then A2: 1 <= Index (p, f) & Index (p, f) + 1 <= len f by A1,JORDAN3:41,NAT_1:
+38;
+  then A3: LSeg (f, Index(p,f)) = LSeg (f/.Index(p,f), f/.(Index(p,f)+1))
+   by TOPREAL1:def 5;
+A4: Index(p,f) in dom f & Index(p,f)+1 in dom f by A2,GOBOARD2:3;
+A5: f is one-to-one by A1,TOPREAL1:def 10;
+     Index(p,f) < Index(p,f)+1 by NAT_1:38;
+then A6: f/.Index(p,f) <> f/.(Index(p,f)+1) by A4,A5,PARTFUN2:17;
+ per cases by REAL_1:def 5;
+ suppose Index(p,f) < Index(q,f);
+ hence thesis by A1,JORDAN3:64;
+ suppose A7: Index(p,f) = Index (q,f);
+A8: p in LSeg (f/.Index(p,f), f/.(Index(p,f)+1)) by A1,A3,JORDAN3:42;
+   q in LSeg (f/.Index(p,f), f/.(Index(p,f)+1)) by A1,A3,A7,JORDAN3:42;
+then A9: LE p, q, f/.Index(p,f), f/.(Index(p,f)+1) or
+  LT q, p, f/.Index(p,f), f/.(Index(p,f)+1) by A6,A8,JORDAN3:63;
+   now per cases by A9,JORDAN3:def 7;
+  suppose A10: LE p, q, f/.Index(p,f), f/.(Index(p,f)+1);
+  thus p in L~L_Cut(f,q) or q in L~L_Cut(f,p)
+  proof
+    per cases;
+    suppose p <> q;
+    hence thesis by A1,A7,A10,JORDAN3:66;
+    suppose p = q;
+    hence thesis by A1,Th22;
+  end;
+  suppose A11: LE q, p, f/.Index(p,f), f/.(Index(p,f)+1);
+  thus p in L~L_Cut(f,q) or q in L~L_Cut(f,p)
+  proof
+    per cases;
+    suppose p <> q;
+    hence thesis by A1,A7,A11,JORDAN3:66;
+    suppose p = q;
+    hence thesis by A1,Th22;
+  end;
+ end;
+ hence thesis;
+ suppose Index(p,f) > Index(q,f);
+ hence thesis by A1,JORDAN3:64;
+end;
+
+theorem
+   for f being non empty FinSequence of TOP-REAL 2,
+     p, q being Point of TOP-REAL 2 st
+      (p <> f.len f or q <> f.len f) &
+      p in L~f & q in L~f & f is_S-Seq holds
+    p in L~L_Cut(f,q) or q in L~L_Cut(f,p)
+proof
+ let f be non empty FinSequence of TOP-REAL 2,
+     p, q be Point of TOP-REAL 2;
+ assume
+A1: p <> f.len f or q <> f.len f;
+ assume A2: p in L~f & q in L~f & f is_S-Seq;
+ per cases by A1;
+ suppose p <> f.len f & q = f.len f;
+ hence thesis by A2,Th25;
+ suppose p = f.len f & q <> f.len f;
+ hence thesis by A2,Th25;
+ suppose p <> f.len f & q <> f.len f;
+ hence thesis by A2,Lm3;
+end;
+
+Lm4:
+ for f being non empty FinSequence of TOP-REAL 2,
+     p, q being Point of TOP-REAL 2 st p in L~f & q in L~f &
+      (Index(p,f)<Index(q,f) or
+       Index(p,f)=Index(q,f) & LE p,q,f/.Index(p,f),f/.(Index(p,f)+1)) &
+      f is_S-Seq & p <> q
+ holds L~B_Cut(f,p,q) c= L~f
+proof
+ let f be non empty FinSequence of TOP-REAL 2,
+     p, q be Point of TOP-REAL 2 such that
+A1: p in L~f and
+A2: q in L~f and
+A3: Index(p,f)<Index(q,f) or
+    Index(p,f)=Index(q,f) & LE p,q,f/.Index(p,f),f/.(Index(p,f)+1) and
+A4: f is_S-Seq and
+A5: p <> q;
+A6: B_Cut(f,p,q) = R_Cut(L_Cut(f,p),q) by A1,A2,A3,JORDAN3:def 8;
+    1<=Index(q,f) & Index(q,f)<len f by A2,JORDAN3:41;
+  then A7: 1<len f by AXIOMS:22;
+    Index(p,f) < len f by A1,JORDAN3:41;
+   then A8: Index(p,f)+1 <= len f by NAT_1:38;
+A9: 1<=Index(p,f)+1 by NAT_1:29;
+A10:  now per cases by A3;
+    case Index(p,f)<Index(q,f);
+    then A11:Index(p,f)+1<=Index(q,f) by NAT_1:38;
+     assume p=f.len f;
+     then len f <= Index(q,f) by A4,A7,A11,JORDAN3:45;
+     hence contradiction by A2,JORDAN3:41;
+    case
+A12:  Index(p,f)=Index(q,f) & LE p,q,f/.Index(p,f),f/.(Index(p,f)+1);
+A13: now assume A14: p = f.(Index(p,f)+1);
+    then A15:    p = f/.(Index(p,f)+1) by A8,A9,FINSEQ_4:24;
+       q in LSeg(f/.Index(p,f),f/.(Index(p,f)+1)) by A12,JORDAN3:def 6;
+     then consider r being Real such that
+A16:   0 <= r & r <= 1 and
+A17:   q = (1-r)*f/.Index(p,f)+r*f/.(Index(p,f)+1) by SPPOL_1:21;
+A18:    p = 1*p by EUCLID:33
+        .= 0.REAL 2 + 1*p by EUCLID:31
+        .= (1-1)*f/.Index(p,f)+1*p by EUCLID:33;
+     then 1<=r by A12,A15,A16,A17,JORDAN3:def 6;
+     then r = 1 by A16,AXIOMS:21;
+   hence contradiction by A5,A8,A9,A14,A17,A18,FINSEQ_4:24;
+  end;
+    assume p=f.len f;
+    hence contradiction by A4,A7,A13,JORDAN3:45;
+   end;
+      now per cases by A3;
+    case Index(p,f)<Index(q,f);
+     then q in L~(L_Cut(f,p)) by A1,A2,A4,JORDAN3:64;
+     hence ex i1 being Nat st 1<=i1 & i1+1<=len L_Cut(f,p)
+        & q in LSeg(L_Cut(f,p),i1) by SPPOL_2:13;
+    case Index(p,f)=Index(q,f)
+        & LE p,q,f/.Index(p,f),f/.(Index(p,f)+1);
+     then q in L~(L_Cut(f,p)) by A1,A2,A4,A5,JORDAN3:66;
+     hence ex i1 being Nat st 1<=i1 & i1+1<=len L_Cut(f,p)
+        & q in LSeg(L_Cut(f,p),i1) by SPPOL_2:13;
+    end;
+then A19: q in L~L_Cut(f,p) by SPPOL_2:17;
+    L_Cut(f,p) is_S-Seq by A1,A4,A10,JORDAN3:69;
+  then A20: L~B_Cut(f,p,q) c= L~L_Cut(f,p) by A6,A19,JORDAN3:76;
+    L~L_Cut(f,p) c= L~f by A1,A4,JORDAN3:77;
+ hence L~B_Cut(f,p,q) c= L~f by A20,XBOOLE_1:1;
+end;
+
+theorem
+   for f being non empty FinSequence of TOP-REAL 2,
+     p, q being Point of TOP-REAL 2 st p in L~f & q in L~f & f is_S-Seq
+ holds L~B_Cut(f,p,q) c= L~f
+proof
+ let f be non empty FinSequence of TOP-REAL 2,
+     p, q be Point of TOP-REAL 2 such that
+A1: p in L~f and
+A2: q in L~f and
+A3: f is_S-Seq;
+ per cases;
+  suppose p = q;
+   then B_Cut(f,p,q) = <*p*> by A1,A3,Th24;
+   then len B_Cut(f,p,q) = 1 by FINSEQ_1:56;
+   then L~B_Cut(f,p,q) = {} by TOPREAL1:28;
+   hence thesis by XBOOLE_1:2;
+  suppose p <> q & (Index(p,f)<Index(q,f) or Index(p,f)=Index(q,f)
+    & LE p,q,f/.Index(p,f),f/.(Index(p,f)+1));
+  hence thesis by A1,A2,A3,Lm4;
+  suppose that
+A4: p <> q and
+A5:not(Index(p,f)<Index(q,f) or Index(p,f)=Index(q,f)
+    & LE p,q,f/.Index(p,f),f/.(Index(p,f)+1));
+    A6:B_Cut(f,p,q)=Rev R_Cut(L_Cut(f,q),p) by A5,JORDAN3:def 8;
+A7:  Index(q,f) < Index(p,f)
+    or Index(p,f)=Index(q,f) & not LE p,q,f/.Index(p,f),f/.(Index(p,f)+1)
+       by A5,AXIOMS:21;
+A8:  now assume that
+A9:   Index(p,f)=Index(q,f) and
+A10:   not LE p,q,f/.Index(p,f),f/.(Index(p,f)+1);
+A11: 1 <= Index(p,f) by A1,JORDAN3:41;
+A12:  Index(p,f) < len f by A1,JORDAN3:41;
+      then A13:   Index(p,f)+1 <= len f by NAT_1:38;
+      then A14:   LSeg(f,Index(p,f)) = LSeg(f/.Index(p,f),f/.(Index(p,f)+1))
+                    by A11,TOPREAL1:def 5;
+      then A15:   p in LSeg(f/.Index(p,f),f/.(Index(p,f)+1)) by A1,JORDAN3:42;
+A16:   q in LSeg(f/.Index(p,f),f/.(Index(p,f)+1))
+                  by A2,A9,A14,JORDAN3:42;
+A17:   Index(p,f) in dom f by A11,A12,FINSEQ_3:27;
+        1 <= Index(p,f)+1 by NAT_1:29;
+      then A18:   Index(p,f)+1 in dom f by A13,FINSEQ_3:27;
+A19:   Index(p,f)+0 <> Index(p,f)+1 by XCMPLX_1:2;
+        f is one-to-one by A3,TOPREAL1:def 10;
+      then f/.Index(p,f)<>f/.(Index(p,f)+1) by A17,A18,A19,PARTFUN2:17;
+      then LT q,p,f/.Index(p,f),
+f/.(Index(p,f)+1) by A10,A15,A16,JORDAN3:63;
+     hence LE q,p,f/.Index(q,f),f/.(Index(q,f)+1) by A9,JORDAN3:def 7;
+    end;
+then A20:  Rev B_Cut(f,q,p) = B_Cut(f,p,q) by A1,A2,A6,A7,JORDAN3:def 8;
+     L~B_Cut(f,q,p) c= L~f by A1,A2,A3,A4,A7,A8,Lm4;
+  hence thesis by A20,SPPOL_2:22;
+end;
+
+theorem
+   for f being non constant standard special_circular_sequence,
+     i, j being Nat st 1 <= i & j <= len GoB f & i < j holds
+   LSeg((GoB f)*(1,width GoB f), (GoB f)*(i,width GoB f)) /\
+   LSeg((GoB f)*(j,width GoB f), (GoB f)*(len GoB f,width GoB f)) = {}
+proof
+ let f be non constant standard special_circular_sequence,
+     i, j be Nat;
+ assume A1: 1 <= i & j <= len GoB f & i < j;
+ set A = LSeg((GoB f)*(1,width GoB f), (GoB f)*(i,width GoB f)),
+     B = LSeg((GoB f)*(j,width GoB f), (GoB f)*(len GoB f,width GoB f));
+ assume A /\ B <> {};
+ then A meets B by XBOOLE_0:def 7;
+ then consider x be set such that
+A2:  x in A & x in B by XBOOLE_0:3;
+ reconsider x1 = x as Point of TOP-REAL 2 by A2;
+A3: 1 <= width GoB f & 1 <= i & i <= len GoB f
+           by A1,AXIOMS:22,GOBOARD7:35;
+   ((GoB f)*(1,width GoB f))`1 <= ((GoB f)*(i,width GoB f))`1
+ proof
+  per cases by A1,REAL_1:def 5;
+  suppose i = 1;
+  hence thesis;
+  suppose i > 1;
+  hence thesis by A3,GOBOARD5:4;
+ end;
+then A4: x1`1 >= ((GoB f)*(1,width GoB f))`1 & x1`1 <= ((GoB f)*(i,width GoB f)
+)`1
+   by A2,TOPREAL1:9;
+A5: ((GoB f)*(j,width GoB f))`1 > ((GoB f)*(i,width GoB f))`1
+   by A1,A3,GOBOARD5:4;
+A6: 1 <= j by A1,AXIOMS:22;
+   ((GoB f)*(j,width GoB f))`1 <= ((GoB f)*(len GoB f,width GoB f))`1
+ proof
+  per cases by A1,REAL_1:def 5;
+  suppose j < len GoB f;
+  hence thesis by A3,A6,GOBOARD5:4;
+  suppose j = len GoB f;
+  hence thesis;
+ end;
+ then x1`1 <= ((GoB f)*(len GoB f,width GoB f))`1 &
+    x1`1 >= ((GoB f)*(j,width GoB f))`1 by A2,TOPREAL1:9;
+ hence thesis by A4,A5,AXIOMS:22;
+end;
+
+theorem
+   for f being non constant standard special_circular_sequence,
+     i, j being Nat st 1 <= i & j <= width GoB f & i < j holds
+   LSeg((GoB f)*(len GoB f,1), (GoB f)*(len GoB f,i)) /\
+   LSeg((GoB f)*(len GoB f,j), (GoB f)*(len GoB f,width GoB f)) = {}
+proof
+ let f be non constant standard special_circular_sequence,
+     i, j be Nat;
+ assume A1: 1 <= i & j <= width GoB f & i < j;
+ set A = LSeg((GoB f)*(len GoB f,1), (GoB f)*(len GoB f,i)),
+     B = LSeg((GoB f)*(len GoB f,j), (GoB f)*(len GoB f,width GoB f));
+ assume A /\ B <> {};
+ then A meets B by XBOOLE_0:def 7;
+ then consider x be set such that
+A2:  x in A & x in B by XBOOLE_0:3;
+ reconsider x1 = x as Point of TOP-REAL 2 by A2;
+A3: 1 <= len GoB f & 1 <= i & i <= width GoB f
+           by A1,AXIOMS:22,GOBOARD7:34;
+   ((GoB f)*(len GoB f,1))`2 <= ((GoB f)*(len GoB f,i))`2
+ proof
+  per cases by A1,REAL_1:def 5;
+  suppose i = 1;
+  hence thesis;
+  suppose i > 1;
+  hence thesis by A3,GOBOARD5:5;
+ end;
+then A4: x1`2 >= ((GoB f)*(len GoB f,1))`2 & x1`2 <= ((GoB f)*(len GoB f,i))`2
+     by A2,TOPREAL1:10;
+A5: ((GoB f)*(len GoB f,j))`2 > ((GoB f)*(len GoB f,i))`2
+   by A1,A3,GOBOARD5:5;
+A6: 1 <= j by A1,AXIOMS:22;
+   ((GoB f)*(len GoB f,j))`2 <= ((GoB f)*(len GoB f,width GoB f))`2
+ proof
+  per cases by A1,REAL_1:def 5;
+  suppose j < width GoB f;
+  hence thesis by A3,A6,GOBOARD5:5;
+  suppose j = width GoB f;
+  hence thesis;
+ end;
+ then x1`2 <= ((GoB f)*(len GoB f,width GoB f))`2 &
+    x1`2 >= ((GoB f)*(len GoB f,j))`2 by A2,TOPREAL1:10;
+ hence thesis by A4,A5,AXIOMS:22;
+end;
+
+theorem Th30:
+ for f being non empty FinSequence of TOP-REAL 2,
+     p being Point of TOP-REAL 2 st f is_S-Seq holds
+   L_Cut (f,f/.1) = f
+proof
+ let f be non empty FinSequence of TOP-REAL 2,
+     p be Point of TOP-REAL 2;
+ assume A1: f is_S-Seq;
+then A2:  1+1 <= len f by TOPREAL1:def 10;
+then A3: 1 <= len f by AXIOMS:22;
+then A4: 1 in dom f by FINSEQ_3:27;
+A5:  1+1 in dom f by A2,FINSEQ_3:27;
+A6: 1 < len f by A2,NAT_1:38;
+A7:  f is one-to-one by A1,TOPREAL1:def 10;
+A8: f/.1 = f.1 by A4,FINSEQ_4:def 4;
+A9: Index(f/.1,f) = 1 by A2,JORDAN3:44;
+     f/.1 <> f/.(1+1) by A4,A5,A7,PARTFUN2:17;
+   then f/.1 <> f.(1+1) by A5,FINSEQ_4:def 4;
+   hence L_Cut (f,f/.1) = <*f/.1*>^mid(f,Index(f/.1,f)+1,len f)
+     by A9,JORDAN3:def 4
+     .= mid(f,1,len f) by A4,A6,A8,A9,JORDAN3:56
+     .= f by A3,JORDAN3:29;
+end;
+
+theorem
+   for f being non empty FinSequence of TOP-REAL 2,
+     p being Point of TOP-REAL 2 st f is_S-Seq holds
+   R_Cut (f,f/.len f) = f
+proof
+ let f be non empty FinSequence of TOP-REAL 2,
+     p be Point of TOP-REAL 2;
+ assume A1: f is_S-Seq;
+then A2: 2 <= len f by TOPREAL1:def 10;
+A3: Rev f is_S-Seq by A1,SPPOL_2:47;
+A4: f/.len f in L~f by A2,JORDAN3:34;
+A5: f/.len f = (Rev f)/.1 by FINSEQ_5:68;
+ thus R_Cut (f,f/.len f) = Rev Rev R_Cut (f,f/.len f) by FINSEQ_6:29
+         .= Rev L_Cut(Rev f,f/.len f) by A1,A4,JORDAN3:57
+         .= Rev Rev f by A3,A5,Th30
+         .= f by FINSEQ_6:29;
+end;
+
+theorem
+   for f being FinSequence of TOP-REAL 2,
+     p being Point of TOP-REAL 2 st p in L~f
+     holds
+   p in LSeg ( f/.Index(p,f), f/.(Index(p,f)+1) )
+proof
+ let f be FinSequence of TOP-REAL 2,
+     p be Point of TOP-REAL 2;
+ assume
+A1: p in L~f;
+ then Index(p,f) < len f by JORDAN3:41;
+ then A2: 1 <= Index(p,f) & Index(p,f)+1 <= len f by A1,JORDAN3:41,NAT_1:38;
+    p in LSeg(f,Index(p,f)) by A1,JORDAN3:42;
+ hence thesis by A2,TOPREAL1:def 5;
+end;
+
+theorem
+     for f be FinSequence of TOP-REAL 2
+   for p be Point of TOP-REAL 2
+   for i be Nat st
+   f is unfolded s.n.c. one-to-one & len f >= 2 & f/.1 in LSeg (f,i) holds
+   i = 1
+proof
+ let f be FinSequence of TOP-REAL 2,
+     p be Point of TOP-REAL 2,
+     i be Nat;
+ assume
+A1: f is unfolded s.n.c. one-to-one & 2 <= len f;
+   then 1 <= len f by AXIOMS:22;
+then A2: 1 in dom f & 2 in dom f by A1,FINSEQ_3:27;
+ assume A3: f/.1 in LSeg (f,i);
+ assume A4: i <> 1;
+ per cases by A4,REAL_1:def 5;
+ suppose A5: i > 1;
+   1+1 <= len f by A1;
+ then f/.1 in LSeg (f,1) by TOPREAL1:27;
+then A6: f/.1 in LSeg (f,1) /\ LSeg (f,i) by A3,XBOOLE_0:def 3;
+then A7: LSeg (f,1) meets LSeg (f,i) by XBOOLE_0:4;
+   now per cases by REAL_1:def 5;
+  suppose A8: i = 2;
+then A9:  1 + 2 <= len f by A3,TOPREAL1:def 5;
+    1 + 1 = 2;
+  then f/.1 in { f/.2 } by A1,A6,A8,A9,TOPREAL1:def 8;
+  then f/.1 = f/.2 by TARSKI:def 1;
+  hence contradiction by A1,A2,PARTFUN2:17;
+  suppose i > 2;
+  then 1 + 1 < i;
+  hence contradiction by A1,A7,TOPREAL1:def 9;
+  suppose i < 2;
+  then i < 1+1;
+  hence contradiction by A5,NAT_1:38;
+ end;
+ hence thesis;
+ suppose i < 1;
+ hence thesis by A3,TOPREAL1:def 5;
+end;
+
+theorem
+   for f be non constant standard special_circular_sequence,
+     j be Nat,
+     P be Subset of TOP-REAL 2 st
+     1 <= j & j <= width GoB f &
+     P = LSeg ((GoB f)*(1,j), (GoB f)*(len (GoB f),j)) holds
+ P is_S-P_arc_joining (GoB f)*(1,j),
+                      (GoB f)*(len (GoB f),j)
+proof
+ let f be non constant standard special_circular_sequence,
+     j be Nat,
+     P be Subset of TOP-REAL 2;
+ assume A1: 1 <= j & j <= width GoB f &
+           P = LSeg ((GoB f)*(1,j), (GoB f)*(len (GoB f),j));
+ set p = (GoB f)*(1,j), q = (GoB f)*(len GoB f, j);
+     1 <= j & j <= width GoB f &
+   1 <= len GoB f & len GoB f <= len GoB f by A1,GOBOARD7:34;
+then A2: p`2 = q`2 by GOBOARD5:2;
+A3: p`1 <> q`1
+  proof
+    assume A4: p`1 = q`1;
+A5: GoB f = GoB(Incr(X_axis(f)),Incr(Y_axis(f))) by GOBOARD2:def 3;
+   1 <= len GoB f &
+     len GoB f <= len GoB(Incr(X_axis(f)),Incr(Y_axis(f)))
+          by GOBOARD2:def 3,GOBOARD7:34;
+then A6: [1,j] in Indices GoB(Incr(X_axis f),Incr(Y_axis(f))) &
+     [len GoB f,j] in Indices GoB(Incr(X_axis f),Incr(Y_axis(f)))
+         by A1,A5,GOBOARD7:10;
+      (GoB f)*(1,j)=
+       (GoB(Incr(X_axis(f)),Incr(Y_axis(f))))*(1,j)
+                        by GOBOARD2:def 3
+     .= |[Incr(X_axis(f)).1,Incr(Y_axis(f)).j]|
+                        by A6,GOBOARD2:def 1;
+then A7: p`1 = Incr(X_axis(f)).1 by EUCLID:56;
+      (GoB f)*(len GoB f, j) =
+       (GoB(Incr(X_axis(f)),Incr(Y_axis(f))))*(len GoB f, j)
+                        by GOBOARD2:def 3
+     .= |[Incr(X_axis(f)).(len GoB f), Incr(Y_axis(f)).j]|
+                        by A6,GOBOARD2:def 1;
+then A8: Incr(X_axis(f)).(len GoB f) = Incr(X_axis(f)).1 by A4,A7,EUCLID:56;
+      len Incr (X_axis(f)) = len GoB f by A5,GOBOARD2:def 1;
+    then 1 <= len GoB f &
+    1 <= len Incr (X_axis(f)) & len GoB f <= len Incr (X_axis(f))
+      by GOBOARD7:34;
+    then len GoB f in dom Incr (X_axis(f)) & 1 in dom Incr (X_axis(f))
+                by FINSEQ_3:27;
+    then len GoB f = 1 by A8,GOBOARD2:19;
+    hence thesis by GOBOARD7:34;
+   end;
+ reconsider gg = <*p,q*> as FinSequence of the carrier of TOP-REAL 2;
+A9: len gg = 2 by FINSEQ_1:61;
+ take gg;
+ thus gg is_S-Seq by A2,A3,SPPOL_2:46;
+ thus P = L~gg by A1,SPPOL_2:21;
+ thus p = gg/.1 & q = gg/.len gg by A9,FINSEQ_4:26;
+end;
+
+theorem
+   for f be non constant standard special_circular_sequence,
+     j be Nat,
+     P be Subset of TOP-REAL 2 st
+     1 <= j & j <= len GoB f &
+     P = LSeg ((GoB f)*(j,1), (GoB f)*(j,width GoB f)) holds
+ P is_S-P_arc_joining (GoB f)*(j,1),
+                      (GoB f)*(j,width GoB f)
+proof
+ let f be non constant standard special_circular_sequence,
+     j be Nat,
+     P be Subset of TOP-REAL 2;
+ assume A1: 1 <= j & j <= len GoB f &
+           P = LSeg ((GoB f)*(j,1),
+                     (GoB f)*(j,width GoB f));
+ set p = (GoB f)*(j, 1),
+     q = (GoB f)*(j, width GoB f);
+     1 <= j & j <= len GoB f &
+   1 <= width GoB f by A1,GOBOARD7:35;
+then A2: p`1 = q`1 by GOBOARD5:3;
+A3: p`2 <> q`2
+  proof
+    assume A4: p`2 = q`2;
+A5: GoB f = GoB(Incr(X_axis(f)),Incr(Y_axis(f))) by GOBOARD2:def 3;
+   1 <= width GoB f &
+     width GoB f <= width GoB(Incr(X_axis(f)),Incr(Y_axis(f)))
+          by GOBOARD2:def 3,GOBOARD7:35;
+then A6: [j,1] in Indices GoB(Incr(X_axis f),Incr(Y_axis(f))) &
+     [j,width GoB f] in Indices GoB(Incr(X_axis f),Incr(Y_axis(f)))
+         by A1,A5,GOBOARD7:10;
+      (GoB f)*(j,1)=
+       (GoB(Incr(X_axis(f)),Incr(Y_axis(f))))*(j,1)
+                        by GOBOARD2:def 3
+     .= |[Incr(X_axis(f)).j,Incr(Y_axis(f)).1]|
+                        by A6,GOBOARD2:def 1;
+then A7: p`2 = Incr(Y_axis(f)).1 by EUCLID:56;
+      (GoB f)*(j, width GoB f)=
+       (GoB(Incr(X_axis(f)),Incr(Y_axis(f))))*(j, width GoB f)
+                        by GOBOARD2:def 3
+     .= |[Incr(X_axis(f)).j, Incr(Y_axis(f)).(width GoB f)]|
+                        by A6,GOBOARD2:def 1;
+then A8: Incr(Y_axis(f)).(width GoB f) = Incr(Y_axis(f)).1 by A4,A7,EUCLID:56;
+      len Incr (Y_axis(f)) = width GoB f by A5,GOBOARD2:def 1;
+    then 1 <= width GoB f &
+    1 <= len Incr (Y_axis(f)) & width GoB f <= len Incr (Y_axis(f))
+      by GOBOARD7:35;
+    then width GoB f in dom Incr (Y_axis(f)) & 1 in dom Incr (Y_axis(f))
+                by FINSEQ_3:27;
+    then width GoB f = 1 by A8,GOBOARD2:19;
+    hence thesis by GOBOARD7:35;
+   end;
+ reconsider gg = <*p,q*> as FinSequence of the carrier of TOP-REAL 2;
+A9: len gg = 2 by FINSEQ_1:61;
+ take gg;
+ thus gg is_S-Seq by A2,A3,SPPOL_2:46;
+ thus P = L~gg by A1,SPPOL_2:21;
+ thus p=gg/.1 & q=gg/.len gg by A9,FINSEQ_4:26;
+end;
+

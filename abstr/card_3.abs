@@ -1,0 +1,286 @@
+:: K\"onig's Theorem
+::  by Grzegorz Bancerek
+::
+:: Received April 10, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL1, CARD_1, FUNCT_1, RELAT_1, BOOLE, FUNCOP_1, FUNCT_2,
+      TARSKI, MCART_1, PROB_1, RLVECT_1, CARD_2, ORDINAL2, FINSET_1, ARYTM_1,
+      CLASSES1, ZFMISC_1, WELLORD1, WELLORD2, RELAT_2, CARD_3, HAHNBAN;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, REAL_1, NAT_1,
+      RELAT_1, RELAT_2, FUNCT_1, FUNCT_2, ORDINAL1, WELLORD1, MCART_1,
+      WELLORD2, CARD_1, FUNCOP_1, FUNCT_4, FINSET_1, PROB_1, CARD_2, CLASSES1;
+ constructors REAL_1, NAT_1, RELAT_2, WELLORD1, MCART_1, WELLORD2, FUNCOP_1,
+      PROB_1, CARD_2, CLASSES1, MEMBERED, XBOOLE_0;
+ clusters RELAT_1, FUNCT_1, FINSET_1, CARD_1, FUNCOP_1, ORDINAL1, MEMBERED,
+      ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET;
+
+
+begin
+
+ reserve A,B,C for Ordinal,
+         K,M,N for Cardinal,
+         x,y,y1,y2,z,u,X,Y,Z,Z1,Z2 for set,
+         n for Nat,
+         f,f1,g,h for Function,
+         Q,R for Relation;
+
+ definition let IT be Function;
+  attr IT is Cardinal-yielding means
+:: CARD_3:def 1
+
+    for x st x in dom IT holds IT.x is Cardinal;
+ end;
+
+ definition
+  cluster Cardinal-yielding Function;
+ end;
+
+definition
+  mode Cardinal-Function is Cardinal-yielding Function;
+end;
+
+ reserve ff for Cardinal-Function;
+
+ definition let ff,X;
+  cluster ff|X -> Cardinal-yielding;
+ end;
+
+ definition let X,K;
+  cluster X --> K -> Cardinal-yielding;
+ end;
+
+canceled 2;
+
+theorem :: CARD_3:3
+   {} is Cardinal-Function;
+
+ scheme CF_Lambda { A()->set, F(set)->Cardinal } :
+  ex ff st dom ff = A() & for x st x in A() holds ff.x = F(x);
+
+ definition let f;
+  func Card f -> Cardinal-Function means
+:: CARD_3:def 2
+
+    dom it = dom f & for x st x in dom f holds it.x = Card(f.x);
+  func disjoin f -> Function means
+:: CARD_3:def 3
+  dom it = dom f & for x st x in dom f holds it.x = [:f.x,{x}:];
+
+ canceled;
+  func product f -> set means
+:: CARD_3:def 5
+   x in it iff ex g st x = g & dom g = dom f &
+       for y st y in dom f holds g.y in f.y;
+ end;
+
+canceled 4;
+
+theorem :: CARD_3:8
+  Card ff = ff;
+
+theorem :: CARD_3:9
+   Card {} = {};
+
+theorem :: CARD_3:10
+   Card (X --> Y) = X --> Card Y;
+
+theorem :: CARD_3:11
+    disjoin {} = {};
+
+theorem :: CARD_3:12
+  disjoin ({x} --> X) = {x} --> [:X,{x}:];
+
+theorem :: CARD_3:13
+   x in dom f & y in
+ dom f & x <> y implies (disjoin f).x misses (disjoin f).y;
+
+theorem :: CARD_3:14
+   Union {} = {};
+
+theorem :: CARD_3:15
+  Union (X --> Y) c= Y;
+
+theorem :: CARD_3:16
+  X <> {} implies Union (X --> Y) = Y;
+
+theorem :: CARD_3:17
+   Union ({x} --> Y) = Y;
+
+theorem :: CARD_3:18
+  g in product f iff dom g = dom f & for x st x in dom f holds g.x in f.x;
+
+theorem :: CARD_3:19
+  product {} = {{}};
+
+theorem :: CARD_3:20
+  Funcs(X,Y) = product (X --> Y);
+
+ definition let x,X;
+  func pi(X,x) -> set means
+:: CARD_3:def 6
+   y in it iff ex f st f in X & y = f.x;
+ end;
+
+canceled;
+
+theorem :: CARD_3:22
+   x in dom f & product f <> {} implies pi(product f,x) = f.x;
+
+canceled;
+
+theorem :: CARD_3:24
+   pi({},x) = {};
+
+theorem :: CARD_3:25
+   pi({g},x) = {g.x};
+
+theorem :: CARD_3:26
+   pi({f,g},x) = {f.x,g.x};
+
+theorem :: CARD_3:27
+  pi(X \/ Y,x) = pi(X,x) \/ pi(Y,x);
+
+theorem :: CARD_3:28
+   pi(X /\ Y,x) c= pi(X,x) /\ pi(Y,x);
+
+theorem :: CARD_3:29
+  pi(X,x) \ pi(Y,x) c= pi(X \ Y,x);
+
+theorem :: CARD_3:30
+   pi(X,x) \+\ pi(Y,x) c= pi(X \+\ Y,x);
+
+theorem :: CARD_3:31
+  Card pi(X,x) <=` Card X;
+
+theorem :: CARD_3:32
+  x in Union disjoin f implies ex y,z st x = [y,z];
+
+theorem :: CARD_3:33
+  x in Union disjoin f iff x`2 in dom f & x`1 in f.(x`2) & x = [x`1,x`2];
+
+theorem :: CARD_3:34
+  f <= g implies disjoin f <= disjoin g;
+
+theorem :: CARD_3:35
+  f <= g implies Union f c= Union g;
+
+theorem :: CARD_3:36
+  Union disjoin (Y --> X) = [:X,Y:];
+
+theorem :: CARD_3:37
+  product f = {} iff {} in rng f;
+
+theorem :: CARD_3:38
+  dom f = dom g & (for x st x in dom f holds f.x c= g.x) implies
+   product f c= product g;
+
+ reserve F,G for Cardinal-Function;
+
+theorem :: CARD_3:39
+    for x st x in dom F holds Card (F.x) = F.x;
+
+theorem :: CARD_3:40
+  for x st x in dom F holds Card ((disjoin F).x) = F.x;
+
+ definition let F;
+  func Sum F -> Cardinal equals
+:: CARD_3:def 7
+    Card Union disjoin F;
+  func Product F -> Cardinal equals
+:: CARD_3:def 8
+    Card product F;
+ end;
+
+canceled 2;
+
+theorem :: CARD_3:43
+   dom F = dom G & (for x st x in dom F holds F.x c= G.x) implies Sum F <=` Sum
+G;
+
+theorem :: CARD_3:44
+   {} in rng F iff Product F = 0;
+
+theorem :: CARD_3:45
+   dom F = dom G & (for x st x in dom F holds F.x c= G.x) implies
+   Product F <=` Product G;
+
+theorem :: CARD_3:46
+   F <= G implies Sum F <=` Sum G;
+
+theorem :: CARD_3:47
+   F <= G & not 0 in rng G implies Product F <=` Product G;
+
+theorem :: CARD_3:48
+   Sum({} --> K) = 0;
+
+theorem :: CARD_3:49
+   Product ({} --> K) = 1;
+
+theorem :: CARD_3:50
+   Sum({x} --> K) = K;
+
+theorem :: CARD_3:51
+   Product({x} --> K) = K;
+
+theorem :: CARD_3:52
+   Sum(M --> N) = M*`N;
+
+theorem :: CARD_3:53
+   Product(N --> M) = exp(M,N);
+
+theorem :: CARD_3:54
+  Card Union f <=` Sum Card f;
+
+theorem :: CARD_3:55
+   Card Union F <=` Sum F;
+
+::
+:: K\"onig's theorem
+::
+
+theorem :: CARD_3:56
+   dom F = dom G & (for x st x in dom F holds F.x in G.x) implies
+   Sum F <` Product G;
+
+ scheme FinRegularity { X()->finite set, P[set,set] }:
+  ex x st x in X() & for y st y in X() & y <> x holds not P[y,x]
+   provided
+  X() <> {} and
+  for x,y st P[x,y] & P[y,x] holds x = y and
+  for x,y,z st P[x,y] & P[y,z] holds P[x,z];
+
+ scheme MaxFinSetElem { X()->finite set, P[set,set] }:
+  ex x st x in X() & for y st y in X() holds P[x,y]
+   provided
+  X() <> {} and
+  for x,y holds P[x,y] or P[y,x] and
+  for x,y,z st P[x,y] & P[y,z] holds P[x,z];
+
+scheme FuncSeparation { X()->set, F(set)->set, P[set,set] }:
+ ex f st dom f = X() &
+   for x st x in X() for y holds y in f.x iff y in F(x) & P[x,y];
+
+theorem :: CARD_3:57
+  Rank n is finite;
+
+theorem :: CARD_3:58
+   X is finite implies Card X <` Card omega;
+
+theorem :: CARD_3:59
+  Card A <` Card B implies A in B;
+
+theorem :: CARD_3:60
+  Card A <` M implies A in M;
+
+theorem :: CARD_3:61
+  X is c=-linear implies
+  ex Y st Y c= X & union Y = union X & for Z st Z c= Y & Z <> {}
+   ex Z1 st Z1 in Z & for Z2 st Z2 in Z holds Z1 c= Z2;
+
+theorem :: CARD_3:62
+   (for Z st Z in X holds Card Z <` M) & X is c=-linear implies
+   Card union X <=` M;

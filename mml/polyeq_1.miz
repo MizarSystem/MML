@@ -1,0 +1,1894 @@
+:: Solving Roots of Polynomial Equations of Degree 2 and 3 with
+:: Real Coefficients
+::  by Liang Xiquan
+::
+:: Received May 18, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, ARYTM_1, ARYTM_3, RELAT_1, SQUARE_1, FUNCT_3, PREPOWER,
+      POWER, POLYEQ_1, GROUP_1;
+ notation ORDINAL1, XCMPLX_0, XREAL_0, REAL_1, NAT_1, SQUARE_1, PREPOWER,
+      POWER, QUIN_1;
+ constructors REAL_1, NAT_1, SQUARE_1, PREPOWER, POWER, QUIN_1, MEMBERED;
+ clusters XREAL_0, SQUARE_1, NEWTON, QUIN_1, MEMBERED;
+ requirements NUMERALS, SUBSET, REAL, ARITHM;
+ theorems REAL_1, REAL_2, SQUARE_1, PREPOWER, POWER, QUIN_1, NEWTON, XREAL_0,
+      XCMPLX_0, XCMPLX_1;
+
+begin :: Polynomial of Degree 1 and 2
+
+reserve a, a', a1, a2, a3, b, b', c, c', d, d', h,
+        p, q, x, x1, x2, x3, u, v, y, z for real number;
+
+definition let a, b, x be real number;
+  func Poly1(a ,b ,x) equals
+  :Def1:
+  a*x+b;
+  coherence;
+end;
+
+definition let a, b, x be real number;
+  cluster Poly1(a ,b ,x) -> real;
+  coherence
+    proof
+        Poly1(a ,b ,x) = a*x+b by Def1;
+      hence thesis;
+    end;
+end;
+
+definition let a, b, x be Real;
+ redefine func Poly1(a ,b ,x) -> Real;
+  coherence by XREAL_0:def 1;
+end;
+
+theorem
+    a <> 0 & Poly1(a,b,x) = 0 implies x = -(b/a)
+proof
+   assume A1: a <> 0 & Poly1(a,b,x) = 0;
+    then a*x+b = 0 by Def1;
+    then a"*(-b) = a"*(a*x) by XCMPLX_0:def 6
+           .= (a"*a)*x by XCMPLX_1:4;
+    then 1*x = a"*(-b) by A1,XCMPLX_0:def 7;
+    then x = -(a"*b) by XCMPLX_1:175;hence
+      x = -(b/a) by XCMPLX_0:def 9;
+end;
+
+theorem
+    Poly1(0,0,x) = 0
+proof
+    Poly1(0,0,x) = 0*x+0 by Def1;
+  hence Poly1(0,0,x) = 0;
+end;
+
+theorem
+    b <> 0 implies not ex x st Poly1(0,b,x) = 0
+proof
+   assume that A1: b <> 0;
+   given x2 such that
+    A2:Poly1(0,b,x2) = 0;
+      0*x2 + b = 0 by A2,Def1;
+    hence contradiction by A1;
+end;
+
+definition let a,b,c,x be real number;
+  func Poly2(a,b,c,x) equals
+  :Def2:
+  a*x^2+b*x+c;
+  coherence;
+end;
+
+definition let a,b,c,x be real number;
+  cluster Poly2(a,b,c,x) -> real;
+  coherence
+    proof
+        Poly2(a,b,c,x) = a*x^2+b*x+c by Def2;
+      hence thesis;
+    end;
+end;
+
+definition let a,b,c,x be Real;
+  redefine func Poly2(a,b,c,x) -> Real;
+  coherence by XREAL_0:def 1;
+end;
+
+theorem Th4:
+ (for x holds Poly2(a,b,c,x) = Poly2(a',b',c',x)) implies
+      a = a'& b = b'& c = c'
+proof
+    assume A1:
+    for x holds
+    Poly2(a,b,c,x) = Poly2(a',b',c',x);
+    then Poly2(a,b,c,0) = Poly2(a',b',c',0);
+    then a*0^2+b*0+c = Poly2(a',b',c',0) by Def2;
+    then A2:a*0+b*0+c = a'*0+b'*0+c' by Def2,SQUARE_1:60;
+      c-c' = c+-c' by XCMPLX_0:def 8;
+    then A3:c-c' = 0 by A2,XCMPLX_0:def 6;
+      Poly2(a,b,c,1) = Poly2(a',b',c',1) by A1;
+    then a*1^2+b*1+c = Poly2(a',b',c',1) by Def2;
+    then a+b+c = a'*1+b'*1+c' by Def2,SQUARE_1:59;
+    then a+b-(a'+b') = (c'-c) by XCMPLX_1:33
+               .= (c+-c) by A2,XCMPLX_0:def 8
+               .= 0 by XCMPLX_0:def 6;
+    then A4: a+b = a'+b' by XCMPLX_1:15;
+      Poly2(a,b,c,-1) = Poly2(a',b',c',-1) by A1;
+    then a*(-1)^2+b*(-1)+c = Poly2(a',b',c',-1) by Def2
+                    .= a'*(-1)^2+b'*(-1)+c' by Def2;
+    then a*1^2+b*(-1)+c = a'*(-1)^2+b'*(-1)+c' by SQUARE_1:61;
+    then a*1+b*(-1)+c = a'*1+b'*(-1)+c' by SQUARE_1:59,61;
+    then a+-b*1+c = a'+b'*(-1)+c' by XCMPLX_1:175;
+    then a+-b+c = a'+-1*b'+c' by XCMPLX_1:175;
+    then a-b+c = a'+-1*b'+c' by XCMPLX_0:def 8
+         .= a'-b'+c' by XCMPLX_0:def 8;
+    then c-b+a = a'-b'+c' by XCMPLX_1:30
+         .= c'-b'+a' by XCMPLX_1:30;
+    then c-(b-a) = c'-b'+a' by XCMPLX_1:37
+           .= c'-(b'-a') by XCMPLX_1:37;
+    then A5: 0 = (b-a)-(b'-a') by A3,XCMPLX_1:24;
+    then b'-a' = b - a by XCMPLX_1:15;
+    then (b'-a'+a')+b' = (b-a)+(a+b) by A4,XCMPLX_1:1
+                 .= (b-a+a)+b by XCMPLX_1:1;
+    then b'-(a'-a')+b' = (b-a+a)+b by XCMPLX_1:37
+                 .= b-(a-a)+b by XCMPLX_1:37;
+    then b'-(a'+-a')+b' = b-(a-a)+b by XCMPLX_0:def 8
+                  .= b-(a+-a)+b by XCMPLX_0:def 8;
+    then b'-0 +b' = b-(a+-a)+b by XCMPLX_0:def 6
+            .= b-0 +b by XCMPLX_0:def 6;
+    then 2*b' = b +b by XCMPLX_1:11
+        .= 2*b by XCMPLX_1:11;
+    then A6:b' = 2*b/2 by XCMPLX_1:90
+      .= (2/2)*b by XCMPLX_1:75
+      .= 1*b;
+      (a+b)-(b-a) = (a'+b')-(b'-a') by A4,A5,XCMPLX_1:15
+               .= (a'+b')-b'+a' by XCMPLX_1:37;
+    then a'+b'-b'+a' = (a+b)-b+a by XCMPLX_1:37;
+    then a'+ (b'-b')+a' = a+b-b+a by XCMPLX_1:29
+                  .= a+(b-b)+a by XCMPLX_1:29;
+    then a'+0 +a' = a+(b-b)+a by XCMPLX_1:14
+            .= a+0 +a by XCMPLX_1:14;
+    then 2*a' = a+a by XCMPLX_1:11
+        .= 2*a by XCMPLX_1:11;
+    then a' = 2*a/2 by XCMPLX_1:90
+      .= (2/2)*a by XCMPLX_1:75
+      .= 1*a;
+      hence thesis by A2,A6;
+ end;
+
+theorem Th5:
+  a <> 0 & delta(a,b,c) >= 0 implies
+    (for x holds Poly2(a,b,c,x) = 0 implies
+      x = (-b+sqrt delta(a,b,c))/(2*a) or x = (-b-sqrt delta(a,b,c))/(2*a))
+proof
+    assume A1: a <> 0 & delta(a,b,c)>=0;
+      now let y;
+      assume Poly2(a,b,c,y) = 0;
+    then a*(a*y^2+b*y+c) = a*0 by Def2;
+    then a*(a*y^2)+a*(b*y)+a*c = 0 by XCMPLX_1:9;
+    then (a*a)*y^2+a*(b*y)+a*c = 0 by XCMPLX_1:4;
+    then (a*a)*y^2+(a*b)*y+a*c = 0 by XCMPLX_1:4;
+    then A2: a^2*y^2+(a*b)*y+a*c = 0 by SQUARE_1:def 3;
+    set t = a^2*y^2+(a*b)*y;
+    A3: t = -a*c by A2,XCMPLX_0:def 6;
+    set e = a*c;
+      t +b^2/4-b^2/4 = -e*(4*4") by A3,XCMPLX_1:26
+                 .= -(e*4)*4" by XCMPLX_1:4;
+    then t +b^2/4-b^2*4" = -(4*e)*4" by XCMPLX_0:def 9;
+    then t +b^2/4-b^2*4" + (4*e)*4" = 0 by XCMPLX_0:def 6;
+    then t +b^2/4-(b^2*4"-(4*e)*4") = 0 by XCMPLX_1:37;
+    then t +b^2/4 = b^2*4"-(4*e)*4" by XCMPLX_1:15
+           .= (b^2-4*e)*4" by XCMPLX_1:40;
+    then A4: (b^2-4*e)*4" = (a*y)^2+(a*b)*y+ b^2/4 by SQUARE_1:68
+                    .= (a*y)^2+(a*y)*b + b^2/4 by XCMPLX_1:4
+                    .= (a*y)^2+((a*y)*b/2*2) + b^2/4 by XCMPLX_1:88;
+      4=2^2 by SQUARE_1:85,def 4;
+    then (b^2-4*e)*4" = (a*y)^2+ 2*((a*y)*b/2) + (b/2)^2 by A4,SQUARE_1:69
+               .= (a*y)^2+ 2*((a*y)*b*2") + (b/2)^2 by XCMPLX_0:def 9
+               .= (a*y)^2+ 2*((a*y)*(b*2")) + (b/2)^2 by XCMPLX_1:4
+               .= (a*y)^2+ 2*((a*y)*(b/2)) + (b/2)^2 by XCMPLX_0:def 9
+               .= (a*y)^2+ 2*(a*y)*(b/2) + (b/2)^2 by XCMPLX_1:4;
+      then (a*y+b/2)^2 = (b^2-4*(a*c))*4" by SQUARE_1:63;
+     then A5: (a*y+b/2)^2 = (b^2-4*(a*c))/4 by XCMPLX_0:def 9;
+
+     A6: delta(a,b,c) = b^2-4*a*c by QUIN_1:def 1;
+     then A7: (b^2-4*(a*c)) >= 0 by A1,XCMPLX_1:4;
+     then (b^2-4*(a*c))/4 >= 0/4 by REAL_1:73;
+     then (a*y+b/2)^2 = (sqrt((b^2-4*(a*c))/4))^2 by A5,SQUARE_1:def 4;
+     then (a*y+b/2)^2 -(sqrt((b^2-4*(a*c))/4))^2 = 0 by XCMPLX_1:14;
+     then A8: ((a*y+b/2) - sqrt((b^2-4*(a*c))/4))*
+     ((a*y+b/2) + sqrt((b^2-4*(a*c))/4)) = 0 by SQUARE_1:67;
+     A9:now assume that
+       A10:((a*y+b/2) -sqrt((b^2-4*(a*c))/4)) =0;
+         (a*y+b/2) = sqrt((b^2-4*(a*c))/4)by A10,XCMPLX_1:15
+                .= sqrt(b^2-4*(a*c))/2 by A7,SQUARE_1:85,99;
+       then a*y = sqrt(b^2-4*(a*c))/2 - b/2 by XCMPLX_1:26
+          .= -(b/2 - sqrt(b^2-4*(a*c))/2 ) by XCMPLX_1:143
+          .= -(b*2" - sqrt(b^2-4*(a*c))/2 ) by XCMPLX_0:def 9
+          .= -(b*2" - sqrt(b^2-4*(a*c))*2" ) by XCMPLX_0:def 9
+          .= -(b - sqrt(b^2-4*(a*c)))*2" by XCMPLX_1:40
+          .= -((b - sqrt delta(a,b,c))*2") by A6,XCMPLX_1:4
+          .= -(b*2" - sqrt delta(a,b,c)*2") by XCMPLX_1:40
+          .= -(b*2") +(sqrt delta(a,b,c)*2") by XCMPLX_1:162
+          .= ((-b)*2" +(sqrt delta(a,b,c)*2"))by XCMPLX_1:175;
+       then y = ((-b)*2" +(sqrt delta(a,b,c)*2")) /a by A1,XCMPLX_1:90
+
+        .= ((-b)*2" +(sqrt delta(a,b,c)*2"))*a" by XCMPLX_0:def 9
+        .= ((-b)*2"*a" +(sqrt delta(a,b,c)*2")*a") by XCMPLX_1:8
+        .= ((-b)*(2"*a") +sqrt delta(a,b,c)*2"*a") by XCMPLX_1:4
+        .= ((-b)*(2"*a") +sqrt delta(a,b,c)*(2"*a")) by XCMPLX_1:4
+        .= (-b +sqrt delta(a,b,c))*(2"*a") by XCMPLX_1:8
+        .= (-b +sqrt delta(a,b,c))*(2*a)" by XCMPLX_1:205;hence
+         y = (-b +sqrt delta(a,b,c))/(2*a) by XCMPLX_0:def 9;
+      end;
+       now assume that
+       A11: (a*y+b/2) +sqrt((b^2-4*(a*c))/4) = 0;
+         (a*y+b/2) = - sqrt((b^2-4*(a*c))/4) by A11,XCMPLX_0:def 6;
+       then a*y+b/2 = -sqrt(b^2-4*(a*c))/2 by A7,SQUARE_1:85,99;
+       then a*y = -sqrt(b^2-4*(a*c))/2 - b/2 by XCMPLX_1:26
+       .= -(b/2 + sqrt(b^2-4*(a*c))/2 ) by XCMPLX_1:161
+       .= -(b*2" + sqrt(b^2-4*(a*c))/2 ) by XCMPLX_0:def 9
+       .= -(b*2" + sqrt(b^2-4*(a*c))*2" ) by XCMPLX_0:def 9
+       .= -(b + sqrt(b^2-4*(a*c)))*2" by XCMPLX_1:8
+       .= -(b + sqrt delta(a,b,c))*2" by A6,XCMPLX_1:4
+       .= -(b*2" + sqrt delta(a,b,c)*2") by XCMPLX_1:8
+       .= -(b*2") -(sqrt delta(a,b,c)*2") by XCMPLX_1:161
+       .= ((-b)*2" -(sqrt delta(a,b,c)*2"))by XCMPLX_1:175;
+       then y = ((-b)*2" -(sqrt delta(a,b,c)*2")) /a by A1,XCMPLX_1:90
+
+       .= ((-b)*2" -(sqrt delta(a,b,c)*2"))*a" by XCMPLX_0:def 9
+       .= ((-b)*2"*a" -(sqrt delta(a,b,c)*2")*a") by XCMPLX_1:40
+       .= ((-b)*(2"*a") -sqrt delta(a,b,c)*2"*a") by XCMPLX_1:4
+       .= ((-b)*(2"*a") -sqrt delta(a,b,c)*(2"*a")) by XCMPLX_1:4
+       .= (-b -sqrt delta(a,b,c))*(2"*a") by XCMPLX_1:40
+       .= (-b -sqrt delta(a,b,c))*(2*a)" by XCMPLX_1:205;hence
+         y = (-b -sqrt delta(a,b,c))/(2*a) by XCMPLX_0:def 9;
+       end; hence
+         y = (-b+sqrt delta(a,b,c))/(2*a) or
+       y = (-b-sqrt delta(a,b,c))/(2*a) by A8,A9,XCMPLX_1:6;
+       end; hence thesis;
+end;
+
+theorem
+    a <> 0 & delta(a,b,c) = 0 &
+    Poly2(a,b,c,x) = 0 implies x = -(b/(2*a))
+proof
+     assume A1: a <> 0 & delta(a,b,c) = 0;
+       now let y;
+     assume Poly2(a,b,c,y) = 0;
+     then a*y^2+b*y+c = 0 by Def2;
+     then a*(a*y^2+b*y+c) = 0;
+     then a*(a*y^2)+a*(b*y)+a*c = 0 by XCMPLX_1:9;
+     then (a*a)*y^2+a*(b*y)+a*c = 0 by XCMPLX_1:4;
+     then A2: (a*a)*y^2+(a*b)*y+a*c = 0 by XCMPLX_1:4;
+     set t = a^2*y^2+(a*b)*y;
+       t +a*c = 0 by A2,SQUARE_1:def 3;
+     then A3: t = -a*c by XCMPLX_0:def 6;
+     set e = a*c;
+     A4:b^2-4*a*c = delta(a,b,c) by QUIN_1:def 1;
+       t +b^2/4-b^2/4 = -e*(4*4") by A3,XCMPLX_1:26
+                  .= -(e*4)*4" by XCMPLX_1:4;
+     then t+b^2/4-b^2*4" = -(4*e)*4" by XCMPLX_0:def 9;
+     then t+b^2/4-b^2*4" + (4*e)*4" = 0 by XCMPLX_0:def 6;
+     then t+b^2/4-(b^2*4"-(4*e)*4") = 0 by XCMPLX_1:37;
+     then t+b^2/4 = b^2*4"-(4*e)*4" by XCMPLX_1:15
+           .= (b^2-4*e)*4" by XCMPLX_1:40
+           .= 0*4" by A1,A4,XCMPLX_1:4;
+     then (a*y)^2+(a*b)*y+ b^2/4 = 0 by SQUARE_1:68;
+     then (a*y)^2+(a*y)*b + b^2/4 = 0 by XCMPLX_1:4;
+      then A5:(a*y)^2+ 2*((a*y)*b/2) + b^2/4 = 0 by XCMPLX_1:88;
+        4=2^2 by SQUARE_1:85,def 4;
+     then (a*y)^2+ 2*((a*y)*b/2) + (b/2)^2 = 0 by A5,SQUARE_1:69;
+      then (a*y)^2+ 2*((a*y)*b*2") + (b/2)^2 = 0 by XCMPLX_0:def 9;
+      then (a*y)^2+ 2*((a*y)*(b*2")) + (b/2)^2 = 0 by XCMPLX_1:4;
+     then (a*y)^2+ 2*((a*y)*(b/2)) + (b/2)^2 = 0 by XCMPLX_0:def 9;
+      then (a*y)^2+ 2*(a*y)*(b/2) + (b/2)^2 = 0 by XCMPLX_1:4;
+      then (a*y+b/2)^2 = 0 by SQUARE_1:63;
+      then a*y+b/2 = 0 by SQUARE_1:73;
+      then a*y = - b/2 by XCMPLX_0:def 6
+         .= - b*2" by XCMPLX_0:def 9;
+      then y = (- b*2")/a by A1,XCMPLX_1:90
+      .= (-2"*b)*a" by XCMPLX_0:def 9
+      .= (-1)*(b*2")*a" by XCMPLX_1:180
+      .= (-1)*((b*2")*a") by XCMPLX_1:4
+      .= -((b*2")*a")*(1) by XCMPLX_1:175
+      .= -(b*(2"*a"))*1 by XCMPLX_1:4
+      .= -(b*(2*a)") by XCMPLX_1:205;hence
+        y = -( b/(2*a)) by XCMPLX_0:def 9;
+      end; hence thesis;
+end;
+
+theorem
+    a <> 0 & delta(a,b,c) < 0 implies
+    not ex x st Poly2(a,b,c,x) = 0
+proof
+     assume that A1: a <> 0 & delta(a,b,c) < 0;
+     given y such that
+     A2: Poly2(a,b,c,y) = 0;
+       a*(a*y^2+b*y+c) = a*0 by A2,Def2;
+     then a*(a*y^2)+a*(b*y)+a*c = 0 by XCMPLX_1:9;
+     then (a*a)*y^2+a*(b*y)+a*c = 0 by XCMPLX_1:4;
+     then A3: (a*a)*y^2+(a*b)*y+a*c = 0 by XCMPLX_1:4;
+     set t = a^2*y^2+(a*b)*y;
+       t +a*c = 0 by A3,SQUARE_1:def 3;
+     then A4: t = -a*c by XCMPLX_0:def 6;
+     set e = a*c;
+       t +b^2/4-b^2/4 = -e*(4*4") by A4,XCMPLX_1:26
+                  .= -(e*4)*4" by XCMPLX_1:4;
+     then t +b^2/4-b^2*4" = -(4*e)*4" by XCMPLX_0:def 9;
+     then t +b^2/4-b^2*4" + (4*e)*4" = 0 by XCMPLX_0:def 6;
+     then t +b^2/4-(b^2*4"-(4*e)*4") = 0 by XCMPLX_1:37;
+     then t +b^2/4 = b^2*4"-(4*e)*4" by XCMPLX_1:15
+            .= (b^2-4*e)*4" by XCMPLX_1:40;
+     then A5: (b^2-4*e)*4" = (a*y)^2+(a*b)*y+ b^2/4 by SQUARE_1:68
+                     .= (a*y)^2+(a*y)*b + b^2/4 by XCMPLX_1:4
+                     .= (a*y)^2+((a*y)*b/2*2) + b^2/4 by XCMPLX_1:88;
+       4=2^2 by SQUARE_1:85,def 4;
+     then (b^2-4*e)*4" = (a*y)^2+ 2*((a*y)*b/2) + (b/2)^2 by A5,SQUARE_1:69
+                .= (a*y)^2+ 2*((a*y)*b*2") + (b/2)^2 by XCMPLX_0:def 9
+                .= (a*y)^2+ 2*((a*y)*(b*2")) + (b/2)^2 by XCMPLX_1:4
+                .= (a*y)^2+ 2*((a*y)*(b/2)) + (b/2)^2 by XCMPLX_0:def 9
+                .= (a*y)^2+ 2*(a*y)*(b/2) + (b/2)^2 by XCMPLX_1:4;
+      then A6: (a*y+b/2)^2 = (b^2-4*(a*c))*4" by SQUARE_1:63;
+        (b^2-4*a*c) < 0 by A1,QUIN_1:def 1;
+      then (b^2-4*(a*c)) < 0 by XCMPLX_1:4;
+      then (b^2-4*(a*c))*4" < 0 by SQUARE_1:24;
+      then (a*y+b/2)*(a*y+b/2) < 0 by A6,SQUARE_1:def 3;
+      then (a*y+b/2) > 0 & (a*y+b/2) < 0 by REAL_2:132;
+      hence contradiction;
+end;
+
+theorem
+    b <> 0 & (for x holds Poly2(0,b,c,x) = 0) implies x = -(c/b)
+proof
+    assume that A1: b <> 0;
+      now assume A2:
+    (for x holds Poly2(0,b,c,x) = 0);
+      now let y;
+      Poly2(0,b,c,y) = 0 by A2;
+    then 0*y^2+b*y+c = 0 by Def2;
+    then b*y = - c by XCMPLX_0:def 6;
+    then y = (-c)/b by A1,XCMPLX_1:90
+     .= (-c)*b" by XCMPLX_0:def 9
+     .= ((-1)*c)*b" by XCMPLX_1:180
+     .= (-1)*(c*b") by XCMPLX_1:4
+     .= (-1)*(c/b) by XCMPLX_0:def 9; hence
+      y = -(c/b) by XCMPLX_1:180;
+      end; hence thesis;
+    end; hence thesis;
+end;
+
+theorem
+    Poly2(0,0,0,x) = 0
+proof
+    0*x^2+0*x+0 = 0;
+  hence thesis by Def2;
+end;
+
+theorem
+    c <> 0 implies not ex x st Poly2(0,0,c,x) = 0
+proof
+  assume A1: c <> 0;
+  given y such that
+    A2: Poly2(0,0,c,y) = 0;
+      0*y^2+0*y+c = 0 by A2,Def2;
+  hence contradiction by A1;
+end;
+
+definition let a,x,x1,x2 be real number;
+  func Quard(a,x1,x2,x) equals
+  :Def3:
+  a*((x-x1)*(x-x2));
+  coherence;
+end;
+
+definition let a,x,x1,x2 be real number;
+  cluster Quard(a,x1,x2,x) -> real;
+  coherence
+    proof
+        Quard(a,x1,x2,x) = a*((x-x1)*(x-x2)) by Def3;
+      hence thesis;
+    end;
+end;
+
+definition let a,x,x1,x2 be Real;
+  redefine func Quard(a,x1,x2,x) -> Real;
+  coherence by XREAL_0:def 1;
+end;
+
+theorem
+    a <> 0 &
+    (for x holds Poly2(a,b,c,x) = Quard(a,x1,x2,x)) implies
+      b/a = -(x1+x2) & c/a = x1*x2
+proof
+  assume A1: a <> 0;
+    now assume A2:
+  (for x holds Poly2(a,b,c,x) = Quard(a,x1,x2,x));
+      now let z;
+      Poly2(a,b,c,z) = Quard(a,x1,x2,z) by A2;
+    then a*z^2+b*z+c = Quard(a,x1,x2,z) by Def2
+              .= a*((z-x1)*(z-x2)) by Def3;
+    then A3:a*((z-x1)*(z-x2)) = a*z^2-(-b*z-(--c)) by XCMPLX_1:157
+                       .= a*z^2+-(-b*z-c) by XCMPLX_0:def 8;
+    set h = z-x1, t = z-x2;
+      (a*z^2)+(b*z+c) = a*(h*t) by A3,XCMPLX_1:164;
+    then (b*z+c) = a*(h*t)-(a*z^2) by XCMPLX_1:26;
+    then A4: a*(h*t-z^2) = (b*z+c) by XCMPLX_1:40;
+    set e = h*t-z^2;
+      e = (b*z+c)/a by A1,A4,XCMPLX_1:90
+     .= a"*(b*z+c) by XCMPLX_0:def 9
+     .= a"*(b*z)+a"*c by XCMPLX_1:8;
+    then e-a"*c = a"*(b*z) by XCMPLX_1:26;
+    then e -a"*c = (a"*b)*z by XCMPLX_1:4;
+    then e+(-a"*c) = (a"*b)*z by XCMPLX_0:def 8;
+    then e = (a"*b)*z-(-a"*c) by XCMPLX_1:26
+     .= (a"*b)*z+-(-a"*c) by XCMPLX_0:def 8
+     .= (a"*b)*z+a"*c;
+    then h*t+-z^2 = (a"*b)*z+a"*c by XCMPLX_0:def 8;
+    then h*t = ((a"*b)*z+a"*c)-(-z^2) by XCMPLX_1:26
+       .= -(-z^2)+(a"*b)*z+a"*c by XCMPLX_1:155
+       .= z^2+(a"*b)*z+a"*c;
+    then z*z-z*x2-x1*z+x1*x2 = z^2+(a"*b)*z+a"*c by XCMPLX_1:47;
+    then z^2+(a"*b)*z+a"*c = z^2-x2*z-x1*z+x1*x2 by SQUARE_1:def 3
+                    .= z^2-(x1*z+x2*z)+x1*x2 by XCMPLX_1:36;
+    then z^2-(x1+x2)*z+x1*x2 = z^2+(a"*b)*z+a"*c by XCMPLX_1:8
+                      .= z^2+(b/a)*z+a"*c by XCMPLX_0:def 9
+                      .= z^2+(b/a)*z+(c/a) by XCMPLX_0:def 9;
+    then A5: z^2-(x1+x2)*z+x1*x2 = 1*z^2+(b/a)*z+(c/a)
+                           .= Poly2(1,b/a,c/a,z) by Def2;
+      1*z^2+(-(x1+x2))*z+x1*x2 = 1*z^2+-(x1+x2)*z+x1*x2 by XCMPLX_1:175
+                .= Poly2(1,b/a,c/a,z) by A5,XCMPLX_0:def 8;
+    hence Poly2(1,-(x1+x2),x1*x2,z) = Poly2(1,b/a,c/a,z) by Def2;
+    end;hence
+      b/a = -(x1+x2) & c/a = x1*x2 by Th4;
+   end;hence thesis;
+  end;
+
+begin :: Polynomial of Degree 3
+
+definition let a,b,c,d,x be real number;
+  func Poly3(a,b,c,d,x) equals :Def4:
+  a*(x |^ 3)+ b*x^2 +c*x +d;
+  coherence;
+end;
+
+definition let a,b,c,d,x be real number;
+  cluster Poly3(a,b,c,d,x) -> real;
+  coherence
+    proof
+        Poly3(a,b,c,d,x) = a*(x |^ 3)+ b*x^2 +c*x +d by Def4;
+      hence thesis;
+    end;
+end;
+
+definition let a,b,c,d,x be Real;
+  redefine func Poly3(a,b,c,d,x) -> Real;
+  coherence by XREAL_0:def 1;
+end;
+
+theorem Th12:
+  (for x holds Poly3(a,b,c,d,x) = Poly3(a',b',c',d',x))
+   implies
+      a = a' & b = b' & c = c' & d = d'
+proof
+       assume that
+   A1: for x holds
+       Poly3(a,b,c,d,x) = Poly3(a',b',c',d',x);
+         Poly3(a,b,c,d,0) = Poly3(a',b',c',d',0)by A1;
+       then a*(0 |^ 3)+ b*0^2 +c*0 +d = Poly3(a',b',c',d',0) by Def4;
+   then A2: a*(0 |^ 3)+ b*0^2 +c*0 +d
+       = a'*(0 |^ 3)+ b'*0^2 +c'*0 +d' by Def4;
+   A3: (0 |^ 3) = 0 by NEWTON:16;
+     Poly3(a,b,c,d,1) = Poly3(a',b',c',d',1) by A1;
+   then a*(1 |^ 3)+ b*1^2 +c*1 +d = Poly3(a',b',c',d',1) by Def4;
+        then a*1 + b*1 +c*1 +d = Poly3(a',b',c',d',1)
+        by NEWTON:15,SQUARE_1:59;
+   then A4: a + b +c +d = a'*(1 |^ 3) + b'*1^2 +c'*1 +d' by Def4
+                   .= a'*1+ b'*1 +c'*1 +d' by NEWTON:15,SQUARE_1:59
+                   .= a'+ b' +c' +d';
+        set r1 = a+b+c;
+        set r2 = a'+b'+c';
+          r1 - r2 = d - d by A2,A3,A4,SQUARE_1:60,XCMPLX_1:33
+                .= 0 by XCMPLX_1:14;
+   then A5:  r1 = r2 by XCMPLX_1:15;
+     Poly3(a,b,c,d,-1) = Poly3(a',b',c',d',-1) by A1;
+   then A6:   a*((-1) |^ 3)+ b*(-1)^2 +c*(-1) +d = Poly3(a',b',c',d',-1)
+        by Def4;
+          3 = 2*1 + 1;
+   then (-1) |^ 3 = - (1 |^ (2+1)) by POWER:2
+                .= - ((1 |^ 2)*1) by NEWTON:11;
+   then (-1) |^ 3 = - 1 by NEWTON:15;
+   then a*(-1)+ b*(-1)^2 +c*(-1) +d
+     = a'*(-1) + b'*(-1)^2 +c'*(-1) +d' by A6,Def4;
+   then -(a*1)+ b*(-1)^2 +c*(-1) +d
+     = a'*(-1) + b'*(-1)^2 +c'*(-1) +d' by XCMPLX_1:175
+    .= -(a'*1) + b'*(-1)^2 +c'*(-1) +d' by XCMPLX_1:175;
+   then -a+b*1^2 +c*(-1) +d
+     = -a' + b'*(-1)^2 +c'*(-1) +d' by SQUARE_1:61
+    .= -a' + b'*1^2 +c'*(-1) +d' by SQUARE_1:61;
+   then -a+b+-(1*c)+d
+     = -a' + b' +(-1)*c' +d' by SQUARE_1:59,XCMPLX_1:175
+    .= -a' + b'+-(1*c') +d' by XCMPLX_1:175;
+   then A7:-a+b-(1*c) +d
+     = -a' + b'+ -(1*c') +d' by XCMPLX_0:def 8
+    .= -a' + b' -(1*c') +d' by XCMPLX_0:def 8;
+         set r3 = -a + b - c;
+         set r4 = -a' + b' -c';
+   A8:r3 - r4 = d -d by A2,A3,A7,SQUARE_1:60,XCMPLX_1:33
+              .= 0 by XCMPLX_1:14;
+   then r1 + r3 = r2 + r4 by A5,XCMPLX_1:15
+          .= a'+b'+c'+(-c' - a' +b') by XCMPLX_1:166
+          .= a'+b'+c'+(-(c'+ a') +b') by XCMPLX_1:161
+          .= a'+b'+c'+( -(c'+ a') -(-b')) by XCMPLX_1:151
+          .= a'+b'+c' -(c'+ a') -(-b') by XCMPLX_1:158
+          .= a'+b'+c' - c'- a' -(-b') by XCMPLX_1:36
+          .= a'+b'+(c'-c') - a' -(-b') by XCMPLX_1:29
+          .= a'+b'+ 0 - a' -(-b') by XCMPLX_1:14
+          .= a'- a'+b' -(-b') by XCMPLX_1:29
+          .= 0 +b' -(-b') by XCMPLX_1:14
+          .= b' + b' by XCMPLX_1:151;
+    then A9: 2*b' = a+b+c + (-a+b-c) by XCMPLX_1:11
+            .= a+b+c + (-c-a+b) by XCMPLX_1:166
+            .= a+b+c + (-(c+a)+b) by XCMPLX_1:161
+            .= a+b+c + (-(c+a)-(-b)) by XCMPLX_1:151
+            .= a+b+c -(c+a)-(-b) by XCMPLX_1:158
+            .= a+b+c -c-a-(-b) by XCMPLX_1:36
+            .= a+b+(c -c)-a-(-b) by XCMPLX_1:29
+            .= a+b+0-a-(-b) by XCMPLX_1:14
+            .= a-a+b-(-b) by XCMPLX_1:29
+            .= 0+ b-(-b) by XCMPLX_1:14
+            .= b+b by XCMPLX_1:151
+            .= 2*b by XCMPLX_1:11;
+     r1 - r3 = r2 - r4 by A5,A8,XCMPLX_1:15
+          .= a'+b'+c'- -( a' - b' +c')by XCMPLX_1:169
+          .= a'+b'+c'+( a'-b'+c')by XCMPLX_1:151
+          .= a'+b'+c'+(-b'+a'+c')by XCMPLX_0:def 8
+          .= a'+b'+c'+(-(b'-a'-c')) by XCMPLX_1:170
+          .= a'+b'+c'-(b'-a'-c') by XCMPLX_0:def 8
+          .= a'+b'+c'-(b'-(a'+c')) by XCMPLX_1:36
+          .= a'+b'+c'-b'+(a'+c') by XCMPLX_1:37
+          .= a'+b'-b'+c'+(a'+c') by XCMPLX_1:29
+          .= a'+c'+(a'+c') by XCMPLX_1:26;
+   then 2*(a'+c') = a+b+c-(-a+b-c) by XCMPLX_1:11
+            .= a+b+c--(a-b+c) by XCMPLX_1:169
+            .= a+b+c+(a-b+c) by XCMPLX_1:151
+            .= a+b+c+(-b+a+c) by XCMPLX_0:def 8
+            .= a+b+c+(-(b-a-c)) by XCMPLX_1:170
+            .= a+b+c-(b-a-c) by XCMPLX_0:def 8
+            .= a+b+c-(b-(a+c)) by XCMPLX_1:36
+            .= a+b+c-b+(a+c) by XCMPLX_1:37
+            .= a+b-b+c+(a+c) by XCMPLX_1:29
+            .= a +c +(a+c) by XCMPLX_1:26
+            .= 2*(a+c) by XCMPLX_1:11;
+   then a'+c' = a+c by XCMPLX_1:5;
+   then A10: a-a' = c'-c by XCMPLX_1:33;
+     Poly3(a,b,c,d,2) = Poly3(a',b',c',d',2) by A1;
+   then A11:  a*(2 |^ 3)+ b*2^2 +c*2 +d = Poly3(a',b',c',d',2) by Def4;
+   A12: 2 |^ 3 = 2 |^ (2+1)
+        .= (2 |^ (1+1))*2 by NEWTON:11
+        .= ((2 |^ 1)*2)*2 by NEWTON:11
+        .= (2 |^ 1)*(2*2) by XCMPLX_1:4;
+   A13: 2 |^ 1 = 2 to_power 1 by POWER:47
+              .= 2 by POWER:30;
+            set r5 = a*8+ b*2^2 +c*2;
+            set r6 = a'*8 + b'*2^2 +c'*2;
+     r5 + d = r6 +d' by A11,A12,A13,Def4;
+   then A14: r5 - r6 = d -d by A2,A3,SQUARE_1:60,XCMPLX_1:33
+        .= 0 by XCMPLX_1:14;
+   A15: (a - a')*8 = (c' -c)*2
+     proof
+          a*8+ b*2^2 +c*2 = a'*8 + b'*2^2 +c'*2 by A14,XCMPLX_1:15;
+        then a*8+ (b*2^2 +c*2) = a'*8 + b'*2^2 +c'*2 by XCMPLX_1:1
+                        .= a'*8 + (b'*2^2 +c'*2) by XCMPLX_1:1;
+        then a*8 - a'*8 = b'*2^2 +c'*2 -( b*2^2 +c*2) by XCMPLX_1:33
+                  .= b'*2^2 +c'*2 - b*2^2 -c*2 by XCMPLX_1:36
+                  .= b'*2^2 - b*2^2+c'*2 -c*2 by XCMPLX_1:29
+                  .= (b*2^2 - b*2^2)+c'*2 -c*2 by A9,XCMPLX_1:5
+                  .= 0 +c'*2 -c*2 by XCMPLX_1:14;
+        then (a - a')*8 = c'*2 -c*2 by XCMPLX_1:40;hence thesis by XCMPLX_1:40
+;
+      end;
+   A16: 8-2=6;
+          (a - a')*8 + (-(c' -c)*2) = 0 by A15,XCMPLX_0:def 6;
+   then (c' - c)*8 - (c' -c)*2 = 0 by A10,XCMPLX_0:def 8;
+   then (c' - c)*6 = 0 by A16,XCMPLX_1:40;
+   then c' - c = 0 or 6 = 0 by XCMPLX_1:6;
+         hence thesis by A2,A3,A9,A10,SQUARE_1:60,XCMPLX_1:5,15;
+end;
+
+definition let a,x,x1,x2,x3 be real number;
+  func Tri(a,x1,x2,x3,x) equals
+  :Def5:
+  a*((x-x1)*(x-x2)*(x-x3));
+  coherence;
+end;
+
+definition let a,x,x1,x2,x3 be real number;
+  cluster Tri(a,x1,x2,x3,x) -> real;
+  coherence
+    proof
+        Tri(a,x1,x2,x3,x) = a*((x-x1)*(x-x2)*(x-x3)) by Def5;
+      hence thesis;
+    end;
+end;
+
+definition let a,x,x1,x2,x3 be Real;
+  redefine func Tri(a,x1,x2,x3,x) -> Real;
+  coherence by XREAL_0:def 1;
+end;
+
+theorem
+    a <> 0 &
+  (for x holds Poly3(a,b,c,d,x) = Tri(a,x1,x2,x3,x)) implies
+     b/a = -(x1+x2+x3) & c/a = x1*x2 +x2*x3 +x1*x3 & d/a = -x1*x2*x3
+proof
+         assume A1: a <> 0;
+         assume A2:
+         for x holds
+         Poly3(a,b,c,d,x) = Tri(a,x1,x2,x3,x);
+          set b' = -(x1+x2+x3);
+          set c' = x1*x2+x2*x3+x1*x3;
+          set d' = -x1*x2*x3;
+          set t1 = b/a;
+          set t2 = c/a;
+          set t3 = d/a;
+           now let x;
+       Poly3(a,b,c,d,x) = Tri(a,x1,x2,x3,x)by A2;
+     then A3: a*(x |^ 3)+ b*x^2 +c*x +d = Tri(a,x1,x2,x3,x) by Def4;
+          set t = a*(x |^ 3)+ b*x^2 +c*x +d;
+          set r8 = ((x-x1)*(x-x2)*(x-x3));
+             t = a*r8 by A3,Def5;
+          then t/a = r8 by A1,XCMPLX_1:90;
+     then a"*t = r8 by XCMPLX_0:def 9;
+     then A4: a"*t = ((x*x-x*x2-x1*x+x1*x2))*(x-x3) by XCMPLX_1:47;
+          set r9 = (x^2-x*x2-x1*x+x1*x2);
+            a"*t = r9*(x-x3) by A4,SQUARE_1:def 3;
+     then A5: a"*t = r9*x- r9*x3 by XCMPLX_1:40;
+     A6: r9*x = (x^2-x2*x-x1*x)*x + (x1*x2)*x by XCMPLX_1:8
+          .= x^2*x-x2*x*x-x1*x*x + (x1*x2)*x by XCMPLX_1:42
+          .= x^2*x-x2*(x*x)-x1*x*x + (x1*x2)*x by XCMPLX_1:4
+          .= x^2*x-x2*x^2-x1*x*x + (x1*x2)*x by SQUARE_1:def 3
+          .= x^2*x-x2*x^2-x1*(x*x) + (x1*x2)*x by XCMPLX_1:4
+          .= x^2*x-x2*x^2-x1*x^2 + (x1*x2)*x by SQUARE_1:def 3
+          .= x^2*x-(x2*x^2+x1*x^2) + (x1*x2)*x by XCMPLX_1:36
+          .= x^2*x-(x2+x1)*x^2 + (x1*x2)*x by XCMPLX_1:8;
+            r9*x3 = (x^2-x*x2-x*x1)*x3+(x1*x2)*x3 by XCMPLX_1:8
+          .= x^2*x3-x*x2*x3-x*x1*x3+(x1*x2)*x3 by XCMPLX_1:42
+          .= x^2*x3-(x2*x3)*x-x*x1*x3+(x1*x2)*x3 by XCMPLX_1:4
+          .= x^2*x3-(x2*x3)*x-(x1*x3)*x+(x1*x2)*x3 by XCMPLX_1:4
+          .= x^2*x3-((x2*x3)*x+(x1*x3)*x)+(x1*x2)*x3 by XCMPLX_1:36
+          .= x^2*x3-((x2*x3)+(x1*x3))*x+ x1*x2*x3 by XCMPLX_1:8;
+     then A7: a"*t = x^2*x-(x2+x1)*x^2 + (x1*x2)*x -
+                 (-((x2*x3)+(x1*x3))*x+x^2*x3+x1*x2*x3)
+                 by A5,A6,XCMPLX_0:def 8;
+                 set r10 = x^2*x-(x2+x1)*x^2;
+     A8: a"*t
+           = r10 + (x1*x2)*x -(-((x2*x3)+(x1*x3))*x+(x^2*x3+x1*x2*x3))
+                  by A7,XCMPLX_1:1
+          .= r10 + (x1*x2)*x -
+                 (-((x2*x3)+(x1*x3))*x--(x^2*x3+x1*x2*x3))
+                  by XCMPLX_1:151
+          .= r10 + (x1*x2)*x + ((x2*x3)+(x1*x3))*x
+                  +-(x^2*x3 +x1*x2*x3) by XCMPLX_1:157
+          .= r10 + (x1*x2)*x + ((x2*x3)+(x1*x3))*x
+                  -(x^2*x3 +x1*x2*x3) by XCMPLX_0:def 8
+          .= r10 + (x1*x2)*x + ((x2*x3)+(x1*x3))*x
+                  -x^2*x3 -x1*x2*x3 by XCMPLX_1:36
+          .= r10 + ((x1*x2)*x + ((x2*x3)+(x1*x3))*x)
+                  -x^2*x3 -x1*x2*x3 by XCMPLX_1:1
+          .= r10 + ((x1*x2)+ (x2*x3+x1*x3))*x
+                  -x^2*x3 -x1*x2*x3 by XCMPLX_1:8;
+      set r11 = ((x1*x2)+ (x2*x3)+(x1*x3))*x;
+     A9: a"*t = r10 + r11 -x3*x^2 -x1*x2*x3 by A8,XCMPLX_1:1
+          .= r10 -x3*x^2+r11 -x1*x2*x3 by XCMPLX_1:29
+          .= (x^2*x-((x2+x1)*x^2+ x3*x^2))+r11 -x1*x2*x3 by XCMPLX_1:36
+          .= (x^2*x-(x2+x1+x3)*x^2)+r11 -x1*x2*x3 by XCMPLX_1:8
+          .= x^2*x + (-(x1+x2+x3)*x^2)+
+                 (x1*x2+x2*x3+x1*x3)*x -x1*x2*x3 by XCMPLX_0:def 8
+          .= x^2*x+(-(x1+x2+x3)*x^2)+
+                 (x1*x2+x2*x3+x1*x3)*x + (-x1*x2*x3) by XCMPLX_0:def 8;
+            (b' + (x1+x2+x3))*x^2 = 0*x^2 by XCMPLX_0:def 6;
+          then b'*x^2 + (x1+x2+x3)*x^2 = 0 by XCMPLX_1:8;
+     then A10: a"*t = x^2*x+ b'*x^2 +c'*x + d' by A9,XCMPLX_0:def 6;
+     A11: x |^ 3 = x |^ (2+1)
+                .= (x |^ (1+1))*x by NEWTON:11
+                .= ((x |^ 1)*x)*x by NEWTON:11;
+            x |^ 1 = x to_power 1 by POWER:47;
+          then x |^ 3 = (x*x)*x by A11,POWER:30;
+     then A12: a"*t = 1*(x |^ 3) + b'*x^2 +c'*x + d' by A10,SQUARE_1:def 3;
+          a"*t
+          = a"*(a*(x |^ 3)+ b*x^2 +(c*x +d)) by XCMPLX_1:1
+         .= a"*(a*(x |^ 3))+ a"*(b*x^2) +a"*(c*x +d) by XCMPLX_1:9
+         .= (a"*a)*(x |^ 3)+ a"*(b*x^2) +a"*(c*x +d) by XCMPLX_1:4
+         .= (a"*a)*(x |^ 3)+ (a"*b)*x^2 +a"*(c*x +d) by XCMPLX_1:4
+         .= (a"*a)*(x |^ 3)+ (a"*b)*x^2 + (a"*(c*x) +a"*d) by XCMPLX_1:8
+         .= (a"*a)*(x |^ 3)+ (a"*b)*x^2 +((a"*c)*x +(a"*d)) by XCMPLX_1:4
+         .= 1*(x |^ 3)+ (a"*b)*x^2 +((a"*c)*x +a"*d) by A1,XCMPLX_0:def 7
+         .= 1*(x |^ 3)+ t1*x^2 +((a"*c)*x +a"*d) by XCMPLX_0:def 9
+         .= 1*(x |^ 3)+ t1*x^2 + (t2*x +a"*d) by XCMPLX_0:def 9
+         .= 1*(x |^ 3)+ t1*x^2 + (t2*x + t3) by XCMPLX_0:def 9
+         .= 1*(x |^ 3)+ t1*x^2 + t2*x +t3 by XCMPLX_1:1
+         .= Poly3(1,t1,t2,t3,x) by Def4; hence
+           Poly3(1,t1,t2,t3,x) = Poly3(1,b',c',d',x) by A12,Def4;
+      end; hence
+              b/a = -(x1+x2+x3) &
+            c/a = x1*x2+x2*x3+x1*x3 &
+            d/a = -x1*x2*x3 by Th12;
+end;
+
+theorem Th14:
+  (y+h) |^ 3 = y |^ 3+((3*h)*y^2+(3*h^2)*y)+h |^ 3
+proof
+    A1:  (y+h) |^ 3 = (y+h) |^ (2+1);
+        set a4 = h*y^2+(2*h^2)*y;
+    A2: (y+h) |^ 3 = ((y+h) |^ (1+1))*(y+h) by A1,NEWTON:11
+         .= ((y+h) |^ 1*(y+h))*(y+h) by NEWTON:11
+         .= ((y+h) |^ 1)*((y+h)*(y+h)) by XCMPLX_1:4
+         .= ((y+h) |^ 1)*(y+h)^2 by SQUARE_1:def 3
+         .= ((y+h) |^ 1)*(y^2+2*y*h+h^2) by SQUARE_1:63
+         .= ((y+h) to_power 1)*(y^2+2*y*h+h^2) by POWER:47
+         .= (y+h)*(y^2+2*y*h+h^2) by POWER:30
+         .= y*(y^2+2*y*h+h^2)+h*(y^2+2*y*h+h^2) by XCMPLX_1:8
+         .= y*y^2+y*(2*y*h)+y*h^2+h*(y^2+2*y*h+h^2) by XCMPLX_1:9
+         .= y*y^2+y*(2*y*h)+y*h^2+(h*y^2+h*(2*y*h)+h*h^2) by XCMPLX_1:9
+         .= y*y^2+y*(2*y)*h +y*h^2+(h*y^2+h*(2*y*h)+h*h^2) by XCMPLX_1:4
+         .= y*y^2-(-h*(-(-y*(2*y)))) +y*h^2+(h*y^2+h*(2*y*h)+h*h^2
+) by XCMPLX_1:151
+         .= y*y^2-(h*(-(2*y)*y)) +y*h^2+(h*y^2+h*(2*y*h)+h*h^2) by XCMPLX_1:179
+         .= y*y^2-(h*(-(2*(y*y)))) +y*h^2+(h*y^2+h*(2*y*h)+h*h^2
+) by XCMPLX_1:4
+         .= y*y^2-(h*(-(2*y^2))) +y*h^2+(h*y^2+h*(2*y*h)+h*h^2
+) by SQUARE_1:def 3
+         .= y*y^2-(-h*(2*y^2)) +y*h^2+(h*y^2+h*(2*y*h)+h*h^2) by XCMPLX_1:175
+
+         .= y*y^2-(-(2*h*y^2)) +y*h^2+(h*y^2+h*(2*y*h)+h*h^2) by XCMPLX_1:4
+         .= y*y^2+(2*h*y^2) +h^2*y+(h*y^2+h*(2*y*h)+h*h^2) by XCMPLX_1:151
+         .= y*y^2+(2*h)*y^2 +h^2*y+(h*y^2+2*y*(h*h)+h*h^2) by XCMPLX_1:4
+         .= y*y^2+(2*h)*y^2 +h^2*y+(h*y^2+2*y*h^2+h*h^2) by SQUARE_1:def 3
+         .= y*y^2+(2*h)*y^2 +h^2*y+(h*y^2+(2*h^2)*y+h*h^2) by XCMPLX_1:4
+         .= y*y^2+(2*h)*y^2 +(h^2*y+(a4+h*h^2)) by XCMPLX_1:1
+         .= y*y^2+(2*h)*y^2 +(a4+(h^2*y+h*h^2)) by XCMPLX_1:1
+         .= y*y^2+(2*h)*y^2 +a4+(h^2*y+h*h^2) by XCMPLX_1:1
+         .= y*y^2+((2*h)*y^2 +a4)+(h^2*y+h*h^2) by XCMPLX_1:1
+         .= y*y^2+(((2*h)*y^2 +h*y^2)+(2*h^2*y))+(h^2*y+h*h^2) by XCMPLX_1:1
+         .= y*y^2+((2*h +h)*y^2+(2*h^2*y))+(h^2*y+h*h^2) by XCMPLX_1:8
+         .= y*y^2+(((2*h +h)*y^2+(2*h^2*y))+(h^2*y+h*h^2)) by XCMPLX_1:1
+         .= y*y^2+((2*h +h)*y^2+((2*h^2*y)+(h^2*y+h*h^2))) by XCMPLX_1:1
+         .= y*y^2+((2*h +h)*y^2+(((2*h^2*y)+h^2*y)+h*h^2)) by XCMPLX_1:1
+         .= y*y^2+((2*h +h)*y^2+((2*h^2+h^2)*y+h*h^2)) by XCMPLX_1:8
+         .= y*y^2+(((2*h +h)*y^2+((2*h^2+h^2)*y))+h*h^2) by XCMPLX_1:1
+         .= y*y^2+((2*h +1*h)*y^2+((2*h^2+h^2)*y))+h*h^2 by XCMPLX_1:1
+         .= y*y^2+(((2 +1)*h)*y^2+((2*h^2+h^2)*y))+h*h^2 by XCMPLX_1:8
+         .= y*y^2+((3*h)*y^2+((2*h^2+1*h^2)*y))+h*h^2
+         .= y*y^2+((3*h)*y^2+((2+1)*h^2)*y)+h*h^2 by XCMPLX_1:8;
+            y |^ 3 = y |^ (2+1)
+          .= (y |^ (1+1))*y by NEWTON:11
+          .= (((y |^ 1)*y))*y by NEWTON:11
+          .= (y |^ 1)*(y*y) by XCMPLX_1:4
+          .= (y |^ 1)*y^2 by SQUARE_1:def 3;
+    then A3: y |^ 3 = (y to_power 1)*y^2by POWER:47;
+            h |^ 3 = h |^ (2+1)
+          .= (h |^ (1+1))*h by NEWTON:11
+          .= (((h |^ 1)*h))*h by NEWTON:11
+          .= (h |^ 1)*(h*h) by XCMPLX_1:4
+          .= (h |^ 1)*h^2 by SQUARE_1:def 3
+          .= (h to_power 1)*h^2 by POWER:47
+          .= h*h^2 by POWER:30; hence
+        (y+h) |^ 3 = y |^ 3 +((3*h)*y^2+(3*h^2)*y)+h |^ 3
+          by A2,A3,POWER:30;
+end;
+
+theorem Th15:
+  a <> 0 & Poly3(a,b,c,d,x) = 0 implies
+    (for a1,a2,a3,h,y st y = (x+b/(3*a)) & h = -b/(3*a) &
+      a1 = b/a & a2 = c/a & a3 = d/a holds
+        y |^ 3 + ((3*h+a1)*y^2+(3*h^2+2*(a1*h)+a2)*y)
+          + ((h |^ 3+a1*h^2)+(a2*h+a3)) = 0)
+proof
+    assume
+    A1:a <> 0;
+      assume A2:Poly3(a,b,c,d,x) = 0;
+      let a1,a2,a3,h,y;
+        assume that
+         A3: y = x+ b/(3*a) & h = -b/(3*a)
+         & a1 = b/a & a2 = c/a & a3 = d/a;
+     0 = a*(x |^ 3)+ b*x^2 +c*x +d by A2,Def4;
+   then A4: 0 = a"*(a*(x |^ 3)+ b*x^2 +c*x +d)
+          .= a"*(a*(x |^ 3)+ b*x^2 +(c*x +d)) by XCMPLX_1:1
+          .= a"*(a*(x |^ 3))+ a"*(b*x^2) +a"*(c*x +d) by XCMPLX_1:9
+          .= (a"*a)*(x |^ 3)+ a"*(b*x^2) +a"*(c*x +d) by XCMPLX_1:4
+          .= 1*(x |^ 3)+ a"*(b*x^2) +a"*(c*x +d) by A1,XCMPLX_0:def 7
+          .= (x |^ 3)+ (a"*b)*x^2 +a"*(c*x +d) by XCMPLX_1:4
+          .= (x |^ 3)+ (a"*b)*x^2 +(a"*(c*x) +a"*d) by XCMPLX_1:8
+          .= (x |^ 3)+ (a"*b)*x^2 +((a"*c)*x +a"*d) by XCMPLX_1:4
+          .= (x |^ 3)+ (a"*b)*x^2 +(a"*c)*x +a"*d by XCMPLX_1:1
+          .= (x |^ 3)+ (b/a)*x^2 +(a"*c)*x +a"*d by XCMPLX_0:def 9
+          .= (x |^ 3)+ (b/a)*x^2 +(c/a)*x +a"*d by XCMPLX_0:def 9
+          .= (x |^ 3)+ a1*x^2 + a2*x + a3 by A3,XCMPLX_0:def 9;
+        A5: x = y - b/(3*a) by A3,XCMPLX_1:26;
+        then A6: x = y + h by A3,XCMPLX_0:def 8;
+        A7: ((y+h) |^ 3) + a1*x^2 + a2*x + a3 = 0 by A3,A4,A5,XCMPLX_0:def 8;
+           x +(-(y+h))= 0 by A6,XCMPLX_0:def 6;
+         then x -(y+h)= 0 by XCMPLX_0:def 8;
+         then a2*(x -(y+h))= 0;
+         then a2*x-a2*(y+h) = 0 by XCMPLX_1:40;
+        then A8: ((y+h) |^ 3) + a1*x^2 + a2*(y+h) + a3 = 0 by A7,XCMPLX_1:15;
+           (y+h)^2 = y^2+2*y*h+h^2 by SQUARE_1:63;
+        then (y+h)^2 = y^2+(2*h)*y+h^2 by XCMPLX_1:4;
+         then a1*(y+h)^2 = a1*y^2+a1*((2*h)*y)+a1*h^2 by XCMPLX_1:9;
+   then A9: a1*(y+h)^2 = a1*y^2+(a1*(2*h))*y+a1*h^2 by XCMPLX_1:4;
+     (y+h) |^ 3 = y |^ 3 +((3*h)*y^2+(3*h^2)*y)+h |^ 3 by Th14;
+   then A10: 0 = y |^ 3 +((3*h)*y^2+(3*h^2)*y)+h |^ 3
+            + a1*(y+h)^2 + a2*(y+h) + a3 by A3,A5,A8,XCMPLX_0:def 8
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+h |^ 3
+          + (a1*y^2+2*(a1*h)*y+a1*h^2)
+          + a2*(y+h) + a3 by A9,XCMPLX_1:4
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+h |^ 3
+          + (a1*y^2+2*(a1*h)*y+a1*h^2)
+          + (a2*y+a2*h) + a3 by XCMPLX_1:8
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+h |^ 3
+          - (- (a1*y^2+2*(a1*h)*y+a1*h^2))
+          + (a2*y+a2*h) + a3 by XCMPLX_1:151
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+h |^ 3
+          - (- (a1*y^2+2*(a1*h)*y+a1*h^2))
+          + ((a2*y+a2*h) + a3) by XCMPLX_1:1
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+h |^ 3
+          - (- (a1*y^2+2*(a1*h)*y+a1*h^2))
+          + (a2*y+(a2*h + a3)) by XCMPLX_1:1
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+h |^ 3
+          - (- (a1*y^2+2*(a1*h)*y+a1*h^2))
+          + a2*y+(a2*h + a3) by XCMPLX_1:1
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+h |^ 3
+          - (- a1*y^2-2*(a1*h)*y-a1*h^2)
+          + a2*y+(a2*h + a3) by XCMPLX_1:167
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+h |^ 3
+          - (- a1*y^2-2*(a1*h)*y-a1*h^2)
+          -(-a2*y)+(a2*h + a3) by XCMPLX_1:151
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)-(-h |^ 3)
+          - (- a1*y^2-2*(a1*h)*y-a1*h^2)
+          -(-a2*y)+(a2*h + a3) by XCMPLX_1:151
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)-((-h |^ 3)
+           +(- a1*y^2-2*(a1*h)*y-a1*h^2))
+          -(-a2*y)+(a2*h + a3) by XCMPLX_1:36
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)-((-h |^ 3)
+           +(- a1*h^2-2*(a1*h)*y-a1*y^2))
+          -(-a2*y)+(a2*h + a3) by XCMPLX_1:148
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)-((-h |^ 3)
+           +(-( a1*h^2+2*(a1*h)*y+a1*y^2)))
+          -(-a2*y)+(a2*h + a3) by XCMPLX_1:167
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)-((-h |^ 3)
+           -( a1*h^2+2*(a1*h)*y+a1*y^2))
+          -(-a2*y)+(a2*h + a3) by XCMPLX_0:def 8
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)-((-h |^ 3)
+           - (a1*h^2+(2*(a1*h)*y+a1*y^2)))
+          -(-a2*y)+(a2*h + a3) by XCMPLX_1:1
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)-(-h |^ 3
+           - a1*h^2-(2*(a1*h)*y+a1*y^2))
+          -(-a2*y)+(a2*h + a3) by XCMPLX_1:36
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)-(-(2*(a1*h)*y+a1*y^2)
+          - h |^ 3 -a1*h^2) -(-a2*y)+(a2*h + a3) by XCMPLX_1:147
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)-(-(2*(a1*h)*y+a1*y^2)
+          -( h |^ 3 +a1*h^2)) -(-a2*y)+(a2*h + a3) by XCMPLX_1:36
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+(2*(a1*h)*y+a1*y^2)
+          +( h |^ 3 +a1*h^2) -(-a2*y)+(a2*h + a3) by XCMPLX_1:157
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+(2*(a1*h)*y+a1*y^2)
+          -(-( h |^ 3 +a1*h^2)) -(-a2*y)+(a2*h + a3) by XCMPLX_1:151
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+(2*(a1*h)*y+a1*y^2)
+          +((--( h |^ 3 +a1*h^2)) -(-a2*y))+(a2*h + a3) by XCMPLX_1:158
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+(2*(a1*h)*y+a1*y^2)
+          +(-(-( h |^ 3 +a1*h^2) +(-a2*y)))+(a2*h + a3) by XCMPLX_1:161
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+(2*(a1*h)*y+a1*y^2)
+          -(-( h |^ 3 +a1*h^2) +(-a2*y))+(a2*h + a3) by XCMPLX_0:def 8
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+(2*(a1*h)*y+a1*y^2)
+          -(-( h |^ 3 +a1*h^2) -a2*y)+(a2*h + a3) by XCMPLX_0:def 8
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+(2*(a1*h)*y+a1*y^2)
+          -(- h |^ 3 -a1*h^2 -a2*y)+(a2*h + a3) by XCMPLX_1:161
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+(2*(a1*h)*y+a1*y^2)
+          -(-a2*y - h |^ 3 -a1*h^2)+(a2*h + a3) by XCMPLX_1:147
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+(2*(a1*h)*y+a1*y^2)
+          -(-(a2*y + h |^ 3 +a1*h^2))+(a2*h + a3) by XCMPLX_1:167
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+(2*(a1*h)*y+a1*y^2)
+           +(a2*y + h |^ 3 +a1*h^2)+(a2*h + a3) by XCMPLX_1:151
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+(2*(a1*h)*y+a1*y^2)
+           +(a2*y + (h |^ 3 +a1*h^2))+(a2*h + a3) by XCMPLX_1:1
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+(2*(a1*h)*y+a1*y^2)
+           +((a2*y + (h |^ 3 +a1*h^2))+(a2*h + a3)) by XCMPLX_1:1
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+(2*(a1*h)*y+a1*y^2)
+           +(a2*y + ((h |^ 3 +a1*h^2)+(a2*h + a3))) by XCMPLX_1:1;
+         set q2 = (h |^ 3 +a1*h^2)+(a2*h + a3);
+         A11: now
+           0 = y |^ 3 +((3*h)*y^2+(3*h^2)*y)+((2*(a1*h)*y+a1*y^2)
+               +(a2*y + q2)) by A10,XCMPLX_1:1
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)-(-((2*(a1*h)*y+a1*y^2)
+               +(a2*y + q2))) by XCMPLX_1:151
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)-(-(2*(a1*h)*y+a1*y^2)
+               -(a2*y + q2)) by XCMPLX_1:161
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)-(-2*(a1*h)*y-a1*y^2
+                -(a2*y + q2)) by XCMPLX_1:161
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)-(-2*(a1*h)*y-a1*y^2
+                 -a2*y - q2 ) by XCMPLX_1:36
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)-(-2*(a1*h)*y
+                 -a2*y -a1*y^2-q2 ) by XCMPLX_1:146; hence
+           y |^ 3 +((3*h)*y^2+(3*h^2)*y)-(-(2*(a1*h)*y
+                 +a2*y) -a1*y^2-q2 ) = 0 by XCMPLX_1:161;
+         end;
+         A12: now
+           0 = y |^ 3 +((3*h)*y^2+(3*h^2)*y)-(-(2*(a1*h)*y
+                 +a2*y) -(a1*y^2+q2)) by A11,XCMPLX_1:36
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)--((2*(a1*h)*y
+                 +a2*y) +(a1*y^2+q2) ) by XCMPLX_1:161
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+((2*(a1*h)*y
+               +a2*y) +(a1*y^2+q2)) by XCMPLX_1:151
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+((2*(a1*h)
+               +a2)*y +(a1*y^2+q2)) by XCMPLX_1:8
+          .= y |^ 3 +((3*h)*y^2+(3*h^2)*y)+(2*(a1*h)
+               +a2)*y +(a1*y^2+q2) by XCMPLX_1:1
+          .= (y |^ 3 +(3*h)*y^2)+(3*h^2)*y+(2*(a1*h)
+               +a2)*y +(a1*y^2+q2) by XCMPLX_1:1
+          .= (y |^ 3 +(3*h)*y^2)+((3*h^2)*y+(2*(a1*h)
+               +a2)*y )+(a1*y^2+q2) by XCMPLX_1:1
+          .= y |^ 3 +(3*h)*y^2+((3*h^2)+(2*(a1*h)
+               +a2))*y +(a1*y^2+q2) by XCMPLX_1:8
+          .= y |^ 3 +(3*h)*y^2+(3*h^2+2*(a1*h)
+               +a2)*y +(a1*y^2+q2) by XCMPLX_1:1
+          .= y |^ 3 +(3*h)*y^2+((3*h^2+2*(a1*h)
+               +a2)*y +(a1*y^2+q2)) by XCMPLX_1:1
+          .= y |^ 3 +((3*h)*y^2+((3*h^2+2*(a1*h)
+               +a2)*y +(a1*y^2+q2))) by XCMPLX_1:1; hence
+            y |^ 3 --((3*h)*y^2+((3*h^2 +2*(a1*h)+a2)*y
+                    +(a1*y^2+q2))) = 0 by XCMPLX_1:151;
+          end;
+         A13: now
+            0 = y |^ 3 -(-(3*h)*y^2-((3*h^2 +2*(a1*h)+a2)*y
+                  +(a1*y^2+q2))) by A12,XCMPLX_1:161
+           .= y |^ 3 -(-(3*h)*y^2-(a1*y^2+q2)
+                  -(3*h^2 +2*(a1*h)+a2)*y) by XCMPLX_1:36
+           .= y |^ 3 -(-((3*h)*y^2+(a1*y^2+q2))
+                  -(3*h^2 +2*(a1*h)+a2)*y) by XCMPLX_1:161
+           .= y |^ 3 -(-(((3*h)*y^2+a1*y^2)+q2)
+                  -(3*h^2 +2*(a1*h)+a2)*y) by XCMPLX_1:1
+           .= y |^ 3 -(-(((3*h+a1)*y^2)+q2)
+                  -(3*h^2 +2*(a1*h)+a2)*y) by XCMPLX_1:8; hence
+            y |^ 3 -(-(3*h+a1)*y^2-q2
+             -(3*h^2 +2*(a1*h)+a2)*y) = 0 by XCMPLX_1:161;
+         end;
+           now
+           0 = y |^ 3 -(-(3*h+a1)*y^2-(3*h^2 +2*(a1*h)+a2)*y-q2)
+             by A13,XCMPLX_1:146
+          .= y |^ 3 --((((3*h+a1)*y^2+(3*h^2 +2*(a1*h)+a2)*y)+q2))
+             by XCMPLX_1:167; hence
+            y |^ 3 +((3*h+a1)*y^2
+                +(3*h^2 +2*(a1*h)+a2)*y + q2) = 0 by XCMPLX_1:151;
+         end; hence
+           y |^ 3 +((3*h+a1)*y^2+(3*h^2 +2*(a1*h)+a2)*y)
+                + ((h |^ 3 +a1*h^2)+(a2*h + a3)) = 0 by XCMPLX_1:1;
+end;
+
+theorem
+    a <> 0 & Poly3(a,b,c,d,x) = 0 implies
+    (for a1,a2,a3,h,y st y = (x+b/(3*a)) & h = -b/(3*a)
+      & a1 = b/a & a2 = c/a & a3 = d/a holds
+        y |^ 3 + 0*y^2 + ((3*a*c-b^2)/(3*a^2))*y
+          + (2*((b/(3*a)) |^ 3)+(3*a*d-b*c)/(3*a^2)) = 0)
+proof
+     assume
+    A1:a <> 0;
+      assume A2:Poly3(a,b,c,d,x) = 0;
+     let a1,a2,a3,h,y;
+       assume that
+       A3:  y = (x + b/(3*a))
+             & h = -b/(3*a)
+             & a1 = b/a & a2 = c/a & a3 = d/a;
+                set q2 = (h |^ 3 +a1*h^2)+(a2*h + a3);
+                set p2 = (3*h^2+2*(a1*h)+a2);
+                set p0 = 3*h+a1;
+       A4: y |^ 3 +(p0*y^2+p2*y) + q2 = 0 by A1,A2,A3,Th15;
+       A5: p0 = 0
+             proof
+               p0 = 3*((-1)*(b/(3*a)))+a1 by A3,XCMPLX_1:180
+               .= (3*(-1))*(b/(3*a))+a1 by XCMPLX_1:4
+               .= (-(3*1))*(b/(3*a))+a1
+               .= -(3*(b/(3*a)))+a1 by XCMPLX_1:175
+               .= -(3*((3*a)"*b))+a1 by XCMPLX_0:def 9
+               .= -(3*((3"*a")*b))+a1 by XCMPLX_1:205
+               .= -((3*(3"*a")*b))+a1 by XCMPLX_1:4
+               .= -(((3*3")*a")*b)+a1 by XCMPLX_1:4
+               .= -(b/a)+a1 by XCMPLX_0:def 9;
+             hence p0 = 0 by A3,XCMPLX_0:def 6;
+             end;
+       A6: 3*a <> 0 by A1,XCMPLX_1:6;
+       A7: p2 = (3*a*c-b^2)/(3*a^2)
+              proof
+                     set t = ((3*a)"*b);
+                     set a5 = b/(3*a);
+       A8:  (3*a)/(3*a) = 1 by A6,XCMPLX_1:60;
+                p2 = (3*(b/(3*a))^2+2*(a1*-b/(3*a))+a2) by A3,SQUARE_1:61
+                .= (3*((3*a)"*b)^2+2*(a1*-b/(3*a))+a2) by XCMPLX_0:def 9
+                .= 3*(((3*a)"*b)*((3*a)"*b))+2*(a1*-b/(3*a))+a2 by SQUARE_1:def
+3
+                .= (3*t)*t+2*(a1*-b/(3*a))+a2 by XCMPLX_1:4
+                .= ((3*(3*a)")*b)*t+2*(a1*-b/(3*a))+a2 by XCMPLX_1:4
+                .= (3*(3"*a")*b)*t+2*(a1*-b/(3*a))+a2 by XCMPLX_1:205
+                .= (((3*3")*a")*b)*t+2*(a1*-b/(3*a))+a2 by XCMPLX_1:4
+                .= (b/a)*((3*a)"*b)+2*(a1*-b/(3*a))+a2 by XCMPLX_0:def 9
+                .= (b/a)*(b/(3*a))+2*(a1*-b/(3*a))+a2 by XCMPLX_0:def 9
+                .= (b*b)/(a*(3*a))+2*(a1*-b/(3*a))+a2 by XCMPLX_1:77
+                .= b^2/((3*a)*a)+2*(a1*-b/(3*a))+a2 by SQUARE_1:def 3
+                .= b^2/(3*(a*a))+2*(a1*-b/(3*a))+a2 by XCMPLX_1:4
+                .= b^2/(3*a^2)+2*((b/a)*-b/(3*a))+c/a by A3,SQUARE_1:def 3
+                .= b^2/(3*a^2)+ 2*-(b/a*a5) +c/a by XCMPLX_1:175
+                .= b^2/(3*a^2)+ -(2*(b/a*a5)) +c/a by XCMPLX_1:175
+                .= b^2/(3*a^2)-2*(b/a*(b/(3*a))) +c/a by XCMPLX_0:def 8
+                .= b^2/(3*a^2)-2*((b*b)/(a*(3*a))) +c/a
+                      by XCMPLX_1:77
+                .= b^2/(3*a^2)-2*((b^2)/((3*a)*a)) +c/a by SQUARE_1:def 3
+                .= b^2/(3*a^2)-2*((b^2)/(3*(a*a))) +c/a by XCMPLX_1:4
+                .= 1*(b^2/(3*a^2))-2*(b^2/(3*a^2)) +c/a by SQUARE_1:def 3
+                .= (1-2)*(b^2/(3*a^2)) +c/a by XCMPLX_1:40
+                .= -b^2/(3*a^2) +((3*a)/(3*a))*(c/a) by A8,XCMPLX_1:180
+                .= -b^2/(3*a^2) +(3*a*c)/(3*a*a) by XCMPLX_1:77
+                .= -b^2/(3*a^2) +(3*a*c)/(3*(a*a)) by XCMPLX_1:4
+                .= -b^2/(3*a^2) +(3*a*c)/(3*a^2) by SQUARE_1:def 3
+                .= (3*a*c)/(3*a^2)-b^2/(3*a^2) by XCMPLX_0:def 8
+                .= (3*a*c)*(3*a^2)"-b^2/(3*a^2) by XCMPLX_0:def 9
+                .= (3*a*c)*(3*a^2)"-b^2*(3*a^2)" by XCMPLX_0:def 9
+                .= ((3*a*c)-b^2)*(3*a^2)" by XCMPLX_1:40;
+              hence p2 = (3*a*c-b^2)/(3*a^2) by XCMPLX_0:def 9;
+              end;
+          q2 = 2*((b/(3*a)) |^ 3)+(3*a*d-b*c)/(3*a^2)
+              proof
+                     set t = 3*a;
+                     set a6 = b/t;
+        A9: b/a = (3*b)/t by XCMPLX_1:92;
+       A10:  q2 = ((-b/t) |^ 3 +b/a*(-b/t)^2)
+                    +(-(c/a*(b/t)) + d/a) by A3,XCMPLX_1:175
+                  .= ((-b/t) |^ 3 +b/a*(-b/t)^2)
+                    +(-(b*c)/(t*a) + d/a) by XCMPLX_1:77
+                  .= ((-b/t) |^ 3 +b/a*(-b/t)^2)
+                    +(-(b*c)/(3*(a*a)) + d/a)by XCMPLX_1:4
+                  .= ((-b/t) |^ 3 +b/a*(-b/t)^2)
+                    +(-(b*c)/(3*a^2) + 1*(d/a)) by SQUARE_1:def 3
+                  .= ((-b/t) |^ 3 +b/a*(-b/t)^2)
+                     +(-(b*c)/(3*a^2) + (t/t)*(d/a)) by A6,XCMPLX_1:60
+                  .= ((-b/t) |^ 3 +b/a*(-b/t)^2)
+                     +(-(b*c)/(3*a^2) -- (t/t)*(d/a)) by XCMPLX_1:151
+                  .= ((-b/t) |^ 3 +b/a*(-b/t)^2)
+                     +-((b*c)/(3*a^2) +- (t/t)*(d/a)) by XCMPLX_1:161
+                  .= ((-b/t) |^ 3 +b/a*(-b/t)^2)
+                     +(-((b*c)/(3*a^2) - (t/t)*(d/a))) by XCMPLX_0:def 8
+                  .= ((-b/t) |^ 3 +b/a*(-b/t)^2)
+                     +((t/t)*(d/a)- (b*c)/(3*a^2)) by XCMPLX_1:143
+                  .= ((-b/t) |^ 3 +b/a*(-b/t)^2)
+                     + ((t/t)*(d/a))- (b*c)/(3*a^2) by XCMPLX_1:29
+                  .= ((-b/t) |^ 3 +b/a*(-b/t)^2)
+                     + ((t*d)/(t*a))- (b*c)/(3*a^2) by XCMPLX_1:77
+                  .= ((-b/t) |^ 3 +b/a*(-b/t)^2)
+                     +(t*d)/(3*(a*a))- (b*c)/(3*a^2) by XCMPLX_1:4
+                  .= ((-b/t) |^ 3 +b/a*(-b/t)^2)
+                      +(t*d)/(3*a^2)-(b*c)/(3*a^2) by SQUARE_1:def 3
+                  .= ((-b/t) |^ 3 +b/a*(-b/t)^2)
+                      +(t*d)*(3*a^2)"-(b*c)/(3*a^2) by XCMPLX_0:def 9
+                  .= ((-b/t) |^ 3 +b/a*(-b/t)^2)
+                      +(t*d)*(3*a^2)"-(b*c)*(3*a^2)" by XCMPLX_0:def 9
+                  .= ((-b/t) |^ 3 +b/a*(-b/t)^2)
+                      +((t*d)*(3*a^2)"-(b*c)*(3*a^2)") by XCMPLX_1:29
+                  .= ((-b/t) |^ 3 +b/a*(-b/t)^2)
+                      +(t*d-b*c)*(3*a^2)" by XCMPLX_1:40
+                  .= ((-b/t) |^ 3 +b/a*(-b/t)^2)
+                      +(t*d-b*c)/(3*a^2) by XCMPLX_0:def 9
+                  .= (-b/t) |^ (2+1) +b/a*(b/t)^2
+                     +(t*d-b*c)/(3*a^2) by SQUARE_1:61
+                  .= ((-b/t) |^ (1+1))*(-b/t) +b/a*(b/t)^2
+                    +( t*d-b*c)/(3*a^2) by NEWTON:11
+                  .= ((-b/t) |^ 1)*(-b/t)*(-b/t)
+                    +b/a*(b/t)^2+( t*d-b*c)/(3*a^2) by NEWTON:11
+                  .= (-b/t) |^ 1*((-b/t)*(-b/t))
+                    +b/a*(b/t)^2+( t*d-b*c)/(3*a^2) by XCMPLX_1:4
+                  .= ((-b/t) |^ 1)*(-b/t)^2 +b/a*(b/t)^2
+                    +( t*d-b*c)/(3*a^2) by SQUARE_1:def 3
+                  .= ((-b/t) to_power 1)*(-b/t)^2 +b/a*(b/t)^2
+                    +( t*d-b*c)/(3*a^2) by POWER:47
+                  .= (-b/t)*(-b/t)^2 +b/a*(b/t)^2
+                    +(t*d-b*c)/(3*a^2) by POWER:30
+                  .= (-b/t)*(b/t)^2 +b/a*(b/t)^2
+                    +(t*d-b*c)/(3*a^2) by SQUARE_1:61
+                  .= (-b/t)*(b^2/t^2) +b/a*(b/t)^2
+                     +(t*d-b*c)/(3*a^2) by SQUARE_1:69
+                  .= ((-b/t)*(b^2/t^2) +b/a*(b^2/t^2))
+                     +(t*d-b*c)/(3*a^2) by SQUARE_1:69
+                  .= ((-b/t+b/a)*(b^2/t^2))
+                      +(t*d-b*c)/(3*a^2) by XCMPLX_1:8
+                  .= (( b/a -b/t)*(b^2/t^2))
+                     +(t*d-b*c)/(3*a^2) by XCMPLX_0:def 8
+                  .= (((3*b)*t" -1*b/t)*(b^2/t^2))
+                     +( t*d-b*c)/(3*a^2) by A9,XCMPLX_0:def 9
+                  .= (((3*b)*t" -1*b*t")*(b^2/t^2))
+                     +( t*d-b*c)/(3*a^2) by XCMPLX_0:def 9
+                  .= (((3*b -1*b)*t")*(b^2/t^2))
+                     +( t*d-b*c)/(3*a^2) by XCMPLX_1:40
+                  .= (((3 -1)*b*t")*(b^2/t^2))
+                     +( t*d-b*c)/(3*a^2) by XCMPLX_1:40
+                  .= ((2*(b*t"))*(b^2/t^2))
+                     +( t*d-b*c)/(3*a^2) by XCMPLX_1:4
+                  .= 2*((b*t")*(b^2/t^2))
+                     +(t*d-b*c)/(3*a^2) by XCMPLX_1:4
+                  .= 2*((b/t)*(b^2/t^2))
+                     +(t*d-b*c)/(3*a^2) by XCMPLX_0:def 9
+                  .= 2*((b/t)*(b/t)^2)
+                     +(t*d-b*c)/(3*a^2) by SQUARE_1:69;
+                 a6 |^ 3 = a6 |^ (2+1)
+                      .= (a6 |^ (1+1))*a6 by NEWTON:11
+                      .= (a6 |^ 1)*a6*a6 by NEWTON:11
+                      .= (a6 |^ 1)*(a6*a6) by XCMPLX_1:4
+                      .= (a6 |^ 1)*a6^2 by SQUARE_1:def 3
+                      .= (a6 to_power 1)*a6^2 by POWER:47; hence
+                 q2 = 2*((b/t) |^ 3)+(t*d-b*c)/(3*a^2) by A10,POWER:30;
+               end; hence thesis by A4,A5,A7;
+end;
+
+theorem
+      (y |^ 3)+0*y^2+((3*a*c-b^2)/(3*a^2))*y
+      + (2*((b/(3*a)) |^ 3)+(3*a*d-b*c)/(3*a^2)) = 0 implies
+       (for p,q st p = (3*a*c-b^2)/(3*a^2) &
+         q = 2*((b/(3*a)) |^ 3)+(3*a*d-b*c)/(3*a^2) holds Poly3(1,0,p,q,y) = 0)
+proof
+     assume that
+   A1: (y |^ 3) +0*y^2 +((3*a*c-b^2)/(3*a^2))*y
+           + (2*((b/(3*a)) |^ 3)+(3*a*d-b*c)/(3*a^2)) = 0;
+    let p,q;
+          assume that
+    A2:  p = (3*a*c-b^2)/(3*a^2)
+         & q = 2*((b/(3*a)) |^ 3)+(3*a*d-b*c)/(3*a^2);
+      1*(y |^ 3) +0*y^2 + p*y +q = 0 by A1,A2; hence
+            Poly3(1,0,p,q,y) = 0 by Def4;
+end;
+
+theorem Th18:
+  Poly3(1,0,p,q,y) = 0 implies
+    (for u,v st y = u+v & 3*v*u+p = 0 holds u |^ 3 + v |^ 3 = -q
+      & (u |^ 3)*(v |^ 3) = (-p/3) |^ 3)
+proof
+      assume
+    A1: Poly3(1,0,p,q,y) = 0;
+      let u,v;
+      assume that
+    A2: y = u+v & 3*v*u+p = 0;
+    A3: 1*(y |^ 3) +0*y^2 + p*y + q = 0 by A1,Def4;
+      (u+v) |^ 3 = u |^ 3+((3*v)*u^2+(3*v^2)*u)+v |^ 3 by Th14
+                    .= u |^ 3+((3*v)*(u*u)+(3*v^2)*u)+v |^ 3 by SQUARE_1:def 3
+                    .= u |^ 3+((3*v)*(u*u)+(3*(v*v))*u)+v |^ 3 by SQUARE_1:def
+3
+                    .= u |^ 3+((3*v)*(u*u)+(3*((v*v)*u)))+v |^ 3 by XCMPLX_1:4
+                    .= u |^ 3+((3*v)*(u*u)+(3*(v*(u*v))))+v |^ 3 by XCMPLX_1:4
+                    .= u |^ 3+((3*v)*(u*u)+(3*(v*u))*v)+v |^ 3 by XCMPLX_1:4
+                    .= u |^ 3+((3*v)*(u*u)+(3*v*u)*v)+v |^ 3 by XCMPLX_1:4
+                    .= u |^ 3+(((3*v*u)*u)+(3*v*u)*v)+v |^ 3 by XCMPLX_1:4
+                    .= u |^ 3+(3*v*u)*(u+v)+v |^ 3 by XCMPLX_1:8;
+    then A4: 0 = -(-u |^ 3-(3*v*u)*(u+v)-v |^ 3)+ p*(u+v) + q by A2,A3,XCMPLX_1
+:174
+           .= -(-u |^ 3-v |^ 3-(3*v*u)*(u+v))+ p*(u+v) + q by XCMPLX_1:146
+           .= (u |^ 3+v |^ 3+(3*v*u)*(u+v))+ p*(u+v) + q by XCMPLX_1:174
+           .= (u |^ 3+v |^ 3)+((3*v*u)*(u+v)+ p*(u+v)) + q by XCMPLX_1:1
+           .= (u |^ 3+v |^ 3)+((3*v*u + p )*(u+v)) + q by XCMPLX_1:8;
+             3*v*u = - p by A2,XCMPLX_0:def 6;
+     then 3*(v*u) = - p by XCMPLX_1:4;
+     then A5: v*u = (- p)/3 by XCMPLX_1:90
+              .= (- p)*3" by XCMPLX_0:def 9
+              .= - (p*3") by XCMPLX_1:175
+              .= - (p/3) by XCMPLX_0:def 9;
+     thus u |^ 3+v |^ 3 = - q by A2,A4,XCMPLX_0:def 6;
+     thus (u |^ 3)*(v |^ 3) = (- p/3) |^ 3
+                      by A5,NEWTON:12;
+end;
+
+theorem Th19:
+  Poly3(1,0,p,q,y) = 0 implies
+    (for u,v st y = u+v & 3*v*u+p = 0 holds
+      y = 3-root(-q/2+sqrt(q^2/4+(p/3) |^ 3)) +
+        3-root(-q/2-sqrt(q^2/4+(p/3) |^ 3)) or
+      y = 3-root(-q/2+sqrt(q^2/4+(p/3) |^ 3)) +
+        3-root(-q/2+sqrt(q^2/4+(p/3) |^ 3)) or
+      y = 3-root(-q/2-sqrt(q^2/4+(p/3) |^ 3)) +
+        3-root(-q/2-sqrt(q^2/4+(p/3) |^ 3)))
+proof
+      assume
+    A1: Poly3(1,0,p,q,y) = 0;
+    let u,v;
+      assume that
+    A2:  y = u+v & 3*v*u+p = 0;
+            set z1 = u |^ 3;
+            set z2 = v |^ 3;
+    A3:  z1+ z2 = -q by A1,A2,Th18;
+    A4:  z2*z1 = (-p/3) |^ 3 by A1,A2,Th18;
+    A5:now let z;
+         thus (z-z1)*(z-z2)=z*z-z*z2-z1*z+z1*z2 by XCMPLX_1:47
+                      .= z^2-z*z2-z1*z+z1*z2 by SQUARE_1:def 3
+                      .= z^2-(z1*z+z2*z)+z1*z2 by XCMPLX_1:36
+                      .= z^2-(z1+z2)*z+z1*z2 by XCMPLX_1:8
+                      .= z^2-(-q)*z+z1*z2 by A1,A2,Th18
+                      .= z^2-(-q)*z+(-p/3) |^ 3 by A1,A2,Th18
+                      .= z^2-(-(q*z))+(-p/3) |^ 3 by XCMPLX_1:175
+                      .= z^2+q*z+(-p/3) |^ 3 by XCMPLX_1:151;
+       end;
+            set e1 = 1;
+            set e2 = q;
+            set e3 = ((-p/3) |^ 3);
+            (z1-z1)*(z1-z2)= 0*(z1-z2) by XCMPLX_1:14;
+    then e1*z1^2+e2*z1 + e3 = 0 by A5;
+    then A6: Poly2(e1,e2,e3,z1) = 0 by Def2;
+      e2^2 = (z1+z2)^2 by A3,SQUARE_1:61;
+    then A7: e2^2-(4*e1*e3) = (z1+z2)^2-(4*(z1*z2)) by A1,A2,Th18
+           .= -(-(z1^2+2*z1*z2+z2^2))-4*(z1*z2) by SQUARE_1:63
+           .= -(-z1^2-2*z1*z2-z2^2)-4*(z1*z2) by XCMPLX_1:167
+           .= -(-z1^2-z2^2-2*z1*z2)-4*(z1*z2) by XCMPLX_1:146
+           .= (z1^2+z2^2+2*z1*z2)-4*(z1*z2) by XCMPLX_1:174
+           .= (z1^2+z2^2+2*z1*z2)+(-4*(z1*z2)) by XCMPLX_0:def 8
+           .= (z1^2+z2^2)+(2*z1*z2+(-4*(z1*z2))) by XCMPLX_1:1
+           .= (z1^2+z2^2)+(2*z1*z2-4*(z1*z2)) by XCMPLX_0:def 8
+           .= (z1^2+z2^2)+(2*(z1*z2)-4*(z1*z2)) by XCMPLX_1:4
+           .= (z1^2+z2^2)+((2-4)*(z1*z2)) by XCMPLX_1:40
+           .= (z1^2+z2^2)+((-2)*(z1*z2))
+           .= (z1^2+z2^2)+-(2*(z1*z2)) by XCMPLX_1:175
+           .= (z1^2+z2^2)-(2*(z1*z2)) by XCMPLX_0:def 8
+           .= (z1^2-2*(z1*z2)+z2^2) by XCMPLX_1:29
+           .= (z1^2-(2*z1*z2)+z2^2) by XCMPLX_1:4
+           .= (z1-z2)^2 by SQUARE_1:64;
+     then A8: (e2^2-4*e1*e3)>= 0 by SQUARE_1:72;
+     then A9:delta(e1,e2,e3) >= 0 by QUIN_1:def 1;
+       (z2-z1)*(z2-z2) = (z2-z1)*0 by XCMPLX_1:14;
+    then e1*z2^2+e2*z2 + e3 = 0 by A5;
+    then A10: Poly2(e1,e2,e3,z2) = 0 by Def2;
+
+      now per cases by A6,A9,Th5;
+    case A11:z1 = (-e2+sqrt delta(e1,e2,e3))/(2*e1);
+        A12: (q^2-4*(-p/3) |^ 3)>= 0 by A7,SQUARE_1:72;
+        A13: z1 = (-e2+sqrt(e2^2-4*e1*e3))/(2*e1) by A11,QUIN_1:def 1
+                .= (-q)/2 +sqrt(q^2-4*(-p/3) |^ 3)/sqrt 4 by SQUARE_1:85,
+XCMPLX_1:63
+                .= (-q)/2 +sqrt((q^2-4*(-p/3) |^ 3)/4) by A12,SQUARE_1:99
+                .= (-q)/2 +sqrt(q^2/4-4*(-p/3) |^ 3/4) by XCMPLX_1:121
+                .= (-q)/2 +sqrt(q^2/4-4"*(4*(-p/3) |^ 3)) by XCMPLX_0:def 9
+                .= (-q)/2 +sqrt(q^2/4-(4"*4)*(-p/3) |^ 3) by XCMPLX_1:4
+                .= (-q)/2 +sqrt(q^2/4-1*(-p/3) |^ 3);
+        A14:(-p/3) |^ 3 = (-p/3) |^ (2+1)
+                        .= ((-p/3) |^ (1+1))*(-p/3) by NEWTON:11
+                        .= ((((-p/3) |^ 1)*(-p/3)))*(-p/3) by NEWTON:11
+                        .= ((-p/3) |^ 1)*((-p/3)*(-p/3)) by XCMPLX_1:4
+                        .= ((-p/3) |^ 1)*(-p/3)^2 by SQUARE_1:def 3;
+        then A15:(-p/3) |^ 3 = ((-p/3) to_power 1)*(-p/3)^2 by POWER:47
+                        .= (-p/3)*(-p/3)^2 by POWER:30
+                        .= (-p/3)*(p/3)^2 by SQUARE_1:61
+                        .= -((p/3)*(p/3)^2) by XCMPLX_1:175;
+        A16:(p/3) |^ 3 = (p/3) |^ (2+1)
+             .= ((p/3) |^ (1+1))*(p/3) by NEWTON:11
+             .= ((((p/3) |^ 1)*(p/3)))*(p/3) by NEWTON:11
+             .= ((p/3) |^ 1)*((p/3)*(p/3)) by XCMPLX_1:4
+             .= ((p/3) |^ 1)*(p/3)^2 by SQUARE_1:def 3
+             .= ((p/3) to_power 1)*(p/3)^2by POWER:47
+             .= (p/3)*(p/3)^2 by POWER:30;
+        then A17:z1 = (-q)/2 +sqrt(q^2/4+(p/3) |^ 3) by A13,A15,XCMPLX_1:151
+             .= (-q)*2" +sqrt(q^2/4+((p/3) |^ 3)) by XCMPLX_0:def 9
+             .= -(q*2") +sqrt(q^2/4+((p/3) |^ 3)) by XCMPLX_1:175
+             .= -(q/2) +sqrt(q^2/4+((p/3) |^ 3)) by XCMPLX_0:def 9;
+         A18: now per cases by REAL_1:def 5;
+         case u >0;
+            then A19: u > 0 & (-q/2 +sqrt(q^2/4+(p/3) |^ 3))> 0 by A17,PREPOWER
+:13;
+                  then u = 3 -Root (-q/2 +sqrt(q^2/4+(p/3) |^ 3))
+                  by A17,PREPOWER:def 3;hence
+                    u = 3-root(-q/2 +sqrt(q^2/4+(p/3) |^ 3))
+                  by A19,POWER:def 1;
+         case A20:u =0;
+            then A21: -q/2 +sqrt(q^2/4+(p/3) |^ 3) = 0 by A17,NEWTON:16;
+            then 3 -Root (-q/2 +sqrt(q^2/4+(p/3) |^ 3)) = 0 by PREPOWER:def 3;
+            hence
+               u = 3-root(-q/2 +sqrt(q^2/4+(p/3) |^ 3)) by A20,A21,POWER:def 1;
+         case u <0;
+            then A22:  -u > 0 by REAL_1:66;
+              (-u) |^ 3 = (-u) |^ (2+1)
+                           .= ((-u) |^ (1+1))*(-u) by NEWTON:11
+                           .= ((((-u) |^ 1)*(-u)))*(-u) by NEWTON:11
+                           .= ((-u) |^ 1)*((-u)*(-u)) by XCMPLX_1:4
+                           .= ((-u) |^ 1)*(-u)^2 by SQUARE_1:def 3;
+            then (-u) |^ 3 = ((-u) to_power 1)*(-u)^2by POWER:47;
+            then A23: (-u) |^ 3 = (-u)*(-u)^2 by POWER:30
+                           .= (-u)*u^2 by SQUARE_1:61
+                           .= -((u)*u^2) by XCMPLX_1:175;
+               u |^ 3 = u |^ (2+1)
+                   .= (u |^ (1+1))*u by NEWTON:11
+                   .= ((u |^ 1)*u)*u by NEWTON:11
+                   .= (u |^ 1)*(u*u) by XCMPLX_1:4;
+            then u |^ 3 = (u |^ 1)*u^2 by SQUARE_1:def 3;
+            then A24: u |^ 3 = (u to_power 1)*u^2 by POWER:47;
+            then A25: (-u) |^ 3 = -(u |^ 3) by A23,POWER:30;
+            then A26: -(u |^ 3)> 0 by A22,PREPOWER:13;
+            A27:  -(-q/2 +sqrt(q^2/4+(p/3) |^ 3))> 0
+                 by A17,A22,A25,PREPOWER:13;
+              (-u) |^ 3 = -(-q/2 +sqrt(q^2/4+(p/3) |^ 3))
+                 by A17,A23,A24,POWER:30;
+            then (-u) = 3 -Root(-(-q/2 +sqrt(q^2/4+(p/3) |^ 3)))
+                 by A17,A22,A26,PREPOWER:def 3;
+            then A28: (-u) = 3-root(-(-q/2 +sqrt(q^2/4+(p/3) |^ 3)))
+                   by A27,POWER:def 1;
+             set r = (-q/2 +sqrt(q^2/4+(p/3) |^ 3));
+            A29: (-u) = 3-root((-1)*(r)) by A28,XCMPLX_1:180;
+            A30: 3 = 2*1+1;
+            then A31: (-u) = (3-root (-1))*(3-root r) by A29,POWER:12;
+              (3-root (-1)) = -1 by A30,POWER:9;
+                  then (-u) = -(3-root r) by A31,XCMPLX_1:180;
+                 then -(-u) = (3-root r); hence
+               u = 3-root(-q/2 +sqrt(q^2/4+(p/3) |^ 3));
+         end;
+              now per cases by A9,A10,Th5;
+            case z2 = (-e2+sqrt delta(e1,e2,e3))/(2*e1);
+              then z2 = (-e2+sqrt(e2^2-4*e1*e3))/(2*e1) by QUIN_1:def 1;
+              then z2 = (-q)/2 +sqrt(q^2-4*(-p/3) |^ 3)/sqrt 4
+                 by SQUARE_1:85,XCMPLX_1:63;
+              then A32: z2 = (-q)/2 +sqrt((q^2-4*(-p/3) |^ 3)/4)
+                      by A8,SQUARE_1:99
+                .= (-q)/2 +sqrt(q^2/4-4*(-p/3) |^ 3/4) by XCMPLX_1:121
+                .= (-q)/2 +sqrt(q^2/4-4"*(4*(-p/3) |^ 3)) by XCMPLX_0:def 9
+                .= (-q)/2 +sqrt(q^2/4-(4"*4)*(-p/3) |^ 3) by XCMPLX_1:4
+                .= (-q)/2 +sqrt(q^2/4-1*(-p/3) |^ 3);
+               (-p/3) |^ 3 = ((-p/3) to_power 1)*(-p/3)^2by A14,POWER:47
+                .= (-p/3)*(-p/3)^2 by POWER:30
+                .= (-p/3)*(p/3)^2 by SQUARE_1:61;
+              then (-p/3) |^ 3 = -((p/3) |^ 3) by A16,XCMPLX_1:175;
+
+              then A33: z2 = (-q)/2 +sqrt(q^2/4+(p/3) |^ 3) by A32,XCMPLX_1:151
+                .= (-q)*2" +sqrt(q^2/4+((p/3) |^ 3)) by XCMPLX_0:def 9
+                .= -(q*2") +sqrt(q^2/4+((p/3) |^ 3)) by XCMPLX_1:175;
+              then A34:  v |^ 3 = -q/2 +sqrt(q^2/4+((p/3) |^ 3)) by XCMPLX_0:
+def 9;
+                 now per cases by REAL_1:def 5;
+               case v >0;
+                  then A35: v > 0 & (-q/2 +sqrt(q^2/4+(p/3) |^ 3))> 0
+                        by A34,PREPOWER:13;
+                    v |^ 3 = -q/2 +sqrt(q^2
+/4+(p/3) |^ 3) by A33,XCMPLX_0:def 9;
+                  then v = 3 -Root (-q/2 +sqrt(q^2/4+(p/3) |^ 3))
+                          by A35,PREPOWER:def 3; hence
+                     v = 3-root(-q/2 +sqrt(q^2/4+(p/3) |^ 3))
+                           by A35,POWER:def 1;
+               case A36:v=0;
+                    v |^ 3 = -q/2 +sqrt(q^2/4+((p/3) |^ 3))
+                         by A33,XCMPLX_0:def 9;
+                  then (-q/2 +sqrt(q^2/4+(p/3) |^ 3)) = 0
+                         by A36,NEWTON:16; hence
+                    v = 3-root(-q/2 +sqrt(q^2/4+(p/3) |^ 3))
+                       by A36,POWER:6;
+               case v<0;
+                  then A37: -v > 0 by REAL_1:66;
+                  then A38:  (-v) |^ 3 > 0 by PREPOWER:13;
+                     (-v) |^ 3 = (-v) |^ (2+1);
+                   then (-v) |^ 3 = ((-v) |^ (1+1))*(-v) by NEWTON:11;
+                   then (-v) |^ 3 = ((((-v) |^ 1)*(-v)))*(-v) by NEWTON:11;
+                   then (-v) |^ 3 = ((-v) |^ 1)*((-v)*(-v)) by XCMPLX_1:4;
+                  then (-v) |^ 3 = ((-v) |^ 1)*(-v)^2 by SQUARE_1:def 3;
+                  then (-v) |^ 3 = ((-v) to_power 1)*(-v)^2by POWER:47;
+                   then (-v) |^ 3 = (-v)*(-v)^2 by POWER:30;
+                   then (-v) |^ 3 = (-v)*v^2 by SQUARE_1:61;
+                  then A39:(-v) |^ 3 = -(v*v^2) by XCMPLX_1:175;
+                     v |^ 3 = v |^ (2+1);
+                   then v |^ 3 = (v |^ (1+1))*v by NEWTON:11;
+                   then v |^ 3 = ((v |^ 1)*v)*v by NEWTON:11;
+                   then v |^ 3 = (v |^ 1)*(v*v) by XCMPLX_1:4;
+                  then v |^ 3 = (v |^ 1)*v^2 by SQUARE_1:def 3;
+                  then A40: v |^ 3 = (v to_power 1)*v^2 by POWER:47;
+                  then A41:  -(-q/2 +sqrt(q^2/4+(p/3) |^ 3))> 0
+                        by A34,A38,A39,POWER:30;
+                    (-v) |^ 3 = -(-q/2 +sqrt(q^2/4+(p/3) |^ 3))
+                                by A34,A39,A40,POWER:30;
+                  then (-v) = 3 -Root(-(-q/2 +sqrt(q^2/4+(p/3) |^ 3)))
+                   by A37,A38,PREPOWER:def 3;
+                  then A42: (-v) = 3-root(-(-q/2 +sqrt(q^2/4+(p/3) |^ 3)))
+                   by A41,POWER:def 1;
+                   set r = (-q/2 +sqrt(q^2/4+(p/3) |^ 3));
+                  A43: (-v) = 3-root((-1)*(r)) by A42,XCMPLX_1:180;
+                  A44: 3 = 2*1+1;
+                  then A45: (-v) = (3-root(-1))*(3-root r) by A43,POWER:12;
+                    (3-root (-1)) = -1 by A44,POWER:9;
+                  then (-v) = -(3-root r) by A45,XCMPLX_1:180;
+                  then -(-v) = (3-root r); hence
+                     v = 3-root(-q/2 +sqrt(q^2/4+(p/3) |^ 3));
+               end; hence thesis by A2,A18;
+            case z2 = (-e2-sqrt delta(e1,e2,e3))/(2*e1);
+                then z2 = (-e2-sqrt(e2^2-4*e1*e3))/(2*e1) by QUIN_1:def 1;
+                then z2 = (-q)/2 -(sqrt(q^2-4*(-p/3) |^ 3))/2 by XCMPLX_1:121;
+                then z2 = ((-q)*2") -(sqrt(q^2
+-4*(-p/3) |^ 3))/2 by XCMPLX_0:def 9;
+                then z2 = -(q*2") -(sqrt(q^2-4*(-p/3) |^ 3))/2 by XCMPLX_1:175
+;
+              then z2 = -q/2 -sqrt(q^2-4*(-p/3) |^ 3)/sqrt 4
+                      by SQUARE_1:85,XCMPLX_0:def 9;
+              then A46:z2 = -q/2 -sqrt((q^2-4*(-p/3) |^ 3)/4)
+                      by A8,SQUARE_1:99
+                .= -q/2 -sqrt(q^2/4-4*(-p/3) |^ 3/4) by XCMPLX_1:121
+                .= -q/2 -sqrt(q^2/4-4"*(4*(-p/3) |^ 3)) by XCMPLX_0:def 9
+                .= -q/2 -sqrt(q^2/4-(4"*4)*(-p/3) |^ 3) by XCMPLX_1:4
+                .= -q/2 -sqrt(q^2/4-1*(-p/3) |^ 3);
+               then A47:v |^ 3 = -q/2 -sqrt(q^2/4+(p/3) |^ 3)
+                   by A15,A16,XCMPLX_1:151;
+                 now per cases by REAL_1:def 5;
+                  case A48:v>0;
+                    then A49: (-q/2 -sqrt(q^2/4+(p/3) |^ 3))> 0 by A47,PREPOWER
+:13;
+                      v > 0 & (-q/2 -sqrt(q^2/4+(p/3) |^ 3))> 0
+                                by A47,A48,PREPOWER:13;
+                     then v = 3 -Root (-q/2 -sqrt(q^2/4+(p/3) |^ 3))
+                           by A47,PREPOWER:def 3;hence
+                       v = 3-root (-q/2 -sqrt(q^2/4+(p/3) |^ 3))
+                           by A49,POWER:def 1;
+                  case A50:v=0;
+                    then A51: (-q/2 -sqrt(q^2/4+(p/3) |^ 3)) = 0
+                       by A47,NEWTON:16; hence
+                       v = 3 -Root (-q/2 -sqrt(q^2/4+(p/3) |^ 3))
+                           by A50,PREPOWER:def 3;hence
+                       v = 3-root (-q/2 -sqrt(q^2
+/4+(p/3) |^ 3))by A51,POWER:def 1
+;
+                  case v<0;
+                    then A52:-v > 0 by REAL_1:66;
+                       (-v) |^ 3 = (-v) |^ (2+1);
+                     then (-v) |^ 3 = ((-v) |^ (1+1))*(-v) by NEWTON:11;
+                     then (-v) |^ 3 = ((((-v) |^ 1)*(-v)))*(-v)
+                                   by NEWTON:11;
+                     then (-v) |^ 3 = ((-v) |^ 1)*((-v)*(-v)) by XCMPLX_1:4;
+                    then (-v) |^ 3 = ((-v) |^ 1)*(-v)^2 by SQUARE_1:def 3;
+                    then A53: (-v) |^ 3 = ((-v) to_power 1)*(-v)^2 by POWER:47
+                                   .= (-v)*(-v)^2 by POWER:30
+                                   .= (-v)*v^2 by SQUARE_1:61
+                                   .= -(v*v^2) by XCMPLX_1:175;
+                       v |^ 3 = v |^ (2+1);
+                     then v |^ 3 = (v |^ (1+1))*v by NEWTON:11;
+                     then v |^ 3 = ((v |^ 1)*v)*v by NEWTON:11;
+                     then v |^ 3 = (v |^ 1)*(v*v) by XCMPLX_1:4;
+                    then A54: v |^ 3 = (v |^ 1)*v^2 by SQUARE_1:def 3;
+                    A55: v to_power 1 = v by POWER:30;
+                    then (-v) |^ 3 = -(v |^ 3) by A53,A54,POWER:47;
+                    then A56: -(-q/2 -sqrt(q^2/4+(p/3) |^ 3))> 0
+                          by A47,A52,PREPOWER:13;
+                      -(v |^ 3) = -(-q/2 -sqrt(q^2/4+(p/3) |^ 3))
+                          by A15,A16,A46,XCMPLX_1:151;
+                    then (-v) |^ 3 = -(-q/2 -sqrt(q^2/4+(p/3) |^ 3))
+                          by A53,A54,A55,POWER:47;
+                    then (-v) = 3 -Root(-(-q/2 -sqrt(q^2/4+(p/3) |^ 3)))
+                          by A52,A56,PREPOWER:def 3;
+                    then A57: (-v) = 3-root(-(-q/2 -sqrt(q^2/4+(p/3) |^ 3)))
+                        by A56,POWER:def 1;
+                     set r = (-q/2 -sqrt(q^2/4+(p/3) |^ 3));
+                    A58: (-v) = 3-root((-1)*(r)) by A57,XCMPLX_1:180;
+                    A59: 3 = 2*1+1;
+                    then A60: (-v) = (3-root (-1))*(3-root r)
+                                 by A58,POWER:12;
+                      (3-root (-1)) = -1 by A59,POWER:9;
+                    then (-v) = -(3-root r) by A60,XCMPLX_1:180;
+                    then -(-v) = (3-root r);
+                     hence v = 3-root(-q/2 -sqrt(q^2/4+(p/3) |^ 3));
+               end; hence thesis by A2,A18;
+            end; hence thesis;
+ case A61:z1 = (-e2-sqrt delta(e1,e2,e3))/(2*e1);
+        then z1 = (-e2-sqrt(e2^2-4*e1*e3))/(2*e1) by QUIN_1:def 1;
+    then A62: z1= (-q)/2 -(sqrt(q^2-4*(-p/3) |^ 3))/2 by XCMPLX_1:121
+    .= ((-q)*2") -(sqrt(q^2-4*(-p/3) |^ 3))/2 by XCMPLX_0:def 9
+    .= -(q*2") -(sqrt(q^2-4*(-p/3) |^ 3))/2 by XCMPLX_1:175
+    .= -q/2 -sqrt(q^2-4*(-p/3) |^ 3)/sqrt 4 by SQUARE_1:85,XCMPLX_0:def 9
+    .= -q/2 -sqrt((q^2-4*(-p/3) |^ 3)/4) by A8,SQUARE_1:99
+    .= -q/2 -sqrt(q^2/4-4*(-p/3) |^ 3/4) by XCMPLX_1:121
+    .= -q/2 -sqrt(q^2/4-4"*(4*(-p/3) |^ 3)) by XCMPLX_0:def 9
+    .= -q/2 -sqrt(q^2/4-(4"*4)*(-p/3) |^ 3) by XCMPLX_1:4
+    .= -q/2 -sqrt(q^2/4-1*(-p/3) |^ 3);hence
+    z1 = -q/2 -sqrt(q^2/4-(-p/3) |^ 3);
+                  (-p/3) |^ 3 = (-p/3) |^ (2+1);
+                then (-p/3) |^ 3 = ((-p/3) |^ (1+1))*(-p/3) by NEWTON:11;
+                then (-p/3) |^ 3 = ((((-p/3) |^ 1)*(-p/3)))*(-p/3)
+                            by NEWTON:11;
+                then (-p/3) |^ 3 = ((-p/3) |^ 1)*((-p/3)*(-p/3))
+                            by XCMPLX_1:4;
+               then (-p/3) |^ 3 = ((-p/3) |^ 1)*(-p/3)^2
+                                by SQUARE_1:def 3;
+               then (-p/3) |^ 3 = ((-p/3) to_power 1)*(-p/3)^2
+                     by POWER:47;
+                then (-p/3) |^ 3 = (-p/3)*(-p/3)^2 by POWER:30;
+                then (-p/3) |^ 3 = (-p/3)*(p/3)^2 by SQUARE_1:61;
+               then A63:(-p/3) |^ 3 = -((p/3)*(p/3)^2) by XCMPLX_1:175;
+                  (p/3) |^ 3 = (p/3) |^ (2+1);
+                then (p/3) |^ 3 = ((p/3) |^ (1+1))*(p/3) by NEWTON:11;
+                then (p/3) |^ 3 = ((((p/3) |^ 1)*(p/3)))*(p/3)
+                            by NEWTON:11;
+                then (p/3) |^ 3 = ((p/3) |^ 1)*((p/3)*(p/3)) by XCMPLX_1:4;
+               then (p/3) |^ 3 = ((p/3) |^ 1)*(p/3)^2 by SQUARE_1:def 3;
+               then (p/3) |^ 3 = ((p/3) to_power 1)*(p/3)^2by POWER:47;
+               then A64: (-p/3) |^ 3 = -((p/3) |^ 3) by A63,POWER:30;
+              then A65:u |^ 3 = -q/2 -sqrt(q^2/4+(p/3) |^ 3) by A62,XCMPLX_1:
+151;
+               A66: now per cases by REAL_1:def 5;
+                  case A67:u >0;
+                    then A68: (-q/2 -sqrt(q^2
+/4+(p/3) |^ 3))> 0 by A65,PREPOWER:13;
+                    A69: u > 0 & (-q/2 -sqrt(q^2/4+(p/3) |^ 3))> 0
+                                by A65,A67,PREPOWER:13;
+                       u |^ 3 = -q/2 -sqrt(q^2/4+(p/3) |^ 3)
+                               by A62,A64,XCMPLX_1:151;
+                     then u = 3 -Root (-q/2 -sqrt(q^2/4+(p/3) |^ 3))
+                           by A69,PREPOWER:def 3;hence
+                       u = 3-root (-q/2 -sqrt(q^2/4+(p/3) |^ 3))
+                           by A68,POWER:def 1;
+                  case A70:u =0;
+                    then (-q/2 -sqrt(q^2/4+(p/3) |^ 3)) = 0 by A65,NEWTON:16;
+                    hence u = 3-root(-q/2 -sqrt(q^2/4+(p/3) |^ 3))
+                           by A70,POWER:6;
+                  case u <0;
+                    then A71:-u > 0 by REAL_1:66;
+                    then A72:  (-u) |^ 3 > 0 by PREPOWER:13;
+                       (-u) |^ 3 = (-u) |^ (2+1);
+                     then (-u) |^ 3 = ((-u) |^ (1+1))*(-u) by NEWTON:11;
+                     then (-u) |^ 3 = ((((-u) |^ 1)*(-u)))*(-u)
+                                   by NEWTON:11;
+                     then (-u) |^ 3 = ((-u) |^ 1)*((-u)*(-u)) by XCMPLX_1:4;
+                    then (-u) |^ 3 = ((-u) |^ 1)*(-u)^2 by SQUARE_1:def 3;
+                    then (-u) |^ 3 = ((-u) to_power 1)*(-u)^2
+                          by POWER:47;
+                     then (-u) |^ 3 = (-u)*(-u)^2 by POWER:30;
+                     then (-u) |^ 3 = (-u)*u^2 by SQUARE_1:61;
+                    then A73:  (-u) |^ 3 = -(u*u^2) by XCMPLX_1:175;
+                       u |^ 3 = u |^ (2+1);
+                     then u |^ 3 = (u |^ (1+1))*u by NEWTON:11;
+                     then u |^ 3 = ((u |^ 1)*u)*u by NEWTON:11;
+                     then u |^ 3 = (u |^ 1)*(u*u) by XCMPLX_1:4;
+                    then u |^ 3 = (u |^ 1)*u^2 by SQUARE_1:def 3;
+                    then A74: u |^ 3 = (u to_power 1)*u^2 by POWER:47;
+                    then A75:  -(-q/2 -sqrt(q^2/4+(p/3) |^ 3))> 0
+                            by A65,A72,A73,POWER:30;
+                    A76: (-u) |^ 3 = -(-q/2 -sqrt(q^2/4+(p/3) |^ 3))
+                            by A65,A73,A74,POWER:30;
+                      3 -Root(-(-q/2 -sqrt(q^2/4+(p/3) |^ 3)))
+                      = 3-root(-(-q/2 -sqrt(q^2/4+(p/3) |^ 3)))
+                            by A75,POWER:def 1;
+                    then A77: (-u) = 3-root(-(-q/2 -sqrt(q^2/4+(p/3) |^ 3)))
+                            by A71,A72,A76,PREPOWER:def 3;
+                     set r = (-q/2 -sqrt(q^2/4+(p/3) |^ 3));
+                    A78: (-u) = 3-root((-1)*(r)) by A77,XCMPLX_1:180;
+                    A79: 3 = 2*1+1;
+                    then A80: (-u) = (3-root (-1))*(3-root r)
+                                 by A78,POWER:12;
+                      (3-root (-1)) = -1 by A79,POWER:9;
+                    then (-u) = -(3-root r) by A80,XCMPLX_1:180;
+                    then -(-u) = (3-root r); hence
+                       u = 3-root(-q/2 -sqrt(q^2/4+(p/3) |^ 3));
+                     end;
+       now per cases by A9,A10,Th5;
+     case z2 = (-e2+sqrt delta(e1,e2,e3))/(2*e1);
+        then z2 = (-e2+sqrt(e2^2-4*e1*e3))/(2*e1) by QUIN_1:def 1;
+        then z2 = (-q)/2 +sqrt(q^2-4*(-p/3) |^ 3)/sqrt 4
+              by SQUARE_1:85,XCMPLX_1:63;
+        then A81: z2 = (-q)/2 +sqrt((q^2-4*(-p/3) |^ 3)/4)
+                          by A8,SQUARE_1:99
+                 .= (-q)/2 +sqrt(q^2/4-4*(-p/3) |^ 3/4) by XCMPLX_1:121
+                 .= (-q)/2 +sqrt(q^2/4-4"*(4*(-p/3) |^ 3)) by XCMPLX_0:def 9
+                 .= (-q)/2 +sqrt(q^2/4-(4"*4)*(-p/3) |^ 3) by XCMPLX_1:4
+                 .= (-q)/2 +sqrt(q^2/4-1*(-p/3) |^ 3);
+           (-p/3) |^ 3 = (-p/3) |^ (2+1);
+         then (-p/3) |^ 3 = ((-p/3) |^ (1+1))*(-p/3) by NEWTON:11;
+         then (-p/3) |^ 3 = ((((-p/3) |^ 1)*(-p/3)))*(-p/3)
+                           by NEWTON:11;
+         then (-p/3) |^ 3 = ((-p/3) |^ 1)*((-p/3)*(-p/3)) by XCMPLX_1:4;
+        then (-p/3) |^ 3 = ((-p/3) |^ 1)*(-p/3)^2 by SQUARE_1:def 3;
+        then (-p/3) |^ 3 = ((-p/3) to_power 1)*(-p/3)^2by POWER:47;
+         then (-p/3) |^ 3 = (-p/3)*(-p/3)^2 by POWER:30;
+         then (-p/3) |^ 3 = (-p/3)*(p/3)^2 by SQUARE_1:61;
+        then A82: (-p/3) |^ 3 = -((p/3)*(p/3)^2) by XCMPLX_1:175;
+           (p/3) |^ 3 = (p/3) |^ (2+1);
+         then (p/3) |^ 3 = ((p/3) |^ (1+1))*(p/3) by NEWTON:11;
+         then (p/3) |^ 3 = ((((p/3) |^ 1)*(p/3)))*(p/3) by NEWTON:11;
+         then (p/3) |^ 3 = ((p/3) |^ 1)*((p/3)*(p/3)) by XCMPLX_1:4;
+
+        then (p/3) |^ 3 = ((p/3) |^ 1)*(p/3)^2 by SQUARE_1:def 3;
+        then (p/3) |^ 3 = ((p/3) to_power 1)*(p/3)^2by POWER:47;
+        then (-p/3) |^ 3 = -((p/3) |^ 3) by A82,POWER:30;
+        then A83: z2 = (-q)/2 +sqrt(q^2/4+(p/3) |^ 3) by A81,XCMPLX_1:151
+
+                .= (-q)*2" +sqrt(q^2/4+((p/3) |^ 3)) by XCMPLX_0:def 9
+                .= -(q*2") +sqrt(q^2/4+((p/3) |^ 3)) by XCMPLX_1:175;
+        then A84:  v |^ 3 = -q/2 +sqrt(q^2/4+((p/3) |^ 3)) by XCMPLX_0:def 9;
+                 now per cases by REAL_1:def 5;
+               case v >0;
+                  then A85: v > 0 & (-q/2 +sqrt(q^2/4+(p/3) |^ 3))> 0
+                         by A84,PREPOWER:13;
+                  then v = 3 -Root (-q/2 +sqrt(q^2/4+(p/3) |^ 3))
+                          by A84,PREPOWER:def 3; hence
+                     v = 3-root(-q/2 +sqrt(q^2/4+(p/3) |^ 3))
+                           by A85,POWER:def 1;
+               case A86:v=0;
+                  then (-q/2 +sqrt(q^2/4+(p/3) |^ 3)) = 0
+                         by A84,NEWTON:16; hence
+                    v = 3-root(-q/2 +sqrt(q^2/4+(p/3) |^ 3))
+                       by A86,POWER:6;
+               case v<0;
+                  then A87: -v > 0 by REAL_1:66;
+                  then A88:  (-v) |^ 3 > 0 by PREPOWER:13;
+                     (-v) |^ 3 = (-v) |^ (2+1);
+                   then (-v) |^ 3 = ((-v) |^ (1+1))*(-v) by NEWTON:11;
+                   then (-v) |^ 3 = ((((-v) |^ 1)*(-v)))*(-v) by NEWTON:11;
+                   then (-v) |^ 3 = ((-v) |^ 1)*((-v)*(-v)) by XCMPLX_1:4;
+                  then (-v) |^ 3 = ((-v) |^ 1)*(-v)^2 by SQUARE_1:def 3;
+                  then (-v) |^ 3 = ((-v) to_power 1)*(-v)^2by POWER:47;
+                   then (-v) |^ 3 = (-v)*(-v)^2 by POWER:30;
+                   then (-v) |^ 3 = (-v)*v^2 by SQUARE_1:61;
+                  then A89:(-v) |^ 3 = -(v*v^2) by XCMPLX_1:175;
+                     v |^ 3 = v |^ (2+1);
+                   then v |^ 3 = (v |^ (1+1))*v by NEWTON:11;
+                   then v |^ 3 = ((v |^ 1)*v)*v by NEWTON:11;
+                   then v |^ 3 = (v |^ 1)*(v*v) by XCMPLX_1:4;
+                  then v |^ 3 = (v |^ 1)*v^2 by SQUARE_1:def 3;
+                  then A90: v |^ 3 = (v to_power 1)*v^2 by POWER:47;
+                  then A91: v |^ 3 = v*v^2 by POWER:30;
+                  A92:  -(-q/2 +sqrt(q^2/4+(p/3) |^ 3))> 0
+                         by A84,A88,A89,A90,POWER:30;
+                    (-v) |^ 3 = -(-q/2 +sqrt(q^2/4+(p/3) |^ 3))
+                         by A83,A89,A91,XCMPLX_0:def 9;
+                  then (-v) = 3 -Root(-(-q/2 +sqrt(q^2/4+(p/3) |^ 3)))
+                         by A87,A88,PREPOWER:def 3;
+                  then A93: (-v) = 3-root(-(-q/2 +sqrt(q^2/4+(p/3) |^ 3)))
+                         by A92,POWER:def 1;
+                   set r = (-q/2 +sqrt(q^2/4+(p/3) |^ 3));
+                  A94: (-v) = 3-root((-1)*(r)) by A93,XCMPLX_1:180;
+                  A95: 3 = 2*1+1;
+                  then A96: (-v) = (3-root(-1))*(3-root r)
+                                by A94,POWER:12;
+                    (3-root (-1)) = -1 by A95,POWER:9;
+                  then (-v) = -(3-root r) by A96,XCMPLX_1:180;
+                  then -(-v) = (3-root r);
+                   hence
+                     v = 3-root(-q/2 +sqrt(q^2/4+(p/3) |^ 3));
+               end; hence thesis by A2,A66;
+        case A97: z2 = (-e2-sqrt delta(e1,e2,e3))/(2*e1);
+             then A98:z2 = (-e2-sqrt(e2^2-4*e1*e3))/(2*e1) by QUIN_1:def 1;
+           e2^2 = (z1+z2)^2 by A3,SQUARE_1:61;
+          then e2^2-(4*e1*e3) = (z1^2+2*z1*z2+z2^2)-4*(z1*z2)
+                      by A4,SQUARE_1:63
+          .= -(-z1^2-2*z1*z2-z2^2)-4*(z1*z2) by XCMPLX_1:174
+          .= -(-z1^2-z2^2-2*z1*z2)-4*(z1*z2) by XCMPLX_1:146
+          .= (z1^2+z2^2+2*z1*z2)-4*(z1*z2) by XCMPLX_1:174
+          .= (z1^2+z2^2+2*z1*z2)+(-4*(z1*z2)) by XCMPLX_0:def 8
+          .= (z1^2+z2^2)+(2*z1*z2+(-4*(z1*z2))) by XCMPLX_1:1
+          .= (z1^2+z2^2)+(2*z1*z2-4*(z1*z2)) by XCMPLX_0:def 8
+          .= (z1^2+z2^2)+(2*(z1*z2)-4*(z1*z2)) by XCMPLX_1:4
+          .= (z1^2+z2^2)+((2-4)*(z1*z2)) by XCMPLX_1:40
+          .= (z1^2+z2^2)+((-2)*(z1*z2))
+          .= (z1^2+z2^2)+-(2*(z1*z2)) by XCMPLX_1:175
+          .= (z1^2+z2^2-2*(z1*z2)) by XCMPLX_0:def 8
+          .= (z1^2-2*(z1*z2)+z2^2) by XCMPLX_1:29
+          .= (z1^2-(2*z1*z2)+z2^2) by XCMPLX_1:4
+          .= (z1-z2)^2 by SQUARE_1:64;
+         then sqrt(q^2-4*1*(-p/3) |^ 3)= 0
+          by A61,A97,SQUARE_1:60,82,XCMPLX_1:14;
+         then z2 = (-q)/2 +sqrt(q^2-4*(-p/3) |^ 3)/sqrt 4
+             by A98;
+         then A99: z2 = (-q)/2 +sqrt((q^2-4*(-p/3) |^ 3)/4)
+                  by A8,SQUARE_1:99
+          .= (-q)/2 +sqrt(q^2/4-4*(-p/3) |^ 3/4) by XCMPLX_1:121
+          .= (-q)/2 +sqrt(q^2/4-4"*(4*(-p/3) |^ 3)) by XCMPLX_0:def 9
+          .= (-q)/2 +sqrt(q^2/4-(4"*4)*(-p/3) |^ 3) by XCMPLX_1:4
+          .= (-q)/2 +sqrt(q^2/4-1*(-p/3) |^ 3);
+            (-p/3) |^ 3 = (-p/3) |^ (2+1)
+          .= ((-p/3) |^ (1+1))*(-p/3) by NEWTON:11
+          .= ((((-p/3) |^ 1)*(-p/3)))*(-p/3) by NEWTON:11
+          .= ((-p/3) |^ 1)*((-p/3)*(-p/3)) by XCMPLX_1:4;
+         then (-p/3) |^ 3 = ((-p/3) |^ 1)*(-p/3)^2 by SQUARE_1:def 3
+          .= ((-p/3) to_power 1)*(-p/3)^2by POWER:47
+          .= (-p/3)*(-p/3)^2 by POWER:30
+          .= (-p/3)*(p/3)^2 by SQUARE_1:61;
+         then A100: (-p/3) |^ 3 = -((p/3)*(p/3)^2) by XCMPLX_1:175;
+           (p/3) |^ 3 = (p/3) |^ (2+1)
+          .= ((p/3) |^ (1+1))*(p/3) by NEWTON:11
+          .= ((((p/3) |^ 1)*(p/3)))*(p/3) by NEWTON:11
+          .= ((p/3) |^ 1)*((p/3)*(p/3)) by XCMPLX_1:4
+          .= ((p/3) |^ 1)*(p/3)^2 by SQUARE_1:def 3;
+         then (p/3) |^ 3 = ((p/3) to_power 1)*(p/3)^2by POWER:47;
+          then (-p/3) |^ 3 = -((p/3) |^ 3) by A100,POWER:30;
+         then A101: z2 = (-q)/2 +sqrt(q^2/4+(p/3) |^ 3) by A99,XCMPLX_1:151
+          .= (-q)*2" +sqrt(q^2/4+((p/3) |^ 3)) by XCMPLX_0:def 9
+          .= -(q*2") +sqrt(q^2/4+((p/3) |^ 3)) by XCMPLX_1:175;
+         then A102:  v |^ 3 = -q/2 +sqrt(q^2/4+((p/3) |^ 3)) by XCMPLX_0:def 9;
+                  now per cases by REAL_1:def 5;
+                case v >0;
+                  then A103: v > 0 & (-q/2 +sqrt(q^2/4+(p/3) |^ 3))> 0
+                       by A102,PREPOWER:13;
+                    v |^ 3 = -q/2 +sqrt(q^2/4+(p/3) |^ 3) by A101,XCMPLX_0:def
+9;
+                   then v = 3 -Root (-q/2 +sqrt(q^2/4+(p/3) |^ 3))
+                          by A103,PREPOWER:def 3;hence
+                     v = 3-root(-q/2 +sqrt(q^2/4+(p/3) |^ 3))
+                           by A103,POWER:def 1;
+               case A104:v=0;
+                  then v |^ 3 = 0 by NEWTON:16;
+                  then (-q/2 +sqrt(q^2/4+(p/3) |^ 3)) = 0
+                         by A101,XCMPLX_0:def 9; hence
+                     v = 3-root(-q/2 +sqrt(q^2/4+(p/3) |^ 3))
+                         by A104,POWER:6;
+               case v<0;
+                  then A105: -v > 0 by REAL_1:66;
+                  then A106:  (-v) |^ 3 > 0 by PREPOWER:13;
+                     (-v) |^ 3 = (-v) |^ (2+1)
+                   .= ((-v) |^ (1+1))*(-v) by NEWTON:11
+                   .= ((((-v) |^ 1)*(-v)))*(-v) by NEWTON:11
+                   .= ((-v) |^ 1)*((-v)*(-v)) by XCMPLX_1:4
+                   .= ((-v) |^ 1)*(-v)^2 by SQUARE_1:def 3
+                   .= ((-v) to_power 1)*(-v)^2by POWER:47
+                   .= (-v)*(-v)^2 by POWER:30
+                   .= (-v)*v^2 by SQUARE_1:61;
+                  then A107:(-v) |^ 3 = -(v*v^2) by XCMPLX_1:175;
+                    v |^ 3 = v |^ (2+1)
+                   .= (v |^ (1+1))*v by NEWTON:11
+                   .= ((v |^ 1)*v)*v by NEWTON:11
+                   .= (v |^ 1)*(v*v) by XCMPLX_1:4
+                   .= (v |^ 1)*v^2 by SQUARE_1:def 3;
+                  then A108: v |^ 3 = (v to_power 1)*v^2 by POWER:47;
+                  then A109: (-v) |^ 3 = -(v |^ 3) by A107,POWER:30;
+                    -(v |^ 3)> 0 by A106,A107,A108,POWER:30;
+                  then A110:  -(-q/2 +sqrt(q^2/4+(p/3) |^ 3))> 0
+                          by A101,XCMPLX_0:def 9;
+                    (-v) |^ 3 = -(-q/2 +sqrt(q^2/4+(p/3) |^ 3))
+                                by A101,A109,XCMPLX_0:def 9;
+                  then (-v) = 3 -Root(-(-q/2 +sqrt(q^2/4+(p/3) |^ 3)))
+                              by A105,A110,PREPOWER:def 3;
+                  then A111: (-v) = 3-root(-(-q/2 +sqrt(q^2/4+(p/3) |^ 3)))
+                             by A110,POWER:def 1;
+                   set r = (-q/2 +sqrt(q^2/4+(p/3) |^ 3));
+                  A112: (-v) = 3-root((-1)*(r)) by A111,XCMPLX_1:180;
+                  A113: 3 = 2*1+1;
+                  then A114: (-v) = (3-root(-1))*(3-root r) by A112,POWER:12;
+                    (3-root (-1)) = -1 by A113,POWER:9;
+                  then (-v) = -(3-root r) by A114,XCMPLX_1:180;
+                  then -(-v) = (3-root r);hence
+                    v = 3-root(-q/2 +sqrt(q^2/4+(p/3) |^ 3));
+               end; hence
+                     y = 3-root(-q/2 +sqrt(q^2/4+(p/3) |^ 3))
+                       +3-root(-q/2 -sqrt(q^2/4+(p/3) |^ 3)) by A2,A66;
+                 end; hence thesis;
+        end; hence thesis;
+end;
+
+theorem
+    b <> 0 & delta(b,c,d) > 0 &
+    Poly3(0,b,c,d,x) = 0 implies
+      x = (-c+sqrt delta(b,c,d))/(2*b) or x = (-c-sqrt delta(b,c,d))/(2*b)
+proof
+       assume that
+       A1: b <> 0 & delta(b,c,d)>0;
+       assume
+         Poly3(0,b,c,d,x) = 0;
+        then 0*(x |^ 3)+ b*x^2 +c*x +d = 0 by Def4;
+       then Poly2(b,c,d,x) = 0 by Def2; hence
+            x = (-c+sqrt delta(b,c,d))/(2*b) or
+          x = (-c-sqrt delta(b,c,d))/(2*b) by A1,Th5;
+end;
+
+theorem
+    a <> 0 & p = c/a & q = d/a &
+    Poly3(a,0,c,d,x) = 0 implies (for u,v st x = u+v & 3*v*u+p = 0
+      holds
+        x = 3-root(-d/(2*a)+sqrt((d^2/(4*a^2))+(c/(3*a)) |^ 3))
+           +3-root(-d/(2*a)-sqrt((d^2/(4*a^2))+(c/(3*a)) |^ 3)) or
+        x = 3-root(-d/(2*a)+sqrt((d^2/(4*a^2))+(c/(3*a)) |^ 3))
+           +3-root(-d/(2*a)+sqrt((d^2/(4*a^2))+(c/(3*a)) |^ 3)) or
+        x = 3-root(-d/(2*a)-sqrt((d^2/(4*a^2))+(c/(3*a)) |^ 3))
+           +3-root(-d/(2*a)-sqrt((d^2/(4*a^2))+(c/(3*a)) |^ 3)))
+proof
+      assume that
+   A1: a <> 0 & p = c/a & q = d/a;
+         assume
+   A2:  Poly3(a,0,c,d,x) = 0;
+       let u,v;
+       assume that
+       A3: x = u+v & 3*v*u+p = 0;
+           a*(x |^ 3)+ 0*x^2 +c*x +d = 0 by A2,Def4;
+         then a"*(a*(x |^ 3)+c*x +d) = 0;
+         then a"*(a*(x |^ 3)+(c*x +d)) = 0 by XCMPLX_1:1;
+         then a"*(a*(x |^ 3))+a"*(c*x +d)= 0 by XCMPLX_1:8;
+         then (a"*a)*(x |^ 3)+a"*(c*x +d)= 0 by XCMPLX_1:4;
+         then 1*(x |^ 3)+a"*(c*x +d)= 0 by A1,XCMPLX_0:def 7;
+         then (x |^ 3)+(a"*(c*x) +a"*d) = 0 by XCMPLX_1:8;
+         then (x |^ 3)+((a"*c)*x +a"*d) = 0 by XCMPLX_1:4;
+         then (x |^ 3)+((c/a)*x +a"*d) = 0 by XCMPLX_0:def 9;
+         then (x |^ 3)+((c/a)*x +d/a) = 0 by XCMPLX_0:def 9;
+   then 1*(x |^ 3)+ 0*x^2 +p*x + q = 0 by A1,XCMPLX_1:1;
+   then A4: Poly3(1,0,p,q,x) = 0 by Def4;
+   A5: p/3 = c/(3*a) by A1,XCMPLX_1:79;
+   A6:-q/2 = -d/(2*a) by A1,XCMPLX_1:79;
+     q^2/4 = d^2/a^2/4 by A1,SQUARE_1:69;
+         then q^2/4 = d^2/(4*a^2) by XCMPLX_1:79; hence
+     x = 3-root(-d/(2*a)+sqrt((d^2/(4*a^2))+(c/(3*a)) |^ 3))
+            +3-root(-d/(2*a)-sqrt((d^2/(4*a^2))+(c/(3*a)) |^ 3)) or
+         x = 3-root(-d/(2*a)+sqrt((d^2/(4*a^2))+(c/(3*a)) |^ 3))
+            +3-root(-d/(2*a)+sqrt((d^2/(4*a^2))+(c/(3*a)) |^ 3)) or
+         x = 3-root(-d/(2*a)-sqrt((d^2/(4*a^2))+(c/(3*a)) |^ 3))
+            +3-root(-d/(2*a)-sqrt((d^2/(4*a^2))+(c/(3*a)) |^ 3))
+             by A3,A4,A5,A6,Th19;
+end;
+
+theorem
+    a <> 0 & delta(a,b,c) >= 0 &
+    Poly3(a,b,c,0,x) = 0 implies
+      x = 0 or x = (-b+sqrt delta(a,b,c))/(2*a) or
+               x = (-b-sqrt delta(a,b,c))/(2*a)
+proof
+        assume that
+   A1: a <> 0 & delta(a,b,c)>= 0;
+        assume
+     Poly3(a,b,c,0,x) = 0;
+   then A2: a*(x |^ 3)+ b*x^2 +c*x +0 = 0 by Def4;
+           x |^ 3 = x |^ (2+1);
+         then x |^ 3 = (x |^ (1+1))*x by NEWTON:11;
+   then A3: x |^ 3 = ((x |^ 1)*x)*x by NEWTON:11;
+           x |^ 1 = x to_power 1 by POWER:47;
+   then x |^ 1 = x by POWER:30;
+   then x |^ 3 = x^2*x by A3,SQUARE_1:def 3;
+         then a*(x^2*x) +b*(x*x)+c*x = 0 by A2,SQUARE_1:def 3;
+         then (a*x^2)*x +b*(x*x)+c*x = 0 by XCMPLX_1:4;
+         then (a*x^2)*x +(b*x)*x+c*x = 0 by XCMPLX_1:4;
+   then (a*x^2 +b*x+c)*x = 0 by XCMPLX_1:9;
+   then x = 0 or (a*x^2 +b*x+c) = 0 by XCMPLX_1:6;
+   then x = 0 or Poly2(a,b,c,x) = 0 by Def2; hence
+           x = 0 or x = (-b+sqrt delta(a,b,c))/(2*a) or
+         x = (-b-sqrt delta(a,b,c))/(2*a) by A1,Th5;
+end;
+
+theorem
+    a <> 0 & c/a < 0 &
+    Poly3(a,0,c,0,x) = 0 implies x = 0 or x = sqrt -c/a or x = -sqrt(-c/a)
+proof
+   assume that
+   A1: a <> 0 & c/a < 0;
+   assume
+         Poly3(a,0,c,0,x) = 0;
+       then A2: a*(x |^ 3)+ 0*x^2 +c*x +0 = 0 by Def4;
+           x |^ 3 = x |^ (2+1);
+         then x |^ 3 = (x |^ (1+1))*x by NEWTON:11;
+       then A3: x |^ 3 = ((x |^ 1)*x)*x by NEWTON:11;
+           x |^ 1 = x to_power 1 by POWER:47;
+       then x |^ 1 = x by POWER:30;
+       then x |^ 3 = x^2*x by A3,SQUARE_1:def 3;
+       then (a*x^2)*x +c*x = 0 by A2,XCMPLX_1:4;
+       then (a*x^2+c)*x = 0 by XCMPLX_1:8;
+       then A4:x = 0 or (a*x^2+c) = 0 by XCMPLX_1:6;
+          now
+             now per cases by REAL_1:def 5;
+           case A5: x > 0;
+              then a*x^2 = - c by A4,XCMPLX_0:def 6;
+              then x^2 = (-c)/a by A1,XCMPLX_1:90;
+              then x^2 = ((-c)*a") by XCMPLX_0:def 9;
+              then x^2 = -(c*a") by XCMPLX_1:175;
+             then A6: x^2 = -c/a by XCMPLX_0:def 9;
+             A7:(-c/a) > 0 by A1,REAL_1:66;
+                x |^ 2 = (x |^ (1+1));
+              then x |^ 2 = ((x |^ 1)*x) by NEWTON:11;
+              then x |^ 2 = ((x to_power 1)*x) by POWER:47;
+              then x |^ 2 = x*x by POWER:30;
+             then x |^ 2 = -c/a by A6,SQUARE_1:def 3;
+             then x = 2 -Root (-c/a) by A5,A7,PREPOWER:def 3; hence
+                x = 0 or x = sqrt -c/a or x = -sqrt(-c/a) by A7,PREPOWER:41;
+           case A8: x < 0;
+             then A9: -x>0 by REAL_1:66;
+                a*x^2 = - c by A4,A8,XCMPLX_0:def 6;
+              then x^2 = (-c)/a by A1,XCMPLX_1:90;
+              then x^2 = ((-c)*a") by XCMPLX_0:def 9;
+              then x^2 = -(c*a") by XCMPLX_1:175;
+              then x^2 = -c/a by XCMPLX_0:def 9;
+             then A10:(-x)^2=-c/a by SQUARE_1:61;
+             A11:(-c/a) > 0 by A1,REAL_1:66;
+                (-x) |^ 2 = ((-x) |^ (1+1));
+              then (-x) |^ 2 = (((-x) |^ 1)*(-x)) by NEWTON:11;
+              then (-x) |^ 2 = (((-x) to_power 1)*(-x)) by POWER:47;
+              then (-x) |^ 2 = (-x)*(-x) by POWER:30;
+             then (-x) |^ 2 = -c/a by A10,SQUARE_1:def 3;
+             then -x = (2 -Root (-c/a)) by A9,A11,PREPOWER:def 3;
+             then -x = sqrt(-c/a) by A11,PREPOWER:41; hence
+                x = 0 or x = sqrt -c/a or x = -sqrt(-c/a);
+           case x=0; hence
+               x = 0 or x = sqrt -c/a or x = -sqrt(-c/a);
+           end;hence
+            x = 0 or x = sqrt -c/a or x = -sqrt(-c/a);
+        end; hence
+            x = 0 or x = sqrt -c/a or x = -sqrt(-c/a);
+end;

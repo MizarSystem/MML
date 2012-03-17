@@ -1,0 +1,541 @@
+:: Minimal Manysorted Signature for Partial Algebra
+::  by Grzegorz Bancerek
+::
+:: Received October 1, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, FINSEQ_1, FUNCT_1, ZF_REFLE, AMI_1, BOOLE, PARTFUN1,
+      UNIALG_1, FUNCT_2, CARD_3, MSUALG_1, UNIALG_2, EQREL_1, SETFAM_1, TARSKI,
+      FINSEQ_2, PROB_1, PBOOLE, INCPROJ, RELAT_2, GROUP_1, MCART_1, PRALG_1,
+      TDGROUP, QC_LANG1, PUA2MSS1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, SETFAM_1,
+      RELAT_1, STRUCT_0, RELSET_1, FUNCT_1, MCART_1, FINSEQ_1, FINSEQ_2,
+      PARTFUN1, FUNCT_2, RELAT_2, EQREL_1, AMI_1, PROB_1, CARD_3, PBOOLE,
+      MSUALG_1, UNIALG_1;
+ constructors NAT_1, PRVECT_1, EQREL_1, AMI_1, MSUALG_1, PROB_1, MEMBERED,
+      PARTFUN1, RELAT_1, RELAT_2;
+ clusters SUBSET_1, STRUCT_0, RELSET_1, FUNCT_1, AMI_1, FINSEQ_1, FINSEQ_2,
+      FINSEQ_5, UNIALG_1, PRVECT_1, MSUALG_1, MSAFREE, FSM_1, PARTFUN1, NAT_1,
+      FRAENKEL, RELAT_1, EQREL_1, TOLER_1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+definition
+ let f be non-empty Function;
+ cluster rng f -> with_non-empty_elements;
+end;
+
+definition let X,Y be non empty set;
+ cluster non empty PartFunc of X,Y;
+end;
+
+definition let X be with_non-empty_elements set;
+ cluster -> non-empty FinSequence of X;
+end;
+
+definition let A be non empty set;
+ cluster homogeneous quasi_total non-empty non empty PFuncFinSequence of A;
+end;
+
+definition
+ cluster non-empty -> non empty UAStr;
+end;
+
+definition
+ let X be non empty with_non-empty_elements set;
+ cluster -> non empty Element of X;
+end;
+
+theorem :: PUA2MSS1:1
+ for f,g being non-empty Function st product f c= product g holds
+ dom f = dom g & for x being set st x in dom f holds f.x c= g.x;
+
+theorem :: PUA2MSS1:2
+ for f,g being non-empty Function st product f = product g holds f = g;
+
+definition let A be non empty set;
+ let f be PFuncFinSequence of A;
+ redefine func rng f -> Subset of PFuncs(A*, A);
+end;
+
+definition let A,B be non empty set;
+ let S be non empty Subset of PFuncs(A, B);
+ redefine mode Element of S -> PartFunc of A,B;
+end;
+
+definition
+ let A be non-empty UAStr;
+ mode OperSymbol of A is Element of dom the charact of A;
+ mode operation of A is Element of rng the charact of A;
+end;
+
+definition
+ let A be non-empty UAStr;
+ let o be OperSymbol of A;
+ func Den(o, A) -> operation of A equals
+:: PUA2MSS1:def 1
+    (the charact of A).o;
+end;
+
+begin :: Partitions
+
+definition let X be set;
+ cluster -> with_non-empty_elements a_partition of X;
+end;
+
+definition
+ let X be set;
+ let R be Equivalence_Relation of X;
+ redefine func Class R -> a_partition of X;
+end;
+
+theorem :: PUA2MSS1:3
+ for X being set, P being a_partition of X, x,a,b being set
+  st x in a & a in P & x in b & b in P holds a = b;
+
+theorem :: PUA2MSS1:4
+ for X,Y being set st X is_finer_than Y
+ for p being FinSequence of X ex q being FinSequence of Y st
+  product p c= product q;
+
+theorem :: PUA2MSS1:5
+ for X being set, P,Q being a_partition of X
+ for f being Function of P,Q st for a being set st a in P holds a c= f.a
+ for p being FinSequence of P, q being FinSequence of Q holds
+  product p c= product q iff f*p = q;
+
+theorem :: PUA2MSS1:6
+ for P being set, f being Function st rng f c= union P
+  ex p being Function st dom p = dom f & rng p c= P & f in product p;
+
+theorem :: PUA2MSS1:7
+ for X be set, P being a_partition of X, f being FinSequence of X
+  ex p being FinSequence of P st f in product p;
+
+theorem :: PUA2MSS1:8
+   for X,Y being non empty set
+ for P being a_partition of X, Q being a_partition of Y holds
+  {[:p,q:] where p is Element of P, q is Element of Q: not contradiction}
+   is a_partition of [:X,Y:];
+
+theorem :: PUA2MSS1:9
+ for X being non empty set
+ for P being a_partition of X holds
+  {product p where p is Element of P*: not contradiction} is a_partition of X
+*;
+
+theorem :: PUA2MSS1:10
+   for X being non empty set, n be Nat
+ for P being a_partition of X holds
+  {product p where p is Element of n-tuples_on P: not contradiction}
+   is a_partition of n-tuples_on X;
+
+theorem :: PUA2MSS1:11
+ for X being non empty set, Y be set st Y c= X
+ for P being a_partition of X holds
+  {a /\ Y where a is Element of P: a meets Y} is a_partition of Y;
+
+theorem :: PUA2MSS1:12
+ for f being non empty Function, P being a_partition of dom f holds
+  {f|a where a is Element of P: not contradiction} is a_partition of f;
+
+definition
+ let X be set;
+ func SmallestPartition X -> a_partition of X equals
+:: PUA2MSS1:def 2
+
+   Class id X;
+end;
+
+theorem :: PUA2MSS1:13
+ for X being non empty set holds
+   SmallestPartition X = {{x} where x is Element of X: not contradiction};
+
+theorem :: PUA2MSS1:14
+ for X being set, p being FinSequence of SmallestPartition X
+  ex q being FinSequence of X st product p = {q};
+
+definition let X be set;
+ mode IndexedPartition of X -> Function means
+:: PUA2MSS1:def 3
+
+  rng it is a_partition of X & it is one-to-one;
+end;
+
+definition let X be set;
+ cluster -> one-to-one non-empty IndexedPartition of X;
+ let P be IndexedPartition of X;
+ redefine func rng P -> a_partition of X;
+end;
+
+definition let X be non empty set;
+ cluster -> non empty IndexedPartition of X;
+end;
+
+definition let X be set, P be a_partition of X;
+ redefine func id P -> IndexedPartition of X;
+end;
+
+definition let X be set;
+ let P be IndexedPartition of X;
+ let x be set; assume
+  x in X;
+ func P-index_of x -> set means
+:: PUA2MSS1:def 4
+
+  it in dom P & x in P.it;
+end;
+
+theorem :: PUA2MSS1:15
+ for X being set, P being non-empty Function st Union P = X &
+   for x,y being set st x in dom P & y in dom P & x <> y holds P.x misses P.y
+  holds P is IndexedPartition of X;
+
+theorem :: PUA2MSS1:16
+ for X,Y being non empty set, P being a_partition of Y
+ for f being Function of X, P st P c= rng f & f is one-to-one
+  holds f is IndexedPartition of Y;
+
+
+begin :: Relations generated by operations of partial algebra
+
+scheme IndRelationEx
+  {A, B() -> non empty set, i() -> Nat,
+   R0() -> (Relation of A(),B()),
+   RR(set,set) -> Relation of A(),B()}:
+ ex R being Relation of A(),B(), F being ManySortedSet of NAT st
+  R = F.i() & F.0 = R0() &
+  for i being Nat, R being Relation of A(),B() st R = F.i
+   holds F.(i+1) = RR(R,i);
+
+scheme RelationUniq
+ {A, B() -> non empty set, P[set,set]}:
+ for R1, R2 being Relation of A(), B() st
+  (for x being Element of A(), y being Element of B() holds
+     [x,y] in R1 iff P[x,y]) &
+  (for x being Element of A(), y being Element of B() holds
+     [x,y] in R2 iff P[x,y])
+ holds R1 = R2;
+
+scheme IndRelationUniq
+  {A, B() -> non empty set, i() -> Nat,
+   R0() -> (Relation of A(),B()),
+   RR(set,set) -> Relation of A(),B()}:
+ for R1, R2 being Relation of A(),B() st
+  (ex F being ManySortedSet of NAT st
+    R1 = F.i() & F.0 = R0() &
+    for i being Nat, R being Relation of A(),B() st R = F.i
+     holds F.(i+1) = RR(R,i)) &
+  (ex F being ManySortedSet of NAT st
+    R2 = F.i() & F.0 = R0() &
+    for i being Nat, R being Relation of A(),B() st R = F.i
+     holds F.(i+1) = RR(R,i))
+ holds R1 = R2;
+
+definition
+ let A be partial non-empty UAStr;
+ func DomRel A -> Relation of the carrier of A means
+:: PUA2MSS1:def 5
+
+  for x,y being Element of A holds [x,y] in it iff
+   for f being operation of A, p,q being FinSequence holds
+    p^<*x*>^q in dom f iff p^<*y*>^q in dom f;
+end;
+
+definition
+ let A be partial non-empty UAStr;
+ cluster DomRel A -> total symmetric transitive;
+end;
+
+definition
+ let A be non-empty partial UAStr;
+ let R be Relation of the carrier of A;
+ func R|^A -> Relation of the carrier of A means
+:: PUA2MSS1:def 6
+
+  for x,y being Element of A holds
+   [x,y] in it iff [x,y] in R &
+    for f being operation of A for p,q being FinSequence
+     st p^<*x*>^q in dom f & p^<*y*>^q in dom f
+     holds [f.(p^<*x*>^q), f.(p^<*y*>^q)] in R;
+end;
+
+definition
+ let A be non-empty partial UAStr;
+ let R be Relation of the carrier of A;
+ let i be Nat;
+ func R|^(A,i) -> Relation of the carrier of A means
+:: PUA2MSS1:def 7
+
+  ex F being ManySortedSet of NAT st it = F.i & F.0 = R &
+  for i being Nat, R being Relation of the carrier of A st R = F.i
+   holds F.(i+1) = R|^A;
+end;
+
+theorem :: PUA2MSS1:17
+ for A being non-empty partial UAStr,
+     R being Relation of the carrier of A
+  holds R|^(A,0) = R & R|^(A,1) = R|^A;
+
+theorem :: PUA2MSS1:18
+ for A being non-empty partial UAStr,
+     i being Nat,
+     R being Relation of the carrier of A
+  holds R|^(A,i+1) = R|^(A,i)|^A;
+
+theorem :: PUA2MSS1:19
+   for A being non-empty partial UAStr,
+     i,j being Nat,
+     R being Relation of the carrier of A
+  holds R|^(A,i+j) = R|^(A,i)|^(A,j);
+
+theorem :: PUA2MSS1:20
+ for A being non-empty partial UAStr
+ for R being Equivalence_Relation of the carrier of A st R c= DomRel A
+  holds R|^A is total symmetric transitive;
+
+theorem :: PUA2MSS1:21
+ for A being non-empty partial UAStr
+ for R being Relation of the carrier of A holds R|^A c= R;
+
+theorem :: PUA2MSS1:22
+ for A being non-empty partial UAStr
+ for R being Equivalence_Relation of the carrier of A st R c= DomRel A
+ for i being Nat holds R|^(A,i) is total symmetric transitive;
+
+definition
+ let A be non-empty partial UAStr;
+ func LimDomRel A -> Relation of the carrier of A means
+:: PUA2MSS1:def 8
+
+  for x,y being Element of A holds
+   [x,y] in it iff for i being Nat holds [x,y] in (DomRel A)|^(A,i);
+end;
+
+theorem :: PUA2MSS1:23
+ for A being non-empty partial UAStr holds LimDomRel A c= DomRel A;
+
+definition
+ let A be non-empty partial UAStr;
+ cluster LimDomRel A -> total symmetric transitive;
+end;
+
+
+begin :: Partitability
+
+definition
+ let X be non empty set;
+ let f be PartFunc of X*, X;
+ let P be a_partition of X;
+ pred f is_partitable_wrt P means
+:: PUA2MSS1:def 9
+
+  for p being FinSequence of P ex a being Element of P st f.:product p c= a;
+end;
+
+definition
+ let X be non empty set;
+ let f be PartFunc of X*, X;
+ let P be a_partition of X;
+ pred f is_exactly_partitable_wrt P means
+:: PUA2MSS1:def 10
+
+  f is_partitable_wrt P &
+  for p being FinSequence of P st product p meets dom f holds
+   product p c= dom f;
+end;
+
+theorem :: PUA2MSS1:24
+   for A being non-empty partial UAStr
+ for f being operation of A holds
+  f is_exactly_partitable_wrt SmallestPartition the carrier of A;
+
+
+
+scheme FiniteTransitivity
+ {x, y() -> FinSequence, P[set], R[set,set]}:
+ P[y()]
+ provided
+  P[x()]
+ and
+  len x() = len y()
+ and
+  for p,q being FinSequence, z1,z2 being set
+   st P[p^<*z1*>^q] & R[z1,z2] holds P[p^<*z2*>^q]
+ and
+  for i being Nat st i in dom x() holds R[x().i, y().i];
+
+theorem :: PUA2MSS1:25
+ for A being non-empty partial UAStr
+ for f being operation of A holds
+  f is_exactly_partitable_wrt Class LimDomRel A;
+
+definition
+ let A be partial non-empty UAStr;
+ mode a_partition of A -> a_partition of the carrier of A means
+:: PUA2MSS1:def 11
+
+  for f being operation of A holds f is_exactly_partitable_wrt it;
+end;
+
+definition
+ let A be partial non-empty UAStr;
+ mode IndexedPartition of A -> IndexedPartition of the carrier of A means
+:: PUA2MSS1:def 12
+
+  rng it is a_partition of A;
+end;
+
+definition
+ let A be partial non-empty UAStr;
+ let P be IndexedPartition of A;
+ redefine func rng P -> a_partition of A;
+end;
+
+theorem :: PUA2MSS1:26
+   for A being non-empty partial UAStr holds
+  Class LimDomRel A is a_partition of A;
+
+theorem :: PUA2MSS1:27
+ for X being non empty set, P being a_partition of X
+ for p being FinSequence of P, q1,q2 being FinSequence, x,y being set
+  st q1^<*x*>^q2 in product p & ex a being Element of P st x in a & y in a
+  holds q1^<*y*>^q2 in product p;
+
+theorem :: PUA2MSS1:28
+ for A being partial non-empty UAStr, P being a_partition of A holds
+  P is_finer_than Class LimDomRel A;
+
+
+begin :: Morphisms between manysorted signatures
+
+
+definition
+ let S1,S2 be ManySortedSign;
+ let f,g be Function;
+ pred f,g form_morphism_between S1,S2 means
+:: PUA2MSS1:def 13
+
+  dom f = the carrier of S1 & dom g = the OperSymbols of S1 &
+  rng f c= the carrier of S2 & rng g c= the OperSymbols of S2 &
+  f*the ResultSort of S1 = (the ResultSort of S2)*g &
+  for o being set, p being Function
+    st o in the OperSymbols of S1 & p = (the Arity of S1).o
+    holds f*p = (the Arity of S2).(g.o);
+end;
+
+theorem :: PUA2MSS1:29
+ for S being non void non empty ManySortedSign holds
+  id the carrier of S, id the OperSymbols of S form_morphism_between S,S;
+
+theorem :: PUA2MSS1:30
+ for S1,S2,S3 being ManySortedSign
+ for f1,f2, g1,g2 being Function st
+  f1, g1 form_morphism_between S1,S2 & f2, g2 form_morphism_between S2,S3
+ holds f2*f1, g2*g1 form_morphism_between S1,S3;
+
+
+definition
+ let S1,S2 be ManySortedSign;
+ pred S1 is_rougher_than S2 means
+:: PUA2MSS1:def 14
+    ex f,g being Function st f,g form_morphism_between S2,S1 &
+   rng f = the carrier of S1 & rng g = the OperSymbols of S1;
+end;
+
+definition
+ let S1,S2 be non void non empty ManySortedSign;
+ redefine pred S1 is_rougher_than S2;
+ reflexivity;
+end;
+
+theorem :: PUA2MSS1:31
+   for S1,S2,S3 being ManySortedSign
+   st S1 is_rougher_than S2 & S2 is_rougher_than S3
+   holds S1 is_rougher_than S3;
+
+
+begin :: Manysorted signature of partital algebra
+
+
+definition
+ let A be partial non-empty UAStr;
+ let P be a_partition of A;
+ func MSSign(A,P) -> strict ManySortedSign means
+:: PUA2MSS1:def 15
+
+  the carrier of it = P &
+  the OperSymbols of it =
+   {[o,p] where o is OperSymbol of A, p is Element of P*:
+    product p meets dom Den(o,A)} &
+  for o being OperSymbol of A, p being Element of P*
+   st product p meets dom Den(o,A)
+   holds (the Arity of it).[o,p] = p &
+         Den(o, A).:product p c= (the ResultSort of it).[o,p];
+end;
+
+definition
+ let A be partial non-empty UAStr;
+ let P be a_partition of A;
+ cluster MSSign(A,P) -> non empty non void;
+end;
+
+definition
+ let A be partial non-empty UAStr;
+ let P be a_partition of A;
+ let o be OperSymbol of MSSign(A,P);
+ redefine
+  func o`1 -> OperSymbol of A;
+  func o`2 -> Element of P*;
+end;
+
+definition
+ let A be partial non-empty UAStr;
+ let S be non void non empty ManySortedSign;
+ let G be MSAlgebra over S;
+ let P be IndexedPartition of the OperSymbols of S;
+ pred A can_be_characterized_by S,G,P means
+:: PUA2MSS1:def 16
+
+   the Sorts of G is IndexedPartition of A &
+   dom P = dom the charact of A &
+   for o being OperSymbol of A holds
+    (the Charact of G)|(P.o) is IndexedPartition of Den(o, A);
+end;
+
+definition
+ let A be partial non-empty UAStr;
+ let S be non void non empty ManySortedSign;
+ pred A can_be_characterized_by S means
+:: PUA2MSS1:def 17
+    ex G being MSAlgebra over S,
+     P being IndexedPartition of the OperSymbols of S st
+   A can_be_characterized_by S,G,P;
+end;
+
+theorem :: PUA2MSS1:32
+   for A being partial non-empty UAStr, P being a_partition of A
+  holds A can_be_characterized_by MSSign(A, P);
+
+theorem :: PUA2MSS1:33
+ for A being partial non-empty UAStr
+ for S being non void non empty ManySortedSign
+ for G being MSAlgebra over S
+ for Q being IndexedPartition of the OperSymbols of S
+     st A can_be_characterized_by S,G,Q
+ for o being OperSymbol of A, r being FinSequence of rng the Sorts of G
+     st product r c= dom Den(o,A)
+ ex s being OperSymbol of S st
+  (the Sorts of G)*the_arity_of s = r & s in Q.o;
+
+theorem :: PUA2MSS1:34
+   for A being partial non-empty UAStr, P being a_partition of A
+  st P = Class LimDomRel A
+ for S being non void non empty ManySortedSign st A can_be_characterized_by S
+  holds MSSign(A,P) is_rougher_than S;
+
+

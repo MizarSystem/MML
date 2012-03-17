@@ -1,0 +1,94 @@
+:: Correctness of Binary Counter Circuits
+::  by Yuguang Yang , Wasaki Katsumi , Yasushi Fuwa and Yatsuka Nakamura
+::
+:: Received March 13, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary GATE_1;
+ notation GATE_1;
+ constructors GATE_1, XBOOLE_0;
+ requirements BOOLE;
+
+
+begin :: Correctness of Binary Counter Circuits
+reserve a,b,c,d for set;
+
+::Correctness of 3-bit binary counter without reset input
+::state transition: s0 (000) -> s1 (001)-> s2 (010) -> ... ->s7 (111) -> s0 (000).
+
+theorem :: GATE_2:1
+  for s0,s1,s2,s3,s4,s5,s6,s7,ns0,ns1,ns2,ns3,ns4,ns5,ns6,ns7,q1,q2,q3,nq1,
+nq2,nq3 being set holds
+  ($s0 iff $AND3(NOT1 q3,NOT1 q2,NOT1 q1))&
+  ($s1 iff $AND3(NOT1 q3,NOT1 q2,q1))&
+  ($s2 iff $AND3(NOT1 q3,q2,NOT1 q1))&
+  ($s3 iff $AND3(NOT1 q3,q2,q1))&
+  ($s4 iff $AND3(q3,NOT1 q2,NOT1 q1))&
+  ($s5 iff $AND3(q3,NOT1 q2,q1))&
+  ($s6 iff $AND3(q3,q2,NOT1 q1))&
+  ($s7 iff $AND3(q3,q2,q1))&
+  ($ns0 iff $AND3(NOT1 nq3,NOT1 nq2,NOT1 nq1))&
+  ($ns1 iff $AND3(NOT1 nq3,NOT1 nq2,nq1))&
+  ($ns2 iff $AND3(NOT1 nq3,nq2,NOT1 nq1))&
+  ($ns3 iff $AND3(NOT1 nq3,nq2,nq1))&
+  ($ns4 iff $AND3(nq3,NOT1 nq2,NOT1 nq1))&
+  ($ns5 iff $AND3(nq3,NOT1 nq2,nq1))&
+  ($ns6 iff $AND3(nq3,nq2,NOT1 nq1))&
+  ($ns7 iff $AND3(nq3,nq2,nq1))&
+  ($nq1 iff $(NOT1 q1))&
+  ($nq2 iff $XOR2(q1,q2))&
+  ($nq3 iff $OR2(AND2(q3, NOT1 q1), AND2(q1, XOR2(q2,q3))))
+implies ($ns1 iff $s0)&
+  ($ns2 iff $s1)&
+  ($ns3 iff $s2)&
+  ($ns4 iff $s3)&
+  ($ns5 iff $s4)&
+  ($ns6 iff $s5)&
+  ($ns7 iff $s6)&
+  ($ns0 iff $s7);
+
+theorem :: GATE_2:2
+  $AND3(AND2(a,d),AND2(b,d),AND2(c,d)) iff $AND2(AND3(a,b,c),d);
+
+theorem :: GATE_2:3
+  (not $AND2(a,b) iff $OR2(NOT1 a, NOT1 b))&
+( $OR2(a,b) & $OR2(c,b) iff $OR2(AND2(a,c),b)) &
+($OR2(a,b) & $OR2(c,b) & $OR2(d,b) iff $OR2(AND3(a,c,d),b))&
+($OR2(a,b) & ($a iff $c) implies $OR2(c,b) );
+
+::Correctness of 3-bit binary counter with  reset input R
+::initial state s*(xxx) -> s0(000) [reset]
+::state transition: s0 (000) -> s1 (001)-> s2 (010) -> ... ->s7 (111) -> s0 (000).
+
+theorem :: GATE_2:4
+  for s0,s1,s2,s3,s4,s5,s6,s7,ns0,ns1,ns2,ns3,ns4,ns5,ns6,ns7,q1,q2,q3,nq1,
+nq2,nq3,R being set holds
+  ($s0 iff $AND3(NOT1 q3,NOT1 q2,NOT1 q1))&
+  ($s1 iff $AND3(NOT1 q3,NOT1 q2,q1))&
+  ($s2 iff $AND3(NOT1 q3,q2,NOT1 q1))&
+  ($s3 iff $AND3(NOT1 q3,q2,q1))&
+  ($s4 iff $AND3(q3,NOT1 q2,NOT1 q1))&
+  ($s5 iff $AND3(q3,NOT1 q2,q1))&
+  ($s6 iff $AND3(q3,q2,NOT1 q1))&
+  ($s7 iff $AND3(q3,q2,q1))&
+  ($ns0 iff $AND3(NOT1 nq3,NOT1 nq2,NOT1 nq1))&
+  ($ns1 iff $AND3(NOT1 nq3,NOT1 nq2,nq1))&
+  ($ns2 iff $AND3(NOT1 nq3,nq2,NOT1 nq1))&
+  ($ns3 iff $AND3(NOT1 nq3,nq2,nq1))&
+  ($ns4 iff $AND3(nq3,NOT1 nq2,NOT1 nq1))&
+  ($ns5 iff $AND3(nq3,NOT1 nq2,nq1))&
+  ($ns6 iff $AND3(nq3,nq2,NOT1 nq1))&
+  ($ns7 iff $AND3(nq3,nq2,nq1))&
+  ($nq1 iff $AND2(NOT1 q1,R))&
+  ($nq2 iff $AND2(XOR2(q1,q2),R))&
+  ($nq3 iff $AND2(OR2(AND2(q3, NOT1 q1), AND2(q1, XOR2(q2,q3))),R))
+implies ($ns1 iff $AND2(s0,R))&
+  ($ns2 iff $AND2(s1,R))&
+  ($ns3 iff $AND2(s2,R))&
+  ($ns4 iff $AND2(s3,R))&
+  ($ns5 iff $AND2(s4,R))&
+  ($ns6 iff $AND2(s5,R))&
+  ($ns7 iff $AND2(s6,R))&
+  ($ns0 iff $OR2(s7,NOT1 R));

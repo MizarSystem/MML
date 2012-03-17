@@ -1,0 +1,898 @@
+:: The Correspondence Between Homomorphisms of Universal Algebra &
+:: Many Sorted Algebra
+::  by Adam Grabowski
+::
+:: Received December 13, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary UNIALG_1, FUNCT_1, RELAT_1, FINSEQ_1, PRALG_1, PBOOLE, TDGROUP,
+      CARD_3, FINSEQ_2, MSUALG_1, BOOLE, CAT_1, AMI_1, ZF_REFLE, CQC_SIM1,
+      FUNCOP_1, UNIALG_2, QC_LANG1, ALG_1, GROUP_6, MSUALG_3, MSUHOM_1,
+      FINSEQ_4;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XREAL_0, NAT_1, RELAT_1, FUNCT_1,
+      RELSET_1, STRUCT_0, PARTFUN1, FUNCT_2, PBOOLE, CARD_3, CQC_LANG,
+      UNIALG_1, FINSEQ_1, UNIALG_2, PRALG_1, FINSEQ_2, FINSEQ_4, TOPREAL1,
+      ALG_1, MSUALG_3, PRE_CIRC, MSUALG_1;
+ constructors XREAL_0, CQC_LANG, ALG_1, MSUALG_3, PRE_CIRC, FINSEQ_4, FINSEQOP,
+      XCMPLX_0, MEMBERED, XBOOLE_0;
+ clusters MSUALG_1, MSUALG_3, PRE_CIRC, FUNCT_1, RELSET_1, STRUCT_0, CQC_LANG,
+      ARYTM_3, MEMBERED, ZFMISC_1, FUNCT_2, PARTFUN1, XBOOLE_0, SUBSET_1,
+      NUMBERS, ORDINAL2;
+ requirements NUMERALS, SUBSET, BOOLE;
+ definitions ALG_1, MSUALG_3, TARSKI;
+ theorems TARSKI, FINSEQ_2, MSUALG_1, UNIALG_2, MSUALG_3, CQC_LANG, FINSEQ_1,
+      FINSEQ_4, FUNCT_1, FUNCT_2, ALG_1, UNIALG_1, PBOOLE, PRALG_1, FUNCOP_1,
+      MONOID_1, CARD_3, RELAT_1, XBOOLE_0, XBOOLE_1;
+
+begin
+
+ reserve U1,U2,U3 for Universal_Algebra,
+         m,n for Nat,
+         a for set,
+         A for non empty set,
+         h for Function of U1,U2;
+
+theorem Th1:
+ for f,g be Function, C be set st rng f c= C holds (g|C)*f = g*f
+  proof
+   let f,g be Function, C be set such that A1: rng f c= C;
+     (g|C)*f = g*(C|f) by MONOID_1:2
+          .= g*f by A1,RELAT_1:125;
+   hence thesis;
+  end;
+
+theorem Th2:
+ for I be set, C be Subset of I holds C* c= I*
+  proof
+   let I be set, C be Subset of I;
+   thus C* c= I*
+   proof
+     let a; assume a in C*;
+     then reconsider p = a as FinSequence of C by FINSEQ_1:def 11;
+       rng p c= I by XBOOLE_1:1;
+     then p is FinSequence of I by FINSEQ_1:def 4;
+     hence thesis by FINSEQ_1:def 11;
+   end;
+  end;
+
+theorem
+   for f be Function, C be set st f is Function-yielding holds
+  f|C is Function-yielding
+  proof
+    let f be Function, C be set such that
+A1:   f is Function-yielding;
+      now let i be set such that A2: i in dom (f|C);
+        dom (f|C) c= dom f by FUNCT_1:76;
+      then f.i is Function by A1,A2,PRALG_1:def 15;
+      hence (f|C).i is Function by A2,FUNCT_1:70;
+    end;
+    hence thesis by PRALG_1:def 15;
+  end;
+
+theorem Th4:
+ for I be set, C be Subset of I, M be ManySortedSet of I holds (M|C)# = M#|(C*)
+  proof
+   let I be set, C be Subset of I, M be ManySortedSet of I;
+A1: dom (M# ) = I* by PBOOLE:def 3;
+A2: C* c= I* by Th2;
+   then dom (M#|(C*)) = C* by A1,RELAT_1:91;
+   then reconsider D = M#|(C*) as ManySortedSet of C* by PBOOLE:def 3;
+     for i being Element of C* holds (M#|(C*)).i = product((M|C)*i)
+   proof
+    let i be Element of C*;
+      i in C*;
+then A3: i in dom D by PBOOLE:def 3;
+A4: i in I* by A2,TARSKI:def 3;
+A5: rng i c= C;
+      a in (D.i) iff ex g be Function st a = g & dom g = dom ((M|C)*i) &
+      for a st a in dom ((M|C)*i) holds g.a in ((M|C)*i).a
+    proof
+     hereby assume a in (D.i);
+       then a in M#.i by A3,FUNCT_1:70;
+       then a in product(M*i) by A4,MSUALG_1:def 3;
+       then consider g be Function such that
+       A6: a = g and
+       A7: dom g = dom (M*i) and
+       A8: for x be set st x in dom (M*i) holds g.x in (M*i).x by CARD_3:def 5;
+       take g;
+       thus a = g by A6;
+          rng i c= C;
+        hence dom g = dom ((M|C)*i) by A7,Th1;
+       thus for a st a in dom ((M|C)*i) holds g.a in ((M|C)*i).a
+       proof
+         let a such that A9: a in dom ((M|C)*i);
+         A10: rng i c= C;
+         then a in dom (M*i) by A9,Th1;
+         then g.a in (M*i).a by A8;
+         hence g.a in ((M|C)*i).a by A10,Th1;
+       end;
+     end;
+     given g be Function such that
+     A11: a = g and
+     A12: dom g = dom ((M|C)*i) and
+     A13: for a st a in dom ((M|C)*i) holds g.a in ((M|C)*i).a;
+A14:  dom g = dom (M*i) by A5,A12,Th1;
+   for a st a in dom (M*i) holds g.a in (M*i).a
+     proof
+       let a; assume a in dom (M*i);
+       then a in dom ((M|C)*i) by A5,Th1;
+       then g.a in ((M|C)*i).a by A13;
+       hence g.a in (M*i).a by A5,Th1;
+     end;
+     then a in product(M*i) by A11,A14,CARD_3:def 5;
+     then a in M#.i by A4,MSUALG_1:def 3;
+     hence a in (D.i) by A3,FUNCT_1:70;
+    end;
+    hence thesis by CARD_3:def 5;
+   end;
+   hence (M|C)# = D by MSUALG_1:def 3
+    .= M#|(C*);
+  end;
+
+definition let A, n; let a be Element of A;
+ redefine func n |-> a -> FinSequence of A;
+ coherence by FINSEQ_2:77;
+end;
+
+definition
+  let S,S' be non empty ManySortedSign;
+  pred S <= S' means :Def1:
+   the carrier of S c= the carrier of S' &
+   the OperSymbols of S c= the OperSymbols of S' &
+   (the Arity of S')|the OperSymbols of S = the Arity of S &
+   (the ResultSort of S')|the OperSymbols of S = the ResultSort of S;
+  reflexivity
+  proof
+   let S be non empty ManySortedSign;
+A1: dom (the Arity of S) = the OperSymbols of S by FUNCT_2:def 1;
+     dom (the ResultSort of S) = the OperSymbols of S by FUNCT_2:def 1;
+   hence thesis by A1,RELAT_1:97;
+  end;
+end;
+
+theorem
+   for S,S',S'' be non empty ManySortedSign st S <= S' & S' <= S'' holds S <=
+S''
+proof
+  let S,S',S'' be non empty ManySortedSign;
+  assume that A1: S <= S' and A2: S' <= S'';
+A3: the carrier of S c= the carrier of S' &
+    the OperSymbols of S c= the OperSymbols of S' &
+    (the Arity of S')|the OperSymbols of S = the Arity of S &
+    (the ResultSort of S')|the OperSymbols of S = the ResultSort of S
+        by A1,Def1;
+A4: the carrier of S' c= the carrier of S'' &
+    the OperSymbols of S' c= the OperSymbols of S'' &
+    (the Arity of S'')|the OperSymbols of S' = the Arity of S' &
+    (the ResultSort of S'')|the OperSymbols of S' = the ResultSort of S'
+        by A2,Def1;
+  hence the carrier of S c= the carrier of S'' by A3,XBOOLE_1:1;
+  thus the OperSymbols of S c= the OperSymbols of S'' by A3,A4,XBOOLE_1:1;
+  thus (the Arity of S'')|the OperSymbols of S =
+    (the Arity of S'')|((the OperSymbols of S')/\(the OperSymbols of S))
+      by A3,XBOOLE_1:28
+     .= ((the Arity of S'')|the OperSymbols of S')|the OperSymbols of S
+        by RELAT_1:100
+     .= (the Arity of S')|the OperSymbols of S by A2,Def1
+     .= the Arity of S by A1,Def1;
+  thus (the ResultSort of S'')|the OperSymbols of S =
+    (the ResultSort of S'')|((the OperSymbols of S') /\ (the OperSymbols of S))
+        by A3,XBOOLE_1:28
+    .= ((the ResultSort of S'')|the OperSymbols of S')|the OperSymbols of S
+        by RELAT_1:100
+    .= (the ResultSort of S')|the OperSymbols of S by A2,Def1
+    .= the ResultSort of S by A1,Def1;
+ end;
+
+theorem
+   for S,S' be strict non empty ManySortedSign st S <= S' & S' <= S holds S =
+S'
+proof
+  let S,S' be strict non empty ManySortedSign;
+  assume that A1: S <= S' and A2: S' <= S;
+A3: the carrier of S c= the carrier of S' &
+    the OperSymbols of S c= the OperSymbols of S' &
+    (the Arity of S')|the OperSymbols of S = the Arity of S &
+    (the ResultSort of S')|the OperSymbols of S = the ResultSort of S
+        by A1,Def1;
+A4: the carrier of S' c= the carrier of S &
+    the OperSymbols of S' c= the OperSymbols of S &
+    (the Arity of S)|the OperSymbols of S' = the Arity of S' &
+    (the ResultSort of S)|the OperSymbols of S' = the ResultSort of S'
+        by A2,Def1;
+A5: dom (the Arity of S') = the OperSymbols of S' by FUNCT_2:def 1;
+A6:  dom (the ResultSort of S') = the OperSymbols of S' by FUNCT_2:def 1;
+A7: the OperSymbols of S = the OperSymbols of S' by A3,A4,XBOOLE_0:def 10;
+A8: the Arity of S = the Arity of S' by A3,A4,A5,RELAT_1:97;
+      the ResultSort of S = the ResultSort of S' by A3,A4,A6,RELAT_1:97;
+    hence thesis by A3,A4,A7,A8,XBOOLE_0:def 10;
+ end;
+
+theorem
+   for g be Function, a be Element of A
+  for k be Nat st 1 <= k & k <= n holds
+    (a .--> g).((n |-> a)/.k) = g
+proof
+   let g be Function;
+   let a be Element of A;
+   let k be Nat; assume 1 <= k & k <= n;
+then A1: k in Seg n by FINSEQ_1:3;
+   then k in dom (n |-> a) by FINSEQ_2:68;
+   then (n |-> a)/.k = (n |-> a).k by FINSEQ_4:def 4
+    .= a by A1,FINSEQ_2:70;
+   hence (a .--> g).((n |-> a)/.k) = g by CQC_LANG:6;
+end;
+
+theorem Th8:
+ for I be set,I0 be Subset of I, A,B be ManySortedSet of I,
+     F be ManySortedFunction of A,B
+  for A0,B0 be ManySortedSet of I0 st A0 = A | I0 & B0 = B | I0 holds
+    F|I0 is ManySortedFunction of A0,B0
+    proof
+     let I be set, I0 be Subset of I, A,B be ManySortedSet of I,
+         F be ManySortedFunction of A,B;
+     let A0,B0 be ManySortedSet of I0 such that A1: A0 = A | I0 & B0 = B | I0;
+A2:  dom A0 = I0 by PBOOLE:def 3;
+A3:  dom B0 = I0 by PBOOLE:def 3;
+A4:   dom (F|I0) = I0 by PBOOLE:def 3;
+       now let i be set; assume A5: i in I0;
+       then (F|I0).i = F.i by A4,FUNCT_1:70;
+       hence (F|I0).i is Function by A5,MSUALG_1:def 2;
+     end;
+     then reconsider G = F|I0 as ManySortedFunction of I0
+       by A4,PRALG_1:def 15;
+       now let i be set; assume A6: i in I0;
+       then A7:  G.i = F.i by A4,FUNCT_1:70;
+         A.i = A0.i & B.i = B0.i by A1,A2,A3,A6,FUNCT_1:70;
+       hence G.i is Function of A0.i,B0.i by A6,A7,MSUALG_1:def 2;
+     end;
+     hence thesis by MSUALG_1:def 2;
+    end;
+
+definition let S,S' be strict non void non empty ManySortedSign;
+ let A be non-empty strict MSAlgebra over S';
+ assume A1: S <= S';
+ func A Over S -> non-empty strict MSAlgebra over S means :Def2:
+  the Sorts of it = (the Sorts of A)|the carrier of S &
+  the Charact of it = (the Charact of A)|the OperSymbols of S;
+ existence
+   proof
+    set C = (the Sorts of A)|the carrier of S;
+    set D = (the Charact of A)|the OperSymbols of S;
+A2: the carrier of S c= the carrier of S' by A1,Def1;
+A3: the OperSymbols of S c= the OperSymbols of S' by A1,Def1;
+      the carrier of S c= dom (the Sorts of A) by A2,PBOOLE:def 3;
+    then dom C = the carrier of S by RELAT_1:91;
+    then reconsider C as ManySortedSet of the carrier of S by PBOOLE:def 3;
+      the OperSymbols of S c= dom (the Charact of A) by A3,PBOOLE:def 3;
+    then dom D = the OperSymbols of S by RELAT_1:91;
+    then reconsider D as ManySortedSet of the OperSymbols of S by PBOOLE:def 3;
+A4: rng (the Arity of S) c= (the carrier of S)*;
+A5: C# * the Arity of S
+     = ((the Sorts of A)#|((the carrier of S)*)) * the Arity of S by A2,Th4
+    .= (the Sorts of A)# * (the Arity of S) by A4,Th1
+    .= (the Sorts of A)# * ((the Arity of S')|the OperSymbols of S) by A1,Def1
+    .= ((the Sorts of A)# * the Arity of S')|the OperSymbols of S
+        by RELAT_1:112;
+    rng (the ResultSort of S) c= the carrier of S;
+then C * the ResultSort of S
+       = (the Sorts of A) * the ResultSort of S by Th1
+      .= (the Sorts of A) * ((the ResultSort of S')|the OperSymbols of S)
+         by A1,Def1
+      .= ((the Sorts of A) * the ResultSort of S')|the OperSymbols of S
+         by RELAT_1:112;
+  then reconsider D as ManySortedFunction of
+       C# * the Arity of S, C * the ResultSort of S by A3,A5,Th8;
+     reconsider B = MSAlgebra(#C,D#) as non-empty strict MSAlgebra over S
+       by MSUALG_1:def 8;
+     take B;
+    thus thesis;
+  end;
+ uniqueness;
+end;
+
+theorem Th9:
+ for S be strict non void non empty ManySortedSign,
+     A be non-empty strict MSAlgebra over S holds A = A Over S
+  proof
+    let S be strict non void non empty ManySortedSign;
+    let A be non-empty strict MSAlgebra over S;
+A1:  the carrier of S = dom (the Sorts of A) by PBOOLE:def 3;
+A2:  the OperSymbols of S = dom (the Charact of A) by PBOOLE:def 3;
+A3:  the Sorts of A Over S = (the Sorts of A)|the carrier of S by Def2
+      .= the Sorts of A by A1,RELAT_1:97;
+     the Charact of A Over S = (the Charact of A)|the OperSymbols of S by Def2
+      .= the Charact of A by A2,RELAT_1:97;
+    hence A = A Over S by A3;
+  end;
+
+theorem Th10:
+ for U1,U2 st U1,U2 are_similar holds MSSign U1 = MSSign U2
+proof
+  let U1,U2 such that A1: U1,U2 are_similar;
+    reconsider f = (*-->0)*(signature U1) as
+        Function of dom signature(U1), {0}* by MSUALG_1:7;
+A2: the carrier of MSSign U1 = {0} &
+    the OperSymbols of MSSign U1 = dom signature U1 &
+    the Arity of MSSign U1 = f &
+    the ResultSort of MSSign U1 = dom signature U1-->0 by MSUALG_1:def 13;
+    reconsider f = (*-->0)*(signature U2) as
+        Function of dom signature(U2), {0}* by MSUALG_1:7;
+A3: the carrier of MSSign U2 = {0} &
+    the OperSymbols of MSSign U2 = dom signature U2 &
+    the Arity of MSSign U2 = f &
+    the ResultSort of MSSign U2 = dom signature U2-->0 by MSUALG_1:def 13;
+   then the OperSymbols of MSSign U1
+     = the OperSymbols of MSSign U2 by A1,A2,UNIALG_2:def 2;
+ hence MSSign U1 = MSSign U2 by A1,A2,A3,UNIALG_2:def 2;
+ end;
+
+definition let U1,U2 be Universal_Algebra, h be Function of U1,U2;
+ assume A1:  MSSign U1 = MSSign U2;
+ func MSAlg h -> ManySortedFunction of MSAlg U1, ((MSAlg U2) Over MSSign U1)
+ equals :Def3:  {0} --> h;
+ coherence
+   proof
+    set f = {0} --> h;
+A2: f = 0 .--> h by CQC_LANG:def 2;
+then A3: dom f = {0} by CQC_LANG:5;
+A4: 0 in {0} by TARSKI:def 1;
+      f.0 = h by A2,CQC_LANG:6;
+    then for x be set st x in dom f holds f.x is Function by TARSKI:def 1;
+    then A5: f is ManySortedFunction of {0} by A3,PBOOLE:def 3,PRALG_1:def 15;
+      MSAlg U1 = MSAlgebra(#MSSorts U1,MSCharact U1#) by MSUALG_1:def 16;
+then A6: (the Sorts of MSAlg U1).0 =
+ ({0} --> the carrier of U1).0 by MSUALG_1:def 14
+     .= the carrier of U1 by A4,FUNCOP_1:13;
+      MSAlg U2 = MSAlgebra(#MSSorts U2,MSCharact U2#) by MSUALG_1:def 16;
+then A7: (the Sorts of MSAlg U2).0 =
+ ({0} --> the carrier of U2).0 by MSUALG_1:def 14
+     .= the carrier of U2 by A4,FUNCOP_1:13;
+A8: now let a; assume a in {0};
+      then a = 0 by TARSKI:def 1;
+      hence f.a is Function of
+        (the Sorts of MSAlg U1).a,(the Sorts of MSAlg U2).a by A2,A6,A7,
+CQC_LANG:6;
+    end;
+    reconsider g = (*-->0)*(signature U1) as
+        Function of dom signature(U1), {0}* by MSUALG_1:7;
+    A9: the carrier of MSSign U1 = {0} &
+    the OperSymbols of MSSign U1 = dom signature U1 &
+    the Arity of MSSign U1 = g &
+    the ResultSort of MSSign U1 = dom signature U1-->0 by MSUALG_1:def 13;
+    reconsider Z1 = the Sorts of MSAlg U1 as ManySortedSet of {0} by MSUALG_1:
+def 13;
+    reconsider Z2 = the Sorts of MSAlg U2 as ManySortedSet of {0} by MSUALG_1:
+def 13;
+      f is ManySortedFunction of Z1,Z2 by A5,A8,MSUALG_1:def 2; hence thesis
+by A1,A9,Th9;
+   end;
+end;
+
+theorem Th11:
+ for U1,U2,h st U1,U2 are_similar
+  for o be OperSymbol of MSSign U1
+    holds ((MSAlg h).(the_result_sort_of o)) = h
+    proof
+       let U1,U2,h such that A1: U1,U2 are_similar;
+       let o be OperSymbol of MSSign U1;
+       set f = MSAlg h;
+A2:    MSSign U1 = MSSign U2 by A1,Th10;
+A3:    0 in {0} by TARSKI:def 1;
+    reconsider f1 = (*-->0)*(signature U2) as
+        Function of dom signature(U2), {0}* by MSUALG_1:7;
+    A4: the carrier of MSSign U2 = {0} &
+    the OperSymbols of MSSign U2 = dom signature U2 &
+    the Arity of MSSign U2 = f1 &
+    the ResultSort of MSSign U2 = dom signature U2-->0 by MSUALG_1:def 13;
+    reconsider f2 = (*-->0)*(signature U1) as
+        Function of dom signature(U1), {0}* by MSUALG_1:7;
+    A5: the carrier of MSSign U1 = {0} &
+    the OperSymbols of MSSign U1 = dom signature U1 &
+    the Arity of MSSign U1 = f2 &
+    the ResultSort of MSSign U1 = dom signature U1-->0 by MSUALG_1:def 13;
+A6:    the OperSymbols of MSSign U2 <> {} by MSUALG_1:def 5;
+     o is Element of the OperSymbols of MSSign U2 by A1,Th10;
+then A7:    o in dom signature U2 by A4,A6;
+       consider n such that A8: the OperSymbols of MSSign U1 = Seg n
+        by MSUALG_1:def 12;
+  o in Seg n by A1,A5,A7,A8,UNIALG_2:def 2;
+then A9:   (n |-> 0).o = 0 by FINSEQ_2:70;
+       thus (f.(the_result_sort_of o)) = (f.((the ResultSort of MSSign U1).o))
+        by MSUALG_1:def 7
+        .= (( {0} --> h ).((dom signature U1 --> 0).o)) by A2,A5,Def3
+        .= (( {0} --> h ).0 ) by A5,A8,A9,FINSEQ_2:def 2
+        .= h by A3,FUNCOP_1:13;
+      end;
+
+theorem Th12:
+ for o be OperSymbol of MSSign U1 holds
+  Den(o,MSAlg U1) = (the charact of U1).o
+  proof
+   let o be OperSymbol of MSSign U1;
+  MSAlg U1 = MSAlgebra(#MSSorts U1,MSCharact U1#) by MSUALG_1:def 16;
+   hence Den(o,MSAlg U1) = ((MSCharact U1).o) by MSUALG_1:def 11
+    .= ((the charact of U1).o) by MSUALG_1:def 15;
+  end;
+
+Lm1: for U1 be Universal_Algebra holds
+    dom signature U1 = dom the charact of U1
+    proof let U1 be Universal_Algebra;
+     thus dom signature U1 = Seg len signature U1 by FINSEQ_1:def 3
+     .= Seg len the charact of U1 by UNIALG_1:def 11
+     .= dom the charact of U1 by FINSEQ_1:def 3;
+    end;
+
+theorem Th13:
+ for o be OperSymbol of MSSign U1 holds
+  Den(o,MSAlg U1) is operation of U1
+  proof
+   let o be OperSymbol of MSSign U1;
+A1:Den(o,MSAlg U1) = (the charact of U1).o by Th12;
+A2:the OperSymbols of MSSign U1 <> {} by MSUALG_1:def 5;
+    reconsider f = (*-->0)*(signature U1) as
+        Function of dom signature(U1), {0}* by MSUALG_1:7;
+    A3: the carrier of MSSign U1 = {0} &
+    the OperSymbols of MSSign U1 = dom signature U1 &
+    the Arity of MSSign U1 = f &
+    the ResultSort of MSSign U1 = dom signature U1-->0 by MSUALG_1:def 13;
+     dom signature U1 = dom the charact of U1 by Lm1;
+   hence Den(o,MSAlg U1) is operation of U1 by A1,A2,A3,UNIALG_2:6;
+  end;
+
+Lm2:
+ for U1,U2 st U1,U2 are_similar
+  for o be OperSymbol of MSSign U1 holds
+   Den(o,MSAlg U2 Over MSSign U1) is operation of U2
+  proof
+   let U1,U2; assume A1: U1,U2 are_similar;
+then A2: signature U1 = signature U2 by UNIALG_2:def 2;
+   let o be OperSymbol of MSSign U1;
+   set A = MSAlg U2 Over MSSign U1;
+A3:MSSign U1 = MSSign U2 by A1,Th10;
+A4:MSAlg U2 = MSAlgebra(#MSSorts U2,MSCharact U2#) by MSUALG_1:def 16;
+A5:Den(o,A) = ((the Charact of A).o) by MSUALG_1:def 11
+       .= ((MSCharact U2).o) by A3,A4,Th9
+       .= ((the charact of U2).o) by MSUALG_1:def 15;
+A6:the OperSymbols of MSSign U1 <> {} by MSUALG_1:def 5;
+    reconsider f = (*-->0)*(signature U1) as
+        Function of dom signature(U1), {0}* by MSUALG_1:7;
+    A7: the carrier of MSSign U1 = {0} &
+    the OperSymbols of MSSign U1 = dom signature U1 &
+    the Arity of MSSign U1 = f &
+    the ResultSort of MSSign U1 = dom signature U1-->0 by MSUALG_1:def 13;
+A8:dom signature U1 = dom the charact of U1 by Lm1;
+   then dom the charact of U1 = dom the charact of U2 by A2,Lm1;
+   hence Den(o,A) is operation of U2 by A5,A6,A7,A8,UNIALG_2:6;
+  end;
+
+theorem Th14:
+ for o be OperSymbol of MSSign U1
+  for y be Element of Args(o,MSAlg U1) holds
+    y is FinSequence of the carrier of U1
+    proof
+     let o be OperSymbol of MSSign U1;
+     let y be Element of Args(o,MSAlg U1);
+     set O1 = Den(o,MSAlg U1);
+A1:  O1 = (the charact of U1).o by Th12;
+    reconsider f = (*-->0)*(signature U1) as
+        Function of dom signature(U1), {0}* by MSUALG_1:7;
+    A2: the carrier of MSSign U1 = {0} &
+    the OperSymbols of MSSign U1 = dom signature U1 &
+    the Arity of MSSign U1 = f &
+    the ResultSort of MSSign U1 = dom signature U1-->0 by MSUALG_1:def 13;
+     A3: the OperSymbols of MSSign U1 <> {} by MSUALG_1:def 5;
+   dom signature U1 = dom the charact of U1 by Lm1;
+     then reconsider O1 as operation of U1 by A1,A2,A3,UNIALG_2:6;
+       Args(o,MSAlg U1) = dom O1 by FUNCT_2:def 1;
+     then y in (the carrier of U1)* by TARSKI:def 3;
+     hence y is FinSequence of the carrier of U1 by FINSEQ_1:def 11;
+    end;
+
+theorem Th15:
+ for U1,U2,h st U1,U2 are_similar
+  for o be OperSymbol of MSSign U1,y be Element of Args(o,MSAlg U1)
+      holds (MSAlg h)#y = h * y
+  proof
+      let U1,U2,h; assume A1: U1,U2 are_similar;
+then A2:    MSSign U1 = MSSign U2 by Th10;
+A3:   0 in {0} by TARSKI:def 1;
+      set f = MSAlg h;
+      let o be OperSymbol of MSSign U1;
+      let y be Element of Args(o,MSAlg U1);
+    reconsider f1 = (*-->0)*(signature U1) as
+        Function of dom signature(U1), {0}* by MSUALG_1:7;
+    A4: the carrier of MSSign U1 = {0} &
+    the OperSymbols of MSSign U1 = dom signature U1 &
+    the Arity of MSSign U1 = f1 &
+    the ResultSort of MSSign U1 = dom signature U1-->0 by MSUALG_1:def 13;
+then A5:    the_arity_of o = ((*-->0)*(signature U1)).o by MSUALG_1:def 6;
+    reconsider f2 = (*-->0)*(signature U2) as
+        Function of dom signature(U2), {0}* by MSUALG_1:7;
+    A6: the carrier of MSSign U2 = {0} &
+    the OperSymbols of MSSign U2 = dom signature U2 &
+    the Arity of MSSign U2 = f2 &
+    the ResultSort of MSSign U2 = dom signature U2-->0 by MSUALG_1:def 13;
+        the OperSymbols of MSSign U1 <> {} by MSUALG_1:def 5;
+      then o in dom signature U2 by A2,A6;
+then A7: o in dom signature U1 by A1,UNIALG_2:def 2;
+      then o in dom f1 by FUNCT_2:def 1;
+then A8:    ((*-->0)*(signature U1)).o = (*-->0).((signature U1).o) by FUNCT_1:
+22;
+        (signature U1).o in rng signature U1 by A7,FUNCT_1:def 5;
+      then consider n such that A9: n = ((signature U1).o);
+A10:now let m; assume m in dom y;
+then A11:   m in dom (the_arity_of o) by MSUALG_3:6;
+         0 is Element of {0} by TARSKI:def 1;
+       then n |-> 0 is FinSequence of {0} by FINSEQ_2:77;
+       then reconsider l = n |-> 0 as Element of (the carrier of MSSign U1)*
+         by A4,FINSEQ_1:def 11;
+A12:  m in dom (n |-> 0) by A5,A8,A9,A11,MSUALG_1:def 4;
+A13: (the_arity_of o)/.m = l/.m by A5,A8,A9,MSUALG_1:def 4;
+A14: l/.m = l.m by A12,FINSEQ_4:def 4;
+         dom (n |-> 0) = Seg n by FINSEQ_2:68;
+       then (the_arity_of o)/.m = 0 by A12,A13,A14,FINSEQ_2:70;
+       hence (f.((the_arity_of o)/.m)) = (( {0} --> h ).0) by A2,Def3
+            .= h by A3,FUNCOP_1:13;
+      end;
+A15:   y is FinSequence of the carrier of U1 by Th14;
+then A16:   rng y c= the carrier of U1 by FINSEQ_1:def 4;
+A17:   dom y = dom (the_arity_of o) by MSUALG_3:6
+         .= dom (n |-> 0) by A5,A8,A9,MSUALG_1:def 4
+         .= Seg n by FINSEQ_2:68;
+      set X = dom (h*y);
+A18:      dom (f#y) = dom (the_arity_of o) by MSUALG_3:6
+         .= dom (n |-> 0) by A5,A8,A9,MSUALG_1:def 4
+         .= Seg n by FINSEQ_2:68
+         .= X by A15,A17,ALG_1:1;
+        dom (f#y) = dom (the_arity_of o) by MSUALG_3:6
+        .= dom (n |-> 0) by A5,A8,A9,MSUALG_1:def 4
+        .= Seg n by FINSEQ_2:68;
+then A19:   f#y is FinSequence by FINSEQ_1:def 2;
+        dom h = the carrier of U1 by FUNCT_2:def 1;
+      then reconsider p = h*y as FinSequence by A15,A16,FINSEQ_1:20;
+A20:   now let m; assume A21: m in dom y;
+then A22:     m in dom (h*y) by A15,ALG_1:1;
+        (f#y).m = (f.((the_arity_of o)/.m)).(y.m) by A21,MSUALG_3:def 8;
+        hence (f#y).m = h.(y.m) by A10,A21
+                     .= p.m by A15,A22,ALG_1:1;
+      end;
+        X = dom y by A15,ALG_1:1;
+      hence (h*y) = (f#y) by A18,A19,A20,FINSEQ_1:17;
+    end;
+
+theorem Th16:
+ h is_homomorphism U1,U2 implies
+  MSAlg h is_homomorphism MSAlg U1,(MSAlg U2 Over MSSign U1)
+  proof
+    assume A1: h is_homomorphism U1,U2;
+    set f = MSAlg h;
+A2: U1,U2 are_similar by A1,ALG_1:def 1;
+then A3: MSSign U1 = MSSign U2 by Th10;
+    let o be OperSymbol of MSSign U1 such that Args (o,MSAlg U1) <> {};
+    let y be Element of Args(o,MSAlg U1);
+    set A = MSAlg U2 Over MSSign U1;
+    set O1 = Den(o,MSAlg U1);
+A4: O1 = (the charact of U1).o by Th12;
+A5:MSAlg U2 = MSAlgebra(#MSSorts U2,MSCharact U2#) by MSUALG_1:def 16;
+A6: Den(o,A) = ((the Charact of A).o) by MSUALG_1:def 11
+       .= ((MSCharact U2).o) by A3,A5,Th9
+       .= ((the charact of U2).o) by MSUALG_1:def 15;
+    reconsider g = (*-->0)*(signature U1) as
+        Function of dom signature(U1), {0}* by MSUALG_1:7;
+    A7: the carrier of MSSign U1 = {0} &
+    the OperSymbols of MSSign U1 = dom signature U1 &
+    the Arity of MSSign U1 = g &
+    the ResultSort of MSSign U1 = dom signature U1-->0 by MSUALG_1:def 13;
+A8:   the OperSymbols of MSSign U1 <> {} by MSUALG_1:def 5;
+     consider m such that A9: the OperSymbols of MSSign U1 = Seg m
+       by MSUALG_1:def 12;
+       o in Seg m by A8,A9;
+     then reconsider k = o as Nat;
+A10:  dom signature U1 = dom the charact of U1 by Lm1;
+     reconsider O1 as operation of U1 by Th13;
+A11:  Args(o,MSAlg U1) = dom O1 by FUNCT_2:def 1;
+     reconsider O2 = Den(o,A) as operation of U2 by A2,Lm2;
+A12:  O2 = (the charact of U2).k by A6;
+       y is FinSequence of the carrier of U1 by Th14;
+     then h.(O1.y) = O2.(h*y) by A1,A4,A7,A8,A10,A11,A12,ALG_1:def 1
+       .= Den(o,A).(f#y) by A2,Th15;
+     hence thesis by A2,Th11;
+   end;
+
+Lm3:
+ for n be Nat st n in dom the charact of U1 holds
+  n is OperSymbol of MSSign U1
+  proof
+   let n be Nat such that A1: n in dom the charact of U1;
+ dom signature U1 = dom the charact of U1 by Lm1;
+    hence thesis by A1,MSUALG_1:def 13;
+  end;
+
+theorem Th17:
+ U1,U2 are_similar implies MSAlg h is ManySortedSet of {0}
+proof
+   assume U1,U2 are_similar;
+   then MSSign U1 = MSSign U2 by Th10;
+   then MSAlg h = {0} --> h by Def3
+    .= 0 .--> h by CQC_LANG:def 2;
+   then dom (MSAlg h) = {0} by CQC_LANG:5;
+   hence MSAlg h is ManySortedSet of {0} by PBOOLE:def 3;
+ end;
+
+theorem Th18:
+ h is_epimorphism U1, U2 implies
+  MSAlg h is_epimorphism MSAlg U1, (MSAlg U2 Over MSSign U1)
+   proof
+      set f = MSAlg h;
+      set A = MSAlg U2 Over MSSign U1;
+      assume A1: h is_epimorphism U1,U2;
+A2:   0 in {0} by TARSKI:def 1;
+A3: h is_homomorphism U1,U2 by A1,ALG_1:def 3;
+      then U1,U2 are_similar by ALG_1:def 1;
+then A4:    MSSign U1 = MSSign U2 by Th10;
+      thus f is_homomorphism MSAlg U1,A by A3,Th16;
+     let i be set; assume
+    i in the carrier of MSSign U1;
+     then reconsider i'=i as Element of MSSign U1;
+     reconsider h' = f.i as Function of (the Sorts of MSAlg U1).i',
+       (the Sorts of A).i' by MSUALG_1:def 2;
+A5:  rng h = the carrier of U2 by A1,ALG_1:def 3;
+  MSAlg U2 = MSAlgebra(#MSSorts U2,MSCharact U2#) by MSUALG_1:def 16;
+then A6:  the Sorts of A = MSSorts U2 by A4,Th9;
+A7:  MSSorts U2 = {0} --> the carrier of U2 by MSUALG_1:def 14;
+    reconsider g = (*-->0)*(signature U1) as
+        Function of dom signature(U1), {0}* by MSUALG_1:7;
+    A8: the carrier of MSSign U1 = {0} &
+    the OperSymbols of MSSign U1 = dom signature U1 &
+    the Arity of MSSign U1 = g &
+    the ResultSort of MSSign U1 = dom signature U1-->0 by MSUALG_1:def 13;
+    A9:  the carrier of MSSign U1 = {0} by MSUALG_1:def 13;
+A10: (MSSorts U2).0 = the carrier of U2 by A2,A7,FUNCOP_1:13;
+   f.0 = ({0} --> h).0 by A4,Def3
+      .= h by A2,FUNCOP_1:13;
+     then rng h' = (the Sorts of A).0 by A5,A6,A8,A10,TARSKI:def 1;
+hence thesis by A9,TARSKI:def 1;
+   end;
+
+theorem Th19:
+ h is_monomorphism U1, U2 implies
+  MSAlg h is_monomorphism MSAlg U1,(MSAlg U2 Over MSSign U1)
+  proof
+   assume A1: h is_monomorphism U1,U2;
+   set f = MSAlg h;
+A2: h is_homomorphism U1,U2 by A1,ALG_1:def 2;
+   then U1,U2 are_similar by ALG_1:def 1;
+then A3: MSSign U1 = MSSign U2 by Th10;
+   thus MSAlg h is_homomorphism MSAlg U1,(MSAlg U2 Over MSSign U1) by A2,Th16;
+   let i be set, h' be Function such that
+A4:   i in dom f and
+A5:   f.i = h';
+    reconsider g = (*-->0)*(signature U1) as
+        Function of dom signature(U1), {0}* by MSUALG_1:7;
+    A6: the carrier of MSSign U1 = {0} &
+    the OperSymbols of MSSign U1 = dom signature U1 &
+    the Arity of MSSign U1 = g &
+    the ResultSort of MSSign U1 = dom signature U1-->0 by MSUALG_1:def 13;
+      f = {0} --> h by A3,Def3
+      .= 0 .--> h by CQC_LANG:def 2;
+then A7: f.0 = h by CQC_LANG:6;
+      dom f = {0} by A6,PBOOLE:def 3;
+    then h = h' by A4,A5,A7,TARSKI:def 1;
+   hence h' is one-to-one by A1,ALG_1:def 2;
+  end;
+
+theorem
+   h is_isomorphism U1,U2 implies
+  MSAlg h is_isomorphism MSAlg U1,(MSAlg U2 Over MSSign U1)
+proof
+ set A = MSAlg U2 Over MSSign U1;
+ set f = MSAlg h;
+ assume A1: h is_isomorphism U1,U2;
+ then h is_epimorphism U1,U2 by ALG_1:def 4;
+ hence f is_epimorphism MSAlg U1,A by Th18;
+   h is_monomorphism U1,U2 by A1,ALG_1:def 4;
+ hence f is_monomorphism MSAlg U1,A by Th19;
+end;
+
+theorem Th21:
+ for U1,U2,h st U1,U2 are_similar holds
+  MSAlg h is_homomorphism MSAlg U1,(MSAlg U2 Over MSSign U1) implies
+   h is_homomorphism U1,U2
+  proof
+    let U1,U2,h such that A1: U1,U2 are_similar;
+    set f = MSAlg h;
+    set A = MSAlg U2 Over MSSign U1;
+A2: MSSign U1 = MSSign U2 by A1,Th10;
+    assume A3: f is_homomorphism MSAlg U1,A;
+    thus U1,U2 are_similar by A1;
+    let n be Nat such that A4: n in dom the charact of U1;
+    let O1 be operation of U1, O2 be operation of U2 such that
+A5: O1 = (the charact of U1).n and
+A6: O2 = (the charact of U2).n;
+    let x be FinSequence of U1 such that A7: x in dom O1;
+    reconsider o = n as OperSymbol of MSSign U1 by A4,Lm3;
+A8: O1 = Den(o,MSAlg U1) by A5,Th12;
+    then reconsider y = x as Element of Args(o,MSAlg U1) by A7,FUNCT_2:def 1;
+A9:  (f.(the_result_sort_of o)).(Den(o,MSAlg U1).y)
+         = h.(O1.y) by A1,A8,Th11;
+A10:   (f.(the_result_sort_of o)).(Den(o,MSAlg U1).y) = Den(o,A).(f#y)
+       by A3,MSUALG_3:def 9;
+A11:MSAlg U2 = MSAlgebra(#MSSorts U2,MSCharact U2#) by MSUALG_1:def 16;
+      Den(o,A) = ((the Charact of A).o) by MSUALG_1:def 11
+       .= ((MSCharact U2).o) by A2,A11,Th9
+       .= O2 by A6,MSUALG_1:def 15;
+    hence thesis by A1,A9,A10,Th15;
+  end;
+
+theorem Th22:
+ for U1,U2,h st U1, U2 are_similar holds
+  MSAlg h is_epimorphism MSAlg U1, (MSAlg U2 Over MSSign U1) implies
+   h is_epimorphism U1, U2
+  proof
+    let U1, U2, h;
+    assume A1: U1, U2 are_similar;
+    assume A2: MSAlg h is_epimorphism MSAlg U1, (MSAlg U2 Over MSSign U1);
+    then A3: MSAlg h is_homomorphism MSAlg U1, (MSAlg U2 Over MSSign U1)
+      by MSUALG_3:def 10;
+A4: MSSign U1 = MSSign U2 by A1,Th10;
+A5: MSAlg h is "onto" by A2,MSUALG_3:def 10;
+    set B = the Sorts of (MSAlg U2 Over MSSign U1);
+    set I = the carrier of MSSign U1;
+    A6: I = {0} by MSUALG_1:def 13;
+A7: 0 in {0} by TARSKI:def 1;
+A8: (MSAlg h).0 = ({0} --> h).0 by A4,Def3
+               .= h by A7,FUNCOP_1:13;
+      MSSorts U2 = {0} --> the carrier of U2 by MSUALG_1:def 14;
+then A9: (MSSorts U2).0 = the carrier of U2 by A7,FUNCOP_1:13;
+A10: B = the Sorts of MSAlg U2 by A4,Th9;
+    A11: MSAlg U2 = MSAlgebra (#MSSorts U2, MSCharact U2#) by MSUALG_1:def 16;
+    thus h is_epimorphism U1, U2
+    proof
+      thus h is_homomorphism U1, U2 by A1,A3,Th21;
+      thus rng h = the carrier of U2 by A5,A6,A7,A8,A9,A10,A11,MSUALG_3:def 3;
+    end;
+  end;
+
+theorem Th23:
+ for U1, U2, h st U1, U2 are_similar holds
+  MSAlg h is_monomorphism MSAlg U1, (MSAlg U2 Over MSSign U1) implies
+   h is_monomorphism U1, U2
+   proof
+    let U1,U2,h; assume A1: U1,U2 are_similar;
+then A2: MSSign U1 = MSSign U2 by Th10;
+    assume A3: MSAlg h is_monomorphism MSAlg U1,(MSAlg U2 Over MSSign U1);
+    then MSAlg h is_homomorphism MSAlg U1,(MSAlg U2 Over MSSign U1)
+      by MSUALG_3:def 11;
+then A4: h is_homomorphism U1,U2 by A1,Th21;
+A5: MSAlg h is "1-1" by A3,MSUALG_3:def 11;
+    reconsider f = (*-->0)*(signature U1) as
+        Function of dom signature(U1), {0}* by MSUALG_1:7;
+    A6: the carrier of MSSign U1 = {0} &
+    the OperSymbols of MSSign U1 = dom signature U1 &
+    the Arity of MSSign U1 = f &
+    the ResultSort of MSSign U1 = dom signature U1-->0 by MSUALG_1:def 13;
+A7: 0 in {0} by TARSKI:def 1;
+      (MSAlg h).0 = ({0} --> h).0 by A2,Def3
+      .= h by A7,FUNCOP_1:13;
+    then h is one-to-one by A5,A6,A7,MSUALG_3:1;
+    hence h is_monomorphism U1, U2 by A4,ALG_1:def 2;
+   end;
+
+theorem
+   for U1, U2, h st U1, U2 are_similar holds
+  MSAlg h is_isomorphism MSAlg U1, (MSAlg U2 Over MSSign U1) implies
+   h is_isomorphism U1, U2
+  proof
+    let U1, U2, h;
+    assume A1: U1, U2 are_similar;
+    assume A2: MSAlg h is_isomorphism MSAlg U1, (MSAlg U2 Over MSSign U1);
+    then A3: MSAlg h is_monomorphism MSAlg U1, (MSAlg U2 Over MSSign U1)
+      by MSUALG_3:def 12;
+A4: MSAlg h is_epimorphism MSAlg U1, (MSAlg U2 Over MSSign U1)
+      by A2,MSUALG_3:def 12;
+    thus h is_monomorphism U1, U2 by A1,A3,Th23;
+    thus h is_epimorphism U1, U2 by A1,A4,Th22;
+  end;
+
+theorem
+   MSAlg (id the carrier of U1) = (id the Sorts of MSAlg U1)
+  proof
+   set f = (id the Sorts of MSAlg U1);
+   set h = id the carrier of U1;
+A1:MSAlg h = {0} --> h by Def3
+    .= 0 .--> h by CQC_LANG:def 2;
+    reconsider g = (*-->0)*(signature U1) as
+        Function of dom signature(U1), {0}* by MSUALG_1:7;
+    A2: the carrier of MSSign U1 = {0} &
+    the OperSymbols of MSSign U1 = dom signature U1 &
+    the Arity of MSSign U1 = g &
+    the ResultSort of MSSign U1 = dom signature U1-->0 by MSUALG_1:def 13;
+   reconsider Z1 = the Sorts of MSAlg U1 as ManySortedSet of {0} by MSUALG_1:
+def 13;
+A3:now let i be set; assume A4:i in {0};
+then A5:   i = 0 by TARSKI:def 1;
+    MSAlg U1 = MSAlgebra(#MSSorts U1,MSCharact U1#) by MSUALG_1:def 16;
+      then Z1.0 = ({0} --> the carrier of U1).0 by MSUALG_1:def 14
+       .= (0 .--> the carrier of U1).0 by CQC_LANG:def 2
+       .= the carrier of U1 by CQC_LANG:6;
+      hence f.0 = h by A2,A4,A5,MSUALG_3:def 1;
+    end;
+A6: (MSAlg h).0 = h by A1,CQC_LANG:6;
+      now let a; assume A7: a in {0};
+      then a = 0 by TARSKI:def 1;
+      hence f.a = (MSAlg h).a by A3,A6,A7;
+    end;
+    hence f = MSAlg h by A2,PBOOLE:3;
+  end;
+
+theorem
+   for U1,U2,U3 st U1,U2 are_similar & U2,U3 are_similar
+  for h1 be Function of U1,U2, h2 be Function of U2,U3 holds
+   (MSAlg h2) ** (MSAlg h1) = MSAlg (h2*h1)
+  proof
+    let U1,U2,U3 such that A1: U1,U2 are_similar and A2: U2,U3 are_similar;
+    let h1 be Function of U1,U2, h2 be Function of U2,U3;
+A3: U1,U3 are_similar by A1,A2,UNIALG_2:4;
+A4: MSSign U1 = MSSign U2 by A1,Th10;
+A5: MSSign U2 = MSSign U3 by A2,Th10;
+A6:MSAlg h1 is ManySortedSet of {0} by A1,Th17;
+      MSAlg h2 is ManySortedSet of {0} by A2,Th17;
+then A7: dom MSAlg h2 = {0} by PBOOLE:def 3;
+A8: dom ((MSAlg h2)**(MSAlg h1))
+      = (dom MSAlg h1) /\ (dom MSAlg h2) by MSUALG_3:def 4
+     .= {0} /\ {0} by A6,A7,PBOOLE:def 3
+     .= {0};
+A9:now let a be set ,f be Function, g be Function such that
+A10:   a in dom ((MSAlg h2) ** (MSAlg h1)) and
+A11:   f = (MSAlg h1).a and
+A12:   g = (MSAlg h2).a;
+A13:   f = (MSAlg h1).0 by A8,A10,A11,TARSKI:def 1
+       .= ({0} --> h1).0 by A4,Def3
+       .= (0 .--> h1).0 by CQC_LANG:def 2
+       .= h1 by CQC_LANG:6;
+     g = (MSAlg h2).0 by A8,A10,A12,TARSKI:def 1
+       .= ({0} --> h2).0 by A5,Def3
+       .= (0 .--> h2).0 by CQC_LANG:def 2
+       .= h2 by CQC_LANG:6;
+      hence ((MSAlg h2)**(MSAlg h1)).a = h2*h1 by A10,A11,A12,A13,MSUALG_3:def
+4;
+    end;
+A14: ((MSAlg h2)**(MSAlg h1)) is ManySortedSet of {0} by A8,PBOOLE:def 3;
+    set h = h2*h1;
+A15: MSAlg h is ManySortedSet of {0} by A3,Th17;
+then A16: dom (MSAlg (h2*h1)) = {0} by PBOOLE:def 3;
+A17:now let a be set; assume a in dom MSAlg h;
+then A18:   a in {0} by A15,PBOOLE:def 3;
+         (MSAlg (h2*h1)).0 = ({0} --> h2*h1).0 by A4,A5,Def3
+         .= (0 .--> (h2*h1)).0 by CQC_LANG:def 2
+         .= h2*h1 by CQC_LANG:6;
+       hence (MSAlg (h2*h1)).a = h2*h1 by A18,TARSKI:def 1;
+     end;
+A19:  dom MSAlg (h2*h1) = {0} by A15,PBOOLE:def 3;
+A20:  now let a be set, f,g be Function such that
+       A21: a in dom (MSAlg (h2*h1)) and
+       A22: f = (MSAlg h1).a and
+       A23: g = (MSAlg h2).a;
+       thus (MSAlg (h2*h1)).a = h2*h1 by A17,A21
+        .= ((MSAlg h2)**(MSAlg h1)).a by A8,A9,A16,A21,A22,A23;
+   end;
+ for a st a in {0} holds ((MSAlg h2)**(MSAlg h1)).a = (MSAlg (h2*h1)).a
+   proof
+     let a;
+     assume A24: a in {0};
+       (MSAlg h1).0 = ({0} --> h1).0 by A4,Def3
+       .= (0 .--> h1).0 by CQC_LANG:def 2
+       .= h1 by CQC_LANG:6;
+then A25: (MSAlg h1).a is Function by A24,TARSKI:def 1;
+       (MSAlg h2).0 = ({0} --> h2).0 by A5,Def3
+       .= (0 .--> h2).0 by CQC_LANG:def 2
+       .= h2 by CQC_LANG:6;
+     then (MSAlg h2).a is Function by A24,TARSKI:def 1;
+     hence ((MSAlg h2)**(MSAlg h1)).a = (MSAlg (h2*h1)).a by A19,A20,A24,A25;
+   end;
+   hence (MSAlg h2)**(MSAlg h1) = MSAlg (h2*h1) by A14,A15,PBOOLE:3;
+  end;
+

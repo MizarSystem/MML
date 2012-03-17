@@ -1,0 +1,1752 @@
+:: The Lattice of Domains of an Extremally Disconnected Space
+::  by Zbigniew Karno
+::
+:: Received August 27, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, TOPS_1, BOOLE, SUBSET_1, NATTRA_1, SETFAM_1, TARSKI,
+      TDLAT_1, RELAT_1, LATTICES, FUNCT_1, TDLAT_2, TDLAT_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, STRUCT_0, RELAT_1,
+      PRE_TOPC, TOPS_1, TOPS_2, PCOMPS_1, BORSUK_1, TSEP_1, BINOP_1, LATTICES,
+      LATTICE3, TDLAT_1, TDLAT_2;
+ constructors TOPS_1, TOPS_2, BORSUK_1, TSEP_1, LATTICE3, TDLAT_1, TDLAT_2,
+      PARTFUN1, MEMBERED;
+ clusters PRE_TOPC, BORSUK_1, TSEP_1, LATTICES, STRUCT_0, COMPLSP1, RELSET_1,
+      SUBSET_1, MEMBERED, ZFMISC_1;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, BORSUK_1, TSEP_1, XBOOLE_0;
+ theorems TARSKI, ZFMISC_1, FUNCT_2, PRE_TOPC, TOPS_1, TOPS_2, PCOMPS_1,
+      BORSUK_1, TSEP_1, LATTICES, TDLAT_1, TDLAT_2, SUBSET_1, SETFAM_1,
+      XBOOLE_0, XBOOLE_1;
+
+begin
+:: 1. Selected Properties of Subsets of a Topological Space.
+reserve X for TopSpace;
+
+::Properties of the Closure and the Interior Operators.
+reserve C for Subset of X;
+
+canceled;
+
+theorem Th2:
+ Cl C = (Int C`)`
+ proof
+  thus Cl C = (Cl((C``)))``
+           .= (Int (C`))` by TOPS_1:def 1;
+ end;
+
+
+theorem Th3:
+ Cl C` = (Int C)`
+ proof
+  thus Cl C` = (Int ( C``))` by Th2
+            .= (Int C)`;
+ end;
+
+theorem Th4:
+ Int C` =  (Cl C)`
+ proof
+  thus Int C` =  (Cl ( C``))` by TOPS_1:def 1
+             .=  (Cl C)`;
+ end;
+
+reserve A, B for Subset of X;
+
+canceled;
+
+theorem
+   A \/ B = the carrier of X implies
+    (A is closed implies A \/ Int B = the carrier of X) &
+      (B is closed implies Int A \/ B = the carrier of X)
+ proof
+  assume A \/ B = the carrier of X;
+   then A \/ B = [#]X by PRE_TOPC:12;
+   then (A \/ B)` = {}X by TOPS_1:8;
+   then (A \/ B)` = {}X;
+   then ( A`) /\  B` = {} by SUBSET_1:29;
+   then A1: ( A`) misses  B` by XBOOLE_0:def 7;
+  thus A is closed implies A \/ Int B = the carrier of X
+   proof
+    assume A is closed;
+     then  A` is open by TOPS_1:29;
+     then ( A`) misses Cl B` by A1,TSEP_1:40;
+     then ( A`) /\ Cl B` = {} by XBOOLE_0:def 7;
+     then ( A`) /\ (Cl B`)`` = {};
+     then ( A`) /\ ((Int B)`) = {} by TOPS_1:def 1;
+     then (A \/ Int B)` = {}X by SUBSET_1:29;
+     then (A \/ Int B)` = {}X;
+     then (A \/ Int B)`` = [#]X by PRE_TOPC:27;
+     then A \/ Int B = [#]X;
+     hence thesis by PRE_TOPC:12;
+   end;
+  thus B is closed implies Int A \/ B = the carrier of X
+   proof
+    assume B is closed;
+     then  B` is open by TOPS_1:29;
+     then (Cl A`) misses  B` by A1,TSEP_1:40;
+     then (Cl A`) /\  B` = {} by XBOOLE_0:def 7;
+     then (Cl A`)`` /\  B` = {};
+     then ((Int A)`) /\  B` = {} by TOPS_1:def 1;
+     then (Int A \/ B)` = {}X by SUBSET_1:29;
+     then (Int A \/ B)` = {}X;
+     then (Int A \/ B)`` = [#]X by PRE_TOPC:27;
+     then Int A \/ B = [#]X;
+     hence thesis by PRE_TOPC:12;
+   end;
+ end;
+
+theorem Th7:
+ A is open & A is closed iff Cl A = Int A
+ proof
+  thus A is open & A is closed implies Cl A = Int A
+   proof
+    assume A is open & A is closed;
+     then Int A = A & Cl A = A by PRE_TOPC:52,TOPS_1:55;
+    hence thesis;
+   end;
+  assume A1: Cl A = Int A;
+      Int A c= A & A c= Cl A by PRE_TOPC:48,TOPS_1:44;
+   then Int A = A & Cl A = A by A1,XBOOLE_0:def 10;
+  hence A is open & A is closed by PRE_TOPC:52,TOPS_1:55;
+ end;
+
+theorem
+   A is open & A is closed implies Int Cl A = Cl Int A
+ proof
+  assume A is open & A is closed;
+   then Int A = A & Cl A = A by PRE_TOPC:52,TOPS_1:55;
+  hence thesis;
+ end;
+
+::Properties of Domains.
+theorem Th9:
+ A is condensed & Cl Int A c= Int Cl A implies
+  A is open_condensed & A is closed_condensed
+ proof
+  assume A is condensed;
+   then A1: Int Cl A c= A & A c= Cl Int A by TOPS_1:def 6;
+  assume Cl Int A c= Int Cl A;
+   then A c= Int Cl A & Cl Int A c= A by A1,XBOOLE_1:1;
+   then A = Int Cl A & A = Cl Int A by A1,XBOOLE_0:def 10;
+  hence thesis by TOPS_1:def 7,def 8;
+ end;
+
+theorem Th10:
+ A is condensed & Cl Int A c= Int Cl A implies A is open & A is closed
+ proof
+  assume A is condensed & Cl Int A c= Int Cl A;
+   then A is open_condensed & A is closed_condensed by Th9;
+  hence thesis by TOPS_1:106,107;
+ end;
+
+theorem Th11:
+ A is condensed implies Int Cl A = Int A & Cl A = Cl Int A
+ proof
+  assume A is condensed;
+   then Int Cl A c= A & A c= Cl Int A by TOPS_1:def 6;
+   then Int Int Cl A c= Int A & Cl A c= Cl Cl Int A by PRE_TOPC:49,TOPS_1:48;
+   then A1: Int Cl A c= Int A & Cl A c= Cl Int A by TOPS_1:26,45;
+       A c= Cl A & Int A c= A by PRE_TOPC:48,TOPS_1:44;
+    then Int A c= Int Cl A & Cl Int A c= Cl A by PRE_TOPC:49,TOPS_1:48;
+  hence thesis by A1,XBOOLE_0:def 10;
+ end;
+
+
+begin
+:: 2. Discrete Topological Structures.
+
+definition let IT be TopStruct;
+ attr IT is discrete means
+:Def1: the topology of IT = bool the carrier of IT;
+ attr IT is anti-discrete means
+:Def2: the topology of IT = {{}, the carrier of IT};
+end;
+
+theorem
+   for Y being TopStruct holds
+   Y is discrete & Y is anti-discrete implies
+     bool the carrier of Y = {{}, the carrier of Y}
+ proof
+   let Y be TopStruct;
+  assume Y is discrete & Y is anti-discrete;
+   then the topology of Y = bool the carrier of Y &
+          the topology of Y = {{}, the carrier of Y} by Def1,Def2;
+  hence thesis;
+ end;
+
+theorem Th13:
+ for Y being TopStruct st
+   {} in the topology of Y & the carrier of Y in the topology of Y holds
+    bool the carrier of Y = {{}, the carrier of Y} implies
+      Y is discrete & Y is anti-discrete
+ proof
+   let Y be TopStruct;
+  assume {} in the topology of Y & the carrier of Y in the topology of Y;
+   then A1: {{}, the carrier of Y} c= the topology of Y by ZFMISC_1:38;
+  assume bool the carrier of Y = {{}, the carrier of Y};
+   then the topology of Y = bool the carrier of Y &
+        the topology of Y = {{}, the carrier of Y} by A1,XBOOLE_0:def 10;
+  hence Y is discrete & Y is anti-discrete by Def1,Def2;
+ end;
+
+definition
+ cluster discrete anti-discrete strict non empty TopStruct;
+ existence
+  proof
+   set one = {{}};
+   reconsider tau = bool one as Subset-Family of one;
+   take Y = TopStruct (#one,tau#);
+   thus Y is discrete by Def1;
+      tau = {{},one} by ZFMISC_1:30;
+   hence Y is anti-discrete by Def2;
+   thus thesis;
+  end;
+end;
+
+theorem Th14:
+ for Y being discrete TopStruct, A being Subset of Y holds
+  (the carrier of Y) \ A in the topology of Y
+  proof
+   let Y be discrete TopStruct, A be Subset of Y;
+A1:  the topology of Y = bool the carrier of Y by Def1;
+       (the carrier of Y) \ A c= the carrier of Y by XBOOLE_1:109;
+   hence thesis by A1;
+  end;
+
+theorem Th15:
+ for Y being anti-discrete TopStruct, A being Subset of Y st
+  A in the topology of Y holds (the carrier of Y) \ A in the topology of Y
+  proof
+    let Y be anti-discrete TopStruct, A be Subset of Y;
+   assume A1: A in the topology of Y;
+      A2: the topology of Y = {{}, the carrier of Y} by Def2;
+    then A = {} or A = the carrier of Y by A1,TARSKI:def 2;
+    then (the carrier of Y) \ A = the carrier of Y or
+           (the carrier of Y) \ A = {} by XBOOLE_1:37;
+   hence thesis by A2,TARSKI:def 2;
+  end;
+
+definition
+ cluster discrete -> TopSpace-like TopStruct;
+ coherence
+  proof
+    let Y be TopStruct; assume
+    Y is discrete;
+       then the topology of Y = bool the carrier of Y by Def1;
+    then the carrier of Y in the topology of Y & (
+ for F being Subset-Family of Y st
+          F c= the topology of Y holds union F in the topology of Y) &(
+ for A,B being Subset of Y st
+          A in the topology of Y & B in the topology of Y holds
+           A /\ B in the topology of Y) by ZFMISC_1:def 1;
+   hence thesis by PRE_TOPC:def 1;
+  end;
+ cluster anti-discrete -> TopSpace-like TopStruct;
+ coherence
+  proof
+    let Y be TopStruct; assume
+    Y is anti-discrete;
+      then A1: the topology of Y = {{}, the carrier of Y} by Def2;
+     now
+    thus the carrier of Y in the topology of Y by A1,TARSKI:def 2;
+    thus for F being Subset-Family of Y st
+          F c= the topology of Y holds union F in the topology of Y
+     proof
+       let F be Subset-Family of Y;
+      assume F c= the topology of Y;
+       then F = {} or F = {{}} or F = {the carrier of Y} or
+            F = {{},the carrier of Y} by A1,ZFMISC_1:42;
+       then union F = {} or union F = the carrier of Y or
+            union F = {} \/ (the carrier of Y) by ZFMISC_1:2,31,93;
+      hence thesis by A1,TARSKI:def 2;
+     end;
+    thus for A,B being Subset of Y st
+          A in the topology of Y & B in the topology of Y holds
+           A /\ B in the topology of Y
+     proof
+       let A,B be Subset of Y;
+      assume A in the topology of Y & B in the topology of Y;
+       then (A = {} or A = the carrier of Y) &
+             (B = {} or B = the carrier of Y) by A1,TARSKI:def 2;
+      hence A /\ B in the topology of Y by A1,TARSKI:def 2;
+     end;
+   end;
+   hence thesis by PRE_TOPC:def 1;
+  end;
+end;
+
+theorem
+   for Y being TopSpace-like TopStruct holds
+   bool the carrier of Y = {{}, the carrier of Y} implies
+      Y is discrete & Y is anti-discrete
+ proof
+   let Y be TopSpace-like TopStruct;
+  assume A1: bool the carrier of Y = {{}, the carrier of Y};
+   reconsider E = {} as Subset of bool the carrier of Y
+    by XBOOLE_1:2;
+    reconsider E as Subset-Family of Y by SETFAM_1:def 7;
+      E c= the topology of Y & union E = {} by XBOOLE_1:2,ZFMISC_1:2;
+   then {} in the topology of Y &
+      the carrier of Y in the topology of Y by PRE_TOPC:def 1;
+  hence thesis by A1,Th13;
+ end;
+
+definition let IT be TopStruct;
+ attr IT is almost_discrete means
+:Def3: for A being Subset of IT st
+   A in the topology of IT holds
+     (the carrier of IT) \ A in the topology of IT;
+end;
+
+definition
+ cluster discrete -> almost_discrete TopStruct;
+ coherence
+  proof
+   let Y be TopStruct; assume Y is discrete;
+then for A be Subset of Y holds A in the topology of Y
+implies
+ (the carrier of Y) \ A in the topology of Y by Th14;
+   hence Y is almost_discrete by Def3;
+  end;
+ cluster anti-discrete -> almost_discrete TopStruct;
+ coherence
+  proof
+   let Y be TopStruct; assume
+    Y is anti-discrete;
+    then for A be Subset of Y holds A in the topology of Y
+implies
+ (the carrier of Y) \ A in the topology of Y by Th15;
+   hence Y is almost_discrete by Def3;
+  end;
+end;
+
+definition
+ cluster almost_discrete strict TopStruct;
+ existence
+  proof
+   consider Y being discrete strict TopStruct;
+   take Y;
+   thus thesis;
+  end;
+end;
+
+
+begin
+:: 3. Discrete Topological Spaces.
+
+definition
+ cluster discrete anti-discrete strict non empty TopSpace;
+ existence
+  proof
+   consider X being discrete anti-discrete strict non empty TopStruct;
+   reconsider X as TopSpace;
+   take X;
+   thus thesis;
+  end;
+end;
+
+theorem Th17:
+ X is discrete iff
+  for A being Subset of X holds A is open
+ proof
+  thus X is discrete implies
+        for A being Subset of X holds A is open
+   proof
+    assume A1: X is discrete;
+     let A be Subset of X;
+        A c= the carrier of X & the topology of X = bool the carrier of X
+                                                 by A1,Def1;
+    hence A is open by PRE_TOPC:def 5;
+   end;
+  assume A2: for A being Subset of X holds A is open;
+      for V being set holds V in the topology of X iff V in bool the carrier of
+X
+     proof let V be set;
+          now assume V in bool the carrier of X;
+           then reconsider C = V as Subset of X;
+              C is open by A2;
+         hence V in the topology of X by PRE_TOPC:def 5;
+        end;
+      hence thesis;
+     end;
+   then the topology of X = bool the carrier of X by TARSKI:2;
+  hence thesis by Def1;
+ end;
+
+theorem Th18:
+ X is discrete iff
+  for A being Subset of X holds A is closed
+ proof
+  thus X is discrete implies
+        for A being Subset of X holds A is closed
+   proof
+    assume A1: X is discrete;
+     let A be Subset of X;
+         A` is open by A1,Th17;
+    hence A is closed by TOPS_1:29;
+   end;
+  assume A2: for A being Subset of X holds A is closed;
+     now let A be Subset of X;
+        A` is closed by A2;
+    hence A is open by TOPS_1:30;
+   end;
+  hence thesis by Th17;
+ end;
+
+theorem Th19:
+ (for A being Subset of X, x being Point of X st A = {x} holds
+   A is open) implies X is discrete
+ proof
+  assume
+A1: for A being Subset of X, x being Point of X st A = {x}
+     holds A is open;
+     now let A be Subset of X;
+    set F = {B where B is Subset of X :
+                 ex a being Point of X st a in A & B = {a}};
+      A2: F c= bool A
+       proof
+        let x be set;
+        assume x in F;
+         then consider C being Subset of X such that
+               A3: x = C and A4: ex a being Point of X st a in A & C = {a};
+           C c= A by A4,ZFMISC_1:37;
+        hence x in bool A by A3;
+       end;
+        bool A c= bool the carrier of X by ZFMISC_1:79;
+     then F is Subset of bool the carrier of X by A2,XBOOLE_1:1;
+     then F is Subset-Family of X by SETFAM_1:def 7;
+     then reconsider F as Subset-Family of X;
+        now let B be Subset of X;
+       assume B in F;
+        then ex C being Subset of X st C = B &
+               ex a being Point of X st a in A & C = {a};
+       hence B is open by A1;
+      end;
+     then A5: F is open by TOPS_2:def 1;
+        now let x be set;
+       assume
+A6:      x in bool A;
+        then reconsider P = x as Subset of X by XBOOLE_1:1;
+           now let y be set;
+          assume
+A7:        y in P;
+           then reconsider a = y as Point of X;
+             now
+            take B0 = {a};
+               B0 is Subset of X by A7,ZFMISC_1:37;
+             hence y in B0 & B0 in F by A6,A7,TARSKI:def 1;
+           end;
+          hence y in union F by TARSKI:def 4;
+         end;
+       hence x c= union F by TARSKI:def 3;
+      end;
+     then union bool A c= union F &
+           union F c= union bool A & union bool A = A by A2,ZFMISC_1:95,99;
+     then union F = A by XBOOLE_0:def 10;
+    hence A is open by A5,TOPS_2:26;
+   end;
+  hence thesis by Th17;
+ end;
+
+definition let X be discrete non empty TopSpace;
+ cluster -> open closed discrete SubSpace of X;
+ coherence
+  proof
+     A1: the topology of X = bool the carrier of X by Def1;
+   let X0 be SubSpace of X;
+   thus X0 is open
+    proof let A be Subset of X;
+     thus thesis by Th17;
+    end;
+   thus X0 is closed
+    proof let A be Subset of X;
+     thus thesis by Th18;
+    end;
+        now let S be set;
+       assume S in bool the carrier of X0;
+        then reconsider A = S as Subset of X0;
+         A2: the carrier of X0 c= the carrier of X by BORSUK_1:35;
+         A3: A c= the carrier of X0;
+        reconsider B = A as Subset of X by A2,XBOOLE_1:1;
+           now
+          take B;
+             A c= [#]X0 by A3,PRE_TOPC:12;
+          hence B in the topology of X & A = B /\ [#]X0 by A1,XBOOLE_1:28;
+         end;
+        hence S in the topology of X0 by PRE_TOPC:def 9;
+      end;
+     then bool the carrier of X0 c= the topology of X0 &
+      the topology of X0 c= bool the carrier of X0 by TARSKI:def 3;
+     hence the topology of X0 = bool the carrier of X0 by XBOOLE_0:def 10;
+  end;
+end;
+
+definition let X be discrete non empty TopSpace;
+ cluster discrete strict SubSpace of X;
+  existence
+   proof
+    consider X0 being strict SubSpace of X;
+     take X0;
+    thus thesis;
+   end;
+end;
+
+theorem Th20:
+ X is anti-discrete iff
+  for A being Subset of X st A is open
+   holds A = {} or A = the carrier of X
+ proof
+  thus X is anti-discrete implies
+          for A being Subset of X st
+             A is open holds A = {} or A = the carrier of X
+   proof
+    assume A1: X is anti-discrete;
+     let A be Subset of X;
+    assume A is open;
+     then A in the topology of X by PRE_TOPC:def 5;
+     then A in {{}, the carrier of X} by A1,Def2;
+    hence thesis by TARSKI:def 2;
+   end;
+  assume A2: for A being Subset of X st
+                A is open holds A = {} or A = the carrier of X;
+       {} in the topology of X &
+        the carrier of X in the topology of X by PRE_TOPC:5,def 1;
+   then A3: {{}, the carrier of X} c= the topology of X by ZFMISC_1:38;
+      now let P be set;
+     assume A4: P in the topology of X;
+      then reconsider C = P as Subset of X;
+         C is open by A4,PRE_TOPC:def 5;
+      then C = {} or C = the carrier of X by A2;
+     hence P in {{}, the carrier of X} by TARSKI:def 2;
+    end;
+   then the topology of X c= {{}, the carrier of X} by TARSKI:def 3;
+   then the topology of X = {{}, the carrier of X} by A3,XBOOLE_0:def 10;
+  hence X is anti-discrete by Def2;
+ end;
+
+theorem Th21:
+ X is anti-discrete iff
+  for A being Subset of X st A is closed
+   holds A = {} or A = the carrier of X
+ proof
+  thus X is anti-discrete implies
+        for A being Subset of X st A is closed holds
+           A = {} or A = the carrier of X
+   proof
+    assume A1: X is anti-discrete;
+     let A be Subset of X;
+    assume A is closed;
+     then  A` is open by TOPS_1:29;
+     then  A` = {} or  A` = the carrier of X by A1,Th20;
+     then  A` = {}X or  A` = [#]X by PRE_TOPC:12;
+     then A`` = [#]X or A`` = {}X by PRE_TOPC:27,TOPS_1:8;
+     then A = [#]X or A = {}X;
+    hence thesis by PRE_TOPC:12;
+   end;
+  assume A2: for A being Subset of X st A is closed holds
+                               A = {} or A = the carrier of X;
+     now let B be Subset of X;
+    assume B is open;
+     then  B` is closed by TOPS_1:30;
+     then  B` = {} or  B` = the carrier of X by A2;
+     then  B` = {}X or  B` = [#]X by PRE_TOPC:12;
+     then  B`` = [#]X or  B`` = {}X by PRE_TOPC:27,TOPS_1:8;
+     then B = [#]X or B = {}X;
+    hence B = {} or B = the carrier of X by PRE_TOPC:12;
+   end;
+  hence X is anti-discrete by Th20;
+ end;
+
+theorem
+   (for A being Subset of X, x being Point of X st
+            A = {x} holds Cl A = the carrier of X) implies
+     X is anti-discrete
+ proof
+  assume A1: for A being Subset of X, x being Point of X st
+               A = {x} holds Cl A = the carrier of X;
+     for B being Subset of X st B is closed
+    holds B = {} or B = the carrier of X
+    proof
+      let B be Subset of X;
+     assume A2: B is closed;
+      consider z being Element of B;
+     assume A3: B <> {};
+      then reconsider x = z as Point of X by TARSKI:def 3;
+       A4: {x} c= B by A3,ZFMISC_1:37;
+       then {x} c= the carrier of X by XBOOLE_1:1;
+      then reconsider A = {x} as Subset of X;
+          Cl A = the carrier of X by A1;
+       then the carrier of X c= B &
+              B c= the carrier of X by A2,A4,TOPS_1:31;
+     hence thesis by XBOOLE_0:def 10;
+    end;
+  hence thesis by Th21;
+ end;
+
+definition let X be anti-discrete non empty TopSpace;
+ cluster -> anti-discrete SubSpace of X;
+ coherence
+  proof
+     A1: the topology of X = {{}, the carrier of X} by Def2;
+   let X0 be SubSpace of X;
+      now
+        now let S be set;
+       assume S in {{}, the carrier of X0};
+       then S = {} or S = the carrier of X0 by TARSKI:def 2;
+       hence S in the topology of X0 by PRE_TOPC:5,def 1;
+      end;
+     then A2: {{}, the carrier of X0} c= the topology of X0 by TARSKI:def 3;
+        now let S be set;
+       assume A3: S in the topology of X0;
+        then reconsider A = S as Subset of X0;
+       consider B being Subset of X such that
+          A4: B in the topology of X and A5: A = B /\ [#]
+X0 by A3,PRE_TOPC:def 9;
+         A6: B = {} implies A = {} by A5;
+            now
+              assume B = the carrier of X;
+               then the carrier of X0 c= B by BORSUK_1:35;
+               then [#]X0 c= B by PRE_TOPC:12;
+               then [#]X0 = B /\ [#]X0 & [#]X0 = the carrier of X0
+                                                    by PRE_TOPC:12,XBOOLE_1:28;
+               hence A = the carrier of X0 by A5;
+             end;
+       hence S in {{}, the carrier of X0} by A1,A4,A6,TARSKI:def 2;
+      end;
+     then the topology of X0 c= {{}, the carrier of X0} by TARSKI:def 3;
+     hence the topology of X0 = {{}, the carrier of X0} by A2,XBOOLE_0:def 10;
+    end;
+   hence thesis by Def2;
+  end;
+end;
+
+definition let X be anti-discrete non empty TopSpace;
+ cluster anti-discrete SubSpace of X;
+  existence
+   proof
+    consider X0 being SubSpace of X;
+     take X0;
+    thus thesis;
+   end;
+end;
+
+theorem Th23:
+ X is almost_discrete iff
+  for A being Subset of X st A is open holds A is closed
+ proof
+  thus X is almost_discrete implies
+   for A being Subset of X st A is open holds A is closed
+   proof
+    assume A1: X is almost_discrete;
+       now let A be Subset of X;
+      assume A is open;
+       then A in the topology of X by PRE_TOPC:def 5;
+       then (the carrier of X) \ A in the topology of X by A1,Def3;
+       then [#]X \ A in the topology of X by PRE_TOPC:12;
+       then [#]X \ A is open by PRE_TOPC:def 5;
+      hence A is closed by PRE_TOPC:def 6;
+     end;
+    hence thesis;
+   end;
+  assume
+A2: for A being Subset of X st A is open holds A is closed;
+     now let A be Subset of X;
+    reconsider A' = A as Subset of X;
+    assume A in the topology of X;
+     then A' is open by PRE_TOPC:def 5;
+     then A' is closed by A2;
+     then [#]X \ A' is open by PRE_TOPC:def 6;
+     then [#]X \ A' in the topology of X by PRE_TOPC:def 5;
+    hence (the carrier of X) \ A in the topology of X by PRE_TOPC:12;
+   end;
+  hence X is almost_discrete by Def3;
+ end;
+
+theorem Th24:
+ X is almost_discrete iff
+  for A being Subset of X st A is closed holds A is open
+ proof
+  thus X is almost_discrete implies
+        for A being Subset of X st A is closed holds A is open
+   proof
+    assume A1: X is almost_discrete;
+     let A be Subset of X;
+    assume A is closed;
+     then  A` is open by TOPS_1:29;
+     then  A` is closed by A1,Th23;
+    hence thesis by TOPS_1:30;
+   end;
+  assume
+A2: for A being Subset of X st A is closed holds A is open;
+     now
+     let A be Subset of X;
+    assume A is open;
+     then  A` is closed by TOPS_1:30;
+     then  A` is open by A2;
+    hence A is closed by TOPS_1:29;
+   end;
+  hence X is almost_discrete by Th23;
+ end;
+
+theorem
+   X is almost_discrete iff
+  for A being Subset of X st A is open holds Cl A = A
+ proof
+  thus X is almost_discrete implies
+        for A being Subset of X st A is open holds Cl A = A
+   proof
+    assume A1: X is almost_discrete;
+     let A be Subset of X;
+    assume A is open;
+     then A is closed by A1,Th23;
+    hence thesis by PRE_TOPC:52;
+   end;
+  assume
+A2: for A being Subset of X st A is open holds Cl A = A;
+     now let A be Subset of X;
+    assume A is open;
+     then Cl A = A by A2;
+    hence A is closed by PRE_TOPC:52;
+   end;
+  hence X is almost_discrete by Th23;
+ end;
+
+theorem
+   X is almost_discrete iff
+  for A being Subset of X st A is closed holds Int A = A
+ proof
+  thus X is almost_discrete implies
+        for A being Subset of X st A is closed holds Int A = A
+   proof
+    assume A1: X is almost_discrete;
+     let A be Subset of X;
+    assume A is closed;
+     then A is open by A1,Th24;
+    hence thesis by TOPS_1:55;
+   end;
+  assume
+A2: for A being Subset of X st A is closed holds Int A = A;
+     now let A be Subset of X;
+    assume A is closed;
+     then Int A = A by A2;
+    hence A is open by TOPS_1:55;
+   end;
+  hence X is almost_discrete by Th24;
+ end;
+
+definition
+ cluster almost_discrete strict TopSpace;
+ existence
+  proof
+   consider X being discrete strict TopSpace;
+   take X;
+   thus thesis;
+  end;
+end;
+
+theorem
+   (for A being Subset of X, x being Point of X st A = {x}
+ holds Cl A is open)
+   implies X is almost_discrete
+ proof
+  assume A1: for D being Subset of X, x being Point of X st
+              D = {x} holds Cl D is open;
+    for A being Subset of X st A is closed holds A is open
+   proof
+     let A be Subset of X;
+    assume A2: A is closed;
+     A3: for C being Subset of X, a being Point of X st
+          a in A & C = {a} holds Cl C c= A
+         proof
+            let C be Subset of X, a be Point of X;
+          assume a in A & C = {a};
+           then C c= A by ZFMISC_1:37;
+           then Cl C c= Cl A by PRE_TOPC:49;
+          hence thesis by A2,PRE_TOPC:52;
+         end;
+    set F = {B where B is Subset of X :
+               ex C being Subset of X, a being Point of X st
+                                     a in A & C = {a} & B = Cl C};
+      A4: F c= bool A
+       proof
+        let x be set;
+        assume x in F;
+         then consider P being Subset of X such that
+               A5: x = P and
+               A6: ex C being Subset of X, a being Point of X st
+                      a in A & C = {a} & P = Cl C;
+           P c= A by A3,A6;
+        hence x in bool A by A5;
+       end;
+        bool A c= bool the carrier of X by ZFMISC_1:79;
+     then F is Subset of bool the carrier of X by A4,XBOOLE_1:1;
+     then F is Subset-Family of X by SETFAM_1:def 7;
+     then reconsider F as Subset-Family of X;
+        now let D be Subset of X;
+       assume D in F;
+        then ex S being Subset of X st S = D &
+               ex C being Subset of X, a being Point of X st
+                                       a in A & C = {a} & S = Cl C;
+       hence D is open by A1;
+      end;
+     then A7: F is open by TOPS_2:def 1;
+        now let x be set;
+       assume
+A8:      x in bool A;
+        then reconsider P = x as Subset of X by XBOOLE_1:1;
+           now let y be set;
+          assume
+A9:        y in P;
+           then reconsider a = y as Point of X;
+             now
+             reconsider P0 = {a} as Subset of X
+                       by A9,ZFMISC_1:37;
+            take B = Cl P0;
+                a in P0 & P0 c= B by PRE_TOPC:48,TARSKI:def 1;
+             hence y in B & B in F by A8,A9;
+           end;
+          hence y in union F by TARSKI:def 4;
+         end;
+       hence x c= union F by TARSKI:def 3;
+      end;
+     then union bool A c= union F &
+           union F c= union bool A & union bool A = A by A4,ZFMISC_1:95,99;
+     then union F = A by XBOOLE_0:def 10;
+    hence thesis by A7,TOPS_2:26;
+   end;
+  hence X is almost_discrete by Th24;
+ end;
+
+theorem
+   X is discrete iff X is almost_discrete &
+  (for A being Subset of X, x being Point of X st A = {x}
+  holds A is closed)
+ proof
+      X is discrete TopSpace implies X is almost_discrete;
+  hence X is discrete implies X is almost_discrete &
+         (for A being Subset of X, x being Point of X st
+                                  A = {x} holds A is closed) by Th18;
+  assume A1: X is almost_discrete;
+  assume A2: for A being Subset of X, x being Point of X st
+               A = {x} holds A is closed;
+     for A being Subset of X, x being Point of X st A = {x}
+   holds A is open
+    proof
+      let A be Subset of X, x be Point of X;
+     assume A = {x};
+      then A is closed by A2;
+     hence thesis by A1,Th24;
+    end;
+  hence X is discrete by Th19;
+ end;
+
+definition
+ cluster discrete -> almost_discrete TopSpace;
+ coherence
+  proof
+   let X be TopSpace;
+   assume X is discrete;
+   then reconsider X as discrete TopSpace;
+     X is almost_discrete;
+   hence thesis;
+  end;
+ cluster anti-discrete -> almost_discrete TopSpace;
+ coherence
+  proof
+   let X be TopSpace;
+   assume X is anti-discrete;
+   then reconsider X as anti-discrete TopSpace;
+     X is almost_discrete;
+   hence thesis;
+  end;
+end;
+
+definition let X be almost_discrete non empty TopSpace;
+ cluster -> almost_discrete (non empty SubSpace of X);
+ coherence
+  proof
+   let X0 be non empty SubSpace of X;
+      now let A0 be Subset of X0;
+     assume A0 is open;
+      then consider A being Subset of X such that
+        A1: A is open and A2: A0 = A /\ [#]X0 by TOPS_2:32;
+         A is closed by A1,Th23;
+     hence A0 is closed by A2,PRE_TOPC:43;
+    end;
+   hence thesis by Th23;
+  end;
+end;
+
+definition let X be almost_discrete non empty TopSpace;
+ cluster open -> closed SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X such that
+A1:  X0 is open;
+   let A be Subset of X; assume A = the carrier of X0;
+    then A is open by A1,TSEP_1:def 1;
+   hence thesis by Th23;
+  end;
+ cluster closed -> open SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X such that
+A2:  X0 is closed;
+   let A be Subset of X; assume A = the carrier of X0;
+    then A is closed by A2,BORSUK_1:def 14;
+   hence thesis by Th24;
+  end;
+end;
+
+definition let X be almost_discrete non empty TopSpace;
+ cluster almost_discrete strict non empty SubSpace of X;
+  existence
+   proof
+    consider X0 being strict non empty SubSpace of X;
+     take X0;
+    thus thesis;
+   end;
+end;
+
+
+begin
+:: 4. Extremally Disconnected Topological Spaces.
+
+definition let IT be non empty TopSpace;
+ attr IT is extremally_disconnected means
+:Def4: for A being Subset of IT st A is open holds Cl A is open;
+end;
+
+definition
+ cluster extremally_disconnected strict (non empty TopSpace);
+ existence
+  proof
+   consider X being discrete strict non empty TopSpace;
+   take X;
+      now let A be Subset of X;
+     assume A1: A is open;
+         A is closed by Th18;
+     hence Cl A is open by A1,PRE_TOPC:52;
+    end;
+   hence thesis by Def4;
+  end;
+end;
+
+reserve X for non empty TopSpace;
+
+theorem Th29:
+ X is extremally_disconnected iff
+  for A being Subset of X st A is closed holds Int A is closed
+ proof
+  thus X is extremally_disconnected implies
+        for A being Subset of X st A is closed
+        holds Int A is closed
+   proof
+    assume A1: X is extremally_disconnected;
+     let A be Subset of X;
+    assume A is closed;
+     then  A` is open by TOPS_1:29;
+     then Cl  A` is open by A1,Def4;
+     then (Cl  A`)` is closed by TOPS_1:30;
+    hence thesis by TOPS_1:def 1;
+   end;
+  assume
+A2: for A being Subset of X st A is closed
+ holds Int A is closed;
+     now let A be Subset of X;
+    assume A is open;
+     then  A` is closed by TOPS_1:30;
+     then Int  A` is closed by A2;
+     then (Int  A`)` is open by TOPS_1:29;
+    hence Cl A is open by Th2;
+   end;
+  hence X is extremally_disconnected by Def4;
+ end;
+
+theorem Th30:
+ X is extremally_disconnected iff
+   for A, B being Subset of X st A is open & B is open holds
+     A misses B implies Cl A misses Cl B
+ proof
+  thus X is extremally_disconnected implies
+         for A, B being Subset of X st A is open & B is open
+         holds A misses B implies Cl A misses Cl B
+   proof
+    assume A1: X is extremally_disconnected;
+     let A, B be Subset of X;
+    assume A2: A is open & B is open;
+    assume A misses B;
+     then A misses Cl B & Cl B is open by A1,A2,Def4,TSEP_1:40;
+    hence thesis by TSEP_1:40;
+   end;
+  assume
+A3: for A, B being Subset of X st A is open & B is open holds
+               A misses B implies Cl A misses Cl B;
+     now let A be Subset of X;
+    assume A4: A is open;
+        A c= Cl A & Cl A is closed by PCOMPS_1:4,PRE_TOPC:48;
+     then A misses (Cl A)` & (Cl A)` is open by TOPS_1:20,29;
+     then (Cl A) misses Cl (Cl A)` by A3,A4;
+     then Cl A c=  (Cl (Cl A)`)` by PRE_TOPC:21;
+     then Cl A c= Int Cl A & Int Cl A c= Cl A by TOPS_1:44,def 1;
+     then Cl A = Int Cl A & Int Cl A is open by TOPS_1:51,XBOOLE_0:def 10;
+    hence Cl A is open;
+   end;
+  hence X is extremally_disconnected by Def4;
+ end;
+
+theorem
+   X is extremally_disconnected iff
+   for A, B being Subset of X st A is closed & B is closed holds
+    A \/ B = the carrier of X implies (Int A) \/ (Int B) = the carrier of X
+ proof
+  thus X is extremally_disconnected implies
+        for A, B being Subset of X st A is closed & B is closed
+        holds
+       A \/ B = the carrier of X implies (Int A) \/ (Int B) = the carrier of X
+   proof
+    assume A1: X is extremally_disconnected;
+     let A, B be Subset of X;
+    assume A is closed & B is closed;
+     then A2:  A` is open &  B` is open by TOPS_1:29;
+    assume A \/ B = the carrier of X;
+     then A \/ B = [#]X by PRE_TOPC:12;
+     then (A \/ B)` = {}X by TOPS_1:8;
+     then (A \/ B)` = {}X;
+     then ( A`) /\  B` = {}X by SUBSET_1:29;
+     then ( A`) misses  B` by XBOOLE_0:def 7;
+     then (Cl  A`) misses (Cl  B`) by A1,A2,Th30;
+     then (Cl  A`) /\ (Cl  B`) = {}X by XBOOLE_0:def 7;
+     then ((Cl  A`) /\ (Cl  B`))` = [#]X by PRE_TOPC:27;
+     then ((Cl  A`) /\ (Cl  B`))` = [#]X;
+     then ( Cl  A`)` \/ ( Cl  B`)` = [#]X by SUBSET_1:30;
+     then ( Cl  A`)` \/ (Int B) = [#]X by TOPS_1:def 1;
+     then (Int A) \/ (Int B) = [#]X by TOPS_1:def 1;
+    hence thesis by PRE_TOPC:12;
+   end;
+  assume
+A3: for A, B being Subset of X st A is closed & B is closed
+      holds A \/ B = the carrier of X implies
+                  (Int A) \/ (Int B) = the carrier of X;
+     now let A, B be Subset of X;
+    assume A is open & B is open;
+     then A4:  A` is closed &  B` is closed by TOPS_1:30;
+    assume A misses B;
+     then A /\ B = {}X by XBOOLE_0:def 7;
+     then (A /\ B)` = [#]X by PRE_TOPC:27;
+     then (A /\ B)` = [#]X;
+     then  A` \/  B` = [#]X by SUBSET_1:30;
+     then  A` \/  B` = the carrier of X by PRE_TOPC:12;
+     then (Int  A`) \/ (Int  B`) = the carrier of X by A3,A4;
+     then (Int  A`) \/ (Int  B`) = [#]X by PRE_TOPC:12;
+     then ((Int  A`) \/ (Int  B`))` = {}X by TOPS_1:8;
+     then ((Int  A`) \/ (Int  B`))` = {}X;
+     then (Int  A`)` /\ (Int  B`)` = {}X by SUBSET_1:29;
+     then (Cl A) /\ (Int  B`)` = {}X by Th2;
+     then (Cl A) misses (Int  B`)` by XBOOLE_0:def 7;
+    hence (Cl A) misses (Cl B) by Th2;
+   end;
+  hence X is extremally_disconnected by Th30;
+ end;
+
+theorem Th32:
+ X is extremally_disconnected iff
+  for A being Subset of X st A is open holds Cl A = Int Cl A
+ proof
+  thus X is extremally_disconnected implies
+        for A being Subset of X st A is open
+         holds Cl A = Int Cl A
+   proof
+    assume A1: X is extremally_disconnected;
+     let A be Subset of X;
+    assume A2: A is open;
+        A c= Cl A & Cl A is closed by PCOMPS_1:4,PRE_TOPC:48;
+     then A misses (Cl A)` & (Cl A)` is open by TOPS_1:20,29;
+     then (Cl A) misses Cl (Cl A)` by A1,A2,Th30;
+     then Cl A c=  (Cl (Cl A)`)` by PRE_TOPC:21;
+     then Cl A c= Int Cl A & Int Cl A c= Cl A by TOPS_1:44,def 1;
+    hence Cl A = Int Cl A by XBOOLE_0:def 10;
+   end;
+  assume A3: for A being Subset of X st A is open
+   holds Cl A = Int Cl A;
+     now let A be Subset of X;
+    assume A is open;
+     then Cl A = Int Cl A & Int Cl A is open by A3,TOPS_1:51;
+    hence Cl A is open;
+   end;
+  hence X is extremally_disconnected by Def4;
+ end;
+
+theorem
+   X is extremally_disconnected iff
+  for A being Subset of X st A is closed holds Int A = Cl Int A
+ proof
+  thus X is extremally_disconnected implies
+        for A being Subset of X st A is closed
+        holds Int A = Cl Int A
+   proof
+    assume A1: X is extremally_disconnected;
+     let A be Subset of X;
+    assume A is closed;
+     then  A` is open by TOPS_1:29;
+     then Cl  A` = Int Cl  A` by A1,Th32;
+     then Int A = (Int Cl  A`)` by TOPS_1:def 1;
+     then Int A = (Int ((Cl  A`)``))`;
+     then Int A = Cl ( Cl  A`)` by Th2;
+    hence thesis by TOPS_1:def 1;
+   end;
+  assume A2: for A being Subset of X st A is closed
+  holds Int A = Cl Int A;
+     now let A be Subset of X;
+    assume A is closed;
+     then Int A = Cl Int A & Cl Int A is closed by A2,PCOMPS_1:4;
+    hence Int A is closed;
+   end;
+  hence X is extremally_disconnected by Th29;
+ end;
+
+theorem Th34:
+ X is extremally_disconnected iff
+  for A being Subset of X st A is condensed
+  holds A is closed & A is open
+ proof
+  thus X is extremally_disconnected implies
+        for A being Subset of X st A is condensed
+        holds A is closed & A is open
+   proof
+    assume A1: X is extremally_disconnected;
+     let A be Subset of X;
+    assume A2: A is condensed;
+     then A3: Cl A = Cl Int A by Th11;
+        Int A is open by TOPS_1:51;
+     then Cl Int A is open by A1,Def4;
+     then Int Cl A = Cl Int A by A3,TOPS_1:55;
+    hence thesis by A2,Th10;
+   end;
+  assume A4: for A being Subset of X st
+              A is condensed holds A is closed & A is open;
+     now let A be Subset of X;
+    assume A is open;
+     then Int A = A & Cl Int A is closed_condensed by TDLAT_1:22,TOPS_1:55;
+     then Cl A is condensed by TOPS_1:106;
+    hence Cl A is open by A4;
+   end;
+  hence X is extremally_disconnected by Def4;
+ end;
+
+theorem Th35:
+ X is extremally_disconnected iff
+  for A being Subset of X st A is condensed holds
+   A is closed_condensed & A is open_condensed
+ proof
+  thus X is extremally_disconnected implies
+        for A being Subset of X st A is condensed holds
+          A is closed_condensed & A is open_condensed
+   proof
+    assume A1: X is extremally_disconnected;
+     let A be Subset of X;
+    assume A2: A is condensed;
+     then A is closed & A is open by A1,Th34;
+    hence thesis by A2,TOPS_1:106,107;
+   end;
+  assume A3: for A being Subset of X st
+              A is condensed holds A is closed_condensed & A is open_condensed;
+     now let A be Subset of X;
+    assume A is condensed;
+     then A is closed_condensed & A is open_condensed by A3;
+    hence A is closed & A is open by TOPS_1:106,107;
+   end;
+  hence X is extremally_disconnected by Th34;
+ end;
+
+theorem Th36:
+ X is extremally_disconnected iff
+  for A being Subset of X st A is condensed
+  holds Int Cl A = Cl Int A
+ proof
+  thus X is extremally_disconnected implies
+        for A being Subset of X st A is condensed
+        holds Int Cl A = Cl Int A
+   proof
+    assume A1: X is extremally_disconnected;
+     let A be Subset of X;
+    assume A is condensed;
+     then A2: Cl A = Cl Int A by Th11;
+        Int A is open by TOPS_1:51;
+     then Cl Int A is open by A1,Def4;
+    hence thesis by A2,TOPS_1:55;
+   end;
+  assume A3: for A being Subset of X st A is condensed
+ holds Int Cl A = Cl Int A;
+     now let A be Subset of X;
+    assume A4: A is condensed;
+     then Int Cl A = Cl Int A by A3;
+    hence A is closed & A is open by A4,Th10;
+   end;
+  hence X is extremally_disconnected by Th34;
+ end;
+
+theorem
+   X is extremally_disconnected iff
+  for A being Subset of X st A is condensed holds Int A = Cl A
+ proof
+  thus X is extremally_disconnected implies
+        for A being Subset of X st A is condensed
+        holds Int A = Cl A
+   proof
+    assume A1: X is extremally_disconnected;
+     let A be Subset of X;
+    assume A2: A is condensed;
+     then A is closed & A is open by A1,Th34;
+     then Int Cl A = Cl Int A & A = Cl A & A = Int A
+                           by A1,A2,Th36,PRE_TOPC:52,TOPS_1:55;
+    hence thesis;
+   end;
+  assume
+A3: for A being Subset of X st A is condensed
+    holds Int A = Cl A;
+     now let A be Subset of X;
+    assume A is condensed;
+     then Int A = Cl A by A3;
+    hence A is closed & A is open by Th7;
+   end;
+  hence X is extremally_disconnected by Th34;
+ end;
+
+theorem Th38:
+ X is extremally_disconnected iff
+  for A being Subset of X holds
+   (A is open_condensed implies A is closed_condensed) &
+     (A is closed_condensed implies A is open_condensed)
+ proof
+  thus X is extremally_disconnected implies
+        for A being Subset of X holds
+         (A is open_condensed implies A is closed_condensed) &
+          (A is closed_condensed implies A is open_condensed)
+    proof
+     assume A1: X is extremally_disconnected;
+      let A be Subset of X;
+     thus A is open_condensed implies A is closed_condensed
+      proof
+       assume A is open_condensed;
+        then A is condensed by TOPS_1:107;
+       hence thesis by A1,Th35;
+      end;
+     thus A is closed_condensed implies A is open_condensed
+      proof
+       assume A is closed_condensed;
+        then A is condensed by TOPS_1:106;
+       hence thesis by A1,Th35;
+      end;
+    end;
+  assume A2: for A being Subset of X holds
+              (A is open_condensed implies A is closed_condensed) &
+                (A is closed_condensed implies A is open_condensed);
+    for A being Subset of X st A is condensed
+  holds Int Cl A = Cl Int A
+   proof
+     let A be Subset of X;
+    assume A is condensed;
+     then Int Cl A c= A & A c= Cl Int A by TOPS_1:def 6;
+     then A3: Int Cl A c= Cl Int A by XBOOLE_1:1;
+        Int Cl A is open_condensed & Cl Int A is closed_condensed
+ by TDLAT_1:22,23;
+     then Int Cl A is closed_condensed & Cl Int A is open_condensed by A2;
+     then Int Cl A = Cl Int Int Cl A & Cl Int A = Int Cl Cl Int A
+                                                    by TOPS_1:def 7,def 8;
+     then Int Cl A = Cl Int Cl A & Cl Int A = Int Cl Int A by TOPS_1:26;
+     then Cl Int A c= Int Cl A by TDLAT_2:1;
+     hence thesis by A3,XBOOLE_0:def 10;
+   end;
+  hence X is extremally_disconnected by Th36;
+ end;
+
+definition let IT be non empty TopSpace;
+ attr IT is hereditarily_extremally_disconnected means
+:Def5: for X0 being non empty SubSpace of IT
+   holds X0 is extremally_disconnected;
+end;
+
+definition
+ cluster hereditarily_extremally_disconnected strict (non empty TopSpace);
+ existence
+  proof
+   consider X being discrete strict non empty TopSpace;
+   take X;
+       now let X0 be non empty SubSpace of X;
+         now let A be Subset of X0;
+        assume A1: A is open;
+            A is closed by Th18;
+        hence Cl A is open by A1,PRE_TOPC:52;
+       end;
+      hence X0 is extremally_disconnected by Def4;
+     end;
+   hence thesis by Def5;
+  end;
+end;
+
+definition
+ cluster
+  hereditarily_extremally_disconnected -> extremally_disconnected
+      (non empty TopSpace);
+ coherence
+  proof
+   let X be non empty TopSpace such that
+A1:  X is hereditarily_extremally_disconnected;
+       X is SubSpace of X by TSEP_1:2;
+   hence thesis by A1,Def5;
+  end;
+ cluster
+  almost_discrete -> hereditarily_extremally_disconnected (non empty TopSpace);
+ coherence
+  proof
+   let X be non empty TopSpace;
+   assume X is almost_discrete;
+   then reconsider X as almost_discrete non empty TopSpace;
+      now let X0 be non empty SubSpace of X;
+        now let A be Subset of X0;
+       assume A2: A is open;
+        then A is closed by Th23;
+       hence Cl A is open by A2,PRE_TOPC:52;
+      end;
+     hence X0 is extremally_disconnected by Def4;
+    end;
+   hence thesis by Def5;
+  end;
+end;
+
+theorem Th39:
+ for X being extremally_disconnected (non empty TopSpace),
+     X0 being non empty SubSpace of X,
+  A being Subset of X st A = the carrier of X0 & A is dense
+  holds X0 is extremally_disconnected
+ proof
+   let X be extremally_disconnected (non empty TopSpace),
+        X0 be non empty SubSpace of X, A be Subset of X;
+  assume A = the carrier of X0;
+   then A1: A = [#]X0 by PRE_TOPC:12;
+  assume A2: A is dense;
+     for D0, B0 being Subset of X0 st D0 is open & B0 is open
+   holds D0 misses B0 implies (Cl D0) misses (Cl B0)
+    proof
+      let D0, B0 be Subset of X0;
+     assume A3: D0 is open & B0 is open;
+      then consider D being Subset of X such that
+        A4: D is open and A5: D /\ [#]X0 = D0 by TOPS_2:32;
+      consider B being Subset of X such that
+        A6: B is open and A7: B /\ [#]X0 = B0 by A3,TOPS_2:32;
+     assume A8: D0 /\ B0 = {};
+      A9: Cl D0 c= (Cl D) /\ [#]X0
+           proof
+             A10: D0 c= D by A5,XBOOLE_1:17;
+            then D0 is Subset of X by XBOOLE_1:1;
+            then reconsider D1 = D0 as Subset of X;
+               Cl D1 c= Cl D by A10,PRE_TOPC:49;
+            then (Cl D1) /\ [#]X0 c= (Cl D) /\ [#]X0 &
+                   Cl D0 = (Cl D1) /\ [#]X0 by PRE_TOPC:47,XBOOLE_1:26;
+            hence thesis;
+           end;
+      A11: Cl B0 c= (Cl B) /\ [#]X0
+           proof
+             A12: B0 c= B by A7,XBOOLE_1:17;
+            then reconsider B1 = B0 as Subset of X
+                by XBOOLE_1:1;
+               Cl B1 c= Cl B by A12,PRE_TOPC:49;
+            then (Cl B1) /\ [#]X0 c= (Cl B) /\ [#]X0 &
+                   Cl B0 = (Cl B1) /\ [#]X0 by PRE_TOPC:47,XBOOLE_1:26;
+            hence thesis;
+           end;
+         D misses B
+        proof
+         assume A13: D /\ B <> {};
+            D /\ B is open by A4,A6,TOPS_1:38;
+          then (D /\ B) meets A by A2,A13,TOPS_1:80;
+          then (D /\ B) /\ A <> {} by XBOOLE_0:def 7;
+          then D /\ (B /\ (A /\ A)) <> {} by XBOOLE_1:16;
+          then D /\ (A /\ (B /\ A)) <> {} by XBOOLE_1:16;
+         hence contradiction by A1,A5,A7,A8,XBOOLE_1:16;
+        end;
+      then (Cl D) misses (Cl B) by A4,A6,Th30;
+      then (Cl D) /\ (Cl B) = {} by XBOOLE_0:def 7;
+      then ((Cl D) /\ (Cl B)) /\ [#]X0 = {};
+      then (Cl D) /\ ((Cl B) /\ ([#]X0 /\ [#]X0)) = {} by XBOOLE_1:16;
+      then (Cl D) /\ ([#]X0 /\ ((Cl B) /\ [#]X0)) = {} by XBOOLE_1:16;
+      then ((Cl D) /\ [#]X0) /\ ((Cl B) /\ [#]X0) = {} &
+        (Cl D0) /\ (Cl B0) c= ((Cl D) /\ [#]X0) /\ ((Cl B) /\ [#]X0)
+                                        by A9,A11,XBOOLE_1:16,27;
+      then (Cl D0) /\ (Cl B0) = {} by XBOOLE_1:3;
+     hence (Cl D0) misses (Cl B0) by XBOOLE_0:def 7;
+    end;
+  hence thesis by Th30;
+ end;
+
+definition let X be extremally_disconnected (non empty TopSpace);
+ cluster open -> extremally_disconnected (non empty SubSpace of X);
+ coherence
+  proof
+   let X0 be non empty SubSpace of X such that
+A1:  X0 is open;
+     reconsider B = the carrier of X0 as Subset of X
+      by TSEP_1:1;
+      now let A0 be Subset of X0;
+     assume A2: A0 is open;
+         A0 c= B;
+      then A0 is Subset of X by XBOOLE_1:1;
+       then reconsider A = A0 as Subset of X;
+         A is open by A1,A2,TSEP_1:17;
+      then A3: Cl A is open by Def4;
+         Cl A0 = (Cl A) /\ [#]X0 by PRE_TOPC:47;
+     hence Cl A0 is open by A3,TOPS_2:32;
+    end;
+   hence X0 is extremally_disconnected by Def4;
+  end;
+end;
+
+definition let X be extremally_disconnected (non empty TopSpace);
+ cluster extremally_disconnected strict (non empty SubSpace of X);
+  existence
+   proof
+    consider X0 being strict open non empty SubSpace of X;
+     take X0;
+    thus thesis;
+   end;
+end;
+
+definition let X be hereditarily_extremally_disconnected (non empty TopSpace);
+ cluster -> hereditarily_extremally_disconnected (non empty SubSpace of X);
+ coherence
+  proof
+   let X0 be non empty SubSpace of X;
+      for Y being non empty SubSpace of X0 holds Y is extremally_disconnected
+     proof
+      let Y be non empty SubSpace of X0;
+         Y is SubSpace of X by TSEP_1:7;
+      hence thesis by Def5;
+     end;
+   hence thesis by Def5;
+  end;
+end;
+
+definition let X be hereditarily_extremally_disconnected (non empty TopSpace);
+ cluster hereditarily_extremally_disconnected strict (non empty SubSpace of X);
+  existence
+   proof
+    consider X0 being strict non empty SubSpace of X;
+     take X0;
+    thus thesis;
+   end;
+end;
+
+theorem
+   (for X0 being closed non empty SubSpace of X
+    holds X0 is extremally_disconnected)
+   implies X is hereditarily_extremally_disconnected
+ proof
+  assume A1: for Y being closed non empty SubSpace of X holds
+               Y is extremally_disconnected;
+     for X0 being non empty SubSpace of X holds X0 is extremally_disconnected
+    proof
+     let X0 be non empty SubSpace of X;
+        the carrier of X0 is Subset of X by TSEP_1:1;
+      then reconsider A0 = the carrier of X0 as Subset of X;
+     set A = Cl A0;
+          A2: A is closed by PCOMPS_1:4;
+        A is non empty by PCOMPS_1:2;
+      then consider Y being strict closed non empty SubSpace of X such that
+        A3: A = the carrier of Y by A2,TSEP_1:15;
+         A0 c= A by PRE_TOPC:48;
+      then reconsider Y0 = X0 as non empty SubSpace of Y by A3,TSEP_1:4;
+            the carrier of Y0 is Subset of Y by TSEP_1:1;
+          then reconsider B0 = the carrier of Y0 as Subset of Y;
+          Cl B0 = A /\ [#]Y & A = [#]Y by A3,PRE_TOPC:12,47;
+       then A4: B0 is dense by TOPS_1:def 3;
+        Y is extremally_disconnected by A1;
+     hence thesis by A4,Th39;
+    end;
+  hence X is hereditarily_extremally_disconnected by Def5;
+ end;
+
+
+begin
+:: 5. The Lattice of Domains of Extremally Disconnected Spaces.
+
+::Properties of the Lattice of Domains of an Extremally Disconnected Space.
+reserve Y for extremally_disconnected (non empty TopSpace);
+
+theorem Th41:
+ Domains_of Y = Closed_Domains_of Y
+ proof
+      now let S be set;
+     assume A1: S in Domains_of Y;
+      then reconsider A = S as Subset of Y;
+         A in {D where D is Subset of Y : D is condensed}
+         by A1,TDLAT_1:def 1;
+      then ex D being Subset of Y st D = A & D is condensed;
+      then A is closed_condensed by Th35;
+     then A in {E where E is Subset of Y : E is closed_condensed};
+     hence S in Closed_Domains_of Y by TDLAT_1:def 5;
+    end;
+   then Domains_of Y c= Closed_Domains_of Y &
+         Closed_Domains_of Y c= Domains_of Y by TARSKI:def 3,TDLAT_1:31;
+  hence thesis by XBOOLE_0:def 10;
+ end;
+
+theorem Th42:
+ D-Union Y = CLD-Union Y & D-Meet Y = CLD-Meet Y
+ proof
+A1:   Domains_of Y = Closed_Domains_of Y by Th41;
+
+  hence D-Union Y = (D-Union Y)|[:Closed_Domains_of Y,Closed_Domains_of Y:]
+by FUNCT_2:40
+     .= CLD-Union Y by TDLAT_1:39;
+  thus D-Meet Y = (D-Meet Y)|[:Closed_Domains_of Y,Closed_Domains_of Y:] by A1,
+FUNCT_2:40
+     .= CLD-Meet Y by TDLAT_1:40;
+ end;
+
+theorem Th43:
+ Domains_Lattice Y = Closed_Domains_Lattice Y
+ proof
+      Domains_of Y = Closed_Domains_of Y &
+        D-Union Y = CLD-Union Y & D-Meet Y = CLD-Meet Y by Th41,Th42;
+  hence Domains_Lattice Y =
+LattStr(#Closed_Domains_of Y,CLD-Union Y,CLD-Meet Y#) by TDLAT_1:def 4
+  .= Closed_Domains_Lattice Y by TDLAT_1:def 8;
+ end;
+
+theorem Th44:
+ Domains_of Y = Open_Domains_of Y
+ proof
+      now let S be set;
+     assume A1: S in Domains_of Y;
+      then reconsider A = S as Subset of Y;
+         A in {D where D is Subset of Y : D is condensed}
+         by A1,TDLAT_1:def 1;
+       then consider D being Subset of Y such that
+A2:     D = A & D is condensed;
+        A is open_condensed by A2,Th35;
+     then A in {E where E is Subset of Y : E is open_condensed};
+     hence S in Open_Domains_of Y by TDLAT_1:def 9;
+    end;
+   then Domains_of Y c= Open_Domains_of Y &
+         Open_Domains_of Y c= Domains_of Y by TARSKI:def 3,TDLAT_1:35;
+  hence thesis by XBOOLE_0:def 10;
+ end;
+
+theorem Th45:
+ D-Union Y = OPD-Union Y & D-Meet Y = OPD-Meet Y
+ proof
+A1:   Domains_of Y = Open_Domains_of Y by Th44;
+
+  hence D-Union Y = (D-Union Y)|[:Open_Domains_of Y,Open_Domains_of Y:] by
+FUNCT_2:40
+     .= OPD-Union Y by TDLAT_1:42;
+  thus D-Meet Y = (D-Meet Y)|[:Open_Domains_of Y,Open_Domains_of Y:] by A1,
+FUNCT_2:40
+     .= OPD-Meet Y by TDLAT_1:43;
+ end;
+
+theorem Th46:
+ Domains_Lattice Y = Open_Domains_Lattice Y
+ proof
+      Domains_of Y = Open_Domains_of Y &
+        D-Union Y = OPD-Union Y & D-Meet Y = OPD-Meet Y by Th44,Th45;
+  hence
+   Domains_Lattice Y =LattStr(#Open_Domains_of Y,OPD-Union Y,OPD-Meet Y#) by
+TDLAT_1:def 4
+  .= Open_Domains_Lattice Y by TDLAT_1:def 12;
+ end;
+
+theorem Th47:
+ for A, B being Element of Domains_of Y holds
+  (D-Union Y).(A,B) = A \/ B & (D-Meet Y).(A,B) = A /\ B
+ proof
+  let A, B be Element of Domains_of Y;
+  reconsider A0 = A, B0 = B as Element of Closed_Domains_of Y by Th41;
+     (D-Union Y).(A,B) = (CLD-Union Y).(A0,B0) &
+           (CLD-Union Y).(A0,B0) = A0 \/ B0 by Th42,TDLAT_1:def 6;
+  hence (D-Union Y).(A,B) = A \/ B;
+  reconsider A0 = A, B0 = B as Element of Open_Domains_of Y by Th44;
+     (D-Meet Y).(A,B) = (OPD-Meet Y).(A0,B0) &
+           (OPD-Meet Y).(A0,B0) = A0 /\ B0 by Th45,TDLAT_1:def 11;
+  hence (D-Meet Y).(A,B) = A /\ B;
+ end;
+
+theorem
+   for a, b being Element of Domains_Lattice Y
+  for A, B being Element of Domains_of Y st a = A & b = B holds
+    a "\/" b = A \/ B & a "/\" b = A /\ B
+ proof
+  let a, b be Element of Domains_Lattice Y;
+   let A, B be Element of Domains_of Y;
+    A1: Domains_Lattice Y =
+           LattStr(#Domains_of Y,D-Union Y,D-Meet Y#) by TDLAT_1:def 4;
+  assume A2: a = A & b = B;
+  hence a "\/" b = (D-Union Y).(A,B) by A1,LATTICES:def 1
+             .= A \/ B by Th47;
+  thus a "/\" b = (D-Meet Y).(A,B) by A1,A2,LATTICES:def 2
+             .= A /\ B by Th47;
+ end;
+
+theorem
+   for F being Subset-Family of Y st F is domains-family
+  for S being Subset of Domains_Lattice Y st S = F holds
+   "\/"(S,Domains_Lattice Y) = Cl(union F)
+ proof
+   let F be Subset-Family of Y;
+  assume F is domains-family;
+   then F c= Domains_of Y by TDLAT_2:65;
+   then F c= Closed_Domains_of Y by Th41;
+  then A1: F is closed-domains-family by TDLAT_2:72;
+   let S be Subset of Domains_Lattice Y;
+   reconsider P = S as Subset of Closed_Domains_Lattice Y
+   by Th43;
+  assume A2: S = F;
+  thus "\/"(S,Domains_Lattice Y) = "\/"(P,Closed_Domains_Lattice Y) by Th43
+                              .= Cl(union F) by A1,A2,TDLAT_2:100;
+ end;
+
+theorem
+   for F being Subset-Family of Y st F is domains-family
+  for S being Subset of Domains_Lattice Y st S = F holds
+   (S <> {} implies "/\"(S,Domains_Lattice Y) = Int(meet F)) &
+     (S = {} implies "/\"(S,Domains_Lattice Y) = [#]Y)
+ proof
+   let F be Subset-Family of Y;
+  assume A1: F is domains-family;
+   then F c= Domains_of Y by TDLAT_2:65;
+   then F c= Open_Domains_of Y by Th44;
+  then A2: F is open-domains-family by TDLAT_2:79;
+   let S be Subset of Domains_Lattice Y;
+     A3: Domains_Lattice Y = Open_Domains_Lattice Y by Th46;
+
+  assume A4: S = F;
+  hence S <> {} implies "/\"(S,Domains_Lattice Y) = Int(meet F)
+                                  by A2,A3,TDLAT_2:110;
+  assume S = {};
+  hence thesis by A1,A4,TDLAT_2:93;
+ end;
+
+::Lattice-theoretic Characterizations of Extremally Disconnected Spaces.
+reserve X for non empty TopSpace;
+
+theorem Th51:
+ X is extremally_disconnected iff Domains_Lattice X is M_Lattice
+ proof
+A1:       Domains_Lattice X =
+           LattStr(#Domains_of X,D-Union X,D-Meet X#) by TDLAT_1:def 4;
+
+  thus X is extremally_disconnected implies Domains_Lattice X is M_Lattice
+   proof
+    assume X is extremally_disconnected;
+     then Domains_Lattice X = Open_Domains_Lattice X by Th46;
+    hence Domains_Lattice X is M_Lattice;
+   end;
+  assume A2: Domains_Lattice X is M_Lattice;
+  assume not X is extremally_disconnected;
+   then consider D being Subset of X such that
+     A3: D is condensed and A4: Int Cl D <> Cl Int D by Th36;
+   set A = Int Cl D, C = Cl Int D, B =  C`;
+     A5: A is open_condensed & C is closed_condensed by TDLAT_1:22,23;
+    then A6: A is condensed & C is condensed by TOPS_1:106,107;
+          B` is closed_condensed by A5;
+    then B is open_condensed by TOPS_1:101;
+    then B is condensed by TOPS_1:107;
+     then B in {E where E is Subset of X : E is condensed};
+    then reconsider b = B as Element of Domains_Lattice X
+       by A1,TDLAT_1:def 1;
+A7: A in {E where E is Subset of X : E is condensed} by A6;
+     then A8: A in Domains_of X by TDLAT_1:def 1;
+    reconsider a = A as Element of Domains_Lattice X
+      by A1,A7,TDLAT_1:def 1;
+A9: C in {E where E is Subset of X : E is condensed} by A6;
+     then A10: C in Domains_of X by TDLAT_1:def 1;
+    reconsider c = C as Element of Domains_Lattice X
+      by A1,A9,TDLAT_1:def 1;
+         A c= D & D c= C by A3,TOPS_1:def 6;
+      then A c= C by XBOOLE_1:1;
+     then A11: a [= c by A8,A10,TDLAT_2:89;
+         A12: A = Int Cl A by A5,TOPS_1:def 8;
+                B misses C by PRE_TOPC:26;
+         then A13: B /\ C = {}X by XBOOLE_0:def 7;
+         A14: A \/ {}X = A;
+         b "/\" c = Cl(Int(B /\ C)) /\ (B /\ C) by A1,TDLAT_2:87
+             .= {}X by A13;
+     then A15: a "\/" (b "/\" c) = Int(Cl A) \/ A by A1,A14,TDLAT_2:87
+                           .= A by A12;
+         A16: C = Cl Int C by A5,TOPS_1:def 7;
+                                               A17: B = Int (Int D)` by Th4
+                                                    .= Int Cl  D` by Th3;
+                                    A18: Cl D is closed by PCOMPS_1:4;
+            Cl(A \/ B) = Cl A \/ Cl B by PRE_TOPC:50
+                       .= Cl Int(Cl D \/ Cl D`) by A17,A18,TDLAT_1:6
+                       .= Cl Int Cl(D \/  D`) by PRE_TOPC:50
+                       .= Cl Int Cl [#]X by PRE_TOPC:18
+                       .= Cl Int [#]X by TOPS_1:27
+                       .= Cl [#]X by TOPS_1:43
+                       .= [#]X by TOPS_1:27;
+       then a "\/" b = Int([#]X) \/ (A \/ B) by A1,TDLAT_2:87
+             .= [#]X \/ (A \/ B) by TOPS_1:43
+             .= [#]X by TOPS_1:2;
+     then (a "\/" b) "/\" c = Cl(Int([#]X /\ C)) /\ ([#]X /\
+ C) by A1,TDLAT_2:87
+                       .= Cl(Int C) /\ ([#]X /\ C) by PRE_TOPC:15
+                       .= Cl(Int C) /\ C by PRE_TOPC:15
+                       .= C by A16;
+  hence contradiction by A2,A4,A11,A15,LATTICES:def 12;
+ end;
+
+theorem
+   Domains_Lattice X = Closed_Domains_Lattice X implies
+                            X is extremally_disconnected by Th51;
+
+theorem
+   Domains_Lattice X = Open_Domains_Lattice X implies
+                          X is extremally_disconnected by Th51;
+
+theorem
+   Closed_Domains_Lattice X = Open_Domains_Lattice X implies
+                                 X is extremally_disconnected
+ proof
+  assume Closed_Domains_Lattice X = Open_Domains_Lattice X;
+   then Closed_Domains_of X =
+                the carrier of Open_Domains_Lattice X by TDLAT_2:94;
+   then A1: Closed_Domains_of X = Open_Domains_of X by TDLAT_2:103;
+      for A being Subset of X holds
+      (A is open_condensed implies A is closed_condensed) &
+         (A is closed_condensed implies A is open_condensed)
+     proof
+       let A be Subset of X;
+      thus A is open_condensed implies A is closed_condensed
+       proof
+        assume A is open_condensed;
+          then A in {E where E is Subset of X : E is open_condensed};
+          then A in Closed_Domains_of X by A1,TDLAT_1:def 9;
+          then A in {E where E is Subset of X : E is closed_condensed}
+                                                       by TDLAT_1:def 5;
+          then ex D being Subset of X st D = A & D is closed_condensed;
+        hence thesis;
+       end;
+      assume A is closed_condensed;
+        then A in {E where E is Subset of X : E is closed_condensed};
+        then A in Open_Domains_of X by A1,TDLAT_1:def 5;
+        then A in
+ {E where E is Subset of X : E is open_condensed } by TDLAT_1:def 9;
+        then ex D being Subset of X st D = A & D is open_condensed;
+      hence A is open_condensed;
+     end;
+  hence thesis by Th38;
+ end;
+
+theorem
+   X is extremally_disconnected iff Domains_Lattice X is B_Lattice
+ proof
+  thus X is extremally_disconnected implies Domains_Lattice X is B_Lattice
+   proof
+    assume X is extremally_disconnected;
+     then Domains_Lattice X = Open_Domains_Lattice X by Th46;
+    hence thesis;
+   end;
+  assume Domains_Lattice X is B_Lattice;
+  hence X is extremally_disconnected by Th51;
+ end;

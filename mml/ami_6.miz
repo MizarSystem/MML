@@ -1,0 +1,3560 @@
+:: On the Instructions of { \bf SCM }
+::  by Artur Korni{\l}owicz
+::
+:: Received May 8, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_3, AMI_1, ORDINAL2, ARYTM, AMI_2, CAT_1, BOOLE, FUNCT_7,
+      FUNCT_1, RELAT_1, FUNCT_4, FUNCOP_1, FINSEQ_1, GR_CY_1, AMISTD_2,
+      MCART_1, AMI_5, AMISTD_1, SETFAM_1, REALSET1, TARSKI, SGRAPH1, GOBOARD5,
+      FRECHET, ARYTM_1, NAT_1, INT_1, UNIALG_1, CARD_5, CARD_3, RELOC;
+ notation TARSKI, XBOOLE_0, SUBSET_1, MCART_1, SETFAM_1, RELAT_1, FUNCT_1,
+      FUNCT_2, REALSET1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0, XREAL_0, INT_1,
+      NAT_1, CQC_LANG, FINSEQ_1, FUNCT_4, STRUCT_0, GR_CY_1, CARD_3, FUNCT_7,
+      AMI_1, AMI_2, AMI_3, AMI_5, AMISTD_1, AMISTD_2;
+ constructors AMI_5, AMISTD_2, DOMAIN_1, NAT_1, FUNCT_7, PRALG_2, MEMBERED;
+ clusters AMI_1, RELSET_1, SCMRING1, TEX_2, AMISTD_2, RELAT_1, FUNCT_1, NAT_1,
+      CQC_LANG, FINSEQ_1, XBOOLE_0, INT_1, AMI_3, FRAENKEL, AMI_5, MEMBERED,
+      ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+ definitions TARSKI, FUNCT_1, FUNCT_2, FUNCT_7, AMISTD_1, AMISTD_2, XBOOLE_0;
+ theorems TARSKI, NAT_1, AMI_1, AMI_3, FUNCT_4, AMI_5, FUNCT_1, FUNCT_2,
+      RELSET_1, CQC_LANG, SCMFSA9A, SETFAM_1, AMI_2, AMISTD_1, MCART_1,
+      FINSEQ_1, FINSEQ_3, CQC_THE1, GR_CY_1, AMISTD_2, FUNCT_7, CARD_3,
+      SCMFSA6A, ORDINAL2, XBOOLE_0, XBOOLE_1, XCMPLX_1, YELLOW_8;
+ schemes FUNCT_2;
+
+begin
+
+reserve a, b, d1, d2 for Data-Location,
+        il, i1, i2 for Instruction-Location of SCM,
+        I for Instruction of SCM,
+        s, s1, s2 for State of SCM,
+        T for InsType of SCM,
+        k for natural number;
+
+theorem Th1:
+ not a in the Instruction-Locations of SCM
+  proof
+      a in SCM-Data-Loc by AMI_3:def 2;
+    hence thesis by AMI_3:def 1,AMI_5:33,XBOOLE_0:3;
+  end;
+
+theorem Th2:
+ SCM-Data-Loc <> the Instruction-Locations of SCM
+  proof
+    assume
+A1:   not thesis;
+    consider a being Element of SCM-Instr-Loc;
+    a in SCM-Instr-Loc;
+    hence thesis by A1,AMI_2:12,AMI_3:def 1;
+  end;
+
+theorem Th3:
+ for o being Object of SCM holds
+  o = IC SCM or o in the Instruction-Locations of SCM or
+  o is Data-Location
+  proof
+    let o be Object of SCM;
+      o in {IC SCM} \/ SCM-Data-Loc or o in SCM-Instr-Loc
+      by AMI_5:23,XBOOLE_0:def 2;
+    then o in {IC SCM} or o in SCM-Data-Loc or o in SCM-Instr-Loc by XBOOLE_0:
+def 2;
+    hence thesis by AMI_3:def 1,def 2,TARSKI:def 1;
+  end;
+
+theorem Th4:
+ i1 <> i2 implies Next i1 <> Next i2
+  proof
+    assume
+A1:   i1 <> i2 & Next i1 = Next i2;
+    consider m1 being Element of SCM-Instr-Loc such that
+A2:   m1 = i1 & Next i1 = Next m1 by AMI_3:def 11;
+    consider m2 being Element of SCM-Instr-Loc such that
+A3:   m2 = i2 & Next i2 = Next m2 by AMI_3:def 11;
+    Next m1 = m1+2 & Next m2 = m2+2 by AMI_2:def 15;
+    hence contradiction by A1,A2,A3,XCMPLX_1:2;
+  end;
+
+theorem Th5:
+ s1,s2 equal_outside the Instruction-Locations of SCM implies s1.a = s2.a
+  proof
+    set IL = the Instruction-Locations of SCM;
+    assume
+A1:   s1,s2 equal_outside IL;
+A2: dom s1 = the carrier of SCM by AMI_3:36;
+A3: dom s2 = the carrier of SCM by AMI_3:36;
+A4: not a in IL by Th1;
+    then a in dom s1 \ IL by A2,XBOOLE_0:def 4;
+then A5: a in dom s1 /\ (dom s1 \ IL) by A2,XBOOLE_0:def 3;
+      a in dom s2 \ IL by A3,A4,XBOOLE_0:def 4;
+then A6: a in dom s2 /\ (dom s2 \ IL) by A3,XBOOLE_0:def 3;
+    thus s1.a = (s1|(dom s1 \ IL)).a by A5,FUNCT_1:71
+             .= (s2|(dom s2 \ IL)).a by A1,FUNCT_7:def 2
+             .= s2.a by A6,FUNCT_1:71;
+  end;
+
+theorem Th6:
+ for N being with_non-empty_elements set,
+     S being realistic IC-Ins-separated definite
+       (non empty non void AMI-Struct over N),
+     t, u being State of S,
+     il being Instruction-Location of S,
+     e being Element of ObjectKind IC S,
+     I being Element of ObjectKind il
+  st e = il & u = t+*((IC S, il)-->(e, I))
+  holds
+    u.il = I &
+    IC u = il &
+    IC Following u = Exec(u.IC u, u).IC S
+  proof
+    let N be with_non-empty_elements set,
+        S be realistic IC-Ins-separated definite
+          (non empty non void AMI-Struct over N),
+        t, u be State of S,
+        il be Instruction-Location of S,
+        e be Element of ObjectKind IC S,
+        I be Element of ObjectKind il such that
+A1:  e = il and
+A2:  u = t+*((IC S, il)-->(e, I));
+     A3: dom ((IC S, il)-->(e, I)) = {IC S, il} by FUNCT_4:65;
+     then A4: IC S in dom ((IC S, il)-->(e, I)) by TARSKI:def 2;
+     A5: IC S <> il by AMI_1:48;
+       il in dom ((IC S, il)-->(e, I)) by A3,TARSKI:def 2;
+         hence
+        u.il = ((IC S, il)-->(e, I)).il by A2,FUNCT_4:14
+             .= I by A5,FUNCT_4:66;
+         thus
+        IC u = u.IC S by AMI_1:def 15
+             .= ((IC S, il)-->(e, I)).IC S by A2,A4,FUNCT_4:14
+             .= il by A1,A5,FUNCT_4:66;
+         thus
+           IC Following u = IC Exec(CurInstr u,u) by AMI_1:def 18
+           .= IC Exec(u.IC u, u) by AMI_1:def 17
+           .= Exec(u.IC u, u).IC S by AMI_1:def 15;
+  end;
+
+Lm1:
+ for x, y being set st x in dom <*y*> holds x = 1
+  proof
+    let x, y be set;
+    assume x in dom <*y*>;
+    then x in Seg 1 by FINSEQ_1:def 8;
+    hence thesis by FINSEQ_1:4,TARSKI:def 1;
+  end;
+
+Lm2:
+ for x, y, z being set st x in dom <*y,z*> holds x = 1 or x = 2
+  proof
+    let x, y, z be set;
+    assume x in dom <*y,z*>;
+    then x in Seg 2 by FINSEQ_3:29;
+    hence thesis by FINSEQ_1:4,TARSKI:def 2;
+  end;
+
+Lm3:
+ T = 0 or T = 1 or T = 2 or T = 3 or T = 4 or T = 5 or T = 6 or T = 7 or T = 8
+  proof
+      T in Segm 9 by AMI_3:def 1;
+    then reconsider t = T as Nat;
+      t = 0 or t < 8+1 by AMI_3:def 1,GR_CY_1:10;
+    then t = 0 or t <= 8 by NAT_1:38;
+    hence thesis by CQC_THE1:9;
+  end;
+
+theorem Th7:
+ AddressPart halt SCM = {}
+  proof
+    thus AddressPart halt SCM = (halt SCM)`2 by AMISTD_2:def 3
+       .= {} by AMI_3:71,MCART_1:def 2;
+  end;
+
+theorem Th8:
+ AddressPart (a:=b) = <*a,b*>
+  proof
+    thus AddressPart (a:=b) = (a:=b)`2 by AMISTD_2:def 3
+       .= [ 1, <*a,b*>]`2 by AMI_3:def 3
+       .= <*a,b*> by MCART_1:def 2;
+  end;
+
+theorem Th9:
+ AddressPart AddTo(a,b) = <*a,b*>
+  proof
+    thus AddressPart AddTo(a,b) = AddTo(a,b)`2 by AMISTD_2:def 3
+       .= [ 2, <*a,b*>]`2 by AMI_3:def 4
+       .= <*a,b*> by MCART_1:def 2;
+  end;
+
+theorem Th10:
+ AddressPart SubFrom(a,b) = <*a,b*>
+  proof
+    thus AddressPart SubFrom(a,b) = SubFrom(a,b)`2 by AMISTD_2:def 3
+       .= [ 3, <*a,b*>]`2 by AMI_3:def 5
+       .= <*a,b*> by MCART_1:def 2;
+  end;
+
+theorem Th11:
+ AddressPart MultBy(a,b) = <*a,b*>
+  proof
+    thus AddressPart MultBy(a,b) = MultBy(a,b)`2 by AMISTD_2:def 3
+       .= [ 4, <*a,b*>]`2 by AMI_3:def 6
+       .= <*a,b*> by MCART_1:def 2;
+  end;
+
+theorem Th12:
+ AddressPart Divide(a,b) = <*a,b*>
+  proof
+    thus AddressPart Divide(a,b) = Divide(a,b)`2 by AMISTD_2:def 3
+       .= [ 5, <*a,b*>]`2 by AMI_3:def 7
+       .= <*a,b*> by MCART_1:def 2;
+  end;
+
+theorem Th13:
+ AddressPart goto i1 = <*i1*>
+  proof
+    thus AddressPart goto i1 = (goto i1)`2 by AMISTD_2:def 3
+       .= [ 6, <*i1*>]`2 by AMI_3:def 8
+       .= <*i1*> by MCART_1:def 2;
+  end;
+
+theorem Th14:
+ AddressPart (a=0_goto i1) = <*i1,a*>
+  proof
+    thus AddressPart (a=0_goto i1) = (a=0_goto i1)`2 by AMISTD_2:def 3
+       .= [ 7, <*i1,a*>]`2 by AMI_3:def 9
+       .= <*i1,a*> by MCART_1:def 2;
+  end;
+
+theorem Th15:
+ AddressPart (a>0_goto i1) = <*i1,a*>
+  proof
+    thus AddressPart (a>0_goto i1) = (a>0_goto i1)`2 by AMISTD_2:def 3
+       .= [ 8, <*i1,a*>]`2 by AMI_3:def 10
+       .= <*i1,a*> by MCART_1:def 2;
+  end;
+
+theorem Th16:
+ T = 0 implies AddressParts T = {0}
+  proof
+    assume
+A1:   T = 0;
+A2: AddressParts T =
+      { AddressPart I where I is Instruction of SCM: InsCode I = T }
+        by AMISTD_2:def 5;
+    hereby
+      let a be set;
+      assume a in AddressParts T;
+      then consider I such that
+A3:     a = AddressPart I and
+A4:     InsCode I = T by A2;
+        I = halt SCM by A1,A4,AMI_5:46;
+      hence a in {0} by A3,Th7,TARSKI:def 1;
+    end;
+    let a be set;
+    assume a in {0};
+    then a = 0 by TARSKI:def 1;
+    hence thesis by A1,A2,Th7,AMI_5:37;
+  end;
+
+definition let T;
+ cluster AddressParts T -> non empty;
+coherence
+  proof
+A1: AddressParts T = {AddressPart I where
+      I is Instruction of SCM: InsCode I = T} by AMISTD_2:def 5;
+    consider a, b, i1;
+A2: T = 0 or T = 1 or T = 2 or T = 3 or T = 4 or T = 5 or T = 6 or T = 7 or
+      T = 8 by Lm3;
+      InsCode halt SCM = 0 & InsCode (a:=b) = 1 & InsCode AddTo(a,b) = 2 &
+     InsCode SubFrom(a,b) = 3 & InsCode MultBy(a,b) = 4 &
+      InsCode Divide(a,b) = 5 & InsCode goto i1 = 6 &
+       InsCode (a =0_goto i1) = 7 & InsCode (a >0_goto i1) = 8
+       by AMI_5:37,38,39,40,41,42,43,44,45;
+    then AddressPart halt SCM in AddressParts T or
+     AddressPart (a:=b) in AddressParts T or
+      AddressPart AddTo(a,b) in AddressParts T or
+       AddressPart SubFrom(a,b) in AddressParts T or
+        AddressPart MultBy(a,b) in AddressParts T or
+         AddressPart Divide(a,b) in AddressParts T or
+          AddressPart goto i1 in AddressParts T or
+           AddressPart (a =0_goto i1) in AddressParts T or
+            AddressPart (a >0_goto i1) in AddressParts T by A1,A2;
+    hence thesis;
+  end;
+end;
+
+theorem Th17:
+ T = 1 implies dom PA AddressParts T = {1,2}
+  proof
+    assume
+A1:   T = 1;
+A2: AddressParts T = {AddressPart I where
+      I is Instruction of SCM: InsCode I = T} by AMISTD_2:def 5;
+    consider a, b;
+A3: AddressPart (a:=b) = <*a,b*> by Th8;
+    hereby
+      let x be set;
+      assume
+A4:     x in dom PA AddressParts T;
+        InsCode (a:=b) = 1 by AMI_5:38;
+      then AddressPart (a:=b) in AddressParts T by A1,A2;
+      then x in dom AddressPart (a:=b) by A4,AMISTD_2:def 1;
+      hence x in {1,2} by A3,FINSEQ_1:4,FINSEQ_3:29;
+    end;
+    let x be set;
+    assume
+A5:   x in {1,2};
+      for f being Function st f in AddressParts T holds x in dom f
+    proof
+      let f be Function;
+      assume f in AddressParts T;
+      then consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = T by A2;
+      consider d1, d2 such that
+A8:     I = d1:=d2 by A1,A7,AMI_5:47;
+        f = <*d1,d2*> by A6,A8,Th8;
+      hence x in dom f by A5,FINSEQ_1:4,FINSEQ_3:29;
+    end;
+    hence thesis by AMISTD_2:def 1;
+  end;
+
+theorem Th18:
+ T = 2 implies dom PA AddressParts T = {1,2}
+  proof
+    assume
+A1:   T = 2;
+A2: AddressParts T = {AddressPart I where
+      I is Instruction of SCM: InsCode I = T} by AMISTD_2:def 5;
+    consider a, b;
+A3: AddressPart AddTo(a,b) = <*a,b*> by Th9;
+    hereby
+      let x be set;
+      assume
+A4:     x in dom PA AddressParts T;
+        InsCode AddTo(a,b) = 2 by AMI_5:39;
+      then AddressPart AddTo(a,b) in AddressParts T by A1,A2;
+      then x in dom AddressPart AddTo(a,b) by A4,AMISTD_2:def 1;
+      hence x in {1,2} by A3,FINSEQ_1:4,FINSEQ_3:29;
+    end;
+    let x be set;
+    assume
+A5:   x in {1,2};
+      for f being Function st f in AddressParts T holds x in dom f
+    proof
+      let f be Function;
+      assume f in AddressParts T;
+      then consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = T by A2;
+      consider d1, d2 such that
+A8:     I = AddTo(d1,d2) by A1,A7,AMI_5:48;
+        f = <*d1,d2*> by A6,A8,Th9;
+      hence x in dom f by A5,FINSEQ_1:4,FINSEQ_3:29;
+    end;
+    hence thesis by AMISTD_2:def 1;
+  end;
+
+theorem Th19:
+ T = 3 implies dom PA AddressParts T = {1,2}
+  proof
+    assume
+A1:   T = 3;
+A2: AddressParts T = {AddressPart I where
+      I is Instruction of SCM: InsCode I = T} by AMISTD_2:def 5;
+    consider a, b;
+A3: AddressPart SubFrom(a,b) = <*a,b*> by Th10;
+    hereby
+      let x be set;
+      assume
+A4:     x in dom PA AddressParts T;
+        InsCode SubFrom(a,b) = 3 by AMI_5:40;
+      then AddressPart SubFrom(a,b) in AddressParts T by A1,A2;
+      then x in dom AddressPart SubFrom(a,b) by A4,AMISTD_2:def 1;
+      hence x in {1,2} by A3,FINSEQ_1:4,FINSEQ_3:29;
+    end;
+    let x be set;
+    assume
+A5:   x in {1,2};
+      for f being Function st f in AddressParts T holds x in dom f
+    proof
+      let f be Function;
+      assume f in AddressParts T;
+      then consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = T by A2;
+      consider d1, d2 such that
+A8:     I = SubFrom(d1,d2) by A1,A7,AMI_5:49;
+        f = <*d1,d2*> by A6,A8,Th10;
+      hence x in dom f by A5,FINSEQ_1:4,FINSEQ_3:29;
+    end;
+    hence thesis by AMISTD_2:def 1;
+  end;
+
+theorem Th20:
+ T = 4 implies dom PA AddressParts T = {1,2}
+  proof
+    assume
+A1:   T = 4;
+A2: AddressParts T = {AddressPart I where
+      I is Instruction of SCM: InsCode I = T} by AMISTD_2:def 5;
+    consider a, b;
+A3: AddressPart MultBy(a,b) = <*a,b*> by Th11;
+    hereby
+      let x be set;
+      assume
+A4:     x in dom PA AddressParts T;
+        InsCode MultBy(a,b) = 4 by AMI_5:41;
+      then AddressPart MultBy(a,b) in AddressParts T by A1,A2;
+      then x in dom AddressPart MultBy(a,b) by A4,AMISTD_2:def 1;
+      hence x in {1,2} by A3,FINSEQ_1:4,FINSEQ_3:29;
+    end;
+    let x be set;
+    assume
+A5:   x in {1,2};
+      for f being Function st f in AddressParts T holds x in dom f
+    proof
+      let f be Function;
+      assume f in AddressParts T;
+      then consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = T by A2;
+      consider d1, d2 such that
+A8:     I = MultBy(d1,d2) by A1,A7,AMI_5:50;
+        f = <*d1,d2*> by A6,A8,Th11;
+      hence x in dom f by A5,FINSEQ_1:4,FINSEQ_3:29;
+    end;
+    hence thesis by AMISTD_2:def 1;
+  end;
+
+theorem Th21:
+ T = 5 implies dom PA AddressParts T = {1,2}
+  proof
+    assume
+A1:   T = 5;
+A2: AddressParts T = {AddressPart I where
+      I is Instruction of SCM: InsCode I = T} by AMISTD_2:def 5;
+    consider a, b;
+A3: AddressPart Divide(a,b) = <*a,b*> by Th12;
+    hereby
+      let x be set;
+      assume
+A4:     x in dom PA AddressParts T;
+        InsCode Divide(a,b) = 5 by AMI_5:42;
+      then AddressPart Divide(a,b) in AddressParts T by A1,A2;
+      then x in dom AddressPart Divide(a,b) by A4,AMISTD_2:def 1;
+      hence x in {1,2} by A3,FINSEQ_1:4,FINSEQ_3:29;
+    end;
+    let x be set;
+    assume
+A5:   x in {1,2};
+      for f being Function st f in AddressParts T holds x in dom f
+    proof
+      let f be Function;
+      assume f in AddressParts T;
+      then consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = T by A2;
+      consider d1, d2 such that
+A8:     I = Divide(d1,d2) by A1,A7,AMI_5:51;
+        f = <*d1,d2*> by A6,A8,Th12;
+      hence x in dom f by A5,FINSEQ_1:4,FINSEQ_3:29;
+    end;
+    hence thesis by AMISTD_2:def 1;
+  end;
+
+theorem Th22:
+ T = 6 implies dom PA AddressParts T = {1}
+  proof
+    assume
+A1:   T = 6;
+A2: AddressParts T = {AddressPart I where
+      I is Instruction of SCM: InsCode I = T} by AMISTD_2:def 5;
+    consider i1;
+A3: AddressPart goto i1 = <*i1*> by Th13;
+    hereby
+      let x be set;
+      assume
+A4:     x in dom PA AddressParts T;
+        InsCode goto i1 = 6 by AMI_5:43;
+      then AddressPart goto i1 in AddressParts T by A1,A2;
+      then x in dom AddressPart goto i1 by A4,AMISTD_2:def 1;
+      hence x in {1} by A3,FINSEQ_1:4,def 8;
+    end;
+    let x be set;
+    assume
+A5:   x in {1};
+      for f being Function st f in AddressParts T holds x in dom f
+    proof
+      let f be Function;
+      assume f in AddressParts T;
+      then consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = T by A2;
+      consider i1 such that
+A8:     I = goto i1 by A1,A7,AMI_5:52;
+        f = <*i1*> by A6,A8,Th13;
+      hence x in dom f by A5,FINSEQ_1:4,def 8;
+    end;
+    hence thesis by AMISTD_2:def 1;
+  end;
+
+theorem Th23:
+ T = 7 implies dom PA AddressParts T = {1,2}
+  proof
+    assume
+A1:   T = 7;
+A2: AddressParts T = {AddressPart I where
+      I is Instruction of SCM: InsCode I = T} by AMISTD_2:def 5;
+    consider i1, a;
+A3: AddressPart (a =0_goto i1) = <*i1,a*> by Th14;
+    hereby
+      let x be set;
+      assume
+A4:     x in dom PA AddressParts T;
+        InsCode (a =0_goto i1) = 7 by AMI_5:44;
+      then AddressPart (a =0_goto i1) in AddressParts T by A1,A2;
+      then x in dom AddressPart (a =0_goto i1) by A4,AMISTD_2:def 1;
+      hence x in {1,2} by A3,FINSEQ_1:4,FINSEQ_3:29;
+    end;
+    let x be set;
+    assume
+A5:   x in {1,2};
+      for f being Function st f in AddressParts T holds x in dom f
+    proof
+      let f be Function;
+      assume f in AddressParts T;
+      then consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = T by A2;
+      consider i1, a such that
+A8:     I = a =0_goto i1 by A1,A7,AMI_5:53;
+        f = <*i1,a*> by A6,A8,Th14;
+      hence x in dom f by A5,FINSEQ_1:4,FINSEQ_3:29;
+    end;
+    hence thesis by AMISTD_2:def 1;
+  end;
+
+theorem Th24:
+ T = 8 implies dom PA AddressParts T = {1,2}
+  proof
+    assume
+A1:   T = 8;
+A2: AddressParts T = {AddressPart I where
+      I is Instruction of SCM: InsCode I = T} by AMISTD_2:def 5;
+    consider i1, a;
+A3: AddressPart (a >0_goto i1) = <*i1,a*> by Th15;
+    hereby
+      let x be set;
+      assume
+A4:     x in dom PA AddressParts T;
+        InsCode (a >0_goto i1) = 8 by AMI_5:45;
+      then AddressPart (a >0_goto i1) in AddressParts T by A1,A2;
+      then x in dom AddressPart (a >0_goto i1) by A4,AMISTD_2:def 1;
+      hence x in {1,2} by A3,FINSEQ_1:4,FINSEQ_3:29;
+    end;
+    let x be set;
+    assume
+A5:   x in {1,2};
+      for f being Function st f in AddressParts T holds x in dom f
+    proof
+      let f be Function;
+      assume f in AddressParts T;
+      then consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = T by A2;
+      consider i1, a such that
+A8:     I = a >0_goto i1 by A1,A7,AMI_5:54;
+        f = <*i1,a*> by A6,A8,Th15;
+      hence x in dom f by A5,FINSEQ_1:4,FINSEQ_3:29;
+    end;
+    hence thesis by AMISTD_2:def 1;
+  end;
+
+theorem Th25:
+ (PA AddressParts InsCode (a:=b)).1 = SCM-Data-Loc
+  proof
+A1: InsCode (a:=b) = 1 by AMI_5:38;
+    then dom PA AddressParts InsCode (a:=b) = {1,2} by Th17;
+then A2: 1 in dom PA AddressParts InsCode (a:=b) by TARSKI:def 2;
+A3: AddressParts InsCode (a:=b) = {AddressPart I where
+      I is Instruction of SCM: InsCode I = InsCode (a:=b)}
+        by AMISTD_2:def 5;
+    hereby
+      let x be set;
+      assume x in (PA AddressParts InsCode (a:=b)).1;
+      then x in pi(AddressParts InsCode (a:=b),1) by A2,AMISTD_2:def 1;
+      then consider f being Function such that
+A4:     f in AddressParts InsCode (a:=b) and
+A5:     f.1 = x by CARD_3:def 6;
+      consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = InsCode (a:=b) by A3,A4;
+        InsCode I = 1 by A7,AMI_5:38;
+      then consider d1, d2 such that
+A8:     I = d1:=d2 by AMI_5:47;
+        x = <*d1,d2*>.1 by A5,A6,A8,Th8
+       .= d1 by FINSEQ_1:61;
+      hence x in SCM-Data-Loc by AMI_3:def 2;
+    end;
+    let x be set;
+    assume x in SCM-Data-Loc;
+    then reconsider x as Data-Location by AMI_5:16;
+      InsCode (x:=b) = 1 by AMI_5:38;
+    then AddressPart (x:=b) in AddressParts InsCode (a:=b) by A1,A3;
+then A9: (AddressPart (x:=b)).1 in pi
+(AddressParts InsCode (a:=b),1) by CARD_3:def 6;
+      (AddressPart (x:=b)).1 = <*x,b*>.1 by Th8
+      .= x by FINSEQ_1:61;
+    hence thesis by A2,A9,AMISTD_2:def 1;
+  end;
+
+theorem Th26:
+ (PA AddressParts InsCode (a:=b)).2 = SCM-Data-Loc
+  proof
+A1: InsCode (a:=b) = 1 by AMI_5:38;
+    then dom PA AddressParts InsCode (a:=b) = {1,2} by Th17;
+then A2: 2 in dom PA AddressParts InsCode (a:=b) by TARSKI:def 2;
+A3: AddressParts InsCode (a:=b) = {AddressPart I where
+      I is Instruction of SCM: InsCode I = InsCode (a:=b)}
+        by AMISTD_2:def 5;
+    hereby
+      let x be set;
+      assume x in (PA AddressParts InsCode (a:=b)).2;
+      then x in pi(AddressParts InsCode (a:=b),2) by A2,AMISTD_2:def 1;
+      then consider f being Function such that
+A4:     f in AddressParts InsCode (a:=b) and
+A5:     f.2 = x by CARD_3:def 6;
+      consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = InsCode (a:=b) by A3,A4;
+        InsCode I = 1 by A7,AMI_5:38;
+      then consider d1, d2 such that
+A8:     I = d1:=d2 by AMI_5:47;
+        x = <*d1,d2*>.2 by A5,A6,A8,Th8
+       .= d2 by FINSEQ_1:61;
+      hence x in SCM-Data-Loc by AMI_3:def 2;
+    end;
+    let x be set;
+    assume x in SCM-Data-Loc;
+    then reconsider x as Data-Location by AMI_5:16;
+      InsCode (a:=x) = 1 by AMI_5:38;
+    then AddressPart (a:=x) in AddressParts InsCode (a:=b) by A1,A3;
+then A9: (AddressPart (a:=x)).2 in pi
+(AddressParts InsCode (a:=b),2) by CARD_3:def 6;
+      (AddressPart (a:=x)).2 = <*a,x*>.2 by Th8
+      .= x by FINSEQ_1:61;
+    hence thesis by A2,A9,AMISTD_2:def 1;
+  end;
+
+theorem Th27:
+ (PA AddressParts InsCode AddTo(a,b)).1 = SCM-Data-Loc
+  proof
+A1: InsCode AddTo(a,b) = 2 by AMI_5:39;
+    then dom PA AddressParts InsCode AddTo(a,b) = {1,2} by Th18;
+then A2: 1 in dom PA AddressParts InsCode AddTo(a,b) by TARSKI:def 2;
+A3: AddressParts InsCode AddTo(a,b) = {AddressPart I where
+      I is Instruction of SCM: InsCode I = InsCode AddTo(a,b)}
+        by AMISTD_2:def 5;
+    hereby
+      let x be set;
+      assume x in (PA AddressParts InsCode AddTo(a,b)).1;
+      then x in pi(AddressParts InsCode AddTo(a,b),1) by A2,AMISTD_2:def 1;
+      then consider f being Function such that
+A4:     f in AddressParts InsCode AddTo(a,b) and
+A5:     f.1 = x by CARD_3:def 6;
+      consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = InsCode AddTo(a,b) by A3,A4;
+        InsCode I = 2 by A7,AMI_5:39;
+      then consider d1, d2 such that
+A8:     I = AddTo(d1,d2) by AMI_5:48;
+        x = <*d1,d2*>.1 by A5,A6,A8,Th9
+       .= d1 by FINSEQ_1:61;
+      hence x in SCM-Data-Loc by AMI_3:def 2;
+    end;
+    let x be set;
+    assume x in SCM-Data-Loc;
+    then reconsider x as Data-Location by AMI_5:16;
+      InsCode AddTo(x,b) = 2 by AMI_5:39;
+    then AddressPart AddTo(x,b) in AddressParts InsCode AddTo(a,b) by A1,A3;
+then A9: (AddressPart AddTo(x,b)).1 in pi(AddressParts InsCode AddTo(a,b),1)
+      by CARD_3:def 6;
+      (AddressPart AddTo(x,b)).1 = <*x,b*>.1 by Th9
+      .= x by FINSEQ_1:61;
+    hence thesis by A2,A9,AMISTD_2:def 1;
+  end;
+
+theorem Th28:
+ (PA AddressParts InsCode AddTo(a,b)).2 = SCM-Data-Loc
+  proof
+A1: InsCode AddTo(a,b) = 2 by AMI_5:39;
+    then dom PA AddressParts InsCode AddTo(a,b) = {1,2} by Th18;
+then A2: 2 in dom PA AddressParts InsCode AddTo(a,b) by TARSKI:def 2;
+A3: AddressParts InsCode AddTo(a,b) = {AddressPart I where
+      I is Instruction of SCM: InsCode I = InsCode AddTo(a,b)}
+        by AMISTD_2:def 5;
+    hereby
+      let x be set;
+      assume x in (PA AddressParts InsCode AddTo(a,b)).2;
+      then x in pi(AddressParts InsCode AddTo(a,b),2) by A2,AMISTD_2:def 1;
+      then consider f being Function such that
+A4:     f in AddressParts InsCode AddTo(a,b) and
+A5:     f.2 = x by CARD_3:def 6;
+      consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = InsCode AddTo(a,b) by A3,A4;
+        InsCode I = 2 by A7,AMI_5:39;
+      then consider d1, d2 such that
+A8:     I = AddTo(d1,d2) by AMI_5:48;
+        x = <*d1,d2*>.2 by A5,A6,A8,Th9
+       .= d2 by FINSEQ_1:61;
+      hence x in SCM-Data-Loc by AMI_3:def 2;
+    end;
+    let x be set;
+    assume x in SCM-Data-Loc;
+    then reconsider x as Data-Location by AMI_5:16;
+      InsCode AddTo(a,x) = 2 by AMI_5:39;
+    then AddressPart AddTo(a,x) in AddressParts InsCode AddTo(a,b) by A1,A3;
+then A9: (AddressPart AddTo(a,x)).2 in pi(AddressParts InsCode AddTo(a,b),2)
+       by CARD_3:def 6;
+      (AddressPart AddTo(a,x)).2 = <*a,x*>.2 by Th9
+      .= x by FINSEQ_1:61;
+    hence thesis by A2,A9,AMISTD_2:def 1;
+  end;
+
+theorem Th29:
+ (PA AddressParts InsCode SubFrom(a,b)).1 = SCM-Data-Loc
+  proof
+A1: InsCode SubFrom(a,b) = 3 by AMI_5:40;
+    then dom PA AddressParts InsCode SubFrom(a,b) = {1,2} by Th19;
+then A2: 1 in dom PA AddressParts InsCode SubFrom(a,b) by TARSKI:def 2;
+A3: AddressParts InsCode SubFrom(a,b) = {AddressPart I where
+      I is Instruction of SCM: InsCode I = InsCode SubFrom(a,b)}
+        by AMISTD_2:def 5;
+    hereby
+      let x be set;
+      assume x in (PA AddressParts InsCode SubFrom(a,b)).1;
+      then x in pi(AddressParts InsCode SubFrom(a,b),1) by A2,AMISTD_2:def 1;
+      then consider f being Function such that
+A4:     f in AddressParts InsCode SubFrom(a,b) and
+A5:     f.1 = x by CARD_3:def 6;
+      consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = InsCode SubFrom(a,b) by A3,A4;
+        InsCode I = 3 by A7,AMI_5:40;
+      then consider d1, d2 such that
+A8:     I = SubFrom(d1,d2) by AMI_5:49;
+        x = <*d1,d2*>.1 by A5,A6,A8,Th10
+       .= d1 by FINSEQ_1:61;
+     hence x in SCM-Data-Loc by AMI_3:def 2;
+    end;
+    let x be set;
+    assume x in SCM-Data-Loc;
+    then reconsider x as Data-Location by AMI_5:16;
+      InsCode SubFrom(x,b) = 3 by AMI_5:40;
+    then AddressPart SubFrom(x,b) in AddressParts InsCode SubFrom(a,b) by A1,A3
+;
+      then A9: (AddressPart SubFrom(x,b)).1 in pi(AddressParts InsCode SubFrom(
+a,b),1)
+      by CARD_3:def 6;
+      (AddressPart SubFrom(x,b)).1 = <*x,b*>.1 by Th10
+      .= x by FINSEQ_1:61;
+    hence thesis by A2,A9,AMISTD_2:def 1;
+  end;
+
+theorem Th30:
+ (PA AddressParts InsCode SubFrom(a,b)).2 = SCM-Data-Loc
+  proof
+A1: InsCode SubFrom(a,b) = 3 by AMI_5:40;
+    then dom PA AddressParts InsCode SubFrom(a,b) = {1,2} by Th19;
+then A2: 2 in dom PA AddressParts InsCode SubFrom(a,b) by TARSKI:def 2;
+A3: AddressParts InsCode SubFrom(a,b) = {AddressPart I where
+      I is Instruction of SCM: InsCode I = InsCode SubFrom(a,b)}
+        by AMISTD_2:def 5;
+    hereby
+      let x be set;
+      assume x in (PA AddressParts InsCode SubFrom(a,b)).2;
+      then x in pi(AddressParts InsCode SubFrom(a,b),2) by A2,AMISTD_2:def 1;
+      then consider f being Function such that
+A4:     f in AddressParts InsCode SubFrom(a,b) and
+A5:     f.2 = x by CARD_3:def 6;
+      consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = InsCode SubFrom(a,b) by A3,A4;
+        InsCode I = 3 by A7,AMI_5:40;
+      then consider d1, d2 such that
+A8:     I = SubFrom(d1,d2) by AMI_5:49;
+        x = <*d1,d2*>.2 by A5,A6,A8,Th10
+       .= d2 by FINSEQ_1:61;
+      hence x in SCM-Data-Loc by AMI_3:def 2;
+    end;
+    let x be set;
+    assume x in SCM-Data-Loc;
+    then reconsider x as Data-Location by AMI_5:16;
+      InsCode SubFrom(a,x) = 3 by AMI_5:40;
+    then AddressPart SubFrom(a,x) in AddressParts InsCode SubFrom(a,b) by A1,A3
+;
+      then A9: (AddressPart SubFrom(a,x)).2 in pi(AddressParts InsCode SubFrom(
+a,b),2)
+       by CARD_3:def 6;
+      (AddressPart SubFrom(a,x)).2 = <*a,x*>.2 by Th10
+      .= x by FINSEQ_1:61;
+    hence thesis by A2,A9,AMISTD_2:def 1;
+  end;
+
+theorem Th31:
+ (PA AddressParts InsCode MultBy(a,b)).1 = SCM-Data-Loc
+  proof
+A1: InsCode MultBy(a,b) = 4 by AMI_5:41;
+    then dom PA AddressParts InsCode MultBy(a,b) = {1,2} by Th20;
+then A2: 1 in dom PA AddressParts InsCode MultBy(a,b) by TARSKI:def 2;
+A3: AddressParts InsCode MultBy(a,b) = {AddressPart I where
+      I is Instruction of SCM: InsCode I = InsCode MultBy(a,b)}
+        by AMISTD_2:def 5;
+    hereby
+      let x be set;
+      assume x in (PA AddressParts InsCode MultBy(a,b)).1;
+      then x in pi(AddressParts InsCode MultBy(a,b),1) by A2,AMISTD_2:def 1;
+      then consider f being Function such that
+A4:     f in AddressParts InsCode MultBy(a,b) and
+A5:     f.1 = x by CARD_3:def 6;
+      consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = InsCode MultBy(a,b) by A3,A4;
+        InsCode I = 4 by A7,AMI_5:41;
+      then consider d1, d2 such that
+A8:     I = MultBy(d1,d2) by AMI_5:50;
+        x = <*d1,d2*>.1 by A5,A6,A8,Th11
+       .= d1 by FINSEQ_1:61;
+      hence x in SCM-Data-Loc by AMI_3:def 2;
+    end;
+    let x be set;
+    assume x in SCM-Data-Loc;
+    then reconsider x as Data-Location by AMI_5:16;
+      InsCode MultBy(x,b) = 4 by AMI_5:41;
+    then AddressPart MultBy(x,b) in AddressParts InsCode MultBy(a,b) by A1,A3;
+      then A9: (AddressPart MultBy(x,b)).1 in pi(AddressParts InsCode MultBy(a,
+b),1)
+      by CARD_3:def 6;
+      (AddressPart MultBy(x,b)).1 = <*x,b*>.1 by Th11
+      .= x by FINSEQ_1:61;
+    hence thesis by A2,A9,AMISTD_2:def 1;
+  end;
+
+theorem Th32:
+ (PA AddressParts InsCode MultBy(a,b)).2 = SCM-Data-Loc
+  proof
+A1: InsCode MultBy(a,b) = 4 by AMI_5:41;
+    then dom PA AddressParts InsCode MultBy(a,b) = {1,2} by Th20;
+then A2: 2 in dom PA AddressParts InsCode MultBy(a,b) by TARSKI:def 2;
+A3: AddressParts InsCode MultBy(a,b) = {AddressPart I where
+      I is Instruction of SCM: InsCode I = InsCode MultBy(a,b)}
+        by AMISTD_2:def 5;
+    hereby
+      let x be set;
+      assume x in (PA AddressParts InsCode MultBy(a,b)).2;
+      then x in pi(AddressParts InsCode MultBy(a,b),2) by A2,AMISTD_2:def 1;
+      then consider f being Function such that
+A4:     f in AddressParts InsCode MultBy(a,b) and
+A5:     f.2 = x by CARD_3:def 6;
+      consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = InsCode MultBy(a,b) by A3,A4;
+        InsCode I = 4 by A7,AMI_5:41;
+      then consider d1, d2 such that
+A8:     I = MultBy(d1,d2) by AMI_5:50;
+        x = <*d1,d2*>.2 by A5,A6,A8,Th11
+       .= d2 by FINSEQ_1:61;
+      hence x in SCM-Data-Loc by AMI_3:def 2;
+    end;
+    let x be set;
+    assume x in SCM-Data-Loc;
+    then reconsider x as Data-Location by AMI_5:16;
+      InsCode MultBy(a,x) = 4 by AMI_5:41;
+    then AddressPart MultBy(a,x) in AddressParts InsCode MultBy(a,b) by A1,A3;
+      then A9: (AddressPart MultBy(a,x)).2 in pi(AddressParts InsCode MultBy(a,
+b),2)
+       by CARD_3:def 6;
+      (AddressPart MultBy(a,x)).2 = <*a,x*>.2 by Th11
+      .= x by FINSEQ_1:61;
+    hence thesis by A2,A9,AMISTD_2:def 1;
+  end;
+
+theorem Th33:
+ (PA AddressParts InsCode Divide(a,b)).1 = SCM-Data-Loc
+  proof
+A1: InsCode Divide(a,b) = 5 by AMI_5:42;
+    then dom PA AddressParts InsCode Divide(a,b) = {1,2} by Th21;
+then A2: 1 in dom PA AddressParts InsCode Divide(a,b) by TARSKI:def 2;
+A3: AddressParts InsCode Divide(a,b) = {AddressPart I where
+      I is Instruction of SCM: InsCode I = InsCode Divide(a,b)}
+        by AMISTD_2:def 5;
+    hereby
+      let x be set;
+      assume x in (PA AddressParts InsCode Divide(a,b)).1;
+      then x in pi(AddressParts InsCode Divide(a,b),1) by A2,AMISTD_2:def 1;
+      then consider f being Function such that
+A4:     f in AddressParts InsCode Divide(a,b) and
+A5:     f.1 = x by CARD_3:def 6;
+      consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = InsCode Divide(a,b) by A3,A4;
+        InsCode I = 5 by A7,AMI_5:42;
+      then consider d1, d2 such that
+A8:     I = Divide(d1,d2) by AMI_5:51;
+        x = <*d1,d2*>.1 by A5,A6,A8,Th12
+       .= d1 by FINSEQ_1:61;
+      hence x in SCM-Data-Loc by AMI_3:def 2;
+    end;
+    let x be set;
+    assume x in SCM-Data-Loc;
+    then reconsider x as Data-Location by AMI_5:16;
+      InsCode Divide(x,b) = 5 by AMI_5:42;
+    then AddressPart Divide(x,b) in AddressParts InsCode Divide(a,b) by A1,A3;
+      then A9: (AddressPart Divide(x,b)).1 in pi(AddressParts InsCode Divide(a,
+b),1)
+      by CARD_3:def 6;
+      (AddressPart Divide(x,b)).1 = <*x,b*>.1 by Th12
+      .= x by FINSEQ_1:61;
+    hence thesis by A2,A9,AMISTD_2:def 1;
+  end;
+
+theorem Th34:
+ (PA AddressParts InsCode Divide(a,b)).2 = SCM-Data-Loc
+  proof
+A1: InsCode Divide(a,b) = 5 by AMI_5:42;
+    then dom PA AddressParts InsCode Divide(a,b) = {1,2} by Th21;
+then A2: 2 in dom PA AddressParts InsCode Divide(a,b) by TARSKI:def 2;
+A3: AddressParts InsCode Divide(a,b) = {AddressPart I where
+      I is Instruction of SCM: InsCode I = InsCode Divide(a,b)}
+        by AMISTD_2:def 5;
+    hereby
+      let x be set;
+      assume x in (PA AddressParts InsCode Divide(a,b)).2;
+      then x in pi(AddressParts InsCode Divide(a,b),2) by A2,AMISTD_2:def 1;
+      then consider f being Function such that
+A4:     f in AddressParts InsCode Divide(a,b) and
+A5:     f.2 = x by CARD_3:def 6;
+      consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = InsCode Divide(a,b) by A3,A4;
+        InsCode I = 5 by A7,AMI_5:42;
+      then consider d1, d2 such that
+A8:     I = Divide(d1,d2) by AMI_5:51;
+        x = <*d1,d2*>.2 by A5,A6,A8,Th12
+       .= d2 by FINSEQ_1:61;
+      hence x in SCM-Data-Loc by AMI_3:def 2;
+    end;
+    let x be set;
+    assume x in SCM-Data-Loc;
+    then reconsider x as Data-Location by AMI_5:16;
+      InsCode Divide(a,x) = 5 by AMI_5:42;
+    then AddressPart Divide(a,x) in AddressParts InsCode Divide(a,b) by A1,A3;
+      then A9: (AddressPart Divide(a,x)).2 in pi(AddressParts InsCode Divide(a,
+b),2)
+       by CARD_3:def 6;
+      (AddressPart Divide(a,x)).2 = <*a,x*>.2 by Th12
+      .= x by FINSEQ_1:61;
+    hence thesis by A2,A9,AMISTD_2:def 1;
+  end;
+
+theorem Th35:
+ (PA AddressParts InsCode goto i1).1 = the Instruction-Locations of SCM
+  proof
+      InsCode goto i1 = 6 by AMI_5:43;
+    then dom PA AddressParts InsCode goto i1 = {1} by Th22;
+then A1: 1 in dom PA AddressParts InsCode goto i1 by TARSKI:def 1;
+A2: AddressParts InsCode goto i1 = {AddressPart I where
+      I is Instruction of SCM: InsCode I = InsCode goto i1}
+        by AMISTD_2:def 5;
+A3: InsCode goto i1 = 6 by AMI_5:43;
+    hereby
+      let x be set;
+      assume x in (PA AddressParts InsCode goto i1).1;
+      then x in pi(AddressParts InsCode goto i1,1) by A1,AMISTD_2:8;
+      then consider g being Function such that
+A4:     g in AddressParts InsCode goto i1 and
+A5:     x = g.1 by CARD_3:def 6;
+      consider I being Instruction of SCM such that
+A6:     g = AddressPart I and
+A7:     InsCode I = InsCode goto i1 by A2,A4;
+      consider i2 such that
+A8:     I = goto i2 by A3,A7,AMI_5:52;
+        g = <*i2*> by A6,A8,Th13;
+      then x = i2 by A5,FINSEQ_1:def 8;
+      hence x in the Instruction-Locations of SCM;
+    end;
+    let x be set;
+    assume x in the Instruction-Locations of SCM;
+    then reconsider x as Instruction-Location of SCM;
+A9: AddressPart goto x = <*x*> by Th13;
+      InsCode goto i1 = InsCode goto x by A3,AMI_5:43;
+then A10: <*x*> in AddressParts InsCode goto i1 by A2,A9;
+      <*x*>.1 = x by FINSEQ_1:def 8;
+    then x in pi(AddressParts InsCode goto i1,1) by A10,CARD_3:def 6;
+    hence thesis by A1,AMISTD_2:8;
+  end;
+
+theorem Th36:
+ (PA AddressParts InsCode (a =0_goto i1)).1 =
+   the Instruction-Locations of SCM
+  proof
+      InsCode (a =0_goto i1) = 7 by AMI_5:44;
+    then dom PA AddressParts InsCode (a =0_goto i1) = {1,2} by Th23;
+then A1: 1 in dom PA AddressParts InsCode (a =0_goto i1) by TARSKI:def 2;
+A2: AddressParts InsCode (a =0_goto i1) = {AddressPart I where
+      I is Instruction of SCM: InsCode I = InsCode (a =0_goto i1)}
+        by AMISTD_2:def 5;
+A3: InsCode (a =0_goto i1) = 7 by AMI_5:44;
+    hereby
+      let x be set;
+      assume x in (PA AddressParts InsCode (a =0_goto i1)).1;
+      then x in pi(AddressParts InsCode (a =0_goto i1),1) by A1,AMISTD_2:8;
+      then consider g being Function such that
+A4:     g in AddressParts InsCode (a =0_goto i1) and
+A5:     x = g.1 by CARD_3:def 6;
+      consider I being Instruction of SCM such that
+A6:     g = AddressPart I and
+A7:     InsCode I = InsCode (a =0_goto i1) by A2,A4;
+      consider i2, b such that
+A8:     I = b =0_goto i2 by A3,A7,AMI_5:53;
+        g = <*i2,b*> by A6,A8,Th14;
+      then x = i2 by A5,FINSEQ_1:61;
+      hence x in the Instruction-Locations of SCM;
+    end;
+    let x be set;
+    assume x in the Instruction-Locations of SCM;
+    then reconsider x as Instruction-Location of SCM;
+A9: AddressPart (a =0_goto x) = <*x,a*> by Th14;
+      InsCode (a =0_goto i1) = InsCode (a =0_goto x) by A3,AMI_5:44;
+then A10: <*x,a*> in AddressParts InsCode (a =0_goto i1) by A2,A9;
+      <*x,a*>.1 = x by FINSEQ_1:61;
+    then x in pi(AddressParts InsCode (a =0_goto i1),1) by A10,CARD_3:def 6;
+    hence thesis by A1,AMISTD_2:8;
+  end;
+
+theorem Th37:
+ (PA AddressParts InsCode (a =0_goto i1)).2 = SCM-Data-Loc
+  proof
+A1: InsCode (a =0_goto i1) = 7 by AMI_5:44;
+    then dom PA AddressParts InsCode (a =0_goto i1) = {1,2} by Th23;
+then A2: 2 in dom PA AddressParts InsCode (a =0_goto i1) by TARSKI:def 2;
+A3: AddressParts InsCode (a =0_goto i1) = {AddressPart I where
+      I is Instruction of SCM: InsCode I = InsCode (a =0_goto i1)}
+        by AMISTD_2:def 5;
+    hereby
+      let x be set;
+      assume x in (PA AddressParts InsCode (a =0_goto i1)).2;
+      then x in pi(AddressParts InsCode (a =0_goto i1),2) by A2,AMISTD_2:def 1
+;
+      then consider f being Function such that
+A4:     f in AddressParts InsCode (a =0_goto i1) and
+A5:     f.2 = x by CARD_3:def 6;
+      consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = InsCode (a =0_goto i1) by A3,A4;
+        InsCode I = 7 by A7,AMI_5:44;
+      then consider i2, b such that
+A8:     I = b =0_goto i2 by AMI_5:53;
+        x = <*i2,b*>.2 by A5,A6,A8,Th14
+       .= b by FINSEQ_1:61;
+      hence x in SCM-Data-Loc by AMI_3:def 2;
+    end;
+    let x be set;
+    assume x in SCM-Data-Loc;
+    then reconsider x as Data-Location by AMI_5:16;
+      InsCode (x =0_goto i1) = 7 by AMI_5:44;
+    then AddressPart (x =0_goto i1) in AddressParts InsCode (a =0_goto i1) by
+A1,A3;
+      then A9: (AddressPart (x =0_goto i1)).2 in pi(AddressParts InsCode (a
+=0_goto i1),2)
+       by CARD_3:def 6;
+      (AddressPart (x =0_goto i1)).2 = <*i1,x*>.2 by Th14
+      .= x by FINSEQ_1:61;
+    hence thesis by A2,A9,AMISTD_2:def 1;
+  end;
+
+theorem Th38:
+ (PA AddressParts InsCode (a >0_goto i1)).1 =
+   the Instruction-Locations of SCM
+  proof
+      InsCode (a >0_goto i1) = 8 by AMI_5:45;
+    then dom PA AddressParts InsCode (a >0_goto i1) = {1,2} by Th24;
+then A1: 1 in dom PA AddressParts InsCode (a >0_goto i1) by TARSKI:def 2;
+A2: AddressParts InsCode (a >0_goto i1) = {AddressPart I where
+      I is Instruction of SCM: InsCode I = InsCode (a >0_goto i1)}
+        by AMISTD_2:def 5;
+A3: InsCode (a >0_goto i1) = 8 by AMI_5:45;
+    hereby
+      let x be set;
+      assume x in (PA AddressParts InsCode (a >0_goto i1)).1;
+      then x in pi(AddressParts InsCode (a >0_goto i1),1) by A1,AMISTD_2:8;
+      then consider g being Function such that
+A4:     g in AddressParts InsCode (a >0_goto i1) and
+A5:     x = g.1 by CARD_3:def 6;
+      consider I being Instruction of SCM such that
+A6:     g = AddressPart I and
+A7:     InsCode I = InsCode (a >0_goto i1) by A2,A4;
+      consider i2, b such that
+A8:     I = b >0_goto i2 by A3,A7,AMI_5:54;
+        g = <*i2,b*> by A6,A8,Th15;
+      then x = i2 by A5,FINSEQ_1:61;
+      hence x in the Instruction-Locations of SCM;
+    end;
+    let x be set;
+    assume x in the Instruction-Locations of SCM;
+    then reconsider x as Instruction-Location of SCM;
+A9: AddressPart (a >0_goto x) = <*x,a*> by Th15;
+      InsCode (a >0_goto i1) = InsCode (a >0_goto x) by A3,AMI_5:45;
+then A10: <*x,a*> in AddressParts InsCode (a >0_goto i1) by A2,A9;
+      <*x,a*>.1 = x by FINSEQ_1:61;
+    then x in pi(AddressParts InsCode (a >0_goto i1),1) by A10,CARD_3:def 6;
+    hence thesis by A1,AMISTD_2:8;
+  end;
+
+theorem Th39:
+ (PA AddressParts InsCode (a >0_goto i1)).2 = SCM-Data-Loc
+  proof
+A1: InsCode (a >0_goto i1) = 8 by AMI_5:45;
+    then dom PA AddressParts InsCode (a >0_goto i1) = {1,2} by Th24;
+then A2: 2 in dom PA AddressParts InsCode (a >0_goto i1) by TARSKI:def 2;
+A3: AddressParts InsCode (a >0_goto i1) = {AddressPart I where
+      I is Instruction of SCM: InsCode I = InsCode (a >0_goto i1)}
+        by AMISTD_2:def 5;
+    hereby
+      let x be set;
+      assume x in (PA AddressParts InsCode (a >0_goto i1)).2;
+      then x in pi(AddressParts InsCode (a >0_goto i1),2) by A2,AMISTD_2:def 1
+;
+      then consider f being Function such that
+A4:     f in AddressParts InsCode (a >0_goto i1) and
+A5:     f.2 = x by CARD_3:def 6;
+      consider I being Instruction of SCM such that
+A6:     f = AddressPart I and
+A7:     InsCode I = InsCode (a >0_goto i1) by A3,A4;
+        InsCode I = 8 by A7,AMI_5:45;
+      then consider i2, b such that
+A8:     I = b >0_goto i2 by AMI_5:54;
+        x = <*i2,b*>.2 by A5,A6,A8,Th15
+       .= b by FINSEQ_1:61;
+      hence x in SCM-Data-Loc by AMI_3:def 2;
+    end;
+    let x be set;
+    assume x in SCM-Data-Loc;
+    then reconsider x as Data-Location by AMI_5:16;
+      InsCode (x >0_goto i1) = 8 by AMI_5:45;
+    then AddressPart (x >0_goto i1) in AddressParts InsCode (a >0_goto i1) by
+A1,A3;
+      then A9: (AddressPart (x >0_goto i1)).2 in pi(AddressParts InsCode (a
+>0_goto i1),2)
+       by CARD_3:def 6;
+      (AddressPart (x >0_goto i1)).2 = <*i1,x*>.2 by Th15
+      .= x by FINSEQ_1:61;
+    hence thesis by A2,A9,AMISTD_2:def 1;
+  end;
+
+Lm4:
+for l being Instruction-Location of SCM,
+    i being Instruction of SCM holds
+  (for s being State of SCM st IC s = l & s.l = i
+   holds Exec(i,s).IC SCM = Next IC s)
+  implies
+  NIC(i, l) = {Next l}
+  proof
+    let l be Instruction-Location of SCM,
+        i be Instruction of SCM;
+    assume
+A1:   for s being State of SCM st IC s = l & s.l = i
+        holds Exec(i, s).IC SCM = Next IC s;
+    set X = {IC Following s where s is State of SCM: IC s = l & s.l = i};
+A2: NIC(i,l) = X by AMISTD_1:def 5;
+    hereby
+      let x be set;
+      assume x in NIC(i,l);
+      then consider s being State of SCM such that
+A3:     x = IC Following s & IC s = l & s.l = i by A2;
+      x = (Following s).IC SCM by A3,AMI_1:def 15
+       .= Exec(CurInstr s,s).IC SCM by AMI_1:def 18
+       .= Exec(s.IC s,s).IC SCM by AMI_1:def 17
+       .= Next l by A1,A3;
+      hence x in {Next l} by TARSKI:def 1;
+    end;
+    let x be set;
+    assume x in {Next l};
+    then
+A4: x = Next l by TARSKI:def 1;
+    consider t being State of SCM;
+    reconsider il1 = l as Element of ObjectKind IC SCM by AMI_1:def 11;
+    reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
+    set u = t+*((IC SCM, l)-->(il1, I));
+A5: IC u = l by Th6;
+A6: u.l = i by Th6;
+    IC Following u = Exec(u.IC u, u).IC SCM by Th6
+    .= Next l by A1,A5,A6;
+    hence thesis by A2,A4,A5,A6;
+  end;
+
+Lm5:
+  for i being Instruction of SCM holds
+  (for l being Instruction-Location of SCM holds NIC(i,l)={Next l})
+  implies JUMP i is empty
+  proof
+    let i be Instruction of SCM;
+    assume
+A1:   for l being Instruction-Location of SCM holds NIC(i,l)={Next l};
+    consider p, q being Element of the Instruction-Locations of SCM
+     such that
+A2:   p <> q by YELLOW_8:def 1;
+    set X = { NIC(i,f) where f is Instruction-Location of SCM:
+        not contradiction };
+    assume not thesis;
+    then meet X is non empty by AMISTD_1:def 6;
+    then consider x being set such that
+A3:   x in meet X by XBOOLE_0:def 1;
+    NIC(i,p) = {Next p} & NIC(i,q) = {Next q} by A1;
+    then {Next p} in X & {Next q} in X;
+    then x in {Next p} & x in {Next q} by A3,SETFAM_1:def 1;
+    then x = Next p & x = Next q by TARSKI:def 1;
+    hence contradiction by A2,Th4;
+  end;
+
+theorem Th40:
+ NIC(halt SCM, il) = {il}
+proof
+    now let x be set;
+  A1: now assume
+     A2: x = il;
+       consider t being State of SCM;
+        reconsider il1 = il as Element of ObjectKind IC SCM by AMI_1:def 11;
+        reconsider I = halt SCM as Element of ObjectKind il by AMI_1:def 14;
+        set u = t+*((IC SCM, il)-->(il1, I));
+           dom ((IC SCM, il)-->(il1, I)) = {IC SCM, il} by FUNCT_4:65;
+     then A3: IC SCM in dom ((IC SCM, il)-->(il1, I)) by TARSKI:def 2;
+     A4: IC SCM <> il by AMI_1:48;
+     A5: u.il = halt SCM by Th6;
+     A6: IC u = il by Th6;
+           IC Following u = Exec(u.IC u, u).IC SCM by Th6
+           .= u.IC SCM by A5,A6,AMI_1:def 8
+           .= ((IC SCM, il)-->(il1, I)).IC SCM by A3,FUNCT_4:14
+           .= il by A4,FUNCT_4:66;
+      hence x in {IC Following s : IC s = il & s.il=halt SCM} by A2,A5,A6;
+     end;
+       now assume
+           x in {IC Following s : IC s = il & s.il=halt SCM};
+         then consider s being State of SCM such that
+     A7: x = IC Following s & IC s = il & s.il = halt SCM;
+      thus x = IC Exec(CurInstr s,s) by A7,AMI_1:def 18
+           .= IC Exec(s.IC s, s) by AMI_1:def 17
+           .= Exec(halt SCM, s).IC SCM by A7,AMI_1:def 15
+           .= s.IC SCM by AMI_1:def 8
+           .= il by A7,AMI_1:def 15;
+     end;
+    hence x in {il} iff x in {IC Following s : IC s = il & s.il=halt SCM}
+       by A1,TARSKI:def 1;
+  end;
+  then {il} = { IC Following s : IC s = il & s.il = halt SCM } by TARSKI:2;
+ hence thesis by AMISTD_1:def 5;
+end;
+
+definition
+ cluster JUMP halt SCM -> empty;
+coherence
+proof
+ set X = { NIC(halt SCM, il) : not contradiction };
+ assume not thesis;
+   then meet X is non empty by AMISTD_1:def 6;
+   then consider x being set such that
+A1:   x in meet X by XBOOLE_0:def 1;
+   set i1 = il.1, i2 = il.2;
+     NIC(halt SCM, i1) in X & NIC(halt SCM, i2) in X;
+   then {i1} in X & {i2} in X by Th40;
+   then x in {i1} & x in {i2} by A1,SETFAM_1:def 1;
+   then x = i1 & x = i2 by TARSKI:def 1;
+ hence contradiction by AMI_3:53;
+end;
+end;
+
+theorem Th41:
+  NIC(a := b, il) = {Next il}
+  proof
+    set i = a:=b;
+    for s being State of SCM st IC s = il & s.il = i
+     holds Exec(i,s).IC SCM = Next IC s by AMI_3:8;
+    hence thesis by Lm4;
+  end;
+
+definition let a, b;
+ cluster JUMP (a := b) -> empty;
+coherence
+proof
+  for l being Instruction-Location of SCM holds NIC(a:=b,l)={Next l} by Th41;
+  hence thesis by Lm5;
+end;
+end;
+
+theorem Th42:
+  NIC(AddTo(a,b), il) = {Next il}
+  proof
+    set i = AddTo(a,b);
+    for s being State of SCM st IC s = il & s.il = i
+     holds Exec(i,s).IC SCM = Next IC s by AMI_3:9;
+    hence thesis by Lm4;
+  end;
+
+definition let a, b;
+ cluster JUMP AddTo(a, b) -> empty;
+coherence
+proof
+  for l being Instruction-Location of SCM holds NIC(AddTo(a,b),l)={Next l}
+    by Th42;
+  hence thesis by Lm5;
+end;
+end;
+
+theorem Th43:
+  NIC(SubFrom(a,b), il) = {Next il}
+  proof
+    set i = SubFrom(a,b);
+    for s being State of SCM st IC s = il & s.il = i
+     holds Exec(i,s).IC SCM = Next IC s by AMI_3:10;
+    hence thesis by Lm4;
+  end;
+
+definition let a, b;
+ cluster JUMP SubFrom(a, b) -> empty;
+coherence
+proof
+  for l being Instruction-Location of SCM holds NIC(SubFrom(a,b),l)={Next l}
+    by Th43;
+  hence thesis by Lm5;
+end;
+end;
+
+theorem Th44:
+  NIC(MultBy(a,b), il) = {Next il}
+  proof
+    set i = MultBy(a,b);
+    for s being State of SCM st IC s = il & s.il = i
+     holds Exec(i,s).IC SCM = Next IC s by AMI_3:11;
+    hence thesis by Lm4;
+  end;
+
+definition let a, b;
+ cluster JUMP MultBy(a,b) -> empty;
+coherence
+proof
+  for l being Instruction-Location of SCM holds NIC(MultBy(a,b),l)={Next l}
+    by Th44;
+  hence thesis by Lm5;
+end;
+end;
+
+theorem Th45:
+  NIC(Divide(a,b), il) = {Next il}
+  proof
+    set i = Divide(a,b);
+    for s being State of SCM st IC s = il & s.il = i
+     holds Exec(i,s).IC SCM = Next IC s by AMI_3:12;
+    hence thesis by Lm4;
+  end;
+
+definition let a, b;
+ cluster JUMP Divide(a,b) -> empty;
+coherence
+proof
+  for l being Instruction-Location of SCM holds NIC(Divide(a,b),l)={Next l}
+    by Th45;
+  hence thesis by Lm5;
+end;
+end;
+
+theorem Th46:
+ NIC(goto i1, il) = {i1}
+proof
+    now let x be set;
+  A1: now assume
+     A2: x = i1;
+         consider t being State of SCM;
+         reconsider il1 = il as Element of ObjectKind IC SCM by AMI_1:def 11;
+         reconsider I = goto i1 as Element of ObjectKind il by AMI_1:def 14;
+         set u = t+*((IC SCM, il)-->(il1, I));
+     A3: IC u = il by Th6;
+     A4: u.il = goto i1 by Th6;
+           IC Following u = Exec(u.IC u, u).IC SCM by Th6
+           .= i1 by A3,A4,AMI_3:13;
+      hence x in {IC Following s : IC s = il & s.il=goto i1} by A2,A3,A4;
+     end;
+       now assume
+           x in {IC Following s : IC s = il & s.il=goto i1};
+         then consider s being State of SCM such that
+     A5: x = IC Following s & IC s = il & s.il = goto i1;
+      thus x = IC Exec(CurInstr s,s) by A5,AMI_1:def 18
+           .= IC Exec(s.IC s, s) by AMI_1:def 17
+           .= Exec(s.IC s, s).IC SCM by AMI_1:def 15
+           .= i1 by A5,AMI_3:13;
+     end;
+    hence x in {i1} iff x in {IC Following s : IC s = il & s.il=goto i1}
+       by A1,TARSKI:def 1;
+  end;
+  then {i1} = { IC Following s : IC s = il & s.il = goto i1 } by TARSKI:2;
+ hence thesis by AMISTD_1:def 5;
+end;
+
+theorem Th47:
+ JUMP goto i1 = {i1}
+proof
+set X = { NIC(goto i1, il) : not contradiction };
+A1: JUMP (goto i1) = meet X by AMISTD_1:def 6;
+   now
+  let x be set;
+  hereby assume
+  A2: x in meet X;
+      set il1 = il.1;
+        NIC(goto i1, il1) in X;
+     then x in NIC(goto i1, il1) by A2,SETFAM_1:def 1;
+     hence x in {i1} by Th46;
+  end;
+  assume x in {i1};
+  then A3: x = i1 by TARSKI:def 1;
+A4:   NIC(goto i1, i1) in X;
+        now let Y be set; assume Y in X;
+         then consider il being Instruction-Location of SCM such that
+      A5: Y = NIC(goto i1, il);
+         NIC(goto i1, il) = {i1} by Th46;
+       hence i1 in Y by A5,TARSKI:def 1;
+      end;
+  hence x in meet X by A3,A4,SETFAM_1:def 1;
+ end;
+ hence JUMP goto i1 = {i1} by A1,TARSKI:2;
+end;
+
+definition let i1;
+ cluster JUMP goto i1 -> non empty trivial;
+coherence
+  proof
+    JUMP goto i1 = {i1} by Th47;
+    hence thesis;
+  end;
+end;
+
+theorem Th48:
+  NIC(a=0_goto i1, il) = {i1, Next il}
+  proof
+    set F = {IC Following s : IC s = il & s.il= a=0_goto i1};
+    hereby
+      let x be set;
+      assume x in NIC(a=0_goto i1, il);
+      then x in F by AMISTD_1:def 5;
+      then consider s being State of SCM such that
+A1:     x = IC Following s & IC s = il & s.il = a=0_goto i1;
+A2:   x = IC Exec(CurInstr s,s) by A1,AMI_1:def 18
+       .= IC Exec(s.IC s, s) by AMI_1:def 17
+       .= Exec(a=0_goto i1, s).IC SCM by A1,AMI_1:def 15;
+      per cases;
+      suppose s.a = 0;
+      then x = i1 by A2,AMI_3:14;
+      hence x in {i1, Next il} by TARSKI:def 2;
+      suppose s.a <> 0;
+      then x = Next il by A1,A2,AMI_3:14;
+      hence x in {i1, Next il} by TARSKI:def 2;
+    end;
+    let x be set;
+    assume
+A3:   x in {i1,Next il};
+    consider t being State of SCM;
+    reconsider il1 = il as Element of ObjectKind IC SCM by AMI_1:def 11;
+    reconsider I = a=0_goto i1 as Element of ObjectKind il by AMI_1:def 14;
+    set u = t+*((IC SCM, il)-->(il1, I));
+A4: a <> il by Th1;
+A5: IC SCM <> a by AMI_5:20;
+    per cases by A3,TARSKI:def 2;
+    suppose
+A6:   x = i1;
+    set v = u+*(a .--> 0);
+A7: dom (a .--> 0) = {a} by CQC_LANG:5;
+    then
+A8: not IC SCM in dom (a .--> 0) by A5,TARSKI:def 1;
+A9: IC v = v.IC SCM by AMI_1:def 15
+        .= u.IC SCM by A8,FUNCT_4:12
+        .= IC u by AMI_1:def 15
+        .= il1 by Th6;
+    not il in dom (a .--> 0) by A4,A7,TARSKI:def 1;
+    then
+A10: v.il = u.il by FUNCT_4:12
+        .= I by Th6;
+    a in dom (a .--> 0) by A7,TARSKI:def 1;
+    then
+A11: v.a = (a .--> 0).a by FUNCT_4:14
+       .= 0 by CQC_LANG:6;
+    IC Following v = IC Exec(CurInstr v, v) by AMI_1:def 18
+      .= IC Exec(v.IC v, v) by AMI_1:def 17
+      .= Exec(v.IC v, v).IC SCM by AMI_1:def 15
+      .= i1 by A9,A10,A11,AMI_3:14;
+    then i1 in F by A9,A10;
+    hence thesis by A6,AMISTD_1:def 5;
+    suppose
+A12:   x = Next il;
+    set v = u+*(a .--> 1);
+A13: dom (a .--> 1) = {a} by CQC_LANG:5;
+    then
+A14: not IC SCM in dom (a .--> 1) by A5,TARSKI:def 1;
+A15: IC v = v.IC SCM by AMI_1:def 15
+        .= u.IC SCM by A14,FUNCT_4:12
+        .= IC u by AMI_1:def 15
+        .= il1 by Th6;
+    not il in dom (a .--> 1) by A4,A13,TARSKI:def 1;
+    then
+A16: v.il = u.il by FUNCT_4:12
+        .= I by Th6;
+    a in dom (a .--> 1) by A13,TARSKI:def 1;
+    then
+A17: v.a = (a .--> 1).a by FUNCT_4:14
+       .= 1 by CQC_LANG:6;
+    IC Following v = IC Exec(CurInstr v, v) by AMI_1:def 18
+      .= IC Exec(v.IC v, v) by AMI_1:def 17
+      .= Exec(v.IC v, v).IC SCM by AMI_1:def 15
+      .= Next il by A15,A16,A17,AMI_3:14;
+    then Next il in F by A15,A16;
+    hence thesis by A12,AMISTD_1:def 5;
+end;
+
+theorem Th49:
+ JUMP (a=0_goto i1) = {i1}
+proof
+set X = { NIC(a=0_goto i1, il) : not contradiction };
+A1: JUMP (a=0_goto i1) = meet X by AMISTD_1:def 6;
+   now
+  let x be set;
+  hereby assume
+  A2: x in meet X;
+      set il1 = il.1, il2 = il.2;
+        NIC(a=0_goto i1, il1) in X & NIC(a=0_goto i1, il2) in X;
+  then A3: x in NIC(a=0_goto i1, il1) & x in NIC(a=0_goto i1, il2)
+       by A2,SETFAM_1:def 1;
+        NIC(a=0_goto i1, il1) = {i1, Next il1} &
+      NIC(a=0_goto i1, il2) = {i1, Next il2} by Th48;
+  then A4: (x = i1 or x = Next il1) & (x = i1 or x = Next il2) by A3,TARSKI:def
+2;
+        il1 <> il2 by AMI_3:53;
+   hence x in {i1} by A4,Th4,TARSKI:def 1;
+  end;
+  assume x in {i1};
+  then A5: x = i1 by TARSKI:def 1;
+A6:   NIC(a=0_goto i1, i1) in X;
+        now let Y be set; assume Y in X;
+         then consider il being Instruction-Location of SCM such that
+A7:          Y = NIC(a=0_goto i1, il);
+       NIC(a=0_goto i1, il) = {i1, Next il} by Th48;
+        hence i1 in Y by A7,TARSKI:def 2;
+      end;
+  hence x in meet X by A5,A6,SETFAM_1:def 1;
+ end;
+ hence JUMP (a=0_goto i1) = {i1} by A1,TARSKI:2;
+end;
+
+definition let a, i1;
+ cluster JUMP (a =0_goto i1) -> non empty trivial;
+coherence
+  proof
+      JUMP (a =0_goto i1) = {i1} by Th49;
+    hence thesis;
+  end;
+end;
+
+theorem Th50:
+  NIC(a>0_goto i1, il) = {i1, Next il}
+  proof
+    set F = {IC Following s : IC s = il & s.il= a>0_goto i1};
+    hereby
+      let x be set;
+      assume x in NIC(a>0_goto i1, il);
+      then x in F by AMISTD_1:def 5;
+      then consider s being State of SCM such that
+A1:     x = IC Following s & IC s = il & s.il = a>0_goto i1;
+A2:   x = IC Exec(CurInstr s,s) by A1,AMI_1:def 18
+       .= IC Exec(s.IC s, s) by AMI_1:def 17
+       .= Exec(a>0_goto i1, s).IC SCM by A1,AMI_1:def 15;
+      per cases;
+      suppose s.a > 0;
+      then x = i1 by A2,AMI_3:15;
+      hence x in {i1, Next il} by TARSKI:def 2;
+      suppose s.a <= 0;
+      then x = Next il by A1,A2,AMI_3:15;
+      hence x in {i1, Next il} by TARSKI:def 2;
+    end;
+    let x be set;
+    assume
+A3:   x in {i1,Next il};
+    consider t being State of SCM;
+    reconsider il1 = il as Element of ObjectKind IC SCM by AMI_1:def 11;
+    reconsider I = a>0_goto i1 as Element of ObjectKind il by AMI_1:def 14;
+    set u = t+*((IC SCM, il)-->(il1, I));
+A4: a <> il by Th1;
+A5: IC SCM <> a by AMI_5:20;
+    per cases by A3,TARSKI:def 2;
+    suppose
+A6:   x = i1;
+    set v = u+*(a .--> 1);
+A7: dom (a .--> 1) = {a} by CQC_LANG:5;
+    then
+A8: not IC SCM in dom (a .--> 1) by A5,TARSKI:def 1;
+A9: IC v = v.IC SCM by AMI_1:def 15
+        .= u.IC SCM by A8,FUNCT_4:12
+        .= IC u by AMI_1:def 15
+        .= il1 by Th6;
+    not il in dom (a .--> 1) by A4,A7,TARSKI:def 1;
+    then
+A10: v.il = u.il by FUNCT_4:12
+        .= I by Th6;
+    a in dom (a .--> 1) by A7,TARSKI:def 1;
+    then
+A11: v.a = (a .--> 1).a by FUNCT_4:14
+       .= 1 by CQC_LANG:6;
+    IC Following v = IC Exec(CurInstr v, v) by AMI_1:def 18
+      .= IC Exec(v.IC v, v) by AMI_1:def 17
+      .= Exec(v.IC v, v).IC SCM by AMI_1:def 15
+      .= i1 by A9,A10,A11,AMI_3:15;
+    then i1 in F by A9,A10;
+    hence thesis by A6,AMISTD_1:def 5;
+    suppose
+A12:   x = Next il;
+    set v = u+*(a .--> 0);
+A13: dom (a .--> 0) = {a} by CQC_LANG:5;
+    then
+A14: not IC SCM in dom (a .--> 0) by A5,TARSKI:def 1;
+A15: IC v = v.IC SCM by AMI_1:def 15
+        .= u.IC SCM by A14,FUNCT_4:12
+        .= IC u by AMI_1:def 15
+        .= il1 by Th6;
+    not il in dom (a .--> 0) by A4,A13,TARSKI:def 1;
+    then
+A16: v.il = u.il by FUNCT_4:12
+        .= I by Th6;
+    a in dom (a .--> 0) by A13,TARSKI:def 1;
+    then
+A17: v.a = (a .--> 0).a by FUNCT_4:14
+       .= 0 by CQC_LANG:6;
+    IC Following v = IC Exec(CurInstr v, v) by AMI_1:def 18
+      .= IC Exec(v.IC v, v) by AMI_1:def 17
+      .= Exec(v.IC v, v).IC SCM by AMI_1:def 15
+      .= Next il by A15,A16,A17,AMI_3:15;
+    then Next il in F by A15,A16;
+    hence thesis by A12,AMISTD_1:def 5;
+  end;
+
+theorem Th51:
+ JUMP (a>0_goto i1) = {i1}
+proof
+set X = { NIC(a>0_goto i1, il) : not contradiction };
+A1: JUMP (a>0_goto i1) = meet X by AMISTD_1:def 6;
+   now
+  let x be set;
+  hereby assume
+  A2: x in meet X;
+      set il1 = il.1, il2 = il.2;
+        NIC(a>0_goto i1, il1) in X & NIC(a>0_goto i1, il2) in X;
+  then A3: x in NIC(a>0_goto i1, il1) & x in NIC(a>0_goto i1, il2)
+       by A2,SETFAM_1:def 1;
+        NIC(a>0_goto i1, il1) = {i1, Next il1} &
+      NIC(a>0_goto i1, il2) = {i1, Next il2} by Th50;
+  then A4: (x = i1 or x = Next il1) & (x = i1 or x = Next il2) by A3,TARSKI:def
+2;
+        il1 <> il2 by AMI_3:53;
+   hence x in {i1} by A4,Th4,TARSKI:def 1;
+  end;
+  assume x in {i1};
+  then A5: x = i1 by TARSKI:def 1;
+A6:   NIC(a>0_goto i1, i1) in X;
+        now let Y be set; assume Y in X;
+         then consider il being Instruction-Location of SCM such that
+A7:        Y = NIC(a>0_goto i1, il);
+        NIC(a>0_goto i1, il) = {i1, Next il} by Th50;
+        hence i1 in Y by A7,TARSKI:def 2;
+      end;
+  hence x in meet X by A5,A6,SETFAM_1:def 1;
+ end;
+ hence JUMP (a>0_goto i1) = {i1} by A1,TARSKI:2;
+end;
+
+definition let a, i1;
+ cluster JUMP (a >0_goto i1) -> non empty trivial;
+coherence
+  proof
+      JUMP (a >0_goto i1) = {i1} by Th51;
+    hence thesis;
+  end;
+end;
+
+theorem Th52:
+ SUCC il = {il, Next il}
+proof
+   set X = { NIC(I, il) \ JUMP I where I is Element of the Instructions of SCM:
+   not contradiction };
+   set N = {il, Next il};
+    now let x be set;
+   hereby assume x in union X; then consider Y being set such that
+   A1: x in Y & Y in X by TARSKI:def 4;
+       consider i being Element of the Instructions of SCM such that
+   A2: Y = NIC(i, il) \ JUMP i by A1;
+    per cases by AMI_3:69;
+    suppose i = [0,{}];
+      then x in {il} \ JUMP halt SCM by A1,A2,Th40,AMI_3:71;
+      then x = il by TARSKI:def 1;
+     hence x in N by TARSKI:def 2;
+    suppose ex a,b st i = a:=b; then consider a, b such that
+    A4: i = a:=b;
+        x in {Next il} \ JUMP (a:=b) by A1,A2,A4,Th41;
+      then x = Next il by TARSKI:def 1;
+     hence x in N by TARSKI:def 2;
+    suppose ex a,b st i = AddTo(a,b); then consider a, b such that
+    A5: i = AddTo(a,b);
+        x in {Next il} \ JUMP AddTo(a,b) by A1,A2,A5,Th42;
+      then x = Next il by TARSKI:def 1;
+     hence x in N by TARSKI:def 2;
+    suppose ex a,b st i = SubFrom(a,b); then consider a, b such that
+    A6: i = SubFrom(a,b);
+        x in {Next il} \ JUMP SubFrom(a,b) by A1,A2,A6,Th43;
+      then x = Next il by TARSKI:def 1;
+     hence x in N by TARSKI:def 2;
+    suppose ex a,b st i = MultBy(a,b); then consider a, b such that
+    A7: i = MultBy(a,b);
+        x in {Next il} \ JUMP MultBy(a,b) by A1,A2,A7,Th44;
+      then x = Next il by TARSKI:def 1;
+     hence x in N by TARSKI:def 2;
+    suppose ex a,b st i = Divide(a,b); then consider a, b such that
+    A8: i = Divide(a,b);
+        x in {Next il} \ JUMP Divide(a,b) by A1,A2,A8,Th45;
+      then x = Next il by TARSKI:def 1;
+     hence x in N by TARSKI:def 2;
+    suppose ex i1 st i = goto i1; then consider i1 such that
+    A9: i = goto i1;
+        x in {i1} \ JUMP i by A1,A2,A9,Th46;
+      then x in {i1} \ {i1} by A9,Th47;
+     hence x in N by XBOOLE_1:37;
+    suppose ex a,i1 st i = a=0_goto i1; then consider a, i1 such that
+    A10:  i = a=0_goto i1;
+          x in NIC(i, il) \ {i1} by A1,A2,A10,Th49;
+    then A11: x in NIC(i, il) & not x in {i1} by XBOOLE_0:def 4;
+          NIC(i, il) = {i1, Next il} by A10,Th48;
+        then x = i1 or x = Next il by A11,TARSKI:def 2;
+     hence x in N by A11,TARSKI:def 1,def 2;
+    suppose ex a,i1 st i = a>0_goto i1; then consider a, i1 such that
+    A12:  i = a>0_goto i1;
+          x in NIC(i, il) \ {i1} by A1,A2,A12,Th51;
+    then A13: x in NIC(i, il) & not x in {i1} by XBOOLE_0:def 4;
+          NIC(i, il) = {i1, Next il} by A12,Th50;
+        then x = i1 or x = Next il by A13,TARSKI:def 2;
+     hence x in N by A13,TARSKI:def 1,def 2;
+   end;
+   assume A14: x in {il, Next il};
+   per cases by A14,TARSKI:def 2;
+   suppose A15: x = il;
+     set i = halt SCM;
+       NIC(i, il) \ JUMP i = {il} by Th40;
+     then x in {il} & {il} in X by A15,TARSKI:def 1;
+    hence x in union X by TARSKI:def 4;
+   suppose A16: x = Next il;
+    consider a, b being Data-Location;
+    set i = AddTo(a,b);
+      NIC(i, il) \ JUMP i = {Next il} by Th42;
+     then x in {Next il} & {Next il} in X by A16,TARSKI:def 1;
+    hence x in union X by TARSKI:def 4;
+  end;
+  then union X = {il, Next il} by TARSKI:2;
+ hence SUCC il = {il, Next il} by AMISTD_1:def 7;
+end;
+
+theorem Th53:
+ for f being Function of NAT, the Instruction-Locations of SCM
+   st for k being Nat holds f.k = il.k holds
+  f is bijective &
+  for k being Nat holds f.(k+1) in SUCC (f.k) &
+   for j being Nat st f.j in SUCC (f.k) holds k <= j
+  proof
+    let f be Function of NAT, the Instruction-Locations of SCM such that
+A1:   for k being Nat holds f.k = il.k;
+   thus
+A2:   f is bijective
+   proof
+    thus f is one-to-one
+    proof let x1, x2 be set such that
+  A3: x1 in dom f & x2 in dom f and
+  A4: f.x1 = f.x2;
+      reconsider k1 = x1, k2 = x2 as Nat by A3,FUNCT_2:def 1;
+        f.k1 = il.k1 & f.k2 = il.k2 by A1;
+      hence x1 = x2 by A4,AMI_3:53;
+    end;
+    thus f is onto
+    proof
+     thus rng f c= the Instruction-Locations of SCM by RELSET_1:12;
+     thus the Instruction-Locations of SCM c= rng f proof
+     let x be set; assume x in the Instruction-Locations of SCM;
+      then consider i being Nat such that
+    A5: x = il.i by AMI_5:19;
+          dom f = NAT by FUNCT_2:def 1;
+        then il.i = f.i & i in dom f by A1;
+    hence x in rng f by A5,FUNCT_1:def 5;
+   end;
+  end;
+  end;
+ let k be Nat;
+   A6: SUCC (f.k) = {f.k, Next (f.k)} by Th52;
+   A7: f.(k+1) = il.(k+1) & f.k = il.k by A1;
+   A8: f.(k+1) = il.(k+1) by A1
+              .= Next il.k by AMI_3:54;
+    hence f.(k+1) in SUCC (f.k) by A6,A7,TARSKI:def 2;
+    let j be Nat;
+    assume
+ A9:  f.j in SUCC (f.k);
+   A10: f is one-to-one by A2,FUNCT_2:def 4;
+   A11: dom f = NAT by FUNCT_2:def 1;
+     per cases by A6,A9,TARSKI:def 2;
+     suppose f.j = f.k;
+      hence k <= j by A10,A11,FUNCT_1:def 8;
+     suppose f.j = Next (f.k);
+         then j = k+1 by A7,A8,A10,A11,FUNCT_1:def 8;
+      hence k <= j by NAT_1:29;
+   end;
+
+definition
+ cluster SCM -> standard;
+coherence
+  proof   deffunc _F(Nat) = il.$1;
+    consider f being Function of NAT, the Instruction-Locations of SCM
+       such that
+A1:   for k being Nat holds f.k = _F(k) from LambdaD;
+      f is bijective &
+     for k being Nat holds f.(k+1) in SUCC (f.k) &
+      for j being Nat st f.j in SUCC (f.k) holds k <= j by A1,Th53;
+    hence SCM is standard by AMISTD_1:19;
+  end;
+end;
+
+theorem Th54:
+ il.(SCM,k) = il.k
+  proof   deffunc _F(Nat) = il.$1;
+    consider f being Function of NAT, the Instruction-Locations of SCM
+      such that
+A1:   for k being Nat holds f.k = _F(k) from LambdaD;
+A2:  f is bijective by A1,Th53;
+A3:  for k being Nat holds f.(k+1) in SUCC (f.k) &
+      for j being Nat st f.j in SUCC (f.k) holds k <= j by A1,Th53;
+      ex f being Function of NAT, the Instruction-Locations of SCM st
+     f is bijective &
+     (for m, n being Nat holds m <= n iff f.m <= f.n) &
+     il.k = f.k
+    proof
+      take f;
+      thus f is bijective by A1,Th53;
+      thus for m, n being Nat holds m <= n iff f.m <= f.n by A2,A3,AMISTD_1:18
+;
+        k is Nat by ORDINAL2:def 21;
+      hence thesis by A1;
+    end;
+    hence thesis by AMISTD_1:def 12;
+  end;
+
+theorem Th55:
+ Next il.(SCM,k) = il.(SCM,k+1)
+  proof
+    thus Next il.(SCM,k) = Next il.k by Th54
+      .= il.(k+1) by AMI_3:54
+      .= il.(SCM,k+1) by Th54;
+  end;
+
+theorem Th56:
+ Next il = NextLoc il
+  proof
+      Next il = il.(SCM,locnum il + 1)
+    proof
+        Next il.(SCM,locnum il) = il.(SCM,locnum il+1) by Th55;
+      hence thesis by AMISTD_1:def 13;
+    end;
+    hence thesis by AMISTD_1:34;
+  end;
+
+definition
+ cluster InsCode halt SCM -> jump-only;
+coherence
+  proof
+    let s be State of SCM, o be Object of SCM, I be Instruction of SCM;
+    assume that
+A1:   InsCode I = InsCode halt SCM and o <> IC SCM;
+      I = halt SCM by A1,AMI_5:37,46;
+    hence Exec(I, s).o = s.o by AMI_1:def 8;
+  end;
+end;
+
+definition
+ cluster halt SCM -> jump-only;
+coherence
+  proof
+    thus InsCode halt SCM is jump-only;
+  end;
+end;
+
+definition let i1;
+ cluster InsCode goto i1 -> jump-only;
+coherence
+  proof
+    set S = SCM;
+    let s be State of S, o be Object of S, I be Instruction of S;
+    assume that
+A1:    InsCode I = InsCode goto i1 and
+A2:    o <> IC S;
+      InsCode goto i1 = 6 by AMI_5:43;
+    then consider i2 such that
+A3:    I = goto i2 by A1,AMI_5:52;
+    per cases by A2,Th3;
+    suppose o in the Instruction-Locations of S;
+    hence Exec(I, s).o = s.o by AMI_1:def 13;
+    suppose o is Data-Location;
+    hence Exec(I, s).o = s.o by A3,AMI_3:13;
+  end;
+end;
+
+definition let i1;
+ cluster goto i1 -> jump-only non sequential non ins-loc-free;
+coherence
+  proof
+    thus InsCode goto i1 is jump-only;
+    thus goto i1 is non sequential
+    proof
+        JUMP goto i1 <> {};
+      hence thesis by AMISTD_1:43;
+    end;
+    take 1;
+      dom AddressPart goto i1 = dom <*i1*> by Th13
+      .= {1} by FINSEQ_1:4,def 8;
+    hence 1 in dom AddressPart goto i1 by TARSKI:def 1;
+    thus thesis by Th35;
+  end;
+end;
+
+definition let a, i1;
+ cluster InsCode (a =0_goto i1) -> jump-only;
+coherence
+  proof
+    set S = SCM;
+    let s be State of S, o be Object of S, I be Instruction of S;
+    assume that
+A1:    InsCode I = InsCode (a =0_goto i1) and
+A2:    o <> IC S;
+      InsCode (a =0_goto i1) = 7 by AMI_5:44;
+    then consider i2, b such that
+A3:    I = (b =0_goto i2) by A1,AMI_5:53;
+    per cases by A2,Th3;
+    suppose o in the Instruction-Locations of S;
+    hence Exec(I, s).o = s.o by AMI_1:def 13;
+    suppose o is Data-Location;
+    hence Exec(I, s).o = s.o by A3,AMI_3:14;
+  end;
+
+ cluster InsCode (a >0_goto i1) -> jump-only;
+coherence
+  proof
+    set S = SCM;
+    let s be State of S, o be Object of S, I be Instruction of S;
+    assume that
+A4:    InsCode I = InsCode (a >0_goto i1) and
+A5:    o <> IC S;
+      InsCode (a >0_goto i1) = 8 by AMI_5:45;
+    then consider i2, b such that
+A6:    I = (b >0_goto i2) by A4,AMI_5:54;
+    per cases by A5,Th3;
+    suppose o in the Instruction-Locations of S;
+    hence Exec(I, s).o = s.o by AMI_1:def 13;
+    suppose o is Data-Location;
+    hence Exec(I, s).o = s.o by A6,AMI_3:15;
+  end;
+end;
+
+definition let a, i1;
+ cluster a =0_goto i1 -> jump-only non sequential non ins-loc-free;
+coherence
+  proof
+    thus InsCode (a =0_goto i1) is jump-only;
+    thus a =0_goto i1 is non sequential
+    proof
+        JUMP (a =0_goto i1) <> {};
+      hence thesis by AMISTD_1:43;
+    end;
+    take 1;
+      dom AddressPart (a =0_goto i1) = dom <*i1,a*> by Th14
+      .= {1,2} by FINSEQ_1:4,FINSEQ_3:29;
+    hence 1 in dom AddressPart (a =0_goto i1) by TARSKI:def 2;
+    thus thesis by Th36;
+  end;
+
+ cluster a >0_goto i1 -> jump-only non sequential non ins-loc-free;
+coherence
+  proof
+    thus InsCode (a >0_goto i1) is jump-only;
+    thus a >0_goto i1 is non sequential
+    proof
+        JUMP (a >0_goto i1) <> {};
+      hence thesis by AMISTD_1:43;
+    end;
+    take 1;
+      dom AddressPart (a >0_goto i1) = dom <*i1,a*> by Th15
+      .= {1,2} by FINSEQ_1:4,FINSEQ_3:29;
+    hence 1 in dom AddressPart (a >0_goto i1) by TARSKI:def 2;
+    thus thesis by Th38;
+  end;
+end;
+
+definition let a, b;
+consider w being State of SCM;
+set t = w+*((dl.0, dl.1)-->(0,1));
+ cluster InsCode (a:=b) -> non jump-only;
+coherence
+proof
+A1: InsCode (a:=b) = 1 by AMI_5:38
+    .= InsCode (dl.0:=dl.1) by AMI_5:38;
+A2: dl.0 <> IC SCM by AMI_3:57;
+     dom ((dl.0, dl.1)-->(0,1)) = {dl.0, dl.1} by FUNCT_4:65;
+then A3: dl.0 in dom ((dl.0, dl.1)-->(0,1)) &
+   dl.1 in dom ((dl.0, dl.1)-->(0,1)) by TARSKI:def 2;
+A4: dl.0 <> dl.1 by AMI_3:52;
+A5: t.dl.0 = (dl.0, dl.1)-->(0,1).dl.0 by A3,FUNCT_4:14
+          .= 0 by A4,FUNCT_4:66;
+     Exec((dl.0:=dl.1), t).dl.0
+    = t.dl.1 by AMI_3:8
+   .= (dl.0, dl.1)-->(0,1).dl.1 by A3,FUNCT_4:14
+   .= 1 by A4,FUNCT_4:66;
+  hence thesis by A1,A2,A5,AMISTD_1:def 3;
+end;
+
+ cluster InsCode AddTo(a,b) -> non jump-only;
+coherence
+proof
+A6: InsCode AddTo(a,b) = 2 by AMI_5:39
+    .= InsCode AddTo(dl.0, dl.1) by AMI_5:39;
+A7: dl.0 <> IC SCM by AMI_3:57;
+     dom ((dl.0, dl.1)-->(0,1)) = {dl.0, dl.1} by FUNCT_4:65;
+then A8: dl.0 in dom ((dl.0, dl.1)-->(0,1)) &
+   dl.1 in dom ((dl.0, dl.1)-->(0,1)) by TARSKI:def 2;
+A9: dl.0 <> dl.1 by AMI_3:52;
+A10: t.dl.0 = (dl.0, dl.1)-->(0,1).dl.0 by A8,FUNCT_4:14
+             .= 0 by A9,FUNCT_4:66;
+A11: t.dl.1 = (dl.0, dl.1)-->(0,1).dl.1 by A8,FUNCT_4:14
+             .= 1 by A9,FUNCT_4:66;
+     Exec(AddTo(dl.0, dl.1), t).dl.0
+    = t.dl.0 + t.dl.1 by AMI_3:9
+   .= 1 by A10,A11;
+  hence thesis by A6,A7,A10,AMISTD_1:def 3;
+end;
+
+ cluster InsCode SubFrom(a,b) -> non jump-only;
+coherence
+proof
+A12: InsCode SubFrom(a,b) = 3 by AMI_5:40
+    .= InsCode SubFrom(dl.0, dl.1) by AMI_5:40;
+A13: dl.0 <> IC SCM by AMI_3:57;
+     dom ((dl.0, dl.1)-->(0,1)) = {dl.0, dl.1} by FUNCT_4:65;
+then A14: dl.0 in dom ((dl.0, dl.1)-->(0,1)) &
+   dl.1 in dom ((dl.0, dl.1)-->(0,1)) by TARSKI:def 2;
+A15: dl.0 <> dl.1 by AMI_3:52;
+A16: t.dl.0 = (dl.0, dl.1)-->(0,1).dl.0 by A14,FUNCT_4:14
+          .= 0 by A15,FUNCT_4:66;
+A17: t.dl.1 = (dl.0, dl.1)-->(0,1).dl.1 by A14,FUNCT_4:14
+          .= 1 by A15,FUNCT_4:66;
+      Exec(SubFrom(dl.0, dl.1), t).dl.0
+    = t.dl.0 - t.dl.1 by AMI_3:10
+   .= -1 by A16,A17;
+  hence thesis by A12,A13,A16,AMISTD_1:def 3;
+end;
+
+ cluster InsCode MultBy(a,b) -> non jump-only;
+coherence
+proof
+   set t = w+*((dl.0, dl.1)-->(1,0));
+A18: InsCode MultBy(a,b) = 4 by AMI_5:41
+    .= InsCode MultBy(dl.0, dl.1) by AMI_5:41;
+A19:  dl.0 <> IC SCM by AMI_3:57;
+      dom ((dl.0, dl.1)-->(1,0)) = {dl.0, dl.1} by FUNCT_4:65;
+     then A20: dl.0 in dom ((dl.0, dl.1)-->(1,0)) &
+   dl.1 in dom ((dl.0, dl.1)-->(1,0)) by TARSKI:def 2;
+A21: dl.0 <> dl.1 by AMI_3:52;
+A22: t.dl.0 = (dl.0, dl.1)-->(1,0).dl.0 by A20,FUNCT_4:14
+             .= 1 by A21,FUNCT_4:66;
+A23: t.dl.1 = (dl.0, dl.1)-->(1,0).dl.1 by A20,FUNCT_4:14
+             .= 0 by A21,FUNCT_4:66;
+     Exec(MultBy(dl.0, dl.1), t).dl.0
+    = t.dl.0 * t.dl.1 by AMI_3:11
+   .= 0 by A23;
+  hence thesis by A18,A19,A22,AMISTD_1:def 3;
+end;
+
+ cluster InsCode Divide(a,b) -> non jump-only;
+coherence
+proof
+   set t = w+*((dl.0, dl.1)-->(7,3));
+A24: InsCode Divide(a,b) = 5 by AMI_5:42
+    .= InsCode Divide(dl.0, dl.1) by AMI_5:42;
+A25:  dl.0 <> IC SCM by AMI_3:57;
+      dom ((dl.0, dl.1)-->(7,3)) = {dl.0, dl.1} by FUNCT_4:65;
+then A26: dl.0 in dom ((dl.0, dl.1)-->(7,3)) &
+   dl.1 in dom ((dl.0, dl.1)-->(7,3)) by TARSKI:def 2;
+A27: dl.0 <> dl.1 by AMI_3:52;
+A28: t.dl.0 = (dl.0, dl.1)-->(7,3).dl.0 by A26,FUNCT_4:14
+          .= 7 by A27,FUNCT_4:66;
+A29: t.dl.1 = (dl.0, dl.1)-->(7,3).dl.1 by A26,FUNCT_4:14
+          .= 3 by A27,FUNCT_4:66;
+A30: 7 = 2 * 3 + 1;
+     Exec(Divide(dl.0, dl.1), t).dl.0
+    = 7 div (3 qua Integer) by A27,A28,A29,AMI_3:12
+   .= 7 div (3 qua Nat) by SCMFSA9A:5
+   .= 2 by A30,NAT_1:def 1;
+  hence thesis by A24,A25,A28,AMISTD_1:def 3;
+end;
+end;
+
+definition let a, b;
+ cluster a:=b -> non jump-only sequential;
+coherence
+  proof
+    thus InsCode (a:=b) is not jump-only;
+    let s be State of SCM;
+      Next IC s = NextLoc IC s by Th56;
+    hence thesis by AMI_3:8;
+  end;
+
+ cluster AddTo(a,b) -> non jump-only sequential;
+coherence
+  proof
+    thus InsCode AddTo(a,b) is not jump-only;
+    let s be State of SCM;
+      Next IC s = NextLoc IC s by Th56;
+    hence thesis by AMI_3:9;
+  end;
+
+ cluster SubFrom(a,b) -> non jump-only sequential;
+coherence
+  proof
+    thus InsCode SubFrom(a,b) is not jump-only;
+    let s be State of SCM;
+      Next IC s = NextLoc IC s by Th56;
+    hence thesis by AMI_3:10;
+  end;
+
+ cluster MultBy(a,b) -> non jump-only sequential;
+coherence
+  proof
+    thus InsCode MultBy(a,b) is not jump-only;
+    let s be State of SCM;
+      Next IC s = NextLoc IC s by Th56;
+    hence thesis by AMI_3:11;
+  end;
+
+ cluster Divide(a,b) -> non jump-only sequential;
+coherence
+  proof
+    thus InsCode Divide(a,b) is not jump-only;
+    let s be State of SCM;
+      Next IC s = NextLoc IC s by Th56;
+    hence thesis by AMI_3:12;
+  end;
+end;
+
+definition
+ cluster SCM -> homogeneous with_explicit_jumps without_implicit_jumps;
+coherence
+  proof
+    thus SCM is homogeneous
+    proof
+      let I, J be Instruction of SCM such that
+A1:     InsCode I = InsCode J;
+A2:   J = [0,{}] or
+      (ex a,b st J = a:=b) or
+      (ex a,b st J = AddTo(a,b)) or
+      (ex a,b st J = SubFrom(a,b)) or
+      (ex a,b st J = MultBy(a,b)) or
+      (ex a,b st J = Divide(a,b)) or
+      (ex i1 st J = goto i1) or
+      (ex a,i1 st J = a=0_goto i1) or
+      (ex a,i1 st J = a>0_goto i1) by AMI_3:69;
+      per cases by AMI_3:69;
+      suppose I = [0,{}];
+      hence thesis by A1,A2,AMI_3:71,AMI_5:37,38,39,40,41,42,43,44,45;
+      suppose ex a,b st I = a:=b;
+      then consider a, b such that
+A3:     I = a:=b;
+A4:   InsCode I = 1 by A3,AMI_5:38;
+        now per cases by AMI_3:69;
+        suppose J = [0,{}];
+        hence dom AddressPart I = dom AddressPart J
+         by A1,A3,AMI_3:71,AMI_5:37,38;
+        suppose ex a,b st J = a:=b;
+        then consider d1, d2 such that
+A5:       J = d1:=d2;
+        thus dom AddressPart I = dom <*a,b*> by A3,Th8
+          .= Seg 2 by FINSEQ_3:29
+          .= dom <*d1,d2*> by FINSEQ_3:29
+          .= dom AddressPart J by A5,Th8;
+        suppose (ex a,b st J = AddTo(a,b)) or
+                (ex a,b st J = SubFrom(a,b)) or
+                (ex a,b st J = MultBy(a,b)) or
+                (ex a,b st J = Divide(a,b)) or
+                (ex i1 st J = goto i1) or
+                (ex a,i1 st J = a=0_goto i1) or
+                (ex a,i1 st J = a>0_goto i1);
+        hence dom AddressPart I = dom AddressPart J
+          by A1,A4,AMI_5:39,40,41,42,43,44,45;
+      end;
+      hence thesis;
+      suppose ex a,b st I = AddTo(a,b);
+      then consider a, b such that
+A6:     I = AddTo(a,b);
+A7:   InsCode I = 2 by A6,AMI_5:39;
+        now per cases by AMI_3:69;
+        suppose J = [0,{}];
+        hence dom AddressPart I = dom AddressPart J
+         by A1,A6,AMI_3:71,AMI_5:37,39;
+        suppose ex a,b st J = AddTo(a,b);
+        then consider d1, d2 such that
+A8:       J = AddTo(d1,d2);
+        thus dom AddressPart I = dom <*a,b*> by A6,Th9
+          .= Seg 2 by FINSEQ_3:29
+          .= dom <*d1,d2*> by FINSEQ_3:29
+          .= dom AddressPart J by A8,Th9;
+        suppose (ex a,b st J = a:=b) or
+                (ex a,b st J = SubFrom(a,b)) or
+                (ex a,b st J = MultBy(a,b)) or
+                (ex a,b st J = Divide(a,b)) or
+                (ex i1 st J = goto i1) or
+                (ex a,i1 st J = a=0_goto i1) or
+                (ex a,i1 st J = a>0_goto i1);
+        hence dom AddressPart I = dom AddressPart J
+          by A1,A7,AMI_5:38,40,41,42,43,44,45;
+      end;
+      hence thesis;
+      suppose ex a,b st I = SubFrom(a,b);
+      then consider a, b such that
+A9:     I = SubFrom(a,b);
+A10:   InsCode I = 3 by A9,AMI_5:40;
+        now per cases by AMI_3:69;
+        suppose J = [0,{}];
+        hence dom AddressPart I = dom AddressPart J
+          by A1,A9,AMI_3:71,AMI_5:37,40;
+        suppose ex a,b st J = SubFrom(a,b);
+        then consider d1, d2 such that
+A11:       J = SubFrom(d1,d2);
+        thus dom AddressPart I = dom <*a,b*> by A9,Th10
+          .= Seg 2 by FINSEQ_3:29
+          .= dom <*d1,d2*> by FINSEQ_3:29
+          .= dom AddressPart J by A11,Th10;
+        suppose (ex a,b st J = a:=b) or
+                (ex a,b st J = AddTo(a,b)) or
+                (ex a,b st J = MultBy(a,b)) or
+                (ex a,b st J = Divide(a,b)) or
+                (ex i1 st J = goto i1) or
+                (ex a,i1 st J = a=0_goto i1) or
+                (ex a,i1 st J = a>0_goto i1);
+        hence dom AddressPart I = dom AddressPart J
+          by A1,A10,AMI_5:38,39,41,42,43,44,45;
+      end;
+      hence thesis;
+      suppose ex a,b st I = MultBy(a,b);
+      then consider a, b such that
+A12:     I = MultBy(a,b);
+A13:   InsCode I = 4 by A12,AMI_5:41;
+        now per cases by AMI_3:69;
+        suppose J = [0,{}];
+        hence dom AddressPart I = dom AddressPart J
+          by A1,A12,AMI_3:71,AMI_5:37,41;
+        suppose ex a,b st J = MultBy(a,b);
+        then consider d1, d2 such that
+A14:       J = MultBy(d1,d2);
+        thus dom AddressPart I = dom <*a,b*> by A12,Th11
+          .= Seg 2 by FINSEQ_3:29
+          .= dom <*d1,d2*> by FINSEQ_3:29
+          .= dom AddressPart J by A14,Th11;
+        suppose (ex a,b st J = a:=b) or
+                (ex a,b st J = AddTo(a,b)) or
+                (ex a,b st J = SubFrom(a,b)) or
+                (ex a,b st J = Divide(a,b)) or
+                (ex i1 st J = goto i1) or
+                (ex a,i1 st J = a=0_goto i1) or
+                (ex a,i1 st J = a>0_goto i1);
+        hence dom AddressPart I = dom AddressPart J
+          by A1,A13,AMI_5:38,39,40,42,43,44,45;
+      end;
+      hence thesis;
+      suppose ex a,b st I = Divide(a,b);
+      then consider a, b such that
+A15:     I = Divide(a,b);
+A16:   InsCode I = 5 by A15,AMI_5:42;
+        now per cases by AMI_3:69;
+        suppose J = [0,{}];
+        hence dom AddressPart I = dom AddressPart J
+          by A1,A15,AMI_3:71,AMI_5:37,42;
+        suppose ex a,b st J = Divide(a,b);
+        then consider d1, d2 such that
+A17:       J = Divide(d1,d2);
+        thus dom AddressPart I = dom <*a,b*> by A15,Th12
+          .= Seg 2 by FINSEQ_3:29
+          .= dom <*d1,d2*> by FINSEQ_3:29
+          .= dom AddressPart J by A17,Th12;
+        suppose (ex a,b st J = a:=b) or
+                (ex a,b st J = AddTo(a,b)) or
+                (ex a,b st J = SubFrom(a,b)) or
+                (ex a,b st J = MultBy(a,b)) or
+                (ex i1 st J = goto i1) or
+                (ex a,i1 st J = a=0_goto i1) or
+                (ex a,i1 st J = a>0_goto i1);
+        hence dom AddressPart I = dom AddressPart J
+          by A1,A16,AMI_5:38,39,40,41,43,44,45;
+      end;
+      hence thesis;
+      suppose ex i1 st I = goto i1;
+      then consider i1 such that
+A18:     I = goto i1;
+A19:   InsCode I = 6 by A18,AMI_5:43;
+        now per cases by AMI_3:69;
+        suppose J = [0,{}];
+        hence dom AddressPart I = dom AddressPart J
+          by A1,A18,AMI_3:71,AMI_5:37,43;
+        suppose ex i2 st J = goto i2;
+        then consider i2 such that
+A20:       J = goto i2;
+        thus dom AddressPart I = dom <*i1*> by A18,Th13
+          .= Seg 1 by FINSEQ_1:def 8
+          .= dom <*i2*> by FINSEQ_1:def 8
+          .= dom AddressPart J by A20,Th13;
+        suppose (ex a,b st J = a:=b) or
+                (ex a,b st J = AddTo(a,b)) or
+                (ex a,b st J = SubFrom(a,b)) or
+                (ex a,b st J = MultBy(a,b)) or
+                (ex a,b st J = Divide(a,b)) or
+                (ex a,i1 st J = a=0_goto i1) or
+                (ex a,i1 st J = a>0_goto i1);
+        hence dom AddressPart I = dom AddressPart J
+          by A1,A19,AMI_5:38,39,40,41,42,44,45;
+      end;
+      hence thesis;
+      suppose ex a,i1 st I = a=0_goto i1;
+      then consider a, i1 such that
+A21:     I = a=0_goto i1;
+A22:   InsCode I = 7 by A21,AMI_5:44;
+        now per cases by AMI_3:69;
+        suppose J = [0,{}];
+        hence dom AddressPart I = dom AddressPart J
+          by A1,A21,AMI_3:71,AMI_5:37,44;
+        suppose ex d1,i2 st J = d1 =0_goto i2;
+        then consider d1, i2 such that
+A23:       J = d1 =0_goto i2;
+        thus dom AddressPart I = dom <*i1,a*> by A21,Th14
+          .= Seg 2 by FINSEQ_3:29
+          .= dom <*i2,d1*> by FINSEQ_3:29
+          .= dom AddressPart J by A23,Th14;
+        suppose (ex a,b st J = a:=b) or
+                (ex a,b st J = AddTo(a,b)) or
+                (ex a,b st J = SubFrom(a,b)) or
+                (ex a,b st J = MultBy(a,b)) or
+                (ex a,b st J = Divide(a,b)) or
+                (ex i1 st J = goto i1) or
+                (ex a,i1 st J = a>0_goto i1);
+        hence dom AddressPart I = dom AddressPart J
+          by A1,A22,AMI_5:38,39,40,41,42,43,45;
+      end;
+      hence thesis;
+      suppose ex a,i1 st I = a>0_goto i1;
+      then consider a, i1 such that
+A24:     I = a>0_goto i1;
+A25:   InsCode I = 8 by A24,AMI_5:45;
+        now per cases by AMI_3:69;
+        suppose J = [0,{}];
+        hence dom AddressPart I = dom AddressPart J
+          by A1,A24,AMI_3:71,AMI_5:37,45;
+        suppose ex d1,i2 st J = d1 >0_goto i2;
+        then consider d1, i2 such that
+A26:       J = d1 >0_goto i2;
+        thus dom AddressPart I = dom <*i1,a*> by A24,Th15
+          .= Seg 2 by FINSEQ_3:29
+          .= dom <*i2,d1*> by FINSEQ_3:29
+          .= dom AddressPart J by A26,Th15;
+        suppose (ex a,b st J = a:=b) or
+                (ex a,b st J = AddTo(a,b)) or
+                (ex a,b st J = SubFrom(a,b)) or
+                (ex a,b st J = MultBy(a,b)) or
+                (ex a,b st J = Divide(a,b)) or
+                (ex i1 st J = goto i1) or
+                (ex a,i1 st J = a=0_goto i1);
+        hence dom AddressPart I = dom AddressPart J
+          by A1,A25,AMI_5:38,39,40,41,42,43,44;
+      end;
+      hence thesis;
+    end;
+
+    thus SCM is with_explicit_jumps
+    proof
+      let I be Instruction of SCM;
+      let f be set such that
+A27:     f in JUMP I;
+      per cases by AMI_3:69;
+      suppose
+A28:     I = [0,{}];
+        JUMP halt SCM is empty;
+      hence thesis by A27,A28,AMI_3:71;
+      suppose ex a,b st I = a:=b;
+      then consider a, b such that
+A29:     I = a:=b;
+        JUMP (a:=b) is empty;
+      hence thesis by A27,A29;
+      suppose ex a,b st I = AddTo(a,b);
+      then consider a, b such that
+A30:     I = AddTo(a,b);
+        JUMP AddTo(a,b) is empty;
+      hence thesis by A27,A30;
+      suppose ex a,b st I = SubFrom(a,b);
+      then consider a, b such that
+A31:     I = SubFrom(a,b);
+        JUMP SubFrom(a,b) is empty;
+      hence thesis by A27,A31;
+      suppose ex a,b st I = MultBy(a,b);
+      then consider a, b such that
+A32:     I = MultBy(a,b);
+        JUMP MultBy(a,b) is empty;
+      hence thesis by A27,A32;
+      suppose ex a,b st I = Divide(a,b);
+      then consider a, b such that
+A33:     I = Divide(a,b);
+        JUMP Divide(a,b) is empty;
+      hence thesis by A27,A33;
+      suppose ex i1 st I = goto i1;
+      then consider i1 such that
+A34:     I = goto i1;
+        JUMP goto i1 = {i1} by Th47;
+then A35:   f = i1 by A27,A34,TARSKI:def 1;
+      take 1;
+A36:   AddressPart goto i1 = <*i1*> by Th13;
+        dom <*i1*> = Seg 1 by FINSEQ_1:def 8;
+      hence 1 in dom AddressPart I by A34,A36,FINSEQ_1:4,TARSKI:def 1;
+      thus f = (AddressPart I).1 &
+       (PA AddressParts InsCode I).1 = the Instruction-Locations of SCM
+        by A34,A35,A36,Th35,FINSEQ_1:def 8;
+      suppose ex a,i1 st I = a=0_goto i1;
+      then consider a, i1 such that
+A37:     I = a=0_goto i1;
+        JUMP (a=0_goto i1) = {i1} by Th49;
+then A38:   f = i1 by A27,A37,TARSKI:def 1;
+      take 1;
+A39:   AddressPart (a=0_goto i1) = <*i1,a*> by Th14;
+        dom <*i1,a*> = Seg 2 by FINSEQ_3:29;
+      hence 1 in dom AddressPart I by A37,A39,FINSEQ_1:4,TARSKI:def 2;
+      thus f = (AddressPart I).1 &
+       (PA AddressParts InsCode I).1 = the Instruction-Locations of SCM
+        by A37,A38,A39,Th36,FINSEQ_1:61;
+      suppose ex a,i1 st I = a>0_goto i1;
+      then consider a, i1 such that
+A40:     I = a>0_goto i1;
+        JUMP (a>0_goto i1) = {i1} by Th51;
+then A41:   f = i1 by A27,A40,TARSKI:def 1;
+      take 1;
+A42:   AddressPart (a>0_goto i1) = <*i1,a*> by Th15;
+        dom <*i1,a*> = Seg 2 by FINSEQ_3:29;
+      hence 1 in dom AddressPart I by A40,A42,FINSEQ_1:4,TARSKI:def 2;
+      thus f = (AddressPart I).1 &
+       (PA AddressParts InsCode I).1 = the Instruction-Locations of SCM
+        by A40,A41,A42,Th38,FINSEQ_1:61;
+    end;
+
+    let I be Instruction of SCM;
+    let f be set;
+    given k being set such that
+A43:   k in dom AddressPart I and
+A44:   f = (AddressPart I).k and
+A45:   (PA AddressParts InsCode I).k = the Instruction-Locations of SCM;
+    per cases by AMI_3:69;
+    suppose I = [0,{}];
+    then dom AddressPart I = dom {} by Th7,AMI_3:71;
+    hence thesis by A43;
+    suppose ex a,b st I = a:=b;
+    then consider a, b such that
+A46:   I = a:=b;
+      k in dom <*a,b*> by A43,A46,Th8;
+    then k = 1 or k = 2 by Lm2;
+    hence thesis by A45,A46,Th2,Th25,Th26;
+    suppose ex a,b st I = AddTo(a,b);
+    then consider a, b such that
+A47:   I = AddTo(a,b);
+      k in dom <*a,b*> by A43,A47,Th9;
+    then k = 1 or k = 2 by Lm2;
+    hence thesis by A45,A47,Th2,Th27,Th28;
+    suppose ex a,b st I = SubFrom(a,b);
+    then consider a, b such that
+A48:   I = SubFrom(a,b);
+      k in dom <*a,b*> by A43,A48,Th10;
+    then k = 1 or k = 2 by Lm2;
+    hence thesis by A45,A48,Th2,Th29,Th30;
+    suppose ex a,b st I = MultBy(a,b);
+    then consider a, b such that
+A49:   I = MultBy(a,b);
+      k in dom <*a,b*> by A43,A49,Th11;
+    then k = 1 or k = 2 by Lm2;
+    hence thesis by A45,A49,Th2,Th31,Th32;
+    suppose ex a,b st I = Divide(a,b);
+    then consider a, b such that
+A50:   I = Divide(a,b);
+      k in dom <*a,b*> by A43,A50,Th12;
+    then k = 1 or k = 2 by Lm2;
+    hence thesis by A45,A50,Th2,Th33,Th34;
+    suppose ex i1 st I = goto i1;
+    then consider i1 such that
+A51:   I = goto i1;
+A52: AddressPart I = <*i1*> by A51,Th13;
+    then k = 1 by A43,Lm1;
+then A53: f = i1 by A44,A52,FINSEQ_1:def 8;
+      JUMP I = {i1} by A51,Th47;
+    hence thesis by A53,TARSKI:def 1;
+    suppose ex a,i1 st I = a=0_goto i1;
+    then consider a, i1 such that
+A54:   I = a=0_goto i1;
+A55: AddressPart I = <*i1,a*> by A54,Th14;
+    then k = 1 or k = 2 by A43,Lm2;
+then A56: f = i1 by A44,A45,A54,A55,Th2,Th37,FINSEQ_1:61;
+      JUMP I = {i1} by A54,Th49;
+    hence thesis by A56,TARSKI:def 1;
+    suppose ex a,i1 st I = a>0_goto i1;
+    then consider a, i1 such that
+A57:   I = a>0_goto i1;
+A58: AddressPart I = <*i1,a*> by A57,Th15;
+    then k = 1 or k = 2 by A43,Lm2;
+then A59: f = i1 by A44,A45,A57,A58,Th2,Th39,FINSEQ_1:61;
+      JUMP I = {i1} by A57,Th51;
+    hence thesis by A59,TARSKI:def 1;
+  end;
+end;
+
+definition
+ cluster SCM -> regular;
+coherence
+  proof
+    let T be InsType of SCM;
+A1: AddressParts T =
+      { AddressPart I where I is Instruction of SCM: InsCode I = T }
+        by AMISTD_2:def 5;
+    per cases by Lm3;
+    suppose
+A2:   T = 0;
+    reconsider f = {} as Function;
+    take f;
+    thus thesis by A2,Th16,CARD_3:19;
+
+    suppose
+A3:   T = 1;
+    take PA AddressParts T;
+    thus AddressParts T c= product PA AddressParts T by AMISTD_2:9;
+    let x be set;
+    assume x in product PA AddressParts T;
+    then consider f being Function such that
+A4:   x = f and
+A5:   dom f = dom PA AddressParts T and
+A6:   for k being set st k in dom PA AddressParts T holds
+        f.k in (PA AddressParts T).k by CARD_3:def 5;
+A7: dom PA AddressParts T = {1,2} by A3,Th17;
+then A8: 1 in dom PA AddressParts T by TARSKI:def 2;
+    then f.1 in (PA AddressParts T).1 by A6;
+    then f.1 in pi(AddressParts T,1) by A8,AMISTD_2:def 1;
+    then consider g being Function such that
+A9:   g in AddressParts T and
+A10:   g.1 = f.1 by CARD_3:def 6;
+A11: 2 in dom PA AddressParts T by A7,TARSKI:def 2;
+    then f.2 in (PA AddressParts T).2 by A6;
+    then f.2 in pi(AddressParts T,2) by A11,AMISTD_2:def 1;
+    then consider h being Function such that
+A12:   h in AddressParts T and
+A13:   h.2 = f.2 by CARD_3:def 6;
+    consider I being Instruction of SCM such that
+A14:   g = AddressPart I and
+A15:   InsCode I = T by A1,A9;
+    consider d1, b such that
+A16:   I = d1:=b by A3,A15,AMI_5:47;
+A17: g = <*d1,b*> by A14,A16,Th8;
+    consider J being Instruction of SCM such that
+A18:   h = AddressPart J and
+A19:   InsCode J = T by A1,A12;
+    consider a, d2 such that
+A20:   J = a:=d2 by A3,A19,AMI_5:47;
+A21: h = <*a,d2*> by A18,A20,Th8;
+A22: dom <*d1,d2*> = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
+      for k being set st k in {1,2} holds <*d1,d2*>.k = f.k
+    proof
+      let k be set;
+      assume
+A23:     k in {1,2};
+      per cases by A23,TARSKI:def 2;
+      suppose
+A24:     k = 1;
+        <*d1,d2*>.1 = d1 by FINSEQ_1:61
+        .= f.1 by A10,A17,FINSEQ_1:61;
+      hence <*d1,d2*>.k = f.k by A24;
+      suppose
+A25:     k = 2;
+        <*d1,d2*>.2 = d2 by FINSEQ_1:61
+        .= f.2 by A13,A21,FINSEQ_1:61;
+      hence <*d1,d2*>.k = f.k by A25;
+    end;
+then A26: <*d1,d2*> = f by A5,A7,A22,FUNCT_1:9;
+      InsCode (d1:=d2) = 1 & AddressPart (d1:=d2) = <*d1,d2*> by Th8,AMI_5:38;
+    hence thesis by A1,A3,A4,A26;
+
+    suppose
+A27:   T = 2;
+    take PA AddressParts T;
+    thus AddressParts T c= product PA AddressParts T by AMISTD_2:9;
+    let x be set;
+    assume x in product PA AddressParts T;
+    then consider f being Function such that
+A28:   x = f and
+A29:   dom f = dom PA AddressParts T and
+A30:   for k being set st k in dom PA AddressParts T holds
+        f.k in (PA AddressParts T).k by CARD_3:def 5;
+A31: dom PA AddressParts T = {1,2} by A27,Th18;
+then A32: 1 in dom PA AddressParts T by TARSKI:def 2;
+    then f.1 in (PA AddressParts T).1 by A30;
+    then f.1 in pi(AddressParts T,1) by A32,AMISTD_2:def 1;
+    then consider g being Function such that
+A33:   g in AddressParts T and
+A34:   g.1 = f.1 by CARD_3:def 6;
+A35: 2 in dom PA AddressParts T by A31,TARSKI:def 2;
+    then f.2 in (PA AddressParts T).2 by A30;
+    then f.2 in pi(AddressParts T,2) by A35,AMISTD_2:def 1;
+    then consider h being Function such that
+A36:   h in AddressParts T and
+A37:   h.2 = f.2 by CARD_3:def 6;
+    consider I being Instruction of SCM such that
+A38:   g = AddressPart I and
+A39:   InsCode I = T by A1,A33;
+    consider d1, b such that
+A40:   I = AddTo(d1,b) by A27,A39,AMI_5:48;
+A41: g = <*d1,b*> by A38,A40,Th9;
+    consider J being Instruction of SCM such that
+A42:   h = AddressPart J and
+A43:   InsCode J = T by A1,A36;
+    consider a, d2 such that
+A44:   J = AddTo(a,d2) by A27,A43,AMI_5:48;
+A45: h = <*a,d2*> by A42,A44,Th9;
+A46: dom <*d1,d2*> = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
+      for k being set st k in {1,2} holds <*d1,d2*>.k = f.k
+    proof
+      let k be set;
+      assume
+A47:     k in {1,2};
+      per cases by A47,TARSKI:def 2;
+      suppose
+A48:     k = 1;
+        <*d1,d2*>.1 = d1 by FINSEQ_1:61
+        .= f.1 by A34,A41,FINSEQ_1:61;
+      hence <*d1,d2*>.k = f.k by A48;
+      suppose
+A49:     k = 2;
+        <*d1,d2*>.2 = d2 by FINSEQ_1:61
+        .= f.2 by A37,A45,FINSEQ_1:61;
+      hence <*d1,d2*>.k = f.k by A49;
+    end;
+then A50: <*d1,d2*> = f by A29,A31,A46,FUNCT_1:9;
+      InsCode AddTo(d1,d2) = 2 & AddressPart AddTo(d1,d2) = <*d1,d2*>
+      by Th9,AMI_5:39;
+    hence thesis by A1,A27,A28,A50;
+
+    suppose
+A51:   T = 3;
+    take PA AddressParts T;
+    thus AddressParts T c= product PA AddressParts T by AMISTD_2:9;
+    let x be set;
+    assume x in product PA AddressParts T;
+    then consider f being Function such that
+A52:   x = f and
+A53:   dom f = dom PA AddressParts T and
+A54:   for k being set st k in dom PA AddressParts T holds
+        f.k in (PA AddressParts T).k by CARD_3:def 5;
+A55: dom PA AddressParts T = {1,2} by A51,Th19;
+then A56: 1 in dom PA AddressParts T by TARSKI:def 2;
+    then f.1 in (PA AddressParts T).1 by A54;
+    then f.1 in pi(AddressParts T,1) by A56,AMISTD_2:def 1;
+    then consider g being Function such that
+A57:   g in AddressParts T and
+A58:   g.1 = f.1 by CARD_3:def 6;
+A59: 2 in dom PA AddressParts T by A55,TARSKI:def 2;
+    then f.2 in (PA AddressParts T).2 by A54;
+    then f.2 in pi(AddressParts T,2) by A59,AMISTD_2:def 1;
+    then consider h being Function such that
+A60:   h in AddressParts T and
+A61:   h.2 = f.2 by CARD_3:def 6;
+    consider I being Instruction of SCM such that
+A62:   g = AddressPart I and
+A63:   InsCode I = T by A1,A57;
+    consider d1, b such that
+A64:   I = SubFrom(d1,b) by A51,A63,AMI_5:49;
+A65: g = <*d1,b*> by A62,A64,Th10;
+    consider J being Instruction of SCM such that
+A66:   h = AddressPart J and
+A67:   InsCode J = T by A1,A60;
+    consider a, d2 such that
+A68:   J = SubFrom(a,d2) by A51,A67,AMI_5:49;
+A69: h = <*a,d2*> by A66,A68,Th10;
+A70: dom <*d1,d2*> = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
+      for k being set st k in {1,2} holds <*d1,d2*>.k = f.k
+    proof
+      let k be set;
+      assume
+A71:     k in {1,2};
+      per cases by A71,TARSKI:def 2;
+      suppose
+A72:     k = 1;
+        <*d1,d2*>.1 = d1 by FINSEQ_1:61
+        .= f.1 by A58,A65,FINSEQ_1:61;
+      hence <*d1,d2*>.k = f.k by A72;
+      suppose
+A73:     k = 2;
+        <*d1,d2*>.2 = d2 by FINSEQ_1:61
+        .= f.2 by A61,A69,FINSEQ_1:61;
+      hence <*d1,d2*>.k = f.k by A73;
+    end;
+then A74: <*d1,d2*> = f by A53,A55,A70,FUNCT_1:9;
+      InsCode SubFrom(d1,d2) = 3 & AddressPart SubFrom(d1,d2) = <*d1,d2*>
+      by Th10,AMI_5:40;
+    hence thesis by A1,A51,A52,A74;
+
+    suppose
+A75:   T = 4;
+    take PA AddressParts T;
+    thus AddressParts T c= product PA AddressParts T by AMISTD_2:9;
+    let x be set;
+    assume x in product PA AddressParts T;
+    then consider f being Function such that
+A76:   x = f and
+A77:   dom f = dom PA AddressParts T and
+A78:   for k being set st k in dom PA AddressParts T holds
+        f.k in (PA AddressParts T).k by CARD_3:def 5;
+A79: dom PA AddressParts T = {1,2} by A75,Th20;
+then A80: 1 in dom PA AddressParts T by TARSKI:def 2;
+    then f.1 in (PA AddressParts T).1 by A78;
+    then f.1 in pi(AddressParts T,1) by A80,AMISTD_2:def 1;
+    then consider g being Function such that
+A81:   g in AddressParts T and
+A82:   g.1 = f.1 by CARD_3:def 6;
+A83: 2 in dom PA AddressParts T by A79,TARSKI:def 2;
+    then f.2 in (PA AddressParts T).2 by A78;
+    then f.2 in pi(AddressParts T,2) by A83,AMISTD_2:def 1;
+    then consider h being Function such that
+A84:   h in AddressParts T and
+A85:   h.2 = f.2 by CARD_3:def 6;
+    consider I being Instruction of SCM such that
+A86:   g = AddressPart I and
+A87:   InsCode I = T by A1,A81;
+    consider d1, b such that
+A88:   I = MultBy(d1,b) by A75,A87,AMI_5:50;
+A89: g = <*d1,b*> by A86,A88,Th11;
+    consider J being Instruction of SCM such that
+A90:   h = AddressPart J and
+A91:   InsCode J = T by A1,A84;
+    consider a, d2 such that
+A92:   J = MultBy(a,d2) by A75,A91,AMI_5:50;
+A93: h = <*a,d2*> by A90,A92,Th11;
+A94: dom <*d1,d2*> = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
+      for k being set st k in {1,2} holds <*d1,d2*>.k = f.k
+    proof
+      let k be set;
+      assume
+A95:     k in {1,2};
+      per cases by A95,TARSKI:def 2;
+      suppose
+A96:     k = 1;
+        <*d1,d2*>.1 = d1 by FINSEQ_1:61
+        .= f.1 by A82,A89,FINSEQ_1:61;
+      hence <*d1,d2*>.k = f.k by A96;
+      suppose
+A97:     k = 2;
+        <*d1,d2*>.2 = d2 by FINSEQ_1:61
+        .= f.2 by A85,A93,FINSEQ_1:61;
+      hence <*d1,d2*>.k = f.k by A97;
+    end;
+then A98: <*d1,d2*> = f by A77,A79,A94,FUNCT_1:9;
+      InsCode MultBy(d1,d2) = 4 & AddressPart MultBy(d1,d2) = <*d1,d2*>
+      by Th11,AMI_5:41;
+    hence thesis by A1,A75,A76,A98;
+
+    suppose
+A99:   T = 5;
+    take PA AddressParts T;
+    thus AddressParts T c= product PA AddressParts T by AMISTD_2:9;
+    let x be set;
+    assume x in product PA AddressParts T;
+    then consider f being Function such that
+A100:   x = f and
+A101:   dom f = dom PA AddressParts T and
+A102:   for k being set st k in dom PA AddressParts T holds
+        f.k in (PA AddressParts T).k by CARD_3:def 5;
+A103: dom PA AddressParts T = {1,2} by A99,Th21;
+then A104: 1 in dom PA AddressParts T by TARSKI:def 2;
+    then f.1 in (PA AddressParts T).1 by A102;
+    then f.1 in pi(AddressParts T,1) by A104,AMISTD_2:def 1;
+    then consider g being Function such that
+A105:   g in AddressParts T and
+A106:   g.1 = f.1 by CARD_3:def 6;
+A107: 2 in dom PA AddressParts T by A103,TARSKI:def 2;
+    then f.2 in (PA AddressParts T).2 by A102;
+    then f.2 in pi(AddressParts T,2) by A107,AMISTD_2:def 1;
+    then consider h being Function such that
+A108:   h in AddressParts T and
+A109:   h.2 = f.2 by CARD_3:def 6;
+    consider I being Instruction of SCM such that
+A110:   g = AddressPart I and
+A111:   InsCode I = T by A1,A105;
+    consider d1, b such that
+A112:   I = Divide(d1,b) by A99,A111,AMI_5:51;
+A113: g = <*d1,b*> by A110,A112,Th12;
+    consider J being Instruction of SCM such that
+A114:   h = AddressPart J and
+A115:   InsCode J = T by A1,A108;
+    consider a, d2 such that
+A116:   J = Divide(a,d2) by A99,A115,AMI_5:51;
+A117: h = <*a,d2*> by A114,A116,Th12;
+A118: dom <*d1,d2*> = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
+      for k being set st k in {1,2} holds <*d1,d2*>.k = f.k
+    proof
+      let k be set;
+      assume
+A119:     k in {1,2};
+      per cases by A119,TARSKI:def 2;
+      suppose
+A120:     k = 1;
+        <*d1,d2*>.1 = d1 by FINSEQ_1:61
+        .= f.1 by A106,A113,FINSEQ_1:61;
+      hence <*d1,d2*>.k = f.k by A120;
+      suppose
+A121:     k = 2;
+        <*d1,d2*>.2 = d2 by FINSEQ_1:61
+        .= f.2 by A109,A117,FINSEQ_1:61;
+      hence <*d1,d2*>.k = f.k by A121;
+    end;
+then A122: <*d1,d2*> = f by A101,A103,A118,FUNCT_1:9;
+      InsCode Divide(d1,d2) = 5 & AddressPart Divide(d1,d2) = <*d1,d2*>
+      by Th12,AMI_5:42;
+    hence thesis by A1,A99,A100,A122;
+
+    suppose
+A123:   T = 6;
+    take PA AddressParts T;
+    thus AddressParts T c= product PA AddressParts T by AMISTD_2:9;
+    let x be set;
+    assume x in product PA AddressParts T;
+    then consider f being Function such that
+A124:   x = f and
+A125:   dom f = dom PA AddressParts T and
+A126:   for k being set st k in dom PA AddressParts T holds
+        f.k in (PA AddressParts T).k by CARD_3:def 5;
+A127: dom PA AddressParts T = {1} by A123,Th22;
+then A128: 1 in dom PA AddressParts T by TARSKI:def 1;
+    then f.1 in (PA AddressParts T).1 by A126;
+    then f.1 in pi(AddressParts T,1) by A128,AMISTD_2:def 1;
+    then consider g being Function such that
+A129:   g in AddressParts T and
+A130:   g.1 = f.1 by CARD_3:def 6;
+    consider I being Instruction of SCM such that
+A131:   g = AddressPart I and
+A132:   InsCode I = T by A1,A129;
+    consider i1 such that
+A133:   I = goto i1 by A123,A132,AMI_5:52;
+A134: dom <*i1*> = {1} by FINSEQ_1:4,def 8;
+      for k being set st k in {1} holds <*i1*>.k = f.k
+    proof
+      let k be set;
+      assume k in {1};
+      then k = 1 by TARSKI:def 1;
+      hence <*i1*>.k = f.k by A130,A131,A133,Th13;
+    end;
+then A135: <*i1*> = f by A125,A127,A134,FUNCT_1:9;
+      InsCode goto i1 = 6 & AddressPart goto i1 = <*i1*> by Th13,AMI_5:43;
+    hence thesis by A1,A123,A124,A135;
+
+    suppose
+A136:   T = 7;
+    take PA AddressParts T;
+    thus AddressParts T c= product PA AddressParts T by AMISTD_2:9;
+    let x be set;
+    assume x in product PA AddressParts T;
+    then consider f being Function such that
+A137:   x = f and
+A138:   dom f = dom PA AddressParts T and
+A139:   for k being set st k in dom PA AddressParts T holds
+        f.k in (PA AddressParts T).k by CARD_3:def 5;
+A140: dom PA AddressParts T = {1,2} by A136,Th23;
+then A141: 1 in dom PA AddressParts T by TARSKI:def 2;
+    then f.1 in (PA AddressParts T).1 by A139;
+    then f.1 in pi(AddressParts T,1) by A141,AMISTD_2:def 1;
+    then consider g being Function such that
+A142:   g in AddressParts T and
+A143:   g.1 = f.1 by CARD_3:def 6;
+A144: 2 in dom PA AddressParts T by A140,TARSKI:def 2;
+    then f.2 in (PA AddressParts T).2 by A139;
+    then f.2 in pi(AddressParts T,2) by A144,AMISTD_2:def 1;
+    then consider h being Function such that
+A145:   h in AddressParts T and
+A146:   h.2 = f.2 by CARD_3:def 6;
+    consider I being Instruction of SCM such that
+A147:   g = AddressPart I and
+A148:   InsCode I = T by A1,A142;
+    consider i1, d1 such that
+A149:   I = d1 =0_goto i1 by A136,A148,AMI_5:53;
+A150: g = <*i1,d1*> by A147,A149,Th14;
+    consider J being Instruction of SCM such that
+A151:   h = AddressPart J and
+A152:   InsCode J = T by A1,A145;
+    consider i2, d2 such that
+A153:   J = d2 =0_goto i2 by A136,A152,AMI_5:53;
+A154: h = <*i2,d2*> by A151,A153,Th14;
+A155: dom <*i1,d2*> = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
+      for k being set st k in {1,2} holds <*i1,d2*>.k = f.k
+    proof
+      let k be set;
+      assume
+A156:     k in {1,2};
+      per cases by A156,TARSKI:def 2;
+      suppose
+A157:     k = 1;
+        <*i1,d2*>.1 = i1 by FINSEQ_1:61
+        .= f.1 by A143,A150,FINSEQ_1:61;
+      hence <*i1,d2*>.k = f.k by A157;
+      suppose
+A158:     k = 2;
+        <*i1,d2*>.2 = d2 by FINSEQ_1:61
+        .= f.2 by A146,A154,FINSEQ_1:61;
+      hence <*i1,d2*>.k = f.k by A158;
+    end;
+then A159: <*i1,d2*> = f by A138,A140,A155,FUNCT_1:9;
+      InsCode (d2 =0_goto i1) = 7 & AddressPart (d2 =0_goto i1) = <*i1,d2*>
+      by Th14,AMI_5:44;
+    hence thesis by A1,A136,A137,A159;
+
+    suppose
+A160:   T = 8;
+    take PA AddressParts T;
+    thus AddressParts T c= product PA AddressParts T by AMISTD_2:9;
+    let x be set;
+    assume x in product PA AddressParts T;
+    then consider f being Function such that
+A161:   x = f and
+A162:   dom f = dom PA AddressParts T and
+A163:   for k being set st k in dom PA AddressParts T holds
+        f.k in (PA AddressParts T).k by CARD_3:def 5;
+A164: dom PA AddressParts T = {1,2} by A160,Th24;
+then A165: 1 in dom PA AddressParts T by TARSKI:def 2;
+    then f.1 in (PA AddressParts T).1 by A163;
+    then f.1 in pi(AddressParts T,1) by A165,AMISTD_2:def 1;
+    then consider g being Function such that
+A166:   g in AddressParts T and
+A167:   g.1 = f.1 by CARD_3:def 6;
+A168: 2 in dom PA AddressParts T by A164,TARSKI:def 2;
+    then f.2 in (PA AddressParts T).2 by A163;
+    then f.2 in pi(AddressParts T,2) by A168,AMISTD_2:def 1;
+    then consider h being Function such that
+A169:   h in AddressParts T and
+A170:   h.2 = f.2 by CARD_3:def 6;
+    consider I being Instruction of SCM such that
+A171:   g = AddressPart I and
+A172:   InsCode I = T by A1,A166;
+    consider i1, d1 such that
+A173:   I = d1 >0_goto i1 by A160,A172,AMI_5:54;
+A174: g = <*i1,d1*> by A171,A173,Th15;
+    consider J being Instruction of SCM such that
+A175:   h = AddressPart J and
+A176:   InsCode J = T by A1,A169;
+    consider i2, d2 such that
+A177:   J = d2 >0_goto i2 by A160,A176,AMI_5:54;
+A178: h = <*i2,d2*> by A175,A177,Th15;
+A179: dom <*i1,d2*> = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
+      for k being set st k in {1,2} holds <*i1,d2*>.k = f.k
+    proof
+      let k be set;
+      assume
+A180:     k in {1,2};
+      per cases by A180,TARSKI:def 2;
+      suppose
+A181:     k = 1;
+        <*i1,d2*>.1 = i1 by FINSEQ_1:61
+        .= f.1 by A167,A174,FINSEQ_1:61;
+      hence <*i1,d2*>.k = f.k by A181;
+      suppose
+A182:     k = 2;
+        <*i1,d2*>.2 = d2 by FINSEQ_1:61
+        .= f.2 by A170,A178,FINSEQ_1:61;
+      hence <*i1,d2*>.k = f.k by A182;
+    end;
+then A183: <*i1,d2*> = f by A162,A164,A179,FUNCT_1:9;
+      InsCode (d2 >0_goto i1) = 8 & AddressPart (d2 >0_goto i1) = <*i1,d2*>
+      by Th15,AMI_5:45;
+    hence thesis by A1,A160,A161,A183;
+  end;
+end;
+
+theorem Th57:
+ IncAddr(goto i1,k) = goto il.(SCM, locnum i1 + k)
+  proof
+A1: InsCode IncAddr(goto i1,k) = InsCode goto i1 by AMISTD_2:def 14
+      .= 6 by AMI_5:43
+      .= InsCode goto il.(SCM, locnum i1 + k) by AMI_5:43;
+A2: dom AddressPart IncAddr(goto i1,k) = dom AddressPart goto i1
+        by AMISTD_2:def 14;
+A3: dom AddressPart goto il.(SCM, locnum i1 + k)
+      = dom <*il.(SCM, locnum i1 + k)*> by Th13
+     .= Seg 1 by FINSEQ_1:def 8
+     .= dom <*i1*> by FINSEQ_1:def 8
+     .= dom AddressPart goto i1 by Th13;
+      for x being set st x in dom AddressPart goto i1 holds
+      (AddressPart IncAddr(goto i1,k)).x =
+      (AddressPart goto il.(SCM, locnum i1 + k)).x
+    proof
+      let x be set;
+      assume
+A4:     x in dom AddressPart goto i1;
+      then x in dom <*i1*> by Th13;
+then A5:   x = 1 by Lm1;
+      then (PA AddressParts InsCode goto i1).x =
+        the Instruction-Locations of SCM by Th35;
+      then consider f being Instruction-Location of SCM such that
+A6:     f = (AddressPart goto i1).x and
+A7:     (AddressPart IncAddr(goto i1,k)).x = il.(SCM,k + locnum f)
+          by A4,AMISTD_2:def 14;
+        f = <*i1*>.x by A6,Th13
+       .= i1 by A5,FINSEQ_1:def 8;
+      hence (AddressPart IncAddr(goto i1,k)).x
+        = <*il.(SCM, locnum i1 + k)*>.x by A5,A7,FINSEQ_1:def 8
+       .= (AddressPart goto il.(SCM, locnum i1 + k)).x by Th13;
+    end;
+    then AddressPart IncAddr(goto i1,k) =
+      AddressPart goto il.(SCM, locnum i1 + k) by A2,A3,FUNCT_1:9;
+    hence IncAddr(goto i1,k) = goto il.(SCM, locnum i1 + k)
+      by A1,AMISTD_2:16;
+  end;
+
+theorem Th58:
+ IncAddr(a=0_goto i1,k) = a=0_goto il.(SCM, locnum i1 + k)
+  proof
+A1: InsCode IncAddr(a=0_goto i1,k) = InsCode (a=0_goto i1) by AMISTD_2:def 14
+      .= 7 by AMI_5:44
+      .= InsCode (a=0_goto il.(SCM, locnum i1 + k)) by AMI_5:44;
+A2: dom AddressPart IncAddr(a=0_goto i1,k) = dom AddressPart (a=0_goto i1)
+        by AMISTD_2:def 14;
+A3: dom AddressPart (a=0_goto il.(SCM, locnum i1 + k))
+      = dom <*il.(SCM, locnum i1 + k), a*> by Th14
+     .= Seg 2 by FINSEQ_3:29
+     .= dom <*i1,a*> by FINSEQ_3:29
+     .= dom AddressPart (a=0_goto i1) by Th14;
+      for x being set st x in dom AddressPart (a=0_goto i1) holds
+      (AddressPart IncAddr(a=0_goto i1,k)).x =
+      (AddressPart (a=0_goto il.(SCM, locnum i1 + k))).x
+    proof
+      let x be set;
+      assume
+A4:     x in dom AddressPart (a=0_goto i1);
+then A5:   x in dom <*i1,a*> by Th14;
+      per cases by A5,Lm2;
+      suppose
+A6:     x = 1;
+      then (PA AddressParts InsCode (a=0_goto i1)).x =
+        the Instruction-Locations of SCM by Th36;
+      then consider f being Instruction-Location of SCM such that
+A7:     f = (AddressPart (a=0_goto i1)).x and
+A8:     (AddressPart IncAddr(a=0_goto i1,k)).x = il.(SCM,k + locnum f)
+          by A4,AMISTD_2:def 14;
+        f = <*i1,a*>.x by A7,Th14
+       .= i1 by A6,FINSEQ_1:61;
+      hence (AddressPart IncAddr(a=0_goto i1,k)).x
+        = <*il.(SCM, locnum i1 + k),a*>.x by A6,A8,FINSEQ_1:61
+       .= (AddressPart (a=0_goto il.(SCM, locnum i1 + k))).x by Th14;
+      suppose
+A9:     x = 2;
+      then (PA AddressParts InsCode (a=0_goto i1)).x <>
+        the Instruction-Locations of SCM by Th2,Th37;
+      hence (AddressPart IncAddr(a=0_goto i1,k)).x
+        = (AddressPart (a=0_goto i1)).x by A4,AMISTD_2:def 14
+       .= <*i1,a*>.x by Th14
+       .= a by A9,FINSEQ_1:61
+       .= <*il.(SCM, locnum i1 + k),a*>.x by A9,FINSEQ_1:61
+       .= (AddressPart (a=0_goto il.(SCM, locnum i1 + k))).x by Th14;
+    end;
+    then AddressPart IncAddr(a=0_goto i1,k) =
+      AddressPart (a=0_goto il.(SCM, locnum i1 + k)) by A2,A3,FUNCT_1:9;
+    hence IncAddr(a=0_goto i1,k) = a=0_goto il.(SCM, locnum i1 + k)
+      by A1,AMISTD_2:16;
+  end;
+
+theorem Th59:
+ IncAddr(a>0_goto i1,k) = a>0_goto il.(SCM, locnum i1 + k)
+  proof
+A1: InsCode IncAddr(a>0_goto i1,k) = InsCode (a>0_goto i1) by AMISTD_2:def 14
+      .= 8 by AMI_5:45
+      .= InsCode (a>0_goto il.(SCM, locnum i1 + k)) by AMI_5:45;
+A2: dom AddressPart IncAddr(a>0_goto i1,k) = dom AddressPart (a>0_goto i1)
+        by AMISTD_2:def 14;
+A3: dom AddressPart (a>0_goto il.(SCM, locnum i1 + k))
+      = dom <*il.(SCM, locnum i1 + k), a*> by Th15
+     .= Seg 2 by FINSEQ_3:29
+     .= dom <*i1,a*> by FINSEQ_3:29
+     .= dom AddressPart (a>0_goto i1) by Th15;
+      for x being set st x in dom AddressPart (a>0_goto i1) holds
+      (AddressPart IncAddr(a>0_goto i1,k)).x =
+      (AddressPart (a>0_goto il.(SCM, locnum i1 + k))).x
+    proof
+      let x be set;
+      assume
+A4:     x in dom AddressPart (a>0_goto i1);
+then A5:   x in dom <*i1,a*> by Th15;
+      per cases by A5,Lm2;
+      suppose
+A6:     x = 1;
+      then (PA AddressParts InsCode (a>0_goto i1)).x =
+        the Instruction-Locations of SCM by Th38;
+      then consider f being Instruction-Location of SCM such that
+A7:     f = (AddressPart (a>0_goto i1)).x and
+A8:     (AddressPart IncAddr(a>0_goto i1,k)).x = il.(SCM,k + locnum f)
+          by A4,AMISTD_2:def 14;
+        f = <*i1,a*>.x by A7,Th15
+       .= i1 by A6,FINSEQ_1:61;
+      hence (AddressPart IncAddr(a>0_goto i1,k)).x
+        = <*il.(SCM, locnum i1 + k),a*>.x by A6,A8,FINSEQ_1:61
+       .= (AddressPart (a>0_goto il.(SCM, locnum i1 + k))).x by Th15;
+      suppose
+A9:     x = 2;
+      then (PA AddressParts InsCode (a>0_goto i1)).x <>
+        the Instruction-Locations of SCM by Th2,Th39;
+      hence (AddressPart IncAddr(a>0_goto i1,k)).x
+        = (AddressPart (a>0_goto i1)).x by A4,AMISTD_2:def 14
+       .= <*i1,a*>.x by Th15
+       .= a by A9,FINSEQ_1:61
+       .= <*il.(SCM, locnum i1 + k),a*>.x by A9,FINSEQ_1:61
+       .= (AddressPart (a>0_goto il.(SCM, locnum i1 + k))).x by Th15;
+    end;
+    then AddressPart IncAddr(a>0_goto i1,k) =
+      AddressPart (a>0_goto il.(SCM, locnum i1 + k)) by A2,A3,FUNCT_1:9;
+    hence IncAddr(a>0_goto i1,k) = a>0_goto il.(SCM, locnum i1 + k)
+      by A1,AMISTD_2:16;
+  end;
+
+definition
+ cluster SCM -> IC-good Exec-preserving;
+coherence
+  proof
+    thus SCM is IC-good
+    proof
+      let I be Instruction of SCM;
+      per cases by AMI_3:69;
+      suppose I = [0,{}];
+      hence thesis by AMI_3:71;
+      suppose ex a,b st I = a:=b;
+      then consider a, b such that
+A1:     I = a:=b;
+      thus thesis by A1;
+      suppose ex a,b st I = AddTo(a,b);
+      then consider a, b such that
+A2:     I = AddTo(a,b);
+      thus thesis by A2;
+      suppose ex a,b st I = SubFrom(a,b);
+      then consider a, b such that
+A3:     I = SubFrom(a,b);
+      thus thesis by A3;
+      suppose ex a,b st I = MultBy(a,b);
+      then consider a, b such that
+A4:     I = MultBy(a,b);
+      thus thesis by A4;
+      suppose ex a,b st I = Divide(a,b);
+      then consider a, b such that
+A5:     I = Divide(a,b);
+      thus thesis by A5;
+      suppose ex i1 st I = goto i1;
+      then consider i1 such that
+A6:     I = goto i1;
+      let k be natural number,
+          s1, s2 be State of SCM such that
+          s2 = s1 +* (IC SCM .--> (IC s1 + k));
+A7:   IC Exec(I,s1) = Exec(I,s1).IC SCM by AMI_1:def 15
+        .= i1 by A6,AMI_3:13;
+      thus IC Exec(I,s1) + k
+         = il.(SCM, locnum IC Exec(I,s1) + k) by AMISTD_1:def 14
+        .= Exec(goto il.(SCM, locnum i1 + k),s2).IC SCM by A7,AMI_3:13
+        .= IC Exec(goto il.(SCM, locnum i1 + k),s2) by AMI_1:def 15
+        .= IC Exec(IncAddr(I,k), s2) by A6,Th57;
+      suppose ex a,i1 st I = a=0_goto i1;
+      then consider a, i1 such that
+A8:     I = a=0_goto i1;
+      let k be natural number,
+          s1, s2 be State of SCM such that
+A9:     s2 = s1 +* (IC SCM .--> (IC s1 + k));
+A10:   a <> IC SCM by AMI_5:20;
+        dom (IC SCM .--> (IC s1 + k)) = {IC SCM} by CQC_LANG:5;
+      then not a in dom (IC SCM .--> (IC s1 + k)) by A10,TARSKI:def 1;
+then A11:   s1.a = s2.a by A9,FUNCT_4:12;
+        now per cases;
+        suppose
+A12:       s1.a = 0;
+A13:     IC Exec(I,s1) = Exec(I,s1).IC SCM by AMI_1:def 15
+          .= i1 by A8,A12,AMI_3:14;
+        thus IC Exec(I,s1) + k
+           = il.(SCM, locnum IC Exec(I,s1) + k) by AMISTD_1:def 14
+          .= Exec(a=0_goto il.(SCM, locnum i1 + k),s2).IC SCM
+             by A11,A12,A13,AMI_3:14
+          .= IC Exec(a=0_goto il.(SCM, locnum i1 + k),s2) by AMI_1:def 15
+          .= IC Exec(IncAddr(I,k), s2) by A8,Th58;
+        suppose
+A14:       s1.a <> 0;
+          dom (IC SCM .--> (IC s1 + k)) = {IC SCM} by CQC_LANG:5;
+then A15:     IC SCM in dom (IC SCM .--> (IC s1 + k)) by TARSKI:def 1;
+A16:     IC s2 = s2.IC SCM by AMI_1:def 15
+             .= (IC SCM .--> (IC s1 + k)).IC SCM by A9,A15,FUNCT_4:14
+             .= IC s1 + k by CQC_LANG:6
+             .= il.(SCM,locnum IC s1 + k) by AMISTD_1:def 14;
+A17:     IC Exec(I, s2) = Exec(I, s2).IC SCM by AMI_1:def 15
+          .= Next IC s2 by A8,A11,A14,AMI_3:14
+          .= NextLoc IC s2 by Th56
+          .= il.(SCM,locnum IC s1 + k) + 1 by A16,AMISTD_1:def 15
+          .= il.(SCM,locnum il.(SCM,locnum IC s1 + k) + 1)
+             by AMISTD_1:def 14
+          .= il.(SCM,locnum IC s1 + k + 1) by AMISTD_1:def 13
+          .= il.(SCM,locnum IC s1 + 1 + k) by XCMPLX_1:1;
+A18:     IC Exec(I,s1) = Exec(I,s1).IC SCM by AMI_1:def 15
+          .= Next IC s1 by A8,A14,AMI_3:14
+          .= NextLoc IC s1 by Th56
+          .= il.(SCM,locnum IC s1 + 1) by AMISTD_1:34;
+        thus IC Exec(I,s1) + k = il.(SCM,locnum IC Exec(I,s1) + k)
+             by AMISTD_1:def 14
+          .= IC Exec(I,s2) by A17,A18,AMISTD_1:def 13
+          .= Exec(I,s2).IC SCM by AMI_1:def 15
+          .= Next IC s2 by A8,A11,A14,AMI_3:14
+          .= Exec(a=0_goto il.(SCM, locnum i1 + k),s2).IC SCM
+             by A11,A14,AMI_3:14
+          .= IC Exec(a=0_goto il.(SCM, locnum i1 + k),s2) by AMI_1:def 15
+          .= IC Exec(IncAddr(I,k), s2) by A8,Th58;
+        end;
+      hence thesis;
+      suppose ex a,i1 st I = a>0_goto i1;
+      then consider a, i1 such that
+A19:     I = a>0_goto i1;
+      let k be natural number,
+          s1, s2 be State of SCM such that
+A20:     s2 = s1 +* (IC SCM .--> (IC s1 + k));
+A21:   a <> IC SCM by AMI_5:20;
+        dom (IC SCM .--> (IC s1 + k)) = {IC SCM} by CQC_LANG:5;
+      then not a in dom (IC SCM .--> (IC s1 + k)) by A21,TARSKI:def 1;
+then A22:   s1.a = s2.a by A20,FUNCT_4:12;
+        now per cases;
+        suppose
+A23:       s1.a > 0;
+A24:     IC Exec(I,s1) = Exec(I,s1).IC SCM by AMI_1:def 15
+          .= i1 by A19,A23,AMI_3:15;
+        thus IC Exec(I,s1) + k
+           = il.(SCM, locnum IC Exec(I,s1) + k) by AMISTD_1:def 14
+          .= Exec(a>0_goto il.(SCM, locnum i1 + k),s2).IC SCM
+             by A22,A23,A24,AMI_3:15
+          .= IC Exec(a>0_goto il.(SCM, locnum i1 + k),s2) by AMI_1:def 15
+          .= IC Exec(IncAddr(I,k), s2) by A19,Th59;
+        suppose
+A25:       s1.a <= 0;
+          dom (IC SCM .--> (IC s1 + k)) = {IC SCM} by CQC_LANG:5;
+then A26:     IC SCM in dom (IC SCM .--> (IC s1 + k)) by TARSKI:def 1;
+A27:     IC s2 = s2.IC SCM by AMI_1:def 15
+             .= (IC SCM .--> (IC s1 + k)).IC SCM by A20,A26,FUNCT_4:14
+             .= IC s1 + k by CQC_LANG:6
+             .= il.(SCM,locnum IC s1 + k) by AMISTD_1:def 14;
+A28:     IC Exec(I, s2) = Exec(I, s2).IC SCM by AMI_1:def 15
+          .= Next IC s2 by A19,A22,A25,AMI_3:15
+          .= NextLoc IC s2 by Th56
+          .= il.(SCM,locnum IC s1 + k) + 1 by A27,AMISTD_1:def 15
+          .= il.(SCM,locnum il.(SCM,locnum IC s1 + k) + 1)
+             by AMISTD_1:def 14
+          .= il.(SCM,locnum IC s1 + k + 1) by AMISTD_1:def 13
+          .= il.(SCM,locnum IC s1 + 1 + k) by XCMPLX_1:1;
+A29:     IC Exec(I,s1) = Exec(I,s1).IC SCM by AMI_1:def 15
+          .= Next IC s1 by A19,A25,AMI_3:15
+          .= NextLoc IC s1 by Th56
+          .= il.(SCM,locnum IC s1 + 1) by AMISTD_1:34;
+        thus IC Exec(I,s1) + k = il.(SCM,locnum IC Exec(I,s1) + k)
+             by AMISTD_1:def 14
+          .= IC Exec(I,s2) by A28,A29,AMISTD_1:def 13
+          .= Exec(I,s2).IC SCM by AMI_1:def 15
+          .= Next IC s2 by A19,A22,A25,AMI_3:15
+          .= Exec(a>0_goto il.(SCM, locnum i1 + k),s2).IC SCM
+             by A22,A25,AMI_3:15
+          .= IC Exec(a>0_goto il.(SCM, locnum i1 + k),s2) by AMI_1:def 15
+          .= IC Exec(IncAddr(I,k), s2) by A19,Th59;
+        end;
+      hence thesis;
+    end;
+
+    let I be Instruction of SCM;
+    let s1, s2 be State of SCM such that
+A30:   s1, s2 equal_outside the Instruction-Locations of SCM;
+A31: dom Exec(I,s1) = dom the Object-Kind of SCM by CARD_3:18;
+then A32: dom Exec(I,s1) = dom Exec(I,s2) by CARD_3:18;
+A33: dom the Object-Kind of SCM = the carrier of SCM by FUNCT_2:def 1;
+A34: dom Exec(I,s1) \ the Instruction-Locations of SCM c= dom Exec(I,s1)
+      by XBOOLE_1:36;
+A35: IC s1 = IC s2 by A30,SCMFSA6A:29;
+    per cases by AMI_3:69;
+    suppose I = [0,{}];
+    hence thesis by A30,AMISTD_2:def 19,AMI_3:71;
+    suppose ex a,b st I = a:=b;
+    then consider a, b such that
+A36:   I = a:=b;
+      for x being set st x in dom Exec(I,s1) \ the Instruction-Locations of SCM
+      holds Exec(I,s1).x = Exec(I,s2).x
+    proof
+      let x be set;
+      assume
+A37:     x in dom Exec(I,s1) \ the Instruction-Locations of SCM;
+then A38:   not x in the Instruction-Locations of SCM by XBOOLE_0:def 4;
+A39:   x in dom Exec(I,s1) by A37,XBOOLE_0:def 4;
+      per cases by A31,A33,A38,A39,Th3;
+      suppose
+A40:     x = IC SCM;
+      hence Exec(I,s1).x = Next IC s1 by A36,AMI_3:8
+         .= Exec(I,s2).x by A35,A36,A40,AMI_3:8;
+      suppose
+A41:     x = a;
+      hence Exec(I,s1).x = s1.b by A36,AMI_3:8
+        .= s2.b by A30,Th5
+        .= Exec(I,s2).x by A36,A41,AMI_3:8;
+      suppose that
+A42:     x is Data-Location and
+A43:     x <> a;
+      thus Exec(I,s1).x = s1.x by A36,A42,A43,AMI_3:8
+        .= s2.x by A30,A42,Th5
+        .= Exec(I,s2).x by A36,A42,A43,AMI_3:8;
+    end;
+    hence Exec(I,s1)|(dom Exec(I,s1) \ the Instruction-Locations of SCM) =
+      Exec(I,s2)|(dom Exec(I,s2) \ the Instruction-Locations of SCM)
+        by A32,A34,SCMFSA6A:9;
+    suppose ex a,b st I = AddTo(a,b);
+    then consider a, b such that
+A44:   I = AddTo(a,b);
+      for x being set st x in dom Exec(I,s1) \ the Instruction-Locations of SCM
+      holds Exec(I,s1).x = Exec(I,s2).x
+    proof
+      let x be set;
+      assume
+A45:     x in dom Exec(I,s1) \ the Instruction-Locations of SCM;
+then A46:   not x in the Instruction-Locations of SCM by XBOOLE_0:def 4;
+A47:   x in dom Exec(I,s1) by A45,XBOOLE_0:def 4;
+      per cases by A31,A33,A46,A47,Th3;
+      suppose
+A48:     x = IC SCM;
+      hence Exec(I,s1).x = Next IC s1 by A44,AMI_3:9
+         .= Exec(I,s2).x by A35,A44,A48,AMI_3:9;
+      suppose
+A49:     x = a;
+      hence Exec(I,s1).x = s1.a + s1.b by A44,AMI_3:9
+        .= s1.a + s2.b by A30,Th5
+        .= s2.a + s2.b by A30,Th5
+        .= Exec(I,s2).x by A44,A49,AMI_3:9;
+      suppose that
+A50:     x is Data-Location and
+A51:     x <> a;
+      thus Exec(I,s1).x = s1.x by A44,A50,A51,AMI_3:9
+        .= s2.x by A30,A50,Th5
+        .= Exec(I,s2).x by A44,A50,A51,AMI_3:9;
+    end;
+    hence Exec(I,s1)|(dom Exec(I,s1) \ the Instruction-Locations of SCM) =
+      Exec(I,s2)|(dom Exec(I,s2) \ the Instruction-Locations of SCM)
+        by A32,A34,SCMFSA6A:9;
+    suppose ex a,b st I = SubFrom(a,b);
+    then consider a, b such that
+A52:   I = SubFrom(a,b);
+      for x being set st x in dom Exec(I,s1) \ the Instruction-Locations of SCM
+      holds Exec(I,s1).x = Exec(I,s2).x
+    proof
+      let x be set;
+      assume
+A53:     x in dom Exec(I,s1) \ the Instruction-Locations of SCM;
+then A54:   not x in the Instruction-Locations of SCM by XBOOLE_0:def 4;
+A55:   x in dom Exec(I,s1) by A53,XBOOLE_0:def 4;
+      per cases by A31,A33,A54,A55,Th3;
+      suppose
+A56:     x = IC SCM;
+      hence Exec(I,s1).x = Next IC s1 by A52,AMI_3:10
+         .= Exec(I,s2).x by A35,A52,A56,AMI_3:10;
+      suppose
+A57:     x = a;
+      hence Exec(I,s1).x = s1.a - s1.b by A52,AMI_3:10
+        .= s1.a - s2.b by A30,Th5
+        .= s2.a - s2.b by A30,Th5
+        .= Exec(I,s2).x by A52,A57,AMI_3:10;
+      suppose that
+A58:     x is Data-Location and
+A59:     x <> a;
+      thus Exec(I,s1).x = s1.x by A52,A58,A59,AMI_3:10
+        .= s2.x by A30,A58,Th5
+        .= Exec(I,s2).x by A52,A58,A59,AMI_3:10;
+    end;
+    hence Exec(I,s1)|(dom Exec(I,s1) \ the Instruction-Locations of SCM) =
+      Exec(I,s2)|(dom Exec(I,s2) \ the Instruction-Locations of SCM)
+        by A32,A34,SCMFSA6A:9;
+    suppose ex a,b st I = MultBy(a,b);
+    then consider a, b such that
+A60:   I = MultBy(a,b);
+      for x being set st x in dom Exec(I,s1) \ the Instruction-Locations of SCM
+      holds Exec(I,s1).x = Exec(I,s2).x
+    proof
+      let x be set;
+      assume
+A61:     x in dom Exec(I,s1) \ the Instruction-Locations of SCM;
+then A62:   not x in the Instruction-Locations of SCM by XBOOLE_0:def 4;
+A63:   x in dom Exec(I,s1) by A61,XBOOLE_0:def 4;
+      per cases by A31,A33,A62,A63,Th3;
+      suppose
+A64:     x = IC SCM;
+      hence Exec(I,s1).x = Next IC s1 by A60,AMI_3:11
+         .= Exec(I,s2).x by A35,A60,A64,AMI_3:11;
+      suppose
+A65:     x = a;
+      hence Exec(I,s1).x = s1.a * s1.b by A60,AMI_3:11
+        .= s1.a * s2.b by A30,Th5
+        .= s2.a * s2.b by A30,Th5
+        .= Exec(I,s2).x by A60,A65,AMI_3:11;
+      suppose that
+A66:     x is Data-Location and
+A67:     x <> a;
+      thus Exec(I,s1).x = s1.x by A60,A66,A67,AMI_3:11
+        .= s2.x by A30,A66,Th5
+        .= Exec(I,s2).x by A60,A66,A67,AMI_3:11;
+    end;
+    hence Exec(I,s1)|(dom Exec(I,s1) \ the Instruction-Locations of SCM) =
+      Exec(I,s2)|(dom Exec(I,s2) \ the Instruction-Locations of SCM)
+        by A32,A34,SCMFSA6A:9;
+    suppose ex a,b st I = Divide(a,b);
+    then consider a, b such that
+A68:   I = Divide(a,b);
+      for x being set st x in dom Exec(I,s1) \ the Instruction-Locations of SCM
+      holds Exec(I,s1).x = Exec(I,s2).x
+    proof
+      let x be set;
+      assume
+A69:     x in dom Exec(I,s1) \ the Instruction-Locations of SCM;
+then A70:   not x in the Instruction-Locations of SCM by XBOOLE_0:def 4;
+A71:   x in dom Exec(I,s1) by A69,XBOOLE_0:def 4;
+      per cases by A31,A33,A70,A71,Th3;
+      suppose
+A72:     x = IC SCM;
+      hence Exec(I,s1).x = Next IC s1 by A68,AMI_3:12
+         .= Exec(I,s2).x by A35,A68,A72,AMI_3:12;
+      suppose
+A73:     x is Data-Location;
+A74:  s1.a = s2.a & s1.b = s2.b by A30,Th5;
+        now let c be Data-Location;
+       per cases;
+       suppose
+A75:     c = b;
+       hence Exec(I,s1).c = s2.a mod s2.b by A68,A74,AMI_3:12
+          .= Exec(I,s2).c by A68,A75,AMI_3:12;
+       suppose
+A76:     c = a & c <> b;
+       hence Exec(I,s1).c = s2.a div s2.b by A68,A74,AMI_3:12
+          .= Exec(I,s2).c by A68,A76,AMI_3:12;
+       suppose
+A77:     c <> a & c <> b;
+       hence Exec(I,s1).c = s1.c by A68,AMI_3:12
+          .= s2.c by A30,Th5
+          .= Exec(I,s2).c by A68,A77,AMI_3:12;
+      end;
+      hence thesis by A73;
+    end;
+    hence Exec(I,s1)|(dom Exec(I,s1) \ the Instruction-Locations of SCM) =
+      Exec(I,s2)|(dom Exec(I,s2) \ the Instruction-Locations of SCM)
+        by A32,A34,SCMFSA6A:9;
+    suppose ex i1 st I = goto i1;
+    then consider i1 such that
+A78:   I = goto i1;
+      for x being set st x in dom Exec(I,s1) \ the Instruction-Locations of SCM
+      holds Exec(I,s1).x = Exec(I,s2).x
+    proof
+      let x be set;
+      assume
+A79:     x in dom Exec(I,s1) \ the Instruction-Locations of SCM;
+then A80:   not x in the Instruction-Locations of SCM by XBOOLE_0:def 4;
+A81:   x in dom Exec(I,s1) by A79,XBOOLE_0:def 4;
+      per cases by A31,A33,A80,A81,Th3;
+      suppose
+A82:     x = IC SCM;
+      hence Exec(I,s1).x = i1 by A78,AMI_3:13
+         .= Exec(I,s2).x by A78,A82,AMI_3:13;
+      suppose
+A83:     x is Data-Location;
+      hence Exec(I,s1).x = s1.x by A78,AMI_3:13
+        .= s2.x by A30,A83,Th5
+        .= Exec(I,s2).x by A78,A83,AMI_3:13;
+    end;
+    hence Exec(I,s1)|(dom Exec(I,s1) \ the Instruction-Locations of SCM) =
+      Exec(I,s2)|(dom Exec(I,s2) \ the Instruction-Locations of SCM)
+        by A32,A34,SCMFSA6A:9;
+    suppose ex a,i1 st I = a=0_goto i1;
+    then consider a, i1 such that
+A84:   I = a=0_goto i1;
+      for x being set st x in dom Exec(I,s1) \ the Instruction-Locations of SCM
+      holds Exec(I,s1).x = Exec(I,s2).x
+    proof
+      let x be set;
+      assume
+A85:     x in dom Exec(I,s1) \ the Instruction-Locations of SCM;
+then A86:   not x in the Instruction-Locations of SCM by XBOOLE_0:def 4;
+A87:   x in dom Exec(I,s1) by A85,XBOOLE_0:def 4;
+A88:   s1.a = s2.a by A30,Th5;
+      per cases by A31,A33,A86,A87,Th3;
+      suppose that
+A89:     x = IC SCM and
+A90:     s1.a = 0;
+      thus Exec(I,s1).x = i1 by A84,A89,A90,AMI_3:14
+        .= Exec(I,s2).x by A84,A88,A89,A90,AMI_3:14;
+      suppose that
+A91:     x = IC SCM and
+A92:     s1.a <> 0;
+      thus Exec(I,s1).x = Next IC s1 by A84,A91,A92,AMI_3:14
+        .= Exec(I,s2).x by A35,A84,A88,A91,A92,AMI_3:14;
+      suppose
+A93:     x is Data-Location;
+      hence Exec(I,s1).x = s1.x by A84,AMI_3:14
+        .= s2.x by A30,A93,Th5
+        .= Exec(I,s2).x by A84,A93,AMI_3:14;
+    end;
+    hence Exec(I,s1)|(dom Exec(I,s1) \ the Instruction-Locations of SCM) =
+      Exec(I,s2)|(dom Exec(I,s2) \ the Instruction-Locations of SCM)
+        by A32,A34,SCMFSA6A:9;
+    suppose ex a,i1 st I = a>0_goto i1;
+    then consider a, i1 such that
+A94:   I = a>0_goto i1;
+      for x being set st x in dom Exec(I,s1) \ the Instruction-Locations of SCM
+      holds Exec(I,s1).x = Exec(I,s2).x
+    proof
+      let x be set;
+      assume
+A95:     x in dom Exec(I,s1) \ the Instruction-Locations of SCM;
+then A96:   not x in the Instruction-Locations of SCM by XBOOLE_0:def 4;
+A97:   x in dom Exec(I,s1) by A95,XBOOLE_0:def 4;
+A98:   s1.a = s2.a by A30,Th5;
+      per cases by A31,A33,A96,A97,Th3;
+      suppose that
+A99:     x = IC SCM and
+A100:     s1.a > 0;
+      thus Exec(I,s1).x = i1 by A94,A99,A100,AMI_3:15
+        .= Exec(I,s2).x by A94,A98,A99,A100,AMI_3:15;
+      suppose that
+A101:     x = IC SCM and
+A102:     s1.a <= 0;
+      thus Exec(I,s1).x = Next IC s1 by A94,A101,A102,AMI_3:15
+        .= Exec(I,s2).x by A35,A94,A98,A101,A102,AMI_3:15;
+      suppose
+A103:     x is Data-Location;
+      hence Exec(I,s1).x = s1.x by A94,AMI_3:15
+        .= s2.x by A30,A103,Th5
+        .= Exec(I,s2).x by A94,A103,AMI_3:15;
+    end;
+    hence Exec(I,s1)|(dom Exec(I,s1) \ the Instruction-Locations of SCM) =
+      Exec(I,s2)|(dom Exec(I,s2) \ the Instruction-Locations of SCM)
+        by A32,A34,SCMFSA6A:9;
+  end;
+end;
+

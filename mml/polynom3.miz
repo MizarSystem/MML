@@ -1,0 +1,2953 @@
+:: The Ring of Polynomials
+::  by Robert Milewski
+::
+:: Received April 17, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, FINSEQ_1, RELAT_1, FUNCT_1, FINSEQ_5, BOOLE, MATRIX_2,
+      FINSEQ_2, MATRLIN, MEASURE6, SQUARE_1, ORDERS_1, RELAT_2, ORDERS_2,
+      FINSET_1, TRIANG_1, ARYTM_1, CARD_1, VECTSP_1, NORMSP_1, FUNCT_2,
+      POLYNOM1, ALGSEQ_1, FUNCOP_1, FUNCT_4, ARYTM_3, LATTICES, ALGSTR_2,
+      GROUP_1, BINOP_1, DTCONSTR, RFINSEQ, POLYNOM3, FINSEQ_4, PARTFUN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      SQUARE_1, STRUCT_0, NAT_1, RELAT_1, RELAT_2, RELSET_1, CARD_1, FINSET_1,
+      FUNCT_1, PARTFUN1, FUNCT_2, ORDERS_1, ORDERS_2, TRIANG_1, FINSEQ_1,
+      FINSEQ_2, FINSEQ_4, FINSEQ_5, FINSOP_1, FINSEQOP, TOPREAL1, RFINSEQ,
+      BINOP_1, RVSUM_1, FVSUM_1, GOBOARD1, TREES_4, WSIERP_1, MATRLIN,
+      BINARITH, GROUP_1, DTCONSTR, RLVECT_1, VECTSP_1, NORMSP_1, POLYNOM1,
+      ALGSEQ_1;
+ constructors SQUARE_1, REAL_1, MONOID_0, DOMAIN_1, ORDERS_2, TRIANG_1,
+      FINSEQOP, ALGSTR_2, FINSEQ_5, FINSOP_1, RFINSEQ, BINARITH, ALGSEQ_1,
+      SETWOP_2, FVSUM_1, TOPREAL1, POLYNOM1, GOBOARD1, WSIERP_1, MEMBERED;
+ clusters XREAL_0, SUBSET_1, FINSEQ_1, STRUCT_0, RELSET_1, VECTSP_1, BINARITH,
+      FINSEQ_2, FINSEQ_5, INT_1, GROUP_2, POLYNOM1, GOBRD13, FUNCT_2, MEMBERED,
+      ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+ definitions TARSKI, XBOOLE_0, RELAT_1, RELAT_2, MATRLIN, RLVECT_1, VECTSP_1,
+      ALGSEQ_1;
+ theorems AXIOMS, TARSKI, ENUMSET1, RELSET_1, REAL_1, REAL_2, INT_1, NAT_1,
+      SQUARE_1, CARD_1, FINSET_1, RLVECT_1, VECTSP_1, VECTSP_9, BINARITH,
+      ALGSEQ_1, RELAT_2, ORDERS_1, ORDERS_2, FUNCT_1, FUNCT_2, FUNCT_7,
+      FUNCOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FINSEQ_5, RFINSEQ,
+      BINOP_1, CARD_3, TOPREAL1, TRIANG_1, GROUP_7, AMI_5, GOBOARD1, GOBOARD9,
+      JORDAN3, RVSUM_1, FVSUM_1, MATRLIN, NORMSP_1, YELLOW15, POLYNOM1,
+      JORDAN8, MATRIX_2, RELAT_1, XBOOLE_0, RLVECT_2, SCMFSA_7, XCMPLX_0,
+      XCMPLX_1, PARTFUN1;
+ schemes FUNCT_2, FINSEQ_1, FINSEQ_2, NAT_1, POLYNOM2, RELSET_1, SETWISEO,
+      BINARITH;
+
+begin  :: Preliminaries
+
+  theorem Th1:
+   for L be add-associative right_zeroed right_complementable
+    (non empty LoopStr)
+   for p be FinSequence of the carrier of L st
+    for i be Nat st i in dom p holds p.i = 0.L holds
+     Sum p = 0.L
+   proof
+    let L be add-associative right_zeroed right_complementable
+     (non empty LoopStr);
+    let p be FinSequence of the carrier of L;
+    assume A1: for k be Nat st k in dom p holds p.k = 0.L;
+      now let k be Nat; assume A2: k in dom p;
+      hence p/.k = p.k by FINSEQ_4:def 4 .= 0.L by A1,A2;
+    end;
+    hence thesis by MATRLIN:15;
+   end;
+
+  theorem Th2:
+   for V be Abelian add-associative right_zeroed (non empty LoopStr)
+   for p be FinSequence of the carrier of V holds
+    Sum p = Sum Rev p
+   proof
+    let V be Abelian add-associative right_zeroed (non empty LoopStr);
+    defpred P[FinSequence of the carrier of V] means Sum $1 = Sum Rev $1;
+    A1: P[<*>(the carrier of V)];
+    A2: for p be FinSequence of the carrier of V
+        for x be Element of V st P[p] holds P[p^<*x*>]
+    proof
+     let p be FinSequence of the carrier of V;
+     let x be Element of V;
+     assume A3: Sum p = Sum Rev p;
+     thus Sum (p^<*x*>) = Sum p + Sum <*x*> by RLVECT_1:58
+        .= Sum (<*x*>^Rev p) by A3,RLVECT_1:58
+        .= Sum Rev (p^<*x*>) by FINSEQ_5:66;
+    end;
+    thus for p be FinSequence of the carrier of V holds P[p]
+     from IndSeqD(A1,A2);
+   end;
+
+  theorem Th3:
+   for p be FinSequence of REAL holds
+    Sum p = Sum Rev p
+   proof
+    defpred P[FinSequence of REAL] means Sum $1 = Sum Rev $1;
+    A1: P[<*>(REAL)];
+    A2: for p be FinSequence of REAL
+        for x be Element of REAL st P[p] holds P[p^<*x*>]
+    proof
+     let p be FinSequence of REAL;
+     let x be Element of REAL;
+     assume A3: Sum p = Sum Rev p;
+     thus Sum (p^<*x*>) = Sum p + Sum <*x*> by RVSUM_1:105
+        .= Sum (<*x*>^Rev p) by A3,RVSUM_1:105
+        .= Sum Rev (p^<*x*>) by FINSEQ_5:66;
+    end;
+    thus for p be FinSequence of REAL holds P[p] from IndSeqD(A1,A2);
+   end;
+
+  theorem Th4:
+   for p be FinSequence of NAT
+   for i be Nat st i in dom p holds
+    Sum p >= p.i
+   proof
+    defpred P[FinSequence of NAT] means
+     for i be Nat st i in dom $1 holds Sum $1 >= $1.i;
+    A1: P[<*> NAT] by FINSEQ_1:26;
+    A2: for p be FinSequence of NAT
+        for x being Element of NAT st P[p] holds P[p^<*x*>]
+    proof
+     let p be FinSequence of NAT;
+     let x be Element of NAT;
+     assume A3: for i be Nat st i in dom p holds Sum p >= p.i;
+     let i be Nat;
+     assume A4: i in dom (p^<*x*>);
+       len (p^<*x*>) = len p + 1 by FINSEQ_2:19;
+     then A5: dom (p^<*x*>) = Seg (len p + 1) by FINSEQ_1:def 3
+        .= Seg len p \/ {len p + 1} by FINSEQ_1:11
+        .= dom p \/ {len p + 1} by FINSEQ_1:def 3;
+     A6: p.i + x >= p.i by NAT_1:29;
+     per cases by A4,A5,XBOOLE_0:def 2;
+      suppose A7: i in dom p;
+       then Sum p >= p.i by A3;
+       then Sum p + x >= p.i + x by AXIOMS:24;
+       then Sum (p^<*x*>) >= p.i + x by RVSUM_1:104;
+       then Sum (p^<*x*>) >= p.i by A6,AXIOMS:22;
+       hence Sum (p^<*x*>) >= (p^<*x*>).i by A7,FINSEQ_1:def 7;
+      suppose i in {len p + 1};
+       then i = len p + 1 by TARSKI:def 1;
+       then (p^<*x*>).i = x by FINSEQ_1:59;
+       then Sum p + x >= (p^<*x*>).i by NAT_1:29;
+       hence Sum (p^<*x*>) >= (p^<*x*>).i by RVSUM_1:104;
+    end;
+    thus for p be FinSequence of NAT holds P[p] from IndSeqD(A1,A2);
+   end;
+
+  definition
+   let D be non empty set;
+   let i be Nat;
+   let p be FinSequence of D;
+   redefine func Del(p,i) -> FinSequence of D;
+   coherence by MATRIX_2:9;
+  end;
+
+  definition
+   let D be non empty set;
+   let a,b be Element of D;
+   redefine func <*a,b*> -> Element of 2-tuples_on D;
+   coherence by FINSEQ_2:121;
+  end;
+
+  definition
+   let D be non empty set;
+   let k,n be Nat;
+   let p be Element of k-tuples_on D;
+   let q be Element of n-tuples_on D;
+   redefine func p^q -> Element of (k+n)-tuples_on D;
+   coherence by FINSEQ_2:127;
+  end;
+
+  definition
+   let D be non empty set;
+   let n be Nat;
+   cluster -> FinSequence-yielding FinSequence of n-tuples_on D;
+   coherence
+   proof
+    let p be FinSequence of n-tuples_on D;
+    let x be set;
+    assume A1: x in dom p;
+    then x in Seg len p by FINSEQ_1:def 3;
+    then reconsider i=x as Nat;
+      p.i is Element of n-tuples_on D by A1,FINSEQ_2:13;
+    hence thesis;
+   end;
+  end;
+
+  definition
+   let D be non empty set;
+   let k,n be Nat;
+   let p be FinSequence of (k-tuples_on D);
+   let q be FinSequence of (n-tuples_on D);
+   redefine func p ^^ q -> Element of ((k+n)-tuples_on D)*;
+   coherence
+   proof
+      rng (p^^q) c= (k+n)-tuples_on D
+    proof
+     let y be set;
+     assume y in rng (p^^q);
+     then consider x be set such that
+      A1: x in dom (p^^q) and
+      A2: y = (p^^q).x by FUNCT_1:def 5;
+       x in (dom p) /\ (dom q) by A1,MATRLIN:def 2;
+     then A3: x in dom p & x in dom q by XBOOLE_0:def 3;
+       y = p.x ^ q.x by A1,A2,MATRLIN:def 2
+      .= (p/.x) ^ q.x by A3,FINSEQ_4:def 4
+      .= (p/.x) ^ (q/.x) by A3,FINSEQ_4:def 4;
+     hence thesis;
+    end;
+    then p^^q is FinSequence of (k+n)-tuples_on D by FINSEQ_1:def 4;
+    hence thesis by FINSEQ_1:def 11;
+   end;
+  end;
+
+  scheme SeqOfSeqLambdaD{D()->non empty set,A()->Nat,T(Nat)->Nat,
+                         F(set,set)->Element of D()}:
+   ex p be FinSequence of D()* st
+    len p = A() &
+    for k be Nat st k in Seg A() holds
+     len (p/.k) = T(k) &
+     for n be Nat st n in dom (p/.k) holds
+      (p/.k).n = F(k,n)
+   proof
+    defpred P[Nat,Element of D()*] means len $2 = T($1) &
+     for n be Nat st n in dom $2 holds $2.n = F($1,n);
+    A1: for k be Nat st k in Seg A() ex d be Element of D()* st P[k,d]
+    proof
+     let k be Nat;
+     assume k in Seg A();
+     deffunc G(Nat) = F(k,$1);
+     consider d be FinSequence of D() such that
+      A2: len d = T(k) and
+      A3: for n be Nat st n in Seg T(k) holds d.n = G(n) from SeqLambdaD;
+     reconsider d as Element of D()* by FINSEQ_1:def 11;
+     take d;
+     thus len d = T(k) by A2;
+     let n be Nat;
+     assume n in dom d;
+     then n in Seg T(k) by A2,FINSEQ_1:def 3;
+     hence d.n = F(k,n) by A3;
+    end;
+    consider p be FinSequence of D()* such that
+     A4: dom p = Seg A() and
+     A5: for k be Nat st k in Seg A() holds P[k,p/.k] from SeqExD(A1);
+    take p;
+    thus len p = A() by A4,FINSEQ_1:def 3;
+    let k be Nat;
+    assume k in Seg A();
+    hence thesis by A5;
+   end;
+
+begin  :: The Lexicographic Order of Finite Sequences
+
+  definition
+   let n be Nat;
+   let p,q be Element of n-tuples_on NAT;
+   pred p < q means :Def1:
+    ex i be Nat st i in Seg n & p.i < q.i &
+     for k be Nat st 1 <= k & k < i holds p.k = q.k;
+   asymmetry
+   proof
+    let p,q be Element of n-tuples_on NAT;
+    given i be Nat such that
+     A1: i in Seg n and
+     A2: p.i < q.i and
+     A3: for k be Nat st 1 <= k & k < i holds p.k = q.k;
+    given j be Nat such that
+     A4: j in Seg n and
+     A5: q.j < p.j and
+     A6: for k be Nat st 1 <= k & k < j holds q.k = p.k;
+    A7: 1 <= i & 1 <= j by A1,A4,FINSEQ_1:3;
+    per cases by REAL_1:def 5;
+     suppose i < j;
+      hence contradiction by A2,A6,A7;
+     suppose j < i;
+      hence contradiction by A3,A5,A7;
+     suppose i = j;
+      hence contradiction by A2,A5;
+   end;
+   synonym q > p;
+  end;
+
+  definition
+   let n be Nat;
+   let p,q be Element of n-tuples_on NAT;
+   pred p <= q means :Def2:
+    p < q or p = q;
+   reflexivity;
+   synonym q >= p;
+  end;
+
+  theorem Th5:
+   for n be Nat
+   for p,q,r be Element of n-tuples_on NAT holds
+    (p < q & q < r implies p < r) &
+    ((p < q & q <= r) or (p <= q & q < r) or (p <= q & q <= r) implies p <= r)
+   proof
+    let n be Nat;
+    let p,q,r be Element of n-tuples_on NAT;
+    thus A1: p < q & q < r implies p < r
+    proof
+     assume that
+      A2: p < q and
+      A3: q < r;
+     consider i be Nat such that
+      A4: i in Seg n and
+      A5: p.i < q.i and
+      A6: for k be Nat st 1 <= k & k < i holds p.k = q.k by A2,Def1;
+     consider j be Nat such that
+      A7: j in Seg n and
+      A8: q.j < r.j and
+      A9: for k be Nat st 1 <= k & k < j holds q.k = r.k by A3,Def1;
+     reconsider t = min(i,j) as Nat by FINSEQ_2:1;
+     take t;
+     thus t in Seg n by A4,A7,SQUARE_1:38;
+       now per cases by REAL_1:def 5;
+      suppose A10: i < j;
+       then A11: t = i by SQUARE_1:def 1;
+         i >= 1 by A4,FINSEQ_1:3;
+       hence p.t < r.t by A5,A9,A10,A11;
+      suppose A12: i > j;
+       then A13: t = j by SQUARE_1:def 1;
+         j >= 1 by A7,FINSEQ_1:3;
+       hence p.t < r.t by A6,A8,A12,A13;
+      suppose i = j;
+       hence p.t < r.t by A5,A8,AXIOMS:22;
+     end;
+     hence p.t < r.t;
+     let k be Nat;
+     assume that
+      A14: 1 <= k and
+      A15: k < t;
+       t <= i & t <= j by SQUARE_1:35;
+     then A16: k < i & k < j by A15,AXIOMS:22;
+     hence p.k = q.k by A6,A14
+        .= r.k by A9,A14,A16;
+    end;
+    assume A17: (p < q & q <= r) or (p <= q & q < r) or (p <= q & q <= r);
+    per cases by A17;
+     suppose p < q & q <= r;
+      then p < q & (q < r or q = r) by Def2;
+      hence p <= r by A1,Def2;
+     suppose p <= q & q < r;
+      then (p < q or p = q) & q < r by Def2;
+      hence p <= r by A1,Def2;
+     suppose p <= q & q <= r;
+      hence p <= r by A1,Def2;
+   end;
+
+  theorem Th6:
+   for n be Nat
+   for p,q be Element of n-tuples_on NAT holds
+    p <> q implies ex i be Nat st i in Seg n & p.i <> q.i &
+     for k be Nat st 1 <= k & k < i holds p.k = q.k
+   proof
+    defpred P[Nat] means for p,q be Element of $1-tuples_on NAT holds
+     p <> q implies ex i be Nat st i in Seg $1 & p.i <> q.i &
+      for k be Nat st 1 <= k & k < i holds p.k = q.k;
+    A1: P[0]
+    proof
+     let p,q be Element of 0-tuples_on NAT;
+     assume that
+      A2: p <> q and
+        not ex i be Nat st i in Seg 0 & p.i <> q.i &
+       for k be Nat st 1 <= k & k < i holds p.k = q.k;
+       p = <*>NAT & q = <*>NAT by FINSEQ_2:113;
+     hence contradiction by A2;
+    end;
+    A3: for n be Nat st P[n] holds P[n+1]
+    proof
+     let n be Nat;
+     assume A4: for p,q be Element of n-tuples_on NAT holds
+      p <> q implies ex i be Nat st i in Seg n & p.i <> q.i &
+       for k be Nat st 1 <= k & k < i holds p.k = q.k;
+     let p,q be Element of (n+1)-tuples_on NAT;
+     consider t1 be Element of n-tuples_on NAT,
+              d1 be Element of NAT such that
+      A5: p = t1^<*d1*> by FINSEQ_2:137;
+     consider t2 be Element of n-tuples_on NAT,
+              d2 be Element of NAT such that
+      A6: q = t2^<*d2*> by FINSEQ_2:137;
+     assume A7: p <> q;
+     A8: len t1 = n & len t2 = n by FINSEQ_2:109;
+     per cases;
+      suppose t1 <> t2;
+       then consider i be Nat such that
+        A9: i in Seg n and
+        A10: t1.i <> t2.i and
+        A11: for k be Nat st 1 <= k & k < i holds t1.k = t2.k by A4;
+       take i;
+       thus i in Seg (n+1) by A9,FINSEQ_2:9;
+         i in dom t1 & i in dom t2 by A8,A9,FINSEQ_1:def 3;
+       then p.i = t1.i & q.i = t2.i by A5,A6,FINSEQ_1:def 7;
+       hence p.i <> q.i by A10;
+       let k be Nat;
+       assume that
+        A12: 1 <= k and
+        A13: k < i;
+       A14: t1.k = t2.k by A11,A12,A13;
+         i <= n by A9,FINSEQ_1:3;
+       then k <= n by A13,AXIOMS:22;
+       then A15: k in dom t1 & k in dom t2 by A8,A12,FINSEQ_3:27;
+       hence p.k = t2.k by A5,A14,FINSEQ_1:def 7
+          .= q.k by A6,A15,FINSEQ_1:def 7;
+      suppose A16: t1 = t2;
+       take i = n+1;
+       thus i in Seg (n+1) by FINSEQ_1:6;
+         p.i = d1 & q.i = d2 by A5,A6,FINSEQ_2:136;
+       hence p.i <> q.i by A5,A6,A7,A16;
+       let k be Nat;
+       assume that
+        A17: 1 <= k and
+        A18: k < i;
+         k <= n by A18,NAT_1:38;
+       then A19: k in dom t1 & k in dom t2 by A8,A17,FINSEQ_3:27;
+       hence p.k = t2.k by A5,A16,FINSEQ_1:def 7
+          .= q.k by A6,A19,FINSEQ_1:def 7;
+    end;
+    thus for n be Nat holds P[n] from Ind(A1,A3);
+   end;
+
+  theorem Th7:
+   for n be Nat
+   for p,q be Element of n-tuples_on NAT holds
+    p <= q or p > q
+   proof
+    let n be Nat;
+    let p,q be Element of n-tuples_on NAT;
+    assume A1: not p <= q;
+    then A2: not p < q & p <> q by Def2;
+    consider i be Nat such that
+     A3: i in Seg n and
+     A4: p.i <> q.i and
+     A5: for k be Nat st 1 <= k & k < i holds p.k = q.k by A1,Th6;
+    take i;
+    thus i in Seg n by A3;
+      p.i >= q.i by A2,A3,A5,Def1;
+    hence q.i < p.i by A4,REAL_1:def 5;
+    thus thesis by A5;
+   end;
+
+  definition
+   let n be Nat;
+   func TuplesOrder n -> Order of n-tuples_on NAT means :Def3:
+    for p,q be Element of n-tuples_on NAT holds [p,q] in it iff p <= q;
+   existence
+   proof
+    defpred P[Element of n-tuples_on NAT,Element of n-tuples_on NAT] means
+     $1 <= $2;
+    consider R be Relation of n-tuples_on NAT,n-tuples_on NAT such that
+     A1: for x,y be Element of n-tuples_on NAT holds
+      [x,y] in R iff P[x,y] from Rel_On_Dom_Ex;
+    A2: R is_reflexive_in n-tuples_on NAT
+    proof
+     let x be set;
+     assume x in n-tuples_on NAT;
+     then reconsider x1=x as Element of n-tuples_on NAT;
+       x1 <= x1;
+     hence [x,x] in R by A1;
+    end;
+    A3: R is_antisymmetric_in n-tuples_on NAT
+    proof
+     let x,y be set;
+     assume that
+      A4: x in n-tuples_on NAT and
+      A5: y in n-tuples_on NAT and
+      A6: [x,y] in R and
+      A7: [y,x] in R;
+     reconsider x1=x, y1=y as Element of n-tuples_on NAT by A4,A5;
+       x1 <= y1 & y1 <= x1 by A1,A6,A7;
+     then (x1 < y1 or x1 = y1) & (y1 < x1 or y1 = x1) by Def2;
+     hence x = y;
+    end;
+A8:   R is_transitive_in n-tuples_on NAT
+    proof
+     let x,y,z be set;
+     assume that
+      A9: x in n-tuples_on NAT and
+      A10: y in n-tuples_on NAT and
+      A11: z in n-tuples_on NAT and
+      A12: [x,y] in R and
+      A13: [y,z] in R;
+     reconsider x1=x, y1=y, z1=z as Element of n-tuples_on NAT by A9,A10,A11;
+       x1 <= y1 & y1 <= z1 by A1,A12,A13;
+     then x1 <= z1 by Th5;
+     hence [x,z] in R by A1;
+    end;
+A14:  dom R = n-tuples_on NAT & field R =n-tuples_on NAT by A2,ORDERS_1:98;
+    then R is total by PARTFUN1:def 4;
+    then reconsider R as Order of n-tuples_on NAT
+                        by A2,A3,A8,A14,RELAT_2:def 9,def 12,def 16;
+    take R;
+    thus thesis by A1;
+   end;
+   uniqueness
+   proof
+    let T1,T2 be Order of n-tuples_on NAT such that
+     A15: for p,q be Element of n-tuples_on NAT holds [p,q] in
+ T1 iff p <= q and
+     A16: for p,q be Element of n-tuples_on NAT holds [p,q] in T2 iff p <= q;
+    let x,y be set;
+    thus [x,y] in T1 implies [x,y] in T2
+    proof
+     assume A17: [x,y] in T1;
+     then consider p,q be set such that
+      A18: [x,y] = [p,q] and
+      A19: p in n-tuples_on NAT and
+      A20: q in n-tuples_on NAT by RELSET_1:6;
+     reconsider p,q as Element of n-tuples_on NAT by A19,A20;
+       p <= q by A15,A17,A18;
+     hence [x,y] in T2 by A16,A18;
+    end;
+    assume A21: [x,y] in T2;
+    then consider p,q be set such that
+     A22: [x,y] = [p,q] and
+     A23: p in n-tuples_on NAT and
+     A24: q in n-tuples_on NAT by RELSET_1:6;
+    reconsider p,q as Element of n-tuples_on NAT by A23,A24;
+      p <= q by A16,A21,A22;
+    hence [x,y] in T1 by A15,A22;
+   end;
+  end;
+
+  definition
+   let n be Nat;
+   cluster TuplesOrder n -> being_linear-order;
+   coherence
+   proof
+    A1: field TuplesOrder n = n-tuples_on NAT by ORDERS_2:2;
+      now let x,y be set;
+     assume that
+      A2: x in n-tuples_on NAT and
+      A3: y in n-tuples_on NAT and
+        x <> y and
+      A4: not [x,y] in TuplesOrder n;
+     reconsider p=x, q=y as Element of n-tuples_on NAT by A2,A3;
+       not p <= q by A4,Def3;
+     then p > q by Th7;
+     then q <= p by Def2;
+     hence [y,x] in TuplesOrder n by Def3;
+    end;
+    then TuplesOrder n is_connected_in n-tuples_on NAT by RELAT_2:def 6;
+    then TuplesOrder n is connected by A1,RELAT_2:def 14;
+    hence thesis by ORDERS_2:def 3;
+   end;
+  end;
+
+begin  :: Decomposition of Natural Numbers
+
+  definition
+   let i be non empty Nat;
+   let n be Nat;
+   func Decomp(n,i) -> FinSequence of i-tuples_on NAT means :Def4:
+    ex A be finite Subset of i-tuples_on NAT st
+     it = SgmX (TuplesOrder i,A) &
+     for p be Element of i-tuples_on NAT holds p in A iff Sum p = n;
+   existence
+   proof
+    defpred P[Element of i-tuples_on NAT] means Sum $1 = n;
+    consider A be Subset of i-tuples_on NAT such that
+     A1: for p be Element of i-tuples_on NAT holds
+      p in A iff P[p] from SubsetEx;
+      n+1 in Seg (n+1) by FINSEQ_1:6;
+    then reconsider n1 = n+1 as non empty set by BINARITH:5;
+      n+1 is finite by CARD_1:69;
+    then A2: i-tuples_on (n+1) is finite by YELLOW15:2;
+      A c= i-tuples_on (n+1)
+    proof
+     let x be set;
+     assume A3: x in A;
+     then reconsider p=x as Element of i-tuples_on NAT;
+     A4: Sum p = n by A1,A3;
+     A5: len p = i by FINSEQ_2:109;
+       rng p c= n+1
+     proof
+      let y be set;
+      assume that
+       A6: y in rng p and
+       A7: not y in n+1;
+        rng p c= NAT by FINSEQ_1:def 4;
+      then reconsider k=y as Nat by A6;
+        not y in { t where t is Nat : t < n+1 } by A7,AXIOMS:30;
+      then A8: k >= n+1;
+      consider j be Nat such that
+       A9: j in dom p and
+       A10: p.j = k by A6,FINSEQ_2:11;
+        Sum p >= k by A9,A10,Th4;
+      hence contradiction by A4,A8,NAT_1:38;
+     end;
+     then p is FinSequence of (n+1) by FINSEQ_1:def 4;
+     then p is Element of i-tuples_on n1 by A5,FINSEQ_2:110;
+     hence x in i-tuples_on (n+1);
+    end;
+    then reconsider A as finite Subset of i-tuples_on NAT by A2,FINSET_1:13;
+    take SgmX (TuplesOrder i,A);
+    thus thesis by A1;
+   end;
+   uniqueness
+   proof
+    let p1,p2 be FinSequence of i-tuples_on NAT;
+    given A1 be finite Subset of i-tuples_on NAT such that
+     A11: p1 = SgmX (TuplesOrder i,A1) and
+     A12: for p be Element of i-tuples_on NAT holds p in A1 iff Sum p = n;
+    given A2 be finite Subset of i-tuples_on NAT such that
+     A13: p2 = SgmX (TuplesOrder i,A2) and
+     A14: for p be Element of i-tuples_on NAT holds p in A2 iff Sum p = n;
+      now let x be set;
+     thus x in A1 implies x in A2
+     proof
+      assume A15: x in A1;
+      then reconsider p = x as Element of i-tuples_on NAT;
+        Sum p = n by A12,A15;
+      hence x in A2 by A14;
+     end;
+     assume A16: x in A2;
+     then reconsider p = x as Element of i-tuples_on NAT;
+       Sum p = n by A14,A16;
+     hence x in A1 by A12;
+    end;
+    hence p1 = p2 by A11,A13,TARSKI:2;
+   end;
+  end;
+
+  definition
+   let i be non empty Nat;
+   let n be Nat;
+   cluster Decomp(n,i) -> non empty one-to-one FinSequence-yielding;
+   coherence
+   proof
+    consider A be finite Subset of i-tuples_on NAT such that
+     A1: Decomp(n,i) = SgmX (TuplesOrder i,A) and
+     A2: for p be Element of i-tuples_on NAT holds p in A iff Sum
+ p = n by Def4;
+      i >= 1 by RLVECT_1:99;
+    then reconsider p1 = ((i-'1)|->0)^<*n*> as Element of i-tuples_on NAT
+                                                                  by AMI_5:4;
+    reconsider p2 = (i-'1)|->0 as FinSequence of NAT;
+      Sum p1 = Sum p2 + n by RVSUM_1:104
+        .= 0+n by RVSUM_1:111;
+    then reconsider A as non empty finite Subset of i-tuples_on NAT by A2;
+      SgmX (TuplesOrder i,A) is non empty finite;
+    hence thesis by A1;
+   end;
+  end;
+
+  theorem Th8:
+   for n be Nat holds len Decomp(n,1) = 1
+   proof
+    let n be Nat;
+    consider A be finite Subset of 1-tuples_on NAT such that
+     A1: Decomp(n,1) = SgmX (TuplesOrder 1,A) and
+     A2: for p be Element of 1-tuples_on NAT holds p in A iff Sum
+ p = n by Def4;
+    A3: A = {<*n*>}
+    proof
+     thus A c= {<*n*>}
+     proof
+      let y be set;
+      assume A4: y in A;
+      then reconsider p=y as Element of 1-tuples_on NAT;
+      A5: Sum p = n by A2,A4;
+      consider k be Element of NAT such that
+       A6: p = <*k*> by FINSEQ_2:117;
+        Sum p = k by A6,RVSUM_1:103;
+      hence y in {<*n*>} by A5,A6,TARSKI:def 1;
+     end;
+     let y be set;
+     assume y in {<*n*>};
+     then A7: y = <*n*> by TARSKI:def 1;
+       Sum <*n*> = n by RVSUM_1:103;
+     hence y in A by A2,A7;
+    end;
+      field TuplesOrder 1 = 1-tuples_on NAT by ORDERS_2:2;
+    then TuplesOrder 1 linearly_orders 1-tuples_on NAT by ORDERS_2:35;
+    then TuplesOrder 1 linearly_orders A by ORDERS_2:36;
+    hence len Decomp(n,1) = Card A by A1,TRIANG_1:9
+       .= 1 by A3,CARD_1:79;
+   end;
+
+  theorem Th9:
+   for n be Nat holds len Decomp(n,2) = n+1
+   proof
+    let n be Nat;
+    consider A be finite Subset of 2-tuples_on NAT such that
+     A1: Decomp(n,2) = SgmX (TuplesOrder 2,A) and
+     A2: for p be Element of 2-tuples_on NAT holds p in A iff Sum
+ p = n by Def4;
+    A3: A = {<*i,n-'i*> where i is Nat : i <= n}
+    proof
+     thus A c= {<*i,n-'i*> where i is Nat : i <= n}
+     proof
+      let x be set;
+      assume A4: x in A;
+      then reconsider p=x as Element of 2-tuples_on NAT;
+      consider d1,d2 be Element of NAT such that
+       A5: p = <*d1,d2*> by FINSEQ_2:120;
+      A6: d1+d2 = Sum p by A5,RVSUM_1:107
+         .= n by A2,A4;
+      then A7: d1 <= n by NAT_1:29;
+      then A8: n-d1 >= 0 by SQUARE_1:12;
+        d2 = n-d1 by A6,XCMPLX_1:26
+         .= n-'d1 by A8,BINARITH:def 3;
+      hence x in {<*i,n-'i*> where i is Nat : i <= n} by A5,A7;
+     end;
+     let x be set;
+     assume x in { <*i,n-'i*> where i is Nat : i <= n };
+     then consider i be Nat such that
+      A9: x = <*i,n-'i*> and
+      A10: i <= n;
+     A11: n-i >= 0 by A10,SQUARE_1:12;
+       Sum <*i,n-'i*> = i+(n-'i) by RVSUM_1:107
+        .= i+(n-i) by A11,BINARITH:def 3
+        .= n by XCMPLX_1:27;
+     hence x in A by A2,A9;
+    end;
+    deffunc F(Nat) = <*$1,n-'$1*>;
+    consider q be FinSequence such that
+     A12: len q = n and
+     A13: for k be Nat st k in Seg n holds q.k = F(k) from SeqLambda;
+    set q1 = q^<*<*0,n*>*>;
+    A14: rng q c= rng q1 by FINSEQ_1:42;
+    A15: len q1 = n+1 by A12,FINSEQ_2:19;
+    then A16: dom q1 = Seg (n+1) by FINSEQ_1:def 3;
+    A17: dom q = Seg n by A12,FINSEQ_1:def 3;
+    A18: rng q1 = {<*i,n-'i*> where i is Nat : i <= n}
+    proof
+     thus rng q1 c= {<*i,n-'i*> where i is Nat : i <= n}
+     proof
+      let x be set;
+      assume x in rng q1;
+      then consider j be Nat such that
+       A19: j in dom q1 and
+       A20: q1.j = x by FINSEQ_2:11;
+        j in Seg n \/ {n+1} by A16,A19,FINSEQ_1:11;
+      then A21: j in Seg n or j in {n+1} by XBOOLE_0:def 2;
+      A22: n >= 0 by NAT_1:18;
+        now per cases by A21,TARSKI:def 1;
+       suppose A23: j in Seg n;
+        then A24: q.j = <*j,n-'j*> by A13;
+        A25: j <= n by A23,FINSEQ_1:3;
+          q1.j = q.j by A17,A23,FINSEQ_1:def 7;
+        hence x in {<*i,n-'i*> where i is Nat : i <= n} by A20,A24,A25;
+       suppose j = n+1;
+        then q1.j = <*0,n*> by A12,FINSEQ_1:59
+           .= <*0,n-'0*> by JORDAN3:2;
+        hence x in {<*i,n-'i*> where i is Nat : i <= n} by A20,A22;
+      end;
+      hence x in {<*i,n-'i*> where i is Nat : i <= n};
+     end;
+     let x be set;
+     assume x in {<*i,n-'i*> where i is Nat : i <= n};
+     then consider i be Nat such that
+      A26: x = <*i,n-'i*> and
+      A27: i <= n;
+       i = 0 or i > 0 by NAT_1:19;
+     then A28: i = 0 or i >= 0+1 by NAT_1:38;
+       now per cases by A27,A28,FINSEQ_1:3;
+      suppose A29: i = 0;
+       A30: n+1 in dom q1 by A16,FINSEQ_1:6;
+         q1.(n+1) = <*0,n*> by A12,FINSEQ_1:59
+          .= x by A26,A29,JORDAN3:2;
+       hence x in rng q1 by A30,FUNCT_1:def 5;
+      suppose A31: i in Seg n;
+       then q.i = x by A13,A26;
+       then x in rng q by A17,A31,FUNCT_1:def 5;
+       hence x in rng q1 by A14;
+     end;
+     hence x in rng q1;
+    end;
+      now let x1,x2 be set;
+     assume that
+      A32: x1 in dom q1 and
+      A33: x2 in dom q1 and
+      A34: q1.x1 = q1.x2;
+     reconsider k1=x1, k2=x2 as Nat by A32,A33,FINSEQ_3:25;
+       x1 in Seg n \/ {n+1} & x2 in Seg n \/ {n+1} by A16,A32,A33,FINSEQ_1:11;
+     then A35: (x1 in Seg n or x1 in {n+1}) & (x2 in Seg n or x2 in {n+1})
+                                                             by XBOOLE_0:def 2;
+       now per cases by A35,TARSKI:def 1;
+      suppose A36: x1 in Seg n & x2 in Seg n;
+       then A37: q1.k1 = q.k1 & q1.k2 = q.k2 by A17,FINSEQ_1:def 7;
+         q.k1 = <*k1,n-'k1*> & q.k2 = <*k2,n-'k2*> by A13,A36;
+       hence x1 = x2 by A34,A37,GROUP_7:2;
+      suppose A38: x1 in Seg n & x2 = n+1;
+       then A39: q1.k1 = q.k1 by A17,FINSEQ_1:def 7
+          .= <*k1,n-'k1*> by A13,A38;
+         q1.k2 = <*0,n*> by A12,A38,FINSEQ_1:59;
+       then k1 = 0 by A34,A39,GROUP_7:2;
+       hence x1 = x2 by A38,FINSEQ_1:3;
+      suppose A40: x1 = n+1 & x2 in Seg n;
+       then A41: q1.k2 = q.k2 by A17,FINSEQ_1:def 7
+          .= <*k2,n-'k2*> by A13,A40;
+         q1.k1 = <*0,n*> by A12,A40,FINSEQ_1:59;
+       then k2 = 0 by A34,A41,GROUP_7:2;
+       hence x1 = x2 by A40,FINSEQ_1:3;
+      suppose x1 = n+1 & x2 = n+1;
+       hence x1 = x2;
+     end;
+     hence x1 = x2;
+    end;
+    then q1 is one-to-one by FUNCT_1:def 8;
+    then A42: card(rng q1) = n+1 by A15,FINSEQ_4:77;
+      field TuplesOrder 2 = 2-tuples_on NAT by ORDERS_2:2;
+    then TuplesOrder 2 linearly_orders 2-tuples_on NAT by ORDERS_2:35;
+    then TuplesOrder 2 linearly_orders A by ORDERS_2:36;
+    hence thesis by A1,A3,A18,A42,TRIANG_1:9;
+   end;
+
+  theorem
+     for n be Nat holds Decomp(n,1) = <*<*n*>*>
+   proof
+    let n be Nat;
+    consider A be finite Subset of 1-tuples_on NAT such that
+     A1: Decomp(n,1) = SgmX (TuplesOrder 1,A) and
+     A2: for p be Element of 1-tuples_on NAT holds p in A iff Sum
+ p = n by Def4;
+      len Decomp(n,1) = 1 by Th8;
+    then A3: dom Decomp(n,1) = Seg 1 by FINSEQ_1:def 3
+       .= dom <*<*n*>*> by FINSEQ_1:55;
+    A4: A = {<*n*>}
+    proof
+     thus A c= {<*n*>}
+     proof
+      let y be set;
+      assume A5: y in A;
+      then reconsider p=y as Element of 1-tuples_on NAT;
+      A6: Sum p = n by A2,A5;
+      consider k be Element of NAT such that
+       A7: p = <*k*> by FINSEQ_2:117;
+        Sum p = k by A7,RVSUM_1:103;
+      hence y in {<*n*>} by A6,A7,TARSKI:def 1;
+     end;
+     let y be set;
+     assume y in {<*n*>};
+     then A8: y = <*n*> by TARSKI:def 1;
+       Sum <*n*> = n by RVSUM_1:103;
+     hence y in A by A2,A8;
+    end;
+    A9: rng <*<*n*>*> = {<*n*>} by FINSEQ_1:56;
+      field TuplesOrder 1 = 1-tuples_on NAT by ORDERS_2:2;
+    then TuplesOrder 1 linearly_orders 1-tuples_on NAT by ORDERS_2:35;
+    then TuplesOrder 1 linearly_orders A by ORDERS_2:36;
+    then rng Decomp(n,1) = {<*n*>} by A1,A4,TRIANG_1:def 2;
+    hence Decomp(n,1) = <*<*n*>*> by A3,A9,FUNCT_1:17;
+   end;
+
+  theorem Th11:
+   for i,j,n,k1,k2 be Nat st Decomp(n,2).i = <*k1,n-'k1*> &
+    Decomp(n,2).j = <*k2,n-'k2*> holds i<j iff k1<k2
+   proof
+    let i,j,n,k1,k2 be Nat;
+    consider A be finite Subset of 2-tuples_on NAT such that
+     A1: Decomp(n,2) = SgmX (TuplesOrder 2,A) and
+       for p be Element of 2-tuples_on NAT holds p in A iff Sum p = n by Def4;
+      field TuplesOrder 2 = 2-tuples_on NAT by ORDERS_2:2;
+    then TuplesOrder 2 linearly_orders 2-tuples_on NAT by ORDERS_2:35;
+    then A2: TuplesOrder 2 linearly_orders A by ORDERS_2:36;
+    assume that
+     A3: Decomp(n,2).i = <*k1,n-'k1*> and
+     A4: Decomp(n,2).j = <*k2,n-'k2*>;
+    A5: i in dom Decomp(n,2) & j in dom Decomp(n,2) by A3,A4,FUNCT_1:def 4;
+    then A6: Decomp(n,2).i = (Decomp(n,2))/.i &
+     Decomp(n,2).j = (Decomp(n,2))/.j by FINSEQ_4:def 4;
+    thus i<j implies k1<k2
+    proof
+     assume i<j;
+     then A7: <*k1,n-'k1*> <> <*k2,n-'k2*> & [<*k1,n-'k1*>,<*k2,n-'k2*>] in
+                          TuplesOrder 2 by A1,A2,A3,A4,A5,A6,TRIANG_1:def 2;
+     then <*k1,n-'k1*> <= <*k2,n-'k2*> by Def3;
+     then <*k1,n-'k1*> < <*k2,n-'k2*> by A7,Def2;
+     then consider t be Nat such that
+      A8: t in Seg 2 and
+      A9: <*k1,n-'k1*>.t < <*k2,n-'k2*>.t and
+      A10: for k be Nat st 1 <= k & k < t holds <*k1,n-'k1*>.k = <*k2,n-'k2*>.k
+                                                                    by Def1;
+     per cases by A8,FINSEQ_1:4,TARSKI:def 2;
+      suppose t = 1;
+       then <*k1,n-'k1*>.t = k1 & <*k2,n-'k2*>.t = k2 by FINSEQ_1:61;
+       hence k1<k2 by A9;
+      suppose t = 2;
+       then <*k1,n-'k1*>.1 = <*k2,n-'k2*>.1 by A10;
+       then <*k1,n-'k1*>.1 = k2 by FINSEQ_1:61;
+       then k1 = k2 by FINSEQ_1:61;
+       hence k1<k2 by A9;
+    end;
+    assume A11: k1<k2;
+    A12: 1 in Seg 2 by FINSEQ_1:3;
+    A13: <*k1,n-'k1*>.1 = k1 & <*k2,n-'k2*>.1 = k2 by FINSEQ_1:61;
+      for k be Nat st 1 <= k & k < 1 holds <*k1,n-'k1*>.k = <*k2,n-'k2*>.k;
+    then A14: <*k1,n-'k1*> < <*k2,n-'k2*> by A11,A12,A13,Def1;
+    assume A15: i>=j;
+    per cases by A15,REAL_1:def 5;
+     suppose i = j;
+      hence contradiction by A3,A4,A11,A13;
+     suppose j<i;
+      then A16: <*k2,n-'k2*> <> <*k1,n-'k1*> & [<*k2,n-'k2*>,<*k1,n-'k1*>] in
+                          TuplesOrder 2 by A1,A2,A3,A4,A5,A6,TRIANG_1:def 2;
+      then <*k2,n-'k2*> <= <*k1,n-'k1*> by Def3;
+      hence contradiction by A14,A16,Def2;
+   end;
+
+  theorem Th12:
+   for i,n,k1,k2 be Nat st Decomp(n,2).i = <*k1,n-'k1*> &
+    Decomp(n,2).(i+1) = <*k2,n-'k2*> holds k2=k1+1
+   proof
+    let i,n,k1,k2 be Nat;
+    consider A be finite Subset of 2-tuples_on NAT such that
+     A1: Decomp(n,2) = SgmX (TuplesOrder 2,A) and
+     A2: for p be Element of 2-tuples_on NAT holds p in A iff Sum
+ p = n by Def4;
+      field TuplesOrder 2 = 2-tuples_on NAT by ORDERS_2:2;
+    then TuplesOrder 2 linearly_orders 2-tuples_on NAT by ORDERS_2:35;
+    then TuplesOrder 2 linearly_orders A by ORDERS_2:36;
+    then A3: rng Decomp(n,2) = A by A1,TRIANG_1:def 2;
+    assume that
+     A4: Decomp(n,2).i = <*k1,n-'k1*> and
+     A5: Decomp(n,2).(i+1) = <*k2,n-'k2*>;
+      i+0 < i+1 by REAL_1:53;
+    then A6: k1 < k2 by A4,A5,Th11;
+    then A7: k1+1 <= k2 by NAT_1:38;
+    assume k2 <> k1+1;
+    then A8: k1+1 < k2 by A7,REAL_1:def 5;
+      k1 < n
+    proof
+     assume k1 >= n;
+     then A9: k2 > n by A6,AXIOMS:22;
+       Sum <*k2,n-'k2*> = k2 + (n-'k2) by RVSUM_1:107;
+     then Sum <*k2,n-'k2*> >= k2 by NAT_1:29;
+     then not Decomp(n,2).(i+1) in rng Decomp(n,2) by A2,A3,A5,A9;
+     then not i+1 in dom Decomp(n,2) by FUNCT_1:def 5;
+     hence contradiction by A5,FUNCT_1:def 4;
+    end;
+    then A10: k1+1 <= n by NAT_1:38;
+      Sum <*k1+1,n-'(k1+1)*> = k1+1+(n-'(k1+1)) by RVSUM_1:107
+       .= n by A10,AMI_5:4;
+    then <*k1+1,n-'(k1+1)*> in rng Decomp(n,2) by A2,A3;
+    then consider k be Nat such that k in dom Decomp(n,2) and
+     A11: Decomp(n,2).k = <*k1+1,n-'(k1+1)*> by FINSEQ_2:11;
+      k1+0 < k1+1 by REAL_1:53;
+    then i < k by A4,A11,Th11;
+    then i+1 <= k by NAT_1:38;
+    hence contradiction by A5,A8,A11,Th11;
+   end;
+
+  theorem Th13:
+   for n be Nat holds Decomp(n,2).1 = <*0,n*>
+   proof
+    let n be Nat;
+    consider A be finite Subset of 2-tuples_on NAT such that
+     A1: Decomp(n,2) = SgmX (TuplesOrder 2,A) and
+     A2: for p be Element of 2-tuples_on NAT holds p in A iff Sum
+ p = n by Def4;
+      1 <= n+1 by NAT_1:29;
+    then 1 in Seg (n+1) by FINSEQ_1:3;
+    then 1 in Seg len Decomp(n,2) by Th9;
+    then A3: 1 in dom Decomp(n,2) by FINSEQ_1:def 3;
+      Sum <*0,n*> = 0+n by RVSUM_1:107;
+    then A4: <*0,n*> in A by A2;
+      field TuplesOrder 2 = 2-tuples_on NAT by ORDERS_2:2;
+    then TuplesOrder 2 linearly_orders 2-tuples_on NAT by ORDERS_2:35;
+    then A5: TuplesOrder 2 linearly_orders A by ORDERS_2:36;
+      now let y be Element of 2-tuples_on NAT;
+     consider d1,d2 be Nat such that
+      A6: y = <*d1,d2*> by FINSEQ_2:120;
+     assume y in A;
+     then Sum <*d1,d2*> = n by A2,A6;
+     then A7: d1 + d2 = n by RVSUM_1:107;
+       now per cases by NAT_1:18;
+      suppose d1 = 0;
+       hence <*0,n*> <= <*d1,d2*> by A7;
+      suppose d1 > 0;
+       then <*0,n*>.1 < d1 by FINSEQ_1:61;
+       then A8: <*0,n*>.1 < <*d1,d2*>.1 by FINSEQ_1:61;
+       A9: 1 in Seg 2 by FINSEQ_1:3;
+         for k be Nat st 1 <= k & k < 1 holds <*0,n*>.k = <*d1,d2*>.k;
+       then <*0,n*> < <*d1,d2*> by A8,A9,Def1;
+       hence <*0,n*> <= <*d1,d2*> by Def2;
+     end;
+     hence [<*0,n*>,y] in TuplesOrder 2 by A6,Def3;
+    end;
+    then (SgmX (TuplesOrder 2,A))/.1 = <*0,n*> by A4,A5,POLYNOM1:8;
+    hence Decomp(n,2).1 = <*0,n*> by A1,A3,FINSEQ_4:def 4;
+   end;
+
+  theorem Th14:
+   for n,i be Nat st i in Seg (n+1) holds Decomp(n,2).i = <*i-'1,n+1-'i*>
+   proof
+    let n,i be Nat;
+    assume A1: i in Seg (n+1);
+    then A2: 1 <= i & i <= n+1 by FINSEQ_1:3;
+    A3: i is non empty by A1,BINARITH:5;
+    consider A be finite Subset of 2-tuples_on NAT such that
+     A4: Decomp(n,2) = SgmX (TuplesOrder 2,A) and
+     A5: for p be Element of 2-tuples_on NAT holds
+      p in A iff Sum p = n by Def4;
+    defpred P[Nat] means $1 <= n+1 implies Decomp(n,2).$1 = <*$1-'1,n+1-'$1*>;
+    A6: P[1]
+    proof
+     assume 1 <= n+1;
+     thus Decomp(n,2).1 = <*0,n*> by Th13
+        .= <*1-'1,n*> by GOBOARD9:1
+        .= <*1-'1,n+1-'1*> by BINARITH:39;
+    end;
+    A7: for j be non empty Nat st P[j] holds P[j+1]
+    proof
+     let j be non empty Nat;
+     assume that
+      A8: j <= n+1 implies Decomp(n,2).j = <*j-'1,n+1-'j*> and
+      A9: j+1 <= n+1;
+     A10: j < n+1 by A9,NAT_1:38;
+       j+1 >= 1 by NAT_1:29;
+     then j+1 in Seg (n+1) by A9,FINSEQ_1:3;
+     then j+1 in Seg len Decomp(n,2) by Th9;
+     then A11: j+1 in dom Decomp(n,2) by FINSEQ_1:def 3;
+     then Decomp(n,2).(j+1) = (Decomp(n,2))/.(j+1) by FINSEQ_4:def 4;
+     then consider d1,d2 be Nat such that
+      A12: Decomp(n,2).(j+1) = <*d1,d2*> by FINSEQ_2:120;
+       field TuplesOrder 2 = 2-tuples_on NAT by ORDERS_2:2;
+     then TuplesOrder 2 linearly_orders 2-tuples_on NAT by ORDERS_2:35;
+     then A13: TuplesOrder 2 linearly_orders A by ORDERS_2:36;
+       Decomp(n,2).(j+1) in rng Decomp(n,2) by A11,FUNCT_1:def 5;
+     then Decomp(n,2).(j+1) in A by A4,A13,TRIANG_1:def 2;
+     then Sum <*d1,d2*> = n by A5,A12;
+     then A14: d1+d2 = n by RVSUM_1:107;
+     then d2 = n-d1 by XCMPLX_1:26;
+     then A15: n-d1 >= 0 by NAT_1:18;
+     A16: d2 = n-d1 by A14,XCMPLX_1:26
+        .= n-'d1 by A15,BINARITH:def 3;
+     A17: j >= 1 by RLVECT_1:99;
+     then A18: j-1 >= 1-1 by REAL_1:49;
+     A19: n+1-j >= 0 by A10,SQUARE_1:12;
+     then n+(1-j) >= 0 by XCMPLX_1:29;
+     then n-(j-1) >= 0 by XCMPLX_1:38;
+     then A20: n-(j-'1) >= 0 by A18,BINARITH:def 3;
+       n >= j by A9,REAL_1:53;
+     then A21: n-j >= 0 by SQUARE_1:12;
+       n+1-(j+1) >= 0 by A9,SQUARE_1:12;
+     then A22: n+1-'(j+1) = n+1-(j+1) by BINARITH:def 3
+        .= n-j by XCMPLX_1:32
+        .= n-'j by A21,BINARITH:def 3;
+       n+1-'j = n+1-j by A19,BINARITH:def 3
+        .= n+(1-j) by XCMPLX_1:29
+        .= n-(j-1) by XCMPLX_1:38
+        .= n-(j-'1) by A18,BINARITH:def 3
+        .= n-'(j-'1) by A20,BINARITH:def 3;
+     then d1 = j-'1+1 by A8,A9,A12,A16,Th12,NAT_1:38
+       .= j by A17,AMI_5:4;
+     hence Decomp(n,2).(j+1) = <*j+1-'1,n+1-'(j+1)*>
+                                                  by A12,A16,A22,BINARITH:39;
+    end;
+      for j be non empty Nat holds P[j] from Ind_from_1(A6,A7);
+    hence thesis by A2,A3;
+   end;
+
+  definition
+   let L be non empty HGrStr;
+   let p,q,r be sequence of L;
+   let t be FinSequence of 3-tuples_on NAT;
+   func prodTuples(p,q,r,t) -> Element of (the carrier of L)* means :Def5:
+    len it = len t &
+    for k be Nat st k in dom t holds
+     it.k = (p.((t/.k)/.1))*(q.((t/.k)/.2))*(r.((t/.k)/.3));
+   existence
+   proof
+    deffunc F(Nat) = (p.((t/.$1)/.1))*(q.((t/.$1)/.2))*(r.((t/.$1)/.3));
+    consider p1 be FinSequence of the carrier of L such that
+     A1: len p1 = len t and
+     A2: for k be Nat st k in Seg len t holds p1.k = F(k) from SeqLambdaD;
+    reconsider p1 as Element of (the carrier of L)* by FINSEQ_1:def 11;
+    take p1;
+    thus len p1 = len t by A1;
+    let k be Nat;
+    assume k in dom t;
+    then k in Seg len t by FINSEQ_1:def 3;
+    hence thesis by A2;
+   end;
+   uniqueness
+   proof
+    let p1,p2 be Element of (the carrier of L)* such that
+     A3: len p1 = len t and
+     A4: for k be Nat st k in dom t holds
+          p1.k = (p.((t/.k)/.1))*(q.((t/.k)/.2))*(r.((t/.k)/.3)) and
+     A5: len p2 = len t and
+     A6: for k be Nat st k in dom t holds
+          p2.k = (p.((t/.k)/.1))*(q.((t/.k)/.2))*(r.((t/.k)/.3));
+      now let i be Nat;
+     assume i in Seg len t;
+then A7:    i in dom t by FINSEQ_1:def 3;
+     hence p1.i = (p.((t/.i)/.1))*(q.((t/.i)/.2))*(r.((t/.i)/.3)) by A4
+        .= p2.i by A6,A7;
+    end;
+    hence p1 = p2 by A3,A5,FINSEQ_2:10;
+   end;
+  end;
+
+  theorem Th15:
+   for L be non empty HGrStr
+   for p,q,r be sequence of L
+   for t be FinSequence of 3-tuples_on NAT
+   for P be Permutation of dom t
+   for t1 be FinSequence of 3-tuples_on NAT st t1 = t*P holds
+    prodTuples(p,q,r,t1) = prodTuples(p,q,r,t)*P
+   proof
+    let L be non empty HGrStr;
+    let p,q,r be sequence of L;
+    let t be FinSequence of 3-tuples_on NAT;
+    let P be Permutation of dom t;
+    let t1 be FinSequence of 3-tuples_on NAT;
+    assume A1: t1 = t*P;
+      len prodTuples(p,q,r,t1) = len t1 by Def5;
+    then A2: dom prodTuples(p,q,r,t1) = Seg len t1 by FINSEQ_1:def 3;
+    A3: rng P = dom t by FUNCT_2:def 3;
+      len prodTuples(p,q,r,t) = len t by Def5;
+    then A4: rng P = dom prodTuples(p,q,r,t) by A3,FINSEQ_3:31;
+    A5: dom P = dom t1 by A1,A3,RELAT_1:46;
+    then A6: dom (prodTuples(p,q,r,t)*P) = dom t1 by A4,RELAT_1:46;
+A7:  dom t1 = Seg len t1 by FINSEQ_1:def 3;
+      now let x be set;
+     assume A8: x in dom t1;
+     then reconsider i=x as Nat by A7;
+     A9: P.i in rng P by A5,A8,FUNCT_1:def 5;
+     then P.i in Seg len t by A3,FINSEQ_1:def 3;
+     then reconsider j=P.i as Nat;
+     A10: prodTuples(p,q,r,t1).i =
+      (p.((t1/.i)/.1))*(q.((t1/.i)/.2))*(r.((t1/.i)/.3)) by A8,Def5;
+     A11: (prodTuples(p,q,r,t)*P).x = prodTuples(p,q,r,t).(P.x)
+                                                         by A5,A8,FUNCT_1:23;
+       t1/.i = t1.i by A8,FINSEQ_4:def 4
+        .= t.(P.i) by A1,A8,FUNCT_1:22
+        .= t/.j by A3,A9,FINSEQ_4:def 4;
+     hence prodTuples(p,q,r,t1).x = (prodTuples(p,q,r,t)*P).x
+                                   by A3,A9,A10,A11,Def5;
+    end;
+    hence thesis by A2,A6,A7,FUNCT_1:9;
+   end;
+
+  theorem Th16:
+   for D be set
+   for f be FinSequence of D*
+   for i be Nat holds
+    Card (f|i) = (Card f)|i
+   proof
+    let D be set;
+    let f be FinSequence of D*;
+    let i be Nat;
+    A1: (Card f)|i = (Card f)|Seg i & f|i = f|Seg i by TOPREAL1:def 1;
+    A2: dom Card f = dom f by CARD_3:def 2;
+      dom Card (f|i) = dom (f|i) by CARD_3:def 2;
+    then A3: len Card (f|i) = len (f|i) by FINSEQ_3:31
+       .= min(i,len f) by A1,FINSEQ_2:24;
+    reconsider k = min(i,len f) as Nat by FINSEQ_2:1;
+    A4: len ((Card f)|i) = min(i,len Card f) by A1,FINSEQ_2:24
+       .= min(i,len f) by A2,FINSEQ_3:31;
+      now let j be Nat;
+     assume A5: j in Seg k;
+     A6: len f = len Card f by A2,FINSEQ_3:31;
+     per cases;
+      suppose A7: i <= len f;
+       then A8: k = i by SQUARE_1:def 1;
+       A9: len(f|i) = i by A7,TOPREAL1:3;
+       A10: Seg len (f|i) = dom (f|i) by FINSEQ_1:def 3;
+         len ((Card f)|i) = i by A6,A7,TOPREAL1:3;
+       then A11: dom ((Card f)|i) = Seg i by FINSEQ_1:def 3;
+         1 <= j & j <= i by A5,A8,FINSEQ_1:3;
+       then 1 <= j & j <= len f by A7,AXIOMS:22;
+       then A12: j in dom f by FINSEQ_3:27;
+       reconsider Cf = Card f as FinSequence of NAT qua set;
+       thus Card (f|i).j = Card ((f|i).j) by A5,A8,A9,A10,CARD_3:def 2
+          .= Card ((f|i)/.j) by A5,A8,A9,A10,FINSEQ_4:def 4
+          .= Card (f/.j) by A5,A8,A9,A10,TOPREAL1:1
+          .= Card (f.j) by A12,FINSEQ_4:def 4
+          .= (Card f).j by A12,CARD_3:def 2
+          .= Cf/.j by A2,A12,FINSEQ_4:def 4
+          .= (Cf|i)/.j by A5,A8,A11,TOPREAL1:1
+          .= (Card f)|i.j by A5,A8,A11,FINSEQ_4:def 4;
+      suppose i > len f;
+       then f|i = f & (Card f)|i = Card f by A1,A6,FINSEQ_2:23;
+       hence Card (f|i).j = (Card f)|i.j;
+    end;
+    hence thesis by A3,A4,FINSEQ_2:10;
+   end;
+
+  theorem Th17:
+   for p be FinSequence of REAL
+   for q be FinSequence of NAT st p=q
+   for i be Nat holds
+    p|i = q|i
+   proof
+    let p be FinSequence of REAL;
+    let q be FinSequence of NAT;
+    assume A1: p=q;
+    let i be Nat;
+    thus p|i = p|(Seg i) by TOPREAL1:def 1
+       .= q|i by A1,TOPREAL1:def 1;
+   end;
+
+  theorem Th18:
+   for p be FinSequence of NAT
+   for i,j be Nat st i <= j holds
+    Sum (p|i) <= Sum (p|j)
+   proof
+    let p be FinSequence of NAT;
+    let i,j be Nat;
+    assume A1: i <= j;
+    then consider k be Nat such that
+     A2: j = i + k by NAT_1:28;
+    per cases;
+     suppose A3: j <= len p;
+      then i <= len p by A1,AXIOMS:22;
+      then A4: len (p|i) = i by TOPREAL1:3;
+      A5: len (p|j) = i + k by A2,A3,TOPREAL1:3;
+      then consider q,r be FinSequence of NAT such that
+       A6: len q = i and
+         len r = k and
+       A7: (p|j) = q^r by FINSEQ_2:26;
+      A8: Sum (p|j) = Sum q + Sum r by A7,RVSUM_1:105;
+      A9: now let n be Nat;
+       assume A10: n in Seg i;
+       A11: Seg i c= Seg j by A1,FINSEQ_1:7;
+       A12: Seg i = dom q by A6,FINSEQ_1:def 3;
+       A13: Seg i = dom (p|i) by A4,FINSEQ_1:def 3;
+       A14: Seg j = dom (p|j) by A2,A5,FINSEQ_1:def 3;
+       reconsider p1 = p as FinSequence of REAL;
+       A15: p|i = p1|i & p|j = p1|j by Th17;
+       then A16: (p1|i)/.n = p/.n & (p1|j)/.n = p/.n
+                                                by A10,A11,A13,A14,TOPREAL1:1;
+       thus (p|i).n = (p1|i)/.n by A10,A13,A15,FINSEQ_4:def 4
+          .= (p|j).n by A10,A11,A14,A15,A16,FINSEQ_4:def 4
+          .= q.n by A7,A10,A12,FINSEQ_1:def 7;
+      end;
+        Sum r >= 0 by NAT_1:18;
+      then Sum q + Sum r >= Sum q + 0 by AXIOMS:24;
+      hence Sum (p|i) <= Sum (p|j) by A4,A6,A8,A9,FINSEQ_2:10;
+     suppose j > len p;
+      then A17: p|j = p by TOPREAL1:2;
+        now per cases;
+       suppose i >= len p;
+        hence Sum (p|i) <= Sum (p|j) by A17,TOPREAL1:2;
+       suppose A18: i < len p;
+        then consider t be Nat such that
+         A19: len p = i + t by NAT_1:28;
+        consider q,r be FinSequence of NAT such that
+         A20: len q = i and
+           len r = t and
+         A21: p = q^r by A19,FINSEQ_2:26;
+        A22: len (p|i) = i by A18,TOPREAL1:3;
+        A23: Sum p = Sum q + Sum r by A21,RVSUM_1:105;
+        A24: now let n be Nat;
+         assume A25: n in Seg i;
+         A26: Seg i = dom q by A20,FINSEQ_1:def 3;
+         A27: Seg i = dom (p|i) by A22,FINSEQ_1:def 3;
+         reconsider p1 = p as FinSequence of REAL;
+         A28: p|i = p1|i by Th17;
+         then A29: (p1|i)/.n = p/.n by A25,A27,TOPREAL1:1;
+         A30: dom (p|i) c= dom p by FINSEQ_5:20;
+         thus (p|i).n = (p1|i)/.n by A25,A27,A28,FINSEQ_4:def 4
+            .= p.n by A25,A27,A29,A30,FINSEQ_4:def 4
+            .= q.n by A21,A25,A26,FINSEQ_1:def 7;
+        end;
+          Sum r >= 0 by NAT_1:18;
+        then Sum q + Sum r >= Sum q + 0 by AXIOMS:24;
+        hence Sum (p|i) <= Sum (p|j) by A17,A20,A22,A23,A24,FINSEQ_2:10;
+      end;
+      hence thesis;
+   end;
+
+  theorem Th19:
+   for D being set,
+       p be FinSequence of D
+   for i be Nat st i < len p holds
+    p|(i+1) = p|i ^ <*p.(i+1)*>
+   proof
+    let D be set,
+        p be FinSequence of D;
+    let i be Nat;
+    assume i < len p;
+then A1: i+1 <= len p by NAT_1:38;
+then A2: p|(i+1) = p|i ^ <*p/.(i+1)*> by JORDAN8:2;
+      1 <= i+1 by NAT_1:29;
+    then i+1 in dom p by A1,FINSEQ_3:27;
+    hence thesis by A2,FINSEQ_4:def 4;
+   end;
+
+  theorem Th20:
+   for p be FinSequence of REAL
+   for i be Nat st i < len p holds
+    Sum (p|(i+1)) = Sum (p|i) + p.(i+1)
+   proof
+    let p be FinSequence of REAL;
+    let i be Nat;
+    assume i < len p;
+    then p|(i+1) = p|i ^ <*p.(i+1)*> by Th19;
+    hence thesis by RVSUM_1:104;
+   end;
+
+  theorem Th21:
+   for p be FinSequence of NAT
+   for i,j,k1,k2 be Nat st i < len p & j < len p &
+    1 <= k1 & 1 <= k2 & k1 <= p.(i+1) & k2 <= p.(j+1) &
+    (Sum (p|i)) + k1 = (Sum (p|j)) + k2 holds
+     i = j & k1 = k2
+   proof
+    let p be FinSequence of NAT;
+    let i,j,k1,k2 be Nat;
+    assume that
+     A1: i < len p and
+     A2: j < len p and
+     A3: 1 <= k1 and
+     A4: 1 <= k2 and
+     A5: k1 <= p.(i+1) and
+     A6: k2 <= p.(j+1) and
+     A7: (Sum (p|i)) + k1 = (Sum (p|j)) + k2 and
+     A8: i <> j or k1 <> k2;
+    reconsider p1 = p as FinSequence of REAL;
+    A9: p|(i+1) = p1|(i+1) & p|i = p1|i by Th17;
+    A10: p|(j+1) = p1|(j+1) & p|j = p1|j by Th17;
+    A11: i <> j by A7,A8,XCMPLX_1:2;
+    A12: Sum (p1|i) + p.(i+1) >= Sum (p|i) + k1 by A5,A9,AXIOMS:24;
+    A13: Sum (p1|j) + p.(j+1) >= Sum (p|j) + k2 by A6,A10,AXIOMS:24;
+    per cases;
+     suppose i < j;
+      then i+1 <= j by NAT_1:38;
+      then Sum (p|j) >= Sum (p1|(i+1)) by A9,Th18;
+      then Sum (p|j) >= Sum (p1|i) + p.(i+1) by A1,Th20;
+      then A14: Sum (p|j) >= Sum (p|j) + k2 by A7,A12,AXIOMS:22;
+        Sum (p|j) + k2 >= Sum (p|j) by NAT_1:29;
+      then Sum (p|j) = Sum (p|j) + k2 by A14,AXIOMS:21;
+      then k2 = 0 by XCMPLX_1:3;
+      hence contradiction by A4;
+     suppose i >= j;
+      then j < i by A11,REAL_1:def 5;
+      then j+1 <= i by NAT_1:38;
+      then Sum (p|i) >= Sum (p1|(j+1)) by A10,Th18;
+      then Sum (p|i) >= Sum (p1|j) + p.(j+1) by A2,Th20;
+      then A15: Sum (p|i) >= Sum (p|i) + k1 by A7,A13,AXIOMS:22;
+        Sum (p|i) + k1 >= Sum (p|i) by NAT_1:29;
+      then Sum (p|i) = Sum (p|i) + k1 by A15,AXIOMS:21;
+      then k1 = 0 by XCMPLX_1:3;
+      hence contradiction by A3;
+   end;
+
+  theorem Th22:
+   for D1,D2 be set
+   for f1 be FinSequence of D1*
+   for f2 be FinSequence of D2*
+   for i1,i2,j1,j2 be Nat st
+    i1 in dom f1 & i2 in dom f2 & j1 in dom (f1.i1) & j2 in dom (f2.i2) &
+    Card f1 = Card f2 &
+    (Sum ((Card f1)|(i1-'1))) + j1 = (Sum ((Card f2)|(i2-'1))) + j2 holds
+     i1 = i2 & j1 = j2
+   proof
+    let D1,D2 be set;
+    let f1 be FinSequence of D1*;
+    let f2 be FinSequence of D2*;
+    let i1,i2,j1,j2 be Nat;
+    assume that
+     A1: i1 in dom f1 and
+     A2: i2 in dom f2 and
+     A3: j1 in dom (f1.i1) and
+     A4: j2 in dom (f2.i2) and
+     A5: Card f1 = Card f2 and
+     A6: (Sum ((Card f1)|(i1-'1))) + j1 = (Sum ((Card f2)|(i2-'1))) + j2;
+      dom Card f1 = dom f1 & dom Card f2 = dom f2 by CARD_3:def 2;
+    then A7: len Card f1 = len f1 & len Card f2 = len f2 by FINSEQ_3:31;
+    A8: 1 <= i1 & i1 <= len f1 & 1 <= i2 & i2 <= len f2
+      by A1,A2,FINSEQ_3:27;
+    then A9: i1-1 >= 0 & i2-1 >= 0 by SQUARE_1:12;
+      i1 < len f1 + 1 & i2 < len f2 + 1 by A8,NAT_1:38;
+    then i1 - 1 < len f1 + 1 - 1 & i2 - 1 < len f2 + 1 - 1 by REAL_1:54;
+    then i1 - 1 < len f1 & i2 - 1 < len f2 by XCMPLX_1:26;
+    then A10: i1-'1 < len Card f1 & i2-'1 < len Card f2
+                                                    by A7,A9,BINARITH:def 3;
+    A11: j1 >= 1 & j2 >= 1 & j1 <= len (f1.i1) & j2 <= len (f2.i2)
+                                                     by A3,A4,FINSEQ_3:27;
+    then j1 <= (Card f1).i1 & j2 <= (Card f2).i2 by A1,A2,CARD_3:def 2;
+    then A12: j1 <= (Card f1).(i1-'1+1) & j2 <= (Card f2).(i2-'1+1)
+                                                               by A8,AMI_5:4;
+    then i1-'1 = i2-'1 & j1 = j2 by A5,A6,A10,A11,Th21;
+    then i1-1 = i2-'1 by A9,BINARITH:def 3;
+    then i1-1 = i2-1 by A9,BINARITH:def 3;
+    hence thesis by A5,A6,A10,A11,A12,Th21,XCMPLX_1:19;
+   end;
+
+begin  :: Polynomials
+
+  definition
+   let L be non empty ZeroStr;
+   mode Polynomial of L is AlgSequence of L;
+  end;
+
+  theorem Th23:
+   for L be non empty ZeroStr
+   for p be Polynomial of L
+   for n be Nat holds
+    n >= len p iff n is_at_least_length_of p
+   proof
+    let L be non empty ZeroStr;
+    let p be Polynomial of L;
+    let n be Nat;
+    thus n >= len p implies n is_at_least_length_of p
+    proof
+     assume A1: n >= len p;
+     let i be Nat;
+      assume i >= n;
+      then i >= len p by A1,AXIOMS:22;
+      hence p.i = 0.L by ALGSEQ_1:22;
+    end;
+    assume n is_at_least_length_of p;
+    hence n >= len p by ALGSEQ_1:def 4;
+   end;
+
+  scheme PolynomialLambdaF{R()->non empty LoopStr, A()->Nat,
+                           F(Nat)->Element of R()}:
+   ex p be Polynomial of R() st
+    len p <= A() & for n be Nat st n < A() holds p.n=F(n)
+  proof
+   defpred P[Nat,Element of R()] means
+    $1<A() & $2=F($1) or $1>=A() & $2=0.R();
+   A1: for x be Element of NAT ex y be Element of R() st P[x,y]
+   proof
+    let x be Element of NAT;
+      x<A() implies x<A() & F(x) = F(x);
+    hence thesis;
+   end;
+   ex f be Function of NAT,the carrier of R() st
+    for x be Element of NAT holds P[x,f.x] from FuncExD(A1);
+   then consider f be Function of NAT,the carrier of R() such that
+    A2: for x be Element of NAT holds
+     x<A() & f.x=F(x) or x>=A() & f.x=0.R();
+   reconsider f as sequence of R() by NORMSP_1:def 3;
+     ex n be Nat st for i be Nat st i >= n holds f.i = 0.R()
+   proof
+    take A();
+    thus thesis by A2;
+   end;
+   then reconsider f as AlgSequence of R() by ALGSEQ_1:def 2;
+   A3:len f <= A()
+   proof
+      for i be Nat st i>=A() holds f.i=0.R() by A2;
+    then A() is_at_least_length_of f by ALGSEQ_1:def 3;
+    hence thesis by ALGSEQ_1:def 4;
+   end;
+   take f;
+   thus thesis by A2,A3;
+  end;
+
+  scheme ExDLoopStrSeq{ R() -> non empty LoopStr,
+                        F(set) -> Element of R() } :
+   ex S be sequence of R() st for n be Nat holds S.n = F(n)
+   proof
+    set Y = the carrier of R();
+    deffunc G(set) = F($1);
+    A1: for x be set st x in NAT holds G(x) in Y;
+    ex f be Function of NAT,Y st for x be set st x in NAT holds f.x = G(x)
+     from Lambda1(A1);
+    then consider f be Function of NAT,Y such that
+A2: for x be set st x in NAT holds f.x = F(x);
+    reconsider f as sequence of R() by NORMSP_1:def 3;
+    take f;
+    thus thesis by A2;
+   end;
+
+  definition
+   let L be non empty LoopStr;
+   let p,q be sequence of L;
+   func p+q -> sequence of L means :Def6:
+    for n be Nat holds it.n = p.n + q.n;
+   existence
+   proof
+    deffunc F(Nat) = p.$1 + q.$1;
+    consider r be sequence of L such that
+     A1: for n be Nat holds r.n = F(n) from ExDLoopStrSeq;
+    take r;
+    thus thesis by A1;
+   end;
+   uniqueness
+   proof
+    let p1,p2 be sequence of L such that
+     A2: for n be Nat holds p1.n = p.n + q.n and
+     A3: for n be Nat holds p2.n = p.n + q.n;
+      now let k be Nat;
+     thus p1.k = p.k + q.k by A2
+              .= p2.k by A3;
+    end;
+    hence p1 = p2 by FUNCT_2:113;
+   end;
+  end;
+
+  definition
+   let L be right_zeroed (non empty LoopStr);
+   let p,q be Polynomial of L;
+   cluster p+q -> finite-Support;
+   coherence
+   proof
+    take s=len p + len q;
+    let i be Nat;
+     assume A1: i >= s;
+       len p + len q >= len p by NAT_1:29;
+     then i >= len p by A1,AXIOMS:22;
+     then A2: p.i = 0.L by ALGSEQ_1:22;
+       len p + len q >= len q by NAT_1:29;
+     then A3: i >= len q by A1,AXIOMS:22;
+     thus (p+q).i = p.i + q.i by Def6
+        .= 0.L + 0.L by A2,A3,ALGSEQ_1:22
+        .= 0.L by RLVECT_1:def 7;
+   end;
+  end;
+
+  theorem Th24:
+   for L be right_zeroed (non empty LoopStr)
+   for p,q be Polynomial of L
+   for n be Nat holds
+    (n is_at_least_length_of p & n is_at_least_length_of q) implies
+     n is_at_least_length_of p+q
+   proof
+    let L be right_zeroed (non empty LoopStr);
+    let p,q be Polynomial of L;
+    let n be Nat;
+    assume that
+     A1: n is_at_least_length_of p and
+     A2: n is_at_least_length_of q;
+    let i be Nat;
+     assume i>=n;
+     then p.i = 0.L & q.i = 0.L by A1,A2,ALGSEQ_1:def 3;
+     hence (p+q).i = 0.L + 0.L by Def6
+        .= 0.L by RLVECT_1:def 7;
+   end;
+
+  theorem
+     for L be right_zeroed (non empty LoopStr)
+   for p,q be Polynomial of L holds
+    support (p+q) c= support p \/ support q
+   proof
+    let L be right_zeroed (non empty LoopStr);
+    let p,q be Polynomial of L;
+    let x be set;
+    assume A1: x in support (p+q);
+    then reconsider x1 = x as Nat;
+      x1 in PSeg len (p+q) by A1,ALGSEQ_1:def 5;
+    then A2: x1 < len (p+q) by ALGSEQ_1:10;
+      x1 < len p or x1 < len q
+    proof
+     assume that
+      A3: not x1 < len p and
+      A4: not x1 < len q;
+       x1 is_at_least_length_of p & x1 is_at_least_length_of q by A3,A4,Th23;
+     then x1 is_at_least_length_of p+q by Th24;
+     hence contradiction by A2,Th23;
+    end;
+    then x in PSeg len p or x in PSeg len q by ALGSEQ_1:10;
+    then x in support p or x in support q by ALGSEQ_1:def 5;
+    hence thesis by XBOOLE_0:def 2;
+   end;
+
+  definition
+   let L be Abelian (non empty LoopStr);
+   let p,q be sequence of L;
+   redefine func p+q;
+   commutativity
+   proof
+    let p,q be sequence of L;
+      now let n be Nat;
+     thus (p+q).n = p.n + q.n by Def6
+        .= (q+p).n by Def6;
+    end;
+    hence p+q = q+p by FUNCT_2:113;
+   end;
+  end;
+
+  theorem Th26:
+   for L be add-associative (non empty LoopStr)
+   for p,q,r be sequence of L holds
+    p+q+r = p+(q+r)
+   proof
+    let L be add-associative (non empty LoopStr);
+    let p,q,r be sequence of L;
+      now let n be Nat;
+     thus (p+q+r).n = (p+q).n + r.n by Def6
+        .= p.n + q.n + r.n by Def6
+        .= p.n + (q.n + r.n) by RLVECT_1:def 6
+        .= p.n + (q+r).n by Def6
+        .= (p+(q+r)).n by Def6;
+    end;
+    hence thesis by FUNCT_2:113;
+   end;
+
+  definition
+   let L be non empty LoopStr;
+   let p be sequence of L;
+   func -p -> sequence of L means :Def7:
+    for n be Nat holds it.n = -p.n;
+   existence
+   proof
+    deffunc F(Nat) = -p.$1;
+    consider r be sequence of L such that
+     A1: for n be Nat holds r.n = F(n) from ExDLoopStrSeq;
+    take r;
+    thus thesis by A1;
+   end;
+   uniqueness
+   proof
+    let p1,p2 be sequence of L such that
+     A2: for n be Nat holds p1.n = -p.n and
+     A3: for n be Nat holds p2.n = -p.n;
+      now let k be Nat;
+     thus p1.k = -p.k by A2
+              .= p2.k by A3;
+    end;
+    hence p1 = p2 by FUNCT_2:113;
+   end;
+  end;
+
+  definition
+   let L be add-associative right_zeroed right_complementable
+    (non empty LoopStr);
+   let p be Polynomial of L;
+   cluster -p -> finite-Support;
+   coherence
+   proof
+    take s=len p;
+    let i be Nat;
+     assume A1: i >= s;
+     thus (-p).i = -p.i by Def7
+        .= - 0.L by A1,ALGSEQ_1:22
+        .= 0.L by RLVECT_1:25;
+   end;
+  end;
+
+  definition
+   let L be non empty LoopStr;
+   let p,q be sequence of L;
+   func p-q -> sequence of L equals :Def8:
+    p+-q;
+   coherence;
+  end;
+
+  definition
+   let L be add-associative right_zeroed right_complementable
+    (non empty LoopStr);
+   let p,q be Polynomial of L;
+   cluster p-q -> finite-Support;
+   coherence
+   proof
+      p-q = p+-q by Def8;
+    hence thesis;
+   end;
+  end;
+
+  theorem Th27:
+   for L be non empty LoopStr
+   for p,q be sequence of L
+   for n be Nat holds
+    (p-q).n = p.n - q.n
+   proof
+    let L be non empty LoopStr;
+    let p,q be sequence of L;
+    let n be Nat;
+    thus (p-q).n = (p+-q).n by Def8
+       .= p.n + (-q).n by Def6
+       .= p.n +- q.n by Def7
+       .= p.n - q.n by RLVECT_1:def 11;
+   end;
+
+  definition
+   let L be non empty ZeroStr;
+   func 0_.(L) -> sequence of L equals :Def9:
+    NAT --> 0.L;
+   coherence by NORMSP_1:def 3;
+  end;
+
+  definition
+   let L be non empty ZeroStr;
+   cluster 0_.(L) -> finite-Support;
+   coherence
+   proof
+    take 0;
+    let i be Nat;
+     assume i >= 0;
+     thus (0_.(L)).i = (NAT --> 0.L).i by Def9
+        .= 0.L by FUNCOP_1:13;
+   end;
+  end;
+
+  theorem Th28:
+   for L be non empty ZeroStr
+   for n be Nat holds
+    (0_.(L)).n = 0.L
+   proof
+    let L be non empty ZeroStr;
+    let n be Nat;
+    thus (0_.(L)).n = (NAT --> 0.L).n by Def9
+       .= 0.L by FUNCOP_1:13;
+   end;
+
+  theorem Th29:
+   for L be right_zeroed (non empty LoopStr)
+   for p be sequence of L holds
+    p+0_.(L) = p
+   proof
+    let L be right_zeroed (non empty LoopStr);
+    let p be sequence of L;
+      now let n be Nat;
+     thus (p+0_.(L)).n = p.n + (0_.(L)).n by Def6
+        .= p.n + 0.L by Th28
+        .= p.n by RLVECT_1:def 7;
+    end;
+    hence thesis by FUNCT_2:113;
+   end;
+
+  theorem Th30:
+   for L be add-associative right_zeroed right_complementable
+    (non empty LoopStr)
+   for p be sequence of L holds
+    p-p = 0_.(L)
+   proof
+    let L be add-associative right_zeroed right_complementable
+     (non empty LoopStr);
+    let p be sequence of L;
+      now let n be Nat;
+     thus (p-p).n = p.n - p.n by Th27
+        .= 0.L by RLVECT_1:28
+        .= (0_.(L)).n by Th28;
+    end;
+    hence thesis by FUNCT_2:113;
+   end;
+
+  definition
+   let L be non empty multLoopStr_0;
+   func 1_.(L) -> sequence of L equals :Def10:
+    0_.(L)+*(0,1_(L));
+   coherence by NORMSP_1:def 3;
+  end;
+
+  definition
+   let L be non empty multLoopStr_0;
+   cluster 1_.(L) -> finite-Support;
+   coherence
+   proof
+    take 1;
+    let i be Nat;
+     assume i >= 1;
+     then A1: i <> 0;
+     thus (1_.(L)).i = (0_.(L)+*(0,1_(L))).i by Def10
+        .= (0_.(L)).i by A1,FUNCT_7:34
+        .= 0.L by Th28;
+   end;
+  end;
+
+  theorem Th31:
+   for L be non empty multLoopStr_0 holds
+    (1_.(L)).0 = 1_(L) &
+    for n be Nat st n <> 0 holds (1_.(L)).n = 0.L
+   proof
+    let L be non empty multLoopStr_0;
+      the carrier of L is non empty & 0 in NAT;
+    then A1: 0 in dom 0_.(L) by FUNCT_2:def 1;
+    thus (1_.(L)).0 = (0_.(L)+*(0,1_(L))).0 by Def10
+       .= 1_(L) by A1,FUNCT_7:33;
+    let n be Nat;
+    assume A2: n <> 0;
+    thus (1_.(L)).n = (0_.(L)+*(0,1_(L))).n by Def10
+       .= (0_.(L)).n by A2,FUNCT_7:34
+       .= 0.L by Th28;
+   end;
+
+  definition
+   let L be non empty doubleLoopStr;
+   let p,q be sequence of L;
+   func p*'q -> sequence of L means :Def11:
+    for i be Nat
+    ex r be FinSequence of the carrier of L st
+     len r = i+1 & it.i = Sum r &
+     for k be Nat st k in dom r holds r.k = p.(k-'1) * q.(i+1-'k);
+   existence
+   proof
+    defpred P[Nat,Element of L] means
+     ex r be FinSequence of the carrier of L st
+      len r = $1+1 & $2 = Sum r &
+      for k be Nat st k in dom r holds r.k = p.(k-'1) * q.($1+1-'k);
+    A1: for i be Element of NAT ex v be Element of L st P[i,v]
+    proof
+     let i be Element of NAT;
+     deffunc F(Nat) = p.($1-'1) * q.(i+1-'$1);
+     consider r be FinSequence of the carrier of L such that
+      A2: len r = i+1 and
+      A3: for k be Nat st k in Seg (i+1) holds r.k = F(k) from SeqLambdaD;
+     take v = Sum r;
+     take r;
+     thus len r = i+1 by A2;
+     thus v = Sum r;
+     let k be Nat;
+     assume k in dom r;
+     then k in Seg (i+1) by A2,FINSEQ_1:def 3;
+     hence r.k = p.(k-'1) * q.(i+1-'k) by A3;
+    end;
+    consider f be Function of NAT,the carrier of L such that
+     A4: for i be Element of NAT holds P[i,f.i] from FuncExD(A1);
+    reconsider f as sequence of L by NORMSP_1:def 3;
+    take f;
+    thus thesis by A4;
+   end;
+   uniqueness
+   proof
+    let p1,p2 be sequence of L such that
+     A5: for i be Nat
+         ex r be FinSequence of the carrier of L st
+          len r = i+1 & p1.i = Sum r &
+          for k be Nat st k in dom r holds r.k = p.(k-'1) * q.(i+1-'k) and
+     A6: for i be Nat
+         ex r be FinSequence of the carrier of L st
+          len r = i+1 & p2.i = Sum r &
+          for k be Nat st k in dom r holds r.k = p.(k-'1) * q.(i+1-'k);
+      now let i be Nat;
+     consider r1 be FinSequence of the carrier of L such that
+      A7: len r1 = i+1 and
+      A8: p1.i = Sum r1 and
+      A9: for k be Nat st k in dom r1 holds r1.k = p.(k-'1) * q.(i+1-'k) by A5;
+     consider r2 be FinSequence of the carrier of L such that
+      A10: len r2 = i+1 and
+      A11: p2.i = Sum r2 and
+      A12: for k be Nat st k in dom r2 holds r2.k = p.(k-'1) * q.(i+1-'k)
+       by A6;
+     A13: dom r1 = Seg len r2 by A7,A10,FINSEQ_1:def 3
+        .= dom r2 by FINSEQ_1:def 3;
+       now let k be Nat;
+      assume A14: k in dom r1;
+      hence r1.k = p.(k-'1) * q.(i+1-'k) by A9
+         .= r2.k by A12,A13,A14;
+     end;
+     hence p1.i = p2.i by A8,A11,A13,FINSEQ_1:17;
+    end;
+    hence p1 = p2 by FUNCT_2:113;
+   end;
+  end;
+
+  definition
+   let L be add-associative right_zeroed right_complementable distributive
+    (non empty doubleLoopStr);
+   let p,q be Polynomial of L;
+   cluster p*'q -> finite-Support;
+   coherence
+   proof
+    take s = len p + len q;
+    let i be Nat;
+     consider r be FinSequence of the carrier of L such that
+      A1: len r = i+1 and
+      A2: (p*'q).i = Sum r and
+      A3: for k be Nat st k in dom r holds r.k = p.(k-'1) * q.(i+1-'k)
+                                                                   by Def11;
+     assume i >= s;
+     then len p <= i - len q by REAL_1:84;
+     then -len p >= -(i - len q) by REAL_1:50;
+     then A4: -len p >= len q - i by XCMPLX_1:143;
+       now let k be Nat;
+      assume A5: k in dom r;
+      then A6: r.k = p.(k-'1) * q.(i+1-'k) by A3;
+      A7: 1 <= k & k <= i+1 by A1,A5,FINSEQ_3:27;
+      then A8: i+1-k >= 0 by SQUARE_1:12;
+      A9: k-1 >= 0 by A7,SQUARE_1:12;
+      per cases;
+       suppose k-'1 < len p;
+        then k-1 < len p by A9,BINARITH:def 3;
+        then -(k-1) > -len p by REAL_1:50;
+        then 1-k > -len p by XCMPLX_1:143;
+        then 1-k > len q - i by A4,AXIOMS:22;
+        then i+(1-k) > len q by REAL_1:84;
+        then i+1-k > len q by XCMPLX_1:29;
+        then i+1-'k >= len q by A8,BINARITH:def 3;
+        then q.(i+1-'k) = 0.L by ALGSEQ_1:22;
+        hence r.k = 0.L by A6,VECTSP_1:36;
+       suppose k-'1 >= len p;
+        then p.(k-'1) = 0.L by ALGSEQ_1:22;
+        hence r.k = 0.L by A6,VECTSP_1:39;
+     end;
+     hence thesis by A2,Th1;
+   end;
+  end;
+
+  theorem Th32:
+   for L be Abelian add-associative right_zeroed right_complementable
+    right-distributive (non empty doubleLoopStr)
+   for p,q,r be sequence of L holds
+    p*'(q+r) = p*'q+p*'r
+   proof
+    let L be Abelian add-associative right_zeroed right_complementable
+     right-distributive (non empty doubleLoopStr);
+    let p,q,r be sequence of L;
+      now let i be Nat;
+     consider r1 be FinSequence of the carrier of L such that
+      A1: len r1 = i+1 and
+      A2: (p*'(q+r)).i = Sum r1 and
+      A3: for k be Nat st k in dom r1 holds r1.k = p.(k-'1) * (q+r).(i+1-'k)
+                                                                   by Def11;
+     consider r2 be FinSequence of the carrier of L such that
+      A4: len r2 = i+1 and
+      A5: (p*'q).i = Sum r2 and
+      A6: for k be Nat st k in dom r2 holds r2.k = p.(k-'1) * q.(i+1-'k)
+                                                                   by Def11;
+     consider r3 be FinSequence of the carrier of L such that
+      A7: len r3 = i+1 and
+      A8: (p*'r).i = Sum r3 and
+      A9: for k be Nat st k in dom r3 holds r3.k = p.(k-'1) * r.(i+1-'k)
+                                                                   by Def11;
+     reconsider r2'=r2, r3'=r3 as
+         Element of (i+1)-tuples_on (the carrier of L) by A4,A7,FINSEQ_2:110;
+     A10: len (r2' + r3') = i+1 by FINSEQ_2:109;
+       now let k be Nat;
+      assume k in Seg (i+1);
+      then A11: k in dom r1 & k in dom r2 & k in dom r3 & k in dom (r2 + r3)
+                                             by A1,A4,A7,A10,FINSEQ_1:def 3;
+      then A12: r2.k = p.(k-'1) * q.(i+1-'k) by A6;
+      A13: r3.k = p.(k-'1) * r.(i+1-'k) by A9,A11;
+      thus r1.k = p.(k-'1) * (q+r).(i+1-'k) by A3,A11
+         .= p.(k-'1) * (q.(i+1-'k) +r.(i+1-'k)) by Def6
+         .= p.(k-'1) * q.(i+1-'k) + p.(k-'1) * r.(i+1-'k) by VECTSP_1:def 11
+         .= (r2 + r3).k by A11,A12,A13,FVSUM_1:21;
+     end;
+     then Sum r1 = Sum(r2' + r3') by A1,A10,FINSEQ_2:10
+        .= Sum r2 + Sum r3 by FVSUM_1:95;
+     hence (p*'(q+r)).i = (p*'q+p*'r).i by A2,A5,A8,Def6;
+    end;
+    hence thesis by FUNCT_2:113;
+   end;
+
+  theorem Th33:
+   for L be Abelian add-associative right_zeroed right_complementable
+    left-distributive (non empty doubleLoopStr)
+   for p,q,r be sequence of L holds
+    (p+q)*'r = p*'r+q*'r
+   proof
+    let L be Abelian add-associative right_zeroed right_complementable
+     left-distributive (non empty doubleLoopStr);
+    let p,q,r be sequence of L;
+      now let i be Nat;
+     consider r1 be FinSequence of the carrier of L such that
+      A1: len r1 = i+1 and
+      A2: ((p+q)*'r).i = Sum r1 and
+      A3: for k be Nat st k in dom r1 holds r1.k = (p+q).(k-'1) * r.(i+1-'k)
+                                                                   by Def11;
+     consider r2 be FinSequence of the carrier of L such that
+      A4: len r2 = i+1 and
+      A5: (p*'r).i = Sum r2 and
+      A6: for k be Nat st k in dom r2 holds r2.k = p.(k-'1) * r.(i+1-'k)
+                                                                   by Def11;
+     consider r3 be FinSequence of the carrier of L such that
+      A7: len r3 = i+1 and
+      A8: (q*'r).i = Sum r3 and
+      A9: for k be Nat st k in dom r3 holds r3.k = q.(k-'1) * r.(i+1-'k)
+                                                                   by Def11;
+     reconsider r2'=r2, r3'=r3 as
+         Element of (i+1)-tuples_on (the carrier of L) by A4,A7,FINSEQ_2:110;
+     A10: len (r2' + r3') = i+1 by FINSEQ_2:109;
+       now let k be Nat;
+      assume k in Seg (i+1);
+      then A11: k in dom r1 & k in dom r2 & k in dom r3 & k in dom (r2 + r3)
+                                             by A1,A4,A7,A10,FINSEQ_1:def 3;
+      then A12: r2.k = p.(k-'1) * r.(i+1-'k) by A6;
+      A13: r3.k = q.(k-'1) * r.(i+1-'k) by A9,A11;
+      thus r1.k = (p+q).(k-'1) * r.(i+1-'k) by A3,A11
+         .= (p.(k-'1) + q.(k-'1)) * r.(i+1-'k) by Def6
+         .= p.(k-'1) * r.(i+1-'k) + q.(k-'1) * r.(i+1-'k) by VECTSP_1:def 12
+         .= (r2 + r3).k by A11,A12,A13,FVSUM_1:21;
+     end;
+     then Sum r1 = Sum(r2' + r3') by A1,A10,FINSEQ_2:10
+        .= Sum r2 + Sum r3 by FVSUM_1:95;
+     hence ((p+q)*'r).i = (p*'r+q*'r).i by A2,A5,A8,Def6;
+    end;
+    hence thesis by FUNCT_2:113;
+   end;
+
+  theorem Th34:
+   for L be Abelian add-associative right_zeroed right_complementable unital
+    associative distributive (non empty doubleLoopStr)
+   for p,q,r be sequence of L holds
+    p*'q*'r = p*'(q*'r)
+   proof
+    let L be Abelian add-associative right_zeroed right_complementable unital
+     associative distributive (non empty doubleLoopStr);
+    let p,q,r be sequence of L;
+      now let i be Nat;
+     consider r1 be FinSequence of the carrier of L such that
+      A1: len r1 = i+1 and
+      A2: (p*'q*'r).i = Sum r1 and
+      A3: for k be Nat st k in dom r1 holds r1.k = (p*'q).(k-'1) * r.(i+1-'k)
+                                                                   by Def11;
+     consider r2 be FinSequence of the carrier of L such that
+      A4: len r2 = i+1 and
+      A5: (p*'(q*'r)).i = Sum r2 and
+      A6: for k be Nat st k in dom r2 holds r2.k = p.(k-'1) * (q*'r).(i+1-'k)
+                                                                   by Def11;
+     deffunc F(Nat) = (Decomp($1-'1,2)) ^^ ($1 |-> <*i+1-'$1*>);
+     consider f2 be FinSequence of ((2+1)-tuples_on NAT)* such that
+      A7: len f2 = i+1 and
+      A8: for k be Nat st k in Seg (i+1) holds
+       f2.k = F(k) from SeqLambdaD;
+     reconsider f2 as FinSequence of (3-tuples_on NAT)*;
+     deffunc F(Nat) = ((i+2-'$1) |-> <*$1-'1*>) ^^ (Decomp(i+1-'$1,2));
+     consider g2 be FinSequence of ((1+2)-tuples_on NAT)* such that
+      A9: len g2 = i+1 and
+      A10: for k be Nat st k in Seg (i+1) holds
+       g2.k = F(k) from SeqLambdaD;
+     reconsider g2 as FinSequence of (3-tuples_on NAT)*;
+     deffunc F(Nat) = prodTuples(p,q,r,f2/.$1);
+     consider f1 be FinSequence of (the carrier of L)* such that
+      A11: len f1 = len f2 and
+      A12: for k be Nat st k in Seg len f2 holds
+       f1.k = F(k) from SeqLambdaD;
+     deffunc F(Nat) = prodTuples(p,q,r,g2/.$1);
+     consider g1 be FinSequence of (the carrier of L)* such that
+      A13: len g1 = len g2 and
+      A14: for k be Nat st k in Seg len g2 holds
+       g1.k = F(k) from SeqLambdaD;
+     A15: len Sum f1 = i+1 by A7,A11,MATRLIN:def 8;
+       now let j be Nat;
+      assume A16: j in Seg (i+1);
+      then A17: j in dom r1 by A1,FINSEQ_1:def 3;
+        len f1 = len (Sum f1) by MATRLIN:def 8;
+      then A18: dom f1 = dom (Sum f1) by FINSEQ_3:31;
+      A19: dom r1 = dom f1 by A1,A7,A11,FINSEQ_3:31;
+      A20: dom f1 = dom f2 by A11,FINSEQ_3:31;
+      consider r3 be FinSequence of the carrier of L such that
+       A21: len r3 = j-'1+1 and
+       A22: (p*'q).(j-'1) = Sum r3 and
+       A23: for k be Nat st k in dom r3 holds
+        r3.k = p.(k-'1) * q.(j-'1+1-'k) by Def11;
+      A24: f1/.j = f1.j by A17,A19,FINSEQ_4:def 4
+         .= prodTuples(p,q,r,f2/.j) by A7,A12,A16;
+      A25: 1 <= j & j <= i+1 by A16,FINSEQ_1:3;
+        len Decomp(j-'1,2) = j-'1+1 by Th9
+         .= j by A25,AMI_5:4;
+      then A26: dom Decomp(j-'1,2) = Seg j by FINSEQ_1:def 3;
+      A27: dom (j |-> <*i+1-'j*>) = Seg j by FINSEQ_2:68;
+      A28: f2/.j = f2.j by A17,A19,A20,FINSEQ_4:def 4
+         .= (Decomp(j-'1,2)) ^^ (j |-> <*i+1-'j*>) by A8,A16;
+      then A29: dom (f2/.j) = (dom (Decomp(j-'1,2))) /\ dom (j |-> <*i+1-'j*>)
+                                                            by MATRLIN:def 2
+         .= Seg j by A26,A27;
+      A30: len prodTuples(p,q,r,f2/.j) = len (f2/.j) by Def5
+         .= j by A29,FINSEQ_1:def 3;
+      A31: dom (r3 * (r.(i+1-'j))) = dom r3 by POLYNOM1:def 3;
+      then A32: len (r3 * (r.(i+1-'j))) = len r3 by FINSEQ_3:31;
+      A33: len r3 = j by A21,A25,AMI_5:4;
+        now let k be Nat;
+       assume A34: k in Seg j;
+       then A35: k in dom r3 by A33,FINSEQ_1:def 3;
+       then A36: r3/.k = r3.k by FINSEQ_4:def 4
+          .= p.(k-'1) * q.(j-'1+1-'k) by A23,A35;
+       A37: (f2/.j)/.k = (f2/.j).k by A29,A34,FINSEQ_4:def 4
+          .= (Decomp(j-'1,2)).k ^ (j |-> <*i+1-'j*>).k
+                                                by A28,A29,A34,MATRLIN:def 2
+          .= <*k-'1,j-'1+1-'k*> ^ (j |-> <*i+1-'j*>).k by A21,A33,A34,Th14
+          .= <*k-'1,j-'1+1-'k*> ^ <*i+1-'j*> by A34,FINSEQ_2:70
+          .= <*k-'1,j-'1+1-'k,i+1-'j*> by FINSEQ_1:60;
+         1 in Seg 3 & 2 in Seg 3 & 3 in Seg 3 by ENUMSET1:14,FINSEQ_3:1;
+       then 1 in Seg len ((f2/.j)/.k) & 2 in Seg len ((f2/.j)/.k) &
+                                 3 in Seg len
+                            ((f2/.j)/.k) by A37,FINSEQ_1:62;
+       then A38: 1 in dom ((f2/.j)/.k) & 2 in dom ((f2/.j)/.k) &
+                 3 in dom ((f2/.j)/.k) by FINSEQ_1:def 3;
+       then A39: ((f2/.j)/.k)/.1 = ((f2/.j)/.k).1 by FINSEQ_4:def 4
+          .= k-'1 by A37,FINSEQ_1:62;
+       A40: ((f2/.j)/.k)/.2 = ((f2/.j)/.k).2 by A38,FINSEQ_4:def 4
+          .= j-'1+1-'k by A37,FINSEQ_1:62;
+       A41: ((f2/.j)/.k)/.3 = ((f2/.j)/.k).3 by A38,FINSEQ_4:def 4
+          .= i+1-'j by A37,FINSEQ_1:62;
+       thus prodTuples(p,q,r,f2/.j).k = (p.(((f2/.j)/.k)/.1))*
+            (q.(((f2/.j)/.k)/.2))*(r.(((f2/.j)/.k)/.3))
+             by A29,A34,Def5
+          .= (r3*(r.(i+1-'j)))/.k by A35,A36,A39,A40,A41,POLYNOM1:def 3
+          .= (r3 * (r.(i+1-'j))).k by A31,A35,FINSEQ_4:def 4;
+      end;
+      then A42: prodTuples(p,q,r,f2/.j) = r3 * (r.(i+1-'j))
+                                                  by A30,A32,A33,FINSEQ_2:10;
+        (p*'q).(j-'1) * r.(i+1-'j) = Sum (r3 * (r.(i+1-'j))) by A22,POLYNOM1:29
+;
+      hence r1.j = Sum (r3 * (r.(i+1-'j))) by A3,A17
+         .= (Sum f1)/.j by A17,A18,A19,A24,A42,MATRLIN:def 8
+         .= (Sum f1).j by A17,A18,A19,FINSEQ_4:def 4;
+     end;
+     then r1 = Sum f1 by A1,A15,FINSEQ_2:10;
+     then A43: Sum r1 = Sum FlattenSeq f1 by POLYNOM1:34;
+     A44: len Sum g1 = i+1 by A9,A13,MATRLIN:def 8;
+       now let j be Nat;
+      assume A45: j in Seg (i+1);
+      then A46: j in dom r2 by A4,FINSEQ_1:def 3;
+        len g1 = len (Sum g1) by MATRLIN:def 8;
+      then A47: dom g1 = dom (Sum g1) by FINSEQ_3:31;
+      A48: dom r2 = dom g1 by A4,A9,A13,FINSEQ_3:31;
+      A49: dom g1 = dom g2 by A13,FINSEQ_3:31;
+      consider r3 be FinSequence of the carrier of L such that
+       A50: len r3 = i+1-'j+1 and
+       A51: (q*'r).(i+1-'j) = Sum r3 and
+       A52: for k be Nat st k in dom r3 holds
+        r3.k = q.(k-'1) * r.(i+1-'j+1-'k) by Def11;
+      A53: g1/.j = g1.j by A46,A48,FINSEQ_4:def 4
+         .= prodTuples(p,q,r,g2/.j) by A9,A14,A45;
+      A54: j <= i+1 by A45,FINSEQ_1:3;
+      then A55: i+1-j >= 0 by SQUARE_1:12;
+        i+1+1 >= i+1 by NAT_1:29;
+      then i+1+1 >= j by A54,AXIOMS:22;
+      then i+(1+1) >= j by XCMPLX_1:1;
+      then A56: i+2-j >= 0 by SQUARE_1:12;
+      A57: i+1-'j+1 =i+1-j+1 by A55,BINARITH:def 3
+         .= i+1+1-j by XCMPLX_1:29
+         .= i+(1+1)-j by XCMPLX_1:1
+         .= i+2-'j by A56,BINARITH:def 3;
+      then len Decomp(i+1-'j,2) = i+2-'j by Th9;
+      then A58: dom Decomp(i+1-'j,2) = Seg (i+2-'j) by FINSEQ_1:def 3;
+      A59: dom ((i+2-'j) |-> <*j-'1*>) = Seg (i+2-'j) by FINSEQ_2:68;
+      A60: g2/.j = g2.j by A46,A48,A49,FINSEQ_4:def 4
+         .= ((i+2-'j) |-> <*j-'1*>) ^^ (Decomp(i+1-'j,2)) by A10,A45;
+      then A61: dom (g2/.j) = dom ((i+2-'j) |-> <*j-'1*>) /\
+                              dom (Decomp(i+1-'j,2)) by MATRLIN:def 2
+         .= Seg (i+2-'j) by A58,A59;
+      A62: len prodTuples(p,q,r,g2/.j) = len (g2/.j) by Def5
+         .= i+2-'j by A61,FINSEQ_1:def 3;
+      A63: dom ((p.(j-'1)) * r3) = dom r3 by POLYNOM1:def 2;
+      then A64: len ((p.(j-'1)) * r3) = len r3 by FINSEQ_3:31;
+        now let k be Nat;
+       assume A65: k in Seg (i+2-'j);
+       then A66: k in dom r3 by A50,A57,FINSEQ_1:def 3;
+       then A67: r3/.k = r3.k by FINSEQ_4:def 4
+          .= q.(k-'1) * r.(i+1-'j+1-'k) by A52,A66;
+       A68: (g2/.j)/.k = (g2/.j).k by A61,A65,FINSEQ_4:def 4
+          .= ((i+2-'j) |-> <*j-'1*>).k ^ (Decomp(i+1-'j,2)).k
+                                                by A60,A61,A65,MATRLIN:def 2
+          .= ((i+2-'j) |-> <*j-'1*>).k^<*k-'1,i+1-'j+1-'k*> by A57,A65,Th14
+          .= <*j-'1*> ^ <*k-'1,i+1-'j+1-'k*> by A65,FINSEQ_2:70
+          .= <*j-'1,k-'1,i+1-'j+1-'k*> by FINSEQ_1:60;
+         1 in Seg 3 & 2 in Seg 3 & 3 in Seg 3 by ENUMSET1:14,FINSEQ_3:1;
+       then 1 in Seg len ((g2/.j)/.k) & 2 in Seg len ((g2/.j)/.k) &
+                                 3 in Seg len (
+(g2/.j)/.k) by A68,FINSEQ_1:62;
+       then A69: 1 in dom ((g2/.j)/.k) & 2 in dom ((g2/.j)/.k) &
+                 3 in dom ((g2/.j)/.k) by FINSEQ_1:def 3;
+       then A70: ((g2/.j)/.k)/.1 = ((g2/.j)/.k).1 by FINSEQ_4:def 4
+          .= j-'1 by A68,FINSEQ_1:62;
+       A71: ((g2/.j)/.k)/.2 = ((g2/.j)/.k).2 by A69,FINSEQ_4:def 4
+          .= k-'1 by A68,FINSEQ_1:62;
+       A72: ((g2/.j)/.k)/.3 = ((g2/.j)/.k).3 by A69,FINSEQ_4:def 4
+          .= i+1-'j+1-'k by A68,FINSEQ_1:62;
+       thus prodTuples(p,q,r,g2/.j).k = (p.(((g2/.j)/.k)/.1))*
+            (q.(((g2/.j)/.k)/.2))*(r.(((g2/.j)/.k)/.3))
+               by A61,A65,Def5
+          .= (p.(((g2/.j)/.k)/.1))*((q.(((g2/.j)/.k)/.2))*
+             (r.(((g2/.j)/.k)/.3))) by VECTSP_1:def 16
+          .= ((p.(j-'1)) * r3)/.k by A66,A67,A70,A71,A72,POLYNOM1:def 2
+          .= ((p.(j-'1)) * r3).k by A63,A66,FINSEQ_4:def 4;
+      end;
+      then A73: prodTuples(p,q,r,g2/.j) = (p.(j-'1)) * r3
+                                               by A50,A57,A62,A64,FINSEQ_2:10;
+        p.(j-'1) * (q*'r).(i+1-'j) = Sum (p.(j-'1) * r3) by A51,POLYNOM1:28;
+      hence r2.j = Sum (p.(j-'1) * r3) by A6,A46
+         .= (Sum g1)/.j by A46,A47,A48,A53,A73,MATRLIN:def 8
+         .= (Sum g1).j by A46,A47,A48,FINSEQ_4:def 4;
+     end;
+     then r2 = Sum g1 by A4,A44,FINSEQ_2:10;
+     then A74: Sum r2 = Sum FlattenSeq g1 by POLYNOM1:34;
+     A75: dom Card f1 = dom f1 & dom Card f2 = dom f2 by CARD_3:def 2;
+     then A76: len Card f1 = len f1 & len Card f2 = len f2 by FINSEQ_3:31;
+       now let j be Nat;
+      assume A77: j in Seg (i+1);
+      then A78: j in dom f1 & j in dom f2 by A7,A11,FINSEQ_1:def 3;
+        f1.j = prodTuples(p,q,r,f2/.j) by A7,A12,A77;
+      then A79: len (f1.j) = len (f2/.j) by Def5
+         .= len (f2.j) by A78,FINSEQ_4:def 4;
+      thus (Card f2).j = len (f2.j) by A78,CARD_3:def 2
+         .= (Card f1).j by A78,A79,CARD_3:def 2;
+     end;
+     then A80: Card f2 = Card f1 by A7,A11,A76,FINSEQ_2:10;
+     then A81: len FlattenSeq f1 = len FlattenSeq f2 by POLYNOM1:31;
+     then A82: len FlattenSeq f1=len prodTuples(p,q,r,FlattenSeq f2) by Def5;
+A83:   Seg len FlattenSeq f2 = dom FlattenSeq f2 by FINSEQ_1:def 3;
+       now let j be Nat;
+      assume A84: j in Seg len FlattenSeq f1;
+      then j in dom FlattenSeq f1 by FINSEQ_1:def 3;
+      then consider i1,j1 be Nat such that
+       A85: i1 in dom f1 and
+       A86: j1 in dom (f1.i1) and
+       A87: j = (Sum Card (f1|(i1-'1))) + j1 and
+       A88: (f1.i1).j1 = (FlattenSeq f1).j by POLYNOM1:32;
+      A89: i1 in Seg len f2 by A11,A85,FINSEQ_1:def 3;
+      then A90: f1.i1 = prodTuples(p,q,r,f2/.i1) by A12;
+      A91: i1 in dom f2 by A89,FINSEQ_1:def 3;
+        len (f1.i1) = len (f2/.i1) by A90,Def5
+         .= len (f2.i1) by A75,A80,A85,FINSEQ_4:def 4;
+      then j1 in Seg len (f2.i1) by A86,FINSEQ_1:def 3;
+      then A92: j1 in Seg len (f2/.i1) by A91,FINSEQ_4:def 4;
+      then A93: j1 in dom (f2/.i1) by FINSEQ_1:def 3;
+A94:    Seg len (f2/.i1) = dom (f2/.i1) by FINSEQ_1:def 3;
+      A95: j in dom FlattenSeq f2 by A81,A84,FINSEQ_1:def 3;
+      then consider i2,j2 be Nat such that
+       A96: i2 in dom f2 and
+       A97: j2 in dom (f2.i2) and
+       A98: j = (Sum Card (f2|(i2-'1))) + j2 and
+       A99: (f2.i2).j2 = (FlattenSeq f2).j by POLYNOM1:32;
+        (Sum ((Card f1)|(i1-'1))) + j1 = (Sum Card (f1|(i1-'1))) + j1 by Th16
+         .= (Sum ((Card f2)|(i2-'1))) + j2 by A87,A98,Th16;
+      then A100: i1 = i2 & j1 = j2 by A80,A85,A86,A96,A97,Th22;
+      A101: (f2/.i1)/.j1 = (f2/.i1).j1 by A93,FINSEQ_4:def 4
+         .= (f2.i1).j1 by A91,FINSEQ_4:def 4
+         .= (FlattenSeq f2)/.j by A95,A99,A100,FINSEQ_4:def 4;
+      thus (FlattenSeq f1).j = (p.(((f2/.i1)/.j1)/.1))*
+               (q.(((f2/.i1)/.j1)/.2))*(r.(((f2/.i1)/.j1)/.3))
+                                                  by A88,A90,A92,A94,Def5
+         .= (prodTuples(p,q,r,FlattenSeq f2)).j by A81,A83,A84,A101,Def5;
+     end;
+     then A102: FlattenSeq f1=prodTuples(p,q,r,FlattenSeq f2) by A82,FINSEQ_2:
+10;
+     A103: dom Card g1 = dom g1 & dom Card g2 = dom g2 by CARD_3:def 2;
+     then A104: len Card g1 = len g1 & len Card g2 = len g2 by FINSEQ_3:31;
+       now let j be Nat;
+      assume A105: j in Seg (i+1);
+      then A106: j in dom g1 & j in dom g2 by A9,A13,FINSEQ_1:def 3;
+        g1.j = prodTuples(p,q,r,g2/.j) by A9,A14,A105;
+      then A107: len (g1.j) = len (g2/.j) by Def5
+         .= len (g2.j) by A106,FINSEQ_4:def 4;
+      thus (Card g2).j = len (g2.j) by A106,CARD_3:def 2
+         .= (Card g1).j by A106,A107,CARD_3:def 2;
+     end;
+     then A108: Card g2 = Card g1 by A9,A13,A104,FINSEQ_2:10;
+     then A109: len (FlattenSeq g2) = len (FlattenSeq g1) by POLYNOM1:31;
+     then A110: dom (FlattenSeq g2) = dom (FlattenSeq g1) by FINSEQ_3:31;
+A111:   dom FlattenSeq g1 = Seg len FlattenSeq g1 by FINSEQ_1:def 3;
+     A112: len FlattenSeq g1=len prodTuples(p,q,r,FlattenSeq g2) by A109,Def5;
+       now let j be Nat;
+      assume A113: j in Seg len FlattenSeq g1;
+      then j in dom FlattenSeq g1 by FINSEQ_1:def 3;
+      then consider i1,j1 be Nat such that
+       A114: i1 in dom g1 and
+       A115: j1 in dom (g1.i1) and
+       A116: j = (Sum Card (g1|(i1-'1))) + j1 and
+       A117: (g1.i1).j1 = (FlattenSeq g1).j by POLYNOM1:32;
+      A118: i1 in Seg len g2 by A13,A114,FINSEQ_1:def 3;
+      then A119: g1.i1 = prodTuples(p,q,r,g2/.i1) by A14;
+A120:    Seg len (g2/.i1) = dom (g2/.i1) by FINSEQ_1:def 3;
+      A121: i1 in dom g2 by A118,FINSEQ_1:def 3;
+        len (g1.i1) = len (g2/.i1) by A119,Def5
+         .= len (g2.i1) by A103,A108,A114,FINSEQ_4:def 4;
+      then j1 in Seg len (g2.i1) by A115,FINSEQ_1:def 3;
+      then A122: j1 in Seg len (g2/.i1) by A121,FINSEQ_4:def 4;
+      then A123: j1 in dom (g2/.i1) by FINSEQ_1:def 3;
+      A124: j in dom FlattenSeq g2 by A109,A113,FINSEQ_1:def 3;
+      then consider i2,j2 be Nat such that
+       A125: i2 in dom g2 and
+       A126: j2 in dom (g2.i2) and
+       A127: j = (Sum Card (g2|(i2-'1))) + j2 and
+       A128: (g2.i2).j2 = (FlattenSeq g2).j by POLYNOM1:32;
+        (Sum ((Card g1)|(i1-'1))) + j1 = (Sum Card (g1|(i1-'1))) + j1 by Th16
+         .= (Sum ((Card g2)|(i2-'1))) + j2 by A116,A127,Th16;
+      then A129: i1 = i2 & j1 = j2 by A108,A114,A115,A125,A126,Th22;
+      A130: ((g2/.i1)/.j1) = (g2/.i1).j1 by A123,FINSEQ_4:def 4
+         .= (g2.i1).j1 by A121,FINSEQ_4:def 4
+         .= (FlattenSeq g2)/.j by A124,A128,A129,FINSEQ_4:def 4;
+      thus (FlattenSeq g1).j = (p.(((g2/.i1)/.j1)/.1))*
+                          (q.(((g2/.i1)/.j1)/.2))*(r.((
+         (g2/.i1)/.j1)/.3)) by A117,A119,A120,A122,Def5
+         .= (prodTuples(p,q,r,FlattenSeq g2)).j
+              by A110,A111,A113,A130,Def5;
+     end;
+then A131: FlattenSeq g1=prodTuples(p,q,r,FlattenSeq g2) by A112,FINSEQ_2:10;
+       now let y be set;
+      thus y in rng FlattenSeq f2 implies y in rng FlattenSeq g2
+      proof
+       assume y in rng FlattenSeq f2;
+       then consider x be Nat such that
+        A132: x in dom FlattenSeq f2 and
+        A133: (FlattenSeq f2).x = y by FINSEQ_2:11;
+       consider i1,j1 be Nat such that
+        A134: i1 in dom f2 and
+        A135: j1 in dom (f2.i1) and
+          x = (Sum Card (f2|(i1-'1))) + j1 and
+        A136: (f2.i1).j1 = (FlattenSeq f2).x by A132,POLYNOM1:32;
+       A137: i1 in Seg (i+1) by A7,A134,FINSEQ_1:def 3;
+       then A138: f2.i1 = (Decomp(i1-'1,2)) ^^ (i1 |-> <*i+1-'i1*>) by A8;
+       then j1 in dom (Decomp(i1-'1,2)) /\ dom (i1 |-> <*i+1-'i1*>)
+                                                       by A135,MATRLIN:def 2;
+       then j1 in dom (i1 |-> <*i+1-'i1*>) by XBOOLE_0:def 3;
+       then A139: j1 in Seg i1 by FINSEQ_2:68;
+       A140: 1 <= i1 & i1 <= i+1 by A137,FINSEQ_1:3;
+       then A141: j1 in Seg (i1-'1+1) by A139,AMI_5:4;
+       A142: y = ((Decomp(i1-'1,2)).j1) ^ ((i1 |-> <*i+1-'i1*>).j1)
+                                    by A133,A135,A136,A138,MATRLIN:def 2
+        .= ((Decomp(i1-'1,2)).j1) ^ <*i+1-'i1*> by A139,FINSEQ_2:70
+        .= <*j1-'1,i1-'1+1-'j1*> ^ <*i+1-'i1*> by A141,Th14
+        .= <*j1-'1,i1-'j1*> ^ <*i+1-'i1*> by A140,AMI_5:4
+        .= <*j1-'1,i1-'j1,i+1-'i1*> by FINSEQ_1:60;
+       set i2 = j1;
+       set j2 = i1-'j1+1;
+       A143: 1 <= j1 & j1 <= i1 by A139,FINSEQ_1:3;
+       then A144: j1-1 >= 0 & i1-j1 >= 0 by SQUARE_1:12;
+       A145: i+1 >= j1 by A140,A143,AXIOMS:22;
+       then A146: i+1-j1 >=0 by SQUARE_1:12;
+       A147: i+1-i1 >= 0 by A140,SQUARE_1:12;
+       A148: i2 in Seg (i+1) by A143,A145,FINSEQ_1:3;
+       then A149: i2 in dom g2 by A9,FINSEQ_1:def 3;
+       A150: 1 <= i1-'j1+1 by NAT_1:29;
+         i1-'j1 <= i+1-'i2 by A140,JORDAN3:5;
+       then i1-'j1+1 <= i+1-'i2+1 by AXIOMS:24;
+       then A151: j2 in Seg (i+1-'i2+1) by A150,FINSEQ_1:3;
+         i+1+1 >= i+1 by NAT_1:29;
+       then i+1+1 >= j1 by A145,AXIOMS:22;
+       then i+(1+1) >= i2 by XCMPLX_1:1;
+       then A152: i+2-i2 >= 0 by SQUARE_1:12;
+       A153: i+1-'i2+1 = i+1-i2+1 by A146,BINARITH:def 3
+          .= i+1+1-i2 by XCMPLX_1:29
+          .= i+(1+1)-i2 by XCMPLX_1:1;
+       then A154: j2 in Seg (i+2-'i2) by A151,A152,BINARITH:def 3;
+       A155: g2.i2 = ((i+2-'i2) |-> <*i2-'1*>)^^(Decomp(i+1-'i2,2))
+             by A10,A148;
+       A156: dom ((i+2-'i2) |-> <*i2-'1*>) = Seg (i+2-'i2) by FINSEQ_2:68;
+         dom Decomp(i+1-'i2,2) = Seg len Decomp(i+1-'i2,2) by FINSEQ_1:def 3
+          .= Seg (i+1-'i2+1) by Th9
+          .= Seg (i+2-'i2) by A152,A153,BINARITH:def 3;
+       then dom (g2.i2) = (Seg (i+2-'i2)) /\ (Seg (i+2-'i2))
+                                                   by A155,A156,MATRLIN:def 2;
+       then A157: j2 in dom (g2.i2) by A151,A152,A153,BINARITH:def 3;
+         i+1-'j1 >= i1-'j1 by A140,JORDAN3:5;
+       then i+1-'j1+1 >= i1-'j1+1 by AXIOMS:24;
+       then i+1-'j1+1-(i1-'j1+1) >= 0 by SQUARE_1:12;
+       then A158: i+1-'j1+1-'(i1-'j1+1)=i+1-'j1+1-(i1-'j1+1) by BINARITH:def 3
+          .= i+1-'j1+1-(i1-j1+1) by A144,BINARITH:def 3
+          .= i+1-j1+1-(i1-j1+1) by A146,BINARITH:def 3
+          .= i+1-j1+1-(1-j1+i1) by XCMPLX_1:30
+          .= i+1-j1+1-(1-(j1-i1)) by XCMPLX_1:37
+          .= i+1-j1+1-1+(j1-i1) by XCMPLX_1:37
+          .= i+1-j1+(j1-i1) by XCMPLX_1:26
+          .= i+1-j1+j1-i1 by XCMPLX_1:29
+          .= i+1-i1 by XCMPLX_1:27
+          .= i+1-'i1 by A147,BINARITH:def 3;
+       A159: (g2.i2).j2=(((i+2-'i2) |-> <*i2-'1*>).j2)^((Decomp(i+1-'i2,2)).j2)
+                                       by A155,A157,MATRLIN:def 2
+          .= <*i2-'1*> ^ ((Decomp(i+1-'i2,2)).j2) by A154,FINSEQ_2:70
+          .= <*i2-'1*> ^ <*j2-'1,i+1-'i2+1-'j2*> by A151,Th14
+          .= <*j1-'1,i1-'j1+1-'1,i+1-'j1+1-'(i1-'j1+1)*> by FINSEQ_1:60
+          .= <*j1-'1,i1-'j1,i+1-'i1*> by A158,BINARITH:39;
+         (Sum Card (g2|(i2-'1))) + j2 in dom FlattenSeq g2 &
+        (g2.i2).j2 = (FlattenSeq g2).((Sum Card (g2|(i2-'1))) + j2)
+                                                      by A149,A157,POLYNOM1:33;
+       hence y in rng FlattenSeq g2 by A142,A159,FUNCT_1:def 5;
+      end;
+      assume y in rng FlattenSeq g2;
+      then consider x be Nat such that
+       A160: x in dom FlattenSeq g2 and
+       A161: (FlattenSeq g2).x = y by FINSEQ_2:11;
+      consider i1,j1 be Nat such that
+       A162: i1 in dom g2 and
+       A163: j1 in dom (g2.i1) and
+         x = (Sum Card (g2|(i1-'1))) + j1 and
+       A164: (g2.i1).j1 = (FlattenSeq g2).x by A160,POLYNOM1:32;
+      A165: i1 in Seg (i+1) by A9,A162,FINSEQ_1:def 3;
+      then A166: g2.i1 = ((i+2-'i1) |-> <*i1-'1*>)^^(Decomp(i+1-'i1,2)) by A10;
+      then j1 in dom ((i+2-'i1) |-> <*i1-'1*>) /\ dom (Decomp(i+1-'i1,2))
+                                                       by A163,MATRLIN:def 2;
+      then j1 in dom ((i+2-'i1) |-> <*i1-'1*>) by XBOOLE_0:def 3;
+      then A167: j1 in Seg (i+2-'i1) by FINSEQ_2:68;
+      A168: 1 <= i1 & i1 <= i+1 by A165,FINSEQ_1:3;
+      then A169: i1-1 >= 0 & i+1-i1 >= 0 by SQUARE_1:12;
+      then A170: i+1-'i1+1 = i+1-i1+1 by BINARITH:def 3
+          .= i+1+1-i1 by XCMPLX_1:29
+          .= i+(1+1)-i1 by XCMPLX_1:1;
+        i+1+1 >= i+1 by NAT_1:29;
+      then i+1+1 >= i1 by A168,AXIOMS:22;
+      then i+(1+1) >= i1 by XCMPLX_1:1;
+      then i+2-i1 >= 0 by SQUARE_1:12;
+      then A171: j1 in Seg (i+1-'i1+1) by A167,A170,BINARITH:def 3;
+      A172: y = (((i+2-'i1) |-> <*i1-'1*>).j1) ^ (Decomp(i+1-'i1,2).j1)
+                                   by A161,A163,A164,A166,MATRLIN:def 2
+       .= <*i1-'1*> ^ (Decomp(i+1-'i1,2).j1) by A167,FINSEQ_2:70
+       .= <*i1-'1*> ^ <*j1-'1,i+1-'i1+1-'j1*> by A171,Th14
+       .= <*i1-'1,j1-'1,i+1-'i1+1-'j1*> by FINSEQ_1:60;
+      set i2 = j1-'1+i1;
+      set j2 = i1;
+      A173: j1-'1+i1 >= i1 by NAT_1:29;
+      then A174: j1-'1+i1 >= 1 by A168,AXIOMS:22;
+        j1 >= 1 by A167,FINSEQ_1:3;
+      then A175: j1-1 >= 0 by SQUARE_1:12;
+      A176: j1 <= i+1-'i1+1 by A171,FINSEQ_1:3;
+      then j1 <= i+1-i1+1 by A169,BINARITH:def 3;
+      then j1-1 <= i+1-i1 by REAL_1:86;
+      then A177: j1-1+i1 <= i+1 by REAL_1:84;
+      then j1-'1+i1 <= i+1 by A175,BINARITH:def 3;
+      then A178: i2 in Seg (i+1) by A174,FINSEQ_1:3;
+      then A179: i2 in dom f2 by A7,FINSEQ_1:def 3;
+      A180: j2 in Seg i2 by A168,A173,FINSEQ_1:3;
+      then A181: j2 in Seg (i2-'1+1) by A174,AMI_5:4;
+      A182: f2.i2 = (Decomp(i2-'1,2)) ^^ (i2 |-> <*i+1-'i2*>) by A8,A178;
+      A183: dom (i2 |-> <*i+1-'i2*>) = Seg i2 by FINSEQ_2:68;
+        dom Decomp(i2-'1,2) = Seg len Decomp(i2-'1,2) by FINSEQ_1:def 3
+         .= Seg (i2-'1+1) by Th9
+         .= Seg i2 by A174,AMI_5:4;
+      then dom (f2.i2) = (Seg i2) /\ (Seg i2) by A182,A183,MATRLIN:def 2;
+      then A184: j2 in dom (f2.i2) by A168,A173,FINSEQ_1:3;
+      A185: i+1-'i1+1-j1 >= 0 by A176,SQUARE_1:12;
+        i+1-(j1-1+i1) >= 0 by A177,SQUARE_1:12;
+      then i+1-(j1-'1+i1) >= 0 by A175,BINARITH:def 3;
+      then A186: i+1-'(j1-'1+i1) = i+1-(j1-'1+i1) by BINARITH:def 3
+         .= i+1-(j1-1+i1) by A175,BINARITH:def 3
+         .= i+1-(i1-1+j1) by XCMPLX_1:30
+         .= i+1-(i1-1)-j1 by XCMPLX_1:36
+         .= i+1-i1+1-j1 by XCMPLX_1:37
+         .= i+1-'i1+1-j1 by A169,BINARITH:def 3
+         .= i+1-'i1+1-'j1 by A185,BINARITH:def 3;
+      A187: (f2.i2).j2 = (Decomp(i2-'1,2).j2) ^ ((i2 |-> <*i+1-'i2*>).j2)
+                                              by A182,A184,MATRLIN:def 2
+         .= (Decomp(i2-'1,2).j2) ^ <*i+1-'i2*> by A180,FINSEQ_2:70
+         .= <*j2-'1,i2-'1+1-'j2*> ^ <*i+1-'i2*> by A181,Th14
+         .= <*j2-'1,i2-'1+1-'j2,i+1-'i2*> by FINSEQ_1:60
+         .= <*i1-'1,j1-'1+i1-'i1,i+1-'(j1-'1+i1)*> by A174,AMI_5:4
+         .= <*i1-'1,j1-'1,i+1-'i1+1-'j1*> by A186,BINARITH:39;
+        (Sum Card (f2|(i2-'1))) + j2 in dom FlattenSeq f2 &
+       (f2.i2).j2 = (FlattenSeq f2).((Sum Card (f2|(i2-'1))) + j2)
+                                                      by A179,A184,POLYNOM1:33;
+      hence y in rng FlattenSeq f2 by A172,A187,FUNCT_1:def 5;
+     end;
+     then A188: rng FlattenSeq f2 = rng FlattenSeq g2 by TARSKI:2;
+     A189: dom Card f2 = dom f2 by CARD_3:def 2
+        .= Seg len g2 by A7,A9,FINSEQ_1:def 3
+        .= dom g2 by FINSEQ_1:def 3
+        .= dom Card g2 by CARD_3:def 2
+        .= dom Rev Card g2 by FINSEQ_5:60;
+     then A190: len Card f2 = len Rev Card g2 by FINSEQ_3:31;
+       now let j be Nat;
+      assume j in Seg len Card f2;
+      then A191: j in dom Card f2 by FINSEQ_1:def 3;
+      then A192: j in dom f2 by CARD_3:def 2;
+      A193: dom Card g2 = dom g2 by CARD_3:def 2;
+      then A194: len Card g2 = len g2 by FINSEQ_3:31;
+      A195: j in Seg len Rev Card g2 by A189,A191,FINSEQ_1:def 3;
+      then A196: j in Seg len g2 by A194,FINSEQ_5:def 3;
+      then len Card g2 - j + 1 in Seg len g2 by A194,FINSEQ_5:2;
+      then A197: len Card g2 - j + 1 in dom g2 by FINSEQ_1:def 3;
+      A198: j >= 1 by A195,FINSEQ_1:3;
+      A199: i+1 >= j by A9,A196,FINSEQ_1:3;
+      A200: f2.j = (Decomp(j-'1,2)) ^^ (j |-> <*i+1-'j*>) by A8,A9,A196;
+      A201: dom Decomp(j-'1,2) = Seg len Decomp(j-'1,2) by FINSEQ_1:def 3
+         .= Seg (j-'1+1) by Th9
+         .= Seg j by A198,AMI_5:4;
+      A202: dom (j |-> <*i+1-'j*>) = Seg j by FINSEQ_2:68;
+        Seg len (f2.j) = dom (f2.j) by FINSEQ_1:def 3
+         .= (Seg j) /\ (Seg j) by A200,A201,A202,MATRLIN:def 2
+         .= Seg j;
+      then A203: len (f2.j) = j by FINSEQ_1:8;
+      A204: i+1-j >= 0 by A199,SQUARE_1:12;
+      then i+1-j+1 = i+1-'j+1 by BINARITH:def 3;
+      then reconsider lj = len Card g2 - j + 1 as Nat by A9,A193,FINSEQ_3:31;
+        i+1-(i+1-j+1) = i+1-(i+1-(j-1)) by XCMPLX_1:37
+         .= i+1-(i+1)+(j-1) by XCMPLX_1:37
+         .= 0+(j-1) by XCMPLX_1:14;
+      then A205: i+1-(i+1-j+1) >= 0 by A198,SQUARE_1:12;
+      then A206: i+1-'lj+1 = i+1-(i+1-j+1)+1 by A9,A194,BINARITH:def 3
+         .= i+1-(i+1-(j-1))+1 by XCMPLX_1:37
+         .= i+1-(i+1)+(j-1)+1 by XCMPLX_1:37
+         .= 0+(j-1)+1 by XCMPLX_1:14
+         .= j+-1+1 by XCMPLX_0:def 8
+         .= j by XCMPLX_1:139;
+      A207: i+1-j+1 >= 0+1 by A204,AXIOMS:24;
+        j-1 >= 0 by A198,SQUARE_1:12;
+      then i+1-(j-1) <= i+1 by REAL_2:173;
+      then A208: i+1-j+1 <= i+1 by XCMPLX_1:37;
+      then lj in Seg (i+1) by A9,A194,A207,FINSEQ_1:3;
+      then A209: g2.lj = ((i+2-'lj) |-> <*lj-'1*>)^^(Decomp(i+1-'lj,2)) by A10;
+      A210: dom Decomp(i+1-'lj,2) = Seg len Decomp(i+1-'lj,2) by FINSEQ_1:def 3
+         .= Seg j by A206,Th9;
+      A211: i+1-'lj+1 = i+1-lj+1 by A9,A194,A205,BINARITH:def 3
+         .= i+1+1-lj by XCMPLX_1:29
+         .= i+(1+1)-lj by XCMPLX_1:1;
+        i+1+1 >= i+1 by NAT_1:29;
+      then i+1+1 >= lj by A9,A194,A208,AXIOMS:22;
+      then i+(1+1) >= lj by XCMPLX_1:1;
+      then A212: i+2-lj >= 0 by SQUARE_1:12;
+      A213: dom ((i+2-'lj) |-> <*lj-'1*>) = Seg (i+2-'lj) by FINSEQ_2:68
+         .= Seg j by A206,A211,A212,BINARITH:def 3;
+        Seg len (g2.lj) = dom (g2.lj) by FINSEQ_1:def 3
+         .= (Seg j) /\ (Seg j) by A209,A210,A213,MATRLIN:def 2
+         .= Seg j;
+      then A214: len (g2.lj) = j by FINSEQ_1:8;
+      thus (Card f2).j = j by A192,A203,CARD_3:def 2
+         .= (Card g2).(len Card g2 - j + 1) by A197,A214,CARD_3:def 2
+         .= (Rev Card g2).j by A189,A191,FINSEQ_5:def 3;
+     end;
+     then A215: Card f2 = Rev Card g2 by A190,FINSEQ_2:10;
+     A216: len FlattenSeq f2 = Sum Card f2 by POLYNOM1:30
+        .= Sum Card g2 by A215,Th3
+        .= len FlattenSeq g2 by POLYNOM1:30;
+       now let x,y be set;
+      assume that
+       A217: x in dom FlattenSeq g2 and
+       A218: y in dom FlattenSeq g2 and
+       A219: (FlattenSeq g2).x = (FlattenSeq g2).y;
+      consider i1,j1 be Nat such that
+       A220: i1 in dom g2 and
+       A221: j1 in dom (g2.i1) and
+       A222: x = (Sum Card (g2|(i1-'1))) + j1 and
+       A223: (g2.i1).j1 = (FlattenSeq g2).x by A217,POLYNOM1:32;
+      consider i2,j2 be Nat such that
+       A224: i2 in dom g2 and
+       A225: j2 in dom (g2.i2) and
+       A226: y = (Sum Card (g2|(i2-'1))) + j2 and
+       A227: (g2.i2).j2 = (FlattenSeq g2).y by A218,POLYNOM1:32;
+      A228: i1 in Seg (i+1) by A9,A220,FINSEQ_1:def 3;
+      then A229: g2.i1 = ((i+2-'i1) |-> <*i1-'1*>)^^(Decomp(i+1-'i1,2)) by A10;
+      A230: i2 in Seg (i+1) by A9,A224,FINSEQ_1:def 3;
+      then A231: g2.i2 = ((i+2-'i2) |-> <*i2-'1*>)^^(Decomp(i+1-'i2,2)) by A10;
+        j1 in Seg len(g2.i1) & j2 in
+ Seg len(g2.i2) by A221,A225,FINSEQ_1:def 3;
+then A232:    i1 >= 1 & i2 >= 1 & j1 >= 1 & j2 >= 1 by A228,A230,FINSEQ_1:3;
+      A233: i1 <= i+1 by A228,FINSEQ_1:3;
+      then A234: i+1-i1 >= 0 by SQUARE_1:12;
+A235:   i+1+1 >= i+1 by NAT_1:29;
+      then i+1+1 >= i1 by A233,AXIOMS:22;
+      then i+(1+1) >= i1 by XCMPLX_1:1;
+      then A236: i+2-i1 >= 0 by SQUARE_1:12;
+      A237: i+1-'i1+1 = i+1-i1+1 by A234,BINARITH:def 3
+         .= i+1+1-i1 by XCMPLX_1:29
+         .= i+(1+1)-i1 by XCMPLX_1:1
+         .= i+2-'i1 by A236,BINARITH:def 3;
+      A238: dom ((i+2-'i1) |-> <*i1-'1*>) = Seg (i+2-'i1) by FINSEQ_2:68;
+        dom Decomp(i+1-'i1,2) = Seg len Decomp(i+1-'i1,2) by FINSEQ_1:def 3
+         .= Seg (i+2-'i1) by A237,Th9;
+      then A239: dom (g2.i1) = (Seg (i+2-'i1)) /\ (Seg (i+2-'i1))
+                                                    by A229,A238,MATRLIN:def 2
+         .= Seg (i+2-'i1);
+      A240: i2 <= i+1 by A230,FINSEQ_1:3;
+      then A241: i+1-i2 >= 0 by SQUARE_1:12;
+        i+1+1 >= i2 by A235,A240,AXIOMS:22;
+      then i+(1+1) >= i2 by XCMPLX_1:1;
+      then A242: i+2-i2 >= 0 by SQUARE_1:12;
+      A243: i+1-'i2+1 = i+1-i2+1 by A241,BINARITH:def 3
+         .= i+1+1-i2 by XCMPLX_1:29
+         .= i+(1+1)-i2 by XCMPLX_1:1
+         .= i+2-'i2 by A242,BINARITH:def 3;
+      A244: dom ((i+2-'i2) |-> <*i2-'1*>) = Seg (i+2-'i2) by FINSEQ_2:68;
+        dom Decomp(i+1-'i2,2) = Seg len Decomp(i+1-'i2,2) by FINSEQ_1:def 3
+         .= Seg (i+2-'i2) by A243,Th9;
+      then A245: dom (g2.i2) = (Seg (i+2-'i2)) /\ (Seg (i+2-'i2))
+                                                    by A231,A244,MATRLIN:def 2
+         .= Seg (i+2-'i2);
+      A246: (g2.i1).j1=(((i+2-'i1) |-> <*i1-'1*>).j1)^((Decomp(i+1-'i1,2)).j1)
+                                                    by A221,A229,MATRLIN:def 2
+         .= <*i1-'1*> ^ ((Decomp(i+1-'i1,2)).j1) by A221,A239,FINSEQ_2:70
+         .= <*i1-'1*> ^ <*j1-'1,i+1-'i1+1-'j1*> by A221,A237,A239,Th14
+         .= <*i1-'1,j1-'1,i+1-'i1+1-'j1*> by FINSEQ_1:60;
+        (g2.i2).j2=(((i+2-'i2) |-> <*i2-'1*>).j2)^((Decomp(i+1-'i2,2)).j2)
+                                                    by A225,A231,MATRLIN:def 2
+         .= <*i2-'1*> ^ ((Decomp(i+1-'i2,2)).j2) by A225,A245,FINSEQ_2:70
+          .= <*i2-'1*> ^ <*j2-'1,i+1-'i2+1-'j2*> by A225,A243,A245,Th14
+          .= <*i2-'1,j2-'1,i+1-'i2+1-'j2*> by FINSEQ_1:60;
+      then i1-'1 = i2-'1 & j1-'1 = j2-'1 by A219,A223,A227,A246,GROUP_7:3;
+      hence x = y by A222,A226,A232,SCMFSA_7:2;
+     end;
+     then A247: FlattenSeq g2 is one-to-one by FUNCT_1:def 8;
+     then FlattenSeq f2 is one-to-one by A188,A216,FINSEQ_4:76;
+     then FlattenSeq f2,FlattenSeq g2 are_fiberwise_equipotent
+                                                by A188,A247,VECTSP_9:4;
+     then consider P be Permutation of dom (FlattenSeq g2) such that
+      A248: FlattenSeq f2 = (FlattenSeq g2)*P by RFINSEQ:17;
+     reconsider P as Permutation of dom (FlattenSeq g1) by A110;
+       FlattenSeq f1 = (FlattenSeq g1)*P by A102,A131,A248,Th15;
+     hence (p*'q*'r).i = (p*'(q*'r)).i by A2,A5,A43,A74,RLVECT_2:9;
+    end;
+    hence thesis by FUNCT_2:113;
+   end;
+
+  definition
+   let L be Abelian add-associative right_zeroed commutative
+    (non empty doubleLoopStr);
+   let p,q be sequence of L;
+   redefine func p*'q;
+   commutativity
+   proof
+    let p,q be sequence of L;
+      now let i be Nat;
+     consider r1 be FinSequence of the carrier of L such that
+      A1: len r1 = i+1 and
+      A2: (p*'q).i = Sum r1 and
+      A3: for k be Nat st k in dom r1 holds r1.k = p.(k-'1) * q.(i+1-'k)
+                                                                   by Def11;
+     consider r2 be FinSequence of the carrier of L such that
+      A4: len r2 = i+1 and
+      A5: (q*'p).i = Sum r2 and
+      A6: for k be Nat st k in dom r2 holds r2.k = q.(k-'1) * p.(i+1-'k)
+                                                                   by Def11;
+       now let k be Nat;
+      assume A7: k in dom r1;
+      then A8: 1 <= k & k <= i+1 by A1,FINSEQ_3:27;
+      then A9: i+1-k >= 0 by SQUARE_1:12;
+      A10: k-1 >= 0 by A8,SQUARE_1:12;
+        i+1-k+1 > i+1-k by REAL_1:69;
+      then i+1-k+1 >= 0 by A9,AXIOMS:22;
+      then reconsider k1 = len r2 - k + 1 as Nat by A4,INT_1:16;
+      A11: i+1-k+1 >= 0+1 by A9,AXIOMS:24;
+        1-k <= 0 by A8,REAL_2:106;
+      then i+(1-k) <= i+0 by AXIOMS:24;
+      then i+1-k <= i by XCMPLX_1:29;
+      then A12: k1 <= i+1 by A4,AXIOMS:24;
+      then A13: k1 in dom r2 by A4,A11,FINSEQ_3:27;
+      A14: k1-1 >= 0 by A4,A11,SQUARE_1:12;
+        i+1-k1 >= 0 by A12,SQUARE_1:12;
+      then A15: i+1-'k1 = i+1-k1 by BINARITH:def 3
+         .= i+1-(i+1-(k-1)) by A4,XCMPLX_1:37
+         .= k-1 by XCMPLX_1:18
+         .= k-'1 by A10,BINARITH:def 3;
+      A16: i+1-'k = i+1-k by A9,BINARITH:def 3
+         .= i+1-k+1-1 by XCMPLX_1:26
+         .= k1-'1 by A4,A14,BINARITH:def 3;
+      thus r1.k = p.(k-'1) * q.(i+1-'k) by A3,A7
+         .= r2.(len r2 - k + 1) by A6,A13,A15,A16;
+     end;
+     then r1 = Rev r2 by A1,A4,FINSEQ_5:def 3;
+     hence (p*'q).i = (q*'p).i by A2,A5,Th2;
+    end;
+    hence p*'q = q*'p by FUNCT_2:113;
+   end;
+  end;
+
+  theorem
+     for L be add-associative right_zeroed right_complementable
+    right-distributive (non empty doubleLoopStr)
+   for p be sequence of L holds
+    p*'0_.(L) = 0_.(L)
+   proof
+    let L be add-associative right_zeroed right_complementable
+     right-distributive (non empty doubleLoopStr);
+    let p be sequence of L;
+      now let i be Nat;
+     consider r be FinSequence of the carrier of L such that
+        len r = i+1 and
+      A1: (p*'0_.(L)).i = Sum r and
+      A2: for k be Nat st k in dom r holds r.k = p.(k-'1) * (0_.(L)).(i+1-'k)
+                                                                   by Def11;
+       now let k be Nat;
+      assume k in dom r;
+      hence r.k = p.(k-'1) * (0_.(L)).(i+1-'k) by A2
+         .= p.(k-'1) * 0.L by Th28
+         .= 0.L by VECTSP_1:36;
+     end;
+     hence (p*'0_.(L)).i = 0.L by A1,Th1
+        .= (0_.(L)).i by Th28;
+    end;
+    hence thesis by FUNCT_2:113;
+   end;
+
+  theorem Th36:
+   for L be add-associative right_zeroed right_unital right_complementable
+    right-distributive (non empty doubleLoopStr)
+   for p be sequence of L holds
+    p*'1_.(L) = p
+   proof
+    let L be add-associative right_zeroed right_unital right_complementable
+     right-distributive (non empty doubleLoopStr);
+    let p be sequence of L;
+      now let i be Nat;
+     consider r be FinSequence of the carrier of L such that
+      A1: len r = i+1 and
+      A2: (p*'1_.(L)).i = Sum r and
+      A3: for k be Nat st k in dom r holds r.k = p.(k-'1) * (1_.(L)).(i+1-'k)
+                                                                   by Def11;
+       i+1 in Seg len r by A1,FINSEQ_1:6;
+     then A4: i+1 in dom r by FINSEQ_1:def 3;
+       r = Del(r,i+1) ^ <*r.(i+1)*> by A1,MATRLIN:6
+      .= Del(r,i+1) ^ <*r/.(i+1)*> by A4,FINSEQ_4:def 4;
+     then A5: Sum r = Sum Del(r,i+1) + Sum <*r/.(i+1)*> by RLVECT_1:58
+        .= Sum Del(r,i+1) + (r/.(i+1)) by RLVECT_1:61;
+       now let k be Nat;
+      assume k in dom Del(r,i+1);
+      then k in Seg len Del(r,i+1) by FINSEQ_1:def 3;
+      then k in Seg i by A1,MATRLIN:3;
+      then A6: 1 <= k & k <= i by FINSEQ_1:3;
+      then A7: k < i+1 by NAT_1:38;
+      then A8: i+1-k <> 0 by XCMPLX_1:15;
+        i+1-k >= 0 by A7,SQUARE_1:12;
+      then A9: i+1-'k <> 0 by A8,BINARITH:def 3;
+        k in Seg (i+1) by A6,A7,FINSEQ_1:3;
+      then A10: k in dom r by A1,FINSEQ_1:def 3;
+      thus Del(r,i+1).k = r.k by A1,A7,GOBOARD1:8
+         .= p.(k-'1) * (1_.(L)).(i+1-'k) by A3,A10
+         .= p.(k-'1) * 0.L by A9,Th31
+         .= 0.L by VECTSP_1:36;
+     end;
+     then A11: Sum Del(r,i+1) = 0.L by Th1;
+       r/.(i+1) = r.(i+1) by A4,FINSEQ_4:def 4
+        .= p.(i+1-'1) * (1_.(L)).(i+1-'(i+1)) by A3,A4
+        .= p.i * (1_.(L)).(i+1-'(i+1)) by BINARITH:39
+        .= p.i * (1_.(L)).0 by GOBOARD9:1
+        .= (p.i) * (1_(L)) by Th31
+        .= p.i by VECTSP_1:def 13;
+     hence (p*'1_.(L)).i = p.i by A2,A5,A11,RLVECT_1:10;
+    end;
+    hence thesis by FUNCT_2:113;
+   end;
+
+begin  :: The Ring of Polynomials
+
+  definition
+   let L be add-associative right_zeroed right_complementable distributive
+    (non empty doubleLoopStr);
+   func Polynom-Ring L -> strict non empty doubleLoopStr means :Def12:
+    (for x be set holds x in the carrier of it iff x is Polynomial of L) &
+    (for x,y be Element of it, p,q be sequence of L st
+      x = p & y = q holds x+y = p+q) &
+    (for x,y be Element of it, p,q be sequence of L st
+      x = p & y = q holds x*y = p*'q) &
+    0.it = 0_.(L) &
+    1_(it) = 1_.(L);
+   existence
+   proof
+    A1: 0_.(L) in {x where x is Polynomial of L : not contradiction};
+    then reconsider Ca = {x where x is Polynomial of L : not contradiction}
+                                                            as non empty set;
+    defpred P[set,set,set] means
+     ex p,q be Polynomial of L st p=$1 & q=$2 & $3=p+q;
+    A2: for x,y be Element of Ca ex u be Element of Ca st P[x,y,u]
+    proof
+     let x,y be Element of Ca;
+       x in Ca;
+     then consider p be Polynomial of L such that
+      A3: x=p;
+       y in Ca;
+     then consider q be Polynomial of L such that
+      A4: y=q;
+       p+q in Ca;
+     then reconsider u=p+q as Element of Ca;
+     take u,p,q;
+     thus thesis by A3,A4;
+    end;
+    consider Ad be Function of [:Ca,Ca:],Ca such that
+     A5: for x,y be Element of Ca holds P[x,y,Ad.[x,y]] from FuncEx2D(A2);
+    defpred P[set,set,set] means
+     ex p,q be Polynomial of L st p=$1 & q=$2 & $3=p*'q;
+    A6: for x,y be Element of Ca ex u be Element of Ca st P[x,y,u]
+    proof
+     let x,y be Element of Ca;
+       x in Ca;
+     then consider p be Polynomial of L such that
+      A7: x=p;
+       y in Ca;
+     then consider q be Polynomial of L such that
+      A8: y=q;
+       p*'q in Ca;
+     then reconsider u=p*'q as Element of Ca;
+     take u,p,q;
+     thus thesis by A7,A8;
+    end;
+    consider Mu be Function of [:Ca,Ca:],Ca such that
+     A9: for x,y be Element of Ca holds P[x,y,Mu.[x,y]] from FuncEx2D(A6);
+      1_.(L) in {x where x is Polynomial of L : not contradiction};
+    then reconsider Un = 1_.(L) as Element of Ca;
+    reconsider Ze = 0_.(L) as Element of Ca by A1;
+    reconsider P = doubleLoopStr(# Ca, Ad, Mu, Un, Ze #)
+     as strict non empty doubleLoopStr;
+    take P;
+    thus for x be set holds x in the carrier of P iff x is Polynomial of L
+    proof
+     let x be set;
+     thus x in the carrier of P implies x is Polynomial of L
+     proof
+      assume x in the carrier of P;
+      then consider p be Polynomial of L such that
+       A10: x=p;
+      thus x is Polynomial of L by A10;
+     end;
+     thus thesis;
+    end;
+    thus for x,y be Element of P, p,q be sequence of L st
+     x = p & y = q holds x+y = p+q
+    proof
+     let x,y be Element of P;
+     let p,q be sequence of L;
+     assume that
+      A11: x = p and
+      A12: y = q;
+     consider p1,q1 be Polynomial of L such that
+      A13: p1 = x and
+      A14: q1 = y and
+      A15: Ad.[x,y] = p1+q1 by A5;
+     thus x+y = p+q by A11,A12,A13,A14,A15,RLVECT_1:def 3;
+    end;
+    thus for x,y be Element of P, p,q be sequence of L st
+     x = p & y = q holds x*y = p*'q
+    proof
+     let x,y be Element of P;
+     let p,q be sequence of L;
+     assume that
+      A16: x = p and
+      A17: y = q;
+A18:  ex p1,q1 be Polynomial of L st p1 = x & q1 = y & Mu.[x,y] = p1*'q1 by A9;
+     thus x*y = Mu.(x,y) by VECTSP_1:def 10
+        .= p*'q by A16,A17,A18,BINOP_1:def 1;
+    end;
+    thus 0.P = 0_.(L) by RLVECT_1:def 2;
+    thus 1_(P) = 1_.(L) by VECTSP_1:def 9;
+   end;
+   uniqueness
+   proof
+    let P1,P2 be strict non empty doubleLoopStr such that
+     A19: for x be set holds x in
+ the carrier of P1 iff x is Polynomial of L and
+     A20: for x,y be Element of P1, p,q be sequence of L st
+      x = p & y = q holds x+y = p+q and
+     A21: for x,y be Element of P1, p,q be sequence of L st
+      x = p & y = q holds x*y = p*'q and
+     A22: 0.P1 = 0_.(L) and
+     A23: 1_(P1) = 1_.(L) and
+     A24: for x be set holds x in
+ the carrier of P2 iff x is Polynomial of L and
+     A25: for x,y be Element of P2, p,q be sequence of L st
+      x = p & y = q holds x+y = p+q and
+     A26: for x,y be Element of P2, p,q be sequence of L st
+      x = p & y = q holds x*y = p*'q and
+     A27: 0.P2 = 0_.(L) and
+     A28: 1_(P2) = 1_.(L);
+    A29: now let x be set;
+       x in the carrier of P1 iff x is Polynomial of L by A19;
+     hence x in the carrier of P1 iff x in the carrier of P2 by A24;
+    end;
+    then A30: the carrier of P1 = the carrier of P2 by TARSKI:2;
+      now let x be Element of P1,
+            y be Element of P2;
+     reconsider x1=x as Element of P2 by A29;
+     reconsider y1=y as Element of P1 by A29;
+     reconsider p=x as sequence of L by A19;
+     reconsider q=y as sequence of L by A24;
+     thus (the add of P1).(x,y) = x+y1 by RLVECT_1:5
+        .= p+q by A20
+        .= x1+y by A25
+        .= (the add of P2).(x,y) by RLVECT_1:5;
+    end;
+    then A31: the add of P1 = the add of P2 by A30,BINOP_1:2;
+    A32: now let x be Element of P1,
+            y be Element of P2;
+     reconsider x1=x as Element of P2 by A29;
+     reconsider y1=y as Element of P1 by A29;
+     reconsider p=x as sequence of L by A19;
+     reconsider q=y as sequence of L by A24;
+     thus (the mult of P1).(x,y) = x*y1 by VECTSP_1:def 10
+        .= p*'q by A21
+        .= x1*y by A26
+        .= (the mult of P2).(x,y) by VECTSP_1:def 10;
+    end;
+    A33: the unity of P1 = 1_.(L) by A23,VECTSP_1:def 9
+       .= the unity of P2 by A28,VECTSP_1:def 9;
+      the Zero of P1 = 0_.(L) by A22,RLVECT_1:def 2
+       .= the Zero of P2 by A27,RLVECT_1:def 2;
+    hence P1 = P2 by A30,A31,A32,A33,BINOP_1:2;
+   end;
+  end;
+
+  definition
+   let L be Abelian add-associative right_zeroed right_complementable
+                                      distributive (non empty doubleLoopStr);
+   cluster Polynom-Ring L -> Abelian;
+   coherence
+   proof
+    let p,q be Element of Polynom-Ring L;
+    reconsider p1=p, q1=q as sequence of L by Def12;
+    thus p + q = p1 + q1 by Def12
+       .= q + p by Def12;
+   end;
+  end;
+
+  definition
+   let L be add-associative right_zeroed right_complementable
+                                      distributive (non empty doubleLoopStr);
+   cluster Polynom-Ring L -> add-associative;
+   coherence
+   proof
+    let p,q,r be Element of Polynom-Ring L;
+    reconsider p1=p, q1=q, r1=r as sequence of L by Def12;
+    A1: q + r = q1 + r1 by Def12;
+      p + q = p1 + q1 by Def12;
+    hence (p + q) + r = (p1 + q1) + r1 by Def12
+       .= p1 + (q1 + r1) by Th26
+       .= p + (q + r) by A1,Def12;
+   end;
+
+   cluster Polynom-Ring L -> right_zeroed;
+   coherence
+   proof
+    let p be Element of Polynom-Ring L;
+    reconsider p1=p as sequence of L by Def12;
+      0.(Polynom-Ring L) = 0_.(L) by Def12;
+    hence p + 0.(Polynom-Ring L) = p1 + 0_.(L) by Def12
+       .= p by Th29;
+   end;
+
+   cluster Polynom-Ring L -> right_complementable;
+   coherence
+   proof
+    let p be Element of Polynom-Ring L;
+    reconsider p1=p as Polynomial of L by Def12;
+    reconsider q = -p1 as Element of Polynom-Ring L by Def12;
+    take q;
+    thus p + q = p1 + -p1 by Def12
+       .= p1 - p1 by Def8
+       .= 0_.(L) by Th30
+       .= 0.(Polynom-Ring L) by Def12;
+   end;
+  end;
+
+  definition
+   let L be Abelian add-associative right_zeroed right_complementable
+                          commutative distributive (non empty doubleLoopStr);
+   cluster Polynom-Ring L -> commutative;
+   coherence
+   proof
+    let p,q be Element of Polynom-Ring L;
+    reconsider p1=p, q1=q as sequence of L by Def12;
+    thus p * q = p1 *' q1 by Def12
+       .= q * p by Def12;
+   end;
+  end;
+
+  definition
+   let L be Abelian add-associative right_zeroed right_complementable unital
+                          associative distributive (non empty doubleLoopStr);
+   cluster Polynom-Ring L -> associative;
+   coherence
+   proof
+    let p,q,r be Element of Polynom-Ring L;
+    reconsider p1=p, q1=q, r1=r as sequence of L by Def12;
+    A1: q * r = q1 *' r1 by Def12;
+      p * q = p1 *' q1 by Def12;
+    hence (p * q) * r = (p1 *' q1) *' r1 by Def12
+       .= p1 *' (q1 *' r1) by Th34
+       .= p * (q * r) by A1,Def12;
+   end;
+  end;
+
+  definition
+   let L be add-associative right_zeroed right_complementable right_unital
+                                      distributive (non empty doubleLoopStr);
+   cluster Polynom-Ring L -> right_unital;
+   coherence
+   proof
+    let p be Element of Polynom-Ring L;
+    reconsider p1=p as sequence of L by Def12;
+      1_(Polynom-Ring L) = 1_.(L) by Def12;
+    hence p * 1_(Polynom-Ring L) = p1 *' 1_.(L) by Def12
+       .= p by Th36;
+   end;
+  end;
+
+  definition
+   let L be Abelian add-associative right_zeroed right_complementable
+                                      distributive (non empty doubleLoopStr);
+   cluster Polynom-Ring L -> distributive;
+   coherence
+   proof
+    let p,q,r be Element of Polynom-Ring L;
+    reconsider p1=p, q1=q, r1=r as sequence of L by Def12;
+    A1: p*q = p1*'q1 & p*r = p1*'r1 by Def12;
+      q+r = q1+r1 by Def12;
+    hence p*(q+r) = p1*'(q1+r1) by Def12
+       .= p1*'q1+p1*'r1 by Th32
+       .= p*q+p*r by A1,Def12;
+    A2: q*p = q1*'p1 & r*p = r1*'p1 by Def12;
+      q+r = q1+r1 by Def12;
+    hence (q+r)*p = (q1+r1)*'p1 by Def12
+       .= q1*'p1+r1*'p1 by Th33
+       .= q*p+r*p by A2,Def12;
+   end;
+  end;

@@ -1,0 +1,892 @@
+:: Some Elementary Notions of the Theory of Petri Nets
+::  by Waldemar Korczy\'nski
+::
+:: Received August 10, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, BOOLE, TARSKI, NET_1, SETFAM_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1;
+ constructors REAL_1, SETFAM_1, XBOOLE_0;
+ clusters RELAT_1, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions XBOOLE_0;
+ theorems TARSKI, ZFMISC_1, XBOOLE_0, XBOOLE_1;
+ schemes XBOOLE_0, SETFAM_1;
+
+begin
+
+definition
+ struct Net (# Places, Transitions -> set, Flow -> Relation #);
+end;
+
+::The above definition describes a "structure  of a Petri net" which
+::is a kind of relational system.
+
+ reserve x,y for set;
+ reserve N for Net;
+
+ definition
+  let N be Net;
+  attr N is Petri means
+  :Def1: the Places of N misses the Transitions of N &
+  (the Flow of N) c= [:the Places of N, the Transitions of N:] \/
+                          [:the Transitions of N, the Places of N:];
+  synonym N is_Petri_net;
+ end;
+
+:: A Petri net is defined as a triple of the form
+::        N = (Places, Transitions, Flow)
+:: with Places and Transitions being disjoint sets and
+::   Flow c= (Transitions x Places) U (Places x Transitions)
+:: It is allowed that both sets Places and Transitions are empty.
+:: A Petri net is here described as a predicate defined in the set
+:: (on the mode) Net.
+
+ definition
+  let N be Net;
+  func Elements(N) equals
+  :Def2: (the Places of N) \/ (the Transitions of N);
+  correctness;
+ end;
+
+:: The set Elements(N) of so called "elements of a Petri net is defined
+:: as the union of its Places and Transitions. Here a function assigning
+:: to a Petri net such a set is defined.
+
+canceled 3;
+
+theorem
+Th4:  (the Places of N) c= Elements(N)
+proof
+   Elements(N) = (the Places of N) \/ (the Transitions of N) by Def2;
+ hence thesis by XBOOLE_1:7;
+end;
+
+theorem Th5:
+  (the Transitions of N) c= Elements(N)
+proof
+   Elements(N) = (the Places of N) \/ (the Transitions of N) by Def2;
+ hence thesis by XBOOLE_1:7;
+end;
+
+:: The above definition describes the set of elements of a Petri net
+:: as a (parametrized) TYPE ("mode" in Mizar) which is sometimes
+:: "technically" (because of the Mizar -writing  technology) more
+:: convenient.
+
+theorem
+ Th6:x in Elements(N) iff
+      x in the Places of N or x in the Transitions of N
+ proof
+    x in Elements(N) iff
+            x in (the Places of N) \/ the Transitions of N by Def2;
+  hence thesis by XBOOLE_0:def 2;
+ end;
+
+theorem
+   Elements(N) <> {} implies
+  (x is Element of Elements(N) implies
+      x is Element of the Places of N or
+        x is Element of the Transitions of N) by Th6;
+
+theorem
+   x is Element of the Places of N &
+           the Places of N <> {} implies x is Element of Elements(N)
+ proof
+  assume A1:x is Element of the Places of N & the Places of N <> {};
+    the Places of N c= Elements(N) by Th4;
+  hence thesis by A1,TARSKI:def 3;
+ end;
+
+theorem
+   x is Element of the Transitions of N &
+           the Transitions of N <> {} implies x is Element of Elements(N)
+ proof
+  assume A1:x is Element of the Transitions of N & the Transitions of N <> {};
+    the Transitions of N c= Elements(N) by Th5;
+  hence thesis by A1,TARSKI:def 3;
+ end;
+
+ Lm1:Net (# {} , {} , {} #) is_Petri_net
+  proof
+   set N = Net (# {} , {} , {} #);
+   thus (the Places of N) /\ the Transitions of N = {};
+   thus thesis by XBOOLE_1:2;
+  end;
+
+definition
+ cluster Net (#{}, {}, {}#) -> Petri;
+ coherence by Lm1;
+end;
+
+:: This lemma is of rather "technical" nature. It allows a definition
+:: of a "subtype" of the type Net. (see the following definition of the
+:: type Pnet).
+
+definition
+ cluster strict Petri Net;
+  existence
+   proof
+       Net (# {} , {} , {} #) is Petri;
+    hence thesis;
+   end;
+end;
+
+definition
+  mode Pnet is Petri Net;
+end;
+
+:: The above definition defines a Petri net as a TYPE of the structure
+:: Net. The type is not empty.
+
+canceled;
+
+theorem Th11:
+for N being Pnet holds
+ not (x in the Places of N & x in the Transitions of N)
+ proof let N be Pnet;
+    (the Places of N) misses (the Transitions of N) by Def1;
+  hence thesis by XBOOLE_0:3;
+ end;
+
+:: This lemma is of rather "technical" character. It will be used in the
+:: proof of the correctness of a definition of a function bellow. (See
+:: the definition of the functions Enter and Exit.)
+
+theorem
+Th12:for N being Pnet holds
+       ([x,y] in the Flow of N & x in the Transitions of N)
+                                      implies y in the Places of N
+proof
+ let N be Pnet;
+ assume A1:[x,y] in the Flow of N & x in the Transitions of N;
+   (the Flow of N) c= [:the Places of N , the Transitions of N:] \/
+               [:the Transitions of N , the Places of N:] by Def1;
+ then A2:[x,y] in [:the Places of N , the Transitions of N:] or
+        [x,y] in [:the Transitions of N , the Places of N:] by A1,XBOOLE_0:def
+2;
+   not(x in the Places of N) by A1,Th11;
+ hence thesis by A2,ZFMISC_1:106;
+end;
+
+theorem
+Th13:  for N being Pnet holds
+       ([x,y] in the Flow of N & y in the Transitions of N)
+                                      implies x in the Places of N
+proof
+ let N be Pnet;
+ assume A1:[x,y] in the Flow of N & y in the Transitions of N;
+   (the Flow of N) c= [:the Places of N , the Transitions of N:] \/
+               [:the Transitions of N , the Places of N:] by Def1;
+ then A2:[x,y] in [:the Places of N , the Transitions of N:] or
+        [x,y] in [:the Transitions of N , the Places of N:] by A1,XBOOLE_0:def
+2;
+   not(y in the Places of N) by A1,Th11;
+ hence thesis by A2,ZFMISC_1:106;
+end;
+
+theorem
+  for N being Pnet holds
+       ([x,y] in the Flow of N & x in the Places of N)
+                                      implies y in the Transitions of N
+proof
+ let N be Pnet;
+ assume A1:[x,y] in the Flow of N & x in the Places of N;
+   (the Flow of N) c= [:the Places of N, the Transitions of N:] \/
+               [:the Transitions of N,the Places of N :] by Def1;
+ then A2:[x,y] in [:the Transitions of N , the Places of N:] or
+        [x,y] in [:the Places of N , the Transitions of N:] by A1,XBOOLE_0:def
+2;
+   not(x in the Transitions of N) by A1,Th11;
+ hence thesis by A2,ZFMISC_1:106;
+end;
+
+theorem
+  for N being Pnet holds
+       ([x,y] in the Flow of N & y in the Places of N)
+                                      implies x in the Transitions of N
+proof
+ let N be Pnet;
+ assume A1:[x,y] in the Flow of N & y in the Places of N;
+   (the Flow of N) c= [:the Places of N, the Transitions of N:] \/
+               [:the Transitions of N,the Places of N :] by Def1;
+ then A2:[x,y] in [:the Transitions of N , the Places of N:] or
+        [x,y] in [:the Places of N , the Transitions of N:] by A1,XBOOLE_0:def
+2;
+   not(y in the Transitions of N) by A1,Th11;
+ hence thesis by A2,ZFMISC_1:106;
+end;
+
+ definition
+  let N be Pnet;
+  let x,y;
+ canceled 2;
+
+  pred pre N,x,y means
+   :Def5: [y,x] in the Flow of N & x in the Transitions of N;
+
+  pred post N,x,y means
+   :Def6: [x,y] in the Flow of N & x in the Transitions of N;
+ end;
+
+  definition
+   let N be Net;
+   let x be Element of Elements(N);
+   func Pre(N,x) means
+   :Def7: y in it iff y in Elements(N) & [y,x] in the Flow of N;
+  existence proof
+   defpred P[set] means [$1,x] in the Flow of N;
+   thus ex IT being set st
+ for y being set holds y in IT iff y in Elements(N) & P[y] from Separation;
+  end;
+  uniqueness
+   proof
+    let X,Y be set such that
+   A1:y in X iff y in Elements(N) & [y,x] in the Flow of N and
+   A2:y in Y iff y in Elements(N) & [y,x] in the Flow of N;
+      for y holds y in X iff y in Y
+    proof
+    A3:y in X implies y in Y
+     proof
+      assume y in X;
+      then y in Elements(N) & [y,x] in the Flow of N by A1;
+      hence thesis by A2;
+     end;
+       y in Y implies y in X
+     proof
+      assume y in Y;
+      then y in Elements(N) & [y,x] in the Flow of N by A2;
+      hence thesis by A1;
+     end;
+     hence thesis by A3;
+    end;
+    hence thesis by TARSKI:2;
+   end;
+
+   func Post(N,x) means
+   :Def8: y in it iff y in Elements(N) & [x,y] in the Flow of N;
+  existence proof
+   defpred P[set] means [x,$1] in the Flow of N;
+   thus ex IT being set st
+   for y being set holds y in IT iff y in Elements(N) & P[y] from Separation;
+  end;
+  uniqueness
+   proof
+    let X,Y be set such that
+   A4:y in X iff y in Elements(N) & [x,y] in the Flow of N and
+   A5:y in Y iff y in Elements(N) & [x,y] in the Flow of N;
+      for y holds y in X iff y in Y
+    proof
+    A6:y in X implies y in Y
+     proof
+      assume y in X;
+      then y in Elements(N) & [x,y] in the Flow of N by A4;
+      hence thesis by A5;
+     end;
+       y in Y implies y in X
+     proof
+      assume y in Y;
+      then y in Elements(N) & [x,y] in the Flow of N by A5;
+      hence thesis by A4;
+     end;
+     hence thesis by A6;
+    end;
+    hence thesis by TARSKI:2;
+   end;
+  end;
+
+theorem
+ Th16:for N being Pnet
+   for x being Element of Elements(N) holds Pre(N,x) c= Elements(N)
+ proof
+  let N be Pnet;
+  let x be Element of Elements(N);
+    for y holds y in Pre(N,x) implies y in Elements(N) by Def7;
+  hence thesis by TARSKI:def 3;
+ end;
+
+theorem
+   for N being Pnet
+   for x being Element of Elements N holds Pre(N,x) c= Elements N by Th16;
+
+theorem
+ Th18:for N being Pnet
+   for x being Element of Elements(N) holds Post(N,x) c= Elements(N)
+ proof
+  let N be Pnet;
+  let x be Element of Elements(N);
+    for y holds y in Post(N,x) implies y in Elements(N) by Def8;
+  hence thesis by TARSKI:def 3;
+ end;
+
+theorem
+   for N being Pnet
+  for x being Element of Elements N holds Post(N,x) c= Elements N by Th18;
+
+theorem
+   for N being Pnet
+          for y being Element of Elements(N) holds
+  y in the Transitions of N implies (x in Pre(N,y) iff pre N,y,x)
+ proof
+  let N be Pnet;
+  let y be Element of Elements(N);
+  assume A1:y in the Transitions of N;
+A2:x in Pre(N,y) implies pre N,y,x
+  proof
+  assume x in Pre(N,y);
+  then [x,y] in the Flow of N by Def7;
+  hence thesis by A1,Def5;
+ end;
+  pre N,y,x implies x in Pre(N,y)
+ proof
+  assume pre N,y,x;
+  then A3:[x,y] in the Flow of N by Def5;
+  then x in the Places of N by A1,Th13;
+  then x in Elements(N) by Th6;
+  hence thesis by A3,Def7;
+ end;
+ hence thesis by A2;
+ end;
+
+theorem
+   for N being Pnet
+          for y being Element of Elements(N) holds
+  y in the Transitions of N implies (x in Post(N,y) iff post N,y,x)
+ proof
+  let N be Pnet;
+  let y be Element of Elements(N);
+  assume A1:y in the Transitions of N;
+A2:x in Post(N,y) implies post N,y,x
+  proof
+  assume x in Post(N,y);
+  then [y,x] in the Flow of N by Def8;
+  hence thesis by A1,Def6;
+ end;
+  post N,y,x implies x in Post(N,y)
+ proof
+  assume post N,y,x;
+  then A3:[y,x] in the Flow of N by Def6;
+  then x in the Places of N by A1,Th12;
+  then x in Elements(N) by Th6;
+  hence thesis by A3,Def8;
+ end;
+ hence thesis by A2;
+ end;
+
+  definition
+   let N be Pnet;
+   let x be Element of Elements(N);
+   assume A1: Elements(N) <> {};
+   func enter(N,x) means
+   :Def9: (x in the Places of N implies it = {x}) &
+            (x in the Transitions of N implies it = Pre(N,x));
+   existence
+    proof
+         not(x in the Places of N & x in the Transitions of N) by Th11;
+      hence thesis;
+    end;
+   uniqueness by A1,Th6;
+  end;
+
+theorem
+Th22:for N being Pnet for x being Element of Elements(N) holds
+    Elements(N) <> {} implies enter(N,x) ={x} or enter(N,x) = Pre(N,x)
+ proof
+  let N be Pnet;
+  let x be Element of Elements(N);
+  assume A1:Elements(N) <> {};
+  then x in (the Places of N) or x in (the Transitions of N) by Th6;
+  hence thesis by A1,Def9;
+ end;
+
+theorem
+Th23:for N being Pnet for x being Element of Elements(N) holds
+          Elements(N) <> {} implies enter(N,x) c= Elements(N)
+ proof
+  let N be Pnet;
+  let x be Element of Elements(N);
+  assume A1:Elements(N) <> {};
+  then A2:enter(N,x) ={x} or enter(N,x) = Pre(N,x) by Th22;
+    enter(N,x) ={x} implies enter(N,x) c= Elements(N)
+  proof
+   assume A3:enter(N,x) ={x};
+     x in Elements(N) by A1;
+   then for y holds y in {x} implies y in Elements(N) by TARSKI:def 1;
+   hence thesis by A3,TARSKI:def 3;
+  end;
+  hence thesis by A2,Th16;
+ end;
+
+theorem
+   for N being Pnet
+   for x being Element of Elements N holds
+     Elements N <> {} implies enter(N,x) c= Elements N by Th23;
+
+  definition
+   let N be Pnet;
+   let x be Element of Elements(N);
+   assume A1: Elements(N) <> {};
+   func exit(N,x) -> set means
+   :Def10: (x in the Places of N implies it = {x}) &
+            (x in the Transitions of N implies it = Post(N,x));
+   existence
+    proof
+         not(x in the Places of N & x in the Transitions of N) by Th11;
+      hence thesis;
+    end;
+   uniqueness by A1,Th6;
+  end;
+
+theorem
+ Th25:for N being Pnet for x being Element of Elements(N) holds
+          Elements(N) <> {} implies exit(N,x) ={x} or
+                                  exit(N,x) = Post(N,x)
+ proof
+  let N be Pnet;
+  let x be Element of Elements(N);
+  assume A1:Elements(N) <> {};
+  then x in (the Places of N) or x in (the Transitions of N) by Th6;
+  hence thesis by A1,Def10;
+ end;
+
+theorem
+Th26:for N being Pnet for x being Element of Elements(N) holds
+          Elements(N) <> {} implies exit(N,x) c= Elements(N)
+ proof
+  let N be Pnet;
+  let x be Element of Elements(N);
+  assume A1:Elements(N) <> {};
+  then A2:exit(N,x) ={x} or exit(N,x) = Post(N,x) by Th25;
+    exit(N,x) ={x} implies exit(N,x) c= Elements(N)
+  proof
+   assume A3:exit(N,x) ={x};
+     x in Elements(N) by A1;
+   then for y holds y in {x} implies y in Elements(N) by TARSKI:def 1;
+   hence thesis by A3,TARSKI:def 3;
+  end;
+  hence thesis by A2,Th18;
+ end;
+
+theorem
+   for N being Pnet
+   for x being Element of Elements N holds
+     Elements N <> {} implies exit(N,x) c= Elements N by Th26;
+
+  definition
+   let N be Pnet;
+   let x be Element of Elements(N);
+   func field(N,x) equals
+       enter(N,x) \/ exit(N,x);
+   correctness;
+  end;
+
+ definition
+  let N be Net;
+  let x be Element of the Transitions of N;
+  func Prec(N,x) means
+    y in it iff y in the Places of N &
+     [y,x] in the Flow of N;
+  existence proof
+   defpred P[set] means [$1,x] in the Flow of N;
+   thus ex IT being set st
+ for y being set holds y in IT iff y in the Places of N & P[y] from Separation;
+  end;
+   uniqueness
+   proof
+    let X,Y be set such that
+   A1:y in X iff y in the Places of N & [y,x] in the Flow of N and
+   A2:y in Y iff y in the Places of N & [y,x] in the Flow of N;
+      for y holds y in X iff y in Y
+    proof
+    A3:y in X implies y in Y
+     proof
+      assume y in X;
+      then y in the Places of N & [y,x] in the Flow of N by A1;
+      hence thesis by A2;
+     end;
+       y in Y implies y in X
+     proof
+      assume y in Y;
+      then y in the Places of N & [y,x] in the Flow of N by A2;
+      hence thesis by A1;
+     end;
+     hence thesis by A3;
+    end;
+    hence thesis by TARSKI:2;
+   end;
+
+  func Postc(N,x) means
+     y in it iff y in the Places of N & [x,y] in the Flow of N;
+  existence proof
+   defpred P[set] means [x,$1] in the Flow of N;
+thus ex IT being set st
+ for y being set holds y in IT iff y in the Places of N & P[y]from Separation;
+  end;
+   uniqueness
+   proof
+    let X,Y be set such that
+   A4:y in X iff y in the Places of N & [x,y] in the Flow of N and
+   A5:y in Y iff y in the Places of N & [x,y] in the Flow of N;
+      for y holds y in X iff y in Y
+    proof
+    A6:y in X implies y in Y
+     proof
+      assume y in X;
+      then y in the Places of N & [x,y] in the Flow of N by A4;
+      hence thesis by A5;
+     end;
+       y in Y implies y in X
+     proof
+      assume y in Y;
+      then y in the Places of N & [x,y] in the Flow of N by A5;
+      hence thesis by A4;
+     end;
+     hence thesis by A6;
+    end;
+    hence thesis by TARSKI:2;
+   end;
+  end;
+
+  definition
+   let N be Pnet;
+   let X be set;
+   func Entr(N,X) means
+   :Def14:x in it iff x c= Elements N &
+       ex y being Element of Elements N st y in X & x = enter(N,y);
+   existence
+    proof
+    defpred P[set] means
+    ex y being Element of Elements N st y in X & $1 = enter(N,y);
+      consider F being Subset-Family of Elements N such that
+A1:     for x being Subset of Elements N
+        holds x in F iff P[x] from SubFamEx;
+     take F;
+     thus thesis by A1;
+    end;
+   uniqueness
+   proof
+    let W,Y be set such that
+   A2:for x holds x in W iff x c= Elements N &
+       ex y being Element of Elements(N) st y in X & x = enter(N,y) and
+   A3:for x holds x in Y iff x c= Elements N &
+       ex y being Element of Elements(N) st y in X & x = enter(N,y);
+      for x holds x in W iff x in Y
+    proof
+    A4:x in W implies x in Y
+     proof
+      assume x in W;
+      then x c= Elements N &
+       ex y being Element of Elements(N) st y in X & x = enter(N,y) by A2;
+      hence thesis by A3;
+     end;
+       x in Y implies x in W
+     proof
+      assume x in Y;
+      then x c= Elements N &
+       ex y being Element of Elements(N) st y in X & x = enter(N,y) by A3;
+      hence thesis by A2;
+     end;
+     hence thesis by A4;
+    end;
+    hence thesis by TARSKI:2;
+   end;
+
+   func Ext(N,X) means
+   :Def15:x in it iff x c= Elements N &
+       ex y being Element of Elements N st y in X & x = exit(N,y);
+   existence
+    proof
+      defpred P[set] means
+      ex y being Element of Elements N st y in X & $1 = exit(N,y);
+      consider F being Subset-Family of Elements N such that
+A5:     for x being Subset of Elements N
+        holds x in F iff P[x] from SubFamEx;
+     take F;
+     thus thesis by A5;
+    end;
+   uniqueness
+   proof
+    let W,Y be set such that
+   A6:for x holds x in W iff x c= Elements N &
+      ex y being Element of Elements(N) st y in X & x = exit(N,y) and
+   A7:for x holds x in Y iff x c= Elements N &
+       ex y being Element of Elements(N) st y in X & x = exit(N,y);
+      for x holds x in W iff x in Y
+    proof
+    A8:x in W implies x in Y
+     proof
+      assume x in W;
+      then x c= Elements N &
+       ex y being Element of Elements(N) st y in X & x = exit(N,y) by A6;
+      hence thesis by A7;
+     end;
+       x in Y implies x in W
+     proof
+      assume x in Y;
+      then x c= Elements N &
+       ex y being Element of Elements(N) st y in X & x = exit(N,y) by A7;
+      hence thesis by A6;
+     end;
+     hence thesis by A8;
+    end;
+    hence thesis by TARSKI:2;
+   end;
+  end;
+
+theorem
+Th28:for N being Pnet
+           for x being Element of Elements(N)
+             for X being set holds
+              Elements(N) <> {} & X c= Elements(N) & x in X implies
+               enter(N,x) in Entr(N,X)
+  proof
+   let N be Pnet;
+   let x be Element of Elements(N);
+   let X be set;
+   assume A1:Elements(N) <> {} & X c= Elements(N) & x in X;
+   then enter(N,x) c= Elements N by Th23;
+   hence thesis by A1,Def14;
+  end;
+
+theorem
+Th29:for N being Pnet
+           for x being Element of Elements(N)
+             for X being set holds
+              Elements(N) <> {} & X c= Elements(N) & x in X implies
+               exit(N,x) in Ext(N,X)
+  proof
+   let N be Pnet;
+   let x be Element of Elements(N);
+   let X be set;
+   assume A1:Elements(N) <> {} & X c= Elements(N) & x in X;
+   then exit(N,x) c= Elements N by Th26;
+   hence thesis by A1,Def15;
+  end;
+
+  definition
+   let N be Pnet;
+   let X be set;
+   func Input(N,X) equals
+   :Def16: union Entr(N,X);
+   correctness;
+
+   func Output(N,X) equals
+   :Def17: union Ext(N,X);
+   correctness;
+  end;
+
+theorem
+    for N being Pnet for x for X being set holds
+         Elements(N) <> {} & X c= Elements(N) implies
+          (x in Input(N,X) iff
+            ex y being Element of Elements(N) st y in X & x in enter(N,y))
+proof
+ let N be Pnet;
+ let x;
+ let X be set;
+ assume A1:Elements(N) <> {} & X c= Elements(N);
+ A2:x in Input(N,X) implies
+   ex y being Element of Elements(N) st y in X & x in enter(N,y)
+ proof
+  assume x in Input(N,X);
+  then x in union Entr(N,X) by Def16;
+  then consider y being set such that A3: x in y & y in
+ Entr(N,X) by TARSKI:def 4
+;
+     ex z being Element of Elements(N) st z in X & y = enter(N,z) by A3,Def14;
+  hence thesis by A3;
+ end;
+   (ex y being Element of Elements(N) st y in X & x in enter(N,y))
+                                           implies x in Input(N,X)
+ proof
+  given y being Element of Elements(N) such that
+                                         A4:y in X & x in enter(N,y);
+     enter(N,y) in Entr(N,X) by A1,A4,Th28;
+  then x in union Entr(N,X) by A4,TARSKI:def 4;
+  hence thesis by Def16;
+ end;
+hence thesis by A2;
+end;
+
+theorem
+  for N being Pnet for x for X being set holds
+         Elements(N) <> {} & X c= Elements(N) implies
+          (x in Output(N,X) iff
+            ex y being Element of Elements(N) st
+                             y in X & x in exit(N,y))
+proof
+ let N be Pnet;
+ let x;
+ let X be set;
+ assume that Elements(N) <> {} and A1: X c= Elements(N);
+ A2:x in Output(N,X) implies
+   ex y being Element of Elements(N) st y in X & x in exit(N,y)
+ proof
+  assume x in Output(N,X);
+  then x in union Ext(N,X) by Def17;
+  then consider y being set such that A3: x in y & y in
+ Ext(N,X) by TARSKI:def 4;
+     ex z being Element of Elements(N) st z in X & y = exit(N,z) by A3,Def15;
+  hence thesis by A3;
+ end;
+   (ex y being Element of Elements(N) st y in X & x in exit(N,y))
+                                           implies x in Output(N,X)
+ proof
+  given y being Element of Elements(N) such that
+                                         A4:y in X & x in exit(N,y);
+     exit(N,y) in Ext(N,X) by A1,A4,Th29;
+  then x in union Ext(N,X) by A4,TARSKI:def 4;
+  hence thesis by Def17;
+ end;
+hence thesis by A2;
+end;
+
+theorem
+    for N being Pnet
+    for X being Subset of Elements(N)
+     for x being Element of Elements(N) holds
+       Elements(N) <> {} implies
+        (x in Input(N,X) iff
+          (x in X & x in the Places of N or
+            ex y being Element of Elements(N) st y in X &
+              y in the Transitions of N & pre N,y,x))
+  proof
+   let N be Pnet;
+   let X be Subset of Elements(N);
+   let x be Element of Elements(N);
+   assume A1:  Elements(N) <> {};
+ A2:x in Input(N,X) implies
+     x in X & x in the Places of N or
+       ex y being Element of Elements(N) st y in X &
+         y in the Transitions of N & pre N,y,x
+   proof
+    assume x in Input(N,X);
+    then x in union Entr(N,X) by Def16;
+    then ex y being set st x in y & y in Entr(N,X) by TARSKI:def 4;
+    then consider y being set such that A3:y in Entr(N,X) & x in y;
+    consider z being Element of Elements(N) such that
+ A4:z in X & y = enter(N,z) by A3,Def14;
+   A5:(z in the Places of N implies y = {z}) &
+       (z in the Transitions of N implies y = Pre(N,z)) by A4,Def9;
+    A6:z in the Places of N or z in the Transitions of N by A1,Th6;
+    z in the Transitions of N implies
+        ex y being Element of Elements(N) st y in X &
+         y in the Transitions of N & pre N,y,x
+    proof
+     assume A7:z in the Transitions of N;
+     then A8: x in Elements(N) & [x,z] in the Flow of N by A3,A5,Def7;
+     take z;
+     thus thesis by A4,A7,A8,Def5;
+    end;
+    hence thesis by A3,A4,A5,A6,TARSKI:def 1;
+   end;
+   (x in X & x in the Places of N or
+     ex y being Element of Elements(N) st y in X &
+      y in the Transitions of N & pre N,y,x) implies
+       x in Input(N,X)
+   proof
+    assume A9:x in X & x in the Places of N or
+     ex y being Element of Elements(N) st y in X &
+      y in the Transitions of N & pre N,y,x;
+    A10:(x in X & x in the Places of N) implies x in Input(N,X)
+    proof
+     assume A11:x in X & x in the Places of N;
+     then A12:enter(N,x) = {x} by Def9;
+       {x} c= Elements(N) by A11,ZFMISC_1:37;
+     then A13:{x} in Entr(N,X) by A11,A12,Def14;
+       x in {x} by TARSKI:def 1;
+     then x in union Entr(N,X) by A13,TARSKI:def 4;
+     hence thesis by Def16;
+    end;
+      (ex y being Element of Elements(N) st y in X &
+      y in the Transitions of N & pre N,y,x) implies x in Input(N,X)
+     proof
+     given y being Element of Elements(N) such that
+     A14: y in X & y in the Transitions of N & pre N,y,x;
+       [x,y] in the Flow of N & y in the Transitions of N by A14,Def5;
+     then x in Pre(N,y) by A1,Def7;
+     then A15:x in enter(N,y) by A14,Def9;
+       enter(N,y) in Entr(N,X) by A14,Th28;
+     then x in union Entr(N,X) by A15,TARSKI:def 4;
+     hence thesis by Def16;
+    end;
+    hence thesis by A9,A10;
+   end;
+   hence thesis by A2;
+  end;
+
+theorem
+    for N being Pnet
+    for X being Subset of Elements(N)
+     for x being Element of Elements(N) holds
+       Elements(N) <> {} implies
+        (x in Output(N,X) iff
+          (x in X & x in the Places of N or
+            ex y being Element of Elements(N) st y in X &
+              y in the Transitions of N & post N,y,x))
+  proof
+   let N be Pnet;
+   let X be Subset of Elements(N);
+   let x be Element of Elements(N);
+   assume A1:  Elements(N) <> {};
+ A2:x in Output(N,X) implies
+     x in X & x in the Places of N or
+       ex y being Element of Elements(N) st y in X &
+         y in the Transitions of N & post N,y,x
+   proof
+    assume x in Output(N,X);
+    then x in union Ext(N,X) by Def17;
+    then ex y being set st x in y & y in Ext(N,X) by TARSKI:def 4;
+    then consider y being set such that A3:y in Ext(N,X) & x in y;
+    consider z being Element of Elements(N) such that
+ A4:z in X & y = exit(N,z) by A3,Def15;
+   A5:(z in the Places of N implies y = {z}) &
+       (z in the Transitions of N implies y = Post(N,z)) by A4,Def10;
+    A6:z in the Places of N or z in the Transitions of N by A1,Th6;
+    z in the Transitions of N implies
+        ex y being Element of Elements(N) st y in X &
+         y in the Transitions of N & post N,y,x
+    proof
+     assume A7:z in the Transitions of N;
+     then A8: x in Elements(N) & [z,x] in the Flow of N by A3,A5,Def8;
+     take z;
+     thus thesis by A4,A7,A8,Def6;
+    end;
+    hence thesis by A3,A4,A5,A6,TARSKI:def 1;
+   end;
+   (x in X & x in the Places of N or
+     ex y being Element of Elements(N) st y in X &
+      y in the Transitions of N & post N,y,x) implies
+       x in Output(N,X)
+   proof
+    assume A9:x in X & x in the Places of N or
+     ex y being Element of Elements(N) st y in X &
+      y in the Transitions of N & post N,y,x;
+    A10:(x in X & x in the Places of N) implies x in Output(N,X)
+    proof
+     assume A11:x in X & x in the Places of N;
+     then A12:exit(N,x) = {x} by Def10;
+       {x} c= Elements(N) by A11,ZFMISC_1:37;
+     then A13:{x} in Ext(N,X) by A11,A12,Def15;
+       x in {x} by TARSKI:def 1;
+     then x in union Ext(N,X) by A13,TARSKI:def 4;
+     hence thesis by Def17;
+    end;
+      (ex y being Element of Elements(N) st y in X &
+      y in the Transitions of N & post N,y,x) implies x in Output(N,X)
+     proof
+     given y being Element of Elements(N) such that
+     A14: y in X & y in the Transitions of N & post N,y,x;
+       [y,x] in the Flow of N & y in the Transitions of N by A14,Def6;
+     then x in Post(N,y) by A1,Def8;
+     then A15:x in exit(N,y) by A14,Def10;
+       exit(N,y) in Ext(N,X) by A14,Th29;
+     then x in union Ext(N,X) by A15,TARSKI:def 4;
+     hence thesis by Def17;
+    end;
+    hence thesis by A9,A10;
+   end;
+   hence thesis by A2;
+  end;

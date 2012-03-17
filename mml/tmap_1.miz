@@ -1,0 +1,4187 @@
+:: Continuity of Mappings over the Union of Subspaces
+::  by Zbigniew Karno
+::
+:: Received May 22, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, TARSKI, FUNCT_1, RELAT_1, BOOLE, FUNCT_4, SETFAM_1,
+      SUBSET_1, CONNSP_2, ORDINAL2, FUNCOP_1, FUNCT_3, TSEP_1, CONNSP_1,
+      TMAP_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, RELAT_1, FUNCT_1,
+      PARTFUN1, FUNCT_2, FUNCT_4, PRE_TOPC, CONNSP_2, BORSUK_1, GRCAT_1,
+      TSEP_1;
+ constructors TOPS_2, CONNSP_1, BORSUK_1, TSEP_1, GRCAT_1, PARTFUN1, MEMBERED,
+      RELAT_2, XBOOLE_0;
+ clusters FUNCT_1, PRE_TOPC, BORSUK_1, TSEP_1, STRUCT_0, COMPLSP1, RELSET_1,
+      SUBSET_1, XBOOLE_0, ZFMISC_1, FUNCT_2, PARTFUN1;
+ requirements BOOLE, SUBSET;
+ definitions PRE_TOPC, BORSUK_1, STRUCT_0, XBOOLE_0;
+ theorems TARSKI, SUBSET_1, FUNCT_1, FUNCT_2, FUNCT_4, ZFMISC_1, PRE_TOPC,
+      CONNSP_2, TOPS_1, TOPS_2, BORSUK_1, TSEP_1, RELAT_1, GRCAT_1, RELSET_1,
+      SETFAM_1, XBOOLE_0, XBOOLE_1, CONNSP_1, PARTFUN1;
+
+begin
+::1. Set-Theoretic Preliminaries.
+
+definition let X be non empty TopSpace;
+           let X1, X2 be non empty SubSpace of X;
+  cluster X1 union X2 -> TopSpace-like;
+  coherence;
+end;
+
+reserve A,B for non empty set;
+
+theorem Th1:
+ for f being Function of A,B, A0 being Subset of A,
+     B0 being Subset of B
+  holds f.:A0 c= B0 iff A0 c= f"B0
+ proof let f be Function of A,B, A0 be Subset of A,
+     B0 be Subset of B;
+  thus f.:A0 c= B0 implies A0 c= f"B0
+   proof assume f.:A0 c= B0;
+    then f"(f.:A0) c= f"B0 & A0 c= f"(f.:A0) by FUNCT_2:50,RELAT_1:178;
+    hence A0 c= f"B0 by XBOOLE_1:1;
+   end;
+  thus A0 c= f"B0 implies f.:A0 c= B0
+   proof assume A0 c= f"B0;
+    then f.:A0 c= f.:f"B0 & f.:f"B0 c= B0 by FUNCT_1:145,RELAT_1:156;
+    hence f.:A0 c= B0 by XBOOLE_1:1;
+   end;
+ end;
+
+theorem Th2:
+ for f being Function of A,B, A0 being non empty Subset of A,
+  f0 being Function of A0,B st
+   for c being Element of A st c in A0 holds f.c = f0.c
+    holds f|A0 = f0
+ proof let f be Function of A,B, A0 be non empty Subset of A,
+            f0 be Function of A0,B such that
+    A1: for c being Element of A st c in A0 holds f.c = f0.c;
+  reconsider g = f|A0 as Function of A0,B by FUNCT_2:38;
+     for c being Element of A0 holds g.c = f0.c
+    proof let c be Element of A0;
+     thus g.c = f.c by FUNCT_1:72
+             .= f0.c by A1;
+    end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+canceled;
+
+theorem Th4:
+ for f being Function of A,B, A0 being non empty Subset of A,
+  C being Subset of A st C c= A0 holds f.:C = (f|A0).:C
+ proof let f be Function of A,B, A0 be non empty Subset of A,
+   C be Subset of A;
+  assume A1: C c= A0;
+  thus (f|A0).:C = (f*(id A0)).:C by RELAT_1:94
+               .= f.:((id A0).:C) by RELAT_1:159
+               .= f.:C by A1,BORSUK_1:3;
+ end;
+
+theorem Th5:
+ for f being Function of A,B, A0 being non empty Subset of A,
+  D being Subset of B st f"D c= A0 holds f"D = (f|A0)"D
+ proof let f be Function of A,B, A0 be non empty Subset of A,
+   D be Subset of B;
+  assume A1: f"D c= A0;
+  thus (f|A0)"D = (f*(id A0))"D by RELAT_1:94
+               .= (id A0)"(f"D) by RELAT_1:181
+               .= f"D by A1,BORSUK_1:4;
+ end;
+
+definition let A,B be non empty set;
+  let A1,A2 be non empty Subset of A;
+            let f1 be Function of A1,B, f2 be Function of A2,B;
+ assume
+  A1:   f1|(A1 /\ A2) = f2|(A1 /\ A2);
+ func f1 union f2 -> Function of A1 \/ A2,B means
+:Def1: it|A1 = f1 & it|A2 = f2;
+ existence
+  proof set H = f1 +* f2; set G = f2 +*f1;
+    A2: dom f1 = A1 & dom f2 = A2 by FUNCT_2:def 1;
+   then A3: dom H = A1 \/ A2 & dom G = A1 \/ A2 by FUNCT_4:def 1;
+   reconsider A0 = A1 \/ A2 as non empty Subset of A;
+  A4: now let a be Element of A0;
+         thus a in A1 implies G.a = f1.a by A2,FUNCT_4:def 1;
+         thus a in A2 \ A1 implies G.a = f2.a
+           proof assume a in A2 \ A1;
+            then not a in A1 by XBOOLE_0:def 4;
+            hence thesis by A2,FUNCT_4:def 1;
+           end;
+      end;
+  A5: now let a be Element of A0;
+         thus a in A2 implies H.a = f2.a by A2,FUNCT_4:def 1;
+         thus a in A1 \ A2 implies H.a = f1.a
+           proof assume a in A1 \ A2;
+            then not a in A2 by XBOOLE_0:def 4;
+            hence thesis by A2,FUNCT_4:def 1;
+           end;
+      end;
+      rng f1 c= B & rng f2 c= B by RELSET_1:12;
+   then A6: rng f1 \/ rng f2 c= B & rng f2 \/ rng f1 c= B by XBOOLE_1:8;
+      rng H c= rng f1 \/ rng f2 & rng G c= rng f2 \/ rng f1 by FUNCT_4:18;
+   then A7: rng G c= B & rng H c= B by A6,XBOOLE_1:1;
+   then reconsider F0 = H as Function of A1 \/ A2,B by A3,FUNCT_2:def 1,
+RELSET_1:11;
+        reconsider F1 = G as Function of A1 \/ A2,B by A3,A7,FUNCT_2:def 1,
+RELSET_1:11;
+A8:    now let a be Element of A0;
+      A9: now assume A10: a in A1 \+\ A2;
+           A11: now assume A12: a in A1 \ A2;
+                  A13: A1 \ A2 c= A1 by XBOOLE_1:36;
+                 thus F0.a = f1.a by A5,A12
+                          .= F1.a by A4,A12,A13;
+                end;
+           A14: now assume A15: a in A2 \ A1;
+                    A2 \ A1 c= A2 by XBOOLE_1:36;
+                 hence F0.a = f2.a by A5,A15
+                          .= F1.a by A4,A15;
+                end;
+              A1 \+\ A2 = (A1 \ A2) \/ (A2 \ A1) by XBOOLE_0:def 6;
+           hence F0.a = F1.a by A10,A11,A14,XBOOLE_0:def 2;
+          end;
+      A16: now assume A17: a in A1 /\ A2;
+           then A18: a in A1 & a in A2 by XBOOLE_0:def 3;
+           A19: f1.a = (f2|(A1 /\ A2)).a by A1,A17,FUNCT_1:72
+                    .= f2.a by A17,FUNCT_1:72;
+              F0.a = f2.a & F1.a = f1.a by A4,A5,A18;
+           hence F0.a = F1.a by A19;
+          end;
+         A0 = (A1 \+\ A2) \/ (A1 /\ A2) & a in A0 by XBOOLE_1:93;
+     hence F0.a = F1.a by A9,A16,XBOOLE_0:def 2;
+    end;
+  take F0;
+        now
+       thus A1 is non empty Subset of A0 by XBOOLE_1:7;
+        let a be Element of A0 such that A20: a in A1;
+       thus F0.a = F1.a by A8
+                .= f1.a by A4,A20;
+      end;
+   hence F0|A1 = f1 by Th2;
+      A2 is non empty Subset of A0 &
+    for a being Element of A0 st a in A2 holds F0.a = f2.a by A5,XBOOLE_1:7;
+   hence F0|A2 = f2 by Th2;
+  end;
+ uniqueness
+  proof
+   let F, G be Function of A1 \/ A2,B such that
+     A21: F|A1 = f1 & F|A2 = f2 and A22: G|A1 = f1 & G|A2 = f2;
+   reconsider A0 = A1 \/ A2 as non empty Subset of A;
+     now let a be Element of A0;
+    A23: now
+         assume A24: a in A1;
+         hence F.a = (G|A1).a by A21,A22,FUNCT_1:72
+                 .= G.a by A24,FUNCT_1:72;
+        end;
+       now
+         assume A25: a in A2;
+         hence F.a = (G|A2).a by A21,A22,FUNCT_1:72
+                 .= G.a by A25,FUNCT_1:72;
+        end;
+    hence F.a = G.a by A23,XBOOLE_0:def 2;
+   end;
+   hence thesis by FUNCT_2:113;
+  end;
+end;
+
+theorem Th6:
+ for A, B be non empty set, A1, A2 being non empty Subset of A
+    st A1 misses A2
+  for f1 being Function of A1,B, f2 being Function of A2,B holds
+   f1|(A1 /\ A2) = f2|(A1 /\
+ A2) & (f1 union f2)|A1 = f1 & (f1 union f2)|A2 = f2
+ proof let A, B be non empty set,
+     A1, A2 be non empty Subset of A such that
+   A1: A1 misses A2;
+  let f1 be Function of A1,B, f2 be Function of A2,B;
+     A2: A1 /\ A2 = {} by A1,XBOOLE_0:def 7;
+     A3: A1 /\ A2 c= A1 & A1 /\ A2 c= A2 by XBOOLE_1:17;
+    then reconsider g1 = f1|(A1 /\ A2) as Function of {},B by A2,FUNCT_2:38;
+    reconsider g2 = f2|(A1 /\ A2) as Function of {},B by A2,A3,FUNCT_2:38;
+     g1 = g2 by PARTFUN1:58;
+  hence thesis by Def1;
+ end;
+
+reserve A, B for non empty set,
+        A1, A2, A3 for non empty Subset of A;
+
+theorem Th7:
+ for g being Function of A1 \/ A2,B,
+  g1 being Function of A1,B, g2 being Function of A2,B st
+   g|A1 = g1 & g|A2 = g2 holds g = g1 union g2
+ proof let g be Function of A1 \/ A2,B,
+            g1 be Function of A1,B, g2 be Function of A2,B;
+   assume A1: g|A1 = g1 & g|A2 = g2;
+     A1 c= A1 \/ A2 & B <> {} by XBOOLE_1:7;
+  then reconsider f1 = g|A1 as Function of A1,B by FUNCT_2:38;
+     A2 c= A1 \/ A2 & B <> {} by XBOOLE_1:7;
+  then reconsider f2 = g|A2 as Function of A2,B by FUNCT_2:38;
+     A2: A1 /\ A2 c= A1 & A1 /\ A2 c= A2 by XBOOLE_1:17;
+   then f1|(A1 /\ A2) = g|(A1 /\ A2) by FUNCT_1:82
+                    .= f2|(A1 /\ A2) by A2,FUNCT_1:82;
+  hence g = g1 union g2 by A1,Def1;
+ end;
+
+theorem
+   for f1 being Function of A1,B, f2 being Function of A2,B st
+  f1|(A1 /\ A2) = f2|(A1 /\ A2) holds f1 union f2 = f2 union f1
+ proof let f1 be Function of A1,B, f2 be Function of A2,B;
+  assume f1|(A1 /\ A2) = f2|(A1 /\ A2);
+  then (f1 union f2)|A1 = f1 & (f1 union f2)|A2 = f2 by Def1;
+  hence f1 union f2 = f2 union f1 by Th7;
+ end;
+
+theorem
+   for A12, A23 being non empty Subset of A
+    st A12 = A1 \/ A2 & A23 = A2 \/ A3
+  for f1 being Function of A1,B, f2 being Function of A2,B,
+   f3 being Function of A3,B st f1|(A1 /\ A2) = f2|(A1 /\ A2) &
+    f2|(A2 /\ A3) = f3|(A2 /\ A3) & f1|(A1 /\ A3) = f3|(A1 /\ A3)
+     for f12 being Function of A12,B, f23 being Function of A23,B st
+      f12 = f1 union f2 & f23 = f2 union f3 holds f12 union f3 = f1 union f23
+ proof let A12, A23 be non empty Subset of A such that
+        A1: A12 = A1 \/ A2 & A23 = A2 \/ A3;
+  let f1 be Function of A1,B, f2 be Function of A2,B, f3 be Function of A3,B
+ such that A2: f1|(A1 /\ A2) = f2|(A1 /\ A2) &
+                   f2|(A2 /\ A3) = f3|(A2 /\ A3) & f1|(A1 /\ A3) = f3|(A1 /\
+ A3);
+  let f12 be Function of A12,B, f23 be Function of A23,B such that
+    A3: f12 = f1 union f2 & f23 = f2 union f3;
+     A1 \/ A23 = A12 \/ A3 by A1,XBOOLE_1:4;
+   then reconsider f = f12 union f3 as Function of A1 \/ A23,B;
+   A4: f12|A1 = f1 & f12|A2 = f2 by A2,A3,Def1;
+A5:    (f12|A1)|(A1 /\ A3) = f1|(A1 /\ A3) & (f12|A2)|(A2 /\ A3) = f2|(A2 /\
+ A3)
+        & A1 /\ A3 c= A1 & A2 /\ A3 c= A2 by A2,A3,Def1,XBOOLE_1:17;
+
+        A12 /\ A3 c= A12 by XBOOLE_1:17;
+     then reconsider F = f12|(A12 /\ A3) as Function of A12 /\ A3,B by FUNCT_2:
+38;
+        A12 /\ A3 c= A3 by XBOOLE_1:17;
+     then reconsider G = f3|(A12 /\ A3) as Function of A12 /\ A3,B by FUNCT_2:
+38;
+       now let x be set;
+      assume A6: x in A12 /\ A3;
+A7:       A12 /\ A3 = (A1 /\ A3) \/ (A2 /\ A3) by A1,XBOOLE_1:23;
+
+         A1 c= A12 & A2 c= A12 by A1,XBOOLE_1:7;
+      then A8: A1 /\ A3 c= A12 /\ A3 & A2 /\ A3 c= A12 /\ A3 by XBOOLE_1:26;
+       A9: now assume A10: x in A1 /\ A3;
+           hence F.x = (F|(A1 /\ A3)).x by FUNCT_1:72
+                    .= (f12|(A1 /\ A3)).x by A8,FUNCT_1:82
+                    .= (f3|(A1 /\ A3)).x by A2,A5,FUNCT_1:82
+                    .= (G|(A1 /\ A3)).x by A8,FUNCT_1:82
+                    .= G.x by A10,FUNCT_1:72;
+          end;
+            now assume A11: x in A2 /\ A3;
+           hence F.x = (F|(A2 /\ A3)).x by FUNCT_1:72
+                    .= (f12|(A2 /\ A3)).x by A8,FUNCT_1:82
+                    .= (f3|(A2 /\ A3)).x by A2,A5,FUNCT_1:82
+                    .= (G|(A2 /\ A3)).x by A8,FUNCT_1:82
+                    .= G.x by A11,FUNCT_1:72;
+          end;
+      hence F.x = G.x by A6,A7,A9,XBOOLE_0:def 2;
+     end;
+   then A12:f12|(A12 /\ A3) = f3|(A12 /\ A3) by FUNCT_2:18;
+
+   then (f|A12)|A1 = f12|A1 & (f|A12)|A2 = f12|A2 &
+          A1 c= A12 & A2 c= A12 by A1,Def1,XBOOLE_1:7;
+  then A13: f|A1 = f1 & f|A2 = f2 by A4,FUNCT_1:82;
+        A23 c= A1 \/ A23 by XBOOLE_1:7;
+   then reconsider H = f|A23 as Function of A23,B by FUNCT_2:38;
+      now let x be set;
+     assume A14: x in A23;
+
+       A15: now assume A16: x in A2;
+           thus H.x = f.x by A14,FUNCT_1:72
+                   .= f2.x by A13,A16,FUNCT_1:72
+                   .= (f23|A2).x by A2,A3,Def1
+                   .= f23.x by A16,FUNCT_1:72;
+          end;
+            now assume A17: x in A3;
+           thus H.x = f.x by A14,FUNCT_1:72
+                   .= (f|A3).x by A17,FUNCT_1:72
+                   .= f3.x by A12,Def1
+                   .= (f23|A3).x by A2,A3,Def1
+                   .= f23.x by A17,FUNCT_1:72;
+          end;
+     hence H.x = f23.x by A1,A14,A15,XBOOLE_0:def 2;
+    end;
+   then f|A23 = f23 by FUNCT_2:18;
+  hence thesis by A13,Th7;
+ end;
+
+theorem
+   for f1 being Function of A1,B, f2 being Function of A2,B st
+  f1|(A1 /\ A2) = f2|(A1 /\ A2) holds
+   (A1 is Subset of A2 iff f1 union f2 = f2) &
+     (A2 is Subset of A1 iff f1 union f2 = f1)
+ proof let f1 be Function of A1,B, f2 be Function of A2,B such that
+   A1: f1|(A1 /\ A2) = f2|(A1 /\ A2);
+  thus A1 is Subset of A2 iff f1 union f2 = f2
+   proof
+    A2: now assume A1 is Subset of A2;
+         then A2 = A1 \/ A2 by XBOOLE_1:12;
+         then (f1 union f2)|(A1 \/ A2) = f2 by A1,Def1;
+         then (f1 union f2)*(id (A1 \/ A2)) = f2 by RELAT_1:94;
+         hence f1 union f2 = f2 by FUNCT_2:23;
+        end;
+          now assume f1 union f2 = f2;
+         then dom (f1 union f2) = dom f2 &
+          dom (f1 union f2) = A1 \/ A2 & dom f2 = A2 by FUNCT_2:def 1;
+         hence A1 is Subset of A2 by XBOOLE_1:7;
+        end;
+    hence thesis by A2;
+   end;
+  thus A2 is Subset of A1 iff f1 union f2 = f1
+   proof
+    A3: now assume A2 is Subset of A1;
+         then A1 = A1 \/ A2 by XBOOLE_1:12;
+         then (f1 union f2)|(A1 \/ A2) = f1 by A1,Def1;
+         then (f1 union f2)*(id (A1 \/ A2)) = f1 by RELAT_1:94;
+         hence f1 union f2 = f1 by FUNCT_2:23;
+        end;
+          now assume f1 union f2 = f1;
+         then dom (f1 union f2) = dom f1 &
+          dom (f1 union f2) = A1 \/ A2 & dom f1 = A1 by FUNCT_2:def 1;
+         hence A2 is Subset of A1 by XBOOLE_1:7;
+        end;
+    hence thesis by A3;
+   end;
+ end;
+
+begin
+::2. Selected Properties of Subspaces of Topological Spaces.
+reserve X for non empty TopSpace;
+
+Lm1: the TopStruct of X is TopSpace-like
+ proof set S = the TopStruct of X;
+  thus the carrier of S in the topology of S &
+      (for a being Subset-Family of S st a c= the topology of S
+        holds union a in the topology of S) &
+      (for a,b being Subset of S st
+         a in the topology of S & b in the topology of S
+        holds a /\ b in the topology of S) by PRE_TOPC:def 1;
+ end;
+
+theorem Th11:
+ for X0 being non empty SubSpace of X
+ holds the TopStruct of X0 is strict SubSpace of X
+ proof let X0 be non empty SubSpace of X;
+   reconsider S = the TopStruct of X0 as non empty TopSpace by Lm1;
+    S is SubSpace of X
+   proof
+     A1: [#](S) = the carrier of S & [#]
+(X0) = the carrier of X0 by PRE_TOPC:12;
+    hence [#](S) c= [#](X) by PRE_TOPC:def 9;
+     let P be Subset of S;
+    thus P in
+ the topology of S implies ex Q being Subset of X st
+                 Q in the topology of X & P = Q /\ [#](S) by A1,PRE_TOPC:def 9;
+     given Q being Subset of X such that
+         A2: Q in the topology of X & P = Q /\ [#](S);
+    thus P in the topology of S by A1,A2,PRE_TOPC:def 9;
+   end;
+  hence thesis;
+ end;
+
+theorem Th12:
+ for X1,X2 being non empty TopSpace st X1 = the TopStruct of X2 holds
+  X1 is SubSpace of X iff X2 is SubSpace of X
+ proof let X1,X2 be non empty TopSpace such that
+    A1: X1 = the TopStruct of X2;
+  thus X1 is SubSpace of X implies X2 is SubSpace of X
+   proof assume A2: X1 is SubSpace of X;
+     A3: [#](X2) = the carrier of X2 & [#]
+(X1) = the carrier of X1 by PRE_TOPC:12;
+    hence [#](X2) c= [#](X) by A1,A2,PRE_TOPC:def 9;
+     let P be Subset of X2;
+    thus P in the topology of X2 implies ex Q being Subset of X
+    st
+                 Q in
+ the topology of X & P = Q /\ [#](X2) by A1,A2,A3,PRE_TOPC:def 9;
+     given Q being Subset of X such that
+         A4: Q in the topology of X & P = Q /\ [#](X2);
+    thus P in the topology of X2 by A1,A2,A3,A4,PRE_TOPC:def 9;
+   end;
+  thus thesis by A1,Th11;
+ end;
+
+theorem Th13:
+ for X1,X2 be non empty TopSpace st X2 = the TopStruct of X1 holds
+  X1 is closed SubSpace of X iff X2 is closed SubSpace of X
+ proof let X1,X2 be non empty TopSpace;
+  assume A1: X2 = the TopStruct of X1;
+  thus X1 is closed SubSpace of X implies X2 is closed SubSpace of X
+   proof assume A2: X1 is closed SubSpace of X;
+     then reconsider Y2 = X2 as SubSpace of X by A1,Th12;
+       the carrier of Y2 is Subset of X by TSEP_1:1;
+     then reconsider A2 = the carrier of Y2 as Subset of X;
+       A2 is closed by A1,A2,TSEP_1:11;
+    hence X2 is closed SubSpace of X by TSEP_1:11;
+   end;
+  assume A3: X2 is closed SubSpace of X;
+   then reconsider Y1 = X1 as SubSpace of X by A1,Th12;
+      the carrier of Y1 is Subset of X by TSEP_1:1;
+    then reconsider A1 = the carrier of Y1 as Subset of X;
+     A1 is closed by A1,A3,TSEP_1:11;
+   hence thesis by TSEP_1:11;
+ end;
+
+theorem Th14:
+ for X1,X2 be non empty TopSpace st X2 = the TopStruct of X1 holds
+  X1 is open SubSpace of X iff X2 is open SubSpace of X
+ proof let X1,X2 be non empty TopSpace;
+  assume A1: X2 = the TopStruct of X1;
+  thus X1 is open SubSpace of X implies X2 is open SubSpace of X
+   proof assume A2: X1 is open SubSpace of X;
+    then reconsider Y2 = X2 as SubSpace of X by A1,Th12;
+       the carrier of Y2 is Subset of X by TSEP_1:1;
+     then reconsider A2 = the carrier of Y2 as Subset of X;
+      A2 is open by A1,A2,TSEP_1:16;
+    hence X2 is open SubSpace of X by TSEP_1:16;
+   end;
+  assume A3: X2 is open SubSpace of X;
+   then reconsider Y1 = X1 as SubSpace of X by A1,Th12;
+      the carrier of Y1 is Subset of X by TSEP_1:1;
+    then reconsider A1 = the carrier of Y1 as Subset of X;
+    A1 is open by A1,A3,TSEP_1:16;
+  hence thesis by TSEP_1:16;
+ end;
+
+reserve X1, X2 for non empty SubSpace of X;
+
+theorem Th15:
+ X1 is SubSpace of X2 implies
+  for x1 being Point of X1 ex x2 being Point of X2 st x2 = x1
+ proof assume A1: X1 is SubSpace of X2;
+  let x1 be Point of X1;
+     the carrier of X1 c= the carrier of X2 &
+          x1 in the carrier of X1 by A1,TSEP_1:4;
+  then reconsider x2 = x1 as Point of X2;
+  take x2;
+  thus thesis;
+ end;
+
+theorem Th16:
+ for x being Point of X1 union X2 holds
+  (ex x1 being Point of X1 st x1 = x) or (ex x2 being Point of X2 st x2 = x)
+ proof let x be Point of X1 union X2;
+  reconsider A0 = the carrier of X1 union X2 as Subset of X
+  by TSEP_1:1;
+  reconsider A1 = the carrier of X1 as Subset of X by TSEP_1:1;
+  reconsider A2 = the carrier of X2 as Subset of X by TSEP_1:1;
+  assume A1: not ex x1 being Point of X1 st x1 = x;
+     ex x2 being Point of X2 st x2 = x
+    proof
+A2:      x in A0 & A0 = A1 \/ A2 by TSEP_1:def 2;
+         not x in A1 by A1;
+     then reconsider x2 = x as Point of X2 by A2,XBOOLE_0:def 2;
+      take x2;
+     thus thesis;
+    end;
+  hence thesis;
+ end;
+
+theorem Th17:
+ X1 meets X2 implies
+  for x being Point of X1 meet X2 holds
+   (ex x1 being Point of X1 st x1 = x) & (ex x2 being Point of X2 st x2 = x)
+ proof assume A1: X1 meets X2;
+  let x be Point of X1 meet X2;
+  reconsider A0 = the carrier of X1 meet X2 as Subset of X
+  by TSEP_1:1;
+  reconsider A1 = the carrier of X1 as Subset of X by TSEP_1:1;
+  reconsider A2 = the carrier of X2 as Subset of X by TSEP_1:1;
+     x in A0 & A0 = A1 /\ A2 by A1,TSEP_1:def 5;
+  then x in A1 & x in A2 by XBOOLE_0:def 3;
+  hence thesis;
+ end;
+
+theorem
+   for x being Point of X1 union X2
+  for F1 being Subset of X1,
+      F2 being Subset of X2 st
+   F1 is closed & x in F1 & F2 is closed & x in F2
+    ex H being Subset of X1 union X2
+    st H is closed & x in H & H c= F1 \/ F2
+ proof let x be Point of X1 union X2;
+  let F1 be Subset of X1, F2 be Subset of X2
+  such that
+    A1: F1 is closed & x in F1 and A2: F2 is closed & x in F2;
+   A3: X1 is SubSpace of X1 union X2 by TSEP_1:22;
+  then consider H1 being Subset of X1 union X2 such that
+    A4: H1 is closed & H1 /\ [#]X1 = F1 by A1,PRE_TOPC:43;
+   A5: X2 is SubSpace of X1 union X2 by TSEP_1:22;
+  then consider H2 being Subset of X1 union X2 such that
+    A6: H2 is closed & H2 /\ [#]X2 = F2 by A2,PRE_TOPC:43;
+  take H = H1 /\ H2;
+   reconsider C1 = the carrier of X1 as Subset of X1 union X2
+   by A3,TSEP_1:1;
+   reconsider C2 = the carrier of X2 as Subset of X1 union X2
+   by A5,TSEP_1:1;
+      the carrier of X1 union X2 = C1 \/ C2 by TSEP_1:def 2;
+  then A7: H = H /\ (C1 \/ C2) by XBOOLE_1:28
+            .= (H /\ C1) \/ (H /\ C2) by XBOOLE_1:23;
+      H c= H1 & H c= H2 by XBOOLE_1:17;
+  then H /\ C1 c= H1 /\ C1 & H /\ C2 c= H2 /\ C2 by XBOOLE_1:26;
+  then A8: H /\ C1 c= F1 & H /\ C2 c= F2 by A4,A6,PRE_TOPC:12;
+     x in H1 & x in H2 by A1,A2,A4,A6,XBOOLE_0:def 3;
+  hence thesis by A4,A6,A7,A8,TOPS_1:35,XBOOLE_0:def 3,XBOOLE_1:13;
+ end;
+
+theorem Th19:
+ for x being Point of X1 union X2
+  for U1 being Subset of X1,
+      U2 being Subset of X2 st
+   U1 is open & x in U1 & U2 is open & x in U2
+    ex V being Subset of X1 union X2
+    st V is open & x in V & V c= U1 \/ U2
+ proof let x be Point of X1 union X2;
+  let U1 be Subset of X1, U2 be Subset of X2
+  such that
+    A1: U1 is open & x in U1 and A2: U2 is open & x in U2;
+   A3: X1 is SubSpace of X1 union X2 by TSEP_1:22;
+  then consider V1 being Subset of X1 union X2 such that
+    A4: V1 is open & V1 /\ [#]X1 = U1 by A1,TOPS_2:32;
+   A5: X2 is SubSpace of X1 union X2 by TSEP_1:22;
+  then consider V2 being Subset of X1 union X2 such that
+    A6: V2 is open & V2 /\ [#]X2 = U2 by A2,TOPS_2:32;
+  take V = V1 /\ V2;
+   reconsider C1 = the carrier of X1 as Subset of X1 union X2
+   by A3,TSEP_1:1;
+   reconsider C2 = the carrier of X2 as Subset of X1 union X2
+   by A5,TSEP_1:1;
+      the carrier of X1 union X2 = C1 \/ C2 by TSEP_1:def 2;
+  then A7: V = V /\ (C1 \/ C2) by XBOOLE_1:28
+            .= (V /\ C1) \/ (V /\ C2) by XBOOLE_1:23;
+      V c= V1 & V c= V2 by XBOOLE_1:17;
+  then V /\ C1 c= V1 /\ C1 & V /\ C2 c= V2 /\ C2 by XBOOLE_1:26;
+  then A8: V /\ C1 c= U1 & V /\ C2 c= U2 by A4,A6,PRE_TOPC:12;
+     x in V1 & x in V2 by A1,A2,A4,A6,XBOOLE_0:def 3;
+  hence thesis by A4,A6,A7,A8,TOPS_1:38,XBOOLE_0:def 3,XBOOLE_1:13;
+ end;
+
+theorem Th20:
+ for x being Point of X1 union X2
+  for x1 being Point of X1, x2 being Point of X2 st x1 = x & x2 = x
+   for A1 being a_neighborhood of x1, A2 being a_neighborhood of x2
+    ex V being Subset of X1 union X2
+     st V is open & x in V & V c= A1 \/ A2
+ proof let x be Point of X1 union X2;
+   let x1 be Point of X1, x2 be Point of X2 such that
+    A1: x1 = x & x2 = x;
+  let A1 be a_neighborhood of x1, A2 be a_neighborhood of x2;
+   consider U1 being Subset of X1 such that
+    A2: U1 is open & U1 c= A1 & x1 in U1 by CONNSP_2:8;
+   consider U2 being Subset of X2 such that
+    A3: U2 is open & U2 c= A2 & x2 in U2 by CONNSP_2:8;
+  consider V being Subset of X1 union X2 such that
+    A4: V is open & x in V & V c= U1 \/ U2 by A1,A2,A3,Th19;
+  take V;
+     U1 \/ U2 c= A1 \/ A2 by A2,A3,XBOOLE_1:13;
+  hence thesis by A4,XBOOLE_1:1;
+ end;
+
+theorem Th21:
+ for x being Point of X1 union X2
+  for x1 being Point of X1, x2 being Point of X2 st x1 = x & x2 = x
+   for A1 being a_neighborhood of x1, A2 being a_neighborhood of x2
+    ex A being a_neighborhood of x st A c= A1 \/ A2
+ proof let x be Point of X1 union X2;
+   let x1 be Point of X1, x2 be Point of X2 such that
+    A1: x1 = x & x2 = x;
+  let A1 be a_neighborhood of x1, A2 be a_neighborhood of x2;
+   consider V being Subset of X1 union X2 such that
+    A2: V is open & x in V & V c= A1 \/ A2 by A1,Th20;
+   reconsider W = V as a_neighborhood of x by A2,CONNSP_2:5;
+  take W;
+  thus thesis by A2;
+ end;
+
+reserve X0, X1, X2, Y1, Y2 for non empty SubSpace of X;
+
+theorem Th22:
+ X0 is SubSpace of X1 implies X0 meets X1 & X1 meets X0
+ proof assume X0 is SubSpace of X1;
+  then the carrier of X0 c= the carrier of X1 by TSEP_1:4;
+  then the carrier of X0 = (the carrier of X0) /\ (the carrier of X1) &
+        the carrier of X0 <> {} by XBOOLE_1:28;
+  then A1: (the carrier of X0) meets (the carrier of X1) by XBOOLE_0:def 7;
+  hence X0 meets X1 by TSEP_1:def 3;
+  thus X1 meets X0 by A1,TSEP_1:def 3;
+ end;
+
+theorem Th23:
+ X0 is SubSpace of X1 & (X0 meets X2 or X2 meets X0) implies
+  X1 meets X2 & X2 meets X1
+ proof
+  reconsider A0 = the carrier of X0 as Subset of X by TSEP_1:1;
+  reconsider A1 = the carrier of X1 as Subset of X by TSEP_1:1;
+  reconsider A2 = the carrier of X2 as Subset of X by TSEP_1:1;
+  assume X0 is SubSpace of X1;
+   then A1: A0 c= A1 by TSEP_1:4;
+  assume A2: X0 meets X2 or X2 meets X0;
+      now assume X0 meets X2;
+       then A2 meets A0 by TSEP_1:def 3;
+       then A2 meets A1 & A1 meets A2 by A1,XBOOLE_1:63;
+       hence X1 meets X2 & X2 meets X1 by TSEP_1:def 3;
+      end;
+  hence thesis by A2;
+ end;
+
+theorem Th24:
+ X0 is SubSpace of X1 & (X1 misses X2 or X2 misses X1) implies
+  X0 misses X2 & X2 misses X0
+ proof
+  reconsider A0 = the carrier of X0, A1 = the carrier of X1,
+      A2 = the carrier of X2 as Subset of X by TSEP_1:1;
+  assume X0 is SubSpace of X1;
+   then A1: A0 c= A1 by TSEP_1:4;
+  assume A2: X1 misses X2 or X2 misses X1;
+      now assume X1 misses X2;
+       then A2 misses A1 by TSEP_1:def 3;
+       then A2 misses A0 & A0 misses A2 by A1,XBOOLE_1:63;
+       hence X0 misses X2 & X2 misses X0 by TSEP_1:def 3;
+      end;
+  hence thesis by A2;
+ end;
+
+theorem
+   X0 union X0 = the TopStruct of X0
+ proof
+     X0 is SubSpace of X0 by TSEP_1:2;
+  hence thesis by TSEP_1:23;
+ end;
+
+theorem
+   X0 meet X0 = the TopStruct of X0
+ proof
+   A1: X0 is SubSpace of X0 by TSEP_1:2;
+  then X0 meets X0 by Th22;
+  hence thesis by A1,TSEP_1:31;
+ end;
+
+theorem Th27:
+ Y1 is SubSpace of X1 & Y2 is SubSpace of X2 implies
+  Y1 union Y2 is SubSpace of X1 union X2
+ proof assume Y1 is SubSpace of X1 & Y2 is SubSpace of X2;
+  then the carrier of Y1 c= the carrier of X1 &
+        the carrier of Y2 c= the carrier of X2 by TSEP_1:4;
+  then (the carrier of Y1) \/ (the carrier of Y2) c=
+         (the carrier of X1) \/ (the carrier of X2) by XBOOLE_1:13;
+  then the carrier of (Y1 union Y2) c=
+         (the carrier of X1) \/ (the carrier of X2) by TSEP_1:def 2;
+  then the carrier of (Y1 union Y2) c=
+         the carrier of (X1 union X2) by TSEP_1:def 2;
+  hence thesis by TSEP_1:4;
+ end;
+
+theorem
+   Y1 meets Y2 & Y1 is SubSpace of X1 & Y2 is SubSpace of X2 implies
+  Y1 meet Y2 is SubSpace of X1 meet X2
+ proof assume A1: Y1 meets Y2;
+  assume Y1 is SubSpace of X1 & Y2 is SubSpace of X2;
+  then the carrier of Y1 c= the carrier of X1 &
+        the carrier of Y2 c= the carrier of X2 by TSEP_1:4;
+  then A2: (the carrier of Y1) /\ (the carrier of Y2) c=
+            (the carrier of X1) /\ (the carrier of X2) by XBOOLE_1:27;
+     (the carrier of Y1) meets (the carrier of Y2) by A1,TSEP_1:def 3;
+   then (the carrier of Y1) /\ (the carrier of Y2) <> {} by XBOOLE_0:def 7;
+  then (the carrier of X1) /\ (the carrier of X2) <> {} by A2,XBOOLE_1:3;
+  then (the carrier of X1) meets (the carrier of X2) by XBOOLE_0:def 7;
+  then X1 meets X2 by TSEP_1:def 3;
+  then (the carrier of Y1) /\ (the carrier of Y2) c=
+         the carrier of (X1 meet X2) by A2,TSEP_1:def 5;
+  then the carrier of (Y1 meet Y2) c=
+         the carrier of (X1 meet X2) by A1,TSEP_1:def 5;
+  hence thesis by TSEP_1:4;
+ end;
+
+theorem Th29:
+ X1 is SubSpace of X0 & X2 is SubSpace of X0 implies
+  X1 union X2 is SubSpace of X0
+ proof assume X1 is SubSpace of X0 & X2 is SubSpace of X0;
+  then the carrier of X1 c= the carrier of X0 &
+        the carrier of X2 c= the carrier of X0 by TSEP_1:4;
+  then (the carrier of X1) \/ (the carrier of X2) c= the carrier of X0
+                                                               by XBOOLE_1:8;
+  then the carrier of (X1 union X2) c= the carrier of X0 by TSEP_1:def 2;
+  hence thesis by TSEP_1:4;
+ end;
+
+theorem
+   X1 meets X2 & X1 is SubSpace of X0 & X2 is SubSpace of X0 implies
+  X1 meet X2 is SubSpace of X0
+ proof assume A1: X1 meets X2;
+  assume X1 is SubSpace of X0 & X2 is SubSpace of X0;
+  then the carrier of X1 c= the carrier of X0 &
+        the carrier of X2 c= the carrier of X0 by TSEP_1:4;
+  then (the carrier of X1) \/ (the carrier of X2) c= the carrier of X0 &
+        (the carrier of X1) /\ (the carrier of X2) c=
+          (the carrier of X1) \/ (the carrier of X2) by XBOOLE_1:8,29;
+  then (the carrier of X1) /\ (the carrier of X2) c= the carrier of X0
+                                                                by XBOOLE_1:1;
+  then the carrier of (X1 meet X2) c= the carrier of X0 by A1,TSEP_1:def 5;
+  hence thesis by TSEP_1:4;
+ end;
+
+theorem Th31:
+ ((X1 misses X0 or X0 misses X1) & (X2 meets X0 or X0 meets X2) implies
+  (X1 union X2) meet X0 = X2 meet X0 & X0 meet (X1 union X2) = X0 meet X2) &
+  ((X1 meets X0 or X0 meets X1) & (X2 misses X0 or X0 misses X2) implies
+    (X1 union X2) meet X0 = X1 meet X0 & X0 meet (X1 union X2) = X0 meet X1)
+ proof
+    reconsider A0 = the carrier of X0 as Subset of X
+    by TSEP_1:1;
+    reconsider A1 = the carrier of X1 as Subset of X
+    by TSEP_1:1;
+    reconsider A2 = the carrier of X2 as Subset of X
+    by TSEP_1:1;
+  thus (X1 misses X0 or X0 misses X1) & (X2 meets X0 or X0 meets X2) implies
+      (X1 union X2) meet X0 = X2 meet X0 & X0 meet (X1 union X2) = X0 meet X2
+   proof assume A1:
+ (X1 misses X0 or X0 misses X1) & (X2 meets X0 or X0 meets X2);
+then A2:   A1 misses A0 by TSEP_1:def 3;
+       X2 is SubSpace of X1 union X2 by TSEP_1:22;
+    then A3: (X1 union X2) meets X0 & X0 meets (X1 union X2) by A1,Th23;
+     then A4: the carrier of (X1 union X2) meet X0
+              = (the carrier of (X1 union X2)) /\ A0 by TSEP_1:def 5
+             .= (A1 \/ A2) /\ A0 by TSEP_1:def 2
+             .= (A1 /\ A0) \/ (A2 /\ A0) by XBOOLE_1:23
+             .= {} \/ (A2 /\ A0) by A2,XBOOLE_0:def 7
+             .= the carrier of (X2 meet X0) by A1,TSEP_1:def 5;
+          the carrier of X0 meet (X1 union X2)
+              = A0 /\ (the carrier of (X1 union X2)) by A3,TSEP_1:def 5
+             .= A0 /\ (A1 \/ A2) by TSEP_1:def 2
+             .= (A0 /\ A1) \/ (A0 /\ A2) by XBOOLE_1:23
+             .= {} \/ (A0 /\ A2) by A2,XBOOLE_0:def 7
+             .= the carrier of (X0 meet X2) by A1,TSEP_1:def 5;
+    hence thesis by A4,TSEP_1:5;
+   end;
+  thus (X1 meets X0 or X0 meets X1) & (X2 misses X0 or X0 misses X2) implies
+      (X1 union X2) meet X0 = X1 meet X0 & X0 meet (X1 union X2) = X0 meet X1
+   proof assume A5:
+ (X1 meets X0 or X0 meets X1) & (X2 misses X0 or X0 misses X2);
+then A6:   A2 misses A0 by TSEP_1:def 3;
+       X1 is SubSpace of X1 union X2 by TSEP_1:22;
+    then A7: (X1 union X2) meets X0 & X0 meets (X1 union X2) by A5,Th23;
+     then A8: the carrier of (X1 union X2) meet X0
+              = (the carrier of (X1 union X2)) /\ A0 by TSEP_1:def 5
+             .= (A1 \/ A2) /\ A0 by TSEP_1:def 2
+             .= (A1 /\ A0) \/ (A2 /\ A0) by XBOOLE_1:23
+             .= (A1 /\ A0) \/ {} by A6,XBOOLE_0:def 7
+             .= the carrier of (X1 meet X0) by A5,TSEP_1:def 5;
+          the carrier of X0 meet (X1 union X2)
+              = A0 /\ (the carrier of (X1 union X2)) by A7,TSEP_1:def 5
+             .= A0 /\ (A1 \/ A2) by TSEP_1:def 2
+             .= (A0 /\ A1) \/ (A0 /\ A2) by XBOOLE_1:23
+             .= (A0 /\ A1) \/ {} by A6,XBOOLE_0:def 7
+             .= the carrier of (X0 meet X1) by A5,TSEP_1:def 5;
+    hence thesis by A8,TSEP_1:5;
+   end;
+ end;
+
+theorem Th32:
+ X1 meets X2 implies
+ (X1 is SubSpace of X0 implies X1 meet X2 is SubSpace of X0 meet X2) &
+  (X2 is SubSpace of X0 implies X1 meet X2 is SubSpace of X1 meet X0)
+ proof assume A1: X1 meets X2;
+  reconsider A0 = the carrier of X0 as Subset of X by TSEP_1:1;
+  reconsider A1 = the carrier of X1 as Subset of X by TSEP_1:1;
+  reconsider A2 = the carrier of X2 as Subset of X by TSEP_1:1;
+   A2: the carrier of X1 meet X2 = A1 /\ A2 by A1,TSEP_1:def 5;
+ A3: now assume A4: X1 is SubSpace of X0;
+     then X0 meets X2 by A1,Th23;
+     then A5: the carrier of X0 meet X2 = A0 /\ A2 by TSEP_1:def 5;
+        A1 c= A0 by A4,TSEP_1:4;
+     then A1 /\ A2 c= A0 /\ A2 by XBOOLE_1:26;
+     hence X1 meet X2 is SubSpace of X0 meet X2 by A2,A5,TSEP_1:4;
+    end;
+    now assume A6: X2 is SubSpace of X0;
+   then X1 meets X0 by A1,Th23;
+   then A7: the carrier of X1 meet X0 = A1 /\ A0 by TSEP_1:def 5;
+      A2 c= A0 by A6,TSEP_1:4;
+   then A1 /\ A2 c= A1 /\ A0 by XBOOLE_1:26;
+   hence X1 meet X2 is SubSpace of X1 meet X0 by A2,A7,TSEP_1:4;
+  end;
+  hence thesis by A3;
+ end;
+
+theorem Th33:
+ X1 is SubSpace of X0 & (X0 misses X2 or X2 misses X0) implies
+  X0 meet (X1 union X2) = the TopStruct of X1 &
+   X0 meet (X2 union X1) = the TopStruct of X1
+ proof
+   reconsider A0 = the carrier of X0 as Subset of X by TSEP_1:1;
+   reconsider A1 = the carrier of X1 as Subset of X by TSEP_1:1;
+   reconsider A2 = the carrier of X2 as Subset of X by TSEP_1:1;
+  assume A1: X1 is SubSpace of X0;
+   then X0 meets X1 & X1 is SubSpace of X1 union X2 by Th22,TSEP_1:22;
+   then A2: X0 meets X1 union X2 by Th23;
+    A3: A1 c= A0 by A1,TSEP_1:4;
+  assume X0 misses X2 or X2 misses X0;
+then A4:A0 misses A2 by TSEP_1:def 3;
+  thus X0 meet (X1 union X2) = the TopStruct of X1
+   proof
+      the carrier of X0 meet (X1 union X2)
+      = A0 /\ the carrier of X1 union X2 by A2,TSEP_1:def 5
+     .= A0 /\ (A1 \/ A2) by TSEP_1:def 2
+     .= (A0 /\ A1) \/ (A0 /\ A2) by XBOOLE_1:23
+     .= (A0 /\ A1) \/ {} by A4,XBOOLE_0:def 7
+     .= A1 by A3,XBOOLE_1:28;
+    hence thesis by TSEP_1:5;
+   end;
+  hence X0 meet (X2 union X1) = the TopStruct of X1;
+ end;
+
+theorem Th34:
+ X1 meets X2 implies
+ (X1 is SubSpace of X0 implies (X0 meet X2) meets X1 & (X2 meet X0) meets X1) &
+  (X2 is SubSpace of X0 implies (X1 meet X0) meets X2 & (X0 meet X1) meets X2)
+ proof assume A1: X1 meets X2;
+  A2:now assume A3: X1 is SubSpace of X0;
+     then A4: X0 meets X2 by A1,Th23;
+     thus (X0 meet X2) meets X1
+      proof
+          X1 meet X2 is SubSpace of X1 by A1,TSEP_1:30;
+       then A5: (X1 meet X2) meets X1 by Th22;
+          X1 meet X2 is SubSpace of X0 meet X2 by A1,A3,Th32;
+       hence thesis by A5,Th23;
+      end;
+     hence (X2 meet X0) meets X1 by A4,TSEP_1:29;
+    end;
+    now assume A6: X2 is SubSpace of X0;
+   then A7: X1 meets X0 by A1,Th23;
+   thus (X1 meet X0) meets X2
+    proof
+        X1 meet X2 is SubSpace of X2 by A1,TSEP_1:30;
+     then A8: (X1 meet X2) meets X2 by Th22;
+        X1 meet X2 is SubSpace of X1 meet X0 by A1,A6,Th32;
+     hence thesis by A8,Th23;
+    end;
+   hence (X0 meet X1) meets X2 by A7,TSEP_1:29;
+  end;
+  hence thesis by A2;
+ end;
+
+theorem Th35:
+ X1 is SubSpace of Y1 & X2 is SubSpace of Y2 &
+  (Y1 misses Y2 or Y1 meet Y2 misses X1 union X2) implies
+    Y1 misses X2 & Y2 misses X1
+ proof assume A1: X1 is SubSpace of Y1 & X2 is SubSpace of Y2;
+      assume A2: Y1 misses Y2 or Y1 meet Y2 misses X1 union X2;
+     now assume A3: not Y1 misses Y2;
+    A4: now assume Y1 meets X2;
+        then (Y1 meet Y2) meets X2 & X2 is SubSpace of X1 union X2
+                                                       by A1,Th34,TSEP_1:22;
+        hence contradiction by A2,A3,Th23;
+       end;
+         now assume Y2 meets X1;
+        then (Y1 meet Y2) meets X1 & X1 is SubSpace of X1 union X2
+                                                       by A1,Th34,TSEP_1:22;
+        hence contradiction by A2,A3,Th23;
+       end;
+    hence Y1 misses X2 & Y2 misses X1 by A4;
+   end;
+  hence thesis by A1,Th24;
+ end;
+
+theorem Th36:
+ X1 is not SubSpace of X2 & X2 is not SubSpace of X1 &
+  X1 union X2 is SubSpace of Y1 union Y2 &
+   Y1 meet (X1 union X2) is SubSpace of X1 &
+    Y2 meet (X1 union X2) is SubSpace of X2 implies
+     Y1 meets X1 union X2 & Y2 meets X1 union X2
+ proof assume A1: X1 is not SubSpace of X2 & X2 is not SubSpace of X1;
+      assume A2: X1 union X2 is SubSpace of Y1 union Y2;
+     assume A3: Y1 meet (X1 union X2) is SubSpace of X1 &
+               Y2 meet (X1 union X2) is SubSpace of X2;
+   reconsider A1 = the carrier of X1, A2 = the carrier of X2,
+              C1 = the carrier of Y1, C2 = the carrier of Y2
+                as Subset of X by TSEP_1:1;
+      A4: the carrier of X1 union X2 = A1 \/ A2 &
+           the carrier of Y1 union Y2 = C1 \/ C2 by TSEP_1:def 2;
+      A5:now assume Y1 misses (X1 union X2);
+          then A6: C1 misses (A1 \/ A2) by A4,TSEP_1:def 3;
+              A1 \/ A2 c= C1 \/ C2 by A2,A4,TSEP_1:4;
+           then A7: A1 \/ A2 = (C1 \/ C2) /\ (A1 \/ A2) by XBOOLE_1:28
+             .= (C1 /\ (A1 \/ A2)) \/ (C2 /\ (A1 \/ A2)) by XBOOLE_1:23
+                           .= {} \/ (C2 /\ (A1 \/ A2)) by A6,XBOOLE_0:def 7
+                           .= C2 /\ (A1 \/ A2);
+             A1 \/ A2 <> {} by XBOOLE_1:15;
+           then C2 meets (A1 \/ A2) by A7,XBOOLE_0:def 7;
+           then Y2 meets (X1 union X2) by A4,TSEP_1:def 3;
+           then the carrier of Y2 meet (X1 union X2) = C2 /\ (A1 \/ A2)
+                                                        by A4,TSEP_1:def 5;
+          then A1 \/ A2 c= A2 & A1 c= A1 \/ A2 by A3,A7,TSEP_1:4,XBOOLE_1:7;
+          then A1 c= A2 by XBOOLE_1:1;
+          hence contradiction by A1,TSEP_1:4;
+         end;
+        now assume Y2 misses (X1 union X2);
+          then A8: C2 misses (A1 \/ A2) by A4,TSEP_1:def 3;
+              A1 \/ A2 c= C1 \/ C2 by A2,A4,TSEP_1:4;
+           then A9: A1 \/ A2 = (C1 \/ C2) /\ (A1 \/ A2) by XBOOLE_1:28
+               .= (C1 /\ (A1 \/ A2)) \/ (C2 /\ (A1 \/ A2)) by XBOOLE_1:23
+                           .= (C1 /\ (A1 \/ A2)) \/ {} by A8,XBOOLE_0:def 7
+                           .= C1 /\ (A1 \/ A2);
+             A1 \/ A2 <> {} by XBOOLE_1:15;
+           then C1 meets (A1 \/ A2) by A9,XBOOLE_0:def 7;
+           then Y1 meets (X1 union X2) by A4,TSEP_1:def 3;
+           then the carrier of Y1 meet (X1 union X2) = C1 /\ (A1 \/ A2)
+                                                         by A4,TSEP_1:def 5;
+          then A1 \/ A2 c= A1 & A2 c= A1 \/ A2 by A3,A9,TSEP_1:4,XBOOLE_1:7;
+          then A2 c= A1 by XBOOLE_1:1;
+          hence contradiction by A1,TSEP_1:4;
+         end;
+  hence thesis by A5;
+ end;
+
+theorem Th37:
+ X1 meets X2 & X1 is not SubSpace of X2 & X2 is not SubSpace of X1 &
+  the TopStruct of X = (Y1 union Y2) union X0 &
+   Y1 meet (X1 union X2) is SubSpace of X1 &
+    Y2 meet (X1 union X2) is SubSpace of X2 &
+     X0 meet (X1 union X2) is SubSpace of X1 meet X2 implies
+      Y1 meets X1 union X2 & Y2 meets X1 union X2
+ proof assume A1: X1 meets X2;
+      assume A2: X1 is not SubSpace of X2 & X2 is not SubSpace of X1;
+     assume A3: the TopStruct of X = (Y1 union Y2) union X0;
+    assume A4: Y1 meet (X1 union X2) is SubSpace of X1 &
+              Y2 meet (X1 union X2) is SubSpace of X2;
+  assume A5: X0 meet (X1 union X2) is SubSpace of X1 meet X2;
+   reconsider A1 = the carrier of X1 as Subset of X by TSEP_1:1;
+   reconsider A2 = the carrier of X2 as Subset of X by TSEP_1:1;
+   reconsider C1 = the carrier of Y1 as Subset of X by TSEP_1:1;
+   reconsider C2 = the carrier of Y2 as Subset of X by TSEP_1:1;
+   reconsider C = the carrier of X0 as Subset of X by TSEP_1:1;
+      A6: the carrier of X1 union X2 = A1 \/ A2 &
+           the carrier of Y1 union Y2 = C1 \/ C2 by TSEP_1:def 2;
+      A7: [#]X = the carrier of X by PRE_TOPC:12;
+      A8:now assume Y1 misses (X1 union X2);
+          then A9: C1 misses (A1 \/ A2) by A6,TSEP_1:def 3;
+             the carrier of X = (C1 \/ C2) \/ C by A3,A6,TSEP_1:def 2;
+           then A10:A1 \/ A2 = ((C1 \/ C2) \/ C) /\ (A1 \/ A2) by A7,PRE_TOPC:
+15
+                     .= (C1 \/ (C2 \/ C)) /\ (A1 \/ A2) by XBOOLE_1:4
+                     .= (C1 /\ (A1 \/ A2)) \/ ((C2 \/ C) /\ (A1 \/
+ A2)) by XBOOLE_1:23
+                     .= {} \/ ((C2 \/ C) /\ (A1 \/ A2)) by A9,XBOOLE_0:def 7
+                     .= (C2 /\ (A1 \/ A2)) \/ (C /\ (A1 \/ A2)) by XBOOLE_1:23;
+            A11: now assume C2 /\ (A1 \/ A2) <> {};
+                  then C2 meets (A1 \/ A2) by XBOOLE_0:def 7;
+                  then Y2 meets (X1 union X2) by A6,TSEP_1:def 3;
+                  then A12: the carrier of Y2 meet (X1 union X2) = C2 /\ (A1 \/
+A2)
+                                                        by A6,TSEP_1:def 5;
+                  then A13: C2 /\ (A1 \/ A2) c= A2 by A4,TSEP_1:4;
+                      now per cases;
+                     suppose C /\ (A1 \/ A2) = {};
+                      hence A1 \/ A2 c= A2 by A4,A10,A12,TSEP_1:4;
+                     suppose C /\ (A1 \/ A2) <> {};
+                      then C meets (A1 \/ A2) by XBOOLE_0:def 7;
+                      then X0 meets (X1 union X2) by A6,TSEP_1:def 3;
+                      then the carrier of X0 meet (X1 union X2) = C /\ (A1 \/
+ A2)
+                                & the carrier of X1 meet X2 = A1 /\ A2
+                                             by A1,A6,TSEP_1:def 5;
+                      then C /\ (A1 \/ A2) c= A1 /\ A2 by A5,TSEP_1:4;
+                      then A1 \/ A2 c= A2 \/ A1 /\ A2 & A1 /\ A2 c= A2
+                                                          by A10,A13,XBOOLE_1:
+13,17;
+                      hence A1 \/ A2 c= A2 by XBOOLE_1:12;
+                     end;
+                  hence A1 \/ A2 c= A2;
+                 end;
+               now assume C /\ (A1 \/ A2) <> {};
+                  then C meets (A1 \/ A2) by XBOOLE_0:def 7;
+                  then X0 meets (X1 union X2) by A6,TSEP_1:def 3;
+                  then the carrier of X0 meet (X1 union X2) = C /\ (A1 \/ A2)
+                                 & the carrier of X1 meet X2 = A1 /\ A2
+                                                    by A1,A6,TSEP_1:def 5;
+                  then A14: C /\ (A1 \/ A2) c= A1 /\ A2 & A1 /\ A2 c= A2
+                                              by A5,TSEP_1:4,XBOOLE_1:17;
+                  then A15: C /\ (A1 \/ A2) c= A2 by XBOOLE_1:1;
+                      now per cases;
+                     suppose C2 /\ (A1 \/ A2) = {};
+                      hence A1 \/ A2 c= A2 by A10,A14,XBOOLE_1:1;
+                     suppose C2 /\ (A1 \/ A2) <> {};
+                      then C2 meets (A1 \/ A2) by XBOOLE_0:def 7;
+                      then Y2 meets (X1 union X2) by A6,TSEP_1:def 3;
+                     then the carrier of Y2 meet (X1 union X2) = C2 /\ (A1 \/
+                      A2) by A6,TSEP_1:def 5;
+                     then C2 /\ (A1 \/ A2) c= A2 by A4,TSEP_1:4;
+                      hence A1 \/ A2 c= A2 by A10,A15,XBOOLE_1:8;
+                     end;
+                  hence A1 \/ A2 c= A2;
+                 end;
+           then A1 \/ A2 c= A2 & A1 c= A1 \/ A2 by A6,A10,A11,XBOOLE_1:7;
+          then A1 c= A2 by XBOOLE_1:1;
+          hence contradiction by A2,TSEP_1:4;
+         end;
+        now assume Y2 misses (X1 union X2);
+          then A16: C2 misses (A1 \/ A2) by A6,TSEP_1:def 3;
+             the carrier of X = (C1 \/ C2) \/ C by A3,A6,TSEP_1:def 2;
+           then A17:A1 \/ A2 = ((C2 \/ C1) \/ C) /\ (A1 \/ A2) by A7,PRE_TOPC:
+15
+                     .= (C2 \/ (C1 \/ C)) /\ (A1 \/ A2) by XBOOLE_1:4
+                     .= (C2 /\ (A1 \/ A2)) \/ ((C1 \/ C) /\ (A1 \/
+ A2)) by XBOOLE_1:23
+                     .= {} \/ ((C1 \/ C) /\ (A1 \/ A2)) by A16,XBOOLE_0:def 7
+                     .= (C1 /\ (A1 \/ A2)) \/ (C /\ (A1 \/ A2)) by XBOOLE_1:23;
+            A18: now assume C1 /\ (A1 \/ A2) <> {};
+                  then C1 meets (A1 \/ A2) by XBOOLE_0:def 7;
+                  then Y1 meets (X1 union X2) by A6,TSEP_1:def 3;
+                  then A19: the carrier of Y1 meet (X1 union X2) = C1 /\ (A1 \/
+A2)
+                                                        by A6,TSEP_1:def 5;
+                  then A20: C1 /\ (A1 \/ A2) c= A1 by A4,TSEP_1:4;
+                      now per cases;
+                     suppose C /\ (A1 \/ A2) = {};
+                      hence A1 \/ A2 c= A1 by A4,A17,A19,TSEP_1:4;
+                     suppose C /\ (A1 \/ A2) <> {};
+                      then C meets (A1 \/ A2) by XBOOLE_0:def 7;
+                      then X0 meets (X1 union X2) by A6,TSEP_1:def 3;
+                      then the carrier of X0 meet (X1 union X2) = C /\ (A1 \/
+ A2)
+                              & the carrier of X1 meet X2 = A1 /\ A2
+                                                       by A1,A6,TSEP_1:def 5;
+                      then C /\ (A1 \/ A2) c= A1 /\ A2 by A5,TSEP_1:4;
+                      then A1 \/ A2 c= A1 \/ A1 /\ A2 & A1 /\ A2 c= A1
+                                              by A17,A20,XBOOLE_1:13,17;
+                      hence A1 \/ A2 c= A1 by XBOOLE_1:12;
+                     end;
+                  hence A1 \/ A2 c= A1;
+                 end;
+               now assume C /\ (A1 \/ A2) <> {};
+                  then C meets (A1 \/ A2) by XBOOLE_0:def 7;
+                  then X0 meets (X1 union X2) by A6,TSEP_1:def 3;
+                  then the carrier of X0 meet (X1 union X2) = C /\ (A1 \/ A2)
+                                & the carrier of X1 meet X2 = A1 /\ A2
+                                                   by A1,A6,TSEP_1:def 5;
+                  then A21: C /\ (A1 \/ A2) c= A1 /\ A2 & A1 /\ A2 c= A1
+                                                      by A5,TSEP_1:4,XBOOLE_1:
+17;
+                  then A22: C /\ (A1 \/ A2) c= A1 by XBOOLE_1:1;
+                      now per cases;
+                     suppose C1 /\ (A1 \/ A2) = {};
+                      hence A1 \/ A2 c= A1 by A17,A21,XBOOLE_1:1;
+                     suppose C1 /\ (A1 \/ A2) <> {};
+                      then C1 meets (A1 \/ A2) by XBOOLE_0:def 7;
+                      then Y1 meets (X1 union X2) by A6,TSEP_1:def 3;
+                     then the carrier of Y1 meet (X1 union X2) = C1 /\ (A1 \/
+                      A2) by A6,TSEP_1:def 5;
+                     then C1 /\ (A1 \/ A2) c= A1 by A4,TSEP_1:4;
+                      hence A1 \/ A2 c= A1 by A17,A22,XBOOLE_1:8;
+                     end;
+                  hence A1 \/ A2 c= A1;
+                 end;
+           then A1 \/ A2 c= A1 & A2 c= A1 \/ A2 by A6,A17,A18,XBOOLE_1:7;
+          then A2 c= A1 by XBOOLE_1:1;
+          hence contradiction by A2,TSEP_1:4;
+         end;
+  hence thesis by A8;
+ end;
+
+theorem Th38:
+ X1 meets X2 & X1 is not SubSpace of X2 & X2 is not SubSpace of X1 &
+  not X1 union X2 is SubSpace of Y1 union Y2 &
+  the TopStruct of X = (Y1 union Y2) union X0 &
+   Y1 meet (X1 union X2) is SubSpace of X1 &
+    Y2 meet (X1 union X2) is SubSpace of X2 &
+     X0 meet (X1 union X2) is SubSpace of X1 meet X2 implies
+      Y1 union Y2 meets X1 union X2 & X0 meets X1 union X2
+ proof assume A1: X1 meets X2;
+      assume A2: X1 is not SubSpace of X2 & X2 is not SubSpace of X1;
+     assume A3: not X1 union X2 is SubSpace of Y1 union Y2;
+    assume A4: the TopStruct of X = (Y1 union Y2) union X0;
+   assume A5: Y1 meet (X1 union X2) is SubSpace of X1 &
+             Y2 meet (X1 union X2) is SubSpace of X2;
+  assume A6: X0 meet (X1 union X2) is SubSpace of X1 meet X2;
+   reconsider A1 = the carrier of X1 as Subset of X by TSEP_1:1;
+   reconsider A2 = the carrier of X2 as Subset of X by TSEP_1:1;
+   reconsider C1 = the carrier of Y1 as Subset of X by TSEP_1:1;
+   reconsider C2 = the carrier of Y2 as Subset of X by TSEP_1:1;
+   reconsider C = the carrier of X0 as Subset of X by TSEP_1:1;
+    A7: Y1 meets X1 union X2 & Y2 meets X1 union X2 by A1,A2,A4,A5,A6,Th37;
+     Y1 is SubSpace of Y1 union Y2 by TSEP_1:22;
+   hence Y1 union Y2 meets X1 union X2 by A7,Th23;
+    A8: [#]X = the carrier of X by PRE_TOPC:12;
+     A9: the carrier of X1 union X2 = A1 \/ A2 &
+           the carrier of Y1 union Y2 = C1 \/ C2 by TSEP_1:def 2;
+    then A10: not A1 \/ A2 c= C1 \/ C2 by A3,TSEP_1:4;
+      now assume X0 misses (X1 union X2);
+     then A11: C misses (A1 \/ A2) by A9,TSEP_1:def 3;
+       the carrier of X = (C1 \/ C2) \/ C by A4,A9,TSEP_1:def 2;
+     then A1 \/ A2 = ((C1 \/ C2) \/ C) /\ (A1 \/ A2) by A8,PRE_TOPC:15
+                 .= ((C1 \/ C2) /\ (A1 \/ A2)) \/ (C /\ (A1 \/ A2)) by XBOOLE_1
+:23
+                 .= ((C1 \/ C2) /\ (A1 \/ A2)) \/ {} by A11,XBOOLE_0:def 7
+                 .= (C1 \/ C2) /\ (A1 \/ A2);
+     hence contradiction by A10,XBOOLE_1:17;
+    end;
+  hence thesis;
+ end;
+
+theorem Th39:
+ ((X1 union X2) meets X0 iff X1 meets X0 or X2 meets X0) &
+  (X0 meets (X1 union X2) iff X0 meets X1 or X0 meets X2)
+ proof
+   reconsider A0 = the carrier of X0 as Subset of X by TSEP_1:1;
+   reconsider A1 = the carrier of X1 as Subset of X by TSEP_1:1;
+   reconsider A2 = the carrier of X2 as Subset of X by TSEP_1:1;
+  thus (X1 union X2) meets X0 iff X1 meets X0 or X2 meets X0
+   proof
+    thus (X1 union X2) meets X0 implies X1 meets X0 or X2 meets X0
+     proof assume (X1 union X2) meets X0;
+      then (the carrier of (X1 union X2)) meets A0 by TSEP_1:def 3;
+      then (the carrier of (X1 union X2)) /\ A0 <> {} by XBOOLE_0:def 7;
+      then (A1 \/ A2) /\ A0 <> {} by TSEP_1:def 2;
+      then (A1 /\ A0) \/ (A2 /\ A0) <> {} by XBOOLE_1:23;
+      then A1 /\ A0 <> {} or A2 /\ A0 <> {};
+      then A1 meets A0 or A2 meets A0 by XBOOLE_0:def 7;
+      hence thesis by TSEP_1:def 3;
+     end;
+    thus X1 meets X0 or X2 meets X0 implies (X1 union X2) meets X0
+     proof assume X1 meets X0 or X2 meets X0;
+      then A1 meets A0 or A2 meets A0 by TSEP_1:def 3;
+      then A1 /\ A0 <> {} or A2 /\ A0 <> {} by XBOOLE_0:def 7;
+      then (A1 /\ A0) \/ (A2 /\ A0) <> {} by XBOOLE_1:15;
+      then (A1 \/ A2) /\ A0 <> {} by XBOOLE_1:23;
+      then (the carrier of (X1 union X2)) /\ A0 <> {} by TSEP_1:def 2;
+      then (the carrier of (X1 union X2)) meets A0 by XBOOLE_0:def 7;
+      hence thesis by TSEP_1:def 3;
+    end;
+   end;
+  hence X0 meets (X1 union X2) iff X0 meets X1 or X0 meets X2;
+ end;
+
+theorem
+   ((X1 union X2) misses X0 iff X1 misses X0 & X2 misses X0) &
+   (X0 misses (X1 union X2) iff X0 misses X1 & X0 misses X2)
+ proof
+   reconsider A0 = the carrier of X0 as Subset of X by TSEP_1:1;
+   reconsider A1 = the carrier of X1 as Subset of X by TSEP_1:1;
+   reconsider A2 = the carrier of X2 as Subset of X by TSEP_1:1;
+  thus (X1 union X2) misses X0 iff X1 misses X0 & X2 misses X0
+   proof
+    thus (X1 union X2) misses X0 implies X1 misses X0 & X2 misses X0
+     proof assume (X1 union X2) misses X0;
+      then (the carrier of (X1 union X2)) misses A0 by TSEP_1:def 3;
+      then (the carrier of (X1 union X2)) /\ A0 = {} by XBOOLE_0:def 7;
+      then (A1 \/ A2) /\ A0 = {} by TSEP_1:def 2;
+      then (A1 /\ A0) \/ (A2 /\ A0) = {} by XBOOLE_1:23;
+      then A1 /\ A0 = {} & A2 /\ A0 = {} by XBOOLE_1:15;
+      then A1 misses A0 & A2 misses A0 by XBOOLE_0:def 7;
+      hence thesis by TSEP_1:def 3;
+     end;
+    thus X1 misses X0 & X2 misses X0 implies (X1 union X2) misses X0
+     proof assume X1 misses X0 & X2 misses X0;
+      then A1 misses A0 & A2 misses A0 by TSEP_1:def 3;
+      then A1 /\ A0 = {} & A2 /\ A0 = {} by XBOOLE_0:def 7;
+      then (A1 /\ A0) \/ (A2 /\ A0) = {};
+      then (A1 \/ A2) /\ A0 = {} by XBOOLE_1:23;
+      then (the carrier of (X1 union X2)) /\ A0 = {} by TSEP_1:def 2;
+      then (the carrier of (X1 union X2)) misses A0 by XBOOLE_0:def 7;
+      hence thesis by TSEP_1:def 3;
+    end;
+   end;
+  hence X0 misses (X1 union X2) iff X0 misses X1 & X0 misses X2;
+ end;
+
+theorem
+   X1 meets X2 implies
+  ((X1 meet X2) meets X0 implies X1 meets X0 & X2 meets X0) &
+   (X0 meets (X1 meet X2) implies X0 meets X1 & X0 meets X2)
+ proof assume A1: X1 meets X2;
+   reconsider A0 = the carrier of X0 as Subset of X by TSEP_1:1;
+   reconsider A1 = the carrier of X1 as Subset of X by TSEP_1:1;
+   reconsider A2 = the carrier of X2 as Subset of X by TSEP_1:1;
+  thus (X1 meet X2) meets X0 implies X1 meets X0 & X2 meets X0
+   proof assume (X1 meet X2) meets X0;
+    then (the carrier of (X1 meet X2)) meets A0 by TSEP_1:def 3;
+    then (the carrier of (X1 meet X2)) /\ A0 <> {} by XBOOLE_0:def 7;
+    then (A1 /\ A2) /\ A0 <> {} by A1,TSEP_1:def 5;
+    then A1 /\ (A2 /\ (A0 /\ A0)) <> {} by XBOOLE_1:16;
+    then A1 /\ (A0 /\ (A2 /\ A0)) <> {} by XBOOLE_1:16;
+    then (A1 /\ A0) /\ (A2 /\ A0) <> {} & (A1 /\ A0) /\ (A2 /\ A0) c= A1 /\
+ A0 &
+           (A1 /\ A0) /\ (A2 /\ A0) c= A2 /\ A0 by XBOOLE_1:16,17;
+    then A1 /\ A0 <> {} & A2 /\ A0 <> {};
+    then A1 meets A0 & A2 meets A0 by XBOOLE_0:def 7;
+    hence thesis by TSEP_1:def 3;
+   end;
+  hence thesis;
+ end;
+
+theorem
+   X1 meets X2 implies
+  (X1 misses X0 or X2 misses X0 implies (X1 meet X2) misses X0) &
+   (X0 misses X1 or X0 misses X2 implies X0 misses (X1 meet X2))
+ proof assume A1: X1 meets X2;
+   reconsider A0 = the carrier of X0 as Subset of X by TSEP_1:1;
+   reconsider A1 = the carrier of X1 as Subset of X by TSEP_1:1;
+   reconsider A2 = the carrier of X2 as Subset of X by TSEP_1:1;
+  thus X1 misses X0 or X2 misses X0 implies (X1 meet X2) misses X0
+   proof assume X1 misses X0 or X2 misses X0;
+    then A1 misses A0 or A2 misses A0 by TSEP_1:def 3;
+    then A1 /\ A0 = {} or A2 /\ A0 = {} by XBOOLE_0:def 7;
+    then (A1 /\ A0) /\ (A2 /\ A0) = {};
+    then A1 /\ ((A2 /\ A0) /\ A0) = {} by XBOOLE_1:16;
+    then A1 /\ (A2 /\ (A0 /\ A0)) = {} by XBOOLE_1:16;
+    then (A1 /\ A2) /\ A0 = {} by XBOOLE_1:16;
+    then (the carrier of (X1 meet X2)) /\ A0 = {} by A1,TSEP_1:def 5;
+    then (the carrier of (X1 meet X2)) misses A0 by XBOOLE_0:def 7;
+    hence thesis by TSEP_1:def 3;
+   end;
+  hence X0 misses X1 or X0 misses X2 implies X0 misses (X1 meet X2);
+ end;
+
+theorem Th43:
+ for X0 being closed non empty SubSpace of X holds
+  X0 meets X1 implies X0 meet X1 is closed SubSpace of X1
+ proof let X0 be closed non empty SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A0 = the carrier of X0 as Subset of X;
+   reconsider A1 = the carrier of X1 as Subset of X by TSEP_1:1;
+  assume A1: X0 meets X1;
+    A0 /\ A1 is Subset of X1 by XBOOLE_1:17;
+  then reconsider B = A0 /\ A1 as Subset of X1;
+     B = A0 /\ [#]X1 & A0 is closed by PRE_TOPC:12,TSEP_1:11;
+  then B is closed & B = the carrier of X0 meet X1 &
+        X0 meet X1 is SubSpace of X1 by A1,PRE_TOPC:43,TSEP_1:30,def 5;
+  hence thesis by TSEP_1:11;
+ end;
+
+theorem Th44:
+ for X0 being open non empty SubSpace of X holds
+  X0 meets X1 implies X0 meet X1 is open SubSpace of X1
+ proof let X0 be open non empty SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A0 = the carrier of X0 as Subset of X;
+   reconsider A1 = the carrier of X1 as Subset of X by TSEP_1:1;
+  assume A1: X0 meets X1;
+    A0 /\ A1 is Subset of X1 by XBOOLE_1:17;
+  then reconsider B = A0 /\ A1 as Subset of X1;
+     B = A0 /\ [#]X1 & A0 is open by PRE_TOPC:12,TSEP_1:16;
+  then B is open & B = the carrier of X0 meet X1 &
+        X0 meet X1 is SubSpace of X1 by A1,TOPS_2:32,TSEP_1:30,def 5;
+  hence thesis by TSEP_1:16;
+ end;
+
+theorem
+   for X0 being closed non empty SubSpace of X holds
+  X1 is SubSpace of X0 & X0 misses X2 implies
+   X1 is closed SubSpace of X1 union X2 &
+    X1 is closed SubSpace of X2 union X1
+ proof let X0 be closed non empty SubSpace of X;
+  assume A1: X1 is SubSpace of X0;
+   then X0 meets X1 & X1 is SubSpace of X1 union X2 by Th22,TSEP_1:22;
+   then A2: X0 meets X1 union X2 by Th23;
+
+   reconsider S = the TopStruct of X1 as SubSpace of X by Th11;
+  assume X0 misses X2;
+   then X0 meet (X1 union X2) = the TopStruct of X1 by A1,Th33;
+   then S is closed SubSpace of X1 union X2 & X1 union X2 = X2 union X1
+                                                           by A2,Th43
+;
+  hence thesis by Th13;
+ end;
+
+theorem Th46:
+ for X0 being open non empty SubSpace of X holds
+  X1 is SubSpace of X0 & X0 misses X2 implies
+   X1 is open SubSpace of X1 union X2 & X1 is open SubSpace of X2 union X1
+ proof let X0 be open non empty SubSpace of X;
+  assume A1: X1 is SubSpace of X0;
+   then X0 meets X1 & X1 is SubSpace of X1 union X2 by Th22,TSEP_1:22;
+   then A2: X0 meets X1 union X2 by Th23;
+
+   reconsider S = the TopStruct of X1 as SubSpace of X by Th11;
+  assume X0 misses X2;
+   then X0 meet (X1 union X2) = the TopStruct of X1 by A1,Th33;
+  then S is open SubSpace of X1 union X2 & X1 union X2 = X2 union X1
+                                                          by A2,Th44;
+  hence thesis by Th14;
+ end;
+
+begin
+::3. Continuity of Mappings.
+
+definition
+ let X, Y be non empty TopSpace, f be map of X,Y, x be Point of X;
+ pred f is_continuous_at x means
+:Def2: for G being a_neighborhood of f.x
+  ex H being a_neighborhood of x st f.:H c= G;
+ antonym f is_not_continuous_at x;
+end;
+
+reserve X, Y for non empty TopSpace; reserve f for map of X,Y;
+
+theorem Th47:
+ for x being Point of X holds
+  f is_continuous_at x iff
+   for G being a_neighborhood of f.x holds f"G is a_neighborhood of x
+ proof let x be Point of X;
+  thus f is_continuous_at x implies
+    for G being a_neighborhood of f.x holds f"G is a_neighborhood of x
+   proof assume A1: f is_continuous_at x;
+     let G be a_neighborhood of f.x;
+    consider H being a_neighborhood of x such that A2: f.:H c= G by A1,Def2;
+       ex V being Subset of X st V is open & V c= f"G & x in V
+      proof consider V being Subset of X such that
+        A3: V is open & V c= H & x in V by CONNSP_2:8;
+       take V;
+          H c= f"G by A2,Th1;
+       hence thesis by A3,XBOOLE_1:1;
+      end;
+    hence f"G is a_neighborhood of x by CONNSP_2:8;
+   end;
+  assume
+    A4: for G being a_neighborhood of f.x holds f"G is a_neighborhood of x;
+   let G be a_neighborhood of f.x;
+    reconsider H = f"G as a_neighborhood of x by A4;
+  take H;
+  thus f.:H c= G by FUNCT_1:145;
+ end;
+
+theorem Th48:
+ for x being Point of X holds
+  f is_continuous_at x iff
+   for G being Subset of Y st G is open & f.x in G
+    ex H being Subset of X st H is open & x in H & f.:H c= G
+ proof let x be Point of X;
+  thus f is_continuous_at x implies
+        for G being Subset of Y st G is open & f.x in G
+         ex H being Subset of X st H is open & x in H & f.:H c= G
+   proof assume A1: f is_continuous_at x;
+    let G be Subset of Y; assume G is open & f.x in G;
+     then reconsider G0 = G as a_neighborhood of f.x by CONNSP_2:5;
+     consider H0 being a_neighborhood of x such that
+      A2: f.:H0 c= G0 by A1,Def2;
+     consider H being Subset of X such that
+      A3: H is open and A4: H c= H0 and A5: x in H by CONNSP_2:8;
+    take H;
+       f.:H c= f.:H0 by A4,RELAT_1:156;
+    hence thesis by A2,A3,A5,XBOOLE_1:1;
+   end;
+  assume
+   A6: for G being Subset of Y st G is open & f.x in G
+          ex H being Subset of X
+           st H is open & x in H & f.:H c= G;
+  let G0 be a_neighborhood of f.x;
+   consider G being Subset of Y such that
+     A7: G is open and A8: G c= G0 and A9: f.x in G by CONNSP_2:8;
+   consider H being Subset of X such that
+     A10: H is open and A11: x in H and A12: f.:H c= G by A6,A7,A9;
+   reconsider H0 = H as a_neighborhood of x by A10,A11,CONNSP_2:5;
+  take H0;
+  thus f.:H0 c= G0 by A8,A12,XBOOLE_1:1;
+ end;
+
+theorem Th49:
+ f is continuous iff for x being Point of X holds f is_continuous_at x
+ proof
+  thus f is continuous implies
+        for x being Point of X holds f is_continuous_at x
+   proof assume A1: f is continuous;
+    let x be Point of X;
+       for G being a_neighborhood of f.x
+      ex H being a_neighborhood of x st f.:H c= G by A1,BORSUK_1:def 2;
+    hence f is_continuous_at x by Def2;
+   end;
+  assume A2: for x being Point of X holds f is_continuous_at x;
+  thus f is continuous
+   proof let x be Point of X, G be a_neighborhood of f.x;
+       f is_continuous_at x by A2;
+    hence thesis by Def2;
+   end;
+ end;
+
+theorem Th50:
+ for X,Y,Z being non empty TopSpace st
+  the carrier of Y = the carrier of Z & the topology of Z c= the topology of Y
+   for f being map of X,Y, g being map of X,Z st f = g holds
+    for x being Point of X holds
+     f is_continuous_at x implies g is_continuous_at x
+ proof let X,Y,Z be non empty TopSpace;
+  assume A1: the carrier of Y = the carrier of Z &
+              the topology of Z c= the topology of Y;
+   let f be map of X,Y,g be map of X,Z;
+  assume A2: f = g;
+   let x be Point of X;
+  assume A3: f is_continuous_at x;
+     for G being Subset of Z st G is open & g.x in G
+    ex H being Subset of X st H is open & x in H & g.:H c= G
+    proof let G be Subset of Z;
+      reconsider F = G as Subset of Y by A1;
+     assume A4: G is open & g.x in G;
+      then G in the topology of Z by PRE_TOPC:def 5;
+      then f.x in F & F is open by A1,A2,A4,PRE_TOPC:def 5;
+      then consider H being Subset of X such that
+        A5: H is open & x in H & f.:H c= F by A3,Th48;
+      take H;
+      thus thesis by A2,A5;
+    end;
+  hence g is_continuous_at x by Th48;
+ end;
+
+theorem Th51:
+ for X,Y,Z being non empty TopSpace st
+  the carrier of X = the carrier of Y & the topology of Y c= the topology of X
+   for f being map of X,Z, g being map of Y,Z st f = g holds
+    for x being Point of X, y being Point of Y st x = y holds
+     g is_continuous_at y implies f is_continuous_at x
+ proof let X,Y,Z be non empty TopSpace;
+  assume A1: the carrier of X = the carrier of Y &
+              the topology of Y c= the topology of X;
+   let f be map of X,Z, g be map of Y,Z;
+  assume A2: f = g;
+   let x be Point of X, y be Point of Y;
+  assume A3: x = y;
+  assume A4: g is_continuous_at y;
+     for G being Subset of Z st G is open & f.x in G
+    ex H being Subset of X st H is open & x in H & f.:H c= G
+    proof let G be Subset of Z;
+     assume G is open & f.x in G;
+      then consider H being Subset of Y such that
+        A5: H is open & y in H & g.:H c= G by A2,A3,A4,Th48;
+      reconsider F = H as Subset of X by A1;
+       A6: H in the topology of Y by A5,PRE_TOPC:def 5;
+      take F;
+      thus thesis by A1,A2,A3,A5,A6,PRE_TOPC:def 5;
+    end;
+  hence f is_continuous_at x by Th48;
+ end;
+
+reserve X,Y,Z for non empty TopSpace;
+reserve f for map of X,Y, g for map of Y,Z;
+
+theorem Th52:
+ for x being Point of X, y being Point of Y st y = f.x holds
+  f is_continuous_at x & g is_continuous_at y implies g*f is_continuous_at x
+ proof let x be Point of X, y be Point of Y such that A1: y = f.x;
+   assume A2: f is_continuous_at x & g is_continuous_at y;
+    for G being a_neighborhood of (g*f).x holds (g*f)"G is a_neighborhood of x
+   proof let G be a_neighborhood of (g*f).x;
+       (g*f).x = g.y by A1,FUNCT_2:21;
+    then g"G is a_neighborhood of f.x by A1,A2,Th47;
+    then f"(g"G) is a_neighborhood of x by A2,Th47;
+    hence (g*f)"G is a_neighborhood of x by RELAT_1:181;
+   end;
+  hence thesis by Th47;
+ end;
+
+theorem
+   for y being Point of Y holds
+  f is continuous & g is_continuous_at y implies
+   for x being Point of X st x in f"{y} holds g*f is_continuous_at x
+ proof let y be Point of Y;
+  assume A1: f is continuous;
+  assume A2: g is_continuous_at y;
+   let x be Point of X such that A3: x in f"{y};
+     dom f = [#]X by TOPS_2:51;
+  then A4: x in the carrier of X & dom f = the carrier of X by PRE_TOPC:12;
+     {x} is Subset of f"{y} by A3,SUBSET_1:63;
+  then f.:{x} c= {y} by Th1;
+  then {f.x} c= {y} & f.x in {f.x} by A4,FUNCT_1:117,TARSKI:def 1;
+  then f is_continuous_at x & f.x = y by A1,Th49,TARSKI:def 1;
+  hence thesis by A2,Th52;
+ end;
+
+theorem
+   for x being Point of X holds
+  f is_continuous_at x & g is continuous implies g*f is_continuous_at x
+ proof let x be Point of X;
+  assume A1: f is_continuous_at x;
+  assume g is continuous;
+   then g is_continuous_at (f.x) by Th49;
+  hence thesis by A1,Th52;
+ end;
+
+theorem
+  f is continuous map of X,Y iff
+  for x being Point of X holds f is_continuous_at x by Th49;
+
+theorem Th56:
+ for X,Y,Z being non empty TopSpace st
+  the carrier of Y = the carrier of Z & the topology of Z c= the topology of Y
+   for f being continuous map of X,Y holds f is continuous map of X,Z
+ proof let X,Y,Z be non empty TopSpace;
+  assume A1: the carrier of Y = the carrier of Z &
+             the topology of Z c= the topology of Y;
+  let f be continuous map of X,Y;
+   reconsider g = f as map of X,Z by A1;
+    for x being Point of X holds g is_continuous_at x
+   proof let x be Point of X;
+       f is_continuous_at x by Th49;
+    hence thesis by A1,Th50;
+   end;
+  hence thesis by Th49;
+ end;
+
+theorem
+   for X,Y,Z being non empty TopSpace st
+  the carrier of X = the carrier of Y & the topology of Y c= the topology of X
+   for f being continuous map of Y,Z holds f is continuous map of X,Z
+ proof let X,Y,Z be non empty TopSpace;
+  assume A1: the carrier of X = the carrier of Y &
+              the topology of Y c= the topology of X;
+  let f be continuous map of Y,Z;
+   reconsider g = f as map of X,Z by A1;
+    for x being Point of X holds g is_continuous_at x
+   proof let x be Point of X;
+    reconsider y = x as Point of Y by A1;
+       f is_continuous_at y by Th49;
+    hence thesis by A1,Th51;
+   end;
+  hence thesis by Th49;
+ end;
+
+::(Definition of the restriction mapping - general case.)
+definition
+ let X, Y be non empty TopSpace, X0 be SubSpace of X, f be map of X,Y;
+ func f|X0 -> map of X0,Y equals
+:Def3: f|(the carrier of X0);
+ coherence
+  proof
+      the carrier of Y <> {} & the carrier of X0 c= the carrier of X
+                                                by BORSUK_1:35;
+   then (f|(the carrier of X0)) is
+       Function of the carrier of X0, the carrier of Y by FUNCT_2:38;
+   hence thesis;
+  end;
+end;
+
+reserve X, Y for non empty TopSpace, X0 for non empty SubSpace of X;
+reserve f for map of X,Y;
+
+theorem Th58:
+ for x being Point of X st x in the carrier of X0 holds f.x = (f|X0).x
+ proof let x be Point of X such that
+    A1: x in the carrier of X0;
+  thus f.x = (f|(the carrier of X0)).x by A1,FUNCT_1:72
+           .= (f|X0).x by Def3;
+ end;
+
+theorem Th59:
+ for f0 being map of X0,Y st
+  for x being Point of X st x in the carrier of X0 holds f.x = f0.x
+   holds f|X0 = f0
+ proof let f0 be map of X0,Y such that
+    A1: for x being Point of X st x in the carrier of X0 holds f.x = f0.x;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+  then f|(the carrier of X0) = f0 by A1,Th2;
+  hence thesis by Def3;
+ end;
+
+theorem Th60:
+ the TopStruct of X0 = the TopStruct of X implies f = f|X0
+ proof assume A1: the TopStruct of X0 = the TopStruct of X;
+  thus f|X0 = f|(the carrier of X0) by Def3
+           .= f*(id the carrier of X) by A1,RELAT_1:94
+           .= f by FUNCT_2:23;
+ end;
+
+theorem Th61:
+ for A being Subset of X st A c= the carrier of X0
+   holds f.:A = (f|X0).:A
+ proof let A be Subset of X such that
+ A1: A c= the carrier of X0;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+  hence f.:A = (f|(the carrier of X0)).:A by A1,Th4
+           .= (f|X0).:A by Def3;
+ end;
+
+theorem
+   for B being Subset of Y st f"B c= the carrier of X0
+ holds f"B = (f|X0)"B
+ proof let B be Subset of Y such that
+ A1: f"B c= the carrier of X0;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+  hence f"B = (f|(the carrier of X0))"B by A1,Th5
+           .= (f|X0)"B by Def3;
+ end;
+
+theorem Th63:
+ for g being map of X0,Y ex h being map of X,Y st h|X0 = g
+ proof let g be map of X0,Y;
+     ex h being map of X,Y st h|X0 = g
+    proof
+       now per cases;
+      suppose A1: the TopStruct of X = the TopStruct of X0;
+       then reconsider h = g as map of X,Y;
+      take h;
+      thus h|X0 = g by A1,Th60;
+      suppose A2: the TopStruct of X <> the TopStruct of X0;
+          Y is SubSpace of Y by TSEP_1:2;
+       then reconsider B = the carrier of Y
+       as non empty Subset of Y
+        by TSEP_1:1;
+        A3: X is SubSpace of X by TSEP_1:2;
+       then reconsider A = the carrier of X
+       as non empty Subset of X
+        by TSEP_1:1;
+            reconsider A0 = the carrier of X0 as Subset of X
+             by TSEP_1:1;
+        reconsider A1 = A \ A0 as Subset of X;
+         A4: A0 misses A1 by XBOOLE_1:79;
+          A0 <> A by A2,A3,TSEP_1:5;
+         then not A c= A0 by XBOOLE_0:def 10;
+       then reconsider A1 as non empty Subset of A by XBOOLE_1:37;
+            reconsider A0 as non empty Subset of A;
+        consider y being Element of B;
+       reconsider g1 = (A1 --> y) as Function of A1,B;
+            reconsider g0 = g as Function of A0,B;
+       set G = g0 union g1;
+         A5: G|A0 = g0 by A4,Th6;
+         the carrier of X = A1 \/ A0 by XBOOLE_1:45;
+       then reconsider h = G as map of X,Y;
+      take h;
+      thus h|X0 = g by A5,Def3;
+     end;
+     hence thesis;
+    end;
+  hence thesis;
+ end;
+
+reserve f for map of X,Y, X0 for non empty SubSpace of X;
+
+theorem Th64:
+ for x being Point of X, x0 being Point of X0 st x = x0 holds
+  f is_continuous_at x implies f|X0 is_continuous_at x0
+ proof let x be Point of X, x0 be Point of X0 such that A1: x = x0;
+  assume A2: f is_continuous_at x;
+     for G being Subset of Y st G is open & (f|X0).x0 in G
+     ex H0 being Subset of X0
+     st H0 is open & x0 in H0 & (f|X0).:H0 c= G
+    proof let G be Subset of Y such that
+    A3: G is open and A4: (f|X0).x0 in G;
+       f.x in G by A1,A4,Th58;
+     then consider H being Subset of X such that
+       A5: H is open and A6: x in H and A7: f.:H c= G by A2,A3,Th48;
+      reconsider C = the carrier of X0 as Subset of X
+      by TSEP_1:1;
+       H /\ C is Subset of X0 by XBOOLE_1:17;
+     then reconsider H0 = H /\ C as Subset of X0;
+     take H0;
+A8:      H0 = H /\ [#]X0 & x in H0 by A1,A6,PRE_TOPC:12,XBOOLE_0:def 3;
+        f|X0 = f|C by Def3;
+     then A9: (f|X0).:H0 c= f.:H0 by RELAT_1:161;
+        f.:H0 c= f.:H /\ f.:C & f.:H /\ f.:C c= f.:H by RELAT_1:154,XBOOLE_1:17
+;
+     then f.:H0 c= f.:H by XBOOLE_1:1;
+     then f.:H0 c= G by A7,XBOOLE_1:1;
+     hence thesis by A1,A5,A8,A9,TOPS_2:32,XBOOLE_1:1;
+    end;
+  hence thesis by Th48;
+ end;
+
+::Characterizations of Continuity at the Point by Local one.
+theorem Th65:
+ for A being Subset of X, x being Point of X,
+ x0 being Point of X0 st
+  A c= the carrier of X0 & A is a_neighborhood of x & x = x0 holds
+   f is_continuous_at x iff f|X0 is_continuous_at x0
+ proof let A be Subset of X, x be Point of X,
+ x0 be Point of X0 such that
+    A1: A c= the carrier of X0 and
+    A2: A is a_neighborhood of x and A3: x = x0;
+  thus f is_continuous_at x implies f|X0 is_continuous_at x0 by A3,Th64;
+  thus f|X0 is_continuous_at x0 implies f is_continuous_at x
+   proof assume A4: f|X0 is_continuous_at x0;
+      for G being Subset of Y st G is open & f.x in G
+      ex H being Subset of X st H is open & x in H & f.:H c= G
+     proof
+      let G be Subset of Y such that A5: G is open and
+      A6: f.x in G;
+        (f|X0).x0 in G by A3,A6,Th58;
+      then consider H0 being Subset of X0 such that
+      A7: H0 is open and A8: x0 in H0 and A9: (f|X0).:H0 c= G by A4,A5,Th48;
+       consider V being Subset of X such that
+        A10: V is open and A11: V c= A and A12: x in V by A2,CONNSP_2:8;
+        V is Subset of X0 by A1,A11,XBOOLE_1:1;
+      then reconsider V0 = V as Subset of X0;
+        A13: H0 /\ V0 c= V by XBOOLE_1:17;
+         V0 is open by A10,TOPS_2:33;
+      then A14: H0 /\ V0 is open by A7,TOPS_1:38;
+        H0 /\ V0 is Subset of X by A13,XBOOLE_1:1;
+      then reconsider H = H0 /\ V0 as Subset of X;
+       take H;
+        for z being Point of Y holds z in f.:H implies z in G
+       proof let z be Point of Y;
+        assume z in f.:H;
+        then consider y being Point of X such that
+              A15: y in H and A16: z = f.y by FUNCT_2:116;
+        set g = f|X0;
+           y in V by A13,A15;
+        then y in A by A11;
+        then A17: z = g.y by A1,A16,Th58;
+           H0 /\ V0 c= H0 by XBOOLE_1:17;
+        then z in g.:H0 by A15,A17,FUNCT_2:43;
+        hence z in G by A9;
+       end;
+      hence thesis by A3,A8,A10,A12,A13,A14,SUBSET_1:7,TSEP_1:9,XBOOLE_0:def 3
+;
+     end;
+    hence thesis by Th48;
+   end;
+ end;
+
+theorem Th66:
+ for A being Subset of X, x being Point of X,
+ x0 being Point of X0 st
+  A is open & x in A & A c= the carrier of X0 & x = x0 holds
+   f is_continuous_at x iff f|X0 is_continuous_at x0
+ proof let A be Subset of X, x be Point of X,
+ x0 be Point of X0 such that
+   A1: A is open & x in A and A2: A c= the carrier of X0 & x = x0;
+  thus f is_continuous_at x implies f|X0 is_continuous_at x0 by A2,Th64;
+  thus f|X0 is_continuous_at x0 implies f is_continuous_at x
+   proof A3: A is a_neighborhood of x by A1,CONNSP_2:5;
+    assume f|X0 is_continuous_at x0;
+    hence thesis by A2,A3,Th65;
+   end;
+ end;
+
+theorem
+   for X0 being open non empty SubSpace of X, x being Point of X,
+     x0 being Point of X0 st
+  x = x0 holds f is_continuous_at x iff f|X0 is_continuous_at x0
+ proof let X0 be open non empty SubSpace of X, x be Point of X,
+          x0 be Point of X0;
+  assume A1: x = x0;
+  hence f is_continuous_at x implies f|X0 is_continuous_at x0 by Th64;
+  thus f|X0 is_continuous_at x0 implies f is_continuous_at x
+   proof
+      the carrier of X0 is Subset of X by TSEP_1:1;
+    then reconsider A = the carrier of X0 as Subset of X;
+     A2: A is open by TSEP_1:16;
+    assume f|X0 is_continuous_at x0;
+    hence thesis by A1,A2,Th66;
+   end;
+ end;
+
+theorem Th68:
+ for f being continuous map of X,Y, X0 being non empty SubSpace of X holds
+  f|X0 is continuous map of X0,Y
+ proof let f be continuous map of X,Y, X0 be non empty SubSpace of X;
+    for x0 being Point of X0 holds f|X0 is_continuous_at x0
+   proof let x0 be Point of X0;
+       the carrier of X0 c= the carrier of X &
+      x0 in the carrier of X0 by BORSUK_1:35;
+    then reconsider x = x0 as Point of X;
+       f is_continuous_at x by Th49;
+    hence thesis by Th64;
+   end;
+  hence thesis by Th49;
+ end;
+
+theorem Th69:
+ for X,Y,Z being non empty TopSpace, X0 being non empty SubSpace of X,
+  f being map of X,Y, g being map of Y,Z holds (g*f)|X0 = g*(f|X0)
+ proof let X,Y,Z be non empty TopSpace, X0 be non empty SubSpace of X,
+            f be map of X,Y, g be map of Y,Z;
+  set h = g*f;
+     h|X0 = h|the carrier of X0 by Def3;
+  then reconsider G = h|the carrier of X0 as map of X0,Z;
+     f|X0 = f|the carrier of X0 by Def3;
+  then reconsider F0 = f|the carrier of X0 as map of X0,Y;
+   set F = g*F0;
+    for x being Point of X0 holds G.x = F.x
+   proof let x be Point of X0;
+       the carrier of X0 c= the carrier of X by BORSUK_1:35;
+    then reconsider y = x as Element of X by TARSKI:def 3;
+    thus G.x = (g*f).y by FUNCT_1:72
+             .= g.(f.y) by FUNCT_2:21
+             .= g.(F0.x) by FUNCT_1:72
+             .= F.x by FUNCT_2:21;
+   end;
+  then G = F by FUNCT_2:113;
+  then h|X0 = g*(f|the carrier of X0) by Def3;
+  hence thesis by Def3;
+ end;
+
+theorem Th70:
+ for X,Y,Z being non empty TopSpace, X0 being non empty SubSpace of X,
+  g being map of Y,Z, f being map of X,Y st
+   g is continuous & f|X0 is continuous holds (g*f)|X0 is continuous
+ proof let X,Y,Z be non empty TopSpace, X0 be non empty SubSpace of X,
+            g be map of Y,Z, f be map of X,Y such that
+        A1: g is continuous & f|X0 is continuous;
+     (g*f)|X0 = g*(f|X0) by Th69;
+  hence thesis by A1,TOPS_2:58;
+ end;
+
+theorem
+   for X,Y,Z being non empty TopSpace, X0 being non empty SubSpace of X,
+  g being continuous map of Y,Z, f being map of X,Y st
+   f|X0 is continuous map of X0,Y holds
+    (g*f)|X0 is continuous map of X0,Z by Th70;
+
+::(Definition of the restriction mapping - special case.)
+definition
+ let X,Y be non empty TopSpace, X0, X1 be SubSpace of X, g be map of X0,Y;
+  assume A1: X1 is SubSpace of X0;
+ func g|X1 -> map of X1,Y equals
+:Def4: g|(the carrier of X1);
+ coherence
+  proof
+      the carrier of Y <> {} & the carrier of X1 c= the carrier of X0
+                                                by A1,TSEP_1:4;
+   then (g|(the carrier of X1)) is
+     Function of the carrier of X1, the carrier of Y by FUNCT_2:38;
+   hence thesis;
+  end;
+end;
+
+reserve X, Y for non empty TopSpace, X0, X1 for non empty SubSpace of X;
+reserve f for map of X,Y, g for map of X0,Y;
+
+theorem Th72:
+ X1 is SubSpace of X0 implies
+  for x0 being Point of X0 st x0 in the carrier of X1 holds g.x0 = (g|X1).x0
+ proof assume A1: X1 is SubSpace of X0;
+  let x0 be Point of X0 such that
+    A2: x0 in the carrier of X1;
+   thus g.x0 = (g|(the carrier of X1)).x0 by A2,FUNCT_1:72
+             .= (g|X1).x0 by A1,Def4;
+ end;
+
+theorem
+   X1 is SubSpace of X0 implies for g1 being map of X1,Y st
+  for x0 being Point of X0 st x0 in the carrier of X1 holds g.x0 = g1.x0
+   holds g|X1 = g1
+ proof assume A1: X1 is SubSpace of X0;
+  let g1 be map of X1,Y such that
+   A2: for x0 being Point of X0 st x0 in the carrier of X1 holds g.x0 = g1.x0;
+     the carrier of X1 is Subset of X0 by A1,TSEP_1:1;
+  then g|(the carrier of X1) = g1 by A2,Th2;
+  hence thesis by A1,Def4;
+ end;
+
+theorem Th74:
+ g = g|X0
+ proof
+     X0 is SubSpace of X0 by TSEP_1:2;
+  hence g|X0 = g|(the carrier of X0) by Def4
+            .= g*(id the carrier of X0) by RELAT_1:94
+            .= g by FUNCT_2:23;
+ end;
+
+theorem Th75:
+ X1 is SubSpace of X0 implies
+  for A being Subset of X0 st A c= the carrier of X1
+  holds g.:A = (g|X1).:A
+ proof assume A1: X1 is SubSpace of X0;
+  let A be Subset of X0 such that A2: A c= the carrier of X1;
+     the carrier of X1 is Subset of X0 by A1,TSEP_1:1;
+  hence g.:A = (g|(the carrier of X1)).:A by A2,Th4
+           .= (g|X1).:A by A1,Def4;
+ end;
+
+theorem
+   X1 is SubSpace of X0 implies
+  for B being Subset of Y st g"B c= the carrier of X1
+  holds g"B = (g|X1)"B
+ proof assume A1: X1 is SubSpace of X0;
+  let B be Subset of Y such that A2: g"B c= the carrier of X1;
+     the carrier of X1 is Subset of X0 by A1,TSEP_1:1;
+  hence g"B = (g|(the carrier of X1))"B by A2,Th5
+           .= (g|X1)"B by A1,Def4;
+ end;
+
+theorem Th77:
+ for g being map of X0,Y st g = f|X0 holds
+  X1 is SubSpace of X0 implies g|X1 = f|X1
+ proof let g be map of X0,Y;
+   assume g = f|X0;
+  then A1: g = f|(the carrier of X0) by Def3;
+   assume A2: X1 is SubSpace of X0;
+  then A3: the carrier of X1 c= the carrier of X0 by TSEP_1:4;
+  thus g|X1 = g|(the carrier of X1) by A2,Def4
+           .= f|(the carrier of X1) by A1,A3,FUNCT_1:82
+           .= f|X1 by Def3;
+ end;
+
+theorem Th78:
+ X1 is SubSpace of X0 implies (f|X0)|X1 = f|X1
+ proof assume A1: X1 is SubSpace of X0;
+  then A2: the carrier of X1 c= the carrier of X0 by TSEP_1:4;
+     f|X0 = f|(the carrier of X0) by Def3;
+  then reconsider h = f|(the carrier of X0) as map of X0,Y;
+  thus (f|X0)|X1 = h|X1 by Def3
+                .= h|(the carrier of X1) by A1,Def4
+                .= f|(the carrier of X1) by A2,FUNCT_1:82
+                .= f|X1 by Def3;
+ end;
+
+theorem Th79:
+ for X0, X1, X2 being non empty SubSpace of X st
+  X1 is SubSpace of X0 & X2 is SubSpace of X1
+   for g being map of X0,Y holds (g|X1)|X2 = g|X2
+ proof let X0, X1, X2 be non empty SubSpace of X such that
+    A1: X1 is SubSpace of X0 & X2 is SubSpace of X1;
+  let g be map of X0,Y;
+   set h = g|X1;
+     A2: h = g|(the carrier of X1) by A1,Def4;
+    A3: the carrier of X1 c= the carrier of X0 &
+          the carrier of X2 c= the carrier of X1 by A1,TSEP_1:4;
+    A4: X2 is SubSpace of X0 by A1,TSEP_1:7;
+  thus h|X2 = h|(the carrier of X2) by A1,Def4
+           .= g|(the carrier of X2) by A2,A3,FUNCT_1:82
+           .= g|X2 by A4,Def4;
+ end;
+
+theorem Th80:
+ for f being map of X,Y, f0 being map of X1,Y,
+  g being map of X0,Y holds
+   X0 = X & f = g implies (g|X1 = f0 iff f|X1 = f0)
+ proof let f be map of X,Y, f0 be map of X1,Y, g be map of X0,Y;
+  assume A1: X0 = X & f = g;
+  A2: now assume A3: g|X1 = f0;
+       thus f|X1 = g|(the carrier of X1) by A1,Def3
+                .= f0 by A1,A3,Def4;
+      end;
+        now assume A4: f|X1 = f0;
+       thus g|X1 = f|(the carrier of X1) by A1,Def4
+                .= f0 by A4,Def3;
+      end;
+  hence thesis by A2;
+ end;
+
+reserve X0, X1, X2 for non empty SubSpace of X;
+reserve f for map of X,Y, g for map of X0,Y;
+
+theorem Th81:
+ for x0 being Point of X0, x1 being Point of X1 st x0 = x1 holds
+  X1 is SubSpace of X0 & g is_continuous_at x0 implies
+   g|X1 is_continuous_at x1
+ proof let x0 be Point of X0, x1 be Point of X1 such that A1: x0 = x1;
+  assume A2: X1 is SubSpace of X0;
+  assume A3: g is_continuous_at x0;
+     for G being Subset of Y st G is open & (g|X1).x1 in G
+     ex H0 being Subset of X1
+     st H0 is open & x1 in H0 & (g|X1).:H0 c= G
+    proof let G be Subset of Y such that
+    A4: G is open and A5: (g|X1).x1 in G;
+       g.x0 in G by A1,A2,A5,Th72;
+     then consider H being Subset of X0 such that
+       A6: H is open and A7: x0 in H and A8: g.:H c= G by A3,A4,Th48;
+      reconsider C = the carrier of X1 as Subset of X0
+      by A2,TSEP_1:1;
+       H /\ C is Subset of X1 by XBOOLE_1:17;
+     then reconsider H0 = H /\ C as Subset of X1;
+     take H0;
+A9:      H0 = H /\ [#]X1 & x0 in H0 by A1,A7,PRE_TOPC:12,XBOOLE_0:def 3;
+        g|X1 = g|C by A2,Def4;
+     then A10: (g|X1).:H0 c= g.:H0 by RELAT_1:161;
+        g.:H0 c= g.:H /\ g.:C & g.:H /\ g.:C c= g.:H by RELAT_1:154,XBOOLE_1:17
+;
+     then g.:H0 c= g.:H by XBOOLE_1:1;
+     then g.:H0 c= G by A8,XBOOLE_1:1;
+     hence thesis by A1,A2,A6,A9,A10,TOPS_2:32,XBOOLE_1:1;
+    end;
+  hence thesis by Th48;
+ end;
+
+theorem Th82:
+ X1 is SubSpace of X0 implies
+  for x0 being Point of X0, x1 being Point of X1 st x0 = x1 holds
+   f|X0 is_continuous_at x0 implies f|X1 is_continuous_at x1
+ proof assume A1: X1 is SubSpace of X0;
+  let x0 be Point of X0, x1 be Point of X1; assume A2: x0 = x1;
+  assume f|X0 is_continuous_at x0;
+  then (f|X0)|X1 is_continuous_at x1 by A1,A2,Th81;
+  hence f|X1 is_continuous_at x1 by A1,Th78;
+ end;
+
+::Characterizations of Continuity at the Point by Local one.
+theorem Th83:
+ X1 is SubSpace of X0 implies
+  for A being Subset of X0, x0 being Point of X0,
+  x1 being Point of X1 st
+   A c= the carrier of X1 & A is a_neighborhood of x0 & x0 = x1 holds
+    g is_continuous_at x0 iff g|X1 is_continuous_at x1
+ proof assume A1: X1 is SubSpace of X0;
+  let A be Subset of X0, x0 be Point of X0, x1 be Point of X1
+  such that
+    A2: A c= the carrier of X1 and
+    A3: A is a_neighborhood of x0 and A4: x0 = x1;
+  thus
+     g is_continuous_at x0 implies g|X1 is_continuous_at x1 by A1,A4,Th81;
+  thus g|X1 is_continuous_at x1 implies g is_continuous_at x0
+   proof assume A5: g|X1 is_continuous_at x1;
+      for G being Subset of Y st G is open & g.x0 in G
+      ex H being Subset of X0 st H is open & x0 in H & g.:H c= G
+     proof let G be Subset of Y such that A6: G is open and
+     A7: g.x0 in G;
+        (g|X1).x1 in G by A1,A4,A7,Th72;
+      then consider H1 being Subset of X1 such that
+       A8: H1 is open and A9: x1 in H1 and A10: (g|X1).:H1 c= G by A5,A6,Th48;
+      consider V being Subset of X0 such that
+       A11: V is open and A12: V c= A and A13: x0 in V by A3,CONNSP_2:8;
+        V is Subset of X1 by A2,A12,XBOOLE_1:1;
+      then reconsider V1 = V as Subset of X1;
+         A14: H1 /\ V1 c= V by XBOOLE_1:17;
+          V1 is open by A1,A11,TOPS_2:33;
+      then A15: H1 /\ V1 is open by A8,TOPS_1:38;
+        H1 /\ V1 is Subset of X0 by A14,XBOOLE_1:1;
+      then reconsider H = H1 /\ V1 as Subset of X0;
+       take H;
+         for z being Point of Y holds z in g.:H implies z in G
+        proof let z be Point of Y;
+         assume z in g.:H;
+         then consider y being Point of X0 such that
+                A16: y in H and A17: z = g.y by FUNCT_2:116;
+         set f = g|X1;
+            y in V by A14,A16;
+         then y in A by A12;
+         then A18: z = f.y by A1,A2,A17,Th72;
+            H1 /\ V1 c= H1 by XBOOLE_1:17;
+         then z in f.:H1 by A16,A18,FUNCT_2:43;
+         hence z in G by A10;
+        end;
+      hence thesis by A1,A4,A9,A11,A13,A14,A15,SUBSET_1:7,TSEP_1:9,XBOOLE_0:def
+3;
+     end;
+    hence thesis by Th48;
+   end;
+ end;
+
+theorem Th84:
+ X1 is SubSpace of X0 implies
+  for A being Subset of X0, x0 being Point of X0,
+  x1 being Point of X1 st
+   A is open & x0 in A & A c= the carrier of X1 & x0 = x1 holds
+    g is_continuous_at x0 iff g|X1 is_continuous_at x1
+ proof assume A1: X1 is SubSpace of X0;
+  let A be Subset of X0, x0 be Point of X0,
+  x1 be Point of X1 such that
+   A2: A is open & x0 in A and A3: A c= the carrier of X1 & x0 = x1;
+  thus
+     g is_continuous_at x0 implies g|X1 is_continuous_at x1 by A1,A3,Th81;
+  thus g|X1 is_continuous_at x1 implies g is_continuous_at x0
+   proof
+     A4: A is a_neighborhood of x0 by A2,CONNSP_2:5;
+    assume g|X1 is_continuous_at x1;
+    hence thesis by A1,A3,A4,Th83;
+   end;
+ end;
+
+theorem
+   X1 is SubSpace of X0 implies
+  for A being Subset of X, x0 being Point of X0,
+  x1 being Point of X1 st
+   A is open & x0 in A & A c= the carrier of X1 & x0 = x1 holds
+    g is_continuous_at x0 iff g|X1 is_continuous_at x1
+ proof assume A1: X1 is SubSpace of X0;
+  let A be Subset of X, x0 be Point of X0,
+  x1 be Point of X1 such that
+   A2: A is open & x0 in A and A3: A c= the carrier of X1 & x0 = x1;
+  thus
+     g is_continuous_at x0 implies g|X1 is_continuous_at x1 by A1,A3,Th81;
+  thus g|X1 is_continuous_at x1 implies g is_continuous_at x0
+   proof
+       the carrier of X1 c= the carrier of X0 by A1,TSEP_1:4;
+    then A is Subset of X0 by A3,XBOOLE_1:1;
+    then reconsider B = A as Subset of X0;
+     A4: B is open & x0 in B & B c= the carrier of X1 by A2,A3,TOPS_2:33;
+    assume g|X1 is_continuous_at x1;
+    hence thesis by A1,A3,A4,Th84;
+   end;
+ end;
+
+theorem Th86:
+ X1 is open SubSpace of X0 implies
+  for x0 being Point of X0, x1 being Point of X1 st
+   x0 = x1 holds g is_continuous_at x0 iff g|X1 is_continuous_at x1
+ proof assume A1: X1 is open SubSpace of X0;
+   let x0 be Point of X0, x1 be Point of X1; assume A2: x0 = x1;
+  hence g is_continuous_at x0 implies g|X1 is_continuous_at x1 by A1,Th81;
+  thus g|X1 is_continuous_at x1 implies g is_continuous_at x0
+   proof
+      the carrier of X1 is Subset of X0 by A1,TSEP_1:1;
+    then reconsider A = the carrier of X1 as Subset of X0;
+     A3: A is open by A1,TSEP_1:16;
+    assume g|X1 is_continuous_at x1;
+    hence thesis by A1,A2,A3,Th84;
+   end;
+ end;
+
+theorem
+   X1 is open SubSpace of X & X1 is SubSpace of X0 implies
+  for x0 being Point of X0, x1 being Point of X1 st
+   x0 = x1 holds g is_continuous_at x0 iff g|X1 is_continuous_at x1
+ proof assume A1: X1 is open SubSpace of X;
+  assume A2: X1 is SubSpace of X0;
+   let x0 be Point of X0, x1 be Point of X1; assume A3: x0 = x1;
+  hence g is_continuous_at x0 implies g|X1 is_continuous_at x1 by A2,Th81;
+  thus g|X1 is_continuous_at x1 implies g is_continuous_at x0
+   proof
+       the carrier of X1 c= the carrier of X0 by A2,TSEP_1:4;
+    then A4: X1 is open SubSpace of X0 by A1,TSEP_1:19;
+    assume g|X1 is_continuous_at x1;
+    hence thesis by A3,A4,Th86;
+   end;
+ end;
+
+theorem Th88:
+ the TopStruct of X1 = X0 implies
+  for x0 being Point of X0, x1 being Point of X1 st x0 = x1 holds
+   g|X1 is_continuous_at x1 implies g is_continuous_at x0
+ proof assume A1: the TopStruct of X1 = X0;
+  let x0 be Point of X0, x1 be Point of X1 such that A2: x0 = x1;
+   reconsider Y1 = the TopStruct of X1 as TopSpace by Lm1;
+A3: Y1 is SubSpace of X0 by A1,TSEP_1:2;
+    the carrier of X1 c= the carrier of X0 by A1;
+  then reconsider A = the carrier of X1 as Subset of X0;
+    A = [#]X0 by A1,PRE_TOPC:12;
+  then A is open by TOPS_1:53;
+  then A4: X1 is open SubSpace of X0 by A3,Th12,TSEP_1:16;
+   assume g|X1 is_continuous_at x1;
+  hence thesis by A2,A4,Th86;
+ end;
+
+theorem Th89:
+ for g being continuous map of X0,Y holds
+  X1 is SubSpace of X0 implies g|X1 is continuous map of X1,Y
+ proof let g be continuous map of X0,Y;
+  assume A1: X1 is SubSpace of X0;
+    for x1 being Point of X1 holds g|X1 is_continuous_at x1
+   proof let x1 be Point of X1;
+    consider x0 being Point of X0 such that A2: x0 = x1 by A1,Th15;
+       g is_continuous_at x0 by Th49;
+    hence thesis by A1,A2,Th81;
+   end;
+  hence thesis by Th49;
+ end;
+
+theorem Th90:
+ X1 is SubSpace of X0 & X2 is SubSpace of X1 implies
+  for g being map of X0,Y holds
+ g|X1 is continuous map of X1,Y implies g|X2 is continuous map of X2,Y
+ proof assume A1: X1 is SubSpace of X0;
+   assume A2: X2 is SubSpace of X1;
+  let g be map of X0,Y;
+   assume g|X1 is continuous map of X1,Y;
+  then (g|X1)|X2 is continuous map of X2,Y by A2,Th89;
+  hence thesis by A1,A2,Th79;
+ end;
+
+theorem Th91:
+ for X being non empty 1-sorted, x being Element of X
+   holds (id X).x = x
+ proof let X be non empty 1-sorted, x be Element of X;
+  thus (id X).x = (id the carrier of X).x by GRCAT_1:def 11
+               .= x by FUNCT_1:35;
+ end;
+
+theorem
+   for X being non empty 1-sorted, f being map of X,X
+   st for x being Element of X holds f.x = x
+  holds f = id X
+ proof let X be non empty 1-sorted, f be map of X,X;
+   assume A1: for x being Element of X holds f.x = x;
+    for x being Element of X holds f.x = (id the carrier of X).x
+   proof let x be Element of X;
+      x = (id the carrier of X).x by FUNCT_1:35;
+    hence thesis by A1;
+   end;
+  then f = id the carrier of X by FUNCT_2:113;
+  hence thesis by GRCAT_1:def 11;
+ end;
+
+theorem Th93:
+ for X,Y being non empty 1-sorted,
+     f being Function of the carrier of X,the carrier of Y
+  holds f*(id X) = f & (id Y)*f = f
+ proof let X,Y be non empty 1-sorted;
+   let f be Function of the carrier of X,the carrier of Y;
+     f*(id the carrier of X) = f & (id the carrier of Y)*f = f by FUNCT_2:23;
+  hence thesis by GRCAT_1:def 11;
+ end;
+
+theorem Th94:
+ id X is continuous map of X,X
+ proof
+    id X is continuous
+   proof
+      for V being Subset of X st V is open holds (id X)"V is open
+     proof let V be Subset of X;
+      assume A1: V is open;
+         (id X)"V = (id the carrier of X)"V by GRCAT_1:def 11
+               .= V by BORSUK_1:4;
+      hence (id X)"V is open by A1;
+     end;
+    hence thesis by TOPS_2:55;
+   end;
+  hence thesis;
+ end;
+
+::(Definition of the inclusion mapping.)
+definition let X be non empty TopSpace, X0 be SubSpace of X;
+ canceled;
+
+ func incl X0 -> map of X0,X equals
+:Def6: (id X)|X0;
+ coherence;
+ correctness;
+ synonym X0 incl X;
+end;
+
+theorem
+   for X0 being non empty SubSpace of X, x being Point of X
+   st x in the carrier of X0
+  holds (incl X0).x = x
+ proof let X0 be non empty SubSpace of X, x be Point of X;
+   assume A1: x in the carrier of X0;
+  thus (incl X0).x = ((id X)|X0).x by Def6
+                  .= (id X).x by A1,Th58
+                  .= x by Th91;
+ end;
+
+theorem
+   for X0 being non empty SubSpace of X, f0 being map of X0,X st
+  for x being Point of X st x in the carrier of X0 holds x = f0.x
+   holds incl X0 = f0
+ proof let X0 be non empty SubSpace of X, f0 be map of X0,X;
+  assume A1: for x being Point of X st x in the carrier of X0 holds x = f0.x;
+     now let x be Point of X such that A2: x in the carrier of X0;
+       (id X).x = x by Th91;
+    hence (id X).x = f0.x by A1,A2;
+   end;
+  then (id X)|X0 = f0 by Th59;
+  hence thesis by Def6;
+ end;
+
+theorem
+   for X0 being non empty SubSpace of X, f being map of X,Y
+   holds f|X0 = f*(incl X0)
+ proof let X0 be non empty SubSpace of X, f be map of X,Y;
+  thus f|X0 = (f*(id X))|X0 by Th93
+           .= f*((id X)|X0) by Th69
+           .= f*(incl X0) by Def6;
+ end;
+
+theorem
+   for X0 being non empty SubSpace of X
+   holds incl X0 is continuous map of X0,X
+ proof let X0 be non empty SubSpace of X;
+    incl X0 = (id X)|X0 & id X is continuous map of X,X by Def6,Th94;
+  hence thesis by Th68;
+ end;
+
+
+begin
+::4. A Modification of the Topology of Topological Spaces.
+reserve X for non empty TopSpace, H, G for Subset of X;
+
+definition let X; let A be Subset of X;
+ func A-extension_of_the_topology_of X -> Subset-Family of X equals
+:Def7: {H \/ (G /\ A) : H in the topology of X & G in the topology of X};
+ coherence
+  proof
+    set FF = {H \/ (G /\ A) : H in the topology of X & G in the topology of X};
+     FF c= bool the carrier of X
+    proof
+       now let C be set;
+       assume C in FF;
+      then ex P, S being Subset of X st C = P \/ (S /\ A) &
+                P in the topology of X & S in the topology of X;
+      hence C in bool the carrier of X;
+     end;
+     hence thesis by TARSKI:def 3;
+    end;
+   then FF is Subset-Family of X by SETFAM_1:def 7;
+   hence thesis;
+  end;
+end;
+
+theorem Th99:
+ for A being Subset of X holds
+  the topology of X c= A-extension_of_the_topology_of X
+ proof let A be Subset of X;
+     now let W be set;
+    assume A1: W in the topology of X;
+    then reconsider H = W as Subset of X;
+        {}X = ({});
+     then reconsider G = {} as Subset of X;
+      H = H \/ (G /\ A) & H in the topology of X & G in the topology of X
+                                                 by A1,PRE_TOPC:5;
+    then H in {P \/ (S /\ A) where P is Subset of X,
+       S is Subset of X :
+                        P in the topology of X & S in the topology of X};
+    hence W in A-extension_of_the_topology_of X by Def7;
+   end;
+  hence thesis by TARSKI:def 3;
+ end;
+
+theorem Th100:
+ for A being Subset of X holds
+  {G /\ A where G is Subset of X : G in the topology of X} c=
+    A-extension_of_the_topology_of X
+ proof let A be Subset of X;
+     now let W be set;
+    assume W in {G /\ A where G is Subset of X :
+        G in the topology of X};
+     then consider G being Subset of X such that
+      A1: W = G /\ A and A2: G in the topology of X;
+        {}X = ({});
+     then reconsider H = {} as Subset of X;
+        G /\ A = H \/ (G /\ A) & H in the topology of X by PRE_TOPC:5;
+    then G /\ A in {P \/ (S /\ A) where P is Subset of X,
+         S is Subset of X :
+                        P in the topology of X & S in the topology of X} by A2;
+    hence W in A-extension_of_the_topology_of X by A1,Def7;
+   end;
+  hence thesis by TARSKI:def 3;
+ end;
+
+theorem Th101:
+ for A being Subset of X holds for C,
+     D being Subset of X st
+  C in the topology of X &
+   D in {G /\ A where G is Subset of X :
+   G in the topology of X} holds
+    C \/ D in A-extension_of_the_topology_of X &
+     C /\ D in A-extension_of_the_topology_of X
+ proof let A be Subset of X; let C,
+     D be Subset of X;
+   assume A1: C in the topology of X;
+   assume D in {G /\ A where G is Subset of X :
+     G in the topology of X};
+    then consider G being Subset of X such that
+     A2: D = G /\ A and A3: G in the topology of X;
+   thus C \/ D in A-extension_of_the_topology_of X
+    proof
+       C \/ D in {P \/ (S /\ A) where P is Subset of X,
+       S is Subset of X :
+               P in the topology of X & S in the topology of X} by A1,A2,A3;
+     hence thesis by Def7;
+    end;
+   thus C /\ D in A-extension_of_the_topology_of X
+    proof
+         {}X = ({});
+      then reconsider H = {} as Subset of X;
+       A4: C /\ D = H \/ ((C /\ G) /\ A) by A2,XBOOLE_1:16;
+        H in the topology of X & C /\ G in
+ the topology of X by A1,A3,PRE_TOPC:5,def 1;
+     then C /\ D in {P \/ (S /\ A) where P is Subset of X,
+        S is Subset of X :
+               P in the topology of X & S in the topology of X} by A4;
+     hence thesis by Def7;
+    end;
+ end;
+
+theorem Th102:
+ for A being Subset of X
+   holds A in A-extension_of_the_topology_of X
+ proof let A be Subset of X;
+       X is SubSpace of X by TSEP_1:2;
+    then reconsider G = the carrier of X as Subset of X
+      by TSEP_1:1;
+       {}X = ({});
+    then reconsider H = {} as Subset of X;
+      A = H \/ (G /\ A) & H in the topology of X & G in the topology of X
+                                                 by PRE_TOPC:5,def 1,XBOOLE_1:
+28;
+    then A in {P \/ (S /\ A) where P is Subset of X,
+       S is Subset of X :
+                        P in the topology of X & S in the topology of X};
+    hence thesis by Def7;
+ end;
+
+theorem Th103:
+ for A being Subset of X holds A in the topology of X iff
+  the topology of X = A-extension_of_the_topology_of X
+ proof let A be Subset of X;
+  thus A in the topology of X implies
+        the topology of X = A-extension_of_the_topology_of X
+   proof assume A1: A in the topology of X;
+    A2: A-extension_of_the_topology_of X c= the topology of X
+         proof
+             now let W be set; assume W in A-extension_of_the_topology_of X;
+            then W in {P \/ (S /\ A) where P is Subset of X,
+              S is Subset of X :
+                       P in the topology of X & S in
+ the topology of X} by Def7;
+             then consider H, G being Subset of X such that
+              A3: W = H \/ (G /\ A) and
+              A4: H in the topology of X & G in the topology of X;
+             reconsider H1 = H as Subset of X;
+               G /\ A in the topology of X by A1,A4,PRE_TOPC:def 1;
+            then H1 is open & G /\ A is open by A4,PRE_TOPC:def 5;
+            then H1 \/ (G /\ A) is open by TOPS_1:37;
+            hence W in the topology of X by A3,PRE_TOPC:def 5;
+           end;
+          hence thesis by TARSKI:def 3;
+         end;
+       the topology of X c= A-extension_of_the_topology_of X by Th99;
+    hence thesis by A2,XBOOLE_0:def 10;
+   end;
+  thus the topology of X = A-extension_of_the_topology_of X implies
+        A in the topology of X by Th102;
+ end;
+
+definition let X be non empty TopSpace, A be Subset of X;
+ func X modified_with_respect_to A -> strict TopSpace equals
+:Def8: TopStruct(#the carrier of X, A-extension_of_the_topology_of X#);
+ coherence
+  proof
+   set Y = TopStruct(#the carrier of X, A-extension_of_the_topology_of X#);
+      Y is TopSpace
+     proof
+       A1: the carrier of Y in the topology of Y
+            proof
+                the topology of X c= A-extension_of_the_topology_of X &
+              the carrier of X in the topology of X by Th99,PRE_TOPC:def 1;
+             hence thesis;
+            end;
+       A2: for FF being Subset-Family of Y st
+             FF c= the topology of Y holds union FF in the topology of Y
+            proof let FF be Subset-Family of Y;
+             set AA = {P \/ (S /\ A) where P is Subset of X,
+               S is Subset of X :
+                               P in the topology of X & S in
+ the topology of X};
+             set SAA = {G /\ A where G is Subset of X :
+                G in the topology of X};
+                SAA c= A-extension_of_the_topology_of X by Th100;
+             then reconsider SAA as Subset-Family of X by TOPS_2:3;
+             set FF1 = {H where H is Subset of X :
+                H in the topology of X &
+          ex G being Subset of X st G in the topology of X &
+                            H \/ (G /\ A) in FF};
+               A3: FF1 c= the topology of X
+                proof
+                   now let W be set; assume W in FF1;
+                  then ex H being Subset of X st W = H &
+ H in the topology of X &
+                          ex G being Subset of X st
+                            G in the topology of X & H \/ (G /\ A) in FF;
+                  hence W in the topology of X;
+                 end;
+                 hence thesis by TARSKI:def 3;
+                end;
+               then reconsider FF1 as Subset-Family of X by TOPS_2:3;
+             set FF2 = {G /\ A where G is Subset of X :
+               G in the topology of X &
+               ex H being Subset of X st H in
+ the topology of X &
+                            H \/ (G /\ A) in FF};
+               A4: FF2 c= SAA
+                proof
+                   now let W be set; assume W in FF2;
+                  then ex G being Subset of X st W = G /\ A &
+ G in the topology of X &
+                          ex H being Subset of X st
+                            H in the topology of X & H \/ (G /\ A) in FF;
+                  hence W in SAA;
+                 end;
+                 hence thesis by TARSKI:def 3;
+                end;
+               then reconsider FF2 as Subset-Family of X by TOPS_2:3;
+             assume FF c= the topology of Y;
+              then A5: FF c= AA by Def7;
+             A6: union FF1 in the topology of X by A3,PRE_TOPC:def 1;
+A7:              union FF2 in SAA
+              proof
+                 now per cases;
+                suppose A8: A = {};
+                  A9: SAA = {{}}
+                      proof
+                       A10: SAA c= {{}}
+                           proof
+                              now let W be set; assume W in SAA;
+                             then ex G being Subset of X
+                               st W = G /\ A &
+ G in the topology of X;
+                              hence W in {{}} by A8,TARSKI:def 1;
+                            end;
+                            hence thesis by TARSKI:def 3;
+                           end;
+                         {{}} c= SAA
+                        proof
+                           now let W be set; assume W in {{}};
+                          then W = {} /\ A & {} is Subset of X
+&
+                            {}
+ in the topology of X by A8,PRE_TOPC:5,TARSKI:def 1
+;
+                          hence W in SAA;
+                         end;
+                         hence thesis by TARSKI:def 3;
+                        end;
+                       hence thesis by A10,XBOOLE_0:def 10;
+                      end;
+                     now per cases by A4,A9,ZFMISC_1:39;
+                    suppose FF2 = {{}};
+                     hence union FF2 = {} by ZFMISC_1:31;
+                    suppose FF2 = {};
+                     hence union FF2 = {} by ZFMISC_1:2;
+                   end;
+                 hence union FF2 in SAA by A9,TARSKI:def 1;
+                suppose A <> {};
+                 then consider Y being strict non empty SubSpace of X such that
+                                    A11: A = the carrier of Y by TSEP_1:10;
+                   A12: A = [#]Y by A11,PRE_TOPC:12;
+                  A13: the topology of Y = SAA
+                        proof
+                         A14: the topology of Y c= SAA
+                           proof
+                              now let W be set; assume A15: W in the topology
+of
+Y;
+                             then reconsider C = W
+                              as Subset of Y;
+                               ex G being Subset of X st
+ G in the topology of X & C = G /\ [#]Y by A15,PRE_TOPC:def 9;
+                             hence W in SAA by A12;
+                            end;
+                            hence thesis by TARSKI:def 3;
+                           end;
+                           SAA c= the topology of Y
+                          proof
+                              now let W be set; assume W in SAA;
+                             then consider G being Subset of X
+                             such that
+                               A16: W = G /\ A and A17: G in the topology of X;
+                                G /\ [#]Y c= [#]Y by XBOOLE_1:17;
+                             then reconsider C = G /\ [#] Y
+                             as Subset of Y
+                                                             by PRE_TOPC:16;
+                                C in the topology of Y by A17,PRE_TOPC:def 9;
+                             hence W in the topology of Y by A11,A16,PRE_TOPC:
+12;
+                            end;
+                            hence thesis by TARSKI:def 3;
+                          end;
+                         hence thesis by A14,XBOOLE_0:def 10;
+                        end;
+                 then reconsider SS = FF2 as Subset-Family of Y
+                  by A4,TOPS_2:3;
+                    union SS in the topology of Y by A4,A13,PRE_TOPC:def 1;
+                 hence union FF2 in SAA by A13;
+               end;
+               hence thesis;
+              end;
+
+               union FF = union FF1 \/ union FF2
+              proof
+               A18: union FF c= union FF1 \/ union FF2
+                proof
+                   now let x be set; assume x in union FF;
+                  then consider W being set such that
+                    A19: x in W & W in FF by TARSKI:def 4;
+                     W in AA by A5,A19;
+                  then consider H, G being Subset of X such that
+                    A20: W = H \/ (G /\ A) and
+                    A21: H in the topology of X & G in the topology of X;
+                    H in FF1 by A19,A20,A21;
+                  then A22: H c= union FF1 by ZFMISC_1:92;
+                    G /\ A in FF2 by A19,A20,A21;
+                  then A23: G /\ A c= union FF2 by ZFMISC_1:92;
+                       union FF1 c= union FF1 \/ union FF2 &
+                    union FF2 c= union FF1 \/ union FF2 by XBOOLE_1:7;
+                  then H c= union FF1 \/ union FF2 &
+                        G /\ A c= union FF1 \/ union FF2 by A22,A23,XBOOLE_1:1;
+                  then H \/ (G /\ A) c= union FF1 \/ union FF2 &
+                        x in H \/ (G /\ A) by A19,A20,XBOOLE_1:8;
+                  hence x in union FF1 \/ union FF2;
+                 end;
+                 hence thesis by TARSKI:def 3;
+                end;
+                 union FF1 \/ union FF2 c= union FF
+                proof
+                   now let x be set such that A24: x in union FF1 \/ union FF2;
+
+                    now per cases by A24,XBOOLE_0:def 2;
+                   suppose x in union FF1;
+                    then consider W being set such that
+                     A25: x in W & W in FF1 by TARSKI:def 4;
+                    consider H being Subset of X such that
+                     A26: W = H and H in the topology of X and
+                     A27: ex G being Subset of X st
+                          G in the topology of X & H \/ (G /\ A) in FF by A25;
+                    consider G being Subset of X such that
+                     A28: H \/ (G /\ A) in FF by A27;
+                      H \/ (G /\ A) c= union FF & H c= H \/ (G /\ A)
+                                       by A28,XBOOLE_1:7,ZFMISC_1:92;
+                    then H c= union FF by XBOOLE_1:1;
+                    hence x in union FF by A25,A26;
+                   suppose x in union FF2;
+                    then consider W being set such that
+                     A29: x in W & W in FF2 by TARSKI:def 4;
+                    consider G being Subset of X such that
+                     A30: W = G /\ A and G in the topology of X and
+                     A31: ex H being Subset of X st
+                          H in the topology of X & H \/ (G /\ A) in FF by A29;
+                    consider H being Subset of X such that
+                     A32: H \/ (G /\ A) in FF by A31;
+                      H \/ (G /\ A) c= union FF & G /\ A c= H \/ (G /\ A)
+                                       by A32,XBOOLE_1:7,ZFMISC_1:92;
+                    then G /\ A c= union FF by XBOOLE_1:1;
+                    hence x in union FF by A29,A30;
+                  end;
+                  hence x in union FF;
+                 end;
+                 hence thesis by TARSKI:def 3;
+                end;
+               hence thesis by A18,XBOOLE_0:def 10;
+              end;
+             hence thesis by A6,A7,Th101;
+            end;
+             for C,D being Subset of Y st
+            C in the topology of Y & D in the topology of Y holds
+             C /\ D in the topology of Y
+            proof let C,D be Subset of Y;
+             assume C in the topology of Y & D in the topology of Y;
+             then A33:
+                 C in {H \/ (G /\ A) where H is Subset of X,
+                    G is Subset of X :
+                      H in the topology of X & G in the topology of X} &
+                 D in {H \/ (G /\ A) where H is Subset of X,
+                 G is Subset of X :
+                      H in the topology of X & G in the topology of X} by Def7;
+             then consider H1, G1 being Subset of X such that
+               A34: C = H1 \/ (G1 /\ A) and
+               A35: H1 in the topology of X & G1 in the topology of X;
+              consider H2, G2 being Subset of X such that
+               A36: D = H2 \/ (G2 /\ A) and
+               A37: H2 in the topology of X & G2 in the topology of X by A33;
+                  A38: H1 /\ H2 in the topology of X by A35,A37,PRE_TOPC:def 1;
+                  A39: H1 /\ G2 in the topology of X by A35,A37,PRE_TOPC:def 1;
+                  A40: H2 /\ G1 in the topology of X by A35,A37,PRE_TOPC:def 1;
+                  A41: G1 /\ G2 in the topology of X by A35,A37,PRE_TOPC:def 1;
+                  H1 /\ G2 is open & H2 /\ G1 is open by A39,A40,PRE_TOPC:def 5
+;
+               then (H1 /\ G2) \/ (H2 /\ G1) is open &
+                     G1 /\ G2 is open by A41,PRE_TOPC:def 5,TOPS_1:37;
+               then (H1 /\ G2) \/ (H2 /\ G1) \/ (G1 /\
+ G2) is open by TOPS_1:37;
+               then A42: (H1 /\ G2) \/ (H2 /\ G1) \/ (G1 /\
+ G2) in the topology of X
+                                                             by PRE_TOPC:def 5;
+                 C /\ D = H1 /\ (H2 \/ (G2 /\ A)) \/ (G1 /\ A) /\ (H2 \/ (G2 /\
+ A))
+                                                            by A34,A36,XBOOLE_1
+:23
+                       .= (H1 /\ H2 \/ H1 /\ (G2 /\ A)) \/
+                           (G1 /\ A) /\ (H2 \/ (G2 /\ A)) by XBOOLE_1:23
+                       .= (H1 /\ H2 \/ H1 /\ (G2 /\ A)) \/
+                          ((G1 /\ A) /\ H2 \/ ((G1 /\ A) /\ (G2 /\
+ A))) by XBOOLE_1:23
+                       .= (H1 /\ H2 \/ ((H1 /\ G2) /\ A)) \/
+                          ((G1 /\ A) /\ H2 \/ ((G1 /\ A) /\ (G2 /\
+ A))) by XBOOLE_1:16
+                       .= (H1 /\ H2 \/ ((H1 /\ G2) /\ A)) \/
+                           ((G1 /\ A) /\ H2 \/ G1 /\ ((G2 /\ A) /\
+ A)) by XBOOLE_1:16
+                       .= (H1 /\ H2 \/ ((H1 /\ G2) /\ A)) \/
+                           ((G1 /\ A) /\ H2 \/ G1 /\ (G2 /\ (A /\
+ A))) by XBOOLE_1:16
+                       .= (H1 /\ H2 \/ ((H1 /\ G2) /\ A)) \/
+                           (H2 /\ (G1 /\ A) \/ (G1 /\ G2) /\ A) by XBOOLE_1:16
+                       .= (H1 /\ H2 \/ ((H1 /\ G2) /\ A)) \/
+                           ((H2 /\ G1) /\ A \/ (G1 /\ G2) /\ A) by XBOOLE_1:16
+                       .= (H1 /\ H2 \/ ((H1 /\ G2) /\ A)) \/
+                           ((H2 /\ G1 \/ G1 /\ G2) /\ A) by XBOOLE_1:23
+                       .= H1 /\ H2 \/ (((H1 /\ G2) /\ A) \/
+                           ((H2 /\ G1 \/ G1 /\ G2) /\ A)) by XBOOLE_1:4
+                       .= H1 /\ H2 \/ ((H1 /\ G2 \/
+                           (H2 /\ G1 \/ G1 /\ G2)) /\ A) by XBOOLE_1:23
+                       .= H1 /\ H2 \/ ((H1 /\ G2 \/
+                           H2 /\ G1 \/ G1 /\ G2) /\ A) by XBOOLE_1:4;
+             then C /\ D in {P \/ (S /\
+ A) where P is Subset of X,
+             S is Subset of X : P in the topology of X &
+             S in the topology of X}
+ by A38,A42;
+             hence thesis by Def7;
+            end;
+      hence thesis by A1,A2,PRE_TOPC:def 1;
+     end;
+    hence thesis;
+  end;
+end;
+
+definition let X be non empty TopSpace, A be Subset of X;
+ cluster X modified_with_respect_to A -> non empty;
+ coherence
+  proof
+      X modified_with_respect_to A =
+     TopStruct(#the carrier of X, A-extension_of_the_topology_of X#) by Def8;
+   hence the carrier of X modified_with_respect_to A is non empty;
+  end;
+end;
+
+reserve A for Subset of X;
+
+theorem Th104:
+ the carrier of (X modified_with_respect_to A) = the carrier of X &
+  the topology of (X modified_with_respect_to A) =
+   A-extension_of_the_topology_of X
+ proof
+     (X modified_with_respect_to A)
+ = TopStruct(#the carrier of X, A-extension_of_the_topology_of X#) by Def8;
+  hence thesis;
+ end;
+
+theorem Th105:
+ for B being Subset of X modified_with_respect_to A st B = A
+   holds B is open
+ proof let B be Subset of X modified_with_respect_to A;
+  assume B = A;
+  then B in A-extension_of_the_topology_of X by Th102;
+  then B in the topology of (X modified_with_respect_to A) by Th104;
+  hence thesis by PRE_TOPC:def 5;
+ end;
+
+theorem Th106:
+ for A being Subset of X holds
+  A is open iff the TopStruct of X = X modified_with_respect_to A
+ proof
+  let A be Subset of X;
+  thus A is open implies the TopStruct of X = X modified_with_respect_to A
+   proof assume A is open;
+    then A1: A in the topology of X by PRE_TOPC:def 5;
+       X modified_with_respect_to A =
+        TopStruct(#the carrier of X, A-extension_of_the_topology_of X#) by Def8
+     .= TopStruct(#the carrier of X, the topology of X#) by A1,Th103;
+    hence thesis;
+   end;
+  thus the TopStruct of X = X modified_with_respect_to A implies A is open
+   proof assume the TopStruct of X = X modified_with_respect_to A;
+    then the topology of X = A-extension_of_the_topology_of X by Th104;
+    then A in the topology of X by Th103;
+    hence thesis by PRE_TOPC:def 5;
+   end;
+ end;
+
+definition let X be non empty TopSpace, A be Subset of X;
+ func modid(X,A) -> map of X,X modified_with_respect_to A equals
+:Def9: id (the carrier of X);
+ coherence
+  proof
+     the carrier of (X modified_with_respect_to A) = the carrier of X by Th104;
+   hence id (the carrier of X) is
+    map of X, X modified_with_respect_to A;
+  end;
+end;
+
+theorem Th107:
+ for A being Subset of X st A is open holds modid(X,A) = id X
+ proof let A be Subset of X;
+   assume A is open;
+  then the TopStruct of X = X modified_with_respect_to A by Th106;
+  then reconsider f = modid(X,A) as map of X,X;
+     f = id (the carrier of X) by Def9
+    .= id X by GRCAT_1:def 11;
+  hence thesis;
+ end;
+
+theorem Th108:
+ for x being Point of X st not x in A holds modid(X,A) is_continuous_at x
+ proof let x be Point of X;
+  assume A1: not x in A;
+     now let W be Subset of X modified_with_respect_to A;
+    assume A2: W is open & (modid(X,A)).x in W;
+     then W in
+ the topology of (X modified_with_respect_to A) by PRE_TOPC:def 5;
+     then W in A-extension_of_the_topology_of X by Th104;
+     then W in {P \/ (S /\ A) where P is Subset of X,
+        S is Subset of X :
+                   P in the topology of X & S in the topology of X} by Def7;
+     then consider H, G being Subset of X such that
+       A3: W = H \/ (G /\ A) and
+       A4: H in the topology of X & G in the topology of X;
+            (modid(X,A)).x = (id (the carrier of X)).x by Def9
+                        .= x by FUNCT_1:35;
+     then A5: (x in H or x in G /\ A) & G /\ A c= A by A2,A3,XBOOLE_0:def 2,
+XBOOLE_1:17;
+    thus ex V being Subset of X st V is open & x in V & (modid(X,A)).:V c= W
+          proof
+          reconsider H as Subset of X;
+           take H;
+              (modid(X,A)).:H = (id (the carrier of X)).:H by Def9
+                          .= H by BORSUK_1:3;
+           hence thesis by A1,A3,A4,A5,PRE_TOPC:def 5,XBOOLE_1:7;
+          end;
+   end;
+  hence thesis by Th48;
+ end;
+
+theorem Th109:
+ for X0 being non empty SubSpace of X st the carrier of X0 misses A
+  for x0 being Point of X0 holds (modid(X,A))|X0 is_continuous_at x0
+ proof let X0 be non empty SubSpace of X;
+  assume A1: (the carrier of X0) /\ A = {};
+   let x0 be Point of X0;
+     x0 in the carrier of X0 & the carrier of X0 c= the carrier of X
+                                                    by BORSUK_1:35;
+  then reconsider x = x0 as Point of X;
+     not x in A by A1,XBOOLE_0:def 3;
+  then modid(X,A) is_continuous_at x by Th108;
+  hence thesis by Th64;
+ end;
+
+theorem Th110:
+ for X0 being non empty SubSpace of X st the carrier of X0 = A
+  for x0 being Point of X0 holds (modid(X,A))|X0 is_continuous_at x0
+ proof let X0 be non empty SubSpace of X;
+  assume A1: the carrier of X0 = A;
+   let x0 be Point of X0;
+     now let W be Subset of X modified_with_respect_to A;
+    assume A2: W is open & (modid(X,A)|X0).x0 in W;
+     then W in
+ the topology of (X modified_with_respect_to A) by PRE_TOPC:def 5;
+     then W in A-extension_of_the_topology_of X by Th104;
+     then W in {P \/ (S /\ A) where P is Subset of X,
+       S is Subset of X :
+                   P in the topology of X & S in the topology of X} by Def7;
+     then consider H, G being Subset of X such that
+       A3: W = H \/ (G /\ A) and
+       A4: H in the topology of X & G in the topology of X;
+      reconsider H, G as Subset of X;
+        x0 in the carrier of X0 & the carrier of X0 c= the carrier of X
+                                                           by BORSUK_1:35;
+     then reconsider x = x0 as Point of X;
+        (modid(X,A)|X0).x0 = (modid(X,A)).x by Th58
+                        .= (id (the carrier of X)).x by Def9
+                        .= x by FUNCT_1:35;
+     then (x in H or x in G /\ A) & x in A by A1,A2,A3,XBOOLE_0:def 2;
+     then x in H /\ A or x in G /\ A by XBOOLE_0:def 3;
+     then A5: x in (H /\ A) \/ (G /\ A) by XBOOLE_0:def 2;
+
+      A6: (H \/ G) /\ A c= the carrier of X0 by A1,XBOOLE_1:17;
+     then A7:
+      (modid(X,A)|X0).:((H \/ G) /\ A) = (modid(X,A)).:((H \/ G) /\ A) by Th61
+                          .= (id (the carrier of X)).:((H \/ G) /\ A) by Def9
+                          .= (H \/ G) /\ A by BORSUK_1:3;
+        H /\ A c= H by XBOOLE_1:17;
+     then A8: (H /\ A) \/ (G /\ A) c= W by A3,XBOOLE_1:9;
+   thus ex V being Subset of X0 st V is open & x0 in V & (modid(X,A)|X0).:
+V c= W
+          proof
+             reconsider V = (H \/ G) /\ A as Subset of X0 by A6;
+           take V;
+               H is open & G is open by A4,PRE_TOPC:def 5;
+            then V = (H \/ G) /\ [#]
+X0 & H \/ G is open by A1,PRE_TOPC:12,TOPS_1:37;
+            hence thesis by A5,A7,A8,TOPS_2:32,XBOOLE_1:23;
+          end;
+   end;
+  hence thesis by Th48;
+ end;
+
+theorem Th111:
+ for X0 being non empty SubSpace of X st the carrier of X0 misses A holds
+  (modid(X,A))|X0 is continuous map of X0,X modified_with_respect_to A
+ proof let X0 be non empty SubSpace of X;
+  assume (the carrier of X0) misses A;
+   then for x0 being Point of X0 holds ((modid(X,A))|X0)
+ is_continuous_at x0 by Th109;
+  hence thesis by Th49;
+ end;
+
+theorem Th112:
+ for X0 being non empty SubSpace of X st the carrier of X0 = A holds
+  (modid(X,A))|X0 is continuous map of X0,X modified_with_respect_to A
+ proof let X0 be non empty SubSpace of X;
+  assume the carrier of X0 = A;
+   then for x0 being Point of X0 holds ((modid(X,A))|X0)
+ is_continuous_at x0 by Th110;
+  hence thesis by Th49;
+ end;
+
+theorem Th113:
+ for A being Subset of X holds
+  A is open iff
+   modid(X,A) is continuous map of X,X modified_with_respect_to A
+ proof let A be Subset of X;
+  thus A is open implies modid(X,A) is
+     continuous map of X,X modified_with_respect_to A
+   proof assume A1: A is open;
+    then A2: the TopStruct of X = X modified_with_respect_to A by Th106;
+    then reconsider f = modid(X,A) as map of X,X;
+       f = id X by A1,Th107;
+    then f is continuous map of X,X by Th94;
+    hence thesis by A2,Th56;
+   end;
+  thus modid(X,A) is continuous map of X,X modified_with_respect_to A
+     implies A is open
+   proof assume A3: modid(X,A) is continuous map of X,X
+         modified_with_respect_to A;
+    set B = (modid(X,A)).:A;
+     A4: B = (id (the carrier of X)).:A by Def9
+          .= A by BORSUK_1:3;
+    then A5: B is open by Th105;
+       (modid(X,A))"B = (id (the carrier of X))"A by A4,Def9
+                   .= A by BORSUK_1:4;
+    hence thesis by A3,A5,TOPS_2:55;
+   end;
+ end;
+
+definition let X be non empty TopSpace, X0 be SubSpace of X;
+ func X modified_with_respect_to X0 -> strict TopSpace means
+:Def10: for A being Subset of X st A = the carrier of X0 holds
+  it = X modified_with_respect_to A;
+ existence
+  proof
+    reconsider B = the carrier of X0 as Subset of X by TSEP_1:1;
+   take X modified_with_respect_to B;
+   thus thesis;
+  end;
+ uniqueness
+  proof let Y1, Y2 be strict TopSpace such that
+    A1: (for A being Subset of X st A = the carrier of X0 holds
+          Y1 = X modified_with_respect_to A) &
+         (for A being Subset of X st A = the carrier of X0 holds
+           Y2 = X modified_with_respect_to A);
+    reconsider C = the carrier of X0 as Subset of X by TSEP_1:1;
+       Y1 = X modified_with_respect_to C &
+      Y2 = X modified_with_respect_to C by A1;
+   hence thesis;
+  end;
+end;
+
+definition let X be non empty TopSpace, X0 be SubSpace of X;
+ cluster X modified_with_respect_to X0 -> non empty;
+ coherence
+  proof
+      [#]X0 c= [#]X & [#]X = the carrier of X by PRE_TOPC:12,def 9;
+    then reconsider O = [#] X0 as Subset of X;
+      [#]X0 = the carrier of X0 by PRE_TOPC:12;
+    then X modified_with_respect_to X0 = X modified_with_respect_to O
+       by Def10;
+   hence thesis;
+  end;
+end;
+
+reserve X0 for non empty SubSpace of X;
+
+theorem Th114:
+ the carrier of (X modified_with_respect_to X0) = the carrier of X &
+  for A being Subset of X st A = the carrier of X0 holds
+   the topology of (X modified_with_respect_to X0) =
+    A-extension_of_the_topology_of X
+ proof set Y = X modified_with_respect_to X0;
+   reconsider A = the carrier of X0 as Subset of X by TSEP_1:1;
+      Y = X modified_with_respect_to A by Def10;
+  then A1: Y =
+    TopStruct(#the carrier of X, A-extension_of_the_topology_of X#) by Def8;
+  hence the carrier of (X modified_with_respect_to X0) = the carrier of X;
+  thus thesis by A1;
+ end;
+
+theorem
+   for Y0 being SubSpace of X modified_with_respect_to X0 st
+  the carrier of Y0 = the carrier of X0 holds
+   Y0 is open SubSpace of X modified_with_respect_to X0
+ proof let Y0 be SubSpace of X modified_with_respect_to X0;
+  assume A1: the carrier of Y0 = the carrier of X0;
+   set Y = X modified_with_respect_to X0;
+   reconsider A = the carrier of X0 as Subset of X by TSEP_1:1;
+    A2: Y = X modified_with_respect_to A by Def10;
+       the carrier of Y0 is Subset of Y by TSEP_1:1;
+     then reconsider B = the carrier of Y0 as Subset of Y;
+     B is open by A1,A2,Th105;
+   hence thesis by TSEP_1:16;
+ end;
+
+theorem
+   X0 is open SubSpace of X iff
+  the TopStruct of X = X modified_with_respect_to X0
+ proof
+  thus X0 is open SubSpace of X implies
+    the TopStruct of X = X modified_with_respect_to X0
+   proof assume A1: X0 is open SubSpace of X;
+      the carrier of X0 is Subset of X by TSEP_1:1;
+    then reconsider A = the carrier of X0 as Subset of X;
+       A is open by A1,TSEP_1:def 1;
+    then the TopStruct of X = X modified_with_respect_to A by Th106;
+    hence thesis by Def10;
+   end;
+  thus the TopStruct of X = X modified_with_respect_to X0 implies
+    X0 is open SubSpace of X
+   proof assume A2: the TopStruct of X = X modified_with_respect_to X0;
+      now let A be Subset of X;
+     assume A = the carrier of X0;
+      then the TopStruct of X = X modified_with_respect_to A by A2,Def10;
+     hence A is open by Th106;
+    end;
+    hence thesis by TSEP_1:def 1;
+   end;
+ end;
+
+definition let X be non empty TopSpace, X0 be SubSpace of X;
+ func modid(X,X0) -> map of X,X modified_with_respect_to X0 means
+:Def11: for A being Subset of X st A = the carrier of X0 holds
+  it = modid(X,A);
+ existence
+  proof
+    reconsider B = the carrier of X0 as Subset of X by TSEP_1:1;
+    X modified_with_respect_to B = X modified_with_respect_to X0 by Def10;
+    then reconsider F = modid(X,B) as map of X,X modified_with_respect_to X0;
+   take F;
+    thus thesis;
+  end;
+ uniqueness
+  proof let F1, F2 be map of X,X modified_with_respect_to X0 such that
+   A1: (for A being Subset of X st A = the carrier of X0
+   holds F1 = modid(X,A))
+    & (for A being Subset of X st A = the carrier of X0
+    holds F2 = modid(X,A));
+    reconsider C = the carrier of X0 as Subset of X by TSEP_1:1;
+       F1 = modid(X,C) & F2 = modid(X,C) by A1;
+   hence thesis;
+  end;
+end;
+
+theorem
+   X0 is open SubSpace of X implies modid(X,X0) = id X
+ proof assume A1: X0 is open SubSpace of X;
+    the carrier of X0 is Subset of X by TSEP_1:1;
+  then reconsider A = the carrier of X0 as Subset of X;
+     A is open by A1,TSEP_1:16;
+  then modid(X,A) = id X & modid(X,A) = modid(X,X0) by Def11,Th107;
+  hence thesis;
+ end;
+
+theorem Th118:
+ for X0, X1 being non empty SubSpace of X st X0 misses X1
+  for x1 being Point of X1 holds (modid(X,X0))|X1 is_continuous_at x1
+ proof let X0, X1 be non empty SubSpace of X;
+  assume A1: X0 misses X1;
+   let x1 be Point of X1;
+    reconsider A = the carrier of X0 as Subset of X by TSEP_1:1;
+       (the carrier of X1) misses A by A1,TSEP_1:def 3;
+     then A2: (modid(X,A))|X1 is_continuous_at x1 by Th109;
+    X modified_with_respect_to A = X modified_with_respect_to X0 by Def10;
+     then reconsider
+          f = (modid(X,A))|X1 as map of X1,X modified_with_respect_to X0;
+      A3: f is_continuous_at x1
+           proof
+              now let W be Subset of X modified_with_respect_to X0;
+             assume A4: W is open & f.x1 in W;
+              then W in the topology of (X modified_with_respect_to X0)
+                                                     by PRE_TOPC:def 5;
+              then W in A-extension_of_the_topology_of X by Th114;
+              then A5: W in the topology of (X modified_with_respect_to A)
+                                                             by Th104;
+              then reconsider W0 = W as Subset of
+                            (X modified_with_respect_to A);
+               A6: W0 is open by A5,PRE_TOPC:def 5;
+             thus ex V being Subset of X1
+                st V is open & x1 in V & f.:V c= W
+                   proof
+                    consider V being Subset of X1 such that
+                     A7: V is open & x1 in V & ((modid(X,A))|X1).:V c= W0
+                                                          by A2,A4,A6,Th48;
+                     take V;
+                    thus thesis by A7;
+                   end;
+            end;
+            hence thesis by Th48;
+           end;
+          modid(X,A)|X1 = modid(X,A)|(the carrier of X1) by Def3
+                     .= modid(X,X0)|(the carrier of X1) by Def11
+                     .= modid(X,X0)|X1 by Def3;
+  hence thesis by A3;
+ end;
+
+theorem Th119:
+ for X0 being non empty SubSpace of X
+  for x0 being Point of X0 holds (modid(X,X0))|X0 is_continuous_at x0
+ proof let X0 be non empty SubSpace of X; let x0 be Point of X0;
+   reconsider A = the carrier of X0 as Subset of X by TSEP_1:1;
+    A1: (modid(X,A))|X0 is_continuous_at x0 by Th110;
+    X modified_with_respect_to A = X modified_with_respect_to X0 by Def10;
+    then reconsider
+     f = (modid(X,A))|X0 as map of X0,X modified_with_respect_to X0;
+      A2: f is_continuous_at x0
+           proof
+              now let W be Subset of X modified_with_respect_to X0;
+             assume A3: W is open & f.x0 in W;
+              then W in the topology of (X modified_with_respect_to X0)
+                                                     by PRE_TOPC:def 5;
+              then W in A-extension_of_the_topology_of X by Th114;
+              then A4: W in the topology of (X modified_with_respect_to A)
+                                                             by Th104;
+              then reconsider W0 = W as Subset of
+                            (X modified_with_respect_to A);
+               A5: W0 is open by A4,PRE_TOPC:def 5;
+             thus ex V being Subset of X0
+               st V is open & x0 in V & f.:V c= W
+                   proof
+                    consider V being Subset of X0 such that
+                     A6: V is open & x0 in V & ((modid(X,A))|X0).:V c= W0
+                                                          by A1,A3,A5,Th48;
+                     take V;
+                    thus thesis by A6;
+                   end;
+            end;
+            hence thesis by Th48;
+           end;
+        modid(X,A)|X0 = modid(X,A)|(the carrier of X0) by Def3
+                    .= modid(X,X0)|(the carrier of X0) by Def11
+                    .= modid(X,X0)|X0 by Def3;
+  hence thesis by A2;
+ end;
+
+theorem
+   for X0, X1 being non empty SubSpace of X st X0 misses X1 holds
+  (modid(X,X0))|X1 is continuous map of X1,X modified_with_respect_to X0
+ proof let X0, X1 be non empty SubSpace of X;
+  assume X0 misses X1;
+   then for x1 being Point of X1 holds ((modid(X,X0))|X1)
+ is_continuous_at x1 by Th118;
+  hence thesis by Th49;
+ end;
+
+theorem
+   for X0 being non empty SubSpace of X holds
+  (modid(X,X0))|X0 is continuous map of X0,X modified_with_respect_to X0
+ proof let X0 be non empty SubSpace of X;
+     for x0 being Point of X0 holds ((modid(X,X0))|X0)
+ is_continuous_at x0 by Th119;
+  hence thesis by Th49;
+ end;
+
+theorem
+   for X0 being SubSpace of X holds
+  X0 is open SubSpace of X iff
+   modid(X,X0) is continuous map of X,X modified_with_respect_to X0
+ proof let X0 be SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+  thus X0 is open SubSpace of X implies
+    modid(X,X0) is continuous map of X,X modified_with_respect_to X0
+   proof assume X0 is open SubSpace of X;
+    then A1: A is open by TSEP_1:16;
+        X modified_with_respect_to X0 = X modified_with_respect_to A &
+          modid(X,X0) = modid(X,A) by Def10,Def11;
+    hence thesis by A1,Th113;
+   end;
+  thus modid(X,X0) is continuous map of X,X modified_with_respect_to X0
+    implies X0 is open SubSpace of X
+   proof assume A2: modid(X,X0) is continuous map of X,X
+     modified_with_respect_to X0;
+        X modified_with_respect_to X0 = X modified_with_respect_to A &
+          modid(X,X0) = modid(X,A) by Def10,Def11;
+    then A is open by A2,Th113;
+    hence thesis by TSEP_1:16;
+   end;
+ end;
+
+
+begin
+::5. Continuity of Mappings over the Union of Subspaces.
+reserve X, Y for non empty TopSpace;
+
+::Continuity at the Point of Mappings over the Union of Subspaces.
+theorem Th123:
+ for X1, X2 being non empty SubSpace of X, g being map of X1 union X2,Y
+  for x1 being Point of X1, x2 being Point of X2,
+   x being Point of X1 union X2 st x = x1 & x = x2 holds
+    g is_continuous_at x iff
+     g|X1 is_continuous_at x1 & g|X2 is_continuous_at x2
+ proof
+  let X1, X2 be non empty SubSpace of X, g be map of X1 union X2,Y;
+  let x1 be Point of X1, x2 be Point of X2, x be Point of X1 union X2 such that
+   A1: x = x1 & x = x2;
+    A2: X1 is SubSpace of X1 union X2 &
+        X2 is SubSpace of X1 union X2 by TSEP_1:22;
+  hence g is_continuous_at x implies
+        g|X1 is_continuous_at x1 & g|X2 is_continuous_at x2 by A1,Th81;
+  thus g|X1 is_continuous_at x1 & g|X2 is_continuous_at x2 implies
+        g is_continuous_at x
+   proof assume A3: g|X1 is_continuous_at x1 & g|X2 is_continuous_at x2;
+      for G being a_neighborhood of g.x
+     ex H being a_neighborhood of x st g.:H c= G
+     proof
+      let G be a_neighborhood of g.x;
+A4:       g.x = (g|X1).x1 & g.x = (g|X2).x2 by A1,A2,Th72;
+       then consider H1 being a_neighborhood of x1 such that
+        A5: (g|X1).:H1 c= G by A3,Def2;
+       consider H2 being a_neighborhood of x2 such that
+        A6: (g|X2).:H2 c= G by A3,A4,Def2;
+      consider H being a_neighborhood of x such that
+       A7: H c= H1 \/ H2 by A1,Th21;
+      take H;
+         the carrier of X1 c= the carrier of X1 union X2 by A2,TSEP_1:4;
+       then reconsider S1 = H1 as Subset of X1 union X2
+       by XBOOLE_1:1;
+         the carrier of X2 c= the carrier of X1 union X2 by A2,TSEP_1:4;
+       then reconsider S2 = H2 as Subset of X1 union X2
+       by XBOOLE_1:1;
+         g.:S1 c= G & g.:S2 c= G by A2,A5,A6,Th75;
+       then S1 c= g"G & S2 c= g"G by Th1;
+       then S1 \/ S2 c= g"G by XBOOLE_1:8;
+       then H c= g"G by A7,XBOOLE_1:1;
+      hence thesis by Th1;
+     end;
+    hence thesis by Def2;
+   end;
+ end;
+
+theorem
+   for f being map of X,Y, X1, X2 being non empty SubSpace of X
+  for x being Point of X1 union X2,
+   x1 being Point of X1, x2 being Point of X2 st x = x1 & x = x2 holds
+    f|(X1 union X2) is_continuous_at x iff
+     f|X1 is_continuous_at x1 & f|X2 is_continuous_at x2
+ proof
+  let f be map of X,Y, X1, X2 be non empty SubSpace of X;
+  let x be Point of X1 union X2, x1 be Point of X1, x2 be Point of X2 such that
+    A1: x = x1 & x = x2;
+   A2: X1 is SubSpace of X1 union X2 & X2 is SubSpace of X1 union X2
+                                                           by TSEP_1:22;
+  hence f|(X1 union X2) is_continuous_at x implies
+     f|X1 is_continuous_at x1 & f|X2 is_continuous_at x2 by A1,Th82;
+  thus f|X1 is_continuous_at x1 & f|X2 is_continuous_at x2
+        implies f|(X1 union X2) is_continuous_at x
+   proof assume A3: f|X1 is_continuous_at x1 & f|X2 is_continuous_at x2;
+    set g = f|(X1 union X2);
+       g|X1 = f|X1 & g|X2 = f|X2 by A2,Th77;
+    hence thesis by A1,A3,Th123;
+   end;
+ end;
+
+theorem
+   for f being map of X,Y, X1, X2 being non empty SubSpace of X
+   st X = X1 union X2
+  for x being Point of X, x1 being Point of X1, x2 being Point of X2 st
+   x = x1 & x = x2 holds
+    f is_continuous_at x iff
+     f|X1 is_continuous_at x1 & f|X2 is_continuous_at x2
+ proof
+  let f be map of X,Y, X1, X2 be non empty SubSpace of X such that
+   A1: X = X1 union X2;
+  let x be Point of X, x1 be Point of X1, x2 be Point of X2; assume
+   A2: x = x1 & x = x2;
+  hence f is_continuous_at x implies
+     f|X1 is_continuous_at x1 & f|X2 is_continuous_at x2 by Th64;
+  thus f|X1 is_continuous_at x1 & f|X2 is_continuous_at x2
+        implies f is_continuous_at x
+   proof assume A3: f|X1 is_continuous_at x1 & f|X2 is_continuous_at x2;
+      for G being a_neighborhood of f.x
+     ex H being a_neighborhood of x st f.:H c= G
+     proof
+      let G be a_neighborhood of f.x;
+A4:       f.x = (f|X1).x1 & f.x = (f|X2).x2 by A2,Th58;
+
+       then consider H1 being a_neighborhood of x1 such that
+        A5: (f|X1).:H1 c= G by A3,Def2;
+       consider H2 being a_neighborhood of x2 such that
+        A6: (f|X2).:H2 c= G by A3,A4,Def2;
+      consider H being a_neighborhood of x such that
+       A7: H c= H1 \/ H2 by A1,A2,Th21;
+      take H;
+          the carrier of X1 c= the carrier of X by BORSUK_1:35;
+       then reconsider S1 = H1 as Subset of X by XBOOLE_1:1;
+          the carrier of X2 c= the carrier of X by BORSUK_1:35;
+       then reconsider S2 = H2 as Subset of X by XBOOLE_1:1;
+         f.:S1 c= G & f.:S2 c= G by A5,A6,Th61;
+       then S1 c= f"G & S2 c= f"G by Th1;
+       then S1 \/ S2 c= f"G by XBOOLE_1:8;
+       then H c= f"G by A7,XBOOLE_1:1;
+      hence thesis by Th1;
+     end;
+    hence thesis by Def2;
+   end;
+ end;
+
+reserve X1, X2 for non empty SubSpace of X;
+
+::Continuity of Mappings over the Union of Subspaces.
+theorem Th126:
+ X1,X2 are_weakly_separated implies
+  for g being map of X1 union X2,Y holds
+   g is continuous map of X1 union X2,Y iff
+    g|X1 is continuous map of X1,Y & g|X2 is continuous map of X2,Y
+ proof assume A1: X1,X2 are_weakly_separated;
+  let g be map of X1 union X2,Y;
+    A2: X1 is SubSpace of X1 union X2 &
+        X2 is SubSpace of X1 union X2 by TSEP_1:22;
+  hence g is continuous map of X1 union X2,Y implies
+   g|X1 is continuous map of X1,Y & g|X2 is continuous map of X2,Y by Th89;
+  thus g|X1 is continuous map of X1,Y & g|X2 is continuous map of X2,Y
+     implies g is continuous map of X1 union X2,Y
+   proof assume A3: g|X1 is continuous map of X1,Y &
+         g|X2 is continuous map of X2,Y;
+      for x being Point of X1 union X2 holds g is_continuous_at x
+     proof
+      let x be Point of X1 union X2;
+       set X0 = X1 union X2;
+      A4: X1 misses X2 implies g is_continuous_at x
+           proof
+            assume X1 misses X2;
+            then X1,X2 are_separated by A1,TSEP_1:85;
+            then consider Y1, Y2 being open non empty SubSpace of X such that
+             A5: X1 is SubSpace of Y1 & X2 is SubSpace of Y2 and
+             A6: Y1 misses Y2 or Y1 meet Y2 misses X0 by TSEP_1:83;
+                Y1 misses X2 & Y2 misses X1 by A5,A6,Th35;
+            then A7: X1 is open SubSpace of X0 & X2 is open SubSpace of X0
+                                                               by A5,Th46;
+             A8: now given x1 being Point of X1 such that A9: x1 = x;
+                     g|X1 is_continuous_at x1 by A3,Th49;
+                  hence g is_continuous_at x by A7,A9,Th86;
+                 end;
+                   now given x2 being Point of X2 such that A10: x2 = x;
+                     g|X2 is_continuous_at x2 by A3,Th49;
+                  hence g is_continuous_at x by A7,A10,Th86;
+                 end;
+            hence thesis by A8,Th16;
+           end;
+            X1 meets X2 implies g is_continuous_at x
+           proof
+            assume A11: X1 meets X2;
+             A12: now
+                   assume A13: X1 is SubSpace of X2 or X2 is SubSpace of X1;
+                    A14: now
+                        assume X1 is SubSpace of X2;
+                        then A15:the TopStruct of X2 = X0 by TSEP_1:23;
+                        then reconsider x2 = x as Point of X2;
+                           g|X2 is_continuous_at x2 by A3,Th49;
+                        hence g is_continuous_at x by A15,Th88;
+                       end;
+                         now
+                        assume X2 is SubSpace of X1;
+                        then A16: the TopStruct of X1 = X0 by TSEP_1:23;
+                        then reconsider x1 = x as Point of X1;
+                           g|X1 is_continuous_at x1 by A3,Th49;
+                        hence g is_continuous_at x by A16,Th88;
+                       end;
+                   hence g is_continuous_at x by A13,A14;
+                  end;
+               now
+              assume A17: not (X1 is SubSpace of X2 or X2 is SubSpace of X1);
+              then consider Y1, Y2 being open non empty SubSpace of X such that
+               A18: Y1 meet X0 is SubSpace of X1 and
+               A19: Y2 meet X0 is SubSpace of X2 and
+               A20: X0 is SubSpace of Y1 union Y2 or
+                ex Z being closed non empty SubSpace of X st
+                the TopStruct of X = (Y1 union Y2) union Z &
+               Z meet X0 is SubSpace of X1 meet X2 by A1,A11,TSEP_1:96;
+       A21: Y1 meets X0 implies Y1 meet X0 is open SubSpace of X0 by Th44;
+       A22: Y2 meets X0 implies Y2 meet X0 is open SubSpace of X0 by Th44;
+               A23: now
+                   assume A24: X0 is SubSpace of Y1 union Y2;
+                   then A25: Y1 meets X0 by A17,A18,A19,Th36;
+                   A26: Y2 meets X0 by A17,A18,A19,A24,Th36;
+                      Y1 is SubSpace of Y1 union Y2 by TSEP_1:22;
+                   then Y1 union Y2 meets X0 by A25,Th23;
+                   then (Y1 union Y2) meet X0 = X0 by A24,TSEP_1:31;
+                   then A27: (Y1 meet X0) union (Y2 meet X0) = X0
+                                            by A25,A26,TSEP_1:35;
+               A28: now given x1 being Point of Y1 meet X0 such that
+                      A29: x1 = x;
+                       g|(Y1 meet X0) is continuous by A2,A3,A18,Th90;
+                    then g|(Y1 meet X0) is_continuous_at x1 by Th49;
+                    hence g is_continuous_at x by A17,A18,A19,A21,A24,A29,Th36,
+Th86;
+                   end;
+                     now given x2 being Point of Y2 meet X0 such that
+                      A30: x2 = x;
+                       g|(Y2 meet X0) is continuous by A2,A3,A19,Th90;
+                    then g|(Y2 meet X0) is_continuous_at x2 by Th49;
+                    hence g is_continuous_at x by A17,A18,A19,A22,A24,A30,Th36,
+Th86;
+                   end;
+                   hence g is_continuous_at x by A27,A28,Th16;
+                  end;
+                now assume A31: not X0 is SubSpace of Y1 union Y2;
+               then consider Z being closed non empty SubSpace of X such that
+                 A32: the TopStruct of X = (Y1 union Y2) union Z and
+                 A33: Z meet X0 is SubSpace of X1 meet X2 by A20;
+               A34: (Y1 union Y2) meets X0 by A11,A17,A18,A19,A31,A32,A33,Th38;
+                   A35: Z meets X0 by A11,A17,A18,A19,A31,A32,A33,Th38;
+                      A36: Y1 meets X0 by A11,A17,A18,A19,A32,A33,Th37;
+                      A37: Y2 meets X0 by A11,A17,A18,A19,A32,A33,Th37;
+                 X is SubSpace of X by TSEP_1:2;
+               then reconsider X12 = the TopStruct of X as SubSpace of X
+                by Th11;
+                 the carrier of X0 c= the carrier of X12 by BORSUK_1:35;
+               then A38: X0 is SubSpace of X12 by TSEP_1:4;
+               then X12 meets X0 by Th22;
+               then ((Y1 union Y2) union Z) meet X0 = the TopStruct of X0
+                 by A32,A38,TSEP_1:31;
+               then A39: ((Y1 union Y2) meet X0) union (Z meet X0)
+                     = the TopStruct of X0 by A34,A35,TSEP_1:35;
+               A40: now assume
+A41:                    ex x12 being Point of (Y1 union Y2) meet X0 st x12 = x;
+A42:                     (Y1 union Y2) meet X0 =
+                         (Y1 meet X0) union (Y2 meet X0) by A36,A37,TSEP_1:35;
+                 A43: now given x1 being Point of Y1 meet X0 such that
+                        A44: x1 = x;
+                        g|(Y1 meet X0) is continuous by A2,A3,A18,Th90;
+                      then g|(Y1 meet X0) is_continuous_at x1 by Th49;
+                      hence g is_continuous_at x by A11,A17,A18,A19,A21,A32,A33
+,A44,Th37,Th86;
+                     end;
+                       now given x2 being Point of Y2 meet X0 such that
+                        A45: x2 = x;
+                         g|(Y2 meet X0) is continuous by A2,A3,A19,Th90;
+                      then g|(Y2 meet X0) is_continuous_at x2 by Th49;
+                      hence g is_continuous_at x by A11,A17,A18,A19,A22,A32,A33
+,A45,Th37,Th86;
+                     end;
+                    hence g is_continuous_at x by A41,A42,A43,Th16;
+                   end;
+                  now given x0 being Point of Z meet X0 such that
+                   A46: x0 = x;
+                 consider x00 being Point of X1 meet X2 such that
+                   A47: x00 = x0 by A33,Th15;
+                 consider x1 being Point of X1 such that
+                   A48: x1 = x00 by A11,Th17;
+                 consider x2 being Point of X2 such that
+                   A49: x2 = x00 by A11,Th17;
+                   g|X1 is_continuous_at x1 & g|X2 is_continuous_at x2 by A3,
+Th49;
+                 hence g is_continuous_at x by A46,A47,A48,A49,Th123;
+                end;
+               hence g is_continuous_at x by A39,A40,Th16;
+              end;
+              hence g is_continuous_at x by A23;
+             end;
+            hence thesis by A12;
+           end;
+      hence g is_continuous_at x by A4;
+     end;
+    hence g is continuous map of X1 union X2,Y by Th49;
+   end;
+ end;
+
+theorem Th127:
+ for X1, X2 being closed non empty SubSpace of X
+  for g being map of X1 union X2,Y holds
+   g is continuous map of X1 union X2,Y iff
+    g|X1 is continuous map of X1,Y & g|X2 is continuous map of X2,Y
+ proof
+  let X1, X2 be closed non empty SubSpace of X;
+  let g be map of X1 union X2,Y;
+     X1,X2 are_weakly_separated by TSEP_1:87;
+  hence thesis by Th126;
+ end;
+
+theorem Th128:
+ for X1, X2 being open non empty SubSpace of X
+  for g being map of X1 union X2,Y holds
+   g is continuous map of X1 union X2,Y iff
+    g|X1 is continuous map of X1,Y & g|X2 is continuous map of X2,Y
+ proof
+  let X1, X2 be open non empty SubSpace of X;
+  let g be map of X1 union X2,Y;
+     X1,X2 are_weakly_separated by TSEP_1:88;
+  hence thesis by Th126;
+ end;
+
+theorem Th129:
+ X1,X2 are_weakly_separated implies
+  for f being map of X,Y holds
+   f|(X1 union X2) is continuous map of X1 union X2,Y iff
+    f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y
+ proof assume A1: X1,X2 are_weakly_separated;
+  let f be map of X,Y;
+    A2: X1 is SubSpace of X1 union X2 &
+        X2 is SubSpace of X1 union X2 by TSEP_1:22;
+    then A3: f|(X1 union X2)|X1 = f|X1 & f|(X1 union X2)|X2 = f|X2 by Th78;
+   hence f|(X1 union X2) is continuous map of X1 union X2,Y implies
+          f|X1 is continuous map of X1,Y &
+          f|X2 is continuous map of X2,Y by A2,Th89;
+   thus f|X1 is continuous map of X1,Y &
+        f|X2 is continuous map of X2,Y implies
+    f|(X1 union X2) is continuous map of X1 union X2,Y by A1,A3,Th126;
+ end;
+
+theorem
+   for f being map of X,Y, X1, X2 being closed non empty SubSpace of X holds
+  f|(X1 union X2) is continuous map of X1 union X2,Y iff
+   f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y
+ proof
+  let f be map of X,Y, X1, X2 be closed non empty SubSpace of X;
+    X1,X2 are_weakly_separated by TSEP_1:87;
+  hence thesis by Th129;
+ end;
+
+theorem
+   for f being map of X,Y, X1, X2 being open non empty SubSpace of X holds
+  f|(X1 union X2) is continuous map of X1 union X2,Y iff
+   f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y
+ proof
+  let f be map of X,Y, X1, X2 be open non empty SubSpace of X;
+    X1,X2 are_weakly_separated by TSEP_1:88;
+  hence thesis by Th129;
+ end;
+
+theorem Th132:
+ for f being map of X,Y, X1, X2 being non empty SubSpace of X st
+  X = X1 union X2 & X1,X2 are_weakly_separated holds
+   f is continuous map of X,Y iff
+    f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y
+ proof
+  let f be map of X,Y, X1, X2 be non empty SubSpace of X such that
+   A1: X = X1 union X2 and A2: X1,X2 are_weakly_separated;
+   thus f is continuous map of X,Y implies
+           f|X1 is continuous map of X1,Y &
+           f|X2 is continuous map of X2,Y by Th68;
+    assume f|X1 is continuous map of X1,Y &
+           f|X2 is continuous map of X2,Y;
+     then f|(X1 union X2) is continuous map of X1 union X2,Y by A2,Th129;
+     hence thesis by A1,Th60;
+ end;
+
+theorem Th133:
+ for f being map of X,Y, X1, X2 being closed non empty SubSpace of X st
+  X = X1 union X2 holds
+   f is continuous map of X,Y iff
+    f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y
+ proof
+  let f be map of X,Y, X1, X2 be closed non empty SubSpace of X such that
+   A1: X = X1 union X2;
+    X1,X2 are_weakly_separated by TSEP_1:87;
+  hence thesis by A1,Th132;
+ end;
+
+theorem Th134:
+ for f being map of X,Y, X1, X2 being open non empty SubSpace of X st
+  X = X1 union X2 holds
+   f is continuous map of X,Y iff
+    f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y
+ proof
+  let f be map of X,Y, X1, X2 be open non empty SubSpace of X such that
+   A1: X = X1 union X2;
+    X1,X2 are_weakly_separated by TSEP_1:88;
+  hence thesis by A1,Th132;
+ end;
+
+::Some Characterizations of Separated Subspaces of Topological Spaces.
+theorem Th135:
+ X1,X2 are_separated iff X1 misses X2 &
+  for Y being non empty TopSpace, g being map of X1 union X2,Y st
+   g|X1 is continuous map of X1,Y & g|X2 is continuous map of X2,Y
+    holds g is continuous map of X1 union X2,Y
+ proof
+  thus X1,X2 are_separated implies X1 misses X2 &
+    for Y being non empty TopSpace, g being map of X1 union X2,Y st
+     g|X1 is continuous map of X1,Y & g|X2 is continuous map of X2,Y holds
+     g is continuous map of X1 union X2,Y
+   proof assume A1: X1,X2 are_separated;
+     then A2: X1,X2 are_weakly_separated by TSEP_1:85;
+    thus X1 misses X2 by A1,TSEP_1:68;
+    thus thesis by A2,Th126;
+   end;
+  thus X1 misses X2 &
+    (for Y being non empty TopSpace, g being map of X1 union X2,Y st
+     g|X1 is continuous map of X1,Y & g|X2 is continuous map of X2,Y holds
+     g is continuous map of X1 union X2,Y)
+    implies X1,X2 are_separated
+   proof assume A3: X1 misses X2;
+    assume
+A4: for Y being non empty TopSpace, g being map of X1 union X2,Y st
+     g|X1 is continuous map of X1,Y & g|X2 is continuous map of X2,Y holds
+     g is continuous map of X1 union X2,Y;
+       reconsider A1 = the carrier of X1 as Subset of X
+       by TSEP_1:1;
+       reconsider A2 = the carrier of X2 as Subset of X
+       by TSEP_1:1;
+    assume X1,X2 are_not_separated;
+     then A5: ex A10, A20 being Subset of X st
+ A10 = the carrier of X1 & A20 = the carrier of X2 &
+ A10,A20 are_not_separated by TSEP_1:def 8;
+          A6: the carrier of X1 union X2 = A1 \/ A2 by TSEP_1:def 2;
+     then A1 is Subset of X1 union X2 by XBOOLE_1:7;
+     then reconsider C1 = A1 as Subset of X1 union X2;
+       A2 is Subset of X1 union X2 by A6,XBOOLE_1:7;
+     then reconsider C2 = A2 as Subset of X1 union X2;
+      A7: Cl C1 = (Cl A1) /\ [#](X1 union X2) &
+           Cl C2 = (Cl A2) /\ [#](X1 union X2) by PRE_TOPC:47;
+      A8: now assume C1,C2 are_separated;
+           then ((Cl A1) /\ [#](X1 union X2)) misses A2 &
+               A1 misses ((Cl A2) /\ [#](X1 union X2)) by A7,CONNSP_1:def 1;
+           then ((Cl A1) /\ [#](X1 union X2)) /\ A2 = {} &
+               A1 /\ ((Cl A2) /\ [#](X1 union X2)) = {} by XBOOLE_0:def 7;
+           then A9: (Cl A1 /\ A2) /\ [#](X1 union X2) = {} &
+                      (A1 /\ Cl A2) /\ [#](X1 union X2) = {} by XBOOLE_1:16;
+              C2 c= [#](X1 union X2) & C1 c= [#](X1 union X2) by PRE_TOPC:14;
+           then Cl A1 /\ A2 c= A2 & A1 /\ Cl A2 c= A1 &
+           A2 c= [#](X1 union X2) & A1 c= [#](X1 union X2) by XBOOLE_1:17;
+           then Cl A1 /\ A2 c= [#](X1 union X2) &
+                   A1 /\ Cl A2 c= [#](X1 union X2) by XBOOLE_1:1;
+           then Cl A1 /\ A2 = {} & A1 /\ Cl A2 = {} by A9,XBOOLE_1:28;
+           then Cl A1 misses A2 & A1 misses Cl A2 by XBOOLE_0:def 7;
+           hence contradiction by A5,CONNSP_1:def 1;
+          end;
+      A10: C1 misses C2 by A3,TSEP_1:def 3;
+        reconsider Y1 = X1, Y2 = X2 as SubSpace of X1 union X2 by TSEP_1:22;
+        now per cases by A8,A10,TSEP_1:41;
+       suppose A11: not C1 is open;
+        set Y = (X1 union X2) modified_with_respect_to C1;
+        set g = modid(X1 union X2,C1);
+         A12: not g is continuous map of X1 union X2,Y by A11,Th113;
+         A13: g|Y1 = g|(the carrier of Y1) by Def3
+                  .= g|X1 by Def4;
+            g|Y2 = g|(the carrier of Y2) by Def3
+                   .= g|X2 by Def4;
+        then g|X1 is continuous map of X1,Y &
+             g|X2 is continuous map of X2,Y by A10,A13,Th111,Th112;
+        hence contradiction by A4,A12;
+       suppose A14: not C2 is open;
+        set Y = (X1 union X2) modified_with_respect_to C2;
+        set g = modid(X1 union X2,C2);
+        A15: not g is continuous map of X1 union X2,Y by A14,Th113;
+         A16: g|Y1 = g|(the carrier of Y1) by Def3
+                  .= g|X1 by Def4;
+            g|Y2 = g|(the carrier of Y2) by Def3
+                  .= g|X2 by Def4;
+        then g|X1 is continuous map of X1,Y & g|X2 is continuous map of X2,Y
+          by A10,A16,Th111,Th112;
+        hence contradiction by A4,A15;
+      end;
+    hence contradiction;
+   end;
+ end;
+
+theorem Th136:
+ X1,X2 are_separated iff X1 misses X2 &
+  for Y being non empty TopSpace, f being map of X,Y st
+   f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y
+    holds f|(X1 union X2) is continuous map of X1 union X2,Y
+ proof
+  thus X1,X2 are_separated implies X1 misses X2 &
+    for Y being non empty TopSpace, f being map of X,Y st
+     f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y holds
+      f|(X1 union X2) is continuous map of X1 union X2,Y
+   proof assume A1: X1,X2 are_separated;
+     then A2: X1,X2 are_weakly_separated by TSEP_1:85;
+    thus X1 misses X2 by A1,TSEP_1:68;
+    thus thesis by A2,Th129;
+   end;
+  thus X1 misses X2 &
+       (for Y being non empty TopSpace, f being map of X,Y st
+      f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y holds
+     f|(X1 union X2) is continuous map of X1 union X2,Y)
+    implies X1,X2 are_separated
+   proof assume A3: X1 misses X2;
+    assume A4: for Y being non empty TopSpace, f being map of X,Y st
+        f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y holds
+              f|(X1 union X2) is continuous map of X1 union X2,Y;
+      for Y being non empty TopSpace, g being map of X1 union X2,Y st
+     g|X1 is continuous map of X1,Y & g|X2 is continuous map of X2,Y holds
+     g is continuous map of X1 union X2,Y
+    proof
+     let Y be non empty TopSpace, g be map of X1 union X2,Y such that
+      A5: g|X1 is continuous map of X1,Y & g|X2 is continuous map of X2,Y;
+     consider h being map of X,Y such that
+      A6: h|(X1 union X2) = g by Th63;
+          X1 is SubSpace of X1 union X2 &
+        X2 is SubSpace of X1 union X2 by TSEP_1:22;
+      then h|X1 is continuous map of X1,Y & h|X2 is continuous map of X2,Y
+        by A5,A6,Th77;
+      hence thesis by A4,A6;
+    end;
+    hence thesis by A3,Th135;
+   end;
+ end;
+
+theorem
+   for X1, X2 being non empty SubSpace of X st X = X1 union X2 holds
+  X1,X2 are_separated iff X1 misses X2 &
+   for Y being non empty TopSpace, f being map of X,Y st
+    f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y
+     holds f is continuous map of X,Y
+ proof let X1, X2 be non empty SubSpace of X such that A1: X = X1 union X2;
+  thus X1,X2 are_separated implies X1 misses X2 &
+     for Y being non empty TopSpace, f being map of X,Y st
+      f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y holds
+      f is continuous map of X,Y
+   proof assume A2: X1,X2 are_separated;
+     then A3: X1,X2 are_weakly_separated by TSEP_1:85;
+    thus X1 misses X2 by A2,TSEP_1:68;
+    thus thesis by A1,A3,Th132;
+   end;
+  thus X1 misses X2 &
+        (for Y being non empty TopSpace, f being map of X,Y st
+         f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y holds
+         f is continuous map of X,Y)
+       implies X1,X2 are_separated
+   proof assume A4: X1 misses X2;
+     assume A5: for Y being non empty TopSpace, f being map of X,Y st
+        f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y holds
+        f is continuous map of X,Y;
+       for Y being non empty TopSpace, f being map of X,Y st
+      f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y holds
+       f|(X1 union X2) is continuous map of X1 union X2,Y
+      proof
+       let Y be non empty TopSpace, f be map of X,Y;
+       assume f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y;
+       then f is continuous map of X,Y by A5;
+       hence thesis by A1,Th60;
+      end;
+    hence thesis by A4,Th136;
+   end;
+ end;
+
+
+begin
+::6. The Union of Continuous Mappings.
+
+definition let X,Y be non empty TopSpace, X1, X2 be non empty SubSpace of X;
+            let f1 be map of X1,Y, f2 be map of X2,Y;
+ assume A1:X1 misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2);
+   func f1 union f2 -> map of X1 union X2,Y means
+:Def12: it|X1 = f1 & it|X2 = f2;
+ existence
+  proof A2: X1 is SubSpace of X1 union X2 &
+             X2 is SubSpace of X1 union X2 by TSEP_1:22;
+   set A1 = the carrier of X1; set A2 = the carrier of X2;
+   set A = the carrier of X1 union X2; set B = the carrier of Y;
+      A3: A = A1 \/ A2 by TSEP_1:def 2;
+   A4: A1 meets A2 implies f1|(A1 /\ A2) = f2|(A1 /\ A2)
+     proof assume A5: A1 meets A2;
+       then A6: X1 meets X2 by TSEP_1:def 3;
+       then A7: X1 meet X2 is SubSpace of X1 &
+           X1 meet X2 is SubSpace of X2 by TSEP_1:30;
+       thus f1|(A1 /\ A2) = f1|(the carrier of X1 meet X2) by A6,TSEP_1:def 5
+                     .= f2|(X1 meet X2) by A1,A5,A7,Def4,TSEP_1:def 3
+                     .= f2|(the carrier of X1 meet X2) by A7,Def4
+                     .= f2|(A1 /\ A2) by A6,TSEP_1:def 5;
+     end;
+    reconsider A1, A2 as non empty Subset of A by A3,XBOOLE_1:7;
+    reconsider g1 = f1 as Function of A1,B;
+    reconsider g2 = f2 as Function of A2,B;
+    set G = g1 union g2;
+    A8: G|A1 = f1 & G|A2 = f2 by A4,Def1,Th6;
+      the carrier of X1 union X2 = (the carrier of X1) \/ (the carrier of X2)
+        by TSEP_1:def 2;
+    then reconsider F = G as map of X1 union X2,Y;
+   take F;
+   thus thesis by A2,A8,Def4;
+  end;
+ uniqueness
+  proof
+   let F be map of X1 union X2,Y, G be map of X1 union X2,Y such that
+          A9: F|X1 = f1 & F|X2 = f2 and A10: G|X1 = f1 & G|X2 = f2;
+    A11: X1 is SubSpace of X1 union X2 &
+        X2 is SubSpace of X1 union X2 by TSEP_1:22;
+    set A1 = the carrier of X1; set A2 = the carrier of X2;
+    set A = the carrier of X1 union X2;
+     A12: A = A1 \/ A2 by TSEP_1:def 2;
+     now let a be Element of A;
+    A13: now assume A14: a in A1;
+         hence F.a = (F|A1).a by FUNCT_1:72
+                 .= f1.a by A9,A11,Def4
+                 .= (G|A1).a by A10,A11,Def4
+                 .= G.a by A14,FUNCT_1:72;
+        end;
+       now assume A15: a in A2;
+         hence F.a = (F|A2).a by FUNCT_1:72
+                 .= f2.a by A9,A11,Def4
+                 .= (G|A2).a by A10,A11,Def4
+                 .= G.a by A15,FUNCT_1:72;
+        end;
+    hence F.a = G.a by A12,A13,XBOOLE_0:def 2;
+   end;
+   hence thesis by FUNCT_2:113;
+  end;
+end;
+
+reserve X, Y for non empty TopSpace;
+
+theorem Th138:
+ for X1, X2 being non empty SubSpace of X
+  for g being map of X1 union X2,Y holds g = (g|X1) union (g|X2)
+ proof let X1, X2 be non empty SubSpace of X;
+  let g be map of X1 union X2,Y;
+     now assume X1 meets X2;
+    then A1: X1 meet X2 is SubSpace of X1 & X1 meet X2 is SubSpace of X2 &
+             X1 is SubSpace of X1 union X2 & X2 is SubSpace of X1 union X2
+                                                             by TSEP_1:22,30;
+    hence (g|X1)|(X1 meet X2) = g|(X1 meet X2) by Th79
+                             .= (g|X2)|(X1 meet X2) by A1,Th79;
+   end;
+  hence thesis by Def12;
+ end;
+
+theorem
+   for X1, X2 being non empty SubSpace of X st X = X1 union X2
+  for g being map of X,Y holds g = (g|X1) union (g|X2)
+ proof let X1, X2 be non empty SubSpace of X such that A1: X = X1 union X2;
+    let g be map of X,Y;
+   reconsider h = g as map of X1 union X2,Y by A1;
+    A2: X1 is SubSpace of X1 union X2 by TSEP_1:22;
+    A3: X2 is SubSpace of X1 union X2 by TSEP_1:22;
+    A4: h|X1 = h|(the carrier of X1) by A2,Def4
+             .= g|X1 by Def3;
+       h|X2 = h|(the carrier of X2) by A3,Def4
+            .= g|X2 by Def3;
+   hence thesis by A4,Th138;
+ end;
+
+theorem Th140:
+ for X1, X2 being non empty SubSpace of X st X1 meets X2
+  for f1 being map of X1,Y, f2 being map of X2,Y holds
+   (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2 iff
+     f1|(X1 meet X2) = f2|(X1 meet X2)
+ proof let X1, X2 be non empty SubSpace of X such that A1: X1 meets X2;
+      let f1 be map of X1,Y, f2 be map of X2,Y;
+  thus (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2 implies
+         f1|(X1 meet X2) = f2|(X1 meet X2)
+   proof A2: X1 meet X2 is SubSpace of X1 &
+              X1 meet X2 is SubSpace of X2 by A1,TSEP_1:30;
+     A3: X1 is SubSpace of X1 union X2 &
+          X2 is SubSpace of X1 union X2 by TSEP_1:22;
+    assume (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2;
+    then (f1 union f2)|(X1 meet X2) = f1|(X1 meet X2) &
+           (f1 union f2)|(X1 meet X2) = f2|(X1 meet X2) by A2,A3,Th79;
+    hence thesis;
+   end;
+  thus f1|(X1 meet X2) = f2|(X1 meet X2) implies
+         (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2 by Def12;
+ end;
+
+theorem
+   for X1, X2 being non empty SubSpace of X,
+  f1 being map of X1,Y, f2 being map of X2,Y st
+   f1|(X1 meet X2) = f2|(X1 meet X2) holds
+    (X1 is SubSpace of X2 iff f1 union f2 = f2) &
+     (X2 is SubSpace of X1 iff f1 union f2 = f1)
+ proof
+   let X1, X2 be non empty SubSpace of X,
+       f1 be map of X1,Y, f2 be map of X2,Y;
+  assume A1: f1|(X1 meet X2) = f2|(X1 meet X2);
+   reconsider Y1 = X1, Y2 = X2, Y3 = X1 union X2 as SubSpace of X1 union X2
+    by TSEP_1:2,22;
+  thus X1 is SubSpace of X2 iff f1 union f2 = f2
+   proof
+    A2: now assume X1 is SubSpace of X2;
+         then A3: the TopStruct of X2 = X1 union X2 by TSEP_1:23;
+            (f1 union f2)|X2 = f2 by A1,Def12;
+         then (f1 union f2)|the carrier of Y2 = f2 by Def4;
+         then (f1 union f2)|the carrier of Y3 = f2 by A3;
+         then (f1 union f2)|(X1 union X2) = f2 by Def4;
+         hence f1 union f2 = f2 by Th74;
+        end;
+          now assume A4: f1 union f2 = f2;
+
+         A5: dom (f1 union f2) = [#](X1 union X2) by TOPS_2:51
+                              .= the carrier of X1 union X2 by PRE_TOPC:12;
+               dom f2 = [#]X2 by TOPS_2:51
+                   .= the carrier of X2 by PRE_TOPC:12;
+          then X1 union X2 = the TopStruct of X2 by A4,A5,TSEP_1:5;
+         hence X1 is SubSpace of X2 by TSEP_1:23;
+        end;
+    hence thesis by A2;
+   end;
+  thus X2 is SubSpace of X1 iff f1 union f2 = f1
+   proof
+    A6: now assume X2 is SubSpace of X1;
+         then A7: the TopStruct of X1 = X1 union X2 by TSEP_1:23;
+            (f1 union f2)|X1 = f1 by A1,Def12;
+         then (f1 union f2)|the carrier of Y1 = f1 by Def4;
+         then (f1 union f2)|the carrier of Y3 = f1 by A7;
+         then (f1 union f2)|(X1 union X2) = f1 by Def4;
+         hence f1 union f2 = f1 by Th74;
+        end;
+          now assume A8: f1 union f2 = f1;
+
+         A9: dom (f1 union f2) = [#](X1 union X2) by TOPS_2:51
+                              .= the carrier of X1 union X2 by PRE_TOPC:12;
+               dom f1 = [#]X1 by TOPS_2:51
+                   .= the carrier of X1 by PRE_TOPC:12;
+          then X1 union X2 = the TopStruct of X1 by A8,A9,TSEP_1:5;
+         hence X2 is SubSpace of X1 by TSEP_1:23;
+        end;
+    hence thesis by A6;
+   end;
+ end;
+
+theorem
+   for X1, X2 being non empty SubSpace of X,
+  f1 being map of X1,Y, f2 being map of X2,Y st
+   X1 misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2) holds
+    f1 union f2 = f2 union f1
+ proof let X1, X2 be non empty SubSpace of X,
+            f1 be map of X1,Y, f2 be map of X2,Y;
+  assume X1 misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2);
+  then (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2 by Def12;
+  hence f1 union f2 = f2 union f1 by Th138;
+ end;
+
+theorem
+   for X1, X2, X3 being non empty SubSpace of X,
+  f1 being map of X1,Y, f2 being map of X2,Y, f3 being map of X3,Y
+   st (X1 misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2)) &
+       (X1 misses X3 or f1|(X1 meet X3) = f3|(X1 meet X3)) &
+        (X2 misses X3 or f2|(X2 meet X3) = f3|(X2 meet X3)) holds
+      (f1 union f2) union f3 = f1 union (f2 union f3)
+ proof let X1, X2, X3 be non empty SubSpace of X, f1 be map of X1,Y,
+            f2 be map of X2,Y, f3 be map of X3,Y such that
+   A1: X1 misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2) and
+   A2: X1 misses X3 or f1|(X1 meet X3) = f3|(X1 meet X3) and
+   A3: X2 misses X3 or f2|(X2 meet X3) = f3|(X2 meet X3);
+  set g = (f1 union f2) union f3;
+   A4: (X1 union X2) union X3 = X1 union (X2 union X3) by TSEP_1:21;
+  then reconsider f = g as map of X1 union (X2 union X3),Y;
+    A5: X1 union X2 is SubSpace of (X1 union X2) union X3 by TSEP_1:22;
+  A6: X1 union X2 is SubSpace of X1 union (X2 union X3) by A4,TSEP_1:22;
+    A7: X3 is SubSpace of (X1 union X2) union X3 by TSEP_1:22;
+  A8: X3 is SubSpace of X1 union (X2 union X3) by A4,TSEP_1:22;
+     now assume A9: (X1 union X2) meets X3;
+       now per cases by A9,Th39;
+      suppose A10: X1 meets X3 & not X2 meets X3;
+        then A11: (X1 union X2) meet X3 = X1 meet X3 by Th31;
+         A12: X1 meet X3 is SubSpace of X1 by A10,TSEP_1:30;
+            (f1 union f2)|(X1 meet X3) = f3|(X1 meet X3)
+               proof
+                   X1 is SubSpace of X1 union X2 by TSEP_1:22;
+                then (f1 union f2)|(X1 meet X3)
+                       = ((f1 union f2)|X1)|(X1 meet X3) by A12,Th79
+                      .= f1|(X1 meet X3) by A1,Def12;
+                hence thesis by A2,A10;
+               end;
+       hence (f1 union f2)|((X1 union X2) meet X3) =
+                                f3|((X1 union X2) meet X3) by A11;
+      suppose A13: not X1 meets X3 & X2 meets X3;
+        then A14: (X1 union X2) meet X3 = X2 meet X3 by Th31;
+         A15: X2 meet X3 is SubSpace of X2 by A13,TSEP_1:30;
+            (f1 union f2)|(X2 meet X3) = f3|(X2 meet X3)
+               proof
+                   X2 is SubSpace of X1 union X2 by TSEP_1:22;
+                then (f1 union f2)|(X2 meet X3)
+                       = ((f1 union f2)|X2)|(X2 meet X3) by A15,Th79
+                      .= f2|(X2 meet X3) by A1,Def12;
+                hence thesis by A3,A13;
+               end;
+       hence (f1 union f2)|((X1 union X2) meet X3) =
+                                f3|((X1 union X2) meet X3) by A14;
+      suppose A16: X1 meets X3 & X2 meets X3;
+
+         then A17: X1 meet X3 is SubSpace of X1 &
+                 X2 meet X3 is SubSpace of X2 by TSEP_1:30;
+        then A18: (X1 meet X3) union (X2 meet X3) is SubSpace of X1 union X2
+                                                                by Th27;
+           X1 meet X3 is SubSpace of X3 &
+                 X2 meet X3 is SubSpace of X3 by A16,TSEP_1:30;
+        then A19: (X1 meet X3) union (X2 meet X3) is SubSpace of X3 by Th29;
+         A20: (f1 union f2)|(X1 meet X3) = f3|(X1 meet X3)
+               proof
+                   X1 is SubSpace of X1 union X2 by TSEP_1:22;
+                then (f1 union f2)|(X1 meet X3)
+                       = ((f1 union f2)|X1)|(X1 meet X3) by A17,Th79
+                      .= f1|(X1 meet X3) by A1,Def12;
+                hence thesis by A2,A16;
+               end;
+         A21: (f1 union f2)|(X2 meet X3) = f3|(X2 meet X3)
+               proof
+                   X2 is SubSpace of X1 union X2 by TSEP_1:22;
+                then (f1 union f2)|(X2 meet X3)
+                       = ((f1 union f2)|X2)|(X2 meet X3) by A17,Th79
+                      .= f2|(X2 meet X3) by A1,Def12;
+                hence thesis by A3,A16;
+               end;
+        set v = f3|((X1 meet X3) union (X2 meet X3));
+          X1 meet X3 is SubSpace of (X1 meet X3) union (X2 meet X3) &
+        X2 meet X3 is SubSpace of (X1 meet X3) union (X2 meet X3) by TSEP_1:22;
+       then A22:        ((f1 union f2)|((X1 meet X3) union (X2 meet X3)))|(X1
+meet X3) =
+                                               (f1 union f2)|(X1 meet X3) &
+        ((f1 union f2)|((X1 meet X3) union (X2 meet X3)))|(X2 meet X3) =
+                                               (f1 union f2)|(X2 meet X3) &
+        (f3|((X1 meet X3) union (X2 meet X3)))|(X1 meet X3) = f3|(X1 meet X3) &
+        (f3|((X1 meet X3) union (X2 meet X3)))|(X2 meet X3) = f3|(X2 meet X3)
+                                                      by A18,A19,Th79;
+
+          (f1 union f2)|((X1 union X2) meet X3) =
+((f1 union f2)|((X1 meet X3) union (X2 meet X3))) by A16,TSEP_1:35
+          .= (v|(X1 meet X3)) union (v|(X2 meet X3)) by A20,A21,A22,Th138
+          .= v by Th138;
+       hence (f1 union f2)|((X1 union X2) meet X3) =
+                                f3|((X1 union X2) meet X3) by A16,TSEP_1:35;
+     end;
+    hence (f1 union f2)|((X1 union X2) meet X3) = f3|((X1 union X2) meet X3);
+   end;
+  then g|(X1 union X2) = f1 union f2 & g|X3 = f3 by Def12;
+  then A23: f|(the carrier of (X1 union X2)) = f1 union f2 &
+        f|(the carrier of X3) = f3 by A5,A7,Def4;
+
+     A24: X1 union X2 is SubSpace of X1 union (X2 union X3) by A4,TSEP_1:22;
+     X1 is SubSpace of X1 union X2 by TSEP_1:22;
+  then f|X1 = (f|(X1 union X2))|X1 by A24,Th79
+           .= (f1 union f2)|X1 by A6,A23,Def4;
+  then A25: f|X1 = f1 by A1,Def12;
+     X2 is SubSpace of X1 union X2 by TSEP_1:22;
+  then A26: f|X2 = (f|(X1 union X2))|X2 by A24,Th79
+           .= (f1 union f2)|X2 by A6,A23,Def4;
+
+     f|(X2 union X3) = f2 union f3
+    proof
+      A27: X2 is SubSpace of X2 union X3 & X3 is SubSpace of X2 union X3 &
+           X2 union X3 is SubSpace of X1 union (X2 union X3) by TSEP_1:22;
+     then A28: (f|(X2 union X3))|X2 = f|X2 by Th79
+                                  .= f2 by A1,A26,Def12;
+         (f|(X2 union X3))|X3 = f|X3 by A27,Th79
+                              .= f3 by A8,A23,Def4;
+     hence thesis by A28,Th138;
+    end;
+  hence thesis by A25,Th138;
+ end;
+
+::Continuity of the Union of Continuous Mappings.
+::(Theorems presented below are suitable also in the case X = X1 union X2.)
+theorem
+   for X1, X2 being non empty SubSpace of X st X1 meets X2
+  for f1 being continuous map of X1,Y, f2 being continuous map of X2,Y
+   st f1|(X1 meet X2) = f2|(X1 meet X2) holds
+    X1,X2 are_weakly_separated implies
+     f1 union f2 is continuous map of X1 union X2,Y
+ proof let X1, X2 be non empty SubSpace of X such that A1: X1 meets X2;
+      let f1 be continuous map of X1,Y, f2 be continuous map of X2,Y;
+  assume f1|(X1 meet X2) = f2|(X1 meet X2);
+   then A2: (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2 by A1,Th140;
+  assume X1,X2 are_weakly_separated;
+  hence thesis by A2,Th126;
+ end;
+
+theorem Th145:
+ for X1, X2 being non empty SubSpace of X st X1 misses X2
+  for f1 being continuous map of X1,Y, f2 being continuous map of X2,Y
+   holds X1,X2 are_weakly_separated implies
+    f1 union f2 is continuous map of X1 union X2,Y
+ proof let X1, X2 be non empty SubSpace of X such that A1: X1 misses X2;
+      let f1 be continuous map of X1,Y, f2 be continuous map of X2,Y;
+   A2: (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2 by A1,Def12;
+  assume X1,X2 are_weakly_separated;
+  hence thesis by A2,Th126;
+ end;
+
+theorem
+   for X1, X2 being closed non empty SubSpace of X st X1 meets X2
+  for f1 being continuous map of X1,Y, f2 being continuous map of X2,Y
+   st f1|(X1 meet X2) = f2|(X1 meet X2) holds
+    f1 union f2 is continuous map of X1 union X2,Y
+ proof let X1, X2 be closed non empty SubSpace of X such that A1: X1 meets X2;
+      let f1 be continuous map of X1,Y, f2 be continuous map of X2,Y;
+  assume f1|(X1 meet X2) = f2|(X1 meet X2);
+  then (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2 by A1,Th140;
+  hence thesis by Th127;
+ end;
+
+theorem
+   for X1, X2 being open non empty SubSpace of X st X1 meets X2
+  for f1 being continuous map of X1,Y, f2 being continuous map of X2,Y
+   st f1|(X1 meet X2) = f2|(X1 meet X2) holds
+    f1 union f2 is continuous map of X1 union X2,Y
+ proof let X1, X2 be open non empty SubSpace of X such that A1: X1 meets X2;
+      let f1 be continuous map of X1,Y, f2 be continuous map of X2,Y;
+  assume f1|(X1 meet X2) = f2|(X1 meet X2);
+  then (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2 by A1,Th140;
+  hence thesis by Th128;
+ end;
+
+theorem
+   for X1, X2 being closed non empty SubSpace of X st X1 misses X2
+  for f1 being continuous map of X1,Y, f2 being continuous map of X2,Y
+   holds f1 union f2 is continuous map of X1 union X2,Y
+ proof let X1, X2 be closed non empty SubSpace of X such that A1: X1 misses X2;
+      let f1 be continuous map of X1,Y, f2 be continuous map of X2,Y;
+     (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2 by A1,Def12;
+  hence thesis by Th127;
+ end;
+
+theorem
+   for X1, X2 being open non empty SubSpace of X st X1 misses X2
+  for f1 being continuous map of X1,Y, f2 being continuous map of X2,Y
+   holds f1 union f2 is continuous map of X1 union X2,Y
+ proof let X1, X2 be open non empty SubSpace of X such that A1: X1 misses X2;
+      let f1 be continuous map of X1,Y, f2 be continuous map of X2,Y;
+     (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2 by A1,Def12;
+  hence thesis by Th128;
+ end;
+
+::A Characterization of Separated Subspaces by means of Continuity of the Union
+::of Continuous continuous mappings defined on the Subspaces.
+theorem
+   for X1, X2 being non empty SubSpace of X holds X1,X2 are_separated iff
+  X1 misses X2 & for Y being non empty TopSpace,
+   f1 being continuous map of X1,Y, f2 being continuous map of X2,Y
+    holds f1 union f2 is continuous map of X1 union X2,Y
+ proof let X1, X2 be non empty SubSpace of X;
+  thus X1,X2 are_separated implies X1 misses X2 &
+     for Y being non empty TopSpace, f1 being continuous map of X1,Y,
+      f2 being continuous map of X2,Y
+     holds f1 union f2 is continuous map of X1 union X2,Y
+   proof assume A1: X1,X2 are_separated;
+     then A2: X1,X2 are_weakly_separated by TSEP_1:85;
+    thus X1 misses X2 by A1,TSEP_1:68;
+    hence thesis by A2,Th145;
+   end;
+  thus X1 misses X2 &
+    (for Y being non empty TopSpace, f1 being continuous map of X1,Y,
+    f2 being continuous map of X2,Y
+     holds f1 union f2 is continuous map of X1 union X2,Y) implies
+       X1,X2 are_separated
+   proof assume A3: X1 misses X2;
+    assume A4: for Y being non empty TopSpace,
+       f1 being continuous map of X1,Y, f2 being continuous map of X2,Y holds
+             f1 union f2 is continuous map of X1 union X2,Y;
+       now let Y be non empty TopSpace, g be map of X1 union X2,Y;
+      assume A5: g|X1 is continuous map of X1,Y &
+      g|X2 is continuous map of X2,Y;
+       then reconsider f1 = g|X1 as continuous map of X1,Y;
+       reconsider f2 = g|X2 as continuous map of X2,Y by A5;
+         g = f1 union f2 by Th138;
+      hence g is continuous map of X1 union X2,Y by A4;
+     end;
+    hence thesis by A3,Th135;
+   end;
+ end;
+
+::Continuity of the Union of Continuous Mappings (a special case).
+theorem
+   for X1, X2 being non empty SubSpace of X st X = X1 union X2
+  for f1 being continuous map of X1,Y, f2 being continuous map of X2,Y
+   st (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2 holds
+  X1,X2 are_weakly_separated implies f1 union f2 is continuous map of X,Y
+ proof let X1, X2 be non empty SubSpace of X such that A1: X = X1 union X2;
+      let f1 be continuous map of X1,Y, f2 be continuous map of X2,Y such that
+         A2: (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2;
+  assume A3: X1,X2 are_weakly_separated;
+  reconsider g = f1 union f2 as map of X,Y by A1;
+     g|X1 = f1 & g|X2 = f2 by A1,A2,Th80;
+  hence thesis by A1,A3,Th132;
+ end;
+
+theorem
+   for X1, X2 being closed non empty SubSpace of X,
+  f1 being continuous map of X1,Y, f2 being continuous map of X2,Y st
+   X = X1 union X2 & (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2 holds
+    f1 union f2 is continuous map of X,Y
+ proof let X1, X2 be closed non empty SubSpace of X,
+          f1 be continuous map of X1,Y, f2 be continuous map of X2,Y such that
+   A1: X = X1 union X2 and
+  A2: (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2;
+   reconsider g = f1 union f2 as map of X,Y by A1;
+     g|X1 = f1 & g|X2 = f2 by A1,A2,Th80;
+  hence thesis by A1,Th133;
+ end;
+
+theorem
+   for X1, X2 being open non empty SubSpace of X,
+  f1 being continuous map of X1,Y, f2 being continuous map of X2,Y st
+   X = X1 union X2 & (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2 holds
+    f1 union f2 is continuous map of X,Y
+ proof let X1, X2 be open non empty SubSpace of X,
+          f1 be continuous map of X1,Y, f2 be continuous map of X2,Y such that
+   A1: X = X1 union X2 and
+  A2: (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2;
+   reconsider g = f1 union f2 as map of X,Y by A1;
+     g|X1 = f1 & g|X2 = f2 by A1,A2,Th80;
+  hence thesis by A1,Th134;
+ end;
+

@@ -1,0 +1,1045 @@
+:: N-Tuples and Cartesian Products for n=5
+::  by Micha{\l} Muzalewski and Wojciech Skaba
+::
+:: Received October 13, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, MCART_1, TARSKI, MCART_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1;
+ constructors TARSKI, MCART_1, MEMBERED, XBOOLE_0;
+ clusters MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ theorems TARSKI, ZFMISC_1, MCART_1, XBOOLE_0, XBOOLE_1;
+ schemes XBOOLE_0;
+
+begin
+
+  reserve x,x1,x2,x3,x4,x5, y,y1,y2,y3,y4,y5,
+          X,X1,X2,X3,X4,X5, Y,Y1,Y2,Y3,Y4,Y5,Y6,Y7,
+          Z,Z1,Z2,Z3,Z4,Z5,Z6,Z7 for set;
+  reserve xx1 for Element of X1, xx2 for Element of X2,
+          xx3 for Element of X3, xx4 for Element of X4,
+          xx5 for Element of X5;
+
+Lm1:
+ X1 <> {} & X2 <> {} implies
+ for x being Element of [:X1,X2:]
+  ex xx1 being (Element of X1),
+     xx2 being Element of X2 st x = [xx1,xx2]
+ proof
+   assume
+A1:  X1 <> {} & X2 <> {};
+then A2:  [:X1,X2:] <> {} by ZFMISC_1:113;
+   let x be Element of [:X1,X2:];
+   reconsider xx1 = x`1 as Element of X1 by A2,MCART_1:10;
+   reconsider xx2 = x`2 as Element of X2 by A2,MCART_1:10;
+   take xx1,xx2;
+   thus x = [xx1,xx2] by A1,MCART_1:24;
+ end;
+
+Lm2:
+ X1 <> {} & X2 <> {} & X3 <> {} implies
+ for x being Element of [:X1,X2,X3:]
+  ex xx1,xx2,xx3 st x = [xx1,xx2,xx3]
+ proof
+    assume
+A1:  X1 <> {} & X2 <> {} & X3 <> {};
+then A2:  [:X1,X2:] <> {} by ZFMISC_1:113;
+    let x be Element of [:X1,X2,X3:];
+    reconsider x'=x as Element of [:[:X1,X2:],X3:] by ZFMISC_1:def 3;
+    consider x12 being (Element of [:X1,X2:]), xx3 such that
+A3:    x' = [x12,xx3] by A1,A2,Lm1;
+    consider xx1,xx2 such that
+A4:    x12 = [xx1,xx2] by A1,Lm1;
+    take xx1,xx2,xx3;
+    thus x = [xx1,xx2,xx3] by A3,A4,MCART_1:def 3;
+ end;
+
+Lm3:
+ X1 <> {} & X2 <> {} & X3 <> {} & X4 <> {} implies
+ for x being Element of [:X1,X2,X3,X4:]
+  ex xx1,xx2,xx3,xx4 st x = [xx1,xx2,xx3,xx4]
+ proof
+   assume
+A1:  X1 <> {} & X2 <> {} & X3 <> {} & X4 <> {};
+then A2:  [:X1,X2,X3:] <> {} by MCART_1:35;
+   let x be Element of [:X1,X2,X3,X4:];
+   reconsider x'=x as Element of [:[:X1,X2,X3:],X4:] by ZFMISC_1:def 4;
+   consider x123 being (Element of [:X1,X2,X3:]), xx4 such that
+A3:   x' = [x123,xx4] by A1,A2,Lm1;
+   consider xx1,xx2,xx3 such that
+A4:   x123 = [xx1,xx2,xx3] by A1,Lm2;
+   take xx1,xx2,xx3,xx4;
+   thus x = [xx1,xx2,xx3,xx4] by A3,A4,MCART_1:def 4;
+ end;
+
+theorem
+   X <> {} implies
+  ex Y st Y in X &
+   for Y1,Y2,Y3,Y4,Y5,Y6
+    st Y1 in Y2 & Y2 in Y3 & Y3 in Y4 & Y4 in Y5 & Y5 in Y6 & Y6 in Y
+        holds Y1 misses X
+ proof
+  defpred P[set] means
+    ex Y1,Y2,Y3,Y4,Y5 st Y1 in Y2 & Y2 in Y3 & Y3 in Y4 & Y4 in Y5 & Y5 in $1
+                                             & Y1 meets X;
+  consider Z1 such that
+A1: for Y holds Y in Z1 iff Y in union X & P[Y] from Separation;
+  defpred Q[set] means
+    ex Y1,Y2,Y3,Y4 st Y1 in Y2 & Y2 in Y3 & Y3 in Y4 & Y4 in $1 & Y1 meets X;
+  consider Z2 such that
+A2:  for Y holds Y in Z2 iff Y in union union X & Q[Y] from Separation;
+  defpred R[set] means
+    ex Y1,Y2,Y3 st Y1 in Y2 & Y2 in Y3 & Y3 in $1 & Y1 meets X;
+  consider Z3 such that
+A3:  for Y holds Y in Z3 iff Y in union union union X & R[Y]
+           from Separation;
+  defpred S[set] means ex Y1,Y2 st Y1 in Y2 & Y2 in $1 & Y1 meets X;
+  consider Z4 such that
+A4:  for Y holds Y in Z4 iff
+         Y in union union union union X & S[Y] from Separation;
+  defpred T[set] means ex Y1 st Y1 in $1 & Y1 meets X;
+  consider Z5 such that
+A5:  for Y holds Y in Z5 iff
+         Y in union union union union union X & T[Y] from Separation;
+  defpred U[set] means $1 meets X;
+  consider Z6 such that
+A6:  for Y holds Y in Z6 iff
+         Y in union union union union union union X & U[Y] from Separation;
+   set V = X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 \/ Z6;
+A7: V = X \/ (Z1 \/ Z2) \/ Z3 \/ Z4 \/ Z5 \/ Z6 by XBOOLE_1:4
+    .= X \/ (Z1 \/ Z2 \/ Z3) \/ Z4 \/ Z5 \/ Z6 by XBOOLE_1:4
+    .= X \/ (Z1 \/ Z2 \/ Z3 \/ Z4) \/ Z5 \/ Z6 by XBOOLE_1:4
+    .= X \/ (Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5) \/ Z6 by XBOOLE_1:4
+    .= X \/ (Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 \/ Z6) by XBOOLE_1:4;
+  assume X <> {};
+  then V <> {} by A7,XBOOLE_1:15;
+  then consider Y such that
+A8:  Y in V and
+A9:  Y misses V by MCART_1:1;
+  assume
+A10: not thesis;
+     now assume
+A11:  Y in X;
+     then consider Y1,Y2,Y3,Y4,Y5,Y6 such that
+A12:   Y1 in Y2 & Y2 in Y3 & Y3 in Y4 & Y4 in Y5 & Y5 in Y6 & Y6 in Y
+   & not Y1 misses X by A10;
+        Y6 in union X & Y1 meets X by A11,A12,TARSKI:def 4;
+     then Y6 in Z1 by A1,A12;
+     then Y6 in X \/ Z1 by XBOOLE_0:def 2;
+     then Y6 in X \/ Z1 \/ Z2 by XBOOLE_0:def 2;
+     then Y6 in X \/ Z1 \/ Z2 \/ Z3 by XBOOLE_0:def 2;
+     then Y6 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 by XBOOLE_0:def 2;
+     then Y meets X \/ Z1 \/ Z2 \/ Z3 \/ Z4 by A12,XBOOLE_0:3;
+     then Y meets X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 by XBOOLE_1:70;
+    hence contradiction by A9,XBOOLE_1:70;
+   end;
+   then Y in Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 \/ Z6 by A7,A8,XBOOLE_0:def 2;
+   then Y in Z1 \/ (Z2 \/ Z3) \/ Z4 \/ Z5 \/ Z6 by XBOOLE_1:4;
+   then Y in Z1 \/ (Z2 \/ Z3 \/ Z4) \/ Z5 \/ Z6 by XBOOLE_1:4;
+   then Y in Z1 \/ (Z2 \/ Z3 \/ Z4 \/ Z5) \/ Z6 by XBOOLE_1:4;
+then A13: Y in Z1 \/ (Z2 \/ Z3 \/ Z4 \/ Z5 \/ Z6) by XBOOLE_1:4;
+     now assume
+A14:  Y in Z1;
+     then consider Y1,Y2,Y3,Y4,Y5 such that
+A15:    Y1 in Y2 & Y2 in Y3 & Y3 in Y4 & Y4 in Y5 & Y5 in Y & Y1 meets X by A1;
+       Y in union X by A1,A14;
+     then Y5 in union union X by A15,TARSKI:def 4;
+     then Y5 in Z2 by A2,A15;
+     then Y5 in X \/ Z1 \/ Z2 by XBOOLE_0:def 2;
+     then Y meets X \/ Z1 \/ Z2 by A15,XBOOLE_0:3;
+     then Y meets X \/ Z1 \/ Z2 \/ Z3 by XBOOLE_1:70;
+     then Y meets X \/ Z1 \/ Z2 \/ Z3 \/ Z4 by XBOOLE_1:70;
+     then Y meets X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 by XBOOLE_1:70;
+    hence contradiction by A9,XBOOLE_1:70;
+   end;
+   then Y in Z2 \/ Z3 \/ Z4 \/ Z5 \/ Z6 by A13,XBOOLE_0:def 2;
+   then Y in Z2 \/ (Z3 \/ Z4) \/ Z5 \/ Z6 by XBOOLE_1:4;
+   then Y in Z2 \/ (Z3 \/ Z4 \/ Z5) \/ Z6 by XBOOLE_1:4;
+then A16: Y in Z2 \/ (Z3 \/ Z4 \/ Z5 \/ Z6) by XBOOLE_1:4;
+     now assume
+A17:  Y in Z2;
+     then consider Y1,Y2,Y3,Y4 such that
+A18:    Y1 in Y2 & Y2 in Y3 & Y3 in Y4 & Y4 in Y & Y1 meets X by A2;
+       Y in union union X by A2,A17;
+     then Y4 in union union union X by A18,TARSKI:def 4;
+     then Y4 in Z3 by A3,A18;
+     then Y4 in X \/ Z1 \/ Z2 \/ Z3 by XBOOLE_0:def 2;
+     then Y4 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 by XBOOLE_0:def 2;
+     then Y4 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 by XBOOLE_0:def 2;
+     then Y4 in V by XBOOLE_0:def 2;
+    hence contradiction by A9,A18,XBOOLE_0:3;
+   end;
+   then Y in Z3 \/ Z4 \/ Z5 \/ Z6 by A16,XBOOLE_0:def 2;
+   then Y in Z3 \/ (Z4 \/ Z5) \/ Z6 by XBOOLE_1:4;
+then A19: Y in Z3 \/ (Z4 \/ Z5 \/ Z6) by XBOOLE_1:4;
+     now assume
+A20:  Y in Z3;
+     then consider Y1,Y2,Y3 such that
+A21:    Y1 in Y2 & Y2 in Y3 & Y3 in Y & Y1 meets X by A3;
+       Y in union union union X by A3,A20;
+     then Y3 in union union union union X by A21,TARSKI:def 4;
+     then Y3 in Z4 by A4,A21;
+     then Y3 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 by XBOOLE_0:def 2;
+     then Y3 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 by XBOOLE_0:def 2;
+     then Y3 in V by XBOOLE_0:def 2;
+    hence contradiction by A9,A21,XBOOLE_0:3;
+   end;
+   then Y in Z4 \/ Z5 \/ Z6 by A19,XBOOLE_0:def 2;
+then A22: Y in Z4 \/ (Z5 \/ Z6) by XBOOLE_1:4;
+     now assume
+A23:  Y in Z4;
+     then consider Y1,Y2 such that
+A24:    Y1 in Y2 & Y2 in Y & Y1 meets X by A4;
+       Y in union union union union X by A4,A23;
+     then Y2 in union union union union union X by A24,TARSKI:def 4;
+     then Y2 in Z5 by A5,A24;
+     then Y2 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 by XBOOLE_0:def 2;
+     then Y2 in V by XBOOLE_0:def 2;
+    hence contradiction by A9,A24,XBOOLE_0:3;
+   end;
+   then A25: Y in Z5 \/ Z6 by A22,XBOOLE_0:def 2;
+     now assume
+A26:  Y in Z5;
+     then consider Y1 such that
+A27:    Y1 in Y & Y1 meets X by A5;
+       Y in union union union union union X by A5,A26;
+     then Y1 in union union union union union union X by A27,TARSKI:def 4;
+     then Y1 in Z6 by A6,A27;
+     then Y1 in V by XBOOLE_0:def 2;
+    hence contradiction by A9,A27,XBOOLE_0:3;
+   end;
+   then Y in Z6 by A25,XBOOLE_0:def 2;
+   then Y meets X by A6;
+  hence contradiction by A7,A9,XBOOLE_1:70;
+ end;
+
+theorem
+Th2:
+ X <> {} implies
+  ex Y st Y in X &
+   for Y1,Y2,Y3,Y4,Y5,Y6,Y7
+    st Y1 in Y2 & Y2 in Y3 & Y3 in Y4 & Y4 in Y5 & Y5 in Y6 & Y6 in Y7 & Y7 in
+ Y
+        holds Y1 misses X
+ proof
+  defpred P[set] means
+    ex Y1,Y2,Y3,Y4,Y5,Y6 st Y1 in Y2 & Y2 in Y3 & Y3 in Y4 & Y4 in Y5 &
+                            Y5 in Y6 & Y6 in $1 & Y1 meets X;
+  consider Z1 such that
+A1: for Y holds Y in Z1 iff Y in union X & P[Y] from Separation;
+  defpred Q[set] means
+    ex Y1,Y2,Y3,Y4,Y5 st Y1 in Y2 & Y2 in Y3 & Y3 in Y4 & Y4 in Y5 &
+                            Y5 in $1 & Y1 meets X;
+  consider Z2 such that
+A2:  for Y holds Y in Z2 iff Y in union union X & Q[Y] from Separation;
+  defpred R[set] means
+    ex Y1,Y2,Y3,Y4 st Y1 in Y2 & Y2 in Y3 & Y3 in Y4 & Y4 in $1 & Y1 meets X;
+  consider Z3 such that
+A3:  for Y holds Y in Z3 iff Y in union union union X & R[Y] from Separation;
+  defpred S[set] means
+    ex Y1,Y2,Y3 st Y1 in Y2 & Y2 in Y3 & Y3 in $1 & Y1 meets X;
+  consider Z4 such that
+A4:  for Y holds Y in Z4 iff
+         Y in union union union union X & S[Y] from Separation;
+  defpred T[set] means
+    ex Y1,Y2 st Y1 in Y2 & Y2 in $1 & Y1 meets X;
+  consider Z5 such that
+A5:  for Y holds Y in Z5 iff
+         Y in union union union union union X & T[Y] from Separation;
+  defpred U[set] means ex Y1 st Y1 in $1 & Y1 meets X;
+  consider Z6 such that
+A6:  for Y holds Y in Z6 iff
+         Y in union union union union union union X & U[Y] from Separation;
+  defpred V[set] means $1 meets X;
+  consider Z7 such that
+A7:  for Y holds Y in Z7 iff
+         Y in union union union union union union union X & V[Y]
+                                              from Separation;
+   set V = X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 \/ Z6 \/ Z7;
+A8: V = X \/ (Z1 \/ Z2) \/ Z3 \/ Z4 \/ Z5 \/ Z6 \/ Z7 by XBOOLE_1:4
+    .= X \/ (Z1 \/ Z2 \/ Z3) \/ Z4 \/ Z5 \/ Z6 \/ Z7 by XBOOLE_1:4
+    .= X \/ (Z1 \/ Z2 \/ Z3 \/ Z4) \/ Z5 \/ Z6 \/ Z7 by XBOOLE_1:4
+    .= X \/ (Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5) \/ Z6 \/ Z7 by XBOOLE_1:4
+    .= X \/ (Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 \/ Z6) \/ Z7 by XBOOLE_1:4
+    .= X \/ (Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 \/ Z6 \/ Z7) by XBOOLE_1:4;
+  assume X <> {};
+  then V <> {} by A8,XBOOLE_1:15;
+  then consider Y such that
+A9:  Y in V and
+A10:  Y misses V by MCART_1:1;
+  assume
+A11: not thesis;
+     now assume
+A12:  Y in X;
+     then consider Y1,Y2,Y3,Y4,Y5,Y6,Y7 such that
+A13:   Y1 in Y2 & Y2 in Y3 & Y3 in Y4 & Y4 in Y5 & Y5 in Y6 & Y6 in Y7 & Y7 in
+ Y
+   & not Y1 misses X by A11;
+
+        Y7 in union X & Y1 meets X by A12,A13,TARSKI:def 4;
+     then Y7 in Z1 by A1,A13;
+     then Y7 in X \/ Z1 by XBOOLE_0:def 2;
+     then Y7 in X \/ Z1 \/ Z2 by XBOOLE_0:def 2;
+     then Y7 in X \/ Z1 \/ Z2 \/ Z3 by XBOOLE_0:def 2;
+     then Y7 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 by XBOOLE_0:def 2;
+     then Y7 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 by XBOOLE_0:def 2;
+     then Y meets X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 by A13,XBOOLE_0:3;
+     then Y meets X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 \/ Z6 by XBOOLE_1:70;
+    hence contradiction by A10,XBOOLE_1:70;
+   end;
+   then Y in Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 \/ Z6 \/ Z7 by A8,A9,XBOOLE_0:def 2;
+   then Y in Z1 \/ (Z2 \/ Z3) \/ Z4 \/ Z5 \/ Z6 \/ Z7 by XBOOLE_1:4;
+   then Y in Z1 \/ (Z2 \/ Z3 \/ Z4) \/ Z5 \/ Z6 \/ Z7 by XBOOLE_1:4;
+   then Y in Z1 \/ (Z2 \/ Z3 \/ Z4 \/ Z5) \/ Z6 \/ Z7 by XBOOLE_1:4;
+   then Y in Z1 \/ (Z2 \/ Z3 \/ Z4 \/ Z5 \/ Z6) \/ Z7 by XBOOLE_1:4;
+then A14: Y in Z1 \/ (Z2 \/ Z3 \/ Z4 \/ Z5 \/ Z6 \/ Z7) by XBOOLE_1:4;
+     now assume
+A15:  Y in Z1;
+     then consider Y1,Y2,Y3,Y4,Y5,Y6 such that
+A16:    Y1 in Y2 & Y2 in Y3 & Y3 in Y4 & Y4 in Y5 & Y5 in Y6 & Y6 in Y
+                                                       & Y1 meets X by A1;
+       Y in union X by A1,A15;
+     then Y6 in union union X by A16,TARSKI:def 4;
+     then Y6 in Z2 by A2,A16;
+     then Y6 in X \/ Z1 \/ Z2 by XBOOLE_0:def 2;
+     then Y meets X \/ Z1 \/ Z2 by A16,XBOOLE_0:3;
+     then Y meets X \/ Z1 \/ Z2 \/ Z3 by XBOOLE_1:70;
+     then Y meets X \/ Z1 \/ Z2 \/ Z3 \/ Z4 by XBOOLE_1:70;
+     then Y meets X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 by XBOOLE_1:70;
+     then Y meets X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 \/ Z6 by XBOOLE_1:70;
+    hence contradiction by A10,XBOOLE_1:70;
+   end;
+   then Y in Z2 \/ Z3 \/ Z4 \/ Z5 \/ Z6 \/ Z7 by A14,XBOOLE_0:def 2;
+   then Y in Z2 \/ (Z3 \/ Z4) \/ Z5 \/ Z6 \/ Z7 by XBOOLE_1:4;
+   then Y in Z2 \/ (Z3 \/ Z4 \/ Z5) \/ Z6 \/ Z7 by XBOOLE_1:4;
+   then Y in Z2 \/ (Z3 \/ Z4 \/ Z5 \/ Z6) \/ Z7 by XBOOLE_1:4;
+then A17: Y in Z2 \/ (Z3 \/ Z4 \/ Z5 \/ Z6 \/ Z7) by XBOOLE_1:4;
+     now assume
+A18:  Y in Z2;
+     then consider Y1,Y2,Y3,Y4,Y5 such that
+A19:    Y1 in Y2 & Y2 in Y3 & Y3 in Y4 & Y4 in Y5 & Y5 in Y & Y1 meets X by A2;
+       Y in union union X by A2,A18;
+     then Y5 in union union union X by A19,TARSKI:def 4;
+     then Y5 in Z3 by A3,A19;
+     then Y5 in X \/ Z1 \/ Z2 \/ Z3 by XBOOLE_0:def 2;
+     then Y5 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 by XBOOLE_0:def 2;
+     then Y5 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 by XBOOLE_0:def 2;
+     then Y5 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 \/ Z6 by XBOOLE_0:def 2;
+     then Y5 in V by XBOOLE_0:def 2;
+    hence contradiction by A10,A19,XBOOLE_0:3;
+   end;
+   then Y in Z3 \/ Z4 \/ Z5 \/ Z6 \/ Z7 by A17,XBOOLE_0:def 2;
+   then Y in Z3 \/ (Z4 \/ Z5) \/ Z6 \/ Z7 by XBOOLE_1:4;
+   then Y in Z3 \/ (Z4 \/ Z5 \/ Z6) \/ Z7 by XBOOLE_1:4;
+then A20: Y in Z3 \/ (Z4 \/ Z5 \/ Z6 \/ Z7) by XBOOLE_1:4;
+     now assume
+A21:  Y in Z3;
+     then consider Y1,Y2,Y3,Y4 such that
+A22:    Y1 in Y2 & Y2 in Y3 & Y3 in Y4 & Y4 in Y & Y1 meets X by A3;
+       Y in union union union X by A3,A21;
+     then Y4 in union union union union X by A22,TARSKI:def 4;
+     then Y4 in Z4 by A4,A22;
+     then Y4 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 by XBOOLE_0:def 2;
+     then Y4 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 by XBOOLE_0:def 2;
+     then Y4 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 \/ Z6 by XBOOLE_0:def 2;
+     then Y4 in V by XBOOLE_0:def 2;
+    hence contradiction by A10,A22,XBOOLE_0:3;
+   end;
+   then Y in Z4 \/ Z5 \/ Z6 \/ Z7 by A20,XBOOLE_0:def 2;
+   then Y in Z4 \/ (Z5 \/ Z6) \/ Z7 by XBOOLE_1:4;
+then A23: Y in Z4 \/ (Z5 \/ Z6 \/ Z7) by XBOOLE_1:4;
+     now assume
+A24:  Y in Z4;
+     then consider Y1,Y2,Y3 such that
+A25:    Y1 in Y2 & Y2 in Y3 & Y3 in Y & Y1 meets X by A4;
+       Y in union union union union X by A4,A24;
+     then Y3 in union union union union union X by A25,TARSKI:def 4;
+     then Y3 in Z5 by A5,A25;
+     then Y3 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 by XBOOLE_0:def 2;
+     then Y3 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 \/ Z6 by XBOOLE_0:def 2;
+     then Y3 in V by XBOOLE_0:def 2;
+    hence contradiction by A10,A25,XBOOLE_0:3;
+   end;
+   then Y in Z5 \/ Z6 \/ Z7 by A23,XBOOLE_0:def 2;
+then A26: Y in Z5 \/ (Z6 \/ Z7) by XBOOLE_1:4;
+     now assume
+A27:  Y in Z5;
+     then consider Y1,Y2 such that
+A28:    Y1 in Y2 & Y2 in Y & Y1 meets X by A5;
+       Y in union union union union union X by A5,A27;
+     then Y2 in union union union union union union X by A28,TARSKI:def 4;
+     then Y2 in Z6 by A6,A28;
+     then Y2 in X \/ Z1 \/ Z2 \/ Z3 \/ Z4 \/ Z5 \/ Z6 by XBOOLE_0:def 2;
+     then Y2 in V by XBOOLE_0:def 2;
+    hence contradiction by A10,A28,XBOOLE_0:3;
+   end;
+   then A29: Y in Z6 \/ Z7 by A26,XBOOLE_0:def 2;
+     now assume
+A30:  Y in Z6;
+     then consider Y1 such that
+A31:    Y1 in Y & Y1 meets X by A6;
+       Y in union union union union union union X by A6,A30;
+     then Y1 in
+ union union union union union union union X by A31,TARSKI:def 4;
+     then Y1 in Z7 by A7,A31;
+     then Y1 in V by XBOOLE_0:def 2;
+    hence contradiction by A10,A31,XBOOLE_0:3;
+   end;
+   then Y in Z7 by A29,XBOOLE_0:def 2;
+   then Y meets X by A7;
+  hence contradiction by A8,A10,XBOOLE_1:70;
+ end;
+
+::
+::   Tuples for n=5
+::
+
+definition
+  let x1,x2,x3,x4,x5;
+  func [x1,x2,x3,x4,x5] equals
+  :Def1:  [[x1,x2,x3,x4],x5];
+  correctness;
+end;
+
+theorem
+Th3: [x1,x2,x3,x4,x5] = [[[[x1,x2],x3],x4],x5]
+ proof
+  thus [x1,x2,x3,x4,x5] = [[x1,x2,x3,x4],x5] by Def1
+                       .= [[[x1,x2,x3],x4],x5] by MCART_1:def 4
+                       .= [[[[x1,x2],x3],x4],x5] by MCART_1:def 3;
+ end;
+
+canceled;
+
+theorem
+   [x1,x2,x3,x4,x5] = [[x1,x2,x3],x4,x5]
+  proof
+    thus [x1,x2,x3,x4,x5] = [[[[x1,x2],x3],x4],x5] by Th3
+                         .= [[[x1,x2],x3],x4,x5] by MCART_1:def 3
+                         .= [[x1,x2,x3],x4,x5] by MCART_1:def 3;
+  end;
+
+theorem
+Th6: [x1,x2,x3,x4,x5] = [[x1,x2],x3,x4,x5]
+  proof
+    thus [x1,x2,x3,x4,x5] = [[[[x1,x2],x3],x4],x5] by Th3
+                         .= [[[x1,x2],x3],x4,x5] by MCART_1:def 3
+                         .= [[x1,x2],x3,x4,x5] by MCART_1:32;
+ end;
+
+theorem Th7:
+  [x1,x2,x3,x4,x5] = [y1,y2,y3,y4,y5]
+  implies x1 = y1 & x2 = y2 & x3 = y3 & x4 = y4 & x5 = y5
+     proof
+       assume [x1,x2,x3,x4,x5] = [y1,y2,y3,y4,y5];
+       then [[x1,x2,x3,x4],x5] = [y1,y2,y3,y4,y5] by Def1
+                              .= [[y1,y2,y3,y4],y5] by Def1;
+       then [x1,x2,x3,x4] = [y1,y2,y3,y4]
+          & x5 = y5 by ZFMISC_1:33;
+       hence thesis by MCART_1:33;
+ end;
+
+theorem Th8:
+ X <> {} implies
+  ex x st x in X &
+   not ex x1,x2,x3,x4,x5 st (x1 in X or x2 in X) & x = [x1,x2,x3,x4,x5]
+ proof
+   assume X <> {};
+   then consider Y such that
+A1:  Y in X and
+A2:  for Y1,Y2,Y3,Y4,Y5,Y6,Y7
+      st Y1 in Y2 & Y2 in Y3 & Y3 in Y4 & Y4 in Y5 & Y5 in Y6 & Y6 in Y7 & Y7
+in Y
+               holds Y1 misses X by Th2;
+   take x = Y;
+   thus x in X by A1;
+   given x1,x2,x3,x4,x5 such that
+A3:  x1 in X or x2 in X and
+A4:  x = [x1,x2,x3,x4,x5];
+   set Y1 = { x1, x2 },
+       Y2 = { Y1, {x1} },
+       Y3 = { Y2, x3 },
+       Y4 = { Y3, {Y2} },
+       Y5 = { Y4, x4 },
+       Y6 = { Y5, {Y4} },
+       Y7 = { Y6, x5 };
+     x1 in Y1 & x2 in Y1 by TARSKI:def 2;
+   then A5: not Y1 misses X by A3,XBOOLE_0:3;
+      Y = [[[[x1,x2],x3],x4],x5] by A4,Th3
+     .= [[[ Y2,x3],x4],x5 ] by TARSKI:def 5
+     .= [[ Y4,x4],x5 ] by TARSKI:def 5
+     .= [ Y6,x5 ] by TARSKI:def 5
+     .= { Y7, { Y6 } } by TARSKI:def 5;
+   then Y1 in Y2 & Y2 in Y3 & Y3 in Y4 & Y4 in Y5 & Y5 in Y6 & Y6 in Y7 & Y7
+in
+ Y
+                                                               by TARSKI:def 2;
+  hence contradiction by A2,A5;
+ end;
+
+::
+::   Cartesian products of five sets
+::
+
+definition
+  let X1,X2,X3,X4,X5;
+  func [:X1,X2,X3,X4,X5:] -> set equals
+  :Def2:  [:[: X1,X2,X3,X4 :],X5 :];
+  correctness;
+end;
+
+theorem Th9:
+ [:X1,X2,X3,X4,X5:] = [:[:[:[:X1,X2:],X3:],X4:],X5:]
+  proof
+   thus [:X1,X2,X3,X4,X5:] = [:[:X1,X2,X3,X4:],X5:] by Def2
+                          .= [:[:[:X1,X2,X3:],X4:],X5:] by ZFMISC_1:def 4
+                          .= [:[:[:[:X1,X2:],X3:],X4:],X5:] by ZFMISC_1:def 3;
+  end;
+
+canceled;
+
+theorem
+   [:X1,X2,X3,X4,X5:] = [:[:X1,X2,X3:],X4,X5:]
+  proof
+    thus [:X1,X2,X3,X4,X5:] = [:[:[:[:X1,X2:],X3:],X4:],X5:] by Th9
+                           .= [:[:[:X1,X2:],X3:],X4,X5:] by ZFMISC_1:def 3
+                           .= [:[:X1,X2,X3:],X4,X5:] by ZFMISC_1:def 3;
+  end;
+
+theorem
+Th12: [:X1,X2,X3,X4,X5:] = [:[:X1,X2:],X3,X4,X5:]
+  proof
+    thus [:X1,X2,X3,X4,X5:] = [:[:[:[:X1,X2:],X3:],X4:],X5:] by Th9
+                           .= [:[:[:X1,X2:],X3:],X4,X5:] by ZFMISC_1:def 3
+                           .= [:[:X1,X2:],X3,X4,X5:] by MCART_1:54;
+ end;
+
+theorem
+ Th13: X1 <> {} & X2 <> {} & X3 <> {} & X4 <> {} & X5 <> {}
+   iff [:X1,X2,X3,X4,X5:] <> {}
+ proof
+A1: [:[:X1,X2,X3,X4:],X5:] = [:X1,X2,X3,X4,X5:] by Def2;
+     X1 <> {} & X2 <> {} & X3 <> {} & X4 <> {}
+   iff [:X1,X2,X3,X4:] <> {} by MCART_1:55;
+   hence thesis by A1,ZFMISC_1:113;
+ end;
+
+theorem Th14:
+ X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{} implies
+  ( [:X1,X2,X3,X4,X5:] = [:Y1,Y2,Y3,Y4,Y5:]
+    implies X1=Y1 & X2=Y2 & X3=Y3 & X4=Y4 & X5=Y5 )
+proof
+A1: [:X1,X2,X3,X4,X5:] = [:[:X1,X2,X3,X4:],X5:] by Def2;
+ assume
+A2: X1<>{} & X2<>{} & X3<>{} & X4<>{};
+ then A3: [:X1,X2,X3,X4:] <> {} by MCART_1:55;
+ assume
+A4: X5<>{};
+  assume [:X1,X2,X3,X4,X5:] = [:Y1,Y2,Y3,Y4,Y5:];
+  then [:[:X1,X2,X3,X4:],X5:] = [:[:Y1,Y2,Y3,Y4:],Y5:] by A1,Def2;
+  then [:X1,X2,X3,X4:] = [:Y1,Y2,Y3,Y4:] & X5 = Y5 by A3,A4,ZFMISC_1:134;
+  hence thesis by A2,MCART_1:56;
+end;
+
+theorem
+   [:X1,X2,X3,X4,X5:]<>{} & [:X1,X2,X3,X4,X5:] = [:Y1,Y2,Y3,Y4,Y5:]
+   implies X1=Y1 & X2=Y2 & X3=Y3 & X4=Y4 & X5=Y5
+proof
+  assume [:X1,X2,X3,X4,X5:]<>{};
+  then X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{} by Th13;
+ hence thesis by Th14;
+end;
+
+theorem
+    [:X,X,X,X,X:] = [:Y,Y,Y,Y,Y:] implies X = Y
+proof
+ assume [:X,X,X,X,X:] = [:Y,Y,Y,Y,Y:];
+  then X<>{} or Y<>{} implies thesis by Th14;
+  hence X = Y;
+end;
+
+theorem Th17:
+ X1 <> {} & X2 <> {} & X3 <> {} & X4 <> {} & X5 <> {} implies
+ for x being Element of [:X1,X2,X3,X4,X5:]
+   ex xx1,xx2,xx3,xx4,xx5 st x = [xx1,xx2,xx3,xx4,xx5]
+ proof
+   assume
+A1:  X1 <> {} & X2 <> {} & X3 <> {} & X4 <> {} & X5 <> {};
+then A2:  [:X1,X2,X3,X4:] <> {} by MCART_1:55;
+  let x be Element of [:X1,X2,X3,X4,X5:];
+   reconsider x'=x as Element of [:[:X1,X2,X3,X4:],X5:] by Def2;
+   consider x1234 being (Element of [:X1,X2,X3,X4:]), xx5 such that
+A3:   x' = [x1234,xx5] by A1,A2,Lm1;
+   consider xx1,xx2,xx3,xx4 such that
+A4:   x1234 = [xx1,xx2,xx3,xx4] by A1,Lm3;
+  take xx1,xx2,xx3,xx4,xx5;
+  thus x = [xx1,xx2,xx3,xx4,xx5] by A3,A4,Def1;
+ end;
+
+definition
+  let X1,X2,X3,X4,X5;
+  assume A1:X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{};
+  let x be Element of [:X1,X2,X3,X4,X5:];
+  func x`1 -> Element of X1 means
+:Def3: x = [x1,x2,x3,x4,x5] implies it = x1;
+  existence
+   proof
+    consider xx1,xx2,xx3,xx4,xx5 such that
+A2:   x = [xx1,xx2,xx3,xx4,xx5] by A1,Th17;
+    take xx1;
+    thus thesis by A2,Th7;
+   end;
+  uniqueness
+   proof
+    consider xx1,xx2,xx3,xx4,xx5 such that
+A3:   x = [xx1,xx2,xx3,xx4,xx5] by A1,Th17;
+    let y,z be Element of X1;
+    assume x = [x1,x2,x3,x4,x5] implies y = x1;
+then A4:   y = xx1 by A3;
+    assume x = [x1,x2,x3,x4,x5] implies z = x1;
+    hence thesis by A3,A4;
+   end;
+
+  func x`2 -> Element of X2 means
+:Def4: x = [x1,x2,x3,x4,x5] implies it = x2;
+  existence
+   proof
+    consider xx1,xx2,xx3,xx4,xx5 such that
+A5:   x = [xx1,xx2,xx3,xx4,xx5] by A1,Th17;
+    take xx2; thus thesis by A5,Th7;
+   end;
+  uniqueness
+   proof
+    consider xx1,xx2,xx3,xx4,xx5 such that
+A6:   x = [xx1,xx2,xx3,xx4,xx5] by A1,Th17;
+    let y,z be Element of X2;
+    assume x = [x1,x2,x3,x4,x5] implies y = x2;
+then A7:   y = xx2 by A6;
+    assume x = [x1,x2,x3,x4,x5] implies z = x2;
+    hence thesis by A6,A7;
+   end;
+
+  func x`3 -> Element of X3 means
+:Def5: x = [x1,x2,x3,x4,x5] implies it = x3;
+  existence
+   proof
+    consider xx1,xx2,xx3,xx4,xx5 such that
+A8:   x = [xx1,xx2,xx3,xx4,xx5] by A1,Th17;
+    take xx3; thus thesis by A8,Th7;
+   end;
+  uniqueness
+   proof
+    consider xx1,xx2,xx3,xx4,xx5 such that
+A9:   x = [xx1,xx2,xx3,xx4,xx5] by A1,Th17;
+    let y,z be Element of X3;
+    assume x = [x1,x2,x3,x4,x5] implies y = x3;
+then A10:   y = xx3 by A9;
+    assume x = [x1,x2,x3,x4,x5] implies z = x3;
+    hence thesis by A9,A10;
+   end;
+
+  func x`4 -> Element of X4 means
+:Def6: x = [x1,x2,x3,x4,x5] implies it = x4;
+  existence
+   proof
+    consider xx1,xx2,xx3,xx4,xx5 such that
+A11:   x = [xx1,xx2,xx3,xx4,xx5] by A1,Th17;
+    take xx4; thus thesis by A11,Th7;
+   end;
+  uniqueness
+   proof
+    consider xx1,xx2,xx3,xx4,xx5 such that
+A12:   x = [xx1,xx2,xx3,xx4,xx5] by A1,Th17;
+    let y,z be Element of X4;
+    assume x = [x1,x2,x3,x4,x5] implies y = x4;
+then A13:   y = xx4 by A12;
+    assume x = [x1,x2,x3,x4,x5] implies z = x4;
+    hence thesis by A12,A13;
+   end;
+
+  func x`5 -> Element of X5 means
+:Def7: x = [x1,x2,x3,x4,x5] implies it = x5;
+  existence
+   proof
+    consider xx1,xx2,xx3,xx4,xx5 such that
+A14:   x = [xx1,xx2,xx3,xx4,xx5] by A1,Th17;
+    take xx5; thus thesis by A14,Th7;
+   end;
+  uniqueness
+   proof
+    consider xx1,xx2,xx3,xx4,xx5 such that
+A15:   x = [xx1,xx2,xx3,xx4,xx5] by A1,Th17;
+    let y,z be Element of X5;
+    assume x = [x1,x2,x3,x4,x5] implies y = x5;
+then A16:   y = xx5 by A15;
+    assume x = [x1,x2,x3,x4,x5] implies z = x5;
+    hence thesis by A15,A16;
+   end;
+ end;
+
+theorem
+  X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{} implies
+ for x being Element of [:X1,X2,X3,X4,X5:]
+  for x1,x2,x3,x4,x5 st x = [x1,x2,x3,x4,x5] holds
+   x`1 = x1 & x`2 = x2 & x`3 = x3 & x`4 = x4 & x`5 = x5
+                                           by Def3,Def4,Def5,Def6,Def7;
+
+theorem Th19:
+ X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{} implies
+ for x being Element of [:X1,X2,X3,X4,X5:] holds x = [x`1,x`2,x`3,x`4,x`5]
+ proof
+   assume
+A1: X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{};
+  let x be Element of [:X1,X2,X3,X4,X5:];
+  consider xx1,xx2,xx3,xx4,xx5 such that
+A2:  x = [xx1,xx2,xx3,xx4,xx5] by A1,Th17;
+  thus x = [x`1,xx2,xx3,xx4,xx5] by A1,A2,Def3
+        .= [x`1,x`2,xx3,xx4,xx5] by A1,A2,Def4
+        .= [x`1,x`2,x`3,xx4,xx5] by A1,A2,Def5
+        .= [x`1,x`2,x`3,x`4,xx5] by A1,A2,Def6
+        .= [x`1,x`2,x`3,x`4,x`5] by A1,A2,Def7;
+ end;
+
+theorem
+Th20:
+ X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{} implies
+ for x being Element of [:X1,X2,X3,X4,X5:] holds
+   x`1 = (x qua set)`1`1`1`1 &
+   x`2 = (x qua set)`1`1`1`2 &
+   x`3 = (x qua set)`1`1`2 &
+   x`4 = (x qua set)`1`2 &
+   x`5 = (x qua set)`2
+ proof
+   assume
+A1: X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{};
+  let x be Element of [:X1,X2,X3,X4,X5:];
+  thus x`1 = [ x`1, x`2]`1 by MCART_1:7
+          .= [[x`1, x`2],x`3]`1`1 by MCART_1:7
+          .= [ x`1, x`2 ,x`3]`1`1 by MCART_1:def 3
+          .= [[x`1, x`2 ,x`3],x`4]`1`1`1 by MCART_1:7
+          .= [ x`1, x`2 ,x`3 ,x`4]`1`1`1 by MCART_1:def 4
+          .= [[x`1, x`2 ,x`3 ,x`4], x`5]`1`1`1`1 by MCART_1:7
+          .= [ x`1, x`2 ,x`3 ,x`4 , x`5]`1`1`1`1 by Def1
+          .= (x qua set)`1`1`1`1 by A1,Th19;
+  thus x`2 = [ x`1, x`2]`2 by MCART_1:7
+          .= [[x`1, x`2],x`3]`1`2 by MCART_1:7
+          .= [ x`1, x`2, x`3]`1`2 by MCART_1:def 3
+          .= [[x`1, x`2, x`3],x`4]`1`1`2 by MCART_1:7
+          .= [ x`1, x`2, x`3, x`4]`1`1`2 by MCART_1:def 4
+          .= [[x`1, x`2, x`3, x`4 ], x`5]`1`1`1`2 by MCART_1:7
+          .= [ x`1, x`2, x`3, x`4 , x`5]`1`1`1`2 by Def1
+          .= (x qua set)`1`1`1`2 by A1,Th19;
+  thus x`3 = [[x`1, x`2],x`3]`2 by MCART_1:7
+          .= [ x`1, x`2, x`3]`2 by MCART_1:def 3
+          .= [[x`1, x`2, x`3],x`4]`1`2 by MCART_1:7
+          .= [ x`1, x`2, x`3, x`4]`1`2 by MCART_1:def 4
+          .= [[x`1, x`2, x`3, x`4],x`5]`1`1`2 by MCART_1:7
+          .= [ x`1, x`2, x`3, x`4 ,x`5]`1`1`2 by Def1
+          .= (x qua set)`1`1`2 by A1,Th19;
+  thus x`4 = [[x`1,x`2,x`3],x`4]`2 by MCART_1:7
+          .= [ x`1,x`2,x`3, x`4]`2 by MCART_1:def 4
+          .= [[x`1,x`2,x`3, x`4],x`5]`1`2 by MCART_1:7
+          .= [ x`1,x`2,x`3, x`4 ,x`5]`1`2 by Def1
+          .= (x qua set)`1`2 by A1,Th19;
+  thus x`5 = [[x`1,x`2,x`3,x`4],x`5]`2 by MCART_1:7
+          .= [ x`1,x`2,x`3,x`4 ,x`5]`2 by Def1
+          .= (x qua set)`2 by A1,Th19;
+ end;
+
+theorem
+      X1 c= [:X1,X2,X3,X4,X5:]
+ or X1 c= [:X2,X3,X4,X5,X1:]
+ or X1 c= [:X3,X4,X5,X1,X2:]
+ or X1 c= [:X4,X5,X1,X2,X3:]
+ or X1 c= [:X5,X1,X2,X3,X4:]
+ implies X1 = {}
+proof
+  assume that
+A1:    X1 c= [:X1,X2,X3,X4,X5:]
+   or X1 c= [:X2,X3,X4,X5,X1:]
+   or X1 c= [:X3,X4,X5,X1,X2:]
+   or X1 c= [:X4,X5,X1,X2,X3:]
+   or X1 c= [:X5,X1,X2,X3,X4:]
+   and
+A2: X1 <> {};
+         [:X1,X2,X3,X4,X5:]<>{}
+    or [:X2,X3,X4,X5,X1:]<>{}
+    or [:X3,X4,X5,X1,X2:]<>{}
+    or [:X4,X5,X1,X2,X3:]<>{}
+    or [:X5,X1,X2,X3,X4:]<>{} by A1,A2,XBOOLE_1:3;
+then A3: X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{} by Th13;
+    now per cases by A1;
+   suppose
+A4:  X1 c= [:X1,X2,X3,X4,X5:];
+     consider x such that
+A5:   x in X1 and
+A6:   for x1,x2,x3,x4,x5
+       st x1 in X1 or x2 in X1 holds x <> [x1,x2,x3,x4,x5] by A2,Th8;
+      reconsider x as Element of [:X1,X2,X3,X4,X5:] by A4,A5;
+        x = [x`1,x`2,x`3,x`4,x`5] & x`1 in X1 by A3,Th19;
+    hence contradiction by A6;
+
+   suppose X1 c= [:X2,X3,X4,X5,X1:];
+    then X1 c= [:[:X2,X3:],X4,X5,X1:] by Th12;
+    hence thesis by A2,MCART_1:63;
+
+   suppose X1 c= [:X3,X4,X5,X1,X2:];
+    then X1 c= [:[:X3,X4:],X5,X1,X2:] by Th12;
+    hence thesis by A2,MCART_1:63;
+
+   suppose X1 c= [:X4,X5,X1,X2,X3:];
+    then X1 c= [:[:X4,X5:],X1,X2,X3:] by Th12;
+    hence thesis by A2,MCART_1:63;
+
+   suppose
+A7:  X1 c= [:X5,X1,X2,X3,X4:];
+     consider x such that
+A8:   x in X1 and
+A9:   for x1,x2,x3,x4,x5
+      st x1 in X1 or x2 in X1 holds x <> [x1,x2,x3,x4,x5] by A2,Th8;
+      reconsider x as Element of [:X5,X1,X2,X3,X4:] by A7,A8;
+        x = [x`1,x`2,x`3,x`4,x`5] & x`2 in X1 by A3,Th19;
+    hence thesis by A9;
+  end;
+ hence contradiction;
+end;
+
+theorem
+   [:X1,X2,X3,X4,X5:] meets [:Y1,Y2,Y3,Y4,Y5:] implies
+   X1 meets Y1 & X2 meets Y2 & X3 meets Y3 & X4 meets Y4 & X5 meets Y5
+proof
+A1: [:[:[:[:X1,X2:],X3:],X4:],X5:] = [:X1,X2,X3,X4,X5:]
+ & [:[:[:[:Y1,Y2:],Y3:],Y4:],Y5:] = [:Y1,Y2,Y3,Y4,Y5:] by Th9;
+ assume [:X1,X2,X3,X4,X5:] meets [:Y1,Y2,Y3,Y4,Y5:];
+  then [:[:[:X1,X2:],X3:],X4:] meets [:[:[:Y1,Y2:],Y3:],Y4:]
+                                         & X5 meets Y5 by A1,ZFMISC_1:127;
+  then [:[:X1,X2:],X3:] meets [:[:Y1,Y2:],Y3:]
+                          & X4 meets Y4 & X5 meets Y5 by ZFMISC_1:127;
+  then [:X1,X2:] meets [:Y1,Y2:]
+           & X3 meets Y3 & X4 meets Y4 & X5 meets Y5 by ZFMISC_1:127;
+ hence thesis by ZFMISC_1:127;
+end;
+
+theorem [:{x1},{x2},{x3},{x4},{x5}:] = { [x1,x2,x3,x4,x5] }
+ proof thus
+      [:{x1},{x2},{x3},{x4},{x5}:]
+  = [:[:{x1},{x2}:],{x3},{x4},{x5}:] by Th12
+ .= [:{[x1,x2]}, {x3},{x4},{x5}:] by ZFMISC_1:35
+ .= { [[x1,x2], x3, x4, x5]} by MCART_1:65
+ .= { [x1,x2,x3,x4,x5] } by Th6;
+ end;
+
+reserve A1 for Subset of X1,
+        A2 for Subset of X2,
+        A3 for Subset of X3,
+        A4 for Subset of X4,
+        A5 for Subset of X5;
+
+:: 5 - Tuples
+
+reserve x for Element of [:X1,X2,X3,X4,X5:];
+
+theorem
+   X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{} implies
+  for x1,x2,x3,x4,x5 st x = [x1,x2,x3,x4,x5]
+   holds x`1 = x1 & x`2 = x2 & x`3 = x3 & x`4 = x4 & x`5 = x5 by Def3,Def4,Def5
+,Def6,Def7;
+
+theorem
+   X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{} &
+  (for xx1,xx2,xx3,xx4,xx5 st x = [xx1,xx2,xx3,xx4,xx5] holds y1 = xx1)
+   implies y1 =x`1
+ proof
+   assume that
+A1: X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{} and
+A2: for xx1,xx2,xx3,xx4,xx5 st x = [xx1,xx2,xx3,xx4,xx5] holds y1 = xx1;
+     x = [x`1,x`2,x`3,x`4,x`5] by A1,Th19;
+  hence thesis by A2;
+ end;
+
+theorem
+   X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{} &
+  (for xx1,xx2,xx3,xx4,xx5 st x = [xx1,xx2,xx3,xx4,xx5] holds y2 = xx2)
+   implies y2 =x`2
+ proof
+   assume that
+A1: X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{} and
+A2: for xx1,xx2,xx3,xx4,xx5 st x = [xx1,xx2,xx3,xx4,xx5] holds y2 = xx2;
+     x = [x`1,x`2,x`3,x`4,x`5] by A1,Th19;
+  hence thesis by A2;
+ end;
+
+theorem
+   X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{} &
+  (for xx1,xx2,xx3,xx4,xx5 st x = [xx1,xx2,xx3,xx4,xx5] holds y3 = xx3)
+   implies y3 =x`3
+ proof
+   assume that
+A1: X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{} and
+A2: for xx1,xx2,xx3,xx4,xx5 st x = [xx1,xx2,xx3,xx4,xx5] holds y3 = xx3;
+     x = [x`1,x`2,x`3,x`4,x`5] by A1,Th19;
+  hence thesis by A2;
+ end;
+
+theorem
+   X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{} &
+  (for xx1,xx2,xx3,xx4,xx5 st x = [xx1,xx2,xx3,xx4,xx5] holds y4 = xx4)
+   implies y4 =x`4
+ proof
+   assume that
+A1: X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{} and
+A2: for xx1,xx2,xx3,xx4,xx5 st x = [xx1,xx2,xx3,xx4,xx5] holds y4 = xx4;
+     x = [x`1,x`2,x`3,x`4,x`5] by A1,Th19;
+  hence thesis by A2;
+ end;
+
+theorem
+   X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{} &
+  (for xx1,xx2,xx3,xx4,xx5 st x = [xx1,xx2,xx3,xx4,xx5] holds y5 = xx5)
+   implies y5 =x`5
+ proof
+   assume that
+A1: X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{} and
+A2: for xx1,xx2,xx3,xx4,xx5 st x = [xx1,xx2,xx3,xx4,xx5] holds y5 = xx5;
+     x = [x`1,x`2,x`3,x`4,x`5] by A1,Th19;
+  hence thesis by A2;
+ end;
+
+theorem
+   y in [: X1,X2,X3,X4,X5 :] implies
+  ex x1,x2,x3,x4,x5
+  st x1 in X1 & x2 in X2 & x3 in X3 & x4 in X4 & x5 in X5
+   & y = [x1,x2,x3,x4,x5]
+   proof
+     assume y in [: X1,X2,X3,X4,X5 :];
+     then y in [:[:X1,X2,X3,X4:],X5:] by Def2;
+     then consider x1234, x5 being set such that
+A1:   x1234 in [:X1,X2,X3,X4:] and
+A2:   x5 in X5 and
+A3:   y = [x1234,x5] by ZFMISC_1:def 2;
+     consider x1, x2, x3, x4 such that
+A4:   x1 in X1 & x2 in X2 & x3 in X3 & x4 in X4
+    & x1234 = [x1,x2,x3,x4] by A1,MCART_1:83;
+       y = [x1,x2,x3,x4,x5] by A3,A4,Def1;
+    hence thesis by A2,A4;
+   end;
+
+theorem
+       [x1,x2,x3,x4,x5] in [: X1,X2,X3,X4,X5 :]
+ iff x1 in X1 & x2 in X2 & x3 in X3 & x4 in X4 & x5 in X5
+   proof
+A1: [:X1,X2,X3,X4,X5:] = [:[:X1,X2:],X3,X4,X5:] by Th12;
+A2: [x1,x2,x3,x4,x5] = [[x1,x2],x3,x4,x5] by Th6;
+       [x1,x2] in [:X1,X2:] iff x1 in X1 & x2 in X2 by ZFMISC_1:106;
+    hence thesis by A1,A2,MCART_1:84;
+   end;
+
+theorem
+   (for y holds y in Z iff
+  ex x1,x2,x3,x4,x5
+  st x1 in X1 & x2 in X2 & x3 in X3 & x4 in X4 & x5 in X5
+   & y = [x1,x2,x3,x4,x5])
+  implies Z = [: X1,X2,X3,X4,X5 :]
+  proof
+   assume
+A1:   for y holds y in Z iff
+       ex x1,x2,x3,x4,x5
+       st x1 in X1 & x2 in X2 & x3 in X3 & x4 in X4 & x5 in X5
+        & y = [x1,x2,x3,x4,x5];
+      now let y;
+     thus y in Z implies y in [:[:X1,X2,X3,X4:],X5:]
+      proof
+        assume y in Z; then consider x1,x2,x3,x4,x5 such that
+A2:      x1 in X1 & x2 in X2 & x3 in X3 & x4 in X4 & x5 in X5
+      & y = [x1,x2,x3,x4,x5] by A1;
+A3:      y = [[x1,x2,x3,x4],x5] by A2,Def1;
+          [x1,x2,x3,x4] in [:X1,X2,X3,X4:] & x5 in X5 by A2,MCART_1:84;
+       hence y in [:[:X1,X2,X3,X4:],X5:] by A3,ZFMISC_1:def 2;
+      end;
+     assume y in [:[:X1,X2,X3,X4:],X5:];
+      then consider x1234,x5 being set such that
+A4:     x1234 in [:X1,X2,X3,X4:] and
+A5:     x5 in X5 and
+A6:     y = [x1234,x5] by ZFMISC_1:def 2;
+      consider x1,x2,x3,x4 such that
+A7:   x1 in X1 & x2 in X2 & x3 in X3 & x4 in X4
+    & x1234 = [x1,x2,x3,x4] by A4,MCART_1:83;
+         y = [x1,x2,x3,x4,x5] by A6,A7,Def1;
+     hence y in Z by A1,A5,A7;
+    end;
+    then Z = [:[:X1,X2,X3,X4:],X5:] by TARSKI:2;
+   hence Z = [: X1,X2,X3,X4,X5 :] by Def2;
+  end;
+
+theorem Th33:
+   X1<>{} & X2<>{} & X3<>{} & X4<>{} & X5<>{}
+ & Y1<>{} & Y2<>{} & Y3<>{} & Y4<>{} & Y5<>{} implies
+  for x being Element of [:X1,X2,X3,X4,X5:],
+      y being Element of [:Y1,Y2,Y3,Y4,Y5:]
+  holds x = y
+  implies x`1 = y`1 & x`2 = y`2 & x`3 = y`3 & x`4 = y`4 & x`5 = y`5
+ proof
+   assume that
+A1: X1 <> {} & X2 <> {} & X3 <> {} & X4 <> {} & X5 <> {} and
+A2: Y1 <> {} & Y2 <> {} & Y3 <> {} & Y4 <> {} & Y5 <> {};
+  let x be Element of [:X1,X2,X3,X4,X5:];
+  let y be Element of [:Y1,Y2,Y3,Y4,Y5:];
+  assume
+A3: x = y;
+  thus x`1 = (x qua set)`1`1`1`1 by A1,Th20 .= y`1 by A2,A3,Th20;
+  thus x`2 = (x qua set)`1`1`1`2 by A1,Th20 .= y`2 by A2,A3,Th20;
+  thus x`3 = (x qua set)`1`1`2 by A1,Th20 .= y`3 by A2,A3,Th20;
+  thus x`4 = (x qua set)`1`2 by A1,Th20 .= y`4 by A2,A3,Th20;
+  thus x`5 = (x qua set)`2 by A1,Th20 .= y`5 by A2,A3,Th20;
+ end;
+
+theorem
+   for x being Element of [:X1,X2,X3,X4,X5:] st x in [:A1,A2,A3,A4,A5:]
+   holds x`1 in A1 & x`2 in A2 & x`3 in A3 & x`4 in A4 & x`5 in A5
+ proof
+   let x be Element of [:X1,X2,X3,X4,X5:];
+  assume
+A1: x in [:A1,A2,A3,A4,A5:];
+   then A2: A1 <> {} & A2 <> {} & A3 <> {} & A4 <> {} & A5 <> {} by Th13;
+   reconsider y = x as Element of [:A1,A2,A3,A4,A5:] by A1;
+     y`1 in A1 & y`2 in A2 & y`3 in A3 & y`4 in A4 & y`5 in A5 by A2;
+  hence x`1 in A1 & x`2 in A2 & x`3 in A3 & x`4 in A4 & x`5 in A5 by Th33;
+ end;
+
+theorem Th35:
+ X1 c= Y1 & X2 c= Y2 & X3 c= Y3 & X4 c= Y4 & X5 c= Y5
+  implies [:X1,X2,X3,X4,X5:] c= [:Y1,Y2,Y3,Y4,Y5:]
+ proof
+    assume X1 c= Y1 & X2 c= Y2 & X3 c= Y3 & X4 c= Y4;
+    then A1: [:X1,X2,X3,X4:] c= [:Y1,Y2,Y3,Y4:] by MCART_1:88;
+A2: [:X1,X2,X3,X4,X5:] = [:[:X1,X2,X3,X4:],X5:] &
+    [:Y1,Y2,Y3,Y4,Y5:] = [:[:Y1,Y2,Y3,Y4:],Y5:] by Def2;
+  assume X5 c= Y5;
+  hence thesis by A1,A2,ZFMISC_1:119;
+ end;
+
+definition
+  let X1,X2,X3,X4,X5,A1,A2,A3,A4,A5;
+  redefine func [:A1,A2,A3,A4,A5:] -> Subset of [:X1,X2,X3,X4,X5:];
+  coherence by Th35;
+end;
+
+theorem
+   X1 <> {} & X2 <> {} implies
+ for xx being Element of [:X1,X2:]
+  ex xx1 being (Element of X1),
+     xx2 being Element of X2 st xx = [xx1,xx2] by Lm1;
+
+theorem
+   X1 <> {} & X2 <> {} & X3 <> {} implies
+ for xx being Element of [:X1,X2,X3:]
+  ex xx1,xx2,xx3 st xx = [xx1,xx2,xx3] by Lm2;
+
+theorem
+   X1 <> {} & X2 <> {} & X3 <> {} & X4 <> {} implies
+ for xx being Element of [:X1,X2,X3,X4:]
+  ex xx1,xx2,xx3,xx4 st xx = [xx1,xx2,xx3,xx4] by Lm3;
+

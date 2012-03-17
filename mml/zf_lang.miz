@@ -1,0 +1,2308 @@
+:: A Model of ZF Set Theory Language
+::  by Grzegorz Bancerek
+::
+:: Received April 4, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, FUNCT_1, BOOLE, RELAT_1, ARYTM_1, ZF_LANG;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, XREAL_0, RELAT_1, FUNCT_1,
+      NAT_1, NUMBERS, FINSEQ_1;
+ constructors NAT_1, FINSEQ_1, XREAL_0, MEMBERED, XBOOLE_0;
+ clusters RELSET_1, XREAL_0, FINSEQ_1, SUBSET_1, ARYTM_3, MEMBERED, ZFMISC_1,
+      XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI;
+ theorems TARSKI, AXIOMS, FUNCT_1, REAL_1, NAT_1, FINSEQ_1, XBOOLE_0, XCMPLX_0,
+      XCMPLX_1;
+ schemes NAT_1, XBOOLE_0;
+
+begin
+
+ reserve k,m,n for Nat,
+         a,X,Y for set,
+         D,D1,D2 for non empty set;
+
+ reserve p,q for FinSequence of NAT;
+
+::
+::       The Construction of ZF Set Theory Language
+::
+
+:: The set and the mode of ZF-language variables
+
+ definition
+  func VAR -> Subset of NAT equals
+:Def1:   { k : 5 <= k };
+   coherence
+    proof
+     set X = { k : 5 <= k };
+        X c= NAT
+       proof let a; assume a in X;
+         then ex k st a = k & 5 <= k;
+        hence a in NAT;
+       end;
+     hence thesis;
+    end;
+ end;
+
+ definition
+  cluster VAR -> non empty;
+  coherence
+  proof
+ 5 in { k : 5 <= k };
+   hence thesis by Def1;
+  end;
+ end;
+
+ definition mode Variable is Element of VAR;
+ end;
+
+ definition let n;
+  func x.n -> Variable equals
+     5 + n;
+   coherence
+    proof set x = 5 + n;
+        5 <= x by NAT_1:29;
+      then x in { k : 5 <= k };
+     hence thesis by Def1;
+    end;
+ end;
+
+ reserve x,y,z,t for Variable;
+
+:: The operations to make ZF-formulae
+
+ definition let x;
+ redefine func <*x*> -> FinSequence of NAT;
+   coherence
+    proof
+     reconsider VAR' = VAR as non empty Subset of NAT;
+     reconsider x' = x as Element of VAR';
+     reconsider x' as Element of NAT;
+        <*x'*> is FinSequence of NAT;
+     hence thesis;
+    end;
+ end;
+
+ definition let x,y;
+  func x '=' y -> FinSequence of NAT equals
+:Def3:   <*0*>^<*x*>^<*y*>;
+   coherence;
+  func x 'in' y -> FinSequence of NAT equals
+:Def4:   <*1*>^<*x*>^<*y*>;
+   coherence;
+ end;
+
+canceled 5;
+
+theorem
+    x '=' y = z '=' t implies x = z & y = t
+  proof assume
+A1:  x '=' y = z '=' t;
+A2:  x '=' y = <*0*>^<*x*>^<*y*> & z '=' t = <*0*>^<*z*>^<*t*> by Def3;
+A3:    <*0*>^<*x*>^<*y*> = <*0*>^(<*x*>^<*y*>) &
+     <*0*>^<*z*>^<*t*> = <*0*>^(<*z*>^<*t*>) by FINSEQ_1:45;
+       <*x,y*>.1 = x & <*x,y*>.2 = y & <*z,t*>.1 = z & <*z,t*>.2 = t &
+      <*x*>^<*y*> = <*x,y*> & <*z*>^<*t*> = <*z,t*> by FINSEQ_1:61,def 9;
+   hence thesis by A1,A2,A3,FINSEQ_1:46;
+  end;
+
+theorem
+    x 'in' y = z 'in' t implies x = z & y = t
+  proof assume
+A1:  x 'in' y = z 'in' t;
+A2:  x 'in' y = <*1*>^<*x*>^<*y*> & z 'in' t = <*1*>^<*z*>^<*t*> by Def4;
+A3:    <*1*>^<*x*>^<*y*> = <*1*>^(<*x*>^<*y*>) &
+     <*1*>^<*z*>^<*t*> = <*1*>^(<*z*>^<*t*>) by FINSEQ_1:45;
+       <*x,y*>.1 = x & <*x,y*>.2 = y & <*z,t*>.1 = z & <*z,t*>.2 = t &
+      <*x*>^<*y*> = <*x,y*> & <*z*>^<*t*> = <*z,t*> by FINSEQ_1:61,def 9;
+   hence thesis by A1,A2,A3,FINSEQ_1:46;
+  end;
+
+ definition let p;
+  func 'not' p -> FinSequence of NAT equals
+:Def5:   <*2*>^p;
+   coherence;
+  let q;
+  func p '&' q -> FinSequence of NAT equals
+:Def6:   <*3*>^p^q;
+   coherence;
+ end;
+
+canceled 2;
+
+theorem
+ Th10: 'not' p = 'not' q implies p = q
+  proof assume
+A1:  'not' p = 'not' q;
+      'not' p = <*2*>^p & 'not' q = <*2*>^q by Def5;
+   hence p = q by A1,FINSEQ_1:46;
+  end;
+
+ definition let x,p;
+  func All(x,p)-> FinSequence of NAT equals
+:Def7:   <*4*>^<*x*>^p;
+   coherence;
+ end;
+
+canceled;
+
+theorem
+ Th12: All(x,p) = All(y,q) implies x = y & p = q
+  proof assume
+A1:  All(x,p) = All(y,q);
+A2:  All(x,p) = <*4*>^<*x*>^p & All(y,q) = <*4*>^<*y*>^q by Def7;
+A3:    <*4*>^<*x*>^p = <*4*>^(<*x*>^p) &
+     <*4*>^<*y*>^q = <*4*>^(<*y*>^q) by FINSEQ_1:45;
+then A4:  <*x*>^p = <*y*>^q by A1,A2,FINSEQ_1:46;
+A5:    (<*x*>^p).1 = x & (<*y*>^q).1 = y by FINSEQ_1:58;
+   hence x = y by A1,A2,A3,FINSEQ_1:46;
+   thus p = q by A4,A5,FINSEQ_1:46;
+  end;
+
+:: The set of all well formed formulae of ZF-language
+
+ definition
+  func WFF -> non empty set means
+:Def8: (for a st a in it holds a is FinSequence of NAT ) &
+       (for x,y holds x '=' y in it & x 'in' y in it ) &
+        (for p st p in it holds 'not' p in it ) &
+         (for p,q st p in it & q in it holds p '&' q in it ) &
+          (for x,p st p in it holds All(x,p) in it ) &
+      for D st
+       (for a st a in D holds a is FinSequence of NAT ) &
+        (for x,y holds x '=' y in D & x 'in' y in D ) &
+         (for p st p in D holds 'not' p in D ) &
+          (for p,q st p in D & q in D holds p '&' q in D ) &
+           (for x,p st p in D holds All(x,p) in D )
+       holds it c= D;
+   existence
+    proof
+     defpred P[set] means
+      (for a st a in $1 holds a is FinSequence of NAT ) &
+       (for x,y holds x '=' y in $1 & x 'in' y in $1 ) &
+        (for p st p in $1 holds 'not' p in $1 ) &
+         (for p,q st p in $1 & q in $1 holds p '&' q in $1 ) &
+          (for x,p st p in $1 holds All(x,p) in $1 );
+     defpred Y[set] means for D st P[D] holds $1 in D;
+     consider Y such that
+A1:    a in Y iff a in NAT* & Y[a] from Separation;
+        now set a = x.0 '=' x.0;
+A2:      a in NAT* by FINSEQ_1:def 11;
+A3:      for D st P[D] holds a in D;
+       take b = a;
+       thus b in Y by A1,A2,A3;
+      end;
+     then reconsider Y as non empty set;
+     take Y;
+     thus a in Y implies a is FinSequence of NAT
+       proof assume a in Y; then a in NAT* by A1; hence thesis by FINSEQ_1:def
+11;
+       end;
+     thus x '=' y in Y & x 'in' y in Y
+       proof
+A4:      x '=' y in NAT* & x 'in' y in NAT* by FINSEQ_1:def 11;
+           for D st P[D] holds x '=' y in D;
+        hence x '=' y in Y by A1,A4;
+           for D st P[D] holds x 'in' y in D;
+        hence x 'in' y in Y by A1,A4;
+       end;
+     thus p in Y implies 'not' p in Y
+       proof assume
+A5:      p in Y;
+A6:      'not' p in NAT* by FINSEQ_1:def 11;
+           for D st P[D] holds 'not' p in D
+          proof let D; assume
+A7:         P[D];
+            then p in D by A1,A5;
+           hence 'not' p in D by A7;
+          end;
+        hence thesis by A1,A6;
+       end;
+     thus q in Y & p in Y implies q '&' p in Y
+       proof assume
+A8:      q in Y & p in Y;
+A9:      q '&' p in NAT* by FINSEQ_1:def 11;
+           for D st P[D] holds q '&' p in D
+          proof let D; assume
+A10:         P[D];
+            then p in D & q in D by A1,A8;
+           hence q '&' p in D by A10;
+          end;
+        hence thesis by A1,A9;
+       end;
+     thus for x,p st p in Y holds All(x,p) in Y
+       proof let x,p such that
+A11:      p in Y;
+A12:      All(x,p) in NAT* by FINSEQ_1:def 11;
+           for D st P[D] holds All(x,p) in D
+          proof let D; assume
+A13:         P[D];
+
+            then p in D by A1,A11;
+           hence All(x,p) in D by A13;
+          end;
+        hence thesis by A1,A12;
+       end;
+     let D such that
+A14:    P[D];
+     let a; assume
+        a in Y;
+     hence a in D by A1,A14;
+    end;
+   uniqueness
+    proof let D1,D2 such that
+A15:    (for a st a in D1 holds a is FinSequence of NAT ) &
+       (for x,y holds x '=' y in D1 & x 'in' y in D1 ) &
+        (for p st p in D1 holds 'not' p in D1 ) &
+         (for p,q st p in D1 & q in D1 holds p '&' q in D1 ) &
+          (for x,p st p in D1 holds All(x,p) in D1 ) &
+      for D st
+       (for a st a in D holds a is FinSequence of NAT ) &
+        (for x,y holds x '=' y in D & x 'in' y in D ) &
+         (for p st p in D holds 'not' p in D ) &
+          (for p,q st p in D & q in D holds p '&' q in D ) &
+           (for x,p st p in D holds All(x,p) in D )
+       holds D1 c= D and
+A16:    (for a st a in D2 holds a is FinSequence of NAT ) &
+       (for x,y holds x '=' y in D2 & x 'in' y in D2 ) &
+        (for p st p in D2 holds 'not' p in D2 ) &
+         (for p,q st p in D2 & q in D2 holds p '&' q in D2 ) &
+          (for x,p st p in D2 holds All(x,p) in D2 ) &
+      for D st
+       (for a st a in D holds a is FinSequence of NAT ) &
+        (for x,y holds x '=' y in D & x 'in' y in D ) &
+         (for p st p in D holds 'not' p in D ) &
+          (for p,q st p in D & q in D holds p '&' q in D ) &
+           (for x,p st p in D holds All(x,p) in D )
+       holds D2 c= D;
+        D1 c= D2 & D2 c= D1 by A15,A16;
+     hence thesis by XBOOLE_0:def 10;
+    end;
+ end;
+
+ definition let IT be FinSequence of NAT;
+  attr IT is ZF-formula-like means
+:Def9:  IT is Element of WFF;
+ end;
+
+ definition
+  cluster ZF-formula-like FinSequence of NAT;
+   existence
+    proof
+     consider x being Element of WFF;
+     reconsider x as FinSequence of NAT by Def8;
+     take x;
+     thus x is Element of WFF;
+    end;
+ end;
+
+definition
+  mode ZF-formula is ZF-formula-like FinSequence of NAT;
+end;
+
+canceled;
+
+theorem
+    a is ZF-formula iff a in WFF
+  proof
+   thus a is ZF-formula implies a in WFF
+     proof assume
+         a is ZF-formula;
+       then a is Element of WFF by Def9;
+      hence a in WFF;
+     end;
+   assume a in WFF;
+   hence thesis by Def8,Def9;
+  end;
+
+ reserve F,F1,G,G1,H,H1 for ZF-formula;
+
+ definition let x,y;
+  cluster x '=' y -> ZF-formula-like;
+   coherence
+    proof
+         x '=' y is ZF-formula-like
+       proof thus x '=' y is Element of WFF by Def8; end;
+     hence thesis;
+    end;
+  cluster x 'in' y -> ZF-formula-like;
+   coherence
+    proof
+         x 'in' y is ZF-formula-like
+       proof thus x 'in' y is Element of WFF by Def8; end;
+     hence thesis;
+    end;
+ end;
+
+ definition let H;
+  cluster 'not' H -> ZF-formula-like;
+   coherence
+    proof
+         'not' H is ZF-formula-like
+       proof H is Element of WFF by Def9;
+        hence 'not' H is Element of WFF by Def8;
+       end;
+     hence thesis;
+    end;
+  let G;
+  cluster H '&' G -> ZF-formula-like;
+   coherence
+    proof
+         H '&' G is ZF-formula-like
+       proof H is Element of WFF & G is Element of WFF by Def9;
+        hence H '&' G is Element of WFF by Def8;
+       end;
+     hence thesis;
+    end;
+ end;
+
+ definition let x,H;
+  cluster All(x,H) -> ZF-formula-like;
+   coherence
+    proof
+         All(x,H) is ZF-formula-like
+       proof H is Element of WFF by Def9;
+        hence All(x,H) is Element of WFF by Def8;
+       end;
+     hence thesis;
+    end;
+ end;
+
+::
+::                   The Properties of ZF-formulae
+::
+
+ definition let H;
+  attr H is being_equality means
+:Def10:  ex x,y st H = x '=' y;
+  synonym H is_equality;
+  attr H is being_membership means
+:Def11:  ex x,y st H = x 'in' y;
+  synonym H is_membership;
+  attr H is negative means
+:Def12:  ex H1 st H = 'not' H1;
+  attr H is conjunctive means
+:Def13:  ex F,G st H = F '&' G;
+  attr H is universal means
+:Def14:  ex x,H1 st H = All(x,H1);
+ end;
+
+canceled;
+
+theorem
+    (H is_equality iff ex x,y st H = x '=' y) &
+   (H is_membership iff ex x,y st H = x 'in' y) &
+    (H is negative iff ex H1 st H = 'not' H1) &
+     (H is conjunctive iff ex F,G st H = F '&' G) &
+      (H is universal iff ex x,H1 st H = All(x,H1) )
+       by Def10,Def11,Def12,Def13,Def14;
+
+ definition let H;
+  attr H is atomic means
+:Def15:  H is_equality or H is_membership;
+ end;
+
+ definition let F,G;
+  func F 'or' G -> ZF-formula equals
+:Def16:   'not'('not' F '&' 'not' G); coherence;
+  func F => G -> ZF-formula equals
+:Def17:   'not' (F '&' 'not' G); coherence;
+ end;
+
+ definition let F,G;
+  func F <=> G -> ZF-formula equals
+:Def18:   (F => G) '&' (G => F); coherence;
+ end;
+
+ definition let x,H;
+  func Ex(x,H) -> ZF-formula equals
+:Def19:   'not' All(x,'not' H); coherence;
+ end;
+
+ definition let H;
+  attr H is disjunctive means
+:Def20:  ex F,G st H = F 'or' G;
+  attr H is conditional means
+:Def21:  ex F,G st H = F => G;
+  attr H is biconditional means
+:Def22:  ex F,G st H = F <=> G;
+  attr H is existential means
+:Def23:  ex x,H1 st H = Ex(x,H1);
+ end;
+
+canceled 5;
+
+theorem
+    (H is disjunctive iff ex F,G st H = F 'or' G) &
+   (H is conditional iff ex F,G st H = F => G) &
+    (H is biconditional iff ex F,G st H = F <=> G) &
+     (H is existential iff ex x,H1 st H = Ex(x,H1) )
+      by Def20,Def21,Def22,Def23;
+
+ definition let x,y,H;
+  func All(x,y,H) -> ZF-formula equals
+:Def24:   All(x,All(y,H)); coherence;
+  func Ex(x,y,H) -> ZF-formula equals
+:Def25:   Ex(x,Ex(y,H)); coherence;
+ end;
+
+theorem
+   All(x,y,H) = All(x,All(y,H)) & Ex(x,y,H) = Ex(x,Ex(y,H)) by Def24,Def25;
+
+ definition let x,y,z,H;
+  func All(x,y,z,H) -> ZF-formula equals
+:Def26:   All(x,All(y,z,H)); coherence;
+  func Ex(x,y,z,H) -> ZF-formula equals
+:Def27:   Ex(x,Ex(y,z,H)); coherence;
+ end;
+
+theorem
+   All(x,y,z,H) = All(x,All(y,z,H)) & Ex(x,y,z,H) = Ex(x,Ex(y,z,H)) by Def26,
+Def27;
+
+theorem
+ Th25: H is_equality or H is_membership or H is negative or H is conjunctive or
+       H is universal
+  proof
+A1:    H is Element of WFF by Def9;
+   assume
+A2: not thesis;
+
+
+A3:  WFF \ { H } is non empty set
+     proof
+      A4: x.0 '=' x.1 in WFF by Def8;
+         x.0 '=' x.1 <> H by A2,Def10;
+       then not x.0 '=' x.1 in { H } by TARSKI:def 1;
+      hence thesis by A4,XBOOLE_0:def 4;
+     end;
+A5:  now let a; assume
+        a in WFF \ { H };
+      then a in WFF by XBOOLE_0:def 4;
+     hence a is FinSequence of NAT by Def8;
+    end;
+A6:  now let x,y;
+     A7: x '=' y in WFF by Def8;
+        x '=' y <> H by A2,Def10;
+      then not x '=' y in { H } by TARSKI:def 1;
+     hence x '=' y in WFF \ { H } by A7,XBOOLE_0:def 4;
+     A8: x 'in' y in WFF by Def8;
+        x 'in' y <> H by A2,Def11;
+      then not x 'in' y in { H } by TARSKI:def 1;
+     hence x 'in' y in WFF \ { H } by A8,XBOOLE_0:def 4;
+    end;
+A9:  now let p; assume
+        p in WFF \ { H };
+     then A10: p in WFF by XBOOLE_0:def 4;
+     then A11: 'not' p in WFF by Def8;
+     reconsider H1 = p as ZF-formula by A10,Def9;
+        'not' H1 <> H by A2,Def12;
+      then not 'not' p in { H } by TARSKI:def 1;
+     hence 'not' p in WFF \ { H } by A11,XBOOLE_0:def 4;
+    end;
+A12:  now let p,q; assume
+        p in WFF \ { H } & q in WFF \ { H };
+     then A13: p in WFF & q in WFF by XBOOLE_0:def 4;
+     then A14: p '&' q in WFF by Def8;
+     reconsider F = p , G = q as ZF-formula by A13,Def9;
+        F '&' G <> H by A2,Def13;
+      then not p '&' q in { H } by TARSKI:def 1;
+     hence p '&' q in WFF \ { H } by A14,XBOOLE_0:def 4;
+    end;
+      now let x,p; assume
+        p in WFF \ { H };
+     then A15: p in WFF by XBOOLE_0:def 4;
+     then A16: All(x,p) in WFF by Def8;
+     reconsider H1 = p as ZF-formula by A15,Def9;
+        All(x,H1) <> H by A2,Def14;
+      then not All(x,p) in { H } by TARSKI:def 1;
+     hence All(x,p) in WFF \ { H } by A16,XBOOLE_0:def 4;
+    end;
+    then WFF c= WFF \ { H } by A3,A5,A6,A9,A12,Def8;
+    then H in WFF \ { H } by A1,TARSKI:def 3;
+    then not H in { H } & H in { H } by TARSKI:def 1,XBOOLE_0:def 4;
+   hence contradiction;
+  end;
+
+theorem
+ Th26: H is atomic or H is negative or H is conjunctive or
+   H is universal
+  proof assume not H is_equality & not H is_membership;
+    hence thesis by Th25;
+  end;
+
+theorem
+ Th27: H is atomic implies len H = 3
+  proof assume
+A1:    H is atomic;
+A2:  now assume H is_equality;
+     then consider x,y such that
+A3:   H = x '=' y by Def10;
+        H = <*0*>^<*x*>^<*y*> by A3,Def3 .= <* 0,x,y *> by FINSEQ_1:def 10;
+     hence len H = 3 by FINSEQ_1:62;
+    end;
+      now assume H is_membership;
+     then consider x,y such that
+A4:   H = x 'in' y by Def11;
+        H = <*1*>^<*x*>^<*y*> by A4,Def4 .= <* 1,x,y *> by FINSEQ_1:def 10;
+     hence len H = 3 by FINSEQ_1:62;
+    end;
+   hence thesis by A1,A2,Def15;
+  end;
+
+theorem
+ Th28: H is atomic or ex H1 st len H1 + 1 <= len H
+  proof assume not H is atomic;
+then A1:  H is negative or H is conjunctive or H is universal by Th26;
+A2:  now let H;
+     assume H is negative;
+     then consider H1 such that
+A3:   H = 'not' H1 by Def12;
+     take H1;
+        H = <*2*>^H1 by A3,Def5;
+      then len H = len <*2*> + len H1 & len <*2*> = 1 & 1 + len H1 = len H1 +
+1
+       by FINSEQ_1:35,57;
+     hence len H1 + 1 <= len H;
+    end;
+A4:  now let H;
+     assume H is conjunctive;
+     then consider H1,F1 such that
+A5:   H = H1 '&' F1 by Def13;
+     take H1;
+        H = <*3*>^H1^F1 by A5,Def6;
+      then len H = len(<*3*>^H1) + len F1 & len(<*3*>^H1) = len <*3*> + len H1
+&
+       len <*3*> = 1 & 1 + len H1 = len H1 + 1
+        by FINSEQ_1:35,57;
+     hence len H1 + 1 <= len H by NAT_1:29;
+    end;
+      now let H;
+     assume H is universal;
+     then consider x,H1 such that
+A6:   H = All(x,H1) by Def14;
+     take H1;
+        H = <*4*>^<*x*>^H1 by A6,Def7;
+      then len H = len(<*4*>^<*x*>) + len H1 & len <*4,x*> = 2 &
+       <*4*>^<*x*> =<*4,x*> & 1 + len H1 = len H1 + 1 &
+        1 + 1 + len H1 = 1 + (1 + len H1) & 1 + (1 + len H1) = 1 + len H1 + 1
+         by FINSEQ_1:35,61,def 9,XCMPLX_1:1;
+     hence len H1 + 1 <= len H by NAT_1:29;
+    end;
+   hence thesis by A1,A2,A4;
+  end;
+
+theorem
+ Th29: 3 <= len H
+  proof
+      now assume not H is atomic;
+     then consider H1 such that
+A1:    len H1 + 1 <= len H by Th28;
+A2:    now assume H1 is atomic;
+        then 3 + 1 <= len H & 3 <= 3 + 1 by A1,Th27;
+       hence 3 <= len H by AXIOMS:22;
+      end;
+        now assume not H1 is atomic;
+       then consider F such that
+A3:      len F + 1 <= len H1 by Th28;
+A4:     len F + 1 + 1 <= len H1 + 1 by A3,REAL_1:55;
+A5:      now assume F is atomic;
+          then len F = 3 by Th27;
+          then 3 + 1 + 1 <= len H & 3 <= 5 by A1,A4,AXIOMS:22;
+         hence 3 <= len H by AXIOMS:22;
+        end;
+          now assume not F is atomic;
+         then consider F1 such that
+A6:        len F1 + 1 <= len F by Th28;
+            0 <= len F1 by NAT_1:18;
+          then 0 + 1 <= len F1 + 1 by REAL_1:55;
+          then 1 <= len F by A6,AXIOMS:22;
+          then 1 + 1 <= len F + 1 by REAL_1:55;
+          then 2 <= len H1 by A3,AXIOMS:22;
+          then 2 + 1 <= len H1 + 1 by REAL_1:55;
+         hence 3 <= len H by A1,AXIOMS:22;
+        end;
+       hence thesis by A5;
+      end;
+     hence thesis by A2;
+    end;
+   hence thesis by Th27;
+  end;
+
+theorem
+    len H = 3 implies H is atomic
+  proof
+   assume
+A1:  len H = 3;
+   assume not H is atomic;
+   then consider H1 such that
+A2:  len H1 + 1 <= len H by Th28;
+      3 <= len H1 by Th29;
+    then 3 + 1 <= len H1 + 1 by REAL_1:55;
+   hence contradiction by A1,A2,AXIOMS:22;
+  end;
+
+theorem
+ Th31: for x,y holds (x '=' y).1 = 0 & (x 'in' y ).1 = 1
+  proof let x,y;
+   thus (x '=' y).1 = (<*0*>^<*x*>^<*y*>).1 by Def3
+                   .= (<*0*>^(<*x*>^<*y*>)).1 by FINSEQ_1:45
+                   .= 0 by FINSEQ_1:58;
+   thus (x 'in' y).1 = (<*1*>^<*x*>^<*y*>).1 by Def4
+                   .= (<*1*>^(<*x*>^<*y*>)).1 by FINSEQ_1:45
+                   .= 1 by FINSEQ_1:58;
+  end;
+
+theorem
+ Th32: for H holds ('not' H).1 = 2
+  proof let H;
+   thus ('not' H).1 = (<*2*>^H).1 by Def5 .= 2 by FINSEQ_1:58;
+  end;
+
+theorem
+ Th33: for F,G holds (F '&' G).1 = 3
+  proof let F,G;
+   thus (F '&' G).1 = (<*3*>^F^G).1 by Def6 .= (<*3*>^(F^G)).1 by FINSEQ_1:45
+                   .= 3 by FINSEQ_1:58;
+  end;
+
+theorem
+ Th34: for x,H holds All(x,H).1 = 4
+  proof let x,H;
+   thus All(x,H).1 = (<*4*>^<*x*>^H).1 by Def7
+                  .= (<*4*>^(<*x*>^H)).1 by FINSEQ_1:45
+                  .= 4 by FINSEQ_1:58;
+  end;
+
+theorem
+ Th35: H is_equality implies H.1 = 0
+  proof assume
+      H is_equality;
+   then consider x,y such that
+A1:  H = x '=' y by Def10;
+      H = <*0*>^<*x*>^<*y*> by A1,Def3 .= <* 0,x,y *> by FINSEQ_1:def 10;
+   hence H.1 = 0 by FINSEQ_1:62;
+  end;
+
+theorem
+ Th36: H is_membership implies H.1 = 1
+  proof assume
+      H is_membership;
+   then consider x,y such that
+A1:  H = x 'in' y by Def11;
+      H = <*1*>^<*x*>^<*y*> by A1,Def4 .= <* 1,x,y *> by FINSEQ_1:def 10;
+   hence H.1 = 1 by FINSEQ_1:62;
+  end;
+
+theorem
+ Th37: H is negative implies H.1 = 2
+  proof assume
+      H is negative;
+   then consider H1 such that
+A1:  H = 'not' H1 by Def12;
+      H = <*2*>^H1 by A1,Def5;
+   hence H.1 = 2 by FINSEQ_1:58;
+  end;
+
+theorem
+ Th38: H is conjunctive implies H.1 = 3
+  proof assume
+      H is conjunctive;
+   then consider F,G such that
+A1:  H = F '&' G by Def13;
+      H = <*3*>^F^G & <*3*>^F^G = <*3*>^(F^G) by A1,Def6,FINSEQ_1:45;
+   hence H.1 = 3 by FINSEQ_1:58;
+  end;
+
+theorem
+ Th39: H is universal implies H.1 = 4
+  proof assume
+      H is universal;
+   then consider x,H1 such that
+A1:  H = All(x,H1) by Def14;
+      H = <*4*>^<*x*>^H1 &
+     <*4*>^<*x*>^H1 = <*4*>^(<*x*>^H1) by A1,Def7,FINSEQ_1:45;
+   hence H.1 = 4 by FINSEQ_1:58;
+  end;
+
+theorem
+ Th40: H is_equality & H.1 = 0 or H is_membership & H.1 = 1 or
+  H is negative & H.1 = 2 or H is conjunctive & H.1 = 3 or
+   H is universal & H.1 = 4
+  proof
+   per cases by Th25;
+    case H is_equality; hence H.1 = 0 by Th35;
+    case H is_membership; hence H.1 = 1 by Th36;
+    case H is negative; hence H.1 = 2 by Th37;
+    case H is conjunctive; hence H.1 = 3 by Th38;
+    case H is universal; hence H.1 = 4 by Th39;
+  end;
+
+theorem
+    H.1 = 0 implies H is_equality by Th40;
+
+theorem
+    H.1 = 1 implies H is_membership by Th40;
+
+theorem
+   H.1 = 2 implies H is negative by Th40;
+
+theorem
+   H.1 = 3 implies H is conjunctive by Th40;
+
+theorem
+   H.1 = 4 implies H is universal by Th40;
+
+ reserve sq,sq' for FinSequence;
+
+theorem
+ Th46: H = F^sq implies H = F
+  proof
+A1:  for n st for k st k < n for H,F,sq st len H = k & H = F^sq holds H = F
+      for H,F,sq st len H = n & H = F^sq holds H = F
+     proof let n such that
+A2:     for k st k < n for H,F,sq st len H = k & H = F^sq holds H = F;
+      let H,F,sq such that
+A3:     len H = n & H = F^sq;
+A4:     len F + len sq = len(F^sq) by FINSEQ_1:35;
+A5:    dom F = Seg len F by FINSEQ_1:def 3;
+         1 <= 3 & 3 <= len F by Th29;
+       then 1 <= 1 & 1 <= len F by AXIOMS:22;
+       then A6: 1 in dom F by A5,FINSEQ_1:3;
+A7:     now assume H is atomic;
+then A8:      len H = 3 by Th27;
+         then len F <= 3 & 3 <= len F by A3,A4,Th29,NAT_1:29;
+         then 3 + len sq = 3 + 0 by A3,A4,A8,AXIOMS:21;
+         then len sq = 0 by XCMPLX_1:2;
+         then sq = {} by FINSEQ_1:25;
+        hence H = F by A3,FINSEQ_1:47;
+       end;
+A9:     now assume
+A10:      H is negative;
+        then consider H1 such that
+A11:      H = 'not' H1 by Def12;
+           (F^sq).1 = 2 by A3,A10,Th37;
+         then F.1 = 2 by A6,FINSEQ_1:def 7;
+         then F is negative by Th40;
+        then consider F1 such that
+A12:      F = 'not' F1 by Def12;
+           'not' H1 = <*2*>^H1 & 'not'
+ F1 = <*2*>^F1 & <*2*>^F1^sq = <*2*>^(F1^sq)
+          by Def5,FINSEQ_1:45;
+then A13:      H1 = F1^sq by A3,A11,A12,FINSEQ_1:46;
+           'not' H1 = <*2*>^H1 by Def5;
+         then len <*2*> + len H1 = len H & len H1 + 1 = 1 + len H1 & len <*2*>
+= 1
+          by A11,FINSEQ_1:35,57;
+         then len H1 < len H by NAT_1:38;
+        hence H = F by A2,A3,A11,A12,A13;
+       end;
+A14:     now assume
+A15:      H is universal;
+        then consider x,H1 such that
+A16:      H = All(x,H1) by Def14;
+           (F^sq).1 = 4 by A3,A15,Th39;
+         then F.1 = 4 by A6,FINSEQ_1:def 7;
+         then F is universal by Th40;
+        then consider y,F1 such that
+A17:      F = All(y,F1) by Def14;
+A18:         All(x,H1) = <*4*>^<*x*>^H1 & All(y,F1) = <*4*>^<*y*>^F1 &
+          <*4*>^<*y*>^F1^sq = <*4*>^<*y*>^(F1^sq) &
+           <*4*>^<*x*>^H1 = <*4*>^(<*x*>^H1) &
+           <*4*>^<*y*>^(F1^sq) = <*4*>^(<*y*>^(F1^sq))
+            by Def7,FINSEQ_1:45;
+then A19:      <*x*>^H1 = <*y*>^(F1^sq) by A3,A16,A17,FINSEQ_1:46;
+           (<*x*>^H1).1 = x & (<*y*>^(F1^sq)).1 = y by FINSEQ_1:58;
+then A20:      H1 = F1^sq by A19,FINSEQ_1:46;
+           All(x,H1) = <*4*>^<*x*>^H1 by Def7;
+         then len(<*4*>^<*x*>) + len H1 = len H & len <*4,x*> = 2 &
+          len H1 + 1 = 1 + len H1 & 1 + (1 + len H1) = 1 + len H1 + 1 &
+           1 + 1 + len H1 = 1 + (1 + len H1) & <*4*>^<*x*> = <*4,x*>
+            by A16,FINSEQ_1:35,61,def 9,XCMPLX_1:1;
+         then len H1 + 1 <= len H by NAT_1:29;
+         then len H1 < len H by NAT_1:38;
+        hence H = F by A2,A3,A17,A18,A20;
+       end;
+         now assume
+A21:      H is conjunctive;
+        then consider G1,G such that
+A22:      H = G1 '&' G by Def13;
+           (F^sq).1 = 3 & 1 <= 1 by A3,A21,Th38;
+         then F.1 = 3 by A6,FINSEQ_1:def 7;
+         then F is conjunctive by Th40;
+        then consider F1,H1 such that
+A23:      F = F1 '&' H1 by Def13;
+A24:      G1 '&' G = <*3*>^G1^G & F1 '&' H1 = <*3*>^F1^H1 &
+          <*3*>^G1^G = <*3*>^(G1^G) & <*3*>^F1^H1 = <*3*>^(F1^H1) &
+           <*3*>^(F1^H1)^sq = <*3*>^(F1^H1^sq) & F1^H1^sq = F1^(H1^sq)
+            by Def6,FINSEQ_1:45;
+then A25:      G1^G = F1^(H1^sq) by A3,A22,A23,FINSEQ_1:46;
+then A26:      (len G1 <= len F1 or len F1 <= len G1) &
+          (len F1 <= len G1 implies ex sq' st G1 = F1^sq') &
+           (len G1 <= len F1 implies ex sq' st F1 = G1^sq')
+            by FINSEQ_1:64;
+A27:      now given sq' such that
+A28:        G1 = F1^sq';
+             len(<*3*>^G1) + len G = len H & len(<*3*>^G1) = len <*3*> + len G1
+&
+            len <*3*> = 1 & 1 + len G1 = len G1 + 1
+             by A22,A24,FINSEQ_1:35,57;
+           then len G1 + 1 <= len H by NAT_1:29;
+           then len G1 < len H by NAT_1:38;
+          hence G1 = F1 by A2,A3,A28;
+         end;
+A29:         now given sq' such that
+A30:        F1 = G1^sq';
+             len(F^sq) = len F + len sq & len <*3*> = 1 &
+            len(<*3*>^F1) = len <*3*> + len F1 & 1 + len F1 = len F1 + 1 &
+             len F = len(<*3*>^F1) + len H1 & len <*3*> = 1 &
+              len F1 + 1 + len H1 + len sq = len F1 + 1 + (len H1 + len sq)
+               by A23,A24,FINSEQ_1:35,57,XCMPLX_1:1;
+           then len F1 + 1 <= len H by A3,NAT_1:29;
+           then len F1 < len H by NAT_1:38;
+          hence F1 = G1 by A2,A3,A30;
+         end;
+then A31:      G = H1^sq by A25,A26,A27,FINSEQ_1:46;
+           len(<*3*>^G1) + len G = len H & len(<*3*>^G1) = len <*3*> + len G1
+&
+          len <*3*> = 1 & 1 + len G1 + len G = len G + (1 + len G1) &
+           len G + (1 + len G1) = len G + 1 + len G1
+            by A22,A24,FINSEQ_1:35,57,XCMPLX_1:1;
+         then len G + 1 <= len H by NAT_1:29;
+         then len G < len H by NAT_1:38;
+        hence F = H by A2,A3,A22,A23,A26,A27,A29,A31;
+       end;
+      hence thesis by A7,A9,A14,Th26;
+     end;
+     defpred P[Nat] means
+      for H,F,sq st len H = $1 & H = F^sq holds H = F;
+A32:  for k st for n st n < k holds P[n] holds P[k] by A1;
+A33:  for n holds P[n] from Comp_Ind(A32);
+      len H = len H;
+   hence thesis by A33;
+  end;
+
+theorem
+ Th47: H '&' G = H1 '&' G1 implies H = H1 & G = G1
+  proof assume
+A1:  H '&' G = H1 '&' G1;
+A2:    H '&' G = <*3*>^H^G & H1 '&' G1 = <*3*>^H1^G1 &
+     <*3*>^H^G = <*3*>^(H^G) & <*3*>^H1^G1 = <*3*>^(H1^G1)
+      by Def6,FINSEQ_1:45;
+  then H^G = H1^G1 by A1,FINSEQ_1:46;
+then A3:  (len H <= len H1 or len H1 <= len H) &
+     (len H1 <= len H implies ex sq st H = H1^sq) &
+      (len H <= len H1 implies ex sq st H1 = H^sq) by FINSEQ_1:64;
+A4:  (ex sq st H1 = H^sq) implies H1 = H by Th46;
+   thus H = H1 by A3,Th46;
+   thus G = G1 by A1,A2,A3,A4,Th46,FINSEQ_1:46;
+  end;
+
+theorem
+ Th48: F 'or' G = F1 'or' G1 implies F = F1 & G = G1
+  proof assume
+A1:  F 'or' G = F1 'or' G1;
+      F 'or' G = 'not'('not' F '&' 'not' G) & F1 'or' G1 = 'not'('not' F1 '&'
+'not' G1) by Def16;
+    then 'not' F '&' 'not' G = 'not' F1 '&' 'not' G1 by A1,Th10;
+    then 'not' F = 'not' F1 & 'not' G = 'not' G1 by Th47;
+   hence thesis by Th10;
+  end;
+
+theorem
+ Th49: F => G = F1 => G1 implies F = F1 & G = G1
+  proof assume
+A1:  F => G = F1 => G1;
+      F => G = 'not' (F '&' 'not' G) & F1 => G1 = 'not' (F1 '&' 'not'
+ G1) by Def17;
+then A2:  F '&' 'not' G = F1 '&' 'not' G1 by A1,Th10;
+   hence F = F1 by Th47;
+      'not' G = 'not' G1 by A2,Th47;
+   hence thesis by Th10;
+  end;
+
+theorem
+ Th50: F <=> G = F1 <=> G1 implies F = F1 & G = G1
+  proof assume
+A1:  F <=> G = F1 <=> G1;
+      F <=> G = (F => G) '&' (G => F) &
+     F1 <=> G1 = (F1 => G1) '&' (G1 => F1) by Def18;
+    then F => G = F1=> G1 by A1,Th47;
+   hence thesis by Th49;
+  end;
+
+theorem
+ Th51: Ex(x,H) = Ex(y,G) implies x = y & H = G
+  proof assume
+A1:  Ex(x,H) = Ex(y,G);
+      Ex(x,H) = 'not' All(x,'not' H) & Ex(y,G) = 'not' All(y,'not'
+ G) by Def19;
+    then All(x,'not' H) = All(y,'not' G) by A1,Th10;
+    then x = y & 'not' H = 'not' G by Th12;
+   hence thesis by Th10;
+  end;
+
+
+::
+::             The Select Function of ZF-fomrulae
+::
+
+ definition let H;
+  assume
+A1: H is atomic;
+  func Var1 H -> Variable equals
+:Def28:   H.2;
+   coherence
+    proof
+A2:      H is_equality or H is_membership by A1,Def15;
+A3:    now given x,y such that
+A4:     H = x '=' y;
+       take k = 0 , x, y;
+       thus H = <*k*>^<*x*>^<*y*> by A4,Def3;
+      end;
+        now given x,y such that
+A5:     H = x 'in' y;
+       take k = 1 , x, y;
+       thus H = <*k*>^<*x*>^<*y*> by A5,Def4;
+      end;
+     then consider k,x,y such that
+A6:    H = <*k*>^<*x*>^<*y*> by A2,A3,Def10,Def11;
+        H = <* k,x,y *> by A6,FINSEQ_1:def 10;
+     hence thesis by FINSEQ_1:62;
+    end;
+  func Var2 H -> Variable equals
+:Def29:   H.3;
+   coherence
+    proof
+A7:      H is_equality or H is_membership by A1,Def15;
+A8:    now given x,y such that
+A9:     H = x '=' y;
+       take k = 0 , x, y;
+       thus H = <*k*>^<*x*>^<*y*> by A9,Def3;
+      end;
+        now given x,y such that
+A10:     H = x 'in' y;
+       take k = 1 , x, y;
+       thus H = <*k*>^<*x*>^<*y*> by A10,Def4;
+      end;
+     then consider k,x,y such that
+A11:    H = <*k*>^<*x*>^<*y*> by A7,A8,Def10,Def11;
+        H = <* k,x,y *> by A11,FINSEQ_1:def 10;
+     hence thesis by FINSEQ_1:62;
+    end;
+ end;
+
+theorem
+    H is atomic implies Var1 H = H.2 & Var2 H = H.3 by Def28,Def29;
+
+theorem
+ Th53: H is_equality implies H = (Var1 H) '=' Var2 H
+  proof assume
+A1:  H is_equality;
+   then consider x,y such that
+A2:  H = x '=' y by Def10;
+A3:  H = <*0*>^<*x*>^<*y*> & <*0*>^<*x*>^<*y*> = <*0,x,y*> by A2,Def3,FINSEQ_1:
+def 10;
+      H is atomic by A1,Def15;
+    then H.2 = x & H.3 = y & H.2 = Var1 H & H.3 = Var2 H
+     by A3,Def28,Def29,FINSEQ_1:62;
+   hence thesis by A2;
+  end;
+
+theorem
+ Th54: H is_membership implies H = (Var1 H) 'in' Var2 H
+  proof assume
+A1:  H is_membership;
+   then consider x,y such that
+A2:  H = x 'in' y by Def11;
+A3:  H = <*1*>^<*x*>^<*y*> & <*1*>^<*x*>^<*y*> = <*1,x,y*>
+     by A2,Def4,FINSEQ_1:def 10;
+      H is atomic by A1,Def15;
+    then H.2 = x & H.3 = y & H.2 = Var1 H & H.3 = Var2 H by A3,Def28,Def29,
+FINSEQ_1:62;
+   hence thesis by A2;
+  end;
+
+ definition let H;
+  assume
+A1: H is negative;
+  func the_argument_of H -> ZF-formula means
+:Def30:  'not' it = H;
+   existence by A1,Def12;
+   uniqueness by Th10;
+ end;
+
+ definition let H;
+  assume
+A1: H is conjunctive or H is disjunctive;
+  func the_left_argument_of H -> ZF-formula means
+:Def31:  ex H1 st it '&' H1 = H if H is conjunctive
+     otherwise ex H1 st it 'or' H1 = H;
+   existence by A1,Def13,Def20;
+   uniqueness by Th47,Th48;
+   consistency;
+  func the_right_argument_of H -> ZF-formula means
+:Def32:  ex H1 st H1 '&' it = H if H is conjunctive
+     otherwise ex H1 st H1 'or' it = H;
+   existence
+    proof
+     thus H is conjunctive implies ex G,H1 st H1 '&' G = H
+       proof assume
+         H is conjunctive;
+        then consider G,F such that
+A2:       G '&' F = H by Def13;
+        take F;
+        thus thesis by A2;
+       end;
+     thus not H is conjunctive implies ex G,H1 st H1 'or' G = H
+       proof assume
+         not H is conjunctive;
+        then consider G,F such that
+A3:       G 'or' F = H by A1,Def20;
+        take F;
+        thus thesis by A3;
+       end;
+    end;
+   uniqueness by Th47,Th48;
+   consistency;
+ end;
+
+canceled;
+
+theorem
+    H is conjunctive implies
+   (F = the_left_argument_of H iff ex G st F '&' G = H) &
+    (F = the_right_argument_of H iff ex G st G '&' F = H) by Def31,Def32;
+
+theorem
+ Th57: H is disjunctive implies
+   (F = the_left_argument_of H iff ex G st F 'or' G = H) &
+    (F = the_right_argument_of H iff ex G st G 'or' F = H)
+   proof assume
+A1:   H is disjunctive;
+    then consider F,G such that
+A2:   H = F 'or' G by Def20;
+       F 'or' G = 'not' ('not' F '&' 'not' G) by Def16;
+     then H.1 = 2 by A2,Th32;
+     then not H is conjunctive by Th38;
+    hence thesis by A1,Def31,Def32;
+   end;
+
+theorem
+ Th58: H is conjunctive implies
+   H = (the_left_argument_of H) '&' the_right_argument_of H
+  proof assume
+A1:  H is conjunctive;
+   then ex F1 st H = (the_left_argument_of H) '&' F1 by Def31;
+   hence thesis by A1,Def32;
+  end;
+
+theorem
+    H is disjunctive implies
+   H = (the_left_argument_of H) 'or' the_right_argument_of H
+  proof assume
+A1:  H is disjunctive;
+    then ex F1 st H = (the_left_argument_of H) 'or' F1 by Th57;
+   hence thesis by A1,Th57;
+  end;
+
+ definition let H;
+  assume
+A1: H is universal or H is existential;
+  func bound_in H -> Variable means
+:Def33:  ex H1 st All(it,H1) = H if H is universal
+     otherwise ex H1 st Ex(it,H1) = H;
+   existence by A1,Def14,Def23;
+   uniqueness by Th12,Th51;
+   consistency;
+  func the_scope_of H -> ZF-formula means
+:Def34:  ex x st All(x,it) = H if H is universal
+     otherwise ex x st Ex(x,it) = H;
+   existence
+    proof
+     thus H is universal implies ex H1,x st All(x,H1) = H
+       proof assume
+         H is universal;
+        then consider x,G such that
+A2:       All(x,G) = H by Def14;
+        take G;
+        thus thesis by A2;
+       end;
+     thus not H is universal implies ex H1,x st Ex(x,H1) = H
+       proof assume
+         not H is universal;
+        then consider x,G such that
+A3:       Ex(x,G) = H by A1,Def23;
+        take G;
+        thus thesis by A3;
+       end;
+    end;
+   uniqueness by Th12,Th51;
+   consistency;
+ end;
+
+theorem
+    H is universal implies
+   (x = bound_in H iff ex H1 st All(x,H1) = H) &
+    (H1 = the_scope_of H iff ex x st All(x,H1) = H) by Def33,Def34;
+
+theorem
+ Th61: H is existential implies
+   (x = bound_in H iff ex H1 st Ex(x,H1) = H) &
+    (H1 = the_scope_of H iff ex x st Ex(x,H1) = H)
+   proof assume
+A1:   H is existential;
+    then consider y,F such that
+A2:   H = Ex(y,F) by Def23;
+       Ex(y,F) = 'not' All(y,'not' F) by Def19;
+     then H.1 = 2 by A2,Th32;
+     then not H is universal by Th39;
+    hence thesis by A1,Def33,Def34;
+   end;
+
+theorem
+ Th62: H is universal implies H = All(bound_in H,the_scope_of H)
+  proof assume
+A1:  H is universal;
+   then ex x st H = All(x,the_scope_of H) by Def34;
+   hence thesis by A1,Def33;
+  end;
+
+theorem
+    H is existential implies H = Ex(bound_in H,the_scope_of H)
+  proof assume
+A1:  H is existential;
+    then ex x st H = Ex(x,the_scope_of H) by Th61;
+   hence thesis by A1,Th61;
+  end;
+
+ definition let H;
+  assume
+A1: H is conditional;
+  func the_antecedent_of H -> ZF-formula means
+:Def35:  ex H1 st H = it => H1;
+   existence by A1,Def21;
+   uniqueness by Th49;
+  func the_consequent_of H -> ZF-formula means
+:Def36:  ex H1 st H = H1 => it;
+   existence
+    proof
+     consider F,G such that
+A2:    H = F => G by A1,Def21;
+     take G,F;
+     thus thesis by A2;
+    end;
+   uniqueness by Th49;
+ end;
+
+theorem
+    H is conditional implies
+   (F = the_antecedent_of H iff ex G st H = F => G) &
+    (F = the_consequent_of H iff ex G st H = G => F) by Def35,Def36;
+
+theorem
+    H is conditional implies
+   H = (the_antecedent_of H) => the_consequent_of H
+  proof assume
+A1:  H is conditional;
+    then ex F st H = (the_antecedent_of H) => F by Def35;
+   hence thesis by A1,Def36;
+  end;
+
+ definition let H;
+  assume
+A1: H is biconditional;
+  func the_left_side_of H -> ZF-formula means
+:Def37:  ex H1 st H = it <=> H1;
+   existence by A1,Def22;
+   uniqueness by Th50;
+  func the_right_side_of H -> ZF-formula means
+:Def38:  ex H1 st H = H1 <=> it;
+   existence
+    proof
+     consider F,G such that
+A2:    H = F <=> G by A1,Def22;
+     take G,F;
+     thus thesis by A2;
+    end;
+   uniqueness by Th50;
+ end;
+
+theorem
+    H is biconditional implies
+   (F = the_left_side_of H iff ex G st H = F <=> G) &
+    (F = the_right_side_of H iff ex G st H = G <=> F) by Def37,Def38;
+
+theorem
+    H is biconditional implies
+   H = (the_left_side_of H) <=> the_right_side_of H
+  proof assume
+A1:  H is biconditional;
+    then ex F st H = (the_left_side_of H) <=> F by Def37;
+   hence thesis by A1,Def38;
+  end;
+
+::
+::         The Immediate Constituents of ZF-formulae
+::
+
+ definition let H,F;
+  pred H is_immediate_constituent_of F means
+:Def39:  F = 'not' H or ( ex H1 st F = H '&' H1 or F = H1 '&' H ) or
+      ex x st F = All(x,H);
+ end;
+
+canceled;
+
+theorem
+ Th69: not H is_immediate_constituent_of x '=' y
+  proof assume H is_immediate_constituent_of x '=' y;
+then A1:  x '=' y = 'not'
+ H or ( ex H1 st x '=' y = H '&' H1 or x '=' y = H1 '&' H ) or
+     ex z st x '=' y = All(z,H) by Def39;
+A2:  (x '=' y).1 = 0 & ('not' H).1 = 2 by Th31,Th32;
+   then consider z such that
+A3:  x '=' y = All(z,H) by A1,Th33;
+   thus contradiction by A2,A3,Th34;
+  end;
+
+theorem
+ Th70: not H is_immediate_constituent_of x 'in' y
+  proof assume H is_immediate_constituent_of x 'in' y;
+then A1:  x 'in' y = 'not' H or ( ex H1 st x 'in' y = H '&' H1 or x 'in'
+ y = H1 '&' H ) or
+     ex z st x 'in' y = All(z,H) by Def39;
+A2:  (x 'in' y).1 = 1 & ('not' H).1 = 2 by Th31,Th32;
+   then consider z such that
+A3:  x 'in' y = All(z,H) by A1,Th33;
+   thus contradiction by A2,A3,Th34;
+  end;
+
+theorem
+ Th71: F is_immediate_constituent_of 'not' H iff F = H
+  proof
+   thus F is_immediate_constituent_of 'not' H implies F = H
+     proof assume
+         F is_immediate_constituent_of 'not' H;
+then A1:     'not' H = 'not' F or ( ex H1 st 'not' H = F '&' H1 or 'not'
+ H = H1 '&' F ) or
+        ex x st 'not' H = All(x,F) by Def39;
+A2:     now given H1 such that
+A3:      'not' H = F '&' H1 or 'not' H = H1 '&' F;
+           ('not' H).1 = 2 & (F '&' H1).1 = 3 & (H1 '&' F).1 = 3 by Th32,Th33;
+        hence contradiction by A3;
+       end;
+         now given x such that
+A4:      'not' H = All(x,F);
+           ('not' H).1 = 2 & All(x,F).1 = 4 by Th32,Th34;
+        hence contradiction by A4;
+       end;
+      hence thesis by A1,A2,Th10;
+     end;
+   thus thesis by Def39;
+  end;
+
+theorem
+ Th72: F is_immediate_constituent_of G '&' H iff F = G or F = H
+  proof
+   thus F is_immediate_constituent_of G '&' H implies
+         F = G or F = H
+     proof assume
+A1:       F is_immediate_constituent_of G '&' H;
+A2:     now assume
+A3:      G '&' H = 'not' F;
+           (G '&' H).1 = 3 & ('not' F).1 = 2 by Th32,Th33;
+        hence contradiction by A3;
+       end;
+         now given x such that
+A4:      G '&' H = All(x,F);
+           (G '&' H).1 = 3 & All(x,F).1 = 4 by Th33,Th34;
+        hence contradiction by A4;
+       end;
+       then ex H1 st G '&' H = F '&' H1 or G '&' H = H1 '&' F by A1,A2,Def39;
+      hence thesis by Th47;
+     end;
+   assume F = G or F = H;
+   hence thesis by Def39;
+  end;
+
+theorem
+ Th73: F is_immediate_constituent_of All(x,H) iff F = H
+  proof
+   thus F is_immediate_constituent_of All(x,H) implies F = H
+     proof assume
+A1:       F is_immediate_constituent_of All(x,H);
+A2:     now assume
+A3:      All(x,H) = 'not' F;
+           All(x,H).1 = 4 & ('not' F).1 = 2 by Th32,Th34;
+        hence contradiction by A3;
+       end;
+         now given G such that
+A4:      All(x,H) = F '&' G or All(x,H) = G '&' F;
+           (F '&' G).1 = 3 & (G '&' F).1 = 3 & All(x,H).1 = 4 by Th33,Th34;
+        hence contradiction by A4;
+       end;
+       then ex y st All(x,H) = All(y,F) by A1,A2,Def39;
+      hence thesis by Th12;
+     end;
+   thus thesis by Def39;
+  end;
+
+theorem
+    H is atomic implies not F is_immediate_constituent_of H
+  proof assume
+A1:    H is atomic;
+A2:  now assume H is_equality;
+      then H = (Var1 H) '=' Var2 H by Th53;
+     hence thesis by Th69;
+    end;
+      now assume H is_membership;
+      then H = (Var1 H) 'in' Var2 H by Th54;
+     hence thesis by Th70;
+    end;
+   hence thesis by A1,A2,Def15;
+  end;
+
+theorem
+ Th75: H is negative implies
+   (F is_immediate_constituent_of H iff F = the_argument_of H)
+  proof assume H is negative;
+    then H = 'not' the_argument_of H by Def30;
+   hence thesis by Th71;
+  end;
+
+theorem
+ Th76: H is conjunctive implies
+   (F is_immediate_constituent_of H iff
+     F = the_left_argument_of H or F = the_right_argument_of H)
+  proof assume H is conjunctive;
+    then H = (the_left_argument_of H) '&' the_right_argument_of H by Th58;
+   hence thesis by Th72;
+  end;
+
+theorem
+ Th77: H is universal implies
+   (F is_immediate_constituent_of H iff F = the_scope_of H)
+  proof assume H is universal;
+    then H = All(bound_in H,the_scope_of H) by Th62;
+   hence thesis by Th73;
+  end;
+
+::
+::    The Subformulae and The Proper Subformulae of ZF-formulae
+::
+
+ reserve L,L' for FinSequence;
+
+ definition let H,F;
+  pred H is_subformula_of F means
+:Def40:  ex n,L st 1 <= n & len L = n & L.1 = H & L.n = F &
+        for k st 1 <= k & k < n
+         ex H1,F1 st L.k = H1 & L.(k + 1) = F1 &
+          H1 is_immediate_constituent_of F1;
+ end;
+
+canceled;
+
+theorem
+ Th79: H is_subformula_of H
+  proof
+   take 1 , <*H*>;
+   thus 1 <= 1;
+   thus len <*H*> = 1 by FINSEQ_1:57;
+   thus <*H*>.1 = H & <*H*>.1 = H by FINSEQ_1:def 8;
+   thus thesis;
+  end;
+
+ definition let H,F;
+  pred H is_proper_subformula_of F means
+:Def41:  H is_subformula_of F & H <> F;
+ end;
+
+canceled;
+
+theorem
+ Th81: H is_immediate_constituent_of F implies len H < len F
+  proof assume
+A1:    H is_immediate_constituent_of F;
+A2:  now assume F = 'not' H;
+      then F = <*2*>^H by Def5;
+      then len F = len <*2*> + len H by FINSEQ_1:35 .= len H + 1 by FINSEQ_1:57
+;
+     hence len H < len F by NAT_1:38;
+    end;
+A3:  now given H1 such that
+A4:    F = H '&' H1 or F = H1 '&' H;
+A5:    len F = len(<*3*>^H^H1) or len F = len(<*3*>^H1^H) by A4,Def6;
+A6:    len(<*3*>^H^H1) = len(<*3*>^H) + len H1 by FINSEQ_1:35
+        .= len <*3*> + len H + len H1 by FINSEQ_1:35
+        .= 1 + len H + len H1 by FINSEQ_1:57;
+        len(<*3*>^H1^H) = len(<*3*>^(H1^H)) by FINSEQ_1:45
+        .= len <*3*> + len(H1^H) by FINSEQ_1:35
+        .= 1 + len(H1^H) by FINSEQ_1:57
+        .= 1 + (len H + len H1) by FINSEQ_1:35
+        .= 1 + len H + len H1 by XCMPLX_1:1;
+      then 1 + len H <= len F & 1 + len H = len H + 1 by A5,A6,NAT_1:29;
+     hence len H < len F by NAT_1:38;
+    end;
+      now given x such that
+A7:    F = All(x,H);
+        F = <*4*>^<*x*>^H by A7,Def7;
+      then len F = len(<*4*>^<*x*>) + len H by FINSEQ_1:35
+        .= len <*4*> + len <*x*> + len H by FINSEQ_1:35
+        .= 1 + len <*x*> + len H by FINSEQ_1:57
+        .= 1 + 1 + len H by FINSEQ_1:57
+        .= (1 + len H) + 1 by XCMPLX_1:1;
+      then 1 + len H <= len F & 1 + len H = len H + 1 by NAT_1:29;
+     hence len H < len F by NAT_1:38;
+    end;
+   hence thesis by A1,A2,A3,Def39;
+  end;
+
+theorem
+ Th82: H is_immediate_constituent_of F implies H is_proper_subformula_of F
+  proof assume
+A1:  H is_immediate_constituent_of F;
+   thus H is_subformula_of F
+     proof
+      take n = 2 , L = <* H,F *>;
+      thus 1 <= n;
+      thus len L = n by FINSEQ_1:61;
+      thus L.1 = H & L.n = F by FINSEQ_1:61;
+      let k; assume
+A2:     1 <= k & k < n;
+       then k < 1 + 1;
+       then k <= 1 by NAT_1:38;
+then A3:     k = 1 by A2,AXIOMS:21;
+      take H,F;
+     thus L.k = H & L.(k + 1) = F by A3,FINSEQ_1:61;
+     thus thesis by A1;
+    end;
+   assume H = F;
+    then len H = len F & len H < len F by A1,Th81;
+   hence contradiction;
+  end;
+
+theorem
+ Th83: H is_proper_subformula_of F implies len H < len F
+  proof assume
+      H is_subformula_of F;
+   then consider n,L such that
+A1:  1 <= n & len L = n & L.1 = H & L.n = F and
+A2:  for k st 1 <= k & k < n
+     ex H1,F1 st L.k = H1 & L.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1
+       by Def40;
+   assume H <> F; then
+     1 < n by A1,REAL_1:def 5; then
+A3:  1 + 1 <= n by NAT_1:38;
+    defpred P[Nat] means 1 <= $1 & $1 < n implies
+      for H1 st L.($1 + 1) = H1 holds len H < len H1;
+A4:  P[0];
+A5:  for k st P[k] holds P[k + 1]
+     proof let k such that
+A6:     1 <= k & k < n implies
+        for H1 st L.(k + 1) = H1 holds len H < len H1 and
+A7:     1 <= k + 1 & k + 1 < n;
+      let H1 such that
+A8:     L.(k + 1 + 1) = H1;
+      consider F1,G such that
+A9:     L.(k + 1) = F1 & L.(k + 1 + 1) = G &
+        F1 is_immediate_constituent_of G by A2,A7;
+A10:      k = 0 implies len H < len H1 by A1,A8,A9,Th81;
+         now given m such that
+A11:      k = m + 1;
+         A12:      len H < len F1 by A6,A7,A9,A11,NAT_1:29,38;
+           len F1 < len H1 by A8,A9,Th81;
+        hence len H < len H1 by A12,AXIOMS:22;
+       end;
+      hence len H < len H1 by A10,NAT_1:22;
+     end;
+A13:  for k holds P[k] from Ind(A4,A5);
+   consider k such that
+A14:  n = 2 + k by A3,NAT_1:28;
+A15:  1 + 1 + k = (1 + k) + 1 by XCMPLX_1:1;
+  then 1 + k < n & 1 <= 1 + k by A14,NAT_1:29,38;
+   hence len H < len F by A1,A13,A14,A15;
+  end;
+
+theorem
+ Th84: H is_proper_subformula_of F implies
+   ex G st G is_immediate_constituent_of F
+  proof assume
+      H is_subformula_of F;
+   then consider n,L such that
+A1:  1 <= n & len L = n & L.1 = H & L.n = F and
+A2:  for k st 1 <= k & k < n
+     ex H1,F1 st L.k = H1 & L.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1
+       by Def40;
+   assume H <> F;
+    then 1 < n by A1,REAL_1:def 5;
+    then 1 + 1 <= n by NAT_1:38;
+   then consider k such that
+A3:  n = 2 + k by NAT_1:28;
+A4:  1 + 1 + k = (1 + k) + 1 by XCMPLX_1:1;
+    then 1 + k < n & 1 <= 1 + k by A3,NAT_1:29,38;
+   then consider H1,F1 such that
+A5:  L.(1 + k) = H1 & L.(1 + k + 1) = F1 &
+     H1 is_immediate_constituent_of F1 by A2;
+   take H1;
+   thus thesis by A1,A3,A4,A5;
+  end;
+
+ reserve j,j1 for Nat;
+
+theorem
+ Th85: F is_proper_subformula_of G & G is_proper_subformula_of H implies
+   F is_proper_subformula_of H
+  proof assume
+A1:  F is_subformula_of G & F <> G & G is_subformula_of H & G <> H;
+   then consider n,L such that
+A2:  1 <= n & len L = n & L.1 = F & L.n = G and
+A3:  for k st 1 <= k & k < n
+     ex H1,F1 st L.k = H1 & L.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1
+       by Def40;
+      1 < n by A1,A2,REAL_1:def 5;
+then A4: 1 + 1 <= n by NAT_1:38;
+   consider m,L' such that
+A5:  1 <= m & len L' = m & L'.1 = G & L'.m = H and
+A6:  for k st 1 <= k & k < m
+     ex H1,F1 st L'.k = H1 & L'.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1
+       by A1,Def40;
+   consider k such that
+A7:  n = 2 + k by A4,NAT_1:28;
+   reconsider L1 = L|(Seg(1 + k)) as FinSequence by FINSEQ_1:19;
+   thus F is_subformula_of H
+     proof
+      take l = 1 + k + m , K = L1^L';
+         m <= m + (1 + k) & m + (1 + k) = 1 + k + m by NAT_1:29;
+      hence 1 <= l by A5,AXIOMS:22;
+A8:    1 + 1 + k = 1 + k + 1 by XCMPLX_1:1;
+then A9:    1 + k <= n by A7,NAT_1:29;
+then A10:     len L1 = 1 + k by A2,FINSEQ_1:21;
+      hence
+A11:     len K = l by A5,FINSEQ_1:35;
+A12:     now let j; assume
+        1 <= j & j <= 1 + k;
+then A13:      j in Seg(1 + k) by FINSEQ_1:3;
+         then j in dom L1 by A2,A9,FINSEQ_1:21;
+      then K.j = L1.j by FINSEQ_1:def 7;
+        hence K.j = L.j by A13,FUNCT_1:72;
+       end;
+         1 <= 1 + k & 1 <= 1 by NAT_1:29;
+      hence K.1 = F by A2,A12;
+         len L1 + 1 <= len L1 + m by A5,REAL_1:55;
+       then len L1 < l & l <= l by A10,NAT_1:38;
+then A14:     K.l = L'.(l - len L1) by A11,FINSEQ_1:37;
+         1 + k + m - (1 + k) = m + (1 + k) + -(1 + k) by XCMPLX_0:def 8
+           .= m + ((1 + k) + -(1 + k)) by XCMPLX_1:1 .= m + 0 by XCMPLX_0:def 6
+           .= m;
+      hence K.l = H by A2,A5,A9,A14,FINSEQ_1:21;
+      let j such that
+A15:     1 <= j & j < l; j + 0 <= j + 1 & j + 0 = j by REAL_1:55;
+then A16:    1 <= j + 1 by A15,AXIOMS:22;
+A17:    now assume
+           j < 1 + k;
+then A18:      j <= 1 + k & j + 1 <= 1 + k by NAT_1:38;
+         then j + 1 <= n by A9,AXIOMS:22;
+         then j < n by NAT_1:38;
+        then consider F1,G1 such that
+A19:      L.j = F1 & L.(j + 1) = G1 & F1 is_immediate_constituent_of G1 by A3,
+A15;
+        take F1, G1;
+        thus K.j = F1 & K.(j + 1) = G1 & F1 is_immediate_constituent_of G1
+          by A12,A15,A16,A18,A19;
+       end;
+A20:    now assume
+A21:      j = 1 + k;
+then A22:         1 + k < j + 1 & j + 1 <= l by A15,NAT_1:38;
+A23:
+         j + 1 = 1 + j & j + 1 - j = j + 1 + -j & 1 + j + -j = 1 + (j + -j) &
+          j + -j = 0 by XCMPLX_0:def 6,def 8,XCMPLX_1:1;
+        K.j = L.j & j < 1 + k + 1 by A12,A15,A21,NAT_1:38;
+        then consider F1,G1 such that
+A24:      L.j = F1 & L.(j + 1) = G1 & F1 is_immediate_constituent_of G1
+          by A3,A7,A8,A15;
+        take F1, G1;
+        thus K.j = F1 & K.(j + 1) = G1 & F1 is_immediate_constituent_of G1
+          by A2,A5,A7,A8,A10,A11,A12,A15,A21,A22,A23,A24,FINSEQ_1:37;
+       end;
+      now assume
+A25:      1 + k < j;
+then A26:         1 + k < j + 1 & j <= l & j + 1 <= l
+          by A15,NAT_1:38;
+           1 + k + 1 <= j by A25,NAT_1:38;
+        then consider j1 such that
+A27:      j = 1 + k + 1 + j1 by NAT_1:28;
+A28:         1 + k + 1 + j1 = 1 + k + (1 + j1) &
+          1 + k + (1 + j1) = 1 + j1 + (1 + k) &
+           1 + j1 + (1 + k) - (1 + k) = 1 + j1 + (1 + k) + -(1 + k) &
+            1 + j1 + (1 + k) + -(1 + k) = 1 + j1 + (1 + k + -(1 + k)) &
+             1 + k + -(1 + k) = 0 & 1 + j1 + 0 = 1 + j1
+              by XCMPLX_0:def 6,def 8,XCMPLX_1:1;
+A29:      j + 1 - len L1 = 1 + j + -len L1 by XCMPLX_0:def 8
+            .= 1 + (j + -len L1) by XCMPLX_1:1
+            .= 1 + j1 + 1 by A2,A9,A27,A28,FINSEQ_1:21;
+A30:      1 + k + m - (1 + k) = m + (1 + k) + -(1 + k) by XCMPLX_0:def 8
+            .= m + (1 + k + -(1 + k)) by XCMPLX_1:1 .= m + 0 by XCMPLX_0:def 6
+            .= m;
+           1 <=
+ 1 + j1 & j - (1 + k) < l - (1 + k) by A15,NAT_1:29,REAL_1:54;
+        then consider F1,G1 such that
+A31:      L'.(1 + j1) = F1 & L'.(1 + j1 + 1) = G1 &
+          F1 is_immediate_constituent_of G1 by A6,A27,A28,A30;
+        take F1, G1;
+        thus K.j = F1 & K.(j + 1) = G1 & F1 is_immediate_constituent_of G1
+          by A10,A11,A25,A26,A27,A28,A29,A31,FINSEQ_1:37;
+       end;
+      hence thesis by A17,A20,REAL_1:def 5;
+     end;
+   assume
+A32:  F = H;
+      F is_proper_subformula_of G & G is_proper_subformula_of H by A1,Def41;
+    then len F < len G & len G < len H by Th83;
+   hence contradiction by A32;
+  end;
+
+theorem
+ Th86: F is_subformula_of G & G is_subformula_of H implies
+   F is_subformula_of H
+  proof assume
+A1:  F is_subformula_of G & G is_subformula_of H;
+
+      now assume F <> G;
+then A2:    F is_proper_subformula_of G by A1,Def41;
+        now assume G <> H;
+        then G is_proper_subformula_of H by A1,Def41;
+        then F is_proper_subformula_of H by A2,Th85;
+       hence thesis by Def41;
+      end;
+     hence thesis by A1;
+    end;
+   hence thesis by A1;
+  end;
+
+theorem
+    G is_subformula_of H & H is_subformula_of G implies G = H
+  proof assume
+A1:  G is_subformula_of H & H is_subformula_of G;
+   assume G <> H;
+    then G is_proper_subformula_of H & H is_proper_subformula_of G by A1,Def41
+;
+    then len G < len H & len H < len G by Th83;
+   hence contradiction;
+  end;
+
+theorem
+ Th88: not F is_proper_subformula_of x '=' y
+  proof assume F is_proper_subformula_of x '=' y;
+    then ex G st G is_immediate_constituent_of x '=' y by Th84;
+   hence contradiction by Th69;
+  end;
+
+theorem
+ Th89: not F is_proper_subformula_of x 'in' y
+  proof assume F is_proper_subformula_of x 'in' y;
+    then ex G st G is_immediate_constituent_of x 'in' y by Th84;
+   hence contradiction by Th70;
+  end;
+
+theorem
+ Th90: F is_proper_subformula_of 'not' H implies F is_subformula_of H
+  proof assume
+A1:  F is_subformula_of 'not' H & F <> 'not' H;
+   then consider n,L such that
+A2:  1 <= n & len L = n & L.1 = F & L.n = 'not' H and
+A3:  for k st 1 <= k & k < n
+     ex H1,F1 st L.k = H1 & L.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1
+       by Def40;
+      1 < n by A1,A2,REAL_1:def 5;
+    then 1 + 1 <= n by NAT_1:38;
+   then consider k such that
+A4:  n = 2 + k by NAT_1:28;
+   reconsider L1 = L|(Seg(1 + k)) as FinSequence by FINSEQ_1:19;
+   take m = 1 + k , L1;
+   thus
+A5:  1 <= m by NAT_1:29;
+A6:  1 + 1 + k = 1 + k + 1 by XCMPLX_1:1;
+      1 + k <= 1 + k + 1 by NAT_1:29;
+   hence len L1 = m by A2,A4,A6,FINSEQ_1:21;
+A7:  now let j; assume
+     1 <= j & j <= m;
+      then j in { j1 : 1 <= j1 & j1 <= 1 + k };
+   then j in Seg(1 + k) by FINSEQ_1:def 1;
+     hence L1.j = L.j by FUNCT_1:72;
+    end;
+   hence L1.1 = F by A2,A5;
+
+      m < m + 1 by NAT_1:38;
+   then consider F1,G1 such that
+A8:  L.m = F1 & L.(m + 1) = G1 & F1 is_immediate_constituent_of G1 by A3,A4,A5,
+A6;
+    F1 = H by A2,A4,A6,A8,Th71;
+   hence L1.m = H by A5,A7,A8;
+   let j; assume
+A9:  1 <= j & j < m;
+then A10:    1 <= 1 + j & 1 + j = j + 1 & j <= m & j + 1 <= m
+     by NAT_1:38;
+      m <= m + 1 by NAT_1:29;
+    then j < n by A4,A6,A9,AXIOMS:22;
+   then consider F1,G1 such that
+A11:  L.j = F1 & L.(j + 1) = G1 & F1 is_immediate_constituent_of G1 by A3,A9;
+   take F1,G1;
+   thus thesis by A7,A9,A10,A11;
+  end;
+
+theorem
+ Th91: F is_proper_subformula_of G '&' H implies
+   F is_subformula_of G or F is_subformula_of H
+  proof assume
+A1:  F is_subformula_of G '&' H & F <> G '&' H;
+   then consider n,L such that
+A2:  1 <= n & len L = n & L.1 = F & L.n = G '&' H and
+A3:  for k st 1 <= k & k < n
+     ex H1,F1 st L.k = H1 & L.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1
+       by Def40;
+      1 < n by A1,A2,REAL_1:def 5;
+    then 1 + 1 <= n by NAT_1:38;
+   then consider k such that
+A4:  n = 2 + k by NAT_1:28;
+   reconsider L1 = L|(Seg(1 + k)) as FinSequence by FINSEQ_1:19;
+A5:  1 + 1 + k = 1 + k + 1 by XCMPLX_1:1;
+    then 1 <= 1 + k & 1 + k < n by A4,NAT_1:29,38;
+   then consider H1,G1 such that
+A6: L.(1 + k) = H1 & L.(1 + k + 1) = G1 & H1 is_immediate_constituent_of G1
+     by A3;
+      F is_subformula_of H1
+     proof
+      take m = 1 + k , L1;
+      thus
+A7:     1 <= m by NAT_1:29;
+         1 + k <= 1 + k + 1 by NAT_1:29;
+      hence len L1 = m by A2,A4,A5,FINSEQ_1:21;
+A8:     now let j; assume
+        1 <= j & j <= m;
+         then j in { j1 : 1 <= j1 & j1 <= 1 + k };
+      then j in Seg(1 + k) by FINSEQ_1:def 1;
+        hence L1.j = L.j by FUNCT_1:72;
+       end;
+      hence L1.1 = F by A2,A7;
+      thus L1.m = H1 by A6,A7,A8;
+      let j; assume
+A9:     1 <= j & j < m;
+then A10:       1 <= 1 + j & 1 + j = j + 1 & j <= m & j + 1 <= m
+        by NAT_1:38;
+         m <= m + 1 by NAT_1:29;
+       then j < n by A4,A5,A9,AXIOMS:22;
+      then consider F1,G1 such that
+A11:     L.j = F1 & L.(j + 1) = G1 & F1 is_immediate_constituent_of G1 by A3,A9
+;
+      take F1,G1;
+      thus thesis by A8,A9,A10,A11;
+     end;
+   hence thesis by A2,A4,A5,A6,Th72;
+  end;
+
+theorem
+ Th92: F is_proper_subformula_of All(x,H) implies F is_subformula_of H
+  proof assume
+A1:  F is_subformula_of All(x,H) & F <> All(x,H);
+   then consider n,L such that
+A2:  1 <= n & len L = n & L.1 = F & L.n = All(x,H) and
+A3:  for k st 1 <= k & k < n
+     ex H1,F1 st L.k = H1 & L.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1
+       by Def40;
+      1 < n by A1,A2,REAL_1:def 5;
+    then 1 + 1 <= n by NAT_1:38;
+   then consider k such that
+A4:  n = 2 + k by NAT_1:28;
+   reconsider L1 = L|(Seg(1 + k)) as FinSequence by FINSEQ_1:19;
+   take m = 1 + k , L1;
+   thus
+A5:  1 <= m by NAT_1:29;
+A6:  1 + 1 + k = 1 + k + 1 by XCMPLX_1:1;
+      1 + k <= 1 + k + 1 by NAT_1:29;
+   hence len L1 = m by A2,A4,A6,FINSEQ_1:21;
+A7:  now let j; assume
+     1 <= j & j <= m;
+      then j in { j1 : 1 <= j1 & j1 <= 1 + k };
+   then j in Seg(1 + k) by FINSEQ_1:def 1;
+     hence L1.j = L.j by FUNCT_1:72;
+    end;
+   hence L1.1 = F by A2,A5;
+
+      m < m + 1 by NAT_1:38;
+   then consider F1,G1 such that
+A8:  L.m = F1 & L.(m + 1) = G1 & F1 is_immediate_constituent_of G1 by A3,A4,A5,
+A6;
+    F1 = H by A2,A4,A6,A8,Th73;
+   hence L1.m = H by A5,A7,A8;
+   let j; assume
+A9:  1 <= j & j < m;
+then A10:    1 <= 1 + j & 1 + j = j + 1 & j <= m & j + 1 <= m
+     by NAT_1:38;
+      m <= m + 1 by NAT_1:29;
+    then j < n by A4,A6,A9,AXIOMS:22;
+   then consider F1,G1 such that
+A11:  L.j = F1 & L.(j + 1) = G1 & F1 is_immediate_constituent_of G1 by A3,A9;
+   take F1,G1;
+   thus thesis by A7,A9,A10,A11;
+  end;
+
+theorem
+    H is atomic implies not F is_proper_subformula_of H
+  proof assume H is atomic;
+    then H is_equality or H is_membership by Def15;
+    then H = (Var1 H) '=' Var2 H or H = (Var1 H) 'in' Var2 H by Th53,Th54;
+   hence thesis by Th88,Th89;
+  end;
+
+theorem
+    H is negative implies the_argument_of H is_proper_subformula_of H
+  proof assume H is negative;
+    then the_argument_of H is_immediate_constituent_of H by Th75;
+   hence thesis by Th82;
+  end;
+
+theorem
+    H is conjunctive implies
+   the_left_argument_of H is_proper_subformula_of H &
+    the_right_argument_of H is_proper_subformula_of H
+  proof assume H is conjunctive;
+    then the_left_argument_of H is_immediate_constituent_of H &
+     the_right_argument_of H is_immediate_constituent_of H by Th76;
+   hence thesis by Th82;
+  end;
+
+theorem
+    H is universal implies the_scope_of H is_proper_subformula_of H
+  proof assume H is universal;
+    then the_scope_of H is_immediate_constituent_of H by Th77;
+   hence thesis by Th82;
+  end;
+
+theorem
+ Th97: H is_subformula_of x '=' y iff H = x '=' y
+  proof
+   thus H is_subformula_of x '=' y implies H = x '=' y
+     proof assume
+A1:     H is_subformula_of x '=' y;
+      assume
+         H <> x '=' y;
+       then H is_proper_subformula_of x '=' y by A1,Def41;
+       then ex F st F is_immediate_constituent_of x '=' y by Th84;
+      hence contradiction by Th69;
+     end;
+   assume H = x '=' y;
+   hence thesis by Th79;
+  end;
+
+theorem
+ Th98: H is_subformula_of x 'in' y iff H = x 'in' y
+  proof
+   thus H is_subformula_of x 'in' y implies H = x 'in' y
+     proof assume
+A1:     H is_subformula_of x 'in' y;
+      assume
+         H <> x 'in' y;
+       then H is_proper_subformula_of x 'in' y by A1,Def41;
+       then ex F st F is_immediate_constituent_of x 'in' y by Th84;
+      hence contradiction by Th70;
+     end;
+   assume H = x 'in' y;
+   hence thesis by Th79;
+  end;
+
+::
+::           The Set of Subformulae of ZF-formulae
+::
+
+ definition let H;
+  func Subformulae H -> set means
+:Def42:  a in it iff ex F st F = a & F is_subformula_of H;
+   existence
+    proof
+     defpred X[set] means ex F st F = $1 & F is_subformula_of H;
+     consider X such that
+A1:    a in X iff a in NAT* & X[a] from Separation;
+     take X;
+     let a;
+     thus a in X implies ex F st F = a & F is_subformula_of H by A1;
+     given F such that
+A2:    F = a & F is_subformula_of H;
+        F in NAT* by FINSEQ_1:def 11;
+     hence a in X by A1,A2;
+    end;
+   uniqueness
+    proof let X,Y such that
+A3:    a in X iff ex F st F = a & F is_subformula_of H and
+A4:    a in Y iff ex F st F = a & F is_subformula_of H;
+        now let a;
+       thus a in X implies a in Y
+         proof assume a in X;
+           then ex F st F = a & F is_subformula_of H by A3;
+          hence thesis by A4;
+         end;
+       assume a in Y;
+        then ex F st F = a & F is_subformula_of H by A4;
+       hence a in X by A3;
+      end;
+     hence thesis by TARSKI:2;
+    end;
+ end;
+
+canceled;
+
+theorem
+ Th100: G in Subformulae H implies G is_subformula_of H
+  proof assume G in Subformulae H;
+    then ex F st F = G & F is_subformula_of H by Def42;
+   hence G is_subformula_of H;
+  end;
+
+theorem
+    F is_subformula_of H implies Subformulae F c= Subformulae H
+  proof assume
+A1:  F is_subformula_of H;
+   let a; assume
+      a in Subformulae F;
+   then consider F1 such that
+A2:  F1 = a & F1 is_subformula_of F by Def42;
+      F1 is_subformula_of H by A1,A2,Th86;
+   hence a in Subformulae H by A2,Def42;
+  end;
+
+theorem
+ Th102: Subformulae x '=' y = { x '=' y }
+  proof
+      now let a;
+     thus a in Subformulae x '=' y implies a in { x '=' y }
+       proof assume a in Subformulae x '=' y;
+        then consider F such that
+A1:       F = a & F is_subformula_of x '=' y by Def42;
+           F = x '=' y by A1,Th97;
+        hence thesis by A1,TARSKI:def 1;
+       end;
+     assume a in { x '=' y };
+      then a = x '=' y & x '=' y is_subformula_of x '=' y by Th79,TARSKI:def 1
+;
+     hence a in Subformulae x '=' y by Def42;
+    end;
+   hence thesis by TARSKI:2;
+  end;
+
+theorem
+ Th103: Subformulae x 'in' y = { x 'in' y }
+  proof
+      now let a;
+     thus a in Subformulae x 'in' y implies a in { x 'in' y }
+       proof assume a in Subformulae x 'in' y;
+        then consider F such that
+A1:       F = a & F is_subformula_of x 'in' y by Def42;
+           F = x 'in' y by A1,Th98;
+        hence thesis by A1,TARSKI:def 1;
+       end;
+     assume a in { x 'in' y };
+      then a = x 'in' y & x 'in' y is_subformula_of x 'in' y by Th79,TARSKI:def
+1;
+     hence a in Subformulae x 'in' y by Def42;
+    end;
+   hence thesis by TARSKI:2;
+  end;
+
+theorem
+ Th104: Subformulae 'not' H = Subformulae H \/ { 'not' H }
+  proof
+      now let a;
+     thus a in Subformulae 'not' H implies a in Subformulae H \/ { 'not' H }
+       proof assume a in Subformulae 'not' H;
+        then consider F such that
+A1:       F = a & F is_subformula_of 'not' H by Def42;
+         now assume F <> 'not' H;
+           then F is_proper_subformula_of 'not' H by A1,Def41;
+           then F is_subformula_of H by Th90;
+          hence a in Subformulae H by A1,Def42;
+         end;
+         then a in Subformulae H or a in { 'not' H } by A1,TARSKI:def 1;
+        hence thesis by XBOOLE_0:def 2;
+       end;
+     assume A2: a in Subformulae H \/ { 'not' H };
+A3:    now assume a in Subformulae H;
+       then consider F such that
+A4:      F = a & F is_subformula_of H by Def42;
+          H is_immediate_constituent_of 'not' H by Th71;
+        then H is_proper_subformula_of 'not' H by Th82;
+        then H is_subformula_of 'not' H by Def41;
+        then F is_subformula_of 'not' H by A4,Th86;
+       hence a in Subformulae 'not' H by A4,Def42;
+      end;
+        now assume a in { 'not' H };
+        then a = 'not' H & 'not' H is_subformula_of 'not' H by Th79,TARSKI:def
+1;
+       hence a in Subformulae 'not' H by Def42;
+      end;
+     hence a in Subformulae 'not' H by A2,A3,XBOOLE_0:def 2;
+    end;
+   hence thesis by TARSKI:2;
+  end;
+
+theorem
+ Th105: Subformulae (H '&' F) = Subformulae H \/ Subformulae F \/ { H '&' F }
+  proof
+      now let a;
+     thus a in Subformulae H '&' F implies
+        a in Subformulae H \/ Subformulae F \/ { H '&' F }
+       proof assume a in Subformulae H '&' F;
+        then consider G such that
+A1:       G = a & G is_subformula_of H '&' F by Def42;
+         now assume G <> H '&' F;
+           then G is_proper_subformula_of H '&' F by A1,Def41;
+           then G is_subformula_of H or G is_subformula_of F by Th91;
+           then a in Subformulae H or a in Subformulae F by A1,Def42;
+          hence a in Subformulae H \/ Subformulae F by XBOOLE_0:def 2;
+         end;
+         then a in Subformulae H \/ Subformulae F or a in { H '&' F } by A1,
+TARSKI:def 1;
+        hence thesis by XBOOLE_0:def 2;
+       end;
+     assume A2: a in Subformulae H \/ Subformulae F \/ { H '&' F };
+A3:   a in Subformulae H \/ Subformulae F implies
+       a in Subformulae H or a in Subformulae F by XBOOLE_0:def 2;
+A4:    now assume a in Subformulae H;
+       then consider G such that
+A5:      G = a & G is_subformula_of H by Def42;
+          H is_immediate_constituent_of H '&' F by Th72;
+        then H is_proper_subformula_of H '&' F by Th82;
+        then H is_subformula_of H '&' F by Def41;
+        then G is_subformula_of H '&' F by A5,Th86;
+       hence a in Subformulae H '&' F by A5,Def42;
+      end;
+A6:    now assume a in Subformulae F;
+       then consider G such that
+A7:      G = a & G is_subformula_of F by Def42;
+          F is_immediate_constituent_of H '&' F by Th72;
+        then F is_proper_subformula_of H '&' F by Th82;
+        then F is_subformula_of H '&' F by Def41;
+        then G is_subformula_of H '&' F by A7,Th86;
+       hence a in Subformulae H '&' F by A7,Def42;
+      end;
+        now assume a in { H '&' F };
+        then a = H '&' F & H '&' F is_subformula_of H '&' F by Th79,TARSKI:def
+1;
+       hence a in Subformulae H '&' F by Def42;
+      end;
+     hence a in Subformulae H '&' F by A2,A3,A4,A6,XBOOLE_0:def 2;
+    end;
+   hence thesis by TARSKI:2;
+  end;
+
+theorem
+ Th106: Subformulae All(x,H) = Subformulae H \/ { All(x,H) }
+  proof
+      now let a;
+     thus a in Subformulae All(x,H) implies a in Subformulae H \/ { All(x,H) }
+       proof assume a in Subformulae All(x,H);
+        then consider F such that
+A1:       F = a & F is_subformula_of All(x,H) by Def42;
+         now assume F <> All(x,H);
+           then F is_proper_subformula_of All(x,H) by A1,Def41;
+           then F is_subformula_of H by Th92;
+          hence a in Subformulae H by A1,Def42;
+         end;
+         then a in Subformulae H or a in { All(x,H) } by A1,TARSKI:def 1;
+        hence thesis by XBOOLE_0:def 2;
+       end;
+     assume A2: a in Subformulae H \/ { All(x,H) };
+A3:    now assume a in Subformulae H;
+       then consider F such that
+A4:      F = a & F is_subformula_of H by Def42;
+          H is_immediate_constituent_of All(x,H) by Th73;
+        then H is_proper_subformula_of All(x,H) by Th82;
+        then H is_subformula_of All(x,H) by Def41;
+        then F is_subformula_of All(x,H) by A4,Th86;
+       hence a in Subformulae All(x,H) by A4,Def42;
+      end;
+        now assume a in { All(x,H) };
+        then a = All(x,H) & All(x,H) is_subformula_of All(x,H) by Th79,TARSKI:
+def 1;
+       hence a in Subformulae All(x,H) by Def42;
+      end;
+     hence a in Subformulae All(x,H) by A2,A3,XBOOLE_0:def 2;
+    end;
+   hence thesis by TARSKI:2;
+  end;
+
+theorem
+    H is atomic iff Subformulae H = { H }
+  proof
+   thus H is atomic implies Subformulae H = { H }
+    proof assume
+        H is atomic;
+      then H is_equality or H is_membership by Def15;
+      then H = (Var1 H) '=' Var2 H or H = (Var1 H) 'in' Var2 H by Th53,Th54;
+     hence thesis by Th102,Th103;
+    end;
+   assume
+A1:  Subformulae H = { H };
+   assume not H is atomic;
+    then H is negative or H is conjunctive or H is universal by Th26;
+then A2:  H = 'not' the_argument_of H or
+     H = (the_left_argument_of H) '&' the_right_argument_of H or
+      H = All(bound_in H,the_scope_of H) by Def30,Th58,Th62;
+A3:  now assume
+        H = 'not' the_argument_of H;
+then A4:   the_argument_of H is_immediate_constituent_of H by Th71;
+      then the_argument_of H is_proper_subformula_of H by Th82;
+      then the_argument_of H is_subformula_of H by Def41;
+then A5:      the_argument_of H in Subformulae H by Def42;
+        len(the_argument_of H) <> len H by A4,Th81;
+     hence contradiction by A1,A5,TARSKI:def 1;
+    end;
+      now assume
+        H = (the_left_argument_of H) '&' the_right_argument_of H;
+then A6:   the_left_argument_of H is_immediate_constituent_of H &
+       the_right_argument_of H is_immediate_constituent_of H by Th72;
+      then the_left_argument_of H is_proper_subformula_of H &
+       the_right_argument_of H is_proper_subformula_of H by Th82;
+      then the_left_argument_of H is_subformula_of H &
+       the_right_argument_of H is_subformula_of H by Def41;
+then A7:      the_left_argument_of H in Subformulae H &
+       the_right_argument_of H in Subformulae H by Def42;
+        len(the_left_argument_of H) <> len H &
+       len(the_right_argument_of H) <> len H by A6,Th81;
+     hence contradiction by A1,A7,TARSKI:def 1;
+    end;
+then A8:  the_scope_of H is_immediate_constituent_of H by A2,A3,Th73;
+    then the_scope_of H is_proper_subformula_of H by Th82;
+    then the_scope_of H is_subformula_of H by Def41;
+then A9:    the_scope_of H in Subformulae H by Def42;
+      len(the_scope_of H) <> len H by A8,Th81;
+   hence contradiction by A1,A9,TARSKI:def 1;
+  end;
+
+theorem
+    H is negative implies
+   Subformulae H = Subformulae the_argument_of H \/ { H }
+  proof assume H is negative;
+    then H = 'not' the_argument_of H by Def30;
+   hence thesis by Th104;
+  end;
+
+theorem
+    H is conjunctive implies
+   Subformulae H = Subformulae the_left_argument_of H \/
+    Subformulae the_right_argument_of H \/ { H }
+  proof assume H is conjunctive;
+    then H = (the_left_argument_of H) '&' the_right_argument_of H by Th58;
+   hence thesis by Th105;
+  end;
+
+theorem
+    H is universal implies
+   Subformulae H = Subformulae the_scope_of H \/ { H }
+  proof assume H is universal;
+    then H = All(bound_in H,the_scope_of H) by Th62;
+   hence thesis by Th106;
+  end;
+
+theorem
+    (H is_immediate_constituent_of G or H is_proper_subformula_of G or
+   H is_subformula_of G) & G in Subformulae F implies H in Subformulae F
+  proof assume
+A1:  (H is_immediate_constituent_of G or H is_proper_subformula_of G or
+     H is_subformula_of G) & G in Subformulae F;
+    then H is_proper_subformula_of G or H is_subformula_of G by Th82;
+    then H is_subformula_of G & G is_subformula_of F by A1,Def41,Th100;
+    then H is_subformula_of F by Th86;
+   hence thesis by Def42;
+  end;
+
+::
+::               The Structural Induction Schemes
+::
+
+scheme ZF_Ind { P[ZF-formula] } :
+  for H holds P[H]
+    provided
+A1: for H st H is atomic holds P[H] and
+A2: for H st H is negative & P[the_argument_of H] holds P[H] and
+A3: for H st H is conjunctive &
+    P[the_left_argument_of H] & P[the_right_argument_of H] holds P[H] and
+A4: for H st H is universal & P[the_scope_of H] holds P[H]
+  proof
+     defpred Q[Nat] means for H st len H = $1 holds P[H];
+A5:  for n st for k st k < n holds Q[k] holds Q[n]
+     proof let n such that
+A6:     for k st k < n for H st len H = k holds P[H];
+      let H such that
+A7:     len H = n;
+A8:     H is atomic or H is negative or H is conjunctive or H is universal
+        by Th26;
+A9:    now assume
+A10:       H is negative;
+         then H = 'not' the_argument_of H by Def30;
+         then the_argument_of H is_immediate_constituent_of H by Th71;
+         then len the_argument_of H < len H by Th81;
+         then P[the_argument_of H] by A6,A7;
+        hence P[H] by A2,A10;
+       end;
+A11:    now assume
+A12:       H is conjunctive;
+         then H = (the_left_argument_of H) '&' the_right_argument_of H by Th58
+;
+         then the_left_argument_of H is_immediate_constituent_of H &
+          the_right_argument_of H is_immediate_constituent_of H
+           by Th72;
+         then len the_left_argument_of H < len H &
+          len the_right_argument_of H < len H by Th81;
+         then P[the_left_argument_of H] & P[the_right_argument_of H] by A6,A7;
+        hence P[H] by A3,A12;
+       end;
+      now assume
+A13:       H is universal;
+         then H = All(bound_in H,the_scope_of H) by Th62;
+         then the_scope_of H is_immediate_constituent_of H by Th73;
+         then len the_scope_of H < len H by Th81;
+         then P[the_scope_of H] by A6,A7;
+        hence P[H] by A4,A13;
+       end;
+      hence thesis by A1,A8,A9,A11;
+     end;
+   let H;
+A14:  len H = len H;
+      for n holds Q[n] from Comp_Ind(A5);
+   hence thesis by A14;
+  end;
+
+scheme ZF_CompInd { P[ZF-formula] } :
+  for H holds P[H]
+    provided
+A1: for H st for F st F is_proper_subformula_of H holds P[F] holds P[H]
+  proof
+     defpred Q[Nat] means for H st len H = $1 holds P[H];
+A2:  for n st for k st k < n holds Q[k] holds Q[n]
+     proof let n such that
+A3:     for k st k < n for H st len H = k holds P[H];
+      let H such that
+A4:     len H = n;
+         now let F; assume
+           F is_proper_subformula_of H;
+         then len F < len H by Th83;
+        hence P[F] by A3,A4;
+       end;
+      hence P[H] by A1;
+     end;
+A5:  for n holds Q[n] from Comp_Ind (A2);
+   let H;
+      len H = len H;
+   hence thesis by A5;
+  end;

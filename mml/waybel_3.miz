@@ -1,0 +1,2023 @@
+:: The "Way-Below" Relation
+::  by Grzegorz Bancerek
+::
+:: Received October 11, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_2, ORDERS_1, QUANTAL1, ORDINAL2, COMPTS_1, LATTICE3,
+      WAYBEL_0, YELLOW_0, LATTICES, BHSP_3, BOOLE, REALSET1, FINSET_1,
+      FILTER_2, WAYBEL_2, FUNCT_1, RELAT_1, FUNCT_4, YELLOW_1, PBOOLE,
+      FUNCOP_1, CARD_3, RLVECT_2, PRE_TOPC, SETFAM_1, TARSKI, WELLORD2,
+      SUBSET_1, TOPS_1, PCOMPS_1, WAYBEL_3;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XREAL_0, NAT_1, RELAT_1, FINSET_1,
+      DOMAIN_1, STRUCT_0, REALSET1, FUNCT_1, FUNCT_4, FUNCOP_1, PBOOLE, CARD_3,
+      PRALG_1, FUNCT_7, GROUP_1, ORDERS_1, PRE_TOPC, TOPS_1, TOPS_2, COMPTS_1,
+      PCOMPS_1, LATTICE3, YELLOW_0, YELLOW_1, WAYBEL_0, YELLOW_4, WAYBEL_2;
+ constructors NAT_1, REALSET1, FUNCT_7, GROUP_1, DOMAIN_1, TOPS_1, TOPS_2,
+      COMPTS_1, PCOMPS_1, YELLOW_4, WAYBEL_2, YELLOW_1, MEMBERED;
+ clusters SUBSET_1, STRUCT_0, FUNCT_1, FINSET_1, ORDERS_1, LATTICE3, PCOMPS_1,
+      CANTOR_1, YELLOW_0, WAYBEL_0, YELLOW_1, ARYTM_3, SETFAM_1, TOPS_1,
+      MEMBERED, ZFMISC_1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, GROUP_1, REALSET1, ORDERS_1, LATTICE3, PRE_TOPC, TOPS_2,
+      COMPTS_1, YELLOW_0, WAYBEL_0, WAYBEL_2, XBOOLE_0;
+ theorems STRUCT_0, TARSKI, ORDERS_1, LATTICE3, ZFMISC_1, NAT_1, RELAT_1,
+      FUNCT_1, FINSET_1, SUBSET_1, FUNCT_4, FUNCOP_1, PBOOLE, CARD_3, PRALG_1,
+      FUNCT_7, PRE_TOPC, TOPS_1, TOPS_2, COMPTS_1, PCOMPS_1, URYSOHN1,
+      YELLOW_0, YELLOW_1, WAYBEL_0, YELLOW_2, WAYBEL_2, YELLOW_4, SETFAM_1,
+      XBOOLE_0, XBOOLE_1, XCMPLX_1;
+ schemes NAT_1, FINSET_1, SETWISEO, ZFREFLE1, PRALG_2, COMPTS_1;
+
+begin :: 1. The "Way-Below" Relation
+
+definition  :: 1.1, p. 38
+ let L be non empty reflexive RelStr;
+ let x,y be Element of L;
+ pred x is_way_below y means:
+Def1:
+  for D being non empty directed Subset of L st y <= sup D
+   ex d being Element of L st d in D & x <= d;
+ synonym x << y;
+ synonym y >> x;
+end;
+
+definition  :: 1.1, p. 38
+ let L be non empty reflexive RelStr;
+ let x be Element of L;
+ attr x is compact means:
+Def2:
+  x is_way_below x;
+ synonym x is isolated_from_below;
+end;
+
+theorem Th1: :: 1.2(i), p. 39
+ for L being non empty reflexive antisymmetric RelStr
+ for x,y being Element of L st x << y holds x <= y
+  proof let L be non empty reflexive antisymmetric RelStr;
+   let x,y be Element of L such that
+A1:  for D being non empty directed Subset of L st y <= sup D
+     ex d being Element of L st d in D & x <= d;
+      {y} is directed & sup {y} = y & y <= y
+     by WAYBEL_0:5,YELLOW_0:39;
+   then consider d being Element of L such that
+A2:  d in {y} & x <= d by A1;
+   thus thesis by A2,TARSKI:def 1;
+  end;
+
+theorem Th2: :: 1.2(ii), p. 39
+ for L being non empty reflexive transitive RelStr, u,x,y,z being Element of L
+  st u <= x & x << y & y <= z holds u << z
+  proof let L be non empty reflexive transitive RelStr;
+   let u,x,y,z be Element of L such that
+A1:  u <= x and
+A2:  for D being non empty directed Subset of L st y <= sup D
+     ex d being Element of L st d in D & x <= d and
+A3:  y <= z;
+   let D be non empty directed Subset of L; assume z <= sup D;
+    then y <= sup D by A3,ORDERS_1:26;
+   then consider d being Element of L such that
+A4:  d in D & x <= d by A2;
+   take d; thus thesis by A1,A4,ORDERS_1:26;
+  end;
+
+theorem Th3: :: 1.2(iii), p. 39
+ for L being non empty Poset st L is with_suprema or L is /\-complete
+ for x,y,z being Element of L
+  st x << z & y << z holds ex_sup_of {x,y}, L & x "\/" y << z
+  proof let L be non empty Poset such that
+A1:  L is with_suprema or L is /\-complete;
+   let x,y,z be Element of L; assume A2: z >> x;
+then A3:  z >= x & for D being non empty directed Subset of L st z <= sup D
+     ex d being Element of L st d in D & x <= d by Def1,Th1;
+   assume A4: z >> y;
+then A5:  z >= y & for D being non empty directed Subset of L st z <= sup D
+     ex d being Element of L st d in D & y <= d by Def1,Th1;
+   thus
+A6:  now per cases by A1; suppose L is with_suprema;
+     hence ex_sup_of {x,y},L by YELLOW_0:20;
+     suppose
+A7:    L is /\-complete;
+     set X = {a where a is Element of L: a >= x & a >= y};
+        X c= the carrier of L
+       proof let a be set; assume a in X;
+         then ex z being Element of L st a = z & z >= x & z >= y;
+        hence thesis;
+       end;
+     then reconsider X as Subset of L;
+        z in X by A3,A5;
+      then ex_inf_of X,L by A7,WAYBEL_0:76;
+     then consider c being Element of L such that
+A8:    c is_<=_than X and
+A9:    for d being Element of L st d is_<=_than X holds d <= c by YELLOW_0:16;
+A10:    c is_>=_than {x,y}
+       proof let a be Element of L; assume A11: a in {x,y};
+           a is_<=_than X
+          proof let b be Element of L; assume b in X;
+            then ex z being Element of L st b = z & z >= x & z >= y;
+           hence thesis by A11,TARSKI:def 2;
+          end;
+        hence thesis by A9;
+       end;
+        now let a be Element of L; assume
+          a is_>=_than {x,y};
+        then a >= x & a >= y by YELLOW_0:8;
+        then a in X;
+       hence c <= a by A8,LATTICE3:def 8;
+      end;
+     hence ex_sup_of {x,y},L by A10,YELLOW_0:15;
+    end;
+   let D be non empty directed Subset of L; assume
+A12:  z <= sup D;
+   then consider d1 being Element of L such that
+A13:  d1 in D & x <= d1 by A2,Def1;
+   consider d2 being Element of L such that
+A14:  d2 in D & y <= d2 by A4,A12,Def1;
+   consider d being Element of L such that
+A15:  d in D & d1 <= d & d2 <= d by A13,A14,WAYBEL_0:def 1;
+A16:  d in D & x <= d & y <= d by A13,A14,A15,ORDERS_1:26;
+   take d; thus thesis by A6,A16,YELLOW_0:18;
+  end;
+
+theorem Th4:   :: 1.2(iv), p. 39
+ for L being lower-bounded antisymmetric reflexive non empty RelStr
+ for x being Element of L holds Bottom L << x
+  proof let L be lower-bounded antisymmetric reflexive non empty RelStr;
+   let x be Element of L;
+   let D be non empty directed Subset of L; assume x <= sup D;
+   consider d being Element of D;
+   reconsider d as Element of L;
+   take d; thus thesis by YELLOW_0:44;
+  end;
+
+theorem
+   for L being non empty Poset, x,y,z being Element of L
+  st x << y & y << z holds x << z
+  proof let L be non empty Poset, x,y,z be Element of L;
+   assume x << y;
+    then x <= y & z <= z by Th1;
+   hence thesis by Th2;
+  end;
+
+theorem
+   for L being non empty reflexive antisymmetric RelStr, x,y being Element of L
+  st x << y & x >> y holds x = y
+  proof let L be non empty reflexive antisymmetric RelStr, x,y be Element of L;
+   assume x << y & x >> y;
+    then x <= y & y <= x by Th1;
+   hence thesis by ORDERS_1:25;
+  end;
+
+definition  :: after 1.2, p. 39
+ let L be non empty reflexive RelStr;
+ let x be Element of L;
+    A1: {y where y is Element of L: y << x} c= the carrier of L
+     proof let z be set; assume z in {y where y is Element of L: y << x};
+       then ex y being Element of L st z = y & y << x;
+      hence thesis;
+     end;
+ func waybelow x -> Subset of L equals:
+Def3:
+   {y where y is Element of L: y << x};
+ correctness by A1;
+    A2: {y where y is Element of L: y >> x} c= the carrier of L
+     proof let z be set; assume z in {y where y is Element of L: y >> x};
+       then ex y being Element of L st z = y & y >> x;
+      hence thesis;
+     end;
+ func wayabove x -> Subset of L equals:
+Def4:
+   {y where y is Element of L: y >> x};
+ correctness by A2;
+end;
+
+theorem Th7:
+ for L being non empty reflexive RelStr, x,y being Element of L holds
+  x in waybelow y iff x << y
+  proof let L be non empty reflexive RelStr, x,y be Element of L;
+      waybelow y = {z where z is Element of L: z << y} by Def3;
+    then x in waybelow y iff ex z being Element of L st x = z & z << y;
+   hence thesis;
+  end;
+
+theorem Th8:
+ for L being non empty reflexive RelStr, x,y being Element of L holds
+  x in wayabove y iff x >> y
+  proof let L be non empty reflexive RelStr, x,y be Element of L;
+      wayabove y = {z where z is Element of L: z >> y} by Def4;
+    then x in wayabove y iff ex z being Element of L st x = z & z >> y;
+   hence thesis;
+  end;
+
+theorem Th9:
+ for L being non empty reflexive antisymmetric RelStr
+ for x being Element of L holds x is_>=_than waybelow x
+  proof let L be non empty reflexive antisymmetric RelStr;
+   let x,y be Element of L; assume
+      y in waybelow x;
+    then y << x by Th7;
+   hence thesis by Th1;
+  end;
+
+theorem
+   for L being non empty reflexive antisymmetric RelStr
+ for x being Element of L holds x is_<=_than wayabove x
+  proof let L be non empty reflexive antisymmetric RelStr;
+   let x,y be Element of L; assume
+      y in wayabove x;
+    then y >> x by Th8;
+   hence thesis by Th1;
+  end;
+
+theorem Th11:
+ for L being non empty reflexive antisymmetric RelStr
+ for x being Element of L holds
+  waybelow x c= downarrow x & wayabove x c= uparrow x
+  proof let L be non empty reflexive antisymmetric RelStr, x be Element of L;
+A1:  waybelow x = {y where y is Element of L: y << x} by Def3;
+A2:  wayabove x = {y where y is Element of L: y >> x} by Def4;
+   hereby let a be set; assume a in waybelow x;
+    then consider y being Element of L such that
+A3:   a = y & y << x by A1;
+       y <= x by A3,Th1;
+    hence a in downarrow x by A3,WAYBEL_0:17;
+   end;
+   let a be set; assume a in wayabove x;
+   then consider y being Element of L such that
+A4:  a = y & y >> x by A2;
+      x <= y by A4,Th1;
+   hence a in uparrow x by A4,WAYBEL_0:18;
+  end;
+
+theorem Th12:
+ for L being non empty reflexive transitive RelStr
+ for x,y being Element of L st x <= y
+  holds waybelow x c= waybelow y & wayabove y c= wayabove x
+  proof let L be non empty reflexive transitive RelStr, x,y be Element of L;
+   assume
+A1:  x <= y;
+A2:  waybelow x = {z where z is Element of L: z << x} by Def3;
+   hereby let z be set; assume
+       z in waybelow x;
+    then consider v being Element of L such that
+A3:   z = v & v << x by A2;
+       v << y by A1,A3,Th2;
+    hence z in waybelow y by A3,Th7;
+   end;
+A4:  wayabove y = {z where z is Element of L: z >> y} by Def4;
+   let z be set; assume
+      z in wayabove y;
+   then consider v being Element of L such that
+A5:  z = v & v >> y by A4;
+      v >> x by A1,A5,Th2;
+   hence z in wayabove x by A5,Th8;
+  end;
+
+definition
+ let L be lower-bounded (non empty reflexive antisymmetric RelStr);
+ let x be Element of L;
+ cluster waybelow x -> non empty;
+ coherence
+  proof Bottom L << x by Th4;
+   hence thesis by Th7;
+  end;
+end;
+
+definition
+ let L be non empty reflexive transitive RelStr;
+ let x be Element of L;
+ cluster waybelow x -> lower;
+ coherence
+  proof let z,y be Element of L; assume z in waybelow x;
+    then z << x by Th7;
+    then y <= z implies y << x by Th2;
+   hence y <= z implies y in waybelow x by Th7;
+  end;
+ cluster wayabove x -> upper;
+ coherence
+  proof
+   hereby let z,y be Element of L; assume z in wayabove x;
+     then z >> x by Th8;
+     then y >= z implies y >> x by Th2;
+    hence y >= z implies y in wayabove x by Th8;
+   end;
+  end;
+end;
+
+definition
+ let L be sup-Semilattice;
+ let x be Element of L;
+ cluster waybelow x -> directed;
+ coherence
+  proof let v,y be Element of L; assume v in waybelow x & y in waybelow x;
+then A1:  v << x & y << x by Th7;
+then A2:  ex_sup_of {v,y},L by Th3;
+   take z = v"\/"y; z << x by A1,Th3;
+   hence z in waybelow x by Th7;
+   thus v <= z & y <= z by A2,YELLOW_0:18;
+  end;
+end;
+
+definition
+ let L be /\-complete (non empty Poset);
+ let x be Element of L;
+ cluster waybelow x -> directed;
+ coherence
+  proof let v,y be Element of L; assume v in waybelow x & y in waybelow x;
+then A1:  v << x & y << x by Th7;
+then A2:  ex_sup_of {v,y},L by Th3;
+   take z = v"\/"y; z << x by A1,Th3;
+   hence z in waybelow x by Th7;
+   thus v <= z & y <= z by A2,YELLOW_0:18;
+  end;
+end;
+
+
+:: EXAMPLES, 1.3, p. 39
+
+definition
+ let L be connected (non empty RelStr);
+ cluster -> directed filtered Subset of L;
+ coherence
+  proof let X be Subset of L;
+   thus X is directed
+    proof let x,y be Element of L;
+        x <= y & y <= y or x >= x & x >= y by WAYBEL_0:def 29;
+     hence thesis;
+    end;
+   let x,y be Element of L;
+      x >= y & y <= y or x >= x & x <= y by WAYBEL_0:def 29;
+   hence thesis;
+  end;
+end;
+
+definition
+ cluster up-complete lower-bounded -> complete (non empty Chain);
+ coherence
+  proof let L be non empty Chain such that
+A1:  L is up-complete lower-bounded;
+      now let X be Subset of L;
+        X = {} or X <> {};
+     hence ex_sup_of X,L by A1,WAYBEL_0:75,YELLOW_0:42;
+    end;
+   hence thesis by YELLOW_0:53;
+  end;
+end;
+
+definition
+ cluster complete (non empty Chain);
+ existence
+  proof consider x being set, O being Order of {x};
+      RelStr(#{x},O#) is trivial non empty RelStr;
+   hence thesis;
+  end;
+end;
+
+theorem Th13:
+ for L being up-complete (non empty Chain)
+ for x,y being Element of L st x < y holds x << y
+  proof let L be up-complete Chain, x,y be Element of L such that
+A1:  x <= y & x <> y;
+   let D be non empty directed Subset of L such that
+A2:  y <= sup D and
+A3:  for d being Element of L st d in D holds not x <= d;
+A4:  ex_sup_of D,L by WAYBEL_0:75;
+      x is_>=_than D
+     proof let z be Element of L; assume z in D;
+       then not x <= z by A3;
+      hence thesis by WAYBEL_0:def 29;
+     end;
+    then x >= sup D by A4,YELLOW_0:def 9;
+    then x >= y by A2,ORDERS_1:26;
+   hence contradiction by A1,ORDERS_1:25;
+  end;
+
+theorem
+   for L being non empty reflexive antisymmetric RelStr
+ for x,y being Element of L st x is not compact & x << y
+  holds x < y
+  proof let L be non empty reflexive antisymmetric RelStr;
+   let x,y be Element of L; assume
+      not x << x & x << y;
+   hence x <= y & x <> y by Th1;
+  end;
+
+theorem
+   for L being non empty lower-bounded reflexive antisymmetric RelStr
+   holds Bottom L is compact
+  proof let L be lower-bounded non empty reflexive antisymmetric RelStr;
+   thus Bottom L << Bottom L by Th4;
+  end;
+
+theorem Th16:
+ for L being up-complete (non empty Poset)
+ for D being non empty finite directed Subset of L holds sup D in D
+  proof let L be up-complete (non empty Poset);
+   let D be non empty finite directed Subset of L;
+      D c= D;
+   then consider d being Element of L such that
+A1:  d in D & d is_>=_than D by WAYBEL_0:1;
+A2:  ex_sup_of D,L by WAYBEL_0:75;
+    then sup D is_>=_than D by YELLOW_0:30;
+    then sup D <= d & sup D >= d by A1,A2,LATTICE3:def 9,YELLOW_0:30;
+   hence thesis by A1,ORDERS_1:25;
+  end;
+
+theorem
+   for L being up-complete (non empty Poset) st L is finite
+ for x being Element of L holds x is isolated_from_below
+  proof let L be up-complete (non empty Poset) such that
+A1:  the carrier of L is finite;
+   let x be Element of L, D be non empty directed Subset of L such that
+A2:  x <= sup D;
+      D is finite by A1,FINSET_1:13;
+    then sup D in D by Th16;
+   hence thesis by A2;
+  end;
+
+begin :: The Way-Below Relation in Other Terms
+
+scheme SSubsetEx {S() -> non empty RelStr, P[set]}:
+ ex X being Subset of S() st
+  for x being Element of S() holds x in X iff P[x]
+  proof
+    defpred p[set] means P[$1];
+    consider X being Subset of S() such that
+A1:  for x being Element of S() holds x in X iff p[x]
+     from SubsetEx;
+   take X;
+   thus thesis by A1;
+  end;
+
+theorem Th18:
+ for L being complete LATTICE, x,y being Element of L st x << y
+  for X being Subset of L st y <= sup X
+   ex A being finite Subset of L st A c= X & x <= sup A
+  proof let L be complete LATTICE, x,y be Element of L; assume
+A1:  x << y;
+   let X be Subset of L; assume
+A2:  y <= sup X;
+   defpred P[set] means
+     ex Y being finite Subset of X st ex_sup_of Y,L & $1 = "\/"(Y,L);
+   consider F being Subset of L such that
+A3:  for a being Element of L holds a in F iff P[a]
+      from SSubsetEx;
+A4: now let Y be finite Subset of X; assume Y <> {};
+        ex_sup_of Y,L by YELLOW_0:17;
+     hence "\/"(Y,L) in F by A3;
+    end;
+A5:  for Y being finite Subset of X st Y <> {} holds ex_sup_of Y,L
+     by YELLOW_0:17;
+      {} c= X & ex_sup_of {},L by XBOOLE_1:2,YELLOW_0:17;
+    then "\/"({},L) in F by A3;
+   then reconsider F as directed non empty Subset of L by A3,A4,A5,WAYBEL_0:51;
+      ex_sup_of X,L by YELLOW_0:17;
+    then sup X = sup F by A3,A4,A5,WAYBEL_0:54;
+   then consider d being Element of L such that
+A6:  d in F & x <= d by A1,A2,Def1;
+   consider Y being finite Subset of X such that
+A7:  ex_sup_of Y,L & d = "\/"(Y,L) by A3,A6;
+      Y c= the carrier of L by XBOOLE_1:1;
+   then reconsider Y as finite Subset of L;
+   take Y; thus thesis by A6,A7;
+  end;
+
+theorem
+   for L being complete LATTICE, x,y being Element of L
+  st for X being Subset of L st y <= sup X
+    ex A being finite Subset of L st A c= X & x <= sup A
+  holds x << y
+  proof let L be complete LATTICE, x,y be Element of L such that
+A1:  for X being Subset of L st y <= sup X
+     ex A being finite Subset of L st A c= X & x <= sup A;
+   let D be non empty directed Subset of L; assume
+      y <= sup D;
+   then consider A being finite Subset of L such that
+A2:  A c= D & x <= sup A by A1;
+   reconsider B = A as finite Subset of D by A2;
+   consider a being Element of L such that
+A3:  a in D & a is_>=_than B by WAYBEL_0:1;
+   take a;
+      a >= sup A by A3,YELLOW_0:32;
+   hence thesis by A2,A3,YELLOW_0:def 2;
+  end;
+
+theorem
+   for L being non empty reflexive transitive RelStr
+ for x,y being Element of L st x << y
+  for I being Ideal of L st y <= sup I holds x in I
+  proof let L be non empty reflexive transitive RelStr;
+   let x,y be Element of L; assume
+A1:  x << y;
+   let I be Ideal of L; assume y <= sup I;
+    then ex d being Element of L st d in I & x <= d by A1,Def1;
+   hence thesis by WAYBEL_0:def 19;
+  end;
+
+theorem Th21:
+ for L being up-complete (non empty Poset), x,y being Element of L st
+  for I being Ideal of L st y <= sup I holds x in I
+ holds x << y
+  proof let L be up-complete (non empty Poset);
+   let x,y be Element of L; assume
+A1:  for I being Ideal of L st y <= sup I holds x in I;
+   let D be non empty directed Subset of L; assume
+A2:  y <= sup D;
+      ex_sup_of D,L by WAYBEL_0:75;
+    then sup D = sup downarrow D & downarrow D is directed non empty
+     by WAYBEL_0:33;
+    then x in downarrow D by A1,A2;
+    then ex d being Element of L st x <= d & d in D by WAYBEL_0:def 15;
+   hence ex d being Element of L st d in D & x <= d;
+  end;
+
+theorem  :: Remark 1.5 (ii)
+   for L being lower-bounded LATTICE st L is meet-continuous
+ for x,y being Element of L holds
+  x << y iff for I being Ideal of L st y = sup I holds x in I
+  proof let L be lower-bounded LATTICE; assume
+A1:  L is up-complete satisfying_MC;
+then A2:  L is up-complete lower-bounded LATTICE;
+   let x,y be Element of L;
+   hereby assume
+A3:   x << y;
+    let I be Ideal of L; assume y = sup I;
+     then ex d being Element of L st d in I & x <= d by A3,Def1;
+    hence x in I by WAYBEL_0:def 19;
+   end;
+   assume
+A4:  for I being Ideal of L st y = sup I holds x in I;
+      now let I be Ideal of L;
+A5:    ex_sup_of finsups ({y}"/\"I), L by A1,WAYBEL_0:75;
+     assume y <= sup I;
+      then y "/\" sup I = y by YELLOW_0:25;
+      then y = sup ({y} "/\" I) by A1,WAYBEL_2:def 6
+       .= sup finsups ({y}"/\"I) by A2,WAYBEL_0:55
+       .= sup downarrow finsups ({y}"/\"I) by A5,WAYBEL_0:33;
+      then x in downarrow finsups ({y} "/\" I) by A4;
+     then consider z being Element of L such that
+A6:    x <= z & z in finsups ({y}"/\"I) by WAYBEL_0:def 15;
+        finsups ({y}"/\"I) = {"\/"(Y,L) where Y is finite Subset of {y}"/\"I:
+        ex_sup_of Y, L} by WAYBEL_0:def 27;
+     then consider Y being finite Subset of {y}"/\"I such that
+A7:    z = "\/"(Y,L) & ex_sup_of Y, L by A6;
+     consider i being Element of I;
+     reconsider i as Element of L;
+A8:    ex_sup_of {i}, L & sup {i} = i & {} c= {i} by XBOOLE_1:2,YELLOW_0:38,39;
+        ex_sup_of {},L by A2,YELLOW_0:17;
+      then "\/"({},L) <= sup {i} by A8,YELLOW_0:34;
+then A9:    "\/"({},L) in I by A8,WAYBEL_0:def 19;
+     Y c= I
+       proof let a be set; assume a in Y;
+         then a in {y}"/\"I;
+         then a in {y"/\"j where j is Element of L: j in I} by YELLOW_4:42;
+        then consider j being Element of L such that
+A10:       a = y"/\"j & j in I;
+           y"/\"j <= j by YELLOW_0:23;
+        hence thesis by A10,WAYBEL_0:def 19;
+       end;
+      then z in I by A7,A9,WAYBEL_0:42;
+     hence x in I by A6,WAYBEL_0:def 19;
+    end;
+   hence thesis by A1,Th21;
+  end;
+
+theorem
+   for L being complete LATTICE holds
+  (for x being Element of L holds x is compact)
+ iff
+  (for X being non empty Subset of L ex x being Element of L st x in X &
+    for y being Element of L st y in X holds not x < y)
+  proof let L be complete LATTICE;
+   hereby assume
+A1:   for x being Element of L holds x is compact;
+    given Y being non empty Subset of L such that
+A2:   for x being Element of L st x in Y
+      ex y being Element of L st y in Y & x < y;
+    defpred P[set,set] means [$1,$2] in the InternalRel of L & $1 <> $2;
+A3:   now let x be set; assume
+A4:    x in Y;
+      then reconsider y = x as Element of L;
+      consider z being Element of L such that
+A5:    z in Y & y < z by A2,A4;
+      reconsider u = z as set;
+      take u;
+         y <= z & y <> z by A5,ORDERS_1:def 10;
+      hence u in Y & P[x,u] by A5,ORDERS_1:def 9;
+     end;
+    consider f being Function such that
+A6:   dom f = Y & rng f c= Y &
+     for x being set st x in Y holds P[x,f.x] from NonUniqBoundFuncEx(A3);
+    consider x being Element of Y; set x1 = x;
+    set Z = {iter(f,n).x where n is Nat: not contradiction};
+       f.x in rng f by A6,FUNCT_1:def 5;
+     then f.x in Y by A6;
+    then reconsider x, x' = f.x1 as Element of L;
+A7:  [x,f.x] in the InternalRel of L & x <> f.x by A6;
+     then x' = iter(f,1).x & x <= x' by FUNCT_7:72,ORDERS_1:def 9;
+then A8:  x' in Z & x < x' by A7,ORDERS_1:def 10;
+A9:   Z c= Y
+      proof let a be set; assume a in Z;
+       then consider n being Nat such that
+A10:     a = iter(f,n).x;
+          dom iter(f,n) = Y by A6,FUNCT_7:76;
+        then a in rng iter(f,n) & rng iter(f,n) c= Y by A6,A10,FUNCT_1:def 5,
+FUNCT_7:76;
+       hence a in Y;
+      end;
+     then Z c= the carrier of L by XBOOLE_1:1;
+    then reconsider Z as Subset of L;
+A11:   now let i be Nat;
+        defpred P[Nat] means
+         ex z,y being Element of L st
+          z = iter(f,i).x & y = iter(f,i+$1).x & z <= y;
+         iter(f,i).x in Z;
+       then iter(f,i).x is Element of L;
+       then
+A12:    P[0];
+A13:    for k being Nat st P[k] holds P[k+1]
+        proof let k be Nat; given z,y being Element of L such that
+A14:      z = iter(f,i).x & y = iter(f,i+k).x & z <= y;
+        take z;
+A15:      rng iter(f,i+k) c= Y & dom iter(f,i+k) = Y by A6,FUNCT_7:76;
+         then A16: y in rng iter(f,i+k) by A14,FUNCT_1:def 5;
+         then f.y in rng f by A6,A15,FUNCT_1:def 5;
+         then f.y in Y by A6;
+        then reconsider yy = f.y as Element of L;
+        take yy; thus z = iter(f,i).x by A14;
+           i+(k+1) = i+k+1 & iter(f,k+i+1) = f*iter(f,k+i)
+          by FUNCT_7:73,XCMPLX_1:1;
+        hence yy = iter(f,i+(k+1)).x by A14,A15,FUNCT_1:23;
+           [y,yy] in the InternalRel of L by A6,A15,A16;
+         then y <= yy by ORDERS_1:def 9;
+        hence z <= yy by A14,ORDERS_1:26;
+       end;
+A17:    for k being Nat holds P[k] from Ind(A12,A13);
+      let k be Nat; assume i <= k;
+      then consider n being Nat such that
+A18:    k = i+n by NAT_1:28;
+A19:    ex z,y being Element of L st
+        z = iter(f,i).x & y = iter(f,i+n).x & z <= y by A17;
+      let z,y be Element of L; assume z = iter(f,i).x & y = iter(f,k).x;
+      hence z <= y by A18,A19;
+     end;
+A20:   now let z,y be Element of L; assume z in Z;
+      then consider k1 being Nat such that
+A21:    z = iter(f,k1).x;
+      assume y in Z;
+      then consider k2 being Nat such that
+A22:    y = iter(f,k2).x;
+         k1 <= k2 or k2 <= k1;
+      hence z <= y or z >= y by A11,A21,A22;
+     end;
+       sup Z is compact by A1;
+     then sup Z <= sup Z & sup Z << sup Z by Def2;
+    then consider A being finite Subset of L such that
+A23:   A c= Z & sup Z <= sup A by Th18;
+A24:   now assume A = {};
+       then x is_>=_than A by YELLOW_0:6;
+       then sup A <= x by YELLOW_0:32;
+       then sup A < x' & Z is_<=_than sup Z by A8,ORDERS_1:32,YELLOW_0:32;
+       then sup Z < x' & x' <= sup Z by A8,A23,LATTICE3:def 9,ORDERS_1:32;
+      hence contradiction by ORDERS_1:30;
+     end;
+A25:   A is finite;
+     defpred P[set] means $1 <> {} implies "\/"($1,L) in $1;
+A26:   P[{}];
+A27:   now let x, B be set; assume
+A28:    x in A & B c= A;
+      then reconsider x' = x as Element of L;
+      assume
+A29:    P[B];
+      thus P[B \/ {x}]
+      proof
+      assume B \/ {x} <> {};
+         ex_sup_of B,L & ex_sup_of {x},L & ex_sup_of B \/ {x},L
+        by YELLOW_0:17;
+then A30:    "\/"(B \/ {x}, L) = "\/"(B,L) "\/" "\/"({x},L) & sup {x'} = x
+        by YELLOW_0:36,39;
+      per cases; suppose B = {};
+       hence "\/"(B \/ {x}, L) in B \/ {x} by A30,TARSKI:def 1;
+      suppose
+       B <> {}; then "\/"(B,L) in A by A28,A29;
+        then x' <= "\/"(B,L) or x' >= "\/"(B,L) by A20,A23,A28;
+        then "\/"(B,L) "\/" x' = "\/"(B,L) or
+        "\/"(B,L) "\/" x' = x' "\/" "\/"(B,L) & x' "\/" "\/"(B,L) = x'
+         by YELLOW_0:24;
+        then "\/"(B \/ {x}, L) in B or "\/"
+(B \/ {x}, L) in {x} by A29,A30,TARSKI:def 1;
+       hence "\/"(B \/ {x}, L) in B \/ {x} by XBOOLE_0:def 2;
+     end;
+     end;
+       P[A] from Finite(A25,A26,A27);
+then A31:  sup A in Z by A23,A24;
+    then consider n being Nat such that
+A32:   sup A = iter(f,n).x;
+A33:   [sup A, f.sup A] in the InternalRel of L & sup A <> f.sup A by A6,A9,A31
+;
+     then f.sup A in the carrier of L by ZFMISC_1:106;
+    then reconsider xSn = f.sup A as Element of L;
+       iter(f,n+1) = f*iter(f,n) & dom iter(f,n) = Y by A6,FUNCT_7:73,76;
+     then sup A <= xSn & f.sup A = iter(f,n+1).x
+      by A32,A33,FUNCT_1:23,ORDERS_1:def 9;
+     then sup A < xSn & xSn in Z & Z is_<=_than sup Z
+      by A33,ORDERS_1:def 10,YELLOW_0:32;
+     then xSn <= sup Z & sup Z < xSn by A23,LATTICE3:def 9,ORDERS_1:32;
+    hence contradiction by ORDERS_1:30;
+   end;
+   assume
+A34:  for X being non empty Subset of L ex x being Element of L st x in X &
+     for y being Element of L st y in X holds not x < y;
+   let x be Element of L; let D be directed non empty Subset of L;
+   consider y being Element of L such that
+A35:  y in D & for z being Element of L st z in D holds not y < z by A34;
+      D is_<=_than y
+     proof let a be Element of L; assume a in D;
+      then consider b being Element of L such that
+A36:     b in D & a <= b & y <= b by A35,WAYBEL_0:def 1;
+         not y < b by A35,A36;
+      hence thesis by A36,ORDERS_1:def 10;
+     end;
+then A37:  sup D <= y by YELLOW_0:32;
+      sup D is_>=_than D by YELLOW_0:32;
+    then y <= sup D by A35,LATTICE3:def 9;
+    then sup D = y by A37,ORDERS_1:25;
+   hence thesis by A35;
+  end;
+
+begin :: Continuous Lattices
+
+definition
+ let L be non empty reflexive RelStr;
+ attr L is satisfying_axiom_of_approximation means:
+Def5:
+  for x being Element of L holds x = sup waybelow x;
+end;
+
+definition
+ cluster trivial -> satisfying_axiom_of_approximation
+   (non empty reflexive RelStr);
+ coherence
+  proof let L be non empty reflexive RelStr; assume
+      for x,y being Element of L holds x = y;
+   hence for x being Element of L holds x = sup waybelow x;
+  end;
+end;
+
+definition
+ let L be non empty reflexive RelStr;
+ attr L is continuous means:
+Def6:
+  (for x being Element of L holds waybelow x is non empty directed) &
+  L is up-complete satisfying_axiom_of_approximation;
+end;
+
+definition
+ cluster continuous -> up-complete satisfying_axiom_of_approximation
+  (non empty reflexive RelStr);
+ coherence by Def6;
+ cluster up-complete satisfying_axiom_of_approximation -> continuous
+  (lower-bounded sup-Semilattice);
+ coherence
+  proof let L be lower-bounded sup-Semilattice; assume
+A1:  L is up-complete satisfying_axiom_of_approximation;
+   thus for x be Element of L holds waybelow x is non empty directed;
+   thus thesis by A1;
+  end;
+end;
+
+definition
+ cluster continuous complete strict LATTICE;
+ existence
+  proof consider x being set, R be Order of {x};
+      RelStr(#{x},R#) is trivial non empty RelStr;
+   hence thesis;
+  end;
+end;
+
+definition
+ let L be continuous (non empty reflexive RelStr);
+ let x be Element of L;
+ cluster waybelow x -> non empty directed;
+ coherence by Def6;
+end;
+
+theorem
+   for L being up-complete Semilattice
+  st for x being Element of L holds waybelow x is non empty directed
+  holds
+   L is satisfying_axiom_of_approximation
+  iff
+   for x,y being Element of L st not x <= y
+    ex u being Element of L st u << x & not u <= y
+  proof let L be up-complete Semilattice such that
+A1:  for x being Element of L holds waybelow x is non empty directed;
+   hereby assume
+A2:   L is satisfying_axiom_of_approximation;
+    let x,y be Element of L; assume
+A3:   not x <= y;
+       waybelow x is non empty directed by A1;
+   then x = sup waybelow x & ex_sup_of waybelow x,L by A2,Def5,WAYBEL_0:75;
+     then y is_>=_than waybelow x implies y >= x by YELLOW_0:def 9;
+    then consider u being Element of L such that
+A4:   u in waybelow x & not u <= y by A3,LATTICE3:def 9;
+    take u; thus u << x & not u <= y by A4,Th7;
+   end;
+   assume
+A5:  for x,y being Element of L st not x <= y
+     ex u being Element of L st u << x & not u <= y;
+   let x be Element of L;
+      waybelow x is non empty directed by A1;
+then A6:  ex_sup_of waybelow x,L by WAYBEL_0:75;
+A7:  x is_>=_than waybelow x by Th9;
+      now let y be Element of L; assume
+A8:    y is_>=_than waybelow x & not x <= y;
+     then consider u being Element of L such that
+A9:    u << x & not u <= y by A5;
+        u in waybelow x by A9,Th7;
+     hence contradiction by A8,A9,LATTICE3:def 9;
+    end;
+   hence x = sup waybelow x by A6,A7,YELLOW_0:def 9;
+  end;
+
+theorem
+   for L being continuous LATTICE, x,y being Element of L
+  holds x <= y iff waybelow x c= waybelow y
+  proof let L be continuous LATTICE, x,y be Element of L;
+   thus x <= y implies waybelow x c= waybelow y by Th12;
+   assume
+A1:  waybelow x c= waybelow y;
+      ex_sup_of waybelow x,L & ex_sup_of waybelow y,L by WAYBEL_0:75;
+    then sup waybelow x <= sup waybelow y by A1,YELLOW_0:34;
+    then x <= sup waybelow y by Def5;
+   hence thesis by Def5;
+  end;
+
+definition
+ cluster complete -> satisfying_axiom_of_approximation (non empty Chain);
+ coherence
+  proof let L be non empty Chain; assume
+      L is complete;
+   then reconsider S = L as complete (non empty Chain);
+      S is satisfying_axiom_of_approximation
+     proof let x be Element of S;
+A1:     ex_sup_of waybelow x,S by YELLOW_0:17;
+A2:     x is_>=_than waybelow x by Th9;
+         now let y be Element of S; assume
+A3:       y is_>=_than waybelow x & not x <= y;
+         then x >= y & x <> y by WAYBEL_0:def 29;
+         then x > y by ORDERS_1:def 10;
+         then x >> y by Th13;
+         then y in waybelow x by Th7;
+         then for z being Element of S st z is_>=_than waybelow x holds z >= y
+          by LATTICE3:def 9;
+then A4:       sup waybelow x = y by A1,A3,YELLOW_0:def 9;
+           x << x
+          proof let D be non empty directed Subset of S; assume
+A5:          x <= sup D; assume
+A6:          for d being Element of S st d in D holds not x <= d;
+A7:          D c= waybelow x
+             proof let a be set; assume
+A8:            a in D;
+              then reconsider a as Element of S;
+                 not x <= a by A6,A8;
+               then a <= x & a <> x by WAYBEL_0:def 29;
+               then a < x by ORDERS_1:def 10;
+               then a << x by Th13;
+              hence thesis by Th7;
+             end;
+              ex_sup_of D,S by YELLOW_0:17;
+            then sup D <= sup waybelow x by A1,A7,YELLOW_0:34;
+           hence contradiction by A3,A4,A5,ORDERS_1:26;
+          end;
+         then x in waybelow x by Th7;
+        hence contradiction by A3,LATTICE3:def 9;
+       end;
+      hence thesis by A1,A2,YELLOW_0:def 9;
+     end;
+   hence thesis;
+  end;
+end;
+
+theorem
+   for L being complete LATTICE st
+  for x being Element of L holds x is compact
+ holds L is satisfying_axiom_of_approximation
+  proof let L be complete LATTICE such that
+A1:  for x being Element of L holds x is compact;
+   let x be Element of L;
+      x is compact by A1;
+    then x << x by Def2;
+    then x in waybelow x & waybelow x is_<=_than sup waybelow x
+     by Th7,YELLOW_0:32;
+then A2:  x <= sup waybelow x by LATTICE3:def 9;
+      ex_sup_of waybelow x, L & ex_sup_of downarrow x, L &
+    waybelow x c= downarrow x & sup downarrow x = x
+     by Th11,WAYBEL_0:34,YELLOW_0:17;
+    then x >= sup waybelow x by YELLOW_0:34;
+   hence thesis by A2,ORDERS_1:25;
+  end;
+
+begin :: The Way-Below Relation in Directed Powers
+
+definition
+ let f be Relation;
+ attr f is non-Empty means:
+Def7:
+  for S being 1-sorted st S in rng f holds S is non empty;
+ attr f is reflexive-yielding means:
+Def8:
+  for S being RelStr st S in rng f holds S is reflexive;
+end;
+
+definition
+ let I be set;
+ cluster RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I;
+ existence
+  proof consider R being reflexive non empty RelStr;
+   set J = I --> R;
+A1:  dom J = I & rng J c= {R} by FUNCOP_1:19;
+   then reconsider J as ManySortedSet of I by PBOOLE:def 3;
+   take J;
+   thus J is RelStr-yielding;
+   thus J is non-Empty
+    proof let S be 1-sorted; assume S in rng J;
+     hence thesis by A1,TARSKI:def 1;
+    end;
+   let S be RelStr; assume S in rng J;
+   hence thesis by A1,TARSKI:def 1;
+  end;
+end;
+
+definition
+ let I be set;
+ let J be RelStr-yielding non-Empty ManySortedSet of I;
+ cluster product J -> non empty;
+ coherence
+  proof
+A1:  the carrier of product J = product Carrier J by YELLOW_1:def 4;
+      now assume {} in rng Carrier J;
+     then consider i being set such that
+A2:    i in dom Carrier J & {} = (Carrier J).i by FUNCT_1:def 5;
+A3:    dom Carrier J = I & dom J = I by PBOOLE:def 3;
+     then consider R being 1-sorted such that
+A4:    R = J.i & {} = the carrier of R by A2,PRALG_1:def 13;
+        R in rng J by A2,A3,A4,FUNCT_1:def 5;
+     then reconsider R as non empty RelStr by Def7,YELLOW_1:def 3;
+        the carrier of R = {} by A4;
+     hence contradiction;
+    end;
+    then the carrier of product J <> {} by A1,CARD_3:37;
+   hence thesis by STRUCT_0:def 1;
+  end;
+end;
+
+definition
+ let I be non empty set;
+ let J be RelStr-yielding non-Empty ManySortedSet of I;
+ let i be Element of I;
+ redefine func J.i -> non empty RelStr;
+ coherence
+  proof dom J = I by PBOOLE:def 3;
+  then J.i in rng J by FUNCT_1:def 5;
+   hence thesis by Def7;
+  end;
+end;
+
+definition
+ let I be set;
+ let J be RelStr-yielding non-Empty ManySortedSet of I;
+ cluster -> Function-like Relation-like (Element of product J);
+ coherence
+  proof let x be Element of product J;
+      the carrier of product J = product Carrier J by YELLOW_1:def 4;
+    then ex g being Function st x = g & dom g = dom Carrier J &
+     for x being set st x in dom Carrier J holds g.x in (Carrier J).x
+      by CARD_3:def 5;
+   hence thesis;
+  end;
+end;
+
+definition
+ let I be non empty set;
+ let J be RelStr-yielding non-Empty ManySortedSet of I;
+ let x be Element of product J;
+ let i be Element of I;
+ redefine func x.i -> Element of J.i;
+ coherence
+  proof
+A1:  ex R being 1-sorted st R = J.i & (Carrier J).i = the carrier of R
+     by PRALG_1:def 13;
+      the carrier of product J = product Carrier J &
+    dom Carrier J = I by PBOOLE:def 3,YELLOW_1:def 4;
+    then x.i in (Carrier J).i by CARD_3:18;
+   hence thesis by A1;
+  end;
+end;
+
+definition
+ let I be non empty set;
+ let J be RelStr-yielding non-Empty ManySortedSet of I;
+ let i be Element of I;
+ let X be Subset of product J;
+ redefine func pi(X,i) -> Subset of J.i;
+ coherence
+  proof set Y = the carrier of product J;
+A1:  Y = product Carrier J & dom Carrier J = I by PBOOLE:def 3,YELLOW_1:def 4;
+      X \/ Y = Y by XBOOLE_1:12;
+    then pi(Y,i) = pi(X,i) \/ pi(Y,i) by CARD_3:27;
+then A2:  pi(X,i) c= pi(Y,i) & pi(Y,i) = (Carrier J).i by A1,CARD_3:22,XBOOLE_1
+:7;
+      ex R being 1-sorted st R = J.i & (Carrier J).i = the carrier of R
+     by PRALG_1:def 13;
+   hence thesis by A2;
+  end;
+end;
+
+theorem Th27:
+ for I being non empty set
+ for J being RelStr-yielding non-Empty ManySortedSet of I
+ for x being Function holds
+  x is Element of product J iff dom x = I &
+    for i being Element of I holds x.i is Element of J.i
+  proof let I be non empty set;
+   let J be RelStr-yielding non-Empty ManySortedSet of I;
+   let x be Function;
+A1:  the carrier of product J = product Carrier J by YELLOW_1:def 4;
+A2:  dom Carrier J = I by PBOOLE:def 3;
+   hereby assume
+A3:   x is Element of product J;
+    hence dom x = I by A1,A2,CARD_3:18;
+    let i be Element of I;
+    reconsider y = x as Element of product J by A3;
+       y.i is Element of J.i;
+    hence x.i is Element of J.i;
+   end;
+   assume
+A4:  dom x = I & for i being Element of I holds x.i is Element of J.i;
+      now let i be set; assume i in dom Carrier J;
+     then reconsider j = i as Element of I by PBOOLE:def 3;
+        x.j is Element of J.j by A4;
+      then x.j in the carrier of J.j &
+      ex R being 1-sorted st R = J.j & (Carrier J).j = the carrier of R
+       by PRALG_1:def 13;
+     hence x.i in (Carrier J).i;
+    end;
+    then x in the carrier of product J by A1,A2,A4,CARD_3:18;
+   hence thesis;
+  end;
+
+theorem Th28:
+ for I being non empty set
+ for J being RelStr-yielding non-Empty ManySortedSet of I
+ for x,y being Element of product J holds
+   x <= y iff for i being Element of I holds x.i <= y.i
+  proof let I be non empty set;
+   let J be RelStr-yielding non-Empty ManySortedSet of I;
+   set L = product J;
+   let x,y be Element of L;
+A1:  the carrier of L = product Carrier J by YELLOW_1:def 4;
+   hereby assume
+A2:   x <= y;
+    let i be Element of I;
+       ex f,g being Function st f = x & g = y &
+      for i be set st i in I
+      ex R being RelStr, xi,yi being Element of R
+       st R = J.i & xi = f.i & yi = g.i & xi <=
+ yi by A1,A2,YELLOW_1:def 4;
+      then ex R being RelStr, xi,yi being Element of R
+       st R = J.i & xi = x.i & yi = y.i & xi <= yi;
+    hence x.i <= y.i;
+   end;
+   assume
+A3:  for i being Element of I holds x.i <= y.i;
+      ex f,g being Function st f = x & g = y &
+     for i be set st i in I
+     ex R being RelStr, xi,yi being Element of R
+      st R = J.i & xi = f.i & yi = g.i & xi <= yi
+     proof take f = x, g = y; thus f = x & g = y;
+      let i be set; assume i in I;
+      then reconsider j = i as Element of I;
+      take J.j, x.j, y.j; thus thesis by A3;
+     end;
+   hence thesis by A1,YELLOW_1:def 4;
+  end;
+
+definition
+ let I be non empty set;
+ let J be RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I;
+ cluster product J -> reflexive;
+ coherence
+  proof thus product J is reflexive
+  proof let x be Element of product J;
+      now let i be Element of I;
+        dom J = I by PBOOLE:def 3;
+      then J.i in rng J by FUNCT_1:def 5;
+      then J.i is reflexive by Def8;
+     hence x.i <= x.i by YELLOW_0:def 1;
+    end;
+   hence thesis by Th28;
+  end;
+  end;
+ let i be Element of I;
+ redefine func J.i -> non empty reflexive RelStr;
+ coherence
+  proof dom J = I by PBOOLE:def 3;
+  then J.i in rng J by FUNCT_1:def 5;
+   hence thesis by Def8;
+  end;
+end;
+
+definition
+ let I be non empty set;
+ let J be RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I;
+ let x be Element of product J;
+ let i be Element of I;
+ redefine func x.i -> Element of J.i;
+ coherence proof thus x.i is Element of J.i; end;
+end;
+
+theorem Th29:
+ for I being non empty set
+ for J being RelStr-yielding non-Empty ManySortedSet of I
+  st for i being Element of I holds J.i is transitive
+ holds product J is transitive
+  proof let I be non empty set;
+   let J be RelStr-yielding non-Empty ManySortedSet of I such that
+A1:  for i being Element of I holds J.i is transitive;
+   let x,y,z be Element of product J such that
+A2:  x <= y & y <= z;
+      now let i be Element of I;
+        x.i <= y.i & y.i <= z.i & J.i is transitive by A1,A2,Th28;
+     hence x.i <= z.i by YELLOW_0:def 2;
+    end;
+   hence thesis by Th28;
+  end;
+
+theorem Th30:
+ for I being non empty set
+ for J being RelStr-yielding non-Empty ManySortedSet of I
+  st for i being Element of I holds J.i is antisymmetric
+ holds product J is antisymmetric
+  proof let I be non empty set;
+   let J be RelStr-yielding non-Empty ManySortedSet of I such that
+A1:  for i being Element of I holds J.i is antisymmetric;
+   let x,y be Element of product J such that
+A2:  x <= y & y <= x;
+A3:  dom x = I & dom y = I by Th27;
+      now let j be set; assume j in I;
+     then reconsider i = j as Element of I;
+        x.i <= y.i & y.i <= x.i & J.i is antisymmetric by A1,A2,Th28;
+     hence x.j = y.j by YELLOW_0:def 3;
+    end;
+   hence thesis by A3,FUNCT_1:9;
+  end;
+
+theorem Th31:
+ for I being non empty set
+ for J being RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I
+  st for i being Element of I holds J.i is complete LATTICE
+ holds product J is complete LATTICE
+  proof let I be non empty set;
+   let J be RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I
+; assume
+A1:  for i being Element of I holds J.i is complete LATTICE;
+    then A2: for i being Element of I holds J.i is transitive;
+      for i being Element of I holds J.i is antisymmetric by A1;
+   then reconsider L = product J as non empty Poset by A2,Th29,Th30;
+      now let X be Subset of product J;
+        deffunc F(Element of I) = sup pi(X,$1);
+     consider f being ManySortedSet of I such that
+A3:    for i being Element of I holds f.i = F(i) from LambdaDMS;
+A4:    dom f = I by PBOOLE:def 3;
+        now let i be Element of I;
+          f.i = sup pi(X,i) by A3;
+       hence f.i is Element of J.i;
+      end;
+     then reconsider f as Element of product J by A4,Th27;
+A5:    f is_>=_than X
+       proof let x be Element of product J such that
+A6:      x in X;
+           now let i be Element of I;
+             x.i in pi(X,i) & J.i is complete LATTICE & f.i = sup pi(X,i)
+            by A1,A3,A6,CARD_3:def 6;
+          hence x.i <= f.i by YELLOW_2:24;
+         end;
+        hence thesis by Th28;
+       end;
+        now let g be Element of product J; assume
+A7:      X is_<=_than g;
+          now thus L = L;
+         let i be Element of I;
+A8:        f.i = sup pi(X,i) & J.i is complete LATTICE by A1,A3;
+            g.i is_>=_than pi(X,i)
+           proof let a be Element of J.i; assume
+               a in pi(X,i);
+            then consider h being Function such that
+A9:           h in X & a = h.i by CARD_3:def 6;
+            reconsider h as Element of product J by A9;
+               h <= g by A7,A9,LATTICE3:def 9;
+            hence a <= g.i by A9,Th28;
+           end;
+         hence f.i <= g.i by A8,YELLOW_0:32;
+        end;
+       hence f <= g by Th28;
+      end;
+      then ex_sup_of X, L by A5,YELLOW_0:15;
+     hence ex_sup_of X, product J;
+    end;
+    then L is complete (non empty Poset) by YELLOW_0:53;
+   hence thesis;
+  end;
+
+theorem Th32:
+ for I being non empty set
+ for J being RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I
+  st for i being Element of I holds J.i is complete LATTICE
+ for X being Subset of product J, i being Element of I holds
+   (sup X).i = sup pi(X,i)
+  proof let I be non empty set;
+   let J be RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I;
+   assume
+A1:  for i being Element of I holds J.i is complete LATTICE;
+   then reconsider L = product J as complete LATTICE by Th31;
+A2:  L is complete;
+   let X be Subset of product J, i be Element of I;
+A3:  sup X is_>=_than X by A2,YELLOW_0:32;
+A4:  (sup X).i is_>=_than pi(X,i)
+     proof let a be Element of J.i; assume
+         a in pi(X,i);
+      then consider f being Function such that
+A5:     f in X & a = f.i by CARD_3:def 6;
+      reconsider f as Element of product J by A5;
+         sup X >= f by A3,A5,LATTICE3:def 9;
+      hence thesis by A5,Th28;
+     end;
+A6:  J.i is complete LATTICE by A1;
+      now let a be Element of J.i; assume
+A7:    a is_>=_than pi(X,i);
+     set f = (sup X)+*(i,a);
+A8:    dom f = dom sup X & dom sup X = I by Th27,FUNCT_7:32;
+        now let j be Element of I;
+          j = i or j <> i;
+        then f.j = (sup X).j or f.j = a & j = i by A8,FUNCT_7:33,34;
+       hence f.j is Element of J.j;
+      end;
+     then reconsider f as Element of product J by A8,Th27;
+        f is_>=_than X
+       proof let g be Element of product J;
+        assume g in X;
+then A9:       g <= sup X & g.i in pi(X,i) by A2,CARD_3:def 6,YELLOW_2:24;
+           now let j be Element of I;
+             j = i or j <> i;
+           then f.j = (sup X).j or f.j = a & j = i by A8,FUNCT_7:33,34;
+          hence f.j >= g.j by A7,A9,Th28,LATTICE3:def 9;
+         end;
+        hence f >= g by Th28;
+       end;
+      then f >= sup X & f.i = a by A2,A8,FUNCT_7:33,YELLOW_0:32;
+     hence (sup X).i <= a by Th28;
+    end;
+   hence thesis by A4,A6,YELLOW_0:32;
+  end;
+
+theorem
+   for I being non empty set
+ for J being RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I
+  st for i being Element of I holds J.i is complete LATTICE
+ for x,y being Element of product J holds
+   x << y
+  iff
+   (for i being Element of I holds x.i << y.i) &
+   (ex K being finite Subset of I st
+      for i being Element of I st not i in K holds x.i = Bottom (J.i))
+  proof let I be non empty set;
+   let J be RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I;
+   set L = product J;
+   assume
+A1:  for i being Element of I holds J.i is complete LATTICE;
+   then reconsider L' = L as complete LATTICE by Th31;
+   let x,y be Element of L;
+   hereby assume
+   A2: x << y;
+    hereby
+    let i be Element of I;
+    thus x.i << y.i
+     proof let Di be non empty directed Subset of J.i such that
+A3:    y.i <= sup Di;
+A4:    dom y = I by Th27;
+      set D = {y+*(i,z) where z is Element of J.i: z in Di};
+         D c= the carrier of L
+        proof let a be set; assume a in D;
+         then consider z being Element of J.i such that
+A5:       a = y+*(i,z) & z in Di;
+A6:       dom (y+*(i,z)) = I by A4,FUNCT_7:32;
+            now let j be Element of I;
+              i = j or i <> j;
+            then (y+*(i,z)).j = z & i = j or (y+*(i,z)).j = y.j by A4,FUNCT_7:
+33,34;
+           hence (y+*(i,z)).j is Element of J.j;
+          end;
+          then a is Element of L by A5,A6,Th27;
+         hence thesis;
+        end;
+      then reconsider D as Subset of L;
+      consider di being Element of Di;
+      reconsider di as Element of J.i;
+A7:    y+*(i,di) in D & dom y = I by Th27;
+      then reconsider D as non empty Subset of L;
+         D is directed
+        proof let z1,z2 be Element of L; assume z1 in D;
+         then consider a1 being Element of J.i such that
+A8:       z1 = y+*(i,a1) & a1 in Di;
+         assume z2 in D;
+         then consider a2 being Element of J.i such that
+A9:       z2 = y+*(i,a2) & a2 in Di;
+         consider a being Element of J.i such that
+A10:       a in Di & a >= a1 & a >= a2 by A8,A9,WAYBEL_0:def 1;
+            y+*(i,a) in D by A10;
+         then reconsider z = y+*(i,a) as Element of L;
+         take z; thus z in D by A10;
+A11:       dom y = I by Th27;
+            now let j be Element of I;
+              i = j or i <> j;
+            then z.j = a & z1.j = a1 & i = j or z.j = y.j & z1.j = y.j
+             by A8,A11,FUNCT_7:33,34;
+           hence z.j >= z1.j by A10,YELLOW_0:def 1;
+          end;
+         hence z >= z1 by Th28;
+            now let j be Element of I;
+              i = j or i <> j;
+            then z.j = a & z2.j = a2 & i = j or z.j = y.j & z2.j = y.j
+             by A9,A11,FUNCT_7:33,34;
+           hence z.j >= z2.j by A10,YELLOW_0:def 1;
+          end;
+         hence z >= z2 by Th28;
+        end;
+      then reconsider D as non empty directed Subset of L;
+         now let j be Element of I;
+A12:      J.i is complete LATTICE & J.j is complete LATTICE by A1;
+then A13:      ex_sup_of Di,J.i & ex_sup_of pi(D,i),J.i by YELLOW_0:17;
+           Di c= pi(D,i)
+          proof let a be set; assume
+A14:         a in Di;
+           then reconsider a as Element of J.i;
+              y+*(i,a) in D by A14;
+            then (y+*(i,a)).i in pi(D,i) by CARD_3:def 6;
+           hence thesis by A7,FUNCT_7:33;
+          end;
+         then A15: sup Di <= sup pi(D,i) by A13,YELLOW_0:34;
+A16:      (sup D).j = sup pi(D,j) by A1,Th32;
+           now assume j <> i;
+           then (y+*(i,di)).j = y.j & (y+*(i,di)).j in pi(D,j)
+            by A7,CARD_3:def 6,FUNCT_7:34;
+          hence y.j in pi(D,j);
+         end;
+        hence (sup D).j >= y.j by A3,A12,A15,A16,YELLOW_0:def 2,YELLOW_2:24;
+       end;
+       then sup D >= y by Th28;
+      then consider d being Element of L such that
+A17:    d in D & d >= x by A2,Def1;
+      consider z being Element of J.i such that
+A18:    d = y+*(i,z) & z in Di by A17;
+      take z;
+         d.i = z by A4,A18,FUNCT_7:33;
+      hence thesis by A17,A18,Th28;
+     end;
+    end;
+    set K = {i where i is Element of I: x.i <> Bottom (J.i)};
+       K c= I
+      proof let a be set; assume a in K;
+        then ex i being Element of I st a = i & x.i <> Bottom (J.i);
+       hence thesis;
+      end;
+    then reconsider K as Subset of I;
+    deffunc F(Element of I) = Bottom (J.$1);
+    consider f being ManySortedSet of I such that
+A19:   for i being Element of I holds f.i = F(i) from LambdaDMS;
+A20:  dom f = I by PBOOLE:def 3;
+       now let i be Element of I; f.i = Bottom (J.i) by A19;
+      hence f.i is Element of J.i;
+     end;
+    then reconsider f as Element of product J by A20,Th27;
+    set X = {f+*(y|a) where a is finite Subset of I: not contradiction};
+       X c= the carrier of L
+      proof let a be set; assume a in X;
+       then consider b being finite Subset of I such that
+A21:      a = f+*(y|b);
+        dom y = I & b c= I by Th27;
+then A22:      dom (y|b) = b by RELAT_1:91;
+then A23:      I = I \/ dom (y|b) by XBOOLE_1:12
+         .= dom (f+*(y|b)) by A20,FUNCT_4:def 1;
+          now let i be Element of I;
+            i in b or not i in b;
+          then (f+*(y|b)).i = f.i or (f+*(y|b)).i = (y|b).i & (y|b).i = y.i
+           by A22,FUNCT_1:70,FUNCT_4:12,14;
+         hence (f+*(y|b)).i is Element of J.i;
+        end;
+        then a is Element of L by A21,A23,Th27;
+       hence thesis;
+      end;
+    then reconsider X as Subset of L;
+    consider e being finite Subset of I;
+       f+*(y|e) in X;
+    then reconsider X as non empty Subset of L;
+       X is directed
+      proof let z1,z2 be Element of L; assume z1 in X;
+       then consider a1 being finite Subset of I such that
+A24:     z1 = f+*(y|a1);
+       assume z2 in X;
+       then consider a2 being finite Subset of I such that
+A25:     z2 = f+*(y|a2);
+       reconsider a = a1 \/ a2 as finite Subset of I;
+          f+*(y|a) in X;
+       then reconsider z = f+*(y|a) as Element of L;
+       take z; thus z in X;
+       dom y = I & dom z = I & dom z1 = I & dom z2 = I by Th27;
+then A26:     dom (y|a) = a & dom (y|a1) = a1 & dom (y|a2) = a2 by RELAT_1:91;
+          now let i be Element of I;
+         J.i is complete LATTICE by A1;
+then A27:       Bottom (J.i) <= y.i & f.i = Bottom (J.i) by A19,YELLOW_0:44;
+         per cases by XBOOLE_0:def 2;
+         suppose not i in a1 & i in a;
+          then z.i = (y|a).i & (y|a).i = y.i & z1.i = f.i
+           by A24,A26,FUNCT_1:70,FUNCT_4:12,14;
+         hence z.i >= z1.i by A27;
+         suppose not i in a & not i in a1;
+          then z.i = f.i & z1.i = f.i by A24,A26,FUNCT_4:12;
+         hence z.i >= z1.i by YELLOW_0:def 1;
+         suppose i in a1 & i in a;
+          then z.i = (y|a).i & (y|a).i = y.i & z1.i = (y|a1).i & (y|a1).i = y.
+i
+           by A24,A26,FUNCT_1:70,FUNCT_4:14;
+         hence z.i >= z1.i by YELLOW_0:def 1;
+        end;
+       hence z >= z1 by Th28;
+          now let i be Element of I;
+         J.i is complete LATTICE by A1;
+then A28:       Bottom (J.i) <= y.i & f.i = Bottom (J.i) by A19,YELLOW_0:44;
+         per cases by XBOOLE_0:def 2;
+         suppose not i in a2 & i in a;
+          then z.i = (y|a).i & (y|a).i = y.i & z2.i = f.i
+           by A25,A26,FUNCT_1:70,FUNCT_4:12,14;
+         hence z.i >= z2.i by A28;
+         suppose not i in a & not i in a2;
+          then z.i = f.i & z2.i = f.i by A25,A26,FUNCT_4:12;
+         hence z.i >= z2.i by YELLOW_0:def 1;
+         suppose i in a2 & i in a;
+          then z.i = (y|a).i & (y|a).i = y.i & z2.i = (y|a2).i & (y|a2).i = y.
+i
+           by A25,A26,FUNCT_1:70,FUNCT_4:14;
+         hence z.i >= z2.i by YELLOW_0:def 1;
+        end;
+       hence z >= z2 by Th28;
+      end;
+    then reconsider X as non empty directed Subset of L;
+       now let i be Element of I;
+      reconsider a = {i} as finite Subset of I;
+A29:     f+*(y|a) in X & L = L';
+      then reconsider z = f+*(y|a) as Element of L;
+A30:    dom y = I & i in a by Th27,TARSKI:def 1;
+       then (y|a).i = y.i & dom (y|a) = a by FUNCT_1:72,RELAT_1:91;
+       then z <= sup X & z.i = y.i by A29,A30,FUNCT_4:14,YELLOW_2:24;
+      hence (sup X).i >= y.i by Th28;
+     end;
+     then y <= sup X by Th28;
+    then consider d being Element of L such that
+A31:   d in X & x <= d by A2,Def1;
+    consider a being finite Subset of I such that
+A32:   d = f+*(y|a) by A31;
+       K c= a
+      proof let j be set; assume j in K;
+       then consider i being Element of I such that
+A33:      j = i & x.i <> Bottom (J.i);
+       assume
+A34:      not j in a;
+       dom y = I by Th27;
+        then dom (y|a) = a & dom d = I by Th27,RELAT_1:91;
+then A35:      d.i = f.i by A32,A33,A34,FUNCT_4:12 .= Bottom (J.i) by A19;
+A36:      J.i is complete LATTICE by A1;
+        then x.i <= d.i & x.i >= Bottom (J.i) by A31,Th28,YELLOW_0:44;
+       hence contradiction by A33,A35,A36,ORDERS_1:25;
+      end;
+    then reconsider K as finite Subset of I by FINSET_1:13;
+    take K;
+    thus for i be Element of I st not i in K &
+     x.i <> Bottom (J.i) holds contradiction;
+   end;
+   assume
+A37:  for i being Element of I holds x.i << y.i;
+   given K being finite Subset of I such that
+A38:  for i being Element of I st not i in K holds x.i = Bottom (J.i);
+   let D be non empty directed Subset of L such that
+A39:  y <= sup D;
+   defpred P[set,set] means
+     ex i being Element of I, z being Element of L st $1 = i & $2 = z &
+       z.i >= x.i;
+A40:  now let k be set; assume
+     k in K; then reconsider i = k as Element of I;
+A41:   pi(D,i) is directed
+       proof let a,b be Element of J.i; assume a in pi(D,i);
+        then consider f being Function such that
+A42:      f in D & a = f.i by CARD_3:def 6;
+        assume b in pi(D,i);
+        then consider g being Function such that
+A43:      g in D & b = g.i by CARD_3:def 6;
+        reconsider f,g as Element of L by A42,A43;
+        consider h being Element of L such that
+A44:      h in D & h >= f & h >= g by A42,A43,WAYBEL_0:def 1;
+        take h.i; thus thesis by A42,A43,A44,Th28,CARD_3:def 6;
+       end;
+     consider dd being Element of D;
+     reconsider dd as Element of L;
+A45:   dd.i in pi(D,i) by CARD_3:def 6;
+        x.i << y.i & y.i <= (sup D).i & (sup D).i = sup pi(D,i)
+       by A1,A37,A39,Th28,Th32;
+     then consider zi being Element of J.i such that
+A46:   zi in pi(D,i) & zi >= x.i by A41,A45,Def1;
+     consider a being Function such that
+A47:   a in D & zi = a.i by A46,CARD_3:def 6;
+     reconsider a as set;
+     take a; thus a in D by A47;
+     thus P[k,a] by A46,A47;
+    end;
+   consider F being Function such that
+A48:  dom F = K & rng F c= D and
+A49:  for k being set st k in K holds P[k,F.k] from NonUniqBoundFuncEx(A40);
+   reconsider Y = rng F as finite Subset of D by A48,FINSET_1:26;
+      L = L';
+   then consider d being Element of L such that
+A50:  d in D & d is_>=_than Y by WAYBEL_0:1;
+   take d; thus d in D by A50;
+      now let i be Element of I;
+A51:   J.i is complete LATTICE by A1;
+     per cases; suppose
+A52:   i in K;
+     then consider j being Element of I, z being Element of L such that
+A53:   i = j & F.i = z & z.j >= x.j by A49;
+        z in Y by A48,A52,A53,FUNCT_1:def 5;
+      then d >= z by A50,LATTICE3:def 9;
+      then d.i >= z.i by Th28;
+     hence d.i >= x.i by A51,A53,YELLOW_0:def 2;
+     suppose not i in K;
+      then x.i = Bottom (J.i) by A38;
+     hence d.i >= x.i by A51,YELLOW_0:44;
+    end;
+   hence thesis by Th28;
+  end;
+
+begin :: The Way-Below Relation in Topological Spaces
+
+theorem Th34:
+ for T being non empty TopSpace
+ for x,y being Element of InclPoset the topology of T
+  st x is_way_below y
+ for F being Subset-Family of T st F is open & y c= union F
+  ex G being finite Subset of F st x c= union G
+  proof let T be non empty TopSpace;
+   set L = InclPoset the topology of T;
+   let x,y be Element of L such that
+A1:  x << y;
+   let F be Subset-Family of T; assume
+A2:  F is open & y c= union F;
+   then reconsider A = F as Subset of L by YELLOW_1:25;
+    sup A = union F by YELLOW_1:22;
+    then y <= sup A by A2,YELLOW_1:3;
+   then consider B being finite Subset of L such that
+A3:  B c= A & x <= sup B by A1,Th18;
+   reconsider G = B as finite Subset of F by A3;
+   take G; sup B = union G by YELLOW_1:22;
+   hence thesis by A3,YELLOW_1:3;
+  end;
+
+theorem Th35:
+ for T being non empty TopSpace
+ for x,y being Element of InclPoset the topology of T
+  st for F being Subset-Family of T st F is open & y c= union F
+       ex G being finite Subset of F st x c= union G
+  holds x is_way_below y
+  proof let T be non empty TopSpace; set L = InclPoset the topology of T;
+A1:  L = RelStr(#the topology of T, RelIncl the topology of T#)
+ by YELLOW_1:def 1;
+   let x,y be Element of L such that
+A2:  for F being Subset-Family of T st F is open & y c= union F
+     ex G being finite Subset of F st x c= union G;
+      now let I be Ideal of L;
+       I is Subset of bool the carrier of T by A1,XBOOLE_1:1;
+     then I is Subset-Family of T by SETFAM_1:def 7;
+     then reconsider F = I as Subset-Family of T;
+     assume y <= sup I;
+      then y c= sup I by YELLOW_1:3;
+      then y c= union F & F is open by YELLOW_1:22,25;
+     then consider G being finite Subset of F such that
+A3:    x c= union G by A2;
+        G is finite Subset of L by XBOOLE_1:1;
+     then reconsider G as finite Subset of L;
+     consider z being Element of L such that
+A4:    z in I & z is_>=_than G by WAYBEL_0:1;
+        union G = sup G & z >= sup G by A4,YELLOW_0:32,YELLOW_1:22;
+      then x <= sup G & sup G in I by A3,A4,WAYBEL_0:def 19,YELLOW_1:3;
+     hence x in I by WAYBEL_0:def 19;
+    end;
+   hence thesis by Th21;
+  end;
+
+theorem Th36:
+ for T being non empty TopSpace
+ for x being Element of InclPoset the topology of T
+ for X being Subset of T st x = X
+ holds x is compact iff X is compact
+  proof let T be non empty TopSpace;
+   let x be Element of InclPoset the topology of T, X be Subset of T such that
+A1:  x = X;
+   hereby assume x is compact;
+then A2:   x << x by Def2;
+    thus X is compact
+     proof let F be Subset-Family of T such that
+A3:     X c= union F and
+A4:     F is open;
+      consider G being finite Subset of F such that
+A5:     x c= union G by A1,A2,A3,A4,Th34;
+        G is Subset of bool the carrier of T by XBOOLE_1:1;
+      then G is Subset-Family of T by SETFAM_1:def 7;
+      then reconsider G as Subset-Family of T;
+      take G; thus G c= F & X c= union G & G is finite by A1,A5;
+     end;
+   end;
+   assume
+A6:  for F being Subset-Family of T st
+     F is_a_cover_of X & F is open
+     ex G being Subset-Family of T
+      st G c= F & G is_a_cover_of X & G is finite;
+      now let F be Subset-Family of T; assume
+A7:    F is open & x c= union F;
+        F is_a_cover_of X proof thus X c= union F by A1,A7; end;
+     then consider G being Subset-Family of T such that
+A8:    G c= F & G is_a_cover_of X & G is finite by A6,A7;
+        x c= union G by A1,A8,COMPTS_1:def 1;
+     hence ex G being finite Subset of F st x c= union G by A8;
+    end;
+   hence x << x by Th35;
+  end;
+
+theorem
+   for T being non empty TopSpace
+ for x being Element of InclPoset the topology of T
+  st x = the carrier of T
+ holds x is compact iff T is compact
+  proof let T be non empty TopSpace;
+   let x be Element of InclPoset the topology of T; assume
+    x = the carrier of T;
+then A1:  x = [#]T by PRE_TOPC:12;
+      T is compact iff [#]T is compact by COMPTS_1:10;
+   hence thesis by A1,Th36;
+  end;
+
+definition
+ let T be non empty TopSpace;
+ attr T is locally-compact means:
+Def9:
+  for x being Point of T, X being Subset of T st x in X & X is open
+   ex Y being Subset of T st x in Int Y & Y c= X & Y is compact;
+end;
+
+definition
+ cluster compact being_T2 -> being_T3 being_T4 locally-compact
+   (non empty TopSpace);
+ coherence
+  proof let T be non empty TopSpace; assume
+A1:  T is compact being_T2;
+   hence
+A2:  T is_T3 & T is_T4 by COMPTS_1:21,22;
+A3:  [#]T is compact & [#]T = the carrier of T by A1,COMPTS_1:10,PRE_TOPC:12;
+   let x be Point of T, X be Subset of T;
+   assume x in X & X is open;
+   then consider Y being open Subset of T such that
+A4:  x in Y & Cl Y c= X by A2,URYSOHN1:29;
+   take Z = Cl Y;
+      Y c= Z by PRE_TOPC:48;
+    then Y c= Int Z & Z is closed by TOPS_1:56;
+   hence x in Int Z & Z c= X & Z is compact by A3,A4,COMPTS_1:18;
+  end;
+end;
+
+theorem Th38:
+ for x being set holds 1TopSp {x} is being_T2
+  proof let x be set;
+   let a,b be Point of 1TopSp {x};
+      the carrier of 1TopSp {x} = {x} by PCOMPS_1:8;
+    then a = x & b = x by TARSKI:def 1;
+   hence thesis;
+  end;
+
+definition
+ cluster compact being_T2 (non empty TopSpace);
+ existence
+  proof take 1TopSp {0};
+   thus thesis by Th38,PCOMPS_1:9;
+  end;
+end;
+
+theorem Th39:
+ for T being non empty TopSpace
+ for x,y being Element of InclPoset the topology of T
+   st ex Z being Subset of T st x c= Z & Z c= y & Z is compact
+   holds x << y
+  proof let T be non empty TopSpace;
+   set L = InclPoset the topology of T;
+   let x,y be Element of L;
+   given Z be Subset of T such that
+A1:  x c= Z & Z c= y & Z is compact;
+A2:  L = RelStr(#the topology of T, RelIncl the topology of T#)
+ by YELLOW_1:def 1;
+    then x in the topology of T & y in the topology of T;
+   then reconsider X = x, Y = y as Subset of T;
+   let D be non empty directed Subset of L;
+A3:  sup D = union D by YELLOW_1:22;
+      D c= bool the carrier of T by A2,XBOOLE_1:1;
+   then reconsider F = D as Subset-Family of T by SETFAM_1:def 7
+;
+   reconsider F as Subset-Family of T;
+A4:  F is open
+     proof let a be Subset of T; assume a in F;
+      hence a in the topology of T by A2;
+     end;
+   assume y <= sup D;
+    then Y c= union F by A3,YELLOW_1:3;
+    then Z c= union F by A1,XBOOLE_1:1;
+    then F is_a_cover_of Z by COMPTS_1:def 1;
+   then consider G being Subset-Family of T such that
+A5:  G c= F & G is_a_cover_of Z & G is finite by A1,A4,COMPTS_1:def 7;
+   consider d being Element of L such that
+A6:  d in D & d is_>=_than G by A5,WAYBEL_0:1;
+   take d; thus d in D by A6;
+      now let B be set; assume
+A7:    B in G; then B in D by A5;
+     then reconsider e = B as Element of L;
+        d >= e by A6,A7,LATTICE3:def 9;
+     hence B c= d by YELLOW_1:3;
+    end;
+    then Z c= union G & union G c= d by A5,COMPTS_1:def 1,ZFMISC_1:94;
+    then Z c= d by XBOOLE_1:1;
+    then X c= d by A1,XBOOLE_1:1;
+   hence x <= d by YELLOW_1:3;
+  end;
+
+theorem Th40:
+ for T being non empty TopSpace st T is locally-compact
+ for x,y being Element of InclPoset the topology of T st x << y
+  ex Z being Subset of T st x c= Z & Z c= y & Z is compact
+  proof let T be non empty TopSpace such that
+A1:  for x being Point of T, X being Subset of T st x in X & X is open
+     ex Y being Subset of T st x in Int Y & Y c= X & Y is compact;
+   set L = InclPoset the topology of T;
+A2:  L = RelStr(#the topology of T, RelIncl the topology of T#)
+ by YELLOW_1:def 1;
+   let x,y be Element of L such that
+A3:  x << y;
+      x in the topology of T & y in the topology of T by A2;
+   then reconsider X = x, Y = y as Subset of T;
+A4:  X is open & Y is open
+     proof thus X in the topology of T & Y in the topology of T by A2; end;
+   set VV = {Int Z where Z is Subset of T: Z c= Y & Z is compact};
+   reconsider e = {}T as Subset of T;
+      {} c= Y & {}T is compact & Int {}T = {}
+ by COMPTS_1:9,TOPS_1:47,XBOOLE_1:2;
+then A5:  e in VV;
+      VV c= bool the carrier of T
+     proof let a be set; assume a in VV;
+       then ex Z being Subset of T st a = Int Z & Z c= Y & Z is compact;
+      hence thesis;
+     end;
+   then VV is non empty Subset-Family of T by A5,SETFAM_1:def 7
+;
+   then reconsider VV as non empty Subset-Family of T;
+   set V = union VV;
+    VV is open
+     proof let a be Subset of T; assume a in VV;
+       then ex Z being Subset of T st a = Int Z & Z c= Y & Z is compact;
+      hence a is open;
+     end;
+   then reconsider A = VV as Subset of L by YELLOW_1:25;
+A6:  sup A = V by YELLOW_1:22;
+      Y c= V
+     proof let a be set; assume
+A7:    a in Y; then reconsider a as Point of T;
+      consider Z being Subset of T such that
+A8:    a in Int Z & Z c= Y & Z is compact by A1,A4,A7;
+         Int Z in VV by A8;
+      hence thesis by A8,TARSKI:def 4;
+     end;
+    then y <= sup A by A6,YELLOW_1:3;
+   then consider B being finite Subset of L such that
+A9:  B c= A & x <= sup B by A3,Th18;
+    defpred P[set,set] means
+     ex Z being Subset of T st $2 = Z & $1 = Int Z & Z c= Y & Z is compact;
+A10:  now let z be set; assume
+        z in B; then z in A by A9;
+     then consider Z being Subset of T such that
+A11:   z = Int Z & Z c= Y & Z is compact;
+     reconsider s = Z as set;
+     take s;
+     thus P[z,s] by A11;
+    end;
+   consider f being Function such that
+A12: dom f = B and
+A13: for z being set st z in B holds P[z, f.z] from NonUniqFuncEx(A10);
+     B is Subset of bool the carrier of T by A2,XBOOLE_1:1;
+   then B is Subset-Family of T by SETFAM_1:def 7;
+   then reconsider W = B as Subset-Family of T;
+      sup B = union W by YELLOW_1:22;
+then A14:  X c= union W by A9,YELLOW_1:3;
+      now let z be set; assume z in rng f;
+     then consider a being set such that
+A15:   a in B & z = f.a by A12,FUNCT_1:def 5;
+        ex Z being Subset of T st z = Z & a = Int Z & Z c= Y & Z is compact
+       by A13,A15;
+     hence z c= the carrier of T;
+    end;
+    then union rng f c= the carrier of T by ZFMISC_1:94;
+   then reconsider Z = union rng f as Subset of T;
+   take Z;
+   thus x c= Z
+     proof let z be set; assume z in x;
+      then consider a being set such that
+A16:    z in a & a in W by A14,TARSKI:def 4;
+      consider Z being Subset of T such that
+A17:    f.a = Z & a = Int Z & Z c= Y & Z is compact by A13,A16;
+         Int Z c= Z by TOPS_1:44;
+       then z in Z & Z in rng f by A12,A16,A17,FUNCT_1:def 5;
+      hence thesis by TARSKI:def 4;
+     end;
+    thus Z c= y
+     proof let z be set; assume z in Z;
+      then consider a being set such that
+A18:    z in a & a in rng f by TARSKI:def 4;
+      consider Z being set such that
+A19:    Z in W & a = f.Z by A12,A18,FUNCT_1:def 5;
+         ex S being Subset of T st a = S & Z = Int S & S c= Y & S is compact
+        by A13,A19;
+      hence thesis by A18;
+     end;
+A20: rng f is finite by A12,FINSET_1:26;
+     defpred P[set] means
+       ex A being Subset of T st A = union $1 & A is compact;
+      union {} = {}T & {}T is compact & {}T is Subset of T
+     by COMPTS_1:9,ZFMISC_1:2;
+     then
+A21: P[{}];
+A22: now let x,B be set; assume
+A23:   x in rng f & B c= rng f;
+      assume P[B]; then
+     consider A being Subset of T such that
+A24:   A = union B & A is compact;
+     thus P[B \/ {x}] proof
+      consider Z being set such that
+A25:   Z in W & x = f.Z by A12,A23,FUNCT_1:def 5;
+      consider S being Subset of T such that
+A26:   x = S & Z = Int S & S c= Y & S is compact by A13,A25;
+      reconsider Bx = A \/ S as Subset of T;
+      take Bx;
+      thus Bx = union B \/ union {x} by A24,A26,ZFMISC_1:31
+             .= union (B \/ {x}) by ZFMISC_1:96;
+      thus Bx is compact by A24,A26,COMPTS_1:19;
+     end;
+    end;
+      P[rng f] from Finite(A20,A21,A22);
+   hence Z is compact;
+  end;
+
+theorem
+   for T being non empty TopSpace st T is locally-compact & T is_T2
+ for x,y being Element of InclPoset the topology of T st x << y
+  ex Z being Subset of T st Z = x & Cl Z c= y & Cl Z is compact
+  proof let T be non empty TopSpace such that
+A1:  T is locally-compact & T is_T2;
+   set L = InclPoset the topology of T;
+A2: L = RelStr(#the topology of T, RelIncl the topology of T#)
+ by YELLOW_1:def 1;
+   let x,y be Element of L; assume
+      x << y;
+   then consider Z being Subset of T such that
+A3:  x c= Z & Z c= y & Z is compact by A1,Th40;
+      x in the topology of T by A2;
+   then reconsider X = x as Subset of T;
+   take X; thus X = x;
+      Z is closed by A1,A3,COMPTS_1:16;
+    then Cl X c= Z & Cl X is closed by A3,TOPS_1:31;
+   hence thesis by A3,COMPTS_1:18,XBOOLE_1:1;
+  end;
+
+theorem
+   for X being non empty TopSpace st X is_T3 &
+   InclPoset the topology of X is continuous
+  holds X is locally-compact
+  proof let T be non empty TopSpace;
+   set L = InclPoset the topology of T;
+A1:  L = RelStr(#the topology of T, RelIncl the topology of T#)
+ by YELLOW_1:def 1;
+   assume
+A2:  T is_T3 & L is continuous;
+then A3:  L is continuous LATTICE;
+   let x be Point of T, X be Subset of T; assume
+A4:  x in X & X is open;
+    then X in the topology of T by PRE_TOPC:def 5;
+   then reconsider a = X as Element of L by A1;
+      a = sup waybelow a by A3,Def5 .= union waybelow a by YELLOW_1:22;
+   then consider Y being set such that
+A5:  x in Y & Y in waybelow a by A4,TARSKI:def 4;
+   Y in the carrier of L by A5;
+   then reconsider Y as Subset of T by A1;
+      waybelow a = {y where y is Element of L: y << a} by Def3;
+   then consider y being Element of L such that
+A6:  Y = y & y << a by A5;
+      Y is open by A1,A5,PRE_TOPC:def 5;
+   then consider W being open Subset of T such that
+A7:  x in W & Cl W c= Y by A2,A5,URYSOHN1:29;
+   take Z = Cl W; W c= Z by PRE_TOPC:48;
+   hence x in Int Z by A7,TOPS_1:54;
+      y <= a by A6,Th1;
+    then Y c= X by A6,YELLOW_1:3;
+   hence Z c= X by A7,XBOOLE_1:1;
+   let F be Subset-Family of T such that
+A8:  F is_a_cover_of Z & F is open;
+ reconsider ZZ = {Z`} as Subset-Family of T by SETFAM_1:def 7;
+   reconsider ZZ as Subset-Family of T;
+   reconsider FZ = F \/ ZZ as Subset-Family of T;
+      for x being Subset of T st x in ZZ holds x is open
+     by TARSKI:def 1;
+    then ZZ is open by TOPS_2:def 1;
+  then FZ is open by A8,TOPS_2:20;
+   then reconsider FF = FZ as Subset of L by YELLOW_1:25;
+A9:  sup FF = union FZ by YELLOW_1:22 .= union F \/ union ZZ by ZFMISC_1:96
+          .= union F \/ Z` by ZFMISC_1:31;
+      Z c= union F by A8,COMPTS_1:def 1;
+    then Z \/ Z` c= sup FF by A9,XBOOLE_1:9;
+    then [#]T c= sup FF by PRE_TOPC:18;
+    then the carrier of T c= sup FF by PRE_TOPC:12;
+    then X c= sup FF by XBOOLE_1:1;
+    then a <= sup FF by YELLOW_1:3;
+   then consider A being finite Subset of L such that
+A10:  A c= FF & y <= sup A by A6,Th18;
+A11:  sup A = union A by YELLOW_1:22;
+      A \ ZZ c= A by XBOOLE_1:36;
+    then A \ ZZ is Subset of L by XBOOLE_1:1;
+   then A \ ZZ is Subset of bool the carrier of T by A1,XBOOLE_1:1;
+   then A \ ZZ is Subset-Family of T by SETFAM_1:def 7;
+   then reconsider G = A \ ZZ as Subset-Family of T;
+   take G;
+   thus G c= F by A10,XBOOLE_1:43;
+   thus Z c= union G
+     proof let z be set; assume z in Z;
+then A12:     z in Y & Y c= union A & not z in Z`
+        by A6,A7,A10,A11,SUBSET_1:54,YELLOW_1:3;
+      then consider B being set such that
+A13:     z in B & B in A by TARSKI:def 4;
+         not B in ZZ by A12,A13,TARSKI:def 1;
+       then B in G by A13,XBOOLE_0:def 4;
+      hence thesis by A13,TARSKI:def 4;
+     end;
+   thus G is finite;
+  end;
+
+theorem
+   for T being non empty TopSpace st T is locally-compact
+  holds InclPoset the topology of T is continuous
+  proof let T be non empty TopSpace such that
+A1:  T is locally-compact;
+   set L = InclPoset the topology of T;
+A2:  L = RelStr(#the topology of T, RelIncl the topology of T#)
+ by YELLOW_1:def 1;
+   thus for x being Element of L holds waybelow x is non empty directed;
+   thus L is up-complete;
+   let x be Element of L; x in the topology of T by A2;
+   then reconsider X = x as Subset of T;
+   thus x c= sup waybelow x
+     proof let a be set; assume
+A3:     a in x; then a in X;
+       then a in the carrier of T & X is open by A2,PRE_TOPC:def 5;
+      then consider Y being Subset of T such that
+A4:     a in Int Y & Y c= X & Y is compact by A1,A3,Def9;
+      reconsider iY = Int Y as Subset of T;
+         Int Y in the topology of T by PRE_TOPC:def 5;
+      then reconsider y = iY as Element of L by A2;
+         y c= Y by TOPS_1:44;
+       then y << x by A4,Th39;
+       then y in waybelow x by Th7;
+       then y c= union waybelow x by ZFMISC_1:92;
+       then y c= sup waybelow x by YELLOW_1:22;
+      hence thesis by A4;
+     end;
+   let a be set; assume a in sup waybelow x;
+    then a in union waybelow x by YELLOW_1:22;
+   then consider Y being set such that
+A5:  a in Y & Y in waybelow x by TARSKI:def 4;
+      waybelow x = {y where y is Element of L: y << x} by Def3;
+   then consider y being Element of L such that
+A6:  Y = y & y << x by A5;
+      y <= x by A6,Th1;
+    then Y c= x by A6,YELLOW_1:3;
+   hence thesis by A5;
+  end;
+

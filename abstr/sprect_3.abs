@@ -1,0 +1,421 @@
+:: Some properties of special polygonal curves
+::  by Andrzej Trybulec and Yatsuka Nakamura
+::
+:: Received October 22, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, ARYTM_1, FINSEQ_1, MATRIX_1, MATRIX_2, PRE_TOPC, EUCLID,
+      ARYTM_3, TOPREAL1, METRIC_1, RELAT_2, JORDAN1, CONNSP_1, PCOMPS_1,
+      SPPOL_1, MCART_1, GOBOARD1, TREES_1, PSCOMP_1, SPRECT_1, COMPTS_1,
+      JORDAN3, RELAT_1, SPPOL_2, FUNCT_1, TARSKI, RFINSEQ, GROUP_2, SEQM_3,
+      GOBOARD5, GOBOARD9, SUBSET_1, TOPREAL4, JORDAN5D, GOBOARD2, SPRECT_2,
+      ABSVALUE, CARD_1, ORDINAL2, TOPS_1, JORDAN5C, FINSEQ_5, FINSEQ_4, ARYTM;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, ORDINAL1, XREAL_0,
+      REAL_1, NAT_1, ABSVALUE, BINARITH, CARD_1, RFINSEQ, FUNCT_1, FINSEQ_1,
+      FINSEQ_4, FINSEQ_5, MATRIX_1, MATRIX_2, STRUCT_0, METRIC_1, PRE_TOPC,
+      TOPS_1, COMPTS_1, CONNSP_1, PCOMPS_1, EUCLID, TOPREAL1, TOPREAL4,
+      JORDAN1, PSCOMP_1, GOBOARD1, GOBOARD2, SPPOL_1, SPPOL_2, GOBOARD5,
+      GOBOARD9, JORDAN3, JORDAN5C, JORDAN5D, SPRECT_1, SPRECT_2;
+ constructors SPRECT_2, PSCOMP_1, REALSET1, SPRECT_1, SPPOL_1, COMPTS_1,
+      REAL_1, GOBOARD2, BINARITH, JORDAN3, TOPREAL2, TOPREAL4, GOBOARD9,
+      CONNSP_1, TOPS_1, JORDAN1, JORDAN5C, TOPS_2, MATRIX_2, ENUMSET1,
+      JORDAN5D, ABSVALUE, RFINSEQ, FINSEQ_4, TOPMETR, MEMBERED;
+ clusters STRUCT_0, RELSET_1, SPRECT_1, SPRECT_2, EUCLID, SPPOL_2, GOBOARD2,
+      XREAL_0, FINSEQ_5, ARYTM_3, MEMBERED, ZFMISC_1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Preliminaries
+
+ reserve i,j,k,n,m for Nat;
+
+canceled;
+
+theorem :: SPRECT_3:2
+   for A,B,C,p being set st A c= B & B /\ C = {p} & p in A
+  holds A /\ C = {p};
+
+theorem :: SPRECT_3:3
+ for q,r,s,t being Real st t >= 0 & t <= 1 &
+  s = (1-t)*q + t*r & q <= s & r < s
+  holds t = 0;
+
+theorem :: SPRECT_3:4
+ for q,r,s,t being Real st t >= 0 & t <= 1 &
+  s = (1-t)*q + t*r & q >= s & r > s
+  holds t = 0;
+
+theorem :: SPRECT_3:5
+ i-'k <= j implies i <= j + k;
+
+theorem :: SPRECT_3:6
+ i <= j + k implies i-'k <= j;
+
+theorem :: SPRECT_3:7
+ i <= j -' k & k <= j implies i + k <= j;
+
+theorem :: SPRECT_3:8
+   j + k <= i implies k <= i -' j;
+
+theorem :: SPRECT_3:9
+   k <= i & i < j implies i -' k < j -' k;
+
+theorem :: SPRECT_3:10
+   i < j & k < j implies i -' k < j -' k;
+
+theorem :: SPRECT_3:11
+   for D being non empty set
+ for f being non empty FinSequence of D, g being FinSequence of D
+ holds (g^f)/.len(g^f) = f/.len f;
+
+theorem :: SPRECT_3:12
+ for a,b,c,d being set holds
+  Indices (a,b)][(c,d) = {[1,1],[1,2],[2,1],[2,2]};
+
+begin :: Euclidean Space
+
+theorem :: SPRECT_3:13
+ for p,q being Point of TOP-REAL n, r being Real
+   st 0 < r & p = (1-r)*p+r*q
+  holds p = q;
+
+theorem :: SPRECT_3:14
+ for p,q being Point of TOP-REAL n, r being Real
+   st r < 1 & p = (1-r)*q+r*p
+  holds p = q;
+
+theorem :: SPRECT_3:15
+   for p,q being Point of TOP-REAL n st p = 1/2*(p+q)
+  holds p = q;
+
+theorem :: SPRECT_3:16
+ for p,q,r being Point of TOP-REAL n st
+  q in LSeg(p,r) & r in LSeg(p,q) holds q = r;
+
+begin :: Euclidean Plane
+
+theorem :: SPRECT_3:17
+ for A being non empty Subset of TOP-REAL 2,
+     p being Element of Euclid 2, r being Real st A = Ball(p,r)
+ holds A is connected;
+
+theorem :: SPRECT_3:18
+ for A, B being Subset of TOP-REAL 2 st
+  A is open & B is_a_component_of A
+ holds B is open;
+
+theorem :: SPRECT_3:19
+ for p,q,r being Point of TOP-REAL 2
+  st LSeg(p,q) is horizontal & r in LSeg(p,q)
+ holds p`2 = r`2;
+
+theorem :: SPRECT_3:20
+ for p,q,r being Point of TOP-REAL 2
+  st LSeg(p,q) is vertical & r in LSeg(p,q)
+ holds p`1 = r`1;
+
+theorem :: SPRECT_3:21
+   for p,q,r,s being Point of TOP-REAL 2
+  st LSeg(p,q) is horizontal & LSeg(r,s) is horizontal &
+   LSeg(p,q) meets LSeg(r,s)
+ holds p`2= r`2;
+
+theorem :: SPRECT_3:22
+   for p,q,r being Point of TOP-REAL 2
+  st LSeg(p,q) is vertical & LSeg(q,r) is horizontal
+ holds LSeg(p,q) /\ LSeg(q,r) = {q};
+
+theorem :: SPRECT_3:23
+   for p,q,r,s being Point of TOP-REAL 2
+  st LSeg(p,q) is horizontal & LSeg(s,r) is vertical & r in LSeg(p,q)
+ holds LSeg(p,q) /\ LSeg(s,r) = {r};
+
+begin :: Main
+
+reserve p,q for Point of TOP-REAL 2;
+reserve G for Go-board;
+
+theorem :: SPRECT_3:24
+   1 <= j & j <= k & k <= width G & 1 <= i & i <= len G
+ implies G*(i,j)`2 <= G*(i,k)`2;
+
+theorem :: SPRECT_3:25
+   1 <= j & j <= width G & 1 <= i & i <= k & k <= len G
+ implies G*(i,j)`1 <= G*(k,j)`1;
+
+reserve C for Subset of TOP-REAL 2;
+
+theorem :: SPRECT_3:26
+ LSeg(NW-corner C,NE-corner C) c= L~SpStSeq C;
+
+theorem :: SPRECT_3:27
+ N-most C c= LSeg(NW-corner C,NE-corner C);
+
+theorem :: SPRECT_3:28
+ for C being non empty compact Subset of TOP-REAL 2
+  holds N-min C in LSeg(NW-corner C,NE-corner C);
+
+theorem :: SPRECT_3:29
+   LSeg(NW-corner C,NE-corner C) is horizontal;
+
+canceled;
+
+theorem :: SPRECT_3:31 :: JORDAN3:76
+  for g being FinSequence of TOP-REAL 2, p being Point of TOP-REAL 2 st
+  g/.1 <> p & ((g/.1)`1 = p`1 or (g/.1)`2 = p`2) &
+    g is_S-Seq & LSeg(p,g/.1) /\ L~g={ g/.1 }
+ holds <*p*>^g is_S-Seq;
+
+canceled;
+
+theorem :: SPRECT_3:33
+   for f being S-Sequence_in_R2, p being Point of TOP-REAL 2 st
+   1 <j & j <= len f & p in L~mid(f,1,j)
+  holds LE p, f/.j, L~f, f/.1, f/.len f;
+
+theorem :: SPRECT_3:34 :: JORDAN4:47
+  for h being FinSequence of TOP-REAL 2 st
+ i in dom h & j in dom h holds L~mid(h,i,j) c= L~h;
+
+theorem :: SPRECT_3:35
+   1 <= i & i < j implies
+  for f being FinSequence of TOP-REAL 2 st j <= len f holds
+   L~mid(f,i,j) = LSeg(f,i) \/ L~mid(f,i+1,j);
+
+theorem :: SPRECT_3:36
+    for f being FinSequence of TOP-REAL 2 st 1 <= i holds
+    i < j & j <= len f implies
+   L~mid(f,i,j) = L~mid(f,i,j -' 1) \/ LSeg(f,j -' 1);
+
+canceled;
+
+theorem :: SPRECT_3:38
+  for f, g being FinSequence of TOP-REAL 2 st f is_S-Seq & g is_S-Seq &
+  ((f/.len f)`1 = (g/.1)`1 or (f/.len f)`2 = (g/.1)`2) &
+   L~f misses L~g &
+   LSeg(f/.len f,g/.1) /\ L~f={ f/.len f } &
+   LSeg(f/.len f,g/.1) /\ L~g={ g/.1 }
+ holds f^g is_S-Seq;
+
+theorem :: SPRECT_3:39
+   for f being S-Sequence_in_R2, p being Point of TOP-REAL 2 st p in L~f
+holds (R_Cut(f,p))/.1 = f/.1;
+
+theorem :: SPRECT_3:40
+   for f being S-Sequence_in_R2, p,q being Point of TOP-REAL 2 st
+   1 <=j & j < len f & p in LSeg(f,j) & q in LSeg(f/.j,p)
+  holds LE q, p, L~f, f/.1, f/.len f;
+
+begin :: Special circular
+
+theorem :: SPRECT_3:41
+ for f being non constant standard special_circular_sequence holds
+  LeftComp f is open & RightComp f is open;
+
+definition let f be non constant standard special_circular_sequence;
+ cluster L~f -> non vertical non horizontal;
+ cluster LeftComp f -> being_Region;
+ cluster RightComp f -> being_Region;
+end;
+
+theorem :: SPRECT_3:42
+ for f being non constant standard special_circular_sequence
+  holds RightComp f misses L~f;
+
+theorem :: SPRECT_3:43
+ for f being non constant standard special_circular_sequence
+  holds LeftComp f misses L~f;
+
+theorem :: SPRECT_3:44
+ for f being non constant standard special_circular_sequence
+  holds i_w_n f < i_e_n f;
+
+theorem :: SPRECT_3:45
+ for f being non constant standard special_circular_sequence
+ ex i st 1 <= i & i < len GoB f & N-min L~f = (GoB f)*(i,width GoB f);
+
+theorem :: SPRECT_3:46
+ for f being clockwise_oriented
+      (non constant standard special_circular_sequence)
+  st i in dom GoB f & f/.1 = (GoB f)*(i,width GoB f) &
+     f/.1 = N-min L~f
+  holds f/.2 = (GoB f)*(i+1,width GoB f)
+       & f/.(len f -' 1) = (GoB f)*(i,width GoB f -' 1);
+
+theorem :: SPRECT_3:47
+   for f being non constant standard special_circular_sequence
+  st 1 <= i & i < j & j <= len f & f/.1 in L~mid(f,i,j)
+ holds i = 1 or j = len f;
+
+theorem :: SPRECT_3:48
+   for f being
+  clockwise_oriented (non constant standard special_circular_sequence)
+  st f/.1 = N-min L~f
+ holds LSeg(f/.1,f/.2) c= L~SpStSeq L~f;
+
+begin :: Rectangular
+
+theorem :: SPRECT_3:49
+ for f being rectangular FinSequence of TOP-REAL 2,
+     p being Point of TOP-REAL 2 st p in L~f
+  holds p`1 = W-bound L~f or p`1 = E-bound L~f or
+        p`2 = S-bound L~f or p`2 = N-bound L~f;
+
+definition
+ cluster rectangular special_circular_sequence;
+end;
+
+theorem :: SPRECT_3:50
+ for f being rectangular special_circular_sequence,
+     g being S-Sequence_in_R2
+  st g/.1 in LeftComp f & g/.len g in RightComp f
+ holds L~f meets L~g;
+
+theorem :: SPRECT_3:51
+ for f being rectangular special_circular_sequence
+  holds SpStSeq L~f = f;
+
+theorem :: SPRECT_3:52
+ for f being rectangular special_circular_sequence holds
+  L~f = { p where p is Point of TOP-REAL 2:
+           p`1 = W-bound L~f & p`2 <= N-bound L~f & p`2 >= S-bound L~f or
+           p`1 <= E-bound L~f & p`1 >= W-bound L~f & p`2 = N-bound L~f or
+           p`1 <= E-bound L~f & p`1 >= W-bound L~f & p`2 = S-bound L~f or
+           p`1 = E-bound L~f & p`2 <= N-bound L~f & p`2 >= S-bound L~f};
+
+theorem :: SPRECT_3:53
+ for f being rectangular special_circular_sequence holds
+  GoB f = (f/.4,f/.1)][(f/.3,f/.2);
+
+theorem :: SPRECT_3:54
+ for f being rectangular special_circular_sequence holds
+   LeftComp f = {p : not(W-bound L~f <= p`1 & p`1 <= E-bound L~f
+                  & S-bound L~f <= p`2 & p`2 <= N-bound L~f)} &
+   RightComp f = {q : W-bound L~f < q`1 & q`1 < E-bound L~f
+                   & S-bound L~f < q`2 & q`2 < N-bound L~f};
+
+definition
+ cluster clockwise_oriented (rectangular special_circular_sequence);
+end;
+
+definition
+ cluster -> clockwise_oriented (rectangular special_circular_sequence);
+end;
+
+theorem :: SPRECT_3:55
+   for f being rectangular special_circular_sequence,
+     g being S-Sequence_in_R2
+   st g/.1 in LeftComp f & g/.len g in RightComp f
+ holds Last_Point(L~g,g/.1,g/.len g,L~f) <> NW-corner L~f;
+
+theorem :: SPRECT_3:56
+   for f being rectangular special_circular_sequence,
+     g being S-Sequence_in_R2
+   st g/.1 in LeftComp f & g/.len g in RightComp f
+ holds Last_Point(L~g,g/.1,g/.len g,L~f) <> SE-corner L~f;
+
+theorem :: SPRECT_3:57
+ for f being rectangular special_circular_sequence,
+     p being Point of TOP-REAL 2 st
+   W-bound L~f > p`1 or p`1 > E-bound L~f or
+   S-bound L~f > p`2 or p`2 > N-bound L~f
+ holds p in LeftComp f;
+
+theorem :: SPRECT_3:58
+   for f being
+   clockwise_oriented (non constant standard special_circular_sequence)
+  st f/.1 = N-min L~f
+ holds LeftComp SpStSeq L~f c= LeftComp f;
+
+begin :: In the area
+
+theorem :: SPRECT_3:59
+ for f being FinSequence of TOP-REAL 2,
+     p,q being Point of TOP-REAL 2 holds <*p,q*> is_in_the_area_of f
+  iff <*p*> is_in_the_area_of f &
+        <*q*> is_in_the_area_of f;
+
+theorem :: SPRECT_3:60
+ for f being rectangular FinSequence of TOP-REAL 2,
+     p being Point of TOP-REAL 2
+  st <*p*> is_in_the_area_of f &
+     (p`1 = W-bound L~f or p`1 = E-bound L~f or
+      p`2 = S-bound L~f or p`2 = N-bound L~f)
+  holds p in L~f;
+
+theorem :: SPRECT_3:61
+ for f being FinSequence of TOP-REAL 2,
+    p,q being Point of TOP-REAL 2, r being Real
+ st 0<=r & r <= 1 & <*p,q*> is_in_the_area_of f
+ holds <*(1-r)*p+r*q*> is_in_the_area_of f;
+
+theorem :: SPRECT_3:62
+ for f, g being FinSequence of TOP-REAL 2
+  st g is_in_the_area_of f & i in dom g
+ holds <*g/.i*> is_in_the_area_of f;
+
+theorem :: SPRECT_3:63
+ for f, g being FinSequence of TOP-REAL 2,
+     p being Point of TOP-REAL 2
+  st g is_in_the_area_of f & p in L~g
+ holds <*p*> is_in_the_area_of f;
+
+theorem :: SPRECT_3:64
+ for f being rectangular FinSequence of TOP-REAL 2,
+     p,q being Point of TOP-REAL 2
+  st not q in L~f & <*p,q*> is_in_the_area_of f
+ holds LSeg(p,q) /\ L~f c= {p};
+
+theorem :: SPRECT_3:65
+   for f being rectangular FinSequence of TOP-REAL 2,
+     p,q being Point of TOP-REAL 2
+  st p in L~f & not q in L~f & <*q*> is_in_the_area_of f
+ holds LSeg(p,q) /\ L~f = {p};
+
+theorem :: SPRECT_3:66
+ for f being non constant standard special_circular_sequence
+   st 1 <= i & i <= len GoB f & 1 <= j & j <= width GoB f
+ holds <*(GoB f)*(i,j)*> is_in_the_area_of f;
+
+theorem :: SPRECT_3:67
+   for g being FinSequence of TOP-REAL 2,
+     p,q being Point of TOP-REAL 2
+  st <*p,q*> is_in_the_area_of g
+  holds <*1/2*(p+q)*> is_in_the_area_of g;
+
+theorem :: SPRECT_3:68
+   for f, g being FinSequence of TOP-REAL 2 st g is_in_the_area_of f
+   holds Rev g is_in_the_area_of f;
+
+theorem :: SPRECT_3:69
+   for f, g being FinSequence of TOP-REAL 2,
+     p being Point of TOP-REAL 2
+   st g is_in_the_area_of f & <*p*> is_in_the_area_of f &
+     g is_S-Seq & p in L~g
+   holds R_Cut(g,p) is_in_the_area_of f;
+
+theorem :: SPRECT_3:70
+   for f being non constant standard special_circular_sequence,
+     g being FinSequence of TOP-REAL2
+   holds g is_in_the_area_of f iff g is_in_the_area_of SpStSeq L~f;
+
+theorem :: SPRECT_3:71
+   for f being rectangular special_circular_sequence,
+     g being S-Sequence_in_R2
+   st g/.1 in LeftComp f & g/.len g in RightComp f
+ holds L_Cut(g,Last_Point(L~g,g/.1,g/.len g,L~f)) is_in_the_area_of f;
+
+theorem :: SPRECT_3:72
+   for f being non constant standard special_circular_sequence
+     st 1 <= i & i < len GoB f & 1 <= j & j < width GoB f
+  holds Int cell(GoB f,i,j) misses L~SpStSeq L~f;
+
+theorem :: SPRECT_3:73
+   for f, g being FinSequence of TOP-REAL 2,
+     p being Point of TOP-REAL 2
+   st g is_in_the_area_of f & <*p*> is_in_the_area_of f &
+     g is_S-Seq & p in L~g
+   holds L_Cut(g,p) is_in_the_area_of f;
+

@@ -1,0 +1,217 @@
+:: Functions and Finite Sequences of Real Numbers
+::  by Jaros{\l}aw Kotowicz
+::
+:: Received March 15, 1993
+:: Copyright (c) 1993 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, CARD_1, FUNCT_1, BOOLE, TARSKI, FUNCT_2, FINSET_1,
+      FINSEQ_1, ARYTM_1, SQUARE_1, RLVECT_1, PROB_1, ARYTM_3, VECTSP_1,
+      RFINSEQ;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XREAL_0, RELAT_1, FUNCT_1,
+      FUNCT_2, FINSEQ_1, CARD_1, REAL_1, NAT_1, SQUARE_1, SEQ_1, FINSEQ_4,
+      FINSET_1, RVSUM_1, TOPREAL1;
+ constructors WELLORD2, FINSEQOP, REAL_1, NAT_1, SQUARE_1, TOPREAL1, FINSEQ_4,
+      SEQ_1, MEMBERED, PARTFUN1, XBOOLE_0;
+ clusters FINSET_1, PRELAMB, FUNCT_1, RELSET_1, FINSEQ_1, FUNCT_2, NAT_1,
+      MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+reserve x,y for set,
+        n,m for Nat,
+        r,s for Real;
+
+definition let F,G be Relation;
+pred F,G are_fiberwise_equipotent means
+:: RFINSEQ:def 1
+ for x be set holds Card (F"{x}) = Card (G"{x});
+ reflexivity;
+ symmetry;
+end;
+
+theorem :: RFINSEQ:1
+for F,G be Function st F,G are_fiberwise_equipotent holds rng F = rng G;
+
+theorem :: RFINSEQ:2
+  for F,G,H be Function
+  st F,G are_fiberwise_equipotent & F,H are_fiberwise_equipotent holds
+     G,H are_fiberwise_equipotent;
+
+theorem :: RFINSEQ:3
+for F,G be Function holds
+                   F,G are_fiberwise_equipotent
+                               iff
+ex H be Function st dom H = dom F & rng H = dom G & H is one-to-one & F = G*H;
+
+theorem :: RFINSEQ:4
+for F,G be Function holds
+  F,G are_fiberwise_equipotent iff for X be set holds Card (F"X) = Card (G"X);
+
+theorem :: RFINSEQ:5
+for D be non empty set, F,G be Function st rng F c= D & rng G c= D holds
+                   F,G are_fiberwise_equipotent
+                              iff
+      for d be Element of D holds Card (F"{d}) = Card (G"{d});
+
+theorem :: RFINSEQ:6
+for F,G be Function st dom F = dom G holds
+   F,G are_fiberwise_equipotent iff ex P be Permutation of dom F st F = G*P;
+
+theorem :: RFINSEQ:7
+  for F,G be Function
+  st F,G are_fiberwise_equipotent holds Card (dom F) = Card (dom G);
+
+definition let F be finite Function, A be set;
+ cluster F"A -> finite;
+end;
+
+canceled;
+
+theorem :: RFINSEQ:9
+  for F,G be finite Function holds
+ F,G are_fiberwise_equipotent iff for X be set holds card (F"X) = card (G"X);
+
+theorem :: RFINSEQ:10
+  for F,G be finite Function st
+  F,G are_fiberwise_equipotent holds card (dom F) = card (dom G);
+
+theorem :: RFINSEQ:11
+  for D be non empty set, F,G be finite Function st rng F c= D & rng G c= D
+ holds F,G are_fiberwise_equipotent
+                                   iff
+          for d be Element of D holds card (F"{d}) = card (G"{d});
+
+canceled;
+
+theorem :: RFINSEQ:13
+  for f,g be FinSequence holds
+  f,g are_fiberwise_equipotent iff for X be set holds card (f"X) = card (g"X);
+
+theorem :: RFINSEQ:14
+for f,g,h be FinSequence holds
+f,g are_fiberwise_equipotent iff f^h, g^h are_fiberwise_equipotent;
+
+theorem :: RFINSEQ:15
+  for f,g be FinSequence holds f^g, g^f are_fiberwise_equipotent;
+
+theorem :: RFINSEQ:16
+for f,g be FinSequence st
+  f,g are_fiberwise_equipotent holds len f = len g & dom f = dom g;
+
+theorem :: RFINSEQ:17
+  for f,g be FinSequence holds
+  f,g are_fiberwise_equipotent iff ex P be Permutation of dom g st f = g*P;
+
+definition let F be Function, X be finite set;
+ cluster F|X -> finite Function-like;
+end;
+
+theorem :: RFINSEQ:18
+  for F be Function, X be finite set
+  ex f be FinSequence st F|X, f are_fiberwise_equipotent;
+
+definition let D be set,
+               f be FinSequence of D,
+               n be Nat;
+func f /^ n -> FinSequence of D means
+:: RFINSEQ:def 2
+ len it = len f - n & for m be Nat st
+ m in dom it holds it.m = f.(m+n) if n<=len f
+ otherwise it = <*>D;
+end;
+
+theorem :: RFINSEQ:19
+for D be non empty set, f be FinSequence of D, n,m be Nat holds
+   n in dom f & m in Seg n implies (f|n).m = f.m & m in dom f;
+
+theorem :: RFINSEQ:20
+for D be non empty set, f be FinSequence of D, n be Nat, x be set st
+   len f = n+1 & x = f.(n+1) holds f = (f|n) ^ <*x*>;
+
+theorem :: RFINSEQ:21
+for D be non empty set, f be FinSequence of D, n be Nat holds (f|n)^(f/^n) = f;
+
+theorem :: RFINSEQ:22
+  for R1,R2 be FinSequence of REAL
+   st R1,R2 are_fiberwise_equipotent holds Sum R1 = Sum R2;
+
+definition let R be FinSequence of REAL;
+func MIM(R) -> FinSequence of REAL means
+:: RFINSEQ:def 3
+ len it = len R & it.(len it) = R.(len R) &
+ for n be Nat st 1 <= n & n <= len it - 1 holds it.n = (R.n) - (R.(n+1));
+end;
+
+theorem :: RFINSEQ:23
+for R be FinSequence of REAL, r be Real, n be Nat
+  st len R = n+2 & R.(n+1) = r holds MIM(R|(n+1)) = MIM(R)|n ^ <* r *>;
+
+theorem :: RFINSEQ:24
+for R be FinSequence of REAL, r,s be Real, n be Nat st
+len R = n+2 & R.(n+1) = r & R.(n+2) = s holds MIM(R) = MIM(R)|n ^ <* r-s,s *>;
+
+theorem :: RFINSEQ:25
+MIM( <*>REAL ) = <*>REAL;
+
+theorem :: RFINSEQ:26
+for r be Real holds MIM(<*r*>) = <*r*>;
+
+theorem :: RFINSEQ:27
+  for r,s be Real holds MIM(<*r,s*>) = <*r-s,s*>;
+
+theorem :: RFINSEQ:28
+  for R be FinSequence of REAL, n be Nat holds MIM(R) /^ n = MIM(R/^n);
+
+theorem :: RFINSEQ:29
+for R be FinSequence of REAL st len R <> 0 holds Sum MIM(R) = R.1;
+
+theorem :: RFINSEQ:30
+  for R be FinSequence of REAL, n be Nat
+  st 1<=n & n<len R holds Sum MIM(R/^n) = R.(n+1);
+
+definition let IT be FinSequence of REAL;
+attr IT is non-increasing means
+:: RFINSEQ:def 4
+ for n be Nat st n in dom IT & n+1 in dom IT holds IT.n >= IT.(n+1);
+end;
+
+definition
+cluster non-increasing FinSequence of REAL;
+end;
+
+theorem :: RFINSEQ:31
+for R be FinSequence of REAL
+  st len R = 0 or len R = 1 holds R is non-increasing;
+
+theorem :: RFINSEQ:32
+for R be FinSequence of REAL holds
+                      R is non-increasing
+                              iff
+            for n,m be Nat st n in dom R & m in dom R & n<m holds R.n>=R.m;
+
+theorem :: RFINSEQ:33
+for R be non-increasing FinSequence of REAL, n be Nat holds
+  R|n is non-increasing FinSequence of REAL;
+
+theorem :: RFINSEQ:34
+  for R be non-increasing FinSequence of REAL, n be Nat holds
+   R /^ n is non-increasing FinSequence of REAL;
+
+theorem :: RFINSEQ:35
+  for R be FinSequence of REAL
+ ex R1 be non-increasing FinSequence of REAL st R,R1 are_fiberwise_equipotent;
+
+theorem :: RFINSEQ:36
+  for R1,R2 be non-increasing FinSequence of REAL st
+  R1,R2 are_fiberwise_equipotent holds R1 = R2;
+
+theorem :: RFINSEQ:37
+  for R be FinSequence of REAL, r,s be Real st r <> 0 holds R"{s/r} = (r*R)"{s}
+;
+
+theorem :: RFINSEQ:38
+  for R be FinSequence of REAL holds (0*R)"{0} = dom R;

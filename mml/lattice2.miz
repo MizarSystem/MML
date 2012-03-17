@@ -1,0 +1,1287 @@
+:: Finite Join and Finite Meet, and Dual Lattices
+::  by Andrzej Trybulec
+::
+:: Received August 10, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, RELAT_1, BOOLE, FUNCT_4, FINSUB_1, BINOP_1, LATTICES,
+      SETWISEO, FUNCOP_1, FILTER_0, FINSET_1, LATTICE2;
+ notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4,
+      PARTFUN1, FUNCOP_1, BINOP_1, STRUCT_0, LATTICES, FINSET_1, FINSUB_1,
+      GROUP_1, SETWISEO, FILTER_0;
+ constructors FUNCT_4, FUNCOP_1, BINOP_1, GROUP_1, SETWISEO, FILTER_0,
+      PARTFUN1, MEMBERED, XBOOLE_0;
+ clusters LATTICES, STRUCT_0, RELSET_1, MEMBERED, ZFMISC_1, FUNCT_2, PARTFUN1,
+      XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions LATTICES, BINOP_1, SETWISEO, FILTER_0, STRUCT_0;
+ theorems LATTICES, BINOP_1, SETWISEO, FUNCOP_1, FUNCT_4, SETWOP_2, FINSET_1,
+      FINSUB_1, FUNCT_2, FUNCT_1, FILTER_0, RFUNCT_2, GRFUNC_1, GROUP_1,
+      RELAT_1, RLSUB_2, XBOOLE_1;
+ schemes FRAENKEL;
+
+begin :: Auxiliary theorems
+
+reserve A for set, C for non empty set,
+        B for Subset of A,
+        x for Element of A,
+        f,g for Function of A,C;
+
+canceled;
+
+theorem Th2:
+ dom (g|B) = B
+ proof
+  thus dom(g|B) = dom g /\ B by RELAT_1:90
+       .= A /\ B by FUNCT_2:def 1
+       .= B by XBOOLE_1:28;
+ end;
+
+canceled 2;
+
+theorem Th5:
+ f|B = g|B iff for x st x in B holds g.x = f.x
+ proof
+  thus f|B = g|B implies for x st x in B holds g.x = f.x
+   proof assume
+A1:  f|B = g|B;
+    let x;
+    assume
+A2:  x in B;
+    hence g.x = (g|B).x by FUNCT_1:72 .= f.x by A1,A2,FUNCT_1:72;
+   end;
+  assume
+A3: for x st x in B holds g.x = f.x;
+   reconsider f'=f|B, g'=g|B as Function of B,C by FUNCT_2:38;
+A4:  now let x be set; assume
+A5:    x in B;
+     hence f'.x = f.x by FUNCT_1:72 .= g.x by A3,A5 .= g'.x by A5,FUNCT_1:72;
+    end;
+  thus f|B = f'|B by RELAT_1:101 .= g'|B by A4,FUNCT_2:18
+           .= g|B by RELAT_1:101;
+ end;
+
+theorem Th6:
+ for B being set holds f +* g|B is Function of A,C
+ proof let B be set;
+A1: dom f = A & dom g = A by FUNCT_2:def 1;
+     dom (f +* g|B) = dom f \/ dom (g|B) by FUNCT_4:def 1
+         .= dom f \/ dom g /\ B by RELAT_1:90
+         .= A by A1,XBOOLE_1:22;
+  hence f +* g|B is Function of A,C by FUNCT_2:130,FUNCT_4:41;
+ end;
+
+theorem Th7:
+  g|B +* f = f
+ proof dom (g|B) = B & dom f = A by Th2,FUNCT_2:def 1;
+  hence g|B +* f = f by FUNCT_4:20;
+ end;
+
+theorem Th8:
+ for f,g being Function holds g <= f implies f +* g = f
+ proof let f,g be Function; assume
+A1: g <= f;
+   then dom g c= dom f by GRFUNC_1:8;
+then A2:dom f = dom f \/ dom g by XBOOLE_1:12;
+     for x be set st x in dom f holds
+    (x in dom g implies f.x = g.x) &
+    (not x in dom g implies f.x = f.x) by A1,GRFUNC_1:8;
+  hence f +* g = f by A2,FUNCT_4:def 1;
+ end;
+
+theorem Th9:
+ f +* f|B = f
+  proof f|B <= f by RELAT_1:88; hence thesis by Th8; end;
+
+theorem Th10:
+ (for x st x in B holds g.x = f.x) implies f +* g|B = f
+  proof assume x in B implies g.x = f.x;
+    then g|B = f|B by Th5;
+   hence f +* g|B = f by Th9;
+  end;
+
+reserve B for Finite_Subset of A;
+
+canceled;
+
+theorem g|B +* f = f
+  proof reconsider C = B as Subset of A by FINSUB_1:32;
+      g|C +* f = f by Th7; hence thesis;
+  end;
+
+theorem Th13: dom (g|B) = B
+  proof reconsider C = B as Subset of A by FINSUB_1:32;
+      dom (g|C) = C by Th2; hence thesis;
+  end;
+
+theorem Th14: (for x st x in B holds g.x = f.x) implies f +* g|B = f
+  proof reconsider C = B as Subset of A by FINSUB_1:32;
+      (for x st x in C holds g.x = f.x) implies f +* g|C = f by Th10;
+   hence thesis;
+  end;
+
+canceled;
+
+theorem Th16:
+ f|B = g|B implies f.:B = g.:B
+  proof assume f|B = g|B;
+   hence f.:B = (g|B).:B by RFUNCT_2:5 .= g.:B by RFUNCT_2:5;
+  end;
+
+definition let D be non empty set;
+ let o,o' be BinOp of D;
+  pred o absorbs o' means
+:Def1: for x,y being Element of D holds o.(x,o'.(x,y)) = x;
+  antonym o doesn't_absorb o';
+end;
+
+:: Dual Lattice structures
+
+reserve L for non empty LattStr,
+        a,b,c for Element of L;
+
+theorem Th17:
+  the L_join of L is commutative associative &
+  the L_meet of L is commutative associative &
+  the L_join of L absorbs the L_meet of L &
+  the L_meet of L absorbs the L_join of L
+   implies L is Lattice-like
+proof
+ assume that
+A1:  the L_join of L is commutative and
+A2:  the L_join of L is associative and
+A3:  the L_meet of L is commutative and
+A4:  the L_meet of L is associative and
+A5:  the L_join of L absorbs the L_meet of L and
+A6:  the L_meet of L absorbs the L_join of L;
+ thus
+A7: a"\/"b = b"\/"a
+  proof
+   thus a"\/"b = (the L_join of L).(a,b) by LATTICES:def 1
+            .= (the L_join of L).(b,a) by A1,BINOP_1:def 2
+            .= b"\/"a by LATTICES:def 1;
+  end;
+A8: a"/\"b = b"/\"a
+  proof
+   thus a"/\"b = (the L_meet of L).(a,b) by LATTICES:def 2
+            .= (the L_meet of L).(b,a) by A3,BINOP_1:def 2
+            .= b"/\"a by LATTICES:def 2;
+  end;
+ thus a"\/"(b"\/"c) = (a"\/"b)"\/"c
+  proof
+A9: (the L_join of L).(a,b) = a"\/"b by LATTICES:def 1;
+      (the L_join of L).(b,c) = b"\/"c by LATTICES:def 1;
+   hence a"\/"(b"\/"c) = (the L_join of L).(a,(the L_join of L).(b,c))
+                                                       by LATTICES:def 1
+            .= (the L_join of L).((the L_join of L).(a,b),c) by A2,BINOP_1:def
+3
+            .= (a"\/"b)"\/"c by A9,LATTICES:def 1;
+  end;
+ thus (a"/\"b)"\/"b = b
+  proof
+A10: (the L_meet of L).(b,a) = b "/\" a by LATTICES:def 2;
+   thus (a"/\"b)"\/"b = b "\/" (a "/\" b) by A7
+           .= b "\/" (b "/\" a) by A8
+           .= (the L_join of L).(b,(the L_meet of L).(b,a)) by A10,LATTICES:def
+1
+           .= b by A5,Def1;
+  end;
+ thus a"/\"b = b"/\"a by A8;
+ thus a"/\"(b"/\"c) = (a"/\"b)"/\"c
+  proof
+A11: (the L_meet of L).(a,b) = a"/\"b by LATTICES:def 2;
+      (the L_meet of L).(b,c) = b"/\"c by LATTICES:def 2;
+   hence a"/\"(b"/\"c) = (the L_meet of L).(a,(the L_meet of L).(b,c))
+                                                       by LATTICES:def 2
+            .= (the L_meet of L).((the L_meet of L).(a,b),c) by A4,BINOP_1:def
+3
+            .= (a"/\"b)"/\"c by A11,LATTICES:def 2;
+  end;
+ let a,b;
+    (the L_join of L).(a,b) = a"\/"b by LATTICES:def 1;
+ hence a"/\"(a"\/"
+b) = (the L_meet of L).(a,(the L_join of L).(a,b))by LATTICES:def 2
+               .= a by A6,Def1;
+end;
+
+
+definition let L be LattStr;
+ func L.: -> strict LattStr equals
+:Def2: LattStr(#the carrier of L, the L_meet of L, the L_join of L#);
+ correctness;
+end;
+
+definition let L be non empty LattStr;
+ cluster L.: -> non empty;
+ coherence
+  proof
+      L.:
+ = LattStr(#the carrier of L, the L_meet of L, the L_join of L#) by Def2;
+   hence the carrier of L.: is non empty;
+  end;
+end;
+
+theorem Th18:
+ the carrier of L = the carrier of L.: &
+ the L_join of L = the L_meet of L.: &
+ the L_meet of L = the L_join of L.:
+  proof
+     L.: = LattStr(#the carrier of L, the L_meet of L, the L_join of L#) by
+Def2
+;
+   hence thesis;
+  end;
+
+theorem
+   for L being strict non empty LattStr holds L.:.: = L
+  proof let L be strict non empty LattStr;
+   the carrier of L = the carrier of L.: &
+   the L_join of L = the L_meet of L.: &
+   the L_meet of L = the L_join of L.: by Th18;
+   hence L.:.: =L by Def2;
+  end;
+
+:: General Lattices
+
+reserve L for Lattice;
+reserve a,b,c,u,v for Element of L;
+
+canceled;
+
+theorem Th21:
+ (for v holds u "\/" v = v) implies u = Bottom L
+  proof assume
+A1:  u "\/" v = v;
+      now let v; v "\/" u = v by A1; then u [= v by LATTICES:def 3;
+     hence v "/\" u = u by LATTICES:21;
+    end;
+   hence u = Bottom L by RLSUB_2:84;
+  end;
+
+theorem Th22:
+ (for v holds (the L_join of L).(u,v) = v) implies u = Bottom L
+  proof assume
+A1:  for v holds (the L_join of L).(u,v) = v;
+      now let v;
+     thus u "\/" v = (the L_join of L).(u,v) by LATTICES:def 1 .= v by A1;
+    end;
+   hence u = Bottom L by Th21;
+  end;
+
+canceled;
+
+theorem Th24:
+ (for v holds u "/\" v = v) implies u = Top L
+  proof assume
+A1:  u "/\" v = v;
+      now let v; v "/\" u = v by A1;
+      then v [= u by LATTICES:21;
+     hence u = v "\/" u by LATTICES:def 3;
+    end;
+   hence u = Top L by RLSUB_2:85;
+  end;
+
+theorem Th25:
+ (for v holds (the L_meet of L).(u,v) = v) implies u = Top L
+  proof assume
+A1:  for v holds (the L_meet of L).(u,v) = v;
+      now let v;
+     thus u "/\" v = (the L_meet of L).(u,v) by LATTICES:def 2 .= v by A1;
+    end;
+   hence u = Top L by Th24;
+  end;
+
+theorem Th26:
+ the L_join of L is idempotent
+  proof let a;
+   thus (the L_join of L).(a,a) = a "\/" a by LATTICES:def 1
+     .= a by LATTICES:17;
+  end;
+
+theorem Th27:
+ for L being join-commutative (non empty \/-SemiLattStr) holds
+  the L_join of L is commutative
+  proof
+   let L be join-commutative (non empty \/-SemiLattStr);
+   let a,b be Element of L;
+   thus (the L_join of L).(a,b) = b "\/" a by LATTICES:def 1
+     .= (the L_join of L).(b,a) by LATTICES:def 1;
+  end;
+
+theorem Th28:
+ the L_join of L has_a_unity implies Bottom L = the_unity_wrt the L_join of L
+ proof set J = the L_join of L;
+  given u such that
+A1: u is_a_unity_wrt J;
+     J is commutative by Th27;
+   then (the L_join of L).(u,v) = v by A1,BINOP_1:12;
+   then u = Bottom L by Th22;
+  hence Bottom L = the_unity_wrt the L_join of L by A1,BINOP_1:def 8;
+ end;
+
+theorem Th29:
+ for L being join-associative (non empty \/-SemiLattStr) holds
+ the L_join of L is associative
+  proof
+   let L be join-associative (non empty \/-SemiLattStr);
+   let a,b,c be Element of L;
+   thus (the L_join of L).(a,(the L_join of L).(b,c))
+      = (the L_join of L).(a, b "\/" c) by LATTICES:def 1
+     .= a "\/" (b "\/" c) by LATTICES:def 1
+     .= (a "\/" b) "\/" c by LATTICES:def 5
+     .= (the L_join of L).(a "\/" b, c) by LATTICES:def 1
+     .= (the L_join of L).((the L_join of L).(a,b),c) by LATTICES:def 1;
+  end;
+
+theorem Th30:
+ the L_meet of L is idempotent
+  proof let a;
+   thus (the L_meet of L).(a,a) = a "/\" a by LATTICES:def 2
+     .= a by LATTICES:18;
+  end;
+
+theorem Th31:
+ for L being meet-commutative (non empty /\-SemiLattStr) holds
+ the L_meet of L is commutative
+  proof
+   let L be meet-commutative (non empty /\-SemiLattStr);
+   let a,b be Element of L;
+   thus (the L_meet of L).(a,b) = b "/\" a by LATTICES:def 2
+     .= (the L_meet of L).(b,a) by LATTICES:def 2;
+  end;
+
+theorem Th32:
+ for L being meet-associative (non empty /\-SemiLattStr) holds
+ the L_meet of L is associative
+  proof
+   let L be meet-associative (non empty /\-SemiLattStr);
+   let a,b,c be Element of L;
+   thus (the L_meet of L).(a,(the L_meet of L).(b,c))
+      = (the L_meet of L).(a, b "/\" c) by LATTICES:def 2
+     .= a "/\" (b "/\" c) by LATTICES:def 2
+     .= (a "/\" b) "/\" c by LATTICES:def 7
+     .= (the L_meet of L).(a "/\" b, c) by LATTICES:def 2
+     .= (the L_meet of L).((the L_meet of L).(a,b),c) by LATTICES:def 2;
+  end;
+
+definition let L be join-commutative (non empty \/-SemiLattStr);
+  cluster the L_join of L -> commutative;
+  coherence by Th27;
+end;
+
+definition let L be join-associative (non empty \/-SemiLattStr);
+  cluster the L_join of L -> associative;
+  coherence by Th29;
+end;
+
+definition let L be meet-commutative (non empty /\-SemiLattStr);
+  cluster the L_meet of L -> commutative;
+  coherence by Th31;
+end;
+
+definition let L be meet-associative (non empty /\-SemiLattStr);
+  cluster the L_meet of L -> associative;
+  coherence by Th32;
+end;
+
+theorem Th33:
+ the L_meet of L has_a_unity implies Top L = the_unity_wrt the L_meet of L
+ proof set J = the L_meet of L;
+  given u such that
+A1: u is_a_unity_wrt J;
+     (the L_meet of L).(u,v) = v by A1,BINOP_1:12;
+   then u = Top L by Th25;
+  hence Top L = the_unity_wrt the L_meet of L by A1,BINOP_1:def 8;
+ end;
+
+theorem Th34:
+ the L_join of L is_distributive_wrt the L_join of L
+  proof
+      now let a,b,c;
+     thus (the L_join of L).(a,(the L_join of L).(b,c))
+        = (the L_join of L).(a, b "\/" c) by LATTICES:def 1
+       .= a "\/" (b "\/" c) by LATTICES:def 1
+       .= a "\/" b "\/" c by LATTICES:def 5
+       .= a "\/" a "\/" b "\/" c by LATTICES:17
+       .= (a "\/" b) "\/" a "\/" c by LATTICES:def 5
+       .= (a "\/" b) "\/" (a "\/" c) by LATTICES:def 5
+       .= (the L_join of L).(a "\/" b, a "\/" c) by LATTICES:def 1
+       .= (the L_join of L).((the L_join of L).(a,b), a "\/"
+ c) by LATTICES:def 1
+       .= (the L_join of L).((the L_join of L).(a,b),(the L_join of L).(a,c))
+                                                           by LATTICES:def 1;
+    end;
+   hence thesis by BINOP_1:24;
+  end;
+
+theorem
+   L is D_Lattice implies
+ the L_join of L is_distributive_wrt the L_meet of L
+  proof assume
+A1: L is D_Lattice;
+      now let a,b,c;
+     thus (the L_join of L).(a,(the L_meet of L).(b,c))
+        = (the L_join of L).(a, b "/\" c) by LATTICES:def 2
+       .= a "\/" (b "/\" c) by LATTICES:def 1
+       .= (a "\/" b) "/\" (a "\/" c) by A1,LATTICES:31
+       .= (the L_meet of L).(a "\/" b, a "\/" c) by LATTICES:def 2
+       .= (the L_meet of L).((the L_join of L).(a,b), a "\/"
+ c) by LATTICES:def 1
+       .= (the L_meet of L).((the L_join of L).(a,b),(the L_join of L).(a,c))
+                                                           by LATTICES:def 1;
+    end;
+   hence thesis by BINOP_1:24;
+  end;
+
+theorem Th36:
+ the L_join of L is_distributive_wrt the L_meet of L
+ implies L is distributive
+ proof assume
+A1: the L_join of L is_distributive_wrt the L_meet of L;
+A2: now let a,b,c;
+    thus a "\/" (b "/\" c) = (the L_join of L).(a, b "/\" c) by LATTICES:def 1
+      .= (the L_join of L).(a,(the L_meet of L).(b,c)) by LATTICES:def 2
+      .= (the L_meet of L).((the L_join of L).(a,b),(the L_join of L).(a,c))
+                                                       by A1,BINOP_1:24
+      .= (the L_meet of L).((the L_join of L).(a,b), a "\/"
+ c) by LATTICES:def 1
+      .= (the L_meet of L).(a "\/" b, a "\/" c) by LATTICES:def 1
+      .= (a "\/" b) "/\" (a "\/" c) by LATTICES:def 2;
+   end;
+  let a,b,c;
+  thus a"/\"(b"\/"c) = a"/\"(c"\/"a)"/\"(c"\/"b) by LATTICES:def 9
+                .= a"/\"((c"\/"a)"/\"(c"\/"b)) by LATTICES:def 7
+                .= a"/\"((a"/\"b)"\/"c) by A2
+                .= ((a"/\"b)"\/"a)"/\"((a"/\"b)"\/"c) by LATTICES:def 8
+                .= (a"/\"b)"\/"(a"/\"c) by A2;
+ end;
+
+theorem Th37:
+ L is D_Lattice implies
+ the L_meet of L is_distributive_wrt the L_join of L
+  proof assume
+A1: L is D_Lattice;
+      now let a,b,c;
+     thus (the L_meet of L).(a,(the L_join of L).(b,c))
+        = (the L_meet of L).(a, b "\/" c) by LATTICES:def 1
+       .= a "/\" (b "\/" c) by LATTICES:def 2
+       .= (a "/\" b) "\/" (a "/\" c) by A1,LATTICES:def 11
+       .= (the L_join of L).(a "/\" b, a "/\" c) by LATTICES:def 1
+       .= (the L_join of L).((the L_meet of L).(a,b), a "/\"
+ c) by LATTICES:def 2
+       .= (the L_join of L).((the L_meet of L).(a,b),(the L_meet of L).(a,c))
+                                                         by LATTICES:def 2;
+    end;
+   hence thesis by BINOP_1:24;
+  end;
+
+theorem
+   the L_meet of L is_distributive_wrt the L_join of L
+ implies L is distributive
+ proof assume
+A1: the L_meet of L is_distributive_wrt the L_join of L;
+  let a,b,c;
+  thus a "/\" (b "\/" c) = (the L_meet of L).(a, b "\/" c) by LATTICES:def 2
+    .= (the L_meet of L).(a,(the L_join of L).(b,c)) by LATTICES:def 1
+    .= (the L_join of L).((the L_meet of L).(a,b),(the L_meet of L).(a,c))
+                                                     by A1,BINOP_1:24
+    .= (the L_join of L).((the L_meet of L).(a,b), a "/\" c) by LATTICES:def 2
+    .= (the L_join of L).(a "/\" b, a "/\" c) by LATTICES:def 2
+    .= (a "/\" b) "\/" (a "/\" c) by LATTICES:def 1;
+ end;
+
+theorem Th39:
+ the L_meet of L is_distributive_wrt the L_meet of L
+  proof
+      now let a,b,c;
+     thus (the L_meet of L).(a,(the L_meet of L).(b,c))
+        = (the L_meet of L).(a, b "/\" c) by LATTICES:def 2
+       .= a "/\" (b "/\" c) by LATTICES:def 2
+       .= a "/\" b "/\" c by LATTICES:def 7
+       .= a "/\" a "/\" b "/\" c by LATTICES:18
+       .= (a "/\" b) "/\" a "/\" c by LATTICES:def 7
+       .= (a "/\" b) "/\" (a "/\" c) by LATTICES:def 7
+       .= (the L_meet of L).(a "/\" b, a "/\" c) by LATTICES:def 2
+       .= (the L_meet of L).((the L_meet of L).(a,b), a "/\"
+ c) by LATTICES:def 2
+       .= (the L_meet of L).((the L_meet of L).(a,b),(the L_meet of L).(a,c))
+                                                          by LATTICES:def 2;
+    end;
+   hence thesis by BINOP_1:24;
+  end;
+
+theorem Th40:
+  the L_join of L absorbs the L_meet of L
+ proof let x,y be Element of L;
+     (the L_meet of L).(x,y) = x "/\" y by LATTICES:def 2;
+  hence (the L_join of L).(x,(the L_meet of L).(x,y)) = x "\/"(x "/\" y)
+                                           by LATTICES:def 1
+     .= x by LATTICES:def 8;
+ end;
+
+theorem Th41:
+ the L_meet of L absorbs the L_join of L
+ proof let x,y be Element of L;
+     (the L_join of L).(x,y) = x "\/" y by LATTICES:def 1;
+  hence (the L_meet of L).(x,(the L_join of L).(x,y)) = x "/\"(x "\/" y)
+                                                         by LATTICES:def 2
+     .= x by LATTICES:def 9;
+ end;
+
+definition let A be non empty set, L be Lattice;
+ let B be Finite_Subset of A; let f be Function of A, the carrier of L;
+  func FinJoin(B, f) -> Element of L equals
+:Def3:  (the L_join of L)$$(B,f);
+ correctness;
+  func FinMeet(B, f) -> Element of L equals
+:Def4:  (the L_meet of L)$$(B,f);
+ correctness;
+end;
+
+reserve A for non empty set,
+        x for Element of A,
+        B for Finite_Subset of A,
+        f,g for Function of A, the carrier of L;
+
+canceled;
+
+theorem Th43:
+  x in B implies f.x [= FinJoin(B,f)
+ proof assume
+A1: x in B;
+A2: the L_join of L is commutative & the L_join of L is associative &
+    the L_join of L is idempotent by Th26;
+     f.x "\/" FinJoin(B,f) = f.x "\/" (the L_join of L)$$(B,f) by Def3
+            .= (the L_join of L).(f.x, (the L_join of L)$$(B,f)) by LATTICES:
+def 1
+            .= (the L_join of L)$$(B,f) by A1,A2,SETWISEO:31
+            .= FinJoin(B,f) by Def3;
+  hence thesis by LATTICES:def 3;
+ end;
+
+theorem Th44:
+  (ex x st x in B & u [= f.x) implies u [= FinJoin(B,f)
+ proof given x such that
+A1: x in B and
+A2: u [= f.x;
+      f.x [= FinJoin(B,f) by A1,Th43;
+then A3:  f.x "\/" FinJoin(B,f) = FinJoin(B,f) by LATTICES:def 3;
+   then u "\/" FinJoin(B,f) = u "\/" f.x "\/" FinJoin(B,f) by LATTICES:def 5
+     .= FinJoin(B,f) by A2,A3,LATTICES:def 3;
+  hence u [= FinJoin(B,f) by LATTICES:def 3;
+ end;
+
+
+theorem Th45:
+  (for x st x in B holds f.x = u) & B <> {} implies FinJoin(B,f) = u
+ proof assume
+A1: (for x st x in B holds f.x = u) & B <> {};
+   set J = the L_join of L;
+A2: J is commutative & J is associative & J is idempotent by Th26;
+  thus FinJoin(B,f) = J$$(B,f) by Def3
+       .= u by A1,A2,SETWISEO:33;
+ end;
+
+theorem
+     FinJoin(B,f) [= u implies for x st x in B holds f.x [= u
+ proof
+  assume
+A1: FinJoin(B,f) [= u;
+  let x;
+  assume x in B; then f.x [= FinJoin(B,f) by Th43;
+  hence f.x [= u by A1,LATTICES:25;
+ end;
+
+theorem Th47:
+  B <> {} & (for x st x in B holds f.x [= u) implies FinJoin(B,f) [= u
+ proof assume that
+A1: B <> {} and
+A2: for x st x in B holds f.x [= u;
+    set J = the L_join of L;
+A3: J is commutative & J is associative &
+    J is_distributive_wrt J & J is idempotent by Th26,Th34;
+A4: now let x;
+     assume x in B;
+then A5:    f.x [= u by A2;
+     thus (J[:](f,u)).x = J.(f.x, u) by FUNCOP_1:60
+        .= f.x "\/" u by LATTICES:def 1 .= u by A5,LATTICES:def 3;
+    end;
+     FinJoin(B,f) "\/" u = J.(FinJoin(B,f), u) by LATTICES:def 1
+       .= J.(J$$(B,f), u) by Def3
+       .= J$$(B,J[:](f,u)) by A1,A3,SETWISEO:37
+       .= u by A1,A3,A4,SETWISEO:33;
+  hence FinJoin(B,f) [= u by LATTICES:def 3;
+ end;
+
+theorem
+    B <> {} & (for x st x in B holds f.x [= g.x)
+   implies FinJoin(B,f) [= FinJoin(B,g)
+ proof assume that
+A1: B <> {} and
+A2: for x st x in B holds f.x [= g.x;
+     now let x; assume
+A3:  x in B;
+     then f.x [= g.x by A2;
+    hence f.x [= FinJoin(B,g) by A3,Th44;
+   end;
+  hence FinJoin(B,f) [= FinJoin(B,g) by A1,Th47;
+ end;
+
+theorem Th49:
+ B <> {} & f|B = g|B implies FinJoin(B,f) = FinJoin(B,g)
+ proof assume that
+A1: B <> {} and
+A2: f|B = g|B;
+    set J = the L_join of L;
+A3: J is commutative & J is associative & J is idempotent by Th26;
+A4:  f.:B = g.:B by A2,Th16;
+  thus FinJoin(B,f) = J$$(B,f) by Def3
+           .= J$$(B,g) by A1,A3,A4,SETWISEO:35
+           .= FinJoin(B,g) by Def3;
+ end;
+
+theorem
+     B <> {} implies v "\/" FinJoin(B,f) = FinJoin(B, (the L_join of L)[;](v,f)
+)
+  proof assume
+A1:  B <> {};
+    set J = the L_join of L;
+A2: J is idempotent & J is commutative & J is associative &
+    J is_distributive_wrt J by Th26,Th34;
+   thus v "\/" FinJoin(B,f) = J.(v, FinJoin(B,f)) by LATTICES:def 1
+            .= J.(v, J$$(B,f)) by Def3
+            .= J$$(B, J[;](v,f)) by A1,A2,SETWISEO:36
+            .= FinJoin(B, J[;](v,f)) by Def3;
+  end;
+
+definition let L be Lattice;
+ cluster L.: -> Lattice-like;
+ coherence
+  proof
+   the carrier of L = the carrier of L.: &
+    the L_join of L = the L_meet of L.: &
+    the L_meet of L = the L_join of L.: by Th18;
+   then the L_join of L.: is commutative &
+   the L_join of L.: is associative &
+   the L_meet of L.: is commutative &
+   the L_meet of L.: is associative &
+   the L_join of L.: absorbs the L_meet of L.: &
+   the L_meet of L.: absorbs the L_join of L.: by Th40,Th41;
+  hence L.: is Lattice-like by Th17;
+ end;
+end;
+
+theorem Th51:
+ for L being Lattice,
+     B being Finite_Subset of A
+ for f being Function of A, the carrier of L,
+     f' being Function of A, the carrier of L.: st f = f'
+   holds FinJoin(B,f) = FinMeet(B,f') &
+         FinMeet(B,f) = FinJoin(B,f')
+ proof
+  let L be Lattice, B be Finite_Subset of A;
+  let f be Function of A, the carrier of L,
+      f' be Function of A, the carrier of L.: such that
+A1: f = f';
+A2: the carrier of L = the carrier of L.: &
+    the L_join of L = the L_meet of L.: &
+    the L_meet of L = the L_join of L.: by Th18;
+   hence FinJoin(B,f) = (the L_meet of L.:)$$(B,f') by A1,Def3
+     .= FinMeet(B,f') by Def4;
+   thus FinMeet(B,f) = (the L_join of L.:)$$(B,f') by A1,A2,Def4
+     .= FinJoin(B,f') by Def3;
+ end;
+
+theorem Th52:
+ for a',b' being Element of L.: st a = a' & b = b' holds
+  a "/\" b = a'"\/" b' & a "\/" b = a'"/\" b'
+ proof let a',b' be Element of L.: such that
+A1: a = a' & b = b';
+  thus a "/\" b = (the L_meet of L).(a,b) by LATTICES:def 2
+             .= (the L_join of L.:).(a',b') by A1,Th18
+             .= a'"\/" b' by LATTICES:def 1;
+  thus a "\/" b = (the L_join of L).(a,b) by LATTICES:def 1
+             .= (the L_meet of L.:).(a',b') by A1,Th18
+             .= a'"/\" b' by LATTICES:def 2;
+ end;
+
+
+theorem Th53:
+ a [= b implies
+  for a',b' being Element of L.: st a = a' & b = b'
+   holds b' [= a'
+proof assume a [= b;
+then A1: a "\/" b = b by LATTICES:def 3;
+ let a',b' be Element of L.:;
+ assume
+   a = a' & b = b';
+  then b' "/\" a' = b' by A1,Th52;
+ hence b' [= a' by LATTICES:21;
+end;
+
+theorem Th54:
+ for a',b' being Element of L.:
+   st a' [= b' & a = a' & b = b'
+  holds b [= a
+proof let a',b' be Element of L.:;
+ assume that
+A1: a' [= b' and
+A2: a = a' & b = b';
+   a' "\/" b' = b' by A1,LATTICES:def 3;
+  then b "/\" a = b by A2,Th52;
+ hence b [= a by LATTICES:21;
+end;
+
+:: Dualizations
+
+theorem Th55:
+  x in B implies FinMeet(B,f) [= f.x
+proof assume
+A1: x in B;
+    the carrier of L = the carrier of L.: by Th18;
+  then reconsider f' = f as Function of A, the carrier of L.:;
+A2:  FinJoin(B,f') = FinMeet(B,f) by Th51;
+    f'.x [= FinJoin(B,f') by A1,Th43;
+ hence FinMeet(B,f) [= f.x by A2,Th54;
+end;
+
+theorem Th56:
+  (ex x st x in B & f.x [= u) implies FinMeet(B,f)[= u
+   proof
+    given x such that
+A1:   x in B and
+A2:  f.x [= u;
+       the carrier of L = the carrier of L.: by Th18;
+     then reconsider f' = f as Function of A, the carrier of L.:;
+     reconsider u' = u as Element of L.: by Th18;
+A3:  FinJoin(B,f') = FinMeet(B,f) by Th51;
+        u' [= f'.x by A2,Th53;
+     then u' [= FinJoin(B,f') by A1,Th44;
+    hence FinMeet(B,f)[= u by A3,Th54;
+   end;
+
+theorem
+    (for x st x in B holds f.x = u) & B <> {} implies FinMeet(B,f) = u
+proof assume that
+A1: (for x st x in B holds f.x = u) and
+A2: B <> {};
+    the carrier of L = the carrier of L.: by Th18;
+  then reconsider f' = f as Function of A, the carrier of L.:;
+  reconsider u' = u as Element of L.: by Th18;
+A3:  FinJoin(B,f') = FinMeet(B,f) by Th51;
+    for x holds x in B implies u' = f'.x by A1;
+ hence FinMeet(B,f) = u by A2,A3,Th45;
+end;
+
+theorem
+    B <> {} implies v "/\" FinMeet(B,f) = FinMeet(B, (the L_meet of L)[;](v,f))
+  proof assume
+A1:  B <> {};
+    set J = the L_meet of L;
+A2: J is idempotent & J is commutative & J is associative &
+    J is_distributive_wrt J by Th30,Th39;
+   thus v "/\" FinMeet(B,f) = J.(v, FinMeet(B,f)) by LATTICES:def 2
+            .= J.(v, J$$(B,f)) by Def4
+            .= J$$(B, J[;](v,f)) by A1,A2,SETWISEO:36
+            .= FinMeet(B, J[;](v,f)) by Def4;
+  end;
+
+theorem
+    u [= FinMeet(B,f) implies for x st x in B holds u [= f.x
+ proof
+  assume
+A1: u [= FinMeet(B,f);
+  let x;
+  assume x in B; then FinMeet(B,f) [= f.x by Th55;
+  hence u [= f.x by A1,LATTICES:25;
+ end;
+
+theorem
+   B <> {} & f|B = g|B implies FinMeet(B,f) = FinMeet(B,g)
+ proof assume
+A1: B <> {} & f|B = g|B;
+     the carrier of L = the carrier of L.: by Th18;
+   then reconsider f' = f, g' = g as Function of A, the carrier of L.:;
+     FinMeet(B,f) = FinJoin(B,f') & FinMeet(B,g) = FinJoin(B,g') by Th51;
+  hence FinMeet(B,f) = FinMeet(B,g) by A1,Th49;
+ end;
+
+theorem Th61:
+  B <> {} & (for x st x in B holds u [= f.x) implies u [= FinMeet(B,f)
+ proof assume that
+A1:  B <> {} and
+A2:  for x st x in B holds u [= f.x;
+     the carrier of L = the carrier of L.: by Th18;
+   then reconsider f' = f as Function of A, the carrier of L.:;
+   reconsider u' = u as Element of L.: by Th18;
+A3:  FinJoin(B,f') = FinMeet(B,f) by Th51;
+     now let x;
+    assume x in B; then u [= f.x by A2;
+    hence f'.x [= u' by Th53;
+   end;
+   then FinJoin(B,f') [= u' by A1,Th47;
+  hence u [= FinMeet(B,f) by A3,Th54;
+ end;
+
+theorem
+    B <> {} & (for x st x in B holds f.x [= g.x)
+   implies FinMeet(B,f) [= FinMeet(B,g)
+ proof assume that
+A1: B <> {} and
+A2: for x st x in B holds f.x [= g.x;
+     now let x; assume
+A3:  x in B;
+     then f.x [= g.x by A2;
+    hence FinMeet(B,f) [= g.x by A3,Th56;
+   end;
+  hence FinMeet(B,f) [= FinMeet(B,g) by A1,Th61;
+ end;
+
+theorem
+   for L being Lattice holds L is lower-bounded iff L.: is upper-bounded
+ proof let L be Lattice;
+  thus L is lower-bounded implies L.: is upper-bounded
+   proof
+    given c being Element of L such that
+A1:   for a being Element of L holds c"/\"a = c & a"/\"c = c;
+     reconsider c' = c as Element of L.: by Th18;
+    take c';
+    let a' be Element of L.:;
+     reconsider a = a' as Element of L by Th18;
+    thus c'"\/"a' = (the L_join of L.:).(c',a') by LATTICES:def 1
+             .= (the L_meet of L).(c,a) by Th18
+             .= c"/\"a by LATTICES:def 2 .= c' by A1;
+    hence a'"\/"c' = c';
+   end;
+  given c being Element of L.: such that
+A2: for a being Element of L.: holds c"\/"a = c & a"\/"c = c;
+   reconsider c'= c as Element of L by Th18;
+  take c';
+  let a' be Element of L;
+  reconsider a = a' as Element of L.: by Th18;
+  thus c'"/\"a' = (the L_meet of L).(c',a') by LATTICES:def 2
+           .= (the L_join of L.:).(c,a) by Th18
+           .= c"\/"a by LATTICES:def 1 .= c' by A2;
+  hence a'"/\"c' = c';
+ end;
+
+theorem Th64:
+ for L being Lattice holds L is upper-bounded iff L.: is lower-bounded
+proof let L be Lattice;
+  thus L is upper-bounded implies L.: is lower-bounded
+   proof
+    given c being Element of L such that
+A1:   for a being Element of L holds c"\/"a = c & a"\/"c = c;
+     reconsider c' = c as Element of L.: by Th18;
+    take c';
+    let a' be Element of L.:;
+     reconsider a = a' as Element of L by Th18;
+    thus c'"/\"a' = (the L_meet of L.:).(c',a') by LATTICES:def 2
+             .= (the L_join of L).(c,a) by Th18
+             .= c"\/"a by LATTICES:def 1 .= c' by A1;
+    hence a'"/\"c' = c';
+   end;
+  given c being Element of L.: such that
+A2: for a being Element of L.: holds c"/\"a = c & a"/\"c = c;
+   reconsider c'= c as Element of L by Th18;
+  take c';
+  let a' be Element of L;
+   reconsider a = a' as Element of L.: by Th18;
+  thus c'"\/"a' = (the L_join of L).(c',a') by LATTICES:def 1
+           .= (the L_meet of L.:).(c,a) by Th18
+           .= c"/\"a by LATTICES:def 2 .= c' by A2;
+  hence a'"\/"c' = c';
+end;
+
+theorem
+   L is D_Lattice iff L.: is D_Lattice
+ proof
+A1: the L_meet of L = the L_join of L.: &
+    the L_join of L = the L_meet of L.: &
+    the carrier of L = the carrier of L.: by Th18;
+  thus L is D_Lattice implies L.: is D_Lattice
+   proof assume L is D_Lattice;
+     then the L_join of L.: is_distributive_wrt the L_meet of L.: by A1,Th37;
+    hence L.: is D_Lattice by Th36;
+   end;
+  assume L.: is D_Lattice;
+   then the L_join of L is_distributive_wrt the L_meet of L by A1,Th37;
+  hence L is D_Lattice by Th36;
+ end;
+
+:::::::::::::::::::::::::::
+::
+:: Lower bounded lattices
+::
+:::::::::::::::::::::::::::
+
+reserve L for 0_Lattice,
+        f,g for Function of A, the carrier of L,
+        u for Element of L;
+
+theorem Th66:
+ Bottom L is_a_unity_wrt the L_join of L
+ proof
+    now let u;
+   thus (the L_join of L).(Bottom L,u) = Bottom L"\/"
+u by LATTICES:def 1 .= u by LATTICES:39;
+  end;
+  hence thesis by BINOP_1:12;
+ end;
+
+theorem Th67:
+ the L_join of L has_a_unity
+  proof Bottom L is_a_unity_wrt the L_join of L by Th66;
+   hence thesis by SETWISEO:def 2;
+  end;
+
+theorem Th68:
+ Bottom L = the_unity_wrt the L_join of L
+  proof the L_join of L has_a_unity by Th67; hence thesis by Th28; end;
+
+theorem Th69:
+ f|B = g|B implies FinJoin(B,f) = FinJoin(B,g)
+  proof
+    set J = the L_join of L;
+A1: J has_a_unity & Bottom L = the_unity_wrt J by Th67,Th68;
+   assume
+A2:  f|B = g|B;
+      now per cases;
+     suppose A3: B = {};
+      hence FinJoin(B,f) = J$$({}.A,f) by Def3
+              .= Bottom L by A1,SETWISEO:40
+              .= J$$({}.A,g) by A1,SETWISEO:40
+              .= FinJoin(B,g) by A3,Def3;
+     suppose B <> {}; hence thesis by A2,Th49;
+    end;
+   hence thesis;
+  end;
+
+theorem Th70:
+  (for x st x in B holds f.x [= u) implies FinJoin(B,f) [= u
+ proof assume
+A1: for x st x in B holds f.x [= u;
+    set J = the L_join of L;
+A2: J is commutative & J is associative & J has_a_unity &
+    Bottom L = the_unity_wrt J & J is_distributive_wrt J & J is idempotent
+       by Th26,Th34,Th67,Th68;
+      now per cases;
+     suppose B = {};
+      then FinJoin(B,f) = J$$({}.A,f) by Def3
+            .= Bottom L by A2,SETWISEO:40;
+      hence thesis by LATTICES:41;
+     suppose B <> {}; hence thesis by A1,Th47;
+    end;
+  hence thesis;
+ end;
+
+theorem
+    (for x st x in B holds f.x [= g.x)
+   implies FinJoin(B,f) [= FinJoin(B,g)
+ proof assume
+A1: for x st x in B holds f.x [= g.x;
+     now let x; assume
+A2:  x in B;
+     then f.x [= g.x by A1;
+    hence f.x [= FinJoin(B,g) by A2,Th44;
+   end;
+  hence FinJoin(B,f) [= FinJoin(B,g) by Th70;
+ end;
+
+:::::::::::::::::::::::::::
+::
+:: Upper bounded lattices
+::
+:::::::::::::::::::::::::::
+
+reserve L for 1_Lattice,
+        f,g for Function of A, the carrier of L,
+        u for Element of L;
+
+theorem Th72:
+ Top L is_a_unity_wrt the L_meet of L
+ proof
+    now let u;
+   thus (the L_meet of L).(Top L,u) = Top L"/\"
+u by LATTICES:def 2 .= u by LATTICES:43;
+  end;
+  hence thesis by BINOP_1:12;
+ end;
+
+theorem Th73:
+ the L_meet of L has_a_unity
+  proof Top L is_a_unity_wrt the L_meet of L by Th72;
+   hence thesis by SETWISEO:def 2;
+  end;
+
+theorem
+   Top L = the_unity_wrt the L_meet of L
+  proof the L_meet of L has_a_unity by Th73; hence thesis by Th33; end;
+
+theorem
+   f|B = g|B implies FinMeet(B,f) = FinMeet(B,g)
+ proof assume
+A1: f|B = g|B;
+     the carrier of L = the carrier of L.: by Th18;
+   then reconsider f' = f, g' = g as Function of A, the carrier of L.:;
+A2: L.: is 0_Lattice by Th64;
+     FinMeet(B,f) = FinJoin(B,f') & FinMeet(B,g) = FinJoin(B,g') by Th51;
+  hence FinMeet(B,f) = FinMeet(B,g) by A1,A2,Th69;
+ end;
+
+theorem Th76:
+  (for x st x in B holds u [= f.x) implies u [= FinMeet(B,f)
+ proof assume
+A1:  for x st x in B holds u [= f.x;
+     the carrier of L = the carrier of L.: by Th18;
+   then reconsider f' = f as Function of A, the carrier of L.:;
+   reconsider u' = u as Element of L.: by Th18;
+A2:  FinJoin(B,f') = FinMeet(B,f) by Th51;
+A3: L.: is 0_Lattice by Th64;
+     now let x;
+    assume x in B; then u [= f.x by A1;
+    hence f'.x [= u' by Th53;
+   end;
+   then FinJoin(B,f') [= u' by A3,Th70;
+  hence u [= FinMeet(B,f) by A2,Th54;
+ end;
+
+theorem
+    (for x st x in B holds f.x [= g.x)
+   implies FinMeet(B,f) [= FinMeet(B,g)
+ proof assume
+A1: for x st x in B holds f.x [= g.x;
+     now let x; assume
+A2:  x in B;
+     then f.x [= g.x by A1;
+    hence FinMeet(B,f) [= g.x by A2,Th56;
+   end;
+  hence FinMeet(B,f) [= FinMeet(B,g) by Th76;
+ end;
+
+theorem
+   for L being 0_Lattice holds Bottom L = Top (L.:)
+ proof let L be 0_Lattice;
+   reconsider u = Bottom L as Element of L.: by Th18;
+     now let v be Element of L.:;
+     reconsider v' = v as Element of L by Th18;
+    thus v "\/" u = Bottom L "/\" v' by Th52 .= u by LATTICES:40;
+   end;
+  hence Bottom L = Top (L.:) by RLSUB_2:85;
+ end;
+
+theorem
+   for L being 1_Lattice holds Top L = Bottom (L.:)
+ proof let L be 1_Lattice;
+   reconsider u = Top L as Element of L.: by Th18;
+     now let v be Element of L.:;
+     reconsider v' = v as Element of L by Th18;
+    thus v "/\" u = Top L "\/" v' by Th52 .= u by LATTICES:44;
+   end;
+  hence Top L = Bottom (L.:) by RLSUB_2:84;
+ end;
+
+:::::::::::::::::::::::::::
+::
+:: Distributive lattices with the minimal element
+::
+:::::::::::::::::::::::::::
+
+definition
+  mode D0_Lattice is distributive lower-bounded Lattice;
+end;
+
+reserve L for D0_Lattice,
+        f,g for (Function of A, the carrier of L),
+        u for Element of L;
+
+theorem
+   the L_meet of L is_distributive_wrt the L_join of L by Th37;
+
+theorem Th81:
+  (the L_meet of L).(u, FinJoin(B, f))
+         = FinJoin(B, (the L_meet of L)[;](u,f))
+ proof
+A1: the L_join of L is commutative & the L_join of L is associative &
+    the L_meet of L is_distributive_wrt the L_join of L &
+    the L_join of L has_a_unity & Bottom L = the_unity_wrt the L_join of L
+         by Th37,Th67,Th68;
+A2: (the L_meet of L).(u,Bottom L) = u"/\"Bottom L by LATTICES:def 2 .= Bottom
+L by LATTICES:40;
+  thus (the L_meet of L).(u, FinJoin(B,f))
+      = (the L_meet of L).(u,(the L_join of L)$$(B,f)) by Def3
+     .= (the L_join of L)$$(B,(the L_meet of L)[;](u,f)) by A1,A2,SETWOP_2:14
+     .= FinJoin(B,(the L_meet of L)[;](u,f)) by Def3;
+ end;
+
+theorem
+    (for x st x in B holds g.x = u "/\" f.x)
+     implies u "/\" FinJoin(B,f) = FinJoin(B,g)
+ proof assume
+A1: for x st x in B holds g.x = u "/\" f.x;
+   reconsider G = ((the L_meet of L)[;](u,f)) +* (g|B)
+                             as Function of A, the carrier of L by Th6;
+     dom (g|B) = B by Th13;
+then A2: G|B = g|B by FUNCT_4:24;
+     now let x; assume x in B;
+    hence g.x = u "/\" f.x by A1 .= (the L_meet of L).(u,f.x) by LATTICES:def 2
+          .= ((the L_meet of L)[;](u,f)).x by FUNCOP_1:66;
+   end;
+then A3: G = (the L_meet of L)[;](u,f) by Th14;
+  thus u "/\" FinJoin(B,f)
+      = (the L_meet of L).(u, FinJoin(B,f)) by LATTICES:def 2
+     .= FinJoin(B,G) by A3,Th81
+     .= FinJoin(B,g) by A2,Th69;
+ end;
+
+theorem Th83:
+  u "/\" FinJoin(B,f) = FinJoin(B, (the L_meet of L)[;](u, f))
+ proof
+  thus u "/\" FinJoin(B,f) = (the L_meet of L).(u, FinJoin(B, f)) by LATTICES:
+def 2
+        .= FinJoin(B, (the L_meet of L)[;](u, f)) by Th81;
+ end;
+
+:: Heyting Lattices
+
+definition
+ let IT be Lattice;
+ canceled;
+
+  attr IT is Heyting means
+:Def6: IT is implicative lower-bounded;
+end;
+
+definition
+  cluster Heyting Lattice;
+ existence
+  proof consider L being B_Lattice;
+   take L;
+   thus L is implicative lower-bounded by FILTER_0:40;
+  end;
+end;
+
+definition
+ cluster Heyting -> implicative lower-bounded Lattice;
+ coherence by Def6;
+ cluster implicative lower-bounded -> Heyting Lattice;
+ coherence by Def6;
+end;
+
+definition
+  mode H_Lattice is Heyting Lattice;
+end;
+
+definition
+ cluster Heyting strict Lattice;
+ existence
+  proof consider L being strict B_Lattice;
+     L is 0_Lattice & L is I_Lattice by FILTER_0:40;
+   then L is H_Lattice by Def6;
+   hence thesis;
+  end;
+end;
+
+theorem
+   for L being 0_Lattice holds
+  L is H_Lattice iff
+  for x,z being Element of L
+   ex y being Element of L st x "/\" y [= z
+    & for v being Element of L st x "/\" v [= z holds v [= y
+ proof let L be 0_Lattice;
+     L is H_Lattice iff L is I_Lattice by Def6;
+  hence thesis by FILTER_0:def 7;
+ end;
+
+theorem
+   for L being Lattice holds L is finite iff L.: is finite
+ proof let L be Lattice;
+     the carrier of L is finite iff the carrier of L.: is finite by Th18;
+  hence thesis by GROUP_1:def 13;
+ end;
+
+Lm1:
+ for L being Lattice st L is finite holds L is lower-bounded
+ proof let L be Lattice;
+  assume L is finite;
+   then the carrier of L is finite by GROUP_1:def 13;
+   then reconsider B = the carrier of L as Finite_Subset of the carrier 
+      of L by FINSUB_1:def 5;
+  take c = FinMeet(B,id the carrier of L);
+  let a be Element of L;
+     (id the carrier of L).a [= a by FUNCT_1:35;
+   then A1: c [= a by Th56;
+  hence c"/\"a = c by LATTICES:21;
+  thus a"/\"c = c by A1,LATTICES:21;
+ end;
+
+Lm2:
+ for L being Lattice st L is finite holds L is upper-bounded
+ proof let L be Lattice;
+  assume L is finite;
+   then the carrier of L is finite by GROUP_1:def 13;
+   then reconsider B = the carrier of L as Finite_Subset of the carrier of L
+                                               by FINSUB_1:def 5;
+  take c = FinJoin(B,id the carrier of L);
+  let a be Element of L;
+     a [= (id the carrier of L).a by FUNCT_1:35;
+   then A1: a [= c & c"\/"a = a"\/"c by Th44;
+  hence c"\/"a = c by LATTICES:def 3;
+  thus a"\/"c = c by A1,LATTICES:def 3;
+ end;
+
+definition
+ cluster finite -> lower-bounded Lattice;
+ coherence by Lm1;
+ cluster finite -> upper-bounded Lattice;
+ coherence by Lm2;
+end;
+
+definition
+ cluster finite -> bounded Lattice;
+ coherence proof let L be Lattice;
+  assume L is finite;
+   then L is upper-bounded lower-bounded Lattice by Lm1,Lm2;
+  hence thesis;
+ end;
+end;
+
+definition
+ cluster distributive finite -> Heyting Lattice;
+ coherence
+ proof let L be Lattice;
+  assume
+A1: L is distributive finite;
+   then reconsider L as D0_Lattice by Lm1;
+   set C = the carrier of L;
+A2: C is finite by A1,GROUP_1:def 13;
+     L is implicative
+    proof let p,q be Element of C;
+      defpred X[Element of C] means p "/\" $1 [= q;
+      set B = {x where x is Element of C: X[x] };
+A3:   B c= C from Fr_Set0;
+      then B is finite by A2,FINSET_1:13;
+      then reconsider B as Finite_Subset of C by A3,FINSUB_1:def 5;
+     take r = FinJoin(B,id C);
+A4:    now let x be Element of C;
+       assume x in B; then A5: ex x' being Element of C st
+     x' = x & p "/\" x' [= q;
+          ((the L_meet of L)[;](p,id C)).x
+              = (the L_meet of L).(p,(id C).x) by FUNCOP_1:66
+             .= (the L_meet of L).(p,x) by FUNCT_1:35
+             .= p "/\" x by LATTICES:def 2;
+       hence ((the L_meet of L)[;](p,id C)).x [= q by A5;
+      end;
+        p "/\" r = FinJoin(B,(the L_meet of L)[;](p,id C)) by Th83;
+     hence p "/\" r [= q by A4,Th70;
+     let r1 be Element of C;
+     assume p "/\" r1 [= q;
+then A6:   r1 in B;
+        r1 = (id C).r1 by FUNCT_1:35;
+     hence r1 [= r by A6,Th43;
+    end;
+  hence thesis by Def6;
+ end;
+end;

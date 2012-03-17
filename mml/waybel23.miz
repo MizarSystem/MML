@@ -1,0 +1,2909 @@
+:: Bases of Continuous Lattices
+::  by Robert Milewski
+::
+:: Received November 28, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary ORDERS_1, WAYBEL_8, WAYBEL_3, BOOLE, WAYBEL_0, COMPTS_1, RELAT_2,
+      YELLOW_1, TARSKI, FILTER_2, YELLOW_0, ORDINAL2, LATTICE3, LATTICES,
+      FINSET_1, CAT_1, BHSP_3, QUANTAL1, FILTER_0, PRE_TOPC, CARD_1, SETFAM_1,
+      ORDINAL1, SUBSET_1, REALSET1, FUNCT_1, WELLORD2, RELAT_1, SEQM_3,
+      YELLOW_2, WAYBEL_1, WELLORD1, SGRAPH1, WAYBEL23, RLVECT_3;
+ notation TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, REALSET1, FUNCT_1,
+      STRUCT_0, FUNCT_2, FINSET_1, ORDINAL1, ORDINAL2, CARD_1, PRE_TOPC,
+      ORDERS_1, CANTOR_1, LATTICE3, YELLOW_0, YELLOW_1, YELLOW_2, WAYBEL_0,
+      WAYBEL_1, WAYBEL_3, WAYBEL_8;
+ constructors TOPS_2, CANTOR_1, LATTICE3, ORDERS_3, YELLOW_3, WAYBEL_1,
+      WAYBEL_3, WAYBEL_8;
+ clusters STRUCT_0, FINSET_1, CARD_1, LATTICE3, YELLOW_0, YELLOW_1, YELLOW_2,
+      WAYBEL_0, WAYBEL_3, WAYBEL_7, WAYBEL_8, WAYBEL14, RELSET_1, SUBSET_1,
+      XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, LATTICE3, YELLOW_0, XBOOLE_0;
+ theorems TARSKI, SETFAM_1, ZFMISC_1, FUNCT_1, FUNCT_2, FINSET_1, PRE_TOPC,
+      CANTOR_1, LATTICE3, YELLOW_0, YELLOW_1, YELLOW_2, YELLOW_3, YELLOW_5,
+      YELLOW12, WAYBEL_0, WAYBEL_1, WAYBEL_3, WAYBEL_7, WAYBEL_8, WAYBEL10,
+      WAYBEL13, WAYBEL20, WAYBEL21, RELSET_1, XBOOLE_0, XBOOLE_1;
+ schemes ORDINAL1, FUNCT_2, MONOID_1, YELLOW_2;
+
+begin  :: Preliminaries
+
+  theorem Th1:
+   for L be non empty Poset
+   for x be Element of L holds
+    compactbelow x = waybelow x /\ the carrier of CompactSublatt L
+   proof
+    let L be non empty Poset;
+    let x be Element of L;
+    A1: compactbelow x c= waybelow x /\ the carrier of CompactSublatt L
+    proof
+     let y be set;
+     assume y in compactbelow x;
+     then y in downarrow x /\ the carrier of CompactSublatt L by WAYBEL_8:5;
+     then A2: y in downarrow x & y in the carrier of CompactSublatt L
+                                                             by XBOOLE_0:def 3;
+     then reconsider y1 = y as Element of L;
+     A3: y1 <= x by A2,WAYBEL_0:17;
+       y1 is compact by A2,WAYBEL_8:def 1;
+     then y1 << y1 by WAYBEL_3:def 2;
+     then y1 << x by A3,WAYBEL_3:2;
+     then y1 in waybelow x by WAYBEL_3:7;
+     hence y in waybelow x /\ the carrier of CompactSublatt L
+                                                          by A2,XBOOLE_0:def 3;
+    end;
+      waybelow x /\ the carrier of CompactSublatt L c= compactbelow x
+    proof
+     let y be set;
+     assume y in waybelow x /\ the carrier of CompactSublatt L;
+     then A4: y in waybelow x & y in the carrier of CompactSublatt L
+                                                             by XBOOLE_0:def 3;
+     then reconsider y1 = y as Element of L;
+       y1 << x by A4,WAYBEL_3:7;
+     then y1 <= x by WAYBEL_3:1;
+     then y in downarrow x by WAYBEL_0:17;
+     then y in downarrow x /\ the carrier of CompactSublatt L
+                                                          by A4,XBOOLE_0:def 3;
+     hence y in compactbelow x by WAYBEL_8:5;
+    end;
+    hence compactbelow x = waybelow x /\ the carrier of CompactSublatt L
+                                                          by A1,XBOOLE_0:def 10
+;
+   end;
+
+  definition
+   let L be non empty reflexive transitive RelStr;
+   let X be Subset of InclPoset Ids L;
+   redefine func union X -> Subset of L;
+   coherence
+   proof
+      union X c= the carrier of L
+    proof
+     let x be set;
+     assume x in union X;
+     then consider Y be set such that
+      A1: x in Y and
+      A2: Y in X by TARSKI:def 4;
+       Y is Element of InclPoset Ids L by A2;
+     then reconsider Y as Ideal of L by YELLOW_2:43;
+       x in Y by A1;
+     hence x in the carrier of L;
+    end;
+    hence union X is Subset of L;
+   end;
+  end;
+
+  Lm1:
+   for X be non empty set
+   for Y be Subset of InclPoset X st ex_sup_of Y,InclPoset X holds
+    union Y c= sup Y
+   proof
+    let X be non empty set;
+    let Y be Subset of InclPoset X;
+    assume A1: ex_sup_of Y,InclPoset X;
+      now let x be set;
+     assume A2: x in Y;
+     then reconsider x1 = x as Element of InclPoset X;
+       sup Y is_>=_than Y by A1,YELLOW_0:30;
+     then sup Y >= x1 by A2,LATTICE3:def 9;
+     hence x c= sup Y by YELLOW_1:3;
+    end;
+    hence union Y c= sup Y by ZFMISC_1:94;
+   end;
+
+  theorem Th2:
+   for L be non empty RelStr
+   for X,Y be Subset of L st X c= Y holds
+    finsups X c= finsups Y
+   proof
+    let L be non empty RelStr;
+    let X,Y be Subset of L;
+    assume A1: X c= Y;
+    let x be set;
+    assume x in finsups X;
+    then x in {"\/"(V,L) where V is finite Subset of X: ex_sup_of V,L}
+                                                         by WAYBEL_0:def 27;
+    then consider Z be finite Subset of X such that
+     A2: x = "\/"(Z,L) and
+     A3: ex_sup_of Z,L;
+    reconsider Z as finite Subset of Y by A1,XBOOLE_1:1;
+      ex_sup_of Z,L by A3;
+    then x in {"\/"(V,L) where V is finite Subset of Y: ex_sup_of V,L} by A2;
+    hence x in finsups Y by WAYBEL_0:def 27;
+   end;
+
+  theorem Th3:
+   for L be non empty transitive RelStr
+   for S be sups-inheriting non empty full SubRelStr of L
+   for X be Subset of L
+   for Y be Subset of S st X = Y holds
+    finsups X c= finsups Y
+   proof
+    let L be non empty transitive RelStr;
+    let S be sups-inheriting non empty full SubRelStr of L;
+    let X be Subset of L;
+    let Y be Subset of S;
+    assume A1: X = Y;
+    let x be set;
+    assume x in finsups X;
+    then x in {"\/"(V,L) where V is finite Subset of X: ex_sup_of V,L}
+                                                         by WAYBEL_0:def 27;
+    then consider Z be finite Subset of X such that
+     A2: x = "\/"(Z,L) and
+     A3: ex_sup_of Z,L;
+    reconsider Z as finite Subset of Y by A1;
+      Z c= the carrier of S by XBOOLE_1:1;
+    then reconsider Z1 = Z as Subset of S;
+      "\/"(Z1,L) in the carrier of S by A3,YELLOW_0:def 19;
+    then ex_sup_of Z1,S & x = "\/"(Z1,S) by A2,A3,YELLOW_0:65;
+    then x in {"\/"(V,S) where V is finite Subset of Y: ex_sup_of V,S};
+    hence x in finsups Y by WAYBEL_0:def 27;
+   end;
+
+  theorem
+     for L be complete transitive antisymmetric (non empty RelStr)
+   for S be sups-inheriting non empty full SubRelStr of L
+   for X be Subset of L
+   for Y be Subset of S st X = Y holds
+    finsups X = finsups Y
+   proof
+    let L be complete transitive antisymmetric (non empty RelStr);
+    let S be sups-inheriting non empty full SubRelStr of L;
+    let X be Subset of L;
+    let Y be Subset of S;
+    assume A1: X = Y;
+    hence finsups X c= finsups Y by Th3;
+     let x be set;
+     assume x in finsups Y;
+     then x in {"\/"(V,S) where V is finite Subset of Y: ex_sup_of V,S}
+                                                         by WAYBEL_0:def 27;
+     then consider Z be finite Subset of Y such that
+      A2: x = "\/"(Z,S) and
+        ex_sup_of Z,S;
+     reconsider Z as finite Subset of X by A1;
+       Z c= the carrier of S by XBOOLE_1:1;
+     then reconsider Z1 = Z as Subset of S;
+     A3: ex_sup_of Z1,L by YELLOW_0:17;
+     then "\/"(Z1,L) in the carrier of S by YELLOW_0:def 19;
+     then x = "\/"(Z1,L) by A2,A3,YELLOW_0:65;
+     then x in {"\/"(V,L) where V is finite Subset of X: ex_sup_of V,L} by A3;
+     hence x in finsups X by WAYBEL_0:def 27;
+   end;
+
+  theorem Th5:
+   for L be complete sup-Semilattice
+   for S be join-inheriting non empty full SubRelStr of L
+    st Bottom L in the carrier of S
+   for X be Subset of L
+   for Y be Subset of S st X = Y holds
+    finsups Y c= finsups X
+   proof
+    let L be complete sup-Semilattice;
+    let S be join-inheriting non empty full SubRelStr of L;
+    assume A1: Bottom L in the carrier of S;
+    let X be Subset of L;
+    let Y be Subset of S;
+    assume A2: X = Y;
+    let x be set;
+    assume x in finsups Y;
+    then x in {"\/"(V,S) where V is finite Subset of Y: ex_sup_of V,S}
+                                                         by WAYBEL_0:def 27;
+    then consider Z be finite Subset of Y such that
+     A3: x = "\/"(Z,S) and
+     A4: ex_sup_of Z,S;
+    reconsider Z as finite Subset of X by A2;
+      now per cases;
+     suppose A5: Z is non empty;
+        Z c= the carrier of S by XBOOLE_1:1;
+      then reconsider Z1 = Z as finite non empty Subset of S
+                                                      by A5;
+      A6: ex_sup_of Z1,L by YELLOW_0:17;
+       "\/"(Z1,L) in the carrier of S by WAYBEL21:15;
+      then reconsider xl = "\/"(Z1,L) as Element of S;
+      A7: "\/"(Z1, L) is_>=_than Z1 &
+       for b be Element of L st b is_>=_than Z1 holds "\/"(Z1, L) <= b
+                                                           by A6,YELLOW_0:30;
+      A8: xl is_>=_than Z1
+      proof
+       let b be Element of S;
+       reconsider b1 = b as Element of L by YELLOW_0:59;
+       assume b in Z1;
+       then b1 <= "\/"(Z1, L) by A7,LATTICE3:def 9;
+       hence b <= xl by YELLOW_0:61;
+      end;
+        now let b be Element of S;
+       reconsider b1 = b as Element of L by YELLOW_0:59;
+       assume A9: b is_>=_than Z1;
+         b1 is_>=_than Z1
+       proof
+        let c1 be Element of L;
+        assume A10: c1 in Z1;
+        then reconsider c = c1 as Element of S;
+          c <= b by A9,A10,LATTICE3:def 9;
+        hence c1 <= b1 by YELLOW_0:60;
+       end;
+       then "\/"(Z1, L) <= b1 by A6,YELLOW_0:30;
+       hence xl <= b by YELLOW_0:61;
+      end;
+      then "\/"(Z1,S) = "\/"(Z1,L) by A8,YELLOW_0:30;
+      then x in { "\/"(V,L) where V is finite Subset of X: ex_sup_of V,L }
+                                                                    by A3,A6;
+      hence x in finsups X by WAYBEL_0:def 27;
+     suppose A11: Z is empty;
+      then A12: x = Bottom S by A3,YELLOW_0:def 11;
+      reconsider dS = Bottom S as Element of L by YELLOW_0:59;
+      reconsider dL = Bottom L as Element of S by A1;
+      A13: dL = "\/"({},L) by YELLOW_0:def 11;
+        S is lower-bounded by A4,A11,WAYBEL20:6;
+      then Bottom S <= dL by YELLOW_0:44;
+      then A14: dS <= Bottom L by YELLOW_0:60;
+        Bottom L <= dS by YELLOW_0:44;
+      then A15: dS = Bottom L by A14,YELLOW_0:def 3;
+        ex_sup_of Z,L by YELLOW_0:17;
+      then x in { "\/"(V,L) where V is finite Subset of X: ex_sup_of V,L }
+                                                          by A11,A12,A13,A15;
+      hence x in finsups X by WAYBEL_0:def 27;
+    end;
+    hence x in finsups X;
+   end;
+
+  theorem Th6:
+   for L be lower-bounded sup-Semilattice
+   for X be Subset of InclPoset Ids L holds
+    sup X = downarrow finsups union X
+   proof
+    let L be lower-bounded sup-Semilattice;
+    let X be Subset of InclPoset Ids L;
+    A1: union X c= downarrow finsups union X &
+    for I be Ideal of L st union X c= I holds
+     downarrow finsups union X c= I by WAYBEL_0:61;
+      ex_sup_of X,InclPoset Ids L by YELLOW_0:17;
+    then A2: union X c= sup X by Lm1;
+    reconsider a = downarrow finsups union X as Element of InclPoset Ids L
+                                                              by YELLOW_2:43;
+      now let b be Element of InclPoset Ids L;
+     assume b in X;
+     then b c= union X by ZFMISC_1:92;
+     then b c= downarrow finsups union X by A1,XBOOLE_1:1;
+     hence b <= a by YELLOW_1:3;
+    end;
+    then A3: a is_>=_than X by LATTICE3:def 9;
+      now let b be Element of InclPoset Ids L;
+     reconsider b1 = b as Ideal of L by YELLOW_2:43;
+     assume b is_>=_than X;
+     then b >= sup X by YELLOW_0:32;
+     then sup X c= b1 by YELLOW_1:3;
+     then union X c= b1 by A2,XBOOLE_1:1;
+     then downarrow finsups union X c= b1 by WAYBEL_0:61;
+     hence a <= b by YELLOW_1:3;
+    end;
+    hence thesis by A3,YELLOW_0:32;
+   end;
+
+  theorem Th7:
+   for L be reflexive transitive RelStr
+   for X be Subset of L holds
+    downarrow downarrow X = downarrow X
+   proof
+    let L be reflexive transitive RelStr;
+    let X be Subset of L;
+    A1: downarrow X c= downarrow downarrow X by WAYBEL_0:16;
+      downarrow downarrow X c= downarrow X
+    proof
+     let x be set;
+     assume A2: x in downarrow downarrow X;
+     then reconsider x1 = x as Element of L;
+     consider y be Element of L such that
+      A3: y >= x1 and
+      A4: y in downarrow X by A2,WAYBEL_0:def 15;
+     consider z be Element of L such that
+      A5: z >= y and
+      A6: z in X by A4,WAYBEL_0:def 15;
+       z >= x1 by A3,A5,YELLOW_0:def 2;
+     hence x in downarrow X by A6,WAYBEL_0:def 15;
+    end;
+    hence downarrow downarrow X = downarrow X by A1,XBOOLE_0:def 10;
+   end;
+
+  theorem
+     for L be reflexive transitive RelStr
+   for X be Subset of L holds
+    uparrow uparrow X = uparrow X
+   proof
+    let L be reflexive transitive RelStr;
+    let X be Subset of L;
+    A1: uparrow X c= uparrow uparrow X by WAYBEL_0:16;
+      uparrow uparrow X c= uparrow X
+    proof
+     let x be set;
+     assume A2: x in uparrow uparrow X;
+     then reconsider x1 = x as Element of L;
+     consider y be Element of L such that
+      A3: y <= x1 and
+      A4: y in uparrow X by A2,WAYBEL_0:def 16;
+     consider z be Element of L such that
+      A5: z <= y and
+      A6: z in X by A4,WAYBEL_0:def 16;
+       z <= x1 by A3,A5,YELLOW_0:def 2;
+     hence x in uparrow X by A6,WAYBEL_0:def 16;
+    end;
+    hence uparrow uparrow X = uparrow X by A1,XBOOLE_0:def 10;
+   end;
+
+  theorem
+     for L be non empty reflexive transitive RelStr
+   for x be Element of L holds
+    downarrow downarrow x = downarrow x
+   proof
+    let L be non empty reflexive transitive RelStr;
+    let x be Element of L;
+    A1: downarrow x c= downarrow downarrow x by WAYBEL_0:16;
+      downarrow downarrow x c= downarrow x
+    proof
+     let v be set;
+     assume A2: v in downarrow downarrow x;
+     then reconsider v1 = v as Element of L;
+     consider y be Element of L such that
+      A3: y >= v1 and
+      A4: y in downarrow x by A2,WAYBEL_0:def 15;
+       x >= y by A4,WAYBEL_0:17;
+     then x >= v1 by A3,YELLOW_0:def 2;
+     hence v in downarrow x by WAYBEL_0:17;
+    end;
+    hence downarrow downarrow x = downarrow x by A1,XBOOLE_0:def 10;
+   end;
+
+  theorem
+     for L be non empty reflexive transitive RelStr
+   for x be Element of L holds
+    uparrow uparrow x = uparrow x
+   proof
+    let L be non empty reflexive transitive RelStr;
+    let x be Element of L;
+    A1: uparrow x c= uparrow uparrow x by WAYBEL_0:16;
+      uparrow uparrow x c= uparrow x
+    proof
+     let v be set;
+     assume A2: v in uparrow uparrow x;
+     then reconsider v1 = v as Element of L;
+     consider y be Element of L such that
+      A3: y <= v1 and
+      A4: y in uparrow x by A2,WAYBEL_0:def 16;
+       x <= y by A4,WAYBEL_0:18;
+     then x <= v1 by A3,YELLOW_0:def 2;
+     hence v in uparrow x by WAYBEL_0:18;
+    end;
+    hence uparrow uparrow x = uparrow x by A1,XBOOLE_0:def 10;
+   end;
+
+  theorem Th11:
+   for L be non empty RelStr
+   for S be non empty SubRelStr of L
+   for X be Subset of L
+   for Y be Subset of S st X = Y holds
+    downarrow Y c= downarrow X
+   proof
+    let L be non empty RelStr;
+    let S be non empty SubRelStr of L;
+    let X be Subset of L;
+    let Y be Subset of S;
+    assume A1: X = Y;
+    let x be set;
+    assume A2: x in downarrow Y;
+    then reconsider x1 = x as Element of S;
+    consider y1 be Element of S such that
+     A3: y1 >= x1 and
+     A4: y1 in Y by A2,WAYBEL_0:def 15;
+    reconsider x2 = x1, y2 = y1 as Element of L by YELLOW_0:59;
+      y2 >= x2 by A3,YELLOW_0:60;
+    hence x in downarrow X by A1,A4,WAYBEL_0:def 15;
+   end;
+
+  theorem Th12:
+   for L be non empty RelStr
+   for S be non empty SubRelStr of L
+   for X be Subset of L
+   for Y be Subset of S st X = Y holds
+    uparrow Y c= uparrow X
+   proof
+    let L be non empty RelStr;
+    let S be non empty SubRelStr of L;
+    let X be Subset of L;
+    let Y be Subset of S;
+    assume A1: X = Y;
+    let x be set;
+    assume A2: x in uparrow Y;
+    then reconsider x1 = x as Element of S;
+    consider y1 be Element of S such that
+     A3: y1 <= x1 and
+     A4: y1 in Y by A2,WAYBEL_0:def 16;
+    reconsider x2 = x1, y2 = y1 as Element of L by YELLOW_0:59;
+      y2 <= x2 by A3,YELLOW_0:60;
+    hence x in uparrow X by A1,A4,WAYBEL_0:def 16;
+   end;
+
+  theorem
+     for L be non empty RelStr
+   for S be non empty SubRelStr of L
+   for x be Element of L
+   for y be Element of S st x = y holds
+    downarrow y c= downarrow x
+   proof
+    let L be non empty RelStr;
+    let S be non empty SubRelStr of L;
+    let x be Element of L;
+    let y be Element of S;
+    assume A1: x = y;
+      downarrow x = downarrow {x} & downarrow y = downarrow {y}
+                                                         by WAYBEL_0:def 17;
+    hence thesis by A1,Th11;
+   end;
+
+  theorem
+     for L be non empty RelStr
+   for S be non empty SubRelStr of L
+   for x be Element of L
+   for y be Element of S st x = y holds
+    uparrow y c= uparrow x
+   proof
+    let L be non empty RelStr;
+    let S be non empty SubRelStr of L;
+    let x be Element of L;
+    let y be Element of S;
+    assume A1: x = y;
+      uparrow x = uparrow {x} & uparrow y = uparrow {y} by WAYBEL_0:def 18;
+    hence thesis by A1,Th12;
+   end;
+
+begin  :: Relational Subsets
+
+  definition
+   let L be non empty RelStr;
+   let S be Subset of L;
+   attr S is meet-closed means :Def1:
+    subrelstr S is meet-inheriting;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   let S be Subset of L;
+   attr S is join-closed means :Def2:
+    subrelstr S is join-inheriting;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   let S be Subset of L;
+   attr S is infs-closed means :Def3:
+    subrelstr S is infs-inheriting;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   let S be Subset of L;
+   attr S is sups-closed means :Def4:
+    subrelstr S is sups-inheriting;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   cluster infs-closed -> meet-closed Subset of L;
+   coherence
+   proof
+    let S be Subset of L;
+    assume S is infs-closed;
+    then reconsider S1 = subrelstr S as infs-inheriting SubRelStr of L
+                                                                by Def3;
+      S1 is meet-inheriting;
+    hence S is meet-closed by Def1;
+   end;
+   cluster sups-closed -> join-closed Subset of L;
+   coherence
+   proof
+    let S be Subset of L;
+    assume S is sups-closed;
+    then reconsider S1 = subrelstr S as sups-inheriting SubRelStr of L
+                                                                by Def4;
+      S1 is join-inheriting;
+    hence S is join-closed by Def2;
+   end;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   cluster infs-closed sups-closed non empty Subset of L;
+   existence
+   proof
+      the carrier of L c= the carrier of L;
+    then reconsider S = the carrier of L as Subset of L;
+    take S;
+    thus subrelstr S is infs-inheriting
+    proof
+       the carrier of subrelstr S = S by YELLOW_0:def 15;
+     then for X be Subset of subrelstr S st
+      ex_inf_of X,L holds "/\"(X,L) in the carrier of subrelstr S;
+     hence thesis by YELLOW_0:def 18;
+    end;
+    thus subrelstr S is sups-inheriting
+    proof
+       the carrier of subrelstr S = S by YELLOW_0:def 15;
+     then for X be Subset of subrelstr S st
+      ex_sup_of X,L holds "\/"(X,L) in the carrier of subrelstr S;
+     hence thesis by YELLOW_0:def 19;
+    end;
+    thus thesis;
+   end;
+  end;
+
+  theorem Th15:
+   for L be non empty RelStr
+   for S be Subset of L holds
+    S is meet-closed iff
+    for x,y be Element of L st x in S & y in S & ex_inf_of {x,y},L
+     holds inf {x,y} in S
+   proof
+    let L be non empty RelStr;
+    let S be Subset of L;
+    thus S is meet-closed implies
+     for x,y be Element of L st x in S & y in S & ex_inf_of {x,y},L
+      holds inf {x,y} in S
+    proof
+     assume S is meet-closed;
+     then A1: subrelstr S is meet-inheriting by Def1;
+     let x,y be Element of L;
+     assume that
+      A2: x in S and
+      A3: y in S and
+      A4: ex_inf_of {x,y},L;
+       the carrier of subrelstr S = S by YELLOW_0:def 15;
+     hence inf {x,y} in S by A1,A2,A3,A4,YELLOW_0:def 16;
+    end;
+    assume A5: for x,y be Element of L st x in S & y in S & ex_inf_of {x,y},L
+     holds inf {x,y} in S;
+      now let x,y be Element of L;
+     assume that
+      A6: x in the carrier of subrelstr S and
+      A7: y in the carrier of subrelstr S and
+      A8: ex_inf_of {x,y},L;
+       the carrier of subrelstr S = S by YELLOW_0:def 15;
+     hence inf {x,y} in the carrier of subrelstr S by A5,A6,A7,A8;
+    end;
+    then subrelstr S is meet-inheriting by YELLOW_0:def 16;
+    hence S is meet-closed by Def1;
+   end;
+
+  theorem Th16:
+   for L be non empty RelStr
+   for S be Subset of L holds
+    S is join-closed iff
+    for x,y be Element of L st x in S & y in S & ex_sup_of {x,y},L
+     holds sup {x,y} in S
+   proof
+    let L be non empty RelStr;
+    let S be Subset of L;
+    thus S is join-closed implies
+     for x,y be Element of L st x in S & y in S & ex_sup_of {x,y},L
+      holds sup {x,y} in S
+    proof
+     assume S is join-closed;
+     then A1: subrelstr S is join-inheriting by Def2;
+     let x,y be Element of L;
+     assume that
+      A2: x in S and
+      A3: y in S and
+      A4: ex_sup_of {x,y},L;
+       the carrier of subrelstr S = S by YELLOW_0:def 15;
+     hence sup {x,y} in S by A1,A2,A3,A4,YELLOW_0:def 17;
+    end;
+    assume A5: for x,y be Element of L st x in S & y in S & ex_sup_of {x,y},L
+     holds sup {x,y} in S;
+      now let x,y be Element of L;
+     assume that
+      A6: x in the carrier of subrelstr S and
+      A7: y in the carrier of subrelstr S and
+      A8: ex_sup_of {x,y},L;
+       the carrier of subrelstr S = S by YELLOW_0:def 15;
+     hence sup {x,y} in the carrier of subrelstr S by A5,A6,A7,A8;
+    end;
+    then subrelstr S is join-inheriting by YELLOW_0:def 17;
+    hence S is join-closed by Def2;
+   end;
+
+  theorem
+     for L be antisymmetric with_infima RelStr
+   for S be Subset of L holds
+    S is meet-closed iff
+    for x,y be Element of L st x in S & y in S holds inf {x,y} in S
+   proof
+    let L be antisymmetric with_infima RelStr;
+    let S be Subset of L;
+    thus S is meet-closed implies
+     for x,y be Element of L st x in S & y in S holds inf {x,y} in S
+    proof
+     assume A1: S is meet-closed;
+     let x,y be Element of L such that
+      A2: x in S and
+      A3: y in S;
+       ex_inf_of {x,y},L by YELLOW_0:21;
+     hence inf {x,y} in S by A1,A2,A3,Th15;
+    end;
+    assume for x,y be Element of L st x in S & y in S holds inf {x,y} in S;
+    then for x,y be Element of L st x in S & y in S & ex_inf_of {x,y},L holds
+     inf {x,y} in S;
+    hence S is meet-closed by Th15;
+   end;
+
+  theorem Th18:
+   for L be antisymmetric with_suprema RelStr
+   for S be Subset of L holds
+    S is join-closed iff
+    for x,y be Element of L st x in S & y in S holds sup {x,y} in S
+   proof
+    let L be antisymmetric with_suprema RelStr;
+    let S be Subset of L;
+    thus S is join-closed implies
+     for x,y be Element of L st x in S & y in S holds sup {x,y} in S
+    proof
+     assume A1: S is join-closed;
+     let x,y be Element of L such that
+      A2: x in S and
+      A3: y in S;
+       ex_sup_of {x,y},L by YELLOW_0:20;
+     hence sup {x,y} in S by A1,A2,A3,Th16;
+    end;
+    assume for x,y be Element of L st x in S & y in S holds sup {x,y} in S;
+    then for x,y be Element of L st x in S & y in S & ex_sup_of {x,y},L holds
+     sup {x,y} in S;
+    hence S is join-closed by Th16;
+   end;
+
+  theorem
+     for L be non empty RelStr
+   for S be Subset of L holds
+    S is infs-closed iff
+    for X be Subset of S st ex_inf_of X,L holds "/\"(X,L) in S
+   proof
+    let L be non empty RelStr;
+    let S be Subset of L;
+    thus S is infs-closed implies
+     for X be Subset of S st ex_inf_of X,L holds "/\"(X,L) in S
+    proof
+     assume S is infs-closed;
+     then A1: subrelstr S is infs-inheriting by Def3;
+     let X be Subset of S;
+       X is Subset of subrelstr S by YELLOW_0:def 15;
+     then A2: X is Subset of subrelstr S;
+     assume ex_inf_of X,L;
+     then "/\"(X,L) in the carrier of subrelstr S by A1,A2,YELLOW_0:def 18;
+     hence "/\"(X,L) in S by YELLOW_0:def 15;
+    end;
+    assume A3: for X be Subset of S st ex_inf_of X,L holds "/\"(X,L) in S;
+      now let X be Subset of subrelstr S;
+     A4: X is Subset of S by YELLOW_0:def 15;
+     assume ex_inf_of X,L;
+     then "/\"(X,L) in S by A3,A4;
+     hence "/\"(X,L) in the carrier of subrelstr S by YELLOW_0:def 15;
+    end;
+    then subrelstr S is infs-inheriting by YELLOW_0:def 18;
+    hence S is infs-closed by Def3;
+   end;
+
+  theorem
+     for L be non empty RelStr
+   for S be Subset of L holds
+    S is sups-closed iff
+    for X be Subset of S st ex_sup_of X,L holds "\/"(X,L) in S
+   proof
+    let L be non empty RelStr;
+    let S be Subset of L;
+    thus S is sups-closed implies
+     for X be Subset of S st ex_sup_of X,L holds "\/"(X,L) in S
+    proof
+     assume S is sups-closed;
+     then A1: subrelstr S is sups-inheriting by Def4;
+     let X be Subset of S;
+       X is Subset of subrelstr S by YELLOW_0:def 15;
+     then A2: X is Subset of subrelstr S;
+     assume ex_sup_of X,L;
+     then "\/"(X,L) in the carrier of subrelstr S by A1,A2,YELLOW_0:def 19;
+     hence "\/"(X,L) in S by YELLOW_0:def 15;
+    end;
+    assume A3: for X be Subset of S st ex_sup_of X,L holds "\/"(X,L) in S;
+      now let X be Subset of subrelstr S;
+     A4: X is Subset of S by YELLOW_0:def 15;
+     assume ex_sup_of X,L;
+     then "\/"(X,L) in S by A3,A4;
+     hence "\/"(X,L) in the carrier of subrelstr S by YELLOW_0:def 15;
+    end;
+    then subrelstr S is sups-inheriting by YELLOW_0:def 19;
+    hence S is sups-closed by Def4;
+   end;
+
+  theorem Th21:
+   for L be non empty transitive RelStr
+   for S be infs-closed non empty Subset of L
+   for X be Subset of S st ex_inf_of X,L holds
+    ex_inf_of X,subrelstr S & "/\"(X,subrelstr S) = "/\"(X,L)
+   proof
+    let L be non empty transitive RelStr;
+    let S be infs-closed non empty Subset of L;
+    let X be Subset of S;
+    A1: subrelstr S is infs-inheriting non empty full SubRelStr of L
+                                                                by Def3;
+      X is Subset of subrelstr S by YELLOW_0:def 15;
+    then A2: X is Subset of subrelstr S;
+    assume
+A3:   ex_inf_of X,L;
+    then "/\"(X,L) in the carrier of subrelstr S by A1,A2,YELLOW_0:def 18;
+    hence ex_inf_of X,subrelstr S & "/\"(X,subrelstr S) = "/\"(X,L)
+          by A2,A3,YELLOW_0:64;
+   end;
+
+  theorem Th22:
+   for L be non empty transitive RelStr
+   for S be sups-closed non empty Subset of L
+   for X be Subset of S st ex_sup_of X,L holds
+    ex_sup_of X,subrelstr S & "\/"(X,subrelstr S) = "\/"(X,L)
+   proof
+    let L be non empty transitive RelStr;
+    let S be sups-closed non empty Subset of L;
+    let X be Subset of S;
+    A1: subrelstr S is sups-inheriting non empty full SubRelStr of L by Def4;
+      X is Subset of subrelstr S by YELLOW_0:def 15;
+    then A2: X is Subset of subrelstr S;
+    assume
+A3:   ex_sup_of X,L;
+    then "\/"(X,L) in the carrier of subrelstr S by A1,A2,YELLOW_0:def 19;
+    hence ex_sup_of X,subrelstr S & "\/"(X,subrelstr S) = "\/"(X,L)
+                          by A2,A3,YELLOW_0:65;
+   end;
+
+  theorem
+     for L be non empty transitive RelStr
+   for S be meet-closed non empty Subset of L
+   for x,y be Element of S st ex_inf_of {x,y},L holds
+    ex_inf_of {x,y},subrelstr S & "/\"({x,y},subrelstr S) = "/\"({x,y},L)
+   proof
+    let L be non empty transitive RelStr;
+    let S be meet-closed non empty Subset of L;
+    let x,y be Element of S;
+    A1: subrelstr S is meet-inheriting non empty full SubRelStr of L by Def1;
+    A2: x is Element of subrelstr S &
+     y is Element of subrelstr S by YELLOW_0:def 15;
+    then A3: x is Element of subrelstr S &
+             y is Element of subrelstr S;
+    assume
+A4:   ex_inf_of {x,y},L;
+    then "/\"({x,y},L) in the carrier of subrelstr S by A1,A2,YELLOW_0:def 16;
+    hence ex_inf_of {x,y},subrelstr S & "/\"({x,y},subrelstr S) = "/\"({x,y},L
+)
+                  by A3,A4,YELLOW_0:66;
+   end;
+
+  theorem
+     for L be non empty transitive RelStr
+   for S be join-closed non empty Subset of L
+   for x,y be Element of S st ex_sup_of {x,y},L holds
+    ex_sup_of {x,y},subrelstr S & "\/"({x,y},subrelstr S) = "\/"({x,y},L)
+   proof
+    let L be non empty transitive RelStr;
+    let S be join-closed non empty Subset of L;
+    let x,y be Element of S;
+    A1: subrelstr S is join-inheriting non empty full SubRelStr of L by Def2;
+    A2: x is Element of subrelstr S &
+     y is Element of subrelstr S by YELLOW_0:def 15;
+    then A3: x is Element of subrelstr S &
+             y is Element of subrelstr S;
+    assume
+A4:   ex_sup_of {x,y},L;
+    then "\/"({x,y},L) in the carrier of subrelstr S by A1,A2,YELLOW_0:def 17;
+    hence ex_sup_of {x,y},subrelstr S & "\/"({x,y},subrelstr S) = "\/"({x,y},L
+)
+                                      by A3,A4,YELLOW_0:67;
+   end;
+
+  theorem Th25:
+   for L be with_infima antisymmetric transitive RelStr
+   for S be non empty meet-closed Subset of L holds
+    subrelstr S is with_infima
+   proof
+    let L be with_infima antisymmetric transitive RelStr;
+    let S be non empty meet-closed Subset of L;
+      subrelstr S is non empty meet-inheriting full SubRelStr of L by Def1;
+    hence subrelstr S is with_infima;
+   end;
+
+  theorem Th26:
+   for L be with_suprema antisymmetric transitive RelStr
+   for S be non empty join-closed Subset of L holds
+    subrelstr S is with_suprema
+   proof
+    let L be with_suprema antisymmetric transitive RelStr;
+    let S be non empty join-closed Subset of L;
+      subrelstr S is non empty join-inheriting full SubRelStr of L by Def2;
+    hence subrelstr S is with_suprema;
+   end;
+
+  definition
+   let L be with_infima antisymmetric transitive RelStr;
+   let S be non empty meet-closed Subset of L;
+   cluster subrelstr S -> with_infima;
+   coherence by Th25;
+  end;
+
+  definition
+   let L be with_suprema antisymmetric transitive RelStr;
+   let S be non empty join-closed Subset of L;
+   cluster subrelstr S -> with_suprema;
+   coherence by Th26;
+  end;
+
+  theorem
+     for L be complete transitive antisymmetric (non empty RelStr)
+   for S be infs-closed non empty Subset of L
+   for X be Subset of S holds
+    "/\"(X,subrelstr S) = "/\"(X,L)
+   proof
+    let L be complete transitive antisymmetric (non empty RelStr);
+    let S be infs-closed non empty Subset of L;
+    let X be Subset of S;
+      ex_inf_of X,L by YELLOW_0:17;
+    hence "/\"(X,subrelstr S) = "/\"(X,L) by Th21;
+   end;
+
+  theorem
+     for L be complete transitive antisymmetric (non empty RelStr)
+   for S be sups-closed non empty Subset of L
+   for X be Subset of S holds
+    "\/"(X,subrelstr S) = "\/"(X,L)
+   proof
+    let L be complete transitive antisymmetric (non empty RelStr);
+    let S be sups-closed non empty Subset of L;
+    let X be Subset of S;
+      ex_sup_of X,L by YELLOW_0:17;
+    hence "\/"(X,subrelstr S) = "\/"(X,L) by Th22;
+   end;
+
+  theorem Th29:
+   for L be Semilattice
+   for S be meet-closed Subset of L holds
+    S is filtered
+   proof
+    let L be Semilattice;
+    let S be meet-closed Subset of L;
+      subrelstr S is meet-inheriting by Def1;
+    hence S is filtered by YELLOW12:26;
+   end;
+
+  theorem Th30:
+   for L be sup-Semilattice
+   for S be join-closed Subset of L holds
+    S is directed
+   proof
+    let L be sup-Semilattice;
+    let S be join-closed Subset of L;
+      subrelstr S is join-inheriting by Def2;
+    hence S is directed by YELLOW12:27;
+   end;
+
+  definition
+   let L be Semilattice;
+   cluster meet-closed -> filtered Subset of L;
+   coherence by Th29;
+  end;
+
+  definition
+   let L be sup-Semilattice;
+   cluster join-closed -> directed Subset of L;
+   coherence by Th30;
+  end;
+
+  theorem
+     for L be Semilattice
+   for S be upper non empty Subset of L holds
+    S is Filter of L iff S is meet-closed
+   proof
+    let L be Semilattice;
+    let S be upper non empty Subset of L;
+      S is Filter of L iff subrelstr S is meet-inheriting by WAYBEL_0:63;
+    hence S is Filter of L iff S is meet-closed by Def1;
+   end;
+
+  theorem
+     for L be sup-Semilattice
+   for S be lower non empty Subset of L holds
+    S is Ideal of L iff S is join-closed
+   proof
+    let L be sup-Semilattice;
+    let S be lower non empty Subset of L;
+      S is Ideal of L iff subrelstr S is join-inheriting by WAYBEL_0:64;
+    hence S is Ideal of L iff S is join-closed by Def2;
+   end;
+
+  theorem Th33:
+   for L be non empty RelStr
+   for S1,S2 be join-closed Subset of L holds
+    S1 /\ S2 is join-closed
+   proof
+    let L be non empty RelStr;
+    let S1,S2 be join-closed Subset of L;
+    A1: subrelstr S1 is join-inheriting &
+        subrelstr S2 is join-inheriting by Def2;
+      now let x,y be Element of L;
+     assume that
+      A2: x in the carrier of subrelstr (S1 /\ S2) and
+      A3: y in the carrier of subrelstr (S1 /\ S2) and
+      A4: ex_sup_of {x,y},L;
+       x in S1 /\ S2 & y in S1 /\ S2 by A2,A3,YELLOW_0:def 15;
+     then x in S1 & x in S2 & y in S1 & y in S2 by XBOOLE_0:def 3;
+     then x in the carrier of subrelstr S1 &
+          x in the carrier of subrelstr S2 &
+          y in the carrier of subrelstr S1 &
+          y in the carrier of subrelstr S2 by YELLOW_0:def 15;
+     then sup {x,y} in the carrier of subrelstr S1 &
+          sup {x,y} in the carrier of subrelstr S2 by A1,A4,YELLOW_0:def 17;
+     then sup {x,y} in S1 & sup {x,y} in S2 by YELLOW_0:def 15;
+     then sup {x,y} in S1 /\ S2 by XBOOLE_0:def 3;
+     hence sup {x,y} in the carrier of subrelstr (S1 /\ S2) by YELLOW_0:def 15
+;
+    end;
+    then subrelstr (S1 /\ S2) is join-inheriting by YELLOW_0:def 17;
+    hence S1 /\ S2 is join-closed by Def2;
+   end;
+
+  theorem
+     for L be non empty RelStr
+   for S1,S2 be meet-closed Subset of L holds
+    S1 /\ S2 is meet-closed
+   proof
+    let L be non empty RelStr;
+    let S1,S2 be meet-closed Subset of L;
+    A1: subrelstr S1 is meet-inheriting &
+        subrelstr S2 is meet-inheriting by Def1;
+      now let x,y be Element of L;
+     assume that
+      A2: x in the carrier of subrelstr (S1 /\ S2) and
+      A3: y in the carrier of subrelstr (S1 /\ S2) and
+      A4: ex_inf_of {x,y},L;
+       x in S1 /\ S2 & y in S1 /\ S2 by A2,A3,YELLOW_0:def 15;
+     then x in S1 & x in S2 & y in S1 & y in S2 by XBOOLE_0:def 3;
+     then x in the carrier of subrelstr S1 &
+          x in the carrier of subrelstr S2 &
+          y in the carrier of subrelstr S1 &
+          y in the carrier of subrelstr S2 by YELLOW_0:def 15;
+     then inf {x,y} in the carrier of subrelstr S1 &
+          inf {x,y} in the carrier of subrelstr S2 by A1,A4,YELLOW_0:def 16;
+     then inf {x,y} in S1 & inf {x,y} in S2 by YELLOW_0:def 15;
+     then inf {x,y} in S1 /\ S2 by XBOOLE_0:def 3;
+     hence inf {x,y} in the carrier of subrelstr (S1 /\ S2) by YELLOW_0:def 15
+;
+    end;
+    then subrelstr (S1 /\ S2) is meet-inheriting by YELLOW_0:def 16;
+    hence S1 /\ S2 is meet-closed by Def1;
+   end;
+
+  theorem Th35:
+   for L be sup-Semilattice
+   for x be Element of L holds
+    downarrow x is join-closed
+   proof
+    let L be sup-Semilattice;
+    let x be Element of L;
+    reconsider x1 = x as Element of L;
+      now let y,z be Element of L;
+     assume that
+      A1: y in the carrier of subrelstr downarrow x and
+      A2: z in the carrier of subrelstr downarrow x and
+        ex_sup_of {y,z},L;
+       y in downarrow x & z in downarrow x by A1,A2,YELLOW_0:def 15;
+     then y <= x1 & z <= x1 by WAYBEL_0:17;
+     then y"\/"z <= x1 by YELLOW_5:9;
+     then y"\/"z in downarrow x by WAYBEL_0:17;
+     then sup {y,z} in downarrow x by YELLOW_0:41;
+     hence sup {y,z} in the carrier of subrelstr downarrow x
+                                                         by YELLOW_0:def 15;
+    end;
+    then subrelstr downarrow x is join-inheriting by YELLOW_0:def 17;
+    hence downarrow x is join-closed by Def2;
+   end;
+
+  theorem Th36:
+   for L be Semilattice
+   for x be Element of L holds
+    downarrow x is meet-closed
+   proof
+    let L be Semilattice;
+    let x be Element of L;
+    reconsider x1 = x as Element of L;
+      now let y,z be Element of L;
+     assume that
+      A1: y in the carrier of subrelstr downarrow x and
+        z in the carrier of subrelstr downarrow x and
+        ex_inf_of {y,z},L;
+       y in downarrow x by A1,YELLOW_0:def 15;
+     then A2: y <= x1 by WAYBEL_0:17;
+       y"/\"z <= y by YELLOW_0:23;
+     then y"/\"z <= x1 by A2,YELLOW_0:def 2;
+     then y"/\"z in downarrow x by WAYBEL_0:17;
+     then inf {y,z} in downarrow x by YELLOW_0:40;
+     hence inf {y,z} in the carrier of subrelstr downarrow x
+                                                         by YELLOW_0:def 15;
+    end;
+    then subrelstr downarrow x is meet-inheriting by YELLOW_0:def 16;
+    hence downarrow x is meet-closed by Def1;
+   end;
+
+  theorem Th37:
+   for L be sup-Semilattice
+   for x be Element of L holds
+    uparrow x is join-closed
+   proof
+    let L be sup-Semilattice;
+    let x be Element of L;
+    reconsider x1 = x as Element of L;
+      now let y,z be Element of L;
+     assume that
+      A1: y in the carrier of subrelstr uparrow x and
+        z in the carrier of subrelstr uparrow x and
+        ex_sup_of {y,z},L;
+       y in uparrow x by A1,YELLOW_0:def 15;
+     then A2: y >= x1 by WAYBEL_0:18;
+       y"\/"z >= y by YELLOW_0:22;
+     then y"\/"z >= x1 by A2,YELLOW_0:def 2;
+     then y"\/"z in uparrow x by WAYBEL_0:18;
+     then sup {y,z} in uparrow x by YELLOW_0:41;
+     hence sup {y,z} in the carrier of subrelstr uparrow x by YELLOW_0:def 15;
+    end;
+    then subrelstr uparrow x is join-inheriting by YELLOW_0:def 17;
+    hence uparrow x is join-closed by Def2;
+   end;
+
+  theorem Th38:
+   for L be Semilattice
+   for x be Element of L holds
+    uparrow x is meet-closed
+   proof
+    let L be Semilattice;
+    let x be Element of L;
+    reconsider x1 = x as Element of L;
+      now let y,z be Element of L;
+     assume that
+      A1: y in the carrier of subrelstr uparrow x and
+      A2: z in the carrier of subrelstr uparrow x and
+        ex_inf_of {y,z},L;
+       y in uparrow x & z in uparrow x by A1,A2,YELLOW_0:def 15;
+     then y >= x1 & z >= x1 by WAYBEL_0:18;
+     then y"/\"z >= x1"/\"x1 by YELLOW_3:2;
+     then y"/\"z >= x1 by YELLOW_5:2;
+     then y"/\"z in uparrow x by WAYBEL_0:18;
+     then inf {y,z} in uparrow x by YELLOW_0:40;
+     hence inf {y,z} in the carrier of subrelstr uparrow x by YELLOW_0:def 15;
+    end;
+    then subrelstr uparrow x is meet-inheriting by YELLOW_0:def 16;
+    hence uparrow x is meet-closed by Def1;
+   end;
+
+  definition
+   let L be sup-Semilattice;
+   let x be Element of L;
+   cluster downarrow x -> join-closed;
+   coherence by Th35;
+   cluster uparrow x -> join-closed;
+   coherence by Th37;
+  end;
+
+  definition
+   let L be Semilattice;
+   let x be Element of L;
+   cluster downarrow x -> meet-closed;
+   coherence by Th36;
+   cluster uparrow x -> meet-closed;
+   coherence by Th38;
+  end;
+
+  theorem Th39:
+   for L be sup-Semilattice
+   for x be Element of L holds
+    waybelow x is join-closed
+   proof
+    let L be sup-Semilattice;
+    let x be Element of L;
+      now let y,z be Element of L;
+     assume that
+      A1: y in the carrier of subrelstr waybelow x and
+      A2: z in the carrier of subrelstr waybelow x and
+        ex_sup_of {y,z},L;
+       y in waybelow x & z in waybelow x by A1,A2,YELLOW_0:def 15;
+     then y << x & z << x by WAYBEL_3:7;
+     then y"\/"z << x by WAYBEL_3:3;
+     then y"\/"z in waybelow x by WAYBEL_3:7;
+     then sup {y,z} in waybelow x by YELLOW_0:41;
+     hence sup {y,z} in the carrier of subrelstr waybelow x
+                                                         by YELLOW_0:def 15;
+    end;
+    then subrelstr waybelow x is join-inheriting by YELLOW_0:def 17;
+    hence waybelow x is join-closed by Def2;
+   end;
+
+  theorem Th40:
+   for L be Semilattice
+   for x be Element of L holds
+    waybelow x is meet-closed
+   proof
+    let L be Semilattice;
+    let x be Element of L;
+      now let y,z be Element of L;
+     assume that
+      A1: y in the carrier of subrelstr waybelow x and
+        z in the carrier of subrelstr waybelow x and
+        ex_inf_of {y,z},L;
+       y in waybelow x by A1,YELLOW_0:def 15;
+     then A2: y << x by WAYBEL_3:7;
+       y"/\"z <= y by YELLOW_0:23;
+     then y"/\"z << x by A2,WAYBEL_3:2;
+     then y"/\"z in waybelow x by WAYBEL_3:7;
+     then inf {y,z} in waybelow x by YELLOW_0:40;
+     hence inf {y,z} in the carrier of subrelstr waybelow x
+                                                         by YELLOW_0:def 15;
+    end;
+    then subrelstr waybelow x is meet-inheriting by YELLOW_0:def 16;
+    hence waybelow x is meet-closed by Def1;
+   end;
+
+  theorem Th41:
+   for L be sup-Semilattice
+   for x be Element of L holds
+    wayabove x is join-closed
+   proof
+    let L be sup-Semilattice;
+    let x be Element of L;
+      now let y,z be Element of L;
+     assume that
+      A1: y in the carrier of subrelstr wayabove x and
+        z in the carrier of subrelstr wayabove x and
+        ex_sup_of {y,z},L;
+       y in wayabove x by A1,YELLOW_0:def 15;
+     then A2: y >> x by WAYBEL_3:8;
+       y"\/"z >= y by YELLOW_0:22;
+     then y"\/"z >> x by A2,WAYBEL_3:2;
+     then y"\/"z in wayabove x by WAYBEL_3:8;
+     then sup {y,z} in wayabove x by YELLOW_0:41;
+     hence sup {y,z} in the carrier of subrelstr wayabove x by YELLOW_0:def 15
+;
+    end;
+    then subrelstr wayabove x is join-inheriting by YELLOW_0:def 17;
+    hence wayabove x is join-closed by Def2;
+   end;
+
+  definition
+   let L be sup-Semilattice;
+   let x be Element of L;
+   cluster waybelow x -> join-closed;
+   coherence by Th39;
+   cluster wayabove x -> join-closed;
+   coherence by Th41;
+  end;
+
+  definition
+   let L be Semilattice;
+   let x be Element of L;
+   cluster waybelow x -> meet-closed;
+   coherence by Th40;
+  end;
+
+begin  :: About Bases of Continuous Lattices
+
+  definition
+   let T be TopStruct;
+   func weight T -> Cardinal equals
+      meet {Card B where B is Basis of T : not contradiction};
+   coherence
+   proof
+     defpred P[Ordinal] means
+       $1 in {Card B where B is Basis of T : not contradiction};
+    A1: ex A be Ordinal st P[A]
+    proof
+     take Card the topology of T;
+       the topology of T is Basis of T by CANTOR_1:2;
+     hence thesis;
+    end;
+    consider A be Ordinal such that
+     A2: P[A] and
+     A3: for C be Ordinal st P[C] holds A c= C from Ordinal_Min(A1);
+    consider B be Basis of T such that
+     A4: A = Card B by A2;
+    reconsider A as Cardinal by A4;
+    set X = {Card B1 where B1 is Basis of T : not contradiction};
+      the topology of T is Basis of T by CANTOR_1:2;
+    then A5: Card the topology of T in X;
+      now let x be set;
+     thus (for y be set holds y in X implies x in y) implies x in A by A2;
+     assume A6: x in A;
+     let y be set;
+     assume A7: y in X;
+     then consider B1 be Basis of T such that
+      A8: y = Card B1;
+     reconsider y1 = y as Cardinal by A8;
+       A c= y1 by A3,A7;
+     hence x in y by A6;
+    end;
+    hence thesis by A5,SETFAM_1:def 1;
+   end;
+  end;
+
+  definition
+   let T be TopStruct;
+   attr T is second-countable means
+      weight T c= omega;
+  end;
+
+  definition  :: DEFINITION 4.1
+   let L be continuous sup-Semilattice;
+   mode CLbasis of L -> Subset of L means :Def7:
+    it is join-closed &
+    for x be Element of L holds x = sup (waybelow x /\ it);
+   existence
+   proof
+    take S = [#]L;
+      subrelstr S is join-inheriting by WAYBEL_0:64;
+    hence S is join-closed by Def2;
+    let x be Element of L;
+    thus x = sup waybelow x by WAYBEL_3:def 5
+          .= sup (waybelow x /\ S) by PRE_TOPC:15;
+   end;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   let S be Subset of L;
+   attr S is with_bottom means :Def8:
+    Bottom L in S;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   let S be Subset of L;
+   attr S is with_top means :Def9:
+    Top L in S;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   cluster with_bottom -> non empty Subset of L;
+   coherence by Def8;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   cluster with_top -> non empty Subset of L;
+   coherence by Def9;
+  end;
+
+  definition
+   let L be non empty RelStr;
+   cluster with_bottom Subset of L;
+   existence
+   proof
+    take [#]L;
+      Bottom L in the carrier of L;
+    hence Bottom L in [#]L by PRE_TOPC:12;
+   end;
+   cluster with_top Subset of L;
+   existence
+   proof
+    take [#]L;
+      Top L in the carrier of L;
+    hence Top L in [#]L by PRE_TOPC:12;
+   end;
+  end;
+
+  definition
+   let L be continuous sup-Semilattice;
+   cluster with_bottom CLbasis of L;
+   existence
+   proof
+      for x,y be Element of L st x in [#]L & y in [#]L holds sup {x,y} in [#]L
+    proof
+     let x,y be Element of L;
+     assume that x in [#]L and y in [#]L;
+       sup {x,y} in the carrier of L;
+     hence sup {x,y} in [#]L by PRE_TOPC:12;
+    end;
+    then A1: [#]L is join-closed by Th18;
+      now let x be Element of L;
+       waybelow x c= the carrier of L;
+     then waybelow x c= [#]L by PRE_TOPC:12;
+     then waybelow x /\ [#]L = waybelow x by XBOOLE_1:28;
+     hence x = sup (waybelow x /\ [#]L) by WAYBEL_3:def 5;
+    end;
+    then reconsider S = [#]L as CLbasis of L by A1,Def7;
+    take S;
+      Bottom L in the carrier of L;
+    then Bottom L in [#]L by PRE_TOPC:12;
+    hence thesis by Def8;
+   end;
+   cluster with_top CLbasis of L;
+   existence
+   proof
+      for x,y be Element of L st x in [#]L & y in [#]L holds sup {x,y} in [#]L
+    proof
+     let x,y be Element of L;
+     assume that x in [#]L and y in [#]L;
+       sup {x,y} in the carrier of L;
+     hence sup {x,y} in [#]L by PRE_TOPC:12;
+    end;
+    then A2: [#]L is join-closed by Th18;
+      now let x be Element of L;
+       waybelow x c= the carrier of L;
+     then waybelow x c= [#]L by PRE_TOPC:12;
+     then waybelow x /\ [#]L = waybelow x by XBOOLE_1:28;
+     hence x = sup (waybelow x /\ [#]L) by WAYBEL_3:def 5;
+    end;
+    then reconsider S = [#]L as CLbasis of L by A2,Def7;
+    take S;
+      Top L in the carrier of L;
+    then Top L in [#]L by PRE_TOPC:12;
+    hence thesis by Def9;
+   end;
+  end;
+
+  theorem Th42:
+   for L be lower-bounded antisymmetric non empty RelStr
+   for S be with_bottom Subset of L holds
+    subrelstr S is lower-bounded
+   proof
+    let L be lower-bounded antisymmetric non empty RelStr;
+    let S be with_bottom Subset of L;
+      Bottom L in S by Def8;
+    then Bottom L in the carrier of subrelstr S by YELLOW_0:def 15;
+    then reconsider dL = Bottom L as Element of subrelstr S;
+    take dL;
+      now let x be Element of subrelstr S;
+     assume  x in the carrier of subrelstr S;
+     reconsider x1 = x as Element of L by YELLOW_0:59;
+       Bottom L <= x1 by YELLOW_0:44;
+     hence dL <= x by YELLOW_0:61;
+    end;
+    hence dL is_<=_than the carrier of subrelstr S by LATTICE3:def 8;
+   end;
+
+  definition
+   let L be lower-bounded antisymmetric non empty RelStr;
+   let S be with_bottom Subset of L;
+   cluster subrelstr S -> lower-bounded;
+   coherence by Th42;
+  end;
+
+  definition
+   let L be continuous sup-Semilattice;
+   cluster -> join-closed CLbasis of L;
+   coherence by Def7;
+  end;
+
+  definition
+   cluster bounded non trivial (continuous LATTICE);
+   existence
+   proof
+    consider X be non empty set;
+    take BoolePoset X;
+    thus thesis;
+   end;
+  end;
+
+  definition
+   let L be lower-bounded non trivial (continuous sup-Semilattice);
+   cluster -> non empty CLbasis of L;
+   coherence
+   proof
+    let B be CLbasis of L;
+    assume A1: B is empty;
+      Top L = "\/"(waybelow Top L /\ B,L) by Def7
+      .= Bottom L by A1,YELLOW_0:def 11;
+    hence contradiction by WAYBEL_7:5;
+   end;
+  end;
+
+  theorem Th43:
+   for L be sup-Semilattice holds
+    the carrier of CompactSublatt L is join-closed Subset of L
+   proof
+    let L be sup-Semilattice;
+      the carrier of CompactSublatt L c= the carrier of L by YELLOW_0:def 13;
+    then reconsider C = the carrier of CompactSublatt L as Subset of L
+                                                         ;
+      subrelstr C = CompactSublatt L by YELLOW_0:def 15;
+    hence the carrier of CompactSublatt L is join-closed Subset of L
+                                                                by Def2;
+   end;
+
+  theorem Th44:  :: Under 4.1 (i)
+   for L be algebraic lower-bounded LATTICE holds
+    the carrier of CompactSublatt L is with_bottom CLbasis of L
+   proof
+    let L be algebraic lower-bounded LATTICE;
+    reconsider C = the carrier of CompactSublatt L as join-closed Subset of L
+                                                                     by Th43;
+      now let x be Element of L;
+       x = sup compactbelow x by WAYBEL_8:def 3;
+     hence x = sup (waybelow x /\ C) by Th1;
+    end;
+    then reconsider C as CLbasis of L by Def7;
+      Bottom L in C by WAYBEL_8:3;
+    hence the carrier of CompactSublatt L is with_bottom CLbasis of L
+                                                            by Def8;
+   end;
+
+  theorem  :: Under 4.1 (ii)
+     for L be continuous lower-bounded sup-Semilattice
+    st the carrier of CompactSublatt L is CLbasis of L holds
+     L is algebraic
+   proof
+    let L be continuous lower-bounded sup-Semilattice;
+    A1: for x being Element of L holds compactbelow x is non empty directed;
+    assume A2: the carrier of CompactSublatt L is CLbasis of L;
+    reconsider C = the carrier of CompactSublatt L as Subset of L by Th43;
+      now let x be Element of L;
+       x = sup (waybelow x /\ C) by A2,Def7;
+     hence x = sup compactbelow x by Th1;
+    end;
+    then L is satisfying_axiom_K by WAYBEL_8:def 3;
+    hence L is algebraic by A1,WAYBEL_8:def 4;
+   end;
+
+  theorem Th46: :: PROPOSITION 4.2. (1) iff (2)
+   for L be continuous lower-bounded LATTICE
+   for B be join-closed Subset of L holds
+    B is CLbasis of L iff
+    for x,y be Element of L st not y <= x
+     ex b be Element of L st b in B & not b <= x & b << y
+   proof
+    let L be continuous lower-bounded LATTICE;
+    let B be join-closed Subset of L;
+    thus B is CLbasis of L implies
+     for x,y be Element of L st not y <= x
+      ex b be Element of L st b in B & not b <= x & b << y
+    proof
+     assume A1: B is CLbasis of L;
+     let x,y be Element of L such that
+      A2: not y <= x;
+     thus ex b be Element of L st b in B & not b <= x & b << y
+     proof
+      assume A3: for b1 be Element of L holds
+       not b1 in B or b1 <= x or not b1 << y;
+      A4: ex_sup_of waybelow y /\ B,L & ex_sup_of downarrow x,L by YELLOW_0:17;
+        waybelow y /\ B c= downarrow x
+      proof
+       let z be set;
+       assume A5: z in waybelow y /\ B;
+       then A6: z in waybelow y & z in B by XBOOLE_0:def 3;
+       reconsider z1 = z as Element of L by A5;
+         z1 << y by A6,WAYBEL_3:7;
+       then z1 <= x by A3,A6;
+       hence z in downarrow x by WAYBEL_0:17;
+      end;
+      then sup (waybelow y /\ B) <= sup (downarrow x) by A4,YELLOW_0:34;
+      then y <= sup (downarrow x) by A1,Def7;
+      hence contradiction by A2,WAYBEL_0:34;
+     end;
+    end;
+    assume A7: for x,y be Element of L st not y <= x
+     ex b be Element of L st b in B & not b <= x & b << y;
+      now let x be Element of L;
+     A8: x = sup waybelow x by WAYBEL_3:def 5;
+     A9: ex_sup_of waybelow x /\ B,L & ex_sup_of waybelow x,L by YELLOW_0:17;
+       waybelow x /\ B c= waybelow x by XBOOLE_1:17;
+     then A10: sup (waybelow x /\ B) <= sup waybelow x by A9,YELLOW_0:34;
+       x <= sup (waybelow x /\ B)
+     proof
+      assume not x <= sup (waybelow x /\ B);
+      then consider b be Element of L such that
+       A11: b in B and
+       A12: not b <= sup (waybelow x /\ B) and
+       A13: b << x by A7;
+        b in waybelow x by A13,WAYBEL_3:7;
+      then b in waybelow x /\ B by A11,XBOOLE_0:def 3;
+      hence contradiction by A12,YELLOW_2:24;
+     end;
+     hence x = sup (waybelow x /\ B) by A8,A10,YELLOW_0:def 3;
+    end;
+    hence B is CLbasis of L by Def7;
+   end;
+
+  theorem Th47: :: PROPOSITION 4.2. (1) iff (3)
+   for L be continuous lower-bounded LATTICE
+   for B be join-closed Subset of L st Bottom L in B holds
+    B is CLbasis of L iff
+    for x,y be Element of L st x << y
+     ex b be Element of L st b in B & x <= b & b << y
+   proof
+    let L be continuous lower-bounded LATTICE;
+    let B be join-closed Subset of L;
+    assume A1: Bottom L in B;
+    thus B is CLbasis of L implies
+     for x,y be Element of L st x << y
+      ex b be Element of L st b in B & x <= b & b << y
+    proof
+     assume A2: B is CLbasis of L;
+     let x,y be Element of L;
+     assume A3: x << y;
+     A4: waybelow y /\ B is join-closed by Th33;
+       Bottom L << y by WAYBEL_3:4;
+     then Bottom L in waybelow y by WAYBEL_3:7;
+     then reconsider D = waybelow y /\ B as non empty directed Subset of L
+                                                 by A1,A4,Th30,XBOOLE_0:def 3;
+       y = sup D by A2,Def7;
+     then consider b be Element of L such that
+      A5: b in D and
+      A6: x <= b by A3,WAYBEL_3:def 1;
+     take b;
+       b in waybelow y & b in B by A5,XBOOLE_0:def 3;
+     hence thesis by A6,WAYBEL_3:7;
+    end;
+    assume A7: for x,y be Element of L st x << y
+      ex b be Element of L st b in B & x <= b & b << y;
+      now let x be Element of L;
+       waybelow x /\ B c= waybelow x by XBOOLE_1:17;
+     then sup (waybelow x /\ B) <= sup waybelow x by WAYBEL_7:3;
+     then A8: sup (waybelow x /\ B) <= x by WAYBEL_3:def 5;
+       x <= sup (waybelow x /\ B)
+     proof
+      assume A9: not x <= sup (waybelow x /\ B);
+        for x being Element of L holds waybelow x is non empty directed;
+      then consider u be Element of L such that
+       A10: u << x and
+       A11: not u <= sup (waybelow x /\ B) by A9,WAYBEL_3:24;
+      consider b be Element of L such that
+       A12: b in B and
+       A13: u <= b and
+       A14: b << x by A7,A10;
+        b in waybelow x by A14,WAYBEL_3:7;
+      then A15: b in waybelow x /\ B by A12,XBOOLE_0:def 3;
+      A16: sup (waybelow x /\ B) is_>=_than waybelow x /\ B by YELLOW_0:32;
+        not b <= sup (waybelow x /\ B) by A11,A13,YELLOW_0:def 2;
+      hence contradiction by A15,A16,LATTICE3:def 9;
+     end;
+     hence x = sup (waybelow x /\ B) by A8,YELLOW_0:def 3;
+    end;
+    hence B is CLbasis of L by Def7;
+   end;
+
+  Lm2:
+   for L be continuous lower-bounded LATTICE
+   for B be join-closed Subset of L st Bottom L in B holds
+    (for x,y be Element of L st x << y
+     ex b be Element of L st b in B & x <= b & b << y) implies
+    (the carrier of CompactSublatt L c= B &
+     for x,y be Element of L st not y <= x
+      ex b be Element of L st b in B & not b <= x & b <= y)
+   proof
+    let L be continuous lower-bounded LATTICE;
+    let B be join-closed Subset of L;
+    assume A1: Bottom L in B;
+    assume A2: for x,y be Element of L st x << y
+     ex b be Element of L st b in B & x <= b & b << y;
+    thus the carrier of CompactSublatt L c= B
+    proof
+     let z be set;
+     assume A3: z in the carrier of CompactSublatt L;
+       the carrier of CompactSublatt L c= the carrier of L by YELLOW_0:def 13;
+     then reconsider z1 = z as Element of L by A3;
+       z1 is compact by A3,WAYBEL_8:def 1;
+     then z1 << z1 by WAYBEL_3:def 2;
+     then consider b be Element of L such that
+      A4: b in B and
+      A5: z1 <= b and
+      A6: b << z1 by A2;
+       b <= z1 by A6,WAYBEL_3:1;
+     hence z in B by A4,A5,YELLOW_0:def 3;
+    end;
+    A7: B is CLbasis of L by A1,A2,Th47;
+    let x,y be Element of L;
+    assume not y <= x;
+    then consider b be Element of L such that
+     A8: b in B and
+     A9: not b <= x and
+     A10: b << y by A7,Th46;
+    take b;
+    thus b in B & not b <= x & b <= y by A8,A9,A10,WAYBEL_3:1;
+   end;
+
+  Lm3:
+   for L be continuous lower-bounded LATTICE
+   for B be Subset of L holds
+    (for x,y be Element of L st not y <= x
+     ex b be Element of L st b in B & not b <= x & b <= y) implies
+    (for x,y be Element of L st not y <= x
+     ex b be Element of L st b in B & not b <= x & b << y)
+   proof
+    let L be continuous lower-bounded LATTICE;
+    let B be Subset of L;
+    assume A1: for x,y be Element of L st not y <= x
+     ex b be Element of L st b in B & not b <= x & b <= y;
+    let x,y be Element of L;
+    assume A2: not y <= x;
+      for z be Element of L holds waybelow z is non empty directed;
+    then consider y1 be Element of L such that
+     A3: y1 << y and
+     A4: not y1 <= x by A2,WAYBEL_3:24;
+    consider b be Element of L such that
+     A5: b in B and
+     A6: not b <= x and
+     A7: b <= y1 by A1,A4;
+    take b;
+    thus b in B & not b <= x & b << y by A3,A5,A6,A7,WAYBEL_3:2;
+   end;
+
+  theorem Th48:  :: PROPOSITION 4.2. (1) iff (4)
+   for L be continuous lower-bounded LATTICE
+   for B be join-closed Subset of L st Bottom L in B holds
+    B is CLbasis of L iff
+    (the carrier of CompactSublatt L c= B &
+     for x,y be Element of L st not y <= x
+      ex b be Element of L st b in B & not b <= x & b <= y)
+   proof
+    let L be continuous lower-bounded LATTICE;
+    let B be join-closed Subset of L;
+    assume A1: Bottom L in B;
+    thus B is CLbasis of L implies
+     (the carrier of CompactSublatt L c= B &
+      for x,y be Element of L st not y <= x
+       ex b be Element of L st b in B & not b <= x & b <= y)
+    proof
+     assume B is CLbasis of L;
+     then for x,y be Element of L st x << y
+      ex b be Element of L st b in B & x <= b & b << y by A1,Th47;
+     hence the carrier of CompactSublatt L c= B &
+      for x,y be Element of L st not y <= x
+       ex b be Element of L st b in B & not b <= x & b <= y by A1,Lm2;
+    end;
+    assume the carrier of CompactSublatt L c= B &
+      for x,y be Element of L st not y <= x
+       ex b be Element of L st b in B & not b <= x & b <= y;
+    then for x,y be Element of L st not y <= x
+     ex b be Element of L st b in B & not b <= x & b << y by Lm3;
+    hence B is CLbasis of L by Th46;
+   end;
+
+  theorem  :: PROPOSITION 4.2. (1) iff (5)
+     for L be continuous lower-bounded LATTICE
+   for B be join-closed Subset of L st Bottom L in B holds
+    B is CLbasis of L iff
+    for x,y be Element of L st not y <= x
+     ex b be Element of L st b in B & not b <= x & b <= y
+   proof
+    let L be continuous lower-bounded LATTICE;
+    let B be join-closed Subset of L;
+    assume A1: Bottom L in B;
+    thus B is CLbasis of L implies
+     for x,y be Element of L st not y <= x
+      ex b be Element of L st b in B & not b <= x & b <= y
+    proof
+     assume B is CLbasis of L;
+     then for x,y be Element of L st x << y
+      ex b be Element of L st b in B & x <= b & b << y by A1,Th47;
+     hence for x,y be Element of L st not y <= x
+      ex b be Element of L st b in B & not b <= x & b <= y by A1,Lm2;
+    end;
+    assume for x,y be Element of L st not y <= x
+      ex b be Element of L st b in B & not b <= x & b <= y;
+    then for x,y be Element of L st not y <= x
+      ex b be Element of L st b in B & not b <= x & b << y by Lm3;
+    hence B is CLbasis of L by Th46;
+   end;
+
+  theorem Th50:
+   for L be lower-bounded sup-Semilattice
+   for S be non empty full SubRelStr of L
+    st Bottom
+L in the carrier of S & the carrier of S is join-closed Subset of L
+   for x be Element of L holds
+    waybelow x /\ (the carrier of S) is Ideal of S
+   proof
+    let L be lower-bounded sup-Semilattice;
+    let S be non empty full SubRelStr of L;
+    assume that
+     A1: Bottom L in the carrier of S and
+     A2: the carrier of S is join-closed Subset of L;
+    let x be Element of L;
+    A3: waybelow x /\ (the carrier of S) c= the carrier of S by XBOOLE_1:17;
+      Bottom L << x by WAYBEL_3:4;
+    then Bottom L in waybelow x by WAYBEL_3:7;
+    then reconsider X = waybelow x /\ (the carrier of S)
+              as non empty Subset of S by A1,A3,XBOOLE_0:def 3;
+    A4: now let a,b be Element of S;
+     reconsider a1 = a, b1 = b as Element of L by YELLOW_0:59;
+     assume that
+      A5: a in X and
+      A6: b <= a;
+     A7: b1 <= a1 by A6,YELLOW_0:60;
+       a in waybelow x by A5,XBOOLE_0:def 3;
+     then a1 << x by WAYBEL_3:7;
+     then b1 << x by A7,WAYBEL_3:2;
+     then b in waybelow x by WAYBEL_3:7;
+     hence b in X by XBOOLE_0:def 3;
+    end;
+    reconsider S1 = the carrier of S as join-closed Subset of L by A2;
+      waybelow x /\ S1 is join-closed by Th33;
+    then waybelow x /\ S1 is directed by Th30;
+    hence thesis by A4,WAYBEL10:24,WAYBEL_0:def 19;
+   end;
+
+  definition
+   let L be non empty reflexive transitive RelStr;
+   let S be non empty full SubRelStr of L;
+   func supMap S -> map of InclPoset(Ids S), L means :Def10:
+    for I be Ideal of S holds it.I = "\/"(I,L);
+   existence
+   proof
+    set P = InclPoset Ids S;
+    deffunc F(set) = "\/"($1,L);
+    A1: for I be set st I in the carrier of P holds F(I) in the carrier of L;
+      ex f be Function of the carrier of P, the carrier of L st
+     for I be set st I in the carrier of P holds f.I = F(I) from Lambda1(A1);
+    then consider f be Function of the carrier of P,the carrier of L such that
+     A2: for I be set st I in the carrier of P holds f.I = "\/"(I,L);
+    reconsider f as map of P,L;
+    take f;
+      for I be Ideal of S holds f.I = "\/"(I,L)
+    proof
+     let I be Ideal of S;
+       I in { X where X is Ideal of S : not contradiction };
+     then I in the carrier of RelStr(#Ids S, RelIncl Ids S#)
+                                                         by WAYBEL_0:def 23;
+     then I in the carrier of P by YELLOW_1:def 1;
+     hence f.I = "\/"(I,L) by A2;
+    end;
+    hence thesis;
+   end;
+   uniqueness
+   proof
+    let f,g be map of InclPoset Ids S, L;
+    assume that
+     A3: for I be Ideal of S holds f.I = "\/"(I,L) and
+     A4: for I be Ideal of S holds g.I = "\/"(I,L);
+    set P = InclPoset Ids S;
+    A5: dom f = the carrier of P & dom g = the carrier of P
+                                                           by FUNCT_2:def 1;
+    A6: the carrier of P = the carrier of RelStr(#Ids S, RelIncl Ids S#)
+                                                           by YELLOW_1:def 1
+       .= Ids S;
+      now
+     let x be set;
+     assume x in the carrier of P;
+     then x in { X where X is Ideal of S : not contradiction }
+                                                      by A6,WAYBEL_0:def 23;
+     then ex I be Ideal of S st x = I;
+     then reconsider I = x as Ideal of S;
+       f.I = "\/"(I,L) & g.I = "\/"(I,L) by A3,A4;
+     hence f.x = g.x;
+    end;
+    hence f = g by A5,FUNCT_1:9;
+   end;
+  end;
+
+  definition
+   let L be non empty reflexive transitive RelStr;
+   let S be non empty full SubRelStr of L;
+   func idsMap S -> map of InclPoset(Ids S), InclPoset(Ids L) means :Def11:
+    for I be Ideal of S
+    ex J be Subset of L st
+     I = J & it.I = downarrow J;
+   existence
+   proof
+    set P = InclPoset Ids S;
+    set R = InclPoset Ids L;
+    deffunc F(Subset of L) = downarrow $1;
+    defpred P[set,set] means
+     ex J be Subset of L st $1 = J & $2 = downarrow J;
+    A1: for I be Element of P
+        ex K be Element of R st P[I,K]
+    proof
+     let I be Element of P;
+       I in the carrier of P;
+     then I in Ids S by YELLOW_1:1;
+     then I in { X where X is Ideal of S : not contradiction }
+                                                         by WAYBEL_0:def 23;
+     then consider J be Ideal of S such that
+      A2: J = I;
+     reconsider J as non empty directed Subset of L by YELLOW_2:7;
+       downarrow J in { X where X is Ideal of L : not contradiction };
+     then downarrow J in Ids L by WAYBEL_0:def 23;
+     then reconsider K = downarrow J as Element of R
+                                                               by YELLOW_1:1;
+     take K,J;
+     thus thesis by A2;
+    end;
+      ex f be Function of the carrier of P, the carrier of R st
+     for I be Element of P holds P[I,f.I] from FuncExD(A1);
+    then consider f be Function of the carrier of P,the carrier of R such that
+     A3: for I be Element of P
+         ex J be Subset of L st I = J & f.I = downarrow J;
+    reconsider f as map of P,R;
+    take f;
+      for I be Ideal of S ex J be Subset of L st I = J & f.I = downarrow J
+    proof
+     let I be Ideal of S;
+       I in { X where X is Ideal of S : not contradiction };
+     then I in the carrier of RelStr(#Ids S, RelIncl Ids S#)
+                                                         by WAYBEL_0:def 23;
+     then I in the carrier of P by YELLOW_1:def 1;
+     then consider J be Subset of L such that
+      A4: I = J and
+      A5: f.I = downarrow J by A3;
+     reconsider J as Subset of L;
+     take J;
+     thus thesis by A4,A5;
+    end;
+    hence thesis;
+   end;
+   uniqueness
+   proof
+    let f,g be map of InclPoset Ids S, InclPoset Ids L;
+    assume that
+     A6: for I be Ideal of S ex J be Subset of L st
+         I = J & f.I = downarrow J and
+     A7: for I be Ideal of S ex J be Subset of L st
+         I = J & g.I = downarrow J;
+    set P = InclPoset Ids S;
+    A8: dom f = the carrier of P & dom g = the carrier of P
+                                                           by FUNCT_2:def 1;
+    A9: the carrier of P = the carrier of RelStr(#Ids S, RelIncl Ids S#)
+                                                           by YELLOW_1:def 1
+       .= Ids S;
+      now
+     let x be set;
+     assume x in the carrier of P;
+     then x in { X where X is Ideal of S : not contradiction }
+                                                      by A9,WAYBEL_0:def 23;
+     then ex I be Ideal of S st x = I;
+     then reconsider I = x as Ideal of S;
+     consider J1 be Subset of L such that
+      A10: I = J1 and
+      A11: f.I = downarrow J1 by A6;
+     consider J2 be Subset of L such that
+      A12: I = J2 and
+      A13: g.I = downarrow J2 by A7;
+     thus f.x = g.x by A10,A11,A12,A13;
+    end;
+    hence f = g by A8,FUNCT_1:9;
+   end;
+  end;
+
+  definition
+   let L be reflexive RelStr;
+   let B be Subset of L;
+   cluster subrelstr B -> reflexive;
+   coherence;
+  end;
+
+  definition
+   let L be transitive RelStr;
+   let B be Subset of L;
+   cluster subrelstr B -> transitive;
+   coherence;
+  end;
+
+  definition
+   let L be antisymmetric RelStr;
+   let B be Subset of L;
+   cluster subrelstr B -> antisymmetric;
+   coherence;
+  end;
+
+  definition
+   let L be lower-bounded continuous sup-Semilattice;
+   let B be with_bottom CLbasis of L;
+   func baseMap B -> map of L, InclPoset(Ids subrelstr B) means :Def12:
+    for x be Element of L holds it.x = waybelow x /\ B;
+   existence
+   proof
+    set P = InclPoset Ids subrelstr B;
+    defpred P[set,set] means
+      ex y be Element of L st $1 = y & $2 = waybelow y /\ B;
+    A1: for x be Element of L
+     ex z be Element of P st P[x,z]
+    proof
+     let x be Element of L;
+     reconsider y = x as Element of L;
+     A2: the carrier of subrelstr B = B by YELLOW_0:def 15;
+       Bottom L in B by Def8;
+     then waybelow y /\ B is Ideal of subrelstr B by A2,Th50;
+     then reconsider z = waybelow y /\ B as
+                                  Element of P by YELLOW_2:43;
+     take z,y;
+     thus thesis;
+    end;
+      ex f be Function of the carrier of L, the carrier of P st
+     for x be Element of L holds P[x,f.x] from FuncExD(A1);
+    then consider f be Function of the carrier of L,the carrier of P such that
+     A3: for x be Element of L ex y be Element of L st
+      x = y & f.x = waybelow y /\ B;
+    reconsider f as map of L,P;
+    take f;
+      now let x be Element of L;
+     consider y be Element of L such that
+      A4: x = y and
+      A5: f.x = waybelow y /\ B by A3;
+     thus f.x = waybelow x /\ B by A4,A5;
+    end;
+    hence thesis;
+   end;
+   uniqueness
+   proof
+    let f,g be map of L,InclPoset Ids subrelstr B;
+    assume that
+     A6: for x be Element of L holds f.x = waybelow x /\ B and
+     A7: for x be Element of L holds g.x = waybelow x /\ B;
+    A8: dom f = the carrier of L & dom g = the carrier of L
+                                                           by FUNCT_2:def 1;
+      now
+     let z be set;
+     assume z in the carrier of L;
+     then reconsider z1 = z as Element of L;
+       f.z = waybelow z1 /\ B & g.z = waybelow z1 /\ B by A6,A7;
+     hence f.z = g.z;
+    end;
+    hence f = g by A8,FUNCT_1:9;
+   end;
+  end;
+
+  theorem Th51:
+   for L be non empty reflexive transitive RelStr
+   for S be non empty full SubRelStr of L holds
+    dom supMap S = Ids S & rng supMap S is Subset of L
+   proof
+    let L be non empty reflexive transitive RelStr;
+    let S be non empty full SubRelStr of L;
+    set P = InclPoset Ids S;
+    thus dom(supMap S) = the carrier of P by FUNCT_2:def 1
+       .= the carrier of RelStr(#Ids S, RelIncl Ids S#) by YELLOW_1:def 1
+       .= Ids S;
+    thus rng supMap S is Subset of L;
+   end;
+
+  theorem Th52:
+   for L be non empty reflexive transitive RelStr
+   for S be non empty full SubRelStr of L
+   for x be set holds
+    x in dom supMap S iff x is Ideal of S
+   proof
+    let L be non empty reflexive transitive RelStr;
+    let S be non empty full SubRelStr of L;
+    let x be set;
+    hereby
+     assume x in dom supMap S;
+     then x in Ids S by Th51;
+     then x in { X where X is Ideal of S : not contradiction }
+                                                         by WAYBEL_0:def 23;
+     then ex I be Ideal of S st x = I;
+     hence x is Ideal of S;
+    end;
+    assume x is Ideal of S;
+    then x in { X where X is Ideal of S: not contradiction };
+    then x in Ids S by WAYBEL_0:def 23;
+    hence x in dom supMap S by Th51;
+   end;
+
+  theorem Th53:
+   for L be non empty reflexive transitive RelStr
+   for S be non empty full SubRelStr of L holds
+    dom idsMap S = Ids S & rng idsMap S is Subset of Ids L
+   proof
+    let L be non empty reflexive transitive RelStr;
+    let S be non empty full SubRelStr of L;
+    set P = InclPoset Ids S;
+    thus dom(idsMap S) = the carrier of P by FUNCT_2:def 1
+       .= the carrier of RelStr(#Ids S, RelIncl Ids S#) by YELLOW_1:def 1
+       .= Ids S;
+    thus rng idsMap S is Subset of Ids L by YELLOW_1:1;
+   end;
+
+  theorem Th54:
+   for L be non empty reflexive transitive RelStr
+   for S be non empty full SubRelStr of L
+   for x be set holds
+    x in dom idsMap S iff x is Ideal of S
+   proof
+    let L be non empty reflexive transitive RelStr;
+    let S be non empty full SubRelStr of L;
+    let x be set;
+    hereby
+     assume x in dom idsMap S;
+     then x in Ids S by Th53;
+     then x in { X where X is Ideal of S : not contradiction }
+                                                         by WAYBEL_0:def 23;
+     then ex I be Ideal of S st x = I;
+     hence x is Ideal of S;
+    end;
+    assume x is Ideal of S;
+    then x in { X where X is Ideal of S: not contradiction };
+    then x in Ids S by WAYBEL_0:def 23;
+    hence x in dom idsMap S by Th53;
+   end;
+
+  theorem Th55:
+   for L be non empty reflexive transitive RelStr
+   for S be non empty full SubRelStr of L
+   for x be set holds
+    x in rng idsMap S implies x is Ideal of L
+   proof
+    let L be non empty reflexive transitive RelStr;
+    let S be non empty full SubRelStr of L;
+    let x be set;
+    assume A1: x in rng idsMap S;
+      rng idsMap S is Subset of Ids L by Th53;
+    then x in Ids L by A1;
+    then x in { X where X is Ideal of L : not contradiction }
+                                                         by WAYBEL_0:def 23;
+    then ex I be Ideal of L st x = I;
+    hence x is Ideal of L;
+   end;
+
+  theorem Th56:
+   for L be lower-bounded continuous sup-Semilattice
+   for B be with_bottom CLbasis of L holds
+    dom baseMap B = the carrier of L &
+    rng baseMap B is Subset of Ids subrelstr B
+   proof
+    let L be lower-bounded continuous sup-Semilattice;
+    let B be with_bottom CLbasis of L;
+    thus dom(baseMap B) = the carrier of L by FUNCT_2:def 1;
+    thus rng baseMap B is Subset of Ids subrelstr B by YELLOW_1:1;
+   end;
+
+  theorem
+     for L be lower-bounded continuous sup-Semilattice
+   for B be with_bottom CLbasis of L
+   for x be set holds
+    x in rng baseMap B implies x is Ideal of subrelstr B
+   proof
+    let L be lower-bounded continuous sup-Semilattice;
+    let B be with_bottom CLbasis of L;
+    let x be set;
+    assume A1: x in rng baseMap B;
+      rng baseMap B is Subset of Ids subrelstr B by Th56;
+    then x in Ids subrelstr B by A1;
+    then x in { X where X is Ideal of subrelstr B : not contradiction }
+                                                         by WAYBEL_0:def 23;
+    then ex I be Ideal of subrelstr B st x = I;
+    hence x is Ideal of subrelstr B;
+   end;
+
+  theorem Th58:
+   for L be up-complete (non empty Poset)
+   for S be non empty full SubRelStr of L holds
+    supMap S is monotone
+   proof
+    let L be up-complete (non empty Poset);
+    let S be non empty full SubRelStr of L;
+    set f = supMap S;
+      now let x, y be Element of InclPoset Ids S;
+     assume A1: x <= y;
+     reconsider I = x, J = y as Ideal of S by YELLOW_2:43;
+       I is non empty directed Subset of L &
+      J is non empty directed Subset of L by YELLOW_2:7;
+     then A2: ex_sup_of I,L & ex_sup_of J,L by WAYBEL_0:75;
+     A3: I c= J by A1,YELLOW_1:3;
+       f.x = "\/"(I,L) & f.y = "\/"(J,L) by Def10;
+     hence f.x <= f.y by A2,A3,YELLOW_0:34;
+    end;
+    hence thesis by WAYBEL_1:def 2;
+   end;
+
+  theorem Th59:
+   for L be non empty reflexive transitive RelStr
+   for S be non empty full SubRelStr of L holds
+    idsMap S is monotone
+   proof
+    let L be non empty reflexive transitive RelStr;
+    let S be non empty full SubRelStr of L;
+    set f = idsMap S;
+      now let x, y be Element of InclPoset Ids S;
+     assume A1: x <= y;
+     reconsider I = x, J = y as Ideal of S by YELLOW_2:43;
+     consider K1 be Subset of L such that
+      A2: I = K1 and
+      A3: f.x = downarrow K1 by Def11;
+     consider K2 be Subset of L such that
+      A4: J = K2 and
+      A5: f.y = downarrow K2 by Def11;
+       I c= J by A1,YELLOW_1:3;
+     then downarrow K1 c= downarrow K2 by A2,A4,YELLOW_3:6;
+     hence f.x <= f.y by A3,A5,YELLOW_1:3;
+    end;
+    hence thesis by WAYBEL_1:def 2;
+   end;
+
+  theorem Th60:
+   for L be lower-bounded continuous sup-Semilattice
+   for B be with_bottom CLbasis of L holds
+    baseMap B is monotone
+   proof
+    let L be lower-bounded continuous sup-Semilattice;
+    let B be with_bottom CLbasis of L;
+    set f = baseMap B;
+      now let x, y be Element of L;
+     assume A1: x <= y;
+     A2: f.x = waybelow x /\ B by Def12;
+     A3: f.y = waybelow y /\ B by Def12;
+       waybelow x c= waybelow y by A1,WAYBEL_3:12;
+     then f.x c= f.y by A2,A3,XBOOLE_1:26;
+     hence f.x <= f.y by YELLOW_1:3;
+    end;
+    hence thesis by WAYBEL_1:def 2;
+   end;
+
+  definition
+   let L be up-complete (non empty Poset);
+   let S be non empty full SubRelStr of L;
+   cluster supMap S -> monotone;
+   coherence by Th58;
+  end;
+
+  definition
+   let L be non empty reflexive transitive RelStr;
+   let S be non empty full SubRelStr of L;
+   cluster idsMap S -> monotone;
+   coherence by Th59;
+  end;
+
+  definition
+   let L be lower-bounded continuous sup-Semilattice;
+   let B be with_bottom CLbasis of L;
+   cluster baseMap B -> monotone;
+   coherence by Th60;
+  end;
+
+  theorem Th61:
+   for L be lower-bounded (continuous sup-Semilattice)
+   for B be with_bottom CLbasis of L holds
+    idsMap (subrelstr B) is sups-preserving
+   proof
+    let L be lower-bounded (continuous sup-Semilattice);
+    let B be with_bottom CLbasis of L;
+      Bottom L in B by Def8;
+    then A1: Bottom L in the carrier of subrelstr B by YELLOW_0:def 15;
+    A2: subrelstr B is join-inheriting by Def2;
+    set f = idsMap (subrelstr B);
+      now let X be Subset of InclPoset Ids subrelstr B;
+     reconsider supX = sup X as Ideal of subrelstr B by YELLOW_2:43;
+     reconsider unionX = union X as Subset of L by WAYBEL13:3;
+     consider J be Subset of L such that
+      A3: supX = J and
+      A4: f.supX = downarrow J by Def11;
+     reconsider dfuX = downarrow finsups union X as Subset of L by WAYBEL13:3;
+     reconsider fuX = finsups union X as Subset of L by WAYBEL13:3;
+       now assume ex_sup_of X,InclPoset Ids subrelstr B;
+      thus ex_sup_of f.:X,InclPoset Ids L by YELLOW_0:17;
+      A5: downarrow finsups union (f.:X) c= downarrow dfuX
+      proof
+       let x be set;
+       assume A6: x in downarrow finsups union (f.:X);
+       then reconsider x1 = x as Element of L;
+       consider y1 be Element of L such that
+        A7: y1 >= x1 and
+        A8: y1 in finsups union (f.:X) by A6,WAYBEL_0:def 15;
+         y1 in { "\/"(V,L) where V is finite Subset of union (f.:X) :
+                                     ex_sup_of V,L } by A8,WAYBEL_0:def 27;
+       then consider Y be finite Subset of union (f.:X) such that
+        A9: y1 = "\/"(Y,L) and
+          ex_sup_of Y,L;
+       defpred P[set,set] means
+         ex I be Element of InclPoset Ids subrelstr B,
+            z1,z2 be Element of L st
+             z1 = $1 & z2 = $2 & I in X & $2 in I & z1 <= z2;
+       A10: for z be set st z in Y
+        ex v be Element of B st P[z,v]
+       proof
+        let z be set;
+        assume z in Y;
+        then consider J be set such that
+         A11: z in J and
+         A12: J in f.:X by TARSKI:def 4;
+        consider I be set such that
+           I in dom f and
+         A13: I in X and
+         A14: J = f.I by A12,FUNCT_1:def 12;
+        reconsider I as Element of InclPoset Ids subrelstr B
+                                                       by A13;
+        reconsider I1 = I as Ideal of subrelstr B by YELLOW_2:43;
+          f.I is Element of InclPoset Ids L;
+        then reconsider J as Element of InclPoset Ids L by A14;
+          J is Ideal of L by YELLOW_2:43;
+        then reconsider z1 = z as Element of L by A11;
+        consider I2 be Subset of L such that
+         A15: I1 = I2 and
+         A16: f.I1 = downarrow I2 by Def11;
+        consider z2 be Element of L such that
+         A17: z2 >= z1 and
+         A18: z2 in I2 by A11,A14,A16,WAYBEL_0:def 15;
+        reconsider v = z2 as Element of B by A15,A18,YELLOW_0:def 15;
+        take v,I,z1,z2;
+        thus z1 = z & z2 = v & I in X & v in I & z1 <= z2 by A13,A15,A17,A18;
+       end;
+       consider g be Function of Y,B such that
+        A19: for z be set st z in Y holds P[z,g.z] from NonUniqFuncDEx(A10);
+       reconsider srg = "\/"(rng g,subrelstr B) as Element of L by YELLOW_0:59;
+         rng g c= B by RELSET_1:12;
+       then A20: rng g c= the carrier of subrelstr B by YELLOW_0:def 15;
+       A21: dom g = Y by FUNCT_2:def 1;
+       then reconsider Z = rng g as finite Subset of subrelstr B
+                                          by A20,FINSET_1:26;
+       A22: ex_sup_of Z,subrelstr B
+       proof
+        per cases;
+         suppose Z is non empty;
+          hence thesis by YELLOW_0:54;
+         suppose Z is empty;
+          hence thesis by YELLOW_0:42;
+       end;
+       A23: ex_sup_of Z,L by YELLOW_0:17;
+        "\/"(Z,L) in the carrier of subrelstr B
+       proof
+        per cases;
+         suppose Z is non empty;
+          hence thesis by A2,WAYBEL21:15;
+         suppose Z is empty;
+          hence thesis by A1,YELLOW_0:def 11;
+       end;
+       then reconsider xl = "\/"(Z,L) as Element of subrelstr B
+                                                         ;
+       A24: "\/"(Z, L) is_>=_than Z &
+        for b be Element of L st b is_>=_than Z holds "\/"(Z, L) <= b
+                                                           by A23,YELLOW_0:30;
+       A25: xl is_>=_than Z
+       proof
+        let b be Element of subrelstr B;
+        reconsider b1 = b as Element of L by YELLOW_0:59;
+        assume b in Z;
+        then b1 <= "\/"(Z, L) by A24,LATTICE3:def 9;
+        hence b <= xl by YELLOW_0:61;
+       end;
+         now let b be Element of subrelstr B;
+        reconsider b1 = b as Element of L by YELLOW_0:59;
+        assume A26: b is_>=_than Z;
+          b1 is_>=_than Z
+        proof
+         let c1 be Element of L;
+         assume A27: c1 in Z;
+         then reconsider c = c1 as Element of subrelstr B;
+           c <= b by A26,A27,LATTICE3:def 9;
+         hence c1 <= b1 by YELLOW_0:60;
+        end;
+        then "\/"(Z, L) <= b1 by A23,YELLOW_0:30;
+        hence xl <= b by YELLOW_0:61;
+       end;
+       then A28: "\/"(Z,subrelstr B) = "\/"(Z,L) by A25,YELLOW_0:30;
+         "\/"(rng g,L) is_>=_than Y
+       proof
+        let a be Element of L;
+        assume A29: a in Y;
+        then consider I be Element of InclPoset Ids subrelstr B,
+                 a1,a2 be Element of L such that
+         A30: a1 = a and
+         A31: a2 = g.a and
+           I in X and
+           g.a in I and
+         A32: a1 <= a2 by A19;
+        A33: g.a in rng g by A21,A29,FUNCT_1:def 5;
+          "\/"(rng g,L) is_>=_than rng g by YELLOW_0:32;
+        then a2 <= "\/"(rng g,L) by A31,A33,LATTICE3:def 9;
+        hence a <= "\/"(rng g,L) by A30,A32,YELLOW_0:def 2;
+       end;
+       then "\/"(Y,L) <= srg by A28,YELLOW_0:32;
+       then A34: x1 <= srg by A7,A9,YELLOW_0:def 2;
+       A35: finsups union X c= downarrow finsups union X by WAYBEL_0:16;
+         rng g c= union X
+       proof
+        let a be set;
+        assume a in rng g;
+        then consider b be set such that
+         A36: b in dom g and
+         A37: a = g.b by FUNCT_1:def 5;
+        consider I be Element of InclPoset Ids subrelstr B,
+                 b1,b2 be Element of L such that
+           b1 = b and
+           b2 = g.b and
+         A38: I in X and
+         A39: g.b in I and
+           b1 <= b2 by A19,A21,A36;
+        thus a in union X by A37,A38,A39,TARSKI:def 4;
+       end;
+       then "\/"(Z,subrelstr B) in { "\/"(V,subrelstr B) where
+            V is finite Subset of union X : ex_sup_of V,subrelstr B } by A22;
+       then "\/"(rng g,subrelstr B) in finsups union X by WAYBEL_0:def 27;
+       hence x in downarrow dfuX by A34,A35,WAYBEL_0:def 15;
+      end;
+        now let x be set;
+       assume A40: x in X;
+       then A41: x in the carrier of InclPoset Ids subrelstr B;
+         x is Element of InclPoset Ids subrelstr B by A40;
+       then reconsider x1 = x as Ideal of subrelstr B by YELLOW_2:43;
+       consider x2 be Subset of L such that
+        A42: x1 = x2 and
+        A43: f.x1 = downarrow x2 by Def11;
+         x1 in dom f by A41,FUNCT_2:def 1;
+       then A44: f.x1 in f.:X by A40,FUNCT_1:def 12;
+       thus x c= union (f.:X)
+       proof
+        let y be set;
+        assume A45: y in x;
+          x c= downarrow x2 by A42,WAYBEL_0:16;
+        hence y in union (f.:X) by A43,A44,A45,TARSKI:def 4;
+       end;
+      end;
+      then union X c= union (f.:X) by ZFMISC_1:94;
+      then A46: finsups unionX c= finsups union (f.:X) by Th2;
+        finsups union X c= finsups unionX by A1,A2,Th5;
+      then finsups union X c= finsups union (f.:X) by A46,XBOOLE_1:1;
+      then A47: downarrow fuX c= downarrow finsups union (f.:X) by YELLOW_3:6;
+        downarrow finsups union X c= downarrow fuX by Th11;
+      then dfuX c= downarrow finsups union (f.:X) by A47,XBOOLE_1:1;
+      then downarrow dfuX c= downarrow downarrow finsups union (f.:X)
+                                                               by YELLOW_3:6;
+      then A48: downarrow dfuX c= downarrow finsups union (f.:X) by Th7;
+      thus sup (f.:X) = downarrow finsups union (f.:X) by Th6
+         .= downarrow dfuX by A5,A48,XBOOLE_0:def 10
+         .= f.sup X by A3,A4,Th6;
+     end;
+     hence f preserves_sup_of X by WAYBEL_0:def 31;
+    end;
+    hence idsMap (subrelstr B) is sups-preserving by WAYBEL_0:def 33;
+   end;
+
+  theorem Th62:
+   for L be up-complete (non empty Poset)
+   for S be non empty full SubRelStr of L holds
+    supMap S = (SupMap L)*(idsMap S)
+   proof
+    let L be up-complete (non empty Poset);
+    let S be non empty full SubRelStr of L;
+    A1: now let x be set;
+     thus x in dom (supMap S) implies
+      x in dom (idsMap S) & (idsMap S).x in dom (SupMap L)
+     proof
+      assume x in dom (supMap S);
+      then x is Ideal of S by Th52;
+      hence x in dom (idsMap S) by Th54;
+      then (idsMap S).x in rng (idsMap S) by FUNCT_1:def 5;
+      then (idsMap S).x is Ideal of L by Th55;
+      hence (idsMap S).x in dom (SupMap L) by YELLOW_2:52;
+     end;
+     thus x in dom (idsMap S) & (idsMap S).x in dom (SupMap L) implies
+      x in dom (supMap S)
+     proof
+      assume that
+       A2: x in dom (idsMap S) and
+         (idsMap S).x in dom (SupMap L);
+        x is Ideal of S by A2,Th54;
+      hence x in dom (supMap S) by Th52;
+     end;
+    end;
+      now let x be set;
+     assume x in dom (supMap S);
+     then reconsider I = x as Ideal of S by Th52;
+     consider J be Subset of L such that
+      A3: I = J and
+      A4: (idsMap S).I = downarrow J by Def11;
+     reconsider J as non empty directed Subset of L by A3,YELLOW_2:7;
+     A5: ex_sup_of J,L by WAYBEL_0:75;
+     thus (supMap S).x = "\/"(I,L) by Def10
+        .= sup (downarrow J) by A3,A5,WAYBEL_0:33
+        .= (SupMap L).((idsMap S).x) by A4,YELLOW_2:def 3;
+    end;
+    hence supMap S = (SupMap L)*(idsMap S) by A1,FUNCT_1:20;
+   end;
+
+  theorem Th63:  :: PROPOSITION 4.3.(i)
+   for L be lower-bounded continuous sup-Semilattice
+   for B be with_bottom CLbasis of L holds
+    [supMap subrelstr B,baseMap B] is Galois
+   proof
+    let L be lower-bounded continuous sup-Semilattice;
+    let B be with_bottom CLbasis of L;
+      now let x be Element of L, y be Element of InclPoset Ids subrelstr B;
+     reconsider I = y as Ideal of subrelstr B by YELLOW_2:43;
+     reconsider J = I as non empty directed Subset of L by YELLOW_2:7;
+     A1: ex_sup_of J,L & ex_sup_of waybelow x,L & ex_sup_of downarrow J,L &
+         ex_sup_of waybelow x /\ B,L by YELLOW_0:17;
+     thus x <= (supMap subrelstr B).y implies (baseMap B).x <= y
+     proof
+      assume x <= (supMap subrelstr B).y;
+      then x <= "\/"(I,L) by Def10;
+      then A2: x <= sup downarrow J by A1,WAYBEL_0:33;
+        waybelow x c= downarrow J
+      proof
+       let z be set;
+       assume A3: z in waybelow x;
+       then reconsider z1 = z as Element of L;
+         z1 << x by A3,WAYBEL_3:7;
+       hence z in downarrow J by A2,WAYBEL_3:20;
+      end;
+      then A4: waybelow x /\ B c= downarrow J /\ B by XBOOLE_1:26;
+        downarrow J /\ B c= J
+      proof
+       let z be set;
+       assume A5: z in downarrow J /\ B;
+       then A6: z in downarrow J & z in B by XBOOLE_0:def 3;
+       reconsider z1 = z as Element of L by A5;
+         z in the carrier of subrelstr B by A6,YELLOW_0:def 15;
+       then reconsider z2 = z as Element of subrelstr B;
+       consider v1 be Element of L such that
+        A7: v1 >= z1 and
+        A8: v1 in J by A6,WAYBEL_0:def 15;
+       reconsider v2 = v1 as Element of subrelstr B by A8;
+       z2 <= v2 by A7,YELLOW_0:61;
+       hence z in J by A8,WAYBEL_0:def 19;
+      end;
+      then waybelow x /\ B c= y by A4,XBOOLE_1:1;
+      then (baseMap B).x c= y by Def12;
+      hence (baseMap B).x <= y by YELLOW_1:3;
+     end;
+     thus (baseMap B).x <= y implies x <= (supMap subrelstr B).y
+     proof
+      assume (baseMap B).x <= y;
+      then (baseMap B).x c= y by YELLOW_1:3;
+      then waybelow x /\ B c= y by Def12;
+      then sup (waybelow x /\ B) <= sup J by A1,YELLOW_0:34;
+      then x <= "\/"(I,L) by Def7;
+      hence x <= (supMap subrelstr B).y by Def10;
+     end;
+    end;
+    hence [supMap subrelstr B,baseMap B] is Galois by WAYBEL_1:9;
+   end;
+
+  theorem Th64:  :: PROPOSITION 4.3.(ii)
+   for L be lower-bounded continuous sup-Semilattice
+   for B be with_bottom CLbasis of L holds
+    supMap subrelstr B is upper_adjoint & baseMap B is lower_adjoint
+   proof
+    let L be lower-bounded continuous sup-Semilattice;
+    let B be with_bottom CLbasis of L;
+      [supMap subrelstr B,baseMap B] is Galois by Th63;
+    hence thesis by WAYBEL_1:10;
+   end;
+
+  theorem Th65:  :: PROPOSITION 4.3.(iii)
+   for L be lower-bounded (continuous sup-Semilattice)
+   for B be with_bottom CLbasis of L holds
+    rng supMap subrelstr B = the carrier of L
+   proof
+    let L be lower-bounded (continuous sup-Semilattice);
+    let B be with_bottom CLbasis of L;
+    A1: Bottom L in B by Def8;
+    thus rng supMap subrelstr B = the carrier of L
+    proof
+     thus rng supMap subrelstr B c= the carrier of L;
+     let x be set;
+     assume x in the carrier of L;
+     then reconsider x1 = x as Element of L;
+     set z = waybelow x1 /\ B;
+       z is Subset of B by XBOOLE_1:17;
+     then z is Subset of subrelstr B by YELLOW_0:def 15;
+     then reconsider z as Subset of subrelstr B;
+       Bottom L << x1 by WAYBEL_3:4;
+     then A2: Bottom L in waybelow x1 by WAYBEL_3:7;
+     A3: now let a,b be Element of subrelstr B;
+      reconsider a1 = a, b1 = b as Element of L by YELLOW_0:59;
+      assume that
+       A4: a in z and
+       A5: b <= a;
+        b in the carrier of subrelstr B;
+      then A6: b in B by YELLOW_0:def 15;
+      A7: b1 <= a1 by A5,YELLOW_0:60;
+        a in waybelow x1 by A4,XBOOLE_0:def 3;
+      then a1 << x1 by WAYBEL_3:7;
+      then b1 << x1 by A7,WAYBEL_3:2;
+      then b in waybelow x1 by WAYBEL_3:7;
+      hence b in z by A6,XBOOLE_0:def 3;
+     end;
+       waybelow x1 /\ B is join-closed by Th33;
+     then waybelow x1 /\ B is directed by Th30;
+     then reconsider z as Ideal of subrelstr B
+                      by A1,A2,A3,WAYBEL10:24,WAYBEL_0:def 19,XBOOLE_0:def 3;
+       z in { X where X is Ideal of subrelstr B : not contradiction };
+     then z in Ids subrelstr B by WAYBEL_0:def 23;
+     then A8: z in dom supMap subrelstr B by Th51;
+       x = "\/"(z,L) by Def7
+      .= (supMap subrelstr B).z by Def10;
+     hence x in rng supMap subrelstr B by A8,FUNCT_1:def 5;
+    end;
+   end;
+
+  theorem Th66:  :: PROPOSITION 4.3.(iv)
+   for L be lower-bounded (continuous sup-Semilattice)
+   for B be with_bottom CLbasis of L holds
+    supMap (subrelstr B) is infs-preserving sups-preserving
+   proof
+    let L be lower-bounded (continuous sup-Semilattice);
+    let B be with_bottom CLbasis of L;
+      supMap (subrelstr B) is upper_adjoint by Th64;
+    hence supMap (subrelstr B) is infs-preserving by WAYBEL_1:13;
+    A1: idsMap (subrelstr B) is sups-preserving by Th61;
+    A2: supMap (subrelstr B) = (SupMap L)*(idsMap (subrelstr B)) by Th62;
+      SupMap L is sups-preserving by WAYBEL13:33;
+    hence supMap (subrelstr B) is sups-preserving by A1,A2,WAYBEL20:28;
+   end;
+
+  theorem Th67:
+   for L be lower-bounded continuous sup-Semilattice
+   for B be with_bottom CLbasis of L holds
+    baseMap B is sups-preserving
+   proof
+    let L be lower-bounded continuous sup-Semilattice;
+    let B be with_bottom CLbasis of L;
+      baseMap B is lower_adjoint by Th64;
+    hence baseMap B is sups-preserving by WAYBEL_1:14;
+   end;
+
+   definition
+    let L be lower-bounded continuous sup-Semilattice;
+    let B be with_bottom CLbasis of L;
+    cluster supMap subrelstr B -> infs-preserving sups-preserving;
+    coherence by Th66;
+    cluster baseMap B -> sups-preserving;
+    coherence by Th67;
+   end;
+
+canceled;
+
+  theorem Th69:  :: PROPOSITION 4.3.(vi)
+   for L be lower-bounded (continuous sup-Semilattice)
+   for B be with_bottom CLbasis of L holds
+    the carrier of CompactSublatt InclPoset(Ids subrelstr B) =
+     { downarrow b where b is Element of subrelstr B : not contradiction }
+   proof
+    let L be lower-bounded (continuous sup-Semilattice);
+    let B be with_bottom CLbasis of L;
+    thus the carrier of CompactSublatt InclPoset(Ids subrelstr B) c=
+     { downarrow b where b is Element of subrelstr B : not contradiction }
+    proof
+     let x be set;
+     assume A1: x in the carrier of CompactSublatt InclPoset(Ids subrelstr B);
+       the carrier of CompactSublatt InclPoset(Ids subrelstr B) c=
+      the carrier of InclPoset(Ids subrelstr B) by YELLOW_0:def 13;
+     then reconsider x1 = x as Element of InclPoset(Ids subrelstr B)
+                                                       by A1;
+       x1 is compact by A1,WAYBEL_8:def 1;
+     then ex b be Element of subrelstr B st x1 = downarrow b by WAYBEL13:12;
+     hence x in { downarrow b where b is Element of subrelstr B :
+                                                         not contradiction };
+    end;
+    thus { downarrow b where b is Element of subrelstr B : not contradiction }
+     c= the carrier of CompactSublatt InclPoset(Ids subrelstr B)
+    proof
+     let x be set;
+     assume x in { downarrow b where b is Element of subrelstr B :
+      not contradiction };
+     then consider b be Element of subrelstr B such that
+      A2: x = downarrow b;
+     reconsider x1 = x as Element of InclPoset(Ids subrelstr B)
+                                                           by A2,YELLOW_2:43;
+       x1 is compact by A2,WAYBEL13:12;
+     hence x in the carrier of CompactSublatt InclPoset(Ids subrelstr B)
+                                                          by WAYBEL_8:def 1;
+    end;
+   end;
+
+  theorem  :: PROPOSITION 4.3.(vii)
+     for L be lower-bounded (continuous sup-Semilattice)
+   for B be with_bottom CLbasis of L holds
+    CompactSublatt InclPoset(Ids subrelstr B),subrelstr B are_isomorphic
+   proof
+    let L be lower-bounded (continuous sup-Semilattice);
+    let B be with_bottom CLbasis of L;
+    deffunc F(Element of subrelstr B) = downarrow $1;
+    A1: for x be Element of subrelstr B holds
+      F(x) is Element of CompactSublatt InclPoset Ids subrelstr B
+    proof
+     let x be Element of subrelstr B;
+       downarrow x in { downarrow b where b is Element of subrelstr B :
+                                                         not contradiction };
+     then downarrow x in the carrier of CompactSublatt
+                                           InclPoset Ids subrelstr B by Th69;
+     hence downarrow x is Element of CompactSublatt InclPoset Ids subrelstr B
+                                                         ;
+    end;
+    consider f be map of subrelstr B,CompactSublatt InclPoset Ids subrelstr B
+      such that
+     A2: for x be Element of subrelstr B holds f.x = F(x) from KappaMD(A1);
+      f is isomorphic by A2,WAYBEL13:13;
+    then subrelstr B,CompactSublatt InclPoset(Ids subrelstr B) are_isomorphic
+                                                          by WAYBEL_1:def 8;
+    hence CompactSublatt InclPoset(Ids subrelstr B),subrelstr B are_isomorphic
+                                                               by WAYBEL_1:7;
+   end;
+
+  Lm4:
+   for L be continuous lower-bounded LATTICE holds
+    L is algebraic implies
+     the carrier of CompactSublatt L is with_bottom CLbasis of L &
+     for B be with_bottom CLbasis of L holds
+      the carrier of CompactSublatt L c= B
+   proof
+    let L be continuous lower-bounded LATTICE;
+    assume L is algebraic;
+    hence the carrier of CompactSublatt L is with_bottom CLbasis of L by Th44;
+    let B be with_bottom CLbasis of L;
+      Bottom L in B by Def8;
+    hence the carrier of CompactSublatt L c= B by Th48;
+   end;
+
+  theorem Th71:
+   for L be continuous lower-bounded LATTICE
+   for B be with_bottom CLbasis of L st
+    for B1 be with_bottom CLbasis of L holds B c= B1
+   for J be Element of InclPoset Ids subrelstr B holds
+    J = waybelow "\/"(J,L) /\ B
+   proof
+    let L be continuous lower-bounded LATTICE;
+    let B be with_bottom CLbasis of L;
+    assume A1: for B1 be with_bottom CLbasis of L holds B c= B1;
+    let J be Element of InclPoset Ids subrelstr B;
+    reconsider J1 = J as Ideal of subrelstr B by YELLOW_2:43;
+    reconsider J2 = J1 as non empty directed Subset of L by YELLOW_2:7;
+    set x = "\/"(J,L);
+    A2: waybelow x /\ B c= J
+    proof
+     let a be set;
+     assume A3: a in waybelow x /\ B;
+     then A4: a in waybelow x & a in B by XBOOLE_0:def 3;
+     reconsider a1 = a as Element of L by A3;
+       a in the carrier of subrelstr B by A4,YELLOW_0:def 15;
+     then reconsider a2 = a as Element of subrelstr B;
+       a1 << x by A4,WAYBEL_3:7;
+     then consider d1 be Element of L such that
+      A5: d1 in J2 and
+      A6: a1 <= d1 by WAYBEL_3:def 1;
+     reconsider d2 = d1 as Element of subrelstr B by A5;
+     a2 <= d2 by A6,YELLOW_0:61;
+     hence a in J by A5,WAYBEL_0:def 19;
+    end;
+    set C = (B \ J2) \/ (waybelow x /\ B);
+    A7: B \ J2 c= B by XBOOLE_1:36;
+      waybelow x /\ B c= B by XBOOLE_1:17;
+    then A8: C c= B by A7,XBOOLE_1:8;
+    A9: subrelstr B is join-inheriting by Def2;
+      subrelstr C is join-inheriting
+    proof
+     let a,b be Element of L;
+     assume that
+      A10: a in the carrier of subrelstr C and
+      A11: b in the carrier of subrelstr C and
+      A12: ex_sup_of {a,b},L;
+     A13: a in C & b in C by A10,A11,YELLOW_0:def 15;
+     then a in B & b in B by A8;
+     then a in the carrier of subrelstr B & b in the carrier of subrelstr B
+                                                         by YELLOW_0:def 15;
+     then reconsider a1 = a, b1 = b as Element of subrelstr B
+                                                         ;
+     A14: a1 <= a1 "\/" b1 & b1 <= a1 "\/" b1 by YELLOW_0:22;
+     A15: sup {a,b} in B by A8,A12,A13,Th16;
+       now per cases by A13,XBOOLE_0:def 2;
+      suppose a in B \ J & b in B \ J;
+       then A16: not a in J by XBOOLE_0:def 4;
+         not a "\/" b in J
+       proof
+        assume a "\/" b in J;
+        then a1 "\/" b1 in J1 by A9,YELLOW_0:71;
+        hence contradiction by A14,A16,WAYBEL_0:def 19;
+       end;
+       then not sup {a,b} in J by YELLOW_0:41;
+       then sup {a,b} in B \ J by A15,XBOOLE_0:def 4;
+       hence sup {a,b} in C by XBOOLE_0:def 2;
+      suppose a in B \ J & b in waybelow x /\ B;
+       then A17: not a in J by XBOOLE_0:def 4;
+         not a "\/" b in J
+       proof
+        assume a "\/" b in J;
+        then a1 "\/" b1 in J1 by A9,YELLOW_0:71;
+        hence contradiction by A14,A17,WAYBEL_0:def 19;
+       end;
+       then not sup {a,b} in J by YELLOW_0:41;
+       then sup {a,b} in B \ J by A15,XBOOLE_0:def 4;
+       hence sup {a,b} in C by XBOOLE_0:def 2;
+      suppose a in waybelow x /\ B & b in B \ J;
+       then A18: not b in J by XBOOLE_0:def 4;
+         not a "\/" b in J
+       proof
+        assume a "\/" b in J;
+        then a1 "\/" b1 in J1 by A9,YELLOW_0:71;
+        hence contradiction by A14,A18,WAYBEL_0:def 19;
+       end;
+       then not sup {a,b} in J by YELLOW_0:41;
+       then sup {a,b} in B \ J by A15,XBOOLE_0:def 4;
+       hence sup {a,b} in C by XBOOLE_0:def 2;
+      suppose a in waybelow x /\ B & b in waybelow x /\ B;
+       then a in waybelow x & b in waybelow x by XBOOLE_0:def 3;
+       then a << x & b << x by WAYBEL_3:7;
+       then a "\/" b << x by WAYBEL_3:3;
+       then a "\/" b in waybelow x by WAYBEL_3:7;
+       then sup {a,b} in waybelow x by YELLOW_0:41;
+       then sup {a,b} in waybelow x /\ B by A15,XBOOLE_0:def 3;
+       hence sup {a,b} in C by XBOOLE_0:def 2;
+     end;
+     hence sup {a,b} in the carrier of subrelstr C by YELLOW_0:def 15;
+    end;
+    then A19: C is join-closed by Def2;
+      now let y be Element of L;
+     per cases;
+      suppose not y <= x;
+       then consider u be Element of L such that
+        A20: u in B and
+        A21: not u <= x and
+        A22: u << y by Th46;
+       A23: waybelow y /\ B is_<=_than sup(waybelow y /\ B) by YELLOW_0:32;
+       A24: sup(waybelow y /\ B) is_>=_than waybelow y /\ C
+       proof
+        let b be Element of L;
+        assume b in waybelow y /\ C;
+        then b in waybelow y & b in C by XBOOLE_0:def 3;
+        then b in waybelow y /\ B by A8,XBOOLE_0:def 3;
+        hence b <= sup(waybelow y /\ B) by A23,LATTICE3:def 9;
+       end;
+         now let b be Element of L;
+        assume A25: b is_>=_than waybelow y /\ C;
+          b is_>=_than waybelow y /\ B
+        proof
+         let c be Element of L;
+         assume c in waybelow y /\ B;
+         then A26: c in waybelow y & c in B by XBOOLE_0:def 3;
+         then c << y by WAYBEL_3:7;
+         then c "\/" u << y by A22,WAYBEL_3:3;
+         then A27: c "\/" u in waybelow y by WAYBEL_3:7;
+           sup {c,u} in B by A20,A26,Th18;
+         then A28: c "\/" u in B by YELLOW_0:41;
+         A29: J is_<=_than x by YELLOW_0:32;
+           u <= c "\/" u by YELLOW_0:22;
+         then not c "\/" u <= x by A21,YELLOW_0:def 2;
+         then not c "\/" u in J by A29,LATTICE3:def 9;
+         then c "\/" u in B \ J by A28,XBOOLE_0:def 4;
+         then c "\/" u in C by XBOOLE_0:def 2;
+         then c "\/" u in waybelow y /\ C by A27,XBOOLE_0:def 3;
+         then A30: c "\/" u <= b by A25,LATTICE3:def 9;
+           c <= c "\/" u by YELLOW_0:22;
+         hence c <= b by A30,YELLOW_0:def 2;
+        end;
+        hence sup(waybelow y /\ B) <= b by YELLOW_0:32;
+       end;
+       then sup(waybelow y /\ B) = sup(waybelow y /\ C) by A24,YELLOW_0:32;
+       hence y = sup(waybelow y /\ C) by Def7;
+      suppose A31: y <= x;
+       A32: waybelow y /\ C c= waybelow y /\ B by A8,XBOOLE_1:26;
+         waybelow y /\ B c= waybelow y /\ C
+       proof
+        let a be set;
+        assume A33: a in waybelow y /\ B;
+        then A34: a in waybelow y & a in B by XBOOLE_0:def 3;
+        reconsider a1 = a as Element of L by A33;
+          a1 << y by A34,WAYBEL_3:7;
+        then a1 << x by A31,WAYBEL_3:2;
+        then a1 in waybelow x by WAYBEL_3:7;
+        then a in waybelow x /\ B by A34,XBOOLE_0:def 3;
+        then a in C by XBOOLE_0:def 2;
+        hence a in waybelow y /\ C by A34,XBOOLE_0:def 3;
+       end;
+       then waybelow y /\ B = waybelow y /\ C by A32,XBOOLE_0:def 10;
+       hence y = sup(waybelow y /\ C) by Def7;
+    end;
+    then reconsider C as CLbasis of L by A19,Def7;
+    A35: Bottom L in B by Def8;
+      Bottom L << x by WAYBEL_3:4;
+    then Bottom L in waybelow x by WAYBEL_3:7;
+    then Bottom L in waybelow x /\ B by A35,XBOOLE_0:def 3;
+    then Bottom L in C by XBOOLE_0:def 2;
+    then C is with_bottom by Def8;
+    then B c= C by A1;
+    then A36: B = C by A8,XBOOLE_0:def 10;
+      J c= waybelow x /\ B
+    proof
+     let a be set;
+     assume A37: a in J;
+     then a in J1;
+     then a in the carrier of subrelstr B;
+     then A38: a in C by A36,YELLOW_0:def 15;
+       not a in B \ J2 by A37,XBOOLE_0:def 4;
+     hence a in waybelow x /\ B by A38,XBOOLE_0:def 2;
+    end;
+    hence J = waybelow "\/"(J,L) /\ B by A2,XBOOLE_0:def 10;
+   end;
+
+  Lm5:
+   for L be continuous lower-bounded LATTICE holds
+    (ex B be with_bottom CLbasis of L st
+     for B1 be with_bottom CLbasis of L holds B c= B1) implies
+    L is algebraic
+   proof
+    let L be continuous lower-bounded LATTICE;
+    given B be with_bottom CLbasis of L such that
+     A1: for B1 be with_bottom CLbasis of L holds B c= B1;
+    A2: [supMap subrelstr B,baseMap B] is Galois by Th63;
+    A3: rng supMap subrelstr B = the carrier of L by Th65;
+      the carrier of InclPoset Ids subrelstr B c= rng baseMap B
+    proof
+     let J be set;
+     assume J in the carrier of InclPoset Ids subrelstr B;
+     then A4: J is Element of InclPoset Ids subrelstr B;
+     set x = "\/"(J,L);
+       J = waybelow x /\ B by A1,A4,Th71;
+     then A5: J = (baseMap B).x by Def12;
+       dom baseMap B = the carrier of L by FUNCT_2:def 1;
+     hence J in rng baseMap B by A5,FUNCT_1:def 5;
+    end;
+    then rng baseMap B = the carrier of InclPoset Ids subrelstr B
+                                                             by XBOOLE_0:def 10
+;
+    then baseMap B is onto by FUNCT_2:def 3;
+    then A6: supMap subrelstr B is one-to-one by A2,WAYBEL_1:29;
+      for x,y be Element of InclPoset Ids subrelstr B holds x <= y iff
+     (supMap subrelstr B).x <= (supMap subrelstr B).y
+    proof
+     let x,y be Element of InclPoset Ids subrelstr B;
+     thus x <= y implies (supMap subrelstr B).x <= (supMap subrelstr B).y
+                                                          by WAYBEL_1:def 2;
+     reconsider x1 = x, y1 = y as Ideal of subrelstr B by YELLOW_2:43;
+     A7: (supMap subrelstr B).x1 = "\/"(x1,L) &
+         (supMap subrelstr B).y1 = "\/"(y1,L) by Def10;
+     A8: x = waybelow "\/"(x,L) /\ B & y = waybelow "\/"(y,L) /\ B by A1,Th71;
+     assume (supMap subrelstr B).x <= (supMap subrelstr B).y;
+     then waybelow "\/"(x1,L) c= waybelow "\/"(y1,L) by A7,WAYBEL_3:25;
+     then waybelow "\/"(x1,L) /\ B c= waybelow "\/"(y1,L) /\ B by XBOOLE_1:26;
+     hence x <= y by A8,YELLOW_1:3;
+    end;
+    then supMap subrelstr B is isomorphic by A3,A6,WAYBEL_0:66;
+    then A9: InclPoset Ids subrelstr B,L are_isomorphic by WAYBEL_1:def 8;
+      InclPoset Ids subrelstr B is lower-bounded algebraic by WAYBEL13:10;
+    hence L is algebraic by A9,WAYBEL13:32;
+   end;
+
+  theorem  :: PROPOSITION 4.4. (1) iff (2)
+     for L be continuous lower-bounded LATTICE holds
+    L is algebraic iff
+     the carrier of CompactSublatt L is with_bottom CLbasis of L &
+     for B be with_bottom CLbasis of L holds
+      the carrier of CompactSublatt L c= B by Lm4,Lm5;
+
+  theorem  :: PROPOSITION 4.4. (1) iff (3)
+     for L be continuous lower-bounded LATTICE holds
+    L is algebraic iff
+     ex B be with_bottom CLbasis of L st
+     for B1 be with_bottom CLbasis of L holds B c= B1
+   proof
+    let L be continuous lower-bounded LATTICE;
+    thus L is algebraic implies
+     ex B be with_bottom CLbasis of L st
+      for B1 be with_bottom CLbasis of L holds B c= B1
+    proof
+     assume L is algebraic;
+     then the carrier of CompactSublatt L is with_bottom CLbasis of L &
+      for B be with_bottom CLbasis of L holds
+       the carrier of CompactSublatt L c= B by Lm4;
+     hence ex B be with_bottom CLbasis of L st
+      for B1 be with_bottom CLbasis of L holds B c= B1;
+    end;
+    thus (ex B be with_bottom CLbasis of L st
+     for B1 be with_bottom CLbasis of L holds B c= B1) implies
+      L is algebraic by Lm5;
+   end;
+

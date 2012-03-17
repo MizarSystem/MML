@@ -1,0 +1,2955 @@
+:: On the {K}uratowski Limit Operators
+::  by Adam Grabowski
+::
+:: Received August 12, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary KURATO_2, WELLFND1, FRECHET2, REARRAN1, YELLOW_6, BOOLE, EUCLID,
+      PRE_TOPC, COMPTS_1, SETFAM_1, METRIC_1, SUBSET_1, PCOMPS_1, RELAT_1,
+      ORDINAL2, LATTICES, SEQ_2, PROB_1, SEQ_1, FUNCT_1, SEQM_3, FRECHET,
+      ARYTM_3, CONNSP_2, ARYTM, TOPS_1, ARYTM_1, NEWTON, NORMSP_1, COMPLEX1,
+      INT_1, FINSEQ_1, TOPREAL1, TOPREAL2, JORDAN9, JORDAN2C, SQUARE_1,
+      GOBOARD9, ZF_REFLE, FUNCOP_1, MCART_1, WAYBEL_7;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, ZFMISC_1,
+      XREAL_0, REAL_1, NAT_1, SETFAM_1, MCART_1, STRUCT_0, PRE_TOPC, TOPS_1,
+      COMPTS_1, RELAT_1, FUNCT_1, INT_1, FINSEQ_1, SEQ_1, TBSP_1, PARTFUN1,
+      FUNCT_2, METRIC_1, PCOMPS_1, EUCLID, NORMSP_1, BORSUK_1, PROB_1,
+      PSCOMP_1, LIMFUNC1, CONNSP_2, TOPREAL1, TOPREAL2, JORDAN2C, SEQM_3,
+      GOBOARD9, FRECHET, FRECHET2, TOPRNS_1, JORDAN9, FUNCT_6, YELLOW_6;
+ constructors REAL_1, JORDAN2C, GROUP_1, TOPREAL2, CONNSP_1, PSCOMP_1, TOPS_1,
+      WEIERSTR, PROB_1, TOPRNS_1, FRECHET, NAT_1, JORDAN9, TBSP_1, CQC_SIM1,
+      LIMFUNC1, GOBOARD9, YELLOW_6, FUNCT_6, FRECHET2;
+ clusters XREAL_0, RELSET_1, NAT_1, INT_1, JORDAN1B, SUBSET_1, STRUCT_0,
+      TOPS_1, BORSUK_1, EUCLID, FINSET_1, METRIC_1, TOPREAL6, GOBRD14,
+      HAUSDORF, SEQ_1, SEQM_3, MEMBERED, FUNCT_2, PARTFUN1, ORDINAL2;
+ requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
+ definitions XBOOLE_0, TARSKI;
+ theorems SETFAM_1, FRECHET, EUCLID, METRIC_1, SEQ_2, REAL_1, TOPREAL3,
+      YELLOW_6, TOPMETR, CONNSP_2, GOBOARD6, XBOOLE_1, PRE_TOPC, SUBSET_1,
+      NAT_1, REAL_2, FUNCT_2, RELSET_1, TOPRNS_1, NORMSP_1, XBOOLE_0, FUNCT_1,
+      INT_1, AXIOMS, SQUARE_1, XREAL_0, SPPOL_1, TOPS_1, TOPREAL6, JORDAN2C,
+      TBSP_1, METRIC_6, FIN_TOPO, ZFMISC_1, RELAT_1, TARSKI, FUNCOP_1, GOBRD14,
+      XCMPLX_0, FUNCT_6, SEQM_3, XCMPLX_1, MCART_1, BORSUK_1, PROB_1, FRECHET2;
+ schemes XBOOLE_0, COMPTS_1, FUNCT_2, COMPLSP1, NAT_1, LATTICE5;
+
+begin :: Preliminaries
+
+theorem Th1:
+  for X, x being set,
+      A being Subset of X st not x in A & x in X holds x in A`
+proof
+  let X, x be set,
+      A be Subset of X;
+  assume not x in A & x in X;
+  then x in X \ A by XBOOLE_0:def 4;
+  hence thesis by SUBSET_1:def 5;
+end;
+
+theorem
+  for F being Function,
+      i being set st i in dom F holds meet F c= F.i
+  proof
+    let F be Function,
+        i be set;
+    assume
+A1: i in dom F;
+    meet F c= F.i
+    proof
+      let x be set;
+      assume x in meet F;
+      hence x in F.i by A1,FUNCT_6:37,RELAT_1:60;
+    end;
+    hence meet F c= F.i;
+  end;
+
+theorem Th3:
+  for T being non empty 1-sorted,
+      S1, S2 being SetSequence of the carrier of T holds
+    S1 = S2 iff for n being Nat holds S1.n = S2.n
+  proof
+    let T be non empty 1-sorted,
+        S1, S2 be SetSequence of the carrier of T;
+    thus S1 = S2 implies for n being Nat holds S1.n = S2.n;
+    assume
+A1: for n being Nat holds S1.n = S2.n;
+A2: dom S1 = NAT by FUNCT_2:def 1
+          .= dom S2 by FUNCT_2:def 1;
+    for x being set st x in dom S1 holds S1.x = S2.x
+    proof
+      let x be set;
+      assume x in dom S1; then
+      reconsider n = x as Nat by FUNCT_2:def 1;
+      S1.x = S2.n by A1
+          .= S2.x;
+      hence thesis;
+    end;
+    hence thesis by A2,FUNCT_1:9;
+  end;
+
+theorem Th4:
+  for A, B, C, D being set st A meets B & C meets D holds
+    [: A, C :] meets [: B, D :]
+  proof
+    let A, B, C, D be set;
+    assume that
+A1: A meets B and
+A2: C meets D;
+    consider x being set such that
+A3: x in A & x in B by A1,XBOOLE_0:3;
+    consider y being set such that
+A4: y in C & y in D by A2,XBOOLE_0:3;
+A5: [x,y] in [: A, C :] by A3,A4,ZFMISC_1:106;
+    [x,y] in [: B, D :] by A3,A4,ZFMISC_1:106;
+    hence thesis by A5,XBOOLE_0:3;
+  end;
+
+definition let X be 1-sorted;
+  cluster -> non empty SetSequence of the carrier of X;
+  coherence;
+end;
+
+definition let T be non empty 1-sorted;
+  cluster non-empty SetSequence of the carrier of T;
+  existence
+  proof
+    consider a being Element of T;
+    set X = NAT --> {a};
+    reconsider X as SetSequence of the carrier of T;
+    take X;
+A1: rng X = {{a}} by FUNCOP_1:14;
+    not {} in rng X by A1,TARSKI:def 1;
+    hence thesis by RELAT_1:def 9;
+  end;
+end;
+
+definition let T be non empty 1-sorted;
+  mode SetSequence of T is SetSequence of the carrier of T;
+  canceled;
+end;
+
+scheme LambdaSSeq { X() -> non empty 1-sorted,
+                    F(set) -> Subset of X() } :
+  ex f being SetSequence of X() st
+    for n being Nat holds f.n = F(n)
+  proof
+    deffunc G(set)=F($1);
+    set Y = bool the carrier of X();
+A1: for x be set st x in NAT holds G(x) in Y;
+    ex f be Function of NAT, Y st for x be set st x in NAT holds f.x = G(x)
+      from Lambda1(A1); then
+    consider f be Function of NAT, Y such that
+A2: for x be set st x in NAT holds f.x = F(x);
+    reconsider f as SetSequence of X();
+    take f;
+    thus thesis by A2;
+  end;
+
+scheme ExTopStrSeq { R() -> non empty TopSpace,
+                     F(set) -> Subset of R() } :
+   ex S be SetSequence of the carrier of R() st
+     for n be Nat holds S.n = F(n)
+  proof
+    deffunc G(set)=F($1);
+    ex f being Function of NAT, bool the carrier of R() st
+    for x being Element of NAT holds f.x = G(x) from LambdaD;
+    then consider f being Function of NAT, bool the carrier of R() such that
+A1: for x being Element of NAT holds f.x = F(x);
+    take f;
+    thus thesis by A1;
+  end;
+
+theorem Th5:
+  for X being non empty 1-sorted,
+      F being SetSequence of the carrier of X holds
+    rng F is Subset-Family of X by SETFAM_1:def 7;
+
+definition let X be non empty 1-sorted,
+               F be SetSequence of the carrier of X;
+  redefine func Union F -> Subset of X;
+  coherence
+  proof
+    Union F c= the carrier of X;
+    hence thesis;
+  end;
+  redefine func meet F -> Subset of X;
+  coherence
+  proof
+    reconsider G = rng F as Subset-Family of X by Th5;
+    meet G c= the carrier of X;
+    hence thesis by FUNCT_6:def 4;
+  end;
+end;
+
+begin :: Lower and Upper Limit of Sequences of Subsets
+
+definition let X be non empty set;
+           let S be Function of NAT, X;
+           let k be Nat;
+  func S ^\ k -> Function of NAT, X means :Def2:
+  for n being Nat holds it.n = S.(n + k);
+  existence
+   proof
+     deffunc F(Nat)=S.($1 + k);
+     thus ex IT being Function of NAT, X st
+  for n being Nat holds IT.n = F(n) from LambdaD;
+   end;
+  uniqueness
+   proof
+     deffunc F(Nat)=S.($1 + k);
+     thus for f,g being Function of NAT, X st
+  (for n being Nat holds f.n = F(n)) &
+  (for n being Nat holds g.n = F(n)) holds f=g from FuncDefUniq;
+  end;
+end;
+
+definition let X be non empty 1-sorted,
+               F be SetSequence of the carrier of X;
+  func lim_inf F -> Subset of X means :Def3:
+    ex f being SetSequence of X st it = Union f &
+      for n being Nat holds f.n = meet (F ^\ n);
+  existence
+  proof
+    deffunc F(Nat) = meet (F ^\ $1);
+    consider f being SetSequence of X such that
+A1: for n being Nat holds f.n = F(n) from LambdaSSeq;
+    take Union f;
+    thus thesis by A1;
+  end;
+  uniqueness
+  proof
+    let A1, A2 be Subset of X;
+    given f1 being SetSequence of X such that
+A2: A1 = Union f1 & for n being Nat holds f1.n = meet (F ^\ n);
+    given f2 being SetSequence of X such that
+A3: A2 = Union f2 & for n being Nat holds f2.n = meet (F ^\ n);
+    for n being Nat holds f1.n = f2.n
+    proof
+      let n be Nat;
+      f1.n = meet (F ^\ n) by A2
+          .= f2.n by A3;
+      hence thesis;
+    end;
+    hence thesis by A2,A3,Th3;
+  end;
+  func lim_sup F -> Subset of X means  :Def4:
+    ex f being SetSequence of X st it = meet f &
+      for n being Nat holds f.n = Union (F ^\ n);
+  existence
+  proof
+    deffunc F(Nat) = Union (F ^\ $1);
+    consider f being SetSequence of X such that
+A4: for n being Nat holds f.n = F(n) from LambdaSSeq;
+    take meet f;
+    thus thesis by A4;
+  end;
+  uniqueness
+  proof
+    let A1, A2 be Subset of X;
+    given f1 being SetSequence of X such that
+A5: A1 = meet f1 & for n being Nat holds f1.n = Union (F ^\ n);
+    given f2 being SetSequence of X such that
+A6: A2 = meet f2 & for n being Nat holds f2.n = Union (F ^\ n);
+    for n being Nat holds f1.n = f2.n
+    proof
+      let n be Nat;
+      f1.n = Union (F ^\ n) by A5
+          .= f2.n by A6;
+      hence thesis;
+    end;
+    hence thesis by A5,A6,Th3;
+  end;
+end;
+
+theorem Th6:
+  for X being non empty 1-sorted,
+      F being SetSequence of the carrier of X,
+      x being set holds
+   x in meet F iff for z being Nat holds x in F.z
+  proof
+    let X be non empty 1-sorted,
+        F be SetSequence of the carrier of X,
+        x be set;
+    hereby assume
+A1:   x in meet F;
+      let z be Nat;
+      z in NAT; then
+      z in dom F by FUNCT_2:def 1;
+      hence x in F.z by A1,FUNCT_6:37;
+    end;
+    assume
+A2: for z being Nat holds x in F.z;
+    for y being set st y in dom F holds x in F.y
+    proof
+      let y be set;
+      assume y in dom F; then
+      reconsider n = y as Nat by FUNCT_2:def 1;
+      x in F.n by A2;
+      hence thesis;
+    end;
+    hence thesis by FUNCT_6:37;
+  end;
+
+theorem Th7:
+  for X being non empty 1-sorted,
+      F being SetSequence of the carrier of X,
+      x being set holds
+   x in lim_inf F iff ex n being Nat st for k being Nat holds x in F.(n+k)
+  proof
+    let X be non empty 1-sorted,
+        F be SetSequence of the carrier of X,
+        x be set;
+    hereby assume
+A1:   x in lim_inf F;
+      consider f being SetSequence of X such that
+A2:   lim_inf F = Union f &
+      for n being Nat holds f.n = meet (F ^\ n) by Def3;
+      consider n being Nat such that
+A3:   x in f.n by A1,A2,PROB_1:25;
+      take n;
+      let k be Nat;
+A4:   x in meet (F ^\ n) by A2,A3;
+      set G = F ^\ n;
+      G.k = F.(n + k) by Def2;
+      hence x in F.(n+k) by A4,Th6;
+    end;
+    given n being Nat such that
+A5: for k being Nat holds x in F.(n+k);
+    set G = F ^\ n;
+    consider f being SetSequence of X such that
+A6: lim_inf F = Union f &
+    for n being Nat holds f.n = meet (F ^\ n) by Def3;
+    for z being Nat holds x in G.z
+    proof
+      let z be Nat;
+      G.z = F.(n + z) by Def2;
+      hence thesis by A5;
+    end; then
+    x in meet G by Th6; then
+    x in f.n by A6;
+    hence thesis by A6,PROB_1:25;
+  end;
+
+theorem Th8:
+  for X being non empty 1-sorted,
+      F being SetSequence of the carrier of X,
+      x being set holds
+   x in lim_sup F iff for n being Nat ex k being Nat st x in F.(n+k)
+  proof
+    let X be non empty 1-sorted,
+        F be SetSequence of the carrier of X,
+        x be set;
+    hereby assume
+A1:   x in lim_sup F;
+      consider f being SetSequence of X such that
+A2:   lim_sup F = meet f &
+      for n being Nat holds f.n = Union (F ^\ n) by Def4;
+      let n be Nat;
+      set G = F ^\ n;
+      f.n = Union G by A2; then
+      x in Union G by A1,A2,Th6; then
+      consider k being Nat such that
+A3:   x in G.k by PROB_1:25;
+      take k;
+      thus x in F.(n+k) by A3,Def2;
+    end;
+    assume
+A4: for n being Nat ex k being Nat st x in F.(n+k);
+    consider f being SetSequence of X such that
+A5: lim_sup F = meet f &
+    for n being Nat holds f.n = Union (F ^\ n) by Def4;
+    for z being Nat holds x in f.z
+    proof
+      let z be Nat;
+      set G = F ^\ z;
+A6:   f.z = Union G by A5;
+      consider k being Nat such that
+A7:   x in F.(z+k) by A4;
+      G.k = F.(z + k) by Def2;
+      hence thesis by A6,A7,PROB_1:25;
+    end;
+    hence thesis by A5,Th6;
+  end;
+
+theorem
+  for X being non empty 1-sorted,
+      F being SetSequence of the carrier of X holds
+   lim_inf F c= lim_sup F
+  proof
+    let X be non empty 1-sorted,
+        F be SetSequence of the carrier of X;
+    let x be set;
+    assume
+A1: x in lim_inf F;
+    consider n be Nat such that
+A2: for k being Nat holds x in F.(n+k) by A1,Th7;
+    now let k be Nat;
+      x in F.(n+k) by A2;
+      hence ex n being Nat st x in F.(k+n);
+    end;
+    hence thesis by Th8;
+  end;
+
+theorem Th10:
+  for X being non empty 1-sorted,
+      F being SetSequence of the carrier of X holds
+   meet F c= lim_inf F
+  proof
+    let X be non empty 1-sorted,
+        F be SetSequence of the carrier of X;
+    let x be set;
+    assume x in meet F; then
+    for k being Nat holds x in F.(0+k) by Th6;
+    hence thesis by Th7;
+  end;
+
+theorem Th11:
+  for X being non empty 1-sorted,
+      F being SetSequence of the carrier of X holds
+   lim_sup F c= Union F
+  proof
+    let X be non empty 1-sorted,
+        F be SetSequence of the carrier of X;
+    let x be set;
+    assume
+A1: x in lim_sup F;
+    consider k being Nat such that
+A2: x in F.(0+k) by A1,Th8;
+    thus thesis by A2,PROB_1:25;
+  end;
+
+theorem
+  for X being non empty 1-sorted,
+      F being SetSequence of the carrier of X holds
+    lim_inf F = (lim_sup Complement F)`
+  proof
+    let X be non empty 1-sorted,
+        F be SetSequence of the carrier of X;
+    set G = Complement F;
+    thus lim_inf F c= (lim_sup Complement F)`
+    proof
+      let x be set;
+      assume
+A1:   x in lim_inf F; then
+      consider n being Nat such that
+A2:   for k being Nat holds x in F.(n+k) by Th7;
+      for k being Nat holds not x in G.(n+k)
+      proof
+        let k be Nat;
+        assume
+A3:     x in G.(n+k);
+        G.(n+k) = (F.(n+k))` by PROB_1:def 4; then
+        not x in F.(n+k) by A3,SUBSET_1:54;
+        hence thesis by A2;
+      end; then
+      not x in lim_sup G by Th8; then
+      x in (lim_sup Complement F)` by A1,Th1;
+      hence thesis;
+    end;
+    thus (lim_sup Complement F)` c= lim_inf F
+    proof
+      let x be set;
+      assume
+A4:   x in (lim_sup Complement F)`; then
+      x in (lim_sup Complement F)`; then
+      not x in lim_sup Complement F by SUBSET_1:54; then
+      consider n being Nat such that
+A5:   for k being Nat holds not x in G.(n+k) by Th8;
+      for k being Nat holds x in F.(n+k)
+      proof
+        let k be Nat;
+        assume not x in F.(n+k); then
+        x in (F.(n+k))` by A4,Th1; then
+        x in G.(n+k) by PROB_1:def 4;
+        hence thesis by A5;
+      end;
+      hence thesis by Th7;
+    end;
+  end;
+
+theorem
+  for X being non empty 1-sorted,
+      A, B, C being SetSequence of the carrier of X st
+   (for n being Nat holds C.n = A.n /\ B.n) holds
+     lim_inf C = lim_inf A /\ lim_inf B
+  proof
+    let X be non empty 1-sorted,
+        A, B, C be SetSequence of the carrier of X;
+    assume
+A1: for n being Nat holds C.n = A.n /\ B.n;
+    thus lim_inf C c= lim_inf A /\ lim_inf B
+    proof
+      let x be set;
+      assume x in lim_inf C; then
+      consider n being Nat such that
+A2:   for k being Nat holds x in C.(n+k) by Th7;
+      for k being Nat holds x in A.(n+k)
+      proof
+        let k be Nat;
+A3:     C.(n+k) = A.(n+k) /\ B.(n+k) by A1;
+        x in C.(n+k) by A2;
+        hence thesis by A3,XBOOLE_0:def 3;
+      end; then
+A4:   x in lim_inf A by Th7;
+      for k being Nat holds x in B.(n+k)
+      proof
+        let k be Nat;
+A5:     C.(n+k) = A.(n+k) /\ B.(n+k) by A1;
+        x in C.(n+k) by A2;
+        hence thesis by A5,XBOOLE_0:def 3;
+      end; then
+      x in lim_inf B by Th7;
+      hence thesis by A4,XBOOLE_0:def 3;
+    end;
+    thus lim_inf A /\ lim_inf B c= lim_inf C
+    proof
+      let x be set;
+      assume x in lim_inf A /\ lim_inf B; then
+A6:   x in lim_inf A & x in lim_inf B by XBOOLE_0:def 3; then
+      consider n1 being Nat such that
+A7:   for k being Nat holds x in A.(n1+k) by Th7;
+      consider n2 being Nat such that
+A8:   for k being Nat holds x in B.(n2+k) by A6,Th7;
+      set n = max (n1, n2);
+A9:   for k being Nat holds x in A.(n+k)
+      proof
+        let k be Nat;
+        n >= n1 by SQUARE_1:46; then
+        consider g being Nat such that
+A10:     n = n1 + g by NAT_1:28;
+        x in A.(n1+(g+k)) by A7;
+        hence thesis by A10,XCMPLX_1:1;
+      end;
+A11:   for k being Nat holds x in B.(n+k)
+      proof
+        let k be Nat;
+        n >= n2 by SQUARE_1:46; then
+        consider g being Nat such that
+A12:     n = n2 + g by NAT_1:28;
+        x in B.(n2+(g+k)) by A8;
+        hence thesis by A12,XCMPLX_1:1;
+      end;
+      for k being Nat holds x in C.(n+k)
+      proof
+        let k be Nat;
+A13:     x in A.(n+k) by A9;
+        x in B.(n+k) by A11; then
+        x in A.(n+k) /\ B.(n+k) by A13,XBOOLE_0:def 3;
+        hence thesis by A1;
+      end;
+      hence thesis by Th7;
+    end;
+  end;
+
+theorem
+  for X being non empty 1-sorted,
+      A, B, C being SetSequence of the carrier of X st
+   (for n being Nat holds C.n = A.n \/ B.n) holds
+     lim_sup C = lim_sup A \/ lim_sup B
+  proof
+    let X be non empty 1-sorted,
+        A, B, C be SetSequence of the carrier of X;
+    assume
+A1: for n being Nat holds C.n = A.n \/ B.n;
+    thus lim_sup C c= lim_sup A \/ lim_sup B
+    proof
+      let x be set;
+      assume
+A2:   x in lim_sup C;
+      (for n being Nat ex k being Nat st x in A.(n+k)) or
+      (for n being Nat ex k being Nat st x in B.(n+k))
+      proof
+        given n1 being Nat such that
+A3:     for k being Nat holds not x in A.(n1+k);
+        given n2 being Nat such that
+A4:     for k being Nat holds not x in B.(n2+k);
+        set n = max (n1, n2);
+        n >= n1 by SQUARE_1:46; then
+        consider g being Nat such that
+A5:     n = n1 + g by NAT_1:28;
+        n >= n2 by SQUARE_1:46; then
+        consider h being Nat such that
+A6:     n = n2 + h by NAT_1:28;
+        consider k being Nat such that
+A7:     x in C.(n+k) by A2,Th8;
+A8:     x in A.(n+k) \/ B.(n+k) by A1,A7;
+        per cases by A8,XBOOLE_0:def 2;
+        suppose x in A.(n+k); then
+        x in A.(n1+(g+k)) by A5,XCMPLX_1:1;
+        hence thesis by A3;
+        suppose x in B.(n+k); then
+        x in B.(n2+(h+k)) by A6,XCMPLX_1:1;
+        hence thesis by A4;
+      end; then
+      x in lim_sup A or x in lim_sup B by Th8;
+      hence thesis by XBOOLE_0:def 2;
+    end;
+    thus lim_sup A \/ lim_sup B c= lim_sup C
+    proof
+      let x be set;
+      assume
+A9:   x in lim_sup A \/ lim_sup B;
+      per cases by A9,XBOOLE_0:def 2;
+      suppose
+A10:   x in lim_sup A;
+      for n being Nat ex k being Nat st x in C.(n+k)
+      proof
+        let n be Nat;
+        consider k being Nat such that
+A11:     x in A.(n+k) by A10,Th8;
+        take k;
+        x in A.(n+k) \/ B.(n+k) by A11,XBOOLE_0:def 2;
+        hence thesis by A1;
+      end;
+      hence thesis by Th8;
+      suppose
+A12:   x in lim_sup B;
+      for n being Nat ex k being Nat st x in C.(n+k)
+      proof
+        let n be Nat;
+        consider k being Nat such that
+A13:     x in B.(n+k) by A12,Th8;
+        take k;
+        x in A.(n+k) \/ B.(n+k) by A13,XBOOLE_0:def 2;
+        hence thesis by A1;
+      end;
+      hence thesis by Th8;
+    end;
+  end;
+
+theorem
+  for X being non empty 1-sorted,
+      A, B, C being SetSequence of the carrier of X st
+   (for n being Nat holds C.n = A.n \/ B.n) holds
+     lim_inf A \/ lim_inf B c= lim_inf C
+  proof
+    let X be non empty 1-sorted,
+        A, B, C be SetSequence of the carrier of X;
+    assume
+A1: for n being Nat holds C.n = A.n \/ B.n;
+    let x be set;
+    assume
+A2: x in lim_inf A \/ lim_inf B;
+    per cases by A2,XBOOLE_0:def 2;
+    suppose x in lim_inf A; then
+    consider n being Nat such that
+A3: for k being Nat holds x in A.(n+k) by Th7;
+    for k being Nat holds x in C.(n+k)
+    proof
+      let k be Nat;
+      x in A.(n+k) by A3; then
+      x in A.(n+k) \/ B.(n+k) by XBOOLE_0:def 2;
+      hence thesis by A1;
+    end;
+    hence thesis by Th7;
+    suppose x in lim_inf B; then
+    consider n being Nat such that
+A4: for k being Nat holds x in B.(n+k) by Th7;
+    for k being Nat holds x in C.(n+k)
+    proof
+      let k be Nat;
+      x in B.(n+k) by A4; then
+      x in A.(n+k) \/ B.(n+k) by XBOOLE_0:def 2;
+      hence thesis by A1;
+    end;
+    hence thesis by Th7;
+  end;
+
+theorem
+  for X being non empty 1-sorted,
+      A, B, C being SetSequence of the carrier of X st
+   (for n being Nat holds C.n = A.n /\ B.n) holds
+     lim_sup C c= lim_sup A /\ lim_sup B
+  proof
+    let X be non empty 1-sorted,
+        A, B, C be SetSequence of the carrier of X;
+    assume
+A1: for n being Nat holds C.n = A.n /\ B.n;
+    let x be set;
+    assume
+A2: x in lim_sup C;
+    for n being Nat ex k being Nat st x in A.(n+k)
+    proof
+      let n be Nat;
+      consider k being Nat such that
+A3:   x in C.(n+k) by A2,Th8;
+      take k;
+      x in A.(n+k) /\ B.(n+k) by A1,A3;
+      hence thesis by XBOOLE_0:def 3;
+    end; then
+A4: x in lim_sup A by Th8;
+    for n being Nat ex k being Nat st x in B.(n+k)
+    proof
+      let n be Nat;
+      consider k being Nat such that
+A5:   x in C.(n+k) by A2,Th8;
+      take k;
+      x in A.(n+k) /\ B.(n+k) by A1,A5;
+      hence thesis by XBOOLE_0:def 3;
+    end; then
+    x in lim_sup B by Th8;
+    hence thesis by A4,XBOOLE_0:def 3;
+  end;
+
+theorem Th17:
+  for X being non empty 1-sorted,
+      A being SetSequence of the carrier of X,
+      B being Subset of X st
+   (for n being Nat holds A.n = B) holds
+     lim_sup A = B
+  proof
+    let X be non empty 1-sorted,
+        A be SetSequence of the carrier of X,
+        B be Subset of X;
+    assume
+A1: for n being Nat holds A.n = B;
+    thus lim_sup A c= B
+    proof
+      let x be set;
+      assume x in lim_sup A; then
+      consider k being Nat such that
+A2:   x in A.(0+k) by Th8;
+      thus thesis by A1,A2;
+    end;
+    thus B c= lim_sup A
+    proof
+      let x be set;
+      assume
+A3:   x in B;
+      for m being Nat ex k being Nat st x in A.(m+k)
+      proof
+        let m be Nat;
+        take 0;
+        thus thesis by A1,A3;
+      end;
+      hence thesis by Th8;
+    end;
+  end;
+
+theorem Th18:
+  for X being non empty 1-sorted,
+      A being SetSequence of the carrier of X,
+      B being Subset of X st
+   (for n being Nat holds A.n = B) holds
+     lim_inf A = B
+  proof
+    let X be non empty 1-sorted,
+        A be SetSequence of the carrier of X,
+        B be Subset of X;
+    assume
+A1: for n being Nat holds A.n = B;
+    thus lim_inf A c= B
+    proof
+      let x be set;
+      assume x in lim_inf A; then
+      consider m being Nat such that
+A2:   for k being Nat holds x in A.(m+k) by Th7;
+      x in A.(m+0) by A2;
+      hence thesis by A1;
+    end;
+    thus B c= lim_inf A
+    proof
+      let x be set;
+      assume
+A3:   x in B;
+      ex m being Nat st for k being Nat holds x in A.(m+k)
+      proof
+        take 0;
+        let k be Nat;
+        thus thesis by A1,A3;
+      end;
+      hence thesis by Th7;
+    end;
+  end;
+
+theorem
+  for X being non empty 1-sorted,
+      A, B being SetSequence of the carrier of X,
+      C being Subset of X st
+   (for n being Nat holds B.n = C \+\ A.n) holds
+     C \+\ lim_inf A c= lim_sup B
+  proof
+    let X be non empty 1-sorted,
+        A, B be SetSequence of the carrier of X,
+        C be Subset of X;
+    assume
+A1: for n being Nat holds B.n = C \+\ A.n;
+    let x be set;
+    assume
+A2: x in C \+\ lim_inf A;
+    per cases by A2,XBOOLE_0:1;
+    suppose
+A3: x in C & not x in lim_inf A;
+    for n being Nat ex k being Nat st x in B.(n+k)
+    proof
+      let n be Nat;
+      consider k being Nat such that
+A4:   not x in A.(n+k) by A3,Th7;
+      take k;
+      x in C \+\ A.(n+k) by A3,A4,XBOOLE_0:1;
+      hence thesis by A1;
+    end;
+    hence thesis by Th8;
+    suppose
+A5: not x in C & x in lim_inf A; then
+    consider n being Nat such that
+A6: for k being Nat holds x in A.(n+k) by Th7;
+    for m being Nat ex k being Nat st x in B.(m+k)
+    proof
+      let m be Nat;
+      take k = n;
+      x in A.(m+k) by A6; then
+      x in C \+\ A.(m+k) by A5,XBOOLE_0:1;
+      hence thesis by A1;
+    end;
+    hence thesis by Th8;
+  end;
+
+theorem
+  for X being non empty 1-sorted,
+      A, B being SetSequence of the carrier of X,
+      C being Subset of X st
+   (for n being Nat holds B.n = C \+\ A.n) holds
+     C \+\ lim_sup A c= lim_sup B
+  proof
+    let X be non empty 1-sorted,
+        A, B be SetSequence of the carrier of X,
+        C be Subset of X;
+    assume
+A1: for n being Nat holds B.n = C \+\ A.n;
+    let x be set;
+    assume
+A2: x in C \+\ lim_sup A;
+    per cases by A2,XBOOLE_0:1;
+    suppose
+A3: x in C & not x in lim_sup A; then
+    consider n being Nat such that
+A4: for k being Nat holds not x in A.(n+k) by Th8;
+    for m being Nat ex k being Nat st x in B.(m+k)
+    proof
+      let m be Nat;
+      take k = n;
+      not x in A.(m+k) by A4; then
+      x in C \+\ A.(m+k) by A3,XBOOLE_0:1;
+      hence thesis by A1;
+    end;
+    hence thesis by Th8;
+    suppose
+A5: not x in C & x in lim_sup A;
+    for m being Nat ex k being Nat st x in B.(m+k)
+    proof
+      let m be Nat;
+      consider k being Nat such that
+A6:   x in A.(m+k) by A5,Th8;
+      take k;
+      x in C \+\ A.(m+k) by A5,A6,XBOOLE_0:1;
+      hence thesis by A1;
+    end;
+    hence thesis by Th8;
+  end;
+
+begin :: Ascending and Descending Families of Subsets
+
+definition let T be non empty 1-sorted,
+               S be SetSequence of T;
+  attr S is descending means :Def5:
+    for i being Nat holds S.(i+1) c= S.i;
+  attr S is ascending means :Def6:
+    for i being Nat holds S.i c= S.(i+1);
+end;
+
+theorem Th21:
+  for f being Function st (for i being Nat holds f.(i+1) c= f.i)
+    for i, j being Nat st
+      i <= j holds f.j c= f.i
+  proof
+    let f be Function;
+    assume
+A1: for i being Nat holds f.(i+1) c= f.i;
+    let i, j be Nat;
+    assume
+A2: i <= j;
+defpred P[Nat] means i + $1 <= j implies f.(i + $1) c= f.i;
+A3: P[0];
+A4: now let k be Nat;
+A5:   i + k + 1 = i + (k + 1) by XCMPLX_1:1;
+      assume
+A6:   P[k];
+      f.(i + (k + 1)) c= f.(i + k) by A1,A5;
+      hence P[k+1] by A5,A6,NAT_1:38,XBOOLE_1:1;
+    end;
+A7: for k being Nat holds P[k] from Ind(A3,A4);
+    consider k be Nat such that
+A8: i + k = j by A2,NAT_1:28;
+    thus f.j c= f.i by A7,A8;
+  end;
+
+theorem Th22:
+  for T being non empty 1-sorted,
+      C being SetSequence of T st
+      C is descending holds
+    for i, m being Nat st i >= m holds
+      C.i c= C.m
+  proof
+    let T be non empty 1-sorted,
+        C be SetSequence of T;
+    assume C is descending; then
+A1: for i being Nat holds C.(i+1) c= C.i by Def5;
+    let i, m be Nat;
+    assume i >= m;
+    hence thesis by A1,Th21;
+  end;
+
+theorem Th23:
+  for T being non empty 1-sorted,
+      C being SetSequence of T st
+      C is ascending holds
+    for i, m being Nat st i >= m holds
+      C.m c= C.i
+  proof
+    let T be non empty 1-sorted,
+        C be SetSequence of T;
+    assume C is ascending; then
+A1: for i being Nat holds C.i c= C.(i+1) by Def6;
+    let i, m be Nat;
+    assume m <= i;
+    hence thesis by A1,FIN_TOPO:5;
+  end;
+
+theorem Th24:
+  for T being non empty 1-sorted,
+      F being SetSequence of T,
+      x being set st
+    F is descending &
+    ex k being Nat st for n being Nat st n > k holds x in F.n holds
+      x in meet F
+  proof
+    let T be non empty 1-sorted,
+        F be SetSequence of T,
+        x be set;
+    assume that
+A1: F is descending;
+A2: rng F <> {} by RELAT_1:64;
+    given k being Nat such that
+A3: for n being Nat st n > k holds x in F.n;
+    k + 1 > k by NAT_1:38; then
+A4: x in F.(k + 1) by A3;
+    assume not x in meet F; then
+    not x in meet rng F by FUNCT_6:def 4; then
+    consider Y being set such that
+A5: Y in rng F & not x in Y by A2,SETFAM_1:def 1;
+    consider y being set such that
+A6: y in dom F & Y = F.y by A5,FUNCT_1:def 5;
+    reconsider y as Nat by A6,FUNCT_2:def 1;
+    per cases;
+    suppose y > k;
+    hence thesis by A3,A5,A6;
+    suppose y <= k; then
+    F.k c= F.y by A1,Th22; then
+A7: not x in F.k by A5,A6;
+    F.(k + 1) c= F.k by A1,Def5;
+    hence thesis by A4,A7;
+  end;
+
+theorem
+  for T being non empty 1-sorted,
+      F being SetSequence of T st
+    F is descending holds
+      lim_inf F = meet F
+  proof
+    let T be non empty 1-sorted,
+        F be SetSequence of T;
+    assume
+A1: F is descending;
+    thus lim_inf F c= meet F
+    proof
+      let x be set;
+      assume x in lim_inf F; then
+      consider n being Nat such that
+A2:   for k being Nat holds x in F.(n+k) by Th7;
+      ex k being Nat st for n being Nat st n > k holds x in F.n
+      proof
+        take k = n;
+        let n be Nat;
+        assume n > k; then
+        consider h being Nat such that
+A3:     n = k + h by NAT_1:28;
+        thus thesis by A2,A3;
+      end;
+      hence thesis by A1,Th24;
+    end;
+    thus meet F c= lim_inf F by Th10;
+  end;
+
+theorem
+  for T being non empty 1-sorted,
+      F being SetSequence of T st
+    F is ascending holds
+      lim_sup F = Union F
+  proof
+    let T be non empty 1-sorted,
+        F be SetSequence of T;
+    assume
+A1: F is ascending;
+    thus lim_sup F c= Union F by Th11;
+    let x be set;
+    assume x in Union F; then
+    consider n being Nat such that
+A2: x in F.n by PROB_1:25;
+    assume not x in lim_sup F; then
+    consider m being Nat such that
+A3: for k being Nat holds not x in F.(m+k) by Th8;
+A4: not x in F.(m+0) by A3;
+    per cases;
+    suppose n <= m; then
+    F.n c= F.m by A1,Th23;
+    hence thesis by A2,A4;
+    suppose n > m; then
+    consider h being Nat such that
+A5: n = m + h by NAT_1:28;
+    thus thesis by A2,A3,A5;
+  end;
+
+begin :: Constant and Convergent Sequences
+
+definition let T be non empty 1-sorted,
+               S be SetSequence of T;
+  attr S is convergent means :Def7:
+  lim_sup S = lim_inf S;
+end;
+
+theorem Th27:
+  for T being non empty 1-sorted,
+      S being SetSequence of T st S is constant holds
+    the_value_of S is Subset of T
+  proof
+    let T be non empty 1-sorted,
+        S be SetSequence of T;
+    assume S is constant; then
+    consider x being set such that
+A1: x in dom S & the_value_of S = S.x by YELLOW_6:def 1;
+    reconsider n = x as Nat by A1,FUNCT_2:def 1;
+    S.n in bool the carrier of T;
+    hence thesis by A1;
+  end;
+
+definition let T be non empty 1-sorted,
+               S be SetSequence of T;
+  redefine attr S is constant means :Def8:
+  ex A being Subset of T st for n being Nat holds S.n = A;
+  compatibility
+  proof
+    hereby
+      assume
+A1:   S is constant; then
+      reconsider X = the_value_of S as Subset of T by Th27;
+      take X;
+      let n be Nat;
+      n in NAT; then
+A2:   n in dom S by FUNCT_2:def 1;
+      consider x being set such that
+A3:   x in dom S & X = S.x by A1,YELLOW_6:def 1;
+      thus S.n = X by A1,A2,A3,SEQM_3:def 5;
+    end;
+    given A being Subset of T such that
+A4: for n being Nat holds S.n = A;
+    for n1, n2 being set st n1 in dom S & n2 in dom S holds S.n1 = S.n2
+    proof
+      let n1, n2 be set;
+      assume n1 in dom S & n2 in dom S; then
+      n1 in NAT & n2 in NAT by FUNCT_2:def 1; then
+      S.n1 = A & S.n2 = A by A4;
+      hence thesis;
+    end;
+    hence thesis by SEQM_3:def 5;
+  end;
+end;
+
+definition let T be non empty 1-sorted;
+  cluster constant -> convergent ascending descending SetSequence of T;
+  coherence
+  proof
+    let S be SetSequence of T;
+    assume S is constant; then
+    consider A being Subset of T such that
+A1: for n being Nat holds S.n = A by Def8;
+A2: lim_sup S = A by A1,Th17;
+A3: lim_inf S = A by A1,Th18;
+A4: now let n be Nat;
+      S.n = A & S.(n+1) = A by A1;
+      hence S.n c= S.(n+1);
+    end;
+    now let n be Nat;
+      S.n = A & S.(n+1) = A by A1;
+      hence S.(n+1) c= S.n;
+    end;
+    hence thesis by A2,A3,A4,Def5,Def6,Def7;
+  end;
+end;
+
+definition let T be non empty 1-sorted;
+  cluster constant non empty SetSequence of T;
+  existence
+  proof
+    consider A being Subset of T;
+    set E = NAT --> A;
+    reconsider E as SetSequence of T;
+    E is constant;
+    hence thesis;
+  end;
+end;
+
+definition let T be non empty 1-sorted,
+               S be convergent SetSequence of T;
+  func Lim_K S -> Subset of T means :Def9:
+  it = lim_sup S & it = lim_inf S;
+  existence
+  proof
+    take L = lim_sup S;
+    thus thesis by Def7;
+  end;
+  uniqueness;
+end;
+
+theorem
+  for X being non empty 1-sorted,
+      F being convergent SetSequence of X,
+      x being set holds
+   x in Lim_K F iff ex n being Nat st for k being Nat holds x in F.(n+k)
+  proof
+    let X be non empty 1-sorted,
+        F be convergent SetSequence of X,
+        x be set;
+    Lim_K F = lim_inf F by Def9;
+    hence thesis by Th7;
+  end;
+
+begin :: Topological Lemmas
+
+ reserve n for Nat;
+
+definition let f be FinSequence of the carrier of TOP-REAL 2;
+  cluster L~f -> closed;
+  coherence by SPPOL_1:49;
+end;
+
+theorem Th29:
+  for r being real number,
+      M being non empty Reflexive MetrStruct,
+      x being Element of M st 0 < r holds
+   x in Ball (x,r)
+  proof
+    let r be real number,
+        M be non empty Reflexive MetrStruct,
+        x be Element of M;
+    assume 0 < r; then
+    dist (x,x) < r by METRIC_1:1;
+    hence thesis by METRIC_1:12;
+  end;
+
+theorem Th30:
+  for x being Point of Euclid n,
+      r being real number holds
+   Ball (x, r) is open Subset of TOP-REAL n
+proof
+  let x be Point of Euclid n,
+      r be real number;
+  reconsider A = Ball (x, r) as Subset of TOP-REAL n
+    by TOPREAL3:13;
+  reconsider A as Subset of TOP-REAL n;
+  r is Real by XREAL_0:def 1; then
+  A is open by GOBOARD6:6;
+  hence thesis;
+end;
+
+theorem Th31:
+  for p, q being Point of TOP-REAL n,
+      p', q' being Point of Euclid n st
+   p = p' & q = q' holds
+     dist (p', q') = |. p - q .|
+proof
+  let p, q be Point of TOP-REAL n,
+      p', q' be Point of Euclid n;
+  assume A1: p = p' & q = q';
+  reconsider p'' = p, q'' = q as Element of REAL n by EUCLID:25;
+  consider y be FinSequence of REAL such that
+A2:  p - q = y & |. p - q .| = |. y .| by TOPRNS_1:def 6;
+  p - q = p'' - q'' by EUCLID:def 13;
+  hence thesis by A1,A2,SPPOL_1:20;
+end;
+
+theorem Th32:
+  for p being Point of Euclid n,
+      x, p' being Point of TOP-REAL n,
+      r being real number st
+    p = p' & x in Ball (p, r) holds
+      |. x - p' .| < r
+  proof
+    let p be Point of Euclid n,
+        x, p' be Point of TOP-REAL n,
+        r be real number;
+    reconsider x' = x as Point of Euclid n by TOPREAL3:13;
+    assume
+A1: p = p' & x in Ball (p, r); then
+    dist (x', p) < r by METRIC_1:12;
+    hence thesis by A1,Th31;
+  end;
+
+theorem Th33:
+  for p being Point of Euclid n,
+      x, p' being Point of TOP-REAL n,
+      r being real number st
+    p = p' & |. x - p' .| < r holds
+      x in Ball (p, r)
+  proof
+    let p be Point of Euclid n,
+        x, p' be Point of TOP-REAL n,
+        r be real number;
+    reconsider x' = x as Point of Euclid n by TOPREAL3:13;
+    assume p = p' & |. x - p' .| < r; then
+    dist (x', p) < r by Th31;
+    hence thesis by METRIC_1:12;
+  end;
+
+theorem
+  for n being Nat,
+      r being Point of TOP-REAL n,
+      X being Subset of TOP-REAL n st r in Cl X holds
+   ex seq being Real_Sequence of n st
+      rng seq c= X & seq is convergent & lim seq = r
+  proof
+    let n be Nat,
+        r be Point of TOP-REAL n,
+        X be Subset of TOP-REAL n;
+    assume
+A1: r in Cl X;
+    reconsider r' = r as Point of Euclid n by TOPREAL3:13;
+    defpred P[set,set] means
+    ex z being Nat st $1 = z & $2 = choose (X /\ Ball (r', 1/(z+1)));
+A2: now let x be set; assume x in NAT; then
+      reconsider k = x as Nat;
+      set n1 = k+1;
+      set oi = Ball (r', 1/n1);
+      reconsider oi as open Subset of TOP-REAL n by Th30;
+      reconsider u = choose (X /\ oi) as set;
+      take u;
+      n1 > 0 by NAT_1:19; then
+      1/n1 > 0 by REAL_2:127; then
+      dist (r',r') < 1/n1 by METRIC_1:1; then
+      r in oi by METRIC_1:12;
+      then X meets oi by A1,PRE_TOPC:54; then
+      X /\ oi is non empty by XBOOLE_0:def 7; then
+      u in X /\ oi;
+      hence u in the carrier of TOP-REAL n;
+      thus P[x,u];
+    end;
+    consider seq being Function such that
+A3: dom seq = NAT and
+A4: rng seq c= the carrier of TOP-REAL n and
+A5: for x being set st x in NAT holds P[x,seq.x]
+      from NonUniqBoundFuncEx(A2);
+    seq is Function of NAT, the carrier of TOP-REAL n
+      by A3,A4,FUNCT_2:def 1,RELSET_1:11; then
+    reconsider seq as Real_Sequence of n by NORMSP_1:def 3;
+    take seq;
+    thus rng seq c= X
+    proof
+      let y be set; assume y in rng seq; then
+      consider x being set such that
+A6:   x in dom seq & seq.x = y by FUNCT_1:def 5;
+      consider k being Nat such that
+A7:   x = k & seq.x = choose (X /\ Ball (r',1/(k+1))) by A3,A5,A6;
+      set n1 = k+1;
+      reconsider oi = Ball (r',1/n1) as open Subset of TOP-REAL n by Th30;
+      n1 > 0 by NAT_1:19; then
+      1/n1 > 0 by REAL_2:127; then
+      dist (r',r') < 1/n1 by METRIC_1:1; then
+      r in oi by METRIC_1:12; then
+      X meets oi by A1,PRE_TOPC:54; then
+      X /\ oi is non empty by XBOOLE_0:def 7;
+      hence y in X by A6,A7,XBOOLE_0:def 3;
+    end;
+A8:now let p be Real; assume
+A9:  0 < p;
+      set cp = [/ 1/p \];
+A10:  0 < 1/p by A9,REAL_2:127;
+A11:  1/p <= cp by INT_1:def 5;
+A12:  0 < cp by A10,INT_1:def 5; then
+      reconsider cp as Nat by INT_1:16;
+      take k = cp;
+      let m be Nat such that
+A13:  k <= m;
+      consider m' being Nat such that
+A14:  m' = m & seq.m = choose (X /\ Ball (r',1/(m'+1))) by A5;
+      set m1 = m+1;
+      set oi = Ball (r',1/m1);
+      reconsider oi as open Subset of TOP-REAL n by Th30;
+      m1 > 0 by NAT_1:19; then
+      1/m1 > 0 by REAL_2:127; then
+      dist (r',r') < 1/m1 by METRIC_1:1; then
+      r in oi by METRIC_1:12; then
+      X meets oi by A1,PRE_TOPC:54; then
+      X /\ oi is non empty by XBOOLE_0:def 7; then
+A15:   seq.m in oi by A14,XBOOLE_0:def 3;
+      reconsider s = seq.m as Point of TOP-REAL n;
+A16:  |. s - r .| < 1/m1 by A15,Th32;
+A17:  k+1 > 0 by NAT_1:18;
+      k+1 <= m+1 by A13,AXIOMS:24; then
+A18:  1/m1 <= 1/(k+1) by A17,REAL_2:152;
+      k < k+1 by NAT_1:38; then
+A19:  1/(k+1) < 1/k by A12,REAL_2:151;
+      1/(1/p) >= 1/cp by A10,A11,REAL_2:152; then
+      1/k <= p by XCMPLX_1:56; then
+      1/(k+1) < p by A19,AXIOMS:22; then
+      1/m1 < p by A18,AXIOMS:22;
+      hence |. seq.m - r .| < p by A16,AXIOMS:22;
+    end;
+    hence seq is convergent by TOPRNS_1:def 9;
+    hence lim seq = r by A8,TOPRNS_1:def 10;
+  end;
+
+definition let M be non empty MetrSpace;
+  cluster TopSpaceMetr M -> first-countable;
+  coherence by FRECHET:21;
+end;
+
+definition let n be Nat;
+  cluster TOP-REAL n -> first-countable;
+  coherence
+  proof
+    TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+    hence thesis;
+  end;
+end;
+
+theorem Th35:
+  for p being Point of Euclid n,
+      q being Point of TOP-REAL n,
+      r being real number st
+    p = q & r > 0 holds
+  Ball (p, r) is a_neighborhood of q
+  proof
+    let p be Point of Euclid n,
+        q be Point of TOP-REAL n,
+        r be real number;
+    Ball (p, r) is Subset of TOP-REAL n by TOPREAL3:13; then
+    reconsider A = Ball (p, r) as Subset of TOP-REAL n;
+    assume p = q & r > 0; then
+A1: q in A by GOBOARD6:4;
+    TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8; then
+    A is open by TOPMETR:21;
+    hence thesis by A1,CONNSP_2:5;
+  end;
+
+theorem
+  for A being Subset of TOP-REAL n,
+      p being Point of TOP-REAL n,
+      p' being Point of Euclid n st p = p' holds
+  p in Cl A iff
+    for r being real number st r > 0 holds Ball (p', r) meets A
+proof
+  let A be Subset of TOP-REAL n,
+      p be Point of TOP-REAL n,
+      p' be Point of Euclid n;
+  assume A1: p = p';
+  hereby assume
+A2: p in Cl A;
+    let r be real number;
+    assume A3: r > 0;
+    the carrier of TOP-REAL n = the carrier of Euclid n by TOPREAL3:13; then
+    reconsider B = Ball (p', r) as Subset of TOP-REAL n
+     ;
+    B is a_neighborhood of p by A1,A3,Th35;
+    hence Ball (p', r) meets A by A2,YELLOW_6:6;
+  end;
+  assume
+A4: for r being real number st r > 0 holds Ball (p', r) meets A;
+  for G being a_neighborhood of p holds G meets A
+  proof
+    let G be a_neighborhood of p;
+    p in Int G by CONNSP_2:def 1; then
+    consider r being real number such that
+A5: r > 0 & Ball (p', r) c= G by A1,GOBOARD6:8;
+    Ball (p', r) meets A by A4,A5;
+    hence thesis by A5,XBOOLE_1:63;
+  end;
+  hence thesis by YELLOW_6:6;
+end;
+
+theorem
+  for x, y being Point of TOP-REAL n,
+      x' being Point of Euclid n st x' = x & x <> y
+    ex r being Real st not y in Ball (x', r)
+  proof
+    let x, y be Point of TOP-REAL n,
+        x' be Point of Euclid n;
+    assume that
+A1: x' = x and
+A2: x <> y;
+    reconsider y' = y as Point of Euclid n by TOPREAL3:13;
+    reconsider r = dist (x', y')/2 as Real;
+    take r;
+A3: dist (x', y') <> 0 by A1,A2,METRIC_1:2;
+    dist (x', y') >= 0 by METRIC_1:5; then
+    dist (x', y') > r by A3,SEQ_2:4;
+    hence thesis by METRIC_1:12;
+  end;
+
+theorem Th38:
+  for S being Subset of TOP-REAL n holds
+    S is non Bounded iff
+    for r being Real st r > 0 holds
+     ex x, y being Point of Euclid n st
+        x in S & y in S & dist (x, y) > r
+  proof
+    let S be Subset of TOP-REAL n;
+    S is Subset of Euclid n by TOPREAL3:13; then
+    reconsider S' = S as Subset of Euclid n;
+    hereby assume S is non Bounded; then
+      S' is non bounded by JORDAN2C:def 2;
+      hence for r being Real st r > 0
+       ex x, y being Point of Euclid n st
+        x in S & y in S & dist (x, y) > r by TBSP_1:def 9;
+    end;
+    assume
+A1: for r being Real st r > 0
+     ex x, y being Point of Euclid n st
+      x in S & y in S & dist (x, y) > r;
+    S is non Bounded
+    proof
+      assume S is Bounded; then
+      consider C being Subset of Euclid n such that
+A2:   C = S & C is bounded by JORDAN2C:def 2;
+      thus thesis by A1,A2,TBSP_1:def 9;
+    end;
+    hence thesis;
+  end;
+
+theorem Th39:
+  for a, b being real number,
+      x, y being Point of Euclid n st
+    Ball (x, a) meets Ball (y, b) holds
+  dist (x, y) < a + b
+  proof
+    let a, b be real number,
+        x, y be Point of Euclid n;
+    assume Ball (x, a) meets Ball (y, b); then
+    consider z being set such that
+A1: z in Ball (x, a) & z in Ball (y, b) by XBOOLE_0:3;
+    reconsider z as Point of Euclid n by A1;
+A2: dist (x, z) < a by A1,METRIC_1:12;
+    dist (y, z) < b by A1,METRIC_1:12; then
+A3: dist (x, z) + dist (y, z) < dist (x, z) + b by REAL_1:67;
+    dist (x, z) + b < a + b by A2,REAL_1:67; then
+A4: dist (x, z) + dist (y, z) < a + b by A3,AXIOMS:22;
+    dist (x, z) + dist (y, z) >= dist (x, y) by METRIC_1:4;
+    hence thesis by A4,AXIOMS:22;
+  end;
+
+theorem Th40:
+  for a, b, c being real number,
+      x, y, z being Point of Euclid n st
+    Ball (x, a) meets Ball (z, c) & Ball (z, c) meets Ball (y, b) holds
+  dist (x, y) < a + b + 2*c
+  proof
+    let a, b, c be real number,
+        x, y, z be Point of Euclid n;
+    assume that
+A1: Ball (x, a) meets Ball (z, c) and
+A2: Ball (z, c) meets Ball (y, b);
+A5: dist (x, z) < a + c by A1,Th39;
+A6: dist (z, y) < c + b by A2,Th39;
+A7: dist (x, z) + dist (z, y) < (a + c) + dist (z, y) by A5,REAL_1:67;
+    (a + c) + dist (z, y) < (a + c) + (c + b) by A6,REAL_1:67; then
+A8: dist (x, z) + dist (z, y) < (a + c) + (c + b) by A7,AXIOMS:22;
+    dist (x, y) <= dist (x, z) + dist (z, y) by METRIC_1:4; then
+    dist (x, y) < (a + c) + (c + b) by A8,AXIOMS:22; then
+    dist (x, y) < (a + c) + c + b by XCMPLX_1:1; then
+    dist (x, y) < a + (c + c) + b by XCMPLX_1:1; then
+    dist (x, y) < a + 2*c + b by XCMPLX_1:11;
+    hence thesis by XCMPLX_1:1;
+  end;
+
+theorem Th41:
+  for X, Y being non empty TopSpace,
+      x being Point of X,
+      y being Point of Y,
+      V being Subset of [: X, Y :] holds
+    V is a_neighborhood of [: {x}, {y} :] iff
+      V is a_neighborhood of [ x, y ]
+  proof
+    let X, Y be non empty TopSpace,
+        x be Point of X,
+        y be Point of Y,
+        V be Subset of [: X, Y :];
+    hereby assume V is a_neighborhood of [: {x}, {y} :]; then
+      V is a_neighborhood of { [x, y] } by ZFMISC_1:35;
+      hence V is a_neighborhood of [ x, y ] by CONNSP_2:10;
+    end;
+    assume V is a_neighborhood of [ x, y ]; then
+    V is a_neighborhood of { [ x, y ] } by CONNSP_2:10;
+    hence thesis by ZFMISC_1:35;
+  end;
+
+scheme TSubsetEx { S() -> non empty TopStruct, P[set] } :
+  ex X being Subset of S() st
+   for x being Point of S() holds x in X iff P[x]
+  proof
+    defpred G[set] means P[$1];
+    consider A being set such that
+A1:  for x being set holds x in A iff x in the carrier of S() & G[x]
+      from Separation;
+    A c= the carrier of S()
+    proof
+      let x be set;
+      assume x in A;
+      hence thesis by A1;
+    end; then
+    reconsider A as Subset of S();
+    take A;
+    thus thesis by A1;
+  end;
+
+scheme TSubsetUniq { S() -> TopStruct, P[set] } :
+  for A1, A2 being Subset of S() st
+  (for x being Point of S() holds x in A1 iff P[x]) &
+  (for x being Point of S() holds x in A2 iff P[x]) holds
+    A1 = A2
+  proof
+    let A, B be Subset of S() such that
+A1:   for p being Point of S() holds p in A iff P[p] and
+A2:   for p being Point of S() holds p in B iff P[p];
+    hereby
+      let x be set;
+      assume
+A3:   x in A; then
+      P[x] by A1;
+      hence x in B by A2,A3;
+    end;
+    let x be set;
+    assume
+A4: x in B; then
+    P[x] by A2;
+    hence x in A by A1,A4;
+  end;
+
+definition let T be non empty TopStruct;
+           let S be SetSequence of the carrier of T;
+           let i be Nat;
+ redefine func S.i -> Subset of T;
+ coherence
+  proof
+    S.i in bool the carrier of T;
+    hence thesis;
+  end;
+end;
+
+theorem Th42:
+  for T be non empty 1-sorted,
+      S being SetSequence of the carrier of T,
+      R being Seq_of_Nat holds
+    S * R is SetSequence of T
+  proof
+    let T be non empty 1-sorted,
+        S be SetSequence of the carrier of T,
+        R be Seq_of_Nat;
+A1: dom S = NAT by FUNCT_2:def 1;
+A2: dom R = NAT by FUNCT_2:def 1;
+    rng R c= NAT by SEQM_3:def 8; then
+A3: dom (S * R) = NAT by A1,A2,RELAT_1:46;
+    rng (S * R) c= rng S by RELAT_1:45; then
+    rng (S * R) c= bool the carrier of T by XBOOLE_1:1; then
+    S * R is Function of NAT, bool the carrier of T by A3,FUNCT_2:4;
+    hence thesis;
+  end;
+
+theorem Th43:
+  id NAT is increasing Seq_of_Nat
+  proof
+    id NAT is Function of NAT, REAL by FUNCT_2:9;
+    hence thesis by FRECHET2:2;
+  end;
+
+definition
+  cluster id NAT -> real-yielding;
+  coherence by Th43;
+end;
+
+Lm1:
+for T being non empty 1-sorted, S being SetSequence of the carrier of T holds
+  ex NS being increasing Seq_of_Nat st S = S * NS
+proof
+  let T be non empty 1-sorted, S be SetSequence of the carrier of T;
+  reconsider NS = id NAT as increasing Seq_of_Nat by Th43;
+  take NS;
+  thus S = S * NS by FUNCT_2:23;
+end;
+
+begin :: Subsequences
+
+definition
+  let T be non empty 1-sorted, S be SetSequence of the carrier of T;
+  mode subsequence of S -> SetSequence of T means :Def10:
+    ex NS being increasing Seq_of_Nat st it = S * NS;
+  existence
+  proof
+    take S;
+    thus ex NS being increasing Seq_of_Nat st S = S * NS by Lm1;
+  end;
+end;
+
+theorem Th44:
+  for T being non empty 1-sorted,
+      S being SetSequence of the carrier of T holds
+    S is subsequence of S
+  proof
+    let T be non empty 1-sorted,
+        S be SetSequence of the carrier of T;
+    ex NS being increasing Seq_of_Nat st S = S * NS by Lm1;
+    hence thesis by Def10;
+  end;
+
+theorem
+  for T being non empty 1-sorted,
+      S being SetSequence of T,
+      S1 being subsequence of S holds
+    rng S1 c= rng S
+  proof
+    let T be non empty 1-sorted,
+        S be SetSequence of T,
+        S1 be subsequence of S;
+    let y be set;
+    assume y in rng S1;
+    then consider x being set such that
+A1: x in dom S1 and
+A2: y = S1.x by FUNCT_1:def 5;
+    consider NS being increasing Seq_of_Nat such that
+A3: S1 = S * NS by Def10;
+    reconsider x as Nat by A1,FUNCT_2:def 1;
+    NS.x in NAT; then
+A4: NS.x in dom S by FUNCT_2:def 1;
+    y = S.(NS.x) by A1,A2,A3,FUNCT_1:22;
+    hence y in rng S by A4,FUNCT_1:def 5;
+  end;
+
+theorem
+  for T being non empty 1-sorted,
+      S1 being SetSequence of the carrier of T,
+      S2 being subsequence of S1,
+      S3 being subsequence of S2 holds
+    S3 is subsequence of S1
+  proof
+    let T be non empty 1-sorted, S1 be SetSequence of the carrier of T,
+        S2 be subsequence of S1, S3 be subsequence of S2;
+    consider NS2 being increasing Seq_of_Nat such that
+A1: S3 = S2 * NS2 by Def10;
+    consider NS1 being increasing Seq_of_Nat such that
+A2: S2 = S1 * NS1 by Def10;
+    S3 = S1 * (NS1 * NS2) by A1,A2,RELAT_1:55;
+    hence S3 is subsequence of S1 by Def10;
+  end;
+
+theorem Th47:
+  for T being non empty 1-sorted,
+      F, G being SetSequence of the carrier of T,
+      A being Subset of T st
+    G is subsequence of F &
+    for i being Nat holds F.i = A holds G = F
+  proof
+    let T be non empty 1-sorted,
+        F, G be SetSequence of the carrier of T,
+        A be Subset of T;
+    assume that
+A1: G is subsequence of F and
+A2: for i being Nat holds F.i = A;
+    consider NS being increasing Seq_of_Nat such that
+A3: G = F * NS by A1,Def10;
+A4: for i being Nat holds G.i = F.i
+    proof
+      let i be Nat;
+      dom NS = NAT by FUNCT_2:def 1; then
+      G.i = F.(NS.i) by A3,FUNCT_1:23
+         .= A by A2
+         .= F.i by A2;
+      hence thesis;
+    end;
+A5: NAT = dom G & NAT = dom F by FUNCT_2:def 1;
+    for x being set st x in dom F holds F.x = G.x
+    proof
+      let x be set;
+      assume x in dom F; then
+      reconsider n = x as Nat by FUNCT_2:def 1;
+      F.x = G.n by A4
+         .= G.x;
+      hence thesis;
+    end;
+    hence thesis by A5,FUNCT_1:9;
+  end;
+
+theorem
+  for T being non empty 1-sorted,
+      A being constant SetSequence of T,
+      B being subsequence of A holds
+   A = B
+  proof
+    let T be non empty 1-sorted,
+        A be constant SetSequence of T,
+        B be subsequence of A;
+    consider X being Subset of T such that
+A1: for n being Nat holds A.n = X by Def8;
+    thus thesis by A1,Th47;
+  end;
+
+theorem Th49:
+  for T being non empty 1-sorted,
+      S being SetSequence of the carrier of T,
+      R being subsequence of S,
+      n being Nat holds
+    ex m being Nat st m >= n & R.n = S.m
+  proof
+    let T being non empty 1-sorted,
+        S being SetSequence of the carrier of T,
+        R being subsequence of S,
+        n being Nat;
+    consider NS being increasing Seq_of_Nat such that
+A1: R = S * NS by Def10;
+    n in NAT; then
+A2: n in dom NS by FUNCT_2:def 1;
+    take m = NS.n;
+    thus m >= n by SEQM_3:33;
+    thus thesis by A1,A2,FUNCT_1:23;
+  end;
+
+definition let T be non empty 1-sorted,
+               X be constant SetSequence of T;
+  cluster -> constant subsequence of X;
+  coherence
+  proof
+    let P be subsequence of X;
+    consider A being Subset of T such that
+A1: for n being Nat holds X.n = A by Def8;
+    ex A being Subset of T st
+      for n being Nat holds P.n = A
+    proof
+      take A;
+      let n be Nat;
+      consider m being Nat such that
+A2:   m >= n & P.n = X.m by Th49;
+      thus thesis by A1,A2;
+    end;
+    hence thesis by Def8;
+  end;
+end;
+
+scheme SubSeqChoice
+  { T() -> non empty TopSpace,
+    S() -> SetSequence of the carrier of T(),
+    P[set]} :
+  ex S1 being subsequence of S() st for n being Nat holds P[S1.n]
+provided
+A1: for n being Nat ex m being Nat st n <= m & P[S().m]
+  proof
+    consider n0 being Nat such that 0 <= n0 and
+A2: P[S().n0] by A1;
+defpred P1[set,set,set] means $3 in NAT &
+      (for m,k being Nat st m = $2 & k = $3 holds m < k & P[S().k]);
+A3: for n being Nat for x being set ex y being set st P1[n,x,y]
+    proof
+      let n be Nat, x be set;
+      per cases;
+      suppose x in NAT;
+      then reconsider mx = x as Nat;
+      consider my being Nat such that
+A4:   mx + 1 <= my & P[S().my] by A1;
+      take my;
+      thus my in NAT;
+      thus for m,k being Nat st m=x & k=my holds m<k & P[S().k]
+        by A4,NAT_1:38;
+      suppose
+A5:   not x in NAT;
+      set y = 0;
+      take 0;
+      thus y in NAT;
+      let m, k be Nat;
+      assume m = x & k = y;
+      hence m < k & P[S().k] by A5;
+    end;
+    consider g being Function such that
+A6: dom g = NAT and
+A7:g.0 = n0 and
+A8:for n being Nat holds
+P1[n,g.n,g.(n+1)] from RecChoice(A3);
+A9:rng g c= NAT
+    proof
+      let y be set;
+      assume y in rng g;
+      then consider x being set such that
+A10:  x in dom g and
+A11:  g.x = y by FUNCT_1:def 5;
+      reconsider n = x as Nat by A6,A10;
+      defpred P[Nat] means g.$1 in NAT;
+A12:  P[0] by A7;
+A13:  for k being Nat holds P[k] implies P[k+1] by A8;
+      for k being Nat holds P[k] from Ind(A12,A13);
+      then g.n in NAT;
+      hence y in NAT by A11;
+    end;
+    then rng g c= REAL by XBOOLE_1:1;
+    then reconsider g as Function of NAT,REAL by A6,FUNCT_2:4;
+    reconsider g as Real_Sequence;
+    for n being Nat holds g.n<g.(n+1)
+    proof
+      let n be Nat;
+      g.(n+1) in rng g by A6,FUNCT_1:def 5;
+      then reconsider k = g.(n+1) as Nat by A9;
+      g.n in rng g by A6,FUNCT_1:def 5;
+      then reconsider m = g.n as Nat by A9;
+      m < k by A8;
+      hence g.n<g.(n+1);
+    end;
+    then reconsider g as increasing Seq_of_Nat by A9,SEQM_3:def 8,def 11;
+    reconsider S1 = S() * g as SetSequence of T() by Th42;
+A14:dom S1 = NAT by FUNCT_2:def 1;
+    reconsider S1 as subsequence of S() by Def10;
+    take S1;
+    thus for n being Nat holds P[S1.n]
+    proof
+      let n be Nat;
+      per cases;
+      suppose n = 0;
+      hence P[S1.n] by A2,A7,A14,FUNCT_1:22;
+      suppose n <> 0;
+      then n > 0 by NAT_1:19;
+      then n >= 0 + 1 by NAT_1:38;
+      then reconsider n' = n-1 as Nat by INT_1:18;
+A15:  for m,k being Nat st m = g.n' & k = g.(n'+1) holds P[S().k] by A8;
+      reconsider k = g.(n'+1) as Nat;
+A16:  P[S().k] by A15;
+      n + (-1) = n' by XCMPLX_0:def 8;
+      then n = n'-(-1) by XCMPLX_1:26;
+      then n = n'+1 by XCMPLX_1:151;
+      hence P[S1.n] by A14,A16,FUNCT_1:22;
+    end;
+  end;
+
+begin :: Lower Topological Limit
+
+definition let T be non empty TopSpace;
+           let S be SetSequence of the carrier of T;
+  func Lim_inf S -> Subset of T means :Def11:
+    for p being Point of T holds
+        p in it iff
+     for G being a_neighborhood of p
+      ex k being Nat st
+     for m being Nat st m > k holds S.m meets G;
+  existence
+   proof
+     defpred P[Point of T] means for G being a_neighborhood of $1
+      ex k being Nat st
+     for m being Nat st m > k holds S.m meets G;
+     thus ex IT being Subset of T st
+    for p being Point of T holds
+        p in IT iff P[p]
+     from TSubsetEx;
+   end;
+  uniqueness
+   proof
+     defpred P[Point of T] means for G being a_neighborhood of $1
+      ex k being Nat st
+     for m being Nat st m > k holds S.m meets G;
+     thus for a,b being Subset of T st
+    (for p being Point of T holds p in a iff P[p]) &
+    (for p being Point of T holds p in b iff P[p]) holds a=b
+     from TSubsetUniq;
+   end;
+end;
+
+theorem Th50:
+   for S being SetSequence of the carrier of TOP-REAL n,
+       p being Point of TOP-REAL n,
+       p' being Point of Euclid n st p = p' holds
+    p in Lim_inf S iff
+     for r being real number st r > 0
+      ex k being Nat st
+     for m being Nat st m > k holds S.m meets Ball (p', r)
+proof
+   let S be SetSequence of the carrier of TOP-REAL n,
+       p be Point of TOP-REAL n,
+       p' be Point of Euclid n;
+   assume A1: p = p';
+   hereby assume
+A2:  p in Lim_inf S;
+     let r be real number;
+     assume r > 0; then
+     reconsider G = Ball (p', r) as a_neighborhood of p by A1,Th35;
+     consider k being Nat such that
+A3:  for m being Nat st m > k holds S.m meets G by A2,Def11;
+     thus ex k being Nat st
+     for m being Nat st m > k holds S.m meets Ball (p', r) by A3;
+   end;
+   assume
+A4:for r being real number st r > 0
+    ex k being Nat st
+   for m being Nat st m > k holds S.m meets Ball (p', r);
+   now let G be a_neighborhood of p;
+     reconsider G' = Int G as Subset of TopSpaceMetr Euclid n
+       by EUCLID:def 8;
+A5:  TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+     p' in G' by A1,CONNSP_2:def 1; then
+     consider r being real number such that
+A6:  r > 0 & Ball (p', r) c= G' by A5,TOPMETR:22;
+     G' c= G by TOPS_1:44; then
+A7:  Ball (p', r) c= G by A6,XBOOLE_1:1;
+     consider k being Nat such that
+A8:  for m being Nat st m > k holds S.m meets Ball (p', r) by A4,A6;
+     take k;
+     let m be Nat;
+     assume m > k; then
+     S.m meets Ball (p', r) by A8;
+     hence S.m meets G by A7,XBOOLE_1:63;
+   end;
+   hence thesis by Def11;
+end;
+
+theorem Th51:
+  for T being non empty TopSpace,
+      S being SetSequence of the carrier of T holds
+    Cl Lim_inf S = Lim_inf S
+  proof
+    let T be non empty TopSpace;
+    let S be SetSequence of the carrier of T;
+    thus Cl Lim_inf S c= Lim_inf S
+    proof
+      let x be set;
+      assume
+A1:   x in Cl Lim_inf S; then
+      reconsider x' = x as Point of T;
+      now let G be a_neighborhood of x';
+        set H = Int G;
+        H is open & x' in H by CONNSP_2:def 1; then
+        Lim_inf S meets H by A1,PRE_TOPC:54; then
+        consider z being set such that
+A2:     z in Lim_inf S & z in H by XBOOLE_0:3;
+        reconsider z as Point of T by A2;
+        z in Int H by A2,TOPS_1:45; then
+        H is a_neighborhood of z by CONNSP_2:def 1; then
+        consider k being Nat such that
+A3:     for m being Nat st m > k holds S.m meets H by A2,Def11;
+        take k;
+        let m be Nat;
+A4:     H c= G by TOPS_1:44;
+        assume m > k; then
+        S.m meets H by A3;
+        hence S.m meets G by A4,XBOOLE_1:63;
+      end;
+      hence x in Lim_inf S by Def11;
+    end;
+    thus thesis by PRE_TOPC:48;
+  end;
+
+theorem Th52:
+  for T being non empty TopSpace,
+      S being SetSequence of the carrier of T holds
+    Lim_inf S is closed
+proof
+  let T be non empty TopSpace;
+  let S be SetSequence of the carrier of T;
+  Lim_inf S = Cl Lim_inf S by Th51;
+  hence thesis;
+end;
+
+theorem
+  for T being non empty TopSpace,
+      R, S being SetSequence of the carrier of T st
+    R is subsequence of S holds Lim_inf S c= Lim_inf R
+  proof
+    let T be non empty TopSpace,
+        R, S be SetSequence of the carrier of T;
+    assume
+A1: R is subsequence of S;
+    let x be set;
+    assume
+A2: x in Lim_inf S; then
+    reconsider p = x as Point of T;
+    consider Nseq being increasing Seq_of_Nat such that
+A3: R = S * Nseq by A1,Def10;
+    for G being a_neighborhood of p
+     ex k being Nat st
+    for m being Nat st m > k holds R.m meets G
+    proof
+      let G be a_neighborhood of p;
+      consider k being Nat such that
+A4:   for m being Nat st m > k holds S.m meets G by A2,Def11;
+      take k;
+      let m1 be Nat;
+      assume
+A5:   m1 > k;
+      dom Nseq = NAT by FUNCT_2:def 1; then
+A6:   R.m1 = S.(Nseq.m1) by A3,FUNCT_1:23;
+      m1 <= Nseq.m1 by SEQM_3:33; then
+      Nseq.m1 > k by A5,AXIOMS:22;
+      hence thesis by A4,A6;
+    end;
+    hence thesis by Def11;
+  end;
+
+theorem Th54:
+  for T being non empty TopSpace,
+      A, B being SetSequence of the carrier of T st
+    for i being Nat holds A.i c= B.i holds
+      Lim_inf A c= Lim_inf B
+  proof
+    let T be non empty TopSpace,
+        A, B be SetSequence of the carrier of T;
+    assume
+A1: for i being Nat holds A.i c= B.i;
+    let x be set;
+    assume
+A2: x in Lim_inf A; then
+    reconsider p = x as Point of T;
+    for G being a_neighborhood of p
+     ex k being Nat st
+    for m being Nat st m > k holds B.m meets G
+    proof
+      let G be a_neighborhood of p;
+      consider k being Nat such that
+A3:   for m being Nat st m > k holds A.m meets G by A2,Def11;
+      take k;
+      let m1 be Nat;
+      assume m1 > k; then
+A4:   A.m1 meets G by A3;
+      A.m1 c= B.m1 by A1;
+      hence thesis by A4,XBOOLE_1:63;
+    end;
+    hence thesis by Def11;
+  end;
+
+theorem
+  for T being non empty TopSpace,
+      A, B, C being SetSequence of the carrier of T st
+    for i being Nat holds C.i = A.i \/ B.i holds
+      Lim_inf A \/ Lim_inf B c= Lim_inf C
+  proof
+    let T be non empty TopSpace,
+        A, B, C be SetSequence of the carrier of T;
+    assume
+A1: for i being Nat holds C.i = A.i \/ B.i;
+    let x be set;
+    assume
+A2: x in Lim_inf A \/ Lim_inf B;
+    reconsider p = x as Point of T by A2;
+    per cases by A2,XBOOLE_0:def 2;
+    suppose
+A3: x in Lim_inf A;
+    for H being a_neighborhood of p
+     ex k being Nat st
+    for m being Nat st m > k holds C.m meets H
+    proof
+      let H be a_neighborhood of p;
+      consider k being Nat such that
+A4:   for m being Nat st m > k holds A.m meets H by A3,Def11;
+      take k;
+      let m be Nat;
+      assume m > k; then
+A5:   A.m meets H by A4;
+      C.m = A.m \/ B.m by A1; then
+      A.m c= C.m by XBOOLE_1:7;
+      hence thesis by A5,XBOOLE_1:63;
+    end;
+    hence thesis by Def11;
+    suppose
+A6: x in Lim_inf B;
+    for H being a_neighborhood of p
+     ex k being Nat st
+    for m being Nat st m > k holds C.m meets H
+    proof
+      let H be a_neighborhood of p;
+      consider k being Nat such that
+A7:   for m being Nat st m > k holds B.m meets H by A6,Def11;
+      take k;
+      let m be Nat;
+      assume m > k; then
+A8:   B.m meets H by A7;
+      C.m = A.m \/ B.m by A1; then
+      B.m c= C.m by XBOOLE_1:7;
+      hence thesis by A8,XBOOLE_1:63;
+    end;
+    hence thesis by Def11;
+  end;
+
+theorem
+  for T being non empty TopSpace,
+      A, B, C being SetSequence of the carrier of T st
+    for i being Nat holds C.i = A.i /\ B.i holds
+      Lim_inf C c= Lim_inf A /\ Lim_inf B
+  proof
+    let T be non empty TopSpace,
+        A, B, C be SetSequence of the carrier of T;
+    assume
+A1: for i being Nat holds C.i = A.i /\ B.i;
+    let x be set;
+    assume
+A2: x in Lim_inf C; then
+    reconsider p = x as Point of T;
+    for H being a_neighborhood of p
+     ex k being Nat st
+    for m being Nat st m > k holds A.m meets H
+    proof
+      let H be a_neighborhood of p;
+      consider k being Nat such that
+A3:   for m being Nat st m > k holds C.m meets H by A2,Def11;
+      take k;
+      let m be Nat;
+      assume m > k; then
+A4:   C.m meets H by A3;
+      C.m = A.m /\ B.m by A1; then
+      C.m c= A.m by XBOOLE_1:17;
+      hence thesis by A4,XBOOLE_1:63;
+    end; then
+A5: x in Lim_inf A by Def11;
+    for H being a_neighborhood of p
+     ex k being Nat st
+    for m being Nat st m > k holds B.m meets H
+    proof
+      let H be a_neighborhood of p;
+      consider k being Nat such that
+A6:   for m being Nat st m > k holds C.m meets H by A2,Def11;
+      take k;
+      let m be Nat;
+      assume m > k; then
+A7:   C.m meets H by A6;
+      C.m = A.m /\ B.m by A1; then
+      C.m c= B.m by XBOOLE_1:17;
+      hence thesis by A7,XBOOLE_1:63;
+    end; then
+    x in Lim_inf B by Def11;
+    hence thesis by A5,XBOOLE_0:def 3;
+  end;
+
+theorem Th57:
+  for T being non empty TopSpace,
+      F, G being SetSequence of the carrier of T st
+    for i being Nat holds G.i = Cl (F.i) holds
+      Lim_inf G = Lim_inf F
+  proof
+    let T be non empty TopSpace,
+        F, G be SetSequence of the carrier of T;
+    assume
+A1: for i being Nat holds G.i = Cl (F.i);
+    thus Lim_inf G c= Lim_inf F
+    proof
+      let x be set;
+      assume
+A2:   x in Lim_inf G; then
+      reconsider p = x as Point of T;
+      for H being a_neighborhood of p
+       ex k being Nat st
+      for m being Nat st m > k holds F.m meets H
+      proof
+        let H be a_neighborhood of p;
+        consider H1 being non empty Subset of T such that
+A3:     H1 is a_neighborhood of p & H1 is open & H1 c= H by CONNSP_2:7;
+        consider k being Nat such that
+A4:     for m being Nat st m > k holds G.m meets H1 by A2,A3,Def11;
+        take k;
+        let m be Nat;
+        assume m > k; then
+        G.m meets H1 by A4; then
+        consider y being set such that
+A5:     y in G.m & y in H1 by XBOOLE_0:3;
+        reconsider y as Point of T by A5;
+        H1 is a_neighborhood of y by A3,A5,CONNSP_2:5; then
+        consider H' being non empty Subset of T such that
+A6:     H' is a_neighborhood of y & H' is open & H' c= H1 by CONNSP_2:7;
+        y in Cl (F.m) by A1,A5; then
+        H' meets F.m by A6,YELLOW_6:6; then
+        H1 meets F.m by A6,XBOOLE_1:63;
+        hence thesis by A3,XBOOLE_1:63;
+      end;
+      hence thesis by Def11;
+    end;
+    thus Lim_inf F c= Lim_inf G
+    proof
+      for i being Nat holds F.i c= G.i
+      proof
+        let i be Nat;
+        G.i = Cl (F.i) by A1;
+        hence thesis by PRE_TOPC:48;
+      end;
+      hence thesis by Th54;
+    end;
+  end;
+
+theorem
+  for S being SetSequence of the carrier of TOP-REAL n,
+      p being Point of TOP-REAL n holds
+     (ex s being Real_Sequence of n st s is convergent &
+      (for x being Nat holds s.x in S.x) & p = lim s) implies
+    p in Lim_inf S
+proof
+  let S be SetSequence of the carrier of TOP-REAL n,
+      p be Point of TOP-REAL n;
+  reconsider p' = p as Point of Euclid n by TOPREAL3:13;
+  given s being Real_Sequence of n such that
+A1:  s is convergent and
+A2:  for x being Nat holds s.x in S.x and
+A3:  p = lim s;
+  for r being real number st r > 0
+   ex k being Nat st
+  for m being Nat st m > k holds S.m meets Ball (p', r)
+  proof
+    let r be real number;
+    reconsider r' = r as Real by XREAL_0:def 1;
+    assume
+A4: r > 0;
+    consider l being Nat such that
+A5: for m being Nat st l <= m holds |. s.m - p .| < r'
+       by A1,A3,A4,TOPRNS_1:def 10;
+    take v = max (0, l);
+    let m be Nat;
+    assume v < m; then
+    l <= m by SQUARE_1:50; then
+    |. s.m - p .| < r' by A5; then
+A6: s.m in Ball (p', r) by Th33;
+    s.m in S.m by A2;
+    hence thesis by A6,XBOOLE_0:3;
+  end;
+  hence thesis by Th50;
+end;
+
+theorem Th59:
+   for T being non empty TopSpace,
+       P being Subset of T,
+       s being SetSequence of the carrier of T st
+   (for i being Nat holds s.i c= P) holds
+   Lim_inf s c= Cl P
+  proof
+    let T be non empty TopSpace,
+        P be Subset of T,
+        s be SetSequence of the carrier of T;
+    assume
+A1: for i being Nat holds s.i c= P;
+    let x be set;
+    assume
+A2: x in Lim_inf s; then
+    reconsider p = x as Point of T;
+    for G being Subset of T st G is open holds
+        p in G implies P meets G
+    proof
+      let G be Subset of T;
+      assume
+A3:   G is open;
+      assume p in G; then
+      reconsider G' = G as a_neighborhood of p by A3,CONNSP_2:5;
+      consider k being Nat such that
+A4:   for m being Nat st m > k holds s.m meets G' by A2,Def11;
+      set m = k + 1;
+      m > k by NAT_1:38; then
+A5:   s.m meets G' by A4;
+      s.m c= P by A1;
+      hence thesis by A5,XBOOLE_1:63;
+    end;
+    hence thesis by PRE_TOPC:def 13;
+  end;
+
+theorem Th60:
+  for T being non empty TopSpace,
+      F being SetSequence of the carrier of T,
+      A being Subset of T st
+    for i being Nat holds F.i = A holds Lim_inf F = Cl A
+  proof
+    let T be non empty TopSpace,
+        F be SetSequence of the carrier of T,
+        A be Subset of T;
+    assume
+A1: for i being Nat holds F.i = A; then
+    for i being Nat holds F.i c= A;
+    hence Lim_inf F c= Cl A by Th59;
+    thus Cl A c= Lim_inf F
+    proof
+      let x be set;
+      assume
+A2:   x in Cl A; then
+      reconsider p = x as Point of T;
+      for G being a_neighborhood of p
+       ex k being Nat st
+      for m being Nat st m > k holds F.m meets G
+      proof
+        let G being a_neighborhood of p;
+        take k = 1;
+        let m be Nat;
+        assume m > k;
+        F.m = A by A1;
+        hence thesis by A2,YELLOW_6:6;
+      end;
+      hence thesis by Def11;
+    end;
+  end;
+
+theorem
+  for T being non empty TopSpace,
+      F being SetSequence of the carrier of T,
+      A being closed Subset of T st
+    for i being Nat holds F.i = A holds Lim_inf F = A
+  proof
+    let T be non empty TopSpace,
+        F be SetSequence of the carrier of T,
+        A be closed Subset of T;
+    assume for i being Nat holds F.i = A; then
+    Lim_inf F = Cl A by Th60;
+    hence thesis by PRE_TOPC:52;
+  end;
+
+theorem Th62:
+  for S being SetSequence of the carrier of TOP-REAL n,
+      P being Subset of TOP-REAL n st P is Bounded &
+   (for i being Nat holds S.i c= P) holds
+  Lim_inf S is Bounded
+  proof
+    let S be SetSequence of the carrier of TOP-REAL n;
+    let P be Subset of TOP-REAL n;
+    assume that
+A1: P is Bounded and
+A2: for i being Nat holds S.i c= P;
+    assume
+A3: Lim_inf S is non Bounded;
+    consider P' being Subset of Euclid n such that
+A4: P' = P & P' is bounded by A1,JORDAN2C:def 2;
+    consider t being Real,
+             z being Point of Euclid n such that
+A5: 0 < t & P' c= Ball (z,t) by A4,METRIC_6:def 10;
+    set r = 1, R = r + r + 3*t;
+    3*t > 3*0 by A5,REAL_1:70; then
+    R > 3*0 by JORDAN2C:6; then
+    consider x, y being Point of Euclid n such that
+A6: x in Lim_inf S & y in Lim_inf S & dist (x, y) > R by A3,Th38;
+    consider k1 being Nat such that
+A7: for m being Nat st m > k1 holds S.m meets Ball (x, r) by A6,Th50;
+    consider k2 being Nat such that
+A8: for m being Nat st m > k2 holds S.m meets Ball (y, r) by A6,Th50;
+    set k = max (k1, k2) + 1;
+    S.k c= P' by A2,A4; then
+A9: S.k c= Ball (z,t) by A5,XBOOLE_1:1;
+    max (k1,k2) >= k1 by SQUARE_1:46; then
+    k > k1 by NAT_1:38; then
+    S.k meets Ball (x, r) by A7; then
+A10: Ball (z,t) meets Ball (x, r) by A9,XBOOLE_1:63;
+    max (k1,k2) >= k2 by SQUARE_1:46; then
+    k > k2 by NAT_1:38; then
+    S.k meets Ball (y, r) by A8; then
+A11: Ball (z,t) meets Ball (y, r) by A9,XBOOLE_1:63;
+    2*t < 3*t by A5,REAL_1:70; then
+A12: r + r + 2*t < r + r + 3*t by REAL_1:67;
+    dist (x,y) < r + r + 2*t by A10,A11,Th40;
+    hence thesis by A6,A12,AXIOMS:22;
+  end;
+
+theorem
+  for S being SetSequence of the carrier of TOP-REAL 2,
+      P being Subset of TOP-REAL 2 st
+     P is Bounded &
+    (for i being Nat holds S.i c= P) &
+   for i being Nat holds S.i is compact holds
+    Lim_inf S is compact
+  proof
+    let S be SetSequence of the carrier of TOP-REAL 2,
+        P be Subset of TOP-REAL 2;
+    assume that
+A1: P is Bounded and
+A2: (for i being Nat holds S.i c= P) and
+    for i being Nat holds S.i is compact;
+A3: Lim_inf S is closed by Th52;
+    Lim_inf S is Bounded by A1,A2,Th62;
+    hence thesis by A3,TOPREAL6:88;
+  end;
+
+theorem Th64:
+  for A, B being SetSequence of the carrier of TOP-REAL n,
+      C being SetSequence of the carrier of [: TOP-REAL n, TOP-REAL n :] st
+    for i being Nat holds C.i = [:A.i, B.i:] holds
+      [: Lim_inf A, Lim_inf B :] = Lim_inf C
+  proof
+    let A, B be SetSequence of the carrier of TOP-REAL n,
+        C be SetSequence of the carrier of [: TOP-REAL n, TOP-REAL n :];
+    assume
+A1: for i being Nat holds C.i = [:A.i, B.i:];
+    thus [: Lim_inf A, Lim_inf B :] c= Lim_inf C
+    proof
+      let x be set;
+      assume
+A2:   x in [: Lim_inf A, Lim_inf B :]; then
+      consider x1, x2 being set such that
+A3:   x1 in Lim_inf A & x2 in Lim_inf B & x = [x1,x2] by ZFMISC_1:def 2;
+      reconsider x1, x2 as Point of TOP-REAL n by A3;
+      reconsider p = x as Point of [: TOP-REAL n, TOP-REAL n :] by A2;
+      for G being a_neighborhood of p
+       ex k being Nat st
+      for m being Nat st m > k holds C.m meets G
+      proof
+        let G be a_neighborhood of p;
+        G is a_neighborhood of [:{x1},{x2}:] by A3,Th41; then
+        consider V being a_neighborhood of {x1},
+                 W being a_neighborhood of x2 such that
+A4:     [:V,W:] c= G by BORSUK_1:67;
+        V is a_neighborhood of x1 by CONNSP_2:10; then
+        consider k1 being Nat such that
+A5:     for m being Nat st m > k1 holds A.m meets V by A3,Def11;
+        consider k2 being Nat such that
+A6:     for m being Nat st m > k2 holds B.m meets W by A3,Def11;
+        take k = max (k1, k2);
+A7:     k >= k1 & k >= k2 by SQUARE_1:46;
+        let m be Nat;
+        assume
+A8:     m > k; then
+        m > k1 by A7,AXIOMS:22; then
+A9:     A.m meets V by A5;
+        m > k2 by A7,A8,AXIOMS:22; then
+        B.m meets W by A6; then
+        [: A.m, B.m :] meets [: V, W :] by A9,Th4; then
+        C.m meets [: V, W :] by A1;
+        hence thesis by A4,XBOOLE_1:63;
+      end;
+      hence thesis by Def11;
+    end;
+    thus Lim_inf C c= [: Lim_inf A, Lim_inf B :]
+    proof
+      let x be set;
+      assume
+A10:   x in Lim_inf C;
+      x in the carrier of [: TOP-REAL n, TOP-REAL n :] by A10; then
+A11:   x in [: the carrier of TOP-REAL n, the carrier of TOP-REAL n :]
+        by BORSUK_1:def 5; then
+      reconsider p1 = x`1, p2 = x`2 as Point of TOP-REAL n by MCART_1:10;
+A12:   x = [p1,p2] by A11,MCART_1:23;
+      consider H being a_neighborhood of p2;
+      consider F being a_neighborhood of p1;
+      for G being a_neighborhood of p1
+       ex k being Nat st
+      for m being Nat st m > k holds A.m meets G
+      proof
+        let G be a_neighborhood of p1;
+        consider k being Nat such that
+A13:     for m being Nat st m > k holds C.m meets [: G, H :] by A10,A12,Def11;
+        take k;
+        let m be Nat;
+        assume m > k; then
+        C.m meets [: G, H :] by A13; then
+        consider y being set such that
+A14:     y in C.m & y in [: G, H :] by XBOOLE_0:3;
+        y in [:A.m, B.m:] by A1,A14; then
+A15:     y`1 in A.m by MCART_1:10;
+        y`1 in G by A14,MCART_1:10;
+        hence thesis by A15,XBOOLE_0:3;
+      end; then
+A16:   p1 in Lim_inf A by Def11;
+      for G being a_neighborhood of p2
+       ex k being Nat st
+      for m being Nat st m > k holds B.m meets G
+      proof
+        let G be a_neighborhood of p2;
+        consider k being Nat such that
+A17:     for m being Nat st m > k holds C.m meets [: F, G :] by A10,A12,Def11;
+        take k;
+        let m be Nat;
+        assume m > k; then
+        C.m meets [: F, G :] by A17; then
+        consider y being set such that
+A18:     y in C.m & y in [: F, G :] by XBOOLE_0:3;
+        y in [:A.m, B.m:] by A1,A18; then
+A19:     y`2 in B.m by MCART_1:10;
+        y`2 in G by A18,MCART_1:10;
+        hence thesis by A19,XBOOLE_0:3;
+      end; then
+      p2 in Lim_inf B by Def11;
+      hence thesis by A12,A16,ZFMISC_1:106;
+    end;
+  end;
+
+theorem
+  for S being SetSequence of TOP-REAL 2 holds
+    lim_inf S c= Lim_inf S
+  proof
+    let S be SetSequence of TOP-REAL 2;
+    let x be set;
+    assume
+A1: x in lim_inf S; then
+    consider k being Nat such that
+A2: for n being Nat holds x in S.(k+n) by Th7;
+    reconsider p = x as Point of Euclid 2 by A1,TOPREAL3:13;
+    reconsider y = x as Point of TOP-REAL 2 by A1;
+    for r being real number st r > 0
+     ex k being Nat st
+    for m being Nat st m > k holds S.m meets Ball (p, r)
+    proof
+      let r be real number;
+      assume
+A3:   r > 0;
+      take k;
+      let m be Nat;
+      assume m > k; then
+      consider h being Nat such that
+A4:   m = k + h by NAT_1:28;
+A5:   x in S.m by A2,A4;
+      x in Ball (p, r) by A3,Th29;
+      hence thesis by A5,XBOOLE_0:3;
+    end; then
+    y in Lim_inf S by Th50;
+    hence thesis;
+  end;
+
+theorem
+  for C being Simple_closed_curve,
+      i being Nat holds
+    Fr (UBD L~Cage (C,i))` = L~Cage (C,i)
+  proof
+    let C be Simple_closed_curve,
+        i be Nat;
+    set K = (UBD L~Cage (C,i))`;
+    set R = L~Cage (C,i);
+    UBD R c= R` by JORDAN2C:30; then
+A1: UBD R misses R by SUBSET_1:43;
+    UBD R misses BDD R by JORDAN2C:28; then
+A2: UBD R misses (BDD R) \/ R by A1,XBOOLE_1:70;
+A3: [#] TOP-REAL 2 = R` \/ R by PRE_TOPC:18
+                  .= (BDD R) \/ (UBD R) \/ R by JORDAN2C:31;
+    K = [#] TOP-REAL 2 \ UBD L~Cage (C,i) by PRE_TOPC:17
+     .= ((UBD R) \/ ((BDD R) \/ R)) \ UBD R by A3,XBOOLE_1:4
+     .= R \/ BDD R by A2,XBOOLE_1:88; then
+A4: BDD R c= K by XBOOLE_1:7;
+    (BDD R) \/ (BDD R)` = [#] TOP-REAL 2 by PRE_TOPC:18; then
+A5: (BDD R) \/ (BDD R)` = the carrier of TOP-REAL 2 by PRE_TOPC:def 3;
+    ((BDD R) \/ (UBD R))` = R`` by JORDAN2C:31; then
+    (BDD R)` /\ (UBD R)` = R by SUBSET_1:29; then
+    (BDD R) \/ R = ((BDD R) \/ (BDD R)`) /\ ((BDD R) \/ K) by XBOOLE_1:24
+                .= (BDD R) \/ K by A5,XBOOLE_1:28
+                .= K by A4,XBOOLE_1:12; then
+A6: Cl K = (BDD L~Cage (C,i)) \/ L~Cage (C,i) by PRE_TOPC:52;
+    K` = LeftComp Cage (C,i) by GOBRD14:46; then
+A7: Cl K` = LeftComp Cage (C,i) \/ R by GOBRD14:32;
+    BDD L~Cage (C,i) misses UBD L~Cage (C,i) by JORDAN2C:28; then
+A8: (BDD L~Cage (C,i)) /\ (UBD L~Cage (C,i)) = {} by XBOOLE_0:def 7;
+    Fr K = Cl K /\ Cl K` by TOPS_1:def 2
+        .= ((BDD L~Cage (C,i)) \/ L~Cage (C,i)) /\
+           ((UBD L~Cage (C,i)) \/ L~Cage (C,i)) by A6,A7,GOBRD14:46
+        .= ((BDD L~Cage (C,i)) /\ (UBD L~Cage (C,i))) \/ L~Cage (C,i)
+          by XBOOLE_1:24
+        .= L~Cage (C,i) by A8;
+    hence thesis;
+  end;
+
+begin :: Upper Topological Limit
+
+definition let T be non empty TopSpace;
+           let S be SetSequence of the carrier of T;
+  func Lim_sup S -> Subset of T means :Def12:
+    for x being set holds
+      x in it iff ex A being subsequence of S st x in Lim_inf A;
+  existence
+  proof
+    defpred P[set] means
+    ex A being subsequence of S st $1 in Lim_inf A;
+    consider X being set such that
+A1: for x being set holds
+    x in X iff x in the carrier of T & P[x] from Separation;
+    X c= the carrier of T
+    proof
+      let x be set;
+      assume x in X;
+      hence thesis by A1;
+    end; then
+    reconsider X as Subset of T;
+    take X;
+    thus thesis by A1;
+  end;
+  uniqueness
+  proof
+    let A1, A2 be Subset of T;
+    defpred P[set] means ex A being subsequence of S st $1 in Lim_inf A;
+    assume that
+A2: for x being set holds
+      x in A1 iff P[x] and
+A3: for x being set holds
+      x in A2 iff P[x];
+    A1 = A2 from Extensionality(A2, A3);
+    hence thesis;
+  end;
+end;
+
+theorem
+  for N being Nat,
+      F being sequence of TOP-REAL N,
+      x being Point of TOP-REAL N,
+      x' being Point of Euclid N st x = x' holds
+    x is_a_cluster_point_of F iff
+  for r being real number,
+      n being Nat st r > 0 holds
+    ex m being Nat st n <= m & F.m in Ball (x', r)
+  proof
+    let N be Nat,
+        F be sequence of TOP-REAL N,
+        x be Point of TOP-REAL N,
+        x' be Point of Euclid N;
+    assume
+A1: x = x';
+    hereby assume
+A2:   x is_a_cluster_point_of F;
+      let r be real number,
+          n be Nat;
+      assume
+A3:   r > 0;
+      reconsider O = Ball (x', r) as open Subset of TOP-REAL N by Th30;
+      x in O by A1,A3,Th29; then
+      consider m being Nat such that
+A4:   n <= m & F.m in O by A2,FRECHET2:def 4;
+      take m;
+      thus n <= m & F.m in Ball (x', r) by A4;
+    end;
+    assume
+A5: for r being real number,
+        n being Nat st r > 0 holds
+     ex m being Nat st n <= m & F.m in Ball (x', r);
+     for O being Subset of TOP-REAL N,
+         n being Nat st O is open & x in O
+      ex m being Nat st n <= m & F.m in O
+    proof
+      let O be Subset of TOP-REAL N,
+          n be Nat;
+      assume
+A6:   O is open & x in O;
+      reconsider G' = O as Subset of TopSpaceMetr Euclid N by EUCLID:def 8;
+A7:   TOP-REAL N = TopSpaceMetr Euclid N by EUCLID:def 8;
+     consider r being real number such that
+A8:  r > 0 & Ball (x', r) c= G' by A1,A6,A7,TOPMETR:22;
+     consider m being Nat such that
+A9:  n <= m & F.m in Ball (x', r) by A5,A8;
+     take m;
+     thus thesis by A8,A9;
+    end;
+    hence thesis by FRECHET2:def 4;
+  end;
+
+theorem Th68:
+  for T being non empty TopSpace,
+      A being SetSequence of the carrier of T holds
+    Lim_inf A c= Lim_sup A
+  proof
+    let T be non empty TopSpace,
+        A be SetSequence of the carrier of T;
+    let x be set;
+    assume
+A1: x in Lim_inf A;
+    ex K being subsequence of A st x in Lim_inf K
+    proof
+      reconsider B = A as subsequence of A by Th44;
+      take B;
+      thus thesis by A1;
+    end;
+    hence thesis by Def12;
+  end;
+
+theorem Th69:
+  for A, B, C being SetSequence of the carrier of TOP-REAL 2 st
+    (for i being Nat holds A.i c= B.i) &
+     C is subsequence of A holds
+     ex D being subsequence of B st for i being Nat holds C.i c= D.i
+  proof
+    let A, B, C be SetSequence of the carrier of TOP-REAL 2;
+    assume that
+A1: for i being Nat holds A.i c= B.i and
+A2: C is subsequence of A;
+    consider NS being increasing Seq_of_Nat such that
+A3: C = A * NS by A2,Def10;
+    set D = B * NS;
+    reconsider D as SetSequence of TOP-REAL 2 by Th42;
+    reconsider D as subsequence of B by Def10;
+    take D;
+    for i being Nat holds C.i c= D.i
+    proof
+      let i be Nat;
+A4:   dom NS = NAT by FUNCT_2:def 1;
+      C.i c= D.i
+      proof
+        let x be set;
+        assume x in C.i; then
+A5:     x in A.(NS.i) by A3,A4,FUNCT_1:23;
+        A.(NS.i) c= B.(NS.i) by A1; then
+        x in B.(NS.i) by A5;
+        hence thesis by A4,FUNCT_1:23;
+      end;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+
+theorem
+  for A, B, C being SetSequence of the carrier of TOP-REAL 2 st
+    (for i being Nat holds A.i c= B.i) &
+     C is subsequence of B holds
+     ex D being subsequence of A st for i being Nat holds D.i c= C.i
+  proof
+    let A, B, C be SetSequence of the carrier of TOP-REAL 2;
+    assume that
+A1: for i being Nat holds A.i c= B.i and
+A2: C is subsequence of B;
+    consider NS being increasing Seq_of_Nat such that
+A3: C = B * NS by A2,Def10;
+    set D = A * NS;
+    reconsider D as SetSequence of TOP-REAL 2 by Th42;
+    reconsider D as subsequence of A by Def10;
+    take D;
+    for i being Nat holds D.i c= C.i
+    proof
+      let i be Nat;
+A4:   dom NS = NAT by FUNCT_2:def 1;
+      D.i c= C.i
+      proof
+        let x be set;
+        assume x in D.i; then
+A5:     x in A.(NS.i) by A4,FUNCT_1:23;
+        A.(NS.i) c= B.(NS.i) by A1; then
+        x in B.(NS.i) by A5;
+        hence thesis by A3,A4,FUNCT_1:23;
+      end;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+
+theorem Th71: :: (2)
+  for A, B being SetSequence of the carrier of TOP-REAL 2 st
+    for i being Nat holds A.i c= B.i holds
+      Lim_sup A c= Lim_sup B
+  proof
+    let A, B be SetSequence of the carrier of TOP-REAL 2;
+    assume
+A1: for i being Nat holds A.i c= B.i;
+    Lim_sup A c= Lim_sup B
+    proof
+      let x be set;
+      assume x in Lim_sup A; then
+      consider A1 being subsequence of A such that
+A2:   x in Lim_inf A1 by Def12;
+      consider D being subsequence of B such that
+A3:   for i being Nat holds A1.i c= D.i by A1,Th69;
+      Lim_inf A1 c= Lim_inf D by A3,Th54;
+      hence thesis by A2,Def12;
+    end;
+    hence thesis;
+  end;
+
+theorem :: (3)
+  for A, B, C being SetSequence of the carrier of TOP-REAL 2 st
+    for i being Nat holds C.i = A.i \/ B.i holds
+      Lim_sup A \/ Lim_sup B c= Lim_sup C
+  proof
+    let A, B, C be SetSequence of the carrier of TOP-REAL 2;
+    assume
+A1: for i being Nat holds C.i = A.i \/ B.i;
+A2: for i being Nat holds A.i c= C.i
+    proof
+      let i be Nat;
+      C.i = A.i \/ B.i by A1;
+      hence thesis by XBOOLE_1:7;
+    end;
+A3: for i being Nat holds B.i c= C.i
+    proof
+      let i be Nat;
+      C.i = A.i \/ B.i by A1;
+      hence thesis by XBOOLE_1:7;
+    end;
+    thus Lim_sup A \/ Lim_sup B c= Lim_sup C
+    proof
+      let x be set;
+      assume
+A4:   x in Lim_sup A \/ Lim_sup B;
+      per cases by A4,XBOOLE_0:def 2;
+      suppose x in Lim_sup A; then
+      consider A1 being subsequence of A such that
+A5:   x in Lim_inf A1 by Def12;
+      consider C1 being subsequence of C such that
+A6:   for i being Nat holds A1.i c= C1.i by A2,Th69;
+      Lim_inf A1 c= Lim_inf C1 by A6,Th54;
+      hence thesis by A5,Def12;
+      suppose x in Lim_sup B; then
+      consider B1 being subsequence of B such that
+A7:   x in Lim_inf B1 by Def12;
+      consider C1 being subsequence of C such that
+A8:   for i being Nat holds B1.i c= C1.i by A3,Th69;
+      Lim_inf B1 c= Lim_inf C1 by A8,Th54;
+      hence thesis by A7,Def12;
+    end;
+  end;
+
+theorem :: (4)
+  for A, B, C being SetSequence of the carrier of TOP-REAL 2 st
+    for i being Nat holds C.i = A.i /\ B.i holds
+      Lim_sup C c= Lim_sup A /\ Lim_sup B
+  proof
+    let A, B, C be SetSequence of the carrier of TOP-REAL 2;
+    assume
+A1: for i being Nat holds C.i = A.i /\ B.i;
+A2: for i being Nat holds C.i c= A.i
+    proof
+      let i be Nat;
+      C.i = A.i /\ B.i by A1;
+      hence thesis by XBOOLE_1:17;
+    end;
+A3: for i being Nat holds C.i c= B.i
+    proof
+      let i be Nat;
+      C.i = A.i /\ B.i by A1;
+      hence thesis by XBOOLE_1:17;
+    end;
+    let x be set;
+    assume x in Lim_sup C; then
+    consider C1 being subsequence of C such that
+A4: x in Lim_inf C1 by Def12;
+    consider D1 being subsequence of A such that
+A5: for i being Nat holds C1.i c= D1.i by A2,Th69;
+    Lim_inf C1 c= Lim_inf D1 by A5,Th54; then
+A6: x in Lim_sup A by A4,Def12;
+    consider E1 being subsequence of B such that
+A7: for i being Nat holds C1.i c= E1.i by A3,Th69;
+    Lim_inf C1 c= Lim_inf E1 by A7,Th54; then
+    x in Lim_sup B by A4,Def12;
+    hence thesis by A6,XBOOLE_0:def 3;
+  end;
+
+theorem Th74:
+  for A, B being SetSequence of the carrier of TOP-REAL 2,
+      C, C1 being SetSequence of the carrier of [: TOP-REAL 2, TOP-REAL 2 :] st
+    (for i being Nat holds C.i = [: A.i, B.i :]) &
+    C1 is subsequence of C holds
+      ex A1, B1 being SetSequence of the carrier of TOP-REAL 2 st
+    A1 is subsequence of A & B1 is subsequence of B &
+      for i being Nat holds C1.i = [: A1.i, B1.i :]
+  proof
+    let A, B be SetSequence of the carrier of TOP-REAL 2,
+        C, C1 be SetSequence of the carrier of [: TOP-REAL 2, TOP-REAL 2 :];
+    assume that
+A1: for i being Nat holds C.i = [: A.i, B.i :] and
+A2: C1 is subsequence of C;
+    consider NS being increasing Seq_of_Nat such that
+A3: C1 = C * NS by A2,Def10;
+    set A1 = A * NS;
+    reconsider A1 as SetSequence of TOP-REAL 2 by Th42;
+    set B1 = B * NS;
+    reconsider B1 as SetSequence of TOP-REAL 2 by Th42;
+    take A1, B1;
+    for i being Nat holds C1.i = [: A1.i, B1.i :]
+    proof
+      let i be Nat;
+A4:   dom NS = NAT by FUNCT_2:def 1; then
+A5:   A1.i = A.(NS.i) by FUNCT_1:23;
+A6:   B1.i = B.(NS.i) by A4,FUNCT_1:23;
+      C1.i = C.(NS.i) by A3,A4,FUNCT_1:23
+          .= [: A1.i, B1.i :] by A1,A5,A6;
+      hence thesis;
+    end;
+    hence thesis by Def10;
+  end;
+
+theorem
+  for A, B being SetSequence of the carrier of TOP-REAL 2,
+      C being SetSequence of the carrier of [: TOP-REAL 2, TOP-REAL 2 :] st
+    for i being Nat holds C.i = [: A.i, B.i :] holds
+      Lim_sup C c= [: Lim_sup A, Lim_sup B :]
+  proof
+    let A, B be SetSequence of the carrier of TOP-REAL 2,
+        C be SetSequence of the carrier of [: TOP-REAL 2, TOP-REAL 2 :];
+    assume
+A1: for i being Nat holds C.i = [: A.i, B.i :];
+      let x be set;
+      assume x in Lim_sup C; then
+      consider C1 being subsequence of C such that
+A2:   x in Lim_inf C1 by Def12;
+      consider A1, B1 being SetSequence of the carrier of TOP-REAL 2 such that
+A3:   A1 is subsequence of A & B1 is subsequence of B &
+      for i being Nat holds C1.i = [: A1.i, B1.i :] by A1,Th74;
+      x in the carrier of [: TOP-REAL 2, TOP-REAL 2 :] by A2; then
+      x in [: the carrier of TOP-REAL 2, the carrier of TOP-REAL 2 :]
+        by BORSUK_1:def 5; then
+      consider x1, x2 being set such that
+A4:   x = [x1, x2] by ZFMISC_1:102;
+      x in [: Lim_inf A1, Lim_inf B1 :] by A2,A3,Th64; then
+      x1 in Lim_inf A1 & x2 in Lim_inf B1 by A4,ZFMISC_1:106; then
+      x1 in Lim_sup A & x2 in Lim_sup B by A3,Def12;
+      hence thesis by A4,ZFMISC_1:106;
+  end;
+
+theorem Th76:
+  for T being non empty TopSpace,
+      F being SetSequence of the carrier of T,
+      A being Subset of T st
+    for i being Nat holds F.i = A holds Lim_inf F = Lim_sup F
+  proof
+    let T be non empty TopSpace,
+        F be SetSequence of the carrier of T,
+        A be Subset of T;
+    assume
+A1: for i being Nat holds F.i = A;
+    thus Lim_inf F c= Lim_sup F by Th68;
+    thus Lim_sup F c= Lim_inf F
+    proof
+      let x be set;
+      assume x in Lim_sup F; then
+      consider G being subsequence of F such that
+A2:   x in Lim_inf G by Def12;
+      thus thesis by A1,A2,Th47;
+    end;
+  end;
+
+theorem
+  for F being SetSequence of the carrier of TOP-REAL 2,
+      A being Subset of TOP-REAL 2 st
+    for i being Nat holds F.i = A holds Lim_sup F = Cl A
+  proof
+    let F be SetSequence of the carrier of TOP-REAL 2,
+        A be Subset of TOP-REAL 2;
+    assume
+A1: for i being Nat holds F.i = A; then
+    Lim_inf F = Lim_sup F by Th76;
+    hence thesis by A1,Th60;
+  end;
+
+theorem
+  for F, G being SetSequence of the carrier of TOP-REAL 2 st
+    for i being Nat holds G.i = Cl (F.i) holds
+      Lim_sup G = Lim_sup F
+  proof
+    let F, G be SetSequence of the carrier of TOP-REAL 2;
+    assume
+A1: for i being Nat holds G.i = Cl (F.i);
+A2: for i being Nat holds F.i c= G.i
+    proof
+      let i be Nat;
+      G.i = Cl (F.i) by A1;
+      hence thesis by PRE_TOPC:48;
+    end;
+    thus Lim_sup G c= Lim_sup F
+    proof
+      let x be set;
+      assume x in Lim_sup G; then
+      consider H being subsequence of G such that
+A3:   x in Lim_inf H by Def12;
+      consider NS being increasing Seq_of_Nat such that
+A4:   H = G * NS by Def10;
+      set P = F * NS;
+      reconsider P as SetSequence of TOP-REAL 2 by Th42;
+      reconsider P as subsequence of F by Def10;
+      for i being Nat holds H.i = Cl (P.i)
+      proof
+        let i be Nat;
+A5:     dom NS = NAT by FUNCT_2:def 1; then
+        H.i = G.(NS.i) by A4,FUNCT_1:23
+           .= Cl (F.(NS.i)) by A1
+           .= Cl (P.i) by A5,FUNCT_1:23;
+        hence thesis;
+      end; then
+      Lim_inf H = Lim_inf P by Th57;
+      hence thesis by A3,Def12;
+    end;
+    thus Lim_sup F c= Lim_sup G by A2,Th71;
+  end;
+

@@ -1,0 +1,12 @@
+HIDDEN
+TARSKI
+RELAT_1
+FUNCT_1
+WELLORD1
+#
+MinSet
+#
+M1 ;M1 V1 ;;;
+ªM1 ;ª&R2 B1 F1 ;;P1 B1 ;M1 ;ª&R2 B2 F1 ;;P1 B2 ;ªR2 K4 B1 B2 ;F2 ;;;;R6 F2 ;F1 ;;ªM1 ;ª&R2 B1 F1 ;;P1 B1 ;;;
+#
+!

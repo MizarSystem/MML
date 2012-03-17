@@ -1,0 +1,240 @@
+:: Components and Unions of Components
+::  by Yatsuka Nakamura and Andrzej Trybulec
+::
+:: Received February 5, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, RELAT_1, CONNSP_1, SETFAM_1, RELAT_2, TARSKI, BOOLE,
+      SUBSET_1, CONNSP_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SETFAM_1, STRUCT_0, PRE_TOPC, CONNSP_1;
+ constructors CONNSP_1, MEMBERED;
+ clusters PRE_TOPC, STRUCT_0, SUBSET_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin :: The component of a subset in a topological space
+
+ reserve x,X,X2,Y,Y2 for set;
+ reserve GX for non empty TopSpace;
+ reserve A2,B2 for Subset of GX;
+ reserve B for Subset of GX;
+
+definition let GX be TopStruct, V be Subset of GX;
+  func skl V -> Subset of GX means
+:: CONNSP_3:def 1
+   ex F being Subset-Family of GX st
+      (for A being Subset of GX holds A in F iff
+      A is connected & V c= A) & union F = it;
+end;
+
+theorem :: CONNSP_3:1
+for GX being TopSpace, V being Subset of GX st
+ (ex A being Subset of GX st A is connected & V c= A)
+  holds V c= skl V;
+
+theorem :: CONNSP_3:2
+  for GX being TopSpace, V being Subset of GX st
+ (not ex A being Subset of GX st A is connected & V c= A)
+  holds skl V = {};
+
+theorem :: CONNSP_3:3
+ skl {}GX = the carrier of GX;
+
+theorem :: CONNSP_3:4
+   for V being Subset of GX st V is connected holds skl V <>{};
+
+theorem :: CONNSP_3:5
+for GX being TopSpace, V being Subset of GX st
+ V is connected & V <> {} holds skl V is connected;
+
+theorem :: CONNSP_3:6
+  for V,C being Subset of GX st V is connected & C is connected
+holds skl V c= C implies C = skl V;
+
+theorem :: CONNSP_3:7
+ for A being Subset of GX st A is_a_component_of GX
+  holds skl A=A;
+
+theorem :: CONNSP_3:8
+for A being Subset of GX holds
+ A is_a_component_of GX iff
+   ex V being Subset of GX st V is connected &
+ V <> {} & A = skl V;
+
+theorem :: CONNSP_3:9
+    for V being Subset of GX st V is connected & V<>{}
+   holds skl V is_a_component_of GX;
+
+theorem :: CONNSP_3:10
+ for A, V be Subset of GX st
+  A is_a_component_of GX & V is connected & V c= A & V<>{}
+   holds A = skl V;
+
+theorem :: CONNSP_3:11
+   for V being Subset of GX st V is connected & V<>{} holds
+    skl (skl V)=skl V;
+
+theorem :: CONNSP_3:12
+   for A,B being Subset of GX st A is connected &
+   B is connected & A<>{} & A c= B
+  holds skl A = skl B;
+
+theorem :: CONNSP_3:13
+   for A,B being Subset of GX st A is connected &
+   B is connected & A<>{} & A c= B
+  holds B c= skl A;
+
+theorem :: CONNSP_3:14
+   for A being Subset of GX,B being Subset of GX st
+   A is connected & A \/ B is connected & A<>{}
+  holds A \/ B c= skl A;
+
+theorem :: CONNSP_3:15
+  for A being Subset of GX, p being Point of GX
+  st A is connected & p in A holds
+  skl p=skl A;
+
+theorem :: CONNSP_3:16
+    for A,B being Subset of GX st A is connected &
+  B is connected & A meets B
+  holds A \/ B c= skl A & A \/ B c= skl B & A c= skl B & B c= skl A;
+
+theorem :: CONNSP_3:17
+   for A being Subset of GX st A is connected & A<>{}
+ holds Cl A c= skl A;
+
+theorem :: CONNSP_3:18
+   for A,B being Subset of GX
+   st A is_a_component_of GX & B is connected & B<>{} & A misses B
+  holds A misses skl B;
+
+begin
+
+definition let GX be TopStruct;
+   mode a_union_of_components of GX -> Subset of GX means
+:: CONNSP_3:def 2
+    ex F being Subset-Family of GX st (for B being
+    Subset of GX st B in F holds B is_a_component_of GX) &
+    it = union F;
+end;
+
+theorem :: CONNSP_3:19
+  {}(GX) is a_union_of_components of GX;
+
+theorem :: CONNSP_3:20
+    for A being Subset of GX st A=(the carrier of GX) holds
+      A is a_union_of_components of GX;
+
+theorem :: CONNSP_3:21
+  for A being Subset of GX,p being Point of GX st p in A
+  & A is a_union_of_components of GX holds
+  skl p c= A;
+
+theorem :: CONNSP_3:22
+   for A,B being Subset of GX st
+ A is a_union_of_components of GX &
+ B is a_union_of_components of GX holds
+  A \/ B is a_union_of_components of GX &
+  A /\ B is a_union_of_components of GX;
+
+theorem :: CONNSP_3:23
+    for Fu being Subset-Family of GX st
+ (for A being Subset of GX st A in Fu
+  holds A is a_union_of_components of GX)
+ holds union Fu is a_union_of_components of GX;
+
+theorem :: CONNSP_3:24
+    for Fu being Subset-Family of GX st
+ (for A being Subset of GX st A in Fu
+  holds A is a_union_of_components of GX)
+ holds meet Fu is a_union_of_components of GX;
+
+theorem :: CONNSP_3:25
+    for A,B being Subset of GX st A is a_union_of_components of
+GX
+  & B is a_union_of_components of GX holds
+  A \ B is a_union_of_components of GX;
+
+begin :: Operations Down and Up
+
+definition let GX be TopStruct, B be Subset of GX,
+   p be Point of GX;
+  assume  p in B;
+  func Down(p,B) -> Point of GX|B equals
+:: CONNSP_3:def 3
+   p;
+end;
+
+definition let GX be TopStruct, B be Subset of GX,
+   p be Point of GX|B;
+  assume B<>{};
+  func Up(p) -> Point of GX equals
+:: CONNSP_3:def 4
+     p;
+end;
+
+definition let GX be TopStruct, V,B be Subset of GX;
+  func Down(V,B) -> Subset of GX|B equals
+:: CONNSP_3:def 5
+   V /\ B;
+end;
+
+definition let GX be TopStruct, B be Subset of GX;
+  let V be Subset of GX|B;
+  func Up(V) -> Subset of GX equals
+:: CONNSP_3:def 6
+   V;
+end;
+
+definition let GX be TopStruct, B be Subset of GX,
+ p be Point of GX;
+ assume  p in B;
+ func skl(p,B) -> Subset of GX means
+:: CONNSP_3:def 7
+   for q being Point of GX|B st q=p holds it=skl q;
+end;
+
+theorem :: CONNSP_3:26
+   for B being Subset of GX, p be Point of GX st p in B
+  holds skl(p,B)<>{};
+
+theorem :: CONNSP_3:27
+  for B being Subset of GX, p be Point of GX st p in B
+  holds skl(p,B)=skl Down(p,B);
+
+theorem :: CONNSP_3:28
+  for V,B being Subset of GX st V c= B holds Down(V,B)=V;
+
+theorem :: CONNSP_3:29
+  for GX being TopSpace
+ for V,B being Subset of GX st V is open holds
+  Down(V,B) is open;
+
+theorem :: CONNSP_3:30
+ for V,B being Subset of GX st V c= B holds
+  Cl Down(V,B) =(Cl V) /\ B;
+
+theorem :: CONNSP_3:31
+   for B being Subset of GX,V being Subset of GX|
+B
+  holds Cl V =(Cl Up(V)) /\ B;
+
+theorem :: CONNSP_3:32
+   for V,B being Subset of GX st V c= B holds
+  Cl Down(V,B) c= Cl V;
+
+theorem :: CONNSP_3:33
+   for B being Subset of GX,
+    V being Subset of GX|B st
+ V c= B holds Down(Up(V),B)=V;
+
+theorem :: CONNSP_3:34
+  for GX being TopSpace
+ for V,B being Subset of GX,
+   W being Subset of GX|B st V=W & W is connected holds V is connected;
+
+theorem :: CONNSP_3:35
+   for B being Subset of GX, p be Point of GX st p in B
+  holds skl(p,B) is connected;

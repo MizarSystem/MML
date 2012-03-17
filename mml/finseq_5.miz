@@ -1,0 +1,1455 @@
+:: Some Properties of Restrictions of Finite Sequences
+::  by Czes\law Byli\'nski
+::
+:: Received January 25, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM_1, FINSEQ_1, FUNCT_1, RELAT_1, FINSEQ_4, REALSET1, RFINSEQ,
+      BOOLE, RLSUB_2, FINSEQ_5;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1, RELAT_1,
+      FUNCT_1, FINSEQ_1, FINSEQ_4, REALSET1, RFINSEQ, TOPREAL1;
+ constructors REAL_1, NAT_1, REALSET1, RFINSEQ, TOPREAL1, FINSEQ_4, INT_1,
+      MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, FUNCT_1, FINSEQ_1, RELSET_1, INT_1, TOPREAL1, NAT_1,
+      MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, FUNCT_1, XBOOLE_0;
+ theorems TARSKI, AXIOMS, ZFMISC_1, REAL_1, NAT_1, RLVECT_1, RLVECT_2,
+      PARTFUN2, FUNCT_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, RFINSEQ,
+      SPPOL_1, REALSET1, TOPREAL1, TOPREAL4, GOBOARD1, PROB_1, RELAT_1,
+      GROUP_5, INT_1, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1;
+ schemes FINSEQ_1;
+
+begin
+
+reserve i,j,k,m,n for Nat;
+
+theorem Th1:
+   i <= n implies n - i + 1 is Nat
+ proof assume i <= n;
+  then reconsider n_i = n - i as Nat by INT_1:18;
+     n_i + 1 is Nat;
+  hence thesis;
+ end;
+
+theorem Th2:
+   i in Seg n implies n - i + 1 in Seg n
+ proof
+   assume A1: i in Seg n;
+then 1 <= i & i <= n by FINSEQ_1:3;
+   then reconsider n_i = n - i as Nat by INT_1:18;
+   reconsider j = n_i + 1 as Nat;
+     0 <= n_i by NAT_1:18;
+then A2:  0+1 <= j by AXIOMS:24;
+     0 <= i by NAT_1:18;
+   then n_i <= n by PROB_1:2;
+then A3:  j <= n + 1 by AXIOMS:24;
+     now assume j = n + 1;
+    then n_i = n + 1 - 1 by XCMPLX_1:26 .= n by XCMPLX_1:26;
+    then 0 = n_i-n by XCMPLX_1:14
+          .= (-i+n)-n by XCMPLX_0:def 8
+          .= -i by XCMPLX_1:26;
+    hence contradiction by A1,FINSEQ_1:3,REAL_1:26;
+   end;
+   then j < n + 1 by A3,REAL_1:def 5;
+   then j <= n by NAT_1:38;
+   hence thesis by A2,FINSEQ_1:3;
+ end;
+
+theorem Th3:
+   for f being Function, x,y being set st f"{y} = {x}
+    holds x in dom f & y in rng f & f.x = y
+ proof let f be Function, x,y be set;
+  assume f"{y} = {x};
+then A1:  x in f"{y} by TARSKI:def 1;
+  hence
+A2:  x in dom f by FUNCT_1:def 13;
+    f.x in {y} by A1,FUNCT_1:def 13;
+  then f.x = y by TARSKI:def 1;
+  hence thesis by A2,FUNCT_1:def 5;
+ end;
+
+theorem
+     for f being Function holds f is one-to-one iff
+    for x being set st x in dom f holds f"{f.x} = {x}
+ proof let f be Function;
+    now
+   hereby
+    assume
+A1:  for x being set st x in dom f holds f is_one-to-one_at x;
+    let x be set;
+    assume x in dom f;
+    then f is_one-to-one_at x by A1;
+    hence f"{f.x} = {x} by FINSEQ_4:3;
+   end;
+   assume
+A2:  for x being set st x in dom f holds f"{f.x} = {x};
+   let x be set;
+   assume
+A3:  x in dom f;
+   then f"{f.x} = {x} by A2;
+   hence f is_one-to-one_at x by A3,FINSEQ_4:3;
+  end;
+  hence thesis by FINSEQ_4:5;
+ end;
+
+theorem
+     for f being Function, y1,y2 being set
+    st f is one-to-one & y1 in rng f & y2 in rng f & f"{y1} = f"{y2}
+   holds y1 = y2
+ proof let f be Function, y1,y2 be set such that
+A1:  f is one-to-one and
+A2:  y1 in rng f and
+A3:  y2 in rng f and
+A4:  f"{y1} = f"{y2};
+   consider x1 being set such that
+A5:  f"{y1} = {x1} by A1,A2,FUNCT_1:144;
+   consider x2 being set such that
+A6:  f"{y2} = {x2} by A1,A3,FUNCT_1:144;
+    f.x1 = y1 & f.x2 = y2 by A5,A6,Th3;
+   hence thesis by A4,A5,A6,ZFMISC_1:6;
+ end;
+
+definition let x be set;
+ cluster <*x*> -> non empty;
+  coherence
+ proof <*x*> = { [1,x] } by FINSEQ_1:52; hence thesis; end;
+end;
+
+definition
+ cluster empty -> trivial set;
+  coherence by REALSET1:def 12;
+end;
+
+definition let x be set;
+ cluster <*x*> -> trivial;
+  coherence
+ proof len <*x*> = 1 by FINSEQ_1:56;
+  hence thesis by SPPOL_1:2;
+ end;
+
+ let y be set;
+ cluster <*x,y*> -> non trivial;
+  coherence
+ proof len <*x,y*> = 2 by FINSEQ_1:61;
+  hence thesis by SPPOL_1:2;
+ end;
+end;
+
+definition
+ cluster one-to-one non empty FinSequence;
+  existence
+ proof consider x being set;
+  set f = <*x*>;
+    f is non empty & f is one-to-one by FINSEQ_3:102;
+  hence thesis;
+ end;
+end;
+
+theorem Th6:
+   for f being non empty FinSequence holds 1 in dom f & len f in dom f
+ proof let f be non empty FinSequence;
+    len f <> 0 by FINSEQ_1:25;
+then A1: len f >= 1 by RLVECT_1:99;
+   hence 1 in dom f by FINSEQ_3:27;
+   thus len f in dom f by A1,FINSEQ_3:27;
+ end;
+
+theorem
+     for f being non empty FinSequence ex i st i+1 = len f
+ proof let f be non empty FinSequence;
+    len f <> 0 by FINSEQ_1:25;
+  hence thesis by NAT_1:22;
+ end;
+
+theorem Th8:
+  for x being set, f being FinSequence holds len(<*x*>^f) = 1 + len f
+ proof let x be set, f be FinSequence;
+  thus len(<*x*>^f) = len <*x*> + len f by FINSEQ_1:35
+                   .= 1 + len f by FINSEQ_1:56;
+ end;
+
+scheme domSeqLambda{A()->Nat,F(set) -> set}:
+   ex p being FinSequence st len p = A() & for k st k in dom p holds p.k=F(k)
+ proof
+  deffunc G(Nat) = F($1);
+  consider p being FinSequence such that
+A1:   len p = A() and
+A2:   for k st k in Seg A() holds p.k=G(k) from SeqLambda;
+  take p;
+  thus len p = A() by A1;
+  let k;
+  assume k in dom p;
+  then k in Seg A() by A1,FINSEQ_1:def 3;
+  hence thesis by A2;
+ end;
+
+canceled;
+
+theorem
+     for f being FinSequence, p,q being set
+     st p in rng f & q in rng f & p..f = q..f
+    holds p = q
+ proof let f be FinSequence, p,q be set such that
+A1:  p in rng f and
+A2:  q in rng f;
+  assume p..f = q..f;
+  hence p = f.(q..f) by A1,FINSEQ_4:29 .= q by A2,FINSEQ_4:29;
+ end;
+
+theorem Th11:
+  for f,g being FinSequence st n+1 in dom f & g = f|Seg n holds
+    f|Seg(n+1) = g^<*f.(n+1)*>
+ proof let f,g be FinSequence such that
+A1: n+1 in dom f and
+A2: g = f|Seg n;
+  reconsider h = f|Seg(n+1) as FinSequence by FINSEQ_1:19;
+    n+1 in Seg(n+1) by FINSEQ_1:6;
+then A3: h.(n+1) = f.(n+1) by FUNCT_1:72;
+    n <= n+1 by NAT_1:29;
+  then Seg n c= Seg(n+1) by FINSEQ_1:7;
+then A4: g = h|Seg n by A2,FUNCT_1:82;
+    n+1 <= len f by A1,FINSEQ_3:27;
+  then len h = n+1 by FINSEQ_1:21;
+  hence f|Seg(n+1) = g^<*f.(n+1)*> by A3,A4,FINSEQ_3:61;
+ end;
+
+theorem Th12:
+   for f being one-to-one FinSequence st i in dom f holds (f.i)..f = i
+ proof let f be one-to-one FinSequence; assume
+A1:  i in dom f;
+  then f.i in rng f by FUNCT_1:def 5;
+then A2:  f just_once_values f.i by FINSEQ_4:10;
+  then f <- (f.i) = (f.i)..f by FINSEQ_4:35;
+  hence (f.i)..f = i by A1,A2,FINSEQ_4:def 3;
+ end;
+
+reserve D for non empty set, p for Element of D, f,g for FinSequence of D;
+
+definition let D be non empty set;
+ cluster one-to-one non empty FinSequence of D;
+  existence
+ proof consider x being Element of D;
+  set f = <*x*>;
+    f is non empty & f is one-to-one by FINSEQ_3:102;
+  hence thesis;
+ end;
+end;
+
+:: FINSEQ_1:17
+
+theorem
+     dom f = dom g & (for i st i in dom f holds f/.i = g/.i) implies f = g
+ proof assume that
+A1: dom f = dom g and
+A2: for i st i in dom f holds f/.i = g/.i;
+    now let k; assume
+A3:  k in dom f;
+   hence f.k = f/.k by FINSEQ_4:def 4
+            .= g/.k by A2,A3
+            .= g.k by A1,A3,FINSEQ_4:def 4;
+  end;
+  hence thesis by A1,FINSEQ_1:17;
+ end;
+
+:: FINSEQ_1:18
+
+theorem Th14:
+ len f = len g & (for k st 1 <= k & k <= len f holds f/.k = g/.k)
+  implies f = g
+ proof assume that
+A1: len f = len g and
+A2: for k st 1 <= k & k <= len f holds f/.k = g/.k;
+    now let k; assume
+A3: 1 <= k & k <= len f;
+   hence f.k = f/.k by FINSEQ_4:24
+            .= g/.k by A2,A3
+            .= g.k by A1,A3,FINSEQ_4:24;
+  end;
+  hence thesis by A1,FINSEQ_1:18;
+ end;
+
+theorem Th15:
+  len f = 1 implies f = <*f/.1*>
+ proof
+  assume
+A1: len f = 1;
+  then f is non empty by FINSEQ_1:25;
+  then 1 in dom f by Th6;
+  then f.1 = f/.1 by FINSEQ_4:def 4;
+  hence thesis by A1,FINSEQ_1:57;
+ end;
+
+theorem Th16:
+ for D being non empty set, p being Element of D,
+     f being FinSequence of D holds
+   (<*p*>^f)/.1 = p
+ proof let D be non empty set, p be Element of D, f be FinSequence of D;
+    len(<*p*>^f) = 1 + len f by Th8;
+  then 1 <= 1 & 1 <= len(<*p*>^f) by NAT_1:29;
+  then 1 in dom(<*p*>^f) by FINSEQ_3:27;
+  then (<*p*>^f)/.1 = (<*p*>^f).1 by FINSEQ_4:def 4;
+  hence thesis by FINSEQ_1:58;
+ end;
+
+:: FINSEQ_1:def 7
+ Lm1:
+   i in dom f implies (f^g)/.i=f/.i
+ proof assume
+A1: i in dom f;
+    dom f c= dom(f^g) by FINSEQ_1:39;
+  hence (f^g)/.i = (f^g).i by A1,FINSEQ_4:def 4
+                .= f.i by A1,FINSEQ_1:def 7
+                .= f/.i by A1,FINSEQ_4:def 4;
+ end;
+
+canceled;
+
+theorem Th18:
+ for D being set, f being FinSequence of D holds
+   len(f|i) <= len f
+ proof let D be set, f be FinSequence of D;
+    i <= len f implies len(f|i) = i by TOPREAL1:3;
+  hence thesis by TOPREAL1:2;
+ end;
+
+theorem Th19:
+ for D being set, f being FinSequence of D holds
+   len(f|i) <= i
+ proof let D be set, f be FinSequence of D;
+    i <= len f implies len(f|i) = i by TOPREAL1:3;
+  hence thesis by TOPREAL1:2;
+ end;
+
+theorem Th20:
+ for D being set, f being FinSequence of D holds
+   dom(f|i) c= dom f
+ proof let D be set, f be FinSequence of D;
+  let j be set;
+  assume
+A1:  j in dom(f|i);
+  then reconsider j as Nat;
+A2: len(f|i) <= len f by Th18;
+    j <= len (f|i) by A1,FINSEQ_3:27;
+then A3: j <= len f by A2,AXIOMS:22;
+    1 <= j by A1,FINSEQ_3:27;
+  hence thesis by A3,FINSEQ_3:27;
+ end;
+
+theorem Th21:
+   rng(f|i) c= rng f
+ proof
+  let p be set;
+  assume p in rng(f|i);
+  then consider j being Nat such that
+A1:  j in dom(f|i) and
+A2:  (f|i)/.j = p by PARTFUN2:4;
+    dom(f|i) c= dom f by Th20;
+  then f/.j in rng f by A1,PARTFUN2:4;
+  hence p in rng f by A1,A2,TOPREAL1:1;
+ end;
+
+canceled;
+
+theorem Th23:
+  for D being set, f being FinSequence of D holds
+   f is non empty implies f|1 = <*f/.1*>
+ proof 
+  let D be set, f be FinSequence of D;  
+  assume f is non empty;
+  then 1 in dom f by Th6;
+  then 1 <= len f by FINSEQ_3:27;
+then A1:  len(f|1) = 1 by TOPREAL1:3;
+then A2:  1 in dom(f|1) by FINSEQ_3:27;
+then A3:  (f|1)/.1 = (f|1).1 by FINSEQ_4:def 4;
+    f/.1 = (f|1)/.1 by A2,TOPREAL1:1;
+  hence thesis by A1,A3,FINSEQ_1:57;
+ end;
+
+theorem
+     i+1 = len f implies f = (f|i)^<*f/.len f*>
+ proof
+  assume
+A1: i+1 = len f;
+  then f is non empty by FINSEQ_1:25;
+then A2: i+1 in dom f by A1,Th6;
+A3: f|i = f|Seg i by TOPREAL1:def 1;
+    dom f = Seg(i+1) by A1,FINSEQ_1:def 3;
+  hence f = f|Seg(i+1) by RELAT_1:97
+         .= (f|i)^<*f.(i+1)*> by A2,A3,Th11
+         .= (f|i)^<*f/.len f*> by A1,A2,FINSEQ_4:def 4;
+ end;
+
+Lm2:
+   f is one-to-one implies f|i is one-to-one
+ proof assume
+A1: f is one-to-one;
+    now let n,m such that
+A2:  n in dom(f|i) and
+A3:  m in dom(f|i) and
+A4:  (f|i)/.n = (f|i)/.m;
+   A5: dom(f|i) c= dom f by Th20;
+     f/.n = (f|i)/.n by A2,TOPREAL1:1 .= f/.m by A3,A4,TOPREAL1:1;
+   hence n = m by A1,A2,A3,A5,PARTFUN2:17;
+  end;
+  hence thesis by PARTFUN2:16;
+ end;
+
+definition let i,D; let f be one-to-one FinSequence of D;
+ cluster f|i -> one-to-one;
+   coherence by Lm2;
+end;
+
+theorem Th25:
+ for D being set, f, g being FinSequence of D holds
+   i <= len f implies (f^g)|i = f|i
+ proof
+   let D be set, f, g be FinSequence of D;
+   assume
+A1:  i <= len f;
+then A2:  len(f|i) = i by TOPREAL1:3;
+     i <= len f+len g by A1,NAT_1:37;
+   then i <= len(f^g) by FINSEQ_1:35;
+then A3:  len((f^g)|i) = i by TOPREAL1:3;
+     now let j;
+    assume
+A4:  j in Seg i;
+    then j <= i by FINSEQ_1:3;
+    then 1 <= j & j <= len f by A1,A4,AXIOMS:22,FINSEQ_1:3;
+  then j in Seg len f by FINSEQ_1:3;
+then A5:  j in dom f by FINSEQ_1:def 3;
+    thus ((f^g)|i).j = ((f^g)|(Seg i)).j by TOPREAL1:def 1
+                    .= (f^g).j by A4,FUNCT_1:72
+                    .= f.j by A5,FINSEQ_1:def 7
+                    .= (f|(Seg i)).j by A4,FUNCT_1:72
+                    .= (f|i).j by TOPREAL1:def 1;
+   end;
+   hence (f^g)|i = f|i by A2,A3,FINSEQ_2:10;
+ end;
+
+theorem
+   for D being set, f, g being FinSequence of D holds
+   (f^g)|(len f) = f
+ proof
+  let D be set, f, g be FinSequence of D;
+    f|len f = f|(Seg len f) by TOPREAL1:def 1;
+  hence f = f|len f by FINSEQ_2:23 .= (f^g)|(len f) by Th25;
+ end;
+
+theorem
+   for D being set, f being FinSequence of D holds
+  p in rng f implies (f-|p)^<*p*> = f|(p..f)
+ proof let D be set, f be FinSequence of D;
+  assume
+A1:  p in rng f;
+  then consider n such that
+A2:  n = p..f - 1 and
+A3:  f-|p = f | Seg n by FINSEQ_4:def 6;
+A4:  n+1 = p..f by A2,XCMPLX_1:27;
+  then n+1 in dom f & f.(n+1) = p by A1,FINSEQ_4:29,30;
+  hence (f-|p)^<*p*> = f|Seg(n+1) by A3,Th11
+                    .= f|(p..f) by A4,TOPREAL1:def 1;
+ end;
+
+theorem
+     len(f/^i) <= len f
+ proof
+  per cases;
+  suppose
+    i <= len f;
+   then len(f/^i) = len f - i by RFINSEQ:def 2;
+   then len(f/^i)+i = len f by XCMPLX_1:27;
+   hence thesis by NAT_1:29;
+  suppose len f < i;
+   then f/^i = <*>D by RFINSEQ:def 2;
+   then len(f/^i) = 0 by FINSEQ_1:32;
+   hence thesis by NAT_1:18;
+ end;
+
+theorem Th29:
+   i in dom(f/^n) implies n+i in dom f
+ proof assume
+A1: i in dom(f/^n);
+  per cases;
+   suppose
+A2:  n <= len f;
+A3:  1 <= i by A1,FINSEQ_3:27;
+      i <= i+n by NAT_1:29;
+then A4:  1 <= i+n by A3,AXIOMS:22;
+      i <= len(f/^n) by A1,FINSEQ_3:27;
+    then i <= len f - n by A2,RFINSEQ:def 2;
+    then n+i <= len f by REAL_1:84;
+    hence n+i in dom f by A4,FINSEQ_3:27;
+   suppose n > len f;
+    then f/^n = <*>D by RFINSEQ:def 2;
+    hence thesis by A1,FINSEQ_1:26;
+ end;
+
+theorem Th30:
+   i in dom(f/^n) implies (f/^n)/.i = f/.(n+i)
+ proof assume
+A1: i in dom(f/^n);
+  per cases;
+   suppose
+A2:  n <= len f;
+A3:  n+i in dom f by A1,Th29;
+    thus (f/^n)/.i = (f/^n).i by A1,FINSEQ_4:def 4
+                  .= f.(n+i) by A1,A2,RFINSEQ:def 2
+                  .= f/.(n+i) by A3,FINSEQ_4:def 4;
+   suppose n > len f;
+    then f/^n = <*>D by RFINSEQ:def 2;
+    hence thesis by A1,FINSEQ_1:26;
+ end;
+
+theorem Th31:
+   f/^0 = f
+ proof
+A1: 0 <= len f by NAT_1:18;
+then A2: len(f/^0) = len f - 0 by RFINSEQ:def 2
+             .= len f;
+    now
+   let i;
+   assume 1 <= i & i <= len(f/^0);
+   then i in dom(f/^0) by FINSEQ_3:27;
+   hence (f/^0).i = f.(i+0) by A1,RFINSEQ:def 2
+                 .= f.i;
+  end;
+  hence thesis by A2,FINSEQ_1:18;
+ end;
+
+theorem
+     f is non empty implies f = <*f/.1*>^(f/^1)
+ proof assume f is non empty;
+  then f|1 = <*f/.1*> by Th23;
+  hence thesis by RFINSEQ:21;
+ end;
+
+theorem
+     i+1 = len f implies f/^i = <*f/.len f*>
+ proof assume
+A1: i+1 = len f;
+  then i <= len f by NAT_1:29;
+then A2:  len(f/^i) = len f - i by RFINSEQ:def 2
+              .= 1 by A1,XCMPLX_1:26;
+   then A3:  1 in dom(f/^i) by FINSEQ_3:27;
+  thus f/^i = <*(f/^i)/.1*> by A2,Th15
+           .= <*f/.len f*> by A1,A3,Th30;
+ end;
+
+theorem Th34:
+   j+1 = i & i in dom f implies <*f/.i*>^(f/^i) = f/^j
+ proof assume that
+A1: j+1 = i and
+A2: i in dom f;
+  set g = <*f/.i*>^(f/^i);
+A3: i <= len f by A2,FINSEQ_3:27;
+      j <= i by A1,NAT_1:29;
+then A4: j <= len f by A3,AXIOMS:22;
+A5: len g = len(f/^i) + 1 by Th8;
+then A6: len g = len f - i + 1 by A3,RFINSEQ:def 2
+         .= len f - j - 1 + 1 by A1,XCMPLX_1:36
+         .= len f - j by XCMPLX_1:27
+         .= len(f/^j) by A4,RFINSEQ:def 2;
+    now let k;
+   assume that
+A7: 1 <= k and
+A8: k <= len g;
+A9: k in dom(f/^j) by A6,A7,A8,FINSEQ_3:27;
+   per cases;
+   suppose
+A10:   k = 1;
+    hence g.k = f/.i by FINSEQ_1:58
+             .= f.i by A2,FINSEQ_4:def 4
+             .= (f/^j).k by A1,A4,A9,A10,RFINSEQ:def 2;
+   suppose
+     k <> 1;
+then A11:   1 < k by A7,REAL_1:def 5;
+    reconsider k' = k-1 as Nat by A7,INT_1:18;
+       k'+1 = k by XCMPLX_1:27;
+then A12:  1 <= k' by A11,NAT_1:38;
+      k' <= len g - 1 by A8,REAL_1:49;
+    then k' <= len(f/^i) by A5,XCMPLX_1:26;
+then A13:   k' in dom(f/^i) by A12,FINSEQ_3:27;
+      len <*f/.i*> = 1 by FINSEQ_1:56;
+    hence g.k = (f/^i).k' by A8,A11,FINSEQ_1:37
+             .= f.(k'+i) by A3,A13,RFINSEQ:def 2
+             .= f.(k'+1+j) by A1,XCMPLX_1:1
+             .= f.(k+j) by XCMPLX_1:27
+             .= (f/^j).k by A4,A9,RFINSEQ:def 2;
+  end;
+  hence <*f/.i*>^(f/^i) = f/^j by A6,FINSEQ_1:18;
+ end;
+
+theorem Th35:
+ for D being set, f being FinSequence of D holds
+   len f <= i implies f/^i is empty
+ proof
+ let D be set, f be FinSequence of D;
+  assume
+A1: len f <= i;
+  per cases;
+   suppose len f = i;
+     then len(f/^i) = len f - len f by RFINSEQ:def 2
+                   .= 0 by XCMPLX_1:14;
+    hence thesis by FINSEQ_1:25;
+   suppose len f <> i;
+    then len f < i by A1,REAL_1:def 5;
+    then f/^i = <*>D by RFINSEQ:def 2;
+    hence thesis;
+ end;
+
+theorem Th36:
+   rng(f/^n) c= rng f
+ proof
+  let p be set;
+  assume p in rng(f/^n);
+  then consider j being Nat such that
+A1:  j in dom(f/^n) and
+A2:  (f/^n)/.j = p by PARTFUN2:4;
+    j+n in dom f by A1,Th29;
+  then f/.(j+n) in rng f by PARTFUN2:4;
+  hence p in rng f by A1,A2,Th30;
+ end;
+
+Lm3:
+   f is one-to-one implies f/^i is one-to-one
+ proof assume
+A1: f is one-to-one;
+    now let n,m such that
+A2:  n in dom(f/^i) and
+A3:  m in dom(f/^i) and
+A4:  (f/^i)/.n = (f/^i)/.m;
+A5: i+n in dom f & i+m in dom f by A2,A3,Th29;
+     f/.(i+n) = (f/^i)/.n by A2,Th30 .= f/.(i+m) by A3,A4,Th30;
+   then i+n = i+m by A1,A5,PARTFUN2:17;
+   hence n = m by XCMPLX_1:2;
+  end;
+  hence thesis by PARTFUN2:16;
+ end;
+
+definition let i,D; let f be one-to-one FinSequence of D;
+ cluster f/^i -> one-to-one;
+  coherence by Lm3;
+end;
+
+theorem Th37:
+   f is one-to-one implies rng(f|n) misses rng(f/^n)
+ proof assume
+A1: f is one-to-one;
+  assume rng(f|n) meets rng(f/^n);
+  then consider x being set such that
+A2: x in rng(f|n) and
+A3: x in rng(f/^n) by XBOOLE_0:3;
+  consider i such that
+A4:  i in dom(f|n) and
+A5:  (f|n)/.i = x by A2,PARTFUN2:4;
+  consider j such that
+A6:  j in dom(f/^n) and
+A7:  (f/^n)/.j = x by A3,PARTFUN2:4;
+   A8: dom(f|n) c= dom f by Th20;
+A9:  j+n in dom f by A6,Th29;
+A10:  f/.(j+n) = (f/^n)/.j by A6,Th30
+             .= f/.i by A4,A5,A7,TOPREAL1:1;
+    now assume
+A11: i = j+n;
+A12: i <= len(f|n) by A4,FINSEQ_3:27;
+     len(f|n) <= n by Th19;
+then A13: i <= n by A12,AXIOMS:22;
+     n <= i by A11,NAT_1:29;
+   then i = n by A13,AXIOMS:21;
+ then j = n-n by A11,XCMPLX_1:26
+     .= 0 by XCMPLX_1:14;
+   hence contradiction by A6,FINSEQ_3:27;
+  end;
+  hence contradiction by A1,A4,A8,A9,A10,PARTFUN2:17;
+ end;
+
+theorem
+     p in rng f implies f |-- p = f/^(p..f)
+ proof assume
+A1:  p in rng f;
+then A2:  len (f|--p) = len f - p..f by FINSEQ_4:def 7;
+A3:  p..f <= len f by A1,FINSEQ_4:31;
+then A4:  len (f/^(p..f)) = len f - p..f by RFINSEQ:def 2;
+A5:  Seg len (f|--p) = dom (f|--p) & Seg len (f/^(p..f)) = dom (f/^(p..f))
+      by FINSEQ_1:def 3;
+    now let i;
+   assume
+A6:  i in dom (f|--p);
+   hence (f|--p).i = f.(i + p..f) by A1,FINSEQ_4:def 7
+                 .= (f/^(p..f)).i by A2,A3,A4,A5,A6,RFINSEQ:def 2;
+  end;
+  hence thesis by A2,A4,A5,FINSEQ_2:10;
+ end;
+
+theorem Th39:
+   (f^g)/^(len f + i) = g/^i
+ proof
+A1:  len(f^g) = len f + len g by FINSEQ_1:35;
+  per cases;
+   suppose
+A2:  i <= len g;
+  then len f + i <= len f + len g by AXIOMS:24;
+then A3:  len((f^g)/^(len f + i)) = len g + len f - (len f + i) by A1,RFINSEQ:
+def 2
+                            .= len g + len f - len f - i by XCMPLX_1:36
+                            .= len g - i by XCMPLX_1:26
+                            .= len(g/^i) by A2,RFINSEQ:def 2;
+      now let k;
+     assume
+A4:    1 <= k & k <= len(g/^i);
+then A5:    k in dom(g/^i) by FINSEQ_3:27;
+then A6:    i+k in dom g by Th29;
+       k in dom((f^g)/^(len f + i)) by A3,A4,FINSEQ_3:27;
+     hence ((f^g)/^(len f + i))/.k = (f^g)/.(len f + i + k) by Th30
+                                  .= (f^g)/.(len f + (i+k)) by XCMPLX_1:1
+                                  .= g/.(i+k) by A6,GROUP_5:96
+                                  .= (g/^i)/.k by A5,Th30;
+    end;
+    hence (f^g)/^(len f + i) = g/^i by A3,Th14;
+   suppose
+A7:  i > len g;
+    then len f + i > len(f^g) by A1,REAL_1:53;
+    hence (f^g)/^(len f+i) = <*>D by RFINSEQ:def 2
+                          .= g/^i by A7,RFINSEQ:def 2;
+ end;
+
+theorem
+     (f^g)/^(len f) = g
+ proof
+  thus (f^g)/^(len f) = (f^g)/^(len f + 0)
+                     .= g/^0 by Th39
+                     .= g by Th31;
+ end;
+
+theorem Th41:
+   p in rng f implies f/.(p..f) = p
+ proof assume p in rng f;
+  then p..f in dom f & f.(p..f) = p by FINSEQ_4:29,30;
+  hence thesis by FINSEQ_4:def 4;
+ end;
+
+theorem Th42:
+   i in dom f implies f/.i..f <= i
+ proof assume that
+A1:  i in dom f;
+  set p = f/.i;
+A2:  p..f = Sgm(f"{p}).1 by FINSEQ_4:def 5;
+    f"{p} c= dom f by RELAT_1:167;
+then A3:  f"{p} c= Seg len f by FINSEQ_1:def 3;
+    f/.i = f.i by A1,FINSEQ_4:def 4;
+  then f.i in {p} by TARSKI:def 1;
+  then i in f"{p} by A1,FUNCT_1:def 13;
+  then i in rng Sgm(f"{p}) by A3,FINSEQ_1:def 13;
+  then consider l being set such that
+A4: l in dom Sgm(f"{p}) and
+A5: Sgm(f"{p}).l = i by FUNCT_1:def 5;
+  reconsider l as Nat by A4;
+      1 <= l & l <= len(Sgm(f"{p})) by A4,FINSEQ_3:27;
+  hence p..f <= i by A2,A3,A5,FINSEQ_3:46;
+ end;
+
+theorem
+     p in rng(f|i) implies p..(f|i) = p..f
+ proof assume
+A1: p in rng(f|i);
+then A2: p..(f|i) in dom(f|i) by FINSEQ_4:30;
+   A3: dom(f|i) c= dom f by Th20;
+  A4: rng(f|i) c= rng f by Th21;
+    f/.(p..(f|i)) = (f|i)/.(p..(f|i)) by A2,TOPREAL1:1
+               .= p by A1,Th41;
+  then A5: p..f <= p..(f|i) by A2,A3,Th42;
+A6: 1 <= p..f by A1,A4,FINSEQ_4:31;
+    p..(f|i) <= len(f|i) by A1,FINSEQ_4:31;
+  then p..f <= len(f|i) by A5,AXIOMS:22;
+then A7:  p..f in dom(f|i) by A6,FINSEQ_3:27;
+  then (f|i)/.(p..f) = f/.(p..f) by TOPREAL1:1
+                  .= p by A1,A4,Th41;
+  then p..(f|i) <= p..f by A7,Th42;
+  hence thesis by A5,AXIOMS:21;
+ end;
+
+theorem
+     i in dom f & f is one-to-one implies f/.i..f = i
+ proof
+  assume
+A1: i in dom f;
+  assume f is one-to-one;
+  then (f.i)..f = i by A1,Th12;
+  hence thesis by A1,FINSEQ_4:def 4;
+ end;
+
+definition let D, f; let p be set;
+ func f-:p -> FinSequence of D equals
+:Def1:  f|(p..f);
+  correctness;
+end;
+
+theorem Th45:
+   p in rng f implies len(f-:p) = p..f
+ proof
+  assume
+    p in rng f;
+  then p..f in dom f by FINSEQ_4:30;
+then A1:  p..f <= len f by FINSEQ_3:27;
+    f-:p = f|(p..f) by Def1;
+  hence thesis by A1,TOPREAL1:3;
+ end;
+
+theorem Th46:
+   p in rng f & i in Seg(p..f) implies (f-:p)/.i = f/.i
+ proof assume that
+A1:  p in rng f and
+A2:  i in Seg(p..f);
+A3:  p..f in dom f by A1,FINSEQ_4:30;
+  thus (f-:p)/.i = (f|(p..f))/.i by Def1 .= f/.i by A2,A3,GOBOARD1:10;
+ end;
+
+theorem
+     p in rng f implies (f-:p)/.1 = f/.1
+ proof assume
+A1:  p in rng f;
+  then 1 <= p..f by FINSEQ_4:31;
+  then 1 in Seg(p..f) by FINSEQ_1:3;
+  hence (f-:p)/.1 = f/.1 by A1,Th46;
+ end;
+
+theorem
+     p in rng f implies (f-:p)/.(p..f) = p
+ proof
+  assume
+A1:  p in rng f;
+  then 1 <= p..f & p..f <= p..f by FINSEQ_4:31;
+then A2:  p..f in Seg(p..f) by FINSEQ_1:3;
+A3:  p..f in dom f by A1,FINSEQ_4:30;
+  thus (f-:p)/.(p..f) = f/.(p..f) by A1,A2,Th46
+                   .= f.(p..f) by A3,FINSEQ_4:def 4
+                   .= p by A1,FINSEQ_4:29;
+ end;
+
+theorem
+   for x being set holds
+   x in rng f & p in rng f & x..f<=p..f implies x in rng(f-:p)
+ proof
+  let x be set; assume that
+A1:  x in rng f and
+A2:  p in rng f and
+A3:  x..f<=p..f;
+  set g = f-:p, i = x..f;
+A4:  i in dom f by A1,FINSEQ_4:30;
+    1 <= i by A1,FINSEQ_4:31;
+then A5:  i in Seg (p..f) by A3,FINSEQ_1:3;
+    Seg len g = dom g by FINSEQ_1:def 3;
+then A6:  i in dom g by A2,A5,Th45;
+  then g.i in rng g by FUNCT_1:def 5;
+  then g/.i in rng g by A6,FINSEQ_4:def 4;
+  then f/.i in rng g by A2,A5,Th46;
+  then f.i in rng g by A4,FINSEQ_4:def 4;
+  hence thesis by A1,FINSEQ_4:29;
+ end;
+
+theorem
+     p in rng f implies f-:p is non empty
+ proof
+  assume
+A1: p in rng f;
+  then 1 <= p..f by FINSEQ_4:31;
+  then 1 <= len(f-:p) by A1,Th45;
+  hence thesis by FINSEQ_3:27,RELAT_1:60;
+ end;
+
+theorem
+     rng(f-:p) c= rng f
+ proof f-:p = f|(p..f) by Def1;
+  hence thesis by Th21;
+ end;
+
+definition let D,p; let f be one-to-one FinSequence of D;
+ cluster f-:p -> one-to-one;
+  coherence
+ proof f-:p = f|(p..f) by Def1;
+  hence thesis;
+ end;
+end;
+
+definition let D, f, p;
+ func f:-p -> FinSequence of D equals
+:Def2:  <*p*>^(f/^p..f);
+ correctness;
+end;
+
+theorem Th52:
+  p in rng f implies ex i st i+1 = p..f & f:-p = f/^i
+ proof assume
+A1:  p in rng f;
+  then 1 <= p..f by FINSEQ_4:31;
+  then reconsider i = p..f - 1 as Nat by INT_1:18;
+  take i;
+  thus
+A2:  i+1 = p..f by XCMPLX_1:27;
+A3:  p..f in dom f by A1,FINSEQ_4:30;
+  thus f:-p = <*p*>^(f/^p..f) by Def2
+           .= <*f/.(p..f)*>^(f/^p..f) by A1,Th41
+           .= f/^i by A2,A3,Th34;
+ end;
+
+theorem Th53:
+   p in rng f implies len (f:-p) = len f - p..f + 1
+ proof
+  assume
+A1:  p in rng f;
+  then consider i such that
+A2:  i+1 = p..f and
+A3:  f:-p = f/^i by Th52;
+    i <= p..f & p..f <= len f by A1,A2,FINSEQ_4:31,NAT_1:29;
+  then i <= len f by AXIOMS:22;
+  hence len(f:-p) = len f - i by A3,RFINSEQ:def 2
+                 .= len f - (p..f - 1) by A2,XCMPLX_1:26
+                 .= len f - p..f + 1 by XCMPLX_1:37;
+ end;
+
+theorem Th54:
+  p in rng f & j+1 in dom(f:-p) implies j+p..f in dom f
+ proof assume that
+A1:  p in rng f and
+A2:  j+1 in dom(f:-p);
+    j+1 <= len(f:-p) by A2,FINSEQ_3:27;
+  then j+1 <= len f - p..f + 1 by A1,Th53;
+  then j <= len f - p..f by REAL_1:53;
+then A3: j+p..f <= len f by REAL_1:84;
+    1 <= p..f & p..f <= j+p..f by A1,FINSEQ_4:31,NAT_1:29;
+  then 1 <= j+p..f by AXIOMS:22;
+  hence j+p..f in dom f by A3,FINSEQ_3:27;
+ end;
+
+Lm4:
+   f:-p is non empty
+ proof f:-p = <*p*>^(f/^p..f) by Def2;
+  then len(f:-p) = 1 + len(f/^p..f) by Th8;
+  hence thesis by FINSEQ_1:25;
+ end;
+
+definition let D,p,f;
+ cluster f:-p -> non empty;
+  coherence by Lm4;
+end;
+
+theorem Th55:
+   p in rng f & j+1 in dom(f:-p) implies (f:-p)/.(j+1) = f/.(j+p..f)
+ proof assume that
+A1:  p in rng f and
+A2:  j+1 in dom(f:-p);
+  set i = j+1;
+  consider k such that
+A3:  k+1 = p..f and
+A4:  f:-p = f/^k by A1,Th52;
+    k <= p..f & p..f <= len f by A1,A3,FINSEQ_4:31,NAT_1:29;
+then A5:  k <= len f by AXIOMS:22;
+A6:  j+p..f in dom f by A1,A2,Th54;
+  thus (f:-p)/.i = (f:-p).i by A2,FINSEQ_4:def 4
+                .= f.(i+k) by A2,A4,A5,RFINSEQ:def 2
+                .= f.(j+p..f) by A3,XCMPLX_1:1
+                .= f/.(j+p..f) by A6,FINSEQ_4:def 4;
+ end;
+
+theorem
+    (f:-p)/.1 = p
+ proof f:-p = <*p*>^(f/^p..f) by Def2;
+  hence thesis by Th16;
+ end;
+
+theorem
+     p in rng f implies (f:-p)/.(len(f:-p)) = f/.len f
+ proof assume
+A1:  p in rng f;
+  then p..f <= len f by FINSEQ_4:31;
+  then reconsider j = len f - p..f as Nat by INT_1:18;
+A2:  len(f:-p) = j + 1 by A1,Th53;
+    len(f:-p) in dom(f:-p) by Th6;
+  hence (f:-p)/.(len(f:-p)) = f/.(j+p..f) by A1,A2,Th55
+                         .= f/.len f by XCMPLX_1:27;
+ end;
+
+theorem
+     p in rng f implies rng(f:-p) c= rng f
+ proof assume p in rng f;
+  then ex i st i+1 = p..f & f:-p = f/^i by Th52;
+  hence thesis by Th36;
+ end;
+
+theorem
+     p in rng f & f is one-to-one implies f:-p is one-to-one
+ proof assume p in rng f;
+  then ex i st i+1 = p..f & f:-p = f/^i by Th52;
+  hence thesis by Lm3;
+ end;
+
+definition let f be FinSequence;
+ func Rev f -> FinSequence means :Def3:
+ len it = len f & for i st i in dom it holds it.i = f.(len f - i + 1);
+  existence
+  proof
+    deffunc F(Nat) = f.(len f - $1 + 1);
+    ex p being FinSequence st len p = len f &
+    for k st k in dom p holds p.k = F(k) from domSeqLambda;
+    hence thesis;
+  end;
+  uniqueness
+ proof let f1,f2 be FinSequence such that
+A1: len f1 = len f and
+A2: for i st i in dom f1 holds f1.i = f.(len f - i + 1) and
+A3: len f2 = len f and
+A4: for i st i in dom f2 holds f2.i = f.(len f - i + 1);
+A5:  dom f1 = Seg len f1 & dom f2 = Seg len f2 & dom f = Seg len f
+      by FINSEQ_1:def 3;
+     now let i; assume i in dom f;
+    then f1.i = f.(len f - i + 1) & f2.i = f.(len f - i + 1)
+     by A1,A2,A3,A4,A5;
+    hence f1.i = f2.i;
+   end;
+  hence thesis by A1,A3,A5,FINSEQ_2:10;
+ end;
+end;
+
+theorem Th60:
+   for f being FinSequence holds dom f = dom Rev f & rng f = rng Rev f
+ proof let f be FinSequence;
+  thus
+A1:  dom f = Seg len f by FINSEQ_1:def 3
+            .= Seg len (Rev f) by Def3
+            .= dom(Rev f) by FINSEQ_1:def 3;
+A2: len f = len(Rev f) by Def3;
+  hereby let x be set;
+   assume x in rng f;
+   then consider i such that
+A3: i in dom f and
+A4: f.i = x by FINSEQ_2:11;
+     i <= len f by A3,FINSEQ_3:27;
+   then reconsider j = len f - i + 1 as Nat by Th1;
+A5:   len f - j + 1 = len f - (len f - i) - 1 + 1 by XCMPLX_1:36
+                   .= len f - (len f - i) by XCMPLX_1:27
+                   .= len f - len f + i by XCMPLX_1:37
+                   .= 0 + i by XCMPLX_1:14
+                   .= i;
+     dom f = Seg len f by FINSEQ_1:def 3;
+  then j in Seg len (Rev f) by A2,A3,Th2;
+then A6:  j in dom(Rev f) by FINSEQ_1:def 3;
+   then (Rev f).j = f.(len f - j + 1) by Def3;
+   hence x in rng(Rev f) by A4,A5,A6,FUNCT_1:def 5;
+  end;
+  let x be set;
+  assume x in rng(Rev f);
+   then consider i such that
+A7: i in dom(Rev f) and
+A8: (Rev f).i = x by FINSEQ_2:11;
+A9: (Rev f).i = f.(len f - i + 1) by A7,Def3;
+    i <= len f by A2,A7,FINSEQ_3:27;
+  then reconsider j = len f - i + 1 as Nat by Th1;
+     i in Seg len(Rev f) by A7,FINSEQ_1:def 3;
+   then j in Seg len (Rev f) by A2,Th2;
+   then j in dom (Rev f) by FINSEQ_1:def 3;
+  hence x in rng f by A1,A8,A9,FUNCT_1:def 5;
+ end;
+
+theorem Th61:
+  for f being FinSequence st i in dom f holds (Rev f).i = f.(len f - i + 1)
+ proof let f be FinSequence;
+    dom f = dom(Rev f) by Th60;
+  hence thesis by Def3;
+ end;
+
+theorem Th62:
+  for f being FinSequence, i,j being Nat
+    st i in dom f & i+j = len f + 1
+  holds j in dom Rev f
+ proof let f be FinSequence, i,j be Nat such that
+A1: i in dom f and
+A2: i+j = len f + 1;
+A3: dom f = Seg len f by FINSEQ_1:def 3;
+A4: j = len f + 1 - i by A2,XCMPLX_1:26
+     .= len f - i + 1 by XCMPLX_1:29;
+    dom f = dom Rev f by Th60;
+  hence j in dom Rev f by A1,A3,A4,Th2;
+ end;
+
+definition let f be empty FinSequence;
+ cluster Rev f -> empty;
+  coherence
+ proof len {} = 0 by FINSEQ_1:25;
+  then len (Rev {}) = 0 by Def3;
+  hence thesis by FINSEQ_1:25;
+ end;
+end;
+
+theorem
+     for x being set holds Rev <*x*> = <*x*>
+ proof let x be set;
+  set f = <*x*>;
+A1:  len f = 1 by FINSEQ_1:56;
+     now let i; assume i in dom f;
+    then i in Seg len f by FINSEQ_1:def 3;
+then i = 1 by A1,FINSEQ_1:4,TARSKI:def 1;
+    hence f.i = f.(len f - i + 1) by A1;
+   end;
+  hence thesis by Def3;
+ end;
+
+theorem
+     for x1,x2 being set holds Rev <*x1,x2*> = <*x2,x1*>
+ proof let x1,x2 be set;
+  set f = <*x1,x2*>, g = <*x2,x1*>;
+A1:  len f = 2 & len g = 2 by FINSEQ_1:61;
+     now let i; assume i in dom g;
+    then A2: i in Seg len f by A1,FINSEQ_1:def 3;
+    per cases by A1,A2,FINSEQ_1:4,TARSKI:def 2;
+    suppose
+A3:   i = 1;
+     hence g.i = x2 by FINSEQ_1:61
+              .= f.(len f - i + 1) by A1,A3,FINSEQ_1:61;
+    suppose
+A4:   i = 2;
+     hence g.i = x1 by FINSEQ_1:61
+              .= f.(len f - i + 1) by A1,A4,FINSEQ_1:61;
+   end;
+  hence thesis by A1,Def3;
+ end;
+
+theorem Th65:
+  for f being FinSequence
+   holds f.1 = (Rev f).(len f) & f.(len f) = (Rev f).1
+ proof let f be FinSequence;
+   per cases;
+   suppose A1: f is empty;
+    then A2:   dom Rev f = {} by Th60,RELAT_1:60;
+     thus f.1 = {} by A1,FUNCT_1:def 4,RELAT_1:60 .= (Rev f).(len f) by A2,
+FUNCT_1:def 4;
+    thus f.(len f) = {} by A1,FUNCT_1:def 4,RELAT_1:60 .= (Rev f).1 by A2,
+FUNCT_1:def 4;
+   suppose f is non empty;
+    then A3: len f <> 0 by FINSEQ_1:25;
+  then len f in Seg len f by FINSEQ_1:5;
+  then len f in dom f by FINSEQ_1:def 3;
+  hence (Rev f).(len f) = f.(len f - len f + 1) by Th61
+                     .= f.(0 + 1) by XCMPLX_1:14
+                     .= f.1;
+    1 >= 1 & len f >= 1 by A3,RLVECT_1:99;
+  then 1 in dom f by FINSEQ_3:27;
+  hence (Rev f).1 = f.(len f - 1 + 1) by Th61
+               .= f.(len f) by XCMPLX_1:27;
+ end;
+
+definition let f be one-to-one FinSequence;
+ cluster Rev f -> one-to-one;
+  coherence
+ proof
+  set g = Rev f;
+  let x1,x2 be set such that
+A1:  x1 in dom g & x2 in dom g and
+A2:  g.x1 = g.x2;
+  reconsider i1 = x1, i2 = x2 as Nat by A1;
+A3:  dom g = Seg len g by FINSEQ_1:def 3;
+A4:  len g = len f by Def3;
+  then i1 <= len f & i2 <= len f by A1,FINSEQ_3:27;
+  then reconsider i1' = len f - i1 + 1, i2' = len f - i2 + 1 as Nat by Th1;
+    dom f = Seg len f by FINSEQ_1:def 3;
+then A5:  i1' in dom f & i2' in dom f by A1,A3,A4,Th2;
+    f.i1' = g.x1 by A1,Def3
+            .= f.i2' by A1,A2,Def3;
+  then i1' = i2' by A5,FUNCT_1:def 8;
+  then len f - i1 = len f - i2 by XCMPLX_1:2;
+  hence x1 = x2 by XCMPLX_1:20;
+ end;
+end;
+
+theorem Th66:
+  for f being FinSequence, x being set holds Rev(f^<*x*>) = <*x*>^(Rev f)
+ proof let f be FinSequence, x be set;
+  set n = len f + 1, g = <*x*>;
+A1: len (f^g) = n by FINSEQ_2:19;
+A2: len(g^(Rev f)) = len g + len (Rev f) by FINSEQ_1:35
+                    .= 1 + len (Rev f) by FINSEQ_1:56
+                    .= n by Def3;
+A3: len(Rev(f^g)) = n by A1,Def3;
+    now let i; assume
+A4:  i in Seg n;
+then A5:  1 <= i & i <= n by FINSEQ_1:3;
+A6:  len g = 1 by FINSEQ_1:57;
+A7:  i in dom(Rev(f^g)) by A3,A4,FINSEQ_1:def 3;
+   per cases by A5,REAL_1:def 5;
+   suppose
+A8:  i = 1;
+      Seg len g = dom g by FINSEQ_1:def 3;
+then A9:  1 in dom g by A6,FINSEQ_1:4,TARSKI:def 1;
+    thus (Rev(f^g)).i = (f^g).(n-1+1) by A1,A7,A8,Def3
+                    .= (f^g).n by XCMPLX_1:27
+                    .= x by FINSEQ_1:59
+                    .= g.1 by FINSEQ_1:57
+                    .= (g^(Rev f)).i by A8,A9,FINSEQ_1:def 7;
+   suppose
+A10:  i > 1;
+    then reconsider j = i-1 as Nat by RLVECT_2:103;
+    reconsider k = n - i + 1 as Nat by A5,Th1;
+    0 < i by A10,AXIOMS:22;
+    then consider l being Nat such that
+A11:   i = l + 1 by NAT_1:22;
+      l <> 0 by A10,A11;
+    then 1 <= l by RLVECT_1:99;
+then A12:   1 <= j by A11,XCMPLX_1:26;
+      j <= n - 1 by A5,REAL_1:49;
+    then j <= len f by XCMPLX_1:26;
+then A13:  j in dom f by A12,FINSEQ_3:27;
+      i - i <= n - i by A5,REAL_1:49;
+    then 0 <= n - i by XCMPLX_1:14;
+    then A14:   0 + 1 <= k by AXIOMS:24;
+      n < len f + i by A10,REAL_1:67;
+    then n - i < len f + i - i by REAL_1:54;
+    then n - i < len f by XCMPLX_1:26;
+    then k < len f + 1 by REAL_1:53;
+    then k <= len f by NAT_1:38;
+then A15:   k in dom f by A14,FINSEQ_3:27;
+    thus (Rev(f^g)).i = (f^g).(n - i + 1) by A1,A7,Def3
+                    .= f.k by A15,FINSEQ_1:def 7
+                    .= f.(len f + (1 - i) + 1) by XCMPLX_1:29
+                    .= f.(len f - j + 1) by XCMPLX_1:38
+                    .= (Rev f).j by A13,Th61
+                    .= (g^(Rev f)).i by A2,A5,A6,A10,FINSEQ_1:37;
+  end;
+  hence thesis by A2,A3,FINSEQ_2:10;
+ end;
+
+theorem
+     for f,g being FinSequence holds Rev(f^g) = (Rev g)^(Rev f)
+ proof let f be FinSequence;
+   defpred P[FinSequence] means Rev(f^$1) = (Rev $1)^(Rev f);
+A1:  P[{}]
+    proof set g = {};
+     thus Rev(f^g) = Rev f by FINSEQ_1:47
+                 .= (Rev g)^(Rev f) by FINSEQ_1:47;
+    end;
+A2:  for g being FinSequence, x being set st P[g] holds P[g^<*x*>]
+    proof let g be FinSequence, x be set such that
+A3:   P[g];
+     thus Rev(f^(g^<*x*>)) = Rev(f^g^<*x*>) by FINSEQ_1:45
+                          .= <*x*>^((Rev g)^(Rev f)) by A3,Th66
+                          .= <*x*>^(Rev g)^(Rev f) by FINSEQ_1:45
+                          .= (Rev(g^<*x*>))^(Rev f) by Th66;
+    end;
+  thus for g being FinSequence holds P[g] from IndSeq(A1,A2);
+ end;
+
+definition let D,f;
+ redefine func Rev f -> FinSequence of D;
+  coherence
+ proof set n = len f;
+A1: dom f = Seg n by FINSEQ_1:def 3;
+    now let i;
+   set j = n - i + 1;
+   assume i in dom (Rev f);
+     then i in Seg len Rev f by FINSEQ_1:def 3;
+then A2:  i in Seg n by Def3;
+   then i <= n by A1,FINSEQ_3:27;
+   then j in Seg n & j is Nat by A2,Th1,Th2;
+   then f.j in D by A1,FINSEQ_2:13;
+   hence Rev f.i in D by A1,A2,Th61;
+  end;
+  hence thesis by FINSEQ_2:14;
+ end;
+end;
+
+theorem
+     f is non empty implies f/.1 = (Rev f)/.len f & f/.len f = (Rev f)/.1
+ proof assume
+A1: f is non empty;
+then A2: 1 in dom f by Th6;
+A3: len f in dom f by A1,Th6;
+A4: dom f = dom Rev f by Th60;
+  thus f/.1 = f.1 by A2,FINSEQ_4:def 4
+             .= (Rev f).len f by Th65
+             .= (Rev f)/.len f by A3,A4,FINSEQ_4:def 4;
+  thus f/.len f = f.(len f) by A3,FINSEQ_4:def 4
+                 .= (Rev f).1 by Th65
+                 .= (Rev f)/.1 by A2,A4,FINSEQ_4:def 4;
+ end;
+
+theorem
+     i in dom f & i+j = len f + 1 implies f/.i = (Rev f)/.j
+ proof assume that
+A1: i in dom f and
+A2: i+j = len f + 1;
+A3: i = len f + 1 - j by A2,XCMPLX_1:26
+     .= len f - j + 1 by XCMPLX_1:29;
+A4: j in dom Rev f by A1,A2,Th62;
+  thus f/.i = f.i by A1,FINSEQ_4:def 4
+             .= (Rev f).j by A3,A4,Def3
+             .= (Rev f)/.j by A4,FINSEQ_4:def 4;
+ end;
+
+definition let D,f,p,n;
+  func Ins(f,n,p) -> FinSequence of D equals
+:Def4:  (f|n)^<*p*>^(f/^n);
+   correctness;
+end;
+
+theorem
+     Ins(f,0,p) = <*p*>^f
+ proof
+  thus Ins(f,0,p) = (f|0)^<*p*>^(f/^0) by Def4
+                 .= <*p*>^(f/^0) by FINSEQ_1:47
+                 .= <*p*>^f by Th31;
+ end;
+
+theorem Th71:
+   len f <= n implies Ins(f,n,p) = f^<*p*>
+ proof assume
+A1: len f <= n;
+then A2: f/^n is empty by Th35;
+  thus Ins(f,n,p) = (f|n)^<*p*>^(f/^n) by Def4
+                 .= (f|n)^<*p*> by A2,FINSEQ_1:47
+                 .= f^<*p*> by A1,TOPREAL1:2;
+ end;
+
+theorem Th72:
+   len(Ins(f,n,p)) = len f + 1
+ proof
+  per cases;
+   suppose
+A1:  n <= len f;
+    thus len Ins(f,n,p)
+       = len((f|n)^<*p*>^(f/^n)) by Def4
+      .= len((f|n)^<*p*>) + len(f/^n) by FINSEQ_1:35
+      .= len((f|n)^<*p*>) + (len f - n) by A1,RFINSEQ:def 2
+      .= len(f|n)+len<*p*> + (len f - n) by FINSEQ_1:35
+      .= len(f|n)+1+(len f - n) by FINSEQ_1:56
+      .= n+1+(len f - n) by A1,TOPREAL1:3
+      .= len f - n + n + 1 by XCMPLX_1:1
+      .= len f + 1 by XCMPLX_1:27;
+   suppose len f < n;
+     then Ins(f,n,p) = f^<*p*> by Th71;
+    hence thesis by FINSEQ_2:19;
+ end;
+
+theorem Th73:
+   rng Ins(f,n,p) = {p} \/ rng f
+ proof
+  thus rng Ins(f,n,p)
+     = rng((f|n)^<*p*>^(f/^n)) by Def4
+    .= rng((f|n)^<*p*>) \/ rng(f/^n) by FINSEQ_1:44
+    .= rng(f|n) \/ rng<*p*> \/ rng(f/^n) by FINSEQ_1:44
+    .= rng(f|n) \/ rng(f/^n) \/ rng<*p*> by XBOOLE_1:4
+    .= rng((f|n)^(f/^n)) \/ rng<*p*> by FINSEQ_1:44
+    .= rng<*p*> \/ rng f by RFINSEQ:21
+    .= {p} \/ rng f by FINSEQ_1:55;
+ end;
+
+definition let D,f,n,p;
+ cluster Ins(f,n,p) -> non empty;
+  coherence
+ proof
+    len(Ins(f,n,p)) = len f + 1 by Th72;
+  hence thesis by FINSEQ_1:25;
+ end;
+end;
+
+theorem
+     p in rng Ins(f,n,p)
+ proof
+    p in {p} by TARSKI:def 1;
+  then p in {p} \/ rng f by XBOOLE_0:def 2;
+  hence thesis by Th73;
+ end;
+
+theorem Th75:
+   i in dom(f|n) implies (Ins(f,n,p))/.i = f/.i
+ proof assume
+A1: i in dom(f|n);
+  thus (Ins(f,n,p))/.i = ((f|n)^<*p*>^(f/^n))/.i by Def4
+                      .= ((f|n)^(<*p*>^(f/^n)))/.i by FINSEQ_1:45
+                      .= (f|n)/.i by A1,Lm1
+                      .= f/.i by A1,TOPREAL1:1;
+ end;
+
+theorem
+     n <= len f implies (Ins(f,n,p))/.(n+1) = p
+ proof assume
+   n <= len f;
+then A1: len(f|n) = n by TOPREAL1:3;
+then A2: len((f|n)^<*p*>) = n+1 by FINSEQ_2:19;
+     1 <= n+1 by NAT_1:29;
+then A3: n+1 in dom((f|n)^<*p*>) by A2,FINSEQ_3:27;
+  thus (Ins(f,n,p))/.(n+1) = ((f|n)^<*p*>^(f/^n))/.(n+1) by Def4
+                        .= ((f|n)^<*p*>)/.(n+1) by A3,Lm1
+                        .= p by A1,TOPREAL4:1;
+ end;
+
+theorem
+     n+1 <= i & i <= len f implies (Ins(f,n,p))/.(i+1) = f/.i
+ proof assume that
+A1: n+1 <= i and
+A2: i <= len f;
+     n <= n+1 by NAT_1:29;
+   then n <= i by A1,AXIOMS:22;
+then A3: n <= len f by A2,AXIOMS:22;
+ then len(f|n) = n by TOPREAL1:3;
+then A4: len((f|n)^<*p*>) = n+1 by FINSEQ_2:19;
+  reconsider j = i - (n+1) as Nat by A1,INT_1:18;
+A5:  n+1+j = i by XCMPLX_1:27;
+then A6:  n+1+(j+1) = i+1 by XCMPLX_1:1;
+A7:  1 <= j+1 by NAT_1:29;
+     n+(j+1) <= len f by A2,A5,XCMPLX_1:1;
+   then j+1 <= len f - n by REAL_1:84;
+   then j+1 <= len(f/^n) by A3,RFINSEQ:def 2;
+then A8:  j+1 in dom(f/^n) by A7,FINSEQ_3:27;
+  thus (Ins(f,n,p))/.(i+1) = ((f|n)^<*p*>^(f/^n))/.(i+1) by Def4
+                        .= (f/^n)/.(j+1) by A4,A6,A8,GROUP_5:96
+                        .= f/.(n+(j+1)) by A8,Th30
+                        .= f/.i by A5,XCMPLX_1:1;
+ end;
+
+theorem
+     1 <= n & f is non empty implies (Ins(f,n,p))/.1 = f/.1
+ proof assume that
+A1: 1 <= n and
+A2: f is non empty;
+    len f <> 0 by A2,FINSEQ_1:25;
+then A3: 1 <= len f by RLVECT_1:99;
+   n <= len f implies len(f|n) = n by TOPREAL1:3;
+  then 1 <= len(f|n) by A1,A3,TOPREAL1:2;
+  then 1 in dom(f|n) by FINSEQ_3:27;
+  hence thesis by Th75;
+ end;
+
+theorem
+     f is one-to-one & not p in rng f implies Ins(f,n,p) is one-to-one
+ proof assume that
+A1: f is one-to-one and
+A2: not p in rng f;
+A3: f|n is one-to-one by A1,Lm2;
+A4: <*p*> is one-to-one by FINSEQ_3:102;
+    now let x be set;
+   assume x in rng<*p*>;
+   then x in {p} by FINSEQ_1:55;
+then A5:   not x in rng f by A2,TARSKI:def 1;
+     rng(f|n) c= rng f by Th21;
+   hence not x in rng(f|n) by A5;
+  end;
+  then rng(f|n) misses rng<*p*> by XBOOLE_0:3;
+then A6:  (f|n) ^ <*p*> is one-to-one by A3,A4,FINSEQ_3:98;
+A7:  f/^n is one-to-one by A1,Lm3;
+    now let x be set;
+   assume
+A8:  x in rng(f/^n);
+     rng(f|n) misses rng(f/^n) by A1,Th37;
+then A9:  not x in rng(f|n) by A8,XBOOLE_0:3;
+     rng(f/^n) c= rng f by Th36;
+   then x in rng f by A8;
+   then not x in {p} by A2,TARSKI:def 1;
+   then not x in rng<*p*> by FINSEQ_1:55;
+   then not x in rng(f|n) \/ rng<*p*> by A9,XBOOLE_0:def 2;
+   hence not x in rng((f|n) ^ <*p*>) by FINSEQ_1:44;
+  end;
+  then rng((f|n) ^ <*p*>) misses rng(f/^n) by XBOOLE_0:3;
+  then (f|n) ^ <*p*> ^ (f/^n) is one-to-one by A6,A7,FINSEQ_3:98;
+  hence thesis by Def4;
+ end;

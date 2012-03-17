@@ -1,0 +1,959 @@
+:: Concrete Categories
+::  by Grzegorz Bancerek
+::
+:: Received January 12, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_2, ALTCAT_1, BOOLE, CAT_1, PBOOLE, FUNCT_1, RELAT_1, PRALG_1,
+      BINOP_1, MCART_1, ALTCAT_2, FUNCTOR0, MSUALG_6, SGRAPH1, MSUALG_3,
+      WELLORD1, ISOCAT_1, NATTRA_1, QC_LANG1, ALTCAT_3, OPPCAT_1, CAT_3,
+      FUNCT_2, FUNCT_5, SEQ_1, COMMACAT, PROB_1, CARD_3, YELLOW18;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, RELSET_1,
+      FUNCT_1, PARTFUN1, FUNCT_2, PROB_1, MCART_1, ZF_FUND1, BINOP_1, MULTOP_1,
+      CARD_3, STRUCT_0, FUNCT_5, PBOOLE, PRALG_1, MSUALG_1, MSUALG_3, FUNCT_3,
+      COMMACAT, ALTCAT_1, ALTCAT_2, FUNCTOR0, ALTCAT_3, FUNCTOR2, FUNCTOR3;
+ constructors ZF_FUND1, WAYBEL_1, CAT_5, ALTCAT_3, FUNCTOR3, PROB_1, MEMBERED;
+ clusters SUBSET_1, RELSET_1, RELAT_1, FUNCT_1, PRALG_1, STRUCT_0, MSUALG_1,
+      ALTCAT_1, ALTCAT_2, FUNCTOR0, FUNCTOR2, ALTCAT_4, MEMBERED, ZFMISC_1,
+      FUNCT_2, NUMBERS, ORDINAL2;
+ requirements SUBSET, BOOLE;
+
+
+begin
+:: <section1>Definability of categories and functors</section1>
+
+scheme AltCatStrLambda
+ { A() -> non empty set,
+   B(set,set) -> set,
+   C(set,set,set,set,set) -> set }:
+ ex C being strict non empty transitive AltCatStr st
+  the carrier of C = A() &
+  (for a,b being object of C holds <^a,b^> = B(a,b)) &
+  (for a,b,c being object of C st <^a,b^> <> {} & <^b,c^> <> {}
+   for f being Morphism of a,b, g being Morphism of b,c
+    holds g*f = C(a,b,c,f,g))
+ provided
+  for a,b,c being Element of A(), f,g being set
+   st f in B(a,b) & g in B(b,c) holds C(a,b,c,f,g) in B(a,c);
+
+scheme CatAssocSch
+ { A() -> non empty transitive AltCatStr,
+   C(set,set,set,set,set) -> set }:
+ A() is associative
+ provided
+  for a,b,c being object of A() st <^a,b^> <> {} & <^b,c^> <> {}
+   for f being Morphism of a,b, g being Morphism of b,c
+    holds g*f = C(a,b,c,f,g)
+ and
+  for a,b,c,d being object of A(), f,g,h being set
+   st f in <^a,b^> & g in <^b,c^> & h in <^c,d^>
+   holds C(a,c,d,C(a,b,c,f,g),h) = C(a,b,d,f,C(b,c,d,g,h));
+
+scheme CatUnitsSch
+ { A() -> non empty transitive AltCatStr,
+   C(set,set,set,set,set) -> set }:
+ A() is with_units
+ provided
+  for a,b,c being object of A() st <^a,b^> <> {} & <^b,c^> <> {}
+   for f being Morphism of a,b, g being Morphism of b,c
+    holds g*f = C(a,b,c,f,g)
+ and
+  for a being object of A()
+   ex f being set st f in <^a,a^> &
+    for b being object of A(), g being set st g in <^a,b^>
+     holds C(a,a,b,f,g) = g
+ and
+  for a being object of A()
+   ex f being set st f in <^a,a^> &
+    for b being object of A(), g being set st g in <^b,a^>
+     holds C(b,a,a,g,f) = g;
+
+
+scheme CategoryLambda
+ { A() -> non empty set,
+   B(set,set) -> set,
+   C(set,set,set,set,set) -> set }:
+ ex C being strict category st
+  the carrier of C = A() &
+  (for a,b being object of C holds <^a,b^> = B(a,b)) &
+  (for a,b,c being object of C st <^a,b^> <> {} & <^b,c^> <> {}
+   for f being Morphism of a,b, g being Morphism of b,c
+    holds g*f = C(a,b,c,f,g))
+ provided
+  for a,b,c being Element of A(), f,g being set
+   st f in B(a,b) & g in B(b,c) holds C(a,b,c,f,g) in B(a,c)
+ and
+  for a,b,c,d being Element of A(), f,g,h being set
+   st f in B(a,b) & g in B(b,c) & h in B(c,d)
+   holds C(a,c,d,C(a,b,c,f,g),h) = C(a,b,d,f,C(b,c,d,g,h))
+ and
+  for a being Element of A()
+   ex f being set st f in B(a,a) &
+    for b being Element of A(), g being set st g in B(a,b)
+     holds C(a,a,b,f,g) = g
+ and
+  for a being Element of A()
+   ex f being set st f in B(a,a) &
+    for b being Element of A(), g being set st g in B(b,a)
+     holds C(b,a,a,g,f) = g;
+
+scheme CategoryLambdaUniq
+ { A() -> non empty set,
+   B(set,set) -> set,
+   C(set,set,set,set,set) -> set }:
+ for C1,C2 being non empty transitive AltCatStr
+  st the carrier of C1 = A() &
+     (for a,b being object of C1 holds <^a,b^> = B(a,b)) &
+     (for a,b,c being object of C1 st <^a,b^> <> {} & <^b,c^> <> {}
+       for f being Morphism of a,b, g being Morphism of b,c
+        holds g*f = C(a,b,c,f,g)) &
+     the carrier of C2 = A() &
+     (for a,b being object of C2 holds <^a,b^> = B(a,b)) &
+     (for a,b,c being object of C2 st <^a,b^> <> {} & <^b,c^> <> {}
+       for f being Morphism of a,b, g being Morphism of b,c
+        holds g*f = C(a,b,c,f,g))
+  holds the AltCatStr of C1 = the AltCatStr of C2;
+
+scheme CategoryQuasiLambda
+ { A() -> non empty set, P[set,set,set],
+   B(set,set) -> set,
+   C(set,set,set,set,set) -> set }:
+ ex C being strict category st
+  the carrier of C = A() &
+  (for a,b being object of C
+   for f being set holds f in <^a,b^> iff f in B(a,b) & P[a,b,f]) &
+  (for a,b,c being object of C st <^a,b^> <> {} & <^b,c^> <> {}
+   for f being Morphism of a,b, g being Morphism of b,c
+    holds g*f = C(a,b,c,f,g))
+ provided
+  for a,b,c being Element of A(), f,g being set
+   st f in B(a,b) & P[a,b,f] & g in B(b,c) & P[b,c,g]
+   holds C(a,b,c,f,g) in B(a,c) & P[a,c, C(a,b,c,f,g)]
+ and
+  for a,b,c,d being Element of A(), f,g,h being set
+   st f in B(a,b) & P[a,b,f] & g in B(b,c) & P[b,c,g] & h in B(c,d) & P[c,d,h]
+   holds C(a,c,d,C(a,b,c,f,g),h) = C(a,b,d,f,C(b,c,d,g,h))
+ and
+  for a being Element of A()
+   ex f being set st f in B(a,a) & P[a,a,f] &
+    for b being Element of A(), g being set st g in B(a,b) & P[a,b,g]
+     holds C(a,a,b,f,g) = g
+ and
+  for a being Element of A()
+   ex f being set st f in B(a,a) & P[a,a,f] &
+    for b being Element of A(), g being set st g in B(b,a) & P[b,a,g]
+     holds C(b,a,a,g,f) = g;
+
+definition
+ let f be Function-yielding Function;
+ let a,b,c be set;
+ cluster f.(a,b,c) -> Relation-like Function-like;
+end;
+
+scheme SubcategoryEx
+ { A() -> category, P[set], Q[set,set,set]}:
+ ex B being strict non empty subcategory of A() st
+  (for a being object of A() holds a is object of B iff P[a]) &
+  (for a,b being object of A(), a',b' being object of B
+    st a' = a & b' = b & <^a,b^> <> {}
+   for f being Morphism of a,b holds f in <^a',b'^> iff Q[a,b,f])
+ provided
+  ex a being object of A() st P[a]
+ and
+  for a,b,c being object of A()
+    st P[a] & P[b] & P[c] & <^a,b^> <> {} & <^b,c^> <> {}
+   for f being Morphism of a,b, g being Morphism of b,c
+    st Q[a,b,f] & Q[b,c,g]
+    holds Q[a,c,g*f]
+ and
+  for a being object of A() st P[a] holds Q[a,a, idm a];
+
+scheme CovariantFunctorLambda
+ { A,B() -> category,
+   O(set) -> set,
+   F(set,set,set) -> set }:
+ ex F being covariant strict Functor of A(),B() st
+  (for a being object of A() holds F.a = O(a)) &
+  for a,b being object of A() st <^a,b^> <> {}
+   for f being Morphism of a,b holds F.f = F(a,b,f)
+  provided
+   for a being object of A() holds O(a) is object of B()
+  and
+   for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     holds F(a,b,f) in (the Arrows of B()).(O(a), O(b))
+  and
+   for a,b,c being object of A() st <^a,b^> <> {} & <^b,c^> <> {}
+    for f being Morphism of a,b, g being Morphism of b,c
+    for a',b',c' being object of B() st a' = O(a) & b' = O(b) & c' = O(c)
+    for f' being Morphism of a',b', g' being Morphism of b',c'
+     st f' = F(a,b,f) & g' = F(b,c,g)
+     holds F(a,c,g*f) = g'*f'
+  and
+   for a being object of A(), a' being object of B() st a' = O(a)
+     holds F(a,a,idm a) = idm a';
+
+theorem :: YELLOW18:1
+ for A,B being category, F,G being covariant Functor of A,B
+  st (for a being object of A holds F.a = G.a) &
+     (for a,b being object of A st <^a,b^> <> {}
+       for f being Morphism of a,b holds F.f = G.f)
+  holds the FunctorStr of F = the FunctorStr of G;
+
+scheme ContravariantFunctorLambda
+ { A,B() -> category,
+   O(set) -> set,
+   F(set,set,set) -> set }:
+ ex F being contravariant strict Functor of A(),B() st
+  (for a being object of A() holds F.a = O(a)) &
+  for a,b being object of A() st <^a,b^> <> {}
+   for f being Morphism of a,b holds F.f = F(a,b,f)
+  provided
+   for a being object of A() holds O(a) is object of B()
+  and
+   for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     holds F(a,b,f) in (the Arrows of B()).(O(b), O(a))
+  and
+   for a,b,c being object of A() st <^a,b^> <> {} & <^b,c^> <> {}
+    for f being Morphism of a,b, g being Morphism of b,c
+    for a',b',c' being object of B() st a' = O(a) & b' = O(b) & c' = O(c)
+    for f' being Morphism of b',a', g' being Morphism of c',b'
+     st f' = F(a,b,f) & g' = F(b,c,g)
+     holds F(a,c,g*f) = f'*g'
+  and
+   for a being object of A(), a' being object of B() st a' = O(a)
+     holds F(a,a,idm a) = idm a';
+
+theorem :: YELLOW18:2
+ for A,B being category, F,G being contravariant Functor of A,B
+  st (for a being object of A holds F.a = G.a) &
+     (for a,b being object of A st <^a,b^> <> {}
+       for f being Morphism of a,b holds F.f = G.f)
+  holds the FunctorStr of F = the FunctorStr of G;
+
+begin
+:: <section2>Isomorphism and equivalence of categories</section2>
+
+definition
+ let A,B,C be non empty set;
+ let f be Function of [:A,B:], C;
+ redefine attr f is one-to-one means
+:: YELLOW18:def 1
+    for a1,a2 being Element of A, b1,b2 being Element of B
+   st f.(a1,b1) = f.(a2,b2) holds a1 = a2 & b1 = b2;
+end;
+
+scheme CoBijectiveSch
+ { A,B() -> category, F() -> covariant Functor of A(), B(),
+   O(set) -> set,
+   F(set,set,set) -> set }:
+  F() is bijective
+ provided
+  for a being object of A() holds F().a = O(a)
+ and
+  for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b holds F().f = F(a,b,f)
+ and
+  for a,b being object of A() st O(a) = O(b) holds a = b
+ and
+  for a,b being object of A() st <^a,b^> <> {}
+    for f,g being Morphism of a,b st F(a,b,f) = F(a,b,g)
+     holds f = g
+ and
+  for a,b being object of B() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     ex c,d being object of A(), g being Morphism of c,d
+      st a = O(c) & b = O(d) & <^c,d^> <> {} & f = F(c,d,g);
+
+scheme CatIsomorphism
+ { A,B() -> category,
+   O(set) -> set,
+   F(set,set,set) -> set }:
+  A(), B() are_isomorphic
+ provided
+  ex F being covariant Functor of A(),B() st
+    (for a being object of A() holds F.a = O(a)) &
+    for a,b being object of A() st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = F(a,b,f)
+ and
+  for a,b being object of A() st O(a) = O(b) holds a = b
+ and
+  for a,b being object of A() st <^a,b^> <> {}
+    for f,g being Morphism of a,b st F(a,b,f) = F(a,b,g)
+     holds f = g
+ and
+  for a,b being object of B() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     ex c,d being object of A(), g being Morphism of c,d
+      st a = O(c) & b = O(d) & <^c,d^> <> {} & f = F(c,d,g);
+
+scheme ContraBijectiveSch
+ { A,B() -> category, F() -> contravariant Functor of A(), B(),
+   O(set) -> set,
+   F(set,set,set) -> set }:
+  F() is bijective
+ provided
+  for a being object of A() holds F().a = O(a)
+ and
+  for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b holds F().f = F(a,b,f)
+ and
+  for a,b being object of A() st O(a) = O(b) holds a = b
+ and
+  for a,b being object of A() st <^a,b^> <> {}
+    for f,g being Morphism of a,b st F(a,b,f) = F(a,b,g)
+     holds f = g
+ and
+  for a,b being object of B() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     ex c,d being object of A(), g being Morphism of c,d
+      st b = O(c) & a = O(d) & <^c,d^> <> {} & f = F(c,d,g);
+
+scheme CatAntiIsomorphism
+ { A,B() -> category,
+   O(set) -> set,
+   F(set,set,set) -> set }:
+  A(), B() are_anti-isomorphic
+ provided
+  ex F being contravariant Functor of A(),B() st
+    (for a being object of A() holds F.a = O(a)) &
+    for a,b being object of A() st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = F(a,b,f)
+ and
+  for a,b being object of A() st O(a) = O(b) holds a = b
+ and
+  for a,b being object of A() st <^a,b^> <> {}
+    for f,g being Morphism of a,b st F(a,b,f) = F(a,b,g)
+     holds f = g
+ and
+  for a,b being object of B() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     ex c,d being object of A(), g being Morphism of c,d
+      st b = O(c) & a = O(d) & <^c,d^> <> {} & f = F(c,d,g);
+
+definition
+ let A,B be category;
+ pred A,B are_equivalent means
+:: YELLOW18:def 2
+    ex F being covariant Functor of A,B,
+     G being covariant Functor of B,A st
+   G*F, id A are_naturally_equivalent &
+   F*G, id B are_naturally_equivalent;
+ reflexivity;
+ symmetry;
+end;
+
+theorem :: YELLOW18:3
+ for A,B,C being non empty reflexive AltGraph
+ for F1,F2 being feasible FunctorStr over A,B
+ for G1,G2 being FunctorStr over B,C
+  st the FunctorStr of F1 = the FunctorStr of F2 &
+     the FunctorStr of G1 = the FunctorStr of G2
+  holds G1*F1 = G2*F2;
+
+theorem :: YELLOW18:4
+ for A,B,C being category
+  st A,B are_equivalent & B,C are_equivalent
+  holds A,C are_equivalent;
+
+theorem :: YELLOW18:5
+ for A,B being category st A,B are_isomorphic
+  holds A,B are_equivalent;
+
+scheme NatTransLambda
+ { A, B() -> category,
+   F, G() -> covariant Functor of A(), B(),
+   T(set) -> set
+ }:
+ ex t being natural_transformation of F(), G() st
+  F() is_naturally_transformable_to G() &
+  for a being object of A() holds t!a = T(a)
+ provided
+   for a being object of A() holds T(a) in <^F().a, G().a^>
+ and
+   for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b
+    for g1 being Morphism of F().a, G().a st g1 = T(a)
+    for g2 being Morphism of F().b, G().b st g2 = T(b)
+     holds g2*F().f = G().f*g1;
+
+scheme NatEquivalenceLambda
+ { A, B() -> category,
+   F, G() -> covariant Functor of A(), B(),
+   T(set) -> set
+ }:
+ ex t being natural_equivalence of F(), G() st
+  F(), G() are_naturally_equivalent &
+  for a being object of A() holds t!a = T(a)
+ provided
+   for a being object of A() holds
+     T(a) in <^F().a, G().a^> & <^G().a, F().a^> <> {} &
+     for f being Morphism of F().a, G().a st f = T(a) holds f is iso
+ and
+   for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b
+    for g1 being Morphism of F().a, G().a st g1 = T(a)
+    for g2 being Morphism of F().b, G().b st g2 = T(b)
+     holds g2*F().f = G().f*g1;
+
+begin
+:: <section3>Dual categories</section3>
+
+definition
+ let C1,C2 be non empty AltCatStr;
+ pred C1, C2 are_opposite means
+:: YELLOW18:def 3
+
+  the carrier of C2 = the carrier of C1 &
+  the Arrows of C2 = ~the Arrows of C1 &
+  for a,b,c being object of C1
+  for a',b',c' being object of C2 st a' = a & b' = b & c' = c
+   holds (the Comp of C2).(a',b',c') = ~((the Comp of C1).(c,b,a));
+ symmetry;
+end;
+
+theorem :: YELLOW18:6
+ for A,B being non empty AltCatStr st A, B are_opposite
+ for a being object of A holds a is object of B;
+
+theorem :: YELLOW18:7
+ for A,B being non empty AltCatStr st A, B are_opposite
+ for a,b being object of A, a',b' being object of B st a' = a & b' = b
+  holds <^a,b^> = <^b',a'^>;
+
+theorem :: YELLOW18:8
+ for A,B being non empty AltCatStr st A, B are_opposite
+ for a,b being object of A, a',b' being object of B st a' = a & b' = b
+ for f being Morphism of a,b holds f is Morphism of b', a';
+
+theorem :: YELLOW18:9
+ for C1,C2 being non empty transitive AltCatStr
+  holds C1, C2 are_opposite iff
+    the carrier of C2 = the carrier of C1 &
+    for a,b,c being object of C1
+     for a',b',c' being object of C2 st a' = a & b' = b & c' = c
+      holds
+       <^a,b^> = <^b',a'^> &
+       (<^a,b^> <> {} & <^b,c^> <> {} implies
+         for f being Morphism of a,b, g being Morphism of b,c
+          for f' being Morphism of b',a', g' being Morphism of c',b'
+           st f' = f & g' = g holds f'*g' = g*f);
+
+theorem :: YELLOW18:10
+ for A,B being category st A, B are_opposite
+ for a being object of A, b being object of B st a = b
+  holds idm a = idm b;
+
+theorem :: YELLOW18:11
+ for C being transitive non empty AltCatStr
+ ex C' being strict transitive non empty AltCatStr st C, C' are_opposite;
+
+theorem :: YELLOW18:12
+ for A,B being transitive non empty AltCatStr st A,B are_opposite
+  holds A is associative implies B is associative;
+
+theorem :: YELLOW18:13
+ for A,B being transitive non empty AltCatStr st A,B are_opposite
+  holds A is with_units implies B is with_units;
+
+theorem :: YELLOW18:14
+ for C,C1,C2 being non empty AltCatStr
+  st C, C1 are_opposite
+  holds C, C2 are_opposite iff the AltCatStr of C1 = the AltCatStr of C2;
+
+definition
+ let C be transitive non empty AltCatStr;
+ func C opp -> strict transitive non empty AltCatStr means
+:: YELLOW18:def 4
+
+  C, it are_opposite;
+end;
+
+definition
+ let C be associative (transitive non empty AltCatStr);
+ cluster C opp -> associative;
+end;
+
+definition
+ let C be with_units (transitive non empty AltCatStr);
+ cluster C opp -> with_units;
+end;
+
+definition
+ let A,B be category such that  A, B are_opposite;
+ func dualizing-func(A,B) -> contravariant strict Functor of A,B
+ means
+:: YELLOW18:def 5
+
+  (for a being object of A holds it.a = a) &
+  for a,b being object of A st <^a,b^> <> {}
+   for f being Morphism of a,b holds it.f = f;
+end;
+
+theorem :: YELLOW18:15
+ for A,B being category st A,B are_opposite
+  holds dualizing-func(A,B)*dualizing-func(B,A) = id B;
+
+theorem :: YELLOW18:16
+ for A, B being category st A, B are_opposite
+  holds dualizing-func(A,B) is bijective;
+
+definition
+ let A be category;
+ cluster dualizing-func(A, A opp) -> bijective;
+ cluster dualizing-func(A opp, A) -> bijective;
+end;
+
+theorem :: YELLOW18:17
+   for A, B being category st A, B are_opposite
+  holds A, B are_anti-isomorphic;
+
+theorem :: YELLOW18:18
+ for A, B, C being category st A, B are_opposite
+  holds A, C are_isomorphic iff B, C are_anti-isomorphic;
+
+theorem :: YELLOW18:19
+   for A, B, C, D being category st A, B are_opposite & C, D are_opposite
+  holds A, C are_isomorphic implies B, D are_isomorphic;
+
+theorem :: YELLOW18:20
+   for A, B, C, D being category st A, B are_opposite & C, D are_opposite
+  holds A, C are_anti-isomorphic implies B, D are_anti-isomorphic;
+
+theorem :: YELLOW18:21
+   for A, B being category st A, B are_opposite
+ for a, b being object of A st <^a,b^> <> {} & <^b,a^> <> {}
+ for a', b' being object of B st a' = a & b' = b
+ for f being Morphism of a,b, f' being Morphism of b',a' st f' = f
+   holds f is retraction iff f' is coretraction;
+
+theorem :: YELLOW18:22
+   for A, B being category st A, B are_opposite
+ for a, b being object of A st <^a,b^> <> {} & <^b,a^> <> {}
+ for a', b' being object of B st a' = a & b' = b
+ for f being Morphism of a,b, f' being Morphism of b',a' st f' = f
+   holds f is coretraction iff f' is retraction;
+
+theorem :: YELLOW18:23
+ for A, B being category st A, B are_opposite
+ for a, b being object of A st <^a,b^> <> {} & <^b,a^> <> {}
+ for a', b' being object of B st a' = a & b' = b
+ for f being Morphism of a,b, f' being Morphism of b',a'
+   st f' = f & f is retraction coretraction
+   holds f'" = f";
+
+theorem :: YELLOW18:24
+ for A, B being category st A, B are_opposite
+ for a, b being object of A st <^a,b^> <> {} & <^b,a^> <> {}
+ for a', b' being object of B st a' = a & b' = b
+ for f being Morphism of a,b, f' being Morphism of b',a' st f' = f
+  holds f is iso iff f' is iso;
+
+theorem :: YELLOW18:25
+ for A, B, C, D being category st A, B are_opposite & C, D are_opposite
+ for F, G being covariant Functor of B, C
+  st F, G are_naturally_equivalent
+  holds dualizing-func(C,D)*G*dualizing-func(A,B),
+        dualizing-func(C,D)*F*dualizing-func(A,B) are_naturally_equivalent;
+
+theorem :: YELLOW18:26
+ for A, B, C, D being category st A, B are_opposite & C, D are_opposite
+  holds A, C are_equivalent implies B, D are_equivalent;
+
+definition
+ let A,B be category;
+ pred A,B are_dual means
+:: YELLOW18:def 6
+
+  A, B opp are_equivalent;
+  symmetry;
+end;
+
+theorem :: YELLOW18:27
+   for A, B being category st A, B are_anti-isomorphic
+  holds A, B are_dual;
+
+theorem :: YELLOW18:28
+   for A, B, C being category st A, B are_opposite
+  holds A, C are_equivalent iff B, C are_dual;
+
+theorem :: YELLOW18:29
+   for A, B, C being category st A, B are_dual & B, C are_equivalent
+  holds A, C are_dual;
+
+theorem :: YELLOW18:30
+   for A, B, C being category st A, B are_dual & B, C are_dual
+  holds A, C are_equivalent;
+
+begin
+:: <section4>Concrete categories</section4>
+
+theorem :: YELLOW18:31
+ for X,Y,x being set
+   holds x in Funcs(X,Y) iff x is Function & proj1 x = X & proj2 x c= Y;
+
+definition
+ let C be 1-sorted;
+ mode ManySortedSet of C is ManySortedSet of the carrier of C;
+end;
+
+definition
+ let C be category;
+ attr C is para-functional means
+:: YELLOW18:def 7
+    ex F being ManySortedSet of C st
+   for a1,a2 being object of C holds <^a1,a2^> c= Funcs(F.a1,F.a2);
+end;
+
+definition
+ cluster quasi-functional -> para-functional category;
+end;
+
+definition
+ let C be category;
+ let a be set;
+ func C-carrier_of a means
+:: YELLOW18:def 8
+
+  ex b being object of C st b = a & it = proj1 idm b if a is object of C
+  otherwise it = {};
+end;
+
+definition
+ let C be category;
+ let a be object of C;
+ redefine func C-carrier_of a equals
+:: YELLOW18:def 9
+
+   proj1 idm a;
+ synonym the_carrier_of a;
+end;
+
+theorem :: YELLOW18:32
+ for A being non empty set, a being object of EnsCat A
+  holds idm a = id a;
+
+theorem :: YELLOW18:33
+ for A being non empty set for a being object of EnsCat A
+  holds the_carrier_of a = a;
+
+definition
+ let C be category;
+ attr C is set-id-inheriting means
+:: YELLOW18:def 10
+
+  for a being object of C holds idm a = id the_carrier_of a;
+end;
+
+definition
+ let A be non empty set;
+ cluster EnsCat A -> set-id-inheriting;
+end;
+
+definition
+ let C be category;
+ attr C is concrete means
+:: YELLOW18:def 11
+
+  C is para-functional semi-functional set-id-inheriting;
+end;
+
+definition
+ cluster concrete -> para-functional semi-functional set-id-inheriting
+   category;
+ cluster para-functional semi-functional set-id-inheriting -> concrete
+   category;
+end;
+
+definition
+ cluster concrete quasi-functional strict category;
+end;
+
+theorem :: YELLOW18:34
+ for C being category holds
+   C is para-functional iff
+    for a1,a2 being object of C
+     holds <^a1,a2^> c= Funcs(the_carrier_of a1, the_carrier_of a2);
+
+theorem :: YELLOW18:35
+ for C being para-functional category
+ for a,b being object of C st <^a,b^> <> {}
+ for f being Morphism of a,b
+  holds f is Function of the_carrier_of a, the_carrier_of b;
+
+definition
+ let A be para-functional category;
+ let a,b be object of A;
+ cluster -> Function-like Relation-like Morphism of a,b;
+end;
+
+theorem :: YELLOW18:36
+ for C being para-functional category
+ for a,b being object of C st <^a,b^> <> {}
+ for f being Morphism of a,b
+  holds dom f = the_carrier_of a & rng f c= the_carrier_of b;
+
+theorem :: YELLOW18:37
+   for C being para-functional semi-functional category
+ for a being object of C
+  holds the_carrier_of a = dom idm a;
+
+theorem :: YELLOW18:38
+ for C being para-functional semi-functional category
+ for a,b,c being object of C st <^a,b^> <> {} & <^b,c^> <> {}
+ for f being Morphism of a,b, g being Morphism of b,c
+  holds g*f = (g qua Function)*(f qua Function);
+
+theorem :: YELLOW18:39
+ for C being para-functional semi-functional category
+ for a being object of C st id the_carrier_of a in <^a,a^>
+  holds idm a = id the_carrier_of a;
+
+scheme ConcreteCategoryLambda
+ { A() -> non empty set,
+   B(set,set) -> set,
+   D(set) -> set }:
+ ex C being concrete strict category
+  st the carrier of C = A() &
+     (for a being object of C holds the_carrier_of a = D(a)) &
+     for a,b being object of C holds <^a,b^> = B(a,b)
+ provided
+ for a,b,c being Element of A(), f,g being Function
+      st f in B(a,b) & g in B(b,c) holds g*f in B(a,c)
+ and
+  for a,b being Element of A() holds B(a,b) c= Funcs(D(a), D(b))
+ and
+  for a being Element of A() holds id D(a) in B(a,a);
+
+scheme ConcreteCategoryQuasiLambda
+ { A() -> non empty set,
+   P[set,set,set],
+   D(set) -> set }:
+ ex C being concrete strict category
+  st the carrier of C = A() &
+     (for a being object of C holds the_carrier_of a = D(a)) &
+     for a,b being Element of A(), f being Function
+      holds f in (the Arrows of C).(a,b) iff f in Funcs(D(a), D(b)) & P[a,b,f]
+ provided
+ for a,b,c being Element of A(), f,g being Function
+      st P[a,b,f] & P[b,c,g] holds P[a,c,g*f]
+ and
+ for a being Element of A() holds P[a,a,id D(a)];
+
+
+scheme ConcreteCategoryEx
+ { A() -> non empty set, B(set) -> set,
+   D[set, set],
+   P[set,set,set] }:
+ ex C being concrete strict category
+  st the carrier of C = A() &
+     (for a being object of C
+       for x being set holds x in the_carrier_of a iff x in B(a) & D[a,x]) &
+     for a,b being Element of A(), f being Function
+      holds f in (the Arrows of C).(a,b) iff
+          f in Funcs(C-carrier_of a, C-carrier_of b) & P[a,b,f]
+ provided
+ for a,b,c being Element of A(), f,g being Function
+      st P[a,b,f] & P[b,c,g] holds P[a,c,g*f]
+ and
+ for a being Element of A(), X being set
+     st for x being set holds x in X iff x in B(a) & D[a,x]
+     holds P[a,a,id X];
+
+scheme ConcreteCategoryUniq1
+ { A() -> non empty set,
+   B(set,set) -> set }:
+ for C1, C2 being para-functional semi-functional category
+  st the carrier of C1 = A() &
+     (for a,b being object of C1 holds <^a,b^> = B(a,b)) &
+     the carrier of C2 = A() &
+     (for a,b being object of C2 holds <^a,b^> = B(a,b))
+  holds the AltCatStr of C1 = the AltCatStr of C2;
+
+scheme ConcreteCategoryUniq2
+ { A() -> non empty set,
+   P[set,set,set],
+   D(set) -> set }:
+ for C1,C2 being para-functional semi-functional category st
+   the carrier of C1 = A() &
+   (for a,b being Element of A(), f being Function
+    holds f in (the Arrows of C1).(a,b) iff f in
+ Funcs(D(a), D(b)) & P[a,b,f]) &
+   the carrier of C2 = A() &
+   (for a,b being Element of A(), f being Function
+    holds f in (the Arrows of C2).(a,b) iff f in Funcs(D(a), D(b)) & P[a,b,f])
+  holds the AltCatStr of C1 = the AltCatStr of C2;
+
+scheme ConcreteCategoryUniq3
+ { A() -> non empty set, B(set) -> set,
+   D[set, set],
+   P[set,set,set] }:
+ for C1,C2 being para-functional semi-functional category st
+   the carrier of C1 = A() &
+   (for a being object of C1
+     for x being set holds x in the_carrier_of a iff x in B(a) & D[a,x]) &
+   (for a,b being Element of A(), f being Function
+     holds f in (the Arrows of C1).(a,b) iff
+          f in Funcs(C1-carrier_of a, C1-carrier_of b) & P[a,b,f]) &
+   the carrier of C2 = A() &
+   (for a being object of C2
+     for x being set holds x in the_carrier_of a iff x in B(a) & D[a,x]) &
+   (for a,b being Element of A(), f being Function
+     holds f in (the Arrows of C2).(a,b) iff
+          f in Funcs(C2-carrier_of a, C2-carrier_of b) & P[a,b,f])
+  holds the AltCatStr of C1 = the AltCatStr of C2;
+
+begin
+:: <section5>Equivalence between concrete categories</section5>
+
+theorem :: YELLOW18:40
+ for C being concrete category
+ for a,b being object of C st <^a,b^> <> {} & <^b,a^> <> {}
+ for f being Morphism of a,b
+  st f is retraction
+  holds rng f = the_carrier_of b;
+
+theorem :: YELLOW18:41
+ for C being concrete category
+ for a,b being object of C st <^a,b^> <> {} & <^b,a^> <> {}
+ for f being Morphism of a,b
+  st f is coretraction
+  holds f is one-to-one;
+
+theorem :: YELLOW18:42
+ for C being concrete category
+ for a,b being object of C st <^a,b^> <> {} & <^b,a^> <> {}
+ for f being Morphism of a,b
+  st f is iso
+  holds f is one-to-one & rng f = the_carrier_of b;
+
+theorem :: YELLOW18:43
+ for C being para-functional semi-functional category
+ for a,b being object of C st <^a,b^> <> {}
+ for f being Morphism of a,b
+  st f is one-to-one & (f qua Function)" in <^b,a^>
+  holds f is iso;
+
+theorem :: YELLOW18:44
+   for C being concrete category
+ for a,b being object of C st <^a,b^> <> {} & <^b,a^> <> {}
+ for f being Morphism of a,b
+  st f is iso
+  holds f" = (f qua Function)";
+
+scheme ConcreteCatEquivalence
+ { A,B() -> para-functional semi-functional category,
+   O1, O2(set) -> set,
+   F1, F2(set,set,set) -> Function,
+   A, B(set) -> Function }:
+  A(), B() are_equivalent
+ provided
+  ex F being covariant Functor of A(),B() st
+    (for a being object of A() holds F.a = O1(a)) &
+    for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b holds F.f = F1(a,b,f)
+ and
+  ex G being covariant Functor of B(),A() st
+    (for a being object of B() holds G.a = O2(a)) &
+    for a,b being object of B() st <^a,b^> <> {}
+    for f being Morphism of a,b holds G.f = F2(a,b,f)
+ and
+  for a, b being object of A() st a = O2(O1(b))
+    holds A(b) in <^a, b^> & A(b)" in <^b,a^> & A(b) is one-to-one
+ and
+  for a, b being object of B() st b = O1(O2(a))
+    holds B(a) in <^a, b^> & B(a)" in <^b,a^> & B(a) is one-to-one
+ and
+  for a,b being object of A() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     holds A(b)*F2(O1(a),O1(b),F1(a,b,f)) = f*A(a)
+ and
+  for a,b being object of B() st <^a,b^> <> {}
+    for f being Morphism of a,b
+     holds F1(O2(a),O2(b),F2(a,b,f))*B(a) = B(b)*f;
+
+begin
+:: <section6>Concretization of categories</section6>
+
+definition
+ let C be category;
+
+ func Concretized C -> concrete strict category means
+:: YELLOW18:def 12
+
+  the carrier of it = the carrier of C &
+  (for a being object of it
+    for x being set holds x in the_carrier_of a iff
+      x in Union disjoin the Arrows of C & a = x`22) &
+  for a,b being Element of C, f being Function
+   holds f in (the Arrows of it).(a,b) iff
+    f in Funcs(it-carrier_of a, it-carrier_of b) &
+    ex fa,fb being object of C, g being Morphism of fa, fb
+     st fa = a & fb = b & <^fa, fb^> <> {} &
+      for o being object of C st <^o, fa^> <> {}
+      for h being Morphism of o,fa holds f.[h,[o,fa]] = [g*h,[o,fb]];
+end;
+
+theorem :: YELLOW18:45
+ for A being category, a being object of A, x being set
+  holds x in (Concretized A)-carrier_of a iff
+    ex b being object of A, f being Morphism of b,a
+     st <^b,a^> <> {} & x = [f,[b,a]];
+
+definition
+ let A be category;
+ let a be object of A;
+ cluster (Concretized A)-carrier_of a -> non empty;
+end;
+
+theorem :: YELLOW18:46
+ for A being category, a, b being object of A st <^a,b^> <> {}
+ for f being Morphism of a,b
+ ex F being Function of
+      (Concretized A)-carrier_of a, (Concretized A)-carrier_of b
+  st F in (the Arrows of Concretized A).(a,b) &
+::     F.[idm a, [a,a]] = [f, [a,b]] &
+     for c being object of A, g being Morphism of c,a st <^c,a^> <> {}
+      holds F.[g, [c,a]] = [f*g, [c,b]];
+
+theorem :: YELLOW18:47
+ for A being category, a, b being object of A st <^a,b^> <> {}
+ for F1,F2 being Function
+  st F1 in (the Arrows of Concretized A).(a,b) &
+     F2 in (the Arrows of Concretized A).(a,b) &
+     F1.[idm a, [a,a]] = F2.[idm a, [a,a]]
+  holds F1 = F2;
+
+scheme NonUniqMSFunctionEx
+ {I() -> set,
+  A, B() -> ManySortedSet of I(),
+  P[set,set,set]}:
+ ex F being ManySortedFunction of A(), B() st
+  for i,x being set st i in I() & x in A().i
+   holds F.i.x in B().i & P[i,x,F.i.x]
+ provided
+  for i,x being set st i in I() & x in A().i
+   ex y being set st y in B().i & P[i,x,y];
+
+definition
+ let A be category;
+ func Concretization A -> covariant strict Functor of A, Concretized A means
+:: YELLOW18:def 13
+
+  (for a being object of A holds it.a = a) &
+  (for a, b being object of A st <^a,b^> <> {}
+   for f being Morphism of a,b holds it.f.[idm a, [a,a]] = [f, [a,b]]);
+end;
+
+definition
+ let A be category;
+ cluster Concretization A -> bijective;
+end;
+
+theorem :: YELLOW18:48
+   for A being category
+  holds A, Concretized A are_isomorphic;
+

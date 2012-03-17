@@ -1,0 +1,4012 @@
+:: Dickson's lemma
+::  by Gilbert Lee and Piotr Rudnicki
+::
+:: Received March 12, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary DICKSON, RELAT_1, RELAT_2, FINSET_1, WELLORD1, ORDERS_2, BOOLE,
+      WAYBEL20, EQREL_1, ORDERS_1, NORMSP_1, FUNCT_1, SQUARE_1, SETFAM_1,
+      CARD_1, NEWTON, SEQM_3, TARSKI, MCART_1, YELLOW_1, PBOOLE, CARD_3,
+      PRE_TOPC, CAT_1, RLVECT_2, WAYBEL_3, YELLOW_6, FUNCOP_1, ORDINAL2,
+      FUNCT_4, YELLOW_3, WELLFND1, WAYBEL_4, REARRAN1, PARTFUN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, STRUCT_0, RELAT_1,
+      RELAT_2, DOMAIN_1, RELSET_1, FINSET_1, MCART_1, WELLORD1, ORDERS_1,
+      ORDERS_2, FUNCT_1, EQREL_1, WELLFND1, WAYBEL_0, NUMBERS, XREAL_0, NAT_1,
+      CARD_1, NORMSP_1, CQC_SIM1, WAYBEL_4, PARTFUN1, FUNCT_2, SEQM_3,
+      PSCOMP_1, FRECHET2, BHSP_3, YELLOW_3, WAYBEL_1, PBOOLE, PRE_TOPC,
+      PRALG_1, CARD_3, YELLOW_1, CQC_LANG, WAYBEL_3, YELLOW_6, FUNCT_4,
+      PRE_CIRC;
+ constructors ORDERS_2, WELLFND1, NAT_1, CQC_SIM1, PRE_CIRC, WAYBEL_4,
+      PSCOMP_1, FRECHET2, YELLOW_3, WAYBEL_1, INT_1, ORDERS_3, WAYBEL_3,
+      DOMAIN_1, BHSP_3, TOLER_1;
+ clusters RELSET_1, FINSET_1, SUBSET_1, STRUCT_0, NAT_1, NORMSP_1, RELAT_1,
+      CARD_5, SEQM_3, YELLOW_6, WAYBEL12, YELLOW_3, YELLOW_1, FUNCT_1,
+      BINARITH, CQC_LANG, BORSUK_3, WAYBEL18, ORDERS_1, FILTER_1, MEMBERED,
+      FUNCT_2, PRE_CIRC, PARTFUN1;
+ requirements BOOLE, SUBSET, NUMERALS;
+ definitions TARSKI, RELAT_2, ORDERS_1, ORDERS_2;
+ theorems WELLORD1, ORDERS_2, SUBSET_1, TARSKI, RELAT_1, RELAT_2, RELSET_1,
+      ZFMISC_1, EQREL_1, STRUCT_0, WAYBEL_0, ORDERS_1, NAT_1, FRECHET2,
+      FUNCT_1, FUNCT_2, REAL_1, CQC_SIM1, SETFAM_1, CARD_2, CARD_4, CARD_1,
+      NORMSP_1, SEQM_3, FINSET_1, AXIOMS, YELLOW_3, WAYBEL_1, WAYBEL20, CARD_5,
+      YELLOW_1, CARD_3, CQC_LANG, FUNCOP_1, WAYBEL_3, MCART_1, FUNCT_4,
+      WELLFND1, WAYBEL_4, PBOOLE, PRALG_1, YELLOW_6, AFINSQ_1, BHSP_3,
+      XBOOLE_0, XBOOLE_1, ORDINAL2, PARTFUN1;
+ schemes PRE_CIRC, RECDEF_1, NAT_1, FUNCT_2, DOMAIN_1, FRAENKEL, GRAPH_2,
+      BINARITH, FUNCT_1, RELSET_1;
+
+begin :: Preliminaries
+
+theorem Th1:
+for g being Function, x being set st dom g = {x} holds g = x .--> g.x
+proof let g be Function, x be set such that
+A1: dom g = {x};
+      now let a,b be set;
+        A2: dom (x .-->g.x) = {x} by CQC_LANG:5;
+        hereby assume A3: [a,b] in g;
+        then A4: a in {x} by A1,FUNCT_1:8;
+        then A5: a = x by TARSKI:def 1; then b = g.x by A3,FUNCT_1:8;
+            then (x.-->g.x).a = b by A5,CQC_LANG:6;
+            hence [a,b] in x.-->g.x by A2,A4,FUNCT_1:8;
+        end;
+        assume A6: [a,b] in x.-->g.x;
+    then A7: a in {x} by A2,FUNCT_1:8;
+    then A8: a = x by TARSKI:def 1;
+          b = (x.-->g.x).a by A6,FUNCT_1:8 .= g.a by A8,CQC_LANG:6;
+        hence [a,b] in g by A1,A7,FUNCT_1:8;
+    end;
+    hence g = x.-->g.x by RELAT_1:def 2;
+end;
+
+theorem Th2:
+for n being Nat holds n c= n+1
+proof let n be Nat;
+    n+1 = n \/ {n} by AFINSQ_1:4;
+  hence thesis by XBOOLE_1:7;
+end;
+
+scheme FinSegRng2{m, n() -> Nat, F(set)->set, P[Nat]}:
+  {F(i) where i is Nat : m()<i & i<=n() & P[i]} is finite
+proof
+    defpred p[Nat] means P[$1];
+    deffunc f(set) = F($1);
+    set F1 = {f(i) where i is Nat: m()<=i & i<=n() & p[i]};
+    set F2 = {f(i) where i is Nat: m()< i & i<=n() & p[i]};
+A1: F1 is finite from FinSegRng;
+      F2 c= F1 proof let x be set; assume x in F2;
+        then consider i being Nat such that
+    A2: F(i) = x & m()< i & i<=n() & P[i];
+      thus thesis by A2;
+    end;
+  hence F2 is finite by A1,FINSET_1:13;
+end;
+
+theorem Th3:
+for X being infinite set ex f being Function of NAT, X st f is one-to-one
+proof let X be infinite set; not Card X is finite by CARD_4:1;
+    then Card NAT c= Card X by CARD_1:38,CARD_4:11;
+    then consider f being Function such that
+A1: f is one-to-one & dom f = NAT & rng f c= X by CARD_1:26;
+      now let x be set such that
+    A2: x in NAT; f.x in rng f by A1,A2,FUNCT_1:12;
+        hence f.x in X by A1;
+    end; then reconsider f as Function of NAT, X by A1,FUNCT_2:5;
+    take f; thus f is one-to-one by A1;
+end;
+
+definition
+  let R be RelStr, f be sequence of R;
+  attr f is ascending means
+    for n being Nat
+   holds f.(n+1) <> f.n & [f.n, f.(n+1)] in the InternalRel of R;
+end;
+
+definition
+  let R be RelStr, f be sequence of R;
+  attr f is weakly-ascending means :Def2:
+  for n being Nat holds [f.n, f.(n+1)] in the InternalRel of R;
+end;
+
+theorem Th4:
+for R being non empty transitive RelStr, f being sequence of R
+ st f is weakly-ascending
+  holds for i,j being Nat st i < j holds f.i <= f.j
+proof let R be non empty transitive RelStr, f be sequence of R such that
+A1: f is weakly-ascending;
+    let i be Nat;
+    defpred P[Nat] means i < $1 implies f.i <= f.$1;
+A2: P[0] by NAT_1:18;
+A3: for j being Nat st P[j] holds P[j+1]
+    proof let j be Nat such that
+    A4: P[j] and
+    A5: i < j+1; reconsider fj1 = f.(j+1) as Element of R;
+    A6: [f.j, f.(j+1)] in the InternalRel of R by A1,Def2;
+    then A7: f.j <= fj1 by ORDERS_1:def 9;
+    A8: i <= j by A5,NAT_1:38;
+        per cases by A8,REAL_1:def 5;
+        suppose i < j; hence f.i <= f.(j+1) by A4,A7,ORDERS_1:26;
+        suppose i = j; hence f.i <= f.(j+1) by A6,ORDERS_1:def 9;
+    end;
+    thus for j being Nat holds P[j] from Ind(A2,A3);
+end;
+
+theorem Th5:
+for R being non empty RelStr
+ holds R is connected iff
+       the InternalRel of R is_strongly_connected_in the carrier of R
+proof let R be non empty RelStr;
+    set IR = the InternalRel of R, CR = the carrier of R;
+    hereby assume A1: R is connected;
+          now let x, y be set such that
+        A2: x in CR & y in CR;
+            reconsider x'=x, y'=y as Element of R by A2;
+              x' <= y' or y' <= x' by A1,WAYBEL_0:def 29;
+            hence [x,y] in IR or [y,x] in IR by ORDERS_1:def 9;
+        end;
+        hence IR is_strongly_connected_in CR by RELAT_2:def 7;
+    end;
+    assume A3: IR is_strongly_connected_in CR;
+      now let x, y be Element of R;
+          [x,y] in IR or [y,x] in IR by A3,RELAT_2:def 7;
+        hence x <= y or y <= x by ORDERS_1:def 9;
+    end;
+    hence R is connected by WAYBEL_0:def 29;
+end;
+
+canceled;
+
+theorem Th7:
+for L being RelStr, Y being set, a being set
+ holds ((the InternalRel of L)-Seg(a) misses Y & a in Y) iff
+        a is_minimal_wrt Y, the InternalRel of L
+proof let L be RelStr, Y be set, a be set;
+    set IR = the InternalRel of L;
+    hereby assume A1: IR-Seg(a) misses Y & a in Y;
+                  then A2: IR-Seg(a) /\ Y = {} by XBOOLE_0:def 7;
+          now thus a in Y by A1;
+               now assume ex y being set st y in Y & y<>a & [y,a] in IR;
+                 then consider y being set such that
+             A3: y in Y & y <> a & [y,a] in IR;
+                   y in IR-Seg(a) by A3,WELLORD1:def 1;
+                 hence contradiction by A2,A3,XBOOLE_0:def 3;
+             end;
+             hence not ex y being set st y in Y & y<>a & [y,a] in IR;
+        end;
+        hence a is_minimal_wrt Y, IR by WAYBEL_4:def 26;
+    end;
+    assume A4: a is_minimal_wrt Y, IR;
+      now assume not IR-Seg(a) misses Y;
+               then IR-Seg(a) /\ Y <> {} by XBOOLE_0:def 7;
+        then consider y being set such that
+    A5: y in IR-Seg(a) /\ Y by XBOOLE_0:def 1;
+    A6: y in IR-Seg(a) & y in Y by A5,XBOOLE_0:def 3;
+        then y <> a & [y,a] in IR by WELLORD1:def 1;
+        hence contradiction by A4,A6,WAYBEL_4:def 26;
+    end;
+    hence IR-Seg(a) misses Y;
+    thus a in Y by A4,WAYBEL_4:def 26;
+end;
+
+theorem Th8:
+for L being non empty transitive antisymmetric RelStr,
+    x being Element of L, a, N being set
+ st a is_minimal_wrt (the InternalRel of L)-Seg(x) /\ N,(the InternalRel of L)
+  holds a is_minimal_wrt N, (the InternalRel of L)
+proof let L be non empty transitive antisymmetric RelStr,
+      x be Element of L, a,N be set such that
+A1: a is_minimal_wrt (the InternalRel of L)-Seg(x) /\ N,(the InternalRel of L);
+    set IR = the InternalRel of L, CR = the carrier of L;
+A2: IR is_transitive_in CR by ORDERS_1:def 5;
+      now
+    A3: a in IR-Seg(x) /\ N & not ex y being set
+         st y in IR-Seg(x) /\ N & a <> y & [y,a] in IR by A1,WAYBEL_4:def 26;
+           then a in IR-Seg(x) & a in N by XBOOLE_0:def 3;
+    then A4: a <> x & [a,x] in IR by WELLORD1:def 1;
+        then a in CR by ZFMISC_1:106;
+        then reconsider a' = a as Element of L;
+        thus a in N by A3,XBOOLE_0:def 3;
+          now assume ex y being set st y in N & y <> a & [y,a] in IR;
+            then consider y being set such that
+        A5: y in N & y <> a & [y,a] in IR;
+              a in CR & y in CR by A5,ZFMISC_1:106;
+        then A6: [y,x] in IR by A2,A4,A5,RELAT_2:def 8;
+            per cases;
+            suppose x = y; then x <= a' & a' <= x by A4,A5,ORDERS_1:def 9;
+                hence contradiction by A4,ORDERS_1:25;
+            suppose x <> y; then y in IR-Seg(x) by A6,WELLORD1:def 1;
+                then y in IR-Seg(x) /\ N by A5,XBOOLE_0:def 3;
+                hence contradiction by A1,A5,WAYBEL_4:def 26;
+        end;
+        hence not ex y being set st y in N & y <> a & [y,a] in IR;
+    end;
+    hence a is_minimal_wrt N, IR by WAYBEL_4:def 26;
+end;
+
+begin :: Chapter 4.2
+
+definition let R be RelStr; :: Def 4.19 (ix)
+  attr R is quasi_ordered means :Def3:
+       R is reflexive transitive;
+end;
+
+definition :: Lemma 4.24.i
+   let R be RelStr such that
+A1: R is quasi_ordered;
+   func EqRel R -> Equivalence_Relation of the carrier of R equals :Def4:
+        (the InternalRel of R) /\ (the InternalRel of R)~;
+coherence proof set IR = the InternalRel of R, CR = the carrier of R;
+      R is reflexive by A1,Def3;
+then A2: IR is_reflexive_in CR by ORDERS_1:def 4;
+      R is transitive by A1,Def3;
+then A3: IR is_transitive_in CR by ORDERS_1:def 5;
+then A4: IR quasi_orders CR by A2,ORDERS_2:def 4;
+      IR /\ IR~ is total symmetric transitive
+      proof
+        IR /\ IR~ is_reflexive_in CR
+        proof
+            let x be set such that
+        A5: x in CR;
+        A6: [x,x] in IR by A2,A5,RELAT_2:def 1;
+            then [x,x] in IR~ by RELAT_1:def 7;
+            hence [x,x] in IR /\ IR~ by A6,XBOOLE_0:def 3;
+        end;
+        then
+A7:  dom(IR /\ IR~) = CR & field(IR /\ IR~) = CR by ORDERS_1:98;
+     hence IR /\ IR~ is total by PARTFUN1:def 4;
+       IR /\ IR~ is_symmetric_in CR proof
+            let x,y be set such that
+              x in CR & y in CR and
+        A8: [x,y] in IR /\ IR~;
+              [x,y] in IR & [x,y] in IR~ by A8,XBOOLE_0:def 3;
+            then [y,x] in IR~ & [y,x] in IR by RELAT_1:def 7;
+            hence [y,x] in IR /\ IR~ by XBOOLE_0:def 3;
+        end;
+        hence IR /\ IR~ is symmetric by A7,RELAT_2:def 11;
+         IR /\ IR~ is_transitive_in CR proof
+            let x, y, z be set such that
+        A9: x in CR and A10: y in CR and
+        A11: z in CR and A12: [x,y] in IR /\ IR~ and
+        A13: [y,z] in IR /\ IR~;
+        A14: [x,y] in IR & [x,y] in IR~ by A12,XBOOLE_0:def 3;
+        A15: [y,z] in IR & [y,z] in IR~ by A13,XBOOLE_0:def 3;
+        then A16: [x,z] in IR by A3,A9,A10,A11,A14,RELAT_2:def 8;
+              IR~ quasi_orders CR by A4,ORDERS_2:38;
+            then IR~ is_transitive_in CR by ORDERS_2:def 4;
+            then [x,z] in IR~ by A9,A10,A11,A14,A15,RELAT_2:def 8;
+            hence [x,z] in IR /\ IR~ by A16,XBOOLE_0:def 3;
+        end;
+        hence IR /\ IR~ is transitive by A7,RELAT_2:def 16;
+    end;
+    hence thesis;
+end;
+end;
+
+theorem Th9:
+  for R being RelStr, x,y being Element of R
+   st R is quasi_ordered holds x in Class(EqRel R, y) iff x <= y & y <= x
+proof let R be RelStr, x,y be Element of R such that
+A1: R is quasi_ordered;
+    set IR = the InternalRel of R;
+    hereby assume x in Class(EqRel R,y);
+       then [x,y] in EqRel R by EQREL_1:27; then [x,y] in IR /\ IR~ by A1,Def4
+;
+    then A2: [x,y] in IR & [x,y] in IR~ by XBOOLE_0:def 3;
+        hence x <= y by ORDERS_1:def 9; [y,x] in IR by A2,RELAT_1:def 7;
+        hence y <= x by ORDERS_1:def 9;
+    end;
+    assume x <= y & y <= x;
+    then [x,y] in IR & [y,x] in IR by ORDERS_1:def 9;
+    then [x,y] in IR & [x,y] in IR~ by RELAT_1:def 7;
+    then [x,y] in IR /\ IR~ by XBOOLE_0:def 3; then [x,y] in EqRel R by A1,Def4
+;
+    hence x in Class(EqRel R, y) by EQREL_1:27;
+end;
+
+definition :: Lemma 4.24, (the InternalRel of R) / EqRel R
+  let R be RelStr;
+  func <=E R -> Relation of Class EqRel R means :Def5:
+  for A, B being set holds [A,B] in it iff
+    ex a, b being Element of R
+      st A = Class(EqRel R, a) & B = Class(EqRel R, b) & a <= b;
+existence proof
+    set IR = the InternalRel of R, CR = the carrier of R;
+    per cases;
+    suppose A1: CR = {};
+        reconsider IT = {} as Relation of Class(EqRel R) by RELSET_1:25;
+        take IT; let A, B be set;
+        thus [A,B] in IT implies
+          ex a, b being Element of R
+            st A = Class(EqRel R, a) & B = Class(EqRel R, b) & a <= b;
+        given a, b being Element of R such that
+          A = Class(EqRel R, a) & B = Class(EqRel R, b) and
+    A2: a <= b; IR = {} by A1,RELSET_1:26;
+        hence [A,B] in IT by A2,ORDERS_1:def 9;
+    suppose CR is non empty;
+        then reconsider R' = R as non empty RelStr by STRUCT_0:def 1;
+        set IT = {[Class(EqRel R, a), Class(EqRel R, b)]
+                  where a,b is Element of R' : a <= b};
+        set Y = Class(EqRel R);
+          IT c= [:Y,Y:] proof let x be set; assume x in IT;
+            then consider a, b being Element of R' such that
+        A3: x = [Class(EqRel R, a), Class(EqRel R, b)] and
+              a <= b;
+              Class(EqRel R, a) in Y & Class(EqRel R, b) in Y by EQREL_1:def 5;
+            hence x in [:Y,Y:] by A3,ZFMISC_1:def 2;
+        end;
+        then reconsider IT as Relation of Class(EqRel R) by RELSET_1:def 1;
+        take IT; let A, B be set;
+        hereby assume [A,B] in IT;
+            then consider a,b being Element of R such that
+        A4: [A,B] = [Class(EqRel R, a), Class(EqRel R, b)] and
+        A5: a <= b;
+            reconsider a' = a, b' = b as Element of R;
+            take a', b';
+            thus A = Class(EqRel R, a') & B = Class(EqRel R, b') &
+                 a' <= b' by A4,A5,ZFMISC_1:33;
+        end;
+        given a, b being Element of R such that
+    A6: A = Class(EqRel R, a) and
+    A7: B = Class(EqRel R, b) and
+    A8: a <= b;
+        thus [A,B] in IT by A6,A7,A8;
+end;
+uniqueness proof let IT1, IT2 be Relation of Class(EqRel R) such that
+A9: for A, B being set holds [A,B] in IT1 iff
+     ex a, b being Element of R
+     st A = Class(EqRel R, a) & B = Class(EqRel R, b) & a <= b and
+A10: for A, B being set holds [A,B] in IT2 iff
+     ex a, b being Element of R
+     st A = Class(EqRel R, a) & B = Class(EqRel R, b) & a <= b;
+      now let x be set;
+        hereby assume
+        A11: x in IT1; set Y = Class(EqRel R);
+            consider A, B being set such that
+              A in Y and B in Y and
+        A12: x = [A,B] by A11,ZFMISC_1:def 2;
+            consider a, b being Element of R such that
+        A13: A = Class(EqRel R, a) & B = Class(EqRel R, b) & a <= b by A9,A11,
+A12;
+            thus x in IT2 by A10,A12,A13;
+        end;
+        assume A14: x in IT2; set Y = Class(EqRel R);
+        consider A, B being set such that
+          A in Y & B in Y and
+    A15: x = [A,B] by A14,ZFMISC_1:def 2;
+        consider a, b being Element of R such that
+    A16: A = Class(EqRel R, a) & B = Class(EqRel R, b) & a <= b by A10,A14,A15;
+        thus x in IT1 by A9,A15,A16;
+    end;
+    hence IT1 = IT2 by TARSKI:2;
+end;
+end;
+
+theorem Th10: :: Lemma 4.24.ii
+for R being RelStr
+ st R is quasi_ordered holds <=E R partially_orders Class(EqRel R)
+proof let R be RelStr;
+    set CR = the carrier of R; set IR = the InternalRel of R;
+    assume
+A1: R is quasi_ordered; then R is transitive by Def3;
+then A2: IR is_transitive_in CR by ORDERS_1:def 5;
+    thus <=E R is_reflexive_in Class(EqRel R) proof
+        let x be set; assume x in Class(EqRel R);
+        then consider a being set such that
+    A3: a in CR and
+    A4: x = Class(EqRel R,a) by EQREL_1:def 5;
+          R is reflexive by A1,Def3;
+        then IR is_reflexive_in CR by ORDERS_1:def 4;
+    then A5: [a,a] in IR by A3,RELAT_2:def 1;
+        reconsider a'= a as Element of R by A3;
+          a' <= a' by A5,ORDERS_1:def 9;
+        hence [x,x] in <=E R by A4,Def5;
+    end;
+    thus <=E R is_transitive_in Class(EqRel R) proof let x,y,z be set such
+that
+    A6: x in Class(EqRel R) & y in Class(EqRel R) & z in Class(EqRel R) and
+    A7: [x,y] in <=E R and
+    A8: [y,z] in <=E R;
+        consider a,b being Element of R such that
+    A9: x = Class(EqRel R, a) & y = Class(EqRel R, b) & a <= b by A7,Def5;
+        consider c,d being Element of R such that
+    A10: y = Class(EqRel R,c) & z = Class(EqRel R,d) & c <= d by A8,Def5;
+    A11: [a,b] in IR by A9,ORDERS_1:def 9;
+    A12: [c,d] in IR by A10,ORDERS_1:def 9;
+        consider x1 being set such that
+    A13: x1 in CR & x = Class(EqRel R, x1) by A6,EQREL_1:def 5;
+          b in Class(EqRel R, c) by A9,A10,A13,EQREL_1:31;
+        then [b,c] in EqRel R by EQREL_1:27; then [b,c] in IR/\ IR~ by A1,Def4
+;
+        then [b,c] in IR by XBOOLE_0:def 3
+; then [a,c] in IR by A2,A11,A13,RELAT_2:def 8;
+       then [a,d] in IR by A2,A12,A13,RELAT_2:def 8; then a<=d by ORDERS_1:def
+9;
+      hence [x,z] in <=E R by A9,A10,Def5;
+    end;
+    thus <=E R is_antisymmetric_in Class(EqRel R)proof let x,y be set such
+that
+    A14: x in Class(EqRel R) and y in Class(EqRel R) and
+    A15: [x,y] in <=E R and
+    A16: [y,x] in <=E R;
+        consider a,b being Element of R such that
+    A17: x = Class(EqRel R, a) & y = Class(EqRel R, b) & a <= b by A15,Def5;
+        consider c,d being Element of R such that
+    A18: y = Class(EqRel R, c) & x = Class(EqRel R, d) & c <= d by A16,Def5;
+    A19: [a,b] in IR by A17,ORDERS_1:def 9;
+    A20: [c,d] in IR by A18,ORDERS_1:def 9;
+        consider x1 being set such that
+    A21: x1 in CR & x = Class(EqRel R, x1) by A14,EQREL_1:def 5;
+    A22: d in Class(EqRel R, a) by A17,A18,A21,EQREL_1:31;
+          a in Class(EqRel R, a) by A21,EQREL_1:28;
+    then A23: [a,d] in EqRel R by A22,EQREL_1:30;
+    A24: c in Class(EqRel R, b) by A17,A18,A21,EQREL_1:31;
+          b in Class(EqRel R, b) by A21,EQREL_1:28;
+    then A25: [b,c] in EqRel R by A24,EQREL_1:30;
+          [a,d] in IR /\ IR~ by A1,A23,Def4;
+        then [a,d] in IR & [a,d] in IR~ by XBOOLE_0:def 3;
+    then A26: [d,a] in IR by RELAT_1:def 7;
+          [b,c] in IR /\ IR~ by A1,A25,Def4;
+        then [b,c] in IR & [b,c] in IR~ by XBOOLE_0:def 3;
+        then [b,d] in IR by A2,A20,A21,RELAT_2:def 8;
+    then A27: [b,a] in IR by A2,A21,A26,RELAT_2:def 8;
+          [b,a] in IR~ by A19,RELAT_1:def 7;
+        then [b,a] in IR /\ IR~ by A27,XBOOLE_0:def 3;
+        then [b,a] in EqRel R by A1,Def4;
+        then b in Class(EqRel R, a) by EQREL_1:27;
+        hence x = y by A17,EQREL_1:31;
+    end;
+end;
+
+theorem ::Lemma 4.24.iii
+  for R being non empty RelStr st R is quasi_ordered & R is connected
+  holds <=E R linearly_orders Class(EqRel R)
+proof let R be non empty RelStr such that
+A1: R is quasi_ordered and
+A2: R is connected;
+A3: <=E R partially_orders Class(EqRel R) by A1,Th10;
+    hence <=E R is_reflexive_in Class(EqRel R) by ORDERS_2:def 5;
+    thus <=E R is_transitive_in Class(EqRel R) by A3,ORDERS_2:def 5;
+    thus <=E R is_antisymmetric_in Class(EqRel R) by A3,ORDERS_2:def 5;
+    thus <=E R is_connected_in Class(EqRel R) proof
+        set CR = the carrier of R;
+        let x, y be set such that
+    A4: x in Class(EqRel R) and
+    A5: y in Class(EqRel R) and x <> y and
+    A6: not [x,y] in <=E R;
+        consider a being set such that
+    A7: a in CR and
+    A8: x = Class(EqRel R, a) by A4,EQREL_1:def 5;
+        consider b being set such that
+    A9: b in CR and
+    A10: y = Class(EqRel R, b) by A5,EQREL_1:def 5;
+        reconsider a'=a,b'=b as Element of R by A7,A9;
+          not (a' <= b') by A6,A8,A10,Def5;
+        then b' <= a' by A2,WAYBEL_0:def 29;
+        hence [y,x] in <=E R by A8,A10,Def5;
+    end;
+end;
+
+definition :: "strict part" of a relation, p. 155
+  let R be Relation;
+  func R\~ -> Relation equals :Def6:
+    R \ R~;
+correctness;
+end;
+
+definition
+  let R be Relation;
+  cluster R \~ -> asymmetric;
+coherence proof
+    now let x,y be set such that x in field (R\~) and y in field (R\~) and
+  A1: [x,y] in R\~;
+        [x,y] in R \ R~ by A1,Def6; then not [x,y] in R~ by XBOOLE_0:def 4
+;
+      then not [y,x] in R by RELAT_1:def 7; then not [y,x] in R\R~ by XBOOLE_0:
+def 4
+;
+      hence not [y,x] in R\~ by Def6;
+  end; then R \~ is_asymmetric_in field (R\~) by RELAT_2:def 5;
+  hence R \~ is asymmetric by RELAT_2:def 13;
+end;
+end;
+
+definition
+  let X be set, R be Relation of X;
+  redefine func R\~ -> Relation of X;
+  coherence
+  proof
+      R\~ = R \ R~ by Def6;
+    hence thesis;
+  end;
+end;
+
+definition
+   let R be RelStr;
+   func R\~ -> strict RelStr equals :Def7:
+     RelStr(# the carrier of R, (the InternalRel of R)\~ #);
+correctness;
+end;
+
+definition
+  let R be non empty RelStr;
+  cluster R\~ -> non empty;
+coherence proof set IR = the InternalRel of R, CR = the carrier of R;
+    R\~ = RelStr(# CR, IR\~ #) by Def7;
+ hence R\~ is non empty;
+end;
+end;
+
+definition
+  let R be transitive RelStr;
+  cluster R\~ -> transitive;
+coherence proof
+    set IR = the InternalRel of R, CR = the carrier of R;
+    set IR'= the InternalRel of R\~, CR' = the carrier of R\~;
+A1: IR is_transitive_in CR by ORDERS_1:def 5;
+ A2: R\~ = RelStr(# CR, IR\~ #) by Def7;
+      now let x,y,z be set such that
+    A3: x in CR' & y in CR' & z in CR' and
+    A4: [x,y] in IR' & [y,z] in IR';
+          [x,y] in IR \ IR~ & [y,z] in IR \ IR~ by A2,A4,Def6;
+    then A5: [x,y] in IR & not [x,y] in IR~ & [y,z] in IR by XBOOLE_0:def 4;
+    then A6: [x,z] in IR by A1,A2,A3,RELAT_2:def 8;
+          now assume [x,z] in IR~;
+            then [z, x] in IR by RELAT_1:def 7;
+            then [y, x] in IR by A1,A2,A3,A5,RELAT_2:def 8;
+            hence contradiction by A5,RELAT_1:def 7;
+        end;
+        then [x,z] in IR \ IR~ by A6,XBOOLE_0:def 4;
+        hence [x,z] in IR' by A2,Def6;
+    end;
+    then IR' is_transitive_in CR' by RELAT_2:def 8;
+    hence R\~ is transitive by ORDERS_1:def 5;
+end;
+end;
+
+definition
+   let R be RelStr;
+   cluster R\~ -> antisymmetric;
+coherence proof
+    set IR = the InternalRel of R, CR = the carrier of R;
+    set IR'= the InternalRel of R\~, CR' = the carrier of R\~;
+A1:  R\~ = RelStr(# CR, IR\~ #) by Def7;
+      now let x, y be set such that
+          x in CR' & y in CR' and
+    A2: [x,y] in IR' & [y,x] in IR';
+          [x,y] in IR\ IR~ & [y,x] in IR\IR~ by A1,A2,Def6;
+        then not [x,y] in IR~ & [y,x] in IR by XBOOLE_0:def 4;
+        hence x = y by RELAT_1:def 7;
+    end;
+    then IR' is_antisymmetric_in CR' by RELAT_2:def 4;
+    hence R\~ is antisymmetric by ORDERS_1:def 6;
+end;
+end;
+
+theorem ::Exercise 4.27:
+  for R being non empty Poset, x being Element of R
+ holds Class(EqRel R, x) = {x}
+proof
+    let R be non empty Poset;
+    set IR = the InternalRel of R, CR = the carrier of R;
+    let x be Element of CR;
+A1: R is quasi_ordered by Def3;
+A2: IR is_antisymmetric_in CR by ORDERS_1:def 6;
+      now let z be set;
+        hereby assume z in Class(EqRel R, x);
+            then [z,x] in EqRel R by EQREL_1:27;
+            then [z,x] in IR /\ IR~ by A1,Def4;
+       then A3:  [z,x] in IR & [z,x] in IR~ by XBOOLE_0:def 3;
+       then A4:  [z,x] in IR & [x,z] in IR by RELAT_1:def 7;
+          z in dom IR by A3,RELAT_1:def 4;
+            then z = x by A2,A4,RELAT_2:def 4;
+            hence z in {x} by TARSKI:def 1;
+        end;
+        assume z in {x};
+        then z = x by TARSKI:def 1;
+        hence z in Class(EqRel R, x) by EQREL_1:28;
+    end;
+    hence Class(EqRel R, x) = {x} by TARSKI:2;
+end;
+
+theorem :: Exercise 4.29.i
+  for R being Relation holds R = R\~ iff R is asymmetric
+proof
+    let R be Relation; thus R = R\~ implies R is asymmetric;
+    assume R is asymmetric;
+then A1: R is_asymmetric_in field R by RELAT_2:def 13;
+A2: R\~ = R \ R~ by Def6;
+      now let a,b be set;
+        hereby assume A3: [a,b] in R;
+            then a in field R & b in field R by RELAT_1:30;
+            then not [b,a] in R by A1,A3,RELAT_2:def 5;
+            then not [a,b] in R~ by RELAT_1:def 7;
+            hence [a,b] in R\~ by A2,A3,XBOOLE_0:def 4;
+        end;
+        assume [a,b] in R\~;
+        hence [a,b] in R by A2,XBOOLE_0:def 4;
+    end;
+    hence R = R\~ by RELAT_1:def 2;
+end;
+
+theorem :: Exercise 4.29.ii
+  for R being Relation st R is transitive holds R\~ is transitive
+proof let R be Relation such that
+A1: R is transitive;
+A2: R\~ = R \ R~ by Def6;
+A3: R is_transitive_in field R by A1,RELAT_2:def 16;
+      now let x, y, z be set such that
+          x in field (R\~) & y in field (R\~) & z in field (R\~) and
+    A4: [x,y] in R\~ and
+    A5: [y,z] in R\~;
+    A6: [x,y] in R & [y,z] in R by A2,A4,A5,XBOOLE_0:def 4;
+    then A7: x in field R & y in field R & z in field R by RELAT_1:30;
+    then A8: [x,z] in R by A3,A6,RELAT_2:def 8;
+          not [x,y] in R~ by A2,A4,XBOOLE_0:def 4;
+    then not [y,x] in R by RELAT_1:def 7;
+        then not [z,x] in R by A3,A6,A7,RELAT_2:def 8;
+    then not [x,z] in R~ by RELAT_1:def 7;
+        hence [x,z] in R\~ by A2,A8,XBOOLE_0:def 4;
+    end;
+    then R\~ is_transitive_in field (R\~) by RELAT_2:def 8;
+    hence R\~ is transitive by RELAT_2:def 16;
+end;
+
+theorem :: Exercise 4.29.iii
+  for R being Relation, a, b being set st R is antisymmetric
+ holds [a,b] in R\~ iff [a,b] in R & a <> b
+proof let R be Relation, a, b be set such that
+A1: R is antisymmetric;
+A2: R is_antisymmetric_in field R by A1,RELAT_2:def 12;
+A3: R\~ = R \ R~ by Def6;
+A4: R\~ is_asymmetric_in field (R\~) by RELAT_2:def 13;
+    hereby assume A5: [a,b] in R\~;
+       hence [a,b] in R by A3,XBOOLE_0:def 4;
+         now assume A6: a = b;
+             a in field (R\~) & b in field (R\~) by A5,RELAT_1:30;
+           hence contradiction by A4,A5,A6,RELAT_2:def 5;
+       end;
+       hence a <> b;
+    end;
+    assume A7: [a,b] in R & a <> b;
+then a in field R & b in field R by RELAT_1:30;
+    then not [b,a] in R by A2,A7,RELAT_2:def 4;
+    then not [a,b] in R~ by RELAT_1:def 7;
+    hence [a,b] in R\~ by A3,A7,XBOOLE_0:def 4;
+end;
+
+theorem Th16: :: Exercise 4.29 (addition)
+for R being RelStr st R is well_founded holds R\~ is well_founded
+proof let R be RelStr such that
+A1: R is well_founded;
+    set IR = the InternalRel of R, CR = the carrier of R;
+    set IR' = the InternalRel of R\~, CR' = the carrier of R\~;
+A2: IR is_well_founded_in CR by A1,WELLFND1:def 2;
+A3:  R\~ = RelStr(# CR, IR\~ #) by Def7;
+      now let Y be set such that
+       A4: Y c= CR' and
+       A5: Y <> {};
+           consider a being set such that
+       A6: a in Y and
+       A7: IR-Seg(a) misses Y by A2,A3,A4,A5,WELLORD1:def 3;
+       A8: IR-Seg(a) /\ Y = {} by A7,XBOOLE_0:def 7;
+           take a;
+           thus a in Y by A6;
+             now assume ex z being set st z in IR'-Seg(a) /\ Y;
+               then consider z being set such that
+           A9: z in IR'-Seg(a) /\ Y;
+           A10: z in IR'-Seg(a) & z in Y by A9,XBOOLE_0:def 3;
+           then A11: z <> a & [z,a] in IR' by WELLORD1:def 1;
+               then [z,a] in IR \ IR~ by A3,Def6;
+               then [z,a] in IR by XBOOLE_0:def 4;
+               then z in IR-Seg(a) by A11,WELLORD1:def 1;
+               hence contradiction by A8,A10,XBOOLE_0:def 3;
+           end; then IR'-Seg(a) /\ Y = {} by XBOOLE_0:def 1;
+           hence IR'-Seg(a) misses Y by XBOOLE_0:def 7;
+    end;
+    then IR' is_well_founded_in CR' by WELLORD1:def 3;
+    hence R\~ is well_founded by WELLFND1:def 2;
+end;
+
+theorem Th17: :: Exercise 4.29 (addition)
+for R being RelStr
+ st R\~ is well_founded & R is antisymmetric holds R is well_founded
+proof let R be RelStr such that
+A1: R\~ is well_founded and
+A2: R is antisymmetric;
+    set IR = the InternalRel of R, CR = the carrier of R;
+    set IR' = the InternalRel of R\~;
+A3: IR is_antisymmetric_in CR by A2,ORDERS_1:def 6;
+A4: R\~ = RelStr(# CR, (IR)\~ #) by Def7;
+then A5: IR' is_well_founded_in CR by A1,WELLFND1:def 2;
+      now let Y be set such that
+    A6: Y c= CR and
+    A7: Y <> {};
+        consider a being set such that
+    A8: a in Y and
+    A9: IR'-Seg(a) misses Y by A5,A6,A7,WELLORD1:def 3;
+    A10: IR'-Seg(a) /\ Y = {} by A9,XBOOLE_0:def 7;
+        take a;
+        thus a in Y by A8;
+          now assume IR-Seg(a) /\ Y <> {};
+            then consider z being set such that
+        A11: z in IR-Seg(a) /\ Y by XBOOLE_0:def 1;
+        A12: z in IR-Seg(a) & z in Y by A11,XBOOLE_0:def 3;
+        then A13: z <> a & [z,a] in IR by WELLORD1:def 1;
+            then not [a,z] in IR by A3,A6,A8,A12,RELAT_2:def 4;
+            then not [z,a] in IR~ by RELAT_1:def 7;
+            then [z,a] in IR \ IR~ by A13,XBOOLE_0:def 4;
+            then [z,a] in IR' by A4,Def6;
+            then z in IR'-Seg(a) by A13,WELLORD1:def 1;
+            hence contradiction by A10,A12,XBOOLE_0:def 3;
+        end;
+        hence IR-Seg(a) misses Y by XBOOLE_0:def 7;
+    end;
+    then IR is_well_founded_in CR by WELLORD1:def 3;
+    hence R is well_founded by WELLFND1:def 2;
+end;
+
+begin :: Chapter 4.3
+
+theorem Th18: :: Def 4.30 (see WAYBEL_4:def 26)
+for L being RelStr, N being set, x being Element of L\~
+ holds x is_minimal_wrt N, the InternalRel of (L\~) iff (x in N &
+        for y being Element of L st y in N & [y,x] in the InternalRel of L
+         holds [x,y] in the InternalRel of L)
+proof
+    let L be RelStr, N be set, x be Element of L\~;
+    set IR = the InternalRel of L, CR = the carrier of L;
+    set IR' = the InternalRel of L\~;
+A1:  L\~ = RelStr(# CR, IR\~ #) by Def7;
+    hereby assume A2: x is_minimal_wrt N, the InternalRel of (L\~);
+        hence x in N by WAYBEL_4:def 26;
+        let y be Element of L such that
+    A3: y in N;
+        assume A4: [y,x] in IR;
+          now per cases;
+            suppose x = y;
+               hence [x,y] in IR by A4;
+            suppose x <> y;
+               then not [y,x] in IR' by A2,A3,WAYBEL_4:def 26;
+               then not [y,x] in IR \ IR~ by A1,Def6;
+               then [y,x] in IR~ by A4,XBOOLE_0:def 4;
+               hence [x,y] in IR by RELAT_1:def 7;
+        end;
+        hence [x,y] in the InternalRel of L;
+    end;
+    assume A5: x in N & for y being Element of L st y in N
+        holds [y,x] in (the InternalRel of L) implies
+              [x,y] in (the InternalRel of L);
+      now
+        thus x in N by A5;
+          now assume ex y being set st y in N & y <> x & [y,x] in IR';
+            then consider y being set such that
+        A6: y in N and
+              y <> x and
+        A7: [y,x] in IR';
+              y in CR by A1,A7,ZFMISC_1:106;
+            then reconsider y'=y as Element of L;
+              [y,x] in IR \ IR~ by A1,A7,Def6;
+        then A8: [y,x] in IR & not [y,x] in IR~ by XBOOLE_0:def 4;
+              [y',x] in IR implies [x,y'] in IR by A5,A6;
+            hence contradiction by A8,RELAT_1:def 7;
+        end;
+        hence not ex y being set st y in N & y <> x & [y,x] in IR';
+    end;
+    hence x is_minimal_wrt N, IR' by WAYBEL_4:def 26;
+end;
+
+:: Proposition 4.31 - see WELLFND1:15
+
+:: Omitting Example 4.32, Exercise 4.33, Exercise 4.34
+
+theorem ::L_4_35: :: Lemma 4.35
+  for R, S being non empty RelStr, m being map of R,S
+ st R is quasi_ordered & S is antisymmetric & S\~ is well_founded &
+    for a,b being Element of R holds
+       (a <= b implies m.a <= m.b) & (m.a = m.b implies [a,b] in EqRel R)
+  holds R\~ is well_founded
+proof
+    let R, S be non empty RelStr, m be map of R, S such that
+A1: R is quasi_ordered and
+A2: S is antisymmetric and
+A3: S\~ is well_founded and
+A4: for a,b being Element of R holds
+       ((a <= b implies m.a <= m.b) &
+       (m.a = m.b implies [a,b] in EqRel R));
+    set IR = the InternalRel of R, IS = the InternalRel of S;
+A5: R\~ = RelStr(# the carrier of R, IR\~ #) by Def7;
+A6: S\~ = RelStr(# the carrier of S, IS\~ #) by Def7;
+A7: IS is_antisymmetric_in the carrier of S by A2,ORDERS_1:def 6;
+      now assume ex f being sequence of R\~ st f is descending;
+        then consider f being sequence of R\~ such that
+        A8: f is descending;
+        reconsider f'=f as sequence of R by A5,NORMSP_1:def 3;
+        deffunc F(Nat) = m.(f'.$1);
+        consider g' being Function of NAT, the carrier of S such that
+    A9: for k being Element of NAT holds g'.k = F(k) from LambdaD;
+        reconsider g=g' as sequence of S\~ by A6,NORMSP_1:def 3;
+          now let n be Nat;
+              [f.(n+1), f.n] in the InternalRel of R\~ by A8,WELLFND1:def 7;
+            then [f.(n+1), f.n] in IR \ IR~ by A5,Def6;
+        then A10: not [f.(n+1), f.n] in IR~ & [f.(n+1), f.n] in IR by XBOOLE_0:
+def 4;
+        A11: g.n = m.(f.n) by A9;
+            A12: now assume g.(n+1) = g.n;
+                then m.(f.(n+1)) = m.(f.n) by A9,A11;
+                then [f'.(n+1), f'.n] in EqRel R by A4;
+                then [f.(n+1), f.n] in (IR /\ IR~) by A1,Def4;
+                hence contradiction by A10,XBOOLE_0:def 3;
+            end;
+            hence g.(n+1) <> g.n;
+            reconsider fn1 = f.(n+1) as Element of R by A5;
+            reconsider fn = f.n as Element of R by A5;
+        A13: fn1 <= fn by A10,ORDERS_1:def 9;
+              g'.(n+1) = m.fn1 & g'.n = m.fn by A9;
+            then g'.(n+1) <= g'.n by A4,A13;
+        then A14: [g.(n+1), g.n] in IS by ORDERS_1:def 9;
+            then not [g.n, g.(n+1)] in IS by A6,A7,A12,RELAT_2:def 4;
+            then not [g.(n+1), g.n] in IS~ by RELAT_1:def 7;
+            then [g.(n+1), g.n] in IS \ IS~ by A14,XBOOLE_0:def 4;
+            hence [g.(n+1), g.n] in the InternalRel of S\~ by A6,Def6;
+        end;
+        then g is descending by WELLFND1:def 7;
+        hence contradiction by A3,WELLFND1:15;
+    end;
+    hence R\~ is well_founded by WELLFND1:15;
+end;
+
+definition :: p. 158, restricted eq classes
+  let R be non empty RelStr, N be Subset of R;
+  func min-classes N -> Subset-Family of R means :Def8:
+    for x being set holds x in it iff
+      ex y being Element of R\~
+       st y is_minimal_wrt N, the InternalRel of (R\~) &
+          x = Class(EqRel R,y) /\ N;
+existence proof
+    set IR' = the InternalRel of R\~;
+    set C = {x /\ N where x is Element of Class(EqRel R) :
+              ex y being Element of R\~ st x = Class(EqRel R, y) &
+              y is_minimal_wrt N, IR'};
+      now let x be set;
+        assume x in C;
+        then consider xx being Element of Class(EqRel R) such that
+    A1: x = xx /\ N and
+          ex y being Element of R\~ st xx = Class(EqRel R, y) &
+         y is_minimal_wrt N, IR';
+        thus x in bool the carrier of R by A1;
+    end;
+    then C c= bool the carrier of R by TARSKI:def 3;
+    then reconsider C as Subset-Family of R by SETFAM_1:def 7;
+    take C;
+    let x be set;
+    hereby assume x in C;
+        then consider xx being Element of Class(EqRel R) such that
+    A2: x = xx /\ N and
+    A3: ex y being Element of R\~ st xx = Class(EqRel R, y) &
+         y is_minimal_wrt N, IR';
+        consider y being Element of R\~ such that
+    A4: xx = Class(EqRel R, y) and
+    A5: y is_minimal_wrt N, IR' by A3;
+        thus ex y being Element of R\~ st y is_minimal_wrt N, IR' &
+        x = Class(EqRel R,y) /\ N by A2,A4,A5;
+    end;
+    given y being Element of R\~ such that
+A6: y is_minimal_wrt N, IR' and
+A7: x = Class(EqRel R,y) /\ N;
+      R\~=RelStr(#the carrier of R,(the InternalRel of R)\~#) by Def7;
+    then reconsider y' = y as Element of R;
+      Class(EqRel R, y') in Class(EqRel R) by EQREL_1:def 5;
+    hence x in C by A6,A7;
+end;
+uniqueness proof
+    set IR = the InternalRel of R\~;
+    let IT1, IT2 be Subset-Family of R such that
+A8: for x being set holds x in IT1 iff
+     ex y being Element of R\~ st y is_minimal_wrt N, IR &
+      x = Class(EqRel R,y) /\ N and
+A9: for x being set holds x in IT2 iff
+     ex y being Element of R\~ st y is_minimal_wrt N, IR &
+      x = Class(EqRel R, y) /\ N;
+      now let x be set;
+    hereby assume x in IT1;
+        then ex y being Element of R\~ st y is_minimal_wrt N, IR &
+        x = Class(EqRel R,y) /\ N by A8;
+        hence x in IT2 by A9;
+    end;
+    assume x in IT2;
+        then ex y being Element of R\~ st y is_minimal_wrt N, IR &
+        x = Class(EqRel R,y) /\ N by A9;
+        hence x in IT1 by A8;
+    end;
+    hence IT1 = IT2 by TARSKI:2;
+end;
+end;
+
+theorem Th20: :: Lemma 4.36
+for R being non empty RelStr, N being Subset of R, x being set
+ st R is quasi_ordered & x in min-classes N
+  holds for y being Element of R\~ st y in x
+          holds y is_minimal_wrt N, the InternalRel of R\~
+proof
+    let R be non empty RelStr, N be Subset of R, x be set
+    such that
+A1: R is quasi_ordered and
+A2: x in min-classes N;
+    set IR = the InternalRel of R, CR = the carrier of R;
+    set IR' = the InternalRel of R\~;
+    let c be Element of R\~ such that
+A3: c in x;
+    consider b being Element of R\~ such that
+A4: b is_minimal_wrt N, IR' and
+A5: x = Class(EqRel R, b) /\ N by A2,Def8;
+A6: b in N by A4,WAYBEL_4:def 26;
+      c in Class(EqRel R, b) & c in N by A3,A5,XBOOLE_0:def 3;
+    then [c,b] in EqRel R by EQREL_1:27;
+    then [c,b] in IR /\ IR~ by A1,Def4;
+then A7: [c,b] in IR & [c,b] in IR~ by XBOOLE_0:def 3;
+      now
+        thus c in N by A3,A5,XBOOLE_0:def 3;
+          now assume ex d being set
+                    st d in N & d <> c & [d,c] in IR';
+            then consider d being set such that
+        A8: d in N and
+              d <> c and
+        A9: [d,c] in IR';
+        A10: R\~ = RelStr(# CR, IR\~ #) by Def7;
+        A11: IR\~ = IR \ IR~ by Def6;
+              [d,c] in IR \ IR~ by A9,A10,Def6;
+        then A12: [d,c] in IR & not [d,c] in IR~ by XBOOLE_0:def 4;
+              R is transitive by A1,Def3;
+        then A13: IR is_transitive_in CR by ORDERS_1:def 5;
+        then A14: [d,b] in IR by A3,A5,A6,A7,A8,A12,RELAT_2:def 8;
+              now assume [d,b] in IR~;
+                then [b,d] in IR by RELAT_1:def 7;
+                then [c,d] in IR by A3,A5,A6,A7,A8,A13,RELAT_2:def 8;
+                hence contradiction by A12,RELAT_1:def 7;
+            end;
+        then A15: [d,b] in IR' by A10,A11,A14,XBOOLE_0:def 4;
+              b <> d by A7,A12,RELAT_1:def 7;
+            hence contradiction by A4,A8,A15,WAYBEL_4:def 26;
+        end;
+        hence not ex d being set st d in N & d <> c & [d,c] in IR';
+    end;
+    hence c is_minimal_wrt N, IR' by WAYBEL_4:def 26;
+end;
+
+theorem Th21:
+for R being non empty RelStr
+ holds R\~ is well_founded iff
+       for N being Subset of R st N <> {}
+         ex x being set st x in min-classes N
+proof
+    let R be non empty RelStr;
+    set IR = the InternalRel of R, CR = the carrier of R;
+    set IR'= the InternalRel of R\~, CR' = the carrier of R\~;
+A1: R\~ = RelStr(# the carrier of R, IR\~ #) by Def7;
+    hereby assume R\~ is well_founded;
+    then A2: IR' is_well_founded_in CR' by WELLFND1:def 2;
+        let N be Subset of CR such that
+    A3: N <> {};
+        reconsider N'=N as Subset of CR' by A1;
+        consider y being set such that
+    A4: y in N' and
+    A5: IR'-Seg(y) misses N' by A2,A3,WELLORD1:def 3;
+    A6: IR'-Seg(y) /\ N' = {} by A5,XBOOLE_0:def 7;
+        reconsider y as Element of R\~ by A4;
+        set x = Class(EqRel R, y) /\ N;
+          now
+            thus y in N by A4;
+              now assume ex z being set
+                        st z in N & z <> y & [z,y] in IR';
+                then consider z being set such that
+            A7: z in N & z <> y and
+            A8: [z,y] in IR';
+                  z in IR'-Seg(y) by A7,A8,WELLORD1:def 1;
+                hence contradiction by A6,A7,XBOOLE_0:def 3;
+            end;
+            hence not ex z being set st z in N & z<>y &[z,y] in IR';
+        end;
+        then y is_minimal_wrt N, IR' by WAYBEL_4:def 26;
+        then x in min-classes N by Def8;
+        hence ex x being set st x in min-classes N;
+    end;
+    assume A9: for N being Subset of R st N <> {}
+                ex x being set st x in min-classes N;
+      now let N be set such that
+    A10: N c= CR' and
+    A11: N <> {};
+        reconsider N'=N as Subset of R by A1,A10;
+        consider x being set such that
+    A12: x in min-classes N' by A9,A11;
+        consider a being Element of R\~ such that
+    A13: a is_minimal_wrt N', IR' and
+          x = Class(EqRel R, a) /\ N' by A12,Def8;
+        reconsider a'=a as set;
+        take a';
+        thus a' in N by A13,WAYBEL_4:def 26;
+          now assume IR'-Seg(a') /\ N <> {};
+            then consider z being set such that
+        A14: z in IR'-Seg(a') /\ N by XBOOLE_0:def 1;
+        A15: z in IR'-Seg(a') & z in N by A14,XBOOLE_0:def 3;
+            then reconsider z as Element of R\~ by A10;
+              z <> a' & [z,a] in IR' by A15,WELLORD1:def 1;
+            hence contradiction by A13,A15,WAYBEL_4:def 26;
+        end;
+        hence IR'-Seg(a') misses N by XBOOLE_0:def 7;
+    end;
+    then IR' is_well_founded_in CR' by WELLORD1:def 3;
+    hence R\~ is well_founded by WELLFND1:def 2;
+end;
+
+theorem Th22:
+for R being non empty RelStr, N being Subset of R,
+    y being Element of R\~
+ st y is_minimal_wrt N, the InternalRel of (R\~)
+  holds min-classes N is non empty
+proof
+    let R be non empty RelStr, N be Subset of R,
+        y be Element of R\~ such that
+A1: y is_minimal_wrt N, the InternalRel of (R\~);
+    consider x being set such that
+A2: x = Class(EqRel R,y) /\ N;
+    thus min-classes N is non empty by A1,A2,Def8;
+end;
+
+theorem Th23:
+for R being non empty RelStr, N being Subset of R, x being set
+  st R is quasi_ordered & x in min-classes N holds x is non empty
+proof
+    let R be non empty RelStr, N be Subset of R, x be set
+    such that
+      R is quasi_ordered and
+A1: x in min-classes N;
+    consider y being Element of R\~ such that
+A2: y is_minimal_wrt N, the InternalRel of R\~ and
+A3: x = Class(EqRel R, y) /\ N by A1,Def8;
+A4: y in N by A2,WAYBEL_4:def 26;
+    then y in Class(EqRel R, y) by EQREL_1:28;
+    hence x is non empty by A3,A4,XBOOLE_0:def 3;
+end;
+
+theorem Th24: :: Lemma 4.37
+for R being non empty RelStr st R is quasi_ordered
+ holds R is connected & R\~ is well_founded iff
+       for N being non empty Subset of R
+        holds Card min-classes N = 1
+proof
+    let R be non empty RelStr such that
+A1: R is quasi_ordered;
+    set IR = the InternalRel of R, CR = the carrier of R;
+    set IR' = the InternalRel of R\~;
+A2: R\~ = RelStr(# CR, IR\~ #) by Def7;
+    hereby assume A3: R is connected & R\~ is well_founded;
+        let N be non empty Subset of CR;
+        consider x being set such that
+    A4: x in min-classes N by A3,Th21;
+        consider a being Element of R\~ such that
+    A5: a is_minimal_wrt N, the InternalRel of (R\~) and
+    A6: x = Class(EqRel R, a) /\ N by A4,Def8;
+    A7: a in N & not ex b being Element of R\~ st b in N &
+         b <> a & [b,a] in IR' by A5,WAYBEL_4:def 26;
+          now let y be set;
+            hereby assume y in min-classes N;
+                then consider b being Element of R\~ such that
+            A8: b is_minimal_wrt N, IR' and
+            A9: y = Class(EqRel R, b) /\ N by Def8;
+            A10: b in N & not ex a being Element of R\~ st a in N &
+                 a <> b & [a,b] in IR' by A8,WAYBEL_4:def 26;
+                reconsider a'=a as Element of R by A2;
+                reconsider b'=b as Element of R by A2;
+A11:             now per cases by A3,WAYBEL_0:def 29;
+                    suppose A12: a' <= b';
+                    then A13: [a, b] in IR by ORDERS_1:def 9;
+                          now per cases;
+                            suppose a = b;
+                                hence [b,a] in IR by A12,ORDERS_1:def 9;
+                            suppose A14: a <> b;
+                                  now assume not [b,a] in IR;
+                                    then not [a,b] in IR~ by RELAT_1:def 7;
+                                    then [a,b] in IR \ IR~ by A13,XBOOLE_0:def
+4
+;
+                                    then [a,b] in IR' by A2,Def6;
+                                    hence contradiction
+                                     by A7,A8,A14,WAYBEL_4:def 26;
+                                end;
+                                hence [b,a] in IR;
+                        end;
+                        hence [a,b] in IR & [b,a] in IR by A12,ORDERS_1:def 9;
+                    suppose A15: b' <= a';
+                    then A16: [b, a] in IR by ORDERS_1:def 9;
+                          now per cases;
+                            suppose a = b;
+                                hence [a,b] in IR by A15,ORDERS_1:def 9;
+                            suppose A17: a <> b;
+                                  now assume not [a,b] in IR;
+                                    then not [b,a] in IR~ by RELAT_1:def 7;
+                                    then [b,a] in IR \ IR~ by A16,XBOOLE_0:def
+4
+;
+                                    then [b,a] in IR' by A2,Def6;
+                                    hence contradiction by A5,A10,A17,WAYBEL_4:
+def 26;
+                                end;
+                                hence [a,b] in IR;
+                        end;
+                        hence [a,b] in IR & [b,a] in IR by A15,ORDERS_1:def 9;
+                end;
+                then [b,a] in IR~ by RELAT_1:def 7;
+                then [b,a] in IR /\ IR~ by A11,XBOOLE_0:def 3;
+                then [b,a] in EqRel R by A1,Def4;
+                then b in Class(EqRel R, a) by EQREL_1:27;
+                then Class(EqRel R, b) = Class(EqRel R, a) by A2,EQREL_1:31;
+                hence y in {x} by A6,A9,TARSKI:def 1;
+            end;
+            assume y in {x};
+              then y = Class(EqRel R, a) /\ N by A6,TARSKI:def 1;
+            hence y in min-classes N by A5,Def8;
+        end;
+        then min-classes N = {x} by TARSKI:2;
+        hence Card min-classes N = 1 by CARD_1:79;
+    end;
+    assume
+A18: for N being non empty Subset of R holds
+     Card min-classes N = 1;
+      now let a,b be Element of R;
+        assume A19: not a <= b & not a >= b;
+    then A20: not [a,b] in IR by ORDERS_1:def 9;
+    then A21: not [b,a] in IR~ by RELAT_1:def 7;
+    A22: not [b,a] in IR by A19,ORDERS_1:def 9;
+    then A23: not [a,b] in IR~ by RELAT_1:def 7;
+        set N' = {a,b};
+        set MCN = {{a},{b}};
+          now let x be set;
+            hereby assume x in min-classes N';
+               then consider y being Element of R\~ such that
+            A24: y is_minimal_wrt N', IR' and
+            A25: x = Class(EqRel R, y) /\ N' by Def8;
+            A26: y in N' &
+                not ex z being Element of R\~ st z in N' & z<>y & [z,y] in IR'
+                 by A24,WAYBEL_4:def 26;
+                per cases by A26,TARSKI:def 2;
+                suppose A27: y = a;
+                      now let z be set;
+                        hereby assume z in x;
+                            then A28: z in Class(EqRel R,a) & z in N'
+                                 by A25,A27,XBOOLE_0:def 3;
+                              now per cases by A28,TARSKI:def 2;
+                                suppose z = a;
+                                    hence z in {a} by TARSKI:def 1;
+                                suppose z = b;
+                                    then [b,a] in EqRel R by A28,EQREL_1:27;
+                                    then [b,a] in IR /\ IR~ by A1,Def4;
+                                    hence z in {a} by A21,XBOOLE_0:def 3;
+                            end;
+                            hence z in {a};
+                        end;
+                        assume z in {a};
+                    then A29: z = a by TARSKI:def 1;
+                    then A30: z in N' by TARSKI:def 2;
+                          z in Class(EqRel R, a) by A29,EQREL_1:28;
+                        hence z in x by A25,A27,A30,XBOOLE_0:def 3;
+                    end;
+                    then x = {a} by TARSKI:2;
+                    hence x in MCN by TARSKI:def 2;
+                suppose A31: y = b;
+                      now let z be set;
+                        hereby assume z in x;
+                            then A32: z in Class(EqRel R,b) & z in N'
+                                 by A25,A31,XBOOLE_0:def 3;
+                              now per cases by A32,TARSKI:def 2;
+                                suppose z = b;
+                                    hence z in {b} by TARSKI:def 1;
+                                suppose z = a;
+                                    then [a,b] in EqRel R by A32,EQREL_1:27;
+                                    then [a,b] in IR /\ IR~ by A1,Def4;
+                                    hence z in {b} by A20,XBOOLE_0:def 3;
+                            end;
+                            hence z in {b};
+                        end;
+                        assume z in {b};
+                        then A33: z = b by TARSKI:def 1;
+                        then A34: z in N' by TARSKI:def 2;
+                              z in Class(EqRel R, b) by A33,EQREL_1:28;
+                        hence z in x by A25,A31,A34,XBOOLE_0:def 3;
+                    end;
+                    then x = {b} by TARSKI:2;
+                    hence x in MCN by TARSKI:def 2;
+            end;
+            assume A35: x in MCN;
+            per cases by A35,TARSKI:def 2;
+            suppose A36: x = {a};
+                  now reconsider a'=a as Element of R\~ by A2;
+                    take a';
+                A37: a' in N' by TARSKI:def 2;
+                      now assume ex y being set
+                               st y in N' & y <> a' & [y,a'] in IR';
+                        then consider y being set such that
+                    A38: y in N' and
+                    A39: y <> a' & [y,a'] in IR';
+                          y = b by A38,A39,TARSKI:def 2;
+                        then [b,a'] in IR \ IR~ by A2,A39,Def6;
+                        hence contradiction by A22,XBOOLE_0:def 4;
+                    end;
+                    hence a' is_minimal_wrt N', the InternalRel of (R\~)
+                     by A37,WAYBEL_4:def 26;
+                      now let z be set;
+                        hereby assume z in x;
+                        then A40: z = a by A36,TARSKI:def 1;
+                            then z in Class(EqRel R, a) by EQREL_1:28;
+                            hence z in Class(EqRel R, a) /\ N'
+                             by A37,A40,XBOOLE_0:def 3;
+                        end;
+                        assume z in Class(EqRel R, a) /\ N';
+                        then A41: z in Class(EqRel R, a) & z in N' by XBOOLE_0:
+def 3;
+                        per cases by A41,TARSKI:def 2;
+                        suppose z = a;
+                            hence z in x by A36,TARSKI:def 1;
+                        suppose z = b;
+                            then [b,a] in EqRel R by A41,EQREL_1:27;
+                            then [b,a] in IR /\ IR~ by A1,Def4;
+                            hence z in x by A21,XBOOLE_0:def 3;
+                    end;
+                    hence x = Class(EqRel R, a') /\ N' by TARSKI:2;
+                end;
+                hence x in min-classes N' by Def8;
+            suppose A42: x = {b};
+              now reconsider b'=b as Element of R\~ by A2;
+                    take b';
+                A43: b' in N' by TARSKI:def 2;
+                      now assume ex y being set
+                               st y in N' & y <> b' & [y,b'] in IR';
+                        then consider y being set such that
+                    A44: y in N' and
+                    A45: y <> b' & [y,b'] in IR';
+                          y = a by A44,A45,TARSKI:def 2;
+                        then [a,b'] in IR \ IR~ by A2,A45,Def6;
+                        hence contradiction by A20,XBOOLE_0:def 4;
+                    end;
+                    hence b' is_minimal_wrt N', the InternalRel of (R\~)
+                     by A43,WAYBEL_4:def 26;
+                      now let z be set;
+                        hereby assume z in x;
+                        then A46: z = b by A42,TARSKI:def 1;
+                            then z in Class(EqRel R, b) by EQREL_1:28;
+                            hence z in Class(EqRel R, b) /\ N'
+                             by A43,A46,XBOOLE_0:def 3;
+                        end;
+                        assume z in Class(EqRel R, b) /\ N';
+                        then A47: z in Class(EqRel R, b) & z in N' by XBOOLE_0:
+def 3;
+                        per cases by A47,TARSKI:def 2;
+                        suppose z = b;
+                            hence z in x by A42,TARSKI:def 1;
+                        suppose z = a;
+                            then [a,b] in EqRel R by A47,EQREL_1:27;
+                            then [a,b] in IR /\ IR~ by A1,Def4;
+                            hence z in x by A23,XBOOLE_0:def 3;
+                    end;
+                    hence x = Class(EqRel R, b') /\ N' by TARSKI:2;
+                end;
+                hence x in min-classes N' by Def8;
+        end;
+    then min-classes N' = MCN by TARSKI:2;
+    then A48: card MCN = 1 by A18;
+          now assume {a} = {b};
+        then A49: a = b by ZFMISC_1:6;
+              R is reflexive by A1,Def3;
+            then IR is_reflexive_in CR by ORDERS_1:def 4;
+            hence contradiction by A20,A49,RELAT_2:def 1;
+        end;
+        hence contradiction by A48,CARD_2:76;
+    end;
+    hence R is connected by WAYBEL_0:def 29;
+      now let N be Subset of R such that
+    A50: N <> {};
+          Card min-classes N = 1 by A18,A50;
+        then min-classes N <> {} by CARD_4:17;
+        hence ex x being set st x in min-classes N by XBOOLE_0:def 1;
+    end;
+    hence R\~ is well_founded by Th21;
+end;
+
+theorem :: Lemma 4.38
+  for R being non empty Poset
+ holds the InternalRel of R well_orders the carrier of R iff
+       for N being non empty Subset of R
+        holds Card min-classes N = 1
+proof
+    let R be non empty Poset;
+    set IR = the InternalRel of R, CR = the carrier of R;
+    A1: R is quasi_ordered by Def3;
+    hereby assume IR well_orders CR;
+    then A2: IR is_reflexive_in CR & IR is_transitive_in CR &
+        IR is_antisymmetric_in CR & IR is_connected_in CR &
+        IR is_well_founded_in CR by WELLORD1:def 5;
+        then IR is_strongly_connected_in CR by ORDERS_1:92;
+    then A3: R is connected by Th5;
+          R is well_founded by A2,WELLFND1:def 2;
+    then R\~ is well_founded by Th16;
+        hence for N being non empty Subset of R holds
+              Card min-classes N = 1 by A1,A3,Th24;
+    end;
+    assume for N being non empty Subset of R holds
+              Card min-classes N = 1;
+then A4: R is connected & R\~ is well_founded by A1,Th24;
+      now thus IR is_reflexive_in CR by ORDERS_1:def 4;
+        thus IR is_transitive_in CR by ORDERS_1:def 5;
+        thus IR is_antisymmetric_in CR by ORDERS_1:def 6;
+          IR is_strongly_connected_in CR by A4,Th5;
+        hence IR is_connected_in CR by ORDERS_1:92;
+          R is well_founded by A4,Th17;
+        hence IR is_well_founded_in CR by WELLFND1:def 2;
+    end;
+    hence IR well_orders CR by WELLORD1:def 5;
+end;
+
+definition :: Def 4.39
+  let R be RelStr, N be Subset of R, B be set;
+  pred B is_Dickson-basis_of N,R means :Def9:
+       B c= N & for a being Element of R st a in N
+                 ex b being Element of R st b in B & b <= a;
+end;
+
+theorem Th26:
+for R being RelStr holds {} is_Dickson-basis_of {} the carrier of R, R
+proof let R be RelStr; set N = {} the carrier of R; thus {} c= N; thus thesis
+;
+end;
+
+theorem Th27:
+for R being non empty RelStr, N being non empty Subset of R,
+    B being set
+ st B is_Dickson-basis_of N,R holds B is non empty
+proof
+    let R be non empty RelStr, N be non empty Subset of R,
+    B be set; assume
+A1: B is_Dickson-basis_of N,R;
+    consider a being Element of N;
+    consider b being Element of R such that
+A2: b in B & b <= a by A1,Def9;
+    thus B is non empty by A2;
+end;
+
+definition :: Def 4.39
+  let R be RelStr;
+  attr R is Dickson means :Def10:
+  for N being Subset of R
+   ex B being set st B is_Dickson-basis_of N,R & B is finite;
+end;
+
+theorem Th28: :: Lemma 4:40
+for R being non empty RelStr
+ st R\~ is well_founded & R is connected holds R is Dickson
+proof let R be non empty RelStr such that
+A1: R\~ is well_founded and
+A2: R is connected;
+    set IR' = the InternalRel of R\~, CR' = the carrier of R\~;
+    set IR = the InternalRel of R, CR = the carrier of R;
+    let N be Subset of CR;
+    per cases;
+    suppose A3: N = {} CR;
+        take B = {};
+        thus B is_Dickson-basis_of N,R by A3,Th26;
+        thus B is finite;
+    suppose A4: N <> {} CR;
+    A5: IR' is_well_founded_in CR' by A1,WELLFND1:def 2;
+    A6: R\~ = RelStr(# the carrier of R, (the InternalRel of R)\~ #)
+         by Def7;
+        then consider b being set such that
+    A7: b in N and
+    A8: IR'-Seg(b) misses N by A4,A5,WELLORD1:def 3; :: C3 => CX
+    A9: IR'-Seg(b) /\ N = {} by A8,XBOOLE_0:def 7;
+        take B = {b};
+        reconsider b as Element of N by A7;
+        thus B is_Dickson-basis_of N,R proof
+              {b} is Subset of N by A4,SUBSET_1:55;
+            hence B c= N;
+            let a be Element of R such that
+        A10: a in N;
+            reconsider b as Element of R by A7;
+            take b;
+            thus b in B by TARSKI:def 1;
+            per cases by A2,WAYBEL_0:def 29;
+            suppose b <= a;
+                hence b <= a;
+            suppose A11: a <= b;
+            then A12: [a,b] in IR by ORDERS_1:def 9;
+                  now per cases;
+                      suppose a = b;
+                          hence b <= a by A11;
+                      suppose A13: not a = b;
+                            now per cases;
+                              suppose [a,b] in IR';
+                                  then a in IR'-Seg(b) by A13,WELLORD1:def 1;
+                                  hence b <= a by A9,A10,XBOOLE_0:def 3;
+                              suppose A14: not [a,b] in IR';
+                                    IR' = IR \ IR~ by A6,Def6;
+                                  then [a,b] in IR~ by A12,A14,XBOOLE_0:def 4
+;
+                                  then [b,a] in IR by RELAT_1:def 7;
+                                  hence b <= a by ORDERS_1:def 9;
+                          end;
+                          hence b <= a;
+                end;
+                hence b <= a;
+        end;
+        thus B is finite;
+end;
+
+theorem Th29: :: Exercise 4.41
+for R, S being RelStr st (the InternalRel of R) c= (the InternalRel of S) &
+    R is Dickson & (the carrier of R) = (the carrier of S)
+  holds S is Dickson
+proof let r, s be RelStr such that
+A1: the InternalRel of r c= the InternalRel of s and
+A2: r is Dickson and
+A3: the carrier of r = the carrier of s;
+    let N be Subset of s;
+    reconsider N' = N as Subset of r by A3;
+    consider B being set such that
+A4: B is_Dickson-basis_of N',r & B is finite by A2,Def10;
+    take B;
+    thus B c= N by A4,Def9;
+    hereby let a be Element of s such that
+    A5: a in N;
+        reconsider a' = a as Element of r by A3;
+        consider b being Element of r such that
+    A6: b in B & b <= a' by A4,A5,Def9;
+        reconsider b' = b as Element of s by A3;
+        take b';
+          [b,a'] in the InternalRel of r by A6,ORDERS_1:def 9;
+        hence b' in B & b' <= a by A1,A6,ORDERS_1:def 9;
+    end;
+    thus B is finite by A4;
+end;
+
+definition
+   let f be Function, b be set such that
+A1: dom f = NAT and
+A2: b in rng f;
+   func f mindex b -> Nat means :Def11:
+        f.it = b & for i being Nat st f.i = b holds it <= i;
+existence proof
+    set N = {i where i is Nat : f.i = b};
+    consider x being set such that
+A3: x in NAT and
+A4: f.x = b by A1,A2,FUNCT_1:def 5;
+    reconsider x as Nat by A3;
+A5: x in N by A4;
+      now let x be set; assume x in N; then consider i being Nat such that
+    A6: x = i and f.i = b;
+        thus x in NAT by A6;
+    end; then reconsider N as non empty Subset of NAT by A5,TARSKI:def 3;
+    take I = min N;
+      I in N by CQC_SIM1:def 8;
+    then consider II being Nat such that
+A7: II = I and
+A8: f.II = b;
+    thus f.I = b by A7,A8; let i be Nat such that
+A9: f.i = b;
+      i in N by A9;
+    hence I <= i by CQC_SIM1:def 8;
+end;
+uniqueness proof
+    let IT1, IT2 be Nat such that
+A10: f.IT1 = b & for i being Nat st f.i = b holds IT1 <= i and
+A11: f.IT2 = b & for i being Nat st f.i = b holds IT2 <= i;
+    assume A12: IT1 <> IT2;
+    per cases by A12,REAL_1:def 5;
+    suppose IT1 < IT2;
+        hence contradiction by A10,A11;
+    suppose IT1 > IT2;
+        hence contradiction by A10,A11;
+    end;
+end;
+
+definition
+   let R be non empty 1-sorted, f be sequence of R, b be set, m be Nat; assume
+A1: ex j being Nat st m < j & f.j = b;
+   func f mindex (b,m) -> Nat means : Def12:
+        f.it = b & m < it & for i being Nat st m < i & f.i = b holds it <= i;
+existence proof
+    set N = {i where i is Nat : m < i & f.i = b};
+    consider j being Nat such that
+A2: m < j & f.j = b by A1;
+A3: j in N by A2;
+      now let x be set;
+        assume x in N;
+        then consider i being Nat such that
+    A4: x = i and m < i & f.i = b;
+        thus x in NAT by A4;
+    end;
+    then reconsider N as non empty Subset of NAT by A3,TARSKI:def 3;
+    take I = min N;
+      I in N by CQC_SIM1:def 8;
+    then consider II being Nat such that
+A5: II = I & m < II & f.II = b;
+    thus f.I = b & m < I by A5;
+    let i be Nat such that
+A6: m < i & f.i = b;
+      i in N by A6;
+    hence I <= i by CQC_SIM1:def 8;
+end;
+uniqueness proof
+    let IT1, IT2 be Nat such that
+A7: f.IT1 = b & m < IT1 & for i being Nat st m < i & f.i = b holds IT1 <= i and
+A8: f.IT2 = b & m < IT2 & for i being Nat st m < i & f.i = b holds IT2 <= i;
+    assume
+A9: IT1 <> IT2;
+    per cases by A9,REAL_1:def 5;
+    suppose IT1 < IT2;
+        hence contradiction by A7,A8;
+    suppose IT1 > IT2;
+        hence contradiction by A7,A8;
+    end;
+end;
+
+theorem Th30: :: Prop 4.42 (i) -> (ii)
+for R being non empty RelStr st R is quasi_ordered & R is Dickson
+ holds for f being sequence of R ex i,j being Nat st i < j & f.i <= f.j
+proof let R be non empty RelStr such that
+      R is quasi_ordered and
+A1: R is Dickson;
+    let f be sequence of R;
+    set N = rng f;
+A2: dom f = NAT by FUNCT_2:def 1;
+    consider B being set such that
+A3: B is_Dickson-basis_of N,R and
+A4: B is finite by A1,Def10;
+    reconsider B as finite non empty set by A3,A4,Th27;
+    defpred P[set] means not contradiction;
+    deffunc F(set) = f mindex $1;
+    set BI = { F(b) where b is Element of B : P[b] };
+A5: BI is finite from FraenkelFinIm;
+    consider b being Element of B;
+A6: f mindex b in BI;
+      now let x be set;
+        assume x in BI;
+        then consider b being Element of B such that
+    A7: x = f mindex b;
+        thus x in NAT by A7;
+    end;
+    then reconsider BI as finite non empty Subset of NAT by A5,A6,TARSKI:def 3;
+    reconsider mB = max BI as Nat by ORDINAL2:def 21;
+    set j = mB+1;
+    reconsider fj = f.j as Element of R;
+      fj in N by A2,FUNCT_1:12;
+    then consider b being Element of R such that
+A8: b in B and
+A9: b <= fj by A3,Def9;
+A10: B c= N by A3,Def9;
+    take i = f mindex b;
+    take j;
+      i in BI by A8;
+    then i <= max(BI) by FRECHET2:51;
+    hence i < j by NAT_1:38;
+      dom f = NAT by NORMSP_1:17;
+    hence f.i <= f.j by A8,A9,A10,Def11;
+end;
+
+theorem Th31:
+for R being RelStr, N being Subset of R, x being Element of R\~
+ st R is quasi_ordered & x in N &
+    ((the InternalRel of R)-Seg(x)) /\ N c= Class(EqRel R,x)
+  holds x is_minimal_wrt N, the InternalRel of R\~
+proof
+    let R be RelStr, N be Subset of R, x be Element of R\~
+    such that
+A1: R is quasi_ordered and
+A2: x in N and
+A3: ((the InternalRel of R)-Seg(x)) /\ N c= Class(EqRel R,x);
+    set IR = the InternalRel of R, CR = the carrier of R;
+    set IR'= the InternalRel of R\~;
+ A4: R\~ = RelStr(# CR, IR\~ #) by Def7;
+      now assume ex y being set st y in N & y<>x & [y,x] in IR';
+        then consider y being set such that
+    A5: y in N and
+    A6: y <> x and
+    A7: [y,x] in IR';
+          [y,x] in IR \ IR~ by A4,A7,Def6;
+    then A8: [y,x] in IR & not [y,x] in IR~ by XBOOLE_0:def 4;
+        then y in IR-Seg(x) by A6,WELLORD1:def 1;
+        then y in IR-Seg(x) /\ N by A5,XBOOLE_0:def 3;
+        then [y,x] in EqRel R by A3,EQREL_1:27;
+        then [y,x] in IR /\ IR~ by A1,Def4;
+        hence contradiction by A8,XBOOLE_0:def 3;
+    end;
+    hence x is_minimal_wrt N, IR' by A2,WAYBEL_4:def 26;
+end;
+
+theorem Th32: :: Prop 4.42 (ii) -> (iii)
+for R being non empty RelStr
+ st R is quasi_ordered &
+    (for f being sequence of R ex i,j being Nat st i < j & f.i <= f.j)
+  holds for N being non empty Subset of R
+          holds min-classes N is finite & min-classes N is non empty
+proof
+    let R be non empty RelStr such that
+A1: R is quasi_ordered and
+A2: for f being sequence of R
+     ex i,j being Nat st i < j & f.i <= f.j;
+    set IR = the InternalRel of R, CR = the carrier of R;
+    set IR'= the InternalRel of R\~;
+ A3:  R\~ = RelStr(# CR, (IR)\~ #) by Def7;
+A4: R is transitive by A1,Def3;
+    let N be non empty Subset of R such that
+A5: not (min-classes N is finite & min-classes N is non empty);
+    per cases by A5;
+    suppose A6: min-classes N is infinite;
+        then reconsider MCN = min-classes N as infinite set;
+        consider f being Function of NAT, min-classes N such that
+    A7: f is one-to-one by A6,Th3;
+    deffunc F(set) = choose(f.$1);
+    A8:  now let x be set such that
+        A9: x in NAT;
+            reconsider x' = x as Nat by A9;
+              f.x' is Element of min-classes N;
+        then A10: f.x in MCN;
+            then f.x is non empty by A1,Th23;
+        then choose(f.x') in f.x;
+            hence F(x) in the carrier of R by A10;
+        end;
+        consider g being Function of NAT,the carrier of R such that
+    A11: for x being set st x in NAT holds g.x = F(x) from Lambda1(A8);
+        reconsider g as sequence of R by NORMSP_1:def 3;
+        consider i,j being Nat such that
+    A12: i < j and
+    A13: g.i <= g.j by A2;
+        reconsider gi = g.i, gj= g.j as Element of R\~ by A3;
+    A14: [gi, gj] in IR by A13,ORDERS_1:def 9;
+    A15: f.i in MCN;
+    then A16: f.i is non empty by A1,Th23;
+    A17: f.j in MCN;
+    then A18: f.j is non empty by A1,Th23;
+    A19: g.j = choose f.j by A11;
+    A20: g.i = choose f.i by A11;
+    A21: gj is_minimal_wrt N, the InternalRel of R\~ by A1,A17,A18,A19,Th20;
+          gi is_minimal_wrt N, the InternalRel of R\~ by A1,A15,A16,A20,Th20
+;
+    then A22: gi in N by WAYBEL_4:def 26;
+    A23: now per cases;
+            suppose gi = gj;
+                hence [gi, gj] in IR~ by A14,RELAT_1:def 7;
+            suppose A24: gi <> gj;
+                  now assume not [gi, gj] in IR~;
+                    then [gi, gj] in IR \ IR~ by A14,XBOOLE_0:def 4;
+                    then [gi, gj] in IR' by A3,Def6;
+                    hence contradiction by A21,A22,A24,WAYBEL_4:def 26;
+                end;
+                hence [gi, gj] in IR~;
+        end;
+          [gi,gj] in IR by A13,ORDERS_1:def 9;
+        then [gi,gj] in IR /\ IR~ by A23,XBOOLE_0:def 3;
+        then [gi,gj] in EqRel R by A1,Def4;
+        then gi in Class(EqRel R, gj) by EQREL_1:27;
+    then A25: Class(EqRel R, gj) = Class(EqRel R, gi) by EQREL_1:31;
+        consider mj being Element of R\~ such that
+    A26: mj is_minimal_wrt N, IR' and
+    A27: f.j = Class(EqRel R,mj) /\ N by A17,Def8;
+    A28: mj in N by A26,WAYBEL_4:def 26;
+        consider mi being Element of R\~ such that
+    A29: mi is_minimal_wrt N, IR' and
+    A30: f.i = Class(EqRel R,mi) /\ N by A15,Def8;
+    A31: mi in N by A29,WAYBEL_4:def 26;
+          gj in Class(EqRel R, mj) by A18,A19,A27,XBOOLE_0:def 3;
+    then A32: Class(EqRel R, gj) = Class(EqRel R, mj) by A28,EQREL_1:31;
+          gi in Class(EqRel R, mi) by A16,A20,A30,XBOOLE_0:def 3;
+        then f.i = f.j by A25,A27,A30,A31,A32,EQREL_1:31;
+        hence contradiction by A6,A7,A12,FUNCT_2:25;
+    suppose
+    A33: min-classes N is empty;
+        deffunc F(set,set) = choose (IR-Seg($2) /\ N\Class(EqRel R,$2));
+        consider f being Function such that
+    A34: dom f = NAT and
+    A35: f.0 = choose N and
+    A36: for n being Element of NAT holds f.(n+1) = F(n,f.n) from LambdaRecEx;
+         defpred P[Nat] means f.$1 in N;
+    A37: P[0] by A35;
+    A38: now let i be Nat such that
+        A39: P[i];
+            reconsider fi = f.i as Element of R\~ by A3,A39;
+            set IC = IR-Seg(fi) /\ N\Class(EqRel R,fi);
+        A40: f.(i+1) = choose (IR-Seg(f.i) /\ N\Class(EqRel R,f.i)) by A36;
+              now assume IC is empty;
+                then IR-Seg(fi) /\ N c= Class(EqRel R,fi) by XBOOLE_1:37;
+                then fi is_minimal_wrt N, IR' by A1,A39,Th31;
+                hence contradiction by A33,Th22;
+            end;
+            then f.(i+1) in IR-Seg(f.i) /\ N by A40,XBOOLE_0:def 4;
+            hence P[i+1] by XBOOLE_0:def 3;
+        end;
+    A41: for i being Nat holds P[i] from Ind(A37,A38);
+          now let x being set such that
+        A42: x in NAT;
+              f.x in N by A41,A42;
+            hence f.x in the carrier of R;
+        end;
+        then f is Function of NAT, the carrier of R by A34,FUNCT_2:5;
+        then reconsider f as sequence of R by NORMSP_1:def 3;
+    A43: now let i be Nat;
+        defpred P[Nat] means i < $1 implies f.i >= f.$1;
+        A44: P[0] by NAT_1:18;
+        A45: for j being Nat st P[j] holds P[j+1]
+           proof let j be Nat such that
+            A46: i < j implies f.i >= f.j and
+            A47: i < j+1;
+            A48: i <= j by A47,NAT_1:38;
+                reconsider fj = f.j, fj1 = f.(j+1) as Element of R\~
+                 by A3;
+                set IC = IR-Seg(fj) /\ N\Class(EqRel R,fj);
+            A49: fj in N by A41;
+            A50: fj1 = choose IC by A36;
+                  now assume IC is empty;
+                    then IR-Seg(fj) /\ N c= Class(EqRel R,fj) by XBOOLE_1:37;
+                    then fj is_minimal_wrt N, IR' by A1,A49,Th31;
+                    hence contradiction by A33,Th22;
+                end;
+                then fj1 in IR-Seg(fj) /\ N by A50,XBOOLE_0:def 4;
+                then fj1 in IR-Seg(fj) by XBOOLE_0:def 3;
+            then A51: [fj1, fj] in IR by WELLORD1:def 1;
+            then A52: f.j >= f.(j+1) by ORDERS_1:def 9;
+                per cases by A48,REAL_1:def 5;
+                suppose i < j;
+                    hence f.i >= f.(j+1) by A4,A46,A52,ORDERS_1:26;
+                suppose i = j;
+                    hence f.i >= f.(j+1) by A51,ORDERS_1:def 9;
+            end;
+            thus for j being Nat holds P[j] from Ind(A44,A45);
+        end;
+    A53: now let i be Nat;
+      defpred P[Nat] means i < $1 implies not f.i <= f.$1;
+        A54: P[0] by NAT_1:18;
+        A55: for j being Nat st P[j] holds P[j+1]
+           proof let j be Nat such that
+                  i < j implies not f.i <= f.j and
+            A56: i < j+1;
+            A57: i <= j by A56,NAT_1:38;
+                reconsider fj = f.j, fj1 = f.(j+1) as Element of R\~
+                 by A3;
+            A58: fj in N by A41;
+                per cases by A57,REAL_1:def 5;
+                suppose A59: i < j; assume
+                A60: f.i <= f.(j+1);
+                      j < j+1 by NAT_1:38;
+                then A61: f.j >= f.(j+1) by A43;
+                      f.i >= f.j by A43,A59;
+                    then f.j <= f.(j+1) by A4,A60,ORDERS_1:26;
+                then A62: fj1 in Class(EqRel R, fj) by A1,A61,Th9;
+                    set IC = IR-Seg(fj) /\ N\Class(EqRel R,fj);
+                A63: fj1 = choose IC by A36;
+                      now assume IC is empty;
+                      then IR-Seg(fj) /\ N c= Class(EqRel R,fj) by XBOOLE_1:37;
+                       then fj is_minimal_wrt N, IR' by A1,A58,Th31;
+                       hence contradiction by A33,Th22;
+                    end;
+                    hence contradiction by A62,A63,XBOOLE_0:def 4;
+                    suppose A64: i = j;
+                        assume A65: f.i <= f.(j+1);
+                          j < j+1 by NAT_1:38;
+                        then f.(j+1) <= f.j by A43;
+                    then A66: fj1 in Class(EqRel R, fj) by A1,A64,A65,Th9;
+                        set IC = IR-Seg(fj) /\ N\Class(EqRel R,fj);
+                    A67: fj1 = choose IC by A36;
+                          now assume IC is empty;
+                         then IR-Seg(fj) /\ N c= Class(EqRel R,fj) by XBOOLE_1:
+37;
+                            then fj is_minimal_wrt N, IR' by A1,A58,Th31;
+                            hence contradiction by A33,Th22;
+                        end;
+                    hence contradiction by A66,A67,XBOOLE_0:def 4;
+                 end;
+            thus for j being Nat holds P[j] from Ind(A54,A55);
+        end;
+        consider i,j being Nat such that
+    A68: i < j & f.i <= f.j by A2;
+    thus contradiction by A53,A68;
+end;
+
+theorem Th33: :: Prop (iii) -> (i)
+for R being non empty RelStr
+  st R is quasi_ordered &
+     (for N being non empty Subset of R
+       holds min-classes N is finite & min-classes N is non empty)
+   holds R is Dickson
+proof
+    let R be non empty RelStr such that
+A1: R is quasi_ordered and
+A2: for N being non empty Subset of R
+     holds min-classes N is finite & min-classes N is non empty;
+A3: R is transitive by A1,Def3;
+A4: R is reflexive by A1,Def3;
+    set IR = the InternalRel of R, CR = the carrier of R;
+    set IR' = the InternalRel of R\~;
+ A5: R\~ = RelStr(# CR, IR\~ #) by Def7;
+    let N be Subset of CR;
+    per cases;
+    suppose A6: N = {} CR;
+        take B = {};
+        thus B is_Dickson-basis_of N,R by A6,Th26;
+        thus B is finite;
+    suppose not N is empty;
+        then reconsider N'=N as non empty Subset of CR;
+        reconsider MCN' = min-classes N' as finite non empty Subset of bool CR
+        by A2;
+        take B = {choose x where x is Element of MCN' : not contradiction };
+        thus B is_Dickson-basis_of N,R proof
+              now let x be set; assume x in B;
+                then consider y being Element of MCN' such that
+            A7: x = choose(y);
+                consider z being Element of R\~ such that
+                  z is_minimal_wrt N, IR' and
+            A8: y = Class(EqRel R, z) /\ N by Def8;
+                  y is non empty by A1,Th23;
+                hence x in N by A7,A8,XBOOLE_0:def 3;
+            end;
+            hence B c= N by TARSKI:def 3;
+            let a be Element of R such that
+        A9: a in N;
+            defpred P[Element of R] means $1 <= a;
+            set NN' = {d where d is Element of N' : P[d]};
+        A10: NN' is Subset of N' from SubsetD;
+              a <= a by A4,ORDERS_1:24;
+            then a in NN' by A9;
+            then reconsider NN' as non empty Subset of CR by A10,XBOOLE_1:1;
+            consider m being Element of min-classes NN';
+        A11: min-classes NN' is non empty by A2;
+            then reconsider m' = m as non empty set by A1,Th23;
+            consider c being Element of m';
+            consider y being Element of R\~ such that
+              y is_minimal_wrt NN', IR' and
+        A12: m' = Class(EqRel R, y) /\ NN' by A11,Def8;
+        A13: c in Class(EqRel R, y) & c in NN' by A12,XBOOLE_0:def 3;
+            then reconsider c as Element of R\~ by A5;
+            reconsider c'=c as Element of R by A5;
+            consider d being Element of N' such that
+        A14: c = d & d <= a by A13;
+        A15: c is_minimal_wrt NN', IR' by A1,A11,Th20;
+              now assume not c is_minimal_wrt N, IR';
+                then consider w being set such that
+            A16: w in N and
+            A17: w <> c and
+            A18: [w,c] in IR' by A14,WAYBEL_4:def 26;
+                  w in CR by A5,A18,ZFMISC_1:106;
+                then reconsider w' = w as Element of R;
+                  [w,c] in IR \ IR~ by A5,A18,Def6;
+                then [w,c] in IR by XBOOLE_0:def 4;
+                then w' <= c' by ORDERS_1:def 9;
+            then w' <= a by A3,A14,ORDERS_1:26;
+                then w' in NN' by A16;
+                hence contradiction by A15,A17,A18,WAYBEL_4:def 26;
+            end;
+        then A19: Class(EqRel R, c) /\ N in min-classes N by Def8;
+        then A20: Class(EqRel R, c) /\ N is non empty by A1,Th23;
+            set t = choose( Class(EqRel R, c) /\ N );
+              t in N by A20,XBOOLE_0:def 3;
+            then reconsider t as Element of R;
+            take t;
+            thus t in B by A19;
+              t in Class(EqRel R, c) by A20,XBOOLE_0:def 3;
+            then [t,c] in EqRel R by EQREL_1:27;
+            then [t,c] in IR /\ IR~ by A1,Def4;
+            then [t,c] in IR by XBOOLE_0:def 3;
+            then t <= c' by ORDERS_1:def 9;
+            hence t <= a by A3,A14,ORDERS_1:26;
+        end;
+        deffunc F(set) = choose $1;
+        defpred P[set] means not contradiction;
+        {F(x) where x is Element of MCN' : P[x]} is finite from FraenkelFinIm;
+        hence B is finite;
+end;
+
+theorem Th34: :: Corollary 4.44
+for R being non empty RelStr st R is quasi_ordered & R is Dickson
+ holds R\~ is well_founded
+proof
+    let R be non empty RelStr such that
+A1: R is quasi_ordered and
+A2: R is Dickson;
+A3: for f being sequence of R ex i,j being Nat st i < j & f.i <= f.j
+     by A1,A2,Th30;
+       now let N be Subset of R such that
+     A4: N <> {};
+           min-classes N is non empty by A1,A3,A4,Th32;
+         hence ex x being set st x in min-classes N by XBOOLE_0:def 1;
+     end;
+     hence R\~ is well_founded by Th21;
+end;
+
+theorem :: Corollary 4.43
+  for R being non empty Poset, N being non empty Subset of R
+ st R is Dickson
+  holds ex B being set st B is_Dickson-basis_of N, R &
+              for C being set st C is_Dickson-basis_of N, R holds B c= C
+proof
+    let R be non empty Poset, N be non empty Subset of R
+    such that
+A1: R is Dickson;
+    set IR=the InternalRel of R, CR = the carrier of R;
+    set IR'=the InternalRel of R\~;
+    set B = {b where b is Element of R\~ : b is_minimal_wrt N, IR'};
+ A2: R\~ = RelStr(# CR, IR\~ #) by Def7;
+A3: R is quasi_ordered by Def3;
+    then for f being sequence of R ex i,j being Nat st i < j & f.i <= f.j
+     by A1,Th30;
+    then min-classes N is finite & min-classes N is non empty
+      by A3,Th32;
+    then consider x being set such that
+A4: x in min-classes N by XBOOLE_0:def 1;
+    consider y being Element of R\~ such that
+A5: y is_minimal_wrt N, IR' & x = Class(EqRel R, y) /\ N by A4,Def8;
+      y in B by A5;
+    then reconsider B as non empty set;
+    take B;
+    A6: now let x be set such that
+       A7: x in B;
+       consider b being Element of R\~ such that
+       A8: x = b and
+       A9: b is_minimal_wrt N, IR' by A7;
+       thus x in N by A8,A9,WAYBEL_4:def 26;
+    end;
+then A10: B c= N by TARSKI:def 3;
+    thus B is_Dickson-basis_of N, R proof
+        thus B c= N by A6,TARSKI:def 3;
+        let a be Element of R such that
+    A11: a in N;
+        reconsider a'=a as Element of R\~ by A2;
+          now assume A12: not ex b being Element of R st b in B & b <= a;
+              IR'-Seg(a) /\ N c= N by XBOOLE_1:17;
+        then A13: IR'-Seg(a) /\ N c= CR by XBOOLE_1:1;
+            per cases;
+            suppose IR'-Seg(a) /\ N = {};
+                    then IR'-Seg(a) misses N by XBOOLE_0:def 7;
+               then a' is_minimal_wrt N, IR' by A11,Th7;
+               then a in B;
+               hence contradiction by A12;
+            suppose A14: IR'-Seg(a) /\ N <> {};
+                 R\~ is well_founded by A1,A3,Th34;
+               then IR' is_well_founded_in CR by A2,WELLFND1:def 2;
+               then consider z being set such that
+            A15: z in IR'-Seg(a) /\ N and
+            A16: IR'-Seg(z) misses (IR'-Seg(a) /\ N) by A13,A14,WELLORD1:def 3;
+                  z in IR'-Seg(a) by A15,XBOOLE_0:def 3;
+            then A17: [z,a] in IR' by WELLORD1:def 1;
+            then z in dom IR' by RELAT_1:def 4;
+                then reconsider z as Element of R\~;
+                reconsider z' = z as Element of R by A2;
+                  z is_minimal_wrt IR'-Seg(a') /\ N, IR' by A15,A16,Th7;
+                then z is_minimal_wrt N, IR' by Th8;
+            then A18: z in B;
+                  [z,a] in IR \ IR~ by A2,A17,Def6;
+                then [z,a] in IR by XBOOLE_0:def 4;
+                then z' <= a by ORDERS_1:def 9;
+                hence contradiction by A12,A18;
+        end;
+        hence ex b being Element of R st b in B & b <= a;
+    end;
+    let C be set such that
+A19: C is_Dickson-basis_of N, R;
+A20: C c= N by A19,Def9;
+      now let b be set such that
+    A21: b in B;
+      b in N by A6,A21;
+        then reconsider b'=b as Element of R;
+        consider c being Element of R such that
+    A22: c in C & c <= b' by A10,A19,A21,Def9;
+        consider b'' being Element of R\~ such that
+    A23: b'' = b & b'' is_minimal_wrt N, IR' by A21;
+    A24: [c,b] in IR by A22,ORDERS_1:def 9;
+    A25: IR is_antisymmetric_in CR by ORDERS_1:def 6;
+          [b,c] in IR by A20,A22,A23,A24,Th18;
+        hence b in C by A22,A24,A25,RELAT_2:def 4;
+    end;
+    hence B c= C by TARSKI:def 3;
+end;
+
+definition
+  let R be non empty RelStr, N be Subset of R such that
+A1: R is Dickson;
+  func Dickson-bases (N,R) -> non empty Subset-Family of R means
+:Def13:
+    for B being set holds B in it iff B is_Dickson-basis_of N,R;
+existence proof
+    set BB = {b where b is Element of bool N: b is_Dickson-basis_of N,R};
+    set CR = the carrier of R;
+    consider bp being set such that
+A2: bp is_Dickson-basis_of N,R and
+      bp is finite by A1,Def10;
+      bp c= N by A2,Def9;
+then A3: bp in BB by A2;
+      now
+        let x be set;
+        assume x in BB;
+        then consider b being Element of bool N such that
+    A4: x = b and
+          b is_Dickson-basis_of N,R;
+          b c= CR by XBOOLE_1:1;
+        hence x in bool CR by A4;
+    end;
+    then BB c= bool CR by TARSKI:def 3;
+    then reconsider BB as non empty Subset-Family of CR by A3,SETFAM_1:def 7;
+    take BB;
+    let B be set;
+    hereby assume B in BB;
+       then consider b being Element of bool N such that
+       A5: b = B and
+       A6: b is_Dickson-basis_of N,R;
+       thus B is_Dickson-basis_of N,R by A5,A6;
+   end;
+   assume A7: B is_Dickson-basis_of N,R;
+   then B c= N by Def9;
+   hence B in BB by A7;
+end;
+uniqueness proof
+    let IT1, IT2 be non empty Subset-Family of R such that
+A8: for B being set holds B in IT1 iff B is_Dickson-basis_of N, R and
+A9: for B being set holds B in IT2 iff B is_Dickson-basis_of N, R;
+      now let x be set;
+        hereby assume x in IT1; then x is_Dickson-basis_of N, R by A8;
+            hence x in IT2 by A9;
+        end;
+        assume x in IT2; then x is_Dickson-basis_of N, R by A9;
+            hence x in IT1 by A8;
+    end;
+    hence IT1 = IT2 by TARSKI:2;
+end;
+end;
+
+theorem Th36: :: Proposition 4.45
+for R being non empty RelStr, s being sequence of R st R is Dickson
+  ex t being sequence of R st t is_subsequence_of s & t is weakly-ascending
+proof
+    let R be non empty RelStr, s be sequence of R such that
+A1: R is Dickson;
+    set CR = the carrier of R;
+deffunc Bi(Element of rng s, Nat) = {n where n is Nat : $1 <= s.n & $2 < n};
+deffunc Bi2(Element of rng s) = {n where n is Nat : $1 <= s.n};
+defpred P[set,Nat,set] means
+ ex N being Subset of CR, B being non empty Subset of CR
+ st N = {s.w where w is Nat : s.$2 <= s.w & $2 < w} &
+    { w where w is Nat : s.$2 <= s.w & $2 < w} is infinite &
+    B = choose {BB where BB is Element of Dickson-bases(N,R): BB is finite} &
+    $3 = s mindex ( choose {b where b is Element of B :
+                            ex b' being Element of rng s
+                            st b'=b & Bi(b',$2) is infinite}, $2);
+defpred Q[set,Nat,set] means
+ {w where w is Nat : s.$2 <= s.w & $2 < w} is infinite implies P[$1,$2,$3];
+
+A2: for n being Nat for x being Element of NAT
+     ex y being Element of NAT st Q[n,x,y] proof
+        let n be Nat, x be Element of NAT;
+        set N = {s.w where w is Nat : s.x <= s.w & x < w};
+          now let y be set;
+            assume y in N;
+            then consider w being Nat such that
+        A3: y = s.w & s.x <= s.w & x < w;
+            thus y in CR by A3;
+        end;
+        then reconsider N as Subset of CR by TARSKI:def 3;
+        set W = {w where w is Nat : s.x <= s.w & x < w};
+        per cases;
+        suppose A4: N is empty;
+        take 1;
+        assume W is infinite;
+        then consider ww being set such that
+    A5: ww in W by XBOOLE_0:def 1;
+        consider www being Nat such that
+          www = ww and
+    A6: s.x <= s.www & x < www by A5;
+          s.www in N by A6;
+        hence thesis by A4;
+        suppose A7: N is non empty;
+        set BBX = {BB where BB is Element of Dickson-bases(N,R): BB is finite};
+        set B = choose BBX;
+        consider BD1 being set such that
+    A8: BD1 is_Dickson-basis_of N,R and
+    A9: BD1 is finite by A1,Def10;
+          BD1 in Dickson-bases(N,R) by A1,A8,Def13;
+        then BD1 in BBX by A9;
+        then B in BBX;
+        then consider BBB being Element of Dickson-bases(N,R) such that
+    A10: B = BBB and
+          BBB is finite;
+    A11: B is_Dickson-basis_of N,R by A1,A10,Def13;
+        then B c= N by Def9;
+        then reconsider B as non empty Subset of CR by A7,A11,Th27,XBOOLE_1:1;
+        set y = s mindex ( choose {b where b is Element of B :
+                            ex b' being Element of rng s
+                            st b'=b & Bi(b',x) is infinite}, x);
+        take y;
+        set W = {w where w is Nat : s.x <= s.w & x < w};
+        assume A12: W is infinite;
+        take N;
+        reconsider B as non empty Subset of CR;
+        take B;
+        thus N = {s.w where w is Nat : s.x <= s.w & x < w};
+        thus { w where w is Nat : s.x <= s.w & x < w} is infinite by A12;
+        thus B = choose {BB where BB is Element of Dickson-bases(N,R):
+                         BB is finite};
+        thus thesis;
+    end;
+    consider B being set such that
+A13: B is_Dickson-basis_of rng s, R and
+A14: B is finite by A1,Def10;
+    reconsider B as non empty set by A13,Th27;
+    set BALL = {b where b is Element of B :
+                ex b' being Element of rng s st b'=b & Bi2(b') is infinite};
+    set b1 = choose BALL;
+    consider f being Function of NAT,NAT such that
+A15: f.0 = s mindex b1 and
+A16: for n being Element of NAT holds Q[n, f.n, f.(n+1)] from RecExD(A2);
+A17: dom f = NAT by FUNCT_2:def 1;
+A18: rng f c= NAT;
+      now
+    A19: B is finite by A14;
+        assume
+    A20: for b being Element of rng s st b in B holds Bi2(b) is finite;
+        set Ball = {Bi2(b) where b is Element of rng s: b in B};
+    A21: Ball is finite from FraenkelFin(A19);
+          now let X be set; assume X in Ball;
+            then consider b being Element of rng s such that
+        A22: X = Bi2(b) and
+        A23: b in B;
+            thus X is finite by A20,A22,A23;
+        end;
+    then A24: union Ball is finite by A21,FINSET_1:25;
+          now let x be set;
+            assume x in NAT;
+            then reconsider x'= x as Nat;
+              dom s = NAT by FUNCT_2:def 1;
+            then x' in dom s;
+        then A25: s.x in rng s by FUNCT_1:12;
+            then reconsider sx = s.x as Element of R;
+            consider b being Element of R such that
+        A26: b in B and
+        A27: b <= sx by A13,A25,Def9;
+              B c= rng s by A13,Def9;
+            then reconsider b as Element of rng s by A26;
+        A28: x' in Bi2(b) by A27;
+              Bi2(b) in Ball by A26;
+            hence x in union Ball by A28,TARSKI:def 4;
+        end;
+        then NAT c= union Ball by TARSKI:def 3;
+        hence contradiction by A24,FINSET_1:13;
+    end;
+    then consider tb being Element of rng s such that
+A29: tb in B & Bi2(tb) is infinite;
+A30: tb in BALL by A29;
+    then b1 in BALL;
+    then consider bt being Element of B such that
+A31: b1 = bt and
+A32: ex b' being Element of rng s st b' = bt & Bi2(b') is infinite;
+    consider b' being Element of rng s such that
+A33: b' = bt and
+      Bi2(b') is infinite by A32;
+      dom s = NAT by NORMSP_1:17;
+then A34: s.(f.0) = b1 by A15,A31,A33,Def11;
+      b1 in BALL by A30;
+    then consider eb being Element of B such that
+A35: b1 = eb and
+A36: ex eb' being Element of rng s st eb'=eb & Bi2(eb') is infinite;
+    consider eb' being Element of rng s such that
+A37: eb' = eb and
+A38: Bi2(eb') is infinite by A36;
+    deffunc F(set) = $1;
+    defpred P[Nat] means s.(f.0) <= s.$1;
+    set W1 = {w where w is Nat: s.(f.0) <= s.w};
+    set W2 = {w where w is Nat: s.(f.0) <= s.w & f.0 < w};
+    set W3 = {F(w) where w is Nat: 0 <= w & w <= f.0 & P[w]};
+A39: W3 is finite from FinSegRng;
+      now let x be set;
+        hereby assume x in W1;
+        then consider w being Nat such that
+    A40: x = w and
+    A41: s.(f.0) <= s.w;
+    A42: 0 <= w by NAT_1:18;
+          w <= f.0 or w > f.0;
+        then x in W2 or x in W3 by A40,A41,A42;
+        hence x in W2 \/ W3 by XBOOLE_0:def 2;
+    end;
+    assume A43: x in W2 \/ W3;
+    per cases by A43,XBOOLE_0:def 2;
+    suppose x in W2;
+    then consider w being Nat such that
+A44: x = w & s.(f.0) <= s.w & f.0 < w;
+    thus x in W1 by A44;
+    suppose x in W3;
+    then consider w being Nat such that
+A45: x = w & 0 <= w & w <= f.0 & s.(f.0) <= s.w;
+    thus x in W1 by A45;
+end;
+    then W1 = W2 \/ W3 by TARSKI:2;
+    then
+A46:    W2 is infinite by A34,A35,A37,A38,A39,FINSET_1:14;
+ defpred R[Nat] means P[$1, f.$1, f.($1+1)];
+ A47: R[0] by A16,A46;
+A48: now let k be Nat such that
+    A49: R[k];
+        consider N being Subset of CR, B being non empty Subset of CR
+        such that
+    A50: N = {s.w where w is Nat : s.(f.k) <= s.w & f.k < w} and
+    A51: {w where w is Nat : s.(f.k) <= s.w & f.k < w} is infinite and
+    A52: B = choose {BB where BB is Element of Dickson-bases(N, R) :
+                    BB is finite} and
+    A53: f.(k+1)=s mindex (choose {b where b is Element of B :
+                                 ex b' being Element of rng s
+                                 st b'=b & Bi(b',f.k) is infinite},f.k) by A49;
+        set BALL={b where b is Element of B: ex b' being Element of rng s
+                                             st b'=b & Bi(b',f.k) is infinite};
+        set BBX ={BB where BB is Element of Dickson-bases(N, R): BB is finite};
+        set iN = {w where w is Nat : s.(f.k) <= s.w & f.k < w};
+        consider BD being set such that
+    A54: BD is_Dickson-basis_of N,R & BD is finite by A1,Def10;
+          BD in Dickson-bases(N,R) by A1,A54,Def13;
+        then BD in BBX by A54;
+        then B in BBX by A52;
+        then consider BB being Element of Dickson-bases(N,R) such that
+    A55: B = BB & BB is finite;
+   A56: B is_Dickson-basis_of N,R by A1,A55,Def13;
+          now
+            deffunc F(Element of rng s) = Bi($1, f.k);
+        A57: B is finite by A55;
+            assume
+        A58: for b being Element of rng s st b in B holds Bi(b, f.k) is finite;
+            set Ball = {F(b) where b is Element of rng s : b in B };
+        A59: Ball is finite from FraenkelFin(A57);
+              now let X be set; assume X in Ball;
+                then consider b being Element of rng s such that
+            A60: X = Bi(b, f.k) and
+            A61: b in B;
+                thus X is finite by A58,A60,A61;
+            end;
+        then A62: union Ball is finite by A59,FINSET_1:25;
+              iN c= union Ball proof
+                let x be set;
+                assume x in iN;
+                then consider w being Nat such that
+            A63: x = w and
+           A64: s.(f.k) <= s.w and
+            A65: f.k < w;
+            A66: s.w in N by A50,A64,A65;
+                reconsider sw = s.w as Element of R;
+                consider b being Element of R such that
+            A67: b in B and
+            A68: b <= sw by A56,A66,Def9;
+            A69: B c= N by A56,Def9;
+                  N c= rng s proof
+                    let x be set;
+                    assume x in N;
+                    then consider u being Nat such that
+                A70: x = s.u and
+                      s.(f.k) <= s.u and
+                      f.k < u by A50;
+                      dom s = NAT by FUNCT_2:def 1;
+                    hence x in rng s by A70,FUNCT_1:12;
+                end;
+                then B c= rng s by A69,XBOOLE_1:1;
+                then reconsider b as Element of rng s by A67;
+            A71: w in Bi(b, f.k) by A65,A68;
+                  Bi(b, f.k) in Ball by A67;
+                hence x in union Ball by A63,A71,TARSKI:def 4;
+            end;
+            hence contradiction by A51,A62,FINSET_1:13;
+        end;
+        then consider b being Element of rng s such that
+    A72: b in B & Bi(b, f.k) is infinite;
+          b in BALL by A72;
+        then choose BALL in BALL;
+        then consider b being Element of B such that
+    A73: b = choose BALL and
+    A74: ex b' being Element of rng s st b'=b & Bi(b',f.k) is infinite;
+        consider b' being Element of rng s such that
+    A75: b' = b and
+    A76: Bi(b',f.k) is infinite by A74;
+    A77: b in B;
+          B c= N by A56,Def9;
+        then b in N by A77; then consider w being Nat such that
+    A78: b = s.w and
+          s.(f.k) <= s.w and
+    A79: f.k < w by A50;
+    A80: s.(f.(k+1)) = choose BALL by A53,A73,A78,A79,Def12;
+    A81: f.k < f.(k+1) by A53,A73,A78,A79,Def12;
+        deffunc F(set) = $1;
+        defpred P[Nat] means s.(f.(k+1)) <= s.$1;
+        set W1 = {w1 where w1 is Nat : s.(f.(k+1)) <= s.w1 & f.k < w1};
+        set W2 = {w1 where w1 is Nat : s.(f.(k+1)) <= s.w1 & f.(k+1) < w1};
+        set W3 = {F(w1) where w1 is Nat : f.k < w1 & w1 <= f.(k+1) & P[w1]};
+    A82: W3 is finite from FinSegRng2;
+          now let x be set;
+            hereby assume x in W1;
+            then consider w being Nat such that
+        A83: x = w and
+        A84: s.(f.(k+1)) <= s.w & f.k < w;
+              w <= f.(k+1) or w > f.(k+1);
+            then x in W2 or x in W3 by A83,A84;
+            hence x in W2 \/ W3 by XBOOLE_0:def 2;
+        end;
+        assume A85: x in W2 \/ W3;
+        per cases by A85,XBOOLE_0:def 2;
+        suppose x in W2;
+            then consider w being Nat such that
+            A86: x = w & s.(f.(k+1)) <= s.w & f.(k+1) < w;
+              f.k < w by A81,A86,AXIOMS:22;
+            hence x in W1 by A86;
+        suppose x in W3;
+            then consider w being Nat such that
+            A87: x = w & f.k < w & w <= f.(k+1) & s.(f.(k+1)) <= s.w;
+            thus x in W1 by A87;
+        end;
+        then W1 = W2 \/ W3 by TARSKI:2;
+        then W2 is infinite by A73,A75,A76,A80,A82,FINSET_1:14;
+        hence R[k+1] by A16;
+    end;
+A88: for n being Element of NAT holds R[n] from Ind(A47,A48);
+    set t = s * f;
+    take t;
+    reconsider f as Function of NAT, REAL by FUNCT_2:9;
+      now
+          now let n be Nat;
+              f.n in rng f by A17,FUNCT_1:def 5;
+            then reconsider fn = f.n as Nat by A18;
+            consider N being Subset of CR, B being non empty Subset of CR
+            such that
+        A89: N = {s.w where w is Nat : s.(fn) <= s.w & fn < w} and
+        A90: {w where w is Nat : s.(fn) <= s.w & fn < w} is infinite and
+        A91: B = choose {BB where BB is Element of Dickson-bases(N, R):
+                        BB is finite} and
+        A92: f.(n+1) = s mindex (choose {b where b is Element of B :
+                                        ex b' being Element of rng s
+                                        st b'=b & Bi(b',fn) is infinite}, fn)
+                                        by A88;
+            set BBX = {BB where BB is Element of Dickson-bases(N, R):
+                       BB is finite};
+            set BJ = {b where b is Element of B :
+                      ex b' being Element of rng s
+                      st b'=b & Bi(b',fn) is infinite};
+            set BC = choose BJ;
+            consider BD being set such that
+        A93: BD is_Dickson-basis_of N,R & BD is finite by A1,Def10;
+              BD in Dickson-bases(N,R) by A1,A93,Def13;
+            then BD in BBX by A93;
+            then B in BBX by A91;
+            then consider BB being Element of Dickson-bases(N,R) such that
+        A94: B = BB and
+        A95: BB is finite;
+       A96: B is_Dickson-basis_of N,R by A1,A94,Def13;
+        then A97: B c= N by Def9;
+              now
+            A98: B is finite by A94,A95;
+                assume
+            A99: for b being Element of rng s st b in B
+                 holds Bi(b, fn) is finite;
+                 deffunc F(Element of rng s) = Bi($1, fn);
+                 set Ball = {F(b) where b is Element of rng s : b in B};
+                 set iN = {w where w is Nat : s.(fn) <= s.w & fn < w};
+            A100: Ball is finite from FraenkelFin(A98);
+                  now let X be set; assume X in Ball;
+                    then consider b being Element of rng s such that
+                A101: X = Bi(b, fn) and
+                A102: b in B;
+                    thus X is finite by A99,A101,A102;
+                end;
+            then A103: union Ball is finite by A100,FINSET_1:25;
+                  iN c= union Ball proof
+                    let x be set;
+                    assume x in iN;
+                    then consider w being Nat such that
+                A104: x = w and
+               A105: s.(fn) <= s.w and
+                A106: f.n < w;
+                A107: s.w in N by A89,A105,A106;
+                    reconsider sw = s.w as Element of R;
+                    consider b being Element of R such that
+                A108: b in B and
+                A109: b <= sw by A96,A107,Def9;
+                A110: B c= N by A96,Def9;
+                      N c= rng s proof
+                        let x be set;
+                        assume x in N;
+                        then consider u being Nat such that
+                    A111: x = s.u and
+                          s.(fn) <= s.u and
+                          fn < u by A89;
+                          dom s = NAT by FUNCT_2:def 1;
+                        hence x in rng s by A111,FUNCT_1:12;
+                    end;
+                    then B c= rng s by A110,XBOOLE_1:1;
+                    then reconsider b as Element of rng s by A108;
+                A112: w in Bi(b, fn) by A106,A109;
+                      Bi(b, fn) in Ball by A108;
+                    hence x in union Ball by A104,A112,TARSKI:def 4;
+                end;
+                hence contradiction by A90,A103,FINSET_1:13;
+           end;
+           then consider b being Element of rng s such that
+       A113: b in B & Bi(b, fn) is infinite;
+             b in BJ by A113;
+           then BC in BJ;
+           then consider b being Element of B such that
+       A114: BC = b and
+             ex b' being Element of rng s st b'=b & Bi(b',fn) is infinite;
+             BC in N by A97,A114,TARSKI:def 3;
+           then consider j being Nat such that
+       A115: BC = s.j & s.(fn) <= s.j & fn < j by A89;
+           thus f.n < f.(n+1) by A92,A115,Def12;
+       end;
+       hence f is increasing by SEQM_3:def 11;
+       let n be Nat;
+         f.n in rng f by A17,FUNCT_1:def 5;
+       hence f.n is Nat by A18;
+    end;
+    then reconsider f as increasing Seq_of_Nat by SEQM_3:29;
+      t = s * f;
+    hence t is_subsequence_of s by BHSP_3:def 4;
+    let n be Nat;
+A116: t.n = s.(f.n) by A17,FUNCT_1:23;
+A117: t.(n+1) = s.(f.(n+1)) by A17,FUNCT_1:23;
+    consider N being Subset of CR, B being non empty Subset of CR such that
+A118: N = {s.w where w is Nat : s.(f.n) <= s.w & f.n < w} and
+A119: {w where w is Nat: s.(f.n) <= s.w & f.n < w} is infinite and
+A120: B = choose{BB where BB is Element of Dickson-bases(N, R):BB is finite}
+and
+A121: f.(n+1) = s mindex ( choose {b where b is Element of B :
+    ex b' being Element of rng s st b'=b & Bi(b',f.n) is infinite}, f.n) by A88
+;
+    set BX = {b where b is Element of B : ex b' being Element of rng s
+                                          st b'=b & Bi(b',f.n) is infinite};
+    set sfn1 = choose BX;
+    set BBX = {BB where BB is Element of Dickson-bases(N, R):BB is finite};
+    consider BD being set such that
+A122: BD is_Dickson-basis_of N,R & BD is finite by A1,Def10;
+      BD in Dickson-bases(N,R) by A1,A122,Def13;
+    then BD in BBX by A122;
+    then B in BBX by A120;
+    then consider BB being Element of Dickson-bases(N, R) such that
+    A123: BB = B and
+    A124: BB is finite;
+A125: B is_Dickson-basis_of N,R by A1,A123,Def13;
+      now
+    A126: B is finite by A123,A124;
+        assume
+    A127: for b being Element of rng s st b in B holds Bi(b, f.n) is finite;
+        deffunc F(Element of rng s) = Bi($1, f.n);
+        set Ball = {F(b) where b is Element of rng s : b in B };
+        set iN = {w where w is Nat : s.(f.n) <= s.w & f.n < w};
+    A128: Ball is finite from FraenkelFin(A126);
+          now
+            let X be set; assume X in Ball;
+            then consider b being Element of rng s such that
+        A129: X = Bi(b, f.n) and
+        A130: b in B;
+            thus X is finite by A127,A129,A130;
+        end;
+    then A131: union Ball is finite by A128,FINSET_1:25;
+          iN c= union Ball proof
+            let x be set;
+            assume x in iN;
+            then consider w being Nat such that
+        A132: x = w and
+       A133: s.(f.n) <= s.w and
+        A134: f.n < w;
+        A135: s.w in N by A118,A133,A134;
+            reconsider sw = s.w as Element of R;
+            consider b being Element of R such that
+        A136: b in B and
+        A137: b <= sw by A125,A135,Def9;
+        A138: B c= N by A125,Def9;
+              N c= rng s proof
+                let x be set;
+                assume x in N;
+                then consider u being Nat such that
+            A139: x = s.u and
+                  s.(f.n) <= s.u and
+                  f.n < u by A118;
+                  dom s = NAT by FUNCT_2:def 1;
+                hence x in rng s by A139,FUNCT_1:12;
+            end;
+            then B c= rng s by A138,XBOOLE_1:1;
+            then reconsider b as Element of rng s by A136;
+        A140: w in Bi(b, f.n) by A134,A137;
+              Bi(b, f.n) in Ball by A136;
+            hence x in union Ball by A132,A140,TARSKI:def 4;
+        end;
+        hence contradiction by A119,A131,FINSET_1:13;
+    end;
+    then consider b being Element of rng s such that
+A141: b in B & Bi(b, f.n) is infinite;
+      b in BX by A141;
+    then sfn1 in BX;
+    then consider b being Element of B such that
+A142: b = sfn1 and
+      ex b' being Element of rng s st b' = b & Bi(b',f.n) is infinite;
+A143: sfn1 in B by A142;
+      B c= N by A125,Def9;
+    then sfn1 in N by A143; then consider w being Nat such that
+A144: sfn1 = s.w and
+A145: s.(f.n) <= s.w and
+A146: f.n < w by A118;
+      t.n <= t.(n+1) by A116,A117,A121,A144,A145,A146,Def12;
+    hence [t.n, t.(n+1)] in the InternalRel of R by ORDERS_1:def 9;
+end;
+
+theorem Th37:
+for R being RelStr st R is empty holds R is Dickson
+proof let R be RelStr such that
+A1: R is empty;
+A2: the carrier of R is empty by A1,STRUCT_0:def 1;
+      now let N be Subset of R;
+        take B = {};
+          N = {} the carrier of R by A2,XBOOLE_1:3;
+        hence B is_Dickson-basis_of N,R by Th26;
+        thus B is finite;
+    end;
+    hence R is Dickson by Def10;
+end;
+
+theorem Th38:  :: Theorem 4.46
+for M, N be RelStr
+ st M is Dickson & N is Dickson & M is quasi_ordered & N is quasi_ordered
+  holds [:M,N:] is quasi_ordered & [:M,N:] is Dickson
+proof let M,N be RelStr such that
+A1: M is Dickson and
+A2: N is Dickson and
+A3: M is quasi_ordered and
+A4: N is quasi_ordered;
+    reconsider M' = M as reflexive transitive RelStr by A3,Def3;
+    reconsider N' = N as reflexive transitive RelStr by A4,Def3;
+      [:M',N':] is reflexive & [:M',N':] is transitive;
+    hence
+A5: [:M,N:] is quasi_ordered by Def3;
+    per cases;
+    suppose M is non empty & N is non empty;
+    then reconsider Me=M,Ne=N as non empty RelStr;
+    set CPMN = [:Me,Ne:];
+      for f being sequence of [:Me,Ne:]
+     ex i,j being Nat st i < j & f.i <= f.j proof
+        let f be sequence of [:Me,Ne:];
+        deffunc F(Element of NAT) = (f.$1)`1;
+        consider a being Function of NAT, the carrier of Me such that
+    A6: for x being Element of NAT holds a.x = F(x) from LambdaD;
+        reconsider a as sequence of Me by NORMSP_1:def 3;
+        consider sa being sequence of Me such that
+    A7: sa is_subsequence_of a and
+    A8: sa is weakly-ascending by A1,Th36;
+        consider NS being increasing Seq_of_Nat such that
+    A9: sa = a * NS by A7,BHSP_3:def 4;
+        deffunc G(Element of NAT) = (f.(NS.$1))`2;
+        consider b being Function of NAT, the carrier of Ne such that
+    A10: for x being Element of NAT holds b.x = G(x) from LambdaD;
+        reconsider b as sequence of Ne by NORMSP_1:def 3;
+        consider i,j being Nat such that
+    A11: i < j & b.i <= b.j by A2,A4,Th30;
+        take NS.i, NS.j;
+        thus NS.i < NS.j by A11,SEQM_3:7;
+        reconsider x = f.(NS.i), y = f.(NS.j) as Element of [:Me,Ne:];
+    A12: dom sa = NAT by FUNCT_2:def 1;
+    then A13: sa.i = a.(NS.i) by A9,FUNCT_1:22
+            .= (f.(NS.i))`1 by A6;
+    A14: sa.j = a.(NS.j) by A9,A12,FUNCT_1:22
+            .= (f.(NS.j))`1 by A6;
+          M is transitive by A3,Def3;
+    then A15: x`1 <= y`1 by A8,A11,A13,A14,Th4;
+          b.i = x`2 & b.j =y`2 by A10;
+        hence f.(NS.i) <= f.(NS.j) by A11,A15,YELLOW_3:12;
+    end;
+    then (for N being non empty Subset of CPMN
+      holds min-classes N is finite & min-classes N is non empty)
+      by A5,Th32;
+    hence [:M,N:] is Dickson by A5,Th33;
+    suppose A16: not (M is non empty & N is non empty);
+          now per cases by A16;
+            suppose M is empty;
+               then reconsider M2 = the carrier of M as empty set by STRUCT_0:
+def 1;
+                  [: M2, the carrier of N:] is empty;
+                hence [:the carrier of M, the carrier of N:] is empty;
+            suppose N is empty;
+               then reconsider N2 = the carrier of N as empty set by STRUCT_0:
+def 1;
+                  [:the carrier of M, N2 :] is empty;
+                hence [:the carrier of M, the carrier of N:] is empty;
+        end;
+        then the carrier of [:M,N:] is empty by YELLOW_3:def 2;
+        then [:M,N:] is empty by STRUCT_0:def 1;
+        hence [:M ,N:] is Dickson by Th37;
+end;
+
+theorem Th39:
+for R, S being RelStr st R,S are_isomorphic & R is Dickson & R is quasi_ordered
+ holds S is quasi_ordered & S is Dickson
+proof
+    let R, S be RelStr such that
+A1: R,S are_isomorphic and
+A2: R is Dickson and
+A3: R is quasi_ordered;
+    set CRS = the carrier of S, IRS = the InternalRel of S;
+    per cases;
+    suppose R is not empty & S is not empty;
+        then reconsider Re = R, Se = S as non empty RelStr;
+        consider f being map of Re,Se such that
+    A4: f is isomorphic by A1,WAYBEL_1:def 8;
+    A5: f is one-to-one & rng f = the carrier of Se &
+        for x,y being Element of Re holds x <= y
+         iff f.x <= f.y by A4,WAYBEL_0:66;
+          now Re is reflexive by A3,Def3;
+            hence Se is reflexive by A1,WAYBEL20:15;
+              Re is transitive by A3,Def3;
+            hence Se is transitive by A1,WAYBEL20:16;
+        end;
+        hence A6: S is quasi_ordered by Def3;
+          now let t be sequence of Se;
+            reconsider fi = f" as Function of the carrier of Se,
+                            the carrier of Re by A5,FUNCT_2:31;
+            deffunc F(Element of NAT) = fi.(t.$1);
+            consider sr being Function of NAT, the carrier of Re such that
+        A7: for x being Element of NAT holds sr.x = F(x) from LambdaD;
+            reconsider sr as sequence of Re by NORMSP_1:def 3;
+            consider i,j being Nat such that
+        A8: i < j and
+        A9: sr.i <= sr.j by A2,A3,Th30;
+            take i,j;
+            thus i < j by A8;
+        A10: f.(sr.i) = f.(f".(t.i)) by A7
+                    .= t.i by A5,FUNCT_1:57;
+              f.(sr.j) = f.(f".(t.j)) by A7
+                   .= t.j by A5,FUNCT_1:57;
+            hence t.i <= t.j by A4,A9,A10,WAYBEL_0:66;
+        end;
+        then for N being non empty Subset of Se
+         holds min-classes N is finite & min-classes N is non empty
+           by A6,Th32;
+        hence S is Dickson by A6,Th33;
+    suppose A11: not(R is not empty & S is not empty);
+    A12: now per cases by A11;
+            suppose A13: R is empty;
+                consider f being map of R,S such that
+            A14: f is isomorphic by A1,WAYBEL_1:def 8;
+                thus S is empty by A13,A14,WAYBEL_0:def 38;
+            suppose S is empty;
+                hence S is empty;
+        end;
+          now
+                 for x being set st x in CRS
+                 holds [x,x] in IRS by A12,STRUCT_0:def 1;
+            then IRS is_reflexive_in CRS by RELAT_2:def 1;
+            hence S is reflexive by ORDERS_1:def 4;
+                for x,y,z be set
+               st x in CRS & y in CRS & z in CRS & [x,y] in IRS & [y,z] in IRS
+                holds [x,z] in IRS by A12,STRUCT_0:def 1;
+              then IRS is_transitive_in CRS by RELAT_2:def 8;
+            hence S is transitive by ORDERS_1:def 5;
+        end;
+        hence S is quasi_ordered by Def3;
+        thus S is Dickson by A12,Th37;
+end;
+
+theorem Th40:
+for p being RelStr-yielding ManySortedSet of 1, z being Element of 1
+ holds p.z, product p are_isomorphic
+proof let p be RelStr-yielding ManySortedSet of 1, z be Element of 1;
+    deffunc F(set) = 0 .--> $1;
+    consider f being Function such that
+A1: dom f = the carrier of p.z and
+A2: for x being set st x in the carrier of p.z holds f.x = F(x) from Lambda;
+A3: z = 0 by CARD_5:1,TARSKI:def 1;
+A4: 0 in 1 by CARD_5:1,TARSKI:def 1;
+      now let x be set;
+        assume A5: x in the carrier of p.z;
+    then A6: f.x = 0.-->x by A2;
+        set g = 0 .--> x;
+    A7: dom g = {0} by CQC_LANG:5
+             .= dom Carrier p by CARD_5:1,PBOOLE:def 3;
+          now let y be set; assume
+              y in dom Carrier p;
+        then A8: y in 1 by PBOOLE:def 3;
+        then A9: y = 0 by CARD_5:1,TARSKI:def 1;
+            consider R being 1-sorted such that
+        A10: R = p.y & (Carrier p).y = the carrier of R
+            by A8,PRALG_1:def 13;
+            thus g.y in (Carrier p).y
+             by A3,A5,A9,A10,CQC_LANG:6;
+        end;
+        then f.x in product Carrier p by A6,A7,CARD_3:def 5;
+        hence f.x in the carrier of product p by YELLOW_1:def 4;
+    end;
+    then f is Function of the carrier of p.z, the carrier of product p
+     by A1,FUNCT_2:5;
+    then reconsider f as map of p.z, product p;
+      now
+    per cases;
+    suppose A11: p.z is empty;
+          now assume
+              the carrier of product p is not empty;
+        then A12: product Carrier p is non empty by YELLOW_1:def 4;
+            consider x being Element of product Carrier p;
+            consider g being Function such that
+              x = g and
+              dom g = dom (Carrier p) and
+        A13: for y being set st y in dom Carrier p holds g.y in (Carrier p).y
+             by A12,CARD_3:def 5;
+        A14: 0 in dom Carrier p by A4,PBOOLE:def 3;
+            consider R being 1-sorted such that
+        A15: R = p.0 and
+        A16: (Carrier p).0 = the carrier of R
+             by A4,PRALG_1:def 13;
+        A17: g.0 in the carrier of R by A13,A14,A16;
+              R is empty by A11,A15,CARD_5:1,TARSKI:def 1;
+            hence contradiction by A17,STRUCT_0:def 1;
+        end;
+        then product p is empty by STRUCT_0:def 1;
+        hence f is isomorphic by A11,WAYBEL_0:def 38;
+    suppose A18: p.z is non empty;
+        then reconsider pz = p.z as non empty RelStr;
+          now let i be set such that
+        A19: i in rng p;
+            consider x being set such that
+        A20: x in dom p and
+        A21: i = p.x by A19,FUNCT_1:def 5;
+              x in 1 by A20,PBOOLE:def 3;
+            then i = p.0 by A21,CARD_5:1,TARSKI:def 1;
+            hence i is non empty 1-sorted by A18,CARD_5:1,TARSKI:def 1;
+        end;
+        then reconsider np = p as yielding_non-empty_carriers
+                       (RelStr-yielding ManySortedSet of 1) by YELLOW_6:def 4;
+          product np is non empty;
+        then reconsider pp = product p as non empty RelStr;
+          now let x1, x2 be set such that
+        A22: x1 in dom f and
+        A23: x2 in dom f and
+        A24: f.x1 = f.x2;
+        A25: f.x1 = 0 .--> x1 by A2,A22
+                .= {0} --> x1 by CQC_LANG:def 2
+                .= [:{0}, {x1}:] by FUNCOP_1:def 2;
+        A26: f.x2 = 0 .--> x2 by A2,A23
+                .= {0} --> x2 by CQC_LANG:def 2
+                .= [:{0}, {x2}:] by FUNCOP_1:def 2;
+        A27: 0 in {0} by TARSKI:def 1;
+              x1 in {x1} by TARSKI:def 1;
+            then [0, x1] in f.x2 by A24,A25,A27,ZFMISC_1:def 2;
+            then consider xa,ya being set such that
+              xa in {0} and
+        A28: ya in {x2} and
+        A29: [0,x1] = [xa,ya] by A26,ZFMISC_1:def 2;
+              x1 in {x2} by A28,A29,ZFMISC_1:33;
+            hence x1 = x2 by TARSKI:def 1;
+        end;
+        then A30: f is one-to-one by FUNCT_1:def 8;
+          now let y be set;
+            thus y in rng f implies y in the carrier of product p;
+            assume y in the carrier of product p;
+            then y in product Carrier p by YELLOW_1:def 4;
+            then consider g being Function such that
+        A31: y = g and
+        A32: dom g = dom (Carrier p) and
+        A33: for x being set st x in dom Carrier p holds g.x in (Carrier p).x
+             by CARD_3:def 5;
+        A34: dom g = {0} by A32,CARD_5:1,PBOOLE:def 3;
+        A35: 0 in dom Carrier p by A4,PBOOLE:def 3;
+            consider R being 1-sorted such that
+        A36: R = p.0 and
+        A37: (Carrier p).0 = the carrier of R by A4,PRALG_1:def 13;
+        A38: g.0 in the carrier of R by A33,A35,A37;
+        A39: g = 0 .--> g.0 by A34,Th1;
+        A40: f.(g.0) = 0 .--> g.0 by A2,A3,A36,A38;
+              g.0 in dom f by A1,A3,A33,A35,A36,A37;
+            hence y in rng f by A31,A39,A40,FUNCT_1:def 5;
+        end;
+        then A41: rng f = the carrier of product p by TARSKI:2;
+        reconsider f' = f as map of pz, pp;
+          now let x, y be Element of pz;
+                  product np is non empty;
+                then the carrier of product p is non empty by STRUCT_0:def 1;
+            then A42: product Carrier p is non empty by YELLOW_1:def 4;
+            A43: f'.x is Element of product Carrier p by YELLOW_1:def 4;
+            hereby assume A44: x <= y;
+              ex f1,g1 being Function st f1 = f'.x & g1 = f'.y &
+                for i be set st i in 1
+                ex R being RelStr, xi,yi being Element of R
+                st R = p.i & xi = f1.i & yi = g1.i & xi <= yi proof
+                    set f1 = 0 .--> x;
+                    set g1 = 0 .--> y;
+                    reconsider f1 as Function;
+                    reconsider g1 as Function;
+                    take f1, g1;
+                    thus f1 = f'.x by A2;
+                    thus g1 = f'.y by A2;
+                    let i be set such that
+                A45: i in 1;
+                A46: i = 0 by A45,CARD_5:1,TARSKI:def 1;
+                      0 in dom p by A4,PBOOLE:def 3;
+                    then p.0 in rng p by FUNCT_1:def 5;
+                    then reconsider p0 = p.0 as RelStr by YELLOW_1:def 3;
+                    set R = p0;
+                    reconsider x'=x as Element of R by CARD_5:1,TARSKI:def 1;
+                    reconsider y'=y as Element of R by CARD_5:1,TARSKI:def 1;
+                    take R, x', y';
+                    thus R = p.i by A45,CARD_5:1,TARSKI:def 1;
+                    thus x' = f1.i by A46,CQC_LANG:6;
+                    thus y' = g1.i by A46,CQC_LANG:6;
+                    thus x' <= y' by A44,CARD_5:1,TARSKI:def 1;
+                 end;
+                hence f'.x <= f'.y by A42,A43,YELLOW_1:def 4;
+            end;
+            assume f'.x <= f'.y;
+            then consider f1, g1 being Function such that
+        A47: f1 = f'.x and
+        A48: g1 = f'.y and
+        A49: for i being set st i in 1
+             ex R being RelStr, xi, yi being Element of R
+             st R = p.i & xi = f1.i & yi = g1.i & xi <= yi
+              by A42,A43,YELLOW_1:def 4;
+            consider R being RelStr, xi, yi being Element of R such that
+        A50: R = p.0 and
+        A51: xi = f1.0 and
+        A52: yi = g1.0 and
+        A53: xi <= yi by A4,A49;
+              f1 = 0 .--> x by A2,A47;
+        then A54: xi = x by A51,CQC_LANG:6;
+        A55: g1 = 0 .--> y by A2,A48;
+              R = pz by A50,CARD_5:1,TARSKI:def 1;
+            hence x <= y by A52,A53,A54,A55,CQC_LANG:6;
+         end;
+         hence f is isomorphic by A30,A41,WAYBEL_0:66;
+    end;
+    hence p.z, product p are_isomorphic by WAYBEL_1:def 8;
+end;
+
+definition
+  let X be set, p be RelStr-yielding ManySortedSet of X, Y be Subset of X;
+  cluster p|Y -> RelStr-yielding;
+coherence proof
+     now let v be set such that
+   A1: v in rng (p|Y);
+       consider x being set such that
+   A2: x in dom (p|Y) and
+   A3: v = (p|Y).x by A1,FUNCT_1:def 5;
+   A4: x in Y by A2,PBOOLE:def 3;
+   then A5: (p|Y).x = p.x by FUNCT_1:72;
+         x in X by A4; then x in dom p by PBOOLE:def 3;
+       then p.x in rng p by FUNCT_1:12;
+       hence v is RelStr by A3,A5,YELLOW_1:def 3;
+   end;
+   hence p|Y is RelStr-yielding by YELLOW_1:def 3;
+end;
+end;
+
+theorem Th41:
+for n being non empty Nat, p being RelStr-yielding ManySortedSet of n
+ holds product p is non empty iff p is non-Empty
+proof
+    let n be non empty Nat, p be RelStr-yielding ManySortedSet of n;
+    hereby assume
+          product p is non empty;
+        then the carrier of product p is non empty by STRUCT_0:def 1;
+        then product Carrier p is non empty by YELLOW_1:def 4;
+        then consider z being set such that
+    A1: z in product Carrier p by XBOOLE_0:def 1;
+        consider g being Function such that
+          z = g and
+          dom g = dom (Carrier p) and
+    A2: for i being set st i in dom (Carrier p) holds g.i in (Carrier p).i
+         by A1,CARD_3:def 5;
+          now let S be 1-sorted such that
+        A3: S in rng p;
+            consider x being set such that
+        A4: x in dom p and
+        A5: S = p.x by A3,FUNCT_1:def 5;
+        A6: x in n by A4,PBOOLE:def 3;
+        then A7: x in dom (Carrier p) by PBOOLE:def 3;
+            consider R being 1-sorted such that
+        A8: R = p.x and
+        A9: (Carrier p).x = the carrier of R by A6,PRALG_1:def 13;
+              the carrier of S is non empty by A2,A5,A7,A8,A9;
+            hence S is non empty by STRUCT_0:def 1;
+        end;
+        hence p is non-Empty by WAYBEL_3:def 7;
+    end;
+    assume A10: p is non-Empty;
+A11: dom Carrier p = n by PBOOLE:def 3;
+    deffunc F(set) = choose (Carrier p).$1;
+    consider g being Function such that
+A12: dom g = dom Carrier p and
+A13: for i being set st i in dom Carrier p holds g.i = F(i) from Lambda;
+    set x = g;
+      now take g;
+        thus x = g;
+        thus dom g = dom Carrier p by A12;
+        thus for i being set st i in dom Carrier p holds g.i in (Carrier p).i
+        proof
+            let i be set such that
+        A14: i in dom Carrier p;
+              i in dom p by A11,A14,PBOOLE:def 3;
+        then A15: p.i in rng p by FUNCT_1:def 5;
+            then reconsider p_i = p.i as RelStr by YELLOW_1:def 3;
+              p_i is non empty by A10,A15,WAYBEL_3:def 7;
+        then A16: the carrier of p_i is non empty by STRUCT_0:def 1;
+              i in n by A14,PBOOLE:def 3;
+            then consider R being 1-sorted such that
+        A17: R = p.i & (Carrier p).i = the carrier of R by PRALG_1:def 13;
+              g.i = choose (Carrier p).i by A13,A14;
+            hence g.i in (Carrier p).i by A16,A17;
+        end;
+    end;
+    then product Carrier p is non empty by CARD_3:def 5;
+    then the carrier of product p is non empty by YELLOW_1:def 4;
+    hence product p is non empty by STRUCT_0:def 1;
+end;
+
+theorem Th42:
+for n being non empty Nat, p being RelStr-yielding ManySortedSet of n+1,
+    ns being Subset of n+1, ne being Element of n+1
+ st ns = n & ne = n holds [:product (p|ns), p.ne:], product p are_isomorphic
+proof let n be non empty Nat, p be RelStr-yielding ManySortedSet of n+1,
+          ns be Subset of n+1, ne be Element of n+1 such that
+A1: ns = n and
+A2: ne = n;
+    set S = [: product (p|ns), p.ne:];
+    set T = product p;
+    set CP = [: the carrier of product (p|ns), the carrier of p.ne:];
+    set CPP = the carrier of product p;
+A3: dom Carrier (p|ns) = n by A1,PBOOLE:def 3;
+    per cases;
+    suppose the carrier of product p is empty;
+    then A4: T is empty by STRUCT_0:def 1;
+        then not p is non-Empty by Th41;
+        then consider r1 being 1-sorted such that
+    A5: r1 in rng p and
+    A6: r1 is empty by WAYBEL_3:def 7;
+        consider x being set such that
+    A7: x in dom p and
+    A8: r1 = p.x by A5,FUNCT_1:def 5;
+          x in n+1 by A7,PBOOLE:def 3;
+    then A9: x in n \/ {n} by AFINSQ_1:4;
+    A10: S is empty proof
+            per cases by A9,XBOOLE_0:def 2;
+            suppose A11: x in n;
+            then A12: (p|ns).x = p.x by A1,FUNCT_1:72;
+                  x in dom(p|ns) by A1,A11,PBOOLE:def 3;
+                then p.x in rng (p|ns) by A12,FUNCT_1:def 5;
+                then not (p|ns) is non-Empty by A6,A8,WAYBEL_3:def 7;
+                then product (p|ns) is empty by A1,Th41;
+                then reconsider ptemp = the carrier of product (p|ns) as empty
+set
+                by STRUCT_0:def 1;
+                  [: ptemp, the carrier of p.ne :] is empty;
+                then the carrier of S is empty by YELLOW_3:def 2;
+                hence S is empty by STRUCT_0:def 1;
+            suppose x in {n};
+                then p.ne is empty by A2,A6,A8,TARSKI:def 1;
+                then reconsider pne = the carrier of p.ne as empty set
+                 by STRUCT_0:def 1;
+                reconsider ptemp = the carrier of product (p|ns) as set;
+                  [: ptemp, pne :] is empty;
+                then the carrier of S is empty by YELLOW_3:def 2;
+                hence S is empty by STRUCT_0:def 1;
+        end;
+        consider f being empty Function;
+    A13: dom f = the carrier of S by A10,STRUCT_0:def 1;
+            for x being set st x in {} holds f.x in the carrier of T;
+        then reconsider f as Function of the carrier of S, the carrier of T
+         by A13,FUNCT_2:5;
+        reconsider f as map of S, T;
+          f is isomorphic by A4,A10,WAYBEL_0:def 38;
+        hence thesis by WAYBEL_1:def 8;
+    suppose A14: the carrier of product p is non empty;
+        then reconsider CPP as non empty set;
+        reconsider T as non empty RelStr by A14,STRUCT_0:def 1;
+    A15: product p is non empty by A14,STRUCT_0:def 1;
+    then A16: p is non-Empty by Th41;
+        reconsider p'=p as RelStr-yielding non-Empty ManySortedSet of n+1
+         by A15,Th41;
+          p'.ne is non empty;
+        then reconsider pne2 = the carrier of p.ne as non empty set
+         by STRUCT_0:def 1;
+          now let S be 1-sorted such that
+        A17: S in rng (p|ns);
+            consider x being set such that
+        A18: x in dom (p|ns) and
+        A19: S = (p|ns).x by A17,FUNCT_1:def 5;
+              x in ns by A18,PBOOLE:def 3;
+            then x in n+1;
+        then A20: x in dom p by PBOOLE:def 3;
+              S = p.x by A18,A19,FUNCT_1:70;
+            then S in rng p by A20,FUNCT_1:def 5;
+            hence S is non empty by A16,WAYBEL_3:def 7;
+        end;
+        then p|ns is non-Empty by WAYBEL_3:def 7;
+    then A21: product (p|ns) is non empty by A1,Th41;
+    then A22: the carrier of product (p|ns) is non empty by STRUCT_0:def 1;
+        reconsider ppns2 = the carrier of product (p|ns) as non empty set
+         by A21,STRUCT_0:def 1;
+          CP = [: ppns2, pne2 :];
+        then the carrier of [: product (p|ns), p.ne:] is non empty
+          by YELLOW_3:def 2;
+        then reconsider S as non empty RelStr by STRUCT_0:def 1;
+          CP = the carrier of S by YELLOW_3:def 2;
+        then reconsider CP' = CP as non empty set;
+        defpred P[set,set] means
+         ex a being Function, b being Element of pne2
+         st a in ppns2 & $1 = [a,b] & $2 = a +* (n.-->b);
+         A23: for x being Element of CP' ex y being Element of CPP st P[x,y]
+         proof
+            let x be Element of CP';
+            reconsider xx = x as Element of [: ppns2, pne2 :];
+            set a = xx`1, b = xx`2;
+            reconsider a as Element of ppns2 by MCART_1:10;
+            reconsider b as Element of pne2 by MCART_1:10;
+        A24: product Carrier (p|ns) is non empty by A22,YELLOW_1:def 4;
+          a is Element of product Carrier (p|ns) by YELLOW_1:def 4;
+            then consider g being Function such that
+        A25: a = g & dom g = dom Carrier (p|ns) and
+        A26: for i being set st i in dom Carrier (p|ns)
+             holds g.i in (Carrier (p|ns)).i by A24,CARD_3:def 5;
+            reconsider a as Function by A25;
+            set y = a +* (n.-->b);
+              now set g1 = y;
+                reconsider g1 as Function;
+                take g1;
+                thus y = g1;
+            A27: dom a = ns by A25,PBOOLE:def 3;
+            A28: dom (n.-->b) = {n} by CQC_LANG:5;
+                thus dom g1 = dom a \/ dom (n.-->b) by FUNCT_4:def 1
+                           .= n \/ {n} by A1,A27,CQC_LANG:5
+                           .= n+1 by AFINSQ_1:4
+                           .= dom (Carrier p) by PBOOLE:def 3;
+                let x be set such that
+            A29: x in dom (Carrier p);
+            A30: x in n+1 by A29,PBOOLE:def 3;
+            then A31: x in n \/ {n} by AFINSQ_1:4;
+                per cases by A31,XBOOLE_0:def 2;
+                suppose A32: x in n;
+                    then x <> n;
+                    then not x in dom(n.-->b) by A28,TARSKI:def 1;
+                then A33: g1.x = a.x by FUNCT_4:12;
+                A34: x in dom(Carrier (p|ns)) by A1,A32,PBOOLE:def 3;
+                    consider R being 1-sorted such that
+                A35: R = (p|ns).x and
+                A36: (Carrier (p|ns)).x = the carrier of R
+                     by A1,A32,PRALG_1:def 13;
+                    consider R2 being 1-sorted such that
+                A37: R2 = p.x and
+                A38: (Carrier p).x = the carrier of R2 by A30,PRALG_1:def 13;
+                      (Carrier (p|ns)).x = (Carrier p).x
+                     by A1,A32,A35,A36,A37,A38,FUNCT_1:72;
+                    hence g1.x in (Carrier p).x by A25,A26,A33,A34;
+                suppose A39: x in {n};
+                then A40: x = n by TARSKI:def 1;
+                      x in dom (n.-->b) by A39,CQC_LANG:5;
+                then A41: g1.x = (n.-->b).n by A40,FUNCT_4:14
+                        .= b by CQC_LANG:6;
+                    consider R being 1-sorted such that
+                A42: R = p.ne & (Carrier p).ne = the carrier of R
+                     by PRALG_1:def 13;
+                    thus g1.x in (Carrier p).x by A2,A40,A41,A42;
+            end;
+            then y in product Carrier p by CARD_3:def 5;
+            then reconsider y as Element of CPP by YELLOW_1:def 4;
+            take y,a,b;
+            thus a in ppns2;
+            thus x = [a,b] by MCART_1:23;
+            thus y = a +* (n.-->b);
+        end;
+        consider f being Function of CP', CPP such that
+    A43: for x being Element of CP' holds P[x,f.x] from FuncExD(A23);
+          now
+              the carrier of [:product(p|ns), p.ne :] =
+            [:the carrier of product(p|ns),the carrier of p.ne:]
+             by YELLOW_3:def 2;
+            then reconsider f as map of [:product (p|ns), p.ne:], product p;
+            reconsider f'=f as map of S, T;
+            take f;
+              now let x1,x2 be set such that
+            A44: x1 in dom f and
+            A45: x2 in dom f and
+            A46: f.x1 = f.x2;
+                  x1 is Element of [:the carrier of product (p|ns),
+                      the carrier of p.ne :] by A44,YELLOW_3:def 2;
+                then consider a1 being Function, b1 being Element of pne2 such
+that
+            A47: a1 in ppns2 and
+            A48: x1 = [a1, b1] and
+            A49: f.x1 = a1 +* (n.-->b1) by A43;
+                  x2 is Element of [: the carrier of product (p|ns),
+                             the carrier of p.ne :] by A45,YELLOW_3:def 2
+;
+                then consider a2 being Function, b2 being Element of pne2 such
+that
+            A50: a2 in ppns2 and
+            A51: x2 = [a2, b2] and
+            A52: f.x2 = a2 +* (n.-->b2) by A43;
+                  a1 in product Carrier (p|ns) by A47,YELLOW_1:def 4;
+                then consider g1 being Function such that
+            A53: a1 = g1 & dom g1 = dom Carrier (p|ns) and
+                  for x being set st x in dom Carrier (p|ns)
+                 holds g1.x in (Carrier (p|ns)).x by CARD_3:def 5;
+                  a2 in product Carrier (p|ns) by A50,YELLOW_1:def 4;
+                then consider g2 being Function such that
+            A54: a2 = g2 & dom g2 = dom Carrier (p|ns) and
+                  for x being set st x in dom Carrier (p|ns)
+                 holds g2.x in (Carrier (p|ns)).x by CARD_3:def 5;
+            A55: dom (n .--> b1) = {n} by CQC_LANG:5;
+            then A56: dom (n .--> b1) = dom (n.-->b2) by CQC_LANG:5;
+            A57: dom a1 = n by A1,A53,PBOOLE:def 3;
+            A58: now assume not n misses {n};
+                    then n /\ {n} <> {} by XBOOLE_0:def 7;
+                    then consider x being set such that
+                A59: x in n /\ {n} by XBOOLE_0:def 1;
+                A60: x in n & x in {n} by A59,XBOOLE_0:def 3;
+                    then x = n by TARSKI:def 1;
+                   hence contradiction by A60;
+                end;
+            then A61: dom a1 misses dom (n.-->b1) by A57,CQC_LANG:5;
+            A62:dom a2 misses dom (n.-->b2) by A53,A54,A57,A58,CQC_LANG:5;
+            A63: now let a, b be set;
+                    hereby assume A64: [a,b] in a1;
+                    then A65: a in dom a1 & b = a1.a by FUNCT_1:8;
+                    then A66: a in dom a1 \/ dom (n.-->b1) by XBOOLE_0:def 2;
+                        then not a in dom (n.-->b1) by A61,A65,XBOOLE_0:5;
+                    then A67: (a2+*(n.-->b2)).a = a1.a by A46,A49,A52,A66,
+FUNCT_4:def 1;
+                    A68: a in dom a2 \/ dom (n.-->b2)
+                         by A53,A54,A65,XBOOLE_0:def 2;
+                    A69: a in dom a2 by A53,A54,A64,FUNCT_1:8;
+                        then not a in dom (n.-->b2) by A62,A68,XBOOLE_0:5;
+                        then b = a2.a by A65,A67,A68,FUNCT_4:def 1;
+                        hence [a,b] in a2 by A69,FUNCT_1:8;
+                    end;
+                    assume A70: [a,b] in a2;
+                then A71: a in dom a2 & b = a2.a by FUNCT_1:8;
+                then A72: a in dom a2 \/ dom (n.-->b2) by XBOOLE_0:def 2;
+                    then not a in dom (n.-->b2) by A62,A71,XBOOLE_0:5;
+                then A73: (a1 +* (n.-->b1)).a = a2.a by A46,A49,A52,A72,FUNCT_4
+:def 1;
+                A74: a in dom a1 \/ dom (n.-->b1)
+                     by A53,A54,A71,XBOOLE_0:def 2;
+                A75: a in dom a1 by A53,A54,A70,FUNCT_1:8;
+                    then not a in dom (n.-->b1) by A61,A74,XBOOLE_0:5;
+                    then b = a1.a by A71,A73,A74,FUNCT_4:def 1;
+                    hence [a,b] in a1 by A75,FUNCT_1:8;
+            end;
+        A76: n in dom (n.-->b1) by A55,TARSKI:def 1;
+        then A77: n in dom a1 \/ dom (n.-->b1) by XBOOLE_0:def 2;
+        A78: n in dom (n.-->b2) by A55,A56,TARSKI:def 1;
+        then n in dom a2 \/ dom (n.-->b2) by XBOOLE_0:def 2;
+            then (a1 +* (n.-->b1)).n = (n.-->b2).n by A46,A49,A52,A78,FUNCT_4:
+def 1
+                               .= b2 by CQC_LANG:6;
+        then b2 = (n.-->b1).n by A76,A77,FUNCT_4:def 1
+              .= b1 by CQC_LANG:6;
+            hence x1 = x2 by A48,A51,A63,RELAT_1:def 2;
+        end;
+    then A79: f is one-to-one by FUNCT_1:def 8;
+          now let y be set;
+            thus y in rng f implies y in the carrier of product p;
+            assume y in the carrier of product p;
+            then y in product Carrier p by YELLOW_1:def 4;
+            then consider g being Function such that
+        A80: y = g and
+        A81: dom g = dom (Carrier p) and
+        A82: for x being set st x in dom Carrier p holds g.x in (Carrier p).x
+             by CARD_3:def 5;
+        A83: dom Carrier p = n+1 by PBOOLE:def 3;
+        A84: n+1 = {i where i is Nat : i < n+1} by AXIOMS:30;
+              n < n+1 by NAT_1:38;
+        then A85: n in n+1 by A84;
+            set a = g|n, b = g.n;
+            set x = [a,b];
+        A86: dom (Carrier (p|ns)) = ns by PBOOLE:def 3;
+        A87: dom a = dom g /\ n by FUNCT_1:68
+                 .= (n+1) /\ n by A81,PBOOLE:def 3;
+              n c= (n+1) by Th2;
+        then A88: dom a = n by A87,XBOOLE_1:28;
+        A89: dom a = dom (Carrier (p|ns)) by A1,A86,A87,XBOOLE_1:28;
+          now let x be set;
+                assume x in dom (Carrier (p|ns));
+            then A90: x in n by A1,PBOOLE:def 3;
+            A91: n c= n+1 by Th2;
+            A92: a.x = g.x by A90,FUNCT_1:72;
+            A93: g.x in (Carrier p).x by A82,A83,A90,A91;
+                consider R1 being 1-sorted such that
+            A94: R1 = p.x & (Carrier p).x = the carrier of R1
+                 by A90,A91,PRALG_1:def 13;
+                consider R2 being 1-sorted such that
+            A95: R2 = (p|ns).x & (Carrier (p|ns)).x = the carrier of R2
+                 by A1,A90,PRALG_1:def 13;
+                thus a.x in (Carrier (p|ns)).x
+                 by A1,A90,A92,A93,A94,A95,FUNCT_1:72;
+            end;
+            then a in product (Carrier (p|ns)) by A89,CARD_3:18;
+        then A96: a in the carrier of product(p|ns) by YELLOW_1:def 4;
+            consider R1 being 1-sorted such that
+        A97: R1 = p.n & (Carrier p).n = the carrier of R1 by A85,PRALG_1:def 13
+;
+        A98: b in the carrier of p.ne by A2,A82,A83,A97;
+            then [a,b] in [:the carrier of product(p|ns), the carrier of p.ne
+:]
+             by A96,ZFMISC_1:106;
+        then A99: x in dom f by FUNCT_2:def 1;
+              x is Element of CP'
+             by A96,A98,ZFMISC_1:106;
+            then consider ta being Function, tb being Element of pne2 such that
+              ta in ppns2 and
+        A100: x = [ta, tb] and
+        A101: f.x = ta +* (n.-->tb) by A43;
+        A102: ta = a & tb = b by A100,ZFMISC_1:33;
+              now let i, j be set;
+                hereby assume A103: [i,j] in (a+*(n.-->b));
+                    then i in dom (a +* (n.-->b)) by FUNCT_1:8;
+                then A104: i in ((dom a) \/ dom ((n.-->b))) by FUNCT_4:def 1;
+                then A105: i in n \/ {n} by A88,CQC_LANG:5;
+                A106: (a+*(n.-->b)).i = j by A103,FUNCT_1:8;
+                    per cases;
+                    suppose A107: i in dom ((n.-->b));
+                        then i in {n} by CQC_LANG:5;
+                    then A108: i = n by TARSKI:def 1;
+                          (a+*(n.-->b)).i = (n.-->b).i by A104,A107,FUNCT_4:def
+1
+                                       .= b by A108,CQC_LANG:6;
+                    then A109: g.i = j by A103,A108,FUNCT_1:8;
+                          i in dom g by A81,A83,A105,AFINSQ_1:4;
+                        hence [i,j] in g by A109,FUNCT_1:8;
+                    suppose A110: not i in dom ((n.-->b));
+                        then not i in {n} by CQC_LANG:5;
+                    then A111: i in n by A105,XBOOLE_0:def 2;
+                      (a +* (n.-->b)).i = a.i by A104,A110,FUNCT_4:def 1;
+                    then A112: g.i = j by A106,A111,FUNCT_1:72;
+                          i in dom g by A81,A83,A105,AFINSQ_1:4;
+                        hence [i,j] in g by A112,FUNCT_1:8;
+                end;
+                assume A113: [i,j] in g;
+                then A114: i in n+1 by A81,A83,FUNCT_1:8;
+                then A115: i in n \/ {n} by AFINSQ_1:4;
+                      dom (a+* (n.-->b)) = dom a \/ dom (n.-->b) by FUNCT_4:def
+1
+                                    .= n \/ {n} by A88,CQC_LANG:5;
+                then A116: i in dom (a+*(n.-->b)) by A114,AFINSQ_1:4;
+                then A117: i in dom a \/ dom (n.-->b) by FUNCT_4:def 1;
+                per cases;
+                suppose A118: i in dom (n.-->b);
+                    then i in {n} by CQC_LANG:5;
+                then A119: i = n by TARSKI:def 1;
+                      (a+* (n.-->b)).i = (n.-->b).i by A117,A118,FUNCT_4:def 1
+                                    .= b by A119,CQC_LANG:6
+                                    .= j by A113,A119,FUNCT_1:8;
+                    hence [i,j] in (a+*(n.-->b)) by A116,FUNCT_1:8;
+
+                suppose A120: not i in dom (n.-->b);
+                        then not i in {n} by CQC_LANG:5;
+                    then A121: i in n by A115,XBOOLE_0:def 2;
+                          (a+*(n.-->b)).i = a.i by A117,A120,FUNCT_4:def 1
+                                       .= g.i by A121,FUNCT_1:72
+                                       .= j by A113,FUNCT_1:8;
+                    hence [i,j] in (a+*(n.-->b)) by A116,FUNCT_1:8;
+            end;
+            then f.x = y by A80,A101,A102,RELAT_1:def 2;
+            hence y in rng f by A99,FUNCT_1:def 5;
+        end;
+    then A122: rng f = the carrier of product p by TARSKI:2;
+
+      now let x, y be Element of S;
+        A123: x is Element of CP by YELLOW_3:def 2;
+            then consider xa being Function, xb being Element of pne2 such that
+        A124: xa in ppns2 and
+        A125: x = [xa,xb] and
+        A126: f.x = xa +* (n.-->xb) by A43;
+              dom f = CP' by FUNCT_2:def 1;
+            then f.x in the carrier of product p by A122,A123,FUNCT_1:def 5;
+        then A127: f'.x in product Carrier p by YELLOW_1:def 4;
+              y is Element of CP by YELLOW_3:def 2;
+            then consider ya being Function, yb being Element of pne2 such that
+        A128: ya in ppns2 and
+        A129: y = [ya,yb] and
+        A130: f.y = ya +* (n.-->yb) by A43;
+        A131: [x,y]`1 = x by MCART_1:def 1;
+        A132: [x,y]`2 = y by MCART_1:def 2;
+        A133: x`1 = xa by A125,MCART_1:def 1;
+        A134: x`2 = xb by A125,MCART_1:def 2;
+        A135: xa in product Carrier (p|ns) by A124,YELLOW_1:def 4;
+            then consider gx being Function such that
+        A136: xa = gx & dom gx = dom Carrier (p|ns) and
+        A137: for x being set st x in dom Carrier (p|ns)
+             holds gx.x in (Carrier (p|ns)).x by CARD_3:def 5;
+        A138: dom xa = n by A1,A136,PBOOLE:def 3;
+        then A139: dom xa \/ dom (n.-->xb) = n \/ {n} by CQC_LANG:5;
+              ya in product Carrier(p|ns) by A128,YELLOW_1:def 4;
+            then consider gy being Function such that
+        A140: ya = gy & dom gy = dom Carrier (p|ns) and
+        A141: for x being set st x in dom Carrier (p|ns)
+             holds gy.x in (Carrier (p|ns)).x by CARD_3:def 5;
+        A142: dom ya = n by A1,A140,PBOOLE:def 3;
+        then A143: dom ya \/ dom (n.-->yb) = n \/ {n} by CQC_LANG:5;
+            reconsider xa'=xa as Element of product(p|ns) by
+A124;
+            reconsider ya'=ya as Element of product(p|ns) by
+A128;
+        hereby assume x <= y;
+                then [x,y] in the InternalRel of S by ORDERS_1:def 9;
+                then [x,y] in ["the InternalRel of product(p|ns),
+                           the InternalRel of p.ne"] by YELLOW_3:def 2;
+            then A144: [[x,y]`1`1,[x,y]`2`1] in the InternalRel of product(p|ns
+) &
+                [[x,y]`1`2,[x,y]`2`2] in the InternalRel of p.ne &
+                (ex a, b being set st [x,y] = [a,b]) &
+                (ex c, d being set st [x,y]`1 = [c,d]) &
+                ex e, f being set st [x,y]`2 = [e,f] by YELLOW_3:10;
+            then A145: [xa,ya] in the InternalRel of product(p|ns)
+                by A129,A131,A132,A133,MCART_1:def 1;
+            A146: xa in product Carrier(p|ns) by A124,YELLOW_1:def 4;
+                  xa' <= ya' by A145,ORDERS_1:def 9;
+                then consider ffx,ggx being Function such that
+            A147: ffx = xa & ggx = ya and
+            A148: for i being set st i in n
+                 ex RR being RelStr, xxi, yyi being Element of RR
+                  st RR = (p|ns).i & xxi = ffx.i & yyi = ggx.i & xxi <= yyi
+                by A1,A146,YELLOW_1:def 4;
+            A149: [xb,yb] in the InternalRel of p.ne
+                by A129,A131,A132,A134,A144,MCART_1:def 2;
+                reconsider xb'=xb as Element of p.ne;
+                reconsider yb'=yb as Element of p.ne;
+            A150: xb' <= yb' by A149,ORDERS_1:def 9;
+                  ex f1,g1 being Function st f1 = f.x & g1 = f.y &
+                for i being set st i in n+1
+                 ex R being RelStr, xi, yi being Element of R
+                 st R = p.i & xi = f1.i & yi = g1.i & xi <= yi
+               proof
+                   set f1 = xa +* (n.-->xb), g1 = ya +* (n.-->yb);
+                   take f1, g1;
+                   thus f1 = f.x by A126;
+                   thus g1 = f.y by A130;
+                   let i be set such that
+               A151: i in n+1;
+               A152: i in n \/ {n} by A151,AFINSQ_1:4;
+                   set R = p.i;
+                   set xi = f1.i;
+                   set yi = g1.i;
+                     i in dom p by A151,PBOOLE:def 3;
+                   then p.i in rng p by FUNCT_1:def 5;
+                   then reconsider R as RelStr by YELLOW_1:def 3;
+               A153: i in dom xa \/ dom (n.-->xb) by A139,A151,AFINSQ_1:4;
+                     now per cases;
+                       suppose A154: i in dom(n.-->xb);
+                           then i in {n} by CQC_LANG:5;
+                       then A155: i = n by TARSKI:def 1;
+                             f1.i = (n.-->xb).i by A153,A154,FUNCT_4:def 1;
+                           then xi is Element of R
+                            by A2,A155,CQC_LANG:6;
+                           hence xi is Element of R;
+                       suppose A156: not i in dom(n.-->xb);
+                       then A157: not i in {n} by CQC_LANG:5;
+                       then A158: i in n by A152,XBOOLE_0:def 2;
+                       A159: i in dom Carrier (p|ns)
+                            by A3,A152,A157,XBOOLE_0:def 2;
+                             f1.i = xa.i by A153,A156,FUNCT_4:def 1;
+                       then A160: xi in (Carrier (p|ns)).i by A136,A137,A159;
+                           consider R2 being 1-sorted such that
+                       A161: R2 = (p|ns).i & (Carrier(p|ns)).i =the carrier of
+R2
+                            by A1,A158,PRALG_1:def 13;
+                             i in dom p by A151,PBOOLE:def 3;
+                           then p.i in rng p by FUNCT_1:def 5;
+                           then reconsider p_i = p.i as RelStr by YELLOW_1:def
+3;
+                             (Carrier(p|ns)).i = the carrier of p_i
+                                                by A1,A158,A161,FUNCT_1:72;
+                           hence xi is Element of R by A160;
+                   end;
+                   then reconsider xi as Element of R;
+               A162: i in dom ya \/ dom (n.-->yb) by A143,A151,AFINSQ_1:4;
+                     now per cases;
+                       suppose A163: i in dom(n.-->yb);
+                           then i in {n} by CQC_LANG:5;
+                       then A164: i = n by TARSKI:def 1;
+                             g1.i = (n.-->yb).i by A162,A163,FUNCT_4:def 1;
+                           then yi is Element of R
+                            by A2,A164,CQC_LANG:6;
+                           hence yi is Element of R;
+                       suppose A165: not i in dom(n.-->yb);
+                       then A166: not i in {n} by CQC_LANG:5;
+                       then A167: i in n by A152,XBOOLE_0:def 2;
+                       A168: i in dom Carrier (p|ns) by A3,A152,A166,XBOOLE_0:
+def 2;
+                             g1.i = ya.i by A162,A165,FUNCT_4:def 1;
+                       then A169: yi in (Carrier (p|ns)).i by A140,A141,A168;
+                           consider R2 being 1-sorted such that
+                       A170: R2 = (p|ns).i & (Carrier(p|ns)).i=the carrier of
+R2
+                            by A1,A167,PRALG_1:def 13;
+                             i in dom p by A151,PBOOLE:def 3;
+                           then p.i in rng p by FUNCT_1:def 5;
+                           then reconsider p_i = p.i as RelStr by YELLOW_1:def
+3;
+                             (Carrier(p|ns)).i = the carrier of p_i
+                                                by A1,A167,A170,FUNCT_1:72;
+                           hence yi is Element of R by A169;
+                   end;
+                   then reconsider yi as Element of R;
+                   take R,xi,yi;
+                   thus R = p.i;
+                   thus xi = f1.i;
+                   thus yi = g1.i;
+                   per cases by A152,XBOOLE_0:def 2;
+                   suppose A171: i in n;
+                   A172: not i in {n} proof
+                          assume i in {n};
+                          then n in n by A171,TARSKI:def 1;
+                          hence contradiction;
+                       end;
+                   then A173: not i in dom (n.-->xb) by CQC_LANG:5;
+                         not i in dom (n.-->yb) by A172,CQC_LANG:5;
+                   then A174: yi = ya.i by A162,FUNCT_4:def 1;
+                       consider RR being RelStr, xxi, yyi being Element of RR
+                       such that
+                   A175: RR = (p|ns).i and
+                   A176: xxi = ffx.i & yyi = ggx.i and
+                   A177: xxi <= yyi by A148,A171;
+                         RR = R by A1,A171,A175,FUNCT_1:72;
+                       hence xi <= yi by A147,A153,A173,A174,A176,A177,FUNCT_4:
+def 1;
+                   suppose A178: i in {n};
+                   then A179: i = n by TARSKI:def 1;
+                   A180: i in dom (n.-->xb) by A178,CQC_LANG:5;
+                   A181: i in dom (n.-->yb) by A178,CQC_LANG:5;
+                   A182: xi = (n.-->xb).i by A153,A180,FUNCT_4:def 1
+                         .= xb by A179,CQC_LANG:6;
+                     yi = (n.-->yb).i by A162,A181,FUNCT_4:def 1
+                         .= yb by A179,CQC_LANG:6;
+                   hence xi <= yi by A2,A150,A178,A182,TARSKI:def 1;
+                end;
+                hence f'.x <= f'.y by A127,YELLOW_1:def 4;
+            end;
+            assume f'.x <= f'.y;
+            then consider f1, g1 being Function such that
+        A183: f1 = f.x and
+        A184: g1 = f.y and
+        A185: for i be set st i in n+1
+             ex R being RelStr, xi,yi being Element of R
+             st R = p.i & xi = f1.i & yi = g1.i & xi <= yi
+              by A127,YELLOW_1:def 4;
+              now set f2 = xa', g2 = ya';
+                reconsider f2, g2 as Function;
+                take f2, g2;
+                thus f2 = xa' & g2 = ya';
+                let i be set such that
+            A186: i in ns;
+            A187: not i in {n} proof
+                  assume i in {n};
+                  then i = n by TARSKI:def 1;
+                  hence contradiction by A1,A186;
+                end;
+            then A188: not i in dom (n.-->yb) by CQC_LANG:5;
+            A189: not i in dom (n.-->xb) by A187,CQC_LANG:5;
+                set R = (p|ns).i;
+                  i in dom (p|ns) by A186,PBOOLE:def 3;
+                then (p|ns).i in rng (p|ns) by FUNCT_1:def 5;
+                then reconsider R as RelStr by YELLOW_1:def 3;
+                take R;
+                set xi = xa.i, yi = ya.i;
+            A190: i in dom xa \/ dom (n.-->xb) by A1,A138,A186,XBOOLE_0:def 2;
+            A191: i in dom Carrier(p|ns)
+                 by A186,PBOOLE:def 3;
+                consider R2 being 1-sorted such that
+            A192: R2 = (p|ns).i & (Carrier(p|ns)).i = the carrier of R2
+                 by A186,PRALG_1:def 13;
+                  xi is Element of R by A136,A137,A191,A192;
+                then reconsider xi as Element of R;
+            A193: i in dom ya \/ dom (n.-->yb) by A1,A142,A186,XBOOLE_0:def 2;
+            A194: yi in (Carrier (p|ns)).i by A140,A141,A191;
+                consider R2 being 1-sorted such that
+            A195: R2 = (p|ns).i & (Carrier(p|ns)).i = the carrier of R2
+                 by A186,PRALG_1:def 13;
+                reconsider yi as Element of R by A194,A195;
+                take xi, yi;
+                thus R = (p|ns).i & xi = f2.i & yi = g2.i;
+                consider R2 being RelStr, xi2, yi2 being Element of R2
+                such that
+            A196: R2 = p.i and
+            A197: xi2 = f1.i and
+            A198:yi2 = g1.i and
+            A199: xi2 <= yi2 by A185,A186;
+            A200: R2 = R by A186,A196,FUNCT_1:72;
+                  (xa +* (n.-->xb)).i = xi by A189,A190,FUNCT_4:def 1;
+                hence xi <= yi by A126,A130,A183,A184,A188,A193,A197,A198,A199,
+A200,FUNCT_4:def 1;
+            end;
+            then xa' <= ya' by A135,YELLOW_1:def 4;
+            then [xa,ya] in the InternalRel of product(p|ns) by ORDERS_1:def 9;
+        then A201: [[x,y]`1`1, [x,y]`2`1] in the InternalRel of product(p|ns)
+             by A129,A131,A132,A133,MCART_1:def 1;
+            consider Rn being RelStr, xni, yni being Element of Rn such that
+        A202: Rn = p.ne and
+        A203: xni = f1.n and
+        A204: yni = g1.n and
+        A205: xni <= yni by A2,A185;
+        A206:[xni, yni] in the InternalRel of p.ne by A202,A205,ORDERS_1:def 9;
+              dom (n.-->xb) = {n} by CQC_LANG:5;
+        then A207: n in dom (n.-->xb) by TARSKI:def 1;
+            then n in dom xa \/ dom (n.-->xb) by XBOOLE_0:def 2;
+        then A208: (xa +* (n.-->xb)).n = (n.-->xb).n by A207,FUNCT_4:def 1
+                               .= xb by CQC_LANG:6;
+              dom (n.-->yb) = {n} by CQC_LANG:5;
+        then A209: n in dom (n.-->yb) by TARSKI:def 1;
+            then n in dom ya \/ dom (n.-->yb) by XBOOLE_0:def 2;
+            then (ya +* (n.-->yb)).n = (n.-->yb).n by A209,FUNCT_4:def 1
+                               .= yb by CQC_LANG:6;
+        then A210: [[x,y]`1`2, [x,y]`2`2] in the InternalRel of p.ne
+             by A126,A129,A130,A131,A132,A134,A183,A184,A203,A204,A206,A208,
+MCART_1:def 2;
+              now set a = x, b = y, c = xa, d = xb, e = ya, f = yb;
+                thus [x,y] = [a,b];
+                thus [x,y]`1 = [c,d] by A125,MCART_1:def 1;
+                thus [x,y]`2 = [e,f] by A129,MCART_1:def 2;
+            end;
+            then [x,y] in ["the InternalRel of product (p|ns),
+                       the InternalRel of p.ne"] by A201,A210,YELLOW_3:10;
+            then [x,y] in the InternalRel of S by YELLOW_3:def 2;
+            hence x <= y by ORDERS_1:def 9;
+        end;
+        hence f is isomorphic by A79,A122,WAYBEL_0:66;
+    end;
+    hence [:product (p|ns), p.ne:], product p are_isomorphic by WAYBEL_1:def 8;
+end;
+
+theorem Th43: :: Corollary 4.47
+for n being non empty Nat, p being RelStr-yielding ManySortedSet of n
+  st for i being Element of n holds p.i is Dickson & p.i is quasi_ordered
+    holds product p is quasi_ordered & product p is Dickson
+proof
+  defpred P[non empty Nat] means
+  for p being RelStr-yielding ManySortedSet of $1
+     st for i being Element of $1 holds p.i is Dickson & p.i is quasi_ordered
+     holds product p is quasi_ordered & product p is Dickson;
+A1:  P[1]
+     proof
+        let p be RelStr-yielding ManySortedSet of 1 such that
+    A2: for i being Element of 1 holds p.i is Dickson & p.i is quasi_ordered;
+        reconsider z = 0 as Element of 1 by CARD_5:1,TARSKI:def 1;
+    A3: p.z is Dickson by A2;
+    A4: p.z is quasi_ordered by A2;
+          p.z,product p are_isomorphic by Th40;
+    hence product p is quasi_ordered & product p is Dickson by A3,A4,Th39;
+    end;
+A5: now
+    let n be non empty Nat; assume
+    A6: P[n];
+    thus P[n+1]
+    proof
+    let p be RelStr-yielding ManySortedSet of n+1; assume
+   A7:for i being Element of (n+1) holds p.i is Dickson & p.i is quasi_ordered;
+         n <= n+1 by NAT_1:29;
+       then reconsider ns = n as Subset of n+1 by CARD_1:56;
+   A8: n+1 = {k where k is Nat : k < n+1} by AXIOMS:30;
+         n < n+1 by NAT_1:38;
+       then n in n+1 by A8;
+       then reconsider ne = n as Element of n+1;
+      reconsider pns = p|ns as RelStr-yielding ManySortedSet of n;
+        for i being Element of n
+       holds pns.i is Dickson & pns.i is quasi_ordered proof
+         let i be Element of n;
+      A9: (pns.i) = p.i by FUNCT_1:72;
+      A10: n = {k where k is Nat : k < n} by AXIOMS:30;
+            i in n;
+          then consider k being Nat such that
+      A11: k = i & k < n by A10;
+            k < n+1 by A11,NAT_1:38;
+          then i in n+1 by A8,A11;
+          then reconsider i'=i as Element of n+1;
+           i' = i;
+         hence pns.i is Dickson & pns.i is quasi_ordered by A7,A9;
+      end;
+  then A12: product(pns) is Dickson & product(pns) is quasi_ordered by A6;
+         p.ne is Dickson & p.ne is quasi_ordered by A7;
+  then A13: [:product(p|ns), p.ne:] is Dickson &
+      [:product(p|ns), p.ne:] is quasi_ordered by A12,Th38;
+     [:product(p|ns),p.ne:], product p are_isomorphic by Th42;
+   hence product p is quasi_ordered & product p is Dickson by A13,Th39;
+   end;
+    end;
+ thus for n being non empty Nat holds P[n] from Ind_from_1(A1, A5);
+end;
+
+Lm1: :: Corollary 4.47
+for p being RelStr-yielding ManySortedSet of {}
+  holds product p is non empty &
+        product p is quasi_ordered & product p is Dickson &
+        product p is antisymmetric
+proof let p be RelStr-yielding ManySortedSet of {};
+A1: product p = RelStr (# {{}}, id {{}} #) by YELLOW_1:26;
+   set pp = product p, cpp = the carrier of pp, ipp = the InternalRel of pp;
+A2: ipp = id {{}} by YELLOW_1:26;
+  thus pp is non empty by YELLOW_1:26;
+  thus pp is quasi_ordered proof
+   thus pp is reflexive by A1;
+   let x, y, z be set; assume
+      x in cpp & y in cpp & z in cpp & [x,y] in ipp & [y,z] in ipp;
+    hence [x,z] in ipp by A2,RELAT_1:def 10;
+  end;
+  thus pp is Dickson proof let N be Subset of cpp;
+   per cases by A1,ZFMISC_1:39;
+   suppose A3: N = {};
+    take B = {}; N = {} cpp by A3;
+    hence B is_Dickson-basis_of N,pp by Th26; thus B is finite;
+   suppose A4: N = {{}};
+    take B = {{}};
+    thus B is_Dickson-basis_of N,pp proof
+       thus B c= N by A4;
+       let a be Element of pp; assume A5: a in N;
+       take b = a;
+       thus b in B by A4,A5;
+           [b,a] in id {{}} by A4,A5,RELAT_1:def 10;
+       hence b <= a by A2,ORDERS_1:def 9;
+     end;
+    thus B is finite;
+  end;
+  thus pp is antisymmetric by A1;
+end;
+
+definition
+ let p be RelStr-yielding ManySortedSet of {};
+ cluster product p -> non empty;
+ coherence by Lm1;
+ cluster product p -> antisymmetric;
+ coherence by Lm1;
+ cluster product p -> quasi_ordered;
+ coherence by Lm1;
+ cluster product p -> Dickson;
+ coherence by Lm1;
+end;
+
+definition
+  func NATOrd -> Relation of NAT equals :Def14:
+    {[x,y] where x, y is Element of NAT : x <= y};
+correctness
+proof
+   set NO = {[x,y] where x, y is Element of NAT : x <= y};
+     now let z be set such that
+   A1: z in NO;
+       consider x, y being Element of NAT such that
+   A2: z = [x,y] and
+         x <= y by A1;
+    thus z in [:NAT, NAT:] by A2;
+   end;
+   then NO c= [:NAT, NAT:] by TARSKI:def 3;
+   hence NO is Relation of NAT by RELSET_1:def 1;
+end;
+end;
+
+theorem Th44:
+NATOrd is_reflexive_in NAT
+proof let x be set such that
+A1: x in NAT; reconsider x' = x as Nat by A1; x' <= x';
+    hence [x,x] in NATOrd by Def14;
+end;
+
+theorem Th45:
+NATOrd is_antisymmetric_in NAT
+proof let x, y be set such that x in NAT & y in NAT and
+A1: [x,y] in NATOrd and
+A2: [y,x] in NATOrd;
+    consider x', y' being Element of NAT such that
+A3: [x,y] = [x',y'] and
+A4: x' <= y' by A1,Def14;
+A5: x = x' & y = y' by A3,ZFMISC_1:33;
+    consider y2, x2 being Element of NAT such that
+A6: [y,x] = [y2,x2] and
+A7: y2 <= x2 by A2,Def14; y2 = y' & x2 = x' by A5,A6,ZFMISC_1:33;
+    hence x = y by A4,A5,A7,AXIOMS:21;
+end;
+
+theorem Th46:
+NATOrd is_strongly_connected_in NAT
+proof
+      now let x, y be set such that
+    A1: x in NAT and
+    A2: y in NAT;
+        thus [x,y] in NATOrd or [y,x] in NATOrd proof
+            assume A3: not [x,y] in NATOrd & not [y,x] in NATOrd;
+            reconsider x,y as Nat by A1,A2;
+            per cases;
+            suppose x <= y;
+               hence contradiction by A3,Def14;
+            suppose y <= x;
+               hence contradiction by A3,Def14;
+        end;
+    end;
+    hence NATOrd is_strongly_connected_in NAT by RELAT_2:def 7;
+end;
+
+theorem Th47:
+NATOrd is_transitive_in NAT
+proof let x, y, z be set such that x in NAT & y in NAT & z in NAT and
+A1: [x,y] in NATOrd and
+A2: [y,z] in NATOrd;
+    consider x1,y1 being Element of NAT such that
+A3: [x,y] = [x1,y1] and
+A4: x1 <= y1 by A1,Def14;
+A5: x = x1 & y = y1 by A3,ZFMISC_1:33;
+    consider y2, z2 being Element of NAT such that
+A6: [y,z] = [y2,z2] and
+A7: y2 <= z2 by A2,Def14;
+A8: y = y2 & z = z2 by A6,ZFMISC_1:33; then x1 <= z2 by A4,A5,A7,AXIOMS:22;
+    hence [x,z] in NATOrd by A5,A8,Def14;
+end;
+
+definition
+  func OrderedNAT -> non empty RelStr equals :Def15:
+    RelStr(# NAT, NATOrd #);
+correctness;
+end;
+
+Lm2: now now let x, y be Element of OrderedNAT;
+        assume not (x <= y);
+        then not [x,y] in NATOrd by Def15,ORDERS_1:def 9;
+        then [y,x] in NATOrd by Def15,Th46,RELAT_2:def 7;
+        hence (y <= x) by Def15,ORDERS_1:def 9;
+    end;
+    hence OrderedNAT is connected by WAYBEL_0:def 29;
+    end;
+
+definition
+  cluster OrderedNAT -> connected;
+coherence by Lm2;
+  cluster OrderedNAT -> Dickson;
+coherence proof
+    set IR' = the InternalRel of OrderedNAT\~,CR' =the carrier of OrderedNAT\~;
+A1:  OrderedNAT\~ = RelStr(# NAT, NATOrd\~ #) by Def7,Def15;
+      now let N be set such that
+    A2: N c= CR' and
+    A3: N <> {};
+         consider k being set such that
+    A4: k in N by A3,XBOOLE_0:def 1;
+        defpred P[Nat] means $1 in N;
+    A5: ex k being Nat st P[k] by A1,A2,A4;
+        consider m being Nat such that
+    A6: P[m] and
+    A7: for n being Nat st P[n] holds m <= n from Min(A5);
+        reconsider m as Element of OrderedNAT by Def15;
+        thus ex m being set st m in N & IR'-Seg(m) misses N proof
+            take m;
+            thus m in N by A6;
+              now assume IR'-Seg(m) /\ N <> {};
+                then consider z being set such that
+            A8: z in IR'-Seg(m) /\ N by XBOOLE_0:def 1;
+            A9: z in IR'-Seg(m) & z in N by A8,XBOOLE_0:def 3;
+            then A10: z <> m & [z,m] in IR' by WELLORD1:def 1;
+                then [z,m] in NATOrd \ NATOrd~ by A1,Def6;
+                then [z,m] in NATOrd by XBOOLE_0:def 4;
+                then consider x,y being Element of NAT such that
+            A11: [z,m] = [x,y] and
+            A12: x <= y by Def14;
+            A13: [x,y] in NATOrd by A12,Def14;
+            A14: z = x & m = y by A11,ZFMISC_1:33;
+                then y <= x by A7,A9;
+                then [y,x] in NATOrd by Def14;
+                hence contradiction by A10,A13,A14,Th45,RELAT_2:def 4;
+            end;
+            hence IR'-Seg(m) misses N by XBOOLE_0:def 7;
+        end;
+    end;
+    then IR' is_well_founded_in CR' by WELLORD1:def 3;
+    then OrderedNAT\~ is well_founded by WELLFND1:def 2;
+    hence OrderedNAT is Dickson by Lm2,Th28;
+  end;
+  cluster OrderedNAT -> quasi_ordered;
+coherence proof
+A15: OrderedNAT is reflexive by Def15,Th44,ORDERS_1:def 4;
+      OrderedNAT is transitive by Def15,Th47,ORDERS_1:def 5;
+    hence OrderedNAT is quasi_ordered by A15,Def3;
+end;
+  cluster OrderedNAT -> antisymmetric;
+coherence by Def15,Th45,ORDERS_1:def 6;
+  cluster OrderedNAT -> transitive;
+coherence by Def15,Th47,ORDERS_1:def 5;
+  cluster OrderedNAT -> well_founded;
+coherence proof
+   set ir = the InternalRel of OrderedNAT;
+     now given f being sequence of OrderedNAT such that
+   A16: f is descending;
+   A17: dom f = NAT by FUNCT_2:def 1;
+       reconsider rf = rng f as non empty Subset of NAT by Def15;
+       set m = min rf;
+         m in rng f by CQC_SIM1:def 8; then consider d being set such that
+   A18: d in dom f & m = f.d by FUNCT_1:def 5;
+       reconsider d as Nat by A18;
+   A19: f.(d+1) <> f.d & [f.(d+1),f.d] in ir by A16,WELLFND1:def 7;
+        then consider x, y being Element of NAT such that
+   A20:  [f.(d+1),f.d] = [x,y] and
+   A21:  x <= y by Def14,Def15;
+        reconsider fd1 = f.(d+1), fd = f.d as Nat by Def15;
+          f.(d+1) = x & f.d = y by A20,ZFMISC_1:33;
+   then A22:  fd1 < fd by A19,A21,REAL_1:def 5;
+          f.(d+1) in rf by A17,FUNCT_1:12;
+    hence contradiction by A18,A22,CQC_SIM1:def 8;
+   end;
+ hence thesis by WELLFND1:15;
+end;
+end;
+
+Lm3: now
+  let n be Nat; set pp = product (n --> OrderedNAT);
+  per cases;
+  suppose n is empty;
+   hence pp is non empty & pp is Dickson & pp is quasi_ordered &
+          pp is antisymmetric by Lm1;
+  suppose n is non empty; then reconsider n' = n as non empty Nat;
+      set p = (n' --> OrderedNAT);
+        product p is non empty;
+    hence product (n --> OrderedNAT) is non empty;
+    for i being Element of n'
+      holds p.i is Dickson & p.i is quasi_ordered by FUNCOP_1:13;
+    hence product (n --> OrderedNAT) is Dickson &
+          product (n --> OrderedNAT) is quasi_ordered by Th43;
+           product p is antisymmetric;
+    hence product (n --> OrderedNAT) is antisymmetric;
+end;
+
+definition :: 4.48 Dickson's Lemma
+ let n be Nat;
+ cluster product (n --> OrderedNAT) -> non empty;
+ coherence by Lm3;
+ cluster product (n --> OrderedNAT) -> Dickson;
+ coherence by Lm3;
+ cluster product (n --> OrderedNAT) -> quasi_ordered;
+ coherence by Lm3;
+ cluster product (n --> OrderedNAT) -> antisymmetric;
+ coherence by Lm3;
+end;
+
+theorem :: Proposition 4.49, in B&W proven without axiom of choice (4.46)
+  for M be RelStr
+ st M is Dickson & M is quasi_ordered
+  holds [:M,OrderedNAT:] is quasi_ordered & [:M,OrderedNAT:] is Dickson
+    by Th38;
+
+:: Omitting Exercise 4.50
+
+theorem Th49: :: Lemma 4.51
+for R, S being non empty RelStr
+ st R is Dickson & R is quasi_ordered & S is quasi_ordered &
+    the InternalRel of R c= the InternalRel of S &
+    (the carrier of R) = (the carrier of S)
+  holds S\~ is well_founded
+proof
+    let R, S be non empty RelStr such that
+A1: R is Dickson & R is quasi_ordered and
+A2: S is quasi_ordered and
+A3: the InternalRel of R c= the InternalRel of S and
+A4: the carrier of R = the carrier of S;
+      S is Dickson by A1,A3,A4,Th29;
+    hence S\~ is well_founded by A2,Th34;
+end;
+
+theorem :: Lemma 4.52
+  for R being non empty RelStr st R is quasi_ordered
+ holds R is Dickson iff
+       for S being non empty RelStr
+        st S is quasi_ordered & the InternalRel of R c= the InternalRel of S &
+           the carrier of R = the carrier of S
+         holds S\~ is well_founded
+proof
+    let R be non empty RelStr such that
+A1: R is quasi_ordered;
+A2: R is reflexive & R is transitive by A1,Def3;
+    set IR = the InternalRel of R, CR = the carrier of R;
+
+    thus R is Dickson implies
+        for S being non empty RelStr st
+          S is quasi_ordered & IR c= the InternalRel of S &
+          CR = the carrier of S
+         holds S\~ is well_founded by A1,Th49;
+    assume A3: for S being non empty RelStr
+                st S is quasi_ordered &
+                     IR c= the InternalRel of S &
+                     CR = the carrier of S
+                holds S\~ is well_founded;
+      now assume not R is Dickson;
+        then not (for N being non empty Subset of R
+        holds min-classes N is finite & min-classes N is non empty)
+         by A1,Th33;
+        then consider f being sequence of R such that
+    A4: for i,j being Nat st i < j holds not f.i <= f.j by A1,Th32;
+        defpred P[set,set] means
+         [$1,$2] in IR or ex i,j being Element of NAT st i < j &
+          [$1, f.j] in IR & [f.i, $2] in IR;
+        consider QOE being Relation of CR,CR such that
+    A5: for x,y being set holds [x,y] in QOE iff x in CR & y in CR & P[x,y]
+        from Rel_On_Set_Ex;
+        set S = RelStr(# CR, QOE #);
+          now let x,y be set such that
+        A6: [x,y] in IR;
+        A7: x in dom IR by A6,RELAT_1:def 4;
+              y in rng IR by A6,RELAT_1:def 5;
+            hence [x,y] in QOE by A5,A6,A7;
+        end;
+    then A8: IR c= the InternalRel of S by RELAT_1:def 3;
+    A9: IR is_reflexive_in CR by A2,ORDERS_1:def 4;
+          now let x be set such that
+        A10: x in CR;
+              [x,x] in IR by A9,A10,RELAT_2:def 1;
+            hence [x,x] in QOE by A5,A10;
+        end;
+        then QOE is_reflexive_in CR by RELAT_2:def 1;
+    then A11: S is reflexive by ORDERS_1:def 4;
+    A12: IR is_transitive_in CR by A2,ORDERS_1:def 5;
+          now let x,y,z be set such that
+        A13: x in CR & y in CR & z in CR and
+        A14: [x,y] in QOE & [y,z] in QOE;
+              now per cases by A5,A14;
+                suppose A15: [x,y] in IR;
+                      now per cases by A5,A14;
+                        suppose [y,z] in IR;
+                            then [x,z] in IR by A12,A13,A15,RELAT_2:def 8;
+                            hence [x,z] in QOE by A5,A13;
+                        suppose (ex i,j being Element of NAT
+                                 st i<j & [y,f.j] in IR & [f.i, z] in IR);
+                            then consider i,j being Element of NAT such that
+                        A16: i < j & [y,f.j] in IR & [f.i, z] in IR;
+                              [x,f.j] in IR by A12,A13,A15,A16,RELAT_2:def 8;
+                            hence [x,z] in QOE by A5,A13,A16;
+                    end;
+                    hence [x,z] in QOE;
+                suppose (ex i,j being Element of NAT
+                         st i < j & [x, f.j] in IR & [f.i, y] in IR);
+                         then consider i, j being Element of NAT such that
+                    A17: i < j & [x, f.j] in IR & [f.i, y] in IR;
+                      now per cases by A5,A14;
+                        suppose [y,z] in IR;
+                            then [f.i, z] in IR by A12,A13,A17,RELAT_2:def 8;
+                            hence [x,z] in QOE by A5,A13,A17;
+                        suppose (ex a,b being Element of NAT
+                                  st a<b & [y,f.b] in IR & [f.a,z] in IR);
+                            then consider a,b being Element of NAT such that
+                        A18: a < b & [y,f.b] in IR & [f.a, z] in IR;
+                              [f.i, f.b] in IR by A12,A13,A17,A18,RELAT_2:def 8
+;
+                            then f.i <= f.b by ORDERS_1:def 9;
+                            then not i < b by A4;
+                            then a <= i by A18,AXIOMS:22;
+                            then a < j by A17,AXIOMS:22;
+                            hence [x,z] in QOE by A5,A13,A17,A18;
+                    end;
+                    hence [x,z] in QOE;
+            end;
+            hence [x,z] in QOE;
+        end;
+        then QOE is_transitive_in CR by RELAT_2:def 8;
+        then S is transitive by ORDERS_1:def 5;
+        then S is quasi_ordered by A11,Def3;
+        then A19: S\~ is well_founded by A3,A8;
+    A20: S\~ = RelStr(# CR, QOE\~ #) by Def7;
+        then reconsider f'=f as sequence of S\~ by NORMSP_1:def 3;
+          now let n be Nat;
+        A21: n < n+1 by NAT_1:38;
+            then not f.n <= f.(n+1) by A4;
+        then A22: not [f.n, f.(n+1)] in IR by ORDERS_1:def 9;
+            hence f'.(n+1) <> f'.n by A9,RELAT_2:def 1;
+        A23: f'.(n+1) in CR & f'.n in CR by FUNCT_2:7;
+            then A24: [f'.(n+1), f'.(n+1)] in IR & [f'.n, f'.n] in IR
+             by A9,RELAT_2:def 1;
+              now assume [f'.n, f'.(n+1)] in QOE;
+                then ex i,j being Element of NAT st i < j &
+                [f'.n, f.j] in IR & [f.i, f'.(n+1)] in IR by A5,A22;
+                then consider l,k being Element of NAT such that
+            A25: k < l and
+            A26: [f'.n, f.l] in IR & [f.k, f'.(n+1)] in IR;
+                  f.n <= f.l & f.k <= f.(n+1) by A26,ORDERS_1:def 9;
+            then A27: l <= n & n+1 <= k by A4;
+                then l < n+1 by NAT_1:38;
+                hence contradiction by A25,A27,AXIOMS:22;
+            end;
+            then [f'.(n+1),f'.n] in QOE & not [f'.(n+1),f'.n] in QOE~
+             by A5,A21,A23,A24,RELAT_1:def 7;
+            then [f'.(n+1), f'.n] in QOE \ QOE~ by XBOOLE_0:def 4;
+            hence [f'.(n+1), f'.n] in the InternalRel of S\~
+              by A20,Def6;
+        end;
+        then f' is descending by WELLFND1:def 7;
+        hence contradiction by A19,WELLFND1:15;
+    end;
+    hence R is Dickson;
+end;
+

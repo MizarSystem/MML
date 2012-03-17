@@ -1,0 +1,1549 @@
+:: Basic Properties of Functor Structures
+::  by Claus Zinn and Wolfgang Jaksch
+::
+:: Received April 24, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_2, ALTCAT_1, ALTCAT_2, MSUALG_6, FUNCTOR0, RELAT_1, FUNCT_3,
+      FUNCT_1, SGRAPH1, BOOLE, MSUALG_3, CAT_1, ENS_1, PRALG_1, PBOOLE,
+      NATTRA_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, BINOP_1, STRUCT_0, PBOOLE, MSUALG_1, PRALG_1, MSUALG_3,
+      ALTCAT_1, ALTCAT_2, FUNCT_3, FUNCTOR0, AUTALG_1;
+ constructors FUNCTOR0, MCART_1, AUTALG_1;
+ clusters RELAT_1, FUNCT_1, ALTCAT_2, MSUALG_1, STRUCT_0, PRALG_1, FUNCTOR0,
+      RELSET_1, SUBSET_1, FUNCT_2;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, PBOOLE, MSUALG_3, ALTCAT_2, FUNCTOR0, AUTALG_1;
+ theorems ALTCAT_1, ALTCAT_2, FUNCTOR0, FUNCT_1, FUNCT_2, FUNCT_3, ZFMISC_1,
+      PBOOLE, RELAT_1, MSUALG_3, BINOP_1, MSUALG_1, AUTALG_1, RELSET_1,
+      XBOOLE_1;
+
+begin
+
+reserve X,Y for set;
+reserve Z for non empty set;
+
+:: ===================================================================
+:: Definitions of some clusters
+:: ===================================================================
+
+definition
+ cluster transitive with_units reflexive (non empty AltCatStr);
+ existence
+ proof consider C being category;
+   take C;
+   thus thesis;
+ end;
+end;
+
+definition
+  let A be non empty reflexive AltCatStr;
+  cluster non empty reflexive SubCatStr of A;
+  existence
+  proof
+    reconsider B = A as SubCatStr of A by ALTCAT_2:21;
+    take B;
+    thus thesis;
+  end;
+end;
+
+definition let C1,C2 be non empty reflexive AltCatStr;
+ let F be feasible FunctorStr over C1,C2,
+     A be non empty reflexive SubCatStr of C1;
+ cluster F|A -> feasible;
+ coherence
+  proof
+      F|A = F * incl A by FUNCTOR0:def 38;
+  hence thesis;
+  end;
+end;
+
+:: ===================================================================
+
+begin
+
+theorem
+    for X being set holds
+    id X is onto
+proof
+  let X be set;
+  reconsider f=(id X) as Function of X,X;
+    rng f = X by RELAT_1:71;
+  hence thesis by FUNCT_2:def 3;
+end;
+
+:: ===================================================================
+
+theorem
+  for A being non empty set,
+    B,C being non empty Subset of A,
+    D being non empty Subset of B st C=D holds
+    incl C = incl B * incl D
+    proof
+      let A be non empty set,
+          B,C be non empty Subset of A,
+          D be non empty Subset of B such that
+A1:        C=D;
+
+A2:   incl B = id B by FUNCT_3:def 4;
+A3:   incl C = id C by FUNCT_3:def 4;
+     incl D = id D by FUNCT_3:def 4;
+
+      then incl B * incl D = id (B /\ D) by A2,FUNCT_1:43
+                     .= incl C by A1,A3,XBOOLE_1:28;
+      hence thesis;
+    end;
+
+theorem Th3:
+for f being Function of X,Y
+  st f is bijective
+holds
+  f" is Function of Y,X
+
+proof
+  let f be Function of X,Y; assume
+A1: f is bijective;
+
+    then f is onto by FUNCT_2:def 4;
+    then A2: rng f = Y by FUNCT_2:def 3;
+      f is one-to-one by A1,FUNCT_2:def 4;
+hence thesis by A2,FUNCT_2:31;
+end;
+
+:: ===================================================================
+
+theorem
+  for f being Function of X,Y,
+    g being Function of Y,Z
+  st f is bijective & g is bijective
+holds
+  ex h being Function of X,Z st
+    h=g*f & h is bijective
+proof
+let f be Function of X,Y,
+    g be Function of Y,Z; assume
+A1: f is bijective & g is bijective;
+
+then A2: f is one-to-one & g is one-to-one by FUNCT_2:def 4;
+A3: f is onto & g is onto by A1,FUNCT_2:def 4;
+    then A4:  rng g = Z by FUNCT_2:def 3;
+      dom g = Y by FUNCT_2:def 1;
+    then A5: Y = {} iff Z = {} by A4,RELAT_1:65;
+
+A6: g*f is one-to-one by A2,FUNCT_1:46;
+    reconsider h=g*f as Function of X,Z by A5,FUNCT_2:19;
+      rng f = Y by A3,FUNCT_2:def 3;
+    then rng(g*f) = Z by A4,A5,FUNCT_2:20;
+    then A7: h is onto by FUNCT_2:def 3;
+    take h;
+thus thesis by A6,A7,FUNCT_2:def 4;
+end;
+
+:: ===================================================================
+
+begin
+
+theorem Th5:
+for A being non empty reflexive AltCatStr,
+    B being non empty reflexive SubCatStr of A,
+    C being non empty SubCatStr of A,
+    D being non empty SubCatStr of B st C = D holds
+    incl C = incl B * incl D
+    proof
+      let A be non empty reflexive AltCatStr,
+          B be non empty reflexive SubCatStr of A,
+          C be non empty SubCatStr of A,
+          D be non empty SubCatStr of B such that
+A1:       C = D;
+
+         set X = [: the carrier of B, the carrier of B :],
+             Y = [: the carrier of D, the carrier of D :];
+               the carrier of D c= the carrier of B by ALTCAT_2:def 11;
+         then A2:     Y c= X by ZFMISC_1:119;
+
+A3:   the ObjectMap of incl C = id Y by A1,FUNCTOR0:def 29
+               .= id(X /\ Y) by A2,XBOOLE_1:28
+               .= (id X)*(id Y) by FUNCT_1:43
+               .= (id X)*the ObjectMap of incl D by FUNCTOR0:def 29
+               .= (the ObjectMap of incl B)*the ObjectMap of incl D
+                                                       by FUNCTOR0:def 29;
+
+     for i being set st i in Y holds
+          (the MorphMap of incl C).i =
+           (((the MorphMap of incl B)*the ObjectMap of incl D)**
+           the MorphMap of incl D).i
+
+  proof
+
+    let i be set; assume
+A4: i in Y;
+
+then A5: i in (dom (id Y)) by FUNCT_1:34;
+
+    set XX = the Arrows of B,
+        YY = the Arrows of D;
+
+    YY cc= XX by ALTCAT_2:def 11;
+then A6:  (YY).i c= (XX).i by A4,ALTCAT_2:def 2;
+A7:   (the MorphMap of incl C).i =
+             (the MorphMap of incl B).i * (the MorphMap of incl D).i
+           proof
+A8:              (the MorphMap of incl B).i =
+                               (id the Arrows of B).i by FUNCTOR0:def 29;
+A9:              (the MorphMap of incl D).i =
+                               (id the Arrows of D).i by FUNCTOR0:def 29;
+A10:              (the MorphMap of incl C).i =
+                               (id the Arrows of C).i by FUNCTOR0:def 29;
+
+                (the MorphMap of incl B).i * (the MorphMap of incl D).i
+                  = (id XX).i * id (YY.i) by A4,A8,A9,MSUALG_3:def 1
+                 .= id (XX.i) * id (YY.i) by A2,A4,MSUALG_3:def 1
+                 .= id (XX.i /\ YY.i) by FUNCT_1:43
+                 .= id ((the Arrows of D).i) by A6,XBOOLE_1:28
+                 .= (the MorphMap of incl C).i by A1,A4,A10,MSUALG_3:def 1;
+
+           hence (the MorphMap of incl C).i =
+             (the MorphMap of incl B).i * (the MorphMap of incl D).i;
+           end;
+
+A11:   ((the MorphMap of incl B)*the ObjectMap of incl D).i =
+           ((the MorphMap of incl B)*id Y).i by FUNCTOR0:def 29
+
+           .= ((the MorphMap of incl B).((id Y).i)) by A5,FUNCT_1:23
+           .= ((the MorphMap of incl B).i) by A4,FUNCT_1:35;
+
+           set dom1 = dom ((the MorphMap of incl B)*the ObjectMap of incl D);
+           set dom2 = dom (the MorphMap of incl D);
+
+A12:            dom (((the MorphMap of incl B)*the ObjectMap of incl D)**
+                the MorphMap of incl D) =
+           dom2 /\ dom1 by MSUALG_3:def 4;
+
+    i in dom2 /\ dom1
+
+      proof
+
+A13:            dom (the MorphMap of incl D)
+                 = Y by PBOOLE:def 3;
+
+              dom ((the MorphMap of incl B)*the ObjectMap of incl D) =
+               dom ((the MorphMap of incl B)*(id Y)) by FUNCTOR0:def 29
+            .= (dom (the MorphMap of incl B)) /\ Y by FUNCT_1:37
+            .= X /\ Y by PBOOLE:def 3
+            .= Y by A2,XBOOLE_1:28;
+
+          hence thesis by A4,A13;
+
+             end;
+
+   hence (the MorphMap of incl C).i =
+          (((the MorphMap of incl B)*the ObjectMap of incl D)**
+           the MorphMap of incl D).i by A7,A11,A12,MSUALG_3:def 4;
+
+  end;
+
+  then the MorphMap of incl C =
+       ((the MorphMap of incl B)*the ObjectMap of incl D)**
+       the MorphMap of incl D by A1,PBOOLE:3;
+
+  hence thesis by A1,A3,FUNCTOR0:def 37;
+end;
+
+:: ===================================================================
+
+theorem Th6:
+for A,B being non empty AltCatStr,
+    F being FunctorStr over A,B st F is bijective holds
+  the ObjectMap of F is bijective &
+  the MorphMap of F is "1-1"
+proof
+let A,B be non empty AltCatStr,
+    F be FunctorStr over A,B; assume
+A1:  F is bijective;
+
+then A2: F is injective by FUNCTOR0:def 36;
+    then F is one-to-one by FUNCTOR0:def 34;
+    then A3: the ObjectMap of F is one-to-one by FUNCTOR0:def 7;
+
+    A4: F is faithful by A2,FUNCTOR0:def 34;
+   F is surjective by A1,FUNCTOR0:def 36;
+    then F is onto by FUNCTOR0:def 35;
+    then (the ObjectMap of F) is onto by FUNCTOR0:def 8;
+hence thesis by A3,A4,FUNCTOR0:def 31,FUNCT_2:def 4;
+end;
+
+:: ===================================================================
+:: Lemmata about properties of G*F, where G,F are FunctorStr
+:: ===================================================================
+
+theorem Th7:
+for C1 being non empty AltGraph, C2,C3 being non empty reflexive AltGraph,
+  F being feasible FunctorStr over C1,C2, G being FunctorStr over C2,C3 st
+  F is one-to-one & G is one-to-one holds
+G*F is one-to-one
+
+proof
+let C1 be non empty AltGraph, C2,C3 be non empty reflexive AltGraph,
+    F be feasible FunctorStr over C1,C2, G be FunctorStr over C2,C3
+; assume
+
+A1:  F is one-to-one & G is one-to-one;
+then A2:  the ObjectMap of F is one-to-one by FUNCTOR0:def 7;
+A3:  the ObjectMap of G is one-to-one by A1,FUNCTOR0:def 7;
+       the ObjectMap of G*F = (the ObjectMap of G)*the ObjectMap of F
+                                                    by FUNCTOR0:def 37;
+hence the ObjectMap of (G*F) is one-to-one by A2,A3,FUNCT_1:46;
+end;
+
+theorem Th8:
+for C1 being non empty AltGraph, C2,C3 being non empty reflexive AltGraph,
+  F being feasible FunctorStr over C1,C2, G being FunctorStr over C2,C3 st
+  F is faithful & G is faithful holds
+G*F is faithful
+proof
+let C1 be non empty AltGraph, C2,C3 be non empty reflexive AltGraph,
+    F be feasible FunctorStr over C1,C2, G be FunctorStr over C2,C3
+    such that
+
+A1:  F is faithful & G is faithful;
+
+     set CC1 = [:the carrier of C1,the carrier of C1:];
+     set CC2 = [:the carrier of C2,the carrier of C2:];
+
+     set MMF = the MorphMap of F;
+     set MMG = the MorphMap of G;
+     reconsider MMGF = the MorphMap of G*F as ManySortedFunction of CC1;
+     reconsider OMF = the ObjectMap of F as Function of CC1,CC2;
+
+A2:  MMF is "1-1" & MMG is "1-1" by A1,FUNCTOR0:def 31;
+
+A3:  MMGF = (MMG*OMF)**MMF by FUNCTOR0:def 37;
+
+       for i be set st i in CC1 holds (MMGF.i) is one-to-one
+     proof
+       let i be set; assume
+A4:      i in CC1;
+then A5:      OMF.i in CC2 by FUNCT_2:7;
+       i in dom ((MMG*OMF)**MMF) by A4,PBOOLE:def 3;
+
+then A6:    MMGF.i
+        = ((MMG*OMF).i)*(MMF.i) by A3,MSUALG_3:def 4
+       .= (MMG.(OMF.i))*(MMF.i) by A4,FUNCT_2:21;
+A7:    MMG.(OMF.i) is one-to-one by A2,A5,MSUALG_3:1;
+         MMF.i is one-to-one by A2,A4,MSUALG_3:1;
+       hence MMGF.i is one-to-one by A6,A7,FUNCT_1:46;
+     end;
+hence the MorphMap of G*F is "1-1" by MSUALG_3:1;
+end;
+
+theorem Th9:
+for C1 being non empty AltGraph, C2,C3 being non empty reflexive AltGraph,
+  F being feasible FunctorStr over C1,C2, G being FunctorStr over C2,C3 st
+  F is onto & G is onto holds
+G*F is onto
+proof
+let C1 be non empty AltGraph, C2,C3 be non empty reflexive AltGraph,
+    F be feasible FunctorStr over C1,C2, G be FunctorStr over C2,C3
+    such that
+A1: F is onto & G is onto;
+    set CC1 = [:the carrier of C1,the carrier of C1:];
+    set CC2 = [:the carrier of C2,the carrier of C2:];
+    set CC3 = [:the carrier of C3,the carrier of C3:];
+    reconsider OMF = the ObjectMap of F as Function of CC1,CC2;
+    reconsider OMG = the ObjectMap of G as Function of CC2,CC3;
+
+A2: OMF is onto by A1,FUNCTOR0:def 8;
+A3: OMG is onto by A1,FUNCTOR0:def 8;
+A4: rng OMF = CC2 by A2,FUNCT_2:def 3;
+   rng OMG = CC3 by A3,FUNCT_2:def 3;
+    then rng (OMG*OMF) = CC3 by A4,FUNCT_2:20;
+then OMG*OMF is onto by FUNCT_2:def 3;
+hence the ObjectMap of (G*F) is onto by FUNCTOR0:def 37;
+end;
+
+theorem Th10:
+for C1 being non empty AltGraph, C2,C3 being non empty reflexive AltGraph,
+  F being feasible FunctorStr over C1,C2, G being FunctorStr over C2,C3 st
+  F is full & G is full holds
+G*F is full
+proof
+let C1 be non empty AltGraph, C2,C3 be non empty reflexive AltGraph,
+    F be feasible FunctorStr over C1,C2, G be FunctorStr over C2,C3
+    such that
+A1:  F is full & G is full;
+     set CC1 = [:the carrier of C1,the carrier of C1:];
+     set CC2 = [:the carrier of C2,the carrier of C2:];
+     set CC3 = [:the carrier of C3,the carrier of C3:];
+     consider MMF being ManySortedFunction of (the Arrows of C1),
+                          (the Arrows of C2)*the ObjectMap of F such that
+A2:    MMF = the MorphMap of F & MMF is "onto" by A1,FUNCTOR0:def 33;
+     consider MMG being ManySortedFunction of (the Arrows of C2),
+                          (the Arrows of C3)*the ObjectMap of G such that
+A3:    MMG = the MorphMap of G & MMG is "onto" by A1,FUNCTOR0:def 33;
+
+     reconsider OMF = the ObjectMap of F as Function of CC1,CC2;
+     reconsider OMG = the ObjectMap of G as Function of CC2,CC3;
+
+    ex f being ManySortedFunction of (the Arrows of C1),
+                         (the Arrows of C3)*the ObjectMap of (G*F) st
+     f = the MorphMap of G*F & f is "onto"
+  proof
+     reconsider MMGF = the MorphMap of G*F as
+                         ManySortedFunction of (the Arrows of C1),
+                           (the Arrows of C3)*the ObjectMap of (G*F) by
+FUNCTOR0:def 5;
+A4:    MMGF = (MMG*OMF)**MMF by A2,A3,FUNCTOR0:def 37;
+     take MMGF;
+       for i be set st i in CC1 holds
+       rng(MMGF.i) = ((the Arrows of C3)*the ObjectMap of (G*F)).i
+     proof
+       let i be set; assume
+A5:      i in CC1;
+then A6:      OMF.i in CC2 by FUNCT_2:7;
+A7:      i in dom ((MMG*OMF)**MMF) by A5,PBOOLE:def 3;
+
+       reconsider MMGI = MMG.(OMF.i) as
+         Function of (the Arrows of C2).(OMF.i),
+         ((the Arrows of C3)*the ObjectMap of G).(OMF.i)
+                                                 by A6,MSUALG_1:def 2;
+
+A8:    rng ((MMG.(OMF.i))*(MMF.i)) = rng (MMG.(OMF.i))
+       proof
+         per cases;
+
+         suppose A9: rng MMGI = {};
+           rng ({}*(MMF.i)) = {};
+         hence thesis by A9,RELAT_1:64;
+
+         suppose A10: rng MMGI<>{};
+           rng MMGI = ((the Arrows of C3)*the ObjectMap of G).(OMF.i)
+                                                  by A3,A6,MSUALG_3:def 3;
+         then A11:      dom MMGI = (the Arrows of C2).(OMF.i)
+                                          by A10,FUNCT_2:def 1;
+           rng ((MMG.(OMF.i))*(MMF.i)) = rng (MMG.(OMF.i))
+         proof
+             dom MMGI
+            = ((the Arrows of C2)*OMF).i by A5,A11,FUNCT_2:21
+           .= rng (MMF.i) by A2,A5,MSUALG_3:def 3;
+         hence thesis by RELAT_1:47;
+         end;
+       hence thesis;
+       end;
+
+         rng (MMGF.i)
+        = rng (((MMG*OMF).i)*(MMF.i)) by A4,A7,MSUALG_3:def 4
+       .= rng (MMG.(OMF.i)) by A5,A8,FUNCT_2:21
+       .= ((the Arrows of C3)*the ObjectMap of G).(OMF.i)
+                                                 by A3,A6,MSUALG_3:def 3
+       .= (the Arrows of C3).(OMG.(OMF.i)) by A6,FUNCT_2:21
+       .= (the Arrows of C3).((OMG*OMF).i) by A5,FUNCT_2:21
+       .= (the Arrows of C3).((the ObjectMap of (G*F)).i) by FUNCTOR0:def 37
+       .= ((the Arrows of C3)*the ObjectMap of (G*F)).i by A5,FUNCT_2:21;
+       hence thesis;
+     end;
+  hence thesis by MSUALG_3:def 3;
+  end;
+hence thesis by FUNCTOR0:def 33;
+end;
+
+theorem Th11:
+for C1 being non empty AltGraph, C2,C3 being non empty reflexive AltGraph,
+  F being feasible FunctorStr over C1,C2, G being FunctorStr over C2,C3 st
+  F is injective & G is injective holds
+G*F is injective
+proof
+let C1 be non empty AltGraph, C2,C3 be non empty reflexive AltGraph,
+  F be feasible FunctorStr over C1,C2, G be FunctorStr over C2,C3; assume
+A1: F is injective & G is injective;
+then A2: F is one-to-one & G is one-to-one by FUNCTOR0:def 34;
+A3: F is faithful & G is faithful by A1,FUNCTOR0:def 34;
+A4: G*F is one-to-one by A2,Th7;
+      G*F is faithful by A3,Th8;
+hence thesis by A4,FUNCTOR0:def 34;
+end;
+
+theorem Th12:
+for C1 being non empty AltGraph, C2,C3 being non empty reflexive AltGraph,
+  F being feasible FunctorStr over C1,C2, G being FunctorStr over C2,C3 st
+  F is surjective & G is surjective holds
+G*F is surjective
+proof
+let C1 be non empty AltGraph, C2,C3 be non empty reflexive AltGraph,
+  F be feasible FunctorStr over C1,C2, G be FunctorStr over C2,C3; assume
+A1: F is surjective & G is surjective;
+then A2: F is full & G is full by FUNCTOR0:def 35;
+A3: F is onto & G is onto by A1,FUNCTOR0:def 35;
+A4: G*F is full by A2,Th10;
+      G*F is onto by A3,Th9;
+hence thesis by A4,FUNCTOR0:def 35;
+end;
+
+theorem Th13:
+for C1 being non empty AltGraph, C2,C3 being non empty reflexive AltGraph,
+  F being feasible FunctorStr over C1,C2, G being FunctorStr over C2,C3 st
+  F is bijective & G is bijective holds
+G*F is bijective
+proof
+let C1 be non empty AltGraph, C2,C3 be non empty reflexive AltGraph,
+  F be feasible FunctorStr over C1,C2, G be FunctorStr over C2,C3; assume
+A1: F is bijective & G is bijective;
+then A2: F is injective & G is injective by FUNCTOR0:def 36;
+A3: F is surjective & G is surjective by A1,FUNCTOR0:def 36;
+A4: G*F is injective by A2,Th11;
+      G*F is surjective by A3,Th12;
+hence thesis by A4,FUNCTOR0:def 36;
+end;
+
+begin :: Theorems about the restriction ans inclusion operator
+
+theorem
+  for A,I being non empty reflexive AltCatStr,
+    B being non empty reflexive SubCatStr of A,
+    C being non empty SubCatStr of A,
+    D being non empty SubCatStr of B st C = D
+for F being FunctorStr over A,I holds
+    F|C = F|B|D
+  proof
+    let A,I be non empty reflexive AltCatStr,
+        B be non empty reflexive SubCatStr of A,
+        C be non empty SubCatStr of A,
+        D be non empty SubCatStr of B such that
+        A1: C = D;
+
+    let F be FunctorStr over A,I;
+
+    thus F|C = F * incl C by FUNCTOR0:def 38
+            .= F * (incl B * incl D) by A1,Th5
+            .= F * incl B * incl D by FUNCTOR0:33
+            .= F|B * incl D by FUNCTOR0:def 38
+            .= F|B|D by FUNCTOR0:def 38;
+  end;
+
+theorem
+   for C1,C2,C3 being non empty reflexive AltCatStr,
+     F being feasible FunctorStr over C1,C2,
+     G being FunctorStr over C2,C3
+ for A being non empty reflexive SubCatStr of C1 holds
+  (G*F)|A = G*(F|A)
+
+  proof
+  let C1,C2,C3 be non empty reflexive AltCatStr,
+      F be feasible FunctorStr over C1,C2,
+      G be FunctorStr over C2,C3;
+  let A be non empty reflexive SubCatStr of C1;
+
+    thus (G*F)|A = (G*F)*incl A by FUNCTOR0:def 38
+                .= G*(F*incl A) by FUNCTOR0:33
+                .= G*(F|A) by FUNCTOR0:def 38;
+  end;
+
+:: ===================== trivial Corollary ============================
+
+canceled;
+
+theorem
+    for A being non empty AltCatStr,
+      B being non empty SubCatStr of A holds
+  B is full iff incl B is full
+
+  proof
+  let A be non empty AltCatStr,
+      B be non empty SubCatStr of A;
+
+:: ====================
+:: forward     ->
+:: ====================
+
+     hereby
+       assume A1: B is full;
+
+       set I = [:the carrier of B, the carrier of B:];
+          the carrier of B c= the carrier of A by ALTCAT_2:def 11;
+        then A2:        I c= [:the carrier of A, the carrier of A:] by ZFMISC_1
+:119;
+
+         dom(the Arrows of A) = [:the carrier of A, the carrier of A:]
+          by PBOOLE:def 3;
+        then A3:     dom(the Arrows of A) /\ I = I by A2,XBOOLE_1:28;
+
+        consider I2' being non empty set, B' being ManySortedSet of I2',
+        f' being Function of [:the carrier of B,the carrier of B:],I2'
+        such that
+A4:      the ObjectMap of incl B = f' and
+A5:      (the Arrows of A) = B' &
+           the MorphMap of incl B is ManySortedFunction of
+                           (the Arrows of B),
+                           B'*f' by FUNCTOR0:def 4;
+
+        reconsider f = the MorphMap of incl B as
+                       ManySortedFunction of (the Arrows of B),
+                       (the Arrows of A)*the ObjectMap of incl B
+              by A4,A5;
+
+          f is "onto"
+        proof
+          let i be set such that
+A6:         i in I;
+
+A7:           (the Arrows of B).i = (the Arrows of A).i
+            proof
+                (the Arrows of B) =
+              (the Arrows of A)|[:the carrier of B, the carrier of B:]
+                                                 by A1,ALTCAT_2:def 13;
+
+                hence thesis by A6,FUNCT_1:72;
+            end;
+
+             rng (f.i)
+                    = rng ((id the Arrows of B).i) by FUNCTOR0:def 29
+                   .= rng (id ((the Arrows of B).i)) by A6,MSUALG_3:def 1
+                   .= (the Arrows of A).i by A7,RELAT_1:71
+                   .= ((the Arrows of A)*id I).i by A3,A6,FUNCT_1:38
+                   .= ((the Arrows of A)*the ObjectMap of incl B).i
+                                                       by FUNCTOR0:def 29;
+                 hence thesis;
+
+        end;
+        hence incl B is full by FUNCTOR0:def 33;
+     end;
+
+:: ====================
+:: backward     <-
+:: ====================
+
+    assume
+A8:        incl B is full;
+
+    set I = [:the carrier of B, the carrier of B:];
+
+A9:     the carrier of B c= the carrier of A by ALTCAT_2:def 11;
+    then A10:     I c= [:the carrier of A, the carrier of A:] by ZFMISC_1:119;
+
+      dom(the Arrows of A) = [:the carrier of A, the carrier of A:]
+      by PBOOLE:def 3;
+    then A11: dom(the Arrows of A) /\ I = I by A10,XBOOLE_1:28;
+    then dom((the Arrows of A)|I) = I by RELAT_1:90;
+
+    then reconsider
+         XX = ((the Arrows of A)|[:the carrier of B, the carrier of B:])
+               as ManySortedSet of I by PBOOLE:def 3;
+
+      the Arrows of B = XX
+    proof
+    thus
+   the Arrows of B c= XX
+         proof
+           let i be set; assume
+A12:               i in I;
+
+           then consider y,z being set such that
+A13:                 y in (the carrier of A) &
+                    z in (the carrier of A) &
+                    i = [y,z] by A10,ZFMISC_1:103
+; :: can also be justified directly by
+                                     :: A1,C2,ZFMISC_1:103;
+
+A14:            y in (the carrier of B) &
+               z in (the carrier of B) by A12,A13,ZFMISC_1:106;
+
+           let x be set;
+           assume
+              x in (the Arrows of B).i;
+           then A15:               x in (the Arrows of B).(y,z) by A13,BINOP_1:
+def 1;
+
+             the Arrows of B cc= the Arrows of A by ALTCAT_2:def 11;
+
+           then (the Arrows of B).i c= (the Arrows of A).i
+                 by A12,ALTCAT_2:def 2;
+
+           then (the Arrows of B).(y,z) c= (the Arrows of A).i
+                 by A13,BINOP_1:def 1;
+
+           then (the Arrows of B).(y,z) c= (the Arrows of A).(y,z)
+                 by A13,BINOP_1:def 1;
+
+           then A16:              x in (the Arrows of A).(y,z) by A15;
+
+
+              XX.(y,z) = (the Arrows of A).(y,z)
+                        by A9,A14,ALTCAT_1:7;
+           hence x in XX.i by A13,A16,BINOP_1:def 1;
+
+        end;
+
+    thus
+       XX c= the Arrows of B
+        proof
+          let i be set such that
+A17:             i in I;
+          let x be set;
+          assume
+A18:      x in XX.i;
+            x in (the Arrows of B).i
+          proof
+            consider y,z being set such that
+A19:             y in (the carrier of A) &
+                z in (the carrier of A) &
+                i = [y,z] by A10,A17,ZFMISC_1:103;
+               y in (the carrier of B) &
+                z in (the carrier of B) by A17,A19,ZFMISC_1:106;
+            then A20:             XX.(y,z) = (the Arrows of A).(y,z)
+                                      by A9,ALTCAT_1:7;
+
+            consider f being ManySortedFunction of (the Arrows of B),
+                        (the Arrows of A)*the ObjectMap of incl B such that
+A21:              f = the MorphMap of incl B & f is "onto" by A8,FUNCTOR0:def
+33;
+
+              f = id the Arrows of B by A21,FUNCTOR0:def 29;
+            then A22:             rng ((id the Arrows of B).i) =
+                ((the Arrows of A)*the ObjectMap of incl B).i
+                                                  by A17,A21,MSUALG_3:def 3
+                .= ((the Arrows of A)*id I).i by FUNCTOR0:def 29
+                .= (the Arrows of A).i by A11,A17,FUNCT_1:38;
+
+
+A23:             rng ((id the Arrows of B).i)
+             = rng (id ((the Arrows of B).i)) by A17,MSUALG_3:def 1
+            .= (the Arrows of B).i by RELAT_1:71;
+
+A24:             (the Arrows of A).(y,z) = (the Arrows of B).(y,z)
+            proof
+                (the Arrows of A).(y,z) = (the Arrows of B).i
+                                                       by A19,A22,A23,BINOP_1:
+def 1;
+              hence
+                (the Arrows of A).(y,z) = (the Arrows of B).(y,z)
+                                                       by A19,BINOP_1:def 1;
+            end;
+              x in (the Arrows of A).(y,z) by A18,A19,A20,BINOP_1:def 1;
+            hence x in (the Arrows of B).i by A19,A24,BINOP_1:def 1;
+          end;
+          hence thesis;
+        end;
+    end;
+
+    hence the Arrows of B =
+          ((the Arrows of A)|[:the carrier of B, the carrier of B:]);
+  end;
+
+:: ===================================================================
+
+begin :: Theorems about 'full' and 'faithful' of Functor Structures
+
+theorem
+   for C1, C2 being non empty AltCatStr,
+     F being Covariant FunctorStr over C1,C2
+ holds
+  (F is full) iff
+  for o1,o2 being object of C1 holds
+      Morph-Map(F,o1,o2) is onto
+
+  proof
+  let C1, C2 be non empty AltCatStr,
+     F be Covariant FunctorStr over C1,C2;
+
+  set I = [:the carrier of C1, the carrier of C1:];
+
+  :: ====================
+  :: forward     ->
+  :: ====================
+
+  hereby assume
+
+A1:  F is full;
+
+     let o1,o2 be object of C1;
+     consider f being ManySortedFunction of (the Arrows of C1),
+                      (the Arrows of C2)*the ObjectMap of F such that
+A2:     f = the MorphMap of F & f is "onto" by A1,FUNCTOR0:def 33;
+
+A3: [o1,o2] in I by ZFMISC_1:106;
+A4: (the MorphMap of F).[o1,o2] = (the MorphMap of F).(o1,o2)
+                                                       by BINOP_1:def 1;
+A5: [o1,o2] in dom(the ObjectMap of F)
+                        by A3,FUNCT_2:def 1;
+       rng(f.[o1,o2]) = ((the Arrows of C2)*the ObjectMap of F).[o1,o2]
+                       by A2,A3,MSUALG_3:def 3;
+     then rng(Morph-Map(F,o1,o2)) =
+         ((the Arrows of C2)*the ObjectMap of F).[o1,o2]
+                                           by A2,A4,FUNCTOR0:def 15
+     .= (the Arrows of C2).((the ObjectMap of F).[o1,o2])
+                                       by A5,FUNCT_1:23
+     .= (the Arrows of C2).((the ObjectMap of F).(o1,o2)) by BINOP_1:def 1
+     .= (the Arrows of C2).[F.o1,F.o2] by FUNCTOR0:23
+     .= (the Arrows of C2).(F.o1,F.o2) by BINOP_1:def 1
+     .= <^F.o1,F.o2^> by ALTCAT_1:def 2;
+    hence Morph-Map(F,o1,o2) is onto by FUNCT_2:def 3;
+  end;
+
+  :: ====================
+  :: backward    <-
+  :: ====================
+
+  assume
+
+A6:  for o1,o2 being object of C1 holds
+       Morph-Map(F,o1,o2) is onto;
+
+    consider I2' being non empty set, B' being ManySortedSet of I2',
+             f' being Function of I,I2'
+    such that
+A7: the ObjectMap of F = f' and
+A8: (the Arrows of C2) = B' &
+    the MorphMap of F is ManySortedFunction of
+                         (the Arrows of C1),
+    B'*f' by FUNCTOR0:def 4;
+
+    reconsider f = the MorphMap of F as
+                   ManySortedFunction of (the Arrows of C1),
+                       (the Arrows of C2)*the ObjectMap of F
+              by A7,A8;
+
+      f is "onto"
+    proof
+     let i be set; assume
+      i in I;
+      then consider o1,o2 being set such that
+A9:          o1 in the carrier of C1 &
+             o2 in the carrier of C1 &
+             i = [o1,o2] by ZFMISC_1:103;
+      reconsider o1, o2 as object of C1 by A9;
+A10:   Morph-Map(F,o1,o2) is onto by A6;
+A11:   [o1,o2] in I by ZFMISC_1:106;
+A12:   (the MorphMap of F).[o1,o2] = (the MorphMap of F).(o1,o2)
+                                                       by BINOP_1:def 1;
+A13: [o1,o2] in dom(the ObjectMap of F)
+                        by A11,FUNCT_2:def 1;
+
+        rng(Morph-Map(F,o1,o2)) = <^F.o1,F.o2^> by A10,FUNCT_2:def 3
+     .= (the Arrows of C2).(F.o1,F.o2) by ALTCAT_1:def 2
+     .= (the Arrows of C2).[F.o1,F.o2] by BINOP_1:def 1
+     .= (the Arrows of C2).((the ObjectMap of F).(o1,o2)) by FUNCTOR0:23
+     .= (the Arrows of C2).((the ObjectMap of F).[o1,o2])
+                                       by BINOP_1:def 1
+     .= ((the Arrows of C2)*the ObjectMap of F).[o1,o2]
+                                           by A13,FUNCT_1:23
+     .= ((the Arrows of C2)*the ObjectMap of F).(o1,o2) by BINOP_1:def 1;
+     then rng(Morph-Map(F,o1,o2)) =
+         ((the Arrows of C2)*the ObjectMap of F).[o1,o2]
+                                                   by BINOP_1:def 1;
+     hence
+         rng(f.i) = ((the Arrows of C2)*the ObjectMap of F).i
+                                  by A9,A12,FUNCTOR0:def 15;
+    end;
+
+    hence
+        ex f being ManySortedFunction of (the Arrows of C1),
+                               (the Arrows of C2)*the ObjectMap of F st
+         f = the MorphMap of F & f is "onto";
+      ::definitional expansion of 'F is full'
+ end;
+
+:: ===================================================================
+
+theorem
+   for C1, C2 being non empty AltCatStr,
+     F being Covariant FunctorStr over C1,C2
+ holds
+  (F is faithful) iff
+  for o1,o2 being object of C1 holds
+      Morph-Map(F,o1,o2) is one-to-one
+
+  proof
+  let C1, C2 be non empty AltCatStr,
+      F be Covariant FunctorStr over C1,C2;
+
+  set I = [:the carrier of C1, the carrier of C1:];
+
+  :: ====================
+  :: forward     ->
+  :: ====================
+
+  hereby assume
+
+A1: F is faithful;
+
+    let o1,o2 be object of C1;
+
+A2: (the MorphMap of F) is "1-1" by A1,FUNCTOR0:def 31;
+
+A3: [o1,o2] in I by ZFMISC_1:106;
+
+A4: (the MorphMap of F).[o1,o2] = (the MorphMap of F).(o1,o2)
+                                                      by BINOP_1:def 1;
+
+      reconsider g = (the MorphMap of F).[o1,o2] as Function;
+
+      dom(the MorphMap of F) = I by PBOOLE:def 3;
+
+    then g is one-to-one by A2,A3,MSUALG_3:def 2;
+
+    hence Morph-Map(F,o1,o2) is one-to-one by A4,FUNCTOR0:def 15;
+
+  end;
+
+  :: ====================
+  :: backward    <-
+  :: ====================
+
+  assume
+
+A5: for o1,o2 being object of C1 holds
+        Morph-Map(F,o1,o2) is one-to-one;
+
+    let i be set,
+        f be Function such that
+
+A6:     i in dom(the MorphMap of F) &
+        (the MorphMap of F).i = f;
+
+      dom(the MorphMap of F) = I by PBOOLE:def 3;
+    then consider o1,o2 being set such that
+A7:          o1 in the carrier of C1 &
+             o2 in the carrier of C1 &
+             i = [o1,o2] by A6,ZFMISC_1:103;
+
+    reconsider o1, o2 as object of C1 by A7;
+
+A8: (the MorphMap of F).(o1,o2) = Morph-Map(F,o1,o2) by FUNCTOR0:def 15;
+   (the MorphMap of F).[o1,o2] = (the MorphMap of F).(o1,o2)
+                                                      by BINOP_1:def 1;
+    hence
+        f is one-to-one by A5,A6,A7,A8;
+
+      ::definitional expansion of 'the MorphMap of F is "1-1"'
+      ::definitional expansion of 'F is faithful' in FUNCTOR0:def 31
+end;
+
+:: ===================================================================
+
+begin :: Theorems about the inversion of Functor Structures
+
+theorem
+  for A being transitive with_units (non empty AltCatStr)
+holds
+  (id A)" = id A
+
+proof
+let A be transitive with_units (non empty AltCatStr);
+
+     set CCA = [:the carrier of A, the carrier of A:];
+
+A1:  the ObjectMap of (id A)" = (the ObjectMap of (id A))"
+                                                        by FUNCTOR0:def 39;
+     consider f being ManySortedFunction of (the Arrows of A),
+                      (the Arrows of A)*the ObjectMap of (id A) such that
+A2:  f = the MorphMap of (id A) &
+         the MorphMap of (id A)" = f""*(the ObjectMap of (id A))" by FUNCTOR0:
+def 39;
+
+A3:  the ObjectMap of (id A)"
+      = (id CCA)" by A1,FUNCTOR0:def 30
+     .= (id CCA) by FUNCT_1:67
+     .= the ObjectMap of (id A) by FUNCTOR0:def 30;
+
+A4:     the MorphMap of (id A) is "1-1"
+        proof
+A5:       the MorphMap of (id A) = id (the Arrows of A) by FUNCTOR0:def 30;
+            for i be set st i in CCA
+            holds (id (the Arrows of A)).i is one-to-one
+          proof
+            let i be set such that
+A6:           i in CCA;
+            id ((the Arrows of A).i) is one-to-one by FUNCT_1:52;
+            hence thesis by A6,MSUALG_3:def 1;
+          end;
+          hence thesis by A5,MSUALG_3:1;
+        end;
+A7:     f is "onto"
+        proof
+            for i be set st i in CCA
+            holds rng(f.i) = ((the Arrows of A)*the ObjectMap of (id A)).i
+          proof
+            let i be set such that
+A8:           i in CCA;
+                dom (the Arrows of A) = CCA by PBOOLE:def 3;
+              then A9:          (dom (the Arrows of A)) /\ CCA = CCA;
+
+                rng(f.i)
+              = rng ((id (the Arrows of A)).i) by A2,FUNCTOR0:def 30
+              .= rng (id ((the Arrows of A).i)) by A8,MSUALG_3:def 1
+              .= (the Arrows of A).i by RELAT_1:71
+              .= ((the Arrows of A)*(id CCA)).i by A8,A9,FUNCT_1:38
+              .= ((the Arrows of A)*the ObjectMap of (id A)).i
+                                                    by FUNCTOR0:def 30;
+            hence thesis;
+          end;
+          hence thesis by MSUALG_3:def 3;
+        end;
+
+
+A10: f"" = f
+     proof
+         for i being set st i in CCA holds
+         (f"").i = f.i
+       proof
+         let i be set; assume
+A11:        i in CCA;
+
+           then (f"").i = ((the MorphMap of (id A)).i)" by A2,A4,A7,MSUALG_3:
+def 5
+           .= ((id (the Arrows of A)).i)" by FUNCTOR0:def 30
+           .= ((id ((the Arrows of A).i)))" by A11,MSUALG_3:def 1
+           .= id ((the Arrows of A).i) by FUNCT_1:67
+           .= ((id (the Arrows of A)).i) by A11,MSUALG_3:def 1
+           .= f.i by A2,FUNCTOR0:def 30;
+         hence thesis;
+       end;
+       hence thesis by PBOOLE:3;
+     end;
+
+  (the MorphMap of (id A))*(id CCA) = the MorphMap of (id A)
+     proof
+         for i being set st i in CCA holds
+         ((the MorphMap of (id A))*(id CCA)).i = (the MorphMap of (id A)).i
+         proof
+           let i be set such that
+A12:          i in CCA;
+               dom (the MorphMap of (id A)) = CCA by PBOOLE:def 3;
+             then (dom (the MorphMap of (id A))) /\ CCA = CCA;
+           hence thesis by A12,FUNCT_1:38;
+         end;
+       hence thesis by PBOOLE:3;
+     end;
+
+hence thesis by A1,A2,A3,A10,FUNCTOR0:def 30;
+
+end;
+
+:: ===================================================================
+
+theorem
+   for A, B being transitive with_units reflexive (non empty AltCatStr)
+ for F being feasible FunctorStr over A,B st F is bijective
+ for G being feasible FunctorStr over B,A st the FunctorStr of G=F" holds
+        F * G = id B
+  proof
+
+    let A,B be transitive with_units reflexive (non empty AltCatStr);
+    let F be feasible FunctorStr over A,B such that
+A1:     F is bijective;
+    let G be feasible FunctorStr over B,A such that
+A2:     the FunctorStr of G=F";
+
+    set I1 = [:the carrier of A,the carrier of A:];
+    set I2 = [:the carrier of B,the carrier of B:];
+
+      the ObjectMap of F*G = (the ObjectMap of F)*the ObjectMap of G
+                                                   by FUNCTOR0:def 37;
+    then A3: the ObjectMap of F*G = (the ObjectMap of F)*(the ObjectMap of F)"
+                                                  by A1,A2,FUNCTOR0:def 39;
+       F is injective by A1,FUNCTOR0:def 36;
+     then F is one-to-one by FUNCTOR0:def 34;
+then A4:  (the ObjectMap of F) is one-to-one by FUNCTOR0:def 7;
+       F is surjective by A1,FUNCTOR0:def 36;
+     then F is onto by FUNCTOR0:def 35;
+then A5:  (the ObjectMap of F) is onto by FUNCTOR0:def 8;
+
+     set OM = the ObjectMap of F;
+
+A6:  dom OM = I1 by FUNCT_2:def 1;
+A7:  rng OM = I2 by A5,FUNCT_2:def 3;
+
+     reconsider OM as bifunction of the carrier of A, the carrier of B;
+
+A8:  the ObjectMap of F*G = id [:the carrier of B,the carrier of B:] by A3,A4,
+A7,FUNCT_1:61;
+       F is injective by A1,FUNCTOR0:def 36;
+     then A9: F is faithful by FUNCTOR0:def 34;
+then A10:  (the MorphMap of F) is "1-1" by FUNCTOR0:def 31;
+       F is surjective by A1,FUNCTOR0:def 36;
+then A11: F is full onto by FUNCTOR0:def 35;
+
+       the FunctorStr of G is bijective by A1,A2,FUNCTOR0:36;
+     then the FunctorStr of G is surjective by FUNCTOR0:def 36;
+     then the FunctorStr of G is full onto by FUNCTOR0:def 35;
+then A12: the ObjectMap of G is onto by FUNCTOR0:def 8;
+
+     consider k being ManySortedFunction of
+                            (the Arrows of A),
+                            (the Arrows of B)*the ObjectMap of F such that
+A13:      k = the MorphMap of F and
+A14:      the MorphMap of F" = k""*(the ObjectMap of F)"
+                                                by A1,FUNCTOR0:def 39;
+
+      consider f being ManySortedFunction of
+                             (the Arrows of A),
+                             (the Arrows of B)*the ObjectMap of F such that
+A15:        f = the MorphMap of F and
+A16:        f is "onto" by A11,FUNCTOR0:def 33;
+
+A17: (the ObjectMap of G) = (the ObjectMap of F)" by A1,A2,FUNCTOR0:def 39;
+
+    set OMG = (the ObjectMap of G);
+
+A18: the MorphMap of F*G = (f * OMG) ** (k""* OMG) by A2,A14,A15,A17,FUNCTOR0:
+def 37;
+
+A19: I2 = dom((f * OMG) ** (k"" * OMG)) by PBOOLE:def 3;
+
+      for i be set st
+        i in I2 holds
+    ((f * OMG) ** (k""* OMG)).i = (id (the Arrows of B)).i
+
+    proof
+    let i be set such that
+
+A20: i in I2;
+A21: dom(OMG) = I2 by FUNCT_2:def 1;
+
+then A22:  (f * OMG).i = k.(OMG.i) by A13,A15,A20,FUNCT_1:23;
+
+A23:  OMG.i in I1
+     proof
+      rng(OMG) = I1 by A12,FUNCT_2:def 3;
+       hence OMG.i in I1 by A20,A21,FUNCT_1:def 5;
+     end;
+
+A24:  (k"" * OMG).i = k"".(OMG.i) by A20,A21,FUNCT_1:23
+                  .= (k.(OMG.i))"
+                  by A10,A13,A15,A16,A23,MSUALG_3:def 5;
+
+A25:  (f.(OMG.i)) is one-to-one
+     proof
+
+A26:     f is "1-1" by A9,A15,FUNCTOR0:def 31;
+      dom(f) = I1 by PBOOLE:def 3;
+
+     hence
+
+       (f.(OMG.i)) is one-to-one by A23,A26,MSUALG_3:def 2;
+     end;
+
+A27:  rng (f.(OMG.i)) = ((the Arrows of B)*the ObjectMap of F).(OMG.i)
+                                            by A16,A23,MSUALG_3:def 3
+
+                    .= (the Arrows of B).((the ObjectMap of F).(OMG.i))
+                                            by A6,A23,FUNCT_1:23;
+
+  A28: (the ObjectMap of F).(OMG.i) = (OM*OM").i by A17,A20,A21,FUNCT_1:23
+                                 .= (id I2).i by A4,A7,FUNCT_1:61
+                                 .= i by A20,FUNCT_1:35;
+
+    ( (f * OMG) ** (k"" * OMG) ).i = f.(OMG.i) * (f.(OMG.i))" by A13,A15,A19,
+A20,A22,A24,MSUALG_3:def 4
+      .= id ((the Arrows of B).i) by A25,A27,A28,FUNCT_1:61
+      .= (id (the Arrows of B)).i by A20,MSUALG_3:def 1;
+
+   hence thesis;
+   end;
+  then the MorphMap of F*G = id (the Arrows of B) by A18,PBOOLE:3;
+
+  hence thesis by A8,FUNCTOR0:def 30;
+end;
+
+Lm1:
+for I be set, A,B be ManySortedSet of I st (A is_transformable_to B)
+for H be ManySortedFunction of A,B,
+ H1 be ManySortedFunction of B,A st
+  H is "1-1" "onto" & H1 = H"" holds H**H1 = id B & H1**H = id A
+proof
+   let I be set,
+       A,B be ManySortedSet of I such that
+A1: (A is_transformable_to B);
+   let H be ManySortedFunction of A,B,
+       H1 be ManySortedFunction of B,A;
+   assume
+A2:    H is "1-1" "onto" & H1 = H"";
+A3:     for i be set st i in I holds (H1**H).i = id (A.i)
+    proof
+     let i be set; assume A4: i in I;
+then A5:     i in dom H by PBOOLE:def 3;
+     reconsider h = H.i as Function of A.i,B.i by A4,MSUALG_1:def 2;
+     reconsider h1 = H1.i as Function of B.i,A.i by A4,MSUALG_1:def 2;
+A6:      h1 = h" by A2,A4,MSUALG_3:def 5;
+A7:      h is one-to-one by A2,A5,MSUALG_3:def 2;
+       B.i = {} implies A.i = {} by A1,A4,AUTALG_1:def 4;
+     then dom h = A.i & rng h c= B.i by FUNCT_2:def 1,RELSET_1:12;
+     then h1*h = id (A.i) by A6,A7,FUNCT_1:61;
+     hence thesis by A4,MSUALG_3:2;
+    end;
+   reconsider F = H1**H as ManySortedFunction of I;
+      now let i be set; assume i in I;
+      then (H1**H).i = id (A.i) by A3;
+     hence (H1**H).i is Function of A.i, A.i;
+    end;
+   then reconsider F as ManySortedFunction of A,A by MSUALG_1:def 2;
+A8:    F = id A by A3,MSUALG_3:def 1;
+A9:    now
+     let i be set; assume A10: i in I;
+then A11:     i in dom H by PBOOLE:def 3;
+     reconsider h = H.i as Function of A.i,B.i by A10,MSUALG_1:def 2;
+     reconsider h1 = H1.i as Function of B.i,A.i by A10,MSUALG_1:def 2;
+A12:      h1 = h" by A2,A10,MSUALG_3:def 5;
+       h is one-to-one by A2,A11,MSUALG_3:def 2;
+      then h*h1 = id rng h by A12,FUNCT_1:61;
+     then h*h1 = id (B.i) by A2,A10,MSUALG_3:def 3;
+     hence (H**H1).i = id (B.i) by A10,MSUALG_3:2;
+    end;
+   reconsider F1 = H**H1 as ManySortedFunction of I;
+      now let i be set; assume i in I;
+      then F1.i = id (B.i) by A9;
+     hence F1.i is Function of B.i, B.i;
+    end;
+    then F1 is ManySortedFunction of B,B by MSUALG_1:def 2;
+   hence thesis by A8,A9,MSUALG_3:def 1;
+  end;
+
+:: ===================================================================
+
+theorem
+   for A, B being transitive with_units reflexive (non empty AltCatStr)
+ for F being feasible FunctorStr over A,B st F is bijective holds
+
+        (F") * F = id A
+  proof
+
+  let A,B be transitive with_units reflexive (non empty AltCatStr);
+  let F be feasible FunctorStr over A,B such that
+A1:     F is bijective;
+
+    set I1 = [:the carrier of A,the carrier of A:];
+A2: (the Arrows of A) is_transformable_to
+                      (the Arrows of B)*the ObjectMap of F
+    proof
+     let i be set;
+     assume
+A3:  i in I1;
+     then consider o1,o2 being set such that
+A4:  o1 in the carrier of A & o2 in the carrier of A & i = [o1,o2]
+        by ZFMISC_1:103;
+     reconsider o1, o2 as object of A by A4;
+A5:  (the Arrows of A).i = (the Arrows of A).(o1,o2) by A4,BINOP_1:def 1
+                        .= <^o1,o2^> by ALTCAT_1:def 2;
+
+     assume ((the Arrows of B)*the ObjectMap of F).i = {};
+     then (the Arrows of B).((the ObjectMap of F).i) = {} by A3,FUNCT_2:21;
+     then (the Arrows of B).((the ObjectMap of F).(o1,o2)) = {} by A4,BINOP_1:
+def 1;
+
+    hence thesis by A5,FUNCTOR0:def 12;
+    end;
+
+       the ObjectMap of F"*F = (the ObjectMap of F")*the ObjectMap of F
+                                                   by FUNCTOR0:def 37;
+     then A6: the ObjectMap of F"*F = (the ObjectMap of F)"*the ObjectMap of F
+                                                  by A1,FUNCTOR0:def 39;
+     set OM = the ObjectMap of F;
+
+       F is injective by A1,FUNCTOR0:def 36;
+     then F is one-to-one by FUNCTOR0:def 34;
+then A7:  (the ObjectMap of F) is one-to-one by FUNCTOR0:def 7;
+A8:  dom OM = I1 by FUNCT_2:def 1;
+then A9:  the ObjectMap of F"*F = id [:the carrier of A,the carrier of A:] by
+A6,A7,FUNCT_1:61;
+   consider f being
+       ManySortedFunction of (the Arrows of A),
+                             (the Arrows of B)*the ObjectMap of F such that
+A10:        f = the MorphMap of F and
+A11:        the MorphMap of F" = f""*(the ObjectMap of F)" by A1,FUNCTOR0:def
+39;
+       F is injective by A1,FUNCTOR0:def 36;
+     then F is faithful by FUNCTOR0:def 34;
+
+then A12:  (the MorphMap of F) is "1-1" by FUNCTOR0:def 31;
+       F is surjective by A1,FUNCTOR0:def 36;
+  then F is full onto by FUNCTOR0:def 35;
+
+     then consider k being ManySortedFunction of (the Arrows of A),
+                             (the Arrows of B)*the ObjectMap of F such that
+A13:         k = the MorphMap of F & k is "onto" by FUNCTOR0:def 33;
+
+   the MorphMap of F"*F = (f""*(the ObjectMap of F)"*the ObjectMap of F)**f
+                                                   by A10,A11,FUNCTOR0:def 37
+   .= (f""*((the ObjectMap of F)"*the ObjectMap of F))**f
+                                                   by RELAT_1:55;
+   then A14: the MorphMap of F"*F = (f""*(id I1))**f by A7,A8,FUNCT_1:61;
+
+      for i being set st i in I1 holds (f""*(id I1)).i = f"".i
+      proof
+        let i be set; assume
+A15:         i in I1;
+
+        then (f""*(id I1)).i = f"".((id I1).i) by FUNCT_2:21
+                       .= f"".i by A15,FUNCT_1:35;
+        hence thesis;
+      end;
+      then (f""*(id I1)) = f"" by PBOOLE:3;
+ then the MorphMap of F"*F = id the Arrows of A by A2,A10,A12,A13,A14,Lm1;
+     hence thesis by A9,FUNCTOR0:def 30;
+  end;
+
+:: ===================================================================
+
+theorem
+  for A, B being transitive with_units reflexive (non empty AltCatStr)
+for F being feasible FunctorStr over A,B st F is bijective holds
+  (F")" = the FunctorStr of F
+
+proof
+  let A,B be transitive with_units reflexive (non empty AltCatStr);
+  let F be feasible FunctorStr over A,B such that
+A1:      F is bijective;
+
+    set CCA = [:the carrier of A, the carrier of A:];
+    set CCB = [:the carrier of B, the carrier of B:];
+A2: F" is bijective by A1,FUNCTOR0:36;
+    then A3: F" is surjective by FUNCTOR0:def 36;
+    A4: F is injective by A1,FUNCTOR0:def 36;
+    then F is one-to-one by FUNCTOR0:def 34;
+    then A5: the ObjectMap of F is one-to-one by FUNCTOR0:def 7;
+
+A6: F is surjective by A1,FUNCTOR0:def 36;
+    then F is onto by FUNCTOR0:def 35;
+    then (the ObjectMap of F) is onto by FUNCTOR0:def 8;
+
+then A7: rng (the ObjectMap of F) = CCB by FUNCT_2:def 3;
+   F is faithful by A4,FUNCTOR0:def 34;
+    then A8: the MorphMap of F is "1-1" by FUNCTOR0:def 31;
+A9: F is full by A6,FUNCTOR0:def 35;
+A10: F" is full by A3,FUNCTOR0:def 35;
+      F" is injective by A2,FUNCTOR0:def 36;
+    then A11: F" is faithful by FUNCTOR0:def 34;
+
+A12: (the ObjectMap of F")"
+     = ((the ObjectMap of F)")" by A1,FUNCTOR0:def 39
+    .= the ObjectMap of F by A5,FUNCT_1:65;
+
+      the MorphMap of (F")" = the MorphMap of F
+    proof
+      consider f being ManySortedFunction of (the Arrows of B),
+                           (the Arrows of A)*the ObjectMap of (F") such that
+A13:   f = the MorphMap of (F") &
+      the MorphMap of (F")" = f""*(the ObjectMap of F")"
+                                                   by A2,FUNCTOR0:def 39;
+      consider g being ManySortedFunction of (the Arrows of A),
+                           (the Arrows of B)*the ObjectMap of F such that
+A14:   g = the MorphMap of F &
+      the MorphMap of (F") = g""*(the ObjectMap of F)"
+                                                   by A1,FUNCTOR0:def 39;
+
+      consider k being ManySortedFunction of (the Arrows of A),
+                        (the Arrows of B)*the ObjectMap of F such that
+A15:   k = the MorphMap of F & k is "onto" by A9,FUNCTOR0:def 33;
+
+      consider kk being ManySortedFunction of (the Arrows of B),
+                           (the Arrows of A)*the ObjectMap of (F") such that
+A16:   kk = the MorphMap of (F") & kk is "onto" by A10,FUNCTOR0:def 33;
+
+A17:   f is "1-1" by A11,A13,FUNCTOR0:def 31;
+
+        for i being set st i in CCA holds
+        (f""*(the ObjectMap of F")").i = (the MorphMap of F).i
+      proof
+        let i be set; assume
+A18:       i in CCA;
+then A19:       (the ObjectMap of F).i in CCB by FUNCT_2:7;
+            (the ObjectMap of F)" is Function of CCB,CCA by A5,A7,FUNCT_2:31;
+          then A20:      (the ObjectMap of F)".((the ObjectMap of F).i) in CCA
+by A19,FUNCT_2:7;
+A21:       (the ObjectMap of F)" is Function of CCB,CCA by A5,A7,FUNCT_2:31;
+A22:       g.i is one-to-one by A8,A14,A18,MSUALG_3:1;
+
+          (f""*((the ObjectMap of F")")).i
+         = f"".((the ObjectMap of F).i) by A12,A18,FUNCT_2:21
+        .= ((the MorphMap of (F")).((the ObjectMap of F).i))" by A13,A16,A17,
+A19,MSUALG_3:def 5
+        .= ((g"".((the ObjectMap of F)".((the ObjectMap of F).i))))"
+                                                by A14,A19,A21,FUNCT_2:21
+        .= (((g.((the ObjectMap of F)".((the ObjectMap of F).i)))"))"
+                                             by A8,A14,A15,A20,MSUALG_3:def 5
+        .= (((g.i)"))" by A5,A18,FUNCT_2:32
+        .= (the MorphMap of F).i by A14,A22,FUNCT_1:65;
+        hence thesis;
+      end;
+    hence thesis by A13,PBOOLE:3;
+    end;
+
+hence thesis by A2,A12,FUNCTOR0:def 39;
+end;
+
+:: ===================================================================
+
+theorem
+  for A, B, C being transitive with_units reflexive (non empty AltCatStr),
+    G being feasible FunctorStr over A,B,
+    F being feasible FunctorStr over B,C,
+    GI being feasible FunctorStr over B,A,
+    FI being feasible FunctorStr over C,B
+              st F is bijective & G is bijective &
+                FI is bijective & GI is bijective &
+                the FunctorStr of GI=G" & the FunctorStr of FI=F" holds
+ (F*G)" = (GI*FI)
+
+proof
+let A, B, C be transitive with_units reflexive (non empty AltCatStr),
+    G be feasible FunctorStr over A,B,
+    F be feasible FunctorStr over B,C,
+    GI be feasible FunctorStr over B,A,
+    FI be feasible FunctorStr over C,B such that
+A1:              F is bijective & G is bijective &
+                 FI is bijective & GI is bijective &
+                 the FunctorStr of GI=G" & the FunctorStr of FI=F";
+
+
+    set CA = [:the carrier of A, the carrier of A:];
+    set CB = [:the carrier of B, the carrier of B:];
+    set CC = [:the carrier of C, the carrier of C:];
+
+A2:  F*G is bijective by A1,Th13;
+     then F*G is surjective by FUNCTOR0:def 36;
+then A3: F*G is full by FUNCTOR0:def 35;
+
+A4: F is injective by A1,FUNCTOR0:def 36;
+A5: F is surjective by A1,FUNCTOR0:def 36;
+A6: F is one-to-one by A4,FUNCTOR0:def 34;
+A7: F is full by A5,FUNCTOR0:def 35;
+
+A8: G is injective by A1,FUNCTOR0:def 36;
+A9: G is surjective by A1,FUNCTOR0:def 36;
+A10: G is one-to-one by A8,FUNCTOR0:def 34;
+A11: G is onto by A9,FUNCTOR0:def 35;
+A12: G is full by A9,FUNCTOR0:def 35;
+
+A13: the ObjectMap of F is one-to-one by A6,FUNCTOR0:def 7;
+A14: the ObjectMap of F is bijective by A1,Th6;
+A15: the ObjectMap of G is one-to-one by A10,FUNCTOR0:def 7;
+A16: the ObjectMap of G is onto by A11,FUNCTOR0:def 8;
+A17: the ObjectMap of G is bijective by A1,Th6;
+
+A18: the ObjectMap of (F*G)" = the ObjectMap of (GI*FI)
+    proof
+        the ObjectMap of (F*G)"
+       = (the ObjectMap of (F*G))" by A2,FUNCTOR0:def 39
+      .= ((the ObjectMap of F)*(the ObjectMap of G))" by FUNCTOR0:def 37
+      .= (the ObjectMap of G)"*(the ObjectMap of F)" by A13,A15,FUNCT_1:66
+      .= (the ObjectMap of GI)*(the ObjectMap of F)" by A1,FUNCTOR0:def 39
+      .= (the ObjectMap of GI)*(the ObjectMap of FI) by A1,FUNCTOR0:def 39
+      .= the ObjectMap of (GI*FI) by FUNCTOR0:def 37;
+    hence thesis;
+    end;
+
+    set OF = the ObjectMap of F;
+    set OG = the ObjectMap of G;
+    reconsider MG = the MorphMap of G
+      as ManySortedFunction of (the Arrows of A),
+                   (the Arrows of B)*the ObjectMap of G by FUNCTOR0:def 5;
+    reconsider MF = the MorphMap of F
+      as ManySortedFunction of (the Arrows of B),
+                   (the Arrows of C)*the ObjectMap of F by FUNCTOR0:def 5;
+    reconsider MFG = the MorphMap of (F*G)
+      as ManySortedFunction of (the Arrows of A),
+               (the Arrows of C)*the ObjectMap of (F*G) by FUNCTOR0:def 5;
+    reconsider OFI=OF" as Function of CC,CB by A14,Th3;
+    reconsider OGI=OG" as Function of CB,CA by A17,Th3;
+    reconsider OG as Function of CA,CB;
+    reconsider OFG = the ObjectMap of (F*G) as Function of CA,CC;
+A19:  MF is "1-1" by A1,Th6;
+    consider mf being ManySortedFunction of (the Arrows of B),
+                          (the Arrows of C)*the ObjectMap of F such that
+A20:  mf = the MorphMap of F & mf is "onto" by A7,FUNCTOR0:def 33;
+    consider mg being ManySortedFunction of (the Arrows of A),
+                          (the Arrows of B)*the ObjectMap of G such that
+A21:  mg = the MorphMap of G & mg is "onto" by A12,FUNCTOR0:def 33;
+    consider mfg being ManySortedFunction of (the Arrows of A),
+                          (the Arrows of C)*the ObjectMap of (F*G) such that
+A22: mfg = the MorphMap of (F*G) & mfg is "onto" by A3,FUNCTOR0:def 33;
+A23:  MG is "1-1" by A1,Th6;
+A24:  MFG is "1-1" by A2,Th6;
+
+      the MorphMap of (F*G)" = the MorphMap of (GI*FI)
+    proof
+      consider f being ManySortedFunction of (the Arrows of A),
+                           (the Arrows of C)*the ObjectMap of (F*G) such that
+A25:     f = the MorphMap of (F*G) &
+        the MorphMap of (F*G)" = f""*(the ObjectMap of (F*G))"
+                                                        by A2,FUNCTOR0:def 39;
+
+A26:  rng(the ObjectMap of G) = CB by A16,FUNCT_2:def 3;
+
+    for i being set st i in CC holds
+        (f""*(the ObjectMap of (F*G))").i
+        = (((the MorphMap of G")*the ObjectMap of F")**the MorphMap of F").i
+   proof
+
+   consider x1 being ManySortedFunction of (the Arrows of B),
+                            (the Arrows of C)*the ObjectMap of F such that
+A27:  x1 = the MorphMap of F &
+      the MorphMap of F" = x1""*(the ObjectMap of F)" by A1,FUNCTOR0:def 39;
+   consider x1 being ManySortedFunction of (the Arrows of A),
+                            (the Arrows of B)*the ObjectMap of G such that
+A28:  x1 = the MorphMap of G &
+      the MorphMap of G" = x1""*(the ObjectMap of G)" by A1,FUNCTOR0:def 39;
+
+        let i be set such that
+A29:       i in CC;
+
+         the ObjectMap of (F*G) is bijective by A2,Th6;
+then A30:       (the ObjectMap of (F*G))" is Function of CC,CA by Th3;
+          then A31:       i in dom ((the ObjectMap of (F*G))") by A29,FUNCT_2:
+def 1;
+A32:       ((the ObjectMap of (F*G))".i) in CA by A29,A30,FUNCT_2:7;
+A33:       OFG" = (OF*OG)" by FUNCTOR0:def 37
+              .= OG"*OF" by A13,A15,FUNCT_1:66;
+A34:       (OG*OG") = (id CB) by A15,A26,FUNCT_2:35;
+A35:       (OFI.i) in CB by A29,FUNCT_2:7;
+then A36:       (OGI.(OFI.i)) in CA by FUNCT_2:7;
+then A37:       MG.(OGI.(OFI.i)) is one-to-one by A23,MSUALG_3:1;
+A38:      MF.(OFI.i) is one-to-one by A19,A35,MSUALG_3:1;
+A39:      OF" = the ObjectMap of F" by A1,FUNCTOR0:def 39;
+A40:      dom (((MG""*OGI)*OFI)**(MF""*OFI))
+           = CC by PBOOLE:def 3;
+A41:      dom (((MF)*OG)**MG)
+           = CA by PBOOLE:def 3;
+            OFG is bijective by A2,Th6;
+          then OFG" is Function of CC,CA by Th3;
+then A42:      ((OFG)".i) in CA by A29,FUNCT_2:7;
+
+A43:        (f""*(the ObjectMap of (F*G))").i
+         = MFG"".((the ObjectMap of (F*G))".i)
+                                          by A25,A31,FUNCT_1:23
+        .= (MFG.((the ObjectMap of (F*G))".i))"
+                                          by A22,A24,A32,MSUALG_3:def 5
+        .= ((((MF)*OG)**MG).((OFG)".i))" by FUNCTOR0:def 37
+        .= ( (((MF)*OG).((OFG)".i))*(MG.((OFG)".i)) )"
+                                         by A41,A42,MSUALG_3:def 4
+        .= ( MF.(OG.((OG"*OF").i)) *(MG.((OFG)".i)) )" by A32,A33,FUNCT_2:21;
+
+A44:        ( MF.(OG.((OG"*OF").i)) *(MG.((OFG)".i)) )"
+         = ( MF.(OG.(OGI.(OFI.i))) *(MG.((OFG)".i)) )" by A29,FUNCT_2:21
+        .= ( MF.((OG*OGI).(OFI.i)) *(MG.((OFG)".i)) )" by A35,FUNCT_2:21
+        .= ( MF.(((id CB)*OFI).i) *(MG.((OFG)".i)) )" by A29,A34,FUNCT_2:21
+        .= ( MF.(OF".i) *(MG.((OGI*OFI).i)) )" by A33,FUNCT_2:23;
+
+         ( MF.(OF".i) *(MG.((OGI*OFI).i)) )"
+         = ((MF.(OF".i)) * (MG.(OGI.(OFI.i))))" by A29,FUNCT_2:21
+        .= (MG.(OGI.(OFI.i)))" * (MF.(OFI.i))"
+                                      by A37,A38,FUNCT_1:66
+        .= (MG"".(OGI.(OFI.i))) * (MF.(OF".i))" by A21,A23,A36,MSUALG_3:def 5
+        .= ((MG""*OGI).(OFI.i)) * (MF.(OF".i))" by A35,FUNCT_2:21
+        .= ((MG""*OGI)*OFI).i * (MF.(OFI.i))" by A29,FUNCT_2:21
+        .= ((MG""*OGI)*OFI).i * (MF"".(OFI.i)) by A19,A20,A35,MSUALG_3:def 5
+        .= ((MG""*OGI)*OFI).i * (MF""*OFI).i by A29,FUNCT_2:21;
+      hence thesis by A27,A28,A29,A39,A40,A43,A44,MSUALG_3:def 4;
+      end;
+
+      then the MorphMap of (F*G)"
+       = ((the MorphMap of GI)*the ObjectMap of FI)**the MorphMap of FI
+                                                   by A1,A25,PBOOLE:3
+      .= the MorphMap of (GI*FI) by FUNCTOR0:def 37;
+      hence thesis;
+    end;
+
+hence thesis by A18;
+end;

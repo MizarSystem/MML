@@ -1,0 +1,197 @@
+:: Convergent Sequences and the Limit of Sequences
+::  by Jaros{\l}aw Kotowicz
+::
+:: Received July 4, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, SEQ_1, ARYTM_1, ARYTM_3, RELAT_1, ABSVALUE, FUNCT_1,
+      LATTICES, ORDINAL2, SEQ_2;
+ notation ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1, ABSVALUE, NAT_1,
+      RELAT_1, FUNCT_1, SEQ_1;
+ constructors REAL_1, SEQ_1, ABSVALUE, NAT_1, PARTFUN1, MEMBERED, XBOOLE_0;
+ clusters SEQ_1, XREAL_0, ARYTM_3, RELSET_1, MEMBERED, ZFMISC_1, XBOOLE_0,
+      ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+  reserve n,n1,n2,k,m for Nat,
+          r,r1,r2,p,g1,g2,g for real number,
+          seq,seq',seq1 for Real_Sequence,
+          y for set,
+          f for real-yielding Function;
+
+canceled 2;
+
+theorem :: SEQ_2:3
+  0<g implies 0<g/2 & 0<g/4;
+
+theorem :: SEQ_2:4
+ 0<g implies g/2<g;
+
+canceled;
+
+theorem :: SEQ_2:6
+ 0<g & 0<p implies 0<g/p;
+
+theorem :: SEQ_2:7
+ 0<=g & 0<=r & g<g1 & r<r1 implies g*r<g1*r1;
+
+canceled;
+
+theorem :: SEQ_2:9
+  -g<r & r<g iff abs(r)<g;
+
+theorem :: SEQ_2:10
+ 0<r1 & r1<r & 0<g implies g/r<g/r1;
+
+theorem :: SEQ_2:11
+ g<>0 & r<>0 implies abs(g"-r")=abs(g-r)/(abs(g)*abs(r));
+
+definition let f be real-yielding Function;
+  attr f is bounded_above means
+:: SEQ_2:def 1
+   ex r st for y st y in dom f holds f.y<r;
+  attr f is bounded_below means
+:: SEQ_2:def 2
+   ex r st for y st y in dom f holds r<f.y;
+end;
+
+definition let seq;
+ redefine attr seq is bounded_above means
+:: SEQ_2:def 3
+    ex r st for n holds seq.n<r;
+  redefine attr seq is bounded_below means
+:: SEQ_2:def 4
+    ex r st for n holds r<seq.n;
+end;
+
+definition let f;
+  attr f is bounded means
+:: SEQ_2:def 5
+    f is bounded_above bounded_below;
+end;
+
+definition
+ cluster bounded -> bounded_above bounded_below (real-yielding Function);
+ cluster bounded_above bounded_below -> bounded (real-yielding Function);
+end;
+
+canceled 3;
+
+theorem :: SEQ_2:15
+  seq is bounded iff ex r st (0<r & for n holds abs(seq.n)<r);
+
+theorem :: SEQ_2:16
+ for n ex r st (0<r & for m st m<=n holds abs(seq.m)<r);
+
+::
+::          CONVERGENT REAL SEQUENCES
+::           THE LIMIT OF SEQUENCES
+::
+
+definition let seq;
+  attr seq is convergent means
+:: SEQ_2:def 6
+    ex g st for p st 0<p ex n st for m st n<=m holds abs (seq.m-g) < p;
+end;
+
+definition let seq;
+ assume seq is convergent;
+func lim seq -> real number means
+:: SEQ_2:def 7
+   for p st 0<p ex n st for m st n<=m holds abs(seq.m-it)<p;
+end;
+
+definition let seq;
+  redefine func lim seq -> Real;
+end;
+
+canceled 2;
+
+theorem :: SEQ_2:19
+  seq is convergent & seq' is convergent implies seq + seq' is convergent;
+
+theorem :: SEQ_2:20
+  seq is convergent & seq' is convergent implies
+             lim (seq + seq')=(lim seq)+(lim seq');
+
+theorem :: SEQ_2:21
+ seq is convergent implies r(#)seq is convergent;
+
+theorem :: SEQ_2:22
+  seq is convergent implies lim(r(#)seq)=r*(lim seq);
+
+theorem :: SEQ_2:23
+ seq is convergent implies - seq is convergent;
+
+theorem :: SEQ_2:24
+  seq is convergent implies lim(-seq)=-(lim seq);
+
+theorem :: SEQ_2:25
+ seq is convergent & seq' is convergent implies
+                         seq - seq' is convergent;
+
+theorem :: SEQ_2:26
+  seq is convergent & seq' is convergent implies
+            lim(seq - seq')=(lim seq)-(lim seq');
+
+
+theorem :: SEQ_2:27
+ seq is convergent implies seq is bounded;
+
+theorem :: SEQ_2:28
+ seq is convergent & seq' is convergent implies
+                  seq (#) seq' is convergent;
+
+theorem :: SEQ_2:29
+ seq is convergent & seq' is convergent implies
+                lim(seq(#)seq')=(lim seq)*(lim seq');
+
+theorem :: SEQ_2:30
+ seq is convergent implies ((lim seq)<>0 implies
+      ex n st for m st n<=m holds abs(lim seq)/2<abs(seq.m));
+
+theorem :: SEQ_2:31
+ seq is convergent & (for n holds 0<=seq.n) implies 0<=(lim seq);
+
+theorem :: SEQ_2:32
+   seq is convergent & seq' is convergent &
+       (for n holds seq.n<=(seq'.n)) implies (lim seq)<=(lim seq');
+
+theorem :: SEQ_2:33
+  seq is convergent & seq' is convergent &
+ (for n holds seq.n<=(seq1.n) & seq1.n<=seq'.n) & (lim seq)=(lim seq')
+                implies seq1 is convergent;
+
+theorem :: SEQ_2:34
+   seq is convergent & seq' is convergent &
+       (for n holds seq.n<=(seq1.n) & seq1.n<=seq'.n) &
+       (lim seq)=(lim seq') implies (lim seq1)=(lim seq);
+
+theorem :: SEQ_2:35
+ seq is convergent & (lim seq)<>0 & seq is_not_0 implies
+       seq" is convergent;
+
+theorem :: SEQ_2:36
+ seq is convergent & (lim seq)<>0 & seq is_not_0 implies
+       lim seq"=(lim seq)";
+
+theorem :: SEQ_2:37
+   seq' is convergent & seq is convergent & (lim seq)<>0
+         & seq is_not_0 implies seq'/"seq is convergent;
+
+theorem :: SEQ_2:38
+   seq' is convergent & seq is convergent & (lim seq)<>0
+         & seq is_not_0 implies lim(seq'/"seq)=(lim seq')/(lim seq);
+
+theorem :: SEQ_2:39
+ seq is convergent & seq1 is bounded & lim seq=0 implies
+              seq(#)seq1 is convergent;
+
+theorem :: SEQ_2:40
+   seq is convergent & seq1 is bounded & lim seq=0 implies
+             lim(seq(#)seq1)=0;

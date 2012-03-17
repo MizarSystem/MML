@@ -1,0 +1,2870 @@
+:: Introduction to Modal Propositional Logic
+::  by Alicia de la Cruz
+::
+:: Received September 30, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary TREES_2, FINSEQ_1, BOOLE, TREES_1, FUNCT_1, RELAT_1, ZFMISC_1,
+      PARTFUN1, ORDINAL1, TARSKI, FINSET_1, PRELAMB, CARD_1, FUNCOP_1,
+      QC_LANG1, MCART_1, ZF_LANG, SEQ_1, MODAL_1;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0,
+      NAT_1, DOMAIN_1, MCART_1, RELAT_1, FUNCT_1, RELSET_1, FINSEQ_1, FINSEQ_2,
+      FUNCT_2, FINSET_1, CARD_1, PARTFUN1, TREES_1, TREES_2, PRELAMB;
+ constructors WELLORD2, NAT_1, DOMAIN_1, PARTFUN1, PRELAMB, XREAL_0, MEMBERED,
+      XBOOLE_0;
+ clusters SUBSET_1, FINSEQ_1, TREES_1, TREES_2, PRELAMB, FINSET_1, RELSET_1,
+      XREAL_0, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0, ORDINAL2, NUMBERS;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, XBOOLE_0;
+ theorems TARSKI, FUNCT_1, REAL_1, NAT_1, ENUMSET1, TREES_1, TREES_2, FUNCOP_1,
+      PRELAMB, MCART_1, DOMAIN_1, PARTFUN1, FINSEQ_1, FINSET_1, CARD_1, AXIOMS,
+      WELLORD2, CARD_2, ZFMISC_1, CQC_THE1, FINSEQ_2, RELAT_1, FUNCT_2,
+      RELSET_1, GROUP_3, XBOOLE_0, XBOOLE_1;
+ schemes TREES_2, FUNCT_1, FINSEQ_2, NAT_1, FUNCT_2, XBOOLE_0;
+
+begin
+
+reserve x,y,x1,x2,y1,y2,z for set,
+        n,m,k for Nat,
+        t1 for DecoratedTree of [: NAT,NAT :],
+        w,s,t,u for FinSequence of NAT,
+        D for non empty set;
+
+Lm1: {} is_a_proper_prefix_of <*m*>
+ proof
+  A1: {} is_a_prefix_of <*m*> by XBOOLE_1:2;
+    {} <> <*m*> by TREES_1:4;
+  hence thesis by A1,XBOOLE_0:def 8;
+ end;
+
+definition let Z be Tree;
+func Root Z -> Element of Z equals :Def1:
+ {};
+ coherence by TREES_1:47;
+end;
+
+definition let D; let T be DecoratedTree of D;
+func Root T -> Element of D equals :Def2:
+  T.(Root dom T);
+ coherence;
+end;
+
+canceled 2;
+
+theorem Th3:
+n <> m implies not <*n*>,<*m*>^s are_c=-comparable
+ proof
+  assume A1: n<>m;
+  assume A2: <*n*>,<*m*>^s are_c=-comparable;
+   per cases by A2,XBOOLE_0:def 9;
+   suppose <*n*> is_a_prefix_of <*m*>^s; then A3: ex a be FinSequence st
+ <*m*>^s = <*n*>^a by TREES_1:8;
+       m = (<*m*>^s).1 by FINSEQ_1:58
+      .= n by A3,FINSEQ_1:58;
+    hence contradiction by A1;
+   suppose
+   <*m*>^s is_a_prefix_of <*n*>; then consider a be FinSequence such that
+    A4: <*n*> = <*m*>^s^a by TREES_1:8;
+      n = (<*m*>^s^a).1 by A4,FINSEQ_1:57
+     .= (<*m*>^(s^a)).1 by FINSEQ_1:45
+     .= m by FINSEQ_1:58;
+    hence contradiction by A1;
+ end;
+
+theorem Th4:
+for s st s <> {} ex w,n st s = <*n*>^w
+ proof
+ defpred P[FinSequence of NAT] means $1 <> {} implies ex w,n
+        st $1 = <*n*>^w;
+ A1: P[<*> NAT];
+ A2: for s,m st P[s] holds P[s^<*m*>]
+  proof let s,m such that
+   A3: s <> {} implies ex w,n st s = <*n*>^w; assume s^<*m*> <> {};
+     per cases;
+     suppose A4: s = {};
+      reconsider w = <*> NAT as FinSequence of NAT;
+      take w, n = m;
+      thus s^<*m*> = <*m*> by A4,FINSEQ_1:47
+        .= <*n*>^w by FINSEQ_1:47;
+     suppose s <> {};
+      then consider w,n such that
+      A5: s = <*n*>^w by A3;
+      take w1 = w^<*m*>,n;
+      thus s^<*m*> =<*n*>^w1 by A5,FINSEQ_1:45;
+  end;
+ for p being FinSequence of NAT holds P[p]  from IndSeqD(A1,A2);
+ hence thesis;
+ end;
+
+theorem Th5:
+n <> m implies not <*n*> is_a_proper_prefix_of <*m*>^s
+ proof assume A1: n <> m;
+  assume <*n*> is_a_proper_prefix_of <*m*>^s;
+  then <*n*> is_a_prefix_of <*m*>^s by XBOOLE_0:def 8;
+ then A2:  ex a be FinSequence st <*m*>^s = <*n*>^a by TREES_1:8;
+    m = (<*m*>^s).1 by FINSEQ_1:58
+   .= n by A2,FINSEQ_1:58;
+  hence contradiction by A1;
+ end;
+
+theorem Th6:
+n <> m implies not <*n*> is_a_prefix_of <*m*>^s
+ proof assume A1: n <> m;
+  assume <*n*> is_a_prefix_of <*m*>^s;
+ then A2:  ex a be FinSequence st <*m*>^s = <*n*>^a by TREES_1:8;
+    m = (<*m*>^s).1 by FINSEQ_1:58
+   .= n by A2,FINSEQ_1:58;
+  hence contradiction by A1;
+ end;
+
+theorem Th7:
+not <*n*> is_a_proper_prefix_of <*m*>
+ proof
+  assume not thesis;
+  then <*n*> is_a_prefix_of <*m*> & <*n*> <> <*m*> by XBOOLE_0:def 8;
+  hence contradiction by TREES_1:16;
+ end;
+
+canceled;
+
+theorem Th9:
+elementary_tree 1 = {{},<*0*>}
+ proof
+  A1: elementary_tree 1 = { <*n*> : n < 1 } \/ {{}} by TREES_1:def 7;
+    now let x;
+  thus x in {{},<*0*>} implies x in { <*n*> : n < 1 } or x in {{}}
+    proof
+     assume x in {{},<*0*>}; then x = {} or x = <*0*> by TARSKI:def 2;
+     hence thesis by TARSKI:def 1;
+    end;
+   assume A2: x in { <*n*> : n < 1 } or x in {{}};
+      now per cases by A2;
+     suppose x in { <*n*> : n < 1 }; then consider n such that
+      A3: x = <*n*> & n < 1;
+        n = 0 by A3,CQC_THE1:2;
+      hence x in {{},<*0*>} by A3,TARSKI:def 2;
+     suppose x in {{}}; then x = {} by TARSKI:def 1;
+      hence x in {{},<*0*>} by TARSKI:def 2;
+     end;
+    hence x in {{},<*0*>};
+   end;
+  hence thesis by A1,XBOOLE_0:def 2;
+ end;
+
+theorem Th10:
+elementary_tree 2 = {{},<*0*>,<*1*>}
+  proof
+  A1: elementary_tree 2 = { <*n*> : n < 2 } \/ {{}} by TREES_1:def 7;
+    now let x;
+  thus x in {{},<*0*>,<*1*>} implies x in { <*n*> : n < 2 } or x in {{}}
+    proof
+     assume x in {{},<*0*>,<*1*>}; then x = {} or x = <*0*> or x = <*1*>
+                                                        by ENUMSET1:13;
+     hence thesis by TARSKI:def 1;
+    end;
+  assume A2: x in { <*n*> : n < 2 } or x in {{}};
+     now per cases by A2;
+    suppose x in { <*n*> : n < 2 };
+     then consider n such that A3: x = <*n*> & n < 2;
+       n = 0 or n = 1 by A3,CQC_THE1:3;
+     hence x in {{},<*0*>,<*1*>} by A3,ENUMSET1:14;
+    suppose x in {{}}; then x = {} by TARSKI:def 1;
+     hence x in {{},<*0*>,<*1*>} by ENUMSET1:14;
+   end;
+  hence x in {{},<*0*>,<*1*>};
+  end;
+  hence thesis by A1,XBOOLE_0:def 2;
+ end;
+
+theorem Th11:
+for Z being Tree,n,m st n <= m & <*m*> in Z holds <*n*> in Z
+ proof
+  let Z be Tree,n,m; assume n <= m & <*m*> in Z;
+  then A1: {}^<*m*> in Z & n <= m by FINSEQ_1:47;
+  reconsider s = {} as FinSequence of NAT by TREES_1:47;
+    s^<*n*> in Z by A1,TREES_1:def 5; hence thesis by FINSEQ_1:47;
+ end;
+
+theorem Th12:
+w^t is_a_proper_prefix_of w^s implies t is_a_proper_prefix_of s
+ proof assume A1: w^t is_a_proper_prefix_of w^s;
+   then w^t is_a_prefix_of w^s & w^t <> w^s by XBOOLE_0:def 8;
+  then consider a be FinSequence such that
+  A2: w^s = w^t^a by TREES_1:8;
+    w^t^a = w^(t^a) by FINSEQ_1:45;
+   then s= t^a by A2,FINSEQ_1:46;
+   then t is_a_prefix_of s by TREES_1:8;
+  hence thesis by A1,XBOOLE_0:def 8;
+ end;
+
+theorem Th13:
+t1 in PFuncs(NAT*,[: NAT,NAT :])
+ proof
+  A1: rng t1 c= [: NAT,NAT :] by TREES_2:def 9;
+    dom t1 c= NAT* by TREES_1:def 5;
+  hence thesis by A1,PARTFUN1:def 5;
+ end;
+
+canceled;
+
+theorem Th15:
+for Z,Z1,Z2 being Tree,z being Element of Z st
+  Z with-replacement (z,Z1) = Z with-replacement (z,Z2) holds Z1 = Z2
+ proof
+  let Z,Z1,Z2 be Tree,z be Element of Z;
+  assume A1: Z with-replacement (z,Z1) = Z with-replacement (z,Z2);
+     now
+    let s;
+    thus s in Z1 implies s in Z2
+     proof
+      assume A2: s in Z1;
+       per cases;
+        suppose s = {}; hence thesis by TREES_1:47;
+        suppose s <> {};
+         then A3: z is_a_proper_prefix_of z^s by TREES_1:33;
+           z^s in Z with-replacement (z,Z2) by A1,A2,TREES_1:def 12;
+          then ex w st w in Z2 & z^s = z^w by A3,TREES_1:def 12;
+         hence thesis by FINSEQ_1:46;
+     end;
+    assume A4: s in Z2;
+     per cases;
+      suppose s = {}; hence s in Z1 by TREES_1:47;
+      suppose s <> {};
+       then A5: z is_a_proper_prefix_of z^s by TREES_1:33;
+         z^s in Z with-replacement (z,Z1) by A1,A4,TREES_1:def 12;
+        then ex w st w in Z1 & z^s = z^w by A5,TREES_1:def 12;
+       hence s in Z1 by FINSEQ_1:46;
+   end;
+  hence thesis by TREES_2:def 1;
+ end;
+
+theorem Th16:
+for Z,Z1,Z2 being DecoratedTree of D,z being Element of dom Z
+  st Z with-replacement (z,Z1) = Z with-replacement (z,Z2) holds Z1 = Z2
+ proof
+  let Z,Z1,Z2 be DecoratedTree of D,z be Element of dom Z;
+  assume A1: Z with-replacement (z,Z1) = Z with-replacement (z,Z2);
+  set T1 = Z with-replacement (z,Z1);
+  set T2 = Z with-replacement (z,Z2);
+  A2: dom T1 = dom Z with-replacement (z,dom Z1) by TREES_2:def 12;
+  A3: dom T2 = dom Z with-replacement (z,dom Z2) by TREES_2:def 12;
+A4: dom Z with-replacement (z,dom Z1) =
+     dom Z with-replacement (z,dom Z2) by A1,A2,TREES_2:def 12;
+  A5: dom Z1 = dom Z2 by A1,A2,A3,Th15;
+    for s st s in dom Z1 holds Z1.s = Z2.s
+   proof
+    let s; assume s in dom Z1;
+    then A6: z^s in dom Z with-replacement (z,dom Z2) &
+        z^s in dom Z with-replacement (z,dom Z1) by A4,TREES_1:def 12;
+    A7: z is_a_prefix_of z^s by TREES_1:8;
+    then consider w such that
+    A8: w in dom Z2 & z^s = z^w & T2.(z^s) = Z2.w by A6,TREES_2:def 12;
+ A9:    ex u st
+ u in dom Z1 & z^s = z^u & T1.(z^s) = Z1.u by A6,A7,TREES_2:def 12;
+       s = w by A8,FINSEQ_1:46;
+   hence thesis by A1,A8,A9,FINSEQ_1:46;
+   end;
+  hence thesis by A5,TREES_2:33;
+ end;
+
+theorem Th17:
+for Z1,Z2 being Tree,p being FinSequence of NAT st p in Z1 holds
+for v being Element of Z1 with-replacement (p,Z2), w being Element of Z1
+st v = w & w is_a_proper_prefix_of p holds succ v = succ w
+ proof
+  let Z1,Z2 be Tree,p be FinSequence of NAT;
+  assume A1: p in Z1;
+  set Z = Z1 with-replacement (p,Z2);
+  let v be Element of Z,w be Element of Z1; assume
+  A2: v = w & w is_a_proper_prefix_of p;
+   then w is_a_prefix_of p & w <> p by XBOOLE_0:def 8;
+  then consider r be FinSequence such that
+  A3: p = w^r by TREES_1:8;
+     now let n; assume
+A4:     n in dom r;
+    then A5: p.(len w + n) = r.n by A3,FINSEQ_1:def 7;
+      len w + n in dom p by A3,A4,FINSEQ_1:41;
+     then p.(len w + n) in rng p by FUNCT_1:def 5;
+    hence r.n in NAT by A5;
+   end;
+  then reconsider r as FinSequence of NAT by FINSEQ_2:14;
+  A6: r <> {} by A2,A3,FINSEQ_1:47;
+     now let x;
+    thus x in succ v implies x in succ w
+     proof
+      assume x in succ v; then x in { v^<*n*> : v^<*n*> in Z} by TREES_2:def 5;
+      then consider n such that
+      A7: x = v^<*n*> & v^<*n*> in Z;
+      reconsider x' = x as FinSequence of NAT by A7;
+          now per cases by A1,A7,TREES_1:def 12;
+        suppose x' in Z1 & not p is_a_proper_prefix_of x';
+         then x in { w^<*m*> : w^<*m*> in Z1} by A2,A7;
+         hence thesis by TREES_2:def 5;
+        suppose ex r be FinSequence of NAT st r in Z2 & x' = p^r;
+         then consider s such that
+         A8: s in Z2 & v^<*n*> = p^s by A7;
+           w^<*n*> = w^(r^s) by A2,A3,A8,FINSEQ_1:45;
+         then A9: <*n*> = r^s by FINSEQ_1:46;
+           s = {}
+          proof assume not thesis; then len s <> 0 by FINSEQ_1:25;
+           then len s > 0 by NAT_1:19;
+           then A10: 0+1 <= len s by NAT_1:38;
+             len r <> 0 by A6,FINSEQ_1:25;
+           then len r > 0 by NAT_1:19;
+           then 0+1 <= len r by NAT_1:38;
+           then 1 + 1 <= len r + len s by A10,REAL_1:55;
+           then 2 <= len (<*n*>) by A9,FINSEQ_1:35; then 2 <= 1 by FINSEQ_1:56;
+           hence contradiction;
+          end;
+          then <*n*> = r by A9,FINSEQ_1:47;
+         then x in { w^<*m*> : w^<*m*> in Z1} by A1,A2,A3,A7;
+         hence thesis by TREES_2:def 5;
+        end;
+       hence thesis;
+      end;
+    assume x in succ w; then x in { w^<*n*> : w^<*n*> in
+ Z1} by TREES_2:def 5;
+    then consider n such that
+    A11: x = w^<*n*> & w^<*n*> in Z1;
+        now assume A12: not v^<*n*> in Z;
+          now per cases by A1,A12,TREES_1:def 12;
+        suppose not v^<*n*> in Z1; hence contradiction by A2,A11;
+        suppose p is_a_proper_prefix_of v^<*n*>;
+         then r is_a_proper_prefix_of <*n*> by A2,A3,Th12;
+         then r in ProperPrefixes <*n*> by TREES_1:36;
+         then r in{{}} by TREES_1:40;
+         hence contradiction by A6,TARSKI:def 1;
+        end;
+       hence contradiction;
+      end; then x in { v^<*m*> : v^<*m*> in Z} by A2,A11;
+     hence x in succ v by TREES_2:def 5;
+   end;
+  hence thesis by TARSKI:2;
+ end;
+
+theorem Th18:
+for Z1,Z2 being Tree,p being FinSequence of NAT st p in Z1 holds
+for v being Element of Z1 with-replacement (p,Z2),w being Element of Z1
+st v = w & not p,w are_c=-comparable holds succ v = succ w
+ proof
+  let Z1,Z2 be Tree,p be FinSequence of NAT;
+  assume A1: p in Z1;
+  set Z = Z1 with-replacement (p,Z2);
+  let v be Element of Z,w be Element of Z1; assume
+  A2: v = w & not p,w are_c=-comparable;
+  then A3: not w is_a_prefix_of p & not p is_a_prefix_of w by XBOOLE_0:def 9;
+     now let x;
+    thus x in succ v implies x in succ w
+     proof
+      assume x in succ v; then x in { v^<*n*> : v^<*n*> in Z} by TREES_2:def 5;
+      then consider n such that
+      A4: x = v^<*n*> & v^<*n*> in Z;
+      reconsider x' = x as FinSequence of NAT by A4;
+        v^<*n*> in Z1
+       proof
+        assume A5: not v^<*n*> in Z1; then ex t st
+ t in Z2 & x' = p^t by A1,A4,TREES_1:def 12;
+then A6:        p is_a_prefix_of v^<*n*> by A4,TREES_1:8;
+         per cases by A6,XBOOLE_0:def 8;
+         suppose p is_a_proper_prefix_of v^<*n*>;
+          hence contradiction by A2,A3,TREES_1:32;
+         suppose p = v^<*n*>;
+          hence contradiction by A1,A5;
+       end;
+      then x in { w^<*m*> : w^<*m*> in Z1} by A2,A4;
+      hence thesis by TREES_2:def 5;
+     end;
+    assume x in succ w; then x in { w^<*n*> : w^<*n*> in Z1} by TREES_2:def 5
+;
+    then consider n such that
+    A7: x = w^<*n*> & w^<*n*> in Z1;
+      not p is_a_proper_prefix_of w^<*n*> by A3,TREES_1:32;
+    then v^<*n*> in Z by A1,A2,A7,TREES_1:def 12;
+    then x in { v^<*m*> : v^<*m*> in Z} by A2,A7;
+    hence x in succ v by TREES_2:def 5;
+   end;
+  hence thesis by TARSKI:2;
+ end;
+
+theorem Th19:
+for Z1,Z2 being Tree,p being FinSequence of NAT st p in Z1 holds
+  for v being Element of Z1 with-replacement (p,Z2),w being Element of Z2
+     st v = p^w holds succ v,succ w are_equipotent
+ proof
+  let Z1,Z2 be Tree,p be FinSequence of NAT such that A1: p in Z1;
+  set T = Z1 with-replacement (p,Z2);
+  let t be Element of Z1 with-replacement (p,Z2),
+      t2 be Element of Z2; assume A2: t = p^t2;
+  then A3: p is_a_prefix_of t by TREES_1:8;
+  A4: for n holds t^<*n*> in T iff t2^<*n*> in Z2
+   proof
+    let n;
+    A5: p is_a_proper_prefix_of t^<*n*> by A3,TREES_1:31;
+    A6: t^<*n*> = p^(t2^<*n*>) by A2,FINSEQ_1:45;
+    thus t^<*n*> in T implies t2^<*n*> in Z2
+     proof
+      assume t^<*n*> in T;
+       then ex w st w in Z2 & t^<*n*> = p^w by A1,A5,TREES_1:def 12;
+      hence thesis by A6,FINSEQ_1:46;
+     end;
+    assume t2^<*n*> in Z2;
+    hence thesis by A1,A6,TREES_1:def 12;
+   end;
+  defpred P[set,set] means for n st $1 = t^<*n*> holds $2 = t2^<*n*>;
+  A7: for x,y1,y2 st x in succ t & P[x,y1] & P[x,y2] holds y1 = y2
+   proof
+    let x,y1,y2; assume A8: x in succ t & P[x,y1] & P[x,y2];
+    then x in { t^<*n*> : t^<*n*> in T } by TREES_2:def 5;
+    then consider n such that
+    A9: x = t^<*n*> & t^<*n*> in T;
+      y1 = t2^<*n*> by A8,A9;
+    hence thesis by A8,A9;
+   end;
+  A10: for x st x in succ t ex y st P[x,y]
+   proof
+    let x; assume x in succ t;
+    then x in { t^<*n*> : t^<*n*> in T } by TREES_2:def 5;
+    then consider n such that
+    A11: x = t^<*n*> & t^<*n*> in T;
+    take t2^<*n*>;
+    let m; assume x = t^<*m*>;
+    hence thesis by A11,FINSEQ_1:46;
+   end;
+  consider f being Function such that
+  A12: dom f = succ t & for x st x in
+ succ t holds P[x,f.x] from FuncEx(A7,A10);
+  A13: rng f = succ t2
+   proof
+       now let x;
+      thus x in rng f implies x in succ t2
+       proof
+        assume x in rng f;
+        then consider y such that
+        A14: y in dom f & x = f.y by FUNCT_1:def 5;
+          y in { t^<*n*> : t^<*n*> in T } by A12,A14,TREES_2:def 5;
+        then consider n such that
+        A15: y = t^<*n*> & t^<*n*> in T;
+        A16: x = t2^<*n*> by A12,A14,A15;
+          t2^<*n*> in Z2 by A4,A15;
+        then x in { t2^<*m*> : t2^<*m*> in Z2 } by A16;
+        hence thesis by TREES_2:def 5;
+       end;
+      assume x in succ t2;
+      then x in { t2^<*n*> : t2^<*n*> in Z2 } by TREES_2:def 5;
+      then consider n such that
+      A17: x = t2^<*n*> & t2^<*n*> in Z2;
+        t^<*n*> in T by A4,A17;
+      then t^<*n*> in { t^<*m*> : t^<*m*> in T };
+      then A18: t^<*n*> in dom f by A12,TREES_2:def 5;
+      then f.(t^<*n*>) = x by A12,A17;
+      hence x in rng f by A18,FUNCT_1:def 5;
+     end;
+    hence thesis by TARSKI:2;
+   end;
+    f is one-to-one
+   proof
+      now let x1,x2;
+     assume A19: x1 in dom f & x2 in dom f & f.x1 = f.x2;
+     then x1 in { t^<*n*> : t^<*n*> in T } by A12,TREES_2:def 5;
+     then consider m such that
+     A20: x1 = t^<*m*> & t^<*m*> in T;
+       x2 in { t^<*n*> : t^<*n*> in T } by A12,A19,TREES_2:def 5;
+     then consider k such that
+     A21: x2 = t^<*k*> & t^<*k*> in T;
+       t2^<*m*> = f.x1 by A12,A19,A20
+             .= t2^<*k*> by A12,A19,A21;
+     hence x1 = x2 by A20,A21,FINSEQ_1:46;
+    end;
+    hence thesis by FUNCT_1:def 8;
+   end;
+  hence thesis by A12,A13,WELLORD2:def 4;
+ end;
+
+theorem Th20:
+for Z1 being Tree,p being FinSequence of NAT st p in Z1 holds
+  for v being Element of Z1,w being Element of Z1|p
+     st v = p^w holds succ v,succ w are_equipotent
+ proof
+  let Z1 be Tree,p be FinSequence of NAT such that A1: p in Z1;
+  set T = Z1|p;
+  let t be Element of Z1,t2 be Element of Z1|p such that A2: t = p^t2;
+  A3: for n holds t^<*n*> in Z1 iff t2^<*n*> in T
+   proof
+    let n;
+    A4: t^<*n*> = p^(t2^<*n*>) by A2,FINSEQ_1:45;
+    hence t^<*n*> in Z1 implies t2^<*n*> in T by A1,TREES_1:def 9;
+    assume t2^<*n*> in T; hence thesis by A1,A4,TREES_1:def 9;
+   end;
+  defpred P[set,set] means for n st $1 = t^<*n*> holds $2 = t2^<*n*>;
+  A5: for x,y1,y2 st x in succ t & P[x,y1] & P[x,y2] holds y1 = y2
+   proof
+    let x,y1,y2; assume A6: x in succ t & P[x,y1] & P[x,y2];
+    then x in { t^<*n*> : t^<*n*> in Z1 } by TREES_2:def 5;
+    then consider n such that
+    A7: x = t^<*n*> & t^<*n*> in Z1;
+      y1 = t2^<*n*> by A6,A7;
+    hence thesis by A6,A7;
+   end;
+  A8: for x st x in succ t ex y st P[x,y]
+   proof
+    let x; assume x in succ t;
+    then x in { t^<*n*> : t^<*n*> in Z1 } by TREES_2:def 5;
+    then consider n such that
+    A9: x = t^<*n*> & t^<*n*> in Z1;
+    take t2^<*n*>;
+    let m; assume x = t^<*m*>;
+    hence thesis by A9,FINSEQ_1:46;
+   end;
+  consider f being Function such that
+  A10: dom f = succ t & for x st x in succ t holds P[x,f.x] from FuncEx(A5,A8);
+  A11: rng f = succ t2
+   proof
+       now let x;
+      thus x in rng f implies x in succ t2
+       proof
+        assume x in rng f;
+        then consider y such that
+        A12: y in dom f & x = f.y by FUNCT_1:def 5;
+          y in { t^<*n*> : t^<*n*> in Z1 } by A10,A12,TREES_2:def 5;
+        then consider n such that
+        A13: y = t^<*n*> & t^<*n*> in Z1;
+        A14: x = t2^<*n*> by A10,A12,A13;
+          t2^<*n*> in T by A3,A13;
+        then x in { t2^<*m*> : t2^<*m*> in T } by A14;
+        hence thesis by TREES_2:def 5;
+       end;
+      assume x in succ t2;
+      then x in { t2^<*n*> : t2^<*n*> in T } by TREES_2:def 5;
+      then consider n such that
+      A15: x = t2^<*n*> & t2^<*n*> in T;
+        t^<*n*> in Z1 by A3,A15;
+      then t^<*n*> in { t^<*m*> : t^<*m*> in Z1 };
+      then A16: t^<*n*> in dom f by A10,TREES_2:def 5;
+      then f.(t^<*n*>) = x by A10,A15;
+      hence x in rng f by A16,FUNCT_1:def 5;
+     end;
+    hence thesis by TARSKI:2;
+   end;
+    f is one-to-one
+   proof
+      now let x1,x2;
+     assume A17: x1 in dom f & x2 in dom f & f.x1 = f.x2;
+     then x1 in { t^<*n*> : t^<*n*> in Z1 } by A10,TREES_2:def 5;
+     then consider m such that
+     A18: x1 = t^<*m*> & t^<*m*> in Z1;
+       x2 in { t^<*n*> : t^<*n*> in Z1 } by A10,A17,TREES_2:def 5;
+     then consider k such that
+     A19: x2 = t^<*k*> & t^<*k*> in Z1;
+       t2^<*m*> = f.x1 by A10,A17,A18
+             .= t2^<*k*> by A10,A17,A19;
+     hence x1 = x2 by A18,A19,FINSEQ_1:46;
+    end;
+    hence thesis by FUNCT_1:def 8;
+   end;
+  hence thesis by A10,A11,WELLORD2:def 4;
+ end;
+
+canceled;
+
+theorem Th22:
+for Z being finite Tree st branchdeg (Root Z) = 0 holds
+   card Z = 1 & Z = {{}}
+ proof
+  let Z be finite Tree; assume branchdeg (Root Z) = 0;
+   then 0 = card succ (Root Z) by PRELAMB:def 4;
+  then A1: succ (Root Z) = {} by CARD_2:59;
+    Z = { Root Z }
+   proof
+       now let x;
+      thus x in Z implies x in { Root Z }
+       proof
+        assume x in Z;
+        then reconsider z = x as Element of Z;
+        assume not thesis; then z <> Root Z by TARSKI:def 1;
+        then z <> {} by Def1; then consider w,n such that
+        A2: z = <*n*>^w by Th4;
+          <*n*> is_a_prefix_of z by A2,TREES_1:8;
+        then <*n*> in Z by TREES_1:45;
+        then {}^<*n*> in Z by FINSEQ_1:47;
+        then (Root Z)^<*n*> in Z by Def1;
+        hence contradiction by A1,TREES_2:14;
+       end;
+      assume x in { Root Z };
+      then reconsider x'= x as Element of Z;
+        x' in Z; hence x in Z;
+     end;
+    hence thesis by TARSKI:2;
+   end;
+  hence thesis by Def1,CARD_2:60;
+ end;
+
+theorem Th23:
+for Z being finite Tree st branchdeg (Root Z) = 1 holds
+     succ (Root Z) = { <*0*> }
+ proof
+  let Z be finite Tree; assume
+     branchdeg (Root Z) = 1;
+  then card succ (Root Z) = 1 by PRELAMB:def 4; then consider x such that
+  A1: succ (Root Z) = {x} by CARD_2:60;
+  A2: x in succ (Root Z) by A1,TARSKI:def 1;
+  then reconsider x' = x as Element of Z;
+    x' in { (Root Z)^<*n*> : (Root Z)^<*n*> in Z } by A2,TREES_2:def 5;
+  then consider m such that
+  A3: x' = (Root Z)^<*m*> & (Root Z)^<*m*> in Z;
+  A4: x' = {}^<*m*> by A3,Def1
+        .= <*m*> by FINSEQ_1:47;
+      now assume A5: m <> 0;
+       <*m*> in Z & 0 <= m by A4,NAT_1:18;
+     then A6: <*0*> in Z by Th11;
+     A7: <*0*> = {}^<*0*> by FINSEQ_1:47
+          .= (Root Z)^<*0*> by Def1;
+     then (Root Z)^<*0*> in succ (Root Z) by A6,TREES_2:14;
+     then <*0*> = x by A1,A7,TARSKI:def 1;
+     hence contradiction by A4,A5,TREES_1:16;
+    end;
+   hence thesis by A1,A4;
+ end;
+
+theorem Th24:
+for Z being finite Tree st branchdeg (Root Z) = 2 holds
+      succ (Root Z) = { <*0*>,<*1*> }
+ proof
+  let Z be finite Tree; assume
+     branchdeg (Root Z) = 2;
+  then card succ (Root Z) = 2 by PRELAMB:def 4; then consider x,y such that
+  A1: x <> y & succ (Root Z) = {x,y} by GROUP_3:166;
+  A2: x in succ (Root Z) & y in succ (Root Z) by A1,TARSKI:def 2;
+  then reconsider x' = x as Element of Z;
+  reconsider y' = y as Element of Z by A2;
+    x' in { (Root Z)^<*n*> : (Root Z)^<*n*> in Z } by A2,TREES_2:def 5;
+  then consider m such that
+  A3: x' = (Root Z)^<*m*> & (Root Z)^<*m*> in Z;
+  A4: x' = {}^<*m*> by A3,Def1
+        .= <*m*> by FINSEQ_1:47;
+    y' in { (Root Z)^<*n*> : (Root Z)^<*n*> in Z } by A2,TREES_2:def 5;
+  then consider k such that
+  A5: y' = (Root Z)^<*k*> & (Root Z)^<*k*> in Z;
+  A6: y' = {}^<*k*> by A5,Def1
+        .= <*k*> by FINSEQ_1:47;
+   per cases;
+    suppose A7: m = 0;
+        now assume A8: k <> 1; then 2 <= k by A1,A4,A6,A7,CQC_THE1:3;
+ then 1 <= k by AXIOMS:22; then A9: <*1*> in Z by A6,Th11;
+         <*1*> = {}^<*1*> by FINSEQ_1:47
+            .= (Root Z)^<*1*> by Def1;
+       then <*1*> in succ (Root Z) by A9,TREES_2:14;
+       then <*1*> = <*0*> or <*1*> = <*k*> by A1,A4,A6,A7,TARSKI:def 2;
+       hence contradiction by A8,TREES_1:16;
+      end;
+     hence thesis by A1,A4,A6,A7;
+    suppose A10: m <> 0;
+       0 <= m by NAT_1:18;
+     then A11: <*0*> in Z by A4,Th11;
+       <*0*> = {}^<*0*> by FINSEQ_1:47
+          .= (Root Z)^<*0*> by Def1;
+     then <*0*> in succ (Root Z) by A11,TREES_2:14;
+then A12:     <*0*> = <*m*> or <*0*> = <*k*> by A1,A4,A6,TARSKI:def 2;
+         now assume A13: m <> 1; then 2 <= m by A10,CQC_THE1:3;
+ then 1 <= m by AXIOMS:22; then A14: <*1*> in Z by A4,Th11;
+         <*1*> = {}^<*1*> by FINSEQ_1:47
+            .= (Root Z)^<*1*> by Def1;
+       then <*1*> in succ (Root Z) by A14,TREES_2:14;
+        then <*1*> = <*0*> or <*1*> = <*m*>
+          by A1,A4,A6,A10,A12,TARSKI:def 2,TREES_1:16;
+ hence contradiction by A13,TREES_1:16;
+      end;
+     hence thesis by A1,A4,A6,A12,TREES_1:16;
+ end;
+
+reserve s',w',v' for Element of NAT*;
+
+theorem Th25:
+for Z being Tree,o being Element of Z st o <> Root Z holds
+  Z|o,{ o^s': o^s' in Z } are_equipotent &
+  not Root Z in { o^w' : o^w' in Z }
+ proof
+  let Z be Tree,o be Element of Z such that A1: o <> Root Z;
+  set A = { o^s' : o^s' in Z };
+  thus Z|o,A are_equipotent
+   proof
+    defpred P[set,set] means for s st $1 = s holds $2 = o^s;
+    A2: for x,y1,y2 st x in Z|o & P[x,y1] & P[x,y2] holds y1 = y2
+     proof
+      let x,y1,y2; assume A3: x in Z|o & P[x,y1] & P[x,y2];
+      then reconsider s = x as FinSequence of NAT by TREES_1:44;
+        y1 = o^s & y2 = o^s by A3; hence thesis;
+     end;
+    A4: for x st x in Z|o ex y st P[x,y]
+     proof
+      let x; assume x in Z|o;
+      then reconsider s = x as FinSequence of NAT by TREES_1:44;
+      take o^s; let w; assume x = w; hence thesis;
+     end;
+      ex f being Function st dom f = Z|o & for x st x in Z|o holds P[x,f.x]
+                  from FuncEx(A2,A4);
+    then consider f being Function such that
+    A5: dom f = Z|o and
+    A6: for x st x in Z|o holds for s st x = s holds f.x = o^s;
+    A7: rng f = A
+     proof
+         now let x;
+        thus x in rng f implies x in A
+         proof
+          assume x in rng f; then consider x1 such that
+          A8: x1 in dom f & x = f.x1 by FUNCT_1:def 5;
+          reconsider x1 as FinSequence of NAT by A5,A8,TREES_1:44;
+          reconsider x1 as Element of NAT* by FINSEQ_1:def 11;
+          A9: o^x1 in Z by A5,A8,TREES_1:def 9;
+            x = o^x1 & x1 is Element of NAT* by A5,A6,A8;
+          hence x in A by A9;
+         end;
+        assume x in A;
+        then consider v' such that
+        A10: x = o^v' & o^v' in Z;
+        A11: v' in Z|o by A10,TREES_1:def 9;
+        A12: v' in dom f by A5,A10,TREES_1:def 9;
+          x = f.v' by A6,A10,A11;
+        hence x in rng f by A12,FUNCT_1:def 5;
+       end;
+      hence thesis by TARSKI:2;
+     end;
+      f is one-to-one
+     proof
+         now let x1,x2; assume A13: x1 in dom f & x2 in dom f & f.x1 = f.x2;
+        then reconsider s1 = x1, s2 = x2 as FinSequence of NAT by A5,TREES_1:44
+;
+          o^s1 = f.x2 by A5,A6,A13
+            .= o^s2 by A5,A6,A13;
+        hence x1 = x2 by FINSEQ_1:46;
+       end;
+      hence thesis by FUNCT_1:def 8;
+     end;
+    hence thesis by A5,A7,WELLORD2:def 4;
+   end;
+  assume not thesis; then consider v' such that
+  A14: Root Z = o^v' & o^v' in Z;
+    {} = o^v' by A14,Def1; then o = {} by FINSEQ_1:48;
+  hence contradiction by A1,Def1;
+ end;
+
+theorem Th26:
+for Z being finite Tree,o being Element of Z st o <> Root Z holds
+ card (Z|o) < card Z
+ proof
+  let Z be finite Tree,o be Element of Z such that A1: o <> Root Z;
+  set A = { o^s' : o^s' in Z };
+  A2: Z|o,A are_equipotent & not Root Z in A by A1,Th25;
+  then reconsider A as finite set by CARD_1:68;
+  reconsider B = A \/ {Root Z} as finite set;
+  A3: card B = card A + 1 by A2,CARD_2:54
+            .= card (Z|o) + 1 by A2,CARD_1:81;
+    B c= Z
+   proof
+       now let x such that A4: x in B;
+         now per cases by A4,XBOOLE_0:def 2;
+        suppose x in { o^s' : o^s' in Z }; then ex v' st
+ x = o^v' & o^v' in Z; hence x in Z;
+        suppose x in {Root Z}; hence x in Z;
+       end;
+      hence x in Z;
+     end;
+    hence thesis by TARSKI:def 3;
+   end;
+  then card (Z|o) + 1 <= card Z by A3,CARD_1:80;
+  hence thesis by NAT_1:38;
+ end;
+
+theorem Th27:
+for Z being finite Tree,z being Element of Z st succ (Root Z) = {z}
+ holds Z = elementary_tree 1 with-replacement (<*0*>,Z|z)
+ proof
+  set e = elementary_tree 1;
+  A1: <*0*> in e by Th9,TARSKI:def 2;
+  let Z be finite Tree,z be Element of Z; assume
+  A2: succ (Root Z) = {z};
+  then card succ (Root Z) = 1 by CARD_1:79;
+  then branchdeg (Root Z) = 1 by PRELAMB:def 4;
+  then {z} = { <*0*> } by A2,Th23; then z in { <*0*> } by TARSKI:def 1;
+  then A3: z = <*0*> by TARSKI:def 1;
+  then A4: <*0*> in Z;
+  A5: {} in Z by TREES_1:47;
+     now let x;
+    thus x in Z implies x in e with-replacement (<*0*>,Z|z)
+     proof
+      assume x in Z;
+      then reconsider x' = x as Element of Z;
+       per cases;
+        suppose x' = {}; hence x in e with-replacement (<*0*>,Z|z)
+          by TREES_1:47;
+        suppose x' <> {};
+        then consider w,n such that
+        A6: x' = <*n*>^w by Th4;
+          <*n*> is_a_prefix_of x' by A6,TREES_1:8;
+        then A7: <*n*> in Z by TREES_1:45;
+          <*n*> = {}^<*n*> by FINSEQ_1:47
+             .= (Root Z)^<*n*> by Def1;
+then A8:        <*n*> in succ (Root Z) by A7,TREES_2:14;
+        then A9: <*n*> = <*0*> by A2,A3,TARSKI:def 1;
+          <*n*> = z by A2,A8,TARSKI:def 1;
+         then w in Z|z by A6,TREES_1:def 9;
+        hence x in e with-replacement (<*0*>,Z|z) by A1,A6,A9,TREES_1:def 12;
+     end;
+    assume x in e with-replacement (<*0*>,Z|z);
+    then reconsider x' = x as Element of e with-replacement (<*0*>,Z|z);
+     per cases by A1,TREES_1:def 12;
+      suppose x' in e & not <*0*> is_a_proper_prefix_of x';
+       hence x in Z by A4,A5,Th9,TARSKI:def 2;
+      suppose ex s st s in Z|z & x' = <*0*>^s;
+       hence x in Z by A3,TREES_1:def 9;
+   end;
+  hence thesis by TARSKI:2;
+ end;
+
+Lm2:
+ for f being Function st dom f is finite holds f is finite
+ proof let f be Function;
+    assume
+A1:    dom f is finite;
+     then rng f is finite by FINSET_1:26;
+     then A2:    [:dom f, rng f:] is finite by A1,FINSET_1:19;
+       f c= [:dom f, rng f:] by RELAT_1:21;
+    hence f is finite by A2,FINSET_1:13;
+ end;
+
+theorem Th28:
+for Z being finite DecoratedTree of D,z be Element of dom Z st
+   succ (Root dom Z) = {z} & dom Z is finite holds
+   Z = ((elementary_tree 1) --> Root Z) with-replacement (<*0*>,Z|z)
+ proof
+  let Z be finite DecoratedTree of D,z be Element of dom Z; assume
+  A1: succ (Root dom Z) = {z} & dom Z is finite;
+  then card succ (Root dom Z) = 1 by CARD_1:79;
+  then branchdeg (Root dom Z) = 1 by PRELAMB:def 4;
+  then {z} = { <*0*> } by A1,Th23; then z in { <*0*> } by TARSKI:def 1;
+  then A2: z = <*0*> by TARSKI:def 1;
+  set e = elementary_tree 1;
+  set E = (elementary_tree 1) --> Root Z;
+  A3: <*0*> in e by Th9,TARSKI:def 2;
+  A4: dom E = e & rng E = { Root Z } by FUNCOP_1:14,19;
+  A5: <*0*> in dom E by A3,FUNCOP_1:19;
+  A6: dom (Z|z) = (dom Z)|z by TREES_2:def 11;
+   then dom (E with-replacement (<*0*>,Z|z)) =
+     e with-replacement (<*0*>, (dom Z)|z)
+     by A3,A4,TREES_2:def 12;
+  then A7: dom (E with-replacement (<*0*>,Z|z)) = dom Z by A1,Th27;
+    for s st s in dom (E with-replacement (<*0*>,Z|z)) holds
+    (E with-replacement (<*0*>,Z|z)).s = Z.s
+   proof
+    A8: dom (E with-replacement (<*0*>,Z|z)) =
+      dom E with-replacement(<*0*>,dom (Z|z))
+      by A5,TREES_2:def 12;
+    let s; assume
+    A9: s in dom (E with-replacement (<*0*>,Z|z));
+    then A10: not <*0*> is_a_prefix_of s &
+     (E with-replacement (<*0*>,Z|z)).s = E.s or
+        ex w st w in dom (Z|z) & s = <*0*>^w &
+        (E with-replacement (<*0*>,Z|z)).s = (Z|z).w
+                                              by A5,A8,TREES_2:def 12;
+       now per cases by A5,A8,A9,TREES_1:def 12;
+      suppose A11: s in dom E & not <*0*> is_a_proper_prefix_of s;
+          now per cases by A4,A11,Th9,TARSKI:def 2;
+         suppose A12: s = {}; then A13: s in e by TREES_1:47;
+A14:           now
+            given w such that
+A15: w in dom (Z|z) & s = <*0*>^w &
+            (E with-replacement (<*0*>,Z|z)).s = (Z|z).w;
+              <*0*> = {} & w = {} by A12,A15,FINSEQ_1:48;
+            hence contradiction by TREES_1:4;
+           end;
+            E.s = Root Z by A13,FUNCOP_1:13
+             .= Z.(Root dom Z) by Def2
+             .= Z.s by A12,Def1;
+          hence thesis by A5,A8,A9,A14,TREES_2:def 12;
+         suppose s = <*0*>;
+          hence thesis by A2,A6,A10,TREES_2:def 11;
+     end;
+    hence thesis;
+      suppose ex w st w in dom (Z|z) & s = <*0*>^w;
+      hence thesis by A2,A6,A10,TREES_1:8,TREES_2:def 11;
+     end;
+    hence thesis;
+   end;
+  hence thesis by A7,TREES_2:33;
+ end;
+
+theorem Th29:
+for Z being Tree,x1,x2 be Element of Z st Z is finite & x1 = <*0*> & x2 = <*1*>
+ & succ (Root Z) = {x1,x2} holds
+ Z = (elementary_tree 2 with-replacement (<*0*>,Z|x1))
+   with-replacement (<*1*>,Z|x2)
+ proof
+  set e = elementary_tree 2;
+  A1: <*0*> in e & <*1*> in e by Th10,ENUMSET1:14;
+  let Z be Tree,x1,x2 be Element of Z such that
+    Z is finite and
+  A2: x1 = <*0*> & x2 = <*1*> & succ (Root Z) = {x1,x2};
+  set T1 = elementary_tree 2 with-replacement (<*0*>,Z|x1);
+  A3: <*1*> in T1
+    proof
+        now
+       assume <*0*> is_a_proper_prefix_of <*1*>;
+       then <*0*> is_a_prefix_of <*1*> by XBOOLE_0:def 8; hence
+ contradiction by TREES_1:16;
+      end;
+     hence thesis by A1,TREES_1:def 12;
+    end;
+     now let s;
+    thus s in Z implies s in T1 & not <*1*> is_a_proper_prefix_of s or
+                                      ex w st w in Z|x2 & s = <*1*>^w
+    proof
+     assume A4: s in Z;
+       per cases;
+        suppose s = {};
+         hence thesis by TREES_1:36,39,47;
+        suppose s <> {}; then consider w,n such that
+         A5: s = <*n*>^w by Th4;
+           <*n*> is_a_prefix_of s by A5,TREES_1:8;
+         then A6: <*n*> in Z by A4,TREES_1:45;
+           <*n*> = {}^<*n*> by FINSEQ_1:47
+              .= (Root Z)^<*n*> by Def1;
+then A7:         <*n*> in succ (Root Z) by A6,TREES_2:14;
+            now per cases by A2,A7,TARSKI:def 2;
+           suppose A8: <*n*> = <*0*>;
+            then w in Z|x1 by A2,A4,A5,TREES_1:def 9;
+            hence thesis by A1,A5,A8,Th5,TREES_1:def 12;
+           suppose A9: <*n*> = <*1*>;
+              then w in Z|x2 by A2,A4,A5,TREES_1:def 9;
+              hence thesis by A5,A9;
+       end;
+      hence thesis;
+    end;
+    assume A10: s in T1 & not <*1*> is_a_proper_prefix_of s or
+                                       ex w st w in Z|x2 & s = <*1*>^w;
+       now per cases by A10;
+      suppose A11: s in T1 & not <*1*> is_a_proper_prefix_of s;
+          now per cases by A1,A11,TREES_1:def 12;
+         suppose s in e & not <*0*> is_a_proper_prefix_of s;
+          then s = {} or s = <*0*> or s = <*1*> by Th10,ENUMSET1:13;
+          hence s in Z by A2,TREES_1:47;
+         suppose ex w st w in Z|x1 & s = <*0*>^w;
+          hence s in Z by A2,TREES_1:def 9;
+        end;
+       hence s in Z;
+      suppose ex w st w in Z|x2 & s = <*1*>^w;
+       hence s in Z by A2,TREES_1:def 9;
+     end;
+    hence s in Z;
+   end;
+  hence thesis by A3,TREES_1:def 12;
+ end;
+
+theorem Th30:
+for Z being DecoratedTree of D,x1,x2 being Element of dom Z st
+  dom Z is finite & x1 = <*0*> & x2 = <*1*> & succ (Root dom Z) = {x1,x2} holds
+   Z = (((elementary_tree 2) --> Root Z) with-replacement (<*0*>,
+     Z|x1)) with-replacement (<*1*>,Z|x2)
+ proof
+  let Z be DecoratedTree of D,x1,x2 be Element of dom Z such that
+  A1: dom Z is finite & x1 = <*0*> & x2 = <*1*> & succ (Root dom Z) = {x1,x2};
+  set e = elementary_tree 2;
+  set E = (elementary_tree 2) --> Root Z;
+  A2: <*0*> in e & <*1*> in e by Th10,ENUMSET1:14;
+  A3: dom E = e by FUNCOP_1:19;
+  A4: <*0*> in dom E & <*1*> in dom E by A2,FUNCOP_1:19;
+  A5: dom (Z|x1) = (dom Z)|x1 & dom (Z|x2) = (dom Z)|x2 by TREES_2:def 11;
+  set T1 = ((elementary_tree 2) --> Root Z) with-replacement (<*0*>,Z|x1);
+  set T = T1 with-replacement (<*1*>,Z|x2);
+  A6: dom T1 = dom E with-replacement (<*0*>,dom (Z|x1))
+    by A4,TREES_2:def 12;
+  A7: dom T1 = e with-replacement (<*0*>,(dom Z)|x1)
+    by A2,A3,A5,TREES_2:def 12;
+    not <*0*> is_a_proper_prefix_of <*1*> by Th7;
+  then A8: <*1*> in dom T1 by A4,A6,TREES_1:def 12;
+  then A9: dom T = dom T1 with-replacement (<*1*>,dom (Z|x2)) by TREES_2:def 12
+;
+  then A10: dom Z = dom T by A1,A3,A5,A6,Th29;
+    for s st s in dom T holds T.s = Z.s
+   proof
+    let s; assume A11: s in dom T;
+    then A12: not <*1*> is_a_prefix_of s & T.s = T1.s or
+    ex u st u in dom(Z|x2) & s = <*1*>^u & T.s = (Z|x2).u
+                                                    by A8,A9,TREES_2:def 12;
+       now per cases by A8,A9,A11,TREES_1:def 12;
+      suppose A13: s in dom T1 & not <*1*> is_a_proper_prefix_of s;
+       then A14: not <*0*> is_a_prefix_of s & T1.s = E.s or
+       ex u st u in dom(Z|x1) & s = <*0*>^u & T1.s = (Z|x1).u
+                                                    by A4,A6,TREES_2:def 12;
+          now per cases by A2,A7,A13,TREES_1:def 12;
+         suppose A15: s in e & not <*0*> is_a_proper_prefix_of s;
+             now per cases by A15,Th10,ENUMSET1:13;
+            suppose A16: s = {};
+A17:              now
+               given u such that
+               A18: u in dom (Z|x1) & s = <*0*>^u & T1.s = (Z|x1).u;
+                 <*0*> = {} by A16,A18,FINSEQ_1:48;
+               hence contradiction by TREES_1:4;
+              end;
+A19:          now
+               given u such that
+               A20: u in dom(Z|x2) & s = <*1*>^u & T.s = (Z|x2).u;
+                 <*1*> = {} by A16,A20,FINSEQ_1:48;
+               hence contradiction by TREES_1:4;
+              end;
+               E.s = Root Z by A15,FUNCOP_1:13
+                .= Z.(Root dom Z) by Def2
+                .= Z.s by A16,Def1;
+             hence thesis by A8,A9,A11,A14,A17,A19,TREES_2:def 12;
+            suppose s = <*0*>;
+             hence thesis by A1,A5,A12,A14,TREES_2:def 11;
+            suppose s = <*1*>;
+              hence thesis by A1,A5,A12,TREES_2:def 11;
+            end;
+           hence thesis;
+          suppose ex w st w in (dom Z)|x1 & s = <*0*>^w;
+          hence thesis by A1,A5,A12,A14,TREES_1:8,TREES_2:def 11;
+        end;
+       hence thesis;
+      suppose ex w st w in dom (Z|x2) & s = <*1*>^w;
+       hence thesis by A1,A5,A12,TREES_1:8,TREES_2:def 11;
+     end;
+    hence thesis;
+   end;
+  hence thesis by A10,TREES_2:33;
+end;
+
+definition
+func MP-variables -> set equals :Def3:
+ [: {3},NAT :];
+ coherence;
+end;
+
+definition
+cluster MP-variables -> non empty;
+ coherence by Def3;
+end;
+
+definition
+mode MP-variable is Element of MP-variables;
+end;
+
+definition
+func MP-conectives -> set equals :Def4:
+ [: {0,1,2},NAT :];
+ coherence;
+end;
+
+definition
+cluster MP-conectives -> non empty;
+ coherence
+  proof
+   reconsider X = {0,1,2} as non empty set by ENUMSET1:14;
+     [: X,NAT :] is non empty set;
+   hence thesis by Def4;
+  end;
+end;
+
+definition
+mode MP-conective is Element of MP-conectives;
+end;
+
+theorem Th31:
+MP-conectives misses MP-variables
+ proof
+  assume not thesis;
+  then consider x being set such that
+  A1: x in [:{0,1,2},NAT:] & x in [:{3},NAT:] by Def3,Def4,XBOOLE_0:3;
+  consider x1,x2 such that A2: x1 in {0,1,2} & x2 in NAT & x = [x1,x2]
+   by A1,ZFMISC_1:def 2;
+    x1 = 3 by A1,A2,ZFMISC_1:128;
+  hence contradiction by A2,ENUMSET1:13;
+ end;
+
+reserve p,q for MP-variable;
+
+definition let T be finite Tree,v be Element of T;
+redefine func branchdeg v -> Nat;
+ coherence
+  proof
+     branchdeg v = card succ v by PRELAMB:def 4;
+   hence thesis;
+  end;
+end;
+
+definition let D be non empty set;
+mode DOMAIN_DecoratedTree of D -> non empty set means :Def5:
+for x st x in it holds x is DecoratedTree of D;
+ existence
+  proof
+   consider d being Element of D;
+   take Z = {(elementary_tree 0) --> d};
+   let x; assume x in Z;
+   hence thesis by TARSKI:def 1;
+  end;
+end;
+
+definition let D0 be non empty set,D be DOMAIN_DecoratedTree of D0;
+redefine
+mode Element of D -> DecoratedTree of D0;
+ coherence by Def5;
+end;
+
+definition
+func MP-WFF -> DOMAIN_DecoratedTree of [: NAT,NAT :] means
+:Def6:
+(for x being DecoratedTree of [: NAT,NAT :] st x in it holds x is finite) &
+for x being finite DecoratedTree of [: NAT,NAT :] holds
+   x in it iff
+    for v being Element of dom x holds branchdeg v <= 2 &
+   (branchdeg v = 0 implies x .v = [0,0] or ex k st x .v = [3,k]) &
+   (branchdeg v = 1 implies x .v = [1,0] or x .v = [1,1]) &
+   (branchdeg v = 2 implies x .v = [2,0]);
+ existence
+ proof
+  set A = [:NAT,NAT:];
+  defpred P[set] means $1 is finite DecoratedTree of A &
+      (for y being finite DecoratedTree of A st y = $1
+      holds dom y is finite &
+         for v being Element of dom y holds branchdeg v <= 2 &
+      (branchdeg v = 0 implies y.v = [0,0] or ex k st y.v = [3,k]) &
+      (branchdeg v = 1 implies y.v = [1,0] or y.v = [1,1]) &
+      (branchdeg v = 2 implies y.v = [2,0]));
+  consider Y being set such that
+  A1: for x holds x in Y iff x in PFuncs(NAT*,A) & P[x]
+      from Separation;
+  A2: for x being finite DecoratedTree of A holds
+        x in Y iff dom x is finite &
+        for v being Element of dom x holds branchdeg v <= 2 &
+     (branchdeg v = 0 implies x .v = [0,0] or ex k st x .v = [3,k]) &
+     (branchdeg v = 1 implies x .v = [1,0] or x .v = [1,1]) &
+     (branchdeg v = 2 implies x .v = [2,0])
+       proof
+        let x be finite DecoratedTree of A;
+        thus x in Y implies dom x is finite &
+         for v being Element of dom x holds branchdeg v <= 2 &
+     (branchdeg v = 0 implies x .v = [0,0] or ex k st x .v = [3,k]) &
+     (branchdeg v = 1 implies x .v = [1,0] or x .v = [1,1]) &
+     (branchdeg v = 2 implies x .v = [2,0]) by A1;
+        assume dom x is finite &
+        for v being Element of dom x holds branchdeg v <= 2 &
+     (branchdeg v = 0 implies x .v = [0,0] or ex k st x .v = [3,k]) &
+     (branchdeg v = 1 implies x .v = [1,0] or x .v = [1,1]) &
+     (branchdeg v = 2 implies x .v = [2,0]);
+        then A3: for y being finite DecoratedTree of A st y = x holds
+            dom y is finite &
+            for v being Element of dom y holds branchdeg v <= 2 &
+     (branchdeg v = 0 implies y.v = [0,0] or ex k st y.v = [3,k]) &
+     (branchdeg v = 1 implies y.v = [1,0] or y.v = [1,1]) &
+     (branchdeg v = 2 implies y.v = [2,0]);
+          x in PFuncs(NAT*,A) by Th13;
+        hence thesis by A1,A3;
+       end;
+  set t=elementary_tree 0;
+  deffunc F(set)=[0,0];
+  consider T being DecoratedTree such that
+  A4: dom T = t & for p being FinSequence of NAT st p in t holds T.p=F(p)
+     from DTreeLambda;
+    rng T c= A
+   proof
+    let x; assume x in rng T; then consider z being set such that
+    A5: z in dom T & x = T.z by FUNCT_1:def 5;
+      z = {} by A4,A5,TARSKI:def 1,TREES_1:56;
+    then reconsider z as FinSequence of NAT by FINSEQ_1:29;
+      T.z = [0,0] by A4,A5; hence thesis by A5;
+   end;
+  then reconsider T as finite DecoratedTree of A by A4,Lm2,TREES_2:def 9;
+  A6: T in PFuncs(NAT*,A) by Th13;
+    for y being finite DecoratedTree of A st y = T holds dom y is finite &
+      for v being Element of dom y holds branchdeg v <= 2 &
+      (branchdeg v = 0 implies y.v = [0,0] or ex k st y.v = [3,k]) &
+      (branchdeg v = 1 implies y.v = [1,0] or y.v = [1,1]) &
+      (branchdeg v = 2 implies y.v = [2,0])
+     proof
+      let y be finite DecoratedTree of A; assume A7: y = T;
+      thus dom y is finite;
+      let v be Element of dom y;
+      A8: v = {} by A4,A7,TARSKI:def 1,TREES_1:56;
+       A9: succ v = {}
+         proof
+          A10: succ v = { v^<*n*>: v^<*n*> in dom y } by TREES_2:def 5;
+          assume A11: not thesis;
+          consider x being Element of succ v;
+            x in succ v by A11;
+          then consider n such that A12: x = v^<*n*> & v^<*n*> in dom y by A10;
+          A13: x = {} by A4,A7,A12,TARSKI:def 1,TREES_1:56;
+            x = <*n*> by A8,A12,FINSEQ_1:47;
+          hence contradiction by A13,TREES_1:4;
+         end;
+      then branchdeg v = 0 by CARD_1:78,PRELAMB:def 4;
+      hence branchdeg v <= 2;
+      thus thesis by A4,A7,A9,CARD_1:78,PRELAMB:def 4;
+     end;
+  then reconsider Y as non empty set by A1,A6;
+    for x st x in Y holds x is DecoratedTree of A by A1;
+  then reconsider Y as DOMAIN_DecoratedTree of A by Def5;
+  take Y;
+  thus thesis by A1,A2;
+ end;
+ uniqueness
+  proof
+   let D1,D2 be DOMAIN_DecoratedTree of [:NAT,NAT:] such that
+A14: for x being DecoratedTree of [: NAT,NAT :] st x in D1
+       holds x is finite and
+   A15:
+    for x being finite DecoratedTree of [:NAT,NAT:] holds
+        x in D1 iff
+        for v being Element of dom x holds branchdeg v <= 2 &
+     (branchdeg v = 0 implies x .v = [0,0] or ex k st x .v = [3,k]) &
+     (branchdeg v = 1 implies x .v = [1,0] or x .v = [1,1]) &
+     (branchdeg v = 2 implies x .v = [2,0]) and
+A16: for x being DecoratedTree of [: NAT,NAT :] st x in D2
+       holds x is finite and
+   A17:
+    for x being finite DecoratedTree of [:NAT,NAT:] holds
+        x in D2 iff
+        for v being Element of dom x holds branchdeg v <= 2 &
+     (branchdeg v = 0 implies x .v = [0,0] or ex k st x .v = [3,k]) &
+     (branchdeg v = 1 implies x .v = [1,0] or x .v = [1,1]) &
+     (branchdeg v = 2 implies x .v = [2,0]);
+   thus D1 c= D2
+    proof
+     let x; assume A18: x in D1;
+     then x is DecoratedTree of [:NAT,NAT:] by Def5;
+     then reconsider y=x as finite DecoratedTree of [:NAT,NAT:]
+      by A14,A18;
+       dom y is finite &
+      for v being Element of dom y holds branchdeg v <= 2 &
+     (branchdeg v = 0 implies y.v = [0,0] or ex k st y.v = [3,k]) &
+     (branchdeg v = 1 implies y.v = [1,0] or y.v = [1,1]) &
+     (branchdeg v = 2 implies y.v = [2,0]) by A15,A18;
+     hence thesis by A17;
+    end;
+   let x; assume A19: x in D2;
+     then x is DecoratedTree of [:NAT,NAT:] by Def5;
+   then reconsider y=x as finite DecoratedTree of [:NAT,NAT:]
+       by A16,A19;
+     dom y is finite &
+   for v being Element of dom y holds branchdeg v <= 2 &
+    (branchdeg v = 0 implies y.v = [0,0] or ex k st y.v = [3,k]) &
+    (branchdeg v = 1 implies y.v = [1,0] or y.v = [1,1]) &
+    (branchdeg v = 2 implies y.v = [2,0]) by A17,A19;
+   hence thesis by A15;
+  end;
+ end;
+
+ :: [0,0] = VERUM
+ :: [1,0] = negation
+ :: [1,1] = modal operator of necessity
+ :: [2,0] = &
+
+definition
+  mode MP-wff is Element of MP-WFF;
+end;
+
+definition
+ cluster -> finite MP-wff;
+ coherence by Def6;
+end;
+
+reserve A,A1,B,B1,C,C1 for MP-wff;
+
+definition let A; let a be Element of dom A;
+redefine func A|a -> MP-wff;
+ coherence
+  proof
+   set x = A|a;
+A1: dom x = (dom A)|a by TREES_2:def 11;
+   then reconsider db = dom x as finite Tree;
+   reconsider x as finite DecoratedTree of [: NAT,NAT :]
+    by A1,Lm2;
+      now set da = dom A;
+     thus db is finite;
+     let v be Element of db; v in db;
+     then A2: v in da|a by TREES_2:def 11;
+     then reconsider w = a^v as Element of da by TREES_1:def 9;
+     reconsider v' = v as Element of da|a by TREES_2:def 11;
+     A3: succ w,succ v' are_equipotent by Th20;
+       succ v' = succ v by TREES_2:def 11;
+     then card succ v = card succ w by A3,CARD_1:81;
+     then branchdeg v = card succ w by PRELAMB:def 4;
+     then A4: branchdeg v = branchdeg w by PRELAMB:def 4;
+     hence branchdeg v <= 2 by Def6;
+     thus branchdeg v = 0 implies x .v = [0,0] or ex k st x .v = [3,k]
+      proof assume A5: branchdeg v = 0;
+        per cases by A4,A5,Def6;
+        suppose A.w = [0,0]; hence thesis by A2,TREES_2:def 11;
+        suppose ex k st A.w = [3,k]; then consider k such that
+         A6: A.w = [3,k];
+            now
+           take k; thus x .v = [3,k] by A2,A6,TREES_2:def 11;
+          end;
+         hence thesis;
+      end;
+     thus branchdeg v = 1 implies x .v = [1,0] or x .v = [1,1]
+      proof assume A7: branchdeg v = 1;
+        per cases by A4,A7,Def6;
+        suppose A.w = [1,0]; hence thesis by A2,TREES_2:def 11;
+        suppose A.w = [1,1]; hence thesis by A2,TREES_2:def 11;
+      end;
+     thus branchdeg v = 2 implies x .v = [2,0]
+      proof
+       assume branchdeg v = 2;
+       then A.w = [2,0] by A4,Def6;
+       hence x .v = [2,0] by A2,TREES_2:def 11;
+      end;
+    end;
+   hence thesis by Def6;
+  end;
+end;
+
+definition let a be Element of MP-conectives;
+func the_arity_of a -> Nat equals
+   a`1;
+ coherence
+  proof
+   reconsider X = {0,1,2} as non empty set by ENUMSET1:14;
+   consider a1 being Element of X,k being Element of NAT such that
+   A1: a=[a1,k] by Def4,DOMAIN_1:9;
+      a1 = 0 or a1 = 1 or a1 = 2 by ENUMSET1:13;
+   hence thesis by A1,MCART_1:7;
+  end;
+end;
+
+definition let D be non empty set, T,T1 be DecoratedTree of D,
+  p be FinSequence of NAT;
+assume A1: p in dom T;
+func @(T,p,T1) -> DecoratedTree of D equals :Def8:
+ T with-replacement (p,T1);
+ coherence
+  proof
+   set X = T with-replacement (p,T1);
+      rng X c= D
+     proof
+      let x; assume x in rng X;
+      then consider z being set such that A2: z in dom X & x = X.z by FUNCT_1:
+def 5;
+      A3: dom X = dom T with-replacement (p,dom T1) by A1,TREES_2:def 12;
+      reconsider z as FinSequence of NAT by A2,TREES_1:44;
+        now per cases by A1,A2,A3,TREES_2:def 12;
+      suppose A4: not p is_a_prefix_of z & X.z = T.z;
+        then not ex s being FinSequence of NAT st s in dom T1 & z = p^s
+               by TREES_1:8;
+        then reconsider z as Element of dom T by A1,A2,A3,TREES_1:def 12;
+              T.z is Element of D;
+            hence x in D by A2,A4;
+      suppose ex s st s in dom T1 & z = p^s & X.z = T1.s;
+      then consider s such that
+         A5: s in dom T1 & z = p^s & X.z = T1.s;
+         reconsider s as Element of dom T1 by A5;
+           T1.s is Element of D;
+         hence x in D by A2,A5;
+      end;
+     hence thesis;
+     end;
+   hence X is DecoratedTree of D by TREES_2:def 9;
+  end;
+end;
+
+theorem Th32:
+((elementary_tree 1) --> [1,0]) with-replacement (<*0*>,A) is MP-wff
+ proof
+  set x = ((elementary_tree 1) --> [1,0]) with-replacement (<*0*>,A);
+  A1: <*0*> in dom ((elementary_tree 1) --> [1,0])
+   proof <*0*> in elementary_tree 1 by TREES_1:55;
+    hence thesis by FUNCOP_1:19;
+   end;
+  then A2: dom x = dom((elementary_tree 1) --> [1,0])
+   with-replacement (<*0*>,dom A)
+      by TREES_2:def 12;
+  reconsider d = <*0*> as Element of elementary_tree 1 by TREES_1:55;
+A3:dom x = elementary_tree 1 with-replacement (d,dom A) by A2,FUNCOP_1:19;
+    @((elementary_tree 1) --> [1,0],<*0*>, A) = x by A1,Def8;
+  then reconsider x as finite DecoratedTree of [: NAT,NAT :] by A3,Lm2;
+  A4: dom x = dom((elementary_tree 1) --> [1,0])
+  with-replacement (<*0*>,dom A)
+      by A1,TREES_2:def 12;
+     for v being Element of dom x holds branchdeg v <= 2 &
+   (branchdeg v = 0 implies x .v = [0,0] or ex k st x .v = [3,k]) &
+   (branchdeg v = 1 implies x .v = [1,0] or x .v = [1,1]) &
+   (branchdeg v = 2 implies x .v = [2,0])
+    proof
+     let v be Element of dom x;
+     set e = (elementary_tree 1) --> [1,0];
+        now per cases by A1,A4,TREES_2:def 12;
+      suppose A5: not <*0*> is_a_prefix_of v & x .v = e.v;
+then A6:     not ex s st s in dom A & v = <*0*>^s by TREES_1:8;
+        then A7: v in dom e &
+        not <*0*> is_a_proper_prefix_of v by A1,A4,TREES_1:def 12;
+       reconsider v'=v as Element of dom e by A1,A4,A6,TREES_1:def 12;
+       A8: dom e = {{},<*0*>} by Th9,FUNCOP_1:19;
+       then A9: v = {} by A5,A7,TARSKI:def 2;
+       A10: succ v' = {<*0*>}
+        proof
+            now let x;
+          thus x in succ v' implies x in {<*0*>}
+           proof
+            assume x in succ v';
+            then x in { v'^<*n*> : v'^<*n*> in dom e } by TREES_2:def 5;
+            then consider n such that A11: x = v'^<*n*> & v'^<*n*> in dom e;
+            A12: x = <*n*> & <*n*> in dom e by A9,A11,FINSEQ_1:47;
+            then <*n*> = {} or <*n*> = <*0*> by A8,TARSKI:def 2;
+            hence thesis by A12,TARSKI:def 1,TREES_1:4;
+           end;
+          assume x in {<*0*>}; then A13: x = <*0*> by TARSKI:def 1;
+          then A14: x = v'^<*0*> by A9,FINSEQ_1:47;
+          then v'^<*0*> in dom e by A8,A13,TARSKI:def 2;
+          then x in { v'^<*n*> : v'^<*n*> in dom e } by A14;
+          hence x in succ v' by TREES_2:def 5;
+         end;
+        hence thesis by TARSKI:2;
+       end;
+         {} is_a_proper_prefix_of <*0*> by Lm1;
+       then succ v= succ v' by A1,A4,A9,Th17;
+       then 1 = card succ v by A10,CARD_1:79;
+       then A15: branchdeg v = 1 by PRELAMB:def 4;
+       hence branchdeg v <= 2;
+         x .v = [1,0]
+        proof
+           v in elementary_tree 1 by A7,FUNCOP_1:19;
+         hence thesis by A5,FUNCOP_1:13;
+        end;
+       hence thesis by A15;
+      suppose ex s st s in dom A & v = <*0*>^s & x .v = A.s;
+       then consider s such that
+       A16: s in dom A & v = <*0*>^s & x .v = A.s;
+       reconsider s as Element of dom A by A16;
+       A17: branchdeg s <= 2 &
+        (branchdeg s = 0 implies A .s = [0,0] or ex m st A .s = [3,m]) &
+        (branchdeg s = 1 implies A .s = [1,0] or A .s = [1,1]) &
+        (branchdeg s = 2 implies A .s = [2,0]) by Def6;
+          succ v,succ s are_equipotent by A1,A4,A16,Th19;
+       then card succ v = card succ s by CARD_1:81;
+then A18:       branchdeg v = card succ s by PRELAMB:def 4;
+       hence branchdeg v <= 2 by A17,PRELAMB:def 4;
+       thus thesis by A16,A17,A18,PRELAMB:def 4;
+      end;
+     hence thesis;
+    end;
+  hence thesis by Def6;
+ end;
+
+theorem Th33:
+((elementary_tree 1)-->[1,1]) with-replacement (<*0*>,A) is MP-wff
+ proof
+  set x = ((elementary_tree 1) --> [1,1]) with-replacement (<*0*> , A);
+  A1: <*0*> in dom ((elementary_tree 1) --> [1,1])
+   proof <*0*> in elementary_tree 1 by TREES_1:55;
+    hence thesis by FUNCOP_1:19;
+   end;
+  then A2: dom x = dom((elementary_tree 1) --> [1,1]) with-replacement
+    (<*0*>,dom A) by TREES_2:def 12;
+  reconsider d = <*0*> as Element of elementary_tree 1 by TREES_1:55;
+A3:     dom x = elementary_tree 1 with-replacement (d,dom A)
+  by A2,FUNCOP_1:19;
+    @((elementary_tree 1) --> [1,1], <*0*> , A) =
+ ((elementary_tree 1) --> [1,1]) with-replacement (<*0*> , A)
+  by A1,Def8;
+  then reconsider x = ((elementary_tree 1) --> [1,1])
+    with-replacement (<*0*> , A)
+ as finite DecoratedTree of [: NAT,NAT :] by A3,Lm2;
+A4: dom x = dom((elementary_tree 1) --> [1,1]) with-replacement (<*0*>,dom A)
+      by A1,TREES_2:def 12;
+     for v being Element of dom x holds branchdeg v <= 2 &
+   (branchdeg v = 0 implies x .v = [0,0] or ex k st x .v = [3,k]) &
+   (branchdeg v = 1 implies x .v = [1,0] or x .v = [1,1]) &
+   (branchdeg v = 2 implies x .v = [2,0])
+    proof
+     let v be Element of dom x;
+     set e = (elementary_tree 1) --> [1,1];
+        now per cases by A1,A4,TREES_2:def 12;
+      suppose A5: not <*0*> is_a_prefix_of v & x .v = e.v;
+then A6:    not ex s st s in dom A & v = <*0*>^s by TREES_1:8;
+       then A7: v in dom e &
+       not <*0*> is_a_proper_prefix_of v by A1,A4,TREES_1:def 12;
+       reconsider v'=v as Element of dom e by A1,A4,A6,TREES_1:def 12;
+       A8: dom e = {{},<*0*>} by Th9,FUNCOP_1:19;
+       then A9: v = {} by A5,A7,TARSKI:def 2;
+       A10: succ v' = {<*0*>}
+        proof
+            now let x;
+          thus x in succ v' implies x in {<*0*>}
+           proof
+            assume x in succ v';
+            then x in { v'^<*n*> : v'^<*n*> in dom e } by TREES_2:def 5;
+            then consider n such that A11: x = v'^<*n*> & v'^<*n*> in dom e;
+            A12: x = <*n*> & <*n*> in dom e by A9,A11,FINSEQ_1:47;
+            then <*n*> = {} or <*n*> = <*0*> by A8,TARSKI:def 2;
+            hence thesis by A12,TARSKI:def 1,TREES_1:4;
+           end;
+           assume x in {<*0*>}; then A13: x = <*0*> by TARSKI:def 1;
+           then A14: x = v'^<*0*> by A9,FINSEQ_1:47;
+           then v'^<*0*> in dom e by A8,A13,TARSKI:def 2;
+           then x in { v'^<*n*> : v'^<*n*> in dom e } by A14;
+           hence x in succ v' by TREES_2:def 5;
+          end;
+         hence thesis by TARSKI:2;
+        end;
+         {} is_a_proper_prefix_of <*0*> by Lm1;
+       then succ v= succ v' by A1,A4,A9,Th17;
+       then 1 = card succ v by A10,CARD_1:79;
+       then A15: branchdeg v = 1 by PRELAMB:def 4;
+       hence branchdeg v <= 2;
+         x .v = [1,1]
+        proof
+           v in elementary_tree 1 by A7,FUNCOP_1:19;
+         hence thesis by A5,FUNCOP_1:13;
+        end;
+       hence thesis by A15;
+      suppose ex s st s in dom A & v = <*0*>^s & x .v = A.s;
+       then consider s such that
+       A16: s in dom A & v = <*0*>^s & x .v = A.s;
+       reconsider s as Element of dom A by A16;
+       A17: branchdeg s <= 2 &
+        (branchdeg s = 0 implies A .s = [0,0] or ex m st A .s = [3,m]) &
+        (branchdeg s = 1 implies A .s = [1,0] or A .s = [1,1]) &
+        (branchdeg s = 2 implies A .s = [2,0]) by Def6;
+          succ v,succ s are_equipotent by A1,A4,A16,Th19;
+       then card succ v = card succ s by CARD_1:81;
+then A18:       branchdeg v = card succ s by PRELAMB:def 4;
+       hence branchdeg v <= 2 by A17,PRELAMB:def 4;
+       thus thesis by A16,A17,A18,PRELAMB:def 4;
+      end;
+     hence thesis;
+    end;
+  hence thesis by Def6;
+ end;
+
+theorem Th34:
+((((elementary_tree 2)-->[2,0]) with-replacement (<*0*>,A)))
+  with-replacement (<*1*>,B)
+  is MP-wff
+ proof
+  set y = ((elementary_tree 2)-->[2,0]) with-replacement (<*0*>,A);
+  set x = y with-replacement (<*1*>,B);
+  A1: <*0*> in dom((elementary_tree 2)-->[2,0])
+   proof
+       <*0*> in elementary_tree 2 by TREES_1:55;
+    hence thesis by FUNCOP_1:19;
+   end;
+    y is DecoratedTree of [: NAT,NAT :]
+     proof
+        @((elementary_tree 2) --> [2,0],<*0*>,A) = y by A1,Def8;
+      hence thesis;
+     end;
+  then reconsider y as DecoratedTree of [: NAT,NAT :];
+  A2: dom y = dom((elementary_tree 2)-->[2,0]) with-replacement (<*0*>,dom A)
+                                             by A1,TREES_2:def 12;
+ A3: <*1*> in elementary_tree 2 by TREES_1:55;
+  A4: dom ((elementary_tree 2) --> [2,0]) = elementary_tree 2
+                                                      by FUNCOP_1:19;
+  A5: <*1*> in dom((elementary_tree 2)-->[2,0]) by A3,FUNCOP_1:19;
+A6:  not <*0*> is_a_proper_prefix_of <*1*>
+   proof
+    assume not thesis; then <*0*> is_a_prefix_of <*1*> by XBOOLE_0:def 8;
+    hence contradiction by TREES_1:16;
+   end;
+  then A7: <*1*> in dom y by A1,A2,A5,TREES_1:def 12;
+     reconsider da = dom A as finite Tree;
+     reconsider d =<*0*> as Element of elementary_tree 2 by A1,FUNCOP_1:19;
+       dom y = (elementary_tree 2) with-replacement(d,da)
+       by A4,TREES_2:def 12;
+     then reconsider dy = dom y as finite Tree;
+     reconsider d1 = <*1*> as Element of dy by A1,A2,A5,A6,TREES_1:def 12;
+     reconsider db = dom B as finite Tree;
+A8:     dom x = dy with-replacement (d1,db) by TREES_2:def 12;
+    @(y,<*1*>,B) = x by A7,Def8;
+  then reconsider x as finite DecoratedTree of [: NAT,NAT :]
+    by A8,Lm2;
+  A9: dom x = dom y with-replacement (<*1*>,dom B) by A7,TREES_2:def 12;
+     for v being Element of dom x holds branchdeg v <= 2 &
+   (branchdeg v = 0 implies x .v = [0,0] or ex k st x .v = [3,k]) &
+   (branchdeg v = 1 implies x .v = [1,0] or x .v = [1,1]) &
+   (branchdeg v = 2 implies x .v = [2,0])
+    proof
+     let v be Element of dom x;
+      set e = (elementary_tree 2)-->[2,0];
+        now per cases by A7,A9,TREES_2:def 12;
+      suppose A10: not <*1*> is_a_prefix_of v & x .v = y .v;
+then A11:   not ex s st s in dom B & v = <*1*>^s by TREES_1:8;
+       then A12: v in dom e with-replacement
+         (<*0*>,dom A) by A2,A7,A9,TREES_1:def 12;
+          now per cases by A1,A12,TREES_2:def 12;
+        suppose A13: not <*0*> is_a_prefix_of v & y.v = e.v;
+then A14:    not ex s st s in dom A & v = <*0*>^s by TREES_1:8;
+        then A15: v in dom e &
+        not <*0*> is_a_proper_prefix_of v by A1,A12,TREES_1:def 12;
+        reconsider v'=v as Element of dom e by A1,A12,A14,TREES_1:def 12;
+        A16: dom e = {{},<*0*>,<*1*>} by Th10,FUNCOP_1:19;
+        then A17: v = {} by A10,A13,A15,ENUMSET1:13;
+        A18: succ v' = {<*0*>,<*1*>}
+         proof
+             now let x;
+           thus x in succ v' implies x in {<*0*>,<*1*>}
+            proof
+             assume x in succ v';
+             then x in { v'^<*n*> : v'^<*n*> in dom e } by TREES_2:def 5;
+             then consider n such that A19: x = v'^<*n*> & v'^<*n*> in dom e;
+             A20: x = <*n*> & <*n*> in dom e by A17,A19,FINSEQ_1:47;
+             then <*n*> = {} or <*n*> = <*0*> or <*n*> = <*1*>
+                                     by A16,ENUMSET1:13;
+             hence thesis by A20,TARSKI:def 2,TREES_1:4;
+            end;
+           assume x in {<*0*>,<*1*>};
+           then A21: x = <*0*> or x = <*1*> by TARSKI:def 2;
+              now per cases by A17,A21,FINSEQ_1:47;
+            suppose A22: x = v'^<*0*>;
+             then v'^<*0*> in dom e by A16,A21,ENUMSET1:14;
+             then x in { v'^<*n*> : v'^<*n*> in dom e } by A22;
+             hence x in succ v' by TREES_2:def 5;
+            suppose A23: x = v'^<*1*>;
+             then v'^<*1*> in dom e by A16,A21,ENUMSET1:14;
+             then x in { v'^<*n*> : v'^<*n*> in dom e } by A23;
+             hence x in succ v' by TREES_2:def 5;
+            end;
+           hence x in succ v';
+          end;
+         hence thesis by TARSKI:2;
+        end;
+       A24: {} is_a_proper_prefix_of <*0*> by Lm1;
+       A25: {} is_a_proper_prefix_of <*1*> by Lm1;
+       A26: succ v = succ v'
+        proof
+         reconsider v'' = v as Element of dom y by A7,A9,A11,TREES_1:def 12;
+           succ v'' = succ v' by A1,A2,A17,A24,Th17;
+         hence thesis by A7,A9,A17,A25,Th17;
+        end;
+          <*0*> <> <*1*> by TREES_1:16;
+       then A27: 2 = card succ v by A18,A26,CARD_2:76;
+       hence branchdeg v <= 2 by PRELAMB:def 4;
+         x .v = [2,0]
+        proof
+           v in elementary_tree 2 by A15,FUNCOP_1:19;
+         hence thesis by A10,A13,FUNCOP_1:13;
+        end;
+       hence thesis by A27,PRELAMB:def 4;
+      suppose ex s st s in dom A & v = <*0*>^s & y.v = A.s;
+       then consider s such that
+       A28: s in dom A & v = <*0*>^s & y.v = A.s;
+       reconsider s as Element of dom A by A28;
+       A29: branchdeg s <= 2 &
+        (branchdeg s = 0 implies A .s = [0,0] or ex m st A .s = [3,m]) &
+        (branchdeg s = 1 implies A .s = [1,0] or A .s = [1,1]) &
+        (branchdeg s = 2 implies A .s = [2,0]) by Def6;
+        A30: not <*1*>,v are_c=-comparable by A28,Th3;
+         succ v,succ s are_equipotent
+        proof
+         reconsider v'=v as Element of dom y by A7,A9,A11,TREES_1:def 12;
+           succ v',succ s are_equipotent by A1,A2,A28,Th19;
+         hence thesis by A7,A9,A30,Th18;
+        end;
+       then card succ v = card succ s by CARD_1:81;
+then A31:       branchdeg v = card succ s by PRELAMB:def 4;
+       hence branchdeg v <= 2 by A29,PRELAMB:def 4;
+       thus thesis by A10,A28,A29,A31,PRELAMB:def 4;
+      end;
+     hence thesis;
+    suppose ex s st s in dom B & v = <*1*>^s & x .v = B.s;
+     then consider s such that
+     A32: s in dom B & v = <*1*>^s & x .v = B.s;
+     reconsider s as Element of dom B by A32;
+     A33: branchdeg s <= 2 &
+      (branchdeg s = 0 implies B .s = [0,0] or ex m st B .s = [3,m]) &
+      (branchdeg s = 1 implies B .s = [1,0] or B .s = [1,1]) &
+      (branchdeg s = 2 implies B .s = [2,0]) by Def6;
+        succ v,succ s are_equipotent by A7,A9,A32,Th19;
+     then card succ v = card succ s by CARD_1:81;
+     then branchdeg v = card succ s by PRELAMB:def 4;
+     hence thesis by A32,A33,PRELAMB:def 4;
+    end;
+   hence thesis;
+  end;
+  hence thesis by Def6;
+ end;
+
+definition let A;
+func 'not' A -> MP-wff equals :Def9:
+ ((elementary_tree 1)-->[1,0]) with-replacement (<*0*>,A);
+ coherence by Th32;
+func (#) A -> MP-wff equals :Def10:
+ ((elementary_tree 1)-->[1,1]) with-replacement (<*0*>,A);
+ coherence by Th33;
+let B;
+func A '&' B -> MP-wff equals :Def11:
+ ((((elementary_tree 2)-->[2,0]) with-replacement (<*0*>,A)))
+   with-replacement (<*1*>,B);
+ coherence by Th34;
+end;
+
+definition let A;
+func ? A -> MP-wff equals
+   'not' (#) 'not' A;
+ correctness;
+let B;
+func A 'or' B -> MP-wff equals
+   'not'('not' A '&' 'not' B);
+correctness;
+func A => B -> MP-wff equals
+   'not'(A '&' 'not' B);
+correctness;
+end;
+
+theorem Th35:
+(elementary_tree 0) --> [3,n] is MP-wff
+ proof
+  set x = (elementary_tree 0) --> [3,n];
+  A1: dom x = { {} } by FUNCOP_1:19,TREES_1:56;
+  then reconsider x as
+   finite DecoratedTree of [: NAT,NAT :] by Lm2;
+  A2: dom x = elementary_tree 0 by FUNCOP_1:19;
+     for v being Element of dom x holds branchdeg v <= 2 &
+   (branchdeg v = 0 implies x .v = [0,0] or ex k st x .v = [3,k]) &
+   (branchdeg v = 1 implies x .v = [1,0] or x .v = [1,1]) &
+   (branchdeg v = 2 implies x .v = [2,0])
+    proof
+    let v be Element of dom x;
+    A3: v = {} by A2,TARSKI:def 1,TREES_1:56;
+    A4: succ v = {}
+     proof
+      assume A5: not thesis;
+      consider y being Element of succ v;
+        y in succ v by A5;
+      then y in { v^<*m*> : v^<*m*> in dom x } by TREES_2:def 5;
+      then consider m such that A6: y = v^<*m*> & v^<*m*> in dom x;
+        y = <*m*> & <*m*> in dom x by A3,A6,FINSEQ_1:47;
+      then <*m*> = {} by A1,TARSKI:def 1; hence contradiction by TREES_1:4;
+     end;
+    then 0 = branchdeg v by CARD_1:78,PRELAMB:def 4;
+    hence branchdeg v <= 2;
+    thus branchdeg v = 0 implies x .v = [0,0] or ex m st x .v =[3,m]
+     proof
+      assume branchdeg v = 0;
+        x .v = [3,n] by A2,FUNCOP_1:13;
+      hence thesis;
+     end;
+    thus thesis by A4,CARD_1:78,PRELAMB:def 4;
+   end;
+  hence thesis by Def6;
+ end;
+
+theorem Th36:
+(elementary_tree 0) --> [0,0] is MP-wff
+ proof
+  set x = (elementary_tree 0) --> [0,0];
+     dom x = { {} } by FUNCOP_1:19,TREES_1:56;
+  then reconsider x as
+   finite DecoratedTree of [: NAT,NAT :] by Lm2;
+  A1: dom x = elementary_tree 0 by FUNCOP_1:19;
+  A2: dom x = { {} } by FUNCOP_1:19,TREES_1:56;
+    for v being Element of dom x holds
+    branchdeg v <= 2 &
+  (branchdeg v = 0 implies x .v = [0,0] or ex k st x .v = [3,k]) &
+  (branchdeg v = 1 implies x .v = [1,0] or x .v = [1,1]) &
+  (branchdeg v = 2 implies x .v = [2,0])
+   proof
+    let v be Element of dom x;
+    A3: v = {} by A1,TARSKI:def 1,TREES_1:56;
+    A4: succ v = {}
+     proof
+      assume A5: not thesis;
+      consider y being Element of succ v;
+        y in succ v by A5;
+      then y in { v^<*m*> : v^<*m*> in dom x } by TREES_2:def 5;
+      then consider m such that A6: y = v^<*m*> & v^<*m*> in dom x;
+        y = <*m*> & <*m*> in dom x by A3,A6,FINSEQ_1:47;
+      then <*m*> = {} by A2,TARSKI:def 1; hence contradiction by TREES_1:4;
+     end;
+    then 0 = branchdeg v by CARD_1:78,PRELAMB:def 4;
+    hence branchdeg v <= 2;
+    thus thesis by A1,A4,CARD_1:78,FUNCOP_1:13,PRELAMB:def 4;
+   end;
+  hence thesis by Def6;
+ end;
+
+definition let p;
+func @p -> MP-wff equals :Def15:
+ (elementary_tree 0) --> p;
+ coherence
+  proof
+   consider x1,x2 such that
+   A1: x1 in {3} & x2 in NAT & p = [x1,x2] by Def3,ZFMISC_1:def 2;
+      x1 = 3 by A1,TARSKI:def 1;
+   hence (elementary_tree 0) --> p is MP-wff by A1,Th35;
+  end;
+end;
+
+theorem Th37:
+@p = @q implies p = q
+ proof
+  A1: {} in elementary_tree 0 by TREES_1:47;
+  assume A2: @p = @q;
+  A3: @p = (elementary_tree 0) --> p by Def15;
+  A4: @q = (elementary_tree 0) --> q by Def15;
+    p = @p.{} by A1,A3,FUNCOP_1:13
+   .= q by A1,A2,A4,FUNCOP_1:13;
+  hence thesis;
+ end;
+
+Lm3: <*0*> in dom ((elementary_tree 1)-->[n,m])
+ proof
+     <*0*> in elementary_tree 1 by Th9,TARSKI:def 2;
+  hence thesis by FUNCOP_1:19;
+ end;
+
+theorem Th38:
+'not' A = 'not' B implies A = B
+ proof
+  assume A1: 'not' A = 'not' B;
+  A2: <*0*> in dom((elementary_tree 1)-->[1,0]) by Lm3;
+    ((elementary_tree 1)-->[1,0]) with-replacement (<*0*>,A) = 'not' A by Def9
+   .= ((elementary_tree 1)-->[1,0]) with-replacement (<*0*>,B) by A1,Def9;
+  hence thesis by A2,Th16;
+ end;
+
+theorem Th39:
+(#)A = (#)B implies A = B
+ proof
+  set AA = (elementary_tree 1)-->[1,1];
+  assume A1: (#)A = (#)B;
+  A2: <*0*> in dom AA by Lm3;
+    AA with-replacement (<*0*>,A) = (#)A by Def10
+          .= AA with-replacement(<*0*>,B) by A1,Def10;
+  hence thesis by A2,Th16;
+ end;
+
+theorem Th40:
+(A '&' B) = (A1 '&' B1) implies A = A1 & B = B1
+ proof
+  set e = elementary_tree 2;
+  set y = (e-->[2,0]) with-replacement (<*0*>,A);
+  set y1 = (e-->[2,0]) with-replacement (<*0*>,A1);
+  A1: A '&' B = y with-replacement (<*1*>,B) by Def11;
+  A2: A1 '&' B1 = y1 with-replacement (<*1*>,B1) by Def11;
+  assume A3: A '&' B = A1 '&' B1;
+  A4: not <*0*>,<*1*> are_c=-comparable by TREES_1:23;
+  A5: not <*1*> is_a_proper_prefix_of <*0*> by Th7;
+  A6: <*0*> in e & <*1*> in e by TREES_1:55;
+  A7: dom (e --> [2,0]) = e by FUNCOP_1:19;
+  then A8: <*0*> in dom(e-->[2,0]) with-replacement (<*1*>,dom B)
+    by A5,A6,TREES_1:def 12;
+  A9: dom y = dom(e-->[2,0]) with-replacement (<*0*>,dom A) &
+      dom y1 = dom(e-->[2,0]) with-replacement (<*0*>,dom A1)
+        by A6,A7,TREES_2:def 12;
+    not <*0*> is_a_proper_prefix_of <*1*> by Th7;
+  then A10: <*1*> in dom y & <*1*> in dom y1 by A6,A7,A9,TREES_1:def 12;
+  then A11: dom (A '&' B) = dom y with-replacement (<*1*>,dom B) &
+      dom (A1 '&' B1) = dom y1 with-replacement (<*1*>,dom B1)
+        by A1,A2,TREES_2:def 12;
+     now let s;
+    thus s in dom B implies s in dom B1
+     proof
+      assume s in dom B;
+      then A12: <*1*>^s in dom(A1 '&' B1) by A3,A10,A11,TREES_1:def 12;
+         now per cases;
+        suppose s = {}; hence thesis by TREES_1:47;
+        suppose s <> {};
+         then <*1*> is_a_proper_prefix_of <*1*>^s by TREES_1:33;
+          then ex w st w in
+ dom B1 & <*1*>^s = <*1*>^w by A10,A11,A12,TREES_1:def 12;
+         hence thesis by FINSEQ_1:46;
+       end;
+      hence thesis;
+     end;
+    assume s in dom B1;
+    then A13: <*1*>^s in dom(A '&' B) by A3,A10,A11,TREES_1:def 12;
+         now per cases;
+        suppose s = {}; hence s in dom B by TREES_1:47;
+        suppose s <> {};
+         then <*1*> is_a_proper_prefix_of <*1*>^s by TREES_1:33;
+          then ex w st w in dom B & <*1*>^s = <*1*>^w by A10,A11,A13,TREES_1:
+def 12;
+         hence s in dom B by FINSEQ_1:46;
+       end;
+    hence s in dom B;
+   end;
+  then A14: dom B = dom B1 by TREES_2:def 1;
+  A15: dom (A '&' B) =
+    (dom(e-->[2,0]) with-replacement (<*1*>,dom B))
+    with-replacement (<*0*>,dom A) by A4,A6,A7,A9,A11,TREES_2:10;
+    dom (A1 '&' B1) = (dom(e-->[2,0]) with-replacement (<*1*>,dom B))
+  with-replacement (<*0*>,dom A1) by A4,A6,A7,A9,A11,A14,TREES_2:10;
+  then A16: dom A = dom A1 by A3,A8,A15,Th15;
+A17:  for s st s in dom B holds B.s = B1.s
+   proof
+    let s;
+    assume s in dom B;
+    then A18: <*1*>^s in dom(A1 '&' B1) by A3,A10,A11,TREES_1:def 12;
+    A19: <*1*> is_a_prefix_of <*1*>^s by TREES_1:8;
+    then consider w such that
+    A20: w in dom B1 & <*1*>^s = <*1*>^w & (A1 '&' B1).(<*1*>^s) = B1.w
+                       by A2,A10,A11,A18,TREES_2:def 12;
+    A21: s = w by A20,FINSEQ_1:46;
+       ex u st u in dom B & <*1*>^s = <*1*>^u & (A '&' B).(<*1*>^s) = B.u
+                       by A1,A3,A10,A11,A18,A19,TREES_2:def 12;
+    hence thesis by A3,A20,A21,FINSEQ_1:46;
+   end;
+  then A22: B = B1 by A14,TREES_2:33;
+    for s st s in dom A holds A.s = A1.s
+   proof
+    let s; assume
+    A23: s in dom A; then A24: <*0*>^s in dom y by A6,A7,A9,TREES_1:def 12;
+   not <*1*> is_a_proper_prefix_of <*0*>^s by Th5;
+    then A25: <*0*>^s in dom (A '&' B) by A10,A11,A24,TREES_1:def 12;
+       now
+      given w such that
+      A26: w in dom B & <*0*>^s = <*1*>^w & (A '&' B).(<*0*>^s) = B.w;
+         <*0*> is_a_prefix_of <*1*>^w by A26,TREES_1:8;
+      hence contradiction by Th6;
+     end;
+    then A27: not <*1*> is_a_prefix_of <*0*>^s & (A '&' B).(<*0*>^s) = y.(<*0*>
+^s)
+                   by A1,A10,A11,A25,TREES_2:def 12;
+    A28: <*0*> is_a_prefix_of <*0*>^s by TREES_1:8; then ex w st
+ w in dom A & <*0*>^s = <*0*>^w & y.(<*0*>^s) = A.w
+                by A6,A7,A9,A24,TREES_2:def 12;
+    then A29: A.s = (A1 '&' B).(<*0*>^s) by A3,A22,A27,FINSEQ_1:46;
+    A30: <*0*>^s in dom y1 by A6,A7,A9,A16,A23,TREES_1:def 12;
+       now
+      given w such that
+      A31: w in dom B1 & <*0*>^s = <*1*>^w & (A1 '&' B1).(<*0*>^s) = B1.w;
+         <*0*> is_a_prefix_of <*1*>^w by A31,TREES_1:8;
+      hence contradiction by Th6;
+     end;
+    then A32: not <*1*> is_a_prefix_of <*0*>^s & (A1 '&' B1).(<*0*>^s) = y1.(<*
+0*>^s)
+                   by A2,A3,A10,A11,A25,TREES_2:def 12; ex u st
+ u in dom A1 & <*0*>^s = <*0*>^u & y1.(<*0*>^s) = A1.u
+                by A6,A7,A9,A28,A30,TREES_2:def 12;
+    hence thesis by A22,A29,A32,FINSEQ_1:46;
+   end;
+  hence thesis by A14,A16,A17,TREES_2:33;
+ end;
+
+definition
+func VERUM -> MP-wff equals :Def16:
+ (elementary_tree 0) --> [0,0];
+ coherence by Th36;
+end;
+
+canceled;
+
+theorem Th42:
+card dom A = 1 implies A = VERUM or ex p st A = @p
+ proof
+  assume A1: card dom A = 1;
+  A2: {} in dom A by TREES_1:47;
+  consider x such that A3: dom A = {x} by A1,CARD_2:60;
+  A4: x = {} by A2,A3,TARSKI:def 1; A5: dom A = {{}} by A2,A3,TARSKI:def 1;
+  A6: dom A = elementary_tree 0 by A2,A3,TARSKI:def 1,TREES_1:56;
+  reconsider x as Element of dom A by A3,TARSKI:def 1;
+     succ x = {}
+   proof
+    A7: succ x = { x^<*n*>: x^<*n*> in dom A } by TREES_2:def 5;
+    assume A8: not thesis;
+    consider y being Element of succ x;
+   y in succ x by A8;
+    then consider n such that
+    A9: y = x^<*n*> & x^<*n*> in dom A by A7;
+    A10: y = {} by A5,A9,TARSKI:def 1;
+      y = <*n*> by A4,A9,FINSEQ_1:47;
+    hence contradiction by A10,TREES_1:4;
+   end;
+then A11:  branchdeg x = 0 by CARD_1:78,PRELAMB:def 4;
+     now per cases by A11,Def6;
+   suppose A.x = [0,0];
+     then for z holds z in dom A implies A.z = [0,0] by A3,TARSKI:def 1;
+    hence thesis by A6,Def16,FUNCOP_1:17;
+   suppose ex n st A.x = [3,n]; then consider n such that
+    A12: A.x = [3,n];
+       for z holds z in dom A implies A.z = [3,n] by A3,A12,TARSKI:def 1;
+    then A13: A = (elementary_tree 0) --> [3,n] by A6,FUNCOP_1:17;
+    reconsider p = [3,n] as MP-variable by Def3,ZFMISC_1:128;
+      A = @p by A13,Def15;
+    hence thesis;
+   end;
+  hence thesis;
+ end;
+
+theorem Th43:
+card dom A >= 2 implies (ex B st A = 'not' B or A = (#)B) or
+ex B,C st A = B '&' C
+ proof
+  assume A1: card dom A >= 2;
+  set b = branchdeg (Root dom A);
+  set a = Root dom A;
+A2:  b <= 2 by Def6;
+A3:   now
+    assume b = 0; then card dom A = 1 by Th22;
+    hence contradiction by A1;
+   end;
+    now
+   per cases by A2,A3,CQC_THE1:3;
+   case A4: b = 1;
+    then card succ a = 1 by PRELAMB:def 4; then consider x such that
+    A5: succ a = {x} by CARD_2:60;
+       x in succ a by A5,TARSKI:def 1;
+    then reconsider x' = x as Element of dom A;
+    take B = A|x';
+       now per cases by A4,Def6;
+     suppose A.a = [1,0];
+       then Root A = [1,0] by Def2;
+      then A = (((elementary_tree 1) --> [1,0]) with-replacement (<*0*>,B))
+        by A5,Th28
+       .= 'not' B by Def9;
+      hence A = 'not' B or A = (#) B;
+     suppose A.a = [1,1];
+       then Root A = [1,1] by Def2;
+      then A = (((elementary_tree 1) --> [1,1]) with-replacement (<*0*>,B))
+       by A5,Th28
+       .= (#) B by Def10;
+      hence A = 'not' B or A = (#) B;
+     end;
+    hence thesis;
+   case A6: b = 2;
+    then A.a = [2,0] by Def6;
+    then A7: Root A = [2,0] by Def2;
+    A8: succ a = { <*0*>,<*1*> } by A6,Th24;
+    then <*0*> in succ a & <*1*> in succ a by TARSKI:def 2;
+    then reconsider x = <*0*>, y = <*1*> as Element of dom A;
+    take B = A|x;
+    take C = A|y;
+      A = ((elementary_tree 2) --> [2,0]) with-replacement (<*0*>,A|x)
+        with-replacement (<*1*>,A|y) by A7,A8,Th30
+     .= B '&' C by Def11;
+    hence thesis;
+   end;
+  hence thesis;
+ end;
+
+theorem Th44:
+card dom A < card dom 'not' A
+ proof
+  set e = elementary_tree 1;
+     <*0*> in e by Th9,TARSKI:def 2;
+  then A1: <*0*> in dom (e --> [1,0]) by FUNCOP_1:19;
+    'not' A = (e --> [1,0]) with-replacement (<*0*>,A) by Def9;
+  then A2: dom 'not' A = dom (e --> [1,0]) with-replacement (<*0*>, dom A)
+    by A1,TREES_2:def 12;
+  then reconsider o = <*0*> as Element of dom 'not' A by A1,TREES_1:def 12;
+  A3: dom A = (dom 'not' A)|o
+   proof
+       now let s;
+      thus s in dom A implies o^s in dom 'not' A by A1,A2,TREES_1:def 12;
+      assume A4: o^s in dom 'not' A;
+          now per cases;
+         suppose s = {}; hence s in dom A by TREES_1:47;
+         suppose s <> {}; then o is_a_proper_prefix_of o^s by TREES_1:33;
+           then ex w st w in dom A & o^s = o^w by A1,A2,A4,TREES_1:def 12;
+          hence s in dom A by FINSEQ_1:46;
+        end;
+      hence s in dom A;
+     end;
+    hence thesis by TREES_1:def 9;
+   end;
+    Root (dom 'not' A) = {} by Def1;
+  then o <> Root (dom 'not' A) by TREES_1:4;
+  hence thesis by A3,Th26;
+ end;
+
+theorem Th45:
+card dom A < card dom (#)A
+ proof
+  set e = elementary_tree 1;
+     <*0*> in e by Th9,TARSKI:def 2;
+  then A1: <*0*> in dom (e --> [1,1]) by FUNCOP_1:19;
+    (#)A = (e --> [1,1]) with-replacement (<*0*>,A) by Def10;
+  then A2: dom (#)A = dom (e --> [1,1]) with-replacement (<*0*>, dom A)
+    by A1,TREES_2:def 12;
+  then reconsider o = <*0*> as Element of dom (#)A by A1,TREES_1:def 12;
+  A3: dom A = (dom (#)A)|o
+   proof
+       now let s;
+      thus s in dom A implies o^s in dom (#)A by A1,A2,TREES_1:def 12;
+      assume A4: o^s in dom (#)A;
+          now per cases;
+         suppose s = {}; hence s in dom A by TREES_1:47;
+         suppose s <> {}; then o is_a_proper_prefix_of o^s by TREES_1:33;
+           then ex w st w in dom A & o^s = o^w by A1,A2,A4,TREES_1:def 12;
+          hence s in dom A by FINSEQ_1:46;
+        end;
+      hence s in dom A;
+     end;
+    hence thesis by TREES_1:def 9;
+   end;
+    Root (dom (#)A) = {} by Def1;
+  then o <> Root (dom (#)A) by TREES_1:4;
+  hence thesis by A3,Th26;
+ end;
+
+theorem Th46:
+card dom A < card dom A '&' B & card dom B < card dom A '&' B
+ proof
+   set e = elementary_tree 2;
+   set y = (e-->[2,0]) with-replacement(<*0*>,A);
+  A1: A '&' B = y with-replacement (<*1*>,B) by Def11;
+  A2: <*0*> in e & <*1*> in e by TREES_1:55;
+  A3: dom (e --> [2,0]) = e by FUNCOP_1:19;
+  then A4: dom y = dom(e-->[2,0]) with-replacement (<*0*>,dom A)
+    by A2,TREES_2:def 12;
+  then A5: <*0*> in dom y by A2,A3,TREES_1:def 12;
+    not <*0*> is_a_proper_prefix_of <*1*> by Th7;
+  then A6: <*1*> in dom y by A2,A3,A4,TREES_1:def 12;
+  then A7: dom (A '&' B) = dom y with-replacement (<*1*>,dom B)
+    by A1,TREES_2:def 12;
+    not <*1*> is_a_proper_prefix_of <*0*> by Th7;
+  then reconsider o = <*0*> as Element of dom A '&' B by A5,A6,A7,TREES_1:def
+12;
+  A8: dom A = (dom A '&' B)|o
+   proof
+       now let s;
+      thus s in dom A implies o^s in dom A '&' B
+       proof
+        assume s in dom A;
+        then A9: o^s in dom y by A2,A3,A4,TREES_1:def 12;
+          not <*1*> is_a_proper_prefix_of o^s by Th5;
+        hence o^s in dom A '&' B by A6,A7,A9,TREES_1:def 12;
+       end;
+      assume A10: o^s in dom A '&' B;
+          now per cases;
+         suppose s = {}; hence s in dom A by TREES_1:47;
+         suppose A11: s <> {};
+             now
+            given w such that
+            A12: w in dom B & o^s = <*1*>^w;
+               o is_a_prefix_of <*1*>^w by A12,TREES_1:8;
+            hence contradiction by Th6;
+           end;
+          then A13: o^s in dom y & not <*1*> is_a_proper_prefix_of o^s
+          by A6,A7,A10,TREES_1:def 12;
+            o is_a_proper_prefix_of o^s by A11,TREES_1:33;
+           then ex w st w in dom A & o^s = o^w by A2,A3,A4,A13,TREES_1:def 12;
+          hence s in dom A by FINSEQ_1:46;
+        end;
+      hence s in dom A;
+     end;
+    hence thesis by TREES_1:def 9;
+   end;
+  A14: Root (dom A '&' B) = {} by Def1;
+  then o <> Root (dom A '&' B) by TREES_1:4;
+  hence card dom A < card dom A '&' B by A8,Th26;
+  reconsider u = <*1*> as Element of dom A '&' B by A6,A7,TREES_1:def 12;
+  A15: dom B = (dom A '&' B)|u
+   proof
+       now let s;
+      thus s in dom B implies u^s in dom A '&' B by A6,A7,TREES_1:def 12;
+      assume A16: u^s in dom A '&' B;
+          now per cases;
+         suppose s = {}; hence s in dom B by TREES_1:47;
+         suppose s <> {};
+          then <*1*> is_a_proper_prefix_of u^s by TREES_1:33;
+           then ex w st w in dom B & u^s = <*1*>^w by A6,A7,A16,TREES_1:def 12
+;
+          hence s in dom B by FINSEQ_1:46;
+        end;
+      hence s in dom B;
+     end;
+    hence thesis by TREES_1:def 9;
+   end;
+    u <> Root (dom A '&' B) by A14,TREES_1:4;
+  hence thesis by A15,Th26;
+ end;
+
+definition let IT be MP-wff;
+attr IT is atomic means :Def17:
+ex p st IT = @p;
+attr IT is negative means :Def18:
+ex A st IT = 'not' A;
+attr IT is necessitive means :Def19:
+ex A st IT = (#) A;
+attr IT is conjunctive means :Def20:
+ex A,B st IT = A '&' B;
+end;
+
+definition
+cluster atomic MP-wff;
+ existence
+  proof
+   reconsider p = [3,0] as MP-variable by Def3,ZFMISC_1:128;
+   take @p; take p; thus thesis;
+  end;
+cluster negative MP-wff;
+ existence
+  proof
+   set A = VERUM;
+   take 'not' A; take A; thus thesis;
+  end;
+cluster necessitive MP-wff;
+ existence
+  proof
+   set A = VERUM;
+   take (#)A; take A; thus thesis;
+  end;
+cluster conjunctive MP-wff;
+ existence
+  proof
+   set A = VERUM;
+   set B = VERUM;
+   take A '&' B; take B; take A; thus thesis;
+  end;
+end;
+
+scheme MP_Ind { Prop[Element of MP-WFF] }:
+        for A being Element of MP-WFF holds Prop[A]
+  provided
+A1:  Prop[VERUM] and
+A2:  for p being MP-variable holds Prop[@p] and
+A3:  for A being Element of MP-WFF st Prop[A] holds Prop['not' A] and
+A4:  for A being Element of MP-WFF st Prop[A] holds Prop[(#) A] and
+A5:  for A, B being Element of MP-WFF st Prop[A] & Prop[B] holds Prop[A '&' B]
+ proof
+  defpred P[Nat] means for A st card dom A <= $1 holds Prop[A];
+  A6: P[0]
+   proof let A such that A7: card dom A <= 0;
+     card dom A = 0 by A7,NAT_1:18;
+    hence thesis by CARD_2:59;
+   end;
+  A8: for k st P[k] holds P[k+1]
+   proof let k such that
+    A9: for A st card dom A <= k holds Prop[A]; let A such that
+    A10: card dom A <= k + 1;
+    set a = Root dom A;
+    set b = branchdeg a;
+A11:    b <= 2 by Def6;
+       now per cases by A11,CQC_THE1:3;
+     suppose b = 0; then A12: card dom A = 1 by Th22;
+          now per cases by A12,Th42;
+        suppose A = VERUM; hence Prop[A] by A1;
+        suppose ex p st A = @p; hence Prop[A] by A2;
+        end;
+      hence Prop[A];
+     suppose A13: b = 1;
+      then A14: succ a ={<*0*>} by Th23;
+       then <*0*> in succ a by TARSKI:def 1;
+      then reconsider o = <*0*> as Element of dom A;
+      A15: A = ((elementary_tree 1) --> Root A) with-replacement (<*0*>, A|o)
+        by A14,Th28;
+      A16: Root A = A.a by Def2;
+         now per cases by A13,Def6;
+       suppose A.a = [1,0];
+        then A17: A = 'not'(A|o) by A15,A16,Def9;
+        A18: dom (A|o) = (dom A)|o by TREES_2:def 11;
+          o <> {} by TREES_1:4;
+        then o <> Root dom A by Def1;
+        then card ((dom A)|o) < card dom A by Th26;
+        then card dom (A|o) < k + 1 by A10,A18,AXIOMS:22;
+        then card dom (A|o) <= k by NAT_1:38;
+        then Prop[A|o] by A9;
+        hence Prop[A] by A3,A17;
+       suppose A.a = [1,1];
+        then A19: A = (#)(A|o) by A15,A16,Def10;
+        A20: dom (A|o) = (dom A)|o by TREES_2:def 11;
+          o <> {} by TREES_1:4;
+        then o <> Root dom A by Def1;
+        then card ((dom A)|o) < card dom A by Th26;
+        then card dom (A|o) < k + 1 by A10,A20,AXIOMS:22;
+        then card dom (A|o) <= k by NAT_1:38;
+        then Prop[A|o] by A9;
+        hence Prop[A] by A4,A19;
+       end;
+      hence thesis;
+     suppose A21: b = 2;
+      then A22: succ a ={<*0*>,<*1*>} by Th24;
+       then <*0*> in succ a & <*1*> in succ a by TARSKI:def 2;
+      then reconsider o1 = <*0*>, o2 = <*1*> as Element of dom A;
+      A23: A = ((elementary_tree 2) --> Root A) with-replacement
+      (<*0*>, A|o1) with-replacement (<*1*>,A|o2) by A22,Th30;
+        Root A = A.a by Def2
+            .= [2,0] by A21,Def6;
+      then A24: A = (A|o1) '&' (A|o2) by A23,Def11;
+      A25: dom (A|o1) = (dom A)|o1 by TREES_2:def 11;
+        o1 <> {} by TREES_1:4;
+      then o1 <> Root dom A by Def1;
+      then card ((dom A)|o1) < card dom A by Th26;
+      then card dom (A|o1) < k + 1 by A10,A25,AXIOMS:22;
+      then card dom (A|o1) <= k by NAT_1:38;
+      then A26: Prop[A|o1] by A9;
+      A27: dom (A|o2) = (dom A)|o2 by TREES_2:def 11;
+        o2 <> {} by TREES_1:4;
+      then o2 <> Root dom A by Def1;
+      then card ((dom A)|o2) < card dom A by Th26;
+      then card dom (A|o2) < k + 1 by A10,A27,AXIOMS:22;
+      then card dom (A|o2) <= k by NAT_1:38;
+      then Prop[A|o2] by A9;
+      hence thesis by A5,A24,A26;
+     end;
+    hence thesis;
+   end;
+  A28: for n holds P[n] from Ind(A6,A8);
+  let A; card dom A <= card dom A;
+  hence Prop[A] by A28;
+ end;
+
+theorem
+  for A being Element of MP-WFF holds
+                A = VERUM or A is atomic MP-wff or
+                A is negative MP-wff or A is necessitive MP-wff or
+                A is conjunctive MP-wff
+ proof
+ defpred Prop[Element of MP-WFF] means $1 = VERUM or $1 is atomic MP-wff or
+                $1 is negative MP-wff or $1 is necessitive MP-wff or
+                $1 is conjunctive MP-wff;
+  A1: Prop[VERUM];
+  A2: for p being MP-variable holds Prop[@p] by Def17;
+  A3: for A being Element of MP-WFF st Prop[A] holds Prop['not' A] by Def18;
+  A4: for A being Element of MP-WFF st Prop[A] holds Prop[(#) A] by Def19;
+  A5: for A,B being Element of MP-WFF st Prop[A] & Prop[B] holds Prop[A '&' B]
+   by Def20;
+   thus for A be Element of MP-WFF holds Prop[A]
+    from MP_Ind(A1,A2,A3,A4,A5);
+ end;
+
+
+theorem Th48:
+ A = VERUM or (ex p st A = @p) or (ex B st A = 'not' B) or (ex B st A = (#)
+B) or
+ (ex B,C st A = B '&' C)
+proof
+A1:  card dom A = 0 or card dom A = 1 or card dom A >= 2 by CQC_THE1:3;
+     now per cases by A1,CARD_2:59;
+    suppose card dom A = 1; hence thesis by Th42;
+    suppose card dom A >= 2; hence thesis by Th43;
+   end;
+ hence thesis;
+end;
+
+theorem Th49:
+@p <> 'not' A & @p <> (#)A & @p <> A '&' B
+ proof
+  set e0 = elementary_tree 0;
+  set e1 = elementary_tree 1;
+  set e2 = elementary_tree 2;
+    @p = e0 --> p by Def15;
+  then A1: dom @p = e0 by FUNCOP_1:19;
+  A2: <*0*> in e1 by Th9,TARSKI:def 2;
+  A3: dom (e1 --> [1,0]) = e1 & dom (e1 --> [1,1]) = e1 by FUNCOP_1:19;
+    'not' A = (e1 --> [1,0]) with-replacement (<*0*>,A) by Def9;
+  then dom ('not'
+A) = e1 with-replacement (<*0*>,dom A) by A2,A3,TREES_2:def 12;
+  then A4: <*0*> in dom ('not' A) by A2,TREES_1:def 12;
+  thus @p <> 'not' A
+   proof
+    assume not thesis;
+    then <*0*> = {} by A1,A4,TARSKI:def 1,TREES_1:56;
+    hence contradiction by TREES_1:4;
+   end;
+    (#)A = (e1 --> [1,1]) with-replacement (<*0*>,A) by Def10;
+  then dom ((#)A) = e1 with-replacement (<*0*>,dom A) by A2,A3,TREES_2:def 12;
+  then A5: <*0*> in dom ((#)A) by A2,TREES_1:def 12;
+  thus @p <> (#)A
+   proof
+    assume not thesis;
+    then <*0*> = {} by A1,A5,TARSKI:def 1,TREES_1:56;
+    hence contradiction by TREES_1:4;
+   end;
+  set y = (e2-->[2,0]) with-replacement (<*0*>,A);
+  A6: A '&' B = y with-replacement (<*1*>,B) by Def11;
+  A7: <*0*> in e2 & <*1*> in e2 by TREES_1:55;
+  A8: dom (e2 --> [2,0]) = e2 by FUNCOP_1:19;
+  then A9: dom y = dom(e2-->[2,0]) with-replacement (<*0*>,dom A)
+    by A7,TREES_2:def 12;
+    not <*0*> is_a_proper_prefix_of <*1*> by Th7;
+  then A10: <*1*> in dom y by A7,A8,A9,TREES_1:def 12;
+  then dom (A '&' B) = dom y with-replacement (<*1*>,dom B)
+    by A6,TREES_2:def 12;
+  then A11: <*1*> in dom (A '&' B) by A10,TREES_1:def 12;
+  thus @p <> A '&' B
+   proof
+    assume not thesis;
+    then <*1*> = {} by A1,A11,TARSKI:def 1,TREES_1:56;
+    hence contradiction by TREES_1:4;
+   end;
+ end;
+
+theorem Th50:
+'not' A <> (#)B & 'not' A <> B '&' C
+ proof
+  set e1 = elementary_tree 1;
+  set e2 = elementary_tree 2;
+  set E = e1 --> [1,0];
+  set F = e1 --> [1,1];
+  A1: <*0*> in e1 by Th9,TARSKI:def 2;
+  A2: dom E = e1 & dom F = e1 by FUNCOP_1:19;
+  A3: <*0*> in dom E & <*0*> in dom F by A1,FUNCOP_1:19;
+  A4: 'not' A = E with-replacement (<*0*>,A) by Def9;
+  A5: (#)B = F with-replacement (<*0*>,B) by Def10;
+  A6: dom 'not'
+A = dom E with-replacement (<*0*>,dom A) by A3,A4,TREES_2:def 12;
+  A7: dom (#)B = dom F with-replacement (<*0*>,dom B) by A3,A5,TREES_2:def 12;
+  A8: {} in dom 'not' A & {} in dom (#)B by TREES_1:47;
+  reconsider e = {} as Element of dom 'not' A by TREES_1:47;
+A9:   now given u such that
+    A10: u in dom A & e = <*0*>^u & 'not' A.e = A.u;
+      <*0*> = e by A10,FINSEQ_1:48;
+    hence contradiction by TREES_1:4;
+   end;
+  A11: e in e1 by TREES_1:47;
+  then A12: E.e = [1,0] by FUNCOP_1:13;
+     now given u such that
+    A13: u in dom B & e = <*0*>^u & ((#)B).e = B.u;
+      <*0*> = e by A13,FINSEQ_1:48;
+    hence contradiction by TREES_1:4;
+   end;
+  then A14: not <*0*> is_a_prefix_of e & ((#)
+B).e = F.e by A3,A5,A7,A8,TREES_2:def 12;
+   F.e = [1,1] & [1,0] <> [1,1] by A11,FUNCOP_1:13,ZFMISC_1:33;
+  hence 'not' A <> (#)B by A3,A4,A6,A9,A12,A14,TREES_2:def 12;
+  set y = (e2-->[2,0]) with-replacement (<*0*>,B);
+  A15: B '&' C = y with-replacement (<*1*>,C) by Def11;
+  A16: <*0*> in e2 & <*1*> in e2 by TREES_1:55;
+  A17: dom (e2 --> [2,0]) = e2 by FUNCOP_1:19;
+  then A18: dom y = dom(e2-->[2,0]) with-replacement (<*0*>,dom B)
+    by A16,TREES_2:def 12;
+    not <*0*> is_a_proper_prefix_of <*1*> by Th7;
+  then A19: <*1*> in dom y by A16,A17,A18,TREES_1:def 12;
+  then dom (B '&' C) = dom y with-replacement (<*1*>,dom C)
+    by A15,TREES_2:def 12;
+  then A20: <*1*> in dom (B '&' C) by A19,TREES_1:def 12;
+  A21: now
+    assume <*1*> in dom E;
+    then <*1*> = {} or <*1*> = <*0*> by A2,Th9,TARSKI:def 2;
+    hence contradiction by TREES_1:4,16;
+   end;
+  assume not thesis;
+   then ex s st s in dom A & <*1*> = <*0*>^s by A3,A6,A20,A21,TREES_1:def 12;
+  then <*0*> is_a_prefix_of <*1*> by TREES_1:8; hence contradiction by TREES_1:
+16;
+ end;
+
+theorem Th51:
+(#)A <> B '&' C
+ proof
+  set e1 = elementary_tree 1;
+  set e2 = elementary_tree 2;
+  set F = e1 --> [1,1];
+  A1: <*0*> in e1 by Th9,TARSKI:def 2;
+  A2: dom F = e1 by FUNCOP_1:19;
+  A3: <*0*> in dom F by A1,FUNCOP_1:19;
+    (#)A = F with-replacement (<*0*>,A) by Def10;
+  then A4: dom (#)A = dom F with-replacement (<*0*>,dom A)
+    by A3,TREES_2:def 12;
+  set y = (e2-->[2,0]) with-replacement (<*0*>,B);
+  A5: B '&' C = y with-replacement (<*1*>,C) by Def11;
+  A6: <*0*> in e2 & <*1*> in e2 by TREES_1:55;
+  A7: dom (e2 --> [2,0]) = e2 by FUNCOP_1:19;
+  then A8: dom y = dom(e2-->[2,0]) with-replacement (<*0*>,dom B)
+    by A6,TREES_2:def 12;
+    not <*0*> is_a_proper_prefix_of <*1*> by Th7;
+  then A9: <*1*> in dom y by A6,A7,A8,TREES_1:def 12;
+  then dom (B '&' C) = dom y with-replacement (<*1*>,dom C)
+    by A5,TREES_2:def 12;
+  then A10: <*1*> in dom (B '&' C) by A9,TREES_1:def 12;
+  A11: now
+    assume <*1*> in dom F;
+    then <*1*> = {} or <*1*> = <*0*> by A2,Th9,TARSKI:def 2;
+    hence contradiction by TREES_1:4,16;
+   end;
+  assume not thesis;
+   then ex s st s in dom A & <*1*> = <*0*>^s by A3,A4,A10,A11,TREES_1:def 12;
+  then <*0*> is_a_prefix_of <*1*> by TREES_1:8; hence contradiction by TREES_1:
+16;
+ end;
+
+Lm4:
+VERUM <> 'not' A & VERUM <> (#)A & VERUM <> A '&' B
+ proof
+  set e1 = elementary_tree 1;
+  set e2 = elementary_tree 2;
+  A1: dom VERUM = elementary_tree 0 by Def16,FUNCOP_1:19;
+  set E = e1 --> [1,0];
+  set F = e1 --> [1,1];
+  A2: <*0*> in e1 by Th9,TARSKI:def 2;
+  A3: dom E = e1 & dom F = e1 by FUNCOP_1:19;
+  A4: <*0*> in dom E & <*0*> in dom F by A2,FUNCOP_1:19;
+  A5: 'not' A = E with-replacement (<*0*>,A) by Def9;
+  A6: (#)A = F with-replacement (<*0*>,A) by Def10;
+  A7: dom 'not' A = dom E with-replacement (<*0*>,dom A)
+    by A4,A5,TREES_2:def 12;
+  A8: dom (#)A = dom F with-replacement (<*0*>,dom A) by A4,A6,TREES_2:def 12;
+  A9: <*0*> in dom ('not' A) by A2,A3,A7,TREES_1:def 12;
+  A10: <*0*> in dom ((#)A) by A2,A3,A8,TREES_1:def 12;
+  thus VERUM <> 'not' A
+   proof
+    assume not thesis;
+    then <*0*> = {} by A1,A9,TARSKI:def 1,TREES_1:56;
+    hence contradiction by TREES_1:4;
+   end;
+  thus VERUM <> (#)A
+   proof
+    assume not thesis;
+    then <*0*> = {} by A1,A10,TARSKI:def 1,TREES_1:56;
+    hence contradiction by TREES_1:4;
+   end;
+  set y = (e2-->[2,0]) with-replacement (<*0*>,A);
+  A11: A '&' B = y with-replacement (<*1*>,B) by Def11;
+  A12: <*0*> in e2 & <*1*> in e2 by TREES_1:55;
+  A13: dom (e2 --> [2,0]) = e2 by FUNCOP_1:19;
+  then A14: dom y = dom( e2-->[2,0]) with-replacement (<*0*>,dom A)
+    by A12,TREES_2:def 12;
+    not <*0*> is_a_proper_prefix_of <*1*> by Th7;
+  then A15: <*1*> in dom y by A12,A13,A14,TREES_1:def 12;
+  then dom (A '&' B) = dom y with-replacement (<*1*>,dom B)
+    by A11,TREES_2:def 12;
+  then A16: <*1*> in dom (A '&' B) by A15,TREES_1:def 12;
+  assume not thesis;
+  then <*1*> = {} by A1,A16,TARSKI:def 1,TREES_1:56;
+  hence contradiction by TREES_1:4;
+ end;
+
+Lm5: [0,0] is MP-conective
+proof
+   0 in {0,1,2} & 0 in NAT by ENUMSET1:14;
+ hence thesis by Def4,ZFMISC_1:106;
+end;
+
+Lm6:
+VERUM <> @p
+ proof
+    @p = elementary_tree 0 --> p by Def15;
+  then A1: rng @p = {p} by FUNCOP_1:14;
+  A2: rng VERUM = {[0,0]} by Def16,FUNCOP_1:14;
+  assume not thesis;
+  then [0,0] in {p} by A1,A2,TARSKI:def 1;
+  hence contradiction by Lm5,Th31,XBOOLE_0:3;
+ end;
+
+theorem
+  VERUM <> @p & VERUM <> 'not' A & VERUM <> (#)A & VERUM <> A '&' B by Lm4,Lm6;
+
+scheme MP_Func_Ex{ D() -> non empty set,
+                   d() -> Element of D(),
+                   F(Element of MP-variables) -> Element of D(),
+                   N,H(Element of D()) -> Element of D(),
+                   C((Element of D()),Element of D()) -> Element of D() }:
+ ex f being Function of MP-WFF, D() st
+    f.VERUM = d() &
+    (for p being MP-variable holds f.@p = F(p)) &
+    (for A being Element of MP-WFF holds f.('not' A) = N(f.A)) &
+    (for A being Element of MP-WFF holds f.((#)A) = H(f.A)) &
+    (for A,B being Element of MP-WFF holds f.(A '&' B) = C(f.A,f.B))
+proof
+ defpred
+ Pfgp[(Element of D()),(Function of MP-WFF,D()),Element of MP-WFF] means
+      ($3 = VERUM implies $1 = d()) &
+      (for p st $3 = @p holds $1 = F(p)) &
+      (for A st $3 = 'not' A holds $1 = N($2.A)) &
+      (for A st $3 = (#)A holds $1 = H($2.A)) &
+      (for A,B st $3 = A '&' B holds $1 = C($2.A,$2.B));
+ defpred Pfn[(Function of MP-WFF, D()), Nat] means
+      for A st card dom A <= $2 holds
+      (A = VERUM implies $1.A = d()) &
+      (for p st A = @p holds $1.A = F(p)) &
+      (for B st A = 'not' B holds $1.A = N($1.B)) &
+      (for B st A = (#)B holds $1.A = H($1.B)) &
+      (for B,C st A = B '&' C holds $1.A = C($1.B,$1.C));
+   defpred P[Nat] means ex F be Function of MP-WFF,D() st Pfn[F,$1];
+  A1: P[0]
+   proof consider F be Function of MP-WFF,D();
+    take F; let A such that A2: card dom A <= 0;
+     card dom A = 0 by A2,NAT_1:18; hence thesis by CARD_2:59;
+   end;
+  A3: for k st P[k] holds P[k+1]
+   proof let k; given F be Function of MP-WFF,D() such that
+    A4: Pfn[F,k];
+    defpred Q[Element of MP-WFF,Element of D()] means
+    (card dom $1 <> k+1 implies $2 = F.$1) &
+           (card dom $1 = k+1 implies Pfgp[$2, F, $1]);
+ A5:  for x being Element of MP-WFF ex y being Element of D() st Q[x,y]
+ proof let A be Element of MP-WFF;
+        now per cases by Th48;
+      case card dom A <> k+1;
+       take y=F.A;
+      case A6: card dom A = k+1 & A = VERUM;
+       take y = d();
+       thus Pfgp[y,F,A] by A6,Lm4,Lm6;
+      case card dom A = k + 1 & ex p st A = @p; then consider p such that
+       A7: A = @p;
+       take y = F(p);
+       thus Pfgp[y,F,A] by A7,Lm6,Th37,Th49;
+      case card dom A = k + 1 & ex B st A = 'not' B; then consider B such that
+       A8: A = 'not' B;
+       take y = N(F.B);
+       thus Pfgp[y,F,A] by A8,Lm4,Th38,Th49,Th50;
+      case card dom A = k + 1 & ex B st A = (#)B; then consider B such that
+       A9: A = (#)B;
+       take y = H(F.B);
+       thus Pfgp[y,F,A] by A9,Lm4,Th39,Th49,Th50,Th51;
+      case card dom A = k + 1 & ex B,C st A = B '&' C;
+      then consider B,C such that A10: A = B '&' C;
+       take y = C(F.B,F.C);
+         now
+          now let B1,C1; assume A = B1 '&' C1; then B=B1 & C=C1 by A10,Th40;
+         hence y=C(F.B1,F.C1);
+        end;
+       hence Pfgp[y,F,A] by A10,Lm4,Th49,Th50,Th51;
+       end;
+       hence Pfgp[y,F,A];
+      end;
+     hence ex y be Element of D() st
+                 (card dom A <> k +1 implies y = F.A) &
+                 (card dom A = k + 1 implies Pfgp[y,F,A]);
+    end;
+     consider G being Function of MP-WFF, D() such that
+     A11: for p being Element of MP-WFF holds Q[p,G.p] from FuncExD(A5);
+    take H = G;
+    thus Pfn[H, k+1]
+     proof
+      let A be Element of MP-WFF; set p = card dom A; assume
+      A12: p <= k+1;
+      thus A = VERUM implies H.A = d()
+        proof
+         per cases;
+          suppose A13: p <> k+1; then A14: p <= k by A12,NAT_1:26;
+             H.A = F.A by A11,A13;
+           hence thesis by A4,A14;
+          suppose p = k+1;
+           hence thesis by A11;
+        end;
+     thus for p st A = @p holds H.A = F(p)
+       proof let q such that A15: A = @q;
+         per cases;
+          suppose A16: p <> k+1; then A17: p <= k by A12,NAT_1:26;
+                  H.A = F.A by A11,A16;
+           hence thesis by A4,A15,A17;
+          suppose p = k+1;
+           hence thesis by A11,A15;
+         end;
+     thus for B st A = 'not' B holds H.A = N(H.B)
+        proof let B; assume A18: A = 'not' B;
+          then card dom B <> k+1 by A12,Th44;
+        then A19:  H.B = F.B by A11;
+         per cases;
+          suppose A20: p <> k+1; then A21: p <= k by A12,NAT_1:26;
+              H.A = F.A by A11,A20;
+           hence thesis by A4,A18,A19,A21;
+          suppose p = k+1;
+           hence thesis by A11,A18,A19;
+        end;
+      thus for B st A = (#)B holds H.A = H(H.B)
+        proof let B; assume A22: A = (#)B;
+          then card dom B <> k+1 by A12,Th45;
+        then A23:  H.B = F.B by A11;
+         per cases;
+          suppose A24: p <> k+1; then A25: p <= k by A12,NAT_1:26;
+              H.A = F.A by A11,A24;
+           hence thesis by A4,A22,A23,A25;
+          suppose p = k+1;
+           hence thesis by A11,A22,A23;
+        end;
+      thus for B,C st A = B '&' C holds H.A = C(H.B,H.C)
+        proof let B,C;
+         assume A26: A = B '&' C;
+          then (card dom B) <> k+1 by A12,Th46;
+        then A27:  H.B = F.B by A11;
+            (card dom C) <> k+1 by A12,A26,Th46;
+        then A28:  H.C = F.C by A11;
+         per cases;
+          suppose A29: p <> k+1; then A30: p <= k by A12,NAT_1:26;
+                  H.A = F.A by A11,A29;
+           hence thesis by A4,A26,A27,A28,A30;
+          suppose p = k+1;
+           hence thesis by A11,A26,A27,A28;
+        end;
+     end;
+   end;
+
+  A31: for n holds P[n] from Ind(A1,A3);
+ defpred Qfn[set, set] means
+       ex A being Element of MP-WFF st A = $1 &
+       for g being Function of MP-WFF, D() st Pfn[g, card dom A] holds
+                $2 = g.A;
+  A32: for x, y1, y2 st x in MP-WFF & Qfn[x, y1] & Qfn[x, y2] holds y1 = y2
+   proof let x, y1, y2 such that
+      x in MP-WFF and
+   A33: Qfn[x, y1] and
+   A34: Qfn[x, y2];
+       consider p being Element of MP-WFF such that
+   A35: p = x and
+   A36: for g being Function of MP-WFF, D() st Pfn[g, card dom p] holds y1 = g.
+p
+                                                by A33;
+       consider F being Function of MP-WFF, D() such that
+   A37: Pfn[F, card dom p] by A31;
+     thus y1 = F.p by A36,A37
+            .= y2 by A34,A35,A37;
+   end;
+  A38: for x st x in MP-WFF ex y st Qfn[x, y]
+   proof let x; assume
+      x in MP-WFF;
+       then reconsider x' = x as Element of MP-WFF;
+       consider F being Function of MP-WFF, D() such that
+   A39: Pfn[F, card dom x'] by A31;
+       take F.x, x';
+       thus x = x';
+       let G be Function of MP-WFF, D(); assume
+   A40: Pfn[G, card dom x'];
+       defpred Prop[Element of MP-WFF] means
+       card dom $1 <= card dom x' implies F.$1 = G.$1;
+   A41: Prop[VERUM]
+       proof assume
+          A42: card dom VERUM <= card dom x';
+          hence F.VERUM = d() by A39
+                      .= G.VERUM by A40,A42;
+         end;
+   A43: for p holds Prop[@p]
+         proof let p; assume
+         A44: card dom @p <= card dom x';
+           hence F.@p = F(p) by A39
+                   .= G.@p by A40,A44;
+         end;
+   A45: for A be Element of MP-WFF st Prop[A] holds Prop['not' A]
+       proof let A such that A46: Prop[A]; assume
+          A47: card dom 'not' A <= card dom x';
+            card dom A < card dom 'not' A by Th44;
+          hence F.('not' A) = N(G.A) by A39,A46,A47,AXIOMS:22
+                  .= G.('not' A) by A40,A47;
+         end;
+   A48: for A be Element of MP-WFF st Prop[A] holds Prop[(#) A]
+       proof let A such that A49: Prop[A]; assume
+          A50: card dom (#)A <= card dom x';
+            card dom A < card dom (#)A by Th45;
+          hence F.((#)A) = H(G.A) by A39,A49,A50,AXIOMS:22
+                  .= G.((#)A) by A40,A50;
+         end;
+   A51: for A,B be Element of MP-WFF st Prop[A] & Prop[B] holds Prop[A '&' B]
+      proof let A,B; assume that
+         A52: Prop[A] and
+         A53: Prop[B] and
+         A54: card dom A '&' B <= card dom x';
+A55:          card dom A < card dom A '&' B by Th46;
+            card dom B < card dom A '&' B by Th46;
+          hence F.(A '&' B) = C(G.A, G.B) by A39,A52,A53,A54,A55,AXIOMS:22
+                  .= G.(A '&' B) by A40,A54;
+         end;
+      for p be Element of MP-WFF holds Prop[p]
+       from MP_Ind(A41,A43,A45,A48,A51);
+    hence F.x = G.x';
+   end;
+  consider F being Function such that
+  A56: dom F = MP-WFF and
+  A57: for x st x in MP-WFF holds Qfn[x, F.x] from FuncEx(A32,A38);
+    F is Function of MP-WFF, D()
+ proof
+   rng F c= D()
+   proof
+    let y; assume y in rng F;
+    then consider x being set such that
+  A58: x in MP-WFF and
+  A59: y = F.x by A56,FUNCT_1:def 5;
+      consider p being Element of MP-WFF such that p = x and
+  A60: for g being Function of MP-WFF, D() st Pfn[g, card dom p] holds y = g.p
+                                          by A57,A58,A59;
+    consider G being Function of MP-WFF, D() such that
+  A61: Pfn[G, card dom p] by A31;
+        y = G.p by A60,A61;
+    hence y in D();
+  end;
+  hence thesis by A56,FUNCT_2:def 1,RELSET_1:11;
+ end;
+  then reconsider F as Function of MP-WFF, D();
+  take F;
+  consider A such that
+  A62: A = VERUM & for g being Function of MP-WFF,D() st Pfn[g,card dom A]
+   holds F.VERUM = g.A by A57;
+  consider G being Function of MP-WFF,D() such that
+  A63: Pfn[G,card dom A] by A31;
+     F.VERUM = G.VERUM by A62,A63;
+  hence F.VERUM = d() by A62,A63;
+  thus for p being MP-variable holds F.@p = F(p)
+   proof let p be MP-variable;
+    consider A such that
+    A64: A = @p & for g being Function of MP-WFF,D() st Pfn[g,card dom A]
+        holds F.@p = g.A by A57;
+    consider G being Function of MP-WFF,D() such that
+    A65: Pfn[G,card dom A] by A31;
+      F.@p = G.@p by A64,A65;
+    hence thesis by A64,A65;
+   end;
+  thus for A being Element of MP-WFF holds F.('not' A) = N(F.A)
+   proof
+    let A be Element of MP-WFF;
+    consider A1 such that
+A67: A1 = 'not' A & for g being Function of MP-WFF,D() st Pfn[g,card dom A1]
+        holds F.'not' A = g.A1 by A57;
+    consider G being Function of MP-WFF,D() such that
+    A68: Pfn[G,card dom A1] by A31;
+    A69: for k st k < card dom 'not' A holds Pfn[G,k]
+     proof
+      let k; assume A70: k < card dom 'not' A;
+      let a be Element of MP-WFF; assume card dom a <= k;
+      then card dom a <= card dom 'not' A by A70,AXIOMS:22;
+      hence thesis by A67,A68;
+     end;
+    A71: F.'not' A = G.'not' A by A67,A68;
+    set k = card dom A;
+      k < card dom 'not' A by Th44;
+    then A72: Pfn[G,k] by A69;
+       ex B st B = A &
+         for g be Function of MP-WFF,D() st Pfn[g,card dom B] holds F.A = g.B
+ by A57;
+    then F.A = G.A by A72;
+    hence thesis by A67,A68,A71;
+   end;
+  thus for A being Element of MP-WFF holds F.((#)A) = H(F.A)
+   proof
+    let A be Element of MP-WFF;
+    consider A1 such that
+    A74: A1 = (#)A & for g being Function of MP-WFF,D() st Pfn[g,card dom A1]
+        holds F.((#)A) = g.A1 by A57;
+    consider G being Function of MP-WFF,D() such that
+    A75: Pfn[G,card dom A1] by A31;
+    A76: for k st k < card dom (#)A holds Pfn[G,k]
+     proof
+      let k; assume A77: k < card dom (#)A;
+      let a be Element of MP-WFF; assume card dom a <= k;
+      then card dom a <= card dom (#)A by A77,AXIOMS:22;
+      hence thesis by A74,A75;
+     end;
+    A78: F.((#)A) = G.((#)A) by A74,A75;
+    set k = card dom A;
+      k < card dom (#)A by Th45;
+    then A79: Pfn[G,k] by A76;
+       ex B st B = A &
+         for g be Function of MP-WFF,D() st Pfn[g,card dom B] holds F.A = g.B
+ by A57;
+    then F.A = G.A by A79;
+    hence thesis by A74,A75,A78;
+   end;
+  thus for A,B being Element of MP-WFF holds F.(A '&' B) = C(F.A,F.B)
+   proof
+    let A,B be Element of MP-WFF;
+    consider A1 such that
+    A81: A1 = A '&' B &
+        for g being Function of MP-WFF,D() st Pfn[g,card dom A1] holds
+        F.(A '&' B) = g.A1 by A57;
+    consider G being Function of MP-WFF,D() such that
+    A82: Pfn[G,card dom A1] by A31;
+    A83: for k st k < card dom A '&' B holds Pfn[G,k]
+     proof
+      let k; assume A84: k < card dom A '&' B;
+      let a be Element of MP-WFF; assume card dom a <= k;
+      then card dom a <= card dom A '&' B by A84,AXIOMS:22;
+      hence thesis by A81,A82;
+     end;
+    A85: F.(A '&' B) = G.(A '&' B) by A81,A82;
+    set k1 = card dom A;
+    set k2 = card dom B;
+      k1 < card dom A '&' B by Th46;
+    then A86: Pfn[G,k1] by A83;
+       ex B1 st B1 = A &
+        for g be Function of MP-WFF,D() st Pfn[g,card dom B1] holds F.A = g.B1
+ by A57;
+    then A87: F.A = G.A by A86;
+      k2 < card dom A '&' B by Th46;
+    then A88: Pfn[G,k2] by A83;
+       ex C st C = B &
+         for g be Function of MP-WFF,D() st Pfn[g,card dom C] holds F.B = g.C
+ by A57;
+    then F.B = G.B by A88;
+    hence thesis by A81,A82,A85,A87;
+   end;
+end;

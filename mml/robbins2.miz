@@ -1,0 +1,1262 @@
+:: On the Two Short Axiomatizations of Ortholattices
+::  by Wioletta Truszkowska and Adam Grabowski
+::
+:: Received June 28, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary LATTICES, SUBSET_1, ARYTM_3, ROBBINS1, ROBBINS2;
+ notation STRUCT_0, LATTICES, ROBBINS1;
+ constructors REALSET1, ROBBINS1;
+ clusters ROBBINS1;
+ theorems ROBBINS1, LATTICES, REALSET1;
+
+begin :: One Axiom for Boolean Algebra
+
+definition let L be non empty ComplLattStr;
+  attr L is satisfying_DN_1 means :Def1:
+    for x, y, z, u being Element of L holds
+      (((x + y)` + z)` + (x + (z` + (z + u)`)`)`)` = z;
+end;
+
+definition
+  cluster TrivComplLat -> satisfying_DN_1;
+  coherence
+  proof
+    let x, y, z, u be Element of TrivComplLat;
+    thus thesis by REALSET1:def 20;
+  end;
+  cluster TrivOrtLat -> satisfying_DN_1;
+  coherence
+  proof
+    let x, y, z, u be Element of TrivOrtLat;
+    thus thesis by REALSET1:def 20;
+  end;
+end;
+
+definition
+  cluster join-commutative join-associative satisfying_DN_1
+    (non empty ComplLattStr);
+  existence
+  proof
+    take TrivComplLat;
+    thus thesis;
+  end;
+end;
+
+ reserve L for satisfying_DN_1 (non empty ComplLattStr);
+ reserve x, y, z, u, v for Element of L;
+
+theorem Th1: :: A61
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z, u, v being Element of L holds
+    ((x + y)` + (((z + u)` + x)` + (y` + (y + v)`)`)`)` = y
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z, u, v be Element of L;
+      set X = ((z + u)` + x)`, Y = (z + (x` + (x + u)`)`)`;
+      set Z = y, U = v;
+      (((X + Y)` + Z)` + (X + (Z` + (Z + U)`)`)`)` = Z by Def1;
+      hence thesis by Def1;
+    end;
+
+theorem Th2: :: A62
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z, u being Element of L holds
+    ((x + y)` + ((z + x)` + (y` + (y + u)`)`)`)` = y
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z, u be Element of L;
+      consider v being Element of L;
+      ((x + z)` + (((y + u)` + x)` + (z` + (z + v)`)`)`)` = z by Th1;
+      hence thesis by Th1;
+    end;
+
+theorem Th3: :: A63
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x being Element of L holds
+    ((x + x`)` + x)` = x`
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x be Element of L;
+      consider y, u being Element of L;
+      set V = (x + u)`;
+      ((x + x`)` + (((x`` + y)` + x)` + (x`` + (x` + V)`)`)`)` = x` by Th1;
+      hence thesis by Def1;
+    end;
+
+theorem Th4: :: A64
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z, u being Element of L holds
+    ((x + y)` + ((z + x)` + (((y + y`)` + y)` + (y + u)`)`)`)` = y
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z, u be Element of L;
+      ((y + y`)` + y)` = y` by Th3;
+      hence thesis by Th2;
+    end;
+
+theorem Th5: :: A65
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    ((x + y)` + ((z + x)` + y)`)` = y
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      consider u being Element of L;
+      set U = (y` + (y + u)`)`;
+      ((x + y)` + ((z + x)` + (((y + y`)` + y)` + (y + U)`)`)`)` = y by Th4;
+      hence thesis by Def1;
+    end;
+
+theorem Th6: :: A66
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    ((x + y)` + (x` + y)`)` = y
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y be Element of L;
+      set Z = (x + x`)`;
+      ((x + y)` + ((Z + x)` + y)`)` = y by Th5;
+      hence thesis by Th3;
+    end;
+
+theorem Th7: :: A67
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    (((x + y)` + x)` + (x + y)`)` = x
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y be Element of L;
+      set X = (x + y)`;
+      ((X + x)` + ((x + X)` + (((x + x`)` + x)` + (x + y)`)`)`)` = x by Th4;
+      hence thesis by Th5;
+    end;
+
+theorem Th8: :: A68
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    (x + ((x + y)` + x)`)` = (x + y)`
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y be Element of L;
+      set X = (x + y)`, Y = x;
+      (((X + Y)` + X)` + (X + Y)`)` = X by Th7;
+      hence thesis by Th7;
+    end;
+
+theorem Th9: :: A69
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    (((x + y)` + z)` + (x + z)`)` = z
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      set X = (x + y)`, Y = z, Z = ((x + y)` + x)`;
+      ((X + Y)` + ((Z + X)` + Y)`)` = Y by Th5;
+      hence thesis by Th7;
+    end;
+
+theorem Th10: :: A70
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    (x + ((y + z)` + (y + x)`)`)` = (y + x)`
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      set Z = (y + x)`, X = (y + z)`, Y = x;
+      (((X + Y)` + Z)` + (X + Z)`)` = Z by Th9;
+      hence thesis by Th9;
+    end;
+
+theorem Th11: :: A71
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    ((((x + y)` + z)` + (x` + y)`)` + y)` = (x` + y)`
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      set X = (x + y)`, Z = (x` + y)`, Y = z;
+      (((X + Y)` + Z)` + (X + Z)`)` = Z by Th9;
+      hence thesis by Th6;
+    end;
+
+theorem Th12: :: A72
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    (x + ((y + z)` + (z + x)`)`)` = (z + x)`
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      set Y = z, Z = ((y + x)` + (y + z)`)`;
+      (x + ((Y + Z)` + (Y + x)`)`)` = (Y + x)` by Th10;
+      hence thesis by Th10;
+    end;
+
+theorem Th13: :: A73
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z, u being Element of L holds
+    ((x + y)` + ((z + x)` + (y` + (u + y)`)`)`)` = y
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z, u be Element of L;
+      set U = ((u + z)` + (u + y)`)`;
+      ((x + y)` + ((z + x)` + (y` + (y + U)`)`)`)` = y by Th2;
+      hence thesis by Th10;
+    end;
+
+theorem Th14: :: A74
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    (x + y)` = (y + x)`
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y be Element of L;
+      set Z = y, X = x, Y = (y + x)`;
+      ((Y + Z)` + (Z + X)`)` = y by Th7;
+      hence thesis by Th12;
+    end;
+
+theorem Th15: :: A75
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    (((x + y)` + (y + z)`)` + z)` = (y + z)`
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      set Y = ((x + y)` + (y + z)`)`;
+      (z + Y)` = (Y + z)` by Th14;
+      hence thesis by Th12;
+    end;
+
+theorem Th16: :: A76
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    ((x + ((x + y)` + z)`)` + z)` = ((x + y)` + z)`
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      set X = ((x + y)` + x)`, Y = (x + y)`;
+      (X + Y)` = x by Th7;
+      hence thesis by Th15;
+    end;
+
+theorem Th17: :: A77
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    (((x + y)` + x)` + y)` = (y + y)`
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y be Element of L;
+      set X = (x + y)`;
+      (X + ((X + x)` + y)`)` = y by Th5;
+      hence thesis by Th16;
+    end;
+
+theorem Th18: :: A78
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    (x` + (y + x)`)` = x
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y be Element of L;
+      set X = (y + x)`;
+      (X + ((x` + y)` + (x` + X)`)`)` = x by Th13;
+      hence thesis by Th10;
+    end;
+
+theorem Th19: :: A79
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    ((x + y)` + y`)` = y
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y be Element of L;
+      (y` + (x + y)`)` = y by Th18;
+      hence thesis by Th14;
+    end;
+
+theorem Th20: :: A80
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    (x + (y + x`)`)` = x`
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y be Element of L;
+      set Z = x`, X = y, Y = x;
+      (((X + Y)` + Z)` + (X + Z)`)` = Z by Th9;
+      hence thesis by Th19;
+    end;
+
+theorem Th21: :: A81
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x being Element of L holds
+    (x + x)` = x`
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x be Element of L;
+      consider y being Element of L;
+      set Y = (y + x)`;
+      (x + (Y + x`)`)` = x` by Th20;
+      hence thesis by Th19;
+    end;
+
+theorem Th22: :: A83
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    (((x + y)` + x)` + y)` = y`
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y be Element of L;
+      y` = (y + y)` by Th21
+        .= (((x + y)` + x)` + y)` by Th17;
+      hence thesis;
+    end;
+
+theorem Th23: :: A85
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x being Element of L holds
+    x`` = x
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x be Element of L;
+      x`` = (((x + x`)` + x)` + x`)` by Th22
+         .= x by Th19;
+      hence thesis;
+    end;
+
+theorem Th24: :: A86
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    ((x + y)` + x)`+ y = y``
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y be Element of L;
+      (((x + y)` + x)` + y)`` = y`` by Th22;
+      hence thesis by Th23;
+    end;
+
+theorem Th25: :: A87
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    (x + y)`` = y + x
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y be Element of L;
+      (x + y)`` = (y + x)`` by Th14
+               .= y + x by Th23;
+      hence thesis;
+    end;
+
+theorem Th26: :: A88
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    x + ((y + z)` + (y + x)`)` = (y + x )``
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      (x + ((y + z)` + (y + x)`)`)`` = (y + x)`` by Th10;
+      hence thesis by Th23;
+    end;
+
+theorem Th27: :: A89
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    x + y = y + x
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y be Element of L;
+      x + y = (x + y)`` by Th23
+           .= y + x by Th25;
+      hence thesis;
+    end;
+
+Lm1:
+  for L being satisfying_DN_1 (non empty ComplLattStr) holds
+    L is join-commutative
+  proof
+    let L;
+    for x, y holds x + y = y + x by Th27;
+    hence thesis by LATTICES:def 4;
+  end;
+
+definition
+  cluster satisfying_DN_1 -> join-commutative (non empty ComplLattStr);
+  coherence by Lm1;
+end;
+
+theorem Th28: :: A90
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    ((x + y)` + x)` + y = y
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y be Element of L;
+      ((x + y)` + x)` + y = y`` by Th24;
+      hence thesis by Th23;
+    end;
+
+theorem :: A91
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    ((x + y)` + y)`+ x = x by Th28;
+
+theorem :: A92
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    x + ((y + x)` + y)` = x by Th28;
+
+theorem Th31: :: A93
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    (x + y`)` + (y` + y)` = (x + y`)`
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y be Element of L;
+      set X = (x + y`)`;
+      X + ((y + X)` + y)` = X by Th28;
+      hence thesis by Th20;
+    end;
+
+theorem Th32: :: A94
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    (x + y)` + (y + y`)` = (x + y)`
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y be Element of L;
+      set X = (x + y)`, Y = y`;
+      X + ((Y + X)` + Y)` = X by Th28;
+      hence thesis by Th18;
+    end;
+
+theorem :: A95
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    (x + y)` + (y` + y)` = (x + y)` by Th32;
+
+theorem Th34: :: A96
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    ((x + y`)`` + y)` = (y` + y)`
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y be Element of L;
+      set Y = y`, Z = y;
+      (((x + Y)` + (Y + Z)`)` + Z)` = (Y + Z)` by Th15;
+      hence thesis by Th31;
+    end;
+
+theorem Th35: :: A97
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    ((x + y`) + y)` = (y` + y)`
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y be Element of L;
+      ((x + y`)`` + y)` = (y` + y)` by Th34;
+      hence thesis by Th23;
+    end;
+
+theorem Th36: :: A98
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    ((((x + y`) + z)` + y)` + (y` + y)`)` = y
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      ((x + y`) + y)` = (y` + y)` by Th35;
+      hence thesis by Th9;
+    end;
+
+theorem Th37: :: A99
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    x + ((y + z)` + (y + x)`)` = y + x
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      x + ((y + z)` + (y + x)`)` = (y + x )`` by Th26;
+      hence thesis by Th23;
+    end;
+
+theorem Th38: :: A100
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    x + (y + ((z + y)` + x)`)` = (z + y)` + x
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      set Y = (z + y)`, Z = y`;
+      x + ((Y + Z)` + (Y + x)`)` = Y + x by Th37;
+      hence thesis by Th19;
+    end;
+
+theorem :: A101
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    x + ((y + x)` + (y + z)`)` = y + x by Th37;
+
+theorem Th40: :: A102
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    ((x + y)` + ((x + y)` + (x + z)`)`)` + y = y
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      set Y = ((x + y)` + (x + z)`)`;
+      ((y + Y)` + Y)`+ y = y by Th28;
+      hence thesis by Th37;
+    end;
+
+theorem Th41: :: A103
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    (((x + y`) + z)` + y)`` = y
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      (((x + y`) + z)` + y)` + (y` + y)` = (((x + y`) + z)` + y)` by Th32;
+      hence thesis by Th36;
+    end;
+
+theorem Th42: :: A104
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    x + ((y + x`) + z)` = x
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      (((y + x`) + z)` + x)`` = x by Th41;
+      hence thesis by Th25;
+    end;
+
+theorem Th43: :: A105
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    x` + ((y + x) + z)` = x`
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      set X = x`;
+      X + ((y + X`) + z)` = X by Th42;
+      hence thesis by Th23;
+    end;
+
+theorem Th44: :: A107
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    (x + y)` + x = x + y`
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y be Element of L;
+      set Z = x;
+      x + (y + ((Z + y)` + x)`)` = (Z + y)` + x by Th38;
+      hence thesis by Th28;
+    end;
+
+theorem Th45: :: A108
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y being Element of L holds
+    (x + (x + y`)`)` = (x + y)`
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y be Element of L;
+      (x + ((x + y)` + x)`)` = (x + y)` by Th8;
+      hence thesis by Th44;
+    end;
+
+theorem Th46: :: A109
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    ((x + y)` + (x + z))` + y = y
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      ((x + y)` + ((x + y)` + (x + z)`)`)` = ((x + y)` + (x + z))` by Th45;
+      hence thesis by Th40;
+    end;
+
+theorem Th47: :: A110
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    (((x + y)` + z)` + (x` + y)`)` + y = (x` + y)``
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      ((((x + y)` + z)` + (x` + y)`)` + y)`` = (x` + y)`` by Th11;
+      hence thesis by Th23;
+    end;
+
+theorem Th48: :: A111
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    (((x + y)` + z)` + (x` + y)`)` + y = x` + y
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      (((x + y)` + z)` + (x` + y)`)` + y = (x` + y)`` by Th47;
+      hence thesis by Th23;
+    end;
+
+theorem Th49: :: A112
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    (x` + ((y + x)`` + (y + z))`)` + (y + z) = (y + x)``+ (y + z)
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      set X = (y + x)`, Y = (y + z), Z = x;
+      (((X + Y)` + Z)` + (X` + Y)`)` + Y = X` + Y by Th48;
+      hence thesis by Th46;
+    end;
+
+theorem Th50: :: A113
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    (x` + ((y + x) + (y + z))`)` + (y + z) = (y + x)`` + (y + z)
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      (x` + ((y + x)`` + (y + z))`)` + (y + z) = (y + x)`` + (y + z) by Th49;
+      hence thesis by Th23;
+    end;
+
+theorem Th51: :: A114
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    (x` + ((y + x) + (y + z))`)` + (y + z) = (y + x) + (y + z)
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      (x` + ((y + x) + (y + z))`)` + (y + z) = (y + x)`` + (y + z) by Th50;
+      hence thesis by Th23;
+    end;
+
+theorem Th52: :: A115
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    x`` + (y + z) = (y + x) + (y + z)
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      x` + ((y + x) + (y + z))` = x` by Th43;
+      hence thesis by Th51;
+    end;
+
+theorem Th53: :: A117
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    (x + y) + (x + z) = y + (x + z)
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      set Y = x, X = y;
+      X`` + (Y + z) = (Y + X) + (Y + z) by Th52;
+      hence thesis by Th23;
+    end;
+
+theorem :: A118
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    (x + y) + (x + z) = z + (x + y) by Th53;
+
+theorem Th55: :: A119
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    x + (y + z) = z + (y + x)
+    proof
+      let L be satisfying_DN_1 (non empty ComplLattStr);
+      let x, y, z be Element of L;
+      (y + x) + (y + z) = z + (y + x) by Th53;
+      hence thesis by Th53;
+    end;
+
+theorem :: A120
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    x + (y + z) = y + (z + x) by Th55;
+
+theorem :: A121
+  for L being satisfying_DN_1 (non empty ComplLattStr),
+      x, y, z being Element of L holds
+    (x + y) + z = x + (y + z) by Th55;
+
+Lm2:
+  for L being satisfying_DN_1 (non empty ComplLattStr) holds
+    L is join-associative
+    proof
+      let L;
+      for x, y, z holds (x + y) + z = x + (y + z) by Th55;
+      hence thesis by LATTICES:def 5;
+    end;
+
+Lm3:  L is Robbins
+    proof
+      for x, y holds ((x + y)` + (x + y`)`)` = x by Th6;
+      hence L is Robbins by ROBBINS1:def 5;
+    end;
+
+definition
+  cluster satisfying_DN_1 -> join-associative (non empty ComplLattStr);
+  coherence by Lm2;
+  cluster satisfying_DN_1 -> Robbins (non empty ComplLattStr);
+  coherence by Lm3;
+end;
+
+theorem Th58:
+  for L being non empty ComplLattStr,
+      x, z being Element of L st
+    L is join-commutative join-associative Huntington holds
+      (z + x) *' (z + x`) = z
+   proof
+     let L be non empty ComplLattStr;
+     let x, z be Element of L;
+     assume L is join-commutative join-associative Huntington;
+     then reconsider L' = L as join-commutative join-associative Huntington
+       (non empty ComplLattStr);
+     reconsider z' = z, x' = x as Element of L';
+     (z' + x') *' (z' + x'`) = z' + (x' *' x'`) by ROBBINS1:32
+        .= z' + Bot L' by ROBBINS1:16
+        .= z' by ROBBINS1:14;
+     hence thesis;
+   end;
+
+theorem Th59:
+  for L being non empty ComplLattStr st
+    L is join-commutative join-associative Robbins holds
+      L is satisfying_DN_1
+  proof
+    let L be non empty ComplLattStr;
+    assume
+A1: L is join-commutative join-associative Robbins; then
+    reconsider L' = L as join-commutative join-associative Robbins
+      (non empty ComplLattStr);
+A2: L' is Huntington;
+    let x, y, z, u be Element of L;
+A3: ((x + y)` + z) *' z = (z + (x + y)`) *' z by A1,LATTICES:def 4
+       .= z *' (z + (x + y)`) by A1,ROBBINS1:8
+       .= z by A2,ROBBINS1:22;
+A4: (z + x) *' (z + x`) = z by A2,Th58;
+A5: (((x + y)` + z) *' x) + z = z + (((x + y)` + z) *' x)
+       by A1,LATTICES:def 4
+       .= (z + ((x + y)` + z)) *' (z + x) by A2,ROBBINS1:32
+       .= (((x + y)` + z) + z) *' (z + x) by A2,LATTICES:def 4
+       .= ((x + y)` + (z + z)) *' (z + x) by A2,LATTICES:def 5
+       .= ((x + y)` + z) *' (z + x) by A2,ROBBINS1:13
+       .= ((x` *' y`)`` + z) *' (z + x) by A2,ROBBINS1:18
+       .= ((x` *' y`) + z) *' (z + x) by A2,ROBBINS1:3
+       .= (z + (x` *' y`)) *' (z + x) by A2,LATTICES:def 4
+       .= ((z + x`) *' (z + y`)) *' (z + x) by A2,ROBBINS1:32
+       .= (z + x) *' ((z + x`) *' (z + y`)) by A2,ROBBINS1:8
+       .= (z + x) *' ((x` + z) *' (z + y`)) by A2,LATTICES:def 4
+       .= (z + x) *' ((x` + z) *' (y` + z)) by A2,LATTICES:def 4
+       .= (z + x) *' (x` + z) *' (y` + z) by A2,ROBBINS1:17
+       .= (z + x) *' (z + x`) *' (y` + z) by A2,LATTICES:def 4
+       .= z *' (z + y`) by A2,A4,LATTICES:def 4
+       .= z by A2,ROBBINS1:22;
+    (((x + y)` + z)` + (x + (z` + (z + u)`)`)`)` =
+      (((x + y)` + z)`` *' (x + (z` + (z + u)`)`)``)``
+        by A2,ROBBINS1:18
+      .= ((x + y)` + z)`` *' (x + (z` + (z + u)`)`)`` by A2,ROBBINS1:3
+      .= ((x + y)` + z)`` *' (x + (z` + (z + u)`)`) by A2,ROBBINS1:3
+      .= ((x + y)` + z) *' (x + (z` + (z + u)`)`) by A2,ROBBINS1:3
+      .= ((x + y)`` *' z`)` *' (x + (z` + (z + u)`)`) by A2,ROBBINS1:18
+      .= ((x + y) *' z`)` *' (x + (z` + (z + u)`)`) by A2,ROBBINS1:3
+      .= ((x + y) *' z`)` *' (x + (z`` *' (z + u)``)``)
+           by A2,ROBBINS1:18
+      .= ((x + y) *' z`)` *' (x + (z *' (z + u)``)``)
+           by A2,ROBBINS1:3
+      .= ((x + y) *' z`)` *' (x + (z *' (z + u)``)) by A2,ROBBINS1:3
+      .= ((x + y) *' z`)` *' (x + (z *' (z + u))) by A2,ROBBINS1:3
+      .= ((x + y) *' z`)` *' (x + z) by A2,ROBBINS1:22
+      .= (((x + y) *' z`)` *' x) + (((x + y) *' z`)` *' z)
+           by A2,ROBBINS1:31
+      .= (((x + y)`` *' z`)` *' x) + (((x + y) *' z`)` *' z)
+           by A2,ROBBINS1:3
+      .= (((x + y)` + z) *' x) + (((x + y) *' z`)` *' z)
+           by A2,ROBBINS1:18
+      .= (((x + y)` + z) *' x) + (((x + y)`` *' z`)` *' z)
+           by A2,ROBBINS1:3
+      .= z by A2,A3,A5,ROBBINS1:18;
+    hence thesis;
+  end;
+
+definition
+  cluster join-commutative join-associative Robbins -> satisfying_DN_1
+      (non empty ComplLattStr);
+  coherence by Th59;
+end;
+
+definition
+  cluster satisfying_DN_1 de_Morgan preOrthoLattice;
+  existence
+  proof
+    take TrivOrtLat;
+    thus thesis;
+  end;
+end;
+
+definition
+  cluster satisfying_DN_1 de_Morgan -> Boolean preOrthoLattice;
+  coherence
+  proof
+    let L be preOrthoLattice;
+    assume L is satisfying_DN_1 de_Morgan; then
+    reconsider L' = L as satisfying_DN_1 de_Morgan preOrthoLattice;
+    L' is Boolean;
+    hence thesis;
+  end;
+  cluster Boolean -> satisfying_DN_1 (well-complemented preOrthoLattice);
+  coherence
+  proof
+    let L be well-complemented preOrthoLattice;
+    assume
+A1: L is Boolean;
+    reconsider L' = L as Boolean well-complemented preOrthoLattice by A1;
+    L' is satisfying_DN_1;
+    hence thesis;
+  end;
+end;
+
+begin :: Meredith Two Axioms for Boolean Algebras
+
+definition let L be non empty ComplLattStr;
+  attr L is satisfying_MD_1 means :Def2:
+    for x, y being Element of L holds
+      (x` + y)` + x = x;
+  attr L is satisfying_MD_2 means :Def3:
+    for x, y, z being Element of L holds
+      (x` + y)` + (z + y) = y + (z + x);
+end;
+
+Lm4: now
+  let L be non empty ComplLattStr;
+  assume
+A1:  L is satisfying_MD_1 satisfying_MD_2;
+A2:  for x, y being Element of L holds
+       x` + (x` + y) = x` + y
+     proof
+       let x, y be Element of L;
+       set X = x` + y;
+       X` + x = x by A1,Def2;
+       hence thesis by A1,Def2;
+     end;
+
+A3:  for x, y, z being Element of L holds
+       ((x` + y)` + z)` + (x` + z) = z + (x` + y)
+     proof
+       let x, y, z be Element of L;
+       ((x` + y)` + z)` + (x` + z) = z + (x` + (x` + y)) by A1,Def3
+         .= z + (x` + y) by A2;
+       hence thesis;
+     end;
+
+A4: for x, y, z being Element of L holds
+       (x` + y)` + ((x` + z)` + y) = y + x
+     proof
+       let x, y, z be Element of L;
+       (x` + y)` + ((x` + z)` + y) = y + ((x` + z)` + x) by A1,Def3
+              .= y + x by A1,Def2;
+       hence thesis;
+     end;
+
+A5: for x, y, z being Element of L holds
+       (x` + ((y + x)` + z)`)` + (y + ((y + x)` + z)`) = y + x
+     proof
+       let x, y, z be Element of L;
+       set P = ((y + x)` + z)`;
+       (x` + P)` + (y + P) = P + (y + x) by A1,Def3
+                          .= y + x by A1,Def2;
+       hence thesis;
+     end;
+
+A6: for x, y being Element of L holds
+       (x` + y)` + y = y + x
+     proof
+       let x, y be Element of L;
+       set X = x` + y;
+A7:    X` + (X` + y) = y + (X` + x) by A1,Def3;
+       (x` + y)` + y = X` + (X` + y) by A2
+                    .= y + x by A1,A7,Def2;
+       hence thesis;
+     end;
+
+A8: for x, y being Element of L holds
+       x + (y + (y + x)) = y + x
+     proof
+       let x, y be Element of L;
+       set Z = y + x;
+       x + (y + (y + x)) = (Z` + x)` + (y + x) by A1,Def3
+           .= y + x by A1,Def2;
+       hence thesis;
+     end;
+
+A9: for x, y being Element of L holds
+       x + (y` + x) = y` + x
+     proof
+       let x, y be Element of L;
+       x + (y` + x) = ((y` + x)` + x)` + (y` + x) by A3
+            .= y` + x by A1,Def2;
+       hence thesis;
+     end;
+
+A10: for x being Element of L holds
+       x + x = x
+     proof
+       let x be Element of L;
+       x + x = (x` + x)` + x by A6
+            .= x by A1,Def2;
+       hence thesis;
+     end;
+
+A11: for x, y being Element of L holds
+        x + (x + y) = x + y
+      proof
+        let x, y be Element of L;
+        x + (x + y) = (y` + x)` + (x + x) by A1,Def3
+            .= (y` + x)` + x by A10
+            .= x + y by A6;
+        hence thesis;
+      end;
+
+A12: for x, y being Element of L holds
+        (x + y) + y = x + y
+      proof
+        let x, y be Element of L;
+        set Y = x + y;
+        (x + y) + y = (y` + (x + y))` + (x + y) by A6
+                   .= (y` + (x + y))` + (x + (x + y)) by A11
+                   .= Y + (x + y) by A1,Def3
+                   .= x + y by A10;
+        hence thesis;
+      end;
+
+A13:
+   for x being Element of L holds
+     x`` + x = x
+   proof
+     let x be Element of L;
+     (x` + x`)` + x = x by A1,Def2;
+     hence thesis by A10;
+   end;
+
+A14:
+   for x, y being Element of L holds
+     x + (y + x) = y + x
+   proof
+     let x, y be Element of L;
+     x + (y + x) = x + (y + (y + x)) by A11
+                .= y + x by A8;
+     hence thesis;
+   end;
+
+A15:
+   for x, y being Element of L holds
+     x + (x`` + y) = x + y
+   proof
+     let x, y be Element of L;
+     x + (x`` + y) = (y` + x)` + (x`` + x) by A1,Def3
+                  .= (y` + x)` + x by A13
+                  .= x + y by A6;
+     hence thesis;
+   end;
+
+A16:
+   for x, y being Element of L holds
+     (x + y) + x = x + y
+   proof
+     let x, y be Element of L;
+     (x + y) + x = ((y` + x)` + x) + x by A6
+                .= (y` + x)` + x by A12
+                .= x + y by A6;
+     hence thesis;
+   end;
+
+A17:
+   for x, y, z being Element of L holds
+     (x + y) + (y + z) = (x + y) + z
+   proof
+     let x, y, z be Element of L;
+     set Y = x + y;
+     (x + y) + z = (z` + Y)` + Y by A6
+                .= (z` + Y)` + (y + Y) by A14
+                .= Y + (y + z) by A1,Def3;
+     hence thesis;
+   end;
+
+A18:
+   for x, y being Element of L holds
+     (x + y`)` + y = y
+   proof
+     let x, y be Element of L;
+     (x + y`)` + y = (y` + (x + y`))` + y by A14
+                  .= y by A1,Def2;
+     hence thesis;
+   end;
+
+A19:
+   for x being Element of L holds
+     x + x`` = x
+   proof
+     let x be Element of L;
+     x + x`` = (x`` + x) + x`` by A13
+            .= x`` + x by A16
+            .= x by A13;
+     hence thesis;
+   end;
+
+A20:
+   for x, y being Element of L holds
+     x + (x` + y)` = x
+   proof
+     let x, y be Element of L;
+     x + (x` + y)` = ((x` + y)` + x) + (x` + y)` by A1,Def2
+                  .= (x` + y)` + x by A16
+                  .= x by A1,Def2;
+     hence thesis;
+   end;
+
+A21:
+   for x, y being Element of L holds
+     x + (y + x`)` = x
+   proof
+     let x, y be Element of L;
+     x + (y + x`)` = ((y + x`)` + x) + (y + x`)` by A18
+                  .= (y + x`)` + x by A16
+                  .= x by A18;
+     hence thesis;
+   end;
+
+A22:
+   for x, y being Element of L holds
+     (x` + (x + y)`)` + (y` + (x + y)`) = y` + x
+   proof
+     let x, y be Element of L;
+     (x` + (x + y)`)` + (y` + (x + y)`)
+        = (x` + (x + y)`)` + (y` + ((y` + x)` + x)`) by A6
+       .= (x` + ((y` + x)` + x)`)` + (y` + ((y` + x)` + x)`) by A6
+       .= y` + x by A5;
+     hence thesis;
+   end;
+
+A23: for x, y being Element of L holds
+       (x + y)` + x = y` + x
+     proof
+       let x, y be Element of L;
+       set Y = y` + x;
+       y` + x = x + (y` + x) by A9
+             .= (Y` + x)` + x by A6
+             .= (x + y)` + x by A6;
+       hence thesis;
+     end;
+
+A24:
+    for x, y being Element of L holds
+      (x + y)` + (y` + x)` = x` + (y` + x)`
+    proof
+       let x, y be Element of L;
+       (x + y)` + (y` + x)` = ((y` + x)` + x)` + (y` + x)` by A6
+          .= x` + (y` + x)` by A23;
+       hence thesis;
+    end;
+
+A25:
+    for x being Element of L holds
+      x + x```` = x
+    proof
+       let x be Element of L;
+       x + x```` = x + (x`` + x````) by A15
+                .= x + x`` by A19
+                .= x by A19;
+       hence thesis;
+    end;
+
+A26:
+    for x being Element of L holds
+      x``` = x`
+    proof
+      let x be Element of L;
+      x``` = (x + x````)` + x``` by A18
+          .= x` + x``` by A25
+          .= x` by A19;
+      hence thesis;
+    end;
+
+A27:
+    for x, y being Element of L holds
+      x + y`` = x + y
+    proof
+      let x, y be Element of L;
+      x + y = (y` + x)` + ((y` + x)` + x) by A4
+        .= (y` + x)` + ((y``` + x)` + x) by A26
+        .= (y``` + x)` + ((y``` + x)` + x) by A26
+        .= x + y`` by A4;
+      hence thesis;
+    end;
+
+A28:
+    for x being Element of L holds
+      x`` = x
+    proof
+      let x be Element of L;
+      x`` = (x``` + x``)` + x`` by A1,Def2
+         .= (x` + x``)` + x`` by A26
+         .= (x` + x``)` + x by A27
+         .= x by A1,Def2;
+      hence thesis;
+    end;
+
+A29:
+    for x, y being Element of L holds
+      x` + (y + x)` = x`
+    proof
+      let x, y be Element of L;
+      x` = x` + (y + x``)` by A21
+        .= x` + (y + x)` by A28;
+      hence thesis;
+    end;
+
+A30:
+    for x, y being Element of L holds
+      x` + (x + y)` = x`
+    proof
+      let x, y be Element of L;
+      x` = x` + (x`` + y)` by A20
+        .= x` + (x + y)` by A28;
+      hence thesis;
+    end;
+
+A31:
+    for x, y being Element of L holds
+      x + y` = y` + x
+    proof
+      let x, y be Element of L;
+      y` + x = (x` + (x + y)`)` + (y` + (x + y)`) by A22
+            .= x`` + (y` + (x + y)`) by A30
+            .= x`` + y` by A29
+            .= x + y` by A28;
+      hence thesis;
+    end;
+
+A32:
+    for x, y being Element of L holds
+      x + y = y + x
+    proof
+      let x, y be Element of L;
+      y`` = y by A28;
+      hence thesis by A31;
+    end;
+    hence L is join-commutative by LATTICES:def 4;
+
+    for x, y being Element of L holds
+      (x` + y`)` + (x` + y)` = x
+    proof
+      let x, y be Element of L;
+      (x` + y`)` + (x` + y)` = (y` + x`)` + (x` + y)` by A32
+           .= (x` + y)` + (y` + x`)` by A32
+           .= x`` + (y` + x`)` by A24
+           .= x + (y` + x`)` by A28
+           .= x by A21;
+      hence thesis;
+    end;
+    hence L is Huntington by ROBBINS1:def 6;
+
+    for x, y, z being Element of L holds
+      (x + y) + z = x + (y + z)
+    proof
+      let x, y, z be Element of L;
+A33: for x, y, z being Element of L holds
+        (x + y) + (z + x) = y + (x + z)
+      proof
+        let x, y, z be Element of L;
+        (x + y) + (z + x) = (z + x) + (x + y) by A32
+                         .= (z + x) + y by A17
+                         .= (x + z) + y by A32
+                         .= y + (x + z) by A32;
+        hence thesis;
+      end;
+      (y + x) + (z + y) = x + (y + z) by A33; then
+A34:    (x + y) + (z + y) = x + (y + z) by A32;
+      (x + y) + z = (x + y) + (y + z) by A17
+                 .= x + (y + z) by A32,A34;
+      hence thesis;
+    end;
+    hence L is join-associative by LATTICES:def 5;
+  end;
+
+definition
+  cluster satisfying_MD_1 satisfying_MD_2 ->
+     join-commutative join-associative Huntington (non empty ComplLattStr);
+  coherence by Lm4;
+  cluster join-commutative join-associative Huntington ->
+     satisfying_MD_1 satisfying_MD_2 (non empty ComplLattStr);
+  coherence
+  proof
+    let L be non empty ComplLattStr;
+    assume L is join-commutative join-associative Huntington; then
+    reconsider L' = L as join-commutative join-associative Huntington
+      (non empty ComplLattStr);
+A1: L' is satisfying_MD_1
+    proof
+      let x, y be Element of L';
+      (x` + y)` + x = (x` + y``)` + x by ROBBINS1:3
+                   .= (x *' y`) + x by ROBBINS1:def 4
+                   .= x by ROBBINS1:21;
+      hence thesis;
+    end;
+    L' is satisfying_MD_2
+    proof
+      let x, y, z be Element of L';
+      set Z = z + y;
+      consider k being Element of L' such that
+A2:   k + k` = Top L' by ROBBINS1:def 8;
+A3:   Z + y` = z + (y + y`) by LATTICES:def 5
+            .= z + Top L' by A2,ROBBINS1:4
+            .= Top L' by ROBBINS1:20;
+      (x` + y)` + (z + y) = (x` + y``)` + (z + y) by ROBBINS1:3
+                         .= (x *' y`) + (z + y) by ROBBINS1:def 4
+                         .= (Z + x) *' (Z + y`) by ROBBINS1:32
+                         .= Z + x by A3,ROBBINS1:15
+                         .= y + (z + x) by LATTICES:def 5;
+      hence thesis;
+    end;
+    hence thesis by A1;
+  end;
+end;
+
+definition
+  cluster satisfying_MD_1 satisfying_MD_2 satisfying_DN_1 de_Morgan
+    preOrthoLattice;
+  existence
+  proof
+    take TrivOrtLat;
+    thus thesis;
+  end;
+end;
+
+definition
+  cluster satisfying_MD_1 satisfying_MD_2 de_Morgan ->
+    Boolean preOrthoLattice;
+  coherence
+  proof
+    let L be preOrthoLattice;
+    assume L is satisfying_MD_1 satisfying_MD_2 de_Morgan; then
+    reconsider L' = L as satisfying_MD_1 satisfying_MD_2 de_Morgan
+      preOrthoLattice;
+    L' is Boolean;
+    hence thesis;
+  end;
+  cluster Boolean -> satisfying_MD_1 satisfying_MD_2 (well-complemented
+    preOrthoLattice);
+  coherence
+  proof
+    let L be well-complemented preOrthoLattice;
+    assume
+A1: L is Boolean;
+    reconsider L' = L as Boolean well-complemented preOrthoLattice by A1;
+    L' is satisfying_MD_1 satisfying_MD_2;
+    hence thesis;
+  end;
+end;

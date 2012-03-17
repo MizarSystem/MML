@@ -1,0 +1,1683 @@
+:: Again on the Order on a Special Polygon
+::  by Andrzej Trybulec and Yatsuka Nakamura
+::
+:: Received October 16, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, FINSEQ_6, RELAT_1, FINSEQ_4, FINSEQ_5, ARYTM_1, RFINSEQ,
+      BOOLE, SEQM_3, GOBOARD5, PRE_TOPC, EUCLID, FUNCT_1, RLSUB_2, PSCOMP_1,
+      TOPREAL1, SPRECT_2;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, XREAL_0, FUNCT_1, FINSEQ_1,
+      FINSEQ_4, FINSEQ_5, RFINSEQ, FINSEQ_6, NAT_1, BINARITH, PRE_TOPC, EUCLID,
+      TOPREAL1, GOBOARD1, GOBOARD5, PSCOMP_1, SPRECT_2;
+ constructors PSCOMP_1, GOBOARD5, BINARITH, REALSET1, FINSEQ_5, SEQM_3,
+      FINSEQ_4, SPRECT_2, RFINSEQ;
+ clusters RELSET_1, XREAL_0, ARYTM_3, SPRECT_2, FINSEQ_6, REVROT_1, SPRECT_1,
+      XBOOLE_0;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions FUNCT_1;
+ theorems FINSEQ_6, FINSEQ_4, FINSEQ_5, REAL_1, FINSEQ_3, AXIOMS, NAT_1,
+      FINSEQ_1, TARSKI, TOPREAL1, GOBOARD7, RFINSEQ, REVROT_1, SPRECT_2,
+      SCMFSA_7, XBOOLE_0, SQUARE_1, XCMPLX_1;
+
+begin
+
+reserve i for Nat,
+        D for non empty set,
+        f for FinSequence of D,
+        g for circular FinSequence of D,
+        p,p1,p2,p3,q for Element of D;
+
+theorem Th1:
+ q in rng(f|(p..f)) implies q..f <= p..f
+proof
+ assume
+A1: q in rng(f|(p..f));
+  then q..(f|(p..f)) = q..f by FINSEQ_5:43;
+then A2: q..f <= len(f|(p..f)) by A1,FINSEQ_4:31;
+    len(f|(p..f)) <= p..f by FINSEQ_5:19;
+ hence q..f <= p..f by A2,AXIOMS:22;
+end;
+
+theorem Th2:
+ p in rng f & q in rng f & p..f <= q..f
+  implies q..(f:-p) = q..f - p..f + 1
+proof assume that
+A1: p in rng f and
+A2: q in rng f and
+A3: p..f <= q..f;
+A4: f = (f|(p..f))^(f/^(p..f)) by RFINSEQ:21;
+  per cases by A3,AXIOMS:21;
+  suppose
+A5:  p..f = q..f;
+  then p = q by A1,A2,FINSEQ_5:10;
+   hence q..(f:-p) = 0+1 by FINSEQ_6:84
+        .= q..f - p..f + 1 by A5,XCMPLX_1:14;
+  suppose
+A6:  p..f < q..f;
+then A7: not q in rng(f|(p..f)) by Th1;
+      p..f <= len f by A1,FINSEQ_4:31;
+    then A8:  len(f|(p..f)) = p..f by TOPREAL1:3;
+      q in rng(f|(p..f)) \/ rng(f/^(p..f)) by A2,A4,FINSEQ_1:44;
+    then A9:  q in rng(f/^(p..f)) by A7,XBOOLE_0:def 2;
+    then q in rng(f/^(p..f)) \ rng(f|(p..f)) by A7,XBOOLE_0:def 4;
+    then A10:   q..f = p..f + q..(f/^(p..f)) by A4,A8,FINSEQ_6:9;
+      not q in {p} by A6,TARSKI:def 1;
+   then not q in rng<*p*> by FINSEQ_1:55;
+   then A11: q in rng(f/^(p..f)) \ rng<*p*> by A9,XBOOLE_0:def 4;
+    f:-p = <*p*>^(f/^p..f) by FINSEQ_5:def 2;
+ hence q..(f:-p) = len<*p*> + q..(f/^(p..f)) by A11,FINSEQ_6:9
+       .= 1 + q..(f/^(p..f)) by FINSEQ_1:56
+       .= q..f - p..f + 1 by A10,XCMPLX_1:26;
+end;
+
+theorem Th3:
+ p in rng f & q in rng f & p..f <= q..f
+  implies p..(f-:q) = p..f
+proof
+A1: f-:q = f|(q..f) by FINSEQ_5:def 1;
+ assume p in rng f & q in rng f & p..f <= q..f;
+  then p in rng(f|(q..f)) by A1,FINSEQ_5:49;
+ hence thesis by A1,FINSEQ_5:43;
+end;
+
+theorem Th4:
+ p in rng f & q in rng f & p..f <= q..f
+  implies q..Rotate(f,p) = q..f - p..f + 1
+proof
+ assume
+A1: p in rng f & q in rng f;
+then A2: Rotate(f,p) = (f:-p)^((f-:p)/^1) by FINSEQ_6:def 2;
+ assume
+A3: p..f <= q..f;
+  then q in rng(f:-p) by A1,FINSEQ_6:67;
+ hence q..Rotate(f,p) = q..(f:-p) by A2,FINSEQ_6:8
+      .= q..f - p..f + 1 by A1,A3,Th2;
+end;
+
+theorem Th5:
+ p1 in rng f & p2 in rng f & p3 in rng f &
+ p1..f <= p2..f & p2..f < p3..f implies
+   p2..Rotate(f,p1) < p3..Rotate(f,p1)
+proof assume that
+A1: p1 in rng f and
+A2: p2 in rng f and
+A3: p3 in rng f and
+A4: p1..f <= p2..f and
+A5: p2..f < p3..f;
+A6: p2..Rotate(f,p1) = p2..f - p1..f + 1 by A1,A2,A4,Th4;
+     p1..f < p3..f by A4,A5,AXIOMS:22;
+   then A7: p3..Rotate(f,p1) = p3..f - p1..f + 1 by A1,A3,Th4;
+    p2..f - p1..f < p3..f - p1..f by A5,REAL_1:54;
+ hence thesis by A6,A7,REAL_1:53;
+end;
+
+theorem
+   p1 in rng f & p2 in rng f & p3 in rng f &
+ p1..f < p2..f & p2..f <= p3..f implies
+   p2..Rotate(f,p1) <= p3..Rotate(f,p1)
+proof assume that
+A1: p1 in rng f and
+A2: p2 in rng f & p3 in rng f and
+A3: p1..f < p2..f and
+A4: p2..f <= p3..f;
+ per cases by A4,AXIOMS:21;
+ suppose p2..f < p3..f;
+  hence thesis by A1,A2,A3,Th5;
+ suppose p2..f = p3..f;
+  hence thesis by A2,FINSEQ_5:10;
+end;
+
+theorem Th7:
+ p in rng g & len g > 1 implies p..g < len g
+proof
+ assume that
+A1: p in rng g and
+A2: len g > 1 and
+A3: p..g >= len g;
+A4: now
+   assume g is empty;
+   then len g = 0 by FINSEQ_1:25;
+   hence contradiction by A2;
+ end;
+   p..g <= len g by A1,FINSEQ_4:31;
+ then p..g = len g by A3,AXIOMS:21;
+ then p = g/.len g by A1,FINSEQ_5:41
+       .= g/.1 by FINSEQ_6:def 1;
+ hence contradiction by A2,A3,A4,FINSEQ_6:47;
+end;
+
+begin :: Ordering of special points on a standard special sequence
+
+reserve f for non constant standard special_circular_sequence,
+        p,p1,p2,p3,q for Point of TOP-REAL 2;
+
+theorem Th8:
+  f/^1 is one-to-one
+proof let x1,x2 be set such that
+A1: x1 in dom(f/^1) and
+A2: x2 in dom (f/^1) and
+A3: (f/^1).x1 = (f/^1).x2;
+  reconsider i=x1, j=x2 as Nat by A1,A2;
+ assume
+A4: x1 <> x2;
+A5: 1 <= i by A1,FINSEQ_3:27;
+A6: 1 <= j by A2,FINSEQ_3:27;
+    i+1 in dom f by A1,FINSEQ_5:29;
+  then A7: i+1 <= len f by FINSEQ_3:27;
+A8: 1 < i+1 by A5,NAT_1:38;
+    j+1 in dom f by A2,FINSEQ_5:29;
+  then A9: 1 <= j+1 & j+1 <= len f by FINSEQ_3:27;
+A10: 1 < j+1 by A6,NAT_1:38;
+ per cases by A4,AXIOMS:21;
+ suppose i < j;
+  then A11: i+1 < j+1 by REAL_1:53;
+    f/.(i+1) = (f/^1)/.i by A1,FINSEQ_5:30
+    .= (f/^1).j by A1,A3,FINSEQ_4:def 4
+    .= (f/^1)/.j by A2,FINSEQ_4:def 4
+    .= f/.(j+1) by A2,FINSEQ_5:30;
+ hence contradiction by A8,A9,A11,GOBOARD7:39;
+ suppose j < i;
+  then A12: j+1 < i+1 by REAL_1:53;
+    f/.(j+1) = (f/^1)/.j by A2,FINSEQ_5:30
+    .= (f/^1).i by A2,A3,FINSEQ_4:def 4
+    .= (f/^1)/.i by A1,FINSEQ_4:def 4
+    .= f/.(i+1) by A1,FINSEQ_5:30;
+ hence contradiction by A7,A10,A12,GOBOARD7:39;
+end;
+
+theorem Th9:
+ 1 < q..f & q in rng f implies (f/.1)..Rotate(f,q) = len f + 1 - q..f
+proof assume that
+A1: 1 < q..f and
+A2: q in rng f;
+A3: f/.1 = Rotate(f,q)/.(1 + len f -' q..f) by A1,A2,REVROT_1:18;
+  set i = 1 + len f -' q..f;
+A4: q..f <= len f by A2,FINSEQ_4:31;
+then A5: q..f <= len f + 1 by NAT_1:38;
+then A6: i = 1 + len f - q..f by SCMFSA_7:3;
+then A7: i = 1 + (len f - q..f) by XCMPLX_1:29;
+    now assume q..f + 0 >= len f;
+    then A8:   q..f = len f by A4,AXIOMS:21;
+      q = f/.(q..f) by A2,FINSEQ_5:41 .= f/.1 by A8,FINSEQ_6:def 1;
+   hence contradiction by A1,FINSEQ_6:47;
+  end;
+  then len f - q..f > 0 by REAL_1:86;
+  then A9: 1 + 0 < i by A7,REAL_1:53;
+    i = len f + (1 - q..f) by A6,XCMPLX_1:29
+     .= len f - (q..f - 1) by XCMPLX_1:38;
+then A10: i +(q..f - 1) = len f by XCMPLX_1:27;
+     q..f - 1 > 0 by A1,SQUARE_1:11;
+   then i < len f by A10,REAL_1:69;
+   then A11: i < len Rotate(f,q) by REVROT_1:14;
+  then A12: i in dom Rotate(f,q) by A9,FINSEQ_3:27;
+  then A13: f/.1 = Rotate(f,q).i by A3,FINSEQ_4:def 4;
+    for j being set st j in dom Rotate(f,q) & j <> i
+     holds Rotate(f,q).j <> f/.1
+   proof let z be set;
+    assume that
+A14:  z in dom Rotate(f,q) and
+A15:  z <> i;
+     reconsider j = z as Nat by A14;
+     per cases by A15,AXIOMS:21;
+     suppose
+A16:    j < i;
+        1 <= j by A14,FINSEQ_3:27;
+     then Rotate(f,q)/.j <> f/.1 by A3,A11,A16,GOBOARD7:38;
+    hence Rotate(f,q).z <> f/.1 by A14,FINSEQ_4:def 4;
+     suppose
+A17:    i < j;
+       j <= len Rotate(f,q) by A14,FINSEQ_3:27;
+     then Rotate(f,q)/.j <> f/.1 by A3,A9,A17,GOBOARD7:39;
+    hence Rotate(f,q).z <> f/.1 by A14,FINSEQ_4:def 4;
+   end;
+  then A18: Rotate(f,q) just_once_values f/.1 by A12,A13,FINSEQ_4:9;
+  then 1 + len f -' q..f = Rotate(f,q) <- (f/.1) by A12,A13,FINSEQ_4:def 3;
+ hence f/.1..Rotate(f,q) = 1 + len f -' q..f by A18,FINSEQ_4:35
+         .= len f + 1 - q..f by A5,SCMFSA_7:3;
+end;
+
+theorem Th10:
+ p in rng f & q in rng f & p..f < q..f
+  implies p..Rotate(f,q) = len f + p..f - q..f
+proof
+ assume
+A1: p in rng f & q in rng f;
+  then A2: Rotate(f,q) = (f:-q)^((f-:q)/^1) by FINSEQ_6:def 2;
+ assume
+A3: p..f < q..f;
+  then A4: p in rng(f-:q) by A1,FINSEQ_5:49;
+then A5: p..(f-:q) >= 1 by FINSEQ_4:31;
+A6: p..f = p..(f-:q) by A1,A3,Th3;
+ per cases by A5,A6,AXIOMS:21;
+ suppose
+A7: p..f = 1;
+  then p = f/.1 by A1,FINSEQ_5:41;
+ hence p..Rotate(f,q) = len f + p..f - q..f by A1,A3,A7,Th9;
+ suppose
+A8: p..f > 1;
+   then A9: p..(f-:q) > 1 by A1,A3,Th3;
+  A10: p..f = 1 + p..((f-:q)/^1) by A4,A6,A8,FINSEQ_6:61;
+A11: f/^1 is one-to-one by Th8;
+A12: p in rng((f-:q)/^1) by A4,A9,FINSEQ_6:62;
+   then A13: p in rng((f/^1)-:q) by A1,A3,A8,FINSEQ_6:65;
+A14: q in rng(f/^1) by A1,A3,A8,FINSEQ_6:83;
+   then A15:  rng((f/^1) -| q) misses rng((f/^1) |-- q) by A11,FINSEQ_4:72;
+     ((f/^1) -| q)^<*q*> = (f/^1)|(q..(f/^1)) by A14,FINSEQ_5:27
+           .= (f/^1)-:q by FINSEQ_5:def 1;
+   then A16: rng((f/^1)-:q) = rng((f/^1) -| q) \/ rng<*q*> by FINSEQ_1:44;
+     not p in {q} by A3,TARSKI:def 1;
+   then A17:  not p in rng<*q*> by FINSEQ_1:55;
+   then p in rng((f/^1) -| q) by A13,A16,XBOOLE_0:def 2;
+   then A18:  not p in rng((f/^1) |-- q) by A15,XBOOLE_0:3;
+    (f/^1):-q = <*q*>^((f/^1) |-- q) by A14,FINSEQ_6:45;
+  then rng((f/^1):-q) = rng<*q*> \/ rng((f/^1) |-- q) by FINSEQ_1:44;
+  then not p in rng((f/^1):-q) by A17,A18,XBOOLE_0:def 2;
+  then not p in rng(f:-q) by A1,A3,A8,FINSEQ_6:89;
+  then p in rng((f-:q)/^1) \ rng(f:-q) by A12,XBOOLE_0:def 4;
+ hence p..Rotate(f,q) = len(f:-q) + p..((f-:q)/^1) by A2,FINSEQ_6:9
+      .= len f - q..f + 1 + p..((f-:q)/^1) by A1,FINSEQ_5:53
+      .= len f - q..f + 1 + (p..f - 1) by A10,XCMPLX_1:26
+      .= len f - q..f + 1 + p..f - 1 by XCMPLX_1:29
+      .= len f - q..f + p..f + 1 - 1 by XCMPLX_1:1
+      .= len f - q..f + p..f by XCMPLX_1:26
+      .= len f + p..f - q..f by XCMPLX_1:29;
+end;
+
+theorem Th11:
+ p1 in rng f & p2 in rng f & p3 in rng f &
+ p1..f < p2..f & p2..f < p3..f implies
+   p3..Rotate(f,p2) < p1..Rotate(f,p2)
+proof assume that
+A1: p1 in rng f and
+A2: p2 in rng f and
+A3: p3 in rng f and
+A4: p1..f < p2..f and
+A5: p2..f < p3..f;
+A6: p1..Rotate(f,p2) = len f + p1..f - p2..f by A1,A2,A4,Th10;
+A7: p3..Rotate(f,p2) = p3..f - p2..f + 1 by A2,A3,A5,Th4
+               .= p3..f + 1 - p2..f by XCMPLX_1:29;
+A8: 1 <= p1..f by A1,FINSEQ_4:31;
+    p3..f <= len f by A3,FINSEQ_4:31;
+  then p3..f + 1 <= len f + p1..f by A8,REAL_1:55;
+  then A9: p3..Rotate(f,p2) <= p1..Rotate(f,p2) by A6,A7,REAL_1:49;
+A10: p1 in rng Rotate(f,p2) by A1,A2,FINSEQ_6:96;
+     p3 in rng Rotate(f,p2) by A2,A3,FINSEQ_6:96;
+  then p3..Rotate(f,p2) <> p1..Rotate(f,p2) by A4,A5,A10,FINSEQ_5:10;
+ hence p3..Rotate(f,p2) < p1..Rotate(f,p2) by A9,AXIOMS:21;
+end;
+
+theorem Th12:
+ p1 in rng f & p2 in rng f & p3 in rng f &
+ p1..f < p2..f & p2..f < p3..f implies
+   p1..Rotate(f,p3) < p2..Rotate(f,p3)
+proof assume that
+A1: p1 in rng f and
+A2: p2 in rng f and
+A3: p3 in rng f and
+A4: p1..f < p2..f and
+A5: p2..f < p3..f;
+     p1..f < p3..f by A4,A5,AXIOMS:22;
+   then A6: p1..Rotate(f,p3) = len f + p1..f - p3..f by A1,A3,Th10;
+A7: p2..Rotate(f,p3) = len f + p2..f - p3..f by A2,A3,A5,Th10;
+    len f + p1..f < len f + p2..f by A4,REAL_1:53;
+ hence p1..Rotate(f,p3) < p2..Rotate(f,p3) by A6,A7,REAL_1:54;
+end;
+
+theorem
+   p1 in rng f & p2 in rng f & p3 in rng f &
+ p1..f <= p2..f & p2..f < p3..f implies
+   p1..Rotate(f,p3) <= p2..Rotate(f,p3)
+proof assume that
+A1: p1 in rng f & p2 in rng f and
+A2: p3 in rng f and
+A3: p1..f <= p2..f and
+A4: p2..f < p3..f;
+ per cases by A3,AXIOMS:21;
+ suppose p1..f < p2..f;
+  hence thesis by A1,A2,A4,Th12;
+ suppose p1..f = p2..f;
+  hence thesis by A1,FINSEQ_5:10;
+end;
+
+theorem
+   (S-min L~f)..f < len f
+proof
+A1: S-min L~f in rng f by SPRECT_2:45;
+    len f > 4 by GOBOARD7:36;
+  then len f > 1 by AXIOMS:22;
+ hence thesis by A1,Th7;
+end;
+
+theorem
+   (S-max L~f)..f < len f
+proof
+A1: S-max L~f in rng f by SPRECT_2:46;
+    len f > 4 by GOBOARD7:36;
+  then len f > 1 by AXIOMS:22;
+ hence thesis by A1,Th7;
+end;
+
+theorem
+   (E-min L~f)..f < len f
+proof
+A1: E-min L~f in rng f by SPRECT_2:49;
+    len f > 4 by GOBOARD7:36;
+  then len f > 1 by AXIOMS:22;
+ hence thesis by A1,Th7;
+end;
+
+theorem
+   (E-max L~f)..f < len f
+proof
+A1: E-max L~f in rng f by SPRECT_2:50;
+    len f > 4 by GOBOARD7:36;
+  then len f > 1 by AXIOMS:22;
+ hence thesis by A1,Th7;
+end;
+
+theorem
+   (N-min L~f)..f < len f
+proof
+A1: N-min L~f in rng f by SPRECT_2:43;
+    len f > 4 by GOBOARD7:36;
+  then len f > 1 by AXIOMS:22;
+ hence thesis by A1,Th7;
+end;
+
+theorem
+   (N-max L~f)..f < len f
+proof
+A1: N-max L~f in rng f by SPRECT_2:44;
+    len f > 4 by GOBOARD7:36;
+  then len f > 1 by AXIOMS:22;
+ hence thesis by A1,Th7;
+end;
+
+theorem
+   (W-max L~f)..f < len f
+proof
+A1: W-max L~f in rng f by SPRECT_2:48;
+    len f > 4 by GOBOARD7:36;
+  then len f > 1 by AXIOMS:22;
+ hence thesis by A1,Th7;
+end;
+
+theorem
+   (W-min L~f)..f < len f
+proof
+A1: W-min L~f in rng f by SPRECT_2:47;
+    len f > 4 by GOBOARD7:36;
+  then len f > 1 by AXIOMS:22;
+ hence thesis by A1,Th7;
+end;
+
+begin :: Ordering of special points on a clockwise oriented sequence
+
+reserve z for clockwise_oriented
+              (non constant standard special_circular_sequence);
+
+Lm1:
+  z/.1 = N-min L~z implies (E-max L~z)..z < (S-max L~z)..z
+proof assume
+A1: z/.1 = N-min L~z;
+  then A2: (E-max L~z)..z < (E-min L~z)..z by SPRECT_2:75;
+ per cases;
+ suppose E-min L~z = S-max L~z;
+  hence thesis by A1,SPRECT_2:75;
+ suppose E-min L~z <> S-max L~z;
+  then (E-min L~z)..z < (S-max L~z)..z by A1,SPRECT_2:76;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm2:
+  z/.1 = N-min L~z implies (E-max L~z)..z < (S-min L~z)..z
+proof assume
+A1: z/.1 = N-min L~z;
+  then A2: (E-max L~z)..z < (S-max L~z)..z by Lm1;
+    (S-max L~z)..z < (S-min L~z)..z by A1,SPRECT_2:77;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm3:
+  z/.1 = N-min L~z implies (E-max L~z)..z < (W-min L~z)..z
+proof assume
+A1: z/.1 = N-min L~z;
+  then A2: (E-max L~z)..z < (S-min L~z)..z by Lm2;
+ per cases;
+ suppose S-min L~z = W-min L~z;
+  hence thesis by A1,Lm2;
+ suppose S-min L~z <> W-min L~z;
+  then (S-min L~z)..z < (W-min L~z)..z by A1,SPRECT_2:78;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm4:
+  z/.1 = N-min L~z implies (E-min L~z)..z < (S-min L~z)..z
+proof assume
+A1: z/.1 = N-min L~z;
+  then A2: (S-max L~z)..z < (S-min L~z)..z by SPRECT_2:77;
+ per cases;
+ suppose E-min L~z = S-max L~z;
+  hence thesis by A1,SPRECT_2:77;
+ suppose E-min L~z <> S-max L~z;
+  then (E-min L~z)..z < (S-max L~z)..z by A1,SPRECT_2:76;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm5:
+  z/.1 = N-min L~z implies (E-min L~z)..z < (W-min L~z)..z
+proof assume
+A1: z/.1 = N-min L~z;
+  then A2: (E-min L~z)..z < (S-min L~z)..z by Lm4;
+ per cases;
+ suppose S-min L~z = W-min L~z;
+  hence thesis by A1,Lm4;
+ suppose S-min L~z <> W-min L~z;
+  then (S-min L~z)..z < (W-min L~z)..z by A1,SPRECT_2:78;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm6:
+  z/.1 = N-min L~z implies (S-max L~z)..z < (W-min L~z)..z
+proof assume
+A1: z/.1 = N-min L~z;
+  then A2: (S-max L~z)..z < (S-min L~z)..z by SPRECT_2:77;
+ per cases;
+ suppose S-min L~z = W-min L~z;
+  hence thesis by A1,SPRECT_2:77;
+ suppose S-min L~z <> W-min L~z;
+  then (S-min L~z)..z < (W-min L~z)..z by A1,SPRECT_2:78;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm7:
+  z/.1 = N-min L~z implies (N-max L~z)..z < (W-min L~z)..z
+proof assume
+A1: z/.1 = N-min L~z;
+  then A2: (E-max L~z)..z < (W-min L~z)..z by Lm3;
+ per cases;
+ suppose N-max L~z = E-max L~z;
+  hence thesis by A1,Lm3;
+ suppose N-max L~z <> E-max L~z;
+  then (N-max L~z)..z < (E-max L~z)..z by A1,SPRECT_2:74;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm8:
+ z/.1 = N-min L~z implies (N-min L~z)..z < (W-min L~z)..z
+proof assume
+A1: z/.1 = N-min L~z;
+  then A2: (N-max L~z)..z < (W-min L~z)..z by Lm7;
+    (N-min L~z)..z < (N-max L~z)..z by A1,SPRECT_2:72;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm9: z/.1 = N-min L~z implies (N-max L~z)..z < (S-max L~z)..z
+proof assume
+A1: z/.1 = N-min L~z;
+  then A2: (N-max L~z)..z <= (E-max L~z)..z by SPRECT_2:74;
+    (E-max L~z)..z < (S-max L~z)..z by A1,Lm1;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm10: z/.1 = N-min L~z implies (N-max L~z)..z < (S-min L~z)..z
+proof assume
+A1: z/.1 = N-min L~z;
+  then A2: (N-max L~z)..z < (S-max L~z)..z by Lm9;
+    (S-max L~z)..z < (S-min L~z)..z by A1,SPRECT_2:77;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+theorem Th22:
+ f/.1 = W-min L~f implies (W-min L~f)..f < (W-max L~f)..f
+proof
+A1: W-min L~f in rng f by SPRECT_2:47;
+A2: W-max L~f in rng f by SPRECT_2:48;
+     W-min L~f <> W-max L~f by SPRECT_2:62;
+then A3: (W-min L~f)..f <> (W-max L~f)..f by A1,A2,FINSEQ_5:10;
+    (W-max L~f)..f in dom f by A2,FINSEQ_4:30;
+then A4: (W-max L~f)..f >= 1 by FINSEQ_3:27;
+ assume f/.1 = W-min L~f;
+  then (W-min L~f)..f = 1 by FINSEQ_6:47;
+ hence (W-min L~f)..f < (W-max L~f)..f by A3,A4,REAL_1:def 5;
+end;
+
+theorem
+   f/.1 = W-min L~f implies (W-max L~f)..f > 1
+proof
+ assume
+A1:  f/.1 = W-min L~f;
+  then (W-min L~f)..f = 1 by FINSEQ_6:47;
+ hence thesis by A1,Th22;
+end;
+
+theorem Th24:
+ z/.1 = W-min L~z & W-max L~z <> N-min L~z
+  implies (W-max L~z)..z < (N-min L~z)..z
+proof set g = Rotate(z,N-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: N-min L~z in rng z by SPRECT_2:43;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = W-min L~z and
+A5: W-max L~z <> N-min L~z;
+A6: Rotate(g,W-min L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = N-min L~g by A2,A3,FINSEQ_6:98;
+A8: N-min L~g in rng g by SPRECT_2:43;
+A9: W-max L~g in rng g by SPRECT_2:48;
+A10: W-min L~g in rng g by SPRECT_2:47;
+A11: (W-min L~g)..g < (W-max L~g)..g by A3,A5,A7,SPRECT_2:79;
+    (W-min L~g)..g > (N-min L~g)..g by A7,Lm8;
+ hence (W-max L~z)..z < (N-min L~z)..z by A3,A6,A8,A9,A10,A11,Th11;
+end;
+
+theorem Th25:
+ z/.1 = W-min L~z implies (N-min L~z)..z < (N-max L~z)..z
+proof set g = Rotate(z,N-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: N-min L~z in rng z by SPRECT_2:43;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = W-min L~z;
+A5: Rotate(g,W-min L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = N-min L~g by A2,A3,FINSEQ_6:98;
+A7: N-min L~g in rng g by SPRECT_2:43;
+A8: N-max L~g in rng g by SPRECT_2:44;
+A9: W-min L~g in rng g by SPRECT_2:47;
+A10: (N-min L~g)..g < (N-max L~g)..g by A6,SPRECT_2:72;
+    (N-max L~g)..g < (W-min L~g)..g by A6,Lm7;
+ hence (N-min L~z)..z < (N-max L~z)..z by A3,A5,A7,A8,A9,A10,Th12;
+end;
+
+theorem Th26:
+ z/.1 = W-min L~z & N-max L~z <> E-max L~z implies
+  (N-max L~z)..z < (E-max L~z)..z
+proof set g = Rotate(z,N-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: N-min L~z in rng z by SPRECT_2:43;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = W-min L~z and
+A5: N-max L~z <> E-max L~z;
+A6: Rotate(g,W-min L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = N-min L~g by A2,A3,FINSEQ_6:98;
+A8: N-max L~g in rng g by SPRECT_2:44;
+A9: E-max L~g in rng g by SPRECT_2:50;
+A10: W-min L~g in rng g by SPRECT_2:47;
+A11: (N-max L~g)..g < (E-max L~g)..g by A3,A5,A7,SPRECT_2:74;
+    (E-max L~g)..g < (W-min L~g)..g by A7,Lm3;
+ hence (N-max L~z)..z < (E-max L~z)..z by A3,A6,A8,A9,A10,A11,Th12;
+end;
+
+theorem Th27:
+ z/.1 = W-min L~z implies (E-max L~z)..z < (E-min L~z)..z
+proof set g = Rotate(z,N-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: N-min L~z in rng z by SPRECT_2:43;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = W-min L~z;
+A5: Rotate(g,W-min L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = N-min L~g by A2,A3,FINSEQ_6:98;
+A7: E-min L~g in rng g by SPRECT_2:49;
+A8: E-max L~g in rng g by SPRECT_2:50;
+A9: W-min L~g in rng g by SPRECT_2:47;
+A10: (E-max L~g)..g < (E-min L~g)..g by A6,SPRECT_2:75;
+    (E-min L~g)..g < (W-min L~g)..g by A6,Lm5;
+ hence (E-max L~z)..z < (E-min L~z)..z by A3,A5,A7,A8,A9,A10,Th12;
+end;
+
+theorem Th28:
+ z/.1 = W-min L~z & E-min L~z <> S-max L~z implies
+  (E-min L~z)..z < (S-max L~z)..z
+proof set g = Rotate(z,N-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: N-min L~z in rng z by SPRECT_2:43;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = W-min L~z and
+A5: E-min L~z <> S-max L~z;
+A6: Rotate(g,W-min L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = N-min L~g by A2,A3,FINSEQ_6:98;
+A8: E-min L~g in rng g by SPRECT_2:49;
+A9: S-max L~g in rng g by SPRECT_2:46;
+A10: W-min L~g in rng g by SPRECT_2:47;
+A11: (E-min L~g)..g < (S-max L~g)..g by A3,A5,A7,SPRECT_2:76;
+    (S-max L~g)..g < (W-min L~g)..g by A7,Lm6;
+ hence (E-min L~z)..z < (S-max L~z)..z by A3,A6,A8,A9,A10,A11,Th12;
+end;
+
+theorem
+   z/.1 = W-min L~z & S-min L~z <> W-min L~z
+  implies (S-max L~z)..z < (S-min L~z)..z
+proof set g = Rotate(z,N-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: N-min L~z in rng z by SPRECT_2:43;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = W-min L~z;
+A5: Rotate(g,W-min L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = N-min L~g by A2,A3,FINSEQ_6:98;
+A7: S-min L~g in rng g by SPRECT_2:45;
+A8: S-max L~g in rng g by SPRECT_2:46;
+A9: W-min L~g in rng g by SPRECT_2:47;
+A10: (S-max L~g)..g < (S-min L~g)..g by A6,SPRECT_2:77;
+ assume S-min L~z <> W-min L~z;
+  then (S-min L~g)..g < (W-min L~g)..g by A3,A6,SPRECT_2:78;
+ hence (S-max L~z)..z < (S-min L~z)..z by A3,A5,A7,A8,A9,A10,Th12;
+end;
+
+theorem Th30:
+ f/.1 = S-max L~f implies (S-max L~f)..f < (S-min L~f)..f
+proof
+A1: S-max L~f in rng f by SPRECT_2:46;
+A2: S-min L~f in rng f by SPRECT_2:45;
+     S-max L~f <> S-min L~f by SPRECT_2:60;
+then A3: (S-max L~f)..f <> (S-min L~f)..f by A1,A2,FINSEQ_5:10;
+    (S-min L~f)..f in dom f by A2,FINSEQ_4:30;
+then A4: (S-min L~f)..f >= 1 by FINSEQ_3:27;
+ assume f/.1 = S-max L~f;
+  then (S-max L~f)..f = 1 by FINSEQ_6:47;
+ hence (S-max L~f)..f < (S-min L~f)..f by A3,A4,REAL_1:def 5;
+end;
+
+theorem
+   f/.1 = S-max L~f implies (S-min L~f)..f > 1
+proof
+ assume
+A1:  f/.1 = S-max L~f;
+  then (S-max L~f)..f = 1 by FINSEQ_6:47;
+ hence thesis by A1,Th30;
+end;
+
+Lm11:
+  z/.1 = W-min L~z implies (E-max L~z)..z < (S-max L~z)..z
+proof assume
+A1: z/.1 = W-min L~z;
+  then A2: (E-max L~z)..z < (E-min L~z)..z by Th27;
+ per cases;
+ suppose E-min L~z = S-max L~z;
+  hence thesis by A1,Th27;
+ suppose E-min L~z <> S-max L~z;
+  then (E-min L~z)..z < (S-max L~z)..z by A1,Th28;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm12:
+  z/.1 = W-min L~z implies (N-min L~z)..z < (E-max L~z)..z
+proof assume
+A1: z/.1 = W-min L~z;
+  then A2: (N-min L~z)..z < (N-max L~z)..z by Th25;
+ per cases;
+ suppose N-max L~z = E-max L~z;
+  hence thesis by A1,Th25;
+ suppose N-max L~z <> E-max L~z;
+  then (N-max L~z)..z < (E-max L~z)..z by A1,Th26;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm13:
+  z/.1 = W-min L~z implies (N-min L~z)..z < (S-max L~z)..z
+proof assume
+A1: z/.1 = W-min L~z;
+  then A2: (N-min L~z)..z < (E-max L~z)..z by Lm12;
+    (E-max L~z)..z < (S-max L~z)..z by A1,Lm11;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm14:
+  z/.1 = W-min L~z implies (N-max L~z)..z < (S-max L~z)..z
+proof assume
+A1: z/.1 = W-min L~z;
+  then A2: (E-max L~z)..z < (S-max L~z)..z by Lm11;
+ per cases;
+ suppose N-max L~z = E-max L~z;
+  hence thesis by A1,Lm11;
+ suppose N-max L~z <> E-max L~z;
+  then (N-max L~z)..z < (E-max L~z)..z by A1,Th26;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm15:
+  z/.1 = W-min L~z implies (W-max L~z)..z < (S-max L~z)..z
+proof assume
+A1: z/.1 = W-min L~z;
+  then A2: (N-min L~z)..z < (S-max L~z)..z by Lm13;
+ per cases;
+ suppose W-max L~z = N-min L~z;
+  hence thesis by A1,Lm13;
+ suppose W-max L~z <> N-min L~z;
+  then (W-max L~z)..z < (N-min L~z)..z by A1,Th24;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm16:
+ z/.1 = W-min L~z implies (N-max L~z)..z < (E-min L~z)..z
+proof assume
+A1: z/.1 = W-min L~z;
+  then A2: (E-max L~z)..z < (E-min L~z)..z by Th27;
+ per cases;
+ suppose N-max L~z = E-max L~z;
+  hence thesis by A1,Th27;
+ suppose N-max L~z <> E-max L~z;
+  then (N-max L~z)..z < (E-max L~z)..z by A1,Th26;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm17: z/.1 = W-min L~z implies (N-min L~z)..z < (E-max L~z)..z
+proof assume
+A1: z/.1 = W-min L~z;
+  then A2: (N-min L~z)..z < (N-max L~z)..z by Th25;
+ per cases;
+ suppose E-max L~z = N-max L~z;
+  hence thesis by A1,Th25;
+ suppose E-max L~z <> N-max L~z;
+  then (N-max L~z)..z < (E-max L~z)..z by A1,Th26;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm18: z/.1 = W-min L~z implies (W-max L~z)..z < (E-max L~z)..z
+proof assume
+A1: z/.1 = W-min L~z;
+  then A2: (W-max L~z)..z <= (N-min L~z)..z by Th24;
+    (N-min L~z)..z < (E-max L~z)..z by A1,Lm17;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm19: z/.1 = W-min L~z implies (W-max L~z)..z < (E-min L~z)..z
+proof assume
+A1: z/.1 = W-min L~z;
+  then A2: (W-max L~z)..z < (E-max L~z)..z by Lm18;
+    (E-max L~z)..z < (E-min L~z)..z by A1,Th27;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+theorem Th32:
+ z/.1 = S-max L~z & S-min L~z <> W-min L~z
+  implies (S-min L~z)..z < (W-min L~z)..z
+proof set g = Rotate(z,N-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: N-min L~z in rng z by SPRECT_2:43;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = S-max L~z and
+A5: S-min L~z <> W-min L~z;
+A6: Rotate(g,S-max L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = N-min L~g by A2,A3,FINSEQ_6:98;
+A8: W-min L~g in rng g by SPRECT_2:47;
+A9: S-max L~g in rng g by SPRECT_2:46;
+A10: S-min L~g in rng g by SPRECT_2:45;
+A11: (S-max L~g)..g < (S-min L~g)..g by A7,SPRECT_2:77;
+    (S-min L~g)..g < (W-min L~g)..g by A3,A5,A7,SPRECT_2:78;
+ hence (S-min L~z)..z < (W-min L~z)..z by A3,A6,A8,A9,A10,A11,Th5;
+end;
+
+theorem Th33:
+ z/.1 = S-max L~z implies (W-min L~z)..z < (W-max L~z)..z
+proof set g = Rotate(z,W-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: W-min L~z in rng z by SPRECT_2:47;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = S-max L~z;
+A5: Rotate(g,S-max L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = W-min L~g by A2,A3,FINSEQ_6:98;
+A7: S-max L~g in rng g by SPRECT_2:46;
+A8: W-max L~g in rng g by SPRECT_2:48;
+A9: W-min L~g in rng g by SPRECT_2:47;
+A10: (S-max L~g)..g > (W-max L~g)..g by A6,Lm15;
+    (W-min L~g)..g < (W-max L~g)..g by A6,Th22;
+ hence (W-min L~z)..z < (W-max L~z)..z by A3,A5,A7,A8,A9,A10,Th12;
+end;
+
+theorem Th34:
+ z/.1 = S-max L~z & W-max L~z <> N-min L~z implies
+  (W-max L~z)..z < (N-min L~z)..z
+proof set g = Rotate(z,W-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: W-min L~z in rng z by SPRECT_2:47;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = S-max L~z and
+A5: W-max L~z <> N-min L~z;
+A6: Rotate(g,S-max L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = W-min L~g by A2,A3,FINSEQ_6:98;
+A8: W-max L~g in rng g by SPRECT_2:48;
+A9: N-min L~g in rng g by SPRECT_2:43;
+A10: S-max L~g in rng g by SPRECT_2:46;
+A11: (W-max L~g)..g < (N-min L~g)..g by A3,A5,A7,Th24;
+    (N-min L~g)..g < (S-max L~g)..g by A7,Lm13;
+ hence (W-max L~z)..z < (N-min L~z)..z by A3,A6,A8,A9,A10,A11,Th12;
+end;
+
+theorem Th35:
+ z/.1 = S-max L~z implies (N-min L~z)..z < (N-max L~z)..z
+proof set g = Rotate(z,W-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: W-min L~z in rng z by SPRECT_2:47;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = S-max L~z;
+A5: Rotate(g,S-max L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = W-min L~g by A2,A3,FINSEQ_6:98;
+A7: N-max L~g in rng g by SPRECT_2:44;
+A8: N-min L~g in rng g by SPRECT_2:43;
+A9: S-max L~g in rng g by SPRECT_2:46;
+A10: (N-min L~g)..g < (N-max L~g)..g by A6,Th25;
+    (N-max L~g)..g < (S-max L~g)..g by A6,Lm14;
+ hence (N-min L~z)..z < (N-max L~z)..z by A3,A5,A7,A8,A9,A10,Th12;
+end;
+
+theorem Th36:
+ z/.1 = S-max L~z & N-max L~z <> E-max L~z implies
+  (N-max L~z)..z < (E-max L~z)..z
+proof set g = Rotate(z,W-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: W-min L~z in rng z by SPRECT_2:47;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = S-max L~z and
+A5: N-max L~z <> E-max L~z;
+A6: Rotate(g,S-max L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = W-min L~g by A2,A3,FINSEQ_6:98;
+A8: N-max L~g in rng g by SPRECT_2:44;
+A9: E-max L~g in rng g by SPRECT_2:50;
+A10: S-max L~g in rng g by SPRECT_2:46;
+A11: (N-max L~g)..g < (E-max L~g)..g by A3,A5,A7,Th26;
+    (E-max L~g)..g < (S-max L~g)..g by A7,Lm11;
+ hence (N-max L~z)..z < (E-max L~z)..z by A3,A6,A8,A9,A10,A11,Th12;
+end;
+
+theorem
+   z/.1 = S-max L~z & E-min L~z <> S-max L~z
+  implies (E-max L~z)..z < (E-min L~z)..z
+proof set g = Rotate(z,W-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: W-min L~z in rng z by SPRECT_2:47;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = S-max L~z;
+A5: Rotate(g,S-max L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = W-min L~g by A2,A3,FINSEQ_6:98;
+A7: E-min L~g in rng g by SPRECT_2:49;
+A8: E-max L~g in rng g by SPRECT_2:50;
+A9: S-max L~g in rng g by SPRECT_2:46;
+A10: (E-max L~g)..g < (E-min L~g)..g by A6,Th27;
+ assume E-min L~z <> S-max L~z;
+  then (E-min L~g)..g < (S-max L~g)..g by A3,A6,Th28;
+ hence (E-max L~z)..z < (E-min L~z)..z by A3,A5,A7,A8,A9,A10,Th12;
+end;
+
+theorem Th38:
+ f/.1 = E-max L~f implies (E-max L~f)..f < (E-min L~f)..f
+proof
+A1: E-min L~f in rng f by SPRECT_2:49;
+A2: E-max L~f in rng f by SPRECT_2:50;
+     E-min L~f <> E-max L~f by SPRECT_2:58;
+then A3: (E-min L~f)..f <> (E-max L~f)..f by A1,A2,FINSEQ_5:10;
+    (E-min L~f)..f in dom f by A1,FINSEQ_4:30;
+then A4: (E-min L~f)..f >= 1 by FINSEQ_3:27;
+ assume f/.1 = E-max L~f;
+  then (E-max L~f)..f = 1 by FINSEQ_6:47;
+ hence (E-max L~f)..f < (E-min L~f)..f by A3,A4,REAL_1:def 5;
+end;
+
+theorem
+   f/.1 = E-max L~f implies (E-min L~f)..f > 1
+proof
+ assume
+A1:  f/.1 = E-max L~f;
+  then (E-max L~f)..f = 1 by FINSEQ_6:47;
+ hence thesis by A1,Th38;
+end;
+
+theorem Th40:
+ z/.1 = E-max L~z & S-max L~z <> E-min L~z
+  implies (E-min L~z)..z < (S-max L~z)..z
+proof set g = Rotate(z,N-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: N-min L~z in rng z by SPRECT_2:43;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = E-max L~z and
+A5: S-max L~z <> E-min L~z;
+A6: Rotate(g,E-max L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = N-min L~g by A2,A3,FINSEQ_6:98;
+A8: S-max L~g in rng g by SPRECT_2:46;
+A9: E-max L~g in rng g by SPRECT_2:50;
+A10: E-min L~g in rng g by SPRECT_2:49;
+A11: (E-max L~g)..g < (E-min L~g)..g by A7,SPRECT_2:75;
+    (E-min L~g)..g < (S-max L~g)..g by A3,A5,A7,SPRECT_2:76;
+ hence (E-min L~z)..z < (S-max L~z)..z by A3,A6,A8,A9,A10,A11,Th5;
+end;
+
+theorem Th41:
+ z/.1 = E-max L~z implies (S-max L~z)..z < (S-min L~z)..z
+proof set g = Rotate(z,N-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: N-min L~z in rng z by SPRECT_2:43;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = E-max L~z;
+A5: Rotate(g,E-max L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = N-min L~g by A2,A3,FINSEQ_6:98;
+A7: S-max L~g in rng g by SPRECT_2:46;
+A8: E-max L~g in rng g by SPRECT_2:50;
+A9: S-min L~g in rng g by SPRECT_2:45;
+A10: (E-max L~g)..g < (S-max L~g)..g by A6,Lm1;
+    (S-max L~g)..g < (S-min L~g)..g by A6,SPRECT_2:77;
+ hence (S-max L~z)..z < (S-min L~z)..z by A3,A5,A7,A8,A9,A10,Th5;
+end;
+
+Lm20: z/.1 = S-max L~z implies (N-min L~z)..z < (E-max L~z)..z
+proof assume
+A1: z/.1 = S-max L~z;
+  then A2: (N-min L~z)..z < (N-max L~z)..z by Th35;
+ per cases;
+ suppose N-max L~z = E-max L~z;
+  hence thesis by A1,Th35;
+ suppose N-max L~z <> E-max L~z;
+  then (N-max L~z)..z < (E-max L~z)..z by A1,Th36;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm21: z/.1 = S-max L~z implies (W-max L~z)..z < (E-max L~z)..z
+proof assume
+A1: z/.1 = S-max L~z;
+  then A2: (N-min L~z)..z < (E-max L~z)..z by Lm20;
+ per cases;
+ suppose W-max L~z = N-min L~z;
+  hence thesis by A1,Lm20;
+ suppose W-max L~z <> N-min L~z;
+  then (W-max L~z)..z < (N-min L~z)..z by A1,Th34;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm22: z/.1 = S-max L~z implies (W-min L~z)..z < (E-max L~z)..z
+proof assume
+A1: z/.1 = S-max L~z;
+  then A2: (W-min L~z)..z < (W-max L~z)..z by Th33;
+    (W-max L~z)..z < (E-max L~z)..z by A1,Lm21;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm23: z/.1 = S-max L~z implies (W-max L~z)..z < (N-max L~z)..z
+proof assume
+A1: z/.1 = S-max L~z;
+  then A2: (N-min L~z)..z < (N-max L~z)..z by Th35;
+ per cases;
+ suppose W-max L~z = N-min L~z;
+  hence thesis by A1,Th35;
+ suppose W-max L~z <> N-min L~z;
+  then (W-max L~z)..z < (N-min L~z)..z by A1,Th34;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm24: z/.1 = S-max L~z implies (W-min L~z)..z < (N-min L~z)..z
+proof assume
+A1: z/.1 = S-max L~z;
+  then A2: (W-min L~z)..z < (W-max L~z)..z by Th33;
+ per cases;
+ suppose N-min L~z = W-max L~z;
+  hence thesis by A1,Th33;
+ suppose N-min L~z <> W-max L~z;
+  then (W-max L~z)..z < (N-min L~z)..z by A1,Th34;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm25: z/.1 = S-max L~z implies (S-min L~z)..z < (N-min L~z)..z
+proof assume
+A1: z/.1 = S-max L~z;
+  then A2: (S-min L~z)..z <= (W-min L~z)..z by Th32;
+    (W-min L~z)..z < (N-min L~z)..z by A1,Lm24;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm26: z/.1 = S-max L~z implies (S-min L~z)..z < (N-max L~z)..z
+proof assume
+A1: z/.1 = S-max L~z;
+  then A2: (S-min L~z)..z < (N-min L~z)..z by Lm25;
+    (N-min L~z)..z < (N-max L~z)..z by A1,Th35;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+theorem Th42:
+ z/.1 = E-max L~z & S-min L~z <> W-min L~z implies
+  (S-min L~z)..z < (W-min L~z)..z
+proof set g = Rotate(z,S-max L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: S-max L~z in rng z by SPRECT_2:46;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = E-max L~z and
+A5: S-min L~z <> W-min L~z;
+A6: Rotate(g,E-max L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = S-max L~g by A2,A3,FINSEQ_6:98;
+A8: S-min L~g in rng g by SPRECT_2:45;
+A9: W-min L~g in rng g by SPRECT_2:47;
+A10: E-max L~g in rng g by SPRECT_2:50;
+A11: (S-min L~g)..g < (W-min L~g)..g by A3,A5,A7,Th32;
+    (W-min L~g)..g < (E-max L~g)..g by A7,Lm22;
+ hence (S-min L~z)..z < (W-min L~z)..z by A3,A6,A8,A9,A10,A11,Th12;
+end;
+
+theorem Th43:
+ z/.1 = E-max L~z implies (W-min L~z)..z < (W-max L~z)..z
+proof set g = Rotate(z,S-max L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: S-max L~z in rng z by SPRECT_2:46;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = E-max L~z;
+A5: Rotate(g,E-max L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = S-max L~g by A2,A3,FINSEQ_6:98;
+A7: W-max L~g in rng g by SPRECT_2:48;
+A8: W-min L~g in rng g by SPRECT_2:47;
+A9: E-max L~g in rng g by SPRECT_2:50;
+A10: (W-min L~g)..g < (W-max L~g)..g by A6,Th33;
+    (W-max L~g)..g < (E-max L~g)..g by A6,Lm21;
+ hence (W-min L~z)..z < (W-max L~z)..z by A3,A5,A7,A8,A9,A10,Th12;
+end;
+
+theorem Th44:
+ z/.1 = E-max L~z & W-max L~z <> N-min L~z implies
+  (W-max L~z)..z < (N-min L~z)..z
+proof set g = Rotate(z,S-max L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: S-max L~z in rng z by SPRECT_2:46;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = E-max L~z and
+A5: W-max L~z <> N-min L~z;
+A6: Rotate(g,E-max L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = S-max L~g by A2,A3,FINSEQ_6:98;
+A8: W-max L~g in rng g by SPRECT_2:48;
+A9: N-min L~g in rng g by SPRECT_2:43;
+A10: E-max L~g in rng g by SPRECT_2:50;
+A11: (W-max L~g)..g < (N-min L~g)..g by A3,A5,A7,Th34;
+    (N-min L~g)..g < (E-max L~g)..g by A7,Lm20;
+ hence (W-max L~z)..z < (N-min L~z)..z by A3,A6,A8,A9,A10,A11,Th12;
+end;
+
+theorem
+   z/.1 = E-max L~z & N-max L~z <> E-max L~z
+  implies (N-min L~z)..z < (N-max L~z)..z
+proof set g = Rotate(z,S-max L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: S-max L~z in rng z by SPRECT_2:46;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = E-max L~z;
+A5: Rotate(g,E-max L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = S-max L~g by A2,A3,FINSEQ_6:98;
+A7: N-max L~g in rng g by SPRECT_2:44;
+A8: N-min L~g in rng g by SPRECT_2:43;
+A9: E-max L~g in rng g by SPRECT_2:50;
+A10: (N-min L~g)..g < (N-max L~g)..g by A6,Th35;
+ assume N-max L~z <> E-max L~z;
+  then (N-max L~g)..g < (E-max L~g)..g by A3,A6,Th36;
+ hence (N-min L~z)..z < (N-max L~z)..z by A3,A5,A7,A8,A9,A10,Th12;
+end;
+
+theorem
+   f/.1 = N-max L~f & N-max L~f <> E-max L~f
+    implies (N-max L~f)..f < (E-max L~f)..f
+proof
+A1: E-max L~f in rng f by SPRECT_2:50;
+A2: N-max L~f in rng f by SPRECT_2:44;
+ assume that
+A3: f/.1 = N-max L~f and
+A4: N-max L~f <> E-max L~f;
+A5: (N-max L~f)..f <> (E-max L~f)..f by A1,A2,A4,FINSEQ_5:10;
+A6:(N-max L~f)..f = 1 by A3,FINSEQ_6:47;
+    (E-max L~f)..f in dom f by A1,FINSEQ_4:30;
+  then (E-max L~f)..f >= 1 by FINSEQ_3:27;
+ hence (N-max L~f)..f < (E-max L~f)..f by A5,A6,AXIOMS:21;
+end;
+
+theorem
+   z/.1 = N-max L~z implies (E-max L~z)..z < (E-min L~z)..z
+proof set g = Rotate(z,W-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: W-min L~z in rng z by SPRECT_2:47;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = N-max L~z;
+A5: Rotate(g,N-max L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = W-min L~g by A2,A3,FINSEQ_6:98;
+A7: E-min L~g in rng g by SPRECT_2:49;
+A8: N-max L~g in rng g by SPRECT_2:44;
+A9: E-max L~g in rng g by SPRECT_2:50;
+A10: (N-max L~g)..g <= (E-max L~g)..g by A6,Th26;
+    (E-max L~g)..g < (E-min L~g)..g by A6,Th27;
+ hence (E-max L~z)..z < (E-min L~z)..z by A3,A5,A7,A8,A9,A10,Th5;
+end;
+
+theorem
+   z/.1 = N-max L~z & E-min L~z <> S-max L~z
+  implies (E-min L~z)..z < (S-max L~z)..z
+proof set g = Rotate(z,W-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: W-min L~z in rng z by SPRECT_2:47;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = N-max L~z and
+A5: E-min L~z <> S-max L~z;
+A6: Rotate(g,N-max L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = W-min L~g by A2,A3,FINSEQ_6:98;
+A8: E-min L~g in rng g by SPRECT_2:49;
+A9: N-max L~g in rng g by SPRECT_2:44;
+A10: S-max L~g in rng g by SPRECT_2:46;
+A11: (N-max L~g)..g < (E-min L~g)..g by A7,Lm16;
+    (E-min L~g)..g < (S-max L~g)..g by A3,A5,A7,Th28;
+ hence (E-min L~z)..z < (S-max L~z)..z by A3,A6,A8,A9,A10,A11,Th5;
+end;
+
+theorem
+   z/.1 = N-max L~z implies (S-max L~z)..z < (S-min L~z)..z
+proof set g = Rotate(z,N-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: N-min L~z in rng z by SPRECT_2:43;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = N-max L~z;
+A5: Rotate(g,N-max L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = N-min L~g by A2,A3,FINSEQ_6:98;
+A7: S-max L~g in rng g by SPRECT_2:46;
+A8: S-min L~g in rng g by SPRECT_2:45;
+A9: N-max L~g in rng g by SPRECT_2:44;
+A10: (S-max L~g)..g < (S-min L~g)..g by A6,SPRECT_2:77;
+    (N-max L~g)..g < (S-max L~g)..g by A6,Lm9;
+ hence (S-max L~z)..z < (S-min L~z)..z by A3,A5,A7,A8,A9,A10,Th5;
+end;
+
+theorem
+   z/.1 = N-max L~z & S-min L~z <> W-min L~z
+  implies (S-min L~z)..z < (W-min L~z)..z
+proof set g = Rotate(z,N-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: N-min L~z in rng z by SPRECT_2:43;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = N-max L~z and
+A5: S-min L~z <> W-min L~z;
+A6: Rotate(g,N-max L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = N-min L~g by A2,A3,FINSEQ_6:98;
+A8: W-min L~g in rng g by SPRECT_2:47;
+A9: S-min L~g in rng g by SPRECT_2:45;
+A10: N-max L~g in rng g by SPRECT_2:44;
+A11: (S-min L~g)..g < (W-min L~g)..g by A3,A5,A7,SPRECT_2:78;
+    (N-max L~g)..g < (S-min L~g)..g by A7,Lm10;
+ hence (S-min L~z)..z < (W-min L~z)..z by A3,A6,A8,A9,A10,A11,Th5;
+end;
+
+theorem
+   z/.1 = N-max L~z implies (W-min L~z)..z < (W-max L~z)..z
+proof set g = Rotate(z,S-max L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: S-max L~z in rng z by SPRECT_2:46;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = N-max L~z;
+A5: Rotate(g,N-max L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = S-max L~g by A2,A3,FINSEQ_6:98;
+A7: W-min L~g in rng g by SPRECT_2:47;
+A8: W-max L~g in rng g by SPRECT_2:48;
+A9: N-max L~g in rng g by SPRECT_2:44;
+A10: (W-min L~g)..g < (W-max L~g)..g by A6,Th33;
+    (W-max L~g)..g < (N-max L~g)..g by A6,Lm23;
+ hence (W-min L~z)..z < (W-max L~z)..z by A3,A5,A7,A8,A9,A10,Th12;
+end;
+
+theorem
+   z/.1 = N-max L~z & N-min L~z <> W-max L~z
+  implies (W-max L~z)..z < (N-min L~z)..z
+proof set g = Rotate(z,S-max L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: S-max L~z in rng z by SPRECT_2:46;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = N-max L~z and
+A5: N-min L~z <> W-max L~z;
+A6: Rotate(g,N-max L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = S-max L~g by A2,A3,FINSEQ_6:98;
+A8: N-min L~g in rng g by SPRECT_2:43;
+A9: W-max L~g in rng g by SPRECT_2:48;
+A10: N-max L~g in rng g by SPRECT_2:44;
+A11: (W-max L~g)..g < (N-min L~g)..g by A3,A5,A7,Th34;
+    (N-min L~g)..g < (N-max L~g)..g by A7,Th35;
+ hence (W-max L~z)..z < (N-min L~z)..z by A3,A6,A8,A9,A10,A11,Th12;
+end;
+
+theorem
+   f/.1 = E-min L~f & E-min L~f <> S-max L~f
+    implies (E-min L~f)..f < (S-max L~f)..f
+proof
+A1: S-max L~f in rng f by SPRECT_2:46;
+A2: E-min L~f in rng f by SPRECT_2:49;
+ assume that
+A3: f/.1 = E-min L~f and
+A4: E-min L~f <> S-max L~f;
+A5: (E-min L~f)..f <> (S-max L~f)..f by A1,A2,A4,FINSEQ_5:10;
+A6:(E-min L~f)..f = 1 by A3,FINSEQ_6:47;
+    (S-max L~f)..f in dom f by A1,FINSEQ_4:30;
+  then (S-max L~f)..f >= 1 by FINSEQ_3:27;
+ hence (E-min L~f)..f < (S-max L~f)..f by A5,A6,AXIOMS:21;
+end;
+
+theorem
+   z/.1 = E-min L~z implies (S-max L~z)..z < (S-min L~z)..z
+proof set g = Rotate(z,N-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: N-min L~z in rng z by SPRECT_2:43;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = E-min L~z;
+A5: Rotate(g,E-min L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = N-min L~g by A2,A3,FINSEQ_6:98;
+A7: S-min L~g in rng g by SPRECT_2:45;
+A8: E-min L~g in rng g by SPRECT_2:49;
+A9: S-max L~g in rng g by SPRECT_2:46;
+A10: (E-min L~g)..g <= (S-max L~g)..g by A6,SPRECT_2:76;
+    (S-max L~g)..g < (S-min L~g)..g by A6,SPRECT_2:77;
+ hence (S-max L~z)..z < (S-min L~z)..z by A3,A5,A7,A8,A9,A10,Th5;
+end;
+
+theorem
+   z/.1 = E-min L~z & S-min L~z <> W-min L~z
+  implies (S-min L~z)..z < (W-min L~z)..z
+proof set g = Rotate(z,N-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: N-min L~z in rng z by SPRECT_2:43;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = E-min L~z and
+A5: S-min L~z <> W-min L~z;
+A6: Rotate(g,E-min L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = N-min L~g by A2,A3,FINSEQ_6:98;
+A8: S-min L~g in rng g by SPRECT_2:45;
+A9: E-min L~g in rng g by SPRECT_2:49;
+A10: W-min L~g in rng g by SPRECT_2:47;
+A11: (E-min L~g)..g < (S-min L~g)..g by A7,Lm4;
+    (S-min L~g)..g < (W-min L~g)..g by A3,A5,A7,SPRECT_2:78;
+ hence (S-min L~z)..z < (W-min L~z)..z by A3,A6,A8,A9,A10,A11,Th5;
+end;
+
+Lm27: z/.1 = E-max L~z implies (S-max L~z)..z < (W-min L~z)..z
+proof assume
+A1: z/.1 = E-max L~z;
+  then A2: (S-max L~z)..z < (S-min L~z)..z by Th41;
+ per cases;
+ suppose W-min L~z = S-min L~z;
+  hence thesis by A1,Th41;
+ suppose W-min L~z <> S-min L~z;
+  then (S-min L~z)..z < (W-min L~z)..z by A1,Th42;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm28: z/.1 = E-max L~z implies (E-min L~z)..z < (W-min L~z)..z
+proof assume
+A1: z/.1 = E-max L~z;
+  then A2: (E-min L~z)..z <= (S-max L~z)..z by Th40;
+    (S-max L~z)..z < (W-min L~z)..z by A1,Lm27;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm29: z/.1 = E-max L~z implies (E-min L~z)..z < (W-max L~z)..z
+proof assume
+A1: z/.1 = E-max L~z;
+  then A2: (E-min L~z)..z < (W-min L~z)..z by Lm28;
+    (W-min L~z)..z < (W-max L~z)..z by A1,Th43;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+Lm30: z/.1 = E-max L~z implies (S-min L~z)..z < (W-max L~z)..z
+proof assume
+A1: z/.1 = E-max L~z;
+  then A2: (W-min L~z)..z < (W-max L~z)..z by Th43;
+ per cases;
+ suppose S-min L~z = W-min L~z;
+  hence thesis by A1,Th43;
+ suppose S-min L~z <> W-min L~z;
+  then (S-min L~z)..z < (W-min L~z)..z by A1,Th42;
+ hence thesis by A2,AXIOMS:22;
+end;
+
+theorem
+   z/.1 = E-min L~z implies (W-min L~z)..z < (W-max L~z)..z
+proof set g = Rotate(z,E-max L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: E-max L~z in rng z by SPRECT_2:50;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = E-min L~z;
+A5: Rotate(g,E-min L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = E-max L~g by A2,A3,FINSEQ_6:98;
+A7: W-min L~g in rng g by SPRECT_2:47;
+A8: W-max L~g in rng g by SPRECT_2:48;
+A9: E-min L~g in rng g by SPRECT_2:49;
+A10: (W-min L~g)..g < (W-max L~g)..g by A6,Th43;
+    (E-min L~g)..g < (W-min L~g)..g by A6,Lm28;
+ hence (W-min L~z)..z < (W-max L~z)..z by A3,A5,A7,A8,A9,A10,Th5;
+end;
+
+theorem
+   z/.1 = E-min L~z & W-max L~z <> N-min L~z
+  implies (W-max L~z)..z < (N-min L~z)..z
+proof set g = Rotate(z,E-max L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: E-max L~z in rng z by SPRECT_2:50;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = E-min L~z and
+A5: W-max L~z <> N-min L~z;
+A6: Rotate(g,E-min L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = E-max L~g by A2,A3,FINSEQ_6:98;
+A8: N-min L~g in rng g by SPRECT_2:43;
+A9: W-max L~g in rng g by SPRECT_2:48;
+A10: E-min L~g in rng g by SPRECT_2:49;
+A11: (W-max L~g)..g < (N-min L~g)..g by A3,A5,A7,Th44;
+    (E-min L~g)..g < (W-max L~g)..g by A7,Lm29;
+ hence (W-max L~z)..z < (N-min L~z)..z by A3,A6,A8,A9,A10,A11,Th5;
+end;
+
+theorem
+   z/.1 = E-min L~z implies (N-min L~z)..z < (N-max L~z)..z
+proof set g = Rotate(z,W-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: W-min L~z in rng z by SPRECT_2:47;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = E-min L~z;
+A5: Rotate(g,E-min L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = W-min L~g by A2,A3,FINSEQ_6:98;
+A7: N-min L~g in rng g by SPRECT_2:43;
+A8: N-max L~g in rng g by SPRECT_2:44;
+A9: E-min L~g in rng g by SPRECT_2:49;
+A10: (N-min L~g)..g < (N-max L~g)..g by A6,Th25;
+    (N-max L~g)..g < (E-min L~g)..g by A6,Lm16;
+ hence (N-min L~z)..z < (N-max L~z)..z by A3,A5,A7,A8,A9,A10,Th12;
+end;
+
+theorem
+   z/.1 = E-min L~z & E-max L~z <> N-max L~z
+  implies (N-max L~z)..z < (E-max L~z)..z
+proof set g = Rotate(z,W-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: W-min L~z in rng z by SPRECT_2:47;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = E-min L~z and
+A5: E-max L~z <> N-max L~z;
+A6: Rotate(g,E-min L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = W-min L~g by A2,A3,FINSEQ_6:98;
+A8: E-max L~g in rng g by SPRECT_2:50;
+A9: N-max L~g in rng g by SPRECT_2:44;
+A10: E-min L~g in rng g by SPRECT_2:49;
+A11: (N-max L~g)..g < (E-max L~g)..g by A3,A5,A7,Th26;
+    (E-max L~g)..g < (E-min L~g)..g by A7,Th27;
+ hence (N-max L~z)..z < (E-max L~z)..z by A3,A6,A8,A9,A10,A11,Th12;
+end;
+
+theorem
+   f/.1 = S-min L~f & S-min L~f <> W-min L~f
+    implies (S-min L~f)..f < (W-min L~f)..f
+proof
+A1: W-min L~f in rng f by SPRECT_2:47;
+A2: S-min L~f in rng f by SPRECT_2:45;
+ assume that
+A3: f/.1 = S-min L~f and
+A4: S-min L~f <> W-min L~f;
+A5: (S-min L~f)..f <> (W-min L~f)..f by A1,A2,A4,FINSEQ_5:10;
+A6:(S-min L~f)..f = 1 by A3,FINSEQ_6:47;
+    (W-min L~f)..f in dom f by A1,FINSEQ_4:30;
+  then (W-min L~f)..f >= 1 by FINSEQ_3:27;
+ hence (S-min L~f)..f < (W-min L~f)..f by A5,A6,AXIOMS:21;
+end;
+
+theorem
+   z/.1 = S-min L~z implies (W-min L~z)..z < (W-max L~z)..z
+proof set g = Rotate(z,E-max L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: E-max L~z in rng z by SPRECT_2:50;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = S-min L~z;
+A5: Rotate(g,S-min L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = E-max L~g by A2,A3,FINSEQ_6:98;
+A7: W-max L~g in rng g by SPRECT_2:48;
+A8: S-min L~g in rng g by SPRECT_2:45;
+A9: W-min L~g in rng g by SPRECT_2:47;
+A10: (S-min L~g)..g <= (W-min L~g)..g by A6,Th42;
+    (W-min L~g)..g < (W-max L~g)..g by A6,Th43;
+ hence (W-min L~z)..z < (W-max L~z)..z by A3,A5,A7,A8,A9,A10,Th5;
+end;
+
+theorem
+   z/.1 = S-min L~z & W-max L~z <> N-min L~z
+  implies (W-max L~z)..z < (N-min L~z)..z
+proof set g = Rotate(z,E-max L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: E-max L~z in rng z by SPRECT_2:50;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = S-min L~z and
+A5: W-max L~z <> N-min L~z;
+A6: Rotate(g,S-min L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = E-max L~g by A2,A3,FINSEQ_6:98;
+A8: W-max L~g in rng g by SPRECT_2:48;
+A9: S-min L~g in rng g by SPRECT_2:45;
+A10: N-min L~g in rng g by SPRECT_2:43;
+A11: (S-min L~g)..g < (W-max L~g)..g by A7,Lm30;
+    (W-max L~g)..g < (N-min L~g)..g by A3,A5,A7,Th44;
+ hence (W-max L~z)..z < (N-min L~z)..z by A3,A6,A8,A9,A10,A11,Th5;
+end;
+
+theorem
+   z/.1 = S-min L~z implies (N-min L~z)..z < (N-max L~z)..z
+proof set g = Rotate(z,S-max L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: S-max L~z in rng z by SPRECT_2:46;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = S-min L~z;
+A5: Rotate(g,S-min L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = S-max L~g by A2,A3,FINSEQ_6:98;
+A7: N-min L~g in rng g by SPRECT_2:43;
+A8: N-max L~g in rng g by SPRECT_2:44;
+A9: S-min L~g in rng g by SPRECT_2:45;
+A10: (N-min L~g)..g < (N-max L~g)..g by A6,Th35;
+    (S-min L~g)..g < (N-min L~g)..g by A6,Lm25;
+ hence (N-min L~z)..z < (N-max L~z)..z by A3,A5,A7,A8,A9,A10,Th5;
+end;
+
+theorem
+   z/.1 = S-min L~z & N-max L~z <> E-max L~z
+  implies (N-max L~z)..z < (E-max L~z)..z
+proof set g = Rotate(z,S-max L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: S-max L~z in rng z by SPRECT_2:46;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = S-min L~z and
+A5: N-max L~z <> E-max L~z;
+A6: Rotate(g,S-min L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = S-max L~g by A2,A3,FINSEQ_6:98;
+A8: E-max L~g in rng g by SPRECT_2:50;
+A9: N-max L~g in rng g by SPRECT_2:44;
+A10: S-min L~g in rng g by SPRECT_2:45;
+A11: (N-max L~g)..g < (E-max L~g)..g by A3,A5,A7,Th36;
+    (S-min L~g)..g < (N-max L~g)..g by A7,Lm26;
+ hence (N-max L~z)..z < (E-max L~z)..z by A3,A6,A8,A9,A10,A11,Th5;
+end;
+
+theorem
+   z/.1 = S-min L~z implies (E-max L~z)..z < (E-min L~z)..z
+proof set g = Rotate(z,N-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: N-min L~z in rng z by SPRECT_2:43;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = S-min L~z;
+A5: Rotate(g,S-min L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = N-min L~g by A2,A3,FINSEQ_6:98;
+A7: E-max L~g in rng g by SPRECT_2:50;
+A8: E-min L~g in rng g by SPRECT_2:49;
+A9: S-min L~g in rng g by SPRECT_2:45;
+A10: (E-max L~g)..g < (E-min L~g)..g by A6,SPRECT_2:75;
+    (E-min L~g)..g < (S-min L~g)..g by A6,Lm4;
+ hence (E-max L~z)..z < (E-min L~z)..z by A3,A5,A7,A8,A9,A10,Th12;
+end;
+
+theorem
+   z/.1 = S-min L~z & S-max L~z <> E-min L~z
+  implies (E-min L~z)..z < (S-max L~z)..z
+proof set g = Rotate(z,N-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: N-min L~z in rng z by SPRECT_2:43;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = S-min L~z and
+A5: S-max L~z <> E-min L~z;
+A6: Rotate(g,S-min L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = N-min L~g by A2,A3,FINSEQ_6:98;
+A8: S-max L~g in rng g by SPRECT_2:46;
+A9: E-min L~g in rng g by SPRECT_2:49;
+A10: S-min L~g in rng g by SPRECT_2:45;
+A11: (E-min L~g)..g < (S-max L~g)..g by A3,A5,A7,SPRECT_2:76;
+    (S-max L~g)..g < (S-min L~g)..g by A7,SPRECT_2:77;
+ hence (E-min L~z)..z < (S-max L~z)..z by A3,A6,A8,A9,A10,A11,Th12;
+end;
+
+theorem
+   f/.1 = W-max L~f & W-max L~f <> N-min L~f
+    implies (W-max L~f)..f < (N-min L~f)..f
+proof
+A1: N-min L~f in rng f by SPRECT_2:43;
+A2: W-max L~f in rng f by SPRECT_2:48;
+ assume that
+A3: f/.1 = W-max L~f and
+A4: W-max L~f <> N-min L~f;
+A5: (W-max L~f)..f <> (N-min L~f)..f by A1,A2,A4,FINSEQ_5:10;
+A6:(W-max L~f)..f = 1 by A3,FINSEQ_6:47;
+    (N-min L~f)..f in dom f by A1,FINSEQ_4:30;
+  then (N-min L~f)..f >= 1 by FINSEQ_3:27;
+ hence (W-max L~f)..f < (N-min L~f)..f by A5,A6,AXIOMS:21;
+end;
+
+theorem
+   z/.1 = W-max L~z implies (N-min L~z)..z < (N-max L~z)..z
+proof set g = Rotate(z,S-max L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: S-max L~z in rng z by SPRECT_2:46;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = W-max L~z;
+A5: Rotate(g,W-max L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = S-max L~g by A2,A3,FINSEQ_6:98;
+A7: N-max L~g in rng g by SPRECT_2:44;
+A8: W-max L~g in rng g by SPRECT_2:48;
+A9: N-min L~g in rng g by SPRECT_2:43;
+A10: (W-max L~g)..g <= (N-min L~g)..g by A6,Th34;
+    (N-min L~g)..g < (N-max L~g)..g by A6,Th35;
+ hence (N-min L~z)..z < (N-max L~z)..z by A3,A5,A7,A8,A9,A10,Th5;
+end;
+
+theorem
+   z/.1 = W-max L~z & N-max L~z <> E-max L~z
+  implies (N-max L~z)..z < (E-max L~z)..z
+proof set g = Rotate(z,S-max L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: S-max L~z in rng z by SPRECT_2:46;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = W-max L~z and
+A5: N-max L~z <> E-max L~z;
+A6: Rotate(g,W-max L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = S-max L~g by A2,A3,FINSEQ_6:98;
+A8: N-max L~g in rng g by SPRECT_2:44;
+A9: W-max L~g in rng g by SPRECT_2:48;
+A10: E-max L~g in rng g by SPRECT_2:50;
+A11: (W-max L~g)..g < (N-max L~g)..g by A7,Lm23;
+    (N-max L~g)..g < (E-max L~g)..g by A3,A5,A7,Th36;
+ hence (N-max L~z)..z < (E-max L~z)..z by A3,A6,A8,A9,A10,A11,Th5;
+end;
+
+theorem
+   z/.1 = W-max L~z implies (E-max L~z)..z < (E-min L~z)..z
+proof set g = Rotate(z,W-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: W-min L~z in rng z by SPRECT_2:47;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = W-max L~z;
+A5: Rotate(g,W-max L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = W-min L~g by A2,A3,FINSEQ_6:98;
+A7: E-max L~g in rng g by SPRECT_2:50;
+A8: E-min L~g in rng g by SPRECT_2:49;
+A9: W-max L~g in rng g by SPRECT_2:48;
+A10: (E-max L~g)..g < (E-min L~g)..g by A6,Th27;
+    (W-max L~g)..g < (E-max L~g)..g by A6,Lm18;
+ hence (E-max L~z)..z < (E-min L~z)..z by A3,A5,A7,A8,A9,A10,Th5;
+end;
+
+theorem
+   z/.1 = W-max L~z & E-min L~z <> S-max L~z
+  implies (E-min L~z)..z < (S-max L~z)..z
+proof set g = Rotate(z,W-min L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: W-min L~z in rng z by SPRECT_2:47;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = W-max L~z and
+A5: E-min L~z <> S-max L~z;
+A6: Rotate(g,W-max L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = W-min L~g by A2,A3,FINSEQ_6:98;
+A8: S-max L~g in rng g by SPRECT_2:46;
+A9: E-min L~g in rng g by SPRECT_2:49;
+A10: W-max L~g in rng g by SPRECT_2:48;
+A11: (E-min L~g)..g < (S-max L~g)..g by A3,A5,A7,Th28;
+    (W-max L~g)..g < (E-min L~g)..g by A7,Lm19;
+ hence (E-min L~z)..z < (S-max L~z)..z by A3,A6,A8,A9,A10,A11,Th5;
+end;
+
+theorem
+   z/.1 = W-max L~z implies (S-max L~z)..z < (S-min L~z)..z
+proof set g = Rotate(z,E-max L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: E-max L~z in rng z by SPRECT_2:50;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = W-max L~z;
+A5: Rotate(g,W-max L~z) = z by A1,A4,REVROT_1:16;
+A6: g/.1 = E-max L~g by A2,A3,FINSEQ_6:98;
+A7: S-max L~g in rng g by SPRECT_2:46;
+A8: S-min L~g in rng g by SPRECT_2:45;
+A9: W-max L~g in rng g by SPRECT_2:48;
+A10: (S-max L~g)..g < (S-min L~g)..g by A6,Th41;
+    (S-min L~g)..g < (W-max L~g)..g by A6,Lm30;
+ hence (S-max L~z)..z < (S-min L~z)..z by A3,A5,A7,A8,A9,A10,Th12;
+end;
+
+theorem
+   z/.1 = W-max L~z & W-min L~z <> S-min L~z
+  implies (S-min L~z)..z < (W-min L~z)..z
+proof set g = Rotate(z,E-max L~z);
+A1: for i st 1 < i & i < len z holds z/.i <> z/.1 by GOBOARD7:38;
+A2: E-max L~z in rng z by SPRECT_2:50;
+A3: L~z = L~g by REVROT_1:33;
+ assume that
+A4: z/.1 = W-max L~z and
+A5: W-min L~z <> S-min L~z;
+A6: Rotate(g,W-max L~z) = z by A1,A4,REVROT_1:16;
+A7: g/.1 = E-max L~g by A2,A3,FINSEQ_6:98;
+A8: W-min L~g in rng g by SPRECT_2:47;
+A9: S-min L~g in rng g by SPRECT_2:45;
+A10: W-max L~g in rng g by SPRECT_2:48;
+A11: (S-min L~g)..g < (W-min L~g)..g by A3,A5,A7,Th42;
+    (W-min L~g)..g < (W-max L~g)..g by A7,Th43;
+ hence (S-min L~z)..z < (W-min L~z)..z by A3,A6,A8,A9,A10,A11,Th12;
+end;

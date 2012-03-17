@@ -1,0 +1,335 @@
+:: Preliminaries to Circuits, II
+::  by Yatsuka Nakamura , Piotr Rudnicki , Andrzej Trybulec and Pauline N. Kawamoto
+::
+:: Received December 13, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary MSUALG_1, UNIALG_2, AMI_1, BOOLE, RELAT_1, FUNCT_1, FUNCOP_1,
+      ZF_REFLE, PBOOLE, CARD_3, FINSEQ_1, QC_LANG1, FINSEQ_4, TDGROUP, PRELAMB,
+      MSAFREE, FREEALG, PRALG_1, ALG_1, TREES_4, REALSET1, MSUALG_2, PRE_CIRC,
+      FINSET_1, CAT_1, TREES_2, DTCONSTR, TREES_3, CARD_1, LANG1, PROB_1,
+      TREES_1, MSAFREE2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, CARD_1, RELAT_1,
+      FUNCT_1, STRUCT_0, FINSET_1, FINSEQ_1, FUNCT_2, PROB_1, CARD_3, TREES_1,
+      TREES_2, TREES_3, TREES_4, PBOOLE, PRALG_1, MSUALG_1, FINSEQ_2, MSAFREE,
+      MSUALG_2, CQC_LANG, DTCONSTR, LANG1, GROUP_1, RELSET_1, MSUALG_3,
+      FINSEQ_4, PRE_CIRC;
+ constructors NAT_1, AMI_1, MSAFREE, GROUP_1, MSUALG_3, PRE_CIRC, FINSOP_1,
+      PRVECT_1, FINSEQ_4, XBOOLE_0;
+ clusters FINSET_1, TREES_1, TREES_2, TREES_3, DTCONSTR, PRELAMB, PRALG_1,
+      MSUALG_1, MSAFREE, MSUALG_2, PRE_CIRC, CARD_1, FUNCT_1, RELSET_1,
+      STRUCT_0, CQC_LANG, XBOOLE_0, ZFMISC_1;
+ requirements BOOLE, SUBSET;
+
+
+begin
+
+::---------------------------------------------------------------------------
+:: Many Sorted Signatures
+::---------------------------------------------------------------------------
+
+definition
+  let S be ManySortedSign;
+  mode Vertex of S is Element of S;
+end;
+
+definition
+  let S be non empty ManySortedSign;
+  func SortsWithConstants S -> Subset of S equals
+:: MSAFREE2:def 1
+
+     { v where v is SortSymbol of S : v is with_const_op }
+      if S is non void otherwise {};
+end;
+
+definition
+  let G be non empty ManySortedSign;
+  func InputVertices G -> Subset of G equals
+:: MSAFREE2:def 2
+
+     (the carrier of G) \ rng the ResultSort of G;
+
+  func InnerVertices G -> Subset of G equals
+:: MSAFREE2:def 3
+
+     rng the ResultSort of G;
+end;
+
+theorem :: MSAFREE2:1
+    for G being void non empty ManySortedSign
+    holds InputVertices G = the carrier of G;
+
+theorem :: MSAFREE2:2
+  for G being non void non empty ManySortedSign, v being Vertex of G
+    st v in InputVertices G
+    holds not ex o being OperSymbol of G st the_result_sort_of o = v;
+
+theorem :: MSAFREE2:3
+    for G being non empty ManySortedSign
+    holds InputVertices G \/ InnerVertices G = the carrier of G;
+
+theorem :: MSAFREE2:4
+  for G being non empty ManySortedSign
+    holds InputVertices G misses InnerVertices G;
+
+theorem :: MSAFREE2:5
+  for G being non empty ManySortedSign
+    holds SortsWithConstants G c= InnerVertices G;
+
+theorem :: MSAFREE2:6
+    for G being non empty ManySortedSign
+    holds InputVertices G misses SortsWithConstants G;
+
+definition let IT be non empty ManySortedSign;
+  attr IT is with_input_V means
+:: MSAFREE2:def 4
+
+    InputVertices IT <> {};
+end;
+
+definition
+  cluster non void with_input_V (non empty ManySortedSign);
+end;
+
+definition
+  let G be with_input_V (non empty ManySortedSign);
+  cluster InputVertices G -> non empty;
+end;
+
+definition
+  let G be non void non empty ManySortedSign;
+  redefine func InnerVertices G -> non empty Subset of G;
+end;
+
+definition
+  let S be non empty ManySortedSign;
+  let MSA be non-empty MSAlgebra over S;
+  mode InputValues of MSA -> ManySortedSet of InputVertices S means
+:: MSAFREE2:def 5
+      for v being Vertex of S st v in InputVertices S
+      holds it.v in (the Sorts of MSA).v;
+end;
+
+:: Generalize this for arbitrary subset of the carrier
+
+
+
+definition
+  let S be non empty ManySortedSign;
+  attr S is Circuit-like means
+:: MSAFREE2:def 6
+    for S' being non void non empty ManySortedSign st S' = S
+      for o1, o2 being OperSymbol of S'
+        st the_result_sort_of o1 = the_result_sort_of o2
+        holds o1 = o2;
+end;
+
+definition
+  cluster void -> Circuit-like (non empty ManySortedSign);
+end;
+
+definition
+  cluster non void Circuit-like strict (non empty ManySortedSign);
+end;
+
+definition
+  let IIG be Circuit-like non void (non empty ManySortedSign);
+  let v be Vertex of IIG such that
+  v in InnerVertices IIG;
+  func action_at v -> OperSymbol of IIG means
+:: MSAFREE2:def 7
+
+      the_result_sort_of it = v;
+end;
+
+begin
+
+::---------------------------------------------------------------------------
+:: Free Many Sorted Algebras
+::---------------------------------------------------------------------------
+
+theorem :: MSAFREE2:7
+    for S being non void non empty ManySortedSign, A being MSAlgebra over S,
+    o being OperSymbol of S,
+    p being FinSequence st len p = len the_arity_of o
+      & for k being Nat st k in dom p
+          holds p.k in (the Sorts of A).((the_arity_of o)/.k)
+    holds p in Args (o, A);
+
+definition
+  let S be non void non empty ManySortedSign,
+    MSA be non-empty MSAlgebra over S;
+  func FreeEnv MSA -> free strict (non-empty MSAlgebra over S) equals
+:: MSAFREE2:def 8
+
+     FreeMSA (the Sorts of MSA);
+end;
+
+theorem :: MSAFREE2:8
+    for S being non void non empty ManySortedSign,
+    MSA being non-empty MSAlgebra over S
+    holds FreeGen(the Sorts of MSA) is free GeneratorSet of FreeEnv MSA;
+
+definition
+  let S be non void non empty ManySortedSign,
+    MSA be non-empty MSAlgebra over S;
+  func Eval MSA -> ManySortedFunction of FreeEnv MSA, MSA means
+:: MSAFREE2:def 9
+
+      it is_homomorphism FreeEnv MSA, MSA
+      & for s being SortSymbol of S,
+          x, y being set st y in FreeSort(the Sorts of MSA, s)
+            & y = root-tree [x, s]
+            & x in (the Sorts of MSA).s
+          holds it.s.y = x;
+end;
+
+
+theorem :: MSAFREE2:9
+  for S being non void non empty ManySortedSign,
+      A being non-empty MSAlgebra over S
+    holds the Sorts of A is GeneratorSet of A;
+
+definition
+  let S be non empty ManySortedSign;
+  let IT be MSAlgebra over S;
+  attr IT is finitely-generated means
+:: MSAFREE2:def 10
+
+    for S' being non void non empty ManySortedSign st S' = S
+      for A being MSAlgebra over S' st A = IT
+        ex G being GeneratorSet of A st G is locally-finite if S is not void
+        otherwise the Sorts of IT is locally-finite;
+end;
+
+definition
+  let S be non empty ManySortedSign;
+  let IT be MSAlgebra over S;
+  attr IT is locally-finite means
+:: MSAFREE2:def 11
+
+    the Sorts of IT is locally-finite;
+end;
+
+definition
+  let S be non empty ManySortedSign;
+  cluster locally-finite -> finitely-generated (non-empty MSAlgebra over S);
+end;
+
+ definition
+   let S be non empty ManySortedSign;
+   func Trivial_Algebra S -> strict MSAlgebra over S means
+:: MSAFREE2:def 12
+
+   the Sorts of it = (the carrier of S) --> {0};
+ end;
+
+definition
+  let S be non empty ManySortedSign;
+  cluster locally-finite non-empty strict MSAlgebra over S;
+end;
+
+definition let IT be non empty ManySortedSign;
+  attr IT is monotonic means
+:: MSAFREE2:def 13
+      for A being finitely-generated (non-empty MSAlgebra over IT)
+      holds A is locally-finite;
+end;
+
+definition
+  cluster non void finite monotonic Circuit-like (non empty ManySortedSign);
+end;
+
+theorem :: MSAFREE2:10
+  for S being non void non empty ManySortedSign
+    for X being non-empty ManySortedSet of the carrier of S,
+      v be SortSymbol of S,
+      e be Element of (the Sorts of FreeMSA X).v
+      holds e is finite DecoratedTree;
+
+theorem :: MSAFREE2:11
+    for S being non void non empty ManySortedSign,
+    X being non-empty locally-finite ManySortedSet of the carrier of S
+    holds FreeMSA X is finitely-generated;
+
+theorem :: MSAFREE2:12
+    for S being non void non empty ManySortedSign,
+    A being non-empty MSAlgebra over S,
+    v being Vertex of S,
+    e being Element of (the Sorts of FreeEnv A).v
+      st v in InputVertices S
+    ex x being Element of (the Sorts of A).v st e = root-tree [x, v];
+
+theorem :: MSAFREE2:13
+  for S being non void non empty ManySortedSign,
+    X being non-empty ManySortedSet of the carrier of S,
+    o being OperSymbol of S,
+    p being DTree-yielding FinSequence
+      st [o,the carrier of S]-tree p
+             in (the Sorts of FreeMSA X).(the_result_sort_of o)
+    holds len p = len the_arity_of o;
+
+theorem :: MSAFREE2:14
+  for S being non void non empty ManySortedSign,
+    X being non-empty ManySortedSet of the carrier of S,
+    o being OperSymbol of S,
+    p being DTree-yielding FinSequence
+      st [o,the carrier of S]-tree p
+             in (the Sorts of FreeMSA X).(the_result_sort_of o)
+    holds
+      for i being Nat st i in dom the_arity_of o
+        holds p.i in (the Sorts of FreeMSA X).((the_arity_of o).i);
+
+definition
+  let S be non void non empty ManySortedSign,
+    X be non-empty ManySortedSet of the carrier of S,
+    v be Vertex of S;
+  cluster -> finite non empty
+   Function-like Relation-like Element of (the Sorts of FreeMSA X).v;
+end;
+
+definition
+  let S be non void non empty ManySortedSign,
+    X be non-empty ManySortedSet of the carrier of S,
+    v be Vertex of S;
+  cluster Function-like Relation-like Element of (the Sorts of FreeMSA X).v;
+end;
+
+definition
+  let S be non void non empty ManySortedSign,
+    X be non-empty ManySortedSet of the carrier of S,
+    v be Vertex of S;
+  cluster -> DecoratedTree-like
+         (Function-like Relation-like Element of (the Sorts of FreeMSA X).v);
+end;
+
+definition
+  let IIG be non void non empty ManySortedSign;
+  let X be non-empty ManySortedSet of the carrier of IIG,
+    v be Vertex of IIG;
+  cluster finite Element of (the Sorts of FreeMSA X).v;
+end;
+
+theorem :: MSAFREE2:15
+    for S being non void non empty ManySortedSign,
+    X being non-empty ManySortedSet of the carrier of S,
+    v being Vertex of S, o being OperSymbol of S,
+    e being Element of (the Sorts of FreeMSA X).v
+      st v in InnerVertices S & e.{} = [o,the carrier of S]
+    ex p being DTree-yielding FinSequence st len p = len the_arity_of o
+      & for i being Nat st i in dom p
+          holds p.i in (the Sorts of FreeMSA X).((the_arity_of o).i);
+
+definition
+  let S be non void non empty ManySortedSign,
+    X be non-empty ManySortedSet of the carrier of S,
+    v be SortSymbol of S,
+    e be Element of (the Sorts of FreeMSA X).v;
+  func depth e -> Nat means
+:: MSAFREE2:def 14
+      ex dt being finite DecoratedTree, t being finite Tree
+      st dt = e & t = dom dt & it = height t;
+end;
+

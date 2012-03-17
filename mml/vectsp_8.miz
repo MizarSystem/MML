@@ -1,0 +1,1369 @@
+:: On the Lattice of Subspaces of Vector Space
+::  by Andrzej Iwaniuk
+::
+:: Received May 23, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary VECTSP_1, GROUP_4, LATTICES, RLSUB_2, RLSUB_1, BOOLE, GROUP_2,
+      FUNCT_1, RELAT_1, RLVECT_1, SETFAM_1, BHSP_3, LATTICE3, RLVECT_3,
+      GROUP_6, PRE_TOPC, INCSP_1, VECTSP_8;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, LATTICE4, SETFAM_1, RLVECT_1,
+      STRUCT_0, VECTSP_1, PRE_TOPC, LATTICES, VECTSP_5, LATTICE3, VECTSP_4,
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, VECTSP_7, MOD_2;
+ constructors LATTICE4, VECTSP_5, LATTICE3, BINOP_1, VECTSP_7, MOD_2, VECTSP_2;
+ clusters LATTICES, VECTSP_4, VECTSP_2, STRUCT_0, VECTSP_5, RELSET_1, SUBSET_1,
+      FUNCT_2, PARTFUN1, XBOOLE_0;
+ requirements BOOLE, SUBSET;
+ definitions LATTICE3, TARSKI, XBOOLE_0;
+ theorems TARSKI, VECTSP_5, LATTICES, LATTICE3, LATTICE4, VECTSP_4, SETFAM_1,
+      VECTSP_7, MOD_2, SUBSET_1, RLVECT_1, FUNCT_1, FUNCT_2, XBOOLE_0,
+      XBOOLE_1;
+ schemes FUNCT_2, DOMAIN_1;
+
+begin
+
+ reserve F for Field;
+ reserve VS for strict VectSp of F;
+
+definition let F, VS;
+   func lattice VS -> strict bounded Lattice equals
+          :Def1: LattStr (# Subspaces(VS), SubJoin(VS), SubMeet(VS) #);
+
+  coherence by VECTSP_5:78;
+end;
+
+definition let F,VS;
+  mode SubVS-Family of VS means
+                    :Def2: for x be set st x in it holds x is Subspace of VS;
+  existence
+  proof
+    take {};
+    thus thesis;
+  end;
+end;
+
+definition let F,VS;
+  cluster non empty SubVS-Family of VS;
+  existence
+  proof
+    consider A being Subspace of VS;
+      for X be set st X in {A} holds
+      X is Subspace of VS by TARSKI:def 1;
+    then reconsider B = {A} as SubVS-Family of VS by Def2;
+    take B;
+    thus thesis;
+  end;
+end;
+
+definition let F,VS;
+  redefine func Subspaces(VS) -> non empty SubVS-Family of VS;
+  coherence
+  proof
+      Subspaces(VS) is SubVS-Family of VS
+     proof
+      let x be set;
+      assume x in Subspaces(VS);
+      then consider W being strict Subspace of VS
+                              such that A1:x = W by VECTSP_5:def 3;
+      thus x is Subspace of VS by A1;
+     end;
+    hence thesis;
+  end;
+
+let X be non empty SubVS-Family of VS;
+ mode Element of X -> Subspace of VS;
+ coherence by Def2;
+end;
+
+definition
+ let F,VS;
+ let x be Element of Subspaces VS;
+ func carr(x) -> Subset of VS means
+ :Def3: ex X being Subspace of VS st
+        x=X & it = the carrier of X;
+ existence
+ proof
+   consider X being Subspace of VS such that A1: X=x;
+   reconsider A = the carrier of x as Subset of VS
+                  by VECTSP_4:def 2;
+   take A,X;
+   thus thesis by A1;
+ end;
+ uniqueness;
+end;
+
+reserve u,e for set;
+
+definition let F,VS;
+  func carr VS -> Function of Subspaces(VS),bool the carrier of VS means
+   :Def4: for h being Element of Subspaces(VS), H being Subspace of VS
+   st h = H holds it.h = the carrier of H;
+ existence
+ proof
+  defpred P[set,set] means
+           for h being Element of Subspaces(VS) st h = $1 holds
+                                        $2 = the carrier of h;
+  A1: for e st e in Subspaces(VS)
+     ex u st u in bool the carrier of VS & P[e,u]
+      proof
+       let e; assume A2: e in Subspaces(VS);
+       then consider E being strict Subspace of VS such that
+                A3: E = e by VECTSP_5:def 3;
+       reconsider u = E as Element of Subspaces VS by A2,A3;
+       reconsider u1 = carr u as Subset of VS;
+       take u1;
+       consider X being Subspace of VS such that
+                A4: u=X & u1 = the carrier of X by Def3;
+       thus thesis by A3,A4;
+      end;
+   consider f being Function of Subspaces(VS),bool the carrier of VS such that
+A5:      for e st e in Subspaces(VS) holds P[e,f.e] from FuncEx1(A1);
+   take f;
+   thus thesis by A5;
+  end;
+ uniqueness
+ proof
+  let F1,F2 be Function of Subspaces(VS),bool the carrier of VS such that
+     A6:for h1 being Element of Subspaces(VS), H1 being Subspace of VS
+                      st h1 = H1 holds F1.h1 = the carrier of H1 and
+     A7:for h2 being Element of Subspaces(VS), H2 being Subspace of VS
+                      st h2 = H2 holds F2.h2 = the carrier of H2;
+    for h being set st h in Subspaces(VS) holds F1.h = F2.h
+   proof
+     let h be set; assume A8:h in Subspaces(VS);
+     then h is Element of Subspaces(VS);
+     then consider H being Subspace of VS such that A9: H=h;
+       F1.h = the carrier of H by A6,A8,A9;
+     hence F1.h = F2.h by A7,A8,A9;
+   end;
+  hence thesis by FUNCT_2:18;
+ end;
+end;
+
+theorem Th1:
+ for VS being strict VectSp of F
+ for H being non empty Subset of Subspaces VS holds
+                                  (carr VS).:H is non empty
+ proof
+  let VS be strict VectSp of F;
+  let H be non empty Subset of Subspaces VS;
+  consider x being Element of Subspaces VS
+                                      such that A1: x in H by SUBSET_1:10;
+    (carr VS).x in ((carr VS).:H) by A1,FUNCT_2:43;
+  hence thesis;
+ end;
+
+theorem
+   for VS being strict VectSp of F
+ for H being strict Subspace of VS holds 0.VS in (carr VS).H
+   proof
+     let VS be strict VectSp of F;
+     let H be strict Subspace of VS;
+       H in Subspaces VS by VECTSP_5:def 3;
+     then A1: (carr VS).H = the carrier of H by Def4;
+       0.H = 0.VS by VECTSP_4:19;
+     hence thesis by A1;
+   end;
+
+reserve x for set;
+
+definition let F,VS;
+ let G be non empty Subset of Subspaces(VS);
+ func meet G -> strict Subspace of VS means
+    :Def5: the carrier of it = meet ((carr VS).:G);
+ existence
+  proof
+    reconsider cG = (carr VS).:G as Subset-Family of VS
+      by SETFAM_1:def 7;
+    set C0 = meet cG;
+    A1:for X being set st X in (carr VS).:G holds 0.VS in X
+      proof
+        let X be set; assume A2:X in (carr VS).:G;
+        then reconsider X as Subset of VS;
+        consider X1 being Element of Subspaces VS
+               such that A3: X1 in G & X =(carr VS).X1 by A2,FUNCT_2:116;
+        A4: X = the carrier of X1 by A3,Def4;
+          0.VS in X1 by VECTSP_4:25;
+        hence thesis by A4,RLVECT_1:def 1;
+      end;
+      (carr VS).:G <> {} by Th1;
+    then A5: C0 <> {} by A1,SETFAM_1:def 1;
+    reconsider C0 as Subset of VS;
+      C0 is lineary-closed
+      proof
+        A6: for v,u being Element of VS st v in C0 & u in C0
+                                                           holds v + u in C0
+        proof
+         let v,u be Element of VS
+         such that A7: v in C0 & u in C0;
+         A8: for X being set st X in (carr VS).:G holds v + u in X
+           proof
+            let X be set; assume A9:X in (carr VS).:G;
+            then A10: v in X & u in X by A7,SETFAM_1:def 1;
+            reconsider X as Subset of VS by A9;
+            consider X1 being Element of Subspaces VS
+            such that A11: X1 in G & X =(carr VS).X1 by A9,FUNCT_2:116;
+            A12: X = the carrier of X1 by A11,Def4;
+            reconsider v1 = v, u1 = u as Element of VS;
+            A13: v1 in X1 & u1 in X1 by A10,A12,RLVECT_1:def 1;
+            reconsider vu = v1 + u1 as Element of VS;
+            A14: vu in X1 + X1 by A13,VECTSP_5:5;
+            consider X2 being strict Subspace of VS such that
+                                 A15: X2 = X1 by VECTSP_5:def 3;
+              vu in X2 by A14,A15,VECTSP_5:8;
+            hence thesis by A12,A15,RLVECT_1:def 1;
+           end;
+           (carr VS).:G <> {} by Th1;
+         hence v + u in C0 by A8,SETFAM_1:def 1;
+        end;
+         for a being Element of F,
+           v being Element of VS st v in C0 holds a * v in C0
+         proof
+           let a be Element of F;
+           let v be Element of VS;
+           assume A16: v in C0;
+           A17: for X being set st X in (carr VS).:G holds a * v in X
+            proof
+              let X be set; assume A18:X in (carr VS).:G;
+              then A19: v in X by A16,SETFAM_1:def 1;
+              reconsider X as Subset of VS by A18;
+              consider X1 being Element of Subspaces VS such that
+                        A20: X1 in G & X =(carr VS).X1 by A18,FUNCT_2:116;
+              A21: X = the carrier of X1 by A20,Def4;
+              reconsider v1 = v as Element of VS;
+                v1 in X1 by A19,A21,RLVECT_1:def 1;
+              then a * v1 in X1 by VECTSP_4:29;
+              hence thesis by A21,RLVECT_1:def 1;
+            end;
+             (carr VS).:G <> {} by Th1;
+           hence a * v in C0 by A17,SETFAM_1:def 1;
+         end;
+        hence thesis by A6,VECTSP_4:def 1;
+      end;
+    hence ex W being strict Subspace of VS st
+            meet ((carr VS).:G) = the carrier of W by A5,VECTSP_4:42;
+  end;
+ uniqueness by VECTSP_4:37;
+end;
+
+theorem Th3:
+  Subspaces(VS) = the carrier of lattice VS
+   proof
+      lattice VS = LattStr (# Subspaces(VS), SubJoin(VS), SubMeet(VS) #) by
+Def1
+;
+    hence thesis;
+   end;
+
+theorem Th4:
+ the L_meet of lattice VS = SubMeet(VS)
+  proof
+     lattice VS = LattStr (# Subspaces(VS), SubJoin(VS), SubMeet(VS) #) by Def1
+;
+   hence thesis;
+  end;
+
+ theorem Th5:
+  the L_join of lattice VS = SubJoin(VS)
+   proof
+      lattice VS = LattStr (# Subspaces(VS), SubJoin(VS), SubMeet(VS) #) by
+Def1
+;
+    hence thesis;
+   end;
+
+theorem Th6:
+ for VS being strict VectSp of F,
+     p,q being Element of lattice VS,
+     H1,H2 being strict Subspace of VS st p=H1 & q=H2
+ holds p [= q iff the carrier of H1 c= the carrier of H2
+ proof
+  let VS be strict VectSp of F;
+  let p,q be Element of lattice VS;
+  let H1,H2 be strict Subspace of VS;
+  A1: the carrier of lattice VS = Subspaces(VS) by Th3;
+  then consider A1 being strict Subspace of VS such that
+                                     A2:  A1=p by VECTSP_5:def 3;
+  consider A2 being strict Subspace of VS such that
+                                     A3:  A2=q by A1,VECTSP_5:def 3;
+  A4: p [= q implies the carrier of A1 c= the carrier of A2
+   proof
+    assume p [= q;
+    then A5: p"/\"q = p by LATTICES:21;
+      p"/\"q= (the L_meet of lattice VS).(p,q) by LATTICES:def 2
+           .= SubMeet(VS).(p,q) by Th4
+           .= A1 /\ A2 by A1,A2,A3,VECTSP_5:def 8;
+    then (the carrier of A1) /\ the carrier of A2 = the carrier of A1
+                                                by A2,A5,VECTSP_5:def 2;
+    hence the carrier of A1 c= the carrier of A2 by XBOOLE_1:17;
+   end;
+
+    the carrier of A1 c= the carrier of A2 implies p [= q
+   proof
+    assume the carrier of A1 c= the carrier of A2;
+    then (the carrier of A1) /\ the carrier of A2 = the carrier of A1
+                                                               by XBOOLE_1:28;
+    then A6: A1 /\ A2 = A1 by VECTSP_5:def 2;
+      A1 /\ A2 = SubMeet(VS).(p,q) by A1,A2,A3,VECTSP_5:def 8
+                .= (the L_meet of lattice VS).(p,q) by Th4
+                .= p"/\"q by LATTICES:def 2;
+    hence p [= q by A2,A6,LATTICES:21;
+   end;
+  hence thesis by A2,A3,A4;
+ end;
+
+theorem Th7:
+  for VS being strict VectSp of F,
+     p,q being Element of lattice VS,
+     H1,H2 being Subspace of VS st p=H1 & q=H2
+     holds p"\/"q = H1+H2
+ proof
+  let VS be strict VectSp of F;
+  let p,q be Element of lattice VS;
+  let H1,H2 be Subspace of VS;
+  A1: the carrier of lattice VS = Subspaces(VS) by Th3;
+  then consider H1 being strict Subspace of VS
+                                    such that A2: H1=p by VECTSP_5:def 3;
+  consider H2 being strict Subspace of VS
+                                   such that A3: H2=q by A1,VECTSP_5:def 3;
+    p"\/"q = (the L_join of lattice VS).(p,q) by LATTICES:def 1
+           .= SubJoin(VS).(p,q) by Th5
+           .= H1 + H2 by A1,A2,A3,VECTSP_5:def 7;
+  hence thesis by A2,A3;
+ end;
+
+theorem Th8:
+  for VS being strict VectSp of F,
+     p,q being Element of lattice VS,
+     H1,H2 being Subspace of VS st p=H1 & q=H2
+     holds p"/\"q = H1 /\ H2
+ proof
+  let VS be strict VectSp of F;
+  let p,q be Element of lattice VS;
+  let H1,H2 be Subspace of VS;
+  A1: the carrier of lattice VS = Subspaces(VS) by Th3;
+  then consider H1 being strict Subspace of VS
+                                    such that A2: H1=p by VECTSP_5:def 3;
+  consider H2 being strict Subspace of VS
+                                   such that A3: H2=q by A1,VECTSP_5:def 3;
+    p"/\"q = (the L_meet of lattice VS).(p,q) by LATTICES:def 2
+           .= SubMeet(VS).(p,q) by Th4
+           .= H1 /\ H2 by A1,A2,A3,VECTSP_5:def 8;
+  hence thesis by A2,A3;
+ end;
+
+definition let L be non empty LattStr;
+ redefine attr L is complete means
+    for X being Subset of L
+   ex a being Element of L
+    st a is_less_than X &
+     for b being Element of L
+      st b is_less_than X holds b [= a;
+  compatibility
+  proof
+   hereby
+    assume
+A1:   L is complete;
+     let X be Subset of L;
+     set Y = { c where c is Element of L:
+                    c is_less_than X };
+     consider p being Element of L such that
+A2:       Y is_less_than p and
+A3:       for r being Element of L st Y is_less_than r
+            holds p [= r
+                by A1,LATTICE3:def 18;
+     take p;
+     thus p is_less_than X
+       proof let q be Element of L;
+         assume
+A4:      q in X;
+           Y is_less_than q
+           proof let s be Element of L;
+             assume s in Y;
+             then ex t being Element of L st
+                       s = t & t is_less_than X;
+             hence s [= q by A4,LATTICE3:def 16;
+           end;
+         hence p [= q by A3;
+       end;
+     let b be Element of L;
+     assume b is_less_than X;
+     then b in Y;
+     hence b [= p by A2,LATTICE3:def 17;
+    end;
+    assume
+A5:   for X being Subset of L
+     ex a being Element of L st a is_less_than X &
+        for b being Element of L st b is_less_than X
+            holds b [= a;
+     let X be set;
+     defpred P[Element of L] means X is_less_than $1;
+     set Y = { c where c is Element of L: P[c] };
+       Y is Subset of L from SubsetD;
+     then consider p being Element of L such that
+A6:       p is_less_than Y and
+A7:            for r being Element of L
+                             st r is_less_than Y holds r [= p by A5;
+     take p;
+     thus X is_less_than p
+       proof let q be Element of L;
+         assume
+A8:      q in X;
+           q is_less_than Y
+           proof let s be Element of L;
+             assume s in Y;
+             then ex t being Element of L st
+                  s = t & X is_less_than t;
+             hence q [= s by A8,LATTICE3:def 17;
+           end;
+         hence q [= p by A7;
+       end;
+     let r be Element of L;
+     assume
+       X is_less_than r;
+     then r in Y;
+     hence p [= r by A6,LATTICE3:def 16;
+   end;
+end;
+
+reserve Z1 for set;
+
+theorem
+        for VS holds lattice VS is complete
+ proof
+  let VS;
+  A1:the carrier of lattice VS = Subspaces(VS) by Th3;
+  let Y be Subset of lattice VS;
+  per cases;
+   suppose A2: Y = {};
+   thus thesis
+   proof
+    take Top lattice VS;
+    thus Top lattice VS is_less_than Y
+     proof
+      let q be Element of lattice VS;
+      thus thesis by A2;
+     end;
+    let b be Element of lattice VS;
+    assume b is_less_than Y;
+    thus thesis by LATTICES:45;
+   end;
+   suppose Y <> {};
+  then reconsider X = Y as non empty Subset of Subspaces(VS) by Th3;
+  reconsider p = meet X as Element of lattice VS
+  by A1,VECTSP_5:def 3;
+  take p;
+  thus p is_less_than Y
+   proof
+    let q be Element of lattice VS;
+    consider H being strict Subspace of VS such that
+                                             A3:H=q by A1,VECTSP_5:def 3;
+    reconsider h = q as Element of Subspaces(VS) by Th3;
+    assume
+    A4: q in Y;
+      (carr VS).h = the carrier of H by A3,Def4;
+    then the carrier of H in (carr VS).:X by A4,FUNCT_2:43;
+    then meet ((carr VS).:X) c= the carrier of H by SETFAM_1:4;
+    then the carrier of meet X c= the carrier of H by Def5;
+    hence p [= q by A3,Th6;
+   end;
+  let r be Element of lattice VS;
+  assume A5: r is_less_than Y;
+  consider H being strict Subspace of VS such that
+                                         A6: H=r by A1,VECTSP_5:def 3;
+   consider x being Element of X;
+A7:for Z1 st Z1 in (carr VS).:X holds the carrier of H c= Z1
+   proof
+    let Z1;
+    assume A8: Z1 in (carr VS).:X;
+    then reconsider Z2=Z1 as Subset of VS;
+    consider z1 being Element of Subspaces(VS) such that
+                        A9:  z1 in X & Z2=(carr VS).z1 by A8,FUNCT_2:116;
+    reconsider z1 as Element of lattice VS by Th3;
+    consider z3 being strict Subspace of VS such that A10: z3=z1
+                                                      by VECTSP_5:def 3;
+    A11: Z1 = the carrier of z3 by A9,A10,Def4;
+      r [= z1 by A5,A9,LATTICE3:def 16;
+    hence the carrier of H c= Z1 by A6,A10,A11,Th6;
+   end;
+    (carr VS).x in (carr VS).:X by FUNCT_2:43;
+  then the carrier of H c= meet ((carr VS).:X) by A7,SETFAM_1:6;
+  then the carrier of H c= the carrier of meet X by Def5;
+  hence r [= p by A6,Th6;
+ end;
+
+theorem Th10:
+   for x being set
+   for VS being strict VectSp of F
+   for S being Subset of VS st
+                        S is non empty & S is lineary-closed holds
+          x in Lin S implies x in S
+    proof
+      let x be set, VS be strict VectSp of F,
+      S be Subset of VS such that
+A1:                        S is non empty & S is lineary-closed;
+      assume
+A2:   x in Lin S;
+      consider W being strict Subspace of VS such that
+A3:                 S = the carrier of W by A1,VECTSP_4:42;
+        Lin S = W by A3,VECTSP_7:16;
+      hence x in S by A2,A3,RLVECT_1:def 1;
+    end;
+
+definition
+ let F be Field;
+ let A,B be strict VectSp of F;
+ let f be Function of the carrier of A,the carrier of B;
+  func FuncLatt f -> Function of the carrier of lattice A,
+                                the carrier of lattice B means
+ :Def7: for S being strict Subspace of A, B0 being Subset of B
+            st B0 = f.:the carrier of S
+                                         holds it.S = Lin B0;
+
+ existence
+  proof
+   defpred P[set,set] means for S being Subspace of A st S = $1 holds
+                                          $2 = Lin(f.: the carrier of S);
+
+  A1:for x st x in the carrier of lattice A
+  ex y be set st y in the carrier of lattice B & P[x,y]
+    proof
+     A2: the carrier of lattice B = Subspaces B by Th3;
+     let x be set; assume x in the carrier of lattice A;
+     then x in Subspaces A by Th3;
+     then consider X being strict Subspace of A such that
+                                        A3: X = x by VECTSP_5:def 3;
+     reconsider y=f.:the carrier of X as Subset of B;
+     consider Y being strict Subspace of B
+                              such that A4: Y =Lin(y);
+     take Y;
+     thus thesis by A2,A3,A4,VECTSP_5:def 3;
+    end;
+
+  consider f1 being Function of the carrier of lattice A,
+  the carrier of lattice B such that
+A5:  for x st x in the carrier of lattice A holds P[x,f1.x] from FuncEx1(A1);
+  take f1;
+  thus thesis
+     proof
+      let S be strict Subspace of A;
+      let B0 be Subset of B;
+      assume A6: B0 = f.:the carrier of S;
+      A7: Subspaces A = the carrier of lattice A by Th3;
+        S is Element of Subspaces A by VECTSP_5:def 3;
+      hence f1.S = Lin B0 by A5,A6,A7;
+    end;
+ end;
+ uniqueness
+  proof
+   let F1,F2 be Function of the carrier of lattice A,
+                            the carrier of lattice B such that
+   A8: for S being strict Subspace of A, B0 being Subset of B
+       st B0 = f.:the carrier of S
+                                    holds F1.S = Lin B0 and
+   A9: for S being strict Subspace of A, B0 being Subset of B
+       st B0 = f.:the carrier of S
+                                    holds F2.S = Lin B0;
+
+     for h being set st h in the carrier of lattice A holds F1.h = F2.h
+       proof
+         let h be set; assume h in the carrier of lattice A;
+         then h is Element of Subspaces A by Th3;
+         then consider S being strict Subspace of A such that
+                                             A10:S = h by VECTSP_5:def 3;
+         reconsider B0 = f.:(the carrier of S) as Subset of B;
+           F1.h = Lin B0 by A8,A10;
+         hence thesis by A9,A10;
+       end;
+   hence thesis by FUNCT_2:18;
+  end;
+ end;
+
+definition
+ let L1, L2 be Lattice;
+ mode Semilattice-Homomorphism of L1,L2 ->
+ Function of the carrier of L1, the carrier of L2 means
+  :Def8: for a, b being Element of L1 holds
+                              it.(a "/\" b) = it.a "/\" it.b;
+  existence
+   proof
+    consider h being Homomorphism of L1, L2;
+    take h;
+    thus thesis by LATTICE4:def 1;
+   end;
+end;
+
+definition
+ let L1, L2 be Lattice;
+ mode sup-Semilattice-Homomorphism of L1, L2 ->
+ Function of the carrier of L1, the carrier of L2 means
+   :Def9: for a, b being Element of L1 holds
+                              it.(a "\/" b) = it.a "\/" it.b;
+  existence
+   proof
+    consider h being Homomorphism of L1, L2;
+    take h;
+    thus thesis by LATTICE4:def 1;
+   end;
+end;
+
+theorem
+    for L1,L2 being Lattice
+  for f being Function of the carrier of L1, the carrier of L2 holds
+      f is Homomorphism of L1, L2 iff
+       f is sup-Semilattice-Homomorphism of L1, L2 &
+       f is Semilattice-Homomorphism of L1, L2
+  proof
+    let L1,L2 be Lattice,
+    f be Function of the carrier of L1, the carrier of L2;
+A1: f is Homomorphism of L1, L2 implies
+         f is sup-Semilattice-Homomorphism of L1, L2 &
+         f is Semilattice-Homomorphism of L1, L2
+      proof
+      assume f is Homomorphism of L1, L2;
+         then for a,b being Element of L1 holds
+               f.(a "\/" b) = f.a "\/" f.b & f.(a "/\" b) = f.a "/\" f.b
+                                               by LATTICE4:def 1;
+         hence f is sup-Semilattice-Homomorphism of L1, L2 &
+         f is Semilattice-Homomorphism of L1, L2 by Def8,Def9;
+       end;
+      f is sup-Semilattice-Homomorphism of L1, L2 &
+     f is Semilattice-Homomorphism of L1, L2 implies
+         f is Homomorphism of L1, L2
+       proof
+        assume
+          f is sup-Semilattice-Homomorphism of L1, L2 &
+        f is Semilattice-Homomorphism of L1, L2;
+        then for a,b being Element of L1 holds
+               f.(a "\/" b) = f.a "\/" f.b & f.(a "/\" b) = f.a "/\" f.b
+                                               by Def8,Def9;
+        hence f is Homomorphism of L1, L2 by LATTICE4:def 1;
+       end;
+    hence thesis by A1;
+  end;
+
+theorem Th12:
+ for F being Field
+ for A,B being strict VectSp of F
+ for f be map of A, B st f is linear holds
+   FuncLatt f is sup-Semilattice-Homomorphism of lattice A, lattice B
+
+   proof
+    let F be Field;
+    let A,B be strict VectSp of F;
+    let f be map of A,B such that
+    A1:                                  f is linear;
+      FuncLatt f is sup-Semilattice-Homomorphism of lattice A, lattice B
+     proof
+      let a,b be Element of lattice A;
+        (FuncLatt f).(a "\/" b) = (FuncLatt f).a "\/" (FuncLatt f).b
+        proof
+         A2: the carrier of lattice A = Subspaces(A) by Th3;
+         then consider A1 being strict Subspace of A such that
+A3:                                          A1 = a by VECTSP_5:def 3;
+         consider B1 being strict Subspace of A such that
+A4:                                          B1 = b by A2,VECTSP_5:def 3;
+A5:      (FuncLatt f).(a "\/" b) =(FuncLatt f).(A1+B1) by A3,A4,Th7;
+         reconsider a2 = (FuncLatt f).a as Element of lattice B;
+A6:     a2 = Lin(f.:the carrier of A1) by A3,Def7;
+         reconsider b2 = (FuncLatt f).b as Element of lattice B;
+A7:     b2 = Lin(f.:the carrier of B1) by A4,Def7;
+A8:      (FuncLatt f).(A1+B1) = Lin(f.:the carrier of (A1+B1)) by Def7;
+A9:     dom f = the carrier of A by FUNCT_2:def 1;
+           0.A in A1 by VECTSP_4:25;
+then A10:     0.A in the carrier of A1 by RLVECT_1:def 1;
+         consider y being Element of B such that
+A11:                      y = f.(0.A);
+A12:      f.:the carrier of A1 <> {} by A9,A10,A11,FUNCT_1:def 12;
+A13:      f.:the carrier of A1 is lineary-closed
+          proof
+           set BB = f.:the carrier of A1;
+           A14: for v,u being Element of B st v in BB & u in BB
+                                                           holds v + u in BB
+             proof
+               let v,u be Element of B; assume
+      A15:                                  v in BB & u in BB;
+               then consider x being Element of A such that
+      A16:             x in the carrier of A1 & v = f.x by FUNCT_2:116;
+      A17:      x in A1 by A16,RLVECT_1:def 1;
+               consider y being Element of A such that
+      A18:             y in the carrier of A1 & u = f.y by A15,FUNCT_2:116;
+                 y in A1 by A18,RLVECT_1:def 1;
+               then x + y in A1 by A17,VECTSP_4:28;
+               then x + y in the carrier of A1 by RLVECT_1:def 1;
+               then f.(x + y) in BB by FUNCT_2:43;
+               hence thesis by A1,A16,A18,MOD_2:def 5;
+             end;
+             for a being Element of F,
+               v being Element of B
+           st v in BB holds a * v in BB
+             proof
+              let a be Element of F;
+              let v be Element of B;
+              assume v in BB;
+              then consider x being Element of A such that
+    A19:               x in the carrier of A1 & v = f.x by FUNCT_2:116;
+                x in A1 by A19,RLVECT_1:def 1;
+              then a * x in A1 by VECTSP_4:29;
+              then a * x in the carrier of A1 by RLVECT_1:def 1;
+              then f.(a * x) in BB by FUNCT_2:43;
+              hence a * v in BB by A1,A19,MOD_2:def 5;
+             end;
+           hence thesis by A14,VECTSP_4:def 1;
+          end;
+
+         then consider A3 being strict Subspace of B such that
+A20:              the carrier of A3 =f.:the carrier of A1 by A12,VECTSP_4:42;
+ A21:     Lin(f.:the carrier of A1) = A3 by A20,VECTSP_7:16;
+           0.A in B1 by VECTSP_4:25;
+then A22:     0.A in the carrier of B1 by RLVECT_1:def 1;
+         consider y1 being Element of B such that
+A23:              y1 = f.(0.A);
+A24:     f.:the carrier of B1 <> {} by A9,A22,A23,FUNCT_1:def 12;
+A25:      f.:the carrier of B1 is lineary-closed
+          proof
+           set BB = f.:the carrier of B1;
+           A26: for v,u being Element of B st v in BB & u in BB
+                                                           holds v + u in BB
+             proof
+               let v,u be Element of B; assume
+               A27: v in BB & u in BB;
+               then consider x being Element of A such that
+    A28:               x in the carrier of B1 & v = f.x by FUNCT_2:116;
+    A29:        x in B1 by A28,RLVECT_1:def 1;
+               consider y being Element of A such that
+    A30:               y in the carrier of B1 & u = f.y by A27,FUNCT_2:116;
+                 y in B1 by A30,RLVECT_1:def 1;
+               then x + y in B1 by A29,VECTSP_4:28;
+               then x + y in the carrier of B1 by RLVECT_1:def 1;
+               then f.(x + y) in BB by FUNCT_2:43;
+               hence thesis by A1,A28,A30,MOD_2:def 5;
+             end;
+             for a being Element of F,
+               v being Element of B
+           st v in BB holds a * v in BB
+             proof
+              let a be Element of F;
+              let v be Element of B;
+              assume v in BB;
+              then consider x being Element of A such that
+    A31:               x in the carrier of B1 & v = f.x by FUNCT_2:116;
+                x in B1 by A31,RLVECT_1:def 1;
+              then a * x in B1 by VECTSP_4:29;
+              then a * x in the carrier of B1 by RLVECT_1:def 1;
+              then f.(a * x) in BB by FUNCT_2:43;
+              hence a * v in BB by A1,A31,MOD_2:def 5;
+             end;
+           hence thesis by A26,VECTSP_4:def 1;
+          end;
+         then consider B3 being strict Subspace of B such that
+A32:              the carrier of B3= f.:the carrier of B1
+                        by A24,VECTSP_4:42;
+A33:      Lin(f.:the carrier of B1) = B3 by A32,VECTSP_7:16;
+A34:      f.:the carrier of (A1+B1) is lineary-closed
+          proof
+           set BB = f.:the carrier of (A1+B1);
+           A35: for v,u being Element of B st v in BB & u in BB
+                                                           holds v + u in BB
+             proof
+               let v,u be Element of B; assume
+      A36:                                  v in BB & u in BB;
+               then consider x being Element of A such that
+      A37:             x in the carrier of (A1+B1) & v = f.x by FUNCT_2:116;
+      A38:      x in A1+B1 by A37,RLVECT_1:def 1;
+               consider y being Element of A such that
+      A39:             y in the carrier of A1+B1 & u = f.y by A36,FUNCT_2:116;
+                 y in A1+B1 by A39,RLVECT_1:def 1;
+               then x + y in A1+B1 by A38,VECTSP_4:28;
+               then x + y in the carrier of A1+B1 by RLVECT_1:def 1;
+               then f.(x + y) in BB by FUNCT_2:43;
+               hence thesis by A1,A37,A39,MOD_2:def 5;
+             end;
+             for a being Element of F,
+               v being Element of B
+           st v in BB holds a * v in BB
+             proof
+              let a be Element of F;
+              let v be Element of B;
+              assume v in BB;
+              then consider x being Element of A such that
+    A40:               x in the carrier of A1+B1 & v = f.x by FUNCT_2:116;
+                x in A1+B1 by A40,RLVECT_1:def 1;
+              then a * x in A1+B1 by VECTSP_4:29;
+              then a * x in the carrier of A1+B1 by RLVECT_1:def 1;
+              then f.(a * x) in BB by FUNCT_2:43;
+              hence a * v in BB by A1,A40,MOD_2:def 5;
+             end;
+           hence thesis by A35,VECTSP_4:def 1;
+          end;
+         reconsider P = Lin(f.:the carrier of (A1+B1)) as Subspace of B;
+         reconsider AB = A3 + B3 as Subspace of B;
+           P = AB
+          proof
+            A41: the carrier of P c= the carrier of AB
+             proof
+                 let x be set;
+                 assume x in the carrier of P;
+         then A42:    x in P by RLVECT_1:def 1;
+                   f.:the carrier of (A1+B1) =
+                          the carrier of (A3+B3)
+                  proof
+                   thus f.:the carrier of (A1+B1) c= the carrier of (A3+B3)
+                    proof
+                       let x be set;
+                       assume
+               A43:     x in f.:the carrier of (A1+B1);
+                       then reconsider x as Element of B;
+                       consider c being Element of A such that
+               A44:          c in the carrier of (A1+B1) & x = f.c
+                                                    by A43,FUNCT_2:116;
+                         c in A1+B1 by A44,RLVECT_1:def 1;
+                       then consider u,v being Element of A such
+that
+                                A45: u in A1 & v in B1 & c = u+v by VECTSP_5:5;
+               A46:     v in the carrier of B1 by A45,RLVECT_1:def 1;
+               A47:     x = f.u + f.v by A1,A44,A45,MOD_2:def 5;
+                         u in the carrier of A1 by A45,RLVECT_1:def 1;
+                       then f.u in f.:the carrier of A1
+                             by FUNCT_2:43;
+               then A48:     f.u in Lin(f.:the carrier of A1)
+                             by VECTSP_7:13;
+                        f.v in f.:the carrier of B1 by A46,FUNCT_2:43;
+                          then f.v in Lin(f.:the carrier of B1)
+                            by VECTSP_7:13;
+                       then x in Lin(f.:the carrier of A1)+Lin(f.:the carrier
+of B1)
+                                           by A47,A48,VECTSP_5:5;
+                       hence thesis by A21,A33,RLVECT_1:def 1;
+                    end;
+                   thus the carrier of (A3+B3) c= f.:the carrier of (A1+B1)
+                    proof
+                       let x be set;
+                       assume
+                         x in the carrier of (A3+B3);
+                       then x in A3+B3 by RLVECT_1:def 1;
+                       then consider vb,ub being Element of B
+                       such that
+               A49:          vb in A3 & ub in B3 & x=vb+ub by VECTSP_5:5;
+                         vb in f.:
+the carrier of A1 by A12,A13,A21,A49,Th10;
+                       then consider va being Element of A such
+that
+               A50:        va in the carrier of A1 & vb = f.va by FUNCT_2:116;
+                         va in A1 by A50,RLVECT_1:def 1;
+              then A51:     va in A1+B1 by VECTSP_5:6;
+                         ub in f.:the carrier of B1
+                                  by A24,A25,A33,A49,Th10;
+                       then consider ua being Element of A such
+that
+               A52:        ua in the carrier of B1 & ub = f.ua by FUNCT_2:116;
+                         ua in B1 by A52,RLVECT_1:def 1;
+                       then ua in A1+B1 by VECTSP_5:6;
+                       then ua + va in A1+B1 by A51,VECTSP_4:28;
+                       then ua + va in the carrier of (A1+B1) by RLVECT_1:def 1
+;
+                       then f.(ua + va) in f.:the carrier of (A1+B1)
+                                              by FUNCT_2:43;
+                       hence thesis by A1,A49,A50,A52,MOD_2:def 5;
+                    end;
+                  end;
+                 hence thesis by A34,A42,Th10;
+             end;
+
+              the carrier of AB c= the carrier of P
+             proof
+                 let x be set;
+                 assume x in the carrier of AB;
+                 then x in A3 + B3 by RLVECT_1:def 1;
+                 then consider u,v being Element of B such that
+         A53:              u in A3 & v in B3 & x = u+v by VECTSP_5:5;
+         A54:     u in f.:the carrier of A1 by A20,A53,RLVECT_1:def 1;
+                    f.:the carrier of A1 c= f.:the carrier of (A1+B1)
+                   proof
+                       let x be set;
+                       assume
+                  A55:  x in f.:the carrier of A1;
+                       then reconsider x as Element of B;
+                       consider c being Element of A such that
+                  A56:      c in the carrier of A1 & x=f.c by A55,FUNCT_2:116;
+                         the carrier of A1 c= the carrier of A1+B1
+                        proof
+                           let x be set;
+                           assume
+                      A57: x in the carrier of A1;
+                      then A58:  x in A1 by RLVECT_1:def 1;
+                             the carrier of A1 c= the carrier of A
+                                           by VECTSP_4:def 2;
+                          then reconsider x as Element of A by
+A57;
+                             x in A1+B1 by A58,VECTSP_5:6;
+                           hence thesis by RLVECT_1:def 1;
+                        end;
+                       hence thesis by A56,FUNCT_2:43;
+                   end;
+         then A59:     u in P by A54,VECTSP_7:13;
+         A60:     v in f.:the carrier of B1 by A32,A53,RLVECT_1:def 1;
+                   f.:the carrier of B1 c= f.:the carrier of (A1+B1)
+                      proof
+                       let x be set;
+                       assume
+                  A61:  x in f.:the carrier of B1;
+                       then reconsider x as Element of B;
+                       consider c being Element of A such that
+                  A62:      c in the carrier of B1 & x=f.c by A61,FUNCT_2:116;
+                         the carrier of B1 c= the carrier of A1+B1
+                        proof
+                           let x be set;
+                           assume
+                      A63: x in the carrier of B1;
+                      then A64:  x in B1 by RLVECT_1:def 1;
+                             the carrier of B1 c= the carrier of A
+                                            by VECTSP_4:def 2;
+                          then reconsider x as Element of A by
+A63;
+                             x in A1+B1 by A64,VECTSP_5:6;
+                           hence thesis by RLVECT_1:def 1;
+                        end;
+                       hence thesis by A62,FUNCT_2:43;
+                   end;
+                 then v in P by A60,VECTSP_7:13;
+                 then x in P by A53,A59,VECTSP_4:28;
+                 hence x in the carrier of P by RLVECT_1:def 1;
+             end;
+           then the carrier of AB = the carrier of P by A41,XBOOLE_0:def 10;
+           hence thesis by VECTSP_4:37;
+          end;
+         hence thesis by A5,A6,A7,A8,A21,A33,Th7;
+        end;
+      hence thesis;
+     end;
+    hence thesis;
+   end;
+
+theorem
+   for F being Field
+ for A,B being strict VectSp of F
+ for f be map of A,B st f is one-to-one linear holds
+            FuncLatt f is Homomorphism of lattice A, lattice B
+
+  proof
+   let F be Field,
+   A,B be strict VectSp of F,
+   f be map of A, B such that
+     A1:           f is one-to-one linear;
+     for a,b being Element of lattice A holds
+      (FuncLatt f).(a "\/" b) = (FuncLatt f).a "\/" (FuncLatt f).b &
+      (FuncLatt f).(a "/\" b) = (FuncLatt f).a "/\" (FuncLatt f).b
+      proof
+       let a,b be Element of lattice A;
+       A2: the carrier of lattice A = Subspaces(A) by Th3;
+  A3:     FuncLatt f is sup-Semilattice-Homomorphism of
+         lattice A, lattice B by A1,Th12;
+         (FuncLatt f).(a "/\" b) = (FuncLatt f).a "/\" (FuncLatt f).b
+        proof
+         consider A1 being strict Subspace of A such that
+A4:                                          A1 = a by A2,VECTSP_5:def 3;
+         consider B1 being strict Subspace of A such that
+A5:                                          B1 = b by A2,VECTSP_5:def 3;
+A6:      (FuncLatt f).(a "/\" b) =(FuncLatt f).(A1 /\ B1) by A4,A5,Th8;
+         reconsider a2 = (FuncLatt f).a as Element of lattice B;
+A7:     a2 = Lin(f.:the carrier of A1) by A4,Def7;
+         reconsider b2 = (FuncLatt f).b as Element of lattice B;
+A8:     b2 = Lin(f.:the carrier of B1) by A5,Def7;
+A9:      (FuncLatt f).(A1 /\ B1) = Lin(f.:the carrier of A1 /\ B1) by Def7;
+A10:     dom f = the carrier of A by FUNCT_2:def 1;
+           0.A in A1 by VECTSP_4:25;
+then A11:     0.A in the carrier of A1 by RLVECT_1:def 1;
+         consider y being Element of B such that
+A12:                      y = f.(0.A);
+A13:      f.:the carrier of A1 <> {} by A10,A11,A12,FUNCT_1:def 12;
+A14:      f.:the carrier of A1 is lineary-closed
+          proof
+           set BB = f.:the carrier of A1;
+           A15: for v,u being Element of B st v in BB & u in BB
+                                                           holds v + u in BB
+             proof
+               let v,u be Element of B; assume
+      A16:                                  v in BB & u in BB;
+               then consider x being Element of A such that
+      A17:             x in the carrier of A1 & v = f.x by FUNCT_2:116;
+      A18:      x in A1 by A17,RLVECT_1:def 1;
+               consider y being Element of A such that
+      A19:             y in the carrier of A1 & u = f.y by A16,FUNCT_2:116;
+                 y in A1 by A19,RLVECT_1:def 1;
+               then x + y in A1 by A18,VECTSP_4:28;
+               then x + y in the carrier of A1 by RLVECT_1:def 1;
+               then f.(x + y) in BB by FUNCT_2:43;
+               hence thesis by A1,A17,A19,MOD_2:def 5;
+             end;
+             for a being Element of F,
+               v being Element of B
+           st v in BB holds a * v in BB
+             proof
+              let a be Element of F;
+              let v be Element of B;
+              assume v in BB;
+              then consider x being Element of A such that
+    A20:               x in the carrier of A1 & v = f.x by FUNCT_2:116;
+                x in A1 by A20,RLVECT_1:def 1;
+              then a * x in A1 by VECTSP_4:29;
+              then a * x in the carrier of A1 by RLVECT_1:def 1;
+              then f.(a * x) in BB by FUNCT_2:43;
+              hence a * v in BB by A1,A20,MOD_2:def 5;
+             end;
+           hence thesis by A15,VECTSP_4:def 1;
+          end;
+
+         then consider A3 being strict Subspace of B such that
+A21:              the carrier of A3 =f.:the carrier of A1 by A13,VECTSP_4:42;
+ A22:     Lin(f.:the carrier of A1) = A3 by A21,VECTSP_7:16;
+           0.A in B1 by VECTSP_4:25;
+then A23:     0.A in the carrier of B1 by RLVECT_1:def 1;
+         consider y1 being Element of B such that
+A24:              y1 = f.(0.A);
+A25:     f.:the carrier of B1 <> {} by A10,A23,A24,FUNCT_1:def 12;
+A26:      f.:the carrier of B1 is lineary-closed
+          proof
+           set BB = f.:the carrier of B1;
+           A27: for v,u being Element of B st v in BB & u in BB
+                                                           holds v + u in BB
+             proof
+               let v,u be Element of B; assume
+               A28: v in BB & u in BB;
+               then consider x being Element of A such that
+    A29:               x in the carrier of B1 & v = f.x by FUNCT_2:116;
+    A30:        x in B1 by A29,RLVECT_1:def 1;
+               consider y being Element of A such that
+    A31:               y in the carrier of B1 & u = f.y by A28,FUNCT_2:116;
+                 y in B1 by A31,RLVECT_1:def 1;
+               then x + y in B1 by A30,VECTSP_4:28;
+               then x + y in the carrier of B1 by RLVECT_1:def 1;
+               then f.(x + y) in BB by FUNCT_2:43;
+               hence thesis by A1,A29,A31,MOD_2:def 5;
+             end;
+             for a being Element of F,
+               v being Element of B
+           st v in BB
+                                                        holds a * v in BB
+             proof
+              let a be Element of F;
+              let v be Element of B;
+              assume v in BB;
+              then consider x being Element of A such that
+    A32:               x in the carrier of B1 & v = f.x by FUNCT_2:116;
+                x in B1 by A32,RLVECT_1:def 1;
+              then a * x in B1 by VECTSP_4:29;
+              then a * x in the carrier of B1 by RLVECT_1:def 1;
+              then f.(a * x) in BB by FUNCT_2:43;
+              hence a * v in BB by A1,A32,MOD_2:def 5;
+             end;
+           hence thesis by A27,VECTSP_4:def 1;
+          end;
+         then consider B3 being strict Subspace of B such that
+A33:              the carrier of B3= f.:the carrier of B1 by A25,VECTSP_4:42;
+A34:      Lin(f.:the carrier of B1) = B3 by A33,VECTSP_7:16;
+A35:      f.:the carrier of A1 /\ B1 is lineary-closed
+          proof
+           set BB = f.:the carrier of A1 /\ B1;
+           A36: for v,u being Element of B st v in BB & u in BB
+                                                           holds v + u in BB
+             proof
+               let v,u be Element of B; assume
+      A37:                                  v in BB & u in BB;
+               then consider x being Element of A such that
+      A38:           x in the carrier of A1 /\ B1 & v = f.x by FUNCT_2:116;
+      A39:      x in A1 /\ B1 by A38,RLVECT_1:def 1;
+               consider y being Element of A such that
+      A40:             y in
+ the carrier of A1 /\ B1 & u = f.y by A37,FUNCT_2:116;
+                 y in A1 /\ B1 by A40,RLVECT_1:def 1;
+               then x + y in A1 /\ B1 by A39,VECTSP_4:28;
+               then x + y in the carrier of A1 /\ B1 by RLVECT_1:def 1;
+               then f.(x + y) in BB by FUNCT_2:43;
+               hence thesis by A1,A38,A40,MOD_2:def 5;
+             end;
+             for a being Element of F,
+               v being Element of B
+           st v in BB holds a * v in BB
+             proof
+              let a be Element of F;
+              let v be Element of B;
+              assume v in BB;
+              then consider x being Element of A such that
+    A41:               x in the carrier of A1 /\ B1 & v = f.x by FUNCT_2:116;
+                x in A1 /\ B1 by A41,RLVECT_1:def 1;
+              then a * x in A1 /\ B1 by VECTSP_4:29;
+              then a * x in the carrier of A1 /\ B1 by RLVECT_1:def 1;
+              then f.(a * x) in BB by FUNCT_2:43;
+              hence a * v in BB by A1,A41,MOD_2:def 5;
+             end;
+           hence thesis by A36,VECTSP_4:def 1;
+          end;
+         reconsider P = Lin(f.:the carrier of A1 /\ B1) as Subspace of B;
+         reconsider AB = A3 /\ B3 as Subspace of B;
+           P = AB
+          proof
+            A42: the carrier of P c= the carrier of AB
+             proof
+                 let x be set;
+                 assume x in the carrier of P;
+         then A43:    x in P by RLVECT_1:def 1;
+                   f.:the carrier of A1 /\ B1 =
+                          the carrier of A3 /\ B3
+                  proof
+                   thus f.:the carrier of A1 /\ B1 c= the carrier of A3 /\ B3
+                      proof
+                       let x be set;
+                       assume
+               A44:     x in f.:the carrier of A1 /\ B1;
+                       then reconsider x as Element of B;
+                       consider c being Element of A such that
+               A45:          c in the carrier of A1 /\ B1 & x = f.c
+                                                    by A44,FUNCT_2:116;
+                         c in A1 /\ B1 by A45,RLVECT_1:def 1;
+                       then c in A1 & c in B1 by VECTSP_5:7;
+               then A46:     c in the carrier of A1 & c in the carrier of B1
+                                                   by RLVECT_1:def 1;
+                       then f.c in f.:the carrier of A1 by FUNCT_2:43;
+               then A47:     f.c in Lin(f.:the carrier of A1)
+                             by VECTSP_7:13;
+                         f.c in f.:the carrier of B1 by A46,FUNCT_2:43;
+                       then f.c in Lin(f.:the carrier of B1)
+                            by VECTSP_7:13;
+                       then x in Lin(f.:the carrier of A1) /\
+ Lin(f.:the carrier of B1) by A45,A47,VECTSP_5:7;
+                       hence thesis by A22,A34,RLVECT_1:def 1;
+                    end;
+                   thus the carrier of A3 /\ B3 c= f.:the carrier of A1 /\ B1
+                    proof
+                       let x be set;
+                       assume x in the carrier of A3 /\ B3;
+            then A48:        x in A3 /\ B3 by RLVECT_1:def 1;
+                       then x in Lin(f.:the carrier of A1) by A22,VECTSP_5:7;
+              then A49:         x in f.:the carrier of A1 by A13,A14,Th10;
+                       then reconsider x as Element of B;
+                       consider xa being Element of A such that
+              A50:      xa in the carrier of A1 & x = f.xa by A49,FUNCT_2:116;
+             A51:      xa in A1 by A50,RLVECT_1:def 1;
+                         x in
+ Lin(f.:the carrier of B1) by A34,A48,VECTSP_5:7;
+                       then x in f.:the carrier of B1 by A25,A26,Th10;
+                       then consider xa1 being Element of A such
+that
+               A52:        xa1 in the carrier of B1 & x = f.xa1 by FUNCT_2:116;
+               A53:     xa1 in B1 by A52,RLVECT_1:def 1;
+                         xa1 = xa by A1,A50,A52,FUNCT_2:25;
+                                       then xa in A1 /\ B1 by A51,A53,VECTSP_5:
+7;
+                       then xa in the carrier of A1 /\ B1 by RLVECT_1:def 1;
+                       hence thesis by A50,FUNCT_2:43;
+                      end;
+                  end;
+                 hence thesis by A35,A43,Th10;
+             end;
+
+              the carrier of AB c= the carrier of P
+             proof
+                 let x be set;
+                 assume x in the carrier of AB;
+         then A54:     x in A3 /\ B3 by RLVECT_1:def 1;
+                 then x in Lin(f.:the carrier of A1) by A22,VECTSP_5:7;
+                 then x in f.:the carrier of A1 by A21,A22,RLVECT_1:def 1;
+                 then consider xa being Element of A such that
+        A55:        xa in the carrier of A1 & x = f.xa by FUNCT_2:116;
+        A56:     xa in A1 by A55,RLVECT_1:def 1;
+                   x in Lin(f.:the carrier of B1) by A34,A54,VECTSP_5:7;
+                 then x in f.:the carrier of B1 by A25,A26,Th10;
+                 then consider xa1 being Element of A such that
+         A57:        xa1 in the carrier of B1 & x = f.xa1 by FUNCT_2:116;
+         A58:     xa1 in B1 by A57,RLVECT_1:def 1;
+                   xa1 = xa by A1,A55,A57,FUNCT_2:25;
+                 then xa in A1 /\ B1 by A56,A58,VECTSP_5:7;
+                 then xa in the carrier of A1 /\ B1 by RLVECT_1:def 1;
+             then f.xa in f.:the carrier of A1 /\ B1 by FUNCT_2:43;
+                 then x in P by A55,VECTSP_7:13;
+                 hence x in the carrier of P by RLVECT_1:def 1;
+             end;
+           then the carrier of AB = the carrier of P by A42,XBOOLE_0:def 10;
+           hence thesis by VECTSP_4:37;
+          end;
+         hence thesis by A6,A7,A8,A9,A22,A34,Th8;
+        end;
+       hence thesis by A3,Def9;
+      end;
+     hence thesis by LATTICE4:def 1;
+   end;
+
+theorem
+   for A,B being strict VectSp of F
+ for f being map of A, B st
+  f is linear & f is one-to-one holds FuncLatt f is one-to-one
+   proof
+    let A,B be strict VectSp of F;
+    let f be map of A, B such that
+A1: f is linear & f is one-to-one;
+      for x1, x2 being set st x1 in dom FuncLatt f & x2 in dom FuncLatt f &
+    (FuncLatt f).x1 = (FuncLatt f).x2 holds x1 = x2
+     proof
+      let x1, x2 be set; assume
+A2:   x1 in dom FuncLatt f & x2 in dom FuncLatt f &
+      (FuncLatt f).x1 = (FuncLatt f).x2;
+      then x1 in the carrier of lattice A &
+      x2 in the carrier of lattice A by FUNCT_2:def 1;
+then A3:   x1 in Subspaces A & x2 in Subspaces A by Th3;
+then consider X1 being strict Subspace of A such that
+A4:                        X1 = x1 by VECTSP_5:def 3;
+      consider X2 being strict Subspace of A such that
+A5:                       X2 = x2 by A3,VECTSP_5:def 3;
+      consider A1 being Subset of B such that
+A6:   A1 = f.:the carrier of X1;
+      consider A2 being Subset of B such that
+A7:            A2 = f.:the carrier of X2;
+A8:      (FuncLatt f).X1 = Lin A1 & (FuncLatt f).X2 = Lin A2
+                                                 by A6,A7,Def7;
+A9:   dom f = the carrier of A by FUNCT_2:def 1;
+        0.A in X1 by VECTSP_4:25;
+then A10:   0.A in the carrier of X1 by RLVECT_1:def 1;
+            consider y being Element of B such that
+A11:         y = f.(0.A);
+A12:   f.:the carrier of X1 <> {} by A9,A10,A11,FUNCT_1:def 12;
+        f.:the carrier of X1 is lineary-closed
+         proof
+           set BB = f.:the carrier of X1;
+           A13: for v,u being Element of B st v in BB & u in BB
+                                                           holds v + u in BB
+             proof
+               let v,u be Element of B; assume
+      A14:                                  v in BB & u in BB;
+               then consider x being Element of A such that
+      A15:             x in the carrier of X1 & v = f.x by FUNCT_2:116;
+      A16:      x in X1 by A15,RLVECT_1:def 1;
+               consider y being Element of A such that
+      A17:             y in the carrier of X1 & u = f.y by A14,FUNCT_2:116;
+                 y in X1 by A17,RLVECT_1:def 1;
+               then x + y in X1 by A16,VECTSP_4:28;
+               then x + y in the carrier of X1 by RLVECT_1:def 1;
+               then f.(x + y) in BB by FUNCT_2:43;
+               hence thesis by A1,A15,A17,MOD_2:def 5;
+             end;
+             for a being Element of F,
+               v being Element of B
+           st v in BB
+                                                        holds a * v in BB
+             proof
+              let a be Element of F;
+              let v be Element of B;
+              assume v in BB;
+              then consider x being Element of A such that
+    A18:               x in the carrier of X1 & v = f.x by FUNCT_2:116;
+                x in X1 by A18,RLVECT_1:def 1;
+              then a * x in X1 by VECTSP_4:29;
+              then a * x in the carrier of X1 by RLVECT_1:def 1;
+              then f.(a * x) in BB by FUNCT_2:43;
+              hence a * v in BB by A1,A18,MOD_2:def 5;
+             end;
+           hence thesis by A13,VECTSP_4:def 1;
+         end;
+      then consider B1 being strict Subspace of B such that
+A19:   the carrier of B1 = f.:the carrier of X1 by A12,VECTSP_4:42;
+        0.A in X2 by VECTSP_4:25;
+then A20:   0.A in the carrier of X2 by RLVECT_1:def 1;
+      consider y being Element of B such that
+A21:            y = f.(0.A);
+A22:   f.:the carrier of X2 <> {} by A9,A20,A21,FUNCT_1:def 12;
+        f.:the carrier of X2 is lineary-closed
+         proof
+           set BB = f.:the carrier of X2;
+           A23: for v,u being Element of B st v in BB & u in BB
+                                                           holds v + u in BB
+             proof
+               let v,u be Element of B; assume
+      A24:                                  v in BB & u in BB;
+               then consider x being Element of A such that
+      A25:             x in the carrier of X2 & v = f.x by FUNCT_2:116;
+      A26:      x in X2 by A25,RLVECT_1:def 1;
+               consider y being Element of A such that
+      A27:             y in the carrier of X2 & u = f.y by A24,FUNCT_2:116;
+                 y in X2 by A27,RLVECT_1:def 1;
+               then x + y in X2 by A26,VECTSP_4:28;
+               then x + y in the carrier of X2 by RLVECT_1:def 1;
+               then f.(x + y) in BB by FUNCT_2:43;
+               hence thesis by A1,A25,A27,MOD_2:def 5;
+             end;
+             for a being Element of F,
+               v being Element of B st v in BB holds a * v in
+ BB
+             proof
+              let a be Element of F;
+              let v be Element of B;
+              assume v in BB;
+              then consider x being Element of A such that
+    A28:               x in the carrier of X2 & v = f.x by FUNCT_2:116;
+                x in X2 by A28,RLVECT_1:def 1;
+              then a * x in X2 by VECTSP_4:29;
+              then a * x in the carrier of X2 by RLVECT_1:def 1;
+              then f.(a * x) in BB by FUNCT_2:43;
+              hence a * v in BB by A1,A28,MOD_2:def 5;
+             end;
+           hence thesis by A23,VECTSP_4:def 1;
+         end;
+      then consider B2 being strict Subspace of B such that
+A29:        the carrier of B2 = f.:the carrier of X2 by A22,VECTSP_4:42;
+        Lin (f.:the carrier of X2) = B2 by A29,VECTSP_7:16;
+then A30:   f.:the carrier of X1 = f.:the carrier of X2
+                    by A2,A4,A5,A6,A7,A8,A19,A29,VECTSP_7:16;
+        the carrier of X1 c= dom f &
+      the carrier of X2 c= dom f by A9,VECTSP_4:def 2;
+      then the carrier of X1 c= the carrier of X2 &
+      the carrier of X2 c= the carrier of X1
+                     by A1,A30,FUNCT_1:157;
+      then the carrier of X1 = the carrier of X2 by XBOOLE_0:def 10;
+      hence thesis by A4,A5,VECTSP_4:37;
+     end;
+    hence thesis by FUNCT_1:def 8;
+   end;
+
+theorem
+   for A being strict VectSp of F holds
+               FuncLatt id the carrier of A = id the carrier of lattice A
+   proof
+      let A be strict VectSp of F;
+      set f = id the carrier of A;
+A1:   dom FuncLatt f = the carrier of lattice A by FUNCT_2:def 1;
+        for x being set st x in the carrier of lattice A holds (FuncLatt f).x =
+x
+       proof
+         let x be set; assume x in the carrier of lattice A;
+         then x in Subspaces A by Th3;
+         then consider X1 being strict Subspace of A such that
+A2:                                 X1 = x by VECTSP_5:def 3;
+A3:      (FuncLatt f).X1 = Lin(f.:the carrier of X1) by Def7;
+       f.:the carrier of X1 = the carrier of X1
+          proof
+            thus f.:the carrier of X1 c= the carrier of X1
+             proof
+                  let z be set;
+                  assume
+    A4:           z in f.:the carrier of X1;
+                  then reconsider z as Element of A;
+                  consider Z being Element of A such that
+    A5:                  Z in the carrier of X1 & z = f.Z by A4,FUNCT_2:116;
+                  thus thesis by A5,FUNCT_1:34;
+             end;
+            thus the carrier of X1 c= f.:the carrier of X1
+             proof
+                  let z be set;
+                  assume
+    A6:           z in the carrier of X1;
+                    the carrier of X1 c= the carrier of A by VECTSP_4:def 2;
+                  then reconsider z as Element of A by A6;
+                    f.z = z by FUNCT_1:34;
+                  hence thesis by A6,FUNCT_2:43;
+             end;
+          end;
+         hence thesis by A2,A3,VECTSP_7:16;
+       end;
+      hence thesis by A1,FUNCT_1:34;
+    end;

@@ -1,0 +1,212 @@
+:: Topological Properties of Subsets in Real Numbers
+::  by Konrad Raczkowski and Pawe{\l} Sadowski
+::
+:: Received June 18, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, SEQ_1, ORDINAL2, SEQM_3, FUNCT_1, SEQ_2, LATTICES, ARYTM_1,
+      ABSVALUE, ARYTM_3, BOOLE, COMPTS_1, RELAT_1, PRE_TOPC, SUBSET_1,
+      SQUARE_1, SEQ_4, RCOMP_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, NAT_1, RELAT_1, FUNCT_2, SEQ_1, SEQ_2, SEQM_3, SEQ_4, ABSVALUE,
+      SQUARE_1;
+ constructors NAT_1, SEQ_2, SEQM_3, SEQ_4, ABSVALUE, SQUARE_1, MEMBERED,
+      XBOOLE_0;
+ clusters XREAL_0, RELSET_1, SEQM_3, SEQ_1, NAT_1, MEMBERED, ZFMISC_1,
+      XBOOLE_0, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+reserve n,n1,m,k for Nat;
+reserve x,y for set;
+reserve s,g,g1,g2,r,p,q,t for real number;
+reserve s1,s2,s3 for Real_Sequence;
+reserve Nseq for increasing Seq_of_Nat;
+reserve X,Y,Y1 for Subset of REAL;
+
+scheme RealSeqChoice { P[set,set] }:
+ ex s1 being Function of NAT, REAL st for n being Nat holds P[n,s1.n]
+provided
+ for n being Nat ex r being real number st P[n,r];
+
+theorem :: RCOMP_1:1
+(for r holds r in X implies r in Y) implies X c= Y;
+
+canceled;
+
+theorem :: RCOMP_1:3
+ Y1 c= Y & Y is bounded_below implies Y1 is bounded_below;
+
+theorem :: RCOMP_1:4
+ Y1 c= Y & Y is bounded_above implies Y1 is bounded_above;
+
+theorem :: RCOMP_1:5
+   Y1 c= Y & Y is bounded implies Y1 is bounded;
+
+definition let g,s be real number;
+func [. g,s .] -> Subset of REAL equals
+:: RCOMP_1:def 1
+  {r where r is Real: g<=r & r<=s };
+end;
+
+definition let g,s be real number;
+func ]. g,s .[ -> Subset of REAL equals
+:: RCOMP_1:def 2
+  {r where r is Real : g<r & r<s };
+end;
+
+canceled 2;
+
+theorem :: RCOMP_1:8
+r in ].p-g,p+g.[ iff abs(r-p)<g;
+
+theorem :: RCOMP_1:9
+  r in [.p,g.] iff abs(p+g-2*r)<=g-p;
+
+theorem :: RCOMP_1:10
+  r in ].p,g.[ iff abs(p+g-2*r)<g-p;
+
+theorem :: RCOMP_1:11
+  for g,s st g<=s holds [.g,s.] = ].g,s.[ \/ {g,s};
+
+theorem :: RCOMP_1:12
+p <= g implies ].g,p.[ = {};
+
+theorem :: RCOMP_1:13
+p < g implies [.g,p.] = {};
+
+theorem :: RCOMP_1:14
+  [.p,p.] = {p};
+
+theorem :: RCOMP_1:15
+    (p<g implies ].p,g.[ <> {}) &
+  (p<=g implies p in [.p,g.] & g in [.p,g.]) &
+  ].p,g.[ c= [.p,g.];
+
+theorem :: RCOMP_1:16
+  r in [.p,g.] & s in [.p,g.] implies [.r,s.] c= [.p,g.];
+
+theorem :: RCOMP_1:17
+  r in ].p,g.[ & s in ].p,g.[ implies [.r,s.] c= ].p,g.[;
+
+theorem :: RCOMP_1:18
+  p<=g implies [.p,g.] = [.p,g.] \/ [.g,p.];
+
+definition let X;
+attr X is compact means
+:: RCOMP_1:def 3
+ for s1 st rng s1 c= X ex s2 st s2 is_subsequence_of s1 &
+ s2 is convergent & lim s2 in X;
+end;
+
+definition let X;
+attr X is closed means
+:: RCOMP_1:def 4
+ for s1 st rng s1 c= X & s1 is convergent holds lim s1 in X;
+end;
+
+definition let X;
+attr X is open means
+:: RCOMP_1:def 5
+X` is closed;
+end;
+
+canceled 3;
+
+theorem :: RCOMP_1:22
+ for s1 st rng s1 c= [.s,g.] holds s1 is bounded;
+
+theorem :: RCOMP_1:23
+ [.s,g.] is closed;
+
+theorem :: RCOMP_1:24
+   [.s,g.] is compact;
+
+theorem :: RCOMP_1:25
+ ].p,q.[ is open;
+
+definition let p, q be real number;
+  cluster ].p,q.[ -> open;
+end;
+
+theorem :: RCOMP_1:26
+X is compact implies X is closed;
+
+theorem :: RCOMP_1:27
+(for p st p in X ex r,n st 0<r & (for m st n<m holds r<abs(s1.m - p)))
+implies
+for s2 st s2 is_subsequence_of s1 holds
+not (s2 is convergent & lim s2 in X);
+
+theorem :: RCOMP_1:28
+ X is compact implies X is bounded;
+
+theorem :: RCOMP_1:29
+   X is bounded closed implies X is compact;
+
+theorem :: RCOMP_1:30
+for X st X<>{} & X is closed & X is bounded_above holds upper_bound X in X;
+
+theorem :: RCOMP_1:31
+for X st X<>{} & X is closed & X is bounded_below holds lower_bound X in X;
+
+theorem :: RCOMP_1:32
+  for X st X<>{} & X is compact holds upper_bound X in X & lower_bound X in X;
+
+theorem :: RCOMP_1:33
+  X is compact & (for g1,g2 st g1 in X & g2 in X holds [.g1,g2.] c= X) implies
+ex p,g st X = [.p,g.];
+
+definition
+cluster open Subset of REAL;
+end;
+
+definition let r be real number;
+ canceled;
+
+mode Neighbourhood of r -> Subset of REAL means
+:: RCOMP_1:def 7
+  ex g st 0<g & it = ].r-g,r+g.[;
+end;
+
+definition let r be real number;
+  cluster -> open Neighbourhood of r;
+end;
+
+canceled 3;
+
+theorem :: RCOMP_1:37
+    for N being Neighbourhood of r holds r in N;
+
+theorem :: RCOMP_1:38
+  for r for N1,N2 being Neighbourhood of r
+ex N being Neighbourhood of r st N c= N1 & N c= N2;
+
+theorem :: RCOMP_1:39
+for X being open Subset of REAL, r st r in X
+ex N being Neighbourhood of r st N c= X;
+
+theorem :: RCOMP_1:40
+  for X being open Subset of REAL, r st r in X
+ex g st 0<g & ].r-g,r+g.[ c= X;
+
+theorem :: RCOMP_1:41
+(for r st r in X holds ex N be Neighbourhood of r st N c= X)
+   implies X is open;
+
+theorem :: RCOMP_1:42
+ (for r st r in X holds ex N be Neighbourhood of r st N c= X) iff X is open;
+
+theorem :: RCOMP_1:43
+  X is open bounded_above implies not upper_bound X in X;
+
+theorem :: RCOMP_1:44
+X is open bounded_below implies not lower_bound X in X;
+
+theorem :: RCOMP_1:45
+  X is open bounded & (for g1,g2 st g1 in X & g2 in X holds [.g1,g2.] c= X)
+implies ex p,g st X = ].p,g.[;

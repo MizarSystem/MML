@@ -1,0 +1,3392 @@
+:: On a Dividing Function of the Simple Closed Curve into Segments
+::  by Yatsuka Nakamura
+::
+:: Received June 16, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, EUCLID, ARYTM_1, COMPTS_1, TOPREAL2, PSCOMP_1, JORDAN6,
+      TOPREAL1, JORDAN3, BOOLE, BORSUK_1, RELAT_1, TOPS_2, ORDINAL2, FUNCT_1,
+      SUBSET_1, RCOMP_1, FINSEQ_1, TBSP_1, GOBRD10, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XREAL_0, REAL_1, NAT_1, RCOMP_1,
+      RELAT_1, BINARITH, FINSEQ_1, FUNCT_1, FUNCT_2, FINSEQ_4, TOPREAL1,
+      TOPREAL2, TBSP_1, GOBOARD1, GOBRD10, PRE_TOPC, TOPS_2, STRUCT_0,
+      COMPTS_1, EUCLID, JORDAN3, PSCOMP_1, JORDAN5C, JORDAN6, TOPMETR;
+ constructors RCOMP_1, GOBRD10, BINARITH, TOPREAL2, TOPS_2, TBSP_1, REAL_1,
+      PSCOMP_1, JORDAN3, JORDAN4, JORDAN5C, JORDAN6, FINSEQ_4, GOBOARD1,
+      T_0TOPSP, URYSOHN1, YELLOW_8;
+ clusters STRUCT_0, RELSET_1, EUCLID, PSCOMP_1, PRE_TOPC, XREAL_0, ARYTM_3,
+      GOBOARD1, BORSUK_2, MEMBERED;
+ requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
+ definitions TARSKI, XBOOLE_0, FUNCT_1;
+ theorems TARSKI, JORDAN6, TOPREAL1, TOPREAL5, JORDAN5C, UNIFORM1, PRE_TOPC,
+      FUNCT_2, TOPS_2, RELAT_1, FUNCT_1, SCMFSA_7, FINSEQ_1, AXIOMS, TOPMETR,
+      FINSEQ_2, JORDAN3, GOBOARD1, BINARITH, NAT_1, REAL_1, RCOMP_1, FINSEQ_4,
+      SQUARE_1, GOBRD10, SPRECT_1, XBOOLE_0, XBOOLE_1, FINSEQ_3, BORSUK_1,
+      COMPTS_1, RELSET_1, AMI_5, JORDAN5B, XCMPLX_0, PARTFUN2, XCMPLX_1;
+ schemes DOMAIN_1, NAT_1;
+
+begin :: Definition of the Segment and its property
+
+reserve p,p1,p2,p3,q for Point of TOP-REAL 2;
+
+Lm1: 0 < 1;
+
+Lm2: 2-'1 = 2-1 by SCMFSA_7:3 .=1;
+
+Lm3:
+ for i, j, k be Nat holds i-'k <= j implies i <= j + k
+proof let i, j, k be Nat; assume
+A1: i-'k <= j;
+ per cases;
+ suppose
+A2: i >= k;
+   i-'k +k <= j + k by A1,AXIOMS:24;
+ hence i <= j + k by A2,AMI_5:4;
+ suppose
+A3: i <= k;
+   k <= j + k by NAT_1:29;
+ hence i <= j + k by A3,AXIOMS:22;
+end;
+
+Lm4: for i, j, k be Nat holds j + k <= i implies k <= i -' j
+proof let i, j, k be Nat; assume
+A1: j + k <= i;
+ per cases by A1,AXIOMS:21;
+ suppose j + k = i;
+ hence k <= i -' j by BINARITH:39;
+ suppose j + k < i;
+ hence k <= i -' j by Lm3;
+end;
+
+theorem Th1: for P being compact non empty Subset of TOP-REAL 2
+ st P is_simple_closed_curve holds
+ W-min(P) in Lower_Arc(P) & E-max(P) in Lower_Arc(P) &
+ W-min(P) in Upper_Arc(P) & E-max(P) in Upper_Arc(P)
+ proof let P be compact non empty Subset of TOP-REAL 2;
+   assume P is_simple_closed_curve;
+    then Upper_Arc(P) is_an_arc_of W-min(P),E-max(P) &
+    Lower_Arc(P) is_an_arc_of E-max(P),W-min(P) by JORDAN6:65;
+   hence thesis by TOPREAL1:4;
+ end;
+
+theorem Th2: for P being compact non empty Subset of TOP-REAL 2,q
+ st P is_simple_closed_curve & LE q,W-min(P),P
+holds q=W-min(P)
+proof let P be compact non empty Subset of TOP-REAL 2,q;
+ assume A1:P is_simple_closed_curve & LE q,W-min(P),P;
+   then A2:q in Upper_Arc(P) & W-min(P) in Upper_Arc(P) &
+    LE q,W-min(P),Upper_Arc(P),W-min(P),E-max(P) by JORDAN6:def 10;
+     Upper_Arc(P) is_an_arc_of W-min(P),E-max(P)
+                            by A1,JORDAN6:def 8;
+ hence q=W-min(P) by A2,JORDAN6:69;
+end;
+
+theorem Th3: for P being compact non empty Subset of TOP-REAL 2,q
+ st P is_simple_closed_curve & q in P holds
+ LE W-min(P),q,P
+proof let P be compact non empty Subset of TOP-REAL 2,q;
+  assume A1: P is_simple_closed_curve & q in P;
+then A2:q in Upper_Arc(P) \/ Lower_Arc(P) by JORDAN6:65;
+   A3: Upper_Arc(P) is_an_arc_of W-min(P),E-max(P) &
+    Lower_Arc(P) is_an_arc_of E-max(P),W-min(P) by A1,JORDAN6:65;
+     A4: W-min(P) in Upper_Arc(P) by A1,Th1;
+    now per cases by A2,XBOOLE_0:def 2;
+   case A5:q in Upper_Arc(P);
+     then LE W-min(P),q,Upper_Arc(P),W-min(P),E-max(P) by A3,JORDAN5C:10;
+    hence LE W-min(P),q,P by A4,A5,JORDAN6:def 10;
+   case A6:q in Lower_Arc(P);
+      now per cases;
+     case not q=W-min(P);
+      hence LE W-min(P),q,P by A4,A6,JORDAN6:def 10;
+     case A7: q=W-min(P);
+       then LE W-min(P),q,Upper_Arc(P),W-min(P),E-max(P) by A3,A4,JORDAN5C:9;
+      hence LE W-min(P),q,P by A4,A7,JORDAN6:def 10;
+     end;
+    hence LE W-min(P),q,P;
+   end;
+  hence LE W-min(P),q,P;
+end;
+
+definition
+ let P be compact non empty Subset of TOP-REAL 2,
+     q1,q2 be Point of TOP-REAL 2;
+ func Segment(q1,q2,P) -> Subset of TOP-REAL 2 equals
+ :Def1: {p: LE q1,p,P & LE p,q2,P} if q2<>W-min(P)
+           otherwise {p1: LE q1,p1,P or q1 in P & p1=W-min(P)};
+  correctness
+  proof
+    ex B being Subset of TOP-REAL 2 st
+    (q2<>W-min(P) implies B={p: LE q1,p,P & LE p,q2,P})&
+    (not q2<>W-min(P) implies B={p1: LE q1,p1,P or q1 in P & p1=W-min(P)})
+    proof
+      now per cases;
+     case A1:q2<>W-min(P);
+     defpred P[Point of TOP-REAL 2] means LE q1,$1,P & LE $1,q2,P;
+        {p: P[p]} is Subset of
+       TOP-REAL 2 from SubsetD;
+       then reconsider C = {p: LE q1,p,P & LE p,q2,P} as Subset of
+         TOP-REAL 2;
+        (q2<>W-min(P) implies C={p: LE q1,p,P & LE p,q2,P})&
+       (not q2<>W-min(P) implies C={p1: LE q1,p1,P or q1 in P & p1=W-min(P)})
+       by A1;
+      hence thesis;
+     case A2: not q2<>W-min(P);
+     defpred P[Point of TOP-REAL 2] means LE q1,$1,P or q1 in P & $1=W-min(P);
+        {p1: P[p1]}
+       is Subset of TOP-REAL 2 from SubsetD;
+       then reconsider C = {p1: LE q1,p1,P or q1 in P & p1=W-min(P)}
+       as Subset of TOP-REAL 2;
+        (q2<>W-min(P) implies C={p: LE q1,p,P & LE p,q2,P})&
+       (not q2<>W-min(P) implies C={p1: LE q1,p1,P or q1 in P & p1=W-min(P)})
+       by A2;
+      hence thesis;
+     end;
+     hence thesis;
+    end;
+   hence thesis;
+  end;
+ end;
+
+theorem
+  for P being compact non empty Subset of TOP-REAL 2
+ st P is_simple_closed_curve holds
+ Segment(W-min(P),E-max(P),P)=Upper_Arc(P) &
+ Segment(E-max(P),W-min(P),P)=Lower_Arc(P)
+  proof let P be compact non empty Subset of TOP-REAL 2;
+   assume A1:P is_simple_closed_curve;
+    then A2:E-max(P)<>W-min(P) by TOPREAL5:25;
+    A3: Upper_Arc(P) is_an_arc_of W-min(P),E-max(P) by A1,JORDAN6:def 8;
+A4:{p: LE W-min(P),p,P & LE p,E-max(P),P} = Upper_Arc(P)
+    proof
+      A5: {p: LE W-min(P),p,P & LE p,E-max(P),P} c= Upper_Arc(P)
+       proof let x be set;assume
+           x in {p: LE W-min(P),p,P & LE p,E-max(P),P};
+          then consider p such that
+          A6: p=x &
+          ( LE W-min(P),p,P & LE p,E-max(P),P);
+             now per cases by A6,JORDAN6:def 10;
+            case p in Upper_Arc(P) & E-max(P) in Lower_Arc(P)
+                                              & not E-max(P)=W-min(P);
+             hence x in Upper_Arc(P) by A6;
+            case p in Upper_Arc(P) & E-max(P) in Upper_Arc(P) &
+                 LE p,E-max(P),Upper_Arc(P),W-min(P),E-max(P);
+             hence x in Upper_Arc(P) by A6;
+            case A7: p in Lower_Arc(P) & E-max(P) in Lower_Arc(P)
+                  & not E-max(P)=W-min(P) &
+               LE p,E-max(P),Lower_Arc(P),E-max(P),W-min(P);
+                Lower_Arc(P) is_an_arc_of E-max(P),W-min(P)
+                            by A1,JORDAN6:def 9;
+               then p=E-max(P) by A7,JORDAN6:69;
+             hence x in Upper_Arc(P) by A3,A6,TOPREAL1:4;
+            end;
+         hence x in Upper_Arc(P);
+       end;
+       Upper_Arc(P) c= {p: LE W-min(P),p,P & LE p,E-max(P),P}
+       proof let x be set;assume A8: x in Upper_Arc(P);
+         then reconsider p2=x as Point of TOP-REAL 2;
+         A9: W-min(P) in Lower_Arc(P) & E-max(P) in Lower_Arc(P) &
+         W-min(P) in Upper_Arc(P) & E-max(P) in Upper_Arc(P) by A1,Th1;
+            LE W-min(P),p2,Upper_Arc(P),W-min(P),E-max(P)
+                                 by A3,A8,JORDAN5C:10;
+          then A10: LE W-min(P),p2,P by A8,A9,JORDAN6:def 10;
+          LE p2,E-max(P),P by A2,A8,A9,JORDAN6:def 10;
+        hence x in {p: LE W-min(P),p,P & LE p,E-max(P),P} by A10;
+       end;
+     hence thesis by A5,XBOOLE_0:def 10;
+    end;
+     {p1: LE E-max(P),p1,P or E-max(P) in P & p1=W-min(P)} = Lower_Arc(P)
+    proof
+      A11: {p1: LE E-max(P),p1,P or E-max(P) in P &
+      p1=W-min(P)} c= Lower_Arc(P)
+       proof let x be set;assume
+           x in {p1: LE E-max(P),p1,P or E-max(P) in P & p1=W-min(P)};
+          then consider p1 such that
+          A12: p1=x & (LE E-max(P),p1,P or E-max(P) in P & p1=W-min(P));
+           now per cases by A12;
+          case A13: LE E-max(P),p1,P;
+             now per cases by A12,A13,JORDAN6:def 10;
+            case x in Lower_Arc(P);
+             hence x in Lower_Arc(P);
+            case A14: E-max(P) in Upper_Arc(P) & p1 in Upper_Arc(P) &
+              LE E-max(P),p1,Upper_Arc(P),W-min(P),E-max(P);
+              A15:Upper_Arc(P) is_an_arc_of W-min(P),E-max(P)
+                             by A1,JORDAN6:65;
+              then LE p1,E-max(P),Upper_Arc(P),W-min(P),E-max(P)
+                                       by A14,JORDAN5C:10;
+              then A16:p1=E-max(P) by A14,A15,JORDAN5C:12;
+               Lower_Arc(P) is_an_arc_of E-max(P),W-min(P) by A1,JORDAN6:def 9;
+             hence x in Lower_Arc(P) by A12,A16,TOPREAL1:4;
+            end;
+           hence x in Lower_Arc(P);
+          case E-max(P) in P & p1=W-min(P);
+            then x in {W-min(P),E-max(P)} by A12,TARSKI:def 2;
+            then x in Upper_Arc(P) /\ Lower_Arc(P) by A1,JORDAN6:def 9;
+           hence x in Lower_Arc(P) by XBOOLE_0:def 3;
+          end;
+         hence x in Lower_Arc(P);
+       end;
+       Lower_Arc(P) c= {p1: LE E-max(P),p1,P or E-max(P) in P & p1=W-min(P)}
+       proof let x be set;assume A17: x in Lower_Arc(P);
+         then reconsider p2=x as Point of TOP-REAL 2;
+     Upper_Arc(P) is_an_arc_of W-min(P),E-max(P) by A1,JORDAN6:65;
+         then not (E-max P in P & p2=W-min P) implies
+          E-max P in Upper_Arc P & p2 in Lower_Arc P & not p2=W-min P
+                                 by A17,SPRECT_1:16,TOPREAL1:4;
+         then LE E-max(P),p2,P or E-max P in P & p2=W-min P by JORDAN6:def 10;
+        hence x in {p1: LE E-max(P),p1,P or E-max(P) in P & p1=W-min(P)};
+       end;
+     hence thesis by A11,XBOOLE_0:def 10;
+    end;
+   hence thesis by A2,A4,Def1;
+  end;
+
+theorem Th5:
+for P being compact non empty Subset of TOP-REAL 2,
+ q1,q2 being Point of TOP-REAL 2 st P is_simple_closed_curve & LE q1,q2,P holds
+ q1 in P & q2 in P
+proof let P be compact non empty Subset of TOP-REAL 2,
+ q1,q2 be Point of TOP-REAL 2;
+ assume A1: P is_simple_closed_curve & LE q1,q2,P;
+  then A2: Upper_Arc(P) \/ Lower_Arc(P)=P by JORDAN6:65;
+   now per cases by A1,JORDAN6:def 10;
+  case q1 in Upper_Arc(P) & q2 in Lower_Arc(P);
+   hence q1 in P & q2 in P by A2,XBOOLE_0:def 2;
+  case q1 in Upper_Arc(P) & q2 in Upper_Arc(P);
+   hence q1 in P & q2 in P by A2,XBOOLE_0:def 2;
+  case q1 in Lower_Arc(P) & q2 in Lower_Arc(P);
+   hence q1 in P & q2 in P by A2,XBOOLE_0:def 2;
+  end;
+ hence thesis;
+end;
+
+theorem Th6:
+for P being compact non empty Subset of TOP-REAL 2,
+ q1,q2 being Point of TOP-REAL 2 st P is_simple_closed_curve & LE q1,q2,P holds
+ q1 in Segment(q1,q2,P) & q2 in Segment(q1,q2,P)
+ proof let P be compact non empty Subset of TOP-REAL 2,
+   q1,q2 be Point of TOP-REAL 2;
+   assume A1: P is_simple_closed_curve & LE q1,q2,P;
+   hereby per cases;
+   suppose A2: q2<>W-min(P);
+       q1 in P by A1,Th5;
+      then LE q1,q1,P by A1,JORDAN6:71;
+      then q1 in {p: LE q1,p,P & LE p,q2,P} by A1;
+     hence q1 in Segment(q1,q2,P) by A2,Def1;
+   suppose A3: q2=W-min(P);
+       q1 in P by A1,Th5;
+      then LE q1,q1,P by A1,JORDAN6:71;
+      then q1 in {p1: LE q1,p1,P or q1 in P & p1=W-min(P)};
+     hence q1 in Segment(q1,q2,P) by A3,Def1;
+   end;
+   per cases;
+   suppose A4: q2<>W-min(P);
+       q2 in P by A1,Th5;
+      then LE q2,q2,P by A1,JORDAN6:71;
+      then q2 in {p: LE q1,p,P & LE p,q2,P} by A1;
+     hence q2 in Segment(q1,q2,P) by A4,Def1;
+   suppose A5: q2=W-min(P);
+       q2 in {p1: LE q1,p1,P or q1 in P & p1=W-min(P)} by A1;
+     hence q2 in Segment(q1,q2,P) by A5,Def1;
+ end;
+
+theorem Th7:
+for P being compact non empty Subset of TOP-REAL 2,
+ q1 being Point of TOP-REAL 2 st q1 in P & P is_simple_closed_curve holds
+   q1 in Segment(q1,W-min P,P)
+ proof let P be compact non empty Subset of TOP-REAL 2,
+   q1 be Point of TOP-REAL 2 such that
+A1:  q1 in P;
+   assume P is_simple_closed_curve;
+      then LE q1,q1,P by A1,JORDAN6:71;
+      then q1 in {p1: LE q1,p1,P or q1 in P & p1=W-min(P)};
+     hence q1 in Segment(q1,W-min P,P) by Def1;
+ end;
+
+theorem
+  for P being compact non empty Subset of TOP-REAL 2,
+ q being Point of TOP-REAL 2
+ st P is_simple_closed_curve & q in P
+ & q<>W-min(P) holds Segment(q,q,P)={q}
+proof let P be compact non empty Subset of TOP-REAL 2,
+  q be Point of TOP-REAL 2;
+  assume that
+A1:P is_simple_closed_curve and
+A2: q in P and
+A3: q <> W-min P;
+   for x being set holds x in Segment(q,q,P) iff x=q
+   proof let x be set;
+     hereby assume x in Segment(q,q,P);
+       then x in {p: LE q,p,P & LE p,q,P} by A3,Def1;
+       then ex p st p=x & (LE q,p,P & LE p,q,P);
+      hence x=q by A1,JORDAN6:72;
+     end;
+    assume A4:x=q;
+       LE q,q,P by A1,A2,JORDAN6:71;
+      then x in {p: LE q,p,P & LE p,q,P} by A4;
+     hence x in Segment(q,q,P) by A3,Def1;
+   end;
+ hence thesis by TARSKI:def 1;
+end;
+
+theorem
+ for P being compact non empty Subset of TOP-REAL 2,
+ q1,q2 being Point of TOP-REAL 2 st
+  P is_simple_closed_curve & q1<>W-min(P) & q2<>W-min(P)
+ holds not W-min(P) in Segment(q1,q2,P)
+proof let P be compact non empty Subset of TOP-REAL 2,
+ q1,q2 be Point of TOP-REAL 2;
+ assume A1: P is_simple_closed_curve & q1<>W-min(P) & q2<>W-min(P);
+  then A2:Segment(q1,q2,P)={p: LE q1,p,P & LE p,q2,P} by Def1;
+   now assume W-min(P) in Segment(q1,q2,P);
+    then consider p such that A3: p=W-min(P) &(LE q1,p,P & LE p,q2,P) by A2;
+         A4: q1 in Upper_Arc(P) & p in Upper_Arc(P) &
+            LE q1,p,Upper_Arc(P),W-min(P),E-max(P) by A3,JORDAN6:def 10;
+           Upper_Arc(P) is_an_arc_of W-min(P),E-max(P)
+                            by A1,JORDAN6:def 8;
+   hence contradiction by A1,A3,A4,JORDAN6:69;
+  end;
+ hence thesis;
+end;
+
+theorem Th10:
+for P being compact non empty Subset of TOP-REAL 2,
+ q1,q2,q3 being Point of TOP-REAL 2
+ st P is_simple_closed_curve & LE q1,q2,P & LE q2,q3,P
+ & not(q1=q2 & q1=W-min(P)) & q1<>q3 & not(q2=q3 & q2=W-min(P)) holds
+ Segment(q1,q2,P)/\ Segment(q2,q3,P)={q2}
+  proof let P be compact non empty Subset of TOP-REAL 2,
+    q1,q2,q3 be Point of TOP-REAL 2;
+    assume A1: P is_simple_closed_curve & LE q1,q2,P & LE q2,q3,P
+    & not(q1=q2 & q1=W-min(P)) & q1<>q3 & not(q2=q3 & q2=W-min(P));
+    then A2: Upper_Arc(P) is_an_arc_of W-min(P),E-max(P) by JORDAN6:def 8;
+     thus Segment(q1,q2,P)/\ Segment(q2,q3,P) c= {q2}
+     proof let x be set;
+       assume x in Segment(q1,q2,P)/\ Segment(q2,q3,P);
+       then A3: x in Segment(q1,q2,P) & x in Segment(q2,q3,P) by XBOOLE_0:def 3
+;
+        now per cases;
+       case q3<>W-min(P);
+         then x in {p: LE q2,p,P & LE p,q3,P} by A3,Def1;
+         then consider p such that A4: p=x & (LE q2,p,P & LE p,q3,P);
+          now per cases;
+         case q2<>W-min(P);
+           then x in {p2: LE q1,p2,P & LE p2,q2,P} by A3,Def1;
+           then ex p2 st p2=x & (LE q1,p2,P & LE p2,q2,P);
+          hence x=q2 by A1,A4,JORDAN6:72;
+         case A5:q2=W-min(P);
+             then q1 in Upper_Arc(P) & q2 in Upper_Arc(P) &
+             LE q1,q2,Upper_Arc(P),W-min(P),E-max(P)
+                             by A1,JORDAN6:def 10;
+            hence contradiction by A1,A2,A5,JORDAN6:69;
+         end;
+        hence x=q2;
+       case A6: q3=W-min(P);
+        then x in {p1: LE q2,p1,P or q2 in P & p1=W-min(P)} by A3,Def1;
+         then consider p1 such that
+         A7:p1=x &(LE q2,p1,P or q2 in P & p1=W-min(P));
+             p1 in {p: LE q1,p,P & LE p,q2,P} by A1,A3,A6,A7,Def1;
+         then ex p st p=p1 & LE q1,p,P & LE p,q2,P;
+        hence x=q2 by A1,A6,A7,JORDAN6:72;
+       end;
+      hence x in {q2} by TARSKI:def 1;
+     end;
+     let x be set;assume x in {q2};
+     then A8: x=q2 by TARSKI:def 1;
+     then A9: x in Segment(q1,q2,P) by A1,Th6;
+      x in Segment(q2,q3,P) by A1,A8,Th6;
+     hence thesis by A9,XBOOLE_0:def 3;
+  end;
+
+theorem Th11:
+for P being compact non empty Subset of TOP-REAL 2,
+ q1,q2 being Point of TOP-REAL 2
+ st P is_simple_closed_curve & LE q1,q2,P
+ & q1 <> W-min P & q2 <> W-min P holds
+ Segment(q1,q2,P)/\ Segment(q2,W-min P,P)={q2}
+  proof let P be compact non empty Subset of TOP-REAL 2,
+    q1,q2 be Point of TOP-REAL 2;
+   set q3 = W-min P;
+    assume A1: P is_simple_closed_curve & LE q1,q2,P
+    & q1<>q3 & not(q2=W-min(P));
+     thus Segment(q1,q2,P)/\ Segment(q2,W-min P,P) c= {q2}
+     proof let x be set;
+       assume x in Segment(q1,q2,P)/\ Segment(q2,q3,P);
+       then A2: x in Segment(q1,q2,P) & x in Segment(q2,q3,P) by XBOOLE_0:def 3
+;
+        then x in {p1: LE q2,p1,P or q2 in P & p1=W-min P} by Def1;
+         then consider p1 such that
+         A3:p1=x and
+A4:       LE q2,p1,P or q2 in P & p1=W-min P;
+             p1 in {p: LE q1,p,P & LE p,q2,P} by A1,A2,A3,Def1;
+then A5:      ex p st p=p1 & LE q1,p,P & LE p,q2,P;
+       per cases by A4;
+       suppose LE q2,p1,P;
+        then x=q2 by A1,A3,A5,JORDAN6:72;
+      hence x in {q2} by TARSKI:def 1;
+       suppose q2 in P & p1=W-min(P);
+      hence x in {q2} by A1,A5,Th2;
+     end;
+     let x be set;assume x in {q2};
+     then A6: x=q2 by TARSKI:def 1;
+     then A7: x in Segment(q1,q2,P) by A1,Th6;
+      q2 in P by A1,Th5;
+     then x in Segment(q2,q3,P) by A1,A6,Th7;
+     hence thesis by A7,XBOOLE_0:def 3;
+  end;
+
+theorem Th12: for P being compact non empty Subset of TOP-REAL 2,
+ q1,q2 being Point of TOP-REAL 2
+ st P is_simple_closed_curve & LE q1,q2,P & q1<>q2 & q1<>W-min(P) holds
+ Segment(q2,W-min(P),P)/\ Segment(W-min(P),q1,P)={W-min(P)}
+ proof let P be compact non empty Subset of TOP-REAL 2,
+   q1,q2 be Point of TOP-REAL 2;
+   assume A1: P is_simple_closed_curve & LE q1,q2,P & q1<>q2 &
+   q1<>W-min(P);
+   then A2: q1 in P & q2 in P by Th5;
+   thus Segment(q2,W-min(P),P)/\ Segment(W-min(P),q1,P) c= {W-min(P)}
+    proof let x be set;
+     assume x in Segment(q2,W-min(P),P)/\ Segment(W-min(P),q1,P);
+      then A3: x in Segment(q2,W-min(P),P) & x in Segment(W-min(P),q1,P)
+                              by XBOOLE_0:def 3;
+      then x in {p1: LE q2,p1,P or q2 in P & p1=W-min(P)} by Def1;
+      then consider p1 such that A4: p1=x &(LE q2,p1,P or q2 in P & p1=W-min(P)
+);
+       now per cases by A4;
+      case A5:LE q2,p1,P;
+         x in {p: LE W-min(P),p,P & LE p,q1,P} by A1,A3,Def1;
+        then ex p2 st p2=x & LE W-min(P),p2,P & LE p2,q1,P;
+        then LE q2,q1,P by A1,A4,A5,JORDAN6:73;
+       hence contradiction by A1,JORDAN6:72;
+      case q2 in P & p1=W-min(P);
+       hence x=W-min(P) by A4;
+      end;
+     hence x in {W-min(P)} by TARSKI:def 1;
+    end;
+    let x be set;assume x in {W-min(P)};
+    then A6: x=W-min(P) by TARSKI:def 1;
+    then x in {p1: LE q2,p1,P or q2 in P & p1=W-min(P)} by A2;
+    then A7: x in Segment(q2,W-min(P),P) by Def1;
+     LE W-min(P),q1,P by A1,A2,Th3;
+    then x in Segment(W-min(P),q1,P) by A1,A6,Th6;
+    hence thesis by A7,XBOOLE_0:def 3;
+ end;
+
+theorem Th13:
+for P being compact non empty Subset of TOP-REAL 2,
+  q1,q2,q3,q4 being Point of TOP-REAL 2
+  st P is_simple_closed_curve & LE q1,q2,P & LE q2,q3,P & LE q3,q4,P
+   & q1<>q2 & q2<>q3 holds
+  Segment(q1,q2,P) misses Segment(q3,q4,P)
+proof let P be compact non empty Subset of TOP-REAL 2,
+  q1,q2,q3,q4 be Point of TOP-REAL 2;
+  assume that
+A1:P is_simple_closed_curve and
+A2: LE q1,q2,P and
+A3: LE q2,q3,P and
+A4: LE q3,q4,P and
+A5: q1<>q2 and
+A6: q2<>q3;
+  assume A7:Segment(q1,q2,P)/\ Segment(q3,q4,P)<>{};
+    consider x being Element of Segment(q1,q2,P)/\ Segment(q3,q4,P);
+    A8:x in Segment(q1,q2,P) & x in Segment(q3,q4,P) by A7,XBOOLE_0:def 3;
+     now per cases;
+    case q4=W-min(P);
+      then q3=W-min(P) by A1,A4,Th2;
+     hence contradiction by A1,A3,A6,Th2;
+    case q4<>W-min(P);
+     then x in {p1: LE q3,p1,P & LE p1,q4,P} by A8,Def1;
+     then consider p1 such that A9:p1=x &(LE q3,p1,P & LE p1,q4,P);
+      q2<>W-min(P) by A1,A2,A5,Th2;
+       then x in {p2: LE q1,p2,P & LE p2,q2,P} by A8,Def1;
+       then consider p2 such that A10:p2=x &(LE q1,p2,P & LE p2,q2,P);
+        LE q3,q2,P by A1,A9,A10,JORDAN6:73;
+      hence contradiction by A1,A3,A6,JORDAN6:72;
+    end;
+   hence contradiction;
+end;
+
+theorem Th14:
+for P being compact non empty Subset of TOP-REAL 2,
+  q1,q2,q3 being Point of TOP-REAL 2
+  st P is_simple_closed_curve & LE q1,q2,P & LE q2,q3,P & q1<>W-min P
+   & q1<>q2 & q2<>q3 holds
+  Segment(q1,q2,P) misses Segment(q3,W-min P,P)
+proof let P be compact non empty Subset of TOP-REAL 2,
+  q1,q2,q3 be Point of TOP-REAL 2;
+  assume A1:P is_simple_closed_curve & LE q1,q2,P & LE q2,q3,P
+  & q1<>W-min P & q1<>q2 & q2<>q3;
+  assume A2:Segment(q1,q2,P)/\ Segment(q3,W-min P,P)<>{};
+    consider x being Element of Segment(q1,q2,P)/\ Segment(q3,W-min P,P);
+    A3:x in Segment(q1,q2,P) & x in Segment(q3,W-min P,P) by A2,XBOOLE_0:def 3;
+     then x in {p1: LE q3,p1,P or q3 in P & p1=W-min P} by Def1;
+     then consider p1 such that
+A4:   p1=x and
+A5:   LE q3,p1,P or q3 in P & p1=W-min P;
+    q2 <> W-min P by A1,Th2;
+  then x in {p: LE q1,p,P & LE p,q2,P} by A3,Def1;
+  then ex p3 st p3 = x & LE q1,p3,P & LE p3,q2,P;
+  then LE q3,q2,P by A1,A4,A5,Th2,JORDAN6:73;
+ hence contradiction by A1,JORDAN6:72;
+end;
+
+begin :: A function to divide the simple closed curve
+
+reserve n for Nat;
+
+theorem Th15:
+  for P being non empty Subset of TOP-REAL n,
+  f being map of I[01], (TOP-REAL n)|P st P<>{} & f is_homeomorphism
+  ex g being map of I[01],TOP-REAL n st f=g &
+  g is continuous & g is one-to-one
+proof let P be non empty Subset of TOP-REAL n,
+  f be map of I[01], (TOP-REAL n)|P;
+  assume A1: P<>{} & f is_homeomorphism;
+      the carrier of (TOP-REAL n)|P = [#]((TOP-REAL n)|P) by PRE_TOPC:12
+         .=P by PRE_TOPC:def 10;
+     then f is Function of the carrier of I[01],the carrier of TOP-REAL n
+                             by FUNCT_2:9;
+  then reconsider g1=f as map of I[01],TOP-REAL n;
+    A2:the carrier of (TOP-REAL n)|P = [#]((TOP-REAL n)|P) by PRE_TOPC:12;
+    A3:[#]((TOP-REAL n)|P)= P  by PRE_TOPC:def 10;
+    A4:f is one-to-one & f is continuous & f" is continuous
+                                  by A1,TOPS_2:def 5;
+   for P2 being Subset of TOP-REAL n st
+    P2 is open holds g1"P2 is open
+  proof let P2 be Subset of TOP-REAL n;
+    assume A5: P2 is open;
+     P2 /\ P is Subset of (TOP-REAL n)|P
+                                    by A2,A3,XBOOLE_1:17;
+    then reconsider B1=P2 /\ P as Subset of (TOP-REAL n)|P;
+      B1 is open by A3,A5,TOPS_2:32;
+     then A6:f"B1 is open by A4,TOPS_2:55;
+     A7:f"B1 = f"P2 /\ f"P by FUNCT_1:137;
+      f"(rng f) c= f"P by A2,A3,RELAT_1:178;
+     then A8:dom f c= f"P by RELAT_1:169;
+      f"P c= dom f by RELAT_1:167;
+     then A9:f"P=dom f by A8,XBOOLE_0:def 10;
+      f"P2 c= dom f by RELAT_1:167;
+    hence g1"P2 is open by A6,A7,A9,XBOOLE_1:28;
+  end;
+  then g1 is continuous by TOPS_2:55;
+ hence thesis by A4;
+end;
+
+theorem Th16:
+  for P being non empty Subset of TOP-REAL n,
+  g being map of I[01], (TOP-REAL n) st g is continuous one-to-one
+   & rng g = P
+  ex f being map of I[01],(TOP-REAL n)|P st f=g &
+   f is_homeomorphism
+proof let P be non empty Subset of TOP-REAL n,
+  g be map of I[01], (TOP-REAL n);
+  assume that
+A1: g is continuous one-to-one and
+A2: rng g = P;
+     the carrier of (TOP-REAL n)|P = [#]((TOP-REAL n)|P) by PRE_TOPC:12;
+   then A3: the carrier of (TOP-REAL n)|P = P by PRE_TOPC:def 10;
+  then g is Function of the carrier of I[01],the carrier of (TOP-REAL n)|P
+                             by A2,FUNCT_2:8;
+  then reconsider f=g as map of I[01],(TOP-REAL n)|P;
+ take f;
+ thus f = g;
+A4: dom f = the carrier of I[01] by FUNCT_2:def 1
+      .= [#]I[01] by PRE_TOPC:12;
+A5: rng f = [#]((TOP-REAL n)|P) by A2,PRE_TOPC:def 10;
+A6: [#]((TOP-REAL n)|P)= P  by PRE_TOPC:def 10;
+   for P2 being Subset of (TOP-REAL n)|P st
+    P2 is open holds f"P2 is open
+  proof let P2 be Subset of (TOP-REAL n)|P;
+   assume
+A7: P2 is open;
+    consider C being Subset of TOP-REAL n such that
+A8:  C is open and
+A9:  C /\ [#]((TOP-REAL n)|P) = P2 by A7,TOPS_2:32;
+A10:   f"C c= [#]I[01] by PRE_TOPC:14;
+     g"P = [#]I[01] by A3,A4,RELSET_1:38;
+    then f"P2 = f"C /\ [#]I[01] by A6,A9,FUNCT_1:137
+         .= f"C by A10,XBOOLE_1:28;
+    hence f"P2 is open by A1,A8,TOPS_2:55;
+  end;
+  then A11: f is continuous by TOPS_2:55;
+   (TOP-REAL n)|P is_T2 by TOPMETR:3;
+ hence thesis by A1,A4,A5,A11,COMPTS_1:26;
+end;
+
+definition
+ cluster increasing -> one-to-one FinSequence of REAL;
+ coherence
+ proof let f be FinSequence of REAL;
+   assume A1:f is increasing;
+    let x,y be set;assume A2: x in dom f & y in dom f & f.x=f.y;
+      then reconsider nx=x,ny=y as Nat;
+      A3: nx<=ny by A1,A2,GOBOARD1:def 1;
+         nx>=ny by A1,A2,GOBOARD1:def 1;
+     hence x=y by A3,REAL_1:def 5;
+ end;
+end;
+
+theorem Th17:
+ for f being FinSequence of REAL st
+ f is increasing holds f is one-to-one
+ proof let f be FinSequence of REAL;
+   assume f is increasing;
+    then reconsider f as increasing FinSequence of REAL;
+    f is one-to-one;
+  hence thesis;
+ end;
+
+Lm5: now
+  let h2 be Nat;
+   h2<h2+1 by NAT_1:38;
+  then h2-1<h2+1-1 by REAL_1:54;
+  then h2-1<h2 by XCMPLX_1:26;
+  then h2-1-1<h2-1 & h2-1<h2 by REAL_1:54;
+  hence h2-1-1<h2 by AXIOMS:22;
+end;
+
+Lm6: 0 in [.0,1.] & 1 in [.0,1.] by RCOMP_1:15;
+
+theorem Th18:
+ for A being Subset of TOP-REAL 2,
+     p1,p2 being Point of TOP-REAL 2
+  st A is_an_arc_of p1,p2
+ ex g being map of I[01], TOP-REAL 2 st
+  g is continuous one-to-one & rng g = A & g.0 = p1 & g.1 = p2
+ proof let A be Subset of TOP-REAL 2,
+     p1,p2 being Point of TOP-REAL 2;
+  assume
+A1: A is_an_arc_of p1,p2;
+   then reconsider A' = A as non empty Subset of TOP-REAL 2
+                     by TOPREAL1:4;
+   consider f being map of I[01], (TOP-REAL 2)|A' such that
+A2: f is_homeomorphism & f.0 = p1 & f.1 = p2 by A1,TOPREAL1:def 2;
+A3: rng f=[#]((TOP-REAL 2)|A') by A2,TOPS_2:def 5;
+   consider g being map of I[01], TOP-REAL 2 such that
+A4: f=g and
+A5: g is continuous one-to-one by A2,Th15;
+  take g;
+  thus g is continuous one-to-one by A5;
+  thus rng g = A by A3,A4,PRE_TOPC:def 10;
+  thus thesis by A2,A4;
+ end;
+
+theorem Th19:
+ for P being non empty Subset of TOP-REAL 2,
+     p1, p2, q1, q2 being Point of TOP-REAL 2,
+     g being map of I[01], TOP-REAL 2,
+     s1, s2 being Real st
+  P is_an_arc_of p1,p2 & g is continuous one-to-one & rng g = P
+  & g.0 = p1 & g.1 = p2
+  & g.s1 = q1 & 0 <= s1 & s1 <= 1 & g.s2 = q2 & 0 <= s2 & s2 <= 1 & s1 <= s2
+ holds LE q1,q2,P,p1,p2
+proof let P be non empty Subset of TOP-REAL 2,
+     p1, p2, q1, q2 be Point of TOP-REAL 2,
+     g be map of I[01], TOP-REAL 2,
+     s1, s2 be Real such that
+A1: P is_an_arc_of p1,p2 and
+A2: g is continuous one-to-one and
+A3: rng g = P;
+   ex f being map of I[01],(TOP-REAL 2)|P st
+   f=g & f is_homeomorphism by A2,A3,Th16;
+ hence thesis by A1,JORDAN5C:8;
+end;
+
+theorem Th20:
+ for P being non empty Subset of TOP-REAL 2,
+     p1, p2, q1, q2 being Point of TOP-REAL 2,
+     g being map of I[01], TOP-REAL 2,
+     s1, s2 being Real st
+  g is continuous one-to-one & rng g = P
+  & g.0 = p1 & g.1 = p2
+  & g.s1 = q1 & 0 <= s1 & s1 <= 1 & g.s2 = q2 & 0 <= s2 & s2 <= 1
+  & LE q1,q2,P,p1,p2
+ holds s1 <= s2
+proof
+ let P be non empty Subset of TOP-REAL 2,
+     p1, p2, q1, q2 be Point of TOP-REAL 2,
+     g be map of I[01], TOP-REAL 2,
+     s1, s2 be Real such that
+A1: g is continuous one-to-one and
+A2: rng g = P;
+   ex f being map of I[01],(TOP-REAL 2)|P st
+   f=g & f is_homeomorphism by A1,A2,Th16;
+ hence thesis by JORDAN5C:def 3;
+end;
+
+theorem :: Dividing simple closed curve into segments.
+  for P being compact non empty Subset of TOP-REAL 2, e being Real
+   st P is_simple_closed_curve & e > 0
+   ex h being FinSequence of the carrier of TOP-REAL 2
+   st h.1=W-min(P) & h is one-to-one & 8<=len h & rng h c= P
+   &(for i being Nat st 1<=i & i<len h holds LE h/.i,h/.(i+1),P)
+   &(for i being Nat,W being Subset of Euclid 2
+   st 1<=i & i<len h & W=Segment(h/.i,h/.(i+1),P) holds
+   diameter(W)<e)
+   & (for W being Subset of Euclid 2 st
+   W=Segment(h/.len h,h/.1,P)  holds diameter(W)<e)
+   & (for i being Nat st 1<=i & i+1<len h holds
+    Segment(h/.i,h/.(i+1),P)/\ Segment(h/.(i+1),h/.(i+2),P)={h/.(i+1)})
+   & Segment(h/.len h,h/.1,P)/\ Segment(h/.1,h/.2,P)={h/.1}
+   & Segment(h/.(len h-' 1),h/.len h,P)/\ Segment(h/.len h,h/.1,P)={h/.len h}
+   & Segment(h/.(len h-'1),h/.len h,P) misses Segment(h/.1,h/.2,P)
+  &(for i,j being Nat st 1<=i & i < j & j < len h & not(i,j are_adjacent1)
+    holds Segment(h/.i,h/.(i+1),P) misses Segment(h/.j,h/.(j+1),P))
+  & (for i being Nat st 1 < i & i+1 < len h holds
+      Segment(h/.len h,h/.1,P) misses Segment(h/.i,h/.(i+1),P))
+ proof
+   let P be compact non empty Subset of TOP-REAL 2, e be Real;
+   assume
+A1: P is_simple_closed_curve & e > 0;
+    then A2: Upper_Arc P is_an_arc_of W-min P, E-max P by JORDAN6:def 8;
+    then consider g1 being map of I[01], TOP-REAL 2 such that
+A3:  g1 is continuous one-to-one and
+A4: rng g1 = Upper_Arc P and
+A5: g1.0 = W-min P & g1.1 = E-max P by Th18;
+A6: dom g1 =[.0,1.] by BORSUK_1:83,FUNCT_2:def 1;
+A7: 0 in dom g1 & 1 in dom g1 by Lm6,BORSUK_1:83,FUNCT_2:def 1;
+A8: E-max P in Upper_Arc P & W-min P in Upper_Arc P by A1,Th1;
+   consider h1 being FinSequence of REAL such that
+   A9: h1.1=0 & h1.len h1=1 & 5<=len h1 & rng h1 c= the carrier of I[01]
+    & h1 is increasing
+    &(for i being Nat,Q being Subset of I[01],
+    W being Subset of Euclid 2
+    st 1<=i & i<len h1 & Q=[.h1/.i,h1/.(i+1).]
+    & W=g1.:Q holds diameter(W)<e) by A1,A3,A5,UNIFORM1:15;
+    A10:h1 is one-to-one by A9,Th17;
+A11: Lower_Arc P is_an_arc_of E-max P, W-min P by A1,JORDAN6:def 9;
+    then consider g2 being map of I[01], TOP-REAL 2 such that
+A12:  g2 is continuous one-to-one and
+A13: rng g2 = Lower_Arc P and
+A14: g2.0 = E-max P & g2.1 = W-min P by Th18;
+A15: dom g2 = [.0,1.] by BORSUK_1:83,FUNCT_2:def 1;
+   consider h2 being FinSequence of REAL such that
+   A16: h2.1=0 & h2.len h2=1 & 5<=len h2 & rng h2 c= the carrier of I[01]
+    & h2 is increasing
+    &(for i being Nat,Q being Subset of I[01],
+    W being Subset of Euclid 2
+    st 1<=i & i<len h2 & Q=[.h2/.i,h2/.(i+1).]
+    & W=g2.:Q holds diameter(W)<e) by A1,A12,A14,UNIFORM1:15;
+A17: len h2-1-1<len h2 by Lm5;
+    A18:h2 is one-to-one by A16,Th17;
+     h1 is FinSequence of the carrier of I[01] by A9,FINSEQ_1:def 4;
+    then reconsider h11=g1*h1 as FinSequence of the carrier of TOP-REAL 2
+                                                 by FINSEQ_2:36;
+    A19:rng h1 c= dom g1 by A9,FUNCT_2:def 1;
+    then A20:dom h1=dom h11 by RELAT_1:46;
+    then A21: len h1=len h11 by FINSEQ_3:31;
+     h2 is FinSequence of the carrier of I[01] by A16,FINSEQ_1:def 4;
+    then reconsider h21=g2*h2 as FinSequence of the carrier of TOP-REAL 2
+                                                 by FINSEQ_2:36;
+     dom g2=the carrier of I[01] by FUNCT_2:def 1;
+    then A22:dom h2=dom h21 by A16,RELAT_1:46;
+    then A23: len h2=len h21 by FINSEQ_3:31;
+A24: 1<=len h1 by A9,AXIOMS:22;
+    then A25: 1 in dom h1 by FINSEQ_3:27;
+A26:len h1 in dom h1 by A24,FINSEQ_3:27;
+    A27: 1<=len h2 by A16,AXIOMS:22;
+    then A28:1 in dom h2 by FINSEQ_3:27;
+A29: len h2 in dom h2 by A27,FINSEQ_3:27;
+A30: h21.1=E-max P by A14,A16,A28,FUNCT_1:23;
+A31: h21.len h2=W-min P by A14,A16,A29,FUNCT_1:23;
+    A32:1 in dom g2 by Lm6,BORSUK_1:83,FUNCT_2:def 1;
+    A33:dom g1=[.0,1.] by BORSUK_1:83,FUNCT_2:def 1;
+    then A34:1 in dom (g1*h1) by A9,A25,Lm6,FUNCT_1:21;
+A35:len h1 in dom h1 by A24,FINSEQ_3:27;
+     h1.len h1 in dom g1 by A9,A33,TOPREAL5:1;
+    then A36:len h1 in dom (g1*h1) by A26,FUNCT_1:21;
+    then A37: h11.len h1=E-max(P) by A5,A9,FUNCT_1:22;
+    reconsider h0=h11^(mid(h21,2,len h21-' 1))
+                as FinSequence of the carrier of TOP-REAL 2;
+A38: h11.1=W-min P by A5,A9,A34,FUNCT_1:22;
+   take h0;
+   thus
+A39: h0.1=W-min P by A34,A38,FINSEQ_1:def 7;
+    A40:len h0=len h11+len (mid(h21,2,len h21 -'1)) by FINSEQ_1:35;
+     2<=len h21 by A16,A23,AXIOMS:22;
+then A41:1+1-1<=len h21-1 by REAL_1:49;
+    then 0<=len h21-1 by AXIOMS:22;
+    then A42:len h21-'1=len h21 -1 by BINARITH:def 3;
+     len h21<=len h21 +1 by NAT_1:37;
+    then len h21 -1<=len h21 +1-1 by REAL_1:49;
+    then A43:2<=len h21 & 1<=len h21-'1 & len h21-'1<=len h21
+                              by A16,A23,A41,A42,AXIOMS:22,XCMPLX_1:26;
+     3<len h21 by A16,A23,AXIOMS:22;
+    then 2+1-1<len h21 -1 by REAL_1:54;
+    then A44:2<len h21 -'1 by A41,JORDAN3:1;
+    then A45:len h21 -'1-'2=len h21 -'1-2 by SCMFSA_7:3;
+    A46:len (mid(h21,2,len h21 -'1))
+                          =(len h21-'1)-'2+1 by A43,A44,JORDAN3:27;
+    then A47:len h0=len h1+(len h2-2) by A21,A23,A40,A42,A45,XCMPLX_1:229;
+                  3+2-2<=len h2 -2 by A16,REAL_1:49;
+                 then 1<=len h2 -2 by AXIOMS:22;
+then A48:   len h1+1<=len h0 by A47,REAL_1:55;
+        then A49:   len h0>len h1 by NAT_1:38;
+       then A50:     1<len h0 by A24,AXIOMS:22;
+        then A51:    len h0 in dom h0 by FINSEQ_3:27;
+        then A52:    h0/.len h0=h0.len h0 by FINSEQ_4:def 4;
+A53:   1<=len h0-len h1 by A48,REAL_1:84;
+A54: len h0-len h11=len h0-'len h11 by A21,A49,SCMFSA_7:3;
+then A55:   1<=len h0-'len h11 by A21,A48,REAL_1:84;
+A56:  2<len h1 by A9,AXIOMS:22;
+    then A57:2 in dom h1 by FINSEQ_3:27;
+    A58: 1+1<=len h0 by A49,A56,AXIOMS:22;
+    then A59:2 in dom h0 by FINSEQ_3:27;
+    A60:h0.2=h11.2 by A21,A56,SCMFSA_7:9;
+A61:  1 in dom h0 by A50,FINSEQ_3:27;
+then A62: h0/.1 = h0.1 by FINSEQ_4:def 4;
+A63: h0/.1=W-min(P) by A39,A61,FINSEQ_4:def 4;
+    A64:h11 is one-to-one by A3,A10,FUNCT_1:46;
+    A65:h21 is one-to-one by A12,A18,FUNCT_1:46;
+   thus
+A66:  h0 is one-to-one
+     proof let x,y be set;assume
+     A67: x in dom h0 & y in dom h0 & h0.x=h0.y;
+       then reconsider nx=x,ny=y as Nat;
+       A68:1<=nx & nx<=len h0 by A67,FINSEQ_3:27;
+       A69:1<=ny & ny<=len h0 by A67,FINSEQ_3:27;
+        now per cases;
+       case nx<=len h1;
+         then A70:nx in dom h1 by A68,FINSEQ_3:27;
+then A71:      h1.nx in rng h1 by FUNCT_1:def 5;
+         A72:h0.nx=h11.nx by A20,A70,FINSEQ_1:def 7
+            .=g1.(h1.nx) by A20,A70,FUNCT_1:22;
+         then A73:h0.nx in Upper_Arc(P) by A4,A19,A71,FUNCT_1:def 5;
+          now per cases;
+         case ny<=len h1;
+           then A74:ny in dom h1 by A69,FINSEQ_3:27;
+then A75:        h1.ny in rng h1 by FUNCT_1:def 5;
+            h0.ny=h11.ny by A20,A74,FINSEQ_1:def 7
+              .=g1.(h1.ny) by A74,FUNCT_1:23;
+           then h1.nx=h1.ny by A3,A19,A67,A71,A72,A75,FUNCT_1:def 8;
+          hence nx=ny by A10,A70,A74,FUNCT_1:def 8;
+         case A76:ny>len h1;
+           then A77:len h1 +1<=ny by NAT_1:38;
+           A78:len h11+1<=ny & ny<=len h11 + len (mid(h21,2,len h21 -'1))
+                                 by A21,A69,A76,FINSEQ_1:35,NAT_1:38;
+           then A79:h0.ny=(mid(h21,2,len h21 -'1)).(ny -len h11) by FINSEQ_1:36
+;
+           A80:ny-len h11=ny-'len h11 by A21,A76,SCMFSA_7:3;
+A81:        ny-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                         by A78,REAL_1:49;
+            len h1 +1-len h1<=ny-len h1 by A77,REAL_1:49;
+           then A82:1<=ny-'len h11 & ny-'len h11<=len mid(h21,2,len h21 -'1)
+                             by A21,A80,A81,XCMPLX_1:26;
+           then A83:h0.ny=h21.(ny-'len h11 +2-'1)
+                             by A43,A44,A79,A80,JORDAN3:27;
+            1+1<=ny-'len h11+1 by A82,AXIOMS:24;
+           then 1+1<=ny-'len h11+1+1-1 by XCMPLX_1:26;
+           then A84:2<=ny-'len h11+2-1 by XCMPLX_1:1;
+            0<=ny-'len h11 by NAT_1:18;
+then A85:        0+2<=ny-'len h11 +2 by AXIOMS:24;
+            ny-len h11<=len h1+(len h2-2)-len h11 by A47,A69,REAL_1:49;
+           then ny-len h11<=(len h2-2) by A21,XCMPLX_1:26;
+           then ny-'len h11+2<=len h2-2+2 by A80,AXIOMS:24;
+then A86:       ny-'len h11+2<=len h2 by XCMPLX_1:27;
+           then A87:ny-'len h11+2-1<=len h2-1 by REAL_1:49;
+           A88:1<=(ny-'len h11 +2-'1) & (ny-'len h11 +2-'1)<=len h21
+                      by A23,A85,A86,Lm2,JORDAN3:5,7;
+           then A89:(ny-'len h11 +2-'1) in dom h21 by FINSEQ_3:27;
+           then h0.ny in rng h21 by A83,FUNCT_1:def 5;
+           then h0.ny in rng g2 by FUNCT_1:25;
+           then h0.nx in Upper_Arc(P)/\ Lower_Arc(P)
+                         by A13,A67,A73,XBOOLE_0:def 3;
+then A90:         h0.nx in {W-min(P),E-max(P)} by A1,JORDAN6:65;
+           A91:ny-'len h11+2-'1<=len h2-1 by A87,A88,JORDAN3:1;
+           A92:2<=ny-'len h11+2-'1 by A84,A88,JORDAN3:1;
+            now per cases by A90,TARSKI:def 2;
+           case h0.nx=W-min(P);
+             then h21.(ny-'len h11 +2-'1)=W-min(P)
+               by A43,A44,A67,A79,A80,A82,JORDAN3:27;
+             then len h21=(ny-'len h11 +2-'1)
+                         by A22,A23,A29,A31,A65,A89,FUNCT_1:def 8;
+             then len h21+1<=len h21-1+1 by A23,A91,AXIOMS:24;
+             then len h21+1<=len h21-(1-1) by XCMPLX_1:37;
+             then len h21+1-len h21<=len h21 -len h21 by REAL_1:49;
+             then len h21+1-len h21<=0 by XCMPLX_1:14;
+            hence contradiction by Lm1,XCMPLX_1:26;
+           case h0.nx=E-max(P);
+             then 1=(ny-'len h11 +2-'1)
+                       by A22,A28,A30,A65,A67,A83,A89,FUNCT_1:def 8;
+            hence contradiction by A92;
+           end;
+          hence nx=ny;
+         end;
+        hence nx=ny;
+       case A93:nx>len h1;
+         then A94:len h1 +1<=nx by NAT_1:38;
+         A95:len h11+1<=nx & nx<=len h11 + len (mid(h21,2,len h21 -'1))
+                            by A21,A68,A93,FINSEQ_1:35,NAT_1:38;
+         then A96:h0.nx=(mid(h21,2,len h21 -'1)).(nx -len h11) by FINSEQ_1:36;
+         A97:nx-len h11=nx-'len h11 by A21,A93,SCMFSA_7:3;
+A98:     nx-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                         by A95,REAL_1:49;
+          len h1 +1-len h1<=nx-len h1 by A94,REAL_1:49;
+         then A99:1<=nx-'len h11 & nx-'len h11<=len mid(h21,2,len h21 -'1)
+                             by A21,A97,A98,XCMPLX_1:26;
+         then A100:h0.nx=h21.(nx-'len h11 +2-'1)
+                             by A43,A44,A96,A97,JORDAN3:27;
+          1+1<=nx-'len h11+1 by A99,AXIOMS:24;
+         then 1+1<=nx-'len h11+1+1-1 by XCMPLX_1:26;
+         then A101:2<=nx-'len h11+2-1 by XCMPLX_1:1;
+          0<=nx-'len h11 by NAT_1:18;
+then A102:    0+2<=nx-'len h11 +2 by AXIOMS:24;
+          nx-len h11<=len h1+(len h2-2)-len h11 by A47,A68,REAL_1:49;
+         then nx-len h11<=(len h2-2) by A21,XCMPLX_1:26;
+         then nx-'len h11+2<=len h2-2+2 by A97,AXIOMS:24;
+then A103:    nx-'len h11+2<=len h2 by XCMPLX_1:27;
+         then A104:nx-'len h11+2-1<=len h2-1 by REAL_1:49;
+         A105:1<=(nx-'len h11 +2-'1) & (nx-'len h11 +2-'1)<=len h21
+                      by A23,A102,A103,Lm2,JORDAN3:5,7;
+         then A106:(nx-'len h11 +2-'1) in dom h21 by FINSEQ_3:27;
+         then h0.nx in rng h21 by A100,FUNCT_1:def 5;
+         then A107:h0.nx in Lower_Arc(P) by A13,FUNCT_1:25;
+          now per cases;
+         case ny<=len h1;
+           then A108:ny in dom h1 by A69,FINSEQ_3:27;
+then A109:      h1.ny in rng h1 by FUNCT_1:def 5;
+            h0.ny=h11.ny by A20,A108,FINSEQ_1:def 7
+              .=g1.(h1.ny) by A20,A108,FUNCT_1:22;
+           then h0.ny in rng g1 by A19,A109,FUNCT_1:def 5;
+           then h0.ny in Upper_Arc(P)/\ Lower_Arc(P) by A4,A67,A107,XBOOLE_0:
+def 3;
+           then A110:       h0.ny in {W-min(P),E-max(P)} by A1,JORDAN6:65;
+           A111:nx-'len h11+2-'1<=len h2-1 by A104,A105,JORDAN3:1;
+           A112:2<=nx-'len h11+2-'1 by A101,A105,JORDAN3:1;
+            now per cases by A110,TARSKI:def 2;
+           case h0.ny=W-min(P);
+             then len h21=(nx-'len h11 +2-'1)
+                     by A22,A23,A29,A31,A65,A67,A100,A106,FUNCT_1:def 8;
+             then len h21+1<=len h21-1+1 by A23,A111,AXIOMS:24;
+             then len h21+1<=len h21-(1-1) by XCMPLX_1:37;
+             then len h21+1-len h21<=len h21 -len h21 by REAL_1:49;
+             then len h21+1-len h21<=0 by XCMPLX_1:14;
+            hence contradiction by Lm1,XCMPLX_1:26;
+           case h0.ny=E-max(P);
+             then h21.(nx-'len h11 +2-'1)=E-max(P)
+               by A43,A44,A67,A96,A97,A99,JORDAN3:27;
+             then 1=(nx-'len h11 +2-'1)
+                         by A22,A28,A30,A65,A106,FUNCT_1:def 8;
+            hence contradiction by A112;
+           end;
+          hence nx=ny;
+         case A113:ny>len h1;
+           then A114:len h1 +1<=ny by NAT_1:38;
+           then A115:h0.ny=(mid(h21,2,len h21 -'1)).(ny -len h11)
+             by A21,A40,A69,FINSEQ_1:36;
+           A116:ny-len h11=ny-'len h11 by A21,A113,SCMFSA_7:3;
+            ny-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+             by A40,A69,REAL_1:49;
+           then A117:ny-len h11<= len (mid(h21,2,len h21 -'1)) by XCMPLX_1:26;
+            len h1 +1-len h1<=ny-len h1 by A114,REAL_1:49;
+           then 1<=ny-len h11 by A21,XCMPLX_1:26;
+           then A118:h0.ny=h21.(ny-'len h11 +2-'1)
+                             by A43,A44,A115,A116,A117,JORDAN3:27;
+            0<=ny-'len h11 by NAT_1:18;
+then A119:        0+2<=ny-'len h11 +2 by AXIOMS:24;
+            ny-len h11<=len h1+(len h2-2)-len h11 by A47,A69,REAL_1:49;
+           then ny-len h11<=(len h2-2) by A21,XCMPLX_1:26;
+           then ny-'len h11+2<=len h2-2+2 by A116,AXIOMS:24;
+           then ny-'len h11+2<=len h2 by XCMPLX_1:27;
+           then A120:1<=(ny-'len h11 +2-'1) & (ny-'len h11 +2-'1)<=len h21
+                         by A23,A119,Lm2,JORDAN3:5,7;
+           then (ny-'len h11 +2-'1) in dom h21 by FINSEQ_3:27;
+           then nx-'len h1+2-'1=ny-'len h1+2-'1
+                           by A21,A65,A67,A100,A106,A118,FUNCT_1:def 8;
+           then nx-'len h1+2-1=ny-'len h1+2-'1 by A21,A105,JORDAN3:1;
+           then nx-'len h1+2-1=ny-'len h1+2-1 by A21,A120,JORDAN3:1;
+           then nx-'len h1+(2-1)=ny-'len h1+2-1 by XCMPLX_1:29;
+           then nx-'len h1+(2-1)=ny-'len h1+(2-1) by XCMPLX_1:29;
+           then nx-'len h1=ny-'len h1+(2-1)-(2-1) by XCMPLX_1:26;
+           then nx-len h1=ny-len h1 by A21,A97,A116,XCMPLX_1:26;
+           then len h1+nx-len h1=len h1+(ny-len h1) by XCMPLX_1:29;
+           then nx=len h1+(ny-len h1) by XCMPLX_1:26;
+           then nx=len h1+ny-len h1 by XCMPLX_1:29;
+          hence nx=ny by XCMPLX_1:26;
+         end;
+        hence nx=ny;
+       end;
+      hence x=y;
+     end;
+then A121: h0/.len h0 <> W-min P by A24,A39,A49,A51,A52,A61,FUNCT_1:def 8;
+     3+2-2<=len h2 -2 by A16,REAL_1:49;
+    then 5+3<=len h1+(len h2 -2) by A9,REAL_1:55;
+   hence
+A122: 8<=len h0 by A21,A23,A40,A42,A45,A46,XCMPLX_1:229;
+     A123:rng (g1*h1) c= rng g1 by RELAT_1:45;
+     A124:rng (mid(h21,2,len h21 -'1)) c= rng h21 by JORDAN3:28;
+      rng (g2*h2) c= rng g2 by RELAT_1:45;
+     then rng (mid(h21,2,len h21 -'1)) c= rng g2 by A124,XBOOLE_1:1;
+     then rng h11 \/ rng (mid(h21,2,len h21 -'1)) c= Upper_Arc(P) \/
+ Lower_Arc(P)
+                 by A4,A13,A123,XBOOLE_1:13;
+     then rng h0 c=Upper_Arc(P) \/ Lower_Arc(P) by FINSEQ_1:44;
+   hence rng h0 c= P by A1,JORDAN6:def 9;
+   thus for i being Nat st 1<=i & i<len h0 holds LE h0/.i,h0/.(i+1),P
+     proof let i be Nat;assume A125: 1<=i & i<len h0;
+       then A126:i+1<=len h0 by NAT_1:38;
+       A127:1<i+1 by A125,NAT_1:38;
+       A128:i<i+1 by NAT_1:38;
+        now per cases;
+       case A129:i<len h1;
+         then A130:i+1<=len h1 by NAT_1:38;
+         A131:h0.i=h11.i by A21,A125,A129,SCMFSA_7:9;
+         A132:i in dom h1 by A125,A129,FINSEQ_3:27;
+         then A133:h0.i=g1.(h1.i) by A131,FUNCT_1:23;
+A134:      h1.i in rng h1 by A132,FUNCT_1:def 5;
+         then A135:0<=h1.i & h1.i<=1 by A9,BORSUK_1:83,TOPREAL5:1;
+         A136:h0.(i+1)=h11.(i+1) by A21,A127,A130,SCMFSA_7:9;
+         A137:i+1 in dom h1 by A127,A130,FINSEQ_3:27;
+         then A138:h0.(i+1)=g1.(h1.(i+1)) by A136,FUNCT_1:23;
+A139:    h1.(i+1) in rng h1 by A137,FUNCT_1:def 5;
+         then A140:0<=h1.(i+1) & h1.(i+1)<=1 by A9,BORSUK_1:83,TOPREAL5:1;
+         A141:h1.i<h1.(i+1) by A9,A128,A132,A137,GOBOARD1:def 1;
+          i in dom h0 by A125,FINSEQ_3:27;
+         then A142:h0/.i=h0.i by FINSEQ_4:def 4;
+          i+1 in dom h0 by A126,A127,FINSEQ_3:27;
+         then A143:h0/.(i+1)=h0.(i+1) by FINSEQ_4:def 4;
+         A144:g1.(h1.i) in rng g1
+            by A6,A9,A134,BORSUK_1:83,FUNCT_1:def 5;
+         A145:h0.(i+1) in Upper_Arc(P)
+         by A4,A6,A9,A138,A139,BORSUK_1:83,FUNCT_1:def 5;
+          LE h0/.i,h0/.(i+1),Upper_Arc(P),W-min(P),E-max(P)
+            by A2,A3,A4,A5,A133,A135,A138,A140,A141,A142,A143,Th19;
+        hence LE h0/.i,h0/.(i+1),P
+          by A4,A133,A142,A143,A144,A145,JORDAN6:def 10;
+       case A146: i>=len h1;
+          now per cases by A146,REAL_1:def 5;
+         case A147:i>len h1;
+           then A148:len h1 +1<=i by NAT_1:38;
+           len h11+1<=i by A21,A147,NAT_1:38;
+           then A149:h0.i=(mid(h21,2,len h21 -'1)).(i -len h11)
+                       by A40,A125,FINSEQ_1:36;
+           A150:i-len h11=i-'len h11 by A21,A147,SCMFSA_7:3;
+A151:        i-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                 by A40,A125,REAL_1:49;
+            len h1 +1-len h1<=i-len h1 by A148,REAL_1:49;
+           then 1<=i-'len h11 & i-'len h11<=len mid(h21,2,len h21 -'1)
+                             by A21,A150,A151,XCMPLX_1:26;
+           then A152:h0.i=h21.(i-'len h11 +2-'1)
+                             by A43,A44,A149,A150,JORDAN3:27;
+           A153:len h1 +1<=i+1 by A148,NAT_1:38;
+           then A154:h0.(i+1)=(mid(h21,2,len h21 -'1)).(i+1 -len h11)
+                                      by A21,A40,A126,FINSEQ_1:36;
+            i+1>len h11 by A21,A147,NAT_1:38;
+           then A155:i+1-len h11=i+1-'len h11 by SCMFSA_7:3;
+A156:      i+1-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                  by A40,A126,REAL_1:49;
+            len h1 +1-len h1<=i+1-len h1 by A153,REAL_1:49;
+           then A157:1<=i+1-'len h11 & i+1-'len h11<=len mid(h21,2,len h21 -'1)
+                             by A21,A155,A156,XCMPLX_1:26;
+           then A158:h0.(i+1)=h21.(i+1-'len h11 +2-'1)
+                    by A43,A44,A154,A155,JORDAN3:27;
+            1<i+1-'len h11+(2-1) by A157,NAT_1:38;
+           then 1<i+1-'len h11+2-1 by XCMPLX_1:29;
+then A159:       0<i+1-'len h11+2-1 by AXIOMS:22;
+           then A160:i+1-'len h11+2-1=i+1-'len h11+2-'1 by BINARITH:def 3;
+            0<=i-'len h11 by NAT_1:18;
+then A161:        0+2<=i-'len h11 +2 by AXIOMS:24;
+            i-len h11<=len h1+(len h2-2)-len h11 by A47,A125,REAL_1:49;
+           then i-len h11<=len h2-2 by A21,XCMPLX_1:26;
+           then i-'len h11+2<=len h2-2+2 by A150,AXIOMS:24;
+then A162:      i-'len h11+2<=len h2 by XCMPLX_1:27;
+           then A163:1<=(i-'len h11 +2-'1) & (i-'len h11 +2-'1)<=len h21
+                          by A23,A161,Lm2,JORDAN3:5,7;
+           set j=i-'len h11+2-'1;
+A164:      j+1=i-'len h11+(1+1)-1+1 by A163,JORDAN3:1
+               .=i-'len h11+1+1-1+1 by XCMPLX_1:1
+               .=i-'len h11+1+1 by XCMPLX_1:26
+               .=i-'len h11+(1+1) by XCMPLX_1:1
+               .=i-'len h11+2;
+           A165:j+1=i-len h11+2-1+1 by A150,A163,JORDAN3:1
+               .=1+(i-len h11+(2-1)) by XCMPLX_1:29
+               .=1+(i+-len h11+(2-1)) by XCMPLX_0:def 8
+               .=(i+1)+-len h11+(2-1) by XCMPLX_1:1
+               .=i+1-len h11+(2-1) by XCMPLX_0:def 8
+               .=i+1-len h11+2-1 by XCMPLX_1:29
+               .=i+1-'len h11+2-'1 by A155,A159,BINARITH:def 3;
+           A166:j in dom h2 by A22,A163,FINSEQ_3:27;
+           then A167:h0.i=g2.(h2.j) by A152,FUNCT_1:23;
+A168:      h2.j in rng h2 by A166,FUNCT_1:def 5;
+           then A169:0<=h2.j & h2.j<=1 by A16,BORSUK_1:83,TOPREAL5:1;
+           A170:j<j+1 by NAT_1:38;
+           A171:1<j+1 by A163,NAT_1:38;
+           then A172:j+1 in dom h2 by A162,A164,FINSEQ_3:27;
+           then A173:h0.(i+1)=g2.(h2.(j+1)) by A158,A165,FUNCT_1:23;
+A174:      h2.(j+1) in rng h2 by A172,FUNCT_1:def 5;
+           then A175:0<=h2.(j+1) & h2.(j+1)<=1 by A16,BORSUK_1:83,TOPREAL5:1;
+           A176:h2.j<h2.(j+1) by A16,A166,A170,A172,GOBOARD1:def 1;
+            i in dom h0 by A125,FINSEQ_3:27;
+           then A177:h0/.i=h0.i by FINSEQ_4:def 4;
+            i+1 in dom h0 by A126,A127,FINSEQ_3:27;
+           then A178:h0/.(i+1)=h0.(i+1) by FINSEQ_4:def 4;
+           A179:h0.i in Lower_Arc(P)
+              by A13,A15,A16,A167,A168,BORSUK_1:83,FUNCT_1:def 5;
+           A180:h0.(i+1) in Lower_Arc(P)
+             by A13,A15,A16,A173,A174,BORSUK_1:83,FUNCT_1:def 5;
+            i+1-len h11<=len h1+(len h2-2)-len h11 by A47,A126,REAL_1:49;
+           then i+1-'len h11<=len h2-2 by A21,A155,XCMPLX_1:26;
+           then i+1-'len h11+2<=len h2-2+2 by AXIOMS:24;
+           then i+1-'len h11+2<=len h2 by XCMPLX_1:27;
+           then A181:i+1-'len h11+2-1<=len h2-1 by REAL_1:49;
+            len h2<len h2+1 by NAT_1:38;
+           then len h2-1<len h2+1-1 by REAL_1:54;
+           then len h2-1<len h2 by XCMPLX_1:26;
+           then i+1-'len h11+2-'1<len h2 by A160,A181,AXIOMS:22;
+           then A182:i+1-'len h11+2-'1 in dom h2 by A165,A171,FINSEQ_3:27;
+A183:      now assume h0/.(i+1)=W-min(P);
+             then len h21=(i+1-'len h11 +2-'1)
+                   by A22,A23,A29,A31,A65,A158,A178,A182,FUNCT_1:def 8;
+             then len h21+1<=len h21-1+1 by A23,A160,A181,AXIOMS:24;
+             then len h21+1<=len h21-(1-1) by XCMPLX_1:37;
+             then len h21+1-len h21<=len h21 -len h21 by REAL_1:49;
+             then len h21+1-len h21<=0 by XCMPLX_1:14;
+            hence contradiction by Lm1,XCMPLX_1:26;
+           end;
+            LE h0/.i,h0/.(i+1),Lower_Arc(P),E-max(P),W-min(P)
+            by A11,A12,A13,A14,A167,A169,A173,A175,A176,A177,A178,Th19;
+          hence LE h0/.i,h0/.(i+1),P
+            by A177,A178,A179,A180,A183,JORDAN6:def 10;
+         case A184:i=len h1;
+          then A185:h0.(i+1)=(mid(h21,2,len h21 -'1)).(i+1 -len h11)
+                                 by A21,A40,A126,FINSEQ_1:36;
+           A186:i+1-len h11=i+1-'len h11 by A21,A128,A184,SCMFSA_7:3;
+            i+1-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                               by A40,A126,REAL_1:49;
+           then A187:i+1-len h11<= len (mid(h21,2,len h21 -'1)) by XCMPLX_1:26;
+            1<=i+1-len h11 by A21,A184,XCMPLX_1:26;
+           then A188:h0.(i+1)=h21.(i+1-'len h11 +2-'1)
+                    by A43,A44,A185,A186,A187,JORDAN3:27;
+           A189:h0.i=h11.i by A21,A125,A184,SCMFSA_7:9;
+            i in dom h1 by A125,A184,FINSEQ_3:27;
+           then A190:h0.i=E-max(P) by A5,A9,A184,A189,FUNCT_1:23;
+            i in dom h0 by A125,FINSEQ_3:27;
+           then h0/.i=E-max(P) by A190,FINSEQ_4:def 4;
+           then A191:h0/.i in Upper_Arc(P) by A1,Th1;
+           set j=i-'len h11+2-'1;
+           len h11-'len h11= len h11-len h11 by SCMFSA_7:3.=0
+                              by XCMPLX_1:14;
+then A192:      j=2-1 by A21,A184,SCMFSA_7:3;
+           then A193:j+1<=len h2 by A16,AXIOMS:22;
+           A194:i+1-'len h11+2-'1=1+2-'1 by A21,A184,BINARITH:39
+           .=2 by BINARITH:39;
+           A195:j+1 in dom h2 by A192,A193,FINSEQ_3:27;
+           then A196:h0.(i+1)=g2.(h2.(j+1)) by A188,A192,A194,FUNCT_1:23;
+A197:      h2.(j+1) in rng h2 by A195,FUNCT_1:def 5;
+            i+1 in dom h0 by A126,A127,FINSEQ_3:27;
+           then A198:h0/.(i+1)=h0.(i+1) by FINSEQ_4:def 4;
+           A199:h0.(i+1) in Lower_Arc(P)
+              by A13,A15,A16,A196,A197,BORSUK_1:83,FUNCT_1:def 5;
+            2<=len h21 by A16,A23,AXIOMS:22;
+           then A200:2 in dom h21 by FINSEQ_3:27;
+           len h21 <> i+1-'len h11 +2-'1 by A16,A23,A194;
+           then h0/.(i+1) <> W-min P
+            by A22,A23,A29,A31,A65,A188,A194,A198,A200,FUNCT_1:def 8;
+          hence LE h0/.i,h0/.(i+1),P by A191,A198,A199,JORDAN6:def 10;
+         end;
+        hence LE h0/.i,h0/.(i+1),P;
+       end;
+      hence LE h0/.i,h0/.(i+1),P;
+     end;
+    thus for i being Nat,W being Subset of Euclid 2
+      st 1<=i & i<len h0 & W=Segment(h0/.i,h0/.(i+1),P) holds
+      diameter(W)<e
+     proof let i be Nat,W be Subset of Euclid 2;
+      assume
+       A201:1<=i & i<len h0 & W=Segment(h0/.i,h0/.(i+1),P);
+       then A202:i+1<=len h0 by NAT_1:38;
+       A203:1<i+1 by A201,NAT_1:38;
+       A204:i<i+1 by NAT_1:38;
+        now per cases by REAL_1:def 5;
+       case A205:i<len h1;
+         then A206:i+1<=len h1 by NAT_1:38;
+         A207:h0.i=h11.i by A21,A201,A205,SCMFSA_7:9;
+         A208:i in dom h1 by A201,A205,FINSEQ_3:27;
+         then A209:h11.i=g1.(h1.i) by FUNCT_1:23;
+         then A210:h0.i=g1.(h1.i) by A21,A201,A205,SCMFSA_7:9;
+A211:    h1.i in rng h1 by A208,FUNCT_1:def 5;
+         then A212:0<=h1.i & h1.i<=1 by A9,BORSUK_1:83,TOPREAL5:1;
+         A213:h0.(i+1)=h11.(i+1) by A21,A203,A206,SCMFSA_7:9;
+         A214:i+1 in dom h1 by A203,A206,FINSEQ_3:27;
+         then A215:h0.(i+1)=g1.(h1.(i+1)) by A213,FUNCT_1:23;
+A216:      h1.(i+1) in rng h1 by A214,FUNCT_1:def 5;
+         then A217:0<=h1.(i+1) & h1.(i+1)<=1 by A9,BORSUK_1:83,TOPREAL5:1;
+         A218:h1.i<h1.(i+1) by A9,A204,A208,A214,GOBOARD1:def 1;
+          i in dom h0 by A201,FINSEQ_3:27;
+         then A219:h0/.i=h0.i by FINSEQ_4:def 4;
+          i+1 in dom h0 by A202,A203,FINSEQ_3:27;
+         then A220:h0/.(i+1)=h0.(i+1) by FINSEQ_4:def 4;
+         A221:h0.i in Upper_Arc(P)
+             by A4,A6,A9,A210,A211,BORSUK_1:83,FUNCT_1:def 5;
+         A222:h0.(i+1) in Upper_Arc(P)
+           by A4,A6,A9,A215,A216,BORSUK_1:83,FUNCT_1:def 5;
+          A223:h1/.i=h1.i by A201,A205,FINSEQ_4:24;
+          A224:h1/.(i+1)=h1.(i+1) by A203,A206,FINSEQ_4:24;
+         then reconsider Q1=[.h1/.i,h1/.(i+1).]
+          as Subset of I[01]
+             by A9,A211,A216,A223,BORSUK_1:83,RCOMP_1:16;
+         A225:Segment(h0/.i,h0/.(i+1),P) c= g1.:([.h1/.i,h1/.(i+1).])
+          proof let x be set;assume
+           A226:x in Segment(h0/.i,h0/.(i+1),P);
+A227:         h0/.(i+1) <> W-min P
+               by A20,A25,A38,A64,A203,A213,A214,A220,FUNCT_1:def 8;
+            then x in {p: LE h0/.i,p,P & LE p,h0/.(i+1),P} by A226,Def1;
+            then consider p being Point of TOP-REAL 2 such that
+            A228:p=x & (LE h0/.i,p,P & LE p,h0/.(i+1),P);
+       A229:h0/.i in Upper_Arc(P) & p in Lower_Arc(P)& not p=W-min(P) or
+            h0/.i in Upper_Arc(P) & p in Upper_Arc(P) &
+             LE h0/.i,p,Upper_Arc(P),W-min(P),E-max(P) or
+            h0/.i in Lower_Arc(P) & p in Lower_Arc(P)& not p=W-min(P) &
+             LE h0/.i,p,Lower_Arc(P),E-max(P),W-min(P)
+                                   by A228,JORDAN6:def 10;
+            A230:p in Upper_Arc(P) & h0/.(i+1) in Lower_Arc(P) or
+            p in Upper_Arc(P) & h0/.(i+1) in Upper_Arc(P) &
+             LE p,h0/.(i+1),Upper_Arc(P),W-min(P),E-max(P) or
+            p in Lower_Arc(P) & h0/.(i+1) in Lower_Arc(P)&
+             LE p,h0/.(i+1),Lower_Arc(P),E-max(P),W-min(P)
+                                   by A228,JORDAN6:def 10;
+             now per cases by A206,REAL_1:def 5;
+            case i+1<len h1;
+             then A231:         h0/.(i+1) <> E-max P
+                       by A20,A26,A37,A64,A213,A214,A220,FUNCT_1:def 8;
+A232:            now assume h0/.(i+1) in Lower_Arc(P);
+                  then h0/.(i+1) in Upper_Arc(P)/\ Lower_Arc(P)
+                             by A220,A222,XBOOLE_0:def 3;
+                  then h0/.(i+1) in {W-min(P),E-max(P)} by A1,JORDAN6:def 9;
+                 hence contradiction by A227,A231,TARSKI:def 2;
+                end;
+              then A233:p in Upper_Arc(P) & h0/.(i+1) in Upper_Arc(P)
+                by A228,JORDAN6:def 10;
+A234:           LE p,h0/.(i+1),Upper_Arc(P),W-min(P),E-max(P)
+                   by A228,A232,JORDAN6:def 10;
+                then A235:         p<>E-max(P) by A2,A231,JORDAN6:70;
+               now per cases by A201,REAL_1:def 5;
+              case i>1;
+then A236:        h0/.i <> W-min P
+                  by A20,A25,A38,A64,A208,A209,A210,A219,FUNCT_1:def 8;
+A237:         h11.i <> E-max(P) by A20,A26,A37,A64,A205,A208,FUNCT_1:def 8;
+                 now assume h0/.i in Lower_Arc(P);
+                  then h0/.i in Upper_Arc(P)/\ Lower_Arc(P)
+                             by A219,A221,XBOOLE_0:def 3;
+                  then h0/.i in {W-min(P),E-max(P)} by A1,JORDAN6:def 9;
+                 hence contradiction by A207,A219,A236,A237,TARSKI:def 2;
+                end;
+                then A238:h0/.i in Upper_Arc(P) & p in Lower_Arc(P)
+                 & not p=W-min(P) or
+                h0/.i in Upper_Arc(P) & p in Upper_Arc(P) &
+                LE h0/.i,p,Upper_Arc(P),W-min(P),E-max(P)
+                  by A228,JORDAN6:def 10;
+then A239:            p <> W-min P by A2,A236,JORDAN6:69;
+A240:             now assume p in Lower_Arc(P);
+                  then p in Upper_Arc(P)/\ Lower_Arc(P) by A233,XBOOLE_0:def 3
+;
+                then p in {W-min(P),E-max(P)} by A1,JORDAN6:def 9;
+                 hence contradiction by A235,A239,TARSKI:def 2;
+                end;
+                  then consider z being set such that A241:z in dom g1 & p=g1.z
+                                   by A4,A238,FUNCT_1:def 5;
+                  reconsider rz=z as Real by A6,A241;
+                A242:g1.(h1/.i)=h0/.i by A201,A205,A207,A209,A219,FINSEQ_4:24;
+                  A243:0<=h1/.i & h1/.i<=1 &
+                   g1.(h1/.(i+1))=h0/.(i+1)
+                by A201,A203,A205,A206,A212,A215,A220,FINSEQ_4:24;
+                    h1.(i+1) in rng h1 by A214,FUNCT_1:def 5;
+              then A244:0<=h1/.(i+1) & h1/.(i+1)<=1
+                by A9,A224,BORSUK_1:83,TOPREAL5:1;
+               take rz;
+               thus rz in dom g1 by A241;
+                   A245:0<=rz & rz<=1 by A6,A241,TOPREAL5:1;
+                   then A246:h1/.i<=rz
+                  by A3,A4,A5,A238,A240,A241,A242,A243,Th20;
+                    rz<=h1/.(i+1)
+                    by A3,A4,A5,A234,A241,A243,A244,A245,Th20;
+               hence rz in [.h1/.i,h1/.(i+1).] by A246,TOPREAL5:1;
+               thus x = g1.rz by A228,A241;
+              case A247:i=1;
+                 now per cases;
+                case A248:p<>W-min(P);
+               now assume p in Lower_Arc(P);
+                    then p in Upper_Arc(P)/\ Lower_Arc(P) by A233,XBOOLE_0:def
+3;
+                    then p in {W-min(P),E-max(P)} by A1,JORDAN6:def 9;
+                   hence contradiction by A235,A248,TARSKI:def 2;
+                  end;
+                  then consider z being set such that A249:z in dom g1 & p=g1.z
+                                   by A4,A229,FUNCT_1:def 5;
+                  reconsider rz=z as Real by A6,A249;
+              take rz;
+              A250:g1.(h1/.(1+1))=h0/.(1+1)
+                  by A206,A215,A220,A247,FINSEQ_4:24;
+                    h1.(1+1) in rng h1 by A214,A247,FUNCT_1:def 5;
+              then A251:0<=h1/.(1+1) & h1/.(1+1)<=1
+              by A9,A224,A247,BORSUK_1:83,TOPREAL5:1;
+                   A252:0<=rz & rz<=1 by A6,A249,TOPREAL5:1;
+         A253:h1/.1<=rz by A6,A9,A223,A247,A249,TOPREAL5:1;
+                    rz<=h1/.(1+1)
+                   by A3,A4,A5,A234,A247,A249,A250,A251,A252,Th20;
+                 hence rz in dom g1
+                      & rz in [.h1/.1,h1/.(1+1).]
+                      & x = g1.rz by A228,A249,A253,TOPREAL5:1;
+                case A254:p=W-min(P);
+                 thus 0 in [.h1/.1,h1/.(1+1).]
+                    by A9,A218,A223,A224,A247,TOPREAL5:1;
+                 thus x = g1.0 by A5,A228,A254;
+                end;
+               hence ex y being set st y in dom g1 &
+               y in [.h1/.1,h1/.(1+1).] & x = g1.y by A7;
+              end;
+             hence ex y being set st y in dom g1 & y in [.h1/.i,h1/.(i+1).]
+              & x = g1.y;
+            case A255:i+1=len h1;
+              then A256:h0/.(i+1)=E-max(P)
+                by A5,A9,A26,A213,A220,FUNCT_1:23;
+              A257:p in Upper_Arc(P) or p in Lower_Arc(P)
+              by A228,JORDAN6:def 10;
+A258:           now assume A259:p in Lower_Arc(P)& not p in Upper_Arc(P);
+                then LE h0/.(i+1),p,Lower_Arc(P),E-max(P),W-min(P)
+                   by A11,A256,JORDAN5C:10;
+               hence contradiction by A8,A11,A230,A256,A259,JORDAN5C:12;
+              end;
+              then A260:LE p,h0/.(i+1),Upper_Arc(P),W-min(P),E-max(P)
+                               by A2,A256,A257,JORDAN5C:10;
+               now per cases;
+              case A261:p<>E-max(P);
+                 now per cases;
+                case A262:p<>W-min(P);
+A263:               now assume p in Lower_Arc(P);
+                    then p in Upper_Arc(P)/\ Lower_Arc(P) by A258,XBOOLE_0:def
+3;
+                    then p in {W-min(P),E-max(P)} by A1,JORDAN6:def 9;
+                   hence contradiction by A261,A262,TARSKI:def 2;
+                  end;
+                  then consider z being set such that A264:z in dom g1 & p=g1.z
+                                   by A4,A229,FUNCT_1:def 5;
+                  reconsider rz=z as Real by A6,A264;
+                 take rz;
+A265:             g1.(h1/.(i+1))=h0/.(i+1) by A203,A206,A215,A220,FINSEQ_4:24;
+                    h1.(i+1) in rng h1 by A214,FUNCT_1:def 5;
+              then A266:0<=h1/.(i+1) & h1/.(i+1)<=1
+              by A9,A224,BORSUK_1:83,TOPREAL5:1;
+                   A267:0<=rz & rz<=1 by A6,A264,TOPREAL5:1;
+                   then A268:h1/.i<=rz
+                    by A3,A4,A5,A207,A209,A212,A219,A223,A229,A263,A264,Th20;
+                    rz<=h1/.(i+1)
+         by A3,A4,A5,A260,A264,A265,A266,A267,Th20;
+                 hence rz in dom g1 &
+                 rz in [.h1/.i,h1/.(i+1).]
+                      & x = g1.rz by A228,A264,A268,TOPREAL5:1;
+                case A269:p=W-min(P);
+                  then h11.i=W-min(P) by A2,A207,A219,A229,JORDAN6:69;
+                  then i=1 by A20,A25,A38,A64,A208,FUNCT_1:def 8;
+                  then 0 in [.h1/.i,h1/.(i+1).]
+                    by A9,A218,A223,A224,TOPREAL5:1;
+                 hence ex y being set st y in dom g1 &
+                 y in [.h1/.i,h1/.(i+1).]
+                     & x = g1.y by A5,A7,A228,A269;
+                end;
+               hence ex y being set st y in dom g1 &
+               y in [.h1/.i,h1/.(i+1).] & x = g1.y;
+               case A270:p=E-max(P);
+                 1 in [.h1/.i,h1/.(i+1).]
+                 by A9,A218,A223,A224,A255,TOPREAL5:1;
+               hence ex y being set st
+                y in dom g1 & y in [.h1/.i,h1/.(i+1).]
+                  & x = g1.y by A5,A33,A228,A270,Lm6;
+               end;
+              hence ex y being set st y in dom g1 & y in [.h1/.i,
+              h1/.(i+1).] & x = g1.y;
+            end;
+           hence x in g1.:([.h1/.i,h1/.(i+1).]) by FUNCT_1:def 12;
+          end;
+          g1.:([.h1/.i,h1/.(i+1).]) c= Segment(h0/.i,h0/.(i+1),P)
+          proof let x be set;assume x in g1.:([.h1/.i,h1/.(i+1).]);
+            then consider y being set such that
+      A271: y in dom g1 & y in [.h1/.i,h1/.(i+1).] & x=g1.y by FUNCT_1:def 12;
+            A272:x in Upper_Arc(P) by A4,A271,FUNCT_1:def 5;
+            then reconsider p1=x as Point of TOP-REAL 2;
+            reconsider sy=y as Real by A271;
+             A273:g1.(h1/.i)=h0/.i by A201,A205,A210,A219,FINSEQ_4:24;
+             A274:h1/.i<=sy & sy<=h1/.(i+1) by A271,TOPREAL5:1;
+             A275:0<=h1/.i & h1/.i<=1 by A201,A205,A212,FINSEQ_4:24;
+             A276:0<=sy & sy<=1 by A6,A271,TOPREAL5:1;
+             then A277:             LE h0/.i,p1,Upper_Arc(P),W-min(P),E-max(P)
+              by A2,A3,A4,A5,A271,A273,A274,A275,Th19;
+              LE p1,h0/.(i+1),Upper_Arc(P),W-min(P),E-max(P)
+           by A2,A3,A4,A5,A215,A217,A220,A224,A271,A274,A276,Th19;
+                           then A278: LE h0/.i,p1,P & LE p1,h0/.(i+1),P
+                       by A219,A220,A221,A222,A272,A277,JORDAN6:def 10;
+A279:       not h0/.(i+1)=W-min P
+               by A20,A25,A38,A64,A203,A213,A214,A220,FUNCT_1:def 8;
+             x in {p: LE h0/.i,p,P & LE p,h0/.(i+1),P} by A278;
+           hence x in Segment(h0/.i,h0/.(i+1),P) by A279,Def1;
+          end;
+         then W=g1.:Q1 by A201,A225,XBOOLE_0:def 10;
+        hence diameter(W)<e by A9,A201,A205;
+       case A280:i>len h1;
+           then A281:len h1 +1<=i by NAT_1:38;
+            len h11+1<=i & i<=len h11 + len (mid(h21,2,len h21 -'1))
+                                 by A21,A201,A280,FINSEQ_1:35,NAT_1:38;
+           then A282:h0.i=(mid(h21,2,len h21 -'1)).(i -len h11) by FINSEQ_1:36;
+           A283:i-len h11=i-'len h11 by A21,A280,SCMFSA_7:3;
+A284:       i-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                      by A40,A201,REAL_1:49;
+            len h1 +1-len h1<=i-len h1 by A281,REAL_1:49;
+           then 1<=i-'len h11 & i-'len h11<=len mid(h21,2,len h21 -'1)
+                             by A21,A283,A284,XCMPLX_1:26;
+           then A285:h0.i=h21.(i-'len h11 +2-'1)
+                             by A43,A44,A282,A283,JORDAN3:27;
+           A286:len h1 +1<=i+1 by A281,NAT_1:38;
+           then A287:h0.(i+1)=(mid(h21,2,len h21 -'1)).(i+1 -len h11)
+                                      by A21,A40,A202,FINSEQ_1:36;
+            i+1>len h11 by A21,A280,NAT_1:38;
+           then A288:i+1-len h11=i+1-'len h11 by SCMFSA_7:3;
+A289:       i+1-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                         by A40,A202,REAL_1:49;
+            len h1 +1-len h1<=i+1-len h1 by A286,REAL_1:49;
+           then A290:1<=i+1-'len h11 & i+1-'len h11<=len mid(h21,2,len h21 -'1)
+                             by A21,A288,A289,XCMPLX_1:26;
+           then A291:h0.(i+1)=h21.(i+1-'len h11 +2-'1)
+                    by A43,A44,A287,A288,JORDAN3:27;
+            1<i+1-'len h11+(2-1) by A290,NAT_1:38;
+           then 1<i+1-'len h11+2-1 by XCMPLX_1:29;
+           then 0<i+1-'len h11+2-1 by AXIOMS:22;
+           then A292:i+1-'len h11+2-1=i+1-'len h11+2-'1 by BINARITH:def 3;
+            0<=i-'len h11 by NAT_1:18;
+then A293:      0+2<=i-'len h11 +2 by AXIOMS:24;
+            i-len h11<=len h1+(len h2-2)-len h11 by A47,A201,REAL_1:49;
+           then i-len h11<=(len h2-2) by A21,XCMPLX_1:26;
+           then i-'len h11+2<=len h2-2+2 by A283,AXIOMS:24;
+then A294:      i-'len h11+2<=len h2 by XCMPLX_1:27;
+           then A295:i-'len h11+2-1<=len h2-1 by REAL_1:49;
+           A296:1<=(i-'len h11 +2-'1) & (i-'len h11 +2-'1)<=len h21
+                         by A23,A293,A294,Lm2,JORDAN3:5,7;
+            len h2<len h2+1 by NAT_1:38;
+           then len h2-1<len h2+1-1 by REAL_1:54;
+           then len h2-1<len h2 by XCMPLX_1:26;
+           then A297:i-'len h11+2-1<len h2 by A295,AXIOMS:22;
+           A298:i-'len h11+2-'1=i-'len h11+2-1 by A296,JORDAN3:1;
+           set j=i-'len h11+2-'1;
+            len h1 +1<=i by A280,NAT_1:38;
+           then len h11+1-len h11<=i-len h11 by A21,REAL_1:49;
+           then 1<=i-len h11 by XCMPLX_1:26;
+           then 1<=i-'len h11 by JORDAN3:1;
+           then 1+2<=i-'len h11+2 by AXIOMS:24;
+           then 1+2-1<=i-'len h11+2-1 by REAL_1:49;
+           then A299:1<j by A298,AXIOMS:22;
+            i-len h11<len h11+(len h2-2)-len h11 by A21,A47,A201,REAL_1:54;
+           then i-len h11<len h2-2 by XCMPLX_1:26;
+then A300:       i-len h11+2<len h2-2+2 by REAL_1:53;
+           A301:j< len h2 by A296,A297,JORDAN3:1;
+           A302:j+1=i-'len h11+(1+1)-1+1 by A296,JORDAN3:1
+               .=i-'len h11+1+1-1+1 by XCMPLX_1:1
+               .=i-'len h11+1+1 by XCMPLX_1:26
+               .=i-'len h11+(1+1) by XCMPLX_1:1;
+           then A303:j+1<len h2 by A283,A300,XCMPLX_1:27;
+           A304:j+1 =1+(i-len h11+(2-1)) by A283,A298,XCMPLX_1:29
+               .=1+(i+-len h11+(2-1)) by XCMPLX_0:def 8
+               .=(i+1)+-len h11+(2-1) by XCMPLX_1:1
+               .=i+1-len h11+(2-1) by XCMPLX_0:def 8
+               .=i+1-'len h11+2-'1 by A288,A292,XCMPLX_1:29;
+           A305:j in dom h2 by A22,A296,FINSEQ_3:27;
+           then A306:h0.i=g2.(h2.j) by A285,FUNCT_1:23;
+A307:        h2.j in rng h2 by A305,FUNCT_1:def 5;
+           A308:1<j+1 by A296,NAT_1:38;
+           then A309:j+1 in dom h2 by A294,A302,FINSEQ_3:27;
+then A310:      h0.(i+1)=g2.(h2.(j+1)) by A291,A304,FUNCT_1:23;
+A311:        h2.(j+1) in rng h2 by A309,FUNCT_1:def 5;
+            i in dom h0 by A201,FINSEQ_3:27;
+           then A312:h0/.i=h0.i by FINSEQ_4:def 4;
+            i+1 in dom h0 by A202,A203,FINSEQ_3:27;
+           then A313:h0/.(i+1)=h0.(i+1) by FINSEQ_4:def 4;
+            g2.(h2.j) in rng g2 by A15,A16,A307,BORSUK_1:83,FUNCT_1:def 5;
+           then A314:h0.i in Lower_Arc(P) by A13,A285,A305,FUNCT_1:23;
+           A315:h0.(i+1) in Lower_Arc(P)
+            by A13,A15,A16,A310,A311,BORSUK_1:83,FUNCT_1:def 5;
+A316: 0 <= h2.j by A16,A307,BORSUK_1:83,TOPREAL5:1;
+A317: h2.j <= 1 by A16,A307,BORSUK_1:83,TOPREAL5:1;
+A318: g2.(h2.(j+1)) = h0/.(i+1) by A291,A304,A309,A313,FUNCT_1:23;
+A319: h2.(j+1) <= 1 by A16,A311,BORSUK_1:83,TOPREAL5:1;
+          A320:h2/.j=h2.j by A296,A301,FINSEQ_4:24;
+          A321:h2/.(j+1)=h2.(j+1) by A294,A302,A308,FINSEQ_4:24;
+         then reconsider Q1=[.h2/.j,h2/.(j+1).] as Subset of
+I[01]
+            by A16,A307,A311,A320,BORSUK_1:83,RCOMP_1:16;
+         A322:Segment(h0/.i,h0/.(i+1),P) c= g2.:([.h2/.j,h2/.(j+1).])
+          proof let x be set;assume
+           A323:x in Segment(h0/.i,h0/.(i+1),P);
+             h0/.(i+1) <> W-min P
+                   by A22,A29,A31,A65,A291,A303,A304,A309,A313,FUNCT_1:def 8;
+            then x in {p: LE h0/.i,p,P & LE p,h0/.(i+1),P} by A323,Def1;
+            then consider p being Point of TOP-REAL 2 such that
+            A324:p=x & (LE h0/.i,p,P & LE p,h0/.(i+1),P);
+            A325:h0/.i in Upper_Arc(P) & p in Lower_Arc(P)& not p=W-min(P) or
+            h0/.i in Upper_Arc(P) & p in Upper_Arc(P) &
+             LE h0/.i,p,Upper_Arc(P),W-min(P),E-max(P) or
+            h0/.i in Lower_Arc(P) & p in Lower_Arc(P)& not p=W-min(P) &
+             LE h0/.i,p,Lower_Arc(P),E-max(P),W-min(P)
+                                   by A324,JORDAN6:def 10;
+                A326:j<len h2 by A294,A302,NAT_1:38;
+              A327: h0/.(i+1) <> E-max P
+              by A22,A28,A30,A65,A291,A304,A308,A309,A313,FUNCT_1:def 8;
+A328:       h21.(j+1) <> W-min P by A22,A29,A31,A65,A303,A309,FUNCT_1:def 8;
+                 now assume h0/.(i+1) in Upper_Arc(P);
+                  then h0/.(i+1) in Upper_Arc(P)/\ Lower_Arc(P)
+                             by A313,A315,XBOOLE_0:def 3;
+                  then h0/.(i+1) in {W-min(P),E-max(P)} by A1,JORDAN6:def 9;
+                 hence contradiction by A291,A304,A313,A327,A328,TARSKI:def 2;
+                end;
+     then A329:p in Lower_Arc(P) & h0/.(i+1) in Lower_Arc(P)& not
+            h0/.(i+1)=W-min(P)
+             & LE p,h0/.(i+1),Lower_Arc(P),E-max(P),W-min(P) or
+            p in Upper_Arc(P) & h0/.(i+1) in Lower_Arc(P)
+                 & not h0/.(i+1)=W-min(P) by A324,JORDAN6:def 10;
+A330:        h0/.i <> W-min(P)
+                    by A22,A29,A31,A65,A285,A305,A312,A326,FUNCT_1:def 8;
+A331:         h21.j <> E-max P by A22,A28,A30,A65,A299,A305,FUNCT_1:def 8;
+A332:         now assume h0/.i in Upper_Arc(P);
+                  then h0/.i in Upper_Arc(P)/\ Lower_Arc(P)
+                                   by A312,A314,XBOOLE_0:def 3;
+                  then h0/.i in {W-min(P),E-max(P)} by A1,JORDAN6:def 9;
+                 hence contradiction by A285,A312,A330,A331,TARSKI:def 2;
+              end;
+then A333:         LE h0/.i,p,Lower_Arc P, E-max P, W-min P
+                      by A324,JORDAN6:def 10;
+A334:         h0/.i <> E-max(P) by A22,A28,A30,A65,A285,A299,A305,A312,FUNCT_1:
+def 8;
+A335:             now assume p in Upper_Arc(P);
+                  then p in Upper_Arc P /\ Lower_Arc P by A325,A332,XBOOLE_0:
+def 3;
+                  then p in {W-min(P),E-max(P)} by A1,JORDAN6:def 9;
+                  then p=W-min(P) or p=E-max(P) by TARSKI:def 2;
+                 hence contradiction by A11,A325,A332,A334,JORDAN6:69;
+                end;
+then A336:           LE p,h0/.(i+1),Lower_Arc(P),E-max(P),W-min(P)
+                  by A324,JORDAN6:def 10;
+                  consider z being set such that A337:z in dom g2 & p=g2.z
+                                   by A13,A329,A335,FUNCT_1:def 5;
+                  reconsider rz=z as Real by A15,A337;
+                  A338:g2.(h2/.(j+1))=h0/.(i+1)
+                      by A291,A304,A309,A313,A321,FUNCT_1:23;
+                   A339:0<=h2/.j & h2/.j<=1
+                      by A16,A307,A320,BORSUK_1:83,TOPREAL5:1;
+                    h2.(j+1) in rng h2 by A309,FUNCT_1:def 5;
+                then 0<=rz & rz<=1 & 0<=h2/.(j+1) & h2/.(j+1)<=1
+                               by A15,A16,A321,A337,BORSUK_1:83,TOPREAL5:1;
+                   then rz<=h2/.(j+1)& h2/.j<=rz
+               by A12,A13,A14,A306,A312,A320,A333,A336,A337,A338,A339,Th20;
+             then rz in [.h2/.j,h2/.(j+1).] by TOPREAL5:1;
+           hence x in g2.:([.h2/.j,h2/.(j+1).]) by A324,A337,FUNCT_1:def 12;
+          end;
+          g2.:([.h2/.j,h2/.(j+1).]) c= Segment(h0/.i,h0/.(i+1),P)
+          proof let x be set;assume x in g2.:([.h2/.j,h2/.(j+1).]);
+            then consider y being set such that
+A340: y in dom g2 & y in [.h2/.j,h2/.(j+1).] & x=g2.y by FUNCT_1:def 12;
+            A341:x in Lower_Arc(P) by A13,A340,FUNCT_1:def 5;
+            then reconsider p1=x as Point of TOP-REAL 2;
+            reconsider sy=y as Real by A340;
+             A342:h2/.j<=sy & sy<=h2/.(j+1) by A340,TOPREAL5:1;
+             A343:0<=sy & sy<=1 by A15,A340,TOPREAL5:1;
+A344:         h2.(j+1) <> 1 by A16,A18,A29,A303,A309,FUNCT_1:def 8;
+A345:         now assume p1=W-min(P);
+             then 1=sy by A12,A14,A32,A340,FUNCT_1:def 8;
+             hence contradiction by A319,A321,A342,A344,AXIOMS:21;
+            end;
+A346:       h0/.(i+1) <> W-min P
+            by A22,A29,A31,A65,A291,A303,A304,A309,A313,FUNCT_1:def 8;
+A347:          LE h0/.i,p1,Lower_Arc(P),E-max(P),W-min(P)
+                  by A11,A12,A13,A14,A306,A312,A316,A317,A320,A340,A342,A343,
+Th19;
+              LE p1,h0/.(i+1),Lower_Arc(P),E-max(P),W-min(P)
+                       by A11,A12,A13,A14,A318,A319,A321,A340,A342,A343,Th19;
+             then LE h0/.i,p1,P & LE p1,h0/.(i+1),P
+                    by A312,A313,A314,A315,A341,A345,A346,A347,JORDAN6:def 10;
+            then x in {p: LE h0/.i,p,P & LE p,h0/.(i+1),P};
+           hence x in Segment(h0/.i,h0/.(i+1),P) by A346,Def1;
+          end;
+         then W=g2.:(Q1) by A201,A322,XBOOLE_0:def 10;
+        hence diameter(W)<e by A16,A296,A301;
+       case A348:i=len h1;
+           then A349:h0.i=E-max(P) by A21,A37,A201,SCMFSA_7:9;
+           A350:i-len h11=i-'len h11 by A21,A348,SCMFSA_7:3;
+           A351:h0.(i+1)=(mid(h21,2,len h21 -'1)).(i+1 -len h11)
+                            by A21,A40,A202,A348,FINSEQ_1:36;
+           A352:i+1-len h11=i+1-'len h11 by A21,A204,A348,SCMFSA_7:3;
+       i+1-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                         by A40,A202,REAL_1:49;
+           then A353:1<=i+1-'len h11 & i+1-'len h11<=len mid(h21,2,len h21 -'1)
+                             by A21,A348,A352,XCMPLX_1:26;
+           then 1<i+1-'len h11+(2-1) by NAT_1:38;
+           then 1<i+1-'len h11+2-1 by XCMPLX_1:29;
+           then 0<i+1-'len h11+2-1 by AXIOMS:22;
+           then A354:i+1-'len h11+2-1=i+1-'len h11+2-'1 by BINARITH:def 3;
+            0<=i-'len h11 by NAT_1:18;
+then A355:      0+2<=i-'len h11 +2 by AXIOMS:24;
+            i-len h11<=len h1+(len h2-2)-len h11 by A47,A201,REAL_1:49;
+           then i-len h11<=(len h2-2) by A21,XCMPLX_1:26;
+           then i-'len h11+2<=len h2-2+2 by A350,AXIOMS:24;
+then A356:      i-'len h11+2<=len h2 by XCMPLX_1:27;
+           then A357:i-'len h11+2-1<=len h2-1 by REAL_1:49;
+           A358:1<=(i-'len h11 +2-'1) & (i-'len h11 +2-'1)<=len h21
+                                    by A23,A355,A356,Lm2,JORDAN3:5,7;
+            len h2<len h2+1 by NAT_1:38;
+           then len h2-1<len h2+1-1 by REAL_1:54;
+           then len h2-1<len h2 by XCMPLX_1:26;
+           then A359:i-'len h11+2-1<len h2 by A357,AXIOMS:22;
+           A360:i-'len h11+2-'1=i-'len h11+2-1 by A358,JORDAN3:1;
+           set j=i-'len h11+2-'1;
+            len h1-len h11>=0 by A21,XCMPLX_1:14;
+           then len h1-'len h11=len h11-len h11 by A21,BINARITH:def 3;
+then A361:      0+2-1=len h1-'len h11+2-1 by XCMPLX_1:14;
+           A362:0<=i-len h11 by A21,A348,XCMPLX_1:14;
+            i-len h11<len h11+(len h2-2)-len h11 by A21,A47,A201,REAL_1:54;
+           then i-len h11<len h2-2 by XCMPLX_1:26;
+           then i-len h11+2<len h2-2+2 by REAL_1:53;
+           then A363:i-len h11+2<len h2 by XCMPLX_1:27;
+           A364:j+1=i-'len h11+(1+1)-1+1 by A358,JORDAN3:1
+               .=i-'len h11+1+1-1+1 by XCMPLX_1:1
+               .=i-'len h11+1+1 by XCMPLX_1:26
+               .=i-'len h11+(1+1) by XCMPLX_1:1;
+           then A365:j+1<len h2 by A362,A363,BINARITH:def 3;
+           A366:j+1=i-len h11+2-1+1 by A360,A362,BINARITH:def 3
+               .=1+(i-len h11+(2-1)) by XCMPLX_1:29
+               .=1+(i+-len h11+(2-1)) by XCMPLX_0:def 8
+               .=(i+1)+-len h11+(2-1) by XCMPLX_1:1
+               .=i+1-len h11+(2-1) by XCMPLX_0:def 8
+               .=i+1-'len h11+2-'1 by A352,A354,XCMPLX_1:29;
+           A367:j in dom h2 by A22,A358,FINSEQ_3:27;
+           then A368:h21.j=g2.(h2.j) by FUNCT_1:23;
+           A369:h0.i=g2.(h2.j) by A14,A16,A348,A349,A361,JORDAN3:1;
+A370:        h2.j in rng h2 by A367,FUNCT_1:def 5;
+           A371:1<j+1 by A358,NAT_1:38;
+           A372:  h0.(i+1)=h21.(j+1) by A43,A44,A351,A352,A353,A366,JORDAN3:27;
+           A373:j+1 in dom h2 by A356,A364,A371,FINSEQ_3:27;
+           then A374:h0.(i+1)=g2.(h2.(j+1)) by A372,FUNCT_1:23;
+A375:        h2.(j+1) in rng h2 by A373,FUNCT_1:def 5;
+            i in dom h0 by A201,FINSEQ_3:27;
+           then A376:h0/.i=h0.i by FINSEQ_4:def 4;
+            i+1 in dom h0 by A202,A203,FINSEQ_3:27;
+           then A377:h0/.(i+1)=h0.(i+1) by FINSEQ_4:def 4;
+           g2.(h2.j) in rng g2 by A15,A16,A370,BORSUK_1:83,FUNCT_1:def 5;
+           then A378:h0.i in Lower_Arc P
+              by A13,A14,A16,A348,A349,A361,JORDAN3:1;
+           A379:h0.(i+1) in Lower_Arc P
+                 by A13,A15,A16,A374,A375,BORSUK_1:83,FUNCT_1:def 5;
+           A380:1<=j & j<len h2 by A358,A359,JORDAN3:1;
+A381:    g2.(h2.(j+1)) = h0/.(i+1) by A372,A373,A377,FUNCT_1:23;
+A382:    h2.(j+1) <= 1 by A16,A375,BORSUK_1:83,TOPREAL5:1;
+           A383:h2/.j=h2.j by A380,FINSEQ_4:24;
+           A384:h2/.(j+1)=h2.(j+1) by A356,A364,A371,FINSEQ_4:24;
+         then reconsider Q1=[.h2/.j,h2/.(j+1).]
+                     as Subset of I[01]
+                          by A16,A370,A375,A383,BORSUK_1:83,RCOMP_1:16;
+         A385:Segment(h0/.i,h0/.(i+1),P) c= g2.:([.h2/.j,h2/.(j+1).])
+          proof let x be set;assume
+           A386:x in Segment(h0/.i,h0/.(i+1),P);
+             h0/.(i+1) <> W-min P
+              by A22,A29,A31,A65,A365,A372,A373,A377,FUNCT_1:def 8;
+            then x in {p: LE h0/.i,p,P & LE p,h0/.(i+1),P} by A386,Def1;
+            then consider p being Point of TOP-REAL 2 such that
+            A387:p=x & LE h0/.i,p,P & LE p,h0/.(i+1),P;
+       A388:h0/.i in Upper_Arc(P) & p in Lower_Arc(P)& not p=W-min(P) or
+            h0/.i in Upper_Arc(P) & p in Upper_Arc(P) &
+             LE h0/.i,p,Upper_Arc(P),W-min(P),E-max(P) or
+            h0/.i in Lower_Arc(P) & p in Lower_Arc(P)& not p=W-min(P) &
+             LE h0/.i,p,Lower_Arc(P),E-max(P),W-min(P)
+                                   by A387,JORDAN6:def 10;
+            j+1<len h2 by A362,A363,A364,BINARITH:def 3;
+            then A389:j<len h2 by NAT_1:38;
+              A390:not h0/.(i+1)=E-max(P)
+                      by A22,A28,A30,A65,A371,A372,A373,A377,FUNCT_1:def 8;
+                A391:h0/.(i+1) in Lower_Arc(P)
+                   by A13,A15,A16,A374,A375,A377,BORSUK_1:83,FUNCT_1:def 5;
+             now assume h0/.(i+1) in Upper_Arc(P);
+              then h0/.(i+1) in Upper_Arc(P)/\ Lower_Arc(P)
+                       by A391,XBOOLE_0:def 3;
+              then h0/.(i+1) in {W-min(P),E-max(P)} by A1,JORDAN6:def 9;
+              then h21.(j+1)=W-min(P) by A372,A377,A390,TARSKI:def 2;
+             hence contradiction by A22,A29,A31,A65,A365,A373,FUNCT_1:def 8;
+            end;
+            then A392:p in Lower_Arc(P) & h0/.(i+1) in Lower_Arc(P)
+            & not h0/.(i+1)=W-min(P)
+             & LE p,h0/.(i+1),Lower_Arc(P),E-max(P),W-min(P) or
+            p in Upper_Arc(P) & h0/.(i+1) in Lower_Arc(P)
+                 & not h0/.(i+1)=W-min(P) by A387,JORDAN6:def 10;
+                A393:h0/.i<>W-min(P)
+                  by A22,A29,A31,A65,A367,A368,A369,A376,A389,FUNCT_1:def 8;
+                 dom (g1*h1) c= dom h0 by FINSEQ_1:39;
+                then A394: h0/.i=E-max(P) by A36,A348,A349,FINSEQ_4:def 4;
+A395:           now assume A396:not p in Lower_Arc(P);
+                  then p=E-max(P) by A2,A388,A394,JORDAN6:70;
+                 hence contradiction by A1,A396,Th1;
+                end;
+A397:           now assume p in Upper_Arc(P);
+                  then p in Upper_Arc(P)/\ Lower_Arc(P) by A395,XBOOLE_0:def 3
+;
+then A398:             p in {W-min(P),E-max(P)} by A1,JORDAN6:def 9;
+                   p <> W-min P by A2,A388,A393,JORDAN6:69;
+                 hence p = E-max P by A398,TARSKI:def 2;
+                end;
+then A399:           LE p,h0/.(i+1),Lower_Arc P, E-max P, W-min P
+                    by A11,A392,JORDAN5C:10;
+                 p in rng g2 by A1,A13,A387,A397,Th1,JORDAN6:def 10;
+                then consider z being set such that A400:z in dom g2 & p=g2.z
+                                 by FUNCT_1:def 5;
+                reconsider rz=z as Real by A15,A400;
+A401:          g2.(h2/.(j+1))=h0/.(i+1)
+                 by A356,A364,A371,A374,A377,FINSEQ_4:24;
+                    h2.(j+1) in rng h2 by A373,FUNCT_1:def 5;
+              then 0<=rz & rz<=1 & 0<=h2/.(j+1) & h2/.(j+1)<=1
+                 by A15,A16,A384,A400,BORSUK_1:83,TOPREAL5:1;
+              then rz<=h2/.(j+1)& h2/.j<=rz
+                 by A12,A13,A14,A16,A348,A361,A383,A399,A400,A401,Th20,JORDAN3:
+1;
+             then rz in [.h2/.j,h2/.(j+1).] by TOPREAL5:1;
+           hence x in g2.:([.h2/.j,h2/.(j+1).]) by A387,A400,FUNCT_1:def 12;
+          end;
+          g2.:([.h2/.j,h2/.(j+1).]) c= Segment(h0/.i,h0/.(i+1),P)
+          proof let x be set;assume x in g2.:([.h2/.j,h2/.(j+1).]);
+            then consider y being set such that
+      A402: y in dom g2 & y in [.h2/.j,h2/.(j+1).] & x=g2.y by FUNCT_1:def 12;
+            A403:x in Lower_Arc(P) by A13,A402,FUNCT_1:def 5;
+            then reconsider p1=x as Point of TOP-REAL 2;
+            reconsider sy=y as Real by A402;
+             A404:h2/.j<=sy & sy<=h2/.(j+1) by A402,TOPREAL5:1;
+             A405:0<=sy & sy<=1 by A15,A402,TOPREAL5:1;
+A406:         h2.(j+1) <> 1 by A16,A18,A29,A365,A373,FUNCT_1:def 8;
+A407:        now assume p1=W-min(P);
+              then 1=sy by A12,A14,A32,A402,FUNCT_1:def 8;
+             hence contradiction by A382,A384,A404,A406,AXIOMS:21;
+            end;
+A408:        h0/.(i+1) <> W-min(P)
+                 by A22,A29,A31,A65,A365,A372,A373,A377,FUNCT_1:def 8;
+              LE h0/.i,p1,Lower_Arc(P),E-max(P),W-min(P)
+                by A11,A12,A13,A14,A349,A376,A402,A405,Th19;
+            then A409: LE h0/.i,p1,P by A376,A378,A403,A407,JORDAN6:def 10;
+             LE p1,h0/.(i+1),Lower_Arc(P),E-max(P),W-min(P)
+                    by A11,A12,A13,A14,A381,A382,A384,A402,A404,A405,Th19;
+            then LE p1,h0/.(i+1),P by A377,A379,A403,A408,JORDAN6:def 10;
+            then x in {p: LE h0/.i,p,P & LE p,h0/.(i+1),P} by A409;
+           hence x in Segment(h0/.i,h0/.(i+1),P) by A408,Def1;
+          end;
+         then W=g2.:(Q1) by A201,A385,XBOOLE_0:def 10;
+        hence diameter(W)<e by A16,A380;
+       end;
+       hence diameter(W)<e;
+      end;
+   thus for W being Subset of Euclid 2 st
+       W=Segment(h0/.len h0,h0/.1,P)  holds diameter W < e
+      proof let W be Subset of Euclid 2;
+       assume
+A410:   W=Segment(h0/.len h0,h0/.1,P);
+         set i=len h0;
+         len h0<=len h11 + len mid(h21,2,len h21 -'1) by FINSEQ_1:35;
+        then A411:    h0.i=(mid(h21,2,len h21 -'1)).(i -len h11) by A21,A48,
+FINSEQ_1:36;
+           A412:i-len h11=i-'len h11 by A21,A49,SCMFSA_7:3;
+            i-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                          by FINSEQ_1:35;
+           then A413:i-len h11<= len (mid(h21,2,len h21 -'1)) by XCMPLX_1:26;
+            len h1 +1-len h1<=i-len h1 by A48,REAL_1:49;
+           then 1<=i-len h1 by XCMPLX_1:26;
+           then A414:h0.i=h21.(i-'len h11 +2-'1)
+                             by A21,A43,A44,A411,A412,A413,JORDAN3:27;
+             A415:i-'len h11+2
+              =(len h21-2)+2 by A21,A23,A47,A412,XCMPLX_1:26
+             .=len h21 by XCMPLX_1:27;
+            0<=i-'len h11 by NAT_1:18;
+then A416:      0+2<=i-'len h11 +2 by AXIOMS:24;
+then A417:      2-'1<=(i-'len h11 +2-'1) by JORDAN3:5;
+            i-'len h11+2<=len h2-2+2 by A21,A47,A412,XCMPLX_1:26;
+then A418:        i-'len h11+2<=len h2 by XCMPLX_1:27;
+           then A419:i-'len h11+2-1<=len h2-1 by REAL_1:49;
+           A420:1<=(i-'len h11 +2-'1) & (i-'len h11 +2-'1)<=len h21
+                             by A23,A416,A418,Lm2,JORDAN3:5,7;
+            len h2<len h2+1 by NAT_1:38;
+           then len h2-1<len h2+1-1 by REAL_1:54;
+           then len h2-1<len h2 by XCMPLX_1:26;
+           then A421:i-'len h11+2-1<len h2 by A419,AXIOMS:22;
+           A422:i-'len h11+2-'1=i-'len h11+2-1 by A417,Lm2,JORDAN3:1;
+           set j=i-'len h11+2-'1;
+            len h11+1-len h11<=i-len h11 by A21,A48,REAL_1:49;
+           then 1<=i-len h11 by XCMPLX_1:26;
+           then 1<=i-'len h11 by JORDAN3:1;
+           then 1+2<=i-'len h11+2 by AXIOMS:24;
+           then 1+2-1<=i-'len h11+2-1 by REAL_1:49;
+           then A423:1<j by A422,AXIOMS:22;
+           A424:j< len h2 by A417,A421,Lm2,JORDAN3:1;
+           A425:j+1=i-'len h11+(1+1)-1+1 by A417,Lm2,JORDAN3:1
+               .=i-'len h11+1+1-1+1 by XCMPLX_1:1
+               .=i-'len h11+1+1 by XCMPLX_1:26
+               .=i-'len h11+(1+1) by XCMPLX_1:1;
+           A426:j in dom h2 by A22,A420,FINSEQ_3:27;
+           then A427:h0.i=g2.(h2.j) by A414,FUNCT_1:23;
+A428:       h2.j in rng h2 by A426,FUNCT_1:def 5;
+           then A429:0<=h2.j & h2.j<=1 by A16,BORSUK_1:83,TOPREAL5:1;
+           A430:1<j+1 by A417,Lm2,NAT_1:38;
+           A431:h0.i in Lower_Arc P
+                       by A13,A15,A16,A427,A428,BORSUK_1:83,FUNCT_1:def 5;
+A432:      now assume h0.i in Upper_Arc(P);
+             then h0.i in Upper_Arc(P)/\ Lower_Arc(P) by A431,XBOOLE_0:def 3;
+             then h0.i in {W-min(P),E-max(P)} by A1,JORDAN6:def 9;
+             then h0.i=W-min(P) or h0.i=E-max(P) by TARSKI:def 2;
+            hence contradiction
+            by A22,A28,A29,A30,A31,A65,A414,A423,A424,A426,FUNCT_1:def 8;
+           end;
+           j+1 in dom h2 by A22,A415,A425,A430,FINSEQ_3:27;
+then A433:      h2.(j+1) in rng h2 by FUNCT_1:def 5;
+            i in dom h0 by A50,FINSEQ_3:27;
+           then A434:h0/.i=h0.i by FINSEQ_4:def 4;
+A435:     0 <= h2.j by A16,A428,BORSUK_1:83,TOPREAL5:1;
+A436:     h2.j <= 1 by A16,A428,BORSUK_1:83,TOPREAL5:1;
+          A437:h2/.j=h2.j by A417,A424,Lm2,FINSEQ_4:24;
+          A438:h2/.(j+1)=h2.(j+1) by A418,A425,A430,FINSEQ_4:24;
+         then reconsider Q1=[.h2/.j,h2/.(j+1).]
+                     as Subset of I[01]
+                by A16,A428,A433,A437,BORSUK_1:83,RCOMP_1:16;
+         A439:Segment(h0/.i,h0/.1,P) c= g2.:([.h2/.j,h2/.(j+1).])
+          proof let x be set;assume
+           A440:x in Segment(h0/.i,h0/.1,P);
+             h0/.1=W-min(P) by A39,A61,FINSEQ_4:def 4;
+            then x in {p: LE h0/.i,p,P or h0/.i in P & p=W-min(P)}
+                                      by A440,Def1;
+            then consider p being Point of TOP-REAL 2 such that
+            A441:p=x & (LE h0/.i,p,P or h0/.i in P & p=W-min(P));
+              A442:j<j+1 by NAT_1:38;
+              A443:j in dom h2 by A417,A424,Lm2,FINSEQ_3:27;
+               j+1 in dom h2 by A418,A425,A430,FINSEQ_3:27;
+              then h2.j<h2.(j+1) by A16,A442,A443,GOBOARD1:def 1;
+              then A444:h2/.(j+1) in [.h2/.j,
+              h2/.(j+1).] by A437,A438,RCOMP_1:15;
+              A445: h2/.(j+1)=1 by A16,A23,A29,A415,A425,FINSEQ_4:def 4;
+             now per cases by A441;
+            case LE h0/.i,p,P & (p<>W-min(P) or not h0/.i in P);
+then A446:h0/.i in Lower_Arc(P) & p in Lower_Arc(P)& not p=W-min(P) &
+               LE h0/.i,p,Lower_Arc(P),E-max(P),W-min(P)
+                          by A432,A434,JORDAN6:def 10;
+                  then consider z being set such that A447:z in dom g2 & p=g2.z
+                                   by A13,FUNCT_1:def 5;
+                  reconsider rz=z as Real by A15,A447;
+              take rz;
+A448:               0<=rz & rz<=1 by A15,A447,TOPREAL5:1;
+then A449:         h2/.j<=rz
+                 by A12,A13,A14,A427,A429,A434,A437,A446,A447,Th20;
+             thus rz in dom g2 by A447;
+               rz<=h2/.(j+1) by A16,A22,A415,A425,A438,A448,FINSEQ_3:31;
+             hence rz in [.h2/.j,h2/.(j+1).] & x = g2.rz
+                         by A441,A447,A449,TOPREAL5:1;
+            case h0/.i in P & p=W-min(P);
+             hence ex y being set st y in dom g2 & y in [.h2/.j,h2/.(j+1).]
+              & x = g2.y by A14,A32,A441,A444,A445;
+            end;
+           hence x in g2.:([.h2/.j,h2/.(j+1).]) by FUNCT_1:def 12;
+          end;
+          g2.:([.h2/.j,h2/.(j+1).]) c= Segment(h0/.i,h0/.1,P)
+          proof let x be set;assume x in g2.:([.h2/.j,h2/.(j+1).]);
+            then consider y being set such that
+      A450: y in dom g2 & y in [.h2/.j,h2/.(j+1).] & x=g2.y by FUNCT_1:def 12;
+            A451:x in Lower_Arc(P) by A13,A450,FUNCT_1:def 5;
+            then reconsider p1=x as Point of TOP-REAL 2;
+            reconsider sy=y as Real by A450;
+             A452:h2/.j<=sy & sy<=h2/.(j+1) by A450,TOPREAL5:1;
+             A453:0<=sy & sy<=1 by A15,A450,TOPREAL5:1;
+            A454:h0/.1=W-min(P) by A39,A61,FINSEQ_4:def 4;
+A455:      Upper_Arc(P) \/ Lower_Arc(P)=P by A1,JORDAN6:def 9;
+A456:        LE h0/.i,p1,Lower_Arc(P),E-max(P),W-min(P)
+               by A11,A12,A13,A14,A427,A434,A435,A436,A437,A450,A452,A453,Th19;
+             now per cases;
+            case p1=W-min(P);
+             hence LE h0/.i,p1,P or  h0/.i in P & p1=W-min(P)
+              by A431,A434,A455,XBOOLE_0:def 2;
+            case p1<>W-min(P);
+             hence LE h0/.i,p1,P or  h0/.i in P & p1=W-min(P)
+                              by A431,A434,A451,A456,JORDAN6:def 10;
+            end;
+            then x in {p: LE h0/.i,p,P or h0/.i in P & p=W-min(P)};
+           hence x in Segment(h0/.i,h0/.1,P) by A454,Def1;
+          end;
+         then W=g2.:Q1 by A410,A439,XBOOLE_0:def 10;
+        hence diameter(W)<e by A16,A417,A424,Lm2;
+      end;
+      A457: for i being Nat st 1<=i & i+1<len h0 holds
+         LE h0/.(i+1),h0/.(i+2),P
+            proof let i be Nat;assume
+            A458: 1<=i & i+1<len h0;
+              then A459:i+1+1<=len h0 by NAT_1:38;
+              A460:1<i+1 by A458,NAT_1:38;
+              then A461:1<i+1+1 by NAT_1:38;
+A462:         i+1<i+1+1 by NAT_1:38;
+               now per cases;
+              case A463:i+1<len h1;
+                then A464:i+1+1<=len h1 by NAT_1:38;
+                A465:h0.(i+1)=h11.(i+1) by A21,A460,A463,SCMFSA_7:9;
+                A466:i+1 in dom h1 by A460,A463,FINSEQ_3:27;
+                then A467:h0.(i+1)=g1.(h1.(i+1)) by A465,FUNCT_1:23;
+A468:            h1.(i+1) in rng h1 by A466,FUNCT_1:def 5;
+                then A469:0<=h1.(i+1) & h1.(i+1)<=1
+                    by A9,BORSUK_1:83,TOPREAL5:1;
+                A470:1<i+1+1 by A460,NAT_1:38;
+                then A471:h0.(i+1+1)=h11.(i+1+1) by A21,A464,SCMFSA_7:9;
+                A472:i+1+1 in dom h1 by A464,A470,FINSEQ_3:27;
+                then A473:h0.(i+1+1)=g1.(h1.(i+1+1)) by A471,FUNCT_1:23;
+A474:            h1.((i+1)+1) in rng h1 by A472,FUNCT_1:def 5;
+then A475:           0<=h1.(i+1+1) by A9,BORSUK_1:83,TOPREAL5:1;
+A476:           h1.(i+1+1)<=1 by A9,A474,BORSUK_1:83,TOPREAL5:1;
+                A477:h1.(i+1)<h1.(i+1+1) by A9,A462,A466,A472,GOBOARD1:def 1;
+                 i+1 in dom h0 by A458,A460,FINSEQ_3:27;
+                then A478:h0/.(i+1)=h0.(i+1) by FINSEQ_4:def 4;
+                 (i+1)+1 in dom h0 by A459,A470,FINSEQ_3:27;
+                then A479:h0/.(i+1+1)=h0.(i+1+1) by FINSEQ_4:def 4;
+                A480:g1.(h1.(i+1)) in rng g1
+                     by A6,A9,A468,BORSUK_1:83,FUNCT_1:def 5;
+                A481: i+1+1=i+(1+1) by XCMPLX_1:1;
+A482:           h0/.(i+1) in Upper_Arc P
+                       by A4,A465,A466,A478,A480,FUNCT_1:23;
+A483:           h0/.(i+1+1) in Upper_Arc P
+                      by A4,A6,A9,A473,A474,A479,BORSUK_1:83,FUNCT_1:def 5;
+                 LE h0/.(i+1),h0/.((i+1)+1),Upper_Arc(P),W-min(P),E-max(P)
+                by A2,A3,A4,A5,A467,A469,A473,A475,A476,A477,A478,A479,Th19;
+               hence thesis by A481,A482,A483,JORDAN6:def 10;
+              case
+A484:          i+1>=len h1;
+                 now per cases by A484,REAL_1:def 5;
+                case A485:i+1>len h1;
+                  then A486:len h1 +1<=i+1 by NAT_1:38;
+A487:             len h11+1<=i+1 by A21,A485,NAT_1:38;
+A488:             i+1<=len h11 + len (mid(h21,2,len h21 -'1))
+                                by A458,FINSEQ_1:35;
+                  then A489:h0.(i+1)=(mid(h21,2,len h21 -'1)).((i+1) -len h11)
+                                               by A487,FINSEQ_1:36;
+                  A490:(i+1)-len h11=(i+1)-'len h11 by A21,A485,SCMFSA_7:3;
+                   (i+1)-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len
+h11
+                                         by A488,REAL_1:49;
+                  then A491:(i+1)-len h11<= len (mid(h21,2,len h21 -'1))
+                                             by XCMPLX_1:26;
+                   len h1 +1-len h1<=(i+1)-len h1 by A486,REAL_1:49;
+then             1<=(i+1)-'len h11 by A21,A490,XCMPLX_1:26;
+                  then A492:h0.(i+1)=h21.((i+1)-'len h11 +2-'1)
+                             by A43,A44,A489,A490,A491,JORDAN3:27;
+                  A493:len h1 +1<=(i+1)+1 by A486,NAT_1:38;
+                  then A494:h0.((i+1)+1)=(mid(h21,2,len h21 -'1)).((i+1)+1 -len
+h11)
+                                      by A21,A40,A459,FINSEQ_1:36;
+                   (i+1)+1>len h11 by A21,A485,NAT_1:38;
+                  then A495:(i+1)+1-len h11=(i+1)+1-'len h11 by SCMFSA_7:3;
+A496:             (i+1)+1-len h11
+                      <=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                         by A40,A459,REAL_1:49;
+                   len h1 +1-len h1<=(i+1)+1-len h1 by A493,REAL_1:49;
+                  then A497:1<=(i+1)+1-'len h11
+                      & (i+1)+1-'len h11<=len mid(h21,2,len h21 -'1)
+                             by A21,A495,A496,XCMPLX_1:26;
+                  then A498:h0.((i+1)+1)=h21.((i+1)+1-'len h11 +2-'1)
+                    by A43,A44,A494,A495,JORDAN3:27;
+                   1<(i+1)+1-'len h11+(2-1) by A497,NAT_1:38;
+                  then 1<(i+1)+1-'len h11+2-1 by XCMPLX_1:29;
+then A499:             0<(i+1)+1-'len h11+2-1 by AXIOMS:22;
+                   0<=(i+1)-'len h11 by NAT_1:18;
+then A500:             0+2<=(i+1)-'len h11 +2 by AXIOMS:24;
+then A501:             2-'1<=((i+1)-'len h11 +2-'1) by JORDAN3:5;
+                   (i+1)-len h11<=len h1+(len h2-2)-len h11
+                             by A47,A458,REAL_1:49;
+                  then (i+1)-len h11<=(len h2-2) by A21,XCMPLX_1:26;
+                  then (i+1)-'len h11+2<=len h2-2+2 by A490,AXIOMS:24;
+then A502:              (i+1)-'len h11+2<=len h2 by XCMPLX_1:27;
+                  then A503:1<=((i+1)-'len h11 +2-'1)
+                            & ((i+1)-'len h11 +2-'1)<=len h21
+                                    by A23,A500,Lm2,JORDAN3:5,7;
+                  A504:(i+1)-'len h11+2-'1=(i+1)-'len h11+2-1
+                                      by A501,Lm2,JORDAN3:1;
+                  set j=(i+1)-'len h11+2-'1;
+                   (i+1)-len h11<len h11+(len h2-2)-len h11
+                                     by A21,A47,A458,REAL_1:54;
+                  then (i+1)-len h11<len h2-2 by XCMPLX_1:26;
+                  then (i+1)-len h11+2<len h2-2+2 by REAL_1:53;
+                  then A505:(i+1)-len h11+2<len h2 by XCMPLX_1:27;
+                A506:j+1=(i+1)-'len h11+(1+1)-1+1 by A501,Lm2,JORDAN3:1
+                  .=(i+1)-'len h11+1+1-1+1 by XCMPLX_1:1
+                  .=(i+1)-'len h11+1+1 by XCMPLX_1:26
+                  .=(i+1)-'len h11+(1+1) by XCMPLX_1:1
+                  .=(i+1)-'len h11+2;
+                  A507:j+1=1+((i+1)-len h11+(2-1)) by A490,A504,XCMPLX_1:29
+                  .=1+((i+1)+-len h11+(2-1)) by XCMPLX_0:def 8
+                  .=((i+1)+1)+-len h11+(2-1) by XCMPLX_1:1
+                  .=(i+1)+1-len h11+(2-1) by XCMPLX_0:def 8
+                  .=(i+1)+1-len h11+2-1 by XCMPLX_1:29
+                  .=(i+1)+1-'len h11+2-'1 by A495,A499,BINARITH:def 3;
+A508:             j in dom h2 by A22,A503,FINSEQ_3:27;
+                  then A509:h0.(i+1)=g2.(h2.j) by A492,FUNCT_1:23;
+A510:              h2.j in rng h2 by A508,FUNCT_1:def 5;
+                  then A511:0<=h2.j & h2.j<=1 by A16,BORSUK_1:83,TOPREAL5:1;
+                  A512:j<j+1 by NAT_1:38;
+                  1<j+1 by A501,Lm2,NAT_1:38;
+                  then A513:j+1 in dom h2 by A502,A506,FINSEQ_3:27;
+                  then A514:h0.((i+1)+1)=g2.(h2.(j+1))
+                     & h21.(j+1)=g2.(h2.(j+1))  by A498,A507,FUNCT_1:23;
+A515:              h2.(j+1) in rng h2 by A513,FUNCT_1:def 5;
+                  A516:h2.j<h2.(j+1) by A16,A508,A512,A513,GOBOARD1:def 1;
+                   i+1 in dom h0 by A458,A460,FINSEQ_3:27;
+                  then A517:h0/.(i+1)=h0.(i+1) by FINSEQ_4:def 4;
+                   (i+1)+1 in dom h0 by A459,A461,FINSEQ_3:27;
+                  then A518:h0/.((i+1)+1)=h0.((i+1)+1) by FINSEQ_4:def 4;
+                  A519:h0.(i+1) in Lower_Arc(P)
+                     by A13,A15,A16,A509,A510,BORSUK_1:83,FUNCT_1:def 5;
+                  A520:h0.((i+1)+1) in Lower_Arc(P)
+                   by A13,A15,A16,A514,A515,BORSUK_1:83,FUNCT_1:def 5;
+A521: 0 <= (h2.(j+1)) by A16,A515,BORSUK_1:83,TOPREAL5:1;
+A522: (h2.(j+1)) <= 1 by A16,A515,BORSUK_1:83,TOPREAL5:1;
+A523:            h0/.(i+1+1) <> W-min P
+           by A22,A29,A31,A65,A490,A498,A505,A506,A507,A513,A518,FUNCT_1:def 8;
+                A524:i+1+1=i+(1+1) by XCMPLX_1:1;
+                 LE h0/.(i+1),h0/.((i+1)+1),Lower_Arc(P),E-max(P),W-min(P)
+                             by A11,A12,A13,A14,A509,A511,A514,A516,A517,A518,
+A521,A522,Th19;
+                 hence thesis by A517,A518,A519,A520,A523,A524,JORDAN6:def 10;
+                case A525:i+1=len h1;
+                  then A526:h0.len h1 =E-max(P) by A21,A37,A460,SCMFSA_7:9;
+                  A527:len h1-len h11=len h1-'len h11 by A21,SCMFSA_7:3;
+A528:             len h1+1 <=len h11 + len (mid(h21,2,len h21 -'1))
+                                          by A459,A525,FINSEQ_1:35;
+                  A529:h0.((i+1)+1)=(mid(h21,2,len h21 -'1)).((i+1)+1 -len h11)
+                                      by A21,A40,A459,A525,FINSEQ_1:36;
+                  A530:(i+1)+1-len h11=(i+1)+1-'len h11
+                                by A21,A462,A525,SCMFSA_7:3;
+             (i+1)+1-len h11
+                       <=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                         by A525,A528,REAL_1:49;
+                  then A531:1<=(i+1)+1-'len h11
+                         & (i+1)+1-'len h11<=len mid(h21,2,len h21 -'1)
+                             by A21,A525,A530,XCMPLX_1:26;
+                  then A532:h0.((i+1)+1)=h21.((i+1)+1-'len h11 +2-'1)
+                    by A43,A44,A529,A530,JORDAN3:27;
+                   1<(i+1)+1-'len h11+(2-1) by A531,NAT_1:38;
+                  then 1<(i+1)+1-'len h11+2-1 by XCMPLX_1:29;
+                  then 0<(i+1)+1-'len h11+2-1 by AXIOMS:22;
+                  then A533:(i+1)+1-'len h11+2-1=(i+1)+1-'len h11+2-'1
+                            by BINARITH:def 3;
+                   0<=(i+1)-'len h11 by NAT_1:18;
+                  then 0+2<=(i+1)-'len h11 +2 by AXIOMS:24;
+                  then A534:2-'1<=((i+1)-'len h11 +2-'1) by JORDAN3:5;
+                   (i+1)-len h11<=len h1+(len h2-2)-len h11
+                               by A47,A458,REAL_1:49;
+                  then (i+1)-'len h11<=len h2-2 by A21,A525,A527,XCMPLX_1:26;
+                  then (i+1)-'len h11+2<=len h2-2+2 by AXIOMS:24;
+then A535:              (i+1)-'len h11+2<=len h2 by XCMPLX_1:27;
+                  A536:(i+1)-'len h11+2-'1=(i+1)-'len h11+2-1
+                                  by A534,Lm2,JORDAN3:1;
+                  set j=(i+1)-'len h11+2-'1;
+                  A537:0<=(i+1)-len h11 by A21,A525,XCMPLX_1:14;
+                   (i+1)-len h11<len h11+(len h2-2)-len h11
+                  by A21,A47,A458,REAL_1:54;
+                  then (i+1)-len h11<len h2-2 by XCMPLX_1:26;
+                  then (i+1)-len h11+2<len h2-2+2 by REAL_1:53;
+                  then A538:(i+1)-len h11+2<len h2 by XCMPLX_1:27;
+                  A539:j+1=(i+1)-'len h11+(1+1)-1+1 by A534,Lm2,JORDAN3:1
+                  .=(i+1)-'len h11+1+1-1+1 by XCMPLX_1:1
+                  .=(i+1)-'len h11+1+1 by XCMPLX_1:26
+                  .=(i+1)-'len h11+(1+1) by XCMPLX_1:1;
+                  then A540:j+1<len h2 by A537,A538,BINARITH:def 3;
+                  A541:j+1=(i+1)-len h11+2-1+1 by A536,A537,BINARITH:def 3
+                  .=1+((i+1)-len h11+(2-1)) by XCMPLX_1:29
+                  .=1+((i+1)+-len h11+(2-1)) by XCMPLX_0:def 8
+                  .=((i+1)+1)+-len h11+(2-1) by XCMPLX_1:1
+                  .=(i+1)+1-len h11+(2-1) by XCMPLX_0:def 8
+                  .=(i+1)+1-'len h11+2-'1 by A530,A533,XCMPLX_1:29;
+                  1<j+1 by A534,Lm2,NAT_1:38;
+                  then A542:j+1 in dom h2 by A535,A539,FINSEQ_3:27;
+                  then A543:h0.((i+1)+1)=g2.(h2.(j+1))
+                         & h21.(j+1)=g2.(h2.(j+1)) by A532,A541,FUNCT_1:23;
+A544:             h2.(j+1) in rng h2 by A542,FUNCT_1:def 5;
+                   len h1 in dom h0 by A458,A460,A525,FINSEQ_3:27;
+                  then A545:h0/.len h1=h0.len h1 by FINSEQ_4:def 4;
+                   (i+1)+1 in dom h0 by A459,A461,FINSEQ_3:27;
+                  then A546:h0/.((i+1)+1)=h0.((i+1)+1) by FINSEQ_4:def 4;
+                  A547:h0.(i+1+1) in Lower_Arc P
+                        by A13,A15,A16,A543,A544,BORSUK_1:83,FUNCT_1:def 5;
+                  A548: h0.(i+1) in Upper_Arc(P) by A1,A525,A526,Th1;
+A549:             h0/.(i+1+1) <> W-min P
+                    by A22,A29,A31,A65,A532,A540,A541,A542,A546,FUNCT_1:def 8;
+                   i+1+1=i+(1+1) by XCMPLX_1:1 .=i+2;
+                 hence thesis by A525,A545,A546,A547,A548,A549,JORDAN6:def 10;
+                end;
+               hence thesis;
+              end;
+             hence thesis;
+            end;
+      A550: for i being Nat st 1<=i & i+1<=len h0 holds
+         LE h0/.i,h0/.(i+1),P & h0/.(i+1)<>W-min(P) & h0/.i<>h0/.(i+1)
+       proof let i be Nat such that
+A551:    1<=i and
+A552:    i+1<=len h0;
+A553:    1<i+1 by A551,NAT_1:38;
+A554:    i<len h0 by A552,NAT_1:38;
+A555:    i<i+1 by NAT_1:38;
+          i in dom h0 by A551,A554,FINSEQ_3:27;
+then A556:    h0/.i=h0.i by FINSEQ_4:def 4;
+                 i+1 in dom h0 by A552,A553,FINSEQ_3:27;
+then A557:    h0/.(i+1)=h0.(i+1) by FINSEQ_4:def 4;
+              now per cases;
+              case A558:i<len h1;
+                then A559:i+1<=len h1 by NAT_1:38;
+                A560:h0.i=h11.i by A21,A551,A558,SCMFSA_7:9;
+                A561:i in dom h1 by A551,A558,FINSEQ_3:27;
+then A562:            h1.i in rng h1 by FUNCT_1:def 5;
+                A563:h0.(i+1)=h11.(i+1) by A21,A553,A559,SCMFSA_7:9;
+                A564:i+1 in dom h1 by A553,A559,FINSEQ_3:27;
+                then A565:h0.(i+1)=g1.(h1.(i+1)) by A563,FUNCT_1:23;
+A566:            h1.(i+1) in rng h1 by A564,FUNCT_1:def 5;
+                A567:h1.i<h1.(i+1) by A9,A555,A561,A564,GOBOARD1:def 1;
+                g1.(h1.i) in rng g1
+                        by A6,A9,A562,BORSUK_1:83,FUNCT_1:def 5;
+                then A568:h0.i in Upper_Arc(P) by A4,A560,A561,FUNCT_1:23;
+           A569:h0.(i+1) in Upper_Arc(P)
+                  by A4,A6,A9,A565,A566,BORSUK_1:83,FUNCT_1:def 5;
+A570: g1.(h1.i) = h0/.i by A556,A560,A561,FUNCT_1:23;
+A571: 0 <= (h1.i) by A9,A562,BORSUK_1:83,TOPREAL5:1;
+A572: (h1.i) <= 1 by A9,A562,BORSUK_1:83,TOPREAL5:1;
+A573: 0 <= (h1.(i+1)) by A9,A566,BORSUK_1:83,TOPREAL5:1;
+A574: (h1.(i+1)) <= 1 by A9,A566,BORSUK_1:83,TOPREAL5:1;
+     A575: i+1 <> 1 by A551,NAT_1:38;
+    A576: i+1 <> i by NAT_1:38;
+                 LE h0/.i,h0/.(i+1),Upper_Arc(P),W-min(P),E-max(P)
+                    by A2,A3,A4,A5,A557,A565,A567,A570,A571,A572,A573,A574,Th19
+;
+               hence thesis by A20,A25,A38,A64,A556,A557,A560,A561,A563,A564,
+A568,A569,A575,A576,FUNCT_1:def 8,JORDAN6:def 10;
+              case
+A577:          i>=len h1;
+                 now per cases by A577,REAL_1:def 5;
+                case A578:i>len h1;
+                  then A579:len h1 +1<=i by NAT_1:38;
+                  A580:len h11+1<=i & i<=len h11 + len (mid(h21,2,len h21 -'1))
+                                      by A21,A554,A578,FINSEQ_1:35,NAT_1:38;
+                                          then A581:             h0.i=(mid(h21,
+2,len h21 -'1)).(i -len h11) by FINSEQ_1:36;
+                  A582:i-len h11=i-'len h11 by A21,A578,SCMFSA_7:3;
+A583:             i-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                         by A580,REAL_1:49;
+                   len h1 +1-len h1<=i-len h1 by A579,REAL_1:49;
+                  then 1<=i-'len h11 & i-'len h11<=len mid(h21,2,len h21 -'1)
+                             by A21,A582,A583,XCMPLX_1:26;
+                  then A584:h0.i=h21.(i-'len h11 +2-'1)
+                             by A43,A44,A581,A582,JORDAN3:27;
+                  A585:len h1 +1<=i+1 by A579,NAT_1:38;
+                  then A586:h0.(i+1)=(mid(h21,2,len h21 -'1)).(i+1 -len h11)
+                                      by A21,A40,A552,FINSEQ_1:36;
+                   i+1>len h11 by A21,A578,NAT_1:38;
+                  then A587:i+1-len h11=i+1-'len h11 by SCMFSA_7:3;
+A588:             i+1-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                         by A40,A552,REAL_1:49;
+                   len h1 +1-len h1<=i+1-len h1 by A585,REAL_1:49;
+then A589:             1<=i+1-'len h11 & i+1-'len h11<=len mid(h21,2,len h21 -'
+1)
+                             by A21,A587,A588,XCMPLX_1:26;
+                  then A590:h0.(i+1)=h21.(i+1-'len h11 +2-'1)
+                    by A43,A44,A586,A587,JORDAN3:27;
+                   1<i+1-'len h11+(2-1) by A589,NAT_1:38;
+                  then 1<i+1-'len h11+2-1 by XCMPLX_1:29;
+                  then 0<i+1-'len h11+2-1 by AXIOMS:22;
+                  then A591:i+1-'len h11+2-1=i+1-'len h11+2-'1 by BINARITH:def
+3;
+                   0<=i-'len h11 by NAT_1:18;
+then A592:             0+2<=i-'len h11 +2 by AXIOMS:24;
+then A593:             2-'1<=(i-'len h11 +2-'1) by JORDAN3:5;
+                   i-len h11<=len h1+(len h2-2)-len h11
+                                      by A47,A554,REAL_1:49;
+                  then i-len h11<=(len h2-2) by A21,XCMPLX_1:26;
+                  then i-'len h11+2<=len h2-2+2 by A582,AXIOMS:24;
+then A594:               i-'len h11+2<=len h2 by XCMPLX_1:27;
+A595:             1<=i-'len h11 +2-'1 by A592,Lm2,JORDAN3:5;
+A596:             i-'len h11 +2-'1<=len h21 by A23,A594,JORDAN3:7;
+                  set j=i-'len h11+2-'1;
+                   i-len h11<len h11+(len h2-2)-len h11
+                                  by A21,A47,A554,REAL_1:54;
+                  then i-len h11<len h2-2 by XCMPLX_1:26;
+then A597:             i-len h11+2<len h2-2+2 by REAL_1:53;
+                   j+1=i-'len h11+(1+1)-1+1 by A593,Lm2,JORDAN3:1
+                  .=i-'len h11+1+1-1+1 by XCMPLX_1:1
+                  .=i-'len h11+1+1 by XCMPLX_1:26
+                  .=i-'len h11+(1+1) by XCMPLX_1:1;
+                  then A598:j+1<len h2 by A582,A597,XCMPLX_1:27;
+                  A599:j+1=i-len h11+2-1+1 by A582,A593,Lm2,JORDAN3:1
+                  .=1+(i-len h11+(2-1)) by XCMPLX_1:29
+                  .=1+(i+-len h11+(2-1)) by XCMPLX_0:def 8
+                  .=(i+1)+-len h11+(2-1) by XCMPLX_1:1
+                  .=i+1-len h11+(2-1) by XCMPLX_0:def 8
+                  .=i+1-'len h11+2-'1 by A587,A591,XCMPLX_1:29;
+                  A600:j in dom h2 by A22,A595,A596,FINSEQ_3:27;
+                  then A601:h0.i=g2.(h2.j) by A584,FUNCT_1:23;
+A602:              h2.j in rng h2 by A600,FUNCT_1:def 5;
+                  A603:j<j+1 by NAT_1:38;
+                  1<j+1 by A595,NAT_1:38;
+                  then A604:j+1 in dom h2 by A598,FINSEQ_3:27;
+                  then A605:h0.(i+1)=g2.(h2.(j+1))
+                     & h21.(j+1)=g2.(h2.(j+1))  by A590,A599,FUNCT_1:23;
+A606:              h2.(j+1) in rng h2 by A604,FUNCT_1:def 5;
+A607:          h2.j<h2.(j+1) by A16,A600,A603,A604,GOBOARD1:def 1;
+                   i in dom h0 by A551,A554,FINSEQ_3:27;
+                  then A608:h0/.i=h0.i by FINSEQ_4:def 4;
+                   i+1 in dom h0 by A552,A553,FINSEQ_3:27;
+                  then A609:h0/.(i+1)=h0.(i+1) by FINSEQ_4:def 4;
+A610: 0 <= (h2.j) by A16,A602,BORSUK_1:83,TOPREAL5:1;
+A611: (h2.j) <= 1 by A16,A602,BORSUK_1:83,TOPREAL5:1;
+A612: 0 <= (h2.(j+1)) by A16,A606,BORSUK_1:83,TOPREAL5:1;
+A613: (h2.(j+1)) <= 1 by A16,A606,BORSUK_1:83,TOPREAL5:1;
+A614:           h0/.(i+1) <> W-min P
+                by A22,A29,A31,A65,A590,A598,A599,A604,A609,FUNCT_1:def 8;
+                A615: j < j+1 by NAT_1:38;
+                 h0/.i in Lower_Arc(P) & h0/.(i+1) in Lower_Arc(P)
+                   & LE h0/.i,h0/.(i+1),Lower_Arc(P),E-max(P),W-min(P)
+                                             by A11,A12,A13,A14,A15,A16,A601,
+A602,A605,A606,A607,A608,A609,A610,A611,A612,A613,Th19,BORSUK_1:83,FUNCT_1:def
+5;
+                 hence thesis by A22,A65,A584,A590,A599,A600,A604,A608,A609,
+A614,A615,FUNCT_1:def 8,JORDAN6:def 10;
+                case A616:i=len h1;
+                  then A617:h0.i=E-max(P) by A21,A37,A551,SCMFSA_7:9;
+                  A618:i-len h11=i-'len h11 by A21,A616,SCMFSA_7:3;
+A619:             i+1 <=len h11 + len (mid(h21,2,len h21 -'1))
+                                          by A552,FINSEQ_1:35;
+                  A620:h0.(i+1)=(mid(h21,2,len h21 -'1)).(i+1 -len h11)
+                                      by A21,A40,A552,A616,FINSEQ_1:36;
+                  A621:i+1-len h11=i+1-'len h11 by A21,A555,A616,SCMFSA_7:3;
+A622:             i+1-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                         by A619,REAL_1:49;
+A623:              1<=i+1-'len h11 by A21,A616,A621,XCMPLX_1:26;
+                   i+1-'len h11<= len mid(h21,2,len h21 -'1)
+                     by A621,A622,XCMPLX_1:26;
+                  then A624:h0.(i+1)=h21.(i+1-'len h11 +2-'1)
+                    by A43,A44,A620,A621,A623,JORDAN3:27;
+                   1<i+1-'len h11+(2-1) by A623,NAT_1:38;
+                  then 1<i+1-'len h11+2-1 by XCMPLX_1:29;
+                  then 0<i+1-'len h11+2-1 by AXIOMS:22;
+                  then A625:i+1-'len h11+2-1=i+1-'len h11+2-'1 by BINARITH:def
+3;
+                   0<=i-'len h11 by NAT_1:18;
+                  then A626: 0+2<=i-'len h11 +2 by AXIOMS:24;
+                  then A627:2-'1<=(i-'len h11 +2-'1) by JORDAN3:5;
+                   i-len h11<=len h1+(len h2-2)-len h11 by A47,A554,REAL_1:49;
+                  then i-'len h11<=len h2-2 by A21,A618,XCMPLX_1:26;
+then A628:              i-'len h11+2<=len h2-2+2 by AXIOMS:24;
+then              i-'len h11+2<=len h2 by XCMPLX_1:27;
+                  then A629:1<=(i-'len h11 +2-'1) & (i-'len h11 +2-'1)<=len h21
+                                    by A23,A626,Lm2,JORDAN3:5,7;
+                  A630:i-'len h11+2-'1=i-'len h11+2-1 by A627,Lm2,JORDAN3:1;
+                  set j=i-'len h11+2-'1;
+                   len h1-len h11>=0 by A21,XCMPLX_1:14;
+                  then len h1-'len h11=len h11-len h11 by A21,BINARITH:def 3;
+                               then A631:             0+2-1=len h1-'len h11+2-1
+by XCMPLX_1:14;
+                  A632:0<=i-len h11 by A21,A616,XCMPLX_1:14;
+                   i-len h11<len h11+(len h2-2)-len h11
+                                  by A21,A47,A554,REAL_1:54;
+                  then i-len h11<len h2-2 by XCMPLX_1:26;
+                  then i-len h11+2<len h2-2+2 by REAL_1:53;
+                  then A633:i-len h11+2<len h2 by XCMPLX_1:27;
+                  A634:j+1=i-'len h11+(1+1)-1+1 by A627,Lm2,JORDAN3:1
+                  .=i-'len h11+1+1-1+1 by XCMPLX_1:1
+                  .=i-'len h11+1+1 by XCMPLX_1:26
+                  .=i-'len h11+(1+1) by XCMPLX_1:1
+                  .=i-'len h11+2;
+                  then A635:j+1<=len h2 by A628,XCMPLX_1:27;
+                  A636:j+1<len h2 by A632,A633,A634,BINARITH:def 3;
+                  A637:j+1=i-len h11+2-1+1 by A630,A632,BINARITH:def 3
+                  .=1+(i-len h11+(2-1)) by XCMPLX_1:29
+                  .=1+(i+-len h11+(2-1)) by XCMPLX_0:def 8
+                  .=(i+1)+-len h11+(2-1) by XCMPLX_1:1
+                  .=i+1-len h11+(2-1) by XCMPLX_0:def 8
+                  .=i+1-'len h11+2-'1 by A621,A625,XCMPLX_1:29;
+                  A638:j in dom h2 by A22,A629,FINSEQ_3:27;
+                  then A639:h21.j=g2.(h2.j) by FUNCT_1:23;
+                  A640:h0.i=g2.(h2.j) by A14,A16,A616,A617,A631,JORDAN3:1;
+                  1<j+1 by A627,Lm2,NAT_1:38;
+                  then A641:j+1 in dom h2 by A635,FINSEQ_3:27;
+                  then A642:h0.(i+1)=g2.(h2.(j+1)) by A624,A637,FUNCT_1:23;
+A643:             h2.(j+1) in rng h2 by A641,FUNCT_1:def 5;
+                   i in dom h0 by A551,A554,FINSEQ_3:27;
+                  then A644:h0/.i=h0.i by FINSEQ_4:def 4;
+                   i+1 in dom h0 by A552,A553,FINSEQ_3:27;
+                  then A645:h0/.(i+1)=h0.(i+1) by FINSEQ_4:def 4;
+                  A646:h0.(i+1) in Lower_Arc(P)
+                         by A13,A15,A16,A642,A643,BORSUK_1:83,FUNCT_1:def 5;
+                  A647: h0.i in Upper_Arc(P) by A1,A617,Th1;
+A648:            h0/.(i+1) <> W-min P
+                 by A22,A29,A31,A65,A624,A636,A637,A641,A645,FUNCT_1:def 8;
+                  j+1 <> j by NAT_1:38;
+                 hence thesis
+                 by A22,A65,A624,A637,A638,A639,A640,A641,A644,A645,A646,A647,
+A648,FUNCT_1:def 8,JORDAN6:def 10;
+                end;
+               hence thesis;
+              end;
+             hence thesis;
+       end;
+   thus for i being Nat st 1<=i & i+1<len h0 holds
+         Segment(h0/.i,h0/.(i+1),P)/\ Segment(h0/.(i+1),h0/.(i+2),P)
+         ={h0/.(i+1)}
+      proof let i be Nat;assume
+        A649: 1<=i & i+1<len h0;
+then A650:LE h0/.i,h0/.(i+1),P & h0/.(i+1)<>W-min(P) & h0/.i<>h0/.(i+1)
+             by A550;
+        A651: LE h0/.(i+1),h0/.(i+2),P by A457,A649;
+        then h0/.i<>h0/.(i+2) by A1,A650,JORDAN6:72;
+        hence Segment(h0/.i,h0/.(i+1),P)/\ Segment(h0/.(i+1),h0/.(i+2),P)
+         ={h0/.(i+1)} by A1,A650,A651,Th10;
+      end;
+   thus Segment(h0/.len h0,h0/.1,P)/\ Segment(h0/.1,h0/.2,P)={h0/.1}
+    proof A652: h11.2 <> W-min(P) by A20,A25,A38,A57,A64,FUNCT_1:def 8;
+                A653:h0.2=g1.(h1.2) by A57,A60,FUNCT_1:23;
+A654:           h1.2 in rng h1 by A57,FUNCT_1:def 5;
+                A655:h0/.2=h0.2 by A59,FINSEQ_4:def 4;
+then A656:     h0/.2 in Upper_Arc P
+               by A4,A6,A9,A653,A654,BORSUK_1:83,FUNCT_1:def 5;
+                  len h1 +1-len h1<=len h0 -len h1 by A48,REAL_1:49;
+                 then A657: 1<=len h0 -len h1 by XCMPLX_1:26;
+                  A658:h0.len h0=(mid(h21,2,len h21 -'1)).(len h0 -len h11)
+                                   by A21,A40,A48,FINSEQ_1:36;
+                len h0 -len h11 <=len h11 + len mid(h21,2,len h21 -'1) -len h11
+                                         by FINSEQ_1:35;
+               then len h0-len h11<= len (mid(h21,2,len h21 -'1))
+                 by XCMPLX_1:26;
+                  then A659:h0.len h0=h21.(len h0-'len h11 +2-'1)
+                    by A21,A43,A44,A54,A657,A658,JORDAN3:27;
+                   0<=len h0-'len h11 by NAT_1:18;
+then A660:             0+2<=len h0-'len h11 +2 by AXIOMS:24;
+                   len h0-'len h11+2<=len h2-2+2
+                              by A21,A47,A54,XCMPLX_1:26;
+                  then len h0-'len h11+2<=len h2 by XCMPLX_1:27;
+                  then A661:1<=(len h0-'len h11 +2-'1)
+                     & (len h0-'len h11 +2-'1)<=len h21
+                                    by A23,A660,Lm2,JORDAN3:5,7;
+                  set j=len h0-'len h11+2-'1;
+                  A662:j in dom h2 by A22,A661,FINSEQ_3:27;
+                  then A663:h0.len h0=g2.(h2.j) by A659,FUNCT_1:23;
+            A664: now assume A665:h0/.2=h0/.len h0;
+                   h2.j in rng h2 by A662,FUNCT_1:def 5;
+                then g2.(h2.j) in rng g2 by A15,A16,BORSUK_1:83,FUNCT_1:def 5;
+                then h0/.2 in Upper_Arc(P)/\  Lower_Arc(P)
+                     by A13,A52,A656,A663,A665,XBOOLE_0:def 3;
+                then h0/.2 in {W-min(P),E-max(P)} by A1,JORDAN6:def 9;
+                then h11.2=E-max(P) by A60,A652,A655,TARSKI:def 2;
+             hence contradiction by A20,A35,A37,A56,A57,A64,FUNCT_1:def 8;
+            end;
+      defpred P[Nat] means
+      $1+2<=len h0 implies LE h0/.2,h0/.($1+2),P;
+         Upper_Arc(P) \/ Lower_Arc(P)= P by A1,JORDAN6:65;
+        then h0/.2 in P by A656,XBOOLE_0:def 2;
+        then A666: P[0] by A1,JORDAN6:71;
+        A667:for k being Nat st P[k] holds P[k+1]
+         proof let k be Nat;assume
+          A668: k+2<=len h0 implies LE h0/.2,h0/.(k+2),P;
+            now assume A669:k+1+2<=len h0;
+             A670:k+1+2=k+2+1 by XCMPLX_1:1;
+             then A671:k+2<len h0 by A669,NAT_1:38;
+             A672:1<=1+k by NAT_1:29;
+              k+1+1=k+(1+1) by XCMPLX_1:1 .=k+2;
+             then LE h0/.(k+2),h0/.(k+2+1),P by A457,A670,A671,A672;
+            hence LE h0/.2,h0/.(k+1+2),P
+             by A1,A668,A669,A670,JORDAN6:73,NAT_1:38;
+           end;
+          hence (k+1+2<=len h0 implies LE h0/.2,h0/.(k+1+2),P);
+         end;
+        A673:for i being Nat holds P[i]
+            from Ind(A666,A667);
+             len h0 -'2=len h0-2 by A58,SCMFSA_7:3;
+            then len h0-'2+2=len h0 by XCMPLX_1:27;
+           then LE h0/.2,h0/.len h0,P & h0/.2<>h0/.len h0
+                         & h0/.2<>W-min(P) by A59,A60,A652,A664,A673,FINSEQ_4:
+def 4;
+       hence thesis by A1,A63,Th12;
+      end;
+      set i = len h0-'1;
+A674:    i+1 = len h0 by A50,AMI_5:4;
+A675:    1<=i by A58,Lm4;
+      A676: len h0 > 1+1+1 by A122,AXIOMS:22;
+      then A677:   len h0-'1 > 1+1 by Lm3;
+A678:  i<len h0 by A50,JORDAN5B:1;
+then A679:   i in dom h0 by A675,FINSEQ_3:27;
+then A680:h0/.i=h0.i by FINSEQ_4:def 4;
+        A681:i+1<=len h0 by A678,NAT_1:38;
+        A682:1+1<=len h0 by A50,NAT_1:38;
+        A683:LE h0/.i,h0/.(i+1),P by A550,A675,A681;
+        A684:LE h0/.1,h0/.(1+1),P by A550,A682;
+           1+1 in dom h0 by A682,FINSEQ_3:27;
+then A685:h0/.(1+1)=h0.(1+1) by FINSEQ_4:def 4;
+        A686:h0/.1<>h0/.(1+1) by A550,A682;
+        A687:h0.(1+1)=h11.(1+1) by A21,A56,SCMFSA_7:9;
+        A688: 1+1 in dom h1 by A56,FINSEQ_3:27;
+        then A689:h0.(1+1)=g1.(h1.(1+1)) by A687,FUNCT_1:23;
+A690:    h1.(1+1) in rng h1 by A688,FUNCT_1:def 5;
+        A691:1<i by A677,AXIOMS:22;
+A692:  now per cases;
+               case A693:i<=len h1;
+                then A694:h0.i=h11.i by A21,A691,SCMFSA_7:9;
+        A695:i in dom h1 by A691,A693,FINSEQ_3:27;
+        then A696:h1.(1+1)<h1.i by A9,A677,A688,GOBOARD1:def 1;
+A697:    h1.i in rng h1 by A695,FUNCT_1:def 5;
+                A698:h0.i=g1.(h1.i) by A694,A695,FUNCT_1:23;
+        A699:0<=h1.i & h1.i<=1 by A9,A697,BORSUK_1:83,TOPREAL5:1;
+            0 <= h1.(1+1) & h1.(1+1) <= 1 by A9,A690,BORSUK_1:83,TOPREAL5:1;
+                then h0/.(1+1) in Upper_Arc(P) & h0/.i in Upper_Arc(P) &
+                LE h0/.(1+1),h0/.i,Upper_Arc(P),W-min(P),E-max(P)
+                  by A2,A3,A4,A5,A6,A9,A680,A685,A689,A690,A696,A697,A698,A699,
+Th19,BORSUK_1:83,FUNCT_1:def 5;
+               hence LE h0/.(1+1),h0/.i,P by JORDAN6:def 10;
+               case A700:i>len h1;
+                  then A701:i-len h11=i-'len h11 by A21,SCMFSA_7:3;
+                   i-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                        by A40,A678,REAL_1:49;
+then A702:0<=i-'len h11
+                      & i-'len h11<=len mid(h21,2,len h21 -'1)
+                             by A21,A700,A701,SQUARE_1:12,XCMPLX_1:26;
+                   i-len h11
+                       <=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                by A40,A678,REAL_1:49;
+                  then A703:i-len h11
+                      <= len (mid(h21,2,len h21 -'1)) by XCMPLX_1:26;
+                   0+1<=i-'len h11+1 by A702,AXIOMS:24;
+                  then 0+1<=i-'len h11+1+1-1 by XCMPLX_1:26;
+                  then 0+1<=i-'len h11+(1+1)-1 by XCMPLX_1:1;
+                  then A704:i-'len h11+2-'1=i-'len h11+2-1 by JORDAN3:1;
+                   0<=i-'len h11 by NAT_1:18;
+                  then 0+2<=i-'len h11 +2 by AXIOMS:24;
+                  then A705:2-'1<=(i-'len h11 +2-'1) by JORDAN3:5;
+                   i-len h11<=len h1+(len h2-2)-len h11 by A47,A678,REAL_1:49;
+                  then i-'len h11<=len h2-2 by A21,A701,XCMPLX_1:26;
+                  then i-'len h11+2<=len h2-2+2 by AXIOMS:24;
+                  then i-'len h11+2<=len h2 by XCMPLX_1:27;
+then i-'len h11 +2-'1<=len h21 by A23,JORDAN3:7;
+then A706:           (i-'len h11 +2-'1) in dom h21 by A705,Lm2,FINSEQ_3:27;
+              1+1 in dom h1 by A56,FINSEQ_3:27;
+                  then A707: h11.(1+1)=g1.(h1.(1+1)) by FUNCT_1:23;
+                  A708:len h1 +1<=i by A700,NAT_1:38;
+                  then A709:h0.i=(mid(h21,2,len h21 -'1)).(i -len h11)
+                                      by A21,A40,A678,FINSEQ_1:36;
+                   len h1 +1-len h1<=i-len h1 by A708,REAL_1:49;
+                  then A710: 1<=i-len h11 by A21,XCMPLX_1:26;
+                  then A711:h0.(i)=h21.(i-'len h11 +2-'1)
+                    by A43,A44,A701,A703,A709,JORDAN3:27;
+                   i+1-1<=len h1+(len h2-2)-1 by A47,A681,REAL_1:49;
+                  then i<=len h1+(len h2-2)-1 by XCMPLX_1:26;
+                  then i-len h11<=len h1+(len h2-2)-1-len h11 by REAL_1:49;
+                  then i-len h11<=len h1+((len h2-2)-1)-len h11 by XCMPLX_1:29
+;
+                  then i-'len h11<=len h2-2-1 by A21,A701,XCMPLX_1:26;
+                  then i-'len h11+2<=len h2-2-1+2 by AXIOMS:24;
+                  then i-'len h11+2<=len h2-1 by XCMPLX_1:229;
+                  then A712:i-'len h11+2-1<=len h2-1-1 by REAL_1:49;
+                  set k=i-'len h11+2-'1;
+                  A713: h2.k in rng h2 by A22,A706,FUNCT_1:def 5;
+                  A714: h1.(1+1) in rng h1 by A57,FUNCT_1:def 5;
+                  A715:h0.i=h21.k by A43,A44,A701,A703,A709,A710,JORDAN3:27;
+                  A716:h0.i=g2.(h2.k)
+                         & h21.k=g2.(h2.k) by A22,A706,A711,FUNCT_1:23;
+A717:g1.(h1.(1+1)) in rng g1 by A6,A9,A714,BORSUK_1:83,FUNCT_1:def 5;
+                  A718:h0.i in Lower_Arc(P)
+                  by A13,A15,A16,A713,A716,BORSUK_1:83,FUNCT_1:def 5;
+                   h0/.i <> W-min P
+              by A17,A22,A29,A31,A65,A680,A704,A706,A712,A715,FUNCT_1:def 8;
+                 hence LE h0/.(1+1),h0/.i,P
+                 by A4,A680,A685,A687,A707,A717,A718,JORDAN6:def 10;
+               end;
+   thus Segment(h0/.(len h0-' 1),h0/.len h0,P)/\ Segment(h0/.len h0,h0/.1,P)
+               ={h0/.len h0}
+      proof
+A719:LE h0/.i,h0/.(i+1),P & h0/.(i+1)<>W-min(P) & h0/.i<>h0/.(i+1)
+             by A550,A674,A675;
+       i <> 1 by A676,Lm3;
+      then h0/.i <> h0/.1 by A61,A66,A679,PARTFUN2:17;
+
+       hence
+          Segment(h0/.i,h0/.len h0,P)/\ Segment(h0/.len h0,h0/.1,P)={h0/.len h0
+}
+          by A1,A63,A674,A719,Th11;
+      end;
+          now
+           now assume A720:h0/.(1+1)=h0/.i;
+             now
+                A721:1+1 in dom h1 by A56,FINSEQ_3:27;
+                then A722: h1.(1+1) in rng h1 by FUNCT_1:def 5;
+                A723:h0.(1+1)=h11.(1+1) by A21,A56,SCMFSA_7:9;
+                then h0.(1+1)=g1.(h1.(1+1)) by A721,FUNCT_1:23;
+          then A724:h0.(1+1) in Upper_Arc(P) by A4,A6,A9,A722,BORSUK_1:83,
+FUNCT_1:def 5;
+              now
+             per cases;
+             case A725:i<=len h1;
+                then A726:h0.i=h11.i by A21,A675,SCMFSA_7:9;
+                 i in dom h1 by A675,A725,FINSEQ_3:27;
+              hence contradiction
+               by A20,A64,A677,A680,A685,A720,A721,A723,A726,FUNCT_1:def 8;
+             case A727:i>len h1;
+                  then A728:len h1 +1<=i by NAT_1:38;
+then A729:     h0.i=(mid(h21,2,len h21 -'1)).(i -len h11)
+                  by A21,A40,A678,FINSEQ_1:36;
+                  A730:i-len h11=i-'len h11 by A21,A727,SCMFSA_7:3;
+                   i-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                         by A40,A678,REAL_1:49;
+                  then A731:i-len h11<= len (mid(h21,2,len h21 -'1))
+                                             by XCMPLX_1:26;
+                   len h1 +1-len h1<=i-len h1 by A728,REAL_1:49;
+                  then 1<=i-len h1 by XCMPLX_1:26;
+                  then A732:h0.i=h21.(i-'len h11 +2-'1)
+                             by A21,A43,A44,A729,A730,A731,JORDAN3:27;
+                   0<=i-'len h11 by NAT_1:18;
+                  then A733: 0+2<=i-'len h11 +2 by AXIOMS:24;
+                  then A734:2-'1<=(i-'len h11 +2-'1) by JORDAN3:5;
+                   i-len h11<=len h1+(len h2-2)-len h11
+                    by A47,A678,REAL_1:49;
+                  then i-'len h11<=len h2-2 by A21,A730,XCMPLX_1:26;
+                  then i-'len h11+2<=len h2-2+2 by AXIOMS:24;
+                  then i-'len h11+2<=len h2 by XCMPLX_1:27;
+                  then A735:1<=(i-'len h11 +2-'1) & (i-'len h11 +2-'1)<=len h21
+                                    by A23,A733,Lm2,JORDAN3:5,7;
+                  A736:i-'len h11+2-'1=i-'len h11+2-1
+                          by A734,Lm2,JORDAN3:1;
+                  set k=i-'len h11+2-'1;
+                   i-len h11<=len h1+(len h2-2)-len h11 by A47,A678,REAL_1:49;
+                  then i-'len h11<=len h2-2 by A21,A730,XCMPLX_1:26;
+                  then i-'len h11+2<=len h2-2+2 by AXIOMS:24;
+                  then A737:i-'len h11+2<=len h2 by XCMPLX_1:27;
+                   i-'len h11+2-'1<i-'len h11+2-1+1 by A736,NAT_1:38;
+                  then A738: i-'len h11+2-'1<i-'len h11+2 by XCMPLX_1:27;
+                   len h11+1-len h11<=i-len h11 by A21,A728,REAL_1:49;
+                  then 1<=i-len h11 by XCMPLX_1:26;
+                  then 1<=i-'len h11 by JORDAN3:1;
+                  then 1+2<=i-'len h11+2 by AXIOMS:24;
+                  then 1+2-1<=i-'len h11+2-1 by REAL_1:49;
+                  then A739:1<k by A736,AXIOMS:22;
+                  A740:k in dom h2 by A22,A735,FINSEQ_3:27;
+                  then A741:h0.i=g2.(h2.k) by A732,FUNCT_1:23;
+                  A742: h2.k in rng h2 by A740,FUNCT_1:def 5;
+                   i in dom h0 by A675,A678,FINSEQ_3:27;
+                  then A743:h0/.i=h0.i by FINSEQ_4:def 4;
+                g2.(h2.k) in rng g2 by A15,A16,A742,BORSUK_1:83,FUNCT_1:def 5;
+               then h0.i in Upper_Arc(P) /\ Lower_Arc(P)
+                         by A13,A685,A720,A724,A741,A743,XBOOLE_0:def 3;
+               then h0.i in {W-min(P),E-max(P)} by A1,JORDAN6:def 9;
+               then h0.i=W-min(P) or h0.i=E-max(P)by TARSKI:def 2;
+              hence contradiction by A22,A28,A29,A30,A31,A65,A732,A737,A738,
+A739,A740,FUNCT_1:def 8;
+             end;
+             hence contradiction;
+            end;
+           hence contradiction;
+          end;
+         hence Segment(h0/.1,h0/.(1+1),P) misses Segment(h0/.i,h0/.len h0,P)
+           by A1,A674,A683,A684,A686,A692,Th13;
+        end;
+     hence Segment(h0/.i,h0/.len h0,P) misses Segment(h0/.1,h0/.2,P);
+     thus for i,j being Nat
+           st 1<=i & i < j & j < len h0 & not i,j are_adjacent1
+         holds Segment(h0/.i,h0/.(i+1),P) misses Segment(h0/.j,h0/.(j+1),P)
+     proof
+      let i,j be Nat;assume that
+A744:    1<=i and
+A745:    i < j and
+A746:    j < len h0 and
+A747:    not i,j are_adjacent1;
+A748:  i<len h0 by A745,A746,AXIOMS:22;
+A749:  1<j by A744,A745,AXIOMS:22;
+        i in dom h0 by A744,A748,FINSEQ_3:27;
+then A750:h0/.i=h0.i by FINSEQ_4:def 4;
+        A751:i+1<=len h0 by A748,NAT_1:38;
+        A752:j+1<=len h0 by A746,NAT_1:38;
+        A753:LE h0/.i,h0/.(i+1),P by A550,A744,A751;
+        A754:LE h0/.j,h0/.(j+1),P by A550,A749,A752;
+        A755:not(j=i+1 or i=j+1) by A747,GOBRD10:def 1;
+           1<j+1 by A749,NAT_1:38;
+          then j+1 in dom h0 by A752,FINSEQ_3:27;
+then A756:h0/.(j+1)=h0.(j+1) by FINSEQ_4:def 4;
+          now per cases;
+         case i<j;
+then A757:       i+1<=j by NAT_1:38;
+           then A758:i+1<j by A755,REAL_1:def 5;
+           A759:i+1<len h0 by A746,A757,AXIOMS:22;
+          A760:h0/.i<>h0/.(i+1) by A550,A744,A751;
+          A761:1<i+1 by A744,NAT_1:38;
+          A762:1<=(i+1) & (i+1)<len h0 by A744,A746,A757,AXIOMS:22,NAT_1:38;
+          A763:LE h0/.(i+1),h0/.j,P
+            proof
+               now per cases;
+              case A764:i+1<=len h1;
+                now per cases;
+               case A765:j<=len h1;
+                A766:h0.(i+1)=h11.(i+1) by A21,A762,A764,SCMFSA_7:9;
+                A767:(i+1) in dom h1 by A762,A764,FINSEQ_3:27;
+then A768:            h1.(i+1) in rng h1 by FUNCT_1:def 5;
+                A769:1<j by A758,A762,AXIOMS:22;
+                then A770:h0.j=h11.j by A21,A765,SCMFSA_7:9;
+                A771:j in dom h1 by A765,A769,FINSEQ_3:27;
+then A772:            h1.j in rng h1 by FUNCT_1:def 5;
+                 i+1 in dom h0 by A762,FINSEQ_3:27;
+                then A773:h0/.(i+1)=h0.(i+1) by FINSEQ_4:def 4;
+                 j in dom h0 by A746,A769,FINSEQ_3:27;
+                then h0/.j=h0.j by FINSEQ_4:def 4;
+                then Upper_Arc(P) is_an_arc_of W-min(P),E-max(P) &
+                g1.(h1.(i+1)) = h0/.(i+1) & 0 <= (h1.(i+1)) & (h1.(i+1)) <= 1
+                & g1.(h1.j) = h0/.j
+                & 0 <= (h1.j) & (h1.j) <= 1
+                                  & (h1.(i+1)) <= (h1.j)
+                      by A1,A9,A758,A766,A767,A768,A770,A771,A772,A773,BORSUK_1
+:83,FUNCT_1:23,GOBOARD1:def 1,JORDAN6:def 8,TOPREAL5:1;
+                then h0/.(i+1) in Upper_Arc(P) & h0/.j in Upper_Arc(P) &
+                LE h0/.(i+1),h0/.j,Upper_Arc(P),W-min(P),E-max(P)
+                                       by A3,A4,A5,A6,A9,A768,A772,Th19,
+BORSUK_1:83,FUNCT_1:def 5;
+               hence thesis by JORDAN6:def 10;
+               case A774:j>len h1;
+                   then A775:len h11<=j
+                   & j<=len h11 + len (mid(h21,2,len h21 -'1))
+                                        by A20,A746,FINSEQ_1:35,FINSEQ_3:31;
+                  A776:j-len h11=j-'len h11 by A21,A774,SCMFSA_7:3;
+                   j-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                        by A775,REAL_1:49;
+then A777:0<=j-'len h11
+                      & j-'len h11<=len mid(h21,2,len h21 -'1)
+                             by A21,A774,A776,SQUARE_1:12,XCMPLX_1:26;
+                  A778: j-len h11
+                       <=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                           by A40,A746,REAL_1:49;
+                  then A779:j-len h11
+                      <= len (mid(h21,2,len h21 -'1)) by XCMPLX_1:26;
+                   0+1<=j-'len h11+1 by A777,AXIOMS:24;
+                  then 0+1<=j-'len h11+1+1-1 by XCMPLX_1:26;
+                  then 0+1<=j-'len h11+(1+1)-1 by XCMPLX_1:1;
+                  then A780:j-'len h11+2-'1=j-'len h11+2-1 by JORDAN3:1;
+                   0<=j-'len h11 by NAT_1:18;
+                  then 0+2<=j-'len h11 +2 by AXIOMS:24;
+                  then A781:2-'1<=j-'len h11 +2-'1 by JORDAN3:5;
+                   j-len h11<=len h1+(len h2-2)-len h11
+                            by A47,A746,REAL_1:49;
+                  then j-len h11<=(len h2-2) by A21,XCMPLX_1:26;
+                  then j-'len h11+2<=len h2-2+2 by A776,AXIOMS:24;
+                  then j-'len h11+2<=len h2 by XCMPLX_1:27;
+then A782: (j-'len h11 +2-'1)<=len h21 by A23,JORDAN3:7;
+                  then A783:(j-'len h11 +2-'1) in dom h21 by A781,Lm2,FINSEQ_3:
+27;
+                  i+1 in Seg len h1 by A762,A764,FINSEQ_1:3;
+then             i+1 in dom h1 by FINSEQ_1:def 3;
+                  then A784: j-len h11=j-'len h11
+                  & h0.(i+1)=h11.(i+1) & (j-'len h11 +2-'1) in dom h21
+                  & j-'len h11+2-'1=j-'len h11+2-1
+                  & j-len h11 <= len (mid(h21,2,len h21 -'1))
+                  & (i+1) in dom h1 & h11.(i+1)=g1.(h1.(i+1))
+              by A21,A761,A764,A774,A778,A781,A782,Lm2,FINSEQ_3:27,FUNCT_1:23,
+JORDAN3:1,SCMFSA_7:3,9,XCMPLX_1:26;
+                  A785:len h1 +1<=j by A774,NAT_1:38;
+                  then A786:h0.j=(mid(h21,2,len h21 -'1)).(j -len h11)
+                                      by A21,A40,A746,FINSEQ_1:36;
+                   len h1 +1-len h1<=j-len h1 by A785,REAL_1:49;
+                  then A787: 1<=j-len h1 by XCMPLX_1:26;
+                  then A788:h0.j=h21.(j-'len h11 +2-'1)
+                    by A21,A43,A44,A776,A779,A786,JORDAN3:27;
+                   j+1-1<=len h1+(len h2-2)-1 by A47,A752,REAL_1:49;
+                  then j<=len h1+(len h2-2)-1 by XCMPLX_1:26;
+                  then j-len h11<=len h1+(len h2-2)-1-len h11 by REAL_1:49;
+                  then j-len h11<=len h1+((len h2-2)-1)-len h11 by XCMPLX_1:29
+;
+                  then j-len h11<=(len h2-2-1) by A21,XCMPLX_1:26;
+                  then j-'len h11+2<=len h2-2-1+2 by A776,AXIOMS:24;
+                  then j-'len h11+2<=len h2-1 by XCMPLX_1:229;
+                  then A789:j-'len h11+2-1<=len h2-1-1 by REAL_1:49;
+                  A790: len h2-1-1<len h2 by Lm5;
+                  set k=j-'len h11+2-'1;
+                  A791: h2.k in rng h2 by A22,A783,FUNCT_1:def 5;
+                   i+1 in dom h1 by A761,A764,FINSEQ_3:27;
+                  then A792: h1.(i+1) in rng h1 by FUNCT_1:def 5;
+                  A793:  h0.j=h21.k by A21,A43,A44,A784,A786,A787,JORDAN3:27;
+                  A794:h0.j=g2.(h2.k) & h21.k=g2.(h2.k) by A22,A783,A788,
+FUNCT_1:23;
+                   (i+1) in dom h0 by A762,FINSEQ_3:27;
+                  then A795:h0/.(i+1)=h0.(i+1) by FINSEQ_4:def 4;
+                   j in dom h0 by A746,A749,FINSEQ_3:27;
+                  then A796:h0/.j=h0.j by FINSEQ_4:def 4;
+                  A797:g1.(h1.(i+1)) in rng g1 by A6,A9,A792,BORSUK_1:83,
+FUNCT_1:def 5;
+                  A798:h0.j in Lower_Arc(P)
+                           by A13,A15,A16,A791,A794,BORSUK_1:83,FUNCT_1:def 5;
+                   h0/.j <> W-min P
+                 by A22,A29,A31,A65,A780,A783,A789,A790,A793,A796,FUNCT_1:def 8
+;
+                 hence thesis by A4,A784,A795,A796,A797,A798,JORDAN6:def 10;
+               end;
+               hence thesis;
+              case A799:i+1>len h1;
+then A800:                len h1<j by A757,AXIOMS:22;
+                  then A801:j-len h11=j-'len h11 by A21,SCMFSA_7:3;
+                   j-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                        by A40,A746,REAL_1:49;
+then A802:0<=j-'len h11
+                      & j-'len h11<=len mid(h21,2,len h21 -'1)
+                               by A21,A800,A801,SQUARE_1:12,XCMPLX_1:26;
+                  A803: j-len h11
+                       <=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                         by A40,A746,REAL_1:49;
+                  then A804:j-len h11
+                      <= len (mid(h21,2,len h21 -'1)) by XCMPLX_1:26;
+                   0+1<=j-'len h11+1 by A802,AXIOMS:24;
+                  then 0+1<=j-'len h11+1+1-1 by XCMPLX_1:26;
+                  then 0+1<=j-'len h11+(1+1)-1 by XCMPLX_1:1;
+                  then A805:j-'len h11+2-'1=j-'len h11+2-1 by JORDAN3:1;
+                   0<=j-'len h11 by NAT_1:18;
+                  then 0+2<=j-'len h11 +2 by AXIOMS:24;
+                  then A806:2-'1<=j-'len h11 +2-'1 by JORDAN3:5;
+                   j-len h11<=len h1+(len h2-2)-len h11 by A47,A746,REAL_1:49;
+                  then j-len h11<=len h2-2 by A21,XCMPLX_1:26;
+                  then j-'len h11+2<=len h2-2+2 by A801,AXIOMS:24;
+                  then j-'len h11+2<=len h2 by XCMPLX_1:27;
+then A807: (j-'len h11 +2-'1)<=len h21 by A23,JORDAN3:7;
+                  then A808:j-'len h11 +2-'1 in dom h21 by A806,Lm2,FINSEQ_3:27
+;
+                  A809:len h11+1<=i+1
+                      & i+1<len h11 + len (mid(h21,2,len h21 -'1))
+                                   by A21,A759,A799,FINSEQ_1:35,NAT_1:38;
+                  A810: i+1-len h11<len h11 + len (mid(h21,2,len h21 -'1)) -
+len h11
+                             by A40,A759,REAL_1:54;
+                  then A811:i+1-len h11<len (mid(h21,2,len h21 -'1))
+                                           by XCMPLX_1:26;
+                   len h1+1<=i+1 by A799,NAT_1:38;
+                  then len h1+1-len h1<=i+1-len h1 by REAL_1:49;
+                  then 1<=i+1-len h1 by XCMPLX_1:26;
+                  then A812:1<=i+1-'len h11 & i+1-'len h11=i+1-len h11
+                                     by A21,JORDAN3:1;
+A813:               h0.(i+1)=(mid(h21,2,len h21 -'1)).(i+1 -len h11)
+                                      by A809,FINSEQ_1:36
+                              .=h21.(i+1-'len h11+2-'1)
+                    by A43,A44,A811,A812,JORDAN3:27;
+                  then A814: j-len h11=j-'len h11 & (i+1)-len h11=(i+1)-'len
+h11
+                  & h0.(i+1)=h21.(i+1-'len h11+2-'1)
+                  & (j-'len h11 +2-'1) in dom h21
+                  & len h11+1<=i+1
+                  & i+1<=len h11 + len (mid(h21,2,len h21 -'1))
+                  & j-'len h11+2-'1=j-'len h11+2-1
+                  & j-len h11 <= len (mid(h21,2,len h21 -'1))
+                  & i+1-len h11<len (mid(h21,2,len h21 -'1))
+                  by A21,A759,A799,A800,A803,A806,A807,A810,Lm2,FINSEQ_1:35,
+FINSEQ_3:27,JORDAN3:1,NAT_1:38,SCMFSA_7:3,XCMPLX_1:26;
+                   len h1<j by A757,A799,AXIOMS:22;
+                  then A815:len h11+1<=j
+                   & j<=len h11 + len (mid(h21,2,len h21 -'1))
+                               by A21,A746,FINSEQ_1:35,NAT_1:38;
+                  then A816:h0.j=(mid(h21,2,len h21 -'1)).(j -len h11)
+                                      by FINSEQ_1:36;
+                   len h1 +1-len h1<=j-len h1 by A21,A815,REAL_1:49
+;
+                  then A817: 1<=j-len h1 by XCMPLX_1:26;
+                  then A818:h0.j=h21.(j-'len h11 +2-'1)
+                    by A21,A43,A44,A801,A804,A816,JORDAN3:27;
+                   0<=(i+1)-'len h11 by NAT_1:18;
+                  then A819: 0+2<=(i+1)-'len h11 +2 by AXIOMS:24;
+                  then A820:2-'1<=((i+1)-'len h11 +2-'1) by JORDAN3:5;
+                   (i+1)-len h11<=len h11+(len h2-2)-len h11
+                                    by A21,A47,A759,REAL_1:49;
+                  then (i+1)-len h11<=(len h2-2) by XCMPLX_1:26;
+                  then (i+1)-'len h11+2<=len h2-2+2 by A814,AXIOMS:24;
+                  then (i+1)-'len h11+2<=len h2 by XCMPLX_1:27;
+                  then A821:1<=((i+1)-'len h11 +2-'1)
+                      & ((i+1)-'len h11 +2-'1)<=len h21
+                                    by A23,A819,Lm2,JORDAN3:5,7;
+                  A822:(i+1)-'len h11+2-'1=(i+1)-'len h11+2-1
+                                  by A820,Lm2,JORDAN3:1;
+                   j+1-1<=len h1+(len h2-2)-1 by A47,A752,REAL_1:49
+;
+                  then j<=len h1+(len h2-2)-1 by XCMPLX_1:26;
+                  then j-len h11<=len h1+(len h2-2)-1-len h11 by REAL_1:49;
+                  then j-len h11<=len h1+((len h2-2)-1)-len h11 by XCMPLX_1:29
+;
+                  then j-len h11<=(len h2-2-1) by A21,XCMPLX_1:26;
+                  then j-'len h11+2<=len h2-2-1+2 by A801,AXIOMS:24;
+                  then j-'len h11+2<=len h2-1 by XCMPLX_1:229;
+                  then A823:j-'len h11+2-1<=len h2-1-1 by REAL_1:49;
+                  A824: len h2-1-1<len h2 by Lm5;
+                  set k=j-'len h11+2-'1;
+                  set j0=(i+1)-'len h11+2-'1;
+                   (i+1)-len h11<j-len h11 by A758,REAL_1:54;
+                  then (i+1)-'len h11+2<j-'len h11+2 by A814,REAL_1:53;
+                  then A825:j0<k by A805,A822,REAL_1:54;
+                  A826:h21.k=g2.(h2.k) by A22,A808,FUNCT_1:23;
+A827:              h2.k in rng h2 by A22,A808,FUNCT_1:def 5;
+                  then A828:0<=h2.k & h2.k<=1 by A16,BORSUK_1:83,TOPREAL5:1;
+                  A829:j0 in dom h2 by A22,A821,FINSEQ_3:27;
+                  then A830:h0.(i+1)=g2.(h2.j0) by A813,FUNCT_1:23;
+A831:              h2.j0 in rng h2 by A829,FUNCT_1:def 5;
+                  then A832:0<=h2.j0 & h2.j0<=1 by A16,BORSUK_1:83,TOPREAL5:1;
+                  A833:h2.(j0)<h2.(k) by A16,A22,A808,A825,A829,GOBOARD1:def 1;
+                  A834:  h0.j=h21.(k) by A21,A43,A44,A814,A816,A817,JORDAN3:27;
+                  A835:h0.j=g2.(h2.k) & h21.k=g2.(h2.k) by A22,A808,A818,
+FUNCT_1:23;
+                   (i+1) in dom h0 by A762,FINSEQ_3:27;
+                  then A836:h0/.(i+1)=h0.(i+1) by FINSEQ_4:def 4;
+                   j in dom h0 by A746,A749,FINSEQ_3:27;
+                  then A837:h0/.j=h0.(j) by FINSEQ_4:def 4;
+                  A838:g2.(h2.j0) in rng g2 by A15,A16,A831,BORSUK_1:83,FUNCT_1
+:def 5;
+                  A839:h0.(j) in Lower_Arc(P)
+                   by A13,A15,A16,A827,A835,BORSUK_1:83,FUNCT_1:def 5;
+A840:            h0/.j <> W-min P
+                  by A22,A29,A31,A65,A805,A808,A823,A824,A834,A837,FUNCT_1:def
+8;
+                 LE h0/.(i+1),h0/.j,Lower_Arc(P),E-max(P),W-min(P)
+                     by A11,A12,A13,A14,A818,A826,A828,A830,A832,A833,A836,A837
+,Th19;
+                 hence thesis by A13,A830,A836,A837,A838,A839,A840,JORDAN6:def
+10;
+              end;
+             hence thesis;
+            end;
+           now assume A841:h0/.(i+1)=h0/.j;
+             now per cases;
+            case A842:i+1<=len h1;
+                A843:1<i+1 by A744,NAT_1:38;
+                then A844:i+1 in dom h1 by A842,FINSEQ_3:27;
+                 i+1 in dom h0 by A751,A843,FINSEQ_3:27;
+                then A845:h0/.(i+1)=h0.(i+1) by FINSEQ_4:def 4;
+                A846:h0.(i+1)=h11.(i+1) by A21,A842,A843,SCMFSA_7:9;
+                then A847:h0.(i+1)=g1.(h1.(i+1)) by A844,FUNCT_1:23;
+                 h1.(i+1) in rng h1 by A844,FUNCT_1:def 5;
+                then A848:h0.(i+1) in Upper_Arc(P)
+                             by A4,A6,A9,A847,BORSUK_1:83,FUNCT_1:def 5;
+              now per cases;
+             case A849:j<=len h1;
+                then A850:h0.(j)=h11.(j) by A21,A749,SCMFSA_7:9;
+                A851:j in dom h1 by A749,A849,FINSEQ_3:27;
+                 j in dom h0 by A746,A749,FINSEQ_3:27;
+                then h0/.j=h0.j by FINSEQ_4:def 4;
+              hence contradiction by A20,A64,A755,A841,A844,A845,A846,A850,A851
+,FUNCT_1:def 8;
+             case A852:j>len h1;
+                  then A853:len h1 +1<=j by NAT_1:38;
+                  A854:len h11+1<=j & j<=
+len h11 + len (mid(h21,2,len h21 -'1)) by A21,A746,A852,FINSEQ_1:35,NAT_1:38;
+A855: h0.j=(mid(h21,2,len h21 -'1)).(j -len h11)
+              by A21,A40,A746,A853,FINSEQ_1:36;
+                  A856:j-len h11=j-'len h11 by A21,A852,SCMFSA_7:3;
+                   j-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                         by A854,REAL_1:49;
+                  then A857:j-len h11<= len (mid(h21,2,len h21 -'1))
+                                             by XCMPLX_1:26;
+                   len h1 +1-len h1<=j-len h1 by A853,REAL_1:49;
+                  then 1<=j-len h11 by A21,XCMPLX_1:26;
+                  then A858:h0.j=h21.(j-'len h11 +2-'1)
+                             by A43,A44,A855,A856,A857,JORDAN3:27;
+                   0<=j-'len h11 by NAT_1:18;
+                  then A859: 0+2<=j-'len h11 +2 by AXIOMS:24;
+                  then A860:2-'1<=(j-'len h11 +2-'1) by JORDAN3:5;
+                   j-len h11<=len h1+(len h2-2)-len h11
+                           by A47,A746,REAL_1:49;
+                  then j-'len h11<=len h2-2 by A21,A856,XCMPLX_1:26;
+                  then j-'len h11+2<=len h2-2+2 by AXIOMS:24;
+                  then j-'len h11+2<=len h2 by XCMPLX_1:27;
+then A861:1<=(j-'len h11 +2-'1) & (j-'len h11 +2-'1)<=
+len h21
+                                    by A23,A859,Lm2,JORDAN3:5,7;
+                  A862:j-'len h11+2-'1=j-'len h11+2-1
+                     by A860,Lm2,JORDAN3:1;
+                  set k=j-'len h11+2-'1;
+                   j-len h11<=len h1+(len h2-2)-len h11
+                                   by A47,A746,REAL_1:49;
+                  then j-'len h11<=len h2-2 by A21,A856,XCMPLX_1:26;
+                  then j-'len h11+2<=len h2-2+2 by AXIOMS:24;
+                  then A863:j-'len h11+2<=len h2 by XCMPLX_1:27;
+                   j-'len h11+2-'1<j-'len h11+2-'1+1 by NAT_1:38;
+                  then A864: j-'len h11+2-'1<j-'len h11+2 by A862,XCMPLX_1:27;
+                   len h11+1-len h11<=j-len h11 by A21,A853,REAL_1:49
+;
+                  then 1<=j-len h11 by XCMPLX_1:26;
+                  then 1<=j-'len h11 by JORDAN3:1;
+                  then 1+2<=j-'len h11+2 by AXIOMS:24;
+                  then 1+2-1<=j-'len h11+2-1 by REAL_1:49;
+                  then A865:1<k by A862,AXIOMS:22;
+                  A866:k in dom h2 by A22,A861,FINSEQ_3:27;
+                  then A867:h0.j=g2.(h2.k) by A858,FUNCT_1:23;
+                  A868: h2.k in rng h2 by A866,FUNCT_1:def 5;
+                   j in dom h0 by A746,A749,FINSEQ_3:27;
+                  then A869:h0/.j=h0.j by FINSEQ_4:def 4;
+                   g2.(h2.k) in rng g2 by A15,A16,A868,BORSUK_1:83,FUNCT_1:def
+5;
+                  then h0.j in Upper_Arc(P) /\ Lower_Arc(P)
+                            by A13,A841,A845,A848,A867,A869,XBOOLE_0:def 3;
+                  then A870:         h0.j in {W-min(P),E-max(P)} by A1,JORDAN6:
+def 9;
+A871:         h0.j <> W-min P
+                   by A22,A29,A31,A65,A858,A863,A864,A866,FUNCT_1:def 8;
+                h0.j <> E-max P
+                   by A22,A28,A30,A65,A858,A865,A866,FUNCT_1:def 8;
+              hence contradiction by A870,A871,TARSKI:def 2;
+             end;
+             hence contradiction;
+            case A872:i+1>len h1;
+                  then A873:len h1 +1<=i+1 by NAT_1:38;
+                  then A874:h0.(i+1)=(mid(h21,2,len h21 -'1)).((i+1) -len h11)
+                                     by A21,A40,A751,FINSEQ_1:36;
+                  A875:(i+1)-len h11=(i+1)-'len h11 by A21,A872,SCMFSA_7:3;
+                   (i+1)-len h11
+                   <=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                         by A40,A751,REAL_1:49;
+                  then A876:(i+1)-len h11<= len (mid(h21,2,len h21 -'1))
+                                             by XCMPLX_1:26;
+                   len h1 +1-len h1<=(i+1)-len h1 by A873,REAL_1:49
+;
+                  then 1<=(i+1)-len h11 by A21,XCMPLX_1:26;
+                  then A877:h0.(i+1)=h21.((i+1)-'len h11 +2-'1)
+                             by A43,A44,A874,A875,A876,JORDAN3:27;
+                   0<=(i+1)-'len h11 by NAT_1:18;
+                  then A878: 0+2<=(i+1)-'len h11 +2 by AXIOMS:24;
+                  then A879:2-'1<=((i+1)-'len h11 +2-'1) by JORDAN3:5;
+                   (i+1)-len h11<=len h1+(len h2-2)-len h11
+                            by A47,A751,REAL_1:49;
+                  then (i+1)-len h11<=(len h2-2) by A21,XCMPLX_1:26;
+                  then (i+1)-'len h11+2<=len h2-2+2 by A875,AXIOMS:24;
+                  then (i+1)-'len h11+2<=len h2 by XCMPLX_1:27;
+then A880:1<=((i+1)-'len h11 +2-'1)
+                  & ((i+1)-'len h11 +2-'1)<=len h21
+                                    by A23,A878,Lm2,JORDAN3:5,7;
+                  A881:(i+1)-'len h11+2-'1=(i+1)-'len h11+2-1
+                                 by A879,Lm2,JORDAN3:1;
+                  set j0=(i+1)-'len h11+2-'1;
+                   len h11+1-len h11<=(i+1)-len h11
+                           by A21,A873,REAL_1:49;
+                  then 1<=(i+1)-len h11 by XCMPLX_1:26;
+                  then A882:(i+1)-'len h11=(i+1)-len h11 by JORDAN3:1;
+                  A883:j0 in dom h2 by A22,A880,FINSEQ_3:27;
+                   1<=i+1 by A744,NAT_1:38;
+                  then i+1 in dom h0 by A751,FINSEQ_3:27;
+                  then A884:h0/.(i+1)=h0.(i+1) by FINSEQ_4:def 4;
+                  A885:j>len h1 by A757,A872,AXIOMS:22;
+                  then A886:len h1 +1<=j by NAT_1:38;
+                   len h11+1<=j & j<=
+len h11 + len (mid(h21,2,len h21 -'1)) by A21,A746,A885,FINSEQ_1:35,NAT_1:38;
+then A887: h0.j=(mid(h21,2,len h21 -'1)).(j -len h11)
+                     by FINSEQ_1:36;
+                  A888:j-len h11=j-'len h11 by A21,A885,SCMFSA_7:3;
+                  A889: j-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len
+h11
+                                    by A40,A746,REAL_1:49;
+                   len h1 +1-len h1<=j-len h1 by A886,REAL_1:49;
+                  then 1<=j-'len h11 & j-'len h11<=len mid(h21,2,len h21 -'1)
+                             by A21,A888,A889,XCMPLX_1:26;
+                  then A890:h0.j=h21.(j-'len h11 +2-'1)
+                             by A43,A44,A887,A888,JORDAN3:27;
+                   0<=j-'len h11 by NAT_1:18;
+                  then A891: 0+2<=j-'len h11 +2 by AXIOMS:24;
+                  then A892:2-'1<=(j-'len h11 +2-'1) by JORDAN3:5;
+                   j-len h11<=len h1+(len h2-2)-len h11 by A47,A746,REAL_1:49;
+                  then j-len h11<=len h2-2 by A21,XCMPLX_1:26;
+                  then j-'len h11+2<=len h2-2+2 by A888,AXIOMS:24;
+                  then j-'len h11+2<=len h2 by XCMPLX_1:27;
+                  then A893:1<=(j-'len h11 +2-'1) & (j-'len h11 +2-'1)<=len h21
+                                    by A23,A891,Lm2,JORDAN3:5,7;
+                  A894:j-'len h11+2-'1=j-'len h11+2-1
+                      by A892,Lm2,JORDAN3:1;
+                  set k=j-'len h11+2-'1;
+                   len h11+1-len h11<=j-len h11 by A21,A886,REAL_1:49
+;
+                  then 1<=j-len h11 by XCMPLX_1:26;
+                  then j-'len h11=j-len h11 by JORDAN3:1;
+                  then i+1-'len h11<j-'len h11 by A758,A882,REAL_1:54;
+                  then i+1-'len h11+2<j-'len h11+2 by REAL_1:53;
+                  then A895:(i+1)-'len h11+2-'1<j-'len h11+2-'1
+                            by A881,A894,REAL_1:54;
+                  A896:k in dom h2 by A22,A893,FINSEQ_3:27;
+                   j in dom h0 by A746,A749,FINSEQ_3:27;
+                  then h0/.j=h0.j by FINSEQ_4:def 4;
+                 hence contradiction
+      by A22,A65,A841,A877,A883,A884,A890,A895,A896,FUNCT_1:def 8;
+            end;
+           hence contradiction;
+          end;
+         hence
+           Segment(h0/.i,h0/.(i+1),P) misses Segment(h0/.j,h0/.(j+1),P)
+                   by A1,A753,A754,A760,A763,Th13;
+        case A897: j<=i;
+          A898:h0/.j<>h0/.(j+1) by A550,A749,A752;
+          A899:1<j+1 by A749,NAT_1:38;
+          A900:LE h0/.(j+1),h0/.i,P
+            proof
+               now per cases;
+              case A901:j+1<=len h1;
+              then A902:h0.(j+1)=h11.(j+1) by A21,A899,SCMFSA_7:9;
+                now per cases;
+               case i<=len h1;
+               thus thesis by A745,A897;
+               case A903:i>len h1;
+                  then A904:i-len h11=i-'len h11 by A21,SCMFSA_7:3;
+                   i-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                        by A40,A748,REAL_1:49;
+then A905:0<=i-'len h11
+                      & i-'len h11<=len mid(h21,2,len h21 -'1)
+                             by A21,A903,A904,SQUARE_1:12,XCMPLX_1:26;
+                   i-len h11
+                       <=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                by A40,A748,REAL_1:49;
+                  then A906:i-len h11
+                      <= len (mid(h21,2,len h21 -'1)) by XCMPLX_1:26;
+                   0+1<=i-'len h11+1 by A905,AXIOMS:24;
+                  then 0+1<=i-'len h11+1+1-1 by XCMPLX_1:26;
+                  then 0+1<=i-'len h11+(1+1)-1 by XCMPLX_1:1;
+                  then A907:i-'len h11+2-'1=i-'len h11+2-1 by JORDAN3:1;
+                   0<=i-'len h11 by NAT_1:18;
+                  then 0+2<=i-'len h11 +2 by AXIOMS:24;
+                  then A908:2-'1<=(i-'len h11 +2-'1) by JORDAN3:5;
+                   i-len h11<=len h1+(len h2-2)-len h11 by A47,A748,REAL_1:49;
+                  then i-'len h11<=len h2-2 by A21,A904,XCMPLX_1:26;
+                  then i-'len h11+2<=len h2-2+2 by AXIOMS:24;
+                  then i-'len h11+2<=len h2 by XCMPLX_1:27;
+then i-'len h11 +2-'1<=len h21 by A23,JORDAN3:7;
+then A909:           (i-'len h11 +2-'1) in dom h21 by A908,Lm2,FINSEQ_3:27;
+              j+1 in dom h1 by A899,A901,FINSEQ_3:27;
+                  then A910: h11.(j+1)=g1.(h1.(j+1)) by FUNCT_1:23;
+                  A911:len h1 +1<=i by A903,NAT_1:38;
+                  then A912:h0.i=(mid(h21,2,len h21 -'1)).(i -len h11)
+                                      by A21,A40,A748,FINSEQ_1:36;
+                   len h1 +1-len h1<=i-len h1 by A911,REAL_1:49;
+                  then A913: 1<=i-len h11 by A21,XCMPLX_1:26;
+                  then A914:h0.(i)=h21.(i-'len h11 +2-'1)
+                    by A43,A44,A904,A906,A912,JORDAN3:27;
+                   i+1-1<=len h1+(len h2-2)-1 by A47,A751,REAL_1:49;
+                  then i<=len h1+(len h2-2)-1 by XCMPLX_1:26;
+                  then i-len h11<=len h1+(len h2-2)-1-len h11 by REAL_1:49;
+                  then i-len h11<=len h1+((len h2-2)-1)-len h11 by XCMPLX_1:29
+;
+                  then i-'len h11<=len h2-2-1 by A21,A904,XCMPLX_1:26;
+                  then i-'len h11+2<=len h2-2-1+2 by AXIOMS:24;
+                  then i-'len h11+2<=len h2-1 by XCMPLX_1:229;
+                  then A915:i-'len h11+2-1<=len h2-1-1 by REAL_1:49;
+A916:               len h2-1-1<len h2 by Lm5;
+                  set k=i-'len h11+2-'1;
+                  A917: h2.k in rng h2 by A22,A909,FUNCT_1:def 5;
+                   j+1 in dom h1 by A899,A901,FINSEQ_3:27;
+                  then A918: h1.(j+1) in rng h1 by FUNCT_1:def 5;
+                  A919:h0.i=h21.k by A43,A44,A904,A906,A912,A913,JORDAN3:27;
+                  A920:h0.i=g2.(h2.k)
+                         & h21.k=g2.(h2.k) by A22,A909,A914,FUNCT_1:23;
+A921:g1.(h1.(j+1)) in rng g1 by A6,A9,A918,BORSUK_1:83,FUNCT_1:def 5;
+                  A922:h0.i in Lower_Arc(P)
+                  by A13,A15,A16,A917,A920,BORSUK_1:83,FUNCT_1:def 5;
+                   h0/.i <> W-min P
+              by A22,A29,A31,A65,A750,A907,A909,A915,A916,A919,FUNCT_1:def 8;
+                 hence thesis by A4,A750,A756,A902,A910,A921,A922,JORDAN6:def
+10;
+               end;
+               hence thesis;
+              case j+1>len h1;
+               thus thesis by A745,A897;
+              end;
+             hence thesis;
+            end;
+          A923:1<j+1 by A749,NAT_1:38;
+           now assume A924:h0/.(j+1)=h0/.i;
+             now per cases;
+            case A925:j+1<=len h1;
+                then A926:j+1 in dom h1 by A923,FINSEQ_3:27;
+                then A927: h1.(j+1) in rng h1 by FUNCT_1:def 5;
+                A928:h0.(j+1)=h11.(j+1) by A21,A923,A925,SCMFSA_7:9;
+                then h0.(j+1)=g1.(h1.(j+1)) by A926,FUNCT_1:23;
+          then A929:h0.(j+1) in Upper_Arc(P) by A4,A6,A9,A927,BORSUK_1:83,
+FUNCT_1:def 5;
+              now per cases;
+             case A930:i<=len h1;
+                then A931:h0.i=h11.i by A21,A744,SCMFSA_7:9;
+                 i in dom h1 by A744,A930,FINSEQ_3:27;
+              hence contradiction
+               by A20,A64,A750,A755,A756,A924,A926,A928,A931,FUNCT_1:def 8;
+             case A932:i>len h1;
+                  then A933:len h1 +1<=i by NAT_1:38;
+then A934:     h0.i=(mid(h21,2,len h21 -'1)).(i -len h11)
+                  by A21,A40,A748,FINSEQ_1:36;
+                  A935:i-len h11=i-'len h11 by A21,A932,SCMFSA_7:3;
+                   i-len h11<=len h11 + len (mid(h21,2,len h21 -'1))-len h11
+                                         by A40,A748,REAL_1:49;
+                  then A936:i-len h11<= len (mid(h21,2,len h21 -'1))
+                                             by XCMPLX_1:26;
+                   len h1 +1-len h1<=i-len h1 by A933,REAL_1:49;
+                  then 1<=i-len h1 by XCMPLX_1:26;
+                  then A937:h0.i=h21.(i-'len h11 +2-'1)
+                             by A21,A43,A44,A934,A935,A936,JORDAN3:27;
+                   0<=i-'len h11 by NAT_1:18;
+                  then A938: 0+2<=i-'len h11 +2 by AXIOMS:24;
+                  then A939:2-'1<=(i-'len h11 +2-'1) by JORDAN3:5;
+                   i-len h11<=len h1+(len h2-2)-len h11
+                    by A47,A748,REAL_1:49;
+                  then i-'len h11<=len h2-2 by A21,A935,XCMPLX_1:26;
+                  then i-'len h11+2<=len h2-2+2 by AXIOMS:24;
+                  then i-'len h11+2<=len h2 by XCMPLX_1:27;
+                  then A940:1<=(i-'len h11 +2-'1) & (i-'len h11 +2-'1)<=len h21
+                                    by A23,A938,Lm2,JORDAN3:5,7;
+                  A941:i-'len h11+2-'1=i-'len h11+2-1
+                          by A939,Lm2,JORDAN3:1;
+                  set k=i-'len h11+2-'1;
+                   i-len h11<=len h1+(len h2-2)-len h11 by A47,A748,REAL_1:49;
+                  then i-'len h11<=len h2-2 by A21,A935,XCMPLX_1:26;
+                  then i-'len h11+2<=len h2-2+2 by AXIOMS:24;
+                  then A942:i-'len h11+2<=len h2 by XCMPLX_1:27;
+                   i-'len h11+2-'1<i-'len h11+2-1+1 by A941,NAT_1:38;
+                  then A943: i-'len h11+2-'1<i-'len h11+2 by XCMPLX_1:27;
+                   len h11+1-len h11<=i-len h11 by A21,A933,REAL_1:49;
+                  then 1<=i-len h11 by XCMPLX_1:26;
+                  then 1<=i-'len h11 by JORDAN3:1;
+                  then 1+2<=i-'len h11+2 by AXIOMS:24;
+                  then 1+2-1<=i-'len h11+2-1 by REAL_1:49;
+                  then A944:1<k by A941,AXIOMS:22;
+                  A945:k in dom h2 by A22,A940,FINSEQ_3:27;
+                  then A946:h0.i=g2.(h2.k) by A937,FUNCT_1:23;
+                  A947: h2.k in rng h2 by A945,FUNCT_1:def 5;
+                   i in dom h0 by A744,A748,FINSEQ_3:27;
+                  then A948:h0/.i=h0.i by FINSEQ_4:def 4;
+                g2.(h2.k) in rng g2 by A15,A16,A947,BORSUK_1:83,FUNCT_1:def 5;
+               then h0.i in Upper_Arc(P) /\ Lower_Arc(P)
+                         by A13,A756,A924,A929,A946,A948,XBOOLE_0:def 3;
+               then h0.i in {W-min(P),E-max(P)} by A1,JORDAN6:def 9;
+               then h0.i=W-min(P) or h0.i=E-max(P)by TARSKI:def 2;
+              hence contradiction by A22,A28,A29,A30,A31,A65,A937,A942,A943,
+A944,A945,FUNCT_1:def 8;
+             end;
+             hence contradiction;
+            case j+1>len h1;
+                 thus contradiction by A745,A897;
+            end;
+           hence contradiction;
+          end;
+         hence Segment(h0/.j,h0/.(j+1),P) misses Segment(h0/.i,
+         h0/.(i+1),P) by A1,A753,A754,A898,A900,Th13;
+        end;
+     hence Segment(h0/.i,h0/.(i+1),P) misses Segment(h0/.j,h0/.(j+1),P);
+    end;
+   let i be Nat such that
+A949: 1 < i and
+A950: i+1 < len h0;
+A951:  i<len h0 by A950,NAT_1:38;
+A952: LE h0/.i,h0/.(i+1),P by A550,A949,A950;
+A953: 1<i+1 by A949,NAT_1:38;
+A954: h0/.i<>h0/.(i+1) by A550,A949,A950;
+A955: i in dom h0 by A949,A951,FINSEQ_3:27;
+     then h0/.i = h0.i by FINSEQ_4:def 4;
+then A956: h0/.i<>W-min P by A39,A61,A66,A949,A955,FUNCT_1:def 8;
+A957: i+1 in dom h0 by A950,A953,FINSEQ_3:27;
+A958: len h0-len h11 <= len (mid(h21,2,len h21 -'1)) by A40,XCMPLX_1:26;
+      set k=len h0-'len h11+2-'1;
+       0<=len h0-'len h11 by NAT_1:18;
+      then 0+2<=len h0-'len h11 +2 by AXIOMS:24;
+then A959: 2-'1<=len h0-'len h11 +2-'1 by JORDAN3:5;
+       len h0-'len h11+2<=len h2-2+2 by A21,A47,A54,XCMPLX_1:26;
+      then len h0-'len h11+2<=len h2 by XCMPLX_1:27;
+      then (len h0-'len h11 +2-'1)<=len h21 by A23,JORDAN3:7;
+      then A960: (len h0-'len h11 +2-'1) in dom h21 by A959,Lm2,FINSEQ_3:27;
+ h0.len h0=mid(h21,2,len h21 -'1).(len h0 -len h11)
+                        by A21,A40,A48,FINSEQ_1:36;
+then A961: h0.len h0=h21.(len h0-'len h11 +2-'1)
+             by A21,A43,A44,A53,A54,A958,JORDAN3:27;
+A962: h21.k=g2.(h2.k) by A22,A960,FUNCT_1:23;
+      A963: h2.k in rng h2 by A22,A960,FUNCT_1:def 5;
+then A964: h0.len h0 in Lower_Arc(P) by A13,A15,A16,A961,A962,BORSUK_1:83,
+FUNCT_1:def 5;
+A965:LE h0/.(i+1),h0/.len h0,P
+      proof
+       per cases;
+       suppose A966:i+1<=len h1;
+then A967:      h0.(i+1)=h11.(i+1) by A21,A953,SCMFSA_7:9;
+          i+1 in dom h1 by A953,A966,FINSEQ_3:27;
+         then A968:      h11.(i+1)=g1.(h1.(i+1)) by FUNCT_1:23;
+                   i+1 in dom h1 by A953,A966,FINSEQ_3:27;
+                  then A969: h1.(i+1) in rng h1 by FUNCT_1:def 5;
+                  A970:h0/.(i+1)=h0.(i+1) by A957,FINSEQ_4:def 4;
+                        g1.(h1.(i+1)) in rng g1 by A6,A9,A969,BORSUK_1:83,
+FUNCT_1:def 5;
+        hence thesis by A4,A52,A121,A964,A967,A968,A970,JORDAN6:def 10;
+       suppose A971:i+1>len h1;
+A972:             0<=len h0-'len h11 by A21,A49,A54,SQUARE_1:12;
+                  A973:len h0-len h11
+                      <= len (mid(h21,2,len h21 -'1)) by A40,XCMPLX_1:26;
+                   0+1<=len h0-'len h11+1 by A972,AXIOMS:24;
+                  then 0+1<=len h0-'len h11+1+1-1 by XCMPLX_1:26;
+                  then 0+1<=len h0-'len h11+(1+1)-1 by XCMPLX_1:1;
+                  then A974:len h0-'len h11+2-'1=len h0-'len h11+2-1 by JORDAN3
+:1;
+                   len h0-'len h11+2<=len h2-2+2
+                        by A21,A47,A54,XCMPLX_1:26;
+                  then len h0-'len h11+2<=len h2 by XCMPLX_1:27;
+then A975: (len h0-'len h11 +2-'1)<=len h21 by A23,JORDAN3:7;
+                  then A976:len h0-'len h11 +2-'1 in dom h21
+                  by A959,Lm2,FINSEQ_3:27;
+A977:             len h11+1<=i+1 by A21,A971,NAT_1:38;
+A978:             i+1<len h11 + len (mid(h21,2,len h21 -'1)) by A950,FINSEQ_1:
+35;
+                   i+1-len h11<len h11 + len (mid(h21,2,len h21 -'1)) - len h11
+                             by A40,A950,REAL_1:54;
+                  then A979:i+1-len h11<len (mid(h21,2,len h21 -'1)) by
+XCMPLX_1:26;
+                   len h1+1<=i+1 by A971,NAT_1:38;
+                  then len h1+1-len h1<=i+1-len h1 by REAL_1:49;
+then A980:              1<=i+1-len h1 by XCMPLX_1:26;
+then A981:             i+1-'len h11=i+1-len h11 by A21,JORDAN3:1;
+A982:              h0.(i+1) = mid(h21,2,len h21 -'1).(i+1 -len h11)
+                                      by A977,A978,FINSEQ_1:36
+                          .= h21.(i+1-'len h11+2-'1)
+                    by A21,A43,A44,A979,A980,A981,JORDAN3:27;
+A983:             (i+1)-len h11=(i+1)-'len h11 by A21,A971,SCMFSA_7:3;
+A984:             (len h0-'len h11 +2-'1) in dom h21 by A959,A975,Lm2,FINSEQ_3:
+27;
+                  h0.len h0=(mid(h21,2,len h21 -'1)).(len h0 -len h11)
+                                      by A21,A40,A48,FINSEQ_1:36;
+                  then A985:h0.len h0=h21.(len h0-'len h11 +2-'1)
+                    by A21,A43,A44,A53,A54,A973,JORDAN3:27;
+                   0<=(i+1)-'len h11 by NAT_1:18;
+                  then 0+2<=(i+1)-'len h11 +2 by AXIOMS:24;
+                  then A986:2-'1<=((i+1)-'len h11 +2-'1) by JORDAN3:5;
+                   (i+1)-len h11<=len h11+(len h2-2)-len h11
+                                    by A21,A47,A950,REAL_1:49;
+                  then (i+1)-len h11<=(len h2-2) by XCMPLX_1:26;
+                  then (i+1)-'len h11+2<=len h2-2+2 by A983,AXIOMS:24;
+then            (i+1)-'len h11+2<=len h2 by XCMPLX_1:27;
+then A987:           (i+1)-'len h11 +2-'1 <= len h21 by A23,JORDAN3:7;
+                  A988:(i+1)-'len h11+2-'1=(i+1)-'len h11+2-1
+                                  by A986,Lm2,JORDAN3:1;
+                  set k=len h0-'len h11+2-'1;
+                  set j0=(i+1)-'len h11+2-'1;
+                   (i+1)-len h11<len h0-len h11 by A950,REAL_1:54;
+                  then (i+1)-'len h11+2<len h0-'len h11+2 by A54,A983,REAL_1:53
+;
+                  then A989:j0<k by A974,A988,REAL_1:54;
+                  A990:h21.k=g2.(h2.k) by A22,A976,FUNCT_1:23;
+A991:              h2.k in rng h2 by A22,A984,FUNCT_1:def 5;
+then A992:             0<=h2.k by A16,BORSUK_1:83,TOPREAL5:1;
+A993:             h2.k<=1 by A16,A991,BORSUK_1:83,TOPREAL5:1;
+                  A994:j0 in dom h2 by A22,A986,A987,Lm2,FINSEQ_3:27;
+                  then A995:h0.(i+1)=g2.(h2.j0) by A982,FUNCT_1:23;
+A996:              h2.j0 in rng h2 by A994,FUNCT_1:def 5;
+then A997:             0<=h2.j0 by A16,BORSUK_1:83,TOPREAL5:1;
+A998:             h2.j0<=1 by A16,A996,BORSUK_1:83,TOPREAL5:1;
+                  A999:h2.(j0)<h2.(k)
+                  by A16,A22,A984,A989,A994,GOBOARD1:def 1;
+                  A1000:h0/.(i+1)=h0.(i+1) by A957,FINSEQ_4:def 4;
+                  g2.(h2.j0) in rng g2 by A15,A16,A996,BORSUK_1:83,FUNCT_1:def
+5;
+                  then A1001:h0.(i+1) in Lower_Arc(P) by A13,A982,A994,FUNCT_1:
+23;
+                  h0.(len h0) in Lower_Arc(P) by A13,A15,A16,A961,A962,A963,
+BORSUK_1:83,FUNCT_1:def 5;
+then A1002:       h0/.len h0 in Lower_Arc P by A51,FINSEQ_4:def 4;
+         LE h0/.(i+1),h0/.len h0,Lower_Arc(P),E-max(P),W-min(P)
+             by A11,A12,A13,A14,A52,A985,A990,A992,A993,A995,A997,A998,A999,
+A1000,Th19;
+       hence thesis by A121,A1000,A1001,A1002,JORDAN6:def 10;
+      end;
+           now assume A1003:h0/.(i+1)=h0/.len h0;
+             now per cases;
+            case A1004:i+1<=len h1;
+                 i+1 in dom h0 by A950,A953,FINSEQ_3:27;
+                then A1005:h0/.(i+1)=h0.(i+1) by FINSEQ_4:def 4;
+                A1006:h0.(i+1)=h11.(i+1) by A21,A953,A1004,SCMFSA_7:9;
+                A1007:i+1 in dom h1 by A953,A1004,FINSEQ_3:27;
+                then A1008:h0.(i+1)=g1.(h1.(i+1)) by A1006,FUNCT_1:23;
+                 h1.(i+1) in rng h1 by A1007,FUNCT_1:def 5;
+                then A1009:h0.(i+1) in Upper_Arc(P)
+                             by A4,A6,A9,A1008,BORSUK_1:83,FUNCT_1:def 5;
+A1010: h0.len h0=(mid(h21,2,len h21 -'1)).(len h0 -len h11)
+              by A21,A40,A48,FINSEQ_1:36;
+                  len h0-len h11<= len (mid(h21,2,len h21 -'1))
+                                             by A40,XCMPLX_1:26;
+                  then A1011:h0.len h0=h21.(len h0-'len h11 +2-'1)
+                             by A21,A43,A44,A53,A54,A1010,JORDAN3:27;
+                   0<=len h0-'len h11 by NAT_1:18;
+                  then 0+2<=len h0-'len h11 +2 by AXIOMS:24;
+                  then A1012:2-'1<=(len h0-'len h11 +2-'1) by JORDAN3:5;
+                   len h0-'len h11+2<=len h2-2+2
+                           by A21,A47,A54,XCMPLX_1:26;
+then             len h0-'len h11+2<=len h2 by XCMPLX_1:27;
+then A1013:            len h0-'len h11 +2-'1 <= len h21 by A23,JORDAN3:7;
+                  A1014:len h0-'len h11+2-'1=len h0-'len h11+2-1
+                     by A1012,Lm2,JORDAN3:1;
+                  set k=len h0-'len h11+2-'1;
+                   len h0-'len h11+2<=len h2-2+2
+                      by A21,A47,A54,XCMPLX_1:26;
+                  then A1015:len h0-'len h11+2<=len h2 by XCMPLX_1:27;
+                   len h0-'len h11+2-'1<len h0-'len h11+2-'1+1 by NAT_1:38;
+                  then A1016: len h0-'len h11+2-'1<len h0-'len h11+2 by A1014,
+XCMPLX_1:27;
+                   1+2<=len h0-'len h11+2 by A55,AXIOMS:24;
+                  then 1+2-1<=len h0-'len h11+2-1 by REAL_1:49;
+                  then A1017:1<k by A1014,AXIOMS:22;
+                  A1018:k in dom h2 by A22,A1012,A1013,Lm2,FINSEQ_3:27;
+                  then A1019:h0.len h0=g2.(h2.k) by A1011,FUNCT_1:23;
+                   h2.k in rng h2 by A1018,FUNCT_1:def 5;
+                  then g2.(h2.k) in rng g2 by A15,A16,BORSUK_1:83,FUNCT_1:def 5
+;
+                  then h0.len h0 in Upper_Arc(P) /\ Lower_Arc(P)
+                   by A13,A52,A1003,A1005,A1009,A1019,XBOOLE_0:def 3;
+then A1020:         h0.len h0 in {W-min(P),E-max(P)} by A1,JORDAN6:def 9;
+A1021:         h0.len h0 <> W-min P
+                     by A22,A29,A31,A65,A1011,A1015,A1016,A1018,FUNCT_1:def 8;
+                h0.len h0 <> E-max P
+                    by A22,A28,A30,A65,A1011,A1017,A1018,FUNCT_1:def 8;
+              hence contradiction by A1020,A1021,TARSKI:def 2;
+            case A1022:i+1>len h1;
+                  then A1023:len h1 +1<=i+1 by NAT_1:38;
+A1024:        i+1 <= len h11 + len mid(h21,2,len h21 -'1) by A950,FINSEQ_1:35;
+                  A1025:h0.(i+1)=(mid(h21,2,len h21 -'1)).((i+1) -len h11)
+                                     by A21,A40,A950,A1023,FINSEQ_1:36;
+                  A1026:(i+1)-len h11=(i+1)-'len h11 by A21,A1022,SCMFSA_7:3;
+                   i+1-len h11
+                   <=len h11 + len mid(h21,2,len h21 -'1)-len h11
+                                         by A1024,REAL_1:49;
+                  then A1027:(i+1)-len h11<= len (mid(h21,2,len h21 -'1))
+                                             by XCMPLX_1:26;
+                   len h1 +1-len h1<=(i+1)-len h1 by A1023,REAL_1:49;
+                  then 1<=(i+1)-len h11 by A21,XCMPLX_1:26;
+                  then A1028:h0.(i+1)=h21.((i+1)-'len h11 +2-'1)
+                             by A43,A44,A1025,A1026,A1027,JORDAN3:27;
+                   0<=(i+1)-'len h11 by NAT_1:18;
+                  then 0+2<=(i+1)-'len h11 +2 by AXIOMS:24;
+                  then A1029:2-'1<=((i+1)-'len h11 +2-'1) by JORDAN3:5;
+                   (i+1)-len h11<=len h1+(len h2-2)-len h11
+                            by A47,A950,REAL_1:49;
+                  then (i+1)-len h11<=(len h2-2) by A21,XCMPLX_1:26;
+                  then (i+1)-'len h11+2<=len h2-2+2 by A1026,AXIOMS:24;
+then              (i+1)-'len h11+2<=len h2 by XCMPLX_1:27;
+then A1030:            (i+1)-'len h11 +2-'1 <= len h21 by A23,JORDAN3:7;
+                  A1031:(i+1)-'len h11+2-'1=(i+1)-'len h11+2-1
+                                 by A1029,Lm2,JORDAN3:1;
+                  set j0=(i+1)-'len h11+2-'1;
+                   len h11+1-len h11<=(i+1)-len h11
+                           by A21,A1023,REAL_1:49;
+                  then 1<=(i+1)-len h11 by XCMPLX_1:26;
+                  then A1032:(i+1)-'len h11=(i+1)-len h11 by JORDAN3:1;
+                 A1033:j0 in dom h2 by A22,A1029,A1030,Lm2,FINSEQ_3:27;
+                   1<=i+1 by A949,NAT_1:38;
+                  then i+1 in dom h0 by A950,FINSEQ_3:27;
+                  then A1034:h0/.(i+1)=h0.(i+1) by FINSEQ_4:def 4;
+A1035: h0.len h0=(mid(h21,2,len h21 -'1)).(len h0 -len h11)
+                     by A21,A40,A48,FINSEQ_1:36;
+                  len h0-len h11<= len (mid(h21,2,len h21 -'1))
+                                             by A40,XCMPLX_1:26;
+                  then A1036:h0.len h0=h21.(len h0-'len h11 +2-'1)
+                             by A43,A44,A54,A55,A1035,JORDAN3:27;
+                   0<=len h0-'len h11 by NAT_1:18;
+                  then 0+2<=len h0-'len h11 +2 by AXIOMS:24;
+                  then A1037:2-'1<=(len h0-'len h11 +2-'1) by JORDAN3:5;
+                   len h0-'len h11+2<=len h2-2+2
+                    by A21,A47,A54,XCMPLX_1:26;
+then              len h0-'len h11+2<=len h2 by XCMPLX_1:27;
+then A1038:            len h0-'len h11 +2-'1 <= len h21 by A23,JORDAN3:7;
+                  A1039:len h0-'len h11+2-'1=len h0-'len h11+2-1
+                      by A1037,Lm2,JORDAN3:1;
+                  set k=len h0-'len h11+2-'1;
+                   len h0-'len h11=len h0-len h11 by A21,A53,JORDAN3:1;
+                  then i+1-'len h11<len h0-'len h11 by A950,A1032,REAL_1:54;
+                  then i+1-'len h11+2<len h0-'len h11+2 by REAL_1:53;
+                  then A1040:            (i+1)-'len h11+2-'1<len h0-'len h11+2
+-'1
+                             by A1031,A1039,REAL_1:54;
+                 k in dom h2 by A22,A1037,A1038,Lm2,FINSEQ_3:27;
+              hence contradiction by A22,A52,A65,A1003,A1028,A1033,A1034,A1036,
+A1040,FUNCT_1:def 8;
+            end;
+           hence contradiction;
+          end;
+   hence Segment(h0/.len h0,h0/.1,P) misses Segment(h0/.i,h0/.(i+1),P)
+                   by A1,A39,A62,A952,A954,A956,A965,Th14;
+  end;

@@ -1,0 +1,2642 @@
+:: Associated Matrix of Linear Map
+::  by Robert Milewski
+::
+:: Received June 30, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_2, PARTFUN1, FINSEQ_4, MATRIX_1, RELAT_1, FUNCT_1, INCSP_1,
+      FINSEQ_1, MATRIX_2, BOOLE, TREES_1, ARYTM_1, FUNCT_2, CARD_1, SUBSET_1,
+      FUNCOP_1, MEASURE6, VECTSP_1, RLVECT_2, RLVECT_3, RLVECT_1, FINSET_1,
+      RLSUB_1, PRE_TOPC, BINOP_1, LATTICES, QC_LANG1, SEQ_1, SQUARE_1, RVSUM_1,
+      RLSUB_2, CAT_3, MATRLIN;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1,
+      MOD_2, STRUCT_0, FINSEQ_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3,
+      MATRIX_1, MATRIX_2, MATRIX_3, FVSUM_1, RLVECT_1, VECTSP_1, VECTSP_4,
+      VECTSP_6, VECTSP_7, FINSET_1, FINSEQ_4, FUNCOP_1, FINSEQ_3, CARD_1,
+      FINSEQ_2, FINSEQOP, BINOP_1, SQUARE_1, PRE_TOPC;
+ constructors REAL_1, NAT_1, MOD_2, FUNCT_3, MATRIX_3, FVSUM_1, VECTSP_6,
+      VECTSP_7, FINSEQ_3, BINOP_1, SQUARE_1, TOPS_2, FINSEQ_4, MEMBERED,
+      PARTFUN1;
+ clusters FINSET_1, MATRIX_1, FUNCT_1, VECTSP_1, FINSEQ_3, RELSET_1, STRUCT_0,
+      FINSEQ_1, FUNCOP_1, XREAL_0, FUNCT_2, NAT_1, MEMBERED, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ theorems TARSKI, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, VECTSP_1, VECTSP_3,
+      VECTSP_4, VECTSP_6, VECTSP_7, RLVECT_1, FUNCT_1, FUNCT_2, FUNCT_3,
+      MATRIX_1, MATRIX_2, MATRIX_3, MOD_2, ZFMISC_1, NAT_1, FVSUM_1, SUBSET_1,
+      CARD_2, FINSEQOP, FUNCOP_1, GOBOARD1, REAL_1, RELAT_1, GROUP_5, RELSET_1,
+      PARTFUN2, XBOOLE_0, XBOOLE_1, RLVECT_2, XCMPLX_1;
+ schemes FINSEQ_1, FINSEQ_2, FUNCT_2, MATRIX_1, GOBOARD2, NAT_1, ZFREFLE1;
+
+begin :: PRELIMINARIES
+
+definition
+  let A be set;
+  let X be set, D be FinSequence-DOMAIN of A, p be PartFunc of X,D, i be set;
+ redefine func p/.i -> Element of D;
+ coherence;
+end;
+
+  reserve k,t,i,j,m,n for Nat;
+  reserve x,y,y1,y2 for set;
+  reserve D for non empty set;
+
+canceled;
+
+  theorem Th2:
+    for p be FinSequence holds rng Del(p,i) c= rng p
+    proof
+      let p be FinSequence;
+        now let x; assume x in rng Del(p,i);
+       then x in rng (p * Sgm((dom p) \ {i})) by MATRIX_2:def 5;
+       hence x in rng p by FUNCT_1:25;
+      end;
+      hence thesis by TARSKI:def 3;
+    end;
+
+  definition
+    let D be non empty set;
+    let k; let M be Matrix of D;
+    redefine func Del(M,k) -> Matrix of D;
+    coherence
+    proof
+        ex n st for x st x in rng Del(M,k) ex p be FinSequence of D
+                                                         st x = p & len p = n
+      proof
+        consider n such that A1: for x st x in rng M ex p be FinSequence of D
+                                          st x = p & len p = n by MATRIX_1:9;
+        take n;
+        let x such that A2: x in rng Del(M,k);
+          Del(M,k) is FinSequence of D* by MATRIX_2:9;
+        then rng Del(M,k) c= D* by FINSEQ_1:def 4;
+        then reconsider p = x as FinSequence of D by A2,FINSEQ_1:def 11;
+        take p;
+          rng Del(M,k) c= rng M by Th2;
+        then consider p1 be FinSequence of D such that A3:
+                                x = p1 & len p1 = n by A1,A2;
+        thus x = p & len p = n by A3;
+      end;
+      hence thesis by MATRIX_1:9;
+    end;
+  end;
+
+  theorem Th3:
+    for M be FinSequence st len M = n+1 holds
+     len Del(M,n+1) = n
+    proof
+      let M be FinSequence such that A1: len M = n+1;
+      reconsider M1 = M as FinSequence;
+        n+1 in Seg len M1 by A1,FINSEQ_1:6;
+      then n+1 in dom M1 by FINSEQ_1:def 3;
+      hence thesis by A1,GOBOARD1:6;
+    end;
+
+  theorem Th4:
+    for M be Matrix of n+1,m,D
+    for M1 be Matrix of D holds
+     ( n > 0 implies width M = width Del(M,n+1) ) &
+     ( M1 = <*M.(n+1)*> implies width M = width M1 )
+    proof
+      let M be Matrix of n+1,m,D;
+      let M1 be Matrix of D;
+      A1: n + 1 > 0 by NAT_1:19;
+      A2: len M = n + 1 by MATRIX_1:def 3;
+        now assume A3: n > 0;
+         len Del(M,n+1) = n by A2,Th3;
+       then consider s be FinSequence such that A4:
+         s in rng Del(M,n+1) & len s = width Del(M,n+1) by A3,MATRIX_1:def 4;
+       consider s1 be FinSequence such that A5: s1 in rng M & len s1 = width M
+                                                    by A1,A2,MATRIX_1:def 4;
+       consider n1 be Nat such that A6: for x st x in rng M
+                ex p be FinSequence of D st x = p & len p = n1 by MATRIX_1:9;
+         rng Del(M,n+1) c= rng M by Th2;
+       then consider p1 be FinSequence of D such that A7: s = p1 & len p1 = n1
+                                                    by A4,A6;
+       consider p2 be FinSequence of D such that A8: s1 = p2 & len p2 = n1
+                                                                    by A5,A6;
+       thus width M = width Del(M,n+1) by A4,A5,A7,A8;
+      end;
+      hence n > 0 implies width M = width Del(M,n+1);
+      assume A9: M1 = <*M.(n+1)*>;
+        n + 1 in Seg len M by A2,FINSEQ_1:6;
+      then n + 1 in dom M by FINSEQ_1:def 3;
+      then M.(n+1) = Line(M,n+1) by MATRIX_2:18;
+      then reconsider M2 = M1 as Matrix of 1,len(Line(M,n+1)),D
+                                                           by A9,MATRIX_1:11;
+      thus width M = len(Line(M,n+1)) by MATRIX_1:def 8
+                  .= width M2 by MATRIX_1:24
+                  .= width M1;
+    end;
+
+  theorem Th5:
+    for M be Matrix of n+1,m,D holds
+     Del(M,n+1) is Matrix of n,m,D
+    proof
+      let M be Matrix of n+1,m,D;
+      A1: len M = n + 1 by MATRIX_1:def 3;
+      then A2: len Del(M,n+1) = n by Th3;
+      per cases by NAT_1:19;
+       suppose A3: n = 0;
+       then Del(M,n+1) = {} by A2,FINSEQ_1:25;
+       hence thesis by A3,MATRIX_1:13;
+       suppose A4: n > 0;
+         len M > 0 by A1,NAT_1:19;
+       then width M = m by A1,MATRIX_1:20;
+       then width Del(M,n+1) = m by A4,Th4;
+       hence thesis by A2,A4,MATRIX_1:20;
+    end;
+
+  theorem Th6:
+    for M being FinSequence st len M = n + 1 holds
+     M = Del(M,len M) ^ <*M.(len M)*>
+    proof
+      let M be FinSequence; assume A1: len M = n + 1;
+      then M <> {} by FINSEQ_1:25;
+      then consider q be FinSequence,x such that A2:
+                                      M = q ^ <*x*> by FINSEQ_1:63;
+      A3: len M = len q + len <*x*> by A2,FINSEQ_1:35
+              .= len q + 1 by FINSEQ_1:56;
+      then A4: M.(len M) = x by A2,FINSEQ_1:59;
+        len q = len q + (1 - 1)
+               .= len M - 1 by A3,XCMPLX_1:29
+               .= n + (1 - 1) by A1,XCMPLX_1:29
+               .= n;
+      then A5: len Del(M,len M) = len q by A1,Th3;
+        now let i; assume A6: i in Seg len q;
+       then A7: i in dom q by FINSEQ_1:def 3;
+         1<=i & i<=len q by A6,FINSEQ_1:3;
+       then 1<=i & i<len M by A3,NAT_1:38;
+       hence Del(M,len M).i = M.i by A1,GOBOARD1:8
+                .= q.i by A2,A7,FINSEQ_1:def 7;
+      end;
+      hence thesis by A2,A4,A5,FINSEQ_2:10;
+    end;
+
+  definition
+    let D; let P be FinSequence of D;
+    redefine func <*P*> -> Matrix of 1,len P,D;
+    coherence by MATRIX_1:11;
+  end;
+
+  begin :: MORE ON FINITE SEQUENCE
+
+  theorem Th7:
+    for A being set, F being FinSequence
+     holds Sgm(F"A)^Sgm(F"(rng F \ A)) is Permutation of dom F
+    proof
+      let A be set;
+      let F be FinSequence;
+A1:   dom F = Seg len F by FINSEQ_1:def 3;
+      set p = Sgm(F"A)^Sgm(F"(rng F \ A));
+      A2: F"A c= dom F by RELAT_1:167;
+      then A3: F"A c= Seg len F by FINSEQ_1:def 3;
+      A4: F"(rng F \ A) c= dom F by RELAT_1:167;
+      then A5: F"(rng F \ A) c= Seg len F by FINSEQ_1:def 3;
+      A6: Sgm(F"A) is one-to-one by A3,FINSEQ_3:99;
+      A7: Sgm(F"(rng F \ A)) is one-to-one by A5,FINSEQ_3:99;
+        A misses (rng F \ A) by XBOOLE_1:79;
+then A8:    A /\ (rng F \ A) = {} by XBOOLE_0:def 7;
+A9:    F"A /\ F"(rng F \ A) = F"(A /\ (rng F \ A)) by FUNCT_1:137
+                             .= {} by A8,RELAT_1:171;
+then A10:   F"A misses F"(rng F \ A) by XBOOLE_0:def 7;
+        rng Sgm(F"A) /\ rng Sgm(F"(rng F \ A)) = F"A /\ rng Sgm(F"(rng F \ A))
+                                                      by A3,FINSEQ_1:def 13
+                                           .= {} by A5,A9,FINSEQ_1:def 13;
+      then rng Sgm(F"A) misses rng Sgm(F"(rng F \ A)) by XBOOLE_0:def 7;
+      then A11: p is one-to-one by A6,A7,FINSEQ_3:98;
+      A12: rng p = rng Sgm(F"A) \/ rng Sgm(F"(rng F \ A)) by FINSEQ_1:44
+               .= F"A \/ rng Sgm(F"(rng F \ A)) by A3,FINSEQ_1:def 13
+               .= F"A \/ F"(rng F \ A) by A5,FINSEQ_1:def 13
+               .= F"(A \/ (rng F \ A)) by RELAT_1:175
+               .= F"((rng F) \/ A) by XBOOLE_1:39
+               .= F"(rng F) \/ F"A by RELAT_1:175
+               .= (dom F) \/ F"A by RELAT_1:169
+               .= dom F by A2,XBOOLE_1:12;
+      A13: F"A \/ F"(rng F \ A) c= dom F by A2,A4,XBOOLE_1:8;
+        dom p = Seg len p by FINSEQ_1:def 3
+           .= Seg (len Sgm(F"A) + len Sgm(F"(rng F \ A))) by FINSEQ_1:35
+           .= Seg (card (F"A) + len Sgm(F"(rng F \ A))) by A3,FINSEQ_3:44
+           .= Seg (card (F"A) + card (F"(rng F \ A))) by A5,FINSEQ_3:44
+           .= Seg card (F"A \/ F"(rng F \ A)) by A10,CARD_2:53
+           .= Seg len Sgm (F"A \/ F"(rng F \ A)) by A1,A13,FINSEQ_3:44
+           .= Seg len Sgm (F"(A \/ (rng F \ A))) by RELAT_1:175
+           .= Seg len Sgm (F"((rng F) \/ A)) by XBOOLE_1:39
+           .= Seg len Sgm (F"(rng F) \/ F"A) by RELAT_1:175
+           .= Seg len Sgm (dom F \/ F"A) by RELAT_1:169
+           .= Seg len Sgm dom F by A2,XBOOLE_1:12
+           .= Seg card Seg len F by A1,FINSEQ_3:44
+           .= Seg len F by FINSEQ_1:78
+           .= dom F by FINSEQ_1:def 3;
+      hence thesis by A11,A12,FUNCT_2:3,83;
+    end;
+
+  theorem Th8:
+    for F being FinSequence, A be Subset of rng F st F is one-to-one
+     ex p being Permutation of dom F st
+      (F-A`)^(F-A) = F*p
+    proof
+      let F be FinSequence;
+      let A be Subset of rng F such that A1: F is one-to-one;
+      set F1 = F-A`, F2 = F-A;
+        (rng F) \ (rng F1) = (rng F) \ (rng F \ A`) by FINSEQ_3:72
+                            .= rng F \ (rng F \ (rng F \ A)) by SUBSET_1:def 5
+                            .= rng F \ (rng F /\ A) by XBOOLE_1:48
+                            .= rng F \ A by XBOOLE_1:47
+                            .= rng F2 by FINSEQ_3:72;
+      then reconsider p = Sgm(F"(rng F1))^Sgm(F"(rng F2))
+        as Permutation of dom F by Th7;
+      take p;
+      A2: F1 is one-to-one & F2 is one-to-one by A1,FINSEQ_3:94;
+A3:    A misses (rng F \ A) by XBOOLE_1:79;
+      A4: rng(F-A`) = rng F \ A` by FINSEQ_3:72;
+      then rng F1 /\ rng F2 = (rng F \ A`) /\ (rng F \ A) by FINSEQ_3:72
+                     .= (rng F \ (rng F \ A)) /\ (rng F \ A) by SUBSET_1:def 5
+                     .= (rng F /\ A) /\ (rng F \ A) by XBOOLE_1:48
+                     .= A /\ (rng F \ A) by XBOOLE_1:28
+                     .= {} by A3,XBOOLE_0:def 7;
+      then A5: rng F1 misses rng F2 by XBOOLE_0:def 7;
+      A6: rng (F1^F2) = rng F1 \/ rng F2 by FINSEQ_1:44
+                     .= (rng F \ A`) \/ (rng F \ A) by A4,FINSEQ_3:72
+                     .= (rng F \ (rng F \ A)) \/ (rng F \ A) by SUBSET_1:def 5
+                     .= (rng F /\ A) \/ (rng F \ A) by XBOOLE_1:48
+                     .= A \/ (rng F \ A) by XBOOLE_1:28
+                     .= A \/ rng F by XBOOLE_1:39
+                     .= rng F by XBOOLE_1:12;
+      A7: F1^F2 is one-to-one by A2,A5,FINSEQ_3:98;
+      reconsider F3 = F * p as FinSequence by FINSEQ_2:44;
+      A8: len F3 = len F by FINSEQ_2:48
+              .= len (F1^F2) by A1,A6,A7,RLVECT_1:106
+              .= len F1 + len F2 by FINSEQ_1:35;
+      A9: now let k such that A10: k in dom F1;
+       A11: F"A` = F"(rng F \ A) by SUBSET_1:def 5
+               .= F"(rng F) \ F"A by FUNCT_1:138
+               .= dom F \ F"A by RELAT_1:169;
+       A12: F"(rng F) = dom F by RELAT_1:169;
+       then F"A` c= F"(rng F) by A11,XBOOLE_1:36;
+       then A13: card(F"(rng F) \ F"A`) = card (F"(rng F)) - card (F"A`)
+                                                              by CARD_2:63
+                                  .= card Seg len F - card (F"A`)
+                                                       by A12,FINSEQ_1:def 3
+                                  .= len F - card (F"A`) by FINSEQ_1:78
+                                  .= len (F - A`) by FINSEQ_3:66;
+         F"(rng F1) c= dom F by RELAT_1:167;
+       then A14: F"(rng F1) c= Seg len F by FINSEQ_1:def 3;
+       A15: dom Sgm(F"(rng F1)) = Seg len Sgm(F"(rng F1)) by FINSEQ_1:def 3
+                           .= Seg card(F"(rng F1)) by A14,FINSEQ_3:44
+                           .= Seg card(F"(rng F \ A`)) by FINSEQ_3:72
+                           .= Seg len (F - A`) by A13,FUNCT_1:138
+                           .= dom F1 by FINSEQ_1:def 3;
+         dom Sgm(F"(rng F1)) c= dom p by FINSEQ_1:39;
+       hence (F*p).k = F.(p.k) by A10,A15,FUNCT_1:23
+                   .= F.(Sgm(F"(rng F1)).k) by A10,A15,FINSEQ_1:def 7
+                   .= (F*Sgm(F"(rng F1))).k by A10,A15,FUNCT_1:23
+                   .= (F*Sgm(F"(rng F \ A`))).k by FINSEQ_3:72
+                   .= (F*Sgm(F"(rng F \ (rng F \ A)))).k by SUBSET_1:def 5
+                   .= (F*Sgm(F"(rng F /\ A))).k by XBOOLE_1:48
+                   .= (F*Sgm(F"(rng F) /\ F"A)).k by FUNCT_1:137
+                   .= (F*Sgm(dom F /\ F"A)).k by RELAT_1:169
+                   .= (F*Sgm((dom F) \ (F"A`))).k by A11,XBOOLE_1:48
+                   .= F1.k by FINSEQ_3:def 1;
+      end;
+        now let k such that A16: k in dom F2;
+       A17: F"(rng F) = dom F by RELAT_1:169;
+         F"A c= dom F by RELAT_1:167;
+       then F"A c= F"(rng F) by RELAT_1:169;
+       then A18: card(F"(rng F) \ F"A) = card (F"(rng F)) - card (F"A)
+                                                             by CARD_2:63
+                                  .= card Seg len F - card (F"A)
+                                                       by A17,FINSEQ_1:def 3
+                                  .= len F - card (F"A) by FINSEQ_1:78
+                                  .= len (F - A) by FINSEQ_3:66;
+       A19: F"(rng F2) c= dom F by RELAT_1:167;
+A20:   dom F = Seg len F by FINSEQ_1:def 3;
+       A21: dom Sgm(F"(rng F2)) = Seg len Sgm(F"(rng F2)) by FINSEQ_1:def 3
+                           .= Seg card(F"(rng F2)) by A19,A20,FINSEQ_3:44
+                           .= Seg card(F"(rng F \ A)) by FINSEQ_3:72
+                           .= Seg len (F - A) by A18,FUNCT_1:138
+                           .= dom F2 by FINSEQ_1:def 3;
+       A22: F"A` = F"(rng F \ A) by SUBSET_1:def 5
+               .= F"(rng F) \ F"A by FUNCT_1:138
+               .= dom F \ F"A by RELAT_1:169;
+       A23: F"(rng F) = dom F by RELAT_1:169;
+       then F"A` c= F"(rng F) by A22,XBOOLE_1:36;
+       then A24: card(F"(rng F) \ F"A`) = card (F"(rng F)) - card (F"A`)
+                                                              by CARD_2:63
+                                  .= card Seg len F - card (F"A`)
+                                                        by A23,FINSEQ_1:def 3
+                                  .= len F - card (F"A`) by FINSEQ_1:78
+                                  .= len (F - A`) by FINSEQ_3:66;
+         F"(rng F1) c= dom F by RELAT_1:167;
+       then F"(rng F1) c= Seg len F by FINSEQ_1:def 3;
+       then A25: len Sgm(F"(rng F1)) = card(F"(rng F1)) by FINSEQ_3:44
+                             .= card(F"(rng F \ A`)) by FINSEQ_3:72
+                             .= len (F - A`) by A24,FUNCT_1:138;
+       then len F1 + k in dom p by A16,A21,FINSEQ_1:41;
+       hence (F*p).(len F1 + k) = F.(p.(len F1 + k)) by FUNCT_1:23
+                         .= F.(Sgm(F"(rng F2)).k) by A16,A21,A25,FINSEQ_1:def 7
+                         .= (F*Sgm(F"(rng F2))).k by A16,A21,FUNCT_1:23
+                         .= (F*Sgm(F"(rng F \ A))).k by FINSEQ_3:72
+                         .= (F*Sgm(F"(rng F) \ F"A)).k by FUNCT_1:138
+                         .= (F*Sgm((dom F) \ F"A)).k by RELAT_1:169
+                         .= F2.k by FINSEQ_3:def 1;
+      end;
+      hence thesis by A8,A9,FINSEQ_3:43;
+    end;
+
+  definition let IT be Function;
+    attr IT is FinSequence-yielding means
+      :Def1: for x st x in dom IT holds IT.x is FinSequence;
+  end;
+
+  definition
+    cluster FinSequence-yielding Function;
+    existence
+    proof
+      consider f being FinSequence,I be set;
+      A1: dom (I --> f) = I by FUNCOP_1:19;
+      take F = I --> f;
+      let x;
+      assume x in dom F;
+      hence thesis by A1,FUNCOP_1:13;
+    end;
+  end;
+
+  definition
+    let F,G be FinSequence-yielding Function;
+    func F^^G -> FinSequence-yielding Function means
+     :Def2: dom it = dom F /\ dom G &
+     for i being set st i in dom it
+     for f,g being FinSequence st f = F.i & g = G.i
+       holds it.i = f^g;
+    existence
+    proof
+      defpred P[set,set] means
+       for f be FinSequence, g be FinSequence st f = F.$1 &
+       g = G.$1 holds $2 = f^g;
+      A1: for i be set st i in dom F /\ dom G ex u be set st P[i,u]
+      proof
+        let i be set;
+        assume i in dom F /\ dom G;
+        then A2: i in dom F & i in dom G by XBOOLE_0:def 3;
+        then reconsider f = F.i as FinSequence by Def1;
+        reconsider g = G.i as FinSequence by A2,Def1;
+        take f^g;
+        thus thesis;
+      end;
+      consider H being Function such that
+       A3: dom H = dom F /\ dom G & for i be set st i in dom F /\ dom G holds
+        P[i,H.i] from NonUniqFuncEx(A1);
+        for x be set st x in dom H holds H.x is FinSequence
+      proof
+        let x be set;
+        assume A4: x in dom H;
+        then A5: x in dom F & x in dom G by A3,XBOOLE_0:def 3;
+        then reconsider f = F.x as FinSequence by Def1;
+        reconsider g = G.x as FinSequence by A5,Def1;
+          H.x = f^g by A3,A4;
+        hence thesis;
+      end;
+      then reconsider H as FinSequence-yielding Function by Def1;
+      take H;
+      thus thesis by A3;
+    end;
+    uniqueness
+    proof
+      let F1,F2 be FinSequence-yielding Function such that
+      A6: dom F1 = dom F /\ dom G and
+      A7: for i be set st i in dom F1
+          for f,g being FinSequence st f = F.i & g = G.i holds F1.i = f^g and
+      A8: dom F2 = dom F /\ dom G and
+      A9: for i be set st i in dom F2
+          for f,g being FinSequence st f = F.i & g = G.i holds F2.i = f^g;
+        now let x; assume A10: x in dom F1;
+       then x in dom F & x in dom G by A6,XBOOLE_0:def 3;
+       then reconsider f = F.x , g = G.x as FinSequence by Def1;
+       thus F1.x = f^g by A7,A10
+                .= F2.x by A6,A8,A9,A10;
+      end;
+      hence F1 = F2 by A6,A8,FUNCT_1:9;
+    end;
+  end;
+
+  begin :: CIAGI I MACIERZE DOTYCZACE PRZESTRZENI LINIOWYCH
+
+  reserve K for Field;
+  reserve V for VectSp of K;
+  reserve a for Element of K;
+  reserve W for Element of V;
+  reserve KL1,KL2,KL3 for Linear_Combination of V;
+  reserve X for Subset of V;
+
+  theorem Th9:
+    X is linearly-independent &
+    Carrier(KL1) c= X & Carrier(KL2) c= X &
+    Sum(KL1) = Sum(KL2) implies KL1 = KL2
+    proof
+      assume A1: X is linearly-independent;
+      assume A2: Carrier(KL1) c= X;
+      assume A3: Carrier(KL2) c= X;
+      assume A4: Sum(KL1) = Sum(KL2);
+      A5: Carrier(KL1) \/ Carrier(KL2) c= X by A2,A3,XBOOLE_1:8;
+         Carrier(KL1 - KL2) c= Carrier(KL1) \/ Carrier(KL2) by VECTSP_6:74;
+      then Carrier(KL1 - KL2) c= X by A5,XBOOLE_1:1;
+      then A6: Carrier(KL1 - KL2) is linearly-independent by A1,VECTSP_7:2;
+      A7: KL1 - KL2 is Linear_Combination of Carrier(KL1 - KL2)
+                                                 by VECTSP_6:28;
+        Sum(KL1) - Sum(KL2) = 0.V by A4,VECTSP_1:66;
+      then A8: Sum(KL1 - KL2) = 0.V by VECTSP_6:80;
+        now let v be Vector of V;
+          not v in Carrier(KL1 - KL2) by A6,A7,A8,VECTSP_7:def 1;
+        then (KL1 - KL2).v = 0.K by VECTSP_6:20;
+        then KL1.v - KL2.v = 0.K by VECTSP_6:73;
+        hence KL1.v = KL2.v by RLVECT_1:35;
+      end;
+      hence thesis by VECTSP_6:def 10;
+    end;
+
+  theorem Th10:
+    X is linearly-independent &
+    Carrier(KL1) c= X & Carrier(KL2) c= X & Carrier(KL3) c= X &
+    Sum(KL1) = Sum(KL2) + Sum(KL3) implies KL1 = KL2 + KL3
+    proof
+      assume A1: X is linearly-independent;
+      assume A2: Carrier(KL1) c= X;
+      assume A3: Carrier(KL2) c= X;
+      assume A4: Carrier(KL3) c= X;
+      assume A5: Sum(KL1) = Sum(KL2) + Sum(KL3);
+      A6: Carrier(KL2 + KL3) c= Carrier(KL2) \/ Carrier(KL3) by VECTSP_6:51;
+        Carrier(KL2) \/ Carrier(KL3) c= X by A3,A4,XBOOLE_1:8;
+      then A7: Carrier(KL2 + KL3) c= X by A6,XBOOLE_1:1;
+        Sum(KL1) = Sum(KL2 + KL3) by A5,VECTSP_6:77;
+      hence thesis by A1,A2,A7,Th9;
+    end;
+
+  theorem Th11:
+    X is linearly-independent &
+    Carrier(KL1) c= X & Carrier(KL2) c= X & a <> 0.K &
+    Sum(KL1) = a * Sum(KL2) implies KL1 = a * KL2
+    proof
+      assume A1: X is linearly-independent;
+      assume A2: Carrier(KL1) c= X;
+      assume A3: Carrier(KL2) c= X;
+      assume A4: a <> 0.K;
+      assume A5: Sum(KL1) = a * Sum(KL2);
+      A6: Carrier(a * KL2) c= X by A3,A4,VECTSP_6:59;
+        Sum(KL1) = Sum(a * KL2) by A5,VECTSP_6:78;
+      hence thesis by A1,A2,A6,Th9;
+    end;
+
+  theorem Th12:
+    for b2 be Basis of V ex KL be Linear_Combination of V st
+    W = Sum(KL) & Carrier KL c= b2
+    proof
+      let b2 be Basis of V;
+        W in the VectSpStr of V by RLVECT_1:3;
+      then W in Lin(b2) by VECTSP_7:def 3;
+      then consider KL1 being Linear_Combination of b2 such that
+       A1: W = Sum(KL1) by VECTSP_7:12;
+      take KL = KL1;
+      thus W = Sum(KL) by A1;
+      thus thesis by VECTSP_6:def 7;
+    end;
+
+  definition
+    let K be Field;
+    let V be VectSp of K;
+    attr V is finite-dimensional means
+     :Def3: ex A being finite Subset of V st A is Basis of V;
+  end;
+
+  definition
+    let K be Field;
+    cluster strict finite-dimensional VectSp of K;
+    existence
+    proof
+      consider V being VectSp of K;
+      take (0).V;
+      thus (0).V is strict;
+      take A = {}(the carrier of (0).V);
+      A1: A is linearly-independent by VECTSP_7:4;
+        Lin(A) = (0).(0).V by VECTSP_7:14;
+      then Lin(A) = the VectSpStr of (0).V by VECTSP_4:47;
+      hence thesis by A1,VECTSP_7:def 3;
+    end;
+  end;
+
+  definition
+    let K be Field;
+    let V be finite-dimensional VectSp of K;
+    mode OrdBasis of V -> FinSequence of the carrier of V means
+     :Def4: it is one-to-one & rng it is Basis of V;
+    existence
+    proof
+      consider A being finite Subset of V such that
+       A1: A is Basis of V by Def3;
+      consider p be FinSequence such that
+       A2: rng p = A and
+       A3: p is one-to-one by FINSEQ_4:73;
+      reconsider p as FinSequence of the carrier of V by A2,FINSEQ_1:def 4;
+      take f = p;
+      thus f is one-to-one by A3;
+      thus thesis by A1,A2;
+    end;
+  end;
+
+  reserve s,p for FinSequence;
+  reserve V1,V2,V3 for finite-dimensional VectSp of K;
+  reserve f,f1,f2 for map of V1,V2;
+  reserve g for map of V2,V3;
+  reserve b1 for OrdBasis of V1;
+  reserve b2 for OrdBasis of V2;
+  reserve b3 for OrdBasis of V3;
+  reserve v1,v2 for Vector of V2;
+  reserve v,w for Element of V1;
+  reserve p2,F for FinSequence of the carrier of V1;
+  reserve p1,d for FinSequence of the carrier of K;
+  reserve KL for Linear_Combination of V1;
+
+Lm1:
+len p = len s & (for j st j in dom p holds p.j = s.j) implies p = s
+proof
+    dom p = Seg len p by FINSEQ_1:def 3;
+  hence thesis by FINSEQ_2:10;
+end;
+
+  definition
+    let K be add-associative right_zeroed right_complementable
+      Abelian associative left_unital distributive (non empty doubleLoopStr);
+    let V1,V2 be VectSp of K;
+    let f1,f2 be map of V1, V2;
+    func f1+f2 -> map of V1,V2 means
+     :Def5: for v be Element of V1 holds it.v = f1.v + f2.v;
+    existence
+    proof
+      deffunc F(Element of V1) = f1.$1 + f2.$1;
+      consider F be Function of the carrier of V1, the carrier of V2 such that
+        A1: for v be Element of V1 holds F.v = F(v)
+                                               from LambdaD;
+      reconsider F as map of V1,V2;
+     take F;
+     thus thesis by A1;
+    end;
+    uniqueness
+    proof
+      let F,G be map of V1,V2 such that
+       A2: for v be Element of V1 holds F.v = f1.v + f2.v and
+       A3: for v be Element of V1 holds G.v = f1.v + f2.v;
+        now let v be Element of V1;
+       thus F.v = f1.v + f2.v by A2
+               .= G.v by A3;
+      end;
+      hence F = G by FUNCT_2:113;
+    end;
+  end;
+
+  definition
+    let K; let V1,V2; let f;
+    let a be Element of K;
+    func a*f -> map of V1,V2 means
+     :Def6: for v be Element of V1 holds it.v = a * (f.v);
+    existence
+    proof
+      deffunc F(Element of V1) = a * (f.$1);
+      consider F be Function of the carrier of V1, the carrier of V2 such that
+        A1: for v be Element of V1 holds F.v = F(v)
+                                                from LambdaD;
+      reconsider F as map of V1,V2;
+     take F;
+     thus thesis by A1;
+    end;
+    uniqueness
+    proof
+      let F,G be map of V1,V2 such that
+       A2: for v be Element of V1 holds F.v = a * (f.v) and
+       A3: for v be Element of V1 holds G.v = a * (f.v);
+        now let v be Element of V1;
+       thus F.v = a * (f.v) by A2
+               .= G.v by A3;
+      end;
+      hence F = G by FUNCT_2:113;
+    end;
+  end;
+
+  theorem Th13:
+    for a being Element of V1
+    for F being FinSequence of the carrier of V1
+    for G being FinSequence of the carrier of K
+      st len F = len G &
+      for k for v being Element of K
+       st k in dom F & v = G.k holds F.k = v * a
+         holds Sum(F) = Sum(G) * a
+   proof
+      let a be Element of V1;
+      let F be FinSequence of the carrier of V1;
+      let G be FinSequence of the carrier of K;
+       defpred P[Nat] means for H being FinSequence of the carrier of V1,
+                I being FinSequence of the carrier of K
+        st len H = len I & len H = $1 &
+        (for k for v be Element of K
+           st k in dom H & v = I.k holds H.k = v * a ) holds
+             Sum(H) = Sum(I) * a;
+      A1: P[0]
+       proof let H be FinSequence of the carrier of V1,
+                  I be FinSequence of the carrier of K;
+       assume that A2: len H = len I & len H = 0 and
+                        for k for v being Element of K
+                       st k in dom H & v = I.k holds H.k = v * a;
+         H = <*>(the carrier of V1) &
+       I = <*>(the carrier of K) by A2,FINSEQ_1:32;
+       then Sum(H) = 0.V1 & Sum(I) = 0.K by RLVECT_1:60;
+       hence Sum(H) = Sum(I) * a by VECTSP_1:59;
+      end;
+      A3:
+       for n st P[n] holds P[n+1]
+       proof let n;
+       assume A4: for H being FinSequence of the carrier of V1,
+                     I being FinSequence of the carrier of K
+         st len H = len I & len H = n &
+         (for k for v being Element of K
+           st k in dom H & v = I.k holds H.k = v * a) holds
+                    Sum(H) = Sum(I) * a;
+       let H be FinSequence of the carrier of V1,
+           I be FinSequence of the carrier of K;
+       assume that A5: len H = len I and A6: len H = n + 1 and
+                   A7: for k for v being Element of K
+                    st k in dom H & v = I.k holds H.k = v * a;
+       reconsider p = H | (Seg n) as FinSequence of the carrier of V1
+                                                           by FINSEQ_1:23;
+       reconsider q = I | (Seg n) as FinSequence of the carrier of K
+                                                           by FINSEQ_1:23;
+       A8: n <= n + 1 by NAT_1:37;
+       then A9: len p = n & len q = n by A5,A6,FINSEQ_1:21;
+A10:    dom p = Seg n & dom q = Seg n by A5,A6,A8,FINSEQ_1:21;
+A11:     now let k; let v be Element of K;
+        assume that A12: k in dom p and A13: v = q.k;
+          len p <= len H by A6,A8,FINSEQ_1:21;
+        then A14: dom p c= dom H by FINSEQ_3:32;
+          I.k = q.k by A10,A12,FUNCT_1:70;
+        then H.k = v * a by A7,A12,A13,A14;
+        hence p.k = v * a by A12,FUNCT_1:70;
+       end;
+         n + 1 in Seg(n + 1) by FINSEQ_1:6;
+then A15:    n + 1 in dom H by A6,FINSEQ_1:def 3;
+       then reconsider v1 = H.(n + 1) as Element of V1
+                                                        by FINSEQ_2:13;
+         dom H = dom I by A5,FINSEQ_3:31;
+       then reconsider v2 = I.(n + 1) as Element of K
+                                               by A15,FINSEQ_2:13;
+       A16: v1 = v2 * a by A7,A15;
+       thus Sum(H) = Sum(p) + v1 by A6,A9,A10,RLVECT_1:55
+                .= Sum(q) * a + v2 * a by A4,A9,A11,A16
+                .= (Sum(q) + v2) * a by VECTSP_1:def 26
+                .= Sum(I) * a by A5,A6,A9,A10,RLVECT_1:55;
+      end;
+      for n holds P[n] from Ind(A1,A3);
+      hence thesis;
+    end;
+
+  theorem Th14:
+    for a be Element of V1
+    for F being FinSequence of the carrier of K
+    for G being FinSequence of the carrier of V1
+     st len F = len G & for k st k in dom F holds G.k = (F/.k) * a
+      holds Sum(G) = Sum(F) * a
+    proof
+      let a be Element of V1;
+      let F be FinSequence of the carrier of K;
+      let G be FinSequence of the carrier of V1;
+      assume that A1: len F = len G and
+                  A2: for k st k in dom F holds G.k = (F/.k) * a;
+        now let k; let v be Element of K;
+       assume that A3: k in dom G and A4: v = F.k;
+A5:    k in dom F by A1,A3,FINSEQ_3:31;
+       then v = F/.k by A4,FINSEQ_4:def 4;
+       hence G.k = v * a by A2,A5;
+      end;
+      hence thesis by A1,Th13;
+    end;
+
+  theorem Th15:
+   for V1 being add-associative right_zeroed right_complementable
+        (non empty LoopStr)
+   for F being FinSequence of the carrier of V1 st
+     for k st k in dom F holds F/.k = 0.V1 holds Sum(F) = 0.V1
+    proof let V1 be add-associative right_zeroed right_complementable
+         (non empty LoopStr);
+      let F be FinSequence of the carrier of V1;
+      assume A1: for k st k in dom F holds F/.k = 0.V1;
+      defpred P[FinSequence of the carrier of V1] means
+      (( for k st k in dom $1 holds $1/.k = 0.V1 ) implies Sum($1) = 0.V1 );
+      A2: P[<*>the carrier of V1] by RLVECT_1:60;
+      A3: for p being FinSequence of the carrier of V1,
+              x being Element of V1 holds
+          P[p] implies P[p^<*x*>]
+      proof
+        let p be FinSequence of the carrier of V1;
+        let x be Element of V1;
+        assume A4: ( for k st k in dom p holds p/.k = 0.V1 )
+                                                       implies Sum(p) = 0.V1;
+        assume A5: for k st k in dom(p^<*x*>) holds (p^<*x*>)/.k = 0.V1;
+        A6: for k st k in dom p holds p/.k = 0.V1
+        proof
+          let k such that A7: k in dom p;
+          A8: dom p c= dom(p^<*x*>) by FINSEQ_1:39;
+          thus p/.k = p.k by A7,FINSEQ_4:def 4
+                      .= (p^<*x*>).k by A7,FINSEQ_1:def 7
+                      .= (p^<*x*>)/.k by A7,A8,FINSEQ_4:def 4
+                      .= 0.V1 by A5,A7,A8;
+        end;
+        A9: len(p^<*x*>) = len p + len<*x*> by FINSEQ_1:35
+                        .= len p + 1 by FINSEQ_1:56;
+          len p + 1 in Seg (len p + 1) by FINSEQ_1:6;
+        then A10: len p + 1 in dom(p^<*x*>) by A9,FINSEQ_1:def 3;
+        A11: x = (p^<*x*>).(len p + 1) by FINSEQ_1:59;
+        thus Sum(p^<*x*>) = Sum(p) + Sum(<*x*>) by RLVECT_1:58
+                    .= Sum(p) + x by RLVECT_1:61
+                    .= Sum
+(p) + (p^<*x*>)/.(len p + 1) by A10,A11,FINSEQ_4:def 4
+                    .= 0.V1 + 0.V1 by A4,A5,A6,A10
+                    .= 0.V1 by RLVECT_1:def 7;
+      end;
+       for p being FinSequence of the carrier of V1 holds P[p]
+                                                         from IndSeqD(A2,A3);
+      hence Sum(F) = 0.V1 by A1;
+    end;
+
+  definition
+    let K; let V1; let p1,p2;
+    func lmlt(p1,p2) -> FinSequence of the carrier of V1 equals
+      :Def7:  (the lmult of V1).:(p1,p2);
+    coherence;
+  end;
+
+  theorem Th16:
+     dom p1 = dom p2 implies dom lmlt(p1,p2) = dom p1
+    proof
+      assume A1: dom p1 = dom p2;
+      A2: rng p1 c= the carrier of K by FINSEQ_1:def 4;
+      A3: rng p2 c= the carrier of V1 by FINSEQ_1:def 4;
+      A4: rng <:p1,p2:> c= [:rng p1,rng p2:] by FUNCT_3:71;
+      A5: [:rng p1,rng p2:] c= [:the carrier of K,the carrier of V1:]
+                                                       by A2,A3,ZFMISC_1:119;
+        [:the carrier of K,the carrier of V1:] = dom (the lmult of V1)
+                                                                by FUNCT_2:def
+1;
+      then A6: rng <:p1,p2:> c= dom (the lmult of V1) by A4,A5,XBOOLE_1:1;
+      thus dom lmlt(p1,p2) = dom ((the lmult of V1).:(p1,p2)) by Def7
+                     .= dom ((the lmult of V1)*<:p1,p2:>) by FUNCOP_1:def 3
+                     .= dom <:p1,p2:> by A6,RELAT_1:46
+                     .= dom p1 /\ dom p2 by FUNCT_3:def 8
+                     .= dom p1 by A1;
+    end;
+
+  definition
+    let V1 be non empty LoopStr; let M be FinSequence of (the carrier of V1)*;
+    func Sum M -> FinSequence of the carrier of V1 means
+     :Def8: len it = len M & for k st k in dom it holds it/.k = Sum (M/.k);
+    existence
+    proof
+      deffunc F(Nat) = Sum (M/.$1);
+      consider F being FinSequence of the carrier of V1 such that A1:
+       len F = len M &
+       for k st k in Seg len M holds F.k = F(k) from SeqLambdaD;
+      take F;
+      thus len F = len M by A1;
+      hereby let k; assume A2: k in dom F;
+       then A3: k in Seg len M by A1,FINSEQ_1:def 3;
+       thus F/.k = F.k by A2,FINSEQ_4:def 4
+                .= Sum (M/.k) by A1,A3;
+      end;
+    end;
+    uniqueness
+    proof
+      let F1,F2 be FinSequence of the carrier of V1 such that
+        A4: len F1 = len M and
+        A5: for k st k in dom F1 holds F1/.k = Sum (M/.k) and
+        A6: len F2 = len M and
+        A7: for k st k in dom F2 holds F2/.k = Sum (M/.k);
+          now let k; assume A8: k in Seg len F1;
+         then A9: k in dom F1 by FINSEQ_1:def 3;
+         A10: k in dom F2 by A4,A6,A8,FINSEQ_1:def 3;
+         thus F1.k = F1/.k by A9,FINSEQ_4:def 4
+                  .= Sum (M/.k) by A5,A9
+                  .= F2/.k by A7,A10
+                  .= F2.k by A10,FINSEQ_4:def 4;
+        end;
+        hence thesis by A4,A6,FINSEQ_2:10;
+    end;
+  end;
+
+  theorem Th17:
+    for M be Matrix of the carrier of V1 st len M = 0 holds Sum Sum M = 0.V1
+    proof
+      let M be Matrix of the carrier of V1; assume len M = 0;
+      then len (Sum M) = 0 by Def8;
+      then Sum M = <*>(the carrier of V1) by FINSEQ_1:32;
+      hence Sum Sum M = 0.V1 by RLVECT_1:60;
+    end;
+
+  theorem Th18:
+    for M be Matrix of m+1,0,the carrier of V1 holds Sum Sum M = 0.V1
+    proof
+      let M be Matrix of m+1,0,the carrier of V1;
+        m+1 > 0 by NAT_1:19;
+      then A1: width M = 0 by MATRIX_1:24;
+        for k st k in dom (Sum M) holds (Sum M)/.k = 0.V1
+      proof
+        let k such that A2: k in dom (Sum M);
+          len M = len Sum M by Def8;
+then A3:    dom M = dom Sum M by FINSEQ_3:31;
+          len M = m+1 by MATRIX_1:def 3;
+then A4:    len M > 0 by NAT_1:19;
+          M/.k in rng M by A2,A3,PARTFUN2:4;
+        then len (M/.k) = 0 by A1,A4,MATRIX_1:def 4;
+        then A5: M/.k = <*>(the carrier of V1) by FINSEQ_1:32;
+        thus (Sum M)/.k = Sum (M/.k) by A2,Def8
+                       .= 0.V1 by A5,RLVECT_1:60;
+      end;
+      hence thesis by Th15;
+    end;
+
+  theorem Th19:
+    for x be Element of V1 holds
+     <*<*x*>*> = <*<*x*>*>@
+    proof
+      let x be Element of V1;
+      set P = <*<*x*>*>, R = (<*<*x*>*>@);
+      A1: len P = 1 by FINSEQ_1:57;
+      then A2: width P = len <*x*> by MATRIX_1:20
+                      .= 1 by FINSEQ_1:57;
+      then A3: len R = 1 by MATRIX_2:12;
+      A4: width R = 1 by A1,A2,MATRIX_2:12;
+        now let i,j; assume A5: [i,j] in Indices P;
+       then [i,j] in [:dom P,Seg 1:] by A2,MATRIX_1:def 5;
+       then i in dom P & j in Seg 1 by ZFMISC_1:106;
+       then i in Seg 1 & j in Seg 1 by A1,FINSEQ_1:def 3;
+       then i = 1 & j = 1 by FINSEQ_1:4,TARSKI:def 1;
+       hence P*(i,j) = R*(i,j) by A5,MATRIX_1:def 7;
+      end;
+      hence thesis by A1,A2,A3,A4,MATRIX_1:21;
+    end;
+
+  theorem Th20:
+    for p being FinSequence of the carrier of V1 st f is linear holds
+      f.Sum(p) = Sum(f*p)
+    proof
+      let p be FinSequence of the carrier of V1;
+      assume A1: f is linear;
+      defpred P[FinSequence of the carrier of V1] means f.Sum($1) = Sum(f*$1);
+      A2: P[<*>(the carrier of V1)]
+       proof
+        thus f.Sum(<*>(the carrier of V1)) = f.(0.V1) by RLVECT_1:60
+               .= f.(0.K*0.V1) by VECTSP_1:59
+               .= 0.K*f.(0.V1) by A1,MOD_2:def 5
+               .= 0.V2 by VECTSP_1:59
+               .= Sum(<*>(the carrier of V2)) by RLVECT_1:60
+               .= Sum(f*<*>(the carrier of V1)) by FINSEQ_2:38;
+       end;
+      A3: for p being FinSequence of the carrier of V1
+      for w being Element of V1 st P[p] holds P[p^<*w*>]
+      proof
+        let p be FinSequence of the carrier of V1;
+        let w be Element of V1 such that A4: f.Sum(p) = Sum
+(f*p);
+        thus f.Sum(p^<*w*>) = f.(Sum(p) + Sum<*w*>) by RLVECT_1:58
+                         .= Sum(f*p) + f.Sum<*w*> by A1,A4,MOD_2:def 5
+                         .= Sum(f*p) + f.w by RLVECT_1:61
+                         .= Sum(f*p) + Sum<*f.w*> by RLVECT_1:61
+                         .= Sum(f*p^<*f.w*>) by RLVECT_1:58
+                         .= Sum(f*(p^<*w*>)) by FINSEQOP:9;
+      end;
+        for p being FinSequence of the carrier of V1 holds P[p]
+                                                         from IndSeqD(A2,A3);
+      hence thesis;
+    end;
+
+  theorem Th21:
+    for a be FinSequence of the carrier of K
+    for p being FinSequence of the carrier of V1 st len p = len a holds
+     f is linear implies f*lmlt(a,p) = lmlt(a,f*p)
+    proof
+      let a be FinSequence of the carrier of K;
+      let p be FinSequence of the carrier of V1 such that A1: len p = len a;
+      assume A2: f is linear;
+      A3: dom p = dom a by A1,FINSEQ_3:31;
+         dom f = the carrier of V1 by FUNCT_2:def 1;
+      then rng p c= dom f by FINSEQ_1:def 4;
+      then A4: dom p = dom (f*p) by RELAT_1:46;
+        Seg len lmlt(a,p) = dom lmlt(a,p) by FINSEQ_1:def 3
+                       .= dom p by A3,Th16
+                       .= dom lmlt(a,f*p) by A3,A4,Th16
+                       .= Seg len lmlt(a,f*p) by FINSEQ_1:def 3;
+      then len lmlt(a,p) = len lmlt(a,f*p) by FINSEQ_1:8;
+      then A5: len (f*lmlt(a,p)) = len lmlt(a,f*p) by FINSEQ_2:37;
+        now let k; assume k in Seg len (f*lmlt(a,p));
+       then A6: k in dom (f*lmlt(a,p)) by FINSEQ_1:def 3;
+         dom (f*lmlt(a,p)) c= dom lmlt(a,p) by RELAT_1:44;
+       then A7: k in dom lmlt(a,p) by A6;
+       then A8: k in dom p by A3,Th16;
+       then A9: a/.k = a.k by A3,FINSEQ_4:def 4;
+       A10: p/.k = p.k by A8,FINSEQ_4:def 4;
+       set P = f*p;
+       A11: P/.k = (f*p).k by A4,A8,FINSEQ_4:def 4;
+       A12: k in dom ((the lmult of V1).:(a,p)) by A7,Def7;
+         k in dom lmlt(a,f*p) by A3,A4,A8,Th16;
+       then A13: k in dom ((the lmult of V2).:(a,f*p)) by Def7;
+       thus (f*lmlt(a,p)).k = f.(lmlt(a,p).k) by A6,FUNCT_1:22
+                .= f.(((the lmult of V1).:(a,p)).k) by Def7
+                .= f.((the lmult of V1).(a.k,p.k)) by A12,FUNCOP_1:28
+                .= f.((a/.k)*(p/.k)) by A9,A10,VECTSP_1:def 24
+                .= (a/.k)*(f.(p/.k)) by A2,MOD_2:def 5
+                .= (a/.k)*(P/.k) by A8,A10,A11,FUNCT_1:23
+                .= (the lmult of V2).(a.k,(f*p).k) by A9,A11,VECTSP_1:def 24
+                .= ((the lmult of V2).:(a,f*p)).k by A13,FUNCOP_1:28
+                .= lmlt(a,f*p).k by Def7;
+     end;
+     hence thesis by A5,FINSEQ_2:10;
+    end;
+
+  theorem Th22:
+    for a be FinSequence of the carrier of K st len a = len b2 holds
+     ( g is linear implies g.Sum(lmlt(a,b2)) = Sum(lmlt(a,g*b2)))
+    proof
+      let a be FinSequence of the carrier of K such that A1: len a = len b2;
+      assume A2: g is linear;
+      hence g.Sum(lmlt(a,b2)) = Sum(g*lmlt(a,b2)) by Th20
+                     .= Sum(lmlt(a,g*b2)) by A1,A2,Th21;
+    end;
+
+  theorem Th23:
+    for F, F1 being FinSequence of the carrier of V1,
+        KL being Linear_Combination of V1,
+        p being Permutation of dom F st F1 = F * p holds
+               KL (#) F1 = (KL (#) F) * p
+    proof
+      let F, F1 be FinSequence of the carrier of V1;
+      let KL be Linear_Combination of V1;
+      let p be Permutation of dom F such that A1: F1 = F * p;
+        dom F = Seg len F by FINSEQ_1:def 3;
+      then dom F = Seg len (KL (#) F) by VECTSP_6:def 8;
+      then A2: dom F = dom (KL (#) F) by FINSEQ_1:def 3;
+      then reconsider F2 = (KL (#) F) * p as FinSequence of the carrier of V1
+                                                       by FINSEQ_2:51;
+      A3: dom (KL (#) F1) = Seg len (KL (#) F1) by FINSEQ_1:def 3
+                       .= Seg len F1 by VECTSP_6:def 8
+                       .= Seg len F by A1,FINSEQ_2:48
+                       .= Seg len (KL (#) F) by VECTSP_6:def 8
+                       .= Seg len F2 by A2,FINSEQ_2:48
+                       .= dom ((KL (#) F) * p) by FINSEQ_1:def 3;
+      A4: dom (KL (#) F1) = Seg len (KL (#) F1) by FINSEQ_1:def 3
+                       .= Seg len F1 by VECTSP_6:def 8
+                       .= dom F1 by FINSEQ_1:def 3;
+        now let k; assume A5: k in dom (KL (#) F1);
+       then k in dom p by A3,FUNCT_1:21;
+       then p.k in rng p by FUNCT_1:def 5;
+       then A6: p.k in dom F by FUNCT_2:def 3;
+       then reconsider k1 = p.k as Nat by FINSEQ_3:25;
+         F1/.k = F1.k by A4,A5,FINSEQ_4:def 4
+                .= F.(p.k) by A1,A4,A5,FUNCT_1:22
+                .= F/.(p.k) by A6,FINSEQ_4:def 4;
+       hence (KL (#) F1).k = KL.(F/.k1) * (F/.k1) by A5,VECTSP_6:def 8
+                       .= (KL (#) F).k1 by A2,A6,VECTSP_6:def 8
+                       .= F2.k by A3,A5,FUNCT_1:22;
+      end;
+      hence thesis by A3,FINSEQ_1:17;
+    end;
+
+  theorem Th24:
+    F is one-to-one & Carrier(KL) c= rng F implies Sum(KL (#) F) = Sum(KL)
+    proof
+      assume A1: F is one-to-one;
+      assume A2: Carrier(KL) c= rng F;
+      then reconsider A = Carrier KL as Subset of rng F;
+      reconsider G1 = F - A`, G2 = F - A
+                      as FinSequence of the carrier of V1 by FINSEQ_3:93;
+      A3: G1 is one-to-one by A1,FINSEQ_3:94;
+      A4: rng G1 = rng F \ A` by FINSEQ_3:72
+           .= rng F \ ((rng F) \ Carrier KL) by SUBSET_1:def 5
+           .= rng F /\ Carrier KL by XBOOLE_1:48
+           .= Carrier(KL) by A2,XBOOLE_1:28;
+        for k st k in dom (KL (#) G2) holds (KL (#) G2)/.k = 0.V1
+      proof
+        let k such that A5: k in dom (KL (#) G2);
+        A6: dom (KL (#) G2) = Seg len (KL (#) G2) by FINSEQ_1:def 3
+                         .= Seg len G2 by VECTSP_6:def 8
+                         .= dom G2 by FINSEQ_1:def 3;
+        then G2.k in rng G2 by A5,FUNCT_1:def 5;
+        then G2.k in rng F \ Carrier KL by FINSEQ_3:72;
+        then not G2.k in Carrier KL by XBOOLE_0:def 4;
+        then A7: not G2/.k in Carrier KL by A5,A6,FINSEQ_4:def 4;
+        thus (KL (#) G2)/.k = (KL (#) G2).k by A5,FINSEQ_4:def 4
+              .= KL.(G2/.k) * (G2/.k) by A5,VECTSP_6:def 8
+              .= 0.K * (G2/.k) by A7,VECTSP_6:20
+              .= 0.V1 by VECTSP_1:59;
+      end;
+      then A8: Sum(KL (#) G2) = 0.V1 by Th15;
+      consider p1 being Permutation of dom F such that A9:
+       (F-A`)^(F-A) = F * p1 by A1,Th8;
+        dom (KL (#) F) = Seg len (KL (#) F) by FINSEQ_1:def 3
+                   .= Seg len F by VECTSP_6:def 8
+                   .= dom F by FINSEQ_1:def 3;
+      then reconsider p1 as Permutation of dom (KL (#) F);
+         KL (#) (G1^G2) = (KL (#) F) * p1 by A9,Th23;
+      hence Sum(KL (#) F) = Sum(KL (#) (G1 ^ G2)) by RLVECT_2:9
+               .= Sum((KL (#) G1) ^ (KL (#) G2)) by VECTSP_6:37
+               .= Sum(KL (#) G1) + Sum(KL (#) G2) by RLVECT_1:58
+               .= Sum(KL) + 0.V1 by A3,A4,A8,VECTSP_6:def 9
+               .= Sum(KL) by RLVECT_1:10;
+    end;
+
+  theorem Th25:
+    for A be set
+    for p be FinSequence of the carrier of V1 st rng p c= A holds
+     f1 is linear & f2 is linear & (for v st v in A holds f1.v = f2.v )
+                    implies f1.Sum(p) = f2.Sum(p)
+    proof
+      let A be set;
+      let p be FinSequence of the carrier of V1 such that A1: rng p c= A;
+      assume A2: f1 is linear;
+      assume A3: f2 is linear;
+      assume A4: for v st v in A holds f1.v = f2.v;
+      defpred P[FinSequence of the carrier of V1] means
+                  rng $1 c= A implies f1.Sum($1) = f2.Sum($1);
+      A5: P[<*>(the carrier of V1)]
+           proof assume rng<*>(the carrier of V1) c= A;
+             thus f1.Sum(<*>(the carrier of V1)) = f1.(0.V1) by RLVECT_1:60
+               .= f1.(0.K*0.V1) by VECTSP_1:59
+               .= 0.K*f1.(0.V1) by A2,MOD_2:def 5
+               .= 0.V2 by VECTSP_1:59
+               .= 0.K*f2.(0.V1) by VECTSP_1:59
+               .= f2.(0.K*0.V1) by A3,MOD_2:def 5
+               .= f2.(0.V1) by VECTSP_1:59
+               .= f2.Sum(<*>(the carrier of V1)) by RLVECT_1:60;
+            end;
+      A6: for p being FinSequence of the carrier of V1,
+       x being Element of V1 st P[p]holds P[p^<*x*>]
+      proof
+        let p be FinSequence of the carrier of V1;
+        let x be Element of V1 such that
+           A7: rng p c= A implies f1.Sum(p) = f2.Sum(p);
+        assume rng (p^<*x*>) c= A;
+        then A8: rng p \/ rng <*x*> c= A by FINSEQ_1:44;
+        A9: rng p c= rng p \/ rng <*x*> by XBOOLE_1:7;
+          rng <*x*> c= rng p \/ rng <*x*> by XBOOLE_1:7;
+        then rng <*x*> c= A by A8,XBOOLE_1:1;
+        then {x} c= A by FINSEQ_1:56;
+        then A10: x in A by ZFMISC_1:37;
+        thus f1.Sum(p^<*x*>) = f1.(Sum(p) + Sum(<*x*>)) by RLVECT_1:58
+                      .= f2.(Sum(p)) + f1.(Sum(<*x*>)) by A2,A7,A8,A9,MOD_2:def
+5,XBOOLE_1:1
+                      .= f2.(Sum(p)) + f1.x by RLVECT_1:61
+                      .= f2.(Sum(p)) + f2.x by A4,A10
+                      .= f2.(Sum(p)) + f2.(Sum(<*x*>)) by RLVECT_1:61
+                      .= f2.(Sum(p) + Sum(<*x*>)) by A3,MOD_2:def 5
+                      .= f2.Sum(p^<*x*>) by RLVECT_1:58;
+      end;
+        for p being FinSequence of the carrier of V1 holds P[p]
+           from IndSeqD(A5,A6);
+      hence thesis by A1;
+    end;
+
+  theorem Th26:
+    f1 is linear & f2 is linear implies
+     for b1 being OrdBasis of V1 st len b1 > 0 holds
+      f1*b1 = f2*b1 implies f1 = f2
+    proof
+      assume A1: f1 is linear & f2 is linear;
+      let b1 be OrdBasis of V1 such that A2: len b1 > 0;
+      assume A3: f1*b1 = f2*b1;
+      reconsider b = rng b1 as Basis of V1 by Def4;
+        now let v be Element of V1;
+          Lin(b) = the VectSpStr of V1 by VECTSP_7:def 3;
+       then v in Lin(b) by RLVECT_1:3;
+       then consider KL be Linear_Combination of b such that A4:
+                                                  v = Sum(KL) by VECTSP_7:12;
+       A5: b1 is one-to-one by Def4;
+       A6: Carrier(KL) c= rng b1 by VECTSP_6:def 7;
+         len b1 in Seg len b1 by A2,FINSEQ_1:5;
+       then reconsider D = dom b1 as non empty set by FINSEQ_1:def 3;
+       set A = { KL.(b1/.i)*(b1/.i) where i is Element of D
+                                                       : not contradiction };
+       set p = KL (#) b1;
+         now let x; assume x in rng p;
+         then consider i such that A7: i in dom p & p.i = x by FINSEQ_2:11;
+        dom p = Seg len p by FINSEQ_1:def 3;
+         then i in Seg len b1 by A7,VECTSP_6:def 8;
+         then A8: i in dom b1 by FINSEQ_1:def 3;
+           (KL (#) b1).i = KL.(b1/.i) * (b1/.i) by A7,VECTSP_6:def 8;
+         hence x in A by A7,A8;
+       end;
+       then A9: rng p c= A by TARSKI:def 3;
+       reconsider A as set;
+       A10: for w st w in A holds f1.w = f2.w
+       proof
+         let w; assume w in A;
+         then consider i be Element of D such that
+                      A11: w = KL.(b1/.i)*(b1/.i);
+           f1.(b1/.i) = f1.(b1.i) by FINSEQ_4:def 4
+                        .= (f2*b1).i by A3,FUNCT_1:23
+                        .= f2.(b1.i) by FUNCT_1:23
+                        .= f2.(b1/.i) by FINSEQ_4:def 4;
+         then f1.(KL.(b1/.i)*(b1/.i)) = KL.(b1/.i)*(f2.(b1/.i)) by A1,MOD_2:def
+5
+                         .= f2.(KL.(b1/.i)*(b1/.i)) by A1,MOD_2:def 5;
+         hence f1.w = f2.w by A11;
+       end;
+       thus f1.v = f1.Sum(KL (#) b1) by A4,A5,A6,Th24
+                .= f2.Sum(p) by A1,A9,A10,Th25
+                .= f2.v by A4,A5,A6,Th24;
+      end;
+      hence thesis by FUNCT_2:113;
+    end;
+
+  definition
+    let D be non empty set;
+    cluster -> FinSequence-yielding Matrix of D;
+    coherence
+    proof
+     let M be Matrix of D;
+     let x;
+     assume A1: x in dom M;
+     then reconsider i = x as Nat by FINSEQ_3:25;
+       M.i = Line(M,i) by A1,MATRIX_2:18;
+     hence M.x is FinSequence;
+    end;
+  end;
+
+  definition
+    let D be non empty set;
+    let F,G be Matrix of D;
+    redefine func F^^G -> Matrix of D;
+    coherence
+    proof
+        ex i st dom (F^^G) = Seg i
+      proof
+        reconsider i = min(len F,len G) as Nat by FINSEQ_2:1;
+        take i;
+        thus dom (F^^G) = dom F /\ dom G by Def2
+              .= dom F /\ Seg len G by FINSEQ_1:def 3
+              .= Seg len F /\ Seg len G by FINSEQ_1:def 3
+              .= Seg i by FINSEQ_2:2;
+      end;
+      then reconsider M = F^^G as FinSequence by FINSEQ_1:def 2;
+        ex n st for x st x in rng M ex p be FinSequence of D st x = p & len p =
+n
+      proof
+        take n = width F + width G;
+        let x; assume x in rng M;
+        then consider y such that A1: y in dom M & x = M.y by FUNCT_1:def 5;
+          dom M = dom F /\ dom G by Def2;
+        then A2: y in dom F & y in dom G by A1,XBOOLE_0:def 3;
+        then A3: F.y in rng F & G.y in rng G by FUNCT_1:def 5;
+          rng F c= D* & rng G c= D* by FINSEQ_1:def 4;
+        then reconsider f = F.y, g = G.y as FinSequence of D
+          by A3,FINSEQ_1:def 11;
+        A4: x = f ^ g by A1,Def2;
+        then reconsider p = x as FinSequence of D;
+        take p;
+        thus x = p;
+        reconsider y as Nat by A1,FINSEQ_3:25;
+          F.y = Line(F,y) & G.y = Line(G,y) by A2,MATRIX_2:18;
+        hence len p = len Line(F,y) + len Line(G,y) by A4,FINSEQ_1:35
+                  .= width F + len Line(G,y) by MATRIX_1:def 8
+                  .= n by MATRIX_1:def 8;
+      end;
+      hence thesis by MATRIX_1:9;
+    end;
+  end;
+
+  definition
+    let D be non empty set; let n,m,k;
+    let M1 be Matrix of n,k,D,
+        M2 be Matrix of m,k,D;
+    redefine func M1^M2 -> Matrix of n+m,k,D;
+    coherence
+    proof
+      per cases;
+       suppose A1: n = 0;
+        then len M1 = 0 by MATRIX_1:def 3;
+        then M1 = {} by FINSEQ_1:25;
+       hence thesis by A1,FINSEQ_1:47;
+       suppose A2: m = 0;
+        then len M2 = 0 by MATRIX_1:def 3;
+        then M2 = {} by FINSEQ_1:25;
+       hence thesis by A2,FINSEQ_1:47;
+       suppose that
+         A3: n <> 0 and
+         A4: m <> 0;
+        A5: n > 0 by A3,NAT_1:19;
+        A6: m > 0 by A4,NAT_1:19;
+        A7: len M1 = n by MATRIX_1:def 3;
+        A8: len M2 = m by MATRIX_1:def 3;
+        A9: width M1 = k by A5,A7,MATRIX_1:20;
+        A10: width M2 = k by A6,A8,MATRIX_1:20;
+          ex n st for x st x in rng (M1^M2) ex p be FinSequence of D
+         st x = p & len p = n
+        proof
+         take k;
+         let x such that A11: x in rng (M1^M2);
+           rng (M1^M2) c= D* by FINSEQ_1:def 4;
+         then reconsider p = x as FinSequence of D by A11,FINSEQ_1:def 11;
+         take p;
+         A12: x in rng M1 \/ rng M2 by A11,FINSEQ_1:44;
+           now per cases by A12,XBOOLE_0:def 2;
+          suppose x in rng M1;
+           then consider y1 such that A13: y1 in dom M1 & x = M1.y1
+                                                          by FUNCT_1:def 5;
+           reconsider y1 as Nat by A13,FINSEQ_3:25;
+             x = Line(M1,y1) by A13,MATRIX_2:18;
+          hence len p = k by A9,MATRIX_1:def 8;
+          suppose x in rng M2;
+           then consider y2 such that A14: y2 in dom M2 & x = M2.y2
+                                                          by FUNCT_1:def 5;
+           reconsider y2 as Nat by A14,FINSEQ_3:25;
+             x = Line(M2,y2) by A14,MATRIX_2:18;
+          hence len p = k by A10,MATRIX_1:def 8;
+         end;
+         hence thesis;
+        end;
+        then reconsider M3 = M1^M2 as Matrix of D by MATRIX_1:9;
+          len M1 = n & len M2 = m by MATRIX_1:def 3;
+        then A15: len M3 = n + m by FINSEQ_1:35;
+        then len M3 <> 0 by A3,NAT_1:23;
+        then A16: len M3 > 0 by NAT_1:19;
+        then consider s be FinSequence such that A17:
+                  s in rng M3 & len s = width M3 by MATRIX_1:def 4;
+        A18: s in rng M1 \/ rng M2 by A17,FINSEQ_1:44;
+          now per cases by A18,XBOOLE_0:def 2;
+         suppose s in rng M1;
+          then consider y1 such that A19: y1 in dom M1 & s = M1.y1
+                                                         by FUNCT_1:def 5;
+          reconsider y1 as Nat by A19,FINSEQ_3:25;
+            s = Line(M1,y1) by A19,MATRIX_2:18;
+          hence width M3 = k by A9,A17,MATRIX_1:def 8;
+         suppose s in rng M2;
+          then consider y2 such that A20: y2 in dom M2 & s = M2.y2
+                                                         by FUNCT_1:def 5;
+          reconsider y2 as Nat by A20,FINSEQ_3:25;
+            s = Line(M2,y2) by A20,MATRIX_2:18;
+          hence width M3 = k by A10,A17,MATRIX_1:def 8;
+        end;
+       hence thesis by A15,A16,MATRIX_1:20;
+    end;
+  end;
+
+  theorem
+      for M1 be Matrix of n,k,D,
+        M2 be Matrix of m,k,D st i in dom M1 holds
+     Line(M1^M2,i) = Line(M1,i)
+    proof
+      let M1 be Matrix of n,k,D;
+      let M2 be Matrix of m,k,D such that A1: i in dom M1;
+        dom M1 c= dom (M1^M2) by FINSEQ_1:39;
+      hence Line(M1^M2,i) = (M1^M2).i by A1,MATRIX_2:18
+             .= M1.i by A1,FINSEQ_1:def 7
+             .= Line(M1,i) by A1,MATRIX_2:18;
+    end;
+
+  theorem Th28:
+    for M1 be Matrix of n,k,D,
+        M2 be Matrix of m,k,D st width M1 = width M2 holds
+     width (M1^M2) = width M1
+    proof
+      let M1 be Matrix of n,k,D;
+      let M2 be Matrix of m,k,D such that A1: width M1 = width M2;
+      consider n such that A2: for x st x in rng (M1^M2)
+                 ex P be FinSequence of D st x = P & len P = n by MATRIX_1:9;
+      per cases by NAT_1:19;
+      suppose A3: len (M1^M2) = 0;
+       then len M1 + len M2 = 0 by FINSEQ_1:35;
+       then A4: len M1 = 0 by NAT_1:23;
+         width (M1^M2) = 0 by A3,MATRIX_1:def 4
+                    .= width M1 by A4,MATRIX_1:def 4;
+       hence width (M1^M2) = width M1;
+      suppose A5: len (M1^M2) > 0;
+       then consider s be FinSequence such that A6:
+              s in rng (M1^M2) & len s = width (M1^M2) by MATRIX_1:def 4;
+       consider P be FinSequence of D such that A7: s = P & len P = n
+                                                                    by A2,A6;
+       A8: len M1 + len M2 > 0+0 by A5,FINSEQ_1:35;
+         now per cases by A8,REAL_1:55;
+        suppose len M1 > 0;
+        then consider s1 be FinSequence such that A9:
+                      s1 in rng M1 & len s1 = width M1 by MATRIX_1:def 4;
+          rng M1 c= rng (M1^M2) by FINSEQ_1:42;
+        then consider P1 be FinSequence of D such that A10:
+                             s1 = P1 & len P1 = n by A2,A9;
+        thus width (M1^M2) = width M1 by A6,A7,A9,A10;
+       suppose len M2 > 0;
+        then consider s2 be FinSequence such that A11:
+                      s2 in rng M2 & len s2 = width M2 by MATRIX_1:def 4;
+          rng M2 c= rng (M1^M2) by FINSEQ_1:43;
+        then consider P2 be FinSequence of D such that A12:
+                              s2 = P2 & len P2 = n by A2,A11;
+        thus width (M1^M2) = width M1 by A1,A6,A7,A11,A12;
+       end;
+       hence thesis;
+     end;
+
+  theorem
+      for M1 be Matrix of t,k,D,
+        M2 be Matrix of m,k,D st n in dom M2 & i = len M1 + n holds
+     Line(M1^M2,i) = Line(M2,n)
+    proof
+      let M1 be Matrix of t,k,D;
+      let M2 be Matrix of m,k,D; assume A1: n in dom M2 & i = len M1 + n;
+      then i in dom (M1^M2) by FINSEQ_1:41;
+      hence Line(M1^M2,i) = (M1^M2).i by MATRIX_2:18
+                        .= M2.n by A1,FINSEQ_1:def 7
+                        .= Line(M2,n) by A1,MATRIX_2:18;
+    end;
+
+  theorem Th30:
+    for M1 be Matrix of n,k,D,
+        M2 be Matrix of m,k,D st width M1 = width M2
+    for i st i in Seg width M1 holds
+     Col(M1^M2,i) = Col(M1,i)^Col(M2,i)
+    proof
+      let M1 be Matrix of n,k,D;
+      let M2 be Matrix of m,k,D such that A1: width M1 = width M2;
+      let i such that A2: i in Seg width M1;
+      A3: len Col(M1^M2,i) = len (M1^M2) by MATRIX_1:def 9
+                 .= len M1 + len M2 by FINSEQ_1:35
+                 .= len M1 + len Col(M2,i) by MATRIX_1:def 9
+                 .= len Col(M1,i) + len Col(M2,i) by MATRIX_1:def 9
+                 .= len (Col(M1,i)^Col(M2,i)) by FINSEQ_1:35;
+        now let j; assume A4: j in Seg len (Col(M1,i)^Col(M2,i));
+       then A5: j in dom (Col(M1,i)^Col(M2,i)) by FINSEQ_1:def 3;
+        j in Seg len (M1^M2) by A3,A4,MATRIX_1:def 9;
+then A6:   j in dom (M1^M2) by FINSEQ_1:def 3;
+         i in Seg width (M1^M2) by A1,A2,Th28;
+       then [j,i] in [:dom(M1^M2),Seg width(M1^M2):] by A6,ZFMISC_1:106;
+       then [j,i] in Indices (M1^M2) by MATRIX_1:def 5;
+       then consider P be FinSequence of D such that A7:
+                  P = (M1^M2).j & (M1^M2)*(j,i) = P.i by MATRIX_1:def 6;
+         now per cases by A5,FINSEQ_1:38;
+       suppose A8: j in dom Col(M1,i);
+        then j in Seg len Col(M1,i) by FINSEQ_1:def 3;
+        then j in Seg len M1 by MATRIX_1:def 9;
+        then A9: j in dom M1 by FINSEQ_1:def 3;
+        then [j,i] in [:dom M1,Seg width M1:] by A2,ZFMISC_1:106;
+        then [j,i] in Indices M1 by MATRIX_1:def 5;
+        then consider P1 be FinSequence of D such that A10:
+                          P1 = M1.j & M1*(j,i) = P1.i by MATRIX_1:def 6;
+          P = P1 by A7,A9,A10,FINSEQ_1:def 7;
+        hence Col(M1^M2,i).j = M1*(j,i) by A6,A7,A10,MATRIX_1:def 9
+                           .= Col(M1,i).j by A9,MATRIX_1:def 9
+                           .= (Col(M1,i)^Col(M2,i)).j by A8,FINSEQ_1:def 7;
+       suppose ex n st n in dom Col(M2,i) & j = len Col(M1,i) + n;
+        then consider n such that
+A11:      n in dom Col(M2,i) & j = len Col(M1,i) + n;
+          n in Seg len Col(M2,i) by A11,FINSEQ_1:def 3;
+        then n in Seg len M2 by MATRIX_1:def 9;
+then A12:    n in dom M2 by FINSEQ_1:def 3;
+        then [n,i] in [:dom M2,Seg width M2:] by A1,A2,ZFMISC_1:106;
+        then [n,i] in Indices M2 by MATRIX_1:def 5;
+        then consider P2 be FinSequence of D such that A13:
+                              P2 = M2.n & M2*(n,i) = P2.i by MATRIX_1:def 6;
+        A14: len Col(M1,i) = len M1 by MATRIX_1:def 9;
+          dom Col(M2,i) = Seg len Col(M2,i) by FINSEQ_1:def 3
+                          .= Seg len M2 by MATRIX_1:def 9
+                          .= dom M2 by FINSEQ_1:def 3;
+        then P = P2 by A7,A11,A13,A14,FINSEQ_1:def 7;
+        hence Col(M1^M2,i).j = M2*(n,i) by A6,A7,A13,MATRIX_1:def 9
+                           .= Col(M2,i).n by A12,MATRIX_1:def 9
+                           .= (Col(M1,i)^Col(M2,i)).j by A11,FINSEQ_1:def 7;
+       end;
+       hence Col(M1^M2,i).j = (Col(M1,i)^Col(M2,i)).j;
+      end;
+      hence thesis by A3,FINSEQ_2:10;
+    end;
+
+  theorem Th31:
+   for M1 be Matrix of n,k,the carrier of V,
+       M2 be Matrix of m,k,the carrier of V holds
+    Sum(M1^M2) = (Sum M1)^(Sum M2)
+   proof
+     let M1 be Matrix of n,k,the carrier of V;
+     let M2 be Matrix of m,k,the carrier of V;
+     A1: len Sum(M1^M2) = len (M1^M2) by Def8
+                     .= len M1 + len M2 by FINSEQ_1:35
+                     .= len Sum M1 + len M2 by Def8
+                     .= len Sum M1 + len Sum M2 by Def8
+                     .= len ((Sum M1)^(Sum M2)) by FINSEQ_1:35;
+       now let i; assume A2: i in Seg len Sum(M1^M2);
+then A3:  i in dom Sum(M1^M2) by FINSEQ_1:def 3;
+        i in Seg len (M1^M2) by A2,Def8;
+      then A4: i in dom (M1^M2) by FINSEQ_1:def 3;
+        now per cases by A4,FINSEQ_1:38;
+      suppose A5: i in dom M1;
+  A6: dom M1 = Seg len M1 by FINSEQ_1:def 3
+            .= Seg len Sum M1 by Def8
+            .= dom Sum M1 by FINSEQ_1:def 3;
+       thus Sum(M1^M2).i = (Sum(M1^M2))/.i by A3,FINSEQ_4:def 4
+                      .= Sum ((M1^M2)/.i) by A3,Def8
+                      .= Sum (M1/.i) by A5,GROUP_5:95
+                      .= (Sum M1)/.i by A5,A6,Def8
+                      .= (Sum M1).i by A5,A6,FINSEQ_4:def 4
+                      .= ((Sum M1)^(Sum M2)).i by A5,A6,FINSEQ_1:def 7;
+      suppose ex n st n in dom M2 & i = len M1 + n;
+       then consider n such that A7: n in dom M2 & i = len M1 + n;
+       A8: len M1 = len Sum M1 by Def8;
+       A9: dom M2 = Seg len M2 by FINSEQ_1:def 3
+             .= Seg len Sum M2 by Def8
+             .= dom Sum M2 by FINSEQ_1:def 3;
+       thus Sum(M1^M2).i = (Sum(M1^M2))/.i by A3,FINSEQ_4:def 4
+                      .= Sum ((M1^M2)/.i) by A3,Def8
+                      .= Sum (M2/.n) by A7,GROUP_5:96
+                      .= (Sum M2)/.n by A7,A9,Def8
+                      .= (Sum M2).n by A7,A9,FINSEQ_4:def 4
+                      .= ((Sum M1)^(Sum M2)).i by A7,A8,A9,FINSEQ_1:def 7;
+      end;
+      hence Sum(M1^M2).i = ((Sum M1)^(Sum M2)).i;
+     end;
+     hence thesis by A1,FINSEQ_2:10;
+   end;
+
+  theorem Th32:
+    for M1 be Matrix of n,k,D,
+        M2 be Matrix of m,k,D st width M1 = width M2 holds
+     (M1^M2)@ = M1@ ^^ M2@
+    proof
+      let M1 be Matrix of n,k,D;
+      let M2 be Matrix of m,k,D such that A1: width M1 = width M2;
+      A2: Seg len (M1@ ^^ M2@) = dom (M1@ ^^ M2@) by FINSEQ_1:def 3
+               .= dom (M1@) /\ dom (M2@) by Def2
+               .= dom (M1@) /\ Seg len (M2@) by FINSEQ_1:def 3
+               .= Seg len (M1@) /\ Seg len (M2@) by FINSEQ_1:def 3
+               .= Seg width M1 /\ Seg len (M2@) by MATRIX_1:def 7
+               .= Seg width M1 /\ Seg width M2 by MATRIX_1:def 7
+               .= Seg width M1 by A1;
+      A3: len ((M1^M2)@) = width (M1^M2) by MATRIX_1:def 7
+                        .= width M1 by A1,Th28
+                        .= len (M1@ ^^ M2@) by A2,FINSEQ_1:8;
+        now let i; assume A4: i in Seg len ((M1^M2)@);
+A5:    Seg len ((M1^M2)@) = dom ((M1^M2)@) by FINSEQ_1:def 3;
+       A6: i in Seg width (M1^M2) by A4,MATRIX_1:def 7;
+A7:    i in dom (M1@ ^^ M2@) by A3,A4,FINSEQ_1:def 3;
+       then A8: i in dom (M1@) /\ dom (M2@) by Def2;
+       then i in Seg len (M1@) /\ dom (M2@) by FINSEQ_1:def 3;
+       then i in Seg len (M1@) /\ Seg len (M2@) by FINSEQ_1:def 3;
+       then i in Seg width M1 /\ Seg len (M2@) by MATRIX_1:def 7;
+       then A9: i in Seg width M1 /\ Seg width M2 by MATRIX_1:def 7;
+       A10: i in dom (M1@) & i in dom (M2@) by A8,XBOOLE_0:def 3;
+       then reconsider m1 = M1@.i,m2 = M2@.i as FinSequence by Def1;
+       thus (M1^M2)@.i = Line((M1^M2)@,i) by A4,A5,MATRIX_2:18
+                      .= Col(M1^M2,i) by A6,MATRIX_2:17
+                      .= Col(M1,i)^Col(M2,i) by A1,A9,Th30
+                      .= Line(M1@,i)^Col(M2,i) by A1,A9,MATRIX_2:17
+                      .= Line(M1@,i)^Line(M2@,i) by A1,A9,MATRIX_2:17
+                      .= Line(M1@,i)^m2 by A10,MATRIX_2:18
+                      .= m1^m2 by A10,MATRIX_2:18
+                      .= (M1@ ^^ M2@).i by A7,Def2;
+      end;
+      hence thesis by A3,FINSEQ_2:10;
+    end;
+
+  theorem Th33:
+    for M1,M2 be Matrix of the carrier of V1 holds
+     (the add of V1).:(Sum M1,Sum M2) = Sum(M1 ^^ M2)
+    proof
+      let M1,M2 be Matrix of the carrier of V1;
+      reconsider m = min(len M1,len M2) as Nat by FINSEQ_2:1;
+      A1: Seg m = Seg len M1 /\ Seg len M2 by FINSEQ_2:2
+              .= Seg len M1 /\ dom M2 by FINSEQ_1:def 3
+              .= dom M1 /\ dom M2 by FINSEQ_1:def 3
+              .= dom (M1 ^^ M2) by Def2
+              .= Seg len (M1 ^^ M2) by FINSEQ_1:def 3;
+      A2: len ((the add of V1).:(Sum M1,Sum M2)) = min(len Sum M1,len Sum M2)
+                                                              by FINSEQ_2:85
+              .= min(len M1,len Sum M2) by Def8
+              .= min(len M1,len M2) by Def8
+              .= len (M1 ^^ M2) by A1,FINSEQ_1:8
+              .= len Sum(M1 ^^ M2) by Def8;
+        now let i; assume A3: i in Seg len ((the add of V1).:(Sum M1,Sum
+ M2));
+then A4:   i in dom ((the add of V1).:(Sum M1,Sum M2)) by FINSEQ_1:def 3;
+A5:    i in dom Sum(M1 ^^ M2) by A2,A3,FINSEQ_1:def 3;
+         i in Seg len (M1 ^^ M2) by A2,A3,Def8;
+       then A6: i in dom (M1 ^^ M2) by FINSEQ_1:def 3;
+       then i in dom M1 /\ dom M2 by Def2;
+       then A7: i in dom M1 & i in dom M2 by XBOOLE_0:def 3;
+       then i in Seg len M1 & i in Seg len M2 by FINSEQ_1:def 3;
+       then i in Seg len (Sum M1) & i in Seg len (Sum M2) by Def8;
+       then A8: i in dom (Sum M1) & i in dom (Sum M2) by FINSEQ_1:def 3;
+       reconsider m1 = M1.i,m2 = M2.i as FinSequence by A7,Def1;
+       A9: ((M1/.i) ^ (M2/.i)) = m1 ^ (M2/.i) by A7,FINSEQ_4:def 4
+                                    .= m1 ^ m2 by A7,FINSEQ_4:def 4
+                                    .= (M1 ^^ M2).i by A6,Def2
+                                    .= (M1 ^^ M2)/.i by A6,FINSEQ_4:def 4;
+       A10: (Sum M1)/.i = (Sum M1).i & (Sum M2)/.i = (Sum
+ M2).i by A8,FINSEQ_4:def 4;
+       thus ((the add of V1).:(Sum M1,Sum M2)).i =
+                      (the add of V1).((Sum M1).i,(Sum M2).i) by A4,FUNCOP_1:28
+                .= ((Sum M1)/.i) + ((Sum M2)/.i) by A10,RLVECT_1:5
+                .= Sum (M1/.i) + (Sum M2/.i) by A8,Def8
+                .= Sum (M1/.i) + Sum (M2/.i) by A8,Def8
+                .= Sum ((M1 ^^ M2)/.i) by A9,RLVECT_1:58
+                .= Sum(M1 ^^ M2)/.i by A5,Def8
+                .= (Sum(M1 ^^ M2)).i by A5,FINSEQ_4:def 4;
+      end;
+      hence thesis by A2,FINSEQ_2:10;
+    end;
+
+  definition
+    let D be non empty set, F be BinOp of D,
+        P1,P2 be FinSequence of D;
+   redefine func F.:(P1,P2) -> FinSequence of D;
+    coherence
+    proof
+      thus F.:(P1,P2) is FinSequence of D;
+    end;
+  end;
+
+  theorem Th34:
+    for P1,P2 be FinSequence of the carrier of V1 st len P1 = len P2 holds
+     Sum((the add of V1).:(P1,P2)) = (Sum P1) + (Sum P2)
+    proof
+      let P1,P2 be FinSequence of the carrier of V1; assume
+         len P1 = len P2;
+      then reconsider R1 = P1, R2 = P2 as
+        Element of (len P1)-tuples_on (the carrier of V1) by FINSEQ_2:110;
+      thus Sum((the add of V1).:(P1,P2)) = Sum (R1 + R2) by FVSUM_1:def 3
+                                     .= Sum P1 + Sum P2 by FVSUM_1:95;
+    end;
+
+  theorem Th35:
+    for M1,M2 be Matrix of the carrier of V1 st len M1 = len M2 holds
+     Sum Sum M1 + Sum Sum M2 = Sum Sum(M1 ^^ M2)
+     proof
+       let M1,M2 be Matrix of the carrier of V1 such that A1: len M1 = len M2;
+         len (Sum M1) = len M1 by Def8
+               .= len (Sum M2) by A1,Def8;
+       hence Sum Sum M1 + Sum Sum M2 = Sum ((the add of V1).:(Sum M1,Sum
+ M2)) by Th34
+                           .= Sum Sum(M1 ^^ M2) by Th33;
+     end;
+
+  theorem Th36:
+    for P be FinSequence of the carrier of V1 holds
+     Sum Sum <*P*> = Sum Sum (<*P*>@)
+    proof
+      let P be FinSequence of the carrier of V1;
+      defpred X[FinSequence of the carrier of V1] means
+        Sum Sum <*$1*> = Sum Sum(<*$1*>@);
+      A1: X[<*>(the carrier of V1)]
+      proof
+        A2: <*<*>(the carrier of V1)*> is Matrix of 0+1,0,the carrier of V1
+                                                              by MATRIX_1:14;
+          len <*<*>(the carrier of V1)*> = 1 by MATRIX_1:def 3;
+        then width <*<*>(the carrier of V1)*> = 0 by A2,MATRIX_1:20;
+        then A3: len (<*<*>(the carrier of V1)*>@) = 0 by MATRIX_1:def 7;
+        thus Sum Sum <*<*>(the carrier of V1)*> = 0.V1 by A2,Th18
+                     .= Sum Sum (<*<*>(the carrier of V1)*>@) by A3,Th17;
+      end;
+      A4: for P being FinSequence of the carrier of V1,
+              x being Element of V1
+           st X[P] holds X[P^<*x*>]
+       proof let P be FinSequence of the carrier of V1,
+                 x be Element of V1 such that A5:
+                                                    Sum Sum <*P*> = Sum Sum
+ (<*P*>@);
+         Seg len (<*P*> ^^ <*<*x*>*>) = dom (<*P*> ^^ <*<*x*>*>)
+                                                          by FINSEQ_1:def 3
+                  .= dom <*P*> /\ dom <*<*x*>*> by Def2
+                  .= Seg 1 /\ dom <*<*x*>*> by FINSEQ_1:55
+                  .= Seg 1 /\ Seg 1 by FINSEQ_1:55
+                  .= Seg 1;
+       then A6: len (<*P*> ^^ <*<*x*>*>) = 1 by FINSEQ_1:8
+             .= len <*P^<*x*>*> by FINSEQ_1:56;
+       A7: now let i; assume A8: i in Seg len <*P^<*x*>*>;
+        then A9: i in dom (<*P*> ^^ <*<*x*>*>) by A6,FINSEQ_1:def 3;
+        A10: i in Seg 1 by A8,FINSEQ_1:57;
+          i in { 1 } by A8,FINSEQ_1:4,57;
+        then A11: i = 1 by TARSKI:def 1;
+          i in dom <*P*> & i in dom <*<*x*>*> by A10,FINSEQ_1:55;
+        then reconsider m1 = <*P*>.i ,m2 = <*<*x*>*>.i as FinSequence by Def1;
+        thus (<*P*> ^^ <*<*x*>*>).i = m1 ^ m2 by A9,Def2
+                .= P ^ m2 by A11,FINSEQ_1:57
+                .= P ^ <*x*> by A11,FINSEQ_1:57
+                .= <*P^<*x*>*>.i by A11,FINSEQ_1:57;
+       end;
+       per cases;
+        suppose len P = 0;
+         then A12: P = {} by FINSEQ_1:25;
+        hence Sum Sum <*P^<*x*>*> = Sum Sum <*<*x*>*> by FINSEQ_1:47
+                 .= Sum Sum (<*<*x*>*>@) by Th19
+                 .= Sum Sum (<*P^<*x*>*>@) by A12,FINSEQ_1:47;
+        suppose len P <> 0;
+         then A13: len P > 0 by NAT_1:19;
+         A14: len <*P*> = 1 by FINSEQ_1:57;
+         then A15: width <*P*> = len P by MATRIX_1:20;
+         A16: len <*<*x*>*> = 1 by FINSEQ_1:57;
+         then A17: width <*<*x*>*> = len <*x*> by MATRIX_1:20
+                 .= 1 by FINSEQ_1:57;
+         A18: len <*P^<*x*>*> = 1 by FINSEQ_1:57;
+         then A19: width <*P^<*x*>*> = len (P^<*x*>) by MATRIX_1:20
+                .= len P + len <*x*> by FINSEQ_1:35
+                .= len P + 1 by FINSEQ_1:57;
+         then A20: width <*P^<*x*>*> > 0 by NAT_1:19;
+         A21: width (<*P*>@) = len <*P*> by A13,A15,MATRIX_2:12
+              .= width (<*<*x*>*>@) by A14,A16,A17,MATRIX_2:12;
+         A22: len ((<*P*>@) ^ (<*<*x*>*>@)) = len (<*P*>@) + len (<*<*x*>*>@)
+                                                               by FINSEQ_1:35
+                  .= width <*P*> + len (<*<*x*>*>@) by MATRIX_1:def 7
+                  .= width <*P*> + width <*<*x*>*> by MATRIX_1:def 7
+                  .= len (<*P^<*x*>*>@) by A15,A17,A19,MATRIX_1:def 7;
+         A23: len (<*P*>@) = len P by A15,MATRIX_1:def 7;
+           width (<*P*>@) = 1 by A13,A14,A15,MATRIX_2:12;
+         then reconsider d1 = <*P*>@ as Matrix of len P,1,the carrier of V1
+                                                       by A13,A23,MATRIX_1:20;
+         A24: len (<*<*x*>*>@) = 1 by A17,MATRIX_1:def 7;
+           width (<*<*x*>*>@) = 1 by A13,A14,A15,A21,MATRIX_2:12;
+         then reconsider d2 = <*<*x*>*>@ as Matrix of 1,1,the carrier of V1
+                                                          by A24,MATRIX_1:20;
+         A25: (<*<*x*>*>@)@ = <*<*x*>*> by A16,A17,MATRIX_2:15;
+         A26: (d1 ^ d2)@ = ((<*P*>@)@) ^^ ((<*<*x*>*>@)@) by A21,Th32
+                   .= <*P*> ^^ <*<*x*>*> by A13,A14,A15,A25,MATRIX_2:15
+                   .= <*P^<*x*>*> by A6,A7,FINSEQ_2:10
+                   .= (<*P^<*x*>*>@)@ by A18,A20,MATRIX_2:15;
+        thus Sum Sum <*P^<*x*>*> = Sum Sum
+ (<*P*> ^^ <*<*x*>*>) by A6,A7,FINSEQ_2:10
+                  .= Sum Sum (<*P*>@) + Sum Sum <*<*x*>*> by A5,A14,A16,Th35
+                  .= Sum Sum (<*P*>@) + Sum Sum (<*<*x*>*>@) by Th19
+                  .= Sum (Sum d1 ^ Sum d2) by RLVECT_1:58
+                  .= Sum Sum (d1 ^ d2) by Th31
+                  .= Sum Sum (<*P^<*x*>*>@) by A22,A26,MATRIX_2:11;
+      end;
+        for P be FinSequence of the carrier of V1 holds X[P]
+                                                 from IndSeqD(A1,A4);
+      hence thesis;
+    end;
+
+  theorem Th37:
+    for M be Matrix of the carrier of V1 st len M = n holds Sum Sum M = Sum Sum
+(M@)
+    proof
+      defpred X[Nat] means for M be Matrix of the carrier of V1
+             st len M = $1 holds Sum Sum M = Sum Sum (M@);
+A1:   X[0]
+      proof
+        let M be Matrix of the carrier of V1; assume A2: len M = 0;
+        then width M = 0 by MATRIX_1:def 4;
+        then A3: len (M@) = 0 by MATRIX_1:def 7;
+        thus Sum Sum M = 0.V1 by A2,Th17
+                  .= Sum Sum (M@) by A3,Th17;
+      end;
+      A4: for n st X[n] holds X[n+1]
+      proof let n such that A5:
+       for M be Matrix of the carrier of V1 st len M = n
+                                                      holds Sum Sum M = Sum Sum
+ (M@);
+       thus for M be Matrix of the carrier of V1 st len M = n+1
+                                                       holds Sum Sum M = Sum
+Sum (M@)
+       proof
+         let M be Matrix of the carrier of V1 such that A6: len M = n+1;
+A7:      dom M = Seg len M by FINSEQ_1:def 3;
+         per cases by NAT_1:19;
+          suppose A8: n = 0;
+          then 1 in dom M by A6,A7,FINSEQ_1:6;
+          then M.1 = Line(M,1) by MATRIX_2:18;
+          then reconsider G = M.1 as FinSequence of the carrier of V1;
+            M = <*G*> by A6,A8,FINSEQ_1:57;
+          hence Sum Sum M = Sum Sum (M@) by Th36;
+          suppose A9: n > 0;
+          A10: len Del(M,n+1) = n by A6,Th3;
+            n + 1 in dom M by A6,A7,FINSEQ_1:6;
+          then A11: M.(n+1) = Line(M,n+1) by MATRIX_2:18;
+          then reconsider M1 = M.(n+1) as FinSequence of the carrier of V1;
+            n + 1 > 0 by NAT_1:19;
+          then reconsider M' = M as Matrix of n+1,width M,the carrier of V1
+                                                           by A6,MATRIX_1:20;
+          reconsider R = <*M1*> as Matrix of 1,width M,the carrier of V1
+                                         by A11,MATRIX_1:def 8;
+          reconsider W = Del(M',n+1) as
+                              Matrix of n,width M,the carrier of V1 by Th5;
+          A12: width W = width M' by A9,Th4
+                     .= width R by Th4;
+          A13: len (W@) = width W by MATRIX_1:def 7
+                      .= len (R@) by A12,MATRIX_1:def 7;
+          thus Sum Sum M = Sum Sum (W ^ R) by A6,Th6
+              .= Sum (Sum W ^ Sum R) by Th31
+              .= Sum Sum Del(M,n+1) + Sum Sum R by RLVECT_1:58
+              .= Sum Sum (Del(M,n+1)@) + Sum Sum R by A5,A10
+              .= Sum Sum (Del(M,n+1)@) + Sum Sum (R@) by Th36
+              .= Sum Sum ((W@) ^^ (R@)) by A13,Th35
+              .= Sum Sum ((W ^ R)@) by A12,Th32
+              .= Sum Sum (M@) by A6,Th6;
+       end;
+      end;
+        for n holds X[n] from Ind(A1,A4);
+      hence thesis;
+    end;
+
+  theorem Th38:
+    for M being Matrix of n,m,the carrier of K st n > 0 & m > 0
+    for p,d being FinSequence of the carrier of K st
+         len p = n & len d = m &
+         for j st j in dom d holds d/.j = Sum mlt(p,Col(M,j))
+    for b,c being FinSequence of the carrier of V1 st
+         len b = m & len c = n &
+         for i st i in dom c holds c/.i = Sum lmlt(Line(M,i),b)
+      holds Sum lmlt(p,c) = Sum lmlt(d,b)
+    proof
+      let M be Matrix of n,m,the carrier of K such that
+A1:      n > 0 & m > 0;
+      let p,d be FinSequence of the carrier of K such that
+A2:     len p = n & len d = m &
+        for j st j in dom d holds d/.j = Sum mlt(p,Col(M,j));
+      let b,c be FinSequence of the carrier of V1 such that
+A3:     len b = m & len c = n &
+        for i st i in dom c holds c/.i = Sum lmlt(Line(M,i),b);
+     deffunc V(Nat,Nat) = (p/.$1) * (M*($1,$2)) * (b/.$2);
+      consider M1 being Matrix of n,m,the carrier of V1 such that A4:
+        for i,j st [i,j] in Indices M1 holds M1*(i,j) = V(i,j)
+          from MatrixLambda;
+      A5: len M1 = n by A1,MATRIX_1:24;
+      A6: width M1 = m by A1,MATRIX_1:24;
+      A7: len M = n by A1,MATRIX_1:24;
+      A8: dom p = dom c by A2,A3,FINSEQ_3:31;
+      then A9: dom lmlt(p,c) = dom p by Th16;
+then A10:  len lmlt(p,c) = len p by FINSEQ_3:31
+                       .= len M1 by A2,MATRIX_1:def 3
+                       .= len Sum M1 by Def8;
+      A11: now let i such that A12: i in dom Sum M1;
+       deffunc V(Nat) = (p/.i) * (lmlt(Line(M,i),b)/.$1);
+       consider F be FinSequence of the carrier of V1 such that A13:
+        len F = len b &
+        for j st j in Seg len b holds F.j = V(j) from SeqLambdaD;
+       A14: len F = width M1 by A1,A3,A13,MATRIX_1:24;
+       A15: len F = width M by A1,A3,A13,MATRIX_1:24;
+       A16: len Line(M1,i) = len F by A14,MATRIX_1:def 8;
+       A17: dom Line(M,i) = Seg len Line(M,i) by FINSEQ_1:def 3
+                     .= Seg len F by A15,MATRIX_1:def 8
+                     .= dom b by A13,FINSEQ_1:def 3;
+        i in Seg len Sum M1 by A12,FINSEQ_1:def 3;
+      then i in Seg len M1 by Def8;
+then A18:  i in dom M1 by FINSEQ_1:def 3;
+then A19:  M1/.i = M1.i by FINSEQ_4:def 4 .= Line(M1,i) by A18,MATRIX_2:18;
+A20: now let j; assume A21: j in Seg len F;
+then A22:     j in dom b by A13,FINSEQ_1:def 3;
+        then A23: j in dom (lmlt(Line(M,i),b)) by A17,Th16;
+        then A24: j in dom ((the lmult of V1).:(Line(M,i),b)) by Def7;
+        A25: b.j = b/.j by A22,FINSEQ_4:def 4;
+        A26: Line(M,i).j = M*(i,j) by A15,A21,MATRIX_1:def 8;
+          [i,j] in [:dom M1,Seg width M1:] by A14,A18,A21,ZFMISC_1:106;
+        then A27: [i,j] in Indices M1 by MATRIX_1:def 5;
+        A28: (lmlt(Line(M,i),b)/.j) = lmlt(Line(M,i),b).j by A23,FINSEQ_4:def 4
+                  .= ((the lmult of V1).:(Line(M,i),b)).j by Def7
+                  .= (the lmult of V1).(Line(M,i).j,b.j) by A24,FUNCOP_1:28
+                  .= M*(i,j) * (b/.j) by A25,A26,VECTSP_1:def 24;
+        thus (M1/.i).j = M1*(i,j) by A14,A19,A21,MATRIX_1:def 8
+                         .= (p/.i) * (M*(i,j)) * (b/.j) by A4,A27
+                         .= (p/.i) * (lmlt(Line(M,i),b)/.j) by A28,VECTSP_1:def
+26
+                         .= F.j by A13,A21;
+       end;
+       A29: i in dom c by A8,A9,A10,A12,FINSEQ_3:31;
+       then A30: c.i = c/.i by FINSEQ_4:def 4;
+       A31: p.i = p/.i by A8,A29,FINSEQ_4:def 4;
+         i in dom lmlt(p,c) by A10,A12,FINSEQ_3:31;
+       then A32: i in dom ((the lmult of V1).:(p,c)) by Def7;
+       A33: dom lmlt(Line(M,i),b) = dom b by A17,Th16;
+then A34:    len F = len lmlt(Line(M,i),b) by A13,FINSEQ_3:31;
+A35:   dom F = dom lmlt(Line(M,i),b) by A13,A33,FINSEQ_3:31;
+A36:    now let j; assume j in dom F;
+         then j in Seg len F by FINSEQ_1:def 3;
+        hence F.j = (p/.i) * (lmlt(Line(M,i),b)/.j) by A13;
+       end;
+       thus lmlt(p,c).i = ((the lmult of V1).:(p,c)).i by Def7
+           .= (the lmult of V1).(p.i,c.i) by A32,FUNCOP_1:28
+           .= (p/.i) * (c/.i) by A30,A31,VECTSP_1:def 24
+           .= (p/.i) * Sum lmlt(Line(M,i),b) by A3,A29
+           .= Sum F by A34,A35,A36,VECTSP_3:10
+           .= Sum (M1/.i) by A16,A19,A20,FINSEQ_2:10
+           .= (Sum M1)/.i by A12,Def8
+           .= (Sum M1).i by A12,FINSEQ_4:def 4;
+      end;
+A37:  dom d = dom b by A2,A3,FINSEQ_3:31;
+then A38:  dom lmlt(d,b) = dom d by Th16;
+A39:  dom lmlt(d,b) = dom b by A37,Th16;
+A40:  width M1 = len (M1@) by MATRIX_1:def 7
+              .= len Sum (M1@) by Def8;
+A41:   len lmlt(d,b) = len b by A39,FINSEQ_3:31
+                   .= len Sum (M1@) by A1,A3,A40,MATRIX_1:24;
+      A42: now let j such that
+A43:   j in Seg len Sum(M1@);
+A44:   Seg len Sum(M1@) = dom Sum(M1@) by FINSEQ_1:def 3;
+       reconsider H = mlt(p,Col(M,j)) as FinSequence of the carrier of K;
+       deffunc V(Nat) = (H/.$1) * (b/.j);
+       consider G be FinSequence of the carrier of V1 such that
+A45:   len G = len p &
+       for i st i in Seg len p holds G.i = V(i) from SeqLambdaD;
+A46:   Seg len p = dom p by FINSEQ_1:def 3;
+A47:   dom p = dom G by A45,FINSEQ_3:31;
+A48:   len Line(M1@,j) = width (M1@) by MATRIX_1:def 8
+                           .= len ((M1@)@) by MATRIX_1:def 7
+                           .= len G by A1,A2,A5,A6,A45,MATRIX_2:15;
+A49:   len p = len Col(M,j) by A2,A7,MATRIX_1:def 9;
+then A50:   len ((the mult of K).:(p,Col(M,j))) = len p by FINSEQ_2:86;
+A51:   now let i; assume A52: i in Seg len G;
+       then A53: i in Seg width (M1@) by A48,MATRIX_1:def 8;
+A54:   Seg len G = dom G by FINSEQ_1:def 3;
+          dom M1 = dom G by A2,A5,A45,FINSEQ_3:31;
+        then [i,j] in [:dom M1,Seg width M1:]
+                            by A40,A43,A52,A54,ZFMISC_1:106;
+        then A55: [i,j] in Indices M1 by MATRIX_1:def 5;
+        A56: p/.i = p.i by A47,A52,A54,FINSEQ_4:def 4;
+A57:      i in Seg len ((the mult of K).:(p,Col(M,j)))
+                            by A45,A49,A52,FINSEQ_2:86;
+        then i in dom ((the mult of K).:(p,Col(M,j))) by FINSEQ_1:def 3;
+        then A58: i in dom H by FVSUM_1:def 7;
+        A59: i in dom ((the mult of K).:(p,Col(M,j))) by A57,FINSEQ_1:def 3;
+A60:    dom M = Seg len M by FINSEQ_1:def 3;
+        A61: (p/.i) * (M*(i,j)) = (the mult of K).(p.i,M*(i,j))
+                                               by A56,VECTSP_1:def 10
+                 .= (the mult of K).(p.i,Col(M,j).i)
+                           by A2,A7,A45,A52,A60,MATRIX_1:def 9
+                 .= ((the mult of K).:(p,Col(M,j))).i by A59,FUNCOP_1:28
+                 .= H.i by FVSUM_1:def 7
+                 .= H/.i by A58,FINSEQ_4:def 4;
+        thus Line(M1@,j).i = (M1@)*(j,i) by A53,MATRIX_1:def 8
+                          .= M1*(i,j) by A55,MATRIX_1:def 7
+                          .= (H/.i) * (b/.j) by A4,A55,A61
+                          .= G.i by A45,A52;
+       end;
+       A62: j in dom Sum(M1@) by A43,FINSEQ_1:def 3;
+       A63: j in dom lmlt(d,b) by A41,A43,FINSEQ_1:def 3;
+       then A64: j in dom ((the lmult of V1).:(d,b)) by Def7;
+       A65: d/.j = d.j by A38,A63,FINSEQ_4:def 4;
+       A66: b/.j = b.j by A39,A63,FINSEQ_4:def 4;
+       A67: j in dom d by A37,A63,Th16;
+       A68: len H = len G by A45,A50,FVSUM_1:def 7;
+then A69:    dom H = dom G by FINSEQ_3:31;
+          len Sum(M1@) = len (M1@) by Def8;
+then A70:     dom Sum(M1@) = dom (M1@) by FINSEQ_3:31;
+then A71:   M1@/.j = M1@.j by A62,FINSEQ_4:def 4 .= Line(M1@,j) by A62,A70,
+MATRIX_2:18;
+       thus lmlt(d,b).j = ((the lmult of V1).:(d,b)).j by Def7
+            .= (the lmult of V1).(d.j,b.j) by A64,FUNCOP_1:28
+            .= (d/.j) * (b/.j) by A65,A66,VECTSP_1:def 24
+            .= Sum H * (b/.j) by A2,A67
+            .= Sum G by A45,A46,A47,A68,A69,Th14
+            .= Sum (M1@/.j) by A48,A51,A71,FINSEQ_2:10
+            .= Sum (M1@)/.j by A62,Def8
+            .= (Sum (M1@)).j by A43,A44,FINSEQ_4:def 4;
+      end;
+      thus Sum lmlt(p,c) = Sum Sum M1 by A10,A11,Lm1
+                      .= Sum Sum (M1@) by A5,Th37
+                      .= Sum lmlt(d,b) by A41,A42,FINSEQ_2:10;
+    end;
+
+  begin :: Decomposition of a Vector in Basis
+
+  definition
+    let K be Field;
+    let V be finite-dimensional VectSp of K;
+    let b1 be OrdBasis of V;
+    let W be Element of V;
+    func W|--b1 -> FinSequence of the carrier of K means
+     :Def9: len it = len b1 &
+      ex KL be Linear_Combination of V st
+      W = Sum(KL) & Carrier KL c= rng b1 &
+      for k st 1<=k & k<=len it holds it/.k=KL.(b1/.k);
+    existence
+    proof
+      reconsider b2 = rng b1 as Basis of V by Def4;
+      consider KL be Linear_Combination of V such that
+       A1: W = Sum(KL) and
+       A2: Carrier KL c= b2 by Th12;
+      deffunc V(Nat) = KL.(b1/.$1);
+      consider A be FinSequence of the carrier of K such that
+       A3: len A = len b1 and
+       A4: for k st k in Seg len b1 holds A.k = V(k) from SeqLambdaD;
+      take A;
+      thus len A = len b1 by A3;
+      take KL;
+      thus W = Sum(KL) by A1;
+      thus Carrier KL c= rng b1 by A2;
+        let k; assume 1<=k & k<=len A;
+        then A5: k in Seg len b1 by A3,FINSEQ_1:3;
+        then k in dom A by A3,FINSEQ_1:def 3;
+        then A.k = A/.k by FINSEQ_4:def 4;
+        hence thesis by A4,A5;
+    end;
+    uniqueness
+    proof
+      let F1,F2 be FinSequence of the carrier of K;
+      assume A6: len F1 = len b1;
+      given KL1 be Linear_Combination of V such that
+      A7: W = Sum(KL1) and
+      A8: Carrier(KL1) c= rng b1 and
+      A9: for k st 1<=k & k<=len F1 holds F1/.k=KL1.(b1/.k);
+      assume A10: len F2 = len b1;
+      given KL2 be Linear_Combination of V such that
+      A11: W = Sum(KL2) and
+      A12: Carrier(KL2) c= rng b1 and
+      A13: for k st 1<=k & k<=len F2 holds F2/.k=KL2.(b1/.k);
+      reconsider b = rng b1 as Basis of V by Def4;
+      A14: b is linearly-independent by VECTSP_7:def 3;
+        for k st 1<=k & k<=len F1 holds F1.k = F2.k
+      proof
+        let k be Nat; assume A15: 1<=k & k<=len F1;
+        then A16: k in dom F1 by FINSEQ_3:27;
+        A17: k in dom F2 by A6,A10,A15,FINSEQ_3:27;
+        thus F1.k = F1/.k by A16,FINSEQ_4:def 4
+                 .= KL1.(b1/.k) by A9,A15
+                 .= KL2.(b1/.k) by A7,A8,A11,A12,A14,Th9
+                 .= F2/.k by A6,A10,A13,A15
+                 .= F2.k by A17,FINSEQ_4:def 4;
+      end;
+      hence F1 = F2 by A6,A10,FINSEQ_1:18;
+    end;
+  end;
+
+Lm2:
+for K being Field for V being finite-dimensional VectSp of K
+ for b being OrdBasis of V
+  for W being Element of V holds
+   dom (W|--b) = dom b
+proof
+  let K be Field;
+  let V be finite-dimensional VectSp of K;
+  let b be OrdBasis of V;
+  let W be Element of V;
+    len (W|--b) = len b by Def9;
+  hence thesis by FINSEQ_3:31;
+end;
+
+  theorem Th39:
+    v1|--b2 = v2|--b2 implies v1 = v2
+    proof
+      assume A1: v1|--b2 = v2|--b2;
+      consider KL1 be Linear_Combination of V2 such that
+       A2: v1 = Sum(KL1) &
+       Carrier KL1 c= rng b2 &
+       for t st 1<=t & t<=len (v1|--b2) holds
+        (v1|--b2)/.t = KL1.(b2/.t) by Def9;
+      consider KL2 be Linear_Combination of V2 such that
+       A3: v2 = Sum(KL2) &
+       Carrier KL2 c= rng b2 &
+       for t st 1<=t & t<=len (v2|--b2) holds
+        (v2|--b2)/.t = KL2.(b2/.t) by Def9;
+      A4: Carrier KL1 \/ Carrier KL2 c= rng b2 by A2,A3,XBOOLE_1:8;
+      A5: now let t be Nat; assume A6: 1<=t & t<=len (v1|--b2);
+       hence KL1.(b2/.t) = (v2|--b2)/.t by A1,A2
+                  .= KL2.(b2/.t) by A1,A3,A6;
+      end;
+        now let v be Vector of V2;
+       per cases;
+        suppose not v in Carrier KL1 \/ Carrier KL2;
+         then A7: not v in Carrier KL1 & not v in Carrier KL2 by XBOOLE_0:def 2
+;
+         then KL2.v = 0.K by VECTSP_6:20;
+        hence KL1.v = KL2.v by A7,VECTSP_6:20;
+        suppose v in Carrier KL1 \/ Carrier KL2;
+         then consider x such that A8: x in dom b2 & v = b2.x
+                                                         by A4,FUNCT_1:def 5;
+         reconsider x as Nat by A8,FINSEQ_3:25;
+         A9: v = b2/.x by A8,FINSEQ_4:def 4;
+         A10: 1<=x by A8,FINSEQ_3:27;
+           x<=len b2 by A8,FINSEQ_3:27;
+         then x<=len (v1|--b2) by Def9;
+        hence KL1.v = KL2.v by A5,A9,A10;
+      end;
+      hence thesis by A2,A3,VECTSP_6:def 10;
+    end;
+
+  theorem Th40:
+    v = Sum lmlt(v|--b1,b1)
+    proof
+      consider KL be Linear_Combination of V1 such that A1:
+       v = Sum KL & Carrier KL c= rng b1 &
+       for k st 1<=k & k<=len (v|--b1) holds (v|--b1)/.k=KL.(b1/.k) by Def9;
+        len (v|--b1) = len b1 by Def9;
+then A2:   dom (v|--b1) = dom b1 by FINSEQ_3:31;
+then A3:   dom b1 = dom lmlt(v|--b1,b1) by Th16;
+A4:   len (KL (#) b1) = len b1 by VECTSP_6:def 8
+                       .= len lmlt(v|--b1,b1) by A3,FINSEQ_3:31;
+A5:  now let t; assume A6: t in dom lmlt(v|--b1,b1);
+       then A7: t in dom (KL (#) b1) by A4,FINSEQ_3:31;
+         t in dom (v|--b1) by A2,A6,Th16;
+       then A8: 1<=t & t<=len (v|--b1) by FINSEQ_3:27;
+       A9: b1/.t = b1.t by A3,A6,FINSEQ_4:def 4;
+       A10: (v|--b1)/.t = (v|--b1).t by A8,FINSEQ_4:24;
+       A11: t in dom ((the lmult of V1).:(v|--b1,b1)) by A6,Def7;
+       thus (KL (#) b1).t = KL.(b1/.t) * (b1/.t) by A7,VECTSP_6:def 8
+            .= ((v|--b1)/.t) * (b1/.t) by A1,A8
+            .= (the lmult of V1).((v|--b1).t,b1.t) by A9,A10,VECTSP_1:def 24
+            .= ((the lmult of V1).:(v|--b1,b1)).t by A11,FUNCOP_1:28
+            .= lmlt(v|--b1,b1).t by Def7;
+      end;
+        b1 is one-to-one by Def4;
+      hence v = Sum(KL (#) b1) by A1,Th24
+            .= Sum lmlt(v|--b1,b1) by A4,A5,Lm1;
+    end;
+
+  theorem Th41:
+    len d = len b1 implies d = Sum(lmlt(d,b1))|--b1
+    proof
+      assume A1: len d = len b1;
+      defpred X[Element of V1, Element of K]
+       means
+       ($1 in rng b1 implies (for k st k in dom b1 & b1/.k = $1 holds
+                                                               $2 = d/.k)) &
+       (not $1 in rng b1 implies $2 = 0.K);
+      A2: for v ex u being Element of K st X[v,u]
+      proof
+        let v be Element of V1;
+        per cases;
+        suppose
+         A3: v in rng b1;
+         then consider k such that A4:
+            k in dom b1 & b1/.k = v by PARTFUN2:4;
+         take u = d/.k;
+           now let i;
+          assume A5: i in dom b1 & b1/.i = v;
+          A6: b1 is one-to-one by Def4;
+             b1.i = b1/.k by A4,A5,FINSEQ_4:def 4
+               .= b1.k by A4,FINSEQ_4:def 4;
+          hence u = d/.i by A4,A5,A6,FUNCT_1:def 8;
+         end;
+         hence thesis by A3;
+        suppose
+         A7: not v in rng b1;
+         take 0.K;
+         thus thesis by A7;
+        end;
+      consider KL be Function of the carrier of V1, the carrier of K such that
+        A8: for v holds X[v,KL.v] from FuncExD(A2);
+        now take f = KL;
+       thus KL = f & dom f = the carrier of V1 & rng f c= the carrier of K
+     by FUNCT_2:def 1,RELSET_1:12;
+      end;
+     then A9: KL in Funcs(the carrier of V1, the carrier of K)
+                                                           by FUNCT_2:def 2;
+        rng b1 is finite & rng b1 is Subset of V1 by Def4;
+      then reconsider T = rng b1 as finite Subset of V1;
+        now take T;
+       let v be Element of V1; assume not v in T;
+         hence KL.v = 0.K by A8;
+      end;
+     then reconsider KL1 = KL as Linear_Combination of V1
+                                                       by A9,VECTSP_6:def 4;
+        now take KL1;
+       thus A10: for k st 1<=k & k<=len d holds d/.k=KL1.(b1/.k)
+       proof
+         let k; assume 1<=k & k<=len d;
+         then A11: k in dom b1 by A1,FINSEQ_3:27;
+         then b1.k = b1/.k by FINSEQ_4:def 4;
+         then b1/.k in rng b1 by A11,FUNCT_1:def 5;
+         hence d/.k=KL1.(b1/.k) by A8,A11;
+       end;
+         for x holds x in Carrier KL1 implies x in rng b1
+       proof
+         let x;
+         assume A12: x in Carrier KL1;
+         assume A13: not x in rng b1;
+         consider v such that A14: x = v & KL1.v <> 0.K by A12,VECTSP_6:19;
+         thus contradiction by A8,A13,A14;
+       end;
+       hence A15: Carrier KL1 c= rng b1 by TARSKI:def 3;
+A16:   b1 is one-to-one by Def4;
+A17:   dom d = dom b1 by A1,FINSEQ_3:31;
+then A18:   dom lmlt(d,b1) = dom b1 by Th16;
+then A19:   len lmlt(d,b1) = len b1 by FINSEQ_3:31
+                     .= len (KL1 (#) b1) by VECTSP_6:def 8;
+         now let k; assume A20: k in dom (lmlt(d,b1));
+        then A21: k in dom ((the lmult of V1).:(d,b1)) by Def7;
+        A22: d/.k = d.k by A17,A18,A20,FINSEQ_4:def 4;
+        A23: b1/.k = b1.k by A18,A20,FINSEQ_4:def 4;
+        A24: k in dom (KL1 (#) b1) by A19,A20,FINSEQ_3:31;
+        A25: 1<=k & k<=len d by A1,A18,A20,FINSEQ_3:27;
+        thus lmlt(d,b1).k = ((the lmult of V1).:(d,b1)).k by Def7
+                         .= (the lmult of V1).(d.k,b1.k) by A21,FUNCOP_1:28
+                         .= (d/.k) * (b1/.k) by A22,A23,VECTSP_1:def 24
+                         .= KL1.(b1/.k) * (b1/.k) by A10,A25
+                         .= (KL1 (#) b1).k by A24,VECTSP_6:def 8;
+       end;
+       hence Sum(lmlt(d,b1)) = Sum(KL1 (#) b1) by A19,Lm1
+                         .= Sum(KL1) by A15,A16,Th24;
+      end;
+      hence thesis by A1,Def9;
+    end;
+
+Lm3: for p be FinSequence, k be set st k in dom p holds len p > 0
+proof
+  let p be FinSequence, k be set; assume k in dom p; then p <> {} by FINSEQ_1:
+26;
+  then len p <> 0 by FINSEQ_1:25;
+  hence thesis by NAT_1:19;
+end;
+
+  theorem Th42:
+    for a,d be FinSequence of the carrier of K st len a = len b2
+    for j be Nat st j in dom b3 & len d = len b2 & for k st k in dom b2 holds
+      d.k = (g.((b2/.k))|--b3)/.j holds
+        len b2 > 0 implies (Sum(lmlt(a,g*b2))|--b3)/.j = Sum(mlt(a,d))
+    proof
+      let a,d be FinSequence of the carrier of K such that A1: len a = len b2;
+      let j be Nat such that A2: j in dom b3;
+A3:    len b3 > 0 by A2,Lm3;
+      assume A4: len d = len b2 &
+        for k st k in dom b2 holds d.k = (g.(b2/.k)|--b3)/.j;
+      assume A5: len b2 > 0;
+      reconsider B3 = g*b2 as FinSequence of the carrier of V3;
+      deffunc V(Nat,Nat) = ((B3/.$1)|--b3)/.$2;
+      consider M being Matrix of len b2,len b3,the carrier of K such that
+A6:    for i,j st [i,j] in Indices M holds M*(i,j) = V(i,j)
+                                                           from MatrixLambda;
+      deffunc W(Nat) = Sum mlt(a,Col(M,$1));
+      consider dd being FinSequence of the carrier of K such that
+A7:    len dd = len b3 &
+        for j st j in dom dd holds dd/.j = W(j) from PiLambdaD;
+         len M = len b2 by MATRIX_1:def 3;
+then A8:    dom M = dom b2 by FINSEQ_3:31;
+A9:   len b2 = len B3 by FINSEQ_2:37;
+then A10:   dom b2 = dom B3 by FINSEQ_3:31;
+A11:  len Col(M,j) = len M by MATRIX_1:def 9
+                       .= len d by A4,MATRIX_1:def 3;
+A12:   Seg len b3 = dom b3 by FINSEQ_1:def 3;
+A13:  width M = len b3 by A5,MATRIX_1:24;
+A14:  j in Seg width M by A2,A5,A12,MATRIX_1:24;
+A15:   now let i; assume i in dom d;
+then A16:   i in dom b2 by A4,FINSEQ_3:31;
+then A17:   B3/.i = B3.i by A10,FINSEQ_4:def 4
+            .= g.(b2.i) by A16,FUNCT_1:23
+            .= g.(b2/.i) by A16,FINSEQ_4:def 4;
+         [i,j] in [:dom M,Seg width M:] by A8,A14,A16,ZFMISC_1:106;
+then A18:   [i,j] in Indices M by MATRIX_1:def 5;
+       thus Col(M,j).i = M*(i,j) by A8,A16,MATRIX_1:def 9
+                      .= (g.((b2/.i))|--b3)/.j by A6,A17,A18
+                      .= d.i by A4,A16;
+      end;
+A19:   now let i such that A20: i in dom B3;
+A21:   len Line(M,i) = width M by MATRIX_1:def 8
+                         .= len ((B3/.i)|--b3) by A13,Def9;
+A22:   now let j; assume
+A23:    j in dom ((B3/.i)|--b3);
+        then j in Seg len ((B3/.i)|--b3) by FINSEQ_1:def 3;
+then A24:    j in Seg width M by A13,Def9;
+        then [i,j] in [:dom M,Seg width M:] by A8,A10,A20,ZFMISC_1:106;
+        then A25: [i,j] in Indices M by MATRIX_1:def 5;
+        thus Line(M,i).j = M*(i,j) by A24,MATRIX_1:def 8
+                        .= ((B3/.i)|--b3)/.j by A6,A25
+                        .= ((B3/.i)|--b3).j by A23,FINSEQ_4:def 4;
+       end;
+       thus B3/.i = Sum lmlt((B3/.i)|--b3,b3) by Th40
+                   .= Sum lmlt(Line(M,i),b3) by A21,A22,Lm1;
+      end;
+      A26: j in dom dd by A2,A7,FINSEQ_3:31;
+      thus (Sum(lmlt(a,g*b2))|--b3)/.j = (Sum(lmlt(dd,b3))|--b3)/.j
+                                                  by A1,A3,A5,A7,A9,A19,Th38
+                           .= dd/.j by A7,Th41
+                           .= Sum(mlt(a,Col(M,j))) by A7,A26
+                           .= Sum(mlt(a,d)) by A11,A15,Lm1;
+    end;
+
+  begin :: MACIERZE PRZEKSZTALCEN LINIOWYCH
+
+  definition
+    let K be Field;
+    let V1,V2 be finite-dimensional VectSp of K;
+    let f be Function of the carrier of V1 ,the carrier of V2;
+    let b1 be FinSequence of the carrier of V1;
+    let b2 be OrdBasis of V2;
+    func AutMt(f,b1,b2) -> Matrix of K means
+      :Def10: len it = len b1 & for k st k in dom b1 holds
+      it/.k = f.(b1/.k)|--b2;
+    existence
+    proof
+      deffunc V(Nat) = f.(b1/.$1)|--b2;
+      consider M be FinSequence such that
+       A1: len M = len b1 and
+       A2: for k st k in Seg len b1 holds M.k = V(k) from SeqLambda;
+        ex n being Nat st for x st x in rng M
+      ex s st s=x & len s = n
+      proof
+        take n = len(f.(b1/.1)|--b2);
+        let x be set; assume x in rng M;
+        then consider y such that A3: y in dom M & x = M.y by FUNCT_1:def 5;
+        reconsider y as Nat by A3,FINSEQ_3:25;
+        A4: y in Seg len M by A3,FINSEQ_1:def 3;
+        then M.y = f.(b1/.y)|--b2 by A1,A2;
+        then reconsider s = M.y as FinSequence;
+        take s;
+        thus s = x by A3;
+        thus len s = len (f.(b1/.y)|--b2) by A1,A2,A4
+                  .= len b2 by Def9
+                  .= n by Def9;
+      end;
+      then reconsider M as tabular FinSequence by MATRIX_1:def 1;
+        now let x; assume x in rng M;
+       then consider y such that A5: y in dom M & x = M.y by FUNCT_1:def 5;
+       reconsider y as Nat by A5,FINSEQ_3:25;
+         y in Seg len M by A5,FINSEQ_1:def 3;
+       then M.y = f.(b1/.y)|--b2 by A1,A2;
+       then reconsider s = M.y as FinSequence of the carrier of K;
+         s = x by A5;
+       hence x in (the carrier of K)* by FINSEQ_1:def 11;
+      end;
+      then rng M c= (the carrier of K)* by TARSKI:def 3;
+      then reconsider M as Matrix of K by FINSEQ_1:def 4;
+      take M1 = M;
+        for k st k in dom b1 holds M1/.k = f.(b1/.k)|--b2
+      proof
+        let k be Nat; assume A6: k in dom b1;
+        then A7: k in Seg len b1 by FINSEQ_1:def 3;
+          dom M1 = dom b1 by A1,FINSEQ_3:31;
+        hence M1/.k = M1.k by A6,FINSEQ_4:def 4
+                  .= f.(b1/.k)|--b2 by A2,A7;
+      end;
+      hence thesis by A1;
+    end;
+    uniqueness
+    proof
+      let K1,K2 be Matrix of K such that
+       A8: len K1 = len b1 and
+       A9: for k st k in dom b1 holds K1/.k = f.(b1/.k)|--b2 and
+       A10: len K2 = len b1 and
+       A11: for k st k in dom b1 holds K2/.k = f.(b1/.k)|--b2;
+        for k st 1 <= k & k <= len K1 holds K1.k = K2.k
+      proof
+        let k be Nat; assume A12: 1 <= k & k <= len K1;
+        then A13: k in dom b1 by A8,FINSEQ_3:27;
+        A14: k in dom K2 by A8,A10,A12,FINSEQ_3:27;
+          k in dom K1 by A12,FINSEQ_3:27;
+        hence K1.k = K1/.k by FINSEQ_4:def 4
+                  .= f.(b1/.k)|--b2 by A9,A13
+                  .= K2/.k by A11,A13
+                  .=K2.k by A14,FINSEQ_4:def 4;
+      end;
+      hence K1 = K2 by A8,A10,FINSEQ_1:18;
+    end;
+  end;
+
+Lm4: dom AutMt(f,b1,b2) = dom b1
+proof
+    len AutMt(f,b1,b2) = len b1 by Def10;
+  hence thesis by FINSEQ_3:31;
+end;
+
+  theorem Th43:
+    len b1 = 0 implies AutMt(f,b1,b2) = {}
+    proof
+      assume len b1 = 0;
+      then len AutMt(f,b1,b2) = 0 by Def10;
+      then dom AutMt(f,b1,b2) = {} by FINSEQ_1:4,def 3;
+      hence AutMt(f,b1,b2) = {} by FINSEQ_1:26;
+    end;
+
+  theorem Th44:
+    len b1 > 0 implies width AutMt(f,b1,b2) = len b2
+    proof
+      assume len b1 > 0;
+      then len AutMt(f,b1,b2) > 0 by Def10;
+      then consider s being FinSequence such that
+A1:   s in rng AutMt(f,b1,b2) & len s = width AutMt(f,b1,b2) by MATRIX_1:def 4;
+      consider i such that
+A2:   i in dom AutMt(f,b1,b2) & AutMt(f,b1,b2).i = s by A1,FINSEQ_2:11;
+        len AutMt(f,b1,b2) = len b1 by Def10;
+      then A3: i in dom b1 by A2,FINSEQ_3:31;
+        s = (AutMt(f,b1,b2))/.i by A2,FINSEQ_4:def 4
+              .= f.(b1/.i)|--b2 by A3,Def10;
+      hence width AutMt(f,b1,b2) = len b2 by A1,Def9;
+    end;
+
+  theorem
+      f1 is linear & f2 is linear &
+    AutMt(f1,b1,b2) = AutMt(f2,b1,b2) & len b1 > 0 implies f1 = f2
+    proof
+      assume A1: f1 is linear & f2 is linear;
+      assume A2: AutMt(f1,b1,b2) = AutMt(f2,b1,b2);
+      assume A3: len b1 > 0;
+        rng b1 is Basis of V1 by Def4;
+      then A4: rng b1 c= the carrier of V1;
+      then A5: rng b1 c= dom f1 by FUNCT_2:def 1;
+      A6: rng b1 c= dom f2 by A4,FUNCT_2:def 1;
+      A7: dom (f1*b1) = dom b1 by A5,RELAT_1:46
+                     .= dom (f2*b1) by A6,RELAT_1:46;
+        now let x be set; assume A8: x in dom (f1*b1);
+       then reconsider k=x as Nat by FINSEQ_3:25;
+       A9: dom (f1*b1) c= dom b1 by RELAT_1:44;
+       then A10: f1.(b1/.k)|--b2 = (AutMt(f2,b1,b2))/.k by A2,A8,Def10
+                            .= f2.(b1/.k)|--b2 by A8,A9,Def10;
+       thus (f1*b1).x = f1.(b1.x) by A8,FUNCT_1:22
+                     .= f1.(b1/.x) by A8,A9,FINSEQ_4:def 4
+                     .= f2.(b1/.x) by A10,Th39
+                     .= f2.(b1.x) by A8,A9,FINSEQ_4:def 4
+                     .= (f2*b1).x by A7,A8,FUNCT_1:22;
+      end;
+      then f1*b1 = f2*b1 by A7,FUNCT_1:9;
+      hence f1 = f2 by A1,A3,Th26;
+    end;
+
+  theorem
+      f is linear & g is linear & len b1 > 0 & len b2 > 0 & len b3 > 0
+     implies
+    AutMt(g*f,b1,b3) = AutMt(f,b1,b2) * AutMt(g,b2,b3)
+  proof
+    assume A1: f is linear & g is linear;
+    assume A2: len b1 > 0 & len b2 > 0 & len b3 > 0;
+    then A3: width AutMt(f,b1,b2) = len b2 by Th44
+                              .= len AutMt(g,b2,b3) by Def10;
+A4: len AutMt(g*f,b1,b3) = len b1 by Def10
+            .= len AutMt(f,b1,b2) by Def10
+            .= len (AutMt(f,b1,b2) * AutMt(g,b2,b3))
+                     by A3,MATRIX_3:def 4;
+then A5: dom AutMt(g*f,b1,b3) = dom (AutMt(f,b1,b2) * AutMt(g,b2,b3))
+      by FINSEQ_3:31;
+A6: width AutMt(g*f,b1,b3) = len b3 by A2,Th44
+                             .= width AutMt(g,b2,b3) by A2,Th44;
+then A7: width AutMt(g*f,b1,b3)
+          = width (AutMt(f,b1,b2) * AutMt(g,b2,b3)) by A3,MATRIX_3:def 4;
+      for i,j st [i,j] in Indices AutMt(g*f,b1,b3) holds
+      AutMt(g*f,b1,b3)*(i,j) = (AutMt(f,b1,b2) * AutMt(g,b2,b3))*(i,j)
+    proof
+      let i,j; assume A8: [i,j] in Indices AutMt(g*f,b1,b3);
+      then A9: [i,j] in [:dom AutMt(g*f,b1,b3),
+                        Seg width AutMt(g*f,b1,b3):] by MATRIX_1:def 5;
+      then A10: [i,j] in Indices (AutMt(f,b1,b2) * AutMt(g,b2,b3))
+                                           by A5,A7,MATRIX_1:def 5;
+A11: i in dom AutMt(g*f,b1,b3) by A9,ZFMISC_1:106;
+     A12: len AutMt(g*f,b1,b3) = len b1 by Def10;
+then A13: i in dom b1 by A11,FINSEQ_3:31;
+      consider p1 be FinSequence of the carrier of K such that A14:
+              p1 = AutMt(g*f,b1,b3).i &
+              AutMt(g*f,b1,b3)*(i,j) = p1.j by A8,MATRIX_1:def 6;
+A15:   j in Seg width AutMt(g*f,b1,b3) by A9,ZFMISC_1:106;
+           len b1 = len AutMt(g*f,b1,b3) by Def10;
+         then len b1 > 0 by A15,FINSEQ_1:4,MATRIX_1:def 4;
+then A16:    j in Seg len b3 by A15,Th44;
+then A17:    j in dom b3 by FINSEQ_1:def 3;
+A18:    p1 = (AutMt(g*f,b1,b3))/.i by A11,A14,FINSEQ_4:def 4
+               .= (g*f).(b1/.i)|--b3 by A13,Def10;
+        j in Seg len ((g*f).(b1/.i)|--b3) by A16,Def9;
+      then A19: j in dom p1 by A18,FINSEQ_1:def 3;
+      deffunc V(Nat) = (g.((b2/.$1))|--b3)/.j;
+      consider d be FinSequence of the carrier of K such that
+A20:    len d = len b2 & for k st k in Seg len b2 holds
+          d.k = V(k) from SeqLambdaD;
+A21:    Seg len b2 = dom b2 by FINSEQ_1:def 3;
+        len AutMt(f,b1,b2) = len b1 by Def10;
+then A22:  i in dom AutMt(f,b1,b2) by A11,A12,FINSEQ_3:31;
+then A23:   Line(AutMt(f,b1,b2),i) = AutMt(f,b1,b2).i by MATRIX_2:18
+                            .= (AutMt(f,b1,b2))/.i by A22,FINSEQ_4:def 4
+                            .= f.(b1/.i)|--b2 by A13,Def10;
+A24:  len Col(AutMt(g,b2,b3),j) = len AutMt(g,b2,b3) by MATRIX_1:def 9
+                               .= len d by A20,Def10;
+A25:   now let k; assume A26: 1 <=k & k <= len d;
+then A27:    k in dom d by FINSEQ_3:27;
+A28:    dom d = Seg len d by FINSEQ_1:def 3;
+A29:    len AutMt(g,b2,b3) = len b2 by Def10;
+then A30:    k in dom AutMt(g,b2,b3) & j in Seg width AutMt(g,b2,b3)
+                      by A6,A9,A20,A26,FINSEQ_3:27,ZFMISC_1:106;
+       then [k,j] in [:dom AutMt(g,b2,b3),Seg width AutMt(g,b2,b3):]
+                                                             by ZFMISC_1:106;
+       then [k,j] in Indices AutMt(g,b2,b3) by MATRIX_1:def 5;
+       then consider p2 be FinSequence of the carrier of K such that
+A31:    p2= AutMt(g,b2,b3).k & AutMt(g,b2,b3)*(k,j) = p2.j by MATRIX_1:def 6;
+       A32: k in dom AutMt(g,b2,b3) by A20,A26,A29,FINSEQ_3:27;
+       A33: k in dom b2 by A20,A26,FINSEQ_3:27;
+       A34: p2 = (AutMt(g,b2,b3))/.k by A30,A31,FINSEQ_4:def 4
+              .= g.(b2/.k)|--b3 by A33,Def10;
+       then j in Seg len p2 by A16,Def9;
+then A35:   j in dom p2 by FINSEQ_1:def 3;
+       thus Col(AutMt(g,b2,b3),j).k = p2.j by A31,A32,MATRIX_1:def 9
+              .= (g.(b2/.k)|--b3)/.j by A34,A35,FINSEQ_4:def 4
+              .= d.k by A20,A27,A28;
+      end;
+        b1/.i in the carrier of V1;
+then A36:  b1/.i in dom f by FUNCT_2:def 1;
+A37:  len (f.(b1/.i)|--b2) = len b2 by Def9;
+      thus AutMt(g*f,b1,b3)*(i,j) = ((g*f).(b1/.i)|--b3)/.j by A14,A18,A19,
+FINSEQ_4:def 4
+       .= (g.(f.(b1/.i))|--b3)/.j by A36,FUNCT_1:23
+       .= (g.Sum(lmlt(f.(b1/.i)|--b2,b2))|--b3)/.j by Th40
+       .= (Sum(lmlt(f.(b1/.i)|--b2,g*b2))|--b3)/.j by A1,A37,Th22
+       .= Sum(mlt(f.(b1/.i)|--b2,d)) by A2,A17,A20,A21,A37,Th42
+       .= Sum(mlt(Line(AutMt(f,b1,b2),i),Col(AutMt(g,b2,b3),j)))
+                                            by A23,A24,A25,FINSEQ_1:18
+       .= Line(AutMt(f,b1,b2),i) "*" Col(AutMt(g,b2,b3),j) by FVSUM_1:def 10
+       .= (AutMt(f,b1,b2) * AutMt(g,b2,b3))*(i,j) by A3,A10,MATRIX_3:def 4;
+    end;
+    hence thesis by A4,A7,MATRIX_1:21;
+  end;
+
+  theorem
+      AutMt(f1+f2,b1,b2) = AutMt(f1,b1,b2) + AutMt(f2,b1,b2)
+    proof
+   len AutMt(f1,b1,b2) = len b1 by Def10
+                                .= len AutMt(f2,b1,b2) by Def10;
+then A1: dom AutMt(f1,b1,b2) = dom AutMt(f2,b1,b2) by FINSEQ_3:31;
+A2: width AutMt(f1,b1,b2) = width AutMt(f2,b1,b2)
+      proof
+          len b1 = 0 or len b1 > 0 implies
+                               width AutMt(f1,b1,b2) = width AutMt(f2,b1,b2)
+        proof
+          assume A3: len b1 = 0 or len b1 > 0;
+          per cases by A3;
+          suppose A4: len b1 = 0;
+           then AutMt(f1,b1,b2) = {} by Th43
+                          .= AutMt(f2,b1,b2) by A4,Th43;
+           hence thesis;
+          suppose A5: len b1 > 0;
+           hence width AutMt(f1,b1,b2) = len b2 by Th44
+                                     .= width AutMt(f2,b1,b2) by A5,Th44;
+        end;
+        hence thesis by NAT_1:19;
+      end;
+A6: len AutMt(f1+f2,b1,b2) = len b1 by Def10
+                             .= len AutMt(f1,b1,b2) by Def10;
+then A7: len AutMt(f1+f2,b1,b2) = len (AutMt(f1,b1,b2) + AutMt(f2,b1,b2))
+                                             by MATRIX_3:def 3;
+A8: dom AutMt(f1+f2,b1,b2) = dom AutMt(f1,b1,b2) by A6,FINSEQ_3:31;
+A9: width AutMt(f1+f2,b1,b2) = width AutMt(f1,b1,b2)
+      proof
+          len b1 = 0 or len b1 > 0 implies
+                             width AutMt(f1+f2,b1,b2) = width AutMt(f1,b1,b2)
+        proof
+          assume A10: len b1 = 0 or len b1 > 0;
+          per cases by A10;
+          suppose A11: len b1 = 0;
+           then AutMt(f1+f2,b1,b2) = {} by Th43
+                             .= AutMt(f1,b1,b2) by A11,Th43;
+           hence thesis;
+          suppose A12: len b1 > 0;
+           hence width AutMt(f1+f2,b1,b2) = len b2 by Th44
+                                     .= width AutMt(f1,b1,b2) by A12,Th44;
+        end;
+        hence thesis by NAT_1:19;
+      end;
+then A13: width AutMt(f1+f2,b1,b2) = width (AutMt(f1,b1,b2) + AutMt(f2,b1,b2))
+                                              by MATRIX_3:def 3;
+        for i,j st [i,j] in Indices AutMt(f1+f2,b1,b2) holds
+         AutMt(f1+f2,b1,b2)*(i,j) = (AutMt(f1,b1,b2) + AutMt(f2,b1,b2))*(i,j)
+      proof
+        let i,j; assume A14: [i,j] in Indices AutMt(f1+f2,b1,b2);
+        then A15: [i,j] in [:dom AutMt(f1+f2,b1,b2),
+                    Seg width AutMt(f1+f2,b1,b2):] by MATRIX_1:def 5;
+        then A16: [i,j] in Indices AutMt(f1,b1,b2)
+                              by A8,A9,MATRIX_1:def 5;
+        A17: [i,j] in Indices AutMt(f2,b1,b2) by A1,A2,A8,A9,A15,MATRIX_1:def 5
+;
+          AutMt(f1+f2,b1,b2)*(i,j) =
+                                  AutMt(f1,b1,b2)*(i,j)+AutMt(f2,b1,b2)*(i,j)
+        proof
+          consider p1 be FinSequence of the carrier of K such that A18:
+                  p1 = AutMt(f1+f2,b1,b2).i &
+                  AutMt(f1+f2,b1,b2)*(i,j) = p1.j by A14,MATRIX_1:def 6;
+          consider p2 be FinSequence of the carrier of K such that A19:
+                  p2 = (AutMt(f1,b1,b2)).i &
+                  AutMt(f1,b1,b2)*(i,j) = p2.j by A16,MATRIX_1:def 6;
+          consider p3 be FinSequence of the carrier of K such that A20:
+                  p3 = (AutMt(f2,b1,b2)).i &
+                  AutMt(f2,b1,b2)*(i,j) = p3.j by A17,MATRIX_1:def 6;
+          A21: j in Seg width AutMt(f1+f2,b1,b2) by A15,ZFMISC_1:106;
+            len b1 = len AutMt(f1+f2,b1,b2) by Def10;
+          then dom b1 = dom AutMt(f1+f2,b1,b2) by FINSEQ_3:31;
+          then dom b1 <> {} by A15,ZFMISC_1:106;
+          then Seg len b1 <> {} by FINSEQ_1:def 3;
+          then len b1 > 0 by FINSEQ_1:4,NAT_1:19;
+then A22:   j in Seg len b2 by A21,Th44;
+then A23:   1<=j & j<=len b2 by FINSEQ_1:3;
+A24:       j in dom b2 by A22,FINSEQ_1:def 3;
+          A25: i in dom AutMt(f1+f2,b1,b2) by A15,ZFMISC_1:106;
+          then A26: i in dom b1 by Lm4;
+          then A27: i in dom AutMt(f1,b1,b2) & i in dom AutMt(f2,b1,b2) by Lm4;
+          A28: 1<=j & j<=len ((f1+f2).(b1/.i)|--b2) & j<=len (f1.(b1/.i)|--b2)
+                    & j<=len (f2.(b1/.i)|--b2) by A23,Def9;
+          A29: p1 = (AutMt(f1+f2,b1,b2))/.i by A18,A25,FINSEQ_4:def 4
+                     .= (f1+f2).(b1/.i)|--b2 by A26,Def10;
+          A30: p2 = (AutMt(f1,b1,b2))/.i by A19,A27,FINSEQ_4:def 4
+                     .= f1.(b1/.i)|--b2 by A26,Def10;
+          A31: p3 = AutMt(f2,b1,b2)/.i by A20,A27,FINSEQ_4:def 4
+                     .= f2.(b1/.i)|--b2 by A26,Def10;
+          A32: j in dom p1 by A24,A29,Lm2;
+          A33: j in dom p2 by A24,A30,Lm2;
+          A34: j in dom p3 by A24,A31,Lm2;
+          A35: AutMt(f1,b1,b2)*(i,j) = p2/.j by A19,A33,FINSEQ_4:def 4;
+          A36: AutMt(f2,b1,b2)*(i,j) = p3/.j by A20,A34,FINSEQ_4:def 4;
+          consider KL1 be Linear_Combination of V2 such that
+            A37: (f1+f2).(b1/.i) = Sum(KL1) and
+A38:            Carrier KL1 c= rng b2 and
+A39:         for t st 1<=t & t<=len ((f1+f2).(b1/.i)|--b2) holds
+                       ((f1+f2).(b1/.i)|--b2)/.t=KL1.(b2/.t) by Def9;
+          consider KL2 be Linear_Combination of V2 such that
+            A40: f1.(b1/.i) = Sum(KL2) and
+A41:        Carrier KL2 c= rng b2 and
+A42:        for t st 1<=t & t<=len (f1.(b1/.i)|--b2) holds
+                              (f1.(b1/.i)|--b2)/.t=KL2.(b2/.t) by Def9;
+          consider KL3 be Linear_Combination of V2 such that
+            A43: f2.(b1/.i) = Sum(KL3) and
+A44:            Carrier KL3 c= rng b2 and
+A45:      for t st 1<=t & t<=len (f2.(b1/.i)|--b2) holds
+                                (f2.(b1/.i)|--b2)/.t=KL3.(b2/.t) by Def9;
+          A46: p1/.j = KL1.(b2/.j) by A28,A29,A39;
+          A47: p2/.j = KL2.(b2/.j) by A28,A30,A42;
+          A48: p3/.j = KL3.(b2/.j) by A28,A31,A45;
+          reconsider b4 = rng b2 as Basis of V2 by Def4;
+          A49: b4 is linearly-independent by VECTSP_7:def 3;
+            (f1+f2).(b1/.i) = f1.(b1/.i) + f2.(b1/.i) by Def5;
+          then KL1.(b2/.j) = (KL2 + KL3).(b2/.j)
+                   by A37,A38,A40,A41,A43,A44,A49,Th10
+                          .= KL2.(b2/.j) + KL3.(b2/.j) by VECTSP_6:def 11;
+          hence AutMt(f1+f2,b1,b2)*(i,j) =
+ AutMt(f1,b1,b2)*(i,j) + AutMt(f2,b1,b2)*(i,j)
+                       by A18,A32,A35,A36,A46,A47,A48,FINSEQ_4:def 4;
+        end;
+        hence thesis by A16,MATRIX_3:def 3;
+      end;
+      hence thesis by A7,A13,MATRIX_1:21;
+    end;
+
+  theorem
+      a <> 0.K implies AutMt(a*f,b1,b2) = a * AutMt(f,b1,b2)
+    proof
+      assume A1: a <> 0.K;
+A2: len AutMt(a*f,b1,b2) = len b1 by Def10
+                            .= len AutMt(f,b1,b2) by Def10;
+then A3: len AutMt(a*f,b1,b2) = len (a * AutMt(f,b1,b2)) by MATRIX_3:def 5;
+A4: dom AutMt(a*f,b1,b2) = dom AutMt(f,b1,b2) by A2,FINSEQ_3:31;
+A5: width AutMt(a*f,b1,b2) = width AutMt(f,b1,b2)
+      proof
+          len b1 = 0 or len b1 > 0 implies
+                               width AutMt(a*f,b1,b2) = width AutMt(f,b1,b2)
+        proof
+          assume A6: len b1 = 0 or len b1 > 0;
+          per cases by A6;
+          suppose A7: len b1 = 0;
+           then AutMt(a*f,b1,b2) = {} by Th43
+                           .= AutMt(f,b1,b2) by A7,Th43;
+           hence thesis;
+          suppose A8: len b1 > 0;
+           hence width AutMt(a*f,b1,b2) = len b2 by Th44
+                                      .= width AutMt(f,b1,b2) by A8,Th44;
+        end;
+        hence thesis by NAT_1:19;
+      end;
+      then A9: width AutMt(a*f,b1,b2) = width (a * AutMt(f,b1,b2)) by MATRIX_3:
+def 5;
+        for i,j st [i,j] in Indices AutMt(a*f,b1,b2) holds
+         AutMt(a*f,b1,b2)*(i,j) = (a * AutMt(f,b1,b2))*(i,j)
+      proof
+        let i,j; assume A10: [i,j] in Indices AutMt(a*f,b1,b2);
+then A11: [i,j] in [:dom AutMt(a*f,b1,b2),Seg width AutMt(a*f,b1,b2):]
+                                                by MATRIX_1:def 5;
+then A12:  [i,j] in Indices AutMt(f,b1,b2) by A4,A5,MATRIX_1:def 5;
+   AutMt(a*f,b1,b2)*(i,j) = a * (AutMt(f,b1,b2)*(i,j))
+        proof
+          consider p1 be FinSequence of the carrier of K such that A13:
+                  p1 = AutMt(a*f,b1,b2).i &
+                  AutMt(a*f,b1,b2)*(i,j) = p1.j by A10,MATRIX_1:def 6;
+          consider p2 be FinSequence of the carrier of K such that A14:
+                  p2 = (AutMt(f,b1,b2)).i &
+                  AutMt(f,b1,b2)*(i,j) = p2.j by A12,MATRIX_1:def 6;
+          A15: j in Seg width AutMt(a*f,b1,b2) by A11,ZFMISC_1:106;
+            len b1 = len AutMt(a*f,b1,b2) by Def10;
+          then dom b1 = dom AutMt(a*f,b1,b2) by FINSEQ_3:31;
+          then dom b1 <> {} by A11,ZFMISC_1:106;
+          then Seg len b1 <> {} by FINSEQ_1:def 3;
+          then len b1 > 0 by FINSEQ_1:4,NAT_1:19;
+then A16:      j in Seg len b2 by A15,Th44;
+          then A17: 1<=j & j<=len b2 by FINSEQ_1:3;
+A18:       j in dom b2 by A16,FINSEQ_1:def 3;
+          A19: i in dom AutMt(a*f,b1,b2) by A11,ZFMISC_1:106;
+          then A20: i in dom b1 by Lm4;
+          then A21: i in dom AutMt(f,b1,b2) by Lm4;
+          A22: 1<=j & j<=len ((a*f).(b1/.i)|--b2) by A17,Def9;
+          A23: 1<=j & j<=len (f.(b1/.i)|--b2) by A17,Def9;
+          A24: p1 = (AutMt(a*f,b1,b2))/.i by A13,A19,FINSEQ_4:def 4
+                     .= (a*f).(b1/.i)|--b2 by A20,Def10;
+          A25: p2 = (AutMt(f,b1,b2))/.i by A14,A21,FINSEQ_4:def 4
+                     .= f.(b1/.i)|--b2 by A20,Def10;
+          A26: j in dom p1 by A18,A24,Lm2;
+            j in dom (f.(b1/.i)|--b2) by A18,Lm2;
+          then A27: AutMt(f,b1,b2)*(i,j) = p2/.j by A14,A25,FINSEQ_4:def 4;
+          consider KL1 be Linear_Combination of V2 such that
+            A28: (a*f).(b1/.i) = Sum(KL1) & Carrier KL1 c= rng b2 &
+            for t st 1<=t & t<=len ((a*f).(b1/.i)|--b2) holds
+                               ((a*f).(b1/.i)|--b2)/.t=KL1.(b2/.t) by Def9;
+          consider KL2 be Linear_Combination of V2 such that
+            A29: f.(b1/.i) = Sum(KL2) & Carrier KL2 c= rng b2 &
+            for t st 1<=t & t<=len (f.(b1/.i)|--b2) holds
+                                (f.(b1/.i)|--b2)/.t=KL2.(b2/.t) by Def9;
+          A30: p1/.j = KL1.(b2/.j) by A22,A24,A28;
+          A31: p2/.j = KL2.(b2/.j) by A23,A25,A29;
+          reconsider b4 = rng b2 as Basis of V2 by Def4;
+          A32: b4 is linearly-independent by VECTSP_7:def 3;
+            (a*f).(b1/.i) = a * (f.(b1/.i)) by Def6;
+          then KL1.(b2/.j) = (a * KL2).(b2/.j)
+                                        by A1,A28,A29,A32,Th11
+                          .= a * KL2.(b2/.j) by VECTSP_6:def 12;
+          hence AutMt(a*f,b1,b2)*(i,j) = a * (AutMt(f,b1,b2)*
+(i,j)) by A13,A26,A27,A30,A31,FINSEQ_4:def 4;
+        end;
+        hence thesis by A12,MATRIX_3:def 5;
+      end;
+      hence thesis by A3,A9,MATRIX_1:21;
+    end;
+

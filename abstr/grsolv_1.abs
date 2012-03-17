@@ -1,0 +1,147 @@
+:: Solvable Groups
+::  by Katarzyna Zawadzka
+::
+:: Received October 23, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary REALSET1, FINSEQ_1, GROUP_3, FUNCT_1, RLSUB_1, GROUP_2, RELAT_1,
+      GROUP_6, BINOP_1, BOOLE, QC_LANG1, WELLORD1, GROUP_1, VECTSP_1, GRAPH_1,
+      GRSOLV_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1, STRUCT_0,
+      BINOP_1, RELAT_1, FUNCT_1, FUNCT_2, RLVECT_1, GR_CY_1, VECTSP_1,
+      FINSEQ_1, GROUP_1, GROUP_2, GROUP_3, GROUP_6;
+ constructors DOMAIN_1, BINOP_1, GR_CY_1, GROUP_6, PARTFUN1, XCMPLX_0,
+      MEMBERED, XBOOLE_0;
+ clusters FUNCT_1, GROUP_1, GROUP_2, GROUP_3, GROUP_6, GR_CY_1, STRUCT_0,
+      RELSET_1, FINSEQ_1, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+reserve i,j,k for Nat;
+
+definition let IT be Group;
+attr IT is solvable means
+:: GRSOLV_1:def 1
+
+ ex F being FinSequence of Subgroups IT st len F>0 & F.1=(Omega).IT &
+ F.(len F)=(1).IT
+ & for i st i in dom F & i+1 in dom F
+ for G1,G2 being strict Subgroup of IT st G1=F.i & G2=F.(i+1) holds
+ G2 is strict normal Subgroup of G1 &
+ for N being normal Subgroup of G1 st N=G2 holds G1./.N is commutative;
+ end;
+
+definition
+cluster solvable strict Group;
+end;
+
+theorem :: GRSOLV_1:1
+for G being strict Group for H,F1,F2 being strict Subgroup of G st
+ F1 is normal Subgroup of F2 holds F1 /\ H is normal Subgroup of F2 /\ H;
+
+theorem :: GRSOLV_1:2
+   for G being strict Group for F2 being strict Subgroup of G
+ for F1 being strict normal Subgroup of F2
+ for a,b being Element of F2
+  holds (a*F1) *(b*F1)=a *b *F1;
+
+theorem :: GRSOLV_1:3
+  for G being strict Group for H,F2 being strict Subgroup of G
+ for F1 being strict normal Subgroup of F2 holds
+ for G2 being strict Subgroup of G st G2=H/\F2
+ for G1 being normal Subgroup of G2 st G1=H /\ F1
+ ex G3 being Subgroup of F2./.F1 st
+ G2./.G1, G3 are_isomorphic;
+
+theorem :: GRSOLV_1:4
+for G being strict Group for H,F2 being strict Subgroup of G
+ for F1 being strict normal Subgroup of F2 holds
+ for G2 being strict Subgroup of G st G2=F2/\H
+ for G1 being normal Subgroup of G2 st G1=F1/\H
+ ex G3 being Subgroup of F2./.F1 st
+ G2./.G1, G3 are_isomorphic;
+
+theorem :: GRSOLV_1:5
+  for G being solvable strict Group for H being strict Subgroup of G holds
+   H is solvable;
+
+theorem :: GRSOLV_1:6
+  for G being strict Group st
+ ex F being FinSequence of Subgroups G st
+ len F>0 & F.1=(Omega).G & F.(len F)=(1).G &
+ for i st i in dom F & i+1 in dom F
+ for G1,G2 being strict Subgroup of G st G1=F.i & G2=F.(i+1) holds
+ G2 is strict normal Subgroup of G1 &
+ for N being normal Subgroup of G1 st N=G2 holds G1./.N is cyclic Group
+ holds G is solvable;
+
+theorem :: GRSOLV_1:7
+  for G being strict commutative Group holds G is strict solvable;
+
+definition let G,H be strict Group;
+let g be Homomorphism of G,H; let A be Subgroup of G;
+func g|A -> Homomorphism of A,H equals
+:: GRSOLV_1:def 2
+  g|(the carrier of A);
+end;
+
+definition let G,H be strict Group;
+let g be Homomorphism of G,H;let A be Subgroup of G;
+func g.:A -> strict Subgroup of H equals
+:: GRSOLV_1:def 3
+ Image (g| A);
+end;
+
+theorem :: GRSOLV_1:8
+ for G,H being strict Group, g being Homomorphism of G,H
+ for A being Subgroup of G holds
+ rng (g|A)=g.:(the carrier of A);
+
+theorem :: GRSOLV_1:9
+ for G,H being strict Group, g being Homomorphism of G,H
+ for A being strict Subgroup of G holds
+  the carrier of (g.: A)=g.:(the carrier of A);
+
+theorem :: GRSOLV_1:10
+ for G,H being strict Group, h being Homomorphism of G,H holds
+  for A being strict Subgroup of G holds
+    Image(h|A) is strict Subgroup of Image h;
+
+theorem :: GRSOLV_1:11
+ for G,H being strict Group, h being Homomorphism of G,H holds
+  for A being strict Subgroup of G holds h.:A is strict Subgroup of Image h;
+
+theorem :: GRSOLV_1:12
+ for G,H being strict Group, h being Homomorphism of G,H holds
+  h.:((1).G)=(1).H & h.:((Omega).G)=(Omega).(Image h);
+
+theorem :: GRSOLV_1:13
+for G,H being strict Group, h being Homomorphism of G,H
+    for A,B being strict Subgroup of G holds
+    A is Subgroup of B implies
+    h.:A is Subgroup of h.:B;
+
+theorem :: GRSOLV_1:14
+for G,H being strict Group, h being Homomorphism of G,H
+    for A being strict Subgroup of G for a being Element of G
+    holds
+    h.a* h.:A=h.:(a*A) & h.:A * h.a=h.:(A*a);
+
+theorem :: GRSOLV_1:15
+for G,H being strict Group, h being Homomorphism of G,H
+    for A,B being Subset of G holds
+    h.:A* h.:B=h.:(A*B);
+
+theorem :: GRSOLV_1:16
+for G,H being strict Group, h being Homomorphism of G,H
+    for A,B being strict Subgroup of G holds
+    A is strict normal Subgroup of B implies
+    h.:A is strict normal Subgroup of h.:B;
+
+theorem :: GRSOLV_1:17
+   for G,H being strict Group, h being Homomorphism of G,H holds
+ G is solvable Group implies Image h is solvable;

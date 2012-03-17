@@ -1,0 +1,919 @@
+:: Euclide Algorithm
+::  by Andrzej Trybulec and Yatsuka Nakamura
+::
+:: Received October 8, 1993
+:: Copyright (c) 1993 Association of Mizar Users
+
+environ
+
+ vocabulary INT_1, NAT_1, ARYTM_3, ARYTM_1, ABSVALUE, FUNCT_1, CQC_LANG, AMI_3,
+      AMI_1, CAT_1, FUNCT_4, RELAT_1, BOOLE, AMI_2, INT_2, PARTFUN1, FUNCOP_1,
+      AMI_4;
+ notation TARSKI, XBOOLE_0, ENUMSET1, NUMBERS, XCMPLX_0, XREAL_0, FUNCT_1,
+      FUNCT_2, INT_1, NAT_1, CQC_LANG, GROUP_1, INT_2, STRUCT_0, RELAT_1,
+      PARTFUN1, AMI_1, AMI_3;
+ constructors ENUMSET1, REAL_1, NAT_1, INT_2, AMI_2, AMI_3, MEMBERED, XBOOLE_0;
+ clusters AMI_1, AMI_3, RELSET_1, XREAL_0, INT_1, FRAENKEL, MEMBERED, ZFMISC_1,
+      XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions AMI_1, TARSKI, AMI_3;
+ theorems AMI_1, REAL_1, INT_1, AXIOMS, ABSVALUE, INT_2, TARSKI, ENUMSET1,
+      NAT_1, CQC_LANG, GR_CY_2, REAL_2, GR_CY_1, PARTFUN1, FUNCT_4, FUNCT_1,
+      GRFUNC_1, ZFMISC_1, AMI_3, CQC_THE1, RELAT_1, RELSET_1, XBOOLE_0,
+      XBOOLE_1, NAT_LAT, XCMPLX_1;
+ schemes NAT_1, RECDEF_1, FUNCT_1, AMI_3;
+
+begin :: Preliminaries
+
+theorem Th1:
+ for i,j being Integer st i >= 0 & j >= 0
+  holds i div j >= 0
+  proof let i,j be Integer such that
+A1:   i >= 0 & j >= 0;
+A2:  i div j = [\ i / j /] by INT_1:def 7;
+A3:  i / j - 1 < [\ i / j /] by INT_1:def 4;
+      i / j >= 0 & 0 - 1 = - 1 by A1,REAL_2:125;
+    then i / j - 1 >= -1 by REAL_1:49;
+    then - 1 < [\ i / j /] by A3,AXIOMS:22;
+   hence i div j >= 0 by A2,INT_1:21;
+  end;
+
+theorem Th2:
+ for i,j being Integer st i >= 0 & j > 0
+  holds abs(i) mod abs(j) = i mod j
+      & abs(i) div abs(j) = i div j
+proof let i,j be Integer;
+assume that A1: i >= 0 and A2: j > 0;
+A3: i = abs(i) & j = abs(j) by A1,A2,ABSVALUE:def 1;
+    i mod j >= 0 & i div j >= 0 by A1,A2,Th1,GR_CY_2:2;
+  then reconsider n = i mod j, m = i div j as Nat by INT_1:16;
+A4: n < j by A2,GR_CY_2:3;
+    n = i - m * j by A2,INT_1:def 8;
+  then i = j * m + n by XCMPLX_1:27;
+ hence thesis by A3,A4,NAT_1:def 1,def 2;
+end;
+
+reserve i,j,k for Nat;
+
+scheme Euklides' { F(Nat)->Nat,G(Nat)->Nat,a()->Nat,b()->Nat } :
+  ex k st F(k) = a() hcf b() & G(k) = 0
+   provided
+A1: 0 < b() and
+A2: b() < a() and
+A3: F(0) = a() and
+A4: G(0) = b() and
+A5: for k st G(k) > 0 holds F(k+1) = G(k) & G(k+1) = F(k) mod G(k)
+ proof
+
+A6: 0 < b() & b() < a() by A1,A2;
+   deffunc _F(Nat,set) = IFEQ($2,0,0,G($1));
+   consider q being Function of NAT,NAT such that
+A7: q.0 = a() and
+A8: for i holds q.(i+1) = _F(i,q.i) from LambdaRecExD;
+   deffunc _Q(Nat) = q.$1;
+     q.(0+1) = IFEQ(q.0,0,0,G(0)) by A8
+     .= G(0) by A1,A2,A7,CQC_LANG:def 1;
+then A9: _Q(0) = a() & _Q(1) = b() by A4,A7;
+A10: for k st q.k qua Nat > 0 holds q.k = F(k)
+    proof let k such that
+A11:    q.k qua Nat > 0;
+       now per cases;
+      case k = 0;
+       hence q.k = F(k) by A3,A7;
+      case k <> 0;
+       then consider i such that
+A12:       k = i+1 by NAT_1:22;
+A13:      now assume
+A14:        q.i qua Nat = 0;
+            q.k = IFEQ(q.i,0,0,G(i)) by A8,A12
+             .= 0 by A14,CQC_LANG:def 1;
+         hence contradiction by A11;
+        end;
+          q.k = IFEQ(q.i,0,0,G(i)) by A8,A12
+          .= G(i) by A13,CQC_LANG:def 1;
+      hence q.k = F(k) by A5,A11,A12;
+     end;
+     hence q.k = F(k);
+    end;
+A15: for k holds _Q(k+2) = _Q(k) mod _Q(k+1)
+    proof let k;
+        now per cases;
+       case
+A16:      q.(k+1) <> 0;
+           now assume
+A17:        G(k) = 0;
+A18:        q.k = 0 or q.k <> 0;
+
+             q.(k+1) = IFEQ(q.k,0,0,G(k)) by A8
+            .= 0 by A17,A18,CQC_LANG:def 1;
+          hence contradiction by A16;
+         end;
+         then A19:       G(k) > 0 by NAT_1:19;
+A20:       q.(k+(1+1)) = q.((k+1)+1) by XCMPLX_1:1
+           .= IFEQ(q.(k+1),0,0,G(k+1)) by A8
+           .= G(k+1) by A16,CQC_LANG:def 1
+           .= F(k) mod G(k) by A5,A19;
+A21:       now assume
+A22:         q.k = 0;
+             q.(k+1) = IFEQ(q.k,0,0,G(k)) by A8
+            .= 0 by A22,CQC_LANG:def 1;
+          hence contradiction by A16;
+         end;
+then A23:       q.k qua Nat > 0 by NAT_1:19;
+           q.(k+1) = IFEQ(q.k,0,0,G(k)) by A8
+            .= G(k) by A21,CQC_LANG:def 1;
+        hence q.(k+2) = q.(k) mod q.(k+1) by A10,A20,A23;
+       case
+A24:       q.(k+1) = 0;
+        thus q.(k+2) = q.(k+(1+1))
+           .= q.((k+1)+1) by XCMPLX_1:1
+           .= IFEQ(q.(k+1),0,0,G(k+1)) by A8
+           .= 0 by A24,CQC_LANG:def 1
+           .= q.(k) mod q.(k+1) by A24,NAT_1:def 2;
+      end;
+     hence q.(k+2) = q.(k) mod q.(k+1);
+    end;
+   consider k such that
+A25:  _Q(k) = a() hcf b() & _Q(k + 1) = 0 from Euklides(A6,A9,A15);
+  take k;
+A26: a() hcf b() > 0 by A1,NAT_LAT:43;
+  hence F(k) = a() hcf b() by A10,A25;
+  thus G(k) = IFEQ(q.k,0,0,G(k)) by A25,A26,CQC_LANG:def 1
+     .= 0 by A8,A25;
+ end;
+
+set a = dl.0, b = dl.1, c = dl.2;
+Lm1: a <> b & b <> c & c <> a by AMI_3:52;
+
+
+
+begin :: Euclide algorithm
+
+definition
+ func Euclide-Algorithm -> programmed FinPartState of SCM equals
+:Def1:
+ (il.0 .--> (dl.2 := dl.1)) +*
+  ((il.1 .--> Divide(dl.0,dl.1)) +*
+   ((il.2 .--> (dl.0 := dl.2)) +*
+    ((il.3 .--> (dl.1 >0_goto il.0)) +*
+     (il.4 .--> halt SCM))));
+ coherence
+  proof
+    set EA3 = (il.3 .--> (b >0_goto il.0)) +* (il.4 .--> halt SCM);
+    set EA2 = (il.2 .--> (a := dl.2)) +* EA3;
+      EA3 is programmed by AMI_3:35;
+    then EA2 is programmed by AMI_3:35;
+    then (il.1 .--> Divide(a,b)) +* EA2 is programmed by AMI_3:35;
+    hence thesis by AMI_3:35;
+  end;
+ correctness;
+end;
+
+defpred P[State of SCM] means
+ $1.il.0 = c := b &
+ $1.il.1 = Divide(a,b) &
+ $1.il.2 = a := c &
+ $1.il.3 = b >0_goto il.0 &
+ $1 halts_at il.4;
+
+ set IN0 = il.0 .--> (dl.2 := b);
+ set IN1 = il.1 .--> Divide(a,b);
+ set IN2 = il.2 .--> (a := dl.2);
+ set IN3 = il.3 .--> (b >0_goto il.0);
+ set IN4 = il.4 .--> halt SCM;
+ set EA3 = IN3 +* IN4;
+ set EA2 = IN2 +* EA3;
+ set EA1 = IN1 +* EA2;
+ set EA0 = IN0 +* EA1;
+
+canceled;
+
+theorem Th4:
+ dom Euclide-Algorithm = { il.0,il.1,il.2,il.3,il.4 }
+ proof
+A1: dom IN0 = { il.0 } by CQC_LANG:5;
+A2: dom IN1 = { il.1 } by CQC_LANG:5;
+A3: dom IN2 = { il.2 } by CQC_LANG:5;
+A4: dom IN3 = { il.3 } by CQC_LANG:5;
+   dom IN4 = { il.4 } by CQC_LANG:5;
+then dom EA3 = { il.3 } \/ { il.4 } by A4,FUNCT_4:def 1
+          .= { il.3,il.4 } by ENUMSET1:41;
+then dom EA2 = { il.2 } \/ { il.3,il.4 } by A3,FUNCT_4:def 1
+          .= { il.2,il.3,il.4 } by ENUMSET1:42;
+then dom EA1 = { il.1 } \/ { il.2,il.3,il.4 } by A2,FUNCT_4:def 1
+          .= { il.1,il.2,il.3,il.4 } by ENUMSET1:44;
+   then dom EA0 = { il.0 } \/ { il.1,il.2,il.3,il.4 } by A1,FUNCT_4:def 1
+          .= { il.0,il.1,il.2,il.3,il.4 } by ENUMSET1:47;
+  hence thesis by Def1;
+ end;
+
+Lm2:
+ for s being State of SCM st Euclide-Algorithm c= s holds P[s]
+ proof let s be State of SCM;
+A1: dom IN1 = { il.1 } by CQC_LANG:5;
+A2: dom IN2 = { il.2 } by CQC_LANG:5;
+A3: dom IN3 = { il.3 } by CQC_LANG:5;
+A4: dom IN4 = { il.4 } by CQC_LANG:5;
+then A5: dom EA3 = { il.3 } \/ { il.4 } by A3,FUNCT_4:def 1
+          .= { il.3,il.4 } by ENUMSET1:41;
+then A6: dom EA2 = { il.2 } \/ { il.3,il.4 } by A2,FUNCT_4:def 1
+          .= { il.2,il.3,il.4 } by ENUMSET1:42;
+then A7: dom EA1 = { il.1 } \/ { il.2,il.3,il.4 } by A1,FUNCT_4:def 1
+          .= { il.1,il.2,il.3,il.4 } by ENUMSET1:44;
+  assume A8: Euclide-Algorithm c= s;
+      il.0 <> il.1 & il.0 <> il.2 & il.0 <> il.3 & il.0 <> il.4 by AMI_3:53;
+    then A9: not il.0 in dom EA1 by A7,ENUMSET1:18;
+   il.0 in dom EA0 by Def1,Th4,ENUMSET1:24;
+  hence s.il.0 = EA0.il.0 by A8,Def1,GRFUNC_1:8
+      .= IN0.il.0 by A9,FUNCT_4:12
+      .= c := b by CQC_LANG:6;
+     EA1 c= EA0 by FUNCT_4:26;
+then A10: EA1 c= s by A8,Def1,XBOOLE_1:1;
+      il.1 <> il.2 & il.1 <> il.3 & il.1 <> il.4 by AMI_3:53;
+then A11: not il.1 in dom EA2 by A6,ENUMSET1:13;
+   il.1 in dom EA1 by A7,ENUMSET1:19;
+  hence s.il.1 = EA1.il.1 by A10,GRFUNC_1:8
+      .= IN1.il.1 by A11,FUNCT_4:12
+      .= Divide(a,b) by CQC_LANG:6;
+     EA2 c= EA1 by FUNCT_4:26;
+then A12: EA2 c= s by A10,XBOOLE_1:1;
+      il.2 <> il.3 & il.2 <> il.4 by AMI_3:53;
+then A13: not il.2 in dom EA3 by A5,TARSKI:def 2;
+   il.2 in dom EA2 by A6,ENUMSET1:14;
+  hence s.il.2 = EA2.il.2 by A12,GRFUNC_1:8
+      .= IN2.il.2 by A13,FUNCT_4:12
+      .= a := c by CQC_LANG:6;
+     EA3 c= EA2 by FUNCT_4:26;
+then A14: EA3 c= s by A12,XBOOLE_1:1; il.3 <> il.4 by AMI_3:53;
+then A15: not il.3 in dom IN4 by A4,TARSKI:def 1;
+   il.3 in dom EA3 by A5,TARSKI:def 2;
+  hence s.il.3 = EA3.il.3 by A14,GRFUNC_1:8
+      .= IN3.il.3 by A15,FUNCT_4:12
+      .= b >0_goto il.0 by CQC_LANG:6;
+A16: il.4 in dom EA3 by A5,TARSKI:def 2;
+A17: il.4 in dom IN4 by A4,TARSKI:def 1;
+  thus s.il.4 = EA3.il.4 by A14,A16,GRFUNC_1:8
+      .= IN4.il.4 by A17,FUNCT_4:14
+      .= halt SCM by CQC_LANG:6;
+ end;
+
+begin :: Natural semantics of the program
+
+theorem Th5:
+  for s being State of SCM st Euclide-Algorithm c= s
+  for k st IC (Computation s).k = il.0
+  holds IC (Computation s).(k+1) = il.1 &
+   (Computation s).(k+1).dl.0 = (Computation s).k.dl.0 &
+   (Computation s).(k+1).dl.1 = (Computation s).k.dl.1 &
+   (Computation s).(k+1).dl.2 = (Computation s).k.dl.1
+ proof let s be State of SCM such that
+A1: Euclide-Algorithm c= s;
+  let k;
+  assume A2: IC (Computation s).k = il.0;
+A3: (Computation s).(k+1)
+     = Exec(s.(IC (Computation s).k),(Computation s).k) by AMI_1:55
+    .= Exec(c := b,(Computation s).k) by A1,A2,Lm2;
+  thus IC (Computation s).(k+1) = (Computation s).(k+1).IC SCM
+    by AMI_1:def 15
+     .= Next IC (Computation s).k by A3,AMI_3:8
+     .= il.(0+1) by A2,AMI_3:54
+     .= il.1;
+  thus (Computation s).(k+1).a = (Computation s).k.a &
+       (Computation s).(k+1).b = (Computation s).k.b by A3,Lm1,AMI_3:8;
+  thus (Computation s).(k+1).c = (Computation s).k.b by A3,AMI_3:8;
+ end;
+
+theorem Th6:
+  for s being State of SCM st Euclide-Algorithm c= s
+  for k st IC (Computation s).k = il.1
+  holds IC (Computation s).(k+1) = il.2 &
+   (Computation s).(k+1).dl.0 =
+    (Computation s).k.dl.0 div (Computation s).k.dl.1 &
+   (Computation s).(k+1).dl.1 =
+    (Computation s).k.dl.0 mod (Computation s).k.dl.1 &
+   (Computation s).(k+1).dl.2 = (Computation s).k.dl.2
+ proof let s be State of SCM such that
+A1: Euclide-Algorithm c= s;
+   let k such that
+A2: IC (Computation s).k = il.1;
+A3: (Computation s).(k+1)
+     = Exec(s.(IC (Computation s).k),(Computation s).k) by AMI_1:55
+    .= Exec(Divide(a,b),(Computation s).k) by A1,A2,Lm2;
+  thus IC (Computation s).(k+1)
+      = (Computation s).(k+1).IC SCM by AMI_1:def 15
+     .= Next IC (Computation s).k by A3,AMI_3:12
+     .= il.(1+1) by A2,AMI_3:54
+     .= il.2;
+   thus
+      (Computation s).(k+1).a = (Computation s).k.a div (Computation s).k.b &
+    (Computation s).(k+1).b = (Computation s).k.a mod (Computation s).k.b &
+    (Computation s).(k+1).c = (Computation s).k.c by A3,Lm1,AMI_3:12;
+ end;
+
+theorem Th7:
+  for s being State of SCM st Euclide-Algorithm c= s
+  for k st IC (Computation s).k = il.2
+  holds IC (Computation s).(k+1) = il.3 &
+   (Computation s).(k+1).dl.0 = (Computation s).k.dl.2 &
+   (Computation s).(k+1).dl.1 = (Computation s).k.dl.1 &
+   (Computation s).(k+1).dl.2 = (Computation s).k.dl.2
+ proof let s be State of SCM such that
+A1: Euclide-Algorithm c= s;
+  let k;
+  assume A2: IC (Computation s).k = il.2;
+A3: (Computation s).(k+1)
+     = Exec(s.(IC (Computation s).k),(Computation s).k) by AMI_1:55
+    .= Exec(a := c,(Computation s).k) by A1,A2,Lm2;
+  thus IC (Computation s).(k+1)
+      = (Computation s).(k+1).IC SCM by AMI_1:def 15
+     .= Next IC (Computation s).k by A3,AMI_3:8
+     .= il.(2+1) by A2,AMI_3:54
+     .= il.3;
+  thus (Computation s).(k+1).a = (Computation s).k.c by A3,AMI_3:8;
+  thus (Computation s).(k+1).b = (Computation s).k.b
+     & (Computation s).(k+1).c = (Computation s).k.c by A3,Lm1,AMI_3:8;
+ end;
+
+theorem Th8:
+  for s being State of SCM st Euclide-Algorithm c= s
+  for k st IC (Computation s).k = il.3
+  holds
+   ((Computation s).k.dl.1 > 0 implies IC (Computation s).(k+1) = il.0) &
+   ((Computation s).k.dl.1 <= 0 implies IC (Computation s).(k+1) = il.4) &
+   (Computation s).(k+1).dl.0 = (Computation s).k.dl.0 &
+   (Computation s).(k+1).dl.1 = (Computation s).k.dl.1
+ proof let s be State of SCM such that
+A1: Euclide-Algorithm c= s;
+  let k; assume
+A2: IC (Computation s).k = il.3;
+A3: (Computation s).(k+1)
+     = Exec(s.(IC (Computation s).k),(Computation s).k) by AMI_1:55
+    .= Exec(b >0_goto il.0,(Computation s).k) by A1,A2,Lm2;
+  thus (Computation s).k.b > 0 implies IC (Computation s).(k+1) = il.0
+   proof assume
+A4:  (Computation s).k.b > 0;
+    thus IC (Computation s).(k+1)
+        = (Computation s).(k+1).IC SCM by AMI_1:def 15
+       .= il.0 by A3,A4,AMI_3:15;
+   end;
+  thus (Computation s).k.b <= 0 implies IC (Computation s).(k+1) = il.4
+   proof assume
+A5:  (Computation s).k.b <= 0;
+    thus IC (Computation s).(k+1)
+        = (Computation s).(k+1).IC SCM by AMI_1:def 15
+       .= Next IC (Computation s).k by A3,A5,AMI_3:15
+       .= il.(3+1) by A2,AMI_3:54
+       .= il.4;
+   end;
+  thus (Computation s).(k+1).a = (Computation s).k.a
+     & (Computation s).(k+1).b = (Computation s).k.b by A3,AMI_3:15;
+ end;
+
+theorem Th9:
+  for s being State of SCM st Euclide-Algorithm c= s
+  for k,i st IC (Computation s).k = il.4
+  holds (Computation s).(k+i) = (Computation s).k
+ proof let s be State of SCM such that
+A1: Euclide-Algorithm c= s;
+   let k,i;
+A2: k <= k + i by NAT_1:29;
+   assume IC (Computation s).k = il.4;
+    then s halts_at IC (Computation s).k by A1,Lm2;
+   hence (Computation s).(k+i) = (Computation s).k by A2,AMI_3:46;
+ end;
+
+Lm3:
+  for s being State of SCM st s starts_at il.0 & Euclide-Algorithm c= s
+    & s.a > 0 & s.b > 0
+  holds
+   (Computation s).(4*k).a > 0 &
+   ((Computation s).(4*k).b > 0 & IC (Computation s).(4*k) = il.0 or
+   (Computation s).(4*k).b = 0 & IC (Computation s).(4*k) = il.4)
+ proof let s be State of SCM such that
+A1: IC s = il.0 and
+A2:  Euclide-Algorithm c= s and
+A3:  s.a > 0 & s.b > 0;
+    defpred _P[Nat] means
+(Computation s).(4*$1).a > 0 &
+   ((Computation s).(4*$1).b > 0 & IC (Computation s).(4*$1) = il.0 or
+   (Computation s).(4*$1).b = 0 & IC (Computation s).(4*$1) = il.4);
+A4: _P[0]  by A1,A3,AMI_1:def 19;
+A5: for k st _P[k] holds _P[k+1] proof let k;
+    set c4 = (Computation s).(4*k), c5 = (Computation s).(4*k+1),
+        c6 = (Computation s).(4*k+2), c7 = (Computation s).(4*k+3),
+        c8 = (Computation s).(4*k+4);
+A6: 4*k+4*1 = 4*(k+1) by XCMPLX_1:8;
+A7: c6 = (Computation s).(4*k+(1+1))
+       .= (Computation s).((4*k+1)+1) by XCMPLX_1:1;
+A8: c7 = (Computation s).(4*k+(2+1))
+       .= (Computation s).((4*k+2)+1) by XCMPLX_1:1;
+A9: c8 = (Computation s).(4*k+(3+1))
+       .= (Computation s).((4*k+3)+1) by XCMPLX_1:1;
+    assume
+A10: c4.a > 0;
+    assume
+A11:   c4.b > 0 & IC c4 = il.0 or c4.b = 0 & IC c4 = il.4;
+       now per cases by A11;
+      case
+A12:     c4.b > 0;
+       then A13:    IC c5 = il.1 &
+        c5.a = c4.a &
+        c5.b = c4.b &
+        c5.c = c4.b by A2,A11,Th5;
+then A14:    IC c6 = il.2 &
+        c6.b = c5.a mod c5.b &
+        c6.c = c5.c by A2,A7,Th6;
+    then A15: IC c7 = il.3 &
+        c7.a = c6.c &
+        c7.b = c6.b &
+        c7.c = c6.c by A2,A8,Th7;
+then (c7.b > 0 implies IC c8 = il.0) &
+        (c7.b <= 0 implies IC c8 = il.4) &
+        c8.a = c7.a &
+        c8.b = c7.b by A2,A9,Th8;
+      hence c8.a > 0 & (c8.b > 0 & IC c8 = il.0 or c8.b = 0 & IC c8 = il.4)
+       by A12,A13,A14,A15,GR_CY_2:2;
+      case c4.b = 0;
+       hence c8.a > 0 & c8.b = 0 & IC c8 = il.4 by A2,A10,A11,Th9;
+     end;
+    hence _P[k+1] by A6;
+   end;
+     for k holds _P[k] from Ind(A4,A5);
+  hence thesis;
+ end;
+
+Lm4:
+  for s being State of SCM st s starts_at il.0 & Euclide-Algorithm c= s
+    & s.a > 0 & s.b > 0
+  holds (Computation s).(4*k).b > 0 implies
+   (Computation s).(4*(k+1)).a = (Computation s).(4*k).b &
+   (Computation s).(4*(k+1)).b
+     = (Computation s).(4*k).a mod (Computation s).(4*k).b
+proof let s be State of SCM such that
+A1: s starts_at il.0 and
+A2: Euclide-Algorithm c= s and
+A3: s.a > 0 & s.b > 0 and
+A4: (Computation s).(4*k).b > 0;
+  set c4 = (Computation s).(4*k), c5 = (Computation s).(4*k+1),
+      c6 = (Computation s).(4*k+2), c7 = (Computation s).(4*k+3);
+A5: 4*k+4*1 = 4*(k+1) by XCMPLX_1:8;
+A6: c6 = (Computation s).(4*k+(1+1))
+       .= (Computation s).((4*k+1)+1) by XCMPLX_1:1;
+A7: c7 = (Computation s).(4*k+(2+1))
+       .= (Computation s).((4*k+2)+1) by XCMPLX_1:1;
+A8: (Computation s).(4*k+4) = (Computation s).(4*k+(3+1))
+       .= (Computation s).((4*k+3)+1) by XCMPLX_1:1;
+     c4.b > 0 & IC c4 = il.0 or c4.b = 0 & IC c4 = il.4 by A1,A2,A3,Lm3;
+   then A9:    IC c5 = il.1 &
+        c5.a = c4.a &
+        c5.b = c4.b &
+        c5.c = c4.b by A2,A4,Th5;
+then A10:    IC c6 = il.2 &
+        c6.b = c5.a mod c5.b &
+        c6.c = c5.c by A2,A6,Th6;
+then A11:    IC c7 = il.3 &
+        c7.a = c6.c &
+        c7.b = c6.b &
+        c7.c = c6.c by A2,A7,Th7;
+ hence (Computation s).(4*(k+1)).a = (Computation s).(4*k).b by A2,A5,A8,A9,A10
+,Th8;
+ thus (Computation s).(4*(k+1)).b =
+(Computation s).(4*k).a mod (Computation s).(4*k).b by A2,A5,A8,A9,A10,A11,Th8;
+end;
+
+Lm5:
+  for s being State of SCM st s starts_at il.0 & Euclide-Algorithm c= s
+  for x, y being Integer st s.a = x & s.b = y & x > y & y > 0
+  holds (Result s).a = x gcd y
+   & ex k st s halts_at IC (Computation s).k
+ proof
+  let s be State of SCM such that
+A1: s starts_at il.0 and
+A2: Euclide-Algorithm c= s;
+  let x, y be Integer such that
+A3: s.a = x & s.b = y and
+A4: x > y & y > 0;
+A5: x > 0 by A4,AXIOMS:22;
+   A6: x >= 0 & y >= 0 by A4,AXIOMS:22;
+   then reconsider x' = x, y' = y as Nat by INT_1:16;
+A7: 0 < y' by A4;
+A8: y' < x' by A4;
+   deffunc F(Nat) = abs((Computation s).(4*$1).a);
+   deffunc G(Nat) = abs((Computation s).(4*$1).b);
+A9: F(0) = abs(x) by A3,AMI_1:def 19
+      .= x' by A6,ABSVALUE:def 1;
+A10: G(0) = abs(y) by A3,AMI_1:def 19
+      .= y' by A4,ABSVALUE:def 1;
+A11:
+  now let k;
+A12: (Computation s).(4*k).b > 0 or (Computation s).(4*k).b = 0
+      by A1,A2,A3,A4,A5,Lm3;
+   assume A13: G(k) > 0;
+   hence F(k+1) = G(k) by A1,A2,A3,A4,A5,A12,Lm4,ABSVALUE:7;
+A14: (Computation s).(4*(k+1)).b >= 0 by A1,A2,A3,A4,A5,Lm3;
+    A15: (Computation s).(4*k).a >= 0 by A1,A2,A3,A4,A5,Lm3;
+   thus G(k+1) = (Computation s).(4*(k+1)).b by A14,ABSVALUE:def 1
+        .= (Computation s).(4*k).a mod (Computation s).(4*k).b
+              by A1,A2,A3,A4,A5,A12,A13,Lm4,ABSVALUE:7
+        .= F(k) mod G(k) by A12,A13,A15,Th2,ABSVALUE:7;
+  end;
+  consider k such that
+A16: F(k) = x' hcf y' and
+A17: G(k) = 0 from Euklides'(A7,A8,A9,A10,A11);
+A18: abs(x) = x' & abs(y) = y' by A6,ABSVALUE:def 1;
+A19: ((Computation s).(4*k)).a > 0 by A1,A2,A3,A4,A5,Lm3;
+     (Computation s).(4*k).b = 0 by A17,ABSVALUE:7;
+   then A20: IC (Computation s).(4*k) = il.4 by A1,A2,A3,A4,A5,Lm3;
+A21: s halts_at il.4 by A2,Lm2;
+  hence (Result s).a = ((Computation s).(4*k)).a by A20,AMI_3:44
+   .= x' hcf y' by A16,A19,ABSVALUE:def 1
+   .= x gcd y by A18,INT_2:def 3;
+  thus thesis by A20,A21;
+ end;
+
+theorem Th10:
+  for s being State of SCM st s starts_at il.0 & Euclide-Algorithm c= s
+  for x, y being Integer st s.dl.0 = x & s.dl.1 = y & x > 0 & y > 0
+  holds (Result s).dl.0 = x gcd y
+proof let s be State of SCM such that
+A1: s starts_at il.0 and
+A2: Euclide-Algorithm c= s;
+  let x, y be Integer such that
+A3: s.a = x and
+A4: s.b = y and
+A5: x > 0 and
+A6: y > 0;
+    now per cases by AXIOMS:21;
+   case x > y;
+    hence (Result s).a = x gcd y by A1,A2,A3,A4,A6,Lm5;
+   case
+A7:  x = y;
+     take s' = (Computation s).4;
+     reconsider x' = x, y' = y as Nat by A5,A6,INT_1:16;
+      abs(x) = x' & abs(y) = y' by A5,A6,ABSVALUE:def 1;
+    then A8:  x mod y = x' mod y' by A5,A6,Th2
+           .= 0 by A7,GR_CY_1:5;
+
+A9:  s = (Computation s).(4*0) & s' = (Computation s).(4*(0+1)) by AMI_1:def 19
+;
+     then s'.b = 0 by A1,A2,A3,A4,A5,A6,A8,Lm4;
+     then IC s' = il.4 by A1,A2,A3,A4,A5,A6,A9,Lm3;
+     then s halts_at IC s' by A2,Lm2;
+    hence (Result s).a = s'.a by AMI_3:44 .= y by A1,A2,A3,A4,A5,A6,A9,Lm4
+       .= abs(x) hcf abs(y) by A6,A7,ABSVALUE:def 1
+       .= x gcd y by INT_2:def 3;
+   case
+A10:  y > x;
+     take s' = (Computation s).4;
+     reconsider x' = x, y' = y as Nat by A5,A6,INT_1:16;
+      abs(x) = x' & abs(y) = y' by A5,A6,ABSVALUE:def 1;
+    then A11:  x mod y = x' mod y' by A5,A6,Th2
+           .= x' by A10,GR_CY_1:4;
+
+A12:  s = (Computation s).(4*0) & s' = (Computation s).(4*(0+1)) by AMI_1:def
+19;
+then A13:  s'.a = y & s'.b = x by A1,A2,A3,A4,A5,A6,A11,Lm4;
+     then IC s' = il.0 by A1,A2,A3,A4,A5,A6,A12,Lm3;
+then A14: s' starts_at il.0 by AMI_3:def 14;
+A15: Euclide-Algorithm c= s' by A2,AMI_3:43;
+     then consider k0 being Nat such that
+A16:   s' halts_at IC (Computation s').k0 by A5,A10,A13,A14,Lm5;
+       (Computation s).(k0+4) = (Computation s').k0 by AMI_1:51;
+then A17:  s halts_at IC (Computation s).(k0+4) by A16,AMI_3:48;
+       (Result s').a = x gcd y by A5,A10,A13,A14,A15,Lm5;
+    hence (Result s).a = x gcd y by A17,AMI_3:47;
+  end;
+ hence (Result s).a = x gcd y;
+end;
+
+definition
+ func Euclide-Function -> PartFunc of FinPartSt SCM, FinPartSt SCM means
+:Def2:  for p,q being FinPartState of SCM holds [p,q] in it
+   iff ex x,y being Integer st x > 0 & y > 0 &
+    p = (dl.0,dl.1) --> (x,y) & q = dl.0 .--> (x gcd y);
+ existence
+  proof
+    defpred _P[set,set] means ex x,y being Integer st x > 0 & y > 0 &
+       $1 = (a,b) --> (x,y) & $2 = a .--> (x gcd y);
+A1: for p,q1,q2 being set st _P[p,q1] & _P[p,q2] holds q1=q2
+    proof let p,q1,q2 be set;
+     given x1,y1 being Integer such that
+A2:    x1 > 0 & y1 > 0 &  p = (a,b) --> (x1,y1) & q1 = a .--> (x1 gcd y1);
+     given x2,y2 being Integer such that
+A3:    x2 > 0 & y2 > 0 &  p = (a,b) --> (x2,y2) & q2 = a .--> (x2 gcd y2);
+A4:    a <> b by AMI_3:52;
+then A5:    x1 = ((a,b) --> (x1,y1)).a by FUNCT_4:66
+        .= x2 by A2,A3,A4,FUNCT_4:66;
+      y1 = ((a,b) --> (x1,y1)).b by A4,FUNCT_4:66 .= y2 by A2,A3,A4,FUNCT_4:66;
+     hence q1 = q2 by A2,A3,A5;
+    end;
+    consider f being Function such that
+A6:   for p,q being set holds [p,q] in f iff p in FinPartSt SCM & _P[p,q]
+    from GraphFunc(A1);
+A7:  dom f c= FinPartSt SCM
+     proof let e be set;
+      assume e in dom f;
+       then [e,f.e] in f by FUNCT_1:8;
+      hence e in FinPartSt SCM by A6;
+     end;
+      rng f c= FinPartSt SCM
+     proof let q be set;
+      assume q in rng f;
+       then consider p being set such that
+A8:     [p,q] in f by RELAT_1:def 5;
+         ex x,y being Integer st
+        x > 0 & y > 0 &p = (a,b) --> (x,y) & q = a .--> (x gcd y) by A6,A8;
+      hence q in FinPartSt SCM by AMI_3:31;
+     end;
+    then reconsider f as PartFunc of FinPartSt SCM, FinPartSt SCM
+      by A7,RELSET_1:11;
+   take f;
+   let p,q be FinPartState of SCM;
+   thus [p,q] in f
+   implies ex x,y being Integer st x > 0 & y > 0 &
+    p = (a,b) --> (x,y) & q = a .--> (x gcd y) by A6;
+   given x,y being Integer such that
+A9:   x > 0 & y > 0 &
+     p = (a,b) --> (x,y) & q = a .--> (x gcd y);
+      p in FinPartSt SCM by AMI_3:31;
+   hence [p,q] in f by A6,A9;
+  end;
+ uniqueness
+  proof
+   defpred _P[set,set] means ex x,y being Integer st x > 0 & y > 0 &
+     $1 = (a,b) --> (x,y) & $2 = a .--> (x gcd y);
+   let IT1,IT2 be PartFunc of FinPartSt SCM, FinPartSt SCM such that
+A10: for p,q being FinPartState of SCM holds [p,q] in IT1 iff _P[p,q] and
+A11: for p,q being FinPartState of SCM holds [p,q] in IT2 iff _P[p,q];
+   thus IT1 = IT2 from EqFPSFunc(A10,A11);
+  end;
+end;
+
+theorem Th11:
+ for p being set holds p in dom Euclide-Function iff
+   ex x,y being Integer st x > 0 & y > 0 & p = (dl.0,dl.1) --> (x,y)
+ proof let p be set;
+A1:  p in dom Euclide-Function iff [p,Euclide-Function.p] in Euclide-Function
+   by FUNCT_1:8;
+A2: dom Euclide-Function c= FinPartSt SCM by RELSET_1:12;
+  hereby assume
+A3:  p in dom Euclide-Function;
+   then p in FinPartSt SCM & Euclide-Function.p in FinPartSt SCM
+      by A2,PARTFUN1:27;
+   then p is FinPartState of SCM & Euclide-Function.p is FinPartState of SCM
+    by AMI_3:32;
+   then ex x,y being Integer st x > 0 & y > 0 &
+    p = (a,b) --> (x,y) & Euclide-Function.p = a .--> (x gcd y)
+     by A1,A3,Def2;
+   hence ex x,y being Integer st x > 0 & y > 0 & p = (a,b) --> (x,y);
+  end;
+  given x,y being Integer such that
+A4:  x > 0 & y > 0 & p = (a,b) --> (x,y);
+      [p,a .--> (x gcd y)] in Euclide-Function by A4,Def2;
+  hence thesis by FUNCT_1:8;
+ end;
+
+theorem Th12:
+ for i,j being Integer st i > 0 & j > 0 holds
+  Euclide-Function.((dl.0,dl.1) --> (i,j)) = dl.0 .--> (i gcd j)
+ proof let i,j be Integer;
+  assume i > 0 & j > 0;
+   then [((a,b) --> (i,j)),a .--> (i gcd j)] in Euclide-Function by Def2;
+  hence Euclide-Function.((a,b) --> (i,j)) = a .--> (i gcd j)
+   by FUNCT_1:8;
+ end;
+
+theorem
+   (Start-At il.0) +* Euclide-Algorithm computes Euclide-Function
+ proof let x be set;
+  assume x in dom Euclide-Function;
+   then consider i1,i2 being Integer such that
+A1: i1 > 0 & i2 > 0 and
+A2:  x = (a,b) --> (i1,i2) by Th11;
+   reconsider s = x as FinPartState of SCM by A2;
+   set p = (Start-At il.0) +* Euclide-Algorithm;
+   set q = Euclide-Algorithm;
+A3: dom s = { a, b } by A2,FUNCT_4:65;
+then A4: a in dom s & b in dom s by TARSKI:def 2;
+      dom(Start-At il.0) = { IC SCM } by AMI_3:34;
+    then A5:  dom p = { IC SCM } \/ { il.0,il.1,il.2,il.3,il.4 }
+      by Th4,FUNCT_4:def 1;
+A6: now assume
+      dom p meets dom s;
+      then consider x being set such that
+A7:    x in dom p & x in dom s by XBOOLE_0:3;
+        x in { IC SCM } or x in { il.0,il.1,il.2,il.3,il.4 }
+        by A5,A7,XBOOLE_0:def 2;
+then A8:     x = IC SCM or x = il.0 or x = il.1 or x = il.2 or x = il.3 or x =
+il.4
+       by ENUMSET1:23,TARSKI:def 1;
+        x = a or x = b by A3,A7,TARSKI:def 2;
+     hence contradiction by A8,AMI_3:56,57;
+    end;
+    then A9:  p c= p +* s by FUNCT_4:33;
+       q c= p by FUNCT_4:26;
+then A10: q c= p +* s by A9,XBOOLE_1:1;
+A11: p +* s starts_at il.0
+     proof
+A12:   dom p c= dom(p +* s) by A9,RELAT_1:25;
+         IC SCM in { IC SCM } by TARSKI:def 1;
+       then A13:     IC SCM in dom p by A5,XBOOLE_0:def 2;
+         dom p /\ dom s = {} by A6,XBOOLE_0:def 7;
+then A14:     not IC SCM in dom s by A13,XBOOLE_0:def 3;
+      thus
+     IC SCM in dom(p +* s) by A12,A13;
+         IC SCM <> il.0 & IC SCM <> il.1 & IC SCM <> il.2 &
+        IC SCM <> il.3 & IC SCM <> il.4 by AMI_3:57;
+then A15:    not IC SCM in dom q by Th4,ENUMSET1:23;
+      thus IC(p +* s) = (p +* s).IC SCM by A12,A13,AMI_3:def 16
+        .= p.IC SCM by A14,FUNCT_4:12
+        .= (Start-At il.0).IC SCM by A15,FUNCT_4:12
+        .= il.0 by AMI_3:50;
+     end;
+  take s;
+  thus x = s;
+A16: for t being State of SCM st p +* s c= t holds t.a = i1 & t.b = i2
+   proof let t be State of SCM such that
+A17: p +* s c= t;
+A18:   a <> b by AMI_3:52;
+      s c= p +* s by FUNCT_4:26;
+then A19: s c= t by A17,XBOOLE_1:1;
+    hence t.a = s.a by A4,GRFUNC_1:8
+      .= i1 by A2,A18,FUNCT_4:66;
+    thus t.b = s.b by A4,A19,GRFUNC_1:8
+      .= i2 by A2,A18,FUNCT_4:66;
+   end;
+A20:  p +* s is autonomic
+   proof let s1,s2 be State of SCM such that
+A21:  p +* s c= s1 and
+A22:  p +* s c= s2;
+A23: s1 starts_at il.0 by A11,A21,AMI_3:49;
+A24: Euclide-Algorithm c= s1 by A10,A21,XBOOLE_1:1;
+A25: s2 starts_at il.0 by A11,A22,AMI_3:49;
+A26: Euclide-Algorithm c= s2 by A10,A22,XBOOLE_1:1;
+A27: s2.a = i1 & s2.b = i2 by A16,A22;
+ set A = { IC SCM, a,b },
+     C = { il.0,il.1,il.2,il.3,il.4};
+A28: dom(p +* s) = { IC SCM } \/ C \/ { a, b } by A3,A5,FUNCT_4:def 1
+      .= { IC SCM } \/ { a, b } \/ C by XBOOLE_1:4
+      .= A \/ C by ENUMSET1:42;
+    let k;
+    set Cs = Computation s1, Cs2 = Computation s2;
+A29:  Euclide-Algorithm c= Cs2.k by A26,AMI_3:43;
+      Euclide-Algorithm c= Cs.k by A24,AMI_3:43;
+    then A30:   (Cs.k)|C = Euclide-Algorithm by Th4,GRFUNC_1:64
+      .= (Cs2.k)|C by A29,Th4,GRFUNC_1:64;
+A31: dom(Cs.k) = the carrier of SCM by AMI_3:36
+     .= dom(Cs2.k) by AMI_3:36;
+    defpred _P[Nat] means  (Cs.$1).IC SCM = (Cs2.$1).IC SCM &
+    (Cs.$1).a = (Cs2.$1).a & (Cs.$1).b = (Cs2.$1).b;
+A32: _P[0] proof
+A33:   Cs.0 = s1 & Cs2.0 = s2 by AMI_1:def 19;
+     hence (Cs.0).IC SCM = IC s1 by AMI_1:def 15
+      .= il.0 by A23,AMI_3:def 14
+      .= IC s2 by A25,AMI_3:def 14
+      .= (Cs2.0).IC SCM by A33,AMI_1:def 15;
+     thus (Cs.0).a = (Cs2.0).a &
+          (Cs.0).b = (Cs2.0).b by A16,A21,A27,A33;
+    end;
+A34: for i,j st _P[4*i] & j<>0 & j<=4 holds _P[4*i+j] proof let i,j;
+     assume that
+A35:   (Cs.(4*i)).IC SCM = (Cs2.(4*i)).IC SCM and
+A36:   (Cs.(4*i)).a = (Cs2.(4*i)).a and
+A37:   (Cs.(4*i)).b = (Cs2.(4*i)).b;
+     assume j <> 0 & j <= 4;
+then A38:   j = 1 or j = 2 or j = 3 or j = 4 by CQC_THE1:5;
+     per cases by A1,A25,A26,A27,Lm3;
+     suppose
+A39:   IC Cs2.(4*i) = il.0;
+A40:   4*i + 1 + 1 = 4*i + (1 + 1) by XCMPLX_1:1;
+A41:   (4*i+2)+1 = 4*i+(2+1) by XCMPLX_1:1;
+A42:   4*i + 3 + 1 = 4*i + (3 + 1) by XCMPLX_1:1;
+A43:   IC Cs.(4*i) = (Cs.(4*i)).IC SCM by AMI_1:def 15
+        .= il.0 by A35,A39,AMI_1:def 15;
+      then A44: IC Cs.(4*i+1) = il.1 & IC Cs2.(4*i+1) = il.1 by A24,A26,A39,Th5
+;
+A45:  (Cs.(4*i+1)).a = (Cs.(4*i)).a by A24,A43,Th5
+           .= (Cs2.(4*i+1)).a by A26,A36,A39,Th5;
+A46:  (Cs.(4*i+1)).b = (Cs.(4*i)).b by A24,A43,Th5
+           .= (Cs2.(4*i+1)).b by A26,A37,A39,Th5;
+A47:  (Cs.(4*i+1)).dl.2 = (Cs.(4*i)).b by A24,A43,Th5
+           .= (Cs2.(4*i+1)).dl.2 by A26,A37,A39,Th5;
+
+A48: IC Cs.(4*i+2) = il.2 & IC Cs2.(4*i+2) = il.2 by A24,A26,A40,A44,Th6;
+A49:  (Cs.(4*i+2)).a = (Cs.(4*i+1)).a div (Cs.(4*i+1)).b
+                             by A24,A40,A44,Th6
+             .= (Cs2.(4*i+2)).a by A26,A40,A44,A45,A46,Th6;
+A50:  (Cs.(4*i+2)).b = (Cs.(4*i+1)).a mod (Cs.(4*i+1)).b
+                             by A24,A40,A44,Th6
+             .= (Cs2.(4*i+2)).b by A26,A40,A44,A45,A46,Th6;
+A51:  (Cs.(4*i+2)).dl.2 = (Cs.(4*i+1)).dl.2 by A24,A40,A44,Th6
+           .= (Cs2.(4*i+2)).dl.2 by A26,A40,A44,A47,Th6;
+
+A52: IC Cs.(4*i+3) = il.3 & IC Cs2.(4*i+3) = il.3 by A24,A26,A41,A48,Th7;
+A53:  (Cs.(4*i+3)).a = (Cs.(4*i+2)).dl.2 by A24,A41,A48,Th7
+           .= (Cs2.(4*i+3)).a by A26,A41,A48,A51,Th7;
+A54:  (Cs.(4*i+3)).b = (Cs.(4*i+2)).b by A24,A41,A48,Th7
+           .= (Cs2.(4*i+3)).b by A26,A41,A48,A50,Th7;
+       (Cs.(4*i+3)).b <= 0 or (Cs.(4*i+3)).b > 0;
+    then A55: IC Cs.(4*i+4) = il.4 & IC Cs2.(4*i+4) = il.4 or
+    IC Cs.(4*i+4) = il.0 & IC Cs2.(4*i+4) = il.0 by A24,A26,A42,A52,A54,Th8;
+A56:  (Cs.(4*i+4)).a = (Cs.(4*i+3)).a by A24,A42,A52,Th8
+             .= (Cs2.(4*i+4)).a by A26,A42,A52,A53,Th8;
+A57:  (Cs.(4*i+4)).b = (Cs.(4*i+3)).b by A24,A42,A52,Th8
+             .= (Cs2.(4*i+4)).b by A26,A42,A52,A54,Th8;
+     thus (Cs.(4*i+j)).IC SCM = IC (Cs2.(4*i+j)) by A38,A44,A48,A52,A55,AMI_1:
+def 15
+      .= (Cs2.(4*i+j)).IC SCM by AMI_1:def 15;
+     thus (Cs.(4*i+j)).a = (Cs2.(4*i+j)).a
+       by A38,A45,A49,A53,A56;
+     thus (Cs.(4*i+j)).b = (Cs2.(4*i+j)).b
+       by A38,A46,A50,A54,A57;
+     suppose
+A58:    IC Cs2.(4*i) = il.4;
+A59:    4*i + j >= 4*i by NAT_1:29;
+        IC Cs.(4*i) = (Cs.(4*i)).IC SCM by AMI_1:def 15
+        .= il.4 by A35,A58,AMI_1:def 15;
+      then s1 halts_at IC Cs.(4*i) & s2 halts_at IC Cs2.(4*i) by A24,A26,A58,
+Lm2;
+      then Cs.(4*i+j) = Cs.(4*i) & Cs2.(4*i+j) = Cs2.(4*i) by A59,AMI_3:46;
+     hence (Cs.(4*i+j)).IC SCM = (Cs2.(4*i+j)).IC SCM &
+          (Cs.(4*i+j)).a = (Cs2.(4*i+j)).a &
+          (Cs.(4*i+j)).b = (Cs2.(4*i+j)).b by A35,A36,A37;
+    end;
+A60: 4 > 0;
+     _P[k] from INDI(A32,A60,A34);
+   then (Cs.k)|A = (Cs2.k)|A by A31,AMI_3:26;
+    hence (Computation s1).k|dom(p +* s) = (Computation s2).k|dom(p +* s)
+     by A28,A30,AMI_3:20;
+   end;
+   A61: p +* s is halting
+    proof let t be State of SCM;
+     assume
+A62:    p +* s c= t;
+then A63:   q c= t by A10,XBOOLE_1:1;
+A64:   t starts_at il.0 by A11,A62,AMI_3:49;
+A65:   t.a = i1 & t.b = i2 by A16,A62;
+     reconsider i1' = i1, i2' = i2 as Nat by A1,INT_1:16;
+     set t' = (Computation t).4;
+  per cases by AXIOMS:21;
+   suppose i1 > i2;
+      then ex k st t halts_at IC (Computation t).k by A1,A63,A64,A65,Lm5;
+     hence thesis by AMI_3:40;
+   suppose
+A66:   i1 = i2;
+      abs(i1) = i1' & abs(i2) = i2' by A1,ABSVALUE:def 1;
+    then A67:  i1 mod i2 = i1' mod i2' by A1,Th2
+           .= 0 by A66,GR_CY_1:5;
+
+A68:  t = (Computation t).(4*0) & t' = (Computation t).(4*(0+1)) by AMI_1:def
+19;
+    then t'.a = t.b & t'.b = t.a mod t.b by A1,A63,A64,A65,Lm4;
+     then IC t' = il.4 by A1,A63,A64,A65,A67,A68,Lm3;
+     then t halts_at IC t' by A63,Lm2;
+     hence thesis by AMI_3:40;
+   suppose
+A69:  i1 < i2;
+      abs(i1) = i1' & abs(i2) = i2' by A1,ABSVALUE:def 1;
+    then A70:  i1 mod i2 = i1' mod i2' by A1,Th2
+           .= i1' by A69,GR_CY_1:4;
+
+A71:  t = (Computation t).(4*0) & t' = (Computation t).(4*(0+1)) by AMI_1:def
+19;
+    then A72:  t'.a = i2 & t'.b = i1 by A1,A63,A64,A65,A70,Lm4;
+     then IC t' = il.0 by A1,A63,A64,A65,A71,Lm3;
+then A73: t' starts_at il.0 by AMI_3:def 14;
+       Euclide-Algorithm c= t' by A63,AMI_3:43;
+     then consider k0 being Nat such that
+A74:   t' halts_at IC (Computation t').k0 by A1,A69,A72,A73,Lm5;
+       (Computation t).(k0+4) = (Computation t').k0 by AMI_1:51;
+     then t halts_at IC (Computation t).(k0+4) by A74,AMI_3:48;
+     hence thesis by AMI_3:40;
+    end;
+  hence
+  p +* s is pre-program of SCM by A20;
+A75: Euclide-Function.s = a .--> (i1 gcd i2) by A1,A2,Th12;
+   consider t being State of SCM such that
+A76:  p +* s c= t by AMI_3:39;
+A77: dom s = { a, b } by A2,FUNCT_4:65;
+then A78: a in dom s & b in dom s by TARSKI:def 2;
+A79: s c= p +* s by FUNCT_4:26;
+then A80: s c= t by A76,XBOOLE_1:1;
+      q c= p by FUNCT_4:26;
+    then q c= p +* s by A9,XBOOLE_1:1;
+then A81: q c= t by A76,XBOOLE_1:1;
+A82: t starts_at il.0 by A11,A76,AMI_3:49;
+      a in the carrier of SCM;
+then A83: a in dom Result t by AMI_3:36;
+     a <> b by AMI_3:52;
+   then s.a = i1 & s.b = i2 by A2,FUNCT_4:66;
+   then t.a = i1 & t.b = i2 by A78,A80,GRFUNC_1:8;
+   then (Result t).a = i1 gcd i2 by A1,A81,A82,Th10;
+then A84: Euclide-Function.s c= Result t by A75,A83,AMI_3:27;
+A85: dom s c= dom(p +* s) by A79,RELAT_1:25;
+      dom(a .--> (i1 gcd i2)) = { a } by CQC_LANG:5;
+    then dom(a .--> (i1 gcd i2)) c= dom s by A77,ZFMISC_1:12;
+then A86: dom(a .--> (i1 gcd i2)) c= dom(p +* s) by A85,XBOOLE_1:1;
+     Result(p +* s) = (Result t)|dom(p +* s) by A20,A61,A76,AMI_1:def 28;
+  hence Euclide-Function.s c= Result(p +* s) by A75,A84,A86,AMI_3:21;
+ end;

@@ -1,0 +1,2397 @@
+:: On Rectangular Finite Sequences of the Points of the Plane
+::  by Andrzej Trybulec and Yatsuka Nakamura
+::
+:: Received November 30, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary REALSET1, SEQM_3, FUNCT_1, RELAT_1, FUNCOP_1, BOOLE, FINSEQ_1,
+      PRE_TOPC, CONNSP_1, EUCLID, COMPTS_1, TOPREAL1, SPPOL_1, MCART_1,
+      SPPOL_2, PSCOMP_1, FINSEQ_6, GOBOARD5, GOBOARD1, CARD_1, ORDINAL2,
+      GOBOARD2, MATRIX_2, TREES_1, MATRIX_1, ABSVALUE, ARYTM_1, RCOMP_1, SEQ_2,
+      FUNCT_5, SQUARE_1, LATTICES, ARYTM_3, JORDAN1, SUBSET_1, GOBOARD9,
+      TOPS_1, SPRECT_1, FINSEQ_4, ARYTM;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, ORDINAL1,
+      NUMBERS, XREAL_0, REAL_1, NAT_1, ABSVALUE, CARD_1, FUNCOP_1, SQUARE_1,
+      FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_4, FINSEQ_6, SEQM_3, SEQ_4, MATRIX_1,
+      MATRIX_2, REALSET1, RCOMP_1, STRUCT_0, PRE_TOPC, TOPS_1, COMPTS_1,
+      CONNSP_1, EUCLID, TOPREAL1, JORDAN1, GOBOARD1, GOBOARD2, GOBOARD5,
+      GOBOARD9, SPPOL_1, SPPOL_2, PSCOMP_1;
+ constructors PSCOMP_1, NAT_1, SPPOL_1, SPPOL_2, TOPREAL4, REALSET1, GOBOARD2,
+      ENUMSET1, MATRIX_2, REAL_1, ABSVALUE, GOBOARD9, JORDAN1, CONNSP_1,
+      TOPS_1, FUNCOP_1, SQUARE_1, RCOMP_1, FINSEQ_4, COMPTS_1, PARTFUN1;
+ clusters STRUCT_0, EUCLID, PSCOMP_1, RELSET_1, FINSEQ_6, YELLOW_6, GOBOARD2,
+      FINSEQ_5, GOBOARD9, TEX_2, RELAT_1, GOBOARD5, PRE_TOPC, WAYBEL_2,
+      TOPREAL1, FINSEQ_1, REALSET1, XBOOLE_0, SEQ_2, NAT_1, MEMBERED, SEQM_3;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions SPPOL_1, TOPREAL1, YELLOW_8, GOBOARD1, GOBOARD5, TARSKI, JORDAN1,
+      SEQ_4, XBOOLE_0;
+ theorems FINSEQ_1, SPPOL_2, SPPOL_1, EUCLID, SEQM_3, FUNCT_1, ZFMISC_1,
+      PSCOMP_1, FINSEQ_3, GROUP_5, GOBOARD1, MATRIX_2, TARSKI, CQC_THE1,
+      REAL_1, GOBOARD2, ENUMSET1, MCART_1, CARD_2, TOPREAL1, AXIOMS, NAT_1,
+      FINSEQ_4, FINSEQ_6, TOPREAL3, GOBOARD7, JORDAN1, GOBRD12, GOBOARD9,
+      CONNSP_1, TOPS_2, JORDAN5A, COMPTS_1, FINSEQ_2, REALSET1, RELAT_1,
+      FUNCOP_1, FUNCT_2, RFUNCT_2, SQUARE_1, SEQ_4, RCOMP_1, REAL_2, TOPREAL5,
+      XBOOLE_0, XBOOLE_1, XCMPLX_1;
+ schemes NAT_1;
+
+begin :: Preliminaries
+
+theorem Th1:
+ for A being trivial set
+  for B being set st B c= A holds B is trivial
+proof let A be trivial set;
+ let B be set;
+ assume
+A1: B c= A;
+ per cases by REALSET1:def 12;
+ suppose A is empty;
+ hence B is trivial by A1,XBOOLE_1:3;
+ suppose ex x being set st A = {x};
+ hence B is trivial by A1,ZFMISC_1:39;
+end;
+
+definition
+ cluster non constant -> non trivial Function;
+ coherence
+  proof let f be Function;
+   assume f is non constant;
+    then consider n1,n2 being set such that
+A1:  n1 in dom f & n2 in dom f and
+A2:  f.n1 <> f.n2 by SEQM_3:def 5;
+      [n1,f.n1] in f & [n2,f.n2] in f by A1,FUNCT_1:8;
+    then reconsider f as non empty Function;
+      f is non trivial
+     proof
+      reconsider x = [n1,f.n1], y = [n2,f.n2] as Element of f by A1,FUNCT_1:8;
+      take x,y;
+      thus x <> y by A2,ZFMISC_1:33;
+     end;
+   hence thesis;
+  end;
+end;
+
+definition
+ cluster trivial -> constant Function;
+ coherence
+  proof let f be Function such that
+A1: f is trivial;
+   assume f is not constant;
+    then reconsider f as non constant Function;
+      f is not trivial;
+   hence contradiction by A1;
+  end;
+end;
+
+theorem Th2:
+ for f being Function st rng f is trivial holds f is constant
+proof let f be Function;
+ assume
+A1: rng f is trivial;
+ per cases by A1,REALSET1:def 12;
+ suppose rng f is empty;
+  then reconsider f as empty Function by RELAT_1:64;
+    f is trivial;
+ hence thesis;
+ suppose ex x being set st rng f = {x};
+  then consider x being set such that
+A2: rng f = {x};
+    f = dom f --> x by A2,FUNCOP_1:15;
+ hence f is constant;
+end;
+
+definition let f be constant Function;
+ cluster rng f -> trivial;
+ coherence
+  proof
+    per cases;
+    suppose f is empty;
+     then reconsider g = f as empty Function;
+      rng g is empty;
+   hence rng f is trivial;
+    suppose f <> {};
+    then dom f <> {} by RELAT_1:64;
+    then consider x being set such that
+A1:   x in dom f by XBOOLE_0:def 1;
+      for y being set holds
+      y in {f.x} iff ex z being set st z in dom f & y = f.z
+    proof let y be set;
+      hereby assume
+A2:      y in {f.x};
+       take x;
+       thus x in dom f & y = f.x by A1,A2,TARSKI:def 1;
+      end;
+     given z being set such that
+A3:   z in dom f and
+A4:   y = f.z;
+        y = f.x by A1,A3,A4,SEQM_3:def 5;
+     hence y in {f.x} by TARSKI:def 1;
+    end;
+   hence rng f is trivial by FUNCT_1:def 5;
+  end;
+end;
+
+definition
+ cluster non empty constant FinSequence;
+ existence proof take <* 0 *>; thus thesis; end;
+end;
+
+theorem Th3:
+ for f,g being FinSequence st f^g is constant
+  holds f is constant & g is constant
+proof let f,g be FinSequence;
+ assume f^g is constant;
+  then reconsider h = f^g as constant FinSequence;
+    rng f c= rng h by FINSEQ_1:42;
+  then rng f is trivial by Th1;
+ hence f is constant by Th2;
+    rng g c= rng h by FINSEQ_1:43;
+  then rng g is trivial by Th1;
+ hence g is constant by Th2;
+end;
+
+theorem Th4:
+ for x,y being set st <*x,y*> is constant
+  holds x = y
+proof let x,y be set;
+ assume <*x,y*> is constant;
+  then reconsider s = <*x,y*> as constant Function;
+A1: rng s is trivial;
+A2: rng<*x,y*> = rng(<*x*>^<*y*>) by FINSEQ_1:def 9
+      .= rng<*x*> \/ rng<*y*> by FINSEQ_1:44
+      .= rng<*x*> \/ {y} by FINSEQ_1:55
+      .= {x} \/ {y}by FINSEQ_1:55
+      .= {x,y} by ENUMSET1:41;
+     x in {x,y} & y in {x,y} by TARSKI:def 2;
+ hence x = y by A1,A2,SPPOL_1:3;
+end;
+
+theorem Th5:
+ for x,y,z being set st <*x,y,z*> is constant
+  holds x = y & y = z & z = x
+proof let x,y,z be set;
+ assume <*x,y,z*> is constant;
+  then reconsider s = <*x,y,z*> as constant Function;
+A1: rng s is trivial;
+A2: rng<*x,y,z*> = rng(<*x*>^<*y*>^<*z*>) by FINSEQ_1:def 10
+      .= rng(<*x*>^<*y*>) \/ rng<*z*> by FINSEQ_1:44
+      .= rng(<*x*>^<*y*>) \/ {z} by FINSEQ_1:55
+      .= rng<*x*> \/ rng<*y*> \/ {z} by FINSEQ_1:44
+      .= rng<*x*> \/ {y} \/ {z} by FINSEQ_1:55
+      .= {x} \/ {y} \/ {z} by FINSEQ_1:55
+      .= {x,y} \/ {z} by ENUMSET1:41
+      .= {x,y,z} by ENUMSET1:43;
+     x in {x,y,z} & y in {x,y,z} & z in {x,y,z} by ENUMSET1:14;
+ hence x = y & y = z & z = x by A1,A2,SPPOL_1:3;
+end;
+
+begin :: Topology
+
+theorem Th6:
+ for GX being non empty TopSpace,
+     A being Subset of GX,
+     B being non empty Subset of GX
+ holds A is_a_component_of B implies A <> {}
+proof
+ let GX be non empty TopSpace,
+     A be Subset of GX,
+     B be non empty Subset of GX;
+ assume A is_a_component_of B;
+  then consider B1 being Subset of GX|B such that
+A1: B1 = A and
+A2: B1 is_a_component_of GX|B by CONNSP_1:def 6;
+    B1 <> {}(GX|B) by A2,CONNSP_1:34;
+ hence A <> {} by A1;
+end;
+
+theorem Th7:
+ for GX being TopStruct,
+     A, B being Subset of GX
+ holds A is_a_component_of B implies A c= B
+proof
+ let GX be TopStruct,
+     A, B be Subset of GX;
+ assume A is_a_component_of B;
+  then consider B1 being Subset of GX|B such that
+A1: B1 = A and
+      B1 is_a_component_of GX|B by CONNSP_1:def 6;
+    the carrier of GX|B = B by JORDAN1:1;
+ hence A c= B by A1;
+end;
+
+theorem Th8:
+ for T being non empty TopSpace,
+     A being non empty Subset of T,
+     B1,B2,S being Subset of T
+  st B1 is_a_component_of A & B2 is_a_component_of A &
+     S is_a_component_of A & B1 \/ B2 = A
+ holds S = B1 or S = B2
+proof
+ let T be non empty TopSpace,
+     A be non empty Subset of T,
+     B1,B2,S be Subset of T such that
+A1: B1 is_a_component_of A and
+A2: B2 is_a_component_of A and
+A3: S is_a_component_of A and
+A4: B1 \/ B2 = A;
+A5: S <> {} by A3,Th6;
+    S c= A by A3,Th7;
+  then S meets A by A5,XBOOLE_1:67;
+  then S meets B1 or S meets B2 by A4,XBOOLE_1:70;
+ hence S = B1 or S = B2 by A1,A2,A3,GOBOARD9:3;
+end;
+
+theorem Th9:
+ for T being non empty TopSpace,
+     A being non empty Subset of T,
+     B1,B2,C1,C2 being Subset of T
+  st B1 is_a_component_of A & B2 is_a_component_of A &
+     C1 is_a_component_of A & C2 is_a_component_of A &
+     B1 \/ B2 = A & C1 \/ C2 = A
+ holds { B1,B2 } = { C1,C2 }
+proof
+ let T be non empty TopSpace,
+     A be non empty Subset of T,
+     B1,B2,C1,C2 be Subset of T such that
+A1: B1 is_a_component_of A and
+A2: B2 is_a_component_of A and
+A3: C1 is_a_component_of A and
+A4: C2 is_a_component_of A and
+A5: B1 \/ B2 = A and
+A6: C1 \/ C2 = A;
+    now let x be set;
+      x = B1 or x = B2 iff x = C1 or x = C2 by A1,A2,A3,A4,A5,A6,Th8;
+   hence x in { B1,B2 } iff x = C1 or x = C2 by TARSKI:def 2;
+  end;
+ hence { B1,B2 } = { C1,C2 } by TARSKI:def 2;
+end;
+
+begin :: Topology of Plane
+
+reserve S for Subset of TOP-REAL 2,
+        C,C1,C2 for non empty compact Subset of TOP-REAL 2,
+        p,q for Point of TOP-REAL 2;
+
+theorem Th10:
+ for p,q,r being Point of TOP-REAL 2
+  holds L~<*p,q,r*> = LSeg(p,q) \/ LSeg(q,r)
+proof let p,q,r be Point of TOP-REAL 2;
+A1: len <*p,q*> = 2 by FINSEQ_1:61;
+A2: <*p,q*>/.2 = q by FINSEQ_4:26;
+A3: <*r*>/.1 = r by FINSEQ_4:25;
+    <*p,q,r*> = <*p,q*>^<*r*> by FINSEQ_1:60;
+ hence L~<*p,q,r*>
+      = L~<*p,q*> \/ LSeg(q,r) \/ L~<*r*> by A1,A2,A3,SPPOL_2:23
+     .= L~<*p,q*> \/ LSeg(q,r) \/ {} by SPPOL_2:12
+     .= LSeg(p,q) \/ LSeg(q,r) by SPPOL_2:21;
+end;
+
+definition let n be Nat; let f be non trivial FinSequence of TOP-REAL n;
+ cluster L~f -> non empty;
+ coherence
+  proof
+      len f <> 0 & len f <> 1 by SPPOL_1:2;
+   hence L~f is non empty by TOPREAL1:28;
+  end;
+end;
+
+definition let f be FinSequence of TOP-REAL 2;
+ cluster L~f -> compact;
+ coherence
+  proof
+    defpred X[Nat] means for f being FinSequence of TOP-REAL 2 st len f = $1
+       holds L~f is compact;
+A1: X[0]
+   proof let f be FinSequence of TOP-REAL 2;
+     assume len f = 0;
+      then L~f ={}TOP-REAL 2 by TOPREAL1:28;
+     hence L~f is compact by COMPTS_1:9;
+    end;
+A2: for m being Nat st X[m] holds X[m+1]
+    proof let m be Nat;
+     assume
+A3:    for f being FinSequence of TOP-REAL 2 st len f = m
+       holds L~f is compact;
+     let f be FinSequence of TOP-REAL 2;
+     assume
+A4:   len f = m+1;
+      then consider q being FinSequence of TOP-REAL 2,
+                   x being Point of TOP-REAL 2 such that
+A5:     f=q^<*x*> by FINSEQ_2:22;
+        len f = len q + len<*x*> by A5,FINSEQ_1:35
+           .= len q + 1 by FINSEQ_1:56;
+      then len q = m by A4,XCMPLX_1:2;
+      then A6:     L~q is compact by A3;
+     per cases;
+     suppose q is empty;
+      then L~f = L~<*x*> by A5,FINSEQ_1:47
+              .= {}TOP-REAL 2 by SPPOL_2:12;
+     hence L~f is compact by COMPTS_1:9;
+     suppose q is non empty;
+      then L~f = L~q \/ LSeg(q/.len q,<*x*>/.1) \/ L~<*x*> by A5,SPPOL_2:23
+              .= L~q \/ LSeg(q/.len q,<*x*>/.1) \/ {} by SPPOL_2:12
+              .= L~q \/ LSeg(q/.len q,<*x*>/.1);
+     hence L~f is compact by A6,COMPTS_1:19;
+    end;
+A7:  for m being Nat holds X[m] from Ind(A1,A2);
+      len f = len f;
+   hence L~f is compact by A7;
+  end;
+end;
+
+theorem Th11:
+ for A,B being Subset of TOP-REAL 2 st A c= B & B is horizontal
+ holds A is horizontal
+proof let A,B be Subset of TOP-REAL 2 such that
+A1: A c= B and
+A2: B is horizontal;
+ let p,q;
+ assume p in A & q in A;
+ hence p`2=q`2 by A1,A2,SPPOL_1:def 2;
+end;
+
+theorem Th12:
+ for A,B being Subset of TOP-REAL 2 st A c= B & B is vertical
+ holds A is vertical
+proof let A,B be Subset of TOP-REAL 2 such that
+A1: A c= B and
+A2: B is vertical;
+ let p,q;
+ assume p in A & q in A;
+ hence p`1=q`1 by A1,A2,SPPOL_1:def 3;
+end;
+
+definition
+ cluster R^2-unit_square -> special_polygonal non horizontal non vertical;
+ coherence
+  proof set Sq = R^2-unit_square;
+   thus Sq is special_polygonal by SPPOL_2:61;
+     Sq = ( LSeg(|[0,0]|,|[0,1]|) \/ LSeg(|[0,1]|,|[1,1]|) ) \/
+        ( LSeg(|[1,1]|,|[1,0]|) \/ LSeg(|[1,0]|,|[0,0]|) ) by SPPOL_2:58,60;
+   then A1:  LSeg(|[0,0]|,|[0,1]|) \/ LSeg(|[0,1]|,|[1,1]|) c= Sq by XBOOLE_1:7
+;
+      LSeg(|[0,0]|,|[0,1]|) c= LSeg(|[0,0]|,|[0,1]|) \/ LSeg(|[0,1]|,|[1,1]|)
+            by XBOOLE_1:7;
+    then A2:  LSeg(|[0,0]|,|[0,1]|) c= Sq by A1,XBOOLE_1:1;
+      |[0,0]|`2 = 0 & |[0,1]|`2 = 1 by EUCLID:56;
+    then LSeg(|[0,0]|,|[0,1]|) is not horizontal by SPPOL_1:36;
+   hence Sq is not horizontal by A2,Th11;
+      LSeg(|[0,1]|,|[1,1]|) c= LSeg(|[0,0]|,|[0,1]|) \/ LSeg(|[0,1]|,|[1,1]|)
+            by XBOOLE_1:7;
+    then A3:  LSeg(|[0,1]|,|[1,1]|) c= Sq by A1,XBOOLE_1:1;
+      |[0,1]|`1 = 0 & |[1,1]|`1 = 1 by EUCLID:56;
+    then LSeg(|[0,1]|,|[1,1]|) is not vertical by SPPOL_1:37;
+   hence Sq is not vertical by A3,Th12;
+  end;
+end;
+
+definition
+ cluster non vertical non horizontal non empty compact Subset of TOP-REAL 2;
+ existence
+  proof
+   take R^2-unit_square;
+   thus thesis by SPPOL_2:63;
+  end;
+end;
+
+begin :: Special points of a compact non empty subset of the plane
+
+theorem Th13:
+ N-min C in C & N-max C in C
+proof
+   N-most C = LSeg(NW-corner C, NE-corner C) /\ C by PSCOMP_1:def 39;
+then A1: N-most C c= C by XBOOLE_1:17;
+    N-min C in N-most C & N-max C in N-most C by PSCOMP_1:101;
+ hence thesis by A1;
+end;
+
+theorem Th14:
+ S-min C in C & S-max C in C
+proof
+   S-most C = LSeg(SW-corner C, SE-corner C) /\ C by PSCOMP_1:def 41;
+then A1: S-most C c= C by XBOOLE_1:17;
+    S-min C in S-most C & S-max C in S-most C by PSCOMP_1:121;
+ hence thesis by A1;
+end;
+
+theorem Th15:
+ W-min C in C & W-max C in C
+proof
+   W-most C = LSeg(NW-corner C, SW-corner C) /\ C by PSCOMP_1:def 38;
+then A1: W-most C c= C by XBOOLE_1:17;
+    W-min C in W-most C & W-max C in W-most C by PSCOMP_1:91;
+ hence thesis by A1;
+end;
+
+theorem Th16:
+ E-min C in C & E-max C in C
+proof
+   E-most C = LSeg(NE-corner C, SE-corner C) /\ C by PSCOMP_1:def 40;
+then A1: E-most C c= C by XBOOLE_1:17;
+    E-min C in E-most C & E-max C in E-most C by PSCOMP_1:111;
+ hence thesis by A1;
+end;
+
+theorem Th17:
+ C is vertical iff W-bound C = E-bound C
+proof
+ thus C is vertical implies W-bound C = E-bound C
+  proof assume
+A1:   C is vertical;
+A2:  W-min C in C & E-min C in C by Th15,Th16;
+   thus W-bound C = (W-min C)`1 by PSCOMP_1:84
+           .= (E-min C)`1 by A1,A2,SPPOL_1:def 3
+           .= E-bound C by PSCOMP_1:104;
+  end;
+ assume
+A3: W-bound C = E-bound C;
+ let p,q;
+ assume p in C & q in C;
+  then W-bound C <= p`1 & p`1 <= E-bound C
+     & W-bound C <= q`1 & q`1 <= E-bound C by PSCOMP_1:71;
+  then p`1 = W-bound C & q`1 = W-bound C by A3,AXIOMS:21;
+ hence thesis;
+end;
+
+theorem Th18:
+ C is horizontal iff S-bound C = N-bound C
+proof
+ thus C is horizontal implies S-bound C = N-bound C
+  proof assume
+A1:   C is horizontal;
+A2:  S-min C in C & N-min C in C by Th13,Th14;
+   thus S-bound C = (S-min C)`2 by PSCOMP_1:114
+           .= (N-min C)`2 by A1,A2,SPPOL_1:def 2
+           .= N-bound C by PSCOMP_1:94;
+  end;
+ assume
+A3: S-bound C = N-bound C;
+ let p,q;
+ assume p in C & q in C;
+  then S-bound C <= p`2 & p`2 <= N-bound C
+     & S-bound C <= q`2 & q`2 <= N-bound C by PSCOMP_1:71;
+  then p`2 = S-bound C & q`2 = S-bound C by A3,AXIOMS:21;
+ hence thesis;
+end;
+
+theorem
+   NW-corner C = NE-corner C implies C is vertical
+ proof
+  assume NW-corner C = NE-corner C;
+   then |[W-bound C, N-bound C]| = NE-corner C by PSCOMP_1:def 35
+         .= |[E-bound C, N-bound C]| by PSCOMP_1:def 36;
+   then W-bound C = E-bound C by SPPOL_2:1;
+  hence C is vertical by Th17;
+ end;
+
+theorem
+   SW-corner C = SE-corner C implies C is vertical
+ proof
+  assume SW-corner C = SE-corner C;
+   then |[W-bound C, S-bound C]| = SE-corner C by PSCOMP_1:def 34
+         .= |[E-bound C, S-bound C]| by PSCOMP_1:def 37;
+   then W-bound C = E-bound C by SPPOL_2:1;
+  hence C is vertical by Th17;
+ end;
+
+theorem
+   NW-corner C = SW-corner C implies C is horizontal
+ proof
+  assume NW-corner C = SW-corner C;
+   then |[W-bound C, N-bound C]| = SW-corner C by PSCOMP_1:def 35
+         .= |[W-bound C, S-bound C]| by PSCOMP_1:def 34;
+   then S-bound C = N-bound C by SPPOL_2:1;
+  hence C is horizontal by Th18;
+ end;
+
+theorem
+   NE-corner C = SE-corner C implies C is horizontal
+ proof
+  assume NE-corner C = SE-corner C;
+   then |[E-bound C, N-bound C]| = SE-corner C by PSCOMP_1:def 36
+         .= |[E-bound C, S-bound C]| by PSCOMP_1:def 37;
+   then S-bound C = N-bound C by SPPOL_2:1;
+  hence C is horizontal by Th18;
+ end;
+
+ reserve i,j,k for Nat,
+         t,r1,r2,s1,s2 for Real;
+
+theorem Th23:
+ W-bound C <= E-bound C
+proof
+    N-min C in C by Th13;
+  then W-bound C <= (N-min C)`1 & (N-min C)`1 <= E-bound C by PSCOMP_1:71;
+ hence W-bound C <= E-bound C by AXIOMS:22;
+end;
+
+theorem Th24:
+ S-bound C <= N-bound C
+proof
+    W-min C in C by Th15;
+  then S-bound C <= (W-min C)`2 & (W-min C)`2 <= N-bound C by PSCOMP_1:71;
+ hence S-bound C <= N-bound C by AXIOMS:22;
+end;
+
+theorem Th25:
+ LSeg(SE-corner C, NE-corner C) =
+  { p : p`1 = E-bound C & p`2 <= N-bound C & p`2 >= S-bound C }
+proof set L = { p : p`1 = E-bound C & p`2 <= N-bound C & p`2 >= S-bound C};
+ set q1 = SE-corner C, q2 = NE-corner C;
+A1: q1`1 = E-bound C & q1`2 = S-bound C by PSCOMP_1:78,79;
+A2: q2`1 = E-bound C & q2`2 = N-bound C by PSCOMP_1:76,77;
+A3: S-bound C <= N-bound C by Th24;
+ thus LSeg(q1,q2) c= L
+  proof let a be set;
+   assume
+A4:  a in LSeg(q1,q2);
+    then reconsider p = a as Point of TOP-REAL 2;
+A5:  p`1 = E-bound C by A1,A2,A4,GOBOARD7:5;
+      p`2 <= N-bound C & p`2 >= S-bound C by A1,A2,A3,A4,TOPREAL1:10;
+   hence thesis by A5;
+  end;
+ let a be set;
+ assume a in L;
+  then ex p st p = a & p`1 = E-bound C & p`2 <= N-bound C & p`2 >= S-bound C;
+ hence a in LSeg(q1,q2) by A1,A2,GOBOARD7:8;
+end;
+
+theorem Th26:
+  LSeg(SW-corner C, SE-corner C) =
+    { p : p`1 <= E-bound C & p`1 >= W-bound C & p`2 = S-bound C}
+proof set L = { p : p`1 <= E-bound C & p`1 >= W-bound C & p`2 = S-bound C};
+ set q1 = SW-corner C, q2 = SE-corner C;
+A1: q1`1 = W-bound C & q1`2 = S-bound C by PSCOMP_1:72,73;
+A2: q2`1 = E-bound C & q2`2 = S-bound C by PSCOMP_1:78,79;
+A3: W-bound C <= E-bound C by Th23;
+ thus LSeg(q1,q2) c= L
+  proof let a be set;
+   assume
+A4:  a in LSeg(q1,q2);
+    then reconsider p = a as Point of TOP-REAL 2;
+A5:  p`2 = S-bound C by A1,A2,A4,GOBOARD7:6;
+      p`1 <= E-bound C & p`1 >= W-bound C by A1,A2,A3,A4,TOPREAL1:9;
+   hence thesis by A5;
+  end;
+ let a be set;
+ assume a in L;
+  then ex p st p = a & p`1 <= E-bound C & p`1 >= W-bound C & p`2 = S-bound C;
+ hence a in LSeg(q1,q2) by A1,A2,GOBOARD7:9;
+end;
+
+theorem Th27:
+ LSeg(NW-corner C, NE-corner C) =
+  { p : p`1 <= E-bound C & p`1 >= W-bound C & p`2 = N-bound C}
+proof set L = { p : p`1 <= E-bound C & p`1 >= W-bound C & p`2 = N-bound C};
+ set q1 = NW-corner C, q2 = NE-corner C;
+A1: q1`1 = W-bound C & q1`2 = N-bound C by PSCOMP_1:74,75;
+A2: q2`1 = E-bound C & q2`2 = N-bound C by PSCOMP_1:76,77;
+A3: W-bound C <= E-bound C by Th23;
+ thus LSeg(q1,q2) c= L
+  proof let a be set;
+   assume
+A4:  a in LSeg(q1,q2);
+    then reconsider p = a as Point of TOP-REAL 2;
+A5:  p`2 = N-bound C by A1,A2,A4,GOBOARD7:6;
+      p`1 <= E-bound C & p`1 >= W-bound C by A1,A2,A3,A4,TOPREAL1:9;
+   hence thesis by A5;
+  end;
+ let a be set;
+ assume a in L;
+  then ex p st p = a & p`1 <= E-bound C & p`1 >= W-bound C & p`2 = N-bound C;
+ hence a in LSeg(q1,q2) by A1,A2,GOBOARD7:9;
+end;
+
+theorem Th28:
+   LSeg(SW-corner C, NW-corner C) =
+     { p : p`1 = W-bound C & p`2 <= N-bound C & p`2 >= S-bound C}
+proof set L = { p : p`1 = W-bound C & p`2 <= N-bound C & p`2 >= S-bound C};
+ set q1 = SW-corner C, q2 = NW-corner C;
+A1: q1`1 = W-bound C & q1`2 = S-bound C by PSCOMP_1:72,73;
+A2: q2`1 = W-bound C & q2`2 = N-bound C by PSCOMP_1:74,75;
+A3: S-bound C <= N-bound C by Th24;
+ thus LSeg(q1,q2) c= L
+  proof let a be set;
+   assume
+A4:  a in LSeg(q1,q2);
+    then reconsider p = a as Point of TOP-REAL 2;
+A5:  p`1 = W-bound C by A1,A2,A4,GOBOARD7:5;
+      p`2 <= N-bound C & p`2 >= S-bound C by A1,A2,A3,A4,TOPREAL1:10;
+   hence thesis by A5;
+  end;
+ let a be set;
+ assume a in L;
+  then ex p st p = a & p`1 = W-bound C & p`2 <= N-bound C & p`2 >= S-bound C;
+ hence a in LSeg(q1,q2) by A1,A2,GOBOARD7:8;
+end;
+
+theorem
+   LSeg(SW-corner C,NW-corner C) /\ LSeg(NW-corner C,NE-corner C) = {NW-corner
+C
+}
+ proof
+    for a being set
+   holds a in LSeg(SW-corner C,NW-corner C) /\ LSeg(NW-corner C,NE-corner C)
+      iff a = NW-corner C
+  proof let a be set;
+  thus a in LSeg(SW-corner C,NW-corner C) /\ LSeg(NW-corner C,NE-corner C)
+    implies a = NW-corner C
+   proof
+    assume
+A1:    a in LSeg(SW-corner C,NW-corner C) /\ LSeg(NW-corner C,NE-corner C);
+     then a in LSeg(SW-corner C,NW-corner C)by XBOOLE_0:def 3;
+     then a in {p : p`1 = W-bound C & p`2 <= N-bound C & p`2 >= S-bound C}
+                                           by Th28;
+     then A2:    ex p st p = a & p`1 = W-bound C & p`2 <= N-bound C & p`2 >=
+S-bound C;
+        a in LSeg(NW-corner C,NE-corner C) by A1,XBOOLE_0:def 3;
+      then a in {p : p`1 <= E-bound C & p`1 >= W-bound C & p`2 = N-bound C}
+                                            by Th27;
+      then ex p st p=a & p`1 <= E-bound C & p`1 >= W-bound C & p`2 = N-bound C
+;
+      then a = |[W-bound C,N-bound C]| by A2,EUCLID:57;
+    hence a = NW-corner C by PSCOMP_1:def 35;
+   end;
+   assume a = NW-corner C;
+    then a in LSeg(SW-corner C,NW-corner C) & a in
+ LSeg(NW-corner C,NE-corner C)
+         by TOPREAL1:6;
+    hence a in LSeg(SW-corner C,NW-corner C) /\ LSeg(NW-corner C,NE-corner C)
+      by XBOOLE_0:def 3;
+   end;
+  hence thesis by TARSKI:def 1;
+ end;
+
+theorem Th30:
+ LSeg(NW-corner C,NE-corner C) /\ LSeg(NE-corner C,SE-corner C) = {NE-corner C}
+ proof
+    for a being set
+   holds a in LSeg(NW-corner C,NE-corner C) /\ LSeg(NE-corner C,SE-corner C)
+      iff a = NE-corner C
+  proof let a be set;
+  thus a in LSeg(NW-corner C,NE-corner C) /\ LSeg(NE-corner C,SE-corner C)
+    implies a = NE-corner C
+   proof
+    assume
+A1:    a in LSeg(NW-corner C,NE-corner C) /\ LSeg(NE-corner C,SE-corner C);
+     then a in LSeg(NW-corner C,NE-corner C)by XBOOLE_0:def 3;
+     then a in {p :p`1 <= E-bound C & p`1 >= W-bound C & p`2 = N-bound C }
+                                           by Th27;
+     then A2:    ex p st p = a & p`1 <= E-bound C & p`1 >= W-bound C & p`2 =
+N-bound C;
+        a in LSeg(NE-corner C,SE-corner C) by A1,XBOOLE_0:def 3;
+      then a in {p : p`1 = E-bound C & p`2 <= N-bound C & p`2 >= S-bound C }
+                                            by Th25;
+      then ex p st p=a & p`1 = E-bound C & p`2 <= N-bound C & p`2 >= S-bound C
+;
+      then a = |[E-bound C,N-bound C]| by A2,EUCLID:57;
+    hence a = NE-corner C by PSCOMP_1:def 36;
+   end;
+   assume a = NE-corner C;
+    then a in LSeg(NW-corner C,NE-corner C) & a in
+ LSeg(NE-corner C,SE-corner C)
+         by TOPREAL1:6;
+    hence a in LSeg(NW-corner C,NE-corner C) /\ LSeg(NE-corner C,SE-corner C)
+      by XBOOLE_0:def 3;
+   end;
+  hence thesis by TARSKI:def 1;
+ end;
+
+theorem Th31:
+ LSeg(SE-corner C,NE-corner C) /\ LSeg(SW-corner C,SE-corner C) = {SE-corner C}
+ proof
+    for a being set
+   holds a in LSeg(NE-corner C,SE-corner C) /\ LSeg(SE-corner C,SW-corner C)
+      iff a = SE-corner C
+  proof let a be set;
+  thus a in LSeg(NE-corner C,SE-corner C) /\ LSeg(SE-corner C,SW-corner C)
+    implies a = SE-corner C
+   proof
+    assume
+A1:    a in LSeg(NE-corner C,SE-corner C) /\ LSeg(SE-corner C,SW-corner C);
+     then a in LSeg(NE-corner C,SE-corner C)by XBOOLE_0:def 3;
+     then a in {p : p`1 = E-bound C & p`2 <= N-bound C & p`2 >= S-bound C }
+                                           by Th25;
+     then A2:    ex p st p = a & p`1 = E-bound C & p`2 <= N-bound C & p`2 >=
+S-bound C;
+        a in LSeg(SE-corner C,SW-corner C) by A1,XBOOLE_0:def 3;
+      then a in {p : p`1 <= E-bound C & p`1 >= W-bound C & p`2 = S-bound C }
+                                            by Th26;
+      then ex p st p=a & p`1 <= E-bound C & p`1 >= W-bound C & p`2 = S-bound C
+;
+      then a = |[E-bound C,S-bound C]| by A2,EUCLID:57;
+    hence a = SE-corner C by PSCOMP_1:def 37;
+   end;
+   assume a = SE-corner C;
+    then a in LSeg(NE-corner C,SE-corner C) & a in
+ LSeg(SE-corner C,SW-corner C)
+         by TOPREAL1:6;
+    hence a in LSeg(NE-corner C,SE-corner C) /\ LSeg(SE-corner C,SW-corner C)
+      by XBOOLE_0:def 3;
+   end;
+  hence thesis by TARSKI:def 1;
+ end;
+
+theorem Th32:
+ LSeg(NW-corner C,SW-corner C) /\ LSeg(SW-corner C,SE-corner C) = {SW-corner C}
+ proof
+    for a being set
+   holds a in LSeg(NW-corner C,SW-corner C) /\ LSeg(SW-corner C,SE-corner C)
+      iff a = SW-corner C
+  proof let a be set;
+  thus a in LSeg(NW-corner C,SW-corner C) /\ LSeg(SW-corner C,SE-corner C)
+    implies a = SW-corner C
+   proof
+    assume
+A1:    a in LSeg(NW-corner C,SW-corner C) /\ LSeg(SW-corner C,SE-corner C);
+     then a in LSeg(NW-corner C,SW-corner C)by XBOOLE_0:def 3;
+     then a in {p : p`1 = W-bound C & p`2 <= N-bound C & p`2 >= S-bound C }
+                                           by Th28;
+     then A2:    ex p st p = a & p`1 = W-bound C & p`2 <= N-bound C & p`2 >=
+S-bound C;
+        a in LSeg(SW-corner C,SE-corner C) by A1,XBOOLE_0:def 3;
+      then a in {p : p`1 <= E-bound C & p`1 >= W-bound C & p`2= S-bound C}
+                                            by Th26;
+      then ex p st p=a & p`1 <= E-bound C & p`1 >= W-bound C & p`2 = S-bound C
+;
+      then a = |[W-bound C,S-bound C]| by A2,EUCLID:57;
+    hence a = SW-corner C by PSCOMP_1:def 34;
+   end;
+   assume a = SW-corner C;
+    then a in LSeg(NW-corner C,SW-corner C) & a in
+ LSeg(SW-corner C,SE-corner C)
+         by TOPREAL1:6;
+    hence a in LSeg(NW-corner C,SW-corner C) /\ LSeg(SW-corner C,SE-corner C)
+      by XBOOLE_0:def 3;
+   end;
+  hence thesis by TARSKI:def 1;
+ end;
+
+begin :: Neither vertical nor horizontal
+
+reserve D1 for non vertical non empty compact Subset of TOP-REAL 2,
+        D2 for non horizontal non empty compact Subset of TOP-REAL 2,
+        D for non vertical non horizontal non empty compact
+              Subset of TOP-REAL 2;
+
+theorem Th33:
+ W-bound D1 < E-bound D1
+proof
+    W-bound D1 <= E-bound D1 & W-bound D1 <> E-bound D1 by Th17,Th23;
+ hence thesis by REAL_1:def 5;
+end;
+
+theorem Th34:
+ S-bound D2 < N-bound D2
+proof
+    S-bound D2 <= N-bound D2 & S-bound D2 <> N-bound D2 by Th18,Th24;
+ hence thesis by REAL_1:def 5;
+end;
+
+theorem Th35:
+ LSeg(SW-corner D1,NW-corner D1) misses LSeg(SE-corner D1,NE-corner D1)
+  proof
+   assume LSeg(SW-corner D1,NW-corner D1) /\
+    LSeg(SE-corner D1,NE-corner D1) <> {};
+    then consider a being set such that
+A1:    a in LSeg(SW-corner D1,NW-corner D1) /\ LSeg(SE-corner D1,NE-corner D1)
+        by XBOOLE_0:def 1;
+       a in LSeg(NW-corner D1,SW-corner D1)by A1,XBOOLE_0:def 3;
+     then a in {p : p`1 = W-bound D1 & p`2 <= N-bound D1 & p`2 >= S-bound D1}
+        by Th28;
+     then A2:    ex p st p = a & p`1 = W-bound D1 & p`2 <= N-bound D1 & p`2 >=
+ S-bound D1;
+        a in LSeg(NE-corner D1,SE-corner D1) by A1,XBOOLE_0:def 3;
+      then a in {p : p`1= E-bound D1 & p`2 <= N-bound D1 & p`2 >= S-bound D1}
+                                            by Th25;
+      then ex p st p=a & p`1 = E-bound D1 & p`2 <= N-bound D1 & p`2 >=
+       S-bound D1;
+     hence contradiction by A2,Th17;
+  end;
+
+theorem Th36:
+ LSeg(SW-corner D2,SE-corner D2) misses LSeg(NW-corner D2,NE-corner D2)
+  proof
+   assume LSeg(SW-corner D2,SE-corner D2) /\
+    LSeg(NW-corner D2,NE-corner D2) <> {};
+    then consider a being set such that
+A1:    a in LSeg(SW-corner D2,SE-corner D2) /\ LSeg(NW-corner D2,NE-corner D2)
+        by XBOOLE_0:def 1;
+       a in LSeg(SE-corner D2,SW-corner D2)by A1,XBOOLE_0:def 3;
+     then a in {p : p`1 <= E-bound D2 & p`1 >= W-bound D2 & p`2 = S-bound D2}
+        by Th26;
+     then A2:    ex p st p = a & p`1 <= E-bound D2 & p`1 >=
+ W-bound D2 & p`2 = S-bound D2;
+        a in LSeg(NE-corner D2,NW-corner D2) by A1,XBOOLE_0:def 3;
+      then a in {p : p`1 <= E-bound D2 & p`1 >= W-bound D2 & p`2= N-bound D2}
+                                            by Th27;
+      then ex p st p=a & p`1 <= E-bound D2 & p`1 >= W-bound D2 & p`2 =
+       N-bound D2;
+     hence contradiction by A2,Th18;
+  end;
+
+begin :: SpStSeq
+
+definition let C be Subset of TOP-REAL 2;
+ func SpStSeq C -> FinSequence of TOP-REAL 2 equals
+:Def1: <*NW-corner C,NE-corner C,SE-corner C*>^
+      <*SW-corner C,NW-corner C*>;
+ coherence;
+end;
+
+theorem Th37:
+ (SpStSeq S)/.1 = NW-corner S
+proof
+A1: SpStSeq S =
+ <*NW-corner S,NE-corner S,SE-corner S*>^<*SW-corner S,NW-corner S*> by Def1;
+    1 in dom<*NW-corner S,NE-corner S,SE-corner S*> by TOPREAL3:6;
+ hence (SpStSeq S)/.1 = <*NW-corner S,NE-corner S,SE-corner S*>/.1
+            by A1,GROUP_5:95
+         .= NW-corner S by FINSEQ_4:27;
+end;
+
+theorem Th38:
+ (SpStSeq S)/.2 = NE-corner S
+proof
+A1: SpStSeq S =
+<*NW-corner S,NE-corner S,SE-corner S*>^<*SW-corner S,NW-corner S*> by Def1;
+    2 in dom<*NW-corner S,NE-corner S,SE-corner S*> by TOPREAL3:6;
+ hence (SpStSeq S)/.2 = <*NW-corner S,NE-corner S,SE-corner S*>/.2
+             by A1,GROUP_5:95
+         .= NE-corner S by FINSEQ_4:27;
+end;
+
+theorem Th39:
+ (SpStSeq S)/.3 = SE-corner S
+proof
+A1: SpStSeq S =
+ <*NW-corner S,NE-corner S,SE-corner S*>^<*SW-corner S,NW-corner S*> by Def1;
+    3 in dom<*NW-corner S,NE-corner S,SE-corner S*> by TOPREAL3:6;
+ hence (SpStSeq S)/.3 = <*NW-corner S,NE-corner S,SE-corner S*>/.3
+            by A1,GROUP_5:95
+         .= SE-corner S by FINSEQ_4:27;
+end;
+
+theorem Th40:
+ (SpStSeq S)/.4 = SW-corner S
+proof
+ set g = <*NW-corner S,NE-corner S,SE-corner S*>;
+A1: SpStSeq S = g^<*SW-corner S,NW-corner S*> by Def1;
+     1 in {1,2} by TARSKI:def 2;
+then A2: 1 in dom <*SW-corner S,NW-corner S*> by FINSEQ_1:4,FINSEQ_3:29;
+    len g = 3 by FINSEQ_1:62;
+ hence (SpStSeq S)/.4 = (SpStSeq S)/.(len g + 1)
+         .= <*SW-corner S,NW-corner S*>/.1 by A1,A2,GROUP_5:96
+         .= SW-corner S by FINSEQ_4:26;
+end;
+
+theorem
+   (SpStSeq S)/.5 = NW-corner S
+proof
+ set g = <*NW-corner S,NE-corner S,SE-corner S*>;
+A1: SpStSeq S = g^<*SW-corner S,NW-corner S*> by Def1;
+     2 in {1,2} by TARSKI:def 2;
+then A2: 2 in dom <*SW-corner S,NW-corner S*> by FINSEQ_1:4,FINSEQ_3:29;
+    len g = 3 by FINSEQ_1:62;
+ hence (SpStSeq S)/.5 = (SpStSeq S)/.(len g + 2)
+         .= <*SW-corner S,NW-corner S*>/.2 by A1,A2,GROUP_5:96
+         .= NW-corner S by FINSEQ_4:26;
+end;
+
+theorem Th42:
+ len SpStSeq S = 5
+proof
+    SpStSeq S = <*NW-corner S,NE-corner S,SE-corner S*>^
+      <*SW-corner S,NW-corner S*> by Def1;
+ hence len SpStSeq S
+          = len<*NW-corner S,NE-corner S,SE-corner S*>
+              + len<*SW-corner S,NW-corner S*> by FINSEQ_1:35
+         .= len<*SW-corner S,NW-corner S*> + 3 by FINSEQ_1:62
+         .= 2 + 3 by FINSEQ_1:61
+         .= 5;
+end;
+
+theorem Th43:
+ L~SpStSeq S =
+   (LSeg(NW-corner S,NE-corner S) \/ LSeg(NE-corner S,SE-corner S)) \/
+   (LSeg(SE-corner S,SW-corner S) \/ LSeg(SW-corner S,NW-corner S))
+proof
+     len<*NW-corner S,NE-corner S,SE-corner S*> = 3 by FINSEQ_1:62;
+then A1: <*NW-corner S,NE-corner S,SE-corner S*>/.
+     len<*NW-corner S,NE-corner S,SE-corner S*> = SE-corner S by FINSEQ_4:27;
+A2: <*SW-corner S,NW-corner S*>/.1 = SW-corner S by FINSEQ_4:26;
+ thus L~SpStSeq S
+  = L~(<*NW-corner S,NE-corner S,SE-corner S*>^<*SW-corner S,NW-corner S*>)
+          by Def1
+ .= L~<*NW-corner S,NE-corner S,SE-corner S*> \/
+    LSeg(SE-corner S,SW-corner S) \/ L~<*SW-corner S,NW-corner S*>
+         by A1,A2,SPPOL_2:23
+ .= L~<*NW-corner S,NE-corner S,SE-corner S*> \/
+    LSeg(SE-corner S,SW-corner S) \/
+ LSeg(SW-corner S,NW-corner S) by SPPOL_2:21
+ .= LSeg(NW-corner S,NE-corner S) \/ LSeg(NE-corner S,SE-corner S) \/
+    LSeg(SE-corner S,SW-corner S) \/ LSeg(SW-corner S,NW-corner S) by Th10
+ .= (LSeg(NW-corner S,NE-corner S) \/ LSeg(NE-corner S,SE-corner S)) \/
+    (LSeg(SE-corner S,SW-corner S) \/ LSeg(SW-corner S,NW-corner S))
+       by XBOOLE_1:4;
+end;
+
+definition let D be non vertical non empty compact Subset of TOP-REAL 2;
+ cluster SpStSeq D -> non constant;
+  coherence
+   proof
+A1:    SpStSeq D = <*NW-corner D,NE-corner D,SE-corner D*>^
+      <*SW-corner D,NW-corner D*> by Def1;
+    assume SpStSeq D is constant;
+     then A2:    <*NW-corner D,NE-corner D,SE-corner D*> is constant by A1,Th3;
+        |[W-bound D, N-bound D]| = NW-corner D by PSCOMP_1:def 35
+        .= NE-corner D by A2,Th5
+        .= |[E-bound D, N-bound D]| by PSCOMP_1:def 36;
+     then W-bound D = E-bound D by SPPOL_2:1;
+    hence contradiction by Th17;
+   end;
+end;
+
+definition let D be non horizontal non empty compact Subset of TOP-REAL 2;
+ cluster SpStSeq D -> non constant;
+  coherence
+   proof
+A1:    SpStSeq D = <*NW-corner D,NE-corner D,SE-corner D*>^
+      <*SW-corner D,NW-corner D*> by Def1;
+    assume SpStSeq D is constant;
+     then A2:    <*SW-corner D,NW-corner D*> is constant by A1,Th3;
+        |[W-bound D, N-bound D]| = NW-corner D by PSCOMP_1:def 35
+        .= SW-corner D by A2,Th4
+        .= |[W-bound D, S-bound D]| by PSCOMP_1:def 34;
+     then N-bound D = S-bound D by SPPOL_2:1;
+    hence contradiction by Th18;
+   end;
+end;
+
+definition let D be non vertical non horizontal non empty compact
+                    Subset of TOP-REAL 2;
+ cluster SpStSeq D -> special unfolded circular s.c.c. standard;
+  coherence
+   proof
+   set f1 = <*NW-corner D,NE-corner D,SE-corner D*>,
+       f2 = <*SW-corner D,NW-corner D*>;
+A1:len f1 = 3 & len f2 = 2 by FINSEQ_1:61,62;
+    then A2: len(f1^f2) = 3+2 by FINSEQ_1:35;
+    set f = SpStSeq D;
+A3: f = f1^f2 by Def1;
+A4: NW-corner D = |[W-bound D,N-bound D]| by PSCOMP_1:def 35;
+A5: NE-corner D = |[E-bound D,N-bound D]| by PSCOMP_1:def 36;
+A6: SE-corner D = |[E-bound D,S-bound D]| by PSCOMP_1:def 37;
+A7: SW-corner D = |[W-bound D,S-bound D]| by PSCOMP_1:def 34;
+      1 in dom f1 by A1,FINSEQ_3:27;
+then A8: f/.1 = f1/.1 by A3,GROUP_5:95 .= NW-corner D by FINSEQ_4:27;
+      2 in dom f1 by A1,FINSEQ_3:27;
+then A9: f/.2 = f1/.2 by A3,GROUP_5:95 .= NE-corner D by FINSEQ_4:27;
+      3 in dom f1 by A1,FINSEQ_3:27;
+then A10: f/.3 = f1/.3 by A3,GROUP_5:95 .= SE-corner D by FINSEQ_4:27;
+      1 in dom f2 by A1,FINSEQ_3:27;
+then A11: f/.(3+1) = f2/.1 by A1,A3,GROUP_5:96 .= SW-corner D by FINSEQ_4:26;
+      2 in dom f2 by A1,FINSEQ_3:27;
+then A12: f/.(3+2) = f2/.2 by A1,A3,GROUP_5:96 .= NW-corner D by FINSEQ_4:26;
+       1+1 = 2;
+then A13: LSeg(f,1) = LSeg(NW-corner D,NE-corner D) by A2,A3,A8,A9,TOPREAL1:def
+5;
+       2+1 = 3;
+then A14: LSeg(f,2) = LSeg(NE-corner D,SE-corner D) by A2,A3,A9,A10,TOPREAL1:
+def 5;
+A15: LSeg(f,3) = LSeg(SE-corner D,SW-corner D) by A2,A3,A10,A11,TOPREAL1:def 5;
+       4+1 = 5;
+then A16: LSeg(f,4) = LSeg(SW-corner D,NW-corner D) by A2,A3,A11,A12,TOPREAL1:
+def 5;
+ thus f is special
+    proof let i;
+    assume 1 <= i;
+     then 1+1 <= i+1 by AXIOMS:24;
+     then A17:   1 < i+1 & 0 < i+1 by AXIOMS:22;
+    assume i+1 <= len f;
+      then A18:    i+1 = 1+1 or i+1 = 2+1 or i+1 = 3+1 or i+1 = 4+1
+          by A2,A3,A17,CQC_THE1:6;
+     per cases by A18,XCMPLX_1:2;
+      suppose
+A19:      i = 1;
+          (f/.1)`2 = N-bound D by A4,A8,EUCLID:56
+                .= (f/.(1+1))`2 by A5,A9,EUCLID:56;
+       hence thesis by A19;
+      suppose
+A20:     i = 2;
+         (f/.2)`1 = E-bound D by A5,A9,EUCLID:56
+               .= (f/.(2+1))`1 by A6,A10,EUCLID:56;
+       hence thesis by A20;
+      suppose
+A21:     i = 3;
+         (f/.3)`2 = S-bound D by A6,A10,EUCLID:56
+               .= (f/.(3+1))`2 by A7,A11,EUCLID:56;
+       hence thesis by A21;
+      suppose
+A22:     i = 4;
+         (f/.4)`1 = W-bound D by A7,A11,EUCLID:56
+               .= (f/.(4+1))`1 by A4,A12,EUCLID:56;
+       hence thesis by A22;
+    end;
+ thus f is unfolded
+    proof let i;
+     assume 1 <= i;
+      then 1+2 <= i+2 by AXIOMS:24;
+      then A23:   2 < i+2 & 1 < i+2 & 0 < i+2 by AXIOMS:22;
+     assume i + 2 <= len f;
+      then A24:   i+2 = 1+2 or i+2 = 2+2 or i+2 = 3+2 by A2,A3,A23,CQC_THE1:6;
+      per cases by A24,XCMPLX_1:2;
+     suppose i = 1;
+      hence LSeg(f,i) /\ LSeg(f,i+1) = {f/.(i+1)} by A9,A13,A14,Th30;
+     suppose i = 2;
+      hence LSeg(f,i) /\ LSeg(f,i+1) = {f/.(i+1)} by A10,A14,A15,Th31;
+     suppose i = 3;
+      hence LSeg(f,i) /\ LSeg(f,i+1) = {f/.(i+1)} by A11,A15,A16,Th32;
+    end;
+      thus f is circular by A2,A3,A8,A12,FINSEQ_6:def 1;
+ thus f is s.c.c.
+    proof let i,j;
+     assume that
+A25:  i+1 < j and
+A26:  (i > 1 & j < len f or j+1 < len f);
+A27:   i+1 >= 1 by NAT_1:29;
+     then A28:   i+1 >= 0 by AXIOMS:22;
+     A29:   j+1 = 0+1 or j+1 = 1+1 or j+1 = 2+1 or j+1 = 3+1 or j+1 = 4+1
+                                                      by A2,A3,A26,CQC_THE1:6;
+A30:   i+1+1 = i+(1+1) by XCMPLX_1:1;
+     then A31:  i+2 <= j by A25,NAT_1:38;
+A32:   (i+2 = 2+2 implies i=2) &
+     (i+2 = 1+2 implies i=1) &
+     (i+2 = 0+2 implies i=0) by XCMPLX_1:2;
+A33: i+2 <> 0+1 by A30,XCMPLX_1:2;
+A34:   now per cases by A25,A27,A28,A29,XCMPLX_1:2;
+       case j = 2;
+        hence i = 0 by A25,A30,A32,CQC_THE1:3;
+       case j = 3;
+        hence i = 0 or i = 1 by A25,A30,A32,CQC_THE1:4;
+       case j = 4;
+        hence i = 0 or i = 2 by A2,A26,A31,A32,A33,Def1,CQC_THE1:5;
+      end;
+     per cases by A34;
+     suppose i = 0;
+      then LSeg(f,i) = {} by TOPREAL1:def 5;
+     hence LSeg(f,i) /\ LSeg(f,j) = {};
+     suppose i = 1 & j = 3;
+     then LSeg(f,i) misses LSeg(f,j) by A13,A15,Th36;
+     hence LSeg(f,i) /\ LSeg(f,j) = {} by XBOOLE_0:def 7;
+     suppose i = 2 & j = 4;
+     then LSeg(f,i) misses LSeg(f,j) by A14,A16,Th35;
+     hence LSeg(f,i) /\ LSeg(f,j) = {} by XBOOLE_0:def 7;
+    end;
+    set Xf1 = <*W-bound D,E-bound D,E-bound D*>,
+        Xf2 = <*W-bound D,W-bound D*>;
+    reconsider Xf = Xf1^Xf2 as FinSequence of REAL;
+A35:len Xf1 = 3 & len Xf2 = 2 by FINSEQ_1:61,62;
+    then A36: len Xf = 3+2 by FINSEQ_1:35;
+      1 in dom Xf1 by A35,FINSEQ_3:27;
+then A37: Xf.1 = Xf1.1 by FINSEQ_1:def 7 .= W-bound D by FINSEQ_1:62;
+      2 in dom Xf1 by A35,FINSEQ_3:27;
+then A38: Xf.2 = Xf1.2 by FINSEQ_1:def 7 .= E-bound D by FINSEQ_1:62;
+      3 in dom Xf1 by A35,FINSEQ_3:27;
+then A39: Xf.3 = Xf1.3 by FINSEQ_1:def 7 .= E-bound D by FINSEQ_1:62;
+      1 in dom Xf2 by A35,FINSEQ_3:27;
+then A40: Xf.(3+1) = Xf2.1 by A35,FINSEQ_1:def 7 .= W-bound D by FINSEQ_1:61;
+      2 in dom Xf2 by A35,FINSEQ_3:27;
+then A41: Xf.(3+2) = Xf2.2 by A35,FINSEQ_1:def 7 .= W-bound D by FINSEQ_1:61;
+       now let n be Nat;
+      assume n in dom Xf;
+       then A42:    n <> 0 & n <= 5 by A36,FINSEQ_3:27;
+      per cases by A42,CQC_THE1:6;
+      suppose n = 1;
+      hence Xf.n = (f/.n)`1 by A8,A37,PSCOMP_1:74;
+      suppose n = 2;
+      hence Xf.n = (f/.n)`1 by A9,A38,PSCOMP_1:76;
+      suppose n = 3;
+      hence Xf.n = (f/.n)`1 by A10,A39,PSCOMP_1:78;
+      suppose n = 4;
+      hence Xf.n = (f/.n)`1 by A11,A40,PSCOMP_1:72;
+      suppose n = 5;
+      hence Xf.n = (f/.n)`1 by A12,A41,PSCOMP_1:74;
+     end;
+     then A43:   Xf = X_axis f by A2,A3,A36,GOBOARD1:def 3;
+A44:    W-bound D < E-bound D by Th33;
+A45:    rng Xf1 = { W-bound D,E-bound D,E-bound D } by FINSEQ_2:148
+             .= { E-bound D,E-bound D,W-bound D } by ENUMSET1:102
+             .= { W-bound D,E-bound D } by ENUMSET1:70;
+        rng Xf2 = { W-bound D,W-bound D } by FINSEQ_2:147
+             .= { W-bound D } by ENUMSET1:69;
+then A46:   rng Xf = { W-bound D,E-bound D } \/ { W-bound D } by A45,FINSEQ_1:
+44
+            .= { W-bound D,W-bound D,E-bound D } by ENUMSET1:42
+            .= { W-bound D,E-bound D } by ENUMSET1:70;
+      then A47:   rng <*W-bound D,E-bound D*> = rng Xf by FINSEQ_2:147;
+A48:   len <*W-bound D,E-bound D*> = 2 by FINSEQ_1:61
+               .= card rng Xf by A44,A46,CARD_2:76;
+       <*W-bound D,E-bound D*> is increasing
+       proof let n,m be Nat;
+           len <*W-bound D,E-bound D*> = 2 by FINSEQ_1:61;
+then A49:       dom <*W-bound D,E-bound D*> = { 1,2 } by FINSEQ_1:4,def 3;
+        assume n in dom <*W-bound D,E-bound D*> &
+               m in dom <*W-bound D,E-bound D*>;
+         then A50:       (n = 1 or n = 2) & (m = 1 or m = 2) by A49,TARSKI:def
+2;
+        assume n < m;
+         then <*W-bound D,E-bound D*>.n = W-bound D &
+              <*W-bound D,E-bound D*>.m = E-bound D by A50,FINSEQ_1:61;
+        hence <*W-bound D,E-bound D*>.n < <*W-bound D,E-bound D*>.m by Th33;
+       end;
+     then A51: <*W-bound D,E-bound D*> = Incr X_axis f by A43,A47,A48,GOBOARD2:
+def 2;
+    set Yf1 = <*N-bound D,N-bound D,S-bound D*>,
+        Yf2 = <*S-bound D,N-bound D*>;
+A52:  S-bound D < N-bound D by Th34;
+    reconsider Yf = Yf1^Yf2 as FinSequence of REAL;
+A53:len Yf1 = 3 & len Yf2 = 2 by FINSEQ_1:61,62;
+    then A54: len Yf = 3+2 by FINSEQ_1:35;
+      1 in dom Yf1 by A53,FINSEQ_3:27;
+then A55: Yf.1 = Yf1.1 by FINSEQ_1:def 7 .= N-bound D by FINSEQ_1:62;
+      2 in dom Yf1 by A53,FINSEQ_3:27;
+then A56: Yf.2 = Yf1.2 by FINSEQ_1:def 7 .= N-bound D by FINSEQ_1:62;
+      3 in dom Yf1 by A53,FINSEQ_3:27;
+then A57: Yf.3 = Yf1.3 by FINSEQ_1:def 7 .= S-bound D by FINSEQ_1:62;
+      1 in dom Yf2 by A53,FINSEQ_3:27;
+then A58: Yf.(3+1) = Yf2.1 by A53,FINSEQ_1:def 7 .= S-bound D by FINSEQ_1:61;
+      2 in dom Yf2 by A53,FINSEQ_3:27;
+then A59: Yf.(3+2) = Yf2.2 by A53,FINSEQ_1:def 7 .= N-bound D by FINSEQ_1:61;
+       now let n be Nat;
+      assume n in dom Yf;
+       then A60:    n <> 0 & n <= 5 by A54,FINSEQ_3:27;
+      per cases by A60,CQC_THE1:6;
+      suppose n = 1;
+      hence Yf.n = (f/.n)`2 by A8,A55,PSCOMP_1:75;
+      suppose n = 2;
+      hence Yf.n = (f/.n)`2 by A9,A56,PSCOMP_1:77;
+      suppose n = 3;
+      hence Yf.n = (f/.n)`2 by A10,A57,PSCOMP_1:79;
+      suppose n = 4;
+      hence Yf.n = (f/.n)`2 by A11,A58,PSCOMP_1:73;
+      suppose n = 5;
+      hence Yf.n = (f/.n)`2 by A12,A59,PSCOMP_1:75;
+     end;
+     then A61:   Yf = Y_axis f by A2,A3,A54,GOBOARD1:def 4;
+A62:    rng Yf1 = { N-bound D,N-bound D,S-bound D } by FINSEQ_2:148
+           .= { S-bound D,N-bound D } by ENUMSET1:70;
+        rng Yf2 = { S-bound D,N-bound D } by FINSEQ_2:147;
+then A63:   rng Yf = { S-bound D,N-bound D } \/ { S-bound D,N-bound D }
+                      by A62,FINSEQ_1:44
+            .= { S-bound D,N-bound D };
+      then A64:   rng <*S-bound D,N-bound D*> = rng Yf by FINSEQ_2:147;
+A65:   len <*S-bound D,N-bound D*> = 2 by FINSEQ_1:61
+              .= card rng Yf by A52,A63,CARD_2:76;
+       <*S-bound D,N-bound D*> is increasing
+       proof let n,m be Nat;
+           len <*S-bound D,N-bound D*> = 2 by FINSEQ_1:61;
+then A66:       dom <*S-bound D,N-bound D*> = { 1,2 } by FINSEQ_1:4,def 3;
+        assume n in dom <*S-bound D,N-bound D*> &
+               m in dom <*S-bound D,N-bound D*>;
+         then A67:       (n = 1 or n = 2) & (m = 1 or m = 2) by A66,TARSKI:def
+2;
+        assume n < m;
+         then <*S-bound D,N-bound D*>.n = S-bound D &
+              <*S-bound D,N-bound D*>.m = N-bound D
+            by A67,FINSEQ_1:61;
+        hence <*S-bound D,N-bound D*>.n < <*S-bound D,N-bound D*>.m by Th34;
+       end;
+     then A68:   <*S-bound D,N-bound D*> = Incr Y_axis f by A61,A64,A65,
+GOBOARD2:def 2;
+     set S = (|[W-bound D,S-bound D]|,|[W-bound D,N-bound D]|)
+           ][(|[E-bound D,S-bound D]|,|[E-bound D,N-bound D]|);
+A69:  len S = 2 by MATRIX_2:3 .= len Incr X_axis f by A51,FINSEQ_1:61;
+A70:  width S = 2 by MATRIX_2:3 .= len Incr Y_axis f by A68,FINSEQ_1:61;
+       for n,m being Nat st [n,m] in Indices S
+            holds S*(n,m) = |[(Incr X_axis f).n,(Incr Y_axis f).m]|
+      proof let n,m be Nat;
+       assume [n,m] in Indices S;
+        then [n,m] in [:{ 1,2 },{ 1,2 }:] by FINSEQ_1:4,MATRIX_2:3;
+        then A71:     [n,m] in {[1,1],[1,2],[2,1],[2,2]} by MCART_1:25;
+A72:    <*S-bound D,N-bound D*>.1 = S-bound D &
+       <*S-bound D,N-bound D*>.2 = N-bound D by FINSEQ_1:61;
+       per cases by A71,ENUMSET1:18;
+       suppose [n,m] = [1,1];
+        then A73:       n = 1 & m = 1 by ZFMISC_1:33;
+       hence S*(n,m) = |[W-bound D,S-bound D]| by MATRIX_2:6
+          .= |[(Incr X_axis f).n,(Incr Y_axis f).m]|
+          by A51,A68,A72,A73,FINSEQ_1:61;
+       suppose [n,m] = [1,2];
+        then A74:       n = 1 & m = 2 by ZFMISC_1:33;
+       hence S*(n,m) = |[W-bound D,N-bound D]| by MATRIX_2:6
+          .= |[(Incr X_axis f).n,(Incr Y_axis f).m]|
+          by A51,A68,A72,A74,FINSEQ_1:61;
+       suppose [n,m] = [2,1];
+        then A75:       n = 2 & m = 1 by ZFMISC_1:33;
+       hence S*(n,m) = |[E-bound D,S-bound D]| by MATRIX_2:6
+            .= |[(Incr X_axis f).n,(Incr Y_axis f).m]|
+            by A51,A68,A72,A75,FINSEQ_1:61;
+       suppose [n,m] = [2,2];
+        then A76:       n = 2 & m = 2 by ZFMISC_1:33;
+       hence S*(n,m) = |[E-bound D,N-bound D]| by MATRIX_2:6
+            .= |[(Incr X_axis f).n,(Incr Y_axis f).m]|
+            by A51,A68,A72,A76,FINSEQ_1:61;
+      end;
+      then A77:   S = GoB(Incr X_axis f, Incr Y_axis f) by A69,A70,GOBOARD2:def
+1
+        .= GoB f by GOBOARD2:def 3;
+A78: f/.1 = |[W-bound D,N-bound D]| by A8,PSCOMP_1:def 35
+           .= (GoB f)*(1,2) by A77,MATRIX_2:6;
+A79: f/.2 = |[E-bound D,N-bound D]| by A9,PSCOMP_1:def 36
+           .= (GoB f)*(2,2) by A77,MATRIX_2:6;
+A80: f/.3 = |[E-bound D,S-bound D]| by A10,PSCOMP_1:def 37
+           .= (GoB f)*(2,1) by A77,MATRIX_2:6;
+A81: f/.4 = |[W-bound D,S-bound D]| by A11,PSCOMP_1:def 34
+           .= (GoB f)*(1,1) by A77,MATRIX_2:6;
+  thus SpStSeq D is standard
+   proof
+   thus for k st k in dom f
+    ex i,j st [i,j] in Indices GoB f & f/.k = (GoB f)*(i,j)
+   proof let k;
+    assume
+A82:   k in dom f;
+     then A83:    k >= 1 & k <= 5 by A2,A3,FINSEQ_3:27;
+A84:    k <> 0 by A82,FINSEQ_3:27;
+    per cases by A83,A84,CQC_THE1:6;
+    suppose
+A85:    k = 1;
+     take 1,2;
+     thus [1,2] in Indices GoB f by A77,MATRIX_2:4;
+     thus f/.k = (GoB f)*(1,2) by A78,A85;
+    suppose
+A86:    k = 2;
+     take 2,2;
+     thus [2,2] in Indices GoB f by A77,MATRIX_2:4;
+     thus f/.k = (GoB f)*(2,2) by A79,A86;
+    suppose
+A87:    k = 3;
+     take 2,1;
+     thus [2,1] in Indices GoB f by A77,MATRIX_2:4;
+     thus f/.k = (GoB f)*(2,1) by A80,A87;
+    suppose
+A88:    k = 4;
+     take 1,1;
+     thus [1,1] in Indices GoB f by A77,MATRIX_2:4;
+     thus f/.k = (GoB f)*(1,1) by A81,A88;
+    suppose
+A89:    k = 5;
+     take 1,2;
+     thus [1,2] in Indices GoB f by A77,MATRIX_2:4;
+     thus f/.k = (GoB f)*(1,2) by A8,A12,A78,A89;
+   end;
+
+   let n be Nat such that
+A90: n in dom f and
+A91: n+1 in dom f;
+   let m,k,i,j be Nat such that
+A92: [m,k] in Indices GoB f and
+A93: [i,j] in Indices GoB f and
+A94: f/.n = (GoB f)*(m,k) and
+A95: f/.(n+1) = (GoB f)*(i,j);
+   A96:  n <> 0 by A90,FINSEQ_3:27;
+      n+1 <= 4+1 by A2,A3,A91,FINSEQ_3:27;
+    then A97: n <= 4 by REAL_1:53;
+   per cases by A96,A97,CQC_THE1:5;
+   suppose
+A98:  n = 1;
+      [1,2] in Indices GoB f by A77,MATRIX_2:4;
+then A99:  m = 1 & k = 2 by A78,A92,A94,A98,GOBOARD1:21;
+      [2,2] in Indices GoB f by A77,MATRIX_2:4;
+then A100:  i = 1+1 & j = 2 by A79,A93,A95,A98,GOBOARD1:21;
+    then abs(m-i) = 1 by A99,GOBOARD1:1;
+   hence abs(m-i)+abs(k-j) = 1 by A99,A100,GOBOARD1:2;
+   suppose
+A101:  n = 2;
+      [2,2] in Indices GoB f by A77,MATRIX_2:4;
+then A102:  m = 2 & k = 1+1 by A79,A92,A94,A101,GOBOARD1:21;
+      [2,1] in Indices GoB f by A77,MATRIX_2:4;
+then A103:  i = 2 & j = 1 by A80,A93,A95,A101,GOBOARD1:21;
+    then abs(k-j) = 1 by A102,GOBOARD1:1;
+   hence abs(m-i)+abs(k-j) = 1 by A102,A103,GOBOARD1:2;
+   suppose
+A104:  n = 3;
+      [2,1] in Indices GoB f by A77,MATRIX_2:4;
+then A105:  m = 1+1 & k = 1 by A80,A92,A94,A104,GOBOARD1:21;
+      [1,1] in Indices GoB f by A77,MATRIX_2:4;
+then A106:  i = 1 & j = 1 by A81,A93,A95,A104,GOBOARD1:21;
+    then abs(m-i) = 1 by A105,GOBOARD1:1;
+   hence abs(m-i)+abs(k-j) = 1 by A105,A106,GOBOARD1:2;
+   suppose
+A107:  n = 4;
+      [1,1] in Indices GoB f by A77,MATRIX_2:4;
+then A108:  m = 1 & k = 1 by A81,A92,A94,A107,GOBOARD1:21;
+      [1,2] in Indices GoB f by A77,MATRIX_2:4;
+then A109:  i = 1 & j = 1+1 by A8,A12,A78,A93,A95,A107,GOBOARD1:21;
+    then abs(k-j) = 1 by A108,GOBOARD1:1;
+   hence abs(m-i)+abs(k-j) = 1 by A108,A109,GOBOARD1:2;
+   end;
+   end;
+end;
+
+theorem Th44:
+ L~SpStSeq D = [.W-bound D,E-bound D,S-bound D,N-bound D.]
+proof
+A1: L~SpStSeq D =
+   (LSeg(NW-corner D,NE-corner D) \/ LSeg(NE-corner D,SE-corner D)) \/
+   (LSeg(SE-corner D,SW-corner D) \/ LSeg(SW-corner D,NW-corner D)) by Th43
+   .=
+     LSeg(SW-corner D,NW-corner D) \/ ( LSeg(NW-corner D,NE-corner D) \/
+     LSeg(NE-corner D,SE-corner D) ) \/ LSeg(SE-corner D,SW-corner D)
+         by XBOOLE_1:4
+   .=
+     LSeg(SW-corner D,NW-corner D) \/ LSeg(NW-corner D,NE-corner D) \/
+     LSeg(NE-corner D,SE-corner D) \/ LSeg(SE-corner D,SW-corner D)
+      by XBOOLE_1:4
+   .=
+   ( LSeg(SW-corner D,NW-corner D) \/ LSeg(NW-corner D,NE-corner D) ) \/
+   ( LSeg(NE-corner D,SE-corner D) \/ LSeg(SE-corner D,SW-corner D) )
+                                    by XBOOLE_1:4;
+A2: NW-corner D = |[W-bound D, N-bound D]| &
+   NE-corner D = |[E-bound D, N-bound D]| &
+   SE-corner D = |[E-bound D, S-bound D]| &
+   SW-corner D = |[W-bound D, S-bound D]|
+         by PSCOMP_1:def 34,def 35,def 36,def 37;
+    W-bound D < E-bound D & S-bound D < N-bound D by Th33,Th34;
+ hence L~SpStSeq D = [.W-bound D,E-bound D,S-bound D,N-bound D.]
+                               by A1,A2,SPPOL_2:58;
+end;
+
+:::: Special points of SpStSeq D (or C)
+
+theorem Th45:
+ for T being non empty TopStruct, X being Subset of T,
+     f be RealMap of T
+ holds rng(f||X) = f.:X
+proof
+ let T be non empty TopStruct, X be Subset of T,
+     f be RealMap of T;
+ thus rng(f||X) = rng(f|X) by PSCOMP_1:def 26 .= f.:X by RELAT_1:148;
+end;
+
+theorem Th46:
+ for T being non empty TopSpace, X being non empty compact Subset of T,
+     f be continuous RealMap of T
+ holds f.:X is bounded_below
+proof
+ let T be non empty TopSpace, X be non empty compact Subset of T,
+     f be continuous RealMap of T;
+A1: (f||X).:X = (f|X).:X by PSCOMP_1:def 26
+          .= f.:X by RFUNCT_2:5;
+    (f||X).:the carrier of T|X is bounded_below by PSCOMP_1:def 11;
+ hence f.:X is bounded_below by A1,JORDAN1:1;
+end;
+
+theorem Th47:
+ for T being non empty TopSpace, X being non empty compact Subset of T,
+     f be continuous RealMap of T
+ holds f.:X is bounded_above
+proof
+ let T be non empty TopSpace, X be non empty compact Subset of T,
+     f be continuous RealMap of T;
+A1: (f||X).:X = (f|X).:X by PSCOMP_1:def 26
+          .= f.:X by RFUNCT_2:5;
+    (f||X).:the carrier of T|X is bounded_above by PSCOMP_1:def 12;
+ hence f.:X is bounded_above by A1,JORDAN1:1;
+end;
+
+definition
+ cluster non empty bounded_above bounded_below Subset of REAL;
+  existence
+  proof
+    reconsider A = {0} as Subset of REAL;
+   take A;
+   thus A is non empty;
+   thus A is bounded_above
+    proof take 0; let t be real number;
+     assume t in A;
+     hence thesis by TARSKI:def 1;
+    end;
+   take 0; let t be real number;
+   assume t in A;
+   hence thesis by TARSKI:def 1;
+  end;
+end;
+
+theorem Th48:
+ W-bound S = inf(proj1.:S)
+proof
+ thus W-bound S = inf (proj1||S) by PSCOMP_1:def 30
+     .= inf((proj1||S).:the carrier of (TOP-REAL 2)|S) by PSCOMP_1:def 20
+     .= inf rng(proj1||S) by FUNCT_2:45
+     .= inf(proj1.:S) by Th45;
+end;
+
+theorem Th49:
+ S-bound S = inf(proj2.:S)
+proof
+ thus S-bound S = inf (proj2||S) by PSCOMP_1:def 33
+     .= inf((proj2||S).:the carrier of (TOP-REAL 2)|S) by PSCOMP_1:def 20
+     .= inf rng(proj2||S) by FUNCT_2:45
+     .= inf(proj2.:S) by Th45;
+end;
+
+theorem Th50:
+ N-bound S = sup(proj2.:S)
+proof
+ thus N-bound S = sup (proj2||S) by PSCOMP_1:def 31
+     .= sup((proj2||S).:the carrier of (TOP-REAL 2)|S) by PSCOMP_1:def 21
+     .= sup rng(proj2||S) by FUNCT_2:45
+     .= sup(proj2.:S) by Th45;
+end;
+
+theorem Th51:
+ E-bound S = sup(proj1.:S)
+proof
+ thus E-bound S = sup (proj1||S) by PSCOMP_1:def 32
+     .= sup((proj1||S).:the carrier of (TOP-REAL 2)|S) by PSCOMP_1:def 21
+     .= sup rng(proj1||S) by FUNCT_2:45
+     .= sup(proj1.:S) by Th45;
+end;
+
+theorem Th52:
+ for A,B being non empty bounded_below Subset of REAL
+  holds inf(A \/ B) = min(inf A,inf B)
+proof let A,B be non empty bounded_below Subset of REAL;
+  set r = min(inf A,inf B);
+A1: r <= inf A & r <= inf B by SQUARE_1:35;
+A2: for t being real number st t in A \/ B holds t >= r
+  proof let t be real number;
+   assume t in A \/ B;
+    then t in A or t in B by XBOOLE_0:def 2;
+    then inf A <= t or inf B <= t by SEQ_4:def 5;
+   hence r <= t by A1,AXIOMS:22;
+  end;
+    for r1 being real number
+    st for t being real number st t in A \/ B holds t >= r1 holds r >= r1
+  proof let r1 be real number;
+   assume
+A3:  for t being real number st t in A \/ B holds t >= r1;
+      now let t be real number;
+     assume t in A;
+      then t in A \/ B by XBOOLE_0:def 2;
+     hence t >= r1 by A3;
+    end;
+then A4:  inf A >= r1 by PSCOMP_1:8;
+      now let t be real number;
+     assume t in B;
+      then t in A \/ B by XBOOLE_0:def 2;
+     hence t >= r1 by A3;
+    end;
+    then inf B >= r1 by PSCOMP_1:8;
+   hence r >= r1 by A4,SQUARE_1:39;
+  end;
+ hence inf(A \/ B) = min(inf A,inf B) by A2,PSCOMP_1:9;
+end;
+
+theorem Th53:
+ for A,B being non empty bounded_above Subset of REAL
+  holds sup(A \/ B) = max(sup A,sup B)
+proof let A,B be non empty bounded_above Subset of REAL;
+  set r = max(sup A,sup B);
+A1: r >= sup A & r >= sup B by SQUARE_1:46;
+A2: for t being real number st t in A \/ B holds t <= r
+  proof let t be real number;
+   assume t in A \/ B;
+    then t in A or t in B by XBOOLE_0:def 2;
+    then sup A >= t or sup B >= t by SEQ_4:def 4;
+   hence r >= t by A1,AXIOMS:22;
+  end;
+    for r1 being real number st
+    for t being real number st t in A \/ B holds t <= r1 holds r <= r1
+  proof let r1 be real number;
+   assume
+A3:  for t being real number st t in A \/ B holds t <= r1;
+      now let t be real number;
+     assume t in A;
+      then t in A \/ B by XBOOLE_0:def 2;
+     hence t <= r1 by A3;
+    end;
+then A4:  sup A <= r1 by PSCOMP_1:10;
+      now let t be real number;
+     assume t in B;
+      then t in A \/ B by XBOOLE_0:def 2;
+     hence t <= r1 by A3;
+    end;
+    then sup B <= r1 by PSCOMP_1:10;
+   hence r <= r1 by A4,SQUARE_1:50;
+  end;
+ hence sup(A \/ B) = max(sup A,sup B) by A2,PSCOMP_1:11;
+end;
+
+theorem Th54:
+ S = C1 \/ C2 implies W-bound S = min(W-bound C1, W-bound C2)
+proof assume
+A1: S = C1 \/ C2;
+A2: W-bound C1 = inf(proj1.:C1) & W-bound C2 = inf(proj1.:C2) by Th48;
+A3: proj1.:C1 is non empty bounded_below & proj1.:C2 is non empty bounded_below
+             by Th46;
+ thus W-bound S = inf(proj1.:S) by Th48
+    .= inf(proj1.:C1 \/ proj1.:C2) by A1,RELAT_1:153
+    .= min(W-bound C1, W-bound C2) by A2,A3,Th52;
+end;
+
+theorem Th55:
+ S = C1 \/ C2 implies S-bound S = min(S-bound C1, S-bound C2)
+proof assume
+A1: S = C1 \/ C2;
+A2: S-bound C1 = inf(proj2.:C1) & S-bound C2 = inf(proj2.:C2) by Th49;
+A3: proj2.:C1 is non empty bounded_below & proj2.:C2 is non empty bounded_below
+             by Th46;
+ thus S-bound S = inf(proj2.:S) by Th49
+    .= inf(proj2.:C1 \/ proj2.:C2) by A1,RELAT_1:153
+    .= min(S-bound C1, S-bound C2) by A2,A3,Th52;
+end;
+
+theorem Th56:
+ S = C1 \/ C2 implies N-bound S = max(N-bound C1, N-bound C2)
+proof assume
+A1: S = C1 \/ C2;
+A2: N-bound C1 = sup(proj2.:C1) & N-bound C2 = sup(proj2.:C2) by Th50;
+A3: proj2.:C1 is non empty bounded_above & proj2.:C2 is non empty bounded_above
+             by Th47;
+ thus N-bound S = sup(proj2.:S) by Th50
+    .= sup(proj2.:C1 \/ proj2.:C2) by A1,RELAT_1:153
+    .= max(N-bound C1, N-bound C2) by A2,A3,Th53;
+end;
+
+theorem Th57:
+ S = C1 \/ C2 implies E-bound S = max(E-bound C1, E-bound C2)
+proof assume
+A1: S = C1 \/ C2;
+A2: E-bound C1 = sup(proj1.:C1) & E-bound C2 = sup(proj1.:C2) by Th51;
+A3: proj1.:C1 is non empty bounded_above & proj1.:C2 is non empty bounded_above
+             by Th47;
+ thus E-bound S = sup(proj1.:S) by Th51
+    .= sup(proj1.:C1 \/ proj1.:C2) by A1,RELAT_1:153
+    .= max(E-bound C1, E-bound C2) by A2,A3,Th53;
+end;
+
+definition let p,q;
+ cluster LSeg(p,q) -> compact;
+ coherence;
+end;
+
+definition
+ cluster {}REAL -> bounded;
+ coherence
+  proof
+   thus {}REAL is bounded_below proof take 0; thus thesis; end;
+   take 0; thus thesis;
+  end;
+end;
+
+definition let r1,r2;
+ cluster [.r1,r2.] -> bounded;
+ coherence
+  proof
+   thus [.r1,r2.] is bounded_below
+    proof
+     take r1;
+     thus thesis by TOPREAL5:1;
+    end;
+   take r2;
+   thus thesis by TOPREAL5:1;
+  end;
+end;
+
+definition
+ cluster bounded -> bounded_below bounded_above Subset of REAL;
+ coherence by SEQ_4:def 3;
+ cluster bounded_below bounded_above -> bounded Subset of REAL;
+ coherence by SEQ_4:def 3;
+end;
+
+canceled;
+
+theorem Th59:
+ r1 <= r2 implies
+  (t in [.r1,r2.] iff ex s1 st 0 <=s1 & s1 <= 1 & t = s1*r1 + (1-s1)*r2)
+proof assume
+A1: r1 <= r2;
+ per cases by A1,REAL_1:def 5;
+ suppose
+A2: r1 = r2;
+then A3: [.r1,r2.] = {r1} by RCOMP_1:14;
+  hereby assume
+A4:  t in [.r1,r2.];
+    reconsider 1' = 1 as Real;
+   take s = 1';
+   thus 0 <=s & s <= 1;
+   thus t = s*r1 + (1-s)*r2 by A3,A4,TARSKI:def 1;
+  end;
+  given s1 such that 0 <=s1 & s1 <= 1 and
+A5: t = s1*r1 + (1-s1)*r2;
+     t = (s1 + (1-s1))*r1 by A2,A5,XCMPLX_1:8
+       .= 1*r1 by XCMPLX_1:27;
+  hence t in [.r1,r2.] by A3,TARSKI:def 1;
+ suppose
+A6: r1 < r2;
+ hereby assume
+A7:  t in [.r1,r2.];
+  take s1 = (r2-t)/(r2-r1);
+A8: r2 - r1 > 0 by A6,SQUARE_1:11;
+      t <= r2 by A7,TOPREAL5:1;
+    then 0 <= r2-t by SQUARE_1:12;
+  hence 0 <=s1 by A8,REAL_2:135;
+     r1 <= t by A7,TOPREAL5:1;
+   then r2-t <= r2-r1 by REAL_2:106;
+  hence s1 <= 1 by A8,REAL_2:117;
+  thus t = t*(r2-r1)/(r2-r1) by A8,XCMPLX_1:90
+      .= (t*r2-t*r1)/(r2-r1) by XCMPLX_1:40
+      .= (t*r2-r1*r2 + (r2*r1-t*r1))/(r2-r1) by XCMPLX_1:39
+      .= (r2*r1-t*r1 + (t-r1)*r2)/(r2-r1) by XCMPLX_1:40
+      .= ((r2-t)*r1 + (t-r1)*r2)/(r2-r1) by XCMPLX_1:40
+      .= (r2-t)*r1/(r2-r1) + (t-r1)*r2/(r2-r1) by XCMPLX_1:63
+      .= (r2-t)*r1/(r2-r1) + (t-r1)/(r2-r1)*r2 by XCMPLX_1:75
+      .= ((r2-t)/(r2-r1))*r1 + (t-r1)/(r2-r1)*r2 by XCMPLX_1:75
+      .= ((r2-t)/(r2-r1))*r1 + (t-r2+(r2-r1))/(r2-r1)*r2 by XCMPLX_1:39
+      .= ((r2-t)/(r2-r1))*r1 + (1*(r2-r1)-(r2-t))/(r2-r1)*r2 by XCMPLX_1:38
+      .= s1*r1 + (1-s1)*r2 by A8,XCMPLX_1:128;
+ end;
+ given s1 such that
+A9: 0 <=s1 and
+A10: s1 <= 1 and
+A11: t = s1*r1 + (1-s1)*r2;
+A12:  s1*r1 + (1-s1)*r1 = (s1 + (1-s1))*r1 by XCMPLX_1:8
+        .= 1*r1 by XCMPLX_1:27;
+     1 - s1 >= 0 by A10,SQUARE_1:12;
+   then (1-s1)*r1 <= (1-s1)*r2 by A6,AXIOMS:25;
+   then A13: r1 <= t by A11,A12,AXIOMS:24;
+A14:  s1*r2 + (1-s1)*r2 = (s1 + (1-s1))*r2 by XCMPLX_1:8
+        .= 1*r2 by XCMPLX_1:27;
+     s1*r1 <= s1*r2 by A6,A9,AXIOMS:25;
+   then t <= r2 by A11,A14,AXIOMS:24;
+ hence t in [.r1,r2.] by A13,TOPREAL5:1;
+end;
+
+theorem Th60:
+ p`1 <= q`1 implies proj1.:LSeg(p,q) = [.p`1,q`1.]
+proof assume
+A1: p`1 <= q`1;
+    for y being set holds y in [.p`1,q`1.] iff
+   ex x being set st x in dom proj1 & x in LSeg(p,q) & y = proj1.x
+  proof let y be set;
+   hereby assume
+A2:    y in [.p`1,q`1.];
+     then reconsider r = y as Real;
+     consider t such that
+A3:   0 <=t & t <= 1 and
+A4:   r = t*p`1 + (1-t)*q`1 by A1,A2,Th59;
+     set o = t*p + (1-t)*q;
+     reconsider x = o as set;
+    take x;
+       o in the carrier of TOP-REAL 2;
+    hence x in dom proj1 by FUNCT_2:def 1;
+    thus x in LSeg(p,q) by A3,SPPOL_1:22;
+    thus y = (t*p)`1 + (1-t)*(q`1) by A4,TOPREAL3:9
+         .= (t*p)`1 + ((1-t)*q)`1 by TOPREAL3:9
+         .= (t*p + (1-t)*q)`1 by TOPREAL3:7
+         .= proj1.x by PSCOMP_1:def 28;
+   end;
+   given x being set such that
+      x in dom proj1 and
+A5: x in LSeg(p,q) and
+A6: y = proj1.x;
+     reconsider s = x as Point of TOP-REAL 2 by A5;
+    consider r being Real such that
+A7:  0<=r & r<=1 and
+A8:  s = (1-r)*q+r*p by A5,SPPOL_1:21;
+      y = s`1 by A6,PSCOMP_1:def 28
+     .= ((1-r)*q)`1+(r*p)`1 by A8,TOPREAL3:7
+     .= (1-r)*(q`1)+(r*p)`1 by TOPREAL3:9
+     .= (1-r)*(q`1)+r*(p`1) by TOPREAL3:9;
+   hence y in [.p`1,q`1.] by A1,A7,Th59;
+  end;
+ hence proj1.:LSeg(p,q) = [.p`1,q`1.] by FUNCT_1:def 12;
+end;
+
+theorem Th61:
+ p`2 <= q`2 implies proj2.:LSeg(p,q) = [.p`2,q`2.]
+proof assume
+A1: p`2 <= q`2;
+    for y being set holds y in [.p`2,q`2.] iff
+   ex x being set st x in dom proj2 & x in LSeg(p,q) & y = proj2.x
+  proof let y be set;
+   hereby assume
+A2:    y in [.p`2,q`2.];
+     then reconsider r = y as Real;
+     consider t such that
+A3:   0 <=t & t <= 1 and
+A4:   r = t*p`2 + (1-t)*q`2 by A1,A2,Th59;
+     set o = t*p + (1-t)*q;
+     reconsider x = o as set;
+    take x;
+       o in the carrier of TOP-REAL 2;
+    hence x in dom proj2 by FUNCT_2:def 1;
+    thus x in LSeg(p,q) by A3,SPPOL_1:22;
+    thus y = (t*p)`2 + (1-t)*(q`2) by A4,TOPREAL3:9
+         .= (t*p)`2 + ((1-t)*q)`2 by TOPREAL3:9
+         .= (t*p + (1-t)*q)`2 by TOPREAL3:7
+         .= proj2.x by PSCOMP_1:def 29;
+   end;
+   given x being set such that
+      x in dom proj2 and
+A5: x in LSeg(p,q) and
+A6: y = proj2.x;
+     reconsider s = x as Point of TOP-REAL 2 by A5;
+    consider r being Real such that
+A7:  0<=r & r<=1 and
+A8:  s = (1-r)*q+r*p by A5,SPPOL_1:21;
+      y = s`2 by A6,PSCOMP_1:def 29
+     .= ((1-r)*q)`2+(r*p)`2 by A8,TOPREAL3:7
+     .= (1-r)*(q`2)+(r*p)`2 by TOPREAL3:9
+     .= (1-r)*(q`2)+r*(p`2) by TOPREAL3:9;
+   hence y in [.p`2,q`2.] by A1,A7,Th59;
+  end;
+ hence proj2.:LSeg(p,q) = [.p`2,q`2.] by FUNCT_1:def 12;
+end;
+
+theorem Th62:
+ p`1 <= q`1 implies W-bound LSeg(p,q) = p`1
+proof assume
+A1: p`1 <= q`1;
+then A2: proj1.:LSeg(p,q) = [.p`1,q`1.] by Th60;
+ thus W-bound LSeg(p,q) = inf(proj1.:LSeg(p,q)) by Th48
+   .= p`1 by A1,A2,JORDAN5A:20;
+end;
+
+theorem Th63:
+ p`2 <= q`2 implies S-bound LSeg(p,q) = p`2
+proof assume
+A1: p`2 <= q`2;
+then A2: proj2.:LSeg(p,q) = [.p`2,q`2.] by Th61;
+ thus S-bound LSeg(p,q) = inf(proj2.:LSeg(p,q)) by Th49
+   .= p`2 by A1,A2,JORDAN5A:20;
+end;
+
+theorem Th64:
+ p`2 <= q`2 implies N-bound LSeg(p,q) = q`2
+proof assume
+A1: p`2 <= q`2;
+then A2: proj2.:LSeg(p,q) = [.p`2,q`2.] by Th61;
+ thus N-bound LSeg(p,q) = sup(proj2.:LSeg(p,q)) by Th50
+   .= q`2 by A1,A2,JORDAN5A:20;
+end;
+
+theorem Th65:
+ p`1 <= q`1 implies E-bound LSeg(p,q) = q`1
+proof assume
+A1: p`1 <= q`1;
+then A2: proj1.:LSeg(p,q) = [.p`1,q`1.] by Th60;
+ thus E-bound LSeg(p,q) = sup(proj1.:LSeg(p,q)) by Th51
+   .= q`1 by A1,A2,JORDAN5A:20;
+end;
+
+theorem Th66:
+ W-bound L~SpStSeq C = W-bound C
+proof
+ set S1 = LSeg(NW-corner C,NE-corner C),
+     S2 = LSeg(NE-corner C,SE-corner C),
+     S3 = LSeg(SE-corner C,SW-corner C),
+     S4 = LSeg(SW-corner C,NW-corner C);
+A1: L~SpStSeq C = (S1 \/ S2) \/ (S3 \/ S4) by Th43;
+A2: W-bound C <= E-bound C by Th23;
+A3: (NW-corner C)`1 = W-bound C by PSCOMP_1:74;
+A4: (NE-corner C)`1 = E-bound C by PSCOMP_1:76;
+A5: (SE-corner C)`1 = E-bound C by PSCOMP_1:78;
+A6: (SW-corner C)`1 = W-bound C by PSCOMP_1:72;
+A7: W-bound S2 = E-bound C by A4,A5,Th62;
+A8: W-bound S4 = W-bound C by A3,A6,Th62;
+A9: S1 \/ S2 is compact by COMPTS_1:19;
+A10: W-bound(S1 \/ S2) = min(W-bound S1,W-bound S2) by Th54
+   .= min(E-bound C,W-bound C) by A2,A3,A4,A7,Th62
+   .= W-bound C by A2,SQUARE_1:def 1;
+A11: S3 \/ S4 is compact by COMPTS_1:19;
+     W-bound(S3 \/ S4) = min(W-bound S3,W-bound S4) by Th54
+   .= min(W-bound C,W-bound C) by A2,A5,A6,A8,Th62
+   .= W-bound C;
+ hence W-bound L~SpStSeq C = min(W-bound C,W-bound C) by A1,A9,A10,A11,Th54
+    .= W-bound C;
+end;
+
+theorem Th67:
+ S-bound L~SpStSeq C = S-bound C
+proof
+ set S1 = LSeg(NW-corner C,NE-corner C),
+     S2 = LSeg(NE-corner C,SE-corner C),
+     S3 = LSeg(SE-corner C,SW-corner C),
+     S4 = LSeg(SW-corner C,NW-corner C);
+A1: L~SpStSeq C = (S1 \/ S2) \/ (S3 \/ S4) by Th43;
+A2: S-bound C <= N-bound C by Th24;
+A3: (NW-corner C)`2 = N-bound C by PSCOMP_1:75;
+A4: (NE-corner C)`2 = N-bound C by PSCOMP_1:77;
+A5: (SE-corner C)`2 = S-bound C by PSCOMP_1:79;
+A6: (SW-corner C)`2 = S-bound C by PSCOMP_1:73;
+A7: S-bound S2 = S-bound C by A2,A4,A5,Th63;
+A8: S-bound S4 = S-bound C by A2,A3,A6,Th63;
+A9: S1 \/ S2 is compact by COMPTS_1:19;
+A10: S-bound(S1 \/ S2) = min(S-bound S1,S-bound S2) by Th55
+   .= min(N-bound C,S-bound C) by A3,A4,A7,Th63
+   .= S-bound C by A2,SQUARE_1:def 1;
+A11: S3 \/ S4 is compact by COMPTS_1:19;
+     S-bound(S3 \/ S4) = min(S-bound S3,S-bound S4) by Th55
+   .= min(S-bound C,S-bound C) by A5,A6,A8,Th63
+   .= S-bound C;
+ hence S-bound L~SpStSeq C = min(S-bound C,S-bound C) by A1,A9,A10,A11,Th55
+    .= S-bound C;
+end;
+
+theorem Th68:
+ N-bound L~SpStSeq C = N-bound C
+proof
+ set S1 = LSeg(NW-corner C,NE-corner C),
+     S2 = LSeg(NE-corner C,SE-corner C),
+     S3 = LSeg(SE-corner C,SW-corner C),
+     S4 = LSeg(SW-corner C,NW-corner C);
+A1: L~SpStSeq C = (S1 \/ S2) \/ (S3 \/ S4) by Th43;
+A2: S-bound C <= N-bound C by Th24;
+A3: (NW-corner C)`2 = N-bound C by PSCOMP_1:75;
+A4: (NE-corner C)`2 = N-bound C by PSCOMP_1:77;
+A5: (SE-corner C)`2 = S-bound C by PSCOMP_1:79;
+A6: (SW-corner C)`2 = S-bound C by PSCOMP_1:73;
+A7: N-bound S2 = N-bound C by A2,A4,A5,Th64;
+A8: N-bound S4 = N-bound C by A2,A3,A6,Th64;
+A9: S1 \/ S2 is compact by COMPTS_1:19;
+A10: N-bound(S1 \/ S2) = max(N-bound S1,N-bound S2) by Th56
+   .= max(N-bound C,N-bound C) by A3,A4,A7,Th64
+   .= N-bound C;
+A11: S3 \/ S4 is compact by COMPTS_1:19;
+     N-bound(S3 \/ S4) = max(N-bound S3,N-bound S4) by Th56
+   .= max(S-bound C,N-bound C) by A5,A6,A8,Th64
+   .= N-bound C by A2,SQUARE_1:def 2;
+ hence N-bound L~SpStSeq C = max(N-bound C,N-bound C) by A1,A9,A10,A11,Th56
+    .= N-bound C;
+end;
+
+theorem Th69:
+ E-bound L~SpStSeq C = E-bound C
+proof
+ set S1 = LSeg(NW-corner C,NE-corner C),
+     S2 = LSeg(NE-corner C,SE-corner C),
+     S3 = LSeg(SE-corner C,SW-corner C),
+     S4 = LSeg(SW-corner C,NW-corner C);
+A1: L~SpStSeq C = (S1 \/ S2) \/ (S3 \/ S4) by Th43;
+A2: W-bound C <= E-bound C by Th23;
+A3: (NW-corner C)`1 = W-bound C by PSCOMP_1:74;
+A4: (NE-corner C)`1 = E-bound C by PSCOMP_1:76;
+A5: (SE-corner C)`1 = E-bound C by PSCOMP_1:78;
+A6: (SW-corner C)`1 = W-bound C by PSCOMP_1:72;
+A7: E-bound S2 = E-bound C by A4,A5,Th65;
+A8: E-bound S4 = W-bound C by A3,A6,Th65;
+A9: S1 \/ S2 is compact by COMPTS_1:19;
+A10: E-bound(S1 \/ S2) = max(E-bound S1,E-bound S2) by Th57
+   .= max(E-bound C,E-bound C) by A2,A3,A4,A7,Th65
+   .= E-bound C;
+A11: S3 \/ S4 is compact by COMPTS_1:19;
+     E-bound(S3 \/ S4) = max(E-bound S3,E-bound S4) by Th57
+   .= max(W-bound C,E-bound C) by A2,A5,A6,A8,Th65
+   .= E-bound C by A2,SQUARE_1:def 2;
+ hence E-bound L~SpStSeq C = max(E-bound C,E-bound C) by A1,A9,A10,A11,Th57
+    .= E-bound C;
+end;
+
+theorem Th70:
+  NW-corner L~SpStSeq C = NW-corner C
+proof
+ thus NW-corner L~SpStSeq C
+     = |[W-bound L~SpStSeq C, N-bound L~SpStSeq C]| by PSCOMP_1:def 35
+    .= |[W-bound C, N-bound L~SpStSeq C]| by Th66
+    .= |[W-bound C, N-bound C]| by Th68
+    .= NW-corner C by PSCOMP_1:def 35;
+end;
+
+theorem Th71:
+  NE-corner L~SpStSeq C = NE-corner C
+proof
+ thus NE-corner L~SpStSeq C
+     = |[E-bound L~SpStSeq C, N-bound L~SpStSeq C]| by PSCOMP_1:def 36
+    .= |[E-bound C, N-bound L~SpStSeq C]| by Th69
+    .= |[E-bound C, N-bound C]| by Th68
+    .= NE-corner C by PSCOMP_1:def 36;
+end;
+
+theorem Th72:
+  SW-corner L~SpStSeq C = SW-corner C
+proof
+ thus SW-corner L~SpStSeq C
+     = |[W-bound L~SpStSeq C, S-bound L~SpStSeq C]| by PSCOMP_1:def 34
+    .= |[W-bound C, S-bound L~SpStSeq C]| by Th66
+    .= |[W-bound C, S-bound C]| by Th67
+    .= SW-corner C by PSCOMP_1:def 34;
+end;
+
+theorem Th73:
+  SE-corner L~SpStSeq C = SE-corner C
+proof
+ thus SE-corner L~SpStSeq C
+     = |[E-bound L~SpStSeq C, S-bound L~SpStSeq C]| by PSCOMP_1:def 37
+    .= |[E-bound C, S-bound L~SpStSeq C]| by Th69
+    .= |[E-bound C, S-bound C]| by Th67
+    .= SE-corner C by PSCOMP_1:def 37;
+end;
+
+theorem Th74:
+ W-most L~SpStSeq C = LSeg(SW-corner C,NW-corner C)
+proof set X = L~SpStSeq C;
+ set S3 = LSeg(SE-corner C,SW-corner C),
+     S4 = LSeg(SW-corner C,NW-corner C);
+A1: X = (LSeg(NW-corner C,NE-corner C) \/
+         LSeg(NE-corner C,SE-corner C)) \/ (S3 \/ S4) by Th43;
+A2: S4 c= S3 \/ S4 by XBOOLE_1:7;
+     S3 \/ S4 c= X by A1,XBOOLE_1:7;
+then A3: S4 c= X by A2,XBOOLE_1:1;
+    LSeg(SW-corner X, NW-corner X)
+    = LSeg(SW-corner X, NW-corner C) by Th70
+   .= LSeg(SW-corner C,NW-corner C) by Th72;
+ hence W-most L~SpStSeq C
+       = LSeg(SW-corner C, NW-corner C) /\ X by PSCOMP_1:def 38
+      .= LSeg(SW-corner C, NW-corner C) by A3,XBOOLE_1:28;
+end;
+
+theorem Th75:
+ N-most L~SpStSeq C = LSeg(NW-corner C,NE-corner C)
+proof set X = L~SpStSeq C;
+ set S1 = LSeg(NW-corner C,NE-corner C),
+     S2 = LSeg(NE-corner C,SE-corner C);
+A1: X = (S1 \/ S2) \/ (LSeg(SE-corner C,SW-corner C) \/
+        LSeg(SW-corner C,NW-corner C)) by Th43;
+A2: S1 c= S1 \/ S2 by XBOOLE_1:7;
+     S1 \/ S2 c= X by A1,XBOOLE_1:7;
+then A3: S1 c= X by A2,XBOOLE_1:1;
+    LSeg(NW-corner X, NE-corner X)
+    = LSeg(NW-corner X, NE-corner C) by Th71
+   .= LSeg(NW-corner C,NE-corner C) by Th70;
+ hence N-most L~SpStSeq C
+       = LSeg(NW-corner C, NE-corner C) /\ X by PSCOMP_1:def 39
+      .= LSeg(NW-corner C, NE-corner C) by A3,XBOOLE_1:28;
+end;
+
+theorem Th76:
+ S-most L~SpStSeq C = LSeg(SW-corner C,SE-corner C)
+proof set X = L~SpStSeq C;
+ set S3 = LSeg(SE-corner C,SW-corner C),
+     S4 = LSeg(SW-corner C,NW-corner C);
+A1: X = (LSeg(NW-corner C,NE-corner C) \/ LSeg(NE-corner C,SE-corner C)) \/
+     (S3 \/ S4) by Th43;
+A2: S3 c= S3 \/ S4 by XBOOLE_1:7;
+     S3 \/ S4 c= X by A1,XBOOLE_1:7;
+then A3: S3 c= X by A2,XBOOLE_1:1;
+    LSeg(SW-corner X, SE-corner X)
+    = LSeg(SW-corner X, SE-corner C) by Th73
+   .= LSeg(SW-corner C,SE-corner C) by Th72;
+ hence S-most L~SpStSeq C
+       = LSeg(SW-corner C, SE-corner C) /\ X by PSCOMP_1:def 41
+      .= LSeg(SW-corner C, SE-corner C) by A3,XBOOLE_1:28;
+end;
+
+theorem Th77:
+ E-most L~SpStSeq C = LSeg(SE-corner C,NE-corner C)
+proof set X = L~SpStSeq C;
+ set S1 = LSeg(NW-corner C,NE-corner C),
+     S2 = LSeg(NE-corner C,SE-corner C);
+A1: X = (S1 \/ S2) \/ (LSeg(SE-corner C,SW-corner C) \/
+        LSeg(SW-corner C,NW-corner C)) by Th43;
+A2: S2 c= S1 \/ S2 by XBOOLE_1:7;
+     S1 \/ S2 c= X by A1,XBOOLE_1:7;
+then A3: S2 c= X by A2,XBOOLE_1:1;
+    LSeg(SE-corner X, NE-corner X)
+    = LSeg(SE-corner X, NE-corner C) by Th71
+   .= LSeg(SE-corner C,NE-corner C) by Th73;
+ hence E-most L~SpStSeq C
+       = LSeg(SE-corner C, NE-corner C) /\ X by PSCOMP_1:def 40
+      .= LSeg(SE-corner C, NE-corner C) by A3,XBOOLE_1:28;
+end;
+
+theorem Th78:
+ proj2.:LSeg(SW-corner C,NW-corner C) = [.S-bound C,N-bound C.]
+proof
+A1: (SW-corner C)`2 = S-bound C & (NW-corner C)`2 = N-bound C
+               by PSCOMP_1:73,75;
+  then (SW-corner C)`2 <= (NW-corner C)`2 by Th24;
+ hence proj2.:LSeg(SW-corner C,NW-corner C) = [.S-bound C,N-bound C.]
+               by A1,Th61;
+end;
+
+theorem Th79:
+ proj1.:LSeg(NW-corner C,NE-corner C) = [.W-bound C,E-bound C.]
+proof
+A1: (NW-corner C)`1 = W-bound C & (NE-corner C)`1 = E-bound C
+               by PSCOMP_1:74,76;
+  then (NW-corner C)`1 <= (NE-corner C)`1 by Th23;
+ hence proj1.:LSeg(NW-corner C,NE-corner C) = [.W-bound C,E-bound C.]
+               by A1,Th60;
+end;
+
+theorem Th80:
+ proj2.:LSeg(NE-corner C,SE-corner C) = [.S-bound C,N-bound C.]
+proof
+A1: (NE-corner C)`2 = N-bound C & (SE-corner C)`2 = S-bound C
+               by PSCOMP_1:77,79;
+  then (SE-corner C)`2 <= (NE-corner C)`2 by Th24;
+ hence proj2.:LSeg(NE-corner C,SE-corner C) = [.S-bound C,N-bound C.]
+               by A1,Th61;
+end;
+
+theorem Th81:
+ proj1.:LSeg(SE-corner C,SW-corner C) = [.W-bound C,E-bound C.]
+proof
+A1: (SE-corner C)`1 = E-bound C & (SW-corner C)`1 = W-bound C
+               by PSCOMP_1:72,78;
+  then (SW-corner C)`1 <= (SE-corner C)`1 by Th23;
+ hence proj1.:LSeg(SE-corner C,SW-corner C) = [.W-bound C,E-bound C.]
+               by A1,Th60;
+end;
+
+theorem Th82:
+ W-min L~SpStSeq C = SW-corner C
+proof set X = L~SpStSeq C, S = W-most X;
+A1: S = LSeg(SW-corner C,NW-corner C) by Th74;
+A2: S-bound C <= N-bound C by Th24;
+A3: inf (proj2||S)
+      = inf((proj2||S).:the carrier of (TOP-REAL 2)|S) by PSCOMP_1:def 20
+     .= inf rng(proj2||S) by FUNCT_2:45
+     .= inf(proj2.:S) by Th45
+     .= inf [.S-bound C,N-bound C.] by A1,Th78
+     .= S-bound C by A2,JORDAN5A:20;
+ thus W-min L~SpStSeq C
+    = |[W-bound X, inf (proj2||S)]| by PSCOMP_1:def 42
+   .= |[W-bound C, inf (proj2||S)]| by Th66
+   .= SW-corner C by A3,PSCOMP_1:def 34;
+end;
+
+theorem Th83:
+ W-max L~SpStSeq C = NW-corner C
+proof set X = L~SpStSeq C, S = W-most X;
+A1: S = LSeg(SW-corner C,NW-corner C) by Th74;
+A2: S-bound C <= N-bound C by Th24;
+A3: sup (proj2||S)
+      = sup((proj2||S).:the carrier of (TOP-REAL 2)|S) by PSCOMP_1:def 21
+     .= sup rng(proj2||S) by FUNCT_2:45
+     .= sup(proj2.:S) by Th45
+     .= sup [.S-bound C,N-bound C.] by A1,Th78
+     .= N-bound C by A2,JORDAN5A:20;
+ thus W-max L~SpStSeq C
+    = |[W-bound X, sup (proj2||S)]| by PSCOMP_1:def 43
+   .= |[W-bound C, sup (proj2||S)]| by Th66
+   .= NW-corner C by A3,PSCOMP_1:def 35;
+end;
+
+theorem Th84:
+ N-min L~SpStSeq C = NW-corner C
+proof set X = L~SpStSeq C, S = N-most X;
+A1: S = LSeg(NW-corner C,NE-corner C) by Th75;
+A2: W-bound C <= E-bound C by Th23;
+A3: inf (proj1||S)
+      = inf((proj1||S).:the carrier of (TOP-REAL 2)|S) by PSCOMP_1:def 20
+     .= inf rng(proj1||S) by FUNCT_2:45
+     .= inf(proj1.:S) by Th45
+     .= inf [.W-bound C,E-bound C.] by A1,Th79
+     .= W-bound C by A2,JORDAN5A:20;
+ thus N-min L~SpStSeq C
+    = |[inf (proj1||S), N-bound X]| by PSCOMP_1:def 44
+   .= |[inf (proj1||S), N-bound C]| by Th68
+   .= NW-corner C by A3,PSCOMP_1:def 35;
+end;
+
+theorem Th85:
+ N-max L~SpStSeq C = NE-corner C
+proof set X = L~SpStSeq C, S = N-most X;
+A1: S = LSeg(NW-corner C,NE-corner C) by Th75;
+A2: W-bound C <= E-bound C by Th23;
+A3: sup (proj1||S)
+      = sup((proj1||S).:the carrier of (TOP-REAL 2)|S) by PSCOMP_1:def 21
+     .= sup rng(proj1||S) by FUNCT_2:45
+     .= sup(proj1.:S) by Th45
+     .= sup [.W-bound C,E-bound C.] by A1,Th79
+     .= E-bound C by A2,JORDAN5A:20;
+ thus N-max L~SpStSeq C
+    = |[sup (proj1||S), N-bound X]| by PSCOMP_1:def 45
+   .= |[sup (proj1||S), N-bound C]| by Th68
+   .= NE-corner C by A3,PSCOMP_1:def 36;
+end;
+
+theorem Th86:
+ E-min L~SpStSeq C = SE-corner C
+proof set X = L~SpStSeq C, S = E-most X;
+A1: S = LSeg(SE-corner C,NE-corner C) by Th77;
+A2: S-bound C <= N-bound C by Th24;
+A3: inf (proj2||S)
+      = inf((proj2||S).:the carrier of (TOP-REAL 2)|S) by PSCOMP_1:def 20
+     .= inf rng(proj2||S) by FUNCT_2:45
+     .= inf(proj2.:S) by Th45
+     .= inf [.S-bound C,N-bound C.] by A1,Th80
+     .= S-bound C by A2,JORDAN5A:20;
+ thus E-min L~SpStSeq C
+    = |[E-bound X, inf (proj2||S)]| by PSCOMP_1:def 47
+
+   .= |[E-bound C, inf (proj2||S)]| by Th69
+   .= SE-corner C by A3,PSCOMP_1:def 37;
+end;
+
+theorem Th87:
+ E-max L~SpStSeq C = NE-corner C
+proof set X = L~SpStSeq C, S = E-most X;
+A1: S = LSeg(SE-corner C,NE-corner C) by Th77;
+A2: S-bound C <= N-bound C by Th24;
+A3: sup (proj2||S)
+      = sup((proj2||S).:the carrier of (TOP-REAL 2)|S) by PSCOMP_1:def 21
+     .= sup rng(proj2||S) by FUNCT_2:45
+     .= sup(proj2.:S) by Th45
+     .= sup [.S-bound C,N-bound C.] by A1,Th80
+     .= N-bound C by A2,JORDAN5A:20;
+ thus E-max L~SpStSeq C
+    = |[E-bound X, sup (proj2||S)]| by PSCOMP_1:def 46
+
+   .= |[E-bound C, sup (proj2||S)]| by Th69
+   .= NE-corner C by A3,PSCOMP_1:def 36;
+end;
+
+theorem Th88:
+ S-min L~SpStSeq C = SW-corner C
+proof set X = L~SpStSeq C, S = S-most X;
+A1: S = LSeg(SW-corner C,SE-corner C) by Th76;
+A2: W-bound C <= E-bound C by Th23;
+A3: inf (proj1||S)
+      = inf((proj1||S).:the carrier of (TOP-REAL 2)|S) by PSCOMP_1:def 20
+     .= inf rng(proj1||S) by FUNCT_2:45
+     .= inf(proj1.:S) by Th45
+     .= inf [.W-bound C,E-bound C.] by A1,Th81
+     .= W-bound C by A2,JORDAN5A:20;
+ thus S-min L~SpStSeq C
+    = |[inf (proj1||S), S-bound X]| by PSCOMP_1:def 49
+   .= |[inf (proj1||S), S-bound C]| by Th67
+   .= SW-corner C by A3,PSCOMP_1:def 34;
+end;
+
+theorem Th89:
+ S-max L~SpStSeq C = SE-corner C
+proof set X = L~SpStSeq C, S = S-most X;
+A1: S = LSeg(SW-corner C,SE-corner C) by Th76;
+A2: W-bound C <= E-bound C by Th23;
+A3: sup (proj1||S)
+      = sup((proj1||S).:the carrier of (TOP-REAL 2)|S) by PSCOMP_1:def 21
+     .= sup rng(proj1||S) by FUNCT_2:45
+     .= sup(proj1.:S) by Th45
+     .= sup [.W-bound C,E-bound C.] by A1,Th81
+     .= E-bound C by A2,JORDAN5A:20;
+ thus S-max L~SpStSeq C
+    = |[sup (proj1||S), S-bound X]| by PSCOMP_1:def 48
+   .= |[sup (proj1||S), S-bound C]| by Th67
+   .= SE-corner C by A3,PSCOMP_1:def 37;
+end;
+
+begin :: rectangular
+
+definition let f be FinSequence of TOP-REAL 2;
+ attr f is rectangular means
+:Def2: ex D st f = SpStSeq D;
+end;
+
+definition let D;
+ cluster SpStSeq D -> rectangular;
+  coherence by Def2;
+end;
+
+definition
+ cluster rectangular FinSequence of TOP-REAL 2;
+ existence proof consider D; take SpStSeq D, D; thus thesis; end;
+end;
+
+reserve s for rectangular FinSequence of TOP-REAL 2;
+
+theorem
+   len s = 5
+proof ex D st s = SpStSeq D by Def2; hence thesis by Th42; end;
+
+definition
+ cluster rectangular -> non constant FinSequence of TOP-REAL 2;
+ coherence
+  proof let f be FinSequence of TOP-REAL 2;
+   assume ex D st f = SpStSeq D;
+   hence f is not constant;
+  end;
+end;
+
+definition
+ cluster rectangular ->
+     standard special unfolded circular s.c.c.
+       (non empty FinSequence of TOP-REAL 2);
+ coherence
+  proof let f be non empty FinSequence of TOP-REAL 2;
+   assume ex D st f = SpStSeq D;
+   hence thesis;
+  end;
+end;
+
+:::: Special points of L~f, f - rectangular
+
+theorem
+   s/.1 = N-min L~s & s/.1 = W-max L~s
+ proof
+   consider D such that
+A1:  s = SpStSeq D by Def2;
+A2:  s/.1 = NW-corner D by A1,Th37;
+  hence s/.1 = N-min L~s by A1,Th84;
+  thus s/.1 = W-max L~s by A1,A2,Th83;
+ end;
+
+theorem
+   s/.2 = N-max L~s & s/.2 = E-max L~s
+ proof
+   consider D such that
+A1:  s = SpStSeq D by Def2;
+A2:  s/.2 = NE-corner D by A1,Th38;
+  hence s/.2 = N-max L~s by A1,Th85;
+  thus s/.2 = E-max L~s by A1,A2,Th87;
+ end;
+
+theorem
+   s/.3 = S-max L~s & s/.3 = E-min L~s
+ proof
+   consider D such that
+A1:  s = SpStSeq D by Def2;
+A2:  s/.3 = SE-corner D by A1,Th39;
+  hence s/.3 = S-max L~s by A1,Th89;
+  thus s/.3 = E-min L~s by A1,A2,Th86;
+ end;
+
+theorem
+   s/.4 = S-min L~s & s/.4 = W-min L~s
+ proof
+   consider D such that
+A1:  s = SpStSeq D by Def2;
+A2:  s/.4 = SW-corner D by A1,Th40;
+  hence s/.4 = S-min L~s by A1,Th88;
+  thus s/.4 = W-min L~s by A1,A2,Th82;
+ end;
+
+begin :: Jordan
+
+theorem Th95:
+  r1 < r2 & s1 < s2 implies [.r1,r2,s1,s2.] is Jordan
+proof assume
+A1: r1 < r2 & s1 < s2;
+    [.r1,r2,s1,s2.] =
+    { p: p`1 = r1 & p`2 <= s2 & p`2 >= s1 or
+             p`1 <= r2 & p`1 >= r1 & p`2 = s2 or
+             p`1 <= r2 & p`1 >= r1 & p`2 = s1 or
+             p`1 = r2 & p`2 <= s2 & p`2 >= s1} by SPPOL_2:def 3;
+ hence [.r1,r2,s1,s2.] is Jordan by A1,JORDAN1:48;
+end;
+
+definition let f be rectangular FinSequence of TOP-REAL 2;
+ cluster L~f -> Jordan;
+ coherence
+  proof
+    consider D such that
+A1:   f = SpStSeq D by Def2;
+A2:  L~f = [.W-bound D,E-bound D,S-bound D,N-bound D.] by A1,Th44;
+      W-bound D < E-bound D & S-bound D < N-bound D by Th33,Th34;
+   hence L~f is Jordan by A2,Th95;
+  end;
+end;
+
+definition let S be Subset of TOP-REAL 2;
+ redefine attr S is Jordan means
+:Def3: S`<> {} &
+ ex A1,A2 being Subset of TOP-REAL 2
+  st S` = A1 \/ A2 & A1 misses A2 & (Cl A1) \ A1 = (Cl A2) \ A2 &
+     A1 is_a_component_of S` & A2 is_a_component_of S`;
+ compatibility
+  proof
+   hereby assume
+A1:   S is Jordan;
+    hence S` <> {} by JORDAN1:def 2;
+     consider A1,A2 being Subset of TOP-REAL 2 such that
+A2:   S` = A1 \/ A2 and
+A3:   A1 misses A2 and
+A4:   (Cl A1) \ A1 = (Cl A2) \ A2 and
+A5:   for C1,C2 being Subset of (TOP-REAL 2)|S`
+        st C1 = A1 & C2 = A2 holds
+         C1 is_a_component_of (TOP-REAL 2)|S` &
+         C2 is_a_component_of (TOP-REAL 2)|S` by A1,JORDAN1:def 2;
+       A1 /\ S` = A1 & A2 /\ S` = A2 by A2,XBOOLE_1:21;
+     then reconsider C1 = A1,C2 = A2 as Subset of (TOP-REAL 2)|S`
+      by TOPS_2:38;
+    take A1,A2;
+    thus S` = A1 \/ A2 by A2;
+    thus A1 misses A2 by A3;
+    thus (Cl A1) \ A1 = (Cl A2) \ A2 by A4;
+       C1 = A1 & C2 = A2; :: ??? po co ta przeslanka ??
+     then C1 is_a_component_of (TOP-REAL 2)|S`
+      & C2 is_a_component_of (TOP-REAL 2)|S` by A5;
+    hence A1 is_a_component_of S` & A2 is_a_component_of S` by CONNSP_1:def 6;
+   end;
+   assume
+A6:  S` <> {};
+   given A1,A2 being Subset of TOP-REAL 2 such that
+A7: S` = A1 \/ A2 and
+A8: A1 misses A2 and
+A9: (Cl A1) \ A1 = (Cl A2) \ A2 and
+A10: A1 is_a_component_of S` and
+A11: A2 is_a_component_of S`;
+   thus S`<> {} by A6;
+   reconsider a1=A1,a2=A2 as Subset of TOP-REAL 2;
+   take a1,a2;
+   thus S` = a1 \/ a2 by A7;
+   thus a1 /\ a2 = {} by A8,XBOOLE_0:def 7;
+   thus (Cl a1) \ a1 = (Cl a2) \ a2 by A9;
+      (ex B being Subset of (TOP-REAL 2)|S`
+     st B = a1 & B is_a_component_of ((TOP-REAL 2)|S`)) &
+    ex B being Subset of (TOP-REAL 2)|S`
+     st B = a2 & B is_a_component_of ((TOP-REAL 2)|S`)
+      by A10,A11,CONNSP_1:def 6;
+   hence thesis;
+  end;
+end;
+
+theorem Th96:
+ for f being rectangular FinSequence of TOP-REAL 2
+  holds LeftComp f misses RightComp f
+proof let f be rectangular FinSequence of TOP-REAL 2;
+A1: (L~f)`<> {} by Def3;
+  consider A1,A2 being Subset of TOP-REAL 2 such that
+A2: (L~f)` = A1 \/ A2 and
+A3: A1 misses A2 and
+      (Cl A1) \ A1 = (Cl A2) \ A2 and
+A4: A1 is_a_component_of (L~f)` and
+A5: A2 is_a_component_of (L~f)` by Def3;
+A6: LeftComp f is_a_component_of (L~f)` by GOBOARD9:def 1;
+A7: RightComp f is_a_component_of (L~f)` by GOBOARD9:def 2;
+    (L~f)`=LeftComp f \/ RightComp f by GOBRD12:11;
+  then { LeftComp f, RightComp f } = { A1,A2 } by A1,A2,A4,A5,A6,A7,Th9;
+  then LeftComp f = A1 & RightComp f = A2
+    or LeftComp f = A2 & RightComp f = A1 by ZFMISC_1:10;
+ hence LeftComp f misses RightComp f by A3;
+end;
+
+definition let f be non constant standard special_circular_sequence;
+ cluster LeftComp f -> non empty;
+ coherence
+  proof
+      len f > 4 by GOBOARD7:36;
+    then 1+1 <= len f by AXIOMS:22;
+then A1:  Int left_cell(f,1) <> {} by GOBOARD9:18;
+      Int left_cell(f,1) c= LeftComp f by GOBOARD9:def 1;
+   hence thesis by A1,XBOOLE_1:3;
+  end;
+ cluster RightComp f -> non empty;
+ coherence
+  proof
+      len f > 4 by GOBOARD7:36;
+    then 1+1 <= len f by AXIOMS:22;
+then A2:  Int right_cell(f,1) <> {} by GOBOARD9:19;
+      Int right_cell(f,1) c= RightComp f by GOBOARD9:def 2;
+   hence thesis by A2,XBOOLE_1:3;
+  end;
+end;
+
+theorem
+   for f being rectangular FinSequence of TOP-REAL 2
+  holds LeftComp f <> RightComp f
+proof let f be rectangular FinSequence of TOP-REAL 2;
+   LeftComp f misses RightComp f by Th96;
+ hence thesis;
+end;

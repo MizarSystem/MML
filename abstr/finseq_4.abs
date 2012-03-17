@@ -1,0 +1,330 @@
+:: Pigeon Hole Principle
+::  by Wojciech A. Trybulec
+::
+:: Received April 8, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, FINSEQ_1, RELAT_1, FINSET_1, CARD_1, BOOLE, PARTFUN1,
+      ARYTM_1, INT_1, RLSUB_2, TARSKI, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      FINSEQ_1, RELAT_1, FUNCT_1, PARTFUN1, CARD_1, FUNCT_2, FINSET_1, INT_1,
+      NAT_1, FINSEQ_3;
+ constructors DOMAIN_1, WELLORD2, FUNCT_2, INT_1, NAT_1, FINSEQ_3, MEMBERED,
+      XBOOLE_0;
+ clusters FINSEQ_1, FUNCT_1, CARD_1, INT_1, FINSET_1, FINSEQ_3, RELSET_1,
+      MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+reserve f for Function;
+reserve p,q for FinSequence;
+reserve A,B,C,x,x1,x2,y,z for set;
+reserve i,k,l,m,m1,m2,n for Nat;
+
+definition let f,x;
+ pred f is_one-to-one_at x means
+:: FINSEQ_4:def 1
+   f " (f .: {x}) = {x};
+end;
+
+canceled;
+
+theorem :: FINSEQ_4:2
+ f is_one-to-one_at x implies x in dom f;
+
+theorem :: FINSEQ_4:3
+ f is_one-to-one_at x iff x in dom f & f " {f.x} = {x};
+
+theorem :: FINSEQ_4:4
+ f is_one-to-one_at x iff
+  x in dom f & for z st z in dom f & x <> z holds f.x <> f.z;
+
+theorem :: FINSEQ_4:5
+   (for x st x in dom f holds f is_one-to-one_at x) iff
+   f is one-to-one;
+
+definition let f,y;
+ pred f just_once_values y means
+:: FINSEQ_4:def 2
+   ex B being finite set st B = f " {y} & card B = 1;
+end;
+
+canceled;
+
+theorem :: FINSEQ_4:7
+ f just_once_values y implies y in rng f;
+
+theorem :: FINSEQ_4:8
+ f just_once_values y iff ex x st {x} = f " {y};
+
+theorem :: FINSEQ_4:9
+ f just_once_values y iff
+  ex x st x in dom f & y = f.x &
+   for z st z in dom f & z <> x holds f.z <> y;
+
+theorem :: FINSEQ_4:10
+ f is one-to-one iff
+  for y st y in rng f holds f just_once_values y;
+
+theorem :: FINSEQ_4:11
+ f is_one-to-one_at x iff x in dom f & f just_once_values f.x;
+
+definition let f,y;
+ assume  f just_once_values y;
+ func f <- y -> set means
+:: FINSEQ_4:def 3
+   it in dom f & f.it = y;
+end;
+
+canceled 4;
+
+theorem :: FINSEQ_4:16
+   f just_once_values y implies f .: {f <- y} = {y};
+
+theorem :: FINSEQ_4:17
+ f just_once_values y implies f " {y} = {f <- y};
+
+theorem :: FINSEQ_4:18
+   f is one-to-one & y in rng f implies (f").y = f <- y;
+
+canceled;
+
+theorem :: FINSEQ_4:20
+   f is_one-to-one_at x implies f <- (f.x) = x;
+
+theorem :: FINSEQ_4:21
+   f just_once_values y implies f is_one-to-one_at f <- y;
+
+reserve D for non empty set;
+reserve d,d1,d2,d3 for Element of D;
+
+
+definition let D; let d1,d2;
+ redefine func <* d1,d2 *> -> FinSequence of D;
+end;
+
+definition let D; let d1,d2,d3;
+ redefine func <* d1,d2,d3 *> -> FinSequence of D;
+end;
+
+definition
+  let X,D be set, p be PartFunc of X,D, i be set;
+ assume  i in dom p;
+ func p/.i -> Element of D equals
+:: FINSEQ_4:def 4
+    p.i;
+end;
+
+theorem :: FINSEQ_4:22
+   for X,D be non empty set, p be Function of X,D, i be Element of X
+ holds p/.i = p.i;
+
+canceled;
+
+theorem :: FINSEQ_4:24
+   for D being set, P being FinSequence of D, i st 1 <= i & i <= len P
+  holds P/.i = P.i;
+
+theorem :: FINSEQ_4:25
+   <* d *>/.1 = d;
+
+theorem :: FINSEQ_4:26
+   <* d1,d2 *>/.1 = d1 & <* d1,d2 *>/.2 = d2;
+
+theorem :: FINSEQ_4:27
+   <* d1,d2,d3 *>/.1 = d1 & <* d1,d2,d3 *>/.2 = d2 & <* d1,d2,d3 *>/.3 = d3;
+
+definition let p; let x;
+ func x..p -> Nat equals
+:: FINSEQ_4:def 5
+    Sgm(p " {x}).1;
+end;
+
+canceled;
+
+theorem :: FINSEQ_4:29
+ x in rng p implies p.(x..p) = x;
+
+theorem :: FINSEQ_4:30
+ x in rng p implies x..p in dom p;
+
+theorem :: FINSEQ_4:31
+ x in rng p implies 1 <= x..p & x..p <= len p;
+
+theorem :: FINSEQ_4:32
+ x in rng p implies x..p - 1 is Nat & len p - x..p is Nat;
+
+theorem :: FINSEQ_4:33
+ x in rng p implies x..p in p " {x};
+
+theorem :: FINSEQ_4:34
+  for k st k in dom p & k < x..p holds p.k <> x;
+
+theorem :: FINSEQ_4:35
+ p just_once_values x implies p <- x = x..p;
+
+theorem :: FINSEQ_4:36
+ p just_once_values x implies
+  for k st k in dom p & k <> x..p holds p.k <> x;
+
+theorem :: FINSEQ_4:37
+ x in rng p & (for k st k in dom p & k <> x..p holds p.k <> x) implies
+  p just_once_values x;
+
+theorem :: FINSEQ_4:38
+ p just_once_values x iff x in rng p & {x..p} = p " {x};
+
+theorem :: FINSEQ_4:39
+   p is one-to-one & x in rng p implies {x..p} = p " {x};
+
+theorem :: FINSEQ_4:40
+ p just_once_values x iff len(p - {x}) = len p - 1;
+
+theorem :: FINSEQ_4:41
+ p just_once_values x implies
+  for k st k in dom(p - {x}) holds
+   (k < x..p implies (p - {x}).k = p.k) &
+   (x..p <= k implies (p - {x}).k = p.(k + 1));
+
+theorem :: FINSEQ_4:42
+   p is one-to-one & x in rng p implies
+  for k st k in dom(p - {x}) holds
+   ((p - {x}).k = p.k iff k < x..p) & ((p - {x}).k = p.(k + 1) iff x..p <= k);
+
+definition let p; let x;
+ assume  x in rng p;
+ func p -| x -> FinSequence means
+:: FINSEQ_4:def 6
+   ex n st n = x..p - 1 & it = p | Seg n;
+end;
+
+canceled 2;
+
+theorem :: FINSEQ_4:45
+ x in rng p & n = x..p - 1 implies p | Seg n = p -| x;
+
+theorem :: FINSEQ_4:46
+ x in rng p implies len(p -| x) = x..p - 1;
+
+theorem :: FINSEQ_4:47
+ x in rng p & n = x..p - 1 implies dom(p -| x) = Seg n;
+
+theorem :: FINSEQ_4:48
+ x in rng p & k in dom(p -| x) implies p.k = (p -| x).k;
+
+theorem :: FINSEQ_4:49
+ x in rng p implies not x in rng(p -| x);
+
+theorem :: FINSEQ_4:50
+   x in rng p implies rng(p -| x) misses {x};
+
+theorem :: FINSEQ_4:51
+   x in rng p implies rng(p -| x) c= rng p;
+
+theorem :: FINSEQ_4:52
+   x in rng p implies (x..p = 1 iff p -| x = {});
+
+theorem :: FINSEQ_4:53
+   x in rng p & p is FinSequence of D implies p -| x is FinSequence of D;
+
+definition let p; let x;
+ assume  x in rng p;
+ func p |-- x -> FinSequence means
+:: FINSEQ_4:def 7
+   len it = len p - x..p &
+         for k st k in dom it holds it.k = p.(k + x..p);
+end;
+
+canceled 3;
+
+theorem :: FINSEQ_4:57
+ x in rng p & n = len p - x..p implies dom(p |-- x) = Seg n;
+
+theorem :: FINSEQ_4:58
+ x in rng p & n in dom(p |-- x) implies n + x..p in dom p;
+
+theorem :: FINSEQ_4:59
+   x in rng p implies rng(p |-- x) c= rng p;
+
+theorem :: FINSEQ_4:60
+ p just_once_values x iff x in rng p & not x in rng(p |-- x);
+
+theorem :: FINSEQ_4:61
+ x in rng p & p is one-to-one implies not x in rng(p |-- x);
+
+theorem :: FINSEQ_4:62
+   p just_once_values x iff x in rng p & rng(p |-- x) misses {x};
+
+theorem :: FINSEQ_4:63
+   x in rng p & p is one-to-one implies rng(p |-- x) misses {x};
+
+theorem :: FINSEQ_4:64
+   x in rng p implies (x..p = len p iff p |-- x = {});
+
+theorem :: FINSEQ_4:65
+   x in rng p & p is FinSequence of D implies p |-- x is FinSequence of D;
+
+theorem :: FINSEQ_4:66
+ x in rng p implies p = (p -| x) ^ <* x *> ^ (p |-- x);
+
+theorem :: FINSEQ_4:67
+   x in rng p & p is one-to-one implies p -| x is one-to-one;
+
+theorem :: FINSEQ_4:68
+   x in rng p & p is one-to-one implies p |-- x is one-to-one;
+
+theorem :: FINSEQ_4:69
+ p just_once_values x iff x in rng p & p - {x} = (p -| x) ^ (p |-- x);
+
+theorem :: FINSEQ_4:70
+   x in rng p & p is one-to-one implies p - {x} = (p -| x) ^ (p |-- x);
+
+theorem :: FINSEQ_4:71
+ x in rng p & p - {x} is one-to-one & p - {x} = (p -| x) ^ (p |-- x) implies
+  p is one-to-one;
+
+theorem :: FINSEQ_4:72
+   x in rng p & p is one-to-one implies rng(p -| x) misses rng(p |-- x);
+
+theorem :: FINSEQ_4:73
+ A is finite implies ex p st rng p = A & p is one-to-one;
+
+theorem :: FINSEQ_4:74
+ rng p c= dom p & p is one-to-one implies rng p = dom p;
+
+theorem :: FINSEQ_4:75
+ rng p = dom p implies p is one-to-one;
+
+theorem :: FINSEQ_4:76
+   rng p = rng q & len p = len q & q is one-to-one implies
+  p is one-to-one;
+
+theorem :: FINSEQ_4:77
+   p is one-to-one iff card(rng p) = len p;
+
+:: If you are looking for theorem
+:: rng p = rng q & p is_one-to-one & q is_one-to-one implies len p = len q,
+:: it is placed in RLVECT_1 under number 106.
+
+reserve f for Function of A,B;
+
+theorem :: FINSEQ_4:78
+   for A,B being finite set, f being Function of A,B
+  holds card A = card B & f is one-to-one implies rng f = B;
+
+theorem :: FINSEQ_4:79
+   for A,B being finite set, f being Function of A,B
+  st card A = card B & rng f = B
+ holds f is one-to-one;
+
+theorem :: FINSEQ_4:80
+   Card B <` Card A & B <> {} implies
+  ex x,y st x in A & y in A & x <> y & f.x = f.y;
+
+theorem :: FINSEQ_4:81
+   Card A <` Card B implies
+  ex x st x in B & for y st y in A holds f.y <> x;

@@ -1,0 +1,1814 @@
+:: Subspaces and Cosets of Subspaces in Vector Space
+::  by Wojciech A. Trybulec
+::
+:: Received July 27, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, VECTSP_1, ARYTM_1, BINOP_1, LATTICES, RLSUB_1, BOOLE,
+      RELAT_1, FUNCT_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
+      STRUCT_0, DOMAIN_1, BINOP_1, RLVECT_1, VECTSP_1;
+ constructors GROUP_2, DOMAIN_1, BINOP_1, PARTFUN1, MEMBERED, XBOOLE_0;
+ clusters FUNCT_1, VECTSP_1, STRUCT_0, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1,
+      XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, VECTSP_1, RLVECT_1, XBOOLE_0;
+ theorems BINOP_1, FUNCT_1, FUNCT_2, TARSKI, VECTSP_1, ZFMISC_1, RLVECT_1,
+      RELAT_1, VECTSP_2, RELSET_1, XBOOLE_0, XBOOLE_1;
+ schemes XBOOLE_0;
+
+begin
+
+
+
+ reserve x,y,y1,y2 for set;
+
+ Lm1:
+ for GF be add-associative right_zeroed right_complementable
+    Abelian commutative associative left_unital distributive
+      (non empty doubleLoopStr),
+     V be Abelian add-associative right_zeroed
+             right_complementable VectSp-like (non empty VectSpStr over GF),
+  a,b being Element of GF,
+  v being Element of V
+  holds (a - b) * v = a * v - b * v
+  proof
+   let GF be add-associative right_zeroed right_complementable
+      Abelian commutative associative left_unital distributive
+       (non empty doubleLoopStr),
+       V be Abelian add-associative right_zeroed
+               right_complementable VectSp-like (non empty VectSpStr over GF),
+    a,b be Element of GF,
+    v be Element of V;
+   thus (a - b) * v = (a + - b) * v by RLVECT_1:def 11
+                   .= a * v + (- b) * v by VECTSP_1:def 26
+                   .= a * v - b * v by VECTSP_1:68;
+  end;
+
+ definition let GF be non empty HGrStr; let V be non empty VectSpStr over GF;
+   let V1 be Subset of V;
+  attr V1 is lineary-closed means :Def1:
+    (for v,u being Element of V st v in V1 & u in V1
+       holds v + u in V1) &
+    (for a being Element of GF,
+        v being Element of V
+     st v in V1 holds a * v in V1);
+ end;
+
+canceled 3;
+
+theorem Th4:
+ for GF be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr),
+     V be Abelian add-associative right_zeroed
+             right_complementable VectSp-like (non empty VectSpStr over GF),
+     V1 be Subset of V
+  st V1 <> {} & V1 is lineary-closed holds 0.V in V1
+  proof
+   let GF be add-associative right_zeroed right_complementable
+         Abelian associative left_unital distributive
+         (non empty doubleLoopStr),
+       V be Abelian add-associative right_zeroed
+            right_complementable VectSp-like (non empty VectSpStr over GF),
+       V1 be Subset of V;
+   assume that A1: V1 <> {} and A2: V1 is lineary-closed;
+    consider x being Element of V1;
+    reconsider x as Element of V by A1,TARSKI:def 3;
+      0.GF * x in V1 by A1,A2,Def1;
+   hence thesis by VECTSP_1:59;
+  end;
+
+theorem Th5:
+ for GF be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr),
+     V be Abelian add-associative right_zeroed
+             right_complementable VectSp-like (non empty VectSpStr over GF),
+     V1 be Subset of V
+  st V1 is lineary-closed
+  for v being Element of V st v in V1 holds - v in V1
+  proof
+   let GF be add-associative right_zeroed right_complementable
+         Abelian associative left_unital distributive
+          (non empty doubleLoopStr),
+       V be Abelian add-associative right_zeroed
+            right_complementable VectSp-like (non empty VectSpStr over GF),
+       V1 be Subset of V;
+   assume A1: V1 is lineary-closed;
+   let v be Element of V; assume v in V1;
+     then (- 1_ GF) * v in V1 by A1,Def1;
+   hence thesis by VECTSP_1:59;
+  end;
+
+theorem
+   for GF be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr),
+     V be Abelian add-associative right_zeroed
+             right_complementable VectSp-like (non empty VectSpStr over GF),
+     V1 be Subset of V
+  st V1 is lineary-closed
+ for v,u being Element of V
+     st v in V1 & u in V1 holds v - u in V1
+   proof
+   let GF be add-associative right_zeroed right_complementable
+         Abelian associative left_unital distributive
+         (non empty doubleLoopStr),
+       V be Abelian add-associative right_zeroed
+            right_complementable VectSp-like (non empty VectSpStr over GF),
+       V1 be Subset of V;
+    assume A1: V1 is lineary-closed;
+    let v,u be Element of V;
+    assume that A2: v in V1 and A3: u in V1;
+        v - u = v + (- u) & - u in V1 by A1,A3,Th5,RLVECT_1:def 11;
+    hence thesis by A1,A2,Def1;
+   end;
+
+theorem Th7:
+ for GF be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr),
+     V be Abelian add-associative right_zeroed
+             right_complementable VectSp-like (non empty VectSpStr over GF)
+  holds {0.V} is lineary-closed
+  proof
+   let GF be add-associative right_zeroed right_complementable
+            Abelian associative left_unital distributive
+            (non empty doubleLoopStr),
+       V be Abelian add-associative right_zeroed
+            right_complementable VectSp-like (non empty VectSpStr over GF);
+   thus for v,u being Element of V
+    st v in {0.V} & u in {0.V} holds v + u in {0.V}
+    proof let v,u be Element of V;
+      assume v in {0.V} & u in {0.V};
+       then v = 0.V & u = 0.V by TARSKI:def 1;
+       then v + u = 0.V & 0.V in {0.V} by RLVECT_1:10,TARSKI:def 1;
+     hence thesis;
+    end;
+  let a be Element of GF;
+  let v be Element of V;
+   assume A1: v in {0.V};
+    then v = 0.V by TARSKI:def 1;
+  hence thesis by A1,VECTSP_1:59;
+ end;
+
+theorem
+   for GF be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr),
+     V be Abelian add-associative right_zeroed
+             right_complementable VectSp-like (non empty VectSpStr over GF),
+     V1 be Subset of V
+ st the carrier of V = V1 holds V1 is lineary-closed
+  proof
+   let GF be add-associative right_zeroed right_complementable
+          Abelian associative left_unital distributive
+          (non empty doubleLoopStr),
+       V be Abelian add-associative right_zeroed
+            right_complementable VectSp-like (non empty VectSpStr over GF),
+       V1 be Subset of V;
+   assume A1: the carrier of V = V1;
+   hence for v,u being Element of V
+    st v in V1 & u in V1 holds v + u in V1;
+   let a be Element of GF;
+   let v be Element of V;
+     assume v in V1;
+    thus a * v in V1 by A1;
+  end;
+
+theorem
+   for GF be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr),
+     V be Abelian add-associative right_zeroed
+             right_complementable VectSp-like (non empty VectSpStr over GF),
+     V1,V2,V3 be Subset of V
+  st V1 is lineary-closed & V2 is lineary-closed &
+     V3 = {v + u where
+                 v is Element of V,
+                 u is Element of V
+             : v in V1 & u in V2}
+  holds V3 is lineary-closed
+   proof
+   let GF be add-associative right_zeroed right_complementable
+          Abelian associative left_unital distributive
+          (non empty doubleLoopStr),
+       V be Abelian add-associative right_zeroed
+            right_complementable VectSp-like (non empty VectSpStr over GF),
+       V1,V2,V3 be Subset of V;
+    assume that A1: V1 is lineary-closed & V2 is lineary-closed and
+                A2: V3 = {v + u where
+                 v is Element of V,
+                 u is Element of V
+                 : v in V1 & u in V2};
+    thus for v,u being Element of V
+      st v in V3 & u in V3 holds v + u in V3
+     proof let v,u be Element of V;
+       assume that A3: v in V3 and A4: u in V3;
+        consider v1,v2 being Element of V such that
+        A5: v = v1 + v2 and
+        A6: v1 in V1 & v2 in V2 by A2,A3;
+        consider u1,u2 being Element of V such that
+        A7: u = u1 + u2 and
+        A8: u1 in V1 & u2 in V2 by A2,A4;
+         A9: v1 + u1 in V1 & v2 + u2 in V2 by A1,A6,A8,Def1;
+           v + u = ((v1 + v2) + u1) + u2 by A5,A7,RLVECT_1:def 6
+              .= ((v1 + u1) + v2) + u2 by RLVECT_1:def 6
+              .= (v1 + u1) + (v2 + u2) by RLVECT_1:def 6;
+      hence thesis by A2,A9;
+     end;
+    let a be Element of GF;
+    let v be Element of V;
+     assume v in V3;
+      then consider v1,v2 being Element of V such that
+      A10: v = v1 + v2 and
+      A11: v1 in V1 & v2 in V2 by A2;
+       A12: a * v1 in V1 & a * v2 in V2 by A1,A11,Def1;
+         a * v = a * v1 + a * v2 by A10,VECTSP_1:def 26;
+    hence a * v in V3 by A2,A12;
+   end;
+
+theorem
+   for GF be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr),
+     V be Abelian add-associative right_zeroed
+             right_complementable VectSp-like (non empty VectSpStr over GF),
+     V1,V2 be Subset of V
+   st V1 is lineary-closed & V2 is lineary-closed
+ holds V1 /\ V2 is lineary-closed
+   proof
+   let GF be add-associative right_zeroed right_complementable
+          Abelian associative left_unital distributive
+          (non empty doubleLoopStr),
+       V be Abelian add-associative right_zeroed
+            right_complementable VectSp-like (non empty VectSpStr over GF),
+       V1,V2 be Subset of V;
+    assume A1: V1 is lineary-closed & V2 is lineary-closed;
+    thus for v,u being Element of V
+     st v in V1 /\ V2 & u in V1 /\ V2 holds v + u in V1 /\ V2
+     proof let v,u be Element of V;
+      assume v in V1 /\ V2 & u in V1 /\ V2;
+       then v in V1 & v in V2 & u in V1 & u in V2 by XBOOLE_0:def 3;
+       then v + u in V1 & v + u in V2 by A1,Def1;
+      hence thesis by XBOOLE_0:def 3;
+     end;
+    let a be Element of GF;
+    let v be Element of V;
+     assume v in V1 /\ V2;
+      then v in V1 & v in V2 by XBOOLE_0:def 3;
+      then a * v in V1 & a * v in V2 by A1,Def1;
+    hence thesis by XBOOLE_0:def 3;
+   end;
+
+ definition
+   let GF be add-associative right_zeroed right_complementable
+            Abelian associative left_unital distributive
+            (non empty doubleLoopStr),
+       V be Abelian add-associative right_zeroed
+            right_complementable VectSp-like (non empty VectSpStr over GF);
+  mode Subspace of V -> Abelian add-associative right_zeroed
+          right_complementable VectSp-like (non empty VectSpStr over GF) means
+   :Def2:
+    the carrier of it c= the carrier of V &
+    the Zero of it = the Zero of V &
+    the add of it =
+     (the add of V) | [:the carrier of it,the carrier of it:] &
+    the lmult of it =
+     (the lmult of V) | [:the carrier of GF, the carrier of it:];
+  existence
+   proof take V;
+    thus the carrier of V c= the carrier of V &
+         the Zero of V = the Zero of V;
+    thus thesis by FUNCT_2:40;
+   end;
+ end;
+
+ reserve GF for add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr),
+         V,X,Y for Abelian add-associative right_zeroed
+              right_complementable VectSp-like (non empty VectSpStr over GF);
+ reserve a for Element of GF;
+ reserve u,u1,u2,v,v1,v2 for Element of V;
+ reserve W,W1,W2 for Subspace of V;
+ reserve V1 for Subset of V;
+ reserve w,w1,w2 for Element of W;
+
+canceled 5;
+
+theorem
+   x in W1 & W1 is Subspace of W2 implies x in W2
+  proof assume x in W1 & W1 is Subspace of W2;
+    then x in the carrier of W1 &
+         the carrier of W1 c= the carrier of W2 by Def2,RLVECT_1:def 1;
+    hence thesis by RLVECT_1:def 1;
+  end;
+
+theorem Th17:
+ x in W implies x in V
+  proof assume x in W;
+    then x in the carrier of W &
+         the carrier of W c= the carrier of V by Def2,RLVECT_1:def 1;
+    hence thesis by RLVECT_1:def 1;
+  end;
+
+theorem Th18:
+ w is Element of V
+  proof w in W by RLVECT_1:3;
+    then w in V by Th17;
+   hence thesis by RLVECT_1:def 1;
+  end;
+
+theorem Th19:
+ 0.W = 0.V
+  proof
+   thus 0.W = the Zero of W by RLVECT_1:def 2
+           .= the Zero of V by Def2
+           .= 0.V by RLVECT_1:def 2;
+  end;
+
+theorem
+   0.W1 = 0.W2
+  proof
+   thus 0.W1 = 0.V by Th19
+            .= 0.W2 by Th19;
+  end;
+
+theorem Th21:
+ w1 = v & w2 = u implies w1 + w2 = v + u
+  proof assume A1: v = w1 & u = w2;
+    set IW = [:the carrier of W, the carrier of W:];
+    reconsider ww1 = w1, ww2 = w2 as Element of V by Th18;
+     A2: v + u = (the add of V).(ww1,ww2) by A1,RLVECT_1:5
+             .= (the add of V).[ww1,ww2] by BINOP_1:def 1;
+        w1 + w2 = (the add of W).(w1,w2) by RLVECT_1:5
+               .= ((the add of V) | IW).(w1,w2) by Def2
+               .= ((the add of V) | IW).[w1,w2] by BINOP_1:def 1;
+   hence thesis by A2,FUNCT_1:72;
+  end;
+
+theorem Th22:
+ w = v implies a * w = a * v
+  proof assume A1: w = v;
+    reconsider ww1 = w as Element of V by Th18;
+     A2: a * v = (the lmult of V).(a,v) by VECTSP_1:def 24
+             .= (the lmult of V).[a,ww1] by A1,BINOP_1:def 1;
+        a * w = (the lmult of W).(a,w) by VECTSP_1:def 24
+             .= (the lmult of W).[a,w] by BINOP_1:def 1
+             .= ((the lmult of V) | ([:the carrier of GF, the carrier of W:])
+).[a,w] by Def2;
+   hence thesis by A2,FUNCT_1:72;
+  end;
+
+theorem Th23:
+ w = v implies - v = - w
+  proof assume A1: w = v;
+      - v = (- 1_ GF) * v & - w = (- 1_ GF) * w by VECTSP_1:59;
+   hence thesis by A1,Th22;
+  end;
+
+theorem Th24:
+ w1 = v & w2 = u implies w1 - w2 = v - u
+  proof assume that A1: w1 = v and A2: w2 = u;
+    A3: - w2 = - u by A2,Th23;
+      w1 - w2 = w1 + (- w2) & v - u = v + (- u) by RLVECT_1:def 11;
+   hence thesis by A1,A3,Th21;
+  end;
+
+Lm2: the carrier of W = V1 implies V1 is lineary-closed
+ proof assume A1: the carrier of W = V1;
+   set VW = the carrier of W;
+   reconsider WW = W as Abelian add-associative right_zeroed
+              right_complementable VectSp-like (non empty VectSpStr over GF);
+  thus for v,u st v in V1 & u in V1 holds v + u in V1
+   proof let v,u;
+     assume v in V1 & u in V1;
+      then reconsider vv = v, uu = u as Element of WW by A1;
+      reconsider vw = vv + uu as Element of VW;
+         vw in V1 by A1;
+    hence v + u in V1 by Th21;
+   end;
+  let a,v;
+   assume v in V1;
+    then reconsider vv = v as Element of WW by A1;
+    reconsider vw = a * vv as Element of VW;
+       vw in V1 by A1;
+  hence a * v in V1 by Th22;
+ end;
+
+theorem Th25:
+ 0.V in W
+  proof 0.W in W & 0.V = 0.W by Th19,RLVECT_1:3;
+   hence thesis;
+  end;
+
+theorem
+   0.W1 in W2
+  proof 0.W1 = 0.V by Th19;
+   hence thesis by Th25;
+  end;
+
+theorem
+   0.W in V
+  proof 0.W in W by RLVECT_1:3;
+   hence thesis by Th17;
+  end;
+
+theorem Th28:
+ u in W & v in W implies u + v in W
+  proof assume u in W & v in W;
+     then A1: u in the carrier of W &
+             v in the carrier of W by RLVECT_1:def 1;
+    reconsider VW = the carrier of W as Subset of V by Def2;
+       VW is lineary-closed by Lm2;
+     then u + v in the carrier of W by A1,Def1;
+   hence thesis by RLVECT_1:def 1;
+  end;
+
+theorem Th29:
+ v in W implies a * v in W
+  proof assume v in W;
+     then A1: v in the carrier of W by RLVECT_1:def 1;
+    reconsider VW = the carrier of W as Subset of V by Def2;
+       VW is lineary-closed by Lm2;
+     then a * v in the carrier of W by A1,Def1;
+   hence thesis by RLVECT_1:def 1;
+  end;
+
+theorem Th30:
+ v in W implies - v in W
+  proof assume v in W;
+    then (- 1_ GF) * v in W by Th29;
+   hence thesis by VECTSP_1:59;
+  end;
+
+theorem Th31:
+ u in W & v in W implies u - v in W
+  proof assume that A1: u in W and A2: v in W;
+      - v in W by A2,Th30;
+    then u + (- v) in W by A1,Th28;
+   hence thesis by RLVECT_1:def 11;
+  end;
+
+theorem Th32:
+ V is Subspace of V
+  proof
+    A1: the carrier of V c= the carrier of V &
+        the Zero of V = the Zero of V;
+      the add of V = (the add of V) |
+      [:the carrier of V, the carrier of V:] &
+    the lmult of V =
+     (the lmult of V) | [:the carrier of GF, the carrier of V:]
+      by FUNCT_2:40;
+   hence thesis by A1,Def2;
+  end;
+
+theorem Th33:
+ for X,V being strict Abelian add-associative right_zeroed
+              right_complementable VectSp-like (non empty VectSpStr over GF)
+ holds V is Subspace of X & X is Subspace of V implies V = X
+  proof let X,V be strict Abelian add-associative right_zeroed
+           right_complementable VectSp-like (non empty VectSpStr over GF);
+   assume A1: V is Subspace of X & X is Subspace of V;
+    set VV = the carrier of V;
+    set VX = the carrier of X;
+    set AV = the add of V;
+    set AX = the add of X;
+    set MV = the lmult of V; set MX = the lmult of X;
+        VV c= VX & VX c= VV by A1,Def2;
+     then A2: VV = VX by XBOOLE_0:def 10;
+     A3: the Zero of V = the Zero of X by A1,Def2;
+        AV = AX | [:VV,VV:] & AX = AV | [:VX,VX:] by A1,Def2;
+     then A4: AV = AX by A2,RELAT_1:101;
+        MV = MX | [:the carrier of GF,VV:] &
+        MX = MV | [:the carrier of GF,VX:] by A1,Def2;
+   hence thesis by A2,A3,A4,RELAT_1:101;
+  end;
+
+theorem Th34:
+ V is Subspace of X & X is Subspace of Y implies V is Subspace of Y
+  proof assume A1: V is Subspace of X & X is Subspace of Y;
+   A2: the carrier of V c= the carrier of Y
+    proof
+        the carrier of V c= the carrier of X &
+       the carrier of X c= the carrier of Y by A1,Def2;
+     hence thesis by XBOOLE_1:1;
+    end;
+   A3: the Zero of V = the Zero of Y
+    proof the Zero of V = the Zero of X &
+          the Zero of X = the Zero of Y by A1,Def2;
+     hence thesis;
+    end;
+   A4: the add of V =
+         (the add of Y) | [:the carrier of V, the carrier of V:]
+    proof set AV = the add of V;
+          set VV = the carrier of V;
+          set AX = the add of X;
+          set VX = the carrier of X;
+          set AY = the add of Y;
+        AV = AX | [:VV,VV:] & AX = AY | [:VX,VX:] & VV c= VX
+                                                     by A1,Def2;
+      then AV = (AY | [:VX,VX:]) | [:VV,VV:] & [:VV,VV:] c= [:VX,VX:]
+                                                             by ZFMISC_1:119;
+     hence thesis by FUNCT_1:82;
+    end;
+     set MV = the lmult of V; set VV = the carrier of V;
+     set MX = the lmult of X; set VX = the carrier of X;
+     set MY = the lmult of Y;
+        MV = MX | [:the carrier of GF,VV:] & MX = MY | [:the carrier of GF,VX:]
+&
+       VV c= VX by A1,Def2;
+      then MV = (MY | [:the carrier of GF,VX:]) | [:the carrier of GF,VV:] &
+       [:the carrier of GF,VV:] c=
+         [:the carrier of GF,the carrier of X:] by ZFMISC_1:118;
+      then MV = MY | [:the carrier of GF,VV:] by FUNCT_1:82;
+   hence thesis by A2,A3,A4,Def2;
+  end;
+
+theorem Th35:
+ the carrier of W1 c= the carrier of W2 implies
+  W1 is Subspace of W2
+  proof assume
+     A1: the carrier of W1 c= the carrier of W2;
+    set VW1 = the carrier of W1;
+    set VW2 = the carrier of W2;
+    set MW1 = the lmult of W1; set MW2 = the lmult of W2;
+    set AV = the add of V; set MV = the lmult of V;
+     A2: the Zero of W1 = the Zero of V &
+     the Zero of W2 = the Zero of V by Def2;
+     A3: the add of W1 = (the add of W2) |
+           [:the carrier of W1, the carrier of W1:]
+      proof
+          (the add of W1) = AV | [:VW1,VW1:] & (the add of W2)
+ = AV | [:VW2,VW2:] &
+         [:VW1,VW1:] c= [:VW2,VW2:] by A1,Def2,ZFMISC_1:119;
+       hence thesis by FUNCT_1:82;
+      end;
+       MW1 = MV | [:the carrier of GF,VW1:] &
+     MW2 = MV | [:the carrier of GF,VW2:] &
+      [:the carrier of GF,VW1:] c= [:the carrier of GF,VW2:]
+                                              by A1,Def2,ZFMISC_1:118;
+     then MW1 = MW2 | [:the carrier of GF,VW1:] by FUNCT_1:82;
+   hence thesis by A1,A2,A3,Def2;
+  end;
+
+theorem
+   (for v st v in W1 holds v in W2) implies W1 is Subspace of W2
+  proof assume A1: for v st v in W1 holds v in W2;
+      the carrier of W1 c= the carrier of W2
+     proof let x be set;
+       assume A2: x in the carrier of W1;
+           the carrier of W1 c= the carrier of V by Def2;
+        then reconsider v = x as Element of V by A2;
+           v in W1 by A2,RLVECT_1:def 1;
+         then v in W2 by A1;
+      hence thesis by RLVECT_1:def 1;
+     end;
+   hence thesis by Th35;
+  end;
+
+definition let GF be add-associative right_zeroed right_complementable
+             Abelian associative left_unital distributive
+             (non empty doubleLoopStr),
+               V be Abelian add-associative right_zeroed
+                right_complementable VectSp-like (non empty VectSpStr over GF);
+ cluster strict Subspace of V;
+  existence
+   proof
+    set M = the lmult of V;
+    set W = VectSpStr (# the carrier of V,the add of V,0.V,M #);
+     A1: now let a,b be Element of W;
+      let x,y be Element of V;
+       assume A2: x = a & b = y;
+      thus a + b = (the add of W).(a,b) by RLVECT_1:5
+                .= x + y by A2,RLVECT_1:5;
+     end;
+A3:  W is Abelian add-associative right_zeroed right_complementable
+      proof
+       thus W is Abelian
+        proof
+       let a,b be Element of W;
+        reconsider x = a, y = b as Element of V;
+       thus a + b = y + x by A1
+                 .= b + a by A1;
+        end;
+       hereby let a,b,c be Element of W;
+        reconsider x = a, y = b, z = c as Element of V;
+        A4: a + b = x + y & b + c = y + z by A1;
+       hence a + b + c = x + y + z by A1
+                     .= x + (y + z) by RLVECT_1:def 6
+                     .= a + (b + c) by A1,A4;
+       end;
+        A5: 0.W = 0.V by RLVECT_1:def 2;
+       hereby let a be Element of W;
+        reconsider x = a as Element of V;
+       thus a + 0.W = x + 0.V by A1,A5
+                    .= a by RLVECT_1:10;
+       end;
+       let a be Element of W;
+       reconsider x = a as Element of V;
+       reconsider b = (comp V).x as Element of W;
+       take b;
+       thus a + b = x + (comp V).x by A1
+                 .= x + - x by VECTSP_1:def 25
+                 .= 0.W by A5,RLVECT_1:16;
+      end;
+        W is VectSp-like
+      proof let a,b be Element of GF;
+            let v,w be Element of W;
+         reconsider x = v, y = w as Element of V;
+        A6: now let a be Element of GF;
+                  let x be Element of W;
+                  let y be Element of V;
+          assume y = x;
+         hence a * x = M.(a,y) by VECTSP_1:def 24
+                   .= a * y by VECTSP_1:def 24;
+        end;
+        then A7: b * v = b * x & a * v = a * x & a * w = a * y;
+        then a * v + a * w = a * x + a * y & v + w = x + y by A1;
+       hence a * (v + w) = a * (x + y) by A6
+                        .= a * x + a * y by VECTSP_1:def 26
+                        .= a * v + a * w by A1,A7;
+       thus (a + b) * v = (a + b) * x by A6
+                       .= a * x + b * x by VECTSP_1:def 26
+                       .= a * v + b * v by A1,A7;
+       thus a * b * v = a * b * x by A6
+                     .= a * (b * x) by VECTSP_1:def 26
+                     .= a * (b * v) by A6,A7;
+       thus 1_ GF * v = 1_ GF * x by A6
+                    .= v by VECTSP_1:def 26;
+      end;
+    then reconsider W as Abelian add-associative right_zeroed
+      right_complementable VectSp-like (non empty VectSpStr over GF) by A3;
+     A8: the Zero of W = the Zero of V by RLVECT_1:def 2;
+       the add of W = (the add of V) |
+      [:the carrier of W, the carrier of W:] &
+     the lmult of W = (the lmult of V) |
+      [:the carrier of GF, the carrier of W:] by FUNCT_2:40;
+     then reconsider W as Subspace of V by A8,Def2;
+    take W;
+    thus thesis;
+   end;
+end;
+
+theorem Th37:
+ for W1,W2 being strict Subspace of V st
+ the carrier of W1 = the carrier of W2
+  holds W1 = W2
+   proof let W1,W2 be strict Subspace of V;
+    assume the carrier of W1 = the carrier of W2;
+      then W1 is Subspace of W2 & W2 is Subspace of W1 by Th35;
+    hence thesis by Th33;
+   end;
+
+theorem Th38:
+ for W1,W2 being strict Subspace of V st
+ (for v holds v in W1 iff v in W2)
+ holds W1 = W2
+  proof let W1,W2 be strict Subspace of V;
+   assume A1: for v holds v in W1 iff v in W2;
+      x in the carrier of W1 iff x in the carrier of W2
+     proof
+      thus x in the carrier of W1 implies
+            x in the carrier of W2
+       proof assume A2: x in the carrier of W1;
+           the carrier of W1 c= the carrier of V by Def2;
+        then reconsider v = x as Element of V by A2;
+           v in W1 by A2,RLVECT_1:def 1;
+         then v in W2 by A1;
+        hence thesis by RLVECT_1:def 1;
+       end;
+       assume A3: x in the carrier of W2;
+           the carrier of W2 c= the carrier of V by Def2;
+        then reconsider v = x as Element of V by A3;
+           v in W2 by A3,RLVECT_1:def 1;
+         then v in W1 by A1;
+      hence thesis by RLVECT_1:def 1;
+     end;
+    then the carrier of W1 = the carrier of W2 by TARSKI:2;
+   hence thesis by Th37;
+  end;
+
+theorem
+   for V being strict Abelian add-associative right_zeroed
+              right_complementable VectSp-like (non empty VectSpStr over GF),
+     W being strict Subspace of V holds
+ the carrier of W = the carrier of V implies
+  W = V
+   proof let V be strict Abelian add-associative right_zeroed
+              right_complementable VectSp-like (non empty VectSpStr over GF),
+     W be strict Subspace of V;
+    assume A1:
+     the carrier of W = the carrier of V;
+       V is Subspace of V by Th32;
+    hence thesis by A1,Th37;
+   end;
+
+theorem
+   for V being strict Abelian add-associative right_zeroed
+              right_complementable VectSp-like (non empty VectSpStr over GF),
+     W being strict Subspace of V holds
+ (for v being Element of V holds v in W) implies W = V
+  proof
+   let V be strict Abelian add-associative right_zeroed
+              right_complementable VectSp-like (non empty VectSpStr over GF),
+       W be strict Subspace of V;
+   assume
+      for v being Element of V holds v in W;
+    then A1: for v be Element of V holds ( v in W iff v in V)
+      by RLVECT_1:3;
+      V is Subspace of V by Th32;
+   hence thesis by A1,Th38;
+  end;
+
+theorem
+   the carrier of W = V1 implies V1 is lineary-closed by Lm2;
+
+theorem Th42:
+ V1 <> {} & V1 is lineary-closed implies
+  ex W being strict Subspace of V st
+   V1 = the carrier of W
+ proof assume that A1: V1 <> {} and A2: V1 is lineary-closed;
+   set VV = the carrier of V;
+   reconsider D = V1 as non empty set by A1;
+   set A = (the add of V) | [:D,D:];
+    A3: V1 c= the carrier of V &
+        dom(the add of V) = [:VV,VV:] by FUNCT_2:def 1;
+      [:D,D:] c= [:VV,VV:] by ZFMISC_1:119;
+    then A4: dom A = [:D,D:] by A3,RELAT_1:91;
+      rng A c= D
+     proof let x;
+       assume x in rng A;
+        then consider y such that A5: y in dom A and A6: A.y = x by FUNCT_1:def
+5;
+        consider y1,y2 such that A7: [y1,y2] = y by A4,A5,ZFMISC_1:102;
+         A8: y1 in D & y2 in D & D c= the carrier of V
+                                 by A4,A5,A7,ZFMISC_1:106;
+        then reconsider y1,y2 as Element of V;
+           x = (the add of V).[y1,y2] by A5,A6,A7,FUNCT_1:70
+          .= (the add of V).(y1,y2) by BINOP_1:def 1
+          .= y1 + y2 by RLVECT_1:5;
+      hence thesis by A2,A8,Def1;
+     end;
+   then reconsider A as BinOp of D by A4,FUNCT_2:def 1,RELSET_1:11;
+   set C = (comp V) | D;
+       V1 c= the carrier of V & dom(comp V) = VV by FUNCT_2:def 1;
+    then A9: dom C = D by RELAT_1:91;
+      rng C c= D
+     proof let x;
+       assume x in rng C;
+        then consider y such that A10: y in dom C and A11: C.y = x
+         by FUNCT_1:def 5;
+        reconsider y as Element of V by A9,A10;
+           x = (comp V).y by A10,A11,FUNCT_1:70
+          .= - y by VECTSP_1:def 25;
+      hence thesis by A2,A9,A10,Th5;
+     end;
+   then reconsider C as UnOp of D by A9,FUNCT_2:def 1,RELSET_1:11;
+   set M = (the lmult of V) | [:the carrier of GF,D:];
+   reconsider d = 0.V as Element of D by A2,Th4;
+    A12: dom(the lmult of V) = [:the carrier of GF,VV:] by FUNCT_2:def 1;
+      [:the carrier of GF,D:] c= [:the carrier of GF,VV:] by ZFMISC_1:119;
+    then A13: dom M = [:the carrier of GF,D:] by A12,RELAT_1:91;
+      rng M c= D
+     proof let x;
+       assume x in rng M;
+        then consider y such that A14: y in dom M and A15: M.y = x by FUNCT_1:
+def 5;
+        consider y1,y2 such that A16: [y1,y2] = y by A13,A14,ZFMISC_1:102;
+         A17: y1 in the carrier of GF & y2 in V1 by A13,A14,A16,ZFMISC_1:106;
+        reconsider y1 as Element of GF by A13,A14,A16,ZFMISC_1:
+106;
+        reconsider y2 as Element of V by A17;
+           x = (the lmult of V).[y1,y2] by A14,A15,A16,FUNCT_1:70
+          .= (the lmult of V).(y1,y2) by BINOP_1:def 1
+          .= y1 * y2 by VECTSP_1:def 24;
+      hence thesis by A2,A17,Def1;
+     end;
+   then reconsider M as Function of [:the carrier of GF,D:], D
+    by A13,FUNCT_2:def 1,RELSET_1:11;
+   set W = VectSpStr (# D,A,d,M #);
+    A18: now let a,b be Element of W;
+     let x,y be Element of V;
+      assume A19: x = a & b = y;
+     thus a + b = (the add of W).(a,b) by RLVECT_1:5
+               .= A.[a,b] by BINOP_1:def 1
+               .= (the add of V).[a,b] by A4,FUNCT_1:70
+               .= (the add of V).(x,y) by A19,BINOP_1:def 1
+               .= x + y by RLVECT_1:5;
+    end;
+A20: W is Abelian add-associative right_zeroed right_complementable
+     proof
+      thus W is Abelian
+       proof
+      let a,b be Element of W;
+       reconsider x = a, y = b as Element of V by TARSKI:def 3;
+      thus a + b = y + x by A18
+                .= b + a by A18;
+       end;
+      hereby let a,b,c be Element of W;
+       reconsider x = a, y = b, z = c as Element of V
+        by TARSKI:def 3;
+       A21: a + b = x + y & b + c = y + z by A18;
+      hence a + b + c = x + y + z by A18
+                    .= x + (y + z) by RLVECT_1:def 6
+                    .= a + (b + c) by A18,A21;
+      end;
+       A22: 0.W = 0.V by RLVECT_1:def 2;
+      hereby let a be Element of W;
+       reconsider x = a as Element of V by TARSKI:def 3;
+       thus a + 0.W = x + 0.V by A18,A22
+                   .= a by RLVECT_1:10;
+      end;
+      let a be Element of W;
+       reconsider x = a as Element of V by TARSKI:def 3;
+       reconsider a' = a as Element of D;
+       reconsider b = C.a' as Element of D;
+       reconsider b as Element of W;
+A23:    (comp V).x = C.x by A9,FUNCT_1:70;
+      take b;
+      thus a + b = x + (comp V).x by A18,A23
+                .= x + - x by VECTSP_1:def 25
+                .= 0.W by A22,RLVECT_1:16;
+     end;
+      W is VectSp-like
+     proof let a,b be Element of GF;
+           let v,w be Element of W;
+        reconsider x = v, y = w as Element of V
+         by TARSKI:def 3;
+       A24: now let a be Element of GF;
+                 let x be Element of W;
+                 let y be Element of V;
+         assume A25: y = x;
+          A26: [a,x] in dom M by A13;
+        thus a * x = M.(a,y) by A25,VECTSP_1:def 24
+                  .= M.[a,y] by BINOP_1:def 1
+                  .= (the lmult of V).[a,y] by A25,A26,FUNCT_1:70
+                  .= (the lmult of V).(a,y) by BINOP_1:def 1
+                  .= a * y by VECTSP_1:def 24;
+       end;
+       then A27: b * v = b * x & a * v = a * x & a * w = a * y;
+       then a * v + a * w = a * x + a * y & v + w = x + y by A18;
+      hence a * (v + w) = a * (x + y) by A24
+                       .= a * x + a * y by VECTSP_1:def 26
+                       .= a * v + a * w by A18,A27;
+      thus (a + b) * v = (a + b) * x by A24
+                      .= a * x + b * x by VECTSP_1:def 26
+                      .= a * v + b * v by A18,A27;
+      thus a * b * v = a * b * x by A24
+                    .= a * (b * x) by VECTSP_1:def 26
+                    .= a * (b * v) by A24,A27;
+      thus 1_ GF * v = 1_ GF * x by A24
+                   .= v by VECTSP_1:def 26;
+     end;
+   then reconsider W as Abelian add-associative right_zeroed
+    right_complementable VectSp-like (non empty VectSpStr over GF) by A20;
+      the Zero of W = the Zero of V by RLVECT_1:def 2;
+   then reconsider W as strict Subspace of V by Def2;
+  take W;
+  thus thesis;
+ end;
+
+ definition let GF; let V;
+  func (0).V -> strict Subspace of V means
+   :Def3: the carrier of it = {0.V};
+  correctness
+   proof {0.V} is lineary-closed & {0.V} <> {} by Th7;
+    hence thesis by Th37,Th42;
+   end;
+ end;
+
+ definition let GF; let V;
+  func (Omega).V -> strict Subspace of V equals
+   :Def4: the VectSpStr of V;
+  coherence
+   proof set W = the VectSpStr of V;
+A1:     now let a; let v,w be Element of W,
+                       v',w' be Element of V such that
+A2:        v=v' & w=w';
+        thus v+w = (the add of W).(v,w) by RLVECT_1:5
+                 .= v'+w' by A2,RLVECT_1:5;
+        thus a*v = (the lmult of W).(a,v) by VECTSP_1:def 24
+                .= a*v' by A2,VECTSP_1:def 24;
+       end;
+A3:  W is Abelian add-associative right_zeroed right_complementable
+      proof
+       thus W is Abelian
+        proof
+       let x,y be Element of W;
+       reconsider x' = x, y' = y as Element of V;
+       thus x+y = y'+x' by A1
+               .= y+x by A1;
+        end;
+A4:     0.W = the Zero of W by RLVECT_1:def 2
+           .= 0.V by RLVECT_1:def 2;
+       hereby let x,y,z be Element of W;
+       reconsider x' = x, y' = y, z' = z as Element of V;
+A5:     x + y = x' + y' & y + z = y' + z' by A1;
+       hence (x+y)+z = (x'+y')+z' by A1
+                   .= x'+(y'+z') by RLVECT_1:def 6
+                   .= x+(y+z) by A1,A5;
+       end;
+       hereby let x be Element of W;
+       reconsider x' = x as Element of V;
+       thus x+(0.W) = x'+0.V by A1,A4
+                   .= x by RLVECT_1:10;
+       end;
+       let x be Element of W;
+       reconsider x' = x as Element of V;
+       consider b being Element of V such that
+A6:     x' + b = 0.V by RLVECT_1:def 8;
+       reconsider b' = b as Element of W;
+       take b';
+       thus x+b' = 0.W by A1,A4,A6;
+      end;
+       W is VectSp-like
+      proof
+       let x,y be Element of GF,
+           v,w be Element of W;
+       reconsider v' = v, w' = w as Element of V;
+A7:     x*v' = x*v & y*v' = y*v & x*w' = x*w by A1;
+          v+w = v'+w' by A1;
+       hence x*(v+w) = x*(v'+w') by A1
+                   .= x*v'+x*w' by VECTSP_1:def 26
+                   .= x*v+x*w by A1,A7;
+       thus (x+y)*v = (x+y)*v' by A1
+                   .= x*v'+y*v' by VECTSP_1:def 26
+                   .= x*v+y*v by A1,A7;
+       thus (x*y)*v = (x*y)*v' by A1
+                   .= x*(y*v') by VECTSP_1:def 26
+                   .= x*(y*v) by A1,A7;
+       thus (1_ GF)*v = (1_ GF)*v' by A1
+                    .= v by VECTSP_1:def 26;
+      end;
+     then reconsider W as Abelian add-associative right_zeroed
+     right_complementable VectSp-like (non empty VectSpStr over GF) by A3;
+       W is Subspace of V
+      proof
+       thus
+           the carrier of W c= the carrier of V &
+         the Zero of W = the Zero of V;
+       thus thesis by FUNCT_2:40;
+      end;
+    hence thesis;
+   end;
+ end;
+
+canceled 3;
+
+theorem
+   x in (0).V iff x = 0.V
+  proof
+   thus x in (0).V implies x = 0.V
+    proof assume x in (0).V;
+      then x in the carrier of (0).V by RLVECT_1:def 1;
+      then x in {0.V} by Def3;
+     hence thesis by TARSKI:def 1;
+    end;
+   thus thesis by Th25;
+  end;
+
+theorem Th47:
+ (0).W = (0).V
+  proof
+     the carrier of (0).W = {0.W} &
+        the carrier of (0).V = {0.V} by Def3;
+    then the carrier of (0).W =
+         the carrier of (0).V & (0).W is Subspace of V by Th19,Th34;
+   hence thesis by Th37;
+  end;
+
+theorem Th48:
+ (0).W1 = (0).W2
+  proof (0).W1 = (0).V & (0).W2 = (0).V by Th47;
+   hence thesis;
+  end;
+
+theorem
+   (0).W is Subspace of V by Th34;
+
+theorem
+   (0).V is Subspace of W
+  proof the carrier of (0).V = {0.V} by Def3
+                               .= {0.W} by Th19
+                               .= {the Zero of W} by RLVECT_1:def 2;
+   hence thesis by Th35;
+  end;
+
+theorem
+   (0).W1 is Subspace of W2
+  proof (0).W1 = (0).W2 & (0).W2 is Subspace of W2 by Th48;
+   hence thesis;
+  end;
+
+canceled;
+
+theorem
+   for V being strict Abelian add-associative right_zeroed
+           right_complementable VectSp-like (non empty VectSpStr over GF) holds
+ V is Subspace of (Omega).V
+  proof let V be strict Abelian add-associative right_zeroed
+              right_complementable VectSp-like (non empty VectSpStr over GF);
+      V is Subspace of V by Th32;
+   hence thesis by Def4;
+  end;
+
+ definition let GF; let V; let v,W;
+  func v + W -> Subset of V equals
+   :Def5: {v + u : u in W};
+  coherence
+   proof
+     defpred Sep[set] means ex u st $1 = v + u & u in W;
+     consider X being set such that
+      A1: for x being set holds x in X iff x in the carrier of V & Sep[x]
+           from Separation;
+        X c= the carrier of V
+       proof let x be set;
+         assume x in X;
+        hence x in the carrier of V by A1;
+       end;
+      then reconsider X as Subset of V;
+     set Y = {v + u : u in W};
+       X = Y
+      proof
+       thus X c= Y
+       proof let x be set;
+         assume x in X;
+          then ex u st x = v + u & u in W by A1;
+        hence thesis;
+       end;
+       thus Y c= X
+       proof let x be set;
+         assume x in Y;
+          then ex u st x = v + u & u in W;
+        hence thesis by A1;
+       end;
+      end;
+    hence thesis;
+   end;
+ end;
+
+Lm3: 0.V + W = the carrier of W
+ proof set A = {0.V + u : u in W};
+   A1: 0.V + W = A by Def5;
+   A2: A c= the carrier of W
+    proof let x be set;
+      assume x in A;
+       then consider u such that A3: x = 0.V + u and A4: u in W;
+          x = u by A3,RLVECT_1:10;
+     hence thesis by A4,RLVECT_1:def 1;
+    end;
+     the carrier of W c= A
+    proof let x be set;
+      assume x in the carrier of W;
+        then A5: x in W by RLVECT_1:def 1;
+        then x in V by Th17;
+        then reconsider y = x as Element of V by RLVECT_1:def 1;
+          0.V + y = x by RLVECT_1:10;
+     hence thesis by A5;
+    end;
+  hence thesis by A1,A2,XBOOLE_0:def 10;
+ end;
+
+ definition let GF; let V; let W;
+  mode Coset of W -> Subset of V means
+   :Def6: ex v st it = v + W;
+  existence
+   proof
+     reconsider VW = the carrier of W as Subset of V by Def2;
+    take VW; take 0.V;
+    thus thesis by Lm3;
+   end;
+ end;
+
+reserve B,C for Coset of W;
+
+canceled 3;
+
+theorem Th57:  x in v + W iff ex u st u in W & x = v + u
+ proof
+  thus x in v + W implies ex u st u in W & x = v + u
+   proof assume x in v + W;
+      then x in {v + u : u in W} by Def5;
+     then consider u such that A1: x = v + u & u in W;
+    take u;
+    thus thesis by A1;
+   end;
+   given u such that A2: u in W & x = v + u;
+      x in {v + v1 : v1 in W} by A2;
+  hence thesis by Def5;
+ end;
+
+theorem Th58:
+ 0.V in v + W iff v in W
+  proof set A = {v + u : u in W};
+   thus 0.V in v + W implies v in W
+    proof assume 0.V in v + W;
+       then 0.V in A by Def5;
+      then consider u such that A1: 0.V = v + u and A2: u in W;
+         v = - u by A1,VECTSP_1:63;
+     hence thesis by A2,Th30;
+    end;
+    assume v in W;
+     then A3: - v in W by Th30;
+       0.V = v + (- v) by VECTSP_1:66;
+     then 0.V in A by A3;
+   hence thesis by Def5;
+  end;
+
+theorem Th59:
+ v in v + W
+  proof v + 0.V = v & 0.V in W by Th25,RLVECT_1:10;
+    then v in {v + u : u in W};
+   hence thesis by Def5;
+  end;
+
+theorem
+   0.V + W = the carrier of W by Lm3;
+
+theorem Th61:
+ v + (0).V = {v}
+  proof set A = {v + u : u in (0).V};
+   thus v + (0).V c= {v}
+    proof let x be set;
+      assume x in v + (0).V;
+        then x in A by Def5;
+       then consider u such that A1: x = v + u and A2: u in (0).V;
+          the carrier of (0).V = {0.V} &
+            u in the carrier of (0).V by A2,Def3,RLVECT_1:def 1;
+        then u = 0.V by TARSKI:def 1;
+        then x = v by A1,RLVECT_1:10;
+     hence thesis by TARSKI:def 1;
+    end;
+   let x be set;
+    assume x in {v};
+     then A3: x = v by TARSKI:def 1;
+       0.V in (0).V & v = v + 0.V by Th25,RLVECT_1:10;
+     then x in A by A3;
+   hence thesis by Def5;
+  end;
+
+Lm4: v in W iff v + W = the carrier of W
+ proof set A = {v + u : u in W};
+  thus v in W implies v + W = the carrier of W
+   proof assume A1: v in W;
+    thus v + W c= the carrier of W
+     proof let x be set;
+       assume x in v + W;
+         then x in A by Def5;
+        then consider u such that A2: x = v + u and A3: u in W;
+           v + u in W by A1,A3,Th28;
+      hence thesis by A2,RLVECT_1:def 1;
+     end;
+    let x be set;
+     assume x in the carrier of W;
+      then reconsider y = x, z = v as
+       Element of W by A1,RLVECT_1:def 1;
+
+      reconsider y1 = y, z1 = z as Element of V by Th18;
+       A4: y - z in W by RLVECT_1:def 1;
+       A5: z + (y - z) = z + (y + (- z)) by RLVECT_1:def 11
+                  .= y + (z + (- z)) by RLVECT_1:def 6
+                  .= y + 0.W by VECTSP_1:66
+                  .= x by RLVECT_1:10;
+       A6: y - z = y1 - z1 by Th24;
+       A7: y1 - z1 in W by A4,Th24;
+         z1 + (y1 - z1) = x by A5,A6,Th21;
+       then x in A by A7;
+    hence thesis by Def5;
+   end;
+   assume A8: v + W = the carrier of W;
+   assume A9: not v in W;
+      0.V in W & v + 0.V = v by Th25,RLVECT_1:10;
+    then v in {v + u : u in W};
+    then v in the carrier of W by A8,Def5;
+  hence thesis by A9,RLVECT_1:def 1;
+ end;
+
+theorem Th62:
+ v + (Omega).V = the carrier of V
+  proof
+A1: the carrier of the VectSpStr of V = the carrier of V;
+      (Omega).V = the VectSpStr of V by Def4;
+    then v in (Omega).V by RLVECT_1:3;
+    then v + (Omega).V = the carrier of (Omega).V by Lm4;
+   hence thesis by A1,Def4;
+  end;
+
+theorem Th63:
+ 0.V in v + W iff v + W = the carrier of W
+  proof
+      (0.V in v + W iff v in W) &
+    (v in W iff v + W = the carrier of W) by Lm4,Th58;
+   hence thesis;
+  end;
+
+theorem
+   v in W iff v + W = the carrier of W by Lm4;
+
+theorem Th65:
+ v in W implies (a * v) + W = the carrier of W
+  proof set A = {a * v + u : u in W};
+    assume A1: v in W;
+   thus (a * v) + W c= the carrier of W
+    proof let x be set;
+      assume x in (a * v) + W;
+        then x in A by Def5;
+       then consider u such that A2: x = a * v + u and A3: u in W;
+          a * v in W by A1,Th29;
+        then a * v + u in W by A3,Th28;
+     hence thesis by A2,RLVECT_1:def 1;
+    end;
+   let x be set;
+    assume A4: x in the carrier of W;
+        the carrier of W c= the carrier of V &
+       v in V by Def2,RLVECT_1:3;
+     then reconsider y = x as
+      Element of V by A4;
+        a * v in W & x in W by A1,A4,Th29,RLVECT_1:def 1;
+      then A5: y - a * v in W by Th31;
+        a * v + (y - a * v) = a * v + (y + - (a * v)) by RLVECT_1:def 11
+                         .= y + (a * v + - (a * v)) by RLVECT_1:def 6
+                         .= y + 0.V by VECTSP_1:66
+                         .= x by RLVECT_1:10;
+      then x in A by A5;
+   hence thesis by Def5;
+  end;
+
+theorem Th66:
+ for GF being Field, V being VectSp of GF,
+     a being Element of GF,
+     v being Element of V,
+     W being Subspace of V
+  st a <> 0.GF & (a * v) + W = the carrier of W holds v in W
+  proof
+   let GF be Field, V be VectSp of GF,
+       a be Element of GF,
+       v be Element of V,
+       W be Subspace of V;
+   assume that A1: a <> 0.GF and
+                    A2: (a * v) + W = the carrier of W;
+    assume not v in W;
+     then not 1_ GF * v in W by VECTSP_1:def 26;
+     then not (a" * a) * v in W by A1,VECTSP_1:def 22;
+     then not a" * (a * v) in W by VECTSP_1:def 26;
+     then A3: not a * v in W by Th29;
+       0.V in W & a * v + 0.V = a * v by Th25,RLVECT_1:10;
+     then a * v in
+      {a * v + u where u is Vector of V : u in W};
+     then a * v in the carrier of W by A2,Def5;
+   hence contradiction by A3,RLVECT_1:def 1;
+  end;
+
+theorem
+   for GF being Field, V being VectSp of GF,
+     v being Element of V,
+     W being Subspace of V
+ holds v in W iff - v + W = the carrier of W
+  proof
+   let GF be Field, V be VectSp of GF,
+       v be Element of V,
+       W be Subspace of V;
+     1_ GF <> 0.GF & 0.GF = - 0.GF by RLVECT_1:25,VECTSP_1:def 21;
+    then - 1_ GF <> 0.GF by VECTSP_2:34;
+    then (v in W iff ((- 1_ GF) * v) + W = the carrier of W) &
+     (- 1_ GF) * v = - v by Th65,Th66,VECTSP_1:59;
+   hence thesis;
+  end;
+
+theorem Th68:
+ u in W iff v + W = (v + u) + W
+  proof
+    set A = {v + v1 : v1 in W};
+    set B = {(v + u) + v2 : v2 in W};
+   thus u in W implies v + W = (v + u) + W
+    proof assume A1: u in W;
+     thus v + W c= (v + u) + W
+      proof let x be set;
+        assume x in v + W;
+          then x in A by Def5;
+         then consider v1 such that A2: x = v + v1 and A3: v1 in W;
+          A4: v1 - u in W by A1,A3,Th31;
+            (v + u) + (v1 - u) = v + (u + (v1 - u)) by RLVECT_1:def 6
+                            .= v + ((v1 + u) - u) by RLVECT_1:42
+                            .= v + (v1 + (u - u)) by RLVECT_1:42
+                            .= v + (v1 + 0.V) by VECTSP_1:66
+                            .= x by A2,RLVECT_1:10;
+          then x in B by A4;
+       hence thesis by Def5;
+      end;
+     let x be set;
+      assume x in (v + u) + W;
+        then x in B by Def5;
+       then consider v2 such that A5: x = (v + u) + v2 and A6: v2 in W;
+        A7: u + v2 in W by A1,A6,Th28;
+          x = v + (u + v2) by A5,RLVECT_1:def 6;
+        then x in A by A7;
+     hence thesis by Def5;
+    end;
+    assume A8: v + W = (v + u) + W;
+        0.V in W & v + 0.V = v by Th25,RLVECT_1:10;
+      then v in A;
+      then v in (v + u) + W by A8,Def5;
+      then v in B by Def5;
+     then consider u1 such that A9: v = (v + u) + u1 and A10: u1 in W;
+        v = v + 0.V & v = v + (u + u1) by A9,RLVECT_1:10,def 6;
+      then u + u1 = 0.V by RLVECT_1:22;
+      then u = - u1 by VECTSP_1:63;
+   hence thesis by A10,Th30;
+  end;
+
+theorem
+   u in W iff v + W = (v - u) + W
+  proof
+    A1: (- u in W iff v + W = (v + (- u)) + W) & v + (- u) = v - u
+                                                 by Th68,RLVECT_1:def 11;
+      - u in W implies u in W
+     proof assume - u in W;
+       then - (- u) in W by Th30;
+      hence thesis by RLVECT_1:30;
+     end;
+   hence thesis by A1,Th30;
+  end;
+
+theorem Th70:
+ v in u + W iff u + W = v + W
+  proof set A = {u + v1 : v1 in W}; set B = {v + v2 : v2 in W};
+   thus v in u + W implies u + W = v + W
+    proof assume v in u + W;
+       then v in A by Def5;
+      then consider z being Element of V such that
+      A1: v = u + z and
+      A2: z in W;
+     thus u + W c= v + W
+      proof let x be set;
+        assume x in u + W;
+          then x in A by Def5;
+         then consider v1 such that A3: x = u + v1 and A4: v1 in W;
+          A5: v1 - z in W by A2,A4,Th31;
+            v - z = u + (z - z) by A1,RLVECT_1:42
+               .= u + 0.V by VECTSP_1:66
+               .= u by RLVECT_1:10;
+          then x = (v + (- z)) + v1 by A3,RLVECT_1:def 11
+                .= v + (v1 + (- z)) by RLVECT_1:def 6
+                .= v + (v1 - z) by RLVECT_1:def 11;
+          then x in B by A5;
+       hence thesis by Def5;
+      end;
+     let x be set;
+      assume x in v + W;
+        then x in B by Def5;
+       then consider v2 such that A6: x = v + v2 and A7: v2 in W;
+        A8: z + v2 in W by A2,A7,Th28;
+          x = u + (z + v2) by A1,A6,RLVECT_1:def 6;
+        then x in A by A8;
+     hence thesis by Def5;
+    end;
+   thus thesis by Th59;
+  end;
+
+theorem Th71:
+ u in v1 + W & u in v2 + W implies v1 + W = v2 + W
+  proof assume that A1: u in v1 + W and A2: u in v2 + W;
+    set A = {v1 + u1 : u1 in W};
+    set B = {v2 + u2 : u2 in W};
+        u in A by A1,Def5;
+     then consider x1 being Element of V such that
+      A3: u = v1 + x1 and A4: x1 in W;
+        u in B by A2,Def5;
+     then consider x2 being Element of V such that
+      A5: u = v2 + x2 and A6: x2 in W;
+   thus v1 + W c= v2 + W
+    proof let x be set;
+      assume x in v1 + W;
+        then x in A by Def5;
+       then consider u1 such that A7: x = v1 + u1 and A8: u1 in W;
+          u - x1 = v1 + (x1 - x1) by A3,RLVECT_1:42
+              .= v1 + 0.V by VECTSP_1:66
+              .= v1 by RLVECT_1:10;
+        then A9: x = (v2 + (x2 - x1)) + u1 by A5,A7,RLVECT_1:42
+                 .= v2 + ((x2 - x1) + u1) by RLVECT_1:def 6;
+          x2 - x1 in W by A4,A6,Th31;
+        then (x2 - x1) + u1 in W by A8,Th28;
+        then x in B by A9;
+     hence thesis by Def5;
+    end;
+   let x be set;
+    assume x in v2 + W;
+      then x in B by Def5;
+     then consider u1 such that A10: x = v2 + u1 and A11: u1 in W;
+        u - x2 = v2 + (x2 - x2) by A5,RLVECT_1:42
+            .= v2 + 0.V by VECTSP_1:66
+            .= v2 by RLVECT_1:10;
+      then A12: x = (v1 + (x1 - x2)) + u1 by A3,A10,RLVECT_1:42
+               .= v1 + ((x1 - x2) + u1) by RLVECT_1:def 6;
+        x1 - x2 in W by A4,A6,Th31;
+      then (x1 - x2) + u1 in W by A11,Th28;
+      then x in A by A12;
+   hence thesis by Def5;
+  end;
+
+theorem
+   for GF being Field, V being VectSp of GF,
+     a being Element of GF,
+     v being Element of V,
+     W being Subspace of V
+ st a <> 1_ GF & a * v in v + W holds v in W
+  proof
+   let GF be Field, V be VectSp of GF,
+      a be Element of GF,
+      v be Element of V,
+      W be Subspace of V;
+    assume that A1: a <> 1_ GF and A2: a * v in v + W;
+     A3: a - 1_ GF <> 0.GF by A1,RLVECT_1:35;
+       a * v in {v + u where u is Element of V
+               : u in W} by A2,Def5;
+    then consider u being Element of V such that
+    A4: a * v = v + u and A5: u in W;
+        u = u + 0.V by RLVECT_1:10
+         .= u + (v - v) by VECTSP_1:66
+         .= a * v - v by A4,RLVECT_1:42
+         .= a * v - 1_ GF * v by VECTSP_1:def 26
+         .= (a - 1_ GF) * v by Lm1;
+     then (a - 1_ GF)" * u = ((a - 1_ GF)" * (a - 1_ GF)) * v
+       by VECTSP_1:def 26;
+     then 1_ GF * v = (a - 1_ GF)" * u by A3,VECTSP_1:def 22;
+     then v = (a - 1_ GF)" * u by VECTSP_1:def 26;
+   hence thesis by A5,Th29;
+  end;
+
+theorem Th73:
+ v in W implies a * v in v + W
+  proof assume A1: v in W;
+     A2: a * v = (a - 0.GF) * v by RLVECT_1:26
+             .= (a - (1_ GF - 1_ GF)) * v by RLVECT_1:28
+             .= ((a - 1_ GF) + 1_ GF) * v by RLVECT_1:43
+             .= (a - 1_ GF) * v + 1_ GF * v by VECTSP_1:def 26
+             .= v + (a - 1_ GF) * v by VECTSP_1:def 26;
+       (a - 1_ GF) * v in W by A1,Th29;
+     then a * v in {v + u : u in W} by A2;
+   hence thesis by Def5;
+  end;
+
+theorem
+   v in W implies - v in v + W
+  proof assume v in W;
+    then (- 1_ GF) * v in v + W by Th73;
+   hence thesis by VECTSP_1:59;
+  end;
+
+theorem Th75:
+ u + v in v + W iff u in W
+  proof set A = {v + v1 : v1 in W};
+   thus u + v in v + W implies u in W
+    proof assume u + v in v + W;
+       then u + v in A by Def5;
+      then consider v1 such that A1: u + v = v + v1 and A2: v1 in W;
+     thus thesis by A1,A2,RLVECT_1:21;
+    end;
+    assume u in W;
+     then u + v in A;
+   hence thesis by Def5;
+  end;
+
+theorem
+   v - u in v + W iff u in W
+  proof
+    A1: v - u = (- u) + v by RLVECT_1:def 11;
+    A2: u in W implies - u in W by Th30;
+      - u in W implies - (- u) in W by Th30;
+   hence thesis by A1,A2,Th75,RLVECT_1:30;
+  end;
+
+canceled;
+
+theorem
+   u in v + W iff
+  (ex v1 st v1 in W & u = v - v1)
+   proof set A = {v + v2 : v2 in W};
+    thus u in v + W implies (ex v1 st v1 in W & u = v - v1)
+     proof assume u in v + W;
+        then u in A by Def5;
+       then consider v1 such that A1: u = v + v1 and A2: v1 in W;
+      take x = - v1;
+      thus x in W by A2,Th30;
+        u = v + (- (- v1)) by A1,RLVECT_1:30
+       .= v - (- v1) by RLVECT_1:def 11;
+      hence thesis;
+     end;
+     given v1 such that A3: v1 in W & u = v - v1;
+        u = v + (- v1) & - v1 in W by A3,Th30,RLVECT_1:def 11;
+      then u in A;
+    hence thesis by Def5;
+   end;
+
+theorem Th79:
+ (ex v st v1 in v + W & v2 in v + W) iff v1 - v2 in W
+  proof
+   thus (ex v st v1 in v + W & v2 in v + W) implies v1 - v2 in W
+    proof given v such that A1: v1 in v + W and A2: v2 in v + W;
+      consider u1 such that A3: u1 in W and A4: v1 = v + u1 by A1,Th57;
+      consider u2 such that A5: u2 in W and A6: v2 = v + u2 by A2,Th57;
+         v1 - v2 = (u1 + v) + (- (v + u2)) by A4,A6,RLVECT_1:def 11
+              .= (u1 + v) + ((- v) - u2) by VECTSP_1:64
+              .= ((u1 + v) + (- v)) - u2 by RLVECT_1:42
+              .= (u1 + (v + (- v))) - u2 by RLVECT_1:def 6
+              .= (u1 + 0.V) - u2 by RLVECT_1:16
+              .= u1 - u2 by RLVECT_1:10;
+     hence thesis by A3,A5,Th31;
+    end;
+    assume v1 - v2 in W;
+    then A7: - (v1 - v2) in W by Th30;
+   take v1;
+   thus v1 in v1 + W by Th59;
+        v1 + (- (v1 - v2)) = v1 + ((- v1) + v2) by VECTSP_1:64
+                        .= (v1 + (- v1)) + v2 by RLVECT_1:def 6
+                        .= 0.V + v2 by RLVECT_1:16
+                        .= v2 by RLVECT_1:10;
+   hence thesis by A7,Th57;
+  end;
+
+theorem Th80:
+ v + W = u + W implies
+  (ex v1 st v1 in W & v + v1 = u)
+   proof
+     assume A1: v + W = u + W;
+    take v1 = u - v;
+         v in u + W by A1,Th59;
+       then v in {u + u2 : u2 in W} by Def5;
+      then consider u1 such that A2: v = u + u1 and A3: u1 in W;
+         0.V = (u + u1) - v by A2,VECTSP_1:66
+               .= u + (u1 - v) by RLVECT_1:42
+               .= u + ((- v) + u1) by RLVECT_1:def 11
+               .= (u + (- v)) + u1 by RLVECT_1:def 6
+               .= u1 + (u - v) by RLVECT_1:def 11;
+        then v1 = - u1 by VECTSP_1:63;
+    hence v1 in W by A3,Th30;
+    thus v + v1 = (u + v) - v by RLVECT_1:42
+               .= u + (v - v) by RLVECT_1:42
+               .= u + 0.V by VECTSP_1:66
+               .= u by RLVECT_1:10;
+   end;
+
+theorem Th81:
+ v + W = u + W implies
+  (ex v1 st v1 in W & v - v1 = u)
+   proof
+     assume A1: v + W = u + W;
+    take v1 = v - u;
+         u in v + W by A1,Th59;
+       then u in {v + u2 : u2 in W} by Def5;
+      then consider u1 such that A2: u = v + u1 and A3: u1 in W;
+         0.V = (v + u1) - u by A2,VECTSP_1:66
+               .= v + (u1 - u) by RLVECT_1:42
+               .= v + ((- u) + u1) by RLVECT_1:def 11
+               .= (v + (- u)) + u1 by RLVECT_1:def 6
+               .= u1 + (v - u) by RLVECT_1:def 11;
+        then v1 = - u1 by VECTSP_1:63;
+    hence v1 in W by A3,Th30;
+    thus v - v1 = (v - v) + u by RLVECT_1:43
+               .= 0.V + u by VECTSP_1:66
+               .= u by RLVECT_1:10;
+   end;
+
+theorem Th82:
+ for W1,W2 being strict Subspace of V
+  holds v + W1 = v + W2 iff W1 = W2
+  proof let W1,W2 be strict Subspace of V;
+   thus v + W1 = v + W2 implies W1 = W2
+    proof assume A1: v + W1 = v + W2;
+        the carrier of W1 = the carrier of W2
+       proof A2: the carrier of W1 c=
+                 the carrier of V by Def2;
+             A3: the carrier of W2 c=
+                 the carrier of V by Def2;
+        thus the carrier of W1 c=
+              the carrier of W2
+         proof let x be set;
+           assume A4: x in the carrier of W1;
+            then reconsider y = x as
+             Element of V by A2;
+
+            set z = v + y;
+               x in W1 by A4,RLVECT_1:def 1;
+             then z in {v + u : u in W1};
+             then z in v + W2 by A1,Def5;
+             then z in {v + u : u in W2} by Def5;
+            then consider u such that A5: z = v + u and A6: u in W2;
+               y = u by A5,RLVECT_1:21;
+          hence thesis by A6,RLVECT_1:def 1;
+         end;
+        let x be set;
+         assume A7: x in the carrier of W2;
+          then reconsider y = x as
+           Element of V by A3;
+
+           set z = v + y;
+              x in W2 by A7,RLVECT_1:def 1;
+            then z in {v + u : u in W2};
+            then z in v + W1 by A1,Def5;
+            then z in {v + u : u in W1} by Def5;
+          then consider u such that A8: z = v + u and A9: u in W1;
+              y = u by A8,RLVECT_1:21;
+        hence thesis by A9,RLVECT_1:def 1;
+       end;
+     hence thesis by Th37;
+    end;
+   thus thesis;
+  end;
+
+theorem Th83:
+ for W1,W2 being strict Subspace of V st v + W1 = u + W2
+  holds W1 = W2
+  proof let W1,W2 be strict Subspace of V;
+   assume A1: v + W1 = u + W2;
+     set V1 = the carrier of W1;
+     set V2 = the carrier of W2;
+    assume A2: W1 <> W2;
+      then V1 <> V2 by Th37;
+      then A3: not V1 c= V2 or not V2 c= V1 by XBOOLE_0:def 10;
+
+      A4: now assume A5: V1 \ V2 <> {};
+        consider x being Element of V1 \ V2;
+            x in V1 & not x in V2 by A5,XBOOLE_0:def 4;
+          then A6: x in W1 & not x in W2 by RLVECT_1:def 1;
+          then x in V by Th17;
+        then reconsider x as Element of V by RLVECT_1:def 1;
+
+         set z = v + x;
+            z in {v + u2 : u2 in W1} by A6;
+          then z in u + W2 by A1,Def5;
+          then z in {u + u2 : u2 in W2} by Def5;
+        then consider u1 such that A7: z = u + u1 and A8: u1 in W2;
+            x = 0.V + x by RLVECT_1:10
+           .= (v + (- v)) + x by VECTSP_1:66
+           .= - v + (u + u1) by A7,RLVECT_1:def 6;
+          then A9: (v + (- v + (u + u1))) + W1 = v + W1 by A6,Th68;
+            v + (- v + (u + u1)) = (v + (- v)) + (u + u1) by RLVECT_1:def 6
+                              .= 0.V + (u + u1) by VECTSP_1:66
+                              .= u + u1 by RLVECT_1:10;
+          then (u + u1) + W2 = (u + u1) + W1 by A1,A8,A9,Th68;
+       hence thesis by A2,Th82;
+      end;
+        now assume A10: V2 \ V1 <> {};
+          consider x being Element of V2 \ V1;
+            x in V2 & not x in V1 by A10,XBOOLE_0:def 4;
+          then A11: x in W2 & not x in W1 by RLVECT_1:def 1;
+          then x in V by Th17;
+        then reconsider x as Element of V by RLVECT_1:def 1;
+
+         set z = u + x;
+            z in {u + u2 : u2 in W2} by A11;
+          then z in v + W1 by A1,Def5;
+          then z in {v + u2 : u2 in W1} by Def5;
+        then consider u1 such that A12: z = v + u1 and A13: u1 in W1;
+            x = 0.V + x by RLVECT_1:10
+           .= (u + (- u)) + x by VECTSP_1:66
+           .= - u + (v + u1) by A12,RLVECT_1:def 6;
+          then A14: (u + (- u + (v + u1))) + W2 = u + W2 by A11,Th68;
+            u + (- u + (v + u1)) = (u + (- u)) + (v + u1) by RLVECT_1:def 6
+                              .= 0.V + (v + u1) by VECTSP_1:66
+                              .= v + u1 by RLVECT_1:10;
+          then (v + u1) + W1 = (v + u1) + W2 by A1,A13,A14,Th68;
+       hence thesis by A2,Th82;
+      end;
+   hence thesis by A3,A4,XBOOLE_1:37;
+  end;
+
+theorem ex C st v in C
+ proof
+   reconsider C = v + W as Coset of W by Def6;
+  take C;
+  thus thesis by Th59;
+ end;
+
+theorem
+   C is lineary-closed iff C = the carrier of W
+  proof
+   thus C is lineary-closed implies C = the carrier of W
+    proof assume A1: C is lineary-closed;
+      consider v such that A2: C = v + W by Def6;
+         C <> {} by A2,Th59;
+       then 0.V in v + W by A1,A2,Th4;
+     hence thesis by A2,Th63;
+    end;
+   thus thesis by Lm2;
+  end;
+
+theorem
+   for W1,W2 being strict Subspace of V,
+     C1 being Coset of W1, C2 being Coset of W2 st C1 = C2
+     holds W1 = W2
+  proof
+   let W1,W2 be strict Subspace of V,
+       C1 be Coset of W1, C2 be Coset of W2;
+ A1:    ex v1 st C1 = v1 + W1 by Def6;
+       ex v2 st C2 = v2 + W2 by Def6;
+   hence thesis by A1,Th83;
+  end;
+
+theorem
+   {v} is Coset of (0).V
+  proof v + (0).V = {v} by Th61;
+   hence thesis by Def6;
+  end;
+
+theorem
+   V1 is Coset of (0).V implies (ex v st V1 = {v})
+  proof assume V1 is Coset of (0).V;
+    then consider v such that A1: V1 = v + (0).V by Def6;
+   take v;
+   thus thesis by A1,Th61;
+  end;
+
+theorem
+   the carrier of W is Coset of W
+  proof the carrier of W = 0.V + W by Lm3;
+   hence thesis by Def6;
+  end;
+
+theorem
+   the carrier of V is Coset of (Omega).V
+  proof
+      the carrier of V c= the carrier of V;
+    then reconsider A = the carrier of V as Subset of V;
+    consider v;
+       A = v + (Omega).V by Th62;
+   hence thesis by Def6;
+  end;
+
+theorem
+   V1 is Coset of (Omega).V implies V1 = the carrier of V
+  proof assume V1 is Coset of (Omega).V;
+    then ex v st V1 = v + (Omega).V by Def6;
+   hence thesis by Th62;
+  end;
+
+theorem
+   0.V in C iff C = the carrier of W
+  proof
+       ex v st C = v + W by Def6;
+   hence thesis by Th63;
+  end;
+
+theorem Th93:
+ u in C iff C = u + W
+  proof
+   thus u in C implies C = u + W
+    proof assume A1: u in C;
+         ex v st C = v + W by Def6;
+     hence thesis by A1,Th70;
+    end;
+   thus thesis by Th59;
+  end;
+
+theorem
+   u in C & v in C implies (ex v1 st v1 in W & u + v1 = v)
+  proof assume u in C & v in C;
+    then C = u + W & C = v + W by Th93;
+   hence thesis by Th80;
+  end;
+
+theorem
+   u in C & v in C implies (ex v1 st v1 in W & u - v1 = v)
+  proof assume u in C & v in C;
+    then C = u + W & C = v + W by Th93;
+   hence thesis by Th81;
+  end;
+
+theorem
+   (ex C st v1 in C & v2 in C) iff v1 - v2 in W
+  proof
+   thus (ex C st v1 in C & v2 in C) implies v1 - v2 in W
+    proof given C such that A1: v1 in C & v2 in C;
+         ex v st C = v + W by Def6;
+     hence thesis by A1,Th79;
+    end;
+    assume v1 - v2 in W;
+     then consider v such that A2: v1 in v + W & v2 in v + W by Th79;
+     reconsider C = v + W as Coset of W by Def6;
+   take C;
+   thus thesis by A2;
+  end;
+
+theorem
+   u in B & u in C implies B = C
+  proof assume A1: u in B & u in C;
+ A2:    ex v1 st B = v1 + W by Def6;
+       ex v2 st C = v2 + W by Def6;
+   hence thesis by A1,A2,Th71;
+  end;
+
+::
+::  Auxiliary theorems.
+::
+
+
+
+canceled 5;
+
+theorem
+   for GF be add-associative right_zeroed right_complementable
+    Abelian commutative associative left_unital distributive
+         (non empty doubleLoopStr),
+     V be Abelian add-associative right_zeroed
+          right_complementable VectSp-like (non empty VectSpStr over GF),
+  a,b being Element of GF,
+  v being Element of V
+  holds (a - b) * v = a * v - b * v by Lm1;

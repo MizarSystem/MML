@@ -1,0 +1,422 @@
+:: Integer and Rational Exponents
+::  by Konrad Raczkowski
+::
+:: Received September 21, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, INT_1, RAT_1, SEQ_1, SEQ_2, FUNCT_1, ORDINAL2, SEQM_3,
+      GROUP_1, SQUARE_1, ARYTM_3, RELAT_1, ARYTM_1, SEQ_4, ABSVALUE, LATTICES,
+      PREPOWER;
+ notation SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1, ABSVALUE,
+      NAT_1, NEWTON, FUNCT_1, SEQ_1, SEQ_2, SEQM_3, GROUP_1, INT_1, SQUARE_1,
+      SEQ_4, RAT_1;
+ constructors REAL_1, NAT_1, SEQ_2, SEQM_3, SQUARE_1, SEQ_4, RAT_1, PARTFUN1,
+      NEWTON, GROUP_1, MEMBERED, XBOOLE_0;
+ clusters INT_1, RAT_1, XREAL_0, SEQ_1, RELSET_1, NEWTON, NAT_1, MEMBERED,
+      ZFMISC_1, XBOOLE_0, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+reserve x for set;
+reserve a, b, c for real number;
+reserve m, n, m1, m2 for Nat;
+reserve k, l, i for Integer;
+reserve p, q for Rational;
+reserve s1, s2 for Real_Sequence;
+
+canceled;
+
+theorem :: PREPOWER:2
+s1 is convergent & (for n holds s1.n>=a) implies lim s1 >= a;
+
+theorem :: PREPOWER:3
+s1 is convergent & (for n holds s1.n<=a) implies lim s1 <= a;
+
+definition let a be real number;
+func a GeoSeq -> Real_Sequence means
+:: PREPOWER:def 1
+ for m holds it.m = a|^m;
+end;
+
+theorem :: PREPOWER:4
+ s1 = a GeoSeq iff s1.0 = 1 & for m holds s1.(m+1) = s1.m * a;
+
+theorem :: PREPOWER:5
+  for a st a <> 0 holds for m holds a GeoSeq.m <> 0;
+
+definition let a be real number; let n;
+ redefine func a|^n;
+end;
+
+definition let a be Real; let n;
+ redefine func a |^ n -> Real;
+end;
+
+canceled 6;
+
+theorem :: PREPOWER:12
+ 0 <> a implies 0 <> a |^ n;
+
+theorem :: PREPOWER:13
+ 0 < a implies 0 < a |^ n;
+
+theorem :: PREPOWER:14
+  (1/a) |^ n = 1 / a |^ n;
+
+theorem :: PREPOWER:15
+  (b/a) |^ n = b |^ n / a |^ n;
+
+canceled;
+
+theorem :: PREPOWER:17
+ 0 < a & a <= b implies a |^ n <= b |^ n;
+
+theorem :: PREPOWER:18
+0 <= a & a < b & 1 <= n implies a |^ n < b |^ n;
+
+theorem :: PREPOWER:19
+a>=1 implies a |^ n >= 1;
+
+theorem :: PREPOWER:20
+ 1 <= a & 1 <= n implies a <= a |^ n;
+
+theorem :: PREPOWER:21
+  1 < a & 2 <= n implies a < a |^ n;
+
+theorem :: PREPOWER:22
+ 0 < a & a <= 1 & 1 <= n implies a |^ n <= a;
+
+theorem :: PREPOWER:23
+  0 < a & a < 1 & 2 <= n implies a |^ n < a;
+
+theorem :: PREPOWER:24 ::Bernoulli inequality
+ -1 < a implies (1 + a) |^ n >= 1 + n * a;
+
+theorem :: PREPOWER:25
+ 0 < a & a < 1 implies (1 + a) |^ n <= 1 + 3 |^ n * a;
+
+theorem :: PREPOWER:26
+s1 is convergent & (for n holds s2.n = (s1.n) |^ m) implies
+s2 is convergent & lim s2 = (lim s1) |^ m;
+
+definition let n; let a be real number;
+assume  1 <= n;
+ canceled;
+
+func n -Root a -> real number means
+:: PREPOWER:def 3
+ it |^ n = a & it > 0 if a>0,
+       it = 0 if a=0;
+end;
+
+definition let n; let a be Real;
+ redefine func n -Root a -> Real;
+end;
+
+canceled;
+
+theorem :: PREPOWER:28
+a>=0 & n>=1 implies (n -Root a) |^ n = a & n -Root (a |^ n) = a;
+
+theorem :: PREPOWER:29
+n>=1 implies n -Root 1 = 1;
+
+theorem :: PREPOWER:30
+a>=0 implies 1 -Root a = a;
+
+theorem :: PREPOWER:31
+a>=0 & b>=0 & n>=1 implies n -Root (a*b) = n -Root a * n -Root b;
+
+theorem :: PREPOWER:32
+a>0 & n>=1 implies n -Root (1/a) = 1/(n -Root a);
+
+theorem :: PREPOWER:33
+  a>=0 & b>0 & n>=1 implies n -Root (a/b) = n -Root a / n -Root b;
+
+theorem :: PREPOWER:34
+a>=0 & n>=1 & m>=1 implies n -Root (m -Root a) = (n*m) -Root a;
+
+theorem :: PREPOWER:35
+a>=0 & n>=1 & m>=1 implies n -Root a * m -Root a = (n*m) -Root (a |^ (n+m));
+
+theorem :: PREPOWER:36
+0<=a & a<=b & n>=1 implies n -Root a <= n -Root b;
+
+theorem :: PREPOWER:37
+a>=0 & a<b & n>=1 implies n -Root a < n -Root b;
+
+theorem :: PREPOWER:38
+a>=1 & n>=1 implies n -Root a >= 1 & a >= n -Root a;
+
+theorem :: PREPOWER:39
+0<=a & a<1 & n>=1 implies a <= n -Root a & n -Root a < 1;
+
+theorem :: PREPOWER:40
+a>0 & n>=1 implies n -Root a - 1 <= (a-1)/n;
+
+theorem :: PREPOWER:41
+  a>=0 implies 2-Root a = sqrt a;
+
+theorem :: PREPOWER:42
+  for s being Real_Sequence, a st a > 0 & (for n st n>=1 holds s.n = n -Root a)
+holds s is convergent & lim s = 1;
+
+definition let a be real number; let k;
+func a #Z k equals
+:: PREPOWER:def 4
+  a |^ abs(k) if k >= 0,
+          (a |^ abs(k))" if k < 0;
+end;
+
+definition let a be real number; let k;
+ cluster a #Z k -> real;
+end;
+
+definition let a be Real; let k;
+ redefine func a #Z k -> Real;
+end;
+
+canceled;
+
+theorem :: PREPOWER:44
+ a #Z 0 = 1;
+
+theorem :: PREPOWER:45
+ a #Z 1 = a;
+
+theorem :: PREPOWER:46
+ a<>0 & i=n implies a #Z i = a |^ n;
+theorem :: PREPOWER:47
+ 1 #Z k = 1;
+
+theorem :: PREPOWER:48
+   a<>0 implies a #Z k <> 0;
+
+theorem :: PREPOWER:49
+ a>0 implies a #Z k > 0;
+
+theorem :: PREPOWER:50
+ (a*b) #Z k = a #Z k * b #Z k;
+
+theorem :: PREPOWER:51
+ a<>0 implies a #Z (-k) = 1/a #Z k;
+
+theorem :: PREPOWER:52
+ (1/a) #Z k = 1/a #Z k;
+
+theorem :: PREPOWER:53
+ a<>0 implies a #Z (m-n) = a |^ m / a |^ n;
+
+theorem :: PREPOWER:54
+ a<>0 implies a #Z (k+l) = a #Z k * a #Z l;
+
+theorem :: PREPOWER:55
+ a #Z k #Z l = a #Z (k*l);
+
+theorem :: PREPOWER:56
+ a>0 & n>=1 implies (n -Root a) #Z k = n -Root (a #Z k);
+
+definition let a be real number; let p;
+  func a #Q p equals
+:: PREPOWER:def 5
+   (denominator(p)) -Root (a #Z numerator(p));
+end;
+
+definition let a be real number; let p;
+ cluster a #Q p -> real;
+end;
+
+definition let a be Real; let p;
+  redefine func a #Q p -> Real;
+end;
+
+canceled;
+
+theorem :: PREPOWER:58
+ a > 0 & p = 0 implies a #Q p = 1;
+
+theorem :: PREPOWER:59
+ a > 0 & p = 1 implies a #Q p = a;
+
+theorem :: PREPOWER:60
+ a>0 & p=n implies a #Q p = a |^ n;
+
+theorem :: PREPOWER:61
+ a>0 & n>=1 & p = n" implies a #Q p = n -Root a;
+
+theorem :: PREPOWER:62
+ 1 #Q p = 1;
+
+theorem :: PREPOWER:63
+ a>0 implies a #Q p > 0;
+
+theorem :: PREPOWER:64
+ a>0 implies a #Q p * a #Q q = a #Q (p+q);
+
+theorem :: PREPOWER:65
+ a>0 implies 1 / a #Q p = a #Q (-p);
+
+theorem :: PREPOWER:66
+ a>0 implies a #Q p / a #Q q = a #Q (p-q);
+
+theorem :: PREPOWER:67
+ a>0 & b>0 implies (a*b) #Q p = a #Q p * b #Q p;
+
+theorem :: PREPOWER:68
+ a>0 implies (1/a) #Q p = 1/a #Q p;
+
+theorem :: PREPOWER:69
+ a>0 & b>0 implies (a/b) #Q p = a #Q p / b #Q p;
+
+theorem :: PREPOWER:70
+ a > 0 implies a #Q p #Q q = a #Q (p*q);
+
+theorem :: PREPOWER:71
+ a>=1 & p >= 0 implies a #Q p >= 1;
+
+theorem :: PREPOWER:72
+ a>=1 & p<=0 implies a #Q p <= 1;
+
+theorem :: PREPOWER:73
+ a>1 & p>0 implies a #Q p > 1;
+
+theorem :: PREPOWER:74
+ a>=1 & p>=q implies a #Q p >= a #Q q;
+
+theorem :: PREPOWER:75
+ a>1 & p>q implies a #Q p > a #Q q;
+
+theorem :: PREPOWER:76
+ a>0 & a<1 & p>0 implies a #Q p < 1;
+
+theorem :: PREPOWER:77
+  a>0 & a<=1 & p<=0 implies a #Q p >= 1;
+
+definition let IT be Real_Sequence;
+  attr IT is Rational_Sequence-like means
+:: PREPOWER:def 6
+   for n holds IT.n is Rational;
+end;
+
+definition
+  cluster Rational_Sequence-like Real_Sequence;
+end;
+
+definition
+  mode Rational_Sequence is Rational_Sequence-like Real_Sequence;
+end;
+
+definition let s be Rational_Sequence,n;
+redefine func s.n -> Rational;
+end;
+
+canceled;
+
+theorem :: PREPOWER:79
+ for a  be real number
+  ex s being Rational_Sequence st s is convergent & lim s = a
+& for n holds s.n<=a;
+
+theorem :: PREPOWER:80
+ for a ex s being Rational_Sequence st s is convergent & lim s = a
+& for n holds s.n>=a;
+
+definition let a be real number; let s be Rational_Sequence;
+  func a #Q s -> Real_Sequence means
+:: PREPOWER:def 7
+  for n holds it.n = a #Q (s.n);
+end;
+
+canceled;
+
+theorem :: PREPOWER:82
+for s being Rational_Sequence st s is convergent & a>0 holds
+a #Q s is convergent;
+
+theorem :: PREPOWER:83
+for s1,s2 being Rational_Sequence, a st s1 is convergent & s2 is convergent &
+lim s1 = lim s2 & a>0 holds a #Q s1 is convergent & a #Q s2 is convergent &
+lim a #Q s1 = lim a #Q s2;
+
+definition let a,b be real number;
+assume  a > 0;
+  func a #R b -> real number means
+:: PREPOWER:def 8
+  ex s being Rational_Sequence st s is convergent &
+     lim s = b & a #Q s is convergent & lim a #Q s = it;
+end;
+
+definition let a,b be Real;
+ redefine func a #R b -> Real;
+end;
+
+canceled;
+
+theorem :: PREPOWER:85
+ a > 0 implies a #R 0 = 1;
+
+theorem :: PREPOWER:86
+   a > 0 implies a #R 1 = a;
+
+theorem :: PREPOWER:87
+ 1 #R a = 1;
+
+theorem :: PREPOWER:88
+a>0 implies a #R p = a #Q p;
+
+theorem :: PREPOWER:89
+ a > 0 implies a #R (b+c) = a #R b * a #R c;
+
+theorem :: PREPOWER:90
+ a > 0 implies a #R (-c) = 1 / a #R c;
+
+theorem :: PREPOWER:91
+ a > 0 implies a #R (b-c) = a #R b / a #R c;
+
+theorem :: PREPOWER:92
+ a > 0 & b > 0 implies (a * b) #R c = a #R c * b #R c;
+
+theorem :: PREPOWER:93
+ a>0 implies (1/a) #R c = 1 / a #R c;
+
+theorem :: PREPOWER:94
+   a > 0 & b > 0 implies (a/b) #R c = a #R c / b #R c;
+
+theorem :: PREPOWER:95
+ a > 0 implies a #R b > 0;
+
+theorem :: PREPOWER:96
+a>=1 & c>=b implies a #R c >= a #R b;
+
+theorem :: PREPOWER:97
+a>1 & c>b implies a #R c > a #R b;
+
+theorem :: PREPOWER:98
+a>0 & a<=1 & c>=b implies a #R c <= a #R b;
+
+theorem :: PREPOWER:99
+ a >= 1 & b >= 0 implies a #R b >= 1;
+
+theorem :: PREPOWER:100
+ a > 1 & b > 0 implies a #R b > 1;
+
+theorem :: PREPOWER:101
+ a >= 1 & b <= 0 implies a #R b <= 1;
+
+theorem :: PREPOWER:102
+   a > 1 & b < 0 implies a #R b < 1;
+
+theorem :: PREPOWER:103
+s1 is convergent & s2 is convergent & lim s1 > 0 &
+(for n holds s1.n>0 & s2.n = (s1.n) #Q p) implies lim s2 = (lim s1) #Q p;
+
+theorem :: PREPOWER:104
+a>0 & s1 is convergent & s2 is convergent &
+(for n holds s2.n = a #R (s1.n)) implies lim s2 = a #R (lim s1);
+
+theorem :: PREPOWER:105
+   a > 0 implies a #R b #R c = a #R (b * c);

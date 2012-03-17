@@ -1,0 +1,417 @@
+:: Continuous Lattices between T$_0$ Spaces
+::  by Grzegorz Bancerek
+::
+:: Received September 24, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary YELLOW_1, PBOOLE, CARD_3, WAYBEL_3, MONOID_0, FUNCT_1, WAYBEL18,
+      PRE_TOPC, ORDERS_1, WAYBEL24, WAYBEL25, RELAT_2, TSP_1, ORDINAL2, CAT_1,
+      YELLOW_0, GROUP_1, BOOLE, YELLOW_9, WAYBEL11, FUNCT_3, RELAT_1, WELLORD1,
+      SEQ_1, T_0TOPSP, WAYBEL_0, SEQM_3, BINOP_1, QUANTAL1, FUNCOP_1, SUBSET_1,
+      BORSUK_1, GROUP_6, YELLOW16, TOPS_2, BHSP_3, REALSET1, URYSOHN1,
+      LATTICE3, LATTICES, FUNCTOR0, WAYBEL_1, PRALG_2, RLVECT_2, FUNCT_2,
+      PROB_1, CANTOR_1, FUNCT_4, WAYBEL_9, MCART_1, FINSET_1, FUNCT_5,
+      SETFAM_1, TARSKI, WAYBEL26;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, MCART_1, FINSET_1,
+      RELAT_1, FUNCT_1, RELSET_1, TOPS_2, FUNCT_3, FUNCT_4, FUNCT_5, STRUCT_0,
+      REALSET1, PROB_1, CARD_3, ZF_FUND1, PBOOLE, MONOID_0, PRALG_1, PRALG_2,
+      PRALG_3, PRE_CIRC, FUNCT_7, WELLORD1, ORDERS_1, LATTICE3, FUNCT_2,
+      GRCAT_1, PRE_TOPC, TSP_1, CANTOR_1, URYSOHN1, T_0TOPSP, BORSUK_1,
+      QUANTAL1, YELLOW_0, WAYBEL_0, YELLOW_1, YELLOW_2, WAYBEL_1, YELLOW_9,
+      WAYBEL_3, WAYBEL_9, WAYBEL11, WAYBEL18, WAYBEL24, WAYBEL25, YELLOW16;
+ constructors ENUMSET1, SEQM_3, ORDERS_3, WAYBEL_5, WAYBEL_1, WAYBEL17,
+      ZF_FUND1, QUANTAL1, GRCAT_1, CANTOR_1, TOPS_2, TSP_1, TDLAT_3, YELLOW_9,
+      URYSOHN1, NATTRA_1, TOLER_1, PRALG_3, FUNCT_7, WAYBEL18, WAYBEL24,
+      WAYBEL25, YELLOW16, MONOID_0, PROB_1;
+ clusters STRUCT_0, WAYBEL_0, WAYBEL_3, RELSET_1, YELLOW_1, LATTICE3, BORSUK_2,
+      WAYBEL10, WAYBEL17, YELLOW_9, YELLOW_0, FUNCT_1, SUBSET_1, MONOID_0,
+      PRE_TOPC, TOPS_1, TSP_1, YELLOW_2, YELLOW_6, WAYBEL_2, YELLOW14,
+      WAYBEL18, WAYBEL24, WAYBEL25, FINSET_1, YELLOW16, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+definition
+ let I be set;
+ let J be RelStr-yielding ManySortedSet of I;
+ redefine func product J; synonym I-POS_prod J;
+end;
+
+definition
+ let I be set;
+ let J be RelStr-yielding non-Empty ManySortedSet of I;
+ cluster I-POS_prod J -> constituted-Functions;
+end;
+
+definition
+ let I be set;
+ let J be TopSpace-yielding non-Empty ManySortedSet of I;
+ redefine func product J; synonym I-TOP_prod J;
+end;
+
+:: 4.1. DEFINITION (a)
+definition
+ let X,Y be non empty TopSpace;
+ func oContMaps(X, Y) -> non empty strict RelStr equals
+:: WAYBEL26:def 1
+
+  ContMaps(X, Omega Y);
+end;
+
+definition
+ let X,Y be non empty TopSpace;
+ cluster oContMaps(X, Y) -> reflexive transitive constituted-Functions;
+end;
+
+definition
+ let X be non empty TopSpace;
+ let Y be non empty T_0 TopSpace;
+ cluster oContMaps(X, Y) -> antisymmetric;
+end;
+
+theorem :: WAYBEL26:1
+ for X,Y being non empty TopSpace
+ for a being set holds
+   a is Element of oContMaps(X, Y) iff a is continuous map of X, Omega Y;
+
+theorem :: WAYBEL26:2
+ for X,Y being non empty TopSpace
+ for a being set holds
+   a is Element of oContMaps(X, Y) iff a is continuous map of X, Y;
+
+theorem :: WAYBEL26:3   :: see yellow14:9
+ for X,Y being non empty TopSpace
+ for a,b being Element of oContMaps(X,Y)
+ for f,g being map of X, Omega Y
+  st a = f & b = g holds a <= b iff f <= g;
+
+definition
+ let X,Y be non empty TopSpace;
+ let x be Point of X;
+ let A be Subset of oContMaps(X,Y);
+ redefine func pi(A,x) -> Subset of Omega Y;
+end;
+
+definition
+ let X,Y be non empty TopSpace;
+ let x be set;
+ let A be non empty Subset of oContMaps(X,Y);
+ cluster pi(A,x) -> non empty;
+end;
+
+theorem :: WAYBEL26:4
+ Omega Sierpinski_Space is TopAugmentation of BoolePoset 1;
+
+theorem :: WAYBEL26:5
+ for X being non empty TopSpace
+ ex f being map of InclPoset the topology of X, oContMaps(X, Sierpinski_Space)
+  st f is isomorphic &
+     for V being open Subset of X holds f.V = chi(V, the carrier of X);
+
+theorem :: WAYBEL26:6
+ for X being non empty TopSpace holds
+   InclPoset the topology of X, oContMaps(X, Sierpinski_Space) are_isomorphic;
+
+:: 4.1. DEFINITION (b)
+definition
+ let X,Y,Z be non empty TopSpace;
+ let f be continuous map of Y,Z;
+ func oContMaps(X, f) -> map of oContMaps(X, Y), oContMaps(X, Z) means
+:: WAYBEL26:def 2
+
+  for g being continuous map of X,Y holds it.g = f*g;
+ func oContMaps(f, X) -> map of oContMaps(Z, X), oContMaps(Y, X) means
+:: WAYBEL26:def 3
+
+  for g being continuous map of Z, X holds it.g = g*f;
+end;
+
+
+:: 4.2.  LEMMA (i)
+theorem :: WAYBEL26:7
+ for X being non empty TopSpace
+ for Y being monotone-convergence T_0-TopSpace
+  holds oContMaps(X,Y) is directed-sups-inheriting
+     SubRelStr of (Omega Y)|^the carrier of X;
+
+theorem :: WAYBEL26:8
+ for X being non empty TopSpace
+ for Y being monotone-convergence T_0-TopSpace
+  holds oContMaps(X, Y) is up-complete;
+
+theorem :: WAYBEL26:9
+ for X,Y,Z being non empty TopSpace
+ for f being continuous map of Y,Z
+  holds oContMaps(X, f) is monotone;
+
+theorem :: WAYBEL26:10
+   for X,Y being non empty TopSpace
+ for f being continuous map of Y,Y st f is idempotent
+  holds oContMaps(X, f) is idempotent;
+
+theorem :: WAYBEL26:11
+ for X,Y,Z being non empty TopSpace
+ for f being continuous map of Y,Z
+  holds oContMaps(f, X) is monotone;
+
+theorem :: WAYBEL26:12
+ for X,Y being non empty TopSpace
+ for f being continuous map of Y,Y st f is idempotent
+  holds oContMaps(f, X) is idempotent;
+
+theorem :: WAYBEL26:13
+ for X,Y,Z being non empty TopSpace
+ for f being continuous map of Y,Z
+ for x being Element of X, A being Subset of oContMaps(X, Y)
+   holds pi(oContMaps(X,f).:A, x) = f.:pi(A, x);
+
+:: 4.2.  LEMMA (ii)
+theorem :: WAYBEL26:14
+ for X being non empty TopSpace
+ for Y,Z being monotone-convergence T_0-TopSpace
+ for f being continuous map of Y,Z
+  holds oContMaps(X, f) is directed-sups-preserving;
+
+theorem :: WAYBEL26:15
+ for X,Y,Z being non empty TopSpace
+ for f being continuous map of Y,Z
+ for x being Element of Y, A being Subset of oContMaps(Z, X)
+   holds pi(oContMaps(f, X).:A, x) = pi(A, f.x);
+
+theorem :: WAYBEL26:16
+ for Y,Z being non empty TopSpace
+ for X being monotone-convergence T_0-TopSpace
+ for f being continuous map of Y,Z
+  holds oContMaps(f, X) is directed-sups-preserving;
+
+:: 4.3.  LEMMA (i) genralized
+theorem :: WAYBEL26:17
+ for X,Z being non empty TopSpace
+ for Y being non empty SubSpace of Z
+  holds oContMaps(X, Y) is full SubRelStr of oContMaps(X, Z);
+
+theorem :: WAYBEL26:18
+ for Z being monotone-convergence T_0-TopSpace
+ for Y being non empty SubSpace of Z
+ for f being continuous map of Z,Y st f is_a_retraction
+  holds Omega Y is directed-sups-inheriting SubRelStr of Omega Z;
+
+theorem :: WAYBEL26:19
+ for X being non empty TopSpace
+ for Z being monotone-convergence T_0-TopSpace
+ for Y being non empty SubSpace of Z
+ for f being continuous map of Z,Y st f is_a_retraction
+  holds
+   oContMaps(X, f) is_a_retraction_of oContMaps(X, Z), oContMaps(X, Y);
+
+theorem :: WAYBEL26:20
+ for X being non empty TopSpace
+ for Z being monotone-convergence T_0-TopSpace
+ for Y being non empty SubSpace of Z
+  st Y is_a_retract_of Z
+ holds oContMaps(X, Y) is_a_retract_of oContMaps(X, Z);
+
+theorem :: WAYBEL26:21
+ for X,Y,Z being non empty TopSpace
+ for f being continuous map of Y,Z st f is_homeomorphism
+  holds oContMaps(X, f) is isomorphic;
+
+theorem :: WAYBEL26:22
+ for X,Y,Z being non empty TopSpace
+  st Y,Z are_homeomorphic
+  holds oContMaps(X, Y), oContMaps(X, Z) are_isomorphic;
+
+:: 4.3.  LEMMA (ii)
+theorem :: WAYBEL26:23
+ for X being non empty TopSpace
+ for Z being monotone-convergence T_0-TopSpace
+ for Y being non empty SubSpace of Z
+  st Y is_a_retract_of Z & oContMaps(X, Z) is complete continuous
+ holds oContMaps(X, Y) is complete continuous;
+
+theorem :: WAYBEL26:24
+ for X being non empty TopSpace
+ for Y,Z being monotone-convergence T_0-TopSpace
+  st Y is_Retract_of Z & oContMaps(X, Z) is complete continuous
+ holds oContMaps(X, Y) is complete continuous;
+
+theorem :: WAYBEL26:25
+ for Y being non trivial T_0-TopSpace
+  st not Y is_T1
+ holds Sierpinski_Space is_Retract_of Y;
+
+theorem :: WAYBEL26:26
+ for X being non empty TopSpace
+ for Y being non trivial T_0-TopSpace
+  st oContMaps(X, Y) is with_suprema
+  holds not Y is_T1;
+
+definition
+ cluster Sierpinski_Space -> non trivial monotone-convergence;
+end;
+
+definition
+ cluster injective monotone-convergence non trivial T_0-TopSpace;
+end;
+
+:: 4.4.  PROPOSITION
+theorem :: WAYBEL26:27
+ for X being non empty TopSpace
+ for Y being monotone-convergence non trivial T_0-TopSpace
+  st oContMaps(X, Y) is complete continuous
+ holds InclPoset the topology of X is continuous;
+
+
+theorem :: WAYBEL26:28
+ for X being non empty TopSpace, x being Point of X
+ for Y being monotone-convergence T_0-TopSpace
+ ex F being directed-sups-preserving projection
+       map of oContMaps(X,Y), oContMaps(X,Y) st
+ (for f being continuous map of X,Y holds F.f = X --> (f.x)) &
+ ex h being continuous map of X,X st h = X --> x & F = oContMaps(h, Y);
+
+:: 4.5.  PROPOSITION
+theorem :: WAYBEL26:29
+ for X being non empty TopSpace, Y being monotone-convergence T_0-TopSpace
+  st oContMaps(X, Y) is complete continuous
+ holds Omega Y is complete continuous;
+
+theorem :: WAYBEL26:30
+ for X being non empty 1-sorted, I being non empty set
+ for J being TopSpace-yielding non-Empty ManySortedSet of I
+ for f being map of X, I-TOP_prod J
+ for i being Element of I
+  holds (commute f).i = proj(J,i)*f;
+
+theorem :: WAYBEL26:31
+ for S being 1-sorted, M being set holds
+  Carrier (M --> S) = M --> the carrier of S;
+
+theorem :: WAYBEL26:32
+ for X,Y being non empty TopSpace, M being non empty set
+ for f being continuous map of X, M-TOP_prod (M --> Y)
+  holds commute f is Function of M, the carrier of oContMaps(X, Y);
+
+theorem :: WAYBEL26:33
+ for X,Y being non empty TopSpace holds
+  the carrier of oContMaps(X, Y) c= Funcs(the carrier of X, the carrier of Y);
+
+theorem :: WAYBEL26:34
+ for X,Y being non empty TopSpace, M being non empty set
+ for f being Function of M, the carrier of oContMaps(X, Y)
+  holds commute f is continuous map of X, M-TOP_prod (M --> Y);
+
+theorem :: WAYBEL26:35
+ for X being non empty TopSpace, M being non empty set
+ ex F being map of oContMaps(X, M-TOP_prod (M --> Sierpinski_Space)),
+                   M-POS_prod (M --> oContMaps(X, Sierpinski_Space))
+  st F is isomorphic &
+     for f being continuous map of X, M-TOP_prod (M --> Sierpinski_Space)
+      holds F.f = commute f;
+
+theorem :: WAYBEL26:36
+ for X being non empty TopSpace, M being non empty set
+  holds
+   oContMaps(X, M-TOP_prod (M --> Sierpinski_Space)),
+    M-POS_prod (M --> oContMaps(X, Sierpinski_Space)) are_isomorphic;
+
+:: 4.6.  PROPOSITION
+theorem :: WAYBEL26:37
+ for X being non empty TopSpace st InclPoset the topology of X is continuous
+ for Y being injective T_0-TopSpace
+ holds
+  oContMaps(X, Y) is complete continuous;
+
+definition
+ cluster non trivial complete Scott TopLattice;
+end;
+
+
+:: 4.7.  THEOREM  p.129.
+theorem :: WAYBEL26:38
+   for X being non empty TopSpace
+ for L being non trivial complete Scott TopLattice
+  holds
+     oContMaps(X, L) is complete continuous
+   iff
+     InclPoset the topology of X is continuous & L is continuous;
+
+definition
+ let f be Function;
+ cluster Union disjoin f -> Relation-like;
+end;
+
+definition
+ let f be Function;
+ func *graph f -> Relation equals
+:: WAYBEL26:def 4
+  (Union disjoin f)~;
+end;
+
+reserve x,y for set, f for Function;
+
+theorem :: WAYBEL26:39
+ [x,y] in *graph f iff x in dom f & y in f.x;
+
+theorem :: WAYBEL26:40
+ for X being finite set holds proj1 X is finite & proj2 X is finite;
+
+:: 4.8.  LEMMA  p.130.
+theorem :: WAYBEL26:41
+ for X,Y being non empty TopSpace
+ for S being Scott TopAugmentation of InclPoset the topology of Y
+ for f being map of X, S
+  st *graph f is open Subset of [:X,Y:]
+  holds f is continuous;
+
+definition
+ let W be Relation, X be set;
+ func (W,X)*graph -> Function means
+:: WAYBEL26:def 5
+
+  dom it = X & for x st x in X holds it.x = W.:{x};
+end;
+
+theorem :: WAYBEL26:42
+ for W being Relation, X being set st dom W c= X
+  holds *graph((W,X)*graph) = W;
+
+definition
+ let X, Y be TopSpace;
+ cluster -> Relation-like Subset of [:X,Y:];
+ cluster -> Relation-like Element of the topology of [:X,Y:];
+end;
+
+theorem :: WAYBEL26:43
+ for X,Y being non empty TopSpace
+ for W being open Subset of [:X,Y:]
+ for x being Point of X
+   holds W.:{x} is open Subset of Y;
+
+:: 4.9.  PROPOSITION a) p.130.
+theorem :: WAYBEL26:44
+ for X,Y being non empty TopSpace
+ for S being Scott TopAugmentation of InclPoset the topology of Y
+ for W being open Subset of [:X,Y:]
+  holds (W, the carrier of X)*graph is continuous map of X, S;
+
+:: 4.9.  PROPOSITION b) p.130.
+theorem :: WAYBEL26:45
+ for X,Y being non empty TopSpace
+ for S being Scott TopAugmentation of InclPoset the topology of Y
+ for W1, W2 being open Subset of [:X,Y:] st W1 c= W2
+ for f1, f2 being Element of oContMaps(X, S)
+  st f1 = (W1, the carrier of X)*graph & f2 = (W2, the carrier of X)*graph
+  holds f1 <= f2;
+
+:: 4.9.  PROPOSITION  p.130.
+theorem :: WAYBEL26:46
+   for X,Y being non empty TopSpace
+ for S being Scott TopAugmentation of InclPoset the topology of Y
+ ex F being map of InclPoset the topology of [:X, Y:], oContMaps(X, S) st
+  F is monotone &
+  for W being open Subset of [:X,Y:] holds F.W = (W, the carrier of X)*graph;
+

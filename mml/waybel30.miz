@@ -1,0 +1,2375 @@
+:: Meet Continuous Lattices Revisited
+::  by Artur Korni{\l}owicz
+::
+:: Received January 6, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, TARSKI, RELAT_2, ORDERS_1, QUANTAL1, YELLOW_1, WAYBEL_0,
+      FILTER_2, LATTICE3, ORDINAL2, YELLOW_0, LATTICES, WAYBEL_2, REALSET1,
+      YELLOW_9, WAYBEL11, BHSP_3, WAYBEL_9, PRE_TOPC, PROB_1, WAYBEL19,
+      PRELAMB, CANTOR_1, SETFAM_1, DIRAF, SUBSET_1, FINSET_1, COMPTS_1,
+      YELLOW_6, TOPS_1, WAYBEL29, YELLOW13, WAYBEL21, RELAT_1, PARTFUN1,
+      FUNCT_3, FUNCT_1, TOPS_2, WAYBEL_3, RLVECT_3, TDLAT_3, CONNSP_2,
+      FILTER_0, WAYBEL_8, WAYBEL_6, WAYBEL30;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELSET_1, FUNCT_1,
+      FUNCT_2, FUNCT_3, STRUCT_0, FINSET_1, REALSET1, ORDERS_1, PRE_TOPC,
+      TOPS_1, TOPS_2, COMPTS_1, CONNSP_2, TDLAT_3, LATTICE3, BORSUK_1,
+      CANTOR_1, YELLOW_0, WAYBEL_0, YELLOW_1, WAYBEL_1, YELLOW_3, YELLOW_4,
+      WAYBEL_2, WAYBEL_3, YELLOW_6, YELLOW_8, WAYBEL_6, WAYBEL_8, WAYBEL_9,
+      WAYBEL11, YELLOW_9, WAYBEL19, WAYBEL21, YELLOW13, WAYBEL29;
+ constructors CANTOR_1, GROUP_1, TOPS_1, TOPS_2, TDLAT_3, YELLOW_4, YELLOW_8,
+      WAYBEL_1, WAYBEL_6, WAYBEL_8, WAYBEL19, ORDERS_3, URYSOHN1, WAYBEL21,
+      YELLOW13, WAYBEL29, MEMBERED;
+ clusters STRUCT_0, FINSET_1, BORSUK_1, SUBSET_1, TEX_1, TOPS_1, CANTOR_1,
+      LATTICE3, YELLOW_0, YELLOW_1, YELLOW_2, YELLOW_3, YELLOW_4, YELLOW_6,
+      WAYBEL_0, WAYBEL_2, WAYBEL_3, WAYBEL_8, WAYBEL10, WAYBEL11, WAYBEL14,
+      YELLOW_9, WAYBEL19, YELLOW12, WAYBEL_4, RELSET_1, YELLOW13, MEMBERED,
+      ZFMISC_1;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, PRE_TOPC, LATTICE3, YELLOW_0, WAYBEL_0, WAYBEL_2,
+      WAYBEL_3, YELLOW_8, YELLOW_9, WAYBEL19, WAYBEL11, YELLOW13, XBOOLE_0;
+ theorems TARSKI, PRE_TOPC, ORDERS_1, TOPS_1, TOPS_2, BORSUK_1, CONNSP_2,
+      TEX_2, TDLAT_3, COMPTS_1, CANTOR_1, LATTICE3, RELAT_1, ZFMISC_1, FUNCT_1,
+      FUNCT_2, FUNCT_3, RELSET_1, YELLOW_0, YELLOW_1, YELLOW_2, YELLOW_3,
+      YELLOW_4, YELLOW_6, YELLOW_8, WAYBEL_0, WAYBEL_2, WAYBEL_3, WAYBEL_8,
+      YELLOW13, WAYBEL11, WAYBEL12, WAYBEL14, YELLOW_9, WAYBEL19, YELLOW12,
+      WAYBEL21, WAYBEL29, SETFAM_1, XBOOLE_0, XBOOLE_1;
+ schemes SETFAM_1, FINSET_1, YELLOW_2;
+
+begin
+
+theorem Th1:
+ for x being set, D being non empty set holds
+  x /\ union D = union {x /\ d where d is Element of D: not contradiction}
+  proof
+    let x be set,
+        D be non empty set;
+    hereby
+      let a be set;
+      assume a in x /\ union D;
+then A1:   a in x & a in union D by XBOOLE_0:def 3;
+      then consider Z being set such that
+A2:     a in Z & Z in D by TARSKI:def 4;
+A3:   a in x /\ Z by A1,A2,XBOOLE_0:def 3;
+        x /\ Z in {x /\ d where d is Element of D: not contradiction} by A2;
+      hence a in union {x /\ d where d is Element of D: not contradiction}
+        by A3,TARSKI:def 4;
+    end;
+    let a be set;
+    assume a in union {x /\ d where d is Element of D: not contradiction};
+    then consider Z being set such that
+A4:   a in Z & Z in {x /\ d where d is Element of D: not contradiction}
+        by TARSKI:def 4;
+    consider d being Element of D such that
+A5:   Z = x /\ d and not contradiction by A4;
+A6: a in x & a in d by A4,A5,XBOOLE_0:def 3;
+    then a in union D by TARSKI:def 4;
+    hence a in x /\ union D by A6,XBOOLE_0:def 3;
+  end;
+
+theorem Th2:
+ for R being non empty reflexive transitive RelStr,
+     D being non empty directed Subset of InclPoset Ids R holds
+   union D is Ideal of R
+  proof
+    let R be non empty reflexive transitive RelStr,
+        D be non empty directed Subset of InclPoset Ids R;
+A1: Ids R = {X where X is Ideal of R: not contradiction} by WAYBEL_0:def 23;
+      D c= the carrier of InclPoset Ids R;
+then A2: D c= Ids R by YELLOW_1:1;
+A3: D c= bool the carrier of R
+    proof
+      let d be set;
+      assume d in D;
+      then d in Ids R by A2;
+      then ex I being Ideal of R st d = I & not contradiction by A1;
+      hence thesis;
+    end;
+    consider d being Element of D;
+      d in D;
+    then d in Ids R by A2;
+    then consider I being Ideal of R such that
+A4:   d = I and not contradiction by A1;
+    consider i being Element of I;
+A5: i in d by A4;
+A6: for X being Subset of R st X in D holds X is directed
+    proof
+      let X be Subset of R;
+      assume X in D;
+      then X in Ids R by A2;
+      then ex I being Ideal of R st X = I & not contradiction by A1;
+      hence thesis;
+    end;
+A7: for X, Y being Subset of R st X in D & Y in D
+     ex Z being Subset of R st Z in D & X \/ Y c= Z
+    proof
+      let X, Y be Subset of R;
+      assume
+A8:     X in D & Y in D;
+      then reconsider X1 = X, Y1 = Y as Element of InclPoset Ids R
+       ;
+      consider Z1 being Element of InclPoset Ids R such that
+A9:     Z1 in D & X1 <= Z1 & Y1 <= Z1 by A8,WAYBEL_0:def 1;
+        Z1 in Ids R by A2,A9;
+      then ex I being Ideal of R st Z1 = I & not contradiction by A1;
+      then reconsider Z = Z1 as Subset of R;
+      take Z;
+      thus Z in D by A9;
+        X1 c= Z1 & Y1 c= Z1 by A9,YELLOW_1:3;
+      hence X \/ Y c= Z by XBOOLE_1:8;
+    end;
+      for X being Subset of R st X in D holds X is lower
+    proof
+      let X be Subset of R;
+      assume X in D;
+      then X in Ids R by A2;
+      then ex I being Ideal of R st X = I & not contradiction by A1;
+      hence thesis;
+    end;
+    hence thesis by A3,A5,A6,A7,TARSKI:def 4,WAYBEL_0:26,46;
+  end;
+
+Lm1:
+  now
+    let R be non empty reflexive transitive RelStr,
+        D be non empty directed Subset of InclPoset Ids R,
+        UD be Element of InclPoset Ids R such that
+A1:   UD = union D;
+    thus D is_<=_than UD
+    proof
+      let d be Element of InclPoset Ids R;
+      assume
+A2:     d in D;
+        d c= UD
+      proof
+        let a be set;
+        assume a in d;
+        hence a in UD by A1,A2,TARSKI:def 4;
+      end;
+      hence d <= UD by YELLOW_1:3;
+    end;
+  end;
+
+Lm2:
+  now
+    let R be non empty reflexive transitive RelStr,
+        D be non empty directed Subset of InclPoset Ids R,
+        UD be Element of InclPoset Ids R such that
+A1:   UD = union D;
+    thus for b being Element of InclPoset Ids R st b is_>=_than D holds UD <=
+b
+    proof
+      let b be Element of InclPoset Ids R such that
+A2:     for a being Element of InclPoset Ids R st a in D holds b >= a;
+        UD c= b
+      proof
+        let x be set;
+        assume x in UD;
+        then consider Z being set such that
+A3:       x in Z & Z in D by A1,TARSKI:def 4;
+        reconsider Z as Element of InclPoset Ids R by A3;
+          b >= Z by A2,A3;
+        then Z c= b by YELLOW_1:3;
+        hence x in b by A3;
+      end;
+      hence UD <= b by YELLOW_1:3;
+    end;
+  end;
+
+:: Exercise 2.16 (i), p. 16
+definition let R be non empty reflexive transitive RelStr;
+ cluster InclPoset Ids R -> up-complete;
+coherence
+  proof
+    set I = InclPoset Ids R;
+    let D be non empty directed Subset of I;
+    reconsider UD = union D as Ideal of R by Th2;
+      Ids R = {X where X is Ideal of R: not contradiction} by WAYBEL_0:def 23;
+    then UD in Ids R;
+    then UD in the carrier of InclPoset Ids R by YELLOW_1:1;
+    then reconsider UD as Element of I;
+    take UD;
+    thus thesis by Lm1,Lm2;
+  end;
+end;
+
+theorem Th3:
+ for R being non empty reflexive transitive RelStr,
+     D being non empty directed Subset of InclPoset Ids R holds
+  sup D = union D
+  proof
+    let R be non empty reflexive transitive RelStr,
+        D be non empty directed Subset of InclPoset Ids R;
+A1: ex_sup_of D,InclPoset Ids R by WAYBEL_0:75;
+A2: Ids R = {X where X is Ideal of R: not contradiction} by WAYBEL_0:def 23;
+    reconsider UD = union D as Ideal of R by Th2;
+      UD in Ids R by A2;
+    then UD in the carrier of InclPoset Ids R by YELLOW_1:1;
+    then reconsider UD as Element of InclPoset Ids R;
+      D is_<=_than UD &
+    for b being Element of InclPoset Ids R st b is_>=_than D holds UD <= b
+      by Lm1,Lm2;
+    hence sup D = union D by A1,YELLOW_0:def 9;
+  end;
+
+theorem Th4:
+ for R being Semilattice,
+     D being non empty directed Subset of InclPoset Ids R,
+     x being Element of InclPoset Ids R holds
+   sup ({x} "/\" D) = union {x /\ d where d is Element of D: not contradiction}
+  proof
+    let R be Semilattice,
+        D be non empty directed Subset of InclPoset Ids R,
+        x be Element of InclPoset Ids R;
+    set I = InclPoset Ids R,
+        A = {x /\ d where d is Element of D: not contradiction},
+        xD = {x "/\" d where d is Element of I: d in D};
+      xD c= the carrier of I
+    proof
+      let a be set;
+      assume a in xD;
+      then ex d being Element of I st a = x "/\" d & d in D;
+      hence thesis;
+    end;
+    then reconsider xD as Subset of I;
+A1: ex_sup_of {x} "/\" D,I by WAYBEL_2:1;
+    then ex_sup_of xD,I by YELLOW_4:42;
+then A2: sup xD is_>=_than xD by YELLOW_0:def 9;
+    hereby
+      let a be set;
+      assume
+A3:     a in sup ({x} "/\" D);
+        ex_sup_of D,I by WAYBEL_0:75;
+      then sup ({x} "/\" D) <= x "/\" sup D by A1,YELLOW_4:53;
+      then sup ({x} "/\" D) c= x "/\" sup D by YELLOW_1:3;
+      then a in x "/\" sup D by A3;
+      then a in x /\ sup D by YELLOW_2:45;
+then A4:   a in x & a in sup D by XBOOLE_0:def 3;
+      then a in union D by Th3;
+      then consider d being set such that
+A5:     a in d and
+A6:     d in D by TARSKI:def 4;
+      reconsider d as Element of I by A6;
+      set A = {x /\ w where w is Element of D: not contradiction};
+A7:   x /\ d in A by A6;
+        a in x /\ d by A4,A5,XBOOLE_0:def 3;
+      hence a in union A by A7,TARSKI:def 4;
+    end;
+    let a be set;
+    assume a in union A;
+    then consider Z being set such that
+A8:   a in Z and
+A9:   Z in A by TARSKI:def 4;
+    consider d being Element of D such that
+A10:   Z = x /\ d and not contradiction by A9;
+    reconsider d as Element of I;
+A11: x /\ d = x "/\" d by YELLOW_2:45;
+A12: xD = {x} "/\" D by YELLOW_4:42;
+    then x "/\" d in {x} "/\" D;
+    then sup xD >= x "/\" d by A2,A12,LATTICE3:def 9;
+    then x "/\" d c= sup xD by YELLOW_1:3;
+    then a in sup xD by A8,A10,A11;
+    hence a in sup ({x} "/\" D) by YELLOW_4:42;
+  end;
+
+:: Exercise 4.8 (i), p. 33
+definition let R be Semilattice;
+ cluster InclPoset Ids R -> satisfying_MC;
+coherence
+  proof
+    set I = InclPoset Ids R;
+    let x be Element of I,
+        D be non empty directed Subset of I;
+    thus x "/\" sup D = x /\ sup D by YELLOW_2:45
+        .= x /\ union D by Th3
+        .= union {x /\ d where d is Element of D: not contradiction} by Th1
+        .= sup ({x} "/\" D) by Th4;
+  end;
+end;
+
+definition let R be non empty trivial RelStr;
+ cluster -> trivial TopAugmentation of R;
+coherence
+  proof
+    let T be TopAugmentation of R;
+      the RelStr of T = the RelStr of R by YELLOW_9:def 4;
+    hence thesis by TEX_2:4;
+  end;
+end;
+
+theorem
+   for S being Scott complete TopLattice, T being complete LATTICE,
+     A being Scott TopAugmentation of T
+   st the RelStr of S = the RelStr of T holds
+  the TopRelStr of A = the TopRelStr of S
+  proof
+    let S be Scott complete TopLattice,
+        T be complete LATTICE,
+        A be Scott TopAugmentation of T such that
+A1:   the RelStr of S = the RelStr of T;
+A2: the RelStr of A = the RelStr of S by A1,YELLOW_9:def 4;
+      the topology of S = sigma S by WAYBEL14:23
+                     .= sigma T by A1,YELLOW_9:52
+                     .= the topology of A by YELLOW_9:51;
+    hence the TopRelStr of A = the TopRelStr of S by A2;
+  end;
+
+theorem
+   for N being Lawson complete TopLattice, T being complete LATTICE,
+     A being Lawson correct TopAugmentation of T
+   st the RelStr of N = the RelStr of T holds
+  the TopRelStr of A = the TopRelStr of N
+  proof
+    let N be Lawson complete TopLattice,
+        T be complete LATTICE,
+        A be Lawson correct TopAugmentation of T such that
+A1:   the RelStr of N = the RelStr of T;
+A2: the RelStr of A = the RelStr of N by A1,YELLOW_9:def 4;
+    consider l being lower correct TopAugmentation of T;
+    consider S being Scott correct TopAugmentation of T;
+A3: the topology of l = omega T & the topology of S = sigma T
+      by WAYBEL19:def 2,YELLOW_9:51;
+A4: the RelStr of S = the RelStr of T & the RelStr of l = the RelStr of T
+      by YELLOW_9:def 4;
+A5: N is Refinement of S, l
+    proof
+      thus the carrier of N = (the carrier of S) \/ (the carrier of l)
+        by A1,A4;
+        (sigma N) \/ (omega N) is prebasis of N by WAYBEL19:def 3;
+      then (sigma T) \/ (omega N) is prebasis of N by A1,YELLOW_9:52;
+      hence (the topology of S) \/ (the topology of l) is prebasis of N
+       by A1,A3,WAYBEL19:3;
+    end;
+      (the topology of S) \/ (the topology of l) c= bool the carrier of N
+    proof
+      let a be set;
+      assume a in (the topology of S) \/ (the topology of l);
+      then a in the topology of S or a in the topology of l by XBOOLE_0:def 2;
+      hence a in bool the carrier of N by A1,A4;
+    end;
+    then reconsider X = (the topology of S) \/ (the topology of l)
+      as Subset-Family of N by SETFAM_1:def 7;
+    reconsider X as Subset-Family of N;
+      the topology of N = UniCl FinMeetCl X by A5,YELLOW_9:56
+                     .= lambda T by A1,A3,WAYBEL19:33
+                     .= the topology of A by WAYBEL19:def 4;
+    hence the TopRelStr of A = the TopRelStr of N by A2;
+  end;
+
+theorem
+   for N being Lawson complete TopLattice
+  for S being Scott TopAugmentation of N
+   for A being Subset of N, J being Subset of S st A = J & J is closed holds
+  A is closed
+  proof
+    let N be Lawson complete TopLattice,
+        S be Scott TopAugmentation of N,
+        A be Subset of N,
+        J be Subset of S such that
+A1:   A = J;
+A2: the RelStr of N = the RelStr of S by YELLOW_9:def 4;
+    assume J is closed;
+then A3: [#]S \ J is open by PRE_TOPC:def 6;
+A4: N is Lawson correct TopAugmentation of S by A2,YELLOW_9:def 4;
+      [#]S = the carrier of S by PRE_TOPC:12
+      .= [#]N by A2,PRE_TOPC:12;
+    hence [#]N \ A is open by A1,A3,A4,WAYBEL19:37;
+  end;
+
+definition let A be complete LATTICE;
+ cluster lambda A -> non empty;
+coherence
+  proof
+    consider S being Lawson correct TopAugmentation of A;
+      InclPoset the topology of S is non trivial;
+    hence thesis by WAYBEL19:def 4;
+  end;
+end;
+
+definition let S be Scott complete TopLattice;
+ cluster InclPoset sigma S -> complete non trivial;
+coherence
+  proof
+      InclPoset the topology of S is complete non trivial;
+    hence thesis by WAYBEL14:23;
+  end;
+end;
+
+definition let N be Lawson complete TopLattice;
+ cluster InclPoset sigma N -> complete non trivial;
+coherence
+  proof
+    consider S being Scott TopAugmentation of N;
+A1: the RelStr of S = the RelStr of N by YELLOW_9:def 4;
+      InclPoset sigma S is complete non trivial;
+    hence thesis by A1,YELLOW_9:52;
+  end;
+ cluster InclPoset lambda N -> complete non trivial;
+coherence
+  proof
+    consider S being Lawson correct TopAugmentation of N;
+      InclPoset the topology of S is complete non trivial;
+    hence thesis by WAYBEL19:def 4;
+  end;
+end;
+
+theorem Th8:
+ for T being non empty reflexive RelStr holds
+ sigma T c= {W\uparrow F where W, F is Subset of T: W in sigma T & F is finite}
+  proof
+    let T be non empty reflexive RelStr;
+    let s be set; assume
+A1:   s in sigma T;
+      s\uparrow {}T = s;
+    hence thesis by A1;
+  end;
+
+theorem Th9:
+ for N being Lawson complete TopLattice holds lambda N = the topology of N
+  proof
+    let N be Lawson complete TopLattice;
+      N is Lawson correct TopAugmentation of N by YELLOW_9:44;
+    hence thesis by WAYBEL19:def 4;
+  end;
+
+theorem Th10:
+ for N being Lawson complete TopLattice holds sigma N c= lambda N
+  proof
+    let N be Lawson complete TopLattice;
+    set Z = {W\uparrow F where W, F is Subset of N: W in
+ sigma N & F is finite};
+      Z is Basis of N by WAYBEL19:32;
+    then Z c= the topology of N by CANTOR_1:def 2;
+then A1: Z c= lambda N by Th9;
+      sigma N c= Z by Th8;
+    hence sigma N c= lambda N by A1,XBOOLE_1:1;
+  end;
+
+theorem
+   for M, N being complete LATTICE st the RelStr of M = the RelStr of N holds
+  lambda M = lambda N
+  proof
+    let M, N be complete LATTICE such that
+A1:   the RelStr of M = the RelStr of N;
+A2: lambda M = UniCl FinMeetCl ((sigma M) \/ (omega M)) &
+     lambda N = UniCl FinMeetCl ((sigma N) \/ (omega N)) by WAYBEL19:33;
+      sigma M = sigma N & omega M = omega N by A1,WAYBEL19:3,YELLOW_9:52;
+    hence lambda M = lambda N by A1,A2;
+  end;
+
+theorem Th12:
+ for N being Lawson complete TopLattice, X being Subset of N holds
+  X in lambda N iff X is open
+  proof
+    let N be Lawson complete TopLattice,
+        X be Subset of N;
+      lambda N = the topology of N by Th9;
+    hence X in lambda N iff X is open by PRE_TOPC:def 5;
+  end;
+
+definition
+ cluster trivial TopSpace-like -> Scott (reflexive non empty TopRelStr);
+coherence
+  proof
+    let T be reflexive non empty TopRelStr;
+    assume T is trivial TopSpace-like;
+    then reconsider W = T as trivial reflexive non empty TopSpace-like
+TopRelStr;
+      W is Scott
+    proof
+      let S be Subset of W;
+      thus S is open implies S is upper;
+      thus thesis by TDLAT_3:17;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition
+ cluster trivial -> Lawson (complete TopLattice);
+coherence
+  proof
+    let T be complete TopLattice;
+    assume T is trivial;
+    then reconsider W = T as trivial complete TopLattice;
+A1: the topology of W = {{}, the carrier of W} by TDLAT_3:def 2;
+    consider N being Lawson correct TopAugmentation of W;
+      the RelStr of T = the RelStr of N by YELLOW_9:def 4;
+    then the topology of T = the topology of N by A1,TDLAT_3:def 2
+     .= lambda T by WAYBEL19:def 4
+     .= UniCl FinMeetCl ((sigma T) \/ (omega T)) by WAYBEL19:33;
+    then FinMeetCl ((omega T) \/ (sigma T)) is Basis of T by YELLOW_9:22;
+    hence (omega T) \/ (sigma T) is prebasis of T by YELLOW_9:23;
+  end;
+end;
+
+definition
+ cluster strict continuous lower-bounded meet-continuous Scott
+  (complete TopLattice);
+existence
+  proof
+    consider A being strict trivial TopLattice;
+    take A;
+    thus thesis;
+  end;
+end;
+
+definition
+ cluster strict continuous compact Hausdorff Lawson (complete TopLattice);
+existence
+  proof
+    consider R being strict trivial complete TopLattice;
+    take R;
+    thus thesis;
+  end;
+end;
+
+EmptySch { A() -> Scott TopLattice, X() -> set, F(set) -> set }:
+ { F(w) where w is Element of A(): w in {} } = {}
+  proof
+   thus { F(w) where w is Element of A(): w in {} } c= {}
+   proof
+     let a be set such that
+A1:    a in { F(w) where w is Element of A(): w in {} };
+     assume not a in {};
+     consider w being Element of A() such that
+A2:    a = F(w) & w in {} by A1;
+     thus thesis by A2;
+   end;
+   thus thesis by XBOOLE_1:2;
+  end;
+
+theorem Th13:
+ for N being meet-continuous LATTICE, A being Subset of N st
+  A has_the_property_(S) holds uparrow A has_the_property_(S)
+  proof
+    let N be meet-continuous LATTICE,
+        A be Subset of N such that
+A1:  for D being non empty directed Subset of N st sup D in A
+      ex y being Element of N st y in D &
+       for x being Element of N st x in D & x >= y holds x in A;
+    let D be non empty directed Subset of N; assume
+     sup D in uparrow A;
+    then consider a being Element of N such that
+A2:   a <= sup D & a in A by WAYBEL_0:def 16;
+    reconsider aa = {a} as non empty directed Subset of N by WAYBEL_0:5;
+      a = sup ({a} "/\" D) by A2,WAYBEL_2:52;
+    then consider y being Element of N such that
+A3:   y in aa "/\" D &
+      for x being Element of N st x in aa "/\"
+ D & x >= y holds x in A by A1,A2;
+      aa "/\" D = {a "/\" d where d is Element of N: d in D} by YELLOW_4:42;
+    then consider d being Element of N such that
+A4:   y = a "/\" d & d in D by A3;
+    take d;
+    thus d in D by A4;
+    let x be Element of N such that
+A5:   x in D & x >= d;
+      y >= y by ORDERS_1:24;
+then A6: y in A by A3;
+      d >= y by A4,YELLOW_0:23;
+    then x >= y by A5,ORDERS_1:26;
+    hence x in uparrow A by A6,WAYBEL_0:def 16;
+  end;
+
+definition let N be meet-continuous LATTICE,
+               A be property(S) Subset of N;
+ cluster uparrow A -> property(S);
+coherence by Th13;
+end;
+
+:: Proposition 2.1 (i), p. 153
+theorem Th14:
+ for N being meet-continuous Lawson (complete TopLattice),
+     S being Scott TopAugmentation of N,
+     A being Subset of N st A in lambda N holds
+  uparrow A in sigma S
+  proof
+    let N be meet-continuous Lawson (complete TopLattice),
+        S be Scott TopAugmentation of N,
+        A be Subset of N such that
+A1:   A in lambda N;
+A2: the RelStr of N = the RelStr of S by YELLOW_9:def 4;
+    then reconsider Y = A as Subset of S;
+    reconsider UA = uparrow A as Subset of S by A2;
+A3: uparrow A = uparrow Y by A2,WAYBEL_0:13;
+A4: S is meet-continuous by A2,YELLOW12:14;
+      A is open by A1,Th12;
+    then A is property(S) by WAYBEL19:36;
+    then Y is property(S) by A2,YELLOW12:19;
+    then uparrow Y is property(S) by A4,Th13;
+    then UA is open by A3,WAYBEL11:15;
+    then uparrow A in the topology of S by PRE_TOPC:def 5;
+    hence uparrow A in sigma S by WAYBEL14:23;
+  end;
+
+theorem Th15:
+ for N being meet-continuous Lawson (complete TopLattice)
+  for S being Scott TopAugmentation of N
+   for A being Subset of N, J being Subset of S st A = J holds
+  A is open implies uparrow J is open
+  proof
+    let N be meet-continuous Lawson (complete TopLattice),
+        S be Scott TopAugmentation of N,
+        A be Subset of N,
+        J be Subset of S such that
+A1:   A = J;
+A2: the RelStr of N = the RelStr of S by YELLOW_9:def 4;
+    assume A is open;
+    then A in lambda N by Th12;
+    then uparrow A in sigma S by Th14;
+    then uparrow J in sigma S by A1,A2,WAYBEL_0:13;
+    hence uparrow J is open by WAYBEL14:24;
+  end;
+
+theorem Th16:
+ for N being meet-continuous Lawson (complete TopLattice)
+  for S being Scott TopAugmentation of N
+   for x being Point of S, y being Point of N
+    for J being Basis of y st x = y holds
+  {uparrow A where A is Subset of N: A in J} is Basis of x
+  proof
+    let N be meet-continuous Lawson (complete TopLattice),
+        S be Scott TopAugmentation of N,
+        x be Point of S,
+        y be Point of N,
+        J be Basis of y such that
+A1:   x = y;
+A2: the RelStr of N = the RelStr of S by YELLOW_9:def 4;
+    set Z = {uparrow A where A is Subset of N: A in J};
+    set K = Z;
+      K is Subset-Family of S
+    proof
+        K c= bool the carrier of S
+      proof
+        let k be set;
+        assume k in K;
+        then consider A being Subset of N such that
+A3:       k = uparrow A and A in J;
+        thus k in bool the carrier of S by A2,A3;
+      end;
+      hence thesis by SETFAM_1:def 7;
+    end;
+    then reconsider K as Subset-Family of S;
+      K is Basis of x
+    proof
+      thus K c= the topology of S
+      proof
+        let k be set;
+        assume k in K;
+        then consider A being Subset of N such that
+A4:       k = uparrow A and
+A5:       A in J;
+        reconsider A' = A as Subset of S by A2;
+          A is open by A5,YELLOW_8:21;
+        then uparrow A' is open by Th15;
+        then uparrow A' in the topology of S by PRE_TOPC:def 5;
+        hence k in the topology of S by A2,A4,WAYBEL_0:13;
+      end;
+        for k being set st k in K holds x in k
+      proof
+        let k be set;
+        assume k in K;
+        then consider A being Subset of N such that
+A6:       k = uparrow A and
+A7:       A in J;
+          y in Intersect J by YELLOW_8:def 2;
+then A8:     y in A by A7,CANTOR_1:10;
+          A c= uparrow A by WAYBEL_0:16;
+        hence x in k by A1,A6,A8;
+      end;
+      hence x in Intersect K by CANTOR_1:10;
+      let sA be Subset of S such that
+A9:     sA is open & x in sA;
+      reconsider lA = sA as Subset of N by A2;
+        sigma N c= lambda N by Th10;
+then A10:  sigma S c= lambda N by A2,YELLOW_9:52;
+        N is Lawson correct TopAugmentation of S by A2,YELLOW_9:def 4;
+      then lA is open by A9,WAYBEL19:37;
+      then lA in lambda N by Th12;
+      then uparrow lA in sigma S by Th14;
+then A11:  uparrow lA is open by A10,Th12;
+        lA c= uparrow lA by WAYBEL_0:16;
+      then consider lV1 being Subset of N such that
+A12:     lV1 in J and
+A13:     lV1 c= uparrow lA by A1,A9,A11,YELLOW_8:def 2;
+      reconsider sUV = uparrow lV1 as Subset of S by A2;
+      take sUV;
+      thus sUV in K by A12;
+A14:  sA = uparrow sA
+      proof
+        thus sA c= uparrow sA by WAYBEL_0:16;
+          sA is upper by A9,WAYBEL11:def 4;
+        hence thesis by WAYBEL_0:24;
+      end;
+A15:  uparrow sA = uparrow lA by A2,WAYBEL_0:13;
+        lV1 is_coarser_than uparrow lA by A13,WAYBEL12:20;
+      hence sUV c= sA by A14,A15,YELLOW12:28;
+    end;
+    hence Z is Basis of x;
+  end;
+
+:: Proposition 2.1 (ii), p. 153
+theorem Th17:
+ for N being meet-continuous Lawson (complete TopLattice)
+  for S being Scott TopAugmentation of N
+   for X being upper Subset of N, Y being Subset of S st X = Y
+  holds Int X = Int Y
+  proof
+    let N be meet-continuous Lawson (complete TopLattice),
+        S be Scott TopAugmentation of N,
+        X be upper Subset of N,
+        Y be Subset of S such that
+A1:   X = Y;
+A2: the RelStr of N = the RelStr of S by YELLOW_9:def 4;
+A3: Int X c= uparrow Int X by WAYBEL_0:16;
+    reconsider sX = Int X as Subset of S by A2;
+    reconsider K = uparrow Int X as Subset of S by A2;
+      uparrow sX is open by Th15;
+then A4: K is open by A2,WAYBEL_0:13;
+      K c= Y
+    proof
+      let a be set; assume
+A5:     a in K;
+      then reconsider x = a as Element of N;
+      consider y being Element of N such that
+A6:     y <= x & y in Int X by A5,WAYBEL_0:def 16;
+A7:   Int X c= X by TOPS_1:44;
+        uparrow X = X
+      proof
+        thus uparrow X c= X by WAYBEL_0:24;
+        thus thesis by WAYBEL_0:16;
+      end;
+      hence a in Y by A1,A6,A7,WAYBEL_0:def 16;
+    end;
+    then uparrow Int X c= Int Y by A4,TOPS_1:56;
+    hence Int X c= Int Y by A3,XBOOLE_1:1;
+    reconsider A = Int Y as Subset of N by A2;
+   N is Lawson correct TopAugmentation of S by A2,YELLOW_9:def 4;
+then A8: A is open by WAYBEL19:37;
+      A c= X by A1,TOPS_1:44;
+    hence Int Y c= Int X by A8,TOPS_1:56;
+  end;
+
+:: Proposition 2.1 (iii), p. 153
+theorem
+   for N being meet-continuous Lawson (complete TopLattice)
+  for S being Scott TopAugmentation of N
+   for X being lower Subset of N, Y being Subset of S st X = Y
+  holds Cl X = Cl Y
+  proof
+    let N be meet-continuous Lawson (complete TopLattice),
+        S be Scott TopAugmentation of N,
+        X be lower Subset of N,
+        Y be Subset of S such that
+A1:   X = Y;
+A2: the RelStr of N = the RelStr of S by YELLOW_9:def 4;
+A4: X` = Y` by A1,A2;
+    reconsider A = Cl Y as Subset of N by A2;
+      (Cl X)` = (Cl X``)`
+         .= Int X` by TOPS_1:def 1
+         .= Int Y` by A4,Th17
+         .= (Cl Y``)` by TOPS_1:def 1
+         .= A` by A2;
+    hence Cl X = Cl Y by TOPS_1:21;
+  end;
+
+theorem Th19:
+ for M, N being complete LATTICE,
+     LM being Lawson correct TopAugmentation of M,
+     LN being Lawson correct TopAugmentation of N st
+   InclPoset sigma N is continuous holds
+  the topology of [:LM,LN qua TopSpace:] = lambda [:M,N:]
+  proof
+    let M, N be complete LATTICE,
+        LM be Lawson correct TopAugmentation of M,
+        LN be Lawson correct TopAugmentation of N such that
+A1:   InclPoset sigma N is continuous;
+    consider LMN being non empty Lawson correct TopAugmentation of [:M,N:];
+    consider lMN being non empty lower correct TopAugmentation of [:M,N:];
+    consider SMN being non empty Scott correct TopAugmentation of [:M,N:];
+A2: LMN is Refinement of SMN, lMN by WAYBEL19:29;
+      [:LM,LN qua TopSpace:] = the TopStruct of LMN
+    proof
+      consider SM being non empty Scott correct TopAugmentation of M;
+      consider SN being non empty Scott correct TopAugmentation of N;
+      consider lM being non empty lower correct TopAugmentation of M;
+      consider lN being non empty lower correct TopAugmentation of N;
+A3:   LM is Refinement of SM, lM & LN is Refinement of SN, lN by WAYBEL19:29;
+A4:  the RelStr of SM = the RelStr of M & the RelStr of SN = the RelStr of N &
+     the RelStr of lM = the RelStr of M & the RelStr of lN = the RelStr of N
+      by YELLOW_9:def 4;
+A5:   the RelStr of LM = the RelStr of M &
+      the RelStr of LN = the RelStr of N by YELLOW_9:def 4;
+A6:   the RelStr of LMN = the RelStr of [:M,N:] by YELLOW_9:def 4;
+A7:   the carrier of [:LM,LN qua TopSpace:]
+        = [:the carrier of LM,the carrier of LN:] by BORSUK_1:def 5
+       .= the carrier of LMN by A5,A6,YELLOW_3:def 2;
+        the TopStruct of LMN is Refinement of [:SM,SN qua TopSpace:],
+                                            [:lM,lN qua TopSpace:]
+      proof
+          [:LM,LN qua TopSpace:]
+         is Refinement of [:SM,SN qua TopSpace:],
+            [:lM,lN qua TopSpace:] by A3,A4,YELLOW12:50;
+        hence the carrier of the TopStruct of LMN =
+          (the carrier of [:SM,SN qua TopSpace:]) \/
+          (the carrier of [:lM,lN qua TopSpace:])
+            by A7,YELLOW_9:def 6;
+A8:     (omega LMN) \/ (sigma LMN) is prebasis of LMN by WAYBEL19:def 3;
+A9:     the topology of [:lM,lN qua TopSpace:] = omega [:M,N:]
+             by WAYBEL19:15
+          .= omega LMN by A6,WAYBEL19:3;
+A10:     the RelStr of SN = the RelStr of N by YELLOW_9:def 4
+          .= the RelStr of Sigma N by YELLOW_9:def 4;
+          the RelStr of SM = the RelStr of M by YELLOW_9:def 4
+          .= the RelStr of Sigma M by YELLOW_9:def 4;
+        then the TopStruct of SN = the TopStruct of Sigma N &
+        the TopStruct of SM = the TopStruct of Sigma M by A10,WAYBEL29:17;
+        then the topology of [:SM,SN qua TopSpace:]
+           = the topology of [:Sigma M,(Sigma N) qua TopSpace:]
+             by WAYBEL29:10
+          .= sigma [:M,N:] by A1,WAYBEL29:34
+          .= sigma LMN by A6,YELLOW_9:52;
+        hence (the topology of [:SM,SN qua TopSpace:]) \/
+         (the topology of [:lM,lN qua TopSpace:])
+          is prebasis of the TopStruct of LMN by A8,A9,YELLOW12:33;
+      end;
+      hence thesis by A3,A4,A7,YELLOW12:49;
+    end;
+    then reconsider R = [:LM,LN qua TopSpace:] as Refinement of SMN, lMN
+      by A2,YELLOW12:47;
+      the topology of [:LM,LN qua TopSpace:] = the topology of R;
+    hence thesis by WAYBEL19:34;
+  end;
+
+:: Proposition 2.2, p. 153
+theorem Th20:
+ for M, N being complete LATTICE,
+     P being Lawson correct TopAugmentation of [:M,N:],
+     Q being Lawson correct TopAugmentation of M,
+     R being Lawson correct TopAugmentation of N st
+   InclPoset sigma N is continuous holds
+  the TopStruct of P = [:Q,R qua TopSpace:]
+  proof
+    let M, N be complete LATTICE,
+        P be Lawson correct TopAugmentation of [:M,N:],
+        Q be Lawson correct TopAugmentation of M,
+        R be Lawson correct TopAugmentation of N such that
+A1:   InclPoset sigma N is continuous;
+A2: the RelStr of P = the RelStr of [:M,N:] &
+    the RelStr of Q = the RelStr of M &
+    the RelStr of R = the RelStr of N by YELLOW_9:def 4;
+then A3: the carrier of P = [:the carrier of Q, the carrier of N:] by YELLOW_3:
+def 2
+
+      .= the carrier of [:Q,R qua TopSpace:] by A2,BORSUK_1:def 5;
+      the topology of P = lambda [:M,N:] by WAYBEL19:def 4
+      .= the topology of [:Q,R qua TopSpace:] by A1,Th19;
+    hence the TopStruct of P = [:Q,R qua TopSpace:] by A3;
+  end;
+
+:: Theorem 2.3, p. 153, first conjunct
+theorem Th21:
+ for N being meet-continuous Lawson (complete TopLattice),
+     x being Element of N
+  holds x"/\" is continuous
+  proof
+    let N be meet-continuous Lawson (complete TopLattice),
+        x be Element of N;
+      for X being non empty Subset of N holds x"/\" preserves_inf_of X
+     by YELLOW13:11;
+    hence x"/\" is continuous by WAYBEL21:45;
+  end;
+
+definition let N be meet-continuous Lawson (complete TopLattice),
+               x be Element of N;
+ cluster x"/\" -> continuous;
+coherence by Th21;
+end;
+
+:: Theorem 2.3, p. 153, second conjunct
+theorem Th22:
+ for N being meet-continuous Lawson (complete TopLattice)
+  st InclPoset sigma N is continuous holds N is topological_semilattice
+  proof
+    let N be meet-continuous Lawson (complete TopLattice) such that
+A1:   InclPoset sigma N is continuous;
+    let g be map of [:N,N qua TopSpace:], N such that
+A2:   g = inf_op N;
+    consider NN being Lawson correct TopAugmentation of [:N,N:];
+A3: the RelStr of NN = the RelStr of [:N,N:] by YELLOW_9:def 4;
+    then reconsider h = inf_op N as map of NN, N;
+A4: the RelStr of N = the RelStr of N;
+A5: h is infs-preserving
+    proof
+      let X be Subset of NN;
+      reconsider X1 = X as Subset of [:N,N:] by A3;
+        inf_op N preserves_inf_of X1 by WAYBEL_0:def 32;
+      hence h preserves_inf_of X by A3,A4,WAYBEL_0:65;
+    end;
+then A6: h is SemilatticeHomomorphism of NN, N by WAYBEL21:5;
+      h is directed-sups-preserving
+    proof
+      let X be Subset of NN;
+      assume X is non empty directed;
+      then reconsider X1 = X as non empty directed Subset of [:N,N:]
+        by A3,WAYBEL_0:3;
+        inf_op N preserves_sup_of X1 by WAYBEL_0:def 37;
+      hence h preserves_sup_of X by A3,A4,WAYBEL_0:65;
+    end;
+then A7: h is continuous by A5,A6,WAYBEL21:46;
+A8: the TopStruct of N = the TopStruct of N;
+      N is TopAugmentation of N by YELLOW_9:44;
+    then the TopStruct of NN = [:N,N qua TopSpace:] by A1,Th20;
+    hence g is continuous by A2,A7,A8,YELLOW12:36;
+  end;
+
+Lm3:
+now
+  let S, T, x1, x2 be set such that
+A1:  x1 in S & x2 in T;
+A2:dom <:pr2(S,T),pr1(S,T):>
+        = dom pr2(S,T) /\ dom pr1(S,T) by FUNCT_3:def 8
+       .= dom pr2(S,T) /\ [:S,T:] by FUNCT_3:def 5
+       .= [:S,T:] /\ [:S,T:] by FUNCT_3:def 6
+       .= [:S,T:];
+    [x1,x2] in [:S,T:] by A1,ZFMISC_1:106;
+  hence <:pr2(S,T),pr1(S,T):>. [x1,x2]
+     = [pr2(S,T). [x1,x2],pr1(S,T). [x1,x2]] by A2,FUNCT_3:def 8
+    .= [x2,pr1(S,T). [x1,x2]] by A1,FUNCT_3:def 6
+    .= [x2,x1] by A1,FUNCT_3:def 5;
+end;
+
+:: Proposition 2.4, p. 153
+theorem
+   for N being meet-continuous Lawson (complete TopLattice)
+  st InclPoset sigma N is continuous holds
+ N is Hausdorff iff
+  for X being Subset of [:N,N qua TopSpace:] st
+   X = the InternalRel of N holds X is closed
+  proof
+    let N be meet-continuous Lawson (complete TopLattice) such that
+A1:   InclPoset sigma N is continuous;
+A2: [:the carrier of N,the carrier of N:]
+       = the carrier of [:N,N qua TopSpace:] by BORSUK_1:def 5;
+    hereby
+      assume
+A3:     N is Hausdorff;
+      let X be Subset of [:N,N qua TopSpace:] such that
+A4:    X = the InternalRel of N;
+      set INF = inf_op N,
+          f = <:pr1(the carrier of N,the carrier of N),INF:>;
+A5:  the carrier of [:N,N:]
+        = [:the carrier of N,the carrier of N:] by YELLOW_3:def 2;
+   then f is Function of [:the carrier of N,the carrier of N:],
+                       [:the carrier of N,the carrier of N:] by FUNCT_3:78;
+      then reconsider f as map of [:N,N qua TopSpace:],
+                             [:N,N qua TopSpace:]
+        by A2;
+A6:   for x, y being Element of N holds f. [x,y] = [x, x "/\" y]
+      proof
+        let x, y be Element of N;
+A7:     dom (pr1(the carrier of N,the carrier of N)) =
+          [:the carrier of N,the carrier of N:] by FUNCT_2:def 1;
+A8:     dom INF = [:the carrier of N,the carrier of N:] by A5,FUNCT_2:def 1;
+          [x,y] in [:the carrier of N,the carrier of N:] by ZFMISC_1:106;
+        hence f. [x,y]
+         = [pr1(the carrier of N,the carrier of N). [x,y],INF. [x,y]]
+            by A7,A8,FUNCT_3:69
+        .= [x, INF. [x,y]] by FUNCT_3:def 5
+        .= [x, x "/\" y] by WAYBEL_2:def 4;
+      end;
+        id the carrier of N c= [:the carrier of N,the carrier of N:]
+        by RELSET_1:28;
+      then reconsider D = id the carrier of N
+       as Subset of [:N,N qua TopSpace:] by A2;
+A9:  D is closed by A3,YELLOW12:46;
+      reconsider INF as map of [:N,N qua TopSpace:], N by A2,A5;
+        N is topological_semilattice by A1,Th22;
+then A10:  INF is continuous by YELLOW13:def 5;
+        pr1(the carrier of N,the carrier of N) is continuous map of
+          [:N,N qua TopSpace:],N by YELLOW12:39;
+then A11:  f is continuous by A10,YELLOW12:41;
+        X = f"D
+      proof
+        hereby
+          let a be set; assume
+A12:         a in X;
+          then consider s, t being set such that
+A13:         s in the carrier of N & t in the carrier of N & a = [s,t]
+              by A4,ZFMISC_1:def 2;
+          reconsider s, t as Element of N by A13;
+            s <= t by A4,A12,A13,ORDERS_1:def 9;
+          then s "/\" t = s by YELLOW_0:25;
+          then f. [s,t] = [s,s] by A6;
+then A14:      f.a in D by A13,RELAT_1:def 10;
+            dom f = the carrier of [:N,N qua TopSpace:]
+            by FUNCT_2:def 1;
+          then a in dom f by A2,A13,ZFMISC_1:106;
+          hence a in f"D by A14,FUNCT_1:def 13;
+        end;
+        let a be set; assume
+A15:      a in f"D;
+then A16:    a in dom f & f.a in D by FUNCT_1:def 13;
+        consider s, t being set such that
+A17:       s in the carrier of N & t in the carrier of N & a = [s,t]
+            by A2,A15,ZFMISC_1:def 2;
+        reconsider s, t as Element of N by A17;
+          f.a = [s, s "/\" t] by A6,A17;
+        then s = s "/\" t by A16,RELAT_1:def 10;
+        then s <= t by YELLOW_0:25;
+        hence a in X by A4,A17,ORDERS_1:def 9;
+      end;
+      hence X is closed by A9,A11,PRE_TOPC:def 12;
+    end;
+    assume
+A18:   for X being Subset of [:N,N qua TopSpace:]
+        st X = the InternalRel of N holds X is closed;
+A19: id the carrier of N = (the InternalRel of N) /\
+ the InternalRel of N~
+    proof
+      thus id the carrier of N
+        c= (the InternalRel of N) /\ the InternalRel of N~ by YELLOW12:22;
+      thus thesis by YELLOW12:23;
+    end;
+      for A being Subset of [:N,N qua TopSpace:] st
+     A = id the carrier of N holds A is closed
+    proof
+      let A be Subset of [:N,N qua TopSpace:] such that
+A20:     A = id the carrier of N;
+A21:  N~ = RelStr(#the carrier of N, (the InternalRel of N)~#)
+        by LATTICE3:def 5;
+      then reconsider X = the InternalRel of N,
+                 Y = the InternalRel of N~
+       as Subset of [:N,N qua TopSpace:]
+         by BORSUK_1:def 5;
+      reconsider X, Y as Subset of [:N,N qua TopSpace:]
+       ;
+      reconsider f = <:pr2(the carrier of N,the carrier of N),
+                       pr1(the carrier of N,the carrier of N):> as
+        continuous map of [:N,N qua TopSpace:],
+                          [:N,N qua TopSpace:] by YELLOW12:42;
+A22:  dom f = [:the carrier of N,the carrier of N:] by YELLOW12:4;
+A23:  X is closed by A18;
+A24:  f.:X = Y
+      proof
+        thus f.:X c= Y
+        proof
+          let y be set;
+          assume y in f.:X;
+          then consider x being set such that
+A25:        x in dom f & x in X & y = f.x by FUNCT_1:def 12;
+          consider x1, x2 being set such that
+A26:        x1 in the carrier of N & x2 in the carrier of N & x = [x1,x2]
+              by A25,ZFMISC_1:def 2;
+            f.x = [x2,x1] by A26,Lm3;
+          hence y in Y by A21,A25,A26,RELAT_1:def 7;
+        end;
+        let y be set; assume
+A27:      y in Y;
+        then consider y1, y2 being set such that
+A28:      y1 in the carrier of N & y2 in the carrier of N & y = [y1,y2]
+            by A21,ZFMISC_1:def 2;
+A29:    [y2,y1] in X by A21,A27,A28,RELAT_1:def 7;
+          f. [y2,y1] = y by A28,Lm3;
+        hence y in f.:X by A22,A29,FUNCT_1:def 12;
+      end;
+        f is_homeomorphism by YELLOW12:43;
+      then Y is closed by A23,A24,TOPS_2:72;
+      hence A is closed by A19,A20,A23,TOPS_1:35;
+    end;
+    hence N is Hausdorff by YELLOW12:46;
+  end;
+
+:: Definition 2.5, p. 154
+definition let N be non empty reflexive RelStr,
+               X be Subset of N;
+ func X^0 -> Subset of N equals :Def1:
+  { u where u is Element of N : for D being non empty directed Subset of N
+      st u <= sup D holds X meets D };
+coherence
+ proof
+   defpred P[Element of N] means
+    for D being non empty directed Subset of N st $1 <= sup D holds X meets D;
+   thus {u where u is Element of N: P[u]} is Subset of N from RelStrSubset;
+ end;
+end;
+
+definition let N be non empty reflexive antisymmetric RelStr,
+               X be empty Subset of N;
+ cluster X^0 -> empty;
+coherence
+  proof
+A1: X^0 = { u where u is Element of N :
+    for D being non empty directed Subset of N st u <= sup D holds X meets D
+      } by Def1;
+      X^0 = {}
+    proof
+      thus X^0 c= {}
+      proof
+        let a be set such that
+A2:       a in X^0 and not a in {};
+        consider u being Element of N such that
+A3:       a = u &
+          for D being non empty directed Subset of N st u <= sup D
+           holds X meets D by A1,A2;
+        reconsider D = {u} as non empty directed Subset of N by WAYBEL_0:5;
+A4:     u <= sup D by YELLOW_0:39;
+          X misses D by XBOOLE_1:65;
+        hence contradiction by A3,A4;
+      end;
+      thus thesis by XBOOLE_1:2;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem
+   for N being non empty reflexive RelStr, A, J being Subset of N st A c= J
+  holds A^0 c= J^0
+  proof
+    let N be non empty reflexive RelStr,
+        A, J be Subset of N such that
+A1:   A c= J;
+A2: A^0 = { u where u is Element of N :
+     for D being non empty directed Subset of N st u <= sup D
+      holds A meets D } by Def1;
+A3: J^0 = { u where u is Element of N :
+     for D being non empty directed Subset of N st u <= sup D
+      holds J meets D } by Def1;
+    let a be set;
+    assume a in A^0;
+    then consider u being Element of N such that
+A4:   a = u &
+      for D being non empty directed Subset of N st u <= sup D
+       holds A meets D by A2;
+      now
+      let D be non empty directed Subset of N;
+      assume u <= sup D;
+      then A meets D by A4;
+      hence J meets D by A1,XBOOLE_1:63;
+    end;
+    hence a in J^0 by A3,A4;
+  end;
+
+:: Remark 2.6 (i), p. 154
+theorem Th25:
+ for N being non empty reflexive RelStr, x being Element of N holds
+  (uparrow x)^0 = wayabove x
+  proof
+    let N be non empty reflexive RelStr,
+        x be Element of N;
+A1: (uparrow x)^0 =
+     { u where u is Element of N : for D being non empty directed Subset of N
+      st u <= sup D holds (uparrow x) meets D } by Def1;
+    thus (uparrow x)^0 c= wayabove x
+    proof
+      let a be set;
+      assume a in (uparrow x)^0;
+      then consider u being Element of N such that
+A2:     a = u &
+        for D being non empty directed Subset of N st u <= sup D
+         holds (uparrow x) meets D by A1;
+         u >> x
+       proof
+         let D be non empty directed Subset of N; assume
+          u <= sup D;
+         then (uparrow x) meets D by A2;
+         then consider d being set such that
+A3:        d in (uparrow x) /\ D by XBOOLE_0:4;
+         reconsider d as Element of N by A3;
+         take d;
+         thus d in D by A3,XBOOLE_0:def 3;
+           d in uparrow x by A3,XBOOLE_0:def 3;
+         hence x <= d by WAYBEL_0:18;
+       end;
+       hence a in wayabove x by A2,WAYBEL_3:8;
+    end;
+    let a be set; assume
+A4:   a in wayabove x;
+    then reconsider b = a as Element of N;
+      now
+      let D be non empty directed Subset of N such that
+A5:     b <= sup D;
+        b >> x by A4,WAYBEL_3:8;
+      then consider d being Element of N such that
+A6:     d in D & x <= d by A5,WAYBEL_3:def 1;
+        d in uparrow x by A6,WAYBEL_0:18;
+      hence (uparrow x) meets D by A6,XBOOLE_0:3;
+    end;
+    hence a in (uparrow x)^0 by A1;
+  end;
+
+:: Remark 2.6 (ii), p. 154
+theorem Th26:
+ for N being Scott TopLattice, X being upper Subset of N holds Int X c= X^0
+  proof
+    let N be Scott TopLattice,
+        X be upper Subset of N;
+    let x be set; assume
+A1:   x in Int X;
+    then reconsider y = x as Element of N;
+A2: X^0 = { u where u is Element of N : for D being non empty directed
+      Subset of N st u <= sup D holds X meets D } by Def1;
+      now
+      let D be non empty directed Subset of N such that
+A3:     y <= sup D;
+A4:   Int X c= X by TOPS_1:44;
+A5:   Int X is upper inaccessible by WAYBEL11:def 4;
+      then sup D in Int X by A1,A3,WAYBEL_0:def 20;
+      then D meets Int X by A5,WAYBEL11:def 1;
+      hence X meets D by A4,XBOOLE_1:63;
+    end;
+    hence x in X^0 by A2;
+  end;
+
+:: Lemma 2.7 (i), p. 154
+theorem Th27:
+ for N being non empty reflexive RelStr, X, Y being Subset of N holds
+  (X^0) \/ (Y^0) c= (X \/ Y)^0
+  proof
+    let N be non empty reflexive RelStr,
+        X, Y be Subset of N;
+    let a be set; assume
+A1:   a in (X^0) \/ (Y^0);
+    then reconsider b = a as Element of N;
+A2: X^0 = { x where x is Element of N : for D being non empty directed
+     Subset of N st x <= sup D holds X meets D } by Def1;
+A3: Y^0 = { y where y is Element of N : for D being non empty directed
+     Subset of N st y <= sup D holds Y meets D } by Def1;
+A4: (X \/ Y)^0 = { xy where xy is Element of N :
+     for D being non empty directed Subset of N st xy <= sup D
+      holds (X \/ Y) meets D } by Def1;
+      now
+      let D be non empty directed Subset of N such that
+A5:     b <= sup D;
+        now per cases by A1,XBOOLE_0:def 2;
+      suppose a in X^0;
+      then consider x being Element of N such that
+A6:     a = x &
+        for D being non empty directed Subset of N st x <= sup D
+          holds X meets D by A2;
+     X meets D by A5,A6;
+then A7:    X /\ D <> {} by XBOOLE_0:def 7;
+        X /\ D c= X /\ D \/ Y /\ D by XBOOLE_1:7;
+      then X /\ D \/ Y /\ D <> {} by A7,XBOOLE_1:3;
+      hence (X \/ Y) /\ D <> {} by XBOOLE_1:23;
+      suppose a in Y^0;
+      then consider y being Element of N such that
+A8:     a = y &
+        for D being non empty directed Subset of N st y <= sup D
+          holds Y meets D by A3;
+     Y meets D by A5,A8;
+then A9:    Y /\ D <> {} by XBOOLE_0:def 7;
+        Y /\ D c= X /\ D \/ Y /\ D by XBOOLE_1:7;
+      then X /\ D \/ Y /\ D <> {} by A9,XBOOLE_1:3;
+      hence (X \/ Y) /\ D <> {} by XBOOLE_1:23;
+      end;
+      hence (X \/ Y) meets D by XBOOLE_0:def 7;
+    end;
+    hence a in (X \/ Y)^0 by A4;
+  end;
+
+:: Lemma 2.7 (ii), p. 154
+theorem Th28:
+ for N being meet-continuous LATTICE, X, Y being upper Subset of N holds
+  (X^0) \/ (Y^0) = (X \/ Y)^0
+  proof
+    let N be meet-continuous LATTICE,
+        X, Y be upper Subset of N;
+    thus (X^0) \/ (Y^0) c= (X \/ Y)^0 by Th27;
+    assume not (X \/ Y)^0 c= (X^0) \/ (Y^0);
+    then consider s being set such that
+A1:   s in (X \/ Y)^0 and
+A2:   not s in (X^0) \/ (Y^0) by TARSKI:def 3;
+A3: not s in X^0 & not s in Y^0 by A2,XBOOLE_0:def 2;
+    reconsider s as Element of N by A1;
+      X^0 = { x where x is Element of N :
+     for D being non empty directed Subset of N st x <= sup D holds
+      X meets D } by Def1;
+    then consider D being non empty directed Subset of N such that
+A4:   s <= sup D & X misses D by A3;
+      Y^0 = { y where y is Element of N :
+     for D being non empty directed Subset of N st y <= sup D holds
+       Y meets D } by Def1;
+    then consider E being non empty directed Subset of N such that
+A5:   s <= sup E & Y misses E by A3;
+      (X \/ Y)^0 = { xy where xy is Element of N :
+     for D being non empty directed Subset of N st xy <= sup D
+      holds (X \/ Y) meets D } by Def1;
+    then consider xy being Element of N such that
+A6:  s = xy & for D being non empty directed Subset of N st xy <= sup D
+       holds (X \/ Y) meets D by A1;
+      s "/\" s = s by YELLOW_0:25;
+    then s <= (sup D) "/\" (sup E) by A4,A5,YELLOW_3:2;
+    then s <= sup (D "/\" E) by WAYBEL_2:51;
+ then (X \/ Y) meets (D"/\"E) by A6;
+then A7:  (X \/ Y) /\ (D"/\"E) <> {} by XBOOLE_0:def 7;
+      X misses (D "/\" E) & Y misses (D "/\" E) by A4,A5,YELLOW12:21;
+    then X /\ (D "/\" E) = {} & Y /\ (D "/\" E) = {} by XBOOLE_0:def 7;
+    then X /\ (D"/\"E) \/ Y /\ (D"/\"E) = {};
+    hence contradiction by A7,XBOOLE_1:23;
+  end;
+
+:: Lemma 2.8, p. 154
+theorem Th29:
+ for S being meet-continuous Scott TopLattice, F being finite Subset of S holds
+  Int uparrow F c= union { wayabove x where x is Element of S : x in F }
+  proof
+    let S be meet-continuous Scott TopLattice,
+        F be finite Subset of S;
+defpred P[set] means
+ex UU being Subset-Family of S st
+ UU = {uparrow x where x is Element of S : x in $1} &
+  (union UU)^0 = union { (uparrow x)^0 where x is Element of S : x in $1 };
+
+A1: F is finite;
+A2: P[{}]
+    proof
+        {} is Subset of bool the carrier of S by XBOOLE_1:2;
+      then {} is Subset-Family of S by SETFAM_1:def 7;
+      then reconsider UU = {} as Subset-Family of S;
+      take UU;
+      thus UU = {uparrow x where x is Element of S : x in {}}
+      proof deffunc F(Element of S) = uparrow $1;
+          {F(x) where x is Element of S : x in {}} = {} from EmptySch;
+        hence thesis;
+      end;
+       deffunc F(Element of S) = (uparrow $1)^0;
+A3:   {F(x) where x is Element of S : x in {}} = {} from EmptySch;
+      reconsider K = union UU as empty Subset of S by ZFMISC_1:2;
+        K^0 is empty;
+      hence thesis by A3;
+    end;
+A4: for b, J being set st b in F & J c= F & P[J] holds P[J \/ {b}]
+    proof
+      let b, J be set; assume
+A5:     b in F & J c= F;
+      assume P[J];
+
+      then consider UU being Subset-Family of S such that
+A6:     UU = {uparrow x where x is Element of S : x in J} and
+A7:     (union UU)^0 = union {(uparrow x)^0 where x is Element of S : x in J};
+
+      reconsider bb = b as Element of S by A5;
+        UU \/ {uparrow bb} is Subset-Family of S
+      proof
+          UU \/ {uparrow bb} c= bool the carrier of S
+        proof
+          let a be set;
+          assume a in UU \/ {uparrow bb};
+          then a in UU or a in {uparrow bb} by XBOOLE_0:def 2;
+          then a in UU or a = uparrow bb by TARSKI:def 1;
+          hence a in bool the carrier of S;
+        end;
+        hence thesis by SETFAM_1:def 7;
+      end;
+      then reconsider I = UU \/ {uparrow bb} as Subset-Family of S
+       ;
+      take I;
+      thus I = {uparrow x where x is Element of S : x in J \/ {b}}
+      proof
+        thus I c= {uparrow x where x is Element of S : x in J \/ {b}}
+        proof
+          let a be set such that
+A8:         a in I;
+          per cases by A8,XBOOLE_0:def 2;
+          suppose a in UU;
+          then consider x being Element of S such that
+A9:         a = uparrow x & x in J by A6;
+            J c= J \/ {b} by XBOOLE_1:7;
+          hence thesis by A9;
+          suppose a in {uparrow bb};
+then A10:       a = uparrow bb by TARSKI:def 1;
+            b in {b} & {b} c= J \/ {b} by TARSKI:def 1,XBOOLE_1:7;
+          hence thesis by A10;
+        end;
+        let a be set;
+        assume a in {uparrow x where x is Element of S : x in J \/ {b}};
+        then consider x being Element of S such that
+A11:       a = uparrow x & x in J \/ {b};
+        per cases by A11,XBOOLE_0:def 2;
+        suppose x in J;
+then A12:     uparrow x in UU by A6;
+          UU c= UU \/ {uparrow bb} by XBOOLE_1:7;
+        hence thesis by A11,A12;
+        suppose x in {b};
+then A13:     x = b by TARSKI:def 1;
+A14:     a in {uparrow x} by A11,TARSKI:def 1;
+          {uparrow bb} c= UU \/ {uparrow bb} by XBOOLE_1:7;
+        hence thesis by A13,A14;
+      end;
+        for X being Subset of S st X in UU holds X is upper
+      proof
+        let X be Subset of S;
+        assume X in UU;
+        then consider x being Element of S such that
+A15:       X = uparrow x & x in J by A6;
+        thus X is upper by A15;
+      end;
+then A16:   union UU is upper by WAYBEL_0:28;
+A17:   (union UU) \/ uparrow bb = union I
+      proof
+        thus (union UU) \/ uparrow bb c= union I
+        proof
+          let a be set such that
+A18:         a in (union UU) \/ uparrow bb;
+          per cases by A18,XBOOLE_0:def 2;
+          suppose a in union UU;
+          then consider A being set such that
+A19:         a in A & A in UU by TARSKI:def 4;
+            UU c= I by XBOOLE_1:7;
+          hence a in union I by A19,TARSKI:def 4;
+          suppose
+A20:         a in uparrow bb;
+A21:       {uparrow bb} c= UU \/ {uparrow bb} by XBOOLE_1:7;
+            uparrow bb in {uparrow bb} by TARSKI:def 1;
+          hence a in union I by A20,A21,TARSKI:def 4;
+        end;
+        let a be set;
+        assume a in union I;
+        then consider A being set such that
+A22:       a in A & A in I by TARSKI:def 4;
+        per cases by A22,XBOOLE_0:def 2;
+        suppose A in UU;
+        then A c= union UU by ZFMISC_1:92;
+then A23:     a in union UU by A22;
+          union UU c= (union UU) \/ uparrow bb by XBOOLE_1:7;
+        hence a in (union UU) \/ uparrow bb by A23;
+        suppose A in {uparrow bb};
+then A24:     A = uparrow bb by TARSKI:def 1;
+          uparrow bb c= (union UU) \/ uparrow bb by XBOOLE_1:7;
+        hence a in (union UU) \/ uparrow bb by A22,A24;
+      end;
+        (union {(uparrow x)^0 where x is Element of S : x in J}) \/
+       ((uparrow bb)^0) =
+          union {(uparrow x)^0 where x is Element of S : x in J \/ {b}}
+      proof
+          {(uparrow x)^0 where x is Element of S : x in J} c=
+          {(uparrow x)^0 where x is Element of S : x in J \/ {b}}
+        proof
+          let a be set;
+          assume a in {(uparrow x)^0 where x is Element of S : x in J};
+          then consider y being Element of S such that
+A25:         a = (uparrow y)^0 & y in J;
+            J c= J \/ {b} by XBOOLE_1:7;
+          hence a in {(uparrow x)^0 where x is Element of S : x in J \/ {b}}
+            by A25;
+        end;
+then A26:     union {(uparrow x)^0 where x is Element of S : x in J} c=
+          union {(uparrow x)^0 where x is Element of S : x in J \/ {b}}
+           by ZFMISC_1:95;
+A27:     b in {b} by TARSKI:def 1;
+          {b} c= J \/ {b} by XBOOLE_1:7;
+        then (uparrow bb)^0 in {(uparrow x)^0 where x is Element of S : x in
+ J \/ {b}}
+          by A27;
+        then (uparrow bb)^0 c=
+          union {(uparrow x)^0 where x is Element of S : x in J \/ {b}}
+           by ZFMISC_1:92;
+        hence (union {(uparrow x)^0 where x is Element of S : x in J}) \/
+         ((uparrow bb)^0) c=
+          union {(uparrow x)^0 where x is Element of S : x in J \/ {b}}
+          by A26,XBOOLE_1:8;
+        let a be set;
+        assume a in union {(uparrow x)^0 where x is Element of S : x in
+ J \/ {b}};
+      then consider A being set such that
+A28:       a in A & A in {(uparrow x)^0 where x is Element of S : x in J \/
+ {b}}
+            by TARSKI:def 4;
+        consider y being Element of S such that
+A29:       A = (uparrow y)^0 & y in J \/ {b} by A28;
+        per cases by A29,XBOOLE_0:def 2;
+        suppose y in J;
+        then (uparrow y)^0 in {(uparrow x)^0 where x is Element of S : x in J}
+;
+then A30:     a in union {(uparrow x)^0 where x is Element of S : x in J}
+          by A28,A29,TARSKI:def 4;
+          union {(uparrow x)^0 where x is Element of S : x in J} c=
+         (union {(uparrow x)^0 where x is Element of S : x in J}) \/
+          ((uparrow bb)^0) by XBOOLE_1:7;
+        hence thesis by A30;
+        suppose y in {b};
+then A31:     y = b by TARSKI:def 1;
+          (uparrow bb)^0 c= (union {(uparrow x)^0 where x is Element of S :
+          x in J}) \/ ((uparrow bb)^0) by XBOOLE_1:7;
+        hence thesis by A28,A29,A31;
+      end;
+      hence (union I)^0 = union { (uparrow x)^0 where x is Element of S :
+        x in J \/ {b} } by A7,A16,A17,Th28;
+    end;
+    P[F] from Finite(A1,A2,A4);
+    then consider UU being Subset-Family of S such that
+A32:  UU = {uparrow x where x is Element of S : x in F} &
+     (union UU)^0 = union { (uparrow x)^0 where x is Element of S : x in F };
+  {(uparrow x)^0 where x is Element of S : x in F} =
+      {wayabove x where x is Element of S : x in F}
+    proof
+      thus {(uparrow x)^0 where x is Element of S : x in F} c=
+        {wayabove x where x is Element of S : x in F}
+      proof
+        let a be set;
+        assume a in {(uparrow x)^0 where x is Element of S : x in F};
+        then consider x being Element of S such that
+A33:       a = (uparrow x)^0 & x in F;
+          (uparrow x)^0 = wayabove x by Th25;
+        hence thesis by A33;
+      end;
+      let a be set;
+      assume a in {wayabove x where x is Element of S : x in F};
+      then consider x being Element of S such that
+A34:     a = wayabove x & x in F;
+        (uparrow x)^0 = wayabove x by Th25;
+      hence thesis by A34;
+    end;
+    then (uparrow F)^0 = union {wayabove x where x is Element of S : x in F}
+         by A32,YELLOW_9:4;
+    hence Int uparrow F c= union {wayabove x where x is Element of S : x in F}
+      by Th26;
+  end;
+
+:: Theorem 2.9, p. 154
+theorem Th30:
+ for N being Lawson (complete TopLattice)
+  holds N is continuous iff N is meet-continuous Hausdorff
+  proof
+    let N be Lawson (complete TopLattice);
+    hereby
+      assume N is continuous;
+      then reconsider L1 = N as continuous lower-bounded Lawson
+       (complete TopLattice);
+        L1 is meet-continuous;
+      hence N is meet-continuous Hausdorff;
+    end;
+    assume
+A1:   N is meet-continuous Hausdorff;
+    thus
+A2:   for x being Element of N holds waybelow x is non empty directed;
+    thus N is up-complete;
+      for x, y being Element of N st not x <= y
+     ex u being Element of N st u << x & not u <= y
+    proof
+      let x, y be Element of N such that
+A3:     not x <= y;
+      consider S being Scott TopAugmentation of N;
+A4:   the RelStr of S = the RelStr of N by YELLOW_9:def 4;
+      reconsider J =
+       {O\uparrow F where O, F is Subset of N: O in sigma N & F is finite}
+        as Basis of N by WAYBEL19:32;
+        x "/\" y <> x by A3,YELLOW_0:23;
+      then consider W, V being Subset of N such that
+A5:     W is open and
+A6:     V is open and
+A7:     x in W & x "/\" y in V & W misses V by A1,COMPTS_1:def 4;
+        V = union {G where G is Subset of N: G in J & G c= V} by A6,YELLOW_8:18
+;
+      then consider K being set such that
+A8:     x "/\" y in K & K in {G where G is Subset of N: G in J & G c= V}
+          by A7,TARSKI:def 4;
+      consider V1 being Subset of N such that
+A9:     K = V1 & V1 in J & V1 c= V by A8;
+      consider U2, F being Subset of N such that
+A10:     V1 = U2\uparrow F and
+A11:     U2 in sigma N and
+A12:     F is finite by A9;
+      reconsider U1 = U2 as Subset of S by A4;
+        U2 in sigma S by A4,A11,YELLOW_9:52;
+then A13:   U1 is open by WAYBEL14:24;
+      reconsider WU1 = W /\ U2 as Subset of N;
+        WU1 c= uparrow F
+      proof
+        let w be set; assume
+A14:       w in WU1 & not w in uparrow F;
+then A15:     w in W by XBOOLE_0:def 3;
+A16:     w in WU1 \ uparrow F by A14,XBOOLE_0:def 4;
+A17:     W misses V1 by A7,A9,XBOOLE_1:63;
+          W /\ U1 c= U1 by XBOOLE_1:17;
+        then WU1 \ uparrow F c= U1 \ uparrow F by XBOOLE_1:33;
+        hence contradiction by A10,A15,A16,A17,XBOOLE_0:3;
+      end;
+      then WU1 is_coarser_than uparrow F by WAYBEL12:20;
+then A18:  uparrow WU1 c= uparrow F by YELLOW12:28;
+      reconsider W1 = WU1 as Subset of S by A4;
+      reconsider F1 = F as finite Subset of S by A4,A12;
+        S is meet-continuous by A1,A4,YELLOW12:14;
+then A19:   Int uparrow F1 c=
+        union { wayabove u where u is Element of S : u in F1 } by Th29;
+A20:   uparrow W1 = uparrow WU1 & uparrow F1 = uparrow F
+        by A4,WAYBEL_0:13;
+      reconsider x1 = x, y1 = y as Element of S by A4;
+A21:   ex_inf_of {x1,y1},S by YELLOW_0:21;
+        x "/\" y = inf {x,y} by YELLOW_0:40
+            .= "/\"({x1,y1},S) by A4,A21,YELLOW_0:27
+            .= x1 "/\" y1 by YELLOW_0:40;
+then A22:   x1 "/\" y1 in U1 by A8,A9,A10,XBOOLE_0:def 4;
+A23:   x1 "/\" y1 <= x1 by YELLOW_0:23;
+        U1 is upper by A13,WAYBEL11:def 4;
+      then x1 in U1 by A22,A23,WAYBEL_0:def 20;
+then A24:   x in W1 by A7,XBOOLE_0:def 3;
+        W1 c= uparrow W1 by WAYBEL_0:16;
+then A25:  x in uparrow W1 by A24;
+        N is Lawson correct TopAugmentation of S by A4,YELLOW_9:def 4;
+      then U2 is open by A13,WAYBEL19:37;
+      then WU1 is open by A5,TOPS_1:38;
+      then uparrow W1 is open by A1,Th15;
+      then uparrow W1 c= Int uparrow F1 by A18,A20,TOPS_1:56;
+      then x in Int uparrow F1 by A25;
+      then consider A being set such that
+A26:    x in A & A in { wayabove u where u is Element of S : u in F1 }
+         by A19,TARSKI:def 4;
+      consider u being Element of S such that
+A27:     A = wayabove u & u in F1 by A26;
+      reconsider u1 = u as Element of N by A4;
+A28:  wayabove u1 = wayabove u by A4,YELLOW12:13;
+A29:   for N being Semilattice, x, y being Element of N st
+       ex u being Element of N st u << x & not u <= x "/\" y
+        ex u being Element of N st u << x & not u <= y
+      proof
+        let N be Semilattice,
+            x, y be Element of N;
+        given u being Element of N such that
+A30:       u << x and
+A31:       not u <= x "/\" y;
+        take u;
+        thus u << x by A30;
+        assume
+A32:       u <= y;
+          u <= x by A30,WAYBEL_3:1;
+        then u "/\" u <= x "/\" y by A32,YELLOW_3:2;
+        hence contradiction by A31,YELLOW_0:25;
+      end;
+        now
+        take u1;
+        thus u1 << x by A26,A27,A28,WAYBEL_3:8;
+          uparrow u1 c= uparrow F by A27,YELLOW12:30;
+        then not x "/\" y in uparrow u1 by A8,A9,A10,XBOOLE_0:def 4;
+        hence not u1 <= x "/\" y by WAYBEL_0:18;
+      end;
+      then consider u2 being Element of N such that
+A33:    u2 << x & not u2 <= y by A29;
+      take u2;
+      thus thesis by A33;
+    end;
+    hence N is satisfying_axiom_of_approximation by A2,WAYBEL_3:24;
+  end;
+
+definition
+ cluster continuous Lawson -> Hausdorff (complete TopLattice);
+coherence by Th30;
+ cluster meet-continuous Lawson Hausdorff -> continuous (complete TopLattice);
+coherence by Th30;
+end;
+
+:: Definition 2.10, p. 155
+definition let N be non empty TopRelStr;
+ attr N is with_small_semilattices means
+    for x being Point of N ex J being basis of x st
+   for A being Subset of N st A in J holds subrelstr A is meet-inheriting;
+ attr N is with_compact_semilattices means
+    for x being Point of N ex J being basis of x st
+   for A being Subset of N st A in J holds subrelstr A is meet-inheriting &
+    A is compact;
+ attr N is with_open_semilattices means :Def4:
+  for x being Point of N ex J being Basis of x st
+   for A being Subset of N st A in J holds subrelstr A is meet-inheriting;
+end;
+
+definition
+ cluster with_open_semilattices -> with_small_semilattices
+                                   (non empty TopSpace-like TopRelStr);
+coherence
+  proof
+    let N be non empty TopSpace-like TopRelStr;
+    assume
+A1:   for x being Point of N ex J being Basis of x st
+     for A being Subset of N st A in J holds subrelstr A is meet-inheriting;
+    let x be Point of N;
+    consider J being Basis of x such that
+A2:   for A being Subset of N st A in J holds subrelstr A is meet-inheriting
+        by A1;
+    reconsider J as basis of x by YELLOW13:23;
+    take J;
+    thus thesis by A2;
+  end;
+
+ cluster with_compact_semilattices -> with_small_semilattices
+                                      (non empty TopSpace-like TopRelStr);
+coherence
+  proof
+    let N be non empty TopSpace-like TopRelStr;
+    assume
+A3:  for x being Point of N ex J being basis of x st
+      for A being Subset of N st A in J holds subrelstr A is meet-inheriting &
+       A is compact;
+    let x be Point of N;
+    consider J being basis of x such that
+A4:   for A being Subset of N st A in J holds subrelstr A is meet-inheriting
+        & A is compact by A3;
+    take J;
+    thus thesis by A4;
+  end;
+
+ cluster anti-discrete -> with_small_semilattices with_open_semilattices
+                                                   (non empty TopRelStr);
+coherence
+  proof
+    let T be non empty TopRelStr;
+    assume T is anti-discrete;
+    then reconsider W = T as anti-discrete non empty TopRelStr;
+    set J = {the carrier of W};
+A5: now
+      let A be Subset of W;
+      assume A in J;
+then A6:   A = the carrier of W by TARSKI:def 1
+       .= [#]W by PRE_TOPC:12;
+        subrelstr [#]W is infs-inheriting;
+      then reconsider K = subrelstr A as infs-inheriting SubRelStr of T by A6;
+        K is meet-inheriting;
+      hence subrelstr A is meet-inheriting;
+    end;
+A7: W is with_small_semilattices
+    proof
+      let x be Point of W;
+      reconsider J as basis of x by YELLOW13:21;
+      take J;
+      let A be Subset of W;
+      assume A in J;
+      hence subrelstr A is meet-inheriting by A5;
+    end;
+      W is with_open_semilattices
+    proof
+      let x be Point of W;
+      reconsider J as Basis of x by YELLOW13:13;
+      take J;
+      let A be Subset of W;
+      assume A in J;
+      hence subrelstr A is meet-inheriting by A5;
+    end;
+    hence thesis by A7;
+  end;
+
+ cluster reflexive trivial TopSpace-like ->
+                             with_compact_semilattices (non empty TopRelStr);
+coherence
+  proof
+    let T be non empty TopRelStr;
+    assume T is reflexive trivial TopSpace-like;
+    then reconsider W = T as reflexive trivial non empty TopSpace-like
+TopRelStr;
+      W is with_compact_semilattices
+    proof
+      let x be Point of W;
+      reconsider J = {the carrier of W} as basis of x by YELLOW13:21;
+      take J;
+      let A be Subset of W;
+      assume A in J;
+then A8:   A = the carrier of W by TARSKI:def 1
+       .= [#]W by PRE_TOPC:12;
+        subrelstr [#]W is infs-inheriting;
+      then reconsider K = subrelstr A as infs-inheriting SubRelStr of T by A8;
+        K is meet-inheriting;
+      hence subrelstr A is meet-inheriting;
+      thus A is compact by A8;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition
+ cluster strict trivial lower TopLattice;
+existence
+  proof
+    consider T being strict trivial TopLattice;
+    take T;
+    thus thesis;
+  end;
+end;
+
+theorem Th31:
+ for N being topological_semilattice (with_infima TopPoset),
+     C being Subset of N st subrelstr C is meet-inheriting holds
+  subrelstr Cl C is meet-inheriting
+  proof
+    let N be topological_semilattice (with_infima TopPoset),
+        C be Subset of N such that
+A1:   subrelstr C is meet-inheriting;
+    set A = Cl C,
+        S = subrelstr A;
+    let x, y be Element of N such that
+A2:  x in the carrier of S & y in the carrier of S & ex_inf_of {x,y},N;
+A3: the carrier of S = A by YELLOW_0:def 15;
+      for V being a_neighborhood of x "/\" y holds V meets C
+    proof
+      let V be a_neighborhood of x "/\" y;
+      set NN = [:N,N qua TopSpace:];
+A4:   the carrier of NN = [:the carrier of N,the carrier of N:]
+        by BORSUK_1:def 5;
+        the carrier of [:N,N:] = [:the carrier of N,the carrier of N:]
+        by YELLOW_3:def 2;
+      then reconsider f = inf_op N as map of NN, N by A4;
+A5:   f is continuous by YELLOW13:def 5;
+      reconsider xy = [x,y] as Point of NN by A4,YELLOW_3:def 2;
+        f.xy = x "/\" y by WAYBEL_2:def 4;
+      then consider H being a_neighborhood of xy such that
+A6:     f.:H c= V by A5,BORSUK_1:def 2;
+      consider A being Subset-Family of NN such that
+A7:     Int H = union A and
+A8:     for e being set st e in A ex X1, Y1 being Subset of N
+         st e = [:X1,Y1:] & X1 is open & Y1 is open by BORSUK_1:45;
+        xy in union A by A7,CONNSP_2:def 1;
+      then consider K being set such that
+A9:     xy in K and
+A10:    K in A by TARSKI:def 4;
+      consider Ix, Iy being Subset of N such that
+A11:    K = [:Ix,Iy:] & Ix is open & Iy is open by A8,A10;
+        x in Ix & Ix = Int Ix by A9,A11,TOPS_1:55,ZFMISC_1:106;
+      then reconsider Ix as a_neighborhood of x by CONNSP_2:def 1;
+        Ix meets C by A2,A3,YELLOW_6:6;
+      then consider ix being set such that
+A12:    ix in Ix & ix in C by XBOOLE_0:3;
+        y in Iy & Iy = Int Iy by A9,A11,TOPS_1:55,ZFMISC_1:106;
+      then reconsider Iy as a_neighborhood of y by CONNSP_2:def 1;
+        Iy meets C by A2,A3,YELLOW_6:6;
+      then consider iy being set such that
+A13:    iy in Iy & iy in C by XBOOLE_0:3;
+      reconsider ix, iy as Element of N by A12,A13;
+        now take a = ix "/\" iy;
+A14:  f. [ix,iy] = ix "/\" iy by WAYBEL_2:def 4;
+A15:  dom f = the carrier of [:N,N:] by FUNCT_2:def 1;
+        [ix,iy] in K by A11,A12,A13,ZFMISC_1:106;
+then A16:  [ix,iy] in Int H by A7,A10,TARSKI:def 4;
+        Int H c= H by TOPS_1:44;
+      then ix "/\" iy in f.:H by A14,A15,A16,FUNCT_1:def 12;
+      hence a in V by A6;
+A17:  the carrier of subrelstr C = C by YELLOW_0:def 15;
+        ex_inf_of {ix,iy},N by YELLOW_0:21;
+      then inf{ix,iy} in C by A1,A12,A13,A17,YELLOW_0:def 16;
+      hence a in C by YELLOW_0:40;
+     end; hence thesis by XBOOLE_0:3;
+    end;
+    then x "/\" y in Cl C by YELLOW_6:6;
+    hence inf {x,y} in the carrier of S by A3,YELLOW_0:40;
+  end;
+
+:: Theorem 2.11, p. 155
+theorem Th32:
+ for N being meet-continuous Lawson (complete TopLattice)
+  for S being Scott TopAugmentation of N holds
+  (for x being Point of S ex J being Basis of x st
+   for W being Subset of S st W in J holds W is Filter of S) iff
+  N is with_open_semilattices
+  proof
+    let N be meet-continuous Lawson (complete TopLattice),
+        S be Scott TopAugmentation of N;
+A1: the RelStr of N = the RelStr of S by YELLOW_9:def 4;
+    hereby assume
+A2:   for x being Point of S ex J being Basis of x st
+       for W being Subset of S st W in J holds W is Filter of S;
+      thus N is with_open_semilattices
+      proof
+        let x be Point of N;
+A3:     now
+          let W be Subset of N such that
+A4:         W is open and
+A5:         x in W;
+          reconsider BL =
+          {O\uparrow F where O, F is Subset of N: O in sigma N & F is finite}
+           as Basis of N by WAYBEL19:32;
+          reconsider y = x as Point of S by A1;
+          consider By being Basis of y such that
+A6:         for A being Subset of S st A in By holds A is Filter of S by A2;
+
+            W = union { G where G is Subset of N: G in BL & G c= W }
+            by A4,YELLOW_8:18;
+          then consider K being set such that
+A7:         x in K & K in { G where G is Subset of N: G in BL & G c= W }
+             by A5,TARSKI:def 4;
+          consider G being Subset of N such that
+A8:         K = G and
+A9:         G in BL and
+A10:         G c= W by A7;
+          consider V, F being Subset of N such that
+A11:         G = V \ uparrow F and
+A12:         V in sigma N and
+A13:         F is finite by A9;
+          reconsider V as Subset of S by A1;
+A14:       sigma N = sigma S by A1,YELLOW_9:52;
+then A15:       V is open by A12,WAYBEL14:24;
+          reconsider F as finite Subset of N by A13;
+            y in V by A7,A8,A11,XBOOLE_0:def 4;
+          then consider U1 being Subset of S such that
+A16:         U1 in By and
+A17:         U1 c= V by A15,YELLOW_8:22;
+          reconsider U2 = U1 as Subset of N by A1;
+            U1 is Filter of S by A6,A16;
+          then reconsider U2 as Filter of N by A1,WAYBEL_0:4,25;
+            U2 \ uparrow F is Subset of N;
+          then reconsider IT = U1 \ uparrow F as Subset of N;
+
+          take U2, F, IT;
+
+          thus IT = U2 \ uparrow F;
+A18:       y in U1 by A16,YELLOW_8:21;
+            not x in uparrow F by A7,A8,A11,XBOOLE_0:def 4;
+          hence x in IT by A18,XBOOLE_0:def 4;
+            U1 is open by A16,YELLOW_8:21;
+          then U1 in sigma S by WAYBEL14:24;
+then A19:      IT in BL by A14;
+            BL c= the topology of N by CANTOR_1:def 2;
+          hence IT is open by A19,PRE_TOPC:def 5;
+            IT c= G by A11,A17,XBOOLE_1:33;
+          hence IT c= W by A10,XBOOLE_1:1;
+        end;
+
+        defpred P[set] means
+          ex U1 being Filter of N, F being finite Subset of N,
+             W1 being Subset of N st $1 = W1 &
+           U1 \ uparrow F = $1 & x in $1 & W1 is open;
+        consider SF being Subset-Family of N such that
+A20:      for W being Subset of N holds W in SF iff P[W]
+            from SubFamEx;
+
+        reconsider SF as Subset-Family of N;
+          SF is Basis of x
+        proof
+          thus SF c= the topology of N
+          proof
+            let a be set; assume
+A21:           a in SF;
+            then reconsider W = a as Subset of N;
+            consider U1 being Filter of N,
+                     F being finite Subset of N,
+                     W1 being Subset of N such that
+A22:          W1 = W and
+                U1 \ uparrow F = W & x in W and
+A23:           W1 is open by A20,A21;
+            thus thesis by A22,A23,PRE_TOPC:def 5;
+          end;
+            for a being set st a in SF holds x in a
+          proof
+            let a be set; assume
+A24:           a in SF;
+            then reconsider W = a as Subset of N;
+            consider U1 being Filter of N,
+                     F being finite Subset of N,
+                     W1 being Subset of N such that
+A25:           W1 = W & U1 \ uparrow F = W & x in W & W1 is open by A20,A24;
+            thus x in a by A25;
+          end;
+          hence x in Intersect SF by CANTOR_1:10;
+          let W be Subset of N;
+          assume W is open & x in W;
+          then consider U2 being Filter of N,
+                   F being finite Subset of N,
+                   IT being Subset of N such that
+A26:         IT = U2 \ uparrow F & x in IT & IT is open & IT c= W by A3;
+          take IT;
+          thus IT in SF & IT c= W by A20,A26;
+        end;
+        then reconsider SF as Basis of x;
+        take SF;
+        let W be Subset of N;
+        assume W in SF;
+        then consider U1 being Filter of N,
+                 F being finite Subset of N,
+                 W1 being Subset of N such that
+A27:       W1 = W & U1 \ uparrow F = W & x in W & W1 is open by A20;
+        set SW = subrelstr W;
+        thus SW is meet-inheriting
+        proof
+          let a, b be Element of N such that
+A28:         a in the carrier of SW & b in the carrier of SW &
+              ex_inf_of {a,b},N;
+A29:       the carrier of SW = W by YELLOW_0:def 15;
+then A30:       a in U1 & b in U1 & not a in uparrow F & not b in uparrow F
+            by A27,A28,XBOOLE_0:def 4;
+          then consider z being Element of N such that
+A31:         z in U1 & z <= a & z <= b by WAYBEL_0:def 2;
+            z "/\" z <= a "/\" b by A31,YELLOW_3:2;
+          then z <= a "/\" b by YELLOW_0:25;
+then A32:       a "/\" b in U1 by A31,WAYBEL_0:def 20;
+            for y being Element of N st y <= a "/\" b holds not y in F
+          proof
+            let y be Element of N such that
+A33:           y <= a "/\" b;
+              a "/\" b <= a by YELLOW_0:23;
+            then y <= a by A33,ORDERS_1:26;
+            hence not y in F by A30,WAYBEL_0:def 16;
+          end;
+          then not a "/\" b in uparrow F by WAYBEL_0:def 16;
+          then a "/\" b in W by A27,A32,XBOOLE_0:def 4;
+          hence inf {a,b} in the carrier of SW by A29,YELLOW_0:40;
+        end;
+      end;
+    end;
+
+    assume
+A34:   N is with_open_semilattices;
+    let x be Point of S;
+    reconsider y = x as Point of N by A1;
+    consider J being Basis of y such that
+A35:  for A being Subset of N st A in J holds subrelstr A is meet-inheriting
+      by A34,Def4;
+    reconsider J' = {uparrow A where A is Subset of N: A in J}
+     as Basis of x by Th16;
+    take J';
+    let W be Subset of S;
+    assume W in J';
+    then consider V being Subset of N such that
+A36:   W = uparrow V and
+A37:   V in J;
+A38: x in V by A37,YELLOW_8:21;
+A39: V c= uparrow V by WAYBEL_0:16;
+      subrelstr V is meet-inheriting by A35,A37;
+    then V is filtered by YELLOW12:26;
+    then uparrow V is filtered by WAYBEL_0:35;
+    hence W is Filter of S by A1,A36,A38,A39,WAYBEL_0:4,25;
+  end;
+
+:: Theorem 2.12, p. 155,  r => l
+theorem Th33:
+ for N being Lawson (complete TopLattice)
+  for S being Scott TopAugmentation of N
+   for x being Element of N holds
+  {inf A where A is Subset of S : x in A & A in sigma S} c=
+   {inf J where J is Subset of N : x in J & J in lambda N}
+  proof
+    let N be Lawson (complete TopLattice),
+        S be Scott TopAugmentation of N,
+        x be Element of N;
+A1: the RelStr of N = the RelStr of S by YELLOW_9:def 4;
+    set s = {inf A where A is Subset of S : x in A & A in sigma S},
+        l = {inf J where J is Subset of N : x in J & J in lambda N};
+    let k be set;
+    assume k in s;
+    then consider J being Subset of S such that
+A2:   k = inf J & x in J & J in sigma S;
+    reconsider A = J as Subset of N by A1;
+      ex_inf_of A,N by YELLOW_0:17;
+then A3: inf A = inf J by A1,YELLOW_0:27;
+      sigma N c= lambda N by Th10;
+    then sigma S c= lambda N by A1,YELLOW_9:52;
+    hence k in l by A2,A3;
+  end;
+
+:: Theorem 2.12, p. 155
+theorem Th34:
+ for N being meet-continuous Lawson (complete TopLattice)
+  for S being Scott TopAugmentation of N
+   for x being Element of N holds
+  {inf A where A is Subset of S : x in A & A in sigma S} =
+  {inf J where J is Subset of N : x in J & J in lambda N}
+  proof
+    let N be meet-continuous Lawson (complete TopLattice),
+        S be Scott TopAugmentation of N,
+        x be Element of N;
+A1: the RelStr of N = the RelStr of S by YELLOW_9:def 4;
+    set l = {inf A where A is Subset of N : x in A & A in lambda N},
+        s = {inf J where J is Subset of S : x in J & J in sigma S};
+    thus s c= l by Th33;
+    let k be set;
+    assume k in l;
+    then consider A being Subset of N such that
+A2:   k = inf A & x in A & A in lambda N;
+    reconsider J = A as Subset of S by A1;
+A3: ex_inf_of J,S by YELLOW_0:17;
+then A4: inf A = inf J by A1,YELLOW_0:27
+         .= inf uparrow J by A3,WAYBEL_0:38;
+A5: J c= uparrow J by WAYBEL_0:16;
+      A is open by A2,Th12;
+    then uparrow J is open by Th15;
+    then uparrow J in sigma S by WAYBEL14:24;
+    hence k in s by A2,A4,A5;
+  end;
+
+:: Theorem 2.13, p. 155,  1 <=> 2
+theorem Th35:
+ for N being meet-continuous Lawson (complete TopLattice) holds
+  N is continuous iff
+   N is with_open_semilattices & InclPoset sigma N is continuous
+  proof
+    let N be meet-continuous Lawson (complete TopLattice);
+    consider S being Scott TopAugmentation of N;
+A1: the RelStr of N = the RelStr of S by YELLOW_9:def 4;
+then A2: sigma S = sigma N by YELLOW_9:52;
+    hereby
+      assume N is continuous;
+then A3:   S is continuous by A1,YELLOW12:15;
+        for x being Point of S ex J being Basis of x st
+       for W being Subset of S st W in J holds W is Filter of S
+      proof
+        let x be Point of S;
+        consider J being Basis of x such that
+A4:       for W being Subset of S st W in J holds W is open filtered
+           by A3,WAYBEL14:35;
+        take J;
+        let W be Subset of S; assume
+A5:       W in J;
+        then W is open by A4;
+        hence W is Filter of S by A4,A5,WAYBEL11:def 4,YELLOW_8:21;
+      end;
+      hence N is with_open_semilattices by Th32;
+        InclPoset sigma S is continuous by A3,WAYBEL14:36;
+      hence InclPoset sigma N is continuous by A1,YELLOW_9:52;
+    end;
+    assume
+A6:   N is with_open_semilattices & InclPoset sigma N is continuous;
+      for x being Element of S ex J being Basis of x st
+     for Y being Subset of S st Y in J holds Y is open filtered
+    proof
+      let x be Element of S;
+      reconsider y = x as Element of N by A1;
+      consider J being Basis of y such that
+A7:     for A being Subset of N st A in J holds subrelstr A is meet-inheriting
+          by A6,Def4;
+      reconsider J' = {uparrow A where A is Subset of N: A in J} as Basis of x
+       by Th16;
+      take J';
+      let Y be Subset of S; assume
+A8:     Y in J';
+      then consider A being Subset of N such that
+A9:     Y = uparrow A and
+A10:     A in J;
+        subrelstr A is meet-inheriting by A7,A10;
+      then A is filtered by YELLOW12:26;
+      then uparrow A is filtered by WAYBEL_0:35;
+      hence Y is open filtered by A1,A8,A9,WAYBEL_0:4,YELLOW_8:21;
+    end;
+    then for x being Element of S holds x = "\/" ({inf X where X is Subset of
+S :
+     x in X & X in sigma S}, S) by A2,A6,WAYBEL14:37;
+    then S is continuous by WAYBEL14:38;
+    hence N is continuous by A1,YELLOW12:15;
+  end;
+
+definition
+ cluster continuous -> with_open_semilattices (Lawson complete TopLattice);
+coherence
+  proof
+    let N be Lawson complete TopLattice;
+    assume N is continuous;
+    then reconsider M = N as continuous Lawson complete TopLattice;
+      M is with_open_semilattices by Th35;
+    hence thesis;
+  end;
+end;
+
+definition let N be continuous Lawson (complete TopLattice);
+ cluster InclPoset sigma N -> continuous;
+coherence by Th35;
+end;
+
+:: Theorem 2.13, p. 155,  1 => 3
+theorem
+   for N being continuous Lawson (complete TopLattice) holds
+  N is compact Hausdorff topological_semilattice with_open_semilattices
+  proof
+    let N be continuous Lawson (complete TopLattice);
+    thus N is compact Hausdorff;
+      InclPoset sigma N is continuous;
+    hence N is topological_semilattice by Th22;
+    thus N is with_open_semilattices;
+  end;
+
+:: Theorem 2.13, p. 155,  3 => 3'
+theorem
+   for N being Hausdorff topological_semilattice with_open_semilattices
+  Lawson (complete TopLattice) holds
+   N is with_compact_semilattices
+  proof
+    let N be Hausdorff topological_semilattice with_open_semilattices
+        Lawson (complete TopLattice);
+    let x be Point of N;
+    consider BO being Basis of x such that
+A1:   for A being Subset of N st A in BO holds subrelstr A is meet-inheriting
+        by Def4;
+    set BC = {Cl A where A is Subset of N: A in BO};
+      BC is Subset-Family of N
+    proof
+        BC c= bool the carrier of N
+      proof
+        let k be set;
+        assume k in BC;
+        then consider A being Subset of N such that
+A2:       k = Cl A and A in BO;
+        thus k in bool the carrier of N by A2;
+      end;
+      hence thesis by SETFAM_1:def 7;
+    end;
+    then reconsider BC as Subset-Family of N;
+      BC is basis of x
+    proof
+      let S be a_neighborhood of x;
+     x in Int S by CONNSP_2:def 1;
+      then consider W being Subset of N such that
+A3:     W in BO and
+A4:     W c= Int S by YELLOW_8:22;
+A5:   x in W & W is open by A3,YELLOW_8:21;
+      then x in Int W by TOPS_1:55;
+      then reconsider T = W as a_neighborhood of x by CONNSP_2:def 1;
+A6:   Int S c= S by TOPS_1:44;
+      per cases;
+      suppose
+A7:    W <> [#]N;
+        x in W by A3,YELLOW_8:21;
+  then {x} c= W by ZFMISC_1:37;
+      then consider G being Subset of N such that
+A8:    G is open and
+A9:    {x} c= G and
+A10:    Cl G c= W by A5,A7,CONNSP_2:26;
+        x in G by A9,ZFMISC_1:37;
+      then consider K being Subset of N such that
+A11:    K in BO and
+A12:    K c= G by A8,YELLOW_8:22;
+        x in K & K is open by A11,YELLOW_8:21;
+then A13:   x in Int K by TOPS_1:55;
+        K c= Cl K by PRE_TOPC:48;
+      then Int K c= Int Cl K by TOPS_1:48;
+      then reconsider KK = Cl K as a_neighborhood of x by A13,CONNSP_2:def 1;
+      take KK;
+      thus KK in BC by A11;
+        Cl K c= Cl G by A12,PRE_TOPC:49;
+      then Cl K c= W by A10,XBOOLE_1:1;
+      then KK c= Int S by A4,XBOOLE_1:1;
+      hence KK c= S by A6,XBOOLE_1:1;
+      suppose
+A14:    W = [#]N;
+      take T;
+        Cl [#]N = [#]N by TOPS_1:27;
+      hence T in BC by A3,A14;
+      thus T c= S by A4,A6,XBOOLE_1:1;
+    end;
+    then reconsider BC as basis of x;
+    take BC;
+    let A be Subset of N;
+    assume A in BC;
+    then consider C being Subset of N such that
+A15:  A = Cl C and
+A16:  C in BO;
+      subrelstr C is meet-inheriting by A1,A16;
+    hence subrelstr A is meet-inheriting by A15,Th31;
+    thus A is compact by A15,COMPTS_1:17;
+  end;
+
+:: Theorem 2.13, p. 155,  3' => 4
+theorem
+   for N being meet-continuous Hausdorff Lawson (complete TopLattice),
+     x being Element of N holds
+   x = "\/"({inf V where V is Subset of N: x in V & V in lambda N},N)
+  proof
+    let N be meet-continuous Hausdorff Lawson (complete TopLattice),
+        x be Element of N;
+    consider S being Scott complete TopAugmentation of N;
+A1: the RelStr of S = the RelStr of N by YELLOW_9:def 4;
+    then reconsider y = x as Element of S;
+A2: for y being Element of S ex J being Basis of y st
+     for X being Subset of S st X in J holds X is open filtered by WAYBEL14:35;
+A3: ex_sup_of {inf X where X is Subset of S: y in X & X in sigma S}, S
+      by YELLOW_0:17;
+      InclPoset sigma S is continuous by WAYBEL14:36;
+    hence
+      x = "\/" ({inf X where X is Subset of S: y in X & X in sigma S}, S)
+         by A2,WAYBEL14:37
+     .= "\/" ({inf X where X is Subset of S: x in X & X in sigma S}, N)
+         by A1,A3,YELLOW_0:26
+     .= "\/" ({inf V where V is Subset of N: x in V & V in lambda N}, N)
+         by Th34;
+  end;
+
+:: Theorem 2.13, p. 155,  1 <=> 4
+theorem
+   for N being meet-continuous Lawson (complete TopLattice) holds
+  N is continuous iff
+   for x being Element of N holds
+    x = "\/"({inf V where V is Subset of N: x in V & V in lambda N},N)
+  proof
+    let N be meet-continuous Lawson (complete TopLattice);
+    consider S being complete Scott TopAugmentation of N;
+A1: the RelStr of S = the RelStr of N by YELLOW_9:def 4;
+    hereby assume
+A2:     N is continuous;
+      let x be Element of N;
+A3:   x is Element of S by A1;
+A4:   S is continuous by A1,A2,YELLOW12:15;
+then A5:   InclPoset sigma S is continuous by WAYBEL14:36;
+A6:   ex_sup_of {inf X where X is Subset of S: x in X & X in sigma S}, N
+        by YELLOW_0:17;
+        for x being Element of S ex J being Basis of x st
+       for Y being Subset of S st Y in J holds Y is open filtered
+         by A4,WAYBEL14:35;
+      hence x = "\/" ({inf X where X is Subset of S: x in X & X in sigma S}, S
+)
+             by A3,A5,WAYBEL14:37
+        .= "\/" ({inf X where X is Subset of S: x in X & X in sigma S}, N)
+             by A1,A6,YELLOW_0:26
+        .= "\/"({inf V where V is Subset of N: x in V & V in lambda N},N)
+             by Th34;
+    end;
+    assume
+A7:  for x being Element of N holds
+      x = "\/"({inf V where V is Subset of N: x in V & V in lambda N},N);
+      now
+      let x be Element of S;
+A8:   x is Element of N by A1;
+A9:   ex_sup_of {inf X where X is Subset of S: x in X & X in sigma S}, N
+        by YELLOW_0:17;
+      thus x = "\/"({inf V where V is Subset of N: x in V & V in lambda N},N)
+         by A7,A8
+       .= "\/"({inf V where V is Subset of S: x in V & V in sigma S},N)
+         by A8,Th34
+       .= "\/"({inf V where V is Subset of S: x in V & V in sigma S},S)
+         by A1,A9,YELLOW_0:26;
+    end;
+    then S is continuous by WAYBEL14:38;
+    hence thesis by A1,YELLOW12:15;
+  end;
+
+:: Exercise 2.16, p. 156,  1 <=> 2
+theorem Th40:
+ for N being meet-continuous Lawson (complete TopLattice) holds
+  N is algebraic iff
+  N is with_open_semilattices & InclPoset sigma N is algebraic
+  proof
+    let N be meet-continuous Lawson (complete TopLattice);
+    consider S being Scott TopAugmentation of N;
+A1: the RelStr of S = the RelStr of N by YELLOW_9:def 4;
+    hereby
+      assume
+A2:     N is algebraic;
+      then reconsider M = N as algebraic LATTICE;
+        M is continuous;
+      hence N is with_open_semilattices by Th35;
+        S is algebraic by A1,A2,WAYBEL_8:17;
+      then ex K being Basis of S st K = {uparrow x where x is Element of S:
+        x in the carrier of CompactSublatt S} by WAYBEL14:42;
+      then InclPoset sigma S is algebraic by WAYBEL14:43;
+      hence InclPoset sigma N is algebraic by A1,YELLOW_9:52;
+    end;
+    assume that
+A3:   N is with_open_semilattices and
+A4:   InclPoset sigma N is algebraic;
+    reconsider T = InclPoset sigma N as algebraic LATTICE by A4;
+      T is continuous;
+    then N is continuous by A3,Th35;
+    then S is continuous by A1,YELLOW12:15;
+    then for x being Element of S ex K being Basis of x st for Y being Subset
+of S
+     st Y in K holds Y is open filtered by WAYBEL14:35;
+then A5: for V being Element of InclPoset sigma S
+     ex VV being Subset of InclPoset sigma S st V = sup VV &
+      for W being Element of InclPoset sigma S st W in VV holds W is co-prime
+       by WAYBEL14:39;
+      InclPoset sigma S is algebraic by A1,A4,YELLOW_9:52;
+    then ex K being Basis of S st K = {uparrow x where x is Element of S:
+     x in the carrier of CompactSublatt S} by A5,WAYBEL14:44;
+    then S is algebraic by WAYBEL14:45;
+    hence thesis by A1,WAYBEL_8:17;
+  end;
+
+definition let N be meet-continuous algebraic Lawson (complete TopLattice);
+ cluster InclPoset sigma N -> algebraic;
+coherence by Th40;
+end;

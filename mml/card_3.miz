@@ -1,0 +1,1654 @@
+:: K\"onig's Theorem
+::  by Grzegorz Bancerek
+::
+:: Received April 10, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL1, CARD_1, FUNCT_1, RELAT_1, BOOLE, FUNCOP_1, FUNCT_2,
+      TARSKI, MCART_1, PROB_1, RLVECT_1, CARD_2, ORDINAL2, FINSET_1, ARYTM_1,
+      CLASSES1, ZFMISC_1, WELLORD1, WELLORD2, RELAT_2, CARD_3, HAHNBAN;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, REAL_1, NAT_1,
+      RELAT_1, RELAT_2, FUNCT_1, FUNCT_2, ORDINAL1, WELLORD1, MCART_1,
+      WELLORD2, CARD_1, FUNCOP_1, FUNCT_4, FINSET_1, PROB_1, CARD_2, CLASSES1;
+ constructors REAL_1, NAT_1, RELAT_2, WELLORD1, MCART_1, WELLORD2, FUNCOP_1,
+      PROB_1, CARD_2, CLASSES1, MEMBERED, XBOOLE_0;
+ clusters RELAT_1, FUNCT_1, FINSET_1, CARD_1, FUNCOP_1, ORDINAL1, MEMBERED,
+      ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET;
+ definitions TARSKI, FUNCT_1, RELAT_2, WELLORD1, WELLORD2, XBOOLE_0;
+ theorems TARSKI, ZFMISC_1, FINSET_1, FUNCT_1, FUNCT_2, MCART_1, ORDINAL1,
+      RELAT_1, RELAT_2, WELLORD1, WELLORD2, CARD_1, FUNCOP_1, FUNCT_4, FUNCT_5,
+      CARD_2, CLASSES1, GRFUNC_1, PROB_1, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+ schemes NAT_1, FUNCT_1, PARTFUN1, ORDINAL1, FUNCT_5, RELAT_1, XBOOLE_0;
+
+begin
+
+ reserve A,B,C for Ordinal,
+         K,M,N for Cardinal,
+         x,y,y1,y2,z,u,X,Y,Z,Z1,Z2 for set,
+         n for Nat,
+         f,f1,g,h for Function,
+         Q,R for Relation;
+
+ definition let IT be Function;
+  attr IT is Cardinal-yielding means:
+Def1:
+    for x st x in dom IT holds IT.x is Cardinal;
+ end;
+
+ definition
+  cluster Cardinal-yielding Function;
+   existence
+    proof
+     consider M; consider X;
+     deffunc f(set) = M;
+     consider f such that
+A1:    dom f = X & for x st x in X holds f.x = f(x) from Lambda;
+     take f;
+     let x; assume x in dom f;
+     hence thesis by A1;
+    end;
+ end;
+
+definition
+  mode Cardinal-Function is Cardinal-yielding Function;
+end;
+
+ reserve ff for Cardinal-Function;
+
+ definition let ff,X;
+  cluster ff|X -> Cardinal-yielding;
+   coherence
+    proof
+        ff|X is Cardinal-yielding
+       proof let x; assume
+A1:       x in dom(ff|X);
+then A2:       (ff|X).x = ff.x & dom(ff|X) = dom ff /\ X
+           by FUNCT_1:70,RELAT_1:90;
+         then x in dom ff by A1,XBOOLE_0:def 3;
+        hence thesis by A2,Def1;
+       end;
+      hence thesis;
+    end;
+ end;
+
+ definition let X,K;
+  cluster X --> K -> Cardinal-yielding;
+   coherence
+    proof
+       X --> K is Cardinal-yielding
+      proof
+        let x; assume x in dom(X --> K);
+        then x in X by FUNCOP_1:19;
+       hence thesis by FUNCOP_1:13;
+      end;
+     hence thesis;
+    end;
+ end;
+
+canceled 2;
+
+theorem
+   {} is Cardinal-Function
+  proof consider K; {} = {} --> K by FUNCT_4:3;
+   hence thesis;
+  end;
+
+ scheme CF_Lambda { A()->set, F(set)->Cardinal } :
+  ex ff st dom ff = A() & for x st x in A() holds ff.x = F(x)
+   proof
+     deffunc f(set) = F($1);
+    consider f such that
+A1:   dom f = A() & for x st x in A() holds f.x = f(x) from Lambda;
+       f is Cardinal-yielding
+      proof let x; assume x in dom f;
+        then f.x = F(x) by A1;
+       hence thesis;
+      end;
+    then reconsider f as Cardinal-Function;
+    take f; thus thesis by A1;
+   end;
+
+ definition let f;
+  func Card f -> Cardinal-Function means:
+Def2:
+    dom it = dom f & for x st x in dom f holds it.x = Card(f.x);
+   existence
+   proof
+     deffunc f(set) = Card (f.$1);
+     thus ex g being Cardinal-Function st
+      dom g = dom f & for x st x in dom f holds g.x = f(x) from CF_Lambda;
+   end;
+   uniqueness
+    proof let a1,a2 be Cardinal-Function such that
+A1:   dom a1 = dom f & for x st x in dom f holds a1.x = Card(f.x) and
+A2:   dom a2 = dom f & for x st x in dom f holds a2.x = Card(f.x);
+        now let x; assume x in dom f;
+        then a1.x = Card(f.x) & a2.x = Card(f.x) by A1,A2;
+       hence a1.x = a2.x;
+      end;
+     hence thesis by A1,A2,FUNCT_1:9;
+    end;
+  func disjoin f -> Function means:
+Def3:  dom it = dom f & for x st x in dom f holds it.x = [:f.x,{x}:];
+   existence
+   proof
+     deffunc f(set) = [:f.$1,{$1}:];
+     thus ex g being Function st
+       dom g = dom f & for x st x in dom f holds g.x = f(x) from Lambda;
+   end;
+   uniqueness
+    proof let a1,a2 be Function such that
+A3:   dom a1 = dom f & for x st x in dom f holds a1.x = [:f.x,{x}:] and
+A4:   dom a2 = dom f & for x st x in dom f holds a2.x = [:f.x,{x}:];
+        now let x; assume x in dom f;
+        then a1.x = [:f.x,{x}:] & a2.x = [:f.x,{x}:] by A3,A4;
+       hence a1.x = a2.x;
+      end;
+     hence thesis by A3,A4,FUNCT_1:9;
+    end;
+
+ canceled;
+
+ defpred P[set] means
+ ex g st $1 = g & dom g = dom f & for x st x in dom f holds g.x in f.x;
+  func product f -> set means:
+Def5:   x in it iff ex g st x = g & dom g = dom f &
+       for y st y in dom f holds g.y in f.y;
+   existence
+    proof
+      consider X such that
+A5:    x in X iff x in Funcs(dom f, union rng f) & P[x] from Separation;
+     take X; let x;
+     thus x in X implies ex g st x = g & dom g = dom f &
+       for x st x in dom f holds g.x in f.x by A5;
+     given g such that
+A6:    x = g & dom g = dom f & for x st x in dom f holds g.x in f.x;
+        rng g c= union rng f
+       proof let y; assume y in rng g;
+        then consider z such that
+A7:       z in dom g & y = g.z by FUNCT_1:def 5;
+           y in f.z & f.z = f.z & f.z in rng f by A6,A7,FUNCT_1:def 5;
+        hence thesis by TARSKI:def 4;
+       end;
+      then x in Funcs(dom f, union rng f) by A6,FUNCT_2:def 2;
+     hence thesis by A5,A6;
+    end;
+   uniqueness
+    proof let X1,X2 be set such that
+A8:   x in X1 iff P[x] and
+A9:   x in X2 iff P[x];
+     thus thesis from Extensionality(A8,A9);
+    end;
+ end;
+
+canceled 4;
+
+theorem
+ Th8: Card ff = ff
+  proof
+      now let x; assume x in dom ff;
+     then reconsider M = ff.x as Cardinal by Def1;
+        Card M = M by CARD_1:def 5;
+     hence ff.x = Card (ff.x);
+    end;
+   hence thesis by Def2;
+  end;
+
+theorem
+   Card {} = {}
+  proof consider K;
+      Card({} --> K) = {} --> K & {} --> K = {} by Th8,FUNCT_4:3;
+   hence thesis;
+  end;
+
+theorem
+   Card (X --> Y) = X --> Card Y
+  proof
+A1:  dom Card (X --> Y) = dom(X --> Y) by Def2;
+then A2:  dom Card (X --> Y) = X & dom (X --> Card Y) = X by FUNCOP_1:19;
+      now let x; assume x in X;
+      then Card (X --> Y).x = Card ((X --> Y).x) & (X --> Card Y).x = Card Y &
+       (X --> Y).x = Y & Y = Y by A1,A2,Def2,FUNCOP_1:13;
+     hence Card (X --> Y).x = (X --> Card Y).x;
+    end;
+   hence thesis by A2,FUNCT_1:9;
+  end;
+
+theorem
+    disjoin {} = {}
+  proof
+      dom disjoin {} = {} by Def3,RELAT_1:60;
+   hence thesis by RELAT_1:64;
+  end;
+
+theorem
+ Th12: disjoin ({x} --> X) = {x} --> [:X,{x}:]
+  proof
+A1:  dom disjoin ({x} --> X) = dom ({x} --> X) & dom ({x} --> X) = {x} &
+     dom ({x} --> [:X,{x}:]) = {x} by Def3,FUNCOP_1:19;
+      now let y; assume y in {x};
+      then disjoin ({x} --> X).y = [:({x} --> X).y,{y}:] & ({x} --> X).y = X &
+       ({x} --> [:X,{x}:]).y = [:X,{x}:] & y = x & X = X
+        by A1,Def3,FUNCOP_1:13,TARSKI:def 1;
+     hence disjoin ({x} --> X).y = ({x} --> [:X,{x}:]).y;
+    end;
+   hence thesis by A1,FUNCT_1:9;
+  end;
+
+theorem
+   x in dom f & y in
+ dom f & x <> y implies (disjoin f).x misses (disjoin f).y
+  proof assume
+A1:  x in dom f & y in dom f & x <> y;
+    consider z being Element of ((disjoin f).x) /\ ((disjoin f).y);
+   assume ((disjoin f).x) /\ ((disjoin f).y) <> {};
+      then (disjoin f).x = [:f.x,{x}:] & (disjoin f).y = [:f.y,{y}:] &
+       (disjoin f).x = (disjoin f).x & (disjoin f).y = (disjoin f).y &
+        z in (disjoin f).x & z in (disjoin f).y
+         by A1,Def3,XBOOLE_0:def 3;
+      then z`2 in {x} & z`2 in {y} by MCART_1:10;
+      then z`2 = x & z`2 = y by TARSKI:def 1;
+     hence contradiction by A1;
+  end;
+
+Lm1: rng {} = {};
+
+theorem
+   Union {} = {} by Lm1,PROB_1:def 3,ZFMISC_1:2;
+
+theorem
+ Th15: Union (X --> Y) c= Y
+  proof let x; assume
+      x in Union (X --> Y);
+    then x in union rng (X --> Y) by PROB_1:def 3;
+   then consider Z such that
+A1:  x in Z & Z in rng (X --> Y) by TARSKI:def 4;
+ A2:   ex z st z in dom (X --> Y) & Z = (X --> Y).z by A1,FUNCT_1:def 5;
+      dom (X --> Y) = X by FUNCOP_1:19;
+   hence x in Y by A1,A2,FUNCOP_1:13;
+  end;
+
+theorem
+ Th16: X <> {} implies Union (X --> Y) = Y
+  proof assume
+A1:  X <> {};
+   consider x being Element of X;
+   thus Union (X --> Y) c= Y by Th15;
+      dom (X --> Y) = X & (X --> Y).x = Y by A1,FUNCOP_1:13,19;
+    then Y in rng (X --> Y) & Union (X --> Y) = union rng (X --> Y)
+     by A1,FUNCT_1:def 5,PROB_1:def 3;
+   hence thesis by ZFMISC_1:92;
+  end;
+
+theorem
+   Union ({x} --> Y) = Y by Th16;
+
+theorem
+ Th18: g in product f iff dom g = dom f & for x st x in dom f holds g.x in f.x
+  proof
+   thus g in product f implies
+      dom g = dom f & for x st x in dom f holds g.x in f.x
+     proof assume g in product f;
+       then ex h being Function st
+     g = h & dom h = dom f & for x st x in dom f holds h.x in f.x by Def5;
+      hence thesis;
+     end;
+   thus thesis by Def5;
+  end;
+
+theorem
+ Th19: product {} = {{}}
+  proof
+   thus product {} c= {{}}
+     proof let x; assume x in product {};
+       then ex g st
+     x = g & dom g = dom {} & for y st y in dom {} holds g.y in {} .y
+        by Def5;
+       then x = {} by RELAT_1:64;
+      hence thesis by TARSKI:def 1;
+     end;
+   let x; assume x in {{}};
+    then x = {} & for y st y in dom {} holds {} .y in {} .y by TARSKI:def 1;
+   hence thesis by Th18;
+  end;
+
+theorem
+ Th20: Funcs(X,Y) = product (X --> Y)
+  proof set f = (X --> Y);
+A1:  dom f = X & for x st x in X holds f.x = Y by FUNCOP_1:13,19;
+   thus Funcs(X,Y) c= product f
+     proof let x; assume x in Funcs(X,Y);
+      then consider g such that
+A2:     x = g & dom g = X & rng g c= Y by FUNCT_2:def 2;
+         now let y; assume y in dom f;
+         then f.y = Y & Y = Y & g.y in rng g by A1,A2,FUNCT_1:def 5;
+        hence g.y in f.y by A2;
+       end;
+      hence thesis by A1,A2,Def5;
+     end;
+   let x; assume x in product f;
+   then consider g such that
+A3:  x = g & dom g = dom f & for x st x in dom f holds g.x in f.x by Def5;
+      rng g c= Y
+     proof let y; assume y in rng g;
+      then consider z such that
+A4:     z in dom g & y = g.z by FUNCT_1:def 5;
+         y in f.z & f.z = Y & Y = Y by A1,A3,A4;
+      hence thesis;
+     end;
+   hence thesis by A1,A3,FUNCT_2:def 2;
+  end;
+
+  defpred P[set] means $1 is Function;
+
+ definition let x,X;
+   defpred R[set,set] means ex g st $1 = g & $2 = g.x;
+  func pi(X,x) -> set means:
+Def6:   y in it iff ex f st f in X & y = f.x;
+   existence
+    proof
+     consider Y such that
+A1:    y in Y iff y in X & P[y] from Separation;
+A2:    for y,z1,z2 being set st y in Y & R[y,z1] & R[y,z2] holds z1 = z2;
+A3:    for y st y in Y ex z st R[y,z]
+       proof let y; assume y in Y;
+        then reconsider y as Function by A1;
+        take y.x, y; thus thesis;
+       end;
+     consider f such that
+A4:    dom f = Y & for y st y in Y holds R[y,f.y] from FuncEx(A2,A3);
+     take rng f; let y;
+     thus y in rng f implies ex f st f in X & y = f.x
+       proof assume y in rng f;
+        then consider z such that
+A5:       z in dom f & y = f.z by FUNCT_1:def 5;
+        consider g such that
+A6:       z = g & f.z = g.x by A4,A5;
+        take g; thus thesis by A1,A4,A5,A6;
+       end;
+     given g such that
+A7:    g in X & y = g.x;
+A8:    g in Y by A1,A7;
+      then ex f1 st g = f1 & f.g = f1.x by A4;
+     hence thesis by A4,A7,A8,FUNCT_1:def 5;
+    end;
+   uniqueness
+    proof
+      defpred Z[set] means ex f st f in X & $1 = f.x;
+      let X1,X2 be set such that
+A9:    y in X1 iff Z[y] and
+A10:   y in X2 iff Z[y];
+     thus thesis from Extensionality(A9,A10);
+    end;
+ end;
+
+canceled;
+
+theorem
+   x in dom f & product f <> {} implies pi(product f,x) = f.x
+  proof assume
+A1:  x in dom f & product f <> {};
+A2:  pi(product f,x) c= f.x
+     proof let y; assume y in pi(product f,x);
+       then ex g st g in product f & y = g.x by Def6;
+      hence y in f.x by A1,Th18;
+     end;
+      f.x c= pi(product f,x)
+     proof consider z being Element of product f;
+      consider g such that
+A3:    z = g & dom g = dom f & for x st x in dom f holds g.x in f.x by A1,Def5;
+      let y;
+      deffunc f(set) = y;
+      deffunc g(set) = g.$1;
+      defpred C[set] means x = $1;
+      consider h being Function such that
+A4:     dom h = dom g & for z st z in dom g holds
+        (C[z] implies h.z = f(z)) & (not C[z] implies h.z = g(z)) from LambdaC;
+      assume
+A5:     y in f.x;
+         now let z; assume z in dom f;
+         then g.z in f.z & (x <> z implies g.z = h.z) &
+          (x = z implies y = h.z) by A3,A4;
+        hence h.z in f.z by A5;
+       end;
+       then h in product f & h.x = y by A1,A3,A4,Th18;
+      hence thesis by Def6;
+     end;
+   hence pi(product f,x) = f.x by A2,XBOOLE_0:def 10;
+  end;
+
+canceled;
+
+theorem
+   pi({},x) = {}
+  proof
+   consider y being Element of pi({},x);
+   assume not thesis;
+      then ex f st f in {} & y = f.x by Def6;
+     hence contradiction;
+  end;
+
+theorem
+   pi({g},x) = {g.x}
+  proof
+   thus pi({g},x) c= {g.x}
+     proof let y; assume y in pi({g},x);
+      then consider f such that
+A1:     f in {g} & y = f.x by Def6;
+         f = g by A1,TARSKI:def 1;
+      hence thesis by A1,TARSKI:def 1;
+     end;
+   let y; assume y in {g.x};
+    then g in {g} & y = g.x by TARSKI:def 1;
+   hence thesis by Def6;
+  end;
+
+theorem
+   pi({f,g},x) = {f.x,g.x}
+  proof
+   thus pi({f,g},x) c= {f.x,g.x}
+     proof let y; assume y in pi({f,g},x);
+      then consider f1 such that
+A1:     f1 in {f,g} & y = f1.x by Def6;
+         f1 = f or f1 = g by A1,TARSKI:def 2;
+      hence thesis by A1,TARSKI:def 2;
+     end;
+   let y; assume y in {f.x,g.x};
+    then f in {f,g} & g in {f,g} & (y = g.x or y = f.x) by TARSKI:def 2;
+   hence thesis by Def6;
+  end;
+
+theorem
+ Th27: pi(X \/ Y,x) = pi(X,x) \/ pi(Y,x)
+  proof
+   thus pi(X \/ Y,x) c= pi(X,x) \/ pi(Y,x)
+     proof let y; assume y in pi(X \/ Y,x);
+      then consider f such that
+A1:     f in X \/ Y & y = f.x by Def6;
+         f in X or f in Y by A1,XBOOLE_0:def 2;
+       then y in pi(X,x) or y in pi(Y,x) by A1,Def6;
+      hence y in pi(X,x) \/ pi(Y,x) by XBOOLE_0:def 2;
+     end;
+   let y; assume y in pi(X,x) \/ pi(Y,x);
+then A2:  y in pi(X,x) or y in pi(Y,x) by XBOOLE_0:def 2;
+A3:  now assume y in pi(X,x);
+     then consider f such that
+A4:    f in X & y = f.x by Def6;
+        f in X \/ Y by A4,XBOOLE_0:def 2;
+     hence thesis by A4,Def6;
+    end;
+      now assume not y in pi(X,x);
+     then consider f such that
+A5:    f in Y & y = f.x by A2,Def6;
+        f in X \/ Y by A5,XBOOLE_0:def 2;
+     hence thesis by A5,Def6;
+    end;
+   hence thesis by A3;
+  end;
+
+theorem
+   pi(X /\ Y,x) c= pi(X,x) /\ pi(Y,x)
+  proof let y; assume y in pi(X /\ Y,x);
+   then consider f such that
+A1:  f in X /\ Y & y = f.x by Def6;
+      f in X & f in Y by A1,XBOOLE_0:def 3;
+    then y in pi(X,x) & y in pi(Y,x) by A1,Def6;
+   hence y in pi(X,x) /\ pi(Y,x) by XBOOLE_0:def 3;
+  end;
+
+theorem
+ Th29: pi(X,x) \ pi(Y,x) c= pi(X \ Y,x)
+  proof let y; assume y in pi(X,x) \ pi(Y,x);
+then A1:  y in pi(X,x) & not y in pi(Y,x) by XBOOLE_0:def 4;
+   then consider f such that
+A2:  f in X & y = f.x by Def6;
+      not f in Y by A1,A2,Def6;
+    then f in X \ Y by A2,XBOOLE_0:def 4;
+   hence y in pi(X \ Y,x) by A2,Def6;
+  end;
+
+theorem
+   pi(X,x) \+\ pi(Y,x) c= pi(X \+\ Y,x)
+  proof
+      pi(X,x) \ pi(Y,x) c= pi(X\Y,x) & pi(Y,x) \ pi(X,x) c= pi(Y\X,x) &
+     pi(X\Y,x) \/ pi(Y\X,x) = pi((X\Y) \/ (Y\X),x) &
+      pi(X,x) \+\ pi(Y,x) = (pi(X,x) \ pi(Y,x)) \/ (pi(Y,x) \ pi(X,x)) &
+       X \+\ Y = (X\Y) \/ (Y\X) by Th27,Th29,XBOOLE_0:def 6;
+   hence thesis by XBOOLE_1:13;
+  end;
+
+theorem
+ Th31: Card pi(X,x) <=` Card X
+  proof
+   consider Y such that
+A1:  y in Y iff y in X & P[y] from Separation;
+   defpred R[set,set] means ex g st $1 = g & $2 = g.x;
+A2:  for y,z1,z2 being set st y in Y & R[y,z1] & R[y,z2] holds z1 = z2;
+A3:  for y st y in Y ex z st R[y,z]
+     proof let y; assume y in Y;
+      then reconsider y as Function by A1;
+      take y.x, y; thus thesis;
+     end;
+   consider f such that
+A4:  dom f = Y & for y st y in Y holds R[y,f.y] from FuncEx(A2,A3);
+      now let y;
+     thus y in rng f implies ex f st f in X & y = f.x
+       proof assume y in rng f;
+        then consider z such that
+A5:       z in dom f & y = f.z by FUNCT_1:def 5;
+        consider g such that
+A6:       z = g & f.z = g.x by A4,A5;
+        take g; thus thesis by A1,A4,A5,A6;
+       end;
+     given g such that
+A7:    g in X & y = g.x;
+A8:    g in Y by A1,A7;
+      then ex f1 st g = f1 & f.g = f1.x by A4;
+     hence y in rng f by A4,A7,A8,FUNCT_1:def 5;
+    end;
+    then rng f = pi(X,x) by Def6;
+then A9:  Card pi(X,x) <=` Card Y by A4,CARD_1:28;
+      Y c= X proof let x; thus thesis by A1; end;
+    then Card Y <=` Card X by CARD_1:27;
+   hence thesis by A9,XBOOLE_1:1;
+  end;
+
+theorem
+ Th32: x in Union disjoin f implies ex y,z st x = [y,z]
+  proof
+A1:  Union disjoin f = union rng disjoin f by PROB_1:def 3;
+   assume x in Union disjoin f;
+   then consider X such that
+A2:  x in X & X in rng disjoin f by A1,TARSKI:def 4;
+   consider y such that
+A3:  y in dom disjoin f & X = (disjoin f).y by A2,FUNCT_1:def 5;
+      y in dom f by A3,Def3;
+    then X = [:f.y,{y}:] by A3,Def3;
+   hence thesis by A2,ZFMISC_1:102;
+  end;
+
+theorem
+ Th33: x in Union disjoin f iff x`2 in dom f & x`1 in f.(x`2) & x = [x`1,x`2]
+  proof
+A1:  Union disjoin f = union rng disjoin f by PROB_1:def 3;
+   thus x in Union disjoin f implies
+      x`2 in dom f & x`1 in f.(x`2) & x = [x`1,x`2]
+     proof
+      assume x in Union disjoin f;
+      then consider X such that
+A2:     x in X & X in rng disjoin f by A1,TARSKI:def 4;
+      consider y such that
+A3:     y in dom disjoin f & X = (disjoin f).y by A2,FUNCT_1:def 5;
+A4:     y in dom f by A3,Def3;
+       then X = [:f.y,{y}:] by A3,Def3;
+       then x = [x`1,x`2] & x`1 in f.y & x`2 in {y} by A2,MCART_1:10,23;
+      hence thesis by A4,TARSKI:def 1;
+     end;
+   assume
+A5:  x`2 in dom f & x`1 in f.(x`2) & x = [x`1,x`2];
+    then (disjoin f).(x`2) = [:f.(x`2),{x`2}:] & dom f = dom disjoin f &
+     x`2 in {x`2} by Def3,TARSKI:def 1;
+    then x in [:f.(x`2),{x`2}:] & [:f.(x`2),{x`2}:] in rng disjoin f
+     by A5,FUNCT_1:def 5,ZFMISC_1:106;
+   hence thesis by A1,TARSKI:def 4;
+  end;
+
+theorem
+ Th34: f <= g implies disjoin f <= disjoin g
+  proof assume f <= g;
+then A1:  dom f c= dom g & (for x st x in dom f holds f.x = g.x) by GRFUNC_1:8;
+A2:  dom disjoin f = dom f & dom disjoin g = dom g by Def3;
+      now let x; assume x in dom disjoin f;
+      then (disjoin f).x = [:f.x,{x}:] & (disjoin g).x = [:g.x,{x}:] &
+       f.x = g.x by A1,A2,Def3;
+     hence (disjoin f).x = (disjoin g).x;
+    end;
+   hence thesis by A1,A2,GRFUNC_1:8;
+  end;
+
+theorem
+ Th35: f <= g implies Union f c= Union g
+  proof assume f <= g;
+then A1:  dom f c= dom g & (for x st x in dom f holds f.x = g.x) by GRFUNC_1:8;
+A2:  Union f = union rng f & Union g = union rng g by PROB_1:def 3;
+   let x; assume x in Union f;
+   then consider X such that
+A3:  x in X & X in rng f by A2,TARSKI:def 4;
+   consider y such that
+A4:  y in dom f & X = f.y by A3,FUNCT_1:def 5;
+      y in dom g & f.y = g.y by A1,A4;
+    then X in rng g by A4,FUNCT_1:def 5;
+   hence thesis by A2,A3,TARSKI:def 4;
+  end;
+
+theorem
+ Th36: Union disjoin (Y --> X) = [:X,Y:]
+  proof set f = Y --> X;
+A1:  dom f = Y & for x st x in Y holds f.x = X by FUNCOP_1:13,19;
+A2:  Union disjoin f = union rng disjoin f by PROB_1:def 3;
+   thus Union disjoin f c= [:X,Y:]
+     proof let x; assume x in Union disjoin f;
+      then consider Z such that
+A3:     x in Z & Z in rng disjoin f by A2,TARSKI:def 4;
+      consider y such that
+A4:     y in dom disjoin f & Z = (disjoin f).y by A3,FUNCT_1:def 5;
+         y in Y by A1,A4,Def3;
+       then Z = [:f.y,{y}:] & f.y = X & X = X & {y} c= Y
+        by A1,A4,Def3,ZFMISC_1:37;
+       then Z c= [:X,Y:] by ZFMISC_1:118;
+      hence thesis by A3;
+     end;
+   let x; assume
+A5:  x in [:X,Y:];
+    then ex x1,x2 being set st x = [x1,x2] by ZFMISC_1:102;
+then A6:  x = [x`1,x`2] by MCART_1:8;
+A7:  x`1 in X & x`2 in Y by A5,MCART_1:10;
+    then f.(x`2) = X & (disjoin f).(x`2) = [:f.x`2,{x`2}:] & X = X &
+     x`2 in dom disjoin f & x`2 in {x`2} by A1,Def3,TARSKI:def 1;
+    then x in [:f.x`2,{x`2}:] & [:f.x`2,{x`2}:] in rng disjoin f
+     by A6,A7,FUNCT_1:def 5,ZFMISC_1:106;
+   hence thesis by A2,TARSKI:def 4;
+  end;
+
+theorem
+ Th37: product f = {} iff {} in rng f
+  proof
+   thus product f = {} implies {} in rng f
+     proof assume
+A1:     product f = {} & not {} in rng f;
+A2:     now assume dom f = {};
+         then for x st x in dom f holds f.x in f.x;
+        hence thesis by A1,Def5;
+       end;
+         now assume dom f <> {};
+        then reconsider M = rng f as non empty set by RELAT_1:65;
+
+           X in M implies X <> {} by A1;
+        then consider f1 such that
+A3:       dom f1 = M & for X st X in M holds f1.X in X by WELLORD2:28;
+        deffunc g(set) = f1.(f.$1);
+        consider g such that
+A4:       dom g = dom f & for x st x in dom f holds g.x = g(x) from Lambda;
+           now let x; assume x in dom f;
+           then f.x in M & f.x = f.x & g.x = f1.(f.x) by A4,FUNCT_1:def 5;
+          hence g.x in f.x by A3;
+         end;
+        hence thesis by A1,A4,Def5;
+       end;
+      hence thesis by A2;
+     end;
+   assume {} in rng f;
+   then consider x such that
+A5:  x in dom f & {} = f.x by FUNCT_1:def 5;
+   assume
+A6:  product f <> {};
+   consider y being Element of product f;
+   consider g such that
+A7:  y = g & dom g = dom f & for x st x in dom f holds g.x in f.x by A6,Def5;
+   thus contradiction by A5,A7;
+  end;
+
+theorem
+ Th38: dom f = dom g & (for x st x in dom f holds f.x c= g.x) implies
+   product f c= product g
+  proof assume
+A1:  dom f = dom g & (for x st x in dom f holds f.x c= g.x);
+   let x; assume x in product f;
+   then consider f1 such that
+A2:  x = f1 & dom f1 = dom f & for x st x in dom f holds f1.x in f.x by Def5;
+      now let x; assume x in dom g;
+      then f1.x in f.x & f.x c= g.x by A1,A2;
+     hence f1.x in g.x;
+    end;
+   hence thesis by A1,A2,Def5;
+  end;
+
+ reserve F,G for Cardinal-Function;
+
+theorem
+    for x st x in dom F holds Card (F.x) = F.x
+  proof let x; assume x in dom F;
+   then reconsider M = F.x as Cardinal by Def1;
+      Card M = M by CARD_1:def 5;
+   hence thesis;
+  end;
+
+theorem
+ Th40: for x st x in dom F holds Card ((disjoin F).x) = F.x
+  proof let x; assume
+A1:  x in dom F;
+   then reconsider M = F.x as Cardinal by Def1;
+      M = M & M,[:M,{x}:] are_equipotent & M = Card M
+    by CARD_1:def 5,CARD_2:13;
+    then M = Card [:M,{x}:] & (disjoin F).x = [:M,{x}:] by A1,Def3,CARD_1:21;
+   hence thesis;
+  end;
+
+ definition let F;
+  func Sum F -> Cardinal equals:
+Def7:    Card Union disjoin F;
+   correctness;
+  func Product F -> Cardinal equals:
+Def8:    Card product F;
+   correctness;
+ end;
+
+canceled 2;
+
+theorem
+   dom F = dom G & (for x st x in dom F holds F.x c= G.x) implies Sum F <=` Sum
+G
+  proof assume
+A1:  dom F = dom G & for x st x in dom F holds F.x c= G.x;
+A2:  Sum F = Card Union disjoin F & Sum G = Card Union disjoin G by Def7;
+      Union disjoin F c= Union disjoin G
+     proof let x; assume x in Union disjoin F;
+       then x in union rng disjoin F by PROB_1:def 3;
+      then consider X such that
+A3:     x in X & X in rng disjoin F by TARSKI:def 4;
+      consider y such that
+A4:     y in dom disjoin F & X = (disjoin F).y by A3,FUNCT_1:def 5;
+         y in dom F by A4,Def3;
+       then F.y c= G.y & X = [:F.y,{y}:] & (disjoin G).y = [:G.y,{y}:] &
+        F.y = F.y & G.y = G.y & y in dom disjoin G
+         by A1,A4,Def3;
+     then X c= [:G.y,{y}:] & [:G.y,{y}:] in rng disjoin G
+        by FUNCT_1:def 5,ZFMISC_1:118;
+       then x in union rng disjoin G by A3,TARSKI:def 4;
+      hence thesis by PROB_1:def 3;
+     end;
+   hence thesis by A2,CARD_1:27;
+  end;
+
+theorem
+   {} in rng F iff Product F = 0
+  proof
+A1:  Product F = Card product F & Card({} qua set) = 0
+   by Def8,CARD_1:47;
+   hence {} in rng F implies Product F = 0 by Th37;
+   assume Product F = 0;
+    then product F,{} are_equipotent by A1,CARD_1:21;
+    then product F = {} by CARD_1:46;
+   hence {} in rng F by Th37;
+  end;
+
+theorem
+   dom F = dom G & (for x st x in dom F holds F.x c= G.x) implies
+   Product F <=` Product G
+  proof assume
+    dom F = dom G & for x st x in dom F holds F.x c= G.x;
+    then Card product G = Product G & Card product F = Product F &
+     product F c= product G by Def8,Th38;
+   hence thesis by CARD_1:27;
+  end;
+
+theorem
+   F <= G implies Sum F <=` Sum G
+  proof assume F <= G;
+    then disjoin F <= disjoin G by Th34;
+    then Union disjoin F c= Union disjoin G & Sum F = Card Union disjoin F &
+     Sum G = Card Union disjoin G by Def7,Th35;
+   hence Sum F <=` Sum G by CARD_1:27;
+  end;
+
+theorem
+   F <= G & not 0 in rng G implies Product F <=` Product G
+  proof assume A1: F <= G;
+then A2: dom F c= dom G & for x st x in dom F holds F.x = G.x by GRFUNC_1:8;
+   assume A3: not 0 in rng G;
+   deffunc f(Function) = $1|dom F;
+   consider f such that
+A4:  dom f = product G & for g st g in product G holds f.g = f(g)
+     from LambdaFS;
+      product F c= rng f
+     proof let x; assume x in product F;
+      then consider g such that
+A5:     x = g & dom g = dom F & for x st x in dom F holds g.x in F.x by Def5;
+A6:     product G <> {} by A3,Th37;
+      consider y being Element of product G;
+      consider h such that
+A7:    y = h & dom h = dom G & for x st x in dom G holds h.x in G.x by A6,Def5;
+      deffunc f(set) = g.$1;
+      deffunc g(set) = h.$1;
+      defpred C[set] means $1 in dom F;
+      consider f1 such that
+A8:    dom f1 = dom G & for x st x in dom G holds
+       (C[x] implies f1.x = f(x)) & (not C[x] implies f1.x = g(x))
+        from LambdaC;
+         now let z such that
+A9:      z in dom G;
+A10:      now assume z in dom F;
+           then f1.z = g.z & g.z in F.z & F.z = G.z by A1,A5,A8,A9,GRFUNC_1:8;
+          hence f1.z in G.z;
+         end;
+           (not z in dom F implies f1.z = h.z) & h.z in G.z by A7,A8,A9;
+        hence f1.z in G.z by A10;
+       end;
+then A11:     f1 in product G by A8,Def5;
+then A12:     f.f1 = f1|dom F & dom(f1|dom F) = dom F by A2,A4,A8,RELAT_1:91;
+         now let z; assume z in dom F;
+         then (f1|dom F).z = f1.z & z in dom G & (z in dom G implies f1.z = g.
+z)
+           by A2,A8,A12,FUNCT_1:70;
+        hence (f1|dom F).z = g.z;
+       end;
+       then f.f1 = g by A5,A12,FUNCT_1:9;
+      hence thesis by A4,A5,A11,FUNCT_1:def 5;
+     end;
+    then Card product F <=` Card product G & Card product F = Product F
+     by A4,Def8,CARD_1:28;
+   hence thesis by Def8;
+  end;
+
+theorem
+   Sum({} --> K) = 0
+  proof dom ({} --> K) = {} by FUNCOP_1:16;
+    then dom disjoin ({} --> K) = {} by Def3;
+    then rng disjoin ({} --> K) = {} by RELAT_1:65;
+    then Union disjoin ({} --> K) = {} by PROB_1:def 3,ZFMISC_1:2;
+   hence thesis by Def7,CARD_1:47;
+  end;
+
+theorem
+   Product ({} --> K) = 1
+  proof {} --> K = {} by FUNCT_4:3;
+   hence Product ({} --> K) = Card {{}} by Def8,Th19
+         .= 1 by CARD_1:50,CARD_2:20;
+  end;
+
+theorem
+   Sum({x} --> K) = K
+  proof
+   thus Sum({x} --> K) = Card Union disjoin ({x} --> K) by Def7
+             .= Card Union ({x} --> [:K,{x}:]) by Th12
+             .= Card [:K,{x}:] by Th16
+             .= Card K by CARD_2:13
+             .= K by CARD_1:def 5;
+  end;
+
+theorem
+   Product({x} --> K) = K
+  proof
+   thus Product({x} --> K) = Card product ({x} --> K) by Def8
+             .= Card Funcs({x},K) by Th20
+             .= Card K by FUNCT_5:65
+             .= K by CARD_1:def 5;
+  end;
+
+theorem
+   Sum(M --> N) = M*`N
+  proof
+   thus Sum(M --> N) = Card Union disjoin (M --> N) by Def7
+           .= Card [:N,M:] by Th36
+           .= M*`N by CARD_2:def 2;
+  end;
+
+theorem
+   Product(N --> M) = exp(M,N)
+  proof set F = N --> M;
+      exp(M,N) = Card Funcs(N,M) & Product F = Card product F &
+     Funcs(N,M) = product F by Def8,Th20,CARD_2:def 3;
+   hence thesis;
+  end;
+
+theorem
+ Th54: Card Union f <=` Sum Card f
+  proof
+A1:  now assume dom f = {};
+     then {} = union rng f by RELAT_1:65,ZFMISC_1:2 .= Union f by PROB_1:def 3;
+     hence thesis by CARD_1:47,XBOOLE_1:2;
+    end;
+      now assume
+A2:    dom f <> {};
+     defpred P[set,set] means
+      x in $2 iff x in Funcs(Card $1,$1) & ex g st x = g & rng g = $1;
+     defpred W[set,set] means P[f.$1,$2];
+A3:   for x,y1,y2 st x in dom f & W[x,y1] & W[x,y2] holds y1 = y2
+       proof let x,y1,y2 such that x in dom f;
+        defpred Q[set] means
+        $1 in Funcs(Card (f.x),f.x) & ex g st $1 = g & rng g = f.x;
+        assume that
+A4:      z in y1 iff Q[z] and
+A5:      z in y2 iff Q[z];
+        thus y1 = y2 from Extensionality(A4,A5);
+       end;
+A6:   for x st x in dom f ex y st W[x,y]
+       proof let x such that x in dom f;
+         defpred A[set] means ex g st $1 = g & rng g = f.x;
+        consider Y such that
+A7:       z in Y iff z in Funcs(Card (f.x),f.x) & A[z] from Separation;
+        take Y;
+        thus thesis by A7;
+       end;
+     consider k being Function such that
+A8:    dom k = dom f & for x st x in dom f holds W[x,k.x] from FuncEx(A3,A6);
+      reconsider M = rng k as non empty set by A2,A8,RELAT_1:65;
+        now let X; assume X in M;
+       then consider x such that
+A9:      x in dom k & X = k.x by FUNCT_1:def 5;
+          Card(f.x),f.x are_equipotent by CARD_1:def 5;
+       then consider g such that
+A10:      g is one-to-one & dom g = Card(f.x) & rng g = f.x by WELLORD2:def 4;
+          g in Funcs(Card(f.x),f.x) by A10,FUNCT_2:def 2;
+       hence X <> {} by A8,A9,A10;
+      end;
+     then consider FF being Function such that
+A11:   dom FF = M & for X st X in M holds FF.X in X by WELLORD2:28;
+     set DD = union rng disjoin Card f;
+     defpred S[set,set] means ex g st g = FF.(k.$1`2) & $2 = g.$1`1;
+A12:   for x,y1,y2 st x in DD & S[x,y1] & S[x,y2] holds y1 = y2;
+A13:   for x st x in DD ex y st S[x,y]
+       proof let x; assume x in DD;
+        then consider X such that
+A14:      x in X & X in rng disjoin Card f by TARSKI:def 4;
+        consider y such that
+A15:     y in dom disjoin Card f & X = (disjoin Card f).y by A14,FUNCT_1:def 5;
+A16:      dom disjoin Card f = dom Card f & dom Card f = dom f
+          by Def2,Def3;
+         then X = [:(Card f).y,{y}:] by A15,Def3;
+         then x`1 in (Card f).y & x`2 in {y} by A14,MCART_1:10;
+then A17:         x`2 in dom f by A15,A16,TARSKI:def 1;
+      then P[f.x`2,k.x`2] & k.x`2 = k.x`2 & k.x`2 in M
+          by A8,FUNCT_1:def 5;
+         then FF.(k.x`2) in k.x`2 by A11;
+         then FF.(k.x`2) in Funcs(Card (f.x`2),f.x`2) by A8,A17;
+        then consider g such that
+A18:      FF.(k.x`2) = g & dom g = Card (f.x`2) & rng g c= f.x`2
+          by FUNCT_2:def 2;
+        take g.x`1, g; thus thesis by A18;
+       end;
+     consider t being Function such that
+A19:   dom t = DD & for x st x in DD holds S[x,t.x] from FuncEx(A12,A13);
+        union rng f c= rng t
+       proof let x; assume x in union rng f;
+        then consider X such that
+A20:       x in X & X in rng f by TARSKI:def 4;
+        consider y such that
+A21:       y in dom f & X = f.y by A20,FUNCT_1:def 5;
+         P[f.y,k.y] & k.y = k.y & k.y in M
+          by A8,A21,FUNCT_1:def 5;
+then A22:       FF.(k.y) in k.y by A11;
+         then FF.(k.y) in Funcs(Card(f.y),f.y) by A8,A21;
+        then consider g such that
+A23:       FF.(k.y) = g & dom g = Card(f.y) & rng g c= f.y by FUNCT_2:def 2;
+           ex g st FF.(k.y) = g & rng g = f.y by A8,A21,A22;
+        then consider z such that
+A24:       z in dom g & x = g.z by A20,A21,A23,FUNCT_1:def 5;
+           (Card f).y = Card(f.y) & dom Card f = dom f & dom g = dom g
+           by A21,Def2;
+         then (disjoin Card f).y = [:dom g,{y}:] & y in {y} &
+          dom disjoin Card f = dom f by A21,A23,Def3,TARSKI:def 1;
+         then [z,y] in [:dom g,{y}:] & [:dom g,{y}:] in rng disjoin Card f
+           by A21,A24,FUNCT_1:def 5,ZFMISC_1:106;
+then A25:   [z,y] in DD & [z,y]`1 = z & [z,y]`2 = y by MCART_1:7,TARSKI:def 4;
+         then ex g st g = FF.(k.y) & t.[z,y] = g.z by A19;
+        hence thesis by A19,A23,A24,A25,FUNCT_1:def 5;
+       end;
+      then Card union rng f <=` Card DD & DD = Union disjoin Card f &
+       union rng f = Union f by A19,CARD_1:28,PROB_1:def 3;
+     hence thesis by Def7;
+    end;
+   hence thesis by A1;
+  end;
+
+theorem
+   Card Union F <=` Sum F
+  proof Card F = F by Th8;
+   hence thesis by Th54;
+  end;
+
+::
+:: K\"onig's theorem
+::
+
+theorem
+   dom F = dom G & (for x st x in dom F holds F.x in G.x) implies
+   Sum F <` Product G
+  proof assume
+A1:  dom F = dom G & (for x st x in dom F holds F.x in G.x);
+   deffunc f(set) = (G.$1)\(F.$1);
+   consider f such that
+A2:  dom f = dom F & for x st x in dom F holds f.x = f(x) from Lambda;
+      now assume {} in rng f;
+     then consider x such that
+A3:   x in dom f & {} = f.x by FUNCT_1:def 5;
+     reconsider Fx = F.x, Gx = G.x as Cardinal by A1,A2,A3,Def1;
+        Fx in Gx & not Fx in Fx by A1,A2,A3;
+      then Fx in Gx \ Fx & {} = Gx \ Fx by A2,A3,XBOOLE_0:def 4;
+     hence contradiction;
+    end;
+then A4:  product f <> {} by Th37;
+   consider a being Element of product f;
+   consider h being Function such that
+A5:  a = h & dom h = dom f & for x st x in dom f holds h.x in f.x by A4,Def5;
+   defpred P[set,Function] means dom $2 = dom F & for x st x in dom F holds
+     ($1`2 = x implies $2.x = $1`1) & ($1`2 <> x implies $2.x = h.x);
+   defpred R[set,set] means ex g st $2 = g & P[$1,g];
+A6: for x,y,z st x in Union disjoin F & R[x,y] & R[x,z] holds y = z
+     proof let x,y,z such that x in Union disjoin F;
+      given g1 being Function such that
+A7:    y = g1 & P[x,g1];
+      given g2 being Function such that
+A8:    z = g2 & P[x,g2];
+         now let u; assume u in dom F;
+         then (x`2 = u implies g1.u = x`1) & (x`2 <> u implies g1.u = h.u) &
+         (x`2 = u implies g2.u = x`1) & (x`2 <> u implies g2.u = h.u) by A7,A8;
+        hence g1.u = g2.u;
+       end;
+      hence thesis by A7,A8,FUNCT_1:9;
+     end;
+A9: for x st x in Union disjoin F ex y st R[x,y]
+     proof let x such that x in Union disjoin F;
+       deffunc f(set) = x`1;
+       deffunc g(set) = h.$1;
+       defpred C[set] means $1 = x`2;
+      consider g such that
+A10:     dom g = dom F & for u st u in dom F holds
+        (C[u] implies g.u = f(u)) & (not C[u] implies g.u = g(u))
+         from LambdaC;
+      reconsider y = g as set;
+      take y,g; thus thesis by A10;
+     end;
+   consider f1 such that
+A11:  dom f1 = Union disjoin F & for x st x in Union disjoin F holds R[x,f1.x]
+      from FuncEx(A6,A9);
+A12:  f1 is one-to-one
+     proof let x,y; assume
+A13:    x in dom f1 & y in dom f1 & f1.x = f1.y & x <> y;
+      then consider g1 being Function such that
+A14:    f1.x = g1 & P[x,g1] by A11;
+      consider g2 being Function such that
+A15:    f1.y = g2 & P[y,g2] by A11,A13;
+A16:    x`2 in dom F & x`1 in F.(x`2) & y`2 in dom F & y`1 in F.(y`2)
+        by A11,A13,Th33;
+         (ex x1,x2 being set st x = [x1,x2]) &
+        (ex x1,x2 being set st y = [x1,x2]) by A11,A13,Th32;
+then A17:       x = [x`1,x`2] & y = [y`1,y`2] by MCART_1:8;
+A18:    now assume x`1 = y`1;
+         then g1.(x`2) = x`1 & g2.(x`2) = h.(x`2) & g2.(y`2) = y`1 &
+          g1.(y`2) = h.(y`2) & f.(y`2) = (G.(y`2))\(F.(y`2)) &
+           h.(y`2) in f.(y`2) & f.(y`2) = f.(y`2)
+            by A2,A5,A13,A14,A15,A16,A17;
+        hence contradiction by A13,A14,A15,A16,XBOOLE_0:def 4;
+       end;
+         x`2 = y`2 implies g1.(x`2) = x`1 & g2.(x`2) = y`1 by A14,A15,A16;
+       then g1.(y`2) = y`1 & g1.(y`2) = h.(y`2) & f.(y`2) = (G.(y`2))\(F.(y`2)
+) &
+        h.(y`2) in f.(y`2) & f.(y`2) = f.(y`2)
+         by A2,A5,A13,A14,A15,A16,A18;
+      hence contradiction by A16,XBOOLE_0:def 4;
+     end;
+A19:  rng f1 c= product G
+     proof let x; assume x in rng f1;
+      then consider y such that
+A20:    y in dom f1 & x = f1.y by FUNCT_1:def 5;
+      consider g such that
+A21:    f1.y = g & P[y,g] by A11,A20;
+         now let x; assume
+A22:      x in dom G;
+        then reconsider Gx = G.x, Fx = F.x as Cardinal by A1,Def1;
+           Fx <` Gx by A1,A22;
+         then (y`2 = x implies g.x = y`1) & (y`2 <> x implies g.x = h.x) &
+          h.x in f.x & f.x = Gx \ Fx & f.x = f.x & y`1 in F.(y`2) &
+           Fx <=` Gx & Fx = Fx
+            by A1,A2,A5,A11,A20,A21,A22,Th33,CARD_1:13;
+        hence g.x in G.x by XBOOLE_0:def 4;
+       end;
+      hence thesis by A1,A20,A21,Def5;
+     end;
+A23:  Sum F = Card Union disjoin F & Product G = Card product G
+       by Def7,Def8;
+then A24: Sum F <=` Product G by A11,A12,A19,CARD_1:26;
+      now assume Sum F = Product G;
+      then Union disjoin F,product G are_equipotent by A23,CARD_1:21;
+     then consider f such that
+A25:    f is one-to-one & dom f = Union disjoin F & rng f = product G
+       by WELLORD2:def 4;
+     deffunc f(set) = G.$1 \ pi(f.:((disjoin F).$1),$1);
+     consider K being Function such that
+A26:    dom K = dom F & for x st x in dom F holds K.x = f(x) from Lambda;
+        now assume {} in rng K;
+       then consider x such that
+A27:      x in dom F & {} = K.x by A26,FUNCT_1:def 5;
+A28:     K.x = G.x \ pi(f.:((disjoin F).x),x) by A26,A27;
+       reconsider Fx = F.x, Gx = G.x as Cardinal by A1,A27,Def1;
+A29:     Card pi(f.:((disjoin F).x),x) <=` Card (f.:((disjoin F).x)) &
+         Card (f.:((disjoin F).x)) <=` Card ((disjoin F).x) by Th31,CARD_2:3;
+          Card ((disjoin F).x) = Fx & Fx in Gx by A1,A27,Th40;
+        then Card pi(f.:((disjoin F).x),x) <=` Fx & Fx <` Gx & Card Gx = Gx
+         by A29,CARD_1:def 5,XBOOLE_1:1;
+        then Card pi(f.:((disjoin F).x),x) <` Card Gx by ORDINAL1:22;
+       hence contradiction by A27,A28,CARD_2:4;
+      end;
+then A30:    product K <> {} by Th37;
+     consider t being Element of product K;
+     consider g such that
+A31:    t = g & dom g = dom K & for x st x in dom K holds g.x in
+ K.x by A30,Def5;
+        now let x; assume x in dom K;
+        then K.x = G.x \ pi(f.:((disjoin F).x),x) & K.x = K.x & G.x = G.x
+         by A26;
+       hence K.x c= G.x by XBOOLE_1:36;
+      end;
+      then product K c= product G by A1,A26,Th38;
+      then t in product G by A30,TARSKI:def 3;
+     then consider y such that
+A32:   y in dom f & t = f.y by A25,FUNCT_1:def 5;
+        Union disjoin F = union rng disjoin F by PROB_1:def 3;
+     then consider X such that
+A33:   y in X & X in rng disjoin F by A25,A32,TARSKI:def 4;
+     consider x such that
+A34:   x in dom disjoin F & X = (disjoin F).x by A33,FUNCT_1:def 5;
+        g in f.:X by A31,A32,A33,FUNCT_1:def 12;
+      then g.x in pi(f.:((disjoin F).x),x) & x in dom F by A34,Def3,Def6;
+      then not g.x in G.x \ pi(f.:((disjoin F).x),x) & g.x in (K.x) &
+       G.x \ pi(f.:((disjoin F).x),x) = K.x by A26,A31,XBOOLE_0:def 4;
+     hence contradiction;
+    end;
+   hence thesis by A24,CARD_1:13;
+  end;
+
+ scheme FinRegularity { X()->finite set, P[set,set] }:
+  ex x st x in X() & for y st y in X() & y <> x holds not P[y,x]
+   provided
+A1:  X() <> {} and
+A2:  for x,y st P[x,y] & P[y,x] holds x = y and
+A3:  for x,y,z st P[x,y] & P[y,z] holds P[x,z]
+   proof
+    defpred Q[Nat] means
+     for X being finite set st card X = $1 & X <> {}
+      ex x st x in X & for y st y in X & y <> x holds not P[y,x];
+A4:   Q[0] by CARD_2:59;
+A5:   Q[n] implies Q[n+1]
+      proof assume
+A6:      for X being finite set st card X = n & X <> {}
+         ex x st x in X & for y st y in X & y <> x holds not P[y,x];
+       let X be finite set; assume
+A7:      card X = n+1 & X <> {};
+       consider x being Element of X;
+A8:      now assume X\{x} = {};
+          then A9: X c= {x} & {x} c= X by A7,XBOOLE_1:37,ZFMISC_1:37;
+         thus thesis
+           proof take x; thus x in X by A7;
+            thus thesis by A9,TARSKI:def 1;
+           end;
+        end;
+          now assume
+A10:       X\{x} <> {};
+            {x} c= X by A7,ZFMISC_1:37;
+          then card (X\{x}) = (n+1) - card {x} & card {x} = 1 & n+1-1 = n &
+           X\{x} is finite
+            by A7,CARD_1:79,CARD_2:63,XCMPLX_1:26;
+         then consider y such that
+A11:        y in X\{x} & for z st z in
+ X\{x} & z <> y holds not P[z,y] by A6,A10
+;
+A12:        now assume
+A13:         P[x,y];
+           thus thesis
+             proof take x; thus x in X by A7;
+              let z; assume
+A14:            z in X & z <> x & P[z,x];
+               then not z in {x} by TARSKI:def 1;
+               then z in X \ {x} & P[z,y] & not y in
+ {x} by A3,A11,A13,A14,XBOOLE_0:def 4
+;
+               then z = y & y <> x by A11,TARSKI:def 1;
+              hence contradiction by A2,A13,A14;
+             end;
+          end;
+            now assume
+A15:         not P[x,y];
+           thus thesis
+             proof take y; thus y in X by A11,XBOOLE_0:def 4;
+              let z such that
+A16:            z in X & z <> y;
+                 z in {x} or not z in {x};
+               then z = x or z in X \ {x} by A16,TARSKI:def 1,XBOOLE_0:def 4;
+              hence thesis by A11,A15,A16;
+             end;
+          end;
+         hence thesis by A12;
+        end;
+       hence thesis by A8;
+      end;
+A17:   Q[n] from Ind(A4,A5);
+       card X() = card X();
+    hence thesis by A1,A17;
+   end;
+
+ scheme MaxFinSetElem { X()->finite set, P[set,set] }:
+  ex x st x in X() & for y st y in X() holds P[x,y]
+   provided
+A1:  X() <> {} and
+A2:  for x,y holds P[x,y] or P[y,x] and
+A3:  for x,y,z st P[x,y] & P[y,z] holds P[x,z]
+   proof
+    defpred Q[Nat] means
+     for X being finite set st card X = $1 & X <> {}
+      ex x st x in X & for y st y in X holds P[x,y];
+A4:   Q[0] by CARD_2:59;
+A5:   Q[n] implies Q[n+1]
+      proof assume
+A6:      for X being finite set st card X = n & X <> {}
+         ex x st x in X & for y st y in X holds P[x,y];
+       let X be finite set; assume
+A7:      card X = n+1 & X <> {};
+       consider x being Element of X;
+A8:      now assume X\{x} = {};
+          then A9: X c= {x} & {x} c= X by A7,XBOOLE_1:37,ZFMISC_1:37;
+         thus thesis
+           proof take x; thus x in X by A7;
+            let y; assume y in X;
+             then y = x by A9,TARSKI:def 1;
+            hence P[x,y] by A2;
+           end;
+        end;
+          now assume
+A10:       X\{x} <> {};
+            {x} c= X by A7,ZFMISC_1:37;
+          then card (X\{x}) = (n+1) - card {x} & card {x} = 1 & n+1-1 = n &
+           X\{x} is finite
+            by A7,CARD_1:79,CARD_2:63,XCMPLX_1:26;
+         then consider y such that
+A11:        y in X\{x} & for z st z in X\{x} holds P[y,z] by A6,A10;
+            (P[x,y] or P[y,x]) & P[x,x] & P[y,y] by A2;
+         then consider z such that
+A12:        (z = x or z = y) & P[z,x] & P[z,y];
+         thus thesis
+           proof take z; thus z in X by A7,A11,A12,XBOOLE_0:def 4;
+            let u;
+A13:           u in {x} or not u in {x};
+            assume u in X;
+             then u = x or u in X\{x} by A13,TARSKI:def 1,XBOOLE_0:def 4;
+             then P[z,u] or P[y,u] by A11,A12;
+            hence thesis by A3,A12;
+           end;
+        end;
+       hence thesis by A8;
+      end;
+A14:   Q[n] from Ind(A4,A5);
+       card X() = card X();
+    hence thesis by A1,A14;
+   end;
+
+scheme FuncSeparation { X()->set, F(set)->set, P[set,set] }:
+ ex f st dom f = X() &
+   for x st x in X() for y holds y in f.x iff y in F(x) & P[x,y]
+  proof
+   defpred Q[set,set] means y in $2 iff y in F($1) & P[$1,y];
+A1:  for x,y1,y2 st x in X() & Q[x,y1] & Q[x,y2] holds y1 = y2
+     proof let x,y1,y2 such that x in X();
+       defpred Z[set] means $1 in F(x) & P[x,$1];
+     assume that
+A2:    y in y1 iff Z[y] and
+A3:    y in y2 iff Z[y];
+      thus y1 = y2 from Extensionality(A2,A3);
+     end;
+A4:  for x st x in X() ex y st Q[x,y]
+     proof let x such that x in X();
+       defpred R[set] means P[x,$1];
+      consider Y such that
+A5:     y in Y iff y in F(x) & R[y] from Separation;
+      take Y;
+      thus thesis by A5;
+     end;
+   thus  ex f st dom f = X() &
+    for x st x in X() holds Q[x,f.x] from FuncEx(A1,A4);
+  end;
+
+ Lm2: Rank 0 is finite by CLASSES1:33;
+ Lm3: Rank n is finite implies Rank (n+1) is finite
+  proof
+       (n+1) = succ n by CARD_1:52;
+    then Rank (n+1) = bool Rank n by CLASSES1:34;
+   hence thesis by FINSET_1:24;
+  end;
+
+theorem
+  Rank n is finite
+  proof
+    defpred P[Nat] means Rank $1 is finite;
+    A1: P[0] by Lm2;
+    A2: for n st P[n] holds P[n+1] by Lm3;
+    for n holds P[n] from Ind(A1,A2);
+    hence thesis;
+  end;
+
+ Lm4: x in field R implies ex y st [x,y] in R or [y,x] in R
+  proof assume x in field R;
+    then x in dom R \/ rng R by RELAT_1:def 6;
+    then x in dom R or x in rng R by XBOOLE_0:def 2;
+   hence ex y st [x,y] in R or [y,x] in R by RELAT_1:def 4,def 5;
+  end;
+
+theorem
+   X is finite implies Card X <` Card omega
+  proof assume
+A1:  X is finite;
+      X,Card X are_equipotent by CARD_1:def 5;
+    then Card X is finite by A1,CARD_1:68;
+   then consider n such that
+A2:  Card X = Card n by CARD_1:86;
+   thus Card X <` Card omega by A2,CARD_1:84;
+  end;
+
+theorem
+ Th59: Card A <` Card B implies A in B
+  proof assume
+      Card A <` Card B & not A in B;
+    then not Card B <=` Card A & B c= A by CARD_1:14,ORDINAL1:26;
+   hence contradiction by CARD_1:27;
+  end;
+
+theorem
+ Th60: Card A <` M implies A in M
+  proof M = M & Card M = M by CARD_1:def 5;
+   hence thesis by Th59;
+  end;
+
+theorem
+ Th61: X is c=-linear implies
+  ex Y st Y c= X & union Y = union X & for Z st Z c= Y & Z <> {}
+   ex Z1 st Z1 in Z & for Z2 st Z2 in Z holds Z1 c= Z2
+  proof assume
+A1:  X is c=-linear;
+   consider R such that
+A2:  R well_orders X by WELLORD2:26;
+A3:  R|_2 X is well-ordering & field(R|_2 X) = X by A2,WELLORD2:25;
+    then R|_2 X, RelIncl order_type_of R|_2 X are_isomorphic by WELLORD2:def 2;
+    then RelIncl order_type_of R|_2 X, R|_2 X are_isomorphic by WELLORD1:50;
+   then consider f such that
+A4:  f is_isomorphism_of RelIncl order_type_of R|_2 X, R|_2 X
+  by WELLORD1:def 8;
+      field RelIncl order_type_of R|_2 X = order_type_of R|_2 X
+      by WELLORD2:def 1;
+then A5:  dom f = order_type_of R|_2 X & rng f = X & f is one-to-one &
+     for x,y holds [x,y] in RelIncl order_type_of R|_2 X iff
+      x in order_type_of R|_2 X & y in order_type_of R|_2 X &
+      [f.x,f.y] in R|_2 X
+       by A3,A4,WELLORD1:def 7;
+       defpred P[set] means for A,B st B in A & $1 = A holds f.B c= f.A;
+   consider Y such that
+A6:  x in Y iff x in dom f & P[x] from Separation;
+   take Z = f.:Y;
+   thus Z c= X by A5,RELAT_1:144;
+   hence union Z c= union X by ZFMISC_1:95;
+   thus union X c= union Z
+     proof let x; assume x in union X;
+      then consider Z1 such that
+A7:     x in Z1 & Z1 in X by TARSKI:def 4;
+      consider y such that
+A8:     y in dom f & Z1 = f.y by A5,A7,FUNCT_1:def 5;
+      reconsider y as Ordinal by A5,A8,ORDINAL1:23;
+      defpred P[Ordinal] means $1 c= y & x in f.$1;
+A9:     ex A st P[A] by A7,A8;
+      consider A such that
+A10:     P[A] & for B st P[B] holds A c= B from Ordinal_Min(A9);
+A11:    A in dom f by A5,A8,A10,ORDINAL1:22;
+         now let B,C; assume
+A12:      C in B & A = B;
+         then not A c= C & C in y & C in dom f
+          by A5,A8,A10,ORDINAL1:7,19;
+then A13:      (not C c= y or not x in f.C) & f.C = f.C & f.A in X & C c= y &
+          f.C in X & f.A = f.A
+           by A5,A10,A11,FUNCT_1:def 5,ORDINAL1:def 2;
+         then f.C,f.A are_c=-comparable by A1,ORDINAL1:def 9;
+         then f.C c= f.A or f.A c= f.C by XBOOLE_0:def 9;
+        hence f.C c= f.B by A10,A12,A13;
+       end;
+       then A in Y by A6,A11;
+       then f.A in Z & f.A = f.A by A11,FUNCT_1:def 12;
+      hence thesis by A10,TARSKI:def 4;
+     end;
+   let V be set; assume
+A14:  V c= Z & V <> {};
+   consider x being Element of V;
+      x in Z by A14,TARSKI:def 3;
+   then consider y such that
+A15:  y in dom f & y in Y & x = f.y by FUNCT_1:def 12;
+   reconsider y as Ordinal by A5,A15,ORDINAL1:23;
+   defpred P[Ordinal] means $1 in Y & f.$1 in V;
+      y = y;
+  then A16:  ex A st P[A] by A14,A15;
+   consider A such that
+A17:  P[A] & for B st P[B] holds A c= B from Ordinal_Min(A16);
+   take Z1 = f.A;
+   thus Z1 in V by A17;
+   let Z2; assume
+A18:  Z2 in V;
+   then consider y such that
+A19:  y in dom f & y in Y & Z2 = f.y by A14,FUNCT_1:def 12;
+   reconsider y as Ordinal by A5,A19,ORDINAL1:23;
+      A c< y iff A c= y & A <> y by XBOOLE_0:def 8;
+    then A = y or A in y by A17,A18,A19,ORDINAL1:21;
+   hence Z1 c= Z2 by A6,A19;
+  end;
+
+theorem
+   (for Z st Z in X holds Card Z <` M) & X is c=-linear implies
+   Card union X <=` M
+  proof assume that
+A1: Z in X implies Card Z <` M and
+A2: X is c=-linear;
+   consider XX being set such that
+A3: XX c= X & union XX = union X and
+A4: for Z st Z c= XX & Z <> {}
+     ex Z1 st Z1 in Z & for Z2 st Z2 in Z holds Z1 c= Z2 by A2,Th61;
+A5: now let Z1,Z2; assume Z1 in XX & Z2 in XX;
+       then Z1,Z2 are_c=-comparable by A2,A3,ORDINAL1:def 9;
+      hence Z1 c= Z2 or Z2 c= Z1 by XBOOLE_0:def 9;
+    end;
+   consider R such that
+A6:  R well_orders union X by WELLORD2:26;
+A7: R is_reflexive_in union X & R is_transitive_in union X &
+     R is_antisymmetric_in union X & R is_connected_in union X &
+      R is_well_founded_in union X by A6,WELLORD1:def 5;
+    defpred P[set,set] means
+     ((ex Z1 st Z1 in XX & $1 in Z1 & not $2 in Z1) or
+     (for Z1 st Z1 in XX holds $1 in Z1 iff $2 in Z1) & [$1,$2] in R);
+   consider Q such that
+A8:  [x,y] in Q iff x in union X & y in union X & P[x,y] from Rel_Existence;
+A9:  field Q = union X
+     proof
+      thus field Q c= union X
+        proof let x; assume x in field Q;
+          then ex y st [x,y] in Q or [y,x] in Q by Lm4;
+         hence thesis by A8;
+        end;
+      let x; assume
+A10:    x in union X;
+       then [x,x] in R & for Z1 st Z1 in XX holds x in Z1 iff x in Z1
+        by A7,RELAT_2:def 1;
+       then [x,x] in Q by A8,A10;
+      hence x in field Q by RELAT_1:30;
+     end;
+      Q is well-ordering
+     proof
+      thus Q is reflexive
+        proof let x; assume
+A11:        x in field Q;
+          then [x,x] in R & for Z1 st Z1 in XX holds x in Z1 iff x in Z1
+           by A7,A9,RELAT_2:def 1;
+         hence thesis by A8,A9,A11;
+        end;
+      thus Q is transitive
+        proof let x,y,z such that
+A12:    x in field Q & y in field Q & z in field Q & [x,y] in Q & [y,z] in Q;
+A13:       now given Z1 such that
+A14:         Z1 in XX & x in Z1 & not y in Z1;
+           given Z2 such that
+A15:         Z2 in XX & y in Z2 & not z in Z2;
+              Z1 c= Z2 or Z2 c= Z1 by A5,A14,A15; hence [x,z] in
+ Q by A8,A9,A12,A14,A15;
+          end;
+A16:       now given Z1 such that
+A17:         Z1 in XX & x in Z1 & not y in Z1;
+           assume
+              (for Z1 st Z1 in XX holds y in Z1 iff z in Z1) & [y,z] in R;
+            then not z in Z1 by A17;
+           hence [x,z] in Q by A8,A9,A12,A17;
+          end;
+A18:       now given Z1 such that
+A19:         Z1 in XX & y in Z1 & not z in Z1;
+           assume
+              (for Z1 st Z1 in XX holds x in Z1 iff y in Z1) & [x,y] in R;
+            then x in Z1 by A19;
+           hence [x,z] in Q by A8,A9,A12,A19;
+          end;
+            now assume
+A20:         (for Z1 st Z1 in XX holds x in Z1 iff y in Z1) & [x,y] in R &
+            (for Z1 st Z1 in XX holds y in Z1 iff z in Z1) & [y,z] in R;
+then A21:         [x,z] in R by A7,A9,A12,RELAT_2:def 8;
+              now let Z; assume Z in XX;
+              then (x in Z iff y in Z) & (y in Z iff z in Z) by A20;
+             hence x in Z iff z in Z;
+            end;
+           hence [x,z] in Q by A8,A9,A12,A21;
+          end;
+         hence thesis by A8,A12,A13,A16,A18;
+        end;
+      thus Q is antisymmetric
+        proof let x,y; assume
+A22:       x in field Q & y in field Q & [x,y] in Q & [y,x] in Q;
+then A23:       ((ex Z1 st Z1 in XX & x in Z1 & not y in Z1) or
+           (for Z1 st Z1 in XX holds x in Z1 iff y in Z1) & [x,y] in R) &
+          ((ex Z1 st Z1 in XX & y in Z1 & not x in Z1) or
+           (for Z1 st Z1 in XX holds y in Z1 iff x in Z1) & [y,x] in R) by A8;
+         now given Z1 such that
+A24:         Z1 in XX & x in Z1 & not y in Z1;
+           given Z2 such that
+A25:         Z2 in XX & y in Z2 & not x in Z2;
+              Z1 c= Z2 or Z2 c= Z1 by A5,A24,A25;
+           hence x = y by A24,A25;
+          end;
+         hence thesis by A7,A9,A22,A23,RELAT_2:def 4;
+        end;
+      thus Q is connected
+        proof let x,y such that
+A26:       x in field Q & y in field Q & x <> y;
+         now assume
+A27:         for Z st Z in XX holds x in Z iff y in Z;
+     then
+     ([x,y] in R or [y,x] in R) & for Z st Z in XX holds y in Z iff x in Z
+             by A7,A9,A26,RELAT_2:def 6;
+           hence thesis by A8,A9,A26,A27;
+          end;
+         hence thesis by A8,A9,A26;
+        end;
+      thus Q is well_founded
+        proof let Y such that
+A28:       Y c= field Q & Y <> {};
+         defpred P[set] means $1 /\ Y <> {};
+         consider Z such that
+A29:       x in Z iff x in XX & P[x] from Separation;
+A30:       Z c= XX proof let x; thus thesis by A29; end;
+         consider x being Element of Y;
+            x in union XX by A3,A9,A28,TARSKI:def 3;
+         then consider Z1 such that
+A31:       x in Z1 & Z1 in XX by TARSKI:def 4;
+            Z1 /\ Y <> {} by A28,A31,XBOOLE_0:def 3;
+          then Z <> {} by A29,A31;
+         then consider Z1 such that
+A32:       Z1 in Z & for Z2 st Z2 in Z holds Z1 c= Z2 by A4,A30;
+A33:       Z1 in XX by A29,A32;
+          then Z1 /\ Y c= Z1 & Z1 c= union X & Z1 /\ Y <> {}
+           by A3,A29,A32,XBOOLE_1:17,ZFMISC_1:92;
+          then Z1 /\ Y c= union X & Z1 /\ Y <> {} by XBOOLE_1:1;
+         then consider x such that
+A34:       x in Z1 /\ Y & for y st y in Z1 /\ Y holds [x,y] in
+ R by A6,WELLORD1:9;
+         take x; thus x in Y by A34,XBOOLE_0:def 3;
+         assume
+A35:       Q-Seg x /\ Y <> {};
+         consider y being Element of Q-Seg x /\ Y;
+A36:       x in Z1 by A34,XBOOLE_0:def 3;
+A37:          y in Q-Seg x & y in Y by A35,XBOOLE_0:def 3;
+then A38:       y <> x & [y,x] in Q & y in Y by WELLORD1:def 1;
+            now given Z2 such that
+A39:         Z2 in XX & y in Z2 & not x in Z2;
+              Z2 /\ Y <> {} by A37,A39,XBOOLE_0:def 3;
+            then Z2 in Z by A29,A39;
+            then Z1 c= Z2 by A32;
+           hence contradiction by A36,A39;
+          end;
+then A40:       y in Z1 & [y,x] in R by A8,A33,A36,A38;
+          then y in Z1 /\ Y by A37,XBOOLE_0:def 3;
+          then [x,y] in R & x in union X & y in union X by A8,A34,A38;
+         hence contradiction by A7,A38,A40,RELAT_2:def 4;
+        end;
+     end;
+    then Q,RelIncl order_type_of Q are_isomorphic by WELLORD2:def 2;
+    then RelIncl order_type_of Q,Q are_isomorphic by WELLORD1:50;
+   then consider g such that
+A41: g is_isomorphism_of RelIncl order_type_of Q,Q by WELLORD1:def 8;
+      field RelIncl order_type_of Q = order_type_of Q by WELLORD2:def 1;
+then A42:  dom g = order_type_of Q & rng g = union X & g is one-to-one &
+     for x,y holds [x,y] in RelIncl order_type_of Q iff
+      x in order_type_of Q & y in order_type_of Q & [g.x,g.y] in Q
+       by A9,A41,WELLORD1:def 7;
+A43:  for Z,x st Z in XX & x in Z holds Q-Seg x c= Z
+     proof let Z,x such that
+A44:    Z in XX & x in Z;
+      let y; assume y in Q-Seg x; then A45: [y,x] in Q by WELLORD1:def 1;
+         now given Z1 such that
+A46:      Z1 in XX & y in Z1 & not x in Z1;
+           Z1 c= Z or Z c= Z1 by A5,A44,A46;
+        hence y in Z by A44,A46;
+       end;
+      hence thesis by A8,A44,A45;
+     end;
+A47:  for A st A in order_type_of Q holds Card A = Card (Q-Seg(g.A))
+     proof let A such that
+A48:    A in order_type_of Q;
+         A,Q-Seg(g.A) are_equipotent
+        proof take f = g|A;
+            A c= dom g by A42,A48,ORDINAL1:def 2;
+         hence
+A49:       f is one-to-one & dom f = A by A42,FUNCT_1:84,RELAT_1:91;
+         thus rng f c= Q-Seg(g.A)
+           proof let x; assume x in rng f;
+            then consider y such that
+A50:          y in dom f & x = f.y by FUNCT_1:def 5;
+            reconsider B = y as Ordinal by A49,A50,ORDINAL1:23;
+A51:          B in order_type_of Q & B c= A
+               by A48,A49,A50,ORDINAL1:19,def 2;
+             then [B,A] in RelIncl order_type_of Q & x = g.B & A <> B
+              by A48,A49,A50,FUNCT_1:70,WELLORD2:def 1;
+             then [x,g.A] in Q & x <> g.A by A42,A48,A51,FUNCT_1:def 8;
+            hence thesis by WELLORD1:def 1;
+           end;
+         let x; assume A52: x in Q-Seg(g.A);
+then A53:       [x,g.A] in Q & x <> g.A by WELLORD1:def 1;
+          then x in union X by A8;
+         then consider y such that
+A54:       y in dom g & x = g.y by A42,FUNCT_1:def 5;
+         reconsider B = y as Ordinal by A42,A54,ORDINAL1:23;
+            [B,A] in RelIncl order_type_of Q by A42,A48,A53,A54;
+         then B c= A & B <> A by A42,A48,A52,A54,WELLORD1:def 1,WELLORD2:def 1;
+          then B c< A by XBOOLE_0:def 8;
+          then B in A by ORDINAL1:21;
+         hence thesis by A54,FUNCT_1:73;
+        end;
+      hence thesis by CARD_1:21;
+     end;
+A55:    order_type_of Q c= M
+     proof let x; assume
+A56:    x in order_type_of Q;
+      then reconsider A = x as Ordinal by ORDINAL1:23;
+         g.x in union X by A42,A56,FUNCT_1:def 5;
+      then consider Z such that
+A57:    g.x in Z & Z in XX by A3,TARSKI:def 4;
+         Q-Seg(g.x) c= Z by A43,A57;
+       then Card (Q-Seg(g.x)) <=` Card Z & Card Z <` M by A1,A3,A57,CARD_1:27;
+       then Card (Q-Seg(g.x)) = Card A & Card (Q-Seg(g.x)) <` M by A47,A56,
+ORDINAL1:22;
+      hence x in M by Th60;
+     end;
+      order_type_of Q,union X are_equipotent by A42,WELLORD2:def 4;
+    then Card order_type_of Q = Card union X & Card M = M by CARD_1:21,def 5;
+   hence thesis by A55,CARD_1:27;
+  end;

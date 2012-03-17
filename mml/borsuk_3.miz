@@ -1,0 +1,1474 @@
+:: Properties of the Product of Compact Topological Spaces
+::  by Adam Grabowski
+::
+:: Received February 13, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, SUBSET_1, FUNCOP_1, ORDINAL2, RELAT_1, FUNCT_1, TOPS_2,
+      T_0TOPSP, BOOLE, COMPTS_1, FUNCT_3, PARTFUN1, PBOOLE, TARSKI, BORSUK_1,
+      TOPS_1, CONNSP_2, SETFAM_1, FINSET_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, SETFAM_1, FUNCT_1,
+      STRUCT_0, PRE_TOPC, TOPS_2, TOPS_1, COMPTS_1, BORSUK_1, T_0TOPSP, PBOOLE,
+      FUNCT_2, FINSET_1, FUNCT_3, CAT_1, CONNSP_2, GRCAT_1;
+ constructors TOPS_2, T_0TOPSP, TOPS_1, COMPTS_1, WAYBEL_3, GRCAT_1, BORSUK_1,
+      MEMBERED;
+ clusters STRUCT_0, PRE_TOPC, BORSUK_1, BORSUK_2, TOPS_1, WAYBEL_3, WAYBEL12,
+      PSCOMP_1, RELSET_1, SUBSET_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, TOPS_2, COMPTS_1, T_0TOPSP, FUNCT_1, XBOOLE_0;
+ theorems BORSUK_1, FUNCOP_1, TOPS_2, FUNCT_2, FUNCT_1, PRE_TOPC, TARSKI,
+      JORDAN1, TOPS_1, TOPMETR, ZFMISC_1, CONNSP_2, STRUCT_0, FUNCT_3,
+      COMPTS_1, FINSET_1, T_0TOPSP, GRCAT_1, YELLOW12, TSEP_1, TOPGRP_1,
+      RELSET_1, SETFAM_1, XBOOLE_0, XBOOLE_1;
+ schemes MSUALG_1, ZFREFLE1, XBOOLE_0;
+
+begin :: Preliminaries
+
+theorem Th1:
+  for S, T being TopSpace holds [#][:S, T:] = [:[#]S, [#]T:]
+proof
+  let S, T be TopSpace;
+A1:the carrier of S = [#]S & the carrier of T = [#]T by PRE_TOPC:12;
+    [#][:S, T:] = the carrier of [:S, T:] by PRE_TOPC:12
+       .= [:[#]S, [#]T:] by A1,BORSUK_1:def 5;
+  hence thesis;
+end;
+
+definition let X be set, Y be empty set;
+  cluster [:X, Y:] -> empty;
+  coherence by ZFMISC_1:113;
+end;
+
+definition let X be empty set, Y be set;
+  cluster [:X, Y:] -> empty;
+  coherence by ZFMISC_1:113;
+end;
+
+theorem Th2:
+  for X, Y being non empty TopSpace,
+      x being Point of X holds
+    Y --> x is continuous map of Y, X|{x}
+proof
+  let X, Y be non empty TopSpace,
+      x be Point of X;
+  set Z = {x};
+  set f = Y --> x;
+A1:f is continuous by BORSUK_1:36;
+A2:f = (the carrier of Y) --> x by BORSUK_1:def 3;
+    the carrier of (X|Z) = Z by JORDAN1:1;
+  then reconsider g = f as map of Y, X|Z by A2;
+    g is continuous by A1,TOPMETR:9;
+  hence thesis;
+end;
+
+definition let T be non empty TopStruct;
+  cluster id T -> being_homeomorphism;
+  coherence by TOPGRP_1:20;
+end;
+
+Lm1:
+  for S being non empty TopStruct holds S, S are_homeomorphic
+proof
+  let S be non empty TopStruct;
+  take id S;
+  thus thesis;
+end;
+
+Lm2:
+  for S, T being non empty TopStruct st S, T are_homeomorphic holds
+    T, S are_homeomorphic
+proof
+  let S, T be non empty TopStruct;
+  assume S, T are_homeomorphic;
+  then consider f being map of S, T such that
+A1:  f is_homeomorphism by T_0TOPSP:def 1;
+    f" is_homeomorphism by A1,TOPS_2:70;
+  hence thesis by T_0TOPSP:def 1;
+end;
+
+definition let S, T be non empty TopStruct;
+  redefine pred S, T are_homeomorphic;
+  reflexivity by Lm1;
+  symmetry by Lm2;
+end;
+
+theorem
+    for S, T, V being non empty TopSpace st
+   S, T are_homeomorphic & T, V are_homeomorphic holds
+    S, V are_homeomorphic
+proof
+  let S, T, V be non empty TopSpace;
+  assume
+A1: S, T are_homeomorphic & T, V are_homeomorphic;
+  then consider f being map of S, T such that
+A2:  f is_homeomorphism by T_0TOPSP:def 1;
+  consider g being map of T, V such that
+A3:  g is_homeomorphism by A1,T_0TOPSP:def 1;
+    g * f is_homeomorphism by A2,A3,TOPS_2:71;
+  hence thesis by T_0TOPSP:def 1;
+end;
+
+begin :: On the projections and empty topological spaces
+
+definition let T be TopStruct,
+               P be empty Subset of T;
+  cluster T | P -> empty;
+  coherence
+proof
+    the carrier of (T | P) = P by JORDAN1:1;
+  hence thesis by STRUCT_0:def 1;
+end;
+end;
+
+definition
+  cluster strict empty TopSpace;
+  existence
+proof
+  consider T being TopSpace;
+  take T | {}T;
+  thus thesis;
+end;
+end;
+
+theorem Th4:
+  for T1 being TopSpace,
+      T2 being empty TopSpace holds [:T1, T2:] is empty & [:T2, T1:] is empty
+proof
+  let T1 be TopSpace,
+      T2 be empty TopSpace;
+    the carrier of [:T1, T2:] = [:the carrier of T1, the carrier of T2:] &
+  the carrier of [:T2, T1:] = [:the carrier of T2, the carrier of T1:]
+      by BORSUK_1:def 5;
+  hence thesis by STRUCT_0:def 1;
+end;
+
+theorem Th5:
+  for T being empty TopSpace holds T is compact
+proof
+  let T be empty TopSpace;
+    {}T is compact by COMPTS_1:9;
+  then [#]T is compact;
+  hence thesis by COMPTS_1:10;
+end;
+
+definition
+  cluster empty -> compact TopSpace;
+  coherence by Th5;
+end;
+
+definition let T1 be TopSpace, T2 be empty TopSpace;
+  cluster [:T1, T2:] -> empty;
+  coherence by Th4;
+end;
+
+theorem Th6:
+  for X, Y being non empty TopSpace,
+      x being Point of X,
+      f being map of [:Y, X | {x}:], Y st
+    f = pr1(the carrier of Y, {x}) holds f is one-to-one
+proof
+  let X, Y be non empty TopSpace,
+      x be Point of X,
+      f be map of [:Y, X | {x}:], Y;
+      set Z = {x};
+      assume A1: f = pr1(the carrier of Y, Z);
+then A2: dom f = [:the carrier of Y, Z:] by FUNCT_3:def 5;
+    let z, y be set such that
+A3:   z in dom f & y in dom f and
+A4:   f.z = f.y;
+    consider x1, x2 being set such that
+A5:   x1 in the carrier of Y & x2 in Z &
+         z = [x1, x2] by A2,A3,ZFMISC_1:def 2;
+    consider y1, y2 being set such that
+A6:   y1 in the carrier of Y & y2 in Z &
+         y = [y1, y2] by A2,A3,ZFMISC_1:def 2;
+A7: x2 = x by A5,TARSKI:def 1 .= y2 by A6,TARSKI:def 1;
+        x1 = f. [y1, y2] by A1,A4,A5,A6,FUNCT_3:def 5
+        .= y1 by A1,A6,FUNCT_3:def 5;
+     hence thesis by A5,A6,A7;
+end;
+
+theorem Th7:
+  for X, Y being non empty TopSpace,
+      x being Point of X,
+      f being map of [:X | {x}, Y:], Y st
+    f = pr2({x}, the carrier of Y) holds f is one-to-one
+proof
+  let X, Y be non empty TopSpace,
+      x be Point of X,
+      f be map of [:X | {x}, Y:], Y;
+      set Z = {x};
+      assume A1: f = pr2(Z, the carrier of Y);
+then A2: dom f = [:Z, the carrier of Y:] by FUNCT_3:def 6;
+    let z, y be set such that
+A3:   z in dom f & y in dom f and
+A4:   f.z = f.y;
+    consider x1, x2 being set such that
+A5:   x1 in Z & x2 in the carrier of Y &
+         z = [x1,x2] by A2,A3,ZFMISC_1:def 2;
+    consider y1, y2 being set such that
+A6:   y1 in Z & y2 in the carrier of Y &
+         y = [y1,y2] by A2,A3,ZFMISC_1:def 2;
+A7: x1 = x by A5,TARSKI:def 1 .= y1 by A6,TARSKI:def 1;
+        x2 = f. [y1, y2] by A1,A4,A5,A6,FUNCT_3:def 6
+        .= y2 by A1,A6,FUNCT_3:def 6;
+      hence thesis by A5,A6,A7;
+end;
+
+theorem Th8:
+  for X, Y being non empty TopSpace,
+      x being Point of X,
+      f being map of [:Y, X | {x}:], Y st
+    f = pr1(the carrier of Y, {x}) holds f" = <:id Y, Y --> x:>
+proof
+  let X, Y be non empty TopSpace,
+      x be Point of X,
+      f be map of [:Y, X | {x}:], Y;
+      set Z = {x};
+      assume A1: f = pr1(the carrier of Y, Z);
+    then A2: rng f = the carrier of Y by FUNCT_3:60
+              .= [#]Y by PRE_TOPC:12;
+A3: f is one-to-one by A1,Th6;
+    reconsider Z as non empty Subset of X;
+    reconsider idY = Y --> x as continuous map of Y, (X|Z) by Th2;
+    set idZ = id Y;
+    reconsider KA = <:idZ, idY:> as continuous map of Y, [:Y, (X|Z):]
+      by YELLOW12:41;
+A4: rng KA c= [:rng idZ, rng idY:] by FUNCT_3:71;
+      rng idY c= the carrier of (X|Z) by RELSET_1:12;
+then A5: rng idY c= Z by JORDAN1:1;
+      rng idZ c= the carrier of Y by RELSET_1:12;
+    then [:rng idZ, rng idY:] c= [:the carrier of Y, Z:]
+      by A5,ZFMISC_1:119;
+then A6: rng KA c= [:the carrier of Y, Z:] by A4,XBOOLE_1:1;
+      [:the carrier of Y, Z:] c= rng KA
+    proof
+      let y be set;
+      assume y in [:the carrier of Y, Z:];
+      then consider y1, y2 being set such that
+A7:     y1 in the carrier of Y & y2 in {x} & y = [y1,y2] by ZFMISC_1:def 2;
+A8:   y = [y1, x] by A7,TARSKI:def 1;
+A9:   idY.y1 = ((the carrier of Y) --> x).y1 by BORSUK_1:def 3
+            .= x by A7,FUNCOP_1:13;
+A10:   y1 in dom KA by A7,FUNCT_2:def 1;
+      then KA. y1 = [idZ.y1, idY.y1] by FUNCT_3:def 8
+            .= [y1, x] by A7,A9,GRCAT_1:11;
+      hence thesis by A8,A10,FUNCT_1:def 5;
+    end;
+then A11: rng KA = [:the carrier of Y, Z:] by A6,XBOOLE_0:def 10
+          .= dom f by A1,FUNCT_3:def 5;
+A12: dom idY = the carrier of Y by FUNCT_2:def 1
+           .= dom idZ by FUNCT_2:def 1;
+      rng idZ c= the carrier of Y by RELSET_1:12;
+    then f*KA = idZ by A1,A5,A12,FUNCT_3:72
+        .= id the carrier of Y by GRCAT_1:def 11
+        .= id rng f by A2,PRE_TOPC:12;
+    then KA = (f qua Function)" by A3,A11,FUNCT_1:64;
+    hence thesis by A2,A3,TOPS_2:def 4;
+  end;
+
+theorem Th9:
+  for X, Y being non empty TopSpace,
+      x being Point of X,
+      f being map of [:X | {x}, Y:], Y st
+    f = pr2({x}, the carrier of Y) holds f" = <:Y --> x, id Y:>
+proof
+  let X, Y be non empty TopSpace,
+      x be Point of X,
+      f be map of [:X | {x}, Y:], Y;
+      set Z = {x};
+      assume A1: f = pr2(Z, the carrier of Y);
+    then A2: rng f = the carrier of Y by FUNCT_3:62
+              .= [#]Y by PRE_TOPC:12;
+A3: f is one-to-one by A1,Th7;
+    reconsider Z as non empty Subset of X;
+    reconsider idZ = Y --> x as continuous map of Y, (X|Z) by Th2;
+    set idY = id Y;
+    reconsider KA = <:idZ, idY:> as continuous map of Y, [:(X|Z), Y:]
+      by YELLOW12:41;
+A4: rng KA c= [:rng idZ, rng idY:] by FUNCT_3:71;
+      rng idZ c= the carrier of (X|Z) by RELSET_1:12;
+then A5: rng idZ c= Z by JORDAN1:1;
+      rng idY c= the carrier of Y by RELSET_1:12;
+    then [:rng idZ, rng idY:] c= [:{x},the carrier of Y:]
+      by A5,ZFMISC_1:119;
+then A6: rng KA c= [:{x}, the carrier of Y:] by A4,XBOOLE_1:1;
+      [:{x}, the carrier of Y:] c= rng KA
+    proof
+      let y be set;
+      assume y in [:{x}, the carrier of Y:];
+      then consider y1, y2 being set such that
+A7:     y1 in {x} & y2 in the carrier of Y & y = [y1,y2] by ZFMISC_1:def 2;
+A8:   y = [x, y2] by A7,TARSKI:def 1;
+A9:   idZ.y2 = ((the carrier of Y) --> x).y2 by BORSUK_1:def 3
+            .= x by A7,FUNCOP_1:13;
+A10:   y2 in dom KA by A7,FUNCT_2:def 1;
+      then KA. y2 = [idZ.y2, idY.y2] by FUNCT_3:def 8
+            .= [x, y2] by A7,A9,GRCAT_1:11;
+      hence thesis by A8,A10,FUNCT_1:def 5;
+    end;
+then A11: rng KA = [:Z, the carrier of Y:] by A6,XBOOLE_0:def 10
+          .= dom f by A1,FUNCT_3:def 6;
+A12: dom idZ = the carrier of Y by FUNCT_2:def 1
+           .= dom idY by FUNCT_2:def 1;
+      rng idY c= the carrier of Y by RELSET_1:12;
+    then f*KA = idY by A1,A5,A12,FUNCT_3:72
+        .= id the carrier of Y by GRCAT_1:def 11
+        .= id rng f by A2,PRE_TOPC:12;
+    then KA = (f qua Function)" by A3,A11,FUNCT_1:64;
+    hence thesis by A2,A3,TOPS_2:def 4;
+  end;
+
+theorem
+    for X, Y being non empty TopSpace,
+      x being Point of X,
+      f being map of [:Y, X | {x}:], Y st
+    f = pr1(the carrier of Y, {x}) holds
+   f is_homeomorphism
+  proof
+  let X, Y be non empty TopSpace,
+      x be Point of X,
+      f be map of [:Y, X | {x}:], Y;
+      set Z = {x};
+      assume A1: f = pr1(the carrier of Y, Z);
+A2:   the carrier of (X|Z) = Z by JORDAN1:1;
+    thus dom f = the carrier of [:Y, (X|Z):] by FUNCT_2:def 1
+               .= [#][:Y, (X|Z):] by PRE_TOPC:12;
+    thus rng f = the carrier of Y by A1,FUNCT_3:60
+              .= [#]Y by PRE_TOPC:12;
+    thus f is one-to-one by A1,Th6;
+    thus f is continuous by A1,A2,YELLOW12:39;
+    reconsider Z as non empty Subset of X;
+    reconsider idZ = Y --> x as continuous map of Y, (X|Z) by Th2;
+    reconsider KA = <:id Y, idZ:> as continuous map of Y, [:Y, (X|Z):]
+      by YELLOW12:41;
+      KA = f" by A1,Th8;
+    hence f" is continuous;
+  end;
+
+theorem Th11:
+  for X, Y being non empty TopSpace,
+      x being Point of X,
+      f being map of [:X | {x}, Y:], Y st
+    f = pr2({x}, the carrier of Y) holds
+   f is_homeomorphism
+  proof
+  let X, Y be non empty TopSpace,
+      x be Point of X,
+      f be map of [:X | {x}, Y:], Y;
+      set Z = {x};
+      assume A1: f = pr2(Z, the carrier of Y);
+A2:   the carrier of (X|Z) = Z by JORDAN1:1;
+    thus dom f = the carrier of [:(X|Z), Y:] by FUNCT_2:def 1
+               .= [#][:(X|Z), Y:] by PRE_TOPC:12;
+    thus rng f = the carrier of Y by A1,FUNCT_3:62
+              .= [#]Y by PRE_TOPC:12;
+    thus
+      f is one-to-one by A1,Th7;
+    thus f is continuous by A1,A2,YELLOW12:40;
+    reconsider Z as non empty Subset of X;
+    reconsider idZ = Y --> x as continuous map of Y, (X|Z) by Th2;
+    reconsider KA = <:idZ, id Y:> as continuous map of Y, [:(X|Z), Y:]
+      by YELLOW12:41;
+      KA = f" by A1,Th9;
+    hence f" is continuous;
+  end;
+
+begin :: On the product of compact spaces
+
+theorem
+    for X being non empty TopSpace, Y being compact non empty TopSpace,
+      G being open Subset of [:X, Y:],
+      x being set st
+   x in { x' where x' is Point of X : [:{x'}, the carrier of Y:] c= G }
+   ex f being ManySortedSet of the carrier of Y st
+   for i being set st i in the carrier of Y
+    ex G1 being Subset of X, H1 being Subset of Y st f.i = [G1,H1] &
+     [x, i] in [:G1, H1:] & G1 is open & H1 is open & [:G1, H1:] c= G
+proof
+ let X be non empty TopSpace, Y be compact non empty TopSpace,
+     G be open Subset of [:X, Y:],
+     x be set;
+ assume
+   x in { x' where x' is Point of X : [:{x'}, the carrier of Y:] c= G };
+  then consider x' be Point of X such that
+A1:  x = x' & [:{x'}, the carrier of Y:] c= G;
+A2: [:{x'}, the carrier of Y:] c= union Base-Appr G by A1,BORSUK_1:54;
+A3:now let y be set;
+   assume A4: y in the carrier of Y;
+     x in {x'} by A1,TARSKI:def 1;
+   then [x,y] in [:{x'}, the carrier of Y:] by A4,ZFMISC_1:106;
+   then consider Z be set such that
+A5:   [x, y] in Z & Z in Base-Appr G by A2,TARSKI:def 4;
+     Base-Appr G = { [:X1,Y1:] where X1 is Subset of X,
+                             Y1 is Subset of Y:
+     [:X1,Y1:] c= G & X1 is open & Y1 is open} by BORSUK_1:def 6;
+   then consider X1 be Subset of X, Y1 be Subset of Y such that
+A6:  Z = [:X1, Y1:] & [:X1,Y1:] c= G & X1 is open & Y1 is open by A5;
+   thus ex G1 be Subset of X,
+            H1 be Subset of Y st
+     [x, y] in [:G1, H1:] & [:G1,H1:] c= G & G1 is open & H1 is open by A5,A6;
+  end;
+   defpred P[set, set] means
+     ex G1 be Subset of X,
+        H1 be Subset of Y st
+      $2 = [G1,H1] &
+     [x, $1] in [:G1, H1:] & G1 is open & H1 is open & [:G1, H1:] c= G;
+A7: for i be set st i in the carrier of Y ex j be set st P[i,j]
+   proof
+    let i be set; assume i in the carrier of Y;
+    then consider G1 be Subset of X, H1 be Subset of Y such that
+A8:  [x, i] in [:G1, H1:] & [:G1, H1:] c= G &
+      G1 is open & H1 is open by A3;
+      ex G2 be Subset of X, H2 be Subset of Y st
+      [G1,H1] = [G2,H2] &
+     [x, i] in [:G2, H2:] & G2 is open & H2 is open & [:G2, H2:] c= G by A8;
+    hence ex j be set st P[i,j];
+   end;
+     ex f being ManySortedSet of the carrier of Y st
+    for i be set st i in the carrier of Y holds P[i,f.i] from MSSEx(A7);
+  hence thesis;
+end;
+
+theorem Th13:
+  for X being non empty TopSpace, Y being compact non empty TopSpace,
+      G being open Subset of [:Y, X:] holds
+ for x being set st x in { y where y is Point of X : [:[#]Y, {y}:] c= G }
+   holds
+    ex R be open Subset of X st x in R &
+      R c= { y where y is Point of X : [:[#]Y, {y}:] c= G }
+proof
+  let X be non empty TopSpace, Y be compact non empty TopSpace,
+      G be open Subset of [:Y, X:];
+  let x be set;
+  assume x in { y where y is Point of X : [:[#]Y, {y}:] c= G };
+  then consider x' being Point of X such that
+A1: x' = x & [:[#]Y, {x'}:] c= G;
+A2: [#]Y is compact by COMPTS_1:10;
+    Int G = G by TOPS_1:55;
+  then G is a_neighborhood of [:[#]Y, {x'}:] by A1,CONNSP_2:def 2;
+  then consider W being a_neighborhood of [#]Y,
+     V being a_neighborhood of x' such that
+A3:    [:W, V:] c= G by A2,BORSUK_1:67;
+  take R = Int V;
+A4:Int W c= W & Int V c= V by TOPS_1:44;
+    [#]Y c= Int W by CONNSP_2:def 2;
+then A5:[#]Y c= W by A4,XBOOLE_1:1;
+    R c= { z where z is Point of X : [:[#]Y, {z}:] c= G }
+  proof
+    let r be set; assume A6: r in R;
+    then reconsider r' = r as Point of X;
+      {r} c= V by A4,A6,ZFMISC_1:37;
+    then [:[#]Y, {r'}:] c= [:W, V:] by A5,ZFMISC_1:119;
+    then [:[#]Y, {r'}:] c= G by A3,XBOOLE_1:1;
+    hence thesis;
+  end;
+ hence thesis by A1,CONNSP_2:def 1;
+end;
+
+theorem Th14:
+ for X being non empty TopSpace, Y being compact non empty TopSpace,
+     G being open Subset of [:Y, X:] holds
+      { x where x is Point of X : [:[#]Y, {x}:] c= G } in the topology of X
+proof
+ let X be non empty TopSpace, Y be compact non empty TopSpace,
+     G be open Subset of [:Y, X:];
+ set Q = { x where x is Point of X : [:[#]Y, {x}:] c= G };
+   Q c= the carrier of X
+ proof
+   let q be set; assume q in Q;
+   then consider x' being Point of X such that
+A1:   q = x' & [:[#]Y, {x'}:] c= G;
+   thus thesis by A1;
+ end;
+ then reconsider Q as Subset of X;
+ defpred P[set] means
+   ex y be set st y in Q &
+   ex S be Subset of X st S = $1 & S is open & y in S & S c= Q;
+ consider RR be set such that
+A2:  for x be set holds x in RR iff x in bool Q & P[x] from Separation;
+   RR c= bool Q
+ proof
+   let x be set;
+   assume x in RR;
+   hence thesis by A2;
+ end;
+ then reconsider RR as Subset-Family of Q by SETFAM_1:def 7;
+A3: union RR = Q
+ proof
+  thus union RR c= Q;
+  thus Q c= union RR
+  proof
+   let a be set; assume a in Q;
+   then consider R be open Subset of X such that
+A4:  a in R & R c= Q by Th13;
+     R in RR by A2,A4;
+   hence thesis by A4,TARSKI:def 4;
+  end;
+ end;
+   bool Q c= bool the carrier of X by ZFMISC_1:79;
+ then reconsider RR as Subset of bool the carrier of X by XBOOLE_1:1;
+ reconsider RR as Subset-Family of X by SETFAM_1:def 7;
+   RR c= the topology of X
+ proof
+   let x be set; assume x in RR;
+   then consider y be set such that
+A5:   y in Q &
+   ex S be Subset of X st S = x & S is open & y in S & S c= Q by A2;
+   consider S be Subset of X such that
+A6:   S = x & S is open & y in S & S c= Q by A5;
+   thus thesis by A6,PRE_TOPC:def 5;
+ end;
+ hence thesis by A3,PRE_TOPC:def 1;
+end;
+
+theorem Th15:
+  for X, Y being non empty TopSpace,
+      x being Point of X holds
+    [: X | {x}, Y :], Y are_homeomorphic
+proof
+  let X be non empty TopSpace, Y be non empty TopSpace,
+      x be Point of X;
+  set Z = {x};
+    the carrier of [:(X|Z), Y:] = [:the carrier of (X|Z), the carrier of Y:]
+    by BORSUK_1:def 5
+          .= [:Z, the carrier of Y:] by JORDAN1:1;
+  then reconsider f= pr2(Z, the carrier of Y) as map of [:X|Z, Y:], Y;
+  take f;
+  thus thesis by Th11;
+end;
+
+Lm3:
+ for X being non empty TopSpace, Y being non empty TopSpace,
+      x being Point of X,
+      Z being non empty Subset of X st Z = {x} holds
+    [: Y, X | Z :], Y are_homeomorphic
+proof
+  let X be non empty TopSpace, Y be non empty TopSpace,
+      x be Point of X,
+      Z be non empty Subset of X;
+  assume Z = {x};
+then A1:[: X | Z, Y :], Y are_homeomorphic by Th15;
+A2:[: Y, X | Z :], [: X | Z, Y :] are_homeomorphic by YELLOW12:44;
+  consider f being map of [: X | Z, Y :], Y such that
+A3:  f is_homeomorphism by A1,T_0TOPSP:def 1;
+  consider g being map of [: Y, X | Z :], [: X | Z, Y :] such that
+A4:  g is_homeomorphism by A2,T_0TOPSP:def 1;
+  reconsider gf = f * g as map of [: Y, X | Z :], Y;
+    gf is_homeomorphism by A3,A4,TOPS_2:71;
+  hence thesis by T_0TOPSP:def 1;
+end;
+
+theorem Th16:
+  for S, T being non empty TopSpace st
+    S, T are_homeomorphic & S is compact holds T is compact
+proof
+  let S, T be non empty TopSpace;
+  assume A1: S, T are_homeomorphic & S is compact;
+  then consider f being map of S, T such that
+A2:  f is_homeomorphism by T_0TOPSP:def 1;
+    f is continuous & rng f = [#] T by A2,TOPS_2:def 5;
+  hence thesis by A1,COMPTS_1:23;
+end;
+
+theorem Th17:
+  for X, Y being TopSpace,
+      XV being SubSpace of X holds
+    [:Y, XV:] is SubSpace of [:Y, X:]
+proof
+  let X, Y be TopSpace,
+      XV be SubSpace of X;
+  set S = [:Y, XV:], T = [:Y, X:];
+A1:the carrier of [:Y, XV:] =
+   [:the carrier of Y, the carrier of XV:] by BORSUK_1:def 5;
+A2:the carrier of [:Y, X:]
+       = [:the carrier of Y, the carrier of X:] by BORSUK_1:def 5;
+A3:the carrier of XV c= the carrier of X by BORSUK_1:35;
+A4:the carrier of [:Y, XV:] = [#]S &
+    the carrier of [:Y, X:] = [#]T by PRE_TOPC:12;
+then A5:[#]S c= [#]T by A1,A2,A3,ZFMISC_1:119;
+    for P being Subset of S holds P in the topology of S iff
+   ex Q being Subset of T st
+     Q in the topology of T & P = Q /\ [#]S
+   proof
+    let P be Subset of S;
+    reconsider P' = P as Subset of S;
+    hereby assume P in the topology of S;
+    then P' is open by PRE_TOPC:def 5;
+    then consider A being Subset-Family of S such that
+A6:   P' = union A &
+        for e be set st e in A ex X1 being Subset of Y,
+                                 Y1 being Subset of XV st
+          e = [:X1,Y1:] & X1 is open & Y1 is open by BORSUK_1:45;
+     set AA = {[:X1, Y2:] where X1 is Subset of Y, Y2 is Subset of X :
+       ex Y1 being Subset of XV st Y1 = Y2 /\ [#](XV) &
+         X1 is open & Y2 is open & [:X1, Y1:] in A };
+       AA c= bool the carrier of T
+       proof
+         let a be set; assume a in AA;
+         then consider Xx1 being Subset of Y, Yy2 being Subset of X such that
+A7:        a = [:Xx1, Yy2:] &
+           ex Y1 being Subset of XV st Y1 = Yy2 /\ [#](XV) &
+           Xx1 is open & Yy2 is open & [:Xx1, Y1:] in A;
+         thus thesis by A7;
+       end;
+     then reconsider AA as Subset-Family of T by SETFAM_1:def 7;
+     reconsider AA as Subset-Family of T;
+   AA c= the topology of T
+     proof
+       let t be set; assume t in AA;
+         then consider Xx1 being Subset of Y, Yy2 being Subset of X such that
+A8:        t = [:Xx1, Yy2:] &
+           ex Y1 being Subset of XV st Y1 = Yy2 /\ [#](XV) &
+           Xx1 is open & Yy2 is open & [:Xx1, Y1:] in A;
+       set A' = { t };
+         A' c= bool the carrier of T
+       proof
+         let a be set; assume a in A';
+         then a = t by TARSKI:def 1;
+         hence thesis by A8;
+       end;
+       then reconsider A' as Subset-Family of T by SETFAM_1:def
+7;
+A9:    t = union A' by ZFMISC_1:31;
+         A' c= { [:X1,Y1:] where X1 is Subset of Y,
+                                    Y1 is Subset of X :
+               X1 in the topology of Y & Y1 in the topology of X }
+       proof
+         let x be set; assume x in A';
+then A10:      x = [:Xx1,Yy2:] by A8,TARSKI:def 1;
+           Xx1 in the topology of Y & Yy2 in the topology of X
+           by A8,PRE_TOPC:def 5;
+         hence thesis by A10;
+       end;
+       then t in { union As where As is Subset-Family of T :
+             As c= { [:X1,Y1:] where X1 is Subset of Y,
+                                    Y1 is Subset of X :
+            X1 in the topology of Y & Y1 in the topology of X}} by A9;
+       hence thesis by BORSUK_1:def 5;
+     end;
+then A11:   union AA in the topology of T by PRE_TOPC:def 1;
+       P = union AA /\ [#]S
+     proof
+       thus P c= union AA /\ [#]S
+       proof
+         let p be set; assume p in P;
+         then consider A1 be set such that
+A12:         p in A1 & A1 in A by A6,TARSKI:def 4;
+         reconsider A1 as Subset of S by A12;
+           p in the carrier of S by A12;
+then A13:      p in [#]S by PRE_TOPC:12;
+         consider X2 being Subset of Y, Y2 being Subset of XV such that
+A14:         A1 = [:X2,Y2:] & X2 is open & Y2 is open by A6,A12;
+         consider p1, p2 being set such that
+A15:         p1 in X2 & p2 in Y2 & p = [p1, p2] by A12,A14,ZFMISC_1:def 2;
+           Y2 in the topology of XV by A14,PRE_TOPC:def 5;
+         then consider Q1 being Subset of X such that
+A16:         Q1 in the topology of X & Y2 = Q1 /\ [#]XV by PRE_TOPC:def 9;
+         reconsider Q1 as Subset of X;
+         set EX = [:X2, Q1:];
+           p2 in Q1 by A15,A16,XBOOLE_0:def 3;
+then A17:      p in EX by A15,ZFMISC_1:106;
+           Q1 is open & [:X2, Y2:] in A by A12,A14,A16,PRE_TOPC:def 5;
+         then EX in {[:Xx1, Yy2:] where Xx1 is Subset of Y, Yy2 is Subset of X
+:
+           ex Z1 being Subset of XV st Z1 = Yy2 /\ [#](XV) &
+             Xx1 is open & Yy2 is open & [:Xx1, Z1:] in A } by A14,A16;
+         then p in union AA by A17,TARSKI:def 4;
+         hence thesis by A13,XBOOLE_0:def 3;
+       end;
+       thus union AA /\ [#]S c= P
+       proof
+         let h be set;
+         assume h in union AA /\ [#]S;
+then A18:      h in union AA & h in [#]S by XBOOLE_0:def 3;
+         then consider A2 being set such that
+A19:        h in A2 & A2 in AA by TARSKI:def 4;
+         consider Xx1 being Subset of Y, Yy2 being Subset of X such that
+A20:        A2 = [:Xx1, Yy2:] &
+           ex Y1 being Subset of XV st Y1 = Yy2 /\ [#](XV) &
+           Xx1 is open & Yy2 is open & [:Xx1, Y1:] in A by A19;
+         consider p1, p2 being set such that
+A21:         p1 in Xx1 & p2 in Yy2 & h = [p1, p2] by A19,A20,ZFMISC_1:def 2;
+         consider Yy1 being Subset of XV such that
+A22:        Yy1 = Yy2 /\
+ [#](XV) & Xx1 is open & Yy2 is open & [:Xx1, Yy1:] in A
+             by A20;
+           p2 in the carrier of XV by A1,A18,A21,ZFMISC_1:106;
+         then p2 in [#]XV by PRE_TOPC:12;
+         then p2 in Yy2 /\ [#]XV by A21,XBOOLE_0:def 3;
+         then h in [:Xx1, Yy1:] by A21,A22,ZFMISC_1:106;
+         hence thesis by A6,A22,TARSKI:def 4;
+       end;
+     end;
+     hence ex Q being Subset of T st
+        Q in the topology of T & P = Q /\ [#]S by A11;
+    end;
+     given Q being Subset of T such that
+A23:    Q in the topology of T & P = Q /\ [#]S;
+     reconsider Q' = Q as Subset of T;
+       Q' is open by A23,PRE_TOPC:def 5;
+     then consider A being Subset-Family of T such that
+A24:    Q' = union A &
+        for e be set st e in A ex X1 being Subset of Y,
+                                 Y1 being Subset of X st
+          e = [:X1,Y1:] & X1 is open & Y1 is open by BORSUK_1:45;
+     reconsider oS = [#]S as Subset of T
+       by A1,A2,A3,A4,ZFMISC_1:119;
+     reconsider A as Subset-Family of T;
+     reconsider AA = A | oS as Subset-Family of T|oS;
+       the carrier of (T|oS) = oS by JORDAN1:1
+        .= the carrier of S by PRE_TOPC:12;
+     then reconsider AA as Subset-Family of S;
+     reconsider AA as Subset-Family of S;
+       union AA c= the carrier of S;
+then A25:  union AA c= oS by PRE_TOPC:12;
+       union AA c= union A by TOPS_2:44;
+then A26:  union AA c= union A /\ oS by A25,XBOOLE_1:19;
+       union A /\ oS c= union AA
+     proof
+       let s be set; assume s in union A /\ oS;
+then A27:    s in union A & s in oS by XBOOLE_0:def 3;
+       then consider A1 being set such that
+A28:      s in A1 & A1 in A by TARSKI:def 4;
+A29:    s in A1 /\ oS by A27,A28,XBOOLE_0:def 3;
+       reconsider A1 as Subset of T by A28;
+         A1 /\ oS in AA by A28,TOPS_2:41;
+       hence thesis by A29,TARSKI:def 4;
+     end;
+then A30:  P = union AA by A23,A24,A26,XBOOLE_0:def 10;
+       for e be set st e in AA ex X1 being Subset of Y,
+                               Y1 being Subset of XV st
+          e = [:X1,Y1:] & X1 is open & Y1 is open
+     proof
+       let e be set; assume A31: e in AA;
+       then reconsider e' = e as Subset of T|oS;
+       consider R being Subset of T such that
+A32:       R in A & R /\ oS = e' by A31,TOPS_2:def 3;
+       consider X1 being Subset of Y, Y1 being Subset of X such that
+A33:       R = [:X1,Y1:] & X1 is open & Y1 is open by A24,A32;
+         [#][:Y, XV:] = [:[#]Y, [#]XV:] by Th1;
+then A34:     e' = [:X1 /\ [#]Y, Y1 /\ [#](XV):] by A32,A33,ZFMISC_1:123;
+       reconsider D1 = X1 /\ [#]Y as Subset of Y;
+         Y1 /\ [#]XV c= [#]XV by XBOOLE_1:17;
+       then Y1 /\ [#]XV c= the carrier of XV by PRE_TOPC:12;
+       then reconsider D2 = Y1 /\ [#]XV as Subset of XV;
+A35:     D1 is open by A33,TOPS_1:38;
+         Y1 in the topology of X by A33,PRE_TOPC:def 5;
+       then D2 in the topology of XV by PRE_TOPC:def 9;
+       then D2 is open by PRE_TOPC:def 5;
+       hence thesis by A34,A35;
+     end;
+     then P' is open by A30,BORSUK_1:45;
+     hence thesis by PRE_TOPC:def 5;
+   end;
+  hence thesis by A5,PRE_TOPC:def 9;
+end;
+
+Lm4:
+  for X, Y being non empty TopSpace,
+      Z being non empty Subset of [:Y, X:],
+      V being non empty Subset of X st Z = [:[#]Y, V:] holds
+   the TopStruct of [:Y, X | V:] = the TopStruct of [:Y, X:] | Z
+proof
+  let X, Y be non empty TopSpace,
+      Z be non empty Subset of [:Y, X:],
+      V be non empty Subset of X;
+  assume A1: Z = [:[#]Y, V:];
+  reconsider A = [:Y, X | V:] as non empty SubSpace of [:Y, X:] by Th17;
+A2:the carrier of A = [:the carrier of Y, the carrier of (X|V):]
+                         by BORSUK_1:def 5
+                  .= [:the carrier of Y, V:] by JORDAN1:1
+                  .= Z by A1,PRE_TOPC:12
+                  .= the carrier of ([:Y, X:]|Z) by JORDAN1:1;
+then A3:A is non empty SubSpace of [:Y, X:] | Z by TOPMETR:4;
+    [:Y, X:] | Z is non empty SubSpace of A by A2,TOPMETR:4;
+  hence thesis by A3,TSEP_1:6;
+end;
+
+theorem Th18:
+  for X being non empty TopSpace,
+      Y being compact non empty TopSpace,
+      x being Point of X,
+      Z being Subset of [:Y, X:] st Z = [:[#]Y, {x}:] holds
+   Z is compact
+proof
+  let X be non empty TopSpace,
+      Y be compact non empty TopSpace,
+      x be Point of X,
+      Z be Subset of [:Y, X:];
+  reconsider V = {x} as non empty Subset of X;
+  assume A1: Z = [:[#]Y, {x}:];
+    Y, [: Y, X | V :] are_homeomorphic by Lm3;
+then A2:[:Y, X | V:] is compact by Th16;
+    the TopStruct of [:Y, X | V:] = the TopStruct of ([:Y, X:] | Z)
+       by A1,Lm4;
+  hence thesis by A1,A2,COMPTS_1:12;
+end;
+
+theorem
+    for X being non empty TopSpace,
+      Y being compact non empty TopSpace,
+      x being Point of X holds
+    [:Y, X|{x}:] is compact
+proof
+  let X be non empty TopSpace,
+      Y be compact non empty TopSpace,
+      x be Point of X;
+    Y, [: Y, X | {x} :] are_homeomorphic by Lm3;
+  hence thesis by Th16;
+end;
+
+theorem
+    for X, Y being compact non empty TopSpace,
+      R being Subset-Family of X st
+   R = { Q where Q is open Subset of X : [:[#]Y, Q:] c=
+     union Base-Appr [#][:Y, X:] } holds R is open & R is_a_cover_of [#]X
+proof
+  let X, Y be compact non empty TopSpace,
+      R be Subset-Family of X;
+  assume A1: R = { Q where Q is open Subset of X : [:[#]Y, Q:] c=
+                   union Base-Appr [#][:Y, X:] };
+    now let P be Subset of X;
+    assume P in R;
+    then consider E being open Subset of X such that
+A2:   E = P & [:[#]Y, E:] c= union Base-Appr [#][:Y, X:] by A1;
+    thus P is open by A2;
+  end;
+  hence R is open by TOPS_2:def 1;
+    [#]X c= union R
+  proof
+    let k be set;
+    assume k in [#]X;
+    then reconsider k' = k as Point of X;
+    reconsider Z = [:[#]Y, {k'}:] as Subset of [:Y, X:];
+      Z c= the carrier of [:Y, X:];
+    then Z c= [#][:Y, X:] by PRE_TOPC:12;
+    then Z c= union Base-Appr [#][:Y, X:] by BORSUK_1:54;
+then A3: Base-Appr [#][:Y, X:] is_a_cover_of Z by COMPTS_1:def 1;
+A4: Base-Appr [#][:Y, X:] is open by BORSUK_1:51;
+      Z is compact by Th18;
+    then consider G being Subset-Family of [:Y, X:] such that
+A5:    G c= Base-Appr [#][:Y, X:] & G is_a_cover_of Z &
+     G is finite by A3,A4,COMPTS_1:def 7;
+A6: G is open by A4,A5,TOPS_2:18;
+A7: Z c= union G by A5,COMPTS_1:def 1;
+    set uR = union G;
+    set Q = { x where x is Point of X : [:[#]Y, {x}:] c= uR };
+      Q c= the carrier of X
+    proof
+      let k be set; assume k in Q;
+      then consider x1 being Point of X such that
+A8:      k = x1 & [:[#]Y, {x1}:] c= uR;
+      thus thesis by A8;
+    end;
+    then reconsider Q as Subset of X;
+      uR is open by A6,TOPS_2:26;
+    then Q in the topology of X by Th14;
+then A9: Q is open by PRE_TOPC:def 5;
+A10: k' in Q by A7;
+      [:[#]Y, Q:] c= union Base-Appr [#][:Y, X:]
+    proof
+      let z be set;
+      assume z in [:[#]Y, Q:];
+      then consider x1, x2 be set such that
+A11:     x1 in [#]Y & x2 in Q & z = [x1, x2] by ZFMISC_1:def 2;
+      consider x2' being Point of X such that
+A12:     x2' = x2 & [:[#]Y, {x2'}:] c= uR by A11;
+        uR c= union Base-Appr [#][:Y, X:] by A5,ZFMISC_1:95;
+then A13:   [:[#]Y, {x2'}:] c= union Base-Appr [#][:Y, X:] by A12,XBOOLE_1:1;
+       x2 in {x2'} by A12,TARSKI:def 1;
+     then z in [:[#]Y, {x2'}:] by A11,ZFMISC_1:106;
+     hence thesis by A13;
+   end;
+   then Q in R by A1,A9;
+   hence thesis by A10,TARSKI:def 4;
+ end;
+ hence thesis by COMPTS_1:def 1;
+end;
+
+theorem Th21:
+  for X, Y being compact non empty TopSpace,
+      R being Subset-Family of X,
+      F being Subset-Family of [:Y, X:] st
+    F is_a_cover_of [:Y, X:] & F is open &
+  R = { Q where Q is open Subset of X :
+   ex FQ being Subset-Family of [:Y, X:] st FQ c= F & FQ is finite &
+    [:[#]Y, Q:] c= union FQ } holds
+      R is open & R is_a_cover_of X
+proof
+ let X, Y be compact non empty TopSpace,
+     R be Subset-Family of X,
+     F be Subset-Family of [:Y, X:];
+ assume A1: F is_a_cover_of [:Y, X:] & F is open &
+    R = { Q where Q is open Subset of X :
+   ex FQ being Subset-Family of [:Y, X:] st FQ c= F & FQ is finite &
+    [:[#]Y, Q:] c= union FQ };
+then A2: union F = [#] [:Y, X:] by PRE_TOPC:def 8;
+   now let P be Subset of X;
+    assume P in R;
+    then consider E being open Subset of X such that
+A3:   E = P &
+     ex FQ being Subset-Family of [:Y, X:] st FQ c= F & FQ is finite &
+       [:[#]Y, E:] c= union FQ by A1;
+    thus P is open by A3;
+ end;
+ hence R is open by TOPS_2:def 1;
+   union R c= the carrier of X;
+then A4: union R c= [#]X by PRE_TOPC:12;
+   [#]X c= union R
+ proof
+   let k be set;
+   assume k in [#]X;
+   then reconsider k' = k as Point of X;
+   reconsider Z = [:[#]Y, {k'}:] as Subset of [:Y, X:];
+     Z c= the carrier of [:Y, X:];
+   then Z c= [#][:Y, X:] by PRE_TOPC:12;
+then A5:F is_a_cover_of Z by A2,COMPTS_1:def 1;
+     Z is compact by Th18;
+   then consider G being Subset-Family of [:Y, X:] such that
+A6: G c= F & G is_a_cover_of Z &
+      G is finite by A1,A5,COMPTS_1:def 7;
+A7:G is open by A1,A6,TOPS_2:18;
+A8:Z c= union G by A6,COMPTS_1:def 1;
+   set uR = union G;
+   set Q = { x where x is Point of X : [:[#]Y, {x}:] c= uR };
+     Q c= the carrier of X
+   proof
+     let k be set; assume k in Q;
+     then consider x1 being Point of X such that
+A9:     k = x1 & [:[#]Y, {x1}:] c= uR;
+     thus thesis by A9;
+   end;
+   then reconsider Q as Subset of X;
+     uR is open by A7,TOPS_2:26;
+   then Q in the topology of X by Th14;
+then A10:Q is open by PRE_TOPC:def 5;
+A11:k' in Q by A8;
+     ex FQ being Subset-Family of [:Y, X:] st FQ c= F & FQ is finite &
+       [:[#]Y, Q:] c= union FQ
+   proof
+     take G;
+     [:[#]Y, Q:] c= union G
+   proof
+     let z be set;
+     assume z in [:[#]Y, Q:];
+     then consider x1, x2 be set such that
+A12:    x1 in [#]Y & x2 in Q & z = [x1, x2] by ZFMISC_1:def 2;
+     consider x2' being Point of X such that
+A13:    x2' = x2 & [:[#]Y, {x2'}:] c= uR by A12;
+       x2 in {x2'} by A13,TARSKI:def 1;
+     then z in [:[#]Y, {x2'}:] by A12,ZFMISC_1:106;
+     hence thesis by A13;
+   end;
+     hence thesis by A6;
+   end;
+   then Q in R by A1,A10;
+   hence thesis by A11,TARSKI:def 4;
+ end;
+ then union R = [#]X by A4,XBOOLE_0:def 10;
+ hence thesis by PRE_TOPC:def 8;
+end;
+
+theorem Th22:
+  for X, Y being compact non empty TopSpace,
+      R being Subset-Family of X,
+      F being Subset-Family of [:Y, X:] st
+    F is_a_cover_of [:Y, X:] & F is open &
+  R = { Q where Q is open Subset of X :
+   ex FQ being Subset-Family of [:Y, X:] st FQ c= F & FQ is finite &
+  [:[#]Y, Q:] c= union FQ } holds
+  ex C being Subset-Family of X st C c= R & C is finite & C is_a_cover_of X
+proof
+ let X, Y be compact non empty TopSpace,
+     R be Subset-Family of X,
+     F be Subset-Family of [:Y, X:];
+ assume F is_a_cover_of [:Y, X:] & F is open &
+    R = { Q where Q is open Subset of X :
+     ex FQ being Subset-Family of [:Y, X:] st FQ c= F & FQ is finite &
+       [:[#]Y, Q:] c= union FQ };
+    then R is open & R is_a_cover_of X by Th21;
+  then ex G being Subset-Family of X
+    st G c= R & G is_a_cover_of X & G is finite by COMPTS_1:def 3;
+  hence thesis;
+end;
+
+theorem Th23:
+  for X, Y being compact non empty TopSpace,
+      F being Subset-Family of [:Y, X:] st
+    F is_a_cover_of [:Y, X:] & F is open
+      ex G being Subset-Family of [:Y, X:]
+       st G c= F & G is_a_cover_of [:Y, X:] & G is finite
+proof
+ let X, Y be compact non empty TopSpace;
+ let F be Subset-Family of [:Y, X:];
+ assume A1: F is_a_cover_of [:Y, X:] & F is open;
+ set R = { Q where Q is open Subset of X :
+   ex FQ being Subset-Family of [:Y, X:] st FQ c= F & FQ is finite &
+    [:[#]Y, Q:] c= union FQ };
+   R c= bool the carrier of X
+ proof
+   let s be set; assume s in R;
+   then consider Q1 being open Subset of X such that
+A2:  s = Q1 & ex FQ being Subset-Family of [:Y, X:] st FQ c= F & FQ is finite &
+      [:[#]Y, Q1:] c= union FQ;
+   thus thesis by A2;
+ end;
+ then reconsider R as Subset-Family of X by SETFAM_1:def 7;
+ reconsider R as Subset-Family of X;
+ consider C being Subset-Family of X such that
+A3:   C c= R & C is finite & C is_a_cover_of X by A1,Th22;
+   defpred P[set, set] means
+     ex FQ being Subset-Family of [:Y, X:] st FQ c= F & FQ is finite &
+       [:[#]Y, $1:] c= union FQ & $2 = FQ;
+A4: for e be set st e in C ex u be set st P[e,u]
+   proof
+     let e be set; assume e in C;
+     then e in R by A3;
+     then consider Q1 being open Subset of X such that
+A5:    Q1 = e & ex FQ being Subset-Family of [:Y, X:] st
+         FQ c= F & FQ is finite & [:[#]Y, Q1:] c= union FQ;
+     thus thesis by A5;
+   end;
+  consider t being Function such that
+A6:  dom t = C & for s being set st s in C holds P[s, t.s]
+      from NonUniqFuncEx(A4);
+A7:union rng t c= F
+   proof
+     let k be set;
+     assume k in union rng t;
+     then consider K be set such that
+A8:    k in K & K in rng t by TARSKI:def 4;
+     consider x1 be set such that
+A9:    x1 in dom t & K = t.x1 by A8,FUNCT_1:def 5;
+     consider FQ being Subset-Family of [:Y, X:] such that
+A10:    FQ c= F & FQ is finite & [:[#]Y, x1:] c= union FQ & K = FQ by A6,A9;
+     thus thesis by A8,A10;
+   end;
+A11:union rng t is finite
+   proof
+A12:   rng t is finite by A3,A6,FINSET_1:26;
+       for X1 be set st X1 in rng t holds X1 is finite
+     proof
+       let X1 be set; assume X1 in rng t;
+       then consider x1 be set such that
+A13:      x1 in dom t & X1 = t.x1 by FUNCT_1:def 5;
+       consider FQ being Subset-Family of [:Y, X:] such that
+A14:      FQ c= F & FQ is finite &
+         [:[#]Y, x1:] c= union FQ & t.x1 = FQ by A6,A13;
+       thus thesis by A13,A14;
+     end;
+     hence thesis by A12,FINSET_1:25;
+   end;
+ deffunc F(set) = [:[#]Y, $1:];
+ set CX = { F(f) where f is Element of bool the carrier of X : f in C };
+   CX c= bool the carrier of [:Y, X:]
+ proof
+   let s be set; assume s in CX;
+   then consider f1 being Element of bool the carrier of X such that
+A15:  s = F(f1) & f1 in C;
+     [:[#]Y, f1:] c= the carrier of [:Y, X:];
+   hence thesis by A15;
+ end;
+ then reconsider CX as Subset-Family of [:Y, X:] by SETFAM_1:def
+7;
+ reconsider CX as Subset-Family of [:Y, X:];
+ set G = union rng t;
+   G c= bool the carrier of [:Y, X:]
+ proof
+   let s be set; assume s in G;
+   then s in F by A7;
+   hence thesis;
+ end;
+  then reconsider G as Subset-Family of [:Y, X:] by SETFAM_1:def
+7;
+  reconsider G as Subset-Family of [:Y, X:];
+  take G;
+   union CX = [:[#]Y, union C:]
+ proof
+   hereby let g be set; assume g in union CX;
+     then consider GG being set such that
+A16:    g in GG & GG in CX by TARSKI:def 4;
+     consider FF being Element of bool the carrier of X such that
+A17:    GG = [:[#]Y, FF:] & FF in C by A16;
+     consider g1, g2 be set such that
+A18:    g1 in [#]Y & g2 in FF & g = [g1, g2] by A16,A17,ZFMISC_1:def 2;
+       g2 in union C by A17,A18,TARSKI:def 4;
+     hence g in [:[#]Y, union C:] by A18,ZFMISC_1:106;
+   end;
+   let g be set;
+   assume g in [:[#]Y, union C:];
+   then consider g1, g2 be set such that
+A19:  g1 in [#]Y & g2 in union C & g = [g1, g2] by ZFMISC_1:def 2;
+   consider GG being set such that
+A20:  g2 in GG & GG in C by A19,TARSKI:def 4;
+     GG in { Q where Q is open Subset of X :
+    ex FQ being Subset-Family of [:Y, X:] st FQ c= F & FQ is finite &
+     [:[#]Y, Q:] c= union FQ } by A3,A20;
+   then consider Q1 being open Subset of X such that
+A21:  GG = Q1 &
+     ex FQ being Subset-Family of [:Y, X:] st FQ c= F & FQ is finite &
+      [:[#]Y, Q1:] c= union FQ;
+A22:g in [:[#]Y, Q1:] by A19,A20,A21,ZFMISC_1:106;
+     [:[#]Y, Q1:] in CX by A20,A21;
+   hence thesis by A22,TARSKI:def 4;
+ end;
+then A23: union CX = [:[#]Y, [#]X:] by A3,PRE_TOPC:def 8
+         .= [#][:Y, X:] by Th1;
+A24:[#][:Y, X:] c= union union rng t
+   proof
+     let d be set;
+     assume d in [#][:Y, X:];
+     then consider CC being set such that
+A25:    d in CC & CC in CX by A23,TARSKI:def 4;
+     consider Cc being Element of bool the carrier of X such that
+A26:     CC = [:[#]Y, Cc:] & Cc in C by A25;
+       Cc in R by A3,A26;
+     then consider Qq being open Subset of X such that
+A27:      Cc = Qq &
+      ex FQ being Subset-Family of [:Y, X:] st FQ c= F & FQ is finite &
+          [:[#]Y, Qq:] c= union FQ;
+     consider d1, d2 being set such that
+A28:    d1 in [#]Y & d2 in Cc & d = [d1, d2] by A25,A26,ZFMISC_1:def 2;
+     consider FQ1 being Subset-Family of [:Y, X:] such that
+A29:    FQ1 c= F & FQ1 is finite &
+        [:[#]Y, Qq:] c= union FQ1 & t.Qq = FQ1 by A6,A26,A27;
+A30:  FQ1 in rng t by A6,A26,A27,A29,FUNCT_1:def 5;
+       d in [:[#]Y, Qq:] by A27,A28,ZFMISC_1:106;
+     then consider DC being set such that
+A31:    d in DC & DC in FQ1 by A29,TARSKI:def 4;
+       DC in union rng t by A30,A31,TARSKI:def 4;
+     hence thesis by A31,TARSKI:def 4;
+   end;
+     union G c= the carrier of [:Y, X:];
+   then union G c= [#][:Y, X:] by PRE_TOPC:12;
+then A32:union G = [#][:Y, X:] by A24,XBOOLE_0:def 10;
+ thus G c= F by A7;
+ thus G is_a_cover_of [:Y, X:] by A32,PRE_TOPC:def 8;
+ thus G is finite by A11;
+end;
+
+Lm5:for T1, T2 be compact non empty TopSpace holds [:T1, T2:] is compact
+  proof
+    let T1, T2 be compact non empty TopSpace;
+    set T = [:T1, T2:];
+    let F be Subset-Family of T;
+    assume F is_a_cover_of T & F is open;
+    hence thesis by Th23;
+  end;
+
+theorem Th24:
+  for T1, T2 be TopSpace st T1 is compact & T2 is compact holds
+    [:T1, T2:] is compact
+  proof
+    let T1, T2 be TopSpace;
+    assume T1 is compact & T2 is compact;
+    then reconsider T1, T2 as compact TopSpace;
+    per cases;
+    suppose T1 is non empty & T2 is non empty;
+    hence thesis by Lm5;
+    suppose T1 is empty & T2 is empty;
+    then [:T1, T2:] is empty by Th4;
+    hence thesis by Th5;
+    suppose T1 is empty & T2 is non empty;
+    then [:T1, T2:] is empty by Th4;
+    hence thesis by Th5;
+    suppose T1 is non empty & T2 is empty;
+    then [:T1, T2:] is empty by Th4;
+    hence thesis by Th5;
+  end;
+
+definition let T1, T2 be compact TopSpace;
+  cluster [:T1, T2:] -> compact;
+  coherence by Th24;
+end;
+
+Lm6:
+  for X, Y being TopSpace,
+      XV being SubSpace of X holds
+    [:XV, Y:] is SubSpace of [:X, Y:]
+proof
+  let X, Y be TopSpace,
+      XV be SubSpace of X;
+  set S = [:XV, Y:], T = [:X, Y:];
+A1:the carrier of S =
+   [:the carrier of XV, the carrier of Y:] by BORSUK_1:def 5;
+A2:the carrier of [:X, Y:]
+       = [:the carrier of X, the carrier of Y:] by BORSUK_1:def 5;
+A3:the carrier of XV c= the carrier of X by BORSUK_1:35;
+A4:the carrier of [:XV, Y:] = [#]S &
+    the carrier of [:X, Y:] = [#]T by PRE_TOPC:12;
+then A5:[#]S c= [#]T by A1,A2,A3,ZFMISC_1:119;
+    for P being Subset of S holds P in the topology of S iff
+   ex Q being Subset of T st
+     Q in the topology of T & P = Q /\ [#]S
+   proof
+    let P be Subset of S;
+    reconsider P' = P as Subset of S;
+    hereby assume P in the topology of S;
+    then P' is open by PRE_TOPC:def 5;
+    then consider A being Subset-Family of S such that
+A6:   P' = union A &
+        for e be set st e in A ex X1 being Subset of XV,
+                                 Y1 being Subset of Y st
+          e = [:X1,Y1:] & X1 is open & Y1 is open by BORSUK_1:45;
+     set AA = {[:X1, Y2:] where X1 is Subset of X, Y2 is Subset of Y :
+       ex Y1 being Subset of XV st Y1 = X1 /\ [#](XV) &
+         X1 is open & Y2 is open & [:Y1, Y2:] in A };
+       AA c= bool the carrier of T
+       proof
+         let a be set; assume a in AA;
+         then consider Xx1 being Subset of X, Yy2 being Subset of Y such that
+A7:        a = [:Xx1, Yy2:] &
+           ex Y1 being Subset of XV st Y1 = Xx1 /\ [#](XV) &
+           Xx1 is open & Yy2 is open & [:Y1, Yy2:] in A;
+         thus thesis by A7;
+       end;
+     then reconsider AA as Subset-Family of T by SETFAM_1:def 7;
+     reconsider AA as Subset-Family of T;
+   AA c= the topology of T
+     proof
+       let t be set; assume t in AA;
+         then consider Xx1 being Subset of X, Yy2 being Subset of Y such that
+A8:        t = [:Xx1, Yy2:] &
+           ex Y1 being Subset of XV st Y1 = Xx1 /\ [#](XV) &
+           Xx1 is open & Yy2 is open & [:Y1, Yy2:] in A;
+       set A' = { t };
+         A' c= bool the carrier of T
+       proof
+         let a be set; assume a in A';
+         then a = t by TARSKI:def 1;
+         hence thesis by A8;
+       end;
+       then reconsider A' as Subset-Family of T by SETFAM_1:def
+7;
+A9:    t = union A' by ZFMISC_1:31;
+         A' c= { [:X1,Y1:] where X1 is Subset of X,
+                                    Y1 is Subset of Y :
+               X1 in the topology of X & Y1 in the topology of Y }
+       proof
+         let x be set; assume x in A';
+then A10:      x = [:Xx1,Yy2:] by A8,TARSKI:def 1;
+           Xx1 in the topology of X & Yy2 in the topology of Y
+           by A8,PRE_TOPC:def 5;
+         hence thesis by A10;
+       end;
+       then t in { union As where As is Subset-Family of T :
+             As c= { [:X1,Y1:] where X1 is Subset of X,
+                                    Y1 is Subset of Y :
+            X1 in the topology of X & Y1 in the topology of Y}} by A9;
+       hence thesis by BORSUK_1:def 5;
+     end;
+then A11:   union AA in the topology of T by PRE_TOPC:def 1;
+       P = union AA /\ [#]S
+     proof
+       thus P c= union AA /\ [#]S
+       proof
+         let p be set; assume p in P;
+         then consider A1 be set such that
+A12:         p in A1 & A1 in A by A6,TARSKI:def 4;
+         reconsider A1 as Subset of S by A12;
+           p in the carrier of S by A12;
+then A13:      p in [#]S by PRE_TOPC:12;
+         consider X2 being Subset of XV, Y2 being Subset of Y such that
+A14:         A1 = [:X2,Y2:] & X2 is open & Y2 is open by A6,A12;
+         consider p1, p2 being set such that
+A15:         p1 in X2 & p2 in Y2 & p = [p1, p2] by A12,A14,ZFMISC_1:def 2;
+           X2 in the topology of XV by A14,PRE_TOPC:def 5;
+         then consider Q1 being Subset of X such that
+A16:         Q1 in the topology of X & X2 = Q1 /\ [#]XV by PRE_TOPC:def 9;
+         reconsider Q1 as Subset of X;
+         set EX = [:Q1, Y2:];
+           p1 in Q1 by A15,A16,XBOOLE_0:def 3;
+then A17:      p in EX by A15,ZFMISC_1:106;
+           Q1 is open & [:X2, Y2:] in A by A12,A14,A16,PRE_TOPC:def 5;
+         then EX in {[:Xx1, Yy2:] where Xx1 is Subset of X, Yy2 is Subset of Y
+:
+           ex Z1 being Subset of XV st Z1 = Xx1 /\ [#](XV) &
+             Xx1 is open & Yy2 is open & [:Z1, Yy2:] in A } by A14,A16;
+         then p in union AA by A17,TARSKI:def 4;
+         hence thesis by A13,XBOOLE_0:def 3;
+       end;
+       thus union AA /\ [#]S c= P
+       proof
+         let h be set;
+         assume h in union AA /\ [#]S;
+then A18:      h in union AA & h in [#]S by XBOOLE_0:def 3;
+         then consider A2 being set such that
+A19:        h in A2 & A2 in AA by TARSKI:def 4;
+         consider Xx1 being Subset of X, Yy2 being Subset of Y such that
+A20:        A2 = [:Xx1, Yy2:] &
+           ex Y1 being Subset of XV st Y1 = Xx1 /\ [#]XV &
+           Xx1 is open & Yy2 is open & [:Y1, Yy2:] in A by A19;
+         consider p1, p2 being set such that
+A21:         p1 in Xx1 & p2 in Yy2 & h = [p1, p2] by A19,A20,ZFMISC_1:def 2;
+         consider Yy1 being Subset of XV such that
+A22:        Yy1 = Xx1 /\ [#]XV & Xx1 is open & Yy2 is open & [:Yy1, Yy2:] in A
+             by A20;
+           p1 in the carrier of XV by A1,A18,A21,ZFMISC_1:106;
+         then p1 in [#]XV by PRE_TOPC:12;
+         then p1 in Xx1 /\ [#](XV) by A21,XBOOLE_0:def 3;
+         then h in [:Yy1, Yy2:] by A21,A22,ZFMISC_1:106;
+         hence thesis by A6,A22,TARSKI:def 4;
+       end;
+     end;
+     hence ex Q being Subset of T st
+        Q in the topology of T & P = Q /\ [#]S by A11;
+    end;
+     given Q being Subset of T such that
+A23:    Q in the topology of T & P = Q /\ [#]S;
+     reconsider Q' = Q as Subset of T;
+       Q' is open by A23,PRE_TOPC:def 5;
+     then consider A being Subset-Family of T such that
+A24:    Q' = union A &
+        for e be set st e in A ex X1 being Subset of X,
+                                 Y1 being Subset of Y st
+          e = [:X1,Y1:] & X1 is open & Y1 is open by BORSUK_1:45;
+     reconsider oS = [#]S as Subset of T
+       by A1,A2,A3,A4,ZFMISC_1:119;
+     reconsider A as Subset-Family of T;
+     reconsider AA = A | oS as Subset-Family of T|oS;
+       the carrier of (T|oS) = oS by JORDAN1:1
+        .= the carrier of S by PRE_TOPC:12;
+     then reconsider AA as Subset-Family of S;
+     reconsider AA as Subset-Family of S;
+       union AA c= the carrier of S;
+then A25:  union AA c= oS by PRE_TOPC:12;
+       union AA c= union A by TOPS_2:44;
+then A26:  union AA c= union A /\ oS by A25,XBOOLE_1:19;
+       union A /\ oS c= union AA
+     proof
+       let s be set; assume s in union A /\ oS;
+then A27:    s in union A & s in oS by XBOOLE_0:def 3;
+       then consider A1 being set such that
+A28:      s in A1 & A1 in A by TARSKI:def 4;
+A29:    s in A1 /\ oS by A27,A28,XBOOLE_0:def 3;
+       reconsider A1 as Subset of T by A28;
+         A1 /\ oS in AA by A28,TOPS_2:41;
+       hence thesis by A29,TARSKI:def 4;
+     end;
+then A30:  P = union AA by A23,A24,A26,XBOOLE_0:def 10;
+       for e be set st e in AA ex X1 being Subset of XV,
+                               Y1 being Subset of Y st
+          e = [:X1,Y1:] & X1 is open & Y1 is open
+     proof
+       let e be set; assume A31: e in AA;
+       then reconsider e' = e as Subset of T|oS;
+       consider R being Subset of T such that
+A32:       R in A & R /\ oS = e' by A31,TOPS_2:def 3;
+       consider X1 being Subset of X, Y1 being Subset of Y such that
+A33:       R = [:X1,Y1:] & X1 is open & Y1 is open by A24,A32;
+         [#][:XV, Y:] = [:[#]XV, [#]Y:] by Th1;
+then A34:     e' = [:X1 /\ [#]XV, Y1 /\ [#]Y:] by A32,A33,ZFMISC_1:123;
+       reconsider D1 = Y1 /\ [#]Y as Subset of Y;
+         X1 /\ [#](XV) c= [#](XV) by XBOOLE_1:17;
+       then X1 /\ [#](XV) c= the carrier of (XV) by PRE_TOPC:12;
+       then reconsider D2 = X1 /\ [#](XV) as Subset of XV;
+A35:     D1 is open by A33,TOPS_1:38;
+         X1 in the topology of X by A33,PRE_TOPC:def 5;
+       then D2 in the topology of XV by PRE_TOPC:def 9;
+       then D2 is open by PRE_TOPC:def 5;
+       hence thesis by A34,A35;
+     end;
+     then P' is open by A30,BORSUK_1:45;
+     hence thesis by PRE_TOPC:def 5;
+   end;
+  hence thesis by A5,PRE_TOPC:def 9;
+end;
+
+theorem Th25:
+  for X, Y being non empty TopSpace,
+      XV being non empty SubSpace of X,
+      YV being non empty SubSpace of Y holds
+   [:XV, YV:] is SubSpace of [:X, Y:]
+proof
+  let X, Y be non empty TopSpace,
+      XV be non empty SubSpace of X,
+      YV be non empty SubSpace of Y;
+A1:[:XV, Y:] is non empty SubSpace of [:X, Y:] by Lm6;
+    [:XV, YV:] is non empty SubSpace of [:XV, Y:] by Th17;
+  hence thesis by A1,TSEP_1:7;
+end;
+
+theorem Th26:
+  for X, Y being non empty TopSpace,
+      Z being non empty Subset of [:Y, X:],
+      V being non empty Subset of X,
+      W being non empty Subset of Y st Z = [:W, V:] holds
+   the TopStruct of [:Y | W, X | V:] = the TopStruct of [:Y, X:] | Z
+proof
+  let X, Y be non empty TopSpace,
+      Z be non empty Subset of [:Y, X:],
+      V be non empty Subset of X,
+      W be non empty Subset of Y;
+  assume A1: Z = [:W, V:];
+  reconsider A = [:Y | W, X | V:] as non empty SubSpace of [:Y, X:] by Th25;
+A2:the carrier of A = [:the carrier of (Y|W), the carrier of (X|V):]
+                         by BORSUK_1:def 5
+                  .= [:the carrier of (Y|W), V:] by JORDAN1:1
+                  .= Z by A1,JORDAN1:1
+                  .= the carrier of ([:Y, X:]|Z) by JORDAN1:1;
+then A3:A is non empty SubSpace of [:Y, X:] | Z by TOPMETR:4;
+    [:Y, X:] | Z is non empty SubSpace of A by A2,TOPMETR:4;
+  hence thesis by A3,TSEP_1:6;
+end;
+
+definition let T be TopSpace;
+  cluster compact Subset of T;
+  existence
+proof
+  take {}T;
+  thus thesis by COMPTS_1:9;
+end;
+end;
+
+definition let T be TopSpace, P be compact Subset of T;
+  cluster T | P -> compact;
+  coherence
+proof
+  per cases;
+  suppose P is non empty;
+  hence thesis by COMPTS_1:12;
+  suppose P is empty;
+  hence thesis by COMPTS_1:12;
+end;
+end;
+
+theorem
+    for T1, T2 being TopSpace,
+      S1 being Subset of T1,
+      S2 being Subset of T2 st S1 is compact & S2 is compact holds
+  [:S1, S2:] is compact Subset of [:T1, T2:]
+proof
+  let T1, T2 be TopSpace,
+      S1 be Subset of T1,
+      S2 be Subset of T2;
+  assume A1: S1 is compact & S2 is compact;
+  per cases;
+  suppose A2: S1 is non empty & S2 is non empty;
+  then consider x be set such that
+A3: x in S1 by XBOOLE_0:def 1;
+  consider y be set such that
+A4: y in S2 by A2,XBOOLE_0:def 1;
+  reconsider T1, T2 as non empty TopSpace by A3,A4,STRUCT_0:def 1;
+  reconsider S1 as compact non empty Subset of T1 by A1,A2;
+  reconsider S2 as compact non empty Subset of T2 by A1,A2;
+  reconsider X = [:S1, S2:] as Subset of [:T1, T2:];
+    the TopStruct of [:T1|S1, T2|S2:] =
+    the TopStruct of ([:T1, T2:] | X) by Th26;
+  hence thesis by COMPTS_1:12;
+  suppose S1 is empty & S2 is non empty;
+  then reconsider S1 as empty Subset of T1;
+    [:S1, S2:] = {}([:T1, T2:]);
+  hence thesis by COMPTS_1:9;
+  suppose S1 is non empty & S2 is empty;
+  then reconsider S2 as empty Subset of T2;
+    [:S1, S2:] = {}([:T1, T2:]);
+  hence thesis by COMPTS_1:9;
+  suppose S1 is empty & S2 is empty;
+  then reconsider S2 as empty Subset of T2;
+    [:S1, S2:] = {}([:T1, T2:]);
+  hence thesis by COMPTS_1:9;
+end;

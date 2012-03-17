@@ -1,0 +1,1726 @@
+:: A Construction of Analytical Ordered Trapezium Spaces
+::  by Henryk Oryszczyszyn and Krzysztof Pra\.zmowski
+::
+:: Received October 29, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, PARSP_1, ANALOAF, ANALMETR, DIRAF, ARYTM_1, TDGROUP,
+      RELAT_1, SYMSP_1, FUNCT_3, BINOP_1, FUNCT_1, MIDSP_1, GEOMTRAP;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, REAL_1, STRUCT_0,
+      DIRAF, RELSET_1, RLVECT_1, MIDSP_1, AFF_1, ANALOAF, BINOP_1, ANALMETR;
+ constructors DOMAIN_1, REAL_1, MIDSP_1, AFF_1, BINOP_1, ANALMETR, XREAL_0,
+      MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, DIRAF, ANALOAF, ANALMETR, RELSET_1, STRUCT_0, MEMBERED,
+      ZFMISC_1, XBOOLE_0;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions STRUCT_0;
+ theorems RLVECT_1, RELAT_1, DIRAF, ANALOAF, SQUARE_1, ANALMETR, AFF_1,
+      ZFMISC_1, RLSUB_2, VECTSP_1, XCMPLX_0, XCMPLX_1;
+ schemes RELSET_1, BINOP_1, COMPLSP1;
+
+begin
+
+reserve V for RealLinearSpace;
+reserve u,u1,u2,v,v1,v2,w,w1,y for VECTOR of V;
+reserve a,a1,a2,b,b1,b2,c,c1,c2 for Real;
+reserve x,z for set;
+
+definition let V; let u,v,u1,v1;
+  pred u,v '||' u1,v1 means :Def1:
+  u,v // u1,v1 or u,v // v1,u1;
+end;
+
+theorem Th1: Gen w,y implies OASpace(V) is OAffinSpace
+ proof assume Gen w,y; then for a1,a2 st a1*w + a2*y = 0.V holds
+ a1=0 & a2=0 by ANALMETR:def 1; hence thesis by ANALOAF:38; end;
+
+theorem Th2: for p,q,p1,q1 being Element of OASpace(V)
+ st p=u & q=v & p1=u1 & q1=v1 holds (p,q // p1,q1 iff u,v // u1,v1)
+ proof let p,q,p1,q1 be Element of OASpace(V) such that
+ A1: p=u & q=v & p1=u1 & q1=v1; A2: OASpace(V) = AffinStruct
+ (#the carrier of V, DirPar(V)#) by ANALOAF:def 4;
+ A3: now assume p,q // p1,q1; then [[u,v],[u1,v1]] in
+ DirPar(V) by A1,A2,ANALOAF:def 2;
+  hence u,v // u1,v1 by ANALOAF:33; end;
+    now assume u,v // u1,v1;
+  then [[p,q],[p1,q1]] in the CONGR of OASpace(V) by A1,A2,ANALOAF:33;
+  hence p,q // p1,q1 by ANALOAF:def 2; end;
+hence thesis by A3; end;
+
+theorem Th3: Gen w,y implies
+ for p,q,p1,q1 being Element of (the carrier of Lambda(OASpace(V)))
+ st p=u & q=v & p1=u1 & q1=v1 holds (p,q // p1,q1 iff u,v '||' u1,v1)
+proof assume A1: Gen w,y; let p,q,p1,q1 be Element of
+(the carrier of Lambda(OASpace(V))) such that A2: p=u & q=v & p1=u1 & q1=v1;
+ reconsider S = OASpace(V) as OAffinSpace by A1,Th1;
+   Lambda(OASpace(V)) = AffinStruct (# the carrier of OASpace(V),
+ lambda(the CONGR of OASpace(V)) #) by DIRAF:def 2;
+ then reconsider p'=p,q'=q,p1'=p1,q1'=q1 as Element of S;
+ A3: now assume p,q // p1,q1; then p',q' '||' p1',q1' by DIRAF:45;
+  then p',q' // p1',q1' or p',q' // q1',p1' by DIRAF:def 4; then u,v // u1,v1
+or
+  u,v // v1,u1 by A2,Th2; hence u,v '||' u1,v1 by Def1; end;
+    now assume u,v '||' u1,v1; then u,v // u1,v1 or u,v // v1,u1 by Def1;
+  then p',q' // p1',q1' or p',q' // q1',p1' by A2,Th2; then p',q' '||' p1',
+q1'
+  by DIRAF:def 4; hence p,q // p1,q1 by DIRAF:45; end;
+hence thesis by A3; end;
+
+theorem Th4:
+ for p,q,p1,q1 being Element of (the carrier of AMSpace(V,w,y))
+ st p=u & q=v & p1=u1 & q1=v1 holds (p,q // p1,q1 iff u,v '||' u1,v1)
+proof let p,q,p1,q1 be Element of
+(the carrier of AMSpace(V,w,y)) such that A1: p=u & q=v & p1=u1 & q1=v1;
+A2: now assume u,v '||' u1,v1; then u,v // u1,v1 or u,v // v1,u1 by Def1;
+ then ex a,b st a*(v-u) = b*(v1-u1) & (a<>0 or b<>0) by ANALMETR:18
+; hence p,q // p1,q1 by A1,ANALMETR:32; end;
+   now assume p,q // p1,q1; then ex a,b st
+ a*(v-u) = b*(v1-u1) & (a<>0 or b<>0) by A1,ANALMETR:32;
+then u,v // u1,v1 or
+ u,v // v1,u1 by ANALMETR:18; hence u,v '||' u1,v1 by Def1; end;
+hence thesis by A2; end;
+
+definition let V; let u,v;
+  func u#v -> VECTOR of V means :Def2:
+  it+it = u+v;
+existence proof set y = u+v; set w = (2")*y;
+   2" + 2" = 1;
+ then w+w = 1*y by RLVECT_1:def 9 .= y by RLVECT_1:def 9; hence thesis; end;
+uniqueness proof let w,w1 such that A1: w+w = u+v and A2:w1+w1 = u+v;
+   0.V = (w+w)-(w1+w1) by A1,A2,RLVECT_1:28
+ .= w+(w-(w1+w1)) by RLVECT_1:42 .= w+((w-w1)-w1) by RLVECT_1:41
+ .= (w+(w-w1))-w1 by RLVECT_1:42
+ .= (w-w1)+(w-w1) by RLVECT_1:42; then w-w1 = 0.V by RLVECT_1:34;
+ hence w=w1 by RLVECT_1:35; end;
+ commutativity;
+ idempotence;
+end;
+
+canceled 2;
+
+theorem Th7: ex y st u#y=w proof take y = (-u)+(w+w);
+   u+y = (u+(-u))+(w+w) by RLVECT_1:def 6 .= 0.V+(w+w)
+ by RLVECT_1:16 .= w+w by RLVECT_1:10; hence u#y = w by Def2; end;
+
+theorem Th8: (u#u1)#(v#v1)=(u#v)#(u1#v1)
+ proof set p=u#u1, q=v#v1, r=u#v, s=u1#v1;
+  set x=p#q,y=r#s;
+  A1: (x+x)+(x+x) = (x+x)+(p+q) by Def2
+   .= (p+q)+(p+q) by Def2 .= p+(q+(p+q)) by RLVECT_1:def 6
+   .= p+(p+(q+q)) by RLVECT_1:def 6 .= (p+p)+(q+q)
+   by RLVECT_1:def 6 .= (p+p)+(v+v1) by Def2 .= (u+u1)+(v+v1) by Def2
+ .= u+(u1+(v+v1))
+   by RLVECT_1:def 6 .= u+(v+(v1+u1)) by RLVECT_1:def 6
+   .= (u+v)+(v1+u1) by RLVECT_1:def 6
+   .= (u+v)+(s+s) by Def2 .= (r+r)+(s+s) by Def2
+ .= r+(r+(s+s)) by RLVECT_1:def 6
+   .= r+(s+(s+r)) by RLVECT_1:def 6 .= (r+s)+(s+r)
+   by RLVECT_1:def 6 .= (y+y)+(r+s) by Def2
+   .= (y+y)+(y+y) by Def2;
+  A2: now let w; w=1*w by RLVECT_1:def 9; then (w+w)+(w+w) =
+(1+1)*w + ((1*w)+(1*w)) by RLVECT_1:def 9
+   .= (1+1)*w + (1+1)*w by RLVECT_1:def 9 .= ((1+1)+(1+1))*w by RLVECT_1:def 9;
+ hence (w+w)+(w+w) = 4*w; end; then 4*x = (y+y)+(y+y) by A1 .= 4*y by A2;
+ hence x=y by RLVECT_1:50; end;
+
+theorem Th9: u#y=u#w implies y=w
+ proof assume A1: u#y=u#w; set p=u#y;
+   u+y = p+p by Def2 .= u+w by A1,Def2; hence y=w by RLVECT_1:21; end;
+
+theorem Th10: u,v // y#u,y#v
+proof set p=y#u,r=y#v; A1: y+u = p+p & y+v = r+r by Def2;
+   2*(r-p) = (1+1)*r - (1+1)*p by RLVECT_1:48
+ .= (1*r+1*r)-(1+1)*p by RLVECT_1:def 9 .= (1*r+1*r)-(1*p+1*p) by RLVECT_1:def
+9
+ .= (r+1*r)-(1*p+1*p) by RLVECT_1:def 9 .= (r+r)-(1*p+1*p) by RLVECT_1:def 9
+ .= (r+r)-(p+1*p) by RLVECT_1:def 9 .= (y+v)-(y+u) by A1,RLVECT_1:def 9
+ .= v+(y-(y+u)) by RLVECT_1:42 .= v+((y-y)-u) by RLVECT_1:41 .= v+(0.V-u)
+ by RLVECT_1:28 .= v+(-u) by RLVECT_1:27 .= v-u by RLVECT_1:def 11 .= 1*(v-u)
+ by RLVECT_1:def 9; hence u,v // p,r by ANALOAF:def 1; end;
+
+theorem u,v '||' w#u,w#v
+  proof u,v // w#u,w#v by Th10; hence thesis by Def1; end;
+
+theorem Th12:
+  2*(u#v-u) = v-u & 2*(v-u#v) = v-u
+ proof set p=u#v;
+ A1: 2-1 =1;
+ A2: 1-2 = -1;
+A3: 2*(p-u) = (1+1)*p - 2*u by RLVECT_1:48 .= (1*p+1*p) - 2*u
+ by RLVECT_1:def 9 .= (p+1*p) - 2*u by RLVECT_1:def 9
+ .= (p+p) - 2*u by RLVECT_1:def 9
+ .= (u+v) - 2*u by Def2
+ .=v+(u-2*u) by RLVECT_1:42
+ .= v+(1*u-2*u) by RLVECT_1:def 9 .= v+(-1)*u by A2,RLVECT_1:49
+ .= v+(-u) by RLVECT_1:29 .= v-u by RLVECT_1:def 11;
+   2*(v-p) = 2*v-(1+1)*p by RLVECT_1:48 .= 2*v-(1*p+1*p) by RLVECT_1:def 9
+ .= 2*v - (1*p+p) by RLVECT_1:def 9 .= 2*v - (p+p) by RLVECT_1:def 9
+ .= 2*v - (u+v) by Def2
+ .= (2*v-v)-u by RLVECT_1:41
+ .= (2*v-1*v)-u by RLVECT_1:def 9 .= 1*v - u by A1,RLVECT_1:49
+ .= v-u by RLVECT_1:def 9; hence thesis by A3; end;
+
+theorem Th13: u,u#v // u#v,v proof set p = u#v;
+  2*(p-u) = v-u by Th12 .= 2*(v-p) by Th12; hence thesis by ANALOAF:def 1; end
+;
+
+theorem Th14: u,v // u,u#v & u,v // u#v,v proof set p = u#v;
+   1*(v-u) = v-u by RLVECT_1:def 9 .= 2*(p-u) by Th12;
+ hence u,v // u,u#v by ANALOAF:def 1
+; 1*(v-u) = v-u by RLVECT_1:def 9 .= 2*(v-p)
+ by Th12; hence u,v // u#v,v by ANALOAF:def 1; end;
+
+Lm1: u,y // y,v implies v,y // y,u & u,y // u,v & y,v // u,v
+proof assume A1: u,y // y,v; then y,u // v,y by ANALOAF:21; hence
+A2: v,y // y,u by ANALOAF:21; thus u,y // u,v by A1,ANALOAF:22;
+  v,y // v,u by A2,ANALOAF:22; hence y,v // u,v by ANALOAF:21; end;
+
+theorem Th15: u,y // y,v implies u#y,y // y,y#v
+ proof assume A1: u,y // y,v; set p=u#y, q=y#v;
+   u,p // p,y & y,q // q,v by Th13; then p,y // u,y & y,q // y,v by Lm1;
+ then A2: u,y // p,y & y,v // y,q by ANALOAF:21;
+   now assume that A3: u<>y and A4: y<>v;
+   y,v // p,y by A1,A2,A3,ANALOAF:20; hence thesis by A2,A4,ANALOAF:20; end;
+hence thesis by ANALOAF:18; end;
+
+theorem Th16: u,v // u1,v1 implies u,v // (u#u1),(v#v1)
+ proof assume A1: u,v // u1,v1;
+    now assume u<>v & u1<>v1; then consider a,b such that
+  A2: 0<a & 0<b & a*(v-u) = b*(v1-u1) by A1,ANALOAF:def 1; set p=u#u1,q=v#v1;
+  A3: 0<a+b by A2,ANALOAF:2;
+  A4: 0<b*2 by A2,SQUARE_1:21;
+    (b*2)*(q-p) = b*(2*(q-p)) by RLVECT_1:def 9
+ .= b*((1+1)*q - 2*p) by RLVECT_1:48
+ .= b*((1*q+1*q) - 2*p) by RLVECT_1:def 9
+   .= b*((q+1*q) - 2*p) by RLVECT_1:def 9 .= b*((q+q) - 2*p) by RLVECT_1:def 9
+   .= b*((v+v1) - 2*p) by Def2
+   .= b*(v+(v1 - (1+1)*p)) by RLVECT_1:42
+   .= b*(v+(v1 - (1*p+1*p))) by RLVECT_1:def 9
+   .= b*(v+(v1 - (p+1*p))) by RLVECT_1:def 9
+   .= b*(v+(v1 - (p+p))) by RLVECT_1:def 9 .= b*(v+(v1 - (u+u1))) by Def2
+   .= b*(v+((v1 - u1)-u)) by RLVECT_1:41
+   .= b*((v+(v1 - u1))-u) by RLVECT_1:42
+   .= b*((v1 - u1)+(v-u)) by RLVECT_1:42 .= a*(v - u)+b*(v-u) by A2,RLVECT_1:
+def 9 .= (a+b)*(v-u) by RLVECT_1:def 9;
+ hence thesis by A3,A4,ANALOAF:def 1
+; end; hence thesis by Th10,ANALOAF:18; end;
+
+Lm2: u,v // u1,v1 implies u,v '||' (u#v1),(v#u1)
+ proof assume A1: u,v // u1,v1;
+ A2: now assume u=v; then u,v // (u#v1),(v#u1) by ANALOAF:18;
+  hence thesis by Def1; end;
+ A3: now assume u1=v1; then u,v // (u#v1),(v#u1) by Th10;
+  hence thesis by Def1; end;
+    now assume u<>v & u1<>v1; then consider a,b such that
+  A4: 0<a & 0<b & a*(v-u) = b*(v1-u1) by A1,ANALOAF:def 1;
+  set p=u#v1,q=v#u1, A=b*2,D=b-a;
+  A5: A*(q-p) = D*(v-u) proof
+   A6: b*(u1-v1) = b*(-(v1-u1)) by VECTSP_1:81 .= -(a*(v-u)) by A4,RLVECT_1:39
+ .= a*(-(v-u)) by RLVECT_1:39
+   .= (-a)*(v-u) by RLVECT_1:38;
+   thus A*(q-p) = b*(2*(q-p)) by RLVECT_1:def 9 .= b*((1+1)*q - 2*p) by
+RLVECT_1:48 .= b*((1*q+1*q) - 2*p) by RLVECT_1:def 9
+   .= b*((q+1*q) - 2*p) by RLVECT_1:def 9 .= b*((q+q) - 2*p) by RLVECT_1:def 9
+   .= b*((v+u1) - 2*p) by Def2
+   .= b*(v+(u1 - (1+1)*p)) by RLVECT_1:42
+   .= b*(v+(u1 - (1*p+1*p))) by RLVECT_1:def 9 .= b*(v+(u1 - (p+1*p)))
+   by RLVECT_1:def 9 .= b*(v+(u1 - (p+p))) by RLVECT_1:def 9
+   .= b*(v+(u1 - (u+v1))) by Def2
+   .= b*(v+((u1 - v1)-u)) by RLVECT_1:41 .= b*((v+(u1 - v1))-u) by RLVECT_1:42
+   .= b*((u1 - v1)+(v-u)) by RLVECT_1:42
+   .= (-a)*(v-u)+b*(v-u) by A6,RLVECT_1:def 9
+   .= (b+(-a))*(v-u) by RLVECT_1:def 9
+   .= D*(v-u) by XCMPLX_0:def 8; end;
+     A<>0 by A4,SQUARE_1:21;
+  then u,v // p,q or u,v // q,p by A5,ANALMETR:18;
+  hence thesis by Def1; end; hence thesis by A2,A3; end;
+
+Lm3: u1#u2 = v1#v2 implies v1-u1 = -(v2-u2)
+proof assume A1: u1#u2=v1#v2; set p=u1#u2;
+A2:p+p = u1+u2 & p+p = v1+v2 by A1,Def2;
+   (v1-u1)+v2 = (v2+v1)-u1 by RLVECT_1:42
+.= u2 by A2,RLSUB_2:78;
+ then (v1-u1)+(v2-u2) = u2-u2 by RLVECT_1:42
+ .= 0.V by RLVECT_1:28; hence thesis by RLVECT_1:19; end;
+
+Lm4: Gen w,y & u,v,u1,v1 are_Ort_wrt w,y implies
+ (u1,v1,u,v are_Ort_wrt w,y & u,v,v1,u1 are_Ort_wrt w,y)
+proof assume that Gen w,y and A1: u,v,u1,v1 are_Ort_wrt w,y;
+A2: v-u,v1-u1 are_Ort_wrt w,y by A1,ANALMETR:def 3;
+then v1-u1,v-u are_Ort_wrt w,y by ANALMETR:8; hence u1,v1,u,v are_Ort_wrt w,y
+by ANALMETR:def 3; A3: v-u,(-1)*(v1-u1) are_Ort_wrt w,y by A2,ANALMETR:11;
+  (-1)*(v1-u1) = -(v1-u1) by RLVECT_1:29 .= (-v1)+u1 by RLVECT_1:47
+ .= u1-v1 by RLVECT_1:def 11;
+hence u,v,v1,u1 are_Ort_wrt w,y by A3,ANALMETR:def 3; end;
+
+Lm5: Gen w,y implies u,v,u1,u1 are_Ort_wrt w,y
+ proof assume A1: Gen w,y; u1-u1 = 0.V by RLVECT_1:28;
+ then v-u,u1-u1 are_Ort_wrt w,y by A1,ANALMETR:9; hence thesis by ANALMETR:def
+3
+; end;
+
+Lm6: Gen w,y & u,v,w1,v1 are_Ort_wrt w,y & u,v,w1,v2 are_Ort_wrt w,y implies
+ u,v,v1,v2 are_Ort_wrt w,y proof assume that A1: Gen w,y and
+ A2: u,v,w1,v1 are_Ort_wrt w,y & u,v,w1,v2 are_Ort_wrt w,y;
+   v-u,v1-w1 are_Ort_wrt w,y & v-u,v2-w1 are_Ort_wrt w,y by A2,ANALMETR:def 3;
+ then A3: v-u,(v2-w1)-(v1-w1) are_Ort_wrt w,y by A1,ANALMETR:14;
+   (v2-w1)-(v1-w1) = v2-(w1+(v1-w1)) by RLVECT_1:41
+ .= v2-(v1-(w1-w1)) by RLVECT_1:43 .= v2-(v1-0.V) by RLVECT_1:28
+  .= v2-v1 by RLVECT_1:26; hence
+   thesis by A3,ANALMETR:def 3; end;
+
+Lm7: Gen w,y & u,v,u,v are_Ort_wrt w,y implies u=v proof assume that
+ A1: Gen w,y and A2: u,v,u,v are_Ort_wrt w,y; v-u,v-u are_Ort_wrt w,y by A2,
+ANALMETR:def 3; then v-u = 0.V by A1,ANALMETR:15;
+ hence u=v by RLVECT_1:35; end;
+
+Lm8: Gen w,y implies u,v,u1,u1 are_Ort_wrt w,y & u1,u1,u,v are_Ort_wrt w,y
+proof assume A1: Gen w,y; u1-u1 = 0.V by RLVECT_1:28;
+ then v-u,u1-u1 are_Ort_wrt w,y by A1,ANALMETR:9;
+ hence u,v,u1,u1 are_Ort_wrt w,y by ANALMETR:def 3; hence
+   u1,u1,u,v are_Ort_wrt w,y by A1,Lm4; end;
+
+Lm9: Gen w,y & (u1,v1 '||' u,v or u,v '||' u1,v1) &
+  (u2,v2,u,v are_Ort_wrt w,y or u,v,u2,v2 are_Ort_wrt w,y) & u<>v
+  implies u1,v1,u2,v2 are_Ort_wrt w,y & u2,v2,u1,v1 are_Ort_wrt w,y
+proof assume that A1: Gen w,y and A2: u1,v1 '||' u,v or u,v '||' u1,v1 and
+ A3: u2,v2,u,v are_Ort_wrt w,y or u,v,u2,v2 are_Ort_wrt w,y and A4: u<>v;
+ reconsider S=AMSpace(V,w,y) as OrtAfSp by A1,ANALMETR:44;
+ reconsider p'=u,q'=v,p1'=u1,q1'=v1,p2'=u2,q2'=v2 as Element of the
+ carrier of AMSpace(V,w,y) by ANALMETR:28
+; reconsider p=p',q=q',p1=p1',q1=q1',p2=p2',q2=q2'
+ as Element of S;
+ A5: p2,q2 _|_ p,q or p,q _|_ p2,q2 by A3,ANALMETR:31; p1,q1 // p,q or
+ p,q // p1,q1 by A2,Th4; then p1,q1 _|_ p2,q2 & p2,q2 _|_ p1,q1
+ by A4,A5,ANALMETR:84; hence thesis by ANALMETR:31; end;
+
+definition let V; let w,y,u,u1,v,v1;
+  pred u,u1,v,v1 are_DTr_wrt w,y means :Def3:
+  u,u1 // v,v1 & u,u1,u#u1,v#v1 are_Ort_wrt w,y &
+   v,v1,u#u1,v#v1 are_Ort_wrt w,y;
+end;
+
+theorem Gen w,y implies u,u,v,v are_DTr_wrt w,y
+ proof assume A1: Gen w,y; A2: u,u // v,v by ANALOAF:18;
+   u#u,v#v,u,u are_Ort_wrt w,y & u#u,v#v,v,v are_Ort_wrt w,y by A1,Lm5;
+  then u,u,u#u,v#v are_Ort_wrt w,y & v,v,u#u,v#v are_Ort_wrt w,y by A1,Lm4;
+ hence thesis by A2,Def3; end;
+
+theorem Gen w,y implies u,v,u,v are_DTr_wrt w,y
+ proof assume A1: Gen w,y; A2: u,v // u,v by ANALOAF:17;
+   u,v,u#v,u#v are_Ort_wrt w,y by A1,Lm5; hence thesis by A2,Def3; end;
+
+theorem Th19: u,v,v,u are_DTr_wrt w,y implies u=v
+ proof assume u,v,v,u are_DTr_wrt w,y; then u,v // v,u by Def3;
+ hence thesis by ANALOAF:19; end;
+
+theorem Th20: Gen w,y & v1,u,u,v2 are_DTr_wrt w,y implies v1=u & u=v2
+proof assume that A1: Gen w,y and A2: v1,u,u,v2 are_DTr_wrt w,y;
+ set a=v1#u, b=u#v2; A3: v1,u // u,v2 & v1,u,a,b are_Ort_wrt w,y &
+ u,v2,a,b are_Ort_wrt w,y by A2,Def3;
+    v1<>v2 implies thesis proof assume v1<>v2;
+   then A4: a<>b by Th9;
+     a,u // u,b by A3,Th15; then a,u // a,b & u,b // a,b by Lm1;
+   then A5: a,u '||' a,b & u,b '||' a,b by Def1; u,v2 // u,b & v1,u // a,u by
+Th14
+; then A6: v1,u '||' a,u & u,v2 '||' u,b by Def1;
+   A7: v1=u proof assume A8: v1<>u;
+    A9: u<>a proof assume u=a; then v1#u=u#u;
+     hence contradiction by A8,Th9; end;
+      a,u,a,b are_Ort_wrt w,y by A1,A3,A6,A8,Lm9; then a,u,a,u are_Ort_wrt w,y
+    by A1,A4,A5,Lm9; hence contradiction by A1,A9,Lm7; end;
+      u=v2 proof assume A10: u<>v2;
+    A11: u<>b proof assume u=b; then u#v2=u#u;
+    hence contradiction by A10,Th9; end;
+      u,b,a,b are_Ort_wrt w,y by A1,A3,A6,A10,Lm9; then u,b,u,b are_Ort_wrt w,
+y
+    by A1,A4,A5,Lm9; hence contradiction by A1,A11,Lm7; end;
+   hence thesis by A7; end;
+ hence thesis by A2,Th19; end;
+
+theorem Th21: Gen w,y & u,v,u1,v1 are_DTr_wrt w,y & u,v,u2,v2 are_DTr_wrt w,y
+  & u<>v implies u1,v1,u2,v2 are_DTr_wrt w,y
+ proof assume that A1: Gen w,y and A2: u,v,u1,v1 are_DTr_wrt w,y &
+  u,v,u2,v2 are_DTr_wrt w,y and A3: u<>v;
+  A4: u,v // u1,v1 & u,v,u#v,u1#v1 are_Ort_wrt w,y &
+  u1,v1,u#v,u1#v1 are_Ort_wrt w,y by A2,Def3;
+  A5: u,v // u2,v2 & u,v,u#v,u2#v2 are_Ort_wrt w,y &
+  u2,v2,u#v,u2#v2 are_Ort_wrt w,y by A2,Def3;
+  then A6: u,v '||' u2,v2 & u,v '||' u1,v1 by A4,Def1;
+  A7: u1,v1 // u2,v2 by A3,A4,A5,ANALOAF:20;
+  set a=u1#v1, b=u2#v2; u,v,a,b are_Ort_wrt w,y by A1,A4,A5,Lm6;
+  then u1,v1,a,b are_Ort_wrt w,y & u2,v2,a,b are_Ort_wrt w,y by A1,A3,A6,Lm9;
+ hence thesis by A7,Def3; end;
+
+theorem Th22: Gen w,y implies ex t being VECTOR of V st
+ (u,v,u1,t are_DTr_wrt w,y or u,v,t,u1 are_DTr_wrt w,y)
+ proof assume A1: Gen w,y; set a=u#v;
+ A2: now assume A3: u=v; u,u // u1,u1 & u#u,u1#u1,u,u are_Ort_wrt w,y &
+  u#u,u1#u1,u1,u1 are_Ort_wrt w,y by A1,Lm5,ANALOAF:18; then u,u // u1,u1 &
+  u,u,u#u,u1#u1 are_Ort_wrt w,y & u1,u1,u#u,u1#u1 are_Ort_wrt w,y by A1,Lm4;
+  then u,u,u1,u1 are_DTr_wrt w,y by Def3; hence thesis by A3; end;
+    now assume A4: u<>v;
+     a<>u proof assume a=u; then u#u = u#v;
+hence contradiction by A4,Th9; end;
+  then u-a<>0.V by RLVECT_1:35;
+  then consider r being Real such that A5: (u1-a)-r*(u-a),u-a are_Ort_wrt w,y
+  by A1,ANALMETR:17; set b = u1-r*(u-a); set t = 2*b-u1;
+  A6: u-v = 2*(u-u#v) by Th12;
+  A7: u1#t = b proof u1+t
+   = (1+1)*b by RLSUB_2:78 .= 1*b+1*b by RLVECT_1:def 9 .= b+1*b by RLVECT_1:
+def 9 .= b+b by RLVECT_1:def 9; hence thesis by Def2; end;
+A8:   u1-(a+r*(u-a)) = (u1-r*(u-a))-a by RLVECT_1:41;
+then A9:   b-a = (u1-a)-r*(u-a) by RLVECT_1:41;
+  A10: b-a,u-a are_Ort_wrt w,y by A5,A8,RLVECT_1:41; b-a,u-v are_Ort_wrt w,y
+by A5,A6,A9,ANALMETR:11; then a,b,v,u are_Ort_wrt w,y by ANALMETR:def 3;
+   then a,b,u,v are_Ort_wrt w,y by A1,Lm4;
+   then A11: u,v,u#v,u1#t are_Ort_wrt w,y by A1,A7,Lm4;
+    u1-b = (u1-u1)+r*(u-a) by RLVECT_1:43
+   .= 0.V + r*(u-a) by RLVECT_1:28 .= r*(u-a) by RLVECT_1:10;
+  then A12: u1-t = 2*(r*(u-a)) by A7,Th12 .= (2*r)*(u-a) by RLVECT_1:def 9;
+  then A13: u1-t = r*(u-v) by A6,RLVECT_1:def 9;
+  A14: now assume A15: r=0; A16: b=u1 & t=u1
+    proof thus b = u1-0.V by A15,RLVECT_1:23 .= u1 by RLVECT_1:26
+; hence t = (1+1)*u1-u1 .= (1*u1+1*u1)-u1 by RLVECT_1:def 9 .= (u1+1*u1)-u1
+by RLVECT_1:def 9 .= (u1+u1)-u1 by RLVECT_1:def 9
+    .= u1 by RLSUB_2:78; end;
+      u,v // u1,t & u1,t,u#v,u1#t are_Ort_wrt w,y proof thus u,v // u1,t by A16
+,ANALOAF:18; a,b,u1,t are_Ort_wrt w,y by A1,A16,Lm5;
+    hence thesis by A1,A7,Lm4
+; end; then u,v,u1,t are_DTr_wrt w,y by A11,Def3;
+   hence thesis; end;
+     now assume r<>0; b-a,u1-t are_Ort_wrt w,y by A10,A12,ANALMETR:11;
+    then A17: a,b,t,u1 are_Ort_wrt w,y by ANALMETR:def 3
+; then a,b,u1,t are_Ort_wrt w,y
+    by A1,Lm4;
+    then A18: u1,t,u#v,u1#t are_Ort_wrt w,y by A1,A7,Lm4;
+    A19: t,u1,u#v,t#u1 are_Ort_wrt w,y by A1,A7,A17,Lm4;
+      r*(u-v) = 1*(u1-t) by A13,RLVECT_1:def 9;
+    then v,u // t,u1 or v,u // u1,t by ANALMETR:18;
+    then u,v // u1,t or u,v // t,u1 by ANALOAF:21; hence u,v,u1,t are_DTr_wrt
+w,y
+    or u,v,t,u1 are_DTr_wrt w,y by A11,A18,A19,Def3; end;
+  hence thesis by A14; end; hence thesis by A2; end;
+
+theorem Th23: Gen w,y & u,v,u1,v1 are_DTr_wrt w,y implies
+ u1,v1,u,v are_DTr_wrt w,y
+  proof assume that A1: Gen w,y and A2: u,v,u1,v1 are_DTr_wrt w,y;
+    u,v // u1,v1 & u,v,u#v,u1#v1 are_Ort_wrt w,y &
+   u1,v1,u#v,u1#v1 are_Ort_wrt w,y by A2,Def3;
+  then u1,v1 // u,v & u1,v1,u1#v1,u#v are_Ort_wrt w,y &
+   u,v,u1#v1,u#v are_Ort_wrt w,y by A1,Lm4,ANALOAF:21;
+  hence thesis by Def3; end;
+
+theorem Th24: Gen w,y & u,v,u1,v1 are_DTr_wrt w,y implies
+ v,u,v1,u1 are_DTr_wrt w,y
+  proof assume that A1: Gen w,y and A2: u,v,u1,v1 are_DTr_wrt w,y;
+  A3: u,v // u1,v1 & u,v,u#v,u1#v1 are_Ort_wrt w,y &
+   u1,v1,u#v,u1#v1 are_Ort_wrt w,y by A2,Def3;
+   now let u,u',v,v' be VECTOR of V; assume u,u',v,v' are_Ort_wrt w,y;
+   then v,v',u,u' are_Ort_wrt w,y by A1,Lm4; then v,v',u',u are_Ort_wrt w,y
+by A1,Lm4; hence u',u,v,v' are_Ort_wrt w,y by A1,Lm4; end;
+  then v,u // v1,u1 &
+  v,u,v#u,v1#u1 are_Ort_wrt w,y & v1,u1,v#u,v1#u1 are_Ort_wrt w,y
+  by A3,ANALOAF:21; hence thesis by Def3; end;
+
+Lm10: Gen w,y & u<>v & u,v '||' u,u1 & u,v '||' u,v1 &
+u,v '||' u,u2 & u,v '||' u,v2
+  implies u1,v1 '||' u2,v2
+proof assume that A1: Gen w,y and A2: u<>v and
+ A3: u,v '||' u,u1 & u,v '||' u,v1 & u,v '||' u,u2 & u,v '||' u,v2;
+reconsider p'=u,q'=v,p1'=u1,q1'=v1,p2'=u2,q2'=v2 as
+ Element of Lambda(OASpace(V)) by ANALMETR:22;
+ reconsider S' = OASpace(V) as OAffinSpace by A1,Th1; reconsider
+ S = Lambda(S') as AffinSpace by DIRAF:48;
+ reconsider p=p',q=q',p1=p1',q1=q1',p2=p2',q2=q2' as Element of the
+ carrier of S; p,q // p,p1 & p,q // p,q1 & p,q // p,p2 & p,q // p,
+ q2 by A1,A3,Th3;
+ then LIN p,q,p1 & LIN p,q,q1 & LIN p,q,p2 & LIN p,q,q2 by AFF_1:def 1;
+ then LIN p1,q1,p2 & LIN p1,q1,q2 by A2,AFF_1:17; then p1,q1 // p2,q2 by AFF_1:
+19;
+ hence thesis by A1,Th3; end;
+
+theorem Th25: Gen w,y & v,u1,v,u2 are_DTr_wrt w,y implies u1=u2
+proof assume that A1: Gen w,y and A2: v,u1,v,u2 are_DTr_wrt w,y;
+ A3: v,u1 // v,u2 & v,u1,v#u1,v#u2 are_Ort_wrt w,y &
+ v,u2,v#u1,v#u2 are_Ort_wrt w,y by A2,Def3;
+ set b=v#u1, c = v#u2; assume A4: u1<>u2;
+ then A5: b<>c by Th9;
+ A6: v,u1 // v,u2 & v,u2 // v,u1 by A3,ANALOAF:21;
+ A7: v,u1 // v,b & v,u2 // v,c by Th14;
+ A8: v,u1 // v,u1 & v,u1 // v,v & v,u2 // v,u2 & v,u2 // v,v
+    by ANALOAF:17,18;
+ A9: v,u1 // v,c proof
+      now assume v<>c; then v<>u2;
+    hence thesis by A6,A7,ANALOAF:20; end;
+   hence thesis by ANALOAF:18; end;
+ A10: v,u2 // v,b proof
+      now assume v<>b; then v<>u1;
+    hence thesis by A3,A7,ANALOAF:20; end;
+   hence thesis by ANALOAF:18; end;
+ A11: v,u1 '||' v,b & v,u2 '||' v,c by A7,Def1;
+ A12: v,u1 '||' v,u1 & v,u1 '||' v,v & v,u2 '||' v,u2 &
+                            v,u2 '||' v,v by A8,Def1;
+ A13: v,u1 '||' v,c by A9,Def1; A14: v,u2 '||' v,b by A10,Def1;
+ A15: now assume A16: v<>u1; then v,u1 '||' b,c by A1,A11,A12,A13,Lm10;
+  then b,c,b,c are_Ort_wrt w,y by A1,A3,A16,Lm9;
+  hence contradiction by A1,A5,Lm7; end;
+    now assume A17: v<>u2; then v,u2 '||' b,c by A1,A11,A12,A14,Lm10;
+  then b,c,b,c are_Ort_wrt w,y by A1,A3,A17,Lm9;
+  hence contradiction by A1,A5,Lm7; end;
+hence thesis by A4,A15; end;
+
+theorem Th26: Gen w,y & u,v,u1,v1 are_DTr_wrt w,y & u,v,u1,v2 are_DTr_wrt w,y
+ implies (u=v or v1=v2)
+proof assume that A1: Gen w,y and A2: u,v,u1,v1 are_DTr_wrt w,y &
+ u,v,u1,v2 are_DTr_wrt w,y; assume u<>v; then u1,v1,u1,v2 are_DTr_wrt w,y
+ by A1,A2,Th21; hence v1=v2 by A1,Th25; end;
+
+theorem Th27: (Gen w,y & u<>u1 & u,u1,v,v1 are_DTr_wrt w,y &
+ (u,u1,v,v2 are_DTr_wrt w,y or u,u1,v2,v are_DTr_wrt w,y)) implies v1=v2
+proof assume that A1: Gen w,y & u<>u1 & u,u1,v,v1 are_DTr_wrt w,y and
+ A2: u,u1,v,v2 are_DTr_wrt w,y or u,u1,v2,v are_DTr_wrt w,y;
+   now assume u,u1,v2,v are_DTr_wrt w,y; then v2,v,v,v1 are_DTr_wrt w,y
+ by A1,Th21; then v=v2 & v=v1 by A1,Th20; hence thesis; end;
+hence thesis by A1,A2,Th26; end;
+
+theorem Th28: Gen w,y & u,v,u1,v1 are_DTr_wrt w,y implies
+      u,v,(u#u1),(v#v1) are_DTr_wrt w,y
+proof assume that A1: Gen w,y and A2: u,v,u1,v1 are_DTr_wrt w,y;
+set p=u#u1,q=v#v1,r=u#v,s=u1#v1;
+A3: u,v // u1,v1 & u,v,r,s are_Ort_wrt w,y & u1,v1,r,s are_Ort_wrt w,y
+ by A2,Def3; p#q = r#s by Th8; then r,s // r,p#q by Th14;
+ then A4: r,s '||' r,p#q by Def1;
+ A5: u,v // (u#u1),(v#v1) by A3,Th16; then A6: u,v '||' p,q by Def1;
+   u1,v1 // u,v by A3,ANALOAF:21;
+ then u1,v1 // (u1#u),(v1#v) & u#u1=u1#u & v#v1=v1#v by Th16;
+then A7: u1,v1 '||' p,q by Def1;
+ A8: now assume r=s; then r=r#s .= p#q by Th8;
+ hence u1,v1,r,(p#q) are_Ort_wrt w,y &
+  u,v,r,(p#q) are_Ort_wrt w,y by A1,Lm8; end;
+ A9:  r<>s implies u1,v1,r,(p#q) are_Ort_wrt w,y &
+  u,v,r,(p#q) are_Ort_wrt w,y by A1,A3,A4,Lm9;
+ then A10:  u<>v implies p,q,r,(p#q) are_Ort_wrt w,y by A1,A6,A8,Lm9;
+A11:  u=v & u1<>v1 implies p,q,r,(p#q) are_Ort_wrt w,y by A1,A7,A8,A9,Lm9;
+     u=v & u1=v1 implies p,q,r,(p#q) are_Ort_wrt w,y by A1,Lm8;
+hence thesis by A5,A8,A9,A10,A11,Def3; end;
+
+theorem Th29: Gen w,y & u,v,u1,v1 are_DTr_wrt w,y implies
+ (u,v,(u#v1),(v#u1) are_DTr_wrt w,y or u,v,(v#u1),(u#v1) are_DTr_wrt w,y)
+proof assume that A1: Gen w,y and A2: u,v,u1,v1 are_DTr_wrt w,y;
+set p=u#v1,q=v#u1,r=u#v,s=u1#v1;
+A3: u,v // u1,v1 & u,v,r,s are_Ort_wrt w,y & u1,v1,r,s are_Ort_wrt w,y
+ by A2,Def3; A4: p#q = r#s by Th8;
+ then r,s // r,p#q by Th14; then A5: r,s '||' r,p#q by Def1;
+A6: u,v '||' p,q by A3,Lm2;
+then A7: u,v // p,q or u,v // q,p by Def1;
+   now assume A8: u<>v & u1<>v1;
+ A9: now assume A10:r=s;
+ then A11: u,v,r,(p#q) are_Ort_wrt w,y & u,v,r,(q#p) are_Ort_wrt w,y
+ by A1,A4,Lm8;
+    p,q,r,(p#q) are_Ort_wrt w,y & q,p,r,(q#p) are_Ort_wrt w,y
+   by A1,A4,A10,Lm8; hence u,v,p,q are_DTr_wrt w,y or u,v,q,p are_DTr_wrt w,y
+ by A7,A11,Def3; end;
+    now assume r<>s;
+then A12: u,v,r,(p#q) are_Ort_wrt w,y by A1,A3,A5,Lm9;
+     then r,(p#q),p,q are_Ort_wrt w,y by A1,A6,A8,Lm9;
+     then r,(p#q),q,p are_Ort_wrt w,y by A1,Lm4;
+  then p,q,r,(p#q) are_Ort_wrt w,y & q,p,r,(q#p) are_Ort_wrt w,y
+   by A1,A6,A8,A12,Lm4,Lm9
+; hence u,v,p,q are_DTr_wrt w,y or u,v,q,p are_DTr_wrt w,y
+ by A7,A12,Def3; end;
+ hence thesis by A9; end; hence thesis by A1,A2,Th28; end;
+
+theorem Th30: for u,u1,u2,v1,v2,t1,t2,w1,w2 being VECTOR of V holds
+ (Gen w,y & u=u1#t1 & u=u2#t2 & u=v1#w1 & u=v2#w2 &
+  u1,u2,v1,v2 are_DTr_wrt w,y implies t1,t2,w1,w2 are_DTr_wrt w,y)
+proof let u,u1,u2,v1,v2,t1,t2,w1,w2 be VECTOR of V; assume that A1: Gen w,y
+and A2: u=u1#t1 & u=u2#t2 & u=v1#w1 & u=v2#w2 and
+A3: u1,u2,v1,v2 are_DTr_wrt w,y; set p=u1#u2,q=v1#v2,r=t1#t2,s=w1#w2;
+A4: u1,u2 // v1,v2 & u1,u2,p,q are_Ort_wrt w,y & v1,v2,p,q are_Ort_wrt w,y
+ by A3,Def3;
+A5: u2-u1 = -(t2-t1) & v2-v1 = -(w2-w1) by A2,Lm3;
+ A6:now assume u1=u2; then t1=t2 by A2,Th9; hence t1,t2 // w1,w2 &
+ t1,t2,r,s are_Ort_wrt w,y by A1,Lm8,ANALOAF:18; end;
+ A7:now assume v1=v2; then w1=w2 by A2,Th9; hence t1,t2 // w1,w2 &
+ w1,w2,r,s are_Ort_wrt w,y by A1,Lm8,ANALOAF:18; end;
+A8: t1,t2 // w1,w2 proof
+    now assume u1<>u2 & v1<>v2; then consider a,b such that A9: 0<a & 0<b &
+  a*(u2-u1)=b*(v2-v1) by A4,ANALOAF:def 1;
+   a*(t2-t1) = a*(-(-(t2-t1))) by RLVECT_1:30 .= -(b*(-(w2-w1))) by A5,A9,
+RLVECT_1:39 .= b*(-(-(w2-w1))) by RLVECT_1:39
+  .= b*(w2-w1) by RLVECT_1:30;
+  hence thesis by A9,ANALOAF:def 1; end; hence thesis by A6,A7; end;
+  u=p#r & u=q#s proof thus p#r = u#u by A2,Th8 .=u;
+ thus q#s = u#u by A2,Th8
+  .=u; end;
+ then A10: s-r = -(q-p) by Lm3
+ .= (-1)*(q-p) by RLVECT_1:29;
+   t2-t1 = -(u2-u1) & w2-w1 = -(v2-v1) by A2,Lm3;
+ then A11: t2-t1 = (-1)*(u2-u1) & w2-w1 = (-1)*(v2-v1) by RLVECT_1:29;
+   u2-u1,q-p are_Ort_wrt w,y & v2-v1,q-p are_Ort_wrt w,y by A4,ANALMETR:def 3;
+ then t2-t1,s-r are_Ort_wrt w,y & w2-w1,s-r are_Ort_wrt w,y
+ by A10,A11,ANALMETR:10; then t1,t2,r,s are_Ort_wrt w,y &
+ w1,w2,r,s are_Ort_wrt w,y by ANALMETR:def 3
+; hence thesis by A8,Def3; end;
+
+Lm11: v1 = b1*w + b2*y & v2 = c1*w + c2*y implies
+ v1 + v2 = (b1 + c1)*w + (b2 + c2)*y & v1 - v2 = (b1 - c1)*w + (b2 - c2)*y
+ proof assume that A1: v1 = b1*w + b2*y and A2: v2 = c1*w + c2*y;
+ thus v1 + v2 = ((b1*w + b2*y) + c1*w) + c2*y by A1,A2,RLVECT_1:def 6
+  .= ((b1*w + c1*w) + b2*y) + c2*y by RLVECT_1:def 6
+  .= ((b1 + c1)*w + b2*y) + c2*y by RLVECT_1:def 9
+  .= (b1 + c1)*w + (b2*y + c2*y) by RLVECT_1:def 6
+  .= (b1 + c1)*w + (b2 + c2)*y by RLVECT_1:def 9;
+ thus v1 - v2 = (b1*w + b2*y)+(-(c1*w + c2*y)) by A1,A2,RLVECT_1:def 11
+  .= (b1*w + b2*y)+(-(c1*w) + -(c2*y)) by RLVECT_1:45
+  .= (b1*w + b2*y)+(c1*(-w) + -(c2*y)) by RLVECT_1:39
+  .= (b1*w + b2*y)+(c1*(-w) + c2*(-y)) by RLVECT_1:39
+  .= (b1*w + b2*y)+((-c1)*w + c2*(-y)) by RLVECT_1:38
+  .= (b1*w + b2*y)+((-c1)*w + (-c2)*y) by RLVECT_1:38
+  .= ((b1*w + b2*y) + (-c1)*w) + (-c2)*y by RLVECT_1:def 6
+  .= ((b1*w + (-c1)*w) + b2*y) + (-c2)*y by RLVECT_1:def 6
+  .= ((b1 + (-c1))*w + b2*y) + (-c2)*y by RLVECT_1:def 9
+  .= (b1 + (-c1))*w + (b2*y + (-c2)*y) by RLVECT_1:def 6
+  .= (b1 + (-c1))*w + (b2 + (-c2))*y by RLVECT_1:def 9
+  .= (b1 - c1)*w + (b2 + (-c2))*y by XCMPLX_0:def 8
+  .= (b1 - c1)*w + (b2 - c2)*y by XCMPLX_0:def 8; end;
+
+Lm12: v = b1*w + b2*y implies a*v = (a*b1)*w + (a*b2)*y proof
+  assume v= b1*w + b2*y; hence a*v = a*(b1*w) + a*(b2*y)
+    by RLVECT_1:def 9 .= (a*b1)*w + a*(b2*y) by RLVECT_1:def 9
+    .= (a*b1)*w + (a*b2)*y by RLVECT_1:def 9; end;
+
+Lm13: Gen w,y & a1*w + a2*y = b1*w + b2*y implies a1=b1 & a2=b2 proof
+ assume that A1: Gen w,y and A2: a1*w+a2*y=b1*w+b2*y;
+   0.V = (a1*w+a2*y)-(b1*w+b2*y) by A2,RLVECT_1:28 .= (a1-b1)*w+(a2-b2)*y by
+Lm11
+;
+ then a1-b1=0 & a2-b2=0 by A1,ANALMETR:def 1
+; then -b1 + a1 =0 & -b2 + a2 = 0 by XCMPLX_0:def 8;
+ then a1=-(-b1) & a2=-(-b2) by XCMPLX_0:def 6; hence thesis; end;
+
+definition let V,w,y,u such that A1: Gen w,y;
+  func pr1(w,y,u) -> Real means
+ :Def4: ex b st u=it*w+b*y;
+ existence by A1,ANALMETR:def 1;
+ uniqueness by A1,Lm13; end;
+
+definition let V,w,y,u such that A1: Gen w,y;
+  func pr2(w,y,u) -> Real means
+ :Def5: ex a st u=a*w+it*y;
+ existence proof consider a,b such that A2: u = a*w+b*y by A1,ANALMETR:def 1;
+ take b; thus thesis by A2; end;
+ uniqueness by A1,Lm13; end;
+
+Lm14: Gen w,y implies u = pr1(w,y,u)*w + pr2(w,y,u)*y
+ proof assume A1: Gen w,y;
+  then ex b st u = (pr1(w,y,u))*w + b*y by Def4;
+ hence thesis by A1,Def5; end;
+
+Lm15: (Gen w,y & u=a*w+b*y) implies a=pr1(w,y,u) & b=pr2(w,y,u)
+ proof assume A1: Gen w,y & u=a*w+b*y;
+  then u = pr1(w,y,u)*w + pr2(w,y,u)*y by Lm14; hence thesis by A1,Lm13; end;
+
+Lm16: Gen w,y implies ( pr1(w,y,u+v) = pr1(w,y,u)+pr1(w,y,v) &
+   pr2(w,y,u+v) = pr2(w,y,u)+pr2(w,y,v) &
+   pr1(w,y,u-v) = pr1(w,y,u)-pr1(w,y,v) &
+   pr2(w,y,u-v) = pr2(w,y,u)-pr2(w,y,v) & pr1(w,y,a*u) = a*pr1(w,y,u) &
+   pr2(w,y,a*u) = a*pr2(w,y,u))
+ proof assume A1: Gen w,y; set p1u = pr1(w,y,u), p2u = pr2(w,y,u),
+  p1v = pr1(w,y,v), p2v = pr2(w,y,v);
+  A2: u = p1u*w + p2u*y & v = p1v*w + p2v*y by A1,Lm14;
+   then u + v = (p1u*w + p2u*y + p1v*w) + p2v*y by RLVECT_1:def 6
+   .= ((p1u*w + p1v*w) + p2u*y) + p2v*y by RLVECT_1:def 6
+   .= (p1u*w + p1v*w) + (p2u*y + p2v*y) by RLVECT_1:def 6
+   .= (p1u + p1v)*w + (p2u*y + p2v*y) by RLVECT_1:def 9
+   .= (p1u + p1v)*w + (p2u + p2v)*y by RLVECT_1:def 9;
+   hence pr1(w,y,u+v) = p1u + p1v & pr2(w,y,u+v) = p2u + p2v by A1,Lm15;
+     u - v = (p1u - p1v)*w + (p2u - p2v)*y by A2,Lm11;
+   hence pr1(w,y,u-v) = p1u - p1v & pr2(w,y,u-v) = p2u - p2v by A1,Lm15;
+     a*u = (a*p1u)*w + (a*p2u)*y by A2,Lm12;
+ hence pr1(w,y,a*u) = a*pr1(w,y,u) & pr2(w,y,a*u) = a*pr2(w,y,u) by A1,Lm15;
+ end;
+
+Lm17: Gen w,y implies (2*pr1(w,y,u#v) = pr1(w,y,u)+pr1(w,y,v) &
+    2*pr2(w,y,u#v) = pr2(w,y,u)+pr2(w,y,v))
+ proof assume A1: Gen w,y; set p=u#v;
+    2*(u#v) = (1+1)*p .= 1*p + 1*p by RLVECT_1:def 9
+  .= p + 1*p by RLVECT_1:def 9 .= p+p by RLVECT_1:def 9 .= u+v by Def2;
+  then 2*pr1(w,y,u#v) = pr1(w,y,u+v) & 2*pr2(w,y,u#v) = pr2(w,y,u+v)
+  by A1,Lm16;
+  hence thesis by A1,Lm16; end;
+
+Lm18: a*(b+c)+a1*(b1+c1) = (a*b+a1*b1)+(a*c+a1*c1)
+ proof thus a*(b+c)+a1*(b1+c1) = (a*b+a*c)+a1*(b1+c1) by XCMPLX_1:8 .=
+(a*b+a*c)+(a1*b1+a1*c1) by XCMPLX_1:8 .= ((a*b+a*c)+a1*b1)+a1*c1 by XCMPLX_1:1
+ .=
+((a*b+a1*b1)+a*c)+a1*c1 by XCMPLX_1:1 .= (a*b+a1*b1)+(a*c+a1*c1) by XCMPLX_1:1;
+ end;
+
+Lm19: -u + -v = -(u+v)
+proof (u+v)+(-u + -v) = ((u+v)+ -u) + -v by RLVECT_1:def 6 .=
+ (v+(u+ -u)) + -v by RLVECT_1:def 6 .=
+ (v+0.V) + -v by RLVECT_1:16 .= v + -v by RLVECT_1:10 .= 0.V by RLVECT_1:16;
+hence thesis by RLVECT_1:def 10; end;
+
+Lm20: a*(b-c)+a1*(b1-c1) = (a*b+a1*b1)-(a*c+a1*c1)
+proof thus a*(b-c)+a1*(b1-c1) = a*(b+ -c)+a1*(b1-c1) by XCMPLX_0:def 8 .=
+  a*(b+ -c)+a1*(b1+ -c1) by XCMPLX_0:def 8 .= (a*b+a1*b1)+(a*(-c)+a1*(-c1))
+  by Lm18 .= (a*b+a1*b1)+(-a*c + a1*(-c1)) by XCMPLX_1:175
+  .= (a*b+a1*b1)+(-a*c + -a1*c1) by XCMPLX_1:175
+ .= (a*b+a1*b1)+ -(a*c+a1*c1)
+  by XCMPLX_1:140 .= (a*b+a1*b1)-(a*c+a1*c1) by XCMPLX_0:def 8; end;
+
+Lm21: (a*b)*c + (a*b1)*c1 = a*(b*c+b1*c1)
+proof thus (a*b)*c + (a*b1)*c1 = a*(b*c) + (a*b1)*c1 by XCMPLX_1:4 .=
+  a*(b*c) + a*(b1*c1) by XCMPLX_1:4 .= a*(b*c + b1*c1) by XCMPLX_1:8; end;
+
+Lm22: ((a+(b-2*a))+a)-b = 0
+ proof thus ((a+(b-2*a))+a)-b = ((1*a+1*a)+(b-2*a))-b by XCMPLX_1:1
+ .= (((1+1)*a)+(b-2*a))-b by XCMPLX_1:8
+  .= (b-(2*a-2*a))-b by XCMPLX_1:37 .= (b-0)-b by XCMPLX_1:14
+  .=0 by XCMPLX_1:14; end;
+
+Lm23: (u2 + a2*v) - (u1 + a1*v) = (u2-u1) + (a2-a1)*v
+ proof thus (u2+a2*v) - (u1+a1*v) = ((u2+a2*v) -u1)-a1*v by RLVECT_1:41 .=
+ (a2*v+(u2 -u1))-a1*v by RLVECT_1:42 .=
+ (u2-u1)+(a2*v-a1*v) by RLVECT_1:42 .=
+ (u2 - u1)+(a2-a1)*v by RLVECT_1:49; end;
+
+Lm24: (a-b)-(a-c) = c-b
+ proof thus (a-b)-(a-c) = ((a-b)-a) + c by XCMPLX_1:37 .=(a-(a+b)) + c by
+XCMPLX_1:36 .= ((a-a)-b) + c by XCMPLX_1:36 .= c + (0-b) by XCMPLX_1:14
+ .= c + -b by XCMPLX_1:150 .= c - b by XCMPLX_0:def 8; end;
+
+definition let V,w,y,u,v;
+  func PProJ(w,y,u,v) -> Real equals:Def6:
+  pr1(w,y,u)*pr1(w,y,v) + pr2(w,y,u)*pr2(w,y,v); correctness;
+end;
+
+theorem Th31: for u,v holds PProJ(w,y,u,v) = PProJ(w,y,v,u)
+ proof let u,v be VECTOR of V;
+ set a1=pr1(w,y,u),a2=pr2(w,y,u),b1=pr1(w,y,v),b2=pr2(w,y,v);
+   PProJ(w,y,u,v) = b1*a1+b2*a2 by Def6 .= PProJ(w,y,v,u) by Def6;
+ hence PProJ(w,y,u,v) = PProJ(w,y,v,u); end;
+
+theorem Th32: Gen w,y implies for u,v,v1 holds
+  PProJ(w,y,u,v+v1)=PProJ(w,y,u,v)+PProJ(w,y,u,v1) &
+  PProJ(w,y,u,v-v1)=PProJ(w,y,u,v)-PProJ(w,y,u,v1) &
+  PProJ(w,y,v-v1,u)=PProJ(w,y,v,u)-PProJ(w,y,v1,u) &
+  PProJ(w,y,v+v1,u)=PProJ(w,y,v,u)+PProJ(w,y,v1,u)
+ proof assume A1: Gen w,y; let u,v,v1 be VECTOR of V;
+ A2: now let u,v,v1 be VECTOR of V;
+ A3: PProJ(w,y,u,v+v1) = pr1(w,y,u)*pr1(w,y,v+v1)+pr2(w,y,u)*pr2(w,y,v+v1)
+ by Def6
+  .= pr1(w,y,u)*(pr1(w,y,v)+pr1(w,y,v1))+pr2(w,y,u)*pr2(w,y,v+v1) by A1,Lm16
+  .= pr1(w,y,u)*(pr1(w,y,v)+pr1(w,y,v1))+pr2(w,y,u)*(pr2(w,y,v)+pr2(w,y,v1))
+  by A1,Lm16 .= (pr1(w,y,u)*pr1(w,y,v)+pr2(w,y,u)*pr2(w,y,v))+
+  (pr1(w,y,u)*pr1(w,y,v1)+pr2(w,y,u)*pr2(w,y,v1)) by Lm18 .=
+  (pr1(w,y,u)*pr1(w,y,v)+pr2(w,y,u)*pr2(w,y,v)) + PProJ(w,y,u,v1) by Def6
+  .= PProJ(w,y,u,v)+PProJ(w,y,u,v1) by Def6;
+    PProJ(w,y,u,v-v1) = pr1(w,y,u)*pr1(w,y,v-v1)+pr2(w,y,u)*pr2(w,y,v-v1) by
+Def6
+  .= pr1(w,y,u)*(pr1(w,y,v)-pr1(w,y,v1))+pr2(w,y,u)*pr2(w,y,v-v1) by A1,Lm16
+  .= pr1(w,y,u)*(pr1(w,y,v)-pr1(w,y,v1))+pr2(w,y,u)*(pr2(w,y,v)-pr2(w,y,v1))
+  by A1,Lm16 .= (pr1(w,y,u)*pr1(w,y,v)+pr2(w,y,u)*pr2(w,y,v))-
+  (pr1(w,y,u)*pr1(w,y,v1)+pr2(w,y,u)*pr2(w,y,v1)) by Lm20 .=
+  (pr1(w,y,u)*pr1(w,y,v)+pr2(w,y,u)*pr2(w,y,v)) - PProJ(w,y,u,v1) by Def6
+  .= PProJ(w,y,u,v)-PProJ(w,y,u,v1) by Def6;
+ hence PProJ(w,y,u,v+v1)=PProJ(w,y,u,v)+PProJ(w,y,u,v1) &
+   PProJ(w,y,u,v-v1)=PProJ(w,y,u,v)-PProJ(w,y,u,v1) by A3; end;
+ hence PProJ(w,y,u,v+v1) = PProJ(w,y,u,v)+PProJ(w,y,u,v1) &
+   PProJ(w,y,u,v-v1) = PProJ(w,y,u,v)-PProJ(w,y,u,v1);
+ thus PProJ(w,y,v-v1,u) = PProJ(w,y,u,v-v1) by Th31 .= PProJ(w,y,u,v)-PProJ
+(w,y,u,v1)
+  by A2 .= PProJ(w,y,v,u) - PProJ(w,y,u,v1) by Th31 .= PProJ(w,y,v,u)-PProJ
+(w,y,v1,u)
+  by Th31;
+ thus PProJ(w,y,v+v1,u)= PProJ(w,y,u,v+v1) by Th31 .= PProJ(w,y,u,v)+PProJ
+(w,y,u,v1) by A2 .= PProJ(w,y,v,u) + PProJ(w,y,u,v1) by Th31
+ .= PProJ(w,y,v,u)+PProJ
+(w,y,v1,u)
+ by Th31; end;
+
+theorem Th33: Gen w,y implies for u,v being VECTOR of V, a being Real holds
+ PProJ(w,y,a*u,v)=a*PProJ(w,y,u,v) & PProJ(w,y,u,a*v)=a*PProJ(w,y,u,v) &
+ PProJ(w,y,a*u,v)=PProJ(w,y,u,v)*a & PProJ(w,y,u,a*v)=PProJ(w,y,u,v)*a
+ proof assume A1: Gen w,y; let u,v be VECTOR of V,a be Real;
+ A2: now let u,v be VECTOR of V,a be Real;
+   PProJ(w,y,a*u,v) = pr1(w,y,a*u)*pr1(w,y,v)+pr2(w,y,a*u)*pr2(w,y,v) by Def6
+ .= (a*pr1(w,y,u))*pr1(w,y,v)+pr2(w,y,a*u)*pr2(w,y,v) by A1,Lm16
+ .= (a*pr1(w,y,u))*pr1(w,y,v)+(a*pr2(w,y,u))*pr2(w,y,v) by A1,Lm16
+ .= a*(pr1(w,y,u)*pr1(w,y,v)+pr2(w,y,u)*pr2(w,y,v)) by Lm21
+ .= a*PProJ(w,y,u,v)
+  by Def6; hence PProJ(w,y,a*u,v) = a*PProJ(w,y,u,v); end;
+ hence PProJ(w,y,a*u,v) = a*PProJ(w,y,u,v);
+ thus PProJ(w,y,u,a*v) = PProJ(w,y,a*v,u) by Th31 .= a*PProJ(w,y,v,u) by A2
+  .= a*PProJ(w,y,u,v) by Th31;
+ thus PProJ(w,y,a*u,v) = PProJ(w,y,u,v)*a by A2;
+ thus PProJ(w,y,u,a*v) = PProJ(w,y,a*v,u) by Th31 .= a*PProJ(w,y,v,u) by A2
+  .= PProJ(w,y,u,v)*a by Th31; end;
+
+theorem Th34: Gen w,y implies for u,v being VECTOR of V holds
+  (u,v are_Ort_wrt w,y iff PProJ(w,y,u,v)=0)
+  proof assume A1: Gen w,y; let u,v be VECTOR of V;
+ set a1=pr1(w,y,u),a2=pr2(w,y,u),b1=pr1(w,y,v),b2=pr2(w,y,v);
+ A2: u = a1*w+a2*y & v = b1*w+b2*y by A1,Lm14;
+ A3: now assume u,v are_Ort_wrt w,y; then a1*b1+a2*b2 = 0 by A1,A2,ANALMETR:5
+;
+  hence PProJ(w,y,u,v) = 0 by Def6; end;
+    now assume PProJ(w,y,u,v) = 0; then a1*b1+a2*b2 = 0 by Def6;
+  hence u,v are_Ort_wrt w,y by A2,ANALMETR:def 2; end;
+ hence u,v are_Ort_wrt w,y iff PProJ(w,y,u,v)=0 by A3; end;
+
+theorem Th35: Gen w,y implies for u,v,u1,v1 being VECTOR of V holds
+ (u,v,u1,v1 are_Ort_wrt w,y iff PProJ
+(w,y,v-u,v1-u1)=0) proof assume A1: Gen w,y;
+let u,v,u1,v1 be VECTOR of V; u,v,u1,v1 are_Ort_wrt w,y iff
+ v-u,v1-u1 are_Ort_wrt w,y by ANALMETR:def 3;
+ hence u,v,u1,v1 are_Ort_wrt w,y iff PProJ(w,y,v-u,v1-u1)=0 by A1,Th34; end;
+
+theorem Th36: Gen w,y implies for u,v,v1 being VECTOR of V holds
+ 2*PProJ(w,y,u,v#v1) = PProJ(w,y,u,v)+PProJ(w,y,u,v1)
+ proof assume A1: Gen w,y; let u,v,v1 be VECTOR of V;
+ set a1=pr1(w,y,u),a2=pr2(w,y,u),b1=pr1(w,y,v),b2=pr2(w,y,v),
+  c1=pr1(w,y,v1),c2=pr2(w,y,v1);
+ thus 2*PProJ(w,y,u,v#v1) = 2*(pr1(w,y,u)*pr1(w,y,v#v1)+
+ pr2(w,y,u)*pr2(w,y,v#v1))
+  by Def6 .= 2*(a1*pr1(w,y,v#v1))+ 2*(a2*pr2(w,y,v#v1)) by XCMPLX_1:8 .=
+ a1*(2*pr1(w,y,v#v1))+ 2*(a2*pr2(w,y,v#v1)) by XCMPLX_1:4 .=
+ a1*(2*pr1(w,y,v#v1))+ a2*(2*pr2(w,y,v#v1)) by XCMPLX_1:4 .=
+ a1*(b1+c1)+ a2*(2*pr2(w,y,v#v1)) by A1,Lm17 .=
+ a1*(b1+c1)+ a2*(b2+c2) by A1,Lm17 .= (a1*b1+a2*b2)+(a1*c1+a2*c2)
+ by Lm18 .= PProJ(w,y,u,v)+ (a1*c1+a2*c2) by Def6
+ .= PProJ(w,y,u,v)+PProJ(w,y,u,v1) by Def6; end;
+
+theorem Th37: Gen w,y implies for u,v being VECTOR of V st u<>v holds
+     PProJ(w,y,u-v,u-v) <> 0
+ proof assume A1: Gen w,y; let u,v be VECTOR of V; assume A2: u<>v;
+ assume PProJ(w,y,u-v,u-v) = 0; then u-v,u-v are_Ort_wrt w,y by A1,Th34;
+ then u-v = 0.V by A1,ANALMETR:15; hence
+   contradiction by A2,RLVECT_1:35; end;
+
+theorem Th38: Gen w,y implies for p,q,u,v,v' being VECTOR of V, A being Real st
+  p,q,u,v are_DTr_wrt w,y & p<>q &
+  A = (PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*(PProJ(w,y,p-q,p-q))" &
+  v'=u+A*(p-q) holds v=v'
+ proof assume A1: Gen w,y;
+ let p,q,u,v,v' be VECTOR of V,A be Real;
+ assume that A2: p,q,u,v are_DTr_wrt w,y and A3: p<>q and
+ A4: A = (PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*(PProJ(w,y,p-q,p-q))" and
+ A5: v'=u+A*(p-q); set s=p#q;
+ A6: PProJ(w,y,p-q,p-q) <> 0 by A1,A3,Th37;
+ A7: p,q // u,v' or p,q // v',u proof 1*(v'-u) = (u+A*(p-q))-u by A5,RLVECT_1:
+def 9 .= A*(p-q)
+  by RLSUB_2:78; then q,p // u,v' or q,p // v',u by ANALMETR:18;
+  hence thesis by ANALOAF:21; end;
+    (p,q,s,u#v' are_Ort_wrt w,y & u,v',s,u#v' are_Ort_wrt w,y) &
+   (p,q,s,v'#u are_Ort_wrt w,y & v',u,s,v'#u are_Ort_wrt w,y)
+ proof set X=PProJ(w,y,p-q,(v'#u)-s); A8: 2*X =
+  2*(PProJ(w,y,p-q,v'#u)-PProJ(w,y,p-q,p#q)) by A1,Th32
+  .= 2*PProJ(w,y,p-q,v'#u)-2*PProJ(w,y,p-q,p#q) by XCMPLX_1:40 .=
+  (PProJ(w,y,p-q,v')+PProJ(w,y,p-q,u))-2*PProJ(w,y,p-q,p#q) by A1,Th36 .=
+  (PProJ(w,y,p-q,v')+PProJ(w,y,p-q,u))-(PProJ(w,y,p-q,p)+PProJ
+(w,y,p-q,q)) by A1,Th36 .=
+(PProJ(w,y,p-q,u+A*(p-q)) + PProJ(w,y,p-q,u)) - PProJ
+(w,y,p-q,p+q) by A1,A5,Th32 .=
+  ((PProJ(w,y,p-q,u) + PProJ(w,y,p-q,A*(p-q))) + PProJ(w,y,p-q,u)) -
+   PProJ(w,y,p-q,p+q) by A1,Th32;
+     PProJ(w,y,p-q,A*(p-q)) =
+((PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*(PProJ(w,y,p-q,p-q))")*PProJ
+(w,y,p-q,p-q)
+  by A1,A4,Th33.=
+  (PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*((PProJ(w,y,p-q,p-q))"*PProJ
+(w,y,p-q,p-q))
+  by XCMPLX_1:4
+  .= (PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*1 by A6,XCMPLX_0:def 7 .=
+  PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u);
+  then 2*X = 0 by A8,Lm22; then X=0 by XCMPLX_1:6;
+  then q,p,p#q,v'#u are_Ort_wrt w,y by A1,Th35;
+  then s,v'#u,q,p are_Ort_wrt w,y by A1,Lm4;
+  then A9: s,v'#u,p,q are_Ort_wrt w,y by A1,Lm4;
+ set Y = PProJ(w,y,v'-u,(v'#u)-s); A10: 2*Y =
+  2*(PProJ(w,y,v'-u,v'#u)-PProJ(w,y,v'-u,p#q)) by A1,Th32
+  .= 2*PProJ(w,y,v'-u,v'#u)-2*PProJ(w,y,v'-u,p#q) by XCMPLX_1:40 .=
+  (PProJ(w,y,v'-u,v')+PProJ(w,y,v'-u,u))-2*PProJ(w,y,v'-u,p#q) by A1,Th36 .=
+  (PProJ(w,y,v'-u,v')+PProJ(w,y,v'-u,u))-(PProJ(w,y,v'-u,p)+PProJ
+(w,y,v'-u,q)) by A1,Th36 .=
+(PProJ(w,y,v'-u,u+A*(p-q)) + PProJ(w,y,v'-u,u)) - PProJ
+(w,y,v'-u,p+q) by A1,A5,Th32.=
+  ((PProJ(w,y,v'-u,u) + PProJ(w,y,v'-u,A*(p-q))) + PProJ(w,y,v'-u,u)) - PProJ
+(w,y,v'-u,p+q)
+  by A1,Th32;
+A11:  v'-u = A*(p-q) by A5,RLSUB_2:78;
+    PProJ(w,y,A*(p-q),A*(p-q)) = A*PProJ(w,y,p-q,A*(p-q)) by A1,Th33
+  .= A*(((PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*(PProJ(w,y,p-q,p-q))")*
+   PProJ(w,y,p-q,p-q)) by A1,A4,Th33
+  .= A*((PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*((PProJ(w,y,p-q,p-q))"*
+   PProJ(w,y,p-q,p-q))) by XCMPLX_1:4
+  .= A*((PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*1) by A6,XCMPLX_0:def 7 .=
+  A*(PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u)); then 2*Y =
+((PProJ(w,y,A*(p-q),u) + (A*PProJ(w,y,p-q,p+q) - A*(2*PProJ(w,y,p-q,u)))) +
+    PProJ(w,y,A*(p-q),u)) - PProJ(w,y,A*(p-q),p+q) by A10,A11,XCMPLX_1:40 .=
+   ((PProJ(w,y,A*(p-q),u) + (PProJ(w,y,A*(p-q),p+q) - A*(2*PProJ
+(w,y,p-q,u)))) +
+    PProJ(w,y,A*(p-q),u)) - PProJ(w,y,A*(p-q),p+q) by A1,Th33 .=
+((PProJ(w,y,A*(p-q),u) + (PProJ(w,y,A*(p-q),p+q) - 2*(A*PProJ(w,y,p-q,u)))) +
+    PProJ(w,y,A*(p-q),u)) - PProJ(w,y,A*(p-q),p+q) by XCMPLX_1:4 .=
+   ((PProJ(w,y,A*(p-q),u) + (PProJ(w,y,A*(p-q),p+q) - 2*PProJ
+(w,y,A*(p-q),u))) +
+    PProJ(w,y,A*(p-q),u)) - PProJ(w,y,A*(p-q),p+q) by A1,Th33
+    .= 0 by Lm22; then A12: Y=0 by XCMPLX_1:6;
+   then u,v',s,v'#u are_Ort_wrt w,y by A1,Th35
+; then s,v'#u,u,v' are_Ort_wrt w,y
+   by A1,Lm4; then s,v'#u,v',u are_Ort_wrt w,y by A1,Lm4;
+ hence thesis by A1,A9,A12,Lm4,Th35; end;
+  then p,q,u,v' are_DTr_wrt w,y or p,q,v',u are_DTr_wrt w,y by A7,Def3;
+ hence v = v' by A1,A2,A3,Th27; end;
+
+Lm25: Gen w,y implies for u,u',u1,u2,t1,t2 being VECTOR of V, A1,A2 being Real
+  st u<>u' &
+     A1 = (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',u1))*((PProJ
+(w,y,u-u',u-u'))") &
+     A2 = (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',u2))*((PProJ
+(w,y,u-u',u-u'))") &
+     t1 = u1+A1*(u-u') & t2 = u2+A2*(u-u')
+  holds t2-t1 = (u2 - u1)+(A2-A1)*(u-u') &
+  A2-A1 = ((-2)*PProJ(w,y,u-u',u2-u1))*((PProJ(w,y,u-u',u-u'))")
+ proof assume A1: Gen w,y;
+ let u,u',u1,u2,t1,t2 be VECTOR of V, A1,A2 be Real such that u<>u' and
+ A2: A1 = (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',u1))*((PProJ
+(w,y,u-u',u-u'))") and
+ A3: A2 = (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',u2))*((PProJ
+(w,y,u-u',u-u'))") and
+ A4: t1 = u1+A1*(u-u') & t2 = u2+A2*(u-u');
+thus t2-t1 = (u2 - u1)+(A2-A1)*(u-u') &
+  A2-A1 = ((-2)*PProJ(w,y,u-u',u2-u1))*((PProJ(w,y,u-u',u-u'))") proof
+ set uu = (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',u2)) -
+  (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',u1));
+    uu = (-2)*PProJ(w,y,u-u',u2-u1) proof
+ A5: uu = (PProJ(w,y,u-u',u+u') - PProJ(w,y,u-u',2*u2)) -
+   (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',u1)) by A1,Th33 .=
+  (PProJ(w,y,u-u',u+u') - PProJ(w,y,u-u',2*u2)) -
+   (PProJ(w,y,u-u',u+u') - PProJ(w,y,u-u',2*u1)) by A1,Th33 .=
+  PProJ(w,y,u-u',2*u1) - PProJ(w,y,u-u',2*u2) by Lm24 .=
+   PProJ(w,y,u-u',2*u1 - 2*u2) by A1,Th32;
+    2*u1 - 2*u2 = 2*u1 + -2*u2 by RLVECT_1:def 11
+  .= -(2*u2 - 2*u1) by RLVECT_1:47 .= -(2*(u2 - u1))
+  by RLVECT_1:48 .= 2*(-(u2 - u1)) by RLVECT_1:39 .=
+  (-2)*(u2 - u1) by RLVECT_1:38; hence
+   uu = (-2)*PProJ(w,y,u-u',u2 - u1)
+  by A1,A5,Th33; end;
+ hence thesis by A2,A3,A4,Lm23,XCMPLX_1:40; end; end;
+
+theorem Th39:
+Gen w,y implies for u,u',u1,u2,v1,v2,t1,t2,w1,w2 being VECTOR of V
+  st u<>u' & u,u',u1,t1 are_DTr_wrt w,y & u,u',u2,t2 are_DTr_wrt w,y &
+ u,u',v1,w1 are_DTr_wrt w,y & u,u',v2,w2 are_DTr_wrt w,y &
+ u1,u2 // v1,v2 holds t1,t2 // w1,w2 proof assume A1: Gen w,y;
+  let u,u',u1,u2,v1,v2,t1,t2,w1,w2 be VECTOR of V such that A2: u<>u' and
+  A3: u,u',u1,t1 are_DTr_wrt w,y & u,u',u2,t2 are_DTr_wrt w,y &
+   u,u',v1,w1 are_DTr_wrt w,y & u,u',v2,w2 are_DTr_wrt w,y and
+  A4: u1,u2 // v1,v2; set
+  A1 = (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',u1))*(PProJ(w,y,u-u',u-u'))",
+  A2 = (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',u2))*(PProJ(w,y,u-u',u-u'))",
+  A3 = (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',v1))*(PProJ(w,y,u-u',u-u'))",
+  A4 = (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',v2))*(PProJ(w,y,u-u',u-u'))";
+ A5: (u1+A1*(u-u'))=t1 & (u2+A2*(u-u'))=t2 & (v1+A3*(u-u'))=w1 &
+(v2+A4*(u-u'))=w2 by A1,A2,A3,Th38;
+ A6: t1=u1+A1*(u-u') & t2=u2+A2*(u-u') by A1,A2,A3,Th38;
+ A7: now assume u1=u2; then t1=t2 by A1,A2,A3,Th26;
+  hence t1,t2 // w1,w2 by ANALOAF:def 1; end;
+ A8: now assume v1=v2; then w1=w2 by A1,A2,A3,Th26;
+  hence t1,t2 // w1,w2 by ANALOAF:def 1; end;
+    now assume u1<>u2 & v1<>v2; then consider a,b such that
+  A9: a*(u2-u1) = b*(v2-v1) & 0<a & 0<b by A4,ANALOAF:16;
+  set uu = ((-2)*PProJ(w,y,u-u',u2-u1));
+  set vv = ((-2)*PProJ(w,y,u-u',v2-v1));
+  set cc = (PProJ(w,y,u-u',u-u'))";
+  A10: a*uu = b*vv proof thus
+     a*uu = (-2)*(a*PProJ(w,y,u-u',u2-u1)) by XCMPLX_1:4
+ .= (-2)*PProJ(w,y,u-u',b*(v2-v1)) by A1,A9,Th33
+    .= (-2)*(b*PProJ(w,y,u-u',v2-v1)) by A1,Th33 .=b*vv by XCMPLX_1:4; end;
+  A11: a*(A2-A1) = b*(A4-A3) proof thus
+    a*(A2-A1) = a*(uu*cc) by A1,A2,A6,Lm25
+ .= (b*vv)*cc by A10,XCMPLX_1:4
+  .= b*(vv*cc) by XCMPLX_1:4 .= b*(A4-A3) by A1,A2,A5,Lm25; end;
+  A12: t2-t1 = (u2 - u1)+(A2-A1)*(u-u') by A1,A2,A5,Lm25;
+  A13: w2-w1 = (v2 - v1)+(A4-A3)*(u-u') by A1,A2,A5,Lm25;
+     a*(t2-t1) = a*(u2 - u1) +
+   a*((A2-A1)*(u-u')) by A12,RLVECT_1:def 9
+ .= b*(v2-v1) + (b*(A4-A3))*(u-u') by A9,A11,RLVECT_1:def 9 .= b*(v2 - v1) +
+   b*((A4-A3)*(u-u')) by RLVECT_1:def 9 .= b*(w2-w1) by A13,RLVECT_1:def 9;
+ hence t1,t2 // w1,w2 by A9,ANALOAF:def 1; end;
+ hence t1,t2 // w1,w2 by A7,A8; end;
+
+theorem Gen w,y implies for u,u',u1,u2,v1,t1,t2,w1 being VECTOR of V
+ st u<>u' & u,u',u1,t1 are_DTr_wrt w,y & u,u',u2,t2 are_DTr_wrt w,y &
+  u,u',v1,w1 are_DTr_wrt w,y & v1=u1#u2 holds w1 = t1#t2
+ proof assume A1: Gen w,y;
+ let u,u',u1,u2,v1,t1,t2,w1 be VECTOR of V such that A2: u<>u' and
+ A3: u,u',u1,t1 are_DTr_wrt w,y & u,u',u2,t2 are_DTr_wrt w,y &
+  u,u',v1,w1 are_DTr_wrt w,y and A4: v1=u1#u2; set
+  A1 = (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',u1))*(PProJ(w,y,u-u',u-u'))",
+  A2 = (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',u2))*(PProJ(w,y,u-u',u-u'))",
+  A3 = (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',v1))*(PProJ(w,y,u-u',u-u'))";
+ A5: (u1+A1*(u-u'))=t1 & (u2+A2*(u-u'))=t2 & (v1+A3*(u-u'))
+=w1 by A1,A2,A3,Th38;
+ then A6: t1+t2 =
+  A1*(u-u')+(u1 + (u2+A2*(u-u'))) by RLVECT_1:def 6 .=
+  A1*(u-u')+((u1 + u2)+A2*(u-u')) by RLVECT_1:def 6 .=
+  (u1 + u2)+(A1*(u-u')+A2*(u-u')) by RLVECT_1:def 6 .=
+  (u1 + u2)+(A1+A2)*(u-u') by RLVECT_1:def 9 .= (v1 + v1)+(A1+A2)*(u-u') by A4,
+Def2;
+ A7: w1+w1 = A3*(u-u')+(v1 + (v1+A3*(u-u'))) by A5,RLVECT_1:def 6 .=
+  A3*(u-u')+((v1 + v1)+A3*(u-u')) by RLVECT_1:def 6 .=
+  (v1 + v1)+(A3*(u-u')+A3*(u-u')) by RLVECT_1:def 6 .=
+  (v1 + v1)+(A3+A3)*(u-u') by RLVECT_1:def 9;
+ A8: A3+A3 = ((PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',v1)) +
+     (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',v1)))*(PProJ
+(w,y,u-u',u-u'))" by XCMPLX_1:8;
+ set uu = (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',u1)) +
+                        (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',u2)),
+     vv = (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',v1)) +
+                        (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',v1));
+ A9: uu = (PProJ(w,y,u-u',u+u') - PProJ(w,y,u-u',2*u1)) +
+      (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',u2)) by A1,Th33 .=
+ (PProJ(w,y,u-u',u+u') - PProJ(w,y,u-u',2*u1)) +
+  (PProJ(w,y,u-u',u+u') - PProJ(w,y,u-u',2*u2)) by A1,Th33 .=
+  (PProJ(w,y,u-u',u+u') + -PProJ(w,y,u-u',2*u1)) +
+   (PProJ(w,y,u-u',u+u') - PProJ(w,y,u-u',2*u2)) by XCMPLX_0:def 8 .=
+ (PProJ(w,y,u-u',u+u') + -PProJ(w,y,u-u',2*u1)) +
+  (PProJ(w,y,u-u',u+u') + -PProJ(w,y,u-u',2*u2)) by XCMPLX_0:def 8 .=
+PProJ(w,y,u-u',u+u') + ((PProJ(w,y,u-u',u+u') + -PProJ(w,y,u-u',2*u1))
+   + -PProJ(w,y,u-u',2*u2)) by XCMPLX_1:1 .=
+ PProJ(w,y,u-u',u+u') + (PProJ(w,y,u-u',u+u') +
+   (-PProJ(w,y,u-u',2*u1) + -PProJ(w,y,u-u',2*u2))) by XCMPLX_1:1 .=
+ (PProJ(w,y,u-u',u+u') + PProJ(w,y,u-u',u+u')) +
+  (-PProJ(w,y,u-u',2*u1) + -PProJ(w,y,u-u',2*u2)) by XCMPLX_1:1 .=
+ (PProJ(w,y,u-u',u+u') + PProJ(w,y,u-u',u+u'))
+  + -(PProJ(w,y,u-u',2*u1) + PProJ(w,y,u-u',2*u2)) by XCMPLX_1:140 .=
+ (PProJ(w,y,u-u',u+u') + PProJ(w,y,u-u',u+u')) +
+  -(2*PProJ(w,y,u-u',u1) + PProJ(w,y,u-u',2*u2)) by A1,Th33 .=
+ (PProJ(w,y,u-u',u+u') + PProJ(w,y,u-u',u+u')) +
+  -(2*PProJ(w,y,u-u',u1) + 2*PProJ(w,y,u-u',u2)) by A1,Th33 .=
+ (PProJ(w,y,u-u',u+u') + PProJ(w,y,u-u',u+u')) +
+  -(2*(PProJ(w,y,u-u',u1) + PProJ(w,y,u-u',u2))) by XCMPLX_1:8 .=
+ (PProJ(w,y,u-u',u+u') + PProJ(w,y,u-u',u+u')) + -(2*(PProJ
+(w,y,u-u',u1+u2))) by A1,Th32;
+   vv = uu proof thus vv = (PProJ(w,y,u-u',u+u') - PProJ(w,y,u-u',2*v1)) +
+   (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',v1)) by A1,Th33 .=
+  (PProJ(w,y,u-u',u+u') - PProJ(w,y,u-u',2*v1)) +
+   (PProJ(w,y,u-u',u+u') - PProJ(w,y,u-u',2*v1)) by A1,Th33 .=
+  (PProJ(w,y,u-u',u+u') + -PProJ(w,y,u-u',2*v1)) +
+   (PProJ(w,y,u-u',u+u') - PProJ(w,y,u-u',2*v1)) by XCMPLX_0:def 8 .=
+  (PProJ(w,y,u-u',u+u') + -PProJ(w,y,u-u',2*v1)) +
+   (PProJ(w,y,u-u',u+u') + -PProJ(w,y,u-u',2*v1)) by XCMPLX_0:def 8 .=
+PProJ(w,y,u-u',u+u') + ((PProJ(w,y,u-u',u+u') + -PProJ(w,y,u-u',2*v1)) +
+   -PProJ(w,y,u-u',2*v1)) by XCMPLX_1:1 .=
+  PProJ(w,y,u-u',u+u') + (PProJ(w,y,u-u',u+u') +
+   (-PProJ(w,y,u-u',2*v1) + -PProJ(w,y,u-u',2*v1))) by XCMPLX_1:1 .=
+ (PProJ(w,y,u-u',u+u') + PProJ(w,y,u-u',u+u')) +
+   (-PProJ(w,y,u-u',2*v1) + -PProJ(w,y,u-u',2*v1)) by XCMPLX_1:1 .=
+  (PProJ(w,y,u-u',u+u') + PProJ(w,y,u-u',u+u')) +
+   -(PProJ(w,y,u-u',2*v1) + PProJ(w,y,u-u',2*v1)) by XCMPLX_1:140 .=
+  (PProJ(w,y,u-u',u+u') + PProJ(w,y,u-u',u+u')) +
+   -(2*PProJ(w,y,u-u',v1) + PProJ(w,y,u-u',2*v1)) by A1,Th33 .=
+  (PProJ(w,y,u-u',u+u') + PProJ(w,y,u-u',u+u')) +
+   -(2*PProJ(w,y,u-u',v1) + 2*PProJ(w,y,u-u',v1)) by A1,Th33 .=
+  (PProJ(w,y,u-u',u+u') + PProJ(w,y,u-u',u+u')) +
+   -(2*(PProJ(w,y,u-u',v1) + PProJ(w,y,u-u',v1))) by XCMPLX_1:8 .=
+  (PProJ(w,y,u-u',u+u') + PProJ(w,y,u-u',u+u')) +
+   -(2*(PProJ(w,y,u-u',v1+v1))) by A1,Th32 .=uu by A4,A9,Def2; end;
+ then t1+t2 = w1+w1 by A6,A7,A8,XCMPLX_1:8; hence w1=t1#t2 by Def2; end;
+
+theorem Th41: Gen w,y implies for u,u',u1,u2,t1,t2 being VECTOR of V
+ st u<>u' & u,u',u1,t1 are_DTr_wrt w,y & u,u',u2,t2 are_DTr_wrt w,y
+  holds u,u',u1#u2,t1#t2 are_DTr_wrt w,y
+ proof assume A1: Gen w,y; let u,u',u1,u2,t1,t2 be VECTOR of V such that
+ A2: u<>u' and A3: u,u',u1,t1 are_DTr_wrt w,y & u,u',u2,t2 are_DTr_wrt w,y;
+   u1,t1,u2,t2 are_DTr_wrt w,y & u2,t2,u1,t1 are_DTr_wrt w,y
+  by A1,A2,A3,Th21;
+ then A4: u1,t1,u1#u2,t1#t2 are_DTr_wrt w,y & u2,t2,u2#u1,t2#t1 are_DTr_wrt w,y
+  by A1,Th28;
+ A5: now assume A6: u1<>t1; u1,t1,u,u' are_DTr_wrt w,y by A1,A3,Th23;
+  hence thesis by A1,A4,A6,Th21; end;
+ A7: now assume A8: u2<>t2; u2,t2,u,u' are_DTr_wrt w,y by A1,A3,Th23;
+  hence thesis by A1,A4,A8,Th21; end;
+    now assume A9: u1=t1 & u2=t2;
+  then A10: u,u' // u1#u2,t1#t2 by ANALOAF:18;
+     u#u',(u1#u2)#(t1#t2),u1#u2,t1#t2 are_Ort_wrt w,y by A1,A9,Lm5;
+  then A11: u1#u2,t1#t2,u#u',(u1#u2)#(t1#t2) are_Ort_wrt w,y by A1,Lm4;
+     u,u',u#u',u1#u2 are_Ort_wrt w,y proof set uu'=u#u';
+     u,u',uu',u1#t1 are_Ort_wrt w,y & u,u',uu',u2#t2 are_Ort_wrt w,y by A3,Def3
+; then A12: u'-u,u1-uu' are_Ort_wrt w,y &
+   u'-u,u2-uu' are_Ort_wrt w,y by A9,ANALMETR:def 3;
+   A13: u1#u2-uu' = (2")*(u1-uu')+(2")*(u2-uu') proof
+    A14: 2*(u1#u2) = (1+1)*(u1#u2) .= 1*(u1#u2)+1*(u1#u2) by RLVECT_1:def 9
+    .= (u1#u2)+1*(u1#u2) by RLVECT_1:def 9 .= (u1#u2)+(u1#u2) by RLVECT_1:def 9
+    .=u1+u2 by Def2;
+    A15: -(2*uu') = -((1+1)*uu') .= -(1*uu'+1*uu') by RLVECT_1:def 9 .=
+     -(uu' + 1*uu') by RLVECT_1:def 9 .= -(uu'+uu') by RLVECT_1:def 9
+     .= -uu' + -uu' by Lm19;
+      u1#u2-uu' = (2"*2)*(u1#u2-uu') by RLVECT_1:def 9
+ .= 2"*(2*(u1#u2-uu')) by RLVECT_1:def 9 .=
+2"*((u1+u2)-(2*uu')) by A14,RLVECT_1:48 .=2"*((u1+u2)+(-uu'+ -uu')) by A15,
+RLVECT_1:def 11
+    .= 2"*(((u1+u2)+ -uu') + -uu') by RLVECT_1:def 6 .=
+    2"*(((-uu' + u1)+u2) + -uu') by RLVECT_1:def 6 .=
+    2"*(((u1-uu')+u2) + -uu') by RLVECT_1:def 11 .=
+    2"*((u1-uu')+(u2 + -uu')) by RLVECT_1:def 6 .=
+    2"*((u1-uu')+(u2-uu')) by RLVECT_1:def 11 .=
+    2"*(u1-uu')+2"*(u2-uu') by RLVECT_1:def 9; hence thesis; end;
+     u'-u,(2")*(u1-uu') are_Ort_wrt w,y & u'-u,(2")*(u2-uu') are_Ort_wrt w,y
+   by A12,ANALMETR:11; then u'-u,u1#u2-uu' are_Ort_wrt w,y
+   by A1,A13,ANALMETR:14; hence thesis by ANALMETR:def 3; end;
+  hence thesis by A9,A10,A11,Def3; end;
+ hence thesis by A5,A7; end;
+
+theorem Th42: Gen w,y implies for u,u',u1,u2,v1,v2,t1,t2,w1,w2 being VECTOR of
+V
+   st u<>u' & u,u',u1,t1 are_DTr_wrt w,y & u,u',u2,t2 are_DTr_wrt w,y &
+ u,u',v1,w1 are_DTr_wrt w,y & u,u',v2,w2 are_DTr_wrt w,y
+ & u1,u2,v1,v2 are_Ort_wrt w,y holds t1,t2,w1,w2 are_Ort_wrt w,y
+ proof assume A1: Gen w,y;
+ let u,u',u1,u2,v1,v2,t1,t2,w1,w2 be VECTOR of V such that A2: u<>u' and
+ A3: u,u',u1,t1 are_DTr_wrt w,y & u,u',u2,t2 are_DTr_wrt w,y &
+ u,u',v1,w1 are_DTr_wrt w,y & u,u',v2,w2 are_DTr_wrt w,y and
+ A4: u1,u2,v1,v2 are_Ort_wrt w,y; set
+  A1 = (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',u1))*(PProJ(w,y,u-u',u-u'))",
+  A2 = (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',u2))*(PProJ(w,y,u-u',u-u'))",
+  A3 = (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',v1))*(PProJ(w,y,u-u',u-u'))",
+  A4 = (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',v2))*(PProJ(w,y,u-u',u-u'))";
+ A5: (u1+A1*(u-u'))=t1 & (u2+A2*(u-u'))=t2 & (v1+A3*(u-u'))=w1 &
+(v2+A4*(u-u'))=w2 by A1,A2,A3,Th38;
+ A6: t1=u1+A1*(u-u') & t2=u2+A2*(u-u') by A1,A2,A3,Th38;
+ A7: PProJ(w,y,u-u',u-u') <> 0 by A1,A2,Th37;
+ A8: t2-t1 = (u2 - u1)+(A2-A1)*(u-u') by A1,A2,A5,Lm25;
+    w2-w1 = (v2 - v1)+(A4-A3)*(u-u') by A1,A2,A5,Lm25;
+ then A9: PProJ(w,y,t2-t1,w2-w1) =PProJ(w,y,u2-u1,(v2 - v1)+(A4-A3)*(u-u')) +
+   PProJ(w,y,(A2-A1)*(u-u'),(v2 - v1)+(A4-A3)*(u-u')) by A1,A8,Th32 .=
+  (PProJ(w,y,u2-u1,v2-v1) + PProJ(w,y,u2-u1,(A4-A3)*(u-u'))) +
+   PProJ(w,y,(A2-A1)*(u-u'),(v2 - v1)+(A4-A3)*(u-u')) by A1,Th32 .=
+  (0 + PProJ(w,y,u2-u1,(A4-A3)*(u-u'))) +
+   PProJ(w,y,(A2-A1)*(u-u'),(v2 - v1)+(A4-A3)*(u-u')) by A1,A4,Th35 .=
+  PProJ(w,y,u2-u1,(A4-A3)*(u-u')) +
+   (PProJ(w,y,(A2-A1)*(u-u'),(v2 - v1)) + PProJ
+(w,y,(A2-A1)*(u-u'),(A4-A3)*(u-u')))
+   by A1,Th32;
+ A10: (-2)*(-2) = 4;
+ set aa = (PProJ(w,y,u-u',u-u'))"*((PProJ(w,y,u-u',u2-u1)*PProJ
+(w,y,u-u',v2-v1)));
+ A11: PProJ(w,y,(A2-A1)*(u-u'),(A4-A3)*(u-u')) =
+  (A2-A1)*PProJ(w,y,u-u',(A4-A3)*(u-u')) by A1,Th33 .=
+  (A2-A1)*((A4-A3)*PProJ(w,y,u-u',u-u')) by A1,Th33 .=
+  (A2-A1)*( (((-2)*PProJ(w,y,u-u',v2-v1)) * ((PProJ(w,y,u-u',u-u'))") ) *
+   PProJ(w,y,u-u',u-u') ) by A1,A2,A5,Lm25 .=
+  (A2-A1)*( ((-2)*PProJ(w,y,u-u',v2-v1))*(((PProJ(w,y,u-u',u-u'))" )*
+   PProJ(w,y,u-u',u-u')) ) by XCMPLX_1:4 .=
+  (A2-A1)*( ((-2)*PProJ(w,y,u-u',v2-v1))*1 ) by A7,XCMPLX_0:def 7 .=
+((-2)*(A2-A1))*PProJ(w,y,u-u',v2-v1) by XCMPLX_1:4 .=
+  ((-2)*( ((-2)*PProJ(w,y,u-u',u2-u1))*((PProJ(w,y,u-u',u-u'))")) )*
+   PProJ(w,y,u-u',v2-v1) by A1,A2,A6,Lm25 .=
+  ((-2)*( (-2)*(PProJ(w,y,u-u',u2-u1)*((PProJ(w,y,u-u',u-u'))"))) )*
+   PProJ(w,y,u-u',v2-v1) by XCMPLX_1:4 .=
+(4*(PProJ(w,y,u-u',u2-u1)*((PProJ(w,y,u-u',u-u'))")))*
+   PProJ(w,y,u-u',v2-v1) by A10,XCMPLX_1:4 .=
+4*(( ((PProJ(w,y,u-u',u-u'))") * PProJ(w,y,u-u',u2-u1) )*
+   PProJ(w,y,u-u',v2-v1)) by XCMPLX_1:4 .=4*aa by XCMPLX_1:4;
+ A12:  PProJ(w,y,u2-u1,(A4-A3)*(u-u')) = PProJ
+(w,y,u2-u1,u-u')*(A4-A3) by A1,Th33 .=
+  PProJ(w,y,u2-u1,u-u')*( ((-2)*PProJ(w,y,u-u',v2-v1))*
+   ((PProJ(w,y,u-u',u-u'))") ) by A1,A2,A5,Lm25 .=
+  PProJ(w,y,u2-u1,u-u')*( (-2)*(PProJ(w,y,u-u',v2-v1)*
+   ((PProJ(w,y,u-u',u-u'))")) ) by XCMPLX_1:4 .=
+(-2)*(PProJ(w,y,u2-u1,u-u')*(((PProJ(w,y,u-u',u-u'))"*
+   PProJ(w,y,u-u',v2-v1))) ) by XCMPLX_1:4 .=
+  (-2)*( (PProJ(w,y,u-u',u-u'))"*((PProJ(w,y,u2-u1,u-u')*
+   PProJ(w,y,u-u',v2-v1))) ) by XCMPLX_1:4 .=(-2)*aa by Th31;
+     PProJ(w,y,(A2-A1)*(u-u'),(v2 - v1)) =
+  PProJ(w,y,v2-v1,(A2-A1)*(u-u')) by Th31 .=
+  PProJ(w,y,v2-v1,u-u')*(A2-A1) by A1,Th33 .=
+  PProJ(w,y,v2-v1,u-u')*( ((-2)*PProJ(w,y,u-u',u2-u1))*
+   ((PProJ(w,y,u-u',u-u'))") ) by A1,A2,A6,Lm25 .=
+  PProJ(w,y,v2-v1,u-u')*( (-2)*(PProJ(w,y,u-u',u2-u1)*
+   ((PProJ(w,y,u-u',u-u'))")) ) by XCMPLX_1:4 .=
+(-2)*( PProJ(w,y,v2-v1,u-u')*(((PProJ(w,y,u-u',u-u'))"*
+   PProJ(w,y,u-u',u2-u1))) ) by XCMPLX_1:4 .=
+  (-2)*( (PProJ(w,y,u-u',u-u'))"*((PProJ(w,y,v2-v1,u-u')*
+   PProJ(w,y,u-u',u2-u1))) ) by XCMPLX_1:4 .=(-2)*aa by Th31;
+ then PProJ(w,y,t2-t1,w2-w1) = (-2)*aa + (((-2)+4)*aa) by A9,A11,A12,XCMPLX_1:8
+  .= ((-2)+((-2)+4))*aa by XCMPLX_1:8
+  .= 0; hence t1,t2,w1,w2 are_Ort_wrt w,y by A1,Th35; end;
+
+theorem Th43: for u,u',u1,u2,v1,v2,t1,t2,w1,w2 being VECTOR of V holds
+ (Gen w,y & u<>u' & u,u',u1,t1 are_DTr_wrt w,y & u,u',u2,t2 are_DTr_wrt w,y &
+  u,u',v1,w1 are_DTr_wrt w,y & u,u',v2,w2 are_DTr_wrt w,y
+  & u1,u2,v1,v2 are_DTr_wrt w,y implies t1,t2,w1,w2 are_DTr_wrt w,y)
+proof let u,u',u1,u2,v1,v2,t1,t2,w1,w2 be VECTOR of V; assume that
+ A1: Gen w,y and A2: u<>u' and A3: u,u',u1,t1 are_DTr_wrt w,y &
+ u,u',u2,t2 are_DTr_wrt w,y & u,u',v1,w1 are_DTr_wrt w,y &
+ u,u',v2,w2 are_DTr_wrt w,y and A4: u1,u2,v1,v2 are_DTr_wrt w,y;
+A5: t1,t2 // w1,w2 proof u1,u2 // v1,v2 by A4,Def3;
+  hence thesis by A1,A2,A3,Th39; end;
+ set uu=u1#u2,vv=v1#v2;
+A6: u,u',uu,(t1#t2) are_DTr_wrt w,y & u,u',vv,(w1#w2)
+ are_DTr_wrt w,y by A1,A2,A3,Th41;
+    u1,u2,uu,vv are_Ort_wrt w,y by A4,Def3;
+then A7: t1,t2,t1#t2,w1#w2 are_Ort_wrt w,y by A1,A2,A3,A6,Th42;
+     v1,v2,uu,vv are_Ort_wrt w,y by A4,Def3;
+ then w1,w2,t1#t2,w1#w2 are_Ort_wrt w,y by A1,A2,A3,A6,Th42;
+hence t1,t2,w1,w2 are_DTr_wrt w,y by A5,A7,Def3; end;
+
+definition let V; let w,y;
+ func DTrapezium(V,w,y) -> Relation of [:the carrier of V,the carrier of V:]
+ means :Def7:  [x,z] in it iff
+     ex u,u1,v,v1 st x=[u,u1] & z=[v,v1] & u,u1,v,v1 are_DTr_wrt w,y;
+existence proof set VV = [:the carrier of V,the carrier of V:];
+  defpred P[set,set] means ex u,u1,v,v1 st $1=[u,u1] & $2=[v,v1] &
+                     u,u1,v,v1 are_DTr_wrt w,y;
+consider P being Relation of VV,VV such that A1: [x,z] in P iff
+      x in VV & z in VV & P[x,z] from Rel_On_Set_Ex;
+ take P; let x,z; thus [x,z] in P implies ex u,u1,v,v1 st x=[u,u1] & z=[v,v1]
+  & u,u1,v,v1 are_DTr_wrt w,y by A1; assume
+    ex u,u1,v,v1 st x=[u,u1] & z=[v,v1] & u,u1,v,v1 are_DTr_wrt w,y;
+                       hence [x,z] in P by A1; end;
+uniqueness proof let P,Q be Relation of [:the carrier of V,the carrier of V:]
+   such that
+  A2:  [x,z] in P iff
+    ex u,u1,v,v1 st x=[u,u1] & z=[v,v1] & u,u1,v,v1 are_DTr_wrt w,y and
+  A3:  [x,z] in Q iff
+    ex u,u1,v,v1 st x=[u,u1] & z=[v,v1] & u,u1,v,v1 are_DTr_wrt w,y;
+    for x,z holds [x,z] in P iff [x,z] in Q
+  proof let x,z; [x,z] in P iff
+  ex u,u1,v,v1 st x=[u,u1] & z=[v,v1] & u,u1,v,v1 are_DTr_wrt w,y by A2;
+  hence thesis by A3; end; hence thesis by RELAT_1:def 2; end; end;
+
+theorem Th44:  [[u,v],[u1,v1]] in DTrapezium(V,w,y)
+ iff u,v,u1,v1 are_DTr_wrt w,y proof
+   now assume [[u,v],[u1,v1]] in DTrapezium(V,w,y);
+ then consider u',v',u1',v1' being VECTOR of V such that
+ A1: [u,v]=[u',v'] & [u1,v1]=[u1',v1'] and A2: u',v',u1',v1' are_DTr_wrt w,y
+ by Def7; u=u' & v=v' & u1=u1' & v1=v1' by A1,ZFMISC_1:33;
+ hence u,v,u1,v1 are_DTr_wrt w,y by A2; end;
+hence thesis by Def7; end;
+
+definition let V;
+  func MidPoint(V) -> BinOp of the carrier of V means
+ :Def8: for u,v holds it.(u,v) = u#v;
+existence
+proof
+  deffunc F(VECTOR of V,VECTOR of V) = $1#$2;
+  ex B being BinOp of the carrier of V st
+   for u,v holds B.(u,v) = F(u,v) from BinOpLambda;
+  hence thesis;
+end;
+uniqueness
+proof
+  deffunc F(VECTOR of V,VECTOR of V) = $1#$2;
+  for o1,o2 being BinOp of the carrier of V st
+    (for a,b being Element of V holds o1.(a,b) = F(a,b)) &
+    (for a,b being Element of V holds o2.(a,b) = F(a,b))
+  holds o1 = o2 from BinOpDefuniq;
+  hence thesis;
+end;
+end;
+
+definition
+  struct(AffinStruct,MidStr) AfMidStruct (# carrier -> set,
+                    MIDPOINT -> BinOp of the carrier,
+                    CONGR -> Relation of [:the carrier,the carrier:] #);
+end;
+
+definition
+ cluster non empty strict AfMidStruct;
+ existence
+  proof
+   consider D being non empty set, m being BinOp of D,
+            c being Relation of [:D,D:];
+   take AfMidStruct (#D,m,c #);
+   thus the carrier of AfMidStruct (#D,m,c #) is non empty;
+   thus thesis;
+  end;
+end;
+
+definition let V,w,y;
+  func DTrSpace(V,w,y) -> strict AfMidStruct equals :Def9:
+  AfMidStruct(#the carrier of V, MidPoint(V),DTrapezium(V,w,y)#);
+correctness; end;
+
+definition let V,w,y;
+ cluster DTrSpace(V,w,y) -> non empty;
+ coherence
+  proof
+     DTrSpace(V,w,y) =
+    AfMidStruct(#the carrier of V, MidPoint(V),DTrapezium(V,w,y)#) by Def9;
+   hence the carrier of DTrSpace(V,w,y) is non empty;
+  end;
+end;
+
+definition let AMS be AfMidStruct;
+  func Af(AMS) -> strict AffinStruct equals
+ :Def10:  AffinStruct(#the carrier of AMS, the CONGR of AMS#);
+ correctness; end;
+
+definition let AMS be non empty AfMidStruct;
+ cluster Af(AMS) -> non empty;
+ coherence
+  proof
+     Af(AMS) = AffinStruct(#the carrier of AMS, the CONGR of AMS#) by Def10;
+   hence the carrier of Af(AMS) is non empty;
+  end;
+end;
+
+definition
+ let AMS be non empty AfMidStruct, a,b be Element of AMS;
+ canceled;
+
+ func a#b -> Element of AMS equals
+ :Def12:  (the MIDPOINT of AMS).(a,b); correctness; end;
+
+reserve a,b,c,d,a1,a2,b1,c1,d1,d2,p,q
+                       for Element of DTrSpace(V,w,y);
+
+canceled;
+
+theorem Th46: for x being set holds x is Element of the
+ carrier of DTrSpace(V,w,y) iff x is VECTOR of V
+ proof let x be set;
+   (DTrSpace(V,w,y))
+ = AfMidStruct(#the carrier of V, MidPoint(V),DTrapezium(V,w,y)#) by Def9;
+ hence thesis; end;
+
+theorem Th47: Gen w,y & u=a & v=b & u1=a1 & v1=b1 implies
+                   (a,b // a1,b1 iff u,v,u1,v1 are_DTr_wrt w,y)
+ proof assume A1: Gen w,y & u=a & v=b & u1=a1 & v1=b1; A2:
+ DTrSpace(V,w,y) =
+  AfMidStruct(#the carrier of V, MidPoint(V),DTrapezium(V,w,y)#) by Def9;
+  A3: now assume a,b // a1,b1;
+   then [[a,b],[a1,b1]] in DTrapezium(V,w,y) by A2,ANALOAF:def 2;
+   hence u,v,u1,v1 are_DTr_wrt w,y by A1,Th44; end;
+     now assume u,v,u1,v1 are_DTr_wrt w,y;
+   then [[a,b],[a1,b1]] in DTrapezium(V,w,y) by A1,Th44;
+   hence a,b // a1,b1 by A2,ANALOAF:def 2; end;
+hence thesis by A3; end;
+
+theorem Th48: Gen w,y & u=a & v=b implies u#v = a#b
+ proof assume A1: Gen w,y & u=a & v=b;
+  (DTrSpace(V,w,y))=AfMidStruct(#the carrier of V, MidPoint(V),DTrapezium(V,w,y
+)
+  #) by Def9;
+ hence a#b = (MidPoint(V)).(u,v) by A1,Def12 .= u#v by Def8; end;
+
+Lm26: Gen w,y & a,b // b,c implies a=b & b=c
+ proof assume A1: Gen w,y & a,b // b,c; reconsider u=a,v=b,u1=c as
+ VECTOR of V by Th46; u,v,v,u1 are_DTr_wrt w,y by A1,Th47;hence thesis by A1,
+Th20; end;
+
+Lm27: Gen w,y & a,b // a1,b1 & a,b // c1,d1 & a<>b implies a1,b1 // c1,d1
+ proof assume A1: Gen w,y & a,b // a1,b1 & a,b // c1,d1 & a<>b;
+ reconsider u=a,v=b,u1=a1,v1=b1,u2=c1,v2=d1 as VECTOR of V by Th46;
+   u,v,u1,v1 are_DTr_wrt w,y & u,v,u2,v2 are_DTr_wrt w,y & u<>v by A1,Th47;
+ then u1,v1,u2,v2 are_DTr_wrt w,y by A1,Th21; hence thesis by A1,Th47; end;
+
+Lm28: Gen w,y & a,b // c,d implies c,d // a,b & b,a // d,c
+ proof assume A1: Gen w,y & a,b // c,d;
+ reconsider u=a,v=b,u1=c,v1=d as VECTOR of V by Th46;
+   u,v,u1,v1 are_DTr_wrt w,y by A1,Th47; then v,u,v1,u1 are_DTr_wrt w,y &
+ u1,v1,u,v are_DTr_wrt w,y by A1,Th23,Th24; hence thesis by A1,Th47; end;
+
+Lm29: Gen w,y implies ex d st a,b // c,d or a,b // d,c
+ proof assume A1: Gen w,y; reconsider u=a,v=b,u1=c as VECTOR of V by Th46;
+ consider t being VECTOR of V such that
+ A2: u,v,u1,t are_DTr_wrt w,y or u,v,t,u1 are_DTr_wrt w,y by A1,Th22;
+ reconsider d=t as Element of DTrSpace(V,w,y) by Th46;
+   a,b // c,d or a,b // d,c by A1,A2,Th47; hence thesis; end;
+
+Lm30: Gen w,y & a,b // c,d1 & a,b // c,d2 implies a=b or d1=d2
+ proof assume A1: Gen w,y & a,b // c,d1 & a,b // c,d2;
+ reconsider u=a,v=b,u1=c,v1=d1,v2=d2 as VECTOR of V by Th46;
+   u,v,u1,v1 are_DTr_wrt w,y & u,v,u1,v2 are_DTr_wrt w,y by A1,Th47;
+ hence thesis by A1,Th26; end;
+
+Lm31: Gen w,y implies a#b = b#a
+ proof assume A1: Gen w,y; reconsider u=a,v=b as VECTOR of V by Th46;
+ thus a#b = u#v by A1,Th48 .= b#a by A1,Th48; end;
+
+Lm32: Gen w,y implies a#a = a
+ proof assume A1: Gen w,y; reconsider u=a as VECTOR of V by Th46;
+   u#u = u; hence thesis by A1,Th48; end;
+
+Lm33: Gen w,y implies (a#b)#(c#d) = (a#c)#(b#d)
+ proof assume A1: Gen w,y; reconsider u=a,u1=b,v=c,v1=d as VECTOR of V by Th46
+; set ab=a#b,cd=c#d,ac=a#c,bd=b#d,uu1=u#u1,vv1=v#v1,uv=u#v,u1v1=u1#v1;
+ A2: ab=uu1 & cd=vv1 & ac = uv & bd=u1v1 by A1,Th48; hence (ab)#(cd) =
+ (uu1)#(vv1) by A1,Th48 .= (uv)#(u1v1) by Th8 .= (ac)#(bd) by A1,A2,Th48; end;
+
+Lm34: Gen w,y implies ex p st p#a=b
+ proof assume A1: Gen w,y; reconsider u=a,v=b as VECTOR of V by Th46;
+ consider u1 such that A2: u#u1=v by Th7;
+ reconsider p=u1 as Element of DTrSpace(V,w,y) by Th46; p#a= u
+#
+u1 by A1,Th48; hence thesis by A2; end;
+
+Lm35: Gen w,y & a#a1=a#a2 implies a1=a2
+ proof assume A1: Gen w,y & a#a1=a#a2; reconsider u=a,u1=a1,u2=a2 as
+ VECTOR of V by Th46; u#u1=a#a1 & u#u2=a#a2 by A1,Th48;
+ hence thesis by A1,Th9; end;
+
+Lm36: Gen w,y & a,b // c,d implies a,b // (a#c),(b#d)
+ proof assume that A1: Gen w,y and A2: a,b // c,d;
+ reconsider u=a,v=b,u1=c,v1=d as VECTOR of V by Th46;
+ A3: a#c = u#u1 & b#d = v#v1 by A1,Th48; u,v,u1,v1 are_DTr_wrt w,y by A1,A2,
+Th47;
+ then u,v,(u#u1),(v#v1) are_DTr_wrt w,y by A1,Th28;
+ hence thesis by A1,A3,Th47; end;
+
+Lm37: Gen w,y & a,b // c,d implies (a,b // (a#d),(b#c) or a,b // (b#c),(a#d))
+ proof assume that A1: Gen w,y and A2: a,b // c,d;
+ reconsider u=a,v=b,u1=c,v1=d as VECTOR of V by Th46;
+ A3: a#d = u#v1 & b#c = v#u1 by A1,Th48; u,v,u1,v1 are_DTr_wrt w,y by A1,A2,
+Th47;
+ then u,v,(u#v1),(v#u1) are_DTr_wrt w,y or u,v,(v#u1),(u#v1) are_DTr_wrt w,y
+ by A1,Th29; hence thesis by A1,A3,Th47; end;
+
+Lm38: Gen w,y & a,b // c,d & a#a1=p & b#b1=p & c#c1=p & d#d1=p implies
+ a1,b1 // c1,d1
+ proof assume that A1: Gen w,y and A2: a,b // c,d and
+ A3: a#a1=p & b#b1=p & c#c1=p & d#d1=p;
+ reconsider u1=a,u2=b,v1=c,v2=d,u=p,t1=a1,t2=b1,w1=c1,w2=d1 as
+ VECTOR of V by Th46; A4: u1,u2,v1,v2 are_DTr_wrt w,y by A1,A2,Th47;
+   u=u1#t1 & u=u2#t2 & u=v1#w1 & u=v2#w2 by A1,A3,Th48;
+ then t1,t2,w1,w2 are_DTr_wrt w,y by A1,A4,Th30; hence thesis by A1,Th47; end
+;
+
+Lm39: Gen w,y & p<>q & p,q // a,a1 & p,q // b,b1 & p,q // c,c1 & p,q // d,d1 &
+ a,b // c,d implies a1,b1 // c1,d1
+proof assume that A1: Gen w,y and A2: p<>q and
+A3: p,q // a,a1 & p,q // b,b1 & p,q // c,c1 & p,q // d,d1 and A4: a,b // c,d;
+reconsider u=p,u'=q,u1=a,u2=b,v1=c,v2=d,t1=a1,t2=b1,w1=c1,w2=d1 as VECTOR
+of V by Th46
+; u<>u' & u,u',u1,t1 are_DTr_wrt w,y & u,u',u2,t2 are_DTr_wrt w,y
+ & u,u',v1,w1 are_DTr_wrt w,y & u,u',v2,w2 are_DTr_wrt w,y
+ & u1,u2,v1,v2 are_DTr_wrt w,y by A1,A2,A3,A4,Th47;
+ then t1,t2,w1,w2 are_DTr_wrt w,y by A1,Th43; hence thesis by A1,Th47; end;
+
+definition let IT be non empty AfMidStruct;
+ attr IT is MidOrdTrapSpace-like means
+:Def13:
+for a,b,c,d,a1,b1,c1,d1,p,q being Element of IT holds
+  a#b=b#a & a#a=a & (a#b)#(c#d)=(a#c)#(b#d) &
+  (ex p being Element of IT st p#a=b) &
+  (a#b=a#c implies b=c) & (a,b // c,d implies a,b // (a#c),(b#d)) &
+  (a,b // c,d implies (a,b // (a#d),(b#c) or a,b // (b#c),(a#d))) &
+  (a,b // c,d & a#a1=p & b#b1=p & c#c1=p & d#d1=p implies a1,b1 // c1,d1) &
+  (p<>q & p,q // a,a1 & p,q // b,b1 & p,q // c,c1 & p,q // d,d1 &
+   a,b // c,d implies a1,b1 // c1,d1) & (a,b // b,c implies a=b & b=c) &
+  (a,b // a1,b1 & a,b // c1,d1 & a<>b implies a1,b1 // c1,d1) &
+  (a,b // c,d implies c,d // a,b & b,a // d,c) &
+  (ex d being Element of IT st a,b // c,d or a,b // d,c) &
+  (a,b // c,p & a,b // c,q implies a=b or p=q);
+end;
+
+definition
+ cluster strict MidOrdTrapSpace-like (non empty AfMidStruct);
+existence proof consider V such that A1: ex w,y st Gen w,y by ANALMETR:7;
+consider w,y being VECTOR of V such that A2: Gen w,y by A1;
+set X = DTrSpace(V,w,y);
+    for a,b,c,d,a1,b1,c1,d1,p,q being Element of X holds
+  a#b=b#a & a#a=a & (a#b)#(c#d)=(a#c)#(b#d) &
+  (ex p being Element of X st p#a=b) &
+  (a#b=a#c implies b=c) & (a,b // c,d implies a,b // (a#c),(b#d)) &
+  (a,b // c,d implies (a,b // (a#d),(b#c) or a,b // (b#c),(a#d))) &
+  (a,b // c,d & a#a1=p & b#b1=p & c#c1=p & d#d1=p implies a1,b1 // c1,d1) &
+  (p<>q & p,q // a,a1 & p,q // b,b1 & p,q // c,c1 & p,q // d,d1 &
+   a,b // c,d implies a1,b1 // c1,d1) & (a,b // b,c implies a=b & b=c) &
+  (a,b // a1,b1 & a,b // c1,d1 & a<>b implies a1,b1 // c1,d1) &
+  (a,b // c,d implies c,d // a,b & b,a // d,c) &
+  (ex d being Element of X st a,b // c,d or a,b // d,c) &
+  (a,b // c,p & a,b // c,q implies a=b or p=q)
+   by A2,Lm26,Lm27,Lm28,Lm29,Lm30,Lm31,Lm32,Lm33,Lm34,Lm35,Lm36,Lm37,Lm38,Lm39;
+   then X is MidOrdTrapSpace-like by Def13;
+  hence thesis;
+ end;
+end;
+
+definition
+ mode MidOrdTrapSpace is MidOrdTrapSpace-like (non empty AfMidStruct);
+end;
+
+theorem Gen w,y implies DTrSpace(V,w,y) is MidOrdTrapSpace
+proof assume A1: Gen w,y; set X = DTrSpace(V,w,y);
+  for a,b,c,d,a1,b1,c1,d1,p,q being Element of X holds
+  a#b=b#a & a#a=a & (a#b)#(c#d)=(a#c)#(b#d) &
+  (ex p being Element of X st p#a=b) &
+  (a#b=a#c implies b=c) & (a,b // c,d implies a,b // (a#c),(b#d)) &
+  (a,b // c,d implies (a,b // (a#d),(b#c) or a,b // (b#c),(a#d))) &
+  (a,b // c,d & a#a1=p & b#b1=p & c#c1=p & d#d1=p implies a1,b1 // c1,d1) &
+  (p<>q & p,q // a,a1 & p,q // b,b1 & p,q // c,c1 & p,q // d,d1 &
+   a,b // c,d implies a1,b1 // c1,d1) & (a,b // b,c implies a=b & b=c) &
+  (a,b // a1,b1 & a,b // c1,d1 & a<>b implies a1,b1 // c1,d1) &
+  (a,b // c,d implies c,d // a,b & b,a // d,c) &
+  (ex d being Element of X st a,b // c,d or a,b // d,c) &
+  (a,b // c,p & a,b // c,q implies a=b or p=q) by A1,Lm26,Lm27,Lm28,Lm29,Lm30,
+Lm31,Lm32,Lm33,Lm34,Lm35,Lm36,Lm37,Lm38,Lm39; hence thesis by Def13; end;
+ consider MOS being MidOrdTrapSpace; set X=Af(MOS);
+Lm40:now
+let a,b,c,d,a1,b1,c1,d1,p,q be Element of X;
+A1:X = AffinStruct(#the carrier of MOS, the CONGR of MOS#) by Def10;
+A2: now let a,b,c,d be Element of X, a',b',c',d' be Element of
+  the carrier of MOS such that A3: a=a' & b=b' & c =c' & d=d';
+  A4: now assume a,b // c,d;
+   then [[a,b],[c,d]] in the CONGR of MOS by A1,ANALOAF:def 2;
+hence a',b' // c',d' by A3,ANALOAF:def 2; end;
+     now assume a',b' // c',d'; then [[a,b],[c,d]] in the CONGR of MOS by A3,
+ANALOAF:def 2;hence a,b // c,d by A1,ANALOAF:def 2; end;
+ hence a,b // c,d iff a',b' // c',d' by A4; end;
+ reconsider a'=a,b'=b,c'=c,d'=d,a1'=a1,b1'=b1,c1'=c1,d1'=d1,p'=p,q'=q as
+  Element of MOS by A1;
+ A5: now assume a,b // b,c; then a',b' // b',c' by A2;hence a=b & b=c by Def13
+; end;
+ A6: now assume a,b // a1,b1 & a,b // c1,d1 & a<>b; then a',b' // a1',b1' &
+   a',b' // c1',d1' & a'<>b' by A2; then a1',b1' // c1',d1' by Def13;
+   hence a1,b1 // c1,d1 by A2; end;
+ A7: now assume a,b // c,d; then a',b' // c',d' by A2; then c',d' // a',b' &
+   b',a' // d',c' by Def13; hence c,d // a,b & b,a // d,c by A2; end;
+ A8: ex d being Element of X st a,b // c,d or a,b // d,c proof
+   consider x' being Element of MOS such that
+   A9: a',b' // c',x' or a',b' // x',c' by Def13; reconsider x=x' as
+   Element of X by A1; take x; thus thesis by A2,A9; end;
+    now assume a,b // c,p & a,b // c,q; then a',b' // c',p' & a',b' // c',q'
+   by A2; hence a=b or p=q by Def13; end;
+ hence (a,b // b,c implies a=b & b=c) &
+  (a,b // a1,b1 & a,b // c1,d1 & a<>b implies a1,b1 // c1,d1) &
+  (a,b // c,d implies c,d // a,b & b,a // d,c) &
+  (ex d being Element of X st a,b // c,d or a,b // d,c) &
+  (a,b // c,p & a,b // c,q implies a=b or p=q) by A5,A6,A7,A8; end;
+
+definition let IT be non empty AffinStruct;
+ attr IT is OrdTrapSpace-like means :Def14:
+for a,b,c,d,a1,b1,c1,d1,p,q being Element of IT holds
+(a,b // b,c implies a=b & b=c) &
+  (a,b // a1,b1 & a,b // c1,d1 & a<>b implies a1,b1 // c1,d1) &
+  (a,b // c,d implies c,d // a,b & b,a // d,c) &
+  (ex d being Element of IT st a,b // c,d or a,b // d,c) &
+  (a,b // c,p & a,b // c,q implies a=b or p=q);
+end;
+
+definition
+ cluster strict OrdTrapSpace-like (non empty AffinStruct);
+  existence
+   proof
+       X is OrdTrapSpace-like by Def14,Lm40;
+    hence thesis;
+   end;
+end;
+
+definition
+ mode OrdTrapSpace is OrdTrapSpace-like (non empty AffinStruct);
+end;
+
+definition let MOS be MidOrdTrapSpace;
+  cluster Af(MOS) -> OrdTrapSpace-like;
+coherence proof set X=Af(MOS);
+   Af(MOS)is OrdTrapSpace-like
+ proof
+let a,b,c,d,a1,b1,c1,d1,p,q be Element of X;
+A1:X = AffinStruct(#the carrier of MOS, the CONGR of MOS#) by Def10;
+A2: now let a,b,c,d be Element of X, a',b',c',d' be Element of
+  the carrier of MOS such that A3: a=a' & b=b' & c =c' & d=d';
+  A4: now assume a,b // c,d;
+   then [[a,b],[c,d]] in the CONGR of MOS by A1,ANALOAF:def 2;
+   hence a',b' // c',d' by A3,ANALOAF:def 2; end;
+     now assume a',b' // c',d'; then [[a,b],[c,d]] in the CONGR of MOS by A3,
+ANALOAF:def 2;hence a,b // c,d by A1,ANALOAF:def 2; end;
+ hence a,b // c,d iff a',b' // c',d' by A4; end;
+ reconsider a'=a,b'=b,c'=c,d'=d,a1'=a1,b1'=b1,c1'=c1,d1'=d1,p'=p,q'=q as
+  Element of MOS by A1;
+ A5: now assume a,b // b,c; then a',b' // b',c' by A2;hence a=b & b=c by Def13
+; end;
+ A6: now assume a,b // a1,b1 & a,b // c1,d1 & a<>b; then a',b' // a1',b1' &
+   a',b' // c1',d1' & a'<>b' by A2; then a1',b1' // c1',d1' by Def13;
+   hence a1,b1 // c1,d1 by A2; end;
+ A7: now assume a,b // c,d; then a',b' // c',d' by A2; then c',d' // a',b' &
+   b',a' // d',c' by Def13; hence c,d // a,b & b,a // d,c by A2; end;
+ A8: ex d being Element of X st a,b // c,d or a,b // d,c proof
+   consider x' being Element of MOS such that
+   A9: a',b' // c',x' or a',b' // x',c' by Def13; reconsider x=x' as
+   Element of X by A1; take x; thus thesis by A2,A9; end;
+    now assume a,b // c,p & a,b // c,q; then a',b' // c',p' & a',b' // c',q'
+   by A2; hence a=b or p=q by Def13; end;
+hence thesis by A5,A6,A7,A8; end;
+  hence thesis;
+ end;
+end;
+
+reserve OTS for OrdTrapSpace;
+reserve a,b,c,d for Element of OTS;
+reserve a',b',c',d',a1',b1',d1' for Element of Lambda(OTS);
+
+theorem Th50: for x being set holds (x is Element of OTS iff
+  x is Element of Lambda(OTS))
+proof let x be set;
+  Lambda(OTS) = AffinStruct (# the carrier of OTS, lambda(the CONGR of OTS) #)
+by DIRAF:def 2;
+hence thesis; end;
+
+theorem Th51: a=a' & b=b' & c =c' & d=d' implies (a',b' // c',d' iff
+  a,b // c,d or a,b // d,c)
+proof assume A1: a=a' & b=b' & c =c' & d=d'; A2: Lambda(OTS) =
+AffinStruct(#the carrier of OTS,lambda(the CONGR of OTS)#) by DIRAF:def 2;
+A3: now assume a',b' // c',d';
+then [[a',b'],[c',d']] in lambda(the CONGR of OTS) by A2,ANALOAF:def 2;
+ then [[a,b],[c,d]] in the CONGR of OTS or [[a,b],[d,c]] in the CONGR of OTS
+ by A1,DIRAF:def 1; hence a,b // c,d or a,b // d,c by ANALOAF:def 2; end;
+   now assume a,b // c,d or a,b // d,c; then [[a,b],[c,d]] in the CONGR of
+OTS
+or
+ [[a,b],[d,c]] in the CONGR of OTS by ANALOAF:def 2;
+ then [[a,b],[c,d]] in the CONGR of Lambda(OTS) by A2,DIRAF:def 1;
+ hence a',b' // c',d' by A1,ANALOAF:def 2; end; hence thesis by A3; end;
+
+Lm41: for a',b',c' ex d' st a',b' // c',d'
+proof let a',b',c'; reconsider a=a',b=b',c =c' as Element of OTS
+by Th50; consider d such that A1: a,b // c,d or a,b // d,c by Def14;
+reconsider d'=d as Element of Lambda(OTS) by Th50; take d';
+thus a',b' // c',d' by A1,Th51; end;
+
+Lm42: a',b' // c',d' implies c',d' // a',b'
+proof assume A1: a',b' // c',d'; reconsider a=a',b=b',c =c',d=d' as Element of
+the carrier of OTS by Th50;
+A2: now assume a,b // c,d; then c,d // a,b by Def14;
+ hence c',d' // a',b' by Th51; end;
+   now assume a,b // d,c; then b,a // c,d by Def14; then c,d // b,a by Def14
+; hence c',d' // a',b' by Th51; end;
+hence thesis by A1,A2,Th51; end;
+
+Lm43: a1'<>b1' & a1',b1' // a',b' & a1',b1' // c',d' implies a',b' // c',d'
+proof assume that A1: a1'<>b1' and A2: a1',b1' // a',b' & a1',b1' // c',d';
+reconsider a1=a1',b1=b1',a=a',b=b',c =c',d=d' as Element of OTS
+by Th50; (a1,b1 // a,b or a1,b1 // b,a) & (a1,b1 // c,d or a1,b1 // d,c)
+by A2,Th51; then a,b // c,d or a,b // d,c or b,a // c,d or b,a // d,c
+by A1,Def14; then a,b // c,d or a,b // d,c by Def14;
+hence thesis by Th51; end;
+
+Lm44: a',b' // c',d' & a',b' // c',d1' implies a'=b' or d'=d1'
+proof assume A1: a',b' // c',d' & a',b' // c',d1'; assume A2: a'<>b';
+reconsider a=a',b=b',c =c',d=d',d1=d1' as Element of OTS by Th50
+;
+  (a,b // c,d & a,b // c,d1) or (a,b // c,d & a,b // d1,c) or
+ (a,b // d,c & a,b // c,d1) or (a,b // d,c & a,b // d1,c) by A1,Th51;
+then d=d1 or d1,c // c,d or d,c // c,d1 or (b,a // c,d & b,a // c,d1)
+by A2,Def14; then d=d1 or (c =d & c =d1) by A2,Def14;
+hence thesis; end;
+
+Lm45: a,b // a,b
+proof consider c such that A1: a,b // a,c or a,b // c,a by Def14;
+A2: now assume A3: a,b // c,a; then c,a // a,b by Def14; then c =a & a=b
+ by Def14; hence a,b // a,b by A3; end;
+   now assume A4: a,b // a,c;
+ A5: now assume A6: a<>c; a,c // a,b by A4,Def14;
+  hence a,b // a,b by A6,Def14; end;
+    now assume a=c; then a,a // a,b by A4,Def14;
+  hence a,b // a,b by Def14; end;
+ hence a,b // a,b by A5; end; hence thesis by A1,A2; end;
+
+Lm46: a',b' // b',a'
+proof reconsider a=a',b=b' as Element of OTS by Th50;
+  a,b // a,b by Lm45; hence thesis by Th51; end;
+
+definition let IT be non empty AffinStruct;
+ attr IT is TrapSpace-like means
+:Def15: for a',b',c',d',p',q' being Element of IT holds
+  a',b' // b',a' & (a',b' // c',d' & a',b' // c',q' implies a'=b' or d'=q') &
+  (p'<>q' & p',q' // a',b' & p',q' // c',d' implies a',b' // c',d') &
+  (a',b' // c',d' implies c',d' // a',b') &
+   (ex x' being Element of IT st a',b' // c',x');
+end;
+
+definition
+ cluster strict TrapSpace-like (non empty AffinStruct);
+  existence
+   proof consider OTS being OrdTrapSpace; set TS=Lambda(OTS);
+       for a',b',c',d',p',q' being Element of TS holds
+  a',b' // b',a' & (a',b' // c',d' & a',b' // c',q' implies a'=b' or d'=q') &
+  (p'<>q' & p',q' // a',b' & p',q' // c',d' implies a',b' // c',d') &
+  (a',b' // c',d' implies c',d' // a',b') &
+   (ex x' being Element of TS st a',b' // c',x')
+    by Lm41,Lm42,Lm43,Lm44,Lm46;
+     then TS is TrapSpace-like by Def15;
+    hence thesis;
+   end;
+end;
+
+definition
+  mode TrapSpace is TrapSpace-like (non empty AffinStruct);
+end;
+
+definition let OTS be OrdTrapSpace;
+ cluster Lambda(OTS) -> TrapSpace-like;
+correctness proof
+   Lambda(OTS) is TrapSpace-like
+  proof
+  let a',b',c',d',p',q' be Element of Lambda(OTS);
+  thus thesis by Lm41,Lm42,Lm43,Lm44,Lm46; end;
+  hence thesis;
+ end;
+end;
+
+definition let IT be non empty AffinStruct;
+ attr IT is Regular means :Def16:
+ for p,q,a,a1,b,b1,c,c1,d,d1 being Element of IT
+  st p<>q & p,q // a,a1 & p,q // b,b1 &
+   p,q // c,c1 & p,q // d,d1 & a,b // c,d holds a1,b1 // c1,d1;
+end;
+
+definition cluster strict Regular (non empty OrdTrapSpace);
+ existence proof consider MOTS being MidOrdTrapSpace; set X=Af(MOTS);
+A1:X = AffinStruct(#the carrier of MOTS, the CONGR of MOTS#) by Def10;
+A2: now let a,b,c,d be Element of X,
+         a',b',c',d' be Element of
+  the carrier of MOTS such that A3: a=a' & b=b' & c =c' & d=d';
+  A4: now assume a,b // c,d;
+   then [[a,b],[c,d]] in the CONGR of MOTS by A1,ANALOAF:def 2;
+hence a',b' // c',d' by A3,ANALOAF:def 2; end;
+     now assume a',b' // c',d'; then [[a,b],[c,d]] in the CONGR of MOTS by A3,
+ANALOAF:def 2;hence a,b // c,d by A1,ANALOAF:def 2; end;
+ hence a,b // c,d iff a',b' // c',d' by A4; end;
+   now let p,q,a,a1,b,b1,c,c1,d,d1 be Element of X such that
+  A5: p<>q & p,q // a,a1 & p,q // b,b1 & p,q // c,c1 & p,q // d,d1 &
+  a,b // c,d;
+ reconsider a'=a,b'=b,c'=c,d'=d,a1'=a1,b1'=b1,c1'=c1,d1'=d1,p'=p,q'=q as
+  Element of MOTS by A1;
+     p'<>q' & p',q' // a',a1' & p',q' // b',b1' & p',q' // c',c1' &
+   p',q' // d',d1' & a',b' // c',d' by A2,A5; then a1',b1' // c1',d1'
+   by Def13; hence a1,b1 // c1,d1 by A2; end;
+   then X is Regular by Def16;
+  hence thesis;
+ end;
+end;
+
+definition let MOS be MidOrdTrapSpace;
+ cluster Af(MOS) -> Regular;
+correctness proof set X=Af(MOS);
+  now let p,q,a,a1,b,b1,c,c1,d,d1 be Element of X;
+assume A1: p<>q & p,q // a,a1 & p,q // b,b1 & p,q // c,c1 & p,q // d,d1 &
+ a,b // c,d;
+A2:X = AffinStruct(#the carrier of MOS, the CONGR of MOS#) by Def10;
+A3: now let a,b,c,d be Element of X, a',b',c',d' be Element of
+  the carrier of MOS such that A4: a=a' & b=b' & c =c' & d=d';
+  A5: now assume a,b // c,d;
+   then [[a,b],[c,d]] in the CONGR of MOS by A2,ANALOAF:def 2;
+hence a',b' // c',d' by A4,ANALOAF:def 2; end;
+     now assume a',b' // c',d'; then [[a,b],[c,d]] in the CONGR of MOS by A4,
+ANALOAF:def 2;hence a,b // c,d by A2,ANALOAF:def 2; end;
+ hence a,b // c,d iff a',b' // c',d' by A5; end;
+ reconsider a'=a,b'=b,c'=c,d'=d,a1'=a1,b1'=b1,c1'=c1,d1'=d1,p'=p,q'=q as
+  Element of MOS by A2;
+   p'<>q' & p',q' // a',a1' & p',q' // b',b1' & p',q' // c',c1' &
+ p',q' // d',d1' &
+ a',b' // c',d' by A1,A3; then a1',b1' // c1',d1' by Def13;
+ hence a1,b1 // c1,d1 by A3; end;
+  hence thesis by Def16;
+ end; end;

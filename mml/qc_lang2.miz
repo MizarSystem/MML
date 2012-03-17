@@ -1,0 +1,1728 @@
+:: Connectives and Subformulae of the First Order Language
+::  by Grzegorz Bancerek
+::
+:: Received November 23, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, QC_LANG1, ZF_LANG, FUNCT_1, MCART_1, RELAT_1, ARYTM_1,
+      BOOLE, QC_LANG2;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, XCMPLX_0, XREAL_0, RELAT_1,
+      FUNCT_1, NAT_1, FINSEQ_1, MCART_1, QC_LANG1;
+ constructors ENUMSET1, NAT_1, QC_LANG1, XREAL_0, XBOOLE_0;
+ clusters RELSET_1, FINSEQ_1, XREAL_0, ARYTM_3, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, QC_LANG1, XBOOLE_0;
+ theorems AXIOMS, TARSKI, ENUMSET1, REAL_1, NAT_1, FUNCT_1, FINSEQ_1, QC_LANG1,
+      XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1;
+ schemes NAT_1, XBOOLE_0;
+
+begin
+
+ reserve sq for FinSequence,
+         x,y,z for bound_QC-variable,
+         p,q,p1,p2,q1 for Element of QC-WFF;
+
+theorem
+ Th1: 'not' p = 'not' q implies p = q
+  proof assume
+A1:  'not' p = 'not' q;
+      'not' p = <*[1,0]*>^@p & 'not' q = <*[1,0]*>^@q & p = @p & q = @q
+     by QC_LANG1:def 12,def 14;
+   hence thesis by A1,FINSEQ_1:46;
+  end;
+
+theorem
+ Th2: the_argument_of 'not' p = p
+  proof
+      'not' p is negative by QC_LANG1:def 18;
+   hence thesis by QC_LANG1:def 23;
+  end;
+
+theorem
+ Th3: p '&' q = p1 '&' q1 implies p = p1 & q = q1
+  proof assume
+A1:  p '&' q = p1 '&' q1;
+A2: p = @p & p1 = @p1 & q = @q & q1 = @q1 by QC_LANG1:def 12;
+A3:    p '&' q = <*[2,0]*>^@p^@q & p1 '&' q1 = <*[2,0]*>^@p1^@q1 &
+     <*[2,0]*>^@p^@q = <*[2,0]*>^(@p^@q) &
+      <*[2,0]*>^@p1^@q1 = <*[2,0]*>^(@p1^@q1) by FINSEQ_1:45,QC_LANG1:def 15
+;
+  then @p^@q = @p1^@q1 by A1,FINSEQ_1:46;
+then A4:  (len @p <= len @p1 or len @p1 <= len @p) &
+     (len @p1 <= len @p implies ex sq st @p = @p1^sq) &
+      (len @p <= len @p1 implies ex sq st @p1 = @p^sq) by FINSEQ_1:64;
+A5:  (ex sq st @p1 = @p^sq) implies p1 = p by A2,QC_LANG1:37;
+   thus p = p1 by A2,A4,QC_LANG1:37;
+   thus q = q1 by A1,A2,A3,A4,A5,FINSEQ_1:46,QC_LANG1:37;
+  end;
+
+theorem
+ Th4: p is conjunctive implies
+   p = (the_left_argument_of p) '&' the_right_argument_of p
+  proof given p1,q1 such that
+A1:  p = p1 '&' q1;
+      p is conjunctive & (ex q st p = p1 '&' q) & (ex q st p = q '&'q1)
+     by A1,QC_LANG1:def 19;
+    then p1 = the_left_argument_of p & q1 = the_right_argument_of p
+      by QC_LANG1:def 24,def 25;
+   hence thesis by A1;
+  end;
+
+theorem Th5:
+ the_left_argument_of (p '&' q) = p & the_right_argument_of (p '&' q) = q
+  proof
+      p '&' q is conjunctive by QC_LANG1:def 19;
+   hence thesis by QC_LANG1:def 24,def 25;
+  end;
+
+theorem
+ Th6: All(x,p) = All(y,q) implies x = y & p = q
+  proof assume
+A1:  All(x,p) = All(y,q);
+A2:  All(x,p) = <*[3,0]*>^<*x*>^@p & All(y,q) = <*[3,0]*>^<*y*>^@q
+      by QC_LANG1:def 16;
+A3:    <*[3,0]*>^<*x*>^@p = <*[3,0]*>^(<*x*>^@p) &
+     <*[3,0]*>^<*y*>^@q = <*[3,0]*>^(<*y*>^@q) by FINSEQ_1:45;
+then A4:  <*x*>^@p = <*y*>^@q by A1,A2,FINSEQ_1:46;
+A5:  @p = p & @q = q by QC_LANG1:def 12;
+A6:    (<*x*>^@p).1 = x & (<*y*>^@q).1 = y by FINSEQ_1:58;
+   hence x = y by A1,A2,A3,FINSEQ_1:46;
+   thus p = q by A4,A5,A6,FINSEQ_1:46;
+  end;
+
+theorem
+ Th7: p is universal implies p = All(bound_in p, the_scope_of p)
+  proof given x,q such that
+A1:  p = All(x,q);
+
+      p is universal & (ex q st p = All(x,q)) & (ex x st p = All(x,q))
+     by A1,QC_LANG1:def 20;
+    then x = bound_in p & q = the_scope_of p by QC_LANG1:def 26,def 27;
+   hence thesis by A1;
+  end;
+
+theorem
+ Th8: bound_in All(x,p) = x & the_scope_of All(x,p) = p
+  proof
+      All(x,p) is universal by QC_LANG1:def 20;
+    then All(x,p) = All(bound_in All(x,p), the_scope_of All(x,p)) by Th7;
+   hence thesis by Th6;
+  end;
+
+ definition
+  func FALSUM -> QC-formula equals:
+Def1:  'not' VERUM;
+   correctness;
+  let p,q be Element of QC-WFF;
+  func p => q -> QC-formula equals:
+Def2:  'not' (p '&' 'not' q);
+   correctness;
+  func p 'or' q -> QC-formula equals:
+Def3:  'not' ('not' p '&' 'not' q);
+   correctness;
+ end;
+
+ definition let p,q be Element of QC-WFF;
+  func p <=> q -> QC-formula equals:
+Def4:  (p => q) '&' (q => p);
+   correctness;
+ end;
+
+ definition let x be bound_QC-variable, p be Element of QC-WFF;
+  func Ex(x,p) -> QC-formula equals:
+Def5:  'not' All(x,'not' p);
+   correctness;
+ end;
+
+canceled 4;
+
+theorem
+   FALSUM is negative & the_argument_of FALSUM = VERUM
+ by Def1,Th2,QC_LANG1:def 18;
+
+theorem
+ Th14: p 'or' q = 'not' p => q
+  proof
+      'not' p => q = 'not' ('not' p '&' 'not' q) by Def2;
+   hence thesis by Def3;
+  end;
+
+canceled;
+
+theorem
+    p 'or' q = p1 'or' q1 implies p = p1 & q = q1
+  proof assume
+A1:  p 'or' q = p1 'or' q1;
+      p 'or' q = 'not'('not' p '&' 'not' q) & p1 'or' q1 = 'not'('not' p1 '&'
+'not' q1) by Def3;
+    then 'not' p '&' 'not' q = 'not' p1 '&' 'not' q1 by A1,Th1;
+    then 'not' p = 'not' p1 & 'not' q = 'not' q1 by Th3;
+   hence thesis by Th1;
+  end;
+
+theorem
+ Th17: p => q = p1 => q1 implies p = p1 & q = q1
+  proof assume
+A1:  p => q = p1 => q1;
+      p => q = 'not' (p '&' 'not' q) & p1 => q1 = 'not' (p1 '&' 'not'
+ q1) by Def2;
+then A2:  p '&' 'not' q = p1 '&' 'not' q1 by A1,Th1;
+   hence p = p1 by Th3;
+      'not' q = 'not' q1 by A2,Th3;
+   hence thesis by Th1;
+  end;
+
+theorem
+    p <=> q = p1 <=> q1 implies p = p1 & q = q1
+  proof assume
+A1:  p <=> q = p1 <=> q1;
+      p <=> q = (p => q) '&' (q => p) &
+     p1 <=> q1 = (p1 => q1) '&' (q1 => p1) by Def4;
+    then p => q = p1 => q1 by A1,Th3;
+   hence thesis by Th17;
+  end;
+
+theorem
+ Th19: Ex(x,p) = Ex(y,q) implies x = y & p = q
+  proof assume
+A1:  Ex(x,p) = Ex(y,q);
+      Ex(x,p) = 'not' All(x,'not' p) & Ex(y,q) = 'not' All(y,'not'
+ q) by Def5;
+    then All(x,'not' p) = All(y,'not' q) by A1,Th1;
+    then x = y & 'not' p = 'not' q by Th6;
+   hence thesis by Th1;
+  end;
+
+ definition let x,y be bound_QC-variable, p be Element of QC-WFF;
+  func All(x,y,p) -> QC-formula equals:
+Def6:  All(x,All(y,p));
+   correctness;
+  func Ex(x,y,p) -> QC-formula equals:
+Def7:  Ex(x,Ex(y,p));
+   correctness;
+ end;
+
+theorem
+   All(x,y,p) = All(x,All(y,p)) & Ex(x,y,p) = Ex(x,Ex(y,p)) by Def6,Def7;
+
+theorem
+ Th21: for x1,x2,y1,y2 being bound_QC-variable st
+   All(x1,y1,p1) = All(x2,y2,p2) holds x1 = x2 & y1 = y2 & p1 = p2
+  proof let x1,x2,y1,y2 be bound_QC-variable such that
+A1:  All(x1,y1,p1) = All(x2,y2,p2);
+      All(x1,y1,p1) = All(x1,All(y1,p1)) by Def6;
+then A2:  All(x1,All(y1,p1)) = All(x2,All(y2,p2)) by A1,Def6;
+   hence x1 = x2 by Th6;
+      All(y1,p1) = All(y2,p2) by A2,Th6;
+   hence thesis by Th6;
+  end;
+
+theorem
+ Th22: All(x,y,p) = All(z,q) implies x = z & All(y,p) = q
+  proof
+      All(x,y,p) = All(x,All(y,p)) by Def6;
+   hence thesis by Th6;
+  end;
+
+theorem
+ Th23: for x1,x2,y1,y2 being bound_QC-variable st
+   Ex(x1,y1,p1) = Ex(x2,y2,p2) holds x1 = x2 & y1 = y2 & p1 = p2
+  proof let x1,x2,y1,y2 be bound_QC-variable such that
+A1:  Ex(x1,y1,p1) = Ex(x2,y2,p2);
+      Ex(x1,y1,p1) = Ex(x1,Ex(y1,p1)) by Def7;
+then A2:  Ex(x1,Ex(y1,p1)) = Ex(x2,Ex(y2,p2)) by A1,Def7;
+   hence x1 = x2 by Th19;
+      Ex(y1,p1) = Ex(y2,p2) by A2,Th19;
+   hence thesis by Th19;
+  end;
+
+theorem
+ Th24: Ex(x,y,p) = Ex(z,q) implies x = z & Ex(y,p) = q
+  proof
+      Ex(x,y,p) = Ex(x,Ex(y,p)) by Def7;
+   hence thesis by Th19;
+  end;
+
+theorem
+   All(x,y,p) is universal &
+   bound_in All(x,y,p) = x & the_scope_of All(x,y,p) = All(y,p)
+  proof
+      All(x,y,p) = All(x,All(y,p)) by Def6;
+   hence thesis by Th8,QC_LANG1:def 20;
+  end;
+
+ definition let x,y,z be bound_QC-variable, p be Element of QC-WFF;
+  func All(x,y,z,p) -> QC-formula equals:
+Def8:  All(x,All(y,z,p));
+   correctness;
+  func Ex(x,y,z,p) -> QC-formula equals:
+Def9:  Ex(x,Ex(y,z,p));
+   correctness;
+ end;
+
+theorem
+   All(x,y,z,p) = All(x,All(y,z,p)) & Ex(x,y,z,p) = Ex(x,Ex(y,z,p)) by Def8,
+Def9
+;
+
+theorem
+   for x1,x2,y1,y2,z1,z2 being bound_QC-variable st
+   All(x1,y1,z1,p1) = All(x2,y2,z2,p2) holds
+    x1 = x2 & y1 = y2 & z1 = z2 & p1 = p2
+  proof let x1,x2,y1,y2,z1,z2 be bound_QC-variable such that
+A1:  All(x1,y1,z1,p1) = All(x2,y2,z2,p2);
+A2:  All(x1,All(y1,z1,p1)) = All(x1,y1,z1,p1) by Def8
+                         .= All(x2,All(y2,z2,p2)) by A1,Def8;
+   hence x1 = x2 by Th6;
+      All(y1,z1,p1) = All(y2,z2,p2) by A2,Th6;
+   hence thesis by Th21;
+  end;
+
+ reserve s,t for bound_QC-variable;
+
+theorem
+   All(x,y,z,p) = All(t,q) implies x = t & All(y,z,p) = q
+  proof
+      All(x,y,z,p) = All(x,All(y,z,p)) by Def8;
+   hence thesis by Th6;
+  end;
+
+theorem
+   All(x,y,z,p) = All(t,s,q) implies x = t & y = s & All(z,p) = q
+  proof
+A1:  All(x,y,z,p) = All(x,All(y,z,p)) & All(t,s,q) = All(t,All(s,q)) by Def6,
+Def8;
+   assume
+A2:  All(x,y,z,p) = All(t,s,q);
+   hence x = t by A1,Th6;
+      All(y,z,p) = All(s,q) by A1,A2,Th6;
+   hence thesis by Th22;
+  end;
+
+theorem
+   for x1,x2,y1,y2,z1,z2 being bound_QC-variable st
+   Ex(x1,y1,z1,p1) = Ex(x2,y2,z2,p2) holds
+    x1 = x2 & y1 = y2 & z1 = z2 & p1 = p2
+  proof let x1,x2,y1,y2,z1,z2 be bound_QC-variable such that
+A1:  Ex(x1,y1,z1,p1) = Ex(x2,y2,z2,p2);
+A2:  Ex(x1,Ex(y1,z1,p1)) = Ex(x1,y1,z1,p1) by Def9
+                       .= Ex(x2,Ex(y2,z2,p2)) by A1,Def9;
+   hence x1 = x2 by Th19;
+      Ex(y1,z1,p1) = Ex(y2,z2,p2) by A2,Th19;
+   hence thesis by Th23;
+  end;
+
+theorem
+   Ex(x,y,z,p) = Ex(t,q) implies x = t & Ex(y,z,p) = q
+  proof
+      Ex(x,y,z,p) = Ex(x,Ex(y,z,p)) by Def9;
+   hence thesis by Th19;
+  end;
+
+theorem
+   Ex(x,y,z,p) = Ex(t,s,q) implies x = t & y = s & Ex(z,p) = q
+  proof
+A1:  Ex(x,y,z,p) = Ex(x,Ex(y,z,p)) & Ex(t,s,q) = Ex(t,Ex(s,q)) by Def7,Def9;
+   assume
+A2:  Ex(x,y,z,p) = Ex(t,s,q);
+   hence x = t by A1,Th19;
+      Ex(y,z,p) = Ex(s,q) by A1,A2,Th19;
+   hence thesis by Th24;
+  end;
+
+theorem
+   All(x,y,z,p) is universal &
+   bound_in All(x,y,z,p) = x & the_scope_of All(x,y,z,p) = All(y,z,p)
+  proof
+      All(x,y,z,p) = All(x,All(y,z,p)) by Def8;
+   hence thesis by Th8,QC_LANG1:def 20;
+  end;
+
+ definition let H be Element of QC-WFF;
+  attr H is disjunctive
+ means ex p,q being Element of QC-WFF st H = p 'or' q;
+  attr H is conditional means:
+Def11:  ex p,q being Element of QC-WFF st H = p => q;
+  attr H is biconditional
+ means ex p,q being Element of QC-WFF st H = p <=> q;
+  attr H is existential means:
+Def13:  ex x being bound_QC-variable, p being Element of QC-WFF st H = Ex(x,p);
+ end;
+
+canceled 4;
+
+theorem
+   Ex(x,y,p) is existential & Ex(x,y,z,p) is existential
+  proof
+      Ex(x,y,p) = Ex(x,Ex(y,p)) & Ex(x,y,z,p) = Ex(x,Ex(y,z,p)) by Def7,Def9;
+   hence thesis by Def13;
+  end;
+
+ definition let H be Element of QC-WFF;
+  func the_left_disjunct_of H -> QC-formula equals:
+Def14:  the_argument_of the_left_argument_of the_argument_of H;
+   correctness;
+  func the_right_disjunct_of H -> QC-formula equals:
+Def15:  the_argument_of the_right_argument_of the_argument_of H;
+   correctness;
+   synonym the_consequent_of H;
+  func the_antecedent_of H -> QC-formula equals:
+Def16:  the_left_argument_of the_argument_of H;
+   correctness;
+ end;
+
+ definition let H be Element of QC-WFF;
+ canceled;
+
+  func the_left_side_of H -> QC-formula equals:
+Def18:  the_antecedent_of the_left_argument_of H;
+   correctness;
+  func the_right_side_of H -> QC-formula equals:
+Def19:  the_consequent_of the_left_argument_of H;
+   correctness;
+ end;
+
+ reserve F,G,H,H1 for Element of QC-WFF;
+
+canceled 6;
+
+theorem Th45:
+ the_left_disjunct_of(F 'or' G) = F & the_right_disjunct_of(F 'or' G) = G &
+   the_argument_of F 'or' G = 'not' F '&' 'not' G
+  proof
+A1:  F 'or' G = 'not'('not' F '&' 'not' G) by Def3;
+   hence the_left_disjunct_of(F 'or' G)
+     = the_argument_of the_left_argument_of the_argument_of
+     'not'('not' F '&' 'not' G)
+      by Def14
+    .= the_argument_of the_left_argument_of ('not' F '&' 'not' G) by Th2
+    .= the_argument_of 'not' F by Th5
+    .= F by Th2;
+   thus the_right_disjunct_of(F 'or' G)
+     = the_argument_of the_right_argument_of the_argument_of
+     'not'('not' F '&' 'not' G)
+      by A1,Def15
+    .= the_argument_of the_right_argument_of ('not' F '&' 'not' G) by Th2
+    .= the_argument_of 'not' G by Th5
+    .= G by Th2;
+   thus thesis by A1,Th2;
+  end;
+
+theorem
+ Th46: the_antecedent_of(F => G) = F & the_consequent_of(F => G) = G &
+   the_argument_of F => G = F '&' 'not' G
+  proof
+A1:  F => G = 'not'(F '&' 'not' G) by Def2;
+   hence the_antecedent_of(F => G)
+     = the_left_argument_of the_argument_of 'not'(F '&' 'not' G) by Def16
+    .= the_left_argument_of (F '&' 'not' G) by Th2
+    .= F by Th5;
+   thus the_consequent_of(F => G)
+     = the_argument_of the_right_argument_of the_argument_of 'not'(F '&' 'not'
+G)
+      by A1,Def15
+    .= the_argument_of the_right_argument_of (F '&' 'not' G) by Th2
+    .= the_argument_of 'not' G by Th5
+    .= G by Th2;
+   thus thesis by A1,Th2;
+  end;
+
+theorem
+ Th47: the_left_side_of(F <=> G) = F & the_right_side_of(F <=> G) = G &
+   the_left_argument_of(F <=> G) = F => G &
+    the_right_argument_of(F <=> G) = G => F
+  proof
+      the_antecedent_of(F => G) = F & the_consequent_of(F => G) = G &
+     the_left_argument_of (F => G) '&' (G => F) = F => G &
+      the_right_argument_of (F => G) '&' (G => F) = G => F &
+       F <=> G = (F => G) '&' (G => F) by Def4,Th5,Th46;
+   hence thesis by Def18,Def19;
+  end;
+
+theorem
+   the_argument_of Ex(x,H) = All(x,'not' H)
+  proof Ex(x,H) = 'not' All(x,'not' H) by Def5;
+   hence thesis by Th2;
+  end;
+
+theorem
+   H is disjunctive implies H is conditional &
+  H is negative & the_argument_of H is conjunctive &
+   the_left_argument_of the_argument_of H is negative &
+    the_right_argument_of the_argument_of H is negative
+  proof given F,G such that
+A1:  H = F 'or' G;
+      F 'or' G = 'not' F => G by Th14;
+   hence H is conditional by A1,Def11;
+A2:  F 'or' G = 'not'('not' F '&' 'not' G) by Def3;
+   hence H is negative by A1,QC_LANG1:def 18;
+A3:  the_argument_of H = 'not' F '&' 'not' G by A1,A2,Th2;
+   hence the_argument_of H is conjunctive by QC_LANG1:def 19;
+      the_left_argument_of the_argument_of H = 'not' F &
+     the_right_argument_of the_argument_of H = 'not' G by A3,Th5;
+   hence thesis by QC_LANG1:def 18;
+  end;
+
+theorem
+   H is conditional implies
+  H is negative & the_argument_of H is conjunctive &
+   the_right_argument_of the_argument_of H is negative
+  proof given F,G such that
+A1:  H = F => G;
+      H = 'not'(F '&' 'not' G) &
+     the_argument_of 'not'(F '&' 'not' G) = F '&' 'not' G &
+      the_right_argument_of (F '&' 'not' G) = 'not' G by A1,Def2,Th2,Th5;
+   hence thesis by QC_LANG1:def 18,def 19;
+  end;
+
+theorem
+   H is biconditional implies
+  H is conjunctive & the_left_argument_of H is conditional &
+   the_right_argument_of H is conditional
+  proof given F,G such that
+A1:  H = F <=> G;
+      H = (F => G) '&' (G => F) &
+     the_left_argument_of (F => G) '&' (G => F) = F => G &
+      the_right_argument_of (F => G) '&' (G => F) = G => F by A1,Def4,Th5;
+   hence thesis by Def11,QC_LANG1:def 19;
+  end;
+
+theorem
+   H is existential implies H is negative & the_argument_of H is universal &
+   the_scope_of the_argument_of H is negative
+  proof given x,H1 such that
+A1:  H = Ex(x,H1);
+      H = 'not' All(x,'not' H1) & the_argument_of 'not'
+    All(x,'not' H1) = All(x,'not' H1) &
+     the_scope_of All(x,'not' H1) = 'not' H1 by A1,Def5,Th2,Th8;
+   hence thesis by QC_LANG1:def 18,def 20;
+  end;
+
+theorem
+   H is disjunctive implies
+   H = (the_left_disjunct_of H) 'or' (the_right_disjunct_of H)
+  proof given F,G such that
+A1:  H = F 'or' G;
+      the_left_disjunct_of H = F & the_right_disjunct_of H = G by A1,Th45;
+   hence thesis by A1;
+  end;
+
+theorem
+   H is conditional implies
+   H = (the_antecedent_of H) => (the_consequent_of H)
+  proof given F,G such that
+A1:  H = F => G;
+      the_antecedent_of H = F & the_consequent_of H = G by A1,Th46;
+   hence thesis by A1;
+  end;
+
+theorem
+   H is biconditional implies
+   H = (the_left_side_of H) <=> (the_right_side_of H)
+  proof given F,G such that
+A1:  H = F <=> G;
+      the_left_side_of H = F & the_right_side_of H = G by A1,Th47;
+   hence thesis by A1;
+  end;
+
+theorem
+   H is existential implies
+  H = Ex(bound_in the_argument_of H,
+         the_argument_of the_scope_of the_argument_of H)
+  proof given x,H1 such that
+A1:  H = Ex(x,H1);
+      H = 'not' All(x,'not' H1) & the_argument_of 'not' All(x,'not' H1) =
+    All(x,'not' H1) &
+     the_scope_of All(x,'not' H1) = 'not' H1 & the_argument_of 'not' H1 = H1 &
+      bound_in All(x,'not' H1) = x by A1,Def5,Th2,Th8;
+   hence thesis by A1;
+  end;
+
+::
+::  Immediate constituents of QC-formulae
+::
+
+ definition let G,H be Element of QC-WFF;
+  pred G is_immediate_constituent_of H means:
+Def20:  H = 'not' G or
+   (ex F being Element of QC-WFF st H = G '&' F or H = F '&' G) or
+    ex x being bound_QC-variable st H = All(x,G);
+ end;
+
+ reserve x,y,z for bound_QC-variable,
+         k,n,m for Nat,
+         P for (QC-pred_symbol of k),
+         V for QC-variable_list of k;
+
+canceled;
+
+theorem
+ Th58: not H is_immediate_constituent_of VERUM
+  proof assume A1: not thesis;
+      'not' H is negative by QC_LANG1:def 18;
+then A2:  (@VERUM.1)`1 = 0 & (@('not' H).1)`1 = 1 by QC_LANG1:49;
+      now given H1 being Element of QC-WFF such that
+A3:    VERUM = H '&' H1 or VERUM = H1 '&' H;
+        H '&' H1 is conjunctive & H1 '&' H is conjunctive by QC_LANG1:def 19
+; hence contradiction by A3,QC_LANG1:49;
+    end;
+   then consider z such that
+A4:  VERUM = All(z,H) by A1,A2,Def20;
+      All(z,H) is universal by QC_LANG1:def 20; hence contradiction by A4,
+QC_LANG1:49;
+  end;
+
+theorem
+ Th59: not H is_immediate_constituent_of P!V
+  proof assume A1: not thesis;
+      P!V is atomic & 'not'
+ H is negative by QC_LANG1:def 17,def 18;
+then A2:  (@(P!V).1)`1 <> 0 & (@(P!V).1)`1 <> 1 & (@(P!V).1)`1 <> 2 &
+     (@(P!V).1)`1 <> 3 & (@('not' H).1)`1 = 1 by QC_LANG1:49,50;
+      now given H1 being Element of QC-WFF such that
+A3:    P!V = H '&' H1 or P!V = H1 '&' H;
+        H '&' H1 is conjunctive & H1 '&' H is conjunctive by QC_LANG1:def 19
+;
+     hence contradiction by A2,A3,QC_LANG1:49;
+    end;
+   then consider z such that
+A4:  P!V = All(z,H) by A1,A2,Def20;
+      All(z,H) is universal by QC_LANG1:def 20;
+   hence contradiction by A2,A4,QC_LANG1:49;
+  end;
+
+theorem
+ Th60: F is_immediate_constituent_of 'not' H iff F = H
+  proof
+   thus F is_immediate_constituent_of 'not' H implies F = H
+     proof assume
+A1:     'not' H = 'not' F or ( ex H1 st 'not' H = F '&' H1 or 'not'
+ H = H1 '&' F ) or
+        ex x st 'not' H = All(x,F);
+         'not' H is negative by QC_LANG1:def 18;
+then A2:    (@('not' H).1)`1 = 1 by QC_LANG1:49;
+A3:     now given H1 such that
+A4:      'not' H = F '&' H1 or 'not' H = H1 '&' F;
+           F '&' H1 is conjunctive & H1 '&' F is conjunctive by QC_LANG1:def 19
+; hence contradiction by A2,A4,QC_LANG1:49;
+       end;
+         now given x such that
+A5:      'not' H = All(x,F);
+           All(x,F) is universal by QC_LANG1:def 20;
+hence contradiction by A2,A5,QC_LANG1:49;
+       end;
+      hence thesis by A1,A3,Th1;
+     end;
+   thus thesis by Def20;
+  end;
+
+theorem
+    H is_immediate_constituent_of FALSUM iff H = VERUM by Def1,Th60;
+
+theorem
+ Th62: F is_immediate_constituent_of G '&' H iff F = G or F = H
+  proof
+   thus F is_immediate_constituent_of G '&' H implies F = G or F = H
+     proof assume
+A1:     G '&' H = 'not'
+ F or (ex H1 st G '&' H = F '&' H1 or G '&' H = H1 '&' F) or
+        ex x st G '&' H = All(x,F);
+         G '&' H is conjunctive by QC_LANG1:def 19;
+then A2:    (@(G '&' H).1)`1 = 2 by QC_LANG1:49;
+A3:     now assume
+A4:      G '&' H = 'not' F;
+           'not' F is negative by QC_LANG1:def 18; hence contradiction by A2,A4
+,QC_LANG1:49;
+       end;
+         now given x such that
+A5:      G '&' H = All(x,F);
+           All(x,F) is universal by QC_LANG1:def 20;
+hence contradiction by A2,A5,QC_LANG1:49;
+       end;
+      hence thesis by A1,A3,Th3;
+     end;
+   assume F = G or F = H;
+   hence thesis by Def20;
+  end;
+
+theorem
+ Th63: F is_immediate_constituent_of All(x,H) iff F = H
+  proof
+   thus F is_immediate_constituent_of All(x,H) implies F = H
+     proof assume
+A1:     All(x,H) = 'not' F or
+        (ex H1 st All(x,H) = F '&' H1 or All(x,H) = H1 '&' F) or
+         ex y st All(x,H) = All(y,F);
+         All(x,H) is universal by QC_LANG1:def 20;
+then A2:    (@All(x,H).1)`1 = 3 by QC_LANG1:49;
+A3:     now assume
+A4:      All(x,H) = 'not' F;
+           'not' F is negative by QC_LANG1:def 18; hence contradiction by A2,A4
+,QC_LANG1:49;
+       end;
+         now given G such that
+A5:      All(x,H) = F '&' G or All(x,H) = G '&' F;
+           F '&' G is conjunctive & G '&' F is conjunctive by QC_LANG1:def 19
+; hence contradiction by A2,A5,QC_LANG1:49;
+       end;
+      hence thesis by A1,A3,Th6;
+     end;
+   thus thesis by Def20;
+  end;
+
+theorem
+ Th64: H is atomic implies not F is_immediate_constituent_of H
+  proof assume ex k,P,V st H = P!V;
+   hence thesis by Th59;
+  end;
+
+theorem
+ Th65: H is negative implies
+   (F is_immediate_constituent_of H iff F = the_argument_of H)
+  proof assume H is negative;
+    then H = 'not' the_argument_of H by QC_LANG1:def 23;
+   hence thesis by Th60;
+  end;
+
+theorem
+ Th66: H is conjunctive implies
+  (F is_immediate_constituent_of H iff
+   F = the_left_argument_of H or F = the_right_argument_of H)
+  proof assume H is conjunctive;
+    then H = (the_left_argument_of H)'&' the_right_argument_of H by Th4;
+   hence thesis by Th62;
+  end;
+
+theorem
+ Th67: H is universal implies
+   (F is_immediate_constituent_of H iff F = the_scope_of H)
+  proof assume H is universal;
+    then H = All(bound_in H, the_scope_of H) by Th7;
+   hence thesis by Th63;
+  end;
+
+
+::
+:: Subformulae of QC-formulae
+::
+
+ reserve L,L' for FinSequence;
+
+
+ definition let G,H;
+  pred G is_subformula_of H means:
+Def21:  ex n,L st 1 <= n & len L = n & L.1 = G & L.n = H &
+    for k st 1 <= k & k < n
+     ex G1,H1 being Element of QC-WFF st L.k = G1 & L.(k+1) = H1 &
+      G1 is_immediate_constituent_of H1;
+  reflexivity
+  proof let H;
+   reconsider L = <*H*> as FinSequence;
+   take 1 , L;
+   thus 1 <= 1 & len L = 1 & L.1 = H & L.1 = H by FINSEQ_1:57;
+   let k; assume 1 <= k & k < 1;
+   hence thesis;
+  end;
+ end;
+
+ definition let H,F;
+  pred H is_proper_subformula_of F means:
+Def22:  H is_subformula_of F & H <> F;
+  irreflexivity;
+ end;
+
+canceled 3;
+
+theorem
+ Th71: H is_immediate_constituent_of F implies len @H < len @F
+  proof assume
+A1:  H is_immediate_constituent_of F;
+      F = VERUM or F is atomic or F is negative or F is conjunctive or
+     F is universal by QC_LANG1:33;
+    then F is negative & H = the_argument_of F or
+     F is conjunctive & H = the_left_argument_of F or
+      F is conjunctive & H = the_right_argument_of F or
+       F is universal & H = the_scope_of F by A1,Th58,Th64,Th65,Th66,Th67;
+   hence thesis by QC_LANG1:45,46,47;
+  end;
+
+theorem
+ Th72: H is_immediate_constituent_of F implies H is_subformula_of F
+  proof assume
+A1:  H is_immediate_constituent_of F;
+   take n = 2 , L = <* H,F *>;
+   thus 1 <= n;
+   thus len L = n by FINSEQ_1:61;
+   thus L.1 = H & L.n = F by FINSEQ_1:61;
+   let k; assume
+A2:  1 <= k & k < n;
+    then k < 1 + 1;
+    then k <= 1 by NAT_1:38;
+then A3:  k = 1 by A2,AXIOMS:21;
+   take H,F;
+   thus L.k = H & L.(k + 1) = F by A3,FINSEQ_1:61;
+   thus thesis by A1;
+  end;
+
+theorem
+ Th73: H is_immediate_constituent_of F implies H is_proper_subformula_of F
+  proof assume
+A1:  H is_immediate_constituent_of F;
+   hence H is_subformula_of F by Th72;
+   assume H = F;
+    then len @H = len @F & len @H < len @F by A1,Th71;
+   hence contradiction;
+  end;
+
+theorem
+ Th74: H is_proper_subformula_of F implies len @H < len @F
+  proof given n,L such that
+A1:  1 <= n & len L = n & L.1 = H & L.n = F and
+A2:  for k st 1 <= k & k < n
+     ex H1,F1 being Element of QC-WFF st L.k = H1 & L.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1;
+   assume
+      H <> F;
+    then 1 < n by A1,REAL_1:def 5;
+then A3:  1 + 1 <= n by NAT_1:38;
+defpred P[Nat] means 1 <= $1 & $1 < n implies for H1 st L.($1 + 1) = H1 holds
+ len @H < len @H1;
+A4:  P[0];
+A5:  for k st P[k] holds P[k+1]
+     proof let k such that
+A6:     1 <= k & k < n implies
+        for H1 st L.(k + 1) = H1 holds len @H < len @H1 and
+A7:     1 <= k + 1 & k + 1 < n;
+      let H1 such that
+A8:     L.(k + 1 + 1) = H1;
+      consider F1,G be Element of QC-WFF such that
+A9:     L.(k + 1) = F1 & L.(k + 1 + 1) = G &
+        F1 is_immediate_constituent_of G by A2,A7;
+A10:      k = 0 implies len @H < len @H1 by A1,A8,A9,Th71;
+         now given m be Nat such that
+A11:      k = m + 1;
+         A12:      len @H < len @F1 by A6,A7,A9,A11,NAT_1:29,38;
+           len @F1 < len @H1 by A8,A9,Th71;
+        hence len @H < len @H1 by A12,AXIOMS:22;
+       end;
+      hence len @H < len @H1 by A10,NAT_1:22;
+     end;
+A13:  for k holds P[k] from Ind(A4,A5);
+   consider k such that
+A14:  n = 2 + k by A3,NAT_1:28;
+A15:  1 + 1 + k = (1 + k) + 1 by XCMPLX_1:1;
+  then 1 + k < n & 1 <= 1 + k by A14,NAT_1:29,38;
+   hence len @H < len @F by A1,A13,A14,A15;
+  end;
+
+theorem
+ Th75: H is_proper_subformula_of F implies
+   ex G st G is_immediate_constituent_of F
+  proof given n,L such that
+A1:  1 <= n & len L = n & L.1 = H & L.n = F and
+A2:  for k st 1 <= k & k < n
+     ex H1,F1 being Element of QC-WFF st L.k = H1 & L.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1;
+   assume H <> F;
+    then 1 < n by A1,REAL_1:def 5;
+    then 1 + 1 <= n by NAT_1:38;
+   then consider k such that
+A3:  n = 2 + k by NAT_1:28;
+A4:  1 + 1 + k = (1 + k) + 1 by XCMPLX_1:1;
+    then 1 + k < n & 1 <= 1 + k by A3,NAT_1:29,38;
+   then consider H1,F1 be Element of QC-WFF such that
+A5:  L.(1 + k) = H1 & L.(1 + k + 1) = F1 &
+     H1 is_immediate_constituent_of F1 by A2;
+   take H1;
+   thus thesis by A1,A3,A4,A5;
+  end;
+
+theorem
+ Th76: F is_proper_subformula_of G & G is_proper_subformula_of H implies
+   F is_proper_subformula_of H
+  proof assume
+A1:  F is_proper_subformula_of G & G is_proper_subformula_of H;
+    then F is_subformula_of G by Def22;
+   then consider n,L such that
+A2:  1 <= n & len L = n & L.1 = F & L.n = G and
+A3:  for k st 1 <= k & k < n
+     ex H1,F1 being Element of QC-WFF st L.k = H1 & L.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1 by Def21;
+      1 < n by A1,A2,REAL_1:def 5;
+then A4: 1 + 1 <= n by NAT_1:38;
+      G is_subformula_of H by A1,Def22;
+   then consider m,L' such that
+A5:  1 <= m & len L' = m & L'.1 = G & L'.m = H and
+A6:  for k st 1 <= k & k < m
+     ex H1,F1 being Element of QC-WFF st L'.k = H1 & L'.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1 by Def21;
+   consider k such that
+A7:  n = 2 + k by A4,NAT_1:28;
+   reconsider L1 = L|(Seg(1 + k)) as FinSequence by FINSEQ_1:19;
+   thus F is_subformula_of H
+     proof
+      take l = 1 + k + m , K = L1^L';
+         m <= m + (1 + k) & m + (1 + k) = 1 + k + m by NAT_1:29;
+      hence 1 <= l by A5,AXIOMS:22;
+A8:    1 + 1 + k = 1 + k + 1 by XCMPLX_1:1;
+then A9:    1 + k <= n by A7,NAT_1:29;
+then A10:     len L1 = 1 + k by A2,FINSEQ_1:21;
+      hence
+A11:     len K = l by A5,FINSEQ_1:35;
+A12:     now let j be Nat; assume
+        1 <= j & j <= 1 + k;
+then A13:      j in Seg(1 + k) by FINSEQ_1:3;
+         then j in dom L1 by A2,A9,FINSEQ_1:21;
+      then K.j = L1.j by FINSEQ_1:def 7;
+        hence K.j = L.j by A13,FUNCT_1:72;
+       end;
+         1 <= 1 + k & 1 <= 1 by NAT_1:29;
+      hence K.1 = F by A2,A12;
+         len L1 + 1 <= len L1 + m by A5,REAL_1:55;
+       then len L1 < l & l <= l by A10,NAT_1:38;
+then A14:     K.l = L'.(l - len L1) by A11,FINSEQ_1:37;
+         1 + k + m - (1 + k) = m + (1 + k) + -(1 + k) by XCMPLX_0:def 8
+           .= m + ((1 + k) + -(1 + k)) by XCMPLX_1:1 .= m + 0 by XCMPLX_0:def 6
+           .= m;
+      hence K.l = H by A2,A5,A9,A14,FINSEQ_1:21;
+      let j be Nat such that
+A15:     1 <= j & j < l; j + 0 <= j + 1 & j + 0 = j by REAL_1:55;
+then A16:    1 <= j + 1 by A15,AXIOMS:22;
+A17:    now assume
+           j < 1 + k;
+then A18:      j <= 1 + k & j + 1 <= 1 + k by NAT_1:38;
+         then j + 1 <= n by A9,AXIOMS:22;
+         then j < n by NAT_1:38;
+        then consider F1,G1 be Element of QC-WFF such that
+A19:      L.j = F1 & L.(j + 1) = G1 & F1 is_immediate_constituent_of G1 by A3,
+A15;
+        take F1, G1;
+        thus K.j = F1 & K.(j + 1) = G1 & F1 is_immediate_constituent_of G1
+          by A12,A15,A16,A18,A19;
+       end;
+A20:    now assume
+A21:      j = 1 + k;
+then A22:         1 + k < j + 1 & j + 1 <= l by A15,NAT_1:38;
+A23:
+         j + 1 = 1 + j & j + 1 - j = j + 1 + -j & 1 + j + -j = 1 + (j + -j) &
+          j + -j = 0 by XCMPLX_0:def 6,def 8,XCMPLX_1:1;
+        K.j = L.j & j < 1 + k + 1 by A12,A15,A21,NAT_1:38;
+        then consider F1,G1 be Element of QC-WFF such that
+A24:      L.j = F1 & L.(j + 1) = G1 & F1 is_immediate_constituent_of G1
+          by A3,A7,A8,A15;
+        take F1, G1;
+        thus K.j = F1 & K.(j + 1) = G1 & F1 is_immediate_constituent_of G1
+          by A2,A5,A7,A8,A10,A11,A12,A15,A21,A22,A23,A24,FINSEQ_1:37;
+       end;
+      now assume
+A25:      1 + k < j;
+then A26:         1 + k < j + 1 & j <= l & j + 1 <= l
+          by A15,NAT_1:38;
+           1 + k + 1 <= j by A25,NAT_1:38;
+        then consider j1 be Nat such that
+A27:      j = 1 + k + 1 + j1 by NAT_1:28;
+A28:         1 + k + 1 + j1 = 1 + k + (1 + j1) &
+          1 + k + (1 + j1) = 1 + j1 + (1 + k) &
+           1 + j1 + (1 + k) - (1 + k) = 1 + j1 + (1 + k) + -(1 + k) &
+            1 + j1 + (1 + k) + -(1 + k) = 1 + j1 + (1 + k + -(1 + k)) &
+             1 + k + -(1 + k) = 0 & 1 + j1 + 0 = 1 + j1
+              by XCMPLX_0:def 6,def 8,XCMPLX_1:1;
+A29:      j + 1 - len L1 = 1 + j + -len L1 by XCMPLX_0:def 8
+            .= 1 + (j + -len L1) by XCMPLX_1:1
+            .= 1 + j1 + 1 by A2,A9,A27,A28,FINSEQ_1:21;
+A30:      1 + k + m - (1 + k) = m + (1 + k) + -(1 + k) by XCMPLX_0:def 8
+            .= m + (1 + k + -(1 + k)) by XCMPLX_1:1 .= m + 0 by XCMPLX_0:def 6
+            .= m;
+           1 <=
+ 1 + j1 & j - (1 + k) < l - (1 + k) by A15,NAT_1:29,REAL_1:54;
+        then consider F1,G1 be Element of QC-WFF such that
+A31:      L'.(1 + j1) = F1 & L'.(1 + j1 + 1) = G1 &
+          F1 is_immediate_constituent_of G1 by A6,A27,A28,A30;
+        take F1, G1;
+        thus K.j = F1 & K.(j + 1) = G1 & F1 is_immediate_constituent_of G1
+          by A10,A11,A25,A26,A27,A28,A29,A31,FINSEQ_1:37;
+       end;
+      hence thesis by A17,A20,REAL_1:def 5;
+     end;
+      len @F < len @G & len @G < len @H by A1,Th74;
+   hence F <> H;
+  end;
+
+theorem
+ Th77: F is_subformula_of G & G is_subformula_of H implies
+   F is_subformula_of H
+  proof assume
+A1:  F is_subformula_of G & G is_subformula_of H;
+      now assume F <> G;
+then A2:    F is_proper_subformula_of G by A1,Def22;
+        now assume G <> H;
+        then G is_proper_subformula_of H by A1,Def22;
+        then F is_proper_subformula_of H by A2,Th76;
+       hence thesis by Def22;
+      end;
+     hence thesis by A1;
+    end;
+   hence thesis by A1;
+  end;
+
+theorem
+ Th78: G is_subformula_of H & H is_subformula_of G implies G = H
+  proof assume
+A1:  G is_subformula_of H & H is_subformula_of G;
+   assume G <> H;
+    then G is_proper_subformula_of H & H is_proper_subformula_of G by A1,Def22
+;
+    then len @G < len @H & len @H < len @G by Th74;
+   hence contradiction;
+  end;
+
+theorem
+ Th79: not (G is_proper_subformula_of H & H is_subformula_of G)
+  proof assume
+    G is_subformula_of H & G <> H & H is_subformula_of G;
+   hence contradiction by Th78;
+  end;
+
+theorem
+    not (G is_proper_subformula_of H & H is_proper_subformula_of G)
+  proof assume
+      G is_subformula_of H & G <> H & H is_proper_subformula_of G;
+   hence contradiction by Th79;
+  end;
+
+theorem
+ Th81: not (G is_subformula_of H & H is_immediate_constituent_of G)
+  proof assume
+A1:  G is_subformula_of H & H is_immediate_constituent_of G;
+    then H is_proper_subformula_of G by Th73;
+   hence contradiction by A1,Th79;
+  end;
+
+theorem
+ Th82: not (G is_proper_subformula_of H & H is_immediate_constituent_of G)
+  proof assume
+      G is_subformula_of H & G <> H & H is_immediate_constituent_of G;
+   hence contradiction by Th81;
+  end;
+
+theorem Th83:
+ F is_proper_subformula_of G & G is_subformula_of H or
+  F is_subformula_of G & G is_proper_subformula_of H or
+   F is_subformula_of G & G is_immediate_constituent_of H or
+    F is_immediate_constituent_of G & G is_subformula_of H or
+     F is_proper_subformula_of G & G is_immediate_constituent_of H or
+      F is_immediate_constituent_of G & G is_proper_subformula_of H implies
+   F is_proper_subformula_of H
+  proof assume
+A1:  F is_proper_subformula_of G & G is_subformula_of H or
+     F is_subformula_of G & G is_proper_subformula_of H or
+      F is_subformula_of G & G is_immediate_constituent_of H or
+       F is_immediate_constituent_of G & G is_subformula_of H or
+        F is_proper_subformula_of G & G is_immediate_constituent_of H or
+         F is_immediate_constituent_of G & G is_proper_subformula_of H;
+    then F is_subformula_of G & G is_subformula_of H by Def22,Th72;
+   hence F is_subformula_of H by Th77;
+   thus thesis by A1,Th79,Th81,Th82;
+  end;
+
+theorem
+    not F is_proper_subformula_of VERUM by Th58,Th75;
+
+theorem
+ Th85: not F is_proper_subformula_of P!V
+  proof assume F is_proper_subformula_of P!V;
+    then ex G st G is_immediate_constituent_of P!V by Th75;
+   hence contradiction by Th59;
+  end;
+
+theorem
+ Th86: F is_subformula_of H iff F is_proper_subformula_of 'not' H
+  proof
+      H is_immediate_constituent_of 'not' H by Th60;
+   hence F is_subformula_of H implies F is_proper_subformula_of 'not'
+ H by Th83;
+   given n,L such that
+A1:  1 <= n & len L = n & L.1 = F & L.n = 'not' H and
+A2:  for k st 1 <= k & k < n
+     ex H1,F1 being Element of QC-WFF st L.k = H1 & L.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1;
+   assume F <> 'not' H;
+    then 1 < n by A1,REAL_1:def 5;
+    then 1 + 1 <= n by NAT_1:38;
+   then consider k such that
+A3:  n = 2 + k by NAT_1:28;
+   reconsider L1 = L|(Seg(1 + k)) as FinSequence by FINSEQ_1:19;
+   take m = 1 + k , L1;
+   thus
+A4:  1 <= m by NAT_1:29;
+A5:  1 + 1 + k = 1 + k + 1 by XCMPLX_1:1;
+      1 + k <= 1 + k + 1 by NAT_1:29;
+   hence len L1 = m by A1,A3,A5,FINSEQ_1:21;
+A6:  now let j be Nat; assume 1 <= j & j <= m;
+   then j in Seg(1 + k) by FINSEQ_1:3;
+     hence L1.j = L.j by FUNCT_1:72;
+    end;
+   hence L1.1 = F by A1,A4;
+
+      m < m + 1 by NAT_1:38;
+   then consider F1,G1 be Element of QC-WFF such that
+A7:  L.m = F1 & L.(m + 1) = G1 & F1 is_immediate_constituent_of G1 by A2,A3,A4,
+A5;
+    F1 = H by A1,A3,A5,A7,Th60;
+   hence L1.m = H by A4,A6,A7;
+   let j be Nat; assume
+A8:  1 <= j & j < m;
+then A9:    1 <= 1 + j & 1 + j = j + 1 & j <= m & j + 1 <= m
+     by NAT_1:38;
+      m <= m + 1 by NAT_1:29;
+    then j < n by A3,A5,A8,AXIOMS:22;
+   then consider F1,G1 be Element of QC-WFF such that
+A10:  L.j = F1 & L.(j + 1) = G1 & F1 is_immediate_constituent_of G1 by A2,A8;
+   take F1,G1;
+   thus thesis by A6,A8,A9,A10;
+  end;
+
+theorem
+   'not' F is_subformula_of H implies F is_proper_subformula_of H
+  proof
+      F is_proper_subformula_of 'not' F by Th86;
+   hence thesis by Th83;
+  end;
+
+theorem
+   F is_proper_subformula_of FALSUM iff F is_subformula_of VERUM
+  by Def1,Th86;
+
+theorem
+ Th89: F is_subformula_of G or F is_subformula_of H iff
+   F is_proper_subformula_of G '&' H
+  proof
+      G is_immediate_constituent_of G '&' H &
+     H is_immediate_constituent_of G '&' H by Th62;
+   hence F is_subformula_of G or F is_subformula_of H implies
+     F is_proper_subformula_of G '&' H by Th83;
+   given n,L such that
+A1:  1 <= n & len L = n & L.1 = F & L.n = G '&' H and
+A2:  for k st 1 <= k & k < n
+     ex H1,F1 be Element of QC-WFF st L.k = H1 & L.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1;
+   assume F <> G '&' H;
+    then 1 < n by A1,REAL_1:def 5;
+    then 1 + 1 <= n by NAT_1:38;
+   then consider k such that
+A3:  n = 2 + k by NAT_1:28;
+   reconsider L1 = L|(Seg(1 + k)) as FinSequence by FINSEQ_1:19;
+A4:  1 + 1 + k = 1 + k + 1 by XCMPLX_1:1;
+    then 1 <= 1 + k & 1 + k < n by A3,NAT_1:29,38;
+   then consider H1,G1 be Element of QC-WFF such that
+A5: L.(1 + k) = H1 & L.(1 + k + 1) = G1 & H1 is_immediate_constituent_of G1
+     by A2;
+      F is_subformula_of H1
+     proof
+      take m = 1 + k , L1;
+      thus
+A6:     1 <= m by NAT_1:29;
+         1 + k <= 1 + k + 1 by NAT_1:29;
+      hence len L1 = m by A1,A3,A4,FINSEQ_1:21;
+A7:     now let j be Nat; assume 1 <= j & j <= m;
+      then j in Seg(1 + k) by FINSEQ_1:3;
+        hence L1.j = L.j by FUNCT_1:72;
+       end;
+      hence L1.1 = F by A1,A6;
+      thus L1.m = H1 by A5,A6,A7;
+      let j be Nat; assume
+A8:     1 <= j & j < m;
+then A9:       1 <= 1 + j & 1 + j = j + 1 & j <= m & j + 1 <= m
+        by NAT_1:38;
+         m <= m + 1 by NAT_1:29;
+       then j < n by A3,A4,A8,AXIOMS:22;
+      then consider F1,G1 be Element of QC-WFF such that
+A10:     L.j = F1 & L.(j + 1) = G1 & F1 is_immediate_constituent_of G1 by A2,A8
+;
+      take F1,G1;
+      thus thesis by A7,A8,A9,A10;
+     end;
+   hence thesis by A1,A3,A4,A5,Th62;
+  end;
+
+theorem
+   F '&' G is_subformula_of H implies
+   F is_proper_subformula_of H & G is_proper_subformula_of H
+  proof
+      F is_proper_subformula_of F '&' G & G is_proper_subformula_of F '&' G
+      by Th89;
+   hence thesis by Th83;
+  end;
+
+theorem
+ Th91: F is_subformula_of H iff F is_proper_subformula_of All(x,H)
+  proof
+      H is_immediate_constituent_of All(x,H) by Th63;
+   hence F is_subformula_of H implies F is_proper_subformula_of All(x,H) by
+Th83;
+   given n,L such that
+A1:  1 <= n & len L = n & L.1 = F & L.n = All(x,H) and
+A2:  for k st 1 <= k & k < n
+     ex H1,F1 being Element of QC-WFF st L.k = H1 & L.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1;
+   assume F <> All(x,H);
+    then 1 < n by A1,REAL_1:def 5;
+    then 1 + 1 <= n by NAT_1:38;
+   then consider k such that
+A3:  n = 2 + k by NAT_1:28;
+   reconsider L1 = L|(Seg(1 + k)) as FinSequence by FINSEQ_1:19;
+   take m = 1 + k , L1;
+   thus
+A4:  1 <= m by NAT_1:29;
+A5:  1 + 1 + k = 1 + k + 1 by XCMPLX_1:1;
+      1 + k <= 1 + k + 1 by NAT_1:29;
+   hence len L1 = m by A1,A3,A5,FINSEQ_1:21;
+A6:  now let j be Nat; assume 1 <= j & j <= m;
+   then j in Seg(1 + k) by FINSEQ_1:3;
+     hence L1.j = L.j by FUNCT_1:72;
+    end;
+   hence L1.1 = F by A1,A4;
+
+      m < m + 1 by NAT_1:38;
+   then consider F1,G1 be Element of QC-WFF such that
+A7:  L.m = F1 & L.(m + 1) = G1 & F1 is_immediate_constituent_of G1 by A2,A3,A4,
+A5;
+    F1 = H by A1,A3,A5,A7,Th63;
+   hence L1.m = H by A4,A6,A7;
+   let j be Nat; assume
+A8:  1 <= j & j < m;
+then A9:    1 <= 1 + j & 1 + j = j + 1 & j <= m & j + 1 <= m
+     by NAT_1:38;
+      m <= m + 1 by NAT_1:29;
+    then j < n by A3,A5,A8,AXIOMS:22;
+   then consider F1,G1 be Element of QC-WFF such that
+A10:  L.j = F1 & L.(j + 1) = G1 & F1 is_immediate_constituent_of G1 by A2,A8;
+   take F1,G1;
+   thus thesis by A6,A8,A9,A10;
+  end;
+
+theorem
+   All(x,H) is_subformula_of F implies H is_proper_subformula_of F
+  proof
+      H is_proper_subformula_of All(x,H) by Th91;
+   hence thesis by Th83;
+  end;
+
+theorem
+   F '&' 'not' G is_proper_subformula_of F => G &
+  F is_proper_subformula_of F => G &
+   'not' G is_proper_subformula_of F => G &
+    G is_proper_subformula_of F => G
+  proof F => G = 'not'(F '&' 'not' G) & F '&' 'not' G is_subformula_of F '&'
+'not' G by Def2;
+   hence
+A1:  F '&' 'not' G is_proper_subformula_of F => G by Th86;
+      F is_proper_subformula_of F '&' 'not' G &
+     'not' G is_proper_subformula_of F '&' 'not' G by Th89;
+   hence
+A2:  F is_proper_subformula_of F => G & 'not' G is_proper_subformula_of F => G
+      by A1,Th76;
+      G is_proper_subformula_of 'not' G by Th86;
+   hence thesis by A2,Th76;
+  end;
+
+theorem
+   'not' F '&' 'not' G is_proper_subformula_of F 'or' G &
+  'not' F is_proper_subformula_of F 'or' G &
+   'not' G is_proper_subformula_of F 'or' G &
+    F is_proper_subformula_of F 'or' G &
+     G is_proper_subformula_of F 'or' G
+  proof
+     F 'or' G = 'not'('not' F '&' 'not' G) & 'not' F '&' 'not' G
+is_subformula_of
+'not' F '&' 'not' G by Def3;
+   hence
+A1:  'not' F '&' 'not' G is_proper_subformula_of F 'or' G by Th86;
+      'not' F is_proper_subformula_of 'not' F '&' 'not' G &
+     'not' G is_proper_subformula_of 'not' F '&' 'not' G by Th89;
+   hence
+A2:  'not' F is_proper_subformula_of F 'or' G & 'not'
+G is_proper_subformula_of F 'or' G
+      by A1,Th76;
+      G is_proper_subformula_of 'not' G & F is_proper_subformula_of 'not'
+F by Th86;
+   hence thesis by A2,Th76;
+  end;
+
+theorem
+    H is atomic implies not F is_proper_subformula_of H
+  proof assume ex k,P,V st H = P!V;
+   hence thesis by Th85;
+  end;
+
+theorem
+    H is negative implies the_argument_of H is_proper_subformula_of H
+  proof assume H is negative;
+    then the_argument_of H is_immediate_constituent_of H by Th65;
+   hence thesis by Th73;
+  end;
+
+theorem
+    H is conjunctive implies
+   the_left_argument_of H is_proper_subformula_of H &
+    the_right_argument_of H is_proper_subformula_of H
+  proof assume H is conjunctive;
+    then the_left_argument_of H is_immediate_constituent_of H &
+     the_right_argument_of H is_immediate_constituent_of H by Th66;
+   hence thesis by Th73;
+  end;
+
+theorem
+    H is universal implies the_scope_of H is_proper_subformula_of H
+  proof assume H is universal;
+    then the_scope_of H is_immediate_constituent_of H by Th67;
+   hence thesis by Th73;
+  end;
+
+theorem
+ Th99: H is_subformula_of VERUM iff H = VERUM
+  proof
+   thus H is_subformula_of VERUM implies H = VERUM
+     proof assume
+A1:     H is_subformula_of VERUM;
+      assume
+         H <> VERUM;
+       then H is_proper_subformula_of VERUM by A1,Def22;
+      hence contradiction by Th58,Th75;
+     end;
+   thus thesis;
+  end;
+
+theorem
+ Th100: H is_subformula_of P!V iff H = P!V
+  proof
+   thus H is_subformula_of P!V implies H = P!V
+     proof assume
+A1:     H is_subformula_of P!V;
+      assume
+         H <> P!V;
+       then H is_proper_subformula_of P!V by A1,Def22;
+       then ex F st F is_immediate_constituent_of P!V by Th75;
+      hence contradiction by Th59;
+     end;
+   thus thesis;
+  end;
+
+theorem
+ Th101: H is_subformula_of FALSUM iff H = FALSUM or H = VERUM
+  proof
+   thus H is_subformula_of FALSUM implies H = FALSUM or H = VERUM
+     proof assume H is_subformula_of FALSUM & H <> FALSUM;
+       then H is_proper_subformula_of FALSUM by Def22;
+       then H is_subformula_of VERUM by Def1,Th86;
+      hence thesis by Th99;
+     end;
+      VERUM is_immediate_constituent_of FALSUM by Def1,Def20;
+    then VERUM is_proper_subformula_of FALSUM by Th73;
+   hence thesis by Def22;
+  end;
+
+::
+::   Set of subformulae of QC-formulae
+::
+
+ definition let H;
+  func Subformulae H -> set means:
+Def23:  for a being set holds a in it iff ex F st F = a & F is_subformula_of H;
+   existence
+    proof
+     defpred P[set] means ex F st F = $1 & F is_subformula_of H;
+     consider X be set such that
+A1:    for a being set holds a in X iff a in QC-WFF & P[a] from Separation;
+     take X;
+     let a be set;
+     thus a in X implies ex F st F = a & F is_subformula_of H by A1;
+     given F such that
+A2:    F = a & F is_subformula_of H;
+     thus a in X by A1,A2;
+    end;
+   uniqueness
+    proof
+     defpred P[set] means ex F st F = $1 & F is_subformula_of H;
+     let X,Y be set such that
+A3:    for a being set holds a in X iff P[a] and
+A4:    for a being set holds a in Y iff P[a];
+     thus thesis from Extensionality(A3,A4);
+    end;
+ end;
+
+canceled;
+
+theorem
+ Th103: G in Subformulae H implies G is_subformula_of H
+  proof assume G in Subformulae H;
+    then ex F st F = G & F is_subformula_of H by Def23;
+   hence G is_subformula_of H;
+  end;
+
+theorem
+ Th104: F is_subformula_of H implies Subformulae F c= Subformulae H
+  proof assume
+A1:  F is_subformula_of H;
+   let a be set; assume
+      a in Subformulae F;
+   then consider F1 be Element of QC-WFF such that
+A2:  F1 = a & F1 is_subformula_of F by Def23;
+      F1 is_subformula_of H by A1,A2,Th77;
+   hence a in Subformulae H by A2,Def23;
+  end;
+
+theorem
+   G in Subformulae H implies Subformulae G c= Subformulae H
+  proof assume G in Subformulae H;
+    then G is_subformula_of H by Th103;
+   hence thesis by Th104;
+  end;
+
+canceled;
+
+theorem
+ Th107: Subformulae(VERUM) = { VERUM }
+  proof
+   thus Subformulae VERUM c= { VERUM }
+     proof let a be set; assume a in Subformulae VERUM;
+      then consider F such that
+A1:     F = a & F is_subformula_of VERUM by Def23;
+         F = VERUM by A1,Th99;
+      hence thesis by A1,TARSKI:def 1;
+     end;
+   let a be set; assume a in { VERUM };
+    then a = VERUM & VERUM is_subformula_of VERUM by TARSKI:def 1;
+   hence a in Subformulae VERUM by Def23;
+  end;
+
+theorem
+ Th108: Subformulae(P!V) = { P!V }
+  proof
+   thus Subformulae(P!V) c= { P!V }
+     proof let a be set; assume a in Subformulae(P!V);
+      then consider F such that
+A1:     F = a & F is_subformula_of P!V by Def23;
+         F = P!V by A1,Th100;
+      hence thesis by A1,TARSKI:def 1;
+     end;
+   let a be set; assume a in { P!V };
+    then a = P!V & P!V is_subformula_of P!V by TARSKI:def 1;
+   hence a in Subformulae(P!V) by Def23;
+  end;
+
+theorem
+   Subformulae(FALSUM) = { VERUM, FALSUM }
+  proof
+   thus Subformulae(FALSUM) c= { VERUM, FALSUM }
+     proof let a be set; assume a in Subformulae(FALSUM);
+       then ex F st F = a & F is_subformula_of FALSUM by Def23;
+       then a = FALSUM or a = VERUM by Th101;
+      hence thesis by TARSKI:def 2;
+     end;
+   let a be set; assume A1: a in { VERUM, FALSUM };
+then A2:  a = VERUM or a = FALSUM by TARSKI:def 2;
+   reconsider a as Element of QC-WFF by A1,TARSKI:def 2;
+      a is_subformula_of FALSUM by A2,Th101;
+   hence thesis by Def23;
+  end;
+
+theorem
+ Th110: Subformulae 'not' H = Subformulae H \/ { 'not' H }
+  proof
+   thus Subformulae 'not' H c= Subformulae H \/ { 'not' H }
+     proof let a be set; assume a in Subformulae 'not' H;
+      then consider F such that
+A1:     F = a & F is_subformula_of 'not' H by Def23;
+       now assume F <> 'not' H;
+         then F is_proper_subformula_of 'not' H by A1,Def22;
+         then F is_subformula_of H by Th86;
+        hence a in Subformulae H by A1,Def23;
+       end;
+       then a in Subformulae H or a in { 'not' H } by A1,TARSKI:def 1;
+      hence thesis by XBOOLE_0:def 2;
+     end;
+   let a be set such that A2: a in Subformulae H \/ { 'not' H };
+A3:  now assume a in Subformulae H;
+     then consider F such that
+A4:    F = a & F is_subformula_of H by Def23;
+        H is_immediate_constituent_of 'not' H by Def20;
+      then H is_proper_subformula_of 'not' H by Th73;
+      then H is_subformula_of 'not' H by Def22;
+      then F is_subformula_of 'not' H by A4,Th77;
+     hence a in Subformulae 'not' H by A4,Def23;
+    end;
+      now assume a in { 'not' H };
+      then a = 'not' H & 'not' H is_subformula_of 'not' H by TARSKI:def 1;
+     hence a in Subformulae 'not' H by Def23;
+    end;
+   hence a in Subformulae 'not' H by A2,A3,XBOOLE_0:def 2;
+  end;
+
+theorem
+ Th111: Subformulae (H '&' F) = Subformulae H \/ Subformulae F \/ { H '&' F }
+  proof
+   thus Subformulae H '&' F c= Subformulae H \/ Subformulae F \/ { H '&' F }
+     proof let a be set; assume a in Subformulae H '&' F;
+      then consider G such that
+A1:     G = a & G is_subformula_of H '&' F by Def23;
+       now assume G <> H '&' F;
+         then G is_proper_subformula_of H '&' F by A1,Def22;
+         then G is_subformula_of H or G is_subformula_of F by Th89;
+         then a in Subformulae H or a in Subformulae F by A1,Def23;
+        hence a in Subformulae H \/ Subformulae F by XBOOLE_0:def 2;
+       end;
+       then a in Subformulae H \/ Subformulae F or a in
+ { H '&' F } by A1,TARSKI:def 1;
+      hence thesis by XBOOLE_0:def 2;
+     end;
+   let a be set such that A2:
+ a in Subformulae H \/ Subformulae F \/ { H '&' F };
+A3: a in Subformulae H \/ Subformulae F implies
+     a in Subformulae H or a in Subformulae F by XBOOLE_0:def 2;
+A4:  now assume a in Subformulae H;
+     then consider G such that
+A5:    G = a & G is_subformula_of H by Def23;
+        H is_immediate_constituent_of H '&' F by Th62;
+      then H is_proper_subformula_of H '&' F by Th73;
+      then H is_subformula_of H '&' F by Def22;
+      then G is_subformula_of H '&' F by A5,Th77;
+     hence a in Subformulae H '&' F by A5,Def23;
+    end;
+A6:  now assume a in Subformulae F;
+     then consider G such that
+A7:    G = a & G is_subformula_of F by Def23;
+        F is_immediate_constituent_of H '&' F by Th62;
+      then F is_proper_subformula_of H '&' F by Th73;
+      then F is_subformula_of H '&' F by Def22;
+      then G is_subformula_of H '&' F by A7,Th77;
+     hence a in Subformulae H '&' F by A7,Def23;
+    end;
+      now assume a in { H '&' F };
+      then a = H '&' F & H '&' F is_subformula_of H '&' F by TARSKI:def 1;
+     hence a in Subformulae H '&' F by Def23;
+    end;
+   hence a in Subformulae H '&' F by A2,A3,A4,A6,XBOOLE_0:def 2;
+  end;
+
+theorem
+ Th112: Subformulae All(x,H) = Subformulae H \/ { All(x,H) }
+  proof
+   thus Subformulae All(x,H) c= Subformulae H \/ { All(x,H) }
+     proof let a be set; assume a in Subformulae All(x,H);
+      then consider F such that
+A1:     F = a & F is_subformula_of All(x,H) by Def23;
+       now assume F <> All(x,H);
+         then F is_proper_subformula_of All(x,H) by A1,Def22;
+         then F is_subformula_of H by Th91;
+        hence a in Subformulae H by A1,Def23;
+       end;
+       then a in Subformulae H or a in { All(x,H) } by A1,TARSKI:def 1;
+      hence thesis by XBOOLE_0:def 2;
+     end;
+   let a be set such that A2: a in Subformulae H \/ { All(x,H) };
+A3:  now assume a in Subformulae H;
+     then consider F such that
+A4:    F = a & F is_subformula_of H by Def23;
+        H is_immediate_constituent_of All(x,H) by Th63;
+      then H is_proper_subformula_of All(x,H) by Th73;
+      then H is_subformula_of All(x,H) by Def22;
+      then F is_subformula_of All(x,H) by A4,Th77;
+     hence a in Subformulae All(x,H) by A4,Def23;
+    end;
+      now assume a in { All(x,H) };
+      then a = All(x,H) & All(x,H) is_subformula_of All(x,H) by TARSKI:def 1;
+     hence a in Subformulae All(x,H) by Def23;
+    end;
+   hence a in Subformulae All(x,H) by A2,A3,XBOOLE_0:def 2;
+  end;
+
+theorem Th113:
+ Subformulae (F => G) =
+   Subformulae F \/ Subformulae G \/ { 'not' G, F '&' 'not' G, F => G }
+  proof F => G = 'not'(F '&' 'not' G) by Def2;
+   hence Subformulae (F => G)
+         = Subformulae (F '&' 'not' G) \/ { F => G } by Th110
+        .= Subformulae F \/ Subformulae 'not' G \/ {F '&' 'not'
+G} \/ {F => G} by Th111
+        .= Subformulae F \/ (Subformulae G \/ {'not' G}) \/ {F '&' 'not'
+G} \/ { F => G }
+            by Th110
+        .= Subformulae F \/ Subformulae G \/ {'not' G} \/ {F '&' 'not'
+G} \/ { F => G }
+            by XBOOLE_1:4
+        .= Subformulae F \/ Subformulae G \/ {'not' G} \/ ({F '&' 'not'
+G} \/ { F => G })
+            by XBOOLE_1:4
+        .= Subformulae F \/ Subformulae G \/ ({'not' G} \/ ({F '&' 'not'
+G} \/ { F => G }))
+            by XBOOLE_1:4
+        .= Subformulae F \/ Subformulae G \/ ({'not' G} \/
+        { F '&' 'not' G,F => G })
+            by ENUMSET1:41
+        .= Subformulae F \/ Subformulae G \/ { 'not' G,F '&' 'not' G,F => G }
+            by ENUMSET1:42;
+  end;
+
+theorem
+   Subformulae (F 'or' G) =
+   Subformulae F \/ Subformulae G \/ {'not' G, 'not' F, 'not' F '&' 'not'
+G, F 'or' G}
+  proof F 'or' G = 'not'('not' F '&' 'not' G) by Def3;
+   hence Subformulae (F 'or' G)
+         = Subformulae ('not' F '&' 'not' G) \/ { F 'or' G } by Th110
+        .= Subformulae 'not' F \/ Subformulae 'not' G \/ {'not' F '&' 'not'
+G} \/ {F 'or' G} by Th111
+        .= Subformulae 'not' F \/ (Subformulae G \/ {'not' G}) \/
+        {'not' F '&' 'not' G} \/ {F 'or' G}
+            by Th110
+        .= Subformulae F \/ {'not' F} \/ (Subformulae G \/ {'not' G}) \/
+               {'not' F '&' 'not' G} \/ {F 'or' G} by Th110
+        .= Subformulae F \/ ((Subformulae G \/ {'not' G}) \/ {'not' F}) \/
+               {'not' F '&' 'not' G} \/ {F 'or' G} by XBOOLE_1:4
+        .= Subformulae F \/ (Subformulae G \/ ({'not' G} \/ {'not' F})) \/
+               {'not' F '&' 'not' G} \/ {F 'or' G} by XBOOLE_1:4
+        .= Subformulae F \/ (Subformulae G \/ {'not' G,'not' F}) \/
+ {'not' F '&'
+'not' G} \/ {F 'or' G}
+            by ENUMSET1:41
+        .= Subformulae F \/ Subformulae G \/ {'not' G,'not' F} \/
+        {'not' F '&' 'not' G} \/ {F 'or' G}
+            by XBOOLE_1:4
+        .= Subformulae F \/ Subformulae G \/ {'not' G,'not' F} \/
+        ({'not' F '&' 'not' G} \/ {F 'or' G})
+            by XBOOLE_1:4
+        .= Subformulae F \/ Subformulae G \/ {'not' G,'not' F} \/
+        {'not' F '&' 'not' G, F 'or' G}
+            by ENUMSET1:41
+        .= Subformulae F \/ Subformulae G \/ ({'not' G,'not' F} \/
+        {'not' F '&' 'not' G, F 'or' G})
+            by XBOOLE_1:4
+        .= Subformulae F \/ Subformulae G \/ {'not' G, 'not' F,
+        'not' F '&' 'not' G, F 'or' G} by ENUMSET1:45;
+  end;
+
+theorem
+   Subformulae (F <=> G) =
+  Subformulae F \/ Subformulae G \/
+   { 'not' G, F '&' 'not' G, F => G, 'not' F, G '&' 'not' F, G => F, F <=> G }
+  proof
+    F <=> G = (F => G) '&' (G => F) by Def4;
+   hence Subformulae (F <=> G)
+        = Subformulae(F => G) \/ Subformulae(G => F) \/ {F <=> G} by Th111
+       .= Subformulae F \/ Subformulae G \/ { 'not' G, F '&' 'not' G, F => G }
+\/
+              Subformulae(G => F) \/ {F <=> G} by Th113
+       .= Subformulae F \/ Subformulae G \/ { 'not' G, F '&' 'not' G, F => G }
+\/
+            (Subformulae F \/ Subformulae G \/ { 'not' F, G '&' 'not'
+F, G => F }) \/
+              {F <=> G} by Th113
+       .= Subformulae F \/ Subformulae G \/ ((Subformulae F \/ Subformulae G \/
+            { 'not' G, F '&' 'not' G, F => G }) \/ { 'not' F, G '&' 'not'
+F, G => F }) \/
+              {F <=> G} by XBOOLE_1:4
+       .= Subformulae F \/ Subformulae G \/ (Subformulae F \/ Subformulae G \/
+            ({ 'not' G, F '&' 'not' G, F => G } \/ { 'not' F, G '&' 'not'
+F, G => F })) \/
+              {F <=> G} by XBOOLE_1:4
+       .= Subformulae F \/ Subformulae G \/ (Subformulae F \/ Subformulae G) \/
+            ({ 'not' G, F '&' 'not' G, F => G } \/ { 'not' F, G '&' 'not'
+F, G => F }) \/
+              {F <=> G} by XBOOLE_1:4
+       .= Subformulae F \/ Subformulae G \/
+            { 'not' G, F '&' 'not' G, F => G, 'not' F,
+            G '&' 'not' F, G => F } \/ {F <=> G} by ENUMSET1:53
+       .= Subformulae F \/ Subformulae G \/
+            ({ 'not' G, F '&' 'not' G, F => G, 'not' F, G '&' 'not' F,
+            G => F } \/ {F <=> G}) by XBOOLE_1:4
+       .= Subformulae F \/ Subformulae G \/
+            { 'not' G, F '&' 'not' G, F => G, 'not' F, G '&' 'not'
+F, G => F, F <=> G }
+               by ENUMSET1:61;
+  end;
+
+theorem
+    H = VERUM or H is atomic iff Subformulae H = { H }
+  proof
+      H is atomic implies Subformulae H = { H }
+     proof assume ex k,P,V st H = P!V;
+     hence thesis by Th108;
+    end;
+   hence H = VERUM or H is atomic implies Subformulae H = { H } by Th107;
+   assume
+A1:  Subformulae H = { H };
+   assume H <> VERUM & not H is atomic;
+    then H is negative or H is conjunctive or H is universal by QC_LANG1:33;
+then A2:  H = 'not' the_argument_of H or
+     H = (the_left_argument_of H) '&' the_right_argument_of H or
+      H = All(bound_in H,the_scope_of H) by Th4,Th7,QC_LANG1:def 23;
+A3:  now assume
+        H = 'not' the_argument_of H;
+then A4:   the_argument_of H is_immediate_constituent_of H by Th60;
+      then the_argument_of H is_proper_subformula_of H by Th73;
+      then the_argument_of H is_subformula_of H by Def22;
+then A5:      the_argument_of H in Subformulae H by Def23;
+        len @(the_argument_of H) <> len @H by A4,Th71;
+     hence contradiction by A1,A5,TARSKI:def 1;
+    end;
+      now assume
+        H = (the_left_argument_of H) '&' the_right_argument_of H;
+then A6:   the_left_argument_of H is_immediate_constituent_of H &
+       the_right_argument_of H is_immediate_constituent_of H by Th62;
+      then the_left_argument_of H is_proper_subformula_of H &
+       the_right_argument_of H is_proper_subformula_of H by Th73;
+      then the_left_argument_of H is_subformula_of H &
+       the_right_argument_of H is_subformula_of H by Def22;
+then A7:      the_left_argument_of H in Subformulae H &
+       the_right_argument_of H in Subformulae H by Def23;
+        len @(the_left_argument_of H) <> len @H &
+       len @(the_right_argument_of H) <> len @H by A6,Th71;
+     hence contradiction by A1,A7,TARSKI:def 1;
+    end;
+then A8:  the_scope_of H is_immediate_constituent_of H by A2,A3,Th63;
+    then the_scope_of H is_proper_subformula_of H by Th73;
+    then the_scope_of H is_subformula_of H by Def22;
+then A9:    the_scope_of H in Subformulae H by Def23;
+      len @(the_scope_of H) <> len @H by A8,Th71;
+   hence contradiction by A1,A9,TARSKI:def 1;
+  end;
+
+theorem
+    H is negative implies
+   Subformulae H = Subformulae the_argument_of H \/ { H }
+  proof assume H is negative;
+    then H = 'not' the_argument_of H by QC_LANG1:def 23;
+   hence thesis by Th110;
+  end;
+
+theorem
+    H is conjunctive implies
+   Subformulae H = Subformulae the_left_argument_of H \/
+    Subformulae the_right_argument_of H \/ { H }
+  proof assume H is conjunctive;
+    then H = (the_left_argument_of H) '&' the_right_argument_of H by Th4;
+   hence thesis by Th111;
+  end;
+
+theorem
+    H is universal implies
+   Subformulae H = Subformulae the_scope_of H \/ { H }
+  proof assume H is universal;
+    then H = All(bound_in H,the_scope_of H) by Th7;
+   hence thesis by Th112;
+  end;
+
+theorem
+    (H is_immediate_constituent_of G or H is_proper_subformula_of G or
+   H is_subformula_of G) & G in Subformulae F implies H in Subformulae F
+  proof assume
+A1:  (H is_immediate_constituent_of G or H is_proper_subformula_of G or
+     H is_subformula_of G) & G in Subformulae F;
+    then H is_proper_subformula_of G or H is_subformula_of G by Th73;
+    then H is_subformula_of G & G is_subformula_of F by A1,Def22,Th103;
+    then H is_subformula_of F by Th77;
+   hence thesis by Def23;
+  end;

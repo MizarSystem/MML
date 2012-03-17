@@ -1,0 +1,235 @@
+:: Quick Sort on SCMPDS
+::  by JingChao Chen
+::
+:: Received June 14, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_3, SCMPDS_2, AMI_1, SCMPDS_4, SCMFSA6A, SCMFSA8A, SCMFSA_7,
+      INT_1, SCMFSA8B, CARD_1, SCMPDS_5, FUNCT_1, UNIALG_2, SCMFSA7B, SCMFSA6B,
+      FUNCT_4, SCMPDS_3, RELAT_1, AMI_2, SCMFSA_9, ARYTM_1, RELOC, SCM_1,
+      FUNCT_7, BOOLE, FUNCOP_1, CARD_3, SCMPDS_8, FINSEQ_1, RFUNCT_2, RFINSEQ,
+      FUNCT_2, SCPISORT, SCMP_GCD, SCPQSORT;
+ notation TARSKI, XBOOLE_0, FUNCT_2, NUMBERS, XCMPLX_0, XREAL_0, RELAT_1,
+      FUNCT_1, FUNCT_4, RECDEF_1, INT_1, NAT_1, AMI_1, AMI_2, AMI_3, AMI_5,
+      FUNCT_7, SCMPDS_2, SCMPDS_3, CARD_1, SCMPDS_4, SCM_1, SCMPDS_5, SCMPDS_6,
+      SCMP_GCD, CARD_3, FINSEQ_1, SCMPDS_8, SFMASTR3, RFINSEQ, SCPISORT;
+ constructors AMI_5, SCMPDS_4, SCM_1, SCMPDS_5, SCMPDS_6, SCMP_GCD, SCMPDS_8,
+      SFMASTR3, RFINSEQ, SCPISORT, RECDEF_1, NAT_1, MEMBERED, RAT_1;
+ clusters AMI_1, INT_1, FUNCT_1, RELSET_1, FINSEQ_1, SCMPDS_2, SCMFSA_4,
+      SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMPDS_8, RFINSEQ, WSIERP_1, NAT_1,
+      FRAENKEL, XREAL_0, NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin :: The Several Properties of "while" Program and Finite Sequence
+
+reserve x for Int_position,
+        n,p0 for Nat;
+
+definition
+   let I,J be shiftable Program-block,
+   a be Int_position,k1 be Integer;
+   cluster if>0(a,k1,I,J) -> shiftable;
+end;
+
+theorem :: SCPQSORT:1      :: see SCMPDS_6:87
+ for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+ J being shiftable Program-block,a ,b be Int_position,k1 being Integer
+ st s.DataLoc(s.a,k1) > 0 & I is_closed_on s & I is_halting_on s
+ holds IExec(if>0(a,k1,I,J),s).b = IExec(I,s).b;
+
+theorem :: SCPQSORT:2
+ for s,sm be State of SCMPDS,I be No-StopCode shiftable Program-block,
+ a be Int_position,i be Integer, m be Nat st card I>0 & I is_closed_on s &
+ I is_halting_on s & s.DataLoc(s.a,i) > 0 &
+ m=LifeSpan (s +* Initialized stop I)+2 &
+ sm=(Computation(s +* Initialized stop while>0(a,i,I))).m holds
+ sm | SCM-Data-Loc =IExec(I,s)|SCM-Data-Loc &
+ sm +*Initialized stop while>0(a,i,I)=sm;
+
+theorem :: SCPQSORT:3
+ for s be State of SCMPDS,I be Program-block st
+ for t be State of SCMPDS st
+  t | SCM-Data-Loc =s | SCM-Data-Loc holds I is_halting_on t
+  holds I is_closed_on s;
+
+theorem :: SCPQSORT:4
+   for i1,i2,i3,i4 be Instruction of SCMPDS holds
+   card (i1 ';' i2 ';' i3 ';' i4)=4;
+
+theorem :: SCPQSORT:5
+ for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+ a,x,y be Int_position, i,c be Integer st card I > 0 &
+  s.x >= c+s.DataLoc(s.a,i) &
+   (for t be State of SCMPDS st t.x >= c+t.DataLoc(s.a,i) & t.y=s.y &
+     t.a=s.a & t.DataLoc(s.a,i) > 0 holds
+     IExec(I,t).a=t.a & I is_closed_on t & I is_halting_on t &
+     IExec(I,t).DataLoc(s.a,i) < t.DataLoc(s.a,i) &
+     IExec(I,t).x >= c+IExec(I,t).DataLoc(s.a,i) & IExec(I,t).y=t.y)
+   holds
+     while>0(a,i,I) is_closed_on s & while>0(a,i,I) is_halting_on s &
+   (s.DataLoc(s.a,i) > 0 implies
+       IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)));
+
+theorem :: SCPQSORT:6
+ for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+ a,x,y be Int_position, i,c be Integer st card I > 0 & s.x >= c &
+   (for t be State of SCMPDS st t.x >= c & t.y=s.y &
+     t.a=s.a & t.DataLoc(s.a,i) > 0 holds
+     IExec(I,t).a=t.a & I is_closed_on t & I is_halting_on t &
+     IExec(I,t).DataLoc(s.a,i) < t.DataLoc(s.a,i) &
+     IExec(I,t).x >= c & IExec(I,t).y=t.y)
+   holds
+   while>0(a,i,I) is_closed_on s & while>0(a,i,I) is_halting_on s &
+   ( s.DataLoc(s.a,i) > 0 implies
+   IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)));
+
+theorem :: SCPQSORT:7
+ for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+ a,x1,x2,x3,x4 be Int_position, i,c,md be Integer st
+  card I > 0 & s.x4=s.x3-c+s.x1 & md <= s.x3-c &
+  (for t be State of SCMPDS st t.x4=t.x3-c+t.x1 & md <= t.x3-c &
+   t.x2=s.x2 & t.a=s.a & t.DataLoc(s.a,i) > 0 holds
+     IExec(I,t).a=t.a & I is_closed_on t & I is_halting_on t &
+     IExec(I,t).DataLoc(s.a,i) < t.DataLoc(s.a,i) &
+     IExec(I,t).x4=IExec(I,t).x3-c+IExec(I,t).x1 &
+     md <= IExec(I,t).x3-c & IExec(I,t).x2=t.x2)
+   holds
+    while>0(a,i,I) is_closed_on s & while>0(a,i,I) is_halting_on s &
+    ( s.DataLoc(s.a,i) > 0 implies
+     IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)) );
+
+theorem :: SCPQSORT:8
+  for f being FinSequence of INT,m,k1,k,n be Nat st m<=k & k <= n &
+  k1=k-1 & f is_non_decreasing_on m,k1 & f is_non_decreasing_on k+1,n &
+  (for i be Nat st m <= i & i < k holds f.i <= f.k) &
+  (for i be Nat st k < i & i <= n holds f.k <= f.i)
+  holds
+   f is_non_decreasing_on m,n;
+
+theorem :: SCPQSORT:9   :: RFINSEQ:17
+for f,g be FinSequence,x be set st x in dom g & f,g are_fiberwise_equipotent
+ holds ex y be set st y in dom g & f.x=g.y;
+
+theorem :: SCPQSORT:10    ::RFINSEQ:14
+ for f,g,h be FinSequence holds
+   f,g are_fiberwise_equipotent iff h^f, h^g are_fiberwise_equipotent;
+
+theorem :: SCPQSORT:11
+ for f,g be FinSequence,m,n,j be Nat st f,g are_fiberwise_equipotent &
+ m<=n & n <= len f & (for i be Nat st 1<=i & i<=m holds f.i=g.i) &
+ (for i be Nat st n<i & i<=len f holds f.i=g.i) & (m<j & j<=n)
+holds ex k be Nat st m<k & k<=n & f.j=g.k;
+
+begin :: Program Partition is to split a sequence into a "smaller" and
+::       a "larger" subsequence
+
+:: a5=a7=length  a2=mid(x[1]), a3=x[2], a4=x[n], a6=save
+definition
+ func Partition -> Program-block equals
+:: SCPQSORT:def 1
+
+      ((GBP,5):=(GBP,4) ';'
+      SubFrom(GBP,5,GBP,2) ';'
+      (GBP,3):=(GBP,2) ';'
+      AddTo(GBP,3,1)) ';'
+      while>0(GBP,5,
+        while>0(GBP,5,
+            (GBP,7):=(GBP,5) ';' AddTo(GBP,5,-1) ';'
+            (GBP,6):=(intpos 4,0) ';'
+            SubFrom(GBP,6,intpos 2,0) ';'
+            if>0(GBP,6, AddTo(GBP,4,-1) ';' AddTo(GBP,7,-1),
+            Load (GBP,5):=0 )
+        ) ';'
+        while>0(GBP,7,
+            (GBP,5):=(GBP,7) ';' AddTo(GBP,7,-1) ';'
+            (GBP,6):=(intpos 2,0) ';'
+            SubFrom(GBP,6,intpos 3,0) ';'
+            if>0(GBP,6, AddTo(GBP,3,1) ';' AddTo(GBP,5,-1),
+            Load (GBP,7):=0 )
+        ) ';'
+        if>0(GBP,5,((GBP,6):=(intpos 4,0) ';'
+                    (intpos 4,0):=(intpos 3,0) ';'
+                    (intpos 3,0):=(GBP,6) ';' AddTo(GBP,5,-2) ';'
+                    AddTo(GBP,3,1)) ';' AddTo(GBP,4,-1)
+        )
+     ) ';'
+     (GBP,6):=(intpos 4,0) ';'
+     (intpos 4,0):=(intpos 2,0) ';'
+     (intpos 2,0):=(GBP,6);
+end;
+
+begin :: The Construction of Quick Sort
+:: a0=global, a1=stack, a2=stack depth
+definition
+ let n,p0 be Nat;
+ func QuickSort(n,p0) -> Program-block equals
+:: SCPQSORT:def 2
+
+       ((GBP:=0) ';'
+       (SBP:=1) ';'
+       (SBP,pn):=(p0+1) ';'
+       (SBP,pn+1):=pn) ';'
+       while>0(GBP,1,
+           (GBP,2):=(SBP,pn+1) ';'
+           SubFrom(GBP,2,SBP,pn) ';'
+           if>0(GBP,2, (GBP,2):=(SBP,pn) ';'
+                  (GBP,4):=(SBP,pn+1) ';'
+                  Partition ';'
+                  (((SBP,pn+3):=(SBP,pn+1) ';'
+                  (SBP,pn+1):=(GBP,4) ';'
+                  (SBP,pn+2):=(GBP,4) ';'
+                  AddTo(SBP,pn+1,-1)) ';'
+                  AddTo(SBP,pn+2,1) ';'
+                  AddTo(GBP,1,2)),
+                  Load AddTo(GBP,1,-2)
+          )
+       );
+end;
+
+begin :: The Basic Property of Partition Program
+
+theorem :: SCPQSORT:12
+  card Partition=38;
+
+theorem :: SCPQSORT:13
+ for s be State of SCMPDS,md,p0 be Nat st s.GBP=0 &
+ s.intpos 4-s.intpos 2 > 0 & s.intpos 2=md & md >= p0+1 & p0 >= 7
+ holds Partition is_closed_on s & Partition is_halting_on s;
+
+theorem :: SCPQSORT:14
+ for s be State of SCMPDS,md,p0,n be Nat,f,f1 be FinSequence of INT
+ st s.GBP=0 & s.intpos 4-s.intpos 2 > 0 & s.intpos 2=md &
+ md >= p0+1 & s.intpos 4 <= p0+n & p0 >= 7 &
+ f is_FinSequence_on s,p0 & len f=n &
+ f1 is_FinSequence_on IExec(Partition,s),p0 & len f1=n
+holds IExec(Partition,s).GBP=0 &
+   IExec(Partition,s).intpos 1=s.intpos 1 &
+   f,f1 are_fiberwise_equipotent &
+   ex m4 be Nat st m4=IExec(Partition,s).intpos 4 &
+   md <= m4 & m4 <= s.intpos 4 &
+   (for i be Nat st md<=i & i < m4 holds
+   IExec(Partition,s).intpos m4 >= IExec(Partition,s).intpos i) &
+   (for i be Nat st m4 < i & i <= s.intpos 4 holds
+   IExec(Partition,s).intpos m4 <= IExec(Partition,s).intpos i) &
+   (for i be Nat st i >= p0+1 & (i < s.intpos 2 or i > s.intpos 4) holds
+         IExec(Partition,s).intpos i = s.intpos i);
+
+theorem :: SCPQSORT:15
+    Partition is No-StopCode shiftable;
+
+begin :: The Basic Property of Quick Sort and Its Correctness
+
+theorem :: SCPQSORT:16
+      card QuickSort(n,p0)=57;
+
+theorem :: SCPQSORT:17
+   for p0,n being Nat st p0 >= 7 holds QuickSort(n,p0) is parahalting;
+
+theorem :: SCPQSORT:18
+   for s being State of SCMPDS,p0,n being Nat st p0 >= 7 holds
+    ex f,g be FinSequence of INT st len f=n & f is_FinSequence_on s,p0 &
+    len g = n & g is_FinSequence_on IExec(QuickSort(n,p0),s),p0 &
+    f,g are_fiberwise_equipotent & g is_non_decreasing_on 1,n;

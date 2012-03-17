@@ -1,0 +1,1243 @@
+:: Reper Algebras
+::  by Micha{\l} Muzalewski
+::
+:: Received May 28, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, FUNCT_1, ARYTM_1, RELAT_1, BOOLE, FINSEQ_2, MIDSP_1,
+      BINOP_1, QC_LANG1, PRE_TOPC, ARYTM_3, PARTFUN1, MIDSP_2, VECTSP_1,
+      GROUP_4, RLVECT_1, MIDSP_3;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, XREAL_0, FUNCT_1, FUNCT_2,
+      BINOP_1, STRUCT_0, PRE_TOPC, FINSEQ_1, FINSEQ_2, NAT_1, RLVECT_1,
+      MIDSP_1, MIDSP_2;
+ constructors BINOP_1, FINSEQ_2, NAT_1, MIDSP_2, XREAL_0, XBOOLE_0;
+ clusters FINSEQ_2, STRUCT_0, RELSET_1, NAT_1, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions MIDSP_1;
+ theorems FINSEQ_1, FINSEQ_2, FUNCT_1, MIDSP_1, MIDSP_2, NAT_1, ZFMISC_1,
+      REAL_1, STRUCT_0, FINSEQ_3, XCMPLX_1;
+ schemes FINSEQ_2, FUNCT_2;
+
+begin
+
+reserve n,i,j,k,l for Nat;
+reserve D for non empty set;
+reserve c,d for Element of D;
+reserve p,q,q',r for FinSequence of D;
+
+theorem
+Th1: len p = j+1+k implies ex q,r,c st len q = j & len r = k & p = q^<*c*>^r
+ proof
+   assume len p = j+1+k;
+   then consider q',r such that
+   A1: len q' = j+1 & len r = k & p = q'^r by FINSEQ_2:26;
+   consider q,c such that
+   A2: q' = q^<*c*> by A1,FINSEQ_2:22;
+A3:   len q' = len q + 1 by A2,FINSEQ_2:19;
+   take q,r,c;
+   thus thesis by A1,A2,A3,XCMPLX_1:2;
+ end;
+
+theorem
+Th2: i in Seg(n) implies ex j,k st n = j+1+k & i = j+1
+ proof
+   assume i in Seg(n);
+   then A1: 1<=i & i<=n by FINSEQ_1:3;
+   then consider j such that
+   A2: i = 1+j by NAT_1:28;
+   consider k such that
+   A3: n = j+1+k by A1,A2,NAT_1:28;
+   take j,k;
+   thus thesis by A2,A3;
+ end;
+
+theorem
+Th3: p = q^<*c*>^r & i = len q + 1
+      implies (for l st 1 <= l & l <= len q holds p.l = q.l)
+              & p.i = c
+              & (for l st i + 1 <= l & l <= len p holds p.l = r.(l-i))
+ proof
+   set q' = q^<*c*>;
+   assume A1: p = q'^r & i = len q + 1;
+   then A2: p = q^(<*c*>^r) by FINSEQ_1:45;
+   A3: len q' = i by A1,FINSEQ_2:19;
+   A4: len p = len q' + len r by A1,FINSEQ_1:35;
+   thus for l st 1 <= l & l <= len q holds p.l = q.l
+     proof
+       let l;
+       assume 1 <= l & l <= len q;
+       then l in dom q by FINSEQ_3:27;
+       hence thesis by A2,FINSEQ_1:def 7;
+     end;
+       i in Seg(i) by A1,FINSEQ_1:5;
+     then i in dom q' by A3,FINSEQ_1:def 3;
+     hence p.i = q'.i by A1,FINSEQ_1:def 7
+              .= c by A1,FINSEQ_1:59;
+   thus for l st i + 1 <= l & l <= len p holds p.l = r.(l-i)
+ by A1,A3,A4,FINSEQ_1:36;
+ end;
+
+theorem
+Th4: l<=j or l=j+1 or j+2<=l
+ proof
+   A1: l<j+1 or l = j+1 or j+1<l by REAL_1:def 5;
+      j+1+1 = j+(1+1) by XCMPLX_1:1
+            .= j+2;
+   hence thesis by A1,NAT_1:38;
+ end;
+
+theorem
+Th5: l in Seg(n)\{i} & i=j+1 implies 1<=l & l<=j or i+1<=l & l<=n
+ proof
+   assume
+   A1: l in Seg(n)\{i} & i=j+1;
+   then A2:l in Seg(n) & l<>i by ZFMISC_1:64;
+     i+1 = j+(1+1) by A1,XCMPLX_1:1
+      .= j+2;
+   hence thesis by A1,A2,Th4,FINSEQ_1:3;
+ end;
+
+definition let n,i,D,d;let p be Element of (n+1)-tuples_on D;
+ assume A1: i in Seg(n+1);
+ func sub(p,i,d) -> Element of (n+1)-tuples_on D means
+ :Def1: it.i = d & for l st l in (dom p)\{i} holds it.l = p.l;
+ existence
+  proof
+    consider j,k such that
+    A2: n+1 = j+1+k & i = j+1 by A1,Th2;
+    A3: len p = n+1 by FINSEQ_2:109;
+    then consider q,r being FinSequence of D, c be Element of D such that
+    A4: len q = j & len r = k & p = q^<*c*>^r by A2,Th1;
+    A5: len (q^<*d*>^r)= len (q^<*d*>) + len r by FINSEQ_1:35
+             .= len q + 1 + len r by FINSEQ_2:19
+             .= len (q^<*c*>) + len r by FINSEQ_2:19
+             .= len p by A4,FINSEQ_1:35;
+    then reconsider s = q^<*d*>^r
+          as Element of (n+1)-tuples_on D by A3,FINSEQ_2:110;
+    A6: for l st l in (dom p)\{i} holds s.l = p.l
+     proof
+       let l;
+       assume l in (dom p)\{i};
+       then A7:l in Seg(n+1)\{i} by A3,FINSEQ_1:def 3;
+         now per cases by A2,A7,Th5;
+         suppose A8: 1<=l & l<=j;
+           hence s.l = q.l by A2,A4,Th3
+                   .= p.l by A2,A4,A8,Th3;
+         suppose A9: i+1<=l & l<=n+1;
+           hence s.l = r.(l-i) by A2,A3,A4,A5,Th3
+                   .= p.l by A2,A3,A4,A9,Th3;
+       end;
+       hence thesis;
+     end;
+    take s;
+    thus thesis by A2,A4,A6,Th3;
+  end;
+ uniqueness
+   proof
+     let q,r be Element of (n+1)-tuples_on D such that
+     A10: q.i = d & for l st l in (dom p)\{i} holds q.l = p.l and
+     A11: r.i = d & for l st l in (dom p)\{i} holds r.l = p.l;
+     A12: len q = n+1 & len r = n+1 by FINSEQ_2:109;
+     A13: len p = n+1 by FINSEQ_2:109;
+A14:  for l st l in dom p holds q.l = r.l
+      proof
+        let l;
+        assume A15: l in dom p;
+          now per cases by A15,ZFMISC_1:64;
+          suppose l = i;
+            hence thesis by A10,A11;
+          suppose A16: l in (dom p)\{i};
+            then q.l = p.l by A10;
+            hence thesis by A11,A16;
+        end;
+        hence thesis;
+      end;
+       dom p = Seg len p by FINSEQ_1:def 3;
+     hence thesis by A12,A13,A14,FINSEQ_2:10;
+   end;
+end;
+
+::Section 2: Reper Algebra Structure and its properties
+begin
+
+definition let n;
+ struct(MidStr) ReperAlgebraStr over n
+  (#carrier -> set,
+   MIDPOINT -> BinOp of the carrier,
+   reper -> Function of n-tuples_on the carrier, the carrier#);
+end;
+
+definition let n; let A be non empty set, m be BinOp of A,
+               r be Function of n-tuples_on A,A;
+ cluster ReperAlgebraStr(#A,m,r#) -> non empty;
+ coherence by STRUCT_0:def 1;
+end;
+
+Lm1:
+now let n; let M be MidSp;
+ let R be Function of (n+2)-tuples_on the carrier of M, the carrier of M;
+ set RA = ReperAlgebraStr (# the carrier of M, the MIDPOINT of M, R #);
+ thus RA is MidSp-like
+  proof let a,b,c,d be Element of RA;
+    reconsider a'=a,b'=b,c'=c,d'=d as Element of M;
+A1: now
+     let a,b be Element of RA,
+         a',b'  be Element of M such that
+A2:   a=a' & b=b';
+     thus a@b = (the MIDPOINT of M).(a,b) by MIDSP_1:def 1
+             .= a'@b' by A2,MIDSP_1:def 1;
+    end;
+   hence a@a = a'@a' .= a by MIDSP_1:def 4;
+   thus a@b = b'@a' by A1 .= b@a by A1;
+A3: a@b = a'@b' & c@d = c'@d' & a'@c' = a@c & b'@d' = b@d by A1;
+   hence (a@b)@(c@d) = (a'@b')@(c'@d') by A1
+            .= (a'@c')@(b'@d') by MIDSP_1:def 4
+            .= (a@c)@(b@d) by A1,A3;
+    consider x'  being Element of M such that
+A4:  x'@a' = b' by MIDSP_1:def 4;
+    reconsider x = x' as Element of RA;
+   take x;
+   thus x@a = b by A1,A4;
+  end;
+end;
+
+definition let n;
+ cluster non empty ReperAlgebraStr over n;
+ existence
+  proof consider A being non empty set, m be BinOp of A,
+               r be Function of n-tuples_on A,A;
+   take ReperAlgebraStr(#A,m,r#);
+   thus thesis;
+  end;
+end;
+
+definition let n;
+ cluster MidSp-like (non empty ReperAlgebraStr over n+2);
+ existence
+  proof consider M being MidSp;
+    consider R being
+     Function of (n+2)-tuples_on the carrier of M, the carrier of M;
+   take ReperAlgebraStr (# the carrier of M, the MIDPOINT of M, R #);
+   thus thesis by Lm1;
+  end;
+end;
+
+reserve RAS for MidSp-like (non empty ReperAlgebraStr over n+2);
+reserve a,b,d,pii,p'i for Point of RAS;
+
+definition let i,D;
+ mode Tuple of i,D is Element of i-tuples_on D;
+end;
+
+definition let n,RAS,i;
+ mode Tuple of i,RAS is Tuple of i,the carrier of RAS;
+end;
+
+reserve p,q for Tuple of (n+1),RAS;
+
+definition let n,RAS,a;
+ redefine func <*a*> -> Tuple of 1,RAS;
+ coherence by FINSEQ_2:118;
+end;
+
+definition let n,RAS,i,j; let p be Tuple of i,RAS, q be Tuple of j,RAS;
+ redefine func p^q -> Tuple of (i+j),RAS;
+ coherence by FINSEQ_2:127;
+end;
+
+Lm2: 1+(n+1) = n+2
+ proof
+   thus 1+(n+1) = n+(1+1) by XCMPLX_1:1
+               .= n+2;
+ end;
+
+theorem
+  <*a*>^p is Tuple of (n+2),RAS by Lm2;
+
+definition let n,RAS,a,p;
+ func *'(a,p) -> Point of RAS equals
+ :Def2:  (the reper of RAS).(<*a*>^p);
+ coherence
+  proof
+    reconsider p' = <*a*>^p as Tuple of (n+2),RAS by Lm2;
+      (the reper of RAS).p' is Point of RAS;
+   hence thesis;
+  end;
+end;
+
+definition let n,i,RAS,d,p;
+ func <:p,i,d:> -> Tuple of (n+1),RAS means
+ :Def3: for D
+        for p' being Element of (n+1)-tuples_on D
+        for d' being Element of D
+         st D = the carrier of RAS & p' = p & d' = d
+         holds it = sub(p',i,d');
+ existence
+  proof
+    take sub(p,i,d);
+    thus thesis;
+  end;
+ uniqueness
+  proof
+    let q1,q2 be Tuple of (n+1),RAS such that
+    A1: for D
+        for p' being Element of (n+1)-tuples_on D
+        for d' being Element of D
+         st D = the carrier of RAS & p' = p & d' = d
+         holds q1 = sub(p',i,d') and
+    A2: for D  being non empty set
+        for p' being Element of (n+1)-tuples_on D
+        for d' being Element of D
+         st D = the carrier of RAS & p' = p & d' = d
+         holds q2 = sub(p',i,d');
+    thus q1 = sub(p,i,d) by A1
+           .= q2 by A2;
+  end;
+end;
+
+theorem
+Th7: i in Seg(n+1) implies <:p,i,d:>.i = d
+                       & for l st l in (dom p)\{i} holds <:p,i,d:>.l = p.l
+ proof
+   assume A1: i in Seg(n+1);
+   set q = <:p,i,d:>;
+   A2: q = sub(p,i,d) by Def3;
+   hence q.i = d by A1,Def1;
+   let l;
+   assume l in (dom p)\{i};
+   hence q.l = p.l by A1,A2,Def1;
+ end;
+
+definition let n;
+ mode Nat of n -> Nat means
+ :Def4: 1<=it & it<=n+1;
+ existence
+  proof
+      0 <= n by NAT_1:18;
+    then A1: 0+1 <= n+1 by REAL_1:55;
+    take 1;
+    thus thesis by A1;
+  end;
+end;
+
+reserve m for Nat of n;
+
+theorem
+Th8: i is Nat of n iff i in Seg(n+1)
+ proof
+     i is Nat of n iff 1<=i & i<=n+1 by Def4;
+   hence thesis by FINSEQ_1:3;
+ end;
+
+canceled;
+
+theorem
+Th10: i<=n implies i+1 is Nat of n
+ proof
+   assume i<=n;
+   then A1: i+1<=n+1 by REAL_1:55;
+     1<=i+1 by NAT_1:29;
+   hence thesis by A1,Def4;
+ end;
+
+theorem
+Th11: (for m holds p.m = q.m) implies p = q
+ proof
+   assume
+   A1: for m holds p.m = q.m;
+     for j st j in Seg(n+1) holds p.j = q.j
+    proof
+      let j;
+      assume j in Seg(n+1);
+      then reconsider j as Nat of n by Th8;
+        p.j = q.j by A1;
+      hence thesis;
+    end;
+   hence thesis by FINSEQ_2:139;
+ end;
+
+theorem
+Th12: (for l being Nat of n st l=i holds <:p,i,d:>.l = d)
+     & for l,i being Nat of n st l<>i holds <:p,i,d:>.l = p.l
+ proof
+   thus for l being Nat of n st l=i holds <:p,i,d:>.l = d
+    proof
+      let l be Nat of n such that
+      A1: l = i;
+        l in Seg(n+1) by Th8;
+      hence thesis by A1,Th7;
+    end;
+   thus for l,i being Nat of n st l<>i holds <:p,i,d:>.l = p.l
+    proof
+      let l,i be Nat of n such that
+      A2: l <> i;
+      A3: l in Seg(n+1) & i in Seg(n+1) by Th8;
+        len p = n+1 by FINSEQ_2:109;
+      then l in Seg(len p)\{i} by A2,A3,ZFMISC_1:64;
+      then l in (dom p)\{i} by FINSEQ_1:def 3;
+      hence thesis by A3,Th7;
+    end;
+ end;
+
+definition let n,D; let p be Element of (n+1)-tuples_on D; let m;
+ redefine func p.m -> Element of D;
+ coherence
+  proof
+    reconsider S = Seg(n+1) as non empty set by FINSEQ_1:6;
+    A1: rng p c= D by FINSEQ_1:def 4;
+    A2: m in S by Th8;
+      len p = n+1 by FINSEQ_2:109;
+    then m in dom p by A2,FINSEQ_1:def 3;
+    then p.m in rng p by FUNCT_1:def 5;
+    hence p.m is Element of D by A1;
+  end;
+end;
+
+definition let n,RAS;
+ attr RAS is being_invariance means
+ :Def5: for a,b,p,q st (for m holds a@(q.m) = b@(p.m))
+                   holds a@*'(b,q) = b@*'(a,p);
+  synonym RAS is_invariance;
+end;
+
+definition let n,i,RAS;
+ pred RAS has_property_of_zero_in i means
+ :Def6: for a,p holds *'(a,<:p,i,a:>) = a;
+end;
+
+definition let n,i,RAS;
+ pred RAS is_semi_additive_in i means
+ :Def7: for a,pii,p st p.i = pii holds *'(a,<:p,i,a@pii:>) = a@*'(a,p);
+end;
+
+theorem
+Th13: RAS is_semi_additive_in m implies
+               for a,d,p,q st q = <:p,m,d:> holds *'(a,<:p,m,a@d:>) = a@*'(a,q)
+ proof
+   assume A1: RAS is_semi_additive_in m;
+   let a,d,p,q; assume
+   A2: q = <:p,m,d:>;
+   then A3: q.m = d by Th12;
+   set qq = <:q,m,a@d:>;
+     qq = <:p,m,a@d:>
+    proof
+      set pp = <:p,m,a@d:>;
+        for k being Nat of n holds qq.k = pp.k
+       proof
+         let k be Nat of n;
+           now per cases;
+           suppose A4: k = m;
+                pp.m = a@d by Th12;
+             hence qq.k = pp.k by A4,Th12;
+           suppose A5: k <> m;
+             hence qq.k = q.k by Th12
+                      .= p.k by A2,A5,Th12
+                      .= pp.k by A5,Th12;
+         end;
+         hence thesis;
+       end;
+      hence thesis by Th11;
+    end;
+   hence thesis by A1,A3,Def7;
+ end;
+
+definition let n,i,RAS;
+ pred RAS is_additive_in i means
+ :Def8: for a,pii,p'i,p st p.i = pii
+                   holds *'(a,<:p,i,pii@p'i:>) = *'(a,p)@*'(a,<:p,i,p'i:>);
+end;
+
+definition let n,i,RAS;
+ pred RAS is_alternative_in i means
+ :Def9: for a,p,pii st p.i = pii holds *'(a,<:p,i+1,pii:>) = a;
+end;
+
+reserve W for ATLAS of RAS;
+reserve v for Vector of W;
+
+definition let n,RAS,W,i;
+ mode Tuple of i,W is Tuple of i,the carrier of the algebra of W;
+end;
+
+reserve x,y for Tuple of (n+1),W;
+
+definition
+ let n,RAS,W,x,i,v;
+ func <:x,i,v:> -> Tuple of (n+1),W means
+ :Def10: for D
+        for x' being Element of (n+1)-tuples_on D
+        for v' being Element of D
+         st D = the carrier of the algebra of W & x' = x & v' = v
+         holds it = sub(x',i,v');
+ existence
+  proof
+    take sub(x,i,v);
+    thus thesis;
+  end;
+ uniqueness
+  proof
+    let y1,y2 be Tuple of (n+1),W such that
+    A1: for D for x' being Element of (n+1)-tuples_on D
+        for v' being Element of D
+         st D = the carrier of the algebra of W & x' = x & v' = v
+         holds y1 = sub(x',i,v') and
+    A2: for D for x' being Element of (n+1)-tuples_on D
+        for v' being Element of D
+         st D = the carrier of the algebra of W & x' = x & v' = v
+         holds y2 = sub(x',i,v');
+    thus y1 = sub(x,i,v) by A1
+           .= y2 by A2;
+  end;
+end;
+
+theorem
+Th14: i in Seg(n+1) implies <:x,i,v:>.i = v
+                  & for l st l in (dom x)\{i} holds <:x,i,v:>.l = x.l
+ proof
+   assume A1: i in Seg(n+1);
+   set y = <:x,i,v:>;
+   A2: y = sub(x,i,v) by Def10;
+   hence y.i = v by A1,Def1;
+   let l;
+   assume l in (dom x)\{i};
+   hence y.l = x.l by A1,A2,Def1;
+ end;
+
+theorem
+Th15: (for l being Nat of n st l=i holds <:x,i,v:>.l = v)
+      & for l,i being Nat of n st l<>i holds <:x,i,v:>.l = x.l
+ proof
+   thus for l being Nat of n st l=i holds <:x,i,v:>.l = v
+    proof
+      let l be Nat of n such that
+      A1: l = i;
+        l in Seg(n+1) by Th8;
+      hence thesis by A1,Th14;
+    end;
+   thus for l,i being Nat of n st l<>i holds <:x,i,v:>.l = x.l
+    proof
+      let l,i be Nat of n such that
+      A2: l <> i;
+      A3: l in Seg(n+1) & i in Seg(n+1) by Th8;
+        len x = n+1 by FINSEQ_2:109;
+      then l in (Seg len x)\{i} by A2,A3,ZFMISC_1:64;
+      then l in (dom x)\{i} by FINSEQ_1:def 3;
+      hence thesis by A3,Th14;
+    end;
+ end;
+
+theorem
+Th16: (for m holds x.m = y.m) implies x = y
+ proof
+   assume
+   A1: for m holds x.m = y.m;
+     for j st j in Seg(n+1) holds x.j = y.j
+    proof
+      let j;
+      assume j in Seg(n+1);
+      then reconsider j as Nat of n by Th8;
+        x.j = y.j by A1;
+      hence thesis;
+    end;
+   hence thesis by FINSEQ_2:139;
+ end;
+
+scheme SeqLambdaD'{n()->Nat,D()->non empty set,F(set)->Element of D()}:
+  ex z being FinSequence of D() st len z = n()+1 &
+   for j being Nat of n() holds z.j = F(j)
+ proof
+   deffunc G(Nat) = F($1);
+   consider z being FinSequence of D() such that
+   A1: len z = n()+1 and
+   A2: for j st j in (Seg(n()+1)) holds z.j = G(j) from SeqLambdaD;
+   reconsider S = Seg(n()+1) as non empty set by FINSEQ_1:6;
+   A3: for j being Nat of n() holds z.j = F(j)
+    proof
+      let j be Nat of n();
+        j in S by Th8;
+      hence thesis by A2;
+    end;
+   take z;
+   thus thesis by A1,A3;
+ end;
+
+definition let n,RAS,W,a,x;
+ func (a,x).W -> Tuple of (n+1),RAS means
+ :Def11: it.m = (a,x.m).W;
+ existence
+  proof
+    deffunc F(Nat of n)=(a,x.$1).W;
+    consider z being FinSequence of (the carrier of RAS) such that
+    A1: len z = n+1 and
+    A2: z.m = F(m) from SeqLambdaD';
+    reconsider z as Tuple of (n+1),RAS by A1,FINSEQ_2:110;
+    take z;
+    thus thesis by A2;
+  end;
+ uniqueness
+  proof
+    let p,q such that
+    A3: for m holds p.m = (a,x.m).W and
+    A4: for m holds q.m = (a,x.m).W;
+      for m holds p.m = q.m
+     proof
+       let m;
+         p.m = (a,x.m).W by A3;
+       hence thesis by A4;
+     end;
+    hence thesis by Th11;
+  end;
+end;
+
+definition let n,RAS,W,a,p;
+ func W.(a,p) -> Tuple of (n+1),W means
+ :Def12: it.m = W.(a,p.m);
+ existence
+  proof
+    deffunc F(Nat of n)=W.(a,p.$1);
+    consider z being FinSequence of (the carrier of the algebra of W) such that
+    A1: len z = n+1 and
+    A2: z.m = F(m) from SeqLambdaD';
+    reconsider z as Tuple of (n+1),W by A1,FINSEQ_2:110;
+    take z;
+    thus thesis by A2;
+  end;
+ uniqueness
+  proof
+    let x,y such that
+    A3: for m holds x.m = W.(a,p.m) and
+    A4: for m holds y.m = W.(a,p.m);
+      for m holds x.m = y.m
+     proof
+       let m;
+         W.(a,p.m) = x.m by A3;
+       hence thesis by A4;
+     end;
+    hence thesis by Th16;
+  end;
+end;
+
+theorem
+Th17: W.(a,p) = x iff (a,x).W = p
+ proof
+   thus W.(a,p) = x implies (a,x).W = p
+    proof
+      assume A1: W.(a,p) = x;
+        now let m;
+          W.(a,p.m) = x.m by A1,Def12;
+        hence (a,x.m).W = p.m by MIDSP_2:39;
+      end;
+      hence thesis by Def11;
+    end;
+   thus (a,x).W = p implies W.(a,p) = x
+    proof
+      assume A2: (a,x).W = p;
+        now let m;
+          (a,x.m).W = p.m by A2,Def11;
+        hence W.(a,p.m) = x.m by MIDSP_2:39;
+      end;
+      hence thesis by Def12;
+    end;
+ end;
+
+theorem
+  W.(a,(a,x).W) = x by Th17;
+
+theorem
+  (a,W.(a,p)).W = p by Th17;
+
+definition let n,RAS,W,a,x;
+ func Phi(a,x) -> Vector of W equals
+ :Def13:  W.(a,*'(a,(a,x).W));
+ coherence;
+end;
+
+theorem
+Th20: W.(a,p) = x & W.(a,b) = v implies (*'(a,p) = b iff Phi(a,x) = v)
+ proof
+   assume A1: W.(a,p) = x & W.(a,b) = v;
+     Phi(a,x) = W.(a,*'(a,(a,x).W)) by Def13
+             .= W.(a,*'(a,p)) by A1,Th17;
+   hence thesis by A1,MIDSP_2:38;
+ end;
+
+theorem
+Th21: RAS is_invariance iff for a,b,x holds Phi(a,x) = Phi(b,x)
+ proof
+   A1: now assume
+     A2: RAS is_invariance;
+     let a,b,x;
+     set p = (a,x).W, q = (b,x).W;
+     A3: W.(a,p) = x by Th17
+                .= W.(b,q) by Th17;
+     A4: Phi(a,x) = W.(a,*'(a,p)) & Phi(b,x) = W.(b,*'(b,q))
+ by Def13;
+       now let m;
+         W.(a,p.m) = W.(a,p).m by Def12
+                .= W.(b,q.m) by A3,Def12;
+       hence a@(q.m) = b@(p.m) by MIDSP_2:39;
+     end;
+     then a@*'(b,q) = b@*'(a,p) by A2,Def5;
+     hence Phi(a,x) = Phi(b,x) by A4,MIDSP_2:39;
+   end;
+     (for a,b,x holds Phi(a,x) = Phi(b,x)) implies RAS is_invariance
+     proof
+       assume
+       A5: for a,b,x holds Phi(a,x) = Phi(b,x);
+       let a,b,p,q;
+       assume
+       A6: for m holds a@(q.m) = b@(p.m);
+         a@*'(b,q) = b@*'(a,p)
+        proof
+A7:          now let m;
+              a@(q.m) = b@(p.m) by A6;
+            then A8: W.(a,p.m) = W.(b,q.m) by MIDSP_2:39;
+            thus W.(a,p).m = W.(a,p.m) by Def12
+                          .= W.(b,q).m by A8,Def12;
+          end;
+          A9: W.(a,*'(a,(a,W.(a,p)).W)) = Phi(a,W.(a,p)) by Def13
+                                      .= Phi(b,W.(a,p)) by A5
+                                      .= W.(b,*'(b,(b,W.(a,p)).W)) by Def13;
+            W.(a,*'(a,p)) = W.(a,*'(a,(a,W.(a,p)).W)) by Th17
+                      .= W.(b,*'(b,(b,W.(b,q)).W)) by A7,A9,Th16
+                      .= W.(b,*'(b,q)) by Th17;
+          hence a@*'(b,q) = b@*'(a,p) by MIDSP_2:39;
+        end;
+      hence thesis;
+    end;
+    hence thesis by A1;
+  end;
+
+theorem
+Th22: 1 in Seg(n+1)
+ proof
+     0 <= n by NAT_1:18;
+   then 0+1 <= n+1 by REAL_1:55;
+   hence thesis by FINSEQ_1:3;
+ end;
+
+canceled;
+
+theorem
+Th24: 1 is Nat of n
+ proof
+     1 in Seg(n+1) by Th22;
+   hence thesis by Th8;
+ end;
+
+::Section 3: Reper Algebra and its atlas
+begin
+
+definition let n;
+ mode ReperAlgebra of n -> MidSp-like (non empty ReperAlgebraStr over n+2)
+ means
+ :Def14: it is_invariance;
+ existence
+  proof
+    consider M being MidSp;
+    set D = the carrier of M, k = (n+1)+1;
+    set C = k-tuples_on D;
+    reconsider one = 1 as Nat of n+1 by Th24;
+    deffunc F(Element of C)=$1.one;
+    consider R being Function of C,D such that
+    A1: for p being Element of C holds R.p = F(p) from LambdaD;
+       k = n+(1+1) by XCMPLX_1:1 .= n+2;
+    then reconsider R as Function of (n+2)-tuples_on D,D;
+    reconsider RA = ReperAlgebraStr (# the carrier of M, the MIDPOINT of M, R
+#)
+     as MidSp-like (non empty ReperAlgebraStr over n+2) by Lm1;
+A2:    for a,b being Point of RA, p,q being Tuple of (n+1),RA
+     st for m holds a@(q.m) = b@(p.m)
+     holds a@*'(b,q) = b@*'(a,p)
+      proof
+        let a,b be Point of RA, p,q be Tuple of (n+1),RA such that
+          for m holds a@(q.m) = b@(p.m);
+        A3: *'(b,q) = R.(<*b*>^q) by Def2
+                   .= (<*b*>^q).one by A1
+                   .= b by FINSEQ_1:58;
+          *'(a,p) = R.(<*a*>^p) by Def2
+              .= (<*a*>^p).one by A1
+              .= a by FINSEQ_1:58;
+        hence b@*'(a,p) = a@*'(b,q) by A3;
+      end;
+    take RA;
+    thus thesis by A2,Def5;
+  end;
+end;
+
+reserve RAS for ReperAlgebra of n;
+reserve a,b,pm,p'm,p''m for Point of RAS;
+reserve p for Tuple of (n+1),RAS;
+reserve W for ATLAS of RAS;
+reserve v for Vector of W;
+reserve x for Tuple of (n+1),W;
+
+theorem
+Th25: Phi(a,x) = Phi(b,x)
+ proof
+     RAS is_invariance by Def14;
+   hence thesis by Th21;
+ end;
+
+definition let n,RAS,W,x;
+ func Phi(x) -> Vector of W means
+ :Def15: for a holds it = Phi(a,x);
+ existence
+  proof
+    consider a;
+    take Phi(a,x);
+    thus thesis by Th25;
+  end;
+ uniqueness
+  proof
+    let y,z be Vector of W such that
+    A1: for a holds y = Phi(a,x) and
+    A2: for a holds z = Phi(a,x);
+    consider a;
+      y = Phi(a,x) & z = Phi(a,x) by A1,A2;
+    hence thesis;
+  end;
+end;
+
+Lm3: W.(a,p) = x implies Phi(x) = W.(a,*'(a,p))
+ proof
+   assume W.(a,p) = x;
+   then A1: (a,x).W = p by Th17;
+   thus Phi(x) = Phi(a,x) by Def15
+            .= W.(a,*'(a,p)) by A1,Def13;
+ end;
+
+Lm4: (a,x).W = p implies Phi(x) = W.(a,*'(a,p))
+ proof
+   assume (a,x).W = p;
+   then W.(a,p) = x by Th17;
+   hence thesis by Lm3;
+ end;
+
+theorem
+Th26: W.(a,p) = x & W.(a,b) = v & Phi(x) = v implies *'(a,p) = b
+ proof
+   assume A1: W.(a,p) = x & W.(a,b) = v & Phi(x) = v;
+     Phi(x) = Phi(a,x) by Def15;
+   hence thesis by A1,Th20;
+ end;
+
+theorem
+Th27: (a,x).W = p & (a,v).W = b & *'(a,p) = b implies Phi(x) = v
+ proof
+   assume A1: (a,x).W = p & (a,v).W = b & *'(a,p) = b;
+   then W.(a,p) = x & W.(a,b) = v by Th17,MIDSP_2:39;
+   then Phi(a,x) = v by A1,Th20;
+   hence thesis by Def15;
+ end;
+
+theorem
+Th28: W.(a,p) = x & W.(a,b) = v implies W.(a,<:p,m,b:>) = <:x,m,v:>
+ proof
+   assume A1: W.(a,p) = x & W.(a,b) = v;
+   set q = <:p,m,b:>; set y = W.(a,q), z = <:x,m,v:>;
+     for k being Nat of n holds y.k = z.k
+    proof
+      let k be Nat of n;
+        now per cases;
+        suppose A2: k = m;
+          thus y.k = W.(a,q.k) by Def12
+                  .= W.(a,b) by A2,Th12
+                  .= z.k by A1,A2,Th15;
+        suppose A3: k <> m;
+          thus y.k = W.(a,q.k) by Def12
+                  .= W.(a,p.k) by A3,Th12
+                  .= x.k by A1,Def12
+                  .= z.k by A3,Th15;
+      end;
+      hence thesis;
+    end;
+    hence thesis by Th16;
+  end;
+
+theorem
+Th29: (a,x).W = p & (a,v).W = b implies (a,<:x,m,v:>).W = <:p,m,b:>
+ proof
+   assume (a,x).W = p & (a,v).W = b;
+   then W.(a,p) = x & W.(a,b) = v by Th17,MIDSP_2:39;
+   then W.(a,<:p,m,b:>) = <:x,m,v:> by Th28;
+   hence thesis by Th17;
+ end;
+
+theorem
+  RAS has_property_of_zero_in m iff for x holds Phi(<:x,m,0.W:>) = 0.W
+ proof
+   thus RAS has_property_of_zero_in m
+        implies for x holds Phi(<:x,m,0.W:>) = 0.W
+    proof
+      assume A1: RAS has_property_of_zero_in m;
+      let x;
+      consider a;
+      set b = (a,(0.W)).W; set p' = <:((a,x).W),m,a:>;
+      A2: b = a by MIDSP_2:40;
+      then A3: (a,(<:x,m,0.W:>)).W = p' by Th29;
+        *'(a,p') = b by A1,A2,Def6;
+      hence thesis by A3,Th27;
+    end;
+   thus (for x holds Phi(<:x,m,0.W:>) = 0.W)
+        implies RAS has_property_of_zero_in m
+    proof
+      assume A4: for x holds Phi(<:x,m,0.W:>) = 0.W;
+        for a,p holds *'(a,<:p,m,a:>) = a
+       proof
+         let a,p;
+         set v = W.(a,a); set x' = <:(W.(a,p)),m,0.W:>;
+         A5: v = 0.W by MIDSP_2:39;
+         then A6: W.(a,(<:p,m,a:>)) = x' by Th28;
+           Phi(x') = v by A4,A5;
+         hence thesis by A6,Th26;
+       end;
+      hence thesis by Def6;
+    end;
+ end;
+
+theorem
+Th31: RAS is_semi_additive_in m iff for x holds
+  Phi(<:x,m,Double (x.m):>) = Double Phi(x)
+ proof
+   thus RAS is_semi_additive_in m
+    implies for x holds Phi(<:x,m,Double (x.m):>) = Double Phi(x)
+     proof
+       assume A1: RAS is_semi_additive_in m;
+       let x;
+       consider a;
+       set x' = <:x,m,Double (x.m):>;
+       set p = (a,x).W, p' = (a,x').W;
+       set q = <:p',m,a@(p'.m):>;
+         for i being Nat of n holds p.i = q.i
+        proof
+          let i be Nat of n;
+            now per cases;
+            suppose A2: i = m;
+              A3: x'.m = Double (x.m) by Th15;
+                W.(a,p) = x & W.(a,p') = x' by Th17;
+              then W.(a,p.m) = x.m & W.(a,p'.m) = x'.m
+ by Def12;
+              then p.m = a@(p'.m) by A3,MIDSP_2:37
+                 .= q.m by Th12;
+              hence p.i = q.i by A2;
+            suppose A4: i <> m;
+              thus p.i = (a,x.i).W by Def11
+                      .= (a,x'.i).W by A4,Th15
+                      .= p'.i by Def11
+                      .= q.i by A4,Th12;
+          end;
+          hence thesis;
+        end;
+       then p = q by Th11;
+       then *'(a,p) = a@*'(a,p') by A1,Def7;
+       then A5: W.(a,*'(a,p')) = Double W.(a,*'(a,p)) by MIDSP_2:37;
+          Phi(x') = W.(a,*'(a,p')) by Lm4;
+       hence thesis by A5,Lm4;
+     end;
+   thus (for x holds Phi(<:x,m,Double (x.m):>) = Double Phi(x))
+    implies RAS is_semi_additive_in m
+     proof
+       assume A6: for x holds Phi(<:x,m,Double (x.m):>) = Double Phi(x);
+       let a; let p'm be Point of RAS, p' be Tuple of (n+1),RAS such that
+       A7: p'.m = p'm;
+       set p = <:p',m,a@(p'.m):>;
+       set x = W.(a,p);
+       set x' = <:x,m,Double (x.m):>;
+         W.(a,p') = x'
+        proof
+          set y = W.(a,p');
+            for i being Nat of n holds x'.i = y.i
+           proof
+             let i be Nat of n;
+               now per cases;
+               suppose A8: i = m;
+                 A9: x'.m = Double (x.m) by Th15;
+                 A10: W.(a,p'.m) = y.m & W.(a,p.m) = x.m
+ by Def12;
+                   p.m = a@(p'.m) by Th12;
+                 hence x'.i = y.i by A8,A9,A10,MIDSP_2:37;
+               suppose A11: i <> m;
+                 hence x'.i = x.i by Th15
+                      .= W.(a,p.i) by Def12
+                      .= W.(a,p'.i) by A11,Th12
+                      .= y.i by Def12;
+             end;
+             hence thesis;
+           end;
+          hence thesis by Th16;
+        end;
+       then A12: Phi(x') = W.(a,*'(a,p')) by Lm3;
+          Phi(x) = W.(a,*'(a,p)) by Lm3;
+       then W.(a,*'(a,p')) = Double W.(a,*'(a,p)) by A6,A12;
+       hence thesis by A7,MIDSP_2:37;
+     end;
+ end;
+
+theorem
+Th32: RAS has_property_of_zero_in m & RAS is_additive_in m
+       implies RAS is_semi_additive_in m
+ proof
+   assume that
+   A1: RAS has_property_of_zero_in m and
+   A2: RAS is_additive_in m;
+   let a,pm,p such that
+   A3: p.m = pm;
+     *'(a,<:p,m,a@pm:>) = *'(a,p)@*'(a,<:p,m,a:>) by A2,A3,Def8
+                    .= a@*'(a,p) by A1,Def6;
+   hence thesis;
+ end;
+
+Lm5: RAS is_semi_additive_in m implies
+     for a,p'm, p''m,p st a@(p''m) = (p.m)@(p'm) holds
+         *'(a,<:p,m,(p.m)@p'm:>) = *'(a,p)@*'(a,<:p,m,p'm:>)
+     iff W.(a,*'(a,<:p,m,p''m:>)) = W.(a,*'(a,p)) + W.(a,*'(a,<:p,m,p'm:>))
+  proof
+    assume A1: RAS is_semi_additive_in m;
+    let a,p'm, p''m,p;
+    assume a@(p''m) = (p.m)@(p'm);
+    then *'(a,<:p,m,(p.m)@p'm:>) = a@*'(a,<:p,m,p''m:>)
+ by A1,Th13;
+    hence thesis by MIDSP_2:36;
+  end;
+
+Lm6:      (for x,v holds Phi(<:x,m,(x.m)+v:>) = Phi(x) + Phi(<:x,m,v:>))
+ implies RAS is_semi_additive_in m
+  proof
+    assume A1: for x,v holds Phi(<:x,m,(x.m)+v:>) = Phi(x) + Phi(<:x,m,v:>);
+      for x holds Phi(<:x,m,Double (x.m):>) = Double Phi(x)
+     proof
+       let x;
+       set v = x.m; set y = <:x,m,v:>;
+         for k being Nat of n holds y.k = x.k
+        proof
+          let k be Nat of n;
+            now per cases;
+            suppose k = m;
+              hence y.k = x.k by Th15;
+            suppose k <> m;
+              hence y.k = x.k by Th15;
+          end;
+          hence thesis;
+        end;
+       then A2: y = x by Th16;
+       thus Phi(<:x,m,Double v:>) = Phi(<:x,m,v+v:>) by MIDSP_2:def 1
+                          .= Phi(x) + Phi(<:x,m,v:>) by A1
+                          .= Double Phi(x) by A2,MIDSP_2:def 1;
+     end;
+    hence thesis by Th31;
+  end;
+
+theorem
+  RAS has_property_of_zero_in m implies (RAS is_additive_in m
+                   iff for x,v holds Phi(<:x,m,(x.m)+v:>) = Phi(x) + Phi
+(<:x,m,v:>))
+ proof
+   assume A1: RAS has_property_of_zero_in m;
+   thus RAS is_additive_in m
+    implies for x,v holds Phi(<:x,m,(x.m)+v:>) = Phi(x) + Phi(<:x,m,v:>)
+     proof
+       assume A2: RAS is_additive_in m;
+       then A3: RAS is_semi_additive_in m by A1,Th32;
+       let x,v;
+       consider a;
+       set p = (a,x).W, p'm = (a,v).W;
+       A4: W.(a,p) = x by Th17;
+       A5: W.(a,p'm) = v by MIDSP_2:39;
+       consider p''m such that
+       A6: (p''m)@a = (p.m)@(p'm) by MIDSP_1:def 4;
+A7:       W.(a,p''m) = W.(a,p.m) + W.(a,p'm) by A6,MIDSP_2:36
+                 .= x.m + v by A4,A5,Def12;
+         *'(a,<:p,m,(p.m)@p'm:>) = *'(a,p)@*'(a,<:p,m,p'm:>)
+ by A2,Def8;
+       then A8: W.(a,*'(a,<:p,m,p''m:>)) = W.(a,*'(a,p)) + W.(a,*'(a,<:p,m,p'm
+:>))
+ by A3,A6,Lm5;
+         <:p,m,p''m:> = (a,<:x,m,(x.m)+v:>).W
+        proof
+          set pp = <:p,m,p''m:>, xx = <:x,m,(x.m)+v:>; set qq = (a,xx).W;
+            for i being Nat of n holds pp.i = qq.i
+           proof
+             let i be Nat of n;
+             per cases;
+               suppose A9: i = m;
+                 hence pp.i = p''m by Th12
+                           .= (a,(x.m)+v).W by A7,MIDSP_2:39
+                           .= (a,xx.m).W by Th15
+                           .= qq.i by A9,Def11;
+               suppose A10: i <> m;
+                 hence pp.i = p.i by Th12
+                          .= (a,x.i).W by Def11
+                          .= (a,xx.i).W by A10,Th15
+                          .= qq.i by Def11;
+           end;
+          hence thesis by Th11;
+        end;
+       then A11: Phi(<:x,m,(x.m)+v:>) = W.(a,*'(a,<:p,m,p''m:>))
+ by Lm4;
+       A12: Phi(x) = W.(a,*'(a,p)) by Lm4;
+         <:p,m,p'm:> = (a,<:x,m,v:>).W
+        proof
+          set pp = <:p,m,p'm:>, qq = (a,<:x,m,v:>).W;
+            for i being Nat of n holds pp.i = qq.i
+           proof
+             let i be Nat of n;
+             per cases;
+               suppose A13: i = m;
+                 hence pp.i = p'm by Th12
+                           .= (a,<:x,m,v:>.m).W by Th15
+                           .= qq.i by A13,Def11;
+               suppose A14: i <> m;
+                 hence pp.i = p.i by Th12
+                          .= (a,x.i).W by Def11
+                          .= (a,<:x,m,v:>.i).W by A14,Th15
+                          .= qq.i by Def11;
+           end;
+          hence thesis by Th11;
+        end;
+       hence thesis by A8,A11,A12,Lm4;
+     end;
+   thus (for x,v holds Phi(<:x,m,(x.m)+v:>) = Phi(x) + Phi(<:x,m,v:>))
+    implies RAS is_additive_in m
+     proof
+       assume A15: for x,v holds Phi(<:x,m,(x.m)+v:>) = Phi(x) + Phi
+(<:x,m,v:>);
+       then A16: RAS is_semi_additive_in m by Lm6;
+         for a,pm,p'm,p st p.m = pm
+                      holds *'(a,<:p,m,pm@p'm:>) = *'(a,p)@*'(a,<:p,m,p'm:>)
+        proof
+          let a,pm,p'm,p such that
+          A17: p.m = pm;
+          set x = W.(a,p), v = W.(a,p'm);
+          A18: (a,x).W = p by Th17;
+          A19: (a,v).W = p'm by MIDSP_2:39;
+          consider p''m such that
+          A20: (p''m)@a = (p.m)@(p'm) by MIDSP_1:def 4;
+A21:          W.(a,p''m) = W.(a,p.m) + W.(a,p'm) by A20,MIDSP_2:36
+                    .= x.m + v by Def12;
+            <:p,m,p''m:> = (a,<:x,m,(x.m)+v:>).W
+           proof
+             set pp = <:p,m,p''m:>, xx = <:x,m,(x.m)+v:>; set qq = (a,xx).W;
+               for i being Nat of n holds pp.i = qq.i
+              proof
+                let i be Nat of n;
+                per cases;
+                  suppose A22: i = m;
+                    hence pp.i = p''m by Th12
+                              .= (a,(x.m)+v).W by A21,MIDSP_2:39
+                              .= (a,xx.m).W by Th15
+                              .= qq.i by A22,Def11;
+                  suppose A23: i <> m;
+                    hence pp.i = p.i by Th12
+                             .= (a,x.i).W by A18,Def11
+                             .= (a,xx.i).W by A23,Th15
+                             .= qq.i by Def11;
+              end;
+             hence thesis by Th11;
+           end;
+          then A24: Phi(<:x,m,(x.m)+v:>) = W.(a,*'(a,<:p,m,p''m:>))
+ by Lm4;
+          A25: Phi(x) = W.(a,*'(a,p)) by Lm3;
+            <:p,m,p'm:> = (a,<:x,m,v:>).W
+           proof
+             set pp = <:p,m,p'm:>, qq = (a,<:x,m,v:>).W;
+               for i being Nat of n holds pp.i = qq.i
+              proof
+                let i be Nat of n;
+                per cases;
+                  suppose A26: i = m;
+                    hence pp.i = p'm by Th12
+                              .= (a,<:x,m,v:>.m).W
+ by A19,Th15
+                              .= qq.i by A26,Def11;
+                  suppose A27: i <> m;
+                    hence pp.i = p.i by Th12
+                             .= (a,x.i).W by A18,Def11
+                             .= (a,<:x,m,v:>.i).W
+ by A27,Th15
+                             .= qq.i by Def11;
+              end;
+             hence thesis by Th11;
+           end;
+           then Phi(<:x,m,v:>) = W.(a,*'(a,<:p,m,p'm:>))
+ by Lm4;
+           then W.(a,*'(a,<:p,m,p''m:>)) = W.(a,*'(a,p)) + W.(a,*'
+(a,<:p,m,p'm:>))
+ by A15,A24,A25;
+          hence thesis by A16,A17,A20,Lm5;
+        end;
+       hence thesis by Def8;
+     end;
+ end;
+
+theorem
+Th34: W.(a,p) = x & m<= n implies W.(a,<:p,m+1,p.m:>) = <:x,m+1,x.m:>
+ proof
+   assume A1: W.(a,p) = x & m<=n;
+   then reconsider m' = m+1 as Nat of n by Th10;
+   set y = W.(a,<:p,m',p.m:>), z = <:x,m',x.m:>;
+     for k being Nat of n holds y.k = z.k
+    proof
+      let k be Nat of n;
+        now per cases;
+        suppose A2: k = m';
+          thus y.k = W.(a,<:p,m',p.m:>.k) by Def12
+                  .= W.(a,p.m) by A2,Th12
+                  .= x.m by A1,Def12
+                  .= z.k by A2,Th15;
+        suppose A3: k <> m';
+          thus y.k = W.(a,<:p,m',p.m:>.k) by Def12
+                  .= W.(a,p.k) by A3,Th12
+                  .= x.k by A1,Def12
+                  .= z.k by A3,Th15;
+      end;
+      hence thesis;
+    end;
+   hence thesis by Th16;
+ end;
+
+theorem
+Th35: (a,x).W = p & m<=n implies (a,<:x,m+1,x.m:>).W = <:p,m+1,p.m:>
+ proof
+   assume (a,x).W = p & m<=n;
+   then W.(a,p) = x & m<=n by Th17;
+   then W.(a,<:p,m+1,p.m:>) = <:x,m+1,x.m:> by Th34;
+   hence thesis by Th17;
+ end;
+
+theorem
+  m<=n implies (RAS is_alternative_in m iff for x holds Phi(<:x,m+1,x.m:>) = 0.
+W
+)
+ proof
+   assume A1: m<=n;
+   thus RAS is_alternative_in m implies for x holds Phi(<:x,m+1,x.m:>) = 0.W
+    proof
+      assume A2: RAS is_alternative_in m;
+      let x;
+      consider a;
+      set p = (a,x).W, b = (a,(0.W)).W; set p' = <:p,m+1,p.m:>;
+      A3: b = a by MIDSP_2:40;
+      A4: (a,(<:x,m+1,x.m:>)).W = p' by A1,Th35;
+        *'(a,p') = b by A2,A3,Def9;
+      hence thesis by A4,Th27;
+    end;
+   thus (for x holds Phi(<:x,m+1,x.m:>) = 0.W) implies RAS is_alternative_in m
+    proof
+      assume A5: for x holds Phi(<:x,m+1,x.m:>) = 0.W;
+        for a,p,pm st p.m = pm holds *'(a,<:p,m+1,pm:>) = a
+       proof
+         let a,p,pm such that
+         A6: p.m = pm;
+         set x = W.(a,p), v = W.(a,a); set x' = <:x,m+1,x.m:>;
+         A7: v = 0.W by MIDSP_2:39;
+         A8: W.(a,(<:p,m+1,p.m:>)) = x' by A1,Th34;
+           Phi(x') = v by A5,A7;
+         hence thesis by A6,A8,Th26;
+       end;
+      hence thesis by Def9;
+    end;
+ end;
+

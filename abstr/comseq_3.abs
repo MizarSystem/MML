@@ -1,0 +1,493 @@
+:: Convergence and the Limit of Complex Sequences. Series
+::  by Yasunari Shidama and Artur Korni{\l}owicz
+::
+:: Received June 25, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary SEQ_1, COMSEQ_1, COMPLEX1, FUNCT_1, SERIES_1, ABSVALUE, ARYTM,
+      ARYTM_1, SUPINF_2, SEQ_2, ARYTM_3, PROB_1, ORDINAL2, SEQM_3, PREPOWER,
+      SQUARE_1, RLVECT_1, RELAT_1, POWER, LATTICES;
+ notation SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0, XREAL_0, REAL_1,
+      RELAT_1, FUNCT_2, SEQ_1, SEQ_2, NAT_1, SEQM_3, ABSVALUE, SERIES_1,
+      COMPLEX1, COMSEQ_1, COMSEQ_2, SQUARE_1, POWER;
+ constructors SEQ_2, SEQM_3, SERIES_1, SQUARE_1, COMSEQ_1, COMSEQ_2, REAL_1,
+      NAT_1, ABSVALUE, PARTFUN1, COMPLEX1, MEMBERED, ARYTM_0, ARYTM_3, FUNCT_4;
+ clusters XREAL_0, COMSEQ_2, SEQ_1, COMSEQ_1, RELSET_1, SEQM_3, NAT_1,
+      COMPLEX1, MEMBERED, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin  :: Preliminaries
+
+reserve rseq,rseq1,rseq2 for Real_Sequence;
+reserve seq,seq1,seq2 for Complex_Sequence;
+reserve k, n, n1, n2, m for Nat;
+reserve p,r for Real;
+
+theorem :: COMSEQ_3:1
+  [*(n+1),0*] <> 0c & [*0,(n+1)*] <> 0c;
+
+theorem :: COMSEQ_3:2
+(for n holds rseq.n = 0) implies for m holds (Partial_Sums abs(rseq)).m = 0;
+
+theorem :: COMSEQ_3:3
+(for n holds rseq.n = 0) implies rseq is absolutely_summable;
+
+definition
+ cluster absolutely_summable Real_Sequence;
+end;
+
+definition
+ cluster summable -> convergent Real_Sequence;
+end;
+
+definition
+ cluster absolutely_summable -> summable Real_Sequence;
+end;
+
+definition
+ cluster absolutely_summable Real_Sequence;
+end;
+
+theorem :: COMSEQ_3:4
+  rseq is convergent implies
+ (for p st 0<p ex n st for m,l be Nat st n <= m & n <= l
+  holds abs(rseq.m-rseq.l)<p);
+
+theorem :: COMSEQ_3:5
+  (for n holds rseq.n <= p) implies for n, l be Nat holds
+ Partial_Sums(rseq).(n+l)-Partial_Sums(rseq).n <= p * l;
+
+theorem :: COMSEQ_3:6
+  (for n holds rseq.n <= p) implies
+ for n holds Partial_Sums(rseq).n <= p * (n+1);
+
+theorem :: COMSEQ_3:7
+  (for n st n <= m holds rseq1.n <= p * rseq2.n) implies
+ Partial_Sums(rseq1).m <= p * Partial_Sums(rseq2).m;
+
+theorem :: COMSEQ_3:8
+  (for n st n <= m holds rseq1.n <= p * rseq2.n) implies
+for n st n <= m holds
+  for l be Nat st n+l <= m holds
+  Partial_Sums(rseq1).(n+l)-Partial_Sums(rseq1).n
+  <= p * (Partial_Sums(rseq2).(n+l)-Partial_Sums(rseq2).n);
+
+theorem :: COMSEQ_3:9
+  (for n holds 0 <= rseq.n) implies
+ (for n, m st n <= m holds
+  abs(Partial_Sums(rseq).m-Partial_Sums(rseq).n)
+   =Partial_Sums(rseq).m-Partial_Sums(rseq).n)
+   &
+ for n holds abs(Partial_Sums(rseq).n)=Partial_Sums(rseq).n;
+
+theorem :: COMSEQ_3:10
+  seq1 is convergent & seq2 is convergent & lim(seq1-seq2)=0c
+ implies lim seq1 = lim seq2;
+
+begin  :: The Operations on Complex Sequences
+
+reserve z for Element of COMPLEX;
+reserve Nseq,Nseq1 for increasing Seq_of_Nat;
+
+definition let z be Element of COMPLEX;
+ func z GeoSeq -> Complex_Sequence means
+:: COMSEQ_3:def 1
+  it.0 = 1r & for n holds it.(n+1) = it.n * z;
+end;
+
+definition let z be Element of COMPLEX,
+               n be Nat;
+ func z #N n -> Element of COMPLEX equals
+:: COMSEQ_3:def 2
+  z GeoSeq.n;
+end;
+
+theorem :: COMSEQ_3:11
+  z #N 0 = 1r;
+
+definition let c be Complex_Sequence;
+ func Re c -> Real_Sequence means
+:: COMSEQ_3:def 3
+  for n holds it.n = Re(c.n);
+end;
+
+definition let c be Complex_Sequence;
+ func Im c -> Real_Sequence means
+:: COMSEQ_3:def 4
+  for n holds it.n = Im(c.n);
+end;
+
+theorem :: COMSEQ_3:12
+|.z.| <= abs Re z + abs Im z;
+
+theorem :: COMSEQ_3:13
+abs(Re z) <= |.z.| & abs(Im z) <= |.z.|;
+
+theorem :: COMSEQ_3:14
+Re seq1=Re seq2 & Im seq1=Im seq2 implies seq1=seq2;
+
+theorem :: COMSEQ_3:15
+Re seq1 + Re seq2 = Re (seq1+seq2) &
+Im seq1 + Im seq2 = Im (seq1+seq2);
+
+theorem :: COMSEQ_3:16
+-(Re seq) = Re (-seq) & -(Im seq) = Im -seq;
+
+theorem :: COMSEQ_3:17
+r*Re(z)=Re([*r,0*]*z) & r*Im(z)=Im([*r,0*]*z);
+
+theorem :: COMSEQ_3:18
+Re seq1-Re seq2=Re (seq1-seq2) & Im seq1-Im seq2=Im(seq1-seq2);
+
+theorem :: COMSEQ_3:19
+  r(#)Re seq = Re ([*r,0*] (#) seq) & r(#)Im seq = Im ([*r,0*] (#) seq);
+
+theorem :: COMSEQ_3:20
+  Re (z (#) seq) = Re z (#) Re seq - Im z (#) Im seq
+ &
+Im (z (#) seq) = Re z (#) Im seq + Im z (#) Re seq;
+
+theorem :: COMSEQ_3:21
+  Re (seq1 (#) seq2) = Re seq1(#)Re seq2-Im seq1(#)Im seq2
+ &
+Im (seq1 (#) seq2) = Re seq1(#)Im seq2+Im seq1(#)Re seq2;
+
+definition let seq be Complex_Sequence,
+               Nseq be increasing Seq_of_Nat;
+ func seq (#) Nseq -> Complex_Sequence means
+:: COMSEQ_3:def 5
+  for n holds it.n = seq.(Nseq.n);
+end;
+
+theorem :: COMSEQ_3:22
+Re (seq(#)Nseq)=(Re seq)*Nseq & Im (seq(#)Nseq)=(Im seq)*Nseq;
+
+definition let seq be Complex_Sequence,
+               k be Nat;
+ func seq ^\ k -> Complex_Sequence means
+:: COMSEQ_3:def 6
+  for n holds it.n=seq.(n+k);
+end;
+
+theorem :: COMSEQ_3:23
+(Re seq)^\k =Re (seq^\k) & (Im seq)^\k =Im (seq^\k);
+
+definition let seq be Complex_Sequence;
+ func Partial_Sums seq -> Complex_Sequence means
+:: COMSEQ_3:def 7
+  it.0 = seq.0 & for n holds it.(n+1) = it.n + seq.(n+1);
+end;
+
+definition let seq be Complex_Sequence;
+ func Sum seq -> Element of COMPLEX equals
+:: COMSEQ_3:def 8
+  lim Partial_Sums seq;
+end;
+
+theorem :: COMSEQ_3:24
+(for n holds seq.n = 0c) implies for m holds (Partial_Sums seq).m = 0c;
+
+theorem :: COMSEQ_3:25
+(for n holds seq.n = 0c) implies for m holds (Partial_Sums |.seq.|).m = 0;
+
+theorem :: COMSEQ_3:26
+Partial_Sums Re seq = Re (Partial_Sums seq) &
+Partial_Sums Im seq = Im (Partial_Sums seq);
+
+theorem :: COMSEQ_3:27
+Partial_Sums(seq1)+Partial_Sums(seq2) = Partial_Sums(seq1+seq2);
+
+theorem :: COMSEQ_3:28
+Partial_Sums(seq1)-Partial_Sums(seq2) = Partial_Sums(seq1-seq2);
+
+theorem :: COMSEQ_3:29
+Partial_Sums(z (#) seq) = z (#) Partial_Sums(seq);
+
+theorem :: COMSEQ_3:30
+  |.Partial_Sums(seq).k.| <= Partial_Sums(|.seq.|).k;
+
+theorem :: COMSEQ_3:31
+|.Partial_Sums(seq).m- Partial_Sums(seq).n.|
+  <= abs( Partial_Sums(|.seq.|).m- Partial_Sums(|.seq.|).n );
+
+theorem :: COMSEQ_3:32
+Partial_Sums(Re seq)^\k =Re (Partial_Sums(seq)^\k) &
+Partial_Sums(Im seq)^\k =Im (Partial_Sums(seq)^\k);
+
+theorem :: COMSEQ_3:33
+  (for n holds seq1.n=seq.0) implies
+ Partial_Sums(seq^\1) = (Partial_Sums(seq)^\1) - seq1;
+
+theorem :: COMSEQ_3:34
+Partial_Sums |.seq.| is non-decreasing;
+
+definition let seq be Complex_Sequence;
+ cluster Partial_Sums |.seq.| -> non-decreasing;
+end;
+
+theorem :: COMSEQ_3:35
+  (for n st n <= m holds seq1.n = seq2.n) implies
+ Partial_Sums(seq1).m =Partial_Sums(seq2).m;
+
+theorem :: COMSEQ_3:36
+1r <> z implies
+ for n holds Partial_Sums(z GeoSeq).n = (1r - z #N (n+1))/(1r-z);
+
+theorem :: COMSEQ_3:37
+z <> 1r & (for n holds seq.(n+1) = z * seq.n) implies
+ for n holds Partial_Sums(seq).n = seq.0 * ((1r - z #N (n+1))/(1r-z));
+
+
+begin  :: Convergence of Complex Sequences
+
+theorem :: COMSEQ_3:38
+for a, b being Real_Sequence, c being Complex_Sequence
+ st (for n holds Re (c.n) = a.n & Im (c.n) = b.n)
+  holds a is convergent & b is convergent iff c is convergent;
+
+theorem :: COMSEQ_3:39
+for a, b being convergent Real_Sequence, c being Complex_Sequence
+ st (for n holds Re (c.n) = a.n & Im (c.n) = b.n)
+  holds c is convergent & lim(c)=[*lim(a),lim(b)*];
+
+theorem :: COMSEQ_3:40
+for a, b being Real_Sequence, c being convergent Complex_Sequence
+ st (for n holds Re (c.n) = a.n & Im (c.n) = b.n)
+  holds a is convergent & b is convergent
+   & lim(a)=Re(lim(c)) & lim(b)=Im (lim(c));
+
+theorem :: COMSEQ_3:41
+for c being convergent Complex_Sequence holds
+  Re c is convergent & Im c is convergent
+    & lim(Re c)=Re(lim(c)) & lim(Im c)=Im (lim(c));
+
+definition let c be convergent Complex_Sequence;
+ cluster Re c -> convergent;
+ cluster Im c -> convergent;
+end;
+
+theorem :: COMSEQ_3:42
+for c being Complex_Sequence st Re c is convergent & Im c is convergent
+ holds c is convergent & Re(lim(c))=lim(Re c) & Im (lim(c))=lim(Im c);
+
+theorem :: COMSEQ_3:43
+(0 < |.z.| & |.z.| < 1 &
+ seq.0 = z & for n holds seq.(n+1) = seq.n * z)
+  implies seq is convergent & lim(seq)=0c;
+
+theorem :: COMSEQ_3:44
+|.z.| < 1 & (for n holds seq.n=z #N (n+1))
+ implies seq is convergent & lim(seq)=0c;
+
+theorem :: COMSEQ_3:45
+  r>0 & (ex m st for n st n>=m holds |.seq.n.| >= r) implies
+ not |.seq.| is convergent or lim |.seq.| <> 0;
+
+theorem :: COMSEQ_3:46
+seq is convergent iff
+ for p st 0<p ex n st for m st n <= m holds |.seq.m-seq.n.|<p;
+
+theorem :: COMSEQ_3:47
+  seq is convergent implies
+ (for p st 0<p ex n st for m,l be Nat st n <= m & n <= l
+  holds |.seq.m-seq.l.|<p);
+
+theorem :: COMSEQ_3:48
+  ((for n holds |. seq.n .| <= rseq.n)
+ & rseq is convergent & lim(rseq)=0)
+  implies seq is convergent & lim(seq)=0c;
+
+begin  :: Summable and Absolutely Summable Complex Sequences
+
+definition let seq, seq1 be Complex_Sequence;
+ pred seq is_subsequence_of seq1 means
+:: COMSEQ_3:def 9
+  ex Nseq st seq = seq1(#)Nseq;
+end;
+
+theorem :: COMSEQ_3:49
+  seq is_subsequence_of seq1 implies
+ Re seq is_subsequence_of Re seq1 & Im seq is_subsequence_of Im seq1;
+
+theorem :: COMSEQ_3:50
+seq is_subsequence_of seq1 & seq1 is_subsequence_of seq2
+ implies seq is_subsequence_of seq2;
+
+theorem :: COMSEQ_3:51
+  seq is bounded implies
+ ex seq1 st seq1 is_subsequence_of seq & seq1 is convergent;
+
+definition let seq be Complex_Sequence;
+ attr seq is summable means
+:: COMSEQ_3:def 10
+  Partial_Sums seq is convergent;
+end;
+
+definition
+ cluster summable Complex_Sequence;
+end;
+
+definition let seq be summable Complex_Sequence;
+ cluster Partial_Sums seq -> convergent;
+end;
+
+definition let seq;
+attr seq is absolutely_summable means
+:: COMSEQ_3:def 11
+ |.seq.| is summable;
+end;
+
+theorem :: COMSEQ_3:52
+(for n holds seq.n = 0c) implies seq is absolutely_summable;
+
+definition
+ cluster absolutely_summable Complex_Sequence;
+end;
+
+definition let seq be absolutely_summable Complex_Sequence;
+ cluster |.seq.| -> summable;
+end;
+
+theorem :: COMSEQ_3:53
+seq is summable implies seq is convergent & lim seq = 0c;
+
+definition
+ cluster summable -> convergent Complex_Sequence;
+end;
+
+theorem :: COMSEQ_3:54
+seq is summable implies
+ Re seq is summable & Im seq is summable
+  & Sum(seq)=[*Sum(Re seq),Sum(Im seq)*];
+
+definition let seq be summable Complex_Sequence;
+ cluster Re seq -> summable;
+ cluster Im seq -> summable;
+end;
+
+theorem :: COMSEQ_3:55
+seq1 is summable & seq2 is summable
+implies
+seq1+seq2 is summable & Sum(seq1+seq2)= Sum(seq1)+Sum(seq2);
+
+theorem :: COMSEQ_3:56
+seq1 is summable & seq2 is summable
+implies
+seq1-seq2 is summable & Sum(seq1-seq2)= Sum(seq1)-Sum(seq2);
+
+definition let seq1, seq2 be summable Complex_Sequence;
+ cluster seq1 + seq2 -> summable;
+ cluster seq1 - seq2 -> summable;
+end;
+
+theorem :: COMSEQ_3:57
+seq is summable implies z (#) seq is summable & Sum(z (#) seq)= z * Sum(seq);
+
+definition let z be Element of COMPLEX,
+               seq be summable Complex_Sequence;
+ cluster z (#) seq -> summable;
+end;
+
+theorem :: COMSEQ_3:58
+Re seq is summable & Im seq is summable implies
+ seq is summable & Sum(seq)=[*Sum(Re seq),Sum(Im seq)*];
+
+theorem :: COMSEQ_3:59
+seq is summable implies for n holds seq^\n is summable;
+
+definition let seq be summable Complex_Sequence,
+               n be Nat;
+ cluster seq^\n -> summable;
+end;
+
+theorem :: COMSEQ_3:60
+  (ex n st seq^\n is summable) implies seq is summable;
+
+theorem :: COMSEQ_3:61
+  seq is summable implies
+ for n holds Sum(seq) = Partial_Sums(seq).n + Sum(seq^\(n+1));
+
+theorem :: COMSEQ_3:62
+Partial_Sums |.seq.| is bounded_above iff seq is absolutely_summable;
+
+definition let seq be absolutely_summable Complex_Sequence;
+ cluster Partial_Sums |.seq.| -> bounded_above;
+end;
+
+theorem :: COMSEQ_3:63
+seq is summable iff (for p st 0<p holds ex n st
+ for m st n <= m holds |.Partial_Sums(seq).m-Partial_Sums(seq).n.|<p);
+
+theorem :: COMSEQ_3:64
+seq is absolutely_summable implies seq is summable;
+
+definition
+ cluster absolutely_summable -> summable Complex_Sequence;
+end;
+
+definition
+ cluster absolutely_summable Complex_Sequence;
+end;
+
+theorem :: COMSEQ_3:65
+|.z.| < 1 implies z GeoSeq is summable & Sum(z GeoSeq) = 1r/(1r-z);
+
+theorem :: COMSEQ_3:66
+  |.z.| < 1 & (for n holds seq.(n+1) = z * seq.n) implies
+ seq is summable & Sum(seq) = seq.0/(1r-z);
+
+theorem :: COMSEQ_3:67
+  rseq1 is summable & (ex m st for n st m<=n holds |.seq2.n.| <= rseq1.n )
+ implies seq2 is absolutely_summable;
+
+theorem :: COMSEQ_3:68
+  (for n holds 0 <= |.seq1.|.n & |.seq1.|.n <= |.seq2.|.n)
+ & seq2 is absolutely_summable implies
+  seq1 is absolutely_summable & Sum |.seq1.| <= Sum |.seq2.|;
+
+theorem :: COMSEQ_3:69
+  (for n holds |.seq.|.n>0) &
+ (ex m st for n st n>=m holds |.seq.|.(n+1)/|.seq.|.n >= 1)
+  implies not seq is absolutely_summable;
+
+theorem :: COMSEQ_3:70
+  (for n holds rseq1.n = n-root (|.seq.|.n)) & rseq1 is convergent &
+  lim rseq1 < 1
+implies seq is absolutely_summable;
+
+theorem :: COMSEQ_3:71
+  (for n holds rseq1.n = n-root (|.seq.|.n))
+ & (ex m st for n st m<=n holds rseq1.n>= 1)
+  implies |.seq.| is not summable;
+
+theorem :: COMSEQ_3:72
+  (for n holds rseq1.n = n-root (|.seq.|.n))
+ & rseq1 is convergent & lim rseq1 > 1
+implies seq is not absolutely_summable;
+
+theorem :: COMSEQ_3:73
+  |.seq .| is non-increasing
+ & (for n holds rseq1.n = 2 to_power n * |.seq.|.(2 to_power n))
+implies
+(seq is absolutely_summable iff rseq1 is summable);
+
+theorem :: COMSEQ_3:74
+  p>1 & (for n st n>=1 holds |.seq.|.n = 1/n to_power p)
+ implies seq is absolutely_summable;
+
+theorem :: COMSEQ_3:75
+  p<=1 & (for n st n>=1 holds |.seq.|.n=1/n to_power p)
+ implies not seq is absolutely_summable;
+
+theorem :: COMSEQ_3:76
+  (for n holds seq.n<>0c & rseq1.n=|.seq.|.(n+1)/|.seq.|.n) &
+ rseq1 is convergent & lim rseq1 < 1 implies
+  seq is absolutely_summable;
+
+theorem :: COMSEQ_3:77
+  (for n holds seq.n<>0c)
+ & (ex m st for n st n>=m holds |.seq.|.(n+1)/|.seq.|.n >= 1)
+  implies seq is not absolutely_summable;

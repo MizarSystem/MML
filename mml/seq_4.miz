@@ -1,0 +1,1526 @@
+:: Convergent Real Sequences. Upper and Lower Bound of Sets of Real Numbers
+::  by Jaros{\l}aw Kotowicz
+::
+:: Received November 23, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, SEQ_1, ORDINAL2, SEQM_3, ARYTM_3, RELAT_1, ARYTM_1, SEQ_2,
+      LATTICES, ABSVALUE, FUNCT_1, PROB_1, SEQ_4, MEMBERED;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, RELAT_1, SEQ_1, SEQ_2, NAT_1, FUNCT_2, SEQM_3, ABSVALUE,
+      MEMBERED;
+ constructors REAL_1, SEQ_2, NAT_1, SEQM_3, ABSVALUE, PARTFUN1, XCMPLX_0,
+      XREAL_0, MEMBERED, XBOOLE_0;
+ clusters XREAL_0, RELSET_1, SEQ_1, SEQM_3, ARYTM_3, REAL_1, XBOOLE_0, NUMBERS,
+      SUBSET_1, MEMBERED, ZFMISC_1, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, SEQ_2;
+ theorems REAL_1, NAT_1, SEQ_1, SEQ_2, SEQM_3, AXIOMS, FUNCT_1, FUNCT_2,
+      ABSVALUE, TARSKI, SQUARE_1, RELAT_1, RELSET_1, XREAL_0, XBOOLE_1,
+      SUBSET_1, XCMPLX_0, XCMPLX_1, MEMBERED;
+ schemes NAT_1, RECDEF_1, SEQ_1, REAL_1, SETWISEO;
+
+begin
+
+  reserve n,k,k1,m,m1,n1,n2,l for Nat;
+  reserve r,r1,r2,p,p1,g,g1,g2,s,s1,s2 for real number;
+  reserve seq,seq1,seq2 for Real_Sequence;
+  reserve Nseq for increasing Seq_of_Nat;
+  reserve x for set;
+  reserve X,Y for Subset of REAL;
+
+theorem
+ Th1:0<r1 & r1<=r & 0<=g implies g/r<=g/r1
+  proof
+   assume that
+A1: 0<r1 and
+A2: r1<=r and
+A3: 0<=g;
+   0<r by A1,A2;
+then A4: 0<=r" by REAL_1:72;
+   A5: 0<=r1" by A1,REAL_1:72;
+     r1*r"<=r*r" by A2,A4,AXIOMS:25;
+   then r1*r"<=1 by A1,A2,XCMPLX_0:def 7;
+   then r1"*(r1*r")<=r1"*1 by A5,AXIOMS:25;
+   then r1"*r1*r"<=r1" by XCMPLX_1:4;
+   then 1*r"<=r1" by A1,XCMPLX_0:def 7;
+   then g*r"<=g*r1" by A3,AXIOMS:25;
+   then g/r<=g*r1" by XCMPLX_0:def 9;
+   hence thesis by XCMPLX_0:def 9;
+  end;
+
+canceled 2;
+
+theorem
+ Th4:0<s implies 0<s/3
+  proof
+   assume 0<s;
+   then 0/3<s/3 by REAL_1:73; hence thesis;
+  end;
+
+canceled;
+
+theorem
+ Th6:0<g & 0<=r & g<=g1 & r<r1 implies g*r<g1*r1
+  proof
+   assume that
+A1: 0<g and
+A2: 0<=r and
+A3: g<=g1 and
+A4: r<r1;
+     0<=r1 by A2,A4,AXIOMS:22;
+then A5: g*r1<=g1*r1 by A3,AXIOMS:25;
+     g*r<g*r1 by A1,A4,REAL_1:70;
+   hence g*r<g1*r1 by A5,AXIOMS:22;
+  end;
+
+theorem
+ Th7:0<=g & 0<=r & g<=g1 & r<=r1 implies g*r<=g1*r1
+  proof
+   assume that
+A1: 0<=g and
+A2: 0<=r and
+A3: g<=g1 and
+A4: r<=r1;
+   A5: g*r<=g*r1 by A1,A4,AXIOMS:25;
+    g*r1<=g1*r1 by A2,A3,A4,AXIOMS:25;
+   hence g*r<=g1*r1 by A5,AXIOMS:22;
+  end;
+
+theorem Th8:
+ for X,Y st for r,p st r in X & p in Y holds r<p
+   ex g st for r,p st r in X & p in Y holds r<=g & g<=p
+  proof
+   let X,Y such that
+A1: for r,p st r in X & p in Y holds r<p;
+       for r,p st r in X & p in Y holds r<=p by A1;
+   then consider g such that
+A2:  for r,p st r in X & p in Y holds r <= g & g <= p by AXIOMS:26;
+    reconsider g as Real by XREAL_0:def 1;
+    take g;
+    thus thesis by A2;
+  end;
+
+theorem :: ARCHIMEDES LAW
+ Th9:0<p & (ex r st r in X) & (for r st r in X holds r+p in X) implies
+       for g ex r st r in X & g<r
+  proof
+   assume that
+A1: 0<p and
+A2: ex r st r in X and
+A3: for r st r in X holds r+p in X and
+A4: ex g st for r st r in X holds not g<r;
+    consider g1 such that
+A5:  for r st r in X holds not g1<r by A4;
+    defpred X[Real] means for r st r in X holds not $1<r;
+    consider Y such that
+A6: for p1 being Real holds p1 in Y iff X[p1] from SepReal;
+      g1 is Real by XREAL_0:def 1;
+then A7: g1 in Y by A5,A6;
+       now let r,p1 such that
+  A8: r in X and
+  A9: p1 in Y;
+  A10: r+p in X by A3,A8;
+A11: r+0<r+p by A1,REAL_1:67;
+        r+p<=p1 by A6,A9,A10;
+      hence r<p1 by A11,AXIOMS:22;
+     end;
+    then consider g2 such that
+A12: for r,p1 st r in X & p1 in Y holds r<=g2 & g2<=p1 by Th8;
+A13:   g2-p is Real by XREAL_0:def 1;
+A14:  now assume not g2-p in Y;
+      then consider r1 such that
+  A15: r1 in X and
+  A16: g2-p<r1 by A6,A13;
+        g2-p+p<r1+p by A16,REAL_1:53;
+      then g2-(p-p)<r1+p by XCMPLX_1:37;
+then A17:  g2-0<r1+p by XCMPLX_1:14;
+        r1+p in X by A3,A15;
+      hence contradiction by A7,A12,A17;
+     end;
+      -p<0 by A1,REAL_1:26,50;
+    then g2+-p<g2+0 by REAL_1:53;
+    then g2-p<g2 by XCMPLX_0:def 8;
+    hence contradiction by A2,A12,A14;
+   end;
+
+theorem
+ Th10:for r ex n st r<n
+  proof
+   let r;
+     for r st r in NAT holds r+1 in NAT by AXIOMS:28;
+   then consider p such that
+A1: p in NAT and
+A2: r<p by Th9;
+   consider n1 such that
+A3: n1=p by A1;
+   take n1;
+   thus r<n1 by A2,A3;
+  end;
+
+definition let X be real-membered set;
+attr X is bounded_above means :Def1:
+ ex p st for r st r in X holds r<=p;
+attr X is bounded_below means :Def2:
+ ex p st for r st r in X holds p<=r;
+end;
+
+definition let X;
+attr X is bounded means :Def3:
+ X is bounded_below bounded_above;
+end;
+
+canceled 3;
+
+theorem
+ Th14: X is bounded iff ex s st 0<s & for r st r in X holds abs(r)<s
+  proof
+  thus X is bounded implies ex s st 0<s & for r st r in X holds abs(r)<s
+   proof
+    assume
+A1: X is bounded;
+    then X is bounded_above by Def3;
+    then consider s1 such that
+A2: for r st r in X holds r<=s1 by Def1;
+      X is bounded_below by A1,Def3;
+    then consider s2 such that
+A3: for r st r in X holds s2<=r by Def2;
+    take s=abs(s1)+abs(s2)+1;
+A4: 0<=abs(s1) by ABSVALUE:5;
+A5: 0<=abs(s2) by ABSVALUE:5;
+    then 0+0<=abs(s1)+abs(s2) by A4,REAL_1:55;
+    hence 0<s by REAL_1:67;
+    let r such that
+ A6: r in X;
+A7: s1<=abs(s1) by ABSVALUE:11;
+      r<=s1 by A2,A6;
+    then r<=abs(s1) by A7,AXIOMS:22;
+    then r+0<=abs(s1)+abs(s2) by A5,REAL_1:55;
+then A8: r<s by REAL_1:67;
+A9: -abs(s2)<=s2 by ABSVALUE:11;
+A10: -abs(s1)<=0 by A4,REAL_1:26,50;
+      s2<=r by A3,A6;
+    then -abs(s2)<=r by A9,AXIOMS:22;
+    then -abs(s1)+-abs(s2)<=0+r by A10,REAL_1:55;
+    then -abs(s1)-abs(s2)<=r by XCMPLX_0:def 8;
+    then -abs(s1)-abs(s2)+-1<r+0 by REAL_1:67;
+then A11: -abs(s1)-abs(s2)-1<r by XCMPLX_0:def 8;
+      -abs(s1)-abs(s2)-1=-abs(s1)-(abs(s2)+1) by XCMPLX_1:36
+     .=-abs(s1)+-(1*(abs(s2)+1)) by XCMPLX_0:def 8
+     .=-(1*abs(s1))+(-1)*(abs(s2)+1) by XCMPLX_1:175
+     .=(-1)*abs(s1)+(-1)*(abs(s2)+1) by XCMPLX_1:175
+     .=(-1)*(abs(s1)+(abs(s2)+1)) by XCMPLX_1:8
+     .=-(1*(abs(s1)+(abs(s2)+1))) by XCMPLX_1:175
+     .=-(abs(s1)+abs(s2)+1) by XCMPLX_1:1;
+    hence abs(r)<s by A8,A11,SEQ_2:9;
+   end;
+   given s such that 0<s and
+A12: for r st r in X holds abs(r)<s;
+      now take g=s;
+     let r; assume r in X;
+ then A13: abs(r)<g by A12;
+       r<=abs(r) by ABSVALUE:11;
+     hence r<=g by A13,AXIOMS:22;
+    end;
+then A14: X is bounded_above by Def1;
+      now take g=-s;
+     let r; assume r in X;
+     then abs(r)<s by A12;
+ then A15: -s<-abs(r) by REAL_1:50;
+       -abs(r)<=r by ABSVALUE:11;
+     hence g<=r by A15,AXIOMS:22;
+    end;
+   then X is bounded_below by Def2;
+   hence thesis by A14,Def3;
+  end;
+
+definition let r;
+  redefine func {r} -> Subset of REAL;
+  coherence
+proof
+    {r} c= REAL
+  proof
+    let x be set; assume x in {r}; then x = r by TARSKI:def 1;
+    hence thesis by XREAL_0:def 1;
+  end;
+  hence thesis;
+end;
+end;
+
+theorem Th15:
+  {r} is bounded
+  proof
+      now take s=abs(r)+1;
+       0<=abs(r) by ABSVALUE:5;
+     then 0+0<abs(r)+1 by REAL_1:67;
+     hence 0<s;
+     let r1 such that
+  A1: r1 in {r};
+       abs(r)+0<s by REAL_1:67;
+     hence abs(r1)<s by A1,TARSKI:def 1;
+    end;
+   hence thesis by Th14;
+  end;
+
+theorem Th16:
+ for X being real-membered set holds
+ X is non empty bounded_above implies
+  ex g st (for r st r in X holds r<=g) & for s st 0<s ex r st r in X & g-s<r
+  proof let X be real-membered set;
+   assume that A1:X is non empty and
+               A2:X is bounded_above;
+   consider r1 being real number such that
+A3:r1 in X by A1,MEMBERED:7;
+   consider p1 such that A4:for r st r in X holds r<=p1 by A2,Def1;
+A5:  X is Subset of REAL by MEMBERED:2;
+   defpred X[Real] means for r st r in X holds r<=$1;
+   consider Y such that
+    A6:for p be Real holds p in Y iff X[p] from SepReal;
+      p1 is Real by XREAL_0:def 1;
+   then A7:p1 in Y by A4,A6;
+      for r,p st r in X & p in Y holds r<=p by A6;
+   then consider g1 such that
+   A8:for r,p st r in X & p in Y holds r<=g1 & g1<=p by A5,AXIOMS:26;
+  reconsider g1 as Real by XREAL_0:def 1;
+   take g=g1;
+      now given s1 such that A9:0<s1 and
+                           A10:for r st r in X holds not g-s1<r;
+      g-s1 is Real by XREAL_0:def 1;
+     then g-s1 in Y by A6,A10;
+     then g<=g-s1 by A3,A8;
+     then g-(g-s1)<=g-s1-(g-s1) by REAL_1:49;
+     then g-(g-s1)<=0 by XCMPLX_1:14;
+     hence contradiction by A9,XCMPLX_1:18;
+    end;
+   hence thesis by A7,A8;
+  end;
+
+theorem Th17:
+ for X being real-membered set holds
+      (for r st r in X holds r<=g1) &
+      (for s st 0<s ex r st (r in X & g1-s<r)) &
+      (for r st r in X holds r<=g2) &
+      (for s st 0<s ex r st (r in X & g2-s<r))
+        implies g1=g2
+  proof let X be real-membered set;
+   assume that A1:for r st r in X holds r<=g1 and
+               A2:for s st 0<s ex r st (r in X & g1-s<r) and
+               A3:for r st r in X holds r<=g2 and
+               A4:for s st 0<s ex r st (r in X & g2-s<r);
+    A5:now assume g1<g2;
+      then 0<g2-g1 by SQUARE_1:11;
+      then consider r1 such that A6:r1 in X and
+                            A7:g2-(g2-g1)<r1 by A4;
+        g1<r1 by A7,XCMPLX_1:18;
+      hence contradiction by A1,A6;
+    end;
+      now assume g2<g1;
+      then 0<g1-g2 by SQUARE_1:11;
+      then consider r1 such that A8:r1 in X and
+                            A9:g1-(g1-g2)<r1 by A2;
+        g2<r1 by A9,XCMPLX_1:18;
+      hence contradiction by A3,A8;
+    end;
+   hence thesis by A5,AXIOMS:21;
+  end;
+
+theorem Th18:
+  for X being real-membered set holds
+  X is non empty bounded_below implies ex g st
+        (for r st r in X holds g<=r) & (for s st 0<s ex r st r in X & r<g+s)
+  proof let X be real-membered set;
+   assume that A1: X is non empty and
+               A2:X is bounded_below;
+   consider r1 being real number such that
+A3: r1 in X by A1,MEMBERED:7;
+   consider p1 such that A4:for r st r in X holds p1<=r by A2,Def2;
+   reconsider X as Subset of REAL by MEMBERED:2;
+   defpred X[Real] means for r st r in X holds $1<=r;
+   consider Y such that
+    A5:for p be Real holds p in Y iff X[p] from SepReal;
+      p1 is Real by XREAL_0:def 1;
+   then A6:p1 in Y by A4,A5;
+      for p,r st p in Y & r in X holds p<=r by A5;
+   then consider g1 such that
+   A7:for p,r st p in Y & r in X holds p<=g1 & g1<=r by AXIOMS:26;
+   reconsider g1 as Real by XREAL_0:def 1;
+   take g=g1;
+      now given s1 such that A8:0<s1 and
+                           A9:for r st r in X holds not r<g+s1;
+      g+s1 is Real by XREAL_0:def 1;
+     then g+s1 in Y by A5,A9;
+     then g+s1<=g by A3,A7;
+     then g+s1-g<=g-g by REAL_1:49;
+     then g+s1-g<=0 by XCMPLX_1:14;
+     hence contradiction by A8,XCMPLX_1:26;
+    end;
+   hence thesis by A6,A7;
+  end;
+
+theorem Th19:
+ for X being real-membered set holds
+      (for r st r in X holds g1<=r) &
+      (for s st 0<s ex r st (r in X & r<g1+s)) &
+      (for r st r in X holds g2<=r) &
+      (for s st 0<s ex r st (r in X & r<g2+s))
+        implies g1=g2
+  proof let X be real-membered set;
+   assume that A1:for r st r in X holds g1<=r and
+               A2:for s st 0<s ex r st (r in X & r<g1+s) and
+               A3:for r st r in X holds g2<=r and
+               A4:for s st 0<s ex r st (r in X & r<g2+s);
+    A5:now assume g1<g2;
+      then 0<g2-g1 by SQUARE_1:11;
+      then consider r1 such that A6:r1 in X and
+                            A7:r1<g1+(g2-g1) by A2;
+        r1<g2 by A7,XCMPLX_1:27;
+      hence contradiction by A3,A6;
+    end;
+      now assume g2<g1;
+      then 0<g1-g2 by SQUARE_1:11;
+      then consider r1 such that A8:r1 in X and
+                            A9:r1<g2+(g1-g2) by A4;
+        r1<g1 by A9,XCMPLX_1:27;
+      hence contradiction by A1,A8;
+    end;
+   hence thesis by A5,AXIOMS:21;
+  end;
+
+definition let X be real-membered set;
+assume A1: X is non empty bounded_above;
+func upper_bound X -> real number means :Def4:
+  (for r st r in X holds r<=it) & (for s st 0<s ex r st r in X & it-s<r);
+ existence by A1,Th16;
+ uniqueness by Th17;
+end;
+
+definition let X be real-membered set;
+assume A1: X is non empty bounded_below;
+func lower_bound X -> real number means :Def5:
+  (for r st r in X holds it<=r) & (for s st 0<s ex r st r in X & r<it+s);
+ existence by A1,Th18;
+ uniqueness by Th19;
+end;
+
+definition let X;
+ redefine func upper_bound X -> Real;
+ coherence by XREAL_0:def 1;
+ redefine func lower_bound X -> Real;
+ coherence by XREAL_0:def 1;
+end;
+
+canceled 2;
+
+theorem Th22:
+  lower_bound {r} = r & upper_bound {r} = r
+  proof
+   set X={r};
+A1: X is bounded by Th15;
+then A2: X is bounded_below by Def3;
+A3: X is bounded_above by A1,Def3;
+       now
+      thus for p st p in X holds r<=p by TARSKI:def 1;
+         now let s such that A4:0<s;
+        take r1=r;
+        thus r1 in X by TARSKI:def 1;
+          r+0<r+s by A4,REAL_1:67;
+        hence r1<r+s;
+       end;
+      hence for s st 0<s ex p st p in X & p<r+s;
+     end;
+    hence lower_bound X=r by A2,Def5;
+       now
+      thus for p st p in X holds p<=r by TARSKI:def 1;
+         now let s such that A5:0<s;
+        take r1=r;
+        thus r1 in X by TARSKI:def 1;
+       -s<0 by A5,REAL_1:26,50;
+        then r+-s<r+0 by REAL_1:67;
+        hence r-s<r1 by XCMPLX_0:def 8;
+       end;
+      hence for s st 0<s ex p st p in X & r-s<p;
+     end;
+    hence upper_bound X=r by A3,Def4;
+  end;
+
+theorem Th23:
+  lower_bound {r} = upper_bound {r}
+  proof
+     lower_bound {r}=r & upper_bound {r}=r by Th22;
+   hence thesis;
+  end;
+
+theorem
+    X is bounded non empty implies lower_bound X <= upper_bound X
+  proof
+   assume that
+A1: X is bounded and
+A2: X is non empty;
+   consider r being Element of REAL such that
+A3:  r in X by A2,SUBSET_1:10;
+A4: X is bounded_below & X is bounded_above by A1,Def3;
+then A5: lower_bound X<=r by A3,Def5;
+      r<=upper_bound X by A3,A4,Def4;
+    hence thesis by A5,AXIOMS:22;
+  end;
+
+theorem
+    X is bounded non empty implies
+      ((ex r,p st r in X & p in X & p<>r) iff lower_bound X < upper_bound X)
+  proof
+   assume that A1: X is bounded and
+               A2: X is non empty;
+thus (ex r,p st r in X & p in X & p<>r) implies lower_bound X<upper_bound X
+ proof
+   given r,p such that
+ A3: r in X and
+ A4: p in X and
+ A5: p<>r;
+   A6: now assume A7:p<r;
+          X is bounded_below by A1,Def3;
+        then lower_bound X<=p by A4,Def5;
+    then A8: lower_bound X<r by A7,AXIOMS:22;
+          X is bounded_above by A1,Def3;
+       then r<=upper_bound X by A3,Def4;
+       hence lower_bound X<upper_bound X by A8,AXIOMS:22;
+      end;
+      now assume A9:r<p;
+          X is bounded_below by A1,Def3;
+        then lower_bound X<=r by A3,Def5;
+    then A10: lower_bound X<p by A9,AXIOMS:22;
+          X is bounded_above by A1,Def3;
+        then p<=upper_bound X by A4,Def4;
+        hence lower_bound X<upper_bound X by A10,AXIOMS:22;
+    end;
+   hence thesis by A5,A6,REAL_1:def 5;
+  end;
+  assume that
+A11: lower_bound X<upper_bound X and
+A12: for r,p st r in X & p in X holds p=r;
+     consider r being Element of REAL such that
+A13: r in X by A2,SUBSET_1:10;
+       now let x;
+         now assume A14:x in X;
+           then x is Real;
+           hence x=r by A12,A13,A14;
+       end;
+      hence x in X iff x=r by A13;
+     end;
+   then X={r} by TARSKI:def 1;
+   hence contradiction by A11,Th23;
+  end;
+
+::
+:: Theorems about the Convergence and the Limit
+::
+
+theorem
+ Th26:seq is convergent implies abs seq is convergent
+  proof
+   assume seq is convergent;
+   then consider g1 such that
+   A1:for p st 0<p ex n st
+       for m st n<=m holds abs((seq.m)-g1)<p by SEQ_2:def 6;
+   reconsider g1 as Real by XREAL_0:def 1;
+   take g=abs(g1);
+   let p; assume 0<p;
+   then consider n1 such that A2:for m st n1<=m holds abs((seq.m)-g1)<p by A1;
+   take n=n1;
+   let m; assume n<=m;
+   then A3:abs((seq.m)-g1)<p by A2;
+   A4:abs(seq.m)-g<=abs((seq.m)-g1) by ABSVALUE:18;
+     abs(g1-seq.m)=abs(-((seq.m)-g1)) by XCMPLX_1:143
+     .=abs((seq.m)-g1) by ABSVALUE:17;
+   then g-abs(seq.m)<=abs((seq.m)-g1) by ABSVALUE:18;
+   then -abs((seq.m)-g1)<= -(g-abs(seq.m)) by REAL_1:50;
+   then -abs((seq.m)-g1)<=abs(seq.m)-g by XCMPLX_1:143;
+   then abs(abs(seq.m)-g)<=abs((seq.m)-g1) by A4,ABSVALUE:12;
+   then abs(((abs seq).m)-g) <=abs((seq.m)-g1) by SEQ_1:16;
+   hence thesis by A3,AXIOMS:22;
+  end;
+
+theorem
+    seq is convergent implies lim abs seq = abs lim seq
+  proof
+   assume A1:seq is convergent;
+   then A2:abs seq is convergent by Th26;
+      now let p; assume 0<p;
+     then consider n1 such that
+     A3:for m st n1<=m holds abs((seq.m)-(lim seq))<p by A1,SEQ_2:def 7;
+     take n=n1;
+     let m; assume n<=m;
+     then A4:abs((seq.m)-(lim seq))<p by A3;
+     A5:abs(seq.m)-abs(lim seq)<=abs((seq.m)-(lim seq)) by ABSVALUE:18;
+       abs((lim seq)-seq.m)=abs(-((seq.m)-(lim seq))) by XCMPLX_1:143
+                 .=abs((seq.m)-(lim seq)) by ABSVALUE:17;
+     then abs(lim seq)-abs(seq.m)<=abs((seq.m)-(lim seq)) by ABSVALUE:18;
+     then -abs((seq.m)-(lim seq))<=-(abs(lim seq)-abs(seq.m))
+                 by REAL_1:50;
+     then -abs((seq.m)-(lim seq))<=abs(seq.m)-abs(lim seq) by XCMPLX_1:143;
+     then abs(abs(seq.m)-abs(lim seq))<=abs((seq.m)-(lim seq))
+                   by A5,ABSVALUE:12;
+     then abs(((abs seq).m)-abs(lim seq)) <=abs((seq.m)-(lim seq)) by SEQ_1:16
+;
+     hence abs(((abs seq).m)-abs(lim seq))<p by A4,AXIOMS:22;
+    end;
+   hence thesis by A2,SEQ_2:def 7;
+  end;
+
+theorem
+   abs seq is convergent & lim abs seq=0 implies
+             seq is convergent & lim seq=0
+  proof
+   assume that A1:abs seq is convergent and
+               A2:lim abs seq=0;
+   A3:-abs seq is convergent by A1,SEQ_2:23;
+   A4:lim(-abs seq)=lim abs seq by A1,A2,REAL_1:26,SEQ_2:24;
+    A5:now let n;
+       -abs(seq.n)<=seq.n by ABSVALUE:11;
+then A6:     -((abs seq).n)<=seq.n by SEQ_1:16;
+       seq.n<=abs(seq.n) by ABSVALUE:11;
+     hence (-abs seq).n<=seq.n & seq.n<=(abs seq).n by A6,SEQ_1:14,16;
+    end;
+   hence seq is convergent by A1,A3,A4,SEQ_2:33;
+   thus lim seq=0 by A1,A2,A3,A4,A5,SEQ_2:34;
+  end;
+
+theorem
+ Th29:seq1 is_subsequence_of seq & seq is convergent implies
+        seq1 is convergent
+  proof
+   assume that A1:seq1 is_subsequence_of seq and
+               A2:seq is convergent;
+   consider g1 such that
+   A3:for p st 0<p ex n st for m st n<=m holds
+     abs((seq.m)-g1)<p by A2,SEQ_2:def 6;
+   consider Nseq such that A4:seq1=seq*Nseq by A1,SEQM_3:def 10;
+   take g=g1;
+   let p; assume 0<p;
+   then consider n1 such that
+     A5:for m st n1<=m holds abs((seq.m)-g1)<p by A3;
+   take n=n1;
+   let m such that A6:n<=m;
+     m<=Nseq.m by SEQM_3:33;
+   then A7:n<=Nseq.m by A6,AXIOMS:22;
+     seq1.m=seq.(Nseq.m) by A4,SEQM_3:31;
+   hence abs((seq1.m)-g)<p by A5,A7;
+  end;
+
+theorem
+ Th30:seq1 is_subsequence_of seq & seq is convergent implies
+        lim seq1=lim seq
+  proof
+   assume that A1:seq1 is_subsequence_of seq and
+               A2:seq is convergent;
+   A3:seq1 is convergent by A1,A2,Th29;
+   consider Nseq such that A4:seq1=seq*Nseq by A1,SEQM_3:def 10;
+      now let p; assume 0<p;
+     then consider n1 such that
+      A5:for m st n1<=m holds abs((seq.m)-(lim seq))<p by A2,SEQ_2:def 7;
+     take n=n1;
+     let m such that A6:n<=m;
+       m<=Nseq.m by SEQM_3:33;
+     then A7:n<=Nseq.m by A6,AXIOMS:22;
+       seq1.m=seq.(Nseq.m) by A4,SEQM_3:31;
+     hence abs((seq1.m)-(lim seq))<p by A5,A7;
+    end;
+   hence thesis by A3,SEQ_2:def 7;
+  end;
+
+theorem
+ Th31:seq is convergent & (ex k st for n st k<=n holds seq1.n=seq.n)
+      implies seq1 is convergent
+  proof
+   assume that A1:seq is convergent and
+               A2:ex k st for n st k<=n holds seq1.n=seq.n;
+   consider g1 such that
+   A3:for p st 0<p ex n st for m st n<=m holds
+         abs((seq.m)-g1)<p by A1,SEQ_2:def 6;
+   consider k such that A4:for n st k<=n holds seq1.n=seq.n by A2;
+   take g=g1;
+   let p; assume 0<p;
+   then consider n1 such that A5:for m st n1<=m holds abs((seq.m)-g1)<p
+           by A3;
+    A6:now assume A7:k<=n1;
+     take n=n1;
+     let m; assume A8:n<=m;
+     then k<=m by A7,AXIOMS:22;
+     then seq1.m=seq.m by A4;
+     hence abs((seq1.m)-g)<p by A5,A8;
+    end;
+      now assume A9:n1<=k;
+     take n=k;
+     let m; assume A10:n<=m;
+     then n1<=m by A9,AXIOMS:22;
+     then abs((seq.m)-g1)<p by A5;
+     hence abs((seq1.m)-g)<p by A4,A10;
+    end;
+   hence ex n st for m st n<=m holds abs(seq1.m-g)<p by A6;
+  end;
+
+theorem
+   seq is convergent & (ex k st for n st k<=n holds seq1.n=seq.n)
+      implies lim seq=lim seq1
+  proof
+   assume that A1:seq is convergent and
+               A2:ex k st for n st k<=n holds seq1.n=seq.n;
+   A3:seq1 is convergent by A1,A2,Th31;
+   consider k such that A4:for n st k<=n holds seq1.n=seq.n by A2;
+      now let p; assume 0<p;
+     then consider n1 such that
+     A5:for m st n1<=m holds abs((seq.m)-(lim seq))<p by A1,SEQ_2:def 7;
+      A6:now assume A7:k<=n1;
+       take n=n1;
+       let m; assume A8:n<=m;
+       then k<=m by A7,AXIOMS:22;
+       then seq1.m=seq.m by A4;hence
+         abs((seq1.m)-(lim seq))<p by A5,A8;
+      end;
+        now assume A9:n1<=k;
+       take n=k;
+       let m; assume A10:n<=m;
+       then n1<=m by A9,AXIOMS:22;
+       then abs((seq.m)-(lim seq))<p by A5;
+       hence abs((seq1.m)-(lim seq))<p by A4,A10;
+      end;hence
+       ex n st for m st n<=m holds abs(seq1.m-(lim seq))<p by A6;
+    end;
+   hence thesis by A3,SEQ_2:def 7;
+  end;
+
+theorem Th33:
+  seq is convergent implies ((seq ^\k) is convergent & lim (seq ^\k)=lim seq)
+  proof
+   assume A1:seq is convergent;
+   A2:seq^\k is_subsequence_of seq by SEQM_3:47;
+   hence seq^\k is convergent by A1,Th29;
+   thus lim (seq ^\k)=lim seq by A1,A2,Th30;
+  end;
+
+canceled;
+
+theorem Th35:
+  seq is convergent & (ex k st seq=seq1 ^\k) implies seq1 is convergent
+  proof
+     assume that
+ A1: seq is convergent and
+ A2: ex k st seq=seq1 ^\k;
+     consider k such that
+ A3: seq=seq1 ^\k by A2;
+     consider g1 such that
+ A4: for p st 0<p ex n st for m st n<=m holds abs(seq.m-g1)<p
+     by A1,SEQ_2:def 6;
+     take g=g1;
+     let p; assume
+     0<p;
+     then consider n1 such that
+ A5: for m st n1<=m holds abs(seq.m-g1)<p by A4;
+     take n=n1+k;
+     let m; assume
+ A6: n<=m;
+     then consider l such that
+ A7: m=n1+k+l by NAT_1:28;
+       m-k=n1+k+l+-k by A7,XCMPLX_0:def 8;
+     then m-k=n1+l+k+-k by XCMPLX_1:1;
+     then m-k=n1+l+k-k by XCMPLX_0:def 8;
+     then m-k=n1+l+(k-k) by XCMPLX_1:29;
+     then m-k=n1+l+0 by XCMPLX_1:14;
+     then consider m1 such that
+ A8: m1=m-k;
+ A9:  now assume not n1<=m1;
+        then m1+k<n1+k by REAL_1:53;
+        then m-(k-k)<n1+k by A8,XCMPLX_1:37;
+        then m-0<n1+k by XCMPLX_1:14;
+        hence contradiction by A6;
+      end;
+ A10:  m1+k=m-(k-k) by A8,XCMPLX_1:37
+      .=m-0 by XCMPLX_1:14
+      .=m;
+     abs(seq.m1-g1)<p by A5,A9;
+   hence abs(seq1.m-g)<p by A3,A10,SEQM_3:def 9;
+ end;
+
+theorem
+   seq is convergent & (ex k st seq=seq1 ^\k)
+       implies lim seq1 =lim seq
+  proof
+     assume that
+ A1: seq is convergent and
+ A2: ex k st seq=seq1 ^\k;
+ A3: seq1 is convergent by A1,A2,Th35;
+     consider k such that
+ A4: seq=seq1 ^\k by A2;
+        now let p; assume
+       0<p;
+       then consider n1 such that
+ A5:   for m st n1<=m holds abs(seq.m-(lim seq))<p by A1,SEQ_2:def 7;
+       take n=n1+k;
+       let m; assume
+ A6:   n<=m;
+       then consider l such that
+ A7:    m=n1+k+l by NAT_1:28;
+         m-k=n1+k+l+-k by A7,XCMPLX_0:def 8;
+       then m-k=n1+l+k+-k by XCMPLX_1:1;
+       then m-k=n1+l+k-k by XCMPLX_0:def 8;
+       then m-k=n1+l+(k-k) by XCMPLX_1:29;
+       then m-k=n1+l+0 by XCMPLX_1:14;
+       then consider m1 such that
+ A8:     m1=m-k;
+ A9:    now assume not n1<=m1;
+         then m1+k<n1+k by REAL_1:53;
+         then m-(k-k)<n1+k by A8,XCMPLX_1:37;
+         then m-0<n1+k by XCMPLX_1:14;
+         hence contradiction by A6;
+        end;
+ A10:   m1+k=m-(k-k) by A8,XCMPLX_1:37
+       .=m-0 by XCMPLX_1:14
+       .=m;
+        abs(seq.m1-(lim seq))<p by A5,A9;
+      hence abs(seq1.m-(lim seq))<p by A4,A10,SEQM_3:def 9;
+     end;
+    hence thesis by A3,SEQ_2:def 7;
+  end;
+
+theorem
+ Th37:seq is convergent & lim seq<>0 implies ex k st (seq ^\k) is_not_0
+  proof
+   assume that A1:seq is convergent and
+               A2:lim seq<>0;
+   consider n1 such that
+   A3:for m st n1<=m holds abs(lim seq)/2<abs((seq.m)) by A1,A2,SEQ_2:30;
+   take k=n1;
+      now let n;
+       0<=n by NAT_1:18;
+     then 0+k<=n+k by REAL_1:55;
+     then abs(lim seq)/2<abs((seq.(n+k))) by A3;
+     then A4:abs(lim seq)/2<abs(((seq ^\k).n)) by SEQM_3:def 9;
+       0<abs(lim seq) by A2,ABSVALUE:6;
+     then 0/2<abs(lim seq)/2 by REAL_1:73; hence (seq ^\k).n<>0 by A4,ABSVALUE:
+7;
+    end;
+   hence thesis by SEQ_1:7;
+  end;
+
+theorem
+   seq is convergent & lim seq<>0 implies
+       ex seq1 st seq1 is_subsequence_of seq & seq1 is_not_0
+  proof
+   assume that A1:seq is convergent and
+               A2:lim seq <>0;
+   consider k such that A3:seq ^\k is_not_0 by A1,A2,Th37;
+   take seq ^\k;
+   thus thesis by A3,SEQM_3:47;
+  end;
+
+theorem Th39:
+  seq is constant implies seq is convergent
+  proof
+   assume seq is constant;
+   then consider r such that A1:for n holds seq.n=r by SEQM_3:def 6;
+   take g=r;
+   let p such that A2:0<p;
+   take n=0;
+   let m such that n<=m;
+     abs((seq.m)-g)=abs(r-g) by A1
+    .=abs(0) by XCMPLX_1:14
+    .=0 by ABSVALUE:7;
+   hence abs((seq.m)-g)<p by A2;
+  end;
+
+theorem
+ Th40:(seq is constant & r in rng seq or
+      seq is constant & (ex n st seq.n=r)) implies lim seq=r
+  proof
+   assume A1: seq is constant & r in rng seq or
+             seq is constant & (ex n st seq.n=r);
+    A2:now assume that A3:seq is constant and
+                    A4:r in rng seq;
+       consider r1 such that A5:rng seq={r1} by A3,SEQM_3:15;
+       consider r2 such that
+       A6:for n holds seq.n=r2 by A3,SEQM_3:def 6;
+   A7: r=r1 by A4,A5,TARSKI:def 1;
+   A8: seq is convergent by A3,Th39;
+          now let p such that A9:0<p;
+         take n=0;
+         let m such that n<=m;
+           m in NAT;
+         then m in dom seq by FUNCT_2:def 1;
+         then seq.m in rng seq by FUNCT_1:def 5;
+         then r2 in rng seq by A6;
+         then r2=r by A5,A7,TARSKI:def 1;
+         then seq.m=r by A6;
+         then abs((seq.m)-r)=abs(0) by XCMPLX_1:14
+          .=0 by ABSVALUE:7;
+         hence abs((seq.m)-r)<p by A9;
+        end;
+       hence lim seq =r by A8,SEQ_2:def 7;
+    end;
+      now assume that
+     A10: seq is constant and
+     A11: ex n st seq.n=r;
+         consider n such that
+     A12:  seq.n=r by A11;
+            n in NAT;
+          then n in dom seq by FUNCT_2:def 1;
+          hence lim seq= r by A2,A10,A12,FUNCT_1:def 5;
+    end;
+   hence thesis by A1,A2;
+  end;
+
+theorem
+   seq is constant implies for n holds lim seq=seq.n by Th40;
+
+theorem
+   seq is convergent & lim seq<>0 implies
+       for seq1 st seq1 is_subsequence_of seq & seq1 is_not_0 holds
+        lim (seq1")=(lim seq)"
+  proof
+   assume that A1:seq is convergent and
+               A2:lim seq<>0;
+   let seq1 such that A3:seq1 is_subsequence_of seq and
+                      A4:seq1 is_not_0;
+   A5:seq1 is convergent by A1,A3,Th29;
+     lim seq1=lim seq by A1,A3,Th30;
+   hence lim seq1"=(lim seq)" by A2,A4,A5,SEQ_2:36;
+  end;
+
+theorem Th43:
+  0<r & (for n holds seq.n=1/(n+r)) implies seq is convergent
+  proof
+   assume that A1:0<r and
+               A2:for n holds seq.n=1/(n+r);
+   take g=0;
+   let p; assume 0<p;
+   then A3:0<p" by REAL_1:72;
+   consider k1 such that A4:p"<k1 by Th10;
+   take n=k1;
+   let m such that A5:n<=m;
+     p"+0<k1+r by A1,A4,REAL_1:67;
+   then 1/(k1+r)<1/p" by A3,SEQ_2:10;
+then A6: 1/(k1+r)<1*p"" by XCMPLX_0:def 9;
+   0<n by A3,A4,AXIOMS:22;
+then A7:   0+0<n+r by A1,REAL_1:67;
+     n+r<=m+r by A5,AXIOMS:24;
+   then 1/(m+r)<=1/(n+r) by A7,Th1;
+   then A8:1/(m+r)<p by A6,AXIOMS:22;
+   A9:seq.m=1/(m+r) by A2;
+     0<=m by NAT_1:18;
+   then 0+0<m+r by A1,REAL_1:67;
+   then 0/(m+r)<1/(m+r) by REAL_1:73;
+   hence abs(seq.m-g)<p by A8,A9,ABSVALUE:def 1;
+  end;
+
+theorem Th44:
+  0<r & (for n holds seq.n=1/(n+r)) implies lim seq=0
+  proof
+   assume that A1:0<r and
+               A2:for n holds seq.n=1/(n+r);
+   A3:seq is convergent by A1,A2,Th43;
+      now let p; assume 0<p;
+     then A4:0<p" by REAL_1:72;
+     consider k1 such that A5:p"<k1 by Th10;
+     take n=k1;
+      let m such that A6:n<=m;
+         p"+0<k1+r by A1,A5,REAL_1:67;
+       then 1/(k1+r)<1/p" by A4,SEQ_2:10;
+then A7:    1/(k1+r)<1*p"" by XCMPLX_0:def 9;
+      0<n by A4,A5,AXIOMS:22;
+then A8:       0+0<n+r by A1,REAL_1:67;
+         n+r<=m+r by A6,AXIOMS:24;
+       then 1/(m+r)<=1/(n+r) by A8,Th1;
+       then A9:1/(m+r)<p by A7,AXIOMS:22;
+       A10:seq.m=1/(m+r) by A2;
+         0<=m by NAT_1:18;
+       then 0+0<m+r by A1,REAL_1:67;
+       then 0/(m+r)<1/(m+r) by REAL_1:73; hence abs(seq.m-0)<p by A9,A10,
+ABSVALUE:def 1;
+    end;
+   hence thesis by A3,SEQ_2:def 7;
+  end;
+
+theorem
+   (for n holds seq.n=1/(n+1)) implies seq is convergent & lim seq=0
+ by Th43,Th44;
+
+theorem
+   0<r & (for n holds seq.n=g/(n+r)) implies seq is convergent & lim seq=0
+  proof
+   assume that A1:0<r and
+               A2:for n holds seq.n=g/(n+r);
+   reconsider r1 = r as Real by XREAL_0:def 1;
+   deffunc U(Nat) = 1/($1+r1);
+   consider seq1 such that A3:for n holds seq1.n=U(n) from ExRealSeq;
+   A4:seq1 is convergent by A1,A3,Th43;
+   then A5:g(#)seq1 is convergent by SEQ_2:21;
+   A6:lim (g(#)seq1)=g*(lim seq1) by A4,SEQ_2:22
+    .=g*0 by A1,A3,Th44
+    .=0;
+      now let n;
+     thus (g(#)seq1).n=g*(seq1.n) by SEQ_1:13
+      .=g*(1/(n+r)) by A3
+      .=g*(1*(n+r)") by XCMPLX_0:def 9
+      .=g/(n+r) by XCMPLX_0:def 9
+      .=seq.n by A2;
+    end;
+   hence seq is convergent & lim seq=0 by A5,A6,FUNCT_2:113;
+  end;
+
+theorem Th47:
+  0<r & (for n holds seq.n=1/(n*n+r)) implies seq is convergent
+  proof
+     assume that
+ A1:  0<r and
+ A2:  for n holds seq.n=1/(n*n+r);
+     take g=0;
+     let p; assume
+    0<p;
+ then A3: 0<p" by REAL_1:72;
+     consider k1 such that
+ A4:  p"<k1 by Th10;
+     take n=k1;
+     let m such that
+  A5:  n<=m;
+  A6: 0<k1 by A3,A4,AXIOMS:22;
+      then 0+1<=k1 by NAT_1:38;
+      then 1*p"<k1*k1 by A3,A4,Th6;
+      then p"+0<k1*k1+r by A1,REAL_1:67;
+      then 1/(k1*k1+r)<1/p" by A3,SEQ_2:10;
+then A7:   1/(k1*k1+r)<1*p"" by XCMPLX_0:def 9;
+ A8: n*n<=m*m by A5,A6,Th7;
+     0<=n*n by NAT_1:18;
+then A9:      0+0<n*n+r by A1,REAL_1:67;
+        n*n+r<=m*m+r by A8,AXIOMS:24;
+      then 1/(m*m+r)<=1/(n*n+r) by A9,Th1;
+  then A10: 1/(m*m+r)<p by A7,AXIOMS:22;
+  A11: seq.m=1/(m*m+r) by A2;
+        0<=m*m by NAT_1:18;
+      then 0+0<m*m+r by A1,REAL_1:67;
+      then 0<(m*m+r)" by REAL_1:72;
+      then 0<1/(m*m+r) by XCMPLX_1:217; hence abs(seq.m-g)<p by A10,A11,
+ABSVALUE:def 1;
+  end;
+
+theorem Th48:
+  0<r & (for n holds seq.n=1/(n*n+r)) implies lim seq=0
+  proof
+    assume that
+ A1: 0<r and
+ A2: for n holds seq.n=1/(n*n+r);
+  A3: seq is convergent by A1,A2,Th47;
+      now let p; assume
+      0<p;
+   then A4: 0<p" by REAL_1:72;
+       consider k1 such that
+   A5:  p"<k1 by Th10;
+       take n=k1;
+       let m such that
+   A6:   n<=m;
+   A7: 0<k1 by A4,A5,AXIOMS:22;
+       then 0+1<=k1 by NAT_1:38;
+       then 1*p"<k1*k1 by A4,A5,Th6;
+       then p"+0<k1*k1+r by A1,REAL_1:67;
+       then 1/(k1*k1+r)<1/p" by A4,SEQ_2:10;
+then A8:    1/(k1*k1+r)<1*p"" by XCMPLX_0:def 9;
+  A9: n*n<=m*m by A6,A7,Th7;
+     0<=n*n by NAT_1:18;
+then A10:   0+0<n*n+r by A1,REAL_1:67;
+         n*n+r<=m*m+r by A9,AXIOMS:24;
+       then 1/(m*m+r)<=1/(n*n+r) by A10,Th1;
+   then A11: 1/(m*m+r)<p by A8,AXIOMS:22;
+   A12: seq.m=1/(m*m+r) by A2;
+         0<=m*m by NAT_1:18;
+       then 0+0<m*m+r by A1,REAL_1:67;
+       then 0<(m*m+r)" by REAL_1:72;
+       then 0<1/(m*m+r) by XCMPLX_1:217;
+       hence abs(seq.m-0)<p by A11,A12,ABSVALUE:def 1;
+    end;
+   hence thesis by A3,SEQ_2:def 7;
+  end;
+
+theorem
+   (for n holds seq.n=1/(n*n+1)) implies
+           seq is convergent & lim seq=0 by Th47,Th48;
+
+theorem
+   0<r & (for n holds seq.n=g/(n*n+r)) implies seq is convergent &
+        lim seq=0
+  proof
+   assume that A1:0<r and
+               A2:for n holds seq.n=g/(n*n+r);
+   reconsider r1 = r as Real by XREAL_0:def 1;
+   deffunc U(Nat) = 1/($1*$1+r1);
+   consider seq1 such that A3:for n holds seq1.n=U(n)
+         from ExRealSeq;
+   A4:seq1 is convergent by A1,A3,Th47;
+   then A5:g(#)seq1 is convergent by SEQ_2:21;
+   A6:lim (g(#)seq1)=g*(lim seq1) by A4,SEQ_2:22
+    .=g*0 by A1,A3,Th48
+    .=0;
+      now let n;
+     thus (g(#)seq1).n=g*(seq1.n) by SEQ_1:13
+      .=g*(1/(n*n+r)) by A3
+      .=g*(1*(n*n+r)") by XCMPLX_0:def 9
+      .=g/(n*n+r) by XCMPLX_0:def 9
+      .=seq.n by A2;
+    end;
+   hence seq is convergent & lim seq=0 by A5,A6,FUNCT_2:113;
+  end;
+
+theorem
+ Th51:seq is non-decreasing & seq is bounded_above implies
+      seq is convergent
+  proof
+  assume that A1:seq is non-decreasing and
+              A2:seq is bounded_above;
+  consider r2 such that
+  A3:for n holds seq.n<r2 by A2,SEQ_2:def 3;
+  defpred X[Real] means ex n st $1=seq.n;
+  consider X such that
+   A4:for p be Real holds p in X iff X[p] from SepReal;
+A5:  seq.0 in X by A4;
+A6:X is bounded_above iff ex r st for p st p in X holds p<=r by Def1;
+A7:   now take r=r2;
+    let p; assume p in X;
+    then ex n1 st p=seq.n1 by A4;
+    hence p<=r by A3;
+   end;
+  take g=upper_bound X;
+  let s; assume A8:0<s;
+  then consider p1 such that A9:p1 in X and
+                        A10:upper_bound X-s<p1 by A5,A6,Def4;
+  consider n1 such that A11:p1=seq.n1 by A4,A9;
+  take n=n1;
+  let m; assume n<=m;
+  then seq.n<=seq.m by A1,SEQM_3:12;
+  then g-s<seq.m by A10,A11,AXIOMS:22;
+  then g+ -s<seq.m by XCMPLX_0:def 8;
+  then A12:-s<seq.m -g by REAL_1:86;
+    seq.m in X by A4;
+  then seq.m<=g by A6,A7,Def4;
+  then seq.m +0<g+s by A8,REAL_1:67;
+  then seq.m -g<s by REAL_1:84;
+  hence abs(seq.m -g)<s by A12,SEQ_2:9;
+ end;
+
+theorem
+ Th52:seq is non-increasing & seq is bounded_below implies
+      seq is convergent
+  proof
+   assume that A1:seq is non-increasing and
+               A2: seq is bounded_below;
+   consider r1 such that
+   A3:for n holds r1< seq.n by A2,SEQ_2:def 4;
+   defpred X[Real] means ex n st $1=seq.n;
+   consider X such that
+    A4:for p be Real holds p in X iff X[p] from SepReal;
+A5:   seq.0 in X by A4;
+A6:X is bounded_below iff ex r st for p st p in X holds r<=p by Def2;
+A7:    now take r=r1;
+     let p; assume p in X;
+     then ex n1 st p=seq.n1 by A4;
+     hence r<=p by A3;
+    end;
+   take g=lower_bound X;
+   let s; assume A8:0<s;
+   then consider p1 such that A9:p1 in X and
+                         A10:p1<lower_bound X+s by A5,A6,Def5;
+   consider n1 such that A11:p1=seq.n1 by A4,A9;
+   take n=n1;
+   let m; assume n<=m;
+   then seq.m<=seq.n by A1,SEQM_3:14;
+   then seq.m <g+s by A10,A11,AXIOMS:22;
+   then A12:seq.m -g<s by REAL_1:84;
+     seq.m in X by A4;
+   then 0+g<=seq.m by A6,A7,Def5;
+   then A13:0<=seq.m-g by REAL_1:84;
+     -s<0 by A8,REAL_1:26,50;
+   hence abs(seq.m -g)<s by A12,A13,SEQ_2:9;
+  end;
+
+theorem
+ Th53:seq is monotone & seq is bounded implies seq is convergent
+ proof
+  assume that A1:seq is monotone and
+              A2:seq is bounded;
+  A3:seq is bounded_below by A2,SEQ_2:def 5;
+    seq is bounded_above by A2,SEQ_2:def 5;
+   then A4: seq is non-decreasing implies thesis by Th51;
+      seq is non-increasing implies thesis by A3,Th52;
+  hence thesis by A1,A4,SEQM_3:def 7;
+ end;
+
+theorem
+   seq is bounded_above & seq is non-decreasing implies
+        for n holds seq.n<=lim seq
+  proof
+   assume that A1:seq is bounded_above and
+               A2:seq is non-decreasing;
+   A3:seq is convergent by A1,A2,Th51;
+   let m;
+   deffunc U(Nat) = seq.m;
+   consider seq1 such that A4:for n holds seq1.n=U(n) from ExRealSeq;
+   A5:seq1 is constant by A4,SEQM_3:def 6;
+   then A6:seq1 is convergent by Th39;
+     seq1.0=seq.m by A4;
+   then A7:lim seq1=seq.m by A5,Th40;
+   deffunc U(Nat) = seq.($1+m);
+   consider seq2 such that
+      A8:for n holds seq2.n=U(n) from ExRealSeq;
+   A9:seq2=seq^\m by A8,SEQM_3:def 9;
+   then A10:lim seq2=lim seq by A3,Th33;
+   A11: seq2 is convergent by A3,A9,Th33;
+      now let n;
+     A12:seq1.n=seq.m by A4;
+       seq2.n=seq.(m+n) by A8;
+     hence seq1.n<=seq2.n by A2,A12,SEQM_3:11;
+    end;
+   hence seq.m<=lim seq by A6,A7,A10,A11,SEQ_2:32;
+  end;
+
+theorem
+   seq is bounded_below & seq is non-increasing implies
+        for n holds lim seq <= seq.n
+  proof
+   assume that A1:seq is bounded_below and
+               A2:seq is non-increasing;
+A3: seq is convergent by A1,A2,Th52;
+   let m;
+   deffunc U(Nat) = seq.m;
+   consider seq1 such that
+A4: for n holds seq1.n= U(n) from ExRealSeq;
+A5:  seq1 is constant by A4,SEQM_3:def 6;
+then A6: seq1 is convergent by Th39;
+     seq1.0=seq.m by A4;
+then A7: lim seq1=seq.m by A5,Th40;
+   deffunc U(Nat) = seq.($1+m);
+   consider seq2 such that
+A8: for n holds seq2.n=U(n) from ExRealSeq;
+A9: seq2=seq^\m by A8,SEQM_3:def 9;
+then A10: lim seq2=lim seq by A3,Th33;
+A11: seq2 is convergent by A3,A9,Th33;
+      now let n;
+     A12:seq1.n=seq.m by A4;
+       seq2.n=seq.(m+n) by A8;
+     hence seq2.n<=seq1.n by A2,A12,SEQM_3:13;
+    end;
+   hence lim seq<=seq.m by A6,A7,A10,A11,SEQ_2:32;
+  end;
+
+ theorem
+  Th56:for seq ex Nseq st seq*Nseq is monotone
+   proof
+   let seq;
+   defpred X[Nat] means for m st $1<m holds seq.$1<seq.m;
+   consider XN being Subset of NAT such that A1:for n holds
+       n in XN iff X[n] from SubsetEx;
+ A2:  now
+       given k1 such that
+   A3: for n st n in XN holds n<=k1;
+   A4:  now let k; assume k1<k;
+          then not k in XN by A3;
+          then consider m such that A5: k<m and
+                                A6: not seq.k<seq.m by A1;
+          take n=m;
+          thus k<n by A5;
+          thus seq.n<=seq.k by A6;
+        end;
+       set seq1=seq ^\(1+k1);
+         seq1 is_subsequence_of seq by SEQM_3:47;
+       then consider Nseq such that
+   A7:  seq1=seq*Nseq by SEQM_3:def 10;
+   A8: now let k;
+             0<=k by NAT_1:18;
+           then 0<k+1 by NAT_1:38;
+           then 0+k1<k+1+k1 by REAL_1:67;
+           then consider n such that
+        A9: k+1+k1<n and
+        A10: seq.n<=seq.(k+1+k1) by A4;
+           consider m such that
+        A11: n=k+1+k1+m by A9,NAT_1:28;
+             n-(1+k1)=k+1+k1+m+-(1+k1) by A11,XCMPLX_0:def 8;
+           then n-(1+k1)=k+(1+k1)+m+-(1+k1) by XCMPLX_1:1;
+           then n-(1+k1)=k+(1+k1)+-(1+k1)+m by XCMPLX_1:1;
+           then n-(1+k1)=k+((1+k1)+-(1+k1))+m by XCMPLX_1:1;
+           then n-(1+k1)=k+0+m by XCMPLX_0:def 6;
+           then consider n1 such that
+            A12: n1=n-(1+k1);
+           take l=n1;
+              now assume not k<l;
+             then n-(1+k1)+(1+k1)<=k+(1+k1) by A12,AXIOMS:24;
+             then n-(1+k1)+(1+k1)<=k+1+k1 by XCMPLX_1:1;
+             then n-((1+k1)-(1+k1))<=k+1+k1 by XCMPLX_1:37;
+             then n-0<=k+1+k1 by XCMPLX_1:14;
+             hence contradiction by A9;
+            end;
+           hence k<l;
+       A13: n=n+0
+            .=n+(-(1+k1)+(1+k1)) by XCMPLX_0:def 6
+            .=n+-(1+k1)+(1+k1) by XCMPLX_1:1
+            .=l+(1+k1) by A12,XCMPLX_0:def 8;
+             seq.n<=seq.(k+(1+k1)) by A10,XCMPLX_1:1;
+           then seq.n<=seq1.k by SEQM_3:def 9;
+           hence seq1.l<=seq1.k by A13,SEQM_3:def 9;
+       end;
+
+  defpred P[Nat,set,set] means
+       for k,l st k=$2 & l=$3 holds
+           k<l &
+           seq1.l<=seq1.k &
+           for m st k<m & seq1.m<=seq1.k holds l<=m;
+A14: for n being Nat for x being Element of NAT
+            ex y being Element of NAT st P[n,x,y]
+      proof
+       let n be Nat,x be Element of NAT;
+     defpred X[Nat] means x<$1 & seq1.$1<=seq1.x;
+   A15: ex n st X[n] by A8;
+         ex l st X[l] & for m st X[m] holds l <= m from Min(A15);
+       then consider l such that
+                   A16: x<l and
+                   A17: seq1.l<=seq1.x and
+                   A18:  for m st x<m & seq1.m<=seq1.x holds l <= m;
+       take l;
+       thus thesis by A16,A17,A18;
+      end;
+   reconsider 0'=0 as Element of NAT qua non empty set;
+   consider f being Function of NAT,NAT such that
+   f.0 = 0' and
+A19: for n being Element of NAT holds P[n,f.n,f.(n+1)] from RecExD(A14);
+A20: rng f c= NAT by RELSET_1:12;
+then A21: rng f c= REAL by XBOOLE_1:1;
+A22: dom f =NAT by FUNCT_2:def 1;
+   then reconsider f as Real_Sequence by A21,FUNCT_2:def 1,RELSET_1:11;
+ A23: now let n;
+         f.n in rng f by A22,FUNCT_1:def 5;
+       hence f.n is Nat by A20;
+     end;
+    now let n;
+        (f.n is Nat) & f.(n+1) is Nat by A23;
+      hence f.n<f.(n+1) by A19;
+    end;
+   then reconsider f as increasing Seq_of_Nat by A20,SEQM_3:def 8,def 11;
+   take Nseq1=Nseq*f;
+       now let n;
+        seq1.(f.(n+1))<=seq1.(f.n) by A19;
+      then (seq1*f).(n+1)<=seq1.(f.n) by SEQM_3:31;
+      then (seq*Nseq*f).(n+1)<=(seq1*f).n by A7,SEQM_3:31;
+      then (seq*Nseq1).(n+1)<=(seq*Nseq*f).n by A7,RELAT_1:55;
+      hence (seq*Nseq1).(n+1)<=(seq*Nseq1).n by RELAT_1:55;
+     end;
+    then seq*Nseq1 is non-increasing by SEQM_3:def 14;
+    hence seq*Nseq1 is monotone by SEQM_3:def 7;
+    end;
+
+      now assume A24:for l ex n st n in XN & not n<=l;
+
+  defpred P[Nat,set,set] means
+       for k,l being Element of NAT st k=$2 & l=$3 holds
+          l in XN & k<l & for m st m in XN & k<m holds l<=m;
+
+A25: for n being Nat for x being Element of NAT
+            ex y being Element of NAT st P[n,x,y]
+      proof
+       let n be Nat,x be Element of NAT;
+       defpred X[Nat] means $1 in XN & x<$1;
+   A26: ex n st X[n] by A24;
+         ex l st X[l] & for m st X[m] holds l <= m from Min(A26);
+       then consider l such that
+                   A27:  l in XN and
+                   A28:  x<l and
+                   A29:  for m st m in XN & x<m holds l <= m;
+       take y=l;
+       thus P[n,x,y] by A27,A28,A29;
+      end;
+   consider n1 such that A30:n1 in XN & not n1<=0 by A24;
+   reconsider 0'=n1 as Element of NAT qua non empty set;
+   consider f being Function of NAT,NAT such that
+A31: f.0 = 0' and
+A32: for n being Element of NAT holds P[n,f.n,f.(n+1)] from RecExD(A25);
+A33: rng f c= NAT by RELSET_1:12;
+then A34: rng f c= REAL by XBOOLE_1:1;
+A35: dom f =NAT by FUNCT_2:def 1;
+   then reconsider f as Real_Sequence by A34,FUNCT_2:def 1,RELSET_1:11;
+ A36: now let n;
+          thus n is Element of NAT;
+A37:          f.n in rng f by A35,FUNCT_1:def 5;
+          hence f.n is Nat by A33;
+          thus f.n is Element of NAT by A33,A37;
+     end;
+ A38: now let n;
+       defpred X[Nat] means f.$1 in XN;
+      A39: X[0] by A30,A31;
+       A40: now let k such that X[k];
+              (f.k is Element of NAT) & f.(k+1) is Element of NAT by A36;
+            hence X[k+1] by A32;
+           end;
+      thus for n holds X[n] from Ind(A39,A40);
+     end;
+ A41: now let n;
+        (f.n is Element of NAT) & f.(n+1) is Element of NAT by A36;
+      hence f.n<f.(n+1) by A32;
+    end;
+   then reconsider f as increasing Seq_of_Nat by A33,SEQM_3:def 8,def 11;
+   take Nseq=f;
+       now let n;
+A42:       Nseq.n in XN by A38;
+         Nseq.n<Nseq.(n+1) by A41;
+       then seq.(Nseq.n)<seq.(Nseq.(n+1)) by A1,A42;
+       then (seq*Nseq).n<seq.(Nseq.(n+1)) by SEQM_3:31;
+       hence (seq*Nseq).n<(seq*Nseq).(n+1) by SEQM_3:31;
+     end;
+    then seq*Nseq is increasing by SEQM_3:def 11;
+    then seq*Nseq is non-decreasing by SEQM_3:23;
+    hence seq*Nseq is monotone by SEQM_3:def 7;
+    end;
+   hence thesis by A2;
+  end;
+
+theorem :: BOLZANO-WEIERSTRASS THEOREM
+ Th57:seq is bounded implies
+      ex seq1 st seq1 is_subsequence_of seq & seq1 is convergent
+  proof
+   assume A1:seq is bounded;
+   consider Nseq such that A2: seq*Nseq is monotone by Th56;
+   take seq1=seq*Nseq;
+   thus seq1 is_subsequence_of seq by SEQM_3:def 10;
+   then seq1 is bounded by A1,SEQM_3:58;
+   hence seq1 is convergent by A2,Th53;
+  end;
+
+theorem :: CAUCHY THEOREM
+     seq is convergent iff
+         for s st 0<s ex n st for m st n<=m holds abs(seq.m -seq.n)<s
+  proof
+thus seq is convergent implies
+         for s st 0<s ex n st for m st n<=m holds abs(seq.m -seq.n)<s
+    proof
+     assume seq is convergent;
+     then consider g1 such that
+  A1: for s st 0<s
+   ex n st for m st n<=m holds abs(seq.m -g1)<s by SEQ_2:def 6;
+     let s; assume 0<s;
+     then 0<s/2 by SEQ_2:3;
+     then consider n1 such that
+  A2: for m st n1<=m holds abs(seq.m -g1)<s/2 by A1;
+     take n=n1;
+     let m such that A3: n<=m;
+       abs(seq.n -g1)<s/2 by A2;
+     then abs(-(g1-seq.n))<s/2 by XCMPLX_1:143;
+  then A4: abs(g1-seq.n)<s/2 by ABSVALUE:17;
+       abs(seq.m -g1)<s/2 by A2,A3;
+     then abs(seq.m -g1)+abs(g1-seq.n)<s/2+s/2 by A4,REAL_1:67;
+  then A5: abs(seq.m -g1)+abs(g1-seq.n)<s by XCMPLX_1:66;
+  A6: abs(seq.m -g1+(g1-seq.n))<=abs(seq.m -g1)+abs(g1-seq.n)
+            by ABSVALUE:13;
+       abs(seq.m -g1+(g1-seq.n))=abs(seq.m -(g1-(g1-seq.n))) by XCMPLX_1:37
+       .=abs(seq.m -(g1-g1+seq.n)) by XCMPLX_1:37
+       .=abs(seq.m -(0+seq.n)) by XCMPLX_1:14
+       .=abs(seq.m -seq.n);
+     hence thesis by A5,A6,AXIOMS:22;
+    end;
+   assume
+ A7: for s st 0<s ex n st for m st n<=m holds abs(seq.m -seq.n)<s;
+    then consider n1 such that
+ A8: for m st n1<=m holds abs(seq.m -seq.n1)<1;
+    consider r1 such that
+ A9: 0<r1 and
+ A10: for m st m<=n1 holds abs(seq.m)<r1 by SEQ_2:16;
+        now take r=r1+abs(seq.n1)+1;
+  A11:  0<=abs(seq.n1) by ABSVALUE:5;
+       then 0+0<r1+abs(seq.n1) by A9,REAL_1:67;
+       hence 0<r by REAL_1:67;
+       let m;
+  A12:   now assume m<=n1;
+          then abs(seq.m)<r1 by A10;
+          then abs(seq.m)+0<r1+abs(seq.n1) by A11,REAL_1:67;
+          hence abs(seq.m)<r by REAL_1:67;
+        end;
+          now assume n1<=m;
+     then A13:  abs(seq.m -seq.n1)<1 by A8;
+            abs(seq.m)-abs(seq.n1)<=abs(seq.m -seq.n1) by ABSVALUE:18;
+          then abs(seq.m)-abs(seq.n1)<1 by A13,AXIOMS:22;
+          then abs(seq.m)-abs(seq.n1)+abs(seq.n1)<1+abs(seq.n1) by REAL_1:53;
+          then abs(seq.m)-(abs(seq.n1)-abs(seq.n1))<1+abs(seq.n1) by XCMPLX_1:
+37
+;
+          then abs(seq.m)-0<1+abs(seq.n1) by XCMPLX_1:14;
+          then 0+abs(seq.m)<r1+(abs(seq.n1)+1) by A9,REAL_1:67;
+          hence abs(seq.m)<r by XCMPLX_1:1;
+         end;
+        hence abs(seq.m)<r by A12;
+      end;
+     then seq is bounded by SEQ_2:15;
+     then consider seq1 such that
+  A14: seq1 is_subsequence_of seq and
+  A15: seq1 is convergent by Th57;
+     consider g1 such that
+  A16: for s st 0<s ex n st for m st n<=m holds abs(seq1.m -g1)<s
+              by A15,SEQ_2:def 6;
+     consider Nseq such that
+  A17: seq1=seq*Nseq by A14,SEQM_3:def 10;
+     take g=g1;
+     let s; assume 0<s;
+  then A18: 0<s/3 by Th4;
+     then consider n1 such that
+  A19: for m st n1<=m holds abs(seq1.m -g1)<s/3 by A16;
+     consider n2 such that
+  A20: for m st n2<=m holds abs(seq.m -seq.n2)<s/3 by A7,A18;
+     take n=n1+n2;
+     let m such that
+ A21:  n<=m;
+       n1<=n by NAT_1:37;
+     then n1<=m by A21,AXIOMS:22;
+     then abs((seq*Nseq).m -g1)<s/3 by A17,A19;
+ then A22: abs(seq.(Nseq.m) -g1)<s/3 by SEQM_3:31;
+       n2<=n by NAT_1:37;
+ then A23: n2<=m by A21,AXIOMS:22;
+ then A24: abs(seq.m -seq.n2)<s/3 by A20;
+       m<=Nseq.m by SEQM_3:33;
+     then n2<=Nseq.m by A23,AXIOMS:22;
+    then abs(seq.(Nseq.m) -seq.n2)<s/3 by A20;
+    then abs(-(seq.n2-seq.(Nseq.m)))<s/3 by XCMPLX_1:143;
+    then abs(seq.n2-seq.(Nseq.m))<s/3 by ABSVALUE:17;
+ then A25: abs(seq.m -seq.n2)+abs(seq.n2-seq.(Nseq.m))<s/3+s/3 by A24,REAL_1:67
+;
+ A26: abs(seq.m -seq.n2+(seq.n2-seq.(Nseq.m)))<=
+     abs(seq.m -seq.n2)+abs(seq.n2-seq.(Nseq.m)) by ABSVALUE:13;
+      abs(seq.m -seq.n2+(seq.n2-seq.(Nseq.m)))
+      =abs(seq.m -(seq.n2-(seq.n2-seq.(Nseq.m)))) by XCMPLX_1:37
+     .=abs(seq.m -(seq.n2-seq.n2+seq.(Nseq.m))) by XCMPLX_1:37
+     .=abs(seq.m -(0+seq.(Nseq.m))) by XCMPLX_1:14
+     .=abs(seq.m -seq.(Nseq.m));
+    then abs(seq.m -seq.(Nseq.m))<s/3+s/3 by A25,A26,AXIOMS:22;
+ then A27: abs(seq.m -seq.(Nseq.m))+abs(seq.(Nseq.m) -g1)<s/3+s/3+s/3
+         by A22,REAL_1:67;
+ A28: abs(seq.m -seq.(Nseq.m)+(seq.(Nseq.m) -g1))<=
+      abs(seq.m -seq.(Nseq.m))+abs(seq.(Nseq.m) -g1) by ABSVALUE:13;
+      abs(seq.m -seq.(Nseq.m)+(seq.(Nseq.m) -g1))
+      =abs(seq.m -(seq.(Nseq.m)-(seq.(Nseq.m) -g1))) by XCMPLX_1:37
+     .=abs(seq.m -(seq.(Nseq.m)-seq.(Nseq.m) +g1)) by XCMPLX_1:37
+     .=abs(seq.m -(0+g1)) by XCMPLX_1:14
+     .=abs(seq.m -g1);
+    then abs(seq.m -g1)<s/3+s/3+s/3 by A27,A28,AXIOMS:22;
+    hence abs(seq.m -g)<s by XCMPLX_1:69;
+  end;
+
+theorem
+   seq is constant & seq1 is convergent implies
+        lim (seq+seq1) =(seq.0) + lim seq1 &
+        lim (seq-seq1) =(seq.0) - lim seq1 &
+        lim (seq1-seq) =(lim seq1) -seq.0 &
+        lim (seq(#)seq1) =(seq.0) * (lim seq1)
+  proof
+   assume that
+ A1: seq is constant and
+ A2: seq1 is convergent;
+ A3: seq is convergent by A1,Th39;
+   hence lim (seq+seq1)=(lim seq)+(lim seq1) by A2,SEQ_2:20
+               .=(seq.0)+(lim seq1) by A1,Th40;
+   thus lim (seq-seq1)=(lim seq)-(lim seq1) by A2,A3,SEQ_2:26
+               .=(seq.0)-(lim seq1) by A1,Th40;
+   thus lim (seq1-seq)=(lim seq1)-(lim seq) by A2,A3,SEQ_2:26
+               .=(lim seq1)-(seq.0) by A1,Th40;
+   thus lim (seq(#)seq1)=(lim seq)*(lim seq1) by A2,A3,SEQ_2:29
+               .=(seq.0)*(lim seq1) by A1,Th40;
+  end;

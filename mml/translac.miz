@@ -1,0 +1,845 @@
+:: Translations in Affine Planes
+::  by Henryk Oryszczyszyn and Krzysztof Pra\.zmowski
+::
+:: Received June 12, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary DIRAF, VECTSP_1, ANALOAF, PASCH, FUNCT_2, TRANSGEO, FUNCT_1, AFF_2,
+      INCSP_1, AFF_1, RELAT_1;
+ notation PARTFUN1, FUNCT_2, STRUCT_0, ANALOAF, DIRAF, AFF_1, AFF_2, TRANSGEO;
+ constructors AFF_1, AFF_2, TRANSGEO, MEMBERED, PARTFUN1, RELAT_2, XBOOLE_0;
+ clusters STRUCT_0, RELSET_1, FUNCT_2, MEMBERED, ZFMISC_1, PARTFUN1, FUNCT_1,
+      XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ theorems FUNCT_2, TRANSGEO, AFF_1, AFF_2, FUNCT_1, DIRAF, RELAT_1;
+ schemes TRANSGEO;
+
+begin
+
+ reserve AS for AffinSpace,
+         a,b,c,d,p,q,r,s,x for Element of AS;
+
+definition let AS;
+ attr AS is Fanoian means
+ :Def1: for a,b,c,d st a,b // c,d & a,c // b,d & a,d // b,c
+                                   holds LIN a,b,c;
+  synonym AS satisfies_Fano;
+end;
+
+Lm1: (LIN a,b,c & a<>b & a<>c & b<>c & not LIN a,b,p) implies
+  (ex x st LIN p,a,x & p<>x & a<>x)
+ proof assume A1: LIN a,b,c & a<>b & a<>c & b<>c & not LIN a,b,p;
+  then a,b // a,c by AFF_1:def 1; then b,a // a,c by AFF_1:13;
+  then consider x such that A2: p,a // a,x & p,b // c,x by A1,DIRAF:47;
+    a,p // a,x by A2,AFF_1:13; then LIN a,p,x by AFF_1:def 1;
+  then A3: LIN p,a,x by AFF_1:15;
+  A4: now assume p = x; then p,b // p,c by A2,AFF_1:13;
+   then LIN p,b,c by AFF_1:def 1; then LIN b,c,p & LIN b,c,a & LIN b,c,b
+                                       by A1,AFF_1:15,16;
+   hence contradiction by A1,AFF_1:17; end;
+     now assume a = x;
+   then p,b // a,c & a,b // a,c by A1,A2,AFF_1:13,def 1;
+   then a,b // p,b by A1,AFF_1:14; then b,a // b,p by AFF_1:13;
+   then LIN b,a,p by AFF_1:def 1; hence contradiction by A1,AFF_1:15; end;
+  hence thesis by A3,A4;
+ end;
+
+Lm2: (LIN a,b,c & a<>b & a<>c & b<>c & not LIN a,b,p & LIN a,b,q) implies
+                                      (ex x st LIN p,q,x & p<>x & q<>x)
+ proof assume A1: LIN a,b,c & a<>b & a<>c & b<>c & not LIN a,b,p & LIN a,b,q;
+
+   A2: now assume A3: q = b & q<>a & q<>c;
+    then LIN q,a,c & not LIN q,a,p by A1,AFF_1:15;
+    hence thesis by A1,A3,Lm1; end;
+   A4: now assume A5: q = c & q<>a & q<>b;
+      now assume LIN q,a,p;
+     then LIN c,a,p & LIN c,a,b & LIN c,a,a by A1,A5,AFF_1:15,16;
+     hence contradiction by A1,AFF_1:17; end;
+    then LIN q,a,b & not LIN q,a,p by A1,AFF_1:15;
+    hence thesis by A1,A5,Lm1; end;
+      now assume A6: q<>a & q<>b & q<>c;
+      now assume LIN q,a,p; then LIN a,q,p & LIN a,q,b by A1,AFF_1:15;
+     then a,q // a,p & a,q // a,b by AFF_1:def 1; then a,b // a,p by A6,AFF_1:
+14;
+     hence contradiction by A1,AFF_1:def 1; end;
+    then LIN q,a,b & not LIN q,a,p by A1,AFF_1:15;
+    hence thesis by A1,A6,Lm1; end;
+   hence thesis by A1,A2,A4,Lm1;
+ end;
+
+Lm3: (LIN a,b,c & a<>b & a<>c & b<>c & not LIN a,b,p & p<>q & p,q // a,b)
+                              implies (ex x st LIN p,q,x & p<>x & q<>x)
+ proof assume A1:
+        LIN a,b,c & a<>b & a<>c & b<>c & not LIN a,b,p & p<>q & p,q // a,b;
+  A2: a<>q proof assume a = q; then a,p // a,b by A1,AFF_1:13;
+   then LIN a,p,b by AFF_1:def 1; hence contradiction by A1,AFF_1:15; end;
+  A3: b<>q proof assume b = q; then b,p // b,a by A1,AFF_1:13;
+   then LIN b,p,a by AFF_1:def 1; hence contradiction by A1,AFF_1:15; end;
+  A4: not LIN a,b,q proof assume A5: LIN a,b,q; then a,b // a,q by AFF_1:def 1
+;
+   then p,q // a,q by A1,AFF_1:14; then q,p // q,a by AFF_1:13;
+   then LIN q,p,a by AFF_1:def 1;
+   then LIN q,a,p & LIN q,a,b & LIN q,a,a by A5,AFF_1:15,16;
+   hence contradiction by A1,A2,AFF_1:17; end;
+  A6: not LIN a,c,p proof assume LIN a,c,p;
+   then LIN a,c,p & LIN a,c,b & LIN a,c,a by A1,AFF_1:15,16;
+   hence contradiction by A1,AFF_1:17; end;
+  consider r such that A7: b,c // q,r & b,q // c,r by DIRAF:47;
+    LIN b,a,c by A1,AFF_1:15; then b,a // b,c by AFF_1:def 1;
+  then b,a // q,r by A1,A7,AFF_1:14; then a,b // q,r by AFF_1:13;
+  then p,q // q,r by A1,AFF_1:14; then q,p // q,r by AFF_1:13;
+  then LIN q,p,r by AFF_1:def 1; then A8: LIN p,q,r by AFF_1:15;
+  A9: q<>r proof assume q = r; then q,b // q,c by A7,AFF_1:13;
+   then LIN q,b,c by AFF_1:def 1;
+   then LIN b,c,q & LIN b,c,a & LIN b,c,b by A1,AFF_1:15,16;
+   hence contradiction by A1,A4,AFF_1:17; end;
+     now assume A10: p = r;
+   consider s such that A11: b,a // q,s & b,q // a,s by DIRAF:47;
+   A12: now assume p = s;
+   then a,p // c,p by A3,A7,A10,A11,AFF_1:14; then p,a // p,c by AFF_1:13;
+   then LIN p,a,c by AFF_1:def 1; hence contradiction by A6,AFF_1:15; end;
+   A13: q<>s proof assume q = s; then q,b // q,a by A11,AFF_1:13;
+    then LIN q,b,a by AFF_1:def 1; hence contradiction by A4,AFF_1:15; end;
+     a,b // q,s by A11,AFF_1:13; then p,q // q,s by A1,AFF_1:14;
+   then q,p // q,s by AFF_1:13; then LIN q,p,s by AFF_1:def 1;
+   then LIN p,q,s by AFF_1:15; hence thesis by A12,A13; end;
+  hence thesis by A8,A9;
+ end;
+
+canceled;
+
+theorem Th2:
+ (ex a,b,c st LIN a,b,c & a<>b & a<>c & b<>c) implies
+   (for p,q st p<>q holds (ex r st LIN p,q,r & p<>r & q<>r))
+ proof given a,b,c such that A1: LIN a,b,c & a<>b & a<>c & b<>c;
+  let p,q such that A2: p<>q;
+  A3: now assume A4: LIN a,b,p & LIN a,b,q;
+   then A5: LIN p,q,c by A1,AFF_1:17;
+     LIN a,b,a & LIN a,b,b by AFF_1:16;
+   then A6: LIN p,q,a & LIN p,q,b by A1,A4,AFF_1:17;
+      now assume A7: p = c or q = c;
+       now assume p <> a or q <> b;
+     A8: now assume A9: p = c & p<>a;
+      then q = b implies thesis by A1,A6;
+      hence thesis by A1,A6,A9; end;
+        now assume A10: q = c & q<>b;
+      then p = b implies thesis by A1,A6;
+      hence thesis by A6,A10; end;
+     hence thesis by A1,A7,A8; end;
+    hence thesis by A1; end;
+   hence thesis by A5;
+      end;
+  A11: now assume not LIN a,b,q & LIN a,b,p; then consider x such that
+   A12: LIN q,p,x & q<>x & p<>x by A1,Lm2;
+     LIN p,q,x by A12,AFF_1:15; hence thesis by A12; end;
+     now assume A13: not LIN a,b,p & not LIN a,b,q;
+      now assume A14: not p,q // a,b;
+    consider p' being Element of AS such that
+    A15: a,b // p,p' & p<>p' by DIRAF:47; p,p' // a,b by A15,AFF_1:13;
+    then A16: ex p'' being Element of AS st
+ LIN p,p',p'' & p<>p'' & p'<>p'' by A1,A13,A15,Lm3;
+      not LIN p,p',q proof assume LIN p,p',q; then p,p' // p,q by AFF_1:def 1
+;
+     hence contradiction by A14,A15,AFF_1:14; end;
+    then consider r such that A17: LIN q,p,r & q<>r & p<>r by A15,A16,Lm1;
+      LIN p,q,r by A17,AFF_1:15;
+    hence thesis by A17; end;
+   hence thesis by A1,A2,A13,Lm3; end;
+  hence thesis by A1,A3,A11,Lm2;
+ end;
+
+ reserve AFP for AffinPlane,
+         a,a',b,b',c,c',d,p,p',q,q',r,x,x',y,y',z
+                        for Element of AFP,
+         A,C,P for Subset of AFP,
+         f,g,h,f1,f2 for Permutation of the carrier of AFP;
+
+canceled;
+
+theorem Th4: (AFP satisfies_Fano &
+ a,b // c,d & a,c // b,d & not LIN a,b,c) implies ex p st LIN b,c,p & LIN a,d,p
+ proof assume that
+  A1: for a,b,c,d st a,b // c,d & a,c // b,d & a,d // b,c holds LIN a,b,c and
+  A2: a,b // c,d & a,c // b,d & not LIN a,b,c;
+    not a,d // b,c by A1,A2; then ex p st LIN a,d,p & LIN b,c,p by AFF_1:74;
+  hence thesis;
+ end;
+
+Lm4: not LIN a,b,x & a,b // x,y & x<>y implies
+        not LIN x,y,a & not LIN b,a,y & not LIN y,x,b
+  proof assume that A1: not LIN a,b,x and
+                    A2: a,b // x,y and A3: x<>y;
+   thus not LIN x,y,a
+     proof assume LIN x,y,a;
+       then LIN x,y,a & x,y // a,b by A2,AFF_1:13;
+       then LIN x,y,a & LIN x,y,b & LIN x,y,x by A3,AFF_1:16,18;
+      hence contradiction by A1,A3,AFF_1:17;
+     end;
+   thus not LIN b,a,y
+     proof assume LIN b,a,y;
+       then LIN b,a,y & b,a // y,x & b<>a by A1,A2,AFF_1:13,16;
+       then LIN b,a,x by AFF_1:18;
+      hence contradiction by A1,AFF_1:15;
+     end;
+   thus not LIN y,x,b
+     proof assume LIN y,x,b;
+       then LIN y,x,b & y,x // b,a by A2,AFF_1:13;
+       then LIN y,x,b & LIN y,x,a & LIN y,x,x by A3,AFF_1:16,18;
+      hence contradiction by A1,A3,AFF_1:17;
+     end;
+ end;
+
+  Lm5: not LIN a,b,x & a,b // x,y & a,x // b,y implies
+          not LIN x,y,a & not LIN b,a,y & not LIN y,x,b
+    proof assume that A1: not LIN a,b,x and
+                      A2: a,b // x,y & a,x // b,y;
+        x<>y
+       proof assume x=y;
+         then x,a // x,b by A2,AFF_1:13; then LIN x,a,b by AFF_1:def 1;
+        hence contradiction by A1,AFF_1:15;
+       end;
+     hence thesis by A1,A2,Lm4;
+    end;
+
+theorem
+Th5: f is_Tr & not LIN a,f.a,x & a,f.a // x,y & a,x // f.a,y
+                                                implies y=f.x
+  proof assume A1: f is_Tr; then A2: f is_Dil by TRANSGEO:def 11;
+    assume A3: not LIN a,f.a,x & a,f.a // x,y & a,x // f.a,y;
+      a,x // f.a,f.x & a,f.a // x,f.x by A1,A2,TRANSGEO:85,100;
+   hence thesis by A3,TRANSGEO:97;
+  end;
+
+theorem
+ Th6: AFP satisfies_des iff
+  (for a,a',b,c,b',c' st not LIN a,a',b & not LIN a,a',c & a,a' // b,b' &
+    a,a' // c,c' & a,b // a',b' & a,c // a',c' holds b,c // b',c')
+   proof
+    thus AFP satisfies_des implies
+    (for a,a',b,c,b',c' st not LIN a,a',b & not LIN a,a',c & a,a' // b,b' &
+             a,a' // c,c' & a,b // a',b' & a,c // a',c' holds b,c // b',c')
+     proof assume A1: AFP satisfies_des;
+
+      let a,a',b,c,b',c';
+       assume A2:  not LIN a,a',b & not LIN a,a',c & a,a' // b,b' &
+                  a,a' // c,c' & a,b // a',b' & a,c // a',c';
+       set A=Line(a,a'), P=Line(b,b'), C=Line(c,c');
+       A3: a<>a' & a<>b & a'<>b & a<>c & a'<>c by A2,AFF_1:16;
+       A4: b<>b' proof assume b=b'; then b,a // b,a' by A2,AFF_1:13;
+        then LIN
+ b,a,a' by AFF_1:def 1; hence contradiction by A2,AFF_1:15; end;
+       A5: c <>c' proof assume c = c'; then c,a // c,a' by A2,AFF_1:13;
+        then LIN
+ c,a,a' by AFF_1:def 1; hence contradiction by A2,AFF_1:15; end;
+       A6: a in A & a' in A & b in P & b' in P & c in C & c' in C by AFF_1:26;
+       A7: A is_line & P is_line & C is_line by A3,A4,A5,AFF_1:def 3;
+       A8: A // P & A // C by A2,A3,A4,A5,AFF_1:51;
+       A9: A<>P by A2,A6,A7,AFF_1:33;
+          A<>C by A2,A6,A7,AFF_1:33;
+       hence thesis by A1,A2,A6,A7,A8,A9,AFF_2:def 11; end;
+    assume
+     A10: for a,a',b,c,b',c' st not LIN a,a',b & not LIN
+ a,a',c & a,a' // b,b' &
+             a,a' // c,c' & a,b // a',b' & a,c // a',c' holds b,c // b',c';
+       now let A,P,C,a,b,c,a',b',c';
+      assume A11: A // P & A // C & a in A & a' in A &
+      b in P & b' in P & c in C & c' in C & A is_line & P is_line &
+      C is_line & A<>P & A<>C & a,b // a',b' & a,c // a',c';
+      then A12: a,a' // b,b' & a,a' // c,c' by AFF_1:53;
+      A13: now assume A14: a=a';
+       then LIN a,b,b' by A11,AFF_1:def 1; then LIN b,b',a by AFF_1:15;
+then A15:       b=b' or a in P by A11,AFF_1:39;
+         LIN a,c,c' by A11,A14,AFF_1:def 1;
+       then LIN c,c',a by AFF_1:15; then c = c' or a in C by A11,AFF_1:39;
+       hence b,c // b',c' by A11,A15,AFF_1:11,59; end;
+         now assume A16: a<>a';
+       A17: not LIN a,a',b proof assume LIN a,a',b;
+        then b in A by A11,A16,AFF_1:39; hence contradiction by A11,AFF_1:59;
+end;
+          not LIN a,a',c proof assume LIN a,a',c;
+        then c in A by A11,A16,AFF_1:39; hence contradiction by A11,AFF_1:59;
+end;
+       hence b,c // b',c' by A10,A11,A12,A17; end;
+      hence b,c // b',c' by A13; end;
+     hence thesis by AFF_2:def 11;
+   end;
+
+theorem
+Th7: ex f st f is_Tr & f.a=a
+  proof
+  take id the carrier of AFP;
+   thus thesis by FUNCT_1:35,TRANSGEO:99;
+  end;
+
+Lm6: a<>b implies ex y st
+      ((not LIN a,b,x & a,b // x,y & a,x // b,y) or
+      (LIN a,b,x & ex p,q st not LIN a,b,p & a,b // p,q &
+                    a,p // b,q & p,q // x,y & p,x // q,y))
+  proof assume A1: a<>b;
+    A2: now assume A3: not LIN a,b,x; ex y st
+ a,b // x,y & a,x // b,y by DIRAF:47;
+         hence thesis by A3; end;
+      now assume A4: LIN a,b,x; consider p such that
+                              A5: not LIN a,b,p by A1,AFF_1:22;
+       consider q such that
+                       A6: a,b // p,q & a,p // b,q by DIRAF:47;
+          ex y st p,q // x,y & p,x // q,y by DIRAF:47;
+      hence thesis by A4,A5,A6;
+     end;
+    hence thesis by A2;
+   end;
+
+Lm7: a<>b implies ex x st
+       (not LIN a,b,x & a,b // x,y & a,x // b,y) or
+       (LIN a,b,x & (ex p,q st not LIN a,b,p & a,b // p,q &
+                       a,p // b,q & p,q // x,y & p,x // q,y))
+  proof assume A1: a<>b;
+    A2: now assume not LIN a,b,y; then A3: not LIN b,a,y by AFF_1:15;
+          consider x such that
+                        A4: b,a // y,x & b,y // a,x by DIRAF:47;
+          A5: not LIN a,b,x by A3,A4,Lm5;
+            a,b // x,y & a,x // b,y by A4,AFF_1:13;
+         hence thesis by A5;
+        end;
+      now assume A6: LIN a,b,y;
+      consider p such that A7: not LIN a,b,p by A1,AFF_1:22;
+      consider q such that A8: a,b // p,q & a,p // b,q by DIRAF:47;
+      consider x such that A9: q,p // y,x & q,y // p,x by DIRAF:47;
+      A10: p,q // x,y & p,x // q,y by A9,AFF_1:13;
+        LIN a,b,x
+        proof
+          A11: a,b // x,y or p=q by A8,A10,AFF_1:14;
+            now assume p=q;
+          then p,a // p,b by A8,AFF_1:13;
+          then LIN p,a,b by AFF_1:def 1;
+         hence contradiction by A7,AFF_1:15;
+        end;
+        then a,b // y,x by A11,AFF_1:13;
+       hence LIN a,b,x by A1,A6,AFF_1:18;
+      end;
+     hence thesis by A7,A8,A10;
+    end;
+   hence thesis by A2;
+  end;
+
+Lm8: AFP satisfies_des &
+     a<>b & LIN a,b,x & a,b // p,q & a,b // p',q' & a,p // b,q &
+      a,p' // b,q' & p,q // x,y & p',q' // x,y' & p,x // q,y &
+      p',x // q',y' & not LIN a,b,p & not LIN a,b,p' & not LIN
+ p,q,p' implies y=y'
+  proof assume that A1: AFP satisfies_des and
+    A2: a<>b and A3: LIN a,b,x and A4: a,b // p,q
+    and A5: a,b // p',q' and A6: a,p // b,q and A7: a,p' // b,q'
+    and A8: p,q // x,y and A9: p',q' // x,y' and A10: p,x // q,y
+    and A11: p',x // q',y' and A12: not LIN a,b,p
+    and A13: not LIN a,b,p' and A14: not LIN p,q,p';
+    A15: p,p' // q,q' by A1,A4,A5,A6,A7,A12,A13,Th6;
+    A16: p,q // p',q' by A2,A4,A5,AFF_1:14;
+    A17: p<>q
+      proof assume p=q;
+        then p,a // p,b by A6,AFF_1:13; then LIN p,a,b by AFF_1:def 1;
+       hence contradiction by A12,AFF_1:15;
+      end;
+    A18: p'<>q'
+      proof assume p'=q';
+        then p',a // p',b by A7,AFF_1:13; then LIN p',a,b by AFF_1:def 1;
+       hence contradiction by A13,AFF_1:15;
+      end;
+      not LIN p,q,x
+      proof assume A19: LIN p,q,x;
+        then A20: p,q // p,x by AFF_1:def 1;
+        A21: x<>a by A4,A6,A12,A19,Lm5;
+          p,x // a,b & a,b // a,x by A3,A4,A17,A20,AFF_1:14,def 1;
+        then p,x // a,x by A2,AFF_1:14;
+        then x,p // x,a by AFF_1:13;
+        then LIN x,p,a & LIN x,p,x & LIN
+ a,x,b by A3,AFF_1:15,16,def 1;
+        then LIN x,p,a & LIN x,p,b & LIN x,p,p by A21,AFF_1:16,20;
+       hence contradiction by A3,A12,AFF_1:17;
+      end;
+    then A22: p',x // q',y by A1,A8,A10,A14,A15,A16,Th6;
+    A23: not LIN p',q',x
+      proof assume A24: LIN p',q',x;
+        then A25: p',q' // p',x by AFF_1:def 1;
+        A26: x<>a by A5,A7,A13,A24,Lm5;
+          p',x // a,b & a,b // a,x by A3,A5,A18,A25,AFF_1:14,def 1;
+        then p',x // a,x by A2,AFF_1:14;
+        then x,p' // x,a by AFF_1:13;
+        then LIN x,p',a & LIN x,p',x & LIN
+ a,x,b by A3,AFF_1:15,16,def 1;
+        then LIN x,p',a & LIN x,p',b & LIN x,p',p' by A26,AFF_1:16,20;
+       hence contradiction by A3,A13,AFF_1:17;
+      end;
+      p',q' // x,y by A8,A16,A17,AFF_1:14;
+   hence thesis by A9,A11,A22,A23,TRANSGEO:97;
+  end;
+
+theorem
+Th8: (for p,q,r st p<>q & LIN p,q,r holds r = p or r = q) & a,b // p,q &
+     a,p // b,q & not LIN a,b,p implies a,q // b,p
+ proof assume that A1: for p,q,r st p<>q & LIN p,q,r holds r = p or r = q
+           and A2: a,b // p,q & a,p // b,q & not LIN a,b,p;
+   A3: a<>b & a<>p & b<>p by A2,AFF_1:16;
+   A4: p<>q proof assume p=q; then p,a // p,b by A2,AFF_1:13;
+    then LIN p,a,b by AFF_1:def 1; hence contradiction by A2,AFF_1:15; end;
+   A5: not LIN a,p,q proof assume LIN a,p,q;
+    then LIN p,q,a & p,q // a,b by A2,AFF_1:13,15;
+    then LIN p,q,b & LIN p,q,a & LIN p,q,p by A4,AFF_1:16,18;
+    hence contradiction by A2,A4,AFF_1:17; end;
+   consider z such that A6: q,p // a,z & q,a // p,z by DIRAF:47;
+     p,q // a,z by A6,AFF_1:13; then a,b // a,z by A2,A4,AFF_1:14;
+   then LIN a,b,z by AFF_1:def 1; then A7: a=z or b=z by A1,A3;
+      now assume a=z; then a,p // a,q by A6,AFF_1:13;
+    hence contradiction by A5,AFF_1:def 1; end;hence thesis by A6,A7,AFF_1:13
+;
+ end;
+
+Lm9: AFP satisfies_des &
+      a<>b & LIN a,b,x & a,b // p,q & a,b // p',q' & a,p // b,q &
+       a,p' // b,q' & p,q // x,y & p',q' // x,y' & p,x // q,y &
+       p',x // q',y' & not LIN a,b,p & not LIN a,b,p' implies y=y'
+  proof assume A1: AFP satisfies_des & a<>b & LIN a,b,x & a,b // p,q &
+     a,b // p',q' & a,p // b,q & a,p' // b,q' & p,q // x,y &
+     p',q' // x,y' & p,x // q,y & p',x // q',y' &
+     not LIN a,b,p & not LIN a,b,p';
+    then A2: a<>p & a<>p' by AFF_1:16;
+    A3: p<>q proof assume p=q;
+       then p,a // p,b by A1,AFF_1:13; then LIN p,a,b by AFF_1:def 1;
+       hence contradiction by A1,AFF_1:15; end;
+    A4: p'<>q' proof assume p'=q';
+     then p',a // p',b by A1,AFF_1:13; then LIN p',a,b by AFF_1:def 1;
+     hence contradiction by A1,AFF_1:15; end;
+    A5: not LIN p,q,x proof assume LIN p,q,x; then p,q // p,x by AFF_1:def 1;
+     then a,b // p,x by A1,A3,AFF_1:14; then a,b // x,p by AFF_1:13;
+     hence contradiction by A1,AFF_1:18; end;
+A6: not LIN p',q',x proof assume LIN
+ p',q',x; then p',q' // p',x by AFF_1:def 1;
+     then a,b // p',x by A1,A4,AFF_1:14; then a,b // x,p' by AFF_1:13;
+     hence contradiction by A1,AFF_1:18; end;
+    A7: x<>y & x<>y' proof
+       now assume x=y; then x,p // x,q by A1,AFF_1:13;
+      then LIN x,p,q by AFF_1:def 1; hence contradiction by A5,AFF_1:15; end;
+     hence x<>y;
+       now assume x=y'; then x,p' // x,q' by A1,AFF_1:13;
+      then LIN x,p',q' by AFF_1:def 1; hence contradiction by A6,AFF_1:15;
+end;
+     hence x<>y'; end;
+    A8: LIN a,b,y proof a,b // x,y by A1,A3,AFF_1:14;
+     hence thesis by A1,AFF_1:18; end;
+    A9: not LIN q,p,b proof assume A10: LIN q,p,b; q,p // b,a by A1,AFF_1:13;
+     then LIN q,p,a & LIN q,p,p by A3,A10,AFF_1:16,18;
+     hence contradiction by A1,A3,A10,AFF_1:17; end;
+      now assume A11: LIN p,q,p';
+     A12: LIN p,q,q' proof p,q // p',q' by A1,AFF_1:14;
+      hence LIN p,q,q' by A3,A11,AFF_1:18; end;
+     A13: now assume A14:for x st LIN a,p,x holds x=a or x=p;
+      then A15: for p,q,r st p<>q & LIN p,q,r holds r = p or r = q by A2,Th2;
+      A16: now assume A17: p=p';
+        then q=q' by A2,A3,A4,A12,A14,Th2;
+       hence y=y' by A1,A5,A17,TRANSGEO:97; end;
+        now assume A18: q=p';
+
+       A19: now assume A20: a=x;
+          then A21: b=y by A1,A7,A8,A14,Th2;
+            a,q // b,p by A1,A15,Th8;
+          then A22: q,p // a,b & q,a // p,b by A1,AFF_1:13;
+          A23: q,p // a,y' & q,a // p,y' by A1,A3,A4,A12,A14,A18,A20,Th2;
+            not LIN q,p,a by A5,A20,AFF_1:15;
+          hence y=y' by A21,A22,A23,TRANSGEO:97; end;
+          now assume A24: b=x;
+          then A25: a=y by A1,A2,A7,A8,A14,Th2;
+            q,p // b,a & q,p // b,y' & q,b // p,a & q,b // p,y'
+                              by A1,A2,A3,A4,A12,A14,A18,A24,Th2,AFF_1:13;
+          hence y=y' by A9,A25,TRANSGEO:97; end;
+      hence y=y' by A1,A2,A14,A19,Th2; end;
+      hence y=y' by A2,A3,A11,A14,A16,Th2; end;
+
+        now given p'' being Element of AFP such that
+      A26: LIN a,p,p'' & p''<>a & p''<>p;
+      consider q'' being Element of AFP such that
+      A27: a,b // p'',q'' and A28: a,p'' // b,q'' by DIRAF:47;
+      consider y'' being Element of AFP such that
+      A29: p'',q'' // x,y'' and A30: p'',x // q'',y'' by DIRAF:47;
+      A31: not LIN p,q,p''
+        proof assume LIN p,q,p'';
+          then LIN p,p'',p & LIN p,p'',q & LIN
+ p,p'',a by A26,AFF_1:15,16;
+          then LIN p,q,a by A26,AFF_1:17;
+         hence contradiction by A1,Lm5;
+        end;
+      A32: not LIN p',q',p''
+        proof assume A33: LIN p',q',p'';
+            p,q // p',q' by A1,AFF_1:14;
+          then LIN p,q,q' by A3,A11,AFF_1:18;
+         hence contradiction by A4,A11,A31,A33,AFF_1:20;
+        end;
+         not LIN a,b,p''
+        proof assume LIN a,b,p'';
+          then LIN a,p'',a & LIN a,p'',b & LIN
+ a,p'',p by A26,AFF_1:15,16;
+         hence contradiction by A1,A26,AFF_1:17;
+        end;
+      then y=y'' & y'=y'' by A1,A27,A28,A29,A30,A31,A32,Lm8;
+     hence y=y'; end;
+    hence y=y' by A13; end;
+   hence thesis by A1,Lm8;
+  end;
+
+Lm10: a<>b & LIN a,b,x & a,b // p,q & a,p // b,q & p,q // x,y &
+                not LIN a,b,p implies p<>q & LIN a,b,y
+  proof assume that A1: a<>b and A2: LIN a,b,x and A3: a,b // p,q
+    and A4: a,p // b,q and A5: p,q // x,y and
+    A6: not LIN a,b,p;
+   thus p<>q
+     proof assume p=q;
+       then p,a // p,b by A4,AFF_1:13;
+       then LIN p,a,b by AFF_1:def 1;
+      hence contradiction by A6,AFF_1:15;
+     end;
+    then a,b // x,y by A3,A5,AFF_1:14;
+   hence LIN a,b,y by A1,A2,AFF_1:18;
+  end;
+
+Lm11: AFP satisfies_des &
+     a<>b & LIN a,b,x & a,b // p,q & a,b // p',q' &
+     a,p // b,q & a,p' // b,q' & p,q // x,y & p,x // q,y &
+     p',q' // x',y & p',x' // q',y & not LIN a,b,p & not LIN a,b,p'
+                                                  implies x=x'
+  proof assume that A1: AFP satisfies_des and
+    A2: a<>b and A3: LIN a,b,x
+    and A4: a,b // p,q and A5: a,b // p',q' and A6: a,p // b,q
+    and A7: a,p' // b,q' and A8: p,q // x,y and A9: p,x // q,y
+    and A10: p',q' // x',y and A11: p',x' // q',y and
+    A12: not LIN a,b,p and A13: not LIN a,b,p';
+      LIN a,b,y by A2,A3,A4,A6,A8,A12,Lm10;
+    then A14: LIN b,a,y by AFF_1:15;
+    A15: b,a // q,p by A4,AFF_1:13;
+    A16: b,a // q',p' by A5,AFF_1:13;
+    A17: b,q // a,p by A6,AFF_1:13;
+    A18: b,q' // a,p' by A7,AFF_1:13;
+    A19: q,p // y,x by A8,AFF_1:13;
+    A20: q,y // p,x by A9,AFF_1:13;
+    A21: q',p' // y,x' by A10,AFF_1:13;
+    A22: q',y // p',x' by A11,AFF_1:13;
+    A23: not LIN b,a,q by A4,A6,A12,Lm5;
+       not LIN b,a,q' by A5,A7,A13,Lm5;
+   hence x=x' by A1,A2,A14,A15,A16,A17,A18,A19,A20,A21,A22,A23,Lm9;
+  end;
+
+Lm12: AFP satisfies_des & a<>b implies ex f st f is_Tr & f.a=b
+  proof
+   defpred X[Element of AFP,Element of AFP] means
+          (not LIN a,b,$1 & a,b // $1,$2 & a,$1 // b,$2) or
+          (LIN a,b,$1 & (ex p,q st not LIN a,b,p & a,b // p,q &
+          a,p // b,q & p,q // $1,$2 & p,$1 // q,$2));
+   assume A1: AFP satisfies_des & a<>b;
+    then A2: ex y st X[x,y] by Lm6;
+    A3: ex x st X[x,y] by A1,Lm7;
+    A4: X[x,y] & X[x,y'] implies y=y' by A1,Lm9,TRANSGEO:97;
+    A5: X[x,y] & X[x',y] implies x=x'
+     proof assume A6:((not LIN a,b,x & a,b // x,y & a,x // b,y) or
+        (LIN a,b,x & ex p,q st not LIN a,b,p & a,b // p,q &
+                     a,p // b,q & p,q // x,y & p,x // q,y)) &
+         ((not LIN a,b,x' & a,b // x',y & a,x' // b,y) or
+         (LIN a,b,x' & ex p,q st not LIN a,b,p & a,b // p,q &
+                    a,p // b,q & p,q // x',y & p,x' // q,y));
+       A7: now assume A8: not LIN a,b,y;
+             then A9: not LIN b,a,y by A1,A6,Lm5,Lm10;
+             A10: b,a // y,x & b,y // a,x by A1,A6,A8,Lm10,AFF_1:13;
+               b,a // y,x' & b,y // a,x' by A1,A6,A8,Lm10,AFF_1:13;
+           hence x=x' by A9,A10,TRANSGEO:97;
+          end;
+         now assume A11: LIN a,b,y;
+         A12: not (not LIN a,b,x & a,b // x,y & a,x // b,y)
+           proof assume A13: not LIN a,b,x & a,b // x,y & a,x // b,y;
+             then a,b // y,x by AFF_1:13;
+            hence contradiction by A1,A11,A13,AFF_1:18;
+           end;
+            not (not LIN a,b,x' & a,b // x',y & a,x' // b,y)
+           proof assume A14: not LIN a,b,x' & a,b // x',y & a,x' // b,y;
+             then a,b // y,x' by AFF_1:13;
+            hence contradiction by A1,A11,A14,AFF_1:18;
+           end;
+        hence x=x' by A1,A6,A12,Lm11;
+       end;
+      hence x=x' by A7;
+     end;
+       ex f st for x,y holds f.x=y iff X[x,y]
+                                        from EXPermutation(A2,A3,A5,A4);
+     then consider f such that A15: for x,y holds f.x=y iff
+      (not LIN a,b,x & a,b // x,y & a,x // b,y) or
+      (LIN a,b,x & (ex p,q st not LIN a,b,p & a,b // p,q &
+                   a,p // b,q & p,q // x,y & p,x // q,y));
+     A16: a,b // x,f.x
+       proof set y=f.x;
+           now assume A17: LIN a,b,x; then consider p,q such that
+           A18: not LIN a,b,p & a,b // p,q & a,p // b,q &
+                             p,q // x,y & p,x // q,y by A15;
+             p<>q by A1,A17,A18,Lm10;
+          hence a,b // x,f.x by A18,AFF_1:14;
+         end;
+        hence a,b // x,f.x by A15;
+       end;
+     A19: x,f.x // y,f.y
+       proof a,b // x,f.x & a,b // y,f.y by A16;
+        hence x,f.x // y,f.y by A1,AFF_1:14;
+       end;
+
+        for x,y holds x,y // f.x,f.y
+       proof let x,y;
+         A20: now assume A21: not LIN a,b,x & not LIN a,b,y;
+               then a,x // b,f.x & a,y // b,f.y &
+               a,b // x,f.x & a,b // y,f.y by A15;
+              hence thesis by A1,A21,Th6;
+             end;
+         A22: now assume A23: LIN a,b,x & LIN a,b,y;
+               then A24: a,b // x,y by AFF_1:19;
+                 a,b // x,f.x & a,b // y,f.y by A16;
+               then LIN a,b,f.x & LIN a,b,f.y by A1,A23,AFF_1:18;
+               then a,b // f.x,f.y by AFF_1:19;
+              hence thesis by A1,A24,AFF_1:14;
+             end;
+         A25: now assume A26: LIN a,b,x & not LIN a,b,y;
+               then A27: a,b // y,f.y & a,y // b,f.y by A15;
+                  ex x' st y,f.y // x,x' & y,x // f.y,x' by DIRAF:47;
+               then y,x // f.y,f.x by A15,A26,A27;
+              hence thesis by AFF_1:13;
+             end;
+            now assume A28: not LIN a,b,x & LIN a,b,y;
+               then A29: a,b // x,f.x & a,x // b,f.x by A15;
+                  ex y' st x,f.x // y,y' & x,y // f.x,y' by DIRAF:47;
+              hence thesis by A15,A28,A29;
+             end;
+        hence thesis by A20,A22,A25;
+       end;
+       then f is_Dil by TRANSGEO:85;
+     then A30: f is_Tr by A19,TRANSGEO:100;
+       f.a=b
+       proof consider p such that A31: not LIN a,b,p by A1,AFF_1:22;
+         consider q such that
+         A32: a,b // p,q & a,p // b,q by DIRAF:47;
+         A33: p,q // a,b & p,a // q,b by A32,AFF_1:13;
+           p,q // a,b & LIN a,b,a by A32,AFF_1:13,16;
+        hence f.a=b by A15,A31,A32,A33;
+       end;
+   hence thesis by A30;
+  end;
+
+theorem
+Th9: AFP satisfies_des implies ex f st f is_Tr & f.a=b
+  proof assume A1: AFP satisfies_des;
+       a=b implies thesis by Th7;
+   hence thesis by A1,Lm12;
+  end;
+
+theorem
+   (for a,b ex f st f is_Tr & f.a=b) implies AFP satisfies_des
+  proof assume A1: for a,b ex f st f is_Tr & f.a=b;
+     now let a,a',b,c,b',c';
+       assume A2: not LIN a,a',b & not LIN a,a',c &
+       a,a' // b,b' & a,a' // c,c' & a,b // a',b' & a,c // a',c';
+       consider f such that A3: f is_Tr and A4: f.a=a' by A1;
+       A5: b'=f.b by A2,A3,A4,Th5; A6: c'=f.c by A2,A3,A4,Th5;
+         f is_Dil by A3,TRANSGEO:def 11;
+       hence b,c // b',c' by A5,A6,TRANSGEO:85; end;
+      hence thesis by Th6;
+  end;
+
+theorem
+Th11: f is_Tr & g is_Tr & not LIN a,f.a,g.a implies f*g=g*f
+  proof assume A1: f is_Tr & g is_Tr; assume A2: not LIN a,f.a,g.a;
+    A3: f is_Dil & g is_Dil by A1,TRANSGEO:def 11;
+    then A4: a,f.a // g.a,g.(f.a) by TRANSGEO:85;
+      a,g.a // f.a,g.(f.a) by A1,A3,TRANSGEO:100;
+    then f.(g.a)=g.(f.a) by A1,A2,A4,Th5;
+    then (f*g).a=g.(f.a) by FUNCT_2:70;
+    then A5: (f*g).a=(g*f).a by FUNCT_2:70;
+      f*g is_Tr & g*f is_Tr by A1,TRANSGEO:105;
+   hence thesis by A5,TRANSGEO:103;
+  end;
+
+theorem
+Th12: AFP satisfies_des & f is_Tr & g is_Tr implies f*g=g*f
+  proof assume that A1: AFP satisfies_des and
+    A2: f is_Tr and A3: g is_Tr; A4: g is_Dil by A3,TRANSGEO:def 11;
+      now assume that A5: f<>id the carrier of AFP and
+    A6: g<>id the carrier of AFP; consider a;
+      A7: a<>f.a by A2,A5,TRANSGEO:def 11; A8: a<>g.a by A3,A6,TRANSGEO:def 11;
+        now assume A9: LIN a,f.a,g.a; consider b such that
+        A10: not LIN a,f.a,b by A7,AFF_1:22; consider h such that
+        A11: h is_Tr and A12: h.a=b by A1,Th9;
+           not LIN a,f.a,h.(g.a)
+          proof assume LIN a,f.a,h.(g.a);
+            then A13: LIN a,f.a,h.(g.a) & LIN a,f.a,a by AFF_1:16;
+
+            A14: not LIN a,g.a,b
+              proof assume LIN a,g.a,b;
+                then LIN a,g.a,b & LIN a,g.a,f.a & LIN a,g.a,a
+                                               by A9,AFF_1:15,16;
+               hence contradiction by A8,A10,AFF_1:17;
+              end;
+            then (g*h).a=(h*g).a by A3,A11,A12,Th11;
+            then (g*h).a=h.(g.a) by FUNCT_2:70;
+            then A15: g.b=h.(g.a) by A12,FUNCT_2:70;
+              a,g.a // b,g.b & a,b // g.a,g.b by A3,A4,TRANSGEO:85,100;
+            then not LIN g.a,a,h.(g.a) by A14,A15,Lm5;
+           hence contradiction by A7,A9,A13,AFF_1:17;
+          end;
+        then A16:
+ h*g is_Tr & not LIN a,f.a,(h*g).a by A3,A11,FUNCT_2:70,TRANSGEO:105;
+
+          h*(f*g)=(h*f)*g by RELAT_1:55 .=(f*h)*g by A2,A10,A11,A12,Th11
+        .=f*(h*g) by RELAT_1:55 .=(h*g)*f by A2,A16,Th11
+        .=h*(g*f) by RELAT_1:55;
+       hence thesis by TRANSGEO:13;
+      end;
+     hence thesis by A2,A3,Th11;
+    end;
+   hence thesis by TRANSGEO:11;
+  end;
+
+theorem
+Th13: f is_Tr & g is_Tr & p,f.p // p,g.p implies p,f.p // p,(f*g).p
+  proof assume that A1: f is_Tr and A2: g is_Tr and
+                                    A3: p,f.p // p,g.p;
+    A4: f is_Dil by A1,TRANSGEO:def 11;
+    A5: now assume g=id the carrier of AFP; then f*g=f by FUNCT_2:23;
+         hence thesis by AFF_1:11;
+        end;
+      now assume g<>id the carrier of AFP; then A6: g.p<>p by A2,TRANSGEO:def
+11
+;
+        p,g.p // f.p,f.(g.p) by A4,TRANSGEO:85;
+      then p,f.p // f.p,f.(g.p) by A3,A6,AFF_1:14;
+      then f.p,p // f.p,f.(g.p) by AFF_1:13;
+      then LIN f.p,p,f.(g.p) by AFF_1:def 1;
+      then LIN p,f.p,f.(g.p) by AFF_1:15;
+      then p,f.p // p,f.(g.p) by AFF_1:def 1;
+     hence thesis by FUNCT_2:70;
+    end;
+   hence thesis by A5;
+  end;
+
+theorem
+   AFP satisfies_Fano & AFP satisfies_des & f is_Tr
+                                 implies ex g st g is_Tr & g*g=f
+  proof assume that A1: AFP satisfies_Fano & AFP satisfies_des
+                and A2: f is_Tr;
+    A3: now assume A4: f=id the carrier of AFP; set g=id the carrier of AFP;
+          A5: g is_Tr by TRANSGEO:99;
+            g*g=id the carrier of AFP by FUNCT_2:23;
+        hence thesis by A4,A5;
+        end;
+      now assume A6: f<>id the carrier of AFP; consider a;
+      set b=f.a; a<>b by A2,A6,TRANSGEO:def 11;
+      then consider c such that A7: not LIN a,b,c by AFF_1:22;
+      A8: not LIN c,a,b & not LIN c,b,a by A7,AFF_1:15;
+      consider d such that
+            A9: c,b // a,d & c,a // b,d by DIRAF:47;
+      consider p such that
+            A10: LIN b,a,p and A11: LIN c,d,p by A1,A8,A9,Th4;
+      consider h such that A12: h is_Tr and A13: h.c = a by A1,Th9;
+      A14: h.b=d by A8,A9,A12,A13,Th5;
+      consider f1 being Permutation of the carrier of AFP such that
+                    A15: f1 is_Tr and A16: f1.p=a by A1,Th9;
+      consider f2 being Permutation of the carrier of AFP such that
+                    A17: f2 is_Tr and A18: f2.p=b by A1,Th9;
+      consider f3 being Permutation of the carrier of AFP such that
+                    A19: f3 is_Tr and A20: f3.p=c by A1,Th9;
+      consider f4 being Permutation of the carrier of AFP such that
+                    A21: f4 is_Tr and A22: f4.p=d by A1,Th9;
+      A23: (f2)" is_Tr by A17,TRANSGEO:104;
+      A24: f1*f2=f4*f3
+        proof f1.((f3)".c)=f1.p by A20,TRANSGEO:4;
+          then A25: (f1*(f3)").c = a by A16,FUNCT_2:70;
+            (f3)" is_Tr by A19,TRANSGEO:104;
+          then f1*(f3)" is_Tr by A15,TRANSGEO:105;
+          then A26: f1*(f3)"=h by A12,A13,A25,TRANSGEO:103;
+            f4.((f2)".b)=f4.p by A18,TRANSGEO:4;
+          then A27: (f4*f2").b=d by A22,FUNCT_2:70;
+            f4*f2" is_Tr by A21,A23,TRANSGEO:105;
+          then f1*f3"=f4*f2" by A12,A14,A26,A27,TRANSGEO:103;
+          then f1*(f3"*f3)=(f4*f2")*f3 by RELAT_1:55;
+          then f1*(id the carrier of AFP)=(f4*f2")*f3 by FUNCT_2:88;
+          then f1=(f4*f2")*f3 by FUNCT_2:23
+                .=f4*(f2"*f3) by RELAT_1:55
+                .=f4*(f3*f2") by A1,A19,A23,Th12
+                .=(f4*f3)*f2" by RELAT_1:55;
+          then f1*f2=(f4*f3)*(f2"*f2) by RELAT_1:55
+                      .=(f4*f3)*(id the carrier of AFP) by FUNCT_2:88
+                      .=f4*f3 by FUNCT_2:23;
+         hence f1*f2=f4*f3;
+        end;
+A28:      LIN p,c,d by A11,AFF_1:15;
+      then A29: p,c // p,d by AFF_1:def 1;
+        p,f3.p // p,f4.p by A20,A22,A28,AFF_1:def 1;
+      then p,c // p,(f3*f4).p by A19,A20,A21,Th13;
+      then A30: p,c // p,(f1*f2).p by A1,A19,A21,A24,Th12;
+   LIN p,a,b by A10,AFF_1:15;
+      then p,f1.p // p,f2.p by A16,A18,AFF_1:def 1;
+      then A31: p,a // p,(f1*f2).p by A15,A16,A17,Th13;
+        now assume p,c // p,a; then LIN p,c,a by AFF_1:def 1;
+        then LIN p,a,c & LIN p,a,a & LIN p,a,b by A10,AFF_1:15,16;
+        then p=a by A7,AFF_1:17;
+        then a,c // c,b or a=d by A9,A29,AFF_1:14;
+        then c,a // c,b or a=d by AFF_1:13;
+        then LIN c,a,b or a=d by AFF_1:def 1;
+        then a,c // a,b by A7,A9,AFF_1:13,15;
+        then LIN a,c,b by AFF_1:def 1;
+       hence contradiction by A7,AFF_1:15;
+      end;
+      then p=(f1*f2).p & f1*f2 is_Tr by A15,A17,A30,A31,AFF_1:14,TRANSGEO:105
+;
+      then f1"*(f1*f2)=f1"*(id the carrier of AFP) by TRANSGEO:def 11;
+      then (f1"*f1)*f2=f1"*(id the carrier of AFP) by RELAT_1:55;
+      then (id the carrier of AFP)*f2=f1"*(id the carrier of AFP)
+       by FUNCT_2:88;
+      then f2=f1"*(id the carrier of AFP) by FUNCT_2:23;
+      then (f2*f2).a=(f2*f1").a by FUNCT_2:23 .=f2.(f1".a) by FUNCT_2:70
+      .=b by A16,A18,TRANSGEO:4;
+      then (f2*f2).a=f.a & f2*f2 is_Tr by A17,TRANSGEO:105;
+      then f2*f2=f by A2,TRANSGEO:103;
+     hence thesis by A17;
+    end;
+   hence thesis by A3;
+  end;
+
+theorem
+Th15: AFP satisfies_Fano &
+  f is_Tr & f*f=id the carrier of AFP implies f=id the carrier of AFP
+  proof assume that A1: AFP satisfies_Fano and
+   A2: f is_Tr and A3: f*f=id the carrier of AFP;
+   consider a;
+   assume f<>id the carrier of AFP;
+    then a<>f.a by A2,TRANSGEO:def 11; then consider b such that
+   A4: not LIN a,f.a,b by AFF_1:22;
+   A5: f is_Dil by A2,TRANSGEO:def 11;
+   then f.b,a // f.(f.b),f.a by TRANSGEO:85;
+   then f.b,a // (f*f).b,f.a by FUNCT_2:70;
+   then f.b,a // b,f.a by A3,FUNCT_1:35;
+   then a,b // f.a,f.b & a,f.a // b,f.b & a,f.b // f.a,b
+                          by A2,A5,AFF_1:13,TRANSGEO:85,100;
+   hence contradiction by A1,A4,Def1;
+  end;
+
+theorem
+   AFP satisfies_des & AFP satisfies_Fano &
+  g is_Tr & f1 is_Tr & f2 is_Tr & g=f1*f1 & g=f2*f2 implies f1=f2
+  proof assume that A1: AFP satisfies_des & AFP satisfies_Fano and
+       g is_Tr and A2: f1 is_Tr and
+    A3: f2 is_Tr and A4: g=f1*f1 and A5: g=f2*f2;
+    set h=f2"*f1;
+    A6: f2" is_Tr by A3,TRANSGEO:104;
+    then A7: h is_Tr by A2,TRANSGEO:105;
+      h*h=f2"*(f1*(f2"*f1)) by RELAT_1:55
+    .=f2"*((f1*f2")*f1) by RELAT_1:55
+    .=f2"*((f2"*f1)*f1) by A1,A2,A6,Th12
+    .=f2"*(f2"*(f1*f1)) by RELAT_1:55
+    .=(f2"*f2")*(f1*f1) by RELAT_1:55
+    .=g"*g by A4,A5,FUNCT_1:66 .=id the carrier of AFP by FUNCT_2:88;
+    then f2"*f1=id the carrier of AFP by A1,A7,Th15;
+    then f2"*f1=f2"*f2 by FUNCT_2:88;
+   hence f1=f2 by TRANSGEO:13;
+  end;

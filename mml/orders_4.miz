@@ -1,0 +1,823 @@
+:: On the Isomorphism Between Finite Chains
+::  by Marta Pruszy\'nska and Marek Dudzicz
+::
+:: Received June 29, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary ORDERS_1, RELAT_2, REALSET1, CARD_4, FINSET_1, CAT_1, YELLOW_0,
+      YELLOW_1, WELLORD2, WELLORD1, BOOLE, LATTICES, PRE_TOPC, FUNCT_4,
+      RELAT_1, FUNCT_1, ORDINAL1, CARD_1, FUNCOP_1, ARYTM_1, PBOOLE, ORDERS_4;
+ notation TARSKI, XBOOLE_0, STRUCT_0, XCMPLX_0, XREAL_0, FINSET_1, NAT_1,
+      FUNCOP_1, GROUP_1, PBOOLE, CARD_1, CARD_4, REALSET1, RELAT_2, ORDERS_1,
+      PRE_TOPC, RELAT_1, FUNCT_1, FUNCT_2, YELLOW_0, WAYBEL_0, YELLOW_1,
+      WAYBEL_1, FUNCT_4, WELLORD1, ORDINAL1;
+ constructors CARD_4, WAYBEL_1, NAT_1, REAL_1, ORDERS_3, GROUP_6, WAYBEL_8,
+      WAYBEL19, WAYBEL23, MEMBERED, TOLER_1;
+ clusters FINSET_1, WAYBEL_0, STRUCT_0, YELLOW_0, YELLOW_1, WAYBEL_2, XREAL_0,
+      YELLOW13, RELSET_1, WAYBEL31, FUNCOP_1, YELLOW14, YELLOW_2, NAT_1,
+      MEMBERED;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, WAYBEL_1;
+ theorems GROUP_1, CARD_1, CARD_2, CARD_4, WAYBEL_0, WAYBEL_1, YELLOW_0,
+      YELLOW_1, STRUCT_0, WELLORD1, FINSET_1, ORDERS_1, TARSKI, CARD_5,
+      WELLORD2, NAT_1, AXIOMS, PBOOLE, FUNCT_1, FUNCT_2, REAL_1, FUNCT_4,
+      RELAT_1, RELAT_2, ORDINAL1, FUNCOP_1, XBOOLE_0, XBOOLE_1, PARTFUN1,
+      XCMPLX_1;
+ schemes NAT_1, PRALG_2;
+
+begin
+
+definition
+ mode Chain -> RelStr means :Def1:
+  it is connected (non empty Poset) or it is empty;
+  existence
+   proof consider R being empty RelStr;
+    take R; thus thesis;
+   end;
+end;
+
+definition
+ cluster empty -> reflexive transitive antisymmetric RelStr;
+ coherence
+  proof
+   let A be RelStr;
+    assume A1: A is empty;
+    then for x be set holds x in the carrier of A
+          implies [x,x] in the InternalRel of A by STRUCT_0:def 1;
+then A2:  the InternalRel of A is_reflexive_in the carrier of A by RELAT_2:def
+1;
+      for x,y,z be set holds
+     x in the carrier of A & y in the carrier of A & z in the carrier of A &
+      [x,y] in the InternalRel of A & [y,z] in the InternalRel of A implies
+        [x,z] in the InternalRel of A by A1,STRUCT_0:def 1;
+then A3:  the InternalRel of A is_transitive_in the carrier of A by RELAT_2:def
+8;
+      for x,y be set holds
+     x in the carrier of A & y in the carrier of A &
+      [x,y] in the InternalRel of A & [y,x] in the InternalRel of A implies
+        x = y by A1,STRUCT_0:def 1;
+    then the InternalRel of A is_antisymmetric_in the carrier of A
+       by RELAT_2:def 4;
+   hence thesis by A2,A3,ORDERS_1:def 4,def 5,def 6;
+  end;
+end;
+
+definition
+ cluster -> reflexive transitive antisymmetric Chain;
+ coherence
+  proof let A be Chain;
+      A is connected (non empty Poset) or A is empty RelStr by Def1;
+   hence thesis;
+  end;
+end;
+
+definition
+ cluster non empty Chain;
+ existence
+  proof
+    consider A being trivial reflexive transitive antisymmetric
+      non empty RelStr;
+      A is Chain by Def1;
+    hence thesis;
+  end;
+end;
+
+definition
+ cluster -> connected (non empty Chain);
+ coherence by Def1;
+end;
+
+definition let L be 1-sorted;
+  attr L is countable means :Def2:
+    the carrier of L is countable;
+end;
+
+definition
+  cluster finite non empty Chain;
+  existence
+   proof
+     consider A being
+     trivial reflexive transitive antisymmetric non empty finite RelStr;
+       A is Chain by Def1;
+     hence thesis;
+   end;
+end;
+
+definition
+  cluster countable Chain;
+  existence
+  proof
+    consider L being finite Chain;
+    take L;
+      the carrier of L is countable by CARD_4:43;
+    hence L is countable by Def2;
+  end;
+end;
+
+definition let A be connected (non empty RelStr);
+  cluster full -> connected (non empty SubRelStr of A);
+  correctness
+   proof
+   let S be non empty SubRelStr of A;
+    assume A1: S is full;
+      for x,y being Element of S holds x <= y or y <= x
+     proof
+      let x,y be Element of S;
+A2:     the carrier of S c= the carrier of A by YELLOW_0:def 13;
+A3:     x in the carrier of S;
+         y in the carrier of S;
+       then reconsider b=y as Element of A by A2;
+       reconsider a=x as Element of A by A2,A3;
+         a <= b or b <= a by WAYBEL_0:def 29;
+       hence thesis by A1,YELLOW_0:61;
+     end;
+    hence thesis by WAYBEL_0:def 29;
+   end;
+end;
+
+definition let A be finite RelStr;
+  cluster -> finite SubRelStr of A;
+  correctness
+   proof
+    let S be SubRelStr of A;
+    the carrier of S c= the carrier of A by YELLOW_0:def 13;
+     then the carrier of S is finite by FINSET_1:13;
+    hence thesis by GROUP_1:def 13;
+   end;
+end;
+
+theorem Th1:
+for n,m be Nat holds
+ n <= m implies InclPoset(n) is full SubRelStr of InclPoset(m)
+ proof
+  let n,m be Nat;
+   assume A1: n <= m;
+A2: the carrier of InclPoset(m)=m by YELLOW_1:1;
+A3:  n c= m by A1,CARD_1:56;
+then A4: the carrier of InclPoset(n) c= the carrier of InclPoset(m)
+      by A2,YELLOW_1:1;
+A5:  the InternalRel of InclPoset n = RelIncl n by YELLOW_1:1;
+A6: the InternalRel of InclPoset m = RelIncl m by YELLOW_1:1;
+A7: RelIncl n c= RelIncl m
+     proof
+      let x be set;
+       assume x in RelIncl n;
+       then x in (RelIncl m) |_2 n by A3,WELLORD2:8;
+      hence thesis by WELLORD1:16;
+     end;
+     (RelIncl m) |_2 n = the InternalRel of InclPoset n by A3,A5,WELLORD2:8;
+   then the InternalRel of InclPoset(n) =
+     (the InternalRel of InclPoset(m))|_2 the carrier of InclPoset(n)
+       by A6,YELLOW_1:1;
+  hence thesis by A4,A5,A6,A7,YELLOW_0:def 13,def 14;
+ end;
+
+definition
+ let L be RelStr;
+ let A,B be set;
+pred A,B form_upper_lower_partition_of L means :Def3:
+ A \/ B = the carrier of L &
+  for a,b be Element of L st a in A & b in B holds
+   a < b;
+end;
+
+theorem Th2:
+ for L be RelStr
+  for A,B be set holds
+   A,B form_upper_lower_partition_of L implies A misses B
+proof
+ let L be RelStr;
+ let A,B be set;
+ assume A1: A,B form_upper_lower_partition_of L & A meets B;
+  then A2: A \/ B = the carrier of L &
+   for a,b be Element of L st a in A & b in B holds a < b by Def3;
+  consider x be set such that A3: x in A /\ B by A1,XBOOLE_0:4;
+A4: x in A & x in B by A3,XBOOLE_0:def 3;
+  then x in the carrier of L by A2,XBOOLE_0:def 2;
+  then reconsider x as Element of L;
+    x < x by A1,A4,Def3;
+ hence contradiction;
+end;
+
+theorem Th3:
+for L be upper-bounded antisymmetric non empty RelStr holds
+ ((the carrier of L) \ { Top L }), { Top L } form_upper_lower_partition_of L
+  proof
+   let L be upper-bounded antisymmetric non empty RelStr;
+A1: ((the carrier of L) \ { Top L }) \/ { Top
+L } = the carrier of L by XBOOLE_1:45;
+     for a,b be Element of L st a in ((the carrier of L) \ { Top L })
+    & b in { Top L } holds a < b
+     proof
+      let a,b be Element of L;
+      assume A2: a in ((the carrier of L) \ { Top L }) & b in { Top L };
+       then a in (the carrier of L) & not a in { Top L } by XBOOLE_0:def 4;
+then A3:    a in (the carrier of L) & a <> Top L by TARSKI:def 1;
+A4:     b = Top L by A2,TARSKI:def 1;
+         a <= Top L by YELLOW_0:45;
+      hence thesis by A3,A4,ORDERS_1:def 10;
+     end;
+   hence thesis by A1,Def3;
+  end;
+
+theorem Th4:
+for L1,L2 be RelStr
+ for f be map of L1,L2 st f is isomorphic
+  holds (the carrier of L1 <> {} iff the carrier of L2 <> {})
+   & (the carrier of L2 <> {} or the carrier of L1 = {})
+    & (the carrier of L1 = {} iff the carrier of L2 = {})
+proof
+ let L1,L2 be RelStr;
+ let f be map of L1,L2 such that A1: f is isomorphic;
+     the carrier of L1 = {} iff the carrier of L2 = {}
+  proof
+    hereby assume the carrier of L1 = {};
+      then L1 is empty by STRUCT_0:def 1;
+      then L2 is empty by A1,WAYBEL_0:def 38;
+      hence the carrier of L2 = {} by STRUCT_0:def 1;
+    end;
+    assume the carrier of L2 = {};
+    then L2 is empty by STRUCT_0:def 1;
+    then L1 is empty by A1,WAYBEL_0:def 38;
+    hence thesis by STRUCT_0:def 1;
+  end;
+ hence thesis;
+end;
+
+theorem Th5:
+for L1,L2 be antisymmetric RelStr
+ for A1,B1 be Subset of L1 st A1,B1 form_upper_lower_partition_of L1
+  for A2,B2 be Subset of L2 st A2,B2 form_upper_lower_partition_of L2
+   for f be map of subrelstr A1, subrelstr A2 st f is isomorphic
+    for g be map of subrelstr B1, subrelstr B2 st g is isomorphic
+     ex h be map of L1,L2 st h = f +* g & h is isomorphic
+proof
+    let L1,L2 be antisymmetric RelStr;
+    let A1,B1 be Subset of L1 such that
+A1:     A1,B1 form_upper_lower_partition_of L1;
+    let A2,B2 be Subset of L2 such that
+A2:     A2,B2 form_upper_lower_partition_of L2;
+    let f be map of subrelstr A1, subrelstr A2 such that
+A3:     f is isomorphic;
+    let g be map of subrelstr B1, subrelstr B2 such that
+A4:     g is isomorphic;
+A5: A1 \/ B1 = the carrier of L1 &
+     for a,b be Element of L1 st a in A1 & b in B1 holds a < b by A1,Def3;
+A6: A1 misses B1 by A1,Th2;
+A7: A2 misses B2 by A2,Th2;
+A8: A2 \/ B2 = the carrier of L2 &
+    for a,b be Element of L2 st a in A2 & b in B2 holds a < b by A2,Def3;
+    set h = f +* g;
+     per cases;
+      suppose A9: the carrier of L1 = {};
+then A10:     A1 = {} & B1 = {} by A5,XBOOLE_1:15;
+then A11:    the carrier of subrelstr A1 = {} by YELLOW_0:def 15;
+       then dom f = the carrier of subrelstr A1 by FUNCT_2:def 1;
+then A12:     dom f = A1 by YELLOW_0:def 15;
+A13:    dom f = {} by A11,FUNCT_2:def 1;
+         the carrier of subrelstr B2 <> {} or
+              the carrier of subrelstr B1 = {} by A10,YELLOW_0:def 15;
+       then dom g = the carrier of subrelstr B1 by FUNCT_2:def 1;
+then A14:    dom g = B1 by YELLOW_0:def 15;
+A15:    dom h = dom f \/ dom g by FUNCT_4:def 1;
+A16:   dom h = the carrier of L1 by A5,A12,A14,FUNCT_4:def 1;
+A17:   rng h c= the carrier of L2
+       proof
+           rng h = {} by A10,A13,A14,A15,RELAT_1:65;
+         hence thesis by XBOOLE_1:2;
+       end;
+A18:   the carrier of subrelstr A1 = {} & the carrier of subrelstr B1 = {}
+         by A10,YELLOW_0:def 15;
+       then subrelstr A1 is empty by STRUCT_0:def 1;
+then A19:   subrelstr A2 is empty by A3,WAYBEL_0:def 38;
+         subrelstr B1 is empty by A18,STRUCT_0:def 1;
+then A20:   subrelstr B2 is empty by A4,WAYBEL_0:def 38;
+         for x be set st x in the carrier of L1 holds h.x in the carrier of L2
+        proof
+         let x be set;
+          assume x in the carrier of L1;
+           then h.x in rng h by A16,FUNCT_1:def 5;
+          hence thesis by A17;
+        end;
+then h is Function of the carrier of L1, the carrier of L2
+         by A16,FUNCT_2:5;
+       then reconsider h as map of L1,L2;
+         the carrier of subrelstr A2 is empty by A19,STRUCT_0:def 1;
+then A21:    A2 = {} by YELLOW_0:def 15;
+         the carrier of subrelstr B2 is empty by A20,STRUCT_0:def 1;
+       then B2 is empty by YELLOW_0:def 15;
+then A22:   L2 is empty by A8,A21,STRUCT_0:def 1;
+         L1 is empty by A9,STRUCT_0:def 1;
+       then h is isomorphic by A22,WAYBEL_0:def 38;
+      hence thesis;
+
+      suppose A23: the carrier of L1 <> {};
+      then A1 <> {} or B1 <> {} by A5;
+      then the carrier of subrelstr A1 is non empty or
+        the carrier of subrelstr B1 is non empty by YELLOW_0:def 15;
+      then subrelstr A1 is non empty or subrelstr B1 is non empty
+        by STRUCT_0:def 1;
+then A24:   subrelstr A2 is non empty or subrelstr B2 is non empty
+              by A3,A4,WAYBEL_0:def 38;
+then A25:    the carrier of subrelstr A2 is non empty or
+              the carrier of subrelstr B2 is non empty by STRUCT_0:def 1;
+      then A2 <> {} or B2 <> {} by YELLOW_0:def 15;
+then A26:    A2 \/ B2 <> {} by XBOOLE_1:15;
+        (A1 <> {} or B1 <> {}) implies (A2 <> {} or A1 = {})
+      proof
+        assume A1 <> {} or B1 <> {};
+          the carrier of subrelstr A2 <> {}
+           or the carrier of subrelstr A1 = {} by A3,Th4;
+        hence thesis by YELLOW_0:def 15;
+      end;
+       then the carrier of subrelstr A2 <> {} or
+         the carrier of subrelstr A1 = {} by YELLOW_0:def 15;
+       then dom f = the carrier of subrelstr A1 by FUNCT_2:def 1;
+then A27:    dom f = A1 by YELLOW_0:def 15;
+         (A2 <> {} or B2 <> {}) implies (B2 <> {} or B1 = {})
+       proof
+         assume A2 <> {} or B2 <> {};
+           the carrier of subrelstr B2 <> {}
+                or the carrier of subrelstr B1 = {} by A4,Th4;
+         hence thesis by YELLOW_0:def 15;
+       end;
+       then A28: the carrier of subrelstr B2 <> {} or
+         the carrier of subrelstr B1 = {}
+           by A24,STRUCT_0:def 1,YELLOW_0:def 15;
+then A29:    dom g = the carrier of subrelstr B1 by FUNCT_2:def 1;
+then A30:    dom g = B1 by YELLOW_0:def 15;
+A31:    dom h = dom f \/ dom g by FUNCT_4:def 1;
+A32:      dom f misses dom g implies rng h = rng f \/ rng g
+          proof
+           assume A33: dom f misses dom g;
+A34:        rng h c= rng f \/ rng g by FUNCT_4:18;
+              rng f \/ rng g c= rng h
+             proof
+              let x be set;
+              assume A35: x in rng f \/ rng g;
+               per cases by A35,XBOOLE_0:def 2;
+                suppose x in rng f;
+                then consider z be set such that
+           A36: z in dom f & x = f.z by FUNCT_1:def 5;
+A37:             z in dom h by A31,A36,XBOOLE_0:def 2;
+                  x = h.z
+                proof
+                    not z in dom g by A33,A36,XBOOLE_0:3;
+                  hence thesis by A36,FUNCT_4:12;
+                end;
+                hence thesis by A37,FUNCT_1:def 5;
+                suppose x in rng g;
+                 then consider z be set such that
+            A38: z in dom g & x = g.z by FUNCT_1:def 5;
+A39:              z in dom h by A31,A38,XBOOLE_0:def 2;
+                   h.z = g.z by A38,FUNCT_4:14;
+                hence thesis by A38,A39,FUNCT_1:def 5;
+             end;
+           hence thesis by A34,XBOOLE_0:def 10;
+          end;
+A40:    rng h = the carrier of L2
+        proof
+         per cases;
+         suppose A41: A2 = {} & A1 = {};
+then the carrier of subrelstr B1 <> {} by A5,A23,YELLOW_0:def 15;
+then A42:     subrelstr B2 is non empty & subrelstr B1 is non empty
+            by A25,A41,STRUCT_0:def 1,YELLOW_0:def 15;
+A43:     rng f = {} by A27,A41,RELAT_1:65;
+        rng g = the carrier of subrelstr B2 by A4,A42,WAYBEL_0:66;
+         hence thesis by A8,A27,A32,A41,A43,XBOOLE_1:65,YELLOW_0:def 15;
+
+         suppose A2 = {} & A1 <> {};
+         then the carrier of subrelstr A2 = {} &
+                 the carrier of subrelstr A1 <> {} by YELLOW_0:def 15;
+         hence thesis by A3,Th4;
+
+         suppose A2 <> {} & A1 = {};
+         then the carrier of subrelstr A2 <> {} &
+           the carrier of subrelstr A1 = {} by YELLOW_0:def 15;
+         hence thesis by A3,Th4;
+         suppose A44: A2 <> {} & A1 <> {};
+           rng h = the carrier of L2
+           proof
+            per cases;
+             suppose A45: B2 <> {};
+                the carrier of subrelstr A2 <> {} &
+                  the carrier of subrelstr A1 <> {} by A44,YELLOW_0:def 15;
+then subrelstr A2 is non empty & subrelstr A1 is non empty
+                   by STRUCT_0:def 1;
+              then rng f = the carrier of subrelstr A2 by A3,WAYBEL_0:66;
+then A46:           rng f = A2 by YELLOW_0:def 15;
+A47:          the carrier of subrelstr B2 <> {} by A45,YELLOW_0:def 15;
+                   then the carrier of subrelstr B1 <> {} by A4,Th4;
+              then subrelstr B2 is non empty & subrelstr B1 is non empty
+                   by A47,STRUCT_0:def 1;
+              then rng g = the carrier of subrelstr B2 by A4,WAYBEL_0:66;
+             hence thesis by A1,A8,A27,A30,A32,A46,Th2,YELLOW_0:def 15;
+
+             suppose A48: B2 = {};
+             then dom g = {} by A28,FUNCT_2:def 1,YELLOW_0:def 15;
+             then for x,y be set holds not [x,y] in g by RELAT_1:20;
+then A49:         g = {} by RELAT_1:56;
+               the carrier of subrelstr A2 <> {} &
+                  the carrier of subrelstr A1 <> {} by A44,YELLOW_0:def 15;
+then subrelstr A2 is non empty & subrelstr A1 is non empty
+                   by STRUCT_0:def 1;
+then rng f = the carrier of subrelstr A2 by A3,WAYBEL_0:66;
+             hence thesis by A8,A32,A48,A49,RELAT_1:60,XBOOLE_1:65,YELLOW_0:def
+15;
+           end;
+         hence thesis;
+        end;
+A50:   dom h = the carrier of L1 by A5,A27,A29,A31,YELLOW_0:def 15;
+       then for x be set st x in the carrier of L1 holds h.x in the carrier of
+L2
+          by A40,FUNCT_1:def 5;
+then A51:    h is Function of the carrier of L1, the carrier of L2
+           by A50,FUNCT_2:5;
+       reconsider L1 as non empty RelStr by A23,STRUCT_0:def 1;
+       reconsider L2 as non empty RelStr by A8,A26,STRUCT_0:def 1;
+       reconsider h as map of L1,L2 by A51;
+A52:    h is one-to-one
+       proof
+         let x1,x2 be Element of L1;
+         assume A53:h.x1 = h.x2;
+
+         per cases by A5,XBOOLE_0:def 2;
+         suppose A54: x1 in A1 & x2 in A1;
+then A55:      the carrier of subrelstr A1 <> {} by YELLOW_0:def 15;
+         then the carrier of subrelstr A2 <> {} by A3,Th4;
+then A56:      subrelstr A1 is non empty &
+           subrelstr A2 is non empty by A55,STRUCT_0:def 1;
+           not x1 in B1 by A6,A54,XBOOLE_0:3;
+then A57:     h.x1 = f.x1 by A30,FUNCT_4:12;
+           not x2 in B1 by A6,A54,XBOOLE_0:3;
+then A58:     f.x1 = f.x2 by A30,A53,A57,FUNCT_4:12;
+           f is one-to-one by A3,A56,WAYBEL_0:66;
+         hence thesis by A27,A54,A58,FUNCT_1:def 8;
+
+         suppose A59: x1 in A1 & x2 in B1;
+         then not x1 in B1 by A6,XBOOLE_0:3;
+then h.x2 = f.x1 by A30,A53,FUNCT_4:12;
+then A60:     h.x2 in rng f by A27,A59,FUNCT_1:def 5;
+A61:     the carrier of subrelstr A1 <> {} by A59,YELLOW_0:def 15;
+         then the carrier of subrelstr A2 <> {} by A3,Th4;
+         then subrelstr A2 is non empty & subrelstr A1 is non empty
+           by A61,STRUCT_0:def 1;
+         then rng f = the carrier of subrelstr A2 by A3,WAYBEL_0:66;
+then A62:     rng f = A2 by YELLOW_0:def 15;
+A63:     rng f misses rng g
+               proof
+A64:             the carrier of subrelstr B1 <> {} by A59,YELLOW_0:def 15;
+                 then the carrier of subrelstr B2 <> {} by A4,Th4;
+                 then subrelstr B2 is non empty & subrelstr B1 is non empty
+                       by A64,STRUCT_0:def 1;
+                 then rng g = the carrier of subrelstr B2 by A4,WAYBEL_0:66;
+                hence thesis by A7,A62,YELLOW_0:def 15;
+               end;
+            h.x2 = g.x2 by A30,A59,FUNCT_4:14;
+              then h.x2 in rng g by A30,A59,FUNCT_1:def 5;
+             hence thesis by A60,A63,XBOOLE_0:3;
+
+             suppose A65: x1 in B1 & x2 in A1;
+then h.x2 = g.x1 by A30,A53,FUNCT_4:14;
+then A66:         h.x2 in rng g by A30,A65,FUNCT_1:def 5;
+A67:         the carrier of subrelstr A1 <> {} by A65,YELLOW_0:def 15;
+             then the carrier of subrelstr A2 <> {} by A3,Th4;
+             then subrelstr A2 is non empty & subrelstr A1 is non empty
+               by A67,STRUCT_0:def 1;
+then A68:         rng f = the carrier of subrelstr A2 by A3,WAYBEL_0:66
+                  .= A2 by YELLOW_0:def 15;
+A69:         the carrier of subrelstr B1 <> {} by A65,YELLOW_0:def 15;
+             then the carrier of subrelstr B2 <> {} by A4,Th4;
+             then subrelstr B2 is non empty & subrelstr B1 is non empty
+               by A69,STRUCT_0:def 1;
+             then rng g = the carrier of subrelstr B2 by A4,WAYBEL_0:66;
+then A70:         rng f misses rng g by A7,A68,YELLOW_0:def 15;
+               not x2 in dom g by A6,A30,A65,XBOOLE_0:3;
+then h.x2 = f.x2 by FUNCT_4:12;
+             then h.x2 in rng f by A27,A65,FUNCT_1:def 5;
+             hence thesis by A66,A70,XBOOLE_0:3;
+
+             suppose A71: x1 in B1 & x2 in B1;
+             then the carrier of subrelstr B1 <> {} by YELLOW_0:def 15;
+              then the carrier of subrelstr B1 <> {} &
+                the carrier of subrelstr B2 <> {} by A4,Th4;
+then A72:           subrelstr B1 is non empty &
+                subrelstr B2 is non empty by STRUCT_0:def 1;
+           h.x1 = g.x1 by A30,A71,FUNCT_4:14;
+then A73:          g.x1 = g.x2 by A30,A53,A71,FUNCT_4:14;
+                g is one-to-one by A4,A72,WAYBEL_0:def 38;
+             hence thesis by A30,A71,A73,FUNCT_1:def 8;
+           end;
+         h is isomorphic
+        proof
+            for x,y being Element of L1 holds x <= y iff h.x <= h.y
+           proof
+            let x,y be Element of L1;
+A74:         not x in A1 implies x in B1 by A5,XBOOLE_0:def 2;
+A75:        not y in B1 implies y in A1 by A5,XBOOLE_0:def 2;
+A76:        dom f misses dom g by A6,A27,A29,YELLOW_0:def 15;
+
+            per cases by A74,A75;
+            suppose A77: x in A1 & y in A1;
+then A78:         x in the carrier of subrelstr A1 &
+                 y in the carrier of subrelstr A1 by YELLOW_0:def 15;
+A79:         the carrier of subrelstr A1 <> {} by A77,YELLOW_0:def 15;
+             reconsider A1' = A1 as non empty Subset of L1 by A77;
+               the carrier of subrelstr A2 <> {} by A3,A79,Th4;
+             then reconsider A2' = A2 as non empty Subset of L2 by YELLOW_0:def
+15;
+             reconsider ax = x, ay = y as Element of subrelstr A1'
+               by A78;
+             reconsider f' = f as map of subrelstr A1', subrelstr A2';
+A80:          h.x = f.x by A6,A27,A30,A77,FUNCT_4:17;
+A81:         h.y = f.y by A6,A27,A30,A77,FUNCT_4:17;
+             hereby assume x <= y;
+               then ax <= ay by YELLOW_0:61;
+               then f'.ax <= f'.ay by A3,WAYBEL_0:66;
+               hence h.x <= h.y by A80,A81,YELLOW_0:60;
+             end;
+
+            assume h.x <= h.y;
+            then f'.ax <= f'.ay by A80,A81,YELLOW_0:61;
+            then ax <= ay by A3,WAYBEL_0:66;
+            hence thesis by YELLOW_0:60;
+
+            suppose A82: x in A1 & y in B1;
+            then A83: x in the carrier of subrelstr A1 &
+              y in the carrier of subrelstr B1 by YELLOW_0:def 15;
+A84:         x < y by A1,A82,Def3;
+            hereby assume x <= y;
+A85:           f.x = h.x by A27,A76,A82,FUNCT_4:17;
+A86:           g.y = h.y by A30,A82,FUNCT_4:14;
+           the carrier of subrelstr A1 <> {} by A82,YELLOW_0:def 15;
+              then A87: the carrier of subrelstr A2 <> {} by A3,Th4;
+          the carrier of subrelstr B1 <> {} by A82,YELLOW_0:def 15;
+then A88:           the carrier of subrelstr B2 <> {} by A4,Th4;
+              reconsider A1' = A1, B1' = B1 as non empty Subset of L1 by A82;
+              reconsider A2' = A2, B2' = B2 as non empty Subset of L2
+                  by A87,A88,YELLOW_0:def 15;
+              reconsider ax = x as Element of subrelstr A1' by A83;
+              reconsider ay = y as Element of subrelstr B1' by A83;
+              reconsider f' = f as map of subrelstr A1', subrelstr A2';
+              reconsider g' = g as map of subrelstr B1', subrelstr B2';
+                f'.ax in the carrier of subrelstr A2' &
+                     g'.ay in the carrier of subrelstr B2';
+              then f'.ax in A2' & g'.ay in B2' by YELLOW_0:def 15;
+              then h.x < h.y by A2,A85,A86,Def3;
+              hence h.x <= h.y by ORDERS_1:def 10;
+            end;
+            assume h.x <= h.y;
+            thus thesis by A84,ORDERS_1:def 10;
+
+            suppose A89: x in B1 & y in A1;
+then y < x by A1,Def3;
+          hence x <= y implies h.x <= h.y by ORDERS_1:30;
+          assume A90: h.x <= h.y;
+A91:       g.x in rng g & f.y in rng f by A27,A30,A89,FUNCT_1:def 5;
+A92:       the carrier of subrelstr A1 is non empty &
+             the carrier of subrelstr B1 is non empty
+               by A89,YELLOW_0:def 15;
+then A93:       subrelstr A1 is non empty & subrelstr B1 is non empty
+                         by STRUCT_0:def 1;
+            the carrier of subrelstr A2 is non empty &
+                   the carrier of subrelstr B2 is non empty
+                         by A3,A4,A92,Th4;
+          then subrelstr A2 is non empty & subrelstr B2 is non empty
+                         by STRUCT_0:def 1;
+          then rng f = the carrier of subrelstr A2 &
+            rng g = the carrier of subrelstr B2 by A3,A4,A93,WAYBEL_0:66;
+then A94:       g.x in B2 & f.y in A2 by A91,YELLOW_0:def 15;
+            g.x = h.x & f.y = h.y by A6,A27,A30,A89,FUNCT_4:14,17;
+          then h.x > h.y by A2,A94,Def3;
+          hence thesis by A90,ORDERS_1:30;
+
+            suppose A95: x in B1 & y in B1;
+             then A96: x in the carrier of subrelstr B1 &
+                 y in the carrier of subrelstr B1 by YELLOW_0:def 15;
+          the carrier of subrelstr B1 <> {} by A95,YELLOW_0:def 15;
+then A97:           the carrier of subrelstr B2 <> {} by A4,Th4;
+             reconsider B1' = B1 as non empty Subset of L1 by A95;
+             reconsider B2' = B2 as non empty Subset of L2
+               by A97,YELLOW_0:def 15;
+             reconsider ax = x, ay = y as Element of subrelstr B1' by A96;
+             reconsider g' = g as map of subrelstr B1', subrelstr B2';
+A98:          h.x = g.x by A30,A95,FUNCT_4:14;
+A99:         h.y = g.y by A30,A95,FUNCT_4:14;
+             hereby assume x <= y;
+               then ax <= ay by YELLOW_0:61;
+               then g'.ax <= g'.ay by A4,WAYBEL_0:66;
+               hence h.x <= h.y by A98,A99,YELLOW_0:60;
+             end;
+             assume h.x <= h.y;
+             then g'.ax <= g'.ay by A98,A99,YELLOW_0:61;
+             then ax <= ay by A4,WAYBEL_0:66;
+             hence thesis by YELLOW_0:60;
+           end;
+         hence thesis by A40,A52,WAYBEL_0:66;
+        end;
+      hence thesis;
+end;
+
+theorem
+  for A being finite Chain, n being Nat st Card(the carrier of A) = n holds
+    A,InclPoset n are_isomorphic
+proof
+  defpred P[Nat] means for A being finite Chain st Card(the carrier of A)
+  = $1 holds A,InclPoset $1 are_isomorphic;
+A1:  P[0]
+     proof
+      let A be finite Chain;
+      assume Card(the carrier of A) = 0;
+then A2:   the carrier of A = {} by CARD_2:59;
+      consider f being map of A, InclPoset 0;
+      take f;
+        the carrier of InclPoset(0) = 0 by YELLOW_1:1;
+      then A is empty & InclPoset(0) is empty by A2,STRUCT_0:def 1;
+      hence thesis by WAYBEL_0:def 38;
+     end;
+A3: for n being Nat st P[n] holds P[n + 1]
+  proof
+    let n be Nat;
+    assume
+A4:    for A being finite Chain st Card(the carrier of A) = n holds
+       A,InclPoset(n) are_isomorphic;
+    let A be finite Chain;
+    assume A5: card(the carrier of A) = n + 1;
+   n >= 0 by NAT_1:18;
+    then n + 1 >= 0 + 1 by AXIOMS:24;
+then A6:  n >= 1 or n + 1 = 1 by NAT_1:26;
+      the carrier of A <> {} by A5,CARD_4:17;
+    then reconsider A as non empty finite Chain by STRUCT_0:def 1;
+    set b = Top A;
+    per cases by A6,NAT_1:38;
+     suppose A7: n + 1 = 1;
+     then consider x be set such that A8: the carrier of A = {x} by A5,CARD_2:
+60;
+       A,InclPoset(1) are_isomorphic
+       proof
+         set g = (the carrier of A) --> 0;
+A9:      rng g = {0} by FUNCOP_1:14;
+A10:      {0} = the carrier of InclPoset 1 by CARD_5:1,YELLOW_1:1;
+           0 in {0} by TARSKI:def 1;
+         then g is Function of the carrier of A, {0} by FUNCOP_1:57;
+         then reconsider g as map of A,InclPoset 1 by A10;
+           g is isomorphic
+          proof
+A11:         g is one-to-one
+            proof
+              let x1,x2 be Element of A;
+              assume g.x1 = g.x2;
+                 x1 = x & x2 = x by A8,TARSKI:def 1;
+              hence x1 = x2;
+            end;
+              for e,f being Element of A holds e <= f iff g.e <= g.f
+             proof
+              let e,f be Element of A;
+              hereby assume e <= f;
+                  g.e = 0 & g.f = 0 by FUNCOP_1:13;
+                hence g.e <= g.f;
+              end;
+              assume g.e <= g.f;
+                e = x by A8,TARSKI:def 1;
+              hence thesis by A8,TARSKI:def 1;
+            end;
+           hence thesis by A9,A10,A11,WAYBEL_0:66;
+          end;
+        hence thesis by WAYBEL_1:def 8;
+       end;
+     hence thesis by A7;
+
+    suppose n + 1 > 1;
+    then n + 1 - 1 > 1 - 1 by REAL_1:54;
+    then A12: n + 0 > 1 - 1 by XCMPLX_1:29;
+A13:  card((the carrier of A) \ {b}) = (card the carrier of A) - card {b}
+                                      by CARD_2:63
+                                   .= (n + 1) -1 by A5,CARD_1:79
+                                   .= n by XCMPLX_1:26;
+      (the carrier of A) \ {b} c= the carrier of A by XBOOLE_1:36;
+    then reconsider Ab=(the carrier of A)\{b} as non empty Subset of A
+                by A12,A13,CARD_4:17;
+    reconsider B = subrelstr Ab as finite Chain by Def1;
+      card(the carrier of B) = n by A13,YELLOW_0:def 15;
+    then B,InclPoset(n) are_isomorphic by A4;
+    then consider f be map of B,InclPoset(n) such that A14: f is isomorphic
+      by WAYBEL_1:def 8;
+A15:  the carrier of B = (the carrier of A)\{b} by YELLOW_0:def 15;
+      n <= n+1 by NAT_1:29;
+    then n c= n+1 by CARD_1:56;
+    then n c= the carrier of InclPoset(n+1) by YELLOW_1:1;
+then A16: the carrier of InclPoset(n) c= the carrier of InclPoset(n+1)
+         by YELLOW_1:1;
+A17: (the carrier of B) , { b } form_upper_lower_partition_of A by A15,Th3;
+A18:  the carrier of InclPoset(n) = n by YELLOW_1:1;
+A19:  n+1 = succ n by CARD_1:52 .= n \/ {n} by ORDINAL1:def 1;
+then A20:  (the carrier of InclPoset(n)) \/ {n} =
+              the carrier of InclPoset(n+1) by A18,YELLOW_1:1;
+      for a,b be Element of InclPoset(n+1) st
+      a in (the carrier of InclPoset(n)) & b in {n} holds a < b
+     proof
+      let a,b be Element of InclPoset(n+1);
+        assume a in the carrier of InclPoset(n) & b in {n};
+then A21:      a in n & b = n by TARSKI:def 1,YELLOW_1:1;
+        then a in { i where i is Nat: i < n } & b = n by AXIOMS:30;
+        then consider h be Nat such that A22: h = a & h < n;
+          a c= b
+        proof
+          assume not a c= b;
+          then consider x be set such that A23: x in a & not x in b by TARSKI:
+def 3;
+            x in { w where w is Nat: w < h } by A22,A23,AXIOMS:30;
+          then consider w' be Nat such that A24: w' = x & w' < h;
+            w' < n by A22,A24,AXIOMS:22;
+          then w' in { t where t is Nat: t < n};
+          hence contradiction by A21,A23,A24,AXIOMS:30;
+        end;
+then A25:    a <= b by YELLOW_1:3;
+          a <> b by A21;
+        hence thesis by A25,ORDERS_1:def 10;
+     end;
+
+then A26: (the carrier of InclPoset(n)),{n}
+           form_upper_lower_partition_of InclPoset(n+1) by A20,Def3;
+    set X = InclPoset {b};
+A27:  the carrier of X = {b} by YELLOW_1:1;
+      {b} c= {b};
+    then reconsider b' = {b} as non empty Subset of X by A27;
+      {n} c= n + 1 by A19,XBOOLE_1:7;
+    then {n} c= the carrier of InclPoset (n+1) by YELLOW_1:1;
+    then reconsider n' = {n} as non empty Subset of InclPoset (n+1)
+     ;
+    set X' = subrelstr b', Y' = subrelstr n';
+A28: the carrier of X' = {b} by YELLOW_0:def 15;
+     deffunc U(set) = n;
+     consider g be ManySortedSet of the carrier of X' such that
+A29:    for d be Element of X' holds g.d = U(d) from LambdaDMS;
+A30: dom g = the carrier of X' by PBOOLE:def 3;
+A31: rng g c= the carrier of Y'
+     proof
+       let r be set;
+       assume r in rng g;
+       then consider x be set such that A32: x in dom g & r = g.x by FUNCT_1:
+def 5;
+         g.x = n by A29,A30,A32;
+       then r in {n} by A32,TARSKI:def 1;
+       hence thesis by YELLOW_0:def 15;
+     end;
+
+      for x be set st x in the carrier of X' holds g.x in the carrier of Y'
+    proof
+      let x be set;
+      assume x in the carrier of X';
+      then g.x in rng g by A30,FUNCT_1:def 5;
+      hence thesis by A31;
+    end;
+then A33: the carrier of subrelstr n' = n' &
+     the carrier of subrelstr {b} = {b} &
+    g is Function of the carrier of X', the carrier of Y'
+         by A30,FUNCT_2:5,YELLOW_0:def 15;
+    then reconsider g as map of subrelstr {b}, subrelstr n' by A28;
+A34:g is one-to-one by A33,PARTFUN1:70;
+      g.b in n' by A33,FUNCT_2:61;
+    then g.b = n by TARSKI:def 1;
+then A35:rng g = the carrier of subrelstr n' by A33,FUNCT_2:62;
+
+A36:  g is isomorphic
+     proof
+        for e,f being Element of subrelstr {b} holds e <= f iff g.e <= g.f
+        proof
+         let e,f be Element of subrelstr {b};
+           e in the carrier of subrelstr {b};
+then A37:       e in {b} by YELLOW_0:def 15;
+         then reconsider e1=e as Element of X' by A28;
+           f in the carrier of subrelstr {b};
+then A38:       f in {b} by YELLOW_0:def 15;
+         then reconsider f1=f as Element of X' by A28;
+         hereby assume e <= f;
+A39:        g.e1 = n by A29;
+             g.f1 = n by A29;
+           hence g.e <= g.f by A39;
+         end;
+         assume g.e <= g.f;
+           e = b by A37,TARSKI:def 1;
+         hence thesis by A38,TARSKI:def 1;
+       end;
+      hence thesis by A34,A35,WAYBEL_0:66;
+     end;
+
+  reconsider A2 = the carrier of InclPoset n, B2 = n'
+           as Subset of InclPoset (n+1) by A16;
+    n <= n+1 by NAT_1:29;
+  then A2 = n & InclPoset n is full SubRelStr of InclPoset (n+1)
+   by Th1,YELLOW_1:1;
+  then InclPoset n = subrelstr A2 & the carrier of B = Ab &
+  g is map of subrelstr {b}, subrelstr B2 by YELLOW_0:def 15;
+  then consider h be map of A,InclPoset(n+1) such that
+A40: h = f +* g & h is isomorphic by A14,A17,A26,A36,Th5;
+    thus thesis by A40,WAYBEL_1:def 8;
+  end;
+
+    for n being Nat holds P[n] from Ind(A1,A3);
+   hence thesis;
+end;

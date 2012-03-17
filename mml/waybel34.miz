@@ -1,0 +1,2863 @@
+:: Duality Based on Galois Connection. Part I
+::  by Grzegorz Bancerek
+::
+:: Received August 8, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary BHSP_3, WAYBEL_0, WAYBEL_1, PRE_TOPC, ORDERS_1, SEQM_3, FUNCT_1,
+      RELAT_1, LATTICES, ORDINAL2, OPPCAT_1, ALTCAT_1, CAT_1, WELLORD1,
+      YELLOW21, FILTER_0, TRIANG_1, QC_LANG1, FUNCTOR0, BOOLE, SGRAPH1,
+      WAYBEL11, YELLOW_9, QUANTAL1, YELLOW_0, SUBSET_1, RELAT_2, WAYBEL_3,
+      LATTICE3, GROUP_6, ALTCAT_2, FUNCOP_1, CANTOR_1, YELLOW20, YELLOW18,
+      COMPTS_1, WAYBEL_8, FINSET_1, WAYBEL34;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELSET_1, FUNCT_1,
+      FUNCT_2, BINOP_1, FINSET_1, STRUCT_0, ORDERS_1, LATTICE3, GRCAT_1,
+      BORSUK_1, TRIANG_1, WELLORD1, ALTCAT_1, FUNCTOR0, ALTCAT_2, YELLOW_0,
+      WAYBEL_0, YELLOW_2, WAYBEL_1, PRE_TOPC, T_0TOPSP, WAYBEL_3, WAYBEL_8,
+      YELLOW_7, WAYBEL11, YELLOW_9, WAYBEL18, YELLOW18, YELLOW20, YELLOW21;
+ constructors RELAT_2, GRCAT_1, TOPS_2, T_0TOPSP, WAYBEL_1, WAYBEL_8, WAYBEL11,
+      YELLOW_9, QUANTAL1, WAYBEL18, YELLOW18, YELLOW20, YELLOW21, BORSUK_1,
+      MEMBERED;
+ clusters RELSET_1, FUNCT_1, PRE_TOPC, FINSET_1, RLVECT_2, STRUCT_0, LATTICE3,
+      YELLOW_0, WAYBEL_0, LATTICE5, YELLOW_2, WAYBEL_1, WAYBEL_2, TRIANG_1,
+      WAYBEL_8, YELLOW_7, WAYBEL11, YELLOW_9, WAYBEL_3, TOPS_1, WAYBEL10,
+      WAYBEL17, WAYBEL21, YELLOW21, ALTCAT_4, FUNCTOR0, FUNCTOR2, MEMBERED,
+      ZFMISC_1;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, PRE_TOPC, T_0TOPSP, LATTICE3, YELLOW_0, WAYBEL_0,
+      WAYBEL_1, WAYBEL_3, WAYBEL11, FUNCTOR0, YELLOW21, XBOOLE_0;
+ theorems ZFMISC_1, RELAT_1, FUNCT_1, FINSET_1, STRUCT_0, FUNCT_2, LATTICE3,
+      PRE_TOPC, GRCAT_1, ORDERS_1, ORDERS_3, BORSUK_1, TSEP_1, TARSKI,
+      FUNCOP_1, TRIANG_1, BINOP_1, PBOOLE, ALTCAT_1, ALTCAT_2, ALTCAT_4,
+      FUNCTOR0, FUNCTOR1, YELLOW_0, WAYBEL_0, YELLOW_2, WAYBEL_1, WAYBEL_3,
+      WAYBEL_6, YELLOW_6, YELLOW_7, WAYBEL_8, YELLOW_3, WAYBEL_9, YELLOW_9,
+      WAYBEL11, WAYBEL15, WAYBEL17, WAYBEL18, WAYBEL20, WAYBEL21, YELLOW18,
+      YELLOW20, YELLOW21, XBOOLE_0, XBOOLE_1;
+ schemes FINSET_1, YELLOW18, YELLOW20, YELLOW21;
+
+begin
+::<section1>Infs-preserving and sups-preserving maps</section1>
+
+definition
+ let S,T be complete LATTICE;
+ cluster Galois Connection of S,T;
+ existence
+  proof consider g being infs-preserving map of S,T;
+      g has_a_lower_adjoint by WAYBEL_1:17;
+    then ex d being map of T,S st [g,d] is Galois by WAYBEL_1:def 11;
+   hence thesis;
+  end;
+end;
+
+theorem Th1:
+ for S,T, S',T' being non empty RelStr
+  st the RelStr of S = the RelStr of S' & the RelStr of T = the RelStr of T'
+ for c being Connection of S,T, c' being Connection of S',T' st c = c'
+  holds c is Galois implies c' is Galois
+  proof let S,T, S',T' being non empty RelStr such that
+A1:  the RelStr of S = the RelStr of S' & the RelStr of T = the RelStr of T';
+   let c be Connection of S,T, c' be Connection of S',T' such that
+A2:  c = c';
+   given g being map of S,T, d being map of T,S such that
+A3:  c = [g,d] and
+A4:  g is monotone & d is monotone and
+A5:  for t being Element of T, s being Element of S
+     holds t <= g.s iff d.t <= s;
+   reconsider g' = g as map of S', T' by A1;
+   reconsider d' = d as map of T', S' by A1;
+   take g',d'; thus c' = [g',d'] by A2,A3;
+   thus g' is monotone & d' is monotone by A1,A4,WAYBEL_9:1;
+   let t' be Element of T', s' be Element of S';
+   reconsider t = t' as Element of T by A1;
+   reconsider s = s' as Element of S by A1;
+      (t' <= g'.s' iff t <= g.s) & (d'.t' <= s' iff d.t <= s) by A1,YELLOW_0:1;
+   hence thesis by A5;
+  end;
+
+definition
+ let S,T be LATTICE;
+ let g be map of S,T;
+ assume S is complete & T is complete & g is infs-preserving;
+    then A1: g has_a_lower_adjoint by WAYBEL_1:17;
+ func LowerAdj g -> map of T,S means:
+Def1:
+  [g, it] is Galois;
+ uniqueness
+  proof let d1,d2 be map of T,S such that
+A2:  [g, d1] is Galois and
+A3:  [g, d2] is Galois;
+      now let t be Element of T;
+     reconsider t' = t as Element of T;
+        d1.t' is_minimum_of g"(uparrow t) & d2.t' is_minimum_of g"(uparrow t)
+       by A2,A3,WAYBEL_1:11;
+      then d1.t = "/\"(g"(uparrow t), S) & d2.t = "/\"(g"(uparrow t), S)
+       by WAYBEL_1:def 6;
+     hence d1.t = d2.t;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+ existence by A1,WAYBEL_1:def 11;
+end;
+
+definition
+ let S,T be LATTICE;
+ let d be map of T,S;
+ assume S is complete & T is complete & d is sups-preserving;
+    then A1: d has_an_upper_adjoint by WAYBEL_1:18;
+ func UpperAdj d -> map of S,T means:
+Def2:
+  [it, d] is Galois;
+ existence by A1,WAYBEL_1:def 12;
+ correctness
+  proof let g1,g2 be map of S,T such that
+A2:  [g1, d] is Galois and
+A3:  [g2, d] is Galois;
+      now let t be Element of S;
+     reconsider t' = t as Element of S;
+        g1.t' is_maximum_of d"(downarrow t) &
+      g2.t' is_maximum_of d"(downarrow t) by A2,A3,WAYBEL_1:12;
+      then g1.t = "\/"(d"(downarrow t), T) & g2.t = "\/"(d"(downarrow t), T)
+       by WAYBEL_1:def 7;
+     hence g1.t = g2.t;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+end;
+
+Lm1:
+now
+ let S,T be LATTICE; assume S is complete & T is complete;
+ then reconsider S' = S, T' = T as complete LATTICE;
+ let g be map of S,T; assume g is infs-preserving;
+ then reconsider g' = g as infs-preserving map of S', T';
+    [g', LowerAdj g'] is Galois by Def1;
+  then LowerAdj g' is lower_adjoint monotone by WAYBEL_1:9,def 12;
+ hence LowerAdj g is monotone lower_adjoint sups-preserving by WAYBEL_1:18;
+end;
+Lm2:
+now
+ let S,T be LATTICE; assume S is complete & T is complete;
+ then reconsider S' = S, T' = T as complete LATTICE;
+ let g be map of S,T; assume g is sups-preserving;
+ then reconsider g' = g as sups-preserving map of S', T';
+    [UpperAdj g', g'] is Galois by Def2;
+  then UpperAdj g' is upper_adjoint monotone by WAYBEL_1:9,def 11;
+ hence UpperAdj g is monotone upper_adjoint infs-preserving by WAYBEL_1:17;
+end;
+
+definition
+ let S,T be complete LATTICE;
+ let g be infs-preserving map of S,T;
+ cluster LowerAdj g -> lower_adjoint;  :: sups-preserving
+ coherence by Lm1;
+end;
+
+definition
+ let S,T be complete LATTICE;
+ let d be sups-preserving map of T,S;
+ cluster UpperAdj d -> upper_adjoint;  :: infs-preserving
+ coherence by Lm2;
+end;
+
+theorem
+   for S,T being complete LATTICE
+ for g being infs-preserving map of S,T
+ for t being Element of T
+  holds (LowerAdj g).t = inf (g"uparrow t)
+  proof let S,T be complete LATTICE;
+   let g be infs-preserving map of S,T;
+   let t be Element of T;
+      [g, LowerAdj g] is Galois by Def1;
+    then (LowerAdj g).t is_minimum_of g"(uparrow t) by WAYBEL_1:11;
+   hence thesis by WAYBEL_1:def 6;
+  end;
+
+theorem
+   for S,T being complete LATTICE
+ for d being sups-preserving map of T,S
+ for s being Element of S
+  holds (UpperAdj d).s = sup (d"downarrow s)
+  proof let S,T be complete LATTICE;
+   let d be sups-preserving map of T,S;
+   let s be Element of S;
+      [UpperAdj d, d] is Galois by Def2;
+    then (UpperAdj d).s is_maximum_of d"(downarrow s) by WAYBEL_1:12;
+   hence thesis by WAYBEL_1:def 7;
+  end;
+
+definition
+ let S,T be RelStr;
+A1:  S opp = RelStr(#the carrier of S, (the InternalRel of S)~#) &
+    T opp = RelStr(#the carrier of T, (the InternalRel of T)~#)
+     by LATTICE3:def 5;
+ let f be Function of the carrier of S, the carrier of T;
+ func f opp -> map of S opp, T opp equals:
+Def3:
+  f;
+ coherence by A1;
+end;
+
+definition
+ let S,T be complete LATTICE;
+ let g be infs-preserving map of S,T;
+ cluster g opp -> lower_adjoint;
+ coherence
+  proof
+A1:  g opp = g & (LowerAdj g) opp = LowerAdj g by Def3;
+      [g, LowerAdj g] is Galois by Def1;
+    then [(LowerAdj g) opp, g opp] is Galois by A1,YELLOW_7:44;
+   hence thesis by WAYBEL_1:def 12;
+  end;
+end;
+
+definition
+ let S,T be complete LATTICE;
+ let d be sups-preserving map of S,T;
+ cluster d opp -> upper_adjoint;
+ coherence
+  proof
+A1:  d opp = d & (UpperAdj d) opp = UpperAdj d by Def3;
+      [UpperAdj d, d] is Galois by Def2;
+    then [d opp, (UpperAdj d) opp] is Galois by A1,YELLOW_7:44;
+   hence thesis by WAYBEL_1:def 11;
+  end;
+end;
+
+theorem
+   for S,T being complete LATTICE
+ for g being infs-preserving map of S, T
+  holds LowerAdj g = UpperAdj (g opp)
+  proof let S,T be complete LATTICE;
+   let g be infs-preserving map of S, T;
+A1:  g opp = g & (LowerAdj g) opp = LowerAdj g by Def3;
+      [g, LowerAdj g] is Galois by Def1;
+    then [(LowerAdj g) opp, g opp] is Galois by A1,YELLOW_7:44;
+   hence thesis by A1,Def2;
+  end;
+
+theorem
+   for S,T being complete LATTICE
+ for d being sups-preserving map of S, T
+  holds LowerAdj (d opp) = UpperAdj d
+  proof let S,T be complete LATTICE;
+   let d be sups-preserving map of S, T;
+A1:  d opp = d & (UpperAdj d) opp = UpperAdj d by Def3;
+      [UpperAdj d, d] is Galois by Def2;
+    then [d opp, (UpperAdj d) opp] is Galois by A1,YELLOW_7:44;
+   hence thesis by A1,Def1;
+  end;
+
+theorem Th6:
+ for L be non empty RelStr holds [id L, id L] is Galois
+  proof let L be non empty RelStr;
+   take g = id L, d = id L;
+   thus [id L, id L] = [g,d] & g is monotone & d is monotone;
+   let t,s be Element of L;
+      g.s = s & d.t = t by GRCAT_1:11;
+   hence thesis;
+  end;
+
+theorem Th7: :: 1.2.  LEMMA, p. 179
+    :: LowerAdj and UpperAdj preserve identities
+ for L being complete LATTICE holds
+    LowerAdj id L = id L & UpperAdj id L = id L
+  proof let L be complete LATTICE;
+      [id L, id L] is Galois by Th6;
+   hence thesis by Def1,Def2;
+  end;
+
+theorem Th8: :: 1.2.  LEMMA, p. 179
+    :: LowerAdj preserves contravariantly composition
+ for L1,L2,L3 being complete LATTICE
+ for g1 being infs-preserving map of L1,L2
+ for g2 being infs-preserving map of L2,L3
+  holds
+     LowerAdj (g2*g1) = (LowerAdj g1)*(LowerAdj g2)
+  proof let L1,L2,L3 be complete LATTICE;
+   let g1 be infs-preserving map of L1,L2;
+   let g2 be infs-preserving map of L2,L3;
+      [g1, LowerAdj g1] is Galois & [g2, LowerAdj g2] is Galois by Def1;
+    then [g2*g1, (LowerAdj g1)*(LowerAdj g2)] is Galois &
+    g2*g1 is infs-preserving by WAYBEL15:7,WAYBEL20:26;
+   hence thesis by Def1;
+  end;
+
+theorem Th9: :: 1.2.  LEMMA, p. 179
+    :: UpperAdj preserves contravariantly composition
+ for L1,L2,L3 being complete LATTICE
+ for d1 being sups-preserving map of L1,L2
+ for d2 being sups-preserving map of L2,L3
+  holds
+     UpperAdj (d2*d1) = (UpperAdj d1)*(UpperAdj d2)
+  proof let L1,L2,L3 be complete LATTICE;
+   let d1 be sups-preserving map of L1,L2;
+   let d2 be sups-preserving map of L2,L3;
+      [UpperAdj d1, d1] is Galois & [UpperAdj d2, d2] is Galois by Def2;
+    then [(UpperAdj d1)*(UpperAdj d2), d2*d1] is Galois &
+    d2*d1 is sups-preserving by WAYBEL15:7,WAYBEL20:28;
+   hence thesis by Def2;
+  end;
+
+theorem Th10: :: 1.3. THEOREM, p. 179
+ for S,T being complete LATTICE
+ for g being infs-preserving map of S,T
+  holds UpperAdj LowerAdj g = g
+  proof let S,T be complete LATTICE;
+   let g be infs-preserving map of S,T;
+      [g, LowerAdj g] is Galois by Def1;
+   hence UpperAdj LowerAdj g = g by Def2;
+  end;
+
+theorem Th11: :: 1.3. THEOREM, p. 179
+ for S,T being complete LATTICE
+ for d being sups-preserving map of S,T
+  holds LowerAdj UpperAdj d = d
+  proof let S,T be complete LATTICE;
+   let d be sups-preserving map of S,T;
+      [UpperAdj d, d] is Galois by Def2;
+   hence thesis by Def1;
+  end;
+
+theorem Th12:
+ for C being non empty AltCatStr
+ for a,b,f being set st f in (the Arrows of C).(a,b)
+ ex o1,o2 being object of C
+   st o1 = a & o2 = b & f in <^o1,o2^> & f is Morphism of o1,o2
+  proof let C be non empty AltCatStr;
+   let a,b,f be set; assume
+A1: f in (the Arrows of C).(a,b);
+    then f in (the Arrows of C). [a,b] by BINOP_1:def 1;
+    then [a,b] in dom the Arrows of C by FUNCT_1:def 4;
+    then [a,b] in [:the carrier of C, the carrier of C:] by PBOOLE:def 3;
+    then a in the carrier of C & b in the carrier of C by ZFMISC_1:106;
+   then reconsider o1 = a, o2 = b as object of C;
+   take o1, o2; <^o1,o2^> = (the Arrows of C).(a,b) by ALTCAT_1:def 2;
+   hence thesis by A1;
+  end;
+
+definition :: 1.1 DEFINITION, p. 179
+ let W be non empty set;
+ defpred L[LATTICE] means $1 is complete;
+ defpred P[LATTICE,LATTICE,map of $1,$2] means $3 is infs-preserving;
+ given w being Element of W such that
+A1:    w is non empty;
+     reconsider w as non empty set by A1;
+     consider r being upper-bounded well-ordering Order of w;
+       RelStr(#w,r#) is complete;
+
+     then
+A2:  ex x being strict LATTICE st L[x] & the carrier of x in W;
+A3:  for a,b,c being LATTICE st L[a] & L[b] & L[c]
+     for f being map of a,b, g being map of b,c st P[a,b,f] & P[b,c,g]
+      holds P[a,c,g*f] by WAYBEL20:26;
+A4:  for a being LATTICE st L[a] holds P[a,a,id a];
+
+ func W-INF_category -> lattice-wise strict category means:
+Def4:
+  (for x being LATTICE holds
+    x is object of it iff x is strict complete & the carrier of x in W) &
+  for a,b being object of it, f being monotone map of latt a, latt b
+    holds f in <^a,b^> iff f is infs-preserving;
+ existence
+  proof
+    thus ex C being lattice-wise strict category st
+    (for x being LATTICE holds
+      x is object of C iff x is strict & L[x] & the carrier of x in W) &
+    for a,b being object of C, f being monotone map of latt a, latt b
+      holds f in <^a,b^> iff P[latt a, latt b, f]
+     from CLCatEx2(A2,A3,A4);
+  end;
+ uniqueness
+  proof let C1, C2 be lattice-wise strict category such that
+A5: for x being LATTICE holds
+       x is object of C1 iff x is strict & L[x] & the carrier of x in W and
+A6: for a,b being object of C1, f being monotone map of latt a, latt b
+        holds f in <^a,b^> iff f is infs-preserving and
+A7: for x being LATTICE holds
+       x is object of C2 iff x is strict & L[x] & the carrier of x in W and
+A8: for a,b being object of C2, f being monotone map of latt a, latt b
+        holds f in <^a,b^> iff f is infs-preserving;
+    defpred Q[set, set, set] means
+     ex L1,L2 being LATTICE, f being map of L1,L2
+       st $1 = L1 & $2 = L2 & $3 = f & f is infs-preserving;
+A9: now
+     let a,b be object of C1;
+     let f be monotone map of latt a, latt b;
+      latt a = a & latt b = b &
+      (f in <^a,b^> iff f is infs-preserving) by A6,YELLOW21:def 6;
+     hence f in <^a,b^> iff Q[a,b,f];
+    end;
+A10: now
+     let a,b be object of C2;
+     let f be monotone map of latt a, latt b;
+      latt a = a & latt b = b &
+      (f in <^a,b^> iff f is infs-preserving) by A8,YELLOW21:def 6;
+     hence f in <^a,b^> iff Q[a,b,f];
+    end;
+    for C1, C2 being lattice-wise category st
+     (for x being LATTICE holds
+       x is object of C1 iff x is strict & L[x] & the carrier of x in W) &
+     (for a,b being object of C1, f being monotone map of latt a, latt b
+        holds f in <^a,b^> iff Q[a, b, f]) &
+     (for x being LATTICE holds
+       x is object of C2 iff x is strict & L[x] & the carrier of x in W) &
+     (for a,b being object of C2, f being monotone map of latt a, latt b
+        holds f in <^a,b^> iff Q[a, b, f])
+    holds the AltCatStr of C1 = the AltCatStr of C2 from CLCatUniq2;
+   hence thesis by A5,A7,A9,A10;
+  end;
+end;
+
+Lm3:
+ for W being with_non-empty_element set
+  for a,b being LATTICE, f being map of a,b
+   holds f in (the Arrows of W-INF_category).(a,b) iff
+      a in the carrier of W-INF_category &
+      b in the carrier of W-INF_category &
+      a is complete & b is complete & f is infs-preserving
+  proof let W be with_non-empty_element set;
+A1: ex x being non empty set st x in W by TRIANG_1:def 1;
+   let a,b be LATTICE, f be map of a,b;
+   set A = W-INF_category;
+   hereby assume f in (the Arrows of A).(a,b);
+     then consider o1, o2 being object of A such that
+A2:   o1 = a & o2 = b & f in <^o1,o2^> & f is Morphism of o1, o2 by Th12;
+     reconsider g = f as Morphism of o1,o2 by A2;
+     thus a in the carrier of A & b in the carrier of A by A2;
+     thus a is complete & b is complete by A1,A2,Def4;
+        latt o1 = a & latt o2 = b & @g = f by A2,YELLOW21:def 6,def 7;
+     hence f is infs-preserving by A1,A2,Def4;
+   end;
+   assume a in the carrier of W-INF_category &
+    b in the carrier of W-INF_category;
+   then reconsider x = a, y = b as object of A;
+A3: latt x = a & latt y = b by YELLOW21:def 6;
+   assume
+A4: a is complete & b is complete & f is infs-preserving;
+    then f is monotone by WAYBEL_1:17;
+    then f in <^x,y^> by A1,A3,A4,Def4;
+   hence thesis by ALTCAT_1:def 2;
+  end;
+
+definition :: 1.1 DEFINITION, p. 179
+ let W be non empty set;
+    defpred L[LATTICE] means $1 is complete;
+    defpred P[LATTICE,LATTICE,map of $1,$2] means $3 is sups-preserving;
+ given w being Element of W such that
+A1:    w is non empty;
+     reconsider w as non empty set by A1;
+     consider r being upper-bounded well-ordering Order of w;
+     RelStr(#w,r#) is complete;
+     then
+A2:  ex x being strict LATTICE st L[x] & the carrier of x in W;
+A3:  for a,b,c being LATTICE st L[a] & L[b] & L[c]
+     for f being map of a,b, g being map of b,c st P[a,b,f] & P[b,c,g]
+     holds P[a,c,g*f] by WAYBEL20:28;
+A4:  for a being LATTICE st L[a] holds P[a,a,id a];
+
+ func W-SUP_category -> lattice-wise strict category means:
+Def5:
+  (for x being LATTICE holds
+    x is object of it iff x is strict complete & the carrier of x in W) &
+  for a,b being object of it, f being monotone map of latt a, latt b
+    holds f in <^a,b^> iff f is sups-preserving;
+ existence
+  proof
+    thus ex C being lattice-wise strict category st
+    (for x being LATTICE holds
+      x is object of C iff x is strict & L[x] & the carrier of x in W) &
+    for a,b being object of C, f being monotone map of latt a, latt b
+      holds f in <^a,b^> iff P[latt a, latt b, f] from CLCatEx2(A2,A3,A4);
+  end;
+ uniqueness
+  proof let C1, C2 be lattice-wise strict category such that
+A5: for x being LATTICE holds
+       x is object of C1 iff x is strict & L[x] & the carrier of x in W and
+A6: for a,b being object of C1, f being monotone map of latt a, latt b
+        holds f in <^a,b^> iff f is sups-preserving and
+A7: for x being LATTICE holds
+       x is object of C2 iff x is strict & L[x] & the carrier of x in W and
+A8: for a,b being object of C2, f being monotone map of latt a, latt b
+        holds f in <^a,b^> iff f is sups-preserving;
+    defpred Q[set, set, set] means
+     ex L1,L2 being LATTICE, f being map of L1,L2
+       st $1 = L1 & $2 = L2 & $3 = f & f is sups-preserving;
+A9: now
+     let a,b be object of C1;
+     let f be monotone map of latt a, latt b;
+      latt a = a & latt b = b &
+      (f in <^a,b^> iff f is sups-preserving) by A6,YELLOW21:def 6;
+     hence f in <^a,b^> iff Q[a,b,f];
+    end;
+A10: now
+     let a,b be object of C2;
+     let f be monotone map of latt a, latt b;
+      latt a = a & latt b = b &
+      (f in <^a,b^> iff f is sups-preserving) by A8,YELLOW21:def 6;
+     hence f in <^a,b^> iff Q[a,b,f];
+    end;
+    for C1, C2 being lattice-wise category st
+     (for x being LATTICE holds
+       x is object of C1 iff x is strict & L[x] & the carrier of x in W) &
+     (for a,b being object of C1, f being monotone map of latt a, latt b
+        holds f in <^a,b^> iff Q[a, b, f]) &
+     (for x being LATTICE holds
+       x is object of C2 iff x is strict & L[x] & the carrier of x in W) &
+     (for a,b being object of C2, f being monotone map of latt a, latt b
+        holds f in <^a,b^> iff Q[a, b, f])
+    holds the AltCatStr of C1 = the AltCatStr of C2 from CLCatUniq2;
+   hence thesis by A5,A7,A9,A10;
+  end;
+end;
+
+Lm4:
+ for W being with_non-empty_element set
+  for a,b being LATTICE, f being map of a,b
+   holds f in (the Arrows of W-SUP_category).(a,b) iff
+      a in the carrier of W-SUP_category &
+      b in the carrier of W-SUP_category &
+      a is complete & b is complete & f is sups-preserving
+  proof let W be with_non-empty_element set;
+A1: ex x being non empty set st x in W by TRIANG_1:def 1;
+   let a,b be LATTICE, f be map of a,b;
+   set A = W-SUP_category;
+   hereby assume f in (the Arrows of A).(a,b);
+     then consider o1, o2 being object of A such that
+A2:   o1 = a & o2 = b & f in <^o1,o2^> & f is Morphism of o1, o2 by Th12;
+     reconsider g = f as Morphism of o1,o2 by A2;
+     thus a in the carrier of A & b in the carrier of A by A2;
+     thus a is complete & b is complete by A1,A2,Def5;
+        latt o1 = a & latt o2 = b & @g = f by A2,YELLOW21:def 6,def 7;
+     hence f is sups-preserving by A1,A2,Def5;
+   end;
+   assume a in the carrier of W-SUP_category &
+    b in the carrier of W-SUP_category;
+   then reconsider x = a, y = b as object of A;
+A3: latt x = a & latt y = b by YELLOW21:def 6;
+   assume
+A4: a is complete & b is complete & f is sups-preserving;
+    then f is monotone by WAYBEL_1:18;
+    then f in <^x,y^> by A1,A3,A4,Def5;
+   hence thesis by ALTCAT_1:def 2;
+  end;
+
+definition
+ let W be with_non-empty_element set;
+ cluster W-INF_category -> with_complete_lattices;
+ coherence
+  proof thus W-INF_category is lattice-wise;
+   let a be object of W-INF_category;
+A1: ex x being non empty set st x in W by TRIANG_1:def 1;
+      a = latt a by YELLOW21:def 6;
+   hence thesis by A1,Def4;
+  end;
+ cluster W-SUP_category -> with_complete_lattices;
+ coherence
+  proof thus W-SUP_category is lattice-wise;
+   let a be object of W-SUP_category;
+A2: ex x being non empty set st x in W by TRIANG_1:def 1;
+      a = latt a by YELLOW21:def 6;
+   hence thesis by A2,Def5;
+  end;
+end;
+
+theorem Th13:
+ for W being with_non-empty_element set
+ for L being LATTICE holds
+   L is object of W-INF_category
+  iff
+   L is strict complete & the carrier of L in W
+  proof let W be with_non-empty_element set;
+      ex a being non empty set st a in W by TRIANG_1:def 1;
+   hence thesis by Def4;
+  end;
+
+
+theorem Th14:
+ for W being with_non-empty_element set
+ for a, b being object of W-INF_category
+ for f being set
+  holds f in <^a,b^> iff f is infs-preserving map of latt a, latt b
+  proof let W be with_non-empty_element set;
+   let a,b be object of W-INF_category, f be set;
+A1: ex a being non empty set st a in W by TRIANG_1:def 1;
+   hereby assume
+A2:   f in <^a,b^>;
+     then reconsider g = f as Morphism of a,b ;
+        f = @g by A2,YELLOW21:def 7;
+     hence f is infs-preserving map of latt a, latt b by A1,A2,Def4;
+    end;
+   thus thesis by A1,Def4;
+  end;
+
+theorem Th15:
+ for W being with_non-empty_element set
+ for L being LATTICE holds
+   L is object of W-SUP_category
+  iff
+   L is strict complete & the carrier of L in W
+  proof let W be with_non-empty_element set;
+      ex a being non empty set st a in W by TRIANG_1:def 1;
+   hence thesis by Def5;
+  end;
+
+theorem Th16:
+ for W being with_non-empty_element set
+ for a, b being object of W-SUP_category
+ for f being set
+  holds f in <^a,b^> iff f is sups-preserving map of latt a, latt b
+  proof let W be with_non-empty_element set;
+   let a,b be object of W-SUP_category, f be set;
+A1: ex a being non empty set st a in W by TRIANG_1:def 1;
+   hereby assume
+A2:   f in <^a,b^>;
+     then reconsider g = f as Morphism of a,b ;
+        f = @g by A2,YELLOW21:def 7;
+     hence f is sups-preserving map of latt a, latt b by A1,A2,Def5;
+    end;
+   thus thesis by A1,Def5;
+  end;
+
+theorem Th17:
+ for W being with_non-empty_element set holds
+   the carrier of W-INF_category = the carrier of W-SUP_category
+  proof let W be with_non-empty_element set;
+A1: ex x being non empty set st x in W by TRIANG_1:def 1;
+   thus the carrier of W-INF_category c= the carrier of W-SUP_category
+     proof let x be set; assume x in the carrier of W-INF_category;
+then A2:    x is object of W-INF_category;
+      then reconsider x as LATTICE by YELLOW21:def 4;
+         x is strict complete & the carrier of x in W by A1,A2,Def4;
+       then x is object of W-SUP_category by Def5;
+      hence thesis;
+     end;
+   let x be set; assume x in the carrier of W-SUP_category;
+then A3: x is object of W-SUP_category;
+   then reconsider x as LATTICE by YELLOW21:def 4;
+      x is strict complete & the carrier of x in W by A1,A3,Def5;
+    then x is object of W-INF_category by Def4;
+   hence thesis;
+  end;
+
+definition :: 1.2 LEMMA, p. 179
+ let W be with_non-empty_element set;
+    set A = W-INF_category, B = W-SUP_category;
+    deffunc O(LATTICE) = $1;
+    deffunc F(LATTICE,LATTICE, map of $1,$2) = LowerAdj $3;
+    defpred P[LATTICE,LATTICE, map of $1,$2] means
+      $1 is complete & $2 is complete & $3 is infs-preserving;
+    defpred Q[LATTICE,LATTICE, map of $1,$2] means
+      $1 is complete & $2 is complete & $3 is sups-preserving;
+A1: for a,b being LATTICE, f being map of a,b
+     holds f in (the Arrows of A).(a,b) iff
+      a in the carrier of A & b in the carrier of A & P[a,b,f] by Lm3;
+A2: for a,b being LATTICE, f being map of a,b
+     holds f in (the Arrows of B).(a,b) iff
+      a in the carrier of B & b in the carrier of B & Q[a,b,f] by Lm4;
+A3: for a being LATTICE st a in the carrier of A
+     holds O(a) in the carrier of B by Th17;
+A4: for a,b being LATTICE, f being map of a,b st P[a,b,f]
+     holds F(a,b,f) is map of O(b),O(a) & Q[O(b), O(a), F(a,b,f)] by Lm1;
+A5: now let a be LATTICE;
+     assume a in the carrier of A;
+      then a is object of A;
+      then a is complete by YELLOW21:def 5;
+     hence F(a,a,id a) = id O(a) by Th7;
+    end;
+A6: for a,b,c being LATTICE, f being map of a,b, g being map of b,c
+     st P[a,b,f] & P[b,c,g]
+     holds F(a,c,g*f) = F(a,b,f)*F(b,c,g) by Th8;
+ func W LowerAdj ->
+    contravariant strict Functor of W-INF_category, W-SUP_category means:
+Def6:
+  (for a being object of W-INF_category holds it.a = latt a) &
+  for a,b being object of W-INF_category st <^a,b^> <> {}
+   for f being Morphism of a,b holds it.f = LowerAdj @f;
+ existence
+  proof
+    thus ex F being contravariant strict
+       Functor of W-INF_category, W-SUP_category st
+    (for a being object of W-INF_category holds F.a = O(latt a)) &
+    for a,b being object of W-INF_category st <^a,b^> <> {}
+    for f being Morphism of a,b holds F.f = F(latt a, latt b, @f)
+    from CLContravariantFunctorEx(A1,A2,A3,A4,A5,A6);
+  end;
+ uniqueness
+  proof let F,G be contravariant strict Functor of A, B such that
+A7: for a being object of W-INF_category holds F.a = latt a and
+A8: for a,b being object of W-INF_category st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = LowerAdj @f and
+A9: for a being object of W-INF_category holds G.a = latt a and
+A10: for a,b being object of W-INF_category st <^a,b^> <> {}
+     for f being Morphism of a,b holds G.f = LowerAdj @f;
+A11: now let a be object of A; thus F.a = latt a by A7 .= G.a by A9; end;
+      now let a,b be object of A such that
+A12:   <^a,b^> <> {};
+     let f be Morphism of a,b;
+     thus F.f = LowerAdj @f by A8,A12 .= G.f by A10,A12;
+    end;
+   hence thesis by A11,YELLOW18:2;
+  end;
+    deffunc G(LATTICE,LATTICE, map of $1,$2) = UpperAdj $3;
+A13: for a being LATTICE st a in the carrier of B
+     holds O(a) in the carrier of A by Th17;
+A14: for a,b being LATTICE, f being map of a,b st Q[a,b,f]
+     holds G(a,b,f) is map of O(b), O(a) & P[O(b), O(a), G(a,b,f)] by Lm2;
+A15: now let a be LATTICE;
+     assume a in the carrier of B;
+      then a is object of B;
+      then a is complete by YELLOW21:def 5;
+     hence G(a,a,id a) = id O(a) by Th7;
+    end;
+A16: for a,b,c being LATTICE, f being map of a,b, g being map of b,c
+     st Q[a,b,f] & Q[b,c,g] holds G(a,c,g*f) = G(a,b,f)*G(b,c,g) by Th9;
+ func W UpperAdj ->
+    contravariant strict Functor of W-SUP_category, W-INF_category means:
+Def7:
+  (for a being object of W-SUP_category holds it.a = latt a) &
+  for a,b being object of W-SUP_category st <^a,b^> <> {}
+   for f being Morphism of a,b holds it.f = UpperAdj @f;
+ existence
+  proof
+    thus ex F being contravariant strict Functor of B,A st
+     (for a being object of B holds F.a = O(latt a)) &
+     for a,b being object of B st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = G(latt a, latt b, @f)
+    from CLContravariantFunctorEx(A2,A1,A13,A14,A15,A16);
+  end;
+ uniqueness
+  proof let F,G be contravariant strict Functor of B,A such that
+A17: for a being object of B holds F.a = latt a and
+A18: for a,b being object of B st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = UpperAdj @f and
+A19: for a being object of B holds G.a = latt a and
+A20: for a,b being object of B st <^a,b^> <> {}
+     for f being Morphism of a,b holds G.f = UpperAdj @f;
+A21: now let a be object of B; thus F.a = latt a by A17 .= G.a by A19; end;
+      now let a,b be object of B such that
+A22:   <^a,b^> <> {};
+     let f be Morphism of a,b;
+     thus F.f = UpperAdj @f by A18,A22 .= G.f by A20,A22;
+    end;
+   hence thesis by A21,YELLOW18:2;
+  end;
+end;
+
+definition
+ let W be with_non-empty_element set;
+ cluster W LowerAdj -> bijective;
+ coherence
+  proof set A = W-INF_category, B = W-SUP_category;
+   set F = W LowerAdj;
+A1: ex x being non empty set st x in W by TRIANG_1:def 1;
+   deffunc O(object of A) = latt $1;
+   deffunc F(object of A,object of A,Morphism of $1,$2) = LowerAdj @$3;
+A2: for a being object of A holds F.a = O(a) by Def6;
+A3: for a,b being object of A st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = F(a,b,f) by Def6;
+A4: now let a,b be object of A; assume O(a) = O(b);
+      then a = latt b by YELLOW21:def 6;
+     hence a = b by YELLOW21:def 6;
+    end;
+A5: now let a,b be object of A such that
+A6:   <^a,b^> <> {};
+     let f,g be Morphism of a,b;
+A7:   @f = f & @g = g by A6,YELLOW21:def 7;
+     then
+A8:   latt a is complete & latt b is complete &
+      @f is infs-preserving & @g is infs-preserving
+       by A1,A6,Def4;
+     assume F(a,b,f) = F(a,b,g);
+     hence f = UpperAdj LowerAdj @g by A7,A8,Th10 .= g by A7,A8,Th10;
+    end;
+A9: now let a,b be object of B such that
+A10:   <^a,b^> <> {};
+     let f be Morphism of a,b;
+A11:   a = latt a & b = latt b by YELLOW21:def 6;
+     then latt a is strict complete & the carrier of latt a in W &
+      latt b is strict complete & the carrier of latt b in W by A1,Def5;
+     then reconsider c = latt b, d = latt a as object of A by Def4;
+     take c,d;
+A12:   latt c = c & latt d = d by YELLOW21:def 6;
+A13:   f = @f by A10,YELLOW21:def 7;
+      then
+A14:   @f is sups-preserving by A1,A10,Def5;
+      then
+A15:   UpperAdj @f is monotone infs-preserving by A12,Lm2;
+      then
+A16:   UpperAdj @f in <^c,d^> by A1,A12,Def4;
+     then reconsider g = UpperAdj @f as Morphism of c,d ;
+     take g;
+     thus b = O(c) & a = O(d) & <^c,d^> <> {} by A1,A11,A15,Def4;
+        g = @g by A16,YELLOW21:def 7;
+     hence f = F(c,d,g) by A12,A13,A14,Th11;
+    end;
+   thus thesis from ContraBijectiveSch(A2,A3,A4,A5,A9);
+  end;
+ cluster W UpperAdj -> bijective;
+ coherence
+  proof set A = W-SUP_category, B = W-INF_category;
+   set F = W UpperAdj;
+A17: ex x being non empty set st x in W by TRIANG_1:def 1;
+   deffunc O(object of A) = latt $1;
+   deffunc F(object of A, object of A, Morphism of $1,$2) = UpperAdj @$3;
+A18: for a being object of A holds F.a = O(a) by Def7;
+A19: for a,b being object of A st <^a,b^> <> {}
+     for f being Morphism of a,b holds F.f = F(a,b,f) by Def7;
+A20: now let a,b be object of A; assume O(a) = O(b);
+      then a = latt b by YELLOW21:def 6;
+     hence a = b by YELLOW21:def 6;
+    end;
+A21: now let a,b be object of A such that
+A22:   <^a,b^> <> {};
+     let f,g be Morphism of a,b;
+A23:   @f = f & @g = g by A22,YELLOW21:def 7;
+      then
+A24:   latt a is complete & latt b is complete &
+      @f is sups-preserving & @g is sups-preserving
+       by A17,A22,Def5;
+     assume F(a,b,f) = F(a,b,g);
+     hence f = LowerAdj UpperAdj @g by A23,A24,Th11 .= g by A23,A24,Th11;
+    end;
+A25: now let a,b be object of B such that
+A26:   <^a,b^> <> {};
+     let f be Morphism of a,b;
+A27:   a = latt a & b = latt b by YELLOW21:def 6;
+     then latt a is strict complete & the carrier of latt a in W &
+      latt b is strict complete & the carrier of latt b in W by A17,Def4;
+     then reconsider c = latt b, d = latt a as object of A by Def5;
+     take c,d;
+A28:   latt c = c & latt d = d by YELLOW21:def 6;
+A29:   f = @f by A26,YELLOW21:def 7;
+      then
+A30:   @f is infs-preserving by A17,A26,Def4;
+      then
+A31:   LowerAdj @f is monotone sups-preserving by A28,Lm1;
+      then
+A32:   LowerAdj @f in <^c,d^> by A17,A28,Def5;
+     then reconsider g = LowerAdj @f as Morphism of c,d ;
+     take g;
+     thus b = O(c) & a = O(d) & <^c,d^> <> {} by A17,A27,A31,Def5;
+        g = @g by A32,YELLOW21:def 7;
+     hence f = F(c,d,g) by A28,A29,A30,Th10;
+    end;
+   thus thesis from ContraBijectiveSch(A18,A19,A20,A21,A25);
+  end;
+end;
+
+theorem Th18:
+ for W being with_non-empty_element set
+  holds W LowerAdj" = W UpperAdj & W UpperAdj" = W LowerAdj
+  proof let W be with_non-empty_element set;
+A1: ex x being non empty set st x in W by TRIANG_1:def 1;
+    set B = W-SUP_category;
+    set F = W LowerAdj, G = W UpperAdj;
+A2: now let a be object of B;
+     thus F.(G.a) = latt (G.a) by Def6 .= G.a by YELLOW21:def 6
+       .= latt a by Def7 .= a by YELLOW21:def 6;
+    end;
+      now let a,b be object of B; assume
+A3:   <^a,b^> <> {};
+then A4:   <^G.b, G.a^> <> {} by FUNCTOR0:def 20;
+     let f be Morphism of a,b;
+A5:   G.f = UpperAdj @f by A3,Def7;
+A6:   @f = f & @(G.f) = G.f by A3,A4,YELLOW21:def 7;
+A7:   latt (G.a) = G.a & latt (G.b) = G.b &
+      latt a = a & latt b = b & G.a = latt a & G.b = latt b
+       by Def7,YELLOW21:def 6;
+A8:   latt a is complete & latt b is complete &
+      @f is sups-preserving by A1,A3,A6,Def5;
+     thus F.(G.f) = LowerAdj @(G.f) by A4,Def6
+       .= f by A5,A6,A7,A8,Th11;
+    end;
+   hence F" = G by A2,YELLOW20:7;
+    set B = W-INF_category;
+    set G = W LowerAdj, F = W UpperAdj;
+A9: now let a be object of B;
+     thus F.(G.a) = latt (G.a) by Def7 .= G.a by YELLOW21:def 6
+       .= latt a by Def6 .= a by YELLOW21:def 6;
+    end;
+      now let a,b be object of B; assume
+A10:   <^a,b^> <> {};
+then A11:   <^G.b, G.a^> <> {} by FUNCTOR0:def 20;
+     let f be Morphism of a,b;
+A12:   G.f = LowerAdj @f by A10,Def6;
+A13:   @f = f & @(G.f) = G.f by A10,A11,YELLOW21:def 7;
+A14:   latt (G.a) = G.a & latt (G.b) = G.b &
+      latt a = a & latt b = b & G.a = latt a & G.b = latt b
+       by Def6,YELLOW21:def 6;
+A15:   latt a is complete & latt b is complete &
+      @f is infs-preserving by A1,A10,A13,Def4;
+     thus F.(G.f) = UpperAdj @(G.f) by A11,Def7
+       .= f by A12,A13,A14,A15,Th10;
+    end;
+   hence F" = G by A9,YELLOW20:7;
+  end;
+
+theorem :: 1.3 THEOREM, p. 179
+   for W being with_non-empty_element set holds
+   (W LowerAdj)*(W UpperAdj) = id (W-SUP_category) &
+   (W UpperAdj)*(W LowerAdj) = id (W-INF_category)
+  proof let W be with_non-empty_element set;
+      W LowerAdj" = W UpperAdj & W UpperAdj" = W LowerAdj by Th18;
+   hence thesis by FUNCTOR1:21;
+  end;
+
+theorem :: 1.3 THEOREM, p. 179
+   for W being with_non-empty_element set holds
+  W-INF_category, W-SUP_category are_anti-isomorphic
+  proof let W be with_non-empty_element set;
+   take W LowerAdj; thus thesis;
+  end;
+
+begin
+::<section2>Scott continuous maps and continuous lattices</section2>
+
+canceled 2;
+
+theorem Th23: :: 1.4. THEOREM, (1) <=> (2), p. 180
+ for S,T being complete LATTICE, g being infs-preserving map of S,T
+  holds
+   g is directed-sups-preserving iff
+     for X being Scott TopAugmentation of T
+     for Y being Scott TopAugmentation of S
+      for V being open Subset of X holds
+       uparrow ((LowerAdj g).:V) is open Subset of Y
+  proof let S,T be complete LATTICE, g be infs-preserving map of S,T;
+   hereby assume
+A1:   g is directed-sups-preserving;
+    let X be Scott TopAugmentation of T;
+    let Y be Scott TopAugmentation of S;
+    let V be open Subset of X;
+A2:   the RelStr of X = the RelStr of T & the RelStr of Y = the RelStr of S
+      by YELLOW_9:def 4;
+    then reconsider g' = g as map of Y,X;
+    reconsider d = LowerAdj g as map of X,Y by A2;
+       uparrow (d.:V) is inaccessible
+      proof let D be non empty directed Subset of Y;
+       assume sup D in uparrow (d.:V);
+       then consider y being Element of Y such that
+A3:      y <= sup D & y in d.:V by WAYBEL_0:def 16;
+       consider u being set such that
+A4:      u in the carrier of X & u in V & y = d.u by A3,FUNCT_2:115;
+       reconsider u as Element of X by A4;
+       reconsider g = g' as map of Y,X;
+          [g, d] is Galois Connection of S,T by Def1;
+        then [g, d] is Galois by A2,Th1;
+then A5:      d*g <= id Y & id X <= g*d by WAYBEL_1:19;
+A6:      (id X).u = u & (g*d).u = g.(d.u) by FUNCT_2:21,GRCAT_1:11;
+        A7: g is infs-preserving map of Y,X by A2,WAYBEL21:6;
+        then u <= g.y & g.y <= g.sup D by A3,A4,A5,A6,ORDERS_3:def 5,YELLOW_2:
+10;
+        then u <= g.sup D & V is upper by ORDERS_1:26,WAYBEL11:def 4;
+then A8:      g.sup D in V by A4,WAYBEL_0:def 20;
+          g is directed-sups-preserving by A1,A2,WAYBEL21:6;
+        then g preserves_sup_of D & ex_sup_of D, Y
+         by WAYBEL_0:def 37,YELLOW_0:17;
+then A9:      g.sup D = sup (g.:D) by WAYBEL_0:def 31;
+          g.:D is directed non empty & V is inaccessible
+         by A7,WAYBEL11:def 4,YELLOW_2:17;
+        then g.:D meets V by A8,A9,WAYBEL11:def 1;
+       then consider z being set such that
+A10:      z in g.:D & z in V by XBOOLE_0:3;
+       consider x being set such that
+A11:      x in the carrier of Y & x in D & z = g qua Function.x by A10,FUNCT_2:
+115;
+       reconsider x as Element of Y by A11;
+          (d*g).x = d.(g.x) & (id Y).x = x by FUNCT_2:21,GRCAT_1:11;
+        then d.(g.x) <= x & d.z in d.:V by A5,A10,FUNCT_2:43,YELLOW_2:10;
+        then x in uparrow (d.:V) by A11,WAYBEL_0:def 16;
+       hence D meets uparrow (d.:V) by A11,XBOOLE_0:3;
+      end;
+     then uparrow (d.:V) is open Subset of Y by WAYBEL11:def 4;
+    hence uparrow ((LowerAdj g).:V) is open Subset of Y by A2,WAYBEL_0:13;
+   end;
+   assume
+A12:  for X being Scott TopAugmentation of T
+    for Y being Scott TopAugmentation of S
+    for V being open Subset of X holds
+     uparrow ((LowerAdj g).:V) is open Subset of Y;
+   consider X being Scott TopAugmentation of T,
+            Y being Scott TopAugmentation of S;
+A13:   the RelStr of X = the RelStr of T & the RelStr of Y = the RelStr of S
+      by YELLOW_9:def 4;
+   then reconsider g' = g as map of Y,X;
+   reconsider g' as infs-preserving map of Y,X by A13,WAYBEL21:6;
+   set d = LowerAdj g;
+   reconsider d' = d as map of X,Y by A13;
+   let D be Subset of S such that
+A14:  D is non empty directed;
+   assume ex_sup_of D, S; thus ex_sup_of g.:D,T by YELLOW_0:17;
+A15:  sup (g.:D) <= g.sup D by WAYBEL17:15;
+   reconsider D' = D as Subset of Y by A13;
+   reconsider D' as non empty directed Subset of Y by A13,A14,WAYBEL_0:3;
+   reconsider s = sup D as Element of Y by A13;
+   set U' = (downarrow sup (g'.:D'))`;
+A16:  U' is open by WAYBEL11:12;
+    then uparrow (d.:U') is open Subset of Y by A12;
+then A17:  uparrow (d.:U') is upper inaccessible Subset of Y by WAYBEL11:def 4;
+A18: ex_sup_of g.:D,T by YELLOW_0:17;
+then A19: sup (g'.:D') = sup (g.:D) by A13,YELLOW_0:26;
+      downarrow sup (g'.:D') = downarrow {sup (g'.:D')} by WAYBEL_0:def 17
+      .= downarrow {sup (g.:D)} by A13,A19,WAYBEL_0:13
+      .= downarrow sup (g.:D) by WAYBEL_0:def 17;
+then A20:  U' = [#]X \ downarrow sup (g.:D) by PRE_TOPC:17
+      .= (the carrier of T) \ downarrow sup (g.:D) by A13,PRE_TOPC:12
+      .= [#]T \ downarrow sup (g.:D) by PRE_TOPC:12
+      .= (downarrow sup (g.:D))` by PRE_TOPC:17;
+A21:  sup (g.:D) <= sup (g.:D);
+      [g,d] is Galois by Def1;
+then A22:  d*g <= id S & id T <= g*d by WAYBEL_1:19;
+      (id S).sup D = sup D & (d*g).sup D = d.(g.sup D)
+     by FUNCT_2:21,GRCAT_1:11;
+    then d.(g.sup D) <= sup D by A22,YELLOW_2:10;
+then A23:  d'.(g'.s) <= s by A13,YELLOW_0:1;
+      ex_sup_of D, S by YELLOW_0:17;
+then A24:  s = sup D' by A13,YELLOW_0:26;
+      g.sup D <= sup (g.:D)
+     proof assume not thesis;
+       then not g.sup D in downarrow sup (g.:D) & sup (g.:D) in downarrow sup
+(g.:D)
+        by A21,WAYBEL_0:17;
+then A25:    g.sup D in U' & not sup (g.:D) in U' by A20,YELLOW_6:10;
+       then d'.(g'.s) in d'.:U' & d'.:U' c= uparrow (d'.:U')
+        by FUNCT_2:43,WAYBEL_0:16;
+       then s in uparrow (d'.:U') & uparrow (d'.:U') = uparrow (d.:U')
+        by A13,A23,WAYBEL_0:13,def 20;
+       then D' meets uparrow (d'.:U') by A17,A24,WAYBEL11:def 1;
+      then consider x being set such that
+A26:    x in D' & x in uparrow (d'.:U') by XBOOLE_0:3;
+      reconsider x as Element of Y by A26;
+      consider u' being Element of Y such that
+A27:    u' <= x & u' in d'.:U' by A26,WAYBEL_0:def 16;
+      consider u being set such that
+A28:    u in the carrier of X & u in U' & u' = d'.u by A27,FUNCT_2:115;
+      reconsider u as Element of X by A28;
+      reconsider a = u as Element of T by A13;
+         (id T).a = u by GRCAT_1:11;
+       then a <= (g*d).a by A22,YELLOW_2:10;
+       then a <= g.(d.a) by FUNCT_2:21;
+       then u <= g'.(d'.u) & g'.(d'.u) <= g'.x
+        by A13,A27,A28,ORDERS_3:def 5,YELLOW_0:1;
+then A29:    u <= g'.x by ORDERS_1:26;
+         g'.x in g'.:D' by A26,FUNCT_2:43;
+       then g'.x <= sup (g'.:D') by YELLOW_2:24;
+       then u <= sup (g'.:D') & U' is upper by A16,A29,ORDERS_1:26,WAYBEL11:def
+4;
+       then sup (g'.:D') in U' by A28,WAYBEL_0:def 20;
+      hence thesis by A13,A18,A25,YELLOW_0:26;
+     end;
+   hence sup (g.:D) = g.sup D by A15,ORDERS_1:25;
+  end;
+
+definition
+ let S,T be non empty reflexive RelStr;
+ let f be map of S,T;
+ attr f is waybelow-preserving means:
+Def8:
+  for x,y being Element of S st x << y holds f.x << f.y;
+end;
+
+theorem Th24: :: 1.4. THEOREM, (1) => (3), p. 180
+ for S,T being complete LATTICE, g being infs-preserving map of S,T
+  holds
+   g is directed-sups-preserving implies LowerAdj g is waybelow-preserving
+  proof let S,T be complete LATTICE, g be infs-preserving map of S,T such that
+A1:  g is directed-sups-preserving;
+   set d = (LowerAdj g);
+A2:  [g,d] is Galois by Def1;
+   let t,t' be Element of T such that
+A3:  t << t';
+   let D be non empty directed Subset of S; assume
+      d.t' <= sup D;
+then A4:  t' <= g.sup D by A2,WAYBEL_1:9;
+      g preserves_sup_of D & ex_sup_of D,S by A1,WAYBEL_0:def 37,YELLOW_0:17;
+    then g.sup D = sup (g.:D) & g.:D is directed non empty
+     by WAYBEL_0:def 31,YELLOW_2:17;
+   then consider x being Element of T such that
+A5:  x in g.:D & t <= x by A3,A4,WAYBEL_3:def 1;
+   consider s being set such that
+A6:  s in the carrier of S & s in D & x = g.s by A5,FUNCT_2:115;
+   reconsider s as Element of S by A6;
+   take s; thus thesis by A2,A5,A6,WAYBEL_1:9;
+  end;
+
+theorem Th25: :: 1.4. THEOREM, (3+) => (1), p. 180
+ for S being complete LATTICE
+ for T being complete continuous LATTICE
+ for g being infs-preserving map of S,T
+  st LowerAdj g is waybelow-preserving
+  holds g is directed-sups-preserving
+  proof let S be complete LATTICE;
+   let T be complete continuous LATTICE;
+   let g be infs-preserving map of S,T such that
+A1:  for t,t' being Element of T st t << t'
+      holds (LowerAdj g).t << (LowerAdj g).t';
+   let D be Subset of S; assume
+A2:  D is non empty directed;
+   assume ex_sup_of D,S; thus ex_sup_of g.:D, T by YELLOW_0:17;
+A3:  sup (g.:D) <= g.sup D by WAYBEL17:15;
+A4:  g.sup D = sup waybelow (g.sup D) by WAYBEL_3:def 5;
+      waybelow (g.sup D) is_<=_than sup (g.:D)
+     proof let t be Element of T; assume t in waybelow (g.sup D);
+       then t << g.sup D by WAYBEL_3:7;
+then A5:     (LowerAdj g).t << (LowerAdj g).(g.sup D) by A1;
+A6:     [g, LowerAdj g] is Galois by Def1;
+       then (LowerAdj g)*g <= id S & (id S).sup D = sup D
+        by GRCAT_1:11,WAYBEL_1:19;
+       then ((LowerAdj g)*g).sup D <= sup D by YELLOW_2:10;
+       then (LowerAdj g).(g.sup D) <= sup D by FUNCT_2:21;
+      then consider x being Element of S such that
+A7:     x in D & (LowerAdj g).t <= x by A2,A5,WAYBEL_3:def 1;
+         g.x in g.:D by A7,FUNCT_2:43;
+       then t <= g.x & g.x <= sup (g.:D) by A6,A7,WAYBEL_1:9,YELLOW_2:24;
+      hence thesis by ORDERS_1:26;
+     end;
+    then g.sup D <= sup (g.:D) by A4,YELLOW_0:32;
+   hence sup (g.:D) = g.sup D by A3,ORDERS_1:25;
+  end;
+
+definition
+ let S,T be TopSpace;
+ let f be map of S,T;
+ attr f is relatively_open means:
+Def9:
+  for V being open Subset of S holds f.:V is open Subset of T|rng f;
+end;
+
+theorem
+   for X,Y being non empty TopSpace
+ for d being map of X, Y holds
+   d is relatively_open iff corestr d is open
+  proof let X,Y be non empty TopSpace; let d be map of X, Y;
+A1:  corestr d = d & Image d = Y|rng d by WAYBEL18:def 6,def 7;
+   thus d is relatively_open implies corestr d is open
+     proof assume
+A2:     for V being open Subset of X holds d.:V is open Subset of Y|rng d;
+      let V be Subset of X; assume V is open;
+      hence thesis by A1,A2;
+     end;
+   assume
+A3:  for V being Subset of X st V is open holds (corestr d).:V is open;
+   let V be open Subset of X;
+   thus thesis by A1,A3;
+  end;
+
+theorem Th27: :: requirement of 1.5. REMARK, p. 181
+ for S,T being complete LATTICE, g being infs-preserving map of S,T
+ for X being Scott TopAugmentation of T
+ for Y being Scott TopAugmentation of S
+ for V being open Subset of X holds
+   (LowerAdj g).:V = (rng LowerAdj g) /\ uparrow ((LowerAdj g).:V)
+  proof let S,T be complete LATTICE, g be infs-preserving map of S,T;
+   let X be Scott TopAugmentation of T;
+   let Y be Scott TopAugmentation of S;
+A1:  the RelStr of X = the RelStr of T & the RelStr of Y = the RelStr of S
+      by YELLOW_9:def 4;
+   then reconsider d = LowerAdj g as map of X,Y;
+   let V be open Subset of X;
+   reconsider A = uparrow ((LowerAdj g).:V) as Subset of Y by A1;
+      d.:V = A /\ rng d
+     proof
+         d.:V c= A & d.:V c= rng d by RELAT_1:144,WAYBEL_0:16;
+      hence d.:V c= A /\ rng d by XBOOLE_1:19;
+      let t be set; assume t in A /\ rng d;
+then A2:     t in A & t in rng d by XBOOLE_0:def 3;
+      then reconsider t as Element of S;
+      consider x being Element of S such that
+A3:     x <= t & x in (LowerAdj g).:V by A2,WAYBEL_0:def 16;
+      consider u being set such that
+A4:     u in the carrier of T & u in V & x = (LowerAdj g).u by A3,FUNCT_2:115;
+         dom d = the carrier of T by FUNCT_2:def 1;
+      then consider v being set such that
+A5:     v in the carrier of T & t = d.v by A2,FUNCT_1:def 5;
+      reconsider u,v as Element of T by A4,A5;
+A6:     (LowerAdj g).(u "\/" v) = x "\/" t by A4,A5,WAYBEL_6:2
+              .= t by A3,YELLOW_0:24;
+      reconsider V' = V as Subset of T by A1;
+         V is upper by WAYBEL11:def 4;
+       then V' is upper & u <= u "\/" v by A1,WAYBEL_0:25,YELLOW_0:22;
+       then u "\/" v in V' by A4,WAYBEL_0:def 20;
+      hence thesis by A6,FUNCT_2:43;
+     end;
+   hence thesis;
+  end;
+
+theorem Th28: :: 1.5. REMARK, (2) => (2'), p. 181
+ for S,T being complete LATTICE, g being infs-preserving map of S,T
+ for X being Scott TopAugmentation of T
+ for Y being Scott TopAugmentation of S
+  st for V being open Subset of X holds
+       uparrow ((LowerAdj g).:V) is open Subset of Y
+  holds
+    for d being map of X, Y st d = LowerAdj g
+     holds d is relatively_open
+  proof let S,T be complete LATTICE, g be infs-preserving map of S,T;
+   let X be Scott TopAugmentation of T;
+   let Y be Scott TopAugmentation of S such that
+A1:  for V being open Subset of X holds
+      uparrow ((LowerAdj g).:V) is open Subset of Y;
+   let d be map of X, Y such that
+A2:  d = LowerAdj g;
+   let V be open Subset of X;
+   reconsider A = uparrow ((LowerAdj g).:V) as open Subset of Y by A1;
+      d.:V = A /\ rng d by A2,Th27;
+then A3:  d.:V = [#](Y|rng d) /\ A & A in the topology of Y
+     by PRE_TOPC:def 5,def 10;
+    then d.:V c= [#](Y|rng d) by XBOOLE_1:17;
+    then d.:V c= the carrier of Y|rng d by XBOOLE_1:1;
+   then reconsider B = d.:V as Subset of Y|rng d;
+      B in the topology of Y|rng d by A3,PRE_TOPC:def 9;
+   hence d.:V is open Subset of Y|rng d by PRE_TOPC:def 5;
+  end;
+
+definition
+ let X,Y be complete LATTICE;
+ let f be sups-preserving map of X,Y;
+ cluster Image f -> complete;
+ coherence by YELLOW_2:36;
+end;
+
+theorem :: 1.5. REMARK, (2') => (2''), p. 181
+   for S,T being complete LATTICE, g being infs-preserving map of S,T
+ for X being Scott TopAugmentation of T
+ for Y being Scott TopAugmentation of S
+ for Z being Scott TopAugmentation of Image LowerAdj g
+ for d being map of X, Y, d' being map of X, Z st d = LowerAdj g & d' = d
+  holds d is relatively_open implies d' is open
+  proof let S,T be complete LATTICE, g be infs-preserving map of S,T;
+   let X be Scott TopAugmentation of T;
+   let Y be Scott TopAugmentation of S;
+   let Z be Scott TopAugmentation of Image LowerAdj g;
+   let d be map of X, Y, d' be map of X, Z such that
+A1:  d = LowerAdj g & d' = d and
+A2:  for V being open Subset of X holds d.:V is open Subset of Y|rng d;
+   let V be Subset of X; assume V is open;
+   then reconsider A = d.:V as open Subset of Y|rng d by A2;
+     Image LowerAdj g = subrelstr rng LowerAdj g by YELLOW_2:def 2;
+then A3:  the carrier of Image LowerAdj g = rng d by A1,YELLOW_0:def 15;
+A4:  the carrier of Y|rng d = [#](Y|rng d) & [#](Y|rng d) = rng d
+     by PRE_TOPC:12,def 10;
+A5:  the RelStr of Z = Image LowerAdj g & the RelStr of X = the RelStr of T &
+    the RelStr of Y = the RelStr of S by YELLOW_9:def 4;
+   then reconsider B = A as Subset of Z by A3,A4;
+      A in the topology of Y|rng d by PRE_TOPC:def 5;
+   then consider C being Subset of Y such that
+A6:  C in the topology of Y & A = C /\ rng d by A4,PRE_TOPC:def 9;
+   reconsider C as Subset of Y;
+      C is open by A6,PRE_TOPC:def 5;
+then A7:  C is upper inaccessible by WAYBEL11:def 4;
+A8:  B is upper
+     proof let x,y be Element of Z;
+      reconsider x' = x, y' = y as Element of Image LowerAdj g
+        by A5;
+      reconsider a = x', b = y' as Element of S by YELLOW_0:59;
+      reconsider a' = a, b' = b as Element of Y by A5;
+      assume x in B & x <= y;
+       then x' in C & x' <= y' by A5,A6,XBOOLE_0:def 3,YELLOW_0:1;
+       then a in C & a <= b by YELLOW_0:60;
+       then a' in C & a' <= b' by A5,YELLOW_0:1;
+       then b' in C & y' in rng d by A3,A7,WAYBEL_0:def 20;
+      hence y in B by A6,XBOOLE_0:def 3;
+     end;
+      B is inaccessible
+     proof let D be directed non empty Subset of Z such that
+A9:     sup D in B;
+      reconsider D' = D as non empty Subset of Image LowerAdj g
+        by A5;
+         D' c= the carrier of S by A3,A5,XBOOLE_1:1;
+      then reconsider E = D' as non empty Subset of S;
+      reconsider E' = E as non empty Subset of Y by A5;
+A10:     ex_sup_of D, Z & ex_sup_of D, Y by YELLOW_0:17;
+         D' is directed by A5,WAYBEL_0:3;
+       then E is directed by YELLOW_2:7;
+then A11:   E' is directed by A5,WAYBEL_0:3;
+A12:   ex_sup_of D',S by YELLOW_0:17;
+        Image LowerAdj g is sups-inheriting by YELLOW_2:34;
+      then "\/"(D',S) in the carrier of Image LowerAdj g by A12,YELLOW_0:def 19
+;
+       then sup E = sup D' by YELLOW_0:69 .= sup D by A5,A10,YELLOW_0:26;
+       then sup E' = sup D by A5,A10,YELLOW_0:26;
+       then sup E' in C by A6,A9,XBOOLE_0:def 3;
+       then C meets E by A7,A11,WAYBEL11:def 1;
+      hence D meets B by A3,A6,XBOOLE_1:77;
+     end;
+   hence d'.:V is open by A1,A8,WAYBEL11:def 4;
+  end;
+
+theorem Th30:
+ for T1, T2, S1, S2 being TopStruct
+   st the TopStruct of T1 = the TopStruct of T2 &
+      the TopStruct of S1 = the TopStruct of S2
+  holds S1 is SubSpace of T1 implies S2 is SubSpace of T2
+  proof let T1, T2, S1, S2 be TopStruct such that
+A1: the TopStruct of T1 = the TopStruct of T2 and
+A2: the TopStruct of S1 = the TopStruct of S2;
+A3: [#]S1 = the carrier of S1 & [#]S2 = the carrier of S2 &
+    [#]T1 = the carrier of T1 & [#]T2 = the carrier of T2 by PRE_TOPC:12;
+   assume that
+A4: [#]S1 c= [#]T1 and
+A5: for P being Subset of S1
+     holds P in the topology of S1 iff
+      ex Q being Subset of T1 st Q in the topology of T1 &
+         P = Q /\ [#]S1;
+   thus [#]S2 c= [#]T2 by A1,A2,A3,A4;
+   thus thesis by A1,A2,A3,A5;
+  end;
+
+theorem Th31:
+ for T being TopStruct holds T|[#]T = the TopStruct of T
+  proof let T be TopStruct;
+      T is SubSpace of T by TSEP_1:2;
+    then the TopStruct of T is strict SubSpace of T &
+    the carrier of T = [#]T &
+    the carrier of T = [#]the TopStruct of T by Th30,PRE_TOPC:12;
+   hence thesis by PRE_TOPC:def 10;
+  end;
+
+theorem Th32: :: 1.6. COROLLARY, p. 181
+ for S,T being complete LATTICE, g being infs-preserving map of S,T
+  st g is one-to-one
+ for X being Scott TopAugmentation of T
+ for Y being Scott TopAugmentation of S
+ for d being map of X,Y st d = LowerAdj g holds
+   g is directed-sups-preserving iff d is open
+   proof let S,T be complete LATTICE, g be infs-preserving map of S,T such that
+A1:   g is one-to-one;
+    let X be Scott TopAugmentation of T;
+    let Y be Scott TopAugmentation of S;
+       [g, LowerAdj g] is Galois by Def1;
+     then LowerAdj g is onto by A1,WAYBEL_1:29;
+then A2:   rng LowerAdj g = the carrier of S by FUNCT_2:def 3;
+A3:   the RelStr of Y = the RelStr of S & the RelStr of X = the RelStr of T
+      by YELLOW_9:def 4;
+A4:   [#]Y = the carrier of Y by PRE_TOPC:12;
+    let d be map of X,Y such that
+A5:   d = LowerAdj g;
+A6:   Y|rng d = the TopStruct of Y by A2,A3,A4,A5,Th31;
+    thus g is directed-sups-preserving implies d is open
+     proof assume g is directed-sups-preserving;
+       then for V being open Subset of X holds
+        uparrow ((LowerAdj g).:V) is open Subset of Y by Th23;
+then A7:     d is relatively_open by A5,Th28;
+      let V be Subset of X; assume V is open;
+       then d.:V is open Subset of Y|rng d by A7,Def9;
+      hence d.:V in the topology of Y by A6,PRE_TOPC:def 5;
+     end;
+    assume
+A8:   for V being Subset of X st V is open holds d.:V is open;
+       now let X' be Scott TopAugmentation of T;
+      let Y' be Scott TopAugmentation of S;
+      let V' be open Subset of X';
+A9:     the RelStr of X' = the RelStr of T &
+       the RelStr of Y' = the RelStr of S by YELLOW_9:def 4;
+      then reconsider V = V' as Subset of X by A3;
+      reconsider V as open Subset of X by A3,A9,YELLOW_9:50;
+      reconsider d' = d as map of X',Y' by A3,A9;
+         d.:V is open by A8;
+then A10:     d'.:V' is open Subset of Y' by A3,A9,YELLOW_9:50;
+       then d'.:V' is upper by WAYBEL11:def 4;
+       then uparrow (d'.:V') c= d'.:V' & d'.:V' c= uparrow (d'.:V')
+        by WAYBEL_0:16,24;
+       then uparrow (d'.:V') = d'.:V' by XBOOLE_0:def 10;
+      hence uparrow ((LowerAdj g).:V') is open Subset of Y'
+        by A5,A9,A10,WAYBEL_0:13;
+     end;
+    hence thesis by Th23;
+   end;
+
+definition
+ let X be complete LATTICE;
+ let f be projection map of X,X;
+ cluster Image f -> complete;
+ coherence by WAYBEL_1:57;
+end;
+
+theorem Th33:
+ for L being complete LATTICE, k being kernel map of L,L holds
+   corestr k is infs-preserving & inclusion k is sups-preserving &
+   LowerAdj corestr k = inclusion k & UpperAdj inclusion k = corestr k
+  proof let L be complete LATTICE, k be kernel map of L,L;
+A1:  [corestr k, inclusion k] is Galois by WAYBEL_1:42;
+    then inclusion k is lower_adjoint & corestr k is upper_adjoint
+      by WAYBEL_1:def 11,def 12;
+   hence corestr k is infs-preserving & inclusion k is sups-preserving
+     by WAYBEL_1:13,14;
+   hence thesis by A1,Def1,Def2;
+  end;
+
+theorem Th34:
+ for L being complete LATTICE, k being kernel map of L,L holds
+    k is directed-sups-preserving
+  iff
+    corestr k is directed-sups-preserving
+  proof let L be complete LATTICE, k be kernel map of L,L;
+   set ck = corestr k;
+      [ck, inclusion k] is Galois by WAYBEL_1:42;
+    then inclusion k is lower_adjoint & corestr k is upper_adjoint
+      by WAYBEL_1:def 11,def 12;
+then A1:  inclusion k is sups-preserving map of Image k, L &
+    ck is infs-preserving by WAYBEL_1:13,14;
+A2:  k = (inclusion k)*ck & inclusion k = LowerAdj ck by Th33,WAYBEL_1:35;
+   hereby assume
+A3:   k is directed-sups-preserving;
+    thus corestr k is directed-sups-preserving
+      proof let D be Subset of L; assume
+          D is non empty directed;
+then A4:      k preserves_sup_of D by A3,WAYBEL_0:def 37;
+       assume ex_sup_of D, L;
+then A5:      sup (k.:D) = k.sup D by A4,WAYBEL_0:def 31
+                 .= (inclusion k).(ck.sup D) by A2,FUNCT_2:21
+                 .= ck.sup D by WAYBEL_1:34;
+       thus ex_sup_of ck.:D, Image k by YELLOW_0:17;
+A6:      ex_sup_of (inclusion k).:(ck.:D), L by YELLOW_0:17;
+A7:      Image k is sups-inheriting by WAYBEL_1:56;
+        ex_sup_of ck.:D, L by YELLOW_0:17;
+then A8:   "\/"((ck.:D), L) in the carrier of Image k
+         by A7,YELLOW_0:def 19;
+         ck.:D = (inclusion k).:(ck.:D) by WAYBEL15:14;
+       hence sup (ck.:D) = sup ((inclusion k).:(ck.:D)) by A6,A8,YELLOW_0:65
+          .= ck.sup D by A2,A5,RELAT_1:159;
+      end;
+   end;
+   thus thesis by A1,A2,WAYBEL15:13;
+  end;
+
+theorem :: 1.7. COROLLARY, (1) <=> (2), p. 181
+   for L being complete LATTICE, k being kernel map of L,L holds
+    k is directed-sups-preserving
+  iff
+    for X being Scott TopAugmentation of Image k
+    for Y being Scott TopAugmentation of L
+    for V being Subset of L st V is open Subset of X
+      holds uparrow V is open Subset of Y
+  proof let L be complete LATTICE, k be kernel map of L,L;
+A1:  [corestr k, inclusion k] is Galois by WAYBEL_1:42;
+    then inclusion k is lower_adjoint & corestr k is upper_adjoint
+     by WAYBEL_1:def 11,def 12;
+then A2:  inclusion k is sups-preserving map of Image k, L &
+    corestr k is infs-preserving by WAYBEL_1:13,14;
+then A3:  k = (inclusion k)*corestr k & inclusion k = LowerAdj corestr k
+     by A1,Def1,WAYBEL_1:35;
+   hereby assume
+A4:   k is directed-sups-preserving;
+    let X be Scott TopAugmentation of Image k;
+    let Y be Scott TopAugmentation of L;
+A5:   the RelStr of X = Image k & the RelStr of Y = the RelStr of L
+      by YELLOW_9:def 4;
+    let V be Subset of L; assume V is open Subset of X;
+    then reconsider A = V as open Subset of X;
+    reconsider B = A as Subset of Image k by A5;
+     A6: corestr k is directed-sups-preserving by A4,Th34;
+       (inclusion k).:B = V by WAYBEL15:14;
+    hence uparrow V is open Subset of Y by A2,A3,A6,Th23;
+   end;
+   assume
+A7:  for X being Scott TopAugmentation of Image k
+    for Y being Scott TopAugmentation of L
+    for V being Subset of L st V is open Subset of X
+      holds uparrow V is open Subset of Y;
+      now set g = corestr k;
+     let X be Scott TopAugmentation of Image k;
+     let Y be Scott TopAugmentation of L;
+     let V be open Subset of X;
+       the RelStr of X = Image k & the RelStr of Y = the RelStr of L
+       by YELLOW_9:def 4;
+     then reconsider B = V as Subset of Image k;
+        the carrier of Image k c= the carrier of L by YELLOW_0:def 13;
+      then B c= the carrier of L by XBOOLE_1:1;
+     then reconsider A = B as Subset of L;
+        uparrow A is open Subset of Y by A7;
+     hence uparrow ((LowerAdj g).:V) is open Subset of Y by A3,WAYBEL15:14;
+    end;
+    then corestr k is directed-sups-preserving by A2,Th23;
+   hence thesis by Th34;
+  end;
+
+theorem Th36:
+ for L being complete LATTICE
+ for S being sups-inheriting non empty full SubRelStr of L
+ for x,y being Element of L, a,b being Element of S st a = x & b = y
+  holds x << y implies a << b
+  proof let L be complete LATTICE;
+   let S be sups-inheriting non empty full SubRelStr of L;
+   let x,y be Element of L, a,b be Element of S such that
+A1:  a = x & b = y and
+A2:  for D being non empty directed Subset of L st y <= sup D
+     ex d being Element of L st d in D & x <= d;
+   let D be non empty directed Subset of S such that
+A3:  b <= sup D;
+   reconsider E = D as non empty directed Subset of L by YELLOW_2:7;
+A4: ex_sup_of D, L by YELLOW_0:17;
+    then "\/"(D,L) in the carrier of S by YELLOW_0:def 19;
+    then sup E = sup D by A4,YELLOW_0:65;
+    then y <= sup E by A1,A3,YELLOW_0:60;
+   then consider e being Element of L such that
+A5:  e in E & x <= e by A2;
+   reconsider d = e as Element of S by A5;
+   take d;
+   thus thesis by A1,A5,YELLOW_0:61;
+  end;
+
+theorem :: 1.7. COROLLARY, (1) => (3), p. 181
+   for L being complete LATTICE, k being kernel map of L,L
+  st k is directed-sups-preserving
+ for x,y being Element of L, a,b being Element of Image k st a = x & b = y
+  holds x << y iff a << b
+  proof let L be complete LATTICE, k be kernel map of L,L;
+   set g = corestr k;
+   assume
+      k is directed-sups-preserving;
+    then corestr k is directed-sups-preserving infs-preserving by Th33,Th34;
+then A1:  LowerAdj g is waybelow-preserving by Th24;
+   let x,y be Element of L, a,b be Element of Image k;
+A2:  Image k is sups-inheriting by WAYBEL_1:56;
+      inclusion k = LowerAdj g by Th33;
+    then (LowerAdj g).a = a & (LowerAdj g).b = b by WAYBEL_1:34;
+   hence thesis by A1,A2,Def8,Th36;
+  end;
+
+theorem :: 1.7. COROLLARY, (3) => (1), p. 181
+   for L being complete LATTICE, k being kernel map of L,L
+  st Image k is continuous &
+   for x,y being Element of L, a,b being Element of Image k
+      st a = x & b = y
+      holds x << y iff a << b
+  holds k is directed-sups-preserving
+  proof let L be complete LATTICE, k be kernel map of L,L such that
+A1:  Image k is continuous and
+A2:  for x,y being Element of L, a,b being Element of Image k
+      st a = x & b = y
+      holds x << y iff a << b;
+   set g = corestr k;
+A3:  corestr k is infs-preserving by Th33;
+      LowerAdj g is waybelow-preserving
+     proof let t,t' be Element of Image k;
+         LowerAdj g = inclusion k by Th33;
+       then (LowerAdj g).t = t & (LowerAdj g).t' = t' by WAYBEL_1:34;
+      hence t << t' implies (LowerAdj g).t << (LowerAdj g).t' by A2;
+     end;
+    then corestr k is directed-sups-preserving by A1,A3,Th25;
+   hence thesis by Th34;
+  end;
+
+theorem Th39:
+ for L being complete LATTICE, c being closure map of L,L holds
+   corestr c is sups-preserving & inclusion c is infs-preserving &
+   UpperAdj corestr c = inclusion c & LowerAdj inclusion c = corestr c
+  proof let L be complete LATTICE, c be closure map of L,L;
+A1:  [inclusion c, corestr c] is Galois by WAYBEL_1:39;
+    then inclusion c is upper_adjoint & corestr c is lower_adjoint
+      by WAYBEL_1:def 11,def 12;
+   hence corestr c is sups-preserving & inclusion c is infs-preserving
+     by WAYBEL_1:13,14;
+   hence thesis by A1,Def1,Def2;
+  end;
+
+theorem Th40:
+ for L being complete LATTICE, c being closure map of L,L holds
+    Image c is directed-sups-inheriting
+  iff
+    inclusion c is directed-sups-preserving
+  proof let L be complete LATTICE, c be closure map of L,L;
+   set ic = inclusion c;
+   thus Image c is directed-sups-inheriting implies
+      inclusion c is directed-sups-preserving
+     proof assume
+A1:     Image c is directed-sups-inheriting;
+      let D be Subset of Image c; assume
+A2:     D is non empty directed;
+      then reconsider E = D as non empty directed Subset of L by YELLOW_2:7;
+A3:     ic.:D = E by WAYBEL15:14;
+      assume ex_sup_of D, Image c;
+      thus ex_sup_of ic.:D, L by YELLOW_0:17;
+      hence sup (ic.:D) = sup D by A1,A2,A3,WAYBEL_0:7 .= ic.sup D by WAYBEL_1:
+34;
+     end;
+   assume
+A4:  inclusion c is directed-sups-preserving;
+   let X be directed Subset of Image c; assume
+A5:  X <> {};
+   assume ex_sup_of X,L;
+      ic preserves_sup_of X & ex_sup_of X, Image c
+     by A4,A5,WAYBEL_0:def 37,YELLOW_0:17;
+    then sup (ic.:X) = ic.sup X by WAYBEL_0:def 31 .= sup X by WAYBEL_1:34;
+    then sup (ic.:X) in the carrier of Image c;
+   hence "\/"(X,L) in the carrier of Image c by WAYBEL15:14;
+  end;
+
+theorem :: 1.8. COROLLARY, (1) <=> (2), p. 182
+   for L being complete LATTICE, c being closure map of L,L holds
+    Image c is directed-sups-inheriting
+  iff
+    for X being Scott TopAugmentation of Image c
+    for Y being Scott TopAugmentation of L
+    for f being map of Y,X st f = c holds f is open
+  proof let L be complete LATTICE, c be closure map of L,L;
+A1:  LowerAdj inclusion c = corestr c & corestr c = c by Th39,WAYBEL_1:32;
+    A2: inclusion c is infs-preserving map of Image c, L &
+    (Image c is directed-sups-inheriting iff
+     inclusion c is directed-sups-preserving) by Th39,Th40;
+   hence Image c is directed-sups-inheriting implies
+    for X being Scott TopAugmentation of Image c
+    for Y being Scott TopAugmentation of L
+    for f being map of Y,X st f = c holds f is open by A1,Th32;
+   assume
+A3:  for X being Scott TopAugmentation of Image c
+    for Y being Scott TopAugmentation of L
+    for f being map of Y,X st f = c holds f is open;
+   consider X being Scott TopAugmentation of Image c,
+            Y being Scott TopAugmentation of L;
+      the RelStr of X = the RelStr of Image c &
+    the RelStr of Y = the RelStr of L by YELLOW_9:def 4;
+   then reconsider f = c as map of Y,X by A1; f is open by A3
+;
+   hence thesis by A1,A2,Th32;
+  end;
+
+theorem :: 1.8. COROLLARY, (1) => (3), p. 182
+   for L being complete LATTICE, c being closure map of L,L holds
+    Image c is directed-sups-inheriting
+  implies
+    corestr c is waybelow-preserving
+  proof let L be complete LATTICE, c be closure map of L,L; assume
+      Image c is directed-sups-inheriting;
+    then inclusion c is directed-sups-preserving infs-preserving by Th39,Th40;
+    then LowerAdj inclusion c is waybelow-preserving by Th24;
+   hence corestr c is waybelow-preserving by Th39;
+  end;
+
+theorem :: 1.8. COROLLARY, (3) => (1), p. 182
+:: SHOULD BE:
+:: for L being complete LATTICE, c being closure map of L,L
+::  st
+::    Image c is continuous & corestr c is waybelow-preserving
+::  holds Image c is directed-sups-inheriting
+:: ------------------------ a bug ???
+
+   for L being continuous complete LATTICE, c being closure map of L,L
+  st
+    corestr c is waybelow-preserving
+  holds
+    Image c is directed-sups-inheriting
+  proof let L be continuous complete LATTICE, c be closure map of L,L; assume
+A1:  corestr c is waybelow-preserving;
+      LowerAdj inclusion c = corestr c & inclusion c is infs-preserving
+     by Th39;
+    then inclusion c is directed-sups-preserving by A1,Th25;
+   hence thesis by Th40;
+  end;
+
+begin
+::<section3>Duality of subcategories of {\it INF} and {\it SUP}</section3>
+
+definition :: 1.9. DEFINITION, p. 182
+ let W be non empty set;
+   set A = W-INF_category;
+    defpred P[set] means not contradiction;
+    defpred Q[object of A, object of A, Morphism of $1,$2] means
+      @$3 is directed-sups-preserving;
+A1: ex a being object of A st P[a];
+A2: for a,b,c being object of A
+     st P[a] & P[b] & P[c] & <^a,b^> <> {} & <^b,c^> <> {}
+    for f being Morphism of a,b, g being Morphism of b,c
+     st Q[a,b,f] & Q[b,c,g] holds Q[a,c,g*f]
+     proof let a,b,c be object of A such that
+A3:    <^a,b^> <> {} & <^b,c^> <> {};
+      let f be Morphism of a,b, g be Morphism of b,c;
+A4:    <^a,c^> <> {} by A3,ALTCAT_1:def 4;
+       then @f = f & @g = g & @(g*f) = g*f by A3,YELLOW21:def 7;
+       then @(g*f) = (@g)*(@f) by A3,A4,ALTCAT_1:def 14;
+      hence thesis by WAYBEL20:29;
+     end;
+A5: for a being object of A st P[a] holds Q[a,a,idm a]
+     proof let a be object of A;
+         idm a in <^a,a^> & idm a = id latt a by YELLOW21:2;
+      hence thesis by YELLOW21:def 7;
+     end;
+ func W-INF(SC)_category -> strict non empty subcategory of W-INF_category
+    means:
+Def10:
+  (for a being object of W-INF_category holds a is object of it) &
+  (for a,b being object of W-INF_category
+   for a',b' being object of it st a' = a & b' = b & <^a,b^> <> {}
+   for f being Morphism of a,b holds
+      f in <^a',b'^> iff @f is directed-sups-preserving);
+ existence
+  proof
+      ex B being strict non empty subcategory of A st
+     (for a being object of A holds a is object of B iff P[a]) &
+     (for a,b being object of A, a',b' being object of B
+       st a' = a & b' = b & <^a,b^> <> {}
+     for f being Morphism of a,b holds f in <^a',b'^> iff Q[a,b,f])
+    from SubcategoryEx(A1,A2,A5);
+   hence thesis;
+  end;
+ correctness
+  proof let B1,B2 being strict non empty subcategory of A; assume
+      for a being object of W-INF_category holds a is object of B1;
+    then
+A6: for a being object of W-INF_category holds a is object of B1 iff P[a];
+   assume
+A7: for a,b being object of W-INF_category
+    for a',b' being object of B1 st a' = a & b' = b & <^a,b^> <> {}
+    for f being Morphism of a,b holds f in <^a',b'^> iff Q[a,b,f];
+   assume for a being object of W-INF_category holds a is object of B2;
+   then
+A8: for a being object of W-INF_category holds a is object of B2 iff P[a];
+   assume
+A9: for a,b being object of W-INF_category
+    for a',b' being object of B2 st a' = a & b' = b & <^a,b^> <> {}
+    for f being Morphism of a,b holds f in <^a',b'^> iff Q[a,b,f];
+      the AltCatStr of B1 = the AltCatStr of B2
+     from SubcategoryUniq(A6,A7,A8,A9);
+   hence thesis;
+  end;
+end;
+
+definition :: 1.9. DEFINITION, p. 182
+ let W be with_non-empty_element set;
+A1:  ex w being non empty set st w in W by TRIANG_1:def 1;
+   set A = W-SUP_category;
+   defpred P[set] means not contradiction;
+   defpred Q[object of A, object of A, Morphism of $1,$2] means
+     UpperAdj @$3 is directed-sups-preserving;
+A2: ex a being object of A st P[a];
+A3: for a,b,c being object of A
+     st P[a] & P[b] & P[c] & <^a,b^> <> {} & <^b,c^> <> {}
+    for f being Morphism of a,b, g being Morphism of b,c
+     st Q[a,b,f] & Q[b,c,g]
+     holds Q[a,c,g*f]
+     proof let a,b,c be object of A such that
+A4:    <^a,b^> <> {} & <^b,c^> <> {};
+      let f be Morphism of a,b, g be Morphism of b,c;
+A5:    <^a,c^> <> {} by A4,ALTCAT_1:def 4;
+       then @f = f & @g = g & @(g*f) = g*f by A4,YELLOW21:def 7;
+       then @g is sups-preserving map of latt b, latt c &
+       @f is sups-preserving map of latt a, latt b &
+       @(g*f) = (@g)*(@f) by A1,A4,A5,Def5,ALTCAT_1:def 14;
+       then UpperAdj @(g*f) = (UpperAdj @f)*(UpperAdj @g) by Th9;
+      hence thesis by WAYBEL20:29;
+     end;
+A6: for a being object of A st P[a] holds Q[a,a,idm a]
+     proof let a be object of A;
+         idm a in <^a,a^> & idm a = id latt a & UpperAdj id latt a = id latt a
+        by Th7,YELLOW21:2;
+      hence thesis by YELLOW21:def 7;
+     end;
+ func W-SUP(SO)_category -> strict non empty subcategory of W-SUP_category
+    means:
+Def11:
+  (for a being object of W-SUP_category holds a is object of it) &
+  (for a,b being object of W-SUP_category
+   for a',b' being object of it st a' = a & b' = b & <^a,b^> <> {}
+   for f being Morphism of a,b holds
+     f in <^a',b'^> iff UpperAdj @f is directed-sups-preserving);
+ existence
+  proof
+    ex B being strict non empty subcategory of A st
+     (for a being object of A holds a is object of B iff P[a]) &
+     (for a,b being object of A, a',b' being object of B
+       st a' = a & b' = b & <^a,b^> <> {}
+     for f being Morphism of a,b holds f in <^a',b'^> iff Q[a,b,f])
+    from SubcategoryEx(A2,A3,A6);
+   hence thesis;
+  end;
+ correctness
+  proof let B1,B2 being strict non empty subcategory of A; assume
+      for a being object of W-SUP_category holds a is object of B1;
+   then
+A7: for a being object of W-SUP_category holds a is object of B1 iff P[a];
+   assume
+A8: for a,b being object of W-SUP_category
+    for a',b' being object of B1 st a' = a & b' = b & <^a,b^> <> {}
+    for f being Morphism of a,b holds f in <^a',b'^> iff Q[a,b,f];
+   assume for a being object of W-SUP_category holds a is object of B2;
+   then
+A9: for a being object of W-SUP_category holds a is object of B2 iff P[a];
+   assume
+A10: for a,b being object of W-SUP_category
+    for a',b' being object of B2 st a' = a & b' = b & <^a,b^> <> {}
+    for f being Morphism of a,b holds f in <^a',b'^> iff Q[a,b,f];
+      the AltCatStr of B1 = the AltCatStr of B2
+     from SubcategoryUniq(A7,A8,A9,A10);
+   hence thesis;
+  end;
+end;
+
+theorem Th44:
+ for S being non empty RelStr, T being non empty reflexive antisymmetric RelStr
+ for t being Element of T
+ for X being non empty Subset of S
+  holds S --> t preserves_sup_of X & S --> t preserves_inf_of X
+  proof let S be non empty RelStr;
+   let T be non empty reflexive antisymmetric RelStr;
+   let t be Element of T;
+   let X be non empty Subset of S;
+   set f = S --> t;
+A1:  f = (the carrier of S) --> t by BORSUK_1:def 3;
+A2:  f.:X = {t}
+     proof thus f.:X c= {t} by A1,BORSUK_1:6;
+      consider x being Element of X;
+         f.x = t & the carrier of T <> {} by A1,FUNCOP_1:13;
+       then t in f.:X by FUNCT_2:43;
+      hence thesis by ZFMISC_1:37;
+     end;
+      f.sup X = t & f.inf X = t & inf {t} = t & sup {t} = t &
+    ex_sup_of {t}, T & ex_inf_of {t}, T by A1,FUNCOP_1:13,YELLOW_0:38,39;
+   hence thesis by A2,WAYBEL_0:def 30,def 31;
+  end;
+
+theorem Th45:
+ for S being non empty RelStr
+ for T being lower-bounded non empty reflexive antisymmetric RelStr
+   holds S --> Bottom T is sups-preserving
+  proof let S be non empty RelStr;
+   let T be lower-bounded non empty reflexive antisymmetric RelStr;
+   let X be Subset of S such that ex_sup_of X,S;
+   set f = (the carrier of S) --> Bottom T;
+A1: S --> Bottom T = f by BORSUK_1:def 3;
+A2: f.sup X = Bottom T by FUNCOP_1:13;
+      (S --> Bottom T).:X c= {Bottom T} by A1,BORSUK_1:6;
+    then (S --> Bottom T).:X = {Bottom T} or (S --> Bottom T).:
+X = {} by ZFMISC_1:39;
+   hence thesis by A1,A2,YELLOW_0:38,39,42,def 11;
+  end;
+
+theorem Th46:
+ for S being non empty RelStr
+ for T being upper-bounded non empty reflexive antisymmetric RelStr
+   holds S --> Top T is infs-preserving
+  proof let S be non empty RelStr;
+   let T be upper-bounded non empty reflexive antisymmetric RelStr;
+   let X be Subset of S such that ex_inf_of X,S;
+   set t = Top T, f = (the carrier of S) --> t;
+A1: S --> t = f by BORSUK_1:def 3;
+A2: f.inf X = t by FUNCOP_1:13;
+      (S --> t).:X c= {t} by A1,BORSUK_1:6;
+    then (S --> t).:X = {t} or (S --> t).:X = {} by ZFMISC_1:39;
+   hence thesis by A1,A2,YELLOW_0:38,39,43,def 12;
+  end;
+
+definition :: WAYBEL24
+ let S be non empty RelStr;
+ let T be upper-bounded non empty reflexive antisymmetric RelStr;
+ cluster S --> Top T -> directed-sups-preserving infs-preserving;
+ coherence
+  proof
+   thus S --> Top T is directed-sups-preserving
+     proof let X be Subset of S; thus thesis by Th44; end;
+   thus thesis by Th46;
+  end;
+end;
+
+definition
+ let S be non empty RelStr;
+ let T be lower-bounded non empty reflexive antisymmetric RelStr;
+ cluster S --> Bottom T -> filtered-infs-preserving sups-preserving;
+ coherence
+  proof thus S --> Bottom T is filtered-infs-preserving
+     proof let X be Subset of S; thus thesis by Th44; end;
+   thus thesis by Th45;
+  end;
+end;
+
+definition
+ let S be non empty RelStr;
+ let T be upper-bounded non empty reflexive antisymmetric RelStr;
+ cluster directed-sups-preserving infs-preserving map of S, T;
+ existence proof take S --> Top T; thus thesis; end;
+end;
+
+definition
+ let S be non empty RelStr;
+ let T be lower-bounded non empty reflexive antisymmetric RelStr;
+ cluster filtered-infs-preserving sups-preserving map of S, T;
+ existence proof take S --> Bottom T; thus thesis; end;
+end;
+
+theorem Th47:
+ for W being with_non-empty_element set
+ for L being LATTICE holds
+   L is object of W-INF(SC)_category
+  iff
+   L is strict complete & the carrier of L in W
+  proof let W be with_non-empty_element set;
+   let L be LATTICE;
+      the carrier of W-INF(SC)_category c= the carrier of W-INF_category
+     by ALTCAT_2:def 11;
+    then L in the carrier of W-INF(SC)_category implies
+      L is object of W-INF_category;
+    then L is object of W-INF(SC)_category iff L is object of W-INF_category
+     by Def10;
+   hence thesis by Th13;
+  end;
+
+theorem Th48:
+ for W being with_non-empty_element set
+ for a, b being object of W-INF(SC)_category
+ for f being set
+  holds f in <^a,b^> iff
+    f is directed-sups-preserving infs-preserving map of latt a, latt b
+  proof let W be with_non-empty_element set;
+   let a,b be object of W-INF(SC)_category, f be set;
+      a in the carrier of W-INF(SC)_category &
+    b in the carrier of W-INF(SC)_category &
+    the carrier of W-INF(SC)_category c= the carrier of W-INF_category
+     by ALTCAT_2:def 11;
+   then reconsider a1 = a, b1 = b as object of W-INF_category;
+   hereby assume
+A1:   f in <^a,b^>;
+A2:   <^a,b^> c= <^a1,b1^> by ALTCAT_2:32;
+     then reconsider g = f as Morphism of a1,b1 by A1;
+        f = @g by A1,A2,YELLOW21:def 7;
+     hence f is directed-sups-preserving infs-preserving map of latt a, latt b
+       by A1,A2,Def10,Th14;
+    end;
+   assume f is directed-sups-preserving infs-preserving map of latt a, latt b;
+   then reconsider f as
+      directed-sups-preserving infs-preserving map of latt a, latt b;
+A3: f in <^a1,b1^> by Th14;
+   then reconsider g = f as Morphism of a1,b1 ;
+      f = @g by A3,YELLOW21:def 7;
+   hence thesis by A3,Def10;
+  end;
+
+theorem
+   for W being with_non-empty_element set
+ for L being LATTICE holds
+   L is object of W-SUP(SO)_category
+  iff
+   L is strict complete & the carrier of L in W
+  proof let W be with_non-empty_element set;
+   let L be LATTICE;
+      the carrier of W-SUP(SO)_category c= the carrier of W-SUP_category
+     by ALTCAT_2:def 11;
+    then L in the carrier of W-SUP(SO)_category implies
+      L is object of W-SUP_category;
+    then L is object of W-SUP(SO)_category iff L is object of W-SUP_category
+     by Def11;
+   hence thesis by Th15;
+  end;
+
+theorem Th50:
+ for W being with_non-empty_element set
+ for a, b being object of W-SUP(SO)_category
+ for f being set
+  holds f in <^a,b^> iff
+   ex g being sups-preserving map of latt a, latt b st g = f &
+     UpperAdj g is directed-sups-preserving
+  proof let W be with_non-empty_element set;
+   let a,b be object of W-SUP(SO)_category, f be set;
+      a in the carrier of W-SUP(SO)_category &
+    b in the carrier of W-SUP(SO)_category &
+    the carrier of W-SUP(SO)_category c= the carrier of W-SUP_category
+     by ALTCAT_2:def 11;
+   then reconsider a1 = a, b1 = b as object of W-SUP_category;
+   hereby assume
+A1:   f in <^a,b^>;
+A2:   <^a,b^> c= <^a1,b1^> by ALTCAT_2:32;
+     then reconsider g = f as Morphism of a1,b1 by A1;
+        f = @g & UpperAdj @g is directed-sups-preserving &
+      f is sups-preserving map of latt a1, latt b1
+       by A1,A2,Def11,Th16,YELLOW21:def 7;
+     hence ex g being sups-preserving map of latt a, latt b st g = f &
+       UpperAdj g is directed-sups-preserving;
+    end;
+   given g being sups-preserving map of latt a, latt b such that
+A3: g = f & UpperAdj g is directed-sups-preserving;
+A4: f in <^a1,b1^> by A3,Th16;
+   then reconsider g = f as Morphism of a1,b1 ;
+      f = @g by A4,YELLOW21:def 7;
+   hence thesis by A3,A4,Def11;
+  end;
+
+theorem :: Remark after 1.9. DEFINITION, p. 182
+   for W being with_non-empty_element set
+  holds W-INF(SC)_category = Intersect(W-INF_category, W-UPS_category)
+  proof let W be with_non-empty_element set;
+   consider w being non empty set such that
+A1: w in W by TRIANG_1:def 1;
+   consider r being upper-bounded well-ordering Order of w;
+A2: now let a be object of W-INF_category, b be object of W-UPS_category;
+        idm a = id latt a & latt a = a & idm b = id latt b & latt b = b
+       by YELLOW21:2,def 6;
+     hence a = b implies idm a = idm b;
+    end;
+   set B = Intersect(W-INF_category, W-UPS_category);
+A3: W-INF_category, W-UPS_category have_the_same_composition by YELLOW20:12;
+then A4: the carrier of B = (the carrier of W-INF_category) /\
+      (the carrier of W-UPS_category) by YELLOW20:def 3;
+      RelStr(#w,r#) is object of W-INF_category &
+    RelStr(#w,r#) is object of W-UPS_category by A1,Th13,YELLOW21:14;
+    then RelStr(#w,r#) in the carrier of Intersect(W-INF_category, W
+-UPS_category)
+     by A4,XBOOLE_0:def 3;
+    then Intersect(W-INF_category, W-UPS_category) is non empty
+     by STRUCT_0:def 1;
+   then reconsider I = Intersect(W-INF_category, W-UPS_category) as
+       non empty subcategory of W-INF_category by A2,A3,YELLOW20:26;
+   set A = W-INF(SC)_category;
+   deffunc B(set,set) = (the Arrows of A).($1,$2);
+A5: for C1, C2 being para-functional semi-functional category
+     st the carrier of C1 = the carrier of A &
+      (for a,b being object of C1 holds <^a,b^> = B(a,b)) &
+      the carrier of C2 = the carrier of A &
+      (for a,b being object of C2 holds <^a,b^> = B(a,b))
+     holds the AltCatStr of C1 = the AltCatStr of C2
+      from ConcreteCategoryUniq1;
+A6: the carrier of I = the carrier of A
+     proof
+      thus the carrier of I c= the carrier of A
+        proof let x be set; assume
+       x in the carrier of I;
+         then reconsider x as object of I;
+         reconsider L = x as LATTICE by YELLOW21:def 4;
+            x in the carrier of W-UPS_category by A4,XBOOLE_0:def 3;
+          then L is object of W-UPS_category;
+          then L is strict complete & the carrier of L in W
+           by A1,YELLOW21:def 10;
+          then L is object of A by Th47;
+         hence thesis;
+        end;
+      let x be set; assume x in the carrier of A;
+      then reconsider x as object of A;
+      reconsider L = x as LATTICE by YELLOW21:def 4;
+         L is complete strict & the carrier of L in W by Th47;
+       then x is object of W-INF_category & x is object of W-UPS_category
+        by Th13,YELLOW21:def 10;
+      hence thesis by A4,XBOOLE_0:def 3;
+     end;
+A7: for a,b being object of A holds <^a,b^> = B(a,b) by ALTCAT_1:def 2;
+      now let a,b be object of I;
+     reconsider a' = a, b' = b as object of A by A6;
+      a in the carrier of W-INF_category & b in the carrier of W
+-INF_category
+       by A4,XBOOLE_0:def 3;
+     then reconsider a1 = a, b1 = b as object of W-INF_category;
+      a in the carrier of W-UPS_category & b in the carrier of W
+-UPS_category
+       by A4,XBOOLE_0:def 3;
+     then reconsider a2 = a, b2 = b as object of W-UPS_category;
+        dom the Arrows of W-INF_category =
+        [:the carrier of W-INF_category, the carrier of W-INF_category:] &
+      dom the Arrows of W-UPS_category =
+        [:the carrier of W-UPS_category, the carrier of W-UPS_category:]
+       by PBOOLE:def 3;
+      then (dom the Arrows of W-INF_category) /\ (dom the Arrows of W
+-UPS_category)
+        = [:(the carrier of W-INF_category)/\ the carrier of W-UPS_category,
+            (the carrier of W-INF_category)/\ the carrier of W-UPS_category:] &
+      a in the carrier of I & b in the carrier of I by ZFMISC_1:123;
+then A8:   [a,b] in (dom the Arrows of W-INF_category) /\
+               (dom the Arrows of W-UPS_category) by A4,ZFMISC_1:def 2;
+A9:   <^a,b^> = (the Arrows of I).(a,b) by ALTCAT_1:def 2
+       .= (the Arrows of I). [a,b] by BINOP_1:def 1
+       .= Intersect(the Arrows of W-INF_category, the Arrows of W-UPS_category)
+           . [a,b] by A3,YELLOW20:def 3
+       .= ((the Arrows of W-INF_category). [a,b]) /\
+          ((the Arrows of W-UPS_category). [a,b]) by A8,YELLOW20:def 2
+       .= ((the Arrows of W-INF_category).(a,b)) /\
+          ((the Arrows of W-UPS_category). [a,b]) by BINOP_1:def 1
+       .= ((the Arrows of W-INF_category).(a,b)) /\
+          ((the Arrows of W-UPS_category).(a,b)) by BINOP_1:def 1
+       .= <^a1,b1^> /\ ((the Arrows of W-UPS_category).(a,b)) by ALTCAT_1:def 2
+       .= <^a1,b1^> /\ <^a2,b2^> by ALTCAT_1:def 2;
+        now let f be set;
+          f in <^a,b^> iff f in <^a1,b1^> & f in <^a2,b2^>
+         by A9,XBOOLE_0:def 3;
+        then f in <^a,b^> iff f is directed-sups-preserving map of latt a2,
+latt b2 &
+          f is infs-preserving map of latt a1, latt b1
+         by Th14,YELLOW21:15;
+        then f in <^a,b^> iff f in <^a',b'^> by Th48;
+       hence f in <^a,b^> iff f in B(a,b) by ALTCAT_1:def 2;
+      end;
+     hence <^a,b^> = B(a,b) by TARSKI:2;
+    end;
+   hence thesis by A5,A6,A7;
+  end;
+
+definition :: 1.9. DEFINITION, p. 182
+ let W be with_non-empty_element set;
+     defpred P[object of W-INF(SC)_category] means  latt $1 is continuous;
+     consider a being non empty set such that
+A1:   a in W by TRIANG_1:def 1;
+     consider r being upper-bounded well-ordering Order of a;
+     set b = RelStr(#a,r#);
+        b is object of W-INF_category by A1,Def4;
+     then reconsider b as object of W-INF(SC)_category by Def10;
+        b = latt b by YELLOW21:def 6;
+     then
+A2:   ex b being object of W-INF(SC)_category st P[b];
+ func W-CL_category -> strict full non empty subcategory of W-INF(SC)_category
+    means:
+Def12:
+  for a being object of W-INF(SC)_category holds
+    a is object of it iff latt a is continuous;
+ existence
+  proof
+    thus ex B being strict full non empty subcategory of W-INF(SC)_category st
+     for a being object of W-INF(SC)_category holds a is object of B iff P[a]
+    from FullSubcategoryEx(A2);
+  end;
+ correctness
+  proof let B1,B2 be strict full non empty subcategory of W-INF(SC)_category
+   such that
+A3: for a being object of W-INF(SC)_category holds a is object of B1 iff P[a]
+   and
+A4: for a being object of W-INF(SC)_category holds a is object of B2 iff P[a];
+     the AltCatStr of B1 = the AltCatStr of B2 from FullSubcategoryUniq(A3,A4);
+   hence thesis;
+  end;
+end;
+
+definition
+ let W be with_non-empty_element set;
+  :: COS ZLE!!! To jest wniosek z rejestracji warunkowej YELLOW21:condreg 9,
+  :: a jest potrzebna rejstracja aby zadzialalo nizej
+ cluster W-CL_category -> with_complete_lattices;
+ coherence;
+end;
+
+theorem Th52:
+ for W being with_non-empty_element set
+ for L being LATTICE st the carrier of L in W
+  holds L is object of W-CL_category iff L is strict complete continuous
+  proof let W be with_non-empty_element set;
+A1: ex a being non empty set st a in W by TRIANG_1:def 1;
+A2: the carrier of W-INF(SC)_category c= the carrier of W-INF_category
+     by ALTCAT_2:def 11;
+A3: the carrier of W-CL_category c= the carrier of W-INF(SC)_category
+     by ALTCAT_2:def 11;
+   let L be LATTICE; assume
+A4: the carrier of L in W;
+   hereby assume
+A5:   L is object of W-CL_category;
+      then L in the carrier of W-CL_category;
+     then reconsider a = L as object of W-INF(SC)_category by A3
+;
+        a in the carrier of W-INF(SC)_category;
+      then L is object of W-INF_category & latt a is continuous
+       by A2,A5,Def12;
+     hence L is strict complete continuous by A1,Def4,YELLOW21:def 6;
+    end;
+   assume
+A6: L is strict complete continuous;
+    then L is object of W-INF_category by A4,Def4;
+   then reconsider a = L as object of W-INF(SC)_category by Def10;
+      latt a = L by YELLOW21:def 6;
+   hence thesis by A6,Def12;
+  end;
+
+theorem Th53:
+ for W being with_non-empty_element set
+ for a,b being object of W-CL_category
+ for f being set holds f in <^a,b^> iff
+   f is infs-preserving directed-sups-preserving map of latt a, latt b
+  proof let W be with_non-empty_element set;
+   let a,b be object of W-CL_category, f be set;
+      a in the carrier of W-CL_category & b in the carrier of W-CL_category &
+    the carrier of W-CL_category c= the carrier of W-INF(SC)_category
+     by ALTCAT_2:def 11;
+   then reconsider a1 = a, b1 = b as object of W-INF(SC)_category;
+      <^a,b^> = <^a1,b1^> by ALTCAT_2:29;
+   hence thesis by Th48;
+  end;
+
+definition :: 1.9. DEFINITION, p. 182
+ let W be with_non-empty_element set;
+     defpred P[object of W-SUP(SO)_category] means latt $1 is continuous;
+     consider a being non empty set such that
+A1:   a in W by TRIANG_1:def 1;
+     consider r being upper-bounded well-ordering Order of a;
+     set b = RelStr(#a,r#);
+        b is object of W-SUP_category by A1,Def5;
+     then reconsider b as object of W-SUP(SO)_category by Def11;
+        b = latt b by YELLOW21:def 6;
+     then
+A2:   ex b being object of W-SUP(SO)_category st P[b];
+ func W-CL-opp_category ->
+         strict full non empty subcategory of W-SUP(SO)_category means:
+Def13:
+  for a being object of W-SUP(SO)_category holds
+    a is object of it iff latt a is continuous;
+ existence
+  proof
+    thus ex B being strict full non empty subcategory of W-SUP(SO)_category st
+     for a being object of W-SUP(SO)_category holds a is object of B iff P[a]
+     from FullSubcategoryEx(A2);
+  end;
+ correctness
+  proof let B1,B2 be strict full non empty subcategory of W-SUP(SO)_category
+   such that
+A3: for a being object of W-SUP(SO)_category holds a is object of B1 iff P[a]
+   and
+A4: for a being object of W-SUP(SO)_category holds a is object of B2 iff P[a];
+      the AltCatStr of B1 = the AltCatStr of B2 from FullSubcategoryUniq(A3,A4)
+;
+   hence thesis;
+  end;
+end;
+
+theorem Th54:
+ for W being with_non-empty_element set
+ for L being LATTICE st the carrier of L in W
+  holds L is object of W-CL-opp_category iff L is strict complete continuous
+  proof let W be with_non-empty_element set;
+A1: ex a being non empty set st a in W by TRIANG_1:def 1;
+A2: the carrier of W-SUP(SO)_category c= the carrier of W-SUP_category
+     by ALTCAT_2:def 11;
+A3: the carrier of W-CL-opp_category c= the carrier of W-SUP(SO)_category
+     by ALTCAT_2:def 11;
+   let L be LATTICE; assume
+A4: the carrier of L in W;
+   hereby assume
+A5:   L is object of W-CL-opp_category;
+      then L in the carrier of W-CL-opp_category;
+     then reconsider a = L as object of W-SUP(SO)_category by A3
+;
+        a in the carrier of W-SUP(SO)_category;
+      then L is object of W-SUP_category & latt a is continuous
+       by A2,A5,Def13;
+     hence L is strict complete continuous by A1,Def5,YELLOW21:def 6;
+    end;
+   assume
+A6: L is strict complete continuous;
+    then L is object of W-SUP_category by A4,Def5;
+   then reconsider a = L as object of W-SUP(SO)_category by Def11;
+      latt a = L by YELLOW21:def 6;
+   hence thesis by A6,Def13;
+  end;
+
+theorem Th55:
+ for W being with_non-empty_element set
+ for a, b being object of W-CL-opp_category
+ for f being set
+  holds f in <^a,b^> iff
+   ex g being sups-preserving map of latt a, latt b st g = f &
+     UpperAdj g is directed-sups-preserving
+  proof let W be with_non-empty_element set;
+   let a,b be object of W-CL-opp_category, f be set;
+      a in the carrier of W-CL-opp_category &
+    b in the carrier of W-CL-opp_category &
+    the carrier of W-CL-opp_category c= the carrier of W-SUP(SO)_category
+     by ALTCAT_2:def 11;
+   then reconsider a1 = a, b1 = b as object of W-SUP(SO)_category;
+      <^a,b^> = <^a1,b1^> by ALTCAT_2:29;
+   hence thesis by Th50;
+  end;
+
+:: 1.10. THEOREM, p. 182
+::::::::::::::::::::::::::::::::::::::
+
+theorem Th56:
+ for W being with_non-empty_element set holds
+  W-INF(SC)_category, W-SUP(SO)_category are_anti-isomorphic_under W LowerAdj
+  proof let W be with_non-empty_element set;
+   set A1 = W-INF_category;
+   set B1 = W-INF(SC)_category, B2 = W-SUP(SO)_category;
+   set F = W LowerAdj;
+A1: ex a being non empty set st a in W by TRIANG_1:def 1;
+A2: F is bijective;
+A3: for a being object of A1 holds
+     a is object of B1 iff F.a is object of B2 by Def10,Def11;
+A4: now let a,b be object of A1 such that
+A5:   <^a,b^> <> {};
+     let a1,b1 be object of B1 such that
+A6:   a1 = a & b1 = b;
+     let a2,b2 be object of B2 such that
+A7:   a2 = F.a & b2 = F.b;
+     let f be Morphism of a,b;
+A8:   <^F.b,F.a^> <> {} by A5,FUNCTOR0:def 20;
+then A9:   @f = f & @(F.f) = F.f & latt a1 = a1 & latt b1 = b1 &
+      latt a = a & latt b = b & latt a2 = a2 & latt b2 = b2
+       by A5,YELLOW21:def 6,def 7;
+then A10:   F.a = latt a & F.b = latt b & F.f = LowerAdj @f & @f is
+infs-preserving
+       by A1,A5,Def4,Def6;
+     reconsider g = f as infs-preserving map of latt a1, latt b1 by A1,A5,A6,A9
+,Def4;
+        UpperAdj LowerAdj g = g by Th10;
+      then f in <^a1,b1^> iff UpperAdj LowerAdj g is directed-sups-preserving
+       by A5,A6,A9,Def10;
+     hence f in <^a1,b1^> iff F.f in <^b2,a2^> by A6,A7,A8,A9,A10,Def11;
+    end;
+   thus thesis from ContraBijectRestriction(A2,A3,A4);
+  end;
+
+theorem
+   for W being with_non-empty_element set holds
+  W-SUP(SO)_category, W-INF(SC)_category are_anti-isomorphic_under W UpperAdj
+  proof let W be with_non-empty_element set;
+      W-INF(SC)_category, W-SUP(SO)_category are_anti-isomorphic_under W
+LowerAdj
+     by Th56;
+    then W-SUP(SO)_category, W-INF(SC)_category
+      are_anti-isomorphic_under (W LowerAdj)" by YELLOW20:52;
+   hence thesis by Th18;
+  end;
+
+theorem Th58:
+ for W being with_non-empty_element set holds
+  W-CL_category, W-CL-opp_category are_anti-isomorphic_under W LowerAdj
+  proof let W be with_non-empty_element set;
+   set A1 = W-INF_category, A2 = W-SUP_category;
+   reconsider B1 = W-CL_category as non empty subcategory of A1 by ALTCAT_4:36;
+   reconsider B2 = W-CL-opp_category as non empty subcategory of A2
+     by ALTCAT_4:36;
+   set F = W LowerAdj;
+A1: ex a being non empty set st a in W by TRIANG_1:def 1;
+A2: F is bijective;
+A3: for a being object of A1 holds
+     a is object of B1 iff F.a is object of B2
+     proof let a be object of A1;
+A4:    latt a = a & F.a = latt a by Def6,YELLOW21:def 6;
+then A5:    the carrier of latt a in W by A1,Def4;
+       then a is object of B1 iff latt a is strict complete continuous by A4,
+Th52;
+      hence thesis by A4,A5,Th54;
+     end;
+A6: now let a,b be object of A1 such that
+A7:   <^a,b^> <> {};
+     let a1,b1 be object of B1 such that
+A8:   a1 = a & b1 = b;
+     let a2,b2 be object of B2 such that
+A9:   a2 = F.a & b2 = F.b;
+     let f be Morphism of a,b;
+    <^F.b,F.a^> <> {} by A7,FUNCTOR0:def 20;
+then A10:   @f = f & @(F.f) = F.f & latt a1 = a1 & latt b1 = b1 &
+      latt a = a & latt b = b & latt a2 = a2 & latt b2 = b2
+       by A7,YELLOW21:def 6,def 7;
+then A11:   F.a = latt a & F.b = latt b & F.f = LowerAdj @f & @f is
+infs-preserving
+       by A1,A7,Def4,Def6;
+     reconsider g = f as infs-preserving map of latt a1, latt b1 by A1,A7,A8,
+A10,Def4;
+      A12: UpperAdj LowerAdj g = g by Th10;
+      then f in <^a1,b1^> iff UpperAdj LowerAdj g is directed-sups-preserving
+       by Th53;
+     hence f in <^a1,b1^> implies F.f in <^b2,a2^>
+       by A8,A9,A10,A11,Th55;
+     assume F.f in <^b2,a2^>;
+      then ex g being sups-preserving map of latt b2, latt a2 st F.f = g &
+        UpperAdj g is directed-sups-preserving by Th55;
+     hence f in <^a1,b1^> by A8,A9,A10,A11,A12,Th53;
+    end;
+      B1,B2 are_anti-isomorphic_under F from ContraBijectRestriction(A2,A3,A6);
+   hence thesis;
+  end;
+
+theorem
+   for W being with_non-empty_element set holds
+  W-CL-opp_category, W-CL_category are_anti-isomorphic_under W UpperAdj
+  proof let W be with_non-empty_element set;
+   set A1 = W-INF_category, A2 = W-SUP_category;
+   reconsider B1 = W-CL_category as non empty subcategory of A1 by ALTCAT_4:36;
+   reconsider B2 = W-CL-opp_category as non empty subcategory of A2
+     by ALTCAT_4:36;
+      W-CL_category, W-CL-opp_category are_anti-isomorphic_under W LowerAdj
+     by Th58;
+    then B2, B1 are_anti-isomorphic_under (W LowerAdj)" by YELLOW20:52;
+   hence thesis by Th18;
+  end;
+
+begin
+::<section4>Compact preserving maps and sup-semilattices morphisms</section4>
+
+definition
+ let S,T be non empty reflexive RelStr;
+ let f be map of S,T;
+ attr f is compact-preserving means
+    for s being Element of S st s is compact holds f.s is compact;
+end;
+
+theorem Th60: :: 1.11. PROPOSITION, (1) => (2) p.183
+ for S,T being complete LATTICE, d being sups-preserving map of T,S
+  st d is waybelow-preserving
+  holds d is compact-preserving
+  proof let S,T be complete LATTICE, d be sups-preserving map of T,S such that
+A1:  for t,t' being Element of T st t << t' holds d.t << d.t';
+   let t be Element of T; assume t << t;
+   hence d.t << d.t by A1;
+  end;
+
+theorem Th61: :: 1.11. PROPOSITION, (2) => (1) p.183
+ for S,T being complete LATTICE, d being sups-preserving map of T,S
+  st T is algebraic & d is compact-preserving
+  holds d is waybelow-preserving
+  proof let S,T be complete LATTICE, d be sups-preserving map of T,S such that
+A1:  T is algebraic and
+A2:  for t being Element of T st t is compact holds d.t is compact;
+   let t,t' be Element of T; assume t << t';
+   then consider k being Element of T such that
+A3:  k in the carrier of CompactSublatt T & t <= k & k <= t' by A1,WAYBEL_8:7;
+      k is compact by A3,WAYBEL_8:def 1;
+    then d.k is compact & d is monotone by A2;
+    then d.k << d.k & d.t <= d.k & d.k <= d.t' by A3,WAYBEL_1:def 2,WAYBEL_3:
+def 2;
+   hence thesis by WAYBEL_3:2;
+  end;
+
+theorem Th62:
+ for R,S,T being non empty RelStr, X being Subset of R
+ for f being map of R,S for g being map of S,T
+  st f preserves_sup_of X & g preserves_sup_of f.:X
+  holds g*f preserves_sup_of X
+  proof let R,S,T be non empty RelStr, X be Subset of R;
+   let f be map of R,S; let g be map of S,T such that
+A1:  ex_sup_of X, R implies ex_sup_of f.:X, S & sup (f.:X) = f.sup X and
+A2:  ex_sup_of f.:X, S implies
+     ex_sup_of g.:(f.:X), T & sup (g.:(f.:X)) = g.sup (f.:X);
+A3:  g.:(f.:X) = (g*f).:X by RELAT_1:159;
+   assume ex_sup_of X, R;
+   hence thesis by A1,A2,A3,FUNCT_2:21;
+  end;
+
+definition
+ let S,T be non empty RelStr;
+ let f be map of S,T;
+ attr f is finite-sups-preserving means
+    for X being finite Subset of S holds f preserves_sup_of X;
+ attr f is bottom-preserving means:
+Def16:
+  f preserves_sup_of {}S;
+end;
+
+theorem
+   for R,S,T being non empty RelStr
+ for f being map of R,S for g being map of S,T
+  st f is finite-sups-preserving & g is finite-sups-preserving
+  holds g*f is finite-sups-preserving
+  proof let R,S,T be non empty RelStr;
+   let f be map of R,S; let g be map of S,T such that
+A1:  for X being finite Subset of R holds f preserves_sup_of X and
+A2:  for X being finite Subset of S holds g preserves_sup_of X;
+   let X be finite Subset of R;
+      f preserves_sup_of X & g preserves_sup_of f.:X by A1,A2;
+   hence thesis by Th62;
+  end;
+
+definition
+ let S,T be non empty antisymmetric lower-bounded RelStr;
+ let f be map of S,T;
+ redefine attr f is bottom-preserving means:
+Def17:
+  f.Bottom S = Bottom T;
+ compatibility
+  proof
+A1:  f.:{} = {} by RELAT_1:149;
+   thus f is bottom-preserving implies f.Bottom S = Bottom T
+     proof assume f preserves_sup_of {}S;
+       then ex_sup_of {}S, S implies sup (f.:{}S) = f.sup {}S
+        by WAYBEL_0:def 31;
+      hence f.Bottom S = sup {}T by A1,YELLOW_0:42,def 11 .= Bottom
+T by YELLOW_0:def 11;
+     end;
+   assume that
+A2:  f.Bottom S = Bottom T and ex_sup_of {}S, S;
+   thus ex_sup_of f.:{}S, T by A1,YELLOW_0:42;
+   thus sup (f.:{}S) = Bottom T by A1,YELLOW_0:def 11 .= f.sup {}S
+     by A2,YELLOW_0:def 11;
+  end;
+end;
+
+definition
+ let L be non empty RelStr;
+ let S be SubRelStr of L;
+ attr S is finite-sups-inheriting means:
+Def18:
+  for X being finite Subset of S st ex_sup_of X,L
+   holds "\/"(X,L) in the carrier of S;
+ attr S is bottom-inheriting means:
+Def19:
+  Bottom L in the carrier of S;
+end;
+
+definition
+ let S,T be non empty RelStr;
+ cluster sups-preserving -> bottom-preserving map of S,T;
+ coherence
+  proof let f be map of S,T;
+   assume f is sups-preserving;
+   hence f preserves_sup_of {}S by WAYBEL_0:def 33;
+  end;
+end;
+
+definition
+ let L be lower-bounded antisymmetric non empty RelStr;
+ cluster finite-sups-inheriting ->
+    bottom-inheriting join-inheriting SubRelStr of L;
+ coherence
+  proof let S be SubRelStr of L;
+   assume
+A1:  S is finite-sups-inheriting;
+    then (ex_sup_of {}, L implies "\/"
+({}S, L) in the carrier of S) & ex_sup_of {}, L
+     by Def18,YELLOW_0:42;
+   hence Bottom L in the carrier of S by YELLOW_0:def 11;
+   let x,y be Element of L; assume
+      x in the carrier of S & y in the carrier of S;
+    then {x,y} c= the carrier of S by ZFMISC_1:38;
+   then reconsider X = {x,y} as finite Subset of S;
+      ex_sup_of X,L implies "\/"(X,L) in the carrier of S by A1,Def18;
+   hence thesis;
+  end;
+end;
+
+definition
+ let L be non empty RelStr;
+ cluster sups-inheriting -> finite-sups-inheriting SubRelStr of L;
+ coherence
+  proof let S be SubRelStr of L such that
+A1:  S is sups-inheriting;
+   let X be finite Subset of S; thus thesis by A1,YELLOW_0:def 19;
+  end;
+end;
+
+definition
+ let S,T be lower-bounded non empty Poset;
+ cluster sups-preserving map of S,T;
+ existence
+  proof consider f being sups-preserving map of S,T;
+   take f; thus thesis;
+  end;
+end;
+
+definition
+ let L be lower-bounded antisymmetric non empty RelStr;
+ cluster bottom-inheriting -> non empty lower-bounded (full SubRelStr of L);
+ coherence
+  proof let S be full SubRelStr of L;
+   assume
+A1:  Bottom L in the carrier of S;
+   hence
+A2:  S is non empty by STRUCT_0:def 1;
+   reconsider x = Bottom L as Element of S by A1;
+   take x; let y be Element of S; assume
+A3:  y in the carrier of S;
+   reconsider a = y as Element of L by A2,YELLOW_0:59;
+      Bottom L <= a by YELLOW_0:44;
+   hence x <= y by A3,YELLOW_0:61;
+  end;
+end;
+
+definition
+ let L be lower-bounded antisymmetric non empty RelStr;
+ cluster non empty sups-inheriting finite-sups-inheriting bottom-inheriting
+  full SubRelStr of L;
+ existence
+  proof consider S being non empty sups-inheriting full SubRelStr of L;
+   take S; thus thesis;
+  end;
+end;
+
+theorem Th64:
+ for L being lower-bounded antisymmetric non empty RelStr
+ for S being non empty bottom-inheriting full SubRelStr of L
+  holds Bottom S = Bottom L
+  proof let L be lower-bounded antisymmetric non empty RelStr;
+   let S be non empty bottom-inheriting full SubRelStr of L;
+  Bottom L in the carrier of S by Def19;
+   then reconsider s = Bottom L as Element of S;
+   reconsider l = Bottom S as Element of L by YELLOW_0:59;
+      Bottom L <= l by YELLOW_0:44;
+    then Bottom S <= s & Bottom S >= s by YELLOW_0:44,61;
+   hence Bottom S = Bottom L by ORDERS_1:25;
+  end;
+
+definition
+ let L be with_suprema lower-bounded non empty Poset;
+ cluster bottom-inheriting join-inheriting -> finite-sups-inheriting
+     (full SubRelStr of L);
+ coherence
+  proof let S be full SubRelStr of L;
+   assume S is bottom-inheriting join-inheriting;
+   then reconsider S' = S as join-inheriting bottom-inheriting full SubRelStr
+of L;
+   let X be finite Subset of S;
+   reconsider X' = X as Subset of S';
+A1:  X is finite;
+   defpred P[set] means
+     for Y being finite Subset of S' st Y = $1
+      holds ex_sup_of Y,L & "\/"(Y, L) = sup Y;
+      Bottom L = "\/"({}, L) & Bottom S' = "\/"({}, S') & ex_sup_of {},L
+     by YELLOW_0:42,def 11;
+     then
+A2:  P[{}] by Th64;
+A3:  for x,B being set st x in X & B c= X & P[B] holds P[B \/ {x}]
+     proof let x,B be set such that
+         x in X & B c= X and
+A4:    for Y being finite Subset of S' st Y = B
+        holds ex_sup_of Y,L & "\/"(Y, L) = sup Y;
+      let Y be finite Subset of S' such that
+A5:    Y = B \/ {x};
+A6:    B c= Y & {x} c= Y by A5,XBOOLE_1:7;
+       then B c= the carrier of S by XBOOLE_1:1;
+      then reconsider Z = B as finite Subset of S'
+       by A6,FINSET_1:13;
+A7:    ex_sup_of Z,L & "\/"(Z, L) = sup Z by A4;
+        x in Y by A6,ZFMISC_1:37;
+      then reconsider x as Element of S';
+      reconsider a = x as Element of L by YELLOW_0:59;
+A8:    ex_sup_of {a}, L by YELLOW_0:38;
+      hence ex_sup_of Y,L by A5,A7,YELLOW_2:3;
+         Z = {} or Z <> {} & S' is with_suprema;
+      then
+A9:    ex_sup_of {x}, S' & ex_sup_of Z, S' by YELLOW_0:42,54;
+      thus "\/"(Y, L) = "\/"(Z, L) "\/" sup {a} by A5,A7,A8,YELLOW_2:3
+        .= "\/"(Z, L) "\/" a by YELLOW_0:39
+        .= (sup Z) "\/" x by A7,YELLOW_0:71
+        .= (sup Z) "\/" sup {x} by YELLOW_0:39
+        .= sup Y by A5,A9,YELLOW_2:3;
+     end;
+      P[X] from Finite(A1,A2,A3);
+    then "\/"(X, L) = sup X' & sup X' in the carrier of S';
+   hence thesis;
+  end;
+end;
+
+theorem Th65:
+ for S,T being non empty RelStr, f being map of S,T
+   st f is finite-sups-preserving
+   holds f is join-preserving bottom-preserving
+  proof let S,T be non empty RelStr, f be map of S,T;
+   assume
+A1:     for X being finite Subset of S holds f preserves_sup_of X;
+   thus f is join-preserving
+    proof let x,y be Element of S;
+     thus f preserves_sup_of {x,y} by A1;
+    end;
+   thus f preserves_sup_of {}S by A1;
+  end;
+
+theorem Th66:
+ for S,T being lower-bounded with_suprema Poset, f being map of S,T
+   st f is join-preserving bottom-preserving
+   holds f is finite-sups-preserving
+  proof let S,T be lower-bounded with_suprema Poset, f be map of S,T;
+   assume A1: f is join-preserving bottom-preserving;
+   let X be finite Subset of S;
+A2:  X is finite;
+    defpred P[set] means
+      for Y being finite Subset of S st Y = $1 holds f preserves_sup_of Y;
+     f preserves_sup_of {}S by A1,Def16;
+     then
+A3:  P[{}];
+A4:  for x,B being set st x in X & B c= X & P[B] holds P[B \/ {x}]
+     proof let x,B be set such that
+        x in X & B c= X and
+A5:    for Y being finite Subset of S st Y = B holds f preserves_sup_of Y;
+      let Y be finite Subset of S such that
+A6:    Y = B \/ {x};
+A7:    B c= Y & {x} c= Y by A6,XBOOLE_1:7;
+       then B c= the carrier of S by XBOOLE_1:1;
+       then
+       reconsider Z = B as finite Subset of S by A7,FINSET_1:13;
+A8:    x in Y by A7,ZFMISC_1:37;
+      then reconsider x as Element of S;
+A9:    f preserves_sup_of Z by A5;
+         f.:Z = {} or f.:Z <> {} & f.:Z is finite;
+      then
+A10:    ex_sup_of f.:Z,T & ex_sup_of {f.x},T by YELLOW_0:42,54;
+         Z = {} or Z <> {};
+       then
+A11:    ex_sup_of Z,S by YELLOW_0:42,54;
+A12:    f preserves_sup_of {sup Z, x} by A1,WAYBEL_0:def 35;
+A13:    sup {x} = x & ex_sup_of {x}, S by YELLOW_0:38,39;
+A14:    ex_sup_of Y,S by A8,YELLOW_0:54;
+      assume ex_sup_of Y,S;
+         f.x in f.:Y by A8,FUNCT_2:43;
+      hence ex_sup_of f.:Y,T by YELLOW_0:54;
+         dom f = the carrier of S by FUNCT_2:def 1;
+       then f.:{x} = {f.x} by FUNCT_1:117;
+       then f.:Y = (f.:Z) \/ {f.x} & sup {f.x} = f.x
+         by A6,RELAT_1:153,YELLOW_0:39;
+      hence sup (f.:Y) = (sup (f.:Z)) "\/" (f.x) by A10,YELLOW_2:3
+         .= (f.(sup Z)) "\/" (f.x) by A9,A11,WAYBEL_0:def 31
+         .= f.((sup Z) "\/" x) by A12,YELLOW_3:9
+         .= f.sup Y by A6,A11,A13,A14,YELLOW_0:36;
+     end;
+      P[X] from Finite(A2,A3,A4);
+   hence thesis;
+  end;
+
+definition
+ let S,T be non empty RelStr;
+ cluster sups-preserving -> finite-sups-preserving map of S,T;
+ coherence
+  proof let f be map of S,T; assume
+      for X being Subset of S holds f preserves_sup_of X;
+   hence for X being finite Subset of S holds f preserves_sup_of X;
+  end;
+ cluster finite-sups-preserving ->
+  join-preserving bottom-preserving map of S,T;
+ coherence by Th65;
+end;
+
+definition
+ let S be non empty RelStr;
+ let T be lower-bounded non empty reflexive antisymmetric RelStr;
+ cluster sups-preserving finite-sups-preserving map of S,T;
+ existence
+  proof consider f being sups-preserving map of S,T;
+   take f; thus thesis;
+  end;
+end;
+
+definition :: WAYBEL13:15
+ let L be lower-bounded non empty Poset;
+ cluster CompactSublatt L -> lower-bounded;
+ coherence
+  proof Bottom L is compact by WAYBEL_3:15;
+    then Bottom L in the carrier of CompactSublatt L by WAYBEL_8:def 1;
+   then reconsider c = Bottom L as Element of CompactSublatt L;
+   take c; let b be Element of CompactSublatt L such that
+  b in the carrier of CompactSublatt L;
+   reconsider x = b as Element of L by YELLOW_0:59;
+      Bottom L <= x by YELLOW_0:44;
+   hence c <= b by YELLOW_0:61;
+  end;
+end;
+
+theorem Th67:
+ for S being RelStr, T being non empty RelStr, f being map of S,T
+ for S' being SubRelStr of S
+ for T' being SubRelStr of T
+  st f.:the carrier of S' c= the carrier of T'
+  holds f|the carrier of S' is map of S', T'
+  proof let S be RelStr, T be non empty RelStr, f be map of S,T;
+   let S' be SubRelStr of S, T' be SubRelStr of T such that
+A1:  f.:the carrier of S' c= the carrier of T';
+   set g = f|the carrier of S';
+      dom f = the carrier of S & the carrier of S' c= the carrier of S
+     by FUNCT_2:def 1,YELLOW_0:def 13;
+    then dom g = the carrier of S' & rng g = f.:the carrier of S'
+     by RELAT_1:91,148;
+    then g is Function of the carrier of S', the carrier of T' by A1,FUNCT_2:4
+;
+   hence thesis;
+  end;
+
+theorem Th68:
+ for S,T being LATTICE, f being join-preserving map of S,T
+ for S' being non empty join-inheriting full SubRelStr of S
+ for T' being non empty join-inheriting full SubRelStr of T
+ for g being map of S', T' st g = f|the carrier of S'
+  holds g is join-preserving
+  proof let S,T be LATTICE, f be join-preserving map of S,T;
+   let S' be non empty join-inheriting full SubRelStr of S;
+   let T' be non empty join-inheriting full SubRelStr of T;
+   let g be map of S', T' such that
+A1:  g = f|the carrier of S';
+      now let x,y be Element of S';
+     reconsider a = x, b = y as Element of S by YELLOW_0:59;
+        x"\/"y = a"\/"b & x in the carrier of S' & a in the carrier of S &
+      the carrier of T <> {} by YELLOW_0:71;
+then A2:    g.(x"\/"y) = f.(a"\/"b) & g.x = f.a & g.y = f.b by A1,FUNCT_1:72;
+     hence g.(x"\/"y) = (f.a)"\/"(f.b) by WAYBEL_6:2
+        .= (g.x)"\/"(g.y) by A2,YELLOW_0:71;
+    end;
+   hence g is join-preserving by WAYBEL_6:2;
+  end;
+
+theorem Th69:
+ for S,T being lower-bounded LATTICE
+ for f being finite-sups-preserving map of S,T
+ for S' being non empty finite-sups-inheriting full SubRelStr of S
+ for T' being non empty finite-sups-inheriting full SubRelStr of T
+ for g being map of S', T' st g = f|the carrier of S'
+  holds g is finite-sups-preserving
+  proof let S,T be lower-bounded LATTICE;
+   let f be finite-sups-preserving map of S,T;
+   let S' be non empty finite-sups-inheriting full SubRelStr of S;
+   let T' be non empty finite-sups-inheriting full SubRelStr of T;
+   let g be map of S', T' such that
+A1:  g = f|the carrier of S';
+A2:  g is bottom-preserving
+     proof Bottom S' = Bottom S & the carrier of T <> {} by Th64;
+      hence g.Bottom S' = f.Bottom S by A1,FUNCT_1:72 .= Bottom T by Def17 .=
+Bottom T' by Th64;
+     end;
+      g is join-preserving by A1,Th68;
+   hence thesis by A2,Th66;
+  end;
+
+definition
+ let L be complete LATTICE;
+ cluster CompactSublatt L -> finite-sups-inheriting;
+ coherence
+  proof
+      CompactSublatt L is bottom-inheriting
+     proof thus Bottom L in the carrier of CompactSublatt L by WAYBEL_8:3;
+     end;
+    then CompactSublatt L is bottom-inheriting join-inheriting non empty
+      full SubRelStr of L;
+   hence thesis;
+  end;
+end;
+
+theorem Th70:
+ for S,T being complete LATTICE
+ for d being sups-preserving map of T,S holds
+   d is compact-preserving
+  iff
+   d|the carrier of CompactSublatt T is
+     finite-sups-preserving map of CompactSublatt T, CompactSublatt S
+  proof let S,T be complete LATTICE, d be sups-preserving map of T,S;
+   thus d is compact-preserving implies
+     d|the carrier of CompactSublatt T is
+       finite-sups-preserving map of CompactSublatt T, CompactSublatt S
+     proof assume
+A1:     for x being Element of T st x is compact holds d.x is compact;
+         d.:the carrier of CompactSublatt T c= the carrier of CompactSublatt S
+        proof let y be set; assume y in d.:
+the carrier of CompactSublatt T;
+         then consider x being set such that
+A2:        x in the carrier of T & x in the carrier of CompactSublatt T &
+          y = d.x by FUNCT_2:115;
+         reconsider x as Element of T by A2;
+            x is compact by A2,WAYBEL_8:def 1;
+          then d.x is compact by A1;
+         hence thesis by A2,WAYBEL_8:def 1;
+        end;
+      hence thesis by Th67,Th69;
+     end;
+   assume
+A3:  d|the carrier of CompactSublatt T is
+     finite-sups-preserving map of CompactSublatt T, CompactSublatt S;
+   let x be Element of T; assume x is compact;
+then A4:  x in the carrier of CompactSublatt T & the carrier of S <> {}
+     by WAYBEL_8:def 1;
+    then d.x = (d|the carrier of CompactSublatt T).x by FUNCT_1:72;
+    then d.x in the carrier of CompactSublatt S by A3,A4,FUNCT_2:7;
+   hence d.x is compact by WAYBEL_8:def 1;
+  end;
+
+theorem :: 1.12. COROLLARY, p. 183
+   for S,T being complete LATTICE st T is algebraic
+ for g being infs-preserving map of S,T holds
+   g is directed-sups-preserving
+  iff
+   (LowerAdj g)|the carrier of CompactSublatt T is
+     finite-sups-preserving map of CompactSublatt T, CompactSublatt S
+  proof let S,T be complete LATTICE such that
+A1:  T is algebraic;
+A2:  T is continuous by A1,WAYBEL_8:7;
+   let g be infs-preserving map of S,T;
+   hereby assume g is directed-sups-preserving;
+     then LowerAdj g is waybelow-preserving by Th24;
+     then LowerAdj g is compact-preserving by Th60;
+    hence (LowerAdj g)|the carrier of CompactSublatt T is
+      finite-sups-preserving map of CompactSublatt T, CompactSublatt S
+       by Th70;
+   end;
+   assume (LowerAdj g)|the carrier of CompactSublatt T is
+     finite-sups-preserving map of CompactSublatt T, CompactSublatt S;
+    then LowerAdj g is compact-preserving by Th70;
+    then LowerAdj g is waybelow-preserving by A1,Th61;
+   hence thesis by A2,Th25;
+  end;
+

@@ -1,0 +1,473 @@
+:: On the Instructions of { \bf SCM+FSA }
+::  by Artur Korni{\l}owicz
+::
+:: Received May 8, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_3, SCMFSA_2, AMI_1, ORDINAL2, ARYTM, FUNCT_1, FUNCT_4, CAT_1,
+      FINSEQ_1, RELAT_1, BOOLE, INT_1, FUNCOP_1, SCMFSA_1, AMI_2, GR_CY_1,
+      AMISTD_2, MCART_1, AMI_5, FINSEQ_4, AMISTD_1, SETFAM_1, REALSET1, TARSKI,
+      SGRAPH1, GOBOARD5, FRECHET, ARYTM_1, NAT_1, ABSVALUE, FINSEQ_2, UNIALG_1,
+      CARD_5, CARD_3, RELOC, FUNCT_7;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL2, ABSVALUE, MCART_1,
+      SETFAM_1, RELAT_1, FUNCT_1, FUNCT_2, REALSET1, ORDINAL1, NUMBERS,
+      XCMPLX_0, XREAL_0, INT_1, NAT_1, CQC_LANG, FINSEQ_1, FINSEQ_2, FUNCT_4,
+      GR_CY_1, CARD_3, FUNCT_7, FINSEQ_4, AMI_1, AMI_2, AMI_3, SCMFSA_1,
+      SCMFSA_2, AMI_5, SCMFSA_3, AMISTD_1, AMISTD_2;
+ constructors AMI_5, AMISTD_2, DOMAIN_1, NAT_1, FUNCT_7, PRALG_2, REAL_1,
+      SCMFSA_1, SCMFSA_3, FINSEQ_4, MEMBERED;
+ clusters AMI_1, RELSET_1, SCMRING1, TEX_2, AMISTD_2, RELAT_1, FINSEQ_1, INT_1,
+      SCMFSA_2, FUNCT_7, AMI_3, NAT_1, FRAENKEL, MEMBERED, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+
+
+begin
+
+reserve a, b, d1, d2, d3, d4 for Int-Location,
+        A, B for Data-Location,
+        f, f1, f2, f3 for FinSeq-Location,
+        il, i1, i2 for Instruction-Location of SCM+FSA,
+        L for Instruction-Location of SCM,
+        I for Instruction of SCM+FSA,
+        s for State of SCM+FSA,
+        T for InsType of SCM+FSA,
+        k for natural number;
+
+theorem :: SCMFSA10:1
+ for f being Function, a, A, b, B, c, C being set st a <> b & a <> c holds
+  ( f +* (a .--> A) +* (b .--> B) +* (c .--> C) ).a = A;
+
+theorem :: SCMFSA10:2
+ for a, b being set holds <*a*> +* (1,b) = <*b*>;
+
+definition
+  let la, lb be Int-Location,
+      a, b be Integer;
+ redefine func (la,lb) --> (a,b) -> FinPartState of SCM+FSA;
+end;
+
+theorem :: SCMFSA10:3
+ not a in the Instruction-Locations of SCM+FSA;
+
+theorem :: SCMFSA10:4
+ not f in the Instruction-Locations of SCM+FSA;
+
+theorem :: SCMFSA10:5
+ SCM+FSA-Data-Loc <> the Instruction-Locations of SCM+FSA;
+
+theorem :: SCMFSA10:6
+ SCM+FSA-Data*-Loc <> the Instruction-Locations of SCM+FSA;
+
+theorem :: SCMFSA10:7
+ for o being Object of SCM+FSA holds
+  o = IC SCM+FSA or o in the Instruction-Locations of SCM+FSA or
+  o is Int-Location or o is FinSeq-Location;
+
+theorem :: SCMFSA10:8
+ i1 <> i2 implies Next i1 <> Next i2;
+
+theorem :: SCMFSA10:9
+ a := b = [1, <* a,b *>];
+
+theorem :: SCMFSA10:10
+ AddTo(a,b) = [2, <* a,b *>];
+
+theorem :: SCMFSA10:11
+ SubFrom(a,b) = [3, <* a,b *>];
+
+theorem :: SCMFSA10:12
+ MultBy(a,b) = [4, <* a,b *>];
+
+theorem :: SCMFSA10:13
+ Divide(a,b) = [5, <* a,b *>];
+
+theorem :: SCMFSA10:14
+ goto il = [6, <* il *>];
+
+theorem :: SCMFSA10:15
+ a=0_goto il = [7, <* il,a *>];
+
+theorem :: SCMFSA10:16
+ a>0_goto il = [8, <* il,a *>];
+
+theorem :: SCMFSA10:17
+ AddressPart halt SCM+FSA = {};
+
+theorem :: SCMFSA10:18
+ AddressPart (a:=b) = <*a,b*>;
+
+theorem :: SCMFSA10:19
+ AddressPart AddTo(a,b) = <*a,b*>;
+
+theorem :: SCMFSA10:20
+ AddressPart SubFrom(a,b) = <*a,b*>;
+
+theorem :: SCMFSA10:21
+ AddressPart MultBy(a,b) = <*a,b*>;
+
+theorem :: SCMFSA10:22
+ AddressPart Divide(a,b) = <*a,b*>;
+
+theorem :: SCMFSA10:23
+ AddressPart goto i1 = <*i1*>;
+
+theorem :: SCMFSA10:24
+ AddressPart (a=0_goto i1) = <*i1,a*>;
+
+theorem :: SCMFSA10:25
+ AddressPart (a>0_goto i1) = <*i1,a*>;
+
+theorem :: SCMFSA10:26
+ AddressPart (b:=(f,a)) = <*b,f,a*>;
+
+theorem :: SCMFSA10:27
+ AddressPart ((f,a):=b) = <*b,f,a*>;
+
+theorem :: SCMFSA10:28
+ AddressPart (a:=len f) = <*a,f*>;
+
+theorem :: SCMFSA10:29
+ AddressPart (f:=<0,...,0>a) = <*a,f*>;
+
+theorem :: SCMFSA10:30
+ T = 0 implies AddressParts T = {0};
+
+definition let T;
+ cluster AddressParts T -> non empty;
+end;
+
+theorem :: SCMFSA10:31
+ T = 1 implies dom PA AddressParts T = {1,2};
+
+theorem :: SCMFSA10:32
+ T = 2 implies dom PA AddressParts T = {1,2};
+
+theorem :: SCMFSA10:33
+ T = 3 implies dom PA AddressParts T = {1,2};
+
+theorem :: SCMFSA10:34
+ T = 4 implies dom PA AddressParts T = {1,2};
+
+theorem :: SCMFSA10:35
+ T = 5 implies dom PA AddressParts T = {1,2};
+
+theorem :: SCMFSA10:36
+ T = 6 implies dom PA AddressParts T = {1};
+
+theorem :: SCMFSA10:37
+ T = 7 implies dom PA AddressParts T = {1,2};
+
+theorem :: SCMFSA10:38
+ T = 8 implies dom PA AddressParts T = {1,2};
+
+theorem :: SCMFSA10:39
+ T = 9 implies dom PA AddressParts T = {1,2,3};
+
+theorem :: SCMFSA10:40
+ T = 10 implies dom PA AddressParts T = {1,2,3};
+
+theorem :: SCMFSA10:41
+ T = 11 implies dom PA AddressParts T = {1,2};
+
+theorem :: SCMFSA10:42
+ T = 12 implies dom PA AddressParts T = {1,2};
+
+theorem :: SCMFSA10:43
+ (PA AddressParts InsCode (a:=b)).1 = SCM+FSA-Data-Loc;
+
+theorem :: SCMFSA10:44
+ (PA AddressParts InsCode (a:=b)).2 = SCM+FSA-Data-Loc;
+
+theorem :: SCMFSA10:45
+ (PA AddressParts InsCode AddTo(a,b)).1 = SCM+FSA-Data-Loc;
+
+theorem :: SCMFSA10:46
+ (PA AddressParts InsCode AddTo(a,b)).2 = SCM+FSA-Data-Loc;
+
+theorem :: SCMFSA10:47
+ (PA AddressParts InsCode SubFrom(a,b)).1 = SCM+FSA-Data-Loc;
+
+theorem :: SCMFSA10:48
+ (PA AddressParts InsCode SubFrom(a,b)).2 = SCM+FSA-Data-Loc;
+
+theorem :: SCMFSA10:49
+ (PA AddressParts InsCode MultBy(a,b)).1 = SCM+FSA-Data-Loc;
+
+theorem :: SCMFSA10:50
+ (PA AddressParts InsCode MultBy(a,b)).2 = SCM+FSA-Data-Loc;
+
+theorem :: SCMFSA10:51
+ (PA AddressParts InsCode Divide(a,b)).1 = SCM+FSA-Data-Loc;
+
+theorem :: SCMFSA10:52
+ (PA AddressParts InsCode Divide(a,b)).2 = SCM+FSA-Data-Loc;
+
+theorem :: SCMFSA10:53
+ (PA AddressParts InsCode goto i1).1 = the Instruction-Locations of SCM+FSA;
+
+theorem :: SCMFSA10:54
+ (PA AddressParts InsCode (a =0_goto i1)).1 =
+   the Instruction-Locations of SCM+FSA;
+
+theorem :: SCMFSA10:55
+ (PA AddressParts InsCode (a =0_goto i1)).2 = SCM+FSA-Data-Loc;
+
+theorem :: SCMFSA10:56
+ (PA AddressParts InsCode (a >0_goto i1)).1 =
+   the Instruction-Locations of SCM+FSA;
+
+theorem :: SCMFSA10:57
+ (PA AddressParts InsCode (a >0_goto i1)).2 = SCM+FSA-Data-Loc;
+
+theorem :: SCMFSA10:58
+ (PA AddressParts InsCode (b:=(f,a))).1 = SCM+FSA-Data-Loc;
+
+theorem :: SCMFSA10:59
+ (PA AddressParts InsCode (b:=(f,a))).2 = SCM+FSA-Data*-Loc;
+
+theorem :: SCMFSA10:60
+ (PA AddressParts InsCode (b:=(f,a))).3 = SCM+FSA-Data-Loc;
+
+theorem :: SCMFSA10:61
+ (PA AddressParts InsCode ((f,a):=b)).1 = SCM+FSA-Data-Loc;
+
+theorem :: SCMFSA10:62
+ (PA AddressParts InsCode ((f,a):=b)).2 = SCM+FSA-Data*-Loc;
+
+theorem :: SCMFSA10:63
+ (PA AddressParts InsCode ((f,a):=b)).3 = SCM+FSA-Data-Loc;
+
+theorem :: SCMFSA10:64
+ (PA AddressParts InsCode (a:=len f)).1 = SCM+FSA-Data-Loc;
+
+theorem :: SCMFSA10:65
+ (PA AddressParts InsCode (a:=len f)).2 = SCM+FSA-Data*-Loc;
+
+theorem :: SCMFSA10:66
+ (PA AddressParts InsCode (f:=<0,...,0>a)).1 = SCM+FSA-Data-Loc;
+
+theorem :: SCMFSA10:67
+ (PA AddressParts InsCode (f:=<0,...,0>a)).2 = SCM+FSA-Data*-Loc;
+
+theorem :: SCMFSA10:68
+ NIC(halt SCM+FSA, il) = {il};
+
+definition
+ cluster JUMP halt SCM+FSA -> empty;
+end;
+
+theorem :: SCMFSA10:69
+ NIC(a := b, il) = {Next il};
+
+definition let a, b;
+ cluster JUMP (a := b) -> empty;
+end;
+
+theorem :: SCMFSA10:70
+ NIC(AddTo(a,b), il) = {Next il};
+
+definition let a, b;
+ cluster JUMP AddTo(a, b) -> empty;
+end;
+
+theorem :: SCMFSA10:71
+ NIC(SubFrom(a,b), il) = {Next il};
+
+definition let a, b;
+ cluster JUMP SubFrom(a, b) -> empty;
+end;
+
+theorem :: SCMFSA10:72
+ NIC(MultBy(a,b), il) = {Next il};
+
+definition let a, b;
+ cluster JUMP MultBy(a,b) -> empty;
+end;
+
+theorem :: SCMFSA10:73
+ NIC(Divide(a,b), il) = {Next il};
+
+definition let a, b;
+ cluster JUMP Divide(a,b) -> empty;
+end;
+
+theorem :: SCMFSA10:74
+ NIC(goto i1, il) = {i1};
+
+theorem :: SCMFSA10:75
+ JUMP goto i1 = {i1};
+
+definition let i1;
+ cluster JUMP goto i1 -> non empty trivial;
+end;
+
+theorem :: SCMFSA10:76
+ NIC(a=0_goto i1, il) = {i1, Next il};
+
+theorem :: SCMFSA10:77
+ JUMP (a=0_goto i1) = {i1};
+
+definition let a, i1;
+ cluster JUMP (a =0_goto i1) -> non empty trivial;
+end;
+
+theorem :: SCMFSA10:78
+  NIC(a>0_goto i1, il) = {i1, Next il};
+
+theorem :: SCMFSA10:79
+ JUMP (a>0_goto i1) = {i1};
+
+definition let a, i1;
+ cluster JUMP (a >0_goto i1) -> non empty trivial;
+end;
+
+theorem :: SCMFSA10:80
+ NIC(a:=(f,b), il) = {Next il};
+
+definition let a, b, f;
+ cluster JUMP (a:=(f,b)) -> empty;
+end;
+
+theorem :: SCMFSA10:81
+ NIC((f,b):=a, il) = {Next il};
+
+definition let a, b, f;
+ cluster JUMP ((f,b):=a) -> empty;
+end;
+
+theorem :: SCMFSA10:82
+ NIC(a:=len f, il) = {Next il};
+
+definition let a, f;
+ cluster JUMP (a:=len f) -> empty;
+end;
+
+theorem :: SCMFSA10:83
+ NIC(f:=<0,...,0>a, il) = {Next il};
+
+definition let a, f;
+ cluster JUMP (f:=<0,...,0>a) -> empty;
+end;
+
+theorem :: SCMFSA10:84
+ SUCC il = {il, Next il};
+
+theorem :: SCMFSA10:85
+ for f being Function of NAT, the Instruction-Locations of SCM+FSA
+   st for k being Nat holds f.k = insloc k holds
+  f is bijective &
+  for k being Nat holds f.(k+1) in SUCC (f.k) &
+   for j being Nat st f.j in SUCC (f.k) holds k <= j;
+
+definition
+ cluster SCM+FSA -> standard;
+end;
+
+theorem :: SCMFSA10:86
+ il.(SCM+FSA,k) = insloc k;
+
+theorem :: SCMFSA10:87
+ Next il.(SCM+FSA,k) = il.(SCM+FSA,k+1);
+
+theorem :: SCMFSA10:88
+ Next il = NextLoc il;
+
+definition
+ cluster InsCode halt SCM+FSA -> jump-only;
+end;
+
+definition
+ cluster halt SCM+FSA -> jump-only;
+end;
+
+definition let i1;
+ cluster InsCode goto i1 -> jump-only;
+end;
+
+definition let i1;
+ cluster goto i1 -> jump-only non sequential non ins-loc-free;
+end;
+
+definition let a, i1;
+ cluster InsCode (a =0_goto i1) -> jump-only;
+
+ cluster InsCode (a >0_goto i1) -> jump-only;
+end;
+
+definition let a, i1;
+ cluster a =0_goto i1 -> jump-only non sequential non ins-loc-free;
+
+ cluster a >0_goto i1 -> jump-only non sequential non ins-loc-free;
+end;
+
+definition let a, b;
+ cluster InsCode (a:=b) -> non jump-only;
+
+ cluster InsCode AddTo(a,b) -> non jump-only;
+
+ cluster InsCode SubFrom(a,b) -> non jump-only;
+
+ cluster InsCode MultBy(a,b) -> non jump-only;
+
+ cluster InsCode Divide(a,b) -> non jump-only;
+end;
+
+definition let a, b;
+ cluster a:=b -> non jump-only sequential;
+
+ cluster AddTo(a,b) -> non jump-only sequential;
+
+ cluster SubFrom(a,b) -> non jump-only sequential;
+
+ cluster MultBy(a,b) -> non jump-only sequential;
+
+ cluster Divide(a,b) -> non jump-only sequential;
+end;
+
+definition let a, b, f;
+ cluster InsCode (b:=(f,a)) -> non jump-only;
+
+ cluster InsCode ((f,a):=b) -> non jump-only;
+end;
+
+definition let a, b, f;
+ cluster b:=(f,a) -> non jump-only sequential;
+
+ cluster (f,a):=b -> non jump-only sequential;
+end;
+
+definition let a, f;
+ cluster InsCode (a:=len f) -> non jump-only;
+
+ cluster InsCode (f:=<0,...,0>a) -> non jump-only;
+end;
+
+definition let a, f;
+ cluster a:=len f -> non jump-only sequential;
+
+ cluster f:=<0,...,0>a -> non jump-only sequential;
+end;
+
+definition
+ cluster SCM+FSA -> homogeneous with_explicit_jumps without_implicit_jumps;
+end;
+
+definition
+ cluster SCM+FSA -> regular;
+end;
+
+theorem :: SCMFSA10:89
+ IncAddr(goto i1,k) = goto il.(SCM+FSA, locnum i1 + k);
+
+theorem :: SCMFSA10:90
+ IncAddr(a=0_goto i1,k) = a=0_goto il.(SCM+FSA, locnum i1 + k);
+
+theorem :: SCMFSA10:91
+ IncAddr(a>0_goto i1,k) = a>0_goto il.(SCM+FSA, locnum i1 + k);
+
+definition
+ cluster SCM+FSA -> IC-good Exec-preserving;
+end;
+

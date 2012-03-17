@@ -1,0 +1,360 @@
+:: The Euclidean Space
+::  by Agata Darmochwa{\l}
+::
+:: Received November 21, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, FINSEQ_2, FINSEQ_1, FUNCT_1, ABSVALUE, ARYTM_1, RVSUM_1,
+      COMPLEX1, SQUARE_1, RLVECT_1, RELAT_1, PCOMPS_1, METRIC_1, PRE_TOPC,
+      FUNCT_2, ARYTM_3, MCART_1, EUCLID, BOOLE;
+ notation XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      NAT_1, DOMAIN_1, FUNCT_1, STRUCT_0, METRIC_1, FUNCT_2, REAL_1, ABSVALUE,
+      FINSEQ_1, FINSEQ_2, FINSEQOP, FRAENKEL, SQUARE_1, RVSUM_1, PRE_TOPC,
+      PCOMPS_1;
+ constructors DOMAIN_1, REAL_1, ABSVALUE, FINSEQOP, FRAENKEL, SQUARE_1,
+      RVSUM_1, PCOMPS_1, SEQ_1, MEMBERED, PARTFUN1, XBOOLE_0;
+ clusters METRIC_1, FINSEQ_2, PCOMPS_1, RELSET_1, XREAL_0, FINSEQ_1, ARYTM_3,
+      SQUARE_1, SEQ_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+ reserve k,j,n for Nat, r for real number;
+
+ definition let n;
+  func REAL n -> FinSequence-DOMAIN of REAL equals
+:: EUCLID:def 1
+  n-tuples_on REAL;
+ end;
+
+reserve x for FinSequence of REAL;
+
+ definition
+  func absreal -> Function of REAL,REAL means
+:: EUCLID:def 2
+    for r holds it.r = abs r;
+ end;
+
+ definition let x;
+   func abs x -> FinSequence of REAL equals
+:: EUCLID:def 3
+   absreal*x;
+ end;
+
+ definition let n;
+   func 0*n -> FinSequence of REAL equals
+:: EUCLID:def 4
+   n |-> (0 qua Real);
+ end;
+
+ definition let n;
+  redefine func 0*n -> Element of REAL n;
+ end;
+
+reserve x,x1,x2,y,z for Element of REAL n;
+
+ definition let n,x;
+   redefine func -x -> Element of REAL n;
+ end;
+
+ definition let n,x,y;
+   redefine func x + y -> Element of REAL n;
+  func x - y -> Element of REAL n;
+ end;
+
+ definition let n; let r be real number; let x;
+  redefine func r*x -> Element of REAL n;
+ end;
+
+ definition let n,x;
+  redefine func abs x -> Element of n-tuples_on REAL;
+ end;
+
+ definition let n,x;
+  redefine func sqr x -> Element of n-tuples_on REAL;
+ end;
+
+ definition let x be FinSequence of REAL;
+   func |.x.| -> Real equals
+:: EUCLID:def 5
+   sqrt Sum sqr x;
+ end;
+
+canceled;
+
+theorem :: EUCLID:2
+len x = n;
+
+theorem :: EUCLID:3
+  dom x = Seg n;
+
+theorem :: EUCLID:4
+  x.k in REAL;
+
+theorem :: EUCLID:5
+  (for k st k in Seg n holds x1.k = x2.k) implies x1 = x2;
+
+theorem :: EUCLID:6
+   r = x.k implies (abs x).k = abs r;
+
+theorem :: EUCLID:7
+abs 0*n = n |-> (0 qua Real);
+
+theorem :: EUCLID:8
+  abs -x = abs x;
+
+theorem :: EUCLID:9
+   abs(r*x) = abs(r)*(abs x);
+
+theorem :: EUCLID:10
+|.0*n.| = 0;
+
+theorem :: EUCLID:11
+|.x.| = 0 implies x = 0*n;
+
+theorem :: EUCLID:12
+|.x.| >= 0;
+
+theorem :: EUCLID:13
+|.-x.| = |.x.|;
+
+theorem :: EUCLID:14
+|.r*x.| = abs(r)*|.x.|;
+
+theorem :: EUCLID:15
+|.x1 + x2.| <= |.x1.| + |.x2.|;
+
+theorem :: EUCLID:16
+|.x1 - x2.| <= |.x1.| + |.x2.|;
+
+theorem :: EUCLID:17
+|.x1.| - |.x2.| <= |.x1 + x2.|;
+
+theorem :: EUCLID:18
+|.x1.| - |.x2.| <= |.x1 - x2.|;
+
+theorem :: EUCLID:19
+|.x1 - x2.| = 0 iff x1 = x2;
+
+theorem :: EUCLID:20
+x1 <> x2 implies |.x1 - x2.| > 0;
+
+theorem :: EUCLID:21
+|.x1 - x2.| = |.x2 - x1.|;
+
+theorem :: EUCLID:22
+|.x1 - x2.| <= |.x1 - x.| + |.x - x2.|;
+
+ definition let n;
+  func Pitag_dist n -> Function of [:REAL n,REAL n:],REAL means
+:: EUCLID:def 6
+  for x,y being Element of REAL n holds it.(x,y) = |.x-y.|;
+ end;
+
+theorem :: EUCLID:23
+sqr(x-y) = sqr(y-x);
+
+theorem :: EUCLID:24
+Pitag_dist n is_metric_of REAL n;
+
+ definition let n;
+  func Euclid n -> strict MetrSpace equals
+:: EUCLID:def 7
+     MetrStruct(#REAL n,Pitag_dist n#);
+ end;
+
+ definition let n;
+  cluster Euclid n -> non empty;
+ end;
+
+ definition let n;
+  func TOP-REAL n -> strict TopSpace equals
+:: EUCLID:def 8
+     TopSpaceMetr (Euclid n);
+ end;
+
+definition let n;
+ cluster TOP-REAL n -> non empty;
+end;
+
+reserve p,p1,p2,p3 for Point of TOP-REAL n,
+        x,x1,x2,y,y1,y2 for real number;
+
+theorem :: EUCLID:25
+the carrier of TOP-REAL n = REAL n;
+
+theorem :: EUCLID:26
+p is Function of Seg n, REAL;
+
+theorem :: EUCLID:27
+p is FinSequence of REAL;
+
+theorem :: EUCLID:28
+for f being FinSequence st f = p holds len f = n;
+
+ definition let n;
+  func 0.REAL n -> Point of TOP-REAL n equals
+:: EUCLID:def 9
+     0*n;
+ end;
+
+ definition let n,p1,p2;
+   func p1 + p2 -> Point of TOP-REAL n means
+:: EUCLID:def 10
+     for p1',p2' being Element of REAL n st p1' = p1 & p2' = p2
+       holds it = p1' + p2';
+   commutativity;
+ end;
+
+theorem :: EUCLID:29
+    for x being Element of REAL n holds sqr abs x = sqr x;
+
+ theorem :: EUCLID:30
+p1 + p2 + p3 = p1 + (p2 + p3);
+
+ theorem :: EUCLID:31
+0.REAL n + p = p & p + 0.REAL n = p;
+
+ definition let x,n,p;
+   func x*p -> Point of TOP-REAL n means
+:: EUCLID:def 11
+     for p' being Element of REAL n st p' = p holds it = x*p';
+ end;
+
+ theorem :: EUCLID:32
+x*0.REAL n = 0.REAL n;
+
+ theorem :: EUCLID:33
+1*p = p & 0 * p = 0.REAL n;
+
+ theorem :: EUCLID:34
+(x*y)*p = x*(y*p);
+
+ theorem :: EUCLID:35
+x*p = 0.REAL n implies x = 0 or p = 0.REAL n;
+
+ theorem :: EUCLID:36
+x*(p1 + p2) = x*p1 + x*p2;
+
+ theorem :: EUCLID:37
+(x + y)*p = x*p + y*p;
+
+ theorem :: EUCLID:38
+x*p1 = x*p2 implies x = 0 or p1 = p2;
+
+definition let n,p;
+ func -p -> Point of TOP-REAL n means
+:: EUCLID:def 12
+   for p' being Element of REAL n st p' = p holds it = -p';
+ end;
+
+theorem :: EUCLID:39
+--p = p;
+
+theorem :: EUCLID:40
+p + -p = 0.REAL n;
+
+theorem :: EUCLID:41
+p1 + p2 = 0.REAL n implies p1 = -p2 & p2 = -p1;
+
+theorem :: EUCLID:42
+-(p1 + p2) = -p1 + -p2;
+
+theorem :: EUCLID:43
+-p = (-1)*p;
+
+theorem :: EUCLID:44
+-x*p = (-x)*p & -x*p = x*(-p);
+
+ definition let n,p1,p2;
+  func p1 - p2 -> Point of TOP-REAL n means
+:: EUCLID:def 13
+     for p1',p2' being Element of REAL n st p1' = p1 & p2' = p2
+       holds it = p1' - p2';
+ end;
+
+theorem :: EUCLID:45
+p1 - p2 = p1 + -p2;
+
+theorem :: EUCLID:46
+p - p = 0.REAL n;
+
+theorem :: EUCLID:47
+p1 - p2 = 0.REAL n implies p1 = p2;
+
+theorem :: EUCLID:48
+-(p1 - p2) = p2 - p1 & -(p1 - p2) = -p1 + p2;
+
+theorem :: EUCLID:49
+p1 + (p2 - p3) = p1 + p2 - p3;
+
+theorem :: EUCLID:50
+p1 - (p2 + p3) = p1 - p2 - p3;
+
+theorem :: EUCLID:51
+p1 - (p2 - p3) = p1 - p2 + p3;
+
+theorem :: EUCLID:52
+p = p + p1 - p1 & p = p - p1 + p1;
+
+theorem :: EUCLID:53
+x*(p1 - p2) = x*p1 - x*p2;
+
+theorem :: EUCLID:54
+(x-y)*p = x*p - y*p;
+
+reserve p,p1,p2 for Point of TOP-REAL 2;
+
+theorem :: EUCLID:55
+ex x,y being Real st p=<*x,y*>;
+
+ definition let p;
+   func p`1 -> Real means
+:: EUCLID:def 14
+     for f being FinSequence st p = f holds it = f.1;
+   func p`2 -> Real means
+:: EUCLID:def 15
+     for f being FinSequence st p = f holds it = f.2;
+ end;
+
+ definition let x,y be real number;
+   func |[ x,y ]| -> Point of TOP-REAL 2 equals
+:: EUCLID:def 16
+<*x,y*>;
+ end;
+
+theorem :: EUCLID:56
+|[x,y]|`1 = x & |[x,y]|`2 = y;
+
+theorem :: EUCLID:57
+p = |[p`1, p`2]|;
+
+theorem :: EUCLID:58
+0.REAL 2 = |[0,0]|;
+
+theorem :: EUCLID:59
+p1 + p2 = |[ p1`1 + p2`1, p1`2 + p2`2]|;
+
+theorem :: EUCLID:60
+|[x1, y1]| + |[x2, y2]| = |[ x1 + x2, y1 + y2]|;
+
+theorem :: EUCLID:61
+x*p = |[ x*p`1 ,x*p`2 ]|;
+
+theorem :: EUCLID:62
+x*|[x1,y1]| = |[ x*x1 ,x*y1 ]|;
+
+theorem :: EUCLID:63
+-p = |[ -p`1, -p`2]|;
+
+theorem :: EUCLID:64
+-|[x1,y1]| = |[ -x1, -y1]|;
+
+theorem :: EUCLID:65
+p1 - p2 = |[ p1`1 - p2`1, p1`2 - p2`2]|;
+
+theorem :: EUCLID:66
+|[x1, y1]| - |[x2, y2]| = |[ x1 - x2, y1 - y2]|;

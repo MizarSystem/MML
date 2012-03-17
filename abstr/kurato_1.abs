@@ -1,0 +1,393 @@
+:: On the {K}uratowski Closure-Complement Problem
+::  by Lilla Krystyna Bagi\'nska and Adam Grabowski
+::
+:: Received June 12, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, KURATO_1, FINSET_1, TOPS_1, PRE_TOPC, CARD_1, SUBSET_1,
+      RCOMP_1, PROB_1, INCPROJ, SETFAM_1, AMI_1, TOPMETR, RAT_1, BORSUK_5;
+ notation XBOOLE_0, TARSKI, SUBSET_1, STRUCT_0, NUMBERS, XREAL_0, PRE_TOPC,
+      TOPS_1, ENUMSET1, CARD_1, FINSET_1, RCOMP_1, INCPROJ, NAT_1, SEQ_4,
+      RCOMP_2, PCOMPS_1, TOPMETR, AMI_1, BORSUK_5;
+ constructors TOPS_1, NAT_1, INCPROJ, RCOMP_2, PSCOMP_1, INTEGRA1, COMPTS_1,
+      LIMFUNC1, TOPGRP_1, TREAL_1, DOMAIN_1, RAT_1, PROB_1, AMI_1, BORSUK_5,
+      MEMBERED;
+ clusters FINSET_1, TOPS_1, TOPREAL6, AMI_1, XBOOLE_0, BORSUK_5, MEMBERED,
+      ZFMISC_1;
+ requirements SUBSET, BOOLE, NUMERALS, REAL, ARITHM;
+
+
+begin :: Fourteen Kuratowski Sets
+
+ reserve T for non empty TopSpace;
+ reserve A for Subset of T;
+
+theorem :: KURATO_1:1
+  Cl (Cl (Cl (Cl A)`)`)` = Cl (Cl A)`;
+
+definition let T, A;
+  func Kurat14Part A equals
+:: KURATO_1:def 1
+    { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`,
+      Cl (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)` };
+end;
+
+definition let T, A;
+  cluster Kurat14Part A -> finite;
+end;
+
+definition let T, A;
+  func Kurat14Set A -> Subset-Family of T equals
+:: KURATO_1:def 2
+    { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`,
+         Cl (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)` } \/
+    { A`, Cl A`, (Cl A`)`, Cl (Cl A`)`, (Cl (Cl A`)`)`,
+          Cl (Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` };
+end;
+
+theorem :: KURATO_1:2
+  Kurat14Set A = Kurat14Part A \/ Kurat14Part A`;
+
+theorem :: KURATO_1:3
+  A in Kurat14Set A & Cl A in Kurat14Set A & (Cl A)` in Kurat14Set A &
+    Cl (Cl A)` in Kurat14Set A & (Cl (Cl A)`)` in Kurat14Set A &
+      Cl (Cl (Cl A)`)` in Kurat14Set A & (Cl (Cl (Cl A)`)`)` in Kurat14Set A;
+
+theorem :: KURATO_1:4
+  A` in Kurat14Set A & Cl A` in Kurat14Set A &
+    (Cl A`)` in Kurat14Set A & Cl (Cl A`)` in Kurat14Set A &
+      (Cl (Cl A`)`)` in Kurat14Set A & Cl (Cl (Cl A`)`)` in Kurat14Set A &
+        (Cl (Cl (Cl A`)`)`)` in Kurat14Set A;
+
+definition let T, A;
+  func Kurat14ClPart A -> Subset-Family of T equals
+:: KURATO_1:def 3
+    { Cl A, Cl (Cl A)`, Cl (Cl (Cl A)`)`,
+            Cl A`, Cl (Cl A`)`, Cl (Cl (Cl A`)`)` };
+  func Kurat14OpPart A -> Subset-Family of T equals
+:: KURATO_1:def 4
+    { (Cl A)`, (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)`,
+             (Cl A`)`, (Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` };
+end;
+
+theorem :: KURATO_1:5
+  Kurat14Set A = { A, A` } \/ Kurat14ClPart A \/ Kurat14OpPart A;
+
+definition let T, A;
+  cluster Kurat14Set A -> finite;
+end;
+
+theorem :: KURATO_1:6
+  for Q being Subset of T holds
+    Q in Kurat14Set A implies Q` in Kurat14Set A & Cl Q in Kurat14Set A;
+
+theorem :: KURATO_1:7
+   card Kurat14Set A <= 14;
+
+begin :: Seven Kuratowski Sets
+
+definition let T, A;
+  func Kurat7Set A -> Subset-Family of T equals
+:: KURATO_1:def 5
+     { A, Int A, Cl A, Int Cl A, Cl Int A, Cl Int Cl A, Int Cl Int A };
+end;
+
+theorem :: KURATO_1:8
+  A in Kurat7Set A & Int A in Kurat7Set A &
+    Cl A in Kurat7Set A & Int Cl A in Kurat7Set A & Cl Int A in Kurat7Set A &
+      Cl Int Cl A in Kurat7Set A & Int Cl Int A in Kurat7Set A;
+
+theorem :: KURATO_1:9
+   Kurat7Set A = { A } \/ { Int A, Int Cl A, Int Cl Int A } \/
+    { Cl A, Cl Int A, Cl Int Cl A };
+
+definition let T, A;
+  cluster Kurat7Set A -> finite;
+end;
+
+theorem :: KURATO_1:10
+  for Q being Subset of T holds
+    Q in Kurat7Set A implies Int Q in Kurat7Set A & Cl Q in Kurat7Set A;
+
+theorem :: KURATO_1:11
+   card Kurat7Set A <= 7;
+
+begin :: The Set Generating Exactly Fourteen Kuratowski Sets
+
+definition
+  func KurExSet -> Subset of R^1 equals
+:: KURATO_1:def 6
+    {1} \/ RAT (2,3) \/ ]. 3, 4 .[ \/ ]. 4,+infty.[;
+end;
+
+theorem :: KURATO_1:12
+  Cl KurExSet = {1} \/ [. 2,+infty.[;
+
+theorem :: KURATO_1:13
+  (Cl KurExSet)` = ].-infty, 1 .[ \/ ]. 1, 2 .[;
+
+theorem :: KURATO_1:14
+  Cl (Cl KurExSet)` = ].-infty, 2 .];
+
+theorem :: KURATO_1:15
+  (Cl (Cl KurExSet)`)` = ]. 2,+infty.[;
+
+theorem :: KURATO_1:16
+  Cl (Cl (Cl KurExSet)`)` = [. 2,+infty.[;
+
+theorem :: KURATO_1:17
+  (Cl (Cl (Cl KurExSet)`)`)` = ].-infty, 2 .[;
+
+theorem :: KURATO_1:18
+  KurExSet` = ].-infty, 1 .[ \/ ]. 1, 2 .] \/ IRRAT(2,3) \/ {3} \/ {4};
+
+theorem :: KURATO_1:19
+  Cl KurExSet` = ].-infty, 3 .] \/ {4};
+
+theorem :: KURATO_1:20
+  (Cl KurExSet`)` = ]. 3, 4 .[ \/ ]. 4,+infty.[;
+
+theorem :: KURATO_1:21
+  Cl (Cl KurExSet`)` = [. 3,+infty.[;
+
+theorem :: KURATO_1:22
+  (Cl (Cl KurExSet`)`)` = ].-infty, 3 .[;
+
+theorem :: KURATO_1:23
+  Cl (Cl (Cl KurExSet`)`)` = ].-infty, 3 .];
+
+theorem :: KURATO_1:24
+  (Cl (Cl (Cl KurExSet`)`)`)` = ]. 3,+infty.[;
+
+begin :: The Set Generating Exactly Seven Kuratowski Sets
+
+theorem :: KURATO_1:25
+  Int KurExSet = ]. 3, 4 .[ \/ ]. 4,+infty.[;
+
+theorem :: KURATO_1:26
+  Cl Int KurExSet = [. 3,+infty.[;
+
+theorem :: KURATO_1:27
+  Int Cl Int KurExSet = ]. 3,+infty.[;
+
+theorem :: KURATO_1:28
+  Int Cl KurExSet = ]. 2,+infty.[;
+
+theorem :: KURATO_1:29
+  Cl Int Cl KurExSet = [. 2,+infty.[;
+
+begin :: The Difference Between Chosen Kuratowski Sets
+
+theorem :: KURATO_1:30
+   Cl Int Cl KurExSet <> Int Cl KurExSet;
+
+theorem :: KURATO_1:31
+  Cl Int Cl KurExSet <> Cl KurExSet;
+
+theorem :: KURATO_1:32
+   Cl Int Cl KurExSet <> Int Cl Int KurExSet;
+
+theorem :: KURATO_1:33
+  Cl Int Cl KurExSet <> Cl Int KurExSet;
+
+theorem :: KURATO_1:34
+   Cl Int Cl KurExSet <> Int KurExSet;
+
+theorem :: KURATO_1:35
+   Int Cl KurExSet <> Cl KurExSet;
+
+theorem :: KURATO_1:36
+   Int Cl KurExSet <> Int Cl Int KurExSet;
+
+theorem :: KURATO_1:37
+   Int Cl KurExSet <> Cl Int KurExSet;
+
+theorem :: KURATO_1:38
+  Int Cl KurExSet <> Int KurExSet;
+
+theorem :: KURATO_1:39
+   Int Cl Int KurExSet <> Cl KurExSet;
+
+theorem :: KURATO_1:40
+  Cl Int KurExSet <> Cl KurExSet;
+
+theorem :: KURATO_1:41
+   Int KurExSet <> Cl KurExSet;
+
+theorem :: KURATO_1:42
+  Cl KurExSet <> KurExSet;
+
+theorem :: KURATO_1:43
+  KurExSet <> Int KurExSet;
+
+theorem :: KURATO_1:44
+   Cl Int KurExSet <> Int Cl Int KurExSet;
+
+theorem :: KURATO_1:45
+  Int Cl Int KurExSet <> Int KurExSet;
+
+theorem :: KURATO_1:46
+   Cl Int KurExSet <> Int KurExSet;
+
+begin :: Final Proofs For Seven
+
+theorem :: KURATO_1:47
+  Int Cl Int KurExSet <> Int Cl KurExSet;
+
+theorem :: KURATO_1:48
+  Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet are_mutually_different;
+
+theorem :: KURATO_1:49
+  Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet are_mutually_different;
+
+theorem :: KURATO_1:50
+  for X being set st X in
+    { Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet } holds
+   X is open non empty Subset of R^1;
+
+theorem :: KURATO_1:51
+   for X being set st X in
+    { Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet } holds
+   X is closed Subset of R^1;
+
+theorem :: KURATO_1:52
+  for X being set st X in
+    { Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet } holds
+   X <> REAL;
+
+theorem :: KURATO_1:53
+    for X being set st X in
+    { Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet } holds
+   X <> REAL;
+
+theorem :: KURATO_1:54
+  { Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet } misses
+    { Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet };
+
+theorem :: KURATO_1:55
+  Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet,
+    Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet
+      are_mutually_different;
+
+definition
+  cluster KurExSet -> non closed non open;
+end;
+
+theorem :: KURATO_1:56
+  { Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet,
+    Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet } misses { KurExSet };
+
+theorem :: KURATO_1:57
+  KurExSet, Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet,
+    Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet are_mutually_different;
+
+theorem :: KURATO_1:58
+   card Kurat7Set KurExSet = 7;
+
+begin :: Final Proofs For Fourteen
+
+definition
+  cluster Kurat14ClPart KurExSet -> with_proper_subsets;
+  cluster Kurat14OpPart KurExSet -> with_proper_subsets;
+end;
+
+definition
+  cluster Kurat14Set KurExSet -> with_proper_subsets;
+end;
+
+definition
+  cluster Kurat14Set KurExSet -> with_non-empty_elements;
+end;
+
+theorem :: KURATO_1:59
+  for A being with_non-empty_elements set,
+      B being set st B c= A holds
+    B is with_non-empty_elements;
+
+definition
+  cluster Kurat14ClPart KurExSet -> with_non-empty_elements;
+  cluster Kurat14OpPart KurExSet -> with_non-empty_elements;
+end;
+
+definition
+  cluster with_proper_subsets with_non-empty_elements Subset-Family of R^1;
+end;
+
+theorem :: KURATO_1:60
+  for F, G being with_proper_subsets with_non-empty_elements
+    Subset-Family of R^1 st
+      F is open & G is closed holds F misses G;
+
+definition
+  cluster Kurat14ClPart KurExSet -> closed;
+  cluster Kurat14OpPart KurExSet -> open;
+end;
+
+theorem :: KURATO_1:61
+  Kurat14ClPart KurExSet misses Kurat14OpPart KurExSet;
+
+definition let T, A;
+  cluster Kurat14ClPart A -> finite;
+  cluster Kurat14OpPart A -> finite;
+end;
+
+theorem :: KURATO_1:62
+  card (Kurat14ClPart KurExSet) = 6;
+
+theorem :: KURATO_1:63
+  card (Kurat14OpPart KurExSet) = 6;
+
+theorem :: KURATO_1:64
+  { KurExSet, KurExSet` } misses Kurat14ClPart KurExSet;
+
+definition
+  cluster KurExSet -> non empty;
+end;
+
+theorem :: KURATO_1:65
+  KurExSet <> KurExSet`;
+
+theorem :: KURATO_1:66
+  { KurExSet, KurExSet` } misses Kurat14OpPart KurExSet;
+
+theorem :: KURATO_1:67
+    card Kurat14Set KurExSet = 14;
+
+begin :: Properties of Kuratowski Sets
+
+definition let T be TopStruct, A be Subset-Family of T;
+  attr A is Cl-closed means
+:: KURATO_1:def 7
+     for P being Subset of T st
+      P in A holds Cl P in A;
+  attr A is Int-closed means
+:: KURATO_1:def 8
+     for P being Subset of T st
+      P in A holds Int P in A;
+end;
+
+definition let T be 1-sorted, A be Subset-Family of T;
+  attr A is compl-closed means
+:: KURATO_1:def 9
+      for P being Subset of T st
+      P in A holds P` in A;
+end;
+
+definition let T, A;
+  cluster Kurat14Set A -> non empty;
+  cluster Kurat14Set A -> Cl-closed;
+  cluster Kurat14Set A -> compl-closed;
+end;
+
+definition let T, A;
+  cluster Kurat7Set A -> non empty;
+  cluster Kurat7Set A -> Int-closed;
+  cluster Kurat7Set A -> Cl-closed;
+end;
+
+definition let T;
+  cluster Int-closed Cl-closed non empty Subset-Family of T;
+  cluster compl-closed Cl-closed non empty Subset-Family of T;
+end;

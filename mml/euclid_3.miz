@@ -1,0 +1,1631 @@
+:: Angle and Triangle in {E}uclidian Topological Space
+::  by Akihiro Kubo and Yatsuka Nakamura
+::
+:: Received May 29, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, COMPLEX1, ARYTM_1, SQUARE_1, FUNCT_1, RCOMP_1, SIN_COS,
+      ARYTM_3, PRE_TOPC, BOOLE, RELAT_1, COMPTRIG, PROB_2, MCART_1, RVSUM_1,
+      FINSEQ_1, EUCLID, COMPLEX2, EUCLID_2, TOPREAL1, TOPMETR, EUCLID_3;
+ notation TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, SQUARE_1, NAT_1, RELAT_1,
+      FUNCT_1, SEQ_1, SIN_COS, FUNCT_2, ARYTM_0, NUMBERS, XREAL_0, REAL_1,
+      COMPLEX1, PRE_TOPC, TOPRNS_1, EUCLID, FINSEQ_1, RVSUM_1, COMPLEX2,
+      EUCLID_2, TOPREAL1, TOPMETR, RCOMP_1;
+ constructors REAL_1, SQUARE_1, SEQ_1, SIN_COS, TOPRNS_1, COMPLEX1, COMPLEX2,
+      EUCLID_2, TOPREAL1, TOPMETR, RCOMP_1, MEMBERED, ARYTM_0;
+ clusters STRUCT_0, RELSET_1, EUCLID, TOPMETR, ARYTM_3, XREAL_0, MEMBERED,
+      NUMBERS;
+ requirements BOOLE, SUBSET, REAL, NUMERALS, ARITHM;
+ definitions XBOOLE_0, TARSKI;
+ theorems XCMPLX_1, REAL_1, SQUARE_1, FUNCT_1, TOPREAL3, COMPLEX1, XBOOLE_0,
+      FUNCT_2, RVSUM_1, FINSEQ_1, EUCLID, JGRAPH_3, COMPLEX2, XREAL_0,
+      EUCLID_2, TOPREAL1, XCMPLX_0, TOPMETR;
+ schemes DOMAIN_1, FUNCT_2;
+
+begin
+
+ reserve z,z1,z2 for Element of COMPLEX;
+ reserve r,r1,r2,x1,x2 for Real;
+ reserve p0,p,p1,p2,p3,q for Point of TOP-REAL 2;
+
+definition let z be Element of COMPLEX;
+  func cpx2euc(z) -> Point of TOP-REAL 2 equals :Def1:
+   |[Re z,Im z]|;
+  correctness;
+end;
+
+definition let p be Point of TOP-REAL 2;
+  func euc2cpx(p) -> Element of COMPLEX equals :Def2:
+   [* p`1,p`2 *];
+  correctness;
+end;
+
+theorem Th1: euc2cpx(cpx2euc(z))=z
+proof A1: euc2cpx(cpx2euc(z))=euc2cpx(|[Re z,Im z]|) by Def1;
+    (|[Re z,Im z]|)`1=Re z & (|[Re z,Im z]|)`2=Im z by EUCLID:56;
+  hence euc2cpx(cpx2euc(z))=[*Re z,Im z*] by A1,Def2
+    .=z by COMPLEX1:8;
+end;
+
+theorem Th2: cpx2euc(euc2cpx(p))=p
+proof A1: cpx2euc(euc2cpx(p))=cpx2euc([* p`1,p`2 *]) by Def2;
+    Re [* p`1,p`2 *] = p`1 & Im [* p`1,p`2 *] = p`2 by COMPLEX1:7;
+  hence cpx2euc(euc2cpx(p))=|[p`1, p`2]| by A1,Def1
+    .=p by EUCLID:57;
+end;
+
+theorem for p ex z st p = cpx2euc(z)
+proof
+  let p;
+  set z = [* p`1 , p`2 *];
+  take z;
+   z=euc2cpx(p) by Def2;
+  hence thesis by Th2;
+end;
+
+theorem for z ex p st z=euc2cpx(p)
+proof
+  let z;
+  set p = |[ Re z,Im z ]|;
+  take p;
+   p=cpx2euc(z) by Def1;
+  hence thesis by Th1;
+end;
+
+theorem for z1,z2 st cpx2euc(z1)=cpx2euc(z2) holds z1=z2
+proof let z1,z2;
+  assume A1: cpx2euc(z1)=cpx2euc(z2);
+   z2 = euc2cpx(cpx2euc(z2)) by Th1;
+  hence z1=z2 by A1,Th1;
+end;
+
+theorem Th6: for p1,p2 st euc2cpx(p1)=euc2cpx(p2) holds p1=p2
+proof let p1,p2;
+  assume A1: euc2cpx(p1)=euc2cpx(p2);
+     p2 = cpx2euc(euc2cpx(p2)) by Th2;
+  hence p1=p2 by A1,Th2;
+end;
+
+theorem Th7: (cpx2euc(z))`1=Re z & (cpx2euc(z))`2=Im z
+proof
+   cpx2euc(z)=|[Re z,Im z]| by Def1;
+  hence thesis by EUCLID:56;
+end;
+
+theorem Th8: Re euc2cpx(p)=p`1 & Im euc2cpx(p)=p`2
+proof
+   euc2cpx(p)=[* p`1,p`2 *] by Def2;
+  hence thesis by COMPLEX1:7;
+end;
+
+theorem Th9: cpx2euc([* x1,x2 *])= |[x1,x2]|
+proof A1: (cpx2euc([* x1,x2 *]))`1=Re ([* x1,x2 *]) &
+       (cpx2euc([* x1,x2 *]))`2=Im ([* x1,x2 *]) by Th7;
+         Re ([* x1,x2 *])=x1 & Im ([* x1,x2 *])=x2 by COMPLEX1:7;
+ hence cpx2euc([* x1,x2 *])= |[x1,x2]| by A1,EUCLID:57;
+end;
+
+theorem Th10:|[Re (z1+z2),Im (z1+z2)]|=|[Re z1 + Re z2, Im z1 + Im z2]|
+proof
+    (|[Re (z1+z2),Im (z1+z2)]|)`1=Re (z1+z2)
+    & (|[Re (z1+z2),Im (z1+z2)]|)`2=Im (z1 + z2) by EUCLID:56;
+  then (|[Re (z1+z2),Im (z1+z2)]|)`1=Re z1+Re z2
+    & (|[Re (z1+z2),Im (z1+z2)]|)`2=Im z1 + Im z2 by COMPLEX1:19;
+  hence thesis by EUCLID:57;
+end;
+
+theorem Th11: cpx2euc(z1+z2)=cpx2euc(z1)+cpx2euc(z2)
+proof
+  A1:cpx2euc(z1+z2)=|[Re (z1+z2),Im (z1+z2)]| by Def1;
+  A2:cpx2euc(z1)=|[Re z1,Im z1]| by Def1;
+    cpx2euc(z2)=|[Re z2,Im z2]| by Def1;
+  then cpx2euc(z1)+cpx2euc(z2)
+    =|[Re z1 + Re z2, Im z1 + Im z2]| by A2,EUCLID:60;
+  hence thesis by A1,Th10;
+end;
+
+theorem Th12:
+[* (p1+p2)`1,(p1+p2)`2 *] = [* p1`1+p2`1,p1`2+p2`2 *]
+proof
+  A1:Re [* (p1+p2)`1,(p1+p2)`2 *]=(p1+p2)`1
+    & Im [* (p1+p2)`1,(p1+p2)`2 *]=(p1+p2)`2 by COMPLEX1:7;
+    (p1+p2)=|[p1`1+p2`1 , p1`2+p2`2]| by EUCLID:59;
+  then A2:Re [* (p1+p2)`1,(p1+p2)`2 *]=p1`1+p2`1
+    & Im [* (p1+p2)`1,(p1+p2)`2 *]=p1`2+p2`2 by A1,EUCLID:56;
+   Re ([* p1`1+p2`1,p1`2+p2`2 *])=p1`1+p2`1
+    & Im ([* p1`1+p2`1,p1`2+p2`2 *])=p1`2+p2`2 by COMPLEX1:7;
+  hence thesis by A2,COMPLEX1:9;
+end;
+
+theorem Th13: euc2cpx(p1+p2)=euc2cpx(p1)+euc2cpx(p2)
+proof
+    euc2cpx(p1+p2)=[* (p1+p2)`1,(p1+p2)`2 *] by Def2;
+    then euc2cpx(p1+p2)=[* p1`1+p2`1,p1`2+p2`2 *] by Th12;
+    then A1:Re euc2cpx(p1+p2)=p1`1+p2`1
+      & Im euc2cpx(p1+p2)=p1`2+p2`2 by COMPLEX1:7;
+    A2:Re euc2cpx(p1)=p1`1 & Im euc2cpx(p1)=p1`2 by Th8;
+      Re euc2cpx(p2)=p2`1 & Im euc2cpx(p2)=p2`2 by Th8;
+  then Re(euc2cpx(p1)+euc2cpx(p2))=p1`1+p2`1
+    & Im(euc2cpx(p1)+euc2cpx(p2))=p1`2+p2`2 by A2,COMPLEX1:19;
+  hence thesis by A1,COMPLEX1:9;
+end;
+
+theorem Th14:|[Re (-z),Im (-z)]|=|[-(Re z), -(Im z)]|
+proof
+    (|[Re (-z),Im (-z)]|)`1=Re (-z)
+    & (|[Re (-z),Im (-z)]|)`2=Im (-z) by EUCLID:56;
+  then (|[Re (-z),Im (-z)]|)`1=-(Re z)
+    & (|[Re (-z),Im (-z)]|)`2=-(Im z) by COMPLEX1:34;
+  hence thesis by EUCLID:57;
+end;
+
+theorem Th15: cpx2euc(-z)= -cpx2euc(z)
+proof
+  A1:cpx2euc(-z)=|[Re (-z),Im (-z)]| by Def1;
+    cpx2euc(z)=|[Re z,Im z]| by Def1;
+  then -cpx2euc(z)
+    =|[-(Re z), -(Im z)]| by EUCLID:64;
+  hence thesis by A1,Th14;
+end;
+
+theorem Th16:[* (-p)`1,(-p)`2 *]=[* -(p`1),-(p`2) *]
+proof
+  A1:Re [* (-p)`1,(-p)`2 *]=(-p)`1
+    & Im [* (-p)`1,(-p)`2 *]=(-p)`2 by COMPLEX1:7;
+    -p=|[-p`1, -p`2]| by EUCLID:63;
+  then A2:Re [* (-p)`1,(-p)`2 *]=-(p`1)
+    & Im [* (-p)`1,(-p)`2 *]=-(p`2) by A1,EUCLID:56;
+   Re [* -(p`1),-(p`2) *]=-(p`1)
+    & Im [* -(p`1),-(p`2) *]=-(p`2) by COMPLEX1:7;
+  hence thesis by A2,COMPLEX1:9;
+end;
+
+theorem Th17: euc2cpx(-p)= -euc2cpx(p)
+proof
+  A1:Re euc2cpx(p)=p`1 & Im euc2cpx(p)=p`2 by Th8;
+    Re(-euc2cpx(p))=-(Re euc2cpx(p))
+    & Im (-euc2cpx(p))=-(Im euc2cpx(p)) by COMPLEX1:34;
+  then -euc2cpx(p)=[* -(p`1),-(p`2) *] by A1,COMPLEX1:8;
+  then -euc2cpx(p)=[* (-p)`1,(-p)`2 *] by Th16;
+  hence thesis by Def2;
+end;
+
+theorem cpx2euc(z1-z2)=cpx2euc(z1)-cpx2euc(z2)
+proof
+  thus cpx2euc(z1-z2)=cpx2euc(z1+-z2) by XCMPLX_0:def 8
+                   .=cpx2euc(z1)+cpx2euc(-z2) by Th11
+                   .=cpx2euc(z1)+-cpx2euc(z2) by Th15
+                   .=cpx2euc(z1)-cpx2euc(z2) by EUCLID:45;
+end;
+
+theorem Th19: euc2cpx(p1-p2)=euc2cpx(p1)-euc2cpx(p2)
+proof
+  thus euc2cpx(p1-p2)=euc2cpx(p1+-p2) by EUCLID:45
+                   .=euc2cpx(p1)+euc2cpx(-p2) by Th13
+                   .=euc2cpx(p1)+-euc2cpx(p2) by Th17
+                   .=euc2cpx(p1)-euc2cpx(p2) by XCMPLX_0:def 8;
+end;
+
+theorem Th20: cpx2euc(0c)= 0.REAL 2 by Def1,COMPLEX1:12,EUCLID:58;
+
+theorem Th21: euc2cpx(0.REAL 2)=0c by Th1,Th20;
+
+theorem euc2cpx(p)=0c implies p=0.REAL 2 by Th2,Th20;
+
+theorem cpx2euc(([* r,0 *])*z)=r*(cpx2euc(z))
+proof
+  A1:Re [* r,0 *] = r & Im [* r,0 *] = 0 by COMPLEX1:7;
+  then A2:Re ([* r,0 *]*z) = r * Re z - 0 * Im z by COMPLEX1:24
+                     .= r * Re z;
+  A3:Im ([* r,0 *]*z) = r * Im z + 0 * Re z by A1,COMPLEX1:24
+                     .= r * Im z;
+   (cpx2euc(z))`1=Re z & (cpx2euc(z))`2=Im z by Th7;
+  then r*cpx2euc(z)=|[ r*Re z,r*Im z ]| by EUCLID:61;
+  hence thesis by A2,A3,Def1;
+end;
+
+theorem Th24: [* r,0 *]*[* r1,r2 *] = [* r*r1,r*r2 *]
+proof
+  A1:Re ([* r,0 *])=r & Im ([* r,0 *])=0 by COMPLEX1:7;
+    Re ([* r1,r2 *])=r1 & Im ([* r1,r2 *])=r2 by COMPLEX1:7;
+  then Re ([* r,0 *]*[* r1,r2 *]) = r * r1 - 0 * r2
+    & Im ([* r,0 *]*[* r1,r2 *]) = r * r2 + 0 * r1 by A1,COMPLEX1:24;
+  then Re ([* r,0 *]*[* r1,r2 *]) = Re [* r*r1,r*r2 *]
+    & Im ([* r,0 *]*[* r1,r2 *]) = Im [* r*r1,r*r2 *] by COMPLEX1:7;
+  hence thesis by COMPLEX1:9;
+end;
+
+theorem euc2cpx(r*p)=([* r,0 *])*euc2cpx(p)
+proof
+   r*p = |[r*p`1,r*p`2]| by EUCLID:61;
+  then (r*p)`1=r*p`1 & (r*p)`2=r*p`2 by EUCLID:56;
+  then euc2cpx(r*p)=[* r*p`1,r*p`2 *] by Def2;
+  then euc2cpx(r*p)=[* r,0 *]*[* p`1,p`2 *] by Th24;
+  hence thesis by Def2;
+end;
+
+theorem Th26: |.euc2cpx(p).|=sqrt ((p`1)^2+(p`2)^2)
+proof
+   Re euc2cpx(p)=p`1 & Im euc2cpx(p)=p`2 by Th8;
+  hence thesis by COMPLEX1:def 16;
+end;
+
+theorem Th27:
+  for f being FinSequence of REAL st len f=2 holds
+   |.f.| = sqrt ((f.1)^2+(f.2)^2)
+proof
+  let f being FinSequence of REAL;
+    assume A1:len f=2;
+    A2:(sqr f).1=(f.1)^2 by RVSUM_1:78;
+    A3:(sqr f).2=(f.2)^2 by RVSUM_1:78;
+    A4:dom (sqr f)= dom f by RVSUM_1:77;
+      Seg len (sqr f) = dom (sqr f) by FINSEQ_1:def 3;
+    then len (sqr f) = len f by A4,FINSEQ_1:def 3;
+    then sqr f = <* (f.1)^2,(f.2)^2 *> by A1,A2,A3,FINSEQ_1:61;
+    then Sum sqr f = Sum (<* (f.1)^2 *>^<* (f.2)^2 *>) by FINSEQ_1:def 9
+                .=Sum <*(f.1)^2*> + (f.2)^2 by RVSUM_1:104
+                .= (f.1)^2 + (f.2)^2 by RVSUM_1:103;
+    hence thesis by EUCLID:def 5;
+end;
+
+theorem
+    for f being FinSequence of REAL, p being Point of TOP-REAL 2
+    st len f = 2 & p = f holds |.p.|=|.f.|
+proof
+  let f be FinSequence of REAL,p be Point of TOP-REAL 2;
+  assume A1:len f= 2 & p = f;
+    then f.1=p`1 & f.2=p`2 by EUCLID:def 14,def 15;
+    then |.f.| = sqrt ((p`1)^2+(p`2)^2) by A1,Th27;
+  hence thesis by JGRAPH_3:10;
+end;
+
+theorem Th29:
+  |.cpx2euc(z).|=sqrt ((Re z)^2 + (Im z)^2)
+proof
+  A1:cpx2euc(z)=|[ Re z,Im z ]| by Def1;
+     (|[ Re z,Im z ]|)`1=Re z & (|[ Re z,Im z ]|)`2=Im z by EUCLID:56;
+ hence thesis by A1,JGRAPH_3:10;
+end;
+
+theorem |.cpx2euc(z).|=|.z.|
+proof
+   |.cpx2euc(z).| = sqrt ((Re z)^2 + (Im z)^2) by Th29;
+  hence thesis by COMPLEX1:def 16;
+end;
+
+theorem Th31: |.euc2cpx(p).|=|.p.|
+proof
+    |.p.| = sqrt ((p`1)^2+(p`2)^2) by JGRAPH_3:10;
+ hence thesis by Th26;
+end;
+
+definition let p;
+  func Arg(p) -> Real equals :Def3:
+  Arg(euc2cpx(p));
+  correctness;
+end;
+
+theorem for z being Element of COMPLEX, p st z=euc2cpx(p) or p=cpx2euc(z)
+ holds Arg(z)=Arg(p)
+proof let z be Element of COMPLEX, p;
+ assume A1: z=euc2cpx(p) or p=cpx2euc(z);
+   per cases by A1;
+  suppose z=euc2cpx(p);
+   hence Arg(z)=Arg(p) by Def3;
+  suppose p=cpx2euc(z);
+    then euc2cpx(p)=z by Th1;
+   hence Arg(z)=Arg(p) by Def3;
+end;
+
+theorem for p holds 0<=Arg(p) & Arg(p)<2*PI
+proof let p;
+    0<=Arg(euc2cpx(p)) & Arg(euc2cpx(p))<2*PI by COMPLEX2:18;
+ hence 0<=Arg(p) & Arg(p)<2*PI by Def3;
+end;
+
+theorem for x1,x2 being Real,p
+ st x1= (|.p.|)*cos (Arg(p)) & x2=(|.p.|)*sin (Arg(p))
+ holds p = |[ x1,x2 ]|
+proof let x1,x2 be Real,p;
+ assume A1: x1= (|.p.|)*cos (Arg(p)) & x2=(|.p.|)*sin (Arg(p));
+    Arg(p)=Arg(euc2cpx(p)) by Def3;
+   then x1= (|.euc2cpx(p).|)*cos (Arg(euc2cpx(p))) &
+   x2=(|.euc2cpx(p).|)*sin (Arg(euc2cpx(p))) by A1,Th31;
+   then euc2cpx(p)= [* x1,x2 *] by COMPLEX2:19;
+   then p=cpx2euc([* x1,x2 *]) by Th2;
+  hence p= |[ x1,x2 ]| by Th9;
+end;
+
+theorem Arg(0.REAL 2)=0 by Def3,Th21,COMPLEX2:20;
+
+theorem for p st p<>0.REAL 2 holds
+  (Arg(p)<PI implies Arg(-p)=Arg(p)+PI)&
+  (Arg(p)>=PI implies Arg(-p)=Arg(p)-PI)
+proof let p;
+ assume p<>0.REAL 2;
+  then A1: euc2cpx(p)<>0c by Th2,Th20;
+  A2: Arg(p)=Arg(euc2cpx(p)) by Def3;
+    Arg(-p)=Arg(euc2cpx(-p)) by Def3 .=Arg(-euc2cpx(p)) by Th17;
+ hence thesis by A1,A2,COMPLEX2:22;
+end;
+
+theorem for p st Arg p=0 holds p=|[ |.p.|,0 ]| & p`2=0
+proof let p;assume Arg p=0;
+  then Arg(euc2cpx(p))=0 by Def3;
+  then A1: euc2cpx(p)=[* |.euc2cpx(p).|,0 *] &
+    Im euc2cpx(p) =0 by COMPLEX2:24,34;
+  A2: cpx2euc([* |.euc2cpx(p).|,0 *])=|[|.euc2cpx(p).|,0 ]| by Th9;
+    |.euc2cpx(p).|=|.p.| by Th31;
+ hence p=|[ |.p.|,0 ]| & p`2=0 by A1,A2,Th2,Th8;
+end;
+
+theorem Th38:
+for p st p<>0.REAL 2 holds
+ (Arg(p)<PI iff Arg(-p)>=PI)
+proof let p;assume p<>0.REAL 2;
+  then A1: euc2cpx(p)<>0c by Th2,Th20;
+  A2: Arg(p)=Arg(euc2cpx(p)) by Def3;
+    Arg(-p)=Arg(euc2cpx(-p)) by Def3 .=Arg(-euc2cpx(p)) by Th17;
+ hence Arg(p)<PI iff Arg(-p)>=PI by A1,A2,COMPLEX2:25;
+end;
+
+theorem
+  for p1,p2 st p1<>p2 or p1-p2<>0.REAL 2 holds
+ (Arg(p1-p2)<PI iff Arg(p2-p1)>=PI)
+proof let p1,p2;
+ assume p1<>p2 or p1-p2<>0.REAL 2;
+  then A1: p1-p2<>0.REAL 2 by EUCLID:47;
+    -(p1-p2)=p2-p1 by EUCLID:48;
+ hence Arg(p1-p2)<PI iff Arg(p2-p1)>=PI by A1,Th38;
+end;
+
+theorem for p holds Arg p in ].0,PI.[ iff p`2 > 0
+proof let p;
+  A1: Arg(p)=Arg(euc2cpx(p)) by Def3;
+    Im euc2cpx(p)=p`2 by Th8;
+ hence thesis by A1,COMPLEX2:27;
+end;
+
+theorem for p st Arg(p)<>0 holds Arg(p)<PI iff sin (Arg(p))>0
+proof let p;
+ assume A1: Arg(p)<>0;
+    Arg(p)=Arg(euc2cpx(p)) by Def3;
+ hence thesis by A1,COMPLEX2:28;
+end;
+
+theorem for p1,p2 st Arg(p1)<PI & Arg(p2)<PI holds Arg(p1+p2)<PI
+proof let p1,p2;
+ assume A1: Arg(p1)<PI & Arg(p2)<PI;
+  A2: Arg(p1)=Arg(euc2cpx(p1)) by Def3;
+    Arg(p2)=Arg(euc2cpx(p2)) by Def3;
+  then Arg(euc2cpx(p1)+euc2cpx(p2))<PI by A1,A2,COMPLEX2:29;
+  then Arg(euc2cpx(p1+p2))<PI by Th13;
+ hence Arg(p1+p2)<PI by Def3;
+end;
+
+definition let p1,p2,p3;
+  func angle(p1,p2,p3) -> Real equals :Def4:
+  angle(euc2cpx(p1),euc2cpx(p2),euc2cpx(p3));
+  correctness by XREAL_0:def 1;
+end;
+
+theorem for p1,p2,p3 holds 0<=angle(p1,p2,p3) & angle(p1,p2,p3)<2*PI
+proof let p1,p2,p3;
+  angle(p1,p2,p3)= angle(euc2cpx(p1),euc2cpx(p2),euc2cpx(p3)) by Def4;
+ hence thesis by COMPLEX2:84;
+end;
+
+theorem for p1,p2,p3 holds angle(p1,p2,p3)=angle(p1-p2,0.REAL 2,p3-p2)
+proof let p1,p2,p3;
+  A1: angle(p1,p2,p3)= angle(euc2cpx(p1),euc2cpx(p2),euc2cpx(p3)) by Def4;
+  A2: angle(p1-p2,0.REAL 2,p3-p2)
+         = angle(euc2cpx(p1-p2),euc2cpx(0.REAL 2),euc2cpx(p3-p2)) by Def4;
+  A3: euc2cpx(p1)-euc2cpx(p2)=euc2cpx(p1-p2) by Th19;
+    euc2cpx(p3)-euc2cpx(p2)=euc2cpx(p3-p2) by Th19;
+ hence thesis by A1,A2,A3,Th21,COMPLEX2:85;
+end;
+
+theorem for p1,p2,p3 st angle(p1,p2,p3) =0 holds
+ Arg(p1-p2)=Arg(p3-p2) & angle(p3,p2,p1)=0
+proof let p1,p2,p3;
+ assume A1: angle(p1,p2,p3) =0;
+  A2: angle(p1,p2,p3)= angle(euc2cpx(p1),euc2cpx(p2),euc2cpx(p3)) by Def4;
+  A3: euc2cpx(p1)-euc2cpx(p2)=euc2cpx(p1-p2) by Th19;
+  A4: euc2cpx(p3)-euc2cpx(p2)=euc2cpx(p3-p2) by Th19;
+  A5: angle(p3,p2,p1)= angle(euc2cpx(p3),euc2cpx(p2),euc2cpx(p1)) by Def4;
+  A6: Arg(p1-p2)=Arg(euc2cpx(p1-p2)) by Def3;
+    Arg(p3-p2)=Arg(euc2cpx(p3-p2)) by Def3;
+ hence thesis by A1,A2,A3,A4,A5,A6,COMPLEX2:88;
+end;
+
+theorem for p1,p2,p3 st angle(p1,p2,p3) <>0 holds
+   angle(p3,p2,p1)=2*PI-angle(p1,p2,p3)
+proof let p1,p2,p3;
+  assume A1: angle(p1,p2,p3) <>0;
+  A2: angle(p1,p2,p3)= angle(euc2cpx(p1),euc2cpx(p2),euc2cpx(p3)) by Def4;
+    angle(p3,p2,p1)=angle(euc2cpx(p3),euc2cpx(p2),euc2cpx(p1)) by Def4;
+   then angle(p3,p2,p1)+angle(p1,p2,p3) = 2*PI by A1,A2,COMPLEX2:94;
+ hence thesis by XCMPLX_1:26;
+end;
+
+theorem for p1,p2,p3 st angle(p3,p2,p1) <>0 holds
+   angle(p3,p2,p1)=2*PI-angle(p1,p2,p3)
+proof let p1,p2,p3;
+ assume A1: angle(p3,p2,p1) <>0;
+  A2: angle(p1,p2,p3)= angle(euc2cpx(p1),euc2cpx(p2),euc2cpx(p3)) by Def4;
+    angle(p3,p2,p1)= angle(euc2cpx(p3),euc2cpx(p2),euc2cpx(p1)) by Def4;
+   then angle(p3,p2,p1)+angle(p1,p2,p3) = 2*PI by A1,A2,COMPLEX2:94;
+ hence thesis by XCMPLX_1:26;
+end;
+
+theorem Th48: for x,y being Element of COMPLEX holds
+  Re (x .|. y) = (Re x)*(Re y)+(Im x)*(Im y)
+proof let x,y be Element of COMPLEX;
+    x .|. y =[* (Re x)*(Re y)+(Im x)*(Im y),-((Re x)*(Im y))+(Im x)*(Re y) *]
+                               by COMPLEX2:42;
+ hence thesis by COMPLEX1:7;
+end;
+
+theorem Th49: for x,y being Element of COMPLEX holds
+  Im (x .|. y) = -((Re x)*(Im y))+(Im x)*(Re y)
+proof let x,y be Element of COMPLEX;
+    x .|. y =[* (Re x)*(Re y)+(Im x)*(Im y),-((Re x)*(Im y))+(Im x)*(Re y) *]
+                               by COMPLEX2:42;
+ hence thesis by COMPLEX1:7;
+end;
+
+theorem Th50: for p,q holds |(p,q)| = p`1*q`1+p`2*q`2
+proof let p,q;
+  A1: |(p,q)|= (1/4)*(|.p+q.|^2 - |.p-q.|^2) by EUCLID_2:71
+       .= (1/4)*( ((p+q)`1)^2+((p+q)`2)^2 - |.p-q.|^2) by JGRAPH_3:10
+       .= (1/4)*( ((p+q)`1)^2+((p+q)`2)^2 - (((p-q)`1)^2+((p-q)`2)^2))
+                                by JGRAPH_3:10
+       .= (1/4)*( ((p+q)`1)^2+((p+q)`2)^2 - ((p-q)`1)^2-((p-q)`2)^2)
+                                by XCMPLX_1:36
+       .= (1/4)*( ((p+q)`1)^2 - ((p-q)`1)^2+((p+q)`2)^2-((p-q)`2)^2)
+                                by XCMPLX_1:29
+       .= (1/4)*( ((p+q)`1)^2 - ((p-q)`1)^2+(((p+q)`2)^2-((p-q)`2)^2))
+                                by XCMPLX_1:29;
+  A2: (p+q)`1=p`1+q`1 by TOPREAL3:7;
+  A3: (p+q)`2=p`2+q`2 by TOPREAL3:7;
+  A4: (p-q)`1=p`1-q`1 by TOPREAL3:8;
+  A5: (p-q)`2=p`2-q`2 by TOPREAL3:8;
+  A6: ((p+q)`1)^2=(p`1)^2+2*p`1*q`1+(q`1)^2 by A2,SQUARE_1:63;
+  A7: ((p+q)`2)^2=(p`2)^2+2*p`2*q`2+(q`2)^2 by A3,SQUARE_1:63;
+  A8: ((p-q)`1)^2=(p`1)^2-2*p`1*q`1+(q`1)^2 by A4,SQUARE_1:64;
+  A9: ((p-q)`2)^2=(p`2)^2-2*p`2*q`2+(q`2)^2 by A5,SQUARE_1:64;
+  A10: ((p+q)`1)^2 - ((p-q)`1)^2=(p`1)^2+2*p`1*q`1+(q`1)^2 -(q`1)^2 - ( (p`1)^2
+     -2*p`1*q`1) by A6,A8,XCMPLX_1:36
+   .=(p`1)^2+2*p`1*q`1 - ( (p`1)^2-2*p`1*q`1) by XCMPLX_1:26
+   .=2*p`1*q`1+(p`1)^2 - (p`1)^2+2*p`1*q`1 by XCMPLX_1:37
+   .=2*p`1*q`1+2*p`1*q`1 by XCMPLX_1:26
+   .=2*(p`1*q`1)+ 2*p`1*q`1 by XCMPLX_1:4
+   .=2*(p`1*q`1)+ 2*(p`1*q`1) by XCMPLX_1:4
+   .=(2+2)*(p`1*q`1) by XCMPLX_1:8
+   .=4*(p`1*q`1);
+    ((p+q)`2)^2 - ((p-q)`2)^2=(p`2)^2+2*p`2*q`2+(q`2)^2 -(q`2)^2 - ( (p`2)^2-2*
+p
+     `2*q`2) by A7,A9,XCMPLX_1:36
+   .=(p`2)^2+2*p`2*q`2 - ( (p`2)^2-2*p`2*q`2) by XCMPLX_1:26
+   .=2*p`2*q`2+(p`2)^2 - (p`2)^2+2*p`2*q`2 by XCMPLX_1:37
+   .=2*p`2*q`2+2*p`2*q`2 by XCMPLX_1:26
+   .=2*(p`2*q`2)+ 2*p`2*q`2 by XCMPLX_1:4
+   .=2*(p`2*q`2)+ 2*(p`2*q`2) by XCMPLX_1:4
+   .=(2+2)*(p`2*q`2) by XCMPLX_1:8
+   .=4*(p`2*q`2);
+  then |(p,q)| =(1/4)*(4*( p`1*q`1+ p`2*q`2)) by A1,A10,XCMPLX_1:8
+         .=(1/4)*4*( p`1*q`1+ p`2*q`2) by XCMPLX_1:4
+         .=1*( p`1*q`1+ p`2*q`2);
+  hence thesis;
+end;
+
+theorem Th51: for p1,p2 holds
+  |(p1,p2)| = Re ((euc2cpx(p1)) .|. (euc2cpx(p2)))
+proof let p1,p2;
+  A1: p1`1=Re euc2cpx(p1) & p1`2= Im euc2cpx(p1) by Th8;
+  A2: p2`1=Re euc2cpx(p2) & p2`2= Im euc2cpx(p2) by Th8;
+ thus |(p1,p2)| = p1`1*p2`1+p1`2*p2`2 by Th50
+                .= Re ((euc2cpx(p1)) .|. (euc2cpx(p2))) by A1,A2,Th48;
+end;
+
+theorem for p1,p2,p3 st p1<>0.REAL 2 & p2<>0.REAL 2 holds
+ ( |(p1,p2)|=0 iff
+ angle(p1,0.REAL 2,p2)=PI/2 or angle(p1,0.REAL 2,p2)=3/2*PI)
+proof let p1,p2,p3;
+  assume A1: p1<>0.REAL 2 & p2<>0.REAL 2;
+   then A2: euc2cpx(p1)<> 0c by Th2,Th20;
+   A3: euc2cpx(p2)<> 0c by A1,Th2,Th20;
+   A4: angle(p1,0.REAL 2,p2)
+   = angle(euc2cpx(p1),euc2cpx(0.REAL 2),euc2cpx(p2)) by Def4;
+     |(p1,p2)| = Re ((euc2cpx(p1)) .|. (euc2cpx(p2))) by Th51;
+ hence thesis by A2,A3,A4,Th21,COMPLEX2:89;
+end;
+
+theorem for p1,p2 st p1<>0.REAL 2 & p2<>0.REAL 2 holds
+ ( -(p1`1*p2`2)+p1`2*p2`1= |.p1.|*|.p2.| or
+   -(p1`1*p2`2)+p1`2*p2`1= -(|.p1.|*|.p2.|)
+    iff angle(p1,0.REAL 2,p2)=PI/2 or angle(p1,0.REAL 2,p2)=3/2*PI)
+proof let p1,p2;
+ assume A1: p1<>0.REAL 2 & p2<>0.REAL 2;
+   then A2: euc2cpx(p1)<> 0c by Th2,Th20;
+   A3: euc2cpx(p2)<> 0c by A1,Th2,Th20;
+   A4: p1`1=Re euc2cpx(p1) & p1`2= Im euc2cpx(p1) by Th8;
+     p2`1=Re euc2cpx(p2) & p2`2= Im euc2cpx(p2) by Th8;
+   then A5: Im ((euc2cpx(p1)) .|. (euc2cpx(p2)))
+    = -(p1`1*p2`2)+p1`2*p2`1 by A4,Th49;
+   A6: |.euc2cpx(p1).|=|.p1.| by Th31;
+   A7: |.euc2cpx(p2).|=|.p2.| by Th31;
+     angle(p1,0.REAL 2,p2)=angle(euc2cpx(p1),euc2cpx(0.REAL 2),euc2cpx(p2))
+                           by Def4;
+ hence thesis by A2,A3,A5,A6,A7,Th21,COMPLEX2:90;
+end;
+
+theorem for p1,p2,p3 st p1<>p2 & p3<>p2 holds
+ ( |( p1-p2,p3-p2 )| = 0 iff
+ angle(p1,p2,p3)=PI/2 or angle(p1,p2,p3)=3/2*PI)
+proof let p1,p2,p3;assume A1: p1<>p2 & p3<>p2;
+  A2: euc2cpx(p1)-euc2cpx(p2)=euc2cpx(p1-p2) by Th19;
+  A3: euc2cpx(p3)-euc2cpx(p2)=euc2cpx(p3-p2) by Th19;
+  A4: angle(p1,p2,p3)=angle(euc2cpx(p1),euc2cpx(p2),euc2cpx(p3)) by Def4;
+A5: |( p1-p2,p3-p2 )| = Re ((euc2cpx(p1-p2)) .|. (euc2cpx(p3-p2)))
+                           by Th51;
+    p1 - p2 <> 0.REAL 2 & p3 - p2 <> 0.REAL 2 by A1,EUCLID:47;
+then A6:euc2cpx(p1-p2) <> 0c & euc2cpx(p3-p2) <> 0c by Th2,Th20;
+ hereby assume |(p1-p2,p3-p2)| = 0;
+   then Re ((euc2cpx(p1-p2)) .|. (euc2cpx(p3-p2))) = 0 by Th51;
+   then angle(euc2cpx(p1-p2),0c,euc2cpx(p3-p2))=PI/2 or
+     angle(euc2cpx(p1-p2),0c,euc2cpx(p3-p2))=3/2*PI
+     by A6,COMPLEX2:89;
+   hence angle(p1,p2,p3)=PI/2 or angle(p1,p2,p3)=3/2*PI
+     by A2,A3,A4,COMPLEX2:85;
+ end;
+ assume angle(p1,p2,p3)=PI/2 or angle(p1,p2,p3)=3/2*PI;
+   then angle(euc2cpx(p1-p2),0c,euc2cpx(p3-p2))=PI/2 or
+     angle(euc2cpx(p1-p2),0c,euc2cpx(p3-p2))=3/2*PI
+      by A2,A3,A4,COMPLEX2:85;
+ hence thesis by A5,A6,COMPLEX2:89;
+end;
+
+theorem for p1,p2,p3 st p1<>p2 & p3<>p2 &
+    (angle(p1,p2,p3)=PI/2 or angle(p1,p2,p3)=3/2*PI) holds
+    (|.p1-p2.|^2+|.p3-p2.|^2=|.p1-p3.|^2)
+proof let p1,p2,p3; assume A1: p1<>p2 & p3<>p2 &
+    (angle(p1,p2,p3)=PI/2 or angle(p1,p2,p3)=3/2*PI);
+  then A2: euc2cpx(p1)<> euc2cpx(p2) by Th6;
+  A3: euc2cpx(p3)<> euc2cpx(p2) by A1,Th6;
+  A4: euc2cpx(p1)-euc2cpx(p2)=euc2cpx(p1-p2) by Th19;
+  A5: euc2cpx(p3)-euc2cpx(p2)=euc2cpx(p3-p2) by Th19;
+  A6: euc2cpx(p1)-euc2cpx(p3)=euc2cpx(p1-p3) by Th19;
+  A7: angle(p1,p2,p3)=angle(euc2cpx(p1),euc2cpx(p2),euc2cpx(p3)) by Def4;
+  A8: |.euc2cpx(p1-p2).|=|.p1-p2.| by Th31;
+  A9: |.euc2cpx(p3-p2).|=|.p3-p2.| by Th31;
+   |.euc2cpx(p1-p3).|=|.p1-p3.| by Th31;
+ hence thesis by A1,A2,A3,A4,A5,A6,A7,A8,A9,COMPLEX2:91;
+end;
+
+theorem :: Sum of inner angles of triangle
+    for p1,p2,p3 st p2<>p1 & p1<>p3 & p3<>p2 &
+  angle(p2,p1,p3)<PI & angle(p1,p3,p2)<PI & angle(p3,p2,p1)<PI holds
+  angle(p2,p1,p3)+angle(p1,p3,p2)+angle(p3,p2,p1)=PI
+proof let p1,p2,p3;assume A1: p2<>p1 & p1<>p3 & p3<>p2 &
+  angle(p2,p1,p3)<PI & angle(p1,p3,p2)<PI & angle(p3,p2,p1)<PI;
+  then A2: euc2cpx(p1)<> euc2cpx(p2) by Th6;
+  A3: euc2cpx(p1)<> euc2cpx(p3) by A1,Th6;
+  A4: euc2cpx(p3)<> euc2cpx(p2) by A1,Th6;
+  A5: angle(p2,p1,p3)=angle(euc2cpx(p2),euc2cpx(p1),euc2cpx(p3)) by Def4;
+  A6: angle(p1,p3,p2)=angle(euc2cpx(p1),euc2cpx(p3),euc2cpx(p2)) by Def4;
+  A7: angle(p3,p2,p1)=angle(euc2cpx(p3),euc2cpx(p2),euc2cpx(p1)) by Def4;
+  per cases by COMPLEX2:84;
+  suppose
+A8: 0 = angle(euc2cpx(p2),euc2cpx(p1),euc2cpx(p3));
+      now per cases by A2,A3,A4,A8,COMPLEX2:101;
+     suppose angle(euc2cpx(p1),euc2cpx(p3),euc2cpx(p2)) = 0 &
+     angle(euc2cpx(p3),euc2cpx(p2),euc2cpx(p1)) = PI;
+     hence thesis by A5,A6,A8,Def4;
+     suppose angle(euc2cpx(p1),euc2cpx(p3),euc2cpx(p2)) = PI &
+     angle(euc2cpx(p3),euc2cpx(p2),euc2cpx(p1)) = 0;
+     hence thesis by A5,A7,A8,Def4;
+     end;
+     hence thesis;
+  suppose A9: 0 < angle(euc2cpx(p2),euc2cpx(p1),euc2cpx(p3));
+   angle(p3,p2,p1)=angle(euc2cpx(p3),euc2cpx(p2),euc2cpx(p1)) &
+  angle(p2,p1,p3)=angle(euc2cpx(p2),euc2cpx(p1),euc2cpx(p3)) &
+  angle(p1,p3,p2)=angle(euc2cpx(p1),euc2cpx(p3),euc2cpx(p2)) by Def4;
+ hence thesis by A1,A2,A3,A9,COMPLEX2:98;
+end;
+
+definition let n be Nat,p1,p2,p3 be Point of TOP-REAL n;
+  func Triangle(p1,p2,p3) -> Subset of TOP-REAL n equals
+:Def5: LSeg(p1,p2) \/ LSeg(p2,p3) \/ LSeg(p3,p1);
+correctness;
+end;
+
+definition let n be Nat,p1,p2,p3 be Point of TOP-REAL n;
+  func closed_inside_of_triangle(p1,p2,p3) -> Subset of TOP-REAL n equals
+:Def6: {p where p is Point of TOP-REAL n:
+        ex a1,a2,a3 being Real st 0<=a1 & 0<=a2 & 0<=a3 & a1+a2+a3=1 &
+        p=a1*p1+a2*p2+a3*p3};
+ correctness
+ proof
+   defpred P[set] means
+    ex a1,a2,a3 being Real st 0<=a1 & 0<=a2 & 0<=a3 & a1+a2+a3=1 &
+        $1=a1*p1+a2*p2+a3*p3;
+   {p where p is Element of TOP-REAL n: P[p]}
+     is Subset of TOP-REAL n from SubsetD;
+  hence thesis;
+ end;
+end;
+
+definition let n be Nat,p1,p2,p3 be Point of TOP-REAL n;
+  func inside_of_triangle(p1,p2,p3) -> Subset of TOP-REAL n equals
+:Def7: closed_inside_of_triangle(p1,p2,p3) \ Triangle(p1,p2,p3);
+ correctness;
+end;
+
+definition let n be Nat,p1,p2,p3 be Point of TOP-REAL n;
+  func outside_of_triangle(p1,p2,p3) -> Subset of TOP-REAL n equals
+:Def8: {p where p is Point of TOP-REAL n:
+        ex a1,a2,a3 being Real st (0>a1 or 0>a2 or 0>a3) & a1+a2+a3=1 &
+        p=a1*p1+a2*p2+a3*p3};
+ correctness
+ proof
+   defpred P[set] means
+    ex a1,a2,a3 being Real st (0>a1 or 0>a2 or 0>a3) & a1+a2+a3=1 &
+        $1=a1*p1+a2*p2+a3*p3;
+     {p where p is Point of TOP-REAL n: P[p]}
+        is Subset of TOP-REAL n from SubsetD;
+  hence thesis;
+ end;
+end;
+
+definition let n be Nat,p1,p2,p3 be Point of TOP-REAL n;
+  func plane(p1,p2,p3) -> Subset of TOP-REAL n equals
+:Def9: outside_of_triangle(p1,p2,p3) \/ closed_inside_of_triangle(p1,p2,p3);
+ correctness;
+end;
+
+theorem Th57: for n being Nat,p1,p2,p3,p being Point of TOP-REAL n st
+ p in plane(p1,p2,p3) holds
+ ex a1,a2,a3 being Real st a1+a2+a3=1 & p=a1*p1+a2*p2+a3*p3
+proof let n be Nat,p1,p2,p3,p be Point of TOP-REAL n;
+  assume A1: p in plane(p1,p2,p3);
+  A2: plane(p1,p2,p3)= outside_of_triangle(p1,p2,p3)
+               \/ closed_inside_of_triangle(p1,p2,p3) by Def9;
+  A3: outside_of_triangle(p1,p2,p3)
+  = {p0 where p0 is Point of TOP-REAL n:
+        ex a1,a2,a3 being Real st (0>a1 or 0>a2 or 0>a3) & a1+a2+a3=1 &
+        p0=a1*p1+a2*p2+a3*p3} by Def8;
+  A4: closed_inside_of_triangle(p1,p2,p3)
+  = {p0 where p0 is Point of TOP-REAL n:
+        ex a1,a2,a3 being Real st 0<=a1 & 0<=a2 & 0<=a3 & a1+a2+a3=1 &
+        p0=a1*p1+a2*p2+a3*p3} by Def6;
+    now per cases by A1,A2,XBOOLE_0:def 2;
+  case p in outside_of_triangle(p1,p2,p3);
+    then consider p4 being Point of TOP-REAL n such that
+    A5: p4=p &
+        ex a1,a2,a3 being Real st (0>a1 or 0>a2 or 0>a3) & a1+a2+a3=1 &
+        p4=a1*p1+a2*p2+a3*p3 by A3;
+    consider a01,a02,a03 being Real such that
+    A6: (0>a01 or 0>a02 or 0>a03) & a01+a02+a03=1 &
+        p=a01*p1+a02*p2+a03*p3 by A5;
+   thus ex a1,a2,a3 being Real st a1+a2+a3=1 & p=a1*p1+a2*p2+a3*p3 by A6;
+  case p in closed_inside_of_triangle(p1,p2,p3);
+    then consider p4 being Point of TOP-REAL n such that
+    A7: p4=p &
+        ex a1,a2,a3 being Real st 0<=a1 & 0<=a2 & 0<=a3 & a1+a2+a3=1 &
+        p4=a1*p1+a2*p2+a3*p3 by A4;
+    consider a01,a02,a03 being Real such that
+    A8: 0<=a01 & 0<=a02 & 0<=a03 & a01+a02+a03=1 &
+        p=a01*p1+a02*p2+a03*p3 by A7;
+   thus ex a1,a2,a3 being Real st a1+a2+a3=1 & p=a1*p1+a2*p2+a3*p3 by A8;
+  end;
+ hence thesis;
+end;
+
+theorem for n being Nat,p1,p2,p3 being Point of TOP-REAL n holds
+      Triangle(p1,p2,p3) c= closed_inside_of_triangle(p1,p2,p3)
+proof let n be Nat,p1,p2,p3 be Point of TOP-REAL n;
+    LSeg(p1,p2) \/ LSeg(p2,p3) \/ LSeg(p3,p1)
+  c= closed_inside_of_triangle(p1,p2,p3)
+  proof let x be set;
+    assume A1: x in LSeg(p1,p2) \/ LSeg(p2,p3) \/ LSeg(p3,p1);
+    then reconsider p0=x as Point of TOP-REAL n;
+    A2: x in LSeg(p1,p2) \/ LSeg(p2,p3) or x in LSeg(p3,p1)
+                             by A1,XBOOLE_0:def 2;
+      now per cases by A2,XBOOLE_0:def 2;
+    case x in LSeg(p1,p2);
+      then x in { (1-lambda)*p1 + lambda*p2 where lambda is Real:
+                  0 <= lambda & lambda <= 1 } by TOPREAL1:def 4;
+      then consider lambda being Real such that
+      A3: x=(1-lambda)*p1 + lambda*p2 & 0 <= lambda & lambda <= 1;
+      A4: 1-lambda>=0 by A3,SQUARE_1:12;
+      A5: (1-lambda)+lambda+0=1 by XCMPLX_1:27;
+        p0=(1-lambda)*p1 + lambda*p2+0.REAL n by A3,EUCLID:31
+       .=(1-lambda)*p1 + lambda*p2+(0)*p3 by EUCLID:33;
+     hence ex a1,a2,a3 being Real st 0<=a1 & 0<=a2 & 0<=a3 & a1+a2+a3=1 &
+        p0=a1*p1+a2*p2+a3*p3 by A3,A4,A5;
+    case x in LSeg(p2,p3);
+      then x in { (1-lambda)*p2 + lambda*p3 where lambda is Real:
+                  0 <= lambda & lambda <= 1 } by TOPREAL1:def 4;
+      then consider lambda being Real such that
+      A6: x=(1-lambda)*p2 + lambda*p3 & 0 <= lambda & lambda <= 1;
+      A7: 1-lambda>=0 by A6,SQUARE_1:12;
+      A8: 0+(1-lambda)+lambda=1 by XCMPLX_1:27;
+        p0=0.REAL n +(1-lambda)*p2 + lambda*p3 by A6,EUCLID:31
+       .=(0)*p1+(1-lambda)*p2 + lambda*p3 by EUCLID:33;
+     hence ex a1,a2,a3 being Real st 0<=a1 & 0<=a2 & 0<=a3 & a1+a2+a3=1 &
+        p0=a1*p1+a2*p2+a3*p3 by A6,A7,A8;
+    case x in LSeg(p3,p1);
+      then x in { (1-lambda)*p3 + lambda*p1 where lambda is Real:
+                  0 <= lambda & lambda <= 1 } by TOPREAL1:def 4;
+      then consider lambda being Real such that
+      A9: x=(1-lambda)*p3 + lambda*p1 & 0 <= lambda & lambda <= 1;
+      A10: 1-lambda>=0 by A9,SQUARE_1:12;
+      A11: lambda+0+(1-lambda)=1 by XCMPLX_1:27;
+        p0=lambda*p1+0.REAL n+ (1-lambda)*p3 by A9,EUCLID:31
+       .=lambda*p1+(0)*p2+ (1-lambda)*p3 by EUCLID:33;
+     hence ex a1,a2,a3 being Real st 0<=a1 & 0<=a2 & 0<=a3 & a1+a2+a3=1 &
+        p0=a1*p1+a2*p2+a3*p3 by A9,A10,A11;
+    end;
+    then x in {p where p is Point of TOP-REAL n:
+        ex a1,a2,a3 being Real st 0<=a1 & 0<=a2 & 0<=a3 & a1+a2+a3=1 &
+        p=a1*p1+a2*p2+a3*p3};
+   hence x in closed_inside_of_triangle(p1,p2,p3) by Def6;
+  end;
+ hence thesis by Def5;
+end;
+
+definition let n be Nat,q1,q2 be Point of TOP-REAL n;
+  pred q1,q2 are_lindependent2 means :Def10:
+    for a1,a2 being Real st a1*q1+a2*q2=0.REAL n holds a1=0 & a2=0;
+  antonym q1,q2 are_ldependent2;
+end;
+
+theorem Th59: for n being Nat,q1,q2 being Point of TOP-REAL n st
+ q1,q2 are_lindependent2 holds q1<>q2 & q1<>0.REAL n & q2<>0.REAL n
+proof let n be Nat,q1,q2 be Point of TOP-REAL n;
+ assume A1: q1,q2 are_lindependent2;
+   assume A2: q1=q2 or q1=0.REAL n or q2=0.REAL n;
+      now per cases by A2;
+    case A3: q1=q2;
+       1*q1+(-1)*q2=q1+(-1)*q2 by EUCLID:33 .=q1+(-q2) by EUCLID:43
+     .=0.REAL n by A3,EUCLID:40;
+     hence contradiction by A1,Def10;
+    case q1=0.REAL n;
+     then 1*q1+(0)*q2=0.REAL n+(0)*q2 by EUCLID:32
+      .=0.REAL n+0.REAL n by EUCLID:33
+     .=0.REAL n by EUCLID:31;
+     hence contradiction by A1,Def10;
+    case q2=0.REAL n;
+     then (0)*q1+1*q2=(0)*q1+0.REAL n by EUCLID:32
+      .=0.REAL n+0.REAL n by EUCLID:33
+     .=0.REAL n by EUCLID:31;
+     hence contradiction by A1,Def10;
+    end;
+   hence contradiction;
+end;
+
+theorem Th60: for n being Nat,p1,p2,p3,p0 being Point of TOP-REAL n st
+p2-p1,p3-p1 are_lindependent2 & p0 in plane(p1,p2,p3)
+holds (ex a1,a2,a3 being Real st p0=a1*p1+a2*p2+a3*p3 & a1+a2+a3=1
+   & (for b1,b2,b3 being Real st p0=b1*p1+b2*p2+b3*p3 & b1+b2+b3=1
+   holds b1=a1 & b2=a2 & b3=a3))
+proof let n be Nat,p1,p2,p3,p0 be Point of TOP-REAL n;
+  assume A1: p2-p1,p3-p1 are_lindependent2 & p0 in plane(p1,p2,p3);
+   set q2=p2-p1,q3=p3-p1;
+  consider a01,a02,a03 being Real such that
+  A2: a01+a02+a03=1 & p0=a01*p1+a02*p2+a03*p3 by A1,Th57;
+        for b1,b2,b3 being Real st p0=b1*p1+b2*p2+b3*p3 & b1+b2+b3=1
+          holds b1=a01 & b2=a02 & b3=a03
+       proof let b1,b2,b3 be Real;
+        assume A3: p0=b1*p1+b2*p2+b3*p3 & b1+b2+b3=1;
+         then A4: p0+-p1=b1*p1+b2*p2+b3*p3+-(b1+b2+b3)*p1 by EUCLID:33
+         .=b1*p1+b2*p2+b3*p3+-((b1+b2)*p1+b3*p1) by EUCLID:37
+         .=b1*p1+b2*p2+b3*p3+-(b1*p1+b2*p1+b3*p1) by EUCLID:37
+          .=b1*p1+b2*p2+b3*p3+(-(b1*p1+b2*p1)+-b3*p1) by EUCLID:42
+         .=b1*p1+b2*p2+b3*p3+(-b1*p1+-b2*p1+-b3*p1) by EUCLID:42
+         .=b1*p1+(b2*p2+b3*p3)+(-b1*p1+-b2*p1+-b3*p1) by EUCLID:30
+         .=b1*p1+(b2*p2+b3*p3)+(-b1*p1+(-b2*p1+-b3*p1)) by EUCLID:30
+         .=(b2*p2+b3*p3)+b1*p1+-b1*p1+(-b2*p1+-b3*p1) by EUCLID:30
+         .=(b2*p2+b3*p3)+b1*p1-b1*p1+(-b2*p1+-b3*p1) by EUCLID:45
+         .=(b2*p2+b3*p3)+(-b2*p1+-b3*p1) by EUCLID:52
+         .=b2*p2+b3*p3+-b2*p1+-b3*p1 by EUCLID:30
+         .=b2*p2+-b2*p1+b3*p3+-b3*p1 by EUCLID:30
+         .=b2*p2+b2*(-p1)+b3*p3+-b3*p1 by EUCLID:44
+         .=b2*(p2+(-p1))+b3*p3+-b3*p1 by EUCLID:36
+         .=b2*(p2+(-p1))+(b3*p3+-b3*p1) by EUCLID:30
+         .=b2*(p2+(-p1))+(b3*p3+b3*(-p1)) by EUCLID:44
+         .=b2*(p2+(-p1))+b3*(p3+(-p1)) by EUCLID:36
+         .=b2*q2+b3*(p3+(-p1)) by EUCLID:45
+         .=b2*q2+b3*q3 by EUCLID:45;
+           p0+-p1=a01*p1+a02*p2+a03*p3+-(a01+a02+a03)*p1 by A2,EUCLID:33
+         .=a01*p1+a02*p2+a03*p3+-((a01+a02)*p1+a03*p1) by EUCLID:37
+         .=a01*p1+a02*p2+a03*p3+-(a01*p1+a02*p1+a03*p1) by EUCLID:37
+         .=a01*p1+a02*p2+a03*p3+(-(a01*p1+a02*p1)+-a03*p1) by EUCLID:42
+         .=a01*p1+a02*p2+a03*p3+(-a01*p1+-a02*p1+-a03*p1) by EUCLID:42
+         .=a01*p1+(a02*p2+a03*p3)+(-a01*p1+-a02*p1+-a03*p1) by EUCLID:30
+         .=a01*p1+(a02*p2+a03*p3)+(-a01*p1+(-a02*p1+-a03*p1)) by EUCLID:30
+         .=(a02*p2+a03*p3)+a01*p1+-a01*p1+(-a02*p1+-a03*p1) by EUCLID:30
+         .=(a02*p2+a03*p3)+a01*p1-a01*p1+(-a02*p1+-a03*p1) by EUCLID:45
+         .=(a02*p2+a03*p3)+(-a02*p1+-a03*p1) by EUCLID:52
+         .=a02*p2+a03*p3+-a02*p1+-a03*p1 by EUCLID:30
+         .=a02*p2+-a02*p1+a03*p3+-a03*p1 by EUCLID:30
+         .=a02*p2+a02*(-p1)+a03*p3+-a03*p1 by EUCLID:44
+         .=a02*(p2+(-p1))+a03*p3+-a03*p1 by EUCLID:36
+         .=a02*(p2+(-p1))+(a03*p3+-a03*p1) by EUCLID:30
+         .=a02*(p2+(-p1))+(a03*p3+a03*(-p1)) by EUCLID:44
+         .=a02*(p2+(-p1))+a03*(p3+(-p1)) by EUCLID:36
+         .=a02*q2+a03*(p3+(-p1)) by EUCLID:45
+         .=a02*q2+a03*q3 by EUCLID:45;
+         then b2*q2+b3*q3+-(a02*q2+a03*q3)=0.REAL n by A4,EUCLID:40;
+         then b2*q2+b3*q3+(-a02*q2+-a03*q3)=0.REAL n by EUCLID:42;
+         then b2*q2+b3*q3+-a02*q2+-a03*q3=0.REAL n by EUCLID:30;
+         then b2*q2+-a02*q2+b3*q3+-a03*q3=0.REAL n by EUCLID:30;
+         then b2*q2+(-a02)*q2+b3*q3+-a03*q3=0.REAL n by EUCLID:44;
+         then (b2+-a02)*q2+b3*q3+-a03*q3=0.REAL n by EUCLID:37;
+         then (b2+-a02)*q2+(b3*q3+-a03*q3)=0.REAL n by EUCLID:30;
+         then (b2+-a02)*q2+(b3*q3+(-a03)*q3)=0.REAL n by EUCLID:44;
+         then (b2+-a02)*q2+(b3+-a03)*q3=0.REAL n by EUCLID:37;
+         then A5: b2+-a02=0 & b3+-a03=0 by A1,Def10;
+         then b2-a02+a02=0+a02 & b3+-a03=0 by XCMPLX_0:def 8;
+         then A6: b2=a02 & b3+-a03=0 by XCMPLX_1:27;
+           b3-a03+a03=0+a03 by A5,XCMPLX_0:def 8;
+         then A7: b3=a03 by XCMPLX_1:27;
+           -b1+1=-b1+(b1+b2)+b3 by A3,XCMPLX_1:1
+         .=-b1+b1+b2+b3 by XCMPLX_1:1 .=0+b2+b3 by XCMPLX_0:def 6
+         .=b2+b3;
+         then -b1=b2+b3-1 by XCMPLX_1:26;
+         then A8: b1=-(b2+b3-1);
+           -a01+1=-a01+(a01+a02)+a03 by A2,XCMPLX_1:1
+         .=-a01+a01+a02+a03 by XCMPLX_1:1 .=0+a02+a03 by XCMPLX_0:def 6
+         .=a02+a03;
+         then -a01=a02+a03-1 by XCMPLX_1:26;
+        hence b1=a01 & b2=a02 & b3=a03 by A6,A7,A8;
+       end;
+   hence thesis by A2;
+end;
+
+theorem Th61: for n being Nat,p1,p2,p3,p0 being Point of TOP-REAL n st
+(ex a1,a2,a3 being Real st p0=a1*p1+a2*p2+a3*p3 & a1+a2+a3=1)
+holds p0 in plane(p1,p2,p3)
+proof let n be Nat,p1,p2,p3,p0 be Point of TOP-REAL n;
+   given a1,a2,a3 being Real such that
+   A1: p0=a1*p1+a2*p2+a3*p3 & a1+a2+a3=1;
+   A2: plane(p1,p2,p3)= outside_of_triangle(p1,p2,p3)
+               \/ closed_inside_of_triangle(p1,p2,p3) by Def9;
+   A3: outside_of_triangle(p1,p2,p3)
+     = {p where p is Point of TOP-REAL n:
+        ex a1,a2,a3 being Real st (0>a1 or 0>a2 or 0>a3) & a1+a2+a3=1 &
+        p=a1*p1+a2*p2+a3*p3} by Def8;
+   A4: closed_inside_of_triangle(p1,p2,p3)
+     = {p where p is Point of TOP-REAL n:
+        ex a1,a2,a3 being Real st 0<=a1 & 0<=a2 & 0<=a3 & a1+a2+a3=1 &
+        p=a1*p1+a2*p2+a3*p3} by Def6;
+     now per cases;
+   case 0>a1 or 0>a2 or 0>a3;
+     then p0 in outside_of_triangle(p1,p2,p3) by A1,A3;
+    hence p0 in plane(p1,p2,p3) by A2,XBOOLE_0:def 2;
+   case 0<=a1 & 0<=a2 & 0<=a3;
+     then p0 in closed_inside_of_triangle(p1,p2,p3) by A1,A4;
+    hence p0 in plane(p1,p2,p3) by A2,XBOOLE_0:def 2;
+   end;
+  hence p0 in plane(p1,p2,p3);
+end;
+
+theorem for n being Nat,p1,p2,p3 being Point of TOP-REAL n holds
+  plane(p1,p2,p3)={p where p is Point of TOP-REAL n:
+   ex a1,a2,a3 being Real st a1+a2+a3=1 & p=a1*p1+a2*p2+a3*p3}
+proof let n be Nat,p1,p2,p3 be Point of TOP-REAL n;
+  thus plane(p1,p2,p3) c= {p where p is Point of TOP-REAL n:
+   ex a1,a2,a3 being Real st a1+a2+a3=1 & p=a1*p1+a2*p2+a3*p3}
+   proof let x be set;assume
+     A1: x in plane(p1,p2,p3);
+     then reconsider p0=x as Point of TOP-REAL n;
+     consider a1,a2,a3 being Real such that
+     A2: a1+a2+a3=1 & p0=a1*p1+a2*p2+a3*p3 by A1,Th57;
+    thus x in {p where p is Point of TOP-REAL n:
+     ex a1,a2,a3 being Real st a1+a2+a3=1 & p=a1*p1+a2*p2+a3*p3} by A2;
+   end;
+    let x be set;assume x in {p where p is Point of TOP-REAL n:
+        ex a1,a2,a3 being Real st a1+a2+a3=1 & p=a1*p1+a2*p2+a3*p3};
+      then consider p being Point of TOP-REAL n such that
+      A3: p=x & ex a1,a2,a3 being Real st a1+a2+a3=1 & p=a1*p1+a2*p2+a3*p3;
+     thus x in plane(p1,p2,p3) by A3,Th61;
+end;
+
+theorem Th63: for p1,p2,p3 st p2-p1,p3-p1 are_lindependent2 holds
+  plane(p1,p2,p3)=REAL 2
+proof let p1,p2,p3;
+ assume A1: p2-p1,p3-p1 are_lindependent2;
+     the carrier of TOP-REAL 2=REAL 2 by EUCLID:25;
+   hence plane(p1,p2,p3) c= REAL 2;
+   let x be set;assume x in REAL 2;
+     then reconsider p0=x as Point of TOP-REAL 2 by EUCLID:25;
+    set q2=p2-p1,q3=p3-p1,p=p0-p1;
+    A2: q2<>0.REAL 2 & q3<>0.REAL 2 by A1,Th59;
+      now per cases by A2,EUCLID:57,58;
+    case A3: q3`1<>0;
+      A4: now assume q2`2*q3`1-q2`1*q3`2=0;
+        then q2`2*q3`1=0+q2`1*q3`2 by XCMPLX_1:27;
+        then q2`2=q2`1*q3`2/q3`1 by A3,XCMPLX_1:90;
+        then q2 = |[q2`1,q2`1*q3`2/q3`1]| by EUCLID:57
+           .=|[q2`1*1,q2`1*q3`2*(q3`1)"]| by XCMPLX_0:def 9
+           .=|[q2`1*1,q2`1*(q3`2*(q3`1)")]| by XCMPLX_1:4
+           .=(q2`1)*|[1,q3`2*(q3`1)"]| by EUCLID:62
+           .=(q2`1)*|[(q3`1)"*q3`1,(q3`1)"*q3`2]| by A3,XCMPLX_0:def 7
+           .=(q2`1)*((q3`1)"*|[q3`1,q3`2]|) by EUCLID:62
+           .=(q2`1)*((q3`1)"*q3) by EUCLID:57
+           .=(q2`1)*(q3`1)"*q3 by EUCLID:34;
+        then q2+-((q2`1)*(q3`1)"*q3)=0.REAL 2 by EUCLID:40;
+        then 1*q2+-((q2`1)*(q3`1)"*q3)=0.REAL 2 by EUCLID:33;
+        then 1*q2+(-((q2`1)*(q3`1)"))*q3=0.REAL 2 by EUCLID:44;
+       hence contradiction by A1,Def10;
+      end;
+      set a=(p`2*q3`1-q3`2*p`1)/(q2`2*q3`1-q2`1*q3`2);
+      set b=(p`1-a*q2`1)/q3`1;
+      A5: a*(q2`1)+b*(q3`1)=a*q2`1+(p`1-a*q2`1) by A3,XCMPLX_1:88
+      .=p`1 by XCMPLX_1:27;
+      A6: a*(q2`2)+b*(q3`2)=a*q2`2+(p`1/q3`1-a*q2`1/q3`1)*q3`2 by XCMPLX_1:121
+      .=a*q2`2+(p`1/q3`1*q3`2-a*q2`1/q3`1*q3`2) by XCMPLX_1:40
+      .=a*q2`2+p`1/q3`1*q3`2-a*q2`1/q3`1*q3`2 by XCMPLX_1:29
+      .=a*q2`2-a*q2`1/q3`1*q3`2+p`1/q3`1*q3`2 by XCMPLX_1:29
+      .=a*q2`2-a*q2`1*(q3`1")*q3`2+p`1/q3`1*q3`2 by XCMPLX_0:def 9
+      .=a*q2`2-a*q2`1*(q3`1"*q3`2)+p`1/q3`1*q3`2 by XCMPLX_1:4
+      .=a*q2`2-a*(q2`1*(q3`1"*q3`2))+p`1/q3`1*q3`2 by XCMPLX_1:4
+      .=a*(q2`2-q2`1*((q3`1)"*q3`2))+p`1/q3`1*q3`2 by XCMPLX_1:40
+      .=a*(q2`2-q2`1*(q3`1)"*q3`2)+p`1/q3`1*q3`2 by XCMPLX_1:4
+      .=a*(q2`2-q2`1/(q3`1)*q3`2)+p`1/q3`1*q3`2 by XCMPLX_0:def 9
+      .=a*(q2`2/q3`1*q3`1-q2`1/q3`1*q3`2)+p`1/q3`1*q3`2 by A3,XCMPLX_1:88
+      .=a*((q3`1/q3`1)*q2`2-q2`1/q3`1*q3`2)+p`1/q3`1*q3`2 by XCMPLX_1:76
+      .=a*(q3`1*(q3`1)"*q2`2-q2`1/(q3`1)*q3`2)+p`1/q3`1*q3`2
+                                       by XCMPLX_0:def 9
+      .=a*(q2`2*(q3`1*(q3`1)")-(q3`1)"*q2`1*q3`2)+p`1/q3`1*q3`2
+        by XCMPLX_0:def 9
+      .=a*(q2`2*(q3`1*(q3`1)")-q2`1*q3`2*(q3`1)")+p`1/q3`1*q3`2
+                                        by XCMPLX_1:4
+      .=a*(q2`2*q3`1*(q3`1)"-q2`1*q3`2*(q3`1)")+p`1/q3`1*q3`2
+                                        by XCMPLX_1:4
+      .=a*((q2`2*q3`1-q2`1*q3`2)*(q3`1)")+p`1/q3`1*q3`2 by XCMPLX_1:40
+      .=a*(q2`2*q3`1-q2`1*q3`2)*(q3`1)"+p`1/q3`1*q3`2 by XCMPLX_1:4
+      .=(p`2*q3`1-q3`2*p`1)*(q3`1)"+p`1/q3`1*q3`2 by A4,XCMPLX_1:88
+      .=(p`2*q3`1-q3`2*p`1)*(q3`1)"+(q3`1)"*p`1*q3`2 by XCMPLX_0:def 9
+      .=(p`2*q3`1-q3`2*p`1)*(q3`1)"+(q3`1)"*(q3`2*p`1) by XCMPLX_1:4
+      .=((p`2*q3`1-q3`2*p`1)+(q3`2*p`1))*(q3`1)" by XCMPLX_1:8
+      .=(p`2*q3`1)*(q3`1)" by XCMPLX_1:27
+      .=(p`2*q3`1)/(q3`1) by XCMPLX_0:def 9
+      .=p`2 by A3,XCMPLX_1:90;
+      A7: a*q2+b*q3=a*|[q2`1,q2`2]|+b*q3 by EUCLID:57
+      .= a*|[q2`1,q2`2]|+b*|[q3`1,q3`2]| by EUCLID:57
+      .= |[a*(q2`1),a*(q2`2)]|+b*|[q3`1,q3`2]| by EUCLID:62
+      .= |[a*(q2`1),a*(q2`2)]|+|[b*(q3`1),b*(q3`2)]| by EUCLID:62
+      .= |[a*(q2`1)+b*(q3`1),a*(q2`2)+b*(q3`2)]|
+                                by EUCLID:60
+      .= p by A5,A6,EUCLID:57;
+        a*q2+b*q3=a*p2-a*p1+b*(p3-p1) by EUCLID:53
+      .= a*p2-a*p1+(b*p3-b*p1) by EUCLID:53
+      .=a*p2+-a*p1+(b*p3-b*p1) by EUCLID:45
+      .=a*p2+-a*p1+(b*p3+-b*p1) by EUCLID:45
+      .=a*p2+-a*p1+(b*p3+(-b)*p1) by EUCLID:44
+      .=a*p2+(-a)*p1+((-b)*p1+b*p3) by EUCLID:44
+      .=a*p2+(-a)*p1+(-b)*p1+b*p3 by EUCLID:30
+      .=a*p2+((-a)*p1+(-b)*p1)+b*p3 by EUCLID:30
+      .=(-a+-b)*p1+a*p2+b*p3 by EUCLID:37;
+      then A8: p0=p1+((-a+-b)*p1+a*p2+b*p3) by A7,EUCLID:52
+      .= p1+((-a+-b)*p1+a*p2)+b*p3 by EUCLID:30
+      .= p1+(-a+-b)*p1+a*p2+b*p3 by EUCLID:30
+      .= 1*p1+(-a+-b)*p1+a*p2+b*p3 by EUCLID:33
+      .=(1+(-a+-b))*p1+a*p2+b*p3 by EUCLID:37;
+        1+(-a+-b)+a+b=1+-b+-a+a+b by XCMPLX_1:1
+      .=1+-b-a+a+b by XCMPLX_0:def 8 .=1+-b+b by XCMPLX_1:27
+      .=1-b+b by XCMPLX_0:def 8
+      .=1 by XCMPLX_1:27;
+     hence x in plane(p1,p2,p3) by A8,Th61;
+    case A9: q3`2<>0;
+      A10: now assume q2`2*q3`1-q2`1*q3`2=0;
+        then q2`2*q3`1=0+q2`1*q3`2 by XCMPLX_1:27;
+        then q2`1=q2`2*q3`1/q3`2 by A9,XCMPLX_1:90;
+        then q2 = |[q2`2*q3`1/q3`2,q2`2]| by EUCLID:57
+           .=|[q2`2*q3`1*(q3`2)",q2`2*1]| by XCMPLX_0:def 9
+           .=|[q2`2*(q3`1*(q3`2)"),q2`2*1]| by XCMPLX_1:4
+           .=(q2`2)*|[q3`1*(q3`2)",1]| by EUCLID:62
+           .=(q2`2)*|[(q3`2)"*q3`1,(q3`2)"*q3`2]| by A9,XCMPLX_0:def 7
+           .=(q2`2)*((q3`2)"*|[q3`1,q3`2]|) by EUCLID:62
+           .=(q2`2)*((q3`2)"*q3) by EUCLID:57
+           .=(q2`2)*(q3`2)"*q3 by EUCLID:34;
+        then q2+-((q2`2)*(q3`2)"*q3)=0.REAL 2 by EUCLID:40;
+        then 1*q2+-((q2`2)*(q3`2)"*q3)=0.REAL 2 by EUCLID:33;
+        then 1*q2+(-((q2`2)*(q3`2)"))*q3=0.REAL 2 by EUCLID:44;
+       hence contradiction by A1,Def10;
+      end;
+      set a=(p`1*q3`2-q3`1*p`2)/(q2`1*q3`2-q2`2*q3`1);
+      set b=(p`2-a*q2`2)/q3`2;
+        -(q2`2*q3`1+-q2`1*q3`2)<> -0 by A10,XCMPLX_0:def 8;
+      then q2`1*q3`2+-q2`2*q3`1<> 0 by XCMPLX_1:141;
+      then A11: q2`1*q3`2-q2`2*q3`1<>0 by XCMPLX_0:def 8;
+      A12: a*(q2`2)+b*(q3`2)=a*q2`2+(p`2-a*q2`2) by A9,XCMPLX_1:88
+      .=p`2 by XCMPLX_1:27;
+      A13: a*(q2`1)+b*(q3`1)=a*q2`1+(p`2/q3`2-a*q2`2/q3`2)*q3`1 by XCMPLX_1:121
+      .=a*q2`1+(p`2/q3`2*q3`1-a*q2`2/q3`2*q3`1) by XCMPLX_1:40
+      .=a*q2`1+p`2/q3`2*q3`1-a*q2`2/q3`2*q3`1 by XCMPLX_1:29
+      .=a*q2`1-a*q2`2/q3`2*q3`1+p`2/q3`2*q3`1 by XCMPLX_1:29
+      .=a*q2`1-a*q2`2*(q3`2")*q3`1+p`2/q3`2*q3`1 by XCMPLX_0:def 9
+      .=a*q2`1-a*q2`2*(q3`2"*q3`1)+p`2/q3`2*q3`1 by XCMPLX_1:4
+      .=a*q2`1-a*(q2`2*(q3`2"*q3`1))+p`2/q3`2*q3`1 by XCMPLX_1:4
+      .=a*(q2`1-q2`2*((q3`2)"*q3`1))+p`2/q3`2*q3`1 by XCMPLX_1:40
+      .=a*(q2`1-q2`2*(q3`2)"*q3`1)+p`2/q3`2*q3`1 by XCMPLX_1:4
+      .=a*(q2`1-q2`2/(q3`2)*q3`1)+p`2/q3`2*q3`1 by XCMPLX_0:def 9
+      .=a*(q2`1/q3`2*q3`2-q2`2/q3`2*q3`1)+p`2/q3`2*q3`1 by A9,XCMPLX_1:88
+      .=a*((q3`2/q3`2)*q2`1-q2`2/q3`2*q3`1)+p`2/q3`2*q3`1 by XCMPLX_1:76
+      .=a*(q3`2*(q3`2)"*q2`1-q2`2/(q3`2)*q3`1)+p`2/q3`2*q3`1
+                                       by XCMPLX_0:def 9
+      .=a*(q2`1*(q3`2*(q3`2)")-(q3`2)"*q2`2*q3`1)+p`2/q3`2*q3`1
+        by XCMPLX_0:def 9
+      .=a*(q2`1*(q3`2*(q3`2)")-q2`2*q3`1*(q3`2)")+p`2/q3`2*q3`1
+                                        by XCMPLX_1:4
+      .=a*(q2`1*q3`2*(q3`2)"-q2`2*q3`1*(q3`2)")+p`2/q3`2*q3`1
+                                        by XCMPLX_1:4
+      .=a*((q2`1*q3`2-q2`2*q3`1)*(q3`2)")+p`2/q3`2*q3`1 by XCMPLX_1:40
+      .=a*(q2`1*q3`2-q2`2*q3`1)*(q3`2)"+p`2/q3`2*q3`1 by XCMPLX_1:4
+      .=(p`1*q3`2-q3`1*p`2)*(q3`2)"+p`2/q3`2*q3`1 by A11,XCMPLX_1:88
+      .=(p`1*q3`2-q3`1*p`2)*(q3`2)"+(q3`2)"*p`2*q3`1 by XCMPLX_0:def 9
+      .=(p`1*q3`2-q3`1*p`2)*(q3`2)"+(q3`2)"*(q3`1*p`2) by XCMPLX_1:4
+      .=((p`1*q3`2-q3`1*p`2)+(q3`1*p`2))*(q3`2)" by XCMPLX_1:8
+      .=(p`1*q3`2)*(q3`2)" by XCMPLX_1:27
+      .=(p`1*q3`2)/(q3`2) by XCMPLX_0:def 9
+      .=p`1 by A9,XCMPLX_1:90;
+      A14: a*q2+b*q3=a*|[q2`1,q2`2]|+b*q3 by EUCLID:57
+      .= a*|[q2`1,q2`2]|+b*|[q3`1,q3`2]| by EUCLID:57
+      .= |[a*(q2`1),a*(q2`2)]|+b*|[q3`1,q3`2]| by EUCLID:62
+      .= |[a*(q2`1),a*(q2`2)]|+|[b*(q3`1),b*(q3`2)]| by EUCLID:62
+      .= |[a*(q2`1)+b*(q3`1),a*(q2`2)+b*(q3`2)]| by EUCLID:60
+      .= p by A12,A13,EUCLID:57;
+        a*q2+b*q3=a*p2-a*p1+b*(p3-p1) by EUCLID:53
+      .= a*p2-a*p1+(b*p3-b*p1) by EUCLID:53
+      .=a*p2+-a*p1+(b*p3-b*p1) by EUCLID:45
+      .=a*p2+-a*p1+(b*p3+-b*p1) by EUCLID:45
+      .=a*p2+-a*p1+(b*p3+(-b)*p1) by EUCLID:44
+      .=a*p2+(-a)*p1+((-b)*p1+b*p3) by EUCLID:44
+      .=a*p2+(-a)*p1+(-b)*p1+b*p3 by EUCLID:30
+      .=a*p2+((-a)*p1+(-b)*p1)+b*p3 by EUCLID:30
+      .=(-a+-b)*p1+a*p2+b*p3 by EUCLID:37;
+      then A15: p0=p1+((-a+-b)*p1+a*p2+b*p3) by A14,EUCLID:52
+      .= p1+((-a+-b)*p1+a*p2)+b*p3 by EUCLID:30
+      .= p1+(-a+-b)*p1+a*p2+b*p3 by EUCLID:30
+      .= 1*p1+(-a+-b)*p1+a*p2+b*p3 by EUCLID:33
+      .=(1+(-a+-b))*p1+a*p2+b*p3 by EUCLID:37;
+        1+(-a+-b)+a+b=1+-b+-a+a+b by XCMPLX_1:1
+      .=1+-b-a+a+b by XCMPLX_0:def 8 .=1+-b+b by XCMPLX_1:27
+      .=1-b+b by XCMPLX_0:def 8
+      .=1 by XCMPLX_1:27;
+     hence x in plane(p1,p2,p3) by A15,Th61;
+ end;
+ hence thesis;
+end;
+
+definition let n be Nat,p1,p2,p3,p be Point of TOP-REAL n;
+  assume A1: p2-p1,p3-p1 are_lindependent2 & p in plane(p1,p2,p3);
+  func tricord1(p1,p2,p3,p) -> Real means :Def11:
+   ex a2,a3 being Real st it+a2+a3=1 & p=it*p1+a2*p2+a3*p3;
+existence
+proof
+  consider a01,a02,a03 being Real such that
+  A2: p=a01*p1+a02*p2+a03*p3 & a01+a02+a03=1
+   & (for b1,b2,b3 being Real st p=b1*p1+b2*p2+b3*p3 & b1+b2+b3=1
+   holds b1=a01 & b2=a02 & b3=a03) by A1,Th60;
+ thus thesis by A2;
+end;
+uniqueness
+proof
+   let a1,b1 be Real;
+  assume A3: (ex a2,a3 being Real st a1+a2+a3=1 & p=a1*p1+a2*p2+a3*p3)
+   & (ex a2,a3 being Real st b1+a2+a3=1 & p=b1*p1+a2*p2+a3*p3);
+   then consider a02,a03 being Real such that
+   A4: a1+a02+a03=1 & p=a1*p1+a02*p2+a03*p3;
+   consider a2,a3 being Real such that
+   A5: b1+a2+a3=1 & p=b1*p1+a2*p2+a3*p3 by A3;
+   consider a001,a002,a003 being Real such that
+   A6: p=a001*p1+a002*p2+a003*p3 & a001+a002+a003=1
+   & (for b01,b02,b03 being Real st p=b01*p1+b02*p2+b03*p3 & b01+b02+b03=1
+   holds b01=a001 & b02=a002 & b03=a003) by A1,Th60;
+     a1=a001 & a02=a002 & a03=a003 by A4,A6;
+  hence a1=b1 by A5,A6;
+end;
+end;
+
+definition let n be Nat,p1,p2,p3,p be Point of TOP-REAL n;
+  assume A1: p2-p1,p3-p1 are_lindependent2 & p in plane(p1,p2,p3);
+  func tricord2(p1,p2,p3,p) -> Real means :Def12:
+   ex a1,a3 being Real st a1+it+a3=1 & p=a1*p1+it*p2+a3*p3;
+  existence
+proof
+  consider a01,a02,a03 being Real such that
+  A2: p=a01*p1+a02*p2+a03*p3 & a01+a02+a03=1
+   & (for b1,b2,b3 being Real st p=b1*p1+b2*p2+b3*p3 & b1+b2+b3=1
+   holds b1=a01 & b2=a02 & b3=a03) by A1,Th60;
+ thus thesis by A2;
+end;
+uniqueness
+proof
+   let a2,b2 be Real;
+  assume A3: (ex a1,a3 being Real st a1+a2+a3=1 & p=a1*p1+a2*p2+a3*p3)
+   & (ex a1,a3 being Real st a1+b2+a3=1 & p=a1*p1+b2*p2+a3*p3);
+   then consider a01,a03 being Real such that
+   A4: a01+a2+a03=1 & p=a01*p1+a2*p2+a03*p3;
+   consider a1,a3 being Real such that
+   A5: a1+b2+a3=1 & p=a1*p1+b2*p2+a3*p3 by A3;
+   consider a001,a002,a003 being Real such that
+   A6: p=a001*p1+a002*p2+a003*p3 & a001+a002+a003=1
+   & (for b01,b02,b03 being Real st p=b01*p1+b02*p2+b03*p3 & b01+b02+b03=1
+   holds b01=a001 & b02=a002 & b03=a003) by A1,Th60;
+     a01=a001 & a2=a002 & a03=a003 by A4,A6;
+  hence a2=b2 by A5,A6;
+end;
+end;
+
+definition let n be Nat,p1,p2,p3,p be Point of TOP-REAL n;
+assume A1: p2-p1,p3-p1 are_lindependent2 & p in plane(p1,p2,p3);
+func tricord3(p1,p2,p3,p) -> Real means
+:Def13: ex a1,a2 being Real st a1+a2+it=1 & p=a1*p1+a2*p2+it*p3;
+existence
+proof
+  consider a01,a02,a03 being Real such that
+  A2: p=a01*p1+a02*p2+a03*p3 & a01+a02+a03=1
+   & (for b1,b2,b3 being Real st p=b1*p1+b2*p2+b3*p3 & b1+b2+b3=1
+   holds b1=a01 & b2=a02 & b3=a03) by A1,Th60;
+ thus thesis by A2;
+end;
+uniqueness
+proof
+   let a3,b3 be Real;
+  assume A3: (ex a1,a2 being Real st a1+a2+a3=1 & p=a1*p1+a2*p2+a3*p3)
+   & (ex a1,a2 being Real st a1+a2+b3=1 & p=a1*p1+a2*p2+b3*p3);
+   then consider a01,a02 being Real such that
+   A4: a01+a02+a3=1 & p=a01*p1+a02*p2+a3*p3;
+   consider a1,a2 being Real such that
+   A5: a1+a2+b3=1 & p=a1*p1+a2*p2+b3*p3 by A3;
+   consider a001,a002,a003 being Real such that
+   A6: p=a001*p1+a002*p2+a003*p3 & a001+a002+a003=1
+   & (for b01,b02,b03 being Real st p=b01*p1+b02*p2+b03*p3 & b01+b02+b03=1
+   holds b01=a001 & b02=a002 & b03=a003) by A1,Th60;
+     a01=a001 & a02=a002 & a3=a003 by A4,A6;
+  hence a3=b3 by A5,A6;
+end;
+end;
+
+definition let p1,p2,p3;
+func trcmap1(p1,p2,p3) -> map of TOP-REAL 2,R^1 means
+  for p holds it.p=tricord1(p1,p2,p3,p);
+existence
+proof
+  set X=the carrier of TOP-REAL 2,Y=the carrier of R^1;
+  defpred P[set,set] means
+          for p st p=$1 holds $2=tricord1(p1,p2,p3,p);
+  A1: for x being set st x in X ex y being set st y in Y & P[x,y]
+  proof let x be set;
+   assume x in X;
+    then reconsider p0=x as Point of TOP-REAL 2;
+      P[x,tricord1(p1,p2,p3,p0)];
+   hence ex y being set st y in Y & P[x,y] by TOPMETR:24;
+  end;
+    ex f being Function of X,Y st for x being set st x in X
+            holds P[x,f.x] from FuncEx1(A1);
+  then consider g being Function of X,Y such that
+  A2: for x being set st x in X holds
+           (for p st p=x holds g.x=tricord1(p1,p2,p3,p));
+  reconsider f0=g as map of TOP-REAL 2,R^1;
+    for p holds f0.p=tricord1(p1,p2,p3,p) by A2;
+ hence thesis;
+end;
+uniqueness
+proof
+  let f1,f2 be map of TOP-REAL 2,R^1;
+   assume A3: (for p holds f1.p=tricord1(p1,p2,p3,p))&
+    (for p holds f2.p=tricord1(p1,p2,p3,p));
+      dom f1= the carrier of TOP-REAL 2 by FUNCT_2:def 1;
+    then A4: dom f1=dom f2 by FUNCT_2:def 1;
+      for x being set st x in dom f1 holds f1.x=f2.x
+    proof let x be set;
+     assume x in dom f1;
+      then reconsider p0=x as Point of TOP-REAL 2 by FUNCT_2:def 1;
+        f1.p0=tricord1(p1,p2,p3,p0) by A3;
+     hence f1.x=f2.x by A3;
+    end;
+   hence f1=f2 by A4,FUNCT_1:9;
+end;
+end;
+
+definition let p1,p2,p3;
+func trcmap2(p1,p2,p3) -> map of TOP-REAL 2,R^1 means
+  for p holds it.p=tricord2(p1,p2,p3,p);
+existence
+proof
+  set X=the carrier of TOP-REAL 2,Y=the carrier of R^1;
+  defpred P[set,set] means
+          for p st p=$1 holds $2=tricord2(p1,p2,p3,p);
+  A1: for x being set st x in X ex y being set st y in Y & P[x,y]
+  proof let x be set;
+   assume x in X;
+    then reconsider p0=x as Point of TOP-REAL 2;
+      P[x,tricord2(p1,p2,p3,p0)];
+   hence ex y being set st y in Y & P[x,y] by TOPMETR:24;
+  end;
+    ex f being Function of X,Y st for x being set st x in X
+            holds P[x,f.x] from FuncEx1(A1);
+  then consider g being Function of X,Y such that
+  A2: for x being set st x in X holds
+           (for p st p=x holds g.x=tricord2(p1,p2,p3,p));
+  reconsider f0=g as map of TOP-REAL 2,R^1;
+    for p holds f0.p=tricord2(p1,p2,p3,p) by A2;
+ hence thesis;
+end;
+uniqueness
+proof
+  let f1,f2 be map of TOP-REAL 2,R^1;
+   assume A3: (for p holds f1.p=tricord2(p1,p2,p3,p))&
+    (for p holds f2.p=tricord2(p1,p2,p3,p));
+      dom f1= the carrier of TOP-REAL 2 by FUNCT_2:def 1;
+    then A4: dom f1=dom f2 by FUNCT_2:def 1;
+      for x being set st x in dom f1 holds f1.x=f2.x
+    proof let x be set;
+     assume x in dom f1;
+      then reconsider p0=x as Point of TOP-REAL 2 by FUNCT_2:def 1;
+        f1.p0=tricord2(p1,p2,p3,p0) by A3;
+     hence f1.x=f2.x by A3;
+    end;
+   hence f1=f2 by A4,FUNCT_1:9;
+end;
+end;
+
+definition let p1,p2,p3;
+  func trcmap3(p1,p2,p3) -> map of TOP-REAL 2,R^1 means
+    for p holds it.p=tricord3(p1,p2,p3,p);
+existence
+proof
+  set X=the carrier of TOP-REAL 2,Y=the carrier of R^1;
+  defpred P[set,set] means
+          for p st p=$1 holds $2=tricord3(p1,p2,p3,p);
+  A1: for x being set st x in X ex y being set st y in Y & P[x,y]
+  proof let x be set;
+   assume x in X;
+    then reconsider p0=x as Point of TOP-REAL 2;
+      P[x,tricord3(p1,p2,p3,p0)];
+   hence ex y being set st y in Y & P[x,y] by TOPMETR:24;
+  end;
+    ex f being Function of X,Y st for x being set st x in X
+            holds P[x,f.x] from FuncEx1(A1);
+  then consider g being Function of X,Y such that
+  A2: for x being set st x in X holds
+           (for p st p=x holds g.x=tricord3(p1,p2,p3,p));
+  reconsider f0=g as map of TOP-REAL 2,R^1;
+    for p holds f0.p=tricord3(p1,p2,p3,p) by A2;
+ hence thesis;
+end;
+uniqueness
+proof
+  let f1,f2 be map of TOP-REAL 2,R^1;
+   assume A3: (for p holds f1.p=tricord3(p1,p2,p3,p))&
+    (for p holds f2.p=tricord3(p1,p2,p3,p));
+      dom f1= the carrier of TOP-REAL 2 by FUNCT_2:def 1;
+    then A4: dom f1=dom f2 by FUNCT_2:def 1;
+      for x being set st x in dom f1 holds f1.x=f2.x
+    proof let x be set;
+     assume x in dom f1;
+      then reconsider p0=x as Point of TOP-REAL 2 by FUNCT_2:def 1;
+        f1.p0=tricord3(p1,p2,p3,p0) by A3;
+     hence f1.x=f2.x by A3;
+    end;
+   hence f1=f2 by A4,FUNCT_1:9;
+end;
+end;
+
+theorem for p1,p2,p3,p st p2-p1,p3-p1 are_lindependent2 holds
+  p in outside_of_triangle(p1,p2,p3) iff
+  tricord1(p1,p2,p3,p)<0 or tricord2(p1,p2,p3,p)<0
+  or tricord3(p1,p2,p3,p)<0
+proof let p1,p2,p3,p;assume
+  A1: p2-p1,p3-p1 are_lindependent2;
+  A2: outside_of_triangle(p1,p2,p3)={p0 where p0 is Point of TOP-REAL 2:
+        ex a1,a2,a3 being Real st (0>a1 or 0>a2 or 0>a3) & a1+a2+a3=1 &
+        p0=a1*p1+a2*p2+a3*p3} by Def8;
+  thus p in outside_of_triangle(p1,p2,p3) implies
+   tricord1(p1,p2,p3,p)<0 or tricord2(p1,p2,p3,p)<0
+    or tricord3(p1,p2,p3,p)<0
+   proof assume p in outside_of_triangle(p1,p2,p3);
+      then consider p0 such that
+      A3: p0=p &
+        ex a1,a2,a3 being Real st (0>a1 or 0>a2 or 0>a3) & a1+a2+a3=1 &
+        p0=a1*p1+a2*p2+a3*p3 by A2;
+        p in the carrier of TOP-REAL 2;
+      then p in REAL 2 by EUCLID:25;
+      then p in plane(p1,p2,p3) by A1,Th63;
+    hence thesis by A1,A3,Def11,Def12,Def13;
+   end;
+   assume
+     A4: tricord1(p1,p2,p3,p)<0 or tricord2(p1,p2,p3,p)<0
+            or tricord3(p1,p2,p3,p)<0;
+        p in the carrier of TOP-REAL 2;
+      then p in REAL 2 by EUCLID:25;
+      then A5: p in plane(p1,p2,p3) by A1,Th63;
+     set i1=tricord1(p1,p2,p3,p),i2=tricord2(p1,p2,p3,p),
+       i3=tricord3(p1,p2,p3,p);
+     consider a2,a3 being Real such that
+     A6: i1+a2+a3=1 & p=i1*p1+a2*p2+a3*p3 by A1,A5,Def11;
+     A7: a2=i2 by A1,A5,A6,Def12;
+      a3=i3 by A1,A5,A6,Def13;
+    hence thesis by A2,A4,A6,A7;
+end;
+
+theorem Th65: for p1,p2,p3,p st p2-p1,p3-p1 are_lindependent2 holds
+  p in Triangle(p1,p2,p3) iff
+  tricord1(p1,p2,p3,p)>=0 & tricord2(p1,p2,p3,p)>=0
+  & tricord3(p1,p2,p3,p)>=0 &
+  (tricord1(p1,p2,p3,p)=0 or tricord2(p1,p2,p3,p)=0
+  or tricord3(p1,p2,p3,p)=0)
+proof let p1,p2,p3,p;
+  assume A1: p2-p1,p3-p1 are_lindependent2;
+  A2: Triangle(p1,p2,p3)= LSeg(p1,p2) \/ LSeg(p2,p3) \/ LSeg(p3,p1)
+          by Def5;
+  A3: for p0 holds p0 in Triangle(p1,p2,p3)
+        iff p0 in LSeg(p1,p2) or p0 in LSeg(p2,p3)
+            or p0 in LSeg(p3,p1)
+    proof let p0;
+        p0 in Triangle(p1,p2,p3)
+        iff p0 in LSeg(p1,p2) \/ LSeg(p2,p3)
+            or p0 in LSeg(p3,p1) by A2,XBOOLE_0:def 2;
+     hence thesis by XBOOLE_0:def 2;
+    end;
+ thus p in Triangle(p1,p2,p3) implies
+   tricord1(p1,p2,p3,p)>=0 & tricord2(p1,p2,p3,p)>=0
+   & tricord3(p1,p2,p3,p)>=0 &
+   (tricord1(p1,p2,p3,p)=0 or tricord2(p1,p2,p3,p)=0
+   or tricord3(p1,p2,p3,p)=0)
+   proof assume A4: p in Triangle(p1,p2,p3);
+    set x=p;
+      now per cases by A3,A4;
+    case x in LSeg(p1,p2);
+      then x in { (1-lambda)*p1 + lambda*p2 where lambda is Real:
+                  0 <= lambda & lambda <= 1 } by TOPREAL1:def 4;
+      then consider lambda being Real such that
+      A5: x=(1-lambda)*p1 + lambda*p2 & 0 <= lambda & lambda <= 1;
+      A6: 1-lambda>=0 by A5,SQUARE_1:12;
+      A7: (1-lambda)+lambda+0=1 by XCMPLX_1:27;
+        p=(1-lambda)*p1 + lambda*p2+0.REAL 2 by A5,EUCLID:31
+       .=(1-lambda)*p1 + lambda*p2+(0)*p3 by EUCLID:33;
+     hence ex a1,a2,a3 being Real st 0<=a1 & 0<=a2 & 0<=a3 & a1+a2+a3=1 &
+       (a1=0 or a2=0 or a3=0) & p=a1*p1+a2*p2+a3*p3 by A5,A6,A7;
+    case x in LSeg(p2,p3);
+      then x in { (1-lambda)*p2 + lambda*p3 where lambda is Real:
+                  0 <= lambda & lambda <= 1 } by TOPREAL1:def 4;
+      then consider lambda being Real such that
+      A8: x=(1-lambda)*p2 + lambda*p3 & 0 <= lambda & lambda <= 1;
+      A9: 1-lambda>=0 by A8,SQUARE_1:12;
+      A10: 0+(1-lambda)+lambda=1 by XCMPLX_1:27;
+        p=0.REAL 2 +(1-lambda)*p2 + lambda*p3 by A8,EUCLID:31
+       .=(0)*p1+(1-lambda)*p2 + lambda*p3 by EUCLID:33;
+     hence ex a1,a2,a3 being Real st 0<=a1 & 0<=a2 & 0<=a3 & a1+a2+a3=1 &
+       (a1=0 or a2=0 or a3=0)&
+        p=a1*p1+a2*p2+a3*p3 by A8,A9,A10;
+    case x in LSeg(p3,p1);
+      then x in { (1-lambda)*p3 + lambda*p1 where lambda is Real:
+                  0 <= lambda & lambda <= 1 } by TOPREAL1:def 4;
+      then consider lambda being Real such that
+      A11: x=(1-lambda)*p3 + lambda*p1 & 0 <= lambda & lambda <= 1;
+      A12: 1-lambda>=0 by A11,SQUARE_1:12;
+      A13: lambda+0+(1-lambda)=1 by XCMPLX_1:27;
+        p=lambda*p1+0.REAL 2+ (1-lambda)*p3 by A11,EUCLID:31
+       .=lambda*p1+(0)*p2+ (1-lambda)*p3 by EUCLID:33;
+     hence ex a1,a2,a3 being Real st 0<=a1 & 0<=a2 & 0<=a3 & a1+a2+a3=1 &
+       (a1=0 or a2=0 or a3=0)&
+        p=a1*p1+a2*p2+a3*p3 by A11,A12,A13;
+    end;
+    then consider a1,a2,a3 being Real such that
+    A14: 0<=a1 & 0<=a2 & 0<=a3 & a1+a2+a3=1 &
+       (a1=0 or a2=0 or a3=0)&
+        p=a1*p1+a2*p2+a3*p3;
+      p in the carrier of TOP-REAL 2;
+    then p in REAL 2 by EUCLID:25;
+    then p in plane(p1,p2,p3) by A1,Th63;
+    hence tricord1(p1,p2,p3,p)>=0 & tricord2(p1,p2,p3,p)>=0
+     & tricord3(p1,p2,p3,p)>=0 &
+     (tricord1(p1,p2,p3,p)=0 or tricord2(p1,p2,p3,p)=0
+     or tricord3(p1,p2,p3,p)=0) by A1,A14,Def11,Def12,Def13;
+   end;
+ thus tricord1(p1,p2,p3,p)>=0 & tricord2(p1,p2,p3,p)>=0
+   & tricord3(p1,p2,p3,p)>=0 &
+   (tricord1(p1,p2,p3,p)=0 or tricord2(p1,p2,p3,p)=0
+   or tricord3(p1,p2,p3,p)=0) implies p in Triangle(p1,p2,p3)
+   proof assume
+     A15: tricord1(p1,p2,p3,p)>=0 & tricord2(p1,p2,p3,p)>=0
+       & tricord3(p1,p2,p3,p)>=0 &
+       (tricord1(p1,p2,p3,p)=0 or tricord2(p1,p2,p3,p)=0
+       or tricord3(p1,p2,p3,p)=0);
+     set p0=p;
+     set i01=tricord1(p1,p2,p3,p0),i02=tricord2(p1,p2,p3,p0),
+          i03=tricord3(p1,p2,p3,p0);
+          p0 in the carrier of TOP-REAL 2;
+        then p0 in REAL 2 by EUCLID:25;
+        then A16: p0 in plane(p1,p2,p3) by A1,Th63;
+       now per cases by A15;
+     case tricord1(p1,p2,p3,p)=0;
+      then consider a2,a3 being Real such that
+      A17: 0+a2+a3=1 & p=(0)*p1+a2*p2+a3*p3 by A1,A16,Def11;
+      A18: a2=i02 by A1,A16,A17,Def12;
+      A19: a3=i03 by A1,A16,A17,Def13;
+      A20: p=0.REAL 2 + a2*p2+a3*p3 by A17,EUCLID:33
+       .=a2*p2+a3*p3 by EUCLID:31;
+      A21: a2=1-a3 by A17,XCMPLX_1:26;
+      then 1-a3+a3>=0+a3 by A15,A18,REAL_1:55;
+      then 1>=0+a3 by XCMPLX_1:27;
+      then p in { (1-lambda)*p2 + lambda*p3 where lambda is Real:
+            0<=lambda & lambda<=1}
+                      by A15,A19,A20,A21;
+      hence p in LSeg(p1,p2) or p in LSeg(p2,p3)
+            or p in LSeg(p3,p1) by TOPREAL1:def 4;
+     case tricord2(p1,p2,p3,p)=0;
+      then consider a1,a3 being Real such that
+      A22: a1+0+a3=1 & p=a1*p1+(0)*p2+a3*p3 by A1,A16,Def12;
+      A23: a1=i01 by A1,A16,A22,Def11;
+      A24: a3=i03 by A1,A16,A22,Def13;
+      A25: p=a1*p1+0.REAL 2 +a3*p3 by A22,EUCLID:33
+       .=a1*p1+a3*p3 by EUCLID:31;
+      A26: a1=1-a3 by A22,XCMPLX_1:26;
+      then 1-a3+a3>=0+a3 by A15,A23,REAL_1:55;
+      then 1>=0+a3 by XCMPLX_1:27;
+      then p in { (1-lambda)*p1 + lambda*p3 where lambda is Real:
+            0<=lambda & lambda<=1} by A15,A24,A25,A26;
+      hence p in LSeg(p1,p2) or p in LSeg(p2,p3)
+            or p in LSeg(p3,p1) by TOPREAL1:def 4;
+     case tricord3(p1,p2,p3,p)=0;
+      then consider a1,a2 being Real such that
+      A27: a1+a2+0=1 & p=a1*p1+a2*p2+(0)*p3 by A1,A16,Def13;
+      A28: a1=i01 by A1,A16,A27,Def11;
+      A29: a2=i02 by A1,A16,A27,Def12;
+      A30: p=a1*p1+a2*p2+0.REAL 2 by A27,EUCLID:33
+       .=a1*p1+a2*p2 by EUCLID:31;
+      A31: a1=1-a2 by A27,XCMPLX_1:26;
+      then 1-a2+a2>=0+a2 by A15,A28,REAL_1:55;
+      then 1>=0+a2 by XCMPLX_1:27;
+      then p in { (1-lambda)*p1 + lambda*p2 where lambda is Real:
+            0<=lambda & lambda<=1} by A15,A29,A30,A31;
+      hence p in LSeg(p1,p2) or p in LSeg(p2,p3)
+            or p in LSeg(p3,p1) by TOPREAL1:def 4;
+     end;
+    hence p in Triangle(p1,p2,p3) by A3;
+   end;
+end;
+
+theorem for p1,p2,p3,p st p2-p1,p3-p1 are_lindependent2 holds
+  p in Triangle(p1,p2,p3) iff
+  tricord1(p1,p2,p3,p)=0 & tricord2(p1,p2,p3,p)>=0
+  & tricord3(p1,p2,p3,p)>=0 or
+  tricord1(p1,p2,p3,p)>=0 & tricord2(p1,p2,p3,p)=0
+  & tricord3(p1,p2,p3,p)>=0 or
+  tricord1(p1,p2,p3,p)>=0 & tricord2(p1,p2,p3,p)>=0
+  & tricord3(p1,p2,p3,p)=0 by Th65;
+
+theorem Th67: for p1,p2,p3,p st p2-p1,p3-p1 are_lindependent2 holds
+  p in inside_of_triangle(p1,p2,p3) iff
+  tricord1(p1,p2,p3,p)>0 & tricord2(p1,p2,p3,p)>0
+  & tricord3(p1,p2,p3,p)>0
+proof let p1,p2,p3,p;assume
+  A1: p2-p1,p3-p1 are_lindependent2;
+  A2: inside_of_triangle(p1,p2,p3)
+      = closed_inside_of_triangle(p1,p2,p3) \ Triangle(p1,p2,p3) by Def7;
+  A3: closed_inside_of_triangle(p1,p2,p3)
+      = {p00 where p00 is Point of TOP-REAL 2:
+        ex a1,a2,a3 being Real st 0<=a1 & 0<=a2 & 0<=a3 & a1+a2+a3=1 &
+        p00=a1*p1+a2*p2+a3*p3} by Def6;
+  A4: inside_of_triangle(p1,p2,p3)={p0 where p0 is Point of TOP-REAL 2:
+        ex a1,a2,a3 being Real st (0<a1 & 0<a2 & 0<a3) & a1+a2+a3=1 &
+        p0=a1*p1+a2*p2+a3*p3}
+   proof
+     thus inside_of_triangle(p1,p2,p3)
+       c= {p0 where p0 is Point of TOP-REAL 2:
+        ex a1,a2,a3 being Real st (0<a1 & 0<a2 & 0<a3) & a1+a2+a3=1 &
+        p0=a1*p1+a2*p2+a3*p3}
+      proof let x be set;assume x in inside_of_triangle(p1,p2,p3);
+        then A5: x in closed_inside_of_triangle(p1,p2,p3) &
+        not x in Triangle(p1,p2,p3) by A2,XBOOLE_0:def 4;
+        then consider p0 being Point of TOP-REAL 2 such that
+        A6: p0=x & ex a1,a2,a3 being Real st
+          0<=a1 & 0<=a2 & 0<=a3 & a1+a2+a3=1 &
+          p0=a1*p1+a2*p2+a3*p3 by A3;
+        consider a1,a2,a3 being Real such that
+        A7: 0<=a1 & 0<=a2 & 0<=a3 & a1+a2+a3=1 &
+          p0=a1*p1+a2*p2+a3*p3 by A6;
+        set i01=tricord1(p1,p2,p3,p0),i02=tricord2(p1,p2,p3,p0),
+          i03=tricord3(p1,p2,p3,p0);
+         p0 in the carrier of TOP-REAL 2;
+        then p0 in REAL 2 by EUCLID:25;
+        then A8: p0 in plane(p1,p2,p3) by A1,Th63;
+        then A9: a1=i01 by A1,A7,Def11;
+        A10: a2=i02 by A1,A7,A8,Def12;
+        A11: a3=i03 by A1,A7,A8,Def13;
+        then (i01<>0 & i02<>0 & i03<>0) by A1,A5,A6,A7,A9,A10,Th65;
+       hence x in
+        {p8 where p8 is Point of TOP-REAL 2:
+        ex a1,a2,a3 being Real st (0<a1 & 0<a2 & 0<a3) & a1+a2+a3=1 &
+        p8=a1*p1+a2*p2+a3*p3} by A6,A7,A9,A10,A11;
+      end;
+     thus {p0 where p0 is Point of TOP-REAL 2:
+        ex a1,a2,a3 being Real st (0<a1 & 0<a2 & 0<a3) & a1+a2+a3=1 &
+        p0=a1*p1+a2*p2+a3*p3} c= inside_of_triangle(p1,p2,p3)
+      proof let x be set;assume x in
+        {p0 where p0 is Point of TOP-REAL 2:
+         ex a1,a2,a3 being Real st (0<a1 & 0<a2 & 0<a3) & a1+a2+a3=1 &
+         p0=a1*p1+a2*p2+a3*p3};
+        then consider p0 being Point of TOP-REAL 2 such that
+         A12: x=p0 &
+         ex a1,a2,a3 being Real st (0<a1 & 0<a2 & 0<a3) & a1+a2+a3=1 &
+         p0=a1*p1+a2*p2+a3*p3;
+         consider a01,a02,a03 being Real such that
+         A13: (0<a01 & 0<a02 & 0<a03) & a01+a02+a03=1 &
+         p0=a01*p1+a02*p2+a03*p3 by A12;
+        set i01=tricord1(p1,p2,p3,p0),i02=tricord2(p1,p2,p3,p0),
+          i03=tricord3(p1,p2,p3,p0);
+          p0 in the carrier of TOP-REAL 2;
+        then p0 in REAL 2 by EUCLID:25;
+        then A14: p0 in plane(p1,p2,p3) by A1,Th63;
+        then A15: a01=i01 by A1,A13,Def11;
+        A16: a02=i02 by A1,A13,A14,Def12;
+          a03=i03 by A1,A13,A14,Def13;
+        then x in closed_inside_of_triangle(p1,p2,p3) &
+          not x in Triangle(p1,p2,p3) by A1,A3,A12,A13,A15,A16,Th65;
+       hence x in inside_of_triangle(p1,p2,p3) by A2,XBOOLE_0:def 4;
+      end;
+   end;
+  thus p in inside_of_triangle(p1,p2,p3) implies
+   tricord1(p1,p2,p3,p)>0 & tricord2(p1,p2,p3,p)>0
+    & tricord3(p1,p2,p3,p)>0
+   proof assume p in inside_of_triangle(p1,p2,p3);
+      then A17: p in closed_inside_of_triangle(p1,p2,p3) &
+          not p in Triangle(p1,p2,p3) by A2,XBOOLE_0:def 4;
+      then consider p0 being Point of TOP-REAL 2 such that
+      A18:  p0=p & ex a1,a2,a3 being Real st
+          0<=a1 & 0<=a2 & 0<=a3 & a1+a2+a3=1 &
+          p0=a1*p1+a2*p2+a3*p3 by A3;
+      A19: not(tricord1(p1,p2,p3,p0)>=0 & tricord2(p1,p2,p3,p0)>=0
+           & tricord3(p1,p2,p3,p0)>=0 &
+           (tricord1(p1,p2,p3,p0)=0 or tricord2(p1,p2,p3,p0)=0
+           or tricord3(p1,p2,p3,p0)=0)) by A1,A17,A18,Th65;
+        p in the carrier of TOP-REAL 2;
+      then p in REAL 2 by EUCLID:25;
+      then p in plane(p1,p2,p3) by A1,Th63;
+     hence thesis by A1,A18,A19,Def11,Def12,Def13;
+   end;
+  thus tricord1(p1,p2,p3,p)>0 & tricord2(p1,p2,p3,p)>0
+   & tricord3(p1,p2,p3,p)>0 implies p in inside_of_triangle(p1,p2,p3)
+   proof assume
+     A20: tricord1(p1,p2,p3,p)>0 & tricord2(p1,p2,p3,p)>0
+            & tricord3(p1,p2,p3,p)>0;
+        p in the carrier of TOP-REAL 2;
+      then p in REAL 2 by EUCLID:25;
+      then A21: p in plane(p1,p2,p3) by A1,Th63;
+     set i1=tricord1(p1,p2,p3,p),i2=tricord2(p1,p2,p3,p),
+       i3=tricord3(p1,p2,p3,p);
+     consider a2,a3 being Real such that
+     A22: i1+a2+a3=1 & p=i1*p1+a2*p2+a3*p3 by A1,A21,Def11;
+     A23: a2=i2 by A1,A21,A22,Def12;
+       a3=i3 by A1,A21,A22,Def13;
+    hence p in inside_of_triangle(p1,p2,p3) by A4,A20,A22,A23;
+   end;
+end;
+
+theorem for p1,p2,p3 st p2-p1,p3-p1 are_lindependent2 holds
+ inside_of_triangle(p1,p2,p3) is non empty
+proof let p1,p2,p3;assume
+ A1: p2-p1,p3-p1 are_lindependent2;
+  A2: (1/3)+(1/3)+(1/3)=1;
+  set p0=(1/3)*p1+(1/3)*p2+(1/3)*p3;
+  set i01=tricord1(p1,p2,p3,p0),i02=tricord2(p1,p2,p3,p0),
+          i03=tricord3(p1,p2,p3,p0);
+          p0 in the carrier of TOP-REAL 2;
+        then p0 in REAL 2 by EUCLID:25;
+        then A3: p0 in plane(p1,p2,p3) by A1,Th63;
+        then A4: 1/3=i01 by A1,A2,Def11;
+        A5: 1/3=i02 by A1,A2,A3,Def12;
+          1/3=i03 by A1,A2,A3,Def13;
+ hence thesis by A1,A4,A5,Th67;
+end;

@@ -1,0 +1,1223 @@
+:: Some Properties of Binary Relations
+::  by Waldemar Korczy\'nski
+::
+:: Received January 17, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, BOOLE, SYSREL, FUNCT_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1;
+ constructors TARSKI, RELSET_1, XBOOLE_0;
+ clusters RELAT_1, ZFMISC_1, XBOOLE_0;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, XBOOLE_0, RELAT_1;
+ theorems ZFMISC_1, RELAT_1, TARSKI, XBOOLE_0, XBOOLE_1;
+
+begin
+ reserve x,y,z,t,X,Y,Z,W for set;
+ reserve R,S,T for Relation;
+
+definition let X,Y;
+ cluster [:X,Y:] -> Relation-like;
+ correctness by RELAT_1:6;
+end;
+
+canceled 11;
+
+theorem Th12:
+  X <> {} & Y <> {} implies dom [:X,Y:] = X & rng [:X,Y:] = Y
+proof
+ assume A1:X <> {} & Y <> {};
+ thus dom [:X,Y:] c= X
+ proof
+  let x;
+  assume x in dom [:X,Y:];
+  then ex y st [x,y] in [:X,Y:] by RELAT_1:def 4;
+  hence thesis by ZFMISC_1:106;
+ end;
+ thus X c= dom [:X,Y:]
+ proof
+  let x;
+  assume A2:x in X;
+  consider y being Element of Y;
+    [x,y] in [:X,Y:] by A1,A2,ZFMISC_1:106;
+  hence thesis by RELAT_1:20;
+ end;
+ thus rng [:X,Y:] c= Y
+ proof
+  let y;
+  assume y in rng [:X,Y:];
+  then ex x st [x,y] in [:X,Y:] by RELAT_1:def 5;
+  hence thesis by ZFMISC_1:106;
+ end;
+ thus Y c= rng [:X,Y:]
+ proof
+  let y;
+  assume A3:y in Y;
+  consider x being Element of X;
+    [x,y] in [:X,Y:] by A1,A3,ZFMISC_1:106;
+  hence thesis by RELAT_1:20;
+ end;
+end;
+
+theorem Th13:
+  dom (R /\ [:X,Y:]) c= X & rng (R /\ [:X,Y:]) c= Y
+proof
+   now per cases;
+  suppose X = {} or Y = {};
+  then R /\ [:X,Y:] = R /\ {} by ZFMISC_1:113
+                     .= {};
+  hence thesis by RELAT_1:60,XBOOLE_1:2;
+ suppose A1: X <> {} & Y <> {};
+    dom (R /\ [:X,Y:]) c= dom R /\ dom [:X,Y:] by RELAT_1:14;
+  then A2:dom (R /\ [:X,Y:]) c= dom R /\ X by A1,Th12;
+    dom R /\ X c= X by XBOOLE_1:17;
+  hence dom (R /\ [:X,Y:]) c= X by A2,XBOOLE_1:1;
+    rng (R /\ [:X,Y:]) c= rng R /\ rng [:X,Y:] by RELAT_1:27;
+  then A3:rng (R /\ [:X,Y:]) c= rng R /\ Y by A1,Th12;
+    rng R /\ Y c= Y by XBOOLE_1:17;
+  hence rng (R /\ [:X,Y:]) c= Y by A3,XBOOLE_1:1;
+ end;
+ hence thesis;
+end;
+
+theorem
+    X misses Y implies dom (R /\ [:X,Y:]) misses rng (R /\ [:X,Y:]) &
+                    dom (R~ /\ [:X,Y:]) misses rng (R~ /\ [:X,Y:])
+proof
+ assume A1: X /\ Y = {};
+ A2:dom (R /\ [:X,Y:]) c= X & rng (R /\ [:X,Y:]) c= Y by Th13;
+ then A3:dom (R /\ [:X,Y:]) /\ rng (R /\ [:X,Y:]) c= X /\ rng (R /\ [:X,Y:])
+                                           by XBOOLE_1:26;
+   X /\ rng (R /\ [:X,Y:]) c= X /\ Y by A2,XBOOLE_1:26;
+ then dom (R /\ [:X,Y:]) /\ rng (R /\ [:X,Y:]) c= {} by A1,A3,XBOOLE_1:1;
+ hence dom (R /\ [:X,Y:]) /\ rng (R /\ [:X,Y:]) = {} by XBOOLE_1:3;
+ A4:dom (R~ /\ [:X,Y:]) c= X & rng (R~ /\ [:X,Y:]) c= Y by Th13;
+ then A5:dom (R~ /\ [:X,Y:]) /\ rng (R~ /\ [:X,Y:]) c= X /\ rng (R~ /\ [:X,Y:])
+                                           by XBOOLE_1:26;
+   X /\ rng (R~ /\ [:X,Y:]) c= X /\ Y by A4,XBOOLE_1:26;
+ then dom (R~ /\ [:X,Y:]) /\ rng (R~ /\ [:X,Y:]) c= {} by A1,A5,XBOOLE_1:1;
+ hence dom (R~ /\ [:X,Y:]) /\ rng (R~ /\ [:X,Y:]) = {} by XBOOLE_1:3;
+end;
+
+theorem Th15:
+  R c= [:X,Y:] implies dom R c= X & rng R c= Y
+proof
+ assume R c= [:X,Y:];
+ then R /\ [:X,Y:] = R by XBOOLE_1:28;
+ hence thesis by Th13;
+end;
+
+theorem
+    R c= [:X,Y:] implies R~ c= [:Y,X:]
+proof
+ assume A1: R c= [:X,Y:];
+  let z,t;
+  assume [z,t] in R~;
+  then [t,z] in R by RELAT_1:def 7;
+  then t in X & z in Y by A1,ZFMISC_1:106;
+  hence thesis by ZFMISC_1:106;
+end;
+
+canceled;
+
+theorem
+    [:X,Y:]~ = [:Y,X:]
+proof
+  let x,y;
+  thus [x,y] in [:X,Y:]~ implies [x,y] in [:Y,X:]
+  proof
+   assume [x,y] in [:X,Y:]~;
+   then [y,x] in [:X,Y:] by RELAT_1:def 7;
+   then y in X & x in Y by ZFMISC_1:106;
+   hence thesis by ZFMISC_1:106;
+  end;
+ thus [x,y] in [:Y,X:] implies [x,y] in [:X,Y:]~
+  proof
+   assume [x,y] in [:Y,X:];
+   then y in X & x in Y by ZFMISC_1:106;
+   then [y,x] in [:X,Y:] by ZFMISC_1:106;
+   hence thesis by RELAT_1:def 7;
+  end;
+end;
+
+canceled;
+
+theorem Th20:
+  (R \/ S) * T = (R * T) \/ (S * T) & R * (S \/ T) = (R * S) \/ (R * T)
+proof
+ thus (R \/ S) * T = (R * T) \/ (S * T)
+ proof
+ let x,y;
+ thus [x,y] in (R \/ S) * T implies [x,y] in (R * T) \/ (S * T)
+ proof
+  assume [x,y] in (R \/ S) * T;
+  then consider z such that A1:[x,z] in R \/ S & [z,y] in T by RELAT_1:def 8;
+    ([x,z] in R & [z,y] in T) or ([x,z] in S & [z,y] in T) by A1,XBOOLE_0:def 2
+;
+  then ([x,y] in R * T) or ([x,y] in S *T) by RELAT_1:def 8;
+  hence thesis by XBOOLE_0:def 2;
+ end;
+thus [x,y] in (R * T) \/ (S * T) implies [x,y] in (R \/ S) * T
+ proof
+  assume A2: [x,y] in (R * T) \/ (S * T);
+  A3:[x,y] in R * T implies thesis
+  proof
+   assume [x,y] in R * T;
+   then consider z such that A4: [x,z] in R & [z,y] in T by RELAT_1:def 8;
+      [x,z] in R \/ S & [z,y] in T by A4,XBOOLE_0:def 2;
+   hence thesis by RELAT_1:def 8;
+  end;
+    [x,y] in S * T implies thesis
+  proof
+   assume [x,y] in S * T;
+   then consider z such that A5: [x,z] in S & [z,y] in T by RELAT_1:def 8;
+      [x,z] in R \/ S & [z,y] in T by A5,XBOOLE_0:def 2;
+   hence thesis by RELAT_1:def 8;
+  end;
+  hence thesis by A2,A3,XBOOLE_0:def 2;
+ end;
+ end;
+ thus R * (S \/ T) = (R * S) \/ (R * T) by RELAT_1:51;
+end;
+
+canceled;
+
+theorem
+  (X misses Y & R c= [:X,Y:] \/ [:Y,X:] & [x,y] in R & x in X
+                  implies not x in Y & not y in X & y in Y) &
+      (X misses Y & R c= [:X,Y:] \/ [:Y,X:] & [x,y] in R & y in Y
+                  implies not y in X & not x in Y & x in X) &
+      (X misses Y & R c= [:X,Y:] \/ [:Y,X:] & [x,y] in R & x in Y
+                  implies not x in X & not y in Y & y in X) &
+      (X misses Y & R c= [:X,Y:] \/ [:Y,X:] & [x,y] in R & y in X
+                  implies not x in X & not y in Y & x in Y)
+proof
+thus X misses Y & R c= [:X,Y:] \/ [:Y,X:] & [x,y] in R & x in X
+                             implies not x in Y & not y in X & y in Y
+ proof
+  assume A1:X misses Y & R c= [:X,Y:] \/ [:Y,X:] & [x,y] in R & x in X;
+  then A2:[:X,Y:] misses [:Y,X:] by ZFMISC_1:127;
+  A3:[x,y] in [:X,Y:] & not [x,y] in [:Y,X:] implies thesis
+  proof
+   assume [x,y] in [:X,Y:] & not [x,y] in [:Y,X:];
+   then (x in X & y in Y) & (not x in Y or not y in X) by ZFMISC_1:106;
+   hence thesis by A1,XBOOLE_0:3;
+  end;
+    [x,y] in [:Y,X:] implies [x,y] in [:X,Y:]
+  proof
+   assume A4: [x,y] in [:Y,X:] & not [x,y] in [:X,Y:];
+     not x in Y by A1,XBOOLE_0:3;
+   hence thesis by A4,ZFMISC_1:106;
+  end;
+  hence thesis by A1,A2,A3,XBOOLE_0:5;
+ end;
+thus X misses Y & R c= [:X,Y:] \/ [:Y,X:] & [x,y] in R & y in Y
+                            implies not y in X & not x in Y & x in X
+ proof
+  assume A5:X misses Y & R c= [:X,Y:] \/ [:Y,X:] & [x,y] in R & y in Y;
+  then A6:[:X,Y:] misses [:Y,X:] by ZFMISC_1:127;
+  A7:[x,y] in [:X,Y:] & not [x,y] in [:Y,X:] implies thesis
+  proof
+   assume [x,y] in [:X,Y:] & not [x,y] in [:Y,X:];
+   then (x in X & y in Y) & (not x in Y or not y in X) by ZFMISC_1:106;
+   hence thesis by A5,XBOOLE_0:3;
+  end;
+    [x,y] in [:Y,X:] implies [x,y] in [:X,Y:]
+  proof
+   assume A8: [x,y] in [:Y,X:] & not [x,y] in [:X,Y:];
+     not y in X by A5,XBOOLE_0:3;
+   hence thesis by A8,ZFMISC_1:106;
+  end;
+  hence thesis by A5,A6,A7,XBOOLE_0:3,def 2;
+ end;
+thus X misses Y & R c= [:X,Y:] \/ [:Y,X:] & [x,y] in R & x in Y
+                             implies not x in X & not y in Y & y in X
+ proof
+  assume A9:X misses Y & R c= [:X,Y:] \/ [:Y,X:] & [x,y] in R & x in Y;
+  then A10:[:X,Y:] misses [:Y,X:] by ZFMISC_1:127;
+  A11:[x,y] in [:X,Y:] implies [x,y] in [:Y,X:]
+  proof
+   assume A12: [x,y] in [:X,Y:] & not [x,y] in [:Y,X:];
+     not x in X by A9,XBOOLE_0:3;
+   hence thesis by A12,ZFMISC_1:106;
+  end;
+    [x,y] in [:Y,X:] & not [x,y] in [:X,Y:] implies thesis
+  proof
+   assume [x,y] in [:Y,X:] & not [x,y] in [:X,Y:];
+   then x in Y & y in X & not x in X or x in Y & y in X & not y in
+ Y by ZFMISC_1:106;
+   hence thesis by A9,XBOOLE_0:3;
+  end;
+  hence thesis by A9,A10,A11,XBOOLE_0:3,def 2;
+ end;
+thus X misses Y & R c= [:X,Y:] \/ [:Y,X:] & [x,y] in R & y in X
+                            implies not x in X & not y in Y & x in Y
+ proof
+  assume A13:X misses Y & R c= [:X,Y:] \/ [:Y,X:] & [x,y] in R & y in X;
+  then A14:[:X,Y:] misses [:Y,X:] by ZFMISC_1:127;
+  A15:[x,y] in [:X,Y:] implies [x,y] in [:Y,X:]
+  proof
+   assume A16: [x,y] in [:X,Y:] & not [x,y] in [:Y,X:];
+     not y in Y by A13,XBOOLE_0:3;
+   hence thesis by A16,ZFMISC_1:106;
+  end;
+    [x,y] in [:Y,X:] & not [x,y] in [:X,Y:] implies thesis
+  proof
+   assume [x,y] in [:Y,X:] & not [x,y] in [:X,Y:];
+   then (x in Y & y in X) & (not x in X or not y in Y) by ZFMISC_1:106;
+   hence thesis by A13,XBOOLE_0:3;
+  end;
+  hence thesis by A13,A14,A15,XBOOLE_0:3,def 2;
+ end;
+end;
+
+canceled;
+
+theorem Th24:
+  (R c= [:X,Y:] & Z c= X implies (R|Z) = R /\ [:Z,Y:]) &
+        (R c= [:X,Y:] & Z c= Y implies (Z|R) = R /\ [:X,Z:])
+proof
+ thus R c= [:X,Y:] & Z c= X implies (R|Z) = R /\ [:Z,Y:]
+ proof
+  assume A1:R c= [:X,Y:] & Z c= X;
+   let x,y;
+   thus [x,y] in (R|Z) implies [x,y] in R /\ [:Z,Y:]
+   proof
+    assume [x,y] in (R|Z);
+    then A2:x in Z & [x,y] in R by RELAT_1:def 11;
+    then x in Z & y in Y by A1,ZFMISC_1:106;
+    then [x,y] in [:Z,Y:] by ZFMISC_1:106;
+    hence thesis by A2,XBOOLE_0:def 3;
+   end;
+   thus [x,y] in R /\ [:Z,Y:] implies [x,y] in (R|Z)
+   proof
+    assume [x,y] in R /\ [:Z,Y:];
+    then [x,y] in R & [x,y] in [:Z,Y:] by XBOOLE_0:def 3;
+    then x in Z & [x,y] in R by ZFMISC_1:106;
+    hence thesis by RELAT_1:def 11;
+   end;
+ end;
+  assume A3:R c= [:X,Y:] & Z c= Y;
+   let x,y;
+  thus [x,y] in (Z|R) implies [x,y] in R /\ [:X,Z:]
+   proof
+    assume [x,y] in (Z|R);
+    then A4:y in Z & [x,y] in R by RELAT_1:def 12;
+    then y in Z & x in X by A3,ZFMISC_1:106;
+    then [x,y] in [:X,Z:] by ZFMISC_1:106;
+    hence thesis by A4,XBOOLE_0:def 3;
+   end;
+  thus [x,y] in R /\ [:X,Z:] implies [x,y] in (Z|R)
+   proof
+    assume [x,y] in R /\ [:X,Z:];
+    then [x,y] in R & [x,y] in [:X,Z:] by XBOOLE_0:def 3;
+    then y in Z & [x,y] in R by ZFMISC_1:106;
+    hence thesis by RELAT_1:def 12;
+   end;
+end;
+
+theorem
+    R c= [:X,Y:] & X = Z \/ W implies R = (R|Z) \/ (R|W)
+proof
+ assume A1:R c= [:X,Y:] & X = Z \/ W;
+ then A2:Z c= X & W c= X by XBOOLE_1:7;
+ thus R = R /\ [:X,Y:] by A1,XBOOLE_1:28
+         .= R /\ ([:Z,Y:] \/ [:W,Y:]) by A1,ZFMISC_1:120
+         .= (R /\ [:Z,Y:]) \/ (R /\ [:W,Y:]) by XBOOLE_1:23
+         .= (R|Z) \/ (R /\ [:W,Y:]) by A1,A2,Th24
+         .= (R|Z) \/ (R|W) by A1,A2,Th24;
+end;
+
+theorem
+    X misses Y & R c= [:X,Y:] \/ [:Y,X:] implies R|X c= [:X,Y:]
+proof
+ assume that
+A1: X /\ Y = {} and
+A2: R c= [:X,Y:] \/ [:Y,X:];
+    R|X = R /\ [:X,rng R:] by RELAT_1:96;
+  then R|X c= ([:X,Y:] \/ [:Y,X:]) /\ [:X,rng R:] by A2,XBOOLE_1:26;
+  then A3: R|X c= [:X,Y:] /\ [:X,rng R:] \/ [:Y,X:] /\ [:X,rng R:] by XBOOLE_1:
+23;
+    [:Y,X:] /\ [:X,rng R:] = [:X /\ Y, X /\ rng R:] by ZFMISC_1:123
+      .= {} by A1,ZFMISC_1:113;
+  hence thesis by A3,XBOOLE_1:18;
+end;
+
+theorem
+    R c= S implies R~ c= S~
+proof
+ assume R c= S;
+ then R \/ S = S by XBOOLE_1:12;
+ then (R~) \/ (S~) = S~ by RELAT_1:40;
+ hence thesis by XBOOLE_1:7;
+end;
+
+:: DIAGONAL RELATION
+
+Lm1:
+  id(X) c= [:X,X:]
+proof
+  let x,y;
+  assume [x,y] in id(X);
+  then x in X & x = y by RELAT_1:def 10;
+  hence thesis by ZFMISC_1:106;
+end;
+
+canceled;
+
+theorem Th29:
+  id(X) * id(X) = id(X)
+proof
+   dom id(X) = X by RELAT_1:71;
+ hence thesis by RELAT_1:77;
+end;
+
+theorem
+    id({x}) = {[x,x]}
+proof
+ thus id({x}) c= {[x,x]}
+  proof
+     [:{x},{x}:] = {[x,x]} by ZFMISC_1:35;
+   hence thesis by Lm1;
+  end;
+    x in {x} & x = x by TARSKI:def 1;
+  then [x,x] in id({x}) by RELAT_1:def 10;
+  hence thesis by ZFMISC_1:37;
+end;
+
+theorem
+    [x,y] in id(X) iff [y,x] in id(X)
+proof
+ thus [x,y] in id(X) implies [y,x] in id(X)
+ proof
+  assume [x,y] in id(X);
+  then x in X & x = y by RELAT_1:def 10;
+  hence thesis by RELAT_1:def 10;
+ end;
+ thus [y,x] in id(X) implies [x,y] in id(X)
+ proof
+  assume [y,x] in id(X);
+  then y in X & y = x by RELAT_1:def 10;
+  hence thesis by RELAT_1:def 10;
+ end;
+end;
+
+theorem Th32:
+  id(X \/ Y) = id(X) \/ id(Y) &
+        id(X /\ Y) = id(X) /\ id(Y) &
+        id(X \ Y) = id(X) \ id(Y)
+proof
+ thus id(X \/ Y) = id(X) \/ id(Y)
+ proof
+   let x,y;
+  thus [x,y] in id(X \/ Y) implies [x,y] in id(X) \/ id(Y)
+  proof
+   assume [x,y] in id(X \/ Y);
+   then x in X \/ Y & x = y by RELAT_1:def 10;
+   then (x in X or x in Y) & x = y by XBOOLE_0:def 2;
+   then [x,y] in id(X) or [x,y] in id(Y) by RELAT_1:def 10;
+   hence thesis by XBOOLE_0:def 2;
+  end;
+   assume [x,y] in id(X) \/ id(Y);
+   then [x,y] in id(X) or [x,y] in id(Y) by XBOOLE_0:def 2;
+   then (x in X or x in Y) & x = y by RELAT_1:def 10;
+   then x in X \/ Y & x = y by XBOOLE_0:def 2;
+   hence thesis by RELAT_1:def 10;
+ end;
+
+ thus id(X /\ Y) = id(X) /\ id(Y)
+ proof
+  let x,y;
+  thus [x,y] in id(X /\ Y) implies [x,y] in id(X) /\ id(Y)
+  proof
+   assume [x,y] in id(X /\ Y);
+   then x in X /\ Y & x = y by RELAT_1:def 10;
+   then x in X & x in Y & x = y by XBOOLE_0:def 3;
+   then [x,y] in id(X) & [x,y] in id(Y) by RELAT_1:def 10;
+   hence thesis by XBOOLE_0:def 3;
+  end;
+   assume [x,y] in id(X) /\ id(Y);
+   then [x,y] in id(X) & [x,y] in id(Y) by XBOOLE_0:def 3;
+   then x in X & x in Y & x = y by RELAT_1:def 10;
+   then x in X /\ Y & x = y by XBOOLE_0:def 3;
+   hence thesis by RELAT_1:def 10;
+ end;
+thus id(X \ Y) = id(X) \ id(Y)
+ proof
+  let x,y;
+  thus [x,y] in id(X \ Y) implies [x,y] in id(X) \ id(Y)
+  proof
+   assume [x,y] in id(X \ Y);
+   then x in X \ Y & x = y by RELAT_1:def 10;
+   then x in X & not x in Y & x = y by XBOOLE_0:def 4;
+   then [x,y] in id(X) & not [x,y] in id(Y) by RELAT_1:def 10;
+   hence thesis by XBOOLE_0:def 4;
+  end;
+   assume [x,y] in id(X) \ id(Y);
+   then [x,y] in id(X) & not [x,y] in id(Y) by XBOOLE_0:def 4;
+   then x in X & x = y & not (x in Y & x = y) by RELAT_1:def 10;
+   then x in X \ Y & x = y by XBOOLE_0:def 4;
+   hence thesis by RELAT_1:def 10;
+ end;
+end;
+
+theorem Th33:
+  X c= Y implies id(X) c= id(Y)
+proof
+ assume X c= Y;
+ then X \/ Y = Y by XBOOLE_1:12;
+ then id(X) \/ id(Y) = id(Y) by Th32;
+ hence thesis by XBOOLE_1:7;
+end;
+
+theorem
+    id(X \ Y) \ id(X) = {}
+proof
+   X \ Y c= X by XBOOLE_1:36;
+ then id(X \ Y) c= id(X) by Th33;
+ hence thesis by XBOOLE_1:37;
+end;
+
+theorem
+    R c= id(dom R) implies R = id(dom R)
+proof
+ assume A1:R c= id(dom R);
+  let x,y;
+  thus [x,y] in R implies [x,y] in id(dom R) by A1;
+  assume [x,y] in id(dom R);
+  then A2:x in dom R & x = y by RELAT_1:def 10;
+  then consider z such that A3:[x,z] in R by RELAT_1:def 4;
+  thus thesis by A1,A2,A3,RELAT_1:def 10;
+end;
+
+theorem
+    id(X) c= R \/ R~ implies id(X) c= R & id(X) c= R~
+proof
+ assume A1:id(X) c= R \/ R~;
+   for x holds x in X implies [x,x] in R & [x,x] in R~
+ proof
+  let x;
+  assume x in X;
+  then [x,x] in id(X) by RELAT_1:def 10;
+  then A2: [x,x] in R or [x,x] in R~ by A1,XBOOLE_0:def 2;
+  hence [x,x] in R by RELAT_1:def 7;
+  thus thesis by A2,RELAT_1:def 7;
+ end;
+ then (for x holds x in X implies [x,x] in R) &
+  (for x holds x in X implies [x,x] in R~);
+ hence thesis by RELAT_1:73;
+end;
+
+theorem
+    id(X) c= R implies id(X) c= R~
+proof
+ assume A1:id(X) c= R;
+   for x holds x in X implies [x,x] in R~
+ proof
+  let x;
+  assume x in X;
+  then [x,x] in id(X) by RELAT_1:def 10;
+  hence thesis by A1,RELAT_1:def 7;
+ end;
+ hence thesis by RELAT_1:73;
+end;
+
+:: CLOSURE RELATION
+
+theorem
+    R c= [:X,X:] implies R \ id(dom R) = R \ id(X) &
+                               R \ id(rng R) = R \ id(X)
+proof
+ assume A1:R c= [:X,X:];
+ then dom R c= X by Th15;
+ then id(dom R) c= id(X) by Th33;
+ then A2: R \ id(X) c= R \ id(dom R) by XBOOLE_1:34;
+   R \ id(dom R) c= R \ id(X)
+ proof
+   let x,y;
+   assume [x,y] in R \ id(dom R);
+   then A3:[x,y] in R & not [x,y] in id(dom R) by XBOOLE_0:def 4;
+     not [x,y] in id(X)
+   proof
+    assume [x,y] in id(X);
+    then x in dom R & x = y by A3,RELAT_1:20,def 10;
+    hence contradiction by A3,RELAT_1:def 10;
+   end;
+   hence thesis by A3,XBOOLE_0:def 4;
+ end;
+ hence R \ id(dom R) = R \ id(X) by A2,XBOOLE_0:def 10;
+   rng R c= X by A1,Th15;
+ then id(rng R) c= id(X) by Th33;
+ then A4: R \ id(X) c= R \ id(rng R) by XBOOLE_1:34;
+   R \ id(rng R) c= R \ id(X)
+ proof
+   let x,y;
+   assume [x,y] in R \ id(rng R);
+   then A5:[x,y] in R & not [x,y] in id(rng R) by XBOOLE_0:def 4;
+     not [x,y] in id(X)
+   proof
+    assume [x,y] in id(X);
+    then y in rng R & x = y by A5,RELAT_1:20,def 10;
+    hence contradiction by A5,RELAT_1:def 10;
+   end;
+   hence thesis by A5,XBOOLE_0:def 4;
+ end;
+ hence R \ id(rng R) = R \ id(X) by A4,XBOOLE_0:def 10;
+end;
+
+theorem
+    (id(X) * (R \ id(X)) = {} implies
+     dom (R \ id(X)) = dom R \ dom (id(X))) &
+     ((R \ id(X)) * id(X) = {} implies
+                   rng (R \ id(X)) = rng R \ rng (id(X)))
+proof
+ thus (id(X) * (R \ id(X)) = {} implies
+         dom (R \ id(X)) = dom R \ dom (id(X)))
+ proof
+  assume A1:id(X) * (R \ id(X)) = {};
+  A2:dom R \ dom(id(X)) c= dom (R \ id(X)) by RELAT_1:15;
+    for x holds x in dom(R \ id(X)) implies x in (dom R \ dom(id(X)
+)
+)
+  proof
+   let x;
+   assume x in dom(R \ id(X));
+   then consider y such that A3: [x,y] in (R \ id(X)) by RELAT_1:def 4;
+A4:   [x,y] in R & not [x,y] in id(X) by A3,XBOOLE_0:def 4;
+   A5:x in dom R & not x in X implies thesis
+   proof
+    assume x in dom R & not x in X;
+    then x in dom R & not x in dom(id(X)) by RELAT_1:71;
+    hence thesis by XBOOLE_0:def 4;
+   end;
+     x in dom R & not x = y implies thesis
+   proof
+      not x in X
+    proof
+     assume x in X;
+     then [x,x] in id(X) & [x,y] in (R \ id(X)) by A3,RELAT_1:def 10;
+     hence thesis by A1,RELAT_1:def 8;
+    end;
+    hence thesis by A5;
+   end;
+   hence thesis by A4,A5,RELAT_1:def 4,def 10;
+  end;
+  then dom (R \ id(X)) c= dom R \ dom (id(X)) by TARSKI:def 3;
+  hence thesis by A2,XBOOLE_0:def 10;
+ end;
+thus (R \ id(X)) * id(X) = {} implies
+                   rng (R \ id(X)) = rng R \ rng (id(X))
+ proof
+  assume A6:(R \ id(X)) * id(X) = {};
+  A7:rng R \ rng(id(X)) c= rng (R \ id(X)) by RELAT_1:28;
+    rng (R \ id(X)) c= rng R \ rng (id(X))
+  proof
+   let y;
+   assume y in rng(R \ id(X));
+   then consider x such that A8: [x,y] in (R \ id(X)) by RELAT_1:def 5;
+A9:   [x,y] in R & not [x,y] in id(X) by A8,XBOOLE_0:def 4;
+
+   A10:y in rng R & not y in X implies thesis
+   proof
+    assume y in rng R & not y in X;
+    then y in rng R & not y in rng(id(X)) by RELAT_1:71;
+    hence thesis by XBOOLE_0:def 4;
+   end;
+     y in rng R & not x = y implies thesis
+   proof
+      not y in X
+    proof
+     assume y in X;
+     then [y,y] in id(X) & [x,y] in (R \ id(X)) by A8,RELAT_1:def 10;
+     hence thesis by A6,RELAT_1:def 8;
+    end;
+    hence thesis by A10;
+   end;
+   hence thesis by A9,A10,RELAT_1:def 5,def 10;
+  end;
+  hence thesis by A7,XBOOLE_0:def 10;
+ end;
+end;
+
+theorem Th40:
+  (R c= R * R & R * (R \ id(rng(R))) = {} implies
+                                            id(rng(R)) c= R) &
+      (R c= R * R & (R \ id(dom(R))) * R = {} implies
+                                            id(dom(R)) c= R)
+proof
+thus (R c= R * R & R * (R \ id(rng(R))) = {} implies
+                                            id(rng(R)) c= R)
+ proof
+  assume A1:R c= R * R & R * (R \ id(rng(R))) = {};
+    for y holds y in rng(R) implies [y,y] in R
+  proof
+   let y;
+   assume y in rng R;
+   then consider x such that A2:[x,y] in R by RELAT_1:def 5;
+   consider z such that A3:[x,z] in R & [z,y] in R by A1,A2,RELAT_1:def 8;
+     z = y
+   proof
+    assume z <> y;
+    then not [z,y] in id(rng(R)) by RELAT_1:def 10;
+    then [z,y] in (R \ id(rng(R))) by A3,XBOOLE_0:def 4;
+    hence contradiction by A1,A3,RELAT_1:def 8;
+   end;
+   hence thesis by A3;
+  end;
+  hence thesis by RELAT_1:73;
+ end;
+thus R c= R * R & (R \ id(dom(R))) * R = {} implies
+                                       id(dom(R)) c= R
+ proof
+  assume A4:R c= R * R & (R \ id(dom(R))) * R = {};
+
+    for x holds x in dom(R) implies [x,x] in R
+   proof
+   let x;
+   assume x in dom R;
+   then consider y such that A5:[x,y] in R by RELAT_1:def 4;
+   consider z such that A6:[x,z] in R & [z,y] in R by A4,A5,RELAT_1:def 8;
+     z = x
+   proof
+    assume z <> x;
+    then not [x,z] in id(dom(R)) by RELAT_1:def 10;
+    then [x,z] in (R \ id(dom(R))) by A6,XBOOLE_0:def 4;
+    hence contradiction by A4,A6,RELAT_1:def 8;
+   end;
+   hence thesis by A6;
+  end;
+  hence thesis by RELAT_1:73;
+ end;
+end;
+
+theorem
+    (R c= R * R & R * (R \ id(rng(R))) = {} implies
+                 R /\ (id(rng(R))) = id(rng(R))) &
+      (R c= R * R & (R \ id(dom(R))) * R = {} implies
+                 R /\ (id(dom(R))) = id(dom(R)))
+proof
+ thus R c= R * R & R * (R \ id(rng(R))) = {} implies
+                 R /\ (id(rng(R))) = id(rng(R))
+ proof
+  assume R c= R * R & R * (R \ id(rng(R))) = {};
+  then id(rng(R)) c= R by Th40;
+  hence thesis by XBOOLE_1:28;
+ end;
+ thus R c= R * R & (R \ id(dom(R))) * R = {} implies
+                 R /\ (id(dom(R))) = id(dom(R))
+ proof
+  assume R c= R * R & (R \ id(dom(R))) * R = {};
+  then id(dom(R)) c= R by Th40;
+  hence thesis by XBOOLE_1:28;
+ end;
+end;
+
+theorem
+    (R * (R \ id(X)) = {} & rng R c= X implies
+           R * (R \ id(rng R)) = {}) &
+          ((R \ id(X)) * R = {} & dom R c= X implies
+           (R \ id(dom R)) * R = {})
+proof
+ thus (R * (R \ id(X)) = {} & rng R c= X implies
+           R * (R \ id(rng R)) = {})
+ proof
+  assume that A1:R * (R \ id(X)) = {} & rng R c= X and
+              A2:not R * (R \ id(rng R)) = {};
+  consider x,y such that A3:[x,y] in R * (R \ id(rng R))
+                                                      by A2,RELAT_1:56;
+  consider z such that A4:[x,z] in R & [z,y] in (R \ id(rng R))
+                                                     by A3,RELAT_1:def 8;
+  A5:z in rng R by A4,RELAT_1:20;
+    [z,y] in R & not [z,y] in id(rng R) by A4,XBOOLE_0:def 4;
+  then [z,y] in R & z <> y by A5,RELAT_1:def 10;
+  then [z,y] in R & not [z,y] in id(X) by RELAT_1:def 10;
+  then [z,y] in R \ id(X) by XBOOLE_0:def 4;
+  hence contradiction by A1,A4,RELAT_1:def 8;
+ end;
+thus ((R \ id(X)) * R = {} & dom R c= X implies
+                           (R \ id(dom R)) * R = {})
+ proof
+  assume that A6:(R \ id(X)) * R = {} & dom R c= X and
+              A7:not (R \ id(dom R)) * R = {};
+  consider x,y such that A8:[x,y] in (R \ id(dom R)) * R
+                                                      by A7,RELAT_1:56;
+  consider z such that A9: [x,z] in (R \ id(dom R)) & [z,y] in R
+                                                     by A8,RELAT_1:def 8;
+    [x,z] in R & not [x,z] in id(dom R) by A9,XBOOLE_0:def 4;
+  then [x,z] in R & (not z in dom R or x <> z) by RELAT_1:def 10;
+  then [x,z] in R & not [x,z] in id(X) by A9,RELAT_1:20,def 10;
+  then [x,z] in R \ id(X) by XBOOLE_0:def 4;
+  hence contradiction by A6,A9,RELAT_1:def 8;
+ end;
+end;
+
+:: OPERATION CL
+
+definition let R;
+ func CL(R) -> Relation equals
+:Def1: R /\ id(dom R);
+ correctness;
+end;
+
+theorem Th43:
+  CL(R) c= R & CL(R) c= id(dom R)
+proof
+   R /\ id(dom R) c= R & R /\ id(dom R) c= id(dom R)
+                                                       by XBOOLE_1:17;
+ hence thesis by Def1;
+end;
+
+theorem Th44:
+  [x,y] in CL(R) implies x in dom( CL(R)) & x = y
+ proof
+  assume [x,y] in CL(R);
+  then x in dom( CL(R)) & [x,y] in R /\ id(dom R)
+                                         by Def1,RELAT_1:20;
+  then x in dom( CL(R)) & [x,y] in id(dom R) by XBOOLE_0:def 3;
+  hence thesis by RELAT_1:def 10;
+ end;
+
+theorem Th45:
+  dom(CL(R)) = rng(CL(R))
+proof
+ thus dom(CL(R)) c= rng(CL(R))
+   proof
+    let x;
+    assume x in dom(CL(R));
+    then consider y such that A1: [x,y] in CL(R) by RELAT_1:def 4;
+      [x,y] in R /\ id(dom R) by A1,Def1;
+    then [x,y] in R & [x,y] in id(dom R) by XBOOLE_0:def 3;
+    then [x,x] in CL(R) by A1,RELAT_1:def 10;
+    hence thesis by RELAT_1:20;
+   end;
+    let x;
+    assume x in rng (CL(R));
+    then consider y such that A2:[y,x] in CL(R) by RELAT_1:def 5;
+      [y,x] in R /\ id(dom R) by A2,Def1;
+    then [y,x] in R & [y,x] in id(dom R) by XBOOLE_0:def 3;
+    then [x,x] in CL(R) by A2,RELAT_1:def 10;
+    hence thesis by RELAT_1:20;
+ end;
+
+theorem Th46:
+  (x in dom(CL(R)) iff x in dom R & [x,x] in R) &
+        (x in rng(CL(R)) iff x in dom R & [x,x] in R) &
+          (x in rng(CL(R)) iff x in rng R & [x,x] in R) &
+           (x in dom(CL(R)) iff x in rng R & [x,x] in R)
+proof
+thus A1: x in dom(CL(R)) iff x in dom R & [x,x] in R
+ proof
+  thus x in dom(CL(R)) implies x in dom R & [x,x] in R
+  proof
+   assume x in dom(CL(R));
+   then consider y such that A2: [x,y] in CL(R) by RELAT_1:def 4;
+     [x,y] in R /\ id(dom R) by A2,Def1;
+   then [x,y] in R & [x,y] in id(dom R) by XBOOLE_0:def 3;
+   hence thesis by RELAT_1:def 10;
+  end;
+  thus x in dom R & [x,x] in R implies x in dom(CL(R))
+  proof
+   assume A3:x in dom R & [x,x] in R;
+   then [x,x] in id(dom R) by RELAT_1:def 10;
+   then [x,x] in (R /\ id(dom R)) by A3,XBOOLE_0:def 3;
+   then [x,x] in CL(R) by Def1;
+   hence thesis by RELAT_1:def 4;
+  end;
+ end;
+hence x in rng(CL(R)) iff x in dom R & [x,x] in R by Th45;
+thus x in rng(CL(R)) iff x in rng R & [x,x] in R by A1,Th45,RELAT_1:20;
+thus x in dom(CL(R)) iff x in rng R & [x,x] in R by A1,RELAT_1:20;
+end;
+
+theorem Th47:
+  CL(R) = id(dom CL(R))
+proof
+  let x,y;
+thus [x,y] in CL(R) implies [x,y] in id(dom CL(R))
+ proof
+  assume [x,y] in CL(R);
+  then x in dom CL(R) & [x,y] in R /\ id(dom R) by Def1,RELAT_1:20;
+  then x in dom CL(R) & [x,y] in id(dom R) by XBOOLE_0:def 3;
+  then x in dom CL(R) & x = y by RELAT_1:def 10;
+  hence thesis by RELAT_1:def 10;
+ end;
+  assume [x,y] in id(dom CL(R));
+  then A1:x in dom CL(R) & x = y by RELAT_1:def 10;
+  then ex z st [x,z] in CL(R) by RELAT_1:def 4;
+  hence thesis by A1,Th44;
+end;
+
+theorem Th48:
+  (R * R = R & R * (R \ CL(R)) = {} & [x,y] in R & x <> y implies
+              x in (dom R \ dom(CL(R))) & y in dom(CL(R))) &
+     (R * R = R & (R \ CL(R)) * R = {} & [x,y] in R & x <> y implies
+              y in (rng R \ dom(CL(R))) & x in dom(CL(R)))
+proof
+thus R * R = R & R * (R \ CL(R)) = {} & [x,y] in R & x <> y implies
+                            x in (dom R \ dom(CL(R))) & y in dom(CL(R))
+proof
+ assume A1:R * R = R & R * (R \ CL(R)) = {} & [x,y] in R & x <> y;
+ then not [x,y] in id(dom R) by RELAT_1:def 10;
+ then not [x,y] in R /\ id(dom R) by XBOOLE_0:def 3;
+ then not [x,y] in CL(R) by Def1;
+ then A2:[x,y] in R \ CL(R) by A1,XBOOLE_0:def 4;
+ consider z such that A3: [x,z] in R & [z,y] in R by A1,RELAT_1:def 8;
+   z = y
+ proof
+  assume z <> y;
+  then not [z,y] in id(dom R) by RELAT_1:def 10;
+  then not [z,y] in R /\ id(dom R) by XBOOLE_0:def 3;
+  then not [z,y] in CL(R) by Def1;
+  then [x,z] in R & [z,y] in R \ CL(R) by A3,XBOOLE_0:def 4;
+  hence thesis by A1,RELAT_1:def 8;
+ end;
+ then A4: y in rng R & y = z by A1,RELAT_1:20;
+ A5: not x in dom(CL(R))
+ proof
+  assume x in dom(CL(R));
+  then [x,x] in R by Th46;
+  hence thesis by A1,A2,RELAT_1:def 8;
+ end;
+   x in dom R by A3,RELAT_1:20;
+ hence thesis by A3,A4,A5,Th46,XBOOLE_0:def 4;
+end;
+thus R * R = R & (R \ CL(R)) * R = {} & [x,y] in R & x <> y implies
+              y in (rng R \ dom(CL(R))) & x in dom(CL(R))
+proof
+ assume A6:R * R = R & (R \ CL(R)) * R = {} & [x,y] in R & x <> y;
+ then not [x,y] in id(dom R) by RELAT_1:def 10;
+ then not [x,y] in R /\ id(dom R) by XBOOLE_0:def 3;
+ then not [x,y] in CL(R) by Def1;
+ then A7:[x,y] in R \ CL(R) by A6,XBOOLE_0:def 4;
+ consider z such that A8: [x,z] in R & [z,y] in R by A6,RELAT_1:def 8;
+   z = x
+ proof
+  assume z <> x;
+  then not [x,z] in id(dom R) by RELAT_1:def 10;
+  then not [x,z] in R /\ id(dom R) by XBOOLE_0:def 3;
+  then not [x,z] in CL(R) by Def1;
+  then [z,y] in R & [x,z] in R \ CL(R) by A8,XBOOLE_0:def 4;
+  hence thesis by A6,RELAT_1:def 8;
+ end;
+ then A9: x in dom R & x = z by A6,RELAT_1:20;
+A10: not y in dom(CL(R))
+ proof
+  assume y in dom(CL(R));
+  then [y,y] in R by Th46;
+  hence thesis by A6,A7,RELAT_1:def 8;
+ end;
+   y in rng R by A8,RELAT_1:20;
+ hence thesis by A8,A9,A10,Th46,XBOOLE_0:def 4;
+end;
+end;
+
+theorem
+    (R * R = R & R * (R \ id(dom R)) = {} & [x,y] in R & x <> y
+       implies x in ((dom R) \ dom(CL(R))) & y in dom(CL(R))) &
+     (R * R = R & (R \ id(dom R)) * R = {} & [x,y] in R & x <> y
+       implies y in ((rng R) \ dom(CL(R))) & x in dom(CL(R)))
+proof
+    (R \ CL(R)) = (R \ R /\ id(dom R)) by Def1
+               .= R \ id(dom R) by XBOOLE_1:47;
+ hence thesis by Th48;
+end;
+
+theorem
+    (R * R = R & R * (R \ id(dom R)) = {}
+                  implies dom(CL(R)) = rng(R) & rng(CL(R)) = rng(R)) &
+        (R * R = R & (R \ id(dom R)) * R = {}
+                  implies dom(CL(R)) = dom(R) & rng(CL(R)) = dom(R))
+
+proof
+ thus R * R = R & R * (R \ id(dom R)) = {}
+           implies dom(CL(R)) = rng(R) & rng(CL(R)) = rng(R)
+ proof
+  assume A1: R * R = R & R * (R \ id(dom R)) = {};
+    CL(R) c= R by Th43;
+  then rng(CL(R)) c= rng(R) by RELAT_1:25;
+  then A2: dom(CL(R)) c= rng(R) by Th45;
+    rng R c= dom(CL(R))
+  proof
+     for y holds y in rng R implies y in dom(CL(R))
+   proof
+    let y;
+    assume y in rng R;
+    then consider x such that A3:[x,y] in R by RELAT_1:def 5;
+    consider z such that A4: [x,z] in R & [z,y] in R by A1,A3,RELAT_1:def 8;
+A5:    z = y
+    proof
+     assume z <> y;
+     then not [z,y] in id(dom R) by RELAT_1:def 10;
+     then [x,z] in R & [z,y] in R \ id(dom R) by A4,XBOOLE_0:def 4;
+     hence thesis by A1,RELAT_1:def 8;
+    end;
+      z in dom R by A4,RELAT_1:20;
+    then [z,y] in id(dom R) by A5,RELAT_1:def 10;
+    then [z,y] in R /\ id(dom R) by A4,XBOOLE_0:def 3;
+    then [z,y] in CL(R) by Def1;
+    hence thesis by A5,RELAT_1:def 4;
+   end;
+   hence thesis by TARSKI:def 3;
+  end;
+  then dom(CL(R)) = rng R by A2,XBOOLE_0:def 10;
+  hence thesis by Th45;
+ end;
+ thus R * R = R & (R \ id(dom R)) * R = {}
+            implies dom(CL(R)) = dom(R) & rng(CL(R)) = dom R
+ proof
+  assume A6: R * R = R & (R \ id(dom R)) * R = {};
+    CL(R) c= R by Th43;
+  then A7:dom(CL(R)) c= dom(R) by RELAT_1:25;
+    dom R c= dom(CL(R))
+  proof
+     for x holds x in dom R implies x in dom(CL(R))
+   proof
+    let x;
+    assume A8:x in dom R;
+    then consider y such that A9:[x,y] in R by RELAT_1:def 4;
+    consider z such that A10: [x,z] in R & [z,y] in R by A6,A9,RELAT_1:def 8;
+A11:    z = x
+    proof
+     assume z <> x;
+     then not [x,z] in id(dom R) by RELAT_1:def 10;
+     then [z,y] in R & [x,z] in R \ id(dom R) by A10,XBOOLE_0:def 4;
+      hence thesis by A6,RELAT_1:def 8;
+    end;
+    then [x,z] in id(dom R) by A8,RELAT_1:def 10;
+    then [x,z] in R /\ id(dom R) by A10,XBOOLE_0:def 3;
+    then [x,z] in CL(R) by Def1;
+    then z in rng(CL(R)) by RELAT_1:def 5;
+    hence thesis by A11,Th45;
+   end;
+   hence thesis by TARSKI:def 3;
+  end;
+  then dom(CL(R)) = dom R by A7,XBOOLE_0:def 10;
+   hence thesis by Th45;
+ end;
+end;
+
+theorem Th51:
+  dom(CL(R)) c= dom R & rng(CL(R)) c= rng R &
+       rng(CL(R)) c= dom R & dom(CL(R)) c= rng R
+proof
+ thus dom(CL(R)) c= dom R & rng(CL(R)) c= rng R
+ proof
+    CL(R) c= R by Th43;
+  hence thesis by RELAT_1:25;
+ end;
+ hence thesis by Th45;
+end;
+
+theorem
+    id(dom(CL(R))) c= id(dom R) &
+        id(rng(CL(R))) c= id(dom R)
+proof
+   dom(CL(R)) c= dom R by Th51;
+ then id(dom(CL(R))) c= id(dom R) by Th33;
+ hence thesis by Th45;
+end;
+
+theorem Th53:
+  id(dom(CL(R))) c= R & id(rng(CL(R))) c= R
+proof
+ thus id(dom(CL(R))) c= R
+ proof
+   let x,y;
+   assume [x,y] in id(dom(CL(R)));
+   then x in dom(CL(R)) & x = y by RELAT_1:def 10;
+   hence thesis by Th46;
+ end;
+ hence thesis by Th45;
+end;
+
+theorem Th54:
+  (id(X) c= R & id(X) * (R \ id(X)) = {}
+                          implies R|X = id(X)) &
+       (id(X) c= R & (R \ id(X)) * id(X) = {}
+                          implies X|R = id(X))
+proof
+ thus id(X) c= R & id(X) * (R \ id(X)) = {}
+                                         implies R|X = id(X)
+ proof
+  assume A1: id(X) c= R & id(X) * (R \ id(X)) = {};
+    R|X = id(X) * R by RELAT_1:94
+     .= id(X) * (R \/ id(X)) by A1,XBOOLE_1:12
+     .= id(X) * ((R \ id(X)) \/ id(X)) by XBOOLE_1:39
+     .= {} \/ id(X) * id(X) by A1,RELAT_1:51
+     .= id(X) by Th29;
+  hence thesis;
+ end;
+ thus id(X) c= R & (R \ id(X)) * id(X) = {}
+                                        implies X|R = id(X)
+ proof
+  assume A2: id(X) c= R & (R \ id(X)) * id(X) = {};
+    X|R = R * id(X) by RELAT_1:123
+     .= (R \/ id(X)) * id(X) by A2,XBOOLE_1:12
+     .= ((R \ id(X)) \/ id(X)) * id(X) by XBOOLE_1:39
+     .= {} \/ id(X) * id(X) by A2,Th20
+     .= id(X) by Th29;
+  hence thesis;
+ end;
+end;
+
+theorem
+    (id(dom(CL(R))) * (R \ id(dom(CL(R)))) = {} implies
+         R|(dom(CL(R))) = id(dom(CL(R))) &
+              R|(rng(CL(R))) = id(dom(CL(R)))) &
+ ((R \ id(rng(CL(R)))) * id(rng(CL(R))) = {} implies
+                     (dom(CL(R)))|R = id(dom(CL(R))) &
+                        (rng(CL(R)))|R = id(rng(CL(R))))
+proof
+ thus id(dom(CL(R))) * (R \ id(dom(CL(R)))) = {} implies
+                     R|(dom(CL(R))) = id(dom(CL(R))) &
+                        R|(rng(CL(R))) = id(dom(CL(R)))
+ proof
+  assume A1: id(dom(CL(R))) * (R \ id(dom(CL(R)))) = {};
+    id(dom(CL(R))) c= R by Th53;
+  then R|(dom(CL(R))) = id(dom(CL(R))) by A1,Th54;
+  hence thesis by Th45;
+ end;
+ thus (R \ id(rng(CL(R)))) * id(rng(CL(R))) = {} implies
+                     (dom(CL(R)))|R = id(dom(CL(R))) &
+                        (rng(CL(R)))|R = id(rng(CL(R)))
+ proof
+  assume A2: (R \ id(rng(CL(R)))) * id(rng(CL(R))) = {};
+    id(rng(CL(R))) c= R by Th53;
+  then (rng(CL(R)))|R = id(rng(CL(R))) by A2,Th54;
+  then (dom(CL(R)))|R = id(rng(CL(R))) by Th45;
+  hence thesis by Th45;
+ end;
+end;
+
+theorem
+    (R * (R \ id(dom R)) = {} implies
+       id(dom(CL(R))) * (R \ id(dom(CL(R)))) = {}) &
+       ((R \ id(dom R)) * R = {} implies
+       (R \ id(dom(CL(R)))) * id(dom(CL(R))) = {})
+proof
+ thus R * (R \ id(dom R)) = {} implies
+    id(dom(CL(R))) * (R \ id(dom(CL(R)))) = {}
+ proof
+  assume A1:R * (R \ id(dom R)) = {};
+  A2: R \ id(dom R) = R \ (R /\ id(dom R)) by XBOOLE_1:47
+                        .= R \ CL(R) by Def1
+                        .= R \ id(dom(CL(R))) by Th47;
+    id(dom(CL(R))) c= R by Th53;
+  then id(dom(CL(R))) * (R \ id(dom(CL(R)))) c=
+                        R * (R \ id(dom R)) by A2,RELAT_1:49;
+  hence thesis by A1,XBOOLE_1:3;
+ end;
+ thus (R \ id(dom R)) * R = {} implies
+   (R \ id(dom(CL(R)))) * id(dom(CL(R))) = {}
+ proof
+  assume A3:(R \ id(dom R)) * R = {};
+  A4: R \ id(dom R) = R \ (R /\ id(dom R)) by XBOOLE_1:47
+                        .= R \ CL(R) by Def1
+                        .= R \ id(dom(CL(R))) by Th47;
+    id(dom(CL(R))) c= R by Th53;
+  then (R \ id(dom(CL(R)))) * id(dom(CL(R))) c=
+                        (R \ id(dom R)) * R by A4,RELAT_1:48;
+  hence thesis by A3,XBOOLE_1:3;
+ end;
+end;
+
+theorem Th57:
+  (S * R = S & R * (R \ id(dom R)) = {} implies
+                    S * (R \ id(dom R)) = {}) &
+      (R * S = S & (R \ id(dom R)) * R = {} implies
+                    (R \ id(dom R)) * S = {})
+proof
+ thus S * R = S & R * (R \ id(dom R)) = {} implies
+                    S * (R \ id(dom R)) = {}
+ proof
+  assume S * R = S & R * (R \ id(dom R)) = {};
+  then S * (R \ id(dom R)) = S * {} by RELAT_1:55
+                           .= {};
+  hence thesis;
+ end;
+ thus R * S = S & (R \ id(dom R)) * R = {} implies
+                    (R \ id(dom R)) * S = {}
+ proof
+  assume R * S = S & (R \ id(dom R)) * R = {};
+  then (R \ id(dom R)) * S = {} * S by RELAT_1:55
+                           .= {};
+  hence thesis;
+ end;
+end;
+
+theorem Th58:
+  (S * R = S & R * (R \ id(dom R)) = {} implies CL(S) c= CL(R)) &
+        (R * S = S & (R \ id(dom R)) * R = {} implies
+                                                 CL(S) c= CL(R))
+proof
+ thus S * R = S & R * (R \ id(dom R)) = {} implies CL(S) c= CL(R)
+ proof
+  assume A1:S * R = S & R * (R \ id(dom R)) = {};
+  then A2: S * (R \ id(dom R)) = {} by Th57;
+    for x,y holds [x,y] in CL(S) implies [x,y] in CL(R)
+  proof
+   let x,y;
+   assume [x,y] in CL(S);
+   then [x,y] in S /\ id(dom S) by Def1;
+   then A3: [x,y] in S & [x,y] in id(dom S) by XBOOLE_0:def 3;
+   then A4:[x,y] in S & x in dom S & x = y by RELAT_1:def 10;
+   consider z such that A5: [x,z] in S & [z,y] in R by A1,A3,RELAT_1:def 8;
+     z = y
+   proof
+    assume z <> y;
+    then not [z,y] in id(dom R) by RELAT_1:def 10;
+    then [z,y] in R \ id(dom R) by A5,XBOOLE_0:def 4;
+    hence contradiction by A2,A5,RELAT_1:def 8;
+   end;
+   then [x,y] in R & x in dom R & x = y by A4,A5,RELAT_1:20;
+   then [x,y] in R & [x,y] in id(dom R) by RELAT_1:def 10;
+   then [x,y] in R /\ id(dom R) by XBOOLE_0:def 3;
+   hence thesis by Def1;
+  end;
+  hence thesis by RELAT_1:def 3;
+ end;
+  assume A6:R * S = S & (R \ id(dom R)) * R = {};
+  then A7: (R \ id(dom R)) * S = {} by Th57;
+    for x,y holds [x,y] in CL(S) implies [x,y] in CL(R)
+  proof
+   let x,y;
+   assume [x,y] in CL(S);
+   then [x,y] in S /\ id(dom S) by Def1;
+   then A8: [x,y] in S & [x,y] in id(dom S) by XBOOLE_0:def 3;
+   then consider z such that A9: [x,z] in R & [z,y] in S by A6,RELAT_1:def 8;
+     z = x
+   proof
+    assume z <> x;
+    then not [x,z] in id(dom R) by RELAT_1:def 10;
+    then [x,z] in R \ id(dom R) by A9,XBOOLE_0:def 4;
+    hence contradiction by A7,A9,RELAT_1:def 8;
+   end;
+   then [x,y] in R & x in dom R & x = y by A8,A9,RELAT_1:20,def 10;
+   then [x,y] in R & [x,y] in id(dom R) by RELAT_1:def 10;
+   then [x,y] in R /\ id(dom R) by XBOOLE_0:def 3;
+   hence thesis by Def1;
+  end;
+  hence thesis by RELAT_1:def 3;
+end;
+
+theorem
+    (S * R = S & R * (R \ id(dom R)) = {} &
+        R * S = R & S * (S \ id(dom S)) = {} implies
+   CL(S) = CL(R)) & (R * S = S & (R \ id(dom R)) * R = {} &
+    S * R = R & (S \ id(dom S)) * S = {} implies CL(S) = CL(R))
+proof
+ thus (S * R = S & R * (R \ id(dom R)) = {} &
+     R * S = R & S * (S \ id(dom S)) = {}) implies CL(S) = CL(R)
+ proof
+  assume (S * R = S & R * (R \ id(dom R)) = {}) &
+                   (R * S = R & S * (S \ id(dom S)) = {});
+  then CL(S) c= CL(R) & CL(R) c= CL(S) by Th58;
+  hence thesis by XBOOLE_0:def 10;
+ end;
+  assume (R * S = S & (R \ id(dom R)) * R = {}) &
+                  (S * R = R & (S \ id(dom S)) * S = {});
+  then CL(S) c= CL(R) & CL(R) c= CL(S) by Th58;
+  hence thesis by XBOOLE_0:def 10;
+end;

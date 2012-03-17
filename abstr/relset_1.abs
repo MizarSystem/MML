@@ -1,0 +1,239 @@
+:: Relations Defined on Sets
+::  by Edmund Woronowicz
+::
+:: Received April 14, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, BOOLE, FUNCT_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1;
+ constructors TARSKI, RELAT_1, SUBSET_1, XBOOLE_0;
+ clusters XBOOLE_0, ZFMISC_1;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+ reserve A,B,X,X1,Y,Y1,Y2,Z for set;
+ reserve a,x,y,z for set;
+
+::
+::   RELATION AS A SUBSET OF CARTESIAN PRODUCT OF A TWO SETS
+::   _______________________________________________________
+
+definition let X,Y;
+  mode Relation of X,Y means
+:: RELSET_1:def 1
+  it c= [:X,Y:];
+end;
+
+definition let X,Y;
+ redefine mode Relation of X,Y -> Subset of [:X,Y:];
+end;
+
+definition let X,Y;
+ cluster -> Relation-like Subset of [:X,Y:];
+end;
+
+reserve P,R for Relation of X,Y;
+
+canceled 3;
+
+theorem :: RELSET_1:4
+    A c= R implies A is Relation of X,Y;
+
+canceled;
+
+theorem :: RELSET_1:6
+    a in R implies ex x,y st a = [x,y] & x in X & y in Y;
+
+canceled;
+
+theorem :: RELSET_1:8
+    x in X & y in Y implies {[x,y]} is Relation of X,Y;
+
+theorem :: RELSET_1:9
+    for R being Relation st dom R c= X holds R is Relation of X, rng R;
+
+theorem :: RELSET_1:10
+    for R being Relation st rng R c= Y holds R is Relation of dom R, Y;
+
+theorem :: RELSET_1:11
+    for R being Relation st dom R c= X & rng R c= Y holds R is Relation of X,Y;
+
+theorem :: RELSET_1:12
+  dom R c= X & rng R c= Y;
+
+theorem :: RELSET_1:13
+  dom R c= X1 implies R is Relation of X1,Y;
+
+theorem :: RELSET_1:14
+  rng R c= Y1 implies R is Relation of X,Y1;
+
+theorem :: RELSET_1:15
+    X c= X1 implies R is Relation of X1,Y;
+
+theorem :: RELSET_1:16
+    Y c= Y1 implies R is Relation of X,Y1;
+
+theorem :: RELSET_1:17
+    X c= X1 & Y c= Y1 implies R is Relation of X1,Y1;
+
+definition let X,Y,P,R;
+ redefine func P \/ R -> Relation of X,Y;
+ redefine func P /\ R -> Relation of X,Y;
+ redefine func P \ R -> Relation of X,Y;
+end;
+
+definition let X,Y,R;
+ redefine func dom R -> Subset of X;
+ redefine func rng R -> Subset of Y;
+end;
+
+canceled;
+
+theorem :: RELSET_1:19
+    field R c= X \/ Y;
+
+canceled 2;
+
+theorem :: RELSET_1:22
+    (for x st x in X ex y st [x,y] in R) iff dom R = X;
+
+theorem :: RELSET_1:23
+   (for y st y in Y ex x st [x,y] in R) iff rng R = Y;
+
+definition let X,Y,R;
+ redefine func R~ -> Relation of Y,X;
+end;
+
+definition let X,Y1,Y2,Z;
+           let P be Relation of X,Y1; let R be Relation of Y2,Z;
+ redefine func P*R -> Relation of X,Z;
+end;
+
+theorem :: RELSET_1:24
+    dom (R~) = rng R & rng (R~) = dom R;
+
+theorem :: RELSET_1:25
+    {} is Relation of X,Y;
+
+theorem :: RELSET_1:26
+    R is Relation of {},Y implies R = {};
+
+theorem :: RELSET_1:27
+    R is Relation of X,{} implies R = {};
+
+theorem :: RELSET_1:28
+  id X c= [:X,X:];
+
+theorem :: RELSET_1:29
+    id X is Relation of X,X;
+
+theorem :: RELSET_1:30
+  id A c= R implies A c= dom R & A c= rng R;
+
+theorem :: RELSET_1:31
+    id X c= R implies X = dom R & X c= rng R;
+
+theorem :: RELSET_1:32
+    id Y c= R implies Y c= dom R & Y = rng R;
+
+definition let X,Y,R,A;
+ redefine func R|A -> Relation of X,Y;
+end;
+
+definition let X,Y,B,R;
+ redefine func B|R -> Relation of X,Y;
+end;
+
+theorem :: RELSET_1:33
+    R|X1 is Relation of X1,Y;
+
+theorem :: RELSET_1:34
+    X c= X1 implies R|X1 = R;
+
+theorem :: RELSET_1:35
+    Y1|R is Relation of X,Y1;
+
+theorem :: RELSET_1:36
+    Y c= Y1 implies Y1|R = R;
+
+definition let X,Y,R,A;
+ redefine func R.:A -> Subset of Y;
+
+ redefine func R"A -> Subset of X;
+end;
+
+canceled;
+
+theorem :: RELSET_1:38
+  R.:X = rng R & R"Y = dom R;
+
+theorem :: RELSET_1:39
+    R.:(R"Y) = rng R & R"(R.:X) = dom R;
+
+scheme Rel_On_Set_Ex{A() -> set,B() -> set,P[set,set]}:
+ ex R being Relation of A(),B() st
+   for x,y holds [x,y] in R iff x in A() & y in B() & P[x,y];
+
+::
+::            RELATION ON THE SET
+::            ___________________
+
+
+definition let X;
+  mode Relation of X is Relation of X,X;
+end;
+
+reserve R for Relation of X;
+
+canceled 5;
+
+theorem :: RELSET_1:45
+    R*(id X) = R & (id X)*R = R;
+
+::
+::            RELATION ON THE DOMAIN
+::            ______________________
+
+reserve D,D1,D2,E,F for non empty set;
+reserve R for Relation of D,E;
+reserve x for Element of D;
+reserve y for Element of E;
+
+theorem :: RELSET_1:46
+    id D <> {};
+
+theorem :: RELSET_1:47
+    for x being Element of D holds
+   x in dom R iff ex y being Element of E st [x,y] in R;
+
+theorem :: RELSET_1:48
+    for y being Element of E holds
+   y in rng R iff ex x being Element of D st [x,y] in R;
+
+theorem :: RELSET_1:49
+    for x being Element of D holds
+        x in dom R implies ex y being Element of E st y in rng R;
+
+theorem :: RELSET_1:50
+    for y being Element of E holds
+        y in rng R implies ex x being Element of D st x in dom R;
+
+theorem :: RELSET_1:51
+    for P being (Relation of D,E), R being Relation of E,F
+    for x being Element of D, z being Element of F holds
+    [x,z] in P*R iff ex y being Element of E st [x,y] in P & [y,z] in R;
+
+theorem :: RELSET_1:52
+    y in R.:D1 iff ex x being Element of D st [x,y] in R & x in D1;
+
+theorem :: RELSET_1:53
+    x in R"D2 iff ex y being Element of E st [x,y] in R & y in D2;
+
+scheme Rel_On_Dom_Ex{A,B() -> non empty set, P[set,set]}:
+ ex R being Relation of A(),B() st
+   for x being Element of A(), y being Element of B() holds
+     [x,y] in R iff P[x,y];

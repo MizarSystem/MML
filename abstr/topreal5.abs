@@ -1,0 +1,145 @@
+:: Intermediate Value Theorem and Thickness of Simple Closed Curves
+::  by Yatsuka Nakamura and Andrzej Trybulec
+::
+:: Received November 13, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, EUCLID, ARYTM, RCOMP_1, BOOLE, CONNSP_1, SUBSET_1,
+      RELAT_2, RELAT_1, FUNCT_1, ORDINAL2, TOPMETR, PCOMPS_1, METRIC_1,
+      ARYTM_1, ABSVALUE, BORSUK_1, ARYTM_3, FUNCT_5, FINSEQ_1, MCART_1,
+      TOPREAL2, TOPREAL1, TOPS_2, COMPTS_1, PSCOMP_1, REALSET1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, RELAT_1, FUNCT_1, STRUCT_0, PRE_TOPC, TOPS_2, COMPTS_1, RCOMP_1,
+      FINSEQ_1, METRIC_1, PCOMPS_1, EUCLID, TOPMETR, TOPREAL1, TOPREAL2,
+      TMAP_1, CONNSP_1, ABSVALUE, BORSUK_1, PSCOMP_1, JORDAN2B;
+ constructors REAL_1, ABSVALUE, TOPS_2, RCOMP_1, TOPMETR, TOPREAL1, TOPREAL2,
+      TMAP_1, CONNSP_1, PSCOMP_1, COMPTS_1, JORDAN2B;
+ clusters FUNCT_1, PRE_TOPC, METRIC_1, TOPMETR, STRUCT_0, EUCLID, BORSUK_1,
+      PSCOMP_1, XREAL_0, RELSET_1, ARYTM_3, MEMBERED, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin ::1.   INTERMEDIATE VALUE THEOREMS AND BOLZANO THEOREM
+
+reserve x,x1 for set;
+reserve a,b,d,ra,rb,r0,s1,s2 for real number;
+reserve r,s,r1,r2,r3,rc for Element of REAL;
+reserve p,q,q1,q2 for Point of TOP-REAL 2;
+reserve X,Y,Z for non empty TopSpace;
+
+theorem :: TOPREAL5:1
+for a,b,c being real number holds c in [.a,b.] iff a<=c & c <=b;
+
+canceled 2;
+
+theorem :: TOPREAL5:4
+for A,B1,B2 being Subset of X st
+  B1 is open & B2 is open & B1 meets A & B2 meets A & A c= B1 \/ B2
+  & B1 misses B2 holds A is not connected;
+
+theorem :: TOPREAL5:5
+for f being continuous map of X,Y,
+   A being Subset of X st A is connected holds f.:A is connected;
+
+theorem :: TOPREAL5:6
+ for ra,rb st ra<=rb holds
+    [#](Closed-Interval-TSpace(ra,rb)) is connected;
+
+::The proof of the following is almost same as TREAL_1:4
+theorem :: TOPREAL5:7
+for A being Subset of R^1,a
+  st A={r:a<r} holds A is open;
+
+::The proof of the following is almost same as TREAL_1:4
+theorem :: TOPREAL5:8
+for A being Subset of R^1,a
+  st A={r:a>r} holds A is open;
+
+theorem :: TOPREAL5:9
+ for A being Subset of R^1,a st not a in A & ex b,d st b in A & d in A
+  & b<a & a<d holds not A is connected;
+
+theorem :: TOPREAL5:10 ::General Intermediate Value Point Theorem
+     for X being non empty TopSpace,xa,xb being Point of X,
+   a,b,d being Real,f being continuous map of X,R^1 st
+   X is connected & f.xa=a & f.xb=b & a<=d & d<=b
+   ex xc being Point of X st f.xc =d;
+
+theorem :: TOPREAL5:11 ::General Intermediate Value Theorem II
+     for X being non empty TopSpace,xa,xb being Point of X,
+   B being Subset of X,
+   a,b,d being Real,f being continuous map of X,R^1 st
+   B is connected & f.xa=a & f.xb=b & a<=d & d<=b & xa in B & xb in B
+   ex xc being Point of X st xc in B & f.xc =d;
+
+::Intermediate Value Theorem <
+theorem :: TOPREAL5:12
+  for ra,rb,a,b st ra<rb
+  for f being continuous map of Closed-Interval-TSpace(ra,rb),R^1,d
+   st f.ra=a & f.rb=b & a<d & d<b
+  ex rc st f.rc =d & ra<rc & rc <rb;
+
+theorem :: TOPREAL5:13 ::Intermediate Value Theorem >
+   for ra,rb,a,b st ra<rb holds
+  for f being continuous map of Closed-Interval-TSpace(ra,rb),R^1,d st
+  f.ra=a & f.rb=b & a>d & d>b holds ex rc st f.rc =d & ra<rc & rc <rb;
+
+theorem :: TOPREAL5:14  ::The Bolzano Theorem
+      for ra,rb
+    for g being continuous map of Closed-Interval-TSpace(ra,rb),R^1,s1,s2
+    st ra<rb & s1*s2<0 & s1=g.ra & s2=g.rb
+    ex r1 st g.r1=0 & ra<r1 & r1<rb;
+
+theorem :: TOPREAL5:15
+for g being map of I[01],R^1,s1,s2 st g is continuous &
+  g.0<>g.1 & s1=g.0 & s2=g.1 holds ex r1 st 0<r1 & r1<1 & g.r1=(s1+s2)/2;
+
+begin ::2.  SIMPLE CLOSED CURVES ARE NOT FLAT
+theorem :: TOPREAL5:16
+for f being map of TOP-REAL 2,R^1 st f=proj1 holds
+ f is continuous;
+
+theorem :: TOPREAL5:17
+for f being map of TOP-REAL 2,R^1 st f=proj2 holds
+ f is continuous;
+
+theorem :: TOPREAL5:18
+for P being non empty Subset of TOP-REAL 2,
+    f being map of I[01], (TOP-REAL 2)|P st f is continuous
+ ex g being map of I[01],R^1 st g is continuous &
+   for r,q st r in the carrier of I[01] & q= f.r holds q`1=g.r;
+
+theorem :: TOPREAL5:19
+for P being non empty Subset of TOP-REAL 2,
+    f being map of I[01], (TOP-REAL 2)|P st f is continuous
+ ex g being map of I[01],R^1 st g is continuous &
+    for r,q st r in the carrier of I[01] & q= f.r holds q`2=g.r;
+
+theorem :: TOPREAL5:20
+for P being non empty Subset of TOP-REAL 2
+ st P is being_simple_closed_curve holds
+  not (ex r st for p st p in P holds p`2=r);
+
+theorem :: TOPREAL5:21
+for P being non empty Subset of TOP-REAL 2
+ st P is being_simple_closed_curve holds
+  not (ex r st for p st p in P holds p`1=r);
+
+theorem :: TOPREAL5:22
+for C being compact non empty Subset of TOP-REAL 2
+    st C is_simple_closed_curve holds N-bound(C) > S-bound(C);
+
+theorem :: TOPREAL5:23
+for C being compact non empty Subset of TOP-REAL 2
+    st C is_simple_closed_curve holds E-bound(C) > W-bound(C);
+
+theorem :: TOPREAL5:24
+  for P being compact non empty Subset of TOP-REAL 2
+ st P is_simple_closed_curve holds S-min(P)<>N-max(P);
+
+theorem :: TOPREAL5:25
+  for P being compact non empty Subset of TOP-REAL 2
+ st P is_simple_closed_curve holds W-min(P)<>E-max(P);
+

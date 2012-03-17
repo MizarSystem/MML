@@ -1,0 +1,1888 @@
+:: Computation in { \bf SCM_FSA }
+::  by Andrzej Trybulec and Yatsuka Nakamura
+::
+:: Received February 7, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary SCMFSA_2, AMI_1, INT_1, AMI_3, RELAT_1, FUNCT_4, FUNCOP_1, AMI_2,
+      BOOLE, FUNCT_1, AMI_5, ABSVALUE, FINSEQ_1, FINSEQ_2, CARD_3, CAT_1,
+      FINSET_1, ARYTM_1, NAT_1, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, XREAL_0, CARD_3, ABSVALUE,
+      RELAT_1, FUNCT_1, FUNCT_4, INT_1, NAT_1, STRUCT_0, CQC_LANG, FINSET_1,
+      FINSEQ_1, FINSEQ_2, FINSEQ_4, CAT_3, AMI_1, AMI_2, AMI_3, AMI_5, FUNCT_7,
+      SCMFSA_2;
+ constructors NAT_1, AMI_5, SCMFSA_1, FUNCT_7, SCMFSA_2, FINSEQ_4, CAT_3,
+      MEMBERED;
+ clusters AMI_1, AMI_3, INT_1, FUNCT_1, RELSET_1, SCMFSA_2, FINSEQ_5, FINSEQ_1,
+      FRAENKEL, ORDINAL2, NUMBERS;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions AMI_1, AMI_5;
+ theorems AMI_1, AMI_3, GRFUNC_1, NAT_1, CQC_LANG, TARSKI, FUNCOP_1, FUNCT_4,
+      FUNCT_1, FINSET_1, ZFMISC_1, INT_1, RELAT_1, AMI_5, SCMFSA_2, SCMFSA_1,
+      ABSVALUE, FINSEQ_2, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+
+begin
+
+reserve k for Nat,
+        da,db for Int-Location,
+        fa for FinSeq-Location;
+
+theorem Th1:
+ not IC SCM+FSA in Int-Locations
+proof assume IC SCM+FSA in Int-Locations;
+  then IC SCM+FSA is Int-Location by SCMFSA_2:11;
+then ObjectKind IC SCM+FSA = INT by SCMFSA_2:26;
+ hence contradiction by AMI_1:def 11,SCMFSA_2:6;
+end;
+
+theorem Th2:
+ not IC SCM+FSA in FinSeq-Locations
+proof assume IC SCM+FSA in FinSeq-Locations;
+  then IC SCM+FSA is FinSeq-Location by SCMFSA_2:12;
+then ObjectKind IC SCM+FSA = INT* by SCMFSA_2:27;
+ hence contradiction by AMI_1:def 11,SCMFSA_2:6;
+end;
+
+theorem
+   for i being Instruction of SCM+FSA, I being Instruction of SCM st i = I
+  for s being State of SCM+FSA, S being State of SCM st
+    S = s|(the carrier of SCM) +*
+       ((the Instruction-Locations of SCM) --> I)
+   holds Exec(i,s) = s +*Exec(I,S) +* s|the Instruction-Locations of SCM+FSA
+         by AMI_3:def 1,SCMFSA_2:75,def 1;
+
+theorem Th4:
+  for s1,s2 being State of SCM+FSA st
+       (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}))
+          = (s2 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}))
+  for l being Instruction of SCM+FSA
+   holds
+      Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+    = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+proof
+     let s1,s2 be State of SCM+FSA such that
+A1:   s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+       = s2 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA});
+ let l be Instruction of SCM+FSA;
+       IC SCM+FSA in {IC SCM+FSA} by TARSKI:def 1;
+then A2:  IC SCM+FSA in (Int-Locations \/ FinSeq-Locations \/
+ {IC SCM+FSA}) by XBOOLE_0:def 2;
+A3:  Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}
+                c= the carrier of SCM+FSA;
+      then (Int-Locations \/ FinSeq-Locations \/
+ {IC SCM+FSA}) c= dom s1 by AMI_3:36;
+      then A4:   IC SCM+FSA in
+ dom (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}))
+         by A2,RELAT_1:91;
+        (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) c= dom s2
+         by A3,AMI_3:36;
+then A5:   IC SCM+FSA in
+ dom (s2 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}))
+         by A2,RELAT_1:91;
+
+A6:   IC s1 = s1.IC SCM+FSA by AMI_1:def 15
+            .= (s2 |
+                (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})).IC SCM+FSA
+                    by A1,A4,FUNCT_1:70
+            .= s2.IC SCM+FSA by A5,FUNCT_1:70
+            .= IC s2 by AMI_1:def 15;
+A7:  dom Exec(l,s1) = the carrier of SCM+FSA by AMI_3:36;
+A8:  dom Exec(l,s2) = the carrier of SCM+FSA by AMI_3:36;
+A9:   dom Exec(l,s1) = dom Exec(l,s2) by A7,AMI_3:36;
+A10: Int-Locations \/ FinSeq-Locations c= (Int-Locations \/ FinSeq-Locations \/
+            {IC SCM+FSA}) by XBOOLE_1:7;
+A11: InsCode l <= 11+1 by SCMFSA_2:35;
+A12: InsCode l <= 10+1 implies InsCode l <= 10 or InsCode l = 11 by NAT_1:26;
+A13: InsCode l <= 9+1 implies InsCode l <= 8+1 or InsCode l = 10 by NAT_1:26;
+ per cases by A11,A12,A13,NAT_1:26;
+ suppose InsCode l <= 8;
+  then reconsider I = l as Instruction of SCM by SCMFSA_2:34;
+  reconsider
+   S1 = s1|(the carrier of SCM) +* ((the Instruction-Locations of SCM) --> I),
+   S2 = s2|(the carrier of SCM) +* ((the Instruction-Locations of SCM) --> I)
+       as State of SCM by AMI_3:def 1,SCMFSA_2:73;
+A14:  dom((the Instruction-Locations of SCM) --> I)
+        = SCM-Instr-Loc by AMI_3:def 1,FUNCOP_1:19;
+      not IC SCM in SCM-Instr-Loc by AMI_1:48,AMI_3:def 1;
+    then SCM-Instr-Loc misses {IC SCM} by ZFMISC_1:56;
+    then SCM-Instr-Loc misses SCM-Data-Loc \/ {IC SCM} by AMI_5:33,XBOOLE_1:70
+;
+then A15:  ((the Instruction-Locations of SCM) --> I)|(SCM-Data-Loc \/
+     {IC SCM}) = {} by A14,RELAT_1:95;
+A16:  SCM-Data-Loc \/ {IC SCM} c= the carrier of SCM by AMI_5:23,XBOOLE_1:7;
+      SCM-Data-Loc c= Int-Locations \/ FinSeq-Locations by SCMFSA_1:def 1,
+SCMFSA_2:def 2,XBOOLE_1:7;
+then A17:  SCM-Data-Loc \/ {IC SCM} c= Int-Locations \/ FinSeq-Locations \/
+ {IC SCM+FSA} by AMI_3:4,SCMFSA_2:7,XBOOLE_1:9;
+A18:  S1 | (SCM-Data-Loc \/ {IC SCM})
+      = s1|(the carrier of SCM) | (SCM-Data-Loc \/
+ {IC SCM}) +* {} by A15,AMI_5:6
+     .= s1|(the carrier of SCM) | (SCM-Data-Loc \/ {IC SCM}) by FUNCT_4:22
+     .= s1|(SCM-Data-Loc \/ {IC SCM}) by A16,RELAT_1:103
+     .= s1|(Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+          |(SCM-Data-Loc \/ {IC SCM}) by A17,RELAT_1:103
+     .= s2|(SCM-Data-Loc \/ {IC SCM}) by A1,A17,RELAT_1:103
+     .= s2|(the carrier of SCM) | (SCM-Data-Loc \/ {IC SCM}) by A16,RELAT_1:103
+     .= s2|(the carrier of SCM) | (SCM-Data-Loc \/
+ {IC SCM}) +* {} by FUNCT_4:22
+     .= S2 | (SCM-Data-Loc \/ {IC SCM}) by A15,AMI_5:6;
+      (the carrier of SCM) misses FinSeq-Locations by AMI_3:def 1,SCMFSA_1:def
+2,SCMFSA_2:def 3,XBOOLE_1:79;
+then A19:  (the carrier of SCM) /\ FinSeq-Locations = {} by XBOOLE_0:def 7;
+     not IC SCM+FSA in the Instruction-Locations of SCM+FSA by AMI_1:48;
+then A20: the Instruction-Locations of SCM+FSA misses {IC SCM+FSA} by ZFMISC_1:
+56;
+     (the Instruction-Locations of SCM+FSA)
+         misses Int-Locations \/ FinSeq-Locations by SCMFSA_2:13,14,XBOOLE_1:70
+;
+   then the Instruction-Locations of SCM+FSA misses
+            Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}
+                    by A20,XBOOLE_1:70;
+then A21:  (the Instruction-Locations of SCM+FSA)
+            /\ (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) = {}
+                 by XBOOLE_0:def 7;
+A22: s1|(the Instruction-Locations of SCM+FSA)
+      | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+      = s1|((the Instruction-Locations of SCM+FSA)
+            /\ (Int-Locations \/ FinSeq-Locations \/
+ {IC SCM+FSA})) by RELAT_1:100
+     .= {} by A21,RELAT_1:110;
+      dom Exec(I,S1) /\ FinSeq-Locations = {} by A19,AMI_3:36;
+    then dom Exec(I,S1) misses FinSeq-Locations by XBOOLE_0:def 7;
+then A23: Exec(I,S1)|FinSeq-Locations = {} by RELAT_1:95;
+A24: Exec(I,S1) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+      = Exec(I,S1) | (Int-Locations \/ FinSeq-Locations)
+          +* Exec(I,S1) |{IC SCM+FSA} by AMI_5:14
+     .= Exec(I,S1)|Int-Locations +* {} +* Exec(I,S1) |{IC SCM+FSA}
+             by A23,AMI_5:14
+     .= Exec(I,S1)|Int-Locations +* Exec(I,S1) |{IC SCM+FSA} by FUNCT_4:22
+     .= Exec(I,S1) | (SCM-Data-Loc \/ {IC SCM})
+                by AMI_3:4,AMI_5:14,SCMFSA_1:def 1,SCMFSA_2:7,def 2;
+A25: s2|(the Instruction-Locations of SCM+FSA)
+      | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+      = s2|((the Instruction-Locations of SCM+FSA)
+            /\ (Int-Locations \/ FinSeq-Locations \/
+ {IC SCM+FSA})) by RELAT_1:100
+     .= {} by A21,RELAT_1:110;
+      dom Exec(I,S2) /\ FinSeq-Locations = {} by A19,AMI_3:36;
+    then dom Exec(I,S2) misses FinSeq-Locations by XBOOLE_0:def 7;
+then A26: Exec(I,S2)|FinSeq-Locations = {} by RELAT_1:95;
+A27: Exec(I,S2) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+      = Exec(I,S2) | (Int-Locations \/ FinSeq-Locations)
+          +* Exec(I,S2) |{IC SCM+FSA} by AMI_5:14
+     .= Exec(I,S2)|Int-Locations +* {} +* Exec(I,S2) |{IC SCM+FSA}
+             by A26,AMI_5:14
+     .= Exec(I,S2)|Int-Locations +* Exec(I,S2) |{IC SCM+FSA} by FUNCT_4:22
+     .= Exec(I,S2) | (SCM-Data-Loc \/ {IC SCM})
+                by AMI_3:4,AMI_5:14,SCMFSA_1:def 1,SCMFSA_2:7,def 2;
+  thus Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+         = (s1 +*Exec(I,S1) +* s1|the Instruction-Locations of SCM+FSA)
+                | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) by AMI_3:
+def 1,SCMFSA_2:75,def 1
+        .= (s1 +*Exec(I,S1))
+             | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+          +* {} by A22,AMI_5:6
+        .= (s1 +*Exec(I,S1))
+             | (Int-Locations \/ FinSeq-Locations \/
+ {IC SCM+FSA}) by FUNCT_4:22
+        .= (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}))
+                   +* Exec(I,S1) | (SCM-Data-Loc \/ {IC SCM}) by A24,AMI_5:6
+        .= (s2 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}))
+                   +* Exec(I,S2) | (SCM-Data-Loc \/ {IC SCM})
+          by A1,A18,AMI_5:58
+        .= (s2 +*Exec(I,S2))
+             | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+          by A27,AMI_5:6
+        .= (s2 +*Exec(I,S2))
+             | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+          +* {} by FUNCT_4:22
+        .= (s2 +*Exec(I,S2) +* s2|the Instruction-Locations of SCM+FSA)
+                 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+                     by A25,AMI_5:6
+        .= Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+              by AMI_3:def 1,SCMFSA_2:75,def 1;
+  suppose InsCode l = 9;
+   then consider da,db,fa such that
+A28: l = db:=(fa,da) by SCMFSA_2:62;
+       db in Int-Locations by SCMFSA_2:9;
+     then db in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
+then A29:     Int-Locations \/ FinSeq-Locations =
+        Int-Locations \/ FinSeq-Locations \/ {db} by ZFMISC_1:46
+                 .= (Int-Locations \/ FinSeq-Locations \ {db} ) \/ {db}
+                          by XBOOLE_1:39;
+A30:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {db}))
+          = (Int-Locations \/ FinSeq-Locations \ {db})
+                         by A7,RELAT_1:91;
+A31:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {db}))
+          = (Int-Locations \/ FinSeq-Locations \ {db})
+                         by A8,RELAT_1:91;
+     for x being set st x in ((Int-Locations \/ FinSeq-Locations) \ {db})
+    holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
+        = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
+    proof
+     let x be set;
+     assume A32: x in ((Int-Locations \/ FinSeq-Locations) \ {db});
+then A33:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
+A34:     not x in {db} by A32,XBOOLE_0:def 4;
+     per cases by A33,XBOOLE_0:def 2;
+     suppose x in Int-Locations;
+      then reconsider a = x as Int-Location by SCMFSA_2:11;
+A35:      a <> db by A34,TARSKI:def 1;
+A36:     a in (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) by A33,
+XBOOLE_0:def 2;
+     thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
+        = (Exec (l,s1)).a by A32,FUNCT_1:72
+       .= s1.a by A28,A35,SCMFSA_2:98
+       .= (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})).a
+                 by A36,FUNCT_1:72
+       .= s2.a by A1,A36,FUNCT_1:72
+       .= (Exec (l,s2)).a by A28,A35,SCMFSA_2:98
+       .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
+                by A32,FUNCT_1:72;
+     suppose x in FinSeq-Locations;
+      then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
+A37:     a in (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) by A33,
+XBOOLE_0:def 2;
+     thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
+        = (Exec (l,s1)).a by A32,FUNCT_1:72
+       .= s1.a by A28,SCMFSA_2:98
+       .= (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})).a
+                 by A37,FUNCT_1:72
+       .= s2.a by A1,A37,FUNCT_1:72
+       .= (Exec (l,s2)).a by A28,SCMFSA_2:98
+       .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
+                by A32,FUNCT_1:72;
+    end;
+ then A38:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db} )
+ = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db} )
+  by A30,A31,FUNCT_1:9;
+      da in Int-Locations by SCMFSA_2:9;
+ then A39: da in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
+ consider k1 being Nat such that
+A40: k1 = abs(s1.da) and
+A41: Exec(l, s1).db = (s1.fa)/.k1 by A28,SCMFSA_2:98;
+ consider k2 being Nat such that
+A42: k2 = abs(s2.da) and
+A43: Exec(l, s2).db = (s2.fa)/.k2 by A28,SCMFSA_2:98;
+A44: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})).da
+                 by A10,A39,FUNCT_1:72
+       .= s2.da by A1,A10,A39,FUNCT_1:72;
+      fa in FinSeq-Locations by SCMFSA_2:10;
+ then fa in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
+then A45: fa in (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) by XBOOLE_0
+:def 2;
+    then s1.fa = (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})).fa
+                 by FUNCT_1:72
+       .= s2.fa by A1,A45,FUNCT_1:72;
+then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A9,A40,A41,A42,A43,A44,AMI_3:24
+;
+then A46:       Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
+          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A29,A38,AMI_3:
+20;
+
+      Exec (l,s1).IC SCM+FSA = Next IC s1 by A28,SCMFSA_2:98
+                      .= Exec (l,s2).IC SCM+FSA by A6,A28,SCMFSA_2:98;
+    then Exec (l,s1) | {IC SCM+FSA} = Exec (l,s2) | {IC SCM+FSA} by A7,A8,AMI_3
+:24;
+   hence Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+      = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+                by A46,AMI_3:20;
+  suppose InsCode l = 10;
+   then consider da,db,fa such that
+A47: l = (fa,da):=db by SCMFSA_2:63;
+       fa in FinSeq-Locations by SCMFSA_2:10;
+     then fa in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
+then A48:     Int-Locations \/ FinSeq-Locations =
+        Int-Locations \/ FinSeq-Locations \/ {fa} by ZFMISC_1:46
+                 .= (Int-Locations \/ FinSeq-Locations \ {fa} ) \/ {fa}
+                          by XBOOLE_1:39;
+A49:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {fa}))
+          = (Int-Locations \/ FinSeq-Locations \ {fa})
+                         by A7,RELAT_1:91;
+A50:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {fa}))
+          = (Int-Locations \/ FinSeq-Locations \ {fa})
+                         by A8,RELAT_1:91;
+     for x being set st x in ((Int-Locations \/ FinSeq-Locations) \ {fa})
+    holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
+        = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
+    proof
+     let x be set;
+     assume A51: x in ((Int-Locations \/ FinSeq-Locations) \ {fa});
+then A52:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
+A53:     not x in {fa} by A51,XBOOLE_0:def 4;
+     per cases by A52,XBOOLE_0:def 2;
+     suppose x in Int-Locations;
+      then reconsider a = x as Int-Location by SCMFSA_2:11;
+A54:     a in (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) by A52,
+XBOOLE_0:def 2;
+     thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
+        = (Exec (l,s1)).a by A51,FUNCT_1:72
+       .= s1.a by A47,SCMFSA_2:99
+       .= (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})).a
+                 by A54,FUNCT_1:72
+       .= s2.a by A1,A54,FUNCT_1:72
+       .= (Exec (l,s2)).a by A47,SCMFSA_2:99
+       .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
+                by A51,FUNCT_1:72;
+     suppose x in FinSeq-Locations;
+      then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
+A55:      a <> fa by A53,TARSKI:def 1;
+A56:     a in (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) by A52,
+XBOOLE_0:def 2;
+     thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
+        = (Exec (l,s1)).a by A51,FUNCT_1:72
+       .= s1.a by A47,A55,SCMFSA_2:99
+       .= (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})).a
+                 by A56,FUNCT_1:72
+       .= s2.a by A1,A56,FUNCT_1:72
+       .= (Exec (l,s2)).a by A47,A55,SCMFSA_2:99
+       .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
+                by A51,FUNCT_1:72;
+    end;
+ then A57:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa} )
+ = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa} )
+  by A49,A50,FUNCT_1:9;
+      da in Int-Locations by SCMFSA_2:9;
+ then A58: da in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
+ consider k1 being Nat such that
+A59: k1 = abs(s1.da) and
+A60: Exec(l, s1).fa = s1.fa+*(k1,s1.db) by A47,SCMFSA_2:99;
+ consider k2 being Nat such that
+A61: k2 = abs(s2.da) and
+A62: Exec(l, s2).fa = s2.fa+*(k2,s2.db) by A47,SCMFSA_2:99;
+A63: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})).da
+                 by A10,A58,FUNCT_1:72
+       .= s2.da by A1,A10,A58,FUNCT_1:72;
+      db in Int-Locations by SCMFSA_2:9;
+ then A64: db in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
+then A65: s1.db = (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})).db
+                 by A10,FUNCT_1:72
+       .= s2.db by A1,A10,A64,FUNCT_1:72;
+      fa in FinSeq-Locations by SCMFSA_2:10;
+ then fa in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
+then A66: fa in (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) by XBOOLE_0
+:def 2;
+    then s1.fa = (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})).fa
+                 by FUNCT_1:72
+       .= s2.fa by A1,A66,FUNCT_1:72;
+then Exec (l,s1) | {fa} = Exec(l,s2) | {fa} by A9,A59,A60,A61,A62,A63,A65,AMI_3
+:24;
+then A67:       Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
+          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A48,A57,AMI_3:
+20;
+
+      Exec (l,s1).IC SCM+FSA = Next IC s1 by A47,SCMFSA_2:99
+                      .= Exec (l,s2).IC SCM+FSA by A6,A47,SCMFSA_2:99;
+    then Exec (l,s1) | {IC SCM+FSA} = Exec (l,s2) | {IC SCM+FSA} by A7,A8,AMI_3
+:24;
+   hence Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+      = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+                by A67,AMI_3:20;
+  suppose InsCode l = 11;
+   then consider da,fa such that
+A68: l = da:=len fa by SCMFSA_2:64;
+       da in Int-Locations by SCMFSA_2:9;
+     then da in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
+then A69:     Int-Locations \/ FinSeq-Locations =
+        Int-Locations \/ FinSeq-Locations \/ {da} by ZFMISC_1:46
+                 .= (Int-Locations \/ FinSeq-Locations \ {da} ) \/ {da}
+                          by XBOOLE_1:39;
+A70:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {da}))
+          = (Int-Locations \/ FinSeq-Locations \ {da})
+                         by A7,RELAT_1:91;
+A71:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {da}))
+          = (Int-Locations \/ FinSeq-Locations \ {da})
+                         by A8,RELAT_1:91;
+     for x being set st x in ((Int-Locations \/ FinSeq-Locations) \ {da})
+    holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {da})).x
+        = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {da})).x
+    proof
+     let x be set;
+     assume A72: x in ((Int-Locations \/ FinSeq-Locations) \ {da});
+then A73:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
+A74:     not x in {da} by A72,XBOOLE_0:def 4;
+     per cases by A73,XBOOLE_0:def 2;
+     suppose x in Int-Locations;
+      then reconsider a = x as Int-Location by SCMFSA_2:11;
+A75:      a <> da by A74,TARSKI:def 1;
+A76:     a in (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) by A73,
+XBOOLE_0:def 2;
+     thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {da})).x
+        = (Exec (l,s1)).a by A72,FUNCT_1:72
+       .= s1.a by A68,A75,SCMFSA_2:100
+       .= (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})).a
+                 by A76,FUNCT_1:72
+       .= s2.a by A1,A76,FUNCT_1:72
+       .= (Exec (l,s2)).a by A68,A75,SCMFSA_2:100
+       .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {da})).x
+                by A72,FUNCT_1:72;
+     suppose x in FinSeq-Locations;
+      then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
+A77:     a in (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) by A73,
+XBOOLE_0:def 2;
+     thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {da})).x
+        = (Exec (l,s1)).a by A72,FUNCT_1:72
+       .= s1.a by A68,SCMFSA_2:100
+       .= (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})).a
+                 by A77,FUNCT_1:72
+       .= s2.a by A1,A77,FUNCT_1:72
+       .= (Exec (l,s2)).a by A68,SCMFSA_2:100
+       .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {da})).x
+                by A72,FUNCT_1:72;
+    end;
+ then A78:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {da} )
+ = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {da} )
+  by A70,A71,FUNCT_1:9;
+      fa in FinSeq-Locations by SCMFSA_2:10;
+ then fa in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
+then A79: fa in (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) by XBOOLE_0
+:def 2;
+    then s1.fa = (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})).fa
+                 by FUNCT_1:72
+       .= s2.fa by A1,A79,FUNCT_1:72;
+    then Exec (l,s1).da = len(s2.fa) by A68,SCMFSA_2:100
+         .= Exec (l,s2).da by A68,SCMFSA_2:100;
+then Exec (l,s1) | {da} = Exec(l,s2) | {da} by A7,A8,AMI_3:24;
+then A80:       Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
+          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A69,A78,AMI_3:
+20;
+
+      Exec (l,s1).IC SCM+FSA = Next IC s1 by A68,SCMFSA_2:100
+                      .= Exec (l,s2).IC SCM+FSA by A6,A68,SCMFSA_2:100;
+    then Exec (l,s1) | {IC SCM+FSA} = Exec (l,s2) | {IC SCM+FSA} by A7,A8,AMI_3
+:24;
+   hence Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+      = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+                by A80,AMI_3:20;
+  suppose InsCode l = 12;
+   then consider da,fa such that
+A81: l = fa:=<0,...,0>da by SCMFSA_2:65;
+       fa in FinSeq-Locations by SCMFSA_2:10;
+     then fa in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
+then A82:     Int-Locations \/ FinSeq-Locations =
+        Int-Locations \/ FinSeq-Locations \/ {fa} by ZFMISC_1:46
+                 .= (Int-Locations \/ FinSeq-Locations \ {fa} ) \/ {fa}
+                          by XBOOLE_1:39;
+A83:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {fa}))
+          = (Int-Locations \/ FinSeq-Locations \ {fa})
+                         by A7,RELAT_1:91;
+A84:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {fa}))
+          = (Int-Locations \/ FinSeq-Locations \ {fa})
+                         by A8,RELAT_1:91;
+     for x being set st x in ((Int-Locations \/ FinSeq-Locations) \ {fa})
+    holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
+        = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
+    proof
+     let x be set;
+     assume A85: x in ((Int-Locations \/ FinSeq-Locations) \ {fa});
+then A86:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
+A87:     not x in {fa} by A85,XBOOLE_0:def 4;
+     per cases by A86,XBOOLE_0:def 2;
+     suppose x in Int-Locations;
+      then reconsider a = x as Int-Location by SCMFSA_2:11;
+A88:     a in (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) by A86,
+XBOOLE_0:def 2;
+     thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
+        = (Exec (l,s1)).a by A85,FUNCT_1:72
+       .= s1.a by A81,SCMFSA_2:101
+       .= (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})).a
+                 by A88,FUNCT_1:72
+       .= s2.a by A1,A88,FUNCT_1:72
+       .= (Exec (l,s2)).a by A81,SCMFSA_2:101
+       .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
+                by A85,FUNCT_1:72;
+     suppose x in FinSeq-Locations;
+      then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
+A89:      a <> fa by A87,TARSKI:def 1;
+A90:     a in (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) by A86,
+XBOOLE_0:def 2;
+     thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
+        = (Exec (l,s1)).a by A85,FUNCT_1:72
+       .= s1.a by A81,A89,SCMFSA_2:101
+       .= (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})).a
+                 by A90,FUNCT_1:72
+       .= s2.a by A1,A90,FUNCT_1:72
+       .= (Exec (l,s2)).a by A81,A89,SCMFSA_2:101
+       .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
+                by A85,FUNCT_1:72;
+    end;
+ then A91:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa} )
+ = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa} )
+  by A83,A84,FUNCT_1:9;
+      da in Int-Locations by SCMFSA_2:9;
+ then A92: da in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
+ consider k1 being Nat such that
+A93: k1 = abs(s1.da) and
+A94: Exec(l, s1).fa = k1 |->0 by A81,SCMFSA_2:101;
+ consider k2 being Nat such that
+A95: k2 = abs(s2.da) and
+A96: Exec(l, s2).fa = k2 |->0 by A81,SCMFSA_2:101;
+   s1.da = (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})).da
+                 by A10,A92,FUNCT_1:72
+       .= s2.da by A1,A10,A92,FUNCT_1:72;
+then Exec (l,s1) | {fa} = Exec(l,s2) | {fa} by A9,A93,A94,A95,A96,AMI_3:24;
+then A97:       Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
+          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A82,A91,AMI_3:
+20;
+
+      Exec (l,s1).IC SCM+FSA = Next IC s1 by A81,SCMFSA_2:101
+                      .= Exec (l,s2).IC SCM+FSA by A6,A81,SCMFSA_2:101;
+    then Exec (l,s1) | {IC SCM+FSA} = Exec (l,s2) | {IC SCM+FSA} by A7,A8,AMI_3
+:24;
+   hence Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+      = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+                by A97,AMI_3:20;
+ end;
+
+theorem Th5:
+  for N being with_non-empty_elements set
+  for S being steady-programmed (non empty non void AMI-Struct over N)
+  for i being Instruction of S,
+      s being State of S
+   holds
+      Exec (i, s) | the Instruction-Locations of S
+          = s | the Instruction-Locations of S
+   proof let N be with_non-empty_elements set;
+    let S be steady-programmed (non empty non void AMI-Struct over N);
+    let i be Instruction of S,
+        s be State of S;
+      dom (Exec (i,s)) = the carrier of S by AMI_3:36;
+then A1: dom (Exec (i, s) | the Instruction-Locations of S)
+        = the Instruction-Locations of S by RELAT_1:91;
+      dom s = the carrier of S by AMI_3:36;
+then A2: dom (s | the Instruction-Locations of S)
+         = the Instruction-Locations of S by RELAT_1:91;
+      for x being set st x in the Instruction-Locations of S
+      holds (Exec (i, s) | the Instruction-Locations of S).x
+                = (s | the Instruction-Locations of S).x
+      proof
+       let x be set;
+       assume x in the Instruction-Locations of S;
+       then reconsider l = x as Instruction-Location of S;
+       thus (Exec (i, s) | the Instruction-Locations of S).x
+              = (Exec (i, s)).l by FUNCT_1:72
+             .= s.l by AMI_1:def 13
+             .= (s | the Instruction-Locations of S).x
+                     by FUNCT_1:72;
+      end;
+    hence Exec (i, s) | the Instruction-Locations of S
+          = s | the Instruction-Locations of S
+                by A1,A2,FUNCT_1:9;
+   end;
+
+begin :: Finite partial states of SCM+FSA
+
+theorem Th6:
+ for p being FinPartState of SCM+FSA
+ holds DataPart p = p | (Int-Locations \/ FinSeq-Locations)
+ proof let p be FinPartState of SCM+FSA;
+A1: Int-Locations misses {IC SCM+FSA} by Th1,ZFMISC_1:56;
+     FinSeq-Locations misses {IC SCM+FSA} by Th2,ZFMISC_1:56;
+   then A2: Int-Locations \/ FinSeq-Locations misses {IC SCM+FSA} by A1,
+XBOOLE_1:70;
+     Int-Locations \/ FinSeq-Locations
+      misses the Instruction-Locations of SCM+FSA by SCMFSA_2:13,14,XBOOLE_1:70
+;
+then A3: (Int-Locations \/ FinSeq-Locations)
+      misses ({IC SCM+FSA} \/ the Instruction-Locations of SCM+FSA)
+        by A2,XBOOLE_1:70;
+     the carrier of SCM+FSA = Int-Locations \/ FinSeq-Locations \/ ({IC SCM+FSA
+}
+\/
+        the Instruction-Locations of SCM+FSA) by SCMFSA_2:8,XBOOLE_1:4;
+  then (the carrier of SCM+FSA)
+      \ ({IC SCM+FSA} \/ the Instruction-Locations of SCM+FSA)
+    = (Int-Locations \/ FinSeq-Locations)
+      \ ({IC SCM+FSA} \/ the Instruction-Locations of SCM+FSA) by XBOOLE_1:40
+   .= Int-Locations \/ FinSeq-Locations by A3,XBOOLE_1:83;
+  hence thesis by AMI_5:def 7;
+ end;
+
+theorem
+ for p being FinPartState of SCM+FSA holds
+  p is data-only iff dom p c= Int-Locations \/ FinSeq-Locations
+proof let p be FinPartState of SCM+FSA;
+A1: the carrier of SCM+FSA =
+     Int-Locations \/ FinSeq-Locations \/
+     ({IC SCM+FSA} \/ the Instruction-Locations of SCM+FSA)
+          by SCMFSA_2:8,XBOOLE_1:4;
+ hereby assume p is data-only;
+   then A2:dom p misses {IC SCM+FSA} \/ the Instruction-Locations of SCM+FSA
+       by AMI_5:def 8;
+     dom p c= the carrier of SCM+FSA by AMI_3:37;
+  hence dom p c= Int-Locations \/ FinSeq-Locations by A1,A2,XBOOLE_1:73;
+ end;
+ assume
+A3: dom p c= Int-Locations \/ FinSeq-Locations;
+A4: Int-Locations misses {IC SCM+FSA} by Th1,ZFMISC_1:56;
+     FinSeq-Locations misses {IC SCM+FSA} by Th2,ZFMISC_1:56;
+   then A5: Int-Locations \/ FinSeq-Locations misses {IC SCM+FSA} by A4,
+XBOOLE_1:70;
+     Int-Locations \/ FinSeq-Locations
+      misses the Instruction-Locations of SCM+FSA
+      by SCMFSA_2:13,14,XBOOLE_1:70;
+   then Int-Locations \/ FinSeq-Locations
+    misses {IC SCM+FSA} \/
+ the Instruction-Locations of SCM+FSA by A5,XBOOLE_1:70;
+ hence dom p misses {IC SCM+FSA} \/ the Instruction-Locations of SCM+FSA
+         by A3,XBOOLE_1:63;
+end;
+
+theorem
+   for p being FinPartState of SCM+FSA
+  holds dom DataPart p c= Int-Locations \/ FinSeq-Locations
+  proof
+   let p be FinPartState of SCM+FSA;
+     DataPart p = p|(Int-Locations \/ FinSeq-Locations) by Th6;
+   hence dom DataPart p c= Int-Locations \/ FinSeq-Locations by RELAT_1:87;
+  end;
+
+theorem
+ for p being FinPartState of SCM+FSA
+  holds dom ProgramPart p c= the Instruction-Locations of SCM+FSA
+  by AMI_3:def 13;
+
+theorem
+    for i being Instruction of SCM+FSA,
+      s being State of SCM+FSA,
+      p being programmed FinPartState of SCM+FSA
+   holds
+      Exec (i, s +* p) = Exec (i,s) +* p
+    proof
+     let i be Instruction of SCM+FSA,
+         s be State of SCM+FSA,
+         p be programmed FinPartState of SCM+FSA;
+      A1: dom p c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
+A2:  Int-Locations \/ FinSeq-Locations misses
+          the Instruction-Locations of SCM+FSA by SCMFSA_2:13,14,XBOOLE_1:70;
+        now assume {IC SCM+FSA} meets the Instruction-Locations of SCM+FSA;
+      then consider x being set such that
+A3:    x in {IC SCM+FSA} and
+A4:    x in the Instruction-Locations of SCM+FSA by XBOOLE_0:3;
+         x = IC SCM+FSA by A3,TARSKI:def 1;
+       hence contradiction by A4,AMI_1:48;
+      end;
+      then Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} misses
+           the Instruction-Locations of SCM+FSA
+                by A2,XBOOLE_1:70;
+then A5:        Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} misses dom p
+          by A1,XBOOLE_1:63;
+then A6:   s|(Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+                = (s +* p) | (Int-Locations \/ FinSeq-Locations \/
+ {IC SCM+FSA})
+                                                         by AMI_5:7;
+A7:    (Exec(i,s) +* p)|(Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+           = Exec(i,s)|(Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+                    by A5,AMI_5:7
+          .= Exec(i,s +* p) |
+               (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) by A6,Th4;
+A8:     Exec (i, s +* p)|the Instruction-Locations of SCM+FSA
+            = (s +* p)|the Instruction-Locations of SCM+FSA by Th5
+           .= s |(the Instruction-Locations of SCM+FSA) +*
+                  p|the Instruction-Locations of SCM+FSA by AMI_5:6
+           .= Exec (i,s) |(the Instruction-Locations of SCM+FSA) +*
+                  p|the Instruction-Locations of SCM+FSA by Th5
+           .= (Exec (i, s) +* p)|the Instruction-Locations of SCM+FSA
+                    by AMI_5:6;
+     thus Exec (i, s +* p)
+             = Exec (i, s +* p)| dom(Exec (i, s +* p)) by RELAT_1:97
+            .= Exec (i, s +* p)|
+                 (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/
+                  the Instruction-Locations of SCM+FSA)
+                                                            by AMI_3:36,
+SCMFSA_2:8
+            .= (Exec (i, s) +* p)|
+                 (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
+                 +* (Exec (i, s) +* p)|the Instruction-Locations of SCM+FSA
+                        by A7,A8,AMI_5:14
+            .= (Exec (i,s) +* p)| the carrier of SCM+FSA by AMI_5:14,SCMFSA_2:8
+            .= (Exec (i,s) +* p)| dom(Exec (i, s) +* p) by AMI_3:36
+            .= Exec (i,s) +* p by RELAT_1:97;
+    end;
+
+theorem
+   for s being State of SCM+FSA,
+     iloc being Instruction-Location of SCM+FSA,
+     a being Int-Location
+  holds s.a = (s +* Start-At iloc).a
+  proof
+   let s be State of SCM+FSA,
+       iloc be Instruction-Location of SCM+FSA,
+       a be Int-Location;
+A1: dom (Start-At iloc) = {IC SCM+FSA} by AMI_3:34;
+      a in the carrier of SCM+FSA;
+    then a in dom s by AMI_3:36;
+then A2: a in dom s \/ dom (Start-At iloc) by XBOOLE_0:def 2;
+      a <> IC SCM+FSA by SCMFSA_2:81;
+    then not a in {IC SCM+FSA} by TARSKI:def 1;
+    hence s.a = (s +* Start-At iloc).a by A1,A2,FUNCT_4:def 1;
+  end;
+
+theorem
+   for s being State of SCM+FSA,
+     iloc being Instruction-Location of SCM+FSA,
+     a    being FinSeq-Location
+  holds s.a = (s +* Start-At iloc).a
+proof
+   let s be State of SCM+FSA,
+       iloc be Instruction-Location of SCM+FSA,
+       a be FinSeq-Location;
+A1: dom (Start-At iloc) = {IC SCM+FSA} by AMI_3:34;
+      a in the carrier of SCM+FSA;
+    then a in dom s by AMI_3:36;
+then A2: a in dom s \/ dom (Start-At iloc) by XBOOLE_0:def 2;
+      a <> IC SCM+FSA by SCMFSA_2:82;
+    then not a in {IC SCM+FSA} by TARSKI:def 1;
+    hence s.a = (s +* Start-At iloc).a by A1,A2,FUNCT_4:def 1;
+end;
+
+theorem
+   for s, t being State of SCM+FSA
+  holds s +* t|(Int-Locations \/ FinSeq-Locations) is State of SCM+FSA
+proof
+ let s, t be State of SCM+FSA;
+A1: product the Object-Kind of SCM+FSA c= sproduct the Object-Kind of SCM+FSA
+      by AMI_1:27;
+     t in product the Object-Kind of SCM+FSA;
+   then t|(Int-Locations \/ FinSeq-Locations) in
+      sproduct the Object-Kind of SCM+FSA by A1,AMI_1:41;
+  hence s +* t|(Int-Locations \/ FinSeq-Locations) is State of SCM+FSA
+       by AMI_1:29;
+end;
+
+begin :: Autonomic finite partial states of SCM+FSA
+
+definition
+ let la be Int-Location;
+ let a be Integer;
+ redefine func la .--> a -> FinPartState of SCM+FSA;
+ coherence
+  proof
+      a is Element of INT & ObjectKind la = INT by INT_1:def 2,SCMFSA_2:26;
+    hence thesis by AMI_1:59;
+  end;
+end;
+
+theorem Th14:
+ for p being autonomic FinPartState of SCM+FSA st DataPart p <> {}
+ holds IC SCM+FSA in dom p
+  proof
+   let p be autonomic FinPartState of SCM+FSA;
+   assume DataPart p <> {};
+   then A1: dom DataPart p <> {} by RELAT_1:64;
+   assume not IC SCM+FSA in dom p;
+then A2: dom p misses {IC SCM+FSA} by ZFMISC_1:56;
+     p is not autonomic
+    proof
+     consider d1 being Element of dom DataPart p;
+A3:  d1 in dom DataPart p by A1;
+       dom DataPart p c= the carrier of SCM+FSA by AMI_3:37;
+     then reconsider d1 as Element of SCM+FSA by A3;
+       DataPart p = p |(Int-Locations \/ FinSeq-Locations) by Th6;
+     then A4: dom DataPart p c= Int-Locations \/ FinSeq-Locations by RELAT_1:87
+;
+     consider d2 being Element of Int-Locations \ dom p;
+       p is finite by AMI_1:def 24;
+     then dom p is finite by AMI_1:21;
+     then not Int-Locations c= dom p by FINSET_1:13,SCMFSA_2:22;
+     then A5: Int-Locations \ dom p <> {} by XBOOLE_1:37;
+     then d2 in Int-Locations by XBOOLE_0:def 4;
+     then reconsider d2 as Int-Location by SCMFSA_2:11;
+     consider il being
+         Element of (the Instruction-Locations of SCM+FSA) \ dom p;
+       p is finite by AMI_1:def 24;
+     then dom p is finite by AMI_1:21;
+     then not the Instruction-Locations of SCM+FSA c= dom p
+                                by FINSET_1:13,SCMFSA_2:24;
+     then A6: (the Instruction-Locations of SCM+FSA) \ dom p <> {} by XBOOLE_1:
+37;
+     then reconsider il as Instruction-Location of SCM+FSA by XBOOLE_0:def 4;
+     per cases by A3,A4,XBOOLE_0:def 2;
+     suppose d1 in Int-Locations;
+     then reconsider d1 as Int-Location by SCMFSA_2:11;
+     set p1 = p +* ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il);
+     set p2 = p +* ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il);
+     consider s1 being State of SCM+FSA such that A7: p1 c= s1 by AMI_3:39;
+     consider s2 being State of SCM+FSA such that A8: p2 c= s2 by AMI_3:39;
+     take s1,s2;
+        not d2 in dom p by A5,XBOOLE_0:def 4;
+then A9:   dom p misses {d2} by ZFMISC_1:56;
+        not il in dom p by A6,XBOOLE_0:def 4;
+then A10:   dom p misses {il} by ZFMISC_1:56;
+       dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
+       = dom((il .--> (d1:=d2)) +* ( d2.--> 0)) \/ dom(Start-At il)
+                                               by FUNCT_4:def 1
+      .= dom((il .--> (d1:=d2)) +* ( d2.--> 0)) \/ {IC SCM+FSA} by AMI_3:34
+      .= dom(il .--> (d1:=d2)) \/ dom ( d2.--> 0) \/ {IC SCM+FSA}
+                by FUNCT_4:def 1
+      .= {il} \/ dom ( d2.--> 0) \/ {IC SCM+FSA} by CQC_LANG:5
+      .= {il} \/ {d2} \/ {IC SCM+FSA} by CQC_LANG:5;
+    then dom p /\ dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
+       = dom p /\ ({il} \/ {d2}) \/ dom p /\ {IC SCM+FSA} by XBOOLE_1:23
+      .= dom p /\ ({il} \/ {d2}) \/ {} by A2,XBOOLE_0:def 7
+      .= dom p /\ {il} \/ dom p /\ {d2} by XBOOLE_1:23
+      .= dom p /\ {il} \/ {} by A9,XBOOLE_0:def 7
+      .= {} by A10,XBOOLE_0:def 7;
+    then dom p misses dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
+      by XBOOLE_0:def 7;
+    then p c= p1 by FUNCT_4:33;
+   hence p c= s1 by A7,XBOOLE_1:1;
+      dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
+       = dom((il .--> (d1:=d2)) +* ( d2.--> 1)) \/ dom(Start-At il)
+                                               by FUNCT_4:def 1
+      .= dom((il .--> (d1:=d2)) +* ( d2.--> 1)) \/ {IC SCM+FSA} by AMI_3:34
+      .= dom(il .--> (d1:=d2)) \/ dom ( d2.--> 1) \/ {IC SCM+FSA}
+                by FUNCT_4:def 1
+      .= {il} \/ dom ( d2.--> 1) \/ {IC SCM+FSA} by CQC_LANG:5
+      .= {il} \/ {d2} \/ {IC SCM+FSA} by CQC_LANG:5;
+    then dom p /\ dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
+       = dom p /\ ({il} \/ {d2}) \/ dom p /\ {IC SCM+FSA} by XBOOLE_1:23
+      .= dom p /\ ({il} \/ {d2}) \/ {} by A2,XBOOLE_0:def 7
+      .= dom p /\ {il} \/ dom p /\ {d2} by XBOOLE_1:23
+      .= dom p /\ {il} \/ {} by A9,XBOOLE_0:def 7
+      .= {} by A10,XBOOLE_0:def 7;
+    then dom p misses dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
+      by XBOOLE_0:def 7;
+    then p c= p2 by FUNCT_4:33;
+   hence p c= s2 by A8,XBOOLE_1:1;
+    take 1;
+       DataPart p c= p by AMI_5:62;
+     then A11: dom DataPart p c= dom p by RELAT_1:25;
+       dom ((Computation s1).1) = the carrier of SCM+FSA by AMI_3:36;
+     then dom p c= dom ((Computation s1).1) by AMI_3:37;
+then A12:  dom ((Computation s1).1|dom p) = dom p by RELAT_1:91;
+A13:  dom(Start-At il) = {IC SCM+FSA} by AMI_3:34;
+then A14: IC SCM+FSA in dom (Start-At il) by TARSKI:def 1;
+A15:  dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
+         = dom ((il .--> (d1:=d2)) +* ( d2.--> 0)) \/ dom(Start-At il)
+                                 by FUNCT_4:def 1;
+then A16: IC SCM+FSA in dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
+                                 by A14,XBOOLE_0:def 2;
+A17:  dom p1 = dom p \/ dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
+                                 by FUNCT_4:def 1;
+then A18: IC SCM+FSA in dom p1 by A16,XBOOLE_0:def 2;
+A19:  IC s1 = s1.IC SCM+FSA by AMI_1:def 15
+          .= p1.IC SCM+FSA by A7,A18,GRFUNC_1:8
+          .= ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il).IC SCM+FSA
+                                              by A16,FUNCT_4:14
+          .= (Start-At il).IC SCM+FSA by A14,FUNCT_4:14
+          .= il by AMI_3:50;
+       dom (il .--> (d1:=d2)) = {il} by CQC_LANG:5;
+then A20: il in dom (il .--> (d1:=d2)) by TARSKI:def 1;
+A21:  dom (d2 .--> 0) = {d2} by CQC_LANG:5;
+       il <> d2 by SCMFSA_2:84;
+then A22: not il in dom (d2 .--> 0) by A21,TARSKI:def 1;
+A23:   dom ((il .--> (d1:=d2)) +* ( d2.--> 0))
+         = dom (il .--> (d1:=d2)) \/ dom ( d2.--> 0) by FUNCT_4:def 1;
+then A24: il in dom ((il .--> (d1:=d2)) +* ( d2.--> 0)) by A20,XBOOLE_0:def 2;
+       il <> IC SCM+FSA by AMI_1:48;
+then A25: not il in dom (Start-At il) by A13,TARSKI:def 1;
+A26: il in dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
+                               by A15,A24,XBOOLE_0:def 2;
+     then il in dom p1 by A17,XBOOLE_0:def 2;
+then A27:  s1.il = p1.il by A7,GRFUNC_1:8
+          .= ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il).il
+                                                 by A26,FUNCT_4:14
+          .= ((il .--> (d1:=d2)) +* ( d2.--> 0)).il by A25,FUNCT_4:12
+          .= (il .--> (d1:=d2)).il by A22,FUNCT_4:12
+          .=(d1:=d2) by CQC_LANG:6;
+A28: d2 in dom (d2 .--> 0) by A21,TARSKI:def 1;
+then A29: d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 0)) by A23,XBOOLE_0:def 2;
+       d2 <> IC SCM+FSA by SCMFSA_2:81;
+then A30: not d2 in dom (Start-At il) by A13,TARSKI:def 1;
+A31: d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
+                                        by A15,A29,XBOOLE_0:def 2;
+     then d2 in dom p1 by A17,XBOOLE_0:def 2;
+then A32:  s1.d2 = p1.d2 by A7,GRFUNC_1:8
+          .= ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il).d2
+                                                 by A31,FUNCT_4:14
+          .= ((il .--> (d1:=d2)) +* ( d2.--> 0)).d2 by A30,FUNCT_4:12
+          .= (d2.--> 0).d2 by A28,FUNCT_4:14
+          .= 0 by CQC_LANG:6;
+    (Computation s1).(0+1).d1 = (Following (Computation s1).0).d1 by AMI_1:def
+19
+                           .= (Following s1).d1 by AMI_1:def 19
+                           .= Exec(CurInstr s1,s1).d1 by AMI_1:def 18
+                           .= Exec(s1.il,s1).d1 by A19,AMI_1:def 17
+                           .= 0 by A27,A32,SCMFSA_2:89;
+then A33:  ((Computation s1).1|dom p).d1 = 0 by A3,A11,A12,FUNCT_1:70;
+       dom ((Computation s2).1) = the carrier of SCM+FSA by AMI_3:36;
+     then dom p c= dom ((Computation s2).1) by AMI_3:37;
+then A34:  dom ((Computation s2).1|dom p) = dom p by RELAT_1:91;
+A35:  dom(Start-At il) = {IC SCM+FSA} by AMI_3:34;
+then A36: IC SCM+FSA in dom (Start-At il) by TARSKI:def 1;
+A37:  dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
+         = dom ((il .--> (d1:=d2)) +* ( d2.--> 1)) \/ dom(Start-At il)
+                                 by FUNCT_4:def 1;
+then A38: IC SCM+FSA in dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
+                                 by A36,XBOOLE_0:def 2;
+A39:  dom p2 = dom p \/ dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
+                                 by FUNCT_4:def 1;
+then A40: IC SCM+FSA in dom p2 by A38,XBOOLE_0:def 2;
+A41:  IC s2 = s2.IC SCM+FSA by AMI_1:def 15
+          .= p2.IC SCM+FSA by A8,A40,GRFUNC_1:8
+          .= ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il).IC SCM+FSA
+                                              by A38,FUNCT_4:14
+          .= (Start-At il).IC SCM+FSA by A36,FUNCT_4:14
+          .= il by AMI_3:50;
+       dom (il .--> (d1:=d2)) = {il} by CQC_LANG:5;
+then A42: il in dom (il .--> (d1:=d2)) by TARSKI:def 1;
+A43:  dom (d2 .--> 1) = {d2} by CQC_LANG:5;
+       il <> d2 by SCMFSA_2:84;
+then A44: not il in dom (d2 .--> 1) by A43,TARSKI:def 1;
+A45:  dom ((il .--> (d1:=d2)) +* ( d2.--> 1))
+         = dom (il .--> (d1:=d2)) \/ dom ( d2.--> 1) by FUNCT_4:def 1;
+then A46: il in dom ((il .--> (d1:=d2)) +* ( d2.--> 1)) by A42,XBOOLE_0:def 2;
+       il <> IC SCM+FSA by AMI_1:48;
+then A47: not il in dom (Start-At il) by A35,TARSKI:def 1;
+A48: il in dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
+                               by A37,A46,XBOOLE_0:def 2;
+
+     then il in dom p2 by A39,XBOOLE_0:def 2;
+then A49:  s2.il = p2.il by A8,GRFUNC_1:8
+          .= ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il).il
+                                                 by A48,FUNCT_4:14
+          .= ((il .--> (d1:=d2)) +* ( d2.--> 1)).il by A47,FUNCT_4:12
+          .= (il .--> (d1:=d2)).il by A44,FUNCT_4:12
+          .=(d1:=d2) by CQC_LANG:6;
+A50: d2 in dom (d2 .--> 1) by A43,TARSKI:def 1;
+then A51: d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 1)) by A45,XBOOLE_0:def 2;
+       d2 <> IC SCM+FSA by SCMFSA_2:81;
+then A52: not d2 in dom (Start-At il) by A35,TARSKI:def 1;
+A53: d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
+                                        by A37,A51,XBOOLE_0:def 2;
+     then d2 in dom p2 by A39,XBOOLE_0:def 2;
+then A54:  s2.d2 = p2.d2 by A8,GRFUNC_1:8
+          .= ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il).d2
+                                                 by A53,FUNCT_4:14
+          .= ((il .--> (d1:=d2)) +* ( d2.--> 1)).d2 by A52,FUNCT_4:12
+          .= (d2.--> 1).d2 by A50,FUNCT_4:14
+          .= 1 by CQC_LANG:6;
+    (Computation s2).(0+1).d1 = (Following (Computation s2).0).d1 by AMI_1:def
+19
+                           .= (Following s2).d1 by AMI_1:def 19
+                           .= Exec(CurInstr s2,s2).d1 by AMI_1:def 18
+                           .= Exec(s2.il,s2).d1 by A41,AMI_1:def 17
+                           .= 1 by A49,A54,SCMFSA_2:89;
+     hence (Computation s1).1|dom p <> (Computation s2).1|dom p by A3,A11,A33,
+A34,FUNCT_1:70;
+     suppose d1 in FinSeq-Locations;
+     then reconsider d1 as FinSeq-Location by SCMFSA_2:12;
+     set p1 = p +* ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il);
+     set p2 = p +* ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il);
+     consider s1 being State of SCM+FSA such that A55: p1 c= s1 by AMI_3:39;
+     consider s2 being State of SCM+FSA such that A56: p2 c= s2 by AMI_3:39;
+     take s1,s2;
+        not d2 in dom p by A5,XBOOLE_0:def 4;
+then A57:   dom p misses {d2} by ZFMISC_1:56;
+        not il in dom p by A6,XBOOLE_0:def 4;
+then A58:   dom p misses {il} by ZFMISC_1:56;
+       dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il)
+       = dom((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0)) \/ dom(Start-At il)
+                                               by FUNCT_4:def 1
+      .= dom((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0)) \/ {IC SCM+FSA}
+                                 by AMI_3:34
+      .= dom(il .--> (d1:=<0,...,0>d2)) \/ dom ( d2.--> 0) \/ {IC SCM+FSA}
+                by FUNCT_4:def 1
+      .= {il} \/ dom ( d2.--> 0) \/ {IC SCM+FSA} by CQC_LANG:5
+      .= {il} \/ {d2} \/ {IC SCM+FSA} by CQC_LANG:5;
+    then dom p /\ dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At
+il)
+       = dom p /\ ({il} \/ {d2}) \/ dom p /\ {IC SCM+FSA} by XBOOLE_1:23
+      .= dom p /\ ({il} \/ {d2}) \/ {} by A2,XBOOLE_0:def 7
+      .= dom p /\ {il} \/ dom p /\ {d2} by XBOOLE_1:23
+      .= dom p /\ {il} \/ {} by A57,XBOOLE_0:def 7
+      .= {} by A58,XBOOLE_0:def 7;
+    then dom p misses dom ((il .--> (d1:=<0,...,0>d2)) +*
+      ( d2.--> 0) +* Start-At il) by XBOOLE_0:def 7;
+    then p c= p1 by FUNCT_4:33;
+   hence p c= s1 by A55,XBOOLE_1:1;
+      dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il)
+       = dom((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1)) \/ dom(Start-At il)
+                                               by FUNCT_4:def 1
+      .= dom((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1)) \/ {IC SCM+FSA}
+               by AMI_3:34
+      .= dom(il .--> (d1:=<0,...,0>d2)) \/ dom ( d2.--> 1) \/ {IC SCM+FSA}
+                by FUNCT_4:def 1
+      .= {il} \/ dom ( d2.--> 1) \/ {IC SCM+FSA} by CQC_LANG:5
+      .= {il} \/ {d2} \/ {IC SCM+FSA} by CQC_LANG:5;
+    then dom p /\ dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At
+il)
+       = dom p /\ ({il} \/ {d2}) \/ dom p /\ {IC SCM+FSA} by XBOOLE_1:23
+      .= dom p /\ ({il} \/ {d2}) \/ {} by A2,XBOOLE_0:def 7
+      .= dom p /\ {il} \/ dom p /\ {d2} by XBOOLE_1:23
+      .= dom p /\ {il} \/ {} by A57,XBOOLE_0:def 7
+      .= {} by A58,XBOOLE_0:def 7;
+    then dom p misses dom ((il .--> (d1:=<0,...,0>d2)) +*
+      ( d2.--> 1) +* Start-At il) by XBOOLE_0:def 7;
+    then p c= p2 by FUNCT_4:33;
+   hence p c= s2 by A56,XBOOLE_1:1;
+    take 1;
+       DataPart p c= p by AMI_5:62;
+     then A59: dom DataPart p c= dom p by RELAT_1:25;
+       dom ((Computation s1).1) = the carrier of SCM+FSA by AMI_3:36;
+     then dom p c= dom ((Computation s1).1) by AMI_3:37;
+then A60:  dom ((Computation s1).1|dom p) = dom p by RELAT_1:91;
+A61:  dom(Start-At il) = {IC SCM+FSA} by AMI_3:34;
+then A62: IC SCM+FSA in dom (Start-At il) by TARSKI:def 1;
+A63:  dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il)
+         = dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0)) \/ dom(Start-At il)
+                                 by FUNCT_4:def 1;
+then A64: IC SCM+FSA in
+        dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il)
+                                 by A62,XBOOLE_0:def 2;
+A65:  dom p1 = dom p \/
+         dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il)
+                                 by FUNCT_4:def 1;
+then A66: IC SCM+FSA in dom p1 by A64,XBOOLE_0:def 2;
+A67: IC s1 = s1.IC SCM+FSA by AMI_1:def 15
+          .= p1.IC SCM+FSA by A55,A66,GRFUNC_1:8
+          .= ((il .--> (d1:=<0,...,0>d2)) +*
+                ( d2.--> 0) +* Start-At il).IC SCM+FSA
+                                              by A64,FUNCT_4:14
+          .= (Start-At il).IC SCM+FSA by A62,FUNCT_4:14
+          .= il by AMI_3:50;
+       dom (il .--> (d1:=<0,...,0>d2)) = {il} by CQC_LANG:5;
+then A68: il in dom (il .--> (d1:=<0,...,0>d2)) by TARSKI:def 1;
+A69:  dom (d2 .--> 0) = {d2} by CQC_LANG:5;
+       il <> d2 by SCMFSA_2:84;
+then A70: not il in dom (d2 .--> 0) by A69,TARSKI:def 1;
+A71:   dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0))
+         = dom (il .--> (d1:=<0,...,0>d2)) \/ dom ( d2.--> 0) by FUNCT_4:def 1;
+     then A72: il in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0)) by A68,
+XBOOLE_0:def 2;
+       il <> IC SCM+FSA by AMI_1:48;
+then A73: not il in dom (Start-At il) by A61,TARSKI:def 1;
+A74: il in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il)
+                               by A63,A72,XBOOLE_0:def 2;
+
+     then il in dom p1 by A65,XBOOLE_0:def 2;
+then A75:  s1.il = p1.il by A55,GRFUNC_1:8
+          .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il).il
+                                                 by A74,FUNCT_4:14
+          .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0)).il by A73,FUNCT_4:12
+          .= (il .--> (d1:=<0,...,0>d2)).il by A70,FUNCT_4:12
+          .=(d1:=<0,...,0>d2) by CQC_LANG:6;
+A76: d2 in dom (d2 .--> 0) by A69,TARSKI:def 1;
+then A77: d2 in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0)) by A71,
+XBOOLE_0:def 2;
+       d2 <> IC SCM+FSA by SCMFSA_2:81;
+then A78: not d2 in dom (Start-At il) by A61,TARSKI:def 1;
+A79: d2 in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il)
+                                        by A63,A77,XBOOLE_0:def 2;
+     then d2 in dom p1 by A65,XBOOLE_0:def 2;
+then A80:  s1.d2 = p1.d2 by A55,GRFUNC_1:8
+          .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il).d2
+                                                 by A79,FUNCT_4:14
+          .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0)).d2 by A78,FUNCT_4:12
+          .= (d2.--> 0).d2 by A76,FUNCT_4:14
+          .= 0 by CQC_LANG:6;
+  consider k such that
+A81: k = abs(s1.d2) and
+A82: Exec(d1:=<0,...,0>d2, s1).d1 = k |-> 0 by SCMFSA_2:101;
+A83: k |-> 0 = 0 |-> 0 by A80,A81,ABSVALUE:7 .= {} by FINSEQ_2:72;
+    (Computation s1).(0+1).d1 = (Following (Computation s1).0).d1 by AMI_1:def
+19
+                           .= (Following s1).d1 by AMI_1:def 19
+                           .= Exec(CurInstr s1,s1).d1 by AMI_1:def 18
+                           .= {} by A67,A75,A82,A83,AMI_1:def 17;
+then A84:  ((Computation s1).1|dom p).d1 = {} by A3,A59,A60,FUNCT_1:70;
+       dom ((Computation s2).1) = the carrier of SCM+FSA by AMI_3:36;
+     then dom p c= dom ((Computation s2).1) by AMI_3:37;
+then A85:  dom ((Computation s2).1|dom p) = dom p by RELAT_1:91;
+A86:  dom(Start-At il) = {IC SCM+FSA} by AMI_3:34;
+then A87: IC SCM+FSA in dom (Start-At il) by TARSKI:def 1;
+A88:  dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il)
+         = dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1)) \/ dom(Start-At il)
+                                 by FUNCT_4:def 1;
+then A89: IC SCM+FSA in
+       dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il)
+                                 by A87,XBOOLE_0:def 2;
+A90:  dom p2 = dom p \/
+       dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il)
+                                 by FUNCT_4:def 1;
+then A91: IC SCM+FSA in dom p2 by A89,XBOOLE_0:def 2;
+A92:  IC s2 = s2.IC SCM+FSA by AMI_1:def 15
+          .= p2.IC SCM+FSA by A56,A91,GRFUNC_1:8
+          .= ((il .--> (d1:=<0,...,0>d2)) +*
+                ( d2.--> 1) +* Start-At il).IC SCM+FSA
+                                              by A89,FUNCT_4:14
+          .= (Start-At il).IC SCM+FSA by A87,FUNCT_4:14
+          .= il by AMI_3:50;
+       dom (il .--> (d1:=<0,...,0>d2)) = {il} by CQC_LANG:5;
+then A93: il in dom (il .--> (d1:=<0,...,0>d2)) by TARSKI:def 1;
+A94:  dom (d2 .--> 1) = {d2} by CQC_LANG:5;
+       il <> d2 by SCMFSA_2:84;
+then A95: not il in dom (d2 .--> 1) by A94,TARSKI:def 1;
+A96:  dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1))
+         = dom (il .--> (d1:=<0,...,0>d2)) \/ dom ( d2.--> 1) by FUNCT_4:def 1;
+     then A97: il in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1)) by A93,
+XBOOLE_0:def 2;
+       il <> IC SCM+FSA by AMI_1:48;
+then A98: not il in dom (Start-At il) by A86,TARSKI:def 1;
+A99: il in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il)
+                               by A88,A97,XBOOLE_0:def 2;
+
+     then il in dom p2 by A90,XBOOLE_0:def 2;
+then A100:  s2.il = p2.il by A56,GRFUNC_1:8
+          .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il).il
+                                                 by A99,FUNCT_4:14
+          .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1)).il by A98,FUNCT_4:12
+          .= (il .--> (d1:=<0,...,0>d2)).il by A95,FUNCT_4:12
+          .=(d1:=<0,...,0>d2) by CQC_LANG:6;
+A101: d2 in dom (d2 .--> 1) by A94,TARSKI:def 1;
+then A102: d2 in
+ dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1)) by A96,XBOOLE_0:def 2;
+       d2 <> IC SCM+FSA by SCMFSA_2:81;
+then A103:not d2 in dom (Start-At il) by A86,TARSKI:def 1;
+A104: d2 in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il)
+                                        by A88,A102,XBOOLE_0:def 2;
+     then d2 in dom p2 by A90,XBOOLE_0:def 2;
+then A105:  s2.d2 = p2.d2 by A56,GRFUNC_1:8
+          .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il).d2
+                                                 by A104,FUNCT_4:14
+          .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1)).d2 by A103,FUNCT_4:12
+          .= (d2.--> 1).d2 by A101,FUNCT_4:14
+          .= 1 by CQC_LANG:6;
+  consider k such that
+A106: k = abs(s2.d2) and
+A107: Exec(d1:=<0,...,0>d2, s2).d1 = k |-> 0 by SCMFSA_2:101;
+A108: k |-> 0 = 1 |-> 0 by A105,A106,ABSVALUE:def 1 .= <*0*> by FINSEQ_2:73;
+    (Computation s2).(0+1).d1 = (Following (Computation s2).0).d1 by AMI_1:def
+19
+                           .= (Following s2).d1 by AMI_1:def 19
+                           .= Exec(CurInstr s2,s2).d1 by AMI_1:def 18
+                           .= <*0*> by A92,A100,A107,A108,AMI_1:def 17;
+     hence (Computation s1).1|dom p <> (Computation s2).1|dom p by A3,A59,A84,
+A85,FUNCT_1:70;
+    end;
+   hence contradiction;
+  end;
+
+definition
+ cluster autonomic non programmed FinPartState of SCM+FSA;
+ existence
+  proof
+   set P = (IC SCM+FSA, insloc 0)-->(insloc 0, halt SCM+FSA);
+A1: {IC SCM+FSA}-->insloc 0 = IC SCM+FSA.-->insloc 0 by CQC_LANG:def 2
+             .= Start-At insloc 0 by AMI_3:def 12;
+     P = ({IC SCM+FSA}-->insloc 0) +* ({insloc 0}-->halt SCM+FSA) by FUNCT_4:
+def 4
+    .= Start-At(insloc 0)+*((insloc 0) .--> halt SCM+FSA) by A1,CQC_LANG:def 2;
+   then reconsider P as FinPartState of SCM+FSA;
+   take P;
+   A2: ObjectKind insloc 0 = the Instructions of SCM+FSA by AMI_1:def 14;
+      ObjectKind IC SCM+FSA = the Instruction-Locations of SCM+FSA
+              by AMI_1:def 11;
+   hence P is autonomic by A2,AMI_1:67;
+      now
+       dom P = { IC SCM+FSA, insloc 0 } by FUNCT_4:65;
+then A3:  IC SCM+FSA in dom P by TARSKI:def 2;
+     assume dom P c= the Instruction-Locations of SCM+FSA;
+     hence contradiction by A3,AMI_1:48;
+    end;
+   hence P is non programmed by AMI_3:def 13;
+  end;
+end;
+
+theorem Th15:
+ for p being autonomic non programmed FinPartState of SCM+FSA
+ holds IC SCM+FSA in dom p
+  proof
+   let p be autonomic non programmed FinPartState of SCM+FSA;
+   A1: not dom p c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
+     dom p c= the carrier of SCM+FSA by AMI_3:37;
+   then dom p = dom p /\ the carrier of SCM+FSA by XBOOLE_1:28
+        .= dom p /\
+             (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) \/
+              dom p /\ the Instruction-Locations of SCM+FSA
+                                      by SCMFSA_2:8,XBOOLE_1:23;
+    then dom p /\ (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) <> {}
+          by A1,XBOOLE_1:17;
+    then A2: dom p /\ {IC SCM+FSA} \/
+       dom p /\ (Int-Locations \/ FinSeq-Locations) <> {} by XBOOLE_1:23;
+    per cases by A2;
+    suppose dom p /\ {IC SCM+FSA} <> {};
+    then dom p meets {IC SCM+FSA} by XBOOLE_0:def 7;
+    hence IC SCM+FSA in dom p by ZFMISC_1:56;
+    suppose A3: dom p /\ (Int-Locations \/ FinSeq-Locations) <> {};
+      DataPart p = p |(Int-Locations \/ FinSeq-Locations) by Th6;
+    then DataPart p <> {} by A3,RELAT_1:60,90;
+   hence IC SCM+FSA in dom p by Th14;
+  end;
+
+theorem
+    for p being autonomic FinPartState of SCM+FSA st IC SCM+FSA in dom p
+   holds IC p in dom p
+    proof
+     let p be autonomic FinPartState of SCM+FSA;
+     assume
+A1:        IC SCM+FSA in dom p;
+     assume
+A2:        not IC p in dom p;
+     set il = IC p;
+     set p1 = p +* ((il .--> goto insloc 0));
+     set p2 = p +* ((il .--> goto insloc 1));
+     consider s1 being State of SCM+FSA such that A3: p1 c= s1 by AMI_3:39;
+     consider s2 being State of SCM+FSA such that A4: p2 c= s2 by AMI_3:39;
+       p is not autonomic
+      proof
+A5:    dom (il .--> (goto insloc 1)) = {il} by CQC_LANG:5;
+A6:    dom (il .--> (goto insloc 0)) = {il} by CQC_LANG:5;
+       take s1,s2;
+     dom p misses {il} by A2,ZFMISC_1:56;
+       then p c= p1 & p c= p2 by A5,A6,FUNCT_4:33;
+       hence A7: p c= s1 & p c= s2 by A3,A4,XBOOLE_1:1;
+       take 1;
+A8:     il in dom (il .--> (goto insloc 1)) by A5,TARSKI:def 1;
+A9:     il in dom (il .--> (goto insloc 0)) by A6,TARSKI:def 1;
+          dom p1 = dom p \/ dom ((il .--> goto insloc 0)) by FUNCT_4:def 1;
+        then il in dom p1 by A9,XBOOLE_0:def 2;
+then A10:     s1.il = p1.il by A3,GRFUNC_1:8
+             .= ((il .--> goto insloc 0)).il by A9,FUNCT_4:14
+             .= goto insloc 0 by CQC_LANG:6;
+          dom p2 = dom p \/ dom ((il .--> goto insloc 1)) by FUNCT_4:def 1;
+        then il in dom p2 by A8,XBOOLE_0:def 2;
+then A11:     s2.il = p2.il by A4,GRFUNC_1:8
+             .= ((il .--> goto insloc 1)).il by A8,FUNCT_4:14
+             .= goto insloc 1 by CQC_LANG:6;
+A12:    (Following s1).IC SCM+FSA
+        = (Exec (CurInstr s1,s1)).IC SCM+FSA by AMI_1:def 18
+       .= Exec (s1.IC s1,s1).IC SCM+FSA by AMI_1:def 17
+       .= Exec (goto insloc 0,s1).IC SCM+FSA by A1,A7,A10,AMI_5:60
+       .= insloc 0 by SCMFSA_2:95;
+
+A13:    (Following s2).IC SCM+FSA
+        = (Exec (CurInstr s2,s2)).IC SCM+FSA by AMI_1:def 18
+       .= Exec (s2.IC s2,s2).IC SCM+FSA by AMI_1:def 17
+       .= Exec (goto insloc 1,s2).IC SCM+FSA by A1,A7,A11,AMI_5:60
+       .= insloc 1 by SCMFSA_2:95;
+
+       assume A14: (Computation s1).1|dom p = (Computation s2).1|dom p;
+         A15: (Following(s1))|dom p
+                      = (Following ((Computation s1).0))|dom p by AMI_1:def 19
+                     .= (Computation s1).(0+1)|dom p by AMI_1:def 19
+                     .= (Following ((Computation s2).0))|dom p by A14,AMI_1:def
+19
+                     .= (Following(s2))|dom p by AMI_1:def 19;
+              insloc 0 = ((Following(s1))|dom p).IC SCM+FSA by A1,A12,FUNCT_1:
+72
+                .= insloc 1 by A1,A13,A15,FUNCT_1:72;
+       hence contradiction by SCMFSA_2:18;
+    end;
+
+     hence contradiction;
+  end;
+
+theorem Th17:
+ for p being autonomic non programmed FinPartState of SCM+FSA,
+     s being State of SCM+FSA st p c= s
+ for i being Nat
+  holds IC (Computation s).i in dom ProgramPart(p)
+  proof
+   let p be autonomic non programmed FinPartState of SCM+FSA,
+       s be State of SCM+FSA such that
+A1:  p c= s;
+   let i be Nat;
+   set Csi = (Computation s).i;
+   set loc = IC Csi;
+   consider ll being Nat such that
+A2:   loc = insloc ll by SCMFSA_2:21;
+   set loc1 = insloc(ll+1);
+A3:  loc <> loc1
+       proof
+         assume loc = loc1;
+         then ll + 0 = ll + 1 by A2,SCMFSA_2:18;
+        hence contradiction by XCMPLX_1:2;
+       end;
+A4: loc = Csi.IC SCM+FSA by AMI_1:def 15;
+  assume
+A5: not IC (Computation s).i in dom ProgramPart(p);
+      ProgramPart p = p|the Instruction-Locations of SCM+FSA
+          by AMI_5:def 6;
+    then loc in dom ProgramPart p iff
+         loc in dom p /\ the Instruction-Locations of SCM+FSA by FUNCT_1:68;
+ then A6:not loc in dom p by A5,XBOOLE_0:def 3;
+
+    set p1 = p +* (loc .--> goto loc);
+    set p2 = p +* (loc .--> goto loc1);
+
+A7:  dom p1 = dom p \/ dom (loc .--> goto loc) &
+         dom p2 = dom p \/ dom (loc .--> goto loc1) by FUNCT_4:def 1;
+A8:  dom (loc .--> goto loc) = {loc} &
+         dom (loc .--> goto loc1) = {loc} by CQC_LANG:5;
+then A9:  loc in dom (loc .--> goto loc) &
+         loc in dom (loc .--> goto loc1) by TARSKI:def 1;
+then A10:   loc in dom p1 & loc in dom p2 by A7,XBOOLE_0:def 2;
+
+    consider s1 being State of SCM+FSA such that
+A11: p1 c= s1 by AMI_3:39;
+    consider s2 being State of SCM+FSA such that
+A12: p2 c= s2 by AMI_3:39;
+
+ set Cs1i = (Computation s1).i;
+ set Cs2i = (Computation s2).i;
+
+A13:  IC SCM+FSA in dom p by Th15;
+    p is not autonomic
+   proof
+     take s1, s2;
+       dom s1 = the carrier of SCM+FSA & dom s2 = the carrier of SCM+FSA
+                                                    by AMI_3:36;
+then A14: dom p c= dom s1 & dom p c= dom s2 by AMI_3:37;
+       now let x be set; assume
+A15:    x in dom p;
+       then dom p misses dom (loc .--> goto loc) &
+       x in dom p1 by A6,A7,A8,XBOOLE_0:def 2,ZFMISC_1:56;
+       then p.x = p1.x & p1.x = s1.x by A11,A15,FUNCT_4:17,GRFUNC_1:8;
+      hence p.x = s1.x;
+     end;
+    hence
+A16: p c= s1 by A14,GRFUNC_1:8;
+      now let x be set; assume
+A17:   x in dom p;
+      then dom p misses dom (loc .--> goto loc1) &
+      x in dom p2 by A6,A7,A8,XBOOLE_0:def 2,ZFMISC_1:56;
+      then p.x = p2.x & p2.x = s2.x by A12,A17,FUNCT_4:17,GRFUNC_1:8;
+     hence p.x = s2.x;
+    end;
+   hence
+A18: p c= s2 by A14,GRFUNC_1:8;
+         (loc .--> goto loc).loc = goto loc &
+       (loc .--> goto loc1).loc = goto loc1 by CQC_LANG:6;
+       then p1.loc = goto loc & p2.loc = goto loc1 by A9,FUNCT_4:14;
+then A19:  s1.loc = goto loc & s2.loc = goto loc1 by A10,A11,A12,GRFUNC_1:8;
+
+  take k = i+1;
+
+  set Cs1k = (Computation s1).k;
+  set Cs2k = (Computation s2).k;
+A20: Cs1k = Following Cs1i by AMI_1:def 19
+          .= Exec (CurInstr Cs1i, Cs1i) by AMI_1:def 18;
+A21: Cs2k = Following Cs2i by AMI_1:def 19
+          .= Exec (CurInstr Cs2i, Cs2i) by AMI_1:def 18;
+
+      A22:   Cs1i.loc = goto loc & Cs2i.loc = goto loc1 by A19,AMI_1:54;
+A23:  (Cs1i|dom p) = (Csi|dom p) by A1,A16,AMI_1:def 25;
+A24: Cs1i.IC SCM+FSA = (Cs1i|dom p).IC SCM+FSA &
+     Csi.IC SCM+FSA = (Csi|dom p).IC SCM+FSA by A13,FUNCT_1:72;
+    (Cs1i|dom p) = (Cs2i|dom p) by A16,A18,AMI_1:def 25;
+     then A25:   Cs1i.IC SCM+FSA = loc & Cs2i.IC SCM+FSA = loc
+           by A4,A13,A23,A24,FUNCT_1:72;
+     IC Cs1i = Cs1i.IC SCM+FSA & IC Cs2i = Cs2i.IC SCM+FSA by AMI_1:def 15;
+     then CurInstr Cs1i = goto loc & CurInstr Cs2i = goto loc1 by A22,A25,AMI_1
+:def 17;
+then A26:   Cs1k.IC SCM+FSA = loc & Cs2k.IC SCM+FSA = loc1 by A20,A21,SCMFSA_2:
+95;
+       (Cs1k|dom p).IC SCM+FSA = Cs1k.IC SCM+FSA &
+     (Cs2k|dom p).IC SCM+FSA = Cs2k.IC SCM+FSA
+                                                    by A13,FUNCT_1:72;
+   hence Cs1k|dom p <> Cs2k|dom p by A3,A26;
+  end;
+ hence contradiction;
+end;
+
+theorem Th18:
+ for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat
+    holds IC (Computation s1).i = IC (Computation s2).i &
+          CurInstr ((Computation s1).i) = CurInstr ((Computation s2).i)
+ proof
+   let p be autonomic non programmed FinPartState of SCM+FSA,
+       s1, s2 be State of SCM+FSA such that
+A1:  p c= s1 & p c= s2;
+    let i be Nat;
+ set I = CurInstr ((Computation s1).i);
+    set Cs1i = (Computation s1).i;
+    set Cs2i = (Computation s2).i;
+A2: IC SCM+FSA in dom p by Th15;
+   thus
+A3: IC Cs1i = IC Cs2i
+   proof assume
+A4:  IC (Computation s1).i <> IC (Computation s2).i;
+A5:  IC Cs1i = Cs1i.IC SCM+FSA & IC Cs2i = Cs2i.IC SCM+FSA by AMI_1:def 15;
+      (Cs1i|dom p).IC SCM+FSA = Cs1i.IC SCM+FSA &
+    (Cs2i|dom p).IC SCM+FSA = Cs2i.IC SCM+FSA by A2,FUNCT_1:72;
+   hence contradiction by A1,A4,A5,AMI_1:def 25;
+  end;
+ thus I = CurInstr ((Computation s2).i)
+   proof assume
+A6:  I <> CurInstr ((Computation s2).i);
+A7:  Cs1i.IC Cs1i = I & Cs2i.IC Cs2i = CurInstr Cs2i by AMI_1:def 17;
+A8:  IC Cs1i in dom ProgramPart p & IC Cs2i in dom ProgramPart p by A1,Th17;
+      ProgramPart p c= p by AMI_5:63;
+    then dom ProgramPart p c= dom p by GRFUNC_1:8;
+then (Cs1i|dom p).IC Cs1i = Cs1i.IC Cs1i & (Cs2i|dom p).IC Cs2i = Cs2i.IC Cs2i
+                                                     by A8,FUNCT_1:72;
+   hence contradiction by A1,A3,A6,A7,AMI_1:def 25;
+  end;
+end;
+
+theorem
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat, da, db being Int-Location
+    st CurInstr ((Computation s1).i) = da := db & da in dom p
+ holds (Computation s1).i.db = (Computation s2).i.db
+proof
+ let p be autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 be State of SCM+FSA such that
+A1: p c= s1 & p c= s2;
+   let i be Nat,
+     da, db be Int-Location;
+   set I = CurInstr ((Computation s1).i);
+   set Cs1i = (Computation s1).i;
+   set Cs2i = (Computation s2).i;
+A2: I = CurInstr ((Computation s2).i) by A1,Th18;
+   set Cs1i1 = (Computation s1).(i+1);
+   set Cs2i1 = (Computation s2).(i+1);
+A3:    Cs1i1 = Following Cs1i by AMI_1:def 19
+               .= Exec (CurInstr Cs1i, Cs1i) by AMI_1:def 18;
+A4:    Cs2i1 = Following Cs2i by AMI_1:def 19
+               .= Exec (CurInstr Cs2i, Cs2i) by AMI_1:def 18;
+A5: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da &
+          (Cs2i1|dom p).da = Cs2i1.da by FUNCT_1:72;
+     assume
+A6:        I = da := db & da in dom p &
+         (Computation s1).i.db <> (Computation s2).i.db;
+          then Cs1i1.da = Cs1i.db & Cs2i1.da = Cs2i.db
+                         by A2,A3,A4,SCMFSA_2:89;
+   hence contradiction by A1,A5,A6,AMI_1:def 25;
+end;
+
+theorem
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat,
+     da, db being Int-Location
+    st CurInstr ((Computation s1).i) = AddTo(da, db) & da in dom p
+   holds (Computation s1).i.da + (Computation s1).i.db
+         = (Computation s2).i.da + (Computation s2).i.db
+proof
+ let p be autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 be State of SCM+FSA such that
+A1: p c= s1 & p c= s2;
+   let i be Nat,
+     da, db be Int-Location;
+ set I = CurInstr ((Computation s1).i);
+    set Cs1i = (Computation s1).i;
+    set Cs2i = (Computation s2).i;
+A2:    I = CurInstr ((Computation s2).i) by A1,Th18;
+   set Cs1i1 = (Computation s1).(i+1);
+   set Cs2i1 = (Computation s2).(i+1);
+A3: Cs1i1 = Following Cs1i by AMI_1:def 19
+            .= Exec (CurInstr Cs1i, Cs1i) by AMI_1:def 18;
+A4: Cs2i1 = Following Cs2i by AMI_1:def 19
+            .= Exec (CurInstr Cs2i, Cs2i) by AMI_1:def 18;
+A5: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da &
+                          (Cs2i1|dom p).da = Cs2i1.da by FUNCT_1:72;
+    assume
+A6: I = AddTo(da, db) & da in dom p &
+   (Computation s1).i.da + (Computation s1).i.db
+   <> (Computation s2).i.da + (Computation s2).i.db;
+   then Cs1i1.da = Cs1i.da + Cs1i.db & Cs2i1.da = Cs2i.da + Cs2i.db
+                            by A2,A3,A4,SCMFSA_2:90;
+   hence contradiction by A1,A5,A6,AMI_1:def 25;
+end;
+
+theorem
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat, da, db being Int-Location
+    st CurInstr ((Computation s1).i) = SubFrom(da, db) & da in dom p
+   holds (Computation s1).i.da - (Computation s1).i.db
+         = (Computation s2).i.da - (Computation s2).i.db
+ proof
+   let p be autonomic non programmed FinPartState of SCM+FSA,
+      s1, s2 be State of SCM+FSA such that
+A1: p c= s1 & p c= s2;
+   let i be Nat,
+     da, db be Int-Location;
+ set I = CurInstr ((Computation s1).i);
+    set Cs1i = (Computation s1).i;
+    set Cs2i = (Computation s2).i;
+A2:    I = CurInstr ((Computation s2).i) by A1,Th18;
+   set Cs1i1 = (Computation s1).(i+1);
+   set Cs2i1 = (Computation s2).(i+1);
+A3: Cs1i1 = Following Cs1i by AMI_1:def 19
+            .= Exec (CurInstr Cs1i, Cs1i) by AMI_1:def 18;
+A4: Cs2i1 = Following Cs2i by AMI_1:def 19
+            .= Exec (CurInstr Cs2i, Cs2i) by AMI_1:def 18;
+A5: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da &
+                      (Cs2i1|dom p).da = Cs2i1.da by FUNCT_1:72;
+  assume
+A6: I = SubFrom(da, db) & da in dom p &
+   (Computation s1).i.da - (Computation s1).i.db
+   <> (Computation s2).i.da - (Computation s2).i.db;
+   then Cs1i1.da = Cs1i.da - Cs1i.db & Cs2i1.da = Cs2i.da - Cs2i.db
+                            by A2,A3,A4,SCMFSA_2:91;
+   hence contradiction by A1,A5,A6,AMI_1:def 25;
+end;
+
+theorem
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat,
+     da, db being Int-Location
+    st CurInstr ((Computation s1).i) = MultBy(da, db) & da in dom p
+   holds (Computation s1).i.da * (Computation s1).i.db
+         = (Computation s2).i.da * (Computation s2).i.db
+proof
+ let p be autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 be State of SCM+FSA such that
+A1: p c= s1 & p c= s2;
+   let i be Nat,
+     da, db be Int-Location;
+ set I = CurInstr ((Computation s1).i);
+    set Cs1i = (Computation s1).i;
+    set Cs2i = (Computation s2).i;
+A2:    I = CurInstr ((Computation s2).i) by A1,Th18;
+   set Cs1i1 = (Computation s1).(i+1);
+   set Cs2i1 = (Computation s2).(i+1);
+A3: Cs1i1 = Following Cs1i by AMI_1:def 19
+            .= Exec (CurInstr Cs1i, Cs1i) by AMI_1:def 18;
+A4: Cs2i1 = Following Cs2i by AMI_1:def 19
+            .= Exec (CurInstr Cs2i, Cs2i) by AMI_1:def 18;
+A5: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da &
+                     (Cs2i1|dom p).da = Cs2i1.da by FUNCT_1:72;
+  assume
+A6: I = MultBy(da, db) & da in dom p &
+   (Computation s1).i.da * (Computation s1).i.db
+   <> (Computation s2).i.da * (Computation s2).i.db;
+   then Cs1i1.da = Cs1i.da * Cs1i.db & Cs2i1.da = Cs2i.da * Cs2i.db
+                                 by A2,A3,A4,SCMFSA_2:92;
+   hence contradiction by A1,A5,A6,AMI_1:def 25;
+ end;
+
+theorem
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat,
+     da, db being Int-Location
+    st CurInstr ((Computation s1).i) = Divide(da, db) & da in dom p & da <> db
+   holds (Computation s1).i.da div (Computation s1).i.db
+         = (Computation s2).i.da div (Computation s2).i.db
+proof
+ let p be autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 be State of SCM+FSA such that
+A1: p c= s1 & p c= s2;
+   let i be Nat,
+     da, db be Int-Location;
+ set I = CurInstr ((Computation s1).i);
+    set Cs1i = (Computation s1).i;
+    set Cs2i = (Computation s2).i;
+A2:    I = CurInstr ((Computation s2).i) by A1,Th18;
+   set Cs1i1 = (Computation s1).(i+1);
+   set Cs2i1 = (Computation s2).(i+1);
+A3: Cs1i1 = Following Cs1i by AMI_1:def 19
+            .= Exec (CurInstr Cs1i, Cs1i) by AMI_1:def 18;
+A4: Cs2i1 = Following Cs2i by AMI_1:def 19
+            .= Exec (CurInstr Cs2i, Cs2i) by AMI_1:def 18;
+A5: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da &
+                          (Cs2i1|dom p).da = Cs2i1.da by FUNCT_1:72;
+  assume
+A6: I = Divide(da, db) & da in dom p & da <> db &
+   (Computation s1).i.da div (Computation s1).i.db
+   <> (Computation s2).i.da div (Computation s2).i.db;
+   then Cs1i1.da = Cs1i.da div Cs1i.db & Cs2i1.da = Cs2i.da div Cs2i.db
+                            by A2,A3,A4,SCMFSA_2:93;
+   hence contradiction by A1,A5,A6,AMI_1:def 25;
+ end;
+
+theorem
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat, da, db being Int-Location
+    st CurInstr ((Computation s1).i) = Divide(da, db) & db in dom p & da <> db
+   holds (Computation s1).i.da mod (Computation s1).i.db
+         = (Computation s2).i.da mod (Computation s2).i.db
+proof
+ let p be autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 be State of SCM+FSA such that
+A1: p c= s1 & p c= s2;
+   let i be Nat, da, db be Int-Location;
+ set I = CurInstr ((Computation s1).i);
+     set Cs1i = (Computation s1).i;
+     set Cs2i = (Computation s2).i;
+A2:     I = CurInstr ((Computation s2).i) by A1,Th18;
+    set Cs1i1 = (Computation s1).(i+1);
+    set Cs2i1 = (Computation s2).(i+1);
+A3:  Cs1i1 = Following Cs1i by AMI_1:def 19
+             .= Exec (CurInstr Cs1i, Cs1i) by AMI_1:def 18;
+A4:  Cs2i1 = Following Cs2i by AMI_1:def 19
+             .= Exec (CurInstr Cs2i, Cs2i) by AMI_1:def 18;
+  assume
+A5: I = Divide(da, db) & db in dom p & da <> db &
+   (Computation s1).i.da mod (Computation s1).i.db
+   <> (Computation s2).i.da mod (Computation s2).i.db;
+then A6: (Cs1i1|dom p).db = Cs1i1.db &
+                    (Cs2i1|dom p).db = Cs2i1.db by FUNCT_1:72;
+     Cs1i1.db = Cs1i.da mod Cs1i.db & Cs2i1.db = Cs2i.da mod Cs2i.db
+                            by A2,A3,A4,A5,SCMFSA_2:93;
+   hence contradiction by A1,A5,A6,AMI_1:def 25;
+ end;
+
+theorem
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat,
+     da being Int-Location,
+     loc being Instruction-Location of SCM+FSA
+    st CurInstr ((Computation s1).i) = da=0_goto loc &
+       loc <> Next (IC (Computation s1).i)
+   holds ((Computation s1).i.da = 0 iff (Computation s2).i.da = 0)
+proof
+ let p be autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 be State of SCM+FSA such that
+A1: p c= s1 & p c= s2;
+   let i be Nat,
+     da be Int-Location,
+     loc be Instruction-Location of SCM+FSA;
+ set I = CurInstr ((Computation s1).i);
+    set Cs1i = (Computation s1).i;
+    set Cs2i = (Computation s2).i;
+A2: IC SCM+FSA in dom p by Th15;
+A3: I = CurInstr ((Computation s2).i) by A1,Th18;
+    set Cs1i1 = (Computation s1).(i+1);
+    set Cs2i1 = (Computation s2).(i+1);
+A4:  Cs1i1 = Following Cs1i by AMI_1:def 19
+             .= Exec (CurInstr Cs1i, Cs1i) by AMI_1:def 18;
+A5:  Cs2i1 = Following Cs2i by AMI_1:def 19
+             .= Exec (CurInstr Cs2i, Cs2i) by AMI_1:def 18;
+A6:(Cs1i1|dom p).IC SCM+FSA = Cs1i1.IC SCM+FSA &
+               (Cs2i1|dom p).IC SCM+FSA = Cs2i1.IC SCM+FSA
+                   by A2,FUNCT_1:72;
+A7:  (Cs1i1|dom p) = (Cs2i1|dom p) by A1,AMI_1:def 25;
+  assume
+A8: I = da=0_goto loc & loc <> Next (IC (Computation s1).i);
+A9: now assume
+   (Computation s1).i.da = 0 & (Computation s2).i.da <> 0;
+    then Cs1i1.IC SCM+FSA = loc & Cs2i1.IC SCM+FSA = Next IC Cs2i
+                            by A3,A4,A5,A8,SCMFSA_2:96;
+    hence contradiction by A1,A6,A7,A8,Th18;
+   end;
+     now assume
+     (Computation s2).i.da = 0 & (Computation s1).i.da <> 0;
+    then Cs2i1.IC SCM+FSA = loc & Cs1i1.IC SCM+FSA = Next IC Cs1i
+                            by A3,A4,A5,A8,SCMFSA_2:96;
+    hence contradiction by A1,A6,A8,AMI_1:def 25;
+   end;
+  hence (Computation s1).i.da = 0 iff (Computation s2).i.da = 0 by A9;
+ end;
+
+theorem
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat,
+     da being Int-Location,
+     loc being Instruction-Location of SCM+FSA
+    st CurInstr ((Computation s1).i) = da>0_goto loc &
+       loc <> Next (IC (Computation s1).i)
+   holds ((Computation s1).i.da > 0 iff (Computation s2).i.da > 0)
+ proof
+  let p be autonomic non programmed FinPartState of SCM+FSA,
+      s1, s2 be State of SCM+FSA such that
+A1: p c= s1 & p c= s2;
+   let i be Nat,
+     da be Int-Location,
+     loc be Instruction-Location of SCM+FSA;
+ set I = CurInstr ((Computation s1).i);
+    set Cs1i = (Computation s1).i;
+    set Cs2i = (Computation s2).i;
+A2: IC SCM+FSA in dom p by Th15;
+A3: IC Cs1i = IC Cs2i by A1,Th18;
+A4: I = CurInstr ((Computation s2).i) by A1,Th18;
+   set Cs1i1 = (Computation s1).(i+1);
+   set Cs2i1 = (Computation s2).(i+1);
+A5: Cs1i1 = Following Cs1i by AMI_1:def 19
+            .= Exec (CurInstr Cs1i, Cs1i) by AMI_1:def 18;
+A6: Cs2i1 = Following Cs2i by AMI_1:def 19
+            .= Exec (CurInstr Cs2i, Cs2i) by AMI_1:def 18;
+A7: (Cs1i1|dom p).IC SCM+FSA = Cs1i1.IC SCM+FSA &
+         (Cs2i1|dom p).IC SCM+FSA = Cs2i1.IC SCM+FSA by A2,FUNCT_1:72;
+A8:   (Cs1i1|dom p) = (Cs2i1|dom p) by A1,AMI_1:def 25;
+  assume
+A9: I = da>0_goto loc & loc <> Next (IC (Computation s1).i);
+A10: now assume
+A11: (Computation s1).i.da > 0 & (Computation s2).i.da <= 0;
+  then Cs1i1.IC SCM+FSA = loc by A5,A9,SCMFSA_2:97;
+   hence contradiction
+    by A3,A4,A6,A7,A8,A9,A11,SCMFSA_2:97;
+   end;
+     now assume
+A12: (Computation s2).i.da > 0 & (Computation s1).i.da <= 0;
+  then Cs2i1.IC SCM+FSA = loc by A4,A6,A9,SCMFSA_2:97;
+    hence contradiction by A5,A7,A8,A9,A12,SCMFSA_2:97;
+   end;
+  hence (Computation s1).i.da > 0 iff (Computation s2).i.da > 0 by A10;
+ end;
+
+theorem
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat, da, db being Int-Location, f being FinSeq-Location
+    st CurInstr ((Computation s1).i) = da := (f,db) & da in dom p
+ for k1,k2 being Nat st
+  k1 = abs((Computation s1).i.db) & k2 = abs((Computation s2).i.db)
+ holds
+    ((Computation s1).i.f)/.k1 = ((Computation s2).i.f)/.k2
+proof
+ let p be autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 be State of SCM+FSA such that
+A1: p c= s1 & p c= s2;
+   let i be Nat,
+     da, db be Int-Location, f be FinSeq-Location;
+   set I = CurInstr ((Computation s1).i);
+   set Cs1i = (Computation s1).i;
+   set Cs2i = (Computation s2).i;
+   set Cs1i1 = (Computation s1).(i+1);
+   set Cs2i1 = (Computation s2).(i+1);
+A2:    Cs1i1 = Following Cs1i by AMI_1:def 19
+               .= Exec (CurInstr Cs1i, Cs1i) by AMI_1:def 18;
+A3:    Cs2i1 = Following Cs2i by AMI_1:def 19
+               .= Exec (CurInstr Cs2i, Cs2i) by AMI_1:def 18;
+A4: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da &
+          (Cs2i1|dom p).da = Cs2i1.da by FUNCT_1:72;
+A5:    Cs1i1|dom p = Cs2i1|dom p by A1,AMI_1:def 25;
+     assume
+A6:        I = da := (f,db) & da in dom p;
+     let i1,i2 be Nat such that
+A7:   i1 = abs((Computation s1).i.db) & i2 = abs((Computation s2).i.db) and
+A8:   ((Computation s1).i.f)/.i1 <> ((Computation s2).i.f)/.i2;
+    consider k1 being Nat such that
+A9:   k1 = abs(Cs1i.db) & Exec(I, Cs1i).da = (Cs1i.f)/.k1 by A6,SCMFSA_2:98;
+    consider k2 being Nat such that
+A10:   k2 = abs(Cs2i.db) & Exec(I, Cs2i).da = (Cs2i.f)/.k2 by A6,SCMFSA_2:98;
+   thus contradiction by A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,Th18;
+end;
+
+theorem
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat, da, db being Int-Location, f being FinSeq-Location
+    st CurInstr ((Computation s1).i) = (f,db):=da & f in dom p
+ for k1,k2 being Nat st
+  k1 = abs((Computation s1).i.db) & k2 = abs((Computation s2).i.db)
+ holds (Computation s1).i.f+*(k1,(Computation s1).i.da)
+       = (Computation s2).i.f+*(k2,(Computation s2).i.da)
+proof
+ let p be autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 be State of SCM+FSA such that
+A1: p c= s1 & p c= s2;
+   let i be Nat,
+     da, db be Int-Location, f be FinSeq-Location;
+   set I = CurInstr ((Computation s1).i);
+   set Cs1i = (Computation s1).i;
+   set Cs2i = (Computation s2).i;
+   set Cs1i1 = (Computation s1).(i+1);
+   set Cs2i1 = (Computation s2).(i+1);
+A2:    Cs1i1 = Following Cs1i by AMI_1:def 19
+               .= Exec (CurInstr Cs1i, Cs1i) by AMI_1:def 18;
+A3:    Cs2i1 = Following Cs2i by AMI_1:def 19
+               .= Exec (CurInstr Cs2i, Cs2i) by AMI_1:def 18;
+A4: f in dom p implies (Cs1i1|dom p).f = Cs1i1.f &
+          (Cs2i1|dom p).f = Cs2i1.f by FUNCT_1:72;
+A5:    Cs1i1|dom p = Cs2i1|dom p by A1,AMI_1:def 25;
+     assume that
+A6:        I = (f,db):=da & f in dom p;
+ let i1, i2 be Nat such that
+A7:  i1 = abs(Cs1i.db) & i2 = abs(Cs2i.db) and
+A8:  Cs1i.f+*(i1,Cs1i.da) <> Cs2i.f+*(i2,Cs2i.da);
+    consider k1 being Nat such that
+A9:   k1 = abs(Cs1i.db) &
+      Exec(I, Cs1i).f = Cs1i.f+*(k1,Cs1i.da) by A6,SCMFSA_2:99;
+    consider k2 being Nat such that
+A10:   k2 = abs(Cs2i.db) &
+      Exec(I, Cs2i).f = Cs2i.f+*(k2,Cs2i.da) by A6,SCMFSA_2:99;
+   thus contradiction by A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,Th18;
+end;
+
+theorem
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat, da being Int-Location, f being FinSeq-Location
+    st CurInstr ((Computation s1).i) = da :=len f & da in dom p
+ holds
+    len((Computation s1).i.f) = len((Computation s2).i.f)
+proof
+ let p be autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 be State of SCM+FSA such that
+A1: p c= s1 & p c= s2;
+   let i be Nat,
+     da be Int-Location, f be FinSeq-Location;
+   set I = CurInstr ((Computation s1).i);
+   set Cs1i = (Computation s1).i;
+   set Cs2i = (Computation s2).i;
+   set Cs1i1 = (Computation s1).(i+1);
+   set Cs2i1 = (Computation s2).(i+1);
+A2:    Cs1i1 = Following Cs1i by AMI_1:def 19
+               .= Exec (CurInstr Cs1i, Cs1i) by AMI_1:def 18;
+A3:    Cs2i1 = Following Cs2i by AMI_1:def 19
+               .= Exec (CurInstr Cs2i, Cs2i) by AMI_1:def 18;
+A4: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da &
+          (Cs2i1|dom p).da = Cs2i1.da by FUNCT_1:72;
+A5:    Cs1i1|dom p = Cs2i1|dom p by A1,AMI_1:def 25;
+     assume that
+A6:        I = da :=len f & da in dom p and
+A7:   len((Computation s1).i.f) <> len((Computation s2).i.f);
+A8:   Exec(I, Cs1i).da = len(Cs1i.f) by A6,SCMFSA_2:100;
+     Exec(I, Cs2i).da = len(Cs2i.f) by A6,SCMFSA_2:100;
+   hence contradiction by A1,A2,A3,A4,A5,A6,A7,A8,Th18;
+end;
+
+theorem
+   for p being autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 being State of SCM+FSA
+  st p c= s1 & p c= s2
+   for i being Nat, da being Int-Location, f being FinSeq-Location
+    st CurInstr ((Computation s1).i) = f:=<0,...,0>da & f in dom p
+ for k1,k2 being Nat st
+  k1 = abs((Computation s1).i.da) & k2 = abs((Computation s2).i.da)
+ holds k1 |-> 0 = k2 |-> 0
+proof
+ let p be autonomic non programmed FinPartState of SCM+FSA,
+     s1, s2 be State of SCM+FSA such that
+A1: p c= s1 & p c= s2;
+   let i be Nat,
+     da be Int-Location, f be FinSeq-Location;
+   set I = CurInstr ((Computation s1).i);
+   set Cs1i = (Computation s1).i;
+   set Cs2i = (Computation s2).i;
+   set Cs1i1 = (Computation s1).(i+1);
+   set Cs2i1 = (Computation s2).(i+1);
+A2:    Cs1i1 = Following Cs1i by AMI_1:def 19
+               .= Exec (CurInstr Cs1i, Cs1i) by AMI_1:def 18;
+A3:    Cs2i1 = Following Cs2i by AMI_1:def 19
+               .= Exec (CurInstr Cs2i, Cs2i) by AMI_1:def 18;
+A4: f in dom p implies (Cs1i1|dom p).f = Cs1i1.f &
+          (Cs2i1|dom p).f = Cs2i1.f by FUNCT_1:72;
+A5:    Cs1i1|dom p = Cs2i1|dom p by A1,AMI_1:def 25;
+     assume that
+A6:        I = f:=<0,...,0>da & f in dom p;
+ let i1, i2 be Nat such that
+A7:  i1 = abs(Cs1i.da) & i2 = abs(Cs2i.da) and
+A8:  i1 |-> 0 <> i2 |->0;
+    consider k1 being Nat such that
+A9:   k1 = abs(Cs1i.da) &
+      Exec(I, Cs1i).f = k1|->0 by A6,SCMFSA_2:101;
+    consider k2 being Nat such that
+A10:   k2 = abs(Cs2i.da) &
+      Exec(I, Cs2i).f = k2|->0 by A6,SCMFSA_2:101;
+   thus contradiction by A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,Th18;
+end;
+

@@ -1,0 +1,1266 @@
+:: Isomorphisms of Cyclic Groups. Some Properties of Cyclic Groups
+::  by Dariusz Surowik
+::
+:: Received June 5, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary REALSET1, GROUP_2, GRAPH_1, GROUP_6, INT_1, GR_CY_1, NAT_1,
+      ARYTM_1, ARYTM_3, ABSVALUE, GROUP_1, FINSET_1, GROUP_4, VECTSP_1,
+      RELAT_1, FINSEQ_1, FUNCT_1, QC_LANG1, WELLORD1, FILTER_0, GROUP_5,
+      GROUP_3;
+ notation TARSKI, SUBSET_1, XCMPLX_0, XREAL_0, RELAT_1, FUNCT_1, FUNCT_2,
+      BINOP_1, INT_1, INT_2, NAT_1, RLVECT_1, GROUP_1, GROUP_2, STRUCT_0,
+      VECTSP_1, GROUP_3, GROUP_4, GROUP_5, GROUP_6, GR_CY_1, FINSEQ_1;
+ constructors REAL_1, BINOP_1, NAT_1, GROUP_4, GROUP_5, GROUP_6, GR_CY_1,
+      NAT_LAT, MEMBERED, XBOOLE_0;
+ clusters INT_1, GR_CY_1, STRUCT_0, XREAL_0, GROUP_2, FINSEQ_1, RELSET_1,
+      GROUP_1, MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions FUNCT_1;
+ theorems AXIOMS, FUNCT_2, GROUP_1, GROUP_2, GROUP_4, GROUP_5, FUNCT_1,
+      GROUP_6, GR_CY_1, NAT_1, INT_1, INT_2, REAL_1, ABSVALUE, REAL_2,
+      FINSEQ_1, TARSKI, RLVECT_1, VECTSP_1, SQUARE_1, RELSET_1, XBOOLE_0,
+      XCMPLX_0, XCMPLX_1;
+ schemes NAT_1, FUNCT_2, FINSEQ_1;
+
+begin
+
+ reserve F,G for Group;
+ reserve G1 for Subgroup of G;
+ reserve Gc for cyclic Group;
+ reserve H for Subgroup of Gc;
+ reserve f for Homomorphism of G,Gc;
+ reserve a,b for Element of G;
+ reserve g for Element of Gc;
+ reserve a1 for Element of G1;
+ reserve k,l,m,n,p,s,r for Nat;
+ reserve i0,i,i1,i2,i3,i4 for Integer;
+ reserve j,j1 for Element of INT.Group;
+ reserve x,y,t for set;
+
+::::::::::::: Some properties of natural and integer numbers.:::::::::::
+
+theorem Th1:
+ for n,m st 0 < m holds n mod m= n - m * (n div m)
+  proof
+   let n,m such that A1: m >0;
+   reconsider z1=m * (n div m),z2=(n mod m) as Integer;
+     n - z1 = z1 + z2 -z1 by A1,NAT_1:47;
+   hence n -m * (n div m) = n mod m by XCMPLX_1:26;
+  end;
+
+theorem Th2:
+ i2 >= 0 implies i1 mod i2 >= 0
+  proof
+   assume A1:i2 >= 0;
+   per cases by A1;
+   suppose A2:i2 > 0;
+     [\ i1/i2 /] <= i1/i2 by INT_1:def 4;
+   then i1 div i2 <= i1/i2 by INT_1:def 7;
+   then (i1 div i2)*i2 <= (i1/i2)*i2 by A2,AXIOMS:25;
+   then (i1 div i2)*i2 <= i1 by A2,XCMPLX_1:88;
+   then i1 - (i1 div i2)*i2 >= 0 by SQUARE_1:12;
+   hence thesis by A2,INT_1:def 8;
+   suppose i2 = 0;
+   hence thesis by INT_1:def 8;
+ end;
+
+theorem Th3:
+ i2 > 0 implies i1 mod i2 < i2
+proof
+ assume A1: i2 > 0;
+   i1/i2 -1 < [\ i1/i2 /] by INT_1:def 4;
+ then i1/i2 -1 < i1 div i2 by INT_1:def 7;
+ then (i1/i2 -1)*i2 < (i1 div i2)*i2 by A1,REAL_1:70;
+ then i1/i2*i2 -1*i2 < (i1 div i2)*i2 by XCMPLX_1:40;
+ then i1 -i2 < (i1 div i2)*i2-0 by A1,XCMPLX_1:88;
+ then i1 -(i1 div i2)*i2 < i2-0 by REAL_2:170;
+ hence thesis by A1,INT_1:def 8;
+end;
+
+theorem Th4:
+ i2 <> 0 implies i1 = (i1 div i2) * i2 + (i1 mod i2)
+proof
+ assume i2 <> 0;
+ then (i1 div i2) * i2 +(i1 mod i2) =
+ (i1 div i2 )*i2 + (i1 - ( i1 div i2 )*i2 ) by INT_1:def 8
+ .= i1 by XCMPLX_1:27;
+ hence thesis;
+end;
+
+theorem Th5:
+ for m,n st m>0 or n>0 holds ex i,i1 st i*m + i1*n = m hcf n
+ proof
+  let m,n;
+  assume A1:m>0 or n>0;
+  defpred P[Nat] means $1>0 & ex i,i1 st i*m+i1*n=$1;
+  A2: ex p st P[p]
+   proof
+      now per cases by A1;
+       suppose A3:m>0;
+              ex i,i1 st i*m+i1*n=m
+               proof
+                 set i1=0;
+                   1*m + i1*n=m;
+                 hence thesis;
+               end;
+        hence thesis by A3;
+       suppose A4:n>0;
+              ex i,i1 st i*m+i1*n=n
+               proof
+                 set i=0;
+                 i*m + 1*n=n;
+                 hence thesis;
+               end;
+       hence thesis by A4;
+  end;
+  hence thesis;
+ end;
+   ex p st P[p] & for n st P[n] holds p <= n from Min(A2); then
+   consider p such that A5:p>0 and A6:ex i,i0 st i*m+i0*n=p and A7: (for k st
+   (k>0 & ex i1,i2 st i1*m+i2*n=k) holds p <= k);
+   consider i,i0 such that A8:i*m+i0*n=p by A6;
+   A9:for k st ex i1,i2 st i1*m+i2*n=k holds p divides k
+    proof
+    let k;
+    given i1,i2 such that A10:i1*m+i2*n=k;
+    consider l,s such that A11:k=p*l+s and A12:s<p by A5,NAT_1:42;
+    s=0
+    proof
+     assume s<>0; then A13:s>0 by NAT_1:19;
+       ex i3,i4 st i3*m+i4*n=s
+     proof
+        s=(i1*m+i2*n)-(i*m+i0*n)*l by A8,A10,A11,XCMPLX_1:26
+         .=(i1*m+i2*n)-(i*m*l+i0*n*l) by XCMPLX_1:8
+         .=(i1*m+i2*n)-i*m*l-i0*n*l by XCMPLX_1:36
+         .=i1*m+(i2*n-i*m*l)-i0*n*l by XCMPLX_1:29
+         .=i1*m+((-i*m*l)+i2*n)-i0*n*l by XCMPLX_0:def 8
+         .=(i1*m+-i*m*l)+i2*n-i0*n*l by XCMPLX_1:1
+         .=(i1*m+-i*m*l)+i2*n+(-i0*n*l) by XCMPLX_0:def 8
+         .=(i1*m+-i*m*l)+(i2*n+-i0*n*l) by XCMPLX_1:1
+         .=(i1*m+-i*m*l)+(i2*n-i0*n*l) by XCMPLX_0:def 8
+         .=(i1*m-i*m*l)+(i2*n-i0*n*l) by XCMPLX_0:def 8
+         .=(i1*m-i*(m*l))+(i2*n-i0*n*l) by XCMPLX_1:4
+         .=(i1*m-i*(l*m))+(i2*n-i0*(l*n)) by XCMPLX_1:4
+         .=(i1*m-i*l*m)+(i2*n-i0*(l*n)) by XCMPLX_1:4
+         .=(i1*m-i*l*m)+(i2*n-i0*l*n) by XCMPLX_1:4
+         .=(i1-i*l)*m+(i2*n-i0*l*n) by XCMPLX_1:40
+         .=(i1-i*l)*m+(i2-i0*l)*n by XCMPLX_1:40;
+         hence thesis;
+       end;
+    hence contradiction by A7,A12,A13;
+    end;
+    hence thesis by A11,NAT_1:def 3;
+  end;
+   p= m hcf n
+ proof
+  A14: ex i,i1 st i*m+i1*n=m
+    proof
+     set i1=0;
+     1*m + i1*n=m;
+     hence thesis;
+    end;
+ A15: ex i,i1 st i*m+i1*n=n
+   proof
+    set i=0;
+    i*m + 1*n=n;
+    hence thesis;
+   end;
+  A16:p divides m by A9,A14;
+  A17:p divides n by A9,A15;
+      for s st s divides m & s divides n holds s divides p
+     proof
+      let s;
+      assume that A18:s divides m and A19:s divides n;
+      consider l such that A20:m = s*l by A18,NAT_1:def 3;
+      consider r such that A21:n = s*r by A19,NAT_1:def 3;
+      reconsider p'=p,s'=s as Integer;
+      ex i4 st p'=s'*i4
+     proof
+   A22:p'=(i*s')*l+i0*(s'*r) by A8,A20,A21,XCMPLX_1:4
+     .= (s'*i)*l+(i0*s')*r by XCMPLX_1:4
+     .= s'*(i*l)+(s'*i0)*r by XCMPLX_1:4
+     .= s'*(i*l)+s'*(i0*r) by XCMPLX_1:4
+     .= s'*(i*l+i0*r) by XCMPLX_1:8;
+     take i*l+i0*r;
+       thus thesis by A22;
+     end;
+        then A23:s' divides p' by INT_1:def 9;
+       A24: for z being Nat holds abs z=z
+          proof
+          let z be Nat;
+            z>=0 by NAT_1:18;
+          hence thesis by ABSVALUE:def 1;
+          end;
+        then A25:abs s=s;
+             abs p=p by A24;
+      hence thesis by A23,A25,INT_2:21;
+     end;
+   hence thesis by A16,A17,NAT_1:def 5;
+ end;
+ hence thesis by A6;
+ end;
+
+theorem
+   ord a>1 & a=b|^k implies k<>0
+proof
+assume that A1: ord a>1 and A2:a=b|^k and A3:k=0;
+  a=1.G by A2,A3,GROUP_1:43;
+hence contradiction by A1,GROUP_1:84;
+end;
+
+theorem Th7:
+ G is finite implies ord G > 0
+proof
+ assume G is finite;
+ then ord G >= 1 by GROUP_1:90;
+ hence thesis by AXIOMS:22;
+end;
+
+:::::::::::::::::::: Some properties of Cyclic Groups ::::::::::::::::::::::
+
+theorem Th8:
+ a in gr {a}
+proof
+  ex i st a=a|^i
+proof
+reconsider i=1 as Integer;
+take i;
+thus thesis by GROUP_1:44;
+end;
+hence thesis by GR_CY_1:25;
+end;
+
+theorem Th9:
+ a=a1 implies gr {a} = gr {a1}
+proof
+assume A1: a= a1;
+reconsider Gr = gr {a1} as Subgroup of G by GROUP_2:65;
+  for b holds b in gr {a} iff b in Gr
+proof
+  A2: for b holds b in gr {a} implies b in Gr
+  proof let b; assume b in gr {a};
+  then consider i such that A3: b= a|^i by GR_CY_1:25;
+    b=a1|^i by A1,A3,GROUP_4:4;
+  hence b in Gr by GR_CY_1:25;
+end;
+  for b holds b in Gr implies b in gr {a}
+proof
+let b; assume A4: b in Gr; then b in G1 by GROUP_2:49;
+then reconsider b1=b as Element of G1 by RLVECT_1:def 1;
+consider i such that A5: b1= a1|^i by A4,GR_CY_1:25;
+  b=a|^i by A1,A5,GROUP_4:4;
+hence b in gr {a} by GR_CY_1:25; end;
+hence thesis by A2; end;
+hence thesis by GROUP_2:69;
+end;
+
+theorem Th10:
+ gr {a} is cyclic Group
+proof
+  ex a1 being Element of gr {a} st gr {a}=gr {a1}
+proof
+  a in gr {a} by Th8;
+then reconsider a1=a as Element of gr {a} by RLVECT_1:def 1;
+take a1;
+thus thesis by Th9;
+end;
+hence thesis by GR_CY_1:def 9;
+end;
+
+theorem Th11:
+ for G being strict Group,b being Element of G holds
+  ( for a being Element of G holds ex i st a=b|^i )
+    iff G= gr {b}
+ proof
+ let G be strict Group;
+ let b be Element of G;
+ thus ( for a being Element of G holds ex i st a=b|^i )
+   implies G= gr {b}
+ proof
+  assume A1:for a being Element of G holds ex i st a=b|^i;
+      for a being Element of G holds a in gr {b}
+     proof
+       let a be Element of G; ex i st a=b|^i by A1;
+       hence thesis by GR_CY_1:25;
+     end;
+    hence thesis by GROUP_2:71;
+ end;
+ thus G= gr {b} implies ( for a  being Element of G holds
+   ex i st a=b|^i )
+ proof
+ assume A2: G= gr {b};
+    for a being Element of G holds ex i st a=b|^i
+  proof
+   let a be Element of G; a in gr {b} by A2,RLVECT_1:def 1;
+   hence thesis by GR_CY_1:25;
+  end;
+ hence thesis;
+ end;
+  thus thesis;
+ end;
+
+theorem Th12:
+ for G being strict Group,b being Element of G
+  holds G is finite implies
+  ((for a being Element of G holds ex p st a=b|^p)
+   iff G = gr {b})
+proof let G be strict Group,b be Element of G;
+assume A1: G is finite;
+thus (for a being Element of G holds ex p st a=b|^p)
+  implies G = gr {b}
+proof
+  assume A2: for a being Element of G holds ex p st a=b|^p;
+    for a being Element of G holds ex i st a=b|^i
+    proof
+       let a be Element of G; consider p such that
+       A3: a=b|^p by A2;
+       reconsider p1=p as Integer;
+       take p1; thus thesis by A3;
+    end;
+  hence G=gr {b} by Th11;
+ end;
+thus G=gr {b} implies (for a being Element of G
+  ex p st a=b|^p)
+proof
+assume A4: G= gr {b};
+  for a being Element of G holds ex p st a=b|^p
+proof let a be Element of G;
+consider i such that A5: a= b|^i by A4,Th11;
+reconsider n1=ord G as Integer;
+A6:n1 > 0 by A1,Th7; then i mod n1 >= 0 by Th2;
+ then reconsider p=i mod n1 as Nat by INT_1:16;
+A7:a = b|^((i div n1) * n1 + (i mod n1)) by A5,A6,Th4
+ .= b|^((i div n1)*n1) *(b|^(i mod n1)) by GROUP_1:63
+ .= b|^(i div n1)|^ord G *(b|^(i mod n1)) by GROUP_1:67
+ .= (1.G) *(b|^(i mod n1)) by A1,GR_CY_1:29
+ .= b|^(i mod n1) by GROUP_1:def 4;
+ take p;
+ thus thesis by A7;
+ end;
+hence thesis;
+end;
+thus thesis;
+end;
+
+theorem Th13:
+ for G being strict Group,a being Element of G holds
+  G is finite & G = gr {a} implies for G1 being strict Subgroup of G holds
+   ex p st G1 = gr {a|^p}
+proof
+let G be strict Group,a be Element of G;
+assume that A1: G is finite and A2:G = gr {a};
+A3:G is cyclic Group by A2,GR_CY_1:def 9;
+  for G1 being strict Subgroup of G holds ex p st G1 = gr {a|^p}
+proof let G1 be strict Subgroup of G;
+  G1 is cyclic Group by A1,A3,GR_CY_1:44;
+then consider b being Element of G1 such that
+A4:G1 = gr {b} by GR_CY_1:def 9;
+reconsider b1 = b as Element of G by GROUP_2:51;
+ consider p such that A5: b1 = a|^p by A1,A2,Th12;
+take p;
+thus thesis by A4,A5,Th9;
+end;
+hence thesis;
+end;
+
+theorem Th14:
+ G is finite & G=gr {a} & ord G = n & n = p * s implies ord (a|^p) = s
+proof
+assume that A1:G is finite and A2:G=gr {a} and A3:ord G = n and A4:n = p * s;
+A5: a|^p is_not_of_order_0 by A1,GR_CY_1:26;
+A6:a|^p|^ s = 1.G
+proof
+thus a|^p|^s = a|^n by A4,GROUP_1:50 .=1.G by A1,A3,GR_CY_1:29;
+ end;
+A7: s <> 0 by A1,A3,A4,Th7;
+ A8: p <> 0 by A1,A3,A4,Th7;
+   for k st a|^p|^ k = 1.G & k <> 0 holds s <= k
+proof
+let k; assume that A9:a|^p|^k=1.G and A10: k <> 0 and A11: s > k;
+A12:p*s > p*k
+proof
+reconsider p1=p as Integer;
+  p1 >0 by A8,NAT_1:19;
+hence thesis by A11,REAL_1:70;
+end;
+A13:ord a = n by A1,A2,A3,GR_CY_1:27;
+A14: p*k <> 0 by A8,A10,XCMPLX_1:6;
+A15: a is_not_of_order_0 by A1,GR_CY_1:26;
+  a|^(p*k) = 1.G by A9,GROUP_1:50;
+hence contradiction by A4,A12,A13,A14,A15,GROUP_1:def 11;
+end;
+hence thesis by A5,A6,A7,GROUP_1:def 11;
+end;
+
+theorem Th15:
+ s divides k implies a|^k in gr {a|^s}
+proof
+assume s divides k;
+then consider p such that A1:k=s*p by NAT_1:def 3;
+  ex i st a|^k=a|^s|^i
+proof
+reconsider p'=p as Integer;
+take p';
+thus thesis by A1,GROUP_1:50;
+end;
+hence thesis by GR_CY_1:25;
+end;
+
+theorem Th16:
+ G is finite & ord gr {a|^s} = ord gr {a|^k} & a|^k in gr {a|^s} implies
+  gr {a|^s} = gr {a|^k}
+proof
+assume that A1:G is finite and A2:ord gr {a|^s} = ord gr {a|^k}
+        and A3: a|^k in gr {a|^s};
+ A4:gr {a|^s} is finite by A1,GROUP_2:48;
+ reconsider h=a|^k as Element of gr {a|^s} by A3,RLVECT_1:def 1;
+   ord gr {h} = ord gr {a|^s} by A2,Th9;
+ hence gr {a|^s} = gr {h} by A4,GROUP_2:85 .= gr {a|^k} by Th9;
+end;
+
+theorem Th17:
+ G is finite & ord G = n & G=gr {a} & ord G1 = p & G1= gr{a|^k} implies n
+ divides k*p
+proof
+assume that A1:G is finite and A2: ord G = n and A3: G=gr {a} and A4: ord G1 =
+p
+        and A5: G1= gr{a|^k};
+ set z=k*p; n>0 by A1,A2,Th7;
+ then consider m,l such that A6:z=(n*m)+l and A7:l < n by NAT_1:42;
+   l=0
+  proof assume A8:l<>0;
+   A9:G1 is finite by A1,GROUP_2:48;
+     a|^k in gr {a|^k} by Th8;
+   then reconsider h=a|^k as Element of G1 by A5,RLVECT_1:def 1;
+     a|^z = a|^k|^p by GROUP_1:50 .= h|^p by GROUP_4:3
+        .= 1.G1 by A4,A9,GR_CY_1:29 .= 1.G by GROUP_2:53;
+then A10:1.G = (a|^(n*m))*(a|^l) by A6,GROUP_1:48
+     .= (a|^n|^m)*(a|^l) by GROUP_1:50 .= ((1.G)|^m)*(a|^l) by A1,A2,GR_CY_1:29
+     .= (1.G)*(a|^l) by GROUP_1:42 .= a|^l by GROUP_1:def 4;
+ A11:  a is_not_of_order_0 by A1,GR_CY_1:26;
+     ord a = n by A1,A2,A3,GR_CY_1:27;
+      hence contradiction by A7,A8,A10,A11,GROUP_1:def 11;
+ end;
+hence thesis by A6,NAT_1:def 3;
+end;
+
+theorem
+   for G being strict Group, a be Element of G holds
+  G is finite & G = gr {a} & ord G = n implies
+  ( G = gr {a|^k} iff k hcf n = 1)
+proof
+let G be strict Group,a be Element of G;
+assume that A1: G is finite and A2:G = gr {a} and A3:ord G = n;
+  A4:n > 0 by A1,A3,Th7;
+A5:G=gr {a|^k} implies k hcf n = 1
+  proof
+   assume that A6:G = gr {a|^k} and A7: k hcf n <> 1;
+   set d=k hcf n;
+   A8: d divides k by NAT_1:def 5;
+   A9: d divides n by NAT_1:def 5;
+   consider l such that A10:k=d*l by A8,NAT_1:def 3;
+   consider p such that A11:n=d*p by A9,NAT_1:def 3;
+    A12: p divides n by A11,NAT_1:def 3;
+   A13: (a|^k)|^p = a|^((l*d)*p) by A10,GROUP_1:50 .=a|^(n*l) by A11,XCMPLX_1:4
+ .=a|^n|^l by GROUP_1:50
+          .=(1.G)|^l by A1,A3,GR_CY_1:29 .= 1.G by GROUP_1:42;
+   A14: p <> 0 by A1,A3,A11,Th7;
+    A15: p<n
+       proof
+A16:        p <= n by A4,A12,NAT_1:54;
+            p <> n
+           proof
+            assume p=n;
+            then d*p = p*1 by A11;
+            hence contradiction by A7,A14,XCMPLX_1:5;
+          end;
+       hence thesis by A16,REAL_1:def 5;
+    end;
+    a|^k is_not_of_order_0 by A1,GR_CY_1:26;
+  then ord (a|^k) <= p by A13,A14,GROUP_1:def 11;
+  hence contradiction by A1,A3,A6,A15,GR_CY_1:27;
+end;
+    k hcf n = 1 implies G=gr {a|^k}
+ proof
+  assume k hcf n = 1;
+  then consider i,i1 such that A17: i*k+ i1*n=1 by A4,Th5;
+    for b be Element of G holds b in gr {a|^k}
+   proof
+    let b be Element of G;
+      b in G by RLVECT_1:def 1;
+    then consider i0 such that A18: b=a|^i0 by A2,GR_CY_1:25;
+    A19:i0=(k*i+n*i1)*i0 by A17
+                           .= k*i*i0+n*i1*i0 by XCMPLX_1:8;
+       ex i2 st b=(a|^k)|^i2
+      proof
+      A20: b=(a|^(k*i*i0))*a|^(n*i1*i0) by A18,A19,GROUP_1:63
+                      .= (a|^(k*i*i0)) *a|^(n*(i1*i0)) by XCMPLX_1:4
+                      .= (a|^(k*i*i0))*a|^n|^(i1*i0) by GROUP_1:68
+                      .= (a|^(k*i*i0))*(1.G)|^(i1*i0) by A1,A3,GR_CY_1:29
+                      .= (a|^(k*i*i0))*1.G by GROUP_1:61
+                      .= (a|^(k*i*i0)) by GROUP_1:def 4
+                      .= a|^(k*(i*i0)) by XCMPLX_1:4
+                      .= a|^k|^(i*i0) by GROUP_1:68;
+         take i*i0;
+        thus thesis by A20;
+      end;
+     hence thesis by GR_CY_1:25;
+   end;
+  hence thesis by GROUP_2:71;
+ end;
+ hence thesis by A5;
+end;
+
+theorem Th19:
+ Gc = gr {g} & g in H implies the HGrStr of Gc = the HGrStr of H
+proof
+assume that A1:Gc=gr{g} and A2: g in H;
+reconsider g'=g as Element of H by A2,RLVECT_1:def 1;
+  gr {g'} is Subgroup of H;
+then gr {g} is Subgroup of H by Th9;
+hence thesis by A1,GROUP_2:64;
+end;
+
+theorem Th20:
+ Gc = gr {g} implies
+  ( Gc is finite iff ex i,i1 st i<>i1 & g|^i = g|^i1 )
+   proof
+     assume A1:Gc = gr {g};
+     A2:Gc is finite implies ex i,i1 st i<>i1 & g|^i = g|^i1
+      proof
+       assume A3: Gc is finite;
+       reconsider zero=0,i0=ord Gc as Integer;
+    A4: zero <> i0 by A3,GROUP_1:90;
+          g|^zero = 1.Gc by GROUP_1:43
+            .= g|^i0 by A3,GR_CY_1:29;
+        hence thesis by A4;
+      end;
+    ( ex i,i1 st i<>i1 & g|^i = g|^i1) implies Gc is finite
+   proof
+    given i,i1 such that A5: i<>i1 & g|^i = g|^i1;
+      now per cases by A5,REAL_1:def 5;
+    suppose i < i1;
+     then i1 > i+0;
+     then A6: i1-i > 0 by REAL_1:86;
+     set r = i1-i;
+  A7:g|^r = 1.Gc
+        proof
+           (g|^i1)*g|^(-i) = (g|^i) *(g|^(i))" by A5,GROUP_1:70;
+         then (g|^i1)*g|^(-i) = 1.Gc by GROUP_1:def 5;
+         then g|^(i1+-i) = 1.Gc by GROUP_1:63;
+         hence thesis by XCMPLX_0:def 8;
+        end;
+A8: for i2 ex n st g|^i2=g|^n & n >= 0 & n < i1-i
+      proof
+      let i2;
+      A9:g|^i2 = g|^( (i2 div r) * r + (i2 mod r) ) by A6,Th4
+      .=g|^(r* (i2 div r) ) *(g|^ (i2 mod r)) by GROUP_1:63
+      .=(1.Gc)|^(i2 div r) *(g|^ (i2 mod r)) by A7,GROUP_1:67
+      .=(1.Gc) *(g|^ (i2 mod r)) by GROUP_1:61
+      .=g|^ (i2 mod r) by GROUP_1:def 4;
+      i2 mod r >= 0 by A6,Th2;
+    then reconsider m=i2 mod r as Nat by INT_1:16;
+    take m;
+    thus thesis by A6,A9,Th2,Th3;
+      end;
+   reconsider m=r as Nat by A6,INT_1:16;
+      ex F being FinSequence st rng F= the carrier of Gc
+    proof
+    deffunc F(Nat) = g|^$1;
+    consider F being FinSequence such that A10:len F = m and
+    A11:for p holds p in Seg m implies F.p = F(p) from SeqLambda;
+A12: dom F = Seg m by A10,FINSEQ_1:def 3;
+A13:  for y st y in rng F holds ex n st y=g|^n
+    proof
+      let y;
+      assume y in rng F;
+      then consider x such that A14: x in dom F and
+      A15: F.x=y by FUNCT_1:def 5;
+      reconsider n=x as Nat by A14;
+      take n;
+      thus thesis by A11,A12,A14,A15;
+    end;
+A16: rng F c= the carrier of Gc
+ proof
+    for x holds x in rng F implies x in the carrier of Gc
+   proof let y;
+    assume y in rng F;
+    then consider n such that A17:y= g|^n by A13;
+     thus thesis by A17;
+ end;
+ hence thesis by TARSKI:def 3;
+ end;
+   A18: the carrier of Gc c= rng F
+        proof
+         for x holds x in the carrier of Gc implies x in rng F
+         proof
+           let y;
+           assume y in the carrier of Gc;
+           then reconsider a=y as Element of Gc;
+             a in Gc by RLVECT_1:def 1;
+           then A19: ex i2 st a=g|^i2 by A1,GR_CY_1:25;
+             ex n st n in dom F & F.n=a
+            proof
+             consider n such that A20: a=g|^n and A21: n >= 0 and
+                                  A22:n < i1-i by A8,A19;
+               now per cases by A21;
+              suppose n=0;
+               then A23:a = g|^m by A7,A20,GROUP_1:43;
+A24:              m >= 1
+              proof m >= 0 +1 by A6,NAT_1:38; hence m >= 1; end;
+                then A25:m in Seg m by FINSEQ_1:3;
+                A26:m in dom F by A12,A24,FINSEQ_1:3;
+                  F.m = a by A11,A23,A25;
+               hence thesis by A26;
+              suppose A27: n >0;
+                  A28:  n >= 1
+                 proof n >= 0 +1 by A27,NAT_1:38;hence n >= 1;end;
+                  then A29:n in Seg m by A22,FINSEQ_1:3;
+                  A30:n in dom F by A12,A22,A28,FINSEQ_1:3;
+                   F.n = a by A11,A20,A29;
+                 hence thesis by A30;
+             end;
+              hence thesis;
+            end;
+           hence thesis by FUNCT_1:def 5;
+        end;
+      hence thesis by TARSKI:def 3;
+        end;
+   take F;
+   thus thesis by A16,A18,XBOOLE_0:def 10;
+  end;
+hence thesis by GROUP_1:def 13;
+   suppose i1 < i;
+     then i > i1+0;
+     then A31: i-i1 > 0 by REAL_1:86;
+     set r = i-i1;
+  A32:g|^r = 1.Gc
+        proof
+           (g|^i)*g|^(-i1) = (g|^i1) *(g|^(i1))" by A5,GROUP_1:70;
+         then (g|^i)*g|^(-i1) = 1.Gc by GROUP_1:def 5;
+         then g|^(i+-i1) = 1.Gc by GROUP_1:63;
+         hence thesis by XCMPLX_0:def 8;
+        end;
+A33: for i2 ex n st g|^i2=g|^n & n >= 0 & n < i-i1
+      proof
+      let i2;
+   A34: g|^i2 = g|^( (i2 div r) * r + (i2 mod r) ) by A31,Th4
+    .=g|^(r* (i2 div r) ) *(g|^ (i2 mod r)) by GROUP_1:63
+    .=(1.Gc)|^(i2 div r) *(g|^ (i2 mod r)) by A32,GROUP_1:67
+    .=(1.Gc) *(g|^ (i2 mod r)) by GROUP_1:61
+    .=g|^ (i2 mod r) by GROUP_1:def 4;
+      i2 mod r >= 0 by A31,Th2;
+    then reconsider m=i2 mod r as Nat by INT_1:16;
+    take m;
+    thus thesis by A31,A34,Th2,Th3;
+      end;
+   reconsider m=r as Nat by A31,INT_1:16;
+      ex F being FinSequence st rng F= the carrier of Gc
+    proof
+    deffunc F(Nat) = g|^$1;
+    consider F being FinSequence such that A35:len F = m and
+            A36:for p holds p in Seg m implies F.p=F(p) from SeqLambda;
+A37: dom F = Seg m by A35,FINSEQ_1:def 3;
+A38:  for y st y in rng F holds ex n st y=g|^n
+    proof
+      let y;
+      assume y in rng F;
+      then consider x such that A39: x in dom F and A40: F.x=y by FUNCT_1:def 5
+;
+      reconsider n=x as Nat by A39;
+      take n;
+      thus thesis by A36,A37,A39,A40;
+    end;
+A41: rng F c= the carrier of Gc
+ proof
+    for x holds x in rng F implies x in the carrier of Gc
+   proof let y;
+    assume y in rng F;
+    then consider n such that A42:y= g|^n by A38;
+     thus thesis by A42;
+ end;
+ hence thesis by TARSKI:def 3;
+ end;
+   A43: the carrier of Gc c= rng F
+        proof
+         for x holds x in the carrier of Gc implies x in rng F
+         proof
+           let y;
+           assume y in the carrier of Gc;
+           then reconsider a=y as Element of Gc;
+             a in Gc by RLVECT_1:def 1;
+           then A44: ex i2 st a=g|^i2 by A1,GR_CY_1:25;
+             ex n st n in dom F & F.n=a
+            proof
+             consider n such that A45: a=g|^n and A46: n >= 0 and
+                                  A47:n < i-i1 by A33,A44;
+               now per cases by A46;
+              suppose n=0;
+               then A48:a = g|^m by A32,A45,GROUP_1:43;
+A49:              m >= 1
+              proof m >= 0 +1 by A31,NAT_1:38; hence m >= 1; end;
+                then A50:m in Seg m by FINSEQ_1:3;
+                A51:m in dom F by A37,A49,FINSEQ_1:3;
+                  F.m = a by A36,A48,A50;
+               hence thesis by A51;
+              suppose A52: n >0;
+                  A53:  n >= 1
+                 proof n >= 0 +1 by A52,NAT_1:38;hence n >= 1;end;
+                  then A54:n in Seg m by A47,FINSEQ_1:3;
+                  A55:n in dom F by A37,A47,A53,FINSEQ_1:3;
+                   F.n = a by A36,A45,A54;
+                 hence thesis by A55;
+             end;
+              hence thesis;
+            end;
+           hence thesis by FUNCT_1:def 5;
+        end;
+      hence thesis by TARSKI:def 3;
+        end;
+   take F;
+   thus thesis by A41,A43,XBOOLE_0:def 10;
+  end;
+hence thesis by GROUP_1:def 13;
+   end;
+   hence thesis;
+   end;
+  hence thesis by A2;
+  end;
+
+definition
+ let n such that A1:n>0;
+ let h be Element of INT.Group(n);
+ func @h -> Nat equals:
+ Def1: h;
+ coherence
+  proof
+      INT.Group(n) = HGrStr(#Segm(n),addint(n)#) by A1,GR_CY_1:def 6;
+   hence thesis by TARSKI:def 3;
+  end;
+end;
+
+:::::::::::::::::::: Isomorphisms of Cyclic Groups. :::::::::::::::::::::::::::
+
+theorem Th21:
+ for Gc being strict cyclic Group holds
+  Gc is finite & ord Gc = n implies INT.Group(n),Gc are_isomorphic
+proof let Gc be strict cyclic Group;
+  assume that A1: Gc is finite and A2: ord Gc = n;
+  A3: n>0 by A1,A2,Th7;
+  consider g being Element of Gc such that A4:
+  for h be Element of Gc holds ex p st h=g|^p by A1,GR_CY_1:42;
+  A5:Gc = gr {g}
+  proof
+    for h be Element of Gc holds ex i st h=g|^i
+    proof
+    let h be Element of Gc;
+    consider p such that A6: h=g|^p by A4;
+    reconsider p1=p as Integer;
+    take p1;
+    thus thesis by A6;
+    end;
+  hence thesis by Th11;
+  end;
+    ex h being Homomorphism of INT.Group(n),Gc st h is_isomorphism
+ proof
+  deffunc F(Element of INT.Group(n)) = g|^@$1;
+  consider h being Function of the carrier of INT.Group(n),the carrier of Gc
+  such that A7:for p be Element of INT.Group(n)
+  holds h.p=F(p) from LambdaD;
+  A8: INT.Group(n) = HGrStr(#Segm(n),addint(n)#) by A3,GR_CY_1:def 6;
+  A9: dom h = the carrier of INT.Group(n) by FUNCT_2:def 1;
+  A10: rng h = the carrier of Gc
+     proof
+      A11: rng h c= the carrier of Gc by RELSET_1:12;
+        the carrier of Gc c= rng h
+       proof
+          for x holds x in the carrier of Gc implies x in rng h
+         proof
+          let x;
+          assume x in the carrier of Gc;
+          then reconsider z=x as Element of Gc;
+          consider p such that A12: z=g|^p by A4;
+            ex t st t in dom h & x=h.(t)
+             proof
+              set t=p mod n;
+A13:              t < n by A3,NAT_1:46;
+                   A14:z=g|^(n * (p div n) + (p mod n)) by A3,A12,NAT_1:47
+                   .=g|^(n * (p div n))*(g|^(p mod n)) by GROUP_1:48
+                   .=g |^ n |^ (p div n)*(g |^ (p mod n)) by GROUP_1:50
+                   .=(1.Gc) |^ (p div n)*(g |^ (p mod n)) by A1,A2,GR_CY_1:29
+                   .=(1.Gc)*(g |^ (p mod n)) by GROUP_1:42
+                   .=(g |^ (p mod n)) by GROUP_1:def 4;
+                   reconsider t'=t as Element of INT.Group(n)
+                    by A3,A8,A13,GR_CY_1:10;
+A15:                   @t'=p mod n by A3,Def1;
+                   take t';
+                   thus thesis by A7,A9,A14,A15;
+            end;
+          hence thesis by FUNCT_1:def 5;
+        end;
+      hence thesis by TARSKI:def 3;
+     end;
+   hence thesis by A11,XBOOLE_0:def 10;
+ end;
+A16: h is one-to-one
+    proof
+       let x,y;
+       assume that A17: x in dom h and A18: y in dom h and A19: h.x=h.y
+                and A20: x<>y;
+      reconsider x'=x as Element of INT.Group(n)
+        by A17,FUNCT_2:def 1;
+      reconsider y'=y as Element of INT.Group(n)
+       by A18,FUNCT_2:def 1;
+       A21:g|^@x'=h.y' by A7,A19 .= g|^@y' by A7;
+            ex p,m st p<>m & g|^p=g|^m & p < n & m < n
+        proof
+         set p=@x',m=@y';
+         A22:p=x' by A3,Def1;
+         then A23: p < n by A3,A8,GR_CY_1:10;
+         A24: m=y' by A3,Def1;
+         then m < n by A3,A8,GR_CY_1:10;
+         hence thesis by A20,A21,A22,A23,A24;
+       end;
+       then consider p,m such that A25: p<>m and A26: g|^p=g|^m and A27: p < n
+                                           and A28: m < n;
+A29:    ex k st k<>0 & k < n & g|^k=1.Gc
+       proof
+        now per cases by REAL_1:def 5;
+      case A30: p < m;
+              reconsider m1=m ,p1=p as Integer;
+              reconsider r1 = (m1-p1) as Nat by A30,INT_1:18;
+          now per cases by NAT_1:18;
+          suppose A31: r1 >0;
+               set zero=0;
+               A32:p1+-p1=zero by XCMPLX_0:def 6;
+                g|^m1*(g|^(-p1)) = g|^(p1+-p1) by A26,GROUP_1:63;
+              then g|^(m1+-p1) = g|^zero by A32,GROUP_1:63;
+              then g|^(m1-p1) = g|^zero by XCMPLX_0:def 8;
+              then A33:g|^r1 = 1.Gc by GROUP_1:43;
+                r1 < n
+               proof
+               per cases by NAT_1:18;
+                suppose p=0;
+                     hence thesis by A28;
+                suppose p>0;
+                     then A34:-p1 <0 by REAL_1:26,50;
+                     reconsider n1=n as Integer;
+                       m1+-p1 < n1+0 by A28,A34,REAL_1:67;
+                     hence thesis by XCMPLX_0:def 8;
+               end;
+               hence thesis by A31,A33;
+          suppose r1 = 0;
+               then m1-p1+p1 = p1;
+              hence thesis by A25,XCMPLX_1:27;
+        end;
+        hence thesis;
+      case A35: m < p;
+              reconsider m1=m ,p1=p as Integer;
+              reconsider r1 = (p1-m1) as Nat by A35,INT_1:18;
+          now per cases by NAT_1:18;
+          suppose A36: r1 >0;
+               set zero=0;
+               A37:m1+-m1=zero by XCMPLX_0:def 6;
+                g|^p1*(g|^(-m1)) = g|^(m1+-m1) by A26,GROUP_1:63;
+              then g|^(p1+-m1) = g|^zero by A37,GROUP_1:63;
+              then g|^(p1-m1) = g|^zero by XCMPLX_0:def 8;
+              then A38:g|^r1 = 1.Gc by GROUP_1:43;
+                r1 < n
+               proof
+                 now per cases by NAT_1:18;
+                suppose m=0;
+                     hence thesis by A27;
+                suppose m>0;
+                     then A39:-m1 <0 by REAL_1:26,50;
+                     reconsider n1=n as Integer;
+                       p1+-m1 < n1+0 by A27,A39,REAL_1:67;
+                     hence thesis by XCMPLX_0:def 8;
+               end;
+               hence thesis;
+               end;
+               hence thesis by A36,A38;
+          suppose r1 = 0;
+               then p1-m1+m1 = m1;
+              hence thesis by A25,XCMPLX_1:27;
+        end;
+        hence thesis;
+      case m=p;
+            hence contradiction by A25;
+      end;
+       hence thesis;
+      end;
+   A40: g is_not_of_order_0 by A1,GR_CY_1:26;
+     ord g = n by A1,A2,A5,GR_CY_1:27;
+    hence contradiction by A29,A40,GROUP_1:def 11;
+  end;
+  for j,j1 being Element of INT.Group(n)
+ holds h.(j*j1)=h.(j)*h.(j1)
+  proof
+  let j,j1 be Element of INT.Group(n);
+  A41:@j1=j1 by A3,Def1;
+   reconsider j'=j,j1'=j1 as Element of Segm(n) by A8;
+
+   @(j*j1)=j*j1 by A3,Def1 .= (addint(n)).(j',j1') by A8,VECTSP_1:def 10
+            .=(j'+j1') mod n by A3,GR_CY_1:def 5
+            .= (@j+@j1) mod n by A3,A41,Def1
+            .=(@j+@j1)- n*((@j+@j1) div n) by A3,Th1;
+    then h.(j*j1) = g|^((@j+@j1) -n *((@j+@j1) div n)) by A7
+            .= g|^((@j+@j1) +-n *((@j+@j1) div n)) by XCMPLX_0:def 8
+            .= g|^(@j+@j1) *g|^(-n *((@j+@j1) div n)) by GROUP_1:64
+            .= g|^(@j+@j1)*(g|^(n *((@j+@j1) div n)))" by GROUP_1:71
+            .= g|^(@j+@j1)*(g|^n|^((@j+@j1) div n))" by GROUP_1:50
+            .= g|^(@j+@j1)*((1.Gc)|^((@j+@j1) div n))" by A1,A2,GR_CY_1:29
+            .= g|^(@j+@j1)*(1.Gc)" by GROUP_1:42
+            .= g|^(@j+@j1)*(1.Gc) by GROUP_1:16
+            .= g|^(@j+@j1) by GROUP_1:def 4
+            .= (g|^@j)*(g|^@j1) by GROUP_1:48 .= h.(j)*(g|^@j1) by A7
+            .= h.(j)*h.(j1) by A7;
+   hence thesis;
+ end;
+  then reconsider h as Homomorphism of INT.Group(n),Gc by GROUP_6:def 7;
+  A42: h is_epimorphism by A10,GROUP_6:def 13;
+  A43: h is_monomorphism by A16,GROUP_6:def 12;
+  take h;
+  thus thesis by A42,A43,GROUP_6:def 14;
+ end;
+ hence thesis by GROUP_6:def 15;
+end;
+
+theorem
+   for Gc being strict cyclic Group holds
+  Gc is infinite implies INT.Group,Gc are_isomorphic
+proof let Gc be strict cyclic Group;
+  assume A1: Gc is infinite;
+  consider g being Element of Gc such that A2:
+  for h be Element of Gc holds ex i st h=g|^i by GR_CY_1:41;
+    ex h being Homomorphism of INT.Group,Gc st h is_isomorphism
+ proof
+  deffunc F(Element of INT.Group) = g|^@'$1;
+  consider h being Function of the carrier of INT.Group,the carrier of Gc
+  such that A3:for j1 be Element of INT.Group
+  holds h.j1=F(j1) from LambdaD;
+  A4:Gc=gr {g} by A2,Th11;
+  A5: dom h = the carrier of INT.Group by FUNCT_2:def 1;
+  A6: rng h = the carrier of Gc
+     proof
+      A7: rng h c= the carrier of Gc by RELSET_1:12;
+        the carrier of Gc c= rng h
+       proof
+          for x holds x in the carrier of Gc implies x in rng h
+         proof
+          let x;
+          assume x in the carrier of Gc;
+          then reconsider z=x as Element of Gc;
+          consider i such that A8: z=g|^i by A2;
+          reconsider i'=i as Element of INT.Group
+           by GR_CY_1:def 4,INT_1:12;
+            ex t st t in dom h & x=h.(t)
+             proof
+                i=@'i' by GR_CY_1:def 7;
+              then x = h.(i') by A3,A8;
+              hence thesis by A5;
+            end;
+           hence thesis by FUNCT_1:def 5;
+        end;
+      hence thesis by TARSKI:def 3;
+     end;
+   hence thesis by A7,XBOOLE_0:def 10;
+ end;
+A9: h is one-to-one
+    proof
+       let x,y;
+       assume that A10: x in dom h and A11: y in dom h and A12: h.x=h.y
+                and A13: x<>y;
+       reconsider x'=x as Element of INT.Group
+        by A10,FUNCT_2:def 1;
+       reconsider y'=y as Element of INT.Group
+        by A11,FUNCT_2:def 1;
+       A14:g|^@'x'=h.y' by A3,A12 .= g|^@'y' by A3;
+            ex i,i1 st i<>i1 & g|^i=g|^i1
+        proof
+         set i=@'x';
+           i=x' by GR_CY_1:def 7;
+         then i <> (@'y') by A13,GR_CY_1:def 7;
+         hence thesis by A14;
+       end;
+    hence contradiction by A1,A4,Th20;
+  end;
+
+  for j,j1 holds h.(j*j1)=h.(j)*h.(j1)
+  proof
+  let j,j1;
+  A15:@'j=j by GR_CY_1:def 7;
+  A16:@'j1=j1 by GR_CY_1:def 7;
+    @'(j*j1)=j*j1 by GR_CY_1:def 7 .= addint.(j,j1) by GR_CY_1:def 4,VECTSP_1:
+def 10
+            .= @'j+@'j1 by A15,A16,GR_CY_1:14;
+    then h.(j*j1) = g|^(@'j+@'j1) by A3
+            .= (g|^@'j)*(g|^@'j1) by GROUP_1:63 .= h.(j)*(g|^@'j1) by A3
+            .= h.(j)*h.(j1) by A3;
+   hence thesis;
+ end;
+  then reconsider h as Homomorphism of INT.Group,Gc by GROUP_6:def 7;
+  A17: h is_epimorphism by A6,GROUP_6:def 13;
+  A18: h is_monomorphism by A9,GROUP_6:def 12;
+  take h;
+  thus thesis by A17,A18,GROUP_6:def 14;
+ end;
+ hence thesis by GROUP_6:def 15;
+end;
+
+theorem Th23:
+ for Gc, Hc being strict cyclic Group holds
+  Hc is finite & Gc is finite & ord Hc = ord Gc implies Hc,Gc are_isomorphic
+ proof let Gc, Hc be strict cyclic Group;
+ assume that A1:Hc is finite and A2: Gc is finite and A3: ord Hc = ord Gc;
+ set p = ord Hc;
+      INT.Group(p),Hc are_isomorphic by A1,Th21;
+ then A4:Hc,INT.Group(p) are_isomorphic by GROUP_6:77;
+      INT.Group(p),Gc are_isomorphic by A2,A3,Th21;
+    hence thesis by A4,GROUP_6:78;
+ end;
+
+theorem Th24:
+ for F,G being strict Group holds
+  F is finite & G is finite & ord F = p & ord G = p & p is prime implies
+   F,G are_isomorphic
+ proof
+ let F,G be strict Group;
+ assume that A1:F is finite and A2: G is finite and A3: ord F = p
+         and A4: ord G = p and A5: p is prime;
+             A6:F is cyclic Group by A1,A3,A5,GR_CY_1:45;
+               G is cyclic Group by A2,A4,A5,GR_CY_1:45;
+         hence thesis by A1,A2,A3,A4,A6,Th23;
+ end;
+
+theorem
+   for F,G being strict Group holds
+  F is finite & G is finite & ord F = 2 & ord G = 2 implies
+   F,G are_isomorphic by Th24,INT_2:44;
+
+theorem
+   for G being strict Group holds
+  G is finite & ord G = 2 implies
+   for H being strict Subgroup of G holds
+    H = (1).G or H = G by GR_CY_1:32,INT_2:44;
+
+theorem
+   for G being strict Group holds
+  G is finite & ord G = 2 implies G is cyclic Group by GR_CY_1:45,INT_2:44;
+
+theorem
+   for G being strict Group holds G is finite & G is cyclic Group & ord G = n
+  implies (for p st p divides n holds
+   (ex G1 being strict Subgroup of G st ord G1 = p &
+    for G2  being strict Subgroup of G st ord G2=p holds G2=G1))
+proof
+let G be strict Group;
+assume that A1:G is finite and A2:G is cyclic Group and A3: ord G = n;
+  for p st p divides n holds (ex G1 being strict Subgroup of G st
+ord G1 = p & for G2 being strict Subgroup of G st ord G2=p holds G2=G1)
+proof let p such that A4:p divides n;
+  ex G1 being strict Subgroup of G st ord G1 = p &
+for G2 being strict Subgroup of G st ord G2=p holds G2=G1
+proof
+consider a being Element of G such that
+A5: G= gr {a} by A2,GR_CY_1:def 9;
+consider s such that A6: n=p*s by A4,NAT_1:def 3;
+A7:ord (a|^s) = p by A1,A3,A5,A6,Th14;
+then A8:ord gr {a|^s} = p by A1,GR_CY_1:27;
+A9:for G2 being strict Subgroup of G st ord G2 = p holds G2=gr {a|^s}
+proof let G2 be strict Subgroup of G such that A10: ord G2 = p;
+consider k such that A11:G2 = gr {a|^k} by A1,A5,Th13;
+  n divides k*p by A1,A3,A5,A10,A11,Th17;
+then consider m such that A12:k*p=n*m by NAT_1:def 3;
+  s divides k
+proof
+  ex l st k=s*l
+proof
+reconsider p1=p as Integer;
+A13:p<>0 by A1,A3,A6,Th7;
+  (1/p1)*p1 *k = (1/p1)*(p1*s*m) by A6,A12,XCMPLX_1:4;
+then (1/p1)*p1 *k = (1/p1)*(p1*(s*m)) by XCMPLX_1:4;
+then (1/p1)*p1 *k = (1/p1)*p1*(s*m) by XCMPLX_1:4;
+then p1*(1/p1)*k = (1/p1)*p1*s*m by XCMPLX_1:4;
+then 1*k = p1*(1/p1)*s*m by A13,XCMPLX_1:107;
+then A14: k = 1*s*m by A13,XCMPLX_1:107;
+take m;
+thus thesis by A14;
+end;
+hence thesis by NAT_1:def 3;
+end;
+then a|^k in gr {a|^s} by Th15;
+hence thesis by A1,A8,A10,A11,Th16;
+end;
+take gr {a|^s};
+thus thesis by A1,A7,A9,GR_CY_1:27;
+end;
+ hence thesis;
+ end;
+  hence thesis;
+   end;
+
+theorem
+   Gc=gr{g} implies (for G,f holds g in Image f implies f is_epimorphism)
+proof
+ assume A1:Gc=gr {g};
+   for G,f holds g in Image f implies f is_epimorphism
+ proof let G,f; assume g in Image f;
+ then Image f = Gc by A1,Th19;
+ hence thesis by GROUP_6:67;
+ end;
+ hence thesis;
+end;
+
+theorem Th30:
+ for Gc being strict cyclic Group holds
+  (Gc is finite & ord Gc=n & ex k st n=2*k) implies
+   ex g1 being Element of Gc st ord g1 = 2 &
+    for g2 being Element of Gc st ord g2=2 holds g1=g2
+  proof let Gc be strict cyclic Group;
+  assume that A1:Gc is finite and A2:ord Gc=n;
+  given k such that A3: n=2*k;
+  consider g being Element of Gc such that
+  A4: Gc=gr{g} by GR_CY_1:def 9;
+  take g|^k;
+  A5:g|^k|^2=g|^ord Gc by A2,A3,GROUP_1:50 .= 1.Gc by A1,GR_CY_1:29;
+  A6:g|^k is_not_of_order_0 by A1,GR_CY_1:26;
+  A7: ord g = n by A1,A2,A4,GR_CY_1:27;
+      A8:k<>0 & 2<>0 by A1,A2,A3,Th7;
+       then A9:k>0 by NAT_1:19;
+A10:    for p st g|^k|^ p = 1.Gc & p <> 0 holds 2 <= p
+      proof
+      let p; assume that A11:g|^k|^p=1.Gc and A12:p<>0 and A13:2>p;
+      A14:n>k*p by A3,A9,A13,REAL_1:70;
+    A15:g is_not_of_order_0 by A1,GR_CY_1:26;
+    A16:k*p<>0 by A8,A12,XCMPLX_1:6;
+        1.Gc = g|^(k*p) by A11,GROUP_1:50;
+      hence contradiction by A7,A14,A15,A16,GROUP_1:def 11;
+      end;
+
+     for g2 being Element of Gc st ord g2=2 holds g|^k=g2
+   proof
+    let g2 be Element of Gc;
+    assume that A17:ord g2=2 and A18:g|^k<>g2;
+    consider k1 being Nat such that A19:g2=g|^k1 by A1,A4,Th12;
+      now
+              consider t,t1 being Nat such that A20:k1=(k*t)+t1 and
+                                                A21:t1<k by A9,NAT_1:42;
+           t1<>0
+            proof
+             assume t1=0;
+             then A22:g|^k1=g|^(k*( 2*(t div 2)+(t mod 2) )) by A20,NAT_1:47
+                .=g|^( k* (2*(t div 2))+ k*(t mod 2) ) by XCMPLX_1:8
+                .=g|^( k* 2*(t div 2)+ k*(t mod 2) ) by XCMPLX_1:4
+                .=g|^( k* 2*(t div 2) )*(g|^( k*(t mod 2))) by GROUP_1:48
+                .=g|^( k* 2)|^(t div 2) *(g|^ (k*(t mod 2))) by GROUP_1:50
+                .=(1.Gc)|^(t div 2) *(g|^ (k*(t mod 2))) by A5,GROUP_1:50
+                .=(1.Gc) *(g|^ (k*(t mod 2))) by GROUP_1:42
+                .=(g|^(k*(t mod 2))) by GROUP_1:def 4;
+
+                 now per cases by GROUP_4:100;
+                suppose t mod 2 = 0;
+                      then g|^k1 = 1.Gc by A22,GROUP_1:43;
+                       hence contradiction by A17,A19,GROUP_1:84;
+
+                suppose t mod 2 = 1;
+                     hence contradiction by A18,A19,A22;
+               end;
+               hence thesis;
+              end;
+           then A23: 2*t1<>0 by XCMPLX_1:6;
+    A24: 2*t1<n by A3,A21,REAL_1:70;
+           A25: g|^(2*t1)=1.Gc
+               proof
+          thus 1.Gc=g|^k1|^2 by A17,A19,GROUP_1:82 .=g|^(((k*t)+t1)*2) by A20,
+GROUP_1:50 .=g|^(2*(k*t)+t1*2) by XCMPLX_1:8 .=g|^(n*t+t1*2) by A3,XCMPLX_1:4
+ .=g|^(n*t)*(g|^(t1*2)) by GROUP_1:48
+               .=g|^(ord g)|^t*(g|^(t1*2)) by A7,GROUP_1:50
+               .=(1.Gc)|^t*(g|^(t1*2)) by GROUP_1:82
+               .=1.Gc*(g|^(t1*2)) by GROUP_1:42
+               .=g|^(2*t1) by GROUP_1:def 4;
+               end;
+              g is_not_of_order_0 by A1,GR_CY_1:26;
+            hence contradiction by A7,A23,A24,A25,GROUP_1:def 11;
+       end;
+    hence thesis;
+ end;
+ hence thesis by A5,A6,A10,GROUP_1:def 11;
+  end;
+
+definition let G;
+ cluster center G -> normal;
+ coherence by GROUP_5:90;
+end;
+
+theorem
+   for Gc being strict cyclic Group holds
+  (Gc is finite & ord Gc=n & ex k st n=2*k) implies
+   ex H being Subgroup of Gc st ord H = 2 & H is cyclic Group
+proof let Gc be strict cyclic Group;
+ assume that A1:Gc is finite and A2: ord Gc=n and A3: ex k st n=2*k;
+ consider g1 being Element of Gc such that A4:ord g1 = 2
+  and for g2 being Element of Gc st ord g2=2 holds g1=g2
+ by A1,A2,A3,Th30; take gr {g1};
+ thus thesis by A1,A4,Th10,GR_CY_1:27;
+end;
+
+theorem Th32:
+ for G being strict Group holds
+  for g being Homomorphism of G,F holds
+    G is cyclic Group implies Image g is cyclic Group
+  proof let G be strict Group;
+  let g be Homomorphism of G,F;
+  assume G is cyclic Group;
+  then consider a being Element of G such that
+  A1:G=gr{a} by GR_CY_1:def 9;
+    ex f1 being Element of Image g st Image g=gr{f1}
+  proof
+    g.a in Image g by GROUP_6:54;
+  then reconsider f=g.a as Element of Image g by RLVECT_1:def 1;
+  A2:for d being Element of Image g holds ex i st d=f|^i
+   proof
+    let d be Element of Image g;
+      d in Image g by RLVECT_1:def 1;
+    then consider b being Element of G such that
+    A3:d=g.(b) by GROUP_6:54;
+      b in gr{a} by A1,RLVECT_1:def 1;
+    then consider i such that A4:b=a|^i by GR_CY_1:25;
+    A5:d=(g.a)|^i by A3,A4,GROUP_6:46 .=f|^i by GROUP_4:4;
+    take i;
+    thus thesis by A5;
+   end;
+  take f;
+  thus thesis by A2,Th11;
+  end;
+  hence thesis by GR_CY_1:def 9;
+  end;
+
+theorem
+   for G,F being strict Group holds
+  G,F are_isomorphic & (G is cyclic Group or F is cyclic Group) implies
+   (G is cyclic Group & F is cyclic Group)
+ proof
+ let G,F be strict Group;
+ assume that A1:G,F are_isomorphic and
+ A2: G is cyclic Group or F is cyclic Group;
+   now per cases by A2;
+  suppose A3: G is cyclic Group;
+            consider h being Homomorphism of G,F such that
+            A4:h is_isomorphism by A1,GROUP_6:def 15;
+              h is_monomorphism & h is_epimorphism by A4,GROUP_6:def 14;
+            then Image h = F by GROUP_6:67;
+            hence thesis by A3,Th32;
+  suppose A5: F is cyclic Group;
+              F,G are_isomorphic by A1,GROUP_6:77;
+            then consider h being Homomorphism of F,G such that
+            A6:h is_isomorphism by GROUP_6:def 15;
+              h is_monomorphism & h is_epimorphism by A6,GROUP_6:def 14;
+            then Image h = G by GROUP_6:67;
+            hence thesis by A5,Th32;
+ end;
+ hence thesis;
+ end;

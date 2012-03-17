@@ -1,0 +1,3804 @@
+:: On the Categories Without Uniqueness of { \bf cod } and { \bf
+:: dom } . Some Properties of the Morphisms and the Functors
+::  by Artur Korni{\l}owicz
+::
+:: Received October 3, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary ALTCAT_1, CAT_1, RELAT_1, BOOLE, ALTCAT_3, CAT_3, RELAT_2,
+      FUNCTOR0, FUNCT_1, SGRAPH1, PRALG_1, MSUALG_3, PBOOLE, MSUALG_6,
+      ALTCAT_2, ALTCAT_4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, RELAT_1, FUNCT_1, FUNCT_2,
+      BINOP_1, MULTOP_1, PBOOLE, STRUCT_0, MSUALG_1, MSUALG_3, ALTCAT_1,
+      ALTCAT_2, ALTCAT_3, FUNCTOR0;
+ constructors ALTCAT_3, FUNCTOR0, MCART_1;
+ clusters FUNCTOR0, ALTCAT_2, MSUALG_1, PRALG_1, FUNCTOR2, RELSET_1, SUBSET_1,
+      ALTCAT_1, STRUCT_0, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions ALTCAT_1, ALTCAT_2, ALTCAT_3, FUNCTOR0, MSUALG_1, MSUALG_3,
+      STRUCT_0, TARSKI, FUNCT_2, XBOOLE_0;
+ theorems ALTCAT_1, ALTCAT_2, ALTCAT_3, BINOP_1, FUNCT_1, FUNCT_2, FUNCTOR0,
+      MCART_1, MULTOP_1, FUNCTOR1, FUNCTOR2, MSUALG_3, PBOOLE, RELAT_1,
+      ZFMISC_1, XBOOLE_0, XBOOLE_1;
+ schemes MSUALG_1, XBOOLE_0;
+
+begin  :: Preliminaries
+
+reserve C for category,
+        o1, o2, o3 for object of C;
+
+definition let C be with_units (non empty AltCatStr),
+               o be object of C;
+ cluster <^o,o^> -> non empty;
+coherence by ALTCAT_1:23;
+end;
+
+theorem Th1:
+for v being Morphism of o1, o2, u being Morphism of o1, o3
+ for f being Morphism of o2, o3 st u = f * v & f" * f = idm o2 &
+  <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,o2^> <> {}
+ holds v = f" * u
+  proof
+    let v be Morphism of o1, o2,
+        u be Morphism of o1, o3,
+        f be Morphism of o2, o3 such that
+A1:   u = f * v and
+A2:   f" * f = idm o2 and
+A3:   <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,o2^> <> {};
+    thus f" * u = f" * f * v by A1,A3,ALTCAT_1:25
+               .= v by A2,A3,ALTCAT_1:24;
+  end;
+
+theorem Th2:
+for v being Morphism of o2, o3, u being Morphism of o1, o3
+ for f being Morphism of o1, o2 st u = v * f & f * f" = idm o2 &
+  <^o1,o2^> <> {} & <^o2,o1^> <> {} & <^o2,o3^> <> {}
+ holds v = u * f"
+  proof
+    let v be Morphism of o2, o3,
+        u be Morphism of o1, o3,
+        f be Morphism of o1, o2 such that
+A1:   u = v * f and
+A2:   f * f" = idm o2 and
+A3:   <^o1,o2^> <> {} & <^o2,o1^> <> {} & <^o2,o3^> <> {};
+    thus u * f" = v * (f * f") by A1,A3,ALTCAT_1:25
+               .= v by A2,A3,ALTCAT_1:def 19;
+  end;
+
+theorem Th3:
+for m being Morphism of o1, o2 st <^o1,o2^> <> {} & <^o2,o1^> <> {} & m is iso
+ holds m" is iso
+  proof
+    let m be Morphism of o1, o2 such that
+A1: <^o1,o2^> <> {} & <^o2,o1^> <> {};
+    assume m is iso;
+then A2: m is retraction coretraction by ALTCAT_3:5;
+    hence m"*(m")" = m" * m by A1,ALTCAT_3:3
+                  .= idm o1 by A1,A2,ALTCAT_3:2;
+    thus (m")"*m" = m * m" by A1,A2,ALTCAT_3:3
+                 .= idm o2 by A1,A2,ALTCAT_3:2;
+  end;
+
+theorem Th4:
+for C being with_units (non empty AltCatStr), o being object of C
+ holds idm o is epi mono
+  proof
+    let C be with_units (non empty AltCatStr),
+        o be object of C;
+    thus idm o is epi
+    proof
+      let o1 be object of C such that
+A1:     <^o,o1^> <> {};
+      let B, C be Morphism of o, o1 such that
+A2:     B * idm o = C * idm o;
+      thus B = B * idm o by A1,ALTCAT_1:def 19
+            .= C by A1,A2,ALTCAT_1:def 19;
+    end;
+    let o1 be object of C such that
+A3:   <^o1,o^> <> {};
+    let B, C be Morphism of o1, o such that
+A4:   idm o * B = idm o * C;
+    thus B = idm o * B by A3,ALTCAT_1:24
+          .= C by A3,A4,ALTCAT_1:24;
+end;
+
+definition let C be with_units (non empty AltCatStr),
+               o be object of C;
+ cluster idm o -> epi mono retraction coretraction;
+coherence by Th4,ALTCAT_3:1;
+end;
+
+definition let C be category,
+               o be object of C;
+ cluster idm o -> iso;
+coherence by ALTCAT_3:6;
+end;
+
+theorem
+  for f being Morphism of o1, o2, g, h being Morphism of o2, o1 st
+ h * f = idm o1 & f * g = idm o2 & <^o1,o2^> <> {} & <^o2,o1^> <> {}
+  holds g = h
+  proof
+    let f be Morphism of o1, o2,
+        g, h be Morphism of o2, o1 such that
+A1:   h * f = idm o1 and
+A2:   f * g = idm o2 and
+A3:   <^o1,o2^> <> {} & <^o2,o1^> <> {};
+    thus g = h * f * g by A1,A3,ALTCAT_1:24
+          .= h * idm o2 by A2,A3,ALTCAT_1:25
+          .= h by A3,ALTCAT_1:def 19;
+  end;
+
+theorem
+  (for o1, o2 being object of C, f being Morphism of o1, o2 holds
+  f is coretraction) implies
+ for a, b being object of C, g being Morphism of a, b
+  st <^a,b^> <> {} & <^b,a^> <> {} holds g is iso
+  proof assume
+A1:   for o1, o2 being object of C, f being Morphism of o1, o2 holds
+       f is coretraction;
+    let a, b be object of C,
+        g be Morphism of a, b such that
+A2:   <^a,b^> <> {} & <^b,a^> <> {};
+A3: g is coretraction by A1;
+      g is retraction
+    proof
+      consider f be Morphism of b, a such that
+A4:     f is_left_inverse_of g by A3,ALTCAT_3:def 3;
+      take f;
+        f is coretraction by A1;
+then A5:   f is mono by A2,ALTCAT_3:16;
+        f * (g * f) = f * g * f by A2,ALTCAT_1:25
+                 .= idm a * f by A4,ALTCAT_3:def 1
+                 .= f by A2,ALTCAT_1:24
+                 .= f * idm b by A2,ALTCAT_1:def 19;
+      hence g * f = idm b by A5,ALTCAT_3:def 7;
+    end;
+    hence g is iso by A2,A3,ALTCAT_3:6;
+  end;
+
+
+begin  :: Some properties of the initial and terminal objects
+
+theorem
+  for m, m' being Morphism of o1, o2
+ st m is _zero & m' is _zero & ex O being object of C st O is _zero
+  holds m = m'
+  proof
+    let m, m' be Morphism of o1, o2 such that
+A1:  m is _zero and
+A2:  m' is _zero;
+    given O being object of C such that
+A3:   O is _zero; consider a being Morphism of o1, O;
+consider b being Morphism of O, o2;
+    consider n being Morphism of O, O;
+    thus m = b * (n" * n) * a by A1,A3,ALTCAT_3:def 12
+          .= m' by A2,A3,ALTCAT_3:def 12;
+  end;
+
+theorem
+  for C being non empty AltCatStr, O, A being object of C
+ for M being Morphism of O, A st O is terminal
+  holds M is mono
+  proof
+    let C be non empty AltCatStr,
+        O, A be object of C,
+        M be Morphism of O, A such that
+A1:   O is terminal;
+    let o be object of C such that
+A2:   <^o,O^> <> {};
+    let a, b be Morphism of o, O such that M * a = M * b;
+    consider N being Morphism of o, O such that
+        N in <^o,O^> and
+A3:   for M1 being Morphism of o, O st M1 in <^o,O^> holds N = M1
+       by A1,ALTCAT_3:27;
+    thus a = N by A2,A3
+          .= b by A2,A3;
+  end;
+
+theorem
+  for C being non empty AltCatStr, O, A being object of C
+ for M being Morphism of A, O st O is initial
+  holds M is epi
+  proof
+    let C be non empty AltCatStr,
+        O, A be object of C,
+        M be Morphism of A, O such that
+A1:   O is initial;
+    let o be object of C such that
+A2:   <^O,o^> <> {};
+    let a, b be Morphism of O, o such that a * M = b * M;
+    consider N being Morphism of O, o such that
+        N in <^O,o^> and
+A3:   for M1 being Morphism of O, o st M1 in <^O,o^> holds N = M1
+       by A1,ALTCAT_3:25;
+    thus a = N by A2,A3
+          .= b by A2,A3;
+  end;
+
+theorem
+  o2 is terminal & o1, o2 are_iso implies o1 is terminal
+  proof assume that
+A1:   o2 is terminal and
+A2:   o1, o2 are_iso;
+      for o3 being object of C holds
+     ex M being Morphism of o3, o1 st M in <^o3,o1^> &
+      for v being Morphism of o3, o1 st v in <^o3,o1^> holds M = v
+    proof
+      let o3 be object of C;
+      consider u being Morphism of o3, o2 such that
+A3:     u in <^o3,o2^> and
+A4:     for M1 being Morphism of o3, o2 st M1 in <^o3,o2^> holds u = M1
+          by A1,ALTCAT_3:27;
+      consider f being Morphism of o1, o2 such that
+A5:     f is iso by A2,ALTCAT_3:def 6;
+A6:   f" * f = idm o1 by A5,ALTCAT_3:def 5;
+      take f" * u;
+A7:   <^o1,o2^> <> {} & <^o2,o1^> <> {} by A2,ALTCAT_3:def 6;
+then A8:   <^o3,o1^> <> {} by A3,ALTCAT_1:def 4;
+      hence f" * u in <^o3,o1^>;
+      let v be Morphism of o3, o1 such that v in <^o3,o1^>;
+        f * v = u by A3,A4;
+      hence f" * u = v by A6,A7,A8,Th1;
+    end;
+    hence o1 is terminal by ALTCAT_3:27;
+  end;
+
+theorem
+  o1 is initial & o1, o2 are_iso implies o2 is initial
+  proof assume that
+A1:   o1 is initial and
+A2:   o1, o2 are_iso;
+      for o3 being object of C holds
+     ex M being Morphism of o2, o3 st M in <^o2,o3^> &
+      for v being Morphism of o2, o3 st v in <^o2,o3^> holds M = v
+    proof
+      let o3 be object of C;
+      consider u being Morphism of o1, o3 such that
+A3:     u in <^o1,o3^> and
+A4:     for M1 being Morphism of o1, o3 st M1 in <^o1,o3^> holds u = M1
+          by A1,ALTCAT_3:25;
+      consider f being Morphism of o1, o2 such that
+A5:     f is iso by A2,ALTCAT_3:def 6;
+A6:   f * f" = idm o2 by A5,ALTCAT_3:def 5;
+      take u * f";
+A7:   <^o1,o2^> <> {} & <^o2,o1^> <> {} by A2,ALTCAT_3:def 6;
+then A8:   <^o2,o3^> <> {} by A3,ALTCAT_1:def 4;
+      hence u * f" in <^o2,o3^>;
+      let v be Morphism of o2, o3 such that v in <^o2,o3^>;
+        v * f = u by A3,A4;
+      hence u * f" = v by A6,A7,A8,Th2;
+    end;
+    hence o2 is initial by ALTCAT_3:25;
+  end;
+
+theorem
+  o1 is initial & o2 is terminal & <^o2,o1^> <> {} implies
+ o2 is initial & o1 is terminal
+  proof assume that
+A1:   o1 is initial and
+A2:   o2 is terminal;
+    assume <^o2,o1^> <> {};
+    then consider m being set such that
+A3:   m in <^o2,o1^> by XBOOLE_0:def 1;
+    reconsider m as Morphism of o2, o1 by A3;
+    consider l being Morphism of o1, o2 such that
+A4:   l in <^o1,o2^> and
+        for M1 being Morphism of o1, o2 st M1 in <^o1,o2^> holds l = M1
+        by A1,ALTCAT_3:25;
+
+      for o3 being object of C holds
+     ex M being Morphism of o2, o3 st M in <^o2,o3^> &
+      for M1 being Morphism of o2, o3 st M1 in <^o2,o3^> holds M = M1
+    proof
+      let o3 be object of C;
+      consider M being Morphism of o1, o3 such that
+A5:     M in <^o1,o3^> &
+        for M1 being Morphism of o1, o3 st M1 in <^o1,o3^> holds M = M1
+          by A1,ALTCAT_3:25;
+      take M * m;
+        <^o2,o3^> <> {} by A3,A5,ALTCAT_1:def 4;
+      hence M * m in <^o2,o3^>;
+      let M1 be Morphism of o2, o3 such that
+A6:     M1 in <^o2,o3^>;
+      consider i2 being Morphism of o2, o2 such that
+          i2 in <^o2,o2^> and
+A7:     for M1 being Morphism of o2, o2 st M1 in <^o2,o2^> holds i2 = M1
+          by A2,ALTCAT_3:27;
+      thus M * m = M1 * l * m by A5
+                .= M1 * (l * m) by A3,A4,A6,ALTCAT_1:25
+                .= M1 * i2 by A7
+                .= M1 * idm o2 by A7
+                .= M1 by A6,ALTCAT_1:def 19;
+    end;
+    hence o2 is initial by ALTCAT_3:25;
+
+      for o3 being object of C holds
+     ex M being Morphism of o3, o1 st M in <^o3,o1^> &
+      for M1 being Morphism of o3, o1 st M1 in <^o3,o1^> holds M = M1
+    proof
+      let o3 be object of C;
+      consider M being Morphism of o3, o2 such that
+A8:     M in <^o3,o2^> &
+        for M1 being Morphism of o3, o2 st M1 in <^o3,o2^> holds M = M1
+          by A2,ALTCAT_3:27;
+      take m * M;
+        <^o3,o1^> <> {} by A3,A8,ALTCAT_1:def 4;
+      hence m * M in <^o3,o1^>;
+      let M1 be Morphism of o3, o1 such that
+A9:     M1 in <^o3,o1^>;
+      consider i1 being Morphism of o1, o1 such that
+          i1 in <^o1,o1^> and
+A10:     for M1 being Morphism of o1, o1 st M1 in <^o1,o1^> holds i1 = M1
+          by A1,ALTCAT_3:25;
+      thus m * M = m * (l * M1) by A8
+                .= m * l * M1 by A3,A4,A9,ALTCAT_1:25
+                .= i1 * M1 by A10
+                .= idm o1 * M1 by A10
+                .= M1 by A9,ALTCAT_1:24;
+    end;
+    hence o1 is terminal by ALTCAT_3:27;
+  end;
+
+
+begin  :: The properties of the functors
+
+theorem Th13:
+for A, B being transitive with_units (non empty AltCatStr)
+ for F being contravariant Functor of A, B
+  for a being object of A holds F.idm a = idm (F.a)
+  proof
+    let A, B be transitive with_units (non empty AltCatStr),
+        F be contravariant Functor of A, B;
+    let a be object of A;
+    thus F.idm a = Morph-Map(F,a,a).idm a by FUNCTOR0:def 17
+                .= idm (F.a) by FUNCTOR0:def 21;
+  end;
+
+theorem Th14:
+for C1, C2 being non empty AltCatStr
+ for F being Contravariant FunctorStr over C1, C2
+  holds F is full iff
+   for o1, o2 being object of C1 holds Morph-Map(F,o2,o1) is onto
+  proof
+    let C1, C2 be non empty AltCatStr,
+        F be Contravariant FunctorStr over C1, C2;
+
+    set I = [:the carrier of C1, the carrier of C1:];
+
+    hereby assume
+A1:    F is full;
+      let o1, o2 be object of C1;
+      thus Morph-Map(F,o2,o1) is onto
+      proof
+        consider f being ManySortedFunction of the Arrows of C1,
+                  (the Arrows of C2)*the ObjectMap of F such that
+A2:       f = the MorphMap of F & f is "onto" by A1,FUNCTOR0:def 33;
+A3:     [o2,o1] in I by ZFMISC_1:106;
+A4:     (the MorphMap of F).[o2,o1] = (the MorphMap of F).(o2,o1)
+           by BINOP_1:def 1;
+A5:     [o2,o1] in dom(the ObjectMap of F) by A3,FUNCT_2:def 1;
+          rng(f.[o2,o1]) = ((the Arrows of C2)*the ObjectMap of F).[o2,o1]
+                         by A2,A3,MSUALG_3:def 3;
+        hence
+          rng(Morph-Map(F,o2,o1)) =
+            ((the Arrows of C2)*the ObjectMap of F).[o2,o1]
+                                              by A2,A4,FUNCTOR0:def 15
+        .= (the Arrows of C2).((the ObjectMap of F).[o2,o1])
+                                              by A5,FUNCT_1:23
+        .= (the Arrows of C2).((the ObjectMap of F).(o2,o1)) by BINOP_1:def 1
+        .= (the Arrows of C2).[F.o1,F.o2] by FUNCTOR0:24
+        .= (the Arrows of C2).(F.o1,F.o2) by BINOP_1:def 1
+        .= <^F.o1,F.o2^> by ALTCAT_1:def 2;
+       end;
+    end;
+    assume
+A6:   for o1,o2 being object of C1 holds Morph-Map(F,o2,o1) is onto;
+    consider I2' being non empty set,
+             B' being ManySortedSet of I2',
+             f' being Function of I, I2' such that
+A7:   the ObjectMap of F = f' and
+A8:   the Arrows of C2 = B' &
+      the MorphMap of F is ManySortedFunction of the Arrows of C1, B'*f'
+        by FUNCTOR0:def 4;
+    reconsider f = the MorphMap of F as
+                  ManySortedFunction of the Arrows of C1,
+                       (the Arrows of C2)*the ObjectMap of F by A7,A8;
+    take f;
+    thus f = the MorphMap of F;
+    let i be set;
+    assume i in I;
+    then consider o2, o1 being set such that
+A9:   o2 in the carrier of C1 &
+      o1 in the carrier of C1 &
+      i = [o2,o1] by ZFMISC_1:103;
+    reconsider o1, o2 as object of C1 by A9;
+A10: [o2,o1] in I by ZFMISC_1:106;
+A11: (the MorphMap of F).[o2,o1] = (the MorphMap of F).(o2,o1)
+      by BINOP_1:def 1;
+A12: [o2,o1] in dom(the ObjectMap of F) by A10,FUNCT_2:def 1;
+      Morph-Map(F,o2,o1) is onto by A6;
+then rng(Morph-Map(F,o2,o1)) = <^F.o1,F.o2^> by FUNCT_2:def 3
+     .= (the Arrows of C2).(F.o1,F.o2) by ALTCAT_1:def 2
+     .= (the Arrows of C2).[F.o1,F.o2] by BINOP_1:def 1
+     .= (the Arrows of C2).((the ObjectMap of F).(o2,o1)) by FUNCTOR0:24
+     .= (the Arrows of C2).((the ObjectMap of F).[o2,o1])
+                                       by BINOP_1:def 1
+     .= ((the Arrows of C2)*the ObjectMap of F).[o2,o1]
+        by A12,FUNCT_1:23;
+    hence rng(f.i) = ((the Arrows of C2)*the ObjectMap of F).i by A9,A11,
+FUNCTOR0:def 15;
+ end;
+
+theorem Th15:
+for C1, C2 being non empty AltCatStr
+ for F being Contravariant FunctorStr over C1, C2
+  holds F is faithful iff
+   for o1, o2 being object of C1 holds Morph-Map(F,o2,o1) is one-to-one
+  proof
+    let C1, C2 be non empty AltCatStr,
+        F be Contravariant FunctorStr over C1,C2;
+
+    set I = [:the carrier of C1, the carrier of C1:];
+
+    hereby assume
+A1:     F is faithful;
+      let o1, o2 be object of C1;
+A2:   (the MorphMap of F) is "1-1" by A1,FUNCTOR0:def 31;
+A3:   [o2,o1] in I by ZFMISC_1:106;
+A4:   (the MorphMap of F).[o2,o1] = (the MorphMap of F).(o2,o1)
+         by BINOP_1:def 1;
+      reconsider g = (the MorphMap of F).[o2,o1] as Function;
+        dom(the MorphMap of F) = I by PBOOLE:def 3;
+      then g is one-to-one by A2,A3,MSUALG_3:def 2;
+      hence Morph-Map(F,o2,o1) is one-to-one by A4,FUNCTOR0:def 15;
+    end;
+    assume
+A5:   for o1, o2 being object of C1 holds Morph-Map(F,o2,o1) is one-to-one;
+    let i be set,
+        f be Function such that
+A6:  i in dom(the MorphMap of F) & (the MorphMap of F).i = f;
+      dom(the MorphMap of F) = I by PBOOLE:def 3;
+    then consider o1, o2 being set such that
+A7:   o1 in the carrier of C1 &
+      o2 in the carrier of C1 &
+      i = [o1,o2] by A6,ZFMISC_1:103;
+    reconsider o1, o2 as object of C1 by A7;
+A8: (the MorphMap of F).(o1,o2) = Morph-Map(F,o1,o2) by FUNCTOR0:def 15;
+      (the MorphMap of F).[o1,o2] = (the MorphMap of F).(o1,o2)
+      by BINOP_1:def 1;
+    hence f is one-to-one by A5,A6,A7,A8;
+end;
+
+theorem Th16:
+for C1, C2 being non empty AltCatStr
+ for F being Covariant FunctorStr over C1, C2
+  for o1, o2 being object of C1, Fm being Morphism of F.o1, F.o2
+   st <^o1,o2^> <> {} & F is full feasible
+ ex m being Morphism of o1, o2 st Fm = F.m
+  proof
+    let C1, C2 be non empty AltCatStr,
+        F be Covariant FunctorStr over C1, C2,
+        o1, o2 be object of C1,
+        Fm be Morphism of F.o1, F.o2 such that
+A1:   <^o1,o2^> <> {};
+     assume F is full;
+     then Morph-Map(F,o1,o2) is onto by FUNCTOR1:18;
+then A2:  rng Morph-Map(F,o1,o2) = <^F.o1,F.o2^> by FUNCT_2:def 3;
+     assume F is feasible;
+then A3:  <^F.o1,F.o2^> <> {} by A1,FUNCTOR0:def 19;
+     then consider m being set such that
+A4:    m in dom Morph-Map(F,o1,o2) and
+A5:    Fm = Morph-Map(F,o1,o2).m by A2,FUNCT_1:def 5;
+       dom Morph-Map(F,o1,o2) = <^o1,o2^> by A3,FUNCT_2:def 1;
+     then reconsider m as Morphism of o1, o2 by A4;
+     take m;
+     thus Fm = F.m by A1,A3,A5,FUNCTOR0:def 16;
+  end;
+
+theorem Th17:
+for C1, C2 being non empty AltCatStr
+ for F being Contravariant FunctorStr over C1, C2
+  for o1, o2 being object of C1, Fm being Morphism of F.o2, F.o1
+   st <^o1,o2^> <> {} & F is full feasible
+ ex m being Morphism of o1, o2 st Fm = F.m
+  proof
+    let C1, C2 be non empty AltCatStr,
+        F be Contravariant FunctorStr over C1, C2,
+        o1, o2 be object of C1,
+        Fm be Morphism of F.o2, F.o1 such that
+A1:   <^o1,o2^> <> {};
+     assume F is full;
+     then Morph-Map(F,o1,o2) is onto by Th14;
+then A2:  rng Morph-Map(F,o1,o2) = <^F.o2,F.o1^> by FUNCT_2:def 3;
+     assume F is feasible;
+then A3:  <^F.o2,F.o1^> <> {} by A1,FUNCTOR0:def 20;
+     then consider m being set such that
+A4:    m in dom Morph-Map(F,o1,o2) and
+A5:    Fm = Morph-Map(F,o1,o2).m by A2,FUNCT_1:def 5;
+       dom Morph-Map(F,o1,o2) = <^o1,o2^> by A3,FUNCT_2:def 1;
+     then reconsider m as Morphism of o1, o2 by A4;
+     take m;
+     thus Fm = F.m by A1,A3,A5,FUNCTOR0:def 17;
+  end;
+
+theorem Th18:
+for A, B being transitive with_units (non empty AltCatStr)
+ for F being covariant Functor of A, B
+  for o1, o2 being object of A, a being Morphism of o1, o2
+   st <^o1,o2^> <> {} & <^o2,o1^> <> {} & a is retraction
+ holds F.a is retraction
+  proof
+    let A, B be transitive with_units (non empty AltCatStr),
+        F be covariant Functor of A, B,
+        o1, o2 be object of A,
+        a be Morphism of o1, o2 such that
+A1:   <^o1,o2^> <> {} & <^o2,o1^> <> {};
+    assume a is retraction;
+    then consider b being Morphism of o2, o1 such that
+A2:   b is_right_inverse_of a by ALTCAT_3:def 2;
+    take F.b;
+      a * b = idm o2 by A2,ALTCAT_3:def 1;
+    hence (F.a) * (F.b) = F.idm o2 by A1,FUNCTOR0:def 24
+                       .= idm F.o2 by FUNCTOR2:2;
+  end;
+
+theorem Th19:
+for A, B being transitive with_units (non empty AltCatStr)
+ for F being covariant Functor of A, B
+  for o1, o2 being object of A, a being Morphism of o1, o2
+   st <^o1,o2^> <> {} & <^o2,o1^> <> {} & a is coretraction
+ holds F.a is coretraction
+  proof
+    let A, B be transitive with_units (non empty AltCatStr),
+        F be covariant Functor of A, B,
+        o1, o2 be object of A,
+        a be Morphism of o1, o2 such that
+A1:   <^o1,o2^> <> {} & <^o2,o1^> <> {};
+    assume a is coretraction;
+    then consider b being Morphism of o2, o1 such that
+A2:   a is_right_inverse_of b by ALTCAT_3:def 3;
+    take F.b;
+      b * a = idm o1 by A2,ALTCAT_3:def 1;
+    hence (F.b) * (F.a) = F.idm o1 by A1,FUNCTOR0:def 24
+                       .= idm F.o1 by FUNCTOR2:2;
+  end;
+
+theorem Th20:
+for A, B being category, F being covariant Functor of A, B
+ for o1, o2 being object of A, a being Morphism of o1, o2
+  st <^o1,o2^> <> {} & <^o2,o1^> <> {} & a is iso
+ holds F.a is iso
+  proof
+    let A, B be category,
+        F be covariant Functor of A, B,
+        o1, o2 be object of A,
+        a be Morphism of o1, o2 such that
+A1:   <^o1,o2^> <> {} & <^o2,o1^> <> {} and
+A2:   a is iso;
+A3: <^F.o1,F.o2^> <> {} & <^F.o2,F.o1^> <> {} by A1,FUNCTOR0:def 19;
+      a is retraction coretraction by A1,A2,ALTCAT_3:6;
+    then F.a is retraction coretraction by A1,Th18,Th19;
+    hence F.a is iso by A3,ALTCAT_3:6;
+  end;
+
+theorem
+  for A, B being category, F being covariant Functor of A, B
+ for o1, o2 being object of A st o1, o2 are_iso
+  holds F.o1, F.o2 are_iso
+  proof
+    let A, B be category,
+        F be covariant Functor of A, B,
+        o1, o2 be object of A; assume
+A1:   o1, o2 are_iso;
+then A2: <^o1,o2^> <> {} & <^o2,o1^> <> {} by ALTCAT_3:def 6;
+    hence <^F.o1,F.o2^> <> {} & <^F.o2,F.o1^> <> {} by FUNCTOR0:def 19;
+    consider a being Morphism of o1, o2 such that
+A3:   a is iso by A1,ALTCAT_3:def 6;
+    take F.a;
+    thus F.a is iso by A2,A3,Th20;
+  end;
+
+theorem Th22:
+for A, B being transitive with_units (non empty AltCatStr)
+ for F being contravariant Functor of A, B
+  for o1, o2 being object of A, a being Morphism of o1, o2
+   st <^o1,o2^> <> {} & <^o2,o1^> <> {} & a is retraction
+ holds F.a is coretraction
+  proof
+    let A, B be transitive with_units (non empty AltCatStr),
+        F be contravariant Functor of A, B,
+        o1, o2 be object of A,
+        a be Morphism of o1, o2 such that
+A1:   <^o1,o2^> <> {} & <^o2,o1^> <> {};
+    assume a is retraction;
+    then consider b being Morphism of o2, o1 such that
+A2:   b is_right_inverse_of a by ALTCAT_3:def 2;
+    take F.b;
+      a * b = idm o2 by A2,ALTCAT_3:def 1;
+    hence (F.b) * (F.a) = F.idm o2 by A1,FUNCTOR0:def 25
+                       .= idm F.o2 by Th13;
+  end;
+
+theorem Th23:
+for A, B being transitive with_units (non empty AltCatStr)
+ for F being contravariant Functor of A, B
+  for o1, o2 being object of A, a being Morphism of o1, o2
+   st <^o1,o2^> <> {} & <^o2,o1^> <> {} & a is coretraction
+ holds F.a is retraction
+  proof
+    let A, B be transitive with_units (non empty AltCatStr),
+        F be contravariant Functor of A, B,
+        o1, o2 be object of A,
+        a be Morphism of o1, o2 such that
+A1:   <^o1,o2^> <> {} & <^o2,o1^> <> {};
+    assume a is coretraction;
+    then consider b being Morphism of o2, o1 such that
+A2:   a is_right_inverse_of b by ALTCAT_3:def 3;
+    take F.b;
+      b * a = idm o1 by A2,ALTCAT_3:def 1;
+    hence (F.a) * (F.b) = F.idm o1 by A1,FUNCTOR0:def 25
+                       .= idm F.o1 by Th13;
+  end;
+
+theorem Th24:
+for A, B being category, F being contravariant Functor of A, B
+  for o1, o2 being object of A, a being Morphism of o1, o2
+   st <^o1,o2^> <> {} & <^o2,o1^> <> {} & a is iso
+ holds F.a is iso
+  proof
+    let A, B be category,
+        F be contravariant Functor of A, B,
+        o1, o2 be object of A,
+        a be Morphism of o1, o2 such that
+A1:   <^o1,o2^> <> {} & <^o2,o1^> <> {} and
+A2:   a is iso;
+A3: <^F.o1,F.o2^> <> {} & <^F.o2,F.o1^> <> {} by A1,FUNCTOR0:def 20;
+      a is retraction coretraction by A1,A2,ALTCAT_3:6;
+    then F.a is retraction coretraction by A1,Th22,Th23;
+    hence F.a is iso by A3,ALTCAT_3:6;
+  end;
+
+theorem
+  for A, B being category, F being contravariant Functor of A, B
+ for o1, o2 being object of A st o1, o2 are_iso
+  holds F.o2, F.o1 are_iso
+  proof
+    let A, B be category,
+        F be contravariant Functor of A, B,
+        o1, o2 be object of A; assume
+A1:   o1, o2 are_iso;
+then A2: <^o1,o2^> <> {} & <^o2,o1^> <> {} by ALTCAT_3:def 6;
+    hence <^F.o2,F.o1^> <> {} & <^F.o1,F.o2^> <> {} by FUNCTOR0:def 20;
+    consider a being Morphism of o1, o2 such that
+A3:   a is iso by A1,ALTCAT_3:def 6;
+    take F.a;
+    thus F.a is iso by A2,A3,Th24;
+  end;
+
+theorem Th26:
+for A, B being transitive with_units (non empty AltCatStr)
+ for F being covariant Functor of A, B
+  for o1, o2 being object of A, a being Morphism of o1, o2
+   st F is full faithful & <^o1,o2^> <> {} & <^o2,o1^> <> {}
+ & F.a is retraction
+ holds a is retraction
+  proof
+    let A, B be transitive with_units (non empty AltCatStr),
+        F be covariant Functor of A, B,
+        o1, o2 be object of A,
+        a be Morphism of o1, o2 such that
+A1:   F is full faithful and
+A2:   <^o1,o2^> <> {} and
+A3:   <^o2,o1^> <> {};
+    assume F.a is retraction;
+    then consider b being Morphism of F.o2, F.o1 such that
+A4:   b is_right_inverse_of F.a by ALTCAT_3:def 2;
+A5: (F.a) * b = idm F.o2 by A4,ALTCAT_3:def 1;
+      Morph-Map(F,o2,o1) is onto by A1,FUNCTOR1:18;
+then A6: rng Morph-Map(F,o2,o1) = <^F.o2,F.o1^> by FUNCT_2:def 3;
+A7: <^F.o2,F.o1^> <> {} by A3,FUNCTOR0:def 19;
+    then consider a' being set such that
+A8:   a' in dom Morph-Map(F,o2,o1) and
+A9:   b = Morph-Map(F,o2,o1).a' by A6,FUNCT_1:def 5;
+A10: dom Morph-Map(F,o2,o2) = <^o2,o2^> by FUNCT_2:def 1;
+      dom Morph-Map(F,o2,o1) = <^o2,o1^> by A7,FUNCT_2:def 1;
+    then reconsider a' as Morphism of o2, o1 by A8;
+    take a';
+A11: Morph-Map(F,o2,o2) is one-to-one by A1,FUNCTOR1:19;
+      Morph-Map(F,o2,o2).idm o2
+               = F.(idm o2) by FUNCTOR0:def 16
+              .= idm F.o2 by FUNCTOR2:2
+              .= (F.a) * F.a' by A3,A5,A7,A9,FUNCTOR0:def 16
+              .= F.(a * a') by A2,A3,FUNCTOR0:def 24
+              .= Morph-Map(F,o2,o2).(a * a') by FUNCTOR0:def 16;
+    hence a * a' = idm o2 by A10,A11,FUNCT_1:def 8;
+  end;
+
+theorem Th27:
+for A, B being transitive with_units (non empty AltCatStr)
+ for F being covariant Functor of A, B
+  for o1, o2 being object of A, a being Morphism of o1, o2
+  st F is full faithful & <^o1,o2^> <> {} & <^o2,o1^> <> {}
+ & F.a is coretraction
+ holds a is coretraction
+  proof
+    let A, B be transitive with_units (non empty AltCatStr),
+        F be covariant Functor of A, B,
+        o1, o2 be object of A,
+        a be Morphism of o1, o2 such that
+A1:   F is full faithful and
+A2:   <^o1,o2^> <> {} and
+A3:   <^o2,o1^> <> {};
+    assume F.a is coretraction;
+    then consider b being Morphism of F.o2, F.o1 such that
+A4:   F.a is_right_inverse_of b by ALTCAT_3:def 3;
+A5: b * (F.a) = idm F.o1 by A4,ALTCAT_3:def 1;
+      Morph-Map(F,o2,o1) is onto by A1,FUNCTOR1:18;
+then A6: rng Morph-Map(F,o2,o1) = <^F.o2,F.o1^> by FUNCT_2:def 3;
+A7: <^F.o2,F.o1^> <> {} by A3,FUNCTOR0:def 19;
+    then consider a' being set such that
+A8:   a' in dom Morph-Map(F,o2,o1) and
+A9:   b = Morph-Map(F,o2,o1).a' by A6,FUNCT_1:def 5;
+A10: dom Morph-Map(F,o1,o1) = <^o1,o1^> by FUNCT_2:def 1;
+      dom Morph-Map(F,o2,o1) = <^o2,o1^> by A7,FUNCT_2:def 1;
+    then reconsider a' as Morphism of o2, o1 by A8;
+    take a';
+A11: Morph-Map(F,o1,o1) is one-to-one by A1,FUNCTOR1:19;
+      Morph-Map(F,o1,o1).idm o1
+               = F.(idm o1) by FUNCTOR0:def 16
+              .= idm F.o1 by FUNCTOR2:2
+              .= (F.a') * F.a by A3,A5,A7,A9,FUNCTOR0:def 16
+              .= F.(a' * a) by A2,A3,FUNCTOR0:def 24
+              .= Morph-Map(F,o1,o1).(a' * a) by FUNCTOR0:def 16;
+    hence a' * a = idm o1 by A10,A11,FUNCT_1:def 8;
+  end;
+
+theorem Th28:
+for A, B being category, F being covariant Functor of A, B
+ for o1, o2 being object of A, a being Morphism of o1, o2
+  st F is full faithful & <^o1,o2^> <> {} & <^o2,o1^> <> {} & F.a is iso
+ holds a is iso
+  proof
+    let A, B be category,
+        F be covariant Functor of A, B,
+        o1, o2 be object of A,
+        a be Morphism of o1, o2 such that
+A1:   F is full faithful and
+A2:   <^o1,o2^> <> {} & <^o2,o1^> <> {} and
+A3:   F.a is iso;
+      <^F.o1,F.o2^> <> {} & <^F.o2,F.o1^> <> {} by A2,FUNCTOR0:def 19;
+    then F.a is retraction coretraction by A3,ALTCAT_3:6;
+    then a is retraction coretraction by A1,A2,Th26,Th27;
+    hence a is iso by A2,ALTCAT_3:6;
+  end;
+
+theorem
+  for A, B being category, F being covariant Functor of A, B
+ for o1, o2 being object of A st F is full faithful &
+  <^o1,o2^> <> {} & <^o2,o1^> <> {} & F.o1, F.o2 are_iso
+ holds o1, o2 are_iso
+  proof
+    let A, B be category,
+        F be covariant Functor of A, B,
+        o1, o2 be object of A such that
+A1:   F is full faithful and
+A2:   <^o1,o2^> <> {} & <^o2,o1^> <> {} and
+A3:   F.o1, F.o2 are_iso;
+    thus <^o1,o2^> <> {} & <^o2,o1^> <> {} by A2;
+    consider Fa being Morphism of F.o1, F.o2 such that
+A4:   Fa is iso by A3,ALTCAT_3:def 6;
+    consider a being Morphism of o1, o2 such that
+A5:   Fa = F.a by A1,A2,Th16;
+    take a;
+    thus a is iso by A1,A2,A4,A5,Th28;
+  end;
+
+theorem Th30:
+for A, B being transitive with_units (non empty AltCatStr)
+ for F being contravariant Functor of A, B
+  for o1, o2 being object of A, a being Morphism of o1, o2
+   st F is full faithful & <^o1,o2^> <> {} & <^o2,o1^> <> {}
+ & F.a is retraction
+ holds a is coretraction
+  proof
+    let A, B be transitive with_units (non empty AltCatStr),
+        F be contravariant Functor of A, B,
+        o1, o2 be object of A,
+        a be Morphism of o1, o2 such that
+A1:   F is full faithful and
+A2:   <^o1,o2^> <> {} and
+A3:   <^o2,o1^> <> {};
+    assume F.a is retraction;
+    then consider b being Morphism of F.o1, F.o2 such that
+A4:   b is_right_inverse_of F.a by ALTCAT_3:def 2;
+A5: (F.a) * b = idm F.o1 by A4,ALTCAT_3:def 1;
+      Morph-Map(F,o2,o1) is onto by A1,Th14;
+then A6: rng Morph-Map(F,o2,o1) = <^F.o1,F.o2^> by FUNCT_2:def 3;
+A7: <^F.o1,F.o2^> <> {} by A3,FUNCTOR0:def 20;
+    then consider a' being set such that
+A8:   a' in dom Morph-Map(F,o2,o1) and
+A9:   b = Morph-Map(F,o2,o1).a' by A6,FUNCT_1:def 5;
+A10: dom Morph-Map(F,o1,o1) = <^o1,o1^> by FUNCT_2:def 1;
+      dom Morph-Map(F,o2,o1) = <^o2,o1^> by A7,FUNCT_2:def 1;
+    then reconsider a' as Morphism of o2, o1 by A8;
+    take a';
+A11: Morph-Map(F,o1,o1) is one-to-one by A1,Th15;
+      Morph-Map(F,o1,o1).idm o1
+               = F.(idm o1) by FUNCTOR0:def 17
+              .= idm F.o1 by Th13
+              .= (F.a) * F.a' by A3,A5,A7,A9,FUNCTOR0:def 17
+              .= F.(a' * a) by A2,A3,FUNCTOR0:def 25
+              .= Morph-Map(F,o1,o1).(a' * a) by FUNCTOR0:def 17;
+    hence a' * a = idm o1 by A10,A11,FUNCT_1:def 8;
+  end;
+
+theorem Th31:
+for A, B being transitive with_units (non empty AltCatStr)
+ for F being contravariant Functor of A, B
+  for o1, o2 being object of A, a being Morphism of o1, o2
+  st F is full faithful & <^o1,o2^> <> {} & <^o2,o1^> <> {}
+ & F.a is coretraction
+ holds a is retraction
+  proof
+    let A, B be transitive with_units (non empty AltCatStr),
+        F be contravariant Functor of A, B,
+        o1, o2 be object of A,
+        a be Morphism of o1, o2 such that
+A1:   F is full faithful and
+A2:   <^o1,o2^> <> {} and
+A3:   <^o2,o1^> <> {};
+    assume F.a is coretraction;
+    then consider b being Morphism of F.o1, F.o2 such that
+A4:   F.a is_right_inverse_of b by ALTCAT_3:def 3;
+A5: b * (F.a) = idm F.o2 by A4,ALTCAT_3:def 1;
+      Morph-Map(F,o2,o1) is onto by A1,Th14;
+then A6: rng Morph-Map(F,o2,o1) = <^F.o1,F.o2^> by FUNCT_2:def 3;
+A7: <^F.o1,F.o2^> <> {} by A3,FUNCTOR0:def 20;
+    then consider a' being set such that
+A8:   a' in dom Morph-Map(F,o2,o1) and
+A9:   b = Morph-Map(F,o2,o1).a' by A6,FUNCT_1:def 5;
+A10: dom Morph-Map(F,o2,o2) = <^o2,o2^> by FUNCT_2:def 1;
+      dom Morph-Map(F,o2,o1) = <^o2,o1^> by A7,FUNCT_2:def 1;
+    then reconsider a' as Morphism of o2, o1 by A8;
+    take a';
+A11: Morph-Map(F,o2,o2) is one-to-one by A1,Th15;
+      Morph-Map(F,o2,o2).idm o2
+               = F.(idm o2) by FUNCTOR0:def 17
+              .= idm F.o2 by Th13
+              .= (F.a') * F.a by A3,A5,A7,A9,FUNCTOR0:def 17
+              .= F.(a * a') by A2,A3,FUNCTOR0:def 25
+              .= Morph-Map(F,o2,o2).(a * a') by FUNCTOR0:def 17;
+    hence a * a' = idm o2 by A10,A11,FUNCT_1:def 8;
+  end;
+
+theorem Th32:
+for A, B being category, F being contravariant Functor of A, B
+ for o1, o2 being object of A, a being Morphism of o1, o2
+  st F is full faithful & <^o1,o2^> <> {} & <^o2,o1^> <> {} & F.a is iso
+ holds a is iso
+  proof
+    let A, B be category,
+        F be contravariant Functor of A, B,
+        o1, o2 be object of A,
+        a be Morphism of o1, o2 such that
+A1:   F is full faithful and
+A2:   <^o1,o2^> <> {} & <^o2,o1^> <> {} and
+A3:   F.a is iso;
+      <^F.o1,F.o2^> <> {} & <^F.o2,F.o1^> <> {} by A2,FUNCTOR0:def 20;
+    then F.a is retraction coretraction by A3,ALTCAT_3:6;
+    then a is retraction coretraction by A1,A2,Th30,Th31;
+    hence a is iso by A2,ALTCAT_3:6;
+  end;
+
+theorem
+  for A, B being category, F being contravariant Functor of A, B
+ for o1, o2 being object of A st F is full faithful &
+  <^o1,o2^> <> {} & <^o2,o1^> <> {} & F.o2, F.o1 are_iso
+ holds o1, o2 are_iso
+  proof
+    let A, B be category,
+        F be contravariant Functor of A, B,
+        o1, o2 be object of A such that
+A1:   F is full faithful and
+A2:   <^o1,o2^> <> {} & <^o2,o1^> <> {} and
+A3:   F.o2, F.o1 are_iso;
+    thus <^o1,o2^> <> {} & <^o2,o1^> <> {} by A2;
+    consider Fa being Morphism of F.o2, F.o1 such that
+A4:   Fa is iso by A3,ALTCAT_3:def 6;
+    consider a being Morphism of o1, o2 such that
+A5:   Fa = F.a by A1,A2,Th17;
+    take a;
+    thus a is iso by A1,A2,A4,A5,Th32;
+  end;
+
+
+Lm1:
+now
+  let C be non empty transitive AltCatStr,
+      p1, p2, p3 be object of C such that
+A1:  (the Arrows of C).(p1,p3) = {};
+  thus [:(the Arrows of C).(p2,p3),(the Arrows of C).(p1,p2):] = {}
+  proof
+    assume [:(the Arrows of C).(p2,p3),(the Arrows of C).(p1,p2):] <> {};
+    then consider k being set such that
+A2:   k in [:(the Arrows of C).(p2,p3),(the Arrows of C).(p1,p2):]
+        by XBOOLE_0:def 1;
+    consider u1, u2 being set such that
+A3:   u1 in (the Arrows of C).(p2,p3) & u2 in (the Arrows of C).(p1,p2)
+       & k = [u1,u2] by A2,ZFMISC_1:def 2;
+      u1 in <^p2,p3^> & u2 in <^p1,p2^> by A3,ALTCAT_1:def 2;
+    then <^p1,p3^> <> {} by ALTCAT_1:def 4;
+    hence contradiction by A1,ALTCAT_1:def 2;
+  end;
+end;
+
+
+begin  :: The subcategories of the morphisms
+
+theorem Th34:
+for C being AltCatStr, D being SubCatStr of C st
+ the carrier of C = the carrier of D & the Arrows of C = the Arrows of D
+  holds D is full
+  proof
+    let C be AltCatStr,
+        D be SubCatStr of C; assume
+A1:  the carrier of C = the carrier of D & the Arrows of C = the Arrows of D;
+    then dom (the Arrows of C) = [:the carrier of D, the carrier of D:]
+      by PBOOLE:def 3;
+    hence the Arrows of D
+       = (the Arrows of C)|[:the carrier of D, the carrier of D:]
+         by A1,RELAT_1:97;
+  end;
+
+theorem Th35:
+for C being with_units (non empty AltCatStr), D being SubCatStr of C st
+ the carrier of C = the carrier of D & the Arrows of C = the Arrows of D
+  holds D is full id-inheriting
+  proof
+    let C be with_units (non empty AltCatStr),
+        D be SubCatStr of C; assume
+A1: the carrier of C = the carrier of D & the Arrows of C = the Arrows of D;
+    hence D is full by Th34;
+      D is non empty
+    proof
+      thus the carrier of D is non empty by A1;
+    end;
+    then reconsider D as full non empty SubCatStr of C by A1,Th34;
+      now let o be object of D,
+            o' be object of C such that
+A2:   o = o';
+        <^o',o'^> = <^o,o^> by A2,ALTCAT_2:29;
+      hence idm o' in <^o,o^>;
+    end;
+    hence thesis by ALTCAT_2:def 14;
+  end;
+
+definition let C be category;
+ cluster full non empty strict subcategory of C;
+existence
+  proof
+      the AltCatStr of C is SubCatStr of C
+    proof
+      thus the carrier of the AltCatStr of C c= the carrier of C;
+      thus the Arrows of the AltCatStr of C cc= the Arrows of C;
+      thus the Comp of the AltCatStr of C cc= the Comp of C;
+    end;
+    then reconsider D = the AltCatStr of C as SubCatStr of C;
+    reconsider D as full non empty id-inheriting SubCatStr of C by Th35;
+    take D;
+    thus thesis;
+  end;
+end;
+
+theorem Th36:
+for B being non empty subcategory of C
+ for A being non empty subcategory of B holds A is non empty subcategory of C
+  proof
+    let B be non empty subcategory of C,
+        A be non empty subcategory of B;
+    reconsider D = A as with_units (non empty SubCatStr of C) by ALTCAT_2:22;
+      D is id-inheriting
+    proof
+        now let o be object of D,
+          o1 be object of C such that
+A1:     o = o1;
+A2:   o in the carrier of D;
+        the carrier of D c= the carrier of B by ALTCAT_2:def 11;
+      then reconsider oo = o as object of B by A2;
+        idm o = idm oo by ALTCAT_2:35
+           .= idm o1 by A1,ALTCAT_2:35;
+      hence idm o1 in <^o,o^>;
+      end;
+      hence thesis by ALTCAT_2:def 14;
+    end;
+    hence A is non empty subcategory of C;
+  end;
+
+theorem Th37:
+for C being non empty transitive AltCatStr
+ for D being non empty transitive SubCatStr of C
+  for o1, o2 being object of C, p1, p2 being object of D
+   for m being Morphism of o1, o2, n being Morphism of p1, p2
+    st p1 = o1 & p2 = o2 & m = n & <^p1,p2^> <> {}
+ holds
+  (m is mono implies n is mono) &
+  (m is epi implies n is epi)
+  proof
+    let C be non empty transitive AltCatStr,
+        D be non empty transitive SubCatStr of C,
+        o1, o2 be object of C,
+        p1, p2 be object of D,
+        m be Morphism of o1, o2,
+        n be Morphism of p1, p2 such that
+A1:   p1 = o1 & p2 = o2 & m = n & <^p1,p2^> <> {};
+    thus m is mono implies n is mono
+    proof
+      assume
+A2:      m is mono;
+      let p3 be object of D such that
+A3:     <^p3,p1^> <> {};
+      let f, g be Morphism of p3, p1 such that
+A4:     n * f = n * g;
+      reconsider o3 = p3 as object of C by ALTCAT_2:30;
+        <^p3,p1^> c= <^o3,o1^> by A1,ALTCAT_2:32;
+then A5:   <^o3,o1^> <> {} by A3,XBOOLE_1:3;
+      reconsider f1 = f, g1 = g as Morphism of o3, o1 by A1,A3,ALTCAT_2:34;
+        m * f1 = n * f by A1,A3,ALTCAT_2:33
+            .= m * g1 by A1,A3,A4,ALTCAT_2:33;
+      hence f = g by A2,A5,ALTCAT_3:def 7;
+    end;
+    assume
+A6:   m is epi;
+    let p3 be object of D such that
+A7:   <^p2,p3^> <> {};
+    let f, g be Morphism of p2, p3 such that
+A8:   f * n = g * n;
+    reconsider o3 = p3 as object of C by ALTCAT_2:30;
+      <^p2,p3^> c= <^o2,o3^> by A1,ALTCAT_2:32;
+then A9: <^o2,o3^> <> {} by A7,XBOOLE_1:3;
+    reconsider f1 = f, g1 = g as Morphism of o2, o3 by A1,A7,ALTCAT_2:34;
+      f1 * m = f * n by A1,A7,ALTCAT_2:33
+          .= g1 * m by A1,A7,A8,ALTCAT_2:33;
+    hence f = g by A6,A9,ALTCAT_3:def 8;
+  end;
+
+theorem Th38:
+for D being non empty subcategory of C
+ for o1, o2 being object of C, p1, p2 being object of D
+  for m being Morphism of o1, o2, m1 being Morphism of o2, o1
+   for n being Morphism of p1, p2, n1 being Morphism of p2, p1
+    st p1 = o1 & p2 = o2 & m = n & m1 = n1 & <^p1,p2^> <> {} & <^p2,p1^> <> {}
+ holds
+  (m is_left_inverse_of m1 iff n is_left_inverse_of n1) &
+  (m is_right_inverse_of m1 iff n is_right_inverse_of n1)
+  proof
+    let D be non empty subcategory of C,
+        o1, o2 be object of C,
+        p1, p2 be object of D,
+        m be Morphism of o1, o2,
+        m1 be Morphism of o2, o1,
+        n be Morphism of p1, p2,
+        n1 be Morphism of p2, p1 such that
+A1:   p1 = o1 & p2 = o2 & m = n & m1 = n1 & <^p1,p2^> <> {} & <^p2,p1^> <> {};
+    thus m is_left_inverse_of m1 iff n is_left_inverse_of n1
+    proof
+      thus m is_left_inverse_of m1 implies n is_left_inverse_of n1
+      proof
+        assume
+A2:       m is_left_inverse_of m1;
+        thus n * n1 = m * m1 by A1,ALTCAT_2:33
+                   .= idm o2 by A2,ALTCAT_3:def 1
+                   .= idm p2 by A1,ALTCAT_2:35;
+      end;
+      assume
+A3:     n is_left_inverse_of n1;
+      thus m * m1 = n * n1 by A1,ALTCAT_2:33
+                 .= idm p2 by A3,ALTCAT_3:def 1
+                 .= idm o2 by A1,ALTCAT_2:35;
+    end;
+    thus m is_right_inverse_of m1 implies n is_right_inverse_of n1
+    proof
+      assume
+A4:     m is_right_inverse_of m1;
+      thus n1 * n = m1 * m by A1,ALTCAT_2:33
+                 .= idm o1 by A4,ALTCAT_3:def 1
+                 .= idm p1 by A1,ALTCAT_2:35;
+    end;
+    assume
+A5:   n is_right_inverse_of n1;
+    thus m1 * m = n1 * n by A1,ALTCAT_2:33
+               .= idm p1 by A5,ALTCAT_3:def 1
+               .= idm o1 by A1,ALTCAT_2:35;
+  end;
+
+theorem
+  for D being full non empty subcategory of C
+ for o1, o2 being object of C, p1, p2 being object of D
+  for m being Morphism of o1, o2, n being Morphism of p1, p2
+   st p1 = o1 & p2 = o2 & m = n & <^p1,p2^> <> {} & <^p2,p1^> <> {}
+ holds
+  (m is retraction implies n is retraction) &
+  (m is coretraction implies n is coretraction) &
+  (m is iso implies n is iso)
+  proof
+    let D be full non empty subcategory of C,
+        o1, o2 be object of C,
+        p1, p2 be object of D,
+        m be Morphism of o1, o2,
+        n be Morphism of p1, p2; assume
+A1:   p1 = o1 & p2 = o2 & m = n & <^p1,p2^> <> {} & <^p2,p1^> <> {};
+then A2: <^p2,p1^> = <^o2,o1^> by ALTCAT_2:29;
+    thus
+A3:   m is retraction implies n is retraction
+    proof
+      assume m is retraction;
+      then consider B being Morphism of o2, o1 such that
+A4:     B is_right_inverse_of m by ALTCAT_3:def 2;
+      reconsider B1 = B as Morphism of p2, p1 by A2;
+      take B1;
+      thus B1 is_right_inverse_of n by A1,A4,Th38;
+    end;
+    thus
+A5:   m is coretraction implies n is coretraction
+    proof
+      assume m is coretraction;
+      then consider B being Morphism of o2, o1 such that
+A6:     B is_left_inverse_of m by ALTCAT_3:def 3;
+      reconsider B1 = B as Morphism of p2, p1 by A2;
+      take B1;
+      thus B1 is_left_inverse_of n by A1,A6,Th38;
+    end;
+    assume m is iso;
+    hence n is iso by A1,A3,A5,ALTCAT_3:5,6;
+  end;
+
+theorem Th40:
+for D being non empty subcategory of C
+ for o1, o2 being object of C, p1, p2 being object of D
+  for m being Morphism of o1, o2, n being Morphism of p1, p2
+   st p1 = o1 & p2 = o2 & m = n & <^p1,p2^> <> {} & <^p2,p1^> <> {}
+ holds
+  (n is retraction implies m is retraction) &
+  (n is coretraction implies m is coretraction) &
+  (n is iso implies m is iso)
+  proof
+    let D be non empty subcategory of C,
+        o1, o2 be object of C,
+        p1, p2 be object of D,
+        m be Morphism of o1, o2,
+        n be Morphism of p1, p2 such that
+A1:   p1 = o1 & p2 = o2 & m = n & <^p1,p2^> <> {} & <^p2,p1^> <> {};
+    thus
+A2:   n is retraction implies m is retraction
+    proof
+      assume n is retraction;
+      then consider B being Morphism of p2, p1 such that
+A3:     B is_right_inverse_of n by ALTCAT_3:def 2;
+      reconsider B1 = B as Morphism of o2, o1 by A1,ALTCAT_2:34;
+      take B1;
+      thus B1 is_right_inverse_of m by A1,A3,Th38;
+    end;
+    thus
+A4:   n is coretraction implies m is coretraction
+    proof
+      assume n is coretraction;
+      then consider B being Morphism of p2, p1 such that
+A5:     B is_left_inverse_of n by ALTCAT_3:def 3;
+      reconsider B1 = B as Morphism of o2, o1 by A1,ALTCAT_2:34;
+      take B1;
+      thus B1 is_left_inverse_of m by A1,A5,Th38;
+    end;
+    assume
+A6:   n is iso;
+      <^p1,p2^> c= <^o1,o2^> & <^p2,p1^> c= <^o2,o1^> by A1,ALTCAT_2:32;
+    then <^o1,o2^> <> {} & <^o2,o1^> <> {} by A1,XBOOLE_1:3;
+    hence m is iso by A2,A4,A6,ALTCAT_3:5,6;
+  end;
+
+definition let C be category;
+ func AllMono C -> strict non empty transitive SubCatStr of C means :Def1:
+  the carrier of it = the carrier of C &
+  the Arrows of it cc= the Arrows of C &
+  for o1, o2 being object of C, m being Morphism of o1, o2 holds
+   m in (the Arrows of it).(o1,o2) iff <^o1,o2^> <> {} & m is mono;
+existence
+  proof
+set I = the carrier of C;
+
+defpred P[set,set] means
+ for x being set holds x in $2 iff
+  ex o1, o2 being object of C, m being Morphism of o1, o2 st $1 = [o1,o2] &
+   <^o1,o2^> <> {} & x = m & m is mono;
+
+A1: for i being set st i in [:I,I:] ex X being set st P[i,X]
+    proof
+      let i be set;
+      assume i in [:I,I:];
+      then consider o1, o2 being set such that
+A2:     o1 in I & o2 in I & i = [o1,o2] by ZFMISC_1:103;
+      reconsider o1, o2 as object of C by A2;
+      defpred P[set] means ex m being Morphism of o1, o2 st
+          <^o1,o2^> <> {} & m = $1 & m is mono;
+      consider X being set such that
+A3:     for x being set holds x in X iff
+         x in (the Arrows of C).(o1,o2) & P[x] from Separation;
+      take X;
+      let x be set;
+      thus x in X implies ex o1, o2 being object of C,
+       m being Morphism of o1, o2 st i = [o1,o2] & <^o1,o2^> <> {} &
+        x = m & m is mono
+      proof
+        assume x in X;
+        then consider m being Morphism of o1, o2 such that
+A4:       <^o1,o2^> <> {} & m = x & m is mono by A3;
+        take o1, o2, m;
+        thus i = [o1,o2] & <^o1,o2^> <> {} & x = m & m is mono by A2,A4;
+      end;
+      given p1, p2 being object of C,
+            m being Morphism of p1, p2 such that
+A5:     i = [p1,p2] & <^p1,p2^> <> {} & x = m &
+          m is mono;
+A6:   o1 = p1 & o2 = p2 by A2,A5,ZFMISC_1:33;
+        m in <^p1,p2^> by A5;
+      then m in (the Arrows of C).(p1,p2) by ALTCAT_1:def 2;
+      hence x in X by A3,A5,A6;
+    end;
+
+    consider Ar being ManySortedSet of [:I,I:] such that
+A7:   for i being set st i in [:I,I:] holds P[i,Ar.i] from MSSEx(A1);
+
+A8: Ar cc= the Arrows of C
+    proof
+      thus [:I,I:] c= [:the carrier of C,the carrier of C:];
+      let i be set; assume
+A9:     i in [:I,I:];
+      let q be set;
+      assume q in Ar.i;
+      then consider p1, p2 being object of C,
+               m being Morphism of p1, p2 such that
+A10:      i = [p1,p2] & <^p1,p2^> <> {} & q = m & m is mono by A7,A9;
+        m in <^p1,p2^> by A10;
+      then m in (the Arrows of C).(p1,p2) by ALTCAT_1:def 2;
+      hence q in (the Arrows of C).i by A10,BINOP_1:def 1;
+    end;
+
+defpred R[set,set] means
+ ex p1, p2, p3 being object of C st $1 = [p1,p2,p3] &
+  $2 = ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):];
+
+A11: for i being set st i in [:I,I,I:] ex j being set st R[i,j]
+    proof
+      let i be set; assume
+       i in [:I,I,I:];
+      then consider p1, p2, p3 being set such that
+A12:     p1 in I & p2 in I & p3 in I & i = [p1,p2,p3] by MCART_1:72;
+      reconsider p1, p2, p3 as object of C by A12;
+      take ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):];
+      take p1, p2, p3;
+      thus i = [p1,p2,p3] by A12;
+      thus thesis;
+    end;
+
+    consider Co being ManySortedSet of [:I,I,I:] such that
+A13:   for i being set st i in [:I,I,I:] holds R[i,Co.i] from MSSEx(A11);
+
+      Co is ManySortedFunction of {|Ar,Ar|}, {|Ar|}
+    proof
+      let i be set;
+      assume i in [:I,I,I:];
+      then consider p1, p2, p3 being object of C such that
+A14:     i = [p1,p2,p3] and
+A15:     Co.i = ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):]
+          by A13;
+
+A16:   (the Arrows of C).(p1,p3) = {} implies
+        [:(the Arrows of C).(p2,p3),(the Arrows of C).(p1,p2):] = {}
+          by Lm1;
+
+        [p2,p3] in [:I,I:] & [p1,p2] in [:I,I:] by ZFMISC_1:def 2;
+      then Ar.[p2,p3] c= (the Arrows of C).[p2,p3] &
+        Ar.[p1,p2] c= (the Arrows of C).[p1,p2] by A8,ALTCAT_2:def 2;
+      then Ar.[p2,p3] c= (the Arrows of C).(p2,p3) &
+        Ar.[p1,p2] c= (the Arrows of C).(p1,p2) by BINOP_1:def 1;
+then A17:   Ar.(p2,p3) c= (the Arrows of C).(p2,p3) &
+        Ar.(p1,p2) c= (the Arrows of C).(p1,p2) by BINOP_1:def 1;
+
+A18:   (the Arrows of C).(p1,p3) = {} implies
+        [:Ar.(p2,p3),Ar.(p1,p2):] = {}
+      proof
+        assume
+A19:       (the Arrows of C).(p1,p3) = {};
+        assume [:Ar.(p2,p3),Ar.(p1,p2):] <> {};
+        then consider k being set such that
+A20:       k in [:Ar.(p2,p3),Ar.(p1,p2):] by XBOOLE_0:def 1;
+        consider u1, u2 being set such that
+A21:       u1 in Ar.(p2,p3) & u2 in Ar.(p1,p2) & k = [u1,u2]
+            by A20,ZFMISC_1:def 2;
+          u1 in (the Arrows of C).(p2,p3) & u2 in (the Arrows of C).(p1,p2)
+          by A17,A21;
+        then u1 in <^p2,p3^> & u2 in <^p1,p2^> by ALTCAT_1:def 2;
+        then <^p1,p3^> <> {} by ALTCAT_1:def 4;
+        hence contradiction by A19,ALTCAT_1:def 2;
+      end;
+
+        [:Ar.(p2,p3),Ar.(p1,p2):] c=
+        [:(the Arrows of C).(p2,p3),(the Arrows of C).(p1,p2):]
+          by A17,ZFMISC_1:119;
+      then reconsider f = Co.i as Function of [:Ar.(p2,p3),Ar.(p1,p2):],
+       (the Arrows of C).(p1,p3) by A15,A16,FUNCT_2:38;
+
+A22:   {|Ar|}.(p1,p2,p3) = Ar.(p1,p3) by ALTCAT_1:def 5;
+A23:   {|Ar,Ar|}.(p1,p2,p3) = [:Ar.(p2,p3),Ar.(p1,p2):] by ALTCAT_1:def 6;
+
+      A24: rng f c= {|Ar|}.i
+      proof
+        let q be set;
+        assume q in rng f;
+        then consider x being set such that
+A25:       x in dom f and
+A26:       q = f.x by FUNCT_1:def 5;
+A27:     dom f = [:Ar.(p2,p3),Ar.(p1,p2):] by A18,FUNCT_2:def 1;
+        then consider m1, m2 being set such that
+A28:       m1 in Ar.(p2,p3) & m2 in Ar.(p1,p2) and
+A29:       x = [m1,m2] by A25,ZFMISC_1:103;
+A30:     m1 in Ar.[p2,p3] & m2 in Ar.[p1,p2] by A28,BINOP_1:def 1;
+          [p2,p3] in [:I,I:] by ZFMISC_1:def 2;
+        then consider q2, q3 being object of C,
+                 qq being Morphism of q2, q3 such that
+A31:        [p2,p3] = [q2,q3] & <^q2,q3^> <> {} & m1 = qq & qq is mono
+             by A7,A30;
+
+          [p1,p2] in [:I,I:] by ZFMISC_1:def 2;
+        then consider r1, r2 being object of C,
+                 rr being Morphism of r1, r2 such that
+A32:        [p1,p2] = [r1,r2] & <^r1,r2^> <> {} & m2 = rr & rr is mono
+             by A7,A30;
+
+A33:     ex o1, o3 being object of C, m being Morphism of o1, o3
+         st [p1,p3] = [o1,o3] & <^o1,o3^> <> {} & q = m & m is mono
+        proof
+A34:       r2 = p2 by A32,ZFMISC_1:33;
+A35:       p2 = q2 by A31,ZFMISC_1:33;
+          then reconsider mm = qq as Morphism of r2, q3 by A32,ZFMISC_1:33;
+          take r1, q3, mm * rr;
+A36:       p1 = r1 & p3 = q3 by A31,A32,ZFMISC_1:33;
+          hence [p1,p3] = [r1,q3];
+          thus
+           <^r1,q3^> <> {} by A31,A32,A34,A35,ALTCAT_1:def 4;
+          thus q = (the Comp of C).(p1,p2,p3).x by A15,A25,A26,A27,FUNCT_1:72
+                .= (the Comp of C).(p1,p2,p3).(mm,rr)
+                   by A29,A31,A32,BINOP_1:def 1
+                .= mm * rr by A31,A32,A34,A35,A36,ALTCAT_1:def 10;
+          thus mm * rr is mono by A31,A32,A34,A35,ALTCAT_3:9;
+        end;
+          [p1,p3] in [:I,I:] by ZFMISC_1:def 2;
+        then q in Ar.[p1,p3] by A7,A33;
+        then q in Ar.(p1,p3) by BINOP_1:def 1;
+        hence q in {|Ar|}.i by A14,A22,MULTOP_1:def 1;
+      end;
+         [:Ar.(p2,p3),Ar.(p1,p2):] = {|Ar,Ar|}.i by A14,A23,MULTOP_1:def 1;
+      hence Co.i is Function of {|Ar,Ar|}.i, {|Ar|}.i
+        by A18,A24,FUNCT_2:8;
+    end;
+    then reconsider Co as BinComp of Ar;
+
+set IT = AltCatStr (#I, Ar, Co#),
+    J = the carrier of IT;
+
+      IT is SubCatStr of C
+    proof
+      thus the carrier of IT c= the carrier of C;
+      thus the Arrows of IT cc= the Arrows of C by A8;
+      thus [:J,J,J:] c= [:I,I,I:];
+      let i be set such that
+A37:     i in [:J,J,J:];
+      let q be set such that
+A38:     q in (the Comp of IT).i;
+      consider p1, p2, p3 being object of C such that
+A39:     i = [p1,p2,p3] &
+        Co.i = ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):]
+          by A13,A37;
+        ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):] c=
+        (the Comp of C).(p1,p2,p3) by RELAT_1:88;
+      then q in (the Comp of C).(p1,p2,p3) by A38,A39;
+      hence q in (the Comp of C).i by A39,MULTOP_1:def 1;
+    end;
+    then reconsider IT as strict non empty SubCatStr of C;
+      IT is transitive
+    proof
+      let p1, p2, p3 be object of IT; assume
+A40:     <^p1,p2^> <> {} & <^p2,p3^> <> {};
+      then consider m2 being set such that
+A41:     m2 in <^p1,p2^> by XBOOLE_0:def 1;
+      consider m1 being set such that
+A42:     m1 in <^p2,p3^> by A40,XBOOLE_0:def 1;
+        m2 in Ar.(p1,p2) & m1 in Ar.(p2,p3) by A41,A42,ALTCAT_1:def 2;
+then A43:   m1 in Ar.[p2,p3] & m2 in Ar.[p1,p2] by BINOP_1:def 1;
+        [p2,p3] in [:I,I:] by ZFMISC_1:def 2;
+      then consider q2, q3 being object of C,
+               qq being Morphism of q2, q3 such that
+A44:      [p2,p3] = [q2,q3] & <^q2,q3^> <> {}
+ & m1 = qq & qq is mono by A7,A43;
+
+        [p1,p2] in [:I,I:] by ZFMISC_1:def 2;
+      then consider r1, r2 being object of C,
+               rr being Morphism of r1, r2 such that
+A45:      [p1,p2] = [r1,r2] & <^r1,r2^> <> {}
+ & m2 = rr & rr is mono by A7,A43;
+
+A46:     r2 = p2 by A45,ZFMISC_1:33;
+A47:     p2 = q2 by A44,ZFMISC_1:33;
+        then reconsider mm = qq as Morphism of r2, q3 by A45,ZFMISC_1:33;
+
+A48:   ex o1, o3 being object of C, m being Morphism of o1, o3
+       st [p1,p3] = [o1,o3] & <^o1,o3^> <> {} & mm * rr = m & m is mono
+      proof
+        take r1, q3, mm * rr;
+          p1 = r1 & p3 = q3 by A44,A45,ZFMISC_1:33;
+        hence [p1,p3] = [r1,q3];
+        thus <^r1,q3^> <> {} by A44,A45,A46,A47,ALTCAT_1:def 4;
+        thus mm * rr = mm * rr;
+        thus mm * rr is mono by A44,A45,A46,A47,ALTCAT_3:9;
+      end;
+        [p1,p3] in [:I,I:] by ZFMISC_1:def 2;
+      then mm * rr in Ar.[p1,p3] by A7,A48;
+      then mm * rr in Ar.(p1,p3) by BINOP_1:def 1;
+      hence <^p1,p3^> <> {} by ALTCAT_1:def 2;
+    end;
+
+    then reconsider IT as strict non empty transitive SubCatStr of C;
+    take IT;
+    thus the carrier of IT = the carrier of C;
+    thus the Arrows of IT cc= the Arrows of C by A8;
+    let o1, o2 be object of C,
+        m be Morphism of o1, o2;
+A49: [o1,o2] in [:I,I:] by ZFMISC_1:def 2;
+    thus m in (the Arrows of IT).(o1,o2) implies
+      <^o1,o2^> <> {} & m is mono
+    proof
+      assume m in (the Arrows of IT).(o1,o2);
+      then m in Ar.[o1,o2] by BINOP_1:def 1;
+      then consider p1, p2 being object of C,
+               n being Morphism of p1, p2 such that
+A50:    [o1,o2] = [p1,p2] & <^p1,p2^> <> {} & m = n & n is mono by A7,A49;
+        o1 = p1 & o2 = p2 by A50,ZFMISC_1:33;
+      hence <^o1,o2^> <> {} & m is mono by A50;
+    end;
+    assume <^o1,o2^> <> {} & m is mono;
+    then m in (the Arrows of IT).[o1,o2] by A7,A49;
+    hence m in (the Arrows of IT).(o1,o2) by BINOP_1:def 1;
+  end;
+uniqueness
+  proof
+    let S1, S2 be strict non empty transitive SubCatStr of C such that
+A51:  the carrier of S1 = the carrier of C and
+A52:  the Arrows of S1 cc= the Arrows of C and
+A53:  for o1, o2 being object of C, m being Morphism of o1, o2 holds
+      m in (the Arrows of S1).(o1,o2) iff <^o1,o2^> <> {} & m is mono and
+A54:  the carrier of S2 = the carrier of C and
+A55:  the Arrows of S2 cc= the Arrows of C and
+A56:  for o1, o2 being object of C, m being Morphism of o1, o2 holds
+      m in (the Arrows of S2).(o1,o2) iff <^o1,o2^> <> {} & m is mono;
+      now
+      let i be set; assume
+A57:     i in [:the carrier of C,the carrier of C:];
+      then consider o1, o2 being set such that
+A58:    o1 in the carrier of C & o2 in the carrier of C & i = [o1,o2]
+        by ZFMISC_1:103;
+      reconsider o1, o2 as object of C by A58;
+      thus (the Arrows of S1).i = (the Arrows of S2).i
+      proof
+        thus (the Arrows of S1).i c= (the Arrows of S2).i
+        proof
+          let n be set such that
+A59:         n in (the Arrows of S1).i;
+            (the Arrows of S1).i c= (the Arrows of C).i
+            by A51,A52,A57,ALTCAT_2:def 2;
+          then n in (the Arrows of C).i by A59;
+          then n in (the Arrows of C).(o1,o2) by A58,BINOP_1:def 1;
+          then n in <^o1,o2^> by ALTCAT_1:def 2;
+          then reconsider m = n as Morphism of o1, o2 ;
+            m in (the Arrows of S1).(o1,o2) by A58,A59,BINOP_1:def 1;
+          then <^o1,o2^> <> {} & m is mono by A53;
+          then m in (the Arrows of S2).(o1,o2) by A56;
+          hence n in (the Arrows of S2).i by A58,BINOP_1:def 1;
+        end;
+        let n be set such that
+A60:       n in (the Arrows of S2).i;
+          (the Arrows of S2).i c= (the Arrows of C).i
+          by A54,A55,A57,ALTCAT_2:def 2;
+        then n in (the Arrows of C).i by A60;
+        then n in (the Arrows of C).(o1,o2) by A58,BINOP_1:def 1;
+        then n in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider m = n as Morphism of o1, o2 ;
+          m in (the Arrows of S2).(o1,o2) by A58,A60,BINOP_1:def 1;
+        then <^o1,o2^> <> {} & m is mono by A56;
+        then m in (the Arrows of S1).(o1,o2) by A53;
+        hence n in (the Arrows of S1).i by A58,BINOP_1:def 1;
+      end;
+    end;
+    then the Arrows of S1 = the Arrows of S2 by A51,A54,PBOOLE:3;
+    hence S1 = S2 by A51,A54,ALTCAT_2:27;
+  end;
+end;
+
+definition let C be category;
+ cluster AllMono C -> id-inheriting;
+coherence
+  proof
+      now let o be object of AllMono C,
+        o' be object of C such that
+A1:   o = o';
+    idm o' in (the Arrows of AllMono C).(o,o) by A1,Def1;
+    hence idm o' in <^o,o^> by ALTCAT_1:def 2;
+    end;
+    hence thesis by ALTCAT_2:def 14;
+  end;
+end;
+
+definition let C be category;
+ func AllEpi C -> strict non empty transitive SubCatStr of C means :Def2:
+  the carrier of it = the carrier of C &
+  the Arrows of it cc= the Arrows of C &
+  for o1, o2 being object of C, m being Morphism of o1, o2 holds
+   m in (the Arrows of it).(o1,o2) iff <^o1,o2^> <> {} & m is epi;
+existence
+  proof
+set I = the carrier of C;
+
+defpred P[set,set] means
+ for x being set holds x in $2 iff
+  ex o1, o2 being object of C, m being Morphism of o1, o2 st $1 = [o1,o2] &
+   <^o1,o2^> <> {} & x = m & m is epi;
+
+A1: for i being set st i in [:I,I:] ex X being set st P[i,X]
+    proof
+      let i be set;
+      assume i in [:I,I:];
+      then consider o1, o2 being set such that
+A2:     o1 in I & o2 in I & i = [o1,o2] by ZFMISC_1:103;
+      reconsider o1, o2 as object of C by A2;
+      defpred P[set] means ex m being Morphism of o1, o2 st
+          <^o1,o2^> <> {} & m = $1 & m is epi;
+      consider X being set such that
+A3:     for x being set holds x in X iff
+         x in (the Arrows of C).(o1,o2) & P[x] from Separation;
+      take X;
+      let x be set;
+      thus x in X implies ex o1, o2 being object of C,
+       m being Morphism of o1, o2 st i = [o1,o2] & <^o1,o2^> <> {} &
+        x = m & m is epi
+      proof
+        assume x in X;
+        then consider m being Morphism of o1, o2 such that
+A4:       <^o1,o2^> <> {} & m = x & m is epi by A3;
+        take o1, o2, m;
+        thus i = [o1,o2] & <^o1,o2^> <> {} & x = m & m is epi by A2,A4;
+      end;
+      given p1, p2 being object of C,
+            m being Morphism of p1, p2 such that
+A5:     i = [p1,p2] & <^p1,p2^> <> {} & x = m & m is epi;
+A6:   o1 = p1 & o2 = p2 by A2,A5,ZFMISC_1:33;
+        m in <^p1,p2^> by A5;
+      then m in (the Arrows of C).(p1,p2) by ALTCAT_1:def 2;
+      hence x in X by A3,A5,A6;
+    end;
+
+    consider Ar being ManySortedSet of [:I,I:] such that
+A7:   for i being set st i in [:I,I:] holds P[i,Ar.i] from MSSEx(A1);
+
+A8: Ar cc= the Arrows of C
+    proof
+      thus [:I,I:] c= [:the carrier of C,the carrier of C:];
+      let i be set; assume
+A9:     i in [:I,I:];
+      let q be set;
+      assume q in Ar.i;
+      then consider p1, p2 being object of C,
+               m being Morphism of p1, p2 such that
+A10:      i = [p1,p2] & <^p1,p2^> <> {} & q = m & m is epi by A7,A9;
+        m in <^p1,p2^> by A10;
+      then m in (the Arrows of C).(p1,p2) by ALTCAT_1:def 2;
+      hence q in (the Arrows of C).i by A10,BINOP_1:def 1;
+    end;
+
+defpred R[set,set] means
+ ex p1, p2, p3 being object of C st $1 = [p1,p2,p3] &
+  $2 = ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):];
+
+A11: for i being set st i in [:I,I,I:] ex j being set st R[i,j]
+    proof
+      let i be set; assume
+       i in [:I,I,I:];
+      then consider p1, p2, p3 being set such that
+A12:     p1 in I & p2 in I & p3 in I & i = [p1,p2,p3] by MCART_1:72;
+      reconsider p1, p2, p3 as object of C by A12;
+      take ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):];
+      take p1, p2, p3;
+      thus i = [p1,p2,p3] by A12;
+      thus thesis;
+    end;
+
+    consider Co being ManySortedSet of [:I,I,I:] such that
+A13:   for i being set st i in [:I,I,I:] holds R[i,Co.i] from MSSEx(A11);
+
+      Co is ManySortedFunction of {|Ar,Ar|}, {|Ar|}
+    proof
+      let i be set;
+      assume i in [:I,I,I:];
+      then consider p1, p2, p3 being object of C such that
+A14:     i = [p1,p2,p3] and
+A15:     Co.i = ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):]
+          by A13;
+
+A16:   (the Arrows of C).(p1,p3) = {} implies
+        [:(the Arrows of C).(p2,p3),(the Arrows of C).(p1,p2):] = {}
+          by Lm1;
+
+        [p2,p3] in [:I,I:] & [p1,p2] in [:I,I:] by ZFMISC_1:def 2;
+      then Ar.[p2,p3] c= (the Arrows of C).[p2,p3] &
+        Ar.[p1,p2] c= (the Arrows of C).[p1,p2] by A8,ALTCAT_2:def 2;
+      then Ar.[p2,p3] c= (the Arrows of C).(p2,p3) &
+        Ar.[p1,p2] c= (the Arrows of C).(p1,p2) by BINOP_1:def 1;
+then A17:   Ar.(p2,p3) c= (the Arrows of C).(p2,p3) &
+        Ar.(p1,p2) c= (the Arrows of C).(p1,p2) by BINOP_1:def 1;
+
+A18:   (the Arrows of C).(p1,p3) = {} implies
+        [:Ar.(p2,p3),Ar.(p1,p2):] = {}
+      proof
+        assume
+A19:       (the Arrows of C).(p1,p3) = {};
+        assume [:Ar.(p2,p3),Ar.(p1,p2):] <> {};
+        then consider k being set such that
+A20:       k in [:Ar.(p2,p3),Ar.(p1,p2):] by XBOOLE_0:def 1;
+        consider u1, u2 being set such that
+A21:       u1 in Ar.(p2,p3) & u2 in Ar.(p1,p2) & k = [u1,u2]
+            by A20,ZFMISC_1:def 2;
+          u1 in (the Arrows of C).(p2,p3) & u2 in (the Arrows of C).(p1,p2)
+          by A17,A21;
+        then u1 in <^p2,p3^> & u2 in <^p1,p2^> by ALTCAT_1:def 2;
+        then <^p1,p3^> <> {} by ALTCAT_1:def 4;
+        hence contradiction by A19,ALTCAT_1:def 2;
+      end;
+
+        [:Ar.(p2,p3),Ar.(p1,p2):] c=
+        [:(the Arrows of C).(p2,p3),(the Arrows of C).(p1,p2):]
+          by A17,ZFMISC_1:119;
+      then reconsider f = Co.i as Function of [:Ar.(p2,p3),Ar.(p1,p2):],
+       (the Arrows of C).(p1,p3) by A15,A16,FUNCT_2:38;
+
+A22:   {|Ar|}.(p1,p2,p3) = Ar.(p1,p3) by ALTCAT_1:def 5;
+A23:   {|Ar,Ar|}.(p1,p2,p3) = [:Ar.(p2,p3),Ar.(p1,p2):] by ALTCAT_1:def 6;
+
+      A24: rng f c= {|Ar|}.i
+      proof
+        let q be set;
+        assume q in rng f;
+        then consider x being set such that
+A25:       x in dom f and
+A26:       q = f.x by FUNCT_1:def 5;
+A27:     dom f = [:Ar.(p2,p3),Ar.(p1,p2):] by A18,FUNCT_2:def 1;
+        then consider m1, m2 being set such that
+A28:       m1 in Ar.(p2,p3) & m2 in Ar.(p1,p2) and
+A29:       x = [m1,m2] by A25,ZFMISC_1:103;
+A30:     m1 in Ar.[p2,p3] & m2 in Ar.[p1,p2] by A28,BINOP_1:def 1;
+          [p2,p3] in [:I,I:] by ZFMISC_1:def 2;
+        then consider q2, q3 being object of C,
+                 qq being Morphism of q2, q3 such that
+A31:        [p2,p3] = [q2,q3] & <^q2,q3^> <> {}
+ & m1 = qq & qq is epi by A7,A30
+;
+
+          [p1,p2] in [:I,I:] by ZFMISC_1:def 2;
+        then consider r1, r2 being object of C,
+                 rr being Morphism of r1, r2 such that
+A32:        [p1,p2] = [r1,r2] & <^r1,r2^> <> {}
+ & m2 = rr & rr is epi by A7,A30
+;
+
+A33:     ex o1, o3 being object of C, m being Morphism of o1, o3
+         st [p1,p3] = [o1,o3] & <^o1,o3^> <> {} & q = m & m is epi
+        proof
+A34:       r2 = p2 by A32,ZFMISC_1:33;
+A35:       p2 = q2 by A31,ZFMISC_1:33;
+          then reconsider mm = qq as Morphism of r2, q3 by A32,ZFMISC_1:33;
+          take r1, q3, mm * rr;
+A36:       p1 = r1 & p3 = q3 by A31,A32,ZFMISC_1:33;
+          hence [p1,p3] = [r1,q3];
+          thus
+           <^r1,q3^> <> {} by A31,A32,A34,A35,ALTCAT_1:def 4;
+          thus q = (the Comp of C).(p1,p2,p3).x by A15,A25,A26,A27,FUNCT_1:72
+                .= (the Comp of C).(p1,p2,p3).(mm,rr)
+                   by A29,A31,A32,BINOP_1:def 1
+                .= mm * rr by A31,A32,A34,A35,A36,ALTCAT_1:def 10;
+          thus mm * rr is epi by A31,A32,A34,A35,ALTCAT_3:10;
+        end;
+          [p1,p3] in [:I,I:] by ZFMISC_1:def 2;
+        then q in Ar.[p1,p3] by A7,A33;
+        then q in Ar.(p1,p3) by BINOP_1:def 1;
+        hence q in {|Ar|}.i by A14,A22,MULTOP_1:def 1;
+      end;
+         [:Ar.(p2,p3),Ar.(p1,p2):] = {|Ar,Ar|}.i by A14,A23,MULTOP_1:def 1;
+      hence Co.i is Function of {|Ar,Ar|}.i, {|Ar|}.i
+        by A18,A24,FUNCT_2:8;
+    end;
+    then reconsider Co as BinComp of Ar;
+
+set IT = AltCatStr (#I, Ar, Co#),
+    J = the carrier of IT;
+
+      IT is SubCatStr of C
+    proof
+      thus the carrier of IT c= the carrier of C;
+      thus the Arrows of IT cc= the Arrows of C by A8;
+      thus [:J,J,J:] c= [:I,I,I:];
+      let i be set such that
+A37:     i in [:J,J,J:];
+      let q be set such that
+A38:     q in (the Comp of IT).i;
+      consider p1, p2, p3 being object of C such that
+A39:     i = [p1,p2,p3] &
+        Co.i = ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):]
+          by A13,A37;
+        ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):] c=
+        (the Comp of C).(p1,p2,p3) by RELAT_1:88;
+      then q in (the Comp of C).(p1,p2,p3) by A38,A39;
+      hence q in (the Comp of C).i by A39,MULTOP_1:def 1;
+    end;
+    then reconsider IT as strict non empty SubCatStr of C;
+      IT is transitive
+    proof
+      let p1, p2, p3 be object of IT; assume
+A40:     <^p1,p2^> <> {} & <^p2,p3^> <> {};
+      then consider m2 being set such that
+A41:     m2 in <^p1,p2^> by XBOOLE_0:def 1;
+      consider m1 being set such that
+A42:     m1 in <^p2,p3^> by A40,XBOOLE_0:def 1;
+        m2 in Ar.(p1,p2) & m1 in Ar.(p2,p3) by A41,A42,ALTCAT_1:def 2;
+then A43:   m1 in Ar.[p2,p3] & m2 in Ar.[p1,p2] by BINOP_1:def 1;
+        [p2,p3] in [:I,I:] by ZFMISC_1:def 2;
+      then consider q2, q3 being object of C,
+               qq being Morphism of q2, q3 such that
+A44:      [p2,p3] = [q2,q3] & <^q2,q3^> <> {} & m1 = qq & qq is epi by A7,A43;
+
+        [p1,p2] in [:I,I:] by ZFMISC_1:def 2;
+      then consider r1, r2 being object of C,
+               rr being Morphism of r1, r2 such that
+A45:      [p1,p2] = [r1,r2] & <^r1,r2^> <> {} & m2 = rr & rr is epi by A7,A43;
+
+A46:     r2 = p2 by A45,ZFMISC_1:33;
+A47:     p2 = q2 by A44,ZFMISC_1:33;
+        then reconsider mm = qq as Morphism of r2, q3 by A45,ZFMISC_1:33;
+
+A48:   ex o1, o3 being object of C, m being Morphism of o1, o3
+       st [p1,p3] = [o1,o3] & <^o1,o3^> <> {} & mm * rr = m & m is epi
+      proof
+        take r1, q3, mm * rr;
+          p1 = r1 & p3 = q3 by A44,A45,ZFMISC_1:33;
+        hence [p1,p3] = [r1,q3];
+        thus <^r1,q3^> <> {} by A44,A45,A46,A47,ALTCAT_1:def 4;
+        thus mm * rr = mm * rr;
+        thus mm * rr is epi by A44,A45,A46,A47,ALTCAT_3:10;
+      end;
+        [p1,p3] in [:I,I:] by ZFMISC_1:def 2;
+      then mm * rr in Ar.[p1,p3] by A7,A48;
+      then mm * rr in Ar.(p1,p3) by BINOP_1:def 1;
+      hence <^p1,p3^> <> {} by ALTCAT_1:def 2;
+    end;
+
+    then reconsider IT as strict non empty transitive SubCatStr of C;
+    take IT;
+    thus the carrier of IT = the carrier of C;
+    thus the Arrows of IT cc= the Arrows of C by A8;
+    let o1, o2 be object of C,
+        m be Morphism of o1, o2;
+A49: [o1,o2] in [:I,I:] by ZFMISC_1:def 2;
+    thus m in (the Arrows of IT).(o1,o2) implies
+      <^o1,o2^> <> {} & m is epi
+    proof
+      assume m in (the Arrows of IT).(o1,o2);
+      then m in Ar.[o1,o2] by BINOP_1:def 1;
+      then consider p1, p2 being object of C,
+               n being Morphism of p1, p2 such that
+A50:    [o1,o2] = [p1,p2] & <^p1,p2^> <> {} & m = n & n is epi by A7,A49;
+        o1 = p1 & o2 = p2 by A50,ZFMISC_1:33;
+      hence <^o1,o2^> <> {} & m is epi by A50;
+    end;
+    assume <^o1,o2^> <> {} & m is epi;
+    then m in (the Arrows of IT).[o1,o2] by A7,A49;
+    hence m in (the Arrows of IT).(o1,o2) by BINOP_1:def 1;
+  end;
+uniqueness
+  proof
+    let S1, S2 be strict non empty transitive SubCatStr of C such that
+A51:  the carrier of S1 = the carrier of C and
+A52:  the Arrows of S1 cc= the Arrows of C and
+A53:  for o1, o2 being object of C, m being Morphism of o1, o2 holds
+      m in (the Arrows of S1).(o1,o2) iff <^o1,o2^> <> {} & m is epi and
+A54:  the carrier of S2 = the carrier of C and
+A55:  the Arrows of S2 cc= the Arrows of C and
+A56:  for o1, o2 being object of C, m being Morphism of o1, o2 holds
+      m in (the Arrows of S2).(o1,o2) iff <^o1,o2^> <> {} & m is epi;
+      now
+      let i be set; assume
+A57:     i in [:the carrier of C,the carrier of C:];
+      then consider o1, o2 being set such that
+A58:    o1 in the carrier of C & o2 in the carrier of C & i = [o1,o2]
+        by ZFMISC_1:103;
+      reconsider o1, o2 as object of C by A58;
+      thus (the Arrows of S1).i = (the Arrows of S2).i
+      proof
+        thus (the Arrows of S1).i c= (the Arrows of S2).i
+        proof
+          let n be set such that
+A59:         n in (the Arrows of S1).i;
+            (the Arrows of S1).i c= (the Arrows of C).i
+            by A51,A52,A57,ALTCAT_2:def 2;
+          then n in (the Arrows of C).i by A59;
+          then n in (the Arrows of C).(o1,o2) by A58,BINOP_1:def 1;
+          then n in <^o1,o2^> by ALTCAT_1:def 2;
+          then reconsider m = n as Morphism of o1, o2 ;
+            m in (the Arrows of S1).(o1,o2) by A58,A59,BINOP_1:def 1;
+          then <^o1,o2^> <> {} & m is epi by A53;
+          then m in (the Arrows of S2).(o1,o2) by A56;
+          hence n in (the Arrows of S2).i by A58,BINOP_1:def 1;
+        end;
+        let n be set such that
+A60:       n in (the Arrows of S2).i;
+          (the Arrows of S2).i c= (the Arrows of C).i
+          by A54,A55,A57,ALTCAT_2:def 2;
+        then n in (the Arrows of C).i by A60;
+        then n in (the Arrows of C).(o1,o2) by A58,BINOP_1:def 1;
+        then n in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider m = n as Morphism of o1, o2 ;
+          m in (the Arrows of S2).(o1,o2) by A58,A60,BINOP_1:def 1;
+        then <^o1,o2^> <> {} & m is epi by A56;
+        then m in (the Arrows of S1).(o1,o2) by A53;
+        hence n in (the Arrows of S1).i by A58,BINOP_1:def 1;
+      end;
+    end;
+    then the Arrows of S1 = the Arrows of S2 by A51,A54,PBOOLE:3;
+    hence S1 = S2 by A51,A54,ALTCAT_2:27;
+  end;
+end;
+
+definition let C be category;
+ cluster AllEpi C -> id-inheriting;
+coherence
+  proof
+      now let o be object of AllEpi C,
+        o' be object of C such that
+A1:   o = o';
+    idm o' in (the Arrows of AllEpi C).(o,o) by A1,Def2;
+    hence idm o' in <^o,o^> by ALTCAT_1:def 2;
+    end;
+    hence thesis by ALTCAT_2:def 14;
+  end;
+end;
+
+definition let C be category;
+ func AllRetr C -> strict non empty transitive SubCatStr of C means :Def3:
+  the carrier of it = the carrier of C &
+  the Arrows of it cc= the Arrows of C &
+  for o1, o2 being object of C, m being Morphism of o1, o2 holds
+   m in (the Arrows of it).(o1,o2) iff <^o1,o2^> <> {} & <^o2,o1^> <> {} &
+    m is retraction;
+existence
+  proof
+set I = the carrier of C;
+
+defpred P[set,set] means
+ for x being set holds x in $2 iff
+  ex o1, o2 being object of C, m being Morphism of o1, o2 st $1 = [o1,o2] &
+   <^o1,o2^> <> {} & <^o2,o1^> <> {} & x = m & m is retraction;
+
+A1: for i being set st i in [:I,I:] ex X being set st P[i,X]
+    proof
+      let i be set;
+      assume i in [:I,I:];
+      then consider o1, o2 being set such that
+A2:     o1 in I & o2 in I & i = [o1,o2] by ZFMISC_1:103;
+      reconsider o1, o2 as object of C by A2;
+      defpred P[set] means ex m being Morphism of o1, o2 st
+          <^o1,o2^> <> {} & <^o2,o1^> <> {} & m = $1 & m is retraction;
+      consider X being set such that
+A3:     for x being set holds x in X iff
+         x in (the Arrows of C).(o1,o2) & P[x] from Separation;
+      take X;
+      let x be set;
+      thus x in X implies ex o1, o2 being object of C,
+       m being Morphism of o1, o2 st i = [o1,o2] & <^o1,o2^> <> {} &
+        <^o2,o1^> <> {} & x = m & m is retraction
+      proof
+        assume x in X;
+        then consider m being Morphism of o1, o2 such that
+A4:       <^o1,o2^> <> {} & <^o2,o1^> <> {} & m = x & m is retraction by A3;
+        take o1, o2, m;
+        thus i = [o1,o2] & <^o1,o2^> <> {} & <^o2,o1^> <> {} & x = m &
+          m is retraction by A2,A4;
+      end;
+      given p1, p2 being object of C,
+            m being Morphism of p1, p2 such that
+A5:     i = [p1,p2] & <^p1,p2^> <> {} & <^p2,p1^> <> {} & x = m &
+          m is retraction;
+A6:   o1 = p1 & o2 = p2 by A2,A5,ZFMISC_1:33;
+        m in <^p1,p2^> by A5;
+      then m in (the Arrows of C).(p1,p2) by ALTCAT_1:def 2;
+      hence x in X by A3,A5,A6;
+    end;
+
+    consider Ar being ManySortedSet of [:I,I:] such that
+A7:   for i being set st i in [:I,I:] holds P[i,Ar.i] from MSSEx(A1);
+
+A8: Ar cc= the Arrows of C
+    proof
+      thus [:I,I:] c= [:the carrier of C,the carrier of C:];
+      let i be set; assume
+A9:     i in [:I,I:];
+      let q be set;
+      assume q in Ar.i;
+      then consider p1, p2 being object of C,
+               m being Morphism of p1, p2 such that
+A10:      i = [p1,p2] & <^p1,p2^> <> {} & <^p2,p1^> <> {} & q = m &
+          m is retraction by A7,A9;
+        m in <^p1,p2^> by A10;
+      then m in (the Arrows of C).(p1,p2) by ALTCAT_1:def 2;
+      hence q in (the Arrows of C).i by A10,BINOP_1:def 1;
+    end;
+
+defpred R[set,set] means
+ ex p1, p2, p3 being object of C st $1 = [p1,p2,p3] &
+  $2 = ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):];
+
+A11: for i being set st i in [:I,I,I:] ex j being set st R[i,j]
+    proof
+      let i be set; assume
+       i in [:I,I,I:];
+      then consider p1, p2, p3 being set such that
+A12:     p1 in I & p2 in I & p3 in I & i = [p1,p2,p3] by MCART_1:72;
+      reconsider p1, p2, p3 as object of C by A12;
+      take ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):];
+      take p1, p2, p3;
+      thus i = [p1,p2,p3] by A12;
+      thus thesis;
+    end;
+
+    consider Co being ManySortedSet of [:I,I,I:] such that
+A13:   for i being set st i in [:I,I,I:] holds R[i,Co.i] from MSSEx(A11);
+
+      Co is ManySortedFunction of {|Ar,Ar|}, {|Ar|}
+    proof
+      let i be set;
+      assume i in [:I,I,I:];
+      then consider p1, p2, p3 being object of C such that
+A14:     i = [p1,p2,p3] and
+A15:     Co.i = ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):]
+          by A13;
+
+A16:   (the Arrows of C).(p1,p3) = {} implies
+        [:(the Arrows of C).(p2,p3),(the Arrows of C).(p1,p2):] = {}
+          by Lm1;
+
+        [p2,p3] in [:I,I:] & [p1,p2] in [:I,I:] by ZFMISC_1:def 2;
+      then Ar.[p2,p3] c= (the Arrows of C).[p2,p3] &
+        Ar.[p1,p2] c= (the Arrows of C).[p1,p2] by A8,ALTCAT_2:def 2;
+      then Ar.[p2,p3] c= (the Arrows of C).(p2,p3) &
+        Ar.[p1,p2] c= (the Arrows of C).(p1,p2) by BINOP_1:def 1;
+then A17:   Ar.(p2,p3) c= (the Arrows of C).(p2,p3) &
+        Ar.(p1,p2) c= (the Arrows of C).(p1,p2) by BINOP_1:def 1;
+
+A18:   (the Arrows of C).(p1,p3) = {} implies
+        [:Ar.(p2,p3),Ar.(p1,p2):] = {}
+      proof
+        assume
+A19:       (the Arrows of C).(p1,p3) = {};
+        assume [:Ar.(p2,p3),Ar.(p1,p2):] <> {};
+        then consider k being set such that
+A20:       k in [:Ar.(p2,p3),Ar.(p1,p2):] by XBOOLE_0:def 1;
+        consider u1, u2 being set such that
+A21:       u1 in Ar.(p2,p3) & u2 in Ar.(p1,p2) & k = [u1,u2]
+            by A20,ZFMISC_1:def 2;
+          u1 in (the Arrows of C).(p2,p3) & u2 in (the Arrows of C).(p1,p2)
+          by A17,A21;
+        then u1 in <^p2,p3^> & u2 in <^p1,p2^> by ALTCAT_1:def 2;
+        then <^p1,p3^> <> {} by ALTCAT_1:def 4;
+        hence contradiction by A19,ALTCAT_1:def 2;
+      end;
+
+        [:Ar.(p2,p3),Ar.(p1,p2):] c=
+        [:(the Arrows of C).(p2,p3),(the Arrows of C).(p1,p2):]
+          by A17,ZFMISC_1:119;
+      then reconsider f = Co.i as Function of [:Ar.(p2,p3),Ar.(p1,p2):],
+       (the Arrows of C).(p1,p3) by A15,A16,FUNCT_2:38;
+
+A22:   {|Ar|}.(p1,p2,p3) = Ar.(p1,p3) by ALTCAT_1:def 5;
+A23:   {|Ar,Ar|}.(p1,p2,p3) = [:Ar.(p2,p3),Ar.(p1,p2):] by ALTCAT_1:def 6;
+
+      A24: rng f c= {|Ar|}.i
+      proof
+        let q be set;
+        assume q in rng f;
+        then consider x being set such that
+A25:       x in dom f and
+A26:       q = f.x by FUNCT_1:def 5;
+A27:     dom f = [:Ar.(p2,p3),Ar.(p1,p2):] by A18,FUNCT_2:def 1;
+        then consider m1, m2 being set such that
+A28:       m1 in Ar.(p2,p3) & m2 in Ar.(p1,p2) and
+A29:       x = [m1,m2] by A25,ZFMISC_1:103;
+A30:     m1 in Ar.[p2,p3] & m2 in Ar.[p1,p2] by A28,BINOP_1:def 1;
+          [p2,p3] in [:I,I:] by ZFMISC_1:def 2;
+        then consider q2, q3 being object of C,
+                 qq being Morphism of q2, q3 such that
+A31:        [p2,p3] = [q2,q3] & <^q2,q3^> <> {} & <^q3,q2^> <> {} & m1 = qq &
+           qq is retraction by A7,A30;
+
+          [p1,p2] in [:I,I:] by ZFMISC_1:def 2;
+        then consider r1, r2 being object of C,
+                 rr being Morphism of r1, r2 such that
+A32:        [p1,p2] = [r1,r2] & <^r1,r2^> <> {} & <^r2,r1^> <> {} & m2 = rr &
+           rr is retraction by A7,A30;
+
+A33:     ex o1, o3 being object of C, m being Morphism of o1, o3
+         st [p1,p3] = [o1,o3] & <^o1,o3^> <> {} & <^o3,o1^> <> {} & q = m &
+          m is retraction
+        proof
+A34:       r2 = p2 by A32,ZFMISC_1:33;
+A35:       p2 = q2 by A31,ZFMISC_1:33;
+          then reconsider mm = qq as Morphism of r2, q3 by A32,ZFMISC_1:33;
+          take r1, q3, mm * rr;
+A36:       p1 = r1 & p3 = q3 by A31,A32,ZFMISC_1:33;
+          hence [p1,p3] = [r1,q3];
+          thus
+A37:         <^r1,q3^> <> {} & <^q3,r1^> <> {}
+              by A31,A32,A34,A35,ALTCAT_1:def 4;
+          thus q = (the Comp of C).(p1,p2,p3).x by A15,A25,A26,A27,FUNCT_1:72
+                .= (the Comp of C).(p1,p2,p3).(mm,rr)
+                   by A29,A31,A32,BINOP_1:def 1
+                .= mm * rr by A31,A32,A34,A35,A36,ALTCAT_1:def 10;
+          thus mm * rr is retraction by A31,A32,A34,A35,A37,ALTCAT_3:18;
+        end;
+          [p1,p3] in [:I,I:] by ZFMISC_1:def 2;
+        then q in Ar.[p1,p3] by A7,A33;
+        then q in Ar.(p1,p3) by BINOP_1:def 1;
+        hence q in {|Ar|}.i by A14,A22,MULTOP_1:def 1;
+      end;
+         [:Ar.(p2,p3),Ar.(p1,p2):] = {|Ar,Ar|}.i by A14,A23,MULTOP_1:def 1;
+      hence Co.i is Function of {|Ar,Ar|}.i, {|Ar|}.i
+        by A18,A24,FUNCT_2:8;
+    end;
+    then reconsider Co as BinComp of Ar;
+
+set IT = AltCatStr (#I, Ar, Co#),
+    J = the carrier of IT;
+
+      IT is SubCatStr of C
+    proof
+      thus the carrier of IT c= the carrier of C;
+      thus the Arrows of IT cc= the Arrows of C by A8;
+      thus [:J,J,J:] c= [:I,I,I:];
+      let i be set such that
+A38:     i in [:J,J,J:];
+      let q be set such that
+A39:     q in (the Comp of IT).i;
+      consider p1, p2, p3 being object of C such that
+A40:     i = [p1,p2,p3] &
+        Co.i = ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):]
+          by A13,A38;
+        ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):] c=
+        (the Comp of C).(p1,p2,p3) by RELAT_1:88;
+      then q in (the Comp of C).(p1,p2,p3) by A39,A40;
+      hence q in (the Comp of C).i by A40,MULTOP_1:def 1;
+    end;
+    then reconsider IT as strict non empty SubCatStr of C;
+      IT is transitive
+    proof
+      let p1, p2, p3 be object of IT; assume
+A41:     <^p1,p2^> <> {} & <^p2,p3^> <> {};
+      then consider m2 being set such that
+A42:     m2 in <^p1,p2^> by XBOOLE_0:def 1;
+      consider m1 being set such that
+A43:     m1 in <^p2,p3^> by A41,XBOOLE_0:def 1;
+        m2 in Ar.(p1,p2) & m1 in Ar.(p2,p3) by A42,A43,ALTCAT_1:def 2;
+then A44:   m1 in Ar.[p2,p3] & m2 in Ar.[p1,p2] by BINOP_1:def 1;
+        [p2,p3] in [:I,I:] by ZFMISC_1:def 2;
+      then consider q2, q3 being object of C,
+               qq being Morphism of q2, q3 such that
+A45:      [p2,p3] = [q2,q3] & <^q2,q3^> <> {} & <^q3,q2^> <> {} & m1 = qq &
+         qq is retraction by A7,A44;
+
+        [p1,p2] in [:I,I:] by ZFMISC_1:def 2;
+      then consider r1, r2 being object of C,
+               rr being Morphism of r1, r2 such that
+A46:      [p1,p2] = [r1,r2] & <^r1,r2^> <> {} & <^r2,r1^> <> {} & m2 = rr &
+         rr is retraction by A7,A44;
+
+A47:     r2 = p2 by A46,ZFMISC_1:33;
+A48:     p2 = q2 by A45,ZFMISC_1:33;
+        then reconsider mm = qq as Morphism of r2, q3 by A46,ZFMISC_1:33;
+
+A49:   ex o1, o3 being object of C, m being Morphism of o1, o3
+       st [p1,p3] = [o1,o3] & <^o1,o3^> <> {} & <^o3,o1^> <> {} &
+        mm * rr = m & m is retraction
+      proof
+        take r1, q3, mm * rr;
+          p1 = r1 & p3 = q3 by A45,A46,ZFMISC_1:33;
+        hence [p1,p3] = [r1,q3];
+        thus
+A50:       <^r1,q3^> <> {} & <^q3,r1^> <> {} by A45,A46,A47,A48,ALTCAT_1:def 4;
+        thus mm * rr = mm * rr;
+        thus mm * rr is retraction by A45,A46,A47,A48,A50,ALTCAT_3:18;
+      end;
+        [p1,p3] in [:I,I:] by ZFMISC_1:def 2;
+      then mm * rr in Ar.[p1,p3] by A7,A49;
+      then mm * rr in Ar.(p1,p3) by BINOP_1:def 1;
+      hence <^p1,p3^> <> {} by ALTCAT_1:def 2;
+    end;
+
+    then reconsider IT as strict non empty transitive SubCatStr of C;
+    take IT;
+    thus the carrier of IT = the carrier of C;
+    thus the Arrows of IT cc= the Arrows of C by A8;
+    let o1, o2 be object of C,
+        m be Morphism of o1, o2;
+A51: [o1,o2] in [:I,I:] by ZFMISC_1:def 2;
+    thus m in (the Arrows of IT).(o1,o2) implies
+      <^o1,o2^> <> {} & <^o2,o1^> <> {} & m is retraction
+    proof
+      assume m in (the Arrows of IT).(o1,o2);
+      then m in Ar.[o1,o2] by BINOP_1:def 1;
+      then consider p1, p2 being object of C,
+               n being Morphism of p1, p2 such that
+A52:    [o1,o2] = [p1,p2] & <^p1,p2^> <> {} & <^p2,p1^> <> {} & m = n &
+         n is retraction by A7,A51;
+        o1 = p1 & o2 = p2 by A52,ZFMISC_1:33;
+      hence <^o1,o2^> <> {} & <^o2,o1^> <> {} & m is retraction by A52;
+    end;
+    assume <^o1,o2^> <> {} & <^o2,o1^> <> {} & m is retraction;
+    then m in (the Arrows of IT).[o1,o2] by A7,A51;
+    hence m in (the Arrows of IT).(o1,o2) by BINOP_1:def 1;
+  end;
+uniqueness
+  proof
+    let S1, S2 be strict non empty transitive SubCatStr of C such that
+A53:  the carrier of S1 = the carrier of C and
+A54:  the Arrows of S1 cc= the Arrows of C and
+A55:  for o1, o2 being object of C, m being Morphism of o1, o2 holds
+      m in (the Arrows of S1).(o1,o2) iff <^o1,o2^> <> {} & <^o2,o1^> <> {} &
+       m is retraction and
+A56:  the carrier of S2 = the carrier of C and
+A57:  the Arrows of S2 cc= the Arrows of C and
+A58:  for o1, o2 being object of C, m being Morphism of o1, o2 holds
+      m in (the Arrows of S2).(o1,o2) iff <^o1,o2^> <> {} & <^o2,o1^> <> {} &
+       m is retraction;
+      now
+      let i be set; assume
+A59:     i in [:the carrier of C,the carrier of C:];
+      then consider o1, o2 being set such that
+A60:    o1 in the carrier of C & o2 in the carrier of C & i = [o1,o2]
+        by ZFMISC_1:103;
+      reconsider o1, o2 as object of C by A60;
+      thus (the Arrows of S1).i = (the Arrows of S2).i
+      proof
+        thus (the Arrows of S1).i c= (the Arrows of S2).i
+        proof
+          let n be set such that
+A61:         n in (the Arrows of S1).i;
+            (the Arrows of S1).i c= (the Arrows of C).i
+            by A53,A54,A59,ALTCAT_2:def 2;
+          then n in (the Arrows of C).i by A61;
+          then n in (the Arrows of C).(o1,o2) by A60,BINOP_1:def 1;
+          then n in <^o1,o2^> by ALTCAT_1:def 2;
+          then reconsider m = n as Morphism of o1, o2 ;
+            m in (the Arrows of S1).(o1,o2) by A60,A61,BINOP_1:def 1;
+          then <^o1,o2^> <> {} & <^o2,o1^> <> {} & m is retraction by A55;
+          then m in (the Arrows of S2).(o1,o2) by A58;
+          hence n in (the Arrows of S2).i by A60,BINOP_1:def 1;
+        end;
+        let n be set such that
+A62:       n in (the Arrows of S2).i;
+          (the Arrows of S2).i c= (the Arrows of C).i
+          by A56,A57,A59,ALTCAT_2:def 2;
+        then n in (the Arrows of C).i by A62;
+        then n in (the Arrows of C).(o1,o2) by A60,BINOP_1:def 1;
+        then n in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider m = n as Morphism of o1, o2 ;
+          m in (the Arrows of S2).(o1,o2) by A60,A62,BINOP_1:def 1;
+        then <^o1,o2^> <> {} & <^o2,o1^> <> {} & m is retraction by A58;
+        then m in (the Arrows of S1).(o1,o2) by A55;
+        hence n in (the Arrows of S1).i by A60,BINOP_1:def 1;
+      end;
+    end;
+    then the Arrows of S1 = the Arrows of S2 by A53,A56,PBOOLE:3;
+    hence S1 = S2 by A53,A56,ALTCAT_2:27;
+  end;
+end;
+
+definition let C be category;
+ cluster AllRetr C -> id-inheriting;
+coherence
+  proof
+      now let o be object of AllRetr C,
+        o' be object of C such that
+A1:   o = o';
+    idm o' in (the Arrows of AllRetr C).(o,o) by A1,Def3;
+    hence idm o' in <^o,o^> by ALTCAT_1:def 2;
+    end;
+    hence thesis by ALTCAT_2:def 14;
+  end;
+end;
+
+definition let C be category;
+ func AllCoretr C -> strict non empty transitive SubCatStr of C means :Def4:
+  the carrier of it = the carrier of C &
+  the Arrows of it cc= the Arrows of C &
+  for o1, o2 being object of C, m being Morphism of o1, o2 holds
+   m in (the Arrows of it).(o1,o2) iff <^o1,o2^> <> {} & <^o2,o1^> <> {} &
+    m is coretraction;
+existence
+  proof
+set I = the carrier of C;
+
+defpred P[set,set] means
+ for x being set holds x in $2 iff
+  ex o1, o2 being object of C, m being Morphism of o1, o2 st $1 = [o1,o2] &
+   <^o1,o2^> <> {} & <^o2,o1^> <> {} & x = m & m is coretraction;
+
+A1: for i being set st i in [:I,I:] ex X being set st P[i,X]
+    proof
+      let i be set;
+      assume i in [:I,I:];
+      then consider o1, o2 being set such that
+A2:     o1 in I & o2 in I & i = [o1,o2] by ZFMISC_1:103;
+      reconsider o1, o2 as object of C by A2;
+      defpred P[set] means ex m being Morphism of o1, o2 st
+          <^o1,o2^> <> {} & <^o2,o1^> <> {} & m = $1 & m is coretraction;
+      consider X being set such that
+A3:     for x being set holds x in X iff
+         x in (the Arrows of C).(o1,o2) & P[x] from Separation;
+      take X;
+      let x be set;
+      thus x in X implies ex o1, o2 being object of C,
+       m being Morphism of o1, o2 st i = [o1,o2] & <^o1,o2^> <> {} &
+        <^o2,o1^> <> {} & x = m & m is coretraction
+      proof
+        assume x in X;
+        then consider m being Morphism of o1, o2 such that
+A4:       <^o1,o2^> <> {} & <^o2,o1^> <> {} & m = x & m is coretraction by A3;
+        take o1, o2, m;
+        thus i = [o1,o2] & <^o1,o2^> <> {} & <^o2,o1^> <> {} & x = m &
+          m is coretraction by A2,A4;
+      end;
+      given p1, p2 being object of C,
+            m being Morphism of p1, p2 such that
+A5:     i = [p1,p2] & <^p1,p2^> <> {} & <^p2,p1^> <> {} & x = m &
+          m is coretraction;
+A6:   o1 = p1 & o2 = p2 by A2,A5,ZFMISC_1:33;
+        m in <^p1,p2^> by A5;
+      then m in (the Arrows of C).(p1,p2) by ALTCAT_1:def 2;
+      hence x in X by A3,A5,A6;
+    end;
+
+    consider Ar being ManySortedSet of [:I,I:] such that
+A7:   for i being set st i in [:I,I:] holds P[i,Ar.i] from MSSEx(A1);
+
+A8: Ar cc= the Arrows of C
+    proof
+      thus [:I,I:] c= [:the carrier of C,the carrier of C:];
+      let i be set; assume
+A9:     i in [:I,I:];
+      let q be set;
+      assume q in Ar.i;
+      then consider p1, p2 being object of C,
+               m being Morphism of p1, p2 such that
+A10:      i = [p1,p2] & <^p1,p2^> <> {} & <^p2,p1^> <> {} & q = m &
+          m is coretraction by A7,A9;
+        m in <^p1,p2^> by A10;
+      then m in (the Arrows of C).(p1,p2) by ALTCAT_1:def 2;
+      hence q in (the Arrows of C).i by A10,BINOP_1:def 1;
+    end;
+
+defpred R[set,set] means
+ ex p1, p2, p3 being object of C st $1 = [p1,p2,p3] &
+  $2 = ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):];
+
+A11: for i being set st i in [:I,I,I:] ex j being set st R[i,j]
+    proof
+      let i be set; assume
+       i in [:I,I,I:];
+      then consider p1, p2, p3 being set such that
+A12:     p1 in I & p2 in I & p3 in I & i = [p1,p2,p3] by MCART_1:72;
+      reconsider p1, p2, p3 as object of C by A12;
+      take ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):];
+      take p1, p2, p3;
+      thus i = [p1,p2,p3] by A12;
+      thus thesis;
+    end;
+
+    consider Co being ManySortedSet of [:I,I,I:] such that
+A13:   for i being set st i in [:I,I,I:] holds R[i,Co.i] from MSSEx(A11);
+
+      Co is ManySortedFunction of {|Ar,Ar|}, {|Ar|}
+    proof
+      let i be set;
+      assume i in [:I,I,I:];
+      then consider p1, p2, p3 being object of C such that
+A14:     i = [p1,p2,p3] and
+A15:     Co.i = ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):]
+          by A13;
+
+A16:   (the Arrows of C).(p1,p3) = {} implies
+        [:(the Arrows of C).(p2,p3),(the Arrows of C).(p1,p2):] = {}
+          by Lm1;
+
+        [p2,p3] in [:I,I:] & [p1,p2] in [:I,I:] by ZFMISC_1:def 2;
+      then Ar.[p2,p3] c= (the Arrows of C).[p2,p3] &
+        Ar.[p1,p2] c= (the Arrows of C).[p1,p2] by A8,ALTCAT_2:def 2;
+      then Ar.[p2,p3] c= (the Arrows of C).(p2,p3) &
+        Ar.[p1,p2] c= (the Arrows of C).(p1,p2) by BINOP_1:def 1;
+then A17:   Ar.(p2,p3) c= (the Arrows of C).(p2,p3) &
+        Ar.(p1,p2) c= (the Arrows of C).(p1,p2) by BINOP_1:def 1;
+
+A18:   (the Arrows of C).(p1,p3) = {} implies
+        [:Ar.(p2,p3),Ar.(p1,p2):] = {}
+      proof
+        assume
+A19:       (the Arrows of C).(p1,p3) = {};
+        assume [:Ar.(p2,p3),Ar.(p1,p2):] <> {};
+        then consider k being set such that
+A20:       k in [:Ar.(p2,p3),Ar.(p1,p2):] by XBOOLE_0:def 1;
+        consider u1, u2 being set such that
+A21:       u1 in Ar.(p2,p3) & u2 in Ar.(p1,p2) & k = [u1,u2]
+            by A20,ZFMISC_1:def 2;
+          u1 in (the Arrows of C).(p2,p3) & u2 in (the Arrows of C).(p1,p2)
+          by A17,A21;
+        then u1 in <^p2,p3^> & u2 in <^p1,p2^> by ALTCAT_1:def 2;
+        then <^p1,p3^> <> {} by ALTCAT_1:def 4;
+        hence contradiction by A19,ALTCAT_1:def 2;
+      end;
+
+        [:Ar.(p2,p3),Ar.(p1,p2):] c=
+        [:(the Arrows of C).(p2,p3),(the Arrows of C).(p1,p2):]
+          by A17,ZFMISC_1:119;
+      then reconsider f = Co.i as Function of [:Ar.(p2,p3),Ar.(p1,p2):],
+       (the Arrows of C).(p1,p3) by A15,A16,FUNCT_2:38;
+
+A22:   {|Ar|}.(p1,p2,p3) = Ar.(p1,p3) by ALTCAT_1:def 5;
+A23:   {|Ar,Ar|}.(p1,p2,p3) = [:Ar.(p2,p3),Ar.(p1,p2):] by ALTCAT_1:def 6;
+
+      A24: rng f c= {|Ar|}.i
+      proof
+        let q be set;
+        assume q in rng f;
+        then consider x being set such that
+A25:       x in dom f and
+A26:       q = f.x by FUNCT_1:def 5;
+A27:     dom f = [:Ar.(p2,p3),Ar.(p1,p2):] by A18,FUNCT_2:def 1;
+        then consider m1, m2 being set such that
+A28:       m1 in Ar.(p2,p3) & m2 in Ar.(p1,p2) and
+A29:       x = [m1,m2] by A25,ZFMISC_1:103;
+A30:     m1 in Ar.[p2,p3] & m2 in Ar.[p1,p2] by A28,BINOP_1:def 1;
+          [p2,p3] in [:I,I:] by ZFMISC_1:def 2;
+        then consider q2, q3 being object of C,
+                 qq being Morphism of q2, q3 such that
+A31:        [p2,p3] = [q2,q3] & <^q2,q3^> <> {} & <^q3,q2^> <> {} & m1 = qq &
+           qq is coretraction by A7,A30;
+
+          [p1,p2] in [:I,I:] by ZFMISC_1:def 2;
+        then consider r1, r2 being object of C,
+                 rr being Morphism of r1, r2 such that
+A32:        [p1,p2] = [r1,r2] & <^r1,r2^> <> {} & <^r2,r1^> <> {} & m2 = rr &
+           rr is coretraction by A7,A30;
+
+A33:     ex o1, o3 being object of C, m being Morphism of o1, o3
+         st [p1,p3] = [o1,o3] & <^o1,o3^> <> {} & <^o3,o1^> <> {} & q = m &
+          m is coretraction
+        proof
+A34:       r2 = p2 by A32,ZFMISC_1:33;
+A35:       p2 = q2 by A31,ZFMISC_1:33;
+          then reconsider mm = qq as Morphism of r2, q3 by A32,ZFMISC_1:33;
+          take r1, q3, mm * rr;
+A36:       p1 = r1 & p3 = q3 by A31,A32,ZFMISC_1:33;
+          hence [p1,p3] = [r1,q3];
+          thus
+A37:         <^r1,q3^> <> {} & <^q3,r1^> <> {}
+              by A31,A32,A34,A35,ALTCAT_1:def 4;
+          thus q = (the Comp of C).(p1,p2,p3).x by A15,A25,A26,A27,FUNCT_1:72
+                .= (the Comp of C).(p1,p2,p3).(mm,rr)
+                   by A29,A31,A32,BINOP_1:def 1
+                .= mm * rr by A31,A32,A34,A35,A36,ALTCAT_1:def 10;
+          thus mm * rr is coretraction by A31,A32,A34,A35,A37,ALTCAT_3:19;
+        end;
+          [p1,p3] in [:I,I:] by ZFMISC_1:def 2;
+        then q in Ar.[p1,p3] by A7,A33;
+        then q in Ar.(p1,p3) by BINOP_1:def 1;
+        hence q in {|Ar|}.i by A14,A22,MULTOP_1:def 1;
+      end;
+         [:Ar.(p2,p3),Ar.(p1,p2):] = {|Ar,Ar|}.i by A14,A23,MULTOP_1:def 1;
+      hence Co.i is Function of {|Ar,Ar|}.i, {|Ar|}.i
+        by A18,A24,FUNCT_2:8;
+    end;
+    then reconsider Co as BinComp of Ar;
+
+set IT = AltCatStr (#I, Ar, Co#),
+    J = the carrier of IT;
+
+      IT is SubCatStr of C
+    proof
+      thus the carrier of IT c= the carrier of C;
+      thus the Arrows of IT cc= the Arrows of C by A8;
+      thus [:J,J,J:] c= [:I,I,I:];
+      let i be set such that
+A38:     i in [:J,J,J:];
+      let q be set such that
+A39:     q in (the Comp of IT).i;
+      consider p1, p2, p3 being object of C such that
+A40:     i = [p1,p2,p3] &
+        Co.i = ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):]
+          by A13,A38;
+        ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):] c=
+        (the Comp of C).(p1,p2,p3) by RELAT_1:88;
+      then q in (the Comp of C).(p1,p2,p3) by A39,A40;
+      hence q in (the Comp of C).i by A40,MULTOP_1:def 1;
+    end;
+    then reconsider IT as strict non empty SubCatStr of C;
+      IT is transitive
+    proof
+      let p1, p2, p3 be object of IT; assume
+A41:     <^p1,p2^> <> {} & <^p2,p3^> <> {};
+      then consider m2 being set such that
+A42:     m2 in <^p1,p2^> by XBOOLE_0:def 1;
+      consider m1 being set such that
+A43:     m1 in <^p2,p3^> by A41,XBOOLE_0:def 1;
+        m2 in Ar.(p1,p2) & m1 in Ar.(p2,p3) by A42,A43,ALTCAT_1:def 2;
+then A44:   m1 in Ar.[p2,p3] & m2 in Ar.[p1,p2] by BINOP_1:def 1;
+        [p2,p3] in [:I,I:] by ZFMISC_1:def 2;
+      then consider q2, q3 being object of C,
+               qq being Morphism of q2, q3 such that
+A45:      [p2,p3] = [q2,q3] & <^q2,q3^> <> {} & <^q3,q2^> <> {} & m1 = qq &
+         qq is coretraction by A7,A44;
+
+        [p1,p2] in [:I,I:] by ZFMISC_1:def 2;
+      then consider r1, r2 being object of C,
+               rr being Morphism of r1, r2 such that
+A46:      [p1,p2] = [r1,r2] & <^r1,r2^> <> {} & <^r2,r1^> <> {} & m2 = rr &
+         rr is coretraction by A7,A44;
+
+A47:     r2 = p2 by A46,ZFMISC_1:33;
+A48:     p2 = q2 by A45,ZFMISC_1:33;
+        then reconsider mm = qq as Morphism of r2, q3 by A46,ZFMISC_1:33;
+
+A49:   ex o1, o3 being object of C, m being Morphism of o1, o3
+       st [p1,p3] = [o1,o3] & <^o1,o3^> <> {} & <^o3,o1^> <> {} &
+        mm * rr = m & m is coretraction
+      proof
+        take r1, q3, mm * rr;
+          p1 = r1 & p3 = q3 by A45,A46,ZFMISC_1:33;
+        hence [p1,p3] = [r1,q3];
+        thus
+A50:       <^r1,q3^> <> {} & <^q3,r1^> <> {} by A45,A46,A47,A48,ALTCAT_1:def 4;
+        thus mm * rr = mm * rr;
+        thus mm * rr is coretraction by A45,A46,A47,A48,A50,ALTCAT_3:19;
+      end;
+        [p1,p3] in [:I,I:] by ZFMISC_1:def 2;
+      then mm * rr in Ar.[p1,p3] by A7,A49;
+      then mm * rr in Ar.(p1,p3) by BINOP_1:def 1;
+      hence <^p1,p3^> <> {} by ALTCAT_1:def 2;
+    end;
+
+    then reconsider IT as strict non empty transitive SubCatStr of C;
+    take IT;
+    thus the carrier of IT = the carrier of C;
+    thus the Arrows of IT cc= the Arrows of C by A8;
+    let o1, o2 be object of C,
+        m be Morphism of o1, o2;
+A51: [o1,o2] in [:I,I:] by ZFMISC_1:def 2;
+    thus m in (the Arrows of IT).(o1,o2) implies
+      <^o1,o2^> <> {} & <^o2,o1^> <> {} & m is coretraction
+    proof
+      assume m in (the Arrows of IT).(o1,o2);
+      then m in Ar.[o1,o2] by BINOP_1:def 1;
+      then consider p1, p2 being object of C,
+               n being Morphism of p1, p2 such that
+A52:    [o1,o2] = [p1,p2] & <^p1,p2^> <> {} & <^p2,p1^> <> {} & m = n &
+         n is coretraction by A7,A51;
+        o1 = p1 & o2 = p2 by A52,ZFMISC_1:33;
+      hence <^o1,o2^> <> {} & <^o2,o1^> <> {} & m is coretraction by A52;
+    end;
+    assume <^o1,o2^> <> {} & <^o2,o1^> <> {} & m is coretraction;
+    then m in (the Arrows of IT).[o1,o2] by A7,A51;
+    hence m in (the Arrows of IT).(o1,o2) by BINOP_1:def 1;
+  end;
+uniqueness
+  proof
+    let S1, S2 be strict non empty transitive SubCatStr of C such that
+A53:  the carrier of S1 = the carrier of C and
+A54:  the Arrows of S1 cc= the Arrows of C and
+A55:  for o1, o2 being object of C, m being Morphism of o1, o2 holds
+      m in (the Arrows of S1).(o1,o2) iff <^o1,o2^> <> {} & <^o2,o1^> <> {} &
+       m is coretraction and
+A56:  the carrier of S2 = the carrier of C and
+A57:  the Arrows of S2 cc= the Arrows of C and
+A58:  for o1, o2 being object of C, m being Morphism of o1, o2 holds
+      m in (the Arrows of S2).(o1,o2) iff <^o1,o2^> <> {} & <^o2,o1^> <> {} &
+       m is coretraction;
+      now
+      let i be set; assume
+A59:     i in [:the carrier of C,the carrier of C:];
+      then consider o1, o2 being set such that
+A60:    o1 in the carrier of C & o2 in the carrier of C & i = [o1,o2]
+        by ZFMISC_1:103;
+      reconsider o1, o2 as object of C by A60;
+      thus (the Arrows of S1).i = (the Arrows of S2).i
+      proof
+        thus (the Arrows of S1).i c= (the Arrows of S2).i
+        proof
+          let n be set such that
+A61:         n in (the Arrows of S1).i;
+            (the Arrows of S1).i c= (the Arrows of C).i
+            by A53,A54,A59,ALTCAT_2:def 2;
+          then n in (the Arrows of C).i by A61;
+          then n in (the Arrows of C).(o1,o2) by A60,BINOP_1:def 1;
+          then n in <^o1,o2^> by ALTCAT_1:def 2;
+          then reconsider m = n as Morphism of o1, o2 ;
+            m in (the Arrows of S1).(o1,o2) by A60,A61,BINOP_1:def 1;
+          then <^o1,o2^> <> {} & <^o2,o1^> <> {} & m is coretraction by A55;
+          then m in (the Arrows of S2).(o1,o2) by A58;
+          hence n in (the Arrows of S2).i by A60,BINOP_1:def 1;
+        end;
+        let n be set such that
+A62:       n in (the Arrows of S2).i;
+          (the Arrows of S2).i c= (the Arrows of C).i
+          by A56,A57,A59,ALTCAT_2:def 2;
+        then n in (the Arrows of C).i by A62;
+        then n in (the Arrows of C).(o1,o2) by A60,BINOP_1:def 1;
+        then n in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider m = n as Morphism of o1, o2 ;
+          m in (the Arrows of S2).(o1,o2) by A60,A62,BINOP_1:def 1;
+        then <^o1,o2^> <> {} & <^o2,o1^> <> {} & m is coretraction by A58;
+        then m in (the Arrows of S1).(o1,o2) by A55;
+        hence n in (the Arrows of S1).i by A60,BINOP_1:def 1;
+      end;
+    end;
+    then the Arrows of S1 = the Arrows of S2 by A53,A56,PBOOLE:3;
+    hence S1 = S2 by A53,A56,ALTCAT_2:27;
+  end;
+end;
+
+definition let C be category;
+ cluster AllCoretr C -> id-inheriting;
+coherence
+  proof
+      now let o be object of AllCoretr C,
+        o' be object of C such that
+A1:   o = o';
+    idm o' in (the Arrows of AllCoretr C).(o,o) by A1,Def4;
+    hence idm o' in <^o,o^> by ALTCAT_1:def 2;
+    end;
+    hence thesis by ALTCAT_2:def 14;
+  end;
+end;
+
+definition let C be category;
+ func AllIso C -> strict non empty transitive SubCatStr of C means :Def5:
+  the carrier of it = the carrier of C &
+  the Arrows of it cc= the Arrows of C &
+  for o1, o2 being object of C, m being Morphism of o1, o2 holds
+   m in (the Arrows of it).(o1,o2) iff <^o1,o2^> <> {} & <^o2,o1^> <> {} &
+    m is iso;
+existence
+  proof
+set I = the carrier of C;
+
+defpred P[set,set] means
+ for x being set holds x in $2 iff
+  ex o1, o2 being object of C, m being Morphism of o1, o2 st $1 = [o1,o2] &
+   <^o1,o2^> <> {} & <^o2,o1^> <> {} & x = m & m is iso;
+
+A1: for i being set st i in [:I,I:] ex X being set st P[i,X]
+    proof
+      let i be set;
+      assume i in [:I,I:];
+      then consider o1, o2 being set such that
+A2:     o1 in I & o2 in I & i = [o1,o2] by ZFMISC_1:103;
+      reconsider o1, o2 as object of C by A2;
+      defpred P[set] means ex m being Morphism of o1, o2 st
+          <^o1,o2^> <> {} & <^o2,o1^> <> {} & m = $1 & m is iso;
+      consider X being set such that
+A3:     for x being set holds x in X iff
+         x in (the Arrows of C).(o1,o2) & P[x] from Separation;
+      take X;
+      let x be set;
+      thus x in X implies ex o1, o2 being object of C,
+       m being Morphism of o1, o2 st i = [o1,o2] & <^o1,o2^> <> {} &
+        <^o2,o1^> <> {} & x = m & m is iso
+      proof
+        assume x in X;
+        then consider m being Morphism of o1, o2 such that
+A4:       <^o1,o2^> <> {} & <^o2,o1^> <> {} & m = x & m is iso by A3;
+        take o1, o2, m;
+        thus i = [o1,o2] & <^o1,o2^> <> {} & <^o2,o1^> <> {} & x = m &
+          m is iso by A2,A4;
+      end;
+      given p1, p2 being object of C,
+            m being Morphism of p1, p2 such that
+A5:     i = [p1,p2] & <^p1,p2^> <> {} & <^p2,p1^> <> {} & x = m &
+          m is iso;
+A6:   o1 = p1 & o2 = p2 by A2,A5,ZFMISC_1:33;
+        m in <^p1,p2^> by A5;
+      then m in (the Arrows of C).(p1,p2) by ALTCAT_1:def 2;
+      hence x in X by A3,A5,A6;
+    end;
+
+    consider Ar being ManySortedSet of [:I,I:] such that
+A7:   for i being set st i in [:I,I:] holds P[i,Ar.i] from MSSEx(A1);
+
+A8: Ar cc= the Arrows of C
+    proof
+      thus [:I,I:] c= [:the carrier of C,the carrier of C:];
+      let i be set; assume
+A9:     i in [:I,I:];
+      let q be set;
+      assume q in Ar.i;
+      then consider p1, p2 being object of C,
+               m being Morphism of p1, p2 such that
+A10:      i = [p1,p2] & <^p1,p2^> <> {} & <^p2,p1^> <> {} & q = m &
+          m is iso by A7,A9;
+        m in <^p1,p2^> by A10;
+      then m in (the Arrows of C).(p1,p2) by ALTCAT_1:def 2;
+      hence q in (the Arrows of C).i by A10,BINOP_1:def 1;
+    end;
+
+defpred R[set,set] means
+ ex p1, p2, p3 being object of C st $1 = [p1,p2,p3] &
+  $2 = ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):];
+
+A11: for i being set st i in [:I,I,I:] ex j being set st R[i,j]
+    proof
+      let i be set; assume
+       i in [:I,I,I:];
+      then consider p1, p2, p3 being set such that
+A12:     p1 in I & p2 in I & p3 in I & i = [p1,p2,p3] by MCART_1:72;
+      reconsider p1, p2, p3 as object of C by A12;
+      take ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):];
+      take p1, p2, p3;
+      thus i = [p1,p2,p3] by A12;
+      thus thesis;
+    end;
+
+    consider Co being ManySortedSet of [:I,I,I:] such that
+A13:   for i being set st i in [:I,I,I:] holds R[i,Co.i] from MSSEx(A11);
+
+      Co is ManySortedFunction of {|Ar,Ar|}, {|Ar|}
+    proof
+      let i be set;
+      assume i in [:I,I,I:];
+      then consider p1, p2, p3 being object of C such that
+A14:     i = [p1,p2,p3] and
+A15:     Co.i = ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):]
+          by A13;
+
+A16:   (the Arrows of C).(p1,p3) = {} implies
+        [:(the Arrows of C).(p2,p3),(the Arrows of C).(p1,p2):] = {}
+          by Lm1;
+
+        [p2,p3] in [:I,I:] & [p1,p2] in [:I,I:] by ZFMISC_1:def 2;
+      then Ar.[p2,p3] c= (the Arrows of C).[p2,p3] &
+        Ar.[p1,p2] c= (the Arrows of C).[p1,p2] by A8,ALTCAT_2:def 2;
+      then Ar.[p2,p3] c= (the Arrows of C).(p2,p3) &
+        Ar.[p1,p2] c= (the Arrows of C).(p1,p2) by BINOP_1:def 1;
+then A17:   Ar.(p2,p3) c= (the Arrows of C).(p2,p3) &
+        Ar.(p1,p2) c= (the Arrows of C).(p1,p2) by BINOP_1:def 1;
+
+A18:   (the Arrows of C).(p1,p3) = {} implies
+        [:Ar.(p2,p3),Ar.(p1,p2):] = {}
+      proof
+        assume
+A19:       (the Arrows of C).(p1,p3) = {};
+        assume [:Ar.(p2,p3),Ar.(p1,p2):] <> {};
+        then consider k being set such that
+A20:       k in [:Ar.(p2,p3),Ar.(p1,p2):] by XBOOLE_0:def 1;
+        consider u1, u2 being set such that
+A21:       u1 in Ar.(p2,p3) & u2 in Ar.(p1,p2) & k = [u1,u2]
+            by A20,ZFMISC_1:def 2;
+          u1 in (the Arrows of C).(p2,p3) & u2 in (the Arrows of C).(p1,p2)
+          by A17,A21;
+        then u1 in <^p2,p3^> & u2 in <^p1,p2^> by ALTCAT_1:def 2;
+        then <^p1,p3^> <> {} by ALTCAT_1:def 4;
+        hence contradiction by A19,ALTCAT_1:def 2;
+      end;
+
+        [:Ar.(p2,p3),Ar.(p1,p2):] c=
+        [:(the Arrows of C).(p2,p3),(the Arrows of C).(p1,p2):]
+          by A17,ZFMISC_1:119;
+      then reconsider f = Co.i as Function of [:Ar.(p2,p3),Ar.(p1,p2):],
+       (the Arrows of C).(p1,p3) by A15,A16,FUNCT_2:38;
+
+A22:   {|Ar|}.(p1,p2,p3) = Ar.(p1,p3) by ALTCAT_1:def 5;
+A23:   {|Ar,Ar|}.(p1,p2,p3) = [:Ar.(p2,p3),Ar.(p1,p2):] by ALTCAT_1:def 6;
+
+      A24: rng f c= {|Ar|}.i
+      proof
+        let q be set;
+        assume q in rng f;
+        then consider x being set such that
+A25:       x in dom f and
+A26:       q = f.x by FUNCT_1:def 5;
+A27:     dom f = [:Ar.(p2,p3),Ar.(p1,p2):] by A18,FUNCT_2:def 1;
+        then consider m1, m2 being set such that
+A28:       m1 in Ar.(p2,p3) & m2 in Ar.(p1,p2) and
+A29:       x = [m1,m2] by A25,ZFMISC_1:103;
+A30:     m1 in Ar.[p2,p3] & m2 in Ar.[p1,p2] by A28,BINOP_1:def 1;
+          [p2,p3] in [:I,I:] by ZFMISC_1:def 2;
+        then consider q2, q3 being object of C,
+                 qq being Morphism of q2, q3 such that
+A31:        [p2,p3] = [q2,q3] & <^q2,q3^> <> {} & <^q3,q2^> <> {} & m1 = qq &
+           qq is iso by A7,A30;
+
+          [p1,p2] in [:I,I:] by ZFMISC_1:def 2;
+        then consider r1, r2 being object of C,
+                 rr being Morphism of r1, r2 such that
+A32:        [p1,p2] = [r1,r2] & <^r1,r2^> <> {} & <^r2,r1^> <> {} & m2 = rr &
+           rr is iso by A7,A30;
+
+A33:     ex o1, o3 being object of C, m being Morphism of o1, o3
+         st [p1,p3] = [o1,o3] & <^o1,o3^> <> {} & <^o3,o1^> <> {} & q = m &
+          m is iso
+        proof
+A34:       r2 = p2 by A32,ZFMISC_1:33;
+A35:       p2 = q2 by A31,ZFMISC_1:33;
+          then reconsider mm = qq as Morphism of r2, q3 by A32,ZFMISC_1:33;
+          take r1, q3, mm * rr;
+A36:       p1 = r1 & p3 = q3 by A31,A32,ZFMISC_1:33;
+          hence [p1,p3] = [r1,q3];
+          thus
+A37:         <^r1,q3^> <> {} & <^q3,r1^> <> {}
+              by A31,A32,A34,A35,ALTCAT_1:def 4;
+          thus q = (the Comp of C).(p1,p2,p3).x by A15,A25,A26,A27,FUNCT_1:72
+                .= (the Comp of C).(p1,p2,p3).(mm,rr)
+                   by A29,A31,A32,BINOP_1:def 1
+                .= mm * rr by A31,A32,A34,A35,A36,ALTCAT_1:def 10;
+          thus mm * rr is iso by A31,A32,A34,A35,A37,ALTCAT_3:7;
+        end;
+          [p1,p3] in [:I,I:] by ZFMISC_1:def 2;
+        then q in Ar.[p1,p3] by A7,A33;
+        then q in Ar.(p1,p3) by BINOP_1:def 1;
+        hence q in {|Ar|}.i by A14,A22,MULTOP_1:def 1;
+      end;
+         [:Ar.(p2,p3),Ar.(p1,p2):] = {|Ar,Ar|}.i by A14,A23,MULTOP_1:def 1;
+      hence Co.i is Function of {|Ar,Ar|}.i, {|Ar|}.i
+        by A18,A24,FUNCT_2:8;
+    end;
+    then reconsider Co as BinComp of Ar;
+
+set IT = AltCatStr (#I, Ar, Co#),
+    J = the carrier of IT;
+
+      IT is SubCatStr of C
+    proof
+      thus the carrier of IT c= the carrier of C;
+      thus the Arrows of IT cc= the Arrows of C by A8;
+      thus [:J,J,J:] c= [:I,I,I:];
+      let i be set such that
+A38:     i in [:J,J,J:];
+      let q be set such that
+A39:     q in (the Comp of IT).i;
+      consider p1, p2, p3 being object of C such that
+A40:     i = [p1,p2,p3] &
+        Co.i = ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):]
+          by A13,A38;
+        ((the Comp of C).(p1,p2,p3))|[:Ar.(p2,p3),Ar.(p1,p2):] c=
+        (the Comp of C).(p1,p2,p3) by RELAT_1:88;
+      then q in (the Comp of C).(p1,p2,p3) by A39,A40;
+      hence q in (the Comp of C).i by A40,MULTOP_1:def 1;
+    end;
+    then reconsider IT as strict non empty SubCatStr of C;
+      IT is transitive
+    proof
+      let p1, p2, p3 be object of IT; assume
+A41:     <^p1,p2^> <> {} & <^p2,p3^> <> {};
+      then consider m2 being set such that
+A42:     m2 in <^p1,p2^> by XBOOLE_0:def 1;
+      consider m1 being set such that
+A43:     m1 in <^p2,p3^> by A41,XBOOLE_0:def 1;
+        m2 in Ar.(p1,p2) & m1 in Ar.(p2,p3) by A42,A43,ALTCAT_1:def 2;
+then A44:   m1 in Ar.[p2,p3] & m2 in Ar.[p1,p2] by BINOP_1:def 1;
+        [p2,p3] in [:I,I:] by ZFMISC_1:def 2;
+      then consider q2, q3 being object of C,
+               qq being Morphism of q2, q3 such that
+A45:      [p2,p3] = [q2,q3] & <^q2,q3^> <> {} & <^q3,q2^> <> {} & m1 = qq &
+         qq is iso by A7,A44;
+
+        [p1,p2] in [:I,I:] by ZFMISC_1:def 2;
+      then consider r1, r2 being object of C,
+               rr being Morphism of r1, r2 such that
+A46:      [p1,p2] = [r1,r2] & <^r1,r2^> <> {} & <^r2,r1^> <> {} & m2 = rr &
+         rr is iso by A7,A44;
+
+A47:     r2 = p2 by A46,ZFMISC_1:33;
+A48:     p2 = q2 by A45,ZFMISC_1:33;
+        then reconsider mm = qq as Morphism of r2, q3 by A46,ZFMISC_1:33;
+
+A49:   ex o1, o3 being object of C, m being Morphism of o1, o3
+       st [p1,p3] = [o1,o3] & <^o1,o3^> <> {} & <^o3,o1^> <> {} &
+        mm * rr = m & m is iso
+      proof
+        take r1, q3, mm * rr;
+          p1 = r1 & p3 = q3 by A45,A46,ZFMISC_1:33;
+        hence [p1,p3] = [r1,q3];
+        thus
+A50:       <^r1,q3^> <> {} & <^q3,r1^> <> {} by A45,A46,A47,A48,ALTCAT_1:def 4;
+        thus mm * rr = mm * rr;
+        thus mm * rr is iso by A45,A46,A47,A48,A50,ALTCAT_3:7;
+      end;
+        [p1,p3] in [:I,I:] by ZFMISC_1:def 2;
+      then mm * rr in Ar.[p1,p3] by A7,A49;
+      then mm * rr in Ar.(p1,p3) by BINOP_1:def 1;
+      hence <^p1,p3^> <> {} by ALTCAT_1:def 2;
+    end;
+
+    then reconsider IT as strict non empty transitive SubCatStr of C;
+    take IT;
+    thus the carrier of IT = the carrier of C;
+    thus the Arrows of IT cc= the Arrows of C by A8;
+    let o1, o2 be object of C,
+        m be Morphism of o1, o2;
+A51: [o1,o2] in [:I,I:] by ZFMISC_1:def 2;
+    thus m in (the Arrows of IT).(o1,o2) implies
+      <^o1,o2^> <> {} & <^o2,o1^> <> {} & m is iso
+    proof
+      assume m in (the Arrows of IT).(o1,o2);
+      then m in Ar.[o1,o2] by BINOP_1:def 1;
+      then consider p1, p2 being object of C,
+               n being Morphism of p1, p2 such that
+A52:    [o1,o2] = [p1,p2] & <^p1,p2^> <> {} & <^p2,p1^> <> {} & m = n &
+         n is iso by A7,A51;
+        o1 = p1 & o2 = p2 by A52,ZFMISC_1:33;
+      hence <^o1,o2^> <> {} & <^o2,o1^> <> {} & m is iso by A52;
+    end;
+    assume <^o1,o2^> <> {} & <^o2,o1^> <> {} & m is iso;
+    then m in (the Arrows of IT).[o1,o2] by A7,A51;
+    hence m in (the Arrows of IT).(o1,o2) by BINOP_1:def 1;
+  end;
+uniqueness
+  proof
+    let S1, S2 be strict non empty transitive SubCatStr of C such that
+A53:  the carrier of S1 = the carrier of C and
+A54:  the Arrows of S1 cc= the Arrows of C and
+A55:  for o1, o2 being object of C, m being Morphism of o1, o2 holds
+      m in (the Arrows of S1).(o1,o2) iff <^o1,o2^> <> {} & <^o2,o1^> <> {} &
+       m is iso and
+A56:  the carrier of S2 = the carrier of C and
+A57:  the Arrows of S2 cc= the Arrows of C and
+A58:  for o1, o2 being object of C, m being Morphism of o1, o2 holds
+      m in (the Arrows of S2).(o1,o2) iff <^o1,o2^> <> {} & <^o2,o1^> <> {} &
+       m is iso;
+      now
+      let i be set; assume
+A59:     i in [:the carrier of C,the carrier of C:];
+      then consider o1, o2 being set such that
+A60:    o1 in the carrier of C & o2 in the carrier of C & i = [o1,o2]
+        by ZFMISC_1:103;
+      reconsider o1, o2 as object of C by A60;
+      thus (the Arrows of S1).i = (the Arrows of S2).i
+      proof
+        thus (the Arrows of S1).i c= (the Arrows of S2).i
+        proof
+          let n be set such that
+A61:         n in (the Arrows of S1).i;
+            (the Arrows of S1).i c= (the Arrows of C).i
+            by A53,A54,A59,ALTCAT_2:def 2;
+          then n in (the Arrows of C).i by A61;
+          then n in (the Arrows of C).(o1,o2) by A60,BINOP_1:def 1;
+          then n in <^o1,o2^> by ALTCAT_1:def 2;
+          then reconsider m = n as Morphism of o1, o2 ;
+            m in (the Arrows of S1).(o1,o2) by A60,A61,BINOP_1:def 1;
+          then <^o1,o2^> <> {} & <^o2,o1^> <> {} & m is iso by A55;
+          then m in (the Arrows of S2).(o1,o2) by A58;
+          hence n in (the Arrows of S2).i by A60,BINOP_1:def 1;
+        end;
+        let n be set such that
+A62:       n in (the Arrows of S2).i;
+          (the Arrows of S2).i c= (the Arrows of C).i
+          by A56,A57,A59,ALTCAT_2:def 2;
+        then n in (the Arrows of C).i by A62;
+        then n in (the Arrows of C).(o1,o2) by A60,BINOP_1:def 1;
+        then n in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider m = n as Morphism of o1, o2 ;
+          m in (the Arrows of S2).(o1,o2) by A60,A62,BINOP_1:def 1;
+        then <^o1,o2^> <> {} & <^o2,o1^> <> {} & m is iso by A58;
+        then m in (the Arrows of S1).(o1,o2) by A55;
+        hence n in (the Arrows of S1).i by A60,BINOP_1:def 1;
+      end;
+    end;
+    then the Arrows of S1 = the Arrows of S2 by A53,A56,PBOOLE:3;
+    hence S1 = S2 by A53,A56,ALTCAT_2:27;
+  end;
+end;
+
+definition let C be category;
+ cluster AllIso C -> id-inheriting;
+coherence
+  proof
+      now let o be object of AllIso C,
+        o' be object of C such that
+A1:   o = o';
+    idm o' in (the Arrows of AllIso C).(o,o) by A1,Def5;
+    hence idm o' in <^o,o^> by ALTCAT_1:def 2;
+    end;
+    hence thesis by ALTCAT_2:def 14;
+  end;
+end;
+
+theorem Th41:
+AllIso C is non empty subcategory of AllRetr C
+  proof
+A1: the carrier of AllIso C = the carrier of C by Def5;
+then A2: the carrier of AllIso C c= the carrier of AllRetr C by Def3;
+      AllIso C is SubCatStr of AllRetr C
+    proof
+        the Arrows of AllIso C cc= the Arrows of AllRetr C
+      proof
+        thus [:the carrier of AllIso C,the carrier of AllIso C:] c=
+          [:the carrier of AllRetr C,the carrier of AllRetr C:]
+            by A2,ZFMISC_1:119;
+        let i be set; assume
+A3:       i in [:the carrier of AllIso C,the carrier of AllIso C:];
+        then consider o1, o2 being set such that
+A4:       o1 in the carrier of AllIso C & o2 in the carrier of AllIso C
+           & i = [o1,o2] by ZFMISC_1:103;
+        reconsider o1, o2 as object of C by A1,A4;
+        let m be set; assume
+A5:       m in (the Arrows of AllIso C).i;
+then A6:     m in (the Arrows of AllIso C).(o1,o2) by A4,BINOP_1:def 1;
+          the Arrows of AllIso C cc= the Arrows of C by Def5;
+        then (the Arrows of AllIso C).[o1,o2] c= (the Arrows of C).[o1,o2]
+          by A3,A4,ALTCAT_2:def 2;
+        then (the Arrows of AllIso C).[o1,o2] c= (the Arrows of C).(o1,o2)
+          by BINOP_1:def 1;
+        then (the Arrows of AllIso C).(o1,o2) c= (the Arrows of C).(o1,o2)
+          by BINOP_1:def 1;
+        then m in (the Arrows of C).(o1,o2) by A6;
+        then m in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider m1 = m as Morphism of o1, o2 ;
+          m1 in (the Arrows of AllIso C).(o1,o2) by A4,A5,BINOP_1:def 1;
+then A7:     <^o1,o2^> <> {} & <^o2,o1^> <> {} by Def5;
+          m1 is iso by A6,Def5;
+        then m1 is retraction by ALTCAT_3:5;
+        then m in (the Arrows of AllRetr C).(o1,o2) by A7,Def3;
+        hence m in (the Arrows of AllRetr C).i by A4,BINOP_1:def 1;
+      end;
+      hence thesis by A2,ALTCAT_2:25;
+    end;
+    then reconsider A = AllIso C as with_units (non empty SubCatStr of AllRetr
+C);
+      A is id-inheriting
+    proof
+        now let o be object of A,
+          o1 be object of AllRetr C such that
+A8:     o = o1;
+      reconsider oo = o as object of C by A1;
+        idm o = idm oo by ALTCAT_2:35
+           .= idm o1 by A8,ALTCAT_2:35;
+      hence idm o1 in <^o,o^>;
+      end;
+      hence thesis by ALTCAT_2:def 14;
+    end;
+    hence AllIso C is non empty subcategory of AllRetr C;
+  end;
+
+theorem Th42:
+AllIso C is non empty subcategory of AllCoretr C
+  proof
+A1: the carrier of AllIso C = the carrier of C by Def5;
+then A2: the carrier of AllIso C c= the carrier of AllCoretr C by Def4;
+      AllIso C is SubCatStr of AllCoretr C
+    proof
+        the Arrows of AllIso C cc= the Arrows of AllCoretr C
+      proof
+        thus [:the carrier of AllIso C,the carrier of AllIso C:] c=
+          [:the carrier of AllCoretr C,the carrier of AllCoretr C:]
+            by A2,ZFMISC_1:119;
+        let i be set; assume
+A3:       i in [:the carrier of AllIso C,the carrier of AllIso C:];
+        then consider o1, o2 being set such that
+A4:       o1 in the carrier of AllIso C & o2 in the carrier of AllIso C
+           & i = [o1,o2] by ZFMISC_1:103;
+        reconsider o1, o2 as object of C by A1,A4;
+        let m be set; assume
+A5:       m in (the Arrows of AllIso C).i;
+then A6:     m in (the Arrows of AllIso C).(o1,o2) by A4,BINOP_1:def 1;
+          the Arrows of AllIso C cc= the Arrows of C by Def5;
+        then (the Arrows of AllIso C).[o1,o2] c= (the Arrows of C).[o1,o2]
+          by A3,A4,ALTCAT_2:def 2;
+        then (the Arrows of AllIso C).[o1,o2] c= (the Arrows of C).(o1,o2)
+          by BINOP_1:def 1;
+        then (the Arrows of AllIso C).(o1,o2) c= (the Arrows of C).(o1,o2)
+          by BINOP_1:def 1;
+        then m in (the Arrows of C).(o1,o2) by A6;
+        then m in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider m1 = m as Morphism of o1, o2 ;
+          m1 in (the Arrows of AllIso C).(o1,o2) by A4,A5,BINOP_1:def 1;
+then A7:     <^o1,o2^> <> {} & <^o2,o1^> <> {} by Def5;
+          m1 is iso by A6,Def5;
+        then m1 is coretraction by ALTCAT_3:5;
+        then m in (the Arrows of AllCoretr C).(o1,o2) by A7,Def4;
+        hence m in (the Arrows of AllCoretr C).i by A4,BINOP_1:def 1;
+      end;
+      hence thesis by A2,ALTCAT_2:25;
+    end;
+    then reconsider A = AllIso C as with_units (non empty SubCatStr of
+AllCoretr C);
+      A is id-inheriting
+    proof
+        now let o be object of A,
+          o1 be object of AllCoretr C such that
+A8:     o = o1;
+      reconsider oo = o as object of C by A1;
+        idm o = idm oo by ALTCAT_2:35
+           .= idm o1 by A8,ALTCAT_2:35;
+      hence idm o1 in <^o,o^>;
+      end;
+      hence thesis by ALTCAT_2:def 14;
+    end;
+    hence AllIso C is non empty subcategory of AllCoretr C;
+  end;
+
+theorem Th43:
+AllCoretr C is non empty subcategory of AllMono C
+  proof
+A1: the carrier of AllCoretr C = the carrier of C by Def4;
+then A2: the carrier of AllCoretr C c= the carrier of AllMono C by Def1;
+      AllCoretr C is SubCatStr of AllMono C
+    proof
+        the Arrows of AllCoretr C cc= the Arrows of AllMono C
+      proof
+        thus [:the carrier of AllCoretr C,the carrier of AllCoretr C:] c=
+          [:the carrier of AllMono C,the carrier of AllMono C:]
+            by A2,ZFMISC_1:119;
+        let i be set; assume
+A3:       i in [:the carrier of AllCoretr C,the carrier of AllCoretr C:];
+        then consider o1, o2 being set such that
+A4:       o1 in the carrier of AllCoretr C & o2 in the carrier of AllCoretr C
+           & i = [o1,o2] by ZFMISC_1:103;
+        reconsider o1, o2 as object of C by A1,A4;
+        let m be set; assume
+A5:       m in (the Arrows of AllCoretr C).i;
+then A6:     m in (the Arrows of AllCoretr C).(o1,o2) by A4,BINOP_1:def 1;
+          the Arrows of AllCoretr C cc= the Arrows of C by Def4;
+        then (the Arrows of AllCoretr C).[o1,o2] c= (the Arrows of C).[o1,o2]
+          by A3,A4,ALTCAT_2:def 2;
+        then (the Arrows of AllCoretr C).[o1,o2] c= (the Arrows of C).(o1,o2)
+          by BINOP_1:def 1;
+        then (the Arrows of AllCoretr C).(o1,o2) c= (the Arrows of C).(o1,o2)
+          by BINOP_1:def 1;
+        then m in (the Arrows of C).(o1,o2) by A6;
+        then m in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider m1 = m as Morphism of o1, o2 ;
+          m1 in (the Arrows of AllCoretr C).(o1,o2)
+          by A4,A5,BINOP_1:def 1;
+then A7:     <^o1,o2^> <> {} & <^o2,o1^> <> {} by Def4;
+          m1 is coretraction by A6,Def4;
+        then m1 is mono by A7,ALTCAT_3:16;
+        then m in (the Arrows of AllMono C).(o1,o2) by A7,Def1;
+        hence m in (the Arrows of AllMono C).i by A4,BINOP_1:def 1;
+      end;
+      hence thesis by A2,ALTCAT_2:25;
+    end;
+    then reconsider A = AllCoretr C as
+      with_units (non empty SubCatStr of AllMono C);
+      A is id-inheriting
+    proof
+        now let o be object of A,
+          o1 be object of AllMono C such that
+A8:     o = o1;
+      reconsider oo = o as object of C by A1;
+        idm o = idm oo by ALTCAT_2:35
+           .= idm o1 by A8,ALTCAT_2:35;
+      hence idm o1 in <^o,o^>;
+      end;
+      hence thesis by ALTCAT_2:def 14;
+    end;
+    hence AllCoretr C is non empty subcategory of AllMono C;
+  end;
+
+theorem Th44:
+AllRetr C is non empty subcategory of AllEpi C
+  proof
+A1: the carrier of AllRetr C = the carrier of C by Def3;
+then A2: the carrier of AllRetr C c= the carrier of AllEpi C by Def2;
+      AllRetr C is SubCatStr of AllEpi C
+    proof
+        the Arrows of AllRetr C cc= the Arrows of AllEpi C
+      proof
+        thus [:the carrier of AllRetr C,the carrier of AllRetr C:] c=
+          [:the carrier of AllEpi C,the carrier of AllEpi C:]
+            by A2,ZFMISC_1:119;
+        let i be set; assume
+A3:       i in [:the carrier of AllRetr C,the carrier of AllRetr C:];
+        then consider o1, o2 being set such that
+A4:       o1 in the carrier of AllRetr C & o2 in the carrier of AllRetr C
+           & i = [o1,o2] by ZFMISC_1:103;
+        reconsider o1, o2 as object of C by A1,A4;
+        let m be set; assume
+A5:       m in (the Arrows of AllRetr C).i;
+then A6:     m in (the Arrows of AllRetr C).(o1,o2) by A4,BINOP_1:def 1;
+          the Arrows of AllRetr C cc= the Arrows of C by Def3;
+        then (the Arrows of AllRetr C).[o1,o2] c= (the Arrows of C).[o1,o2]
+          by A3,A4,ALTCAT_2:def 2;
+        then (the Arrows of AllRetr C).[o1,o2] c= (the Arrows of C).(o1,o2)
+          by BINOP_1:def 1;
+        then (the Arrows of AllRetr C).(o1,o2) c= (the Arrows of C).(o1,o2)
+          by BINOP_1:def 1;
+        then m in (the Arrows of C).(o1,o2) by A6;
+        then m in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider m1 = m as Morphism of o1, o2 ;
+          m1 in
+ (the Arrows of AllRetr C).(o1,o2) by A4,A5,BINOP_1:def 1;
+then A7:     <^o1,o2^> <> {} & <^o2,o1^> <> {} by Def3;
+          m1 is retraction by A6,Def3;
+        then m1 is epi by A7,ALTCAT_3:15;
+        then m in (the Arrows of AllEpi C).(o1,o2) by A7,Def2;
+        hence m in (the Arrows of AllEpi C).i by A4,BINOP_1:def 1;
+      end;
+      hence thesis by A2,ALTCAT_2:25;
+    end;
+    then reconsider A = AllRetr C as with_units (non empty SubCatStr of AllEpi
+C);
+      A is id-inheriting
+    proof
+        now let o be object of A,
+          o1 be object of AllEpi C such that
+A8:     o = o1;
+      reconsider oo = o as object of C by A1;
+        idm o = idm oo by ALTCAT_2:35
+           .= idm o1 by A8,ALTCAT_2:35;
+      hence idm o1 in <^o,o^>;
+      end;
+      hence thesis by ALTCAT_2:def 14;
+    end;
+    hence AllRetr C is non empty subcategory of AllEpi C;
+  end;
+
+theorem
+  (for o1, o2 being object of C, m being Morphism of o1, o2 holds m is mono)
+ implies the AltCatStr of C = AllMono C
+  proof assume
+A1:  for o1, o2 being object of C, m being Morphism of o1, o2 holds m is mono;
+A2: the carrier of AllMono C = the carrier of the AltCatStr of C by Def1;
+A3: the Arrows of AllMono C cc= the Arrows of C by Def1;
+      now
+      let i be set; assume
+A4:     i in [:the carrier of C,the carrier of C:];
+      then consider o1, o2 being set such that
+A5:    o1 in the carrier of C & o2 in the carrier of C & i = [o1,o2]
+        by ZFMISC_1:103;
+      reconsider o1, o2 as object of C by A5;
+      thus (the Arrows of AllMono C).i = (the Arrows of C).i
+      proof
+        thus (the Arrows of AllMono C).i c=
+          (the Arrows of C).i by A2,A3,A4,ALTCAT_2:def 2;
+        let n be set; assume
+         n in (the Arrows of C).i;
+        then n in (the Arrows of C).(o1,o2) by A5,BINOP_1:def 1;
+then A6:     n in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider n1 = n as Morphism of o1, o2 ;
+          n1 is mono by A1;
+        then n in (the Arrows of AllMono C).(o1,o2) by A6,Def1;
+        hence n in (the Arrows of AllMono C).i by A5,BINOP_1:def 1;
+      end;
+    end;
+    then the Arrows of AllMono C = the Arrows of the AltCatStr of C by A2,
+PBOOLE:3;
+    hence the AltCatStr of C = AllMono C by A2,ALTCAT_2:26;
+  end;
+
+theorem
+  (for o1, o2 being object of C, m being Morphism of o1, o2 holds m is epi)
+ implies the AltCatStr of C = AllEpi C
+  proof assume
+A1:  for o1, o2 being object of C, m being Morphism of o1, o2 holds m is epi;
+A2: the carrier of AllEpi C = the carrier of the AltCatStr of C by Def2;
+A3: the Arrows of AllEpi C cc= the Arrows of C by Def2;
+      now
+      let i be set; assume
+A4:     i in [:the carrier of C,the carrier of C:];
+      then consider o1, o2 being set such that
+A5:    o1 in the carrier of C & o2 in the carrier of C & i = [o1,o2]
+        by ZFMISC_1:103;
+      reconsider o1, o2 as object of C by A5;
+      thus (the Arrows of AllEpi C).i = (the Arrows of C).i
+      proof
+        thus (the Arrows of AllEpi C).i c=
+          (the Arrows of C).i by A2,A3,A4,ALTCAT_2:def 2;
+        let n be set; assume
+         n in (the Arrows of C).i;
+        then n in (the Arrows of C).(o1,o2) by A5,BINOP_1:def 1;
+then A6:     n in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider n1 = n as Morphism of o1, o2 ;
+          n1 is epi by A1;
+        then n in (the Arrows of AllEpi C).(o1,o2) by A6,Def2;
+        hence n in (the Arrows of AllEpi C).i by A5,BINOP_1:def 1;
+      end;
+    end;
+    then the Arrows of AllEpi C = the Arrows of the AltCatStr of C by A2,PBOOLE
+:3;
+    hence the AltCatStr of C = AllEpi C by A2,ALTCAT_2:26;
+  end;
+
+theorem
+  (for o1, o2 being object of C, m being Morphism of o1, o2
+  holds m is retraction & <^o2,o1^> <> {}) implies
+ the AltCatStr of C = AllRetr C
+  proof assume
+A1:  for o1, o2 being object of C, m being Morphism of o1, o2 holds
+      m is retraction & <^o2,o1^> <> {};
+A2: the carrier of AllRetr C = the carrier of the AltCatStr of C by Def3;
+A3: the Arrows of AllRetr C cc= the Arrows of C by Def3;
+      now
+      let i be set; assume
+A4:     i in [:the carrier of C,the carrier of C:];
+      then consider o1, o2 being set such that
+A5:    o1 in the carrier of C & o2 in the carrier of C & i = [o1,o2]
+        by ZFMISC_1:103;
+      reconsider o1, o2 as object of C by A5;
+      thus (the Arrows of AllRetr C).i = (the Arrows of C).i
+      proof
+        thus (the Arrows of AllRetr C).i c=
+          (the Arrows of C).i by A2,A3,A4,ALTCAT_2:def 2;
+        let n be set; assume
+         n in (the Arrows of C).i;
+        then n in (the Arrows of C).(o1,o2) by A5,BINOP_1:def 1;
+then A6:     n in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider n1 = n as Morphism of o1, o2 ;
+          <^o2,o1^> <> {} & n1 is retraction by A1;
+        then n in (the Arrows of AllRetr C).(o1,o2) by A6,Def3;
+        hence n in (the Arrows of AllRetr C).i by A5,BINOP_1:def 1;
+      end;
+    end;
+    then the Arrows of AllRetr C = the Arrows of the AltCatStr of C by A2,
+PBOOLE:3;
+    hence the AltCatStr of C = AllRetr C by A2,ALTCAT_2:26;
+  end;
+
+theorem
+  (for o1, o2 being object of C, m being Morphism of o1, o2 holds
+  m is coretraction & <^o2,o1^> <> {})
+ implies the AltCatStr of C = AllCoretr C
+  proof assume
+A1:  for o1, o2 being object of C, m being Morphism of o1, o2 holds
+      m is coretraction & <^o2,o1^> <> {};
+A2: the carrier of AllCoretr C = the carrier of the AltCatStr of C by Def4;
+A3: the Arrows of AllCoretr C cc= the Arrows of C by Def4;
+      now
+      let i be set; assume
+A4:     i in [:the carrier of C,the carrier of C:];
+      then consider o1, o2 being set such that
+A5:    o1 in the carrier of C & o2 in the carrier of C & i = [o1,o2]
+        by ZFMISC_1:103;
+      reconsider o1, o2 as object of C by A5;
+      thus (the Arrows of AllCoretr C).i = (the Arrows of C).i
+      proof
+        thus (the Arrows of AllCoretr C).i c=
+          (the Arrows of C).i by A2,A3,A4,ALTCAT_2:def 2;
+        let n be set; assume
+         n in (the Arrows of C).i;
+        then n in (the Arrows of C).(o1,o2) by A5,BINOP_1:def 1;
+then A6:     n in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider n1 = n as Morphism of o1, o2 ;
+          <^o2,o1^> <> {} & n1 is coretraction by A1;
+        then n in (the Arrows of AllCoretr C).(o1,o2) by A6,Def4;
+        hence n in (the Arrows of AllCoretr C).i by A5,BINOP_1:def 1;
+      end;
+    end;
+    then the Arrows of AllCoretr C = the Arrows of the AltCatStr of C
+      by A2,PBOOLE:3;
+    hence the AltCatStr of C = AllCoretr C by A2,ALTCAT_2:26;
+  end;
+
+theorem
+  (for o1, o2 being object of C, m being Morphism of o1, o2 holds
+  m is iso & <^o2,o1^> <> {})
+ implies the AltCatStr of C = AllIso C
+  proof assume
+A1:  for o1, o2 being object of C, m being Morphism of o1, o2 holds
+      m is iso & <^o2,o1^> <> {};
+A2: the carrier of AllIso C = the carrier of the AltCatStr of C by Def5;
+A3: the Arrows of AllIso C cc= the Arrows of C by Def5;
+      now
+      let i be set; assume
+A4:     i in [:the carrier of C,the carrier of C:];
+      then consider o1, o2 being set such that
+A5:    o1 in the carrier of C & o2 in the carrier of C & i = [o1,o2]
+        by ZFMISC_1:103;
+      reconsider o1, o2 as object of C by A5;
+      thus (the Arrows of AllIso C).i = (the Arrows of C).i
+      proof
+        thus (the Arrows of AllIso C).i c=
+          (the Arrows of C).i by A2,A3,A4,ALTCAT_2:def 2;
+        let n be set; assume
+         n in (the Arrows of C).i;
+        then n in (the Arrows of C).(o1,o2) by A5,BINOP_1:def 1;
+then A6:     n in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider n1 = n as Morphism of o1, o2 ;
+          <^o2,o1^> <> {} & n1 is iso by A1;
+        then n in (the Arrows of AllIso C).(o1,o2) by A6,Def5;
+        hence n in (the Arrows of AllIso C).i by A5,BINOP_1:def 1;
+      end;
+    end;
+    then the Arrows of AllIso C = the Arrows of the AltCatStr of C by A2,PBOOLE
+:3;
+    hence the AltCatStr of C = AllIso C by A2,ALTCAT_2:26;
+  end;
+
+theorem Th50:
+for o1, o2 being object of AllMono C
+ for m being Morphism of o1, o2 st <^o1,o2^> <> {} holds m is mono
+  proof
+    let o1, o2 be object of AllMono C,
+        m be Morphism of o1, o2 such that
+A1:   <^o1,o2^> <> {};
+      the carrier of AllMono C = the carrier of C by Def1;
+    then reconsider p1 = o1, p2 = o2 as object of C;
+    reconsider p = m as Morphism of p1, p2 by A1,ALTCAT_2:34;
+      m in <^o1,o2^> by A1;
+    then p in (the Arrows of AllMono C).(o1,o2) by ALTCAT_1:def 2;
+    then <^p1,p2^> <> {} & p is mono by Def1;
+    hence m is mono by A1,Th37;
+  end;
+
+theorem Th51:
+for o1, o2 being object of AllEpi C
+ for m being Morphism of o1, o2 st <^o1,o2^> <> {} holds m is epi
+  proof
+    let o1, o2 be object of AllEpi C,
+        m be Morphism of o1, o2 such that
+A1:   <^o1,o2^> <> {};
+      the carrier of AllEpi C = the carrier of C by Def2;
+    then reconsider p1 = o1, p2 = o2 as object of C;
+    reconsider p = m as Morphism of p1, p2 by A1,ALTCAT_2:34;
+      m in <^o1,o2^> by A1;
+    then p in (the Arrows of AllEpi C).(o1,o2) by ALTCAT_1:def 2;
+    then <^p1,p2^> <> {} & p is epi by Def2;
+    hence m is epi by A1,Th37;
+  end;
+
+theorem Th52:
+for o1, o2 being object of AllIso C
+ for m being Morphism of o1, o2 st <^o1,o2^> <> {}
+  holds m is iso & m" in <^o2,o1^>
+  proof
+    let o1, o2 be object of AllIso C,
+        m be Morphism of o1, o2 such that
+A1:   <^o1,o2^> <> {};
+      the carrier of AllIso C = the carrier of C by Def5;
+    then reconsider p1 = o1, p2 = o2 as object of C;
+    reconsider p = m as Morphism of p1, p2 by A1,ALTCAT_2:34;
+      m in <^o1,o2^> by A1;
+    then p in (the Arrows of AllIso C).(o1,o2) by ALTCAT_1:def 2;
+then A2: <^p1,p2^> <> {} & <^p2,p1^> <> {} & p is iso by Def5;
+    then p" is iso by Th3;
+    then p" in (the Arrows of AllIso C).(p2,p1) by A2,Def5;
+then A3: p" in <^o2,o1^> by ALTCAT_1:def 2;
+    then reconsider m1 = p" as Morphism of o2, o1 ;
+A4: m is retraction
+    proof
+      take m1;
+      thus m * m1 = p * p" by A1,A3,ALTCAT_2:33
+                 .= idm p2 by A2,ALTCAT_3:def 5
+                 .= idm o2 by ALTCAT_2:35;
+    end;
+      m is coretraction
+    proof
+      take m1;
+      thus m1 * m = p" * p by A1,A3,ALTCAT_2:33
+                 .= idm p1 by A2,ALTCAT_3:def 5
+                 .= idm o1 by ALTCAT_2:35;
+    end;
+    hence m is iso by A1,A3,A4,ALTCAT_3:6;
+    thus m" in <^o2,o1^> by A3;
+  end;
+
+theorem
+  AllMono AllMono C = AllMono C
+  proof
+A1: the carrier of AllMono AllMono C = the carrier of AllMono C by Def1;
+A2: the carrier of AllMono C = the carrier of C by Def1;
+A3: the Arrows of AllMono AllMono C cc= the Arrows of AllMono C
+      by Def1;
+      now
+      let i be set; assume
+A4:     i in [:the carrier of C,the carrier of C:];
+      then consider o1, o2 being set such that
+A5:    o1 in the carrier of C & o2 in the carrier of C & i = [o1,o2]
+        by ZFMISC_1:103;
+      reconsider o1, o2 as object of AllMono C by A2,A5;
+      thus (the Arrows of AllMono AllMono C).i =
+        (the Arrows of AllMono C).i
+      proof
+        thus (the Arrows of AllMono AllMono C).i c=
+          (the Arrows of AllMono C).i by A1,A2,A3,A4,ALTCAT_2:def 2;
+        let n be set; assume
+         n in (the Arrows of AllMono C).i;
+        then n in
+ (the Arrows of AllMono C).(o1,o2) by A5,BINOP_1:def 1;
+then A6:     n in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider n1 = n as Morphism of o1, o2 ;
+          n1 is mono by A6,Th50;
+        then n in (the Arrows of AllMono AllMono C).(o1,o2) by A6,Def1;
+        hence n in (the Arrows of AllMono AllMono C).i by A5,BINOP_1:def 1;
+      end;
+    end;
+    then the Arrows of AllMono AllMono C = the Arrows of AllMono C
+      by A1,A2,PBOOLE:3;
+    hence AllMono AllMono C = AllMono C by A1,ALTCAT_2:26;
+  end;
+
+theorem
+  AllEpi AllEpi C = AllEpi C
+  proof
+A1: the carrier of AllEpi AllEpi C = the carrier of AllEpi C by Def2;
+A2: the carrier of AllEpi C = the carrier of C by Def2;
+A3: the Arrows of AllEpi AllEpi C cc= the Arrows of AllEpi C
+      by Def2;
+      now
+      let i be set; assume
+A4:     i in [:the carrier of C,the carrier of C:];
+      then consider o1, o2 being set such that
+A5:    o1 in the carrier of C & o2 in the carrier of C & i = [o1,o2]
+        by ZFMISC_1:103;
+      reconsider o1, o2 as object of AllEpi C by A2,A5;
+      thus (the Arrows of AllEpi AllEpi C).i =
+        (the Arrows of AllEpi C).i
+      proof
+        thus (the Arrows of AllEpi AllEpi C).i c=
+          (the Arrows of AllEpi C).i by A1,A2,A3,A4,ALTCAT_2:def 2;
+        let n be set; assume
+         n in (the Arrows of AllEpi C).i;
+        then n in (the Arrows of AllEpi C).(o1,o2) by A5,BINOP_1:def 1;
+then A6:     n in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider n1 = n as Morphism of o1, o2 ;
+          n1 is epi by A6,Th51;
+        then n in (the Arrows of AllEpi AllEpi C).(o1,o2) by A6,Def2;
+        hence n in (the Arrows of AllEpi AllEpi C).i by A5,BINOP_1:def 1;
+      end;
+    end;
+    then the Arrows of AllEpi AllEpi C = the Arrows of AllEpi C
+      by A1,A2,PBOOLE:3;
+    hence AllEpi AllEpi C = AllEpi C by A1,ALTCAT_2:26;
+  end;
+
+theorem
+  AllIso AllIso C = AllIso C
+  proof
+A1: the carrier of AllIso AllIso C = the carrier of AllIso C by Def5;
+A2: the carrier of AllIso C = the carrier of C by Def5;
+A3: the Arrows of AllIso AllIso C cc= the Arrows of AllIso C
+      by Def5;
+      now
+      let i be set; assume
+A4:     i in [:the carrier of C,the carrier of C:];
+      then consider o1, o2 being set such that
+A5:    o1 in the carrier of C & o2 in the carrier of C & i = [o1,o2]
+        by ZFMISC_1:103;
+      reconsider o1, o2 as object of AllIso C by A2,A5;
+      thus (the Arrows of AllIso AllIso C).i =
+        (the Arrows of AllIso C).i
+      proof
+        thus (the Arrows of AllIso AllIso C).i c=
+          (the Arrows of AllIso C).i by A1,A2,A3,A4,ALTCAT_2:def 2;
+        let n be set; assume
+         n in (the Arrows of AllIso C).i;
+        then n in (the Arrows of AllIso C).(o1,o2) by A5,BINOP_1:def 1;
+then A6:     n in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider n1 = n as Morphism of o1, o2 ;
+A7:     n1" in <^o2,o1^> by A6,Th52;
+          n1 is iso by A6,Th52;
+        then n in (the Arrows of AllIso AllIso C).(o1,o2) by A6,A7,Def5;
+        hence n in (the Arrows of AllIso AllIso C).i by A5,BINOP_1:def 1;
+      end;
+    end;
+    then the Arrows of AllIso AllIso C = the Arrows of AllIso C
+      by A1,A2,PBOOLE:3;
+    hence AllIso AllIso C = AllIso C by A1,ALTCAT_2:26;
+  end;
+
+theorem
+  AllIso AllMono C = AllIso C
+  proof
+A1: the carrier of AllIso AllMono C = the carrier of AllMono C by Def5;
+A2: the carrier of AllIso C = the carrier of C by Def5;
+A3: the carrier of AllMono C = the carrier of C by Def1;
+A4: AllIso C is non empty subcategory of AllCoretr C by Th42;
+      AllCoretr C is non empty subcategory of AllMono C by Th43;
+then A5: AllIso C is non empty subcategory of AllMono C by A4,Th36;
+      now
+      let i be set; assume
+A6:     i in [:the carrier of C,the carrier of C:];
+      then consider o1, o2 being set such that
+A7:    o1 in the carrier of C & o2 in the carrier of C & i = [o1,o2]
+        by ZFMISC_1:103;
+      reconsider o1, o2 as object of AllMono C by A3,A7;
+      thus (the Arrows of AllIso AllMono C).i =
+        (the Arrows of AllIso C).i
+      proof
+        thus (the Arrows of AllIso AllMono C).i c=
+         (the Arrows of AllIso C).i
+        proof
+          let n be set such that
+A8:         n in (the Arrows of AllIso AllMono C).i;
+          reconsider q1 = o1, q2 = o2 as object of AllIso AllMono C
+            by A1;
+A9:       n in (the Arrows of AllIso AllMono C).(q1,q2)
+            by A7,A8,BINOP_1:def 1;
+then A10:       n in <^q1,q2^> by ALTCAT_1:def 2;
+A11:       <^q1,q2^> c= <^o1,o2^> & <^q2,q1^> c= <^o2,o1^> by ALTCAT_2:32;
+          then reconsider n2 = n as Morphism of o1, o2 by A10;
+          reconsider r1 = o1, r2 = o2 as object of C
+            by A3;
+A12:       <^o1,o2^> c= <^r1,r2^> & <^o2,o1^> c= <^r2,r1^> by ALTCAT_2:32;
+          then <^q1,q2^> c= <^r1,r2^> by A11,XBOOLE_1:1;
+          then reconsider n1 = n as Morphism of r1, r2 by A10;
+            <^q2,q1^> <> {} by A10,Th52;
+then A13:       <^o1,o2^> <> {} & <^o2,o1^> <> {} by A10,A11,XBOOLE_1:3;
+then A14:       <^r1,r2^> <> {} & <^r2,r1^> <> {} by A12,XBOOLE_1:3;
+            n2 is iso by A9,Def5;
+          then n1 is iso by A13,Th40;
+          then n in (the Arrows of AllIso C).(r1,r2) by A14,Def5;
+          hence n in (the Arrows of AllIso C).i by A7,BINOP_1:def 1;
+        end;
+        let n be set such that
+A15:       n in (the Arrows of AllIso C).i;
+        reconsider p1 = o1, p2 = o2 as object of AllIso C
+          by A2,A3;
+          the Arrows of AllIso C cc= the Arrows of AllMono C
+          by A5,ALTCAT_2:def 11;
+        then (the Arrows of AllIso C).i c= (the Arrows of AllMono C).i
+          by A2,A6,ALTCAT_2:def 2;
+        then n in (the Arrows of AllMono C).i by A15;
+        then n in (the Arrows of AllMono C).(o1,o2) by A7,BINOP_1:def 1;
+then A16:     n in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider n1 = n as Morphism of o1, o2 ;
+          n in (the Arrows of AllIso C).(o1,o2) by A7,A15,BINOP_1:def 1;
+then A17:     n in <^p1,p2^> by ALTCAT_1:def 2;
+        then reconsider n2 = n as Morphism of p1, p2 ;
+A18:     n2" in <^p2,p1^> by A17,Th52;
+A19:     <^p2,p1^> c= <^o2,o1^> by A5,ALTCAT_2:32;
+          n2 is iso by A17,Th52;
+        then n1 is iso by A5,A17,A18,Th40;
+        then n in (the Arrows of AllIso AllMono C).(o1,o2) by A16,A18,A19,Def5
+;
+        hence n in (the Arrows of AllIso AllMono C).i by A7,BINOP_1:def 1;
+      end;
+    end;
+then A20: the Arrows of AllIso AllMono C = the Arrows of AllIso C
+      by A1,A2,A3,PBOOLE:3;
+      AllIso AllMono C is transitive non empty SubCatStr of C by ALTCAT_2:22;
+    then AllIso AllMono C is SubCatStr of AllIso C by A1,A2,A3,A20,ALTCAT_2:25
+;
+    hence AllIso AllMono C = AllIso C by A1,A2,A3,A20,ALTCAT_2:26;
+  end;
+
+theorem
+  AllIso AllEpi C = AllIso C
+  proof
+A1: the carrier of AllIso AllEpi C = the carrier of AllEpi C by Def5;
+A2: the carrier of AllIso C = the carrier of C by Def5;
+A3: the carrier of AllEpi C = the carrier of C by Def2;
+A4: AllIso C is non empty subcategory of AllRetr C by Th41;
+      AllRetr C is non empty subcategory of AllEpi C by Th44;
+then A5: AllIso C is non empty subcategory of AllEpi C by A4,Th36;
+      now
+      let i be set; assume
+A6:     i in [:the carrier of C,the carrier of C:];
+      then consider o1, o2 being set such that
+A7:    o1 in the carrier of C & o2 in the carrier of C & i = [o1,o2]
+        by ZFMISC_1:103;
+      reconsider o1, o2 as object of AllEpi C by A3,A7;
+      thus (the Arrows of AllIso AllEpi C).i =
+        (the Arrows of AllIso C).i
+      proof
+        thus (the Arrows of AllIso AllEpi C).i c=
+         (the Arrows of AllIso C).i
+        proof
+          let n be set such that
+A8:         n in (the Arrows of AllIso AllEpi C).i;
+          reconsider q1 = o1, q2 = o2 as object of AllIso AllEpi C
+            by A1;
+A9:       n in (the Arrows of AllIso AllEpi C).(q1,q2)
+            by A7,A8,BINOP_1:def 1;
+then A10:       n in <^q1,q2^> by ALTCAT_1:def 2;
+A11:       <^q1,q2^> c= <^o1,o2^> & <^q2,q1^> c= <^o2,o1^> by ALTCAT_2:32;
+          then reconsider n2 = n as Morphism of o1, o2 by A10;
+          reconsider r1 = o1, r2 = o2 as object of C
+            by A3;
+A12:       <^o1,o2^> c= <^r1,r2^> & <^o2,o1^> c= <^r2,r1^> by ALTCAT_2:32;
+          then <^q1,q2^> c= <^r1,r2^> by A11,XBOOLE_1:1;
+          then reconsider n1 = n as Morphism of r1, r2 by A10;
+            <^q2,q1^> <> {} by A10,Th52;
+then A13:       <^o1,o2^> <> {} & <^o2,o1^> <> {} by A10,A11,XBOOLE_1:3;
+then A14:       <^r1,r2^> <> {} & <^r2,r1^> <> {} by A12,XBOOLE_1:3;
+            n2 is iso by A9,Def5;
+          then n1 is iso by A13,Th40;
+          then n in (the Arrows of AllIso C).(r1,r2) by A14,Def5;
+          hence n in (the Arrows of AllIso C).i by A7,BINOP_1:def 1;
+        end;
+        let n be set such that
+A15:       n in (the Arrows of AllIso C).i;
+        reconsider p1 = o1, p2 = o2 as object of AllIso C
+          by A2,A3;
+          the Arrows of AllIso C cc= the Arrows of AllEpi C
+          by A5,ALTCAT_2:def 11;
+        then (the Arrows of AllIso C).i c= (the Arrows of AllEpi C).i
+          by A2,A6,ALTCAT_2:def 2;
+        then n in (the Arrows of AllEpi C).i by A15;
+        then n in (the Arrows of AllEpi C).(o1,o2) by A7,BINOP_1:def 1;
+then A16:     n in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider n1 = n as Morphism of o1, o2 ;
+          n in (the Arrows of AllIso C).(o1,o2) by A7,A15,BINOP_1:def 1;
+then A17:     n in <^p1,p2^> by ALTCAT_1:def 2;
+        then reconsider n2 = n as Morphism of p1, p2 ;
+A18:     n2" in <^p2,p1^> by A17,Th52;
+A19:     <^p2,p1^> c= <^o2,o1^> by A5,ALTCAT_2:32;
+          n2 is iso by A17,Th52;
+        then n1 is iso by A5,A17,A18,Th40;
+        then n in (the Arrows of AllIso AllEpi C).(o1,o2) by A16,A18,A19,Def5;
+        hence n in (the Arrows of AllIso AllEpi C).i by A7,BINOP_1:def 1;
+      end;
+    end;
+then A20: the Arrows of AllIso AllEpi C = the Arrows of AllIso C
+      by A1,A2,A3,PBOOLE:3;
+      AllIso AllEpi C is transitive non empty SubCatStr of C by ALTCAT_2:22;
+    then AllIso AllEpi C is SubCatStr of AllIso C by A1,A2,A3,A20,ALTCAT_2:25;
+    hence AllIso AllEpi C = AllIso C by A1,A2,A3,A20,ALTCAT_2:26;
+  end;
+
+theorem
+  AllIso AllRetr C = AllIso C
+  proof
+A1: the carrier of AllIso AllRetr C = the carrier of AllRetr C by Def5;
+A2: the carrier of AllIso C = the carrier of C by Def5;
+A3: the carrier of AllRetr C = the carrier of C by Def3;
+A4: AllIso C is non empty subcategory of AllRetr C by Th41;
+      now
+      let i be set; assume
+A5:     i in [:the carrier of C,the carrier of C:];
+      then consider o1, o2 being set such that
+A6:    o1 in the carrier of C & o2 in the carrier of C & i = [o1,o2]
+        by ZFMISC_1:103;
+      reconsider o1, o2 as object of AllRetr C by A3,A6;
+      thus (the Arrows of AllIso AllRetr C).i =
+        (the Arrows of AllIso C).i
+      proof
+        thus (the Arrows of AllIso AllRetr C).i c=
+         (the Arrows of AllIso C).i
+        proof
+          let n be set such that
+A7:         n in (the Arrows of AllIso AllRetr C).i;
+          reconsider q1 = o1, q2 = o2 as object of AllIso AllRetr C
+            by A1;
+A8:       n in (the Arrows of AllIso AllRetr C).(q1,q2)
+            by A6,A7,BINOP_1:def 1;
+then A9:       n in <^q1,q2^> by ALTCAT_1:def 2;
+A10:       <^q1,q2^> c= <^o1,o2^> & <^q2,q1^> c= <^o2,o1^> by ALTCAT_2:32;
+          then reconsider n2 = n as Morphism of o1, o2 by A9;
+          reconsider r1 = o1, r2 = o2 as object of C
+            by A3;
+A11:       <^o1,o2^> c= <^r1,r2^> & <^o2,o1^> c= <^r2,r1^> by ALTCAT_2:32;
+          then <^q1,q2^> c= <^r1,r2^> by A10,XBOOLE_1:1;
+          then reconsider n1 = n as Morphism of r1, r2 by A9;
+            <^q2,q1^> <> {} by A9,Th52;
+then A12:       <^o1,o2^> <> {} & <^o2,o1^> <> {} by A9,A10,XBOOLE_1:3;
+then A13:       <^r1,r2^> <> {} & <^r2,r1^> <> {} by A11,XBOOLE_1:3;
+            n2 is iso by A8,Def5;
+          then n1 is iso by A12,Th40;
+          then n in (the Arrows of AllIso C).(r1,r2) by A13,Def5;
+          hence n in (the Arrows of AllIso C).i by A6,BINOP_1:def 1;
+        end;
+        let n be set such that
+A14:       n in (the Arrows of AllIso C).i;
+        reconsider p1 = o1, p2 = o2 as object of AllIso C
+          by A2,A3;
+          the Arrows of AllIso C cc= the Arrows of AllRetr C
+          by A4,ALTCAT_2:def 11;
+        then (the Arrows of AllIso C).i c= (the Arrows of AllRetr C).i
+          by A2,A5,ALTCAT_2:def 2;
+        then n in (the Arrows of AllRetr C).i by A14;
+        then n in (the Arrows of AllRetr C).(o1,o2) by A6,BINOP_1:def 1;
+then A15:     n in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider n1 = n as Morphism of o1, o2 ;
+          n in (the Arrows of AllIso C).(o1,o2) by A6,A14,BINOP_1:def 1;
+then A16:     n in <^p1,p2^> by ALTCAT_1:def 2;
+        then reconsider n2 = n as Morphism of p1, p2 ;
+A17:     n2" in <^p2,p1^> by A16,Th52;
+A18:     <^p2,p1^> c= <^o2,o1^> by A4,ALTCAT_2:32;
+          n2 is iso by A16,Th52;
+        then n1 is iso by A4,A16,A17,Th40;
+        then n in (the Arrows of AllIso AllRetr C).(o1,o2) by A15,A17,A18,Def5
+;
+        hence n in (the Arrows of AllIso AllRetr C).i by A6,BINOP_1:def 1;
+      end;
+    end;
+then A19: the Arrows of AllIso AllRetr C = the Arrows of AllIso C
+      by A1,A2,A3,PBOOLE:3;
+      AllIso AllRetr C is transitive non empty SubCatStr of C by ALTCAT_2:22;
+    then AllIso AllRetr C is SubCatStr of AllIso C by A1,A2,A3,A19,ALTCAT_2:25
+;
+    hence AllIso AllRetr C = AllIso C by A1,A2,A3,A19,ALTCAT_2:26;
+  end;
+
+theorem
+  AllIso AllCoretr C = AllIso C
+  proof
+A1: the carrier of AllIso AllCoretr C = the carrier of AllCoretr C by Def5;
+A2: the carrier of AllIso C = the carrier of C by Def5;
+A3: the carrier of AllCoretr C = the carrier of C by Def4;
+A4: AllIso C is non empty subcategory of AllCoretr C by Th42;
+      now
+      let i be set; assume
+A5:     i in [:the carrier of C,the carrier of C:];
+      then consider o1, o2 being set such that
+A6:    o1 in the carrier of C & o2 in the carrier of C & i = [o1,o2]
+        by ZFMISC_1:103;
+      reconsider o1, o2 as object of AllCoretr C by A3,A6;
+      thus (the Arrows of AllIso AllCoretr C).i =
+        (the Arrows of AllIso C).i
+      proof
+        thus (the Arrows of AllIso AllCoretr C).i c=
+         (the Arrows of AllIso C).i
+        proof
+          let n be set such that
+A7:         n in (the Arrows of AllIso AllCoretr C).i;
+          reconsider q1 = o1, q2 = o2 as object of AllIso AllCoretr C
+            by A1;
+A8:       n in (the Arrows of AllIso AllCoretr C).(q1,q2)
+            by A6,A7,BINOP_1:def 1;
+then A9:       n in <^q1,q2^> by ALTCAT_1:def 2;
+A10:       <^q1,q2^> c= <^o1,o2^> & <^q2,q1^> c= <^o2,o1^> by ALTCAT_2:32;
+          then reconsider n2 = n as Morphism of o1, o2 by A9;
+          reconsider r1 = o1, r2 = o2 as object of C
+            by A3;
+A11:       <^o1,o2^> c= <^r1,r2^> & <^o2,o1^> c= <^r2,r1^> by ALTCAT_2:32;
+          then <^q1,q2^> c= <^r1,r2^> by A10,XBOOLE_1:1;
+          then reconsider n1 = n as Morphism of r1, r2 by A9;
+            <^q2,q1^> <> {} by A9,Th52;
+then A12:       <^o1,o2^> <> {} & <^o2,o1^> <> {} by A9,A10,XBOOLE_1:3;
+then A13:       <^r1,r2^> <> {} & <^r2,r1^> <> {} by A11,XBOOLE_1:3;
+            n2 is iso by A8,Def5;
+          then n1 is iso by A12,Th40;
+          then n in (the Arrows of AllIso C).(r1,r2) by A13,Def5;
+          hence n in (the Arrows of AllIso C).i by A6,BINOP_1:def 1;
+        end;
+        let n be set such that
+A14:       n in (the Arrows of AllIso C).i;
+        reconsider p1 = o1, p2 = o2 as object of AllIso C
+          by A2,A3;
+          the Arrows of AllIso C cc= the Arrows of AllCoretr C
+          by A4,ALTCAT_2:def 11;
+        then (the Arrows of AllIso C).i c= (the Arrows of AllCoretr C).i
+          by A2,A5,ALTCAT_2:def 2;
+        then n in (the Arrows of AllCoretr C).i by A14;
+        then n in (the Arrows of AllCoretr C).(o1,o2) by A6,BINOP_1:def 1;
+then A15:     n in <^o1,o2^> by ALTCAT_1:def 2;
+        then reconsider n1 = n as Morphism of o1, o2 ;
+          n in (the Arrows of AllIso C).(o1,o2) by A6,A14,BINOP_1:def 1;
+then A16:     n in <^p1,p2^> by ALTCAT_1:def 2;
+        then reconsider n2 = n as Morphism of p1, p2 ;
+A17:     n2" in <^p2,p1^> by A16,Th52;
+A18:     <^p2,p1^> c= <^o2,o1^> by A4,ALTCAT_2:32;
+          n2 is iso by A16,Th52;
+        then n1 is iso by A4,A16,A17,Th40;
+        then n in (the Arrows of AllIso AllCoretr C).(o1,o2) by A15,A17,A18,
+Def5;
+        hence n in (the Arrows of AllIso AllCoretr C).i by A6,BINOP_1:def 1;
+      end;
+    end;
+then A19: the Arrows of AllIso AllCoretr C = the Arrows of AllIso C
+      by A1,A2,A3,PBOOLE:3;
+      AllIso AllCoretr C is transitive non empty SubCatStr of C by ALTCAT_2:22;
+    then AllIso AllCoretr C is SubCatStr of AllIso C by A1,A2,A3,A19,ALTCAT_2:
+25;
+    hence AllIso AllCoretr C = AllIso C by A1,A2,A3,A19,ALTCAT_2:26;
+  end;

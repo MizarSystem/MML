@@ -1,0 +1,1013 @@
+:: Dynkin's Lemma in Measure Theory
+::  by Franz Merkl
+::
+:: Received November 27, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary PROB_1, RELAT_1, FUNCT_1, ALGSEQ_1, FINSET_1, BOOLE, FUNCOP_1,
+      FUNCT_4, TARSKI, PROB_2, SETFAM_1, COHSP_1, SUBSET_1, DYNKIN;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSET_1, NUMBERS, XREAL_0,
+      SETFAM_1, RELAT_1, FUNCT_1, FUNCT_2, NAT_1, FUNCT_4, FUNCOP_1, ALGSEQ_1,
+      PROB_1, COHSP_1, PROB_2;
+ constructors ALGSEQ_1, NAT_1, FUNCT_4, COHSP_1, PROB_2, MEMBERED;
+ clusters SUBSET_1, ARYTM_3, RELSET_1, FINSET_1, FUNCT_1, FUNCT_4, FUNCOP_1,
+      MEMBERED, NUMBERS, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+ theorems TARSKI, PROB_1, FUNCT_1, ZFMISC_1, FUNCT_2, ALGSEQ_1, FUNCT_4,
+      SUBSET_1, NAT_1, RELSET_1, RELAT_1, FINSET_1, FUNCOP_1, SETFAM_1, REAL_1,
+      PROB_2, FINSUB_1, XBOOLE_0, XBOOLE_1;
+ schemes FUNCT_2, NAT_1, FINSET_1, XBOOLE_0;
+
+begin
+
+reserve Omega, F for non empty set,
+        f for SetSequence of Omega,
+        X,A,B for Subset of Omega,
+        D for non empty Subset of bool Omega,
+        k,n,m for Nat,
+        h,x,y,z,u,v,Y,I for set;
+
+:::::::::::::::::::
+:: Preliminaries ::
+:::::::::::::::::::
+
+theorem Th1:
+ for f being SetSequence of Omega
+  for x holds x in rng f iff ex n st f.n=x
+proof
+ let f be SetSequence of Omega;
+ let x;
+ A1: dom f=NAT by FUNCT_2:def 1;
+   now assume x in rng f;
+  then consider z such that A2: z in dom f & x=f.z by FUNCT_1:def 5;
+  reconsider n=z as Nat by A2,FUNCT_2:def 1;
+  take n;
+  thus f.n=x by A2;
+ end;
+ hence thesis by A1,FUNCT_1:def 5;
+end;
+
+theorem Th2:
+ for n holds PSeg(n) is finite
+proof
+ defpred P[Nat] means PSeg($1) is finite;
+ A1: P[0] by ALGSEQ_1:11;
+ A2: for n st P[n] holds P[n+1]
+ proof
+  let n;
+  assume P[n];
+  then PSeg(n) \/ {n} is finite by FINSET_1:14;
+  hence thesis by ALGSEQ_1:17;
+ end;
+ thus for n holds P[n] from Ind(A1,A2);
+end;
+
+definition let n;
+ cluster PSeg(n) -> finite;
+ coherence by Th2;
+end;
+
+definition
+ let a,b,c be set;
+ func (a,b) followed_by c equals :Def1:
+ (NAT --> c) +* ((0,1) --> (a,b));
+ coherence;
+end;
+
+definition
+ let a,b,c be set;
+ cluster (a,b) followed_by c -> Function-like Relation-like;
+ coherence
+ proof
+     (a,b) followed_by c = (NAT --> c) +* ((0,1) --> (a,b)) by Def1;
+   hence thesis;
+ end;
+end;
+
+definition
+ let X be non empty set;
+ let a,b,c be Element of X;
+ redefine func (a,b) followed_by c -> Function of NAT, X;
+ coherence
+ proof
+    dom(NAT --> c) = NAT & rng(NAT --> c) = {c}
+  & dom((0,1) --> (a,b)) = {0,1} & rng((0,1) --> (a,b)) = {a,b}
+   by FUNCOP_1:14,19,FUNCT_4:65,67;
+  then A1: dom((NAT --> c) +* ((0,1) --> (a,b))) = NAT \/ {0,1}
+  & rng ((NAT --> c) +* ((0,1) --> (a,b))) c= {c} \/ {a,b}
+   by FUNCT_4:18,def 1;
+    NAT \/ {0,1} = NAT
+   proof
+      now
+     let x;
+     assume x in NAT \/ {0,1};
+     then x in NAT or x in {0,1} by XBOOLE_0:def 2;
+     then x in NAT or x=0 or x=1 by TARSKI:def 2;
+     hence x in NAT;
+    end;
+    then NAT \/ {0,1} c= NAT & NAT c= NAT \/ {0,1} by TARSKI:def 3,XBOOLE_1:7;
+    hence thesis by XBOOLE_0:def 10;
+   end;
+  then A2: dom((a,b) followed_by c)=NAT
+  & rng((a,b) followed_by c) c= {c} \/ {a,b} by A1,Def1;
+    {c} c= X & {a,b} c= X by ZFMISC_1:37,38;
+  then {c} \/ {a,b} c= X by XBOOLE_1:8;
+  then rng((a,b) followed_by c) c= X by A2,XBOOLE_1:1;
+  hence (a,b) followed_by c is Function of NAT, X by A2,FUNCT_2:4;
+ end;
+end;
+
+ Lm1:
+ for X being non empty set
+  for a,b,c being Element of X holds
+   (a,b) followed_by c is Function of NAT,X;
+
+definition
+ let Omega be non empty set;
+ let a,b,c be Subset of Omega;
+ redefine func (a,b) followed_by c -> SetSequence of Omega;
+ coherence
+ proof
+  thus (a,b) followed_by c is SetSequence of Omega;
+ end;
+end;
+
+canceled 2;
+
+theorem Th5:
+for a,b,c being set holds
+ ((a,b) followed_by c).0 = a &
+ ((a,b) followed_by c).1 = b &
+ for n st n <> 0 & n <> 1 holds
+ ((a,b) followed_by c).n = c
+proof
+ let a,b,c be set;
+ A1: dom(NAT --> c) = NAT & rng(NAT --> c) = {c}
+  & dom((0,1) --> (a,b)) = {0,1} & rng((0,1) --> (a,b)) = {a,b}
+   by FUNCOP_1:14,19,FUNCT_4:65,67;
+ A2: ((0,1) --> (a,b)).0=a &((0,1) --> (a,b)).1=b by FUNCT_4:66;
+    0 in {0,1} & 1 in {0,1} by TARSKI:def 2;
+ then ((NAT --> c) +* ((0,1) --> (a,b))).0=a
+    & ((NAT --> c) +* ((0,1) --> (a,b))).1=b
+  by A1,A2,FUNCT_4:14;
+ hence ((a,b) followed_by c).0=a & ((a,b) followed_by c).1 = b
+  by Def1;
+ let n such that A3: n <> 0 & n <> 1;
+ A4: not n in dom((0,1) --> (a,b)) by A1,A3,TARSKI:def 2;
+ thus ((a,b) followed_by c).n=((NAT --> c) +* ((0,1) --> (a,b))).n
+  by Def1
+ .= (NAT --> c).n by A4,FUNCT_4:12
+ .= c by FUNCOP_1:13;
+end;
+
+theorem Th6:
+ for a,b being Subset of Omega holds
+ union rng ((a,b) followed_by {}) = a \/ b
+proof
+ let a,b be Subset of Omega;
+  ((a,b) followed_by {} Omega) is SetSequence of Omega;
+ then reconsider r=((a,b) followed_by {}) as Function of NAT, bool Omega;
+   r.0=a & r.1=b by Th5;
+ then a in rng r & b in rng r by FUNCT_2:6;
+ then a c= union rng r & b c= union rng r by ZFMISC_1:92;
+ then A1: a \/ b c= union rng r by XBOOLE_1:8;
+ A2: for x st x in dom r holds r.x=a or r.x=b or r.x={}
+ proof
+  let x such that A3: x in dom r;
+  reconsider n=x as Nat by A3,FUNCT_2:def 1;
+    r.0=a & r.1=b & (n<>0 & n<>1 implies r.n={}) by Th5;
+  hence thesis;
+ end;
+ A4: for y st y in rng r holds y=a or y=b or y={}
+ proof
+  let y such that A5: y in rng r;
+  consider x such that A6: x in dom r & y=r.x by A5,FUNCT_1:def 5;
+  thus thesis by A2,A6;
+ end;
+   for z holds z in union rng r implies z in a \/ b
+ proof
+  let z;
+  assume z in union rng r;
+  then consider y such that A7: z in y & y in rng r by TARSKI:def 4;
+    z in a or z in b or z in {} by A4,A7;
+  hence z in a \/ b by XBOOLE_0:def 2;
+ end;
+ then union rng r c= a \/ b by TARSKI:def 3;
+ hence thesis by A1,XBOOLE_0:def 10;
+end;
+
+definition
+ let Omega be non empty set;
+ let f be SetSequence of Omega;
+ let X be Subset of Omega;
+ func seqIntersection(X,f) -> SetSequence of Omega
+ means :Def2:
+ for n holds it.n = X /\ f.n;
+ existence
+ proof
+  deffunc F(Nat) = X /\ f.$1;
+  consider g being Function of NAT, bool Omega such that
+   A1: for x being Element of NAT holds g.x = F(x) from LambdaD;
+  take g;
+  let n;
+  thus g.n= X /\ f.n by A1;
+ end;
+ uniqueness
+ proof
+  let i1,i2 be SetSequence of Omega;
+  assume A2: for n holds i1.n=X/\ f.n;
+  assume A3: for n holds i2.n=X/\ f.n;
+    now
+   let n be Element of NAT;
+     i1.n=X/\ f.n & i2.n=X/\ f.n by A2,A3;
+   hence i1.n=i2.n;
+  end;
+  hence i1=i2 by FUNCT_2:113;
+ end;
+end;
+
+begin
+::::::::::::::::::::::::::::::::::::::::::::::::
+:: disjoint-valued functions and intersection ::
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition let Omega; let f;
+  redefine attr f is disjoint_valued means :Def3:
+    n<m implies f.n misses f.m;
+  compatibility
+  proof
+    thus f is disjoint_valued implies
+      for n,m holds (n<m implies f.n misses f.m) by PROB_2:def 3;
+    assume A1: n<m implies f.n misses f.m;
+      now let x,y be set; assume A2: x <> y;
+      per cases;
+      suppose x in dom f & y in dom f;
+      then reconsider n = x, m = y as Nat by FUNCT_2:def 1;
+        n < m or n > m by A2,REAL_1:def 5;
+      hence f.x misses f.y by A1;
+      suppose not (x in dom f & y in dom f);
+      then f.x = {} or f.y = {} by FUNCT_1:def 4;
+      hence f.x misses f.y by XBOOLE_1:65;
+    end;
+    hence thesis by PROB_2:def 3;
+  end;
+end;
+
+theorem Th7:
+for Y being non empty set holds
+ for x holds
+  x c= meet Y iff for y being Element of Y holds x c= y
+proof
+ let Y be non empty set;
+ let x;
+ hereby
+  assume A1: x c= meet Y;
+  let y be Element of Y;
+    for z st z in x holds z in y by A1,SETFAM_1:def 1;
+  hence x c= y by TARSKI:def 3;
+ end;
+ assume A2: for y being Element of Y holds x c= y;
+   for z holds z in x implies z in meet Y
+  proof
+   let z;
+   assume A3: z in x;
+     now
+    let u such that A4: u in Y;
+      x c= u by A2,A4;
+    hence z in u by A3;
+   end;
+   hence z in meet Y by SETFAM_1:def 1;
+  end;
+  hence x c= meet Y by TARSKI:def 3;
+end;
+
+definition let x be set;
+ redefine attr x is multiplicative;
+ synonym x is intersection_stable;
+end;
+
+definition
+  let Omega be non empty set;
+  let f be SetSequence of Omega;
+  let n be Element of NAT;
+ canceled;
+
+  func disjointify(f,n) -> Element of bool Omega equals
+:Def5:
+  f.n \ union rng (f|PSeg(n));
+  coherence
+  proof
+     f.n \ union rng (f|PSeg(n)) c= f.n by XBOOLE_1:36;
+   hence f.n \ union rng (f|PSeg(n)) is Element of bool Omega by XBOOLE_1:1;
+  end;
+end;
+
+definition
+ let Omega be non empty set;
+ let g be SetSequence of Omega;
+ func disjointify(g) -> SetSequence of Omega means
+:Def6:
+ for n holds it.n=disjointify(g,n);
+ existence
+ proof
+  deffunc F(Nat) = disjointify(g,$1);
+  consider f being Function of NAT, bool Omega such that
+   A1: for x being Element of NAT holds f.x = F(x) from LambdaD;
+  take f;
+  let n;
+  thus f.n= disjointify(g,n) by A1;
+ end;
+ uniqueness
+ proof
+  let i1,i2 be SetSequence of Omega;
+  assume A2: for n holds i1.n=disjointify(g,n);
+  assume A3: for n holds i2.n=disjointify(g,n);
+    now
+   let n be Element of NAT;
+     i1.n=disjointify(g,n) & i2.n=disjointify(g,n) by A2,A3;
+   hence i1.n=i2.n;
+  end;
+  hence i1=i2 by FUNCT_2:113;
+ end;
+end;
+
+theorem Th8:
+ for n holds (disjointify(f)).n=f.n \ union rng(f|PSeg(n))
+proof
+ let n;
+   (disjointify(f)).n=disjointify(f,n)
+ & disjointify(f,n)=f.n \ union rng(f|PSeg(n)) by Def5,Def6;
+ hence thesis;
+end;
+
+theorem Th9:
+ for f being SetSequence of Omega holds
+  disjointify(f) is disjoint_valued
+proof
+ let f be SetSequence of Omega;
+   now
+  let n,m;
+  assume n<m;
+  then A1: n in PSeg(m) by ALGSEQ_1:10;
+    dom f=NAT by FUNCT_2:def 1;
+  then dom(f|PSeg(m))=PSeg(m)/\ NAT by RELAT_1:90;
+  then n in dom(f|PSeg(m)) by A1,XBOOLE_0:def 3;
+  then A2: (f|PSeg(m)).n in rng(f|PSeg(m)) by FUNCT_1:def 5;
+    (f|PSeg(m)).n=f.n by A1,FUNCT_1:72;
+  then f.n c= union rng(f|PSeg(m)) by A2,ZFMISC_1:92;
+  then f.n misses f.m \ union rng(f|PSeg(m)) by XBOOLE_1:85;
+  then A3: f.n misses (disjointify(f)).m by Th8;
+    f.n \ union rng(f|PSeg(n)) c= f.n by XBOOLE_1:36;
+  then (disjointify(f)).n c= f.n by Th8;
+  hence (disjointify(f)).n misses (disjointify(f)).m by A3,XBOOLE_1:63;
+ end;
+ hence thesis by Def3;
+end;
+
+theorem Th10:
+ for f being SetSequence of Omega holds
+  union rng disjointify(f) = union rng f
+proof
+ let f be SetSequence of Omega;
+ A1: dom f=NAT & dom(disjointify(f))=NAT by FUNCT_2:def 1;
+   now
+  let x;
+  assume x in union rng disjointify(f);
+  then consider y such that A2: x in y & y in rng disjointify(f)
+   by TARSKI:def 4;
+  consider z such that A3: z in dom(disjointify(f)) & y=(disjointify(f)).z
+   by A2,FUNCT_1:def 5;
+  reconsider n=z as Nat by A3,FUNCT_2:def 1;
+  A4: x in f.n\ union rng (f|PSeg(n)) by A2,A3,Th8;
+  A5: f.n\ union rng (f|PSeg(n)) c= f.n by XBOOLE_1:36;
+    f.n in rng(f) by A1,FUNCT_1:def 5;
+  hence x in union rng f by A4,A5,TARSKI:def 4;
+ end;
+ then A6: union rng disjointify(f) c= union rng f by TARSKI:def 3;
+   now
+  let x;
+  assume x in union rng f;
+  then consider y such that A7: x in y & y in rng f
+   by TARSKI:def 4;
+  consider z such that A8: z in dom(f) & y=f.z
+   by A7,FUNCT_1:def 5;
+  reconsider n=z as Nat by A8,FUNCT_2:def 1;
+  defpred P[Nat] means x in f.$1;
+  A9: ex k st P[k]
+  proof
+   take n;
+   thus thesis by A7,A8;
+  end;
+  consider k such that
+  A10: P[k] & for m st P[m] holds k <= m from Min(A9);
+    now
+   assume x in union rng(f|PSeg(k));
+   then consider y such that A11: x in y & y in rng(f|PSeg(k))
+    by TARSKI:def 4;
+   consider z such that A12: z in dom(f|PSeg(k)) & y=(f|PSeg(k)).z
+    by A11,FUNCT_1:def 5;
+     dom(f|PSeg(k)) c= NAT by A1,RELAT_1:89;
+   then reconsider n=z as Nat by A12;
+   A13: dom(f|PSeg(k)) c= PSeg(k) by RELAT_1:87;
+   then A14: n<k by A12,ALGSEQ_1:10;
+     y=f.n by A12,A13,FUNCT_1:72;
+   hence contradiction by A10,A11,A14;
+  end;
+  then x in f.k \ union rng(f|PSeg(k)) by A10,XBOOLE_0:def 4;
+  then A15: x in (disjointify(f)).k by Th8;
+    (disjointify(f)).k in rng disjointify(f) by A1,FUNCT_1:def 5;
+  hence x in union rng disjointify(f) by A15,TARSKI:def 4;
+ end;
+ then union rng f c= union rng disjointify(f) by TARSKI:def 3;
+ hence thesis by A6,XBOOLE_0:def 10;
+end;
+
+theorem Th11:
+ for x,y being Subset of Omega st x misses y holds
+  (x,y) followed_by {} Omega is disjoint_valued
+proof
+ let x,y be Subset of Omega such that A1: x misses y;
+ reconsider r=(x,y) followed_by {} Omega as Function of NAT, bool Omega;
+   now
+  let n,m;
+  assume A2: n<m;
+  A3: n=0 & m=1 or m<>0 & m<>1
+  proof
+     now
+    assume A4: m=0 or m=1;
+      0+1=1;
+    then n <= 0 by A2,A4,NAT_1:38;
+    hence n=0 & m=1 by A2,A4,NAT_1:19;
+   end;
+   hence thesis;
+  end;
+  A5:r.0=x & r.1=y by Th5;
+    m<>0 & m<>1 implies r.m={} by Th5;
+  hence r.n misses r.m by A1,A3,A5,XBOOLE_1:65;
+ end;
+ hence thesis by Def3;
+end;
+
+theorem Th12:
+for f being SetSequence of Omega holds
+ f is disjoint_valued implies
+ for X being Subset of Omega holds seqIntersection(X,f) is disjoint_valued
+proof
+ let f be SetSequence of Omega;
+ assume A1: f is disjoint_valued;
+ let X be Subset of Omega;
+   for n,m holds n<m
+  implies (seqIntersection(X,f)).n misses (seqIntersection(X,f)).m
+ proof
+  let n,m;
+  assume n<m;
+  then f.n misses f.m by A1,PROB_2:def 3;
+  then A2: X/\ f.n misses f.m by XBOOLE_1:74;
+    (seqIntersection(X,f)).n=X/\ f.n &
+  (seqIntersection(X,f)).m=X/\ f.m by Def2;
+  hence thesis by A2,XBOOLE_1:74;
+ end;
+ hence seqIntersection(X,f) is disjoint_valued by Def3;
+end;
+
+theorem Th13:
+for f being SetSequence of Omega
+ for X being Subset of Omega holds
+  X/\ Union f= Union seqIntersection(X,f)
+proof
+ let f be SetSequence of Omega;
+ let X be Subset of Omega;
+ A1: dom f=NAT & dom seqIntersection(X,f)=NAT by FUNCT_2:def 1;
+   now
+  let z;
+  assume z in X/\ Union f;
+  then A2: z in X & z in Union f by XBOOLE_0:def 3;
+  then z in X & z in union rng f by PROB_1:def 3;
+  then consider u such that A3: z in u & u in rng f by TARSKI:def 4;
+  consider v such that A4: v in dom f & u=f.v by A3,FUNCT_1:def 5;
+  reconsider n=v as Nat by A4,FUNCT_2:def 1;
+  A5: z in X/\ f.n by A2,A3,A4,XBOOLE_0:def 3;
+    X/\ f.n = (seqIntersection(X,f)).n by Def2;
+  then X/\ f.n in rng seqIntersection(X,f) by A1,FUNCT_1:def 5;
+  then z in union rng seqIntersection(X,f) by A5,TARSKI:def 4;
+  hence z in Union seqIntersection(X,f) by PROB_1:def 3;
+ end;
+ then A6:  X/\ Union f c= Union seqIntersection(X,f) by TARSKI:def 3;
+   now
+  let z;
+  assume z in Union seqIntersection(X,f);
+  then A7: z in union rng seqIntersection(X,f) by PROB_1:def 3;
+  reconsider g=seqIntersection(X,f) as SetSequence of Omega;
+  consider u such that A8: z in u & u in rng g by A7,TARSKI:def 4;
+  consider v such that A9: v in dom g & u=g.v by A8,FUNCT_1:def 5;
+  reconsider n=v as Nat by A9,FUNCT_2:def 1;
+    z in X/\ f.n by A8,A9,Def2;
+  then A10: z in X & z in f.n by XBOOLE_0:def 3;
+    f.n in rng f by A1,FUNCT_1:def 5;
+  then z in union rng f by A10,TARSKI:def 4;
+  then z in Union f by PROB_1:def 3;
+  hence z in X/\ Union f by A10,XBOOLE_0:def 3;
+ end;
+ then Union seqIntersection(X,f) c= X/\ Union f by TARSKI:def 3;
+ hence thesis by A6,XBOOLE_0:def 10;
+end;
+
+begin
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Dynkin Systems:definition and closure properties ::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition let Omega;
+  mode Dynkin_System of Omega -> Subset of bool Omega means
+  :Def7:
+  (for f holds rng f c= it & f is disjoint_valued implies Union f in it)
+  & (for X holds X in it implies X` in it)
+  & {} in it;
+  existence
+  proof
+     bool Omega c= bool Omega;
+   then reconsider D = bool Omega as non empty Subset of bool Omega;
+   take D;
+      {} c= Omega by XBOOLE_1:2;
+   hence thesis;
+  end;
+end;
+
+definition let Omega;
+  cluster -> non empty Dynkin_System of Omega;
+coherence by Def7;
+end;
+
+theorem Th14: bool Omega is Dynkin_System of Omega
+proof
+   A1: (for f holds rng f c= bool Omega & f is disjoint_valued implies
+                   Union f in bool Omega)
+       &(for X holds X in bool Omega implies X`in bool Omega);
+     {} c= Omega by XBOOLE_1:2;
+   then bool Omega c= bool Omega & {} in bool Omega;
+   hence thesis by A1,Def7;
+end;
+
+theorem Th15:
+  (for Y st Y in F holds Y is Dynkin_System of Omega) implies
+  meet F is Dynkin_System of Omega
+proof
+ assume A1: for Y st Y in F holds Y is Dynkin_System of Omega;
+ A2: now
+      let f;
+      assume A3: rng f c= meet F & f is disjoint_valued;
+        now
+       let Y such that A4: Y in F;
+       A5: Y is Dynkin_System of Omega by A1,A4;
+         meet F c= Y by A4,SETFAM_1:4;
+       then rng f c= Y by A3,XBOOLE_1:1;
+       hence Union f in Y by A3,A5,Def7;
+      end;
+      hence Union f in meet F by SETFAM_1:def 1;
+     end;
+ A6: now
+      let X;
+      assume A7: X in meet F;
+        for Y st Y in F holds X` in Y
+      proof
+       let Y such that A8: Y in F;
+       A9: Y is Dynkin_System of Omega by A1,A8;
+         meet F c= Y by A8,SETFAM_1:4;
+       hence X` in Y by A7,A9,Def7;
+      end;
+      hence X` in meet F by SETFAM_1:def 1;
+     end;
+ consider Y being Element of F;
+ A10: Y is Dynkin_System of Omega by A1;
+   meet F c= Y by SETFAM_1:4;
+ then A11: meet F is Subset of bool Omega by A10,XBOOLE_1:1;
+   now
+  let Y such that A12: Y in F;
+    Y is Dynkin_System of Omega by A1,A12;
+  hence {} in Y by Def7;
+ end;
+ then {} in meet F by SETFAM_1:def 1;
+ hence thesis by A2,A6,A11,Def7;
+end;
+
+theorem Th16:
+ D is Dynkin_System of Omega & D is intersection_stable
+ implies
+ (A in D & B in D implies A\B in D)
+proof
+ assume A1: D is Dynkin_System of Omega & D is intersection_stable;
+ assume A2: A in D & B in D;
+ then B`in D by A1,Def7;
+ then A /\ (B`) in D by A1,A2,FINSUB_1:def 2;
+ hence A\B in D by SUBSET_1:32;
+end;
+
+theorem Th17:
+ D is Dynkin_System of Omega & D is intersection_stable
+ implies
+ (A in D & B in D implies A \/ B in D)
+proof
+ assume
+ A1: D is Dynkin_System of Omega & D is intersection_stable;
+ assume A in D & B in D;
+ then A`in D & B`in D by A1,Def7;
+ then A`/\ B`in D by A1,FINSUB_1:def 2;
+ then (A \/ B)`in D by SUBSET_1:29;
+ then (A \/ B)``in D by A1,Def7;
+ hence thesis;
+end;
+
+theorem Th18:
+ D is Dynkin_System of Omega & D is intersection_stable
+ implies
+ for x being finite set holds
+ x c= D implies union x in D
+proof
+ assume
+ A1: D is Dynkin_System of Omega & D is intersection_stable;
+ let x be finite set;
+ assume A2: x c= D;
+ defpred P[set] means union $1 in D;
+ A3: x is finite;
+ A4: P[{}] by A1,Def7,ZFMISC_1:2;
+ A5: for y,b being set st y in x & b c= x & P[b] holds P[b \/ {y}]
+ proof
+  let y,b be set such that A6: y in x & b c= x & union b in D;
+  A7: union {y}=y by ZFMISC_1:31;
+  reconsider union_b = union b as Subset of Omega by A6;
+    y in D by A2,A6;
+  then reconsider y1=y as Subset of Omega;
+    union_b \/ y1 in D by A1,A2,A6,Th17;
+  hence union(b \/ {y})in D by A7,ZFMISC_1:96;
+ end;
+ thus P[x] from Finite(A3,A4,A5);
+end;
+
+theorem Th19:
+  D is Dynkin_System of Omega & D is intersection_stable
+ implies
+ for f being SetSequence of Omega holds
+   rng f c= D implies rng disjointify(f) c= D
+proof
+ assume
+ A1: D is Dynkin_System of Omega & D is intersection_stable;
+ let f be SetSequence of Omega;
+ assume A2: rng f c= D;
+ A3: for n holds (disjointify(f)).n in D
+ proof
+  let n;
+  A4: rng (f|PSeg(n)) c= rng(f) by RELAT_1:99;
+  then A5: rng(f|PSeg(n)) c= D by A2,XBOOLE_1:1;
+    dom(f|PSeg(n)) c= PSeg(n) by RELAT_1:87;
+  then A6: dom(f|PSeg(n)) is finite by FINSET_1:13;
+    rng(f) is Subset of bool Omega by RELSET_1:12;
+  then rng(f|PSeg(n)) is finite Subset of bool Omega by A4,A6,FINSET_1:26,
+XBOOLE_1:1;
+  then A7: union rng(f|PSeg(n))in D by A1,A5,Th18;
+    dom(f)=NAT by FUNCT_2:def 1;
+  then A8: f.n in rng f by FUNCT_1:def 5;
+  reconsider urf=union rng(f|PSeg(n)) as Subset of Omega by A7;
+    f.n \ urf in D by A1,A2,A7,A8,Th16;
+  hence (disjointify(f)).n in D by Th8;
+ end;
+   now
+  let y;
+  assume y in rng disjointify(f);
+  then consider x such that A9:
+   x in dom(disjointify(f)) & y=(disjointify(f)).x by FUNCT_1:def 5;
+  reconsider n=x as Nat by A9,FUNCT_2:def 1;
+    y=(disjointify(f)).n by A9;
+  hence y in D by A3;
+ end;
+ hence rng disjointify(f) c= D by TARSKI:def 3;
+end;
+
+theorem Th20:
+ D is Dynkin_System of Omega & D is intersection_stable
+ implies
+ for f being SetSequence of Omega holds
+   rng f c= D implies union rng f in D
+proof
+  assume
+ A1: D is Dynkin_System of Omega & D is intersection_stable;
+ let f be SetSequence of Omega;
+ assume rng f c= D;
+ then A2: rng disjointify(f) c= D by A1,Th19;
+   disjointify(f) is disjoint_valued by Th9;
+ then Union disjointify(f) in D by A1,A2,Def7;
+ then union rng disjointify(f) in D by PROB_1:def 3;
+ hence union rng f in D by Th10;
+end;
+
+theorem Th21:
+ for D being Dynkin_System of Omega
+  for x,y being Element of D holds
+  x misses y implies x \/ y in D
+proof
+ let D be Dynkin_System of Omega;
+ let x,y be Element of D;
+ assume A1: x misses y;
+ reconsider e={} as Element of D by Def7;
+ reconsider x1=x as Subset of Omega;
+ reconsider y1=y as Subset of Omega;
+ reconsider r= (x1,y1) followed_by {} Omega as SetSequence of Omega;
+ A2: r is disjoint_valued by A1,Th11;
+   (x,y) followed_by e is Function of NAT,D by Lm1;
+ then rng r c= D by RELSET_1:12;
+ then Union r in D by A2,Def7;
+ then union rng r in D by PROB_1:def 3;
+ hence x \/ y in D by Th6;
+end;
+
+theorem Th22:
+ for D being Dynkin_System of Omega
+  for x,y being Element of D holds
+  x c= y implies y\x in D
+proof
+ let D be Dynkin_System of Omega;
+ let x,y be Element of D;
+ assume A1: x c= y;
+ A2: y`in D by Def7;
+   x c= y`` by A1;
+ then x misses y` by SUBSET_1:43;
+ then A3: x \/ y` in D by A2,Th21;
+   (x \/ y`)` = x` /\ y`` by SUBSET_1:29
+          .= y\x by SUBSET_1:32;
+ hence thesis by A3,Def7;
+end;
+
+begin
+
+:::::::::::::::::::::::::::::::::::
+:: Main steps for Dynkin's Lemma ::
+:::::::::::::::::::::::::::::::::::
+
+theorem Th23:
+ D is Dynkin_System of Omega & D is intersection_stable implies
+ D is SigmaField of Omega
+proof
+ assume A1:
+  D is Dynkin_System of Omega & D is intersection_stable;
+ then A2: for X st X in D holds X`in D by Def7;
+   for f st (for n holds f.n in D) holds Intersection f in D
+ proof
+  let f such that A3: for n holds f.n in D;
+  A4: for n holds (f.n)`in D
+    proof
+     let n;
+       f.n in D by A3;
+     hence thesis by A1,Def7;
+    end;
+  A5: for n holds (Complement f).n in D
+    proof
+     let n;
+       (Complement f).n=(f.n)` by PROB_1:def 4;
+     hence thesis by A4;
+    end;
+     for x st x in rng Complement f holds x in D
+   proof
+     let x such that A6: x in rng Complement f;
+     consider z such that A7: z in dom Complement f & x=(Complement f).z
+      by A6,FUNCT_1:def 5;
+     reconsider n=z as Nat by A7,FUNCT_2:def 1;
+       x=(Complement f).n by A7;
+     hence x in D by A5;
+   end;
+  then rng Complement f c= D by TARSKI:def 3;
+  then union rng Complement f in D by A1,Th20;
+  then Union Complement f in D by PROB_1:def 3;
+  then (Union Complement f)` in D by A1,Def7;
+  hence Intersection f in D by PROB_1:def 5;
+ end;
+ hence thesis by A2,PROB_1:32;
+end;
+
+definition
+ let Omega be non empty set;
+ let E be Subset of bool Omega;
+ func generated_Dynkin_System(E) -> Dynkin_System of Omega means
+ :Def8:
+ E c= it & for D being Dynkin_System of Omega holds
+  (E c= D implies it c= D);
+ existence
+ proof
+  defpred P[set] means $1 is Dynkin_System of Omega & E c= $1;
+  consider Y such that
+  A1: for x holds x in Y iff x in bool bool Omega & P[x] from Separation;
+    bool Omega is Dynkin_System of Omega by Th14;
+  then reconsider Y as non empty set by A1;
+    for z st z in Y holds z is Dynkin_System of Omega by A1;
+  then reconsider I=meet Y as Dynkin_System of Omega by Th15;
+  take I;
+    for y being Element of Y holds E c= y by A1;
+  hence E c= I by Th7;
+  let D be Dynkin_System of Omega;
+  assume E c= D;
+  then D in Y by A1;
+  hence I c= D by SETFAM_1:4;
+ end;
+ uniqueness
+ proof
+  let I1,I2 be Dynkin_System of Omega;
+  assume A2: E c= I1 & for D being Dynkin_System of Omega holds
+   (E c= D implies I1 c= D);
+  assume E c= I2 & for D being Dynkin_System of Omega holds
+   (E c= D implies I2 c= D);
+  then I1 c= I2 & I2 c= I1 by A2;
+  hence I1=I2 by XBOOLE_0:def 10;
+ end;
+end;
+
+definition
+ let Omega be non empty set;
+ let G be set;
+ let X be Subset of Omega;
+ func DynSys(X,G) -> Subset of bool Omega
+ means :Def9:
+ for A being Subset of Omega holds
+  A in it iff A /\ X in G;
+ existence
+ proof
+  defpred P[set] means $1 /\ X in G;
+  consider I such that
+  A1: for x holds x in I iff x in bool Omega & P[x] from Separation;
+    for x holds x in I implies x in bool Omega by A1;
+  then reconsider I as Subset of bool Omega by TARSKI:def 3;
+  take I;
+  let A be Subset of Omega;
+  thus thesis by A1;
+ end;
+ uniqueness
+ proof
+  let I1,I2 be Subset of bool Omega;
+  assume A2: for A being Subset of Omega holds
+   A in I1 iff A /\ X in G;
+  assume A3: for A being Subset of Omega holds
+   A in I2 iff A/\ X in G;
+    now
+   let A be Element of bool Omega;
+     (A in I1 iff A /\ X in G) & (A in I2 iff A /\ X in G) by A2,A3;
+   hence A in I1 iff A in I2;
+  end;
+  hence thesis by SUBSET_1:8;
+ end;
+end;
+
+definition
+ let Omega be non empty set;
+ let G be Dynkin_System of Omega;
+ let X be Element of G;
+ redefine func DynSys(X,G) -> Dynkin_System of Omega;
+ coherence
+ proof
+    {}/\ X={} &{}in G by Def7;
+  then A1:{}in DynSys(X,G) by Def9;
+  A2: for f being SetSequence of Omega holds
+   rng f c= DynSys(X,G) & f is disjoint_valued implies Union f in DynSys(X,G)
+  proof
+   let f be SetSequence of Omega;
+   assume A3:  rng f c= DynSys(X,G) & f is disjoint_valued;
+   reconsider X1=X as Subset of Omega;
+   A4: seqIntersection(X,f) is disjoint_valued by A3,Th12;
+     now
+    let x;
+    assume x in rng seqIntersection(X1,f);
+    then consider n such that A5: x=(seqIntersection(X1,f)).n by Th1;
+    A6: x=X/\ f.n by A5,Def2;
+      f.n in rng f by Th1;
+    hence x in G by A3,A6,Def9;
+   end;
+   then rng seqIntersection(X1,f) c= G by TARSKI:def 3;
+   then Union seqIntersection(X1,f) in G by A4,Def7;
+   then X/\ Union f in G by Th13;
+   hence thesis by Def9;
+  end;
+    for A being Subset of Omega holds
+       A in DynSys(X,G) implies A` in DynSys(X,G)
+  proof
+   let A be Subset of Omega;
+   assume A in DynSys(X,G);
+   then A7: X /\ A in G by Def9;
+     X/\ A c= X by XBOOLE_1:17;
+   then A8: X\(X/\ A)in G by A7,Th22;
+     X misses X` by SUBSET_1:26;
+then A9: X /\ X` = {} by XBOOLE_0:def 7;
+     X\(X/\ A) = X /\ (X/\ A)` by SUBSET_1:32
+   .= X /\ (X` \/ A`) by SUBSET_1:30
+   .= (X/\ X`) \/ (X/\ A`) by XBOOLE_1:23
+   .= X/\ A` by A9;
+   hence thesis by A8,Def9;
+  end;
+  hence thesis by A1,A2,Def7;
+ end;
+end;
+
+theorem Th24:
+ for E being Subset of bool Omega
+  for X,Y being Subset of Omega holds
+   X in E & Y in generated_Dynkin_System(E) & E is intersection_stable
+   implies
+   X/\ Y in generated_Dynkin_System(E)
+proof
+ let E be Subset of bool Omega;
+ let X,Y be Subset of Omega;
+ assume A1: X in E & Y in generated_Dynkin_System(E)
+            & E is intersection_stable;
+ reconsider G=generated_Dynkin_System(E) as Dynkin_System of Omega;
+   E c= generated_Dynkin_System(E) by Def8;
+ then reconsider X as Element of G by A1;
+   for x holds x in E implies x in DynSys(X,G)
+ proof
+  let x;
+  assume A2: x in E;
+  then reconsider x as Subset of Omega;
+  A3: x /\ X in E by A1,A2,FINSUB_1:def 2;
+    E c= G by Def8;
+  hence thesis by A3,Def9;
+ end;
+ then E c= DynSys(X,G) & DynSys(X,G) is Dynkin_System of Omega by TARSKI:def 3
+;
+ then generated_Dynkin_System(E) c= DynSys(X,G) by Def8;
+ hence thesis by A1,Def9;
+end;
+
+theorem Th25:
+ for E being Subset of bool Omega
+  for X,Y being Subset of Omega holds
+   X in generated_Dynkin_System(E) & Y in generated_Dynkin_System(E)
+   & E is intersection_stable
+   implies
+   X/\ Y in generated_Dynkin_System(E)
+proof
+ let E be Subset of bool Omega;
+ let X,Y be Subset of Omega;
+ assume A1: X in generated_Dynkin_System(E)
+   & Y in generated_Dynkin_System(E) & E is intersection_stable;
+ reconsider G=generated_Dynkin_System(E) as Dynkin_System of Omega;
+ defpred P[set] means ex X being Element of G st $1=DynSys(X,G);
+ consider h such that A2: for x holds x in h iff x in bool bool Omega & P[x]
+   from Separation;
+ A3: for Y st Y in h holds Y is Dynkin_System of Omega
+ proof
+  let Y;
+  assume Y in h;
+  then ex X being Element of G st Y=DynSys(X,G) by A2;
+  hence thesis;
+ end;
+   h is non empty
+ proof
+  consider X being Element of G;
+    DynSys(X,G) in h by A2;
+  hence thesis;
+ end;
+ then reconsider h as non empty set;
+ A4: meet h is Dynkin_System of Omega by A3,Th15;
+   for x holds x in E implies x in meet h
+ proof
+  let x;
+  assume A5: x in E;
+    for Y st Y in h holds x in Y
+  proof
+   let Y such that A6: Y in h;
+   consider X being Element of G such that A7: Y=DynSys(X,G) by A2,A6;
+     x/\ X in G by A1,A5,Th24;
+   hence x in Y by A5,A7,Def9;
+  end;
+  hence x in meet h by SETFAM_1:def 1;
+ end;
+ then E c= meet h by TARSKI:def 3;
+ then A8: G c= meet h by A4,Def8;
+   DynSys(X,G)in h by A1,A2;
+ then meet h c= DynSys(X,G) by SETFAM_1:4;
+ then G c= DynSys(X,G) by A8,XBOOLE_1:1;
+ hence thesis by A1,Def9;
+end;
+
+theorem Th26:
+ for E being Subset of bool Omega st E is intersection_stable holds
+  generated_Dynkin_System(E) is intersection_stable
+proof
+ let E be Subset of bool Omega such that A1: E is intersection_stable;
+ reconsider G=generated_Dynkin_System(E) as Subset of bool Omega;
+   for a,b being set st a in G & b in G holds a/\ b in G by A1,Th25;
+ hence thesis by FINSUB_1:def 2;
+end;
+
+theorem
+   for E being Subset of bool Omega st E is intersection_stable
+  for D being Dynkin_System of Omega st E c= D holds
+   sigma(E) c= D
+proof
+ let E be Subset of bool Omega such that A1: E is intersection_stable;
+ let D be Dynkin_System of Omega such that A2: E c= D;
+ reconsider G=generated_Dynkin_System(E) as Dynkin_System of Omega;
+   G is intersection_stable by A1,Th26;
+ then A3: G is SigmaField of Omega by Th23;
+   E c= G by Def8;
+ then A4: sigma(E) c= G by A3,PROB_1:def 14;
+   G c= D by A2,Def8;
+ hence thesis by A4,XBOOLE_1:1;
+end;

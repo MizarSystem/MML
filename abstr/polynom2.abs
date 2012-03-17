@@ -1,0 +1,442 @@
+:: Evaluation of Multivariate Polynomials
+::  by Christoph Schwarzweller and Andrzej Trybulec
+::
+:: Received April 14, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, RELAT_1, FINSEQ_4, BOOLE, FUNCT_1, ARYTM_1, BINOP_1,
+      VECTSP_1, LATTICES, RLVECT_1, ORDERS_1, RELAT_2, ORDERS_2, GROUP_1,
+      REALSET1, VECTSP_2, FINSET_1, ALGSTR_1, FINSOP_1, TRIANG_1, CARD_1,
+      FINSEQ_5, ORDINAL1, WELLORD2, POLYNOM1, ALGSEQ_1, PARTFUN1, FUNCT_4,
+      CAT_1, RFINSEQ, ARYTM_3, QC_LANG1, PRE_TOPC, ENDALG, GRCAT_1, COHSP_1,
+      QUOFIELD, POLYNOM2, CARD_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, STRUCT_0,
+      RELAT_1, FINSOP_1, RELAT_2, RELSET_1, FUNCT_1, FINSET_1, ORDINAL1,
+      PARTFUN1, FUNCT_2, BINOP_1, FUNCT_4, REAL_1, NAT_1, REALSET1, ALGSTR_1,
+      RLVECT_1, ORDERS_1, ORDERS_2, FINSEQ_1, FINSEQ_4, CQC_LANG, VECTSP_1,
+      GROUP_1, GROUP_4, QUOFIELD, FINSEQ_5, TOPREAL1, CARD_1, PRE_TOPC,
+      GRCAT_1, ENDALG, TRIANG_1, RFINSEQ, VECTSP_2, YELLOW_1, POLYNOM1;
+ constructors ORDERS_2, CQC_LANG, TOPREAL1, ALGSTR_2, QUOFIELD, GRCAT_1,
+      REAL_1, FINSEQ_5, TRIANG_1, ENDALG, MONOID_0, GROUP_4, FINSOP_1, RFINSEQ,
+      POLYNOM1, YELLOW_1, MEMBERED;
+ clusters STRUCT_0, FUNCT_1, FINSET_1, RELSET_1, FINSEQ_1, CQC_LANG, INT_1,
+      ALGSTR_1, POLYNOM1, ALGSTR_2, ARYTM_3, MONOID_0, VECTSP_1, NAT_1,
+      XREAL_0, MEMBERED, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+
+
+
+begin :: Preliminaries ------------------------------------------------------------
+
+scheme SeqExD{D() -> non empty set,
+              N() -> Nat, P[set,set]}:
+  ex p being FinSequence of D()
+  st dom p = Seg N() &
+     for k being Nat st k in Seg N() holds P[k,p/.k]
+ provided
+  for k being Nat st k in Seg N() ex x being Element of D() st P[k,x];
+
+scheme FinRecExD2{D() -> non empty set,A() -> (Element of D()),
+                  N() -> Nat, P[set,set,set]}:
+ex p being FinSequence of D()
+st len p = N() &
+   (p/.1 = A() or N() = 0) &
+   for n being Nat st 1 <= n & n <= N()-1 holds P[n,p/.n,p/.(n+1)]
+provided
+ for n being Nat
+     st 1 <= n & n <= N()-1
+     holds for x being Element of D()
+           ex y being Element of D() st P[n,x,y];
+
+scheme FinRecUnD2{D() -> set, A() -> Element of D(),
+                  N() -> Nat,
+                  F,G() -> FinSequence of D(),
+                  P[set,set,set]}:
+F() = G()
+provided
+ for n being Nat st 1 <= n & n <= N()-1
+     for x,y1,y2 being Element of D() st P[n,x,y1] & P[n,x,y2]
+     holds y1 = y2 and
+ len F() = N() & (F()/.1 = A() or N() = 0) &
+     for n being Nat st 1 <= n & n <= N()-1 holds P[n,F()/.n,F()/.(n+1)] and
+ len G() = N() & (G()/.1 = A() or N() = 0) &
+     for n being Nat st 1 <= n & n <= N()-1 holds P[n,G()/.n,G()/.(n+1)];
+
+scheme FinInd{M, N() -> Nat, P[Nat]} :
+for i being Nat st M() <= i & i <= N() holds P[i]
+provided
+  P[M()] and
+  for j being Nat st M() <= j & j < N() holds P[j] implies P[j+1];
+
+scheme FinInd2{M,N() -> Nat, P[Nat]} :
+for i being Nat st M() <= i & i <= N() holds P[i]
+provided
+  P[M()] and
+  for j being Nat st M() <= j & j < N() holds
+     (for j' being Nat st M() <= j' & j' <= j holds P[j']) implies P[j+1];
+
+scheme IndFinSeq {D() -> set,
+                  F() -> FinSequence of D(),
+                  P[set]} :
+for i being Nat st 1 <= i & i <= len F() holds P[F().i]
+provided
+  P[F().1] and
+  for i being Nat st 1 <= i & i < len F()
+      holds P[F().i] implies P[F().(i+1)];
+
+canceled;
+
+theorem :: POLYNOM2:2
+for L being unital associative non trivial (non empty doubleLoopStr),
+    a being Element of L,
+    n,m being Nat
+holds power(L).(a,n+m) = power(L).(a,n) * power(L).(a,m);
+
+theorem :: POLYNOM2:3
+ for L being well-unital (non empty doubleLoopStr)
+  holds 1_(L) = 1.L;
+
+definition
+ cluster Abelian right_zeroed add-associative right_complementable
+         unital well-unital distributive commutative associative
+         non trivial (non empty doubleLoopStr);
+end;
+
+begin :: About Finite Sequences and the Functor SgmX ------------------------------
+
+theorem :: POLYNOM2:4
+for p being FinSequence,
+    k being Nat st k in dom p
+for i being Nat st 1 <= i & i <= k holds i in dom p;
+
+theorem :: POLYNOM2:5
+for L being left_zeroed right_zeroed (non empty LoopStr),
+    p being FinSequence of the carrier of L,
+    i being Nat
+    st i in dom p & for i' being Nat st i' in dom p & i' <> i holds p/.i' = 0.L
+holds Sum p = p/.i;
+
+theorem :: POLYNOM2:6
+  for L being add-associative right_zeroed right_complementable
+            distributive unital (non empty doubleLoopStr),
+    p being FinSequence of the carrier of L
+    st ex i being Nat st i in dom p & p/.i = 0.L
+holds Product p = 0.L;
+
+theorem :: POLYNOM2:7
+for L being Abelian add-associative (non empty LoopStr),
+    a being Element of L,
+    p,q being FinSequence of the carrier of L
+    st len p = len q &
+       ex i being Nat
+       st i in dom p & q/.i = a + p/.i &
+          for i' being Nat st i' in dom p & i' <> i holds q/.i' = p/.i'
+holds Sum q = a + Sum p;
+
+theorem :: POLYNOM2:8
+for L being commutative associative (non empty doubleLoopStr),
+    a being Element of L,
+    p,q being FinSequence of the carrier of L
+    st len p = len q &
+       ex i being Nat
+       st i in dom p & q/.i = a * p/.i &
+          for i' being Nat st i' in dom p & i' <> i holds q/.i' = p/.i'
+holds Product q = a * Product p;
+
+theorem :: POLYNOM2:9
+for X being set,
+    A being empty Subset of X,
+    R being Order of X st R linearly_orders A
+holds SgmX(R,A) = {};
+
+theorem :: POLYNOM2:10
+for X being set,
+    A being finite Subset of X,
+    R be Order of X st R linearly_orders A
+for i,j being Nat st i in dom(SgmX(R,A)) & j in dom(SgmX(R,A))
+holds SgmX(R,A)/.i = SgmX(R,A)/.j implies i = j;
+
+theorem :: POLYNOM2:11
+for X being set,
+    A being finite Subset of X,
+    a being Element of X st not(a in A)
+for B being finite Subset of X st B = {a} \/ A
+for R being Order of X st R linearly_orders B
+for k being Nat st k in dom(SgmX(R,B)) & SgmX(R,B)/.k = a
+for i being Nat st 1 <= i & i <= k - 1
+holds SgmX(R,B)/.i = SgmX(R,A)/.i;
+
+theorem :: POLYNOM2:12
+for X being set,
+    A being finite Subset of X,
+    a being Element of X st not(a in A)
+for B being finite Subset of X st B = {a} \/ A
+for R being Order of X st R linearly_orders B
+for k being Nat st k in dom(SgmX(R,B)) & SgmX(R,B)/.k = a
+for i being Nat st k <= i & i <= len(SgmX(R,A))
+holds SgmX(R,B)/.(i+1) = SgmX(R,A)/.i;
+
+theorem :: POLYNOM2:13
+for X being non empty set,
+    A being finite Subset of X,
+    a being Element of X st not(a in A)
+for B being finite Subset of X st B = {a} \/ A
+for R being Order of X st R linearly_orders B
+for k being Nat st k + 1 in dom(SgmX(R,B)) & SgmX(R,B)/.(k+1) = a
+holds SgmX(R,B) = Ins(SgmX(R,A),k,a);
+
+begin :: Evaluation of Bags -------------------------------------------------------
+
+theorem :: POLYNOM2:14
+for X being set,
+    b being bag of X st support b = {}
+holds b = EmptyBag X;
+
+definition
+let X be set,
+    b be bag of X;
+attr b is empty means
+:: POLYNOM2:def 1
+b = EmptyBag X;
+end;
+
+definition
+let X be non empty set;
+cluster non empty bag of X;
+end;
+
+definition
+let X be set,
+    b be bag of X;
+redefine func support b -> finite Subset of X;
+end;
+
+theorem :: POLYNOM2:15
+for n being Ordinal,
+    b being bag of n
+holds RelIncl n linearly_orders support b;
+
+definition
+let X be set;
+let x be FinSequence of X,
+    b be bag of X;
+redefine func b * x -> PartFunc of NAT,NAT;
+end;
+
+definition
+let n be Ordinal,
+    b be bag of n,
+    L be non trivial unital (non empty doubleLoopStr),
+    x be Function of n, L;
+func eval(b,x) -> Element of L means
+:: POLYNOM2:def 2
+ex y being FinSequence of the carrier of L
+st len y = len SgmX(RelIncl n, support b) &
+   it = Product y &
+   for i being Nat st 1 <= i & i <= len y holds
+        y/.i = power(L).((x * SgmX(RelIncl n, support b))/.i,
+                         (b * SgmX(RelIncl n, support b))/.i);
+end;
+
+theorem :: POLYNOM2:16
+for n being Ordinal,
+    L being non trivial unital (non empty doubleLoopStr),
+    x being Function of n, L
+holds eval(EmptyBag n,x) = 1.L;
+
+theorem :: POLYNOM2:17
+for n being Ordinal,
+    L being unital non trivial (non empty doubleLoopStr),
+    u being set,
+    b being bag of n st support b = {u}
+for x being Function of n, L
+holds eval(b,x) = power(L).(x.u,b.u);
+
+theorem :: POLYNOM2:18
+for n being Ordinal,
+    L being right_zeroed add-associative right_complementable
+            unital distributive Abelian
+            non trivial commutative associative (non empty doubleLoopStr),
+    b1,b2 being bag of n,
+    x being Function of n, L
+holds eval(b1+b2,x) = eval(b1,x) * eval(b2,x);
+
+begin :: Evaluation of Polynomials ------------------------------------------------
+
+definition
+let n be Ordinal,
+    L be add-associative right_zeroed right_complementable
+         (non empty LoopStr),
+    p,q be Polynomial of n, L;
+cluster p - q -> finite-Support;
+end;
+
+theorem :: POLYNOM2:19
+for L being right_zeroed add-associative right_complementable
+            unital distributive
+            non trivial (non empty doubleLoopStr),
+    n being Ordinal,
+    p being Polynomial of n,L st Support p = {}
+holds p = 0_(n,L);
+
+definition
+let n be Ordinal,
+    L be right_zeroed add-associative right_complementable
+         unital distributive
+         non trivial (non empty doubleLoopStr),
+    p be Polynomial of n,L;
+cluster Support p -> finite;
+end;
+
+theorem :: POLYNOM2:20
+for n being Ordinal,
+    L being right_zeroed add-associative right_complementable
+            unital distributive
+            non trivial (non empty doubleLoopStr),
+    p being Polynomial of n,L
+holds BagOrder n linearly_orders Support p;
+
+definition
+let n be Ordinal,
+    b be Element of Bags n;
+func b@ -> bag of n equals
+:: POLYNOM2:def 3
+b;
+end;
+
+definition
+let n be Ordinal,
+    L be right_zeroed add-associative right_complementable
+         unital distributive
+         non trivial (non empty doubleLoopStr),
+    p be Polynomial of n,L,
+    x be Function of n, L;
+func eval(p,x) -> Element of L means
+:: POLYNOM2:def 4
+ex y being FinSequence of the carrier of L
+st len y = len SgmX(BagOrder n, Support p) &
+   it = Sum y &
+   for i being Nat st 1 <= i & i <= len y holds
+        y/.i = (p * SgmX(BagOrder n, Support p))/.i *
+               eval(((SgmX(BagOrder n, Support p))/.i)@,x);
+end;
+
+theorem :: POLYNOM2:21
+for n being Ordinal,
+    L being right_zeroed add-associative right_complementable
+            unital distributive
+            non trivial (non empty doubleLoopStr),
+    p being Polynomial of n,L,
+    b being bag of n st Support p = {b}
+for x being Function of n, L
+holds eval(p,x) = p.b * eval(b,x);
+
+theorem :: POLYNOM2:22
+for n being Ordinal,
+    L being right_zeroed add-associative right_complementable
+            unital distributive
+            non trivial (non empty doubleLoopStr),
+    x being Function of n, L
+holds eval(0_(n,L),x) = 0.L;
+
+theorem :: POLYNOM2:23
+for n being Ordinal,
+    L being right_zeroed add-associative right_complementable
+            unital distributive non trivial (non empty doubleLoopStr),
+   x being Function of n, L
+holds eval(1_(n,L),x) = 1.L;
+
+theorem :: POLYNOM2:24
+for n being Ordinal,
+    L being right_zeroed add-associative right_complementable
+            unital distributive
+            non trivial (non empty doubleLoopStr),
+    p being Polynomial of n,L,
+    x being Function of n, L
+holds eval(-p,x) = - eval(p,x);
+
+theorem :: POLYNOM2:25
+for n being Ordinal,
+    L being right_zeroed add-associative right_complementable
+            Abelian unital distributive
+            non trivial (non empty doubleLoopStr),
+    p,q being Polynomial of n,L,
+    x being Function of n, L
+holds eval(p+q,x) = eval(p,x) + eval(q,x);
+
+theorem :: POLYNOM2:26
+  for n being Ordinal,
+    L being right_zeroed add-associative right_complementable
+            Abelian unital distributive
+            non trivial (non empty doubleLoopStr),
+    p,q being Polynomial of n,L,
+    x being Function of n, L
+holds eval(p-q,x) = eval(p,x) - eval(q,x);
+
+theorem :: POLYNOM2:27
+for n being Ordinal,
+    L being right_zeroed add-associative right_complementable
+            Abelian unital distributive
+            non trivial commutative associative
+             (non empty doubleLoopStr),
+    p,q being Polynomial of n,L,
+    x being Function of n, L
+holds eval(p*'q,x) = eval(p,x) * eval(q,x);
+
+begin :: Evaluation Homomorphism --------------------------------------------------
+
+definition
+let n be Ordinal,
+    L be right_zeroed add-associative right_complementable
+         unital distributive non trivial (non empty doubleLoopStr),
+    x be Function of n, L;
+func Polynom-Evaluation(n,L,x) -> map of Polynom-Ring(n,L),L means
+:: POLYNOM2:def 5
+for p being Polynomial of n,L holds it.p = eval(p,x);
+end;
+
+definition
+ let n be Ordinal,
+     L be right_zeroed Abelian add-associative right_complementable
+          well-unital distributive associative
+          non trivial (non empty doubleLoopStr);
+ cluster Polynom-Ring (n, L) -> well-unital;
+end;
+
+definition
+let n be Ordinal,
+    L be Abelian right_zeroed add-associative right_complementable
+         well-unital distributive associative
+         non trivial (non empty doubleLoopStr),
+    x be Function of n, L;
+cluster Polynom-Evaluation(n,L,x) -> unity-preserving;
+end;
+
+definition
+let n be Ordinal,
+    L be right_zeroed add-associative right_complementable
+         Abelian unital distributive
+         non trivial (non empty doubleLoopStr),
+    x be Function of n, L;
+cluster Polynom-Evaluation(n,L,x) -> additive;
+end;
+
+definition
+ let n be Ordinal,
+     L be right_zeroed add-associative right_complementable
+            Abelian unital distributive
+            non trivial commutative associative (non empty doubleLoopStr),
+    x be Function of n, L;
+ cluster Polynom-Evaluation(n,L,x) -> multiplicative;
+end;
+
+definition
+let n be Ordinal,
+    L be right_zeroed add-associative right_complementable
+            Abelian well-unital distributive
+            non trivial commutative associative (non empty doubleLoopStr),
+    x be Function of n, L;
+ cluster Polynom-Evaluation(n,L,x) -> RingHomomorphism;
+end;

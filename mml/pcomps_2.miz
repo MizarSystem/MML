@@ -1,0 +1,1676 @@
+:: On Paracompactness of Metrizable Spaces
+::  by Leszek Borys
+::
+:: Received July 23, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, FUNCT_1, ARYTM_3, RELAT_1, WELLORD1, RELAT_2, BOOLE, TARSKI,
+      FINSEQ_1, PRE_TOPC, METRIC_1, SETFAM_1, COMPTS_1, SUBSET_1, ARYTM_1,
+      PCOMPS_1, FINSET_1, PCOMPS_2, GROUP_1, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, REAL_1, TOPS_2, FUNCT_1, FUNCT_2, NAT_1, SETFAM_1, STRUCT_0,
+      METRIC_1, COMPTS_1, PRE_TOPC, PCOMPS_1, PREPOWER, WELLORD1, RELAT_1,
+      FINSEQ_1, FINSET_1, RELAT_2, FINSEQ_2, FINSEQ_4;
+ constructors TOPS_2, NAT_1, COMPTS_1, PCOMPS_1, REAL_1, PREPOWER, WELLORD1,
+      WELLORD2, RELAT_2, FINSEQ_4, MEMBERED;
+ clusters SUBSET_1, PRE_TOPC, FINSET_1, RELSET_1, STRUCT_0, XREAL_0, FINSEQ_1,
+      METRIC_1, NEWTON, MEMBERED, ZFMISC_1, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, WELLORD1, RELAT_2, SETFAM_1, XBOOLE_0;
+ theorems PCOMPS_1, COMPTS_1, SETFAM_1, TOPS_1, TOPS_2, PRE_TOPC, SUBSET_1,
+      TARSKI, WELLORD2, AXIOMS, ZFMISC_1, NAT_1, REAL_1, REAL_2, PREPOWER,
+      WELLORD1, RELAT_1, RELAT_2, SEQ_4, FUNCT_1, FINSET_1, METRIC_1, FINSEQ_1,
+      CARD_1, FINSEQ_2, FINSEQ_4, TBSP_1, NEWTON, XREAL_0, XBOOLE_0, XBOOLE_1,
+      XCMPLX_1;
+ schemes NAT_1, FUNCT_2, SETFAM_1, PRE_TOPC, RECDEF_1, TREES_2, FRAENKEL,
+      XBOOLE_0;
+
+begin :: 1. Selected properties of real numbers
+
+  reserve r,u for real number;
+  reserve n,k,i for Nat;
+
+canceled 2;
+
+  theorem
+  Th3: r>0 & u > 0 implies ex k be Nat st u/(2 |^ k) <= r
+    proof
+      assume that A1:r>0 and A2: u>0;
+      consider t be real number such that
+        A3: r * t = 1 by A1,AXIOMS:20;
+        reconsider t as Real by XREAL_0:def 1;
+      A4: t > 0 by A1,A3,REAL_2:123;
+      A5: r = 1/t by A3,XCMPLX_1:74
+        .= (u * 1) / (u * t) by A2,XCMPLX_1:92
+        .= u/(u * t);
+      consider n such that A6: (u * t) < n by SEQ_4:10;
+      A7: 0 < u * t by A2,A4,REAL_2:122;
+      then A8: u/(u * t) > u/n by A2,A6,REAL_2:200;
+      defpred P[Nat] means $1 <= 2 |^ $1;
+        2 |^ 0 = 1 by NEWTON:9;
+      then A9: P[0];
+      A10: for k be Nat st P[k] holds P[k + 1]
+        proof
+          let k be Nat;
+          assume A11: k <= 2 |^ k;
+          A12: 2 |^ (k + 1) = (2 |^ k) * (2 |^ 1) by NEWTON:13
+                          .= (2 |^ k) * 2 by NEWTON:10
+                          .= 2 |^ k + 2 |^ k by XCMPLX_1:11;
+            2 |^ k >= 1 by PREPOWER:19;
+          then A13: 2 |^ k + 2 |^ k >= 2 |^ k + 1 by REAL_1:55;
+            (2 |^ k) + 1 >= k + 1 by A11,REAL_1:55;
+          hence thesis by A12,A13,AXIOMS:22;
+        end;
+        for k be Nat holds P[k] from Ind(A9,A10);
+      then A14: n <= (2 |^ n);
+        0 < n by A6,A7,AXIOMS:22;
+      then A15: u/n >= u/(2 |^ n) by A2,A14,REAL_2:201;
+      take n;
+      thus thesis by A5,A8,A15,AXIOMS:22;
+    end;
+
+theorem Th4:
+    k>=n & r >= 1 implies r |^ k >= r |^ n
+    proof
+      assume that A1:k>=n and A2: r >= 1;
+      consider m be Nat such that A3: k = n + m by A1,NAT_1:28;
+      A4: r |^ k = r |^ n * r |^ m by A3,NEWTON:13;
+         r |^ n >= 1 by A2,PREPOWER:19;
+      then A5: r |^ n >= 0 by AXIOMS:22;
+        r |^ m >= 1 by A2,PREPOWER:19;
+      hence thesis by A4,A5,REAL_2:146;
+    end;
+
+begin :: 2. Certain functions defined on families of sets
+
+  reserve R for Relation;
+  reserve A for set;
+
+theorem
+  Th5: R well_orders A implies R |_2 A well_orders A & A = field (R |_2 A)
+    proof
+      assume A1: R well_orders A;
+      then A2: R is_reflexive_in A by WELLORD1:def 5;
+      A3: field (R |_2 A) c= A by WELLORD1:20;
+A4:      A c= field (R |_2 A)
+        proof
+          let x be set;
+          assume A5: x in A;
+          then A6: [x,x] in [:A,A:] by ZFMISC_1:106;
+            [x,x] in R by A2,A5,RELAT_2:def 1;
+          then [x,x] in R |_2 A by A6,WELLORD1:16;
+          hence x in field (R |_2 A) by RELAT_1:30;
+        end;
+      A7: R |_2 A is_reflexive_in A
+        proof
+          let x be set;
+          assume A8: x in A;
+          then A9: [x,x] in R by A2,RELAT_2:def 1;
+            [x,x] in [:A,A:] by A8,ZFMISC_1:106;
+          hence [x,x] in R |_2 A by A9,WELLORD1:16;
+        end;
+      A10:R |_2 A c= R by WELLORD1:15;
+      A11: R |_2 A is_transitive_in A
+        proof
+          let x,y,z be set;
+          assume that A12:x in A and A13:y in A and A14:z in A and
+                 A15:[x,y] in R |_2 A and A16:[y,z] in R |_2 A;
+            R is_transitive_in A by A1,WELLORD1:def 5;
+          then A17:[x,z] in R by A10,A12,A13,A14,A15,A16,RELAT_2:def 8;
+            [x,z] in [:A,A:] by A12,A14,ZFMISC_1:106;
+          hence [x,z] in R |_2 A by A17,WELLORD1:16;
+        end;
+      A18: R |_2 A is_antisymmetric_in A
+        proof
+          let x,y be set;
+          assume that A19:x in A and A20:y in A and
+              A21: [x,y] in R |_2 A and A22:[y,x] in R |_2 A;
+            R is_antisymmetric_in A by A1,WELLORD1:def 5;
+          hence x=y by A10,A19,A20,A21,A22,RELAT_2:def 4;
+        end;
+      A23: R |_2 A is_connected_in A
+        proof
+          let x,y be set;
+          assume A24: x in A & y in A & x <>y;
+A25:      R is_connected_in A by A1,WELLORD1:def 5;
+            now per cases by A24,A25,RELAT_2:def 6;
+            case A26:[x,y] in R;
+              [x,y] in [:A,A:] by A24,ZFMISC_1:106;
+            hence [x,y] in R |_2 A by A26,WELLORD1:16;
+            case A27:[y,x] in R;
+              [y,x] in [:A,A:] by A24,ZFMISC_1:106;
+            hence [y,x] in R |_2 A by A27,WELLORD1:16;
+          end;
+          hence [x,y] in R |_2 A or [y,x] in R |_2 A;
+        end;
+        R |_2 A is_well_founded_in A
+        proof
+          let Y be set;
+          assume that A28:Y c= A and A29: Y <> {};
+            R is_well_founded_in A by A1,WELLORD1:def 5;
+          then consider a be set such that
+              A30:a in Y and A31:R-Seg(a) misses Y by A28,A29,WELLORD1:def 3;
+            (R |_2 A)-Seg(a) c= R-Seg(a) by WELLORD1:21;
+          then (R |_2 A)-Seg(a) misses Y by A31,XBOOLE_1:63;
+          hence ex a be set st a in Y & (R |_2 A)-Seg(a) misses Y by A30;
+        end;
+      hence thesis by A3,A4,A7,A11,A18,A23,WELLORD1:def 5,XBOOLE_0:def 10;
+    end;
+
+scheme MinSet{A()->set,R()->Relation,P[set]}:
+  ex X be set st X in A() & P[X] &
+    for Y be set st Y in A() & P[Y] holds [X,Y] in R()
+  provided
+   A1: R() well_orders A() and
+   A2: ex X be set st X in A() & P[X]
+   proof
+     defpred Q[set] means P[$1];
+     consider Y be set such that
+       A3: for x be set holds x in Y iff x in A() & Q[x] from Separation;
+A4:     ex x be set st x in Y
+       proof
+         consider x be set such that A5: x in A() & P[x] by A2;
+         take x;
+         thus x in Y by A3,A5;
+       end;
+       for x be set holds x in Y implies x in A() by A3;
+     then Y c= A() by TARSKI:def 3;
+     then consider X be set such that A6: X in Y and
+       A7: for Z be set st Z in Y holds [X,Z] in R() by A1,A4,WELLORD1:9;
+     A8: X in A() by A3,A6;
+     A9: P[X] by A3,A6;
+       for M be set st M in A() & P[M] holds [X,M] in R()
+       proof
+         let M be set;
+         assume M in A() & P[M];
+         then M in Y by A3;
+         hence thesis by A7;
+       end;
+     hence thesis by A8,A9;
+   end;
+
+definition let FX be set, R be Relation,
+               B be Element of FX;
+  func PartUnion(B,R) equals
+  :Def1: union (R-Seg(B));
+  coherence;
+end;
+
+definition let FX be set, R be Relation;
+  func DisjointFam(FX,R) means
+    A in it iff ex B be Element of FX st B in FX & A = B\PartUnion(B,R);
+  existence
+    proof
+      defpred P[set] means
+       ex B be Element of FX st B in FX & $1 = B\PartUnion(B,R);
+      consider X being set such that
+       A1: for x being set holds x in X iff x in bool union FX & P[x]
+        from Separation;
+      reconsider X as set;
+      take X;
+      let A;
+      thus A in X implies ex B be Element of FX st
+          B in FX & A = B\PartUnion(B,R) by A1;
+      assume A2:ex B be Element of FX st B in FX & A = B\PartUnion(B,R);
+      then consider B be Element of FX such that
+          A3: B in FX & A = B\PartUnion(B,R);
+        B c= union FX by A3,ZFMISC_1:92;
+      then A c= union FX by A3,XBOOLE_1:109;
+      hence A in X by A1,A2;
+    end;
+  uniqueness
+  proof
+   defpred P[set] means
+    ex B be Element of FX st B in FX & $1 = B\PartUnion(B,R);
+   thus for X1,X2 being set st
+    (for x be set holds x in X1 iff P[x]) &
+    (for x be set holds x in X2 iff P[x]) holds X1 = X2 from SetEq;
+  end;
+end;
+
+definition let X be set, n be Nat, f be Function of NAT,bool X;
+  func PartUnionNat(n,f) equals
+      union (f.:(Seg(n)\{n}));
+  coherence;
+  end;
+
+begin :: 3. Paracompactness of metrizable spaces
+
+  reserve PT for non empty TopSpace;
+  reserve PM for MetrSpace;
+  reserve FX,GX,HX for Subset-Family of PT;
+  reserve Y,V,W for Subset of PT;
+
+theorem
+  Th6:PT is_T3 implies
+       for FX st FX is_a_cover_of PT & FX is open
+         ex HX st HX is open & HX is_a_cover_of PT &
+           for V st V in HX ex W st W in FX & Cl V c= W
+proof
+  assume A1: PT is_T3;
+  let FX;
+  assume that A2:FX is_a_cover_of PT and A3:FX is open;
+  defpred P[set] means ex V1 being Subset of PT st V1 = $1 &
+   V1 is open & ex W st W in FX & Cl V1 c= W;
+  consider HX such that
+A4: for V being Subset of PT holds V in HX iff P[V]
+ from SubFamExS;
+  take HX;
+    for V being Subset of PT st V in HX holds V is open
+  proof
+   let V be Subset of PT;
+   assume V in HX;
+   then consider V1 being Subset of PT such that
+A5: V1 = V & V1 is open & ex W st W in FX & Cl V1 c= W by A4;
+   thus thesis by A5;
+  end;
+  hence HX is open by TOPS_2:def 1;
+  thus HX is_a_cover_of PT
+    proof
+        [#](PT) = union HX
+      proof
+        thus [#](PT) c= union HX
+        proof
+          let x be set;
+          assume x in [#](PT);
+          then reconsider x as Point of PT;
+          consider V being Subset of PT such that
+            A6: x in V & V in FX by A2,PCOMPS_1:5;
+          reconsider V as Subset of PT;
+            now per cases;
+          suppose A7:V`<> {};
+          A8: not x in V` by A6,SUBSET_1:54;
+            V is open by A3,A6,TOPS_2:def 1;
+          then V` is closed by TOPS_1:30;
+          then consider X,Y being Subset of PT such that
+          A9: X is open &
+             Y is open & x in X & V` c= Y & X misses Y
+               by A1,A7,A8,COMPTS_1:def 5;
+          A10: Y` c= V by A9,SUBSET_1:36;
+          A11: X c= Y` by A9,SUBSET_1:43;
+            Y` is closed by A9,TOPS_1:30;
+          then Cl X c= Y` by A11,TOPS_1:31;
+          then Cl X c= V by A10,XBOOLE_1:1;
+          then X in HX by A4,A6,A9;
+          hence x in union HX by A9,TARSKI:def 4;
+          suppose A12: V` = {};
+          consider X being Subset of PT such that A13: X=[#](PT);
+          A14: V = ({}(PT))` by A12
+              .= [#](PT) by PRE_TOPC:27;
+          A15: X is open by A13,TOPS_1:53;
+          A16: x in X by A13,PRE_TOPC:13;
+            Cl X = V by A13,A14,TOPS_1:27;
+          then X in HX by A4,A6,A15;
+          hence x in union HX by A16,TARSKI:def 4;
+          end;
+          hence thesis;
+        end;
+        thus union HX c= [#](PT)
+        proof
+          let x be set;
+          assume x in union HX;
+          then consider V be set such that
+            A17: x in V & V in HX by TARSKI:def 4;
+          reconsider x as Point of PT by A17;
+            x in [#](PT) by PRE_TOPC:13;
+          hence thesis;
+        end;
+      end;
+      hence thesis by PRE_TOPC:def 8;
+    end;
+  let V be Subset of PT;
+  assume V in HX;
+  then ex V1 being Subset of PT st V1 = V & V1 is open &
+   ex W st W in FX & Cl V1 c= W by A4;
+  hence ex W st W in FX & Cl V c= W;
+end;
+
+theorem
+    for PT,FX st PT is_T2 & PT is paracompact &
+             FX is_a_cover_of PT & FX is open
+         ex GX st GX is open & GX is_a_cover_of PT &
+           clf GX is_finer_than FX & GX is locally_finite
+proof
+  let PT,FX;
+  assume that A1: PT is_T2 and
+              A2: PT is paracompact and
+              A3: FX is_a_cover_of PT and
+              A4: FX is open;
+    PT is_T3 by A1,A2,PCOMPS_1:27;
+  then consider HX such that A5: HX is open &
+    HX is_a_cover_of PT & for V st V in HX
+       ex W st W in FX & Cl V c= W by A3,A4,Th6;
+  consider GX such that A6:GX is open & GX is_a_cover_of PT &
+           GX is_finer_than HX &
+           GX is locally_finite by A2,A5,PCOMPS_1:def 4;
+  A7: for V st V in GX ex W st W in FX & (Cl V) c= W
+   proof
+     let V;
+     assume V in GX;
+     then consider X being set such that
+          A8: X in HX & V c= X by A6,SETFAM_1:def 2;
+     reconsider X as Subset of PT by A8;
+     consider W such that A9:W in FX & Cl X c= W by A5,A8;
+     take W;
+       Cl V c= Cl X by A8,PRE_TOPC:49;
+     hence thesis by A9,XBOOLE_1:1;
+   end;
+    clf GX is_finer_than FX
+  proof
+    let X be set;
+    assume A10:X in clf GX;
+    then reconsider X as Subset of PT;
+    consider V such that A11: X = Cl V &
+           V in GX by A10,PCOMPS_1:def 3;
+    consider W such that A12: W in FX & (Cl V) c= W by A7,A11;
+    take W;
+    thus thesis by A11,A12;
+  end;
+  hence thesis by A6;
+end;
+
+theorem Th8:
+  for f being Function of
+      [:the carrier of PT,the carrier of PT:],REAL st
+      f is_metric_of ( the carrier of PT) holds
+      PM = SpaceMetr(the carrier of PT,f) implies
+      the carrier of PM = the carrier of PT
+    proof
+      let f be Function of
+        [:the carrier of PT,the carrier of PT:],REAL;
+      assume A1: f is_metric_of the carrier of PT;
+      assume PM = SpaceMetr(the carrier of PT,f);
+      then PM = MetrStruct(#the carrier of PT,f#) by A1,PCOMPS_1:def 8;
+      hence thesis;
+    end;
+
+canceled 2;
+
+theorem
+    for f being Function of
+      [:the carrier of PT,the carrier of PT:],REAL st
+      f is_metric_of ( the carrier of PT) holds
+      PM = SpaceMetr(the carrier of PT,f) implies
+        (FX is Subset-Family of PT iff
+        FX is Subset-Family of PM) by Th8;
+
+  reserve Mn for Relation;
+  reserve n,k,l,q,p,q1 for Nat;
+
+definition let PM be non empty set;
+           let g be Function of NAT,(bool bool PM)*;
+           let n;
+     redefine func g.n -> FinSequence of bool bool PM;
+     coherence
+      proof
+          g.n is Element of (bool bool PM)*;
+        hence g.n is FinSequence of bool bool PM;
+      end;
+     end;
+
+XXX1 { PM() -> non empty set, UB() -> Element of bool bool PM(),
+            F(set,set) -> Subset of PM(),
+            P[set],
+            Q[set,set,set,set]} :
+ex f being Function of NAT, bool bool PM() st
+  f.0 = UB() &
+  for n holds f.(n+1) =
+  {union { F(c,n) where c is Element of PM():
+              for fq be Element of bool bool PM(),q
+              st q <= n & fq = f.q holds Q[c,V,n,fq]
+              }
+      where V is Element of bool PM() : P[V]}
+  proof
+    defpred T[Nat,FinSequence of bool bool PM(),set] means
+     $3 = $2^<*{union { F(c,$1) where c is Element of PM():
+      for fq be Element of bool bool PM(),q st q <= $1 & fq = $2/.(q+1) holds
+       Q[c,V,$1,fq] } where V is Element of bool PM() : P[V]}*>;
+    A1: for n being Element of NAT for x being Element of (bool bool PM())*
+     ex y being Element of (bool bool PM())* st T[n,x,y]
+        proof
+          let n;
+          let x be Element of (bool bool PM())*;
+          set T = {
+            union { F(c,n) where c is Element of PM():
+                    for fq be Element of bool bool PM(),q
+                    st q <= n & fq = x/.(q+1) holds Q[c,V,n,fq]}
+            where V is Element of bool PM() : P[V]};
+            T in bool bool PM()
+            proof
+                now
+                let X be set; assume X in T;
+                then consider V be Element of bool PM() such that
+                 A2:  X=union { F(c,n) where c is Element of PM():
+                    for fq be Element of bool bool PM(),q
+                    st q <= n & fq = x/.(q+1) holds Q[c,V,n,fq]
+                    } and P[V];
+                  now let a be set; assume a in X;
+                  then consider P be set such that A3: a in P and
+                  A4: P in { F(c,n) where c is Element of PM():
+                    for fq be Element of bool bool PM(),q
+                    st q <= n & fq = x/.(q+1) holds Q[c,V,n,fq]}
+                      by A2,TARSKI:def 4;
+                  consider c be Element of PM() such that
+                    A5: P = F(c,n) and
+                      for fq be Element of bool bool PM(),q
+                    st q <= n & fq = x/.(q+1) holds Q[c,V,n,fq] by A4;
+                  thus a in PM() by A3,A5;
+                end;
+                then X c= PM() by TARSKI:def 3;
+                hence X in bool PM();
+              end;
+              then T c= bool PM() by TARSKI:def 3;
+              hence thesis;
+            end;
+          then reconsider T as Element of bool bool PM();
+          reconsider T1 = <*T*> as FinSequence of bool bool PM();
+          consider y be FinSequence of bool bool PM() such that
+            A6: y = x^T1;
+          reconsider y as Element of (bool bool PM())* by FINSEQ_1:def 11;
+          take y;
+          thus thesis by A6;
+        end;
+      reconsider A = <*UB()*> as Element of (bool bool PM())*
+        by FINSEQ_1:def 11;
+    consider g be Function of NAT,(bool bool PM())* such that
+      A7: g.0=A and
+      A8: for n be Element of NAT holds T[n,g.n,g.(n+1)] from RecExD(A1);
+      deffunc G(Nat) = (g.$1)/.len(g.$1);
+      consider f be Function of NAT,bool bool PM() such that
+       A9: for n holds f.n=G(n) from LambdaD;
+      take f;
+        len <*UB()*> = 1 by FINSEQ_1:56;
+      hence f.0 = <*UB()*>/.1 by A7,A9 .= UB() by FINSEQ_4:25;
+      defpred R[Nat] means len(g.$1) = $1 + 1;
+      A10: R[0] by A7,FINSEQ_1:56;
+      A11: for k st R[k] holds R[k+1]
+        proof
+          let k such that A12: len(g.k) = k+1;
+            len(g.(k+1))=len((g.k)^<*{
+            union { F(c,k) where c is Element of PM():
+                    for fq be Element of bool bool PM(),q
+                    st q <= k & fq = (g.k)/.(q+1) holds Q[c,V,k,fq]
+                    }
+            where V is Element of bool PM() : P[V]}*>) by A8
+          .= len(g.k)+1 by FINSEQ_2:19;
+          hence thesis by A12;
+        end;
+      A13: for n holds R[n] from Ind(A10,A11);
+      defpred T[Nat] means for q st q <= $1 holds f.q = (g.$1)/.(q+1);
+      A14: T[0]
+        proof
+          let q;
+          assume q <= 0;
+          then A15: q = 0 by NAT_1:18;
+         thus f.q = (g.q)/.len(g.q) by A9 .= (g.0)/.(q+1)
+           by A7,A15,FINSEQ_1:56;
+        end;
+      A16: for k st T[k] holds T[k+1]
+          proof
+            let k;
+            assume A17: for q st q <= k holds f.q = (g.k)/.(q+1);
+            let q;
+            assume A18: q <= k+1;
+              now per cases by A18,REAL_1:def 5;
+            suppose A19: q = k+1;
+            thus f.q=(g.q)/.len(g.q) by A9 .= (g.(k+1))/.(q+1) by A13,A19;
+            suppose A20: q < k+1; then A21: q+1 <= k+1 by NAT_1:38;
+            A22: q <= k by A20,NAT_1:38; q+1>=1 by NAT_1:29;
+            then A23: q+1 in Seg(k+1) by A21,FINSEQ_1:3;
+            k+1+1>=k+1 by NAT_1:29; then Seg(k+1) c= Seg(k+1+1) by FINSEQ_1:7;
+            then q+1 in Seg(k+1+1) by A23;
+        then q+1 in Seg(len(g.(k+1))) by A13;
+then A24:          q+1 in dom(g.(k+1)) by FINSEQ_1:def 3;
+           q+1 in Seg len(g.k) by A13,A23;
+then A25:          q+1 in dom (g.k) by FINSEQ_1:def 3;
+            thus (g.(k+1))/.(q+1) = (g.(k+1)).(q+1) by A24,FINSEQ_4:def 4
+              .= ((g.k)^<*{ union { F(c,k) where c is Element of PM():
+                    for fq be Element of bool bool PM(),q
+                    st q <= k & fq = (g.k)/.(q+1) holds Q[c,V,k,fq]}
+            where V is Element of bool PM()
+            : P[V]}*>).(q+1) by A8 .= (g.k).(q+1) by A25,FINSEQ_1:def 7
+            .= (g.k)/.(q+1) by A25,FINSEQ_4:def 4 .= f.q by A17,A22;
+            end;
+            hence thesis;
+          end;
+      A26: for n holds T[n] from Ind(A14,A16);
+      let n;
+      defpred P2[set] means P[$1];
+      deffunc F2(set) = union { F(c,n) where c is Element of PM():
+       for fq be Element of bool bool PM(),q st q <= n & fq = f.q holds
+        Q[c,$1,n,fq]};
+      deffunc G2(set) = union { F(c,n) where c is Element of PM():
+       for fq be Element of bool bool PM(),q st q <= n &
+        fq = (g.n)/.(q+1) holds Q[c,$1,n,fq]};
+      set NF = { F2(V) where V is Element of bool PM(): P2[V] };
+      A27: for V be Element of bool PM() st P2[V] holds F2(V) = G2(V)
+          proof
+            let V be Element of bool PM() such that P[V];
+            deffunc F1(set) = F($1,n);
+            defpred P1[set] means for fq be Element of bool bool PM(),q st
+             q <= n & fq = f.q holds Q[$1,V,n,fq];
+            defpred P2[set] means for fq be Element of bool bool PM(),q st
+             q <= n & fq = (g.n)/.(q+1) holds Q[$1,V,n,fq];
+                A28:for c be Element of PM() holds P1[c] iff P2[c]
+                  proof
+                  let c be Element of PM();
+                  thus (for fq be Element of bool bool PM(),q
+                  st q <= n & fq = f.q holds Q[c,V,n,fq]) implies
+                  for fq be Element of bool bool PM(),q
+                  st q <= n & fq = (g.n)/.(q+1) holds Q[c,V,n,fq]
+                    proof
+                      assume A29: for fq be Element of bool bool PM(),q
+                      st q <= n & fq = f.q holds Q[c,V,n,fq];
+                      let fq be Element of bool bool PM(),q;
+                      assume A30: q <= n & fq = (g.n)/.(q+1);
+                      then fq = f.q by A26;
+                      hence thesis by A29,A30;
+                    end;
+                  assume A31: for fq be Element of bool bool PM(),q
+                  st q <= n & fq = (g.n)/.(q+1) holds Q[c,V,n,fq];
+                  let fq be Element of bool bool PM(),q; assume
+                    A32: q <= n & fq = f.q;
+                  then f.q = (g.n)/.(q+1) by A26;
+                  hence Q[c,V,n,fq] by A31,A32;
+                  end;
+            { F1(c) where c is Element of PM(): P1[c] } =
+            { F1(c) where c is Element of PM(): P2[c] } from Fraenkel6'(A28);
+            hence thesis;
+          end;
+      A33: NF = { G2(V) where V is Element of bool PM() : P2[V] }
+       from FraenkelF'R(A27);
+      then A34: len(g.(n+1))=len((g.n)^<*NF*>) by A8
+      .= len(g.n)+1 by FINSEQ_2:19;
+      A35: len(g.n)+1 in dom (g.(n+1))
+        proof
+            len(g.(n+1))= n+1+1 by A13;
+          then A36: dom(g.(n+1)) = Seg(n+1+1) by FINSEQ_1:def 3;
+            len(g.n)+1=n+1+1 by A13;
+          hence thesis by A36,FINSEQ_1:6;
+        end;
+      thus f.(n+1) = (g.(n+1))/.(len(g.n)+1) by A9,A34
+      .= g.(n+1).(len(g.n)+1) by A35,FINSEQ_4:def 4
+      .= ((g.n)^<*NF*>).(len(g.n)+1) by A8,A33
+      .= NF by FINSEQ_1:59;
+  end;
+
+XXX { PM() -> non empty set, UB() -> Element of bool bool PM(),
+            F(set,set) -> Subset of PM(),
+            P[set],
+            Q[set,set,set]} :
+ex f being Function of NAT, bool bool PM() st
+  f.0 = UB() &
+  for n holds f.(n+1) =
+  { union { F(c,n) where c is Element of PM():
+              Q[c,V,n] &
+              not c in union{union(f.q): q <= n }
+              }
+      where V is Element of bool PM()
+      : P[V]}
+  proof
+    defpred P1[set] means P[$1];
+    defpred Q1[set,set,set,set] means Q[$1,$2,$3] & not $1 in union $4;
+    deffunc F1(set,set) = F($1,$2);
+    consider f being Function of NAT, bool bool PM() such that
+      A1: f.0 = UB() and
+      A2: for n holds f.(n+1) =
+      { union { F1(c,n) where c is Element of PM():
+                  for fq be Element of bool bool PM(),q
+                  st q <= n & fq = f.q holds Q1[c,V,n,fq] }
+        where V is Element of bool PM() : P1[V]} from XXX1;
+    take f;
+    thus f.0 = UB() by A1;
+    let n;
+    defpred P2[set] means P[$1];
+    deffunc F2(set) = union { F(c,n) where c is Element of PM():
+     for fq be Element of bool bool PM(),q st q <= n & fq = f.q holds
+      Q[c,$1,n] & not c in union(fq) };
+    deffunc G2(set) = union { F(c,n) where c is Element of PM(): Q[c,$1,n] &
+     not c in union{union(f.q): q <= n } };
+    set fxxx1 = { F2(V) where V is Element of bool PM() : P2[V] };
+    set fxxx = { G2(V) where V is Element of bool PM() : P2[V] };
+    A3:now
+        let V be Element of bool PM();
+        assume P2[V];
+        deffunc F1(set) = F($1,n);
+        defpred P1[set] means for fq be Element of bool bool PM(),q
+         st q <= n & fq = f.q holds Q[$1,V,n] & not $1 in union(fq);
+        defpred Q1[set] means Q[$1,V,n] & not $1 in union{union(f.q1):
+         q1 <= n };
+          A4:now
+              let c be Element of PM();
+                A5: ( for fq be Element of bool bool PM(),q
+                st q <= n & fq = f.q holds not c in union(fq))
+                iff not c in union{union(f.q): q <= n }
+                proof
+                thus (for fq be Element of bool bool PM(),q
+                st q <= n & fq = f.q holds not c in union(fq))
+                implies not c in union{union(f.q): q <= n }
+                  proof
+                    assume A6: for fq be Element of bool bool PM(),q
+                      st q <= n & fq = f.q holds not c in union(fq);
+                    assume c in union{union(f.q): q <= n};
+                    then consider C be set such that
+                      A7: c in C and A8: C in {union(f.q): q <=
+ n}by TARSKI:def 4;
+                    consider q be Nat such that
+                      A9: C = union(f.q) and A10: q <= n by A8;
+                    thus contradiction by A6,A7,A9,A10;
+                  end;
+                assume A11: not c in union{union(f.q): q <= n };
+                let fq be Element of bool bool PM(),q;
+                assume that A12: q <= n and A13: fq = f.q;
+                assume A14: c in union(fq);
+                  union(fq) in {union(f.p): p <= n} by A12,A13;
+                hence contradiction by A11,A14,TARSKI:def 4;
+                end;
+              thus P1[c] iff Q1[c]
+                proof
+                  hereby assume A15:( for fq be Element of bool bool PM(),q
+                    st q <= n & fq = f.q holds Q[c,V,n] & not c in union(fq));
+                    consider q such that A16: q <= n;
+                    consider fq be Element of bool bool PM() such that
+                      A17: fq = f.q;
+                    thus Q[c,V,n] by A15,A16,A17;
+                    thus not c in union{union(f.p): p <= n } by A5,A15;
+                  end;
+                  assume Q[c,V,n] & not c in union{union(f.q): q <= n };
+                  hence thesis by A5;
+                end;
+            end;
+        { F1(c) where c is Element of PM(): P1[c] }
+         = { F1(c) where c is Element of PM(): Q1[c] } from Fraenkel6'(A4);
+        hence F2(V) = G2(V);
+      end;
+      fxxx1 = fxxx from FraenkelF'R(A3);
+    hence thesis by A2;
+  end;
+
+theorem  :: Stone Theorem - general case
+  Th12: PT is metrizable implies
+     for FX being Subset-Family of PT
+        st FX is_a_cover_of PT & FX is open
+      ex GX being Subset-Family of PT
+         st GX is open & GX is_a_cover_of PT &
+               GX is_finer_than FX & GX is locally_finite
+      proof
+        assume PT is metrizable;
+        then consider metr being Function of
+          [:the carrier of PT,the carrier of PT:],REAL such that
+          A1: metr is_metric_of (the carrier of PT) and
+          A2: Family_open_set( SpaceMetr (the carrier of PT,metr) ) =
+               the topology of PT by PCOMPS_1:def 9;
+        consider PM being non empty MetrSpace such that
+          A3: PM = SpaceMetr(the carrier of PT,metr);
+        let FX;
+        assume that A4:FX is_a_cover_of PT and A5: FX is open;
+        consider R such that A6: R well_orders FX by WELLORD2:26;
+        consider Mn such that A7: Mn = R |_2 FX;
+        A8: Mn well_orders FX by A6,A7,Th5;
+        set UB = {union {Ball(c,1/2)
+          where c is Element of PM:
+          c in V\PartUnion(V,Mn) & Ball(c,3/2) c= V}
+           where V is Subset of PM: V in FX};
+          UB is Element of bool bool the carrier of PM
+          proof
+            reconsider UB as set;
+              UB c= bool the carrier of PM
+            proof
+              let x be set;
+              assume x in UB;
+              then consider V be Subset of PM such that
+                  A9: x = union {Ball(c,1/2)
+                  where c is Element of PM:
+                  c in V\PartUnion(V,Mn) & Ball(c,3/2) c= V}
+                  and V in FX;
+                  x c= the carrier of PM
+                proof
+                  let y be set; assume y in x;
+                  then consider W be set such that
+                   A10: y in W and A11: W in {Ball(c,1/2)
+                     where c is Element of PM:
+                     c in V\PartUnion(V,Mn) & Ball(c,3/2) c= V}
+                     by A9,TARSKI:def 4;
+                  consider c be Element of PM
+                   such that A12: W = Ball(c,1/2) and
+                     c in V\PartUnion(V,Mn) & Ball(c,3/2) c= V by A11;
+                  thus y in the carrier of PM by A10,A12;
+                end;
+              hence thesis;
+            end;
+          hence thesis;
+        end;
+        then reconsider UB as Element of bool bool the carrier of PM;
+        deffunc F1(Element of PM,Nat) = Ball($1,1/(2 |^($2+1)));
+        defpred Q1[Element of PM,
+                   Element of bool the carrier of PM,Nat] means
+         $1 in $2\PartUnion($2,Mn) & Ball($1,3/(2 |^ ($3+1))) c= $2;
+        defpred P1[set] means $1 in FX;
+        consider f being Function of NAT, bool bool the carrier of PM
+          such that
+          A13: f.0 = UB and
+          A14: for n holds f.(n+1) = {union { F1(c,n)
+              where c is Element of PM:
+              Q1[c,V,n] &
+              not c in union{union (f.q): q <= n } }
+                where V is Element of bool the carrier of PM: P1[V]}
+                  from XXX;
+        defpred P2[set] means ex n st $1 in f.n;
+        consider GX being Subset-Family of PM
+          such that A15: for X being Subset of PM
+            holds X in GX iff P2[X] from SubFamEx;
+          GX is Subset-Family of PT by A1,A3,Th8;
+        then reconsider GX as Subset-Family of PT;
+        take GX;
+        thus A16: GX is open
+          proof
+              for X being Subset of PT st X in GX holds X is open
+              proof
+                let X be Subset of PT;
+                assume A17: X in GX;
+                then reconsider X as Subset of PM;
+                consider n such that A18: X in f.n by A15,A17;
+                 now per cases by NAT_1:19;
+                  suppose A19: n=0;
+                  thus X in the topology of PT
+                    proof
+                      consider V be Subset of PM
+                        such that A20: X = union {Ball(c,1/2)
+                        where c is Element of PM:
+                        c in V\PartUnion(V,Mn) & Ball(c,3/2) c= V} and
+                          V in FX by A13,A18,A19;
+                      set NF = {Ball(c,1/2)
+                        where c is Element of PM:
+                        c in V\PartUnion(V,Mn) & Ball(c,3/2) c= V};
+                        NF c= bool the carrier of PM
+                      proof
+                        let a be set;
+                        assume a in NF;
+                        then consider
+                          c be Element of PM
+                          such that A21: a = Ball(c,1/2) and
+                            c in V\PartUnion(V,Mn) & Ball(c,3/2) c= V;
+                        thus a in bool the carrier of PM by A21;
+                      end;
+                      then reconsider NF as Subset-Family of PM
+                        by SETFAM_1:def 7;
+                        NF c= Family_open_set(PM)
+                      proof
+                        let a be set;
+                        assume a in NF;
+                        then consider c be Element of PM
+                          such that A22: a = Ball(c,1/2) and
+                            c in V\PartUnion(V,Mn) & Ball(c,3/2) c= V;
+                        thus a in Family_open_set(PM) by A22,PCOMPS_1:33;
+                      end;
+                      hence thesis by A2,A3,A20,PCOMPS_1:36;
+                    end;
+                  suppose n>0;
+                  then consider k such that A23: n = k + 1 by NAT_1:22;
+                  thus X in the topology of PT
+                    proof
+                        X in {union { Ball(c,1/(2 |^ (k+1)))
+                        where c is Element of PM:
+                        c in V\PartUnion(V,Mn) &
+                        Ball(c,3/(2 |^ (k+1))) c= V &
+                        not c in union{union(f.q)
+                                      where q is Nat: q <= k } }
+                        where V is Element of bool the carrier of PM:
+                          V in FX} by A14,A18,A23;
+                      then consider V be Element of bool the carrier of PM
+                        such that
+                        A24: X = union { Ball(c,1/(2 |^ (k+1)))
+                        where c is Element of PM:
+                        c in V\PartUnion(V,Mn) &
+                        Ball(c,3/(2 |^ (k+1))) c= V &
+                        not c in union{union(f.q)
+                                      where q is Nat: q <= k } } and V in FX;
+                        reconsider NF = { Ball(c,1/(2 |^ (k+1)))
+                        where c is Element of PM:
+                        c in V\PartUnion(V,Mn) &
+                        Ball(c,3/(2 |^ (k+1))) c= V &
+                        not c in union { union(f.q)
+                                       where q is Nat: q <= k } } as set;
+                        NF c= bool the carrier of PM
+                        proof
+                          let a be set;
+                          assume a in NF;
+                          then consider
+                            c be Element of PM
+                            such that A25: a = Ball(c,1/(2 |^ (k+1)))
+                              and c in V\PartUnion(V,Mn) &
+                              Ball(c,3/(2 |^ (k+1))) c= V &
+                              not c in union { union(f.l): l <= k};
+                          thus a in bool the carrier of PM by A25;
+                        end;
+                        then reconsider NF as Subset-Family of
+PM
+                          by SETFAM_1:def 7;
+                        NF c= Family_open_set(PM)
+                        proof
+                          let a be set;
+                          assume a in NF;
+                          then consider c be Element of PM
+                            such that A26: a = Ball(c,1/(2 |^ (k+1)))
+                              and c in V\PartUnion(V,Mn) &
+                              Ball(c,3/(2 |^ (k+1))) c= V &
+                              not c in union{union(f.l): l <= k};
+                          thus a in Family_open_set(PM) by A26,PCOMPS_1:33;
+                        end;
+                      hence thesis by A2,A3,A24,PCOMPS_1:36;
+                    end;
+                end;
+                hence thesis by PRE_TOPC:def 5;
+              end;
+            hence thesis by TOPS_2:def 1;
+          end;
+        thus A27: GX is_a_cover_of PT
+          proof
+            A28: [#](PT) c= union GX
+              proof
+                  let x be set;
+                  defpred P1[set] means x in $1;
+                  assume A29: x in [#](PT);
+                  then ex G be Subset of PT st x in G & G in FX
+                               by A4,PCOMPS_1:5;
+                  then A30: ex G be set st G in FX & P1[G];
+                  consider X be set such that
+                    A31: X in FX and A32: P1[X] and
+                    A33: for Y be set st Y in FX & P1[Y] holds [X,Y] in Mn
+                            from MinSet(A8,A30);
+                  reconsider X as Subset of PT by A31;
+                    X is open by A5,A31,TOPS_2:def 1;
+                  then A34: X in Family_open_set(PM) by A2,A3,PRE_TOPC:def 5;
+                  reconsider X as Subset of PM
+                    by A1,A3,Th8;
+                  reconsider x'=x as Element of PM
+                         by A1,A3,A29,Th8;
+                  consider r be Real such that
+                   A35: r>0 and A36: Ball(x',r) c= X by A32,A34,PCOMPS_1:def 5;
+                  defpred P2[Nat] means 3/(2 |^ $1) <= r;
+                  A37: ex k be Nat st P2[k] by A35,Th3;
+                  consider k such that A38: P2[k] and
+                   for l st P2[l] holds k <= l from Min(A37);
+                  A39: 2 |^ k > 0 by PREPOWER:13;
+                     2 |^ (k+1) = 2 |^ k * 2 by NEWTON:11;
+                  then 2 |^ (k+1) >= 2 |^ k by A39,REAL_2:146;
+                  then 3/2 |^ (k+1) <= 3/2 |^ k by A39,REAL_2:201;
+                  then A40: 3/2 |^ (k+1) <= r by A38,AXIOMS:22;
+                  assume A41: not x in union GX;
+
+                  A42: for V be set,n st V in f.n holds not x in V
+                    proof
+                      let V be set;
+                      let n;
+                      assume V in f.n;
+                      then V in GX by A15;
+                      hence thesis by A41,TARSKI:def 4;
+                    end;
+                  A43: for n holds not x in union (f.n)
+                    proof
+                      let n;
+                      assume x in union (f.n);
+                      then consider V be set such that A44: x in V & V in f.n
+                            by TARSKI:def 4;
+                      thus contradiction by A42,A44;
+                    end;
+                    now
+                  set W = union{ Ball(y,1/(2 |^ (k+1)))
+                        where y is Element of PM:
+                        y in X\PartUnion(X,Mn) &
+                        Ball(y,3/(2 |^ (k+1))) c= X &
+                        not y in union{ union(f.q) where q is Nat: q <= k} };
+                  A45: x in W
+                    proof
+                      consider A be Subset of PM
+                        such that A46: A = Ball(x',1/(2 |^ (k+1)));
+                        0 < 2 |^ (k+1) by PREPOWER:13;
+                      then 0 < 1/(2 |^ (k+1)) by REAL_2:127;
+                      then A47: x in A by A46,TBSP_1:16;
+                        not x' in PartUnion(X,Mn)
+                        proof
+                          assume x' in PartUnion(X,Mn);
+                          then x' in union (Mn-Seg(X)) by Def1;
+                          then consider M be set such that A48: x' in M and
+                              A49: M in Mn-Seg(X) by TARSKI:def 4;
+                          reconsider FX as set;
+                          A50: M <> X & [M,X] in Mn by A49,WELLORD1:def 1;
+                          then M in field Mn by RELAT_1:30;
+                          then A51: M in FX by A6,A7,Th5;
+                          then A52: [X,M] in Mn by A33,A48;
+                            Mn is_antisymmetric_in FX
+                            by A8,WELLORD1:def 5;
+                          hence contradiction by A31,A50,A51,A52,RELAT_2:def 4
+;
+                        end;
+                      then A53: x' in X\PartUnion(X,Mn) by A32,XBOOLE_0:def 4;
+                        Ball(x',3/(2 |^ (k+1))) c= Ball(x',r)
+                              by A40,PCOMPS_1:1;
+                      then A54: Ball(x',3/(2 |^ (k+1))) c= X
+                      by A36,XBOOLE_1:1;
+                        not x' in union { union(f.q)
+                                          where q is Nat: q <= k}
+                       proof
+                         assume x' in union { union(f.q)
+                                            where q is Nat: q <= k};
+                         then consider D be set such that
+                           A55: x' in D and
+                           A56: D in { union(f.q)
+                     where q is Nat: q <= k} by TARSKI:def 4;
+                         consider q be Nat such that
+                           A57: D = union (f.q) and q <= k by A56;
+                         thus contradiction by A43,A55,A57;
+                       end;
+                      then A in { Ball(y,1/(2 |^ (k+1)))
+                      where y is Element of PM:
+                      y in X\PartUnion(X,Mn) &
+                      Ball(y,3/(2 |^ (k+1))) c= X &
+                              not y in union { union(f.q)
+                         where q is Nat: q <= k}} by A46,A53,A54;
+                      hence thesis by A47,TARSKI:def 4;
+                    end;
+                  reconsider W as set;
+                   W in {union{ Ball(y,1/(2 |^ (k+1)))
+                    where y is Element of PM:
+                    y in V\PartUnion(V,Mn) &
+                    Ball(y,3/(2 |^ (k+1))) c= V &
+                      not y in union { union(f.q) where q is Nat: q <= k}}
+                    where V is Element of bool the carrier of PM: V in FX}
+by A31;
+                  then W in f.(k+1) by A14;
+                  hence ex W be set,l be Nat st W in f.l & x in W by A45;
+                  end;
+                  hence contradiction by A42;
+              end;
+              union GX c= [#](PT)
+            proof
+              let x be set;
+              assume x in union GX;
+              then consider X be set such that
+                A58: x in X and A59: X in GX by TARSKI:def 4;
+              reconsider x'=x as Point of PT by A58,A59;
+                x' in the carrier of PT;
+              hence x in [#](PT) by PRE_TOPC:12;
+            end;
+            then [#](PT) = union GX by A28,XBOOLE_0:def 10;
+            hence thesis by PRE_TOPC:def 8;
+          end;
+        thus GX is_finer_than FX
+          proof
+              for X be set st X in GX ex Y be set st Y in FX & X c= Y
+            proof
+              let X be set;
+              assume A60: X in GX;
+              then reconsider
+                X as Subset of PM;
+              consider n such that A61: X in f.n by A15,A60;
+                 now per cases by NAT_1:19;
+                suppose A62: n=0;
+                thus ex Y be set st Y in FX & X c= Y
+                  proof
+                    consider V be Subset of PM such that
+                      A63: X = union {Ball(c,1/2)
+                      where c is Element of PM:
+                      c in V\PartUnion(V,Mn) & Ball(c,3/2) c= V} and
+                      A64: V in FX by A13,A61,A62;
+                    set NF = {Ball(c,1/2)
+                      where c is Element of PM:
+                      c in V\PartUnion(V,Mn) & Ball(c,3/2) c= V};
+                          NF c= bool the carrier of PM
+                        proof
+                          let a be set;
+                          assume a in NF;
+                          then consider
+                            c be Element of PM
+                            such that A65: a = Ball(c,1/2) and
+                              c in V\PartUnion(V,Mn) & Ball(c,3/2) c= V;
+                          thus a in bool the carrier of PM by A65;
+                        end;
+                      then reconsider NF as Subset-Family of PM
+                        by SETFAM_1:def 7;
+                    A66: for W be set st W in NF holds W c= V
+                      proof
+                        let W be set;
+                        assume W in NF;
+                        then consider c be Element of PM
+                          such that
+                          A67: W = Ball(c,1/2) & c in V\PartUnion(V,Mn) and
+                          A68: Ball(c,3/2) c= V;
+                          Ball(c,1/2) c= Ball(c,3/2) by PCOMPS_1:1;
+                        hence thesis by A67,A68,XBOOLE_1:1;
+                      end;
+                    reconsider V as set;
+                    take Y = V;
+                    thus Y in FX by A64;
+                    thus X c= Y by A63,A66,ZFMISC_1:94;
+                  end;
+                suppose n>0;
+                then consider k such that A69: n = k + 1 by NAT_1:22;
+                thus ex Y be set st Y in FX & X c= Y
+                  proof
+                      X in {union { Ball(c,1/(2 |^ (k+1)))
+                      where c is Element of PM:
+                      c in V\PartUnion(V,Mn) &
+                      Ball(c,3/(2 |^ (k+1))) c= V &
+                      not c in union { union(f.q) where q is Nat: q <= k}}
+                      where V is Element of bool the carrier of PM: V in FX}
+                        by A14,A61,A69;
+                    then consider V be Element of bool the carrier of PM
+                      such that
+                      A70: X = union { Ball(c,1/(2 |^ (k+1)))
+                      where c is Element of PM:
+                      c in V\PartUnion(V,Mn) &
+                      Ball(c,3/(2 |^ (k+1))) c= V &
+                      not c in union{union(f.q) where q is Nat: q <= k}} and
+                      A71: V in FX;
+                    reconsider NF = { Ball(c,1/(2 |^ (k+1)))
+                      where c is Element of PM:
+                      c in V\PartUnion(V,Mn) &
+                      Ball(c,3/(2 |^ (k+1))) c= V &
+                      not c in union{union(f.q) where q is Nat: q <= k}}
+                      as set;
+                      NF c= bool the carrier of PM
+                      proof
+                        let a be set;
+                        assume a in NF;
+                        then consider
+                          c be Element of PM
+                          such that A72: a = Ball(c,1/(2 |^ (k+1)))
+                            and c in V\PartUnion(V,Mn) &
+                            Ball(c,3/(2 |^ (k+1))) c= V &
+                            not c in union { union(f.q)
+                                           where q is Nat: q <= k};
+                        thus a in bool the carrier of PM by A72;
+                      end;
+                      then reconsider NF as Subset-Family of PM
+                        by SETFAM_1:def 7;
+                    A73: for W be set st W in NF holds W c= V
+                      proof
+                        let W be set;
+                        assume W in NF;
+                        then consider
+                          c be Element of PM
+                          such that A74: W = Ball(c,1/(2 |^ (k+1)))
+                            & c in V\PartUnion(V,Mn) and
+                            A75: Ball(c,3/(2 |^ (k+1))) c= V &
+                            not c in union { union(f.q)
+                                           where q is Nat: q <= k};
+                           0 < 2 |^ (k+1) by PREPOWER:13;
+                        then 1/(2 |^ (k+1)) <= 3/(2 |^ (k+1))
+                        by REAL_1:73;
+                        then Ball(c,1/(2 |^ (k+1))) c= Ball(c,3/(2 |^ (k+1)))
+                                   by PCOMPS_1:1;
+                        hence thesis by A74,A75,XBOOLE_1:1;
+                      end;
+                    reconsider V as set;
+                    take Y = V;
+                    thus Y in FX by A71;
+                    thus X c= Y by A70,A73,ZFMISC_1:94;
+                  end;
+              end;
+              hence thesis;
+            end;
+            hence thesis by SETFAM_1:def 2;
+          end;
+        thus GX is locally_finite
+          proof
+              for x be Point of PT ex W be Subset of PT
+              st x in W & W is open &
+              { V : V in GX & V meets W } is finite
+              proof
+                let x be Point of PT;
+                consider X be Subset of PT such that
+                  A76: x in X and A77: X in GX by A27,PCOMPS_1:5;
+                reconsider X as Subset of PT;
+                defpred P3[set] means X in f.$1;
+                A78: ex n st P3[n] by A15,A77;
+                consider k such that A79: P3[k] and
+                 for l st P3[l] holds k <= l from Min(A78);
+                  X is open by A16,A77,TOPS_2:def 1;
+                then A80: X in Family_open_set(PM) by A2,A3,PRE_TOPC:def 5;
+                reconsider x'=x as Element of PM
+                        by A1,A3,Th8;
+                consider r be Real such that
+               A81: r>0 and A82: Ball(x',r) c= X by A76,A80,PCOMPS_1:def 5;
+ consider m be Nat such that
+                A83: 1/(2 |^ m) <= r by A81,Th3;
+                  2 |^ (m+1+k+1) > 0 by PREPOWER:13;
+                then A84: 1/(2 |^ (m+1+k+1)) > 0 by REAL_2:127;
+                consider W be Subset of PM such that
+                A85: W = Ball(x',1/(2 |^ (m+1+k+1)));
+                A86:x in W by A84,A85,TBSP_1:16;
+                  W is Subset of PT by A1,A3,Th8;
+                then reconsider W as Subset of PT;
+                  W in the topology of PT by A2,A3,A85,PCOMPS_1:33;
+                then A87:W is open by PRE_TOPC:def 5;
+                  { V : V in GX & V meets W } is finite
+                  proof
+                    set NZ={ V : V in GX & V meets W };
+                    defpred P4[set,set] means $1 in f.$2;
+                    A88: for p be set st p in NZ ex n st P4[p,n]
+                      proof
+                       let p be set;
+                       assume p in NZ;
+                       then consider V be Subset of PT such that
+                          A89: p = V and A90: V in GX and V meets W;
+                       consider k be Nat such that A91: V in f.k by A15,A90;
+                       thus thesis by A89,A91;
+                      end;
+                    consider g be Function such that
+                      A92: dom g = NZ and
+                      A93: for y be set st y in NZ ex n st g.y=n & P4[y,n] &
+                       for t be Nat st P4[y,t] holds n <=t
+                        from FuncExOfMinNat(A88);
+                    A94: rng g c= {i: i < (m+1+k+1)}
+                      proof
+                        let t be set;
+                        assume t in rng g;
+                        then consider a be set such that
+                          A95: a in dom g and A96: t = g.a by FUNCT_1:def 5;
+                        consider n be Nat such that A97: g.a = n and
+                            A98:a in f.n and
+                        for p be Nat st a in f.p holds n <= p by A92,A93,A95;
+                        assume A99: not t in {i: i < (m+1+k+1)};
+                        consider V such that A100:a=V and
+                            V in GX and A101: V meets W by A92,A95;
+                        reconsider t as Nat by A96,A97;
+                        A102:t >= (m+1+k+1) by A99;
+                        consider y being set such that
+                        A103: y in V & y in W by A101,XBOOLE_0:3;
+                          now per cases by NAT_1:19;
+                          suppose A104: t=0;
+                            m+1+k+1 >= 1 by NAT_1:29;
+                          hence contradiction by A102,A104,AXIOMS:22;
+                          suppose t>0;
+                          then consider l be Nat such that
+                              A105: t=l+1 by NAT_1:22;
+                            V in {union { Ball(c,1/(2 |^ (l+1)))
+                          where c is Element of PM:
+                          c in Y\PartUnion(Y,Mn) &
+                          Ball(c,3/(2 |^ (l+1))) c= Y &
+                          not c in union{union(f.q) where q is Nat: q <= l}}
+                          where Y is Element of bool the carrier of PM:
+                            Y in FX} by A14,A96,A97,A98,A100,A105;
+                          then consider Y be Element of bool the carrier of PM
+                          such that A106: V = union { Ball(c,1/(2 |^ (l+1)))
+                          where c is Element of PM:
+                          c in Y\PartUnion(Y,Mn) &
+                          Ball(c,3/(2 |^ (l+1))) c= Y &
+                          not c in
+ union{union(f.q) where q is Nat: q <= l}} and
+                            Y in FX; reconsider NF = { Ball(c,1/(2 |^ (l+1)))
+                          where c is Element of PM:
+                          c in Y\PartUnion(Y,Mn) &
+                          Ball(c,3/(2 |^ (l+1))) c= Y &
+                          not c in union{union(f.q) where q is Nat: q <= l}}
+                          as set;
+                          consider T be set such that A107: y in T and
+                          A108: T in NF by A103,A106,TARSKI:def 4;
+                          consider c be Element of PM
+                          such that A109: T = Ball(c,1/(2 |^ (l+1))) and
+                          A110: c in Y\PartUnion(Y,Mn) &
+                          Ball(c,3/(2 |^ (l+1))) c= Y &
+                          not c in union{union (f.q)
+                            where q is Nat: q <= l} by A108;
+                          reconsider y as Element of PM
+                              by A103;
+ A111:2 |^ t >= 2 |^ (m+1+k+1) by A102,Th4;
+  A112:2 |^ (m+1+k+1) > 0 by PREPOWER:13;
+then A113: 1/(2 |^ (m+1+k+1)) >= 1/(2 |^ t) by A111,REAL_2:201;
+   2 |^ (1+k+1) <> 0 by PREPOWER:12;
+  then A114:1/(2 |^ m) - 1/(2 |^ (m+1+k+1)) =
+  (1*(2 |^ (1+k+1)))/((2 |^ m)*(2 |^ (1+k+1))) - 1/(2 |^ (m+1+k+1))
+  by XCMPLX_1:92 .= (1*(2 |^ (1+k+1)))/(2 |^ (m+((1+k)+1)))
+  - 1/(2 |^ (m+1+k+1)) by NEWTON:13
+ .= (1*(2 |^ (1+k+1)))/(2 |^ ((m+(1+k))+1)) -
+  1/(2 |^ (m+1+k+1)) by XCMPLX_1:1 .= 2 |^ (1+k+1)/(2 |^ (m+1+k+1)) -
+  1/(2 |^ (m+1+k+1)) by XCMPLX_1:1 .= ((2 |^ (1+k))*2)/(2 |^ (m+1+k+1)) -
+  1/(2 |^ (m+1+k+1)) by NEWTON:11 .= (((2 |^ (1+k))*2)-1)/(2 |^ (m+1+k+1))
+    by XCMPLX_1:121;
+    (2 |^ (1+k)) >= 1 by PREPOWER:19; then (2 |^ (1+k))*2>=2
+  by REAL_2:146; then ((2 |^ (1+k))*2)-1>=2-1 by REAL_1:49;
+then A115: 1/(2 |^ m) - 1/(2 |^ (m+1+k+1)) >= 1/(2 |^ (m+1+k+1)) by A112,A114,
+REAL_1:73;
+    A116: for t be Nat st t < l holds not c in union(f.t)
+      proof
+        let t be Nat;
+        assume A117: t < l;
+        assume A118: c in union(f.t);
+          union(f.t) in {union(f.q) where q is Nat: q <= l} by A117;
+        hence contradiction by A110,A118,TARSKI:def 4;
+      end;
+        dist(c,y) < 1/(2 |^ t) by A105,A107,A109,METRIC_1:12;
+      then dist(c,y) < 1/(2 |^ (m+1+k+1)) by A113,AXIOMS:22;
+      then A119: dist(c,y) + dist(y,x') <
+        1/(2 |^ (m+1+k+1)) + dist(y,x') by REAL_1:53;
+      A120: dist(c,x') >= 1/(2 |^ m)
+        proof
+          assume not dist(c,x') >= 1/(2 |^ m);
+          then dist(x',c) < r by A83,AXIOMS:22;
+          then c in Ball(x',r) by METRIC_1:12;
+          then A121: c in union (f.k) by A79,A82,TARSKI:def 4;
+          A122: k <> l
+          proof
+            assume k=l;
+            then union (f.k) in {union(f.q) where q is Nat: q <= l};
+            hence contradiction by A110,A121,TARSKI:def 4;
+          end;A123:l >= k+(m+1) by A102,A105,REAL_1:53; k+(m+1)>=k
+by NAT_1:29;
+          then k <= l by A123,AXIOMS:22;
+          then k < l by A122,REAL_1:def 5;
+          hence contradiction by A116,A121;
+        end;
+        dist(c,y) + dist(y,x') >= dist(c,x') by METRIC_1:4;
+      then dist(c,y) + dist(y,x') >= 1/(2 |^ m)
+          by A120,AXIOMS:22;
+      then 1/(2 |^ (m+1+k+1)) + dist(y,x') > 1/(2 |^ m)
+          by A119,AXIOMS:22;
+      then dist(y,x') >= 1/(2 |^ m) - 1/(2 |^ (m+1+k+1)) by REAL_1:84;
+      then dist(y,x') >= 1/(2 |^ (m+1+k+1)) by A115,AXIOMS:22;
+      hence contradiction by A85,A103,METRIC_1:12;
+    end;
+    hence contradiction;
+  end;
+  g is one-to-one
+  proof
+      for x1,x2 be set st x1 in dom g & x2 in dom g &
+      g.x1 = g.x2 holds x1 = x2
+    proof
+      let x1,x2 be set;
+      assume that A124: x1 in dom g and A125: x2 in dom g
+          and A126: g.x1 = g.x2;
+      assume A127: x1<>x2;
+      consider n1 be Nat such that A128: g.x1 = n1 and
+        A129: x1 in f.n1 and
+          for t be Nat st x1 in f.t holds
+          n1 <= t by A92,A93,A124;
+      consider n2 be Nat such that A130: g.x2 = n2 and
+        A131: x2 in f.n2 and
+          for t be Nat st x2 in f.t holds
+          n2 <= t by A92,A93,A125;
+
+      consider V1 be Subset of PT such that
+        A132: x1=V1 and V1 in GX and
+        A133: V1 meets W by A92,A124;
+      consider w1 being set such that
+      A134: w1 in W and
+      A135: w1 in x1 by A132,A133,XBOOLE_0:3;
+      consider V2 be Subset of PT such that
+        A136: x2=V2 and V2 in GX and
+        A137: V2 meets W by A92,A125;
+      consider w2 being set such that
+      A138: w2 in W and
+      A139: w2 in x2 by A136,A137,XBOOLE_0:3;
+      reconsider w1, w2 as Element of PM by A134,A138;
+
+        now per cases by NAT_1:19;
+        suppose A140: n1=0;
+        then consider M1 be Subset of PM
+          such that A141: x1 = union {Ball(c,1/2)
+          where c is Element of PM:
+          c in M1\PartUnion(M1,Mn) & Ball(c,3/2) c= M1}
+          and A142: M1 in FX by A13,A129;
+        consider k1 be set such that A143: w1 in k1 and
+        A144: k1 in {Ball(c,1/2)
+          where c is Element of PM:
+          c in M1\PartUnion(M1,Mn) & Ball(c,3/2) c= M1}
+                by A135,A141,TARSKI:def 4;
+        consider c1 be Element of PM
+        such that A145: k1 = Ball(c1,1/2) and
+        A146: c1 in M1\PartUnion(M1,Mn) and
+        A147: Ball(c1,3/2) c= M1 by A144;
+        consider M2 be Subset of PM
+          such that A148: x2 = union {Ball(c,1/2)
+          where c is Element of PM:
+          c in M2\PartUnion(M2,Mn) & Ball(c,3/2) c= M2}
+          and A149: M2 in FX by A13,A126,A128,A130,A131,A140;
+        consider k2 be set such that A150: w2 in k2 and
+        A151: k2 in {Ball(c,1/2)
+          where c is Element of PM:
+          c in M2\PartUnion(M2,Mn) & Ball(c,3/2) c= M2}
+              by A139,A148,TARSKI:def 4;
+        consider c2 be Element of PM
+        such that A152: k2 = Ball(c2,1/2) and
+        A153: c2 in M2\PartUnion(M2,Mn) and
+        A154: Ball(c2,3/2) c= M2 by A151;
+        A155: dist(x',c2) <= dist(x',w2) + dist(w2,c2)
+          by METRIC_1:4;
+          dist(c1,x') <= dist(c1,w1) + dist(w1,x')
+          by METRIC_1:4;
+        then A156: dist(c1,x') + dist(x',c2) <=
+          (dist(c1,w1) + dist(w1,x')) +
+          (dist(x',w2) + dist(w2,c2)) by A155,REAL_1:55;
+          dist(c1,c2) <= dist(c1,x') + dist(x',c2)
+          by METRIC_1:4;
+        then A157: dist(c1,c2) <= (dist(c1,w1) + dist(w1,x')) +
+            (dist(x',w2) + dist(w2,c2)) by A156,AXIOMS:22;
+        A158: dist(c1,w1) < 1/2 by A143,A145,METRIC_1:12;
+        A159: dist(x',w1) < 1/(2 |^ (m+1+k+1))
+          by A85,A134,METRIC_1:12;
+        A160: dist(x',w2) < 1/(2 |^ (m+1+k+1))
+          by A85,A138,METRIC_1:12;
+        A161: dist(c2,w2) < 1/2 by A150,A152,METRIC_1:12;
+          dist(c1,c2) <= dist(c1,w1) + (dist(w1,x') +
+            (dist(x',w2) + dist(w2,c2))) by A157,XCMPLX_1:1;
+        then dist(c1,c2) - (dist(w1,x') + (dist(x',w2) +
+          dist(w2,c2))) <= dist(c1,w1) by REAL_1:86;
+        then dist(c1,c2) - (dist(w1,x') + (dist(x',w2) +
+          dist(w2,c2))) < 1/2 by A158,AXIOMS:22;
+        then dist(c1,c2) < 1/2 + (dist(w1,x') +
+          (dist(x',w2) + dist(w2,c2))) by REAL_1:84;
+        then dist(c1,c2) < dist(w1,x') + (1/2 +
+          (dist(x',w2) + dist(w2,c2))) by XCMPLX_1:1;
+        then dist(c1,c2) - (1/2 + (dist(x',w2) +
+          dist(w2,c2))) < dist(w1,x') by REAL_1:84;
+        then dist(c1,c2) - (1/2 + (dist(x',w2) +
+          dist(w2,c2))) < 1/(2 |^ (m+1+k+1))
+            by A159,AXIOMS:22;
+        then dist(c1,c2) < 1/(2 |^ (m+1+k+1)) + (1/2 +
+          (dist(x',w2) + dist(w2,c2))) by REAL_1:84;
+        then dist(c1,c2) < (dist(x',w2) + dist(w2,c2))
+          + (1/(2 |^ (m+1+k+1)) + 1/2) by XCMPLX_1:1;
+        then dist(c1,c2) < dist(x',w2) + (dist(w2,c2)
+          + (1/(2 |^ (m+1+k+1)) + 1/2)) by XCMPLX_1:1;
+        then dist(c1,c2) - (dist(w2,c2) +
+          (1/(2 |^ (m+1+k+1)) + 1/2)) < dist(x',w2)
+              by REAL_1:84;
+        then dist(c1,c2) - (dist(w2,c2) +
+          (1/(2 |^ (m+1+k+1)) + 1/2)) < 1/(2 |^ (m+1+k+1))
+              by A160,AXIOMS:22;
+        then dist(c1,c2) < 1/(2 |^ (m+1+k+1)) + (dist(w2,c2) +
+          (1/(2 |^ (m+1+k+1)) + 1/2))
+              by REAL_1:84;
+        then dist(c1,c2) < dist(w2,c2) + (1/(2 |^ (m+1+k+1)) +
+          (1/(2 |^ (m+1+k+1)) + 1/2))
+              by XCMPLX_1:1;
+        then dist(c1,c2) - (1/(2 |^ (m+1+k+1)) +
+          (1/(2 |^ (m+1+k+1)) + 1/2)) < dist(w2,c2)
+              by REAL_1:84;
+        then dist(c1,c2) - (1/(2 |^ (m+1+k+1)) +
+          (1/(2 |^ (m+1+k+1)) + 1/2)) < 1/2
+              by A161,AXIOMS:22;
+        then dist(c1,c2) < 1/2 + (1/(2 |^ (m+1+k+1)) +
+          (1/(2 |^ (m+1+k+1)) + 1/2))
+              by REAL_1:84;
+        then A162: dist(c1,c2) < (1/2 + 1/(2 |^ (m+1+k+1))) +
+            (1/(2 |^ (m+1+k+1)) + 1/2) by XCMPLX_1:1;
+            A163: (1/2 + 1/(2 |^ (m+1+k+1)))
+              + (1/(2 |^ (m+1+k+1)) + 1/2) =
+1/2 + ((1/2 + 1/(2 |^ (m+1+k+1))) +
+              1/(2 |^ (m+1+k+1))) by XCMPLX_1:1 .=
+            1/2 + (1/2 + (1/(2 |^ (m+1+k+1)) +
+              1/(2 |^ (m+1+k+1)))) by XCMPLX_1:1 .=
+            (1/2 + 1/2) + (1/(2 |^ (m+1+k+1)) +
+              1/(2 |^ (m+1+k+1))) by XCMPLX_1:1 .=
+            (1+1)/2 + (1/(2 |^ (m+1+k+1)) +
+              1/(2 |^ (m+1+k+1))) .=
+2/2 + 2/(2 |^ (m+1+k+1)) by XCMPLX_1:63;
+              m+k+1 >= 1 by NAT_1:29;
+            then A164: m+1+k >= 1 by XCMPLX_1:1;
+            A165: 2/(2 |^ (m+1+k+1)) =(1*2)/(2 |^ (m+1+k)*2) by NEWTON:11
+            .= 1/(2 |^ (m+1+k)) by XCMPLX_1:92;
+               2 |^ (m+1+k) >= 2 |^ 1 by A164,Th4;
+            then 2 |^ (m+1+k) >= 2 by NEWTON:10;
+            then A166: 1/(2 |^ (m+1+k)) <= 1/2
+              by REAL_2:201;
+              (1/2 + 1/(2 |^ (m+1+k+1)))
+              + (1/(2 |^ (m+1+k+1)) + 1/2) -
+              2/2 = 1/(2 |^ (m+1+k)) by A163,A165,XCMPLX_1:26;
+            then (1/2 + 1/(2 |^ (m+1+k+1)))
+              + (1/(2 |^ (m+1+k+1)) + 1/2) <= 2/2 + 1/2
+                by A166,REAL_1:86;
+        then A167: dist(c1,c2) < 3/2 by A162,AXIOMS:22;
+        then A168: c2 in Ball(c1,3/2) by METRIC_1:12;
+        A169: c1 in Ball(c2,3/2) by A167,METRIC_1:12;
+        A170: Mn is_connected_in FX by A8,WELLORD1:def 5;
+        A171: M1 <> M2 by A127,A141,A148;
+          now per cases by A142,A149,A170,A171,RELAT_2:def 6;
+          suppose [M1,M2] in Mn;
+          then M1 in Mn-Seg(M2) by A171,WELLORD1:def 1;
+          then c2 in union(Mn-Seg(M2)) by A147,A168,TARSKI:def 4;
+          then c2 in PartUnion(M2,Mn) by Def1;
+          hence contradiction by A153,XBOOLE_0:def 4;
+          suppose [M2,M1] in Mn;
+          then M2 in Mn-Seg(M1) by A171,WELLORD1:def 1;
+          then c1 in union(Mn-Seg(M1)) by A154,A169,TARSKI:def 4;
+          then c1 in PartUnion(M1,Mn) by Def1;
+          hence contradiction by A146,XBOOLE_0:def 4;
+        end;
+        hence contradiction;
+        suppose n1>0;
+        then consider l be Nat such that
+            A172: n1 = l+1 by NAT_1:22;
+          x1 in {union {Ball(c,1/(2 |^ (l+1)))
+          where c is Element of PM:
+              c in M1\PartUnion(M1,Mn) &
+              Ball(c,3/(2 |^ (l+1))) c= M1 &
+                not c in union { union(f.q)
+                where q is Nat: q <= l}}
+          where M1 is Element of bool the carrier of PM:
+              M1 in FX} by A14,A129,A172;
+        then consider
+        M1 be Element of bool the carrier of PM such that
+          A173: x1 = union {Ball(c,1/(2 |^ (l+1)))
+          where c is Element of PM:
+              c in M1\PartUnion(M1,Mn) &
+              Ball(c,3/(2 |^ (l+1))) c= M1 &
+                not c in union { union(f.q)
+                where q is Nat: q <= l}} and A174: M1 in FX;
+        reconsider NF = {Ball(c,1/(2 |^ (l+1)))
+          where c is Element of PM:
+          c in M1\PartUnion(M1,Mn) &
+          Ball(c,3/(2 |^ (l+1))) c= M1 &
+            not c in union { union(f.q)
+            where q is Nat: q <= l}} as set;
+        consider k1 be set such that A175: w1 in k1 and
+        A176: k1 in NF by A135,A173,TARSKI:def 4;
+        consider c1 be Element of PM
+        such that A177: k1 = Ball(c1,1/(2 |^ (l+1))) and
+        A178: c1 in M1\PartUnion(M1,Mn) and
+        A179: Ball(c1,3/(2 |^ (l+1))) c= M1 and
+            not c1 in union { union(f.q)
+            where q is Nat: q <= l} by A176;
+          x2 in {union {Ball(c,1/(2 |^ (l+1)))
+          where c is Element of PM:
+              c in M2\PartUnion(M2,Mn) &
+              Ball(c,3/(2 |^ (l+1))) c= M2 &
+              not c in union { union(f.q)
+                where q is Nat: q <= l}}
+            where M2 is Element of bool the carrier of PM:
+                  M2 in FX} by A14,A126,A128,A130,A131,A172;
+        then consider M2 be Element of bool the carrier of PM
+             such that
+          A180: x2 = union {Ball(c,1/(2 |^ (l+1)))
+          where c is Element of PM:
+            c in M2\PartUnion(M2,Mn) &
+            Ball(c,3/(2 |^ (l+1))) c= M2 &
+            not c in union { union(f.q)
+             where q is Nat: q <= l}} and A181: M2 in FX;
+        reconsider NF = {Ball(c,1/(2 |^ (l+1)))
+          where c is Element of PM:
+          c in M2\PartUnion(M2,Mn) &
+          Ball(c,3/(2 |^ (l+1))) c= M2 &
+            not c in union { union(f.q)
+            where q is Nat: q <= l}} as set;
+        consider k2 be set such that A182: w2 in k2 and
+        A183: k2 in NF by A139,A180,TARSKI:def 4;
+        consider c2 be Element of PM
+        such that A184: k2 = Ball(c2,1/(2 |^ (l+1))) and
+        A185: c2 in M2\PartUnion(M2,Mn) and
+        A186: Ball(c2,3/(2 |^ (l+1))) c= M2 and
+             not c2 in union { union(f.q)
+              where q is Nat: q <= l} by A183;
+        A187: dist(x',c2) <= dist(x',w2) + dist(w2,c2) by METRIC_1:4;
+          dist(c1,x') <= dist(c1,w1) + dist(w1,x')
+          by METRIC_1:4;
+        then A188: dist(c1,x') + dist(x',c2) <=
+          (dist(c1,w1) + dist(w1,x')) +
+          (dist(x',w2) + dist(w2,c2)) by A187,REAL_1:55;
+          dist(c1,c2) <= dist(c1,x') + dist(x',c2)
+          by METRIC_1:4;
+        then A189: dist(c1,c2) <= (dist(c1,w1) + dist(w1,x')) +
+            (dist(x',w2) + dist(w2,c2)) by A188,AXIOMS:22;
+        A190: dist(c1,w1) < 1/(2 |^ (l+1))
+          by A175,A177,METRIC_1:12;
+        A191: dist(x',w1) < 1/(2 |^ (m+1+k+1))
+          by A85,A134,METRIC_1:12;
+        A192: dist(x',w2) < 1/(2 |^ (m+1+k+1))
+          by A85,A138,METRIC_1:12;
+        A193: dist(c2,w2) < 1/(2 |^ (l+1))
+          by A182,A184,METRIC_1:12;
+          dist(c1,c2) <= dist(c1,w1) + (dist(w1,x') +
+            (dist(x',w2) + dist(w2,c2))) by A189,XCMPLX_1:1;
+        then dist(c1,c2) - (dist(w1,x') + (dist(x',w2) +
+          dist(w2,c2))) <= dist(c1,w1) by REAL_1:86;
+        then dist(c1,c2) - (dist(w1,x') + (dist(x',w2) +
+          dist(w2,c2))) < 1/(2 |^ (l+1)) by A190,AXIOMS:22;
+        then dist(c1,c2) < 1/(2 |^ (l+1)) + (dist(w1,x') +
+          (dist(x',w2) + dist(w2,c2))) by REAL_1:84;
+        then dist(c1,c2) < dist(w1,x') + (1/(2 |^ (l+1)) +
+          (dist(x',w2) + dist(w2,c2))) by XCMPLX_1:1;
+        then dist(c1,c2) - (1/(2 |^ (l+1)) + (dist(x',w2) +
+          dist(w2,c2))) < dist(w1,x') by REAL_1:84;
+        then dist(c1,c2) - (1/(2 |^ (l+1)) + (dist(x',w2) +
+          dist(w2,c2))) < 1/(2 |^ (m+1+k+1))
+            by A191,AXIOMS:22;
+        then dist(c1,c2) < 1/(2 |^ (m+1+k+1)) +
+          (1/(2 |^ (l+1)) + (dist(x',w2) + dist(w2,c2)))
+            by REAL_1:84;
+        then dist(c1,c2) < (dist(x',w2) + dist(w2,c2))
+          + (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1))) by XCMPLX_1:1;
+        then dist(c1,c2) < dist(x',w2) + (dist(w2,c2)
+          + (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1))))
+            by XCMPLX_1:1;
+        then dist(c1,c2) - (dist(w2,c2) +
+          (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1)))) <
+            dist(x',w2) by REAL_1:84;
+        then dist(c1,c2) - (dist(w2,c2) +
+          (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1)))) <
+            1/(2 |^ (m+1+k+1)) by A192,AXIOMS:22;
+        then dist(c1,c2) < 1/(2 |^ (m+1+k+1)) + (dist(w2,c2) +
+          (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1))))
+              by REAL_1:84;
+        then dist(c1,c2) < dist(w2,c2) + (1/(2 |^ (m+1+k+1)) +
+          (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1))))
+              by XCMPLX_1:1;
+        then dist(c1,c2) - (1/(2 |^ (m+1+k+1)) +
+          (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1)))) <
+          dist(w2,c2) by REAL_1:84;
+        then dist(c1,c2) - (1/(2 |^ (m+1+k+1)) +
+          (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1)))) <
+            1/(2 |^ (l+1)) by A193,AXIOMS:22;
+        then dist(c1,c2) < 1/(2 |^ (l+1)) +
+          (1/(2 |^ (m+1+k+1)) + (1/(2 |^ (m+1+k+1)) +
+            1/(2 |^ (l+1)))) by REAL_1:84;
+        then A194: dist(c1,c2) < (1/(2 |^ (l+1)) +
+          1/(2 |^ (m+1+k+1))) + (1/(2 |^ (m+1+k+1)) +
+            1/(2 |^ (l+1))) by XCMPLX_1:1;
+            A195: (1/(2 |^ (l+1)) + 1/(2 |^ (m+1+k+1)))
+              + (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1))) =
+1/(2 |^ (l+1)) + ((1/(2 |^ (l+1)) +
+              1/(2 |^ (m+1+k+1))) + 1/(2 |^ (m+1+k+1))) by XCMPLX_1:1 .=
+            1/(2 |^ (l+1)) + (1/(2 |^ (l+1)) +
+              (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (m+1+k+1))))
+                by XCMPLX_1:1 .=
+            (1/(2 |^ (l+1)) + 1/(2 |^ (l+1))) +
+              (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (m+1+k+1))) by XCMPLX_1:1 .=
+            (1+1)/(2 |^ (l+1)) +
+              (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (m+1+k+1))) by XCMPLX_1:63
+                .= 2/(2 |^ (l+1)) + 2/(2 |^ (m+1+k+1)) by XCMPLX_1:63;
+              n1 in rng g by A124,A128,FUNCT_1:def 5;
+            then n1 in {i: i<m+1+k+1} by A94;
+            then consider i such that A196:n1=i &
+                i < m+1+k+1;
+            consider h be Nat such that
+              A197: m+1+k+1 = (l+1) + h by A172,A196,NAT_1:28;
+              h <> 0 by A172,A196,A197;
+            then consider i be Nat such that
+            A198: h = i + 1 by NAT_1:22;
+            A199: 2 |^ (l+1) > 0 by PREPOWER:13;
+            A200: 2/(2 |^ (m+1+k+1)) =
+                2/(2 |^ (((l+1)+i)+1)) by A197,A198,XCMPLX_1:1
+             .= (1*2)/(2 |^ ((l+1)+i)*2) by NEWTON:11
+             .= 1/(2 |^ ((l+1)+i)) by XCMPLX_1:92;
+              (l+1)+i >= l+1 by NAT_1:29;
+            then 2 |^ ((l+1)+i) >= 2 |^ (l+1) by Th4;
+            then A201:1/(2 |^ ((l+1)+i)) <= 1/(2 |^ (l+1))
+              by A199,REAL_2:201;
+              (1/(2 |^ (l+1)) + 1/(2 |^ (m+1+k+1)))
+              + (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1))) -
+              2/(2 |^ (l+1)) = 1/(2 |^ ((l+1)+i))
+              by A195,A200,XCMPLX_1:26;
+            then (1/(2 |^ (l+1)) + 1/(2 |^ (m+1+k+1)))
+              + (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1))) <=
+              2/(2 |^ (l+1)) + 1/(2 |^ (l+1))
+              by A201,REAL_1:86;
+            then (1/(2 |^ (l+1)) + 1/(2 |^ (m+1+k+1)))
+              + (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1))) <=
+              (2+1)/(2 |^ (l+1)) by XCMPLX_1:63;
+        then A202: dist(c1,c2) < 3/(2 |^ (l+1))
+          by A194,AXIOMS:22;
+        then A203: c2 in Ball(c1,3/(2 |^ (l+1))) by METRIC_1:12;
+        A204: c1 in Ball(c2,3/(2 |^ (l+1))) by A202,METRIC_1:12;
+        A205: Mn is_connected_in FX by A8,WELLORD1:def 5;
+        A206: M1 <> M2 by A127,A173,A180;
+          now per cases by A174,A181,A205,A206,RELAT_2:def 6;
+          suppose [M1,M2] in Mn;
+          then M1 in Mn-Seg(M2) by A206,WELLORD1:def 1;
+          then c2 in union(Mn-Seg(M2)) by A179,A203,TARSKI:def 4;
+          then c2 in PartUnion(M2,Mn) by Def1;
+          hence contradiction by A185,XBOOLE_0:def 4;
+          suppose [M2,M1] in Mn;
+          then M2 in Mn-Seg(M1) by A206,WELLORD1:def 1;
+          then c1 in union(Mn-Seg(M1)) by A186,A204,TARSKI:def 4;
+          then c1 in PartUnion(M1,Mn) by Def1;
+          hence contradiction by A178,XBOOLE_0:def 4;
+        end;
+        hence contradiction;
+      end;
+      hence contradiction;
+    end;
+    hence thesis by FUNCT_1:def 8;
+  end;
+then A207: NZ,rng g are_equipotent by A92,WELLORD2:def 4;
+  {i: i < m+1+k+1 } is finite
+  proof
+      {i: i < m+1+k+1 } c= {0} \/ Seg(m+1+k+1)
+    proof
+      let x be set;
+      assume x in {i: i < m+1+k+1};
+      then consider i be Nat such that
+        A208: x = i and A209: i < (m+1+k+1);
+      reconsider x1=x as Nat by A208;
+        now per cases by NAT_1:19;
+        suppose x1 = 0;
+        hence x1 in {0} or x1 in Seg(m+1+k+1) by TARSKI:def 1;
+        suppose x1 > 0;
+        then consider l be Nat such that
+          A210: x1 = l +1 by NAT_1:22;
+           x1 >= 1 by A210,NAT_1:29;
+        hence x1 in {0} or x1 in Seg(m+1+k+1) by A208,A209,FINSEQ_1:3;
+      end;
+      hence x in {0} \/ Seg(m+1+k+1) by XBOOLE_0:def 2;
+    end;
+    hence thesis by FINSET_1:13;
+  end;
+then rng g is finite by A94,FINSET_1:13;
+hence thesis by A207,CARD_1:68;
+end;
+hence thesis by A86,A87;
+end;
+hence thesis by PCOMPS_1:def 2;
+end;
+end;
+
+theorem  :: Stone Theorem
+    PT is metrizable implies PT is paracompact
+  proof
+    assume PT is metrizable;
+    then for FX being Subset-Family of PT st FX is_a_cover_of PT & FX is open
+      ex GX being Subset-Family of PT
+      st GX is open & GX is_a_cover_of PT &
+         GX is_finer_than FX & GX is locally_finite by Th12;
+    hence thesis by PCOMPS_1:def 4;
+  end;

@@ -1,0 +1,1127 @@
+:: Equivalence Relations and Classes of Abstraction
+::  by Konrad Raczkowski and Pawe{\l} Sadowski
+::
+:: Received November 16, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, SETFAM_1, ARYTM_1, BOOLE, RELAT_2, LATTICES, FINSEQ_1,
+      FUNCT_1, TARSKI, EQREL_1, PARTFUN1, TOLER_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XREAL_0, RELAT_1,
+      RELAT_2, RELSET_1, SETFAM_1, FINSEQ_1, FUNCT_1, NAT_1, PARTFUN1;
+ constructors RELAT_2, SETFAM_1, FINSEQ_1, REAL_1, NAT_1, XREAL_0, MEMBERED,
+      PARTFUN1, ORDERS_1, XBOOLE_0;
+ clusters RELSET_1, FINSEQ_1, SUBSET_1, XREAL_0, ARYTM_3, ZFMISC_1, PARTFUN1,
+      XBOOLE_0;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, RELAT_2, XBOOLE_0, PARTFUN1;
+ theorems RELAT_1, RELAT_2, AXIOMS, RELSET_1, SETFAM_1, ZFMISC_1, TARSKI,
+      FINSEQ_1, NAT_1, REAL_1, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1,
+      ORDERS_1, PARTFUN1;
+ schemes SETFAM_1, RELSET_1, FINSEQ_1, NAT_1;
+
+begin
+
+reserve X,Y,Z,x,y,y1,y2,z for set;
+reserve i,j,k for Nat;
+reserve A,B,C for Subset of X;
+reserve R,R1,R2 for Relation of X;
+reserve AX for Subset of [:X,X:];
+reserve SFXX for Subset-Family of [:X,X:];
+
+:: Auxiliary theorems
+
+theorem Th1:
+i < j implies j - i is Nat
+proof
+  defpred P[Nat] means i < $1 implies $1 - i is Nat;
+A1: P[0] by NAT_1:18;
+A2: now let j;
+    assume
+A3:   P[j];
+    thus P[j+1]
+    proof
+    assume i < j + 1;
+     then A4:    i <= j by NAT_1:38;
+A5:    j + 1 - i = (j - i) + 1 by XCMPLX_1:29;
+       now per cases by A4,REAL_1:def 5;
+       suppose i = j;
+         then j + 1 - i = 0 + 1 by A5,XCMPLX_1:14;
+        hence j + 1 - i is Nat;
+       suppose i < j;
+         then reconsider k = j - i as Nat by A3;
+            j - i + 1 = k + 1;
+        hence j + 1 - i is Nat by XCMPLX_1:29;
+     end;
+    hence j + 1 - i is Nat;
+    end;
+   end;
+   for j holds P[j] from Ind(A1,A2);
+ hence thesis;
+end;
+
+:: Equivalence Relation and its properties
+
+definition let X;
+func nabla X -> Relation of X equals  :Def1:
+ [:X,X:];
+coherence by RELSET_1:def 1;
+end;
+
+definition let X;
+ cluster nabla X -> total reflexive;
+ coherence
+  proof
+   thus dom nabla X c= X;
+   thus X c= dom nabla X
+    proof let x be set;
+     assume x in X;
+      then [x,x] in [:X,X:] by ZFMISC_1:106;
+      then [x,x] in nabla X by Def1;
+     hence x in dom nabla X by RELAT_1:def 4;
+    end;
+   let x;
+   assume x in field nabla X;
+    then x in dom nabla X \/ rng nabla X by RELAT_1:def 6;
+    then [x,x] in [:X,X:] by ZFMISC_1:106;
+   hence [x,x] in nabla X by Def1;
+ end;
+end;
+
+definition let X; let R1,R2;
+redefine func R1 /\ R2 -> Relation of X;
+coherence
+ proof
+    R1 /\ R2 c= [:X,X:];
+  hence thesis;
+ end;
+func R1 \/ R2 -> Relation of X;
+coherence
+ proof
+    R1 \/ R2 c= [:X,X:];
+  hence thesis;
+ end;
+end;
+
+canceled 2;
+
+theorem
+id X is_reflexive_in X & id X is_symmetric_in X &
+id X is_transitive_in X
+  proof
+    thus for x st x in X holds [x,x] in id X by RELAT_1:def 10;
+    thus for x,y st x in X & y in X & [x,y] in id X holds
+    [y,x] in id X
+    proof let x,y;
+      assume x in X & y in X & [x,y] in id X;
+      then y in X & x in X & y = x by RELAT_1:def 10;
+      hence thesis by RELAT_1:def 10;
+   end;
+   thus for x,y,z st x in X & y in X & z in X & [x,y] in id X &
+   [y,z] in id X holds [x,z] in id X by RELAT_1:def 10;
+  end;
+
+definition let X;
+  mode Tolerance of X is total reflexive symmetric Relation of X;
+  mode Equivalence_Relation of X is total symmetric transitive Relation of X;
+end;
+
+canceled;
+
+theorem
+  id X is Equivalence_Relation of X;
+
+theorem Th7:
+  nabla X is Equivalence_Relation of X
+ proof
+A1: nabla X = [:X,X:] by Def1;
+A2: nabla X is_symmetric_in X
+   proof
+      for x,y holds x in X & y in X & [x,y] in nabla X implies
+                  [y,x] in nabla X by A1,ZFMISC_1:107;
+    hence thesis by RELAT_2:def 3;
+   end;
+A3: nabla X is_transitive_in X
+   proof
+      for x,y,z st x in X & y in X & z in X & [x,y] in nabla X &
+    [y,z] in nabla X holds [x,z] in nabla X by A1,ZFMISC_1:106;
+    hence thesis by RELAT_2:def 8;
+   end;
+    field nabla X = X by ORDERS_1:97;
+   hence thesis by A2,A3,RELAT_2:def 11,def 16;
+ end;
+
+definition let X;
+  cluster nabla X -> total symmetric transitive;
+  coherence by Th7;
+end;
+
+reserve EqR,EqR1,EqR2,EqR3 for Equivalence_Relation of X;
+
+Lm1:
+  [x,y] in R implies x in X & y in X
+  proof
+   assume [x,y] in R;
+    then x in dom R & y in rng R by RELAT_1:20;
+   hence thesis;
+  end;
+
+canceled 3;
+
+LemA:
+  for X being set,
+      R being total Relation of X holds
+    field R = X
+  proof
+    let X be set,
+        R be total Relation of X;
+    dom R = X by PARTFUN1:def 4;
+    hence field R = X \/ rng R by RELAT_1:def 6
+             .= X by XBOOLE_1:12;
+  end;
+
+theorem Th11:
+  for R being total reflexive Relation of X holds
+    x in X implies [x,x] in R
+  proof
+    let R be total reflexive Relation of X;
+    field R = X by ORDERS_1:97;
+    then R is_reflexive_in X by RELAT_2:def 9;
+    hence thesis by RELAT_2:def 1;
+  end;
+
+theorem Th12:
+  for R being total symmetric Relation of X holds
+    [x,y] in R implies [y,x] in R
+  proof
+    let R be total symmetric Relation of X;
+A1: field R = X by LemA;
+   assume [x,y] in R;
+   then A2: x in X & y in X & [x,y] in R by Lm1;
+   R is_symmetric_in X by A1,RELAT_2:def 11;
+   hence thesis by A2,RELAT_2:def 3;
+  end;
+
+theorem Th13:
+  for R being total transitive Relation of X holds
+    [x,y] in R & [y,z] in R implies [x,z] in R
+  proof
+    let R be total transitive Relation of X;
+A1: field R = X by LemA;
+   assume [x,y] in R & [y,z] in R;
+   then A2: x in X & y in X & z in X & [x,y] in R & [y,z] in R by Lm1;
+   R is_transitive_in X by A1,RELAT_2:def 16;
+   hence thesis by A2,RELAT_2:def 8;
+  end;
+
+theorem
+  for R being total reflexive Relation of X holds
+    (ex x being set st x in X) implies R <> {} by Th11;
+
+theorem 
+  for R being total Relation of X holds
+    field R = X by LemA;
+
+theorem Th16:
+  R is Equivalence_Relation of X iff
+    R is reflexive symmetric transitive & field R = X
+proof
+ thus R is Equivalence_Relation of X implies
+ R is reflexive symmetric transitive & field R = X by LemA;
+ assume
+A1:  R is reflexive & R is symmetric & R is transitive & field R = X;
+ then R is_reflexive_in X by RELAT_2:def 9;
+ then dom R = X by ORDERS_1:98;
+ hence thesis by A1,PARTFUN1:def 4;
+end;
+
+definition let X; let EqR1,EqR2;
+  redefine func EqR1 /\ EqR2 -> Equivalence_Relation of X;
+coherence
+ proof
+  A1: field (EqR1 /\ EqR2) = X
+  proof A2: for x st x in X holds [x,x] in EqR1 by Th11;
+     for x st x in X holds [x,x] in EqR2 by Th11;
+   then id X c= EqR1 & id X c= EqR2 by A2,RELAT_1:73;
+   then id X c= EqR1 /\ EqR2 by XBOOLE_1:19;
+   then dom(EqR1 /\ EqR2) = X & rng(EqR1 /\
+ EqR2) = X by RELSET_1:31,32;
+   then field (EqR1 /\ EqR2) = X \/ X by RELAT_1:def 6;
+   hence thesis;
+  end;
+  A3: EqR1 /\ EqR2 is reflexive by RELAT_2:31;
+  A4: EqR1 /\ EqR2 is symmetric by RELAT_2:35;
+    EqR1 /\ EqR2 is transitive by RELAT_2:43;
+  hence thesis by A1,A3,A4,Th16;
+ end;
+end;
+
+theorem
+  id X /\ EqR = id X
+proof
+   now let x,y; assume [x,y] in id X;
+  then x in X & x = y by RELAT_1:def 10;
+  hence [x,y] in EqR by Th11;
+ end;
+ then id X c= EqR by RELAT_1:def 3;
+ hence thesis by XBOOLE_1:28;
+end;
+
+theorem Th18:
+  nabla X /\ R = R
+proof
+   [:X,X:] = nabla X by Def1; hence thesis by XBOOLE_1:28;
+end;
+
+theorem Th19:
+  for SFXX st (SFXX <> {} & for Y st Y in SFXX
+   holds Y is Equivalence_Relation of X)
+    holds meet SFXX is Equivalence_Relation of X
+proof
+ let SFXX such that A1: SFXX <> {} and
+ A2: for Y st Y in SFXX holds Y is Equivalence_Relation of X;
+ reconsider XX = meet SFXX as Relation of X by RELSET_1:def 1;
+ A3: XX is_reflexive_in X
+    proof let x such that A4: x in X;
+       for Y st Y in SFXX holds [x,x] in Y
+     proof let Y; assume Y in SFXX;
+       then Y is Equivalence_Relation of X by A2;
+       hence thesis by A4,Th11;
+     end;
+     hence thesis by A1,SETFAM_1:def 1;
+    end;
+ A5: XX is_symmetric_in X
+    proof let x,y;
+     assume A6: x in X & y in X & [x,y] in XX;
+       now let Y; assume A7: Y in SFXX;
+       then A8: Y is Equivalence_Relation of X by A2;
+         [x,y] in Y by A6,A7,SETFAM_1:def 1;
+       hence [y,x] in Y by A8,Th12;
+     end;
+     hence thesis by A1,SETFAM_1:def 1;
+    end;
+A9:   XX is_transitive_in X
+    proof let x,y,z;
+     assume A10: x in X & y in X & z in X & [x,y] in XX & [y,z] in XX;
+       now let Y; assume A11: Y in SFXX;
+       then A12: Y is Equivalence_Relation of X by A2;
+         [x,y] in Y & [y,z] in Y by A10,A11,SETFAM_1:def 1;
+       hence [x,z] in Y by A12,Th13;
+     end;
+     hence thesis by A1,SETFAM_1:def 1;
+    end;
+A13:     field XX = X by A3,ORDERS_1:98;
+  dom XX = X by A3,ORDERS_1:98;
+ hence thesis by A5,A9,A13,RELAT_2:def 11,def 16,PARTFUN1:def 4;
+end;
+
+theorem Th20:
+for R holds ex EqR st R c= EqR & for EqR2 st R c= EqR2 holds EqR c= EqR2
+ proof let R;
+  defpred P[set] means $1 is Equivalence_Relation of X & R c= $1;
+  consider F being Subset-Family of [:X,X:] such that
+  A1: for AX holds AX in F iff P[AX] from SubFamEx;
+    nabla X /\ R = R by Th18;
+  then R c= nabla X by XBOOLE_1:17;
+  then A2: F <> {} by A1;
+    for Y st Y in F holds Y is Equivalence_Relation of X by A1;
+  then reconsider EqR = meet F as Equivalence_Relation of X by A2,Th19;
+  take EqR;
+A3:  for Y st Y in F holds R c= Y by A1;
+    now let EqR2; assume R c= EqR2;
+   then EqR2 in F by A1;
+   hence EqR c= EqR2 by SETFAM_1:4;
+  end;
+  hence thesis by A2,A3,SETFAM_1:6;
+ end;
+
+definition let X; let EqR1,EqR2;
+ canceled;
+func EqR1 "\/" EqR2 -> Equivalence_Relation of X means
+  :Def3:
+EqR1 \/ EqR2 c= it & for EqR st EqR1 \/ EqR2 c= EqR holds it c= EqR;
+existence by Th20;
+uniqueness
+proof let R1,R2 be Equivalence_Relation of X such that
+ A1: EqR1 \/ EqR2 c= R1 & for EqR st EqR1 \/ EqR2 c= EqR holds R1 c= EqR and
+ A2: EqR1 \/ EqR2 c= R2 & for EqR st EqR1 \/ EqR2 c= EqR holds R2 c= EqR;
+ A3: R1 c= R2 by A1,A2;
+   R2 c= R1 by A1,A2;
+ hence thesis by A3,XBOOLE_0:def 10;
+end;
+end;
+
+canceled;
+
+theorem
+  EqR "\/" EqR = EqR
+proof
+  for EqR3 st EqR \/ EqR c= EqR3 holds EqR c= EqR3;
+  hence thesis by Def3;
+end;
+
+theorem
+Th23:EqR1 "\/" EqR2 = EqR2 "\/" EqR1
+proof
+    for EqR3 holds EqR3 = EqR1 "\/" EqR2 implies EqR3 = EqR2 "\/" EqR1
+ proof let EqR3;
+  assume A1: EqR3 = EqR1 "\/" EqR2;
+  then A2: EqR2 \/ EqR1 c= EqR3 by Def3;
+    for EqR st EqR2 \/ EqR1 c= EqR holds EqR3 c= EqR by A1,Def3;
+  hence thesis by A2,Def3;
+ end;
+ hence thesis;
+end;
+
+definition let X; let EqR1,EqR2;
+  redefine func EqR1 "\/" EqR2;
+  commutativity by Th23;
+end;
+
+theorem
+  EqR1 /\ (EqR1 "\/" EqR2) = EqR1
+proof
+ thus EqR1 /\ (EqR1 "\/" EqR2) c= EqR1 by XBOOLE_1:17;
+ A1: EqR1 c= EqR1 \/ EqR2 by XBOOLE_1:7;
+   EqR1 \/ EqR2 c= EqR1 "\/" EqR2 by Def3;
+ then EqR1 c= EqR1 "\/" EqR2 by A1,XBOOLE_1:1;
+ hence thesis by XBOOLE_1:19;
+end;
+
+theorem
+  EqR1 "\/" (EqR1 /\ EqR2) = EqR1
+proof
+ A1: EqR1 = EqR1 \/ (EqR1 /\ EqR2) by XBOOLE_1:22;
+   for EqR st EqR1 \/ (EqR1 /\ EqR2) c= EqR holds EqR1 c= EqR by XBOOLE_1:22;
+ hence thesis by A1,Def3;
+end;
+
+scheme Ex_Eq_Rel {X() -> set,P[set,set]}:
+       ex EqR being Equivalence_Relation of X() st
+       for x,y holds [x,y] in EqR iff x in X() & y in X() & P[x,y]
+       provided
+       A1: for x st x in X() holds P[x,x] and
+       A2: for x,y st P[x,y] holds P[y,x] and
+       A3: for x,y,z st P[x,y] & P[y,z] holds P[x,z]
+proof
+ defpred R[set,set] means P[$1,$2];
+ consider Y being Relation of X(),X() such that A4:
+ for x,y holds [x,y] in Y iff x in X() & y in X() & R[x,y] from Rel_On_Set_Ex;
+ A5: Y is_reflexive_in X()
+ proof let x; assume A6: x in X();
+  then P[x,x] by A1;
+  hence thesis by A4,A6;
+ end;
+ A7: Y is_symmetric_in X()
+ proof let x,y;
+  assume A8: x in X() & y in X() & [x,y] in Y;
+  then P[x,y] by A4;
+  then y in X() & x in X() & P[y,x] by A2,A8;
+  hence thesis by A4;
+ end;
+A9:   Y is_transitive_in X()
+ proof let x,y,z;
+  assume A10: x in X() & y in X() & z in X() & [x,y] in Y & [y,z] in Y;
+  then A11: P[x,y] by A4;
+    P[y,z] by A4,A10;
+  then P[x,z] by A3,A11;
+  hence thesis by A4,A10;
+ end;
+A12: field Y = X() by A5,ORDERS_1:98;
+  dom Y = X() by A5,ORDERS_1:98;
+ then reconsider R1 = Y as Equivalence_Relation of X()
+                        by A7,A9,A12,RELAT_2:def 11,def 16,PARTFUN1:def 4;
+ take R1;
+ thus thesis by A4;
+end;
+
+:: Classes of abstraction
+
+definition let X be set,
+               R be Tolerance of X,
+               x be set;
+  func Class(R,x) -> Subset of X equals :Def4:
+    R.:{x};
+  correctness;
+end;
+
+canceled;
+
+theorem Th27:
+  for R being Tolerance of X holds
+    y in Class (R,x) iff [y,x] in R
+ proof
+  let R be Tolerance of X;
+  thus y in Class(R,x) implies [y,x] in R
+  proof
+    assume y in Class(R,x);
+    then y in R.:{x} by Def4;
+     then ex z being set st [z,y] in R & z in {x} by RELAT_1:def 13;
+    then [x,y] in R by TARSKI:def 1;
+    hence [y,x] in R by Th12;
+  end;
+  assume [y,x] in R;
+  then A1: [x,y] in R by Th12;
+  x in {x} by TARSKI:def 1;
+  then y in R.:{x} by A1,RELAT_1:def 13;
+  hence thesis by Def4;
+ end;
+
+theorem Th28:
+  for R being Tolerance of X holds
+    for x st x in X holds x in Class (R,x)
+  proof
+   let R be Tolerance of X;
+   let x;
+   assume x in X;
+   then [x,x] in R by Th11;
+   hence thesis by Th27;
+  end;
+
+theorem
+  for R being Tolerance of X holds
+    for x st x in X holds ex y st x in Class(R,y)
+  proof
+   let R be Tolerance of X;
+   let x;
+   assume x in X;
+   then x in Class(R,x) by Th28;
+   hence thesis;
+  end;
+
+theorem
+  for R being transitive Tolerance of X holds
+    y in Class(R,x) & z in Class(R,x) implies [y,z] in R
+  proof
+    let R be transitive Tolerance of X;
+    assume y in Class(R,x) & z in Class(R,x);
+    then [y,x] in R & [z,x] in R by Th27;
+    then [y,x] in R & [x,z] in R by Th12;
+    hence thesis by Th13;
+  end;
+
+Lm2:
+  for x st x in X holds [x,y] in EqR iff Class(EqR,x) = Class(EqR,y)
+proof let x such that A1: x in X;
+ thus [x,y] in EqR implies Class(EqR,x) = Class(EqR,y)
+ proof
+  assume A2: [x,y] in EqR;
+    now let z;
+    assume z in Class(EqR,x);
+    then [z,x] in EqR by Th27;
+    then [z,y] in EqR by A2,Th13;
+    hence z in Class(EqR,y) by Th27;
+  end;
+  then A3: Class(EqR,x) c= Class(EqR,y) by TARSKI:def 3;
+    now let z;
+    assume z in Class(EqR,y);
+    then A4: [z,y] in EqR by Th27;
+      [y,x] in EqR by A2,Th12;
+    then [z,x] in EqR by A4,Th13;
+    hence z in Class(EqR,x) by Th27;
+  end;
+  then Class(EqR,y) c= Class(EqR,x) by TARSKI:def 3;
+  hence thesis by A3,XBOOLE_0:def 10;
+ end;
+ assume Class(EqR,x) = Class(EqR,y);
+ then x in Class(EqR,y) by A1,Th28;
+ hence thesis by Th27;
+end;
+
+theorem Th31:
+  for x st x in X holds y in Class(EqR,x) iff Class(EqR,x) = Class(EqR,y)
+proof let x such that A1: x in X;
+ thus y in Class(EqR,x) implies Class(EqR,x) = Class(EqR,y)
+ proof
+  assume y in Class(EqR,x);
+   then [y,x] in EqR by Th27;
+  then [x,y] in EqR by Th12;
+  hence thesis by A1,Lm2;
+ end;
+ assume Class(EqR,x) = Class(EqR,y);
+ then [x,y] in EqR by A1,Lm2;
+ then [y,x] in EqR by Th12;
+ hence thesis by Th27;
+end;
+
+theorem Th32:
+  for x,y st x in X & y in X holds Class(EqR,x) = Class(EqR,y) or
+    Class(EqR,x) misses Class(EqR,y)
+ proof let x,y;
+  assume A1: x in X & y in X;
+  A2: [x,y] in EqR implies Class(EqR,x) = Class(EqR,y)
+      proof
+       assume [x,y] in EqR;
+       then x in Class(EqR,y) by Th27;
+       hence thesis by A1,Th31;
+      end;
+    not [x,y] in EqR implies Class(EqR,x) misses Class(EqR,y)
+   proof
+    assume A3: not [x,y] in EqR;
+    assume Class(EqR,x) meets Class(EqR,y);
+    then consider z such that A4: z in Class(EqR,x) & z in Class(EqR,y) by
+XBOOLE_0:3;
+      [z,x] in EqR & [z,y] in EqR by A4,Th27;
+    then [x,z] in EqR & [z,y] in EqR by Th12;
+    hence contradiction by A3,Th13;
+   end;
+  hence thesis by A2;
+ end;
+
+theorem
+  for x st x in X holds Class(id X,x) = {x}
+ proof let x;
+  assume A1: x in X;
+     now let y;
+    assume y in Class(id X,x);
+    then [y,x] in id X by Th27;
+    hence y = x by RELAT_1:def 10;
+  end;
+  then for y holds y in Class(id X,x) iff y = x by A1,Th28;
+  hence thesis by TARSKI:def 1;
+ end;
+
+theorem Th34:
+for x st x in X holds Class(nabla X,x) = X
+proof let x such that A1: x in X;
+   now let y; assume y in X;
+  then [y,x] in [:X,X:] by A1,ZFMISC_1:106;
+  then [y,x] in nabla X by Def1;
+  hence y in Class(nabla X,x) by Th27;
+ end;
+ then for y holds y in X iff y in Class(nabla X,x);
+ hence thesis by TARSKI:2;
+end;
+
+theorem Th35:
+(ex x st Class(EqR,x) = X) implies EqR = nabla X
+proof
+ given x such that A1: Class(EqR,x) = X;
+   now let y,z; assume [y,z] in [:X,X:];
+  then y in Class(EqR,x) & z in Class(EqR,x) by A1,ZFMISC_1:106;
+  then [y,x] in EqR & [z,x] in EqR by Th27;
+  then [y,x] in EqR & [x,z] in EqR by Th12;
+  hence [y,z] in EqR by Th13;
+ end;
+ then [:X,X:] c= EqR by ZFMISC_1:109;
+ then [:X,X:] = EqR by XBOOLE_0:def 10;
+ hence thesis by Def1;
+end;
+
+theorem
+  x in X implies ([x,y] in EqR1 "\/" EqR2 iff
+ex f being FinSequence st 1 <= len f & x = f.1 & y = f.(len f) &
+for i st 1 <= i & i < len f holds [f.i,f.(i+1)] in EqR1 \/ EqR2)
+proof assume A1: x in X;
+ thus [x,y] in EqR1 "\/" EqR2 implies
+ ex f being FinSequence st 1 <= len f & x = f.1 & y = f.(len f) &
+ for i st 1 <= i & i < len f holds [f.i,f.(i+1)] in EqR1 \/ EqR2
+ proof assume A2: [x,y] in EqR1 "\/" EqR2;
+  defpred P[set,set] means ex f being FinSequence st (1 <= len f &
+  $1 = f.1 & $2 = f.(len f) & for i st 1 <= i & i < len f holds
+  [f.i,f.(i+1)] in EqR1 \/ EqR2);
+  consider Y being Relation of X,X such that A3: for x,y holds
+  [x,y] in Y iff x in X & y in X & P[x,y] from Rel_On_Set_Ex;
+  A4: Y is_reflexive_in X
+  proof let x such that A5: x in X;
+   set g = <*x*>;
+   A6: len g = 1 & g.1 = x by FINSEQ_1:57;
+     for i st 1 <= i & i < len g holds [g.i,g.(i+1)] in EqR1 \/ EqR2 by
+FINSEQ_1:57;
+   hence thesis by A3,A5,A6;
+  end;
+  A7: Y is_symmetric_in X
+  proof let x,y;
+   assume A8: x in X & y in X & [x,y] in Y;
+   then consider f being FinSequence such that A9:
+   (1 <= len f & x = f.1 & y = f.(len f) &
+   for i st 1 <= i & i < len f holds [f.i,f.(i+1)] in EqR1 \/ EqR2) by A3;
+   defpred P[Nat,set] means $2 = f.(1 + (len f) - $1);
+   A10: for k,y1,y2 st k in Seg(len f) & P[k,y1] & P[k,y2] holds y1 =y2;
+   A11: for k st k in Seg(len f) ex z st P[k,z];
+   consider g being FinSequence such that A12: dom g = Seg(len f) &
+   for k st k in Seg(len f) holds P[k,g.k] from SeqEx(A10,A11);
+   A13: len f = len g by A12,FINSEQ_1:def 3;
+   A14: 1 <= len g by A9,A12,FINSEQ_1:def 3;
+   A15: now
+           1 in Seg(len f) by A9,FINSEQ_1:3;
+        then g.1 = f.((len f) + 1 - 1) by A12
+           .= f.((len f) + (1 - 1)) by XCMPLX_1:29
+           .= f.(len f);
+        hence y = g.1 by A9;
+       end;
+   A16: now
+           len f in Seg(len f) by A9,FINSEQ_1:3;
+        then g.(len f) = f.(1 + (len f) - len f) by A12
+                 .= f.(1 + (len f - (len f))) by XCMPLX_1:29
+                 .= f.(1 + 0) by XCMPLX_1:14;
+        hence x = g.(len g) by A9,A12,FINSEQ_1:def 3;
+       end;
+     for j st 1 <= j & j < len g holds [g.j,g.(j+1)] in EqR1 \/ EqR2
+   proof let j;
+    assume A17: 1 <= j & j < len g;
+    then j in Seg(len f) by A13,FINSEQ_1:3;
+    then A18: g.j = f.(1 + (len f) - j) by A12
+           .= f.(((len f) - j) + 1) by XCMPLX_1:29;
+    A19: 1 <= (j + 1) by NAT_1:37;
+      (j + 1) <= len f by A13,A17,NAT_1:38;
+     then (j + 1) in Seg(len f) by A19,FINSEQ_1:3;
+    then A20: g.(j + 1) = f.((len f) + 1 - (1 + j)) by A12
+                 .= f.((len f) + 1 - 1 - j) by XCMPLX_1:36
+                 .= f.((len f) + (1 - 1) - j) by XCMPLX_1:29
+                 .= f.((len f) - j);
+    reconsider k = (len f) - j as Nat by A13,A17,Th1;
+      j - (len f) < (len f) - (len f) by A13,A17,REAL_1:54;
+    then - ((len f) - j) < (len f) - (len f) by XCMPLX_1:143;
+    then - ((len f) - j) < - 0 by XCMPLX_1:14;
+    then 0 < k by REAL_1:50;
+then A21:    0 + 1 <= k by NAT_1:38;
+      0 + 1 <= j by A17;
+    then 0 < j by NAT_1:38;
+    then - j < 0 by REAL_1:26,50;
+    then (len f) + (- j) < 0 + (len f) by REAL_1:53;
+    then (len f) - j < len f by XCMPLX_0:def 8;
+    then A22: [f.k,f.(k + 1)] in EqR1 \/ EqR2 by A9,A21;
+      now per cases by A22,XBOOLE_0:def 2;
+     suppose [f.k,f.(k + 1)] in EqR1;
+      then [f.(k + 1),f.k] in EqR1 by Th12;
+      hence [f.(k + 1),f.k] in EqR1 \/ EqR2 by XBOOLE_0:def 2;
+     suppose [f.k,f.(k + 1)] in EqR2;
+      then [f.(k + 1),f.k] in EqR2 by Th12;
+      hence [f.(k + 1),f.k] in EqR1 \/ EqR2 by XBOOLE_0:def 2;
+    end;
+    hence thesis by A18,A20;
+   end;
+   hence thesis by A3,A8,A14,A15,A16;
+  end;
+A23:    Y is_transitive_in X
+  proof let x,y,z;
+   assume A24: x in X & y in X & z in X & [x,y] in Y & [y,z] in Y;
+   then consider f being FinSequence such that A25:
+   (1 <= len f & x = f.1 & y = f.(len f) &
+   for i st 1 <= i & i < len f holds [f.i,f.(i+1)] in EqR1 \/ EqR2) by A3;
+   consider g being FinSequence such that A26:
+   (1 <= len g & y = g.1 & z = g.(len g) &
+   for i st 1 <= i & i < len g holds [g.i,g.(i+1)] in EqR1 \/ EqR2) by A3,A24;
+   set h = f^g;
+   A27:len h = len f + len g by FINSEQ_1:35;
+   then A28: 1 <= len h by A25,NAT_1:37;
+     1 in Seg(len f) by A25,FINSEQ_1:3;
+   then 1 in dom f by FINSEQ_1:def 3;
+   then A29: x = h.1 by A25,FINSEQ_1:def 7;
+   A30: len f + 1 <= len f + len g by A26,REAL_1:55;
+   then A31:   h.(len h) = g.(len g + len f - len f) by A27,FINSEQ_1:36
+            .= g.(len g + (len f - len f)) by XCMPLX_1:29
+            .= g.(len g + 0) by XCMPLX_1:14
+            .= g.(len g);
+     for i st 1 <= i & i < len h holds [h.i,h.(i+1)] in EqR1 \/ EqR2
+   proof let i;
+    assume A32: 1 <= i & i < len h;
+    then A33: (1 <= i & i < len f) or i = len f or len f < i by REAL_1:def 5;
+      now per cases by A32,A33,NAT_1:38;
+     suppose A34: (1 <= i & i < len f);
+      then i in Seg(len f) by FINSEQ_1:3;
+      then i in dom f by FINSEQ_1:def 3;
+      then A35: h.i = f.i by FINSEQ_1:def 7;
+        (1 <= i + 1 & i + 1 <= len f) by A34,NAT_1:38;
+      then i + 1 in Seg(len f) by FINSEQ_1:3;
+      then i + 1 in dom f by FINSEQ_1:def 3;
+       then h.(i + 1) = f.(i + 1) by FINSEQ_1:def 7;
+      hence [h.i,h.(i+1)] in EqR1 \/ EqR2 by A25,A34,A35;
+     suppose A36: i = len f;
+        len f in Seg(len f) by A25,FINSEQ_1:3;
+      then len f in dom f by FINSEQ_1:def 3;
+      then A37: h.i = y by A25,A36,FINSEQ_1:def 7;
+      A38: h.(i + 1) = g.(1 + len f - len f) by A30,A36,FINSEQ_1:36
+                   .= g.(1 + (len f - len f)) by XCMPLX_1:29
+                   .= g.(1 + 0) by XCMPLX_1:14
+                   .= y by A26;
+        [y,y] in EqR1 by A24,Th11;
+      hence [h.i,h.(i+1)] in EqR1 \/ EqR2 by A37,A38,XBOOLE_0:def 2;
+     suppose A39: (len f + 1 <= i & i < len h);
+      then (len f + 1 <= i + 1 & i + 1 <= len f + len g) by A27,NAT_1:38;
+      then A40: h.(i + 1) = g.(1 + i - len f) by FINSEQ_1:36
+                   .= g.((i - len f) + 1) by XCMPLX_1:29;
+       1 <= len f & len f < i by A25,A39,NAT_1:38;
+     then reconsider k = i - len f as Nat by Th1;
+  (1 + len f - len f <= i - len f & i < len f + len g) by A39,FINSEQ_1:35,
+REAL_1:49;
+     then (1 + (len f - len f) <= i - len f & i < len f + len g) by XCMPLX_1:29
+;
+     then (1 + 0 <= i - len f & i < len f + len g) by XCMPLX_1:14;
+     then (1 <= i - len f & i - len f < len g) by REAL_1:84;
+     then [g.k,g.(k + 1)] in EqR1 \/ EqR2 by A26;
+     hence [h.i,h.(i+1)] in EqR1 \/ EqR2 by A27,A39,A40,FINSEQ_1:36;
+    end;
+    hence thesis;
+   end;
+   hence thesis by A3,A24,A26,A28,A29,A31;
+  end;
+ field Y = X & dom Y = X by A4,ORDERS_1:98;
+  then reconsider R1 = Y as Equivalence_Relation of X
+                        by A7,A23,RELAT_2:def 11,def 16,PARTFUN1:def 4;
+    for x,y holds [x,y] in EqR1 \/ EqR2 implies [x,y] in R1
+  proof let x,y;
+   assume A42: [x,y] in EqR1 \/ EqR2;
+   then A43: x in X & y in X by Lm1;
+   set g = <*x,y*>;
+   A44: len g = 2 by FINSEQ_1:61;
+   A45:len g = 1 + 1 by FINSEQ_1:61;
+   A46: g.1 = x & g.2 = y by FINSEQ_1:61;
+   A47: g.1 = x & g.(len g) = y by A44,FINSEQ_1:61;
+     for i st 1 <= i & i < len g holds [g.i,g.(i+1)] in EqR1 \/ EqR2
+   proof let i;
+    assume 1 <= i & i < len g;
+    then 1 <= i & i <= 1 by A45,NAT_1:38;
+    then 1 = i by AXIOMS:21;
+    hence thesis by A42,A46;
+   end;
+   hence thesis by A3,A43,A45,A47;
+  end;
+  then EqR1 \/ EqR2 c= R1 by RELAT_1:def 3;
+  then EqR1 "\/"
+ EqR2 c= R1 by Def3; then consider f being FinSequence such that A48:
+  1 <= len f & x = f.1 & y = f.(len f) &
+  for i st 1 <= i & i < len f holds [f.i,f.(i+1)] in EqR1 \/ EqR2 by A2,A3;
+  take f;
+  thus thesis by A48;
+ end;
+given f being FinSequence such that A49: 1 <= len f &
+                x = f.1 & y = f.(len f) &
+        for i st 1 <= i & i < len f holds [f.i,f.(i+1)] in EqR1 \/ EqR2;
+  defpred P[Nat] means
+    1 <= $1 & $1 <= len f implies [f.1,f.$1] in EqR1 "\/" EqR2;
+  for i holds P[i]
+  proof
+   A50:P[0];
+   A51:now let i;
+        assume A52: P[i];
+      thus P[i+1]
+      proof
+      assume A53: 1 <= i + 1 & i + 1 <= len f;
+      then A54: i < len f by NAT_1:38;
+        1 <= i or 1 = i + 1 by A53,NAT_1:26;
+then A55:      1 <= i or 1 - 1 = i by XCMPLX_1:26;
+      A56: EqR1 \/ EqR2 c= EqR1 "\/" EqR2 by Def3;
+         now per cases by A55;
+        suppose A57: 1 <= i;
+         then [f.i,f.(i+1)] in EqR1 \/ EqR2 by A49,A54;
+hence [f.1,f.(i+1)] in EqR1 "\/" EqR2 by A52,A53,A56,A57,Th13,NAT_1:38;
+        suppose A58: 0 = i;
+          [f.1,f.1] in EqR1 by A1,A49,Th11;
+        then [f.1,f.1] in EqR1 \/ EqR2 by XBOOLE_0:def 2;
+        hence [f.1,f.(i+1)] in EqR1 "\/" EqR2 by A56,A58;
+       end;
+     hence [f.1,f.(i + 1)] in EqR1 "\/" EqR2;
+     end;
+    end;
+   thus thesis from Ind(A50,A51);
+  end;
+ hence thesis by A49;
+end;
+
+theorem Th37:
+for E being Equivalence_Relation of X st E = EqR1 \/ EqR2 holds
+for x st x in X holds
+Class(E,x) = Class(EqR1,x) or Class(E,x) = Class(EqR2,x)
+proof let E be Equivalence_Relation of X such that
+ A1: E = EqR1 \/ EqR2;
+   for x st x in X holds
+ Class(E,x) = Class(EqR1,x) or Class(E,x) = Class(EqR2,x)
+ proof let x such that x in X;
+  assume that A2: not Class(E,x) = Class(EqR1,x) and
+       A3: not Class(E,x) = Class(EqR2,x);
+  consider y such that A4: y in Class(E,x) & not y in Class(EqR1,x) or
+       y in Class(EqR1,x) & not y in Class(E,x) by A2,TARSKI:2;
+A5:  now assume that A6: y in Class(EqR1,x) and A7: not y in Class(E,x);
+     [y,x] in EqR1 by A6,Th27;
+   then [y,x] in E by A1,XBOOLE_0:def 2;
+   hence contradiction by A7,Th27;
+  end;
+  consider z such that A8: z in Class(E,x) & not z in Class(EqR2,x) or
+       z in Class(EqR2,x) & not z in Class(E,x) by A3,TARSKI:2;
+A9:  now assume that A10: z in Class(EqR2,x) and A11: not z in Class(E,x);
+     [z,x] in EqR2 by A10,Th27;
+   then [z,x] in E by A1,XBOOLE_0:def 2;
+   hence contradiction by A11,Th27;
+  end;
+  A12:[y,x] in E by A4,A5,Th27;
+    not [y,x] in EqR1 by A4,A5,Th27;
+  then A13:[y,x] in EqR2 by A1,A12,XBOOLE_0:def 2;
+  A14:[z,x] in E by A8,A9,Th27;
+  then [x,z] in E by Th12;
+then A15:  [y,z] in E by A12,Th13;
+    not [z,x] in EqR2 by A8,A9,Th27;
+  then A16: [z,x] in EqR1 by A1,A14,XBOOLE_0:def 2;
+  A17:now assume A18:[y,z] in EqR2;
+     [x,y] in EqR2 by A13,Th12;
+   then [x,z] in EqR2 by A18,Th13;
+   then [z,x] in EqR2 by Th12;
+   hence contradiction by A8,A9,Th27;
+  end;
+    now assume [y,z] in EqR1;
+   then A19:[z,y] in EqR1 by Th12;
+     [x,z] in EqR1 by A16,Th12;
+   then [x,y] in EqR1 by A19,Th13;
+   then [y,x] in EqR1 by Th12;
+   hence contradiction by A4,A5,Th27;
+  end;
+ hence contradiction by A1,A15,A17,XBOOLE_0:def 2;
+ end;
+ hence thesis;
+end;
+
+theorem
+  EqR1 \/ EqR2 = nabla X implies EqR1 = nabla X or EqR2 = nabla X
+proof
+ assume A1: EqR1 \/ EqR2 = nabla X;
+ A2: now assume X = {};
+     then [:X,X:] = {} by ZFMISC_1:113;
+      then nabla X = {} by Def1;
+     hence EqR1 = nabla X or EqR2 = nabla X by A1,XBOOLE_1:15;
+    end;
+   (not X = {}) implies EqR1 = nabla X or EqR2 = nabla X
+ proof
+  assume A3: X <> {};
+  consider y being Element of X;
+    now let x; assume A4: x in X;
+   then Class(nabla X,x) = Class(EqR1,x) or
+   Class(nabla X,x) = Class(EqR2,x) by A1,Th37;
+   hence Class(EqR1,x) = X or Class(EqR2,x) = X by A4,Th34;
+  end;
+  then Class(EqR1,y) = X or Class(EqR2,y) = X by A3;
+  hence thesis by Th35;
+ end;
+ hence thesis by A2;
+end;
+
+definition let X; let EqR;
+ func Class EqR -> Subset-Family of X means
+ :Def5:
+ A in it iff ex x st x in X & A = Class(EqR,x);
+ existence
+ proof
+   defpred P[set] means ex x st x in X & $1 = Class(EqR,x);
+   consider F being Subset-Family of X such that
+A1:for A holds A in F iff P[A] from SubFamEx;
+   take F;
+   thus thesis by A1;
+ end;
+ uniqueness
+ proof
+  let F1,F2 be Subset-Family of X;
+  assume that
+  A2: for A holds A in F1 iff ex x st x in X & A = Class(EqR,x) and
+  A3: for A holds A in F2 iff ex x st x in X & A = Class(EqR,x);
+      now let A;
+       A in F1 iff ex x st x in X & A = Class(EqR,x) by A2;
+     hence A in F1 iff A in F2 by A3;
+    end;
+  hence F1 = F2 by SETFAM_1:44;
+ end;
+ end;
+
+canceled;
+
+theorem Th40:
+X = {} implies Class EqR = {}
+proof
+ assume that A1: X = {} and A2: Class EqR <> {};
+ consider z being Element of Class EqR;
+   z is Subset of X by A2,TARSKI:def 3;
+ then ex x st x in X & z = Class(EqR,x) by A2,Def5;
+ hence contradiction by A1;
+end;
+
+definition let X;
+mode a_partition of X -> Subset-Family of X means
+:Def6:
+union it = X & for A st A in it holds A<>{} &
+for B st B in it holds A = B or A misses B if X <> {} otherwise it = {};
+existence
+proof
+ thus X <> {} implies
+ ex F being Subset-Family of X st union F = X &
+ for A st A in F holds A<>{} & for B st B in F holds A = B or A misses B
+ proof assume X <> {};
+  defpred P[set] means ex x st x in X & $1 = {x};
+  consider F being Subset-Family of X such that
+  A1: for A being Subset of X holds A in F iff P[A] from SubFamEx;
+A2:  now let y;
+     now assume A3: y in X;
+    set Z = {y};
+    A4: y in Z by TARSKI:def 1;
+      Z is Subset of X by A3,ZFMISC_1:37;
+    then Z in F by A1,A3;
+    hence ex Z st y in Z & Z in F by A4;
+   end;
+   hence y in X iff ex Z st y in Z & Z in F;
+  end;
+  A5: for A st A in F holds A<>{} & for B st B in F holds
+      A = B or A misses B
+  proof let A; assume A in F;
+   then consider x such that A6: x in X & A = {x} by A1;
+   thus A <> {} by A6;
+   let B; assume B in F;
+   then consider y such that A7: y in X & B = {y} by A1;
+     now assume A8: (not x = y);
+      for z st z in A holds not z in B
+    proof let z; assume z in A;
+     then not z = y by A6,A8,TARSKI:def 1;
+     hence thesis by A7,TARSKI:def 1;
+    end;
+    hence A misses B by XBOOLE_0:3;
+   end;
+   hence thesis by A6,A7;
+  end;
+  take F;
+  thus thesis by A2,A5,TARSKI:def 4;
+ end;
+ assume X = {};
+   {} c= bool X by XBOOLE_1:2;
+ then {} is Subset-Family of X by SETFAM_1:def 7;
+ hence thesis;
+end;
+consistency;
+end;
+
+canceled;
+
+theorem
+  Class EqR is a_partition of X
+proof
+ A1: X <> {} implies Class EqR is a_partition of X
+ proof assume A2: X <> {};
+    now let x;
+     now assume A3: x in X;
+    consider Z such that A4: Z = Class(EqR,x);
+    A5: x in Z by A3,A4,Th28;
+      Z in Class EqR by A3,A4,Def5;
+    hence ex Z st x in Z & Z in Class EqR by A5;
+   end;
+   hence x in X iff ex Z st x in Z & Z in Class EqR;
+  end;
+  then A6: union(Class EqR) = X by TARSKI:def 4;
+    for A st A in Class EqR holds
+  A<>{} & for B st B in Class EqR holds A = B or A misses B
+  proof let A; assume A in Class EqR;
+   then consider x such that A7: x in X & A = Class(EqR,x) by Def5;
+   thus A <> {} by A7,Th28;
+   let B; assume B in Class EqR;
+   then ex y st y in X & B = Class(EqR,y) by Def5;
+   hence thesis by A7,Th32;
+  end;
+  hence thesis by A2,A6,Def6;
+ end;
+   X = {} implies Class EqR is a_partition of X
+ proof assume A8: X = {};
+  then Class EqR = {} by Th40;
+  hence thesis by A8,Def6;
+ end;
+ hence thesis by A1;
+end;
+
+theorem
+  for P being a_partition of X holds ex EqR st P = Class EqR
+proof let P be a_partition of X;
+ A1: X <> {} implies ex EqR st P = Class EqR
+ proof assume A2: X <> {}; then A3: union P = X by Def6;
+  defpred P[set,set] means ex A st A in P & $1 in A & $2 in A;
+  A4: for x st x in X holds P[x,x]
+  proof let x; assume x in X;
+   then consider Z such that A5: x in Z & Z in P by A3,TARSKI:def 4;
+   reconsider A = Z as Subset of X by A5;
+   take A;
+   thus thesis by A5;
+  end;
+  A6: for x,y st P[x,y] holds P[y,x];
+  A7: for x,y,z st P[x,y] & P[y,z] holds P[x,z]
+  proof let x,y,z;
+   given A such that A8: A in P & x in A & y in A;
+   given B such that A9: B in P & y in B & z in B;
+      A = B or A misses B by A8,A9,Def6;
+   hence thesis by A8,A9,XBOOLE_0:3;
+  end;
+  consider R being Equivalence_Relation of X such that
+  A10: for x,y holds [x,y] in R iff x in X & y in X &
+      P[x,y] from Ex_Eq_Rel(A4,A6,A7);
+  take R;
+    P = Class R
+  proof
+     now let A;
+    A11: now assume A12: A in P;
+    then A13: A <> {} by A2,Def6;
+     consider x being Element of A;
+     A14: x in X by A13,TARSKI:def 3;
+       now let y;
+      A15: now assume y in A;
+       then [y,x] in R by A10,A12,A14;
+       hence y in Class(R,x) by Th27;
+      end;
+        now assume y in Class(R,x);
+       then [y,x] in R by Th27;
+       then consider B such that A16: B in P & y in B & x in B by A10;
+           A meets B by A13,A16,XBOOLE_0:3;
+       hence y in A by A12,A16,Def6;
+      end;
+      hence y in A iff y in Class(R,x) by A15;
+     end;
+     then A = Class(R,x) by TARSKI:2;
+     hence A in Class R by A14,Def5;
+    end;
+      now assume A in Class R;
+     then consider x such that A17: x in X & A = Class(R,x) by Def5;
+       x in Class(R,x) by A17,Th28;
+     then [x,x] in R by Th27;
+     then consider B such that A18: B in P & x in B & x in B by A10;
+       A = B
+     proof
+        now let y;
+       A19: now assume y in A;
+        then [y,x] in R by A17,Th27;
+        then consider C such that A20: C in P & y in C & x in C by A10;
+            B meets C by A18,A20,XBOOLE_0:3;
+        hence y in B by A18,A20,Def6;
+       end;
+         now assume y in B;
+        then [y,x] in R by A10,A18;
+        hence y in A by A17,Th27;
+       end;
+       hence y in A iff y in B by A19;
+      end;
+      hence thesis by TARSKI:2;
+     end;
+     hence A in P by A18;
+    end;
+    hence A in P iff A in Class R by A11;
+   end;
+   hence thesis by SETFAM_1:44;
+  end;
+  hence thesis;
+ end;
+   X = {} implies ex EqR st P = Class EqR
+ proof
+  assume A21: X = {};
+  then A22: P = {} by Def6;
+  consider EqR1;
+  take EqR1;
+  thus P = Class EqR1 by A21,A22,Th40;
+ end;
+ hence thesis by A1;
+end;
+
+theorem
+  for x st x in X holds [x,y] in EqR iff Class(EqR,x) = Class(EqR,y) by Lm2;
+
+theorem
+  x in Class EqR implies ex y being Element of X st x = Class(EqR,y)
+proof
+ assume A1: x in Class EqR;
+ then reconsider x as Subset of X;
+ consider y such that A2: y in X & x = Class(EqR,y) by A1,Def5;
+ reconsider y as Element of X by A2;
+ take y;
+ thus thesis by A2;
+end;
+

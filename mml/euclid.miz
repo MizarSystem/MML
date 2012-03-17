@@ -1,0 +1,1088 @@
+:: The Euclidean Space
+::  by Agata Darmochwa{\l}
+::
+:: Received November 21, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, FINSEQ_2, FINSEQ_1, FUNCT_1, ABSVALUE, ARYTM_1, RVSUM_1,
+      COMPLEX1, SQUARE_1, RLVECT_1, RELAT_1, PCOMPS_1, METRIC_1, PRE_TOPC,
+      FUNCT_2, ARYTM_3, MCART_1, EUCLID, BOOLE;
+ notation XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      NAT_1, DOMAIN_1, FUNCT_1, STRUCT_0, METRIC_1, FUNCT_2, REAL_1, ABSVALUE,
+      FINSEQ_1, FINSEQ_2, FINSEQOP, FRAENKEL, SQUARE_1, RVSUM_1, PRE_TOPC,
+      PCOMPS_1;
+ constructors DOMAIN_1, REAL_1, ABSVALUE, FINSEQOP, FRAENKEL, SQUARE_1,
+      RVSUM_1, PCOMPS_1, SEQ_1, MEMBERED, PARTFUN1, XBOOLE_0;
+ clusters METRIC_1, FINSEQ_2, PCOMPS_1, RELSET_1, XREAL_0, FINSEQ_1, ARYTM_3,
+      SQUARE_1, SEQ_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions STRUCT_0, PCOMPS_1;
+ theorems ABSVALUE, AXIOMS, BINOP_1, FINSEQ_1, FINSEQ_2, FINSEQOP, FUNCT_1,
+      FUNCT_2, PCOMPS_1, REAL_1, RVSUM_1, SQUARE_1, TARSKI, XREAL_0, XCMPLX_0,
+      XCMPLX_1;
+ schemes FUNCT_2;
+
+begin
+
+ reserve k,j,n for Nat, r for real number;
+
+ definition let n;
+  func REAL n -> FinSequence-DOMAIN of REAL equals :Def1:
+  n-tuples_on REAL;
+  coherence;
+ end;
+
+reserve x for FinSequence of REAL;
+
+ definition
+  func absreal -> Function of REAL,REAL means
+   :Def2: for r holds it.r = abs r;
+   existence
+   proof
+     deffunc F(Real) = abs $1;
+     consider f be Function of REAL,REAL such that
+A1:    for r be Real holds f.r = F(r) from LambdaD;
+     take f;
+     let r;
+       r is Real by XREAL_0:def 1;
+     hence thesis by A1;
+   end;
+   uniqueness
+   proof
+     let f, g be Function of REAL,REAL such that
+A2:    for r holds f.r = abs r and
+A3:    for r holds g.r = abs r;
+       now let x be Element of REAL;
+      thus f.x = abs x by A2 .= g.x by A3;
+     end;
+     hence thesis by FUNCT_2:113;
+   end;
+ end;
+
+ definition let x;
+   func abs x -> FinSequence of REAL equals :Def3:
+   absreal*x;
+  coherence;
+ end;
+
+ definition let n;
+   func 0*n -> FinSequence of REAL equals :Def4:
+   n |-> (0 qua Real);
+  coherence;
+ end;
+
+ definition let n;
+  redefine func 0*n -> Element of REAL n;
+  coherence
+  proof
+      n-tuples_on REAL = REAL n & 0*n = n |-> (0 qua Real) by Def1,Def4;
+    hence thesis;
+  end;
+ end;
+
+reserve x,x1,x2,y,z for Element of REAL n;
+
+ definition let n,x;
+   redefine func -x -> Element of REAL n;
+   coherence
+    proof
+     reconsider R1=x as Element of n-tuples_on REAL by Def1;
+       -R1 in n-tuples_on REAL;
+     hence thesis by Def1;
+    end;
+ end;
+
+ definition let n,x,y;
+   redefine func x + y -> Element of REAL n;
+   coherence
+    proof
+     reconsider R1=x,R2=y as Element of n-tuples_on REAL by Def1;
+       R1 + R2 in n-tuples_on REAL;
+     hence thesis by Def1;
+    end;
+  func x - y -> Element of REAL n;
+   coherence
+    proof
+     reconsider R1=x,R2=y as Element of n-tuples_on REAL by Def1;
+       R1 - R2 in n-tuples_on REAL;
+     hence thesis by Def1;
+    end;
+ end;
+
+ definition let n; let r be real number; let x;
+  redefine func r*x -> Element of REAL n;
+   coherence
+    proof
+     reconsider R=x as Element of n-tuples_on REAL by Def1;
+       r*R in n-tuples_on REAL;
+     hence thesis by Def1;
+    end;
+ end;
+
+ definition let n,x;
+  redefine func abs x -> Element of n-tuples_on REAL;
+   coherence
+    proof
+       n-tuples_on REAL = REAL n & abs x = absreal*x by Def1,Def3;
+     hence thesis by FINSEQ_2:133;
+    end;
+ end;
+
+ definition let n,x;
+  redefine func sqr x -> Element of n-tuples_on REAL;
+   coherence
+    proof
+       n-tuples_on REAL = REAL n & sqr x = sqrreal*x by Def1,RVSUM_1:def 8;
+     hence thesis by FINSEQ_2:133;
+    end;
+ end;
+
+ definition let x be FinSequence of REAL;
+   func |.x.| -> Real equals :Def5:
+   sqrt Sum sqr x;
+  coherence;
+ end;
+
+canceled;
+
+theorem Th2: len x = n
+ proof
+    n-tuples_on REAL = REAL n by Def1;
+  hence thesis by FINSEQ_2:109;
+ end;
+
+theorem Th3:
+  dom x = Seg n
+ proof
+    len x = n by Th2; hence thesis by FINSEQ_1:def 3;
+ end;
+
+theorem Th4:
+  x.k in REAL
+ proof
+  per cases;
+  suppose A1: k in Seg n;
+    len x = n by Th2;
+  then Seg n = dom x by FINSEQ_1:def 3;
+  hence thesis by A1,FINSEQ_2:13;
+  suppose not k in Seg n;
+  then not k in dom x by Th3;
+  then x.k = 0 by FUNCT_1:def 4;
+  hence thesis;
+ end;
+
+theorem Th5:
+  (for k st k in Seg n holds x1.k = x2.k) implies x1 = x2
+proof n-tuples_on REAL = REAL n by Def1;
+  hence thesis by FINSEQ_2:139;
+end;
+
+Lm1: dom abs x = dom x
+proof
+    len abs x = n by FINSEQ_2:109;
+  then dom abs x = Seg n by FINSEQ_1:def 3;
+  hence thesis by Th3;
+end;
+
+theorem Th6:
+   r = x.k implies (abs x).k = abs r
+ proof assume that
+A1:  r = x.k;
+  per cases;
+  suppose A2: k in Seg n;
+    len abs x = n by FINSEQ_2:109;
+  then absreal*x = abs x & k in dom abs x by A2,Def3,FINSEQ_1:def 3;
+  hence (abs x).k = absreal.r by A1,FUNCT_1:22 .= abs r by Def2;
+  suppose not k in Seg n;
+then A3: not k in dom x by Th3;
+then A4: not k in dom abs x by Lm1;
+A5: r = {} by A1,A3,FUNCT_1:def 4;
+    (abs x).k = 0 by A4,FUNCT_1:def 4;
+  hence thesis by A5,ABSVALUE:def 1;
+ end;
+
+Lm2: sqr abs x = sqr x
+proof
+    now let k; assume k in Seg n;
+    thus (sqr abs x).k = ((abs x).k)^2 by RVSUM_1:79
+      .= (abs (x.k))^2 by Th6
+      .= (x.k)^2 by SQUARE_1:62
+      .= (sqr x).k by RVSUM_1:78;
+  end;
+  hence thesis by FINSEQ_2:139;
+end;
+
+theorem abs 0*n = n |-> (0 qua Real)
+proof
+  thus abs 0*n = abs(n |-> (0 qua Real)) by Def4
+               .= absreal*(n |-> (0 qua Real)) by Def3
+               .= n |-> absreal.(0 qua Real) by FINSEQOP:17
+               .= n |-> abs 0 by Def2
+               .= n |-> 0 by ABSVALUE:7;
+end;
+
+theorem Th8:
+  abs -x = abs x
+ proof
+    now let j such that
+     j in Seg n;
+   reconsider r = x.j, r' = (-x).j as Element of REAL by Th4;
+   thus (abs -x).j = abs r' by Th6
+                  .= abs (-r) by RVSUM_1:35
+                  .= abs r by ABSVALUE:17
+                  .= (abs x).j by Th6;
+  end;
+  hence thesis by FINSEQ_2:139;
+ end;
+
+theorem Th9:
+   abs(r*x) = abs(r)*(abs x)
+ proof
+    now let j such that
+A1:  j in Seg n;
+   reconsider r' = x.j, rr = (r*x).j as Element of REAL by Th4;
+     len abs x = n by FINSEQ_2:109;
+   then Seg n = dom (abs x) by FINSEQ_1:def 3;
+   then reconsider ar = (abs x).j as Real by A1,FINSEQ_2:13;
+A2: r is Real by XREAL_0:def 1;
+A3: abs r is Real by XREAL_0:def 1;
+   thus (abs(r*x)).j = abs(rr) by Th6
+                    .= abs(r*r') by A2,RVSUM_1:66
+                    .= abs(r)*abs(r') by ABSVALUE:10
+                    .= abs(r)*ar by Th6
+                    .= (abs(r)*(abs x)).j by A3,RVSUM_1:67;
+  end;
+  hence thesis by FINSEQ_2:139;
+ end;
+
+theorem Th10: |.0*n.| = 0
+ proof
+   thus |.0*n .| = sqrt Sum sqr 0*n by Def5
+        .= sqrt Sum sqr (n |-> (0 qua Real)) by Def4
+        .= sqrt Sum (n |-> (0 qua Real)) by RVSUM_1:82,SQUARE_1:60
+        .= sqrt (n*0) by RVSUM_1:110
+        .= 0 by SQUARE_1:82;
+ end;
+
+theorem Th11: |.x.| = 0 implies x = 0*n
+ proof assume
+A1:  |.x.| = 0;
+A2:  n-tuples_on REAL = REAL n by Def1;
+    now let j; assume
+A3:  j in Seg n;
+   reconsider r = x.j as Element of REAL by Th4;
+     0 <= Sum sqr x & sqrt Sum sqr x = 0 by A1,Def5,RVSUM_1:116;
+   then Sum sqr x = 0 by SQUARE_1:92;
+   then Sum sqr abs x = 0 by Lm2;
+   then (abs x).j = (n|->0).j by RVSUM_1:121;
+   then abs r = (n|-> 0).j by Th6;
+   then abs r = 0 by A3,FINSEQ_2:70;
+   then r = 0 by ABSVALUE:7;
+   hence x.j = (n|->(0 qua Real)).j by A3,FINSEQ_2:70;
+  end;
+  then x = n|->(0 qua Real) by A2,Th5;
+  hence thesis by Def4;
+ end;
+
+theorem Th12: |.x.| >= 0
+ proof
+    |.x.| = sqrt Sum sqr x & 0 <= Sum sqr x by Def5,RVSUM_1:116;
+  hence thesis by SQUARE_1:def 4;
+ end;
+
+theorem Th13: |.-x.| = |.x.|
+ proof
+   thus |.-x.| = sqrt Sum sqr -x by Def5
+            .= sqrt Sum sqr abs -x by Lm2
+            .= sqrt Sum sqr abs x by Th8
+            .= sqrt Sum sqr x by Lm2
+            .= |.x.| by Def5;
+ end;
+
+theorem Th14: |.r*x.| = abs(r)*|.x.|
+ proof
+A1:   0 <= (abs(r))^2 & 0 <= Sum sqr abs x by RVSUM_1:116,SQUARE_1:72;
+A2:   0 <= abs(r) by ABSVALUE:5;
+A3: abs(r) is Real by XREAL_0:def 1;
+A4: (abs(r))^2 is Real by XREAL_0:def 1;
+   thus |.r*x.| = sqrt Sum sqr (r*x) by Def5
+         .= sqrt Sum sqr abs(r*x) by Lm2
+         .= sqrt Sum sqr (abs(r)*abs x) by Th9
+         .= sqrt Sum ((abs(r))^2 * sqr abs x) by A3,RVSUM_1:84
+         .= sqrt ((abs(r))^2 * Sum sqr abs x) by A4,RVSUM_1:117
+         .= sqrt (abs(r))^2 * sqrt Sum sqr abs x by A1,SQUARE_1:97
+         .= abs(r) * sqrt Sum sqr abs x by A2,SQUARE_1:89
+         .= abs(r) * sqrt Sum sqr x by Lm2
+         .= abs(r)*|.x.| by Def5;
+ end;
+
+theorem Th15: |.x1 + x2.| <= |.x1.| + |.x2.|
+ proof
+A1: 0 <= Sum sqr x1 & 0 <= Sum sqr x2 &
+    0 <= Sum sqr abs x1 & 0 <= Sum sqr abs x2 by RVSUM_1:116;
+then A2: 0 <= sqrt Sum sqr x1 & 0 <= sqrt Sum sqr x2 &
+    0 <= sqrt Sum sqr abs x1 & 0 <= sqrt Sum sqr abs x2 by SQUARE_1:def 4;
+A3: Sum sqr (abs x1 + abs x2)
+      = Sum (sqr abs x1 + 2*mlt(abs x1,abs x2) + sqr abs x2) by RVSUM_1:98
+     .= Sum(sqr abs x1 + 2*mlt(abs x1,abs x2)) + Sum sqr abs x2
+       by RVSUM_1:119
+     .= Sum sqr abs x1 + Sum(2*mlt(abs x1,abs x2)) + Sum sqr abs x2
+       by RVSUM_1:119
+     .= Sum sqr abs x1 + (2*Sum mlt(abs x1,abs x2))+Sum sqr abs x2
+       by RVSUM_1:117;
+     k in Seg n implies (sqr abs (x1 + x2)).k <= (sqr (abs x1 + abs x2)).k
+    proof
+     assume that
+A4:    k in Seg n;
+    set r2 = (sqr (abs x1 + abs x2)).k;
+      len (x1+x2) = n by Th2;
+then A5:  dom (x1+x2) = Seg n by FINSEQ_1:def 3;
+     reconsider r11 = x1.k, r22 = x2.k as Element of REAL by Th4;
+     reconsider r12 = (x1 + x2).k as Element of REAL by Th4;
+       len abs x1 = n & len abs x2 = n by FINSEQ_2:109;
+     then dom abs x1 = Seg n & dom abs x2 = Seg n by FINSEQ_1:def 3;
+     then reconsider abs1 = (abs x1).k, abs2 = (abs x2).k as Real
+      by A4,FINSEQ_2:13;
+       len (abs x1 + abs x2) = n by FINSEQ_2:109;
+     then dom(abs x1 + abs x2) = Seg n by FINSEQ_1:def 3;
+     then reconsider abs12 = (abs x1 + abs x2).k as Real by A4,FINSEQ_2:13;
+       len (abs (x1+x2)) = n by FINSEQ_2:109;
+     then dom abs (x1+x2) = Seg n by FINSEQ_1:def 3;
+     then reconsider abs'12 = (abs (x1 + x2)).k as Real by A4,FINSEQ_2:13;
+       abs(r11 + r22) <= abs(r11) + abs(r22) by ABSVALUE:13;
+     then abs(r12) <= abs(r11) + abs(r22) by A4,A5,RVSUM_1:26;
+     then abs(r12) <= abs(r11) + abs2 & len(abs x1 + abs x2) = n
+      by Th6,FINSEQ_2:109;
+     then abs(r12) <= abs1 + abs2 & dom(abs x1 + abs x2) = Seg n
+      by Th6,FINSEQ_1:def 3;
+     then abs(r12) >= 0 & abs(r12) <= abs12 by A4,ABSVALUE:5,RVSUM_1:26;
+     then abs'12 <= abs12 & 0 <= abs'12 by Th6;
+     then (abs'12)^2 <= (abs12)^2 by SQUARE_1:77;
+     then (abs'12)^2 <= r2 by RVSUM_1:79;
+     hence thesis by RVSUM_1:79;
+    end;
+    then Sum sqr abs (x1 + x2) <=
+      Sum sqr abs x1 + (2*Sum mlt(abs x1,abs x2))+Sum sqr abs x2
+        by A3,RVSUM_1:112;
+then A6:  Sum sqr (x1 + x2) <=
+      Sum sqr abs x1 + (2*Sum mlt(abs x1,abs x2))+Sum sqr abs x2 by Lm2;
+A7:  k in Seg n implies 0 <= (mlt(abs x1,abs x2)).k
+    proof
+      assume k in Seg n;
+     set r = (mlt(abs x1,abs x2)).k;
+     reconsider r1 = x1.k, r2 = x2.k as Element of REAL by Th4;
+       len mlt(abs x1,abs x2) = n & (abs x1).k = abs(r1) & (abs x2).k = abs(r2)
+       by Th6,FINSEQ_2:109;
+     then r = abs(r1)*abs(r2) & 0 <= abs(r1) & 0 <= abs(r2)
+       by ABSVALUE:5,RVSUM_1:87;
+     then 0 * abs(r2) <= r by AXIOMS:25;
+     hence thesis;
+    end;
+     len mlt(abs x1,abs x2) = n by FINSEQ_2:109;
+   then dom mlt(abs x1,abs x2) = Seg n & 0 <= (Sum mlt(abs x1,abs x2))^2 &
+     (Sum mlt(abs x1,abs x2))^2 <= (Sum sqr abs x1)*(Sum sqr abs x2)
+    by FINSEQ_1:def 3,RVSUM_1:122,SQUARE_1:72;
+   then 0 <= Sum mlt(abs x1,abs x2) &
+      sqrt(Sum mlt(abs x1,abs x2))^2 <= sqrt((Sum sqr abs x1)*(Sum sqr abs x2))
+     by A7,RVSUM_1:114,SQUARE_1:94;
+   then 0 <= 2 & Sum mlt(abs x1,abs x2) <=
+     sqrt((Sum sqr abs x1)*(Sum sqr abs x2)) by SQUARE_1:89;
+   then Sum sqr abs x1 <= Sum sqr abs x1 &
+     2*Sum mlt(abs x1,abs x2) <= 2*sqrt((Sum sqr abs x1)*(Sum sqr abs x2))
+    by AXIOMS:25;
+   then Sum sqr abs x2 <= Sum sqr abs x2 &
+     Sum sqr abs x1+(2*Sum mlt(abs x1,abs x2)) <=
+      Sum sqr abs x1+2*sqrt((Sum sqr abs x1)*(Sum sqr abs x2)) by REAL_1:55;
+   then Sum sqr abs x1+(2*Sum mlt(abs x1,abs x2)) + Sum sqr abs x2 <=
+      Sum sqr abs x1+2*sqrt((Sum sqr abs x1)*(Sum sqr abs x2)) + Sum sqr abs x2
+    by REAL_1:55;
+   then Sum sqr (x1 + x2) <=
+       Sum sqr abs x1+2*sqrt((Sum sqr abs x1)*(Sum sqr abs x2)) + Sum
+     sqr abs x2 by A6,AXIOMS:22;
+   then Sum sqr (x1 + x2) <=
+     Sum sqr abs x1+2*((sqrt Sum sqr abs x1)*(sqrt Sum sqr abs x2)) +
+     Sum sqr abs x2 by A1,SQUARE_1:97;
+   then Sum sqr abs x1 = (sqrt Sum sqr abs x1)^2 &
+    (sqrt Sum sqr abs x2)^2 = Sum sqr abs x2 &
+     Sum sqr (x1 + x2) <=
+       Sum sqr abs x1+2*(sqrt Sum sqr abs x1)*(sqrt Sum sqr abs x2) + Sum
+   sqr abs x2 by A1,SQUARE_1:def 4,XCMPLX_1:4;
+   then 0 <= Sum sqr (x1 + x2) &
+      Sum sqr (x1 + x2) <= ((sqrt Sum sqr abs x1) + (sqrt Sum
+   sqr abs x2))^2 by RVSUM_1:116,SQUARE_1:63;
+   then 0 + 0 <= (sqrt Sum sqr abs x1) + (sqrt Sum sqr abs x2) &
+    sqrt Sum sqr (x1 + x2) <=
+      sqrt(((sqrt Sum sqr abs x1) + (sqrt Sum sqr abs x2))^2)
+     by A2,REAL_1:55,SQUARE_1:94;
+   then sqrt Sum sqr (x1 + x2) <= (sqrt Sum sqr abs x1) +
+     (sqrt Sum sqr abs x2) by SQUARE_1:89;
+   then sqrt Sum sqr (x1 + x2) <= (sqrt Sum sqr abs x1) +
+     (sqrt Sum sqr x2) by Lm2;
+   then sqrt Sum sqr (x1 + x2) <= (sqrt Sum sqr abs x1) + |.x2.| by Def5;
+   then sqrt Sum sqr (x1 + x2) <= (sqrt Sum sqr x1) + |.x2.| by Lm2;
+   then sqrt Sum sqr (x1 + x2) <= |.x1.| + |.x2.| by Def5;
+   hence thesis by Def5;
+ end;
+
+theorem Th16: |.x1 - x2.| <= |.x1.| + |.x2.|
+ proof
+  reconsider R1=x1,R2=x2 as Element of n-tuples_on REAL by Def1;
+    |.x1 - x2.| = |.R1 + - R2.| by RVSUM_1:52;
+  then |.x1 - x2.| <= |.x1.| + |.-x2.| by Th15;
+  hence thesis by Th13;
+ end;
+
+theorem |.x1.| - |.x2.| <= |.x1 + x2.|
+ proof
+  reconsider R1=x1,R2=x2 as Element of n-tuples_on REAL by Def1;
+    x1 = R1 + R2 - R2 by RVSUM_1:63;
+  then |.x1.| <= |.x1 + x2.| + |.x2.| by Th16;
+  hence thesis by REAL_1:86;
+ end;
+
+theorem |.x1.| - |.x2.| <= |.x1 - x2.|
+ proof
+  reconsider R1=x1,R2=x2 as Element of n-tuples_on REAL by Def1;
+    x1 = R1 - R2 + R2 by RVSUM_1:64;
+  then |.x1.| <= |.x1 - x2.| + |.x2.| by Th15;
+  hence thesis by REAL_1:86;
+ end;
+
+theorem Th19: |.x1 - x2.| = 0 iff x1 = x2
+ proof
+  reconsider R1=x1,R2=x2 as Element of n-tuples_on REAL by Def1;
+  thus |.x1 - x2.| = 0 implies x1 = x2
+   proof
+    assume |.x1 - x2.| = 0;
+    then R1 - R2 = 0*n by Th11 .= n |-> 0 by Def4;
+    hence thesis by RVSUM_1:59;
+   end;
+  assume x1 = x2;
+  then R1 - R2 = n |-> 0 by RVSUM_1:58 .= 0*n by Def4;
+  hence thesis by Th10;
+ end;
+
+theorem x1 <> x2 implies |.x1 - x2.| > 0
+ proof assume x1 <> x2;
+  then |.x1 - x2.| >= 0 & 0 <> |.x1 - x2.| by Th12,Th19;
+  hence thesis;
+ end;
+
+theorem Th21: |.x1 - x2.| = |.x2 - x1.|
+ proof
+   reconsider R1=x1,R2=x2 as Element of n-tuples_on REAL by Def1;
+   thus |.x1 - x2.| = |.-(R2 - R1).| by RVSUM_1:56
+                   .= |.x2 - x1.| by Th13;
+ end;
+
+theorem Th22: |.x1 - x2.| <= |.x1 - x.| + |.x - x2.|
+ proof
+   reconsider R1=x1,R2=x2,R=x as Element of n-tuples_on REAL by Def1;
+     |.x1 - x2.| = |.R1 - R + R - R2.| by RVSUM_1:64
+              .= |.(x1 - x) + (x - x2).| by RVSUM_1:61;
+   hence thesis by Th15;
+ end;
+
+ definition let n;
+  func Pitag_dist n -> Function of [:REAL n,REAL n:],REAL means :Def6:
+  for x,y being Element of REAL n holds it.(x,y) = |.x-y.|;
+  existence
+   proof
+    deffunc F(Element of REAL n, Element of REAL n) = |.$1-$2.|;
+    consider f being Function of [:REAL n, REAL n:], REAL such that
+A1:   for x,y being Element of REAL n holds f.[x,y] = F(x,y) from Lambda2D;
+    take f;
+     let x,y be Element of REAL n;
+     thus f.(x,y) = f.[x,y] by BINOP_1:def 1 .= |.x-y.| by A1;
+   end;
+  uniqueness
+   proof
+    let f,g be Function of [:REAL n, REAL n:], REAL;
+    assume that
+     A2: for x,y being Element of REAL n holds f.(x,y) = |.x-y.| and
+     A3: for x,y being Element of REAL n holds g.(x,y) = |.x-y.|;
+      f.(x,y) = g.(x,y)
+     proof
+      thus f.(x,y) = |.x-y.| by A2 .= g.(x,y) by A3;
+     end;
+    hence thesis by BINOP_1:2;
+   end;
+ end;
+
+theorem sqr(x-y) = sqr(y-x)
+ proof
+  reconsider R1=x,R2=y as Element of n-tuples_on REAL by Def1;
+  thus sqr(x-y) = sqr R1 - 2*mlt(R1,R2) + sqr R2 by RVSUM_1:99
+   .= sqr R2 + (sqr R1 + - 2*mlt(R1,R2)) by RVSUM_1:52
+   .= sqr R2 + - 2*mlt(R1,R2) + sqr R1 by RVSUM_1:32
+   .= sqr R2 - 2*mlt(R2,R1) + sqr R1 by RVSUM_1:52
+   .= sqr(y-x) by RVSUM_1:99;
+ end;
+
+theorem Th24: Pitag_dist n is_metric_of REAL n
+ proof
+  let x,y,z;
+  thus (Pitag_dist n).(x,y) = 0 iff x=y
+   proof
+      (Pitag_dist n).(x,y) = |.x-y.| by Def6;
+    hence thesis by Th19;
+   end;
+  thus (Pitag_dist n).(x,y) = |.x-y.| by Def6
+   .= |.y-x.| by Th21 .= (Pitag_dist n).(y,x) by Def6;
+  thus (Pitag_dist n).(x,z) <= (Pitag_dist n).(x,y) + (Pitag_dist n).(y,z)
+   proof
+      (Pitag_dist n).(x,y) = |.x-y.| & (Pitag_dist n).(x,z) = |.x-z.| &
+     (Pitag_dist n).(y,z) = |.y-z.| by Def6;
+    hence thesis by Th22;
+   end;
+ end;
+
+ definition let n;
+  func Euclid n -> strict MetrSpace equals
+   :Def7:  MetrStruct(#REAL n,Pitag_dist n#);
+  coherence
+   proof
+      Pitag_dist n is_metric_of REAL n by Th24;
+    then SpaceMetr(REAL n, Pitag_dist n) = MetrStruct(#REAL n,Pitag_dist n#)
+     by PCOMPS_1:def 8;
+    hence thesis;
+   end;
+ end;
+
+ definition let n;
+  cluster Euclid n -> non empty;
+ coherence
+ proof
+     Euclid n = MetrStruct(#REAL n,Pitag_dist n#) by Def7;
+   hence the carrier of Euclid n is non empty;
+ end;
+ end;
+
+ definition let n;
+  func TOP-REAL n -> strict TopSpace equals
+   :Def8:  TopSpaceMetr (Euclid n);
+  coherence;
+ end;
+
+definition let n;
+ cluster TOP-REAL n -> non empty;
+ coherence
+  proof TOP-REAL n = TopSpaceMetr Euclid n by Def8;
+   hence thesis;
+  end;
+end;
+
+reserve p,p1,p2,p3 for Point of TOP-REAL n,
+        x,x1,x2,y,y1,y2 for real number;
+
+theorem Th25: the carrier of TOP-REAL n = REAL n
+ proof
+  thus the carrier of TOP-REAL n
+     = the carrier of TopSpaceMetr (Euclid n) by Def8
+    .= the carrier of TopStruct (#the carrier of Euclid n,
+        Family_open_set Euclid n#) by PCOMPS_1:def 6
+    .= the carrier of MetrStruct(#REAL n,Pitag_dist n#) by Def7
+    .= REAL n;
+   end;
+
+theorem Th26: p is Function of Seg n, REAL
+ proof
+    the carrier of TOP-REAL n = REAL n by Th25 .= n-tuples_on REAL by Def1
+   .= Funcs(Seg n, REAL) by FINSEQ_2:111;
+  then p is Element of Funcs(Seg n,REAL);
+  hence thesis;
+ end;
+
+theorem Th27: p is FinSequence of REAL
+ proof
+    p is Function of Seg n, REAL by Th26;
+  hence thesis by FINSEQ_2:28;
+ end;
+
+theorem Th28: for f being FinSequence st f = p holds len f = n
+ proof
+  let f be FinSequence;
+  assume A1: f = p;
+   then A2: f is Function of Seg n, REAL by Th26;
+   reconsider f as FinSequence of REAL by A1,Th27;
+     Seg len f = dom f by FINSEQ_1:def 3 .= Seg n by A2,FUNCT_2:def 1;
+   hence thesis by FINSEQ_1:8;
+ end;
+
+ definition let n;
+  func 0.REAL n -> Point of TOP-REAL n equals
+   :Def9:  0*n;
+  coherence by Th25;
+ end;
+
+ definition let n,p1,p2;
+   func p1 + p2 -> Point of TOP-REAL n means
+    :Def10: for p1',p2' being Element of REAL n st p1' = p1 & p2' = p2
+       holds it = p1' + p2';
+   existence
+    proof
+     reconsider p1' = p1, p2' = p2 as Element of REAL n by Th25;
+     reconsider q = p1' + p2' as Point of TOP-REAL n by Th25;
+     take q; thus thesis;
+    end;
+   uniqueness
+    proof
+     let p11,p22 be Point of TOP-REAL n such that
+    A1: for p1',p2' being Element of REAL n st p1' = p1 & p2' = p2 holds
+        p11 = p1' + p2' and
+    A2: for p1',p2' being Element of REAL n st p1' = p1 & p2' = p2 holds
+        p22 = p1' + p2';
+     reconsider p1' = p1, p2' = p2 as Element of REAL n by Th25;
+     thus p11 = p1' + p2' by A1 .= p22 by A2;
+    end;
+   commutativity;
+ end;
+
+theorem
+    for x being Element of REAL n holds sqr abs x = sqr x by Lm2;
+
+ theorem Th30: p1 + p2 + p3 = p1 + (p2 + p3)
+   proof
+    reconsider r1=p1, r2=p2, r3=p3 as Element of REAL n by Th25;
+    reconsider r1'=r1, r2'=r2, r3'=r3 as Element of n-tuples_on REAL by Def1;
+    reconsider r12 = r1 + r2 as Point of TOP-REAL n by Th25;
+    reconsider p23 = p2 + p3 as Element of REAL n by Th25;
+    thus p1 + p2 + p3 = r12 + p3 by Def10
+                     .= r1 + r2 + r3 by Def10
+                     .= r1' + (r2' + r3') by RVSUM_1:32
+                     .= r1 + p23 by Def10
+                     .= p1 + (p2 + p3) by Def10;
+   end;
+
+ theorem Th31: 0.REAL n + p = p & p + 0.REAL n = p
+  proof
+   reconsider r1=p as Element of REAL n by Th25;
+   reconsider r1'=r1 as Element of n-tuples_on REAL by Def1;
+   A1: 0.REAL n = 0*n & 0*n = n|->(0 qua Real) by Def4,Def9;
+   hence 0.REAL n + p = 0*n + r1 by Def10
+                    .= r1' by A1,RVSUM_1:33 .= p;
+   thus p + 0.REAL n = r1 + 0*n by A1,Def10
+                    .= r1' by A1,RVSUM_1:33 .= p;
+  end;
+
+ definition let x,n,p;
+   func x*p -> Point of TOP-REAL n means
+    :Def11: for p' being Element of REAL n st p' = p holds it = x*p';
+   existence
+    proof
+     reconsider p' = p as Element of REAL n by Th25;
+     reconsider q = x*p' as Point of TOP-REAL n by Th25;
+     take q; thus thesis;
+    end;
+   uniqueness
+    proof
+     let p1,p2 be Point of TOP-REAL n such that
+    A1: for p' being Element of REAL n st p' = p holds p1 = x*p' and
+    A2: for p' being Element of REAL n st p' = p holds p2 = x*p';
+     reconsider p' = p as Element of REAL n by Th25;
+     thus p1 = x*p' by A1 .= p2 by A2;
+    end;
+ end;
+
+ theorem Th32: x*0.REAL n = 0.REAL n
+  proof
+   A1: 0.REAL n = 0*n by Def9;
+     |. x*(0*n).| = abs(x)*|.0*n.| by Th14 .= abs(x)*0 by Th10 .= 0;
+   then x*(0*n) = 0*n by Th11;
+   hence x*0.REAL n = 0.REAL n by A1,Def11;
+  end;
+
+ theorem Th33: 1*p = p & 0 * p = 0.REAL n
+  proof
+   reconsider r1=p as Element of REAL n by Th25;
+   reconsider r1'=r1 as Element of n-tuples_on REAL by Def1;
+   thus 1*p = 1*r1 by Def11 .= r1' by RVSUM_1:74 .= p;
+   thus 0 * p = 0 * r1' by Def11 .= n|->0 by RVSUM_1:75 .= 0*n by Def4
+           .= 0.REAL n by Def9;
+  end;
+
+ theorem Th34: (x*y)*p = x*(y*p)
+  proof
+   reconsider r1=p as Element of REAL n by Th25;
+   reconsider r1'=r1 as Element of n-tuples_on REAL by Def1;
+   reconsider yp = y*p as Element of REAL n by Th25;
+A1: x is Real & y is Real by XREAL_0:def 1;
+   thus (x*y)*p = (x*y)*r1 by Def11 .= x*(y*r1') by A1,RVSUM_1:71
+               .= x*(yp) by Def11 .= x*(y*p) by Def11;
+  end;
+
+ theorem x*p = 0.REAL n implies x = 0 or p = 0.REAL n
+  proof
+   assume A1: x*p = 0.REAL n & x <> 0;
+   thus p = 1*p by Th33 .= ((1/x)*x)*p by A1,XCMPLX_1:107
+ .= (1/x)*(x*p) by Th34
+     .= 0.REAL n by A1,Th32;
+  end;
+
+ theorem Th36: x*(p1 + p2) = x*p1 + x*p2
+  proof
+   reconsider r1=p1, r2=p2 as Element of REAL n by Th25;
+   reconsider r1'=r1, r2'=r2 as Element of n-tuples_on REAL by Def1;
+   reconsider p12 = p1 + p2 as Element of REAL n by Th25;
+   reconsider xp1 = x*p1,xp2 = x*p2 as Element of REAL n by Th25;
+A1: x is Real by XREAL_0:def 1;
+   thus x*(p1 + p2) = x*p12 by Def11 .= x*(r1 + r2) by Def10
+                   .= x*r1' + x*r2' by A1,RVSUM_1:73
+                   .= xp1 + x*r2 by Def11
+                   .= xp1 + xp2 by Def11
+                   .= x*p1 + x*p2 by Def10;
+  end;
+
+ theorem Th37: (x + y)*p = x*p + y*p
+  proof
+   reconsider r1=p as Element of REAL n by Th25;
+   reconsider r1'=r1 as Element of n-tuples_on REAL by Def1;
+   reconsider yp = y*p, xp = x*p as Element of REAL n by Th25;
+A1: x is Real & y is Real by XREAL_0:def 1;
+   thus (x + y)*p = (x + y)*r1 by Def11 .= x*r1' + y*r1' by A1,RVSUM_1:72
+                 .= x*r1 + yp by Def11
+                 .= xp + yp by Def11
+                 .= x*p + y*p by Def10;
+  end;
+
+ theorem x*p1 = x*p2 implies x = 0 or p1 = p2
+  proof
+   assume that A1: x*p1 = x*p2 and A2: x <> 0;
+     ((1/x)*x)*p1 = (1/x)*(x*p2) by A1,Th34;
+   then ((1/x)*x)*p1 = ((1/x)*x)*p2 by Th34;
+   then 1*p1 = ((1/x)*x)*p2 by A2,XCMPLX_1:107;
+   then 1*p1 = 1*p2 by A2,XCMPLX_1:107;
+   hence p1 = 1*p2 by Th33 .= p2 by Th33;
+  end;
+
+definition let n,p;
+ func -p -> Point of TOP-REAL n means
+  :Def12: for p' being Element of REAL n st p' = p holds it = -p';
+   existence
+    proof
+     reconsider p' = p as Element of REAL n by Th25;
+     reconsider q = -p' as Point of TOP-REAL n by Th25;
+     take q; thus thesis;
+    end;
+   uniqueness
+    proof
+     let p1,p2 be Point of TOP-REAL n such that
+    A1: for p' being Element of REAL n st p' = p holds p1 = -p' and
+    A2: for p' being Element of REAL n st p' = p holds p2 = -p';
+     reconsider p' = p as Element of REAL n by Th25;
+     thus p1 = -p' by A1 .= p2 by A2;
+    end;
+ end;
+
+theorem Th39: --p = p
+ proof
+  reconsider r1=p, p2=-p as Element of REAL n by Th25;
+  reconsider r1 as Element of n-tuples_on REAL by Def1;
+  thus --p = -p2 by Def12 .= --r1 by Def12 .= p;
+ end;
+
+theorem p + -p = 0.REAL n
+ proof
+  reconsider r1=p as Element of REAL n by Th25;
+  reconsider p2=-p as Element of REAL n by Th25;
+  reconsider p1=p2, r1 as Element of n-tuples_on REAL by Def1;
+  A1: p1 = -r1 by Def12;
+  thus p + -p = r1 + p1 by Def10 .= n|->(0 qua Real) by A1,RVSUM_1:40
+   .= 0*n by Def4 .= 0.REAL n by Def9;
+ end;
+
+theorem p1 + p2 = 0.REAL n implies p1 = -p2 & p2 = -p1
+ proof
+  reconsider r1=p1, r2=p2 as Element of REAL n by Th25;
+  assume A1: p1 + p2 = 0.REAL n;
+  reconsider r1, r2 as Element of n-tuples_on REAL by Def1;
+    r1 + r2 = 0.REAL n by A1,Def10 .= 0*n by Def9 .= n |-> 0 by Def4;
+   then r1 = -r2 & r2 = -r1 by RVSUM_1:41;
+   hence thesis by Def12;
+ end;
+
+theorem Th42: -(p1 + p2) = -p1 + -p2
+ proof
+  reconsider r1=p1, r2=p2, p12=p1+p2 as Element of REAL n by Th25;
+  reconsider r1'=r1, r2'=r2 as Element of n-tuples_on REAL by Def1;
+  A1: -r1 = -p1 & -r2 = -p2 by Def12;
+  thus -(p1 + p2) = -p12 by Def12 .= -(r1'+r2') by Def10
+          .= -r1 + -r2 by RVSUM_1:45 .= -p1 + -p2 by A1,Def10;
+ end;
+
+theorem Th43: -p = (-1)*p
+ proof
+  reconsider r=p as Element of REAL n by Th25;
+  reconsider r'=r as Element of n-tuples_on REAL by Def1;
+  thus -p = -r' by Def12 .= (-1)*r' by RVSUM_1:76 .= (-1)*p by Def11;
+ end;
+
+theorem Th44: -x*p = (-x)*p & -x*p = x*(-p)
+ proof
+  reconsider r=p, r1=x*p as Element of REAL n by Th25;
+  reconsider r'=r as Element of n-tuples_on REAL by Def1;
+A1: x is Real by XREAL_0:def 1;
+  thus A2: -x*p = (-1)*(x*p) by Th43 .= (-1)*r1 by Def11 .= (-1)*(x*r) by Def11
+   .= ((-1)*x)*r' by A1,RVSUM_1:71 .= (-x)*r by XCMPLX_1:180
+ .= (-x)*p by Def11;
+  A3: -r = -p by Def12;
+  thus -x*p = ((-1)*x)*p by A2,XCMPLX_1:180 .= (x*(-1))*r by Def11
+ .= x*((-1)*r') by A1,RVSUM_1:71
+   .= x*(-r) by RVSUM_1:76 .= x*(-p) by A3,Def11;
+ end;
+
+ definition let n,p1,p2;
+  func p1 - p2 -> Point of TOP-REAL n means
+    :Def13: for p1',p2' being Element of REAL n st p1' = p1 & p2' = p2
+       holds it = p1' - p2';
+   existence
+    proof
+     reconsider p1' = p1, p2' = p2 as Element of REAL n by Th25;
+     reconsider q = p1' - p2' as Point of TOP-REAL n by Th25;
+     take q; thus thesis;
+    end;
+   uniqueness
+    proof
+     let p11,p22 be Point of TOP-REAL n such that
+    A1: for p1',p2' being Element of REAL n st p1' = p1 & p2' = p2 holds
+        p11 = p1' - p2' and
+    A2: for p1',p2' being Element of REAL n st p1' = p1 & p2' = p2 holds
+        p22 = p1' - p2';
+     reconsider p1' = p1, p2' = p2 as Element of REAL n by Th25;
+     thus p11 = p1' - p2' by A1 .= p22 by A2;
+    end;
+ end;
+
+theorem Th45: p1 - p2 = p1 + -p2
+ proof
+  reconsider r1=p1, r2=p2 as Element of REAL n by Th25;
+  reconsider r1'=r1, r2'=r2 as Element of n-tuples_on REAL by Def1;
+  A1: -r2 = - p2 by Def12;
+  thus p1 - p2 = r1' - r2' by Def13 .= r1 + -r2 by RVSUM_1:52
+    .= p1 + -p2 by A1,Def10;
+ end;
+
+theorem Th46: p - p = 0.REAL n
+ proof
+  reconsider r=p as Element of REAL n by Th25;
+  reconsider r'=r as Element of n-tuples_on REAL by Def1;
+  thus p - p = r' - r' by Def13 .= n |-> (0 qua Real) by RVSUM_1:58
+            .= 0*n by Def4 .= 0.REAL n by Def9;
+ end;
+
+theorem p1 - p2 = 0.REAL n implies p1 = p2
+ proof
+  reconsider r1=p1, r2=p2 as Element of REAL n by Th25;
+  reconsider r1'=r1, r2'=r2 as Element of n-tuples_on REAL by Def1;
+  assume p1 - p2 = 0.REAL n;
+   then r1' - r2' = 0.REAL n by Def13 .= 0*n by Def9
+                 .= n |-> (0 qua Real) by Def4;
+  hence p1 = p2 by RVSUM_1:59;
+ end;
+
+theorem -(p1 - p2) = p2 - p1 & -(p1 - p2) = -p1 + p2
+ proof
+  thus -(p1 - p2) = -(p1 + -p2) by Th45 .= -p1 + --p2 by Th42
+          .= p2 + -p1 by Th39 .= p2 - p1 by Th45;
+  hence -(p1 - p2) = -p1 + p2 by Th45;
+ end;
+
+theorem Th49: p1 + (p2 - p3) = p1 + p2 - p3
+ proof
+  thus p1 + (p2 - p3) = p1 + (p2 + -p3) by Th45 .= (p1 + p2) + -p3 by Th30
+    .= p1 + p2 - p3 by Th45;
+ end;
+
+theorem Th50: p1 - (p2 + p3) = p1 - p2 - p3
+ proof
+  thus p1 - (p2 + p3) = p1 + -(p2 + p3) by Th45 .= p1 + (-p2 + -p3) by Th42
+   .= (p1 + -p2) + -p3 by Th30 .= (p1 + -p2) - p3 by Th45
+   .= p1 - p2 - p3 by Th45;
+ end;
+
+theorem p1 - (p2 - p3) = p1 - p2 + p3
+ proof
+  thus p1 - (p2 - p3) = p1 - (p2 + -p3) by Th45 .= p1 - p2 - -p3 by Th50
+   .= p1 - p2 + --p3 by Th45 .= p1 - p2 + p3 by Th39;
+ end;
+
+theorem p = p + p1 - p1 & p = p - p1 + p1
+ proof
+  thus p = p + 0.REAL n by Th31 .= p + (p1 - p1) by Th46
+           .= p + p1 - p1 by Th49;
+  hence p = p + (p1 - p1) by Th49 .= p + (-p1 + p1) by Th45
+ .= p + -p1 + p1 by Th30 .= p - p1 + p1 by Th45;
+ end;
+
+theorem x*(p1 - p2) = x*p1 - x*p2
+ proof
+  thus x*(p1 - p2) = x*(p1 + -p2) by Th45 .= x*p1 + x*(-p2) by Th36
+                  .= x*p1 + -x*p2 by Th44 .= x*p1 - x*p2 by Th45;
+ end;
+
+theorem (x-y)*p = x*p - y*p
+ proof
+  thus (x-y)*p = (x+-y)*p by XCMPLX_0:def 8 .= x*p + (-y)*p by Th37
+   .= x*p + -y*p by Th44 .= x*p - y*p by Th45;
+ end;
+
+reserve p,p1,p2 for Point of TOP-REAL 2;
+
+theorem Th55: ex x,y being Real st p=<*x,y*>
+  proof
+     the carrier of TOP-REAL 2 = REAL 2 & REAL 2 = 2-tuples_on REAL by Def1,
+Th25
+;
+   then reconsider p'=p as Element of 2-tuples_on REAL;
+     ex x,y be Real st p'=<*x,y*> by FINSEQ_2:120;
+   hence thesis;
+  end;
+
+ definition let p;
+   func p`1 -> Real means
+    :Def14: for f being FinSequence st p = f holds it = f.1;
+  existence
+   proof
+    reconsider f = p as FinSequence of REAL by Th27;
+      len f = 2 by Th28;
+    then dom f = Seg 2 & 1 in {1,2} by FINSEQ_1:def 3,TARSKI:def 2;
+    then reconsider x = f.1 as Real by FINSEQ_1:4,FINSEQ_2:13;
+    take x; thus thesis;
+   end;
+  uniqueness
+   proof
+    let x,y be Real; assume that
+  A1: for f being FinSequence st p = f holds x = f.1 and
+  A2: for f being FinSequence st p = f holds y = f.1;
+    reconsider f = p as FinSequence by Th27;
+    thus x = f.1 by A1 .= y by A2;
+   end;
+   func p`2 -> Real means
+    :Def15: for f being FinSequence st p = f holds it = f.2;
+  existence
+   proof
+    reconsider f = p as FinSequence of REAL by Th27;
+      len f = 2 by Th28;
+    then dom f = Seg 2 & 2 in {1,2} by FINSEQ_1:def 3,TARSKI:def 2;
+    then reconsider x = f.2 as Real by FINSEQ_1:4,FINSEQ_2:13;
+    take x; thus thesis;
+   end;
+  uniqueness
+   proof
+    let x,y be Real; assume that
+  A3: for f being FinSequence st p = f holds x = f.2 and
+  A4: for f being FinSequence st p = f holds y = f.2;
+    reconsider f = p as FinSequence of REAL by Th27;
+    thus x = f.2 by A3 .= y by A4;
+   end;
+ end;
+
+ definition let x,y be real number;
+   func |[ x,y ]| -> Point of TOP-REAL 2 equals :Def16:  <*x,y*>;
+  coherence
+   proof
+      x is Real & y is Real by XREAL_0:def 1;
+    then <*x,y*> is Element of 2-tuples_on REAL by FINSEQ_2:121;
+    then <*x,y*> is Element of REAL 2 by Def1;
+    hence <*x,y*> is Point of TOP-REAL 2 by Th25;
+   end;
+ end;
+
+theorem Th56: |[x,y]|`1 = x & |[x,y]|`2 = y
+ proof
+ A1: |[x,y]| = <*x,y*> by Def16;
+  hence |[x,y]|`1 = <*x,y*>.1 by Def14 .= x by FINSEQ_1:61;
+  thus |[x,y]|`2 = <*x,y*>.2 by A1,Def15 .= y by FINSEQ_1:61;
+ end;
+
+theorem Th57: p = |[p`1, p`2]|
+ proof
+  consider x,y be Real such that A1: p = <* x,y *> by Th55;
+  reconsider f = p as FinSequence by Th27;
+  A2: p`1 = f.1 by Def14 .= x by A1,FINSEQ_1:61;
+    p`2 = f.2 by Def15 .= y by A1,FINSEQ_1:61;
+  hence thesis by A1,A2,Def16;
+ end;
+
+theorem 0.REAL 2 = |[0,0]|
+ proof
+  A1: 0.REAL 2 = 0*2 by Def9 .= 2 |-> 0 by Def4
+   .= <* 0,0 *> by FINSEQ_2:75;
+  then A2: (0.REAL 2)`1 = <* 0,0 *>.1 by Def14 .= 0 by FINSEQ_1:61;
+    (0.REAL 2)`2 = <* 0,0 *>.2 by A1,Def15 .= 0 by FINSEQ_1:61;
+  hence |[0,0]| = 0.REAL 2 by A2,Th57;
+ end;
+
+theorem Th59: p1 + p2 = |[ p1`1 + p2`1, p1`2 + p2`2]|
+ proof
+  reconsider p1'=p1, p2'=p2 as Element of REAL 2 by Th25;
+  A1: p1 + p2 = p1' + p2' by Def10;
+   then len(p1'+p2') = 2 by Th28;
+then A2:  dom(p1'+p2') = Seg 2 & 2 in {1,2} & 1 in {1,2}
+    by FINSEQ_1:def 3,TARSKI:def 2;
+
+  A3: p1`1 = p1'.1 & p2`1 = p2'.1 by Def14;
+  A4: (p1+p2)`1 = (p1' + p2').1 by A1,Def14
+               .= p1`1 + p2`1 by A2,A3,FINSEQ_1:4,RVSUM_1:26;
+  A5: p1`2 = p1'.2 & p2`2 = p2'.2 by Def15;
+    (p1+p2)`2 = (p1' + p2').2 by A1,Def15
+               .= p1`2 + p2`2 by A2,A5,FINSEQ_1:4,RVSUM_1:26;
+  hence p1 + p2 = |[ p1`1 + p2`1, p1`2 + p2`2]| by A4,Th57;
+ end;
+
+theorem |[x1, y1]| + |[x2, y2]| = |[ x1 + x2, y1 + y2]|
+ proof
+    |[x1, y1]|`1 = x1 & |[x1, y1]|`2 = y1 & |[x2, y2]|`1 = x2 & |[x2, y2]|`2 =
+y2
+   by Th56;
+  hence thesis by Th59;
+ end;
+
+theorem Th61: x*p = |[ x*p`1 ,x*p`2 ]|
+ proof
+  reconsider p1=p as Element of REAL 2 by Th25;
+  A1: x*p = x*p1 by Def11;
+  A2: p`1 = p1.1 & p`2 = p1.2 by Def14,Def15;
+A3: x is Real by XREAL_0:def 1;
+  A4: (x*p)`1 = (x*p1).1 by A1,Def14 .= x*(p`1)
+     by A2,A3,RVSUM_1:66;
+    (x*p)`2 = (x*p1).2 by A1,Def15 .= x*(p`2) by A2,A3,RVSUM_1:66;
+  hence x*p = |[ x*p`1, x*p`2]| by A4,Th57;
+ end;
+
+theorem x*|[x1,y1]| = |[ x*x1 ,x*y1 ]|
+ proof
+    |[x1,y1]|`1 = x1 & |[x1,y1]|`2 = y1 by Th56;
+  hence thesis by Th61;
+ end;
+
+theorem Th63: -p = |[ -p`1, -p`2]|
+ proof
+  thus -p = (-1)*p by Th43 .= |[ (-1)*p`1, (-1)*p`2]| by Th61
+     .= |[ -p`1, (-1)*p`2]| by XCMPLX_1:180 .= |[ -p`1, -p`2]| by XCMPLX_1:180;
+ end;
+
+theorem -|[x1,y1]| = |[ -x1, -y1]|
+ proof
+    |[x1,y1]|`1 = x1 & |[x1,y1]|`2 = y1 by Th56;
+  hence thesis by Th63;
+ end;
+
+theorem Th65: p1 - p2 = |[ p1`1 - p2`1, p1`2 - p2`2]|
+ proof
+    -p2 = |[ -p2`1, -p2`2]| by Th63;
+  then A1: (-p2)`1 = -p2`1 & (-p2)`2 = -p2`2 by Th56;
+  thus p1 - p2 = p1 + -p2 by Th45 .= |[ p1`1 + -p2`1, p1`2 + -p2`2]| by A1,Th59
+              .= |[ p1`1 - p2`1, p1`2 + -p2`2]| by XCMPLX_0:def 8
+              .= |[ p1`1 - p2`1, p1`2 - p2`2]| by XCMPLX_0:def 8;
+ end;
+
+theorem |[x1, y1]| - |[x2, y2]| = |[ x1 - x2, y1 - y2]|
+ proof
+    |[x1, y1]|`1 = x1 & |[x1, y1]|`2 = y1 & |[x2, y2]|`1 = x2 & |[x2, y2]|`2 =
+y2
+   by Th56;
+  hence thesis by Th65;
+ end;

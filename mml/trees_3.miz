@@ -1,0 +1,2362 @@
+:: Sets and Functions of Trees and Joining Operations of Trees
+::  by Grzegorz Bancerek
+::
+:: Received November 27, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, FUNCT_1, RELAT_1, FINSET_1, MCART_1, TREES_1, TREES_2,
+      BOOLE, FUNCT_2, TARSKI, FINSEQ_2, FUNCOP_1, FUNCT_6, PARTFUN1, FUNCT_3,
+      ARYTM_1, SQUARE_1, TREES_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      NAT_1, RELAT_1, FUNCT_1, FINSEQ_1, FINSET_1, DOMAIN_1, SQUARE_1,
+      FUNCOP_1, RELSET_1, FUNCT_2, FUNCT_3, FINSEQ_2, TREES_1, TREES_2,
+      FUNCT_6;
+ constructors FUNCT_5, NAT_1, DOMAIN_1, SQUARE_1, FUNCT_3, FINSEQ_2, TREES_2,
+      FUNCT_6, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, FINSEQ_1, TREES_1, TREES_2, FINSET_1, RELSET_1, CARD_1,
+      XREAL_0, MEMBERED, ZFMISC_1, XBOOLE_0, ORDINAL2, NUMBERS;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, XBOOLE_0, TREES_1, TREES_2;
+ theorems TARSKI, AXIOMS, ZFMISC_1, FINSEQ_1, MCART_1, NAT_1, SQUARE_1,
+      FUNCT_1, FUNCT_2, FUNCT_3, FUNCOP_1, MODAL_1, FUNCT_6, FINSEQ_2,
+      FINSEQ_3, ENUMSET1, TREES_1, TREES_2, REAL_1, RELAT_1, RELSET_1,
+      XBOOLE_0, XBOOLE_1, XCMPLX_1;
+ schemes NAT_1, CARD_3, XBOOLE_0;
+
+begin :: Finite sets
+
+ reserve x,y,z for set, i,k,n for Nat, p,q,r,s for FinSequence,
+  w for FinSequence of NAT, X,Y for set, f for Function;
+
+Lm1: 1 <= n & n <= len p implies (p^q).n = p.n
+ proof assume 1 <= n & n <= len p;
+   then n in dom p by FINSEQ_3:27;
+  hence thesis by FINSEQ_1:def 7;
+ end;
+
+begin :: Sets of trees
+
+definition
+ func Trees -> set means:
+Def1:   x in it iff x is Tree;
+  existence
+   proof set X = {T where T is Subset of NAT*: T is Tree};
+    take X; let x;
+    thus x in X implies x is Tree
+      proof assume x in X;
+        then ex T being Subset of NAT* st x = T & T is Tree;
+       hence thesis;
+      end;
+    assume x is Tree; then reconsider T = x as Tree;
+       T is Subset of NAT* by TREES_1:def 5;
+    hence thesis;
+   end;
+  uniqueness
+   proof
+    defpred X[set] means $1 is Tree;
+    let T1,T2 be set such that
+A1:  x in T1 iff X[x] and
+A2:  x in T2 iff X[x];
+    thus thesis from Extensionality(A1,A2);
+   end;
+end;
+
+definition
+ cluster Trees -> non empty;
+ coherence
+ proof
+  consider T being Tree;
+    T in Trees by Def1;
+  hence thesis;
+ end;
+end;
+
+definition
+ func FinTrees -> Subset of Trees means:
+Def2:
+  x in it iff x is finite Tree;
+  existence
+   proof set X = {T where T is Element of Trees: T is finite Tree};
+       X c= Trees
+      proof let x; assume x in X;
+        then ex T being Element of Trees st x = T & T is finite Tree;
+       hence thesis;
+      end;
+    then reconsider X as Subset of Trees;
+    take X; let x;
+    thus x in X implies x is finite Tree
+      proof assume x in X;
+        then ex T being Element of Trees st x = T & T is finite Tree;
+       hence thesis;
+      end;
+    assume x is finite Tree; then reconsider T = x as finite Tree;
+       T in Trees by Def1;
+    hence thesis;
+   end;
+  uniqueness
+   proof
+    defpred X[set] means $1 is finite Tree;
+    let T1,T2 be Subset of Trees such that
+A1:  x in T1 iff X[x] and
+A2:  x in T2 iff X[x];
+    thus thesis from Extensionality(A1,A2);
+   end;
+end;
+
+definition
+ cluster FinTrees -> non empty;
+ coherence
+ proof
+  consider T being finite Tree;
+    T in FinTrees by Def2;
+  hence thesis;
+ end;
+end;
+
+definition let IT be set;
+ attr IT is constituted-Trees means:
+Def3:
+  for x st x in IT holds x is Tree;
+ attr IT is constituted-FinTrees means:
+Def4:
+  for x st x in IT holds x is finite Tree;
+ attr IT is constituted-DTrees means:
+Def5:
+  for x st x in IT holds x is DecoratedTree;
+end;
+
+theorem
+   X is constituted-Trees iff X c= Trees
+  proof
+   thus X is constituted-Trees implies X c= Trees
+     proof assume
+A1:     for x st x in X holds x is Tree;
+      let x; assume x in X; then x is Tree by A1;
+      hence thesis by Def1;
+     end;
+   assume
+A2:  X c= Trees;
+   let x; assume x in X; hence thesis by A2,Def1;
+  end;
+
+theorem
+   X is constituted-FinTrees iff X c= FinTrees
+  proof
+   thus X is constituted-FinTrees implies X c= FinTrees
+     proof assume
+A1:     for x st x in X holds x is finite Tree;
+      let x; assume x in X; then x is finite Tree by A1;
+      hence thesis by Def2;
+     end;
+   assume
+A2:  X c= FinTrees;
+   let x; assume x in X; hence thesis by A2,Def2;
+  end;
+
+theorem Th3:
+ X is constituted-Trees & Y is constituted-Trees iff X \/
+ Y is constituted-Trees
+  proof
+   thus X is constituted-Trees & Y is constituted-Trees implies
+    X \/ Y is constituted-Trees
+     proof assume that
+A1:     for x st x in X holds x is Tree and
+A2:     for x st x in Y holds x is Tree;
+      let x; assume x in X \/ Y; then x in X or x in Y by XBOOLE_0:def 2;
+      hence thesis by A1,A2;
+     end;
+   assume
+A3:  for x st x in X \/ Y holds x is Tree;
+   thus X is constituted-Trees
+     proof let x; assume x in X; then x in X \/ Y by XBOOLE_0:def 2;
+      hence thesis by A3;
+     end;
+   let x; assume x in Y; then x in X \/ Y by XBOOLE_0:def 2;
+   hence thesis by A3;
+  end;
+
+theorem
+   X is constituted-Trees & Y is constituted-Trees implies
+   X \+\ Y is constituted-Trees
+  proof assume that
+A1:  for x st x in X holds x is Tree and
+A2:  for x st x in Y holds x is Tree;
+   let x; assume x in X \+\ Y; then not x in X iff x in Y by XBOOLE_0:1;
+   hence thesis by A1,A2;
+  end;
+
+theorem
+   X is constituted-Trees implies X /\ Y is constituted-Trees &
+   Y /\ X is constituted-Trees & X \ Y is constituted-Trees
+  proof assume
+A1:  for x st x in X holds x is Tree;
+   thus X /\ Y is constituted-Trees
+     proof let x; assume x in X /\ Y; then x in X by XBOOLE_0:def 3;
+      hence thesis by A1;
+     end;
+   hence Y /\ X is constituted-Trees;
+   let x; assume x in X \ Y; then x in X by XBOOLE_0:def 4;
+   hence thesis by A1;
+  end;
+
+theorem Th6:
+ X is constituted-FinTrees & Y is constituted-FinTrees iff
+   X \/ Y is constituted-FinTrees
+  proof
+   thus X is constituted-FinTrees & Y is constituted-FinTrees implies
+      X \/ Y is constituted-FinTrees
+     proof assume that
+A1:     for x st x in X holds x is finite Tree and
+A2:     for x st x in Y holds x is finite Tree;
+      let x; assume x in X \/ Y; then x in X or x in Y by XBOOLE_0:def 2;
+      hence thesis by A1,A2;
+     end;
+   assume
+A3:  for x st x in X \/ Y holds x is finite Tree;
+   thus X is constituted-FinTrees
+     proof let x; assume x in X; then x in X \/ Y by XBOOLE_0:def 2;
+      hence thesis by A3;
+     end;
+   let x; assume x in Y; then x in X \/ Y by XBOOLE_0:def 2;
+   hence thesis by A3;
+  end;
+
+theorem
+   X is constituted-FinTrees & Y is constituted-FinTrees implies
+   X \+\ Y is constituted-FinTrees
+  proof assume that
+A1:  for x st x in X holds x is finite Tree and
+A2:  for x st x in Y holds x is finite Tree;
+   let x; assume x in X \+\ Y; then not x in X iff x in Y by XBOOLE_0:1;
+   hence thesis by A1,A2;
+  end;
+
+theorem
+   X is constituted-FinTrees implies X /\ Y is constituted-FinTrees &
+   Y /\ X is constituted-FinTrees & X \ Y is constituted-FinTrees
+  proof assume
+A1:  for x st x in X holds x is finite Tree;
+   thus X /\ Y is constituted-FinTrees
+     proof let x; assume x in X /\ Y; then x in X by XBOOLE_0:def 3;
+      hence thesis by A1;
+     end;
+   hence Y /\ X is constituted-FinTrees;
+   let x; assume x in X \ Y; then x in X by XBOOLE_0:def 4;
+   hence thesis by A1;
+  end;
+
+theorem Th9:
+ X is constituted-DTrees & Y is constituted-DTrees iff
+   X \/ Y is constituted-DTrees
+  proof
+   thus X is constituted-DTrees & Y is constituted-DTrees implies
+      X \/ Y is constituted-DTrees
+     proof assume that
+A1:     for x st x in X holds x is DecoratedTree and
+A2:     for x st x in Y holds x is DecoratedTree;
+      let x; assume x in X \/ Y; then x in X or x in Y by XBOOLE_0:def 2;
+      hence thesis by A1,A2;
+     end;
+   assume
+A3:  for x st x in X \/ Y holds x is DecoratedTree;
+   thus X is constituted-DTrees
+     proof let x; assume x in X; then x in X \/ Y by XBOOLE_0:def 2;
+      hence thesis by A3;
+     end;
+   let x; assume x in Y; then x in X \/ Y by XBOOLE_0:def 2;
+   hence thesis by A3;
+  end;
+
+theorem
+   X is constituted-DTrees & Y is constituted-DTrees implies
+   X \+\ Y is constituted-DTrees
+  proof assume that
+A1:  for x st x in X holds x is DecoratedTree and
+A2:  for x st x in Y holds x is DecoratedTree;
+   let x; assume x in X \+\ Y; then not x in X iff x in Y by XBOOLE_0:1;
+   hence thesis by A1,A2;
+  end;
+
+theorem
+   X is constituted-DTrees implies X /\ Y is constituted-DTrees &
+   Y /\ X is constituted-DTrees & X \ Y is constituted-DTrees
+  proof assume
+A1:  for x st x in X holds x is DecoratedTree;
+   thus X /\ Y is constituted-DTrees
+     proof let x; assume x in X /\ Y; then x in X by XBOOLE_0:def 3;
+      hence thesis by A1;
+     end;
+   hence Y /\ X is constituted-DTrees;
+   let x; assume x in X \ Y; then x in X by XBOOLE_0:def 4;
+   hence thesis by A1;
+  end;
+
+theorem Th12:
+ {} is constituted-Trees constituted-FinTrees constituted-DTrees
+  proof
+   thus for x st x in {} holds x is Tree;
+   thus for x st x in {} holds x is finite Tree;
+   thus for x st x in {} holds x is DecoratedTree;
+  end;
+
+theorem Th13:
+ {x} is constituted-Trees iff x is Tree
+  proof
+   thus {x} is constituted-Trees implies x is Tree
+     proof assume
+A1:     for y st y in {x} holds y is Tree; x in {x} by TARSKI:def 1;
+      hence thesis by A1;
+     end;
+   assume
+A2:  x is Tree; let y;
+   thus thesis by A2,TARSKI:def 1;
+  end;
+
+theorem Th14:
+ {x} is constituted-FinTrees iff x is finite Tree
+  proof
+   thus {x} is constituted-FinTrees implies x is finite Tree
+     proof assume
+A1:     for y st y in {x} holds y is finite Tree; x in {x} by TARSKI:def 1;
+      hence thesis by A1;
+     end;
+   assume
+A2:  x is finite Tree; let y;
+   thus thesis by A2,TARSKI:def 1;
+  end;
+
+theorem Th15:
+ {x} is constituted-DTrees iff x is DecoratedTree
+  proof
+   thus {x} is constituted-DTrees implies x is DecoratedTree
+     proof assume
+A1:     for y st y in {x} holds y is DecoratedTree; x in {x} by TARSKI:def 1;
+      hence thesis by A1;
+     end;
+   assume
+A2:  x is DecoratedTree; let y;
+   thus thesis by A2,TARSKI:def 1;
+  end;
+
+theorem Th16:
+ {x,y} is constituted-Trees iff x is Tree & y is Tree
+  proof
+   thus {x,y} is constituted-Trees implies x is Tree & y is Tree
+     proof assume
+A1:     for z st z in {x,y} holds z is Tree; x in {x,y} & y in {x,y} by TARSKI:
+def 2;
+      hence thesis by A1;
+     end;
+   assume
+A2:  x is Tree & y is Tree; let z;
+   thus thesis by A2,TARSKI:def 2;
+  end;
+
+theorem Th17:
+ {x,y} is constituted-FinTrees iff x is finite Tree & y is finite Tree
+  proof
+   thus {x,y} is constituted-FinTrees implies x is finite Tree & y is
+finite Tree
+     proof assume
+A1:     for z st z in {x,y} holds z is finite Tree;
+         x in {x,y} & y in {x,y} by TARSKI:def 2;
+      hence thesis by A1;
+     end;
+   assume
+A2:  x is finite Tree & y is finite Tree; let z;
+   thus thesis by A2,TARSKI:def 2;
+  end;
+
+theorem Th18:
+ {x,y} is constituted-DTrees iff x is DecoratedTree & y is DecoratedTree
+  proof
+   thus {x,y} is constituted-DTrees implies
+      x is DecoratedTree & y is DecoratedTree
+     proof assume
+A1:     for z st z in {x,y} holds z is DecoratedTree;
+         x in {x,y} & y in {x,y} by TARSKI:def 2;
+      hence thesis by A1;
+     end;
+   assume
+A2:  x is DecoratedTree & y is DecoratedTree; let z;
+   thus thesis by A2,TARSKI:def 2;
+  end;
+
+theorem
+   X is constituted-Trees & Y c= X implies Y is constituted-Trees
+  proof assume
+A1:  for x st x in X holds x is Tree;
+   assume
+A2:  Y c= X;
+   let x; assume x in Y; hence thesis by A1,A2;
+  end;
+
+theorem
+   X is constituted-FinTrees & Y c= X implies Y is constituted-FinTrees
+  proof assume
+A1:  for x st x in X holds x is finite Tree;
+   assume
+A2:  Y c= X;
+   let x; assume x in Y; hence thesis by A1,A2;
+  end;
+
+theorem
+   X is constituted-DTrees & Y c= X implies Y is constituted-DTrees
+  proof assume
+A1:  for x st x in X holds x is DecoratedTree;
+   assume
+A2:  Y c= X;
+   let x; assume x in Y; hence thesis by A1,A2;
+  end;
+
+definition
+ cluster finite constituted-Trees constituted-FinTrees non empty set;
+  existence
+   proof consider T be finite Tree;
+    take {T}; thus thesis by Th13,Th14;
+   end;
+ cluster finite constituted-DTrees non empty set;
+  existence
+   proof consider T be DecoratedTree;
+    take {T}; thus thesis by Th15;
+   end;
+end;
+
+definition
+ cluster constituted-FinTrees -> constituted-Trees set;
+  coherence
+   proof let X be set;
+    assume X is constituted-FinTrees;
+    hence for x st x in X holds x is Tree by Def4;
+   end;
+end;
+
+definition let X be constituted-Trees set;
+ cluster -> constituted-Trees Subset of X;
+  coherence
+   proof let Y be Subset of X; let x;
+     thus thesis by Def3;
+   end;
+end;
+
+definition let X be constituted-FinTrees set;
+ cluster -> constituted-FinTrees Subset of X;
+  coherence
+   proof let Y be Subset of X; let x;
+     thus thesis by Def4;
+   end;
+end;
+
+definition let X be constituted-DTrees set;
+ cluster -> constituted-DTrees Subset of X;
+  coherence
+   proof let Y be Subset of X; let x;
+     thus thesis by Def5;
+   end;
+end;
+
+definition
+ let D be constituted-Trees non empty set;
+ redefine mode Element of D -> Tree;
+  coherence by Def3;
+end;
+
+definition
+ let D be constituted-FinTrees non empty set;
+ redefine mode Element of D -> finite Tree;
+  coherence by Def4;
+end;
+
+definition
+ let D be constituted-DTrees non empty set;
+ redefine mode Element of D -> DecoratedTree;
+  coherence by Def5;
+end;
+
+definition
+ cluster Trees -> constituted-Trees;
+  coherence
+   proof Trees is constituted-Trees proof let x; thus thesis by Def1; end;
+    hence thesis;
+   end;
+end;
+
+definition
+ cluster constituted-FinTrees non empty Subset of Trees;
+  existence
+   proof
+       FinTrees is constituted-FinTrees proof let x; thus thesis by Def2; end;
+    hence thesis;
+   end;
+end;
+
+definition
+ cluster FinTrees -> constituted-FinTrees;
+  coherence
+   proof
+       FinTrees is constituted-FinTrees proof let x; thus thesis by Def2; end;
+    hence thesis;
+   end;
+end;
+
+definition let D be non empty set;
+ mode DTree-set of D -> set means:
+Def6:
+  for x st x in it holds x is DecoratedTree of D;
+  existence
+   proof
+    take {}; let x; thus thesis;
+   end;
+end;
+
+definition let D be non empty set;
+ cluster -> constituted-DTrees DTree-set of D;
+  coherence
+   proof let T be DTree-set of D;
+    let x; thus thesis by Def6;
+   end;
+end;
+
+definition let D be non empty set;
+ cluster finite non empty DTree-set of D;
+  existence
+   proof consider T being DecoratedTree of D; set X = {T};
+       X is constituted-DTrees
+      proof let x; assume x in X; hence thesis by TARSKI:def 1;
+      end;
+    then reconsider X as constituted-DTrees set;
+       X is DTree-set of D
+      proof let x; assume x in X; hence thesis by TARSKI:def 1;
+      end;
+    then reconsider X as DTree-set of D;
+    take X; thus X is finite;
+    thus thesis;
+   end;
+end;
+
+definition let D be non empty set, E be non empty DTree-set of D;
+ redefine mode Element of E -> DecoratedTree of D;
+  coherence by Def6;
+end;
+
+definition let T be Tree, D be non empty set;
+ redefine func Funcs(T,D) -> non empty DTree-set of D;
+  coherence
+   proof set F = Funcs(T,D);
+       F is constituted-DTrees
+      proof let x; assume x in F;
+       then consider f being Function such that
+A1:      x = f & dom f = T & rng f c= D by FUNCT_2:def 2;
+       thus thesis by A1,TREES_2:def 8;
+      end;
+    then reconsider F as constituted-DTrees set;
+       F is DTree-set of D
+      proof let x; assume x in F;
+       then consider f being Function such that
+A2:      x = f & dom f = T & rng f c= D by FUNCT_2:def 2;
+       thus thesis by A2,TREES_2:def 8,def 9;
+      end;
+    then reconsider F as DTree-set of D;
+    consider d being Function of T,D;
+       dom d = T & rng d c= D by FUNCT_2:def 1;
+     then d in F by FUNCT_2:def 2;
+    hence thesis;
+   end;
+ mode Relation of T,D -> ParametrizedSubset of D;
+  coherence
+   proof let f be Relation of T,D;
+    rng f c= D;
+    hence thesis by TREES_2:def 9;
+   end;
+end;
+
+definition let T be Tree, D be non empty set;
+ cluster -> DecoratedTree-like Function of T,D;
+ coherence
+  proof let f be Function of T,D;
+   thus dom f is Tree by FUNCT_2:def 1;
+  end;
+end;
+
+ definition
+  let D be non empty set;
+  func Trees(D) -> DTree-set of D means:
+Def7:
+   for T being DecoratedTree of D holds T in it;
+   existence
+    proof set TT = union {Funcs(T,D) where T is Element of Trees:
+          not contradiction};
+        TT is constituted-DTrees
+       proof let x; assume x in TT;
+        then consider X such that
+A1:       x in X & X in {Funcs(T,D) where T is Element of Trees:
+           not contradiction} by TARSKI:def 4;
+        consider T being Element of Trees such that
+A2:       X = Funcs(T,D) by A1;
+        thus thesis by A1,A2,Def6;
+       end;
+     then reconsider TT as constituted-DTrees set;
+        TT is DTree-set of D
+       proof let x; assume x in TT;
+        then consider X such that
+A3:       x in X & X in {Funcs(T,D) where T is Element of Trees:
+           not contradiction} by TARSKI:def 4;
+        consider T being Element of Trees such that
+A4:       X = Funcs(T,D) by A3;
+        thus thesis by A3,A4,Def6;
+       end;
+     then reconsider TT as DTree-set of D;
+     take TT; let T be DecoratedTree of D;
+     reconsider t = dom T as Element of Trees by Def1;
+        rng T c= D by TREES_2:def 9;
+      then T in Funcs(t,D) & Funcs(t,D) in {Funcs(W,D) where W is Element of
+Trees:
+       not contradiction} by FUNCT_2:def 2;
+     hence thesis by TARSKI:def 4;
+    end;
+   uniqueness
+    proof let T1,T2 be DTree-set of D such that
+A5:    for T being DecoratedTree of D holds T in T1 and
+A6:    for T being DecoratedTree of D holds T in T2;
+     thus T1 c= T2
+       proof let x; assume x in T1;
+         then x is DecoratedTree of D by Def6;
+        hence thesis by A6;
+       end;
+     let x; assume x in T2;
+      then x is DecoratedTree of D by Def6;
+     hence thesis by A5;
+    end;
+ end;
+
+ definition
+  let D be non empty set;
+  cluster Trees(D) -> non empty;
+   coherence by Def7;
+ end;
+
+ definition let D be non empty set;
+  func FinTrees(D) -> DTree-set of D means :Def8:
+   for T being DecoratedTree of D holds dom T is finite iff T in it;
+   existence
+    proof
+     defpred X[set] means ex T being DecoratedTree of D st $1 = T &
+        dom T is finite;
+     consider X such that
+A1:    x in X iff x in Trees(D) & X[x] from Separation;
+        now let x; assume x in X;
+        then x in Trees D by A1;
+       hence x is DecoratedTree of D by Def6;
+      end;
+     then reconsider X as DTree-set of D by Def6;
+     take X; let T be DecoratedTree of D; T in Trees D by Def7;
+     hence dom T is finite implies T in X by A1;
+     assume T in X;
+      then ex t being DecoratedTree of D st T = t & dom t is finite by A1;
+     hence thesis;
+    end;
+   uniqueness
+    proof let T1,T2 be DTree-set of D such that
+A2:    for T being DecoratedTree of D holds dom T is finite iff T in T1 and
+A3:    for T being DecoratedTree of D holds dom T is finite iff T in T2;
+     thus T1 c= T2
+       proof let x; assume
+A4:       x in T1;
+        then reconsider T = x as DecoratedTree of D by Def6;
+           dom T is finite by A2,A4;
+        hence thesis by A3;
+       end;
+     let x; assume
+A5:    x in T2;
+     then reconsider T = x as DecoratedTree of D by Def6;
+        dom T is finite by A3,A5;
+     hence thesis by A2;
+    end;
+ end;
+
+ definition let D be non empty set;
+  cluster FinTrees D -> non empty;
+   coherence
+    proof
+     consider T being finite Tree; consider t be Function of T,D;
+     A1: t is Relation of T,D;
+      then dom t is finite & t in Trees D by Def7;
+     hence thesis by A1,Def8;
+    end;
+  end;
+
+theorem
+   for D being non empty set holds FinTrees D c= Trees D
+  proof let D be non empty set; let x; assume x in FinTrees D;
+    then x is DecoratedTree of D by Def6;
+   hence thesis by Def7;
+  end;
+
+begin :: Functions yielding trees
+
+definition let IT be Function;
+ attr IT is Tree-yielding means:
+Def9:
+  rng IT is constituted-Trees;
+ attr IT is FinTree-yielding means:
+Def10:
+  rng IT is constituted-FinTrees;
+ attr IT is DTree-yielding means:
+Def11:
+  rng IT is constituted-DTrees;
+end;
+
+theorem Th23:
+ {} is Tree-yielding FinTree-yielding DTree-yielding
+  proof
+   thus rng {} is constituted-Trees by Th12,FINSEQ_1:27;
+   thus rng {} is constituted-FinTrees by Th12,FINSEQ_1:27;
+   thus rng {} is constituted-DTrees by Th12,FINSEQ_1:27;
+  end;
+
+theorem Th24:
+ f is Tree-yielding iff for x st x in dom f holds f.x is Tree
+  proof
+   thus f is Tree-yielding implies for x st x in dom f holds f.x is Tree
+     proof assume
+A1:     for x st x in rng f holds x is Tree;
+      let x; assume x in dom f; then f.x in rng f by FUNCT_1:def 5;
+      hence thesis by A1;
+     end;
+   assume
+A2:  for x st x in dom f holds f.x is Tree;
+   let x; assume x in rng f;
+    then ex y st y in dom f & x = f.y by FUNCT_1:def 5;
+   hence thesis by A2;
+  end;
+
+theorem
+   f is FinTree-yielding iff for x st x in dom f holds f.x is finite Tree
+  proof
+   thus f is FinTree-yielding implies for x st x in dom f holds f.x is
+finite Tree
+     proof assume
+A1:     for x st x in rng f holds x is finite Tree;
+      let x; assume x in dom f; then f.x in rng f by FUNCT_1:def 5;
+      hence thesis by A1;
+     end;
+   assume
+A2:  for x st x in dom f holds f.x is finite Tree;
+   let x; assume x in rng f;
+    then ex y st y in dom f & x = f.y by FUNCT_1:def 5;
+   hence thesis by A2;
+  end;
+
+theorem Th26:
+ f is DTree-yielding iff for x st x in dom f holds f.x is DecoratedTree
+  proof
+   thus f is DTree-yielding implies
+    for x st x in dom f holds f.x is DecoratedTree
+     proof assume
+A1:     for x st x in rng f holds x is DecoratedTree;
+      let x; assume x in dom f; then f.x in rng f by FUNCT_1:def 5;
+      hence thesis by A1;
+     end;
+   assume
+A2:  for x st x in dom f holds f.x is DecoratedTree;
+   let x; assume x in rng f;
+    then ex y st y in dom f & x = f.y by FUNCT_1:def 5;
+   hence thesis by A2;
+  end;
+
+theorem Th27:
+ p is Tree-yielding & q is Tree-yielding iff p^q is Tree-yielding
+  proof
+A1:  rng (p^q) = rng p \/ rng q by FINSEQ_1:44;
+   thus p is Tree-yielding & q is Tree-yielding implies p^q is Tree-yielding
+     proof assume rng p is constituted-Trees & rng q is constituted-Trees;
+      hence rng (p^q) is constituted-Trees by A1,Th3;
+     end;
+   assume
+A2:  rng (p^q) is constituted-Trees;
+   hence rng p is constituted-Trees by A1,Th3;
+   thus rng q is constituted-Trees by A1,A2,Th3;
+  end;
+
+theorem Th28:
+ p is FinTree-yielding & q is FinTree-yielding iff p^q is FinTree-yielding
+  proof
+A1:  rng (p^q) = rng p \/ rng q by FINSEQ_1:44;
+   thus p is FinTree-yielding & q is FinTree-yielding implies
+      p^q is FinTree-yielding
+     proof
+      assume rng p is constituted-FinTrees & rng q is constituted-FinTrees;
+      hence rng (p^q) is constituted-FinTrees by A1,Th6;
+     end;
+   assume
+A2:  rng (p^q) is constituted-FinTrees;
+   hence rng p is constituted-FinTrees by A1,Th6;
+   thus rng q is constituted-FinTrees by A1,A2,Th6;
+  end;
+
+theorem Th29:
+ p is DTree-yielding & q is DTree-yielding iff p^q is DTree-yielding
+  proof
+A1:  rng (p^q) = rng p \/ rng q by FINSEQ_1:44;
+   thus p is DTree-yielding & q is DTree-yielding implies
+      p^q is DTree-yielding
+     proof assume rng p is constituted-DTrees & rng q is constituted-DTrees;
+      hence rng (p^q) is constituted-DTrees by A1,Th9;
+     end;
+   assume
+A2:  rng (p^q) is constituted-DTrees;
+   hence rng p is constituted-DTrees by A1,Th9;
+   thus rng q is constituted-DTrees by A1,A2,Th9;
+  end;
+
+theorem Th30:
+ <*x*> is Tree-yielding iff x is Tree
+  proof
+      (x is Tree iff {x} is constituted-Trees) &
+    rng <*x*> = {x} by Th13,FINSEQ_1:56;
+   hence thesis by Def9;
+  end;
+
+theorem Th31:
+ <*x*> is FinTree-yielding iff x is finite Tree
+  proof
+      (x is finite Tree iff {x} is constituted-FinTrees) &
+    rng <*x*> = {x} by Th14,FINSEQ_1:56;
+   hence thesis by Def10;
+  end;
+
+theorem Th32:
+ <*x*> is DTree-yielding iff x is DecoratedTree
+  proof
+      (x is DecoratedTree iff {x} is constituted-DTrees) &
+    rng <*x*> = {x} by Th15,FINSEQ_1:56;
+   hence thesis by Def11;
+  end;
+
+theorem Th33:
+ <*x,y*> is Tree-yielding iff x is Tree & y is Tree
+  proof
+      (x is Tree & y is Tree iff {x,y} is constituted-Trees) &
+    rng <*x,y*> = {x,y} by Th16,FINSEQ_2:147;
+   hence thesis by Def9;
+  end;
+
+theorem Th34:
+ <*x,y*> is FinTree-yielding iff x is finite Tree & y is finite Tree
+  proof
+      (x is finite Tree & y is finite Tree iff {x,y} is constituted-FinTrees) &
+    rng <*x,y*> = {x,y} by Th17,FINSEQ_2:147;
+   hence thesis by Def10;
+  end;
+
+theorem Th35:
+ <*x,y*> is DTree-yielding iff x is DecoratedTree & y is DecoratedTree
+  proof
+      (x is DecoratedTree & y is DecoratedTree iff {x,y} is constituted-DTrees)
+&
+    rng <*x,y*> = {x,y} by Th18,FINSEQ_2:147;
+   hence thesis by Def11;
+  end;
+
+theorem Th36:
+ i <> 0 implies (i |-> x is Tree-yielding iff x is Tree)
+  proof assume i <> 0;
+    then i |-> x = (Seg i) --> x & Seg i <> {} by FINSEQ_1:5,FINSEQ_2:def 2;
+    then rng (i |-> x) = {x} by FUNCOP_1:14;
+    then (x is Tree iff rng (i |-> x) is constituted-Trees) &
+    (i |-> x is Tree-yielding iff rng (i |-> x) is constituted-Trees)
+     by Def9,Th13;
+   hence thesis;
+  end;
+
+theorem Th37:
+ i <> 0 implies (i |-> x is FinTree-yielding iff x is finite Tree)
+  proof assume i <> 0;
+    then i |-> x = (Seg i) --> x & Seg i <> {} by FINSEQ_1:5,FINSEQ_2:def 2;
+    then rng (i |-> x) = {x} by FUNCOP_1:14;
+    then (x is finite Tree iff rng (i |-> x) is constituted-FinTrees) &
+    (i |-> x is FinTree-yielding iff rng (i |-> x) is constituted-FinTrees)
+     by Def10,Th14;
+   hence thesis;
+  end;
+
+theorem Th38:
+ i <> 0 implies (i |-> x is DTree-yielding iff x is DecoratedTree)
+  proof assume i <> 0;
+    then i |-> x = (Seg i) --> x & Seg i <> {} by FINSEQ_1:5,FINSEQ_2:def 2;
+    then rng (i |-> x) = {x} by FUNCOP_1:14;
+    then (x is DecoratedTree iff rng (i |-> x) is constituted-DTrees) &
+    (i |-> x is DTree-yielding iff rng (i |-> x) is constituted-DTrees)
+     by Def11,Th15;
+   hence thesis;
+  end;
+
+definition
+ cluster Tree-yielding FinTree-yielding non empty FinSequence;
+  existence
+   proof consider T being finite Tree;
+    take <*T*>;
+       <*T*> = {[1,T]} by FINSEQ_1:52;
+    hence thesis by Th30,Th31;
+   end;
+ cluster DTree-yielding non empty FinSequence;
+  existence
+   proof consider T being DecoratedTree;
+    take <*T*>;
+       <*T*> = {[1,T]} by FINSEQ_1:52;
+    hence thesis by Th32;
+   end;
+end;
+
+definition
+ cluster Tree-yielding FinTree-yielding non empty Function;
+  existence
+   proof
+    consider p being Tree-yielding FinTree-yielding non empty FinSequence;
+    take p; thus thesis;
+   end;
+ cluster DTree-yielding non empty Function;
+  existence
+   proof consider p being DTree-yielding non empty FinSequence;
+    take p; thus thesis;
+   end;
+end;
+
+definition
+ cluster FinTree-yielding -> Tree-yielding Function;
+  coherence
+   proof let f be Function;
+    assume f is FinTree-yielding;
+     then rng f is constituted-FinTrees set by Def10;
+    hence rng f is constituted-Trees;
+   end;
+end;
+
+definition
+ let D be constituted-Trees non empty set;
+ cluster -> Tree-yielding FinSequence of D;
+  coherence
+   proof let p be FinSequence of D;
+    let x; rng p c= D; hence thesis by Def3;
+   end;
+end;
+
+definition let p,q be Tree-yielding FinSequence;
+ cluster p^q -> Tree-yielding;
+  coherence by Th27;
+end;
+
+definition
+ let D be constituted-FinTrees non empty set;
+ cluster -> FinTree-yielding FinSequence of D;
+  coherence
+   proof let p be FinSequence of D;
+    let x; rng p c= D; hence thesis by Def4;
+   end;
+end;
+
+definition let p,q be FinTree-yielding FinSequence;
+ cluster p^q -> FinTree-yielding;
+  coherence by Th28;
+end;
+
+definition
+ let D be constituted-DTrees non empty set;
+ cluster -> DTree-yielding FinSequence of D;
+  coherence
+   proof let p be FinSequence of D;
+    let x; rng p c= D; hence thesis by Def5;
+   end;
+end;
+
+definition let p,q be DTree-yielding FinSequence;
+ cluster p^q -> DTree-yielding;
+  coherence by Th29;
+end;
+
+Lm2: <*x*> is non empty & <*x,y*> is non empty
+ proof len <*x*> = 1 & len <*x,y*> = 2 by FINSEQ_1:57,61;
+   then dom <*x*> = Seg 1 & dom <*x,y*> = Seg 2 & 1 in Seg 1 & 1 in Seg 2 &
+   <*x*> = <*x*> & <*x,y*> = <*x,y*>
+    by FINSEQ_1:4,def 3,TARSKI:def 1,def 2;
+   then [1,<*x*>.1] in <*x*> & [1,<*x,y*>.1] in <*x,y*> by FUNCT_1:8;
+  hence thesis;
+ end;
+
+definition let T be Tree;
+ cluster <*T*> -> Tree-yielding non empty;
+  coherence by Lm2,Th30;
+ let S be Tree;
+ cluster <*T,S*> -> Tree-yielding non empty;
+  coherence by Lm2,Th33;
+end;
+
+definition let n be Nat, T be Tree;
+ cluster n |-> T -> Tree-yielding;
+  coherence
+   proof 0 |-> T = {} & (n = 0 or n <> 0) by FINSEQ_2:72;
+    hence thesis by Th23,Th36;
+   end;
+end;
+
+definition let T be finite Tree;
+ cluster <*T*> -> FinTree-yielding;
+  coherence by Th31;
+ let S be finite Tree;
+ cluster <*T,S*> -> FinTree-yielding;
+  coherence by Th34;
+end;
+
+definition let n be Nat, T be finite Tree;
+ cluster n |-> T -> FinTree-yielding;
+  coherence
+   proof 0 |-> T = {} & (n = 0 or n <> 0) by FINSEQ_2:72;
+    hence thesis by Th23,Th37;
+   end;
+end;
+
+definition let T be DecoratedTree;
+ cluster <*T*> -> DTree-yielding non empty;
+  coherence by Lm2,Th32;
+ let S be DecoratedTree;
+ cluster <*T,S*> -> DTree-yielding non empty;
+  coherence by Lm2,Th35;
+end;
+
+definition let n be Nat, T be DecoratedTree;
+ cluster n |-> T -> DTree-yielding;
+  coherence
+   proof 0 |-> T = {} & (n = 0 or n <> 0) by FINSEQ_2:72;
+    hence thesis by Th23,Th38;
+   end;
+end;
+
+theorem Th39:
+ for f being DTree-yielding Function holds dom doms f = dom f &
+   doms f is Tree-yielding
+  proof let f be DTree-yielding Function;
+A1:  dom doms f = f"SubFuncs rng f by FUNCT_6:def 2;
+   hence dom doms f c= dom f by RELAT_1:167;
+   thus dom f c= dom doms f
+     proof let x; assume
+A2:     x in dom f; then f.x is DecoratedTree by Th26;
+      hence thesis by A1,A2,FUNCT_6:28;
+     end;
+      now let x; assume x in dom doms f;
+then A3:    x in dom f by A1,FUNCT_6:28;
+     then reconsider g = f.x as DecoratedTree by Th26;
+        (doms f).x = dom g by A3,FUNCT_6:31;
+     hence (doms f).x is Tree;
+    end;
+   hence thesis by Th24;
+  end;
+
+definition let p be DTree-yielding FinSequence;
+ cluster doms p -> Tree-yielding FinSequence-like;
+  coherence
+   proof dom doms p = dom p & Seg len p = dom p by Th39,FINSEQ_1:def 3;
+    hence thesis by Th39,FINSEQ_1:def 2;
+   end;
+end;
+
+theorem
+   for p being DTree-yielding FinSequence holds len doms p = len p
+  proof let p be DTree-yielding FinSequence;
+      dom p = dom doms p & Seg len p = dom p & Seg len doms p = dom doms p
+     by Th39,FINSEQ_1:def 3;
+   hence len doms p = len p by FINSEQ_1:8;
+  end;
+
+Lm3: for D being non empty set, T being DecoratedTree of D holds
+ T is Function of dom T, D
+  proof let D be non empty set, T be DecoratedTree of D;
+      rng T c= D by TREES_2:def 9;
+   hence thesis by FUNCT_2:def 1,RELSET_1:11;
+  end;
+
+begin :: Trees decorated by Cartesian product and structure of substitution
+
+definition let D,E be non empty set;
+ mode DecoratedTree of D,E is DecoratedTree of [:D,E:];
+ mode DTree-set of D,E is DTree-set of [:D,E:];
+end;
+
+definition let T1,T2 be DecoratedTree;
+ cluster <:T1,T2:> -> DecoratedTree-like;
+  coherence
+   proof dom <:T1,T2:> = dom T1 /\ dom T2 by FUNCT_3:def 8;
+     then dom <:T1,T2:> is Tree by TREES_1:50;
+    hence thesis by TREES_2:def 8;
+   end;
+end;
+
+definition let D1,D2 be non empty set;
+ let T1 be DecoratedTree of D1;
+ let T2 be DecoratedTree of D2;
+ redefine func <:T1,T2:> -> DecoratedTree of D1,D2;
+  coherence
+   proof rng T1 c= D1 & rng T2 c= D2 by TREES_2:def 9;
+     then rng <:T1,T2:> c= [:rng T1, rng T2:] &
+     [:rng T1, rng T2:] c= [:D1,D2:] by FUNCT_3:71,ZFMISC_1:119;
+     then rng <:T1,T2:> c= [:D1,D2:] by XBOOLE_1:1;
+    hence <:T1,T2:> is DecoratedTree of D1,D2 by TREES_2:def 9;
+   end;
+end;
+
+definition let D,E be non empty set;
+ let T be DecoratedTree of D;
+ let f be Function of D,E;
+ redefine func f*T -> DecoratedTree of E;
+  coherence
+   proof reconsider g = T as Function of dom T, D by Lm3;
+     reconsider fg = f*g as Function of dom T, E;
+       rng fg c= E;
+    hence thesis by TREES_2:def 9;
+   end;
+end;
+
+definition let D1,D2 be non empty set; redefine
+ func pr1(D1,D2) -> Function of [:D1,D2:], D1;
+  coherence proof thus pr1(D1,D2) is Function of [:D1,D2:], D1; end;
+ func pr2(D1,D2) -> Function of [:D1,D2:], D2;
+  coherence proof thus pr2(D1,D2) is Function of [:D1,D2:], D2; end;
+end;
+
+definition let D1,D2 be non empty set, T be DecoratedTree of D1,D2;
+ func T`1 -> DecoratedTree of D1 equals:
+Def12:   pr1(D1,D2)*T;
+  correctness;
+ func T`2 -> DecoratedTree of D2 equals:
+Def13:   pr2(D1,D2)*T;
+  correctness;
+end;
+
+theorem Th41:
+ for D1,D2 being non empty set, T being DecoratedTree of D1,D2,
+   t being Element of dom T holds (T.t)`1 = T`1.t & T`2.t = (T.t)`2
+  proof let D1,D2 be non empty set, T be DecoratedTree of D1,D2;
+   let t be Element of dom T;
+A1:  T`1 = pr1(D1,D2)*T & T`2 = pr2(D1,D2)*T & dom pr1(D1,D2) = [:D1,D2:] &
+    dom pr2(D1,D2) = [:D1,D2:] & rng T c= [:D1,D2:]
+     by Def12,Def13,FUNCT_2:def 1,TREES_2:def 9;
+    then dom T`1 = dom T & dom T`2 = dom T by RELAT_1:46;
+    then T.t = [(T.t)`1,(T.t)`2] & T`1.t = pr1(D1,D2).(T.t) &
+    T`2.t = pr2(D1,D2).(T.t) by A1,FUNCT_1:22,MCART_1:23;
+   hence thesis by FUNCT_3:def 5,def 6;
+  end;
+
+theorem
+   for D1,D2 being non empty set, T being DecoratedTree of D1,D2 holds
+   <:T`1,T`2:> = T
+  proof let D1,D2 be non empty set, T be DecoratedTree of D1,D2;
+      T`1 = pr1(D1,D2)*T & T`2 = pr2(D1,D2)*T & dom pr1(D1,D2) = [:D1,D2:] &
+    dom pr2(D1,D2) = [:D1,D2:] & rng T c= [:D1,D2:]
+     by Def12,Def13,FUNCT_2:def 1,TREES_2:def 9;
+then A1:  dom T`1 = dom T & dom T`2 = dom T by RELAT_1:46;
+then A2:  dom <:T`1,T`2:> = dom T by FUNCT_3:70;
+      now let x; assume x in dom T; then reconsider t = x as Element of dom T;
+     thus <:T`1,T`2:>.x = [T`1.t,T`2.t] by A1,FUNCT_3:69
+         .= [(T.t)`1,T`2.t] by Th41 .= [(T.t)`1,(T.t)`2] by Th41
+         .= T.x by MCART_1:23;
+    end;
+   hence thesis by A2,FUNCT_1:9;
+  end;
+
+ definition let T be finite Tree;
+  cluster Leaves T -> finite non empty;
+   coherence
+    proof
+A1:    T <> {};
+      defpred X[set,set] means
+       ex t1,t2 being Element of T st $1 = t1 & $2 = t2 & t2 is_a_prefix_of t1;
+A2:    for x,y st X[x,y] & X[y,x] holds x = y by XBOOLE_0:def 10;
+A3:    for x,y,z st X[x,y] & X[y,z] holds X[x,z]
+       proof let x,y,z;
+        given t1,t2 being Element of T such that
+A4:      x = t1 & y = t2 & t2 is_a_prefix_of t1;
+        given t3,t4 being Element of T such that
+A5:      y = t3 & z = t4 & t4 is_a_prefix_of t3;
+        take t1,t4; thus thesis by A4,A5,XBOOLE_1:1;
+       end;
+     consider x such that
+A6:    x in T & for y st y in T & y <> x holds not X[y,x]
+        from FinRegularity(A1,A2,A3);
+     reconsider x as Element of T by A6;
+        now let p be FinSequence of NAT; assume p in T;
+       then reconsider t1 = p as Element of T;
+       thus not x is_a_proper_prefix_of p
+         proof assume x is_a_prefix_of p; then x = t1 by A6;
+          hence thesis;
+         end;
+      end;
+     hence thesis by TREES_1:def 8;
+    end;
+ end;
+
+definition let T be Tree, S be non empty Subset of T;
+ redefine mode Element of S -> Element of T;
+  coherence
+   proof let t be Element of S;
+    thus t is Element of T;
+   end;
+end;
+
+definition let T be finite Tree;
+ redefine mode Leaf of T -> Element of Leaves T;
+  coherence by TREES_1:def 10;
+end;
+
+ definition
+  let T be finite Tree;
+  mode T-Substitution of T -> Tree means:
+Def14:
+   for t being Element of it holds t in T or
+    ex l being Leaf of T st l is_a_proper_prefix_of t;
+   existence
+    proof take T; thus thesis; end;
+ end;
+
+definition let T be finite Tree, t be Leaf of T, S be Tree;
+ redefine func T with-replacement (t,S) -> T-Substitution of T;
+  coherence
+   proof let s be Element of T with-replacement (t,S); assume
+A1:   not s in T;
+    then consider t1 being FinSequence of NAT such that
+A2:   t1 in S & s = t^t1 by TREES_1:def 12;
+    take t;
+       t^{} = t by FINSEQ_1:47;
+     then t1 <> {} by A1,A2;
+    hence t is_a_proper_prefix_of s by A2,TREES_1:33;
+   end;
+end;
+
+ definition let T be finite Tree;
+  cluster finite T-Substitution of T;
+   existence
+    proof
+        for t being Element of T holds t in T or
+       ex l being Leaf of T st l is_a_proper_prefix_of t;
+      then T is T-Substitution of T by Def14;
+     hence thesis;
+    end;
+ end;
+
+ definition let n;
+  mode T-Substitution of n is T-Substitution of elementary_tree n;
+ end;
+
+theorem
+   for T being Tree holds T is T-Substitution of 0
+  proof let T be Tree; let t be Element of T;
+   assume
+A1:  not t in elementary_tree 0;
+   consider l being Leaf of elementary_tree 0;
+   take l;
+      l = {} & t <> {} & {} is_a_prefix_of t
+     by A1,TARSKI:def 1,TREES_1:56,XBOOLE_1:2;
+   hence thesis by XBOOLE_0:def 8;
+  end;
+
+theorem
+   for T1, T2 being Tree st T1-level 1 c= T2-level 1 &
+   for n st <*n*> in T1 holds T1|<*n*> = T2|<*n*> holds T1 c= T2
+  proof let T1, T2 be Tree; assume that
+A1:  T1-level 1 c= T2-level 1 and
+A2:  for n st <*n*> in T1 holds T1|<*n*> = T2|<*n*>;
+   let x; assume x in T1;
+   then reconsider t = x as Element of T1;
+      now assume t <> {};
+     then consider p being FinSequence of NAT, n such that
+A3:    t = <*n*>^p by MODAL_1:4;
+A4:    T1-level 1 = {t1 where t1 is Element of T1: len t1 = 1} &
+      len <*n*> = 1 by FINSEQ_1:56,TREES_2:def 6;
+     reconsider q = <*n*> as Element of T1 by A3,TREES_1:46;
+        q in T1-level 1 by A4;
+      then q in T2-level 1 & T2-level 1 c= T2 by A1;
+      then p in T1|q & T1|<*n*> = T2|<*n*> & q in T2 by A2,A3,TREES_1:def 9;
+     hence t in T2 by A3,TREES_1:def 9;
+    end;
+   hence x in T2 by TREES_1:47;
+  end;
+
+Lm4: n < len p implies n+1 in dom p & p.(n+1) in rng p
+ proof assume
+A1:    n < len p; n >= 0 by NAT_1:18;
+       then n+1 >= 0+1 & n+1 <= len p by A1,NAT_1:38,REAL_1:55;
+       then n+1 in dom p by FINSEQ_3:27;
+      hence thesis by FUNCT_1:def 5;
+ end;
+
+begin :: Joining of trees
+
+canceled;
+
+theorem
+   for T,T' being Tree, p being FinSequence of NAT st
+   p in Leaves T holds T c= T with-replacement (p,T')
+  proof let T,T' be Tree, p be FinSequence of NAT such that
+A1:  p in Leaves T;
+   let x; assume x in T; then reconsider t = x as Element of T;
+      not p is_a_proper_prefix_of t & p in T by A1,TREES_1:def 8;
+   hence thesis by TREES_1:def 12;
+  end;
+
+theorem
+   for T,T' being DecoratedTree, p being Element of dom T holds
+   (T with-replacement (p,T')).p = T'.{}
+  proof let T,T' be DecoratedTree, p be Element of dom T;
+      p is_a_prefix_of p & p in dom T with-replacement (p,dom T') &
+     dom (T with-replacement (p,T')) =
+      dom T with-replacement (p,dom T')
+        by TREES_1:def 12,TREES_2:def 12;
+   then consider r being FinSequence of NAT such that
+A1:  r in dom T' & p = p^r & (T with-replacement (p,T')).p = T'.r
+     by TREES_2:def 12;
+      p = p^{} by FINSEQ_1:47;
+   hence thesis by A1,FINSEQ_1:46;
+  end;
+
+theorem
+   for T,T' being DecoratedTree, p,q being Element of dom T st
+   not p is_a_prefix_of q holds (T with-replacement (p,T')).q = T.q
+  proof let T,T' be DecoratedTree, p,q be Element of dom T;
+   assume not p is_a_prefix_of q;
+    then q in dom T with-replacement(p,dom T') &
+      dom (T with-replacement(p,T')) = dom T with-replacement(p,dom T') &
+    not ex r being FinSequence of NAT st r in dom T' & q = p^r &
+      (T with-replacement(p,T')).q = T'.r by TREES_1:8,TREES_2:9,def 12
+;
+   hence thesis by TREES_2:def 12;
+  end;
+
+theorem
+   for T,T' being DecoratedTree, p being Element of dom T,
+  q being Element of dom T' holds (T with-replacement (p,T')).(p^q) = T'.q
+  proof let T,T' be DecoratedTree;
+   let p be Element of dom T, q be Element of dom T';
+      p is_a_prefix_of p^q & p^q in dom T with-replacement(p,dom T') &
+     dom (T with-replacement (p,T')) = dom T with-replacement(p,dom T')
+       by TREES_1:8,def 12,TREES_2:def 12;
+   then consider r being FinSequence of NAT such that
+A1:  r in dom T' & p^q = p^r & (T with-replacement (p,T')).(p^q) = T'.r
+    by TREES_2:def 12;
+   thus thesis by A1,FINSEQ_1:46;
+  end;
+
+definition let T1,T2 be Tree;
+ cluster T1 \/ T2 -> non empty Tree-like;
+  coherence by TREES_1:49;
+end;
+
+theorem Th50:
+ for T1,T2 being Tree, p being Element of T1 \/ T2 holds
+  (p in T1 & p in T2 implies (T1 \/ T2)|p = (T1|p) \/ (T2|p)) &
+   (not p in T1 implies (T1 \/ T2)|p = T2|p) &
+    (not p in T2 implies (T1 \/ T2)|p = T1|p)
+  proof let T1,T2 be Tree, p be Element of T1 \/ T2;
+   thus p in T1 & p in T2 implies (T1 \/ T2)|p = (T1|p) \/ (T2|p)
+     proof assume
+A1:     p in T1 & p in T2;
+      let q be FinSequence of NAT;
+      thus q in (T1 \/ T2)|p implies q in (T1|p) \/ (T2|p)
+        proof assume q in (T1 \/ T2)|p;
+          then p^q in T1 \/ T2 by TREES_1:def 9;
+          then p^q in T1 or p^q in T2 by XBOOLE_0:def 2;
+          then q in T1|p or q in T2|p by A1,TREES_1:def 9;
+         hence thesis by XBOOLE_0:def 2;
+        end;
+      assume q in (T1|p) \/ (T2|p);
+       then q in T1|p or q in T2|p by XBOOLE_0:def 2;
+       then p^q in T1 or p^q in T2 by A1,TREES_1:def 9;
+       then p^q in T1 \/ T2 by XBOOLE_0:def 2;
+      hence thesis by TREES_1:def 9;
+     end;
+   for T1,T2 being Tree, p being Element of T1 \/ T2 st
+      not p in T1 holds (T1 \/ T2)|p = T2|p
+     proof let T1, T2 be Tree; let p be Element of T1 \/ T2; assume
+A2:     not p in T1;
+then A3:     p in T2 by XBOOLE_0:def 2;
+      let q be FinSequence of NAT;
+      thus q in (T1 \/ T2)|p implies q in T2|p
+        proof assume q in (T1 \/ T2)|p;
+          then p^q in T1 \/ T2 by TREES_1:def 9;
+          then p^q in T1 or p^q in T2 by XBOOLE_0:def 2;
+         hence thesis by A2,A3,TREES_1:46,def 9;
+        end;
+      assume q in T2|p;
+       then p^q in T2 by A3,TREES_1:def 9;
+       then p^q in T1 \/ T2 by XBOOLE_0:def 2;
+      hence thesis by TREES_1:def 9;
+     end;
+   hence thesis;
+  end;
+
+definition let p such that
+A1:  p is Tree-yielding;
+ func tree p -> Tree means:
+Def15:
+  x in it iff x = {} or ex n,q st n < len p & q in p.(n+1) & x = <*n*>^q;
+  existence
+   proof
+    defpred X[set] means
+      ($1 = {} or ex n,q st n < len p & q in p.(n+1) & $1 = <*n*>^q);
+    consider T being set such that
+A2:   y in T iff y in NAT* & X[y] from Separation;
+       <*>NAT = {} & <*>NAT in NAT* by FINSEQ_1:def 11;
+    then reconsider T as non empty set by A2;
+A3:   rng p is constituted-Trees by A1,Def9;
+A4:   now let n; assume n < len p;
+       then p.(n+1) in rng p by Lm4;
+      hence p.(n+1) is Tree by A3,Def3;
+     end;
+       T is Tree-like
+      proof
+       thus T c= NAT* proof let y; thus thesis by A2; end;
+       thus w in T implies ProperPrefixes w c= T
+         proof assume
+A5:        w in T;
+             now assume w <> {};
+            then consider n,q such that
+A6:          n < len p & q in p.(n+1) & w = <*n*>^q by A2,A5;
+            reconsider q as FinSequence of NAT by A6,FINSEQ_1:50;
+            thus thesis
+             proof let x; assume x in ProperPrefixes w;
+              then consider r such that
+A7:            x = r & r is_a_proper_prefix_of w by TREES_1:def 4;
+                 r is_a_prefix_of w by A7,XBOOLE_0:def 8;
+              then consider k such that
+A8:            r = w|Seg k by TREES_1:def 1;
+                 rng r = w.:Seg k & w.:Seg k c= rng w & rng w c= NAT
+                by A8,RELAT_1:144,148;
+              then reconsider r as FinSequence of NAT by FINSEQ_1:def 4;
+A9:            r in NAT* by FINSEQ_1:def 11;
+                 now assume r <> {};
+                then consider r1 being FinSequence of NAT, i such that
+A10:              r = <*i*>^r1 by MODAL_1:4;
+                   dom <*i*> = Seg 1 by FINSEQ_1:55;
+                 then 1 in Seg 1 & Seg 1 c= dom r by A10,FINSEQ_1:4,39,TARSKI:
+def 1;
+then A11:              r.1 = i & w.1 = n & r.1 = w.1
+                  by A6,A8,A10,FINSEQ_1:58,FUNCT_1:70;
+                 then r1 is_a_proper_prefix_of q by A6,A7,A10,MODAL_1:12;
+                 then p.(n+1) is Tree & r1 is_a_prefix_of q
+                  by A4,A6,XBOOLE_0:def 8;
+                 then r1 in p.(n+1) by A6,TREES_1:45;
+                hence thesis by A2,A6,A7,A9,A10,A11;
+               end;
+              hence thesis by A2,A7,A9;
+             end;
+           end;
+          hence thesis by TREES_1:39,XBOOLE_1:2;
+         end;
+       let w,k,n such that
+A12:      w^<*k*> in T & n <= k;
+A13:      now assume
+A14:       w = {};
+          then <*k*> in T & <*k*> <> {} by A12,FINSEQ_1:47,TREES_1:4;
+         then consider m being Nat,q such that
+A15:       m < len p & q in p.(m+1) & <*k*> = <*m*>^q by A2;
+            <*k*>.1 = k & (<*m*>^q).1 = m by FINSEQ_1:58,def 8;
+then A16:       n < len p by A12,A15,AXIOMS:22;
+          then p.(n+1) in rng p by Lm4;
+          then p.(n+1) is Tree by A3,Def3;
+          then {} in p.(n+1) & <*n*>^{} = <*n*> & {}^<*n*> = <*n*> & <*n*> in
+NAT*
+           by FINSEQ_1:47,def 11,TREES_1:47;
+         hence thesis by A2,A14,A16;
+        end;
+          now assume
+A17:       w <> {};
+         then consider q being FinSequence of NAT, m being Nat such that
+A18:       w = <*m*>^q by MODAL_1:4;
+            w^<*k*> <> {} & w^<*n*> <> {} by A17,FINSEQ_1:48;
+         then consider m' being Nat,r such that
+A19:       m' < len p & r in p.(m'+1) & w^<*k*> = <*m'*>^r by A2,A12;
+A20:       w^<*k*> = <*m*>^(q^<*k*>) & w^<*n*> = <*m*>^(q^<*n*>)
+           by A18,FINSEQ_1:45;
+then A21:       (w^<*k*>).1 = m & (w^<*k*>).1 = m' & <*m*>^(q^<*n*>) in NAT*
+           by A19,FINSEQ_1:58,def 11;
+then A22:       r = q^<*k*> & p.(m+1) in rng p by A19,A20,Lm4,FINSEQ_1:46;
+          then p.(m+1) is Tree by A3,Def3;
+          then q^<*n*> in p.(m+1) by A12,A19,A21,A22,TREES_1:def 5;
+         hence thesis by A2,A19,A20,A21;
+        end;
+       hence w^<*n*> in T by A13;
+      end;
+    then reconsider T as Tree;
+    take T; let x;
+    thus x in T implies x = {} or
+       ex n,q st n < len p & q in p.(n+1) & x = <*n*>^q by A2;
+    assume
+A23:   x = {} or ex n,q st n < len p & q in p.(n+1) & x = <*n*>^q;
+A24:   now given n,q such that
+A25:    n < len p & q in p.(n+1) & x = <*n*>^q;
+      reconsider T1 = p.(n+1) as Tree by A4,A25;
+      reconsider q as Element of T1 by A25;
+         <*n*>^q in NAT* by FINSEQ_1:def 11;
+      hence x in NAT* by A25;
+     end;
+       {} in NAT* by FINSEQ_1:66;
+    hence thesis by A2,A23,A24;
+   end;
+  uniqueness
+   proof
+    defpred X[set] means
+       $1 = {} or ex n,q st n < len p & q in p.(n+1) & $1 = <*n*>^q;
+    let T1,T2 be Tree such that
+A26:  x in T1 iff X[x] and
+A27:  x in T2 iff X[x];
+    thus thesis from Extensionality(A26,A27);
+   end;
+end;
+
+definition let T be Tree;
+ func ^T -> Tree equals:
+Def16:
+   tree<*T*>;
+  correctness;
+end;
+
+definition let T1,T2 be Tree;
+ func tree(T1,T2) -> Tree equals:
+Def17:
+   tree(<*T1,T2*>);
+  correctness;
+end;
+
+theorem
+   p is Tree-yielding implies (<*n*>^q in tree(p) iff n < len p & q in p.(n+1))
+  proof assume
+A1:  p is Tree-yielding;
+      <*n*> <> {} by TREES_1:4;
+then A2:  <*n*>^q <> {} by FINSEQ_1:48;
+   thus <*n*>^q in tree(p) implies n < len p & q in p.(n+1)
+     proof assume <*n*>^q in tree(p);
+      then consider k,r such that
+A3:     k < len p & r in p.(k+1) & <*n*>^q = <*k*>^r by A1,A2,Def15;
+         (<*n*>^q).1 = n & (<*k*>^r).1 = k by FINSEQ_1:58;
+      hence thesis by A3,FINSEQ_1:46;
+     end;
+   thus thesis by A1,Def15;
+  end;
+
+theorem Th52:
+ p is Tree-yielding implies
+  tree(p)-level 1 = {<*n*>: n < len p} &
+   for n st n < len p holds (tree(p))|<*n*> = p.(n+1)
+  proof set T = tree(p); assume
+A1:  p is Tree-yielding;
+then A2: rng p is constituted-Trees by Def9;
+   thus T-level 1 = {<*n*>: n < len p}
+     proof
+A3:    T-level 1 = {t where t is Element of T: len t = 1} by TREES_2:def 6;
+      thus T-level 1 c= {<*n*>: n < len p}
+        proof let x; assume x in T-level 1;
+         then consider t being Element of T such that
+A4:       x = t & len t = 1 by A3;
+A5:       t = <*t.1*> by A4,FINSEQ_1:57;
+          then t <> {} by TREES_1:4;
+         then consider n, q such that
+A6:       n < len p & q in p.(n+1) & t = <*n*>^q by A1,Def15;
+            <*n*> <> {} by TREES_1:4;
+          then t = <*n*> by A5,A6,TREES_1:6;
+         hence thesis by A4,A6;
+        end;
+      let x; assume x in {<*n*>: n < len p};
+      then consider n such that
+A7:    x = <*n*> & n < len p;
+         p.(n+1) in rng p by A7,Lm4;
+       then p.(n+1) is Tree by A2,Def3;
+       then {} in p.(n+1) & <*n*>^{} = <*n*> & <*n*> in NAT*
+        by FINSEQ_1:47,def 11,TREES_1:47;
+      then reconsider t = <*n*> as Element of T by A1,A7,Def15;
+         len t = 1 by FINSEQ_1:56;
+      hence thesis by A3,A7;
+     end;
+   let n; assume
+A8: n < len p; then p.(n+1) in rng p by Lm4;
+    then reconsider S = p.(n+1) as Tree by A2,Def3;
+      {} in S & <*n*>^{} = <*n*> & <*n*> in NAT*
+     by FINSEQ_1:47,def 11,TREES_1:47;
+then A9: <*n*> in T by A1,A8,Def15;
+      T|<*n*> = S
+     proof let r be FinSequence of NAT;
+      thus r in T|<*n*> implies r in S
+        proof assume r in T|<*n*>;
+then A10:       {} <> <*n*> & <*n*>^r in T by A9,TREES_1:4,def 9;
+          then <*n*>^r <> {} by FINSEQ_1:48;
+         then consider m being Nat, q such that
+A11:       m < len p & q in p.(m+1) & <*n*>^r = <*m*>^q by A1,A10,Def15;
+            (<*n*>^r).1 = n & (<*m*>^q).1 = m by FINSEQ_1:58;
+         hence thesis by A11,FINSEQ_1:46;
+        end;
+      assume r in S;
+then A12:    <*n*>^r in T by A1,A8,Def15; then <*n*> in T by TREES_1:46;
+      hence thesis by A12,TREES_1:def 9;
+     end;
+   hence T|<*n*> = p.(n+1);
+  end;
+
+theorem
+   for p,q being Tree-yielding FinSequence st tree(p) = tree(q) holds p = q
+  proof let p,q be Tree-yielding FinSequence such that
+A1:  tree(p) = tree(q);
+A2:  tree(p)-level 1 = {<*n*>: n < len p} &
+    tree(q)-level 1 = {<*k*>: k < len q} &
+    (for n st n < len p holds (tree(p))|<*n*> = p.(n+1)) &
+     for n st n < len q holds (tree(q))|<*n*> = q.(n+1) by Th52;
+      now let n1,n2 be Nat; assume
+        {<*i*>: i < n1} = {<*k*>: k < n2} & n1 < n2;
+      then <*n1*> in {<*i*>: i < n1};
+     then consider i such that
+A3:   <*n1*> = <*i*> & i < n1;
+        <*n1*>.1 = n1 & <*i*>.1 = i by FINSEQ_1:57;
+     hence contradiction by A3;
+    end;
+    then not (len p < len q or len p > len q) by A1,A2;
+then A4:  len p = len q by REAL_1:def 5;
+      now let i; assume
+A5:    i >= 1 & i <= len p;
+     then consider k such that
+A6:    i = 1+k by NAT_1:28;
+        k < len p by A5,A6,NAT_1:38;
+      then p.i = (tree(p))|<*k*> & q.i = (tree(q))|<*k*> by A4,A6,Th52;
+     hence p.i = q.i by A1;
+    end;
+   hence p = q by A4,FINSEQ_1:18;
+  end;
+
+theorem Th54:
+ for p1,p2 being Tree-yielding FinSequence, T being Tree holds
+   p in T iff <*len p1*>^p in tree(p1^<*T*>^p2)
+  proof let p1,p2 be Tree-yielding FinSequence, T be Tree;
+A1:  len (p1^<*T*>^p2) = len (p1^<*T*>) + len p2 &
+    len (p1^<*T*>) = len p1 + len <*T*> & len <*T*> = 1 by FINSEQ_1:35,57;
+      len p1+1+len p2 = (len p1+len p2)+1 by XCMPLX_1:1;
+    then len p1+len p2 < len (p1^<*T*>^p2) & len p1 <= len p1+len p2
+     by A1,NAT_1:29,38;
+then A2:  len p1 < len (p1^<*T*>^p2) by AXIOMS:22;
+      len p1+1 >= 1 by NAT_1:29;
+    then len p1+1 in dom (p1^<*T*>) by A1,FINSEQ_3:27;
+then A3:  (p1^<*T*>^p2).(len p1+1) = (p1^<*T*>).(len p1+1) by FINSEQ_1:def 7
+       .= T by FINSEQ_1:59;
+   hence p in T implies <*len p1*>^p in tree(p1^<*T*>^p2) by A2,Def15;
+   assume
+A4:  <*len p1*>^p in tree(p1^<*T*>^p2);
+      <*len p1*> <> {} by TREES_1:4;
+    then <*len p1*>^p <> {} by FINSEQ_1:48;
+   then consider n,q such that
+A5:  n < len (p1^<*T*>^p2) & q in (p1^<*T*>^p2).(n+1) & <*len p1*>^p = <*n*>^q
+     by A4,Def15;
+      (<*len p1*>^p).1 = len p1 & (<*n*>^q).1 = n by FINSEQ_1:58;
+   hence thesis by A3,A5,FINSEQ_1:46;
+  end;
+
+theorem Th55:
+ tree({}) = elementary_tree 0
+  proof let p be FinSequence of NAT;
+   thus p in tree({}) implies p in elementary_tree 0
+     proof assume p in tree({});
+then A1:     p = {} or ex n,q st n < len {} & q in {} .(n+1) & p = <*n*>^q
+        by Def15,Th23;
+      assume not thesis;
+      then consider n,q such that
+A2:     n < len {} & q in {} .(n+1) & p = <*n*>^q by A1,TARSKI:def 1,TREES_1:56
+;
+         n < 0 by A2,FINSEQ_1:25;
+      hence contradiction by NAT_1:18;
+     end;
+   assume p in elementary_tree 0; then p = {} by TARSKI:def 1,TREES_1:56;
+   hence thesis by Def15,Th23;
+  end;
+
+theorem Th56:
+ p is Tree-yielding implies elementary_tree len p c= tree(p)
+  proof assume
+A1:  p is Tree-yielding;
+then A2:  rng p is constituted-Trees &
+    for n,q st n < len p & q in p.(n+1) holds <*n*>^q in tree(p) by Def9,Def15;
+   let q be set; assume q in elementary_tree len p;
+    then q in {<*n*>: n < len p} \/ {{}} by TREES_1:def 7;
+    then q in {<*n*>: n < len p} or q in {{}} by XBOOLE_0:def 2;
+then A3:  (ex n st q = <*n*> & n < len p) or q = {} by TARSKI:def 1;
+   assume
+A4:  not thesis;
+   then consider n such that
+A5:  q = <*n*> & n < len p by A3,TREES_1:47;
+      p.(n+1) in rng p by A5,Lm4;
+   then reconsider t = p.(n+1) as Tree by A2,Def3;
+      {} in t & <*n*>^{} = q by A5,FINSEQ_1:47,TREES_1:47;
+   hence thesis by A1,A4,A5,Def15;
+  end;
+
+theorem Th57:
+ elementary_tree i = tree(i|->elementary_tree 0)
+  proof set p = i |-> elementary_tree 0; let q be FinSequence of NAT;
+A1:  len p = i by FINSEQ_2:69;
+    then elementary_tree i c= tree(p) by Th56;
+   hence q in elementary_tree i implies q in tree(p);
+   assume q in tree(p);
+then A2:  q = {} or ex n,r st n < len p & r in p.(n+1) & q = <*n*>^r by Def15;
+      now given n, r such that
+A3:    n < len p & r in p.(n+1) & q = <*n*>^r;
+        p = (Seg i) --> elementary_tree 0 by FINSEQ_2:def 2;
+      then rng p c= {elementary_tree 0} & p.(n+1) in rng p by A3,Lm4,FUNCOP_1:
+19
+;
+      then p.(n+1) = elementary_tree 0 by TARSKI:def 1;
+      then r = {} by A3,TARSKI:def 1,TREES_1:56;
+      then q = <*n*> by A3,FINSEQ_1:47;
+     hence thesis by A1,A3,TREES_1:55;
+    end;
+   hence thesis by A2,TREES_1:47;
+  end;
+
+theorem Th58:
+ for T being Tree, p being Tree-yielding FinSequence holds
+ tree(p^<*T*>) = (tree(p) \/ elementary_tree (len p + 1))
+   with-replacement (<*len p*>, T)
+  proof let T be Tree, p be Tree-yielding FinSequence;
+   set W1 = elementary_tree (len p + 1),
+    W2 = tree(p) \/ W1,
+    W = W2 with-replacement (<*len p*>, T);
+      len <*T*> = 1 by FINSEQ_1:57;
+then A1: len (p^<*T*>) = len p + 1 by FINSEQ_1:35;
+      len p < len p+1 by NAT_1:38;
+    then <*len p*> in W1 by TREES_1:55;
+then A2:  <*len p*> in W2 by XBOOLE_0:def 2;
+   let q be FinSequence of NAT;
+   thus q in tree(p^<*T*>) implies q in W
+     proof assume q in tree(p^<*T*>);
+then A3:     q = {} or ex n,r st n < len (p^<*T*>) & r in (p^<*T*>).(n+1) &
+       q = <*n*>^r by Def15;
+         now given n, r such that
+A4:       n < len (p^<*T*>) & r in (p^<*T*>).(n+1) & q = <*n*>^r;
+        reconsider r as FinSequence of NAT by A4,FINSEQ_1:50;
+A5:       n <= len p by A1,A4,NAT_1:38;
+A6:       now assume
+A7:        n < len p; then n+1 in dom p by Lm4;
+           then (p^<*T*>).(n+1) = p.(n+1) by FINSEQ_1:def 7;
+           then q in tree(p) by A4,A7,Def15;
+then A8:        q in W2 by XBOOLE_0:def 2;
+             not <*len p*> is_a_prefix_of <*n*>^r by A7,MODAL_1:6;
+           then not <*len p*> is_a_proper_prefix_of <*n*>^r by XBOOLE_0:def 8;
+          hence q in W by A2,A4,A8,TREES_1:def 12;
+         end;
+           now assume
+A9:        n = len p;
+           then (p^<*T*>).(n+1) = T & r = r by FINSEQ_1:59;
+          hence q in W by A2,A4,A9,TREES_1:def 12;
+         end;
+        hence thesis by A5,A6,REAL_1:def 5;
+       end;
+      hence thesis by A3,TREES_1:47;
+     end;
+   assume
+A10:  q in W;
+   assume
+A11:  not thesis;
+A12:  now given r being FinSequence of NAT such that
+A13:   r in T & q = <*len p*>^r;
+        len p < len p+1 & (p^<*T*>).(len p+1) = T by FINSEQ_1:59,NAT_1:38;
+     hence thesis by A1,A11,A13,Def15;
+    end;
+      now assume q in W2;
+then A14:    q in tree(p) or q in W1 by XBOOLE_0:def 2;
+A15:    now assume q in tree(p);
+        then q = {} & {} in tree(p^<*T*>) or
+        ex n,r st n < len p & r in p.(n+1) & q = <*n*>^r by Def15;
+       then consider n,r such that
+A16:     n < len p & r in p.(n+1) & q = <*n*>^r by A11;
+          n+1 in dom p & len p < len p+1 by A16,Lm4,NAT_1:38;
+        then p.(n+1) = (p^<*T*>).(n+1) & n < len (p^<*T*>)
+         by A1,A16,AXIOMS:22,FINSEQ_1:def 7;
+       hence thesis by A11,A16,Def15;
+      end;
+        now assume
+A17:     not q in tree(p);
+        then q = {} or ex n st n < len p+1 & q = <*n*> by A14,TREES_1:57;
+       then consider n such that
+A18:     n < len p+1 & q = <*n*> by A11,TREES_1:47;
+A19:     now assume n < len p;
+          then p.(n+1) in rng p & rng p is constituted-Trees by Def9,Lm4;
+          then p.(n+1) is Tree by Def3;
+         hence {} in p.(n+1) by TREES_1:47;
+        end;
+A20:     q = <*n*>^{} by A18,FINSEQ_1:47;
+        then n >= len p & n <= len p by A17,A18,A19,Def15,NAT_1:38;
+        then len p = n & n < n+1 & (p^<*T*>).(len p+1) = T & {} in T
+         by AXIOMS:21,FINSEQ_1:59,NAT_1:38,TREES_1:47;
+       hence thesis by A1,A11,A20,Def15;
+      end;
+     hence thesis by A15;
+    end;
+   hence thesis by A2,A10,A12,TREES_1:def 12;
+  end;
+
+theorem
+   for p being Tree-yielding FinSequence holds
+  tree(p^<*elementary_tree 0*>) = tree(p) \/ elementary_tree (len p + 1)
+  proof let p be Tree-yielding FinSequence;
+      len p < len p+1 by NAT_1:38;
+then A1:  <*len p*> in elementary_tree (len p + 1) by TREES_1:55;
+then A2:  <*len p*> in tree(p) \/ elementary_tree (len p + 1) by XBOOLE_0:def 2
+;
+      {} in (elementary_tree (len p+1))|<*len p*> by TREES_1:47;
+then A3:  elementary_tree 0 c= (elementary_tree (len p+1))|<*len p*>
+     by TREES_1:56,ZFMISC_1:37;
+A4:  (elementary_tree (len p+1))|<*len p*> c= elementary_tree 0
+     proof let x; assume
+         x in (elementary_tree (len p+1))|<*len p*>;
+      then reconsider q = x as Element of (elementary_tree (len p+1))|<*len p*>
+;
+         <*len p*> <> {} by TREES_1:4;
+       then <*len p*>^q <> {} & <*len p*>^q in elementary_tree (len p+1)
+        by A1,FINSEQ_1:48,TREES_1:def 9;
+      then consider n such that
+A5:    n < len p+1 & <*len p*>^q = <*n*> by TREES_1:57;
+         len <*n*> = 1 & len <*len p*> = 1 by FINSEQ_1:57;
+       then 1+len q = 1+0 by A5,FINSEQ_1:35;
+       then len q = 0 by XCMPLX_1:2;
+       then x = {} by FINSEQ_1:25;
+      hence thesis by TREES_1:47;
+     end;
+      now let n,r; assume <*len p*> = <*n*>^r;
+      then n = <*len p*>.1 by FINSEQ_1:58 .= len p by FINSEQ_1:57;
+     hence not n < len p;
+    end;
+then A6:  not ex n,q st n < len p & q in p.(n+1) & <*len p*> = <*n*>^q;
+      <*len p*> <> {} by TREES_1:4;
+    then not <*len p*> in tree(p) by A6,Def15;
+then A7:  (tree(p) \/ elementary_tree (len p + 1))|<*len p*>
+      = (elementary_tree (len p+1))|<*len p*> by A2,Th50
+     .= elementary_tree 0 by A3,A4,XBOOLE_0:def 10;
+   thus tree(p^<*elementary_tree 0*>)
+      = (tree(p) \/ elementary_tree (len p + 1)) with-replacement(<*len p*>,
+        elementary_tree 0) by Th58
+     .= tree(p) \/ elementary_tree (len p + 1) by A2,A7,TREES_2:8;
+  end;
+
+theorem Th60:
+ for p, q being Tree-yielding FinSequence for T1,T2 be Tree holds
+  tree(p^<*T1*>^q) = tree(p^<*T2*>^q) with-replacement(<*len p*>,T1)
+  proof let p, q be Tree-yielding FinSequence, T1, T2 be Tree;
+   set w1 = p^<*T1*>^q, W1 = tree(w1), w2 = p^<*T2*>^q, W2 = tree(w2),
+    W = W2 with-replacement(<*len p*>, T1);
+      len <*T1*> = 1 & len <*T2*> = 1 by FINSEQ_1:57;
+then A1: len (p^<*T1*>) = len p + 1 & len w1 = len (p^<*T1*>)+len q &
+    len (p^<*T2*>) = len p + 1 & len w2 = len (p^<*T2*>)+len q
+     by FINSEQ_1:35;
+      len p < len p+1 & len p+1 <= len p+1+len q by NAT_1:29,38;
+then A2: len p < len p+1+len q by AXIOMS:22;
+    then w2.(len p+1) in rng w2 & rng w2 is constituted-Trees by A1,Def9,Lm4;
+    then w2.(len p+1) is Tree by Def3;
+    then {} in w2.(len p+1) & <*len p*>^{} = <*len p*>
+     by FINSEQ_1:47,TREES_1:47;
+then A3:  <*len p*> in W2 by A1,A2,Def15;
+   let r be FinSequence of NAT;
+   thus r in W1 implies r in W
+     proof assume r in W1;
+then A4:     r = {} or ex n,s st n < len w1 & s in w1.(n+1) & r = <*n*>^s by
+Def15;
+         now given n, s such that
+A5:       n < len w1 & s in w1.(n+1) & r = <*n*>^s;
+        reconsider s as FinSequence of NAT by A5,FINSEQ_1:50;
+A6:       n <= len p or n >= len p+1 by NAT_1:38;
+A7:       now assume
+A8:        n < len p;
+           then n+1 in dom p & dom p c= dom (p^<*T2*>) & dom p c= dom (p^<*T1
+*>)
+            by Lm4,FINSEQ_1:39;
+           then (p^<*T2*>).(n+1) = p.(n+1) & (p^<*T1*>).(n+1) = p.(n+1) &
+           n+1 in dom (p^<*T1*>) & n+1 in dom (p^<*T2*>)
+            by FINSEQ_1:def 7;
+           then w2.(n+1) = p.(n+1) & w1.(n+1) = p.(n+1) by FINSEQ_1:def 7;
+then A9:        r in W2 by A1,A5,Def15;
+             not <*len p*> is_a_prefix_of <*n*>^s by A8,MODAL_1:6;
+           then not <*len p*> is_a_proper_prefix_of <*n*>^s by XBOOLE_0:def 8;
+          hence r in W by A3,A5,A9,TREES_1:def 12;
+         end;
+A10:      now assume
+A11:        n = len p;
+then A12:        (p^<*T1*>).(n+1) = T1 by FINSEQ_1:59;
+             n < len p+1 by A11,NAT_1:38;
+           then n+1 in dom (p^<*T1*>) by A1,Lm4;
+           then w1.(n+1) = T1 & s = s by A12,FINSEQ_1:def 7;
+          hence r in W by A3,A5,A11,TREES_1:def 12;
+         end;
+           now assume
+A13:        n >= len p+1 & n < len p+1+len q;
+           then n+1 >= len p+1+1 & n+1 <= len p+1+len q by NAT_1:38,REAL_1:55;
+           then w1.(n+1) = q.(n+1-(len p+1)) & w2.(n+1) = q.(n+1-(len p+1))
+            by A1,FINSEQ_1:36;
+then A14:        r in W2 by A1,A5,Def15;
+             len p <> n by A13,NAT_1:38;
+           then not <*len p*> is_a_prefix_of <*n*>^s by MODAL_1:6;
+           then not <*len p*> is_a_proper_prefix_of <*n*>^s by XBOOLE_0:def 8;
+          hence r in W by A3,A5,A14,TREES_1:def 12;
+         end;
+        hence thesis by A1,A5,A6,A7,A10,REAL_1:def 5;
+       end;
+      hence thesis by A4,TREES_1:47;
+     end;
+   assume r in W;
+then A15:  r in W2 & not <*len p*> is_a_proper_prefix_of r or
+     ex s being FinSequence of NAT st s in T1 & r = <*len p*>^s
+      by A3,TREES_1:def 12;
+   assume
+A16: not r in W1;
+then A17:  r <> {} & for n,q st n < len w1 & q in w1.(n+1) holds r <> <*n*>^q
+     by Def15;
+A18: (p^<*T1*>).(len p+1) = T1 by FINSEQ_1:59;
+      len p < len p+1 & len p+1 <= len p+1+len q by NAT_1:29,38;
+then A19: len p < len w2 & len p+1 in dom (p^<*T1*>) by A1,Lm4,AXIOMS:22;
+then A20: w1.(len p+1) = T1 by A18,FINSEQ_1:def 7;
+   then consider n, s such that
+A21:  n < len w2 & s in w2.(n+1) & r = <*n*>^s by A1,A15,A17,A19,Def15;
+   reconsider s as FinSequence of NAT by A21,FINSEQ_1:50;
+      (n = len p implies s = {}) & {} in T1
+     by A1,A15,A16,A20,A21,Def15,TREES_1:33,47;
+    then n <> len p & (n <= len p or n >= len p) by A1,A16,A20,A21,Def15;
+    then n < len p or n > len p & 1<=1 by REAL_1:def 5;
+    then 1 <= 1+n & 1+n = n+1 & n+1 <= len p & w1 = p^(<*T1*>^q) &
+    w2 = p^(<*T2*>^q) or len p+1 < n+1 & n+1 <= len w1
+     by A1,A21,FINSEQ_1:45,NAT_1:29,38,REAL_1:53;
+    then w1.(n+1) = p.(n+1) & w2.(n+1) = p.(n+1) or
+    w1.(n+1) = q.(n+1-(len p+1)) & w2.(n+1) = q.(n+1-(len p+1))
+     by A1,Lm1,FINSEQ_1:37;
+   hence contradiction by A1,A16,A21,Def15;
+  end;
+
+theorem
+   for T being Tree holds ^T = elementary_tree 1 with-replacement(<*0*>, T)
+  proof let T be Tree; let p be FinSequence of NAT;
+A1:  ^T = tree<*T*> by Def16;
+A2:  <*T*>.1 = T & len <*T*> = 1 & 0+1 = 1 & {} in T & 0 < 1
+     by FINSEQ_1:57,TREES_1:47;
+A3:  <*0*> in elementary_tree 1 by MODAL_1:9,TARSKI:def 2;
+   thus p in ^T implies p in elementary_tree 1 with-replacement(<*0*>, T)
+     proof assume
+A4:     p in ^T;
+         now assume p <> {};
+        then consider n,q such that
+A5:       n < len <*T*> & q in <*T*>.(n+1) & p = <*n*>^q by A1,A4,Def15;
+        reconsider q as FinSequence of NAT by A5,FINSEQ_1:50;
+           n >= 0 & n <= 0 by A2,A5,NAT_1:18,38;
+         then n = 0 & p = <*n*>^q by A5;
+        hence thesis by A2,A3,A5,TREES_1:def 12;
+       end;
+      hence thesis by TREES_1:47;
+     end;
+   assume p in elementary_tree 1 with-replacement(<*0*>,T);
+then A6:  p in elementary_tree 1 & not <*0*> is_a_proper_prefix_of p or
+    ex r being FinSequence of NAT st r in T & p = <*0*>^r by A3,TREES_1:def 12;
+      now assume p in elementary_tree 1;
+      then p = {} or p = <*0*> & p^{} = p by FINSEQ_1:47,MODAL_1:9,TARSKI:def 2
+;
+     hence thesis by A1,A2,Def15;
+    end;
+   hence thesis by A1,A2,A6,Def15;
+  end;
+
+theorem
+   for T1,T2 being Tree holds
+   tree(T1,T2) = (elementary_tree 2 with-replacement(<*0*>,T1))
+    with-replacement (<*1*>, T2)
+  proof let T1,T2 be Tree; let p be FinSequence of NAT;
+A1:  tree(T1,T2) = tree(<*T1,T2*>) by Def17;
+A2:  <*T1,T2*>.1 = T1 & <*T1,T2*>.2 = T2 & len <*T1,T2*> = 2 & 1+1 = 2 &
+     0+1 = 1 & {} in T1 & {} in T2 & 0 < 2 & 1 < 2 & 0 <> 1
+      by FINSEQ_1:61,TREES_1:47;
+A3:  <*0*> in elementary_tree 2 & <*1*> in elementary_tree 2 &
+     not <*0*> is_a_proper_prefix_of <*1*> &
+     not <*0*> is_a_proper_prefix_of <*0*> by ENUMSET1:14,MODAL_1:7,10
+;
+then A4:  <*1*> in elementary_tree 2 with-replacement(<*0*>, T1) &
+   <*0*> in elementary_tree 2 with-replacement(<*0*>, T1) by TREES_1:def 12;
+   thus p in tree(T1,T2) implies
+     p in (elementary_tree 2 with-replacement (<*0*>,T1))
+      with-replacement(<*1*>, T2)
+     proof assume
+A5:     p in tree(T1,T2);
+         now assume p <> {};
+        then consider n,q such that
+A6:       n < len <*T1,T2*> & q in
+ <*T1,T2*>.(n+1) & p = <*n*>^q by A1,A5,Def15;
+        reconsider q as FinSequence of NAT by A6,FINSEQ_1:50;
+A7:      not <*1*> is_a_prefix_of <*0*>^q by MODAL_1:6;
+A8:      now assume n = 0;
+           then not <*1*> is_a_proper_prefix_of <*n*>^q &
+           <*n*>^q in elementary_tree 2 with-replacement(<*0*>, T1)
+            by A2,A3,A6,A7,TREES_1:def 12,XBOOLE_0:def 8;
+          hence p in (elementary_tree 2 with-replacement (<*0*>, T1))
+           with-replacement(<*1*>,T2) by A4,A6,TREES_1:def 12;
+         end;
+           n <= 0+1 by A2,A6,NAT_1:38;
+         then n = 1 & (n = 1 implies
+       <*n*>^q in (elementary_tree 2 with-replacement (<*0*>,T1))
+         with-replacement(<*1*>,T2)) or
+          n >= 0 & n <= 0 by A2,A4,A6,NAT_1:18,26,TREES_1:def 12;
+        hence thesis by A6,A8;
+       end;
+      hence thesis by TREES_1:47;
+     end;
+   assume p in (elementary_tree 2 with-replacement (<*0*>,T1))
+     with-replacement(<*1*>,T2);
+then A9:  p in elementary_tree 2 with-replacement(<*0*>,T1) &
+     not <*1*> is_a_proper_prefix_of p or
+    ex r being FinSequence of NAT st r in
+ T2 & p = <*1*>^r by A4,TREES_1:def 12;
+      now assume p in elementary_tree 2 with-replacement(<*0*>,T1);
+then A10:   p in elementary_tree 2 & not <*0*> is_a_proper_prefix_of p or
+       ex r being FinSequence of NAT st r in T1 & p = <*0*>^r
+        by A3,TREES_1:def 12;
+        now assume p in elementary_tree 2;
+        then (p = {} or p = <*0*> or p = <*1*>) & p^{} = p
+         by ENUMSET1:13,FINSEQ_1:47,MODAL_1:10;
+       hence thesis by A1,A2,Def15;
+      end;
+     hence thesis by A1,A2,A10,Def15;
+    end;
+   hence thesis by A1,A2,A9,Def15;
+  end;
+
+definition let p be FinTree-yielding FinSequence;
+ cluster tree(p) -> finite;
+  coherence
+   proof
+     defpred X[set] means
+      for p being FinTree-yielding FinSequence st len p = $1 holds
+       tree(p) is finite Tree;
+A1:   X[0] by Th55,FINSEQ_1:25;
+A2:   X[n] implies X[n+1]
+      proof assume
+A3:     for p being FinTree-yielding FinSequence st len p = n holds
+         tree(p) is finite Tree;
+       let p be FinTree-yielding FinSequence such that
+A4:     len p = n+1;
+          0 <= n by NAT_1:18;
+        then len p <> 0 by A4,NAT_1:38;
+        then p <> {} by FINSEQ_1:25;
+       then consider q, x such that
+A5:     p = q^<*x*> by FINSEQ_1:63;
+       reconsider q as FinTree-yielding FinSequence by A5,Th28;
+          len <*x*> = 1 by FINSEQ_1:57;
+        then len p = len q+1 by A5,FINSEQ_1:35;
+then A6:     len q = n by A4,XCMPLX_1:2;
+        then tree(q) is finite by A3;
+       then reconsider W = tree(q) \/ elementary_tree (n+1) as finite Tree
+         by TREES_1:52;
+          <*x*> is FinTree-yielding by A5,Th28;
+       then reconsider x as finite Tree by Th31;
+          n < n+1 by NAT_1:38;
+        then <*n*> in elementary_tree (n+1) by TREES_1:55;
+       then reconsider r = <*n*> as Element of W by XBOOLE_0:def 2;
+          tree(p) = W with-replacement(r, x) by A5,A6,Th58;
+       hence thesis;
+      end;
+      X[n] from Ind(A1,A2);
+     then len p = len p implies thesis;
+    hence thesis;
+   end;
+end;
+
+definition let T be finite Tree;
+ cluster ^T -> finite;
+  coherence
+   proof ^T = tree<*T*> by Def16;
+    hence thesis;
+   end;
+end;
+
+definition let T1,T2 be finite Tree;
+ cluster tree(T1,T2) -> finite;
+  coherence
+   proof tree(T1,T2) = tree(<*T1,T2*>) by Def17;
+    hence thesis;
+   end;
+end;
+
+theorem Th63:
+ for T being Tree, x being set holds x in ^T iff x = {} or
+   ex p st p in T & x = <*0*>^p
+  proof let T be Tree; let x; set p = <*T*>;
+A1:  ^T = tree(p) by Def16;
+A2:  len p = 1 & p.1 = T by FINSEQ_1:57;
+   thus x in ^T & x <> {} implies ex p st p in T & x = <*0*>^p
+     proof assume x in ^T & x <> {};
+      then consider n, q such that
+A3:     n < len p & q in p.(n+1) & x = <*n*>^q by A1,Def15;
+         0+1 = 1;
+       then n <= 0 & n >= 0 by A2,A3,NAT_1:18,38;
+       then n = 0;
+      hence thesis by A2,A3;
+     end; 0 < 0+1;
+   hence thesis by A1,A2,Def15;
+  end;
+
+theorem Th64:
+ for T being Tree, p being FinSequence holds p in T iff <*0*>^p in ^T
+  proof let T be Tree, p be FinSequence;
+   thus p in T implies <*0*>^p in ^T by Th63;
+   assume
+A1:  <*0*>^p in ^T; <*0*> <> {} by TREES_1:4;
+    then <*0*>^p <> {} & ^T = tree<*T*> by Def16,FINSEQ_1:48;
+   then consider n,q such that
+A2:  n < len <*T*> & q in <*T*>.(n+1) & <*0*>^p = <*n*>^q by A1,Def15;
+      (<*0*>^p).1 = 0 & (<*n*>^q).1 = n by FINSEQ_1:58;
+    then p = q & <*T*>.(n+1) = T by A2,FINSEQ_1:46,57;
+   hence thesis by A2;
+  end;
+
+theorem
+   for T being Tree holds elementary_tree 1 c= ^T
+  proof let T be Tree; let x; assume x in elementary_tree 1;
+   then reconsider p = x as Element of elementary_tree 1;
+      p = {} or p = <*0*> & {} in T & <*0*>^{} = <*0*>
+     by FINSEQ_1:47,MODAL_1:9,TARSKI:def 2,TREES_1:47;
+   hence thesis by Th63;
+  end;
+
+theorem
+   for T1,T2 being Tree st T1 c= T2 holds ^T1 c= ^T2
+  proof let T1,T2 be Tree such that
+A1:  T1 c= T2;
+   let x; assume x in ^T1; then reconsider p = x as Element of ^T1;
+   p = {} or ex q st q in T1 & p = <*0*>^q by Th63;
+   hence thesis by A1,Th63;
+  end;
+
+theorem
+   for T1,T2 being Tree st ^T1 = ^T2 holds T1 = T2
+  proof let T1,T2 be Tree such that
+A1:  ^T1 = ^T2;
+   let p be FinSequence of NAT;
+      (p in T1 iff <*0*>^p in ^T1) & (p in T2 iff <*0*>^p in ^T2) by Th64;
+   hence thesis by A1;
+  end;
+
+theorem
+   for T being Tree holds (^T)|<*0*> = T
+  proof let T be Tree; set p = <*T*>;
+      len p = 1 & p.1 = T & 0+1 = 1 & 0 < 1 & ^T = tree(p) by Def16,FINSEQ_1:57
+;
+   hence thesis by Th52;
+  end;
+
+theorem
+   for T1,T2 being Tree holds ^T1 with-replacement (<*0*>,T2) = ^T2
+  proof let T1,T2 be Tree;
+      len {} = 0 & <*T1*> = {}^<*T1*> & <*T2*> = {}^<*T2*> &
+    <*T1*> = <*T1*>^{} & <*T2*> = <*T2*>^{} by FINSEQ_1:25,47;
+    then tree(<*T2*>) = tree(<*T1*>) with-replacement (<*0*>, T2) &
+      tree(<*T1*>) = ^T1 & tree(<*T2*>) = ^T2 by Def16,Th23,Th60;
+   hence thesis;
+  end;
+
+theorem
+   ^elementary_tree 0 = elementary_tree 1
+  proof set T = elementary_tree 0;
+   thus ^T = tree<*T*> by Def16 .= tree(1 |-> T) by FINSEQ_2:73
+             .= elementary_tree 1 by Th57;
+  end;
+
+theorem Th71:
+ for T1,T2 being Tree, x being set holds x in tree(T1,T2) iff x = {} or
+   ex p st p in T1 & x = <*0*>^p or p in T2 & x = <*1*>^p
+  proof let T1, T2 be Tree; let x; set p = <*T1,T2*>;
+A1:  tree(T1,T2) = tree(p) by Def17;
+A2:  len p = 2 & p.1 = T1 & p.2 = T2 by FINSEQ_1:61;
+   thus x in tree(T1,T2) & x <> {} implies
+      ex p st p in T1 & x = <*0*>^p or p in T2 & x = <*1*>^p
+     proof assume x in tree(T1,T2) & x <> {};
+      then consider n, q such that
+A3:     n < len p & q in p.(n+1) & x = <*n*>^q by A1,Def15;
+         1+1 = 2;
+       then n <= 1 by A2,A3,NAT_1:38;
+       then n = 1 or n < 0+1 by REAL_1:def 5;
+       then n = 1 or n <= 0 & n >= 0 by NAT_1:18,38;
+       then n = 1 or n = 0;
+      hence thesis by A2,A3;
+     end;
+      now given q such that
+A4:    q in T1 & x = <*0*>^q or q in T2 & x = <*1*>^q;
+        x = <*0*>^q or x <> <*0*>^q;
+     then consider n such that
+A5:    n = 0 & x = <*0*>^q or n = 1 & x <> <*0*>^q;
+     take n,q; thus n < len p by A2,A5;
+        (<*0*>^q).1 = 0 & (<*1*>^q).1 = 1 & 0 <> 1 by FINSEQ_1:58;
+     hence q in p.(n+1) & x = <*n*>^q by A4,A5,FINSEQ_1:61;
+    end;
+   hence thesis by A1,Def15;
+  end;
+
+theorem Th72:
+ for T1,T2 being Tree, p being FinSequence holds
+   p in T1 iff <*0*>^p in tree(T1,T2)
+  proof let T1,T2 be Tree;
+      tree(T1,T2) = tree(<*T1,T2*>) & <*T1,T2*> = <*T1*>^<*T2*> &
+      <*T1*> = {}^<*T1*> &
+    len {} = 0 by Def17,FINSEQ_1:25,47,def 9;
+   hence thesis by Th23,Th54;
+  end;
+
+theorem Th73:
+ for T1,T2 being Tree, p being FinSequence holds
+   p in T2 iff <*1*>^p in tree(T1,T2)
+  proof let T1,T2 be Tree;
+      tree(T1,T2) = tree(<*T1,T2*>) & <*T1,T2*> = <*T1*>^<*T2*> &
+      len <*T1*> = 1 &
+    <*T1,T2*> = <*T1,T2*>^{} by Def17,FINSEQ_1:47,57,def 9;
+   hence thesis by Th23,Th54;
+  end;
+
+theorem
+   for T1,T2 being Tree holds elementary_tree 2 c= tree(T1,T2)
+  proof let T1,T2 be Tree; let x; assume x in elementary_tree 2;
+   then reconsider p = x as Element of elementary_tree 2;
+      p = {} or p = <*0*> & {} in T1 & <*0*>^{} = <*0*> or
+    p = <*1*> & {} in T2 & <*1*>^{} = <*1*>
+     by ENUMSET1:13,FINSEQ_1:47,MODAL_1:10,TREES_1:47;
+   hence thesis by Th71;
+  end;
+
+theorem
+   for T1,T2, W1,W2 being Tree st T1 c= W1 & T2 c= W2 holds
+   tree(T1,T2) c= tree(W1,W2)
+  proof let T1,T2, W1,W2 be Tree such that
+A1:  T1 c= W1 & T2 c= W2;
+   let x; assume x in tree(T1,T2);
+   then reconsider p = x as Element of tree(T1,T2);
+   p = {} or ex q st q in T1 & p = <*0*>^q or q in T2 & p = <*1*>^q by Th71;
+   hence thesis by A1,Th71;
+  end;
+
+theorem
+   for T1,T2, W1,W2 being Tree st tree(T1,T2) = tree(W1,W2) holds
+   T1 = W1 & T2 = W2
+  proof let T1,T2, W1,W2 be Tree such that
+A1:  tree(T1,T2) = tree(W1,W2);
+      now let p; p in T1 iff <*0*>^p in tree(T1,T2) by Th72;
+     hence p in T1 iff p in W1 by A1,Th72;
+    end;
+   hence for p being FinSequence of NAT holds p in T1 iff p in W1;
+   let p be FinSequence of NAT;
+      p in T2 iff <*1*>^p in tree(T1,T2) by Th73;
+   hence thesis by A1,Th73;
+  end;
+
+theorem
+   for T1,T2 being Tree holds tree(T1,T2)|<*0*> = T1 & tree(T1,T2)|<*1*> = T2
+  proof let T1, T2 be Tree; set p = <*T1,T2*>;
+      len p = 2 & p.1 = T1 & p.2 = T2 & 0+1 = 1 & 1+1 = 2 & 0 < 2 & 1 < 2 &
+    tree(T1,T2) = tree(p) by Def17,FINSEQ_1:61;
+   hence thesis by Th52;
+  end;
+
+theorem
+   for T,T1,T2 being Tree holds
+   tree(T1,T2) with-replacement (<*0*>, T) = tree(T,T2) &
+    tree(T1,T2) with-replacement (<*1*>, T) = tree(T1,T)
+  proof let T,T1,T2 be Tree;
+      len {} = 0 & <*T1*> = {}^<*T1*> & <*T*> = {}^<*T*> &
+    <*T1,T2*>^{} = <*T1,T2*> & <*T1,T*>^{} = <*T1,T*> & len <*T1*> = 1 &
+    <*T1,T2*> = <*T1*>^<*T2*> & <*T1,T*> = <*T1*>^<*T*> &
+    <*T,T2*> = <*T*>^<*T2*> by FINSEQ_1:25,47,57,def 9
+;
+    then tree(<*T,T2*>) = tree(<*T1,T2*>) with-replacement(<*0*>, T) &
+    tree(<*T1,T*>) = tree(<*T1,T2*>) with-replacement(<*1*>, T) &
+    tree(<*T1,T2*>) = tree(T1,T2) &
+    tree(<*T,T2*>) = tree(T,T2) & tree(<*T1,T*>) = tree(T1,T)
+     by Def17,Th23,Th60;
+   hence thesis;
+  end;
+
+theorem
+   tree(elementary_tree 0, elementary_tree 0) = elementary_tree 2
+  proof set T = elementary_tree 0;
+   thus tree(T,T) = tree(<*T,T*>) by Def17 .= tree(2 |-> T) by FINSEQ_2:75
+             .= elementary_tree 2 by Th57;
+  end;
+
+reserve w for FinTree-yielding FinSequence;
+
+theorem Th80:
+ for w st for t being finite Tree st t in rng w holds height t <= n holds
+   height tree(w) <= n+1
+  proof let w such that
+A1:  for t being finite Tree st t in rng w holds height t <= n;
+   consider p being FinSequence of NAT such that
+A2:  p in tree(w) & len p = height tree(w) by TREES_1:def 15;
+A3:  p = {} & len {} = 0 or ex n,q st n < len w & q in w.(n+1) & p = <*n*>^q
+     by A2,Def15,FINSEQ_1:25;
+      now given k,q such that
+A4:    k < len w & q in w.(k+1) & p = <*k*>^q;
+A5:    w.(k+1) in rng w & rng w is constituted-FinTrees by A4,Def10,Lm4;
+     then reconsider t = w.(k+1) as finite Tree by Def4;
+     reconsider q as FinSequence of NAT by A4,FINSEQ_1:50;
+        len q <= height t & height t <= n & len <*k*> = 1
+       by A1,A4,A5,FINSEQ_1:57,TREES_1:def 15;
+      then len q <= n & len p = 1+len q by A4,AXIOMS:22,FINSEQ_1:35;
+     hence height tree(w) <= n+1 by A2,REAL_1:55;
+    end;
+   hence thesis by A2,A3,NAT_1:18;
+  end;
+
+theorem Th81:
+ for t being finite Tree st t in rng w holds height tree(w) > height t
+  proof let t be finite Tree; assume t in rng w;
+   then consider x such that
+A1:  x in dom w & t = w.x by FUNCT_1:def 5;
+   reconsider x as Nat by A1;
+A2:  1 <= x & len w >= x by A1,FINSEQ_3:27;
+   then consider n such that
+A3:  x = 1+n by NAT_1:28;
+    n < len w & {} in t & <*n*>^{} = <*n*>
+     by A2,A3,FINSEQ_1:47,NAT_1:38,TREES_1:47;
+    then t = (tree(w))|<*n*> & <*n*> in tree(w) & <*n*> <> {}
+      by A1,A3,Def15,Th52,TREES_1:4;
+   hence thesis by TREES_1:85;
+  end;
+
+theorem Th82:
+ for t being finite Tree st t in rng w &
+  for t' being finite Tree st t' in rng w holds height t' <= height t holds
+   height tree(w) = (height t) + 1
+  proof let t be finite Tree such that
+A1:  t in rng w and
+A2:  for t' being finite Tree st t' in rng w holds height t' <= height t;
+      height tree(w) > height t by A1,Th81;
+    then height tree(w) <= (height t) + 1 & height tree(w) >= (height t) + 1
+     by A2,Th80,NAT_1:38;
+   hence thesis by AXIOMS:21;
+  end;
+
+theorem
+   for T being finite Tree holds height ^T = (height T) + 1
+  proof let T be finite Tree; set m = height T;
+A1:  ^T = tree<*T*> & rng <*T*> = {T} & T in {T}
+     by Def16,FINSEQ_1:55,TARSKI:def 1;
+    then for t being finite Tree st t in rng <*T*> holds height t <= m by
+TARSKI:def 1;
+   hence height ^T = m+1 by A1,Th82;
+  end;
+
+theorem
+   for T1,T2 being finite Tree holds
+   height tree(T1,T2) = max(height T1, height T2)+1
+  proof let T1,T2 be finite Tree; set m = max(height T1, height T2);
+      height T2 <= height T1 or height T2 > height T1;
+then A1:  tree(T1,T2) = tree(<*T1,T2*>) & rng <*T1,T2*> = {T1,T2} & T1 in {T1,
+T2} &
+    T2 in {T1,T2} & (m = height T1 or m = height T2)
+     by Def17,FINSEQ_2:147,SQUARE_1:def 2,TARSKI:def 2;
+      now let t be finite Tree; assume t in rng <*T1,T2*>;
+      then t = T1 or t = T2 by A1,TARSKI:def 2;
+     hence height t <= m by SQUARE_1:46;
+    end;
+   hence height tree(T1,T2) = m+1 by A1,Th82;
+  end;
+

@@ -1,0 +1,882 @@
+:: The Divisibility of Integers and Integer Relatively Primes
+::  by Rafa{\l} Kwiatek and Grzegorz Zwara
+::
+:: Received July 10, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM_3, INT_1, ARYTM_1, ABSVALUE, FILTER_0, INT_2;
+ notation SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1, INT_1, NAT_1, GROUP_1;
+ constructors REAL_1, NAT_1, GROUP_1, XBOOLE_0;
+ clusters INT_1, ZFMISC_1, XBOOLE_0;
+ requirements REAL, NUMERALS, SUBSET, ARITHM;
+ theorems AXIOMS, INT_1, REAL_1, ABSVALUE, NAT_1, XCMPLX_0, XCMPLX_1;
+ schemes REAL_1;
+
+begin
+
+  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+  ::     SOME PROPERTIES ON FUNCTIONS: HCF & LCM FOR NATURAL NUMBERS        ::
+  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+ reserve a,b,c,d,e,f,g,h,z for Nat;
+
+canceled 2;
+
+  theorem
+  Th3: 0 divides a iff a = 0
+   proof
+      0 divides a implies a = 0
+     proof
+      assume 0 divides a;
+      then ex b st a = 0*b by NAT_1:def 3;
+      hence thesis;
+     end;
+    hence thesis;
+   end;
+
+  theorem
+  Th4: a = 0 or b = 0 iff a lcm b = 0
+   proof
+    A1: a = 0 implies a lcm b = 0
+     proof
+      assume a = 0;
+      then 0 divides (a lcm b) by NAT_1:def 4;
+      hence thesis by Th3;
+     end;
+    A2: b = 0 implies (a lcm b) = 0
+     proof
+      assume b = 0;
+      then 0 divides (a lcm b) by NAT_1:def 4;
+      hence thesis by Th3;
+     end;
+      (a lcm b) = 0 implies a = 0 or b = 0
+     proof
+      assume A3: (a lcm b) = 0;
+A4:   a divides a implies a divides a*b by NAT_1:56;
+        b divides b implies b divides b*a by NAT_1:56;
+      then 0 divides a*b by A3,A4,NAT_1:def 4;
+      then a*b = 0 by Th3;
+      hence thesis by XCMPLX_1:6;
+     end;
+    hence thesis by A1,A2;
+   end;
+
+  theorem
+     a = 0 & b = 0 iff a hcf b = 0
+   proof
+      (a hcf b) = 0 implies a = 0 & b = 0
+     proof
+      assume (a hcf b) = 0;
+      then 0 divides a & 0 divides b by NAT_1:def 5;
+      hence thesis by Th3;
+     end;
+    hence thesis;
+   end;
+
+  theorem
+     a*b = (a lcm b)*(a hcf b)
+   proof
+    A1: a<>0 & b<>0 implies a*b = (a lcm b)*(a hcf b)
+     proof
+      assume A2: a<>0 & b<>0;
+A3:   a divides a implies a divides a*b by NAT_1:56;
+        b divides b implies b divides b*a by NAT_1:56;
+      then (a lcm b) divides a*b by A3,NAT_1:def 4;
+      then consider c such that A4: a*b = (a lcm b)*c by NAT_1:def 3;
+      A5: a divides (a lcm b) & b divides (a lcm b) by NAT_1:def 4;
+      then consider d such that A6: (a lcm b) = a*d by NAT_1:def 3;
+      consider e such that A7: (a lcm b) = b*e by A5,NAT_1:def 3;
+        a*b = a*(c*d) by A4,A6,XCMPLX_1:4;
+      then A8: b = c*d by A2,XCMPLX_1:5;
+        a*b = b*(c*e) by A4,A7,XCMPLX_1:4;
+      then a = c*e by A2,XCMPLX_1:5;
+      then A9:c divides a & c divides b by A8,NAT_1:def 3;
+        f divides a & f divides b implies f divides c
+       proof
+        assume A10: f divides a & f divides b;
+        then consider g such that A11: a = f*g by NAT_1:def 3;
+        consider h such that A12: b = f*h by A10,NAT_1:def 3;
+        A13: b*g = g*h*f by A12,XCMPLX_1:4;
+          a*h = g*h*f by A11,XCMPLX_1:4;
+        then a divides g*h*f & b divides g*h*f by A13,NAT_1:def 3;
+        then (a lcm b) divides g*h*f by NAT_1:def 4;
+        then consider z such that A14: g*h*f = (a lcm b)*z by NAT_1:def 3;
+        A15: c*(a lcm b) = (g*(h*f))*f by A4,A11,A12,XCMPLX_1:4
+                      .= (a lcm b)*z*f by A14,XCMPLX_1:4
+                      .= (z*f)*(a lcm b) by XCMPLX_1:4;
+          (a lcm b) <> 0 by A2,Th4;
+        then c = f*z by A15,XCMPLX_1:5;
+        hence thesis by NAT_1:def 3;
+       end;
+      hence thesis by A4,A9,NAT_1:def 5;
+     end;
+      a = 0 or b = 0 implies a*b = (a lcm b)*(a hcf b)
+     proof
+      assume A16: a = 0 or b = 0;
+      then a*b = 0*(a hcf b)
+      .= (a lcm b)*(a hcf b) by A16,Th4;
+      hence thesis;
+     end;
+    hence thesis by A1;
+   end;
+
+ ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+ ::                 SOME PROPERTIES OF INTEGER NUMBERS                   ::
+ ::                              LCM,HCF                                 ::
+ ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  reserve m,n for Nat;
+  reserve a,b,c,d,a1,b1,a2,b2,k,l for Integer;
+
+canceled;
+
+  theorem
+  Th8: -n is Nat iff n = 0
+   proof
+    thus -n is Nat implies n = 0
+     proof
+      assume -n is Nat;
+      then A1: -n>=0 & n>=0 by NAT_1:18;
+      then n+(-n)>=0+n by AXIOMS:24;
+      then n-n>=0+n by XCMPLX_0:def 8;
+      then 0>=n by XCMPLX_1:14;
+      hence thesis by A1,AXIOMS:21;
+     end;
+    thus n = 0 implies -n is Nat;
+    thus thesis;
+   end;
+
+  theorem
+  Th9: not -1 is Nat by Th8;
+
+  theorem
+  Th10: 0 divides a iff a = 0
+   proof
+      0 divides a implies a = 0
+     proof
+      assume 0 divides a;
+      then consider a1 such that A1: a = 0*a1 by INT_1:def 9;
+      thus thesis by A1;
+     end;
+    hence thesis;
+   end;
+
+  theorem
+  Th11: a divides -a & -a divides a
+   proof
+    thus a divides -a
+     proof
+        -a = -(a*1) .= a*(-1) by XCMPLX_1:175;
+      hence thesis by INT_1:def 9;
+     end;
+    thus thesis
+     proof
+        a = -(-(a*1)).= (-a)*(-1) by XCMPLX_1:176;
+      hence thesis by INT_1:def 9;
+     end;
+   end;
+
+  theorem
+  Th12: a divides b implies a divides b*c
+   proof
+    assume a divides b;
+    then consider d such that A1: b = a*d by INT_1:def 9;
+      b*c = a*(d*c) by A1,XCMPLX_1:4;
+    hence thesis by INT_1:def 9;
+   end;
+
+  theorem
+  Th13: a divides b & b divides c implies a divides c
+   proof
+    assume that A1: a divides b and A2: b divides c;
+    consider k such that A3: b = a*k by A1,INT_1:def 9;
+    consider l such that A4: c = b*l by A2,INT_1:def 9;
+      c = a*(k*l) by A3,A4,XCMPLX_1:4;
+    hence thesis by INT_1:def 9;
+   end;
+
+  theorem
+  Th14: (a divides b iff a divides -b) & (a divides b iff -a divides b) & (a
+ divides b iff -a divides -b) & (a divides -b iff -a divides b)
+   proof
+    thus A1: a divides b iff a divides -b
+     proof
+      A2: a divides b implies a divides -b
+       proof
+        assume A3: a divides b;
+          b divides -b by Th11;
+        hence thesis by A3,Th13;
+       end;
+        a divides -b implies a divides b
+       proof
+        assume A4: a divides -b;
+          -b divides b by Th11;
+        hence thesis by A4,Th13;
+       end;
+      hence thesis by A2;
+     end;
+    thus A5: a divides b iff -a divides b
+     proof
+      A6: a divides b implies -a divides b
+       proof
+        assume A7: a divides b;
+          -a divides a by Th11;
+        hence thesis by A7,Th13;
+       end;
+        -a divides b implies a divides b
+       proof
+        assume A8: -a divides b;
+          a divides -a by Th11;
+        hence thesis by A8,Th13;
+       end;
+      hence thesis by A6;
+     end;
+    thus a divides b iff -a divides -b
+     proof
+      A9: a divides b implies -a divides -b
+       proof
+        assume A10: a divides b;
+          -a divides a by Th11;
+        hence thesis by A1,A10,Th13;
+       end;
+        -a divides -b implies a divides b
+       proof
+        assume A11: -a divides -b;
+          -b divides b by Th11;
+        hence thesis by A5,A11,Th13;
+       end;
+      hence thesis by A9;
+     end;
+    thus thesis by A1,A5;
+   end;
+
+  theorem
+     a divides b & b divides a implies a = b or a = -b
+   proof
+    assume A1: a divides b & b divides a;
+    then consider a1 such that A2: b = a*a1 by INT_1:def 9;
+    consider b1 such that A3: a = b*b1 by A1,INT_1:def 9;
+      a<>0 implies a = b or a = -b
+     proof
+      assume A4: a<>0;
+        1*a = a*(a1*b1) by A2,A3,XCMPLX_1:4;
+      then a1*b1 = 1 by A4,XCMPLX_1:5;
+      then a = b*1 or a = b*(-1) by A3,INT_1:22;
+      then a = b*1 or a = (-b)*1 by XCMPLX_1:175;
+      hence thesis;
+     end;
+    hence thesis by A1,Th10;
+   end;
+
+  theorem
+  Th16: a divides 0 & 1 divides a & -1 divides a
+   proof
+    thus a divides 0
+     proof
+        0 = a*0;
+      hence thesis by INT_1:def 9;
+     end;
+    thus 1 divides a
+     proof
+        a = 1*a;
+      hence thesis by INT_1:def 9;
+     end;
+    thus thesis
+     proof
+        a = -(1*(-a))
+       .= (-1)*(-a) by XCMPLX_1:175;
+      hence thesis by INT_1:def 9;
+     end;
+   end;
+
+  theorem
+  Th17: a divides 1 or a divides -1 implies a = 1 or a = -1
+   proof
+    assume A1: a divides 1 or a divides -1;
+    A2: a divides 1 implies a = 1 or a = -1
+     proof
+      assume a divides 1;
+      then consider b such that A3: 1 = a*b by INT_1:def 9;
+      thus thesis by A3,INT_1:22;
+     end;
+      a divides -1 implies a = 1 or a = -1
+     proof
+      assume a divides -1;
+      then ex b st -1 = a*b by INT_1:def 9;
+      hence thesis by INT_1:23;
+     end;
+    hence thesis by A1,A2;
+   end;
+
+  theorem
+     a = 1 or a = -1 implies a divides 1 & a divides -1 by Th16;
+
+  theorem
+     a,b are_congruent_mod c iff c divides (a-b)
+   proof
+    A1: a,b are_congruent_mod c implies c divides (a-b)
+     proof
+      assume a,b are_congruent_mod c;
+      then ex d st (a-b) = c*d by INT_1:def 3;
+      hence thesis by INT_1:def 9;
+     end;
+      c divides (a-b) implies a,b are_congruent_mod c
+     proof
+      assume c divides (a-b);
+      then ex d st (a-b) = c*d by INT_1:def 9;
+      hence thesis by INT_1:def 3;
+     end;
+    hence thesis by A1;
+   end;
+
+theorem
+    abs(a) is Nat;
+
+  theorem
+  Th21: a divides b iff (abs(a)) divides (abs(b))
+   proof
+    A1: a divides b implies (abs(a)) divides (abs(b))
+     proof
+      assume a divides b;
+      then consider c such that A2: b = a*c by INT_1:def 9;
+        abs(b) = abs(a)*abs(c) by A2,ABSVALUE:10;
+      hence thesis by NAT_1:def 3;
+     end;
+      (abs(a)) divides (abs(b)) implies a divides b
+     proof
+      assume (abs(a)) divides (abs(b));
+      then consider m such that A3: abs(b) = abs(a)*m by NAT_1:def 3;
+      A4: a>=0 implies a divides b
+       proof
+        assume a>=0;
+        then A5: abs(b) = a*m by A3,ABSVALUE:def 1;
+        A6: b>=0 implies a divides b
+         proof
+          assume b>=0;
+          then b = a*m by A5,ABSVALUE:def 1;
+          hence thesis by INT_1:def 9;
+         end;
+          b<0 implies a divides b
+         proof
+          assume b<0;
+          then -b = a*m by A5,ABSVALUE:def 1;
+          then b = -(a*m) .= a*(-m) by XCMPLX_1:175;
+          hence thesis by INT_1:def 9;
+         end;
+        hence thesis by A6;
+       end;
+        a<0 implies a divides b
+       proof
+        assume a<0;
+        then A7: abs(b) = (-a)*m by A3,ABSVALUE:def 1;
+        A8: b>=0 implies a divides b
+         proof
+          assume b>=0;
+          then b = (-a)*m by A7,ABSVALUE:def 1 .= a*(-m) by XCMPLX_1:176;
+          hence thesis by INT_1:def 9;
+         end;
+          b<0 implies a divides b
+         proof
+          assume b<0;
+          then -b = (-a)*m by A7,ABSVALUE:def 1 .= -(a*m) by XCMPLX_1:175;
+          then -(-b) = a*m;
+          hence thesis by INT_1:def 9;
+         end;
+        hence thesis by A8;
+       end;
+      hence thesis by A4;
+     end;
+    hence thesis by A1;
+   end;
+
+                         ::::::::::::::::::
+                         ::     LCM      ::
+                         ::::::::::::::::::
+
+  definition let a,b;
+ canceled;
+
+   func a lcm' b -> Integer equals :Def2:  abs(a) lcm abs(b);
+   coherence;
+   commutativity;
+  end;
+
+canceled;
+
+  theorem
+     a lcm' b is Nat
+   proof
+      a lcm' b = abs(a) lcm abs(b) by Def2;
+    hence thesis;
+   end;
+
+canceled;
+
+  theorem
+  Th25: a divides (a lcm' b)
+   proof
+      abs(a) divides (abs(a) lcm abs(b)) by NAT_1:def 4;
+    then consider m such that A1: (abs(a) lcm abs(b)) = abs(a)*m by NAT_1:def 3
+;
+    A2: a>=0 implies a divides (a lcm' b)
+     proof
+      assume A3: a>=0;
+      reconsider c = (abs(a) lcm abs(b)) as Integer;
+      reconsider a1 = m as Integer;
+        c = a*a1 by A1,A3,ABSVALUE:def 1;
+      then a divides c by INT_1:def 9;
+      hence thesis by Def2;
+     end;
+      a<0 implies a divides (a lcm' b)
+     proof
+      assume A4: a<0;
+      reconsider c = abs(a) lcm abs(b) as Integer;
+      reconsider b1 = m as Integer;
+        c = (-a)*b1 by A1,A4,ABSVALUE:def 1 .= a*(-b1) by XCMPLX_1:176;
+      then a divides c by INT_1:def 9;
+      hence thesis by Def2;
+     end;
+    hence thesis by A2;
+   end;
+
+  theorem
+    b divides (a lcm' b) by Th25;
+
+  theorem
+  Th27: for c st a divides c & b divides c holds (a lcm' b) divides c
+   proof
+    let c; assume A1: a divides c & b divides c;
+    then A2: (abs(a)) divides (abs(c)) by Th21;
+       (abs(b)) divides (abs(c)) by A1,Th21;
+    then (abs(a) lcm abs(b)) divides (abs(c)) by A2,NAT_1:def 4;
+    then consider m such that
+A3: abs(c) = (abs(a) lcm abs(b))*m by NAT_1:def 3;
+    A4: c>=0 implies (a lcm' b) divides c
+     proof
+      assume c>=0;
+      then abs(c) = c by ABSVALUE:def 1;
+      then c = (a lcm' b)*m by A3,Def2;
+      hence thesis by INT_1:def 9;
+     end;
+      c <0 implies (a lcm' b) divides c
+     proof
+      assume c <0;
+      then abs(c) = -c by ABSVALUE:def 1;
+      then -c = (a lcm' b)*m by A3,Def2;
+      then c = -((a lcm' b)*m) .= (a lcm' b)*(-m) by XCMPLX_1:175;
+      hence thesis by INT_1:def 9;
+     end;
+    hence thesis by A4;
+   end;
+
+                          ::::::::::::::::::
+                          ::      GCD     ::
+                          ::::::::::::::::::
+
+  definition let a,b;
+   func a gcd b -> Integer equals :Def3:  abs(a) hcf abs(b);
+   coherence;
+   commutativity;
+  end;
+
+canceled;
+
+  theorem
+  Th29: a gcd b is Nat
+   proof
+      a gcd b = abs(a) hcf abs(b) by Def3;
+    hence thesis;
+   end;
+
+canceled;
+
+  theorem
+  Th31: (a gcd b) divides a
+   proof
+      (abs(a) hcf abs(b)) divides (abs(a)) by NAT_1:def 5;
+    then consider m such that
+A1: abs(a) = (abs(a) hcf abs(b))*m by NAT_1:def 3;
+    A2: a>=0 implies (a gcd b) divides a
+     proof
+      assume A3: a>=0;
+      reconsider c = abs(a) hcf abs(b) as Integer;
+      reconsider a1 = m as Integer;
+        a = c*a1 by A1,A3,ABSVALUE:def 1;
+      then c divides a by INT_1:def 9;
+      hence thesis by Def3;
+     end;
+      a<0 implies (a gcd b) divides a
+     proof
+      assume A4: a<0;
+      reconsider c = abs(a) hcf abs(b) as Integer;
+      reconsider b1 = m as Integer;
+        -(-a) = -(c*b1) by A1,A4,ABSVALUE:def 1 .= c*(-b1) by XCMPLX_1:175;
+      then c divides a by INT_1:def 9;
+      hence thesis by Def3;
+     end;
+    hence thesis by A2;
+   end;
+
+  theorem
+    (a gcd b) divides b by Th31;
+
+  theorem
+  Th33: for c st c divides a & c divides b holds c divides (a gcd b)
+   proof
+    let c; assume A1: c divides a & c divides b;
+    then A2: (abs(c)) divides (abs(a)) by Th21;
+       (abs(c)) divides (abs(b)) by A1,Th21;
+    then (abs(c)) divides (abs(a) hcf abs(b)) by A2,NAT_1:def 5;
+    then consider m such that
+A3: abs(a) hcf abs(b) = (abs(c))*m by NAT_1:def 3;
+    A4: c>=0 implies c divides (a gcd b)
+     proof
+      assume c>=0;
+      then abs(c) = c by ABSVALUE:def 1;
+      then a gcd b = c*m by A3,Def3;
+      hence thesis by INT_1:def 9;
+     end;
+      c <0 implies c divides (a gcd b)
+     proof
+      assume c <0;
+      then abs(c) = -c by ABSVALUE:def 1;
+      then a gcd b = (-c)*m by A3,Def3;
+      then a gcd b = c*(-m) by XCMPLX_1:176;
+      hence thesis by INT_1:def 9;
+     end;
+    hence thesis by A4;
+   end;
+
+  theorem
+     a = 0 or b = 0 iff a lcm' b = 0
+   proof
+    A1: a = 0 implies a lcm' b = 0
+     proof
+      assume a = 0;
+      then 0 divides (a lcm' b) by Th25;
+      hence thesis by Th10;
+     end;
+    A2: b = 0 implies a lcm' b = 0
+     proof
+      assume b = 0;
+      then 0 divides (a lcm' b) by Th25;
+      hence thesis by Th10;
+     end;
+      a lcm' b = 0 implies a = 0 or b = 0
+     proof
+      assume A3: a lcm' b = 0;
+A4:      a divides a implies a divides a*b by Th12;
+        b divides b implies b divides b*a by Th12;
+      then 0 divides a*b by A3,A4,Th27;
+      then a*b = 0 by Th10;
+      hence thesis by XCMPLX_1:6;
+     end;
+    hence thesis by A1,A2;
+   end;
+
+  theorem
+  Th35: a = 0 & b = 0 iff a gcd b = 0
+   proof
+    A1: a = 0 & b = 0 implies a gcd b = 0
+     proof
+      assume a = 0 & b = 0;
+      then 0 divides (a gcd b) by Th33;
+      hence thesis by Th10;
+     end;
+      a gcd b = 0 implies a = 0 & b = 0
+     proof
+      assume a gcd b = 0;
+      then 0 divides a & 0 divides b by Th31;
+      hence thesis by Th10;
+     end;
+    hence thesis by A1;
+   end;
+
+  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+  ::                      RELATIVE PRIME NUMBERS                            ::
+  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  definition let a,b;
+  pred a,b are_relative_prime means :Def4: a gcd b = 1;
+   symmetry;
+  end;
+
+canceled 2;
+
+  theorem
+     a<>0 or b<>0 implies ex a1,b1 st
+       a = (a gcd b)*a1 & b = (a gcd b)*b1 & a1,b1 are_relative_prime
+   proof
+    assume A1: a<>0 or b<>0;
+      (a gcd b) divides a by Th31;
+    then consider a1 such that A2: a = (a gcd b)*a1 by INT_1:def 9;
+      (a gcd b) divides b by Th31;
+    then consider b1 such that A3: b = (a gcd b)*b1 by INT_1:def 9;
+      (a1 gcd b1) divides a1 by Th31;
+    then consider a2 such that A4: a1 = (a1 gcd b1)*a2 by INT_1:def 9;
+      (a1 gcd b1) divides b1 by Th31;
+    then consider b2 such that A5: b1 = (a1 gcd b1)*b2 by INT_1:def 9;
+    A6: a = ((a gcd b)*(a1 gcd b1))*a2 by A2,A4,XCMPLX_1:4;
+      b = ((a gcd b)*(a1 gcd b1))*b2 by A3,A5,XCMPLX_1:4;
+    then (a gcd b)*(a1 gcd b1) divides a & (a gcd b)*(a1 gcd b1) divides
+b by A6,INT_1:def 9;
+    then (a gcd b)*(a1 gcd b1) divides (a gcd b) by Th33;
+    then consider c such that A7: a gcd b = ((a gcd b)*(a1 gcd b1))*c
+     by INT_1:def 9;
+    A8: (a gcd b)*1 = (a gcd b)*((a1 gcd b1)*c) by A7,XCMPLX_1:4;
+      a gcd b <>0 by A1,Th35;
+    then 1 = (a1 gcd b1)*c by A8,XCMPLX_1:5;
+    then a1 gcd b1 = 1 or a1 gcd b1 = -1 by INT_1:22;
+    then a1,b1 are_relative_prime by Def4,Th9,Th29;
+    hence thesis by A2,A3;
+   end;
+
+  theorem
+  Th39: a,b are_relative_prime implies (c*a gcd c*b) = abs(c)
+  & c*a gcd b*c = abs(c) & a*c gcd c*b = abs(c) & a*c gcd b*c = abs(c)
+   proof
+    assume a,b are_relative_prime;
+    then A1: a gcd b = 1 by Def4;
+    thus A2: c*a gcd c*b = abs(c)
+     proof
+        c divides c*a & c divides c*b by Th12;
+      then c divides (c*a gcd c*b) by Th33;
+      then consider d such that A3: c*a gcd c*b = c*d by INT_1:def 9;
+        (c*a gcd c*b) divides c*a by Th31;
+      then consider k such that A4: c*a = (c*a gcd c*b)*k by INT_1:def 9;
+        (c*a gcd c*b) divides c*b by Th31;
+      then consider l such that A5: c*b = (c*a gcd c*b)*l by INT_1:def 9;
+      A6: c*a = c*(d*k) by A3,A4,XCMPLX_1:4;
+      A7: c*b = c*(d*l) by A3,A5,XCMPLX_1:4;
+      A8: c <>0 implies c*a gcd c*b = abs(c)
+       proof
+        assume A9: c <>0;
+        then a = d*k by A6,XCMPLX_1:5;
+        then A10: d divides a by INT_1:def 9;
+          b = d*l by A7,A9,XCMPLX_1:5;
+        then d divides b by INT_1:def 9;
+        then d divides 1 by A1,A10,Th33;
+        then c*a gcd c*b = c*1 or c*a gcd c*b = c*(-1) by A3,Th17;
+        then c*a gcd c*b = c*1 or c*a gcd c*b = (-c)*1 by XCMPLX_1:175;
+        then A11: abs((c*a gcd c*b)) = abs(c) by ABSVALUE:17;
+          c*a gcd c*b is Nat by Th29;
+        then c*a gcd c*b >=0 by NAT_1:18;
+        hence thesis by A11,ABSVALUE:def 1;
+       end;
+        c = 0 implies c*a gcd c*b = abs(c)
+       proof
+        assume A12: c = 0;
+        then c*a gcd c*b = 0 by Th35 .= abs(0) by ABSVALUE:def 1;
+        hence thesis by A12;
+       end;
+      hence thesis by A8;
+     end;
+    hence c*a gcd b*c = abs(c);
+    thus thesis by A2;
+   end;
+
+  theorem
+  Th40: c divides a*b & a,c are_relative_prime implies c divides b
+   proof
+    assume A1: c divides a*b & a,c are_relative_prime;
+    then A2: a*b gcd c*b = abs(b) by Th39;
+      c divides c*b by Th12;
+    then A3: c divides (a*b gcd c*b) by A1,Th33;
+      b<0 implies c divides b
+     proof
+      assume b<0;
+      then c divides (-b) by A2,A3,ABSVALUE:def 1;
+      hence thesis by Th14;
+     end;
+    hence thesis by A2,A3,ABSVALUE:def 1;
+   end;
+
+  theorem
+     a,c are_relative_prime & b,c are_relative_prime implies
+       a*b,c are_relative_prime
+   proof
+    assume a,c are_relative_prime & b,c are_relative_prime;
+    then A1: (a gcd c) = 1 & (b gcd c) = 1 by Def4;
+    A2: (a*b gcd c) divides a*b & (a*b gcd c) divides c by Th31;
+    A3: ((a*b gcd c) gcd a) divides (a*b gcd c) & ((a*b gcd c) gcd a) divides
+a by Th31;
+    then ((a*b gcd c) gcd a) divides c by A2,Th13;
+    then ((a*b gcd c) gcd a) divides 1 by A1,A3,Th33;
+    then (a*b gcd c) gcd a = 1 or (a*b gcd c) gcd a = -1 by Th17;
+    then a,(a*b gcd c) are_relative_prime by Def4,Th9,Th29;
+    then (a*b gcd c) divides b by A2,Th40;
+    then (a*b gcd c) divides 1 by A1,A2,Th33;
+    then a*b gcd c = 1 or a*b gcd c = -1 by Th17;
+    hence thesis by Def4,Th9,Th29;
+   end;
+
+::***************************************************************************::
+::                           PRIME NUMBERS                                   ::
+::***************************************************************************::
+
+  reserve p,p1,q,k,l for Nat;
+  reserve x for Real;
+  reserve X for Subset of REAL;
+
+  definition let p;
+   attr p is prime means :Def5: p>1 &
+    for n holds n divides p implies n = 1 or n = p;
+  end;
+
+  definition let m,n;
+   pred m,n are_relative_prime means :Def6: m hcf n = 1;
+  end;
+
+canceled 2;
+
+  theorem
+     2 is prime
+   proof
+    thus 2>1 & for n holds n divides 2 implies n = 1 or n = 2
+     proof
+      thus 2>1;
+        let n;
+        assume A1: n divides 2;
+        then n<>0 by Th3;
+        then n>0 by NAT_1:19;
+        then A2: n>=0+1 by NAT_1:38;
+        then n+(-1+1)>=1;
+        then (n+-1)+1>=1 by XCMPLX_1:1;
+        then A3: (n-1)+1>=1 by XCMPLX_0:def 8;
+          n-1>=1-1 by A2,REAL_1:49;
+        then reconsider m = n-1 as Nat by INT_1:16;
+          m+1 = 1 or m>=1 by A3,NAT_1:26;
+        then (n-1)+1 = 1 or (n-1)+1>=1+1 by AXIOMS:24;
+        then n+-1+1 = 1 or (n+-1)+1>=1+1 by XCMPLX_0:def 8;
+        then A4: n+(-1+1) = 1 or n+(-1+1)>=2 by XCMPLX_1:1;
+          n<=2 by A1,NAT_1:54;
+        hence thesis by A4,AXIOMS:21;
+     end;
+   end;
+
+canceled;
+
+  theorem
+    ex p st not p is prime
+   proof
+    take 4;
+      ex n st n divides 4 & n<>1 & n<>4
+     proof
+      take 2;
+        4 = 2*2;
+      hence thesis by NAT_1:def 3;
+     end;
+    hence thesis by Def5;
+   end;
+
+  theorem
+     p is prime & q is prime implies p,q are_relative_prime or p = q
+   proof
+    assume A1: p is prime & q is prime;
+    assume not p,q are_relative_prime;
+    then A2: (p hcf q)<>1 by Def6;
+      (p hcf q) divides p & (p hcf q) divides q by NAT_1:def 5;
+    then (p hcf q) = p & (p hcf q) = q by A1,A2,Def5;
+    hence thesis;
+   end;
+
+  scheme Ind1 { a() -> Nat,P[Nat] } : for k st k>=a() holds P[k] provided
+   A1: P[a()] and
+   A2: for k st k>=a() & P[k] holds P[k+1]
+   proof
+    let k;
+    assume k>=a();
+    then k-a()>=a()-a() by REAL_1:49;
+    then k-a()>=0 by XCMPLX_1:14;
+    then reconsider m = k-a() as Nat by INT_1:16;
+      k-(a()-a()) = m+a() by XCMPLX_1:37;
+    then A3: k-0 = m+a() by XCMPLX_1:14;
+    defpred P1[Real] means ex m st P[m+a()] & m = $1;
+    consider X such that A4: x in X iff P1[x]
+     from SepReal;
+      P[0+a()] by A1;
+    then A5: 0 in X by A4;
+       for x st x in X holds x+1 in X
+     proof
+      let x;
+      assume x in X;
+      then consider m such that A6: P[m+a()] & m = x by A4;
+        m+a()>=a() & P[m+a()] implies P[m+a()+1] by A2;
+      then A7: m+a()>=a() & P[m+a()] implies P[m+1+a()] by XCMPLX_1:1;
+        m>=0 by NAT_1:18;
+      then m+a()>=0+a() by AXIOMS:24;
+      hence thesis by A4,A6,A7;
+     end;
+    then m in X by A5,NAT_1:2;
+    then ex n st P[n+a()] & n = m by A4;
+    hence P[k] by A3;
+   end;
+
+  scheme Comp_Ind1 { a() -> Nat,P[Nat] } : for k st k>=a() holds P[k] provided
+   A1: for k st k>=a() & (for n st n>=a() & n<k holds P[n]) holds P[k]
+   proof
+     defpred P1[Nat] means for n st (n>=a() & n<$1) holds P[n];
+    A2: P1[a()];
+    A3: for k st k>=a() holds P1[k] implies P1[k+1]
+     proof
+      let k;
+      assume k>=a();
+      assume A4: for n st n>=a() & n<k holds P[n];
+      let n;
+      assume A5: n>=a() & n<k+1;
+      then n<=k by NAT_1:38;
+      then n<k or n = k by REAL_1:def 5;
+      hence thesis by A1,A4,A5;
+     end;
+    let k;
+    A6: for k st k>=a() holds P1[k]
+      from Ind1(A2,A3);
+    assume A7: k>=a();
+    then for n st (n>=a() & n<k) holds P[n] by A6;
+    hence P[k] by A1,A7;
+   end;
+
+  theorem
+     l>=2 implies ex p st p is prime & p divides l
+   proof
+    assume A1: l>=2;
+    defpred P[Nat] means (ex p st p is prime & p divides $1);
+    A2: for k st k>=2 holds (for n st n>=2 holds n<k implies P[n])
+    implies P[k]
+     proof
+      let k; assume k>=2;
+      then k+1>1+1 by NAT_1:38;
+      then k+1-1>1+1-1 by REAL_1:54;
+      then A3: k+(1-1)>1+1-1 by XCMPLX_1:29;
+      assume A4: for n st n>=2 holds n<k implies (ex p st p is prime & p
+ divides n);
+        not k is prime implies ex p st p is prime & p divides k
+       proof
+        assume not k is prime;
+        then consider m such that A5: m divides k & m<>1 & m<>k by A3,Def5;
+          m>=2 & m<k
+         proof
+          thus m>=2
+           proof
+              m<>0 by A5,Th3;
+            then m>0 by NAT_1:19;
+            then m>=0+1 by NAT_1:38;
+            then m>1 by A5,REAL_1:def 5;
+            then m>=1+1 by NAT_1:38;
+            hence thesis;
+           end;
+              k>0 by A3,AXIOMS:22;
+            then m<=k by A5,NAT_1:54;
+            hence thesis by A5,REAL_1:def 5;
+         end;
+        then consider p1 such that A6: p1 is prime & p1 divides m by A4;
+        take p1;
+        thus thesis by A5,A6,NAT_1:51;
+       end;
+      hence thesis;
+     end;
+      for k st k>=2 holds P[k] from Comp_Ind1 (A2);
+    hence thesis by A1;
+   end;

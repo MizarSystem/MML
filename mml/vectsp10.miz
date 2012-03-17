@@ -1,0 +1,2073 @@
+:: Quotient Vector Spaces and Functionals
+::  by Jaros{\l}aw Kotowicz
+::
+:: Received November 5, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, VECTSP_1, ARYTM_1, HAHNBAN, FUNCT_1, GRCAT_1, UNIALG_1,
+      BINOP_1, LATTICES, RELAT_1, HAHNBAN1, MCART_1, RLSUB_1, RLSUB_2,
+      RLVECT_3, RLVECT_2, FUNCT_2, ALGSTR_2, REALSET1, BOOLE, SEQM_3, GROUP_6,
+      SETFAM_1, ARYTM_3, VECTSP10;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, STRUCT_0, FUNCT_1,
+      REALSET1, RLVECT_1, BINOP_1, RLVECT_2, VECTSP_1, RELSET_1, FUNCT_2,
+      SEQM_3, FRAENKEL, VECTSP_4, VECTSP_5, VECTSP_6, VECTSP_7, HAHNBAN1;
+ constructors DOMAIN_1, REALSET1, BINOP_1, RLVECT_2, VECTSP_5, VECTSP_6,
+      VECTSP_7, SEQM_3, HAHNBAN1;
+ clusters STRUCT_0, SUBSET_1, FUNCT_1, RELSET_1, VECTSP_1, HAHNBAN1, VECTSP_4,
+      XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions HAHNBAN1, TARSKI, XBOOLE_0, VECTSP_4, VECTSP_5, RLVECT_1, SEQM_3;
+ theorems XBOOLE_1, FUNCT_2, HAHNBAN1, VECTSP_1, RLVECT_1, STRUCT_0, ANPROJ_1,
+      MCART_1, VECTSP_5, VECTSP_4, VECTSP_6, VECTSP_7, TARSKI, FUNCT_1,
+      XBOOLE_0, REALSET1, ZFMISC_1, SEQM_3, SETFAM_1, BINOP_1, MOD_1;
+ schemes FUNCT_2, RLVECT_2;
+
+begin
+::Auxiliary Facts about Double Loops and Vector Spaces
+
+theorem
+  for K be add-associative right_zeroed right_complementable
+            left-distributive left_unital (non empty doubleLoopStr)
+for a be Element of K holds (- 1_ K) * a = - a by MOD_1:14;
+
+definition
+ let K be doubleLoopStr;
+func StructVectSp(K) -> strict VectSpStr over K equals :Def1:
+ VectSpStr (# the carrier of K, the add of K, the Zero of K, the mult of K#);
+ coherence;
+end;
+
+Lm1:
+now
+ let K be doubleLoopStr; set V = StructVectSp(K);
+   V = VectSpStr (# the carrier of K, the add of K,
+                  the Zero of K, the mult of K#) by Def1;
+ hence the carrier of V = the carrier of K &
+ the add of V = the add of K & the Zero of V = the Zero of K &
+ the lmult of V = the mult of K;
+end;
+
+definition
+ let K be non empty doubleLoopStr;
+cluster StructVectSp(K) -> non empty;
+ coherence
+  proof
+     the carrier of StructVectSp(K) = the carrier of K by Lm1;
+   hence thesis by STRUCT_0:def 1;
+  end;
+end;
+
+definition
+ let K be Abelian (non empty doubleLoopStr);
+cluster StructVectSp(K) -> Abelian;
+ coherence
+  proof
+   set V = StructVectSp(K);
+      now
+    let x,y be Vector of V;
+     reconsider x'=x,y'=y as Element of K by Lm1;
+  A1: the add of V = the add of K by Lm1;
+     thus x+y = (the add of V).(x,y) by RLVECT_1:5
+       .= y'+x' by A1,RLVECT_1:5
+       .= (the add of K).(y',x') by RLVECT_1:5
+       .= y+x by A1,RLVECT_1:5;
+     end;
+    hence thesis by RLVECT_1:def 5;
+  end;
+end;
+
+definition
+ let K be add-associative (non empty doubleLoopStr);
+cluster StructVectSp(K) -> add-associative;
+ coherence
+  proof
+    set V = StructVectSp(K);
+       now
+     let x,y,z be Vector of V;
+      reconsider x'=x,y'=y,z'=z as Element of K by Lm1;
+    A1: the add of V = the add of K by Lm1;
+      thus (x+y)+z = (the add of V).(x+y,z) by RLVECT_1:5
+       .= (the add of V).((the add of V).(x,y),z) by RLVECT_1:5
+       .= (the add of K).((x'+y'),z') by A1,RLVECT_1:5
+       .= (x'+y')+z' by RLVECT_1:5
+       .= x'+(y'+z') by RLVECT_1:def 6
+       .= (the add of V).(x',(y'+z')) by A1,RLVECT_1:5
+       .= (the add of V).(x',(the add of V).(y',z')) by A1,RLVECT_1:5
+       .= (the add of V).(x,y+z) by RLVECT_1:5
+       .= x+(y+z) by RLVECT_1:5;
+      end;
+  hence thesis by RLVECT_1:def 6;
+ end;
+end;
+
+definition
+ let K be right_zeroed (non empty doubleLoopStr);
+cluster StructVectSp(K) -> right_zeroed;
+ coherence
+   proof
+    set V = StructVectSp(K);
+       now let x be Vector of V;
+      reconsider x'=x as Element of K by Lm1;
+    A1: the add of V = the add of K &
+        the Zero of V = the Zero of K by Lm1;
+    then A2: (the Zero of K) = 0.V & (the Zero of K) = 0.K by RLVECT_1:def 2;
+      thus x+0.V = (the add of V).(x,0.V) by RLVECT_1:5
+         .= x'+(0.K) by A1,A2,RLVECT_1:5
+        .= x by RLVECT_1:def 7;
+     end;
+    hence thesis by RLVECT_1:def 7;
+ end;
+end;
+
+definition
+ let K be right_complementable (non empty doubleLoopStr);
+cluster StructVectSp(K) -> right_complementable;
+ coherence
+   proof
+    set V = StructVectSp(K);
+       now let x be Vector of V;
+      reconsider x'=x as Element of K by Lm1;
+   A1: the add of V = the add of K &
+       the Zero of V = the Zero of K by Lm1;
+   then A2: (the Zero of K) = 0.V & (the Zero of K) = 0.K by RLVECT_1:def 2;
+      consider t be Element of K such that
+   A3: x' + t = 0.K by RLVECT_1:def 8;
+      reconsider t' = t as Vector of V by Lm1;
+      take t';
+      thus x + t' = (the add of V).(x,t') by RLVECT_1:5
+       .= 0.V by A1,A2,A3,RLVECT_1:5;
+     end;
+    hence thesis by RLVECT_1:def 8;
+  end;
+end;
+
+definition
+ let K be associative left_unital distributive (non empty doubleLoopStr);
+cluster StructVectSp(K) -> VectSp-like;
+ coherence
+  proof
+   set V = StructVectSp(K);
+      now
+    let x,y be Element of K;
+    let v,w be Vector of V;
+     reconsider v' = v , w' = w as Element of K by Lm1;
+   A1: (the lmult of V).(x,w) = x*w by VECTSP_1:def 24;
+   A2: (the lmult of V).(y,v) = y*v by VECTSP_1:def 24;
+   A3: the add of V = the add of K &
+       the lmult of V = the mult of K by Lm1;
+     set MLT = the mult of K;
+     thus x*(v+w) = (the lmult of V).(x,(v+w)) by VECTSP_1:def 24
+       .= MLT.(x,(the add of K).(v',w')) by A3,RLVECT_1:5
+       .= MLT.(x,v'+w') by RLVECT_1:5
+       .= x*(v'+w') by VECTSP_1:def 10
+       .= x*v'+x*w' by VECTSP_1:def 18
+       .= (the add of K).(x*v',x*w') by RLVECT_1:5
+       .= (the add of K).(MLT.(x,v'),x*w') by VECTSP_1:def 10
+       .= (the add of K).
+          ((the lmult of V).(x,v),(the lmult of V).(x,w)) by A3,VECTSP_1:def 10
+       .= (the add of K).(x*v,x*w) by A1,VECTSP_1:def 24
+       .= x*v+x*w by A3,RLVECT_1:5;
+     thus (x+y)*v = (the lmult of V).((x+y),v) by VECTSP_1:def 24
+       .= (x+y)*v' by A3,VECTSP_1:def 10
+       .= x*v'+y*v' by VECTSP_1:def 18
+       .= (the add of K).(x*v',y*v') by RLVECT_1:5
+       .= (the add of K).(MLT.(x,v'),y*v') by VECTSP_1:def 10
+       .= (the add of K).
+          ((the lmult of V).(x,v),(the lmult of V).(y,v)) by A3,VECTSP_1:def 10
+       .= (the add of K).(x*v,y*v) by A2,VECTSP_1:def 24
+       .= x*v+y*v by A3,RLVECT_1:5;
+     thus (x*y)*v = (the lmult of V).((x*y),v) by VECTSP_1:def 24
+       .= (x*y)*v' by A3,VECTSP_1:def 10
+       .= x*(y*v') by VECTSP_1:def 16
+       .= MLT.(x,y*v') by VECTSP_1:def 10
+       .= (the lmult of V).(x,(the lmult of V).(y,v)) by A3,VECTSP_1:def 10
+       .= (the lmult of V).(x,(y*v)) by VECTSP_1:def 24
+       .= x*(y*v) by VECTSP_1:def 24;
+     thus (1_ K)*v = MLT.(1_ K,v') by A3,VECTSP_1:def 24
+       .= (1_ K)*v' by VECTSP_1:def 10
+       .= v by VECTSP_1:def 19;
+    end;
+   hence thesis by VECTSP_1:def 26;
+  end;
+end;
+
+definition
+ let K be non degenerated (non empty doubleLoopStr);
+cluster StructVectSp(K) -> non trivial;
+ coherence
+  proof
+   set V = StructVectSp(K);
+   reconsider v = 1_ K as Vector of V by Lm1;
+     the Zero of V = the Zero of K by Lm1;
+   then the Zero of K = 0.V & (the Zero of K) = 0.K by RLVECT_1:def 2;
+   then v <> 0.V by VECTSP_1:def 21;
+   hence V is non trivial by ANPROJ_1:def 8;
+  end;
+end;
+
+definition
+ let K be non degenerated (non empty doubleLoopStr);
+cluster non trivial (non empty VectSpStr over K);
+ existence
+  proof take StructVectSp(K); thus thesis; end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+         (non empty doubleLoopStr);
+cluster add-associative right_zeroed right_complementable strict
+         (non empty VectSpStr over K);
+correctness
+ proof take StructVectSp(K); thus thesis; end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable associative
+          left_unital distributive (non empty doubleLoopStr);
+cluster add-associative right_zeroed right_complementable VectSp-like strict
+        (non empty VectSpStr over K);
+ correctness
+  proof take StructVectSp(K); thus thesis; end;
+end;
+
+definition
+ let K be Abelian add-associative right_zeroed right_complementable associative
+          left_unital distributive non degenerated (non empty doubleLoopStr);
+cluster Abelian add-associative right_zeroed right_complementable VectSp-like
+         strict non trivial (non empty VectSpStr over K);
+ existence
+  proof take StructVectSp(K); thus thesis; end;
+end;
+
+theorem Th2:
+for K be add-associative right_zeroed right_complementable associative
+         left_unital distributive (non empty doubleLoopStr),
+    a be Element of K
+for V be add-associative right_zeroed right_complementable VectSp-like
+        (non empty VectSpStr over K),
+     v be Vector of V holds (0.K)*v = 0.V & a*(0.V) = 0.V
+ proof
+  let F be add-associative right_zeroed right_complementable
+   associative left_unital distributive (non empty doubleLoopStr);
+  let x be Element of F;
+  let V be add-associative right_zeroed right_complementable VectSp-like
+         (non empty VectSpStr over F),
+     v be Vector of V;
+     v+(0.F)*v = (1_ F)*v + (0.F)*v by VECTSP_1:def 26
+     .= ((1_ F)+(0.F))*v by VECTSP_1:def 26
+     .= (1_ F)*v by RLVECT_1:10
+     .= v by VECTSP_1:def 26
+     .= v+0.V by RLVECT_1:10;
+    hence A1:(0.F)*v = 0.V by RLVECT_1:21;
+    hence x*(0.V) = (x*(0.F))*v by VECTSP_1:def 26
+     .= 0.V by A1,VECTSP_1:36;
+   end;
+
+theorem
+  for K be add-associative right_zeroed right_complementable
+      Abelian associative left_unital distributive (non empty doubleLoopStr)
+for V be VectSp of K
+for S, T be Subspace of V, v be Vector of V st
+ S /\ T = (0).V & v in S & v in T holds v = 0.V
+ proof
+  let K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr);
+  let V be VectSp of K, S, T be Subspace of V, v be Vector of V;
+  assume that
+ A1: S /\ T = (0).V and
+ A2: v in S and
+ A3: v in T;
+    v in the carrier of S & v in the carrier of T by A2,A3,RLVECT_1:def 1;
+  then v in (the carrier of S) /\ (the carrier of T) by XBOOLE_0:def 3;
+  then v in the carrier of (S /\ T) by VECTSP_5:def 2;
+  then v in {0.V} by A1,VECTSP_4:def 3;
+  hence thesis by TARSKI:def 1;
+ end;
+
+theorem Th4:
+for K be Field, V be VectSp of K
+for x be set, v be Vector of V holds
+x in Lin{v} iff ex a be Element of K st x =a*v
+ proof
+  let K be Field, V be VectSp of K, x be set, v be Vector of V;
+  thus x in Lin{v} implies ex a be Element of K st x = a * v
+   proof assume x in Lin{v};
+    then consider l be Linear_Combination of {v} such that
+   A1: x = Sum(l) by VECTSP_7:12;
+      Sum(l) = l.v * v by VECTSP_6:43;
+    hence thesis by A1;
+   end;
+  given a be Element of K such that A2: x = a * v;
+  deffunc F(set) = 0.K;
+  consider f be Function of the carrier of V, the carrier of K such that
+ A3: f.v = a and A4: for z be Vector of V st z <> v holds f.z = F(z)
+                                                             from LambdaSep1;
+  reconsider f as Element of Funcs(the carrier of V,the carrier of K)
+         by FUNCT_2:11;
+     now let z be Vector of V;
+    assume not z in {v};
+    then z <> v by TARSKI:def 1;
+    hence f.z = 0.K by A4;
+   end;
+  then reconsider f as Linear_Combination of V by VECTSP_6:def 4;
+    Carrier f c= {v}
+   proof let x be set;
+    assume A5: x in Carrier f;
+    then f.x <> 0.K by VECTSP_6:20;
+    then x = v by A4,A5;
+    hence thesis by TARSKI:def 1;
+   end;
+  then reconsider f as Linear_Combination of {v} by VECTSP_6:def 7;
+    Sum(f) = x by A2,A3,VECTSP_6:43;
+  hence thesis by VECTSP_7:12;
+end;
+
+theorem Th5:
+for K be Field, V be VectSp of K, v be Vector of V, a,b be Scalar of V
+ st v <> 0.V & a * v = b * v holds a = b
+ proof
+  let K be Field, V be VectSp of K, v be Vector of V,
+  a,b be Scalar of V such that
+ A1: v <> 0.V and
+ A2: a * v = b * v;
+    a*v - b*v = 0.V by A2,VECTSP_1:66;
+  then (a-b)*v = 0.V by VECTSP_4:103;
+  then a-b = 0.K by A1,VECTSP_1:60;
+  hence thesis by VECTSP_1:66;
+ end;
+
+theorem Th6:
+for K be add-associative right_zeroed right_complementable associative
+          Abelian left_unital distributive (non empty doubleLoopStr)
+for V be VectSp of K
+for W1,W2 be Subspace of V st V is_the_direct_sum_of W1,W2
+for v,v1,v2 be Vector of V st v1 in W1 & v2 in W2 & v = v1 + v2
+  holds v |-- (W1,W2) = [v1,v2]
+ proof
+  let K be add-associative right_zeroed right_complementable associative
+          Abelian left_unital distributive (non empty doubleLoopStr),
+  V be VectSp of K;
+ let W1,W2 be Subspace of V;
+  assume
+A1: V is_the_direct_sum_of W1,W2;
+  let v,v1,v2 be Vector of V;
+     [v1,v2]`1 = v1 & [v1,v2]`2 = v2 by MCART_1:7;
+  hence thesis by A1,VECTSP_5:def 6;
+ end;
+
+theorem Th7:
+for K be add-associative right_zeroed right_complementable associative
+          Abelian left_unital distributive (non empty doubleLoopStr)
+for V be VectSp of K
+for W1,W2 be Subspace of V st V is_the_direct_sum_of W1,W2
+for v,v1,v2 be Vector of V st v |-- (W1,W2) = [v1,v2] holds v = v1 + v2
+ proof
+ let K be add-associative right_zeroed right_complementable associative
+          Abelian left_unital distributive (non empty doubleLoopStr),
+  V be VectSp of K; let W1,W2 be Subspace of V such that
+A1: V is_the_direct_sum_of W1,W2;
+  let v,v1,v2 be Vector of V;
+  assume v |-- (W1,W2) = [v1,v2];
+   then (v |-- (W1,W2))`1 = v1 & (v |-- (W1,W2))`2 = v2 by MCART_1:7;
+  hence v = v1 + v2 by A1,VECTSP_5:def 6;
+ end;
+
+theorem Th8:
+for K be add-associative right_zeroed right_complementable associative
+          Abelian left_unital distributive (non empty doubleLoopStr)
+for V be VectSp of K
+for W1,W2 be Subspace of V st V is_the_direct_sum_of W1,W2
+for v,v1,v2 be Vector of V st v |-- (W1,W2) = [v1,v2]
+ holds v1 in W1 & v2 in W2
+ proof
+ let K be add-associative right_zeroed right_complementable associative
+          Abelian left_unital distributive (non empty doubleLoopStr),
+  V be VectSp of K; let W1,W2 be Subspace of V such that
+A1: V is_the_direct_sum_of W1,W2;
+  let v,v1,v2 be Vector of V;
+  assume v |-- (W1,W2) = [v1,v2];
+   then (v |-- (W1,W2))`1 = v1 & (v |-- (W1,W2))`2 = v2 by MCART_1:7;
+  hence thesis by A1,VECTSP_5:def 6;
+ end;
+
+theorem Th9:
+for K be add-associative right_zeroed right_complementable associative
+          Abelian left_unital distributive (non empty doubleLoopStr)
+for V be VectSp of K
+for W1,W2 be Subspace of V st V is_the_direct_sum_of W1,W2
+for v,v1,v2 be Vector of V st v |-- (W1,W2) = [v1,v2]
+  holds v |-- (W2,W1) = [v2,v1]
+ proof
+  let K be add-associative right_zeroed right_complementable associative
+          Abelian left_unital distributive (non empty doubleLoopStr),
+  V be VectSp of K; let W1,W2 be Subspace of V;
+  assume
+A1: V is_the_direct_sum_of W1,W2;
+then A2: V is_the_direct_sum_of W2,W1 by VECTSP_5:51;
+  let v,v1,v2 be Vector of V;
+  assume v |-- (W1,W2) = [v1,v2];
+    then A3:   (v |-- (W1,W2))`1 = v1 & (v |-- (W1,W2))`2 = v2 by MCART_1:7;
+    then A4:   v1 in W1 & v2 in W2 by A1,VECTSP_5:def 6;
+      v = v2 + v1 by A1,A3,VECTSP_5:def 6;
+  hence v |-- (W2,W1) = [v2,v1] by A2,A4,Th6;
+ end;
+
+theorem Th10:
+for K be add-associative right_zeroed right_complementable associative
+          Abelian left_unital distributive (non empty doubleLoopStr)
+for V be VectSp of K
+for W1,W2 be Subspace of V st V is_the_direct_sum_of W1,W2
+for v be Vector of V st v in W1 holds v |-- (W1,W2) = [v,0.V]
+  proof
+  let K be add-associative right_zeroed right_complementable associative
+          Abelian left_unital distributive (non empty doubleLoopStr),
+  V be VectSp of K; let W1,W2 be Subspace of V such that
+A1: V is_the_direct_sum_of W1,W2;
+   let v be Vector of V such that
+A2: v in W1;
+A3:  0.V in W2 by VECTSP_4:25;
+      v + 0.V = v by RLVECT_1:10;
+   hence v |-- (W1,W2) = [v,0.V] by A1,A2,A3,Th6;
+  end;
+
+theorem Th11:
+for K be add-associative right_zeroed right_complementable associative
+          Abelian left_unital distributive (non empty doubleLoopStr)
+for V be VectSp of K
+for W1,W2 be Subspace of V st V is_the_direct_sum_of W1,W2
+ for v be Vector of V st v in W2 holds v |-- (W1,W2) = [0.V,v]
+ proof
+  let K be add-associative right_zeroed right_complementable associative
+          Abelian left_unital distributive (non empty doubleLoopStr),
+  V be VectSp of K; let W1,W2 be Subspace of V;
+  assume V is_the_direct_sum_of W1,W2;
+then A1:  V is_the_direct_sum_of W2,W1 by VECTSP_5:51;
+  let v be Vector of V;
+  assume v in W2; then v |-- (W2,W1) = [v,0.V] by A1,Th10;
+  hence v |-- (W1,W2) = [0.V,v] by A1,Th9;
+ end;
+
+theorem Th12:
+for K be add-associative right_zeroed right_complementable associative
+          Abelian left_unital distributive (non empty doubleLoopStr)
+for V be VectSp of K
+for V1 be Subspace of V, W1 be Subspace of V1,
+  v be Vector of V st v in W1 holds v is Vector of V1
+ proof
+ let K be add-associative right_zeroed right_complementable associative
+          Abelian left_unital distributive (non empty doubleLoopStr),
+  V be VectSp of K; let V1 be Subspace of V, W1 be Subspace of V1,
+  v be Vector of V such that
+A1: v in W1;
+A2: the carrier of W1 c= the carrier of V1 by VECTSP_4:def 2;
+     v in the carrier of W1 by A1,RLVECT_1:def 1;
+  hence v is Vector of V1 by A2;
+ end;
+
+theorem Th13:
+for K be add-associative right_zeroed right_complementable associative
+          Abelian left_unital distributive (non empty doubleLoopStr)
+for V be VectSp of K
+for V1,V2,W be Subspace of V, W1,W2 be Subspace of W
+  st W1 = V1 & W2 = V2 holds W1 + W2 = V1 + V2
+ proof
+  let K be add-associative right_zeroed right_complementable associative
+          Abelian left_unital distributive (non empty doubleLoopStr),
+  V be VectSp of K;
+  let V1,V2,W be Subspace of V, W1,W2 be Subspace of W such that
+A1: W1 = V1 & W2 = V2;
+   reconsider W3 = W1 + W2 as Subspace of V by VECTSP_4:34;
+     now let v be Vector of V;
+    hereby assume
+A2:     v in W3;
+      then reconsider w = v as Vector of W by Th12;
+      consider w1,w2 be Vector of W such that
+A3:    w1 in W1 & w2 in W2 and
+A4:    w = w1 + w2 by A2,VECTSP_5:5;
+      reconsider v1 = w1, v2 = w2 as Vector of V by VECTSP_4:18;
+        v = v1 + v2 by A4,VECTSP_4:21;
+     hence v in V1 + V2 by A1,A3,VECTSP_5:5;
+    end;
+A5:  the carrier of W1 c= the carrier of W &
+    the carrier of W2 c= the carrier of W by VECTSP_4:def 2;
+    assume v in V1 + V2;
+     then consider v1,v2 be Vector of V such that
+A6:    v1 in V1 & v2 in V2 and
+A7:    v = v1 + v2 by VECTSP_5:5;
+        v1 in the carrier of W1 & v2 in the carrier of W2
+        by A1,A6,RLVECT_1:def 1;
+      then reconsider w1 = v1, w2 = v2 as Vector of W by A5;
+        v = w1 + w2 by A7,VECTSP_4:21;
+    hence v in W3 by A1,A6,VECTSP_5:5;
+   end;
+  hence W1 + W2 = V1 + V2 by VECTSP_4:38;
+ end;
+
+theorem Th14:
+for K be Field, V be VectSp of K, W be Subspace of V
+for v be Vector of V, w be Vector of W st v = w holds Lin{w} = Lin{v}
+ proof
+   let K be Field, V be VectSp of K, W be Subspace of V,
+   v be Vector of V, w be Vector of W such that
+A1: v = w;
+   reconsider W1 = Lin{w} as Subspace of V by VECTSP_4:34;
+     now let u be Vector of V;
+    hereby assume u in W1;
+      then consider a be Element of K such that
+A2:     u = a * w by Th4;
+        u = a * v by A1,A2,VECTSP_4:22;
+     hence u in Lin{v} by Th4;
+    end;
+    assume u in Lin{v};
+     then consider a be Element of K such that
+A3:     u = a * v by Th4;
+       u = a * w by A1,A3,VECTSP_4:22;
+    hence u in W1 by Th4;
+   end;
+  hence Lin{w} = Lin{v} by VECTSP_4:38;
+ end;
+
+theorem Th15:
+for K be Field, V be VectSp of K
+for v be Vector of V, X be Subspace of V st not v in X
+for y be Vector of X + Lin{v}, W be Subspace of X + Lin{v}
+  st v = y & W = X
+ holds X + Lin{v} is_the_direct_sum_of W,Lin{y}
+ proof
+  let K be Field, V be VectSp of K,
+      v be Vector of V, X be Subspace of V such that
+A1: not v in X;
+  let y be Vector of X + Lin{v}, W be Subspace of X + Lin{v}; assume
+A2: v = y & W = X;
+   then Lin{v} = Lin{y} by Th14;
+  hence the VectSpStr of X + Lin{v} = W + Lin{y} by A2,Th13;
+  assume W /\ Lin{y} <> (0).(X + Lin{v});
+   then consider z be Vector of X + Lin{v} such that
+A3:  not(z in W /\ Lin{y} iff z in (0).(X + Lin{v})) by VECTSP_4:38;
+  per cases by A3;
+  suppose that
+A4: z in W /\ Lin{y} and
+A5: not z in (0).(X + Lin{v});
+A6: z in W by A4,VECTSP_5:7;
+     z in Lin{y} by A4,VECTSP_5:7;
+   then consider a be Element of K such that
+A7: z = a * y by Th4;
+     now per cases;
+    suppose a = 0.K;
+      then z = 0.(X + Lin{v}) by A7,VECTSP_1:60;
+     hence contradiction by A5,VECTSP_4:25;
+    suppose
+A8:   a <> 0.K;
+        y = (1_ K)*y by VECTSP_1:def 26
+      .= a"*a*y by A8,VECTSP_1:def 22
+       .= a"*(a*y) by VECTSP_1:def 26;
+     hence contradiction by A1,A2,A6,A7,VECTSP_4:29;
+   end;
+  hence contradiction;
+  suppose that
+A9: not z in W /\ Lin{y} and
+A10: z in (0).(X + Lin{v});
+     z = 0.(X + Lin{v}) by A10,VECTSP_4:46;
+  hence contradiction by A9,VECTSP_4:25;
+ end;
+
+theorem Th16:
+for K be Field, V be VectSp of K, v be Vector of V, X be Subspace of V,
+  y be Vector of X + Lin{v}, W be Subspace of X + Lin{v}
+ st v = y & X = W & not v in X holds y |-- (W,Lin{y}) = [0.W,y]
+ proof
+  let K be Field, V be VectSp of K, v be Vector of V, X be Subspace of V,
+   y be Vector of X + Lin{v}, W be Subspace of X + Lin{v};
+     y in {y} by TARSKI:def 1;
+then A1: y in Lin{y} by VECTSP_7:13;
+  assume v = y & X = W & not v in X;
+  then X + Lin{v} is_the_direct_sum_of W,Lin{y} by Th15;
+  then y |-- (W,Lin{y}) = [0.(X + Lin{v}),y] by A1,Th11;
+  hence y |-- (W,Lin{y}) = [0.W,y] by VECTSP_4:19;
+ end;
+
+theorem Th17:
+for K be Field, V be VectSp of K, v be Vector of V, X be Subspace of V
+for y be Vector of X + Lin{v}, W be Subspace of X + Lin{v}
+ st v = y & X = W & not v in X
+for w be Vector of X + Lin{v} st w in X holds w |-- (W,Lin{y}) = [w,0.V]
+ proof
+  let K be Field, V be VectSp of K, v be Vector of V, X be Subspace of V,
+   y be Vector of X + Lin{v}, W be Subspace of X + Lin{v} such that
+A1: v = y & X = W & not v in X;
+  let w be Vector of X + Lin{v} such that
+A2: w in X;
+      X + Lin{v} is_the_direct_sum_of W,Lin{y} by A1,Th15;
+  then w |-- (W,Lin{y}) = [w,0.(X + Lin{v})] by A1,A2,Th10;
+  hence w |-- (W,Lin{y}) = [w,0.V] by VECTSP_4:19;
+ end;
+
+theorem Th18:
+for K be add-associative right_zeroed right_complementable associative
+          Abelian left_unital distributive (non empty doubleLoopStr),
+  V be VectSp of K
+for v be Vector of V, W1,W2 be Subspace of V
+ ex v1,v2 be Vector of V st v |-- (W1,W2) = [v1,v2]
+ proof
+  let K be add-associative right_zeroed right_complementable associative
+          Abelian left_unital distributive (non empty doubleLoopStr),
+  V be VectSp of K; let v be Vector of V, W1,W2 be Subspace of V;
+  take (v |-- (W1,W2))`1,(v |-- (W1,W2))`2;
+  thus v |-- (W1,W2) = [(v |-- (W1,W2))`1,v |-- (W1,W2)`2] by MCART_1:23;
+ end;
+
+theorem Th19:
+for K be Field, V be VectSp of K
+ for v be Vector of V, X be Subspace of V,
+   y be Vector of X + Lin{v}, W be Subspace of X + Lin{v}
+   st v = y & X = W & not v in X
+for w be Vector of X + Lin{v}
+ ex x be Vector of X,
+   r be Element of K st w |-- (W,Lin{y}) = [x,r*v]
+ proof
+ let K be Field, V be VectSp of K, v be Vector of V, X be Subspace of V,
+   y be Vector of X + Lin{v}, W be Subspace of X + Lin{v} such that
+A1: v = y & X = W & not v in X;
+  let w be Vector of X + Lin{v};
+A2:  X + Lin{v} is_the_direct_sum_of W,Lin{y} by A1,Th15;
+   consider v1,v2 be Vector of X + Lin{v} such that
+A3:  w |-- (W,Lin{y}) = [v1,v2] by Th18;
+     v1 in W by A2,A3,Th8;
+   then reconsider x = v1 as Vector of X by A1,RLVECT_1:def 1;
+     v2 in Lin{y} by A2,A3,Th8;
+   then consider r be Element of K such that
+A4:  v2 = r * y by Th4;
+  take x,r;
+  thus w |-- (W,Lin{y}) = [x,r*v] by A1,A3,A4,VECTSP_4:22;
+ end;
+
+theorem Th20:
+for K be Field, V be VectSp of K
+for v be Vector of V, X be Subspace of V,
+   y be Vector of X + Lin{v}, W be Subspace of X + Lin{v}
+   st v = y & X = W & not v in X
+ for w1,w2 be Vector of X + Lin{v}, x1,x2 be Vector of X,
+     r1,r2 be Element of K
+  st w1 |-- (W,Lin{y}) = [x1,r1*v] & w2 |-- (W,Lin{y}) = [x2,r2*v]
+  holds w1 + w2 |-- (W,Lin{y}) = [x1 + x2, (r1+r2)*v]
+ proof
+  let K be Field, V be VectSp of K, v be Vector of V, X be Subspace of V,
+   y be Vector of X + Lin{v}, W be Subspace of X + Lin{v}; assume
+A1: v = y & X = W & not v in X;
+then A2: X + Lin{v} is_the_direct_sum_of W,Lin{y} by Th15;
+  let w1,w2 be Vector of X + Lin{v}, x1,x2 be Vector of X,
+     r1,r2 be Element of K such that
+A3: w1 |-- (W,Lin{y}) = [x1,r1*v] & w2 |-- (W,Lin{y}) = [x2,r2*v];
+   reconsider z1 = x1, z2 = x2 as Vector of V by VECTSP_4:18;
+   reconsider y1 = x1, y2 = x2 as Vector of X + Lin{v} by A1,VECTSP_4:18;
+A4:  r1*v = r1*y & r2*v = r2*y by A1,VECTSP_4:22;
+    then y1 in W & y2 in W by A2,A3,Th8;
+then A5: y1 + y2 in W by VECTSP_4:28;
+       (r1+r2)*v = (r1+r2)*y by A1,VECTSP_4:22;
+then A6: (r1+r2)*v in Lin{y} by Th4;
+       w1 = y1 + r1*y & w2 = y2 + r2*y by A2,A3,A4,Th7;
+     then A7: w1 + w2 = y1 + r1*y + y2 + r2*y by RLVECT_1:def 6
+        .= y1 + y2 + r1*y + r2*y by RLVECT_1:def 6
+        .= y1 + y2 + (r1*y + r2*y) by RLVECT_1:def 6
+        .= y1 + y2 + (r1+r2)*y by VECTSP_1:def 26;
+A8: (r1+r2)*y = (r1+r2)*v by A1,VECTSP_4:22;
+     y1 + y2 = z1 + z2 by VECTSP_4:21
+    .= x1 + x2 by VECTSP_4:21;
+  hence w1 + w2 |-- (W,Lin{y}) = [x1 + x2, (r1+r2)*v]
+   by A2,A5,A6,A7,A8,Th6;
+ end;
+
+theorem Th21:
+for K be Field, V be VectSp of K
+for v be Vector of V, X be Subspace of V,
+   y be Vector of X + Lin{v}, W be Subspace of X + Lin{v}
+   st v = y & X = W & not v in X
+ for w be Vector of X + Lin{v}, x be Vector of X,
+  t,r be Element of K
+  st w |-- (W,Lin{y}) = [x,r*v]
+  holds t*w |-- (W,Lin{y}) = [t*x, t*r*v]
+ proof
+  let K be Field, V be VectSp of K, v be Vector of V, X be Subspace of V,
+   y be Vector of X + Lin{v}, W be Subspace of X + Lin{v}; assume
+A1: v = y & X = W & not v in X;
+then A2: X + Lin{v} is_the_direct_sum_of W,Lin{y} by Th15;
+  let w be Vector of X + Lin{v}, x be Vector of X,
+  t,r be Element of K such that
+A3: w |-- (W,Lin{y}) = [x,r*v];
+   reconsider z = x as Vector of X + Lin{v} by A1,VECTSP_4:18;
+   reconsider u = x as Vector of V by VECTSP_4:18;
+A4: t*z = t*u by VECTSP_4:22 .= t*x by VECTSP_4:22;
+A5: t*r*y = t*r*v by A1,VECTSP_4:22;
+    A6: t*z in W by A1,A4,RLVECT_1:def 1;
+A7: t*r*y in Lin{y} by Th4;
+     r*y = r*v by A1,VECTSP_4:22;
+   then t*w = t*(z + r*y) by A2,A3,Th7
+     .= t*z + t*(r*y) by VECTSP_1:def 26
+     .= t*z + t*r*y by VECTSP_1:def 26;
+  hence t*w |-- (W,Lin{y}) = [t*x, t*r*v] by A2,A4,A5,A6,A7,Th6;
+ end;
+
+begin
+:: Quotient Vector Space for non commutative Double Loop
+
+definition
+ let K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V be VectSp of K;
+ let W be Subspace of V;
+func CosetSet(V,W) ->non empty Subset-Family of V equals :Def2:
+ {A where A is Coset of W: not contradiction};
+ correctness
+  proof
+   set C = {A where A is Coset of W: not contradiction};
+   A1: C c= bool the carrier of V
+    proof
+     let x be set;assume x in C;
+     then consider A be Coset of W such that
+     A2: A = x;
+     thus x in bool the carrier of V by A2;
+    end;
+     the carrier of W is Coset of W by VECTSP_4:89;
+   then the carrier of W in C;
+   hence thesis by A1,SETFAM_1:def 7;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V be VectSp of K;
+ let W be Subspace of V;
+func addCoset(V,W) -> BinOp of CosetSet(V,W) means :Def3:
+ for A,B be Element of CosetSet(V,W)
+  for a,b be Vector of V st A = a + W & B = b + W holds it.(A,B) = (a+b)+W;
+ existence
+  proof
+   set C = CosetSet(V,W);
+ A1: C = {A where A is Coset of W: not contradiction} by Def2;
+   defpred P[set,set,set] means
+    for a,b be Vector of V st $1 = a + W & $2 = b + W holds $3 = (a+b)+W;
+A2: now
+     let A,B be Element of C;
+       A in C;
+     then consider A1 be Coset of W such that
+  A3: A1=A by A1;
+       B in C;
+     then consider B1 be Coset of W such that
+  A4: B1=B by A1;
+     consider a be Vector of V such that
+  A5: A1 = a+W by VECTSP_4:def 6;
+     consider b be Vector of V such that
+  A6: B1 = b+W by VECTSP_4:def 6;
+     reconsider z = (a+b) + W as Coset of W by VECTSP_4:def 6;
+       z in C by A1;
+     then reconsider z as Element of C;
+     take z;
+     thus P[A,B,z]
+      proof let a1,b1 be Vector of V;
+        assume A = a1 + W & B = b1 + W;
+        then A7: a1 in a+W & b1 in b +W by A3,A4,A5,A6,VECTSP_4:59;
+        then consider w1 be Vector of V such that
+  A8:   w1 in W & a1 = a+w1 by VECTSP_4:57;
+        consider w2 be Vector of V such that
+  A9:   w2 in W & b1 = b+w2 by A7,VECTSP_4:57;
+  A10:  a1+b1 = w1+ a + b+ w2 by A8,A9,RLVECT_1:def 6
+        .= w1+ (a + b)+ w2 by RLVECT_1:def 6
+        .= a + b+ (w1+ w2) by RLVECT_1:def 6;
+        w1+w2 in W by A8,A9,VECTSP_4:28;
+        then A11:  a1+b1 in (a+b)+W by A10,VECTSP_4:57;
+        a1+b1 in (a1+b1) +W by VECTSP_4:59;
+        hence z = (a1+b1)+W by A11,VECTSP_4:71;
+      end;
+    end;
+   consider f be Function of [:C,C:],C such that
+ A12:  for A,B be Element of C holds P[A,B, f.[A,B]] from FuncEx2D(A2);
+   reconsider f as BinOp of C;
+   take f;
+   let A,B be Element of C;
+   let a,b be Vector of V;
+   assume
+ A13: A = a + W & B = b + W;
+    thus f.(A,B) = f.[A,B] by BINOP_1:def 1
+     .= (a+b)+W by A12,A13;
+  end;
+ uniqueness
+  proof
+   let f1,f2 be BinOp of CosetSet(V,W) such that
+ A14: for A,B be Element of CosetSet(V,W)
+   for a,b be Vector of V st A = a + W & B = b + W holds f1.(A,B) = (a+b) +W
+       and
+ A15: for A,B be Element of CosetSet(V,W)
+   for a,b be Vector of V st A = a + W & B = b + W holds f2.(A,B) = (a+b) +W;
+   set C = CosetSet(V,W);
+ A16: C = {A where A is Coset of W: not contradiction} by Def2;
+      now
+     let A,B be Element of CosetSet(V,W);
+       A in C;
+     then consider A1 be Coset of W such that
+  A17: A1=A by A16;
+       B in C;
+     then consider B1 be Coset of W such that
+  A18: B1=B by A16;
+     consider a be Vector of V such that
+  A19: A1 = a+W by VECTSP_4:def 6;
+     consider b be Vector of V such that
+  A20: B1 = b+W by VECTSP_4:def 6;
+     thus f1.(A,B) = a+b + W by A14,A17,A18,A19,A20
+      .= f2.(A,B) by A15,A17,A18,A19,A20;
+    end;
+   hence thesis by BINOP_1:2;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V be VectSp of K;
+ let W be Subspace of V;
+func zeroCoset(V,W) -> Element of CosetSet(V,W) equals :Def4:
+ the carrier of W;
+ coherence
+  proof
+ A1: {A where A is Coset of W: not contradiction} = CosetSet(V,W) by Def2;
+     the carrier of W = 0.V+W by VECTSP_4:60;
+   then the carrier of W is Coset of W by VECTSP_4:def 6;
+   then the carrier of W in CosetSet(V,W) by A1;
+   hence thesis;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V be VectSp of K;
+ let W be Subspace of V;
+func lmultCoset(V,W) -> Function of [:the carrier of K, CosetSet(V,W):],
+                                    CosetSet(V,W) means :Def5:
+ for z be Element of K, A be Element of CosetSet(V,W)
+ for a be Vector of V st A = a+W holds it.(z,A) = z*a +W;
+ existence
+  proof
+   set C = CosetSet(V,W);
+   set cF = the carrier of K;
+  A1: C = {A where A is Coset of W: not contradiction} by Def2;
+   defpred P[Element of K, set, set] means
+      for a be Vector of V st $2 = a + W holds $3 = $1*a+W;
+  A2: now
+       let z be Element of K;
+       let A be Element of C;
+         A in C;
+       then consider A1 be Coset of W such that
+    A3: A1=A by A1;
+       consider a be Vector of V such that
+    A4: A1 = a+W by VECTSP_4:def 6;
+       reconsider c = z*a + W as Coset of W by VECTSP_4:def 6;
+         c in C by A1;
+       then reconsider c as Element of C;
+       take c;
+       thus P[z, A, c]
+        proof let a1 be Vector of V;
+          assume A = a1 + W;
+          then a1 in a+W by A3,A4,VECTSP_4:59;
+          then consider w1 be Vector of V such that
+    A5:   w1 in W & a1 = a+w1 by VECTSP_4:57;
+    A6:   z*a1 = z*a+z*w1 by A5,VECTSP_1:def 26;
+          z*w1 in W by A5,VECTSP_4:29;
+          then A7:  z*a1 in z*a+W by A6,VECTSP_4:57;
+          z*a1 in z*a1 +W by VECTSP_4:59;
+          hence c =z*a1 +W by A7,VECTSP_4:71;
+        end;
+      end;
+   consider f be Function of [:cF,C:],C such that
+  A8: for z be Element of K
+      for A be Element of C holds P[z,A, f.[z,A]] from FuncEx2D(A2);
+   take f;
+   let z be Element of K, A be Element of C, a be Vector of V;
+   assume
+   A9: A = a + W;
+   thus f.(z,A) = f.[z,A] by BINOP_1:def 1
+     .= z*a+W by A8,A9;
+   end;
+ uniqueness
+  proof
+   set C = CosetSet(V,W);
+   set cF = the carrier of K;
+   let f1,f2 be Function of [:cF, C:], C such that
+ A10: for z be Element of K, A be Element of CosetSet(V,W)
+     for a be Vector of V st A = a + W holds f1.(z,A) = z*a + W and
+ A11: for z be Element of K, A be Element of CosetSet(V,W)
+     for a be Vector of V st A = a + W holds f2.(z,A) = z*a + W;
+   set C = CosetSet(V,W);
+ A12: C = {A where A is Coset of W: not contradiction} by Def2;
+      now
+     let z be Element of K;
+     let A be Element of CosetSet(V,W);
+       A in C;
+     then consider A1 be Coset of W such that
+  A13: A1=A by A12;
+     consider a be Vector of V such that
+  A14: A1 = a+W by VECTSP_4:def 6;
+     thus f1.(z,A) = z*a + W by A10,A13,A14
+      .= f2.(z,A) by A11,A13,A14;
+    end;
+   hence thesis by BINOP_1:2;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V be VectSp of K;
+ let W be Subspace of V;
+func VectQuot(V,W) -> strict Abelian add-associative right_zeroed
+    right_complementable VectSp-like (non empty VectSpStr over K) means :Def6:
+  the carrier of it = CosetSet(V,W) &
+  the add of it = addCoset(V,W) &
+  the Zero of it = zeroCoset(V,W) &
+  the lmult of it = lmultCoset(V,W);
+ existence
+  proof
+   set C = CosetSet(V,W), aC = addCoset(V,W), zC = zeroCoset(V,W),
+      lC = lmultCoset(V,W), A = VectSpStr (# C, aC, zC, lC #);
+ A1: C = {AA where AA is Coset of W: not contradiction} by Def2;
+ A2:  A is Abelian
+    proof
+     let A1,A2 be Element of A;
+       A1 in C;
+     then consider aa be Coset of W such that
+   A3: A1=aa by A1;
+       A2 in C;
+     then consider bb be Coset of W such that
+   A4: A2=bb by A1;
+     consider a be Vector of V such that
+   A5: aa = a+W by VECTSP_4:def 6;
+     consider b be Vector of V such that
+   A6: bb = b+W by VECTSP_4:def 6;
+    thus A1+A2 = (the add of A).(A1,A2) by RLVECT_1:5
+     .= (a+b) +W by A3,A4,A5,A6,Def3
+     .= aC.(A2,A1) by A3,A4,A5,A6,Def3
+     .= A2+A1 by RLVECT_1:5;
+    end;
+ A7: A is add-associative
+    proof
+     let A1,A2,A3 be Element of A;
+       A1 in C;
+     then consider aa be Coset of W such that
+   A8: A1=aa by A1;
+       A2 in C;
+     then consider bb be Coset of W such that
+   A9: A2=bb by A1;
+       A3 in C;
+     then consider cc be Coset of W such that
+   A10: A3=cc by A1;
+     consider a be Vector of V such that
+   A11: aa = a+W by VECTSP_4:def 6;
+     consider b be Vector of V such that
+   A12: bb = b+W by VECTSP_4:def 6;
+     consider c be Vector of V such that
+   A13: cc = c+W by VECTSP_4:def 6;
+   A14: aC.(A1,A2) =a+b+W by A8,A9,A11,A12,Def3;
+   A15: aC.(A2,A3) =b+c+W by A9,A10,A12,A13,Def3;
+   then aC.(A2,A3) is Coset of W by VECTSP_4:def 6;
+   then A16: aC.(A2,A3) in C by A1;
+     thus A1+A2 + A3 = (the add of A).(A1+A2,A3) by RLVECT_1:5
+     .= (the add of A).((the add of A).(A1,A2),A3) by RLVECT_1:5
+     .= a+b+c +W by A10,A13,A14,Def3
+     .= a+(b+c) +W by RLVECT_1:def 6
+     .= aC.(A1,aC.(A2,A3)) by A8,A11,A15,A16,Def3
+     .= (the add of A).(A1,A2+A3) by RLVECT_1:5
+     .= A1+(A2+A3) by RLVECT_1:5;
+    end;
+A17: A is right_zeroed
+    proof
+     let A1 be Element of A;
+       A1 in C;
+     then consider aa be Coset of W such that
+   A18: A1=aa by A1;
+     consider a be Vector of V such that
+   A19: aa = a+W by VECTSP_4:def 6;
+   A20: 0.A = the Zero of A by RLVECT_1:def 2
+       .= the carrier of W by Def4
+       .= 0.V + W by VECTSP_4:60;
+     thus A1 + 0.A = (the add of A).(A1,0.A) by RLVECT_1:5
+     .= (a+0.V) +W by A18,A19,A20,Def3
+     .= A1 by A18,A19,RLVECT_1:10;
+    end;
+ A21: A is right_complementable
+    proof
+     let A1 be Element of A;
+       A1 in C;
+     then consider aa be Coset of W such that
+   A22: A1=aa by A1;
+     consider a be Vector of V such that
+   A23: aa = a+W by VECTSP_4:def 6;
+   A24: 0.A = the Zero of A by RLVECT_1:def 2
+        .= the carrier of W by Def4
+        .= 0.V + W by VECTSP_4:60;
+     set A2 = -a+ W;
+       A2 is Coset of W by VECTSP_4:def 6;
+     then A2 in C by A1;
+     then reconsider A2 as Element of A;
+     take A2;
+     thus A1 + A2 = (the add of A).(A1,A2) by RLVECT_1:5
+     .= (a+-a) +W by A22,A23,Def3
+     .= 0.A by A24,RLVECT_1:16;
+    end;
+       now
+      let x,y be Element of K;
+      let A1,A2 be Element of A;
+        A1 in C;
+      then consider aa be Coset of W such that
+   A25: A1=aa by A1;
+        A2 in C;
+      then consider bb be Coset of W such that
+   A26: A2=bb by A1;
+      consider a be Vector of V such that
+   A27: aa = a+W by VECTSP_4:def 6;
+      consider b be Vector of V such that
+   A28: bb = b+W by VECTSP_4:def 6;
+   A29: aC.(A1,A2) =a+b+W by A25,A26,A27,A28,Def3;
+   A30: lC.(x,A1) =x*a+W by A25,A27,Def5;
+      then lC.(x,A1) is Coset of W by VECTSP_4:def 6;
+   then A31:  lC.(x,A1) in C by A1;
+   A32: lC.(x,A1) = x*A1 & lC.(x,A2) = x*A2 by VECTSP_1:def 24;
+   A33: lC.(x,A2) =x*b+W by A26,A28,Def5;
+      then lC.(x,A2) is Coset of W by VECTSP_4:def 6;
+   then A34:  lC.(x,A2) in C by A1;
+    thus x*(A1+A2) = (the lmult of A).(x,A1+A2) by VECTSP_1:def 24
+        .= lC.(x,(the add of A).(A1,A2)) by RLVECT_1:5
+        .= x*(a+b) +W by A29,Def5
+        .= x*a+x*b +W by VECTSP_1:def 26
+        .= aC.(lC.(x,A1), lC.(x,A2)) by A30,A31,A33,A34,Def3
+        .= x*A1+x*A2 by A32,RLVECT_1:5;
+   A35: lC.(y,A1) =y*a+W by A25,A27,Def5;
+     then lC.(y,A1) is Coset of W by VECTSP_4:def 6;
+   then A36: lC.(y,A1) in C by A1;
+   A37: lC.(y,A1) = y*A1 by VECTSP_1:def 24;
+    thus (x+y)*A1 = (the lmult of A).(x+y,A1) by VECTSP_1:def 24
+      .= (x+y)*a +W by A25,A27,Def5
+      .= x*a + y*a + W by VECTSP_1:def 26
+      .= aC.(lC.(x,A1), lC.(y,A1)) by A30,A31,A35,A36,Def3
+      .= x*A1+y*A1 by A32,A37,RLVECT_1:5;
+    thus (x*y)*A1 = (the lmult of A).(x*y,A1) by VECTSP_1:def 24
+      .= (x*y)*a +W by A25,A27,Def5
+      .= x*(y*a) +W by VECTSP_1:def 26
+      .= lC.(x,y*A1) by A35,A37,Def5
+      .=x*(y*A1) by VECTSP_1:def 24;
+    thus (1_ K)*A1 = (the lmult of A).(1_ K,A1) by VECTSP_1:def 24
+      .= 1_ K*a +W by A25,A27,Def5
+      .= A1 by A25,A27,VECTSP_1:def 26;
+    end;
+   then reconsider A as strict Abelian add-associative right_zeroed
+     right_complementable VectSp-like (non empty VectSpStr over K)
+      by A2,A7,A17,A21,VECTSP_1:def 26;
+   take A;
+   thus thesis;
+  end;
+ uniqueness;
+end;
+
+theorem Th22:
+for K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr),
+  V be VectSp of K, W be Subspace of V holds
+zeroCoset(V,W) = 0.V + W & 0.(VectQuot(V,W)) = zeroCoset(V,W)
+proof
+ let F be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V be VectSp of F;
+ let W be Subspace of V;
+ A1: 0.V = 0.W by VECTSP_4:19;
+ A2: 0.W in W by RLVECT_1:def 1;
+ thus zeroCoset(V,W) = the carrier of W by Def4
+ .= 0.V + W by A1,A2,VECTSP_4:64;
+ thus 0.(VectQuot(V,W)) = the Zero of VectQuot(V,W) by RLVECT_1:def 2
+ .= zeroCoset(V,W) by Def6;
+end;
+
+theorem Th23:
+for K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr)
+for V be VectSp of K, W be Subspace of V, w be Vector of VectQuot(V,W)
+holds w is Coset of W & ex v be Vector of V st w = v + W
+ proof
+  let K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr),
+   V be VectSp of K, W be Subspace of V, w be Vector of VectQuot(V,W);
+  set qv = VectQuot(V,W), cs = CosetSet(V,W);
+ A1: cs = {A where A is Coset of W: not contradiction} by Def2;
+    cs = the carrier of qv by Def6;
+  then w in {A where A is Coset of W: not contradiction} by A1;
+  then consider A be Coset of W such that
+ A2: A= w;
+  thus thesis by A2,VECTSP_4:def 6;
+ end;
+
+theorem Th24:
+for K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr)
+for V be VectSp of K, W be Subspace of V, v be Vector of V
+holds v+W is Coset of W & v+W is Vector of VectQuot(V,W)
+ proof
+  let K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr),
+   V be VectSp of K, W be Subspace of V, v be Vector of V;
+  set cs = CosetSet(V,W);
+  thus A1: v + W is Coset of W by VECTSP_4:def 6;
+    cs = {A where A is Coset of W: not contradiction} by Def2;
+  then v+W in cs by A1;
+  hence thesis by Def6;
+ end;
+
+theorem
+  for K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr)
+for V be VectSp of K, W be Subspace of V, A be Coset of W
+holds A is Vector of VectQuot(V,W)
+ proof
+  let K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr),
+   V be VectSp of K, W be Subspace of V, A be Coset of W;
+  set cs = CosetSet(V,W);
+    cs = {B where B is Coset of W: not contradiction} by Def2;
+  then A in cs;
+  hence thesis by Def6;
+ end;
+
+theorem
+  for K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr),
+ V be VectSp of K, W be Subspace of V
+for A be Vector of VectQuot(V,W), v be Vector of V, a be Scalar of V
+st A = v + W holds a*A = a*v + W
+ proof
+  let K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr),
+   V be VectSp of K, W be Subspace of V;
+  set vw = VectQuot(V,W), lm = the lmult of vw;
+  let A be Vector of vw, v be Vector of V, a be Scalar of V;
+  assume A1: A = v + W;
+    A is Coset of W by Th23;
+  then A in {B where B is Coset of W: not contradiction};
+  then reconsider w=A as Element of CosetSet(V,W) by Def2;
+  thus a*A = lm.(a,A) by VECTSP_1:def 24
+   .= (lmultCoset(V,W)).(a,w) by Def6
+   .= a*v + W by A1,Def5;
+ end;
+
+theorem
+  for K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr),
+ V be VectSp of K, W be Subspace of V
+for A1,A2 be Vector of VectQuot(V,W), v1,v2 be Vector of V
+st A1 = v1 + W & A2 = v2 + W holds A1 + A2 = v1 + v2 + W
+ proof
+ let K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr),
+   V be VectSp of K, W be Subspace of V;
+  set vw = VectQuot(V,W), ad = the add of vw;
+  let A1,A2 be Vector of vw, v1,v2 be Vector of V;
+  assume that
+ A1: A1 = v1 + W and
+ A2: A2 = v2 + W;
+    A1 is Coset of W & A2 is Coset of W by Th23;
+  then A1 in {B where B is Coset of W: not contradiction} &
+  A2 in {B where B is Coset of W: not contradiction};
+  then reconsider w1=A1,w2=A2 as Element of CosetSet(V,W) by Def2;
+  thus A1+A2 = ad.[A1,A2] by RLVECT_1:def 3
+   .= ad.(A1,A2) by BINOP_1:def 1
+   .= (addCoset(V,W)).(w1,w2) by Def6
+   .= (v1 + v2) + W by A1,A2,Def3;
+ end;
+
+begin
+:: Auxiliary Facts about Functionals
+
+theorem Th28:
+for K be Field, V be VectSp of K
+ for X be Subspace of V, fi be linear-Functional of X,
+     v be Vector of V,
+     y be Vector of X + Lin {v} st v = y & not v in X
+   for r be Element of K
+    ex psi be linear-Functional of X + Lin{v} st
+       psi|the carrier of X=fi & psi.y = r
+proof
+  let K be Field,
+      V be VectSp of K,
+      X be Subspace of V,
+     fi be linear-Functional of X,
+      v be Vector of V,
+      y be Vector of X + Lin{v}; assume that
+ A1: v = y and
+ A2: not v in X;
+   let r be Element of K;
+   reconsider W1 = X as Subspace of X + Lin{v} by VECTSP_5:11;
+    defpred
+  P[Element of (X + Lin{v}), Element of K] means
+    for x be Vector of X, s be Element of K st
+      ($1 |-- (W1,Lin{y}))`1 = x & ($1 |-- (W1,Lin{y}))`2 = s*v
+     holds $2 = fi.x + s*r;
+A3:     for e be Element of (X + Lin{v})
+        ex a be Element of K st P[e,a]
+  proof
+  let e be Element of (X + Lin{v});
+       consider x be Vector of X, s be Element of K such that
+ A4:     e |-- (W1,Lin{y}) = [x,s*v]
+        by A1,A2,Th19;
+      take u = fi.x + s*r;
+      let x' be Vector of X, t be Element of K
+       such that
+ A5:     (e |-- (W1,Lin{y}))`1 = x' & (e |-- (W1,Lin{y}))`2 = t*v;
+ A6:    v <> 0.V by A2,VECTSP_4:25;
+         s*v = t * v by A4,A5,MCART_1:7;
+       then t = s by A6,Th5;
+      hence u = fi.x' + t*r by A4,A5,MCART_1:7;
+     end;
+    consider f be Function of the carrier of X + Lin{v},the carrier of K
+    such that
+ A7:  for e be Element of X + Lin{v}
+  holds P[e,f.e] from FuncExD(A3);
+ A8: dom fi = the carrier of X by FUNCT_2:def 1;
+ A9: now let a be set; assume
+     a in dom fi;
+      then reconsider x = a as Vector of X;
+        X is Subspace of X + Lin{v} by VECTSP_5:11;
+      then the carrier of X c= the carrier of X + Lin{v} by VECTSP_4:def 2;
+      then reconsider v1 = x as Vector of X + Lin{v} by TARSKI:def 3;
+        v1 in X by RLVECT_1:def 1;
+    then (v1 |-- (W1,Lin{y})) = [v1,0.V] by A1,A2,Th17
+                          .= [v1,0.K*v] by Th2;
+ then A10:
+ (v1 |-- (W1,Lin{y}))`1 = x & (v1 |-- (W1,Lin{y}))`2 = 0.K*v by MCART_1:7;
+     thus fi.a = fi.x + 0.K by RLVECT_1:10
+         .= fi.x + 0.K*r by VECTSP_1:39
+         .= f.a by A7,A10;
+    end;
+    reconsider f as Functional of X + Lin{v};
+ A11: f is additive
+     proof let v1,v2 be Vector of X + Lin{v};
+       consider x1 be Vector of X, s1 be Element of K
+       such that
+ A12:    v1 |-- (W1,Lin{y}) = [x1,s1*v] by A1,A2,Th19;
+       consider x2 be Vector of X, s2 be Element of K
+       such that
+ A13:    v2 |-- (W1,Lin{y}) = [x2,s2*v] by A1,A2,Th19;
+ A14:       (v1 |-- (W1,Lin{y}))`1 = x1 & (v1 |-- (W1,Lin{y}))`2 = s1*v
+          by A12,MCART_1:7;
+ A15:       (v2 |-- (W1,Lin{y}))`1 = x2 & (v2 |-- (W1,Lin{y}))`2 = s2*v
+          by A13,MCART_1:7;
+         v1 + v2 |-- (W1,Lin{y}) = [x1 +x2,(s1+s2)*v] by A1,A2,A12,A13,Th20;
+       then (v1 + v2 |-- (W1,Lin{y}))`1 = x1 + x2 &
+        (v1 + v2 |-- (W1,Lin{y}))`2 = (s1+ s2)*v by MCART_1:7;
+      hence f.(v1+v2) = fi.(x1 + x2) + (s1 + s2)*r by A7
+            .= fi.(x1 + x2) + (s1*r + s2*r) by VECTSP_1:def 12
+            .= fi.(x1) + fi.(x2) + (s1*r + s2*r) by HAHNBAN1:def 11
+            .= fi.(x1) + fi.(x2) + s1*r + s2*r by RLVECT_1:def 6
+            .= fi.(x1) + s1*r + fi.(x2) + s2*r by RLVECT_1:def 6
+            .= fi.(x1) + s1*r + (fi.(x2) + s2*r) by RLVECT_1:def 6
+            .= f.v1 + (fi.(x2) + s2*r) by A7,A14
+            .= f.v1+f.v2 by A7,A15;
+     end;
+      f is homogeneous
+     proof let v0 be Vector of X + Lin{v}, t be Element of K;
+       consider x0 be Vector of X, s0 be Element of K
+       such that
+ A16:    v0 |-- (W1,Lin{y}) = [x0,s0*v] by A1,A2,Th19;
+ A17:       (v0 |-- (W1,Lin{y}))`1 = x0 & (v0 |-- (W1,Lin{y}))`2 = s0*v
+          by A16,MCART_1:7;
+         t*v0 |-- (W1,Lin{y}) = [t*x0,t*s0*v] by A1,A2,A16,Th21;
+       then (t*v0 |-- (W1,Lin{y}))`1 = t*x0 &
+        (t*v0 |-- (W1,Lin{y}))`2 = t*s0*v by MCART_1:7;
+      hence f.(t*v0) = fi.(t*x0) + t*s0*r by A7
+         .= t*(fi.x0) + t*s0*r by HAHNBAN1:def 12
+         .= t*(fi.x0) + t*(s0*r) by VECTSP_1:def 16
+         .= t*(fi.x0 + s0*r) by VECTSP_1:def 11
+         .= t*f.v0 by A7,A17;
+     end;
+    then reconsider f as linear-Functional of X + Lin{v} by A11;
+   take f;
+  A18:  dom f = the carrier of X + Lin{v} by FUNCT_2:def 1;
+    X is Subspace of X + Lin{v} by VECTSP_5:11;
+   then dom fi c= dom f by A8,A18,VECTSP_4:def 2;
+   then dom fi = dom f /\ the carrier of X by A8,XBOOLE_1:28;
+   hence f|the carrier of X=fi by A9,FUNCT_1:68;
+ A19:  y |-- (W1,Lin{y}) = [0.W1,y] by A1,A2,Th16;
+ then A20: (y |-- (W1,Lin{y}))`1 = 0.X by MCART_1:7;
+      (y |-- (W1,Lin{y}))`2 = y by A19,MCART_1:7
+    .= (1_ K)*v by A1,VECTSP_1:def 26;
+  hence f.y = fi.(0.X) + (1_ K)*r by A7,A20
+   .= 0.K + (1_ K)*r by HAHNBAN1:def 13
+   .= 0.K + r by VECTSP_1:def 19
+   .= r by RLVECT_1:10;
+ end;
+
+definition
+ let K be right_zeroed (non empty LoopStr);
+ let V be non empty VectSpStr over K;
+cluster additive 0-preserving Functional of V;
+ existence
+  proof take 0Functional(V); thus thesis; end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+      (non empty doubleLoopStr);
+ let V be right_zeroed (non empty VectSpStr over K);
+cluster additive -> 0-preserving Functional of V;
+ coherence
+  proof
+  let f be Functional of V;
+   assume
+  A1: f is additive;
+     f.(0.V) = f.(0.V+0.V) by RLVECT_1:def 7
+   .= f.(0.V) + f.(0.V) by A1,HAHNBAN1:def 11;
+   hence f.(0.V) = 0.K by RLVECT_1:22;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable associative
+          left_unital distributive (non empty doubleLoopStr);
+ let V be add-associative right_zeroed right_complementable VectSp-like
+          (non empty VectSpStr over K);
+cluster homogeneous -> 0-preserving Functional of V;
+ coherence
+  proof
+   let f be Functional of V;
+   assume A1: f is homogeneous;
+   thus f.(0.V) = f.(0.K * 0.V) by Th2
+   .= 0.K * f.(0.V) by A1,HAHNBAN1:def 12
+   .= 0.K by VECTSP_1:39;
+  end;
+end;
+
+definition
+ let K be non empty ZeroStr;
+ let V be non empty VectSpStr over K;
+cluster 0Functional(V) -> constant;
+ coherence
+  proof
+   set f = 0Functional(V);
+   let x,y be set; assume
+     x in dom f & y in dom f;
+   then reconsider v=x, w=y as Vector of V;
+   thus f.x = f.v
+   .= 0.K by HAHNBAN1:22
+   .= f.w by HAHNBAN1:22
+   .= f.y;
+  end;
+end;
+
+definition
+ let K be non empty ZeroStr;
+ let V be non empty VectSpStr over K;
+cluster constant Functional of V;
+ existence
+  proof take 0Functional(V); thus thesis; end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+         (non empty doubleLoopStr);
+ let V be right_zeroed (non empty VectSpStr over K);
+ let f be 0-preserving Functional of V;
+redefine attr f is constant means :Def7:
+ f = 0Functional(V);
+ compatibility
+  proof
+  A1: f.(0.V) = 0.K by HAHNBAN1:def 13;
+  A2: the carrier of V = dom f by FUNCT_2:def 1;
+   hereby assume
+    A3: f is constant;
+        now let v be Vector of V;
+       thus f.v = 0.K by A1,A2,A3,SEQM_3:def 5
+       .=(0Functional(V)).v by HAHNBAN1:22;
+      end;
+     hence f = 0Functional(V) by FUNCT_2:113;
+   end;
+   assume A4: f = 0Functional(V);
+      now let x,y be set such that
+     A5: x in dom f & y in dom f;
+     reconsider v=x, w=y as Vector of V by A5;
+     thus f.x = (0Functional(V)).v by A4
+     .= 0.K by HAHNBAN1:22
+     .= (0Functional(V)).w by HAHNBAN1:22
+     .= f.y by A4;
+    end;
+   hence f is constant by SEQM_3:def 5;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+          (non empty doubleLoopStr);
+ let V be right_zeroed (non empty VectSpStr over K);
+cluster constant additive 0-preserving Functional of V;
+ existence
+  proof take 0Functional(V); thus thesis; end;
+end;
+
+definition
+ let K be non empty 1-sorted;
+ let V be non empty VectSpStr over K;
+cluster non constant -> non trivial Functional of V;
+coherence
+ proof
+  let f be Functional of V;
+  assume f is non constant;
+  then consider n1,n2 be set such that
+ A1:  n1 in dom f & n2 in dom f and
+ A2:  f.n1 <> f.n2 by SEQM_3:def 5;
+ A3:  [n1,f.n1] in f & [n2,f.n2] in f by A1,FUNCT_1:8;
+ assume A4: f is trivial;
+  per cases by A4,REALSET1:def 12;
+   suppose f = {};
+    hence contradiction by A3;
+   suppose ex x be set st f = {x};
+    then consider x be set such that
+   A5: f={x};
+      [n1,f.n1] = x & x=[n2,f.n2] by A3,A5,TARSKI:def 1;
+    hence contradiction by A2,ZFMISC_1:33;
+  end;
+end;
+
+definition
+ let K be Field;
+ let V be non trivial VectSp of K;
+cluster additive homogeneous non constant non trivial Functional of V;
+existence
+ proof
+  consider v be Vector of V such that
+A1: v <> 0.V by ANPROJ_1:def 8;
+  consider W be Linear_Compl of Lin{v};
+    V is_the_direct_sum_of W, Lin{v} by VECTSP_5:def 5;
+
+then A2: the VectSpStr of V = W + Lin{v} & W /\ Lin{v} = (0).V
+                by VECTSP_5:def 4;
+  then reconsider y = v as Vector of W+Lin{v};
+     now assume v in W;
+     then A3: v in the carrier of W by RLVECT_1:def 1;
+        v in {v} by TARSKI:def 1;
+      then v in Lin{v} by VECTSP_7:13;
+      then v in the carrier of Lin{v} by RLVECT_1:def 1;
+      then v in (the carrier of W)/\(the carrier of Lin{v}) by A3,XBOOLE_0:def
+3;
+      then v in the carrier of (W /\ Lin{v}) by VECTSP_5:def 2;
+      then v in {0.V} by A2,VECTSP_4:def 3;
+      hence contradiction by A1,TARSKI:def 1;
+   end;
+  then consider psi be linear-Functional of W + Lin{v} such that
+A4:  psi|the carrier of W=0Functional(W) & psi.y = 1_ K by Th28;
+  reconsider f = psi as Functional of V by A2;
+  take f;
+ thus f is additive
+   proof
+    let v1,v2 be Vector of V;
+    reconsider w1=v1, w2 =v2 as Vector of W +Lin{v} by A2;
+      v1+v2 = (the add of (W + Lin{v})).[w1,w2] by A2,RLVECT_1:def 3
+     .= w1+w2 by RLVECT_1:def 3;
+    hence thesis by HAHNBAN1:def 11;
+   end;
+thus f is homogeneous
+   proof
+    let v1 be Vector of V, a be Element of K;
+    reconsider w1=v1 as Vector of W +Lin{v} by A2;
+      a*v1 = (the lmult of (W+Lin{v})).(a,w1) by A2,VECTSP_1:def 24
+     .= a*w1 by VECTSP_1:def 24;
+    hence thesis by HAHNBAN1:def 12;
+   end;
+   then reconsider f1=f as homogeneous Functional of V;
+ thus f is non constant
+   proof
+    assume A5: f is constant;
+   A6:  1_ K <> 0.K by VECTSP_1:def 21;
+   A7: the carrier of V = dom f by FUNCT_2:def 1;
+      f1.(0.V)=0.K by HAHNBAN1:def 13;
+    hence contradiction by A4,A5,A6,A7,SEQM_3:def 5;
+   end;
+ thus f is non trivial
+  proof
+    set x = [v,1_ K], y = [0.V, 0.K];
+    assume A8: f is trivial;
+   A9:  1_ K <> 0.K by VECTSP_1:def 21;
+   A10: the carrier of V = dom f by FUNCT_2:def 1;
+     f1.(0.V)=0.K by HAHNBAN1:def 13;
+   then A11: x in f & y in f by A4,A10,FUNCT_1:8;
+    per cases by A8,REALSET1:def 12;
+    suppose f = {};
+    hence contradiction by A4,A10,FUNCT_1:8;
+    suppose ex z be set st f = {z};
+    then consider z be set such that
+  A12: f = {z};
+      z = x & z = y by A11,A12,TARSKI:def 1;
+    hence contradiction by A9,ZFMISC_1:33;
+   end;
+ end;
+end;
+
+definition
+ let K be Field;
+ let V be non trivial VectSp of K;
+cluster trivial -> constant Functional of V;
+ coherence
+  proof let f be Functional of V such that
+  A1: f is trivial;
+   assume f is not constant;
+   then reconsider f as non constant Functional of V;
+     f is not trivial;
+   hence contradiction by A1;
+  end;
+end;
+
+definition
+ let K be Field;
+ let V be non trivial VectSp of K;
+ let v be Vector of V;
+ let W be Linear_Compl of Lin{v};
+ assume A1: v <> 0.V;
+func coeffFunctional(v,W) -> non constant non trivial linear-Functional of V
+means :Def8: it.v = 1_ K & it|the carrier of W = 0Functional(W);
+existence
+ proof
+    V is_the_direct_sum_of W, Lin{v} by VECTSP_5:def 5;
+then A2: the VectSpStr of V = W + Lin{v} & W /\ Lin{v} = (0).V
+                by VECTSP_5:def 4;
+  then reconsider y = v as Vector of W+Lin{v};
+     now assume v in W;
+     then A3: v in the carrier of W by RLVECT_1:def 1;
+        v in {v} by TARSKI:def 1;
+      then v in Lin{v} by VECTSP_7:13;
+      then v in the carrier of Lin{v} by RLVECT_1:def 1;
+      then v in (the carrier of W)/\(the carrier of Lin{v}) by A3,XBOOLE_0:def
+3;
+      then v in the carrier of (W /\ Lin{v}) by VECTSP_5:def 2;
+      then v in {0.V} by A2,VECTSP_4:def 3;
+      hence contradiction by A1,TARSKI:def 1;
+   end;
+  then consider psi be linear-Functional of W + Lin{v} such that
+A4:  psi|the carrier of W=0Functional(W) & psi.y = 1_ K by Th28;
+  reconsider f = psi as Functional of V by A2;
+A5: f is additive
+   proof
+    let v1,v2 be Vector of V;
+    reconsider w1=v1, w2 =v2 as Vector of W +Lin{v} by A2;
+      v1+v2 = (the add of (W + Lin{v})).[w1,w2] by A2,RLVECT_1:def 3
+     .= w1+w2 by RLVECT_1:def 3;
+    hence thesis by HAHNBAN1:def 11;
+   end;
+   f is homogeneous
+   proof
+    let v1 be Vector of V, a be Element of K;
+    reconsider w1=v1 as Vector of W +Lin{v} by A2;
+      a*v1 = (the lmult of (W+Lin{v})).(a,w1) by A2,VECTSP_1:def 24
+     .= a*w1 by VECTSP_1:def 24;
+    hence thesis by HAHNBAN1:def 12;
+   end;
+  then reconsider f as linear-Functional of V by A5;
+ A6: f is non constant
+   proof
+    assume A7: f is constant;
+    A8:  1_ K <> 0.K by VECTSP_1:def 21;
+    A9: the carrier of V = dom f by FUNCT_2:def 1;
+      f.(0.V)=0.K by HAHNBAN1:def 13;
+    hence contradiction by A4,A7,A8,A9,SEQM_3:def 5;
+   end;
+    f is non trivial
+   proof
+    set x = [v,1_ K], y = [0.V, 0.K];
+    assume A10: f is trivial;
+   A11:  1_ K <> 0.K by VECTSP_1:def 21;
+   A12: the carrier of V = dom f by FUNCT_2:def 1;
+     f.(0.V)=0.K by HAHNBAN1:def 13;
+   then A13: x in f & y in f by A4,A12,FUNCT_1:8;
+    per cases by A10,REALSET1:def 12;
+    suppose f = {};
+    hence contradiction by A4,A12,FUNCT_1:8;
+    suppose ex z be set st f = {z};
+    then consider z be set such that
+  A14: f = {z};
+      z = x & z = y by A13,A14,TARSKI:def 1;
+    hence contradiction by A11,ZFMISC_1:33;
+   end;
+  then reconsider f as non constant non trivial linear-Functional of V by A6;
+  take f;
+  thus thesis by A4;
+ end;
+uniqueness
+ proof
+  let f1, f2 be non constant non trivial linear-Functional of V such that
+A15: f1.v = 1_ K & f1|the carrier of W = 0Functional(W) and
+A16: f2.v = 1_ K & f2|the carrier of W = 0Functional(W);
+    V is_the_direct_sum_of W, Lin{v} by VECTSP_5:def 5;
+then A17: the VectSpStr of V = W + Lin{v} & W /\ Lin{v} = (0).V by VECTSP_5:def
+4;
+     now let w be Vector of V;
+      w in W+Lin{v} by A17,RLVECT_1:def 1;
+    then consider v1,v2 be Vector of V such that
+   A18: v1 in W & v2 in Lin{v} & w = v1 +v2 by VECTSP_5:5;
+    consider a be Element of K such that
+   A19: v2 = a* v by A18,Th4;
+   A20: v1 in the carrier of W by A18,RLVECT_1:def 1;
+   then A21: f1.v1 = (f2|the carrier of W).v1 by A15,A16,FUNCT_1:72
+      .= f2.v1 by A20,FUNCT_1:72;
+    thus f1.w= f1.v1 + f1.(a*v) by A18,A19,HAHNBAN1:def 11
+    .= f1.v1 + a* f1.v by HAHNBAN1:def 12
+    .= f1.v1 + f2.(a*v) by A15,A16,HAHNBAN1:def 12
+    .= f2.w by A18,A19,A21,HAHNBAN1:def 11;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+end;
+
+theorem Th29:
+for K be Field, V be non trivial VectSp of K
+for f be non constant 0-preserving Functional of V
+ex v be Vector of V st v <> 0.V & f.v <> 0.K
+ proof
+  let K be Field, V be non trivial VectSp of K,
+    f be non constant 0-preserving Functional of V; assume
+ A1: for v be Vector of V st v <> 0.V holds f.v = 0.K;
+ A2: f.(0.V) =0.K by HAHNBAN1:def 13;
+     now
+    let x,y be set; assume
+      x in dom f & y in dom f;
+    then reconsider v=x,w=y as Vector of V;
+    thus f.x = f.v
+     .= 0.K by A1,A2
+     .= f.w by A1,A2
+     .= f.y;
+    end;
+  hence contradiction by SEQM_3:def 5;
+ end;
+
+theorem Th30:
+for K be Field, V be non trivial VectSp of K
+ for v be Vector of V, a be Scalar of V
+ for W be Linear_Compl of Lin{v} st v <> 0.V holds
+  (coeffFunctional(v,W)).(a*v) = a
+proof
+  let K be Field, V be non trivial VectSp of K,
+    v be Vector of V, a be Scalar of V, W be Linear_Compl of Lin{v};
+  assume
+ A1: v <> 0.V;
+  set cf = coeffFunctional(v,W);
+  thus cf.(a*v) = a*cf.v by HAHNBAN1:def 12
+  .= a*(1_ K) by A1,Def8
+  .= a by VECTSP_1:def 19;
+ end;
+
+theorem Th31:
+for K be Field, V be non trivial VectSp of K
+ for v,w be Vector of V
+ for W be Linear_Compl of Lin{v} st v <> 0.V & w in W holds
+  (coeffFunctional(v,W)).w = 0.K
+ proof
+   let K be Field, V be non trivial VectSp of K,
+      v,w be Vector of V, W be Linear_Compl of Lin{v};
+   assume that
+  A1: v <> 0.V and
+  A2: w in W;
+   reconsider s = w as Vector of W by A2,RLVECT_1:def 1;
+   set cf = coeffFunctional(v,W), cw = the carrier of W;
+     w in cw by A2,RLVECT_1:def 1;
+   hence cf.(w) = (cf|cw).w by FUNCT_1:72
+    .= (0Functional(W)).s by A1,Def8
+    .= 0.K by HAHNBAN1:22;
+  end;
+
+theorem
+  for K be Field, V be non trivial VectSp of K
+ for v,w be Vector of V, a be Scalar of V
+ for W be Linear_Compl of Lin{v} st v <> 0.V & w in W holds
+  (coeffFunctional(v,W)).(a*v+w) = a
+ proof
+  let K be Field, V be non trivial VectSp of K,
+    v,w be Vector of V, a be Scalar of V, W be Linear_Compl of Lin{v};
+  assume that
+ A1: v <> 0.V and
+ A2: w in W;
+  set cf = coeffFunctional(v,W);
+  thus cf.(a*v+w) = cf.(a*v)+cf.w by HAHNBAN1:def 11
+  .= cf.(a*v) + 0.K by A1,A2,Th31
+  .= cf.(a*v) by RLVECT_1:def 7
+  .= a by A1,Th30;
+ end;
+
+theorem
+  for K be non empty LoopStr
+for V be non empty VectSpStr over K
+for f,g be Functional of V, v be Vector of V holds (f-g).v = f.v - g.v
+ proof
+  let K be non empty LoopStr;
+  let V be non empty VectSpStr over K;
+  let f,g be Functional of V, v be Vector of V;
+  thus (f-g).v = (f+-g).v by HAHNBAN1:def 8
+   .= f.v + (-g).v by HAHNBAN1:def 6
+   .= f.v +- g.v by HAHNBAN1:def 7
+   .= f.v - g.v by RLVECT_1:def 11;
+ end;
+
+definition
+ let K be Field;
+ let V be non trivial VectSp of K;
+cluster V*' -> non trivial;
+ coherence
+  proof
+   assume A1: V*' is trivial;
+   consider g be non constant linear-Functional of V;
+  A2: g <> 0Functional(V);
+  A3: 0.(V*') = the Zero of (V*') by RLVECT_1:def 2;
+   reconsider g as Element of (V*') by HAHNBAN1:def 14;
+     g = 0.(V*') by A1,ANPROJ_1:def 8;
+   hence contradiction by A2,A3,HAHNBAN1:def 14;
+  end;
+end;
+
+begin
+:: Kernel of Additive Functional and Subspace Generated by Kernel of
+::  Linear Functional. Linear Functionals in Quotient Vector Space
+::  generated by Additive Functional
+
+definition
+ let K be non empty ZeroStr;
+ let V be non empty VectSpStr over K;
+ let f be Functional of V;
+func ker f -> Subset of V equals :Def9:
+   {v where v is Vector of V : f.v = 0.K};
+  coherence
+   proof
+    set A = {v where v is Vector of V : f.v = 0.K};
+      A c= the carrier of V
+     proof
+      let x be set; assume x in A;
+      then consider v be Vector of V such that
+    A1: v=x & f.v = 0.K;
+      thus thesis by A1;
+     end;
+    hence A is Subset of V;
+   end;
+end;
+
+definition
+ let K be right_zeroed (non empty LoopStr);
+ let V be non empty VectSpStr over K;
+ let f be 0-preserving Functional of V;
+cluster ker f -> non empty;
+  coherence
+   proof
+       f.(0.V) = 0.K & ker f = {v where v is Vector of V : f.v = 0.K}
+      by Def9,HAHNBAN1:def 13;
+     then 0.V in ker f;
+     hence thesis;
+    end;
+end;
+
+theorem Th34:
+for K be add-associative right_zeroed right_complementable
+    associative left_unital distributive (non empty doubleLoopStr)
+for V be add-associative right_zeroed right_complementable
+         VectSp-like (non empty VectSpStr over K)
+for f be linear-Functional of V holds ker f is lineary-closed
+ proof
+  let F be add-associative right_zeroed right_complementable
+    associative left_unital distributive (non empty doubleLoopStr);
+  let V be add-associative right_zeroed right_complementable
+         VectSp-like (non empty VectSpStr over F);
+  let f be linear-Functional of V;
+  set V1 = ker f;
+ A1: V1 = {a where a is Vector of V : f.a = 0.F} by Def9;
+  thus for v,u be Vector of V st v in V1 & u in V1
+        holds v + u in V1
+    proof
+     let v,u be Vector of V;
+     assume
+    A2: v in V1 & u in V1;
+     then consider a be Vector of V such that
+    A3: a = v & f.a= 0.F by A1;
+    consider b be Vector of V such that
+    A4: b = u & f.b= 0.F by A1,A2;
+      f.(v+u) = 0.F+0.F by A3,A4,HAHNBAN1:def 11
+     .= 0.F by RLVECT_1:10;
+    hence thesis by A1;
+    end;
+   let a be Element of F;
+   let v be Vector of V;
+   assume v in V1;
+   then consider w be Vector of V such that
+  A5: w=v & f.w=0.F by A1;
+     f.(a*v) = a * 0.F by A5,HAHNBAN1:def 12
+    .=0.F by VECTSP_1:36;
+   hence thesis by A1;
+ end;
+
+definition
+ let K be non empty ZeroStr;
+ let V be non empty VectSpStr over K;
+ let f be Functional of V;
+attr f is degenerated means :Def10:  ker f <> {0.V};
+end;
+
+definition
+ let K be non degenerated (non empty doubleLoopStr);
+ let V be non trivial (non empty VectSpStr over K);
+cluster non degenerated 0-preserving -> non constant Functional of V;
+ coherence
+  proof
+   let f be Functional of V; assume that
+  A1: f is non degenerated and
+  A2: f is 0-preserving and
+  A3: f is constant;
+  A4: f.(0.V) =0.K by A2,HAHNBAN1:def 13;
+  A5: dom f = the carrier of V by FUNCT_2:def 1;
+     now assume
+    A6: for v be Vector of V st v <> 0.V holds f.v = 0.K;
+       the carrier of V c= ker f
+      proof
+       let x be set; assume x in the carrier of V;
+       then reconsider v=x as Vector of V;
+       per cases;
+        suppose v = 0.V;
+         then x in {w where w is Vector of V: f.w=0.K} by A4;
+         hence thesis by Def9;
+        suppose v <> 0.V;
+         then f.v = 0.K by A6;
+         then x in {w where w is Vector of V: f.w=0.K};
+         hence thesis by Def9;
+      end;
+    then the carrier of V = ker f by XBOOLE_0:def 10
+    .= {0.V} by A1,Def10;
+    then the carrier of V is trivial by REALSET1:def 12;
+    hence contradiction by REALSET1:def 13;
+   end;
+  then consider v be Vector of V such that
+  A7: v <> 0.V & f. v <> 0.K;
+  thus contradiction by A3,A4,A5,A7,SEQM_3:def 5;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+       Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V be VectSp of K;
+ let f be linear-Functional of V;
+func Ker f -> strict non empty Subspace of V means :Def11:
+     the carrier of it = ker f;
+ existence
+  proof
+     ker f is lineary-closed by Th34; hence thesis by VECTSP_4:42;
+  end;
+ uniqueness by VECTSP_4:37;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V be VectSp of K;
+ let W be Subspace of V;
+ let f be additive Functional of V;
+ assume A1: the carrier of W c= ker f;
+func
+ QFunctional(f,W) -> additive Functional of VectQuot(V,W) means :Def12:
+ for A be Vector of VectQuot(V,W), a be Vector of V
+  st A = a+W holds it.A = f.a;
+ existence
+  proof
+   set vq = VectQuot(V,W);
+   set C = CosetSet(V,W);
+   set aC = addCoset(V,W);
+ A2: C = the carrier of vq by Def6;
+   defpred P[set,set] means
+     for a be Vector of V st $1 = a+W holds $2 = f.a;
+ A3: now
+      let A be Vector of vq;
+      consider a be Vector of V such that
+    A4: A = a+W by Th23;
+      take y = f.a;
+      thus P[A, y]
+       proof let a1 be Vector of V;
+         assume A = a1+W;
+         then a in a1+W by A4,VECTSP_4:59;
+         then consider w be Vector of V such that
+    A5:  w in W & a = a1 + w by VECTSP_4:57;
+    A6:  ker f = {v where v is Vector of V : f.v = 0.K} by Def9;
+         w in the carrier of W by A5,RLVECT_1:def 1;
+         then w in ker f by A1;
+         then consider aa be Vector of V such that
+    A7:  aa=w & f.aa =0.K by A6;
+         thus y = f.a1+f.w by A5,HAHNBAN1:def 11
+           .= f.a1 by A7,RLVECT_1:def 7;
+       end;
+    end;
+   consider ff be Function of the carrier of vq, the carrier of K such that
+ A8: for A be Vector of vq holds P[A, ff.A] from FuncExD(A3);
+   reconsider ff as Functional of vq;
+      now
+     let A,B be Vector of vq;
+     consider a be Vector of V such that
+   A9: A = a+W by Th23;
+     consider b be Vector of V such that
+   A10: B = b+W by Th23;
+   A11: the add of vq = addCoset(V,W) by Def6;
+   A12: aC.(A,B) =a+b+W by A2,A9,A10,Def3;
+    thus ff.(A+B) = ff.((the add of vq).(A,B)) by RLVECT_1:5
+    .= f.(a+b) by A8,A11,A12
+    .= f.a + f.b by HAHNBAN1:def 11
+    .= ff.A + f.b by A8,A9
+    .= ff.A + ff.B by A8,A10;
+    end;
+   then reconsider ff as additive Functional of vq by HAHNBAN1:def 11;
+   take ff;
+   thus thesis by A8;
+  end;
+ uniqueness
+  proof
+   set vq = VectQuot(V,W);
+   let f1,f2 be additive Functional of vq such that
+ A13: for A be Vector of VectQuot(V,W)
+     for a be Vector of V st A = a+W holds f1.A = f.a and
+ A14: for A be Vector of VectQuot(V,W)
+     for a be Vector of V st A = a+W holds f2.A = f.a;
+      now
+     let A be Vector of vq;
+     consider a be Vector of V such that
+   A15: A = a+W by Th23;
+     thus f1.A = f.a by A13,A15
+     .= f2.A by A14,A15;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+end;
+
+theorem Th35:
+for K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr)
+for V be VectSp of K, W be Subspace of V
+for f be linear-Functional of V st the carrier of W c= ker f
+ holds QFunctional(f,W) is homogeneous
+ proof
+  let F be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr);
+  let V be VectSp of F;
+  let W be Subspace of V;
+  let f be linear-Functional of V;
+  assume
+ A1: the carrier of W c= ker f;
+  set qf = QFunctional(f,W);
+  set vq = VectQuot(V,W);
+     now
+    let A be Vector of vq;
+    let r be Scalar of vq;
+    set C = CosetSet(V,W);
+ A2: C = the carrier of vq by Def6;
+ A3: C = {AA where AA is Coset of W: not contradiction} by Def2;
+      A in C by A2;
+    then consider aa be Coset of W such that
+ A4: A = aa by A3;
+    consider a be Vector of V such that
+ A5: aa = a+W by VECTSP_4:def 6;
+      r*A = (the lmult of vq).(r,A) by VECTSP_1:def 24
+      .= (lmultCoset(V,W)).(r,A) by Def6
+      .= r*a+ W by A2,A4,A5,Def5;
+   hence qf.(r*A) = f.(r*a) by A1,Def12
+      .= r*f.a by HAHNBAN1:def 12
+      .= r*(qf.A) by A1,A4,A5,Def12;
+  end;
+ hence thesis by HAHNBAN1:def 12;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V be VectSp of K;
+ let f be linear-Functional of V;
+func CQFunctional(f) -> linear-Functional of VectQuot(V,Ker f) equals :Def13:
+  QFunctional(f,Ker f);
+ correctness
+  proof
+     the carrier of (Ker f) = ker f by Def11;
+   hence thesis by Th35;
+  end;
+end;
+
+theorem Th36:
+for K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr)
+for V be VectSp of K, f be linear-Functional of V
+for A be Vector of VectQuot(V,Ker f), v be Vector of V st A = v+Ker f holds
+ (CQFunctional(f)).A = f.v
+ proof
+  let K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr),
+     V be VectSp of K, f be linear-Functional of V;
+  let A be Vector of VectQuot(V,Ker f), v be Vector of V; assume
+ A1: A = v+Ker f;
+ A2: the carrier of (Ker f) = ker f by Def11;
+  thus (CQFunctional(f)).A = (QFunctional(f,Ker f)).A by Def13
+  .= f.v by A1,A2,Def12;
+ end;
+
+definition
+ let K be Field;
+ let V be non trivial VectSp of K;
+ let f be non constant linear-Functional of V;
+cluster CQFunctional(f) -> non constant;
+ coherence
+ proof
+   set W = Ker f, qf = CQFunctional(f), qv = VectQuot(V,W);
+   assume qf is constant;
+  then A1: qf = 0Functional(qv) by Def7;
+   consider v be Vector of V such that
+  A2: v <> 0.V & f.v <> 0.K by Th29;
+   reconsider cv = v+W as Vector of qv by Th24;
+     0.K = qf.cv by A1,HAHNBAN1:22
+   .= f.v by Th36;
+   hence contradiction by A2;
+  end;
+end;
+
+definition
+ let K be add-associative right_zeroed right_complementable
+    Abelian associative left_unital distributive (non empty doubleLoopStr);
+ let V be VectSp of K;
+ let f be linear-Functional of V;
+cluster CQFunctional(f) -> non degenerated;
+ coherence
+ proof
+  set qf = CQFunctional(f), W = Ker f, qV = VectQuot(V,W);
+  A1: ker qf = {w where w is Vector of qV: qf.w=0.K} by Def9;
+  A2: the carrier of qV = CosetSet(V,W) by Def6;
+  A3: CosetSet(V,W) = {A where A is Coset of W: not contradiction} by Def2;
+  A4: qf = QFunctional(f,W) by Def13;
+  A5: the carrier of W = ker f by Def11;
+  A6: ker f = {w where w is Vector of V: f.w=0.K} by Def9;
+  thus ker qf c= {0.qV}
+   proof
+    let x be set; assume
+      x in ker qf;
+    then consider w be Vector of qV such that
+   A7: x= w & qf.w=0.K by A1;
+      w in CosetSet(V,W) by A2;
+    then consider A be Coset of W such that
+   A8: w = A by A3;
+    consider v be Vector of V such that
+   A9: A = v + W by VECTSP_4:def 6;
+      f.v = 0.K by A4,A5,A7,A8,A9,Def12;
+    then v in ker f by A6;
+    then v in W by A5,RLVECT_1:def 1;
+    then v+W = the carrier of W by VECTSP_4:64;
+    then w = zeroCoset(V,W) by A8,A9,Def4
+    .= 0.qV by Th22;
+    hence thesis by A7,TARSKI:def 1;
+   end;
+  thus {0.qV} c= ker qf
+   proof
+    let x be set; assume
+      x in {0.qV};
+    then A10: x = 0.qV by TARSKI:def 1;
+      qf.(0.qV) = 0.K by HAHNBAN1:def 13;
+    hence thesis by A1,A10;
+   end;
+  end;
+end;

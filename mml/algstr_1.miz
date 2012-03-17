@@ -1,0 +1,1111 @@
+:: From Loops to Abelian Multiplicative Groups with Zero
+::  by Micha{\l} Muzalewski and Wojciech Skaba
+::
+:: Received July 10, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, BOOLE, MIDSP_1, REALSET1, ARYTM_1, VECTSP_1, CAT_1,
+      VECTSP_2, BINOP_1, RELAT_1, ARYTM_3, FUNCT_1, ALGSTR_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, REAL_1, BINOP_1, STRUCT_0,
+      VECTSP_1, RLVECT_1, VECTSP_2, MIDSP_1;
+ constructors BINOP_1, VECTSP_2, MIDSP_1, REAL_1, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, VECTSP_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions RLVECT_1, STRUCT_0;
+ theorems RLVECT_1, VECTSP_1, VECTSP_2, TARSKI, XCMPLX_1;
+
+begin :: GROUPS
+
+ reserve L for non empty LoopStr;
+ reserve a,b,c,x,y,z for Element of L;
+
+theorem Th1: (for a holds a + 0.L = a)
+     & (for a ex x st a+x = 0.L)
+     & (for a,b,c holds (a+b)+c = a+(b+c))
+   implies (a+b = 0.L implies b+a = 0.L)
+  proof
+    assume A1: (for a holds a + 0.L = a)
+               & (for a ex x st a+x = 0.L)
+               & (for a,b,c holds (a+b)+c = a+(b+c));
+        assume A2: a+b = 0.L;
+        consider x such that A3: b + x = 0.L by A1;
+        thus b+a = (b+a) + (b+x) by A1,A3
+                .= ((b+a) + b) + x by A1
+                .= (b + 0.L) + x by A1,A2
+                .= 0.L by A1,A3;
+  end;
+
+theorem Th2: (for a holds a + 0.L = a)
+     & (for a ex x st a+x = 0.L)
+     & (for a,b,c holds (a+b)+c = a+(b+c))
+   implies 0.L+a = a+0.L
+  proof
+    assume A1: (for a holds a + 0.L = a)
+               & (for a ex x st a+x = 0.L)
+               & (for a,b,c holds (a+b)+c = a+(b+c));
+    then consider x such that A2: a + x = 0.L;
+    thus 0.L+a = a + (x+a) by A1,A2
+              .= a+0.L by A1,A2,Th1;
+  end;
+
+theorem Th3: (for a holds a + 0.L = a)
+     & (for a ex x st a+x = 0.L)
+     & (for a,b,c holds (a+b)+c = a+(b+c))
+   implies for a ex x st x+a = 0.L
+  proof
+    assume A1: (for a holds a + 0.L = a)
+               & (for a ex x st a+x = 0.L)
+               & (for a,b,c holds (a+b)+c = a+(b+c));
+    let a;
+    consider x such that A2: a + x = 0.L by A1;
+      x+a=0.L by A1,A2,Th1;
+    hence thesis;
+  end;
+
+definition let x be set;
+ canceled 2;
+
+  func Extract x -> Element of {x} equals x;
+  coherence by TARSKI:def 1;
+ end;
+
+definition
+ func L_Trivial -> strict LoopStr equals
+ :Def4: LoopStr (# {{}}, op2, Extract {} #);
+ correctness;
+end;
+
+definition
+ cluster L_Trivial -> non empty;
+ coherence
+  proof
+     thus the carrier of L_Trivial is non empty by Def4;
+  end;
+end;
+
+canceled;
+
+theorem Th5:
+ for a,b being Element of L_Trivial holds a = b
+  proof
+   let a,b be Element of L_Trivial;
+   thus a = {} by Def4,TARSKI:def 1 .= b by Def4,TARSKI:def 1;
+  end;
+
+theorem
+    for a,b be Element of L_Trivial holds a+b = 0.L_Trivial
+ by Th5;
+
+Lm1: for a be Element of L_Trivial holds a + 0.L_Trivial = a
+ by Th5;
+
+Lm2: for a be Element of L_Trivial holds 0.L_Trivial + a = a
+ by Th5;
+
+Lm3: for a,b be Element of L_Trivial
+             ex x be Element of L_Trivial st a+x=b
+proof
+  let a,b be Element of L_Trivial;
+  take x = 0.L_Trivial;
+  thus a+x = b by Th5;
+end;
+
+Lm4: for a,b be Element of L_Trivial
+             ex x be Element of L_Trivial st x+a=b
+proof
+  let a,b be Element of L_Trivial;
+  take x = 0.L_Trivial;
+  thus x+a = b by Th5;
+end;
+
+Lm5: for a,x,y be Element of L_Trivial holds a+x=a+y
+    implies x=y by Th5;
+
+Lm6: for a,x,y be Element of L_Trivial holds x+a=y+a
+   implies x=y by Th5;
+
+definition let IT be non empty LoopStr;
+  attr IT is left_zeroed means
+:Def5: for a being Element of IT holds 0.IT + a = a;
+end;
+
+definition let L be non empty LoopStr;
+  attr L is add-left-cancelable means :Def6:
+    for a,b,c being Element of L holds
+      a + b = a + c implies b = c;
+
+  attr L is add-right-cancelable means :Def7:
+    for a,b,c being Element of L holds
+      b + a = c + a implies b = c;
+
+  attr L is add-left-invertible means :Def8:
+    for a,b be Element of L
+      ex x being Element of L st x + a = b;
+
+  attr L is add-right-invertible means :Def9:
+    for a,b be Element of L
+      ex x being Element of L st a + x = b;
+end;
+
+definition let IT be non empty LoopStr;
+  attr IT is Loop-like means :Def10:
+    IT is add-left-cancelable add-right-cancelable
+          add-left-invertible add-right-invertible;
+end;
+
+definition
+  cluster Loop-like -> add-left-cancelable add-right-cancelable
+             add-left-invertible add-right-invertible (non empty LoopStr);
+  coherence by Def10;
+  cluster add-left-cancelable add-right-cancelable
+          add-left-invertible add-right-invertible ->
+              Loop-like (non empty LoopStr);
+  coherence by Def10;
+end;
+
+theorem Th7:
+  for L being non empty LoopStr holds
+    L is Loop-like iff
+     (for a,b be Element of L
+        ex x being Element of L st a+x=b)
+     & (for a,b be Element of L
+        ex x being Element of L st x+a=b)
+     & (for a,x,y be Element of L holds a+x=a+y implies x=y)
+     & (for a,x,y be Element of L holds x+a=y+a implies x=y)
+proof
+  let L be non empty LoopStr;
+  hereby assume L is Loop-like;
+then A1: L is add-left-cancelable add-right-cancelable
+          add-left-invertible add-right-invertible by Def10;
+    hence for a,b be Element of L
+      ex x being Element of L st a+x=b by Def9;
+    thus for a,b be Element of L
+        ex x being Element of L st x+a=b by A1,Def8;
+    thus for a,x,y be Element of L holds a+x=a+y implies x=y
+     by A1,Def6;
+    let a,x,y be Element of L;
+    thus x+a=y+a implies x=y by A1,Def7;
+   end;
+   assume (for a,b be Element of L
+        ex x being Element of L st a+x=b)
+     & (for a,b be Element of L
+        ex x being Element of L st x+a=b)
+     & (for a,x,y be Element of L holds a+x=a+y implies x=y)
+     & (for a,x,y be Element of L holds x+a=y+a implies x=y);
+   hence L is add-left-cancelable add-right-cancelable
+         add-left-invertible add-right-invertible by Def6,Def7,Def8,Def9;
+end;
+
+Lm7: for a,b,c be Element of L_Trivial
+    holds (a+b)+c = a+(b+c) by Th5;
+
+Lm8: for a,b be Element of L_Trivial holds a+b = b+a by Th5;
+
+definition
+  cluster L_Trivial -> add-associative Loop-like right_zeroed left_zeroed;
+  coherence by Def5,Lm1,Lm2,Lm3,Lm4,Lm5,Lm6,Lm7,Th7,RLVECT_1:def 6,def 7;
+end;
+
+definition
+ cluster strict left_zeroed right_zeroed Loop-like (non empty LoopStr);
+  existence
+   proof
+     take L_Trivial;
+     thus thesis;
+   end;
+end;
+
+definition
+  mode Loop is left_zeroed right_zeroed Loop-like (non empty LoopStr);
+end;
+
+definition
+ cluster strict add-associative Loop;
+  existence
+   proof
+    take L_Trivial;
+    thus thesis;
+   end;
+end;
+
+definition
+  mode Group is add-associative Loop;
+end;
+
+definition
+ cluster Loop-like -> right_complementable (non empty LoopStr);
+ coherence
+  proof let L be (non empty LoopStr);
+  assume L is Loop-like;
+   hence for a being Element of L
+   ex x being Element of L st a+x = 0.L by Th7;
+  end;
+ cluster add-associative right_zeroed right_complementable
+              -> left_zeroed Loop-like (non empty LoopStr);
+ coherence
+  proof let L;
+    assume
+A1:  L is add-associative right_zeroed right_complementable;
+     then reconsider G = L
+       as add-associative right_zeroed right_complementable
+             (non empty LoopStr);
+    thus for a holds 0.L + a = a by A1,RLVECT_1:10;
+        now thus for a,b ex x st a+x=b by A1,RLVECT_1:20;
+      thus for a,b ex x st x+a=b
+        proof let a,b;
+          reconsider a' = a, b' = b as Element of G;
+          reconsider x = b' + -a' as Element of L;
+         take x;
+            (b'+-a')+a' = b'+(-a'+a') by RLVECT_1:def 6
+                 .= b'+0.G by RLVECT_1:16
+                 .= b by RLVECT_1:10;
+          hence thesis;
+         end;
+       thus (for a,x,y be Element of L
+              holds a+x=a+y implies x=y) &
+             for a,x,y be Element of L holds x+a=y+a implies x=y
+ by A1,RLVECT_1:21;
+     end;
+     hence L is Loop-like by Th7;
+  end;
+end;
+
+canceled;
+
+theorem Th9:
+   L is Group iff
+     (for a holds a + 0.L = a)
+   & (for a ex x st a+x = 0.L)
+   & (for a,b,c holds (a+b)+c = a+(b+c))
+  proof
+    thus L is Group implies
+           (for a holds a + 0.L = a)
+         & (for a ex x st a+x = 0.L)
+         & (for a,b,c holds (a+b)+c = a+(b+c))
+ by Th7,RLVECT_1:def 6,def 7;
+        assume A1: (for a holds a + 0.L = a)
+                  & (for a ex x st a+x = 0.L)
+                  & (for a,b,c holds (a+b)+c = a+(b+c));
+      now thus
+         A2: for a be Element of L holds 0.L + a = a
+             proof
+               let a;
+               thus 0.L+a = a+0.L by A1,Th2 .= a by A1;
+             end;
+           thus for a,b be Element of L
+             ex x being Element of L st a+x=b
+             proof
+               let a,b;
+               consider y such that A3: a+y = 0.L by A1;
+               take x = y+b;
+               thus a+x = 0.L + b by A1,A3
+                       .= b by A2;
+             end;
+           thus for a,b be Element of L
+             ex x being Element of L st x+a=b
+             proof
+               let a,b;
+               consider y such that A4: y+a = 0.L by A1,Th3;
+               take x = b+y;
+               thus x+a = b + 0.L by A1,A4
+                       .= b by A1;
+             end;
+           thus for a,x,y be Element of L
+              holds a+x=a+y implies x=y
+             proof
+               let a,x,y;
+               consider z such that A5: z+a = 0.L by A1,Th3;
+               assume a+x = a+y;
+               then (z+a)+x = z+(a+y) by A1 .= (z+a)+y by A1;
+               hence x = 0.L + y by A2,A5 .= y by A2;
+             end;
+           thus for a,x,y be Element of L
+              holds x+a=y+a implies x=y
+             proof
+               let a,x,y;
+               consider z such that A6: a+z = 0.L by A1;
+               assume x+a = y+a;
+               then x+(a+z) = (y+a)+z by A1 .= y+(a+z) by A1;
+               hence x = y + 0.L by A1,A6 .= y by A1;
+             end;
+         end;
+       hence thesis by A1,Def5,Th7,RLVECT_1:def 6,def 7;
+  end;
+
+definition
+  cluster L_Trivial -> Abelian;
+  coherence by Lm8,RLVECT_1:def 5;
+end;
+
+definition
+ cluster strict Abelian Group;
+  existence
+   proof take L_Trivial;
+    thus thesis;
+   end;
+end;
+
+canceled;
+
+theorem
+     L is Abelian Group iff
+     (for a holds a + 0.L = a)
+   & (for a ex x st a+x = 0.L)
+   & (for a,b,c holds (a+b)+c = a+(b+c))
+   & (for a,b holds a+b = b+a) by Th9,RLVECT_1:def 5;
+
+definition
+ func multL_Trivial -> strict multLoopStr equals
+ :Def11: multLoopStr (# {{}}, op2, Extract {} #);
+ correctness;
+end;
+
+definition
+ cluster multL_Trivial -> non empty;
+ coherence
+  proof
+    thus the carrier of multL_Trivial is non empty by Def11;
+  end;
+end;
+
+canceled 6;
+
+theorem Th18:
+ for a,b being Element of multL_Trivial holds a = b
+  proof
+   let a,b be Element of multL_Trivial;
+   thus a = {} by Def11,TARSKI:def 1 .= b by Def11,TARSKI:def 1;
+  end;
+
+theorem
+     for a,b be Element of multL_Trivial
+  holds a*b = 1_ multL_Trivial by Th18;
+
+Lm9: for a be Element of multL_Trivial
+   holds a * 1_ multL_Trivial = a by Th18;
+
+Lm10: for a be Element of multL_Trivial
+   holds 1_ multL_Trivial * a = a by Th18;
+
+Lm11: for a,b be Element of multL_Trivial
+             ex x be Element of multL_Trivial st a*x=b
+         proof
+           let a,b be Element of multL_Trivial;
+           take x = 1_ multL_Trivial;
+           thus a*x = b by Th18;
+         end;
+
+Lm12: for a,b be Element of multL_Trivial
+             ex x be Element of multL_Trivial st x*a=b
+         proof
+           let a,b be Element of multL_Trivial;
+           take x = 1_ multL_Trivial;
+           thus x*a = b by Th18;
+         end;
+
+   Lm13: for a,x,y be Element of multL_Trivial
+   holds a*x=a*y implies x=y by Th18;
+
+   Lm14: for a,x,y be Element of multL_Trivial
+   holds x*a=y*a implies x=y by Th18;
+
+  definition let IT be non empty multLoopStr;
+    attr IT is invertible means :Def12:
+       (for a,b   be Element of IT
+       ex x being Element of IT st a*x=b)
+       & (for a,b   be Element of IT
+       ex x being Element of IT st x*a=b);
+    attr IT is cancelable means :Def13:
+       (for a,x,y be Element of IT holds a*x=a*y implies x=y)
+       & (for a,x,y be Element of IT holds x*a=y*a implies x=y);
+  end;
+
+definition
+ cluster strict well-unital invertible cancelable (non empty multLoopStr);
+  existence
+   proof
+      multL_Trivial is well-unital invertible cancelable
+ by Def12,Def13,Lm9,Lm10,Lm11,Lm12,Lm13,Lm14,VECTSP_2:def 2;
+    hence thesis;
+   end;
+end;
+
+definition
+    mode multLoop is well-unital invertible cancelable (non empty multLoopStr);
+end;
+
+  definition
+    cluster multL_Trivial -> well-unital invertible cancelable;
+    coherence by Def12,Def13,Lm9,Lm10,Lm11,Lm12,Lm13,Lm14,VECTSP_2:def 2;
+  end;
+
+Lm15: for a,b,c be Element of multL_Trivial
+    holds (a*b)*c = a*(b*c) by Th18;
+
+definition
+ cluster strict associative multLoop;
+  existence
+   proof multL_Trivial is associative by Lm15,VECTSP_1:def 16;
+    hence thesis;
+   end;
+end;
+
+definition
+    mode multGroup is associative multLoop;
+end;
+
+ reserve L for non empty multLoopStr;
+ reserve a,b,c,x,y,z for Element of L;
+
+Lm16: (for a holds a * 1_ L = a)
+     & (for a ex x st a*x = 1_ L)
+     & (for a,b,c holds (a*b)*c = a*(b*c))
+   implies (a*b = 1_ L implies b*a = 1_ L)
+  proof
+    assume A1: (for a holds a * 1_ L = a)
+               & (for a ex x st a*x = 1_ L)
+               & (for a,b,c holds (a*b)*c = a*(b*c));
+        assume A2: a*b = 1_ L;
+        consider x such that A3: b * x = 1_ L by A1;
+        thus b*a = (b*a) * (b*x) by A1,A3
+                .= ((b*a) * b) * x by A1
+                .= (b * 1_ L) * x by A1,A2
+                .= 1_ L by A1,A3;
+  end;
+
+Lm17: (for a holds a * 1_ L = a)
+     & (for a ex x st a*x = 1_ L)
+     & (for a,b,c holds (a*b)*c = a*(b*c))
+   implies 1_ L*a = a*1_ L
+  proof
+    assume A1: (for a holds a * 1_ L = a)
+               & (for a ex x st a*x = 1_ L)
+               & (for a,b,c holds (a*b)*c = a*(b*c));
+    then consider x such that A2: a * x = 1_ L;
+    thus 1_ L*a = a * (x*a) by A1,A2
+              .= a*1_ L by A1,A2,Lm16;
+  end;
+
+Lm18: (for a holds a * 1_ L = a)
+     & (for a ex x st a*x = 1_ L)
+     & (for a,b,c holds (a*b)*c = a*(b*c))
+   implies for a ex x st x*a = 1_ L
+  proof
+    assume A1: (for a holds a * 1_ L = a)
+               & (for a ex x st a*x = 1_ L)
+               & (for a,b,c holds (a*b)*c = a*(b*c));
+    let a;
+    consider x such that A2: a * x = 1_ L by A1;
+      x*a=1_ L by A1,A2,Lm16;
+    hence thesis;
+  end;
+
+canceled 2;
+
+theorem Th22:
+   L is multGroup iff
+     (for a holds a * 1_ L = a)
+   & (for a ex x st a*x = 1_ L)
+   & (for a,b,c holds (a*b)*c = a*(b*c))
+  proof
+    thus L is multGroup implies
+           (for a holds a * 1_ L = a)
+         & (for a ex x st a*x = 1_ L)
+         & (for a,b,c holds (a*b)*c = a*(b*c))
+ by Def12,VECTSP_1:def 16,VECTSP_2:def 2;
+        assume A1: (for a holds a * 1_ L = a)
+                  & (for a ex x st a*x = 1_ L)
+                  & (for a,b,c holds (a*b)*c = a*(b*c));
+
+  now thus
+           A2: for a be Element of L holds 1_ L * a = a
+             proof
+               let a;
+               thus 1_ L*a = a*1_ L by A1,Lm17 .= a by A1;
+             end;
+           thus for a,b   be Element of L
+              ex x being Element of L st a*x=b
+             proof
+               let a,b;
+               consider y such that A3: a*y = 1_ L by A1;
+               take x = y*b;
+               thus a*x = 1_ L * b by A1,A3
+                       .= b by A2;
+             end;
+           thus for a,b   be Element of L
+           ex x being Element of L st x*a=b
+             proof
+               let a,b;
+               consider y such that A4: y*a = 1_ L by A1,Lm18;
+               take x = b*y;
+               thus x*a = b * 1_ L by A1,A4
+                       .= b by A1;
+             end;
+           thus for a,x,y be Element of L
+           holds a*x=a*y implies x=y
+             proof
+               let a,x,y;
+               consider z such that A5: z*a = 1_ L by A1,Lm18;
+               assume a*x = a*y;
+               then (z*a)*x = z*(a*y) by A1 .= (z*a)*y by A1;
+               hence x = 1_ L * y by A2,A5 .= y by A2;
+             end;
+           thus for a,x,y be Element of L
+           holds x*a=y*a implies x=y
+             proof
+               let a,x,y;
+               consider z such that A6: a*z = 1_ L by A1;
+               assume x*a = y*a;
+               then x*(a*z) = (y*a)*z by A1 .= y*(a*z) by A1;
+               hence x = y * 1_ L by A1,A6 .= y by A1;
+             end;
+         end;
+       hence thesis by A1,Def12,Def13,VECTSP_1:def 16,VECTSP_2:def 2;
+  end;
+
+definition
+  cluster multL_Trivial -> associative;
+  coherence by Lm15,VECTSP_1:def 16;
+end;
+
+Lm19: for a,b be Element of multL_Trivial holds a*b = b*a
+       by Th18;
+
+definition
+ cluster strict commutative multGroup;
+  existence
+   proof multL_Trivial is commutative by Lm19,VECTSP_1:def 17;
+    hence thesis;
+   end;
+end;
+
+canceled;
+
+theorem
+     L is commutative multGroup iff
+     (for a holds a * 1_ L = a)
+   & (for a ex x st a*x = 1_ L)
+   & (for a,b,c holds (a*b)*c = a*(b*c))
+   & (for a,b holds a*b = b*a) by Th22,VECTSP_1:def 17;
+
+definition
+  let L be invertible cancelable (non empty multLoopStr);
+  let a be Element of L;
+ canceled 2;
+
+  func a" -> Element of L means :Def16:
+    a*it = 1_ L;
+  existence by Def12;
+  uniqueness by Def13;
+end;
+
+ reserve G for multGroup;
+ reserve a,b,c,x for Element of G;
+
+canceled;
+
+theorem
+    a*(a") = 1_ G & a"*a=1_ G
+    proof
+      thus A1: a*(a") = 1_ G by Def16;
+        (for a holds a * 1_ G = a)
+      & (for a ex x st a*x = 1_ G)
+      & (for a,b,c holds (a*b)*c = a*(b*c)) by Th22;
+      hence (a")*a = 1_ G by A1,Lm16;
+    end;
+
+definition
+  let L be invertible cancelable (non empty multLoopStr);
+  let a, b be Element of L;
+  func a/b -> Element of L equals
+      a*(b");
+  correctness;
+end;
+
+definition
+ canceled 3;
+
+ func multEX_0 -> strict multLoopStr_0 equals
+ :Def21: multLoopStr_0 (# REAL, multreal, 1, 0 #);
+ correctness;
+end;
+
+definition
+ cluster multEX_0 -> non empty;
+ coherence
+  proof
+    thus the carrier of multEX_0 is non empty by Def21;
+  end;
+end;
+
+Lm20: for a,b be Element of multEX_0
+          for x,y be Real holds a = x & b = y implies a * b = x * y
+    proof
+       let a,b be Element of multEX_0;
+       let x,y be Real;
+       assume a=x & b=y;
+       hence a * b = (multreal).(x,y) by Def21,VECTSP_1:def 10
+                 .= x * y by VECTSP_1:def 14;
+    end;
+
+Lm21: 0 = 0.multEX_0 by Def21,RLVECT_1:def 2;
+
+Lm22: 1 = 1_ multEX_0 by Def21,VECTSP_1:def 9;
+Lm23: for a be Element of multEX_0 holds a * 1_ multEX_0 = a
+     proof
+       let a be Element of multEX_0;
+       reconsider aa=a as Real by Def21;
+       thus a * 1_ multEX_0 = (multreal).(aa,1) by Def21,Lm22,VECTSP_1:def 10
+                          .= aa * 1 by VECTSP_1:def 14
+                          .= a;
+     end;
+
+Lm24: for a be Element of multEX_0 holds 1_ multEX_0 * a = a
+     proof
+       let a be Element of multEX_0;
+       reconsider aa=a as Real by Def21;
+       thus 1_ multEX_0 * a = (multreal).(1,aa) by Def21,Lm22,VECTSP_1:def 10
+                          .= 1 * aa by VECTSP_1:def 14
+                          .= a;
+     end;
+
+canceled 5;
+
+theorem
+  Th32: for q,p be Real st q<>0 ex y be Real st p=q*y
+    proof
+      let q,p be Real;
+      reconsider y = p/q as Real;
+      assume A1: q<>0;
+      take y;
+      thus thesis by A1,XCMPLX_1:88;
+    end;
+
+theorem
+  Th33: for q,p be Real st q<>0 ex y be Real st p=y*q
+    proof
+      let q,p be Real;
+      reconsider y =p/q as Real;
+      assume A1: q<>0;
+      take y;
+      thus thesis by A1,XCMPLX_1:88;
+    end;
+
+Lm25: for a,b be Element of multEX_0 st a<>0.multEX_0
+       ex x be Element of multEX_0 st a*x=b
+     proof
+       let a,b be Element of multEX_0 such that
+       A1: a<>0.multEX_0;
+       reconsider p=a, q=b as Real by Def21;
+       consider r be Real such that A2: p*r = q by A1,Lm21,Th32;
+       reconsider x=r as Element of multEX_0 by Def21;
+         a*x = b by A2,Lm20;
+       hence thesis;
+     end;
+
+Lm26: for a,b be Element of multEX_0 st a<>0.multEX_0
+       ex x be Element of multEX_0 st x*a=b
+     proof
+       let a,b be Element of multEX_0 such that
+       A1: a<>0.multEX_0;
+       reconsider p=a, q=b as Real by Def21;
+       consider r be Real such that A2: r*p = q by A1,Lm21,Th33;
+       reconsider x=r as Element of multEX_0 by Def21;
+         x*a = b by A2,Lm20;
+       hence thesis;
+     end;
+
+   Lm27: for a,x,y be Element of multEX_0 st a<>0.multEX_0
+            holds a*x=a*y implies x=y
+     proof
+       let a,x,y be Element of multEX_0 such that
+       A1: a<>0.multEX_0;
+       assume A2: a*x=a*y;
+       reconsider aa=a, p=x, q=y as Real by Def21;
+         aa*p = a*y by A2,Lm20 .= aa*q by Lm20;
+       hence thesis by A1,Lm21,XCMPLX_1:5;
+     end;
+
+Lm28: for a,x,y be Element of multEX_0 st a<>0.multEX_0
+            holds x*a=y*a implies x=y
+     proof
+       let a,x,y be Element of multEX_0 such that
+       A1: a<>0.multEX_0;
+       assume A2: x*a=y*a;
+       reconsider aa=a, p=x, q=y as Real by Def21;
+         p*aa = y*a by A2,Lm20 .= q*aa by Lm20;
+       hence thesis by A1,Lm21,XCMPLX_1:5;
+     end;
+
+Lm29: for a be Element of multEX_0
+   holds a*0.multEX_0 = 0.multEX_0
+     proof
+       let a be Element of multEX_0;
+       reconsider aa=a as Real by Def21;
+       thus a*0.multEX_0 = aa*0 by Lm20,Lm21
+                        .= 0.multEX_0 by Def21,RLVECT_1:def 2;
+     end;
+
+Lm30: for a be Element of multEX_0
+   holds 0.multEX_0*a = 0.multEX_0
+     proof
+       let a be Element of multEX_0;
+       reconsider aa=a as Real by Def21;
+       thus 0.multEX_0*a = 0*aa by Lm20,Lm21
+                        .= 0.multEX_0 by Def21,RLVECT_1:def 2;
+     end;
+
+definition let IT be non empty multLoopStr_0;
+  attr IT is almost_invertible means :Def22:
+     (for a,b be Element of IT st a<>0.IT
+       ex x be Element of IT st a*x=b) &
+     (for a,b be Element of IT st a<>0.IT
+       ex x be Element of IT st x*a=b);
+
+  attr IT is almost_cancelable means :Def23:
+     (for a,x,y be Element of IT st a<>0.IT
+         holds a*x=a*y implies x=y) &
+     (for a,x,y be Element of IT st a<>0.IT
+           holds x*a=y*a implies x=y);
+end;
+
+definition let IT be non empty multLoopStr_0;
+  attr IT is multLoop_0-like means :Def24:
+    IT is almost_invertible almost_cancelable
+     & (for a be Element of IT holds a*0.IT = 0.IT)
+     & (for a be Element of IT holds 0.IT*a = 0.IT);
+end;
+
+theorem Th34:
+  for L being non empty multLoopStr_0 holds
+    L is multLoop_0-like iff
+     (for a,b be Element of L st a<>0.L
+         ex x be Element of L st a*x=b) &
+     (for a,b be Element of L st a<>0.L
+         ex x be Element of L st x*a=b) &
+     (for a,x,y be Element of L st a<>0.L
+           holds a*x=a*y implies x=y) &
+     (for a,x,y be Element of L st a<>0.L
+           holds x*a=y*a implies x=y) &
+     (for a be Element of L holds a*0.L = 0.L) &
+     (for a be Element of L holds 0.L*a = 0.L)
+proof
+  let L be non empty multLoopStr_0;
+  hereby assume L is multLoop_0-like;
+    then L is almost_invertible almost_cancelable
+     & (for a be Element of L holds a*0.L = 0.L)
+     & (for a be Element of L holds 0.L*a = 0.L) by Def24;
+    hence (for a,b be Element of L st a<>0.L
+         ex x be Element of L st a*x=b) &
+     (for a,b be Element of L st a<>0.L
+         ex x be Element of L st x*a=b) &
+     (for a,x,y be Element of L st a<>0.L
+           holds a*x=a*y implies x=y) &
+     (for a,x,y be Element of L st a<>0.L
+           holds x*a=y*a implies x=y) &
+     (for a be Element of L holds a*0.L = 0.L) &
+     (for a be Element of L holds 0.L*a = 0.L) by Def22,Def23;
+  end;
+  assume (for a,b be Element of L st a<>0.L
+         ex x be Element of L st a*x=b) &
+     (for a,b be Element of L st a<>0.L
+         ex x be Element of L st x*a=b) &
+     (for a,x,y be Element of L st a<>0.L
+           holds a*x=a*y implies x=y) &
+     (for a,x,y be Element of L st a<>0.L
+           holds x*a=y*a implies x=y) &
+     (for a be Element of L holds a*0.L = 0.L) &
+     (for a be Element of L holds 0.L*a = 0.L);
+  then L is almost_invertible almost_cancelable
+     & (for a be Element of L holds a*0.L = 0.L)
+     & (for a be Element of L holds 0.L*a = 0.L) by Def22,Def23;
+  hence thesis by Def24;
+end;
+
+definition
+  cluster multLoop_0-like -> almost_invertible almost_cancelable
+    (non empty multLoopStr_0);
+  coherence by Def24;
+end;
+
+definition
+ cluster strict well-unital multLoop_0-like non degenerated
+               (non empty multLoopStr_0);
+  existence
+   proof
+       multEX_0 is well-unital multLoop_0-like non degenerated
+ by Lm21,Lm22,Lm23,Lm24,Lm25,Lm26,Lm27,Lm28,Lm29,Lm30,Th34,VECTSP_1:def 21,
+VECTSP_2:def 2;
+    hence thesis;
+   end;
+end;
+
+definition
+  mode multLoop_0 is well-unital non degenerated multLoop_0-like
+     (non empty multLoopStr_0);
+end;
+
+definition
+  cluster multEX_0 -> well-unital multLoop_0-like;
+  coherence by Lm23,Lm24,Lm25,Lm26,Lm27,Lm28,Lm29,Lm30,Th34,VECTSP_2:def 2;
+end;
+
+Lm31: for a,b,c be Element of multEX_0
+    holds (a*b)*c = a*(b*c)
+          proof
+            let a,b,c be Element of multEX_0;
+            reconsider p=a, q=b, r=c as Real by Def21;
+            A1: a*b = p*q by Lm20;
+            A2: b*c = q*r by Lm20;
+            thus (a*b)*c = (p*q)*r by A1,Lm20
+                        .= p*(q*r) by XCMPLX_1:4
+                        .= a*(b*c) by A2,Lm20;
+          end;
+
+definition
+ cluster strict associative non degenerated multLoop_0;
+  existence
+   proof multEX_0 is associative non degenerated by Lm21,Lm22,Lm31,VECTSP_1:def
+16,def 21;
+    hence thesis;
+   end;
+end;
+
+definition
+    mode multGroup_0 is associative non degenerated multLoop_0;
+end;
+
+ reserve L for non empty multLoopStr_0;
+ reserve a,b,c,x,y,z for Element of L;
+
+Lm32: 0.L <> 1_ L
+     & (for a holds a * 1_ L = a)
+     & (for a st a<>0.L ex x st a*x = 1_ L)
+     & (for a,b,c holds (a*b)*c = a*(b*c))
+     & (for a holds a*0.L = 0.L)
+   implies (a*b = 1_ L implies b*a = 1_ L)
+  proof
+     assume that
+     A1: 0.L <> 1_ L and
+     A2: for a holds a * 1_ L = a and
+     A3: for a st a<>0.L ex x st a*x = 1_ L and
+     A4: for a,b,c holds (a*b)*c = a*(b*c) and
+     A5: for a holds a*0.L = 0.L;
+        assume A6: a*b = 1_ L;
+        then b<>0.L by A1,A5;
+        then consider x such that A7: b * x = 1_ L by A3;
+        thus b*a = (b*a) * (b*x) by A2,A7
+                .= ((b*a) * b) * x by A4
+                .= (b * 1_ L) * x by A4,A6
+                .= 1_ L by A2,A7;
+  end;
+
+Lm33: 0.L <> 1_ L
+     & (for a holds a * 1_ L = a)
+     & (for a st a<>0.L ex x st a*x = 1_ L)
+     & (for a,b,c holds (a*b)*c = a*(b*c))
+     & (for a holds a*0.L = 0.L)
+   implies 1_ L*a = a*1_ L
+  proof
+    assume that A1: 0.L <> 1_ L and
+      A2: for a holds a * 1_ L = a and
+      A3: for a st a<>0.L ex x st a*x = 1_ L and
+      A4: for a,b,c holds (a*b)*c = a*(b*c) and
+      A5: for a holds a*0.L = 0.L;
+    A6: a<>0.L implies 1_ L*a = a*1_ L
+      proof
+        assume a<>0.L;
+        then consider x such that A7: a * x = 1_ L by A3;
+        thus 1_ L*a = a * (x*a) by A4,A7
+                  .= a*1_ L by A1,A2,A3,A4,A5,A7,Lm32;
+      end;
+
+      a=0.L implies 1_ L*a = a*1_ L
+      proof
+        assume A8: a=0.L;
+        hence 1_ L*a = 0.L by A5
+                  .= a*1_ L by A2,A8;
+      end;
+    hence thesis by A6;
+  end;
+
+Lm34: 0.L <> 1_ L
+     & (for a holds a * 1_ L = a)
+     & (for a st a<>0.L ex x st a*x = 1_ L)
+     & (for a,b,c holds (a*b)*c = a*(b*c))
+     & (for a holds a*0.L = 0.L)
+   implies for a st a<>0.L ex x st x*a = 1_ L
+  proof
+    assume that A1: 0.L <> 1_ L and
+     A2: for a holds a * 1_ L = a and
+     A3: for a st a<>0.L ex x st a*x = 1_ L and
+     A4: for a,b,c holds (a*b)*c = a*(b*c) and
+     A5: for a holds a*0.L = 0.L;
+    let a;
+    assume a<>0.L;
+    then consider x such that A6: a * x = 1_ L by A3;
+      x*a=1_ L by A1,A2,A3,A4,A5,A6,Lm32;
+    hence thesis;
+  end;
+
+canceled;
+
+theorem Th36:
+   L is multGroup_0 iff
+       0.L <> 1_ L
+     & (for a holds a * 1_ L = a)
+     & (for a st a<>0.L ex x st a*x = 1_ L)
+     & (for a,b,c holds (a*b)*c = a*(b*c))
+     & (for a holds a*0.L = 0.L)
+     & (for a holds 0.L*a = 0.L)
+  proof
+    thus L is multGroup_0 implies
+           0.L <> 1_ L
+         & (for a holds a * 1_ L = a)
+         & (for a st a<>0.L ex x st a*x = 1_ L)
+         & (for a,b,c holds (a*b)*c = a*(b*c))
+         & (for a holds a*0.L = 0.L)
+         & (for a holds 0.L*a = 0.L)
+ by Th34,VECTSP_1:def 16,def 21,VECTSP_2:def 2;
+        assume that A1: 0.L <> 1_ L and
+         A2: for a holds a * 1_ L = a and
+         A3: for a st a<>0.L ex x st a*x = 1_ L and
+         A4: for a,b,c holds (a*b)*c = a*(b*c) and
+         A5: for a holds a*0.L = 0.L and
+         A6: for a holds 0.L*a = 0.L;
+           now thus
+         A7: for a be Element of L holds 1_ L * a = a
+             proof
+               let a;
+               thus 1_ L*a = a*1_ L by A1,A2,A3,A4,A5,Lm33
+                   .= a by A2;
+             end;
+
+           thus for a,b be Element of L st a<>0.L
+                     ex x be Element of L st a*x=b
+             proof
+               let a,b;
+               assume a<>0.L;
+               then consider y such that
+               A8: a*y = 1_ L by A3;
+               take x = y*b;
+               thus a*x = 1_ L * b by A4,A8
+                       .= b by A7;
+             end;
+
+           thus for a,b be Element of L st a<>0.L
+                   ex x be Element of L st x*a=b
+             proof
+               let a,b;
+               assume a<>0.L;
+               then consider y such that
+               A9: y*a = 1_ L by A1,A2,A3,A4,A5,Lm34;
+               take x = b*y;
+               thus x*a = b * 1_ L by A4,A9
+                       .= b by A2;
+             end;
+
+           thus for a,x,y be Element of L st a<>0.L
+              holds a*x=a*y implies x=y
+             proof
+               let a,x,y;
+               assume a<>0.L;
+               then consider z such that
+                A10: z*a = 1_ L by A1,A2,A3,A4,A5,Lm34;
+               assume a*x = a*y;
+               then (z*a)*x = z*(a*y) by A4
+                    .= (z*a)*y by A4;
+               hence x = 1_ L * y by A7,A10 .= y by A7;
+             end;
+
+           thus for a,x,y be Element of L st a<>0.L
+              holds x*a=y*a implies x=y
+             proof
+               let a,x,y;
+               assume a<>0.L;
+               then consider z such that
+               A11: a*z = 1_ L by A3;
+               assume x*a = y*a;
+               then x*(a*z) = (y*a)*z by A4
+               .= y*(a*z) by A4;
+               hence x = y * 1_ L by A2,A11
+               .= y by A2;
+             end;
+         end;
+       hence thesis
+        by A1,A2,A4,A5,A6,Th34,VECTSP_1:def 16,def 21,VECTSP_2:def 2;
+  end;
+
+definition
+  cluster multEX_0 -> associative;
+  coherence by Lm31,VECTSP_1:def 16;
+end;
+
+Lm35: for a,b be Element of multEX_0 holds a*b = b*a
+      proof
+        let a,b be Element of multEX_0;
+        reconsider p=a, q=b as Real by Def21;
+        thus a*b = q*p by Lm20
+                .= b*a by Lm20;
+      end;
+
+definition
+ cluster strict commutative multGroup_0;
+  existence
+   proof multEX_0 is commutative non degenerated
+     by Lm21,Lm22,Lm35,VECTSP_1:def 17,def 21;
+    hence thesis;
+   end;
+end;
+
+canceled;
+
+theorem
+     L is commutative multGroup_0 iff
+       (0.L <> 1_ L)
+     & (for a holds a * 1_ L = a)
+     & (for a st a<>0.L ex x st a*x = 1_ L)
+     & (for a,b,c holds (a*b)*c = a*(b*c))
+     & (for a holds a*0.L = 0.L)
+     & (for a holds 0.L*a = 0.L)
+     & (for a,b holds a*b = b*a) by Th36,VECTSP_1:def 17;
+
+definition
+  let L be almost_invertible almost_cancelable (non empty multLoopStr_0);
+  let a be Element of L;
+  assume A1: a<>0.L;
+  func a" -> Element of L means :Def25:
+    a*it = 1_ L;
+  existence by A1,Def22;
+  uniqueness by A1,Def23;
+end;
+
+reserve G for associative almost_invertible almost_cancelable well-unital
+  (non empty multLoopStr_0);
+reserve a,x for Element of G;
+
+canceled;
+
+theorem
+    a<>0.G implies a*(a") = 1_ G & a"*a=1_ G
+    proof
+      assume A1:a<>0.G;
+      hence A2: a*(a") = 1_ G by Def25;
+      consider x such that
+A3:   x*a = 1_ G by A1,Def22;
+        x*(a*(a")) = 1_ G * (a") by A3,VECTSP_1:def 16;
+      then x = 1_ G * (a") by A2,VECTSP_2:def 2;
+      hence thesis by A3,VECTSP_2:def 2;
+    end;
+
+definition
+  let L be almost_invertible almost_cancelable (non empty multLoopStr_0);
+  let a, b be Element of L;
+  func a/b -> Element of L equals
+      a*(b");
+  correctness;
+end;
+
+

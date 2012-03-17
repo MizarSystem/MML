@@ -1,0 +1,349 @@
+:: On the Minimal Distance Between Set in {E}uclidean Space
+::  by Andrzej Trybulec
+::
+:: Received August 19, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary JORDAN1K, JGRAPH_2, TARSKI, BOOLE, SUBSET_1, ARYTM, RELAT_2,
+      RELAT_1, ARYTM_1, PRE_TOPC, COMPTS_1, CONNSP_1, EUCLID, TOPREAL2,
+      SQUARE_1, GOBOARD5, JORDAN2C, JORDAN1H, JORDAN11, ABSVALUE, SEQ_2, SEQ_4,
+      TREES_1, JORDAN8, TOPREAL1, ORDINAL2, JORDAN6, JORDAN9, FINSEQ_1,
+      FUNCT_1, PSCOMP_1, MCART_1, ARYTM_3, JORDAN5C, PCOMPS_1, WEIERSTR,
+      LATTICES, METRIC_1, COMPLEX1, SGRAPH1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, REAL_1,
+      NAT_1, ABSVALUE, SQUARE_1, FUNCT_1, RELSET_1, BINARITH, PARTFUN1,
+      FUNCT_2, FINSEQ_1, MATRIX_1, SEQ_4, STRUCT_0, GRCAT_1, PRE_TOPC,
+      COMPTS_1, CONNSP_1, METRIC_1, METRIC_6, PSCOMP_1, PCOMPS_1, EUCLID,
+      TOPREAL1, TOPREAL2, WEIERSTR, GOBOARD5, JORDAN2C, JORDAN5C, JORDAN6,
+      JORDAN8, JORDAN9, GOBRD14, JGRAPH_1, JGRAPH_2, JORDAN1H, JORDAN11;
+ constructors JORDAN1, CONNSP_1, JORDAN2C, TOPS_1, JORDAN1H, JORDAN11, REAL_1,
+      REALSET1, PSCOMP_1, JORDAN8, JORDAN6, JORDAN9, JORDAN5C, TOPS_2,
+      T_0TOPSP, WEIERSTR, TBSP_1, TOPRNS_1, SQUARE_1, ABSVALUE, JGRAPH_2,
+      GOBRD14, GRCAT_1, BINARITH, CARD_4, MEMBERED, PARTFUN1;
+ clusters METRIC_1, PCOMPS_1, GOBRD14, TOPS_1, TOPMETR, FINSET_1, EUCLID,
+      JGRAPH_2, TOPREAL6, JORDAN8, RELSET_1, SUBSET_1, PRE_TOPC, JORDAN1A,
+      NAT_1, BORSUK_3, STRUCT_0, BORSUK_4, SPRECT_4, BORSUK_2, JORDAN1C,
+      XREAL_0, MEMBERED, ZFMISC_1, FUNCT_2, PARTFUN1;
+ requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve X for set, Y for non empty set;
+
+theorem :: JORDAN1K:1
+ for f being Function of X,Y st f is onto
+ for y being Element of Y ex x being set st x in X & y = f.x;
+
+theorem :: JORDAN1K:2
+   for f being Function of X,Y st f is onto
+ for y being Element of Y ex x being Element of X st y = f.x;
+
+theorem :: JORDAN1K:3
+ for f being Function of X,Y, A being Subset of X st f is onto
+  holds (f.:A)` c= f.:A`;
+
+theorem :: JORDAN1K:4
+ for f being Function of X,Y, A being Subset of X st f is one-to-one
+  holds f.:A` c= (f.:A)`;
+
+theorem :: JORDAN1K:5
+ for f being Function of X,Y, A being Subset of X st f is bijective
+  holds (f.:A)` = f.:A`;
+
+begin :: Topological and metrizable spaces
+
+theorem :: JORDAN1K:6
+ for T being TopSpace
+ for A be Subset of T
+ holds A is_a_component_of {}T iff A is empty;
+
+theorem :: JORDAN1K:7
+ for T being non empty TopSpace
+ for A,B,C being Subset of T st A c= B &
+   A is_a_component_of C & B is_a_component_of C
+ holds A = B;
+
+ reserve n for Nat;
+
+theorem :: JORDAN1K:8
+ n >= 1 implies
+ for P being Subset of Euclid n holds
+  P is bounded implies P` is not bounded;
+
+reserve r for Real,
+        M for non empty MetrSpace;
+
+theorem :: JORDAN1K:9
+ for C being non empty Subset of TopSpaceMetr M,
+     p being Point of TopSpaceMetr M
+  holds (dist_min C).p >= 0;
+
+theorem :: JORDAN1K:10
+ for C being non empty Subset of TopSpaceMetr M,
+     p being Point of M
+   st for q being Point of M st q in C holds dist(p,q) >= r
+  holds (dist_min C).p >= r;
+
+theorem :: JORDAN1K:11
+ for A,B being non empty Subset of TopSpaceMetr M
+  holds min_dist_min(A,B) >= 0;
+
+theorem :: JORDAN1K:12
+ for A,B being compact Subset of TopSpaceMetr M st A meets B
+  holds min_dist_min(A,B) = 0;
+
+theorem :: JORDAN1K:13
+ for A,B being non empty Subset of TopSpaceMetr M
+   st for p,q being Point of M st p in A & q in B
+        holds dist(p,q) >= r
+  holds min_dist_min(A,B) >= r;
+
+begin :: Euclid topological spaces
+
+theorem :: JORDAN1K:14
+ for P,Q being Subset of TOP-REAL n st P is_a_component_of Q`
+  holds P is_inside_component_of Q or P is_outside_component_of Q;
+
+theorem :: JORDAN1K:15
+   n>= 1 implies BDD {}TOP-REAL n = {}TOP-REAL n;
+
+theorem :: JORDAN1K:16
+   BDD [#]TOP-REAL n = {}TOP-REAL n;
+
+theorem :: JORDAN1K:17
+   n>= 1 implies UBD {}TOP-REAL n = [#]TOP-REAL n;
+
+theorem :: JORDAN1K:18
+   UBD [#]TOP-REAL n = {}TOP-REAL n;
+
+theorem :: JORDAN1K:19
+ for P being connected Subset of TOP-REAL n,
+     Q being Subset of TOP-REAL n st P misses Q
+  holds P c= UBD Q or P c= BDD Q;
+
+begin :: Euclid plane
+
+reserve C,D for Simple_closed_curve,
+        n for Nat,
+        p,q,q1,q2 for Point of TOP-REAL 2,
+        r,s1,s2,t1,t2 for Real,
+        x,y for Point of Euclid 2;
+
+theorem :: JORDAN1K:20
+  dist(|[0,0]|,r*q) = abs(r)*dist(|[0,0]|,q);
+
+theorem :: JORDAN1K:21
+ dist(q1+q,q2+q) = dist(q1,q2);
+
+theorem :: JORDAN1K:22
+ p <> q implies dist(p,q) > 0;
+
+theorem :: JORDAN1K:23
+ dist(q1-q,q2-q) = dist(q1,q2);
+
+theorem :: JORDAN1K:24
+ dist(p,q) = dist(-p,-q);
+
+theorem :: JORDAN1K:25
+ dist(q-q1,q-q2) = dist(q1,q2);
+
+theorem :: JORDAN1K:26
+  dist(r*p,r*q) = abs(r)*dist(p,q);
+
+theorem :: JORDAN1K:27
+ r <= 1 implies dist(p,r*p+(1-r)*q) = (1-r)*dist(p,q);
+
+theorem :: JORDAN1K:28
+ 0 <= r implies dist(q,r*p+(1-r)*q) = r*dist(p,q);
+
+theorem :: JORDAN1K:29
+ p in LSeg(q1,q2) implies dist(q1,p) + dist(p,q2) = dist(q1,q2);
+
+theorem :: JORDAN1K:30
+ q1 in LSeg(q2,p) & q1 <> q2 implies dist(q1,p) < dist(q2,p);
+
+theorem :: JORDAN1K:31
+ y = |[0,0]| implies Ball(y,r) = {q : |.q.| < r };
+
+begin :: Affine maps
+
+theorem :: JORDAN1K:32
+ AffineMap(r,s1,r,s2).p = r*p+|[s1,s2]|;
+
+theorem :: JORDAN1K:33
+  AffineMap(r,q`1,r,q`2).p = r*p+q;
+
+theorem :: JORDAN1K:34
+ s1 > 0 & s2 > 0 implies
+ AffineMap(s1,t1,s2,t2)*AffineMap(1/s1,-t1/s1,1/s2,-t2/s2) = id REAL 2;
+
+theorem :: JORDAN1K:35
+ y = |[0,0]| & x = q & r > 0 implies
+  AffineMap(r,q`1,r,q`2).:Ball(y,1) = Ball(x,r);
+
+theorem :: JORDAN1K:36
+ for A,B,C,D being Real st A>0 & C>0
+  holds AffineMap(A,B,C,D) is onto;
+
+theorem :: JORDAN1K:37
+ Ball(x,r)` is connected Subset of TOP-REAL 2;
+
+begin :: Minimal distance between subsets
+
+definition let n; let A,B be Subset of TOP-REAL n;
+ func dist_min(A,B) -> Real means
+:: JORDAN1K:def 1
+ ex A',B' being Subset of TopSpaceMetr Euclid n
+   st A = A' & B = B' & it = min_dist_min(A',B');
+end;
+
+definition
+   let M be non empty MetrSpace;
+   let P,Q be non empty compact Subset of TopSpaceMetr M;
+ redefine func min_dist_min(P,Q);
+  commutativity;
+   func max_dist_max(P,Q);
+  commutativity;
+end;
+
+definition let n;
+ let A,B be non empty compact Subset of TOP-REAL n;
+ redefine func dist_min(A,B);
+ commutativity;
+end;
+
+theorem :: JORDAN1K:38
+ for A,B being non empty Subset of TOP-REAL n
+  holds dist_min(A,B) >= 0;
+
+theorem :: JORDAN1K:39
+ for A,B being compact Subset of TOP-REAL n st A meets B
+  holds dist_min(A,B) = 0;
+
+theorem :: JORDAN1K:40
+ for A,B being non empty Subset of TOP-REAL n
+  st for p,q being Point of TOP-REAL n st p in A & q in B
+        holds dist(p,q) >= r
+ holds dist_min(A,B) >= r;
+
+theorem :: JORDAN1K:41
+ for D being Subset of TOP-REAL n,
+     A,C being non empty Subset of TOP-REAL n st C c= D
+  holds dist_min(A,D) <= dist_min(A,C);
+
+theorem :: JORDAN1K:42
+ for A,B being non empty compact Subset of TOP-REAL n
+  ex p,q being Point of TOP-REAL n
+    st p in A & q in B & dist_min(A,B) = dist(p,q);
+
+theorem :: JORDAN1K:43
+ for p,q being Point of TOP-REAL n
+  holds dist_min({p},{q}) = dist(p,q);
+
+definition let n; let p be Point of TOP-REAL n;
+ let B be Subset of TOP-REAL n;
+ func dist(p,B) -> Real equals
+:: JORDAN1K:def 2
+ dist_min({p},B);
+end;
+
+theorem :: JORDAN1K:44
+ for A being non empty Subset of TOP-REAL n,
+     p being Point of TOP-REAL n
+  holds dist(p,A) >= 0;
+
+theorem :: JORDAN1K:45
+ for A being compact Subset of TOP-REAL n,
+     p being Point of TOP-REAL n st p in A
+  holds dist(p,A) = 0;
+
+theorem :: JORDAN1K:46
+ for A being non empty compact Subset of TOP-REAL n,
+     p being Point of TOP-REAL n
+  ex q being Point of TOP-REAL n
+    st q in A & dist(p,A) = dist(p,q);
+
+theorem :: JORDAN1K:47
+ for C being non empty Subset of TOP-REAL n
+ for D being Subset of TOP-REAL n st C c= D
+ for q being Point of TOP-REAL n
+  holds dist(q,D) <= dist(q,C);
+
+theorem :: JORDAN1K:48
+ for A being non empty Subset of TOP-REAL n, p being Point of TOP-REAL n
+  st for q being Point of TOP-REAL n st q in A holds dist(p,q) >= r
+ holds dist(p,A) >= r;
+
+theorem :: JORDAN1K:49
+ for p,q being Point of TOP-REAL n
+  holds dist(p,{q}) = dist(p,q);
+
+theorem :: JORDAN1K:50
+ for A being non empty Subset of TOP-REAL n,
+     p,q being Point of TOP-REAL n st q in A
+ holds dist(p,A) <= dist(p,q);
+
+theorem :: JORDAN1K:51
+  for A being compact non empty Subset of TOP-REAL 2,
+      B being open Subset of TOP-REAL 2 st A c= B
+ for p being Point of TOP-REAL 2 st not p in B
+  holds dist(p,B) < dist(p,A);
+
+begin :: BDD & UBD
+
+theorem :: JORDAN1K:52
+ UBD C meets UBD D;
+
+theorem :: JORDAN1K:53
+ q in UBD C & p in BDD C implies dist(q,C) < dist(q,p);
+
+definition let C;
+ cluster BDD C -> non empty;
+end;
+
+theorem :: JORDAN1K:54
+ not p in BDD C implies dist(p,C) <= dist(p,BDD C);
+
+theorem :: JORDAN1K:55
+ not(C c= BDD D & D c= BDD C);
+
+theorem :: JORDAN1K:56
+ C c= BDD D implies D c= UBD C;
+
+begin :: Main definitions
+
+theorem :: JORDAN1K:57
+   L~Cage(C,n) c= UBD C;
+
+definition let C;
+ func Lower_Middle_Point C -> Point of TOP-REAL 2 equals
+:: JORDAN1K:def 3
+ First_Point(Lower_Arc C,W-min C,E-max C,
+                  Vertical_Line((W-bound C+E-bound C)/2));
+ func Upper_Middle_Point C -> Point of TOP-REAL 2 equals
+:: JORDAN1K:def 4
+ First_Point(Upper_Arc C,W-min C,E-max C,
+                  Vertical_Line((W-bound C+E-bound C)/2));
+end;
+
+theorem :: JORDAN1K:58
+  Lower_Arc C meets Vertical_Line((W-bound C+E-bound C)/2);
+
+theorem :: JORDAN1K:59
+  Upper_Arc C meets Vertical_Line((W-bound C+E-bound C)/2);
+
+theorem :: JORDAN1K:60
+   (Lower_Middle_Point C)`1 = (W-bound C+E-bound C)/2;
+
+theorem :: JORDAN1K:61
+   (Upper_Middle_Point C)`1 = (W-bound C+E-bound C)/2;
+
+theorem :: JORDAN1K:62
+    Lower_Middle_Point C in Lower_Arc C;
+
+theorem :: JORDAN1K:63
+    Upper_Middle_Point C in Upper_Arc C;
+

@@ -1,0 +1,1043 @@
+:: Miscellaneous { I }
+::  by Andrzej Trybulec
+::
+:: Received August 28, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, TARSKI, FUNCT_1, RELAT_1, SUBSET_1, ARYTM_1, ARYTM, RCOMP_1,
+      ARYTM_3, ORDINAL2, SEQM_3, PROB_1, ABSVALUE, SQUARE_1, FUNCT_3, MCART_1,
+      PRE_TOPC, SETFAM_1, COMPTS_1, SEQ_1, SEQ_2, RELAT_2, PSCOMP_1, LIMFUNC1,
+      CONNSP_1, METRIC_1, SEQ_4, TOPMETR, INTEGRA1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, FUNCT_1,
+      RELSET_1, FUNCT_2, DTCONSTR, INTEGRA1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, REAL_1, NAT_1, ABSVALUE, BINARITH, SQUARE_1, SEQ_1, SEQ_2,
+      SEQ_4, RCOMP_1, STRUCT_0, PRE_TOPC, COMPTS_1, BORSUK_1, PSCOMP_1, SEQM_3,
+      TOPMETR, LIMFUNC1, CONNSP_1;
+ constructors BINARITH, REAL_1, SEQM_3, COMPTS_1, MCART_1, DTCONSTR, INTEGRA1,
+      RFUNCT_2, ABSVALUE, PSCOMP_1, PARTFUN1, TOPMETR, TSP_1, INT_1, PROB_1,
+      LIMFUNC1, CONNSP_1, MEMBERED;
+ clusters XREAL_0, INT_1, STRUCT_0, PRE_TOPC, RELSET_1, SUBSET_1, INTEGRA1,
+      SEQM_3, PSCOMP_1, BORSUK_1, BORSUK_3, SEQ_1, TOPREAL6, MEMBERED,
+      ZFMISC_1, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE;
+ definitions TARSKI, RCOMP_1, SEQ_4, XBOOLE_0;
+ theorems AMI_5, JORDAN3, REAL_1, REAL_2, ZFMISC_1, TARSKI, SUBSET_1, MCART_1,
+      FUNCT_2, DTCONSTR, FUNCT_1, RFUNCT_2, RCOMP_1, SEQ_4, SEQM_3, ABSVALUE,
+      TOPREAL5, PSCOMP_1, AXIOMS, GOBOARD7, BORSUK_1, TOPMETR, JORDAN6,
+      UNIFORM1, JORDAN1, PRE_TOPC, SQUARE_1, RELAT_1, SEQ_2, TOPREAL6, TSP_1,
+      SEQ_1, INTEGRA1, CONNSP_1, XREAL_0, LIMFUNC1, PROB_1, FCONT_3, TSEP_1,
+      SETFAM_1, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+ schemes FUNCT_2, PSCOMP_1;
+
+begin :: Preliminaries
+
+scheme NonEmpty{ A()-> non empty set, F(set)-> set}:
+ { F(a) where a is Element of A(): not contradiction } is non empty
+proof consider a0 being set such that
+A1: a0 in A() by XBOOLE_0:def 1;
+    F(a0) in { F(a) where a is Element of A(): not contradiction } by A1;
+ hence thesis;
+end;
+
+canceled 2;
+
+theorem Th3:
+ for A,B being set, f being Function st A c= dom f & f.:A c= B
+  holds A c= f"B
+proof let A,B be set, f being Function;
+ assume A c= dom f;
+  then A1: A c= f"(f.:A) by FUNCT_1:146;
+ assume f.:A c= B;
+  then f"(f.:A) c= f"B by RELAT_1:178;
+ hence A c= f"B by A1,XBOOLE_1:1;
+end;
+
+theorem Th4:
+ for f being Function, A,B being set st A misses B
+  holds f"A misses f"B
+proof let f be Function, A,B be set;
+ assume A misses B;
+  then A /\ B = {} by XBOOLE_0:def 7;
+  then {} = f"(A /\ B) by RELAT_1:171
+     .= f"A /\ f"B by FUNCT_1:137;
+ hence f"A misses f"B by XBOOLE_0:def 7;
+end;
+
+theorem Th5:
+ for S,X being set, f being Function of S,X, A being Subset of X
+   st X = {} implies S = {}
+  holds (f"A)` = f"(A`)
+proof let S,X be set, f be Function of S,X, A be Subset of X such that
+A1: X = {} implies S = {};
+    A misses A` by SUBSET_1:26;
+then A /\ A` = {} by XBOOLE_0:def 7;
+  then f"A /\ f"(A`) = f"({}X) by FUNCT_1:137 .= {} by RELAT_1:171;
+  then A2: f"A misses f"(A`) by XBOOLE_0:def 7;
+    f"A \/ f"(A`) = f"(A \/ A`) by RELAT_1:175 .= f"[#]X by SUBSET_1:25
+      .= f"X by SUBSET_1:def 4 .= S by A1,FUNCT_2:48
+      .= [#]S by SUBSET_1:def 4;
+  then (f"A)` /\ (f"(A`))` = ([#]S)` by SUBSET_1:29
+          .= {}S by SUBSET_1:21;
+  then (f"A)` misses (f"(A`))` by XBOOLE_0:def 7;
+ hence (f"A)` = f"(A`) by A2,SUBSET_1:46;
+end;
+
+theorem Th6:
+ for S being 1-sorted, X being non empty set,
+     f being Function of the carrier of S,X,
+     A being Subset of X
+  holds (f"A)` = f"(A`) by Th5;
+
+ reserve i,j,m,n for Nat,
+         r,s,r0,s0,t for real number;
+
+theorem
+   m <= n implies n-'(n-'m) = m
+proof assume
+A1: m <= n;
+    n -' m <= n by JORDAN3:13;
+  then n-'(n-'m) + (n-'m) = n by AMI_5:4
+     .= m + (n-'m) by A1,AMI_5:4;
+ hence thesis by XCMPLX_1:2;
+end;
+
+canceled;
+
+theorem Th9:
+ for a,b being real number st r in [.a,b.] & s in [.a,b.]
+  holds (r + s)/2 in [.a,b.]
+ proof let a,b be real number such that
+A1: r in [.a,b.] and
+A2: s in [.a,b.];
+   reconsider a,b,r,s as Real by XREAL_0:def 1;
+     a <= r & a <= s by A1,A2,TOPREAL5:1;
+   then a+a <= r+s by REAL_1:55;
+   then (a+a)/2 <= (r+s)/2 by REAL_1:73;
+then A3: a <= (r + s)/2 by XCMPLX_1:65;
+     r <= b & s <= b by A1,A2,TOPREAL5:1;
+   then r+s <= b+b by REAL_1:55;
+   then (r+s)/2 <= (b+b)/2 by REAL_1:73;
+   then (r + s)/2 <= b by XCMPLX_1:65;
+  hence thesis by A3,TOPREAL5:1;
+ end;
+
+theorem Th10:
+ for Nseq being increasing Seq_of_Nat, i,j st i <= j
+  holds Nseq.i <= Nseq.j
+proof let Nseq be increasing Seq_of_Nat;
+    Nseq is non-decreasing by SEQM_3:23;
+ hence thesis by SEQM_3:12;
+end;
+
+theorem Th11:
+ abs(abs(r0-s0)-abs(r-s)) <= abs(r0-r) + abs(s0-s)
+proof
+A1: abs(abs(r0-s0) - abs(r-s)) <= abs(r0-s0 - (r-s)) by ABSVALUE:22;
+    r0-s0 - (r-s) = r0-s0 - r + s by XCMPLX_1:37
+      .= r0-r - s0 + s by XCMPLX_1:21
+      .= r0-r - (s0-s) by XCMPLX_1:37;
+  then abs(r0-s0 - (r-s)) <= abs(r0-r) + abs(s0-s) by ABSVALUE:19;
+ hence abs(abs(r0-s0)-abs(r-s)) <= abs(r0-r) + abs(s0-s) by A1,AXIOMS:22;
+end;
+
+theorem
+   t in ].r,s.[ implies abs(t) < max(abs(r),abs(s))
+proof assume
+A1: t in ].r,s.[;
+  reconsider r,t,s as Real by XREAL_0:def 1;
+   A2: r < t & t < s by A1,JORDAN6:45;
+ per cases;
+ suppose
+A3: t >= 0;
+  then A4: t = abs(t) by ABSVALUE:def 1;
+    s > 0 by A1,A3,JORDAN6:45;
+  then abs(t) < abs(s) by A2,A4,ABSVALUE:def 1;
+ hence thesis by SQUARE_1:50;
+ suppose
+A5: t < 0;
+  then A6: -t = abs(t) by ABSVALUE:def 1;
+    r < 0 by A2,A5,AXIOMS:22;
+  then -r =abs(r) by ABSVALUE:def 1;
+  then abs(t) < abs(r) by A2,A6,REAL_1:50;
+ hence thesis by SQUARE_1:50;
+end;
+
+definition let A,B,C be non empty set;
+ let f be Function of A, [:B,C:];
+ redefine func pr1 f -> Function of A,B means
+:Def1:  for x being Element of A holds it.x = (f.x)`1;
+ coherence
+  proof
+A1:  dom pr1 f = dom f by DTCONSTR:def 2;
+    then A2:  dom pr1 f = A by FUNCT_2:def 1;
+      rng pr1 f c= B
+     proof let x be set;
+      assume x in rng pr1 f;
+       then consider y being set such that
+A3:     y in dom pr1 f and
+A4:     x = (pr1 f).y by FUNCT_1:def 5;
+A5:     x = (f.y)`1 by A1,A3,A4,DTCONSTR:def 2;
+         f.y in [:B,C:] by A1,A3,FUNCT_2:7;
+      hence x in B by A5,MCART_1:10;
+     end;
+   hence pr1 f is Function of A,B by A2,FUNCT_2:4;
+  end;
+ compatibility
+  proof let IT be Function of A,B;
+A6:  dom pr1 f = dom f by DTCONSTR:def 2;
+    then A7:  dom pr1 f = A by FUNCT_2:def 1;
+   hence IT = pr1 f implies for x being Element of A holds IT.x = (f.x)`1
+    by A6,DTCONSTR:def 2;
+   assume for x being Element of A holds IT.x = (f.x)`1;
+    then A8:   for x being set st x in dom f holds IT.x = (f.x)`1;
+      dom IT = dom f by A6,A7,FUNCT_2:def 1;
+   hence IT = pr1 f by A8,DTCONSTR:def 2;
+  end;
+ func pr2 f -> Function of A,C means
+:Def2: for x being Element of A holds it.x = (f.x)`2;
+ coherence
+  proof
+A9:  dom pr2 f = dom f by DTCONSTR:def 3;
+    then A10:  dom pr2 f = A by FUNCT_2:def 1;
+      rng pr2 f c= C
+     proof let x be set;
+      assume x in rng pr2 f;
+       then consider y being set such that
+A11:     y in dom pr2 f and
+A12:     x = (pr2 f).y by FUNCT_1:def 5;
+A13:     x = (f.y)`2 by A9,A11,A12,DTCONSTR:def 3;
+         f.y in [:B,C:] by A9,A11,FUNCT_2:7;
+      hence x in C by A13,MCART_1:10;
+     end;
+   hence pr2 f is Function of A,C by A10,FUNCT_2:4;
+  end;
+ compatibility
+  proof let IT be Function of A,C;
+A14:  dom pr2 f = dom f by DTCONSTR:def 3;
+    then A15:  dom pr2 f = A by FUNCT_2:def 1;
+   hence IT = pr2 f implies for x being Element of A holds IT.x = (f.x)`2
+     by A14,DTCONSTR:def 3;
+   assume for x being Element of A holds IT.x = (f.x)`2;
+    then A16:   for x being set st x in dom f holds IT.x = (f.x)`2;
+      dom IT = dom f by A14,A15,FUNCT_2:def 1;
+   hence IT = pr2 f by A16,DTCONSTR:def 3;
+  end;
+end;
+
+scheme DoubleChoice{ A,B,C() -> non empty set, P[set,set,set]}:
+ ex a being Function of A(), B(),
+    b being Function of A(), C() st
+  for i being Element of A() holds P[i,a.i,b.i]
+ provided
+A1: for i being Element of A()
+  ex ai being Element of B(),
+     bi being Element of C() st P[i,ai,bi]
+proof
+  defpred P1[set,set] means P[$1,($2)`1,($2)`2];
+A2: for e being Element of A()
+       ex u being Element of [:B(),C():] st P1[e,u]
+   proof let e be Element of A();
+     consider ai being Element of B(),
+              bi being Element of C() such that
+A3:    P[e,ai,bi] by A1;
+    take [ai,bi];
+    thus [ai,bi] is Element of [:B(),C():] by ZFMISC_1:106;
+       [ai,bi]`1 = ai & [ai,bi]`2 = bi by MCART_1:7;
+    hence P[e,[ai,bi]`1,[ai,bi]`2] by A3;
+   end;
+  consider f being Function of A(), [:B(),C():] such that
+A4: for e being Element of A() holds P1[e,f.e] from FuncExD(A2);
+ take pr1 f, pr2 f;
+ let i be Element of A();
+    (f.i)`1 = (pr1 f).i & (f.i)`2 = (pr2 f).i by Def1,Def2;
+ hence P[i,(pr1 f).i,(pr2 f).i] by A4;
+end;
+
+theorem Th13:
+ for S,T being non empty TopSpace, G being Subset of [:S,T:]
+  st for x being Point of [:S,T:] st x in G
+      ex GS being Subset of S, GT being Subset of T
+        st GS is open & GT is open & x in [:GS,GT:] & [:GS,GT:] c= G
+  holds G is open
+proof let S,T be non empty TopSpace, G being Subset of [:S,T:] such that
+A1: for x being Point of [:S,T:] st x in G
+      ex GS being Subset of S, GT being Subset of T
+        st GS is open & GT is open & x in [:GS,GT:] & [:GS,GT:] c= G;
+  set A = {[:GS,GT:] where GS is Subset of S, GT is Subset of T :
+             GS is open & GT is open & [:GS,GT:] c= G };
+    A c= bool the carrier of [:S,T:]
+   proof let e be set;
+    assume e in A;
+     then consider GS being Subset of S, GT being Subset of T such that
+A2:   e = [:GS,GT:] and
+         GS is open & GT is open & [:GS,GT:] c= G;
+    thus e in bool the carrier of [:S,T:] by A2;
+   end;
+   then reconsider A as Subset-Family of [:S,T:] by SETFAM_1:def
+7;
+   reconsider A as Subset-Family of [:S,T:];
+    for x being set holds x in G iff ex Y being set st x in Y & Y in A
+   proof let x be set;
+    thus x in G implies ex Y being set st x in Y & Y in A
+    proof assume x in G;
+      then consider GS being Subset of S, GT being Subset of T such that
+A3:    GS is open & GT is open & x in [:GS,GT:] & [:GS,GT:] c= G by A1;
+     take Y = [:GS,GT:];
+     thus x in Y & Y in A by A3;
+    end;
+    given Y being set such that
+A4:  x in Y and
+A5:  Y in A;
+       ex GS being Subset of S, GT being Subset of T st
+      Y = [:GS,GT:] & GS is open & GT is open & [:GS,GT:] c= G by A5;
+    hence x in G by A4;
+   end;
+then A6: G = union A by TARSKI:def 4;
+     for e being set st e in A ex X1 being Subset of S,
+                     Y1 being Subset of T st
+    e = [:X1,Y1:] & X1 is open & Y1 is open
+   proof let e be set;
+    assume e in A;
+     then ex GS being Subset of S, GT being Subset of T st
+      e = [:GS,GT:] & GS is open & GT is open & [:GS,GT:] c= G;
+    hence ex GS being Subset of S, GT being Subset of T st
+      e = [:GS,GT:] & GS is open & GT is open;
+   end;
+ hence G is open by A6,BORSUK_1:45;
+end;
+
+begin :: topological properties of sets of real numbers
+
+theorem Th14:
+ for A,B being compact Subset of REAL holds A /\ B is compact
+ proof let A,B be compact Subset of REAL;
+  let s1 be Real_Sequence such that
+A1: rng s1 c= A /\ B;
+     A /\ B c= A by XBOOLE_1:17;
+   then rng s1 c= A by A1,XBOOLE_1:1;
+   then consider s2 being Real_Sequence such that
+A2: s2 is_subsequence_of s1 and
+A3: s2 is convergent and
+A4: lim s2 in A by RCOMP_1:def 3;
+     rng s2 c= rng s1 by A2,RFUNCT_2:11;
+   then A5: rng s2 c= A /\ B by A1,XBOOLE_1:1;
+     A /\ B c= B by XBOOLE_1:17;
+   then rng s2 c= B by A5,XBOOLE_1:1;
+   then consider s3 being Real_Sequence such that
+A6: s3 is_subsequence_of s2 and
+A7: s3 is convergent and
+A8: lim s3 in B by RCOMP_1:def 3;
+   take s3;
+   thus s3 is_subsequence_of s1 by A2,A6,SEQM_3:48;
+   thus s3 is convergent by A7;
+      lim s3 = lim s2 by A3,A6,SEQ_4:30;
+   hence lim s3 in A /\ B by A4,A8,XBOOLE_0:def 3;
+ end;
+
+definition let A be Subset of REAL;
+ attr A is connected means
+:Def3: for r,s being real number st r in A & s in A holds [.r,s.] c= A;
+end;
+
+theorem
+   for T being non empty TopSpace
+ for f being continuous RealMap of T
+ for A being Subset of T st A is connected holds
+  f.:A is connected
+proof let T be non empty TopSpace;
+ let f be continuous RealMap of T;
+ let A be Subset of T;
+ assume
+A1: A is connected;
+ let r,s;
+ assume
+A2: r in f.:A;
+  then consider p being Point of T such that
+A3: p in A and
+A4: r = f.p by FUNCT_2:116;
+ assume
+A5: s in f.:A;
+  then consider q being Point of T such that
+A6: q in A and
+A7: s = f.q by FUNCT_2:116;
+ assume not [.r,s.] c= f.:A;
+  then consider t being Real such that
+A8: t in [.r,s.] and
+A9: not t in f.:A by SUBSET_1:7;
+  reconsider r,s,t as Real by XREAL_0:def 1;
+  set P1 = f"left_open_halfline t, Q1 = f"right_open_halfline t,
+      P = P1 /\ A, Q = Q1 /\ A,
+      X = left_open_halfline t \/ right_open_halfline t;
+  reconsider Y = {t} as Subset of REAL;
+     Y` = REAL \ {t} by SUBSET_1:def 5
+          .= REAL \ [.t,t.] by RCOMP_1:14
+          .= X by LIMFUNC1:25;
+   then A10: (f"Y)` = f"X by Th6
+        .= P1 \/ Q1 by RELAT_1:175;
+A11: A c= f"(f.:A) by FUNCT_2:50;
+     {t} misses f.:A by A9,ZFMISC_1:56;
+   then f"{t} misses f"(f.:A) by Th4;
+   then f"{t} misses A by A11,XBOOLE_1:63;
+   then A c= P1 \/ Q1 by A10,PRE_TOPC:21;
+   then A12: A = A /\ (P1 \/ Q1) by XBOOLE_1:28
+    .= P \/ Q by XBOOLE_1:23;
+A13: left_open_halfline t = {r1 where r1 is Real: r1 < t} by PROB_1:def 15;
+A14: right_open_halfline t = {r1 where r1 is Real: t < r1} by LIMFUNC1:def 3;
+     r <= t & r <> t by A2,A8,A9,TOPREAL5:1;
+   then r < t by AXIOMS:21;
+   then r in left_open_halfline t by A13;
+   then p in P1 by A4,FUNCT_2:46;
+   then A15: P <> {}T by A3,XBOOLE_0:def 3;
+     t <= s & s <> t by A5,A8,A9,TOPREAL5:1;
+   then t < s by AXIOMS:21;
+   then s in right_open_halfline t by A14;
+   then q in Q1 by A7,FUNCT_2:46;
+   then A16: Q <> {}T by A6,XBOOLE_0:def 3;
+     left_open_halfline t is open by FCONT_3:8;
+   then A17: P1 is open by PSCOMP_1:54;
+     right_open_halfline t is open by FCONT_3:7;
+   then A18: Q1 is open by PSCOMP_1:54;
+A19: P c= P1 by XBOOLE_1:17;
+A20: Q c= Q1 by XBOOLE_1:17;
+     left_open_halfline t /\ right_open_halfline t = ].t,t.[ by LIMFUNC1:18
+        .= {} by RCOMP_1:12;
+   then left_open_halfline t misses right_open_halfline t by XBOOLE_0:def 7;
+   then P1 misses Q1 by Th4;
+   then P1 /\ Q1 = {} by XBOOLE_0:def 7;
+   then P1 /\ Q1 misses P \/ Q by XBOOLE_1:65;
+   then P,Q are_separated by A17,A18,A19,A20,TSEP_1:49;
+ hence contradiction by A1,A12,A15,A16,CONNSP_1:16;
+end;
+
+definition let A,B be Subset of REAL;
+  set Y = {abs(r - s) where r is Element of REAL, s is Element of REAL :
+                 r in A & s in B};
+      Y c= REAL
+     proof let e be set;
+      assume e in Y;
+       then ex r,s being Element of REAL st e = abs(r - s) & r in A & s in B;
+      hence thesis;
+     end;
+    then reconsider Y0 = Y as Subset of REAL;
+ func dist(A,B) -> real number means
+:Def4: ex X being Subset of REAL st
+    X = {abs(r - s) where r is Element of REAL, s is Element of REAL :
+            r in A & s in B}
+          & it = lower_bound X;
+ existence
+  proof
+   take lower_bound Y0;
+   thus thesis;
+  end;
+ uniqueness;
+ commutativity
+  proof let IT be real number, A,B be Subset of REAL;
+   given X0 being Subset of REAL such that
+A1: X0 = {abs(r - s) where r is Element of REAL, s is Element of REAL :
+             r in A & s in B} and
+A2: IT = lower_bound X0;
+    set Y = {abs(r - s) where r is Element of REAL, s is Element of REAL :
+          r in B & s in A};
+      Y c= REAL
+     proof let e be set;
+      assume e in Y;
+       then ex r,s being Element of REAL st e = abs(r - s) & r in B & s in A;
+      hence thesis;
+     end;
+    then reconsider Y0 = Y as Subset of REAL;
+   take Y0;
+   thus Y0 = {abs(r - s) where r is Element of REAL, s is Element of REAL :
+           r in B & s in A};
+      X0 = Y0
+     proof
+      thus X0 c= Y0
+       proof let x be set;
+        assume x in X0;
+         then consider r,s being Element of REAL such that
+A3:        x = abs(r - s) & r in A & s in B by A1;
+            x = abs(s - r) by A3,UNIFORM1:13;
+        hence x in Y0 by A3;
+       end;
+      let x be set;
+      assume x in Y0;
+       then consider r,s being Element of REAL such that
+A4:      x = abs(r - s) & r in B & s in A;
+         x = abs(s - r) by A4,UNIFORM1:13;
+      hence x in X0 by A1,A4;
+     end;
+   hence IT = lower_bound Y0 by A2;
+  end;
+end;
+
+theorem Th16:
+ for A,B being Subset of REAL, r, s st r in A & s in B
+  holds abs(r-s) >= dist(A,B)
+proof let A,B be Subset of REAL;
+  set Y = {abs(r - s) where r is Element of REAL, s is Element of REAL :
+            r in A & s in B};
+      Y c= REAL
+     proof let e be set;
+      assume e in Y;
+       then ex r,s being Real st e = abs(r - s) & r in A & s in B;
+      hence thesis;
+     end;
+    then reconsider Y0 = Y as Subset of REAL;
+A1: dist(A,B) = lower_bound Y0 by Def4;
+A2: Y0 is bounded_below
+  proof take 0;
+   let r0;
+   assume r0 in Y0;
+    then ex r,s being Real st r0 = abs(r - s) & r in A & s in B;
+   hence 0<=r0 by ABSVALUE:5;
+  end;
+ let r,s;
+ assume r in A & s in B;
+  then abs(r-s) in Y0;
+ hence abs(r-s) >= dist(A,B) by A1,A2,SEQ_4:def 5;
+end;
+
+theorem Th17:
+ for A,B being Subset of REAL,
+     C,D being non empty Subset of REAL st C c= A & D c= B
+  holds dist(A,B) <= dist(C,D)
+proof let A,B be Subset of REAL,
+          C,D be non empty Subset of REAL such that
+A1: C c= A and
+A2: D c= B;
+  set X = {abs(r - s) where r is Element of REAL, s is Element of REAL :
+         r in A & s in B};
+      X c= REAL
+     proof let e be set;
+      assume e in X;
+       then ex r,s being Real st e = abs(r - s) & r in A & s in B;
+      hence thesis;
+     end;
+    then reconsider X as Subset of REAL;
+A3: dist(A,B) = lower_bound X by Def4;
+A4: X is bounded_below
+  proof take 0;
+   let r0;
+   assume r0 in X;
+    then ex r,s being Real st r0 = abs(r - s) & r in A & s in B;
+   hence 0<=r0 by ABSVALUE:5;
+  end;
+  consider r0 being set such that
+A5: r0 in C by XBOOLE_0:def 1;
+  consider s0 being set such that
+A6: s0 in D by XBOOLE_0:def 1;
+  set Y = {abs(r - s) where r is Element of REAL, s is Element of REAL :
+      r in C & s in D};
+     r0 is Real & s0 is Real by A5,A6;
+   then reconsider r0,s0 as real number;
+A7: abs(r0 - s0) in Y by A5,A6;
+      Y c= REAL
+     proof let e be set;
+      assume e in Y;
+       then ex r,s being Real st e = abs(r - s) & r in C & s in D;
+      hence thesis;
+     end;
+    then reconsider Y as non empty Subset of REAL by A7;
+A8: dist(C,D) = lower_bound Y by Def4;
+     Y c= X
+   proof let x be set;
+    assume x in Y;
+     then ex r,s being Real st x = abs(r - s) & r in C & s in D;
+    hence x in X by A1,A2;
+   end;
+ hence dist(A,B) <= dist(C,D) by A3,A4,A8,PSCOMP_1:12;
+end;
+
+theorem Th18:
+ for A, B being non empty compact Subset of REAL
+  ex r,s being real number st r in A & s in B &
+       dist(A,B) = abs(r - s)
+proof let A, B be non empty compact Subset of REAL;
+  reconsider At = A, Bt = B as non empty compact Subset of R^1
+          by TOPMETR:24,TOPREAL6:81;
+A1:   the carrier of R^1|At = At & the carrier of R^1|Bt = Bt by JORDAN1:1;
+  reconsider AB = [:R^1|At, R^1|Bt:] as compact (non empty TopSpace);
+  defpred P[set,set] means ex r,s being Real st $1 = [r,s] & $2 = abs(r-s);
+A2: now let x be set;
+    assume x in the carrier of AB;
+     then x in [:A,B:] by A1,BORSUK_1:def 5;
+     then consider r,s being set such that
+A3:   r in REAL & s in REAL and
+A4:   x = [r,s] by ZFMISC_1:103;
+     reconsider r,s as Real by A3;
+    take t = abs(r-s);
+    thus P[x,t] by A4;
+   end;
+  consider f being RealMap of AB such that
+A5: for x being Element of AB
+    holds P[x,f.x] from NonUniqExRF(A2);
+    for Y being Subset of REAL st Y is open holds f"Y is open
+   proof let Y be Subset of REAL such that
+A6:  Y is open;
+       for x being Point of AB st x in f"Y
+      ex YS being Subset of R^1|At, YT being Subset of R^1|Bt
+        st YS is open & YT is open & x in [:YS,YT:] & [:YS,YT:] c= f"Y
+     proof let x be Point of AB;
+      assume x in f"Y;
+       then f.x in Y by FUNCT_1:def 13;
+       then consider N being Neighbourhood of f.x such that
+A7:     N c= Y by A6,RCOMP_1:39;
+       consider g being real number such that
+A8:     0 < g and
+A9:     N = ].f.x-g,f.x+g.[ by RCOMP_1:def 7;
+       consider r,s being Real such that
+A10:     x = [r,s] and
+A11:     f.x = abs(r-s) by A5;
+       reconsider a=r-g/2, b=r+g/2, c =s-g/2, d=s+g/2 as Real by XREAL_0:def 1;
+       reconsider S = ].a,b.[, T = ].c,d.[
+         as Subset of R^1 by TOPMETR:24;
+         S /\ A c= A by XBOOLE_1:17;
+       then reconsider YS = S /\ A as Subset of R^1|At by A1;
+         T /\ B c= B by XBOOLE_1:17;
+       then reconsider YT = T /\ B as Subset of R^1|Bt by A1;
+      take YS, YT;
+         S is open & T is open by JORDAN6:46;
+      hence YS is open & YT is open by A1,TSP_1:def 1;
+         0 < g/2 by A8,SEQ_2:3;
+       then A12:    r in S & s in T by TOPREAL6:20;
+         x in the carrier of AB;
+       then x in [:A,B:] by A1,BORSUK_1:def 5;
+       then r in A & s in B by A10,ZFMISC_1:106;
+       then r in YS & s in YT by A12,XBOOLE_0:def 3;
+      hence x in [:YS,YT:] by A10,ZFMISC_1:106;
+A13:   dom f = the carrier of AB by FUNCT_2:def 1;
+         f.:[:YS,YT:] c= N
+        proof let e be set;
+         assume e in f.:[:YS,YT:];
+          then consider y being Element of AB such that
+A14:        y in [:YS,YT:] and
+A15:        e = f.y by FUNCT_2:116;
+          consider r1,s1 being Real such that
+A16:        y = [r1,s1] and
+A17:        f.y = abs(r1-s1) by A5;
+            r1 in YS by A14,A16,ZFMISC_1:106;
+          then r1 in ].r-g/2,r+g/2.[ by XBOOLE_0:def 3;
+          then A18:       abs(r1-r) < g/2 by RCOMP_1:8;
+            s1 in YT by A14,A16,ZFMISC_1:106;
+          then s1 in ].s-g/2,s+g/2.[ by XBOOLE_0:def 3;
+          then A19:       abs(s1-s) < g/2 by RCOMP_1:8;
+            g = g/2 + g/2 by XCMPLX_1:66;
+          then A20:       abs(r1-r) + abs(s1-s) < g by A18,A19,REAL_1:67;
+            abs(abs(r1-s1)-abs(r-s)) <= abs(r1-r) + abs(s1-s) by Th11;
+          then abs(abs(r1-s1)-abs(r-s)) < g by A20,AXIOMS:22;
+         hence e in N by A9,A11,A15,A17,RCOMP_1:8;
+        end;
+       then f.:[:YS,YT:] c= Y by A7,XBOOLE_1:1;
+      hence [:YS,YT:] c= f"Y by A13,Th3;
+     end;
+    hence f"Y is open by Th13;
+   end;
+  then reconsider f as continuous RealMap of AB by PSCOMP_1:54;
+    f.:the carrier of AB is with_min by PSCOMP_1:def 15;
+  then inf(f.:the carrier of AB) in f.:the carrier of AB by PSCOMP_1:def 4;
+  then consider x being Element of AB such that
+A21: x in the carrier of AB and
+A22: inf(f.:the carrier of AB) = f.x by FUNCT_2:116;
+A23: x in [:A,B:] by A1,A21,BORSUK_1:def 5;
+  then consider r1,s1 being set such that
+A24: r1 in REAL & s1 in REAL and
+A25: x = [r1,s1] by ZFMISC_1:103;
+     r1 is Real & s1 is Real by A24;
+   then reconsider r1,s1 as real number;
+ take r1,s1;
+ thus r1 in A & s1 in B by A23,A25,ZFMISC_1:106;
+A26: f.:the carrier of AB =
+  {abs(r - s) where r is Element of REAL, s is Element of REAL : r in A & s in
+ B}
+   proof
+    hereby let x be set;
+     assume x in f.:the carrier of AB;
+      then consider y being Element of AB such that
+A27:    y in the carrier of AB and
+A28:    x = f.y by FUNCT_2:116;
+      consider r1,s1 being Real such that
+A29:    y = [r1,s1] and
+A30:    f.y = abs(r1-s1) by A5;
+        [r1,s1] in [:A,B:] by A1,A27,A29,BORSUK_1:def 5;
+      then r1 in A & s1 in B by ZFMISC_1:106;
+     hence x in {abs(r - s) where r is Element of REAL, s is Element of REAL :
+             r in A & s in B} by A28,A30;
+    end;
+    let x be set;
+    assume x in {abs(r - s) where r is Element of REAL, s is Element of REAL :
+         r in A & s in B};
+     then consider r,s being Real such that
+A31:   x = abs(r - s) and
+A32:   r in A & s in B;
+       [r,s] in [:A,B:] by A32,ZFMISC_1:106;
+     then reconsider y = [r,s] as Element of AB
+        by A1,BORSUK_1:def 5;
+     consider r1,s1 being Real such that
+A33:   y = [r1,s1] and
+A34:   f.y = abs(r1-s1) by A5;
+       r1 = r & s1 = s by A33,ZFMISC_1:33;
+    hence x in f.:the carrier of AB by A31,A34,FUNCT_2:43;
+   end;
+  consider r,s being Real such that
+A35: x = [r,s] and
+A36: f.x = abs(r-s) by A5;
+    r1 = r & s1 = s by A25,A35,ZFMISC_1:33;
+ hence dist(A,B) = abs(r1 - s1) by A22,A26,A36,Def4;
+end;
+
+theorem Th19:
+ for A, B being non empty compact Subset of REAL
+  holds dist(A,B) >= 0
+proof let A, B be non empty compact Subset of REAL;
+  set X = {abs(r - s) where r is Element of REAL, s is Element of REAL :
+        r in A & s in B};
+  consider r0 being set such that
+A1: r0 in A by XBOOLE_0:def 1;
+  consider s0 being set such that
+A2: s0 in B by XBOOLE_0:def 1;
+     r0 is Real & s0 is Real by A1,A2;
+   then reconsider r0,s0 as real number;
+A3: abs(r0 - s0) in X by A1,A2;
+      X c= REAL
+     proof let e be set;
+      assume e in X;
+       then ex r,s being Real st e = abs(r - s) & r in A & s in B;
+      hence thesis;
+     end;
+    then reconsider X as non empty Subset of REAL by A3;
+A4: dist(A,B) = lower_bound X by Def4;
+    for t being real number st t in X holds t >= 0
+   proof let t be real number;
+    assume t in X;
+     then ex r,s being Real st t = abs(r - s) & r in A & s in B;
+    hence t >= 0 by ABSVALUE:5;
+   end;
+ hence dist(A,B) >= 0 by A4,PSCOMP_1:8;
+end;
+
+theorem Th20:
+ for A,B being non empty compact Subset of REAL st A misses B
+  holds dist(A,B) > 0
+proof let A,B being non empty compact Subset of REAL such that
+A1: A misses B;
+  consider r0,s0 such that
+A2: r0 in A and
+A3: s0 in B and
+A4: dist(A,B) = abs(r0 - s0) by Th18;
+  reconsider r0,s0 as Real by XREAL_0:def 1;
+ assume dist(A,B) <= 0;
+  then abs(r0 - s0) = 0 by A4,Th19;
+  then r0 = s0 by GOBOARD7:2;
+ hence contradiction by A1,A2,A3,XBOOLE_0:3;
+end;
+
+theorem
+   for e,f being real number, A,B being compact Subset of REAL st
+  A misses B & A c= [.e,f.] & B c= [.e,f.]
+ for S being Function of NAT, bool REAL st
+  for i being Nat holds S.i is connected &
+       S.i meets A & S.i meets B
+ ex r being real number st r in [.e,f.] & not r in A \/ B &
+  for i being Nat ex k being Nat st i <= k & r in S.k
+proof let e,f be real number, A,B be compact Subset of REAL such that
+A1: A misses B and
+A2: A c= [.e,f.] and
+A3: B c= [.e,f.];
+ let S be Function of NAT, bool REAL such that
+A4:  for i being Nat holds S.i is connected &
+       S.i meets A & S.i meets B;
+defpred P[set,Element of bool REAL] means $2 is closed-interval &
+       $2 meets A & $2 meets B & $2 c= S.$1;
+A5: for i being Nat ex u being Element of bool REAL
+    st P[i,u]
+  proof let i be Nat;
+      S.i meets A by A4;
+    then consider x being set such that
+A6:  x in S.i and
+A7:  x in A by XBOOLE_0:3;
+    reconsider x as Real by A7;
+      S.i meets B by A4;
+    then consider y being set such that
+A8:  y in S.i and
+A9:  y in B by XBOOLE_0:3;
+    reconsider y as Real by A9;
+A10:  S.i is connected by A4;
+   per cases;
+   suppose
+A11:   x <= y;
+    take [.x,y.];
+    thus [.x,y.] is closed-interval by A11,INTEGRA1:def 1;
+       x in [.x,y.] by A11,RCOMP_1:15;
+    hence [.x,y.] meets A by A7,XBOOLE_0:3;
+       y in [.x,y.] by A11,RCOMP_1:15;
+    hence [.x,y.] meets B by A9,XBOOLE_0:3;
+    thus [.x,y.] c= S.i by A6,A8,A10,Def3;
+   suppose
+A12:  y <= x;
+    take [.y,x.];
+    thus [.y,x.] is closed-interval by A12,INTEGRA1:def 1;
+       x in [.y,x.] by A12,RCOMP_1:15;
+    hence [.y,x.] meets A by A7,XBOOLE_0:3;
+       y in [.y,x.] by A12,RCOMP_1:15;
+    hence [.y,x.] meets B by A9,XBOOLE_0:3;
+    thus [.y,x.] c= S.i by A6,A8,A10,Def3;
+  end;
+  consider T be Function of NAT, bool REAL such that
+A13:  for i being Nat holds P[i,T.i] from FuncExD(A5);
+deffunc F(Nat)=T.$1 /\ A;
+  consider SA being Function of NAT, bool REAL such that
+A14: for i being Nat holds SA.i = F(i) from LambdaD;
+deffunc G(Nat)=T.$1 /\ B;
+  consider SB being Function of NAT, bool REAL such that
+A15: for i being Nat holds SB.i = G(i) from LambdaD;
+defpred P[Nat,Real,Real] means
+    $2 in SA.$1 & $3 in SB.$1 & dist(SA.$1,SB.$1) = abs($2 - $3);
+A16: for i being Nat
+    ex ai,bi being Real st P[i,ai,bi]
+    proof let i be Nat;
+      reconsider Si = T.i as closed-interval Subset of REAL by A13;
+A17:    T.i meets A & T.i meets B by A13;
+        SA.i = Si /\ A & SB.i = Si /\ B by A14,A15;
+      then reconsider SAi = SA.i, SBi = SB.i
+             as non empty compact Subset of REAL by A17,Th14,XBOOLE_0:def 7;
+        consider ai,bi being real number such that
+        A18: ai in SAi & bi in SBi &
+       dist(SAi,SBi) = abs(ai - bi) by Th18;
+       reconsider ai,bi as Real by XREAL_0:def 1;
+       take ai,bi;
+       thus P[i,ai,bi] by A18;
+    end;
+  consider sa,sb being Real_Sequence such that
+A19: for i being Nat holds P[i,sa.i,sb.i] from DoubleChoice(A16);
+    rng sa c= [.e,f.]
+   proof let u be set;
+    assume u in rng sa;
+     then consider x being set such that
+A20:   x in dom sa and
+A21:   u = sa.x by FUNCT_1:def 5;
+     reconsider n = x as Nat by A20;
+       sa.n in SA.n by A19;
+     then u in T.n /\ A by A14,A21;
+     then u in A by XBOOLE_0:def 3;
+    hence u in [.e,f.] by A2;
+   end;
+  then consider ga being Real_Sequence such that
+A22: ga is_subsequence_of sa and
+A23: ga is convergent and
+A24: lim ga in [.e,f.] by RCOMP_1:def 3;
+  consider Nseq being increasing Seq_of_Nat such that
+A25:  ga = sa*Nseq by A22,SEQM_3:def 10;
+  set gb = sb*Nseq;
+    rng gb c= [.e,f.]
+   proof let u be set;
+    assume u in rng gb;
+     then consider x being set such that
+A26:   x in dom gb and
+A27:   u = gb.x by FUNCT_1:def 5;
+     reconsider n = x as Nat by A26;
+       gb.n = sb.(Nseq.n) by SEQM_3:31;
+     then gb.n in SB.(Nseq.n) by A19;
+     then u in T.(Nseq.n) /\ B by A15,A27;
+     then u in B by XBOOLE_0:def 3;
+    hence u in [.e,f.] by A3;
+   end;
+  then consider fb being Real_Sequence such that
+A28: fb is_subsequence_of gb and
+A29: fb is convergent and
+A30: lim fb in [.e,f.] by RCOMP_1:def 3;
+  consider Nseq1 being increasing Seq_of_Nat such that
+A31:  fb = gb*Nseq1 by A28,SEQM_3:def 10;
+  set fa = ga*Nseq1, r = (lim fa + lim fb)/2;
+    fa is_subsequence_of ga by SEQM_3:def 10;
+  then A32: lim fa = lim ga by A23,SEQ_4:30;
+  set d0 = dist(A,B),
+      ff = (1/2)(#)(fa+fb);
+    fa is_subsequence_of ga by SEQM_3:def 10;
+  then A33: fa is convergent by A23,SEQ_4:29;
+   then A34: fa+fb is convergent by A29,SEQ_2:19;
+   then A35: ff is convergent by SEQ_2:21;
+A36: r = (1/2)*(lim fa + lim fb) by XCMPLX_1:100
+     .= (1/2)*lim(fa+fb) by A29,A33,SEQ_2:20
+     .= lim ff by A34,SEQ_2:22;
+      T.0 meets A & T.0 meets B by A13;
+    then A is non empty & B is non empty by XBOOLE_1:65;
+    then d0 > 0 by A1,Th20;
+    then d0/2 > 0 by REAL_2:127;
+   then consider k0 being Nat such that
+A37: for i being Nat st k0 <= i holds abs(ff.i - r) < d0/2
+         by A35,A36,SEQ_2:def 7;
+A38: now assume
+A39: r in A \/ B;
+     ff.k0 = (1/2)*((fa+fb).k0) by SEQ_1:13
+     .= ((fa+fb).k0)/2 by XCMPLX_1:100
+     .= (fa.k0+fb.k0)/2 by SEQ_1:11;
+   then A40: abs((fa.k0+fb.k0)/2 - r) < d0/2 by A37;
+   set i = Nseq.(Nseq1.k0),
+       di = dist(SA.i,SB.i);
+        T.i meets A & T.i meets B by A13;
+      then T.i /\ A <> {} & T.i /\ B <> {} by XBOOLE_0:def 7;
+then A41: SA.i is non empty & SB.i is non empty by A14,A15;
+A42: SA.i = T.i /\ A & SB.i = T.i /\ B by A14,A15;
+   then SA.i c= A & SB.i c= B by XBOOLE_1:17;
+   then A43:  d0 <= di by A41,Th17;
+   then d0/2 <= di/2 by REAL_1:73;
+   then di/2 + d0/2 <= di/2 + di/2 by AXIOMS:24;
+   then A44:  di/2 + d0/2 <= di by XCMPLX_1:66;
+A45: fa.k0 = ga.(Nseq1.k0) by SEQM_3:31
+        .= sa.i by A25,SEQM_3:31;
+A46: fb.k0 = gb.(Nseq1.k0) by A31,SEQM_3:31
+        .= sb.i by SEQM_3:31;
+     T.i is closed-interval by A13;
+   then consider a,b being Real such that
+       a <= b and
+A47:  T.i = [.a,b.] by INTEGRA1:def 1;
+     2*(d0/2) = d0 by XCMPLX_1:88;
+   then A48: 2*abs((sa.i+sb.i)/2 - r) < d0 by A40,A45,A46,REAL_1:70;
+A49: 2*abs((sa.i+sb.i)/2 - r) = abs(2)*abs((sa.i+sb.i)/2 - r) by ABSVALUE:def 1
+        .= abs(2*((sa.i+sb.i)/2 - r)) by ABSVALUE:10
+        .= abs(2*((sa.i+sb.i)/2) - 2*r) by XCMPLX_1:40
+        .= abs(sa.i+sb.i-2*r) by XCMPLX_1:88;
+A50: sa.i in SA.i & sb.i in SB.i by A19;
+A51: SA.i c= T.i & SB.i c= T.i by A42,XBOOLE_1:17;
+A52: di <= abs(sb.i-sa.i) by A50,Th16;
+A53: now per cases;
+    suppose sa.i <= sb.i;
+     then sb.i - sa.i >= 0 by SQUARE_1:12;
+    then di <= sb.i-sa.i by A52,ABSVALUE:def 1;
+    then d0 <= sb.i-sa.i by A43,AXIOMS:22;
+
+   then abs(sa.i+sb.i-2*r) <= sb.i-sa.i by A48,A49,AXIOMS:22;
+   then A54: r in [.sa.i,sb.i.] by RCOMP_1:9;
+       [.sa.i,sb.i.] c= T.i by A47,A50,A51,RCOMP_1:16;
+    hence r in T.i by A54;
+    suppose sb.i <= sa.i;
+     then A55:   sa.i - sb.i >= 0 by SQUARE_1:12;
+      abs(sb.i-sa.i) = abs(sa.i-sb.i) by UNIFORM1:13;
+    then di <= sa.i-sb.i by A52,A55,ABSVALUE:def 1;
+    then d0 <= sa.i-sb.i by A43,AXIOMS:22;
+
+   then abs(sb.i+sa.i-2*r) <= sa.i-sb.i by A48,A49,AXIOMS:22;
+   then A56: r in [.sb.i,sa.i.] by RCOMP_1:9;
+       [.sb.i,sa.i.] c= T.i by A47,A50,A51,RCOMP_1:16;
+    hence r in T.i by A56;
+   end;
+  per cases by A39,XBOOLE_0:def 2;
+  suppose
+A57: r in B;
+     fa.k0 - (fa.k0+fb.k0)/2 = (fa.k0 + fa.k0)/2 - (fa.k0+fb.k0)/2 by XCMPLX_1:
+65
+          .= (fa.k0 + fa.k0 - (fa.k0+fb.k0))/2 by XCMPLX_1:121
+          .= (fa.k0 + fa.k0 - fa.k0 - fb.k0)/2 by XCMPLX_1:36
+          .= (fa.k0 - fb.k0)/2 by XCMPLX_1:26;
+   then fa.k0 - r = (fa.k0-fb.k0)/2 + (fa.k0+fb.k0)/2 - r by XCMPLX_1:27
+       .= (fa.k0-fb.k0)/2 + ((fa.k0+fb.k0)/2 - r) by XCMPLX_1:29;
+   then A58:  abs(fa.k0 - r) <= abs((fa.k0-fb.k0)/2) + abs((fa.k0+fb.k0)/2 - r)
+               by ABSVALUE:13;
+A59:  abs((fa.k0-fb.k0)/2) = abs((fa.k0-fb.k0))/abs(2) by ABSVALUE:16
+      .= abs((fa.k0-fb.k0))/2 by ABSVALUE:def 1;
+     abs((fa.k0-fb.k0)/2) + abs((fa.k0+fb.k0)/2 - r) <
+     abs((fa.k0-fb.k0)/2) + d0/2
+        by A40,REAL_1:53;
+   then A60:  abs(fa.k0 - r) < abs((fa.k0-fb.k0))/2 + d0/2 by A58,A59,AXIOMS:22
+;
+A61: fa.k0 in SA.i by A19,A45;
+     SB.i = T.i /\ B by A15;
+   then A62: r in SB.i by A53,A57,XBOOLE_0:def 3;
+     abs(fa.k0 - r) < di/2 + d0/2 by A19,A45,A46,A60;
+   then abs(fa.k0 - r) < di by A44,AXIOMS:22;
+  hence contradiction by A61,A62,Th16;
+  suppose
+A63: r in A;
+     fb.k0 - (fb.k0+fa.k0)/2 = (fb.k0 + fb.k0)/2 - (fb.k0+fa.k0)/2 by XCMPLX_1:
+65
+          .= (fb.k0 + fb.k0 - (fb.k0+fa.k0))/2 by XCMPLX_1:121
+          .= (fb.k0 + fb.k0 - fb.k0 - fa.k0)/2 by XCMPLX_1:36
+          .= (fb.k0 - fa.k0)/2 by XCMPLX_1:26;
+   then fb.k0 - r = (fb.k0-fa.k0)/2 + (fb.k0+fa.k0)/2 - r by XCMPLX_1:27
+       .= (fb.k0-fa.k0)/2 + ((fb.k0+fa.k0)/2 - r) by XCMPLX_1:29;
+   then A64:  abs(fb.k0 - r) <= abs((fb.k0-fa.k0)/2) + abs((fb.k0+fa.k0)/2 - r)
+    by ABSVALUE:13;
+A65:  abs((fb.k0-fa.k0)/2) = abs((fb.k0-fa.k0))/abs(2) by ABSVALUE:16
+      .= abs((fb.k0-fa.k0))/2 by ABSVALUE:def 1;
+     abs((fb.k0-fa.k0)/2) + abs((fb.k0+fa.k0)/2 - r) <
+     abs((fb.k0-fa.k0)/2) + d0/2
+        by A40,REAL_1:53;
+   then A66:  abs(fb.k0 - r) < abs((fb.k0-fa.k0))/2 + d0/2 by A64,A65,AXIOMS:22
+;
+A67: fb.k0 in SB.i by A19,A46;
+     SA.i = T.i /\ A by A14;
+   then A68: r in SA.i by A53,A63,XBOOLE_0:def 3;
+     abs(fb.k0-fa.k0) = abs(fa.k0-fb.k0) by UNIFORM1:13
+       .= di by A19,A45,A46;
+   then abs(fb.k0 - r) < di by A44,A66,AXIOMS:22;
+  hence contradiction by A67,A68,Th16;
+ end;
+ take r;
+ thus r in [.e,f.] by A24,A30,A32,Th9;
+ thus not r in A \/ B by A38;
+ let i being Nat;
+A69: i <= Nseq.i by SEQM_3:33;
+      i <= Nseq1.i by SEQM_3:33;
+   then Nseq.i <= Nseq.(Nseq1.i) by Th10;
+   then A70: i <= Nseq.(Nseq1.i) by A69,AXIOMS:22;
+  set k = max(k0,i);
+A71: k0 <= k by SQUARE_1:46;
+ take j = Nseq.(Nseq1.k);
+    i <= k by SQUARE_1:46;
+  then Nseq1.i <= Nseq1.k by Th10;
+  then Nseq.(Nseq1.i) <= j by Th10;
+ hence i <= j by A70,AXIOMS:22;
+     ff.k = (1/2)*((fa+fb).k) by SEQ_1:13
+     .= ((fa+fb).k)/2 by XCMPLX_1:100
+     .= (fa.k+fb.k)/2 by SEQ_1:11;
+   then A72: abs((fa.k+fb.k)/2 - r) < d0/2 by A37,A71;
+   set di = dist(SA.j,SB.j);
+        T.j meets A & T.j meets B by A13;
+      then T.j /\ A <> {} & T.j /\ B <> {} by XBOOLE_0:def 7;
+      then A73: SA.j is non empty & SB.j is non empty by A14,A15;
+A74: SA.j = T.j /\ A & SB.j = T.j /\ B by A14,A15;
+   then SA.j c= A & SB.j c= B by XBOOLE_1:17;
+   then A75:  d0 <= di by A73,Th17;
+A76: fa.k = ga.(Nseq1.k) by SEQM_3:31
+        .= sa.j by A25,SEQM_3:31;
+A77: fb.k = gb.(Nseq1.k) by A31,SEQM_3:31
+        .= sb.j by SEQM_3:31;
+     T.j is closed-interval by A13;
+   then consider a,b be Real such that
+       a <= b and
+A78:  T.j = [.a,b.] by INTEGRA1:def 1;
+     2*(d0/2) = d0 by XCMPLX_1:88;
+   then A79: 2*abs((sa.j+sb.j)/2 - r) < d0 by A72,A76,A77,REAL_1:70;
+A80: 2*abs((sa.j+sb.j)/2 - r) = abs(2)*abs((sa.j+sb.j)/2 - r) by ABSVALUE:def 1
+        .= abs(2*((sa.j+sb.j)/2 - r)) by ABSVALUE:10
+        .= abs(2*((sa.j+sb.j)/2) - 2*r) by XCMPLX_1:40
+        .= abs(sa.j+sb.j-2*r) by XCMPLX_1:88;
+A81: sa.j in SA.j & sb.j in SB.j by A19;
+A82: SA.j c= T.j & SB.j c= T.j by A74,XBOOLE_1:17;
+A83: di <= abs(sb.j-sa.j) by A81,Th16;
+A84:
+   now per cases;
+    suppose sa.j <= sb.j;
+     then sb.j - sa.j >= 0 by SQUARE_1:12;
+    then di <= sb.j-sa.j by A83,ABSVALUE:def 1;
+    then d0 <= sb.j-sa.j by A75,AXIOMS:22;
+
+   then abs(sa.j+sb.j-2*r) <= sb.j-sa.j by A79,A80,AXIOMS:22;
+   then A85: r in [.sa.j,sb.j.] by RCOMP_1:9;
+       [.sa.j,sb.j.] c= T.j by A78,A81,A82,RCOMP_1:16;
+    hence r in T.j by A85;
+    suppose sb.j <= sa.j;
+     then A86:   sa.j - sb.j >= 0 by SQUARE_1:12;
+      abs(sb.j-sa.j) = abs(sa.j-sb.j) by UNIFORM1:13;
+    then di <= sa.j-sb.j by A83,A86,ABSVALUE:def 1;
+    then d0 <= sa.j-sb.j by A75,AXIOMS:22;
+   then abs(sb.j+sa.j-2*r) <= sa.j-sb.j by A79,A80,AXIOMS:22;
+   then A87: r in [.sb.j,sa.j.] by RCOMP_1:9;
+       [.sb.j,sa.j.] c= T.j by A78,A81,A82,RCOMP_1:16;
+  hence r in T.j by A87;
+ end;
+    T.j c= S.j by A13;
+ hence r in S.j by A84;
+end;
+

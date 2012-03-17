@@ -1,0 +1,1691 @@
+:: The Sum and Product of Finite Sequences of Real Numbers
+::  by Czes{\l}aw Byli\'nski
+::
+:: Received May 11, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, FINSEQ_2, ARYTM_1, FUNCT_1, RELAT_1, BINOP_1, VECTSP_1,
+      SETWISEO, SQUARE_1, ARYTM, FUNCOP_1, FINSEQOP, RLVECT_1, RVSUM_1, CARD_3,
+      BOOLE;
+ notation TARSKI, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, XREAL_0, REAL_1,
+      NAT_1, SQUARE_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCOP_1,
+      VECTSP_1, SETWISEO, FINSEQ_1, FINSEQ_2, FINSEQ_4, SEQ_1, FINSEQOP,
+      SETWOP_2;
+ constructors REAL_1, NAT_1, SQUARE_1, BINOP_1, VECTSP_1, SETWISEO, FINSEQOP,
+      FINSOP_1, FINSEQ_4, SEQ_2, MEMBERED, PARTFUN1, XBOOLE_0;
+ clusters RELSET_1, FINSEQ_2, NAT_1, MEMBERED, ZFMISC_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, XBOOLE_0, ORDINAL2;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions BINOP_1, SETWISEO, FINSEQOP;
+ theorems REAL_1, SQUARE_1, FUNCT_1, FUNCT_2, BINOP_1, FINSEQ_1, FUNCOP_1,
+      FINSEQ_2, VECTSP_1, FINSEQOP, SETWOP_2, RELAT_1, FINSOP_1, XREAL_0,
+      ZFMISC_1, XCMPLX_0, XCMPLX_1;
+ schemes NAT_1, FUNCT_2;
+
+begin
+
+ reserve i,j,k for Nat;
+ reserve x,x1,x2,x3,r,r1,r2,r3 for Element of REAL;
+ reserve F,F',F1,F2 for FinSequence of REAL;
+ reserve R,R1,R2,R3 for Element of i-tuples_on REAL;
+
+:: Auxiliary theorems
+
+canceled 2;
+
+theorem Th3:
+   0 is_a_unity_wrt addreal
+ proof
+  thus for x holds addreal.(0,x) = x
+   proof let x;
+    thus addreal.(0,x) = 0 + x by VECTSP_1:def 4 .= x;
+   end;
+  let x;
+  thus addreal.(x,0) = x + 0 by VECTSP_1:def 4 .= x;
+ end;
+
+theorem Th4:
+   the_unity_wrt addreal = 0 by Th3,BINOP_1:def 8;
+
+theorem Th5:
+   addreal has_a_unity
+ proof reconsider O=0 as Element of REAL;
+  take O; thus thesis by Th3;
+ end;
+
+theorem Th6:
+   addreal is commutative
+ proof let x1,x2;
+  thus addreal.(x1,x2) = x2 + x1 by VECTSP_1:def 4
+                      .= addreal.(x2,x1) by VECTSP_1:def 4;
+ end;
+
+theorem Th7:
+   addreal is associative
+ proof let x1,x2,x3;
+  thus addreal.(x1,addreal.(x2,x3))
+      = addreal.(x1,x2+x3) by VECTSP_1:def 4
+     .= x1+(x2+x3) by VECTSP_1:def 4
+     .= x1+x2+x3 by XCMPLX_1:1
+     .= (addreal.(x1,x2))+x3 by VECTSP_1:def 4
+     .= addreal.(addreal.(x1,x2),x3) by VECTSP_1:def 4;
+ end;
+
+definition
+ func diffreal -> BinOp of REAL equals
+:Def1:  addreal*(id REAL,compreal);
+  correctness;
+end;
+
+canceled;
+
+theorem Th9:
+   diffreal.(r1,r2) = r1 - r2
+ proof
+  thus diffreal.(r1,r2) = addreal.(r1,compreal.r2) by Def1,FINSEQOP:87
+                       .= addreal.(r1,- r2) by VECTSP_1:def 5
+                       .= r1 + - r2 by VECTSP_1:def 4
+                       .= r1 - r2 by XCMPLX_0:def 8;
+ end;
+
+definition
+ func sqrreal -> UnOp of REAL means
+:Def2: for r holds it.r = r^2;
+  existence
+ proof
+  deffunc F(Element of REAL) = ($1)^2;
+  consider G being Function of REAL,REAL such that
+A1: for x being Element of REAL holds G.x = F(x) from LambdaD;
+  take G; let r; thus G.r = (r)^2 by A1;
+ end;
+  uniqueness
+ proof let G1,G2 be UnOp of REAL such that
+A2: (for r holds G1.r = r^2) & for r holds G2.r = r^2;
+    now let x; G1.(x) = (x)^2 & G2.(x) = (x)^2 & x = x by A2;
+   hence G1.x = G2.x;
+  end;
+  hence thesis by FUNCT_2:113;
+ end;
+end;
+
+canceled;
+
+theorem Th11:
+   multreal is commutative
+ proof let x1,x2;
+  thus multreal.(x1,x2) = x2 * x1 by VECTSP_1:def 14
+                       .= multreal.(x2,x1) by VECTSP_1:def 14;
+ end;
+
+theorem Th12:
+   multreal is associative
+ proof let x1,x2,x3;
+  thus multreal.(x1,multreal.(x2,x3))
+      = multreal.(x1,x2*x3) by VECTSP_1:def 14
+     .= x1*(x2*x3) by VECTSP_1:def 14
+     .= x1*x2*x3 by XCMPLX_1:4
+     .= (multreal.(x1,x2))*x3 by VECTSP_1:def 14
+     .= multreal.(multreal.(x1,x2),x3) by VECTSP_1:def 14;
+ end;
+
+theorem Th13:
+   1 is_a_unity_wrt multreal
+ proof
+  thus for x holds multreal.(1,x) = x
+   proof let x;
+    thus multreal.(1,x) = 1 * x by VECTSP_1:def 14 .= x;
+   end;
+  let x;
+  thus multreal.(x,1) = x * 1 by VECTSP_1:def 14 .= x;
+ end;
+
+theorem Th14:
+   the_unity_wrt multreal = 1 by Th13,BINOP_1:def 8;
+
+theorem Th15:
+   multreal has_a_unity
+ proof reconsider O=1 as Element of REAL; take O; thus thesis by Th13; end;
+
+theorem Th16:
+   multreal is_distributive_wrt addreal
+ proof
+    now let x1,x2,x3;
+   thus multreal.(x1,addreal.(x2,x3))
+      = multreal.(x1,x2+x3) by VECTSP_1:def 4
+     .= x1*(x2+x3) by VECTSP_1:def 14
+     .= x1*x2+x1*x3 by XCMPLX_1:8
+     .= addreal.(x1*x2,x1*x3) by VECTSP_1:def 4
+     .= addreal.(multreal.(x1,x2),x1*x3) by VECTSP_1:def 14
+     .= addreal.(multreal.(x1,x2),multreal.(x1,x3)) by VECTSP_1:def 14;
+   thus multreal.(addreal.(x1,x2),x3)
+      = multreal.(x1+x2,x3) by VECTSP_1:def 4
+     .= (x1+x2)*x3 by VECTSP_1:def 14
+     .= x1*x3+x2*x3 by XCMPLX_1:8
+     .= addreal.(x1*x3,x2*x3) by VECTSP_1:def 4
+     .= addreal.(multreal.(x1,x3),x2*x3) by VECTSP_1:def 14
+     .= addreal.(multreal.(x1,x3),multreal.(x2,x3)) by VECTSP_1:def 14;
+  end;
+  hence thesis by BINOP_1:23;
+ end;
+
+theorem Th17:
+   sqrreal is_distributive_wrt multreal
+ proof let x1,x2;
+   thus sqrreal.(multreal.(x1,x2))
+      = sqrreal.(x1*x2) by VECTSP_1:def 14
+     .= (x1*x2)^2 by Def2
+     .= x1^2*x2^2 by SQUARE_1:68
+     .= multreal.(x1^2,x2^2) by VECTSP_1:def 14
+     .= multreal.(sqrreal.x1,x2^2) by Def2
+     .= multreal.(sqrreal.x1,sqrreal.x2) by Def2;
+ end;
+
+definition let x be real number;
+ func x multreal -> UnOp of REAL equals
+:Def3: multreal[;](x,id REAL);
+ coherence
+   proof
+     reconsider y = x as Real by XREAL_0:def 1;
+       multreal[;](y,id REAL) is UnOp of REAL;
+     hence thesis;
+   end;
+end;
+
+Lm1:
+   (multreal[;](r,id REAL)).x = r*x
+ proof
+  thus (multreal[;](r,id REAL)).x = multreal.(r,(id REAL).x) by FUNCOP_1:66
+                               .= multreal.(r,x) by FUNCT_1:35
+                               .= r*x by VECTSP_1:def 14;
+ end;
+
+canceled;
+
+theorem
+     (r multreal).x = r*x
+ proof r multreal = multreal[;](r,id REAL) by Def3;
+  hence thesis by Lm1;
+ end;
+
+theorem Th20:
+   r multreal is_distributive_wrt addreal
+ proof r multreal = multreal[;](r,id REAL) by Def3;
+  hence thesis by Th16,FINSEQOP:55;
+ end;
+
+theorem Th21:
+   compreal is_an_inverseOp_wrt addreal
+ proof let x;
+   thus addreal.(x,compreal.x) = x+compreal.x by VECTSP_1:def 4
+                              .= x+-x by VECTSP_1:def 5
+                              .= the_unity_wrt addreal by Th4,XCMPLX_0:def 6;
+   thus addreal.(compreal.x,x) = compreal.x+x by VECTSP_1:def 4
+                              .= -x+x by VECTSP_1:def 5
+                              .= the_unity_wrt addreal by Th4,XCMPLX_0:def 6;
+ end;
+
+theorem Th22:
+   addreal has_an_inverseOp by Th21,FINSEQOP:def 2;
+
+theorem Th23:
+   the_inverseOp_wrt addreal = compreal by Th5,Th7,Th21,Th22,FINSEQOP:def 3;
+
+theorem
+     compreal is_distributive_wrt addreal by Th5,Th6,Th7,Th22,Th23,FINSEQOP:67;
+
+:: Some Functors on the i-tuples on Real
+
+
+definition let F1,F2;
+  func F1 + F2 -> FinSequence of REAL equals
+:Def4: addreal.:(F1,F2);
+   correctness;
+ commutativity
+  proof let F,F1,F2 be FinSequence of REAL;
+   assume
+A1:  F = addreal.:(F1,F2);
+A2:  dom addreal = [:REAL,REAL:] by FUNCT_2:def 1;
+A3:  rng F1 c= REAL by FINSEQ_1:def 4;
+A4:  rng F2 c= REAL by FINSEQ_1:def 4;
+    then A5:  [:rng F2, rng F1:] c= dom addreal by A2,A3,ZFMISC_1:119;
+      [:rng F1, rng F2:] c= dom addreal by A2,A3,A4,ZFMISC_1:119;
+    then A6:  dom(addreal.:(F1,F2)) = dom F1 /\ dom F2 by FUNCOP_1:84
+          .= dom(addreal.:(F2,F1)) by A5,FUNCOP_1:84;
+      for z being set st z in dom(addreal.:(F2,F1))
+       holds F.z = addreal.(F2.z,F1.z)
+     proof let z be set such that
+A7:    z in dom(addreal.:(F2,F1));
+       set F1z = F1.z, F2z =F2.z;
+      thus F.z = addreal.(F1.z,F2.z) by A1,A6,A7,FUNCOP_1:28
+           .= F1z + F2z by VECTSP_1:def 4
+           .= addreal.(F2.z,F1.z) by VECTSP_1:def 4;
+     end;
+   hence F = addreal.:(F2,F1) by A1,A6,FUNCOP_1:27;
+  end;
+end;
+
+canceled;
+
+theorem Th26:
+   i in dom (F1+F2) implies (F1+F2).i = F1.i + F2.i
+ proof assume that
+A1: i in dom (F1+F2);
+  set r1 = F1.i, r2 = F2.i;
+    F1 + F2 = addreal.:(F1,F2) & i in dom(F1+F2) by A1,Def4;
+  then (F1 + F2).i = addreal.(r1,r2) by FUNCOP_1:28;
+  hence thesis by VECTSP_1:def 4;
+ end;
+
+definition let i,R1,R2;
+  redefine func R1 + R2 -> Element of i-tuples_on REAL;
+   coherence
+ proof R1 + R2 = addreal.:(R1,R2) by Def4; hence thesis by FINSEQ_2:140; end;
+end;
+
+theorem Th27:
+   (R1+R2).j = R1.j + R2.j
+ proof per cases;
+  suppose
+A1:  not j in Seg i;
+   then A2:  not j in dom R1 by FINSEQ_2:144;
+A3:  not j in dom R2 by A1,FINSEQ_2:144;
+      not j in dom(R1+R2) by A1,FINSEQ_2:144;
+   hence (R1+R2).j = 0+0 by FUNCT_1:def 4
+       .= R1.j + 0 by A2,FUNCT_1:def 4
+       .= R1.j + R2.j by A3,FUNCT_1:def 4;
+  suppose j in Seg i;
+   then j in dom (R1 + R2) by FINSEQ_2:144;
+  hence thesis by Th26;
+ end;
+
+theorem
+     <*>REAL + F = <*>REAL
+ proof
+     <*>REAL + F = addreal.:(<*>REAL,F) by Def4;
+  hence thesis by FINSEQ_2:87;
+ end;
+
+theorem
+     <*r1*> + <*r2*> = <*r1+r2*>
+ proof
+   thus <*r1*> + <*r2*> = addreal.:(<*r1*>,<*r2*>) by Def4
+                       .= <*addreal.(r1,r2)*> by FINSEQ_2:88
+                       .= <*r1+r2*> by VECTSP_1:def 4;
+ end;
+
+theorem
+     (i|->r1) + (i|->r2) = i|->(r1+r2)
+ proof
+   thus (i|->r1) + (i|->r2) = addreal.:(i|->r1,i|->r2) by Def4
+                           .= i|->(addreal.(r1,r2)) by FINSEQOP:18
+                           .= i|->(r1+r2) by VECTSP_1:def 4;
+ end;
+
+canceled;
+
+theorem Th32:
+   R1 + (R2 + R3) = R1 + R2 + R3
+ proof
+   thus R1 + (R2 + R3) = addreal.:(R1,R2+R3) by Def4
+                      .= addreal.:(R1,addreal.:(R2,R3)) by Def4
+                      .= addreal.:(addreal.:(R1,R2),R3) by Th7,FINSEQOP:29
+                      .= addreal.:(R1+R2,R3) by Def4
+                      .= R1 + R2 + R3 by Def4;
+ end;
+
+theorem Th33:
+   R + (i|->(0 qua Real)) = R
+ proof
+  thus R + (i|->(0 qua Real)) = addreal.:(R,i|->0) by Def4
+  .= R by Th4,Th5,FINSEQOP:57;
+ end;
+
+definition let F;
+  func -F -> FinSequence of REAL equals
+:Def5: compreal*F;
+   correctness;
+ involutiveness
+  proof let f,F be FinSequence of REAL;
+   assume
+A1:   f = compreal*F;
+A2:  rng f c= REAL by FINSEQ_1:def 4;
+A3:  rng F c= REAL by FINSEQ_1:def 4;
+A4:  rng f c= dom compreal by A2,FUNCT_2:def 1;
+      rng F c= dom compreal by A3,FUNCT_2:def 1;
+    then A5:  dom F = dom f by A1,RELAT_1:46;
+    then A6:  dom F = dom(compreal*f) by A4,RELAT_1:46;
+      for k st k in dom F holds F.k = (compreal*f).k
+     proof let k such that
+A7:    k in dom F;
+      reconsider fk = f.k, Fk = F.k as Element of REAL;
+      thus F.k = --Fk
+          .= -compreal.(F.k) by VECTSP_1:def 5
+          .= -fk by A1,A7,FUNCT_1:23
+          .= compreal.(f.k) by VECTSP_1:def 5
+          .= (compreal*f).k by A5,A7,FUNCT_1:23;
+     end;
+   hence F = compreal*f by A6,FINSEQ_1:17;
+  end;
+end;
+
+theorem Th34:
+ dom F = dom -F
+  proof
+      dom compreal = REAL by FUNCT_2:def 1;
+    then rng F c= dom compreal by FINSEQ_1:def 4;
+   hence dom F = dom(compreal*F) by RELAT_1:46
+        .= dom -F by Def5;
+  end;
+
+theorem Th35:
+  (-F).i = -F.i
+ proof per cases;
+  suppose
+A1:  not i in dom -F;
+   then A2:   not i in dom F by Th34;
+   thus (-F).i = -0 by A1,FUNCT_1:def 4
+      .= -F.i by A2,FUNCT_1:def 4;
+  suppose
+A3:  i in dom -F;
+  set r = F.i;
+     -F = compreal*F by Def5;
+  then (-F).i = compreal.r by A3,FUNCT_1:22;
+  hence thesis by VECTSP_1:def 5;
+ end;
+
+definition let i,R;
+ redefine func -R -> Element of i-tuples_on REAL;
+  coherence
+ proof -R = compreal*R by Def5; hence thesis by FINSEQ_2:133; end;
+end;
+
+theorem
+     r = R.j implies (-R).j = -r by Th35;
+
+theorem
+     -(<*>REAL) = <*>REAL
+ proof -(<*>REAL) = compreal*(<*>REAL) by Def5;
+  hence thesis by FINSEQ_2:38;
+ end;
+
+theorem
+     -<*r*> = <*-r*>
+ proof
+   thus -<*r*> = compreal*<*r*> by Def5
+              .= <*compreal.r*> by FINSEQ_2:39
+              .= <*-r*> by VECTSP_1:def 5;
+ end;
+
+theorem Th39:
+   -(i|->r) = i|->-r
+ proof
+   thus -(i|->r) = compreal*(i|->r) by Def5
+                .= i|->(compreal.r) by FINSEQOP:17
+                .= i|->-r by VECTSP_1:def 5;
+ end;
+
+theorem Th40:
+   R + -R = (i|->0)
+ proof
+  thus R + -R = addreal.:(R,-R) by Def4
+             .= addreal.:(R,compreal*R) by Def5
+             .= i|->0 by Th4,Th5,Th7,Th22,Th23,FINSEQOP:77;
+ end;
+
+theorem Th41:
+   R1 + R2 = (i|->0) implies R1 = -R2
+ proof
+     R1 + R2 = addreal.:(R1,R2) & -R2 = compreal*R2 by Def4,Def5;
+  hence thesis by Th4,Th5,Th7,Th22,Th23,FINSEQOP:78;
+ end;
+
+canceled;
+
+theorem
+     -R1 = -R2 implies R1 = R2
+ proof assume -R1 = -R2; hence R1 = --R2 .= R2; end;
+
+theorem
+     R1 + R = R2 + R implies R1 = R2
+ proof assume R1 + R = R2 + R;
+  then R1 + (R + -R)= (R2 + R)+-R by Th32;
+  then R1 + (R + -R)= R2 + (R + -R) & R + -R = (i|->0) by Th32,Th40;
+  then R1 = R2 + (i|->(0 qua Real)) by Th33;
+  hence R1 = R2 by Th33;
+ end;
+
+theorem Th45:
+   -(R1 + R2) = -R1 + -R2
+ proof
+     (R1 + R2) + (-R1 + -R2) = R1 + R2 + -R1 + -R2 by Th32
+                          .= R2 + (R1 + -R1) + -R2 by Th32
+                          .= R2 + (i|->(0 qua Real)) + -R2 by Th40
+                          .= R2 + -R2 by Th33
+                          .= (i|->0) by Th40;
+   hence thesis by Th41;
+ end;
+
+definition let F1,F2;
+  func F1 - F2 -> FinSequence of REAL equals
+:Def6: diffreal.:(F1,F2);
+   correctness;
+end;
+
+canceled;
+
+theorem Th47:
+   i in dom (F1-F2) implies (F1-F2).i = F1.i - F2.i
+ proof assume that
+A1: i in dom (F1-F2);
+   set r1 = F1.i, r2 = F2.i;
+    F1 - F2 = diffreal.:(F1,F2) & i in dom(F1-F2) by A1,Def6;
+  then (F1 - F2).i = diffreal.(r1,r2) by FUNCOP_1:28;
+  hence thesis by Th9;
+ end;
+
+definition let i,R1,R2;
+ redefine func R1 - R2 -> Element of i-tuples_on REAL;
+  coherence
+ proof R1 - R2 = diffreal.:(R1,R2) by Def6;
+  hence thesis by FINSEQ_2:140;
+ end;
+end;
+
+theorem
+     (R1-R2).j = R1.j - R2.j
+ proof per cases;
+  suppose
+A1:  not j in Seg i;
+   then A2:  not j in dom R1 by FINSEQ_2:144;
+A3:  not j in dom R2 by A1,FINSEQ_2:144;
+      not j in dom(R1-R2) by A1,FINSEQ_2:144;
+   hence (R1-R2).j = 0-0 by FUNCT_1:def 4
+       .= R1.j - 0 by A2,FUNCT_1:def 4
+       .= R1.j - R2.j by A3,FUNCT_1:def 4;
+  suppose j in Seg i;
+  then j in dom (R1 - R2) by FINSEQ_2:144;
+  hence thesis by Th47;
+ end;
+
+theorem
+     <*>REAL - F = <*>REAL & F - <*>REAL = <*>REAL
+ proof
+    <*>REAL - F = diffreal.:(<*>REAL,F) & F - <*>REAL = diffreal.:(F,<*>REAL)
+   by Def6;
+  hence thesis by FINSEQ_2:87;
+ end;
+
+theorem
+     <*r1*> - <*r2*> = <*r1-r2*>
+ proof
+   thus <*r1*> - <*r2*> = diffreal.:(<*r1*>,<*r2*>) by Def6
+                       .= <*diffreal.(r1,r2)*> by FINSEQ_2:88
+                       .= <*r1-r2*> by Th9;
+ end;
+
+theorem
+     (i|->r1) - (i|->r2) = i|->(r1-r2)
+ proof
+   thus (i|->r1) - (i|->r2) = diffreal.:((i|->r1),(i|->r2)) by Def6
+                           .= i|->(diffreal.(r1,r2)) by FINSEQOP:18
+                           .= i|->(r1-r2) by Th9;
+ end;
+
+theorem Th52:
+   R1 - R2 = R1 + - R2
+ proof
+  thus R1 - R2 = diffreal.:(R1,R2) by Def6
+              .= addreal.:(R1,compreal*R2) by Def1,FINSEQOP:89
+              .= addreal.:(R1,-R2) by Def5
+              .= R1 + -R2 by Def4;
+ end;
+
+theorem
+     R - (i|->(0 qua Real)) = R
+ proof
+  thus R - (i|->(0 qua Real)) = R + - (i|->(0 qua Real)) by Th52
+  .= R + (i|->(0 qua Real)) by Th39,REAL_1:26 .= R by Th33;
+ end;
+
+theorem
+     (i|->(0 qua Real)) - R = -R
+ proof thus (i|->(0 qua Real)) - R = (i|->(0 qua Real)) + -R by Th52
+ .= - R by Th33; end;
+
+theorem
+     R1 - -R2 = R1 + R2
+ proof thus R1 - -R2 = R1 + --R2 by Th52 .= R1 + R2; end;
+
+theorem
+     -(R1 - R2) = R2 - R1
+ proof
+   thus -(R1 - R2) = -(R1 + -R2) by Th52
+                  .= -R1 + --R2 by Th45
+                  .= R2 - R1 by Th52;
+ end;
+
+theorem Th57:
+   -(R1 - R2) = -R1 + R2
+ proof
+   thus -(R1 - R2) = -(R1+ -R2) by Th52
+                  .= -R1 +--R2 by Th45
+                  .= -R1 + R2;
+ end;
+
+theorem Th58:
+   R - R = (i|->0)
+ proof thus R - R = R + - R by Th52 .= (i|->0) by Th40; end;
+
+theorem
+     R1 - R2 = (i|->0) implies R1 = R2
+ proof assume R1 - R2 = (i|->0);
+   then R1 + - R2 = (i|->0) by Th52;
+   then R1 = --R2 by Th41;
+   hence thesis;
+ end;
+
+theorem
+     R1 - R2 - R3 = R1 - (R2 + R3)
+ proof
+   thus R1 - R2 - R3 = R1 - R2 + - R3 by Th52
+                    .= R1 + - R2 + - R3 by Th52
+                    .= R1 + (- R2 + - R3) by Th32
+                    .= R1 + -(R2 + R3) by Th45
+                    .= R1 - (R2 + R3) by Th52;
+ end;
+
+theorem Th61:
+   R1 + (R2 - R3) = R1 + R2 - R3
+ proof
+   thus R1 + (R2 - R3) = R1 + (R2 + - R3) by Th52
+                      .= R1 + R2 + - R3 by Th32
+                      .= R1 + R2 - R3 by Th52;
+ end;
+
+theorem
+     R1 - (R2 - R3) = R1 - R2 + R3
+ proof
+   thus R1 - (R2 - R3) = R1 + - (R2 - R3) by Th52
+                      .= R1 + (- R2 + R3) by Th57
+                      .= R1 + - R2 + R3 by Th32
+                      .= R1 - R2 + R3 by Th52;
+ end;
+
+theorem
+     R1 = R1 + R - R
+ proof
+   thus R1 = R1 + (i|->(0 qua Real)) by Th33
+          .= R1 + (R - R) by Th58
+          .= R1 + R - R by Th61;
+ end;
+
+theorem
+     R1 = R1 - R + R
+ proof
+   thus R1 = R1 + (i|->(0 qua Real)) by Th33
+          .= R1 + (-R + R) by Th40
+          .= R1 + -R + R by Th32
+          .= R1 - R + R by Th52;
+ end;
+
+definition let r be real number; let F;
+  func r*F -> FinSequence of REAL equals
+:Def7: (r multreal)*F;
+   correctness;
+end;
+
+Lm2: r*F = (multreal[;](r,id REAL))*F
+ proof r multreal = multreal[;](r,id REAL) by Def3;
+  hence thesis by Def7;
+ end;
+
+theorem Th65:
+ dom(r*F) = dom F
+  proof
+      dom(r multreal) = REAL by FUNCT_2:def 1;
+    then rng F c= dom(r multreal) by FINSEQ_1:def 4;
+   hence dom F = dom((r multreal)*F) by RELAT_1:46
+        .= dom(r*F) by Def7;
+  end;
+
+theorem Th66:
+   (r*F).i = r*(F.i)
+ proof per cases;
+  suppose
+A1: not i in dom (r*F);
+    then A2:  not i in dom F by Th65;
+   thus (r*F).i = r*0 by A1,FUNCT_1:def 4
+      .= r*(F.i) by A2,FUNCT_1:def 4;
+  suppose
+A3:  i in dom (r*F);
+  set r' = F.i;
+A4:  i in dom(r*F) & r*F = (multreal[;](r,id REAL))*F by A3,Lm2;
+then A5:  r' in dom(multreal[;](r,id REAL)) by FUNCT_1:21;
+  thus (r*F).i = (multreal[;](r,id REAL)).r' by A4,FUNCT_1:22
+              .= multreal.(r,(id REAL).r') by A5,FUNCOP_1:42
+              .= multreal.(r,r') by FUNCT_1:35
+              .= r*(F.i) by VECTSP_1:def 14;
+ end;
+
+definition let i; let r be real number; let R;
+ redefine func r*R -> Element of i-tuples_on REAL;
+  coherence
+ proof
+  reconsider q = r as Real by XREAL_0:def 1;
+    q*R = (multreal[;](q,id REAL))*R by Lm2;
+  hence thesis by FINSEQ_2:133;
+ end;
+end;
+
+theorem
+     (r*R).j = r*(R.j) by Th66;
+
+theorem
+     r*(<*>REAL) = <*>REAL
+ proof r*(<*>REAL) = (multreal[;](r,id REAL))*(<*>REAL) by Lm2;
+  hence thesis by FINSEQ_2:38;
+ end;
+
+theorem
+     r*<*r1*> = <*r*r1*>
+ proof
+   thus r*<*r1*> = (multreal[;](r,id REAL))*<*r1*> by Lm2
+                .= <*(multreal[;](r,id REAL)).r1*> by FINSEQ_2:39
+                .= <*r*r1*> by Lm1;
+ end;
+
+theorem Th70:
+   r1*(i|->r2) = i|->(r1*r2)
+ proof
+   thus r1*(i|->r2) = (multreal[;](r1,id REAL))*(i|->r2) by Lm2
+                   .= i|->((multreal[;](r1,id REAL)).r2) by FINSEQOP:17
+                   .= i|->(r1*r2) by Lm1;
+ end;
+
+theorem Th71:
+   (r1*r2)*R = r1*(r2*R)
+ proof
+  thus (r1*r2)*R
+      = (multreal[;](r1*r2,id REAL))*R by Lm2
+     .= multreal[;](multreal.(r1,r2),id REAL)*R by VECTSP_1:def 14
+     .= multreal[;](r1,multreal[;](r2,id REAL))*R by Th12,FUNCOP_1:77
+     .= (multreal[;](r1,id REAL)*(multreal [;] (r2,id REAL)))*R
+     by FUNCOP_1:69
+     .= (multreal[;](r1,id REAL))*(multreal[;](r2,id REAL)*R) by RELAT_1:55
+     .= (multreal[;](r1,id REAL))*(r2*R) by Lm2
+     .= r1*(r2*R) by Lm2;
+ end;
+
+theorem
+     (r1 + r2)*R = r1*R + r2*R
+ proof
+  thus (r1 + r2)*R
+     = (multreal[;](r1 + r2,id REAL))*R by Lm2
+    .= multreal[;](addreal.(r1,r2),id REAL)*R by VECTSP_1:def 4
+    .= addreal.:(multreal[;](r1,id REAL),multreal[;](r2,id REAL))*R
+        by Th16,FINSEQOP:36
+    .= addreal.:(multreal[;](r1,id REAL)*R,multreal[;]
+(r2,id REAL)*R) by FUNCOP_1:31
+    .= multreal[;](r1,id REAL)*R + multreal[;](r2,id REAL)*R by Def4
+    .= r1*R + multreal[;](r2,id REAL)*R by Lm2
+    .= r1*R + r2*R by Lm2;
+ end;
+
+theorem
+     r*(R1+R2) = r*R1 + r*R2
+ proof set rM = r multreal;
+A1:  r multreal is_distributive_wrt addreal by Th20;
+  thus r*(R1+R2)
+     = rM*(R1 + R2) by Def7
+    .= rM*(addreal.:(R1,R2)) by Def4
+    .= addreal.:(rM*R1,rM*R2) by A1,FINSEQOP:52
+    .= rM*R1 + rM*R2 by Def4
+    .= r*R1 + rM*R2 by Def7
+    .= r*R1 + r*R2 by Def7;
+ end;
+
+theorem
+     1*R = R
+ proof
+A1: rng R c= REAL by FINSEQ_1:def 4;
+   thus 1*R = multreal[;](1,id REAL)*R by Lm2
+           .= (id REAL)*R by Th14,Th15,FINSEQOP:45
+           .= R by A1,RELAT_1:79;
+ end;
+
+theorem
+     0*R = (i|->0)
+ proof
+A1:  rng R c= REAL by FINSEQ_1:def 4;
+  thus 0*R = multreal[;](0,id REAL)*R by Lm2
+          .= multreal[;](0,(id REAL)*R) by FUNCOP_1:44
+          .= multreal[;](0,R) by A1,RELAT_1:79
+          .= i|->0 by Th4,Th5,Th7,Th16,Th22,FINSEQOP:80;
+ end;
+
+theorem Th76:
+   (-1)*R = -R
+ proof
+A1:   compreal.1 = -1 by VECTSP_1:def 5;
+   thus (-1)*R
+      = multreal[;](-1,id REAL)*R by Lm2
+     .= compreal*R by A1,Th5,Th7,Th14,Th15,Th16,Th22,Th23,FINSEQOP:72
+     .= -R by Def5;
+ end;
+
+definition let F;
+ func sqr F -> FinSequence of REAL equals
+:Def8: sqrreal*F;
+  correctness;
+end;
+
+theorem Th77:
+ dom(sqr F) = dom F
+  proof
+      dom sqrreal = REAL by FUNCT_2:def 1;
+    then rng F c= dom sqrreal by FINSEQ_1:def 4;
+   hence dom F = dom(sqrreal*F) by RELAT_1:46
+        .= dom(sqr F) by Def8;
+  end;
+
+theorem Th78:
+   (sqr F).i = (F.i)^2
+ proof per cases;
+  suppose
+A1:  not i in dom sqr F;
+    then A2:  not i in dom F by Th77;
+   thus (sqr F).i = 0^2 by A1,FUNCT_1:def 4,SQUARE_1:60
+      .= (F.i)^2 by A2,FUNCT_1:def 4;
+  suppose
+A3:  i in dom sqr F;
+  set r = F.i;
+    sqr F = sqrreal*F & i in dom(sqr F) by A3,Def8;
+  then (sqr F).i = sqrreal.r by FUNCT_1:22;
+  hence thesis by Def2;
+ end;
+
+definition let i,R;
+ redefine func sqr R -> Element of i-tuples_on REAL;
+  coherence
+ proof sqr R = sqrreal*R by Def8;
+  hence thesis by FINSEQ_2:133;
+ end;
+end;
+
+theorem
+   (sqr R).j = (R.j)^2 by Th78;
+
+theorem
+     sqr (<*>REAL) = <*>REAL
+ proof sqr (<*>REAL) = sqrreal*(<*>REAL) by Def8;
+  hence thesis by FINSEQ_2:38;
+ end;
+
+theorem
+     sqr <*r*> = <*r^2*>
+ proof
+   thus sqr <*r*> = sqrreal*<*r*> by Def8
+                 .= <*sqrreal.r*> by FINSEQ_2:39
+                 .= <*r^2*> by Def2;
+ end;
+
+theorem
+     sqr(i |-> r) = i |-> r^2
+ proof
+  thus sqr(i |-> r) = sqrreal*(i |-> r) by Def8
+                   .= i |-> (sqrreal.r) by FINSEQOP:17
+                   .= i |-> r^2 by Def2;
+ end;
+
+theorem Th83:
+   sqr -R = sqr R
+ proof
+    now let j; assume j in Seg i;
+   set r = R.j, r' = (-R).j;
+   thus (sqr -R).j = (r')^2 by Th78
+                  .= (-r)^2 by Th35
+                  .= r^2 by SQUARE_1:61
+                  .= (sqr R).j by Th78;
+  end;
+  hence thesis by FINSEQ_2:139;
+ end;
+
+theorem Th84:
+   sqr (r*R) = r^2* sqr R
+ proof
+A1: rng R c= REAL by FINSEQ_1:def 4;
+A2: rng(sqrreal*R) c= REAL by FINSEQ_1:def 4;
+  thus sqr (r*R) = sqrreal*(r*R) by Def8
+                .= sqrreal*(multreal[;](r,id REAL)*R) by Lm2
+                .= sqrreal*(multreal[;](r,(id REAL)*R)) by FUNCOP_1:44
+                .= sqrreal*(multreal[;](r,R)) by A1,RELAT_1:79
+                .= multreal[;](sqrreal.r,sqrreal*R) by Th17,FINSEQOP:53
+                .= multreal[;]
+(sqrreal.r,(id REAL)*(sqrreal*R)) by A2,RELAT_1:79
+                .= multreal[;](sqrreal.r,id REAL)*(sqrreal*R) by FUNCOP_1:44
+                .= multreal[;](r^2,id REAL)*(sqrreal*R) by Def2
+                .= r^2*(sqrreal*R) by Lm2
+                .= r^2* sqr R by Def8;
+ end;
+
+definition let F1,F2;
+  func mlt(F1,F2) -> FinSequence of REAL equals
+:Def9: multreal.:(F1,F2);
+  correctness;
+ commutativity
+  proof let F,F1,F2 be FinSequence of REAL;
+   assume
+A1:  F = multreal.:(F1,F2);
+A2:  dom multreal = [:REAL,REAL:] by FUNCT_2:def 1;
+A3:  rng F1 c= REAL by FINSEQ_1:def 4;
+A4:  rng F2 c= REAL by FINSEQ_1:def 4;
+    then A5:  [:rng F2, rng F1:] c= dom multreal by A2,A3,ZFMISC_1:119;
+      [:rng F1, rng F2:] c= dom multreal by A2,A3,A4,ZFMISC_1:119;
+    then A6:  dom(multreal.:(F1,F2)) = dom F1 /\ dom F2 by FUNCOP_1:84
+          .= dom(multreal.:(F2,F1)) by A5,FUNCOP_1:84;
+      for z being set st z in dom(multreal.:(F2,F1))
+       holds F.z = multreal.(F2.z,F1.z)
+     proof let z be set such that
+A7:    z in dom(multreal.:(F2,F1));
+       set F1z = F1.z, F2z =F2.z;
+      thus F.z = multreal.(F1.z,F2.z) by A1,A6,A7,FUNCOP_1:28
+           .= F1z * F2z by VECTSP_1:def 14
+           .= multreal.(F2.z,F1.z) by VECTSP_1:def 14;
+     end;
+   hence F = multreal.:(F2,F1) by A1,A6,FUNCOP_1:27;
+  end;
+end;
+
+canceled;
+
+theorem Th86:
+   i in dom mlt(F1,F2) implies mlt(F1,F2).i = F1.i * F2.i
+ proof assume that
+A1: i in dom mlt(F1,F2);
+  set r1 = F1.i, r2 = F2.i;
+    mlt(F1,F2) = multreal.:(F1,F2) & i in dom mlt(F1,F2) by A1,Def9;
+  then mlt(F1,F2).i = multreal.(r1,r2) by FUNCOP_1:28;
+  hence thesis by VECTSP_1:def 14;
+ end;
+
+definition let i,R1,R2;
+ redefine func mlt(R1,R2) -> Element of i-tuples_on REAL;
+  coherence
+ proof mlt(R1,R2) = multreal.:(R1,R2) by Def9;
+  hence thesis by FINSEQ_2:140;
+ end;
+end;
+
+theorem Th87:
+   mlt(R1,R2).j = R1.j * R2.j
+ proof per cases;
+  suppose
+A1:  not j in Seg i;
+then A2:  not j in dom R2 by FINSEQ_2:144;
+      not j in dom mlt(R1,R2) by A1,FINSEQ_2:144;
+   hence mlt(R1,R2).j = R1.j *0 by FUNCT_1:def 4
+       .= R1.j * R2.j by A2,FUNCT_1:def 4;
+  suppose j in Seg i;
+  then j in dom mlt(R1,R2) by FINSEQ_2:144;
+  hence thesis by Th86;
+ end;
+
+theorem
+     mlt(<*>REAL,F) = <*>REAL
+ proof
+     mlt(<*>REAL,F) = multreal.:(<*>REAL,F) by Def9;
+  hence thesis by FINSEQ_2:87;
+ end;
+
+theorem
+     mlt(<*r1*>,<*r2*>) = <*r1*r2*>
+ proof
+  thus mlt(<*r1*>,<*r2*>) = multreal.:(<*r1*>,<*r2*>) by Def9
+                         .= <*multreal.(r1,r2)*> by FINSEQ_2:88
+                         .= <*r1*r2*> by VECTSP_1:def 14;
+ end;
+
+canceled;
+
+theorem
+     mlt(R1,mlt(R2,R3)) = mlt(mlt(R1,R2),R3)
+ proof
+  thus mlt(R1,mlt(R2,R3)) = multreal.:(R1,mlt(R2,R3)) by Def9
+                         .= multreal.:(R1,multreal.:(R2,R3)) by Def9
+                         .= multreal.:(multreal.:
+(R1,R2),R3) by Th12,FINSEQOP:29
+                         .= multreal.:(mlt(R1,R2),R3) by Def9
+                         .= mlt(mlt(R1,R2),R3) by Def9;
+ end;
+
+theorem Th92:
+   mlt(i|->r,R) = r*R
+ proof
+  thus mlt(i|->r,R) = multreal.:(i|->r,R) by Def9
+                   .= multreal[;](r,R) by FINSEQOP:21
+                   .= multreal[;](r,(id REAL))*R by FINSEQOP:23
+                   .= r*R by Lm2;
+ end;
+
+theorem
+     mlt(i|->r1,i|->r2) = i|->(r1*r2)
+ proof
+   thus mlt(i|->r1,i|->r2) = r1*(i|->r2) by Th92
+                          .= i|->(r1*r2) by Th70;
+ end;
+
+theorem Th94:
+   r*mlt(R1,R2) = mlt(r*R1,R2)
+ proof
+   thus r*mlt(R1,R2)
+      = (multreal[;](r,id REAL))*(mlt(R1,R2)) by Lm2
+     .= (multreal[;](r,id REAL))*(multreal.:(R1,R2)) by Def9
+     .= multreal.:((multreal[;](r,id REAL))*R1,R2) by Th12,FINSEQOP:27
+     .= multreal.:(r*R1,R2) by Lm2
+     .= mlt(r*R1,R2) by Def9;
+ end;
+
+canceled;
+
+theorem
+     r*R = mlt(i|->r,R) by Th92;
+
+theorem Th97:
+   sqr(R) = mlt(R,R)
+ proof
+A1:  len R = i by FINSEQ_2:109;
+then A2:  len(sqrreal*R) = i by FINSEQ_2:37;
+A3:  len(multreal.:(R,R)) = i by A1,FINSEQ_2:86;
+A4:  now let j;
+    assume
+A5:    j in Seg i;
+then A6:    j in dom(sqrreal*R) by A2,FINSEQ_1:def 3;
+A7:    j in dom(multreal.:(R,R)) by A3,A5,FINSEQ_1:def 3;
+    set r = R.j;
+    thus (sqrreal*R).j = sqrreal.r by A6,FUNCT_1:22
+                      .= r^2 by Def2
+                      .= r*r by SQUARE_1:def 3
+                      .= multreal.(r,r) by VECTSP_1:def 14
+                      .= (multreal.:(R,R)).j by A7,FUNCOP_1:28;
+   end;
+  thus sqr(R) = sqrreal*R by Def8
+             .= multreal.:(R,R) by A2,A3,A4,FINSEQ_2:10
+             .= mlt(R,R) by Def9;
+ end;
+
+theorem Th98:
+   sqr(R1 + R2) = sqr R1 + 2*mlt(R1,R2) + sqr R2
+ proof
+    now let j; assume j in Seg i;
+   set r1_r2 = (R1 + R2).j, r1 = R1.j, r2 = R2.j,
+              r1'2 = (sqr R1).j, r2'2 = (sqr R2).j,
+              r1r2 = mlt(R1,R2).j,2r1r2 = (2*mlt(R1,R2)).j,
+              r1'2_2r1r2 = (sqr R1 + 2*mlt(R1,R2)).j;
+   thus (sqr(R1 + R2)).j = r1_r2^2 by Th78
+                        .= (r1 + r2)^2 by Th27
+                        .= r1^2+2*r1*r2+r2^2 by SQUARE_1:63
+                        .= r1^2+2*(r1*r2)+r2^2 by XCMPLX_1:4
+                        .= r1'2+2*(r1*r2)+r2^2 by Th78
+                        .= r1'2+2*(r1*r2)+r2'2 by Th78
+                        .= r1'2+2*(r1r2)+r2'2 by Th87
+                        .= r1'2+2r1r2+r2'2 by Th66
+                        .= r1'2_2r1r2+r2'2 by Th27
+                        .= (sqr R1 + 2*mlt(R1,R2) + sqr R2).j by Th27;
+  end;
+  hence thesis by FINSEQ_2:139;
+ end;
+
+theorem Th99:
+   sqr(R1 - R2) = sqr R1 - 2*mlt(R1,R2) + sqr R2
+ proof
+   thus sqr(R1 - R2) = sqr(R1 + -R2) by Th52
+                    .= sqr R1 + 2*mlt(R1,-R2) + sqr -R2 by Th98
+                    .= sqr R1 + 2*mlt(R1,-R2) + sqr R2 by Th83
+                    .= sqr R1 + 2*mlt(R1,(-1)*R2) + sqr R2 by Th76
+                    .= sqr R1 + 2*((-1)*mlt(R1,R2)) + sqr R2 by Th94
+                    .= sqr R1 + ((-1)*2)*mlt(R1,R2) + sqr R2 by Th71
+                    .= sqr R1 + (-1)*(2*mlt(R1,R2)) + sqr R2 by Th71
+                    .= sqr R1 + -(2*mlt(R1,R2)) + sqr R2 by Th76
+                    .= sqr R1 - 2*mlt(R1,R2) + sqr R2 by Th52;
+ end;
+
+theorem
+     sqr mlt(R1,R2) = mlt(sqr R1,sqr R2)
+ proof
+  thus sqr mlt(R1,R2) = sqrreal*(mlt(R1,R2)) by Def8
+                     .= sqrreal*(multreal.:(R1,R2)) by Def9
+                     .= multreal.:(sqrreal*R1,sqrreal*R2) by Th17,FINSEQOP:52
+                     .= mlt(sqrreal*R1,sqrreal*R2) by Def9
+                     .= mlt(sqr R1,sqrreal*R2) by Def8
+                     .= mlt(sqr R1,sqr R2) by Def8;
+ end;
+
+:: Finite sum of Finite Sequence of Real Numbers
+
+definition let F be FinSequence of REAL;
+  func Sum(F) -> Real equals
+:Def10: addreal $$ F;
+  coherence;
+end;
+
+canceled;
+
+theorem Th102:
+   Sum(<*> REAL) = 0
+ proof set F = <*> REAL;
+   thus Sum F = addreal $$ F by Def10 .= 0 by Th4,Th5,FINSOP_1:11;
+ end;
+
+theorem Th103:
+   Sum <*r*> = r
+ proof set F = <*r*>;
+  thus Sum F = addreal $$ F by Def10 .= r by FINSOP_1:12;
+ end;
+
+theorem Th104:
+   Sum(F^<*r*>) = Sum F + r
+ proof
+  thus Sum(F^<*r*>) = addreal $$ (F^<*r*>) by Def10
+                 .= addreal.(addreal $$ F,r) by Th5,FINSOP_1:5
+                 .= addreal.(Sum F,r) by Def10
+                 .= Sum F + r by VECTSP_1:def 4;
+ end;
+
+theorem Th105:
+   Sum(F1^F2) = Sum F1 + Sum F2
+ proof
+  thus Sum(F1^F2)
+     = addreal $$ (F1^F2) by Def10
+    .= addreal.(addreal $$ F1,addreal $$ F2) by Th5,Th7,FINSOP_1:6
+    .= addreal.(Sum F1,addreal $$ F2) by Def10
+    .= addreal.(Sum F1,Sum F2) by Def10
+    .= Sum F1 + Sum F2 by VECTSP_1:def 4;
+ end;
+
+theorem
+     Sum(<*r*>^F) = r + Sum F
+ proof thus Sum(<*r*>^F) = Sum <*r*> + Sum F by Th105 .= r + Sum
+ F by Th103; end;
+
+theorem Th107:
+   Sum<*r1,r2*> = r1 + r2
+ proof
+   thus Sum<*r1,r2*> = Sum(<*r1*>^<*r2*>) by FINSEQ_1:def 9
+                  .= Sum<*r1*> + r2 by Th104
+                  .= r1 + r2 by Th103;
+ end;
+
+theorem
+     Sum<*r1,r2,r3*> = r1 + r2 + r3
+ proof
+   thus Sum<*r1,r2,r3*> = Sum(<*r1,r2*>^<*r3*>) by FINSEQ_1:60
+                     .= Sum<*r1,r2*> + r3 by Th104
+                     .= r1 + r2 + r3 by Th107;
+ end;
+
+theorem
+     for R being Element of 0-tuples_on REAL holds Sum R = 0
+      by Th102,FINSEQ_2:113;
+
+theorem Th110:
+   Sum(i |-> r) = i*r
+ proof
+   defpred P[Nat] means Sum($1 |->r) = $1*r;
+A1: P[0] by Th102,FINSEQ_2:113;
+A2:  for i st P[i] holds P[(i+1)]
+   proof let i such that
+A3:   Sum(i |-> r) = i*r;
+    thus Sum((i+1) |-> r) = Sum((i |-> r)^<*r*>) by FINSEQ_2:74
+                       .= i*r + 1*r by A3,Th104
+                       .= (i+1)*r by XCMPLX_1:8;
+   end;
+    for i holds P[i] from Ind(A1,A2);
+  hence thesis;
+ end;
+
+theorem Th111:
+   Sum(i |-> (0 qua Real)) = 0
+ proof
+   thus Sum(i |-> (0 qua Real)) = i*0 by Th110 .= 0;
+ end;
+
+theorem Th112:
+   (for j st j in Seg i holds R1.j <= R2.j) implies Sum R1 <= Sum R2
+ proof
+   defpred P[Nat] means
+     for R1,R2 being Element of $1-tuples_on REAL
+      st for j st j in Seg $1 holds R1.j <= R2.j holds
+       Sum R1 <= Sum R2;
+A1: P[0]
+    proof let R1,R2 be Element of 0-tuples_on REAL;
+       Sum R1 = 0 & Sum R2 = 0 by Th102,FINSEQ_2:113;
+     hence thesis;
+    end;
+A2: for i st P[i] holds P[i+1]
+   proof let i such that
+A3:   for R1,R2 being Element of i-tuples_on REAL
+        st for j st j in Seg i holds R1.j <= R2.j
+       holds Sum R1 <= Sum R2;
+    let R1,R2 be Element of (i+1)-tuples_on REAL such that
+A4:   for j st j in Seg (i+1) holds R1.j <= R2.j;
+    consider R1' being (Element of i-tuples_on REAL), x1 such that
+A5:   R1 = R1'^<*x1*> by FINSEQ_2:137;
+    consider R2' being (Element of i-tuples_on REAL), x2 such that
+A6:   R2 = R2'^<*x2*> by FINSEQ_2:137;
+    set n = i+1;
+      n in Seg n & R1.n = x1 & R2.n = x2 by A5,A6,FINSEQ_1:6,FINSEQ_2:136;
+then A7:   x1 <= x2 by A4;
+      for j st j in Seg i holds R1'.j <= R2'.j
+     proof let j such that
+A8:      j in Seg i;
+        Seg len R1' = dom R1' & Seg len R2' = dom R2' &
+      len R1' = i & len R2' = i by FINSEQ_1:def 3,FINSEQ_2:109;
+      then j in Seg n & R1'.j = R1.j & R2'.j = R2.j
+        by A5,A6,A8,FINSEQ_1:def 7,FINSEQ_2:9;
+      hence thesis by A4;
+     end;
+    then Sum R1' <= Sum R2' & Sum R1 = Sum R1' + x1 & Sum R2 = Sum R2' + x2
+      by A3,A5,A6,Th104;
+    hence Sum R1 <= Sum R2 by A7,REAL_1:55;
+   end;
+    for i holds P[i] from Ind(A1,A2);
+  hence thesis;
+ end;
+
+theorem Th113:
+   (for j st j in Seg i holds R1.j <= R2.j) &
+    (ex j st j in Seg i & R1.j < R2.j)
+     implies Sum R1 < Sum R2
+ proof
+   defpred P[Nat] means
+     for R1,R2 be Element of $1-tuples_on REAL st
+      (for j st j in Seg $1 holds R1.j <= R2.j) &
+       (ex j st j in Seg $1 & R1.j < R2.j)
+       holds Sum R1 < Sum R2;
+A1: P[0] by FINSEQ_1:4;
+A2: for i st P[i] holds P[i+1]
+   proof
+ now let i such that
+A3: P[i];
+     let R1,R2 be Element of (i+1)-tuples_on REAL such that
+A4:    for j st j in Seg (i+1) holds R1.j <= R2.j;
+     given j such that
+A5:    j in Seg (i+1) & R1.j < R2.j;
+     consider R1' being (Element of i-tuples_on REAL), x1 such that
+A6:    R1 = R1'^<*x1*> by FINSEQ_2:137;
+     consider R2' being (Element of i-tuples_on REAL), x2 such that
+A7:    R2 = R2'^<*x2*> by FINSEQ_2:137;
+A8:    (i+1) in Seg (i+1) & R1.(i+1) = x1 & R2.(i+1) = x2
+        by A6,A7,FINSEQ_1:6,FINSEQ_2:136;
+A9:    for j st j in Seg i holds R1'.j <= R2'.j
+      proof let j such that
+A10:     j in Seg i;
+         Seg len R1' = dom R1' & Seg len R2' = dom R2' &
+       len R1' = i & len R2' = i by FINSEQ_1:def 3,FINSEQ_2:109;
+       then j in Seg (i+1) & R1'.j = R1.j & R2'.j = R2.j
+         by A6,A7,A10,FINSEQ_1:def 7,FINSEQ_2:9;
+        hence thesis by A4;
+      end;
+       now per cases by A5,FINSEQ_2:8;
+      suppose
+A11:     j in Seg i;
+         Seg len R1' = dom R1' & Seg len R2' = dom R2' &
+       len R1' = i & len R2' = i by FINSEQ_1:def 3,FINSEQ_2:109;
+       then R1'.j = R1.j & R2'.j = R2.j by A6,A7,A11,FINSEQ_1:def 7;
+       then Sum R1' < Sum R2' & Sum R1 = Sum R1' + x1 &
+           Sum R2 = Sum R2' + x2 & x1 <= x2
+        by A3,A4,A5,A6,A7,A8,A9,A11,Th104;
+       hence Sum R1 < Sum R2 by REAL_1:67;
+      suppose
+A12:     j = i+1;
+         Sum R1' <= Sum R2' & Sum R1 = Sum R1' + x1 & Sum R2 = Sum R2' + x2
+        by A6,A7,A9,Th104,Th112;
+       hence Sum R1 < Sum R2 by A5,A8,A12,REAL_1:67;
+      end;
+     hence Sum R1 < Sum R2;
+   end;
+   hence thesis;
+  end;
+     for i holds P[i] from Ind(A1,A2);
+   hence thesis;
+ end;
+
+theorem Th114:
+   (for i st i in dom F holds 0 <= F.i) implies 0 <= Sum F
+ proof assume
+A1:  for i st i in dom F holds 0 <= F.i;
+  set i = len F;
+  set R1 = i|->(0 qua Real);
+  reconsider R2 = F as Element of i-tuples_on REAL by FINSEQ_2:110;
+A2: Seg len F = dom F by FINSEQ_1:def 3;
+    now let j; assume
+A3:   j in Seg i;
+   then R1.j = 0 by FINSEQ_2:70;
+   hence R1.j <= R2.j by A1,A2,A3;
+  end;
+  then Sum R1 <= Sum R2 by Th112;
+  hence thesis by Th111;
+ end;
+
+theorem Th115:
+   (for i st i in dom F holds 0 <= F.i) &
+    (ex i st i in dom F & 0 < F.i)
+     implies 0 < Sum F
+ proof assume
+A1:   for i st i in dom F holds 0 <= F.i;
+  set i = len F, R1 = i|->(0 qua Real);
+  reconsider R2 = F as Element of i-tuples_on REAL by FINSEQ_2:110;
+A2:   Seg len F = dom F by FINSEQ_1:def 3;
+A3: now let j; assume
+A4:   j in Seg i;
+   then R1.j = 0 by FINSEQ_2:70;
+   hence R1.j <= R2.j by A1,A2,A4;
+  end;
+  given j such that
+A5:  j in dom F and
+A6:  0 < F.j;
+    R1.j = 0 by A2,A5,FINSEQ_2:70;
+  then Sum R1 < Sum R2 by A2,A3,A5,A6,Th113;
+  hence thesis by Th111;
+ end;
+
+theorem Th116:
+   0 <= Sum sqr F
+ proof
+    now let i such that
+    i in dom sqr F;
+   set r = (sqr F).i;
+   set x = F.i;
+     0 <= x^2 by SQUARE_1:72; hence 0 <= r by Th78;
+  end;
+  hence thesis by Th114;
+end;
+
+theorem Th117:
+   Sum(r*F) = r*(Sum F)
+ proof set rM = multreal[;](r,id REAL);
+  thus Sum (r*F)
+     = addreal $$(r*F) by Def10
+    .= addreal $$(rM*F) by Lm2
+    .= rM.(addreal $$F) by Th5,Th7,Th16,Th22,SETWOP_2:41
+    .= rM.(Sum F) by Def10
+    .= r*(Sum F) by Lm1;
+ end;
+
+theorem
+     Sum -F = -(Sum F)
+ proof
+   thus Sum -F = addreal $$(-F) by Def10
+            .= addreal $$(compreal*F) by Def5
+            .= compreal.(addreal $$ F) by Th5,Th6,Th7,Th22,Th23,SETWOP_2:42
+            .= compreal.(Sum F) by Def10
+            .= -(Sum F) by VECTSP_1:def 5;
+ end;
+
+theorem Th119:
+   Sum(R1 + R2) = Sum R1 + Sum R2
+ proof
+  thus Sum(R1 + R2)
+     = addreal $$(R1 + R2) by Def10
+    .= addreal $$(addreal.:(R1,R2)) by Def4
+    .= addreal.(addreal$$R1,addreal$$R2) by Th5,Th6,Th7,SETWOP_2:46
+    .= addreal.(Sum R1,addreal$$R2) by Def10
+    .= addreal.(Sum R1,Sum R2) by Def10
+    .= Sum R1 + Sum R2 by VECTSP_1:def 4;
+ end;
+
+theorem Th120:
+   Sum(R1 - R2) = Sum R1 - Sum R2
+ proof
+  thus Sum(R1 - R2)
+     = addreal $$(R1 - R2) by Def10
+    .= addreal $$(diffreal.:(R1,R2)) by Def6
+    .= diffreal.(addreal$$R1,addreal$$R2)
+         by Def1,Th5,Th6,Th7,Th22,Th23,SETWOP_2:48
+    .= diffreal.(Sum R1,addreal$$R2) by Def10
+    .= diffreal.(Sum R1,Sum R2) by Def10
+    .= Sum R1 - Sum R2 by Th9;
+ end;
+
+theorem
+     Sum sqr R = 0 implies R = i |-> 0
+ proof assume
+A1:   Sum sqr R = 0;
+A2:   len R = i by FINSEQ_2:109;
+A3:  len(i |-> 0) = i by FINSEQ_2:109;
+then A4:   Seg i = dom R & Seg i = dom(i |-> 0) by A2,FINSEQ_1:def 3;
+  assume R <> i |-> 0;
+  then consider j such that
+A5:   j in dom R and
+A6:   R.j <> (i |-> 0).j by A2,A3,A4,FINSEQ_2:10;
+A7:   sqr R = sqrreal*R by Def8;
+A8:   dom sqr R = Seg len sqr R & dom R = Seg len R by FINSEQ_1:def 3;
+A9: now let k such that
+     k in dom sqr R;
+     set r = (sqr R).k;
+     set x = R.k;
+       0 <= x^2 by SQUARE_1:72; hence 0 <= r by Th78;
+    end;
+A10:  j in dom sqr R by A5,A7,A8,FINSEQ_2:37;
+  set x = R.j,x' = (sqr R).j;
+    x <> 0 by A2,A5,A6,A8,FINSEQ_2:70;
+  then 0 < x^2 by SQUARE_1:74;
+  then 0 < x' by Th78;
+  hence thesis by A1,A9,A10,Th115;
+ end;
+
+theorem
+     (Sum mlt(R1,R2))^2 <= (Sum sqr R1)*(Sum sqr R2)
+ proof
+  defpred P[Nat] means
+    for R1,R2 being Element of $1-tuples_on REAL
+        holds (Sum mlt(R1,R2))^2 <= (Sum sqr R1)*(Sum sqr R2);
+A1: P[0]
+      proof let R1,R2 be Element of 0-tuples_on REAL;
+         sqr R1 = <*>REAL & mlt(R1,R2) = <*>REAL by FINSEQ_2:113;
+       hence thesis by Th102,SQUARE_1:60;
+      end;
+A2: for i st P[i] holds P[i+1]
+   proof let i such that
+A3:   for R1,R2 being Element of i-tuples_on REAL
+        holds (Sum mlt(R1,R2))^2 <= (Sum sqr R1)*(Sum sqr R2);
+    let R1,R2 be Element of (i+1)-tuples_on REAL;
+    consider R1' being (Element of i-tuples_on REAL), x1 such that
+A4:    R1 = R1'^<*x1*> by FINSEQ_2:137;
+    consider R2' being (Element of i-tuples_on REAL), x2 such that
+A5:    R2 = R2'^<*x2*> by FINSEQ_2:137;
+      (Sum mlt(R1',R2'))^2 + 0 <= (Sum sqr R1')*(Sum sqr R2') by A3;
+then A6:    0 <= (Sum sqr R1')*(Sum sqr R2') - (Sum mlt(R1',R2'))^2 by REAL_1:
+84;
+A7:   (Sum sqr R1' + x1^2)*(Sum sqr R2' + x2^2)
+        = (Sum sqr R1')*(Sum sqr R2' + x2^2) + x1^2*(Sum
+ sqr R2' + x2^2) by XCMPLX_1:8
+       .= ((Sum sqr R1')*(Sum sqr R2')+(Sum sqr R1')*x2^2)+x1^2*(Sum
+ sqr R2' + x2^2) by XCMPLX_1:8
+       .= ((Sum sqr R1')*(Sum sqr R2')+(Sum sqr R1')*x2^2)+(x1^2*(Sum
+ sqr R2')+x1^2*x2^2) by XCMPLX_1:8
+       .= (Sum sqr R1')*(Sum sqr R2')+((Sum sqr R1')*x2^2+(x1^2*(Sum
+ sqr R2')+x1^2*x2^2)) by XCMPLX_1:1
+       .= (Sum sqr R1')*(Sum sqr R2')+(x1^2*(Sum sqr R2')+(Sum
+ sqr R1')*x2^2+x1^2*x2^2) by XCMPLX_1:1
+       .= (Sum sqr R1')*(Sum sqr R2')+(x1^2*(Sum sqr R2')+(Sum
+ sqr R1')*x2^2)+x1^2*x2^2 by XCMPLX_1:1
+       .= (Sum sqr R1')*(Sum sqr R2')+(Sum(x1^2*sqr R2')+(Sum
+ sqr R1')*x2^2)+x1^2*x2^2 by Th117
+       .= (Sum sqr R1')*(Sum sqr R2')+(Sum sqr(x1*R2')+x2^2*(Sum
+ sqr R1'))+x1^2*x2^2 by Th84
+       .= (Sum sqr R1')*(Sum sqr R2')+(Sum sqr(x1*R2')+Sum
+(x2^2*sqr R1'))+x1^2*x2^2 by Th117
+       .= (Sum sqr R1')*(Sum sqr R2')+(Sum sqr(x1*R2')+Sum
+ sqr(x2*R1'))+x1^2*x2^2 by Th84;
+      mlt(R1'^<*x1*>,R2'^<*x2*>)
+      = multreal.:(R1'^<*x1*>,R2'^<*x2*>) by Def9
+     .= (multreal.:(R1',R2'))^<*multreal.(x1,x2)*> by FINSEQOP:11
+     .= (multreal.:(R1',R2'))^<*x1*x2*> by VECTSP_1:def 14
+     .= (mlt(R1',R2'))^<*x1*x2*> by Def9;
+then A8:  Sum mlt(R1'^<*x1*>,R2'^<*x2*>) = Sum mlt(R1',R2') + x1*x2 by Th104;
+A9:   2*(x1*x2)*Sum mlt(R1',R2')
+        = 2*((x1*x2)*Sum mlt(R1',R2')) by XCMPLX_1:4
+       .= 2*Sum((x1*x2)*mlt(R1',R2')) by Th117
+       .= 2*Sum(x1*(x2*mlt(R1',R2'))) by Th71
+       .= 2*Sum(x1*mlt(R2',x2*R1')) by Th94
+       .= 2*Sum(mlt(x1*R2',x2*R1')) by Th94;
+A10:  -(Sum mlt(R1',R2')+x1*x2)^2
+        = -((x1*x2)^2+2*(x1*x2)*Sum mlt(R1',R2')+(Sum mlt(R1',R2'))^2
+) by SQUARE_1:63
+       .= -((x1*x2)^2+(2*(x1*x2)*Sum mlt(R1',R2')+(Sum mlt(R1',R2'))^2
+)) by XCMPLX_1:1
+       .= -(x1*x2)^2+-(2*(x1*x2)*Sum mlt(R1',R2')+(Sum mlt(R1',R2'))^2)
+               by XCMPLX_1:140
+       .= -x1^2*x2^2+-((Sum mlt(R1',R2'))^2+2*(x1*x2)*Sum mlt(R1',R2'))
+              by SQUARE_1:68
+       .= -x1^2*x2^2+(-(Sum mlt(R1',R2'))^2+ -2*Sum(mlt(x1*R2',x2*R1')))
+              by A9,XCMPLX_1:140;
+A11:  Sum sqr(x1*R2')+Sum sqr(x2*R1') + -2*Sum(mlt(x1*R2',x2*R1'))
+       = Sum sqr(x1*R2')+-2*Sum(mlt(x1*R2',x2*R1'))+Sum
+ sqr(x2*R1') by XCMPLX_1:1
+      .= Sum sqr(x1*R2')-2*Sum(mlt(x1*R2',x2*R1'))+Sum
+ sqr(x2*R1') by XCMPLX_0:def 8
+      .= Sum sqr(x1*R2')-Sum(2*mlt(x1*R2',x2*R1'))+Sum sqr(x2*R1') by Th117
+      .= Sum(sqr(x1*R2')-2*mlt(x1*R2',x2*R1'))+Sum sqr(x2*R1') by Th120
+      .= Sum(sqr (x1*R2')-2*mlt(x1*R2',x2*R1')+sqr(x2*R1')) by Th119;
+  Sum sqr (R^<*r*>) = Sum sqr R + r^2
+ proof
+      sqr(R^<*r*>) = sqrreal*(R^<*r*>) by Def8
+                    .= (sqrreal*R)^<*sqrreal.r*> by FINSEQOP:9
+                    .= (sqrreal*R)^<*r^2*> by Def2
+                    .= (sqr R)^<*r^2*> by Def8;
+   hence Sum sqr (R^<*r*>) = Sum sqr R + r^2 by Th104;
+ end;
+    then (Sum sqr R1' + x1^2) = Sum sqr R1 &
+    (Sum sqr R2' + x2^2) = Sum sqr R2 by A4,A5;
+    then A12:  (Sum sqr R1)*(Sum sqr R2) - (Sum mlt(R1,R2))^2
+       = (Sum sqr R1' + x1^2)*(Sum sqr R2' + x2^2)
+           + -(Sum mlt(R1',R2')+x1*x2)^2 by A4,A5,A8,XCMPLX_0:def 8
+      .= ((Sum sqr R1')*(Sum sqr R2')+(Sum sqr(x1*R2')+Sum
+ sqr(x2*R1'))+x1^2*x2^2) +
+        -x1^2*x2^2 + (-(Sum mlt(R1',R2'))^2 + -2*Sum(mlt(x1*R2',x2*R1')))
+          by A7,A10,XCMPLX_1:1
+      .= ((Sum sqr R1')*(Sum sqr R2')+(Sum sqr(x1*R2')+Sum
+ sqr(x2*R1'))+x1^2*x2^2)
+        -x1^2*x2^2 + (-(Sum mlt(R1',R2'))^2 + -2*Sum(mlt(x1*R2',x2*R1')))
+          by XCMPLX_0:def 8
+      .= ((Sum sqr R1')*(Sum sqr R2')+(Sum sqr(x1*R2')+Sum sqr(x2*R1'))) +
+         (-(Sum mlt(R1',R2'))^2 +- 2*Sum(mlt(x1*R2',x2*R1')))
+          by XCMPLX_1:26
+      .= (Sum sqr R1')*(Sum sqr R2')+((Sum sqr(x1*R2')+Sum sqr(x2*R1')) +
+         (-(Sum mlt(R1',R2'))^2 +- 2*Sum(mlt(x1*R2',x2*R1'))))
+          by XCMPLX_1:1
+      .= (Sum sqr R1')*(Sum sqr R2')+(-(Sum mlt(R1',R2'))^2 +
+         ((Sum sqr(x1*R2')+Sum sqr(x2*R1')) +- 2*Sum(mlt(x1*R2',x2*R1'))))
+          by XCMPLX_1:1
+      .= (Sum sqr R1')*(Sum sqr R2')+-(Sum mlt(R1',R2'))^2 +
+         ((Sum sqr(x1*R2')+Sum sqr(x2*R1')) +- 2*Sum(mlt(x1*R2',x2*R1')))
+          by XCMPLX_1:1
+      .= (Sum sqr R1')*(Sum sqr R2')-(Sum mlt(R1',R2'))^2 +
+         Sum(sqr (x1*R2')-2*mlt(x1*R2',x2*R1')+sqr (x2*R1'))
+          by A11,XCMPLX_0:def 8
+      .= (Sum sqr R1')*(Sum sqr R2')-(Sum mlt(R1',R2'))^2 + Sum
+ sqr (x1*R2'-x2*R1')
+          by Th99;
+      0 <= Sum sqr (x1*R2'-x2*R1') by Th116;
+    then 0 + 0 <= (Sum sqr R1)*(Sum sqr R2) - (Sum
+ mlt(R1,R2))^2 by A6,A12,REAL_1:55;
+    then (Sum mlt(R1,R2))^2 + 0 <= (Sum sqr R1)*(Sum sqr R2) by REAL_1:84;
+    hence (Sum mlt(R1,R2))^2 <= (Sum sqr R1)*(Sum sqr R2);
+   end;
+    for i holds P[i] from Ind(A1,A2);
+  hence thesis;
+ end;
+
+:: The Product of Finite Sequences of Real Numbers
+
+definition let F be FinSequence of REAL;
+  func Product (F) -> Real equals
+:Def11: multreal $$ F;
+  coherence;
+end;
+
+canceled;
+
+theorem Th124:
+   Product (<*> REAL) = 1
+ proof set F = <*> REAL;
+   thus Product F = multreal $$ F by Def11 .= 1 by Th14,Th15,FINSOP_1:11;
+ end;
+
+theorem Th125:
+   Product <*r*> = r
+ proof set F = <*r*>;
+  thus Product F = multreal $$ F by Def11 .= r by FINSOP_1:12;
+ end;
+
+theorem Th126:
+   Product (F^<*r*>) = Product F * r
+ proof
+  thus Product (F^<*r*>) = multreal $$ (F^<*r*>) by Def11
+                 .= multreal.(multreal $$ F,r) by Th15,FINSOP_1:5
+                 .= multreal.(Product F,r) by Def11
+                 .= Product F * r by VECTSP_1:def 14;
+ end;
+
+theorem Th127:
+   Product (F1^F2) = Product F1 * Product F2
+ proof
+  thus Product (F1^F2)
+     = multreal $$ (F1^F2) by Def11
+    .= multreal.(multreal $$ F1,multreal $$ F2) by Th12,Th15,FINSOP_1:6
+    .= multreal.(Product F1,multreal $$ F2) by Def11
+    .= multreal.(Product F1,Product F2) by Def11
+    .= Product F1 * Product F2 by VECTSP_1:def 14;
+ end;
+
+theorem
+     Product (<*r*>^F) = r * Product F
+ proof thus Product (<*r*>^F) = Product <*r*> * Product F by Th127
+   .= r * Product F by Th125; end;
+
+theorem Th129:
+   Product <*r1,r2*> = r1 * r2
+ proof
+   thus Product <*r1,r2*> = Product (<*r1*>^<*r2*>) by FINSEQ_1:def 9
+                  .= Product <*r1*> * r2 by Th126
+                  .= r1 * r2 by Th125;
+ end;
+
+theorem
+     Product <*r1,r2,r3*> = r1 * r2 * r3
+ proof
+   thus Product <*r1,r2,r3*> = Product (<*r1,r2*>^<*r3*>) by FINSEQ_1:60
+                     .= Product <*r1,r2*> * r3 by Th126
+                     .= r1 * r2 * r3 by Th129;
+ end;
+
+theorem
+     for R being Element of 0-tuples_on REAL holds Product R = 1
+     by Th124,FINSEQ_2:113;
+
+theorem
+     Product (i|->(1 qua Real)) = 1
+ proof
+  thus Product (i|->(1 qua Real)) = multreal$$(i|->(1 qua Real)) by Def11
+               .= 1 by Th14,Th15,SETWOP_2:35;
+ end;
+
+theorem
+     (ex k st k in dom F & F.k = 0) iff Product F = 0
+ proof
+   defpred P[Nat] means
+    for F st len F = $1 holds (ex k st k in
+      Seg $1 & F.k = 0) iff Product F = 0;
+A1:  P[0] by Th124,FINSEQ_1:4,32;
+A2: for i st P[i] holds P[i+1]
+     proof let i such that
+A3:     for F st len F = i holds (ex k st k in Seg i & F.k = 0) iff
+          Product F = 0;
+      let F; assume
+A4:     len F = i+1;
+      then consider F',x such that
+A5:     F = F'^<*x*> by FINSEQ_2:22;
+A6:      len F = len F' + 1 by A5,FINSEQ_2:19;
+then A7:     len F' = i by A4,XCMPLX_1:2;
+A8:    Product F = Product F' * x by A5,Th126;
+      thus (ex k st k in Seg (i+1) & F.k = 0) implies Product F = 0
+       proof given k such that
+A9:      k in Seg (i+1) and
+A10:      F.k = 0;
+          now per cases by A9,FINSEQ_2:8;
+         suppose
+A11:          k in Seg i;
+            Seg len F' = dom F' by FINSEQ_1:def 3;
+          then F'.k = F.k by A5,A7,A11,FINSEQ_1:def 7;
+          then Product F' = 0 by A3,A7,A10,A11;
+          hence thesis by A8;
+         suppose k = i+1;
+          then x = 0 by A4,A5,A6,A10,FINSEQ_1:59;
+          hence thesis by A8;
+        end;
+        hence thesis;
+       end;
+      assume
+A12:      Product F = 0;
+      per cases by A8,A12,XCMPLX_1:6;
+       suppose Product F' = 0;
+        then consider k such that
+A13:       k in Seg i & F'.k = 0 by A3,A7;
+          Seg len F' = dom F' by FINSEQ_1:def 3;
+        then k in Seg (i+1) & F.k = 0 by A5,A7,A13,FINSEQ_1:def 7,FINSEQ_2:9;
+        hence thesis;
+       suppose x = 0;
+        then i+1 in Seg(i+1) & F.(i+1) = 0
+           by A4,A5,A6,FINSEQ_1:6,59;
+        hence thesis;
+     end;
+A14:  Seg len F = dom F by FINSEQ_1:def 3;
+    for i holds P[i] from Ind(A1,A2);
+  hence thesis by A14;
+ end;
+
+theorem
+     Product ((i+j)|->r) = (Product (i|->r))*(Product (j|->r))
+ proof
+   thus Product ((i+j)|->r)
+      = multreal$$((i+j)|->r) by Def11
+     .= multreal.(multreal$$(i|->r),multreal$$(j|->r))
+       by Th12,Th15,SETWOP_2:37
+     .= (multreal$$(i|->r))*(multreal$$(j|->r)) by VECTSP_1:def 14
+     .= (multreal$$(i|->r))*(Product (j|->r)) by Def11
+     .= (Product (i|->r))*(Product (j|->r)) by Def11;
+ end;
+
+theorem
+     Product ((i*j)|->r) = Product (j|->(Product (i|->r)))
+ proof
+   thus Product ((i*j)|->r)
+      = multreal$$((i*j)|->r) by Def11
+     .= multreal$$(j|->multreal$$(i|->r)) by Th11,Th12,Th15,SETWOP_2:38
+     .= multreal$$(j|->(Product (i|->r))) by Def11
+     .= Product (j|->(Product (i|->r))) by Def11;
+ end;
+
+theorem
+     Product (i|->(r1*r2)) = (Product (i|->r1))*(Product (i|->r2))
+ proof
+   thus Product (i|->(r1*r2))
+      = multreal$$(i|->(r1*r2)) by Def11
+     .= multreal$$(i|->multreal.(r1,r2)) by VECTSP_1:def 14
+     .= multreal.(multreal$$(i|->r1),multreal$$(i|->r2))
+        by Th11,Th12,Th15,SETWOP_2:47
+     .= (multreal$$(i|->r1))*(multreal$$(i|->r2)) by VECTSP_1:def 14
+     .= (multreal$$(i|->r1))*(Product (i|->r2)) by Def11
+     .= (Product (i|->r1))*(Product (i|->r2)) by Def11;
+ end;
+
+theorem Th137:
+   Product mlt(R1,R2) = Product R1 * Product R2
+ proof
+  thus Product (mlt(R1,R2))
+     = multreal $$ mlt (R1,R2) by Def11
+    .= multreal $$(multreal.:(R1,R2)) by Def9
+    .= multreal.(multreal$$R1,multreal$$R2) by Th11,Th12,Th15,SETWOP_2:46
+    .= multreal.(Product R1,multreal$$R2) by Def11
+    .= multreal.(Product R1,Product R2) by Def11
+    .= Product R1 * Product R2 by VECTSP_1:def 14;
+ end;
+
+theorem
+     Product (r*R) = Product (i|->r) * Product R
+ proof
+   thus Product (r*R) = Product mlt(i|->r,R) by Th92
+    .= Product (i|->r) * Product R by Th137;
+ end;
+
+theorem
+     Product sqr R = (Product R)^2
+ proof
+   thus Product sqr R = Product (mlt(R,R)) by Th97
+               .= Product R * Product R by Th137
+               .= (Product R)^2 by SQUARE_1:def 3;
+ end;

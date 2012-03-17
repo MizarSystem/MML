@@ -1,0 +1,447 @@
+:: Monoid of Multisets and Subsets
+::  by Grzegorz Bancerek
+::
+:: Received December 29, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary VECTSP_1, FUNCT_1, FINSEQ_4, RELAT_1, FUNCT_2, PARTFUN1, FINSEQ_2,
+      FINSEQ_1, CAT_1, FUNCOP_1, BOOLE, BINOP_1, SETWISEO, ALGSTR_1, MONOID_0,
+      LATTICE2, MCART_1, GROUP_1, VECTSP_2, FUNCT_3, FINSET_1, COMPLEX1,
+      CARD_1, ARYTM_1, MONOID_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, REAL_1, NAT_1,
+      RELAT_1, STRUCT_0, FUNCT_1, FINSEQ_1, MONOID_0, FUNCT_2, BINOP_1,
+      FUNCOP_1, SETWISEO, FINSET_1, FRAENKEL, FUNCT_3, FINSEQ_2, CARD_1,
+      LATTICE2, FUNCT_4, FUNCT_6, VECTSP_1, DOMAIN_1;
+ constructors REAL_1, NAT_1, BINOP_1, FUNCOP_1, SETWISEO, FRAENKEL, FUNCT_3,
+      LATTICE2, FUNCT_6, MONOID_0, DOMAIN_1, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, FUNCT_1, FINSET_1, MONOID_0, RELAT_1, PRELAMB, STRUCT_0,
+      RELSET_1, FINSEQ_1, FUNCOP_1, NAT_1, MEMBERED, ZFMISC_1, XBOOLE_0,
+      ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Updating
+
+ reserve x,y,z, X,Y,Z for set, n for Nat;
+
+definition let D1,D2,D be non empty set;
+ mode Function of D1,D2,D is Function of [:D1,D2:],D;
+end;
+
+definition let f be Function, x1,x2,y be set;
+ func f..(x1,x2,y) equals
+:: MONOID_1:def 1
+
+   f..([x1,x2],y);
+end;
+
+theorem :: MONOID_1:1
+ for f,g being Function, x1,x2,x being set st
+  [x1,x2] in dom f & g = f.(x1,x2) & x in dom g holds f..(x1,x2,x) = g.x;
+
+definition let A,D1,D2,D be non empty set;
+ let f be Function of D1, D2, Funcs(A,D);
+ let x1 be Element of D1;
+ let x2 be Element of D2;
+ let x be Element of A;
+ redefine func f..(x1,x2,x) -> Element of D;
+end;
+
+definition let A be set;
+ let D1,D2,D be non empty set, f be Function of D1,D2,D;
+ let g1 be Function of A,D1;
+ let g2 be Function of A,D2;
+ redefine func f.:(g1,g2) -> Element of Funcs(A,D);
+end;
+
+definition let A be non empty set;
+ let n be Nat, x be Element of A;
+ redefine func n |-> x -> FinSequence of A;
+ synonym n .--> x;
+end;
+
+definition let D be non empty set, A be set, d be Element of D;
+ redefine func A --> d -> Element of Funcs(A,D);
+end;
+
+definition let A be set;
+ let D1,D2,D be non empty set, f be Function of D1,D2,D;
+ let d be Element of D1;
+ let g be Function of A,D2;
+ redefine func f[;](d,g) -> Element of Funcs(A,D);
+end;
+
+definition let A be set;
+ let D1,D2,D be non empty set, f be Function of D1,D2,D;
+ let g be Function of A,D1;
+ let d be Element of D2;
+ redefine func f[:](g,d) -> Element of Funcs(A,D);
+end;
+
+theorem :: MONOID_1:2
+   for f,g being Function, X being set holds (f|X)*g = f*(X|g);
+
+scheme NonUniqFuncDEx
+  { X() -> set, Y() -> non empty set, P[set,set] }:
+ ex f being Function of X(), Y() st for x st x in X() holds P[x,f.x]
+  provided
+  for x st x in X() ex y being Element of Y() st P[x,y];
+
+begin :: Monoid of functions into a semigroup
+
+definition let D1,D2,D be non empty set;
+ let f be Function of D1,D2,D;
+ let A be set;
+ func (f,D).:A -> Function of Funcs(A,D1), Funcs(A,D2), Funcs(A,D) means
+:: MONOID_1:def 2
+
+  for f1 being Element of Funcs(A,D1) for f2 being Element of Funcs(A,D2)
+   holds it.(f1,f2) = f.:(f1,f2);
+end;
+
+theorem :: MONOID_1:3
+   for D1,D2,D being non empty set for f being Function of D1,D2,D
+  for A being set, f1 being (Function of A,D1), f2 being Function of A,D2
+   for x st x in A holds ((f,D).:A)..(f1,f2,x) = f.(f1.x,f2.x);
+
+reserve A for set, D for non empty set, a,b,c,l,r for Element of D,
+ o,o' for BinOp of D, f,g,h for Function of A,D;
+
+theorem :: MONOID_1:4
+ o is commutative implies o.:(f,g) = o.:(g,f);
+
+theorem :: MONOID_1:5
+ o is associative implies o.:(o.:(f,g),h) = o.:(f,o.:(g,h));
+
+theorem :: MONOID_1:6
+ a is_a_unity_wrt o implies o[;](a,f) = f & o[:](f,a) = f;
+
+theorem :: MONOID_1:7
+ o is idempotent implies o.:(f,f) = f;
+
+theorem :: MONOID_1:8
+ o is commutative implies (o,D).:A is commutative;
+
+theorem :: MONOID_1:9
+ o is associative implies (o,D).:A is associative;
+
+theorem :: MONOID_1:10
+ a is_a_unity_wrt o implies A --> a is_a_unity_wrt (o,D).:A;
+
+theorem :: MONOID_1:11
+ o has_a_unity implies the_unity_wrt (o,D).:A = A --> the_unity_wrt o &
+   (o,D).:A has_a_unity;
+
+theorem :: MONOID_1:12
+ o is idempotent implies (o,D).:A is idempotent;
+
+theorem :: MONOID_1:13
+ o is invertible implies (o,D).:A is invertible;
+
+theorem :: MONOID_1:14
+ o is cancelable implies (o,D).:A is cancelable;
+
+theorem :: MONOID_1:15
+ o is uniquely-decomposable implies (o,D).:A is uniquely-decomposable;
+
+theorem :: MONOID_1:16
+   o absorbs o' implies (o,D).:A absorbs (o',D).:A;
+
+theorem :: MONOID_1:17
+ for D1, D2, D, E1, E2, E being non empty set, o1 being Function of D1, D2, D,
+   o2 being Function of E1, E2, E st o1 <= o2 holds (o1,D).:A <= (o2,E).:A;
+
+definition let G be non empty HGrStr; let A be set;
+ func .:(G,A) -> HGrStr equals
+:: MONOID_1:def 3
+
+   multLoopStr (# Funcs(A, the carrier of G),
+   (the mult of G,the carrier of G).:A,
+   (A --> the_unity_wrt the mult of G)#) if G is unital otherwise
+   HGrStr (# Funcs(A, the carrier of G),
+   (the mult of G,the carrier of G).:A #);
+end;
+
+definition let G be non empty HGrStr; let A be set;
+ cluster .:(G,A) -> non empty;
+end;
+
+reserve G for non empty HGrStr;
+
+theorem :: MONOID_1:18
+ the carrier of .:(G,X) = Funcs(X, the carrier of G) &
+ the mult of .:(G,X) = (the mult of G, the carrier of G).:X;
+
+theorem :: MONOID_1:19
+   x is Element of .:
+(G,X) iff x is Function of X, the carrier of G;
+
+definition let G be non empty HGrStr, A be set;
+ cluster .:(G,A) -> constituted-Functions;
+end;
+
+theorem :: MONOID_1:20
+ for f being Element of .:(G,X)
+  holds dom f = X & rng f c= the carrier of G;
+
+theorem :: MONOID_1:21
+ for f,g being Element of .:(G,X) st
+  for x st x in X holds f.x = g.x holds f = g;
+
+definition let G be non empty HGrStr, A be non empty set;
+ let f be Element of .:(G,A);
+ cluster rng f -> non empty;
+ let a be Element of A;
+ redefine func f.a -> Element of G;
+end;
+
+theorem :: MONOID_1:22
+ for f1,f2 being Element of .:(G,D), a being Element of D holds
+  (f1*f2).a = (f1.a)*(f2.a);
+
+definition let G be unital (non empty HGrStr); let A be set;
+ redefine func .:(G,A) -> well-unital constituted-Functions strict
+  (non empty multLoopStr);
+end;
+
+theorem :: MONOID_1:23
+ for G being unital (non empty HGrStr) holds
+   the unity of .:(G,X) = X --> the_unity_wrt the mult of G;
+
+theorem :: MONOID_1:24
+ for G being non empty HGrStr, A being set holds
+  (G is commutative implies .:(G,A) is commutative) &
+  (G is associative implies .:(G,A) is associative) &
+  (G is idempotent implies .:(G,A) is idempotent) &
+  (G is invertible implies .:(G,A) is invertible) &
+  (G is cancelable implies .:(G,A) is cancelable) &
+  (G is uniquely-decomposable implies .:(G,A) is uniquely-decomposable);
+
+theorem :: MONOID_1:25
+   for H being non empty SubStr of G holds .:(H,X) is SubStr of .:(G,X);
+
+theorem :: MONOID_1:26
+   for G being unital (non empty HGrStr), H being non empty SubStr of G st
+  the_unity_wrt the mult of G in the carrier of H holds
+   .:(H,X) is MonoidalSubStr of .:(G,X);
+
+definition
+ let G be unital associative commutative
+          cancelable uniquely-decomposable (non empty HGrStr);
+ let A be set;
+ redefine func .:(G,A) -> commutative cancelable uniquely-decomposable
+                constituted-Functions strict Monoid;
+end;
+
+begin :: Monoid of multisets over a set
+
+definition let A be set;
+ func MultiSet_over A -> commutative cancelable uniquely-decomposable
+                         constituted-Functions strict Monoid equals
+:: MONOID_1:def 4
+
+   .:(<NAT,+,0>, A);
+end;
+
+theorem :: MONOID_1:27
+ the carrier of MultiSet_over X = Funcs(X,NAT) &
+ the mult of MultiSet_over X = (addnat,NAT).:X &
+ the unity of MultiSet_over X = X --> 0;
+
+definition let A be set;
+ mode Multiset of A is Element of MultiSet_over A;
+end;
+
+theorem :: MONOID_1:28
+ x is Multiset of X iff x is Function of X,NAT;
+
+theorem :: MONOID_1:29
+ for m being Multiset of X holds dom m = X & rng m c= NAT;
+
+definition let A be non empty set;
+ let m be Multiset of A;
+ redefine func rng m -> non empty Subset of NAT;
+ let a be Element of A;
+
+ func m.a -> Nat;
+end;
+
+theorem :: MONOID_1:30
+ for m1,m2 being Multiset of D, a being Element of D holds
+   (m1 [*] m2).a = (m1.a)+(m2.a);
+
+theorem :: MONOID_1:31
+ chi(Y,X) is Multiset of X;
+
+definition let Y,X;
+ redefine func chi(Y,X) -> Multiset of X;
+end;
+
+definition let X; let n be Nat;
+ redefine func X --> n -> Multiset of X;
+end;
+
+definition let A be non empty set, a be Element of A;
+ func chi a -> Multiset of A equals
+:: MONOID_1:def 5
+
+   chi({a},A);
+end;
+
+theorem :: MONOID_1:32
+ for A being non empty set, a,b being Element of A holds
+  (chi a).a = 1 & (b <> a implies (chi a).b = 0);
+
+reserve A for non empty set, a for Element of A, p for FinSequence of A,
+ m1,m2 for Multiset of A;
+
+theorem :: MONOID_1:33
+ (for a holds m1.a = m2.a) implies m1 = m2;
+
+definition let A be set;
+ func finite-MultiSet_over A ->
+  strict non empty MonoidalSubStr of MultiSet_over A means
+:: MONOID_1:def 6
+
+  for f being Multiset of A holds
+   f in the carrier of it iff f"(NAT\{0}) is finite;
+end;
+
+theorem :: MONOID_1:34
+ chi a is Element of finite-MultiSet_over A;
+
+theorem :: MONOID_1:35
+ dom ({x}|(p^<*x*>)) = dom ({x}|p) \/ {len p+1};
+
+theorem :: MONOID_1:36
+ x <> y implies dom ({x}|(p^<*y*>)) = dom ({x}|p);
+
+definition let A be set, F be finite Relation;
+ cluster A|F -> finite;
+end;
+
+definition let A be non empty set, p be FinSequence of A;
+ func |.p.| -> Multiset of A means
+:: MONOID_1:def 7
+
+  for a being Element of A holds it.a = card dom ({a}|p);
+end;
+
+theorem :: MONOID_1:37
+   |.<*> A.|.a = 0;
+
+theorem :: MONOID_1:38
+ |.<*> A.| = A --> 0;
+
+theorem :: MONOID_1:39
+   |.<*a*>.| = chi a;
+
+reserve p,q for FinSequence of A;
+
+theorem :: MONOID_1:40
+ |.p^<*a*>.| = |.p.| [*] chi a;
+
+theorem :: MONOID_1:41
+ |.p^q.| = |.p.|[*]|.q.|;
+
+theorem :: MONOID_1:42
+ |.n .--> a.|.a = n &
+   for b being Element of A st b <> a holds |.n .--> a.|.b = 0;
+
+reserve fm for Element of finite-MultiSet_over A;
+
+theorem :: MONOID_1:43
+   |.p.| is Element of finite-MultiSet_over A;
+
+theorem :: MONOID_1:44
+   x is Element of finite-MultiSet_over A implies
+ ex p st x = |.p.|;
+
+begin :: Monoid of subsets of a semigroup
+
+reserve a,b,c for Element of D;
+
+definition let D1,D2,D be non empty set, f be Function of D1,D2,D;
+ func f.:^2 -> Function of bool D1, bool D2, bool D means
+:: MONOID_1:def 8
+
+  for x being Element of [:bool D1, bool D2:] holds
+   it.x = f.:[:x`1,x`2:];
+end;
+
+theorem :: MONOID_1:45
+ for D1,D2,D being non empty set, f being Function of D1,D2,D
+  for X1 being Subset of D1, X2 being Subset of D2 holds
+   (f.:^2).(X1,X2) = f.:[:X1,X2:];
+
+theorem :: MONOID_1:46
+ for D1,D2,D being non empty set, f being Function of D1,D2,D
+  for X1 being Subset of D1, X2 being Subset of D2, x1,x2 being set
+   st x1 in X1 & x2 in X2 holds f.(x1,x2) in (f.:^2).(X1,X2);
+
+theorem :: MONOID_1:47
+   for D1,D2,D being non empty set, f being Function of D1,D2,D
+  for X1 being Subset of D1, X2 being Subset of D2 holds
+   (f.:^2).(X1,X2) =
+   {f.(a,b) where a is Element of D1, b is Element of D2: a in X1 & b in X2};
+
+theorem :: MONOID_1:48
+ o is commutative implies o.:[:X,Y:] = o.:[:Y,X:];
+
+theorem :: MONOID_1:49
+ o is associative implies o.:[:o.:[:X,Y:],Z:] = o.:[:X,o.:[:Y,Z:]:];
+
+theorem :: MONOID_1:50
+ o is commutative implies o.:^2 is commutative;
+
+theorem :: MONOID_1:51
+ o is associative implies o.:^2 is associative;
+
+theorem :: MONOID_1:52
+ a is_a_unity_wrt o implies o.:[:{a},X:] = D /\ X & o.:[:X,{a}:] = D /\ X;
+
+theorem :: MONOID_1:53
+ a is_a_unity_wrt o implies {a} is_a_unity_wrt o.:^2 &
+  o.:^2 has_a_unity & the_unity_wrt o.:^2 = {a};
+
+theorem :: MONOID_1:54
+ o has_a_unity implies o.:^2 has_a_unity &
+  {the_unity_wrt o} is_a_unity_wrt o.:^2 &
+  the_unity_wrt o.:^2 = {the_unity_wrt o};
+
+theorem :: MONOID_1:55
+ o is uniquely-decomposable implies o.:^2 is uniquely-decomposable;
+
+definition let G be non empty HGrStr;
+ func bool G -> HGrStr equals
+:: MONOID_1:def 9
+
+   multLoopStr(#bool the carrier of G, (the mult of G).:^2,
+     {the_unity_wrt the mult of G}#) if G is unital otherwise
+   HGrStr(#bool the carrier of G, (the mult of G).:^2#);
+end;
+
+definition let G be non empty HGrStr;
+ cluster bool G -> non empty;
+end;
+
+definition let G be unital (non empty HGrStr);
+ redefine func bool G -> well-unital strict (non empty multLoopStr);
+end;
+
+theorem :: MONOID_1:56
+ the carrier of bool G = bool the carrier of G &
+ the mult of bool G = (the mult of G).:^2;
+
+theorem :: MONOID_1:57
+   for G being unital (non empty HGrStr) holds
+   the unity of bool G = {the_unity_wrt the mult of G};
+
+theorem :: MONOID_1:58
+   for G being non empty HGrStr holds
+  (G is commutative implies bool G is commutative) &
+  (G is associative implies bool G is associative) &
+  (G is uniquely-decomposable implies bool G is uniquely-decomposable);
+

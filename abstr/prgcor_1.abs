@@ -1,0 +1,351 @@
+:: Correctness of Non Overwriting Programs. {P}art {I}
+::  by Yatsuka Nakamura
+:: 
+:: Received December 5, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, FUNCT_1, FINSEQ_1, ARYTM_1, ARYTM_3, INT_1, NAT_1,
+      PARTFUN1, GROUP_1, PRGCOR_1;
+ notation TARSKI, XCMPLX_0, XREAL_0, FUNCT_1, FINSEQ_1, INT_1, BINARITH,
+      RELSET_1, PARTFUN1, NAT_1, EULER_2;
+ constructors WELLORD2, FINSEQOP, REAL_1, SQUARE_1, TOPREAL1, FINSEQ_4, SEQ_1,
+      XCMPLX_0, CQC_LANG, RFINSEQ, INTEGRA2, INT_1, ABSVALUE, BINARITH,
+      RELSET_1, PARTFUN1, NEWTON, NAT_1, ORDINAL1, ORDINAL2, XREAL_0, EULER_2;
+ clusters NUMBERS, FINSET_1, PRELAMB, FUNCT_1, RELSET_1, FINSEQ_1, XREAL_0,
+      ARYTM_3, FUNCT_2, REAL_1, NAT_1, RFINSEQ, INTEGRA2, INT_1, SQUARE_1,
+      ABSVALUE, PARTFUN1, NEWTON, ORDINAL1, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+::----------------------
+::----------------------
+::  Non overwriting program is a program where each variable used in it
+::is written only just one time, but the control variables used for
+::for-statement are exceptional.  Contrarily, variables are allowed
+::to be read many times.
+::    There are other restriction for non overwriting program. For statements,
+::only the followings are allowed: substituting-statement, if-else-statement,
+::for-statement(with break and without break), function(correct one)-call
+::-statement and return-statement.
+::   Grammars of non overwriting program is like one of C-language.
+::   For type of variables, 'int','real","char" and "float" can be used, and
+::and array of them can also be used. For operation, "+", "-" and "*"
+::are used for a type int, "+","-","*" and "/" are used for a type float.
+::    User can also define structures like in C.
+::    Non overwriting program can be translated to (predicative) logic
+::formula in definition part to define functions. If a new function
+::is correctly defined, a corresponding program is correct, if it does not use
+::arrays. If it uses arrays, area check is necessary in the following
+::theorem.
+::    Semantic correctness is shown by some theorems following the definition.
+::These theorems must tie up the result of the program and mathematical concepts
+::introduced before.
+::   Correctness is proven function-wise. We must use only
+::correctness-proven functions to define a new function(to write a new
+::program as a form of a function).
+::  Here, we present two program of division function of two natural
+::numbers and of two integers. An algorithm is checked for each case, by
+::proving correctness of the definitions.
+::  We also do an area check of index of arrays used in one of the programs.
+::---------
+:: type correspondence:
+::  int .....> Integer
+::  float .....> Real
+::  char ......> Subset of A
+::---------
+:: statement correspondence:
+::   We use tr(statement_i) for translated logic formula corresponding
+:: to statement_i.
+::  i=j+k-l;  ....>    i=j+k-l
+::  i=j*k;  ....>    i=j*k
+::  x=y*z/s;  ....>   x=y*z/s
+::  statement_1;statement2;statement3;...
+::   .......>    tr(statement_1)& tr(statement_2)& tr(statement_3)&...
+::  if (statement_1){statement_2;statement_3;...}
+::   .......>    tr(statement_1) implies tr(statement_2)& tr(statement_3)&..;
+::  if (statement_1){statement_2;statement_3;...} else statement_4;
+::   .......>  (tr(statement_1) implies tr(statement_2)& tr(statement_3)&..)&
+::             (not tr(statement_1) implies tr(statement_4));
+::  for (i=1;i++;i<=n)statement_1;
+::   .......> for i being Integer st 1<=i & i<=n holds tr(statement_1);
+::  for (i=1;i++;i<=n){statement_1;statement_2;...;if (statement_3)break;}
+::   .......> (ex j being Integer st 1<=j & j<=n &
+::                 (for i being Integer st 1<=i & i<j holds
+::                  tr(statement_1 for i)& tr(statement_2 for i)&...
+::                                & not (statement_3 for i))&
+::                 &tr(statement_1 for j)& tr(statement_2 for j)&...
+::                 &statement_3 for j)
+::                or
+::                 (for i being Integer st 1<=i & i<=n holds
+::                  tr(statement_1 for i)& tr(statement_2 for i)&...
+::                                & not (statement_3 for i));
+:: ***If "break" is expected in the above "for statement",
+:: then "or" part can be deleted.
+::------
+:: arrays correspondence:
+::  int a[n+1]   .....> ex a being FinSequence of INT st len a=n & ...;
+::  float x[n+1] .....> ex x being FinSequence of REAL st len x=n & ...;
+::  Declaration of variables corresponds to existential statement.
+::------
+:: various correctness problem:
+::   1. mathematical algorithm   .....>  a function is well defined in Mizar
+::   2. semantic correctness   .....> by theorems connecting it with
+::         other mathematical or computational concepts in Mizar
+::   3. area check of variable of array .....> by a theorem checking
+::                                                the area, in Mizar
+::   4. Is the translation to logic formula correct?
+::                    ......> by other methods outside of Mizar
+::   5. overflow problem  .....> by other theorems, maybe in Mizar
+::   6. error about float .....> avoid "=" sign in if clause,
+::                 or corresponding float to other types not Real
+::   7. translation of usual programs to non overwriting programs
+::                    ......>  by other methods outside of Mizar
+::------
+:: other comments:
+::   A concept of non overwriting is important, not only
+:: because of proving correctness, but because of debugging and
+:: safety of data.
+::   As memory is now cheap enough, it is wise to save all history of
+:: variables in a program.
+::-------------------------
+::-------------------------
+
+theorem :: PRGCOR_1:1
+for n,m,k being Nat holds (n+k)-'(m+k)=n-'m;
+
+reserve t for Nat;
+
+theorem :: PRGCOR_1:2
+for n,k being Nat st k>0 & n mod (2*k)>=k holds
+  n mod (2*k)-k= n mod k & (n mod k) +k = n mod (2*k);
+
+theorem :: PRGCOR_1:3
+for n,k being Nat st k>0 & n mod (2*k)>=k holds
+  n div k= (n div (2*k))*2+1;
+
+theorem :: PRGCOR_1:4
+for n,k being Nat st k>0 & n mod (2*k)<k holds
+  n mod (2*k)= n mod k;
+
+theorem :: PRGCOR_1:5
+for n,k being Nat st k>0 & n mod (2*k)<k holds
+  n div k= (n div (2*k))*2;
+
+definition let C be set, f be PartFunc of C, INT, x be set;
+ cluster f.x -> integer;
+end;
+
+theorem :: PRGCOR_1:6
+for m,n being Nat st m>0 holds ex i being Nat st
+ (for k2 being Nat st k2<i holds m*(2|^k2)<=n)
+ & m*(2|^i)>n;
+
+theorem :: PRGCOR_1:7
+for i being Integer,f being FinSequence st 1<=i & i<=len f
+holds i in dom f;
+
+:: Overwrting program to divide n by m (n>=0&m>0),where division / used is
+:: special, because it is achieved by shifting a word.
+
+:: int idiv1_prg(int n,int m){
+::   int sm,sn,pn,i,j;
+::   if(n<m){return 0;}
+::   sm=m;
+::   for (i=1;i<=n;i++){sm=sm*2; if (sm >n)break;}
+::   pn=0;sn=n;sm=sm/2;
+::   for (j=1;j<=i;j++){
+::   if(sn>=sm){sn=sn-sm;sm=sm/2;pn=pn*2+1;} else {sm=sm/2;pn=pn*2;}
+::   }
+::   return pn;
+:: }
+
+:: Non overwrting program same as above, assuming n>=0 & m>0
+
+:: int idiv1_prg(int n,int m){
+::    int sm[n+1+1],sn[n+1+1],pn[n+1+1],i,j;
+::    if (n<m){return 0;}
+::    sm[1]=m;
+::    for (i=1;i<=n;i++){
+::     sm[i+1]=sm[i]*2;
+::     if(sm[i+1]>n){break;}
+::     }
+::    pn[i+1]=0;sn[i+1]=n;
+::    for (j=1;j<=i;j++){
+::     if(sn[i+1-(j-1)]>=sm[i+1-j]){sn[i+1-j]=sn[i+1-(j-1)]-sm[i+1-j];
+::           pn[i+1-j]=pn[i+1-(j-1)]*2+1;}
+::        else {sn[i+1-j]=sn[i+1-(j-1)]; pn[i+1-j]=pn[i+1-(j-1)]*2;}
+::        }
+::     return pn[1];
+::   }
+
+definition let n,m be Integer;
+assume  n>=0 & m>0;
+func idiv1_prg(n,m) -> Integer means
+:: PRGCOR_1:def 1
+    ex sm,sn,pn being FinSequence of INT st
+      len sm=n+1 & len sn=n+1 & len pn=n+1 &
+    (n<m implies it=0)&
+    (not (n<m) implies
+    sm.1=m &
+     ( ex i being Integer st 1<=i & i<=n &
+       ((for k being Integer st 1<=k & k<i holds
+            sm.(k+1)=sm.(k)*2 & not(sm.(k+1)>n))
+        &   sm.(i+1)=sm.(i)*2 & sm.(i+1)>n
+       )
+       &
+       pn.(i+1)=0 & sn.(i+1)=n &
+       (for j being Integer st 1<=j & j<=i holds
+        (sn.(i+1- (j- 1))>=sm.(i+1- j) implies
+             sn.(i+1- j)=sn.(i+1- (j- 1))-sm.(i+1- j)
+             &
+             pn.(i+1- j)=pn.(i+1- (j- 1))*2+1
+        )&
+        (not sn.(i+1- (j- 1))>=sm.(i+1- j) implies
+             sn.(i+1- j)=sn.(i+1- (j- 1))
+             &
+             pn.(i+1- j)=pn.(i+1- (j- 1))*2
+        )
+       )&
+       it=pn.1
+     )
+    );
+end;
+
+:: The following theorem is about array index area checking.
+:: Each index of an array appeared in the program is checked
+:: at the place just in front of the place the array is used,
+:: if it remains in the defined area of array.
+theorem :: PRGCOR_1:8
+for n,m being Integer st n>=0 & m>0 holds
+   for sm,sn,pn being FinSequence of INT,i being Integer st
+      len sm=n+1 & len sn=n+1 & len pn=n+1 &
+    (not (n<m) implies
+     sm.1=m &
+     ( 1<=i & i<=n &
+       ((for k being Integer st 1<=k & k<i holds
+        sm.(k+1)=sm.(k)*2 & not(sm.(k+1)>n))
+        & sm.(i+1)=sm.(i)*2 & sm.(i+1)>n
+       )
+       &
+       pn.(i+1)=0 & sn.(i+1)=n &
+       (for j being Integer st 1<=j & j<=i holds
+        (sn.(i+1- (j- 1))>=sm.(i+1- j) implies
+             sn.(i+1- j)=sn.(i+1- (j- 1))-sm.(i+1- j) &
+             pn.(i+1- j)=pn.(i+1- (j- 1))*2+1
+        )&
+        (not sn.(i+1- (j- 1))>=sm.(i+1- j) implies
+             sn.(i+1- j)=sn.(i+1- (j- 1))
+             &
+             pn.(i+1- j)=pn.(i+1- (j- 1))*2
+        )
+       )& idiv1_prg(n,m)=pn.1
+     )
+    )
+    holds
+      len sm=n+1 & len sn=n+1 & len pn=n+1 &
+    (n<m implies idiv1_prg(n,m)=0)&
+    (not (n<m) implies
+    1 in dom sm & sm.1=m &
+     ( 1<=i & i<=n &
+       ((for k being Integer st 1<=k & k<i holds
+        k+1 in dom sm & k in dom sm & sm.(k+1)=sm.(k)*2 & not(sm.(k+1)>n))
+        & i+1 in dom sm & i in dom sm & sm.(i+1)=sm.(i)*2 & sm.(i+1)>n
+       )
+       &
+       i+1 in dom pn & pn.(i+1)=0 & i+1 in dom sn & sn.(i+1)=n &
+       (for j being Integer st 1<=j & j<=i holds
+        i+1-(j-1) in dom sn & i+1-j in dom sm &
+        (sn.(i+1- (j- 1))>=sm.(i+1- j) implies
+           i+1-j in dom sn & i+1-j in dom sm &
+             sn.(i+1- j)=sn.(i+1- (j- 1))-sm.(i+1- j)
+             & i+1-j in dom pn & i+1-(j-1) in dom pn &
+             pn.(i+1- j)=pn.(i+1- (j- 1))*2+1
+        )&
+        (not sn.(i+1- (j- 1))>=sm.(i+1- j) implies
+             i+1-j in dom sn & i+1-(j-1) in dom sn &
+             sn.(i+1- j)=sn.(i+1- (j- 1))
+             & i+1-j in dom pn & i+1-(j-1) in dom pn &
+             pn.(i+1- j)=pn.(i+1- (j- 1))*2
+        )
+       ) & 1 in dom pn &
+       idiv1_prg(n,m) =pn.1
+     )
+    );
+
+
+theorem :: PRGCOR_1:9
+for n,m being Nat st m>0 holds
+ idiv1_prg(n qua Integer,m qua Integer)=n div m;
+
+theorem :: PRGCOR_1:10
+for n,m being Integer st n>=0 & m>0 holds
+ idiv1_prg(n,m)=n div m;
+
+theorem :: PRGCOR_1:11
+for n,m being Integer,n2,m2 being Nat holds
+ (m=0 & n2=n & m2=m implies n div m=0 & n2 div m2=0)&
+ (n>=0 & m>0 & n2=n & m2=m implies n div m =n2 div m2)&
+ (n>=0 & m<0 & n2=n & m2= -m implies
+    (m2*(n2 div m2)=n2 implies n div m =-(n2 div m2))
+    &(m2*(n2 div m2)<>n2 implies n div m =-(n2 div m2)-1))&
+ (n<0 & m>0 & n2= -n & m2=m implies
+    (m2*(n2 div m2)=n2 implies n div m =-(n2 div m2))
+    &(m2*(n2 div m2)<>n2 implies n div m =-(n2 div m2)-1))&
+ (n<0 & m<0 & n2= -n & m2= -m implies n div m =n2 div m2);
+
+::
+:: int idiv_prg(int n,int m){
+::   int i;
+::   if (m==0){return 0;}
+::   if (n>=0 && m>0){return idiv1_prg(n,m);}
+::   if (n>=0 && m<0){
+::    i= idiv1_prg(n,-m);
+::    if((-m)*i==n){return -i;} else{return -i-1;}
+::   }
+::   if (n<0 && m>0){
+::    i= idiv1_prg(-n,m);
+::    if(m*i== -n){return -i;} else{return -i-1;}
+::   }
+::   return idiv1_prg(-n,-m);
+::   }
+::
+:: One time writing program
+::  Same as above.
+
+
+definition let n,m be Integer;
+func idiv_prg(n,m) -> Integer means
+:: PRGCOR_1:def 2
+ ex i being Integer st
+ (m=0 implies it=0)&
+ (not m=0 implies
+   (n>=0 & m>0 implies it= idiv1_prg(n,m))&
+   (not (n>=0 & m>0) implies
+    (n>=0 & m<0 implies i=idiv1_prg(n,-m) &
+     ((-m)*i=n implies it=-i
+     )&
+     ((-m)*i <> n implies it= -i-1
+     )
+    )&
+    (not (n>=0 & m<0) implies
+     (n<0 & m>0 implies i=idiv1_prg(-n,m) &
+      (m*i= -n implies it=-i
+      )&
+      (m*i <> -n implies it=-i-1
+      )
+     )&
+     (not (n<0 & m>0) implies
+       it=idiv1_prg(-n,-m)
+     )
+    )
+   )
+ );
+end;
+
+theorem :: PRGCOR_1:12
+for n,m being Integer holds
+ idiv_prg(n,m)=n div m;
+

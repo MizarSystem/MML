@@ -1,0 +1,431 @@
+:: The Subformula Tree of a Formula of the First Order Language
+::  by Oleg Okhotnikov
+::
+:: Received October 2, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, RELAT_1, TREES_1, ZFMISC_1, FUNCT_1, TREES_2, FINSET_1,
+      TREES_4, BOOLE, TREES_9, ORDINAL1, CARD_1, MCART_1, ORDERS_1, TARSKI,
+      QC_LANG1, ZF_LANG, QC_LANG4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
+      RELAT_1, FUNCT_1, FUNCT_2, FINSET_1, FINSEQ_1, FINSEQ_4, CARD_1, TREES_1,
+      TREES_2, TREES_4, TREES_9, QC_LANG1, QC_LANG2, MCART_1;
+ constructors NAT_1, FINSEQ_4, TREES_4, TREES_9, QC_LANG2, XREAL_0, MEMBERED;
+ clusters SUBSET_1, TREES_1, TREES_2, TREES_9, RELSET_1, TREES_A, FINSET_1,
+      FINSEQ_1, NAT_1, MEMBERED, ORDINAL2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+canceled 3;
+
+theorem :: QC_LANG4:4
+  for n being Nat, r being FinSequence ex q being FinSequence st
+    q = r|Seg n & q is_a_prefix_of r;
+
+canceled;
+
+theorem :: QC_LANG4:6
+  for D being non empty set, r being FinSequence of D,
+    r1,r2 being FinSequence, k being Nat
+      st k+1 <= len r & r1 = r|Seg (k+1) & r2 = r|Seg k holds
+        ex x being Element of D st r1 = r2^<*x*>;
+
+theorem :: QC_LANG4:7
+  for D being non empty set, r being FinSequence of D, r1 being FinSequence
+    st 1 <= len r & r1 = r|Seg 1 holds ex x being Element of D st r1 = <*x*>;
+
+definition let D be non empty set, T be DecoratedTree of D;
+ cluster -> Function-like Relation-like Element of dom T;
+end;
+
+definition let D be non empty set, T be DecoratedTree of D;
+ cluster -> FinSequence-like Element of dom T;
+end;
+
+definition let D be non empty set;
+ cluster finite DecoratedTree of D;
+end;
+
+reserve T for DecoratedTree,
+        p for FinSequence of NAT;
+
+theorem :: QC_LANG4:8
+  T.p = (T|p).{};
+
+reserve T for finite-branching DecoratedTree,
+        t for Element of dom T,
+        x for FinSequence,
+        n, k, m for Nat;
+
+theorem :: QC_LANG4:9
+  succ(T,t) = T*(t succ);
+
+theorem :: QC_LANG4:10
+  dom (T*(t succ)) = dom (t succ);
+
+theorem :: QC_LANG4:11
+  dom succ(T,t) = dom (t succ);
+
+theorem :: QC_LANG4:12
+  t^<*n*> in dom T iff n+1 in dom (t succ);
+
+theorem :: QC_LANG4:13
+  for T, x, n st x^<*n*> in dom T holds T.(x^<*n*>) = succ(T,x).(n+1);
+
+reserve x, x' for Element of dom T,
+        y' for set;
+
+theorem :: QC_LANG4:14
+  x' in succ x implies T.x' in rng succ(T,x);
+
+theorem :: QC_LANG4:15
+  y' in rng succ(T,x) implies ex x' st y' = T.x' & x' in succ x;
+
+reserve n,k1,k2,l,k,m for Nat,
+        x,y,y1,y2 for set;
+
+scheme ExDecTrees { D() -> non empty set, d() -> Element of D(),
+    G(set) -> FinSequence of D() }:
+ ex T being finite-branching DecoratedTree of D() st
+    T.{} = d() &
+    for t being Element of dom T, w being Element of D() st w = T.t
+      holds succ(T,t) = G(w);
+
+theorem :: QC_LANG4:16
+  for T being Tree, t being Element of T holds
+    ProperPrefixes t is finite Chain of T;
+
+theorem :: QC_LANG4:17
+  for T being Tree holds T-level 0 = {{}};
+
+theorem :: QC_LANG4:18
+  for T being Tree holds
+    T-level (n+1) = union { succ w where w is Element of T : len w = n };
+
+theorem :: QC_LANG4:19
+  for T being finite-branching Tree, n being Nat holds T-level n is finite;
+
+theorem :: QC_LANG4:20
+  for T being finite-branching Tree holds
+    T is finite iff ex n being Nat st T-level n = {};
+
+theorem :: QC_LANG4:21
+  for T being finite-branching Tree st not T is finite
+    ex C being Chain of T st not C is finite;
+
+theorem :: QC_LANG4:22
+  for T being finite-branching Tree st not T is finite
+    ex B being Branch of T st not B is finite;
+
+theorem :: QC_LANG4:23
+  for T being Tree, C being Chain of T, t being Element of T
+    st t in C & not C is finite
+      ex t' being Element of T st t' in C & t is_a_proper_prefix_of t';
+
+theorem :: QC_LANG4:24
+  for T being Tree, B being Branch of T, t being Element of T
+    st t in B & not B is finite
+      ex t' being Element of T st t' in B & t' in succ t;
+
+theorem :: QC_LANG4:25
+  for f being Function of NAT,NAT st
+   (for n holds f.(n+1) qua Nat <= f.n qua Nat)
+     ex m st for n st m <= n holds f.n = f.m;
+
+scheme FinDecTree { D() -> non empty set,
+    T() -> finite-branching DecoratedTree of D(), F(Element of D()) -> Nat }:
+  T() is finite
+provided
+for t,t' being Element of dom T(), d being Element of D()
+    st t' in succ t & d = T().t' holds F(d) < F(T().t);
+
+reserve D for non empty set,
+        T for DecoratedTree of D;
+
+theorem :: QC_LANG4:26
+  for y being set st y in rng T holds y is Element of D;
+
+theorem :: QC_LANG4:27
+  for x being set st x in dom T holds T.x is Element of D;
+
+begin
+
+reserve F, G, G',H, H' for Element of QC-WFF;
+
+theorem :: QC_LANG4:28
+  F is_subformula_of G implies len @ F <= len @ G;
+
+theorem :: QC_LANG4:29
+    F is_subformula_of G & len @ F = len @ G implies F = G;
+
+definition let p be Element of QC-WFF;
+  func list_of_immediate_constituents(p) -> FinSequence of QC-WFF equals
+:: QC_LANG4:def 1
+     <*> QC-WFF if p = VERUM or p is atomic,
+     <* the_argument_of p *> if p is negative,
+     <* the_left_argument_of p, the_right_argument_of p *> if
+      p is conjunctive
+    otherwise <* the_scope_of p *>;
+end;
+
+theorem :: QC_LANG4:30
+  k in dom list_of_immediate_constituents(F) &
+    G = (list_of_immediate_constituents(F)).k implies
+      G is_immediate_constituent_of F;
+
+theorem :: QC_LANG4:31
+  rng list_of_immediate_constituents(F) =
+    { G where G is Element of QC-WFF : G is_immediate_constituent_of F };
+
+definition let p be Element of QC-WFF;
+  func tree_of_subformulae(p) -> finite DecoratedTree of QC-WFF means
+:: QC_LANG4:def 2
+    it.{} = p & for x being Element of dom it holds
+      succ(it,x) = list_of_immediate_constituents(it.x);
+end;
+
+reserve t, t', t'' for Element of dom tree_of_subformulae(F);
+
+canceled 2;
+
+theorem :: QC_LANG4:34
+  F in rng tree_of_subformulae(F);
+
+theorem :: QC_LANG4:35
+  t^<*n*> in dom tree_of_subformulae(F) implies
+    ex G st G = (tree_of_subformulae(F)).(t^<*n*>) &
+      G is_immediate_constituent_of (tree_of_subformulae(F)).t;
+
+theorem :: QC_LANG4:36
+  H is_immediate_constituent_of (tree_of_subformulae(F)).t iff
+    ex n st t^<*n*> in dom tree_of_subformulae(F) &
+      H = (tree_of_subformulae(F)).(t^<*n*>);
+
+theorem :: QC_LANG4:37
+  G in rng tree_of_subformulae(F) & H is_immediate_constituent_of G
+    implies H in rng tree_of_subformulae(F);
+
+theorem :: QC_LANG4:38
+  G in rng tree_of_subformulae(F) & H is_subformula_of G implies
+    H in rng tree_of_subformulae(F);
+
+theorem :: QC_LANG4:39
+  G in rng tree_of_subformulae(F) iff G is_subformula_of F;
+
+theorem :: QC_LANG4:40
+    rng tree_of_subformulae(F) = Subformulae(F);
+
+theorem :: QC_LANG4:41
+    t' in succ t implies (tree_of_subformulae(F)).t'
+    is_immediate_constituent_of (tree_of_subformulae(F)).t;
+
+reserve x,y1,y2 for set;
+
+theorem :: QC_LANG4:42
+  t is_a_prefix_of t' implies (tree_of_subformulae(F)).t'
+    is_subformula_of (tree_of_subformulae(F)).t;
+
+theorem :: QC_LANG4:43
+  t is_a_proper_prefix_of t' implies
+    len @((tree_of_subformulae(F)).t') < len @((tree_of_subformulae(F)).t);
+
+theorem :: QC_LANG4:44
+  t is_a_proper_prefix_of t' implies
+    (tree_of_subformulae(F)).t' <> (tree_of_subformulae(F)).t;
+
+theorem :: QC_LANG4:45
+  t is_a_proper_prefix_of t' implies (tree_of_subformulae(F)).t'
+    is_proper_subformula_of (tree_of_subformulae(F)).t;
+
+theorem :: QC_LANG4:46
+    (tree_of_subformulae(F)).t = F iff t = {};
+
+theorem :: QC_LANG4:47
+  t <> t' & (tree_of_subformulae(F)).t = (tree_of_subformulae(F)).t' implies
+    not t,t' are_c=-comparable;
+
+definition let F, G be Element of QC-WFF;
+  func F-entry_points_in_subformula_tree_of G ->
+    AntiChain_of_Prefixes of dom tree_of_subformulae(F) means
+:: QC_LANG4:def 3
+      for t being Element of dom tree_of_subformulae(F) holds
+        t in it iff (tree_of_subformulae(F)).t = G;
+end;
+
+canceled;
+
+theorem :: QC_LANG4:49
+  F-entry_points_in_subformula_tree_of G =
+    { t where t is Element of dom tree_of_subformulae(F) :
+      (tree_of_subformulae(F)).t = G };
+
+theorem :: QC_LANG4:50
+  G is_subformula_of F iff F-entry_points_in_subformula_tree_of G <> {};
+
+theorem :: QC_LANG4:51
+  t' = t^<*m*> & (tree_of_subformulae(F)).t is negative implies
+    (tree_of_subformulae(F)).t' = the_argument_of (tree_of_subformulae(F)).t &
+      m = 0;
+
+theorem :: QC_LANG4:52
+  t' = t^<*m*> & (tree_of_subformulae(F)).t is conjunctive implies
+    (tree_of_subformulae(F)).t'
+      = the_left_argument_of (tree_of_subformulae(F)).t & m = 0 or
+    (tree_of_subformulae(F)).t'
+      = the_right_argument_of (tree_of_subformulae(F)).t & m = 1;
+
+theorem :: QC_LANG4:53
+  t' = t^<*m*> & (tree_of_subformulae(F)).t is universal implies
+    (tree_of_subformulae(F)).t' = the_scope_of (tree_of_subformulae(F)).t &
+      m = 0;
+
+theorem :: QC_LANG4:54
+  (tree_of_subformulae(F)).t is negative implies
+    t^<*0*> in dom tree_of_subformulae(F) & (tree_of_subformulae(F)).(t^<*0*>)
+      = the_argument_of (tree_of_subformulae(F)).t;
+
+reserve x,y for set;
+
+theorem :: QC_LANG4:55
+  (tree_of_subformulae(F)).t is conjunctive implies
+    t^<*0*> in dom tree_of_subformulae(F) & (tree_of_subformulae(F)).(t^<*0*>)
+      = the_left_argument_of (tree_of_subformulae(F)).t &
+    t^<*1*> in dom tree_of_subformulae(F) & (tree_of_subformulae(F)).(t^<*1*>)
+      = the_right_argument_of (tree_of_subformulae(F)).t;
+
+theorem :: QC_LANG4:56
+  (tree_of_subformulae(F)).t is universal implies
+    t^<*0*> in dom tree_of_subformulae(F) & (tree_of_subformulae(F)).(t^<*0*>)
+      = the_scope_of (tree_of_subformulae(F)).t;
+
+reserve t for Element of dom tree_of_subformulae(F),
+        s for Element of dom tree_of_subformulae(G);
+
+theorem :: QC_LANG4:57
+  t in F-entry_points_in_subformula_tree_of G &
+  s in G-entry_points_in_subformula_tree_of H implies
+  t^s in F-entry_points_in_subformula_tree_of H;
+
+reserve t for Element of dom tree_of_subformulae(F),
+        s for FinSequence;
+
+theorem :: QC_LANG4:58
+  t in F-entry_points_in_subformula_tree_of G &
+  t^s in F-entry_points_in_subformula_tree_of H implies
+  s in G-entry_points_in_subformula_tree_of H;
+
+theorem :: QC_LANG4:59
+for F,G,H holds
+  { t^s where t is Element of dom tree_of_subformulae(F),
+    s is Element of dom tree_of_subformulae(G) :
+      t in F-entry_points_in_subformula_tree_of G &
+      s in G-entry_points_in_subformula_tree_of H } c=
+  F-entry_points_in_subformula_tree_of H;
+
+theorem :: QC_LANG4:60
+  (tree_of_subformulae(F))|t
+    = tree_of_subformulae((tree_of_subformulae(F)).t);
+
+theorem :: QC_LANG4:61
+  t in F-entry_points_in_subformula_tree_of G iff
+    (tree_of_subformulae(F))|t = tree_of_subformulae(G);
+
+theorem :: QC_LANG4:62
+    F-entry_points_in_subformula_tree_of G =
+    { t where t is Element of dom tree_of_subformulae(F) :
+      (tree_of_subformulae(F))|t = tree_of_subformulae(G) };
+
+reserve C for Chain of dom tree_of_subformulae(F);
+
+theorem :: QC_LANG4:63
+    for F,G,H,C st
+  G in { (tree_of_subformulae(F)).t
+    where t is Element of dom tree_of_subformulae(F) : t in C } &
+  H in { (tree_of_subformulae(F)).t
+    where t is Element of dom tree_of_subformulae(F) : t in C } holds
+      G is_subformula_of H or H is_subformula_of G;
+
+definition let F be Element of QC-WFF;
+  mode Subformula of F -> Element of QC-WFF means
+:: QC_LANG4:def 4
+    it is_subformula_of F;
+end;
+
+definition let F be Element of QC-WFF; let G be Subformula of F;
+  mode Entry_Point_in_Subformula_Tree of G ->
+    Element of dom tree_of_subformulae(F) means
+:: QC_LANG4:def 5
+      (tree_of_subformulae(F)).it = G;
+end;
+
+reserve G for Subformula of F;
+
+reserve t, t' for Entry_Point_in_Subformula_Tree of G;
+
+canceled;
+
+theorem :: QC_LANG4:65
+    t <> t' implies not t,t' are_c=-comparable;
+
+definition let F be Element of QC-WFF; let G be Subformula of F;
+  func entry_points_in_subformula_tree(G) ->
+    non empty AntiChain_of_Prefixes of dom tree_of_subformulae(F) equals
+:: QC_LANG4:def 6
+      F-entry_points_in_subformula_tree_of G;
+end;
+
+canceled;
+
+theorem :: QC_LANG4:67
+  t in entry_points_in_subformula_tree(G);
+
+theorem :: QC_LANG4:68
+  entry_points_in_subformula_tree(G) =
+    { t where t is Entry_Point_in_Subformula_Tree of G : t = t };
+
+reserve G1, G2 for Subformula of F,
+        t1 for Entry_Point_in_Subformula_Tree of G1,
+        s for Element of dom tree_of_subformulae(G1);
+
+theorem :: QC_LANG4:69
+  s in G1-entry_points_in_subformula_tree_of G2 implies
+    t1^s is Entry_Point_in_Subformula_Tree of G2;
+
+reserve s for FinSequence;
+
+theorem :: QC_LANG4:70
+    t1^s is Entry_Point_in_Subformula_Tree of G2 implies
+  s in G1-entry_points_in_subformula_tree_of G2;
+
+theorem :: QC_LANG4:71
+for F,G1,G2 holds
+  { t^s where t is Entry_Point_in_Subformula_Tree of G1,
+    s is Element of dom tree_of_subformulae(G1) :
+      s in G1-entry_points_in_subformula_tree_of G2 } =
+  { t^s where t is Element of dom tree_of_subformulae(F),
+    s is Element of dom tree_of_subformulae(G1) :
+      t in F-entry_points_in_subformula_tree_of G1 &
+      s in G1-entry_points_in_subformula_tree_of G2 };
+
+theorem :: QC_LANG4:72
+    for F,G1,G2 holds
+  { t^s where t is Entry_Point_in_Subformula_Tree of G1,
+    s is Element of dom tree_of_subformulae(G1) :
+      s in G1-entry_points_in_subformula_tree_of G2 } c=
+  entry_points_in_subformula_tree(G2);
+
+reserve G1, G2 for Subformula of F,
+        t1 for Entry_Point_in_Subformula_Tree of G1,
+        t2 for Entry_Point_in_Subformula_Tree of G2;
+
+theorem :: QC_LANG4:73
+    (ex t1,t2 st t1 is_a_prefix_of t2) implies G2 is_subformula_of G1;
+
+theorem :: QC_LANG4:74
+    G2 is_subformula_of G1 implies for t1 ex t2 st t1 is_a_prefix_of t2;
+
+

@@ -1,0 +1,3468 @@
+:: Dijkstra's Shortest Path Algorithm
+::  by Jing-Chao Chen
+::
+:: Received March 17, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM_1, INT_1, RELAT_1, SCM_1, RLVECT_1, AMI_3, GRAPHSP, FUNCT_1,
+      BOOLE, FINSET_1, ORDERS_1, FINSEQ_1, CARD_1, FUNCT_2, GRAPH_1, FINSEQ_4,
+      GRAPH_5, GRAPH_4, MSAFREE2, FUNCT_4;
+ notation XREAL_0, REAL_1, NAT_1, INT_1, TARSKI, XBOOLE_0, SUBSET_1, RELAT_1,
+      FUNCT_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, CARD_1, FINSET_1, GRAPH_1,
+      PARTFUN1, FUNCT_2, GRAPH_4, GRAPH_3, GRAPH_5, BINARITH, DOMAIN_1,
+      RVSUM_1, GOBOARD1, NUMBERS, FUNCT_7;
+ constructors REAL_1, INT_1, FINSEQ_4, GRAPH_5, GRAPH_4, DOMAIN_1, BINARITH,
+      GOBOARD1, FUNCT_7, MEMBERED, RELAT_2;
+ clusters FRAENKEL, INT_1, GRAPH_5, FINSEQ_1, FINSET_1, RELSET_1, GRAPH_1,
+      FUNCT_2, GRAPH_4, XREAL_0, MEMBERED, PARTFUN1, NUMBERS, ORDINAL2;
+ requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
+ definitions TARSKI;
+ theorems FUNCT_2, AXIOMS, FUNCT_1, PARTFUN1, FINSEQ_1, NAT_1, FINSET_1,
+      ZFMISC_1, TARSKI, REAL_1, FINSEQ_3, XBOOLE_0, XBOOLE_1, SUBSET_1,
+      GRAPH_1, FINSEQ_4, CARD_1, CARD_2, INT_1, GRAPH_5, GRAPH_4, FINSEQ_2,
+      ENUMSET1, BINARITH, RVSUM_1, SCMFSA_7, FUNCT_7, XCMPLX_1;
+ schemes FUNCT_1, RECDEF_1, NAT_1, GRAPH_5;
+
+begin  :: Preliminaries
+
+reserve x,y,X for set,
+        i,j,k,m,n for Nat,
+        p for FinSequence of X,
+        ii for Integer;
+
+theorem Th1:
+ for p being FinSequence,x being set holds not x in rng p & p is one-to-one
+ iff p^<*x*> is one-to-one
+proof
+    let p be FinSequence,x be set;
+A1: rng p misses rng <*x*> & p is one-to-one & <*x*> is one-to-one
+    iff p ^ <*x*> is one-to-one by FINSEQ_3:98;
+      rng <*x*> = {x} by FINSEQ_1:55;
+    hence thesis by A1,FINSEQ_3:102,ZFMISC_1:54,56;
+end;
+
+theorem Th2:
+  1 <= ii & ii <= len p implies p.ii in X
+proof assume A1:1 <= ii & ii <= len p;
+  then 0 <= ii by AXIOMS:22;
+  then reconsider ii as Nat by INT_1:16;
+    ii in dom p by A1,FINSEQ_3:27;
+  hence thesis by PARTFUN1:27;
+end;
+
+theorem Th3:
+  1 <= ii & ii <= len p implies p/.ii = p.ii
+proof assume A1:1 <= ii & ii <= len p;
+  then 0 <= ii by AXIOMS:22;
+  then reconsider ii as Nat by INT_1:16;
+    ii in dom p by A1,FINSEQ_3:27;
+  hence thesis by FINSEQ_4:def 4;
+end;
+
+reserve G for Graph,
+        pe,qe for FinSequence of the Edges of G,
+        p,q for oriented Chain of G,
+        W for Function,
+        U,V,e,ee for set,
+        v1,v2,v3,v4 for Vertex of G;
+
+theorem Th4:
+  W is_weight_of G & len pe = 1 implies cost(pe,W) = W.(pe.1)
+proof
+     assume A1: W is_weight_of G & len pe = 1;
+     set f=RealSequence(pe,W);
+A2:  dom f = dom pe & for i st i in dom pe holds f.i=W.(pe.i)
+     by A1,GRAPH_5:def 15;
+A3:  1 in dom pe by A1,FINSEQ_3:27;
+       len f=1 by A1,A2,FINSEQ_3:31;
+then A4:  f = <*f.1*> by FINSEQ_1:57;
+     thus cost(pe,W) = Sum f by GRAPH_5:def 16
+     .= f.1 by A4,RVSUM_1:103
+     .= W.(pe.1) by A1,A3,GRAPH_5:def 15;
+end;
+
+theorem Th5:
+  e in the Edges of G implies <*e*> is Simple (oriented Chain of G)
+proof
+   assume e in the Edges of G;
+then A1:  <*e*> is FinSequence of the Edges of G by SCMFSA_7:22;
+     len <*e*> = 1 by FINSEQ_1:57;
+   hence thesis by A1,GRAPH_5:18;
+end;
+
+Lm1:
+ for p,q being FinSequence st 1 <= n & n <= len p holds p.n = (p^q).n
+proof
+  let p,q be FinSequence;
+  assume 1 <= n & n <= len p;
+  then n in dom p by FINSEQ_3:27;
+  hence p.n = (p^q).n by FINSEQ_1:def 7;
+end;
+
+Lm2:
+for p,q being FinSequence st 1 <= n & n <= len q holds
+  q.n = (p^q).(len p+n)
+proof
+  let p,q be FinSequence;
+  assume 1 <= n & n <= len q;
+  then n in dom q by FINSEQ_3:27;
+  hence thesis by FINSEQ_1:def 7;
+end;
+
+theorem Th6:
+ for p being Simple (oriented Chain of G) st p=pe^qe & len pe >= 1 &
+ len qe >= 1 holds
+  (the Target of G).(p.len p) <> (the Target of G).(pe.len pe) &
+  (the Source of G).(p.1) <> (the Source of G).(qe.1)
+proof
+     let p be Simple (oriented Chain of G);
+     set FT=the Target of G, FS=the Source of G;
+     assume A1: p=pe^qe & len pe >= 1 & len qe >= 1;
+     consider vs being FinSequence of the Vertices of G such that
+A2:  vs is_oriented_vertex_seq_of p &
+     (for n,m st 1<=n & n<m & m<=len vs & vs.n=vs.m holds n=1 & m=len vs)
+     by GRAPH_4:def 7;
+A3:  len vs = len p + 1 &
+     for n st 1<=n & n<=len p holds p.n orientedly_joins vs/.n, vs/.(n+1)
+     by A2,GRAPH_4:def 5;
+       len p = len pe + len qe by A1,FINSEQ_1:35;
+then A4:  len p >= len pe+1 by A1,REAL_1:55;
+then A5:  len p > len pe by NAT_1:38;
+then A6:  len p >= 1 by A1,AXIOMS:22;
+A7:  1 <= len vs by A3,NAT_1:37;
+       p.len p orientedly_joins vs/.len p, vs/.(len p+1) by A2,A6,GRAPH_4:def 5
+;
+then A8:  FT.(p.len p)=vs/.(len p+1) by GRAPH_4:def 1
+         .=vs.len vs by A3,A7,FINSEQ_4:24;
+A9:  1 < len pe +1 by A1,NAT_1:38;
+A10:  len pe+1 < len vs by A3,A4,NAT_1:38;
+A11:  p.len pe orientedly_joins vs/.len pe, vs/.(len pe+1) by A1,A2,A5,GRAPH_4:
+def 5;
+   FT.(pe.len pe) = FT.(p.len pe) by A1,Lm1
+     .=vs/.(len pe+1) by A11,GRAPH_4:def 1
+     .=vs.(len pe +1) by A9,A10,FINSEQ_4:24;
+     hence FT.(p.len p) <> FT.(pe.len pe) by A2,A8,A9,A10;
+       p.1 orientedly_joins vs/.1, vs/.(1+1) by A2,A6,GRAPH_4:def 5;
+then A12:  FS.(p.1)=vs/.1 by GRAPH_4:def 1
+         .=vs.1 by A7,FINSEQ_4:24;
+A13:  p.(len pe+1) orientedly_joins vs/.(len pe+1), vs/.(len pe+1+1)
+      by A2,A4,A9,GRAPH_4:def 5;
+A14:  FS.(qe.1) = FS.(p.(len pe+1)) by A1,Lm2
+     .=vs/.(len pe+1) by A13,GRAPH_4:def 1
+     .=vs.(len pe +1) by A9,A10,FINSEQ_4:24;
+     assume FS.(p.1) = FS.(qe.1);
+     hence contradiction by A2,A9,A10,A12,A14;
+end;
+
+begin :: The fundamental properties of directed paths and shortest paths
+
+theorem Th7:
+  p is_orientedpath_of v1,v2,V iff p is_orientedpath_of v1,v2,V \/ {v2}
+proof
+    set V'=V \/ {v2};
+  V c= V' by XBOOLE_1:7;
+    hence p is_orientedpath_of v1,v2,V implies
+       p is_orientedpath_of v1,v2,V' by GRAPH_5:36;
+    assume p is_orientedpath_of v1,v2,V';
+then A1:  p is_orientedpath_of v1,v2 & vertices(p) \ {v2} c= V' by GRAPH_5:def
+4;
+     then vertices(p) \ {v2} \ {v2} c= V by XBOOLE_1:43;
+     then vertices(p) \ ({v2} \/ {v2}) c= V by XBOOLE_1:41;
+     hence thesis by A1,GRAPH_5:def 4;
+end;
+
+theorem Th8:
+ p is_shortestpath_of v1,v2,V,W iff p is_shortestpath_of v1,v2,V \/{v2},W
+proof
+    set V'=V \/ {v2};
+    hereby assume A1: p is_shortestpath_of v1,v2,V,W;
+   then p is_orientedpath_of v1,v2,V & for q st q is_orientedpath_of v1,v2,V
+       holds cost(p,W) <= cost(q,W) by GRAPH_5:def 18;
+    then A2: p is_orientedpath_of v1,v2,V' by Th7;
+         now let q;
+          assume q is_orientedpath_of v1,v2,V';
+          then q is_orientedpath_of v1,v2,V by Th7;
+          hence cost(p,W) <= cost(q,W) by A1,GRAPH_5:def 18;
+        end;
+        hence p is_shortestpath_of v1,v2,V',W by A2,GRAPH_5:def 18;
+    end;
+    assume A3:p is_shortestpath_of v1,v2,V',W;
+then p is_orientedpath_of v1,v2,V' & for q st q is_orientedpath_of v1,v2,V'
+    holds cost(p,W) <= cost(q,W) by GRAPH_5:def 18;
+then A4: p is_orientedpath_of v1,v2,V by Th7;
+      now let q;
+       assume q is_orientedpath_of v1,v2,V;
+       then q is_orientedpath_of v1,v2,V' by Th7;
+       hence cost(p,W) <= cost(q,W) by A3,GRAPH_5:def 18;
+    end;
+    hence thesis by A4,GRAPH_5:def 18;
+end;
+
+theorem Th9:
+  p is_shortestpath_of v1,v2,V,W & q is_shortestpath_of v1,v2,V,W implies
+  cost(p,W)=cost(q,W)
+proof
+   assume A1: p is_shortestpath_of v1,v2,V,W & q is_shortestpath_of v1,v2,V,W;
+then A2: p is_orientedpath_of v1,v2,V & for r being oriented Chain of G
+    st r is_orientedpath_of v1,v2,V holds cost(p,W) <= cost(r,W)
+    by GRAPH_5:def 18;
+  q is_orientedpath_of v1,v2,V & for r being oriented Chain of G
+    st r is_orientedpath_of v1,v2,V holds cost(q,W) <= cost(r,W)
+    by A1,GRAPH_5:def 18;
+then A3: cost(p,W) <= cost(q,W) by A1,GRAPH_5:def 18;
+      cost(q,W) <= cost(p,W) by A1,A2,GRAPH_5:def 18;
+    hence thesis by A3,AXIOMS:21;
+end;
+
+theorem Th10:
+for G being oriented Graph,v1,v2 be Vertex of G,e1,e2 be set
+st e1 in the Edges of G & e2 in the Edges of G &
+e1 orientedly_joins v1,v2 & e2 orientedly_joins v1,v2 holds e1=e2
+proof
+  let G be oriented Graph,v1,v2 be Vertex of G,e1,e2 be set;
+  assume A1: e1 in the Edges of G & e2 in the Edges of G &
+  e1 orientedly_joins v1,v2 & e2 orientedly_joins v1,v2;
+  then (the Source of G).e1 = v1 & (the Target of G).e1 = v2 &
+  (the Source of G).e2 = v1 & (the Target of G).e2 = v2 by GRAPH_4:def 1;
+  hence thesis by A1,GRAPH_1:def 4;
+end;
+
+Lm3:
+ 1 <= i & i <= len pe implies (the Source of G).(pe.i) in the Vertices of G
+   & (the Target of G).(pe.i) in the Vertices of G
+proof
+   assume 1 <= i & i <= len pe;
+   then i in dom pe by FINSEQ_3:27;
+   hence thesis by GRAPH_5:11;
+end;
+
+theorem Th11:
+the Vertices of G= U \/ V & v1 in U & v2 in V & (for v3,v4 st v3 in U &
+v4 in V holds not (ex e st e in the Edges of G & e orientedly_joins v3,v4))
+ implies not ex p st p is_orientedpath_of v1,v2
+proof
+    assume A1: the Vertices of G= U \/ V & v1 in U & v2 in V & (for v3,v4
+     st v3 in U & v4 in V holds not (ex e st e in the Edges of G &
+     e orientedly_joins v3,v4));
+    given p such that
+A2: p is_orientedpath_of v1,v2;
+    set FS=the Source of G,
+        FT=the Target of G;
+A3: p <> {} & FS.(p.1) = v1 & FT.(p.(len p))= v2 by A2,GRAPH_5:def 3;
+then A4: len p >= 1 by GRAPH_5:8;
+    defpred PP[Nat] means $1 >=1 & $1<=len p & FS.(p.$1) in U;
+A5: for k st PP[k] holds k <= len p;
+A6: ex k st PP[k] by A1,A3,A4;
+    consider k such that
+A7: PP[k] & for n st PP[n] holds n <= k from Max(A5,A6);
+    reconsider vx=FS.(p.k) as Vertex of G by A7,Lm3;
+A8: p.k in the Edges of G by A7,Th2;
+    per cases;
+    suppose k=len p;
+        then p.k orientedly_joins vx,v2 by A3,GRAPH_4:def 1;
+        hence contradiction by A1,A7,A8;
+    suppose k<>len p;
+    then A9: k < len p by A7,REAL_1:def 5;
+    then A10: FS.(p.(k+1)) = FT.(p.k) by A7,GRAPH_1:def 12;
+    A11: k < k+1 by NAT_1:38;
+        A12: now assume A13: FS.(p.(k+1)) in U;
+       A14:  k+1 <= len p by A9,INT_1:20;
+              1 <= k+1 by NAT_1:37;
+            hence contradiction by A7,A11,A13,A14;
+        end;
+    A15: FT.(p.k) in the Vertices of G by A7,Lm3;
+        reconsider vy=FT.(p.k) as Vertex of G by A7,Lm3;
+    A16: vy in V by A1,A10,A12,A15,XBOOLE_0:def 2;
+          p.k orientedly_joins vx,vy by GRAPH_4:def 1;
+        hence contradiction by A1,A7,A8,A16;
+end;
+
+Lm4:
+  1<= i & i <= len pe & (v1=(the Source of G).(pe.i) or
+  v1=(the Target of G).(pe.i)) implies v1 in vertices pe
+proof
+   assume A1: 1<= i & i <= len pe & (v1=(the Source of G).(pe.i) or
+      v1=(the Target of G).(pe.i));
+   then i in dom pe by FINSEQ_3:27;
+   hence thesis by A1,GRAPH_5:28;
+end;
+
+theorem Th12:
+the Vertices of G= U \/ V & v1 in U & (for v3,v4 st v3 in U &
+v4 in V holds not (ex e st e in the Edges of G & e orientedly_joins v3,v4)) &
+p is_orientedpath_of v1,v2 implies p is_orientedpath_of v1,v2,U
+proof
+    assume A1: the Vertices of G= U \/ V & v1 in U & (for v3,v4 st v3 in U &
+     v4 in V holds not (ex e st e in the Edges of G &
+     e orientedly_joins v3,v4)) & p is_orientedpath_of v1,v2;
+    set FS=the Source of G,
+        FT=the Target of G;
+A2: vertices p \ {v2} c= vertices p by XBOOLE_1:36;
+      now
+      assume not vertices p c= U;
+      then consider i being Nat, q,r being FinSequence of the Edges of G such
+that
+A3:   i+1 <= len p & not vertices(p/.(i+1)) c= U & len q=i & p=q^r &
+      vertices q c= U by GRAPH_5:23;
+A4:   1 <= i+ 1 by NAT_1:37;
+      then p/.(i+1)=p.(i+1) by A3,FINSEQ_4:24;
+then A5:   vertices(p/.(i+1))={FS.(p.(i+1)),FT.(p.(i+1))} by GRAPH_5:def 1;
+A6:   now
+         assume FS.(p.(i+1)) in U & FT.(p.(i+1)) in U;
+         then vertices(p/.(i+1)) \/ U = U by A5,ZFMISC_1:48;
+         hence contradiction by A3,XBOOLE_1:7;
+      end;
+A7:   p.(i+1) in the Edges of G by A3,A4,Th2;
+A8:   FT.(p.(i+1)) in the Vertices of G by A3,A4,Lm3;
+      reconsider vy=FT.(p.(i+1)) as Vertex of G by A3,A4,Lm3;
+A9:   vy in U or vy in V by A1,A8,XBOOLE_0:def 2;
+      per cases;
+      suppose A10: i=0;
+     then FS.(p.(i+1))=v1 by A1,GRAPH_5:def 3;
+         then p.(i+1) orientedly_joins v1,vy by GRAPH_4:def 1;
+        hence contradiction by A1,A6,A7,A9,A10,GRAPH_5:def 3;
+      suppose A11: i<>0;
+        reconsider vx=FS.(p.(i+1)) as Vertex of G by A3,A4,Lm3;
+        hereby
+         per cases;
+         suppose A12: vx in U;
+             p.(i+1) orientedly_joins vx,vy by GRAPH_4:def 1;
+           hence contradiction by A1,A6,A7,A9,A12;
+         suppose A13: not vx in U;
+             i > 0 by A11,NAT_1:19;
+    then A14:    i >= 1+0 by INT_1:20;
+           then reconsider vq=FT.(q.i) as Vertex of G by A3,Lm3;
+           A15: vq in vertices(q) by A3,A14,Lm4;
+    A16:    i < len p by A3,NAT_1:38;
+             FT.(q.i)=FT.(p.i) by A3,A14,Lm1
+           .=FS.(p.(i+1)) by A14,A16,GRAPH_1:def 12;
+           hence contradiction by A3,A13,A15;
+        end;
+    end;
+    then vertices(p) \ {v2} c= U by A2,XBOOLE_1:1;
+    hence thesis by A1,GRAPH_5:def 4;
+end;
+
+begin :: The basic theorems for Dijkstra's shortest path algorithm (continue)
+
+reserve G for finite Graph,
+        P,Q for oriented Chain of G,
+        v1,v2,v3 for Vertex of G;
+
+theorem Th13:
+W is_weight>=0of G & P is_shortestpath_of v1,v2,V,W & v1 <> v2 & v1 <> v3 &
+Q is_shortestpath_of v1,v3,V,W & not (ex e st e in the Edges of G &
+e orientedly_joins v2,v3) & P islongestInShortestpath V,v1,W implies
+Q is_shortestpath_of v1,v3,V \/{v2},W
+proof
+     assume A1: W is_weight>=0of G & P is_shortestpath_of v1,v2,V,W &
+         v1 <> v2 & v1 <> v3 & Q is_shortestpath_of v1,v3,V,W & not (ex e
+         st e in the Edges of G & e orientedly_joins v2,v3) &
+         P islongestInShortestpath V,v1,W;
+       set V'=V \/ {v2},
+           FS=the Source of G,
+           FT=the Target of G;
+A2:  W is_weight_of G by A1,GRAPH_5:50;
+A3:  now
+         let S be oriented Chain of G;
+         assume A4: S is_orientedpath_of v1,v3,V';
+          then consider s being Simple (oriented Chain of G) such that
+      A5: s is_shortestpath_of v1,v3,V',W by A1,GRAPH_5:66;
+      A6: s is_orientedpath_of v1,v3,V' by A5,GRAPH_5:def 18;
+      then A7: s is_orientedpath_of v1,v3 by GRAPH_5:def 4;
+          then s <> {} by GRAPH_5:def 3;
+      then len s >=1 by GRAPH_5:8;
+          then consider i such that
+      A8: len s = 1+i by NAT_1:28;
+          consider s1,s2 being FinSequence such that
+      A9: len s1 = i & len s2 = 1 & s = s1^s2 by A8,FINSEQ_2:25;
+          reconsider s1,s2 as Simple (oriented Chain of G) by A9,GRAPH_5:17;
+      A10:  s2.1= s.len s by A8,A9,Lm2;
+      A11:  FS.(s.1)=v1 & FT.(s.len s)=v3 by A7,GRAPH_5:def 3;
+           reconsider vx=FS.(s2.1) as Vertex of G by A9,Lm3;
+      A12:  now
+              assume vx=v2;
+          then A13:  s2.1 orientedly_joins v2,v3 by A10,A11,GRAPH_4:def 1;
+                 1 in dom s2 by A9,FINSEQ_3:27;
+               then s2.1 in the Edges of G by FINSEQ_2:13;
+               hence contradiction by A1,A13;
+           end;
+      A14:  vertices(s) \ {v3} c= V' by A6,GRAPH_5:def 4;
+      A15:  cost(s,W) <= cost(S,W) by A4,A5,GRAPH_5:def 18;
+           per cases;
+           suppose A16: not v2 in vertices s or v2=v3;
+              set Vs=vertices s;
+                (Vs \ {v3}) \ {v2} c= V by A14,XBOOLE_1:43;
+         then A17:  Vs \ ({v3} \/ {v2}) c= V by XBOOLE_1:41;
+                now
+                per cases by A16;
+                suppose A18: not v2 in vertices s;
+                  (Vs \ {v2}) \ {v3} c= V by A17,XBOOLE_1:41;
+                hence Vs \ {v3} c= V by A18,ZFMISC_1:65;
+               suppose v2=v3;
+                hence Vs \ {v3} c= V by A17;
+              end;
+              then s is_orientedpath_of v1,v3,V by A7,GRAPH_5:def 4;
+              then cost(Q,W) <= cost(s,W) by A1,GRAPH_5:def 18;
+              hence cost(Q,W) <= cost(S,W) by A15,AXIOMS:22;
+
+           suppose A19: v2 in vertices s & v2<>v3;
+              then consider j such that
+          A20: 1<=j & j <= len s & v2 = FT.(s.j) by A1,A11,GRAPH_5:32;
+                len s1 <> 0 by A8,A9,A11,A19,A20,AXIOMS:21;
+              then len s1 > 0 by NAT_1:19;
+          then A21: len s1 >= 0+1 by INT_1:20;
+          A22: len s1 < len s by A8,A9,NAT_1:38;
+          A23: vx=FS.(s.(len s1+1)) by A9,Lm2
+              .=FT.(s.len s1) by A21,A22,GRAPH_1:def 12;
+          A24: now
+                assume j > len s1;
+                then j >= len s1+1 by INT_1:20;
+                hence contradiction by A8,A9,A11,A19,A20,AXIOMS:21;
+              end;
+              then consider k such that
+         A25:  len s1 = j+k by NAT_1:28;
+              consider t1,t2 being FinSequence such that
+         A26:  len t1 = j & len t2 = k & s1 = t1^t2 by A25,FINSEQ_2:25;
+          reconsider t1,t2 as Simple (oriented Chain of G) by A26,GRAPH_5:17;
+         A27:  FS.(t1.1)=FS.(s1.1) by A20,A26,Lm1
+              .=v1 by A9,A11,A21,Lm1;
+         A28:  t1 <> {} by A20,A26,GRAPH_5:8;
+                FT.(t1.len t1)=FT.(s1.j) by A20,A26,Lm1
+              .=v2 by A9,A20,A24,Lm1;
+         then A29:  t1 is_orientedpath_of v1,v2 by A27,A28,GRAPH_5:def 3;
+              A30: len s2>=1 by A9;
+         then A31:  not v3 in vertices (s1) by A1,A9,A11,A21,GRAPH_5:21;
+              set Vt=vertices(t1);
+                Vt c= vertices (t1^t2) by GRAPH_5:30;
+         then A32:  not v3 in Vt by A1,A9,A11,A21,A26,A30,GRAPH_5:21;
+                vertices(s1^s2) \ {v3} c= V' by A6,A9,GRAPH_5:def 4;
+         then A33:  vertices(t1^t2) \ {v3} c= V' by A26,GRAPH_5:26;
+              then Vt \ {v3} c= V' by GRAPH_5:26;
+              then Vt c= V' by A32,ZFMISC_1:65;
+              then Vt \ {v2} c= V by XBOOLE_1:43;
+              then t1 is_orientedpath_of v1,v2,V by A29,GRAPH_5:def 4;
+         then A34:  cost(P,W) <= cost(t1,W) by A1,GRAPH_5:def 18;
+                vx = FT.(s1.len s1) by A9,A21,A23,Lm1;
+         then A35:  vx in vertices(s1) by A21,Lm4;
+                not vx in {v2} by A12,TARSKI:def 1;
+         then A36:  vx in (vertices(s1) \ {v2}) by A35,XBOOLE_0:def 4;
+                vertices(s1) c= V' by A26,A31,A33,ZFMISC_1:65;
+              then A37: vertices(s1) \ {v2} c= V by XBOOLE_1:43;
+                not v1 in vertices (s2) by A1,A9,A11,A21,GRAPH_5:21;
+              then vx <> v1 by A9,Lm4;
+              then consider q being oriented Chain of G such that
+        A38:   q is_shortestpath_of v1,vx,V,W & cost(q,W) <= cost(P,W)
+              by A1,A36,A37,GRAPH_5:def 19;
+        A39:   q is_orientedpath_of v1,vx,V by A38,GRAPH_5:def 18;
+        A40:   s2.1 orientedly_joins vx,v3 by A10,A11,GRAPH_4:def 1;
+        A41:   q is_orientedpath_of v1,vx by A39,GRAPH_5:def 4;
+              then q <> {} by GRAPH_5:def 3;
+        then A42:   len q >=1 by GRAPH_5:8;
+              then consider p being oriented Chain of G such that
+        A43:   p=q^s2 & p is_orientedpath_of v1,v3 by A9,A40,A41,GRAPH_5:37;
+                p is_orientedpath_of v1,v3,V \/{vx}
+              by A9,A39,A40,A42,A43,GRAPH_5:38;
+              then p is_orientedpath_of v1,v3,V by A36,A37,ZFMISC_1:46;
+              then cost(Q,W) <= cost(p,W) by A1,GRAPH_5:def 18;
+        then A44:   cost(Q,W) <= cost(q,W)+cost(s2,W) by A2,A43,GRAPH_5:58;
+        A45:   cost(q,W) <= cost(t1,W) by A34,A38,AXIOMS:22;
+        A46:   cost(s1,W) = cost(t1,W)+cost(t2,W) by A2,A26,GRAPH_5:58;
+                0 <= cost(t2,W) by A1,GRAPH_5:54;
+              then 0+cost(t1,W) <= cost(s1,W) by A46,REAL_1:55;
+        then A47:   cost(q,W) <= cost(s1,W) by A45,AXIOMS:22;
+                cost(s,W) = cost(s1,W)+cost(s2,W) by A2,A9,GRAPH_5:58;
+              then cost(q,W)+cost(s2,W) <= cost(s,W) by A47,REAL_1:55;
+              then cost(Q,W) <= cost(s,W) by A44,AXIOMS:22;
+              hence cost(Q,W) <= cost(S,W) by A15,AXIOMS:22;
+     end;
+A48:  Q is_orientedpath_of v1,v3,V by A1,GRAPH_5:def 18;
+       V c= V' by XBOOLE_1:7;
+     then Q is_orientedpath_of v1,v3,V' by A48,GRAPH_5:36;
+     hence thesis by A3,GRAPH_5:def 18;
+end;
+
+reserve G for finite oriented Graph,
+        P,Q for oriented Chain of G,
+        W for Function of (the Edges of G), Real>=0,
+        v1,v2,v3,v4 for Vertex of G;
+
+theorem Th14:
+e in the Edges of G & v1 <> v2 & P=<*e*> & e orientedly_joins v1,v2
+implies P is_shortestpath_of v1,v2,{v1},W
+proof
+     assume A1: e in the Edges of G & v1 <> v2 & P=<*e*> &
+      e orientedly_joins v1,v2;
+       set FS=the Source of G,
+           FT=the Target of G,
+           Eg=the Edges of G;
+A2:  FS.e = v1 & FT.e = v2 by A1,GRAPH_4:def 1;
+A3:  now
+         let S be oriented Chain of G;
+         assume A4: S is_orientedpath_of v1,v2,{v1};
+            W is_weight>=0of G by GRAPH_5:def 13;
+          then consider s being Simple (oriented Chain of G) such that
+      A5: s is_shortestpath_of v1,v2,{v1},W by A4,GRAPH_5:66;
+      A6: s is_orientedpath_of v1,v2,{v1} by A5,GRAPH_5:def 18;
+      then A7: s is_orientedpath_of v1,v2 by GRAPH_5:def 4;
+          then s <> {} by GRAPH_5:def 3;
+      then A8: len s >=1 by GRAPH_5:8;
+          set Vs=vertices s;
+            Vs \ {v2} c= {v1} by A6,GRAPH_5:def 4;
+          then Vs c= {v2} \/ {v1} by XBOOLE_1:44;
+      then A9: Vs c= {v1,v2} by ENUMSET1:41;
+      A10: FS.(s.1)=v1 & FT.(s.len s)=v2 by A7,GRAPH_5:def 3;
+          then v1 in Vs & v2 in Vs by A8,Lm4;
+          then {v1} c= Vs & {v2} c= Vs by ZFMISC_1:37;
+          then {v1} \/ {v2} c= Vs by XBOOLE_1:8;
+          then A11: {v1,v2} c= Vs by ENUMSET1:41;
+          consider i such that
+      A12: len s = 1+i by A8,NAT_1:28;
+          consider s1,s2 being FinSequence such that
+      A13: len s1 = i & len s2 = 1 & s = s1^s2 by A12,FINSEQ_2:25;
+          reconsider s1,s2 as Simple (oriented Chain of G) by A13,GRAPH_5:17;
+            now
+             assume s1 <> {};
+         then A14: len s1 >=1 by GRAPH_5:8;
+               len s2 =1 by A13;
+         then A15: FT.(s.len s) <> FT.(s1.len s1) &
+             FS.(s.1) <> FS.(s2.1) by A13,A14,Th6;
+         A16: len s1 < len s by A12,A13,NAT_1:38;
+             A17: FS.(s2.1)=FS.(s.(len s1+1)) by A13,Lm2
+           .=FT.(s.len s1) by A14,A16,GRAPH_1:def 12
+           .=FT.(s1.len s1) by A13,A14,Lm1;
+               vertices(s2) c= vertices(s1^s2) by GRAPH_5:30;
+         then A18: vertices(s2) c= {v1,v2} by A9,A11,A13,XBOOLE_0:def 10;
+             reconsider vx=FS.(s2.1) as Vertex of G by A13,Lm3;
+               vx in vertices(s2) by A13,Lm4;
+             hence contradiction by A10,A15,A17,A18,TARSKI:def 2;
+           end;
+       then A19: len s= 0+1 by A12,A13,FINSEQ_1:25;
+             s/.1 in Eg by A1;
+           then s.1 in Eg by A19,FINSEQ_4:24;
+           then e = s.1 by A1,A2,A10,A19,GRAPH_1:def 4;
+           then s = P by A1,A19,FINSEQ_1:57;
+          hence cost(P,W) <= cost(S,W) by A4,A5,GRAPH_5:def 18;
+     end;
+A20:  len P = 1 & P.1=e by A1,FINSEQ_1:57;
+     then P <> {} by GRAPH_5:8;
+then A21:  P is_orientedpath_of v1,v2 by A2,A20,GRAPH_5:def 3;
+A22:  P/.1=e by A20,FINSEQ_4:24;
+       vertices(P)=vertices(P/.1) by A20,GRAPH_5:29;
+     then vertices(P)={v1,v2} by A2,A22,GRAPH_5:def 1;
+     then vertices(P) \ {v2} = ({v1} \/ {v2}) \{v2} by ENUMSET1:41
+     .={v1} \ {v2} by XBOOLE_1:40;
+     then vertices(P) \ {v2} c= {v1} by XBOOLE_1:36;
+     then P is_orientedpath_of v1,v2,{v1} by A21,GRAPH_5:def 4;
+     hence thesis by A3,GRAPH_5:def 18;
+end;
+
+theorem Th15:
+e in the Edges of G & P is_shortestpath_of v1,v2,V,W & v1 <> v3 & Q=P^<*e*> &
+e orientedly_joins v2,v3 & v1 in V & (for v4 st v4 in V holds
+not (ex ee st ee in the Edges of G & ee orientedly_joins v4,v3)) implies
+Q is_shortestpath_of v1,v3,V \/{v2},W
+proof
+     assume A1: e in the Edges of G & P is_shortestpath_of v1,v2,V,W &
+     v1 <> v3 & Q=P^<*e*> & e orientedly_joins v2,v3 & v1 in V &
+    (for v4 st v4 in V holds not (ex ee st ee in the Edges of G &
+    ee orientedly_joins v4,v3));
+       set V'=V \/ {v2},
+           FS=the Source of G,
+           FT=the Target of G;
+A2:  W is_weight>=0of G by GRAPH_5:def 13;
+then A3:  W is_weight_of G by GRAPH_5:50;
+      set Eg=the Edges of G;
+A4:  now
+         let S be oriented Chain of G;
+         assume A5: S is_orientedpath_of v1,v3,V';
+          then consider s being Simple (oriented Chain of G) such that
+      A6: s is_shortestpath_of v1,v3,V',W by A2,GRAPH_5:66;
+      A7: s is_orientedpath_of v1,v3,V' by A6,GRAPH_5:def 18;
+      then A8: s is_orientedpath_of v1,v3 by GRAPH_5:def 4;
+          then s <> {} by GRAPH_5:def 3;
+      then A9: len s >=1 by GRAPH_5:8;
+          then consider i such that
+      A10: len s = 1+i by NAT_1:28;
+          consider s1,s2 being FinSequence such that
+      A11: len s1 = i & len s2 = 1 & s = s1^s2 by A10,FINSEQ_2:25;
+          reconsider s1,s2 as Simple (oriented Chain of G) by A11,GRAPH_5:17;
+      A12:  s2.1= s.len s by A10,A11,Lm2;
+      A13:  FS.(s.1)=v1 & FT.(s.len s)=v3 by A8,GRAPH_5:def 3;
+           reconsider vx=FS.(s2.1) as Vertex of G by A11,Lm3;
+      A14:  s1 <> {}
+           proof
+             assume s1 = {};
+          then A15:  len s= 1+ 0 by A10,A11,FINSEQ_1:25;
+          then A16:  s.1 orientedly_joins v1,v3 by A13,GRAPH_4:def 1;
+                 s.1 in the Edges of G by A15,Th2;
+               hence contradiction by A1,A16;
+           end;
+      then A17:  len s1 >=1 by GRAPH_5:8;
+         len s1 < len s by A10,A11,NAT_1:38;
+      then A18:  FS.(s.len s)=FT.(s.len s1) by A10,A11,A17,GRAPH_1:def 12
+           .=FT.(s1.len s1) by A11,A17,Lm1;
+           set Vs=vertices s;
+      A19:  Vs \ {v3} c= V' by A7,GRAPH_5:def 4;
+      A20:  now
+               assume A21: vx <> v2;
+            A22: vx in Vs by A9,A12,Lm4;
+                  vx <> FT.(s.len s) by A11,A12,A17,A18,Th6;
+                then not vx in {v3} by A13,TARSKI:def 1;
+                then vx in (Vs \ {v3}) by A22,XBOOLE_0:def 4;
+                then A23: vx in V or vx in {v2} by A19,XBOOLE_0:def 2;
+            A24: s2.1 orientedly_joins vx,v3 by A12,A13,GRAPH_4:def 1;
+                  s2.1 in the Edges of G by A11,Th2;
+                hence contradiction by A1,A21,A23,A24,TARSKI:def 1;
+           end;
+            FS.(s1.1)=v1 by A11,A13,A17,Lm1;
+      then A25: s1 is_orientedpath_of v1,v2 by A12,A14,A18,A20,GRAPH_5:def 3;
+            len s2 = 1 by A11;
+          then not FT.(s.len s) in vertices(s1) by A1,A11,A13,A17,GRAPH_5:21;
+      then A26: vertices(s1) \ {v3} = vertices(s1) by A13,ZFMISC_1:65;
+            vertices(s1) c= vertices(s1^s2) by GRAPH_5:30;
+          then vertices(s1) c= Vs \ {v3} by A11,A26,XBOOLE_1:33;
+          then vertices(s1) c= V' by A19,XBOOLE_1:1;
+          then vertices(s1) \ {v2} c= V' \ {v2} by XBOOLE_1:33;
+      then A27: vertices(s1) \ {v2} c= V \ {v2} by XBOOLE_1:40;
+            V \ {v2} c= V by XBOOLE_1:36;
+          then vertices(s1) \ {v2} c= V by A27,XBOOLE_1:1;
+          then s1 is_orientedpath_of v1,v2,V by A25,GRAPH_5:def 4;
+      then A28: cost(P,W) <= cost(s1,W) by A1,GRAPH_5:def 18;
+            s2/.1 in Eg by A1;
+      then A29: s2.1 in Eg by A11,FINSEQ_4:24;
+            FS.e = v2 & FT.e = v3 by A1,GRAPH_4:def 1;
+          then e = s2.1 by A1,A12,A13,A20,A29,GRAPH_1:def 4;
+      then A30: s2 = <*e*> by A11,FINSEQ_1:57;
+      A31: cost(s,W)=cost(s1,W)+cost(s2,W) by A3,A11,GRAPH_5:58;
+            cost(Q,W)=cost(P,W)+cost(s2,W) by A1,A3,A30,GRAPH_5:58;
+      then A32: cost(Q,W) <= cost(s,W) by A28,A31,REAL_1:55;
+            cost(s,W) <= cost(S,W) by A5,A6,GRAPH_5:def 18;
+          hence cost(Q,W) <= cost(S,W) by A32,AXIOMS:22;
+     end;
+A33:  P is_orientedpath_of v1,v2,V by A1,GRAPH_5:def 18;
+then P is_orientedpath_of v1,v2 by GRAPH_5:def 4;
+     then P <> {} by GRAPH_5:def 3;
+then A34:  len P >=1 by GRAPH_5:8;
+     reconsider pe=<*e*> as FinSequence of Eg by A1,SCMFSA_7:22;
+   len pe = 1 & pe.1=e by FINSEQ_1:57;
+     then Q is_orientedpath_of v1,v3,V' by A1,A33,A34,GRAPH_5:38;
+     hence thesis by A4,GRAPH_5:def 18;
+end;
+
+theorem Th16:
+the Vertices of G= U \/ V & v1 in U & (for v3,v4 st v3 in U &
+v4 in V holds not (ex e st e in the Edges of G & e orientedly_joins v3,v4))
+ implies (P is_shortestpath_of v1,v2,U,W iff P is_shortestpath_of v1,v2,W)
+proof
+    assume A1: the Vertices of G= U \/ V & v1 in U &
+      (for v3,v4 st v3 in U & v4 in V holds not (ex e st e in
+      the Edges of G & e orientedly_joins v3,v4));
+    hereby
+       assume A2: P is_shortestpath_of v1,v2,U,W;
+ then P is_orientedpath_of v1,v2,U & for Q st Q is_orientedpath_of v1,v2,U
+       holds cost(P,W) <= cost(Q,W) by GRAPH_5:def 18;
+ then A3:   P is_orientedpath_of v1,v2 by GRAPH_5:def 4;
+         now let Q;
+          assume Q is_orientedpath_of v1,v2;
+          then Q is_orientedpath_of v1,v2,U by A1,Th12;
+          hence cost(P,W) <= cost(Q,W) by A2,GRAPH_5:def 18;
+       end;
+       hence P is_shortestpath_of v1,v2,W by A3,GRAPH_5:def 17;
+    end;
+    hereby
+       assume A4: P is_shortestpath_of v1,v2,W;
+ then P is_orientedpath_of v1,v2 & for Q st Q is_orientedpath_of v1,v2
+       holds cost(P,W) <= cost(Q,W) by GRAPH_5:def 17;
+ then A5:   P is_orientedpath_of v1,v2,U by A1,Th12;
+         now let Q;
+          assume Q is_orientedpath_of v1,v2,U;
+          then Q is_orientedpath_of v1,v2 by GRAPH_5:def 4;
+          hence cost(P,W) <= cost(Q,W) by A4,GRAPH_5:def 17;
+       end;
+       hence P is_shortestpath_of v1,v2,U,W by A5,GRAPH_5:def 18;
+    end;
+end;
+
+begin  :: The definition of assignment statement
+
+definition let f be Function, i, x be set;
+  redefine func f+*(i,x);
+  synonym (f,i):=x;
+end;
+
+theorem Th17:
+  for x,y being set, f being Function holds rng (f,x):=y c= rng f \/ {y}
+proof
+   let x,y be set,f be Function;
+   set TT=(f, x):=y;
+   let z be set;
+       assume z in rng TT;
+       then consider w be set such that
+ A1:   w in dom TT & z = TT.w by FUNCT_1:def 5;
+ A2:   w in dom f by A1,FUNCT_7:32;
+       per cases;
+       suppose w<>x;
+          then z=f.w by A1,FUNCT_7:34;
+          then z in rng f or z in {y} by A2,FUNCT_1:def 5;
+          hence z in rng f \/ {y} by XBOOLE_0:def 2;
+       suppose w=x;
+          then z=y by A1,A2,FUNCT_7:33;
+          then z in rng f or z in {y} by TARSKI:def 1;
+          hence z in rng f \/ {y} by XBOOLE_0:def 2;
+end;
+
+definition let f be FinSequence of REAL, x be set, r be Real;
+  redefine func (f, x):=r -> FinSequence of REAL;
+  coherence
+  proof
+       dom ((f, x):=r) = dom f by FUNCT_7:32
+     .= Seg (len f) by FINSEQ_1:def 3;
+then A1: (f, x):=r is FinSequence by FINSEQ_1:def 2;
+      rng ((f, x):=r) c= REAL
+    proof let y;
+       assume A2: y in rng ((f, x):=r);
+         rng ((f, x):=r) c= rng f \/ {r} by Th17;
+   then A3: y in rng f or y in {r} by A2,XBOOLE_0:def 2;
+         rng f c= REAL by FINSEQ_1:def 4;
+       hence y in REAL by A3;
+    end;
+    hence thesis by A1,FINSEQ_1:def 4;
+  end;
+end;
+
+definition let i,k be Nat,f be FinSequence of REAL,r be Real;
+  func (f,i):=(k,r) -> FinSequence of REAL equals :Def1:
+   ((f,i):=k,k):=r;
+  coherence;
+end;
+
+reserve f,g,h for Element of REAL*,
+        r for Real;
+
+theorem Th18:
+   i <> k & i in dom f implies ((f,i):=(k,r)).i = k
+proof
+   assume A1: i <> k & i in dom f;
+   set fik = (f,i):=k;
+   thus ((f,i):=(k,r)).i = ((fik,k):=r).i by Def1
+   .=fik.i by A1,FUNCT_7:34
+   .=k by A1,FUNCT_7:33;
+end;
+
+theorem Th19:
+  m <> i & m <> k & m in dom f implies ((f,i):=(k,r)).m = f.m
+proof
+     assume A1: m <> i & m <> k & m in dom f;
+     set fik = (f,i):=k;
+     thus ((f,i):=(k,r)).m = ((fik,k):=r).m by Def1
+     .=fik.m by A1,FUNCT_7:34
+     .=f.m by A1,FUNCT_7:34;
+end;
+
+theorem Th20:
+  k in dom f implies ((f,i):=(k,r)).k = r
+proof
+     assume A1: k in dom f;
+     set fik = (f,i):=k;
+A2:  dom fik = dom f by FUNCT_7:32;
+     thus ((f,i):=(k,r)).k = ((fik,k):=r).k by Def1
+     .=r by A1,A2,FUNCT_7:33;
+end;
+
+theorem Th21:
+ dom ((f,i):=(k,r)) = dom f
+proof
+   set fik = (f,i):=k;
+   thus dom ((f,i):=(k,r)) = dom (((fik,k):=r)) by Def1
+   .=dom fik by FUNCT_7:32
+   .=dom f by FUNCT_7:32;
+end;
+
+begin  :: The definition of Pascal-like while-do statement
+
+definition let X be set;
+  redefine func id X -> Element of Funcs(X,X);
+  coherence
+  proof
+      id X in Funcs(X,X) by FUNCT_2:12;
+    hence thesis;
+  end;
+end;
+
+definition let X be set,f,g be Function of X,X;
+  redefine func g*f -> Function of X,X;
+  coherence proof X <> {} or X = {}; hence thesis by FUNCT_2:19;end;
+end;
+
+definition let X be set,f,g be Element of Funcs(X,X);
+  redefine func g*f -> Element of Funcs(X,X);
+  coherence
+  proof
+     reconsider f,g as Function of X,X by FUNCT_2:121;
+       g*f in Funcs(X,X) by FUNCT_2:12;
+     hence thesis;
+  end;
+end;
+
+definition let X be set,f be Element of Funcs(X,X),g be Element of X;
+ redefine func f.g -> Element of X;
+ coherence
+   proof
+A1:  f is Function of X,X by FUNCT_2:121;
+     per cases;
+     suppose A2: X = {};
+        then {} = dom f by A1,FUNCT_2:def 1;
+        then f.g = {} by FUNCT_1:def 4;
+        hence thesis by A2,SUBSET_1:def 2;
+     suppose X <> {};
+        hence f.g is Element of X by A1,FUNCT_2:7;
+   end;
+ end;
+
+definition let X be set, f be Element of Funcs(X,X);
+  func repeat(f) -> Function of NAT,Funcs(X,X) means :Def2:
+   it.0 = id X & for i being Nat holds it.(i+1)=f*(it.i);
+   existence
+   proof
+     deffunc G(Nat,Element of Funcs(X,X)) = f*$2;
+     ex F being Function of NAT,Funcs(X,X) st
+      F.0 = id X & for n being Element of NAT holds F.(n+1) = G(n,F.n)
+       from LambdaRecExD;
+     hence thesis;
+   end;
+   uniqueness
+   proof
+    deffunc R(Nat,Element of Funcs(X,X)) = f*$2;
+    let F1,F2 be Function of NAT,Funcs(X,X) such that
+A1: F1.0 = id X & for i being Nat holds F1.(i+1)=R(i,F1.i) and
+A2: F2.0 = id X & for i being Nat holds F2.(i+1)=R(i,F2.i);
+    thus F1 = F2 from LambdaRecUnD(A1,A2);
+   end;
+end;
+
+theorem Th22:
+for F being Element of Funcs(REAL*,REAL*),f being Element of REAL*,n,i be Nat
+holds (repeat F).0 .f = f
+proof
+    let F be Element of Funcs(REAL*,REAL*),f be Element of REAL*,n,i be Nat;
+    thus (repeat F).0 .f = (id (REAL*)).f by Def2
+      .= f by FUNCT_1:35;
+end;
+
+Lm5:
+for X being set,f being Element of Funcs(X,X) holds dom f=X
+proof
+     let X be set, f be Element of Funcs(X,X);
+     consider ff being Function such that
+A1:  f = ff & dom ff = X & rng ff c= X by FUNCT_2:def 2;
+     thus thesis by A1;
+end;
+
+theorem Th23:
+for F,G being Element of Funcs(REAL*,REAL*),f being Element of REAL*,
+i be Nat holds (repeat (F*G)).(i+1).f = F.(G.((repeat (F*G)).i.f))
+proof
+    let F,G be Element of Funcs(REAL*,REAL*),f be Element of REAL*,i;
+    set Fi=(repeat (F*G)).i,
+        ff=Fi.f,
+        FFi=(F*G)*Fi;
+    A1: dom (F*G) = REAL* by Lm5;
+    A2: dom FFi=REAL* by Lm5;
+   thus (repeat (F*G)).(i+1).f=FFi.f by Def2
+    .=(F*G).ff by A2,FUNCT_1:22
+    .=F.(G.ff) by A1,FUNCT_1:22;
+end;
+
+definition let g be Element of Funcs(REAL*,REAL*),f be Element of REAL*;
+  redefine func g.f -> Element of REAL*;
+  coherence
+  proof
+       g.f in REAL*;
+     hence thesis;
+  end;
+end;
+
+definition let f be Element of REAL*, n be Nat;
+  func OuterVx(f,n) -> Subset of NAT equals :Def3:
+  {i: i in dom f & 1 <= i & i <= n & f.i <> -1 & f.(n+i) <> -1};
+  coherence
+  proof
+     set NS={i: i in dom f & 1 <= i & i <= n & f.i <> -1 & f.(n+i) <> -1};
+       NS c= NAT
+     proof
+        let x be set;
+        assume x in NS;
+        then consider k being Nat such that
+    A1: x=k & k in dom f & 1 <= k & k <= n & f.k <> -1 & f.(n+k) <> -1;
+         thus x in NAT by A1;
+     end;
+     hence NS is Subset of NAT;
+  end;
+end;
+
+definition let f be Element of Funcs(REAL*,REAL*),g be Element of REAL*,
+               n be Nat;
+  assume A1: ex i st OuterVx((repeat f).i.g,n) = {};
+  func LifeSpan(f,g,n) -> Nat means :Def4:
+    OuterVx((repeat f).it.g,n) = {} &
+    for k being Nat st OuterVx((repeat f).k.g,n) = {} holds it <= k;
+   existence
+   proof
+     defpred P[Nat] means OuterVx((repeat f).$1.g,n) = {};
+A2:  ex k st P[k] by A1;
+     ex k st P[k] & for n st P[n] holds k <= n from Min(A2);
+     hence thesis;
+   end;
+   uniqueness
+   proof let it1, it2 be Nat;
+     assume A3: not thesis;
+     then it1 <= it2 & it2 <= it1;
+     hence contradiction by A3,AXIOMS:21;
+  end;
+end;
+
+definition let f be Element of Funcs(REAL*,REAL*), n be Nat;
+  func while_do(f,n) -> Element of Funcs(REAL*,REAL*) means :Def5:
+   dom it=REAL* & for h being Element of REAL* holds
+   it.h=(repeat f).LifeSpan(f,h,n).h;
+   existence
+   proof
+      set X=REAL*;
+      consider ff being Function such that
+A1:   f = ff & dom ff = X & rng ff c= X by FUNCT_2:def 2;
+      defpred P[set,set] means
+          for h being Element of X st $1=h holds
+          $2=(repeat f).LifeSpan(f,h,n).h;
+A2:    now
+          let xx,y1,y2 be set;
+          assume A3: xx in dom f & P[xx,y1] & P[xx,y2];
+          then reconsider xx as Element of X by A1;
+            y1=(repeat f).LifeSpan(f,xx,n).xx &
+          y2=(repeat f).LifeSpan(f,xx,n).xx by A3;
+          hence y1=y2;
+       end;
+A4:    now
+           let xx be set;
+           assume xx in dom f;
+           then reconsider h'=xx as Element of X by A1;
+             now
+               take yy=(repeat f).LifeSpan(f,h',n).h';
+               let h be Element of X;
+               assume xx=h;
+               hence yy=(repeat f).LifeSpan(f,h,n).h;
+           end;
+          hence ex y1 being set st P[xx,y1];
+        end;
+       consider f' being Function such that
+A5:    dom f'=dom f & for xx being set st xx in dom f holds P[xx, f'.xx]
+       from FuncEx(A2,A4);
+        rng f' c= X
+      proof let y;
+           assume y in rng f';
+           then consider xx being set such that
+      A6:  xx in dom f' & y = f'.xx by FUNCT_1:def 5;
+           reconsider h'=xx as Element of X by A1,A5,A6;
+             y=(repeat f).LifeSpan(f,h',n).h' by A5,A6;
+           hence y in X;
+      end;
+      then reconsider f' as Element of Funcs(X,X) by A1,A5,FUNCT_2:def 2;
+      take f';
+      thus dom f' = X by A1,A5;
+      let h be Element of X;
+      thus f'.h=(repeat f).LifeSpan(f,h,n).h by A1,A5;
+   end;
+   uniqueness
+   proof
+       set X=REAL*;
+       let g1,g2 be Element of Funcs(X,X) such that
+A7:    dom g1 = X & for h being Element of X holds
+       g1.h=(repeat f).LifeSpan(f,h,n).h and
+A8:    dom g2 = X & for h being Element of X holds
+       g2.h=(repeat f).LifeSpan(f,h,n).h;
+         now
+          let xx be set;
+          assume xx in dom g1;
+          then reconsider h=xx as Element of X by A7;
+          thus g1.xx=(repeat f).LifeSpan(f,h,n).h by A7
+                .=g2.xx by A8;
+        end;
+        hence g1=g2 by A7,A8,FUNCT_1:9;
+   end;
+end;
+
+begin :: Defining a weight function for an oriented graph
+
+definition
+   let G be oriented Graph,v1,v2 be Vertex of G;
+   assume A1: ex e be set st e in the Edges of G & e orientedly_joins v1,v2;
+   func Edge(v1,v2) means :Def6:
+    ex e be set st it = e & e in the Edges of G & e orientedly_joins v1,v2;
+   existence by A1;
+   uniqueness by Th10;
+end;
+
+definition
+   let G be oriented Graph,v1,v2 be Vertex of G, W be Function;
+   func Weight(v1,v2,W) equals :Def7:
+      W.Edge(v1,v2) if ex e be set st e in the Edges of G &
+      e orientedly_joins v1,v2 otherwise -1;
+   correctness;
+end;
+
+definition
+   let G be oriented Graph,v1,v2 be Vertex of G,
+       W be Function of (the Edges of G), Real>=0;
+   redefine func Weight(v1,v2,W) -> Real;
+   coherence
+   proof
+       per cases;
+       suppose A1: ex e be set st e in the Edges of G &
+               e orientedly_joins v1,v2;
+       then consider e being set such that
+   A2:   Edge(v1,v2) = e & e in the Edges of G & e orientedly_joins v1,v2
+         by Def6;
+           e in dom W by A2,FUNCT_2:def 1;
+         then W.Edge(v1,v2) in Real>=0 by A2,PARTFUN1:27;
+         hence thesis by A1,Def7;
+       suppose not ex e be set st e in the Edges of G &
+               e orientedly_joins v1,v2;
+         hence thesis by Def7;
+   end;
+end;
+
+reserve G for oriented Graph,
+        v1,v2 for Vertex of G,
+        W for Function of (the Edges of G), Real>=0;
+
+theorem Th24:
+  Weight(v1,v2,W) >= 0 iff ex e be set st e in the Edges of G &
+  e orientedly_joins v1,v2
+proof
+   set EG=the Edges of G;
+   hereby
+      assume A1: Weight(v1,v2,W) >= 0;
+      assume not ex e be set st e in EG & e orientedly_joins v1,v2;
+      then Weight(v1,v2,W) = -1 by Def7;
+      hence contradiction by A1;
+   end;
+   assume ex e be set st e in the Edges of G &
+      e orientedly_joins v1,v2;
+   then consider e being set such that
+A2:  Edge(v1,v2) = e & e in EG & e orientedly_joins v1,v2 by Def6;
+       e in dom W by A2,FUNCT_2:def 1;
+     then W.e in Real>=0 by PARTFUN1:27;
+     then consider r being Real such that
+A3:  W.e=r & r >=0 by GRAPH_5:def 12;
+     thus thesis by A2,A3,Def7;
+end;
+
+theorem
+   Weight(v1,v2,W) = -1 iff not ex e be set st e in the Edges of G &
+    e orientedly_joins v1,v2 by Def7,Th24;
+
+theorem Th26:
+  e in the Edges of G & e orientedly_joins v1,v2 implies Weight(v1,v2,W)=W.e
+proof
+   set EG=the Edges of G;
+   assume A1: e in EG & e orientedly_joins v1,v2;
+    then consider e1 being set such that
+A2: Edge(v1,v2) = e1 & e1 in EG & e1 orientedly_joins v1,v2 by Def6;
+     e=e1 by A1,A2,Th10;
+   hence thesis by A2,Def7;
+end;
+
+begin :: Basic operations for Dijkstra's shortest path algorithm
+
+definition let f be Element of REAL*, n be Nat;
+  func UnusedVx(f,n) -> Subset of NAT equals :Def8:
+  {i: i in dom f & 1 <= i & i <= n & f.i <> -1};
+  coherence
+  proof
+     set NS={i: i in dom f & 1 <= i & i <= n & f.i <> -1};
+       NS c= NAT
+     proof
+        let x be set;
+        assume x in NS;
+        then consider k being Nat such that
+    A1: x=k & k in dom f & 1 <= k & k <= n & f.k <> -1;
+        thus x in NAT by A1;
+     end;
+     hence NS is Subset of NAT;
+  end;
+end;
+
+definition let f be Element of REAL*, n be Nat;
+  func UsedVx(f,n) -> Subset of NAT equals :Def9:
+  {i: i in dom f & 1 <= i & i <= n & f.i = -1};
+  coherence
+  proof
+     set NS={i: i in dom f & 1 <= i & i <= n & f.i = -1};
+       NS c= NAT
+     proof
+        let x be set;
+        assume x in NS;
+        then consider k being Nat such that
+    A1: x=k & k in dom f & 1 <= k & k <= n & f.k = -1;
+         thus x in NAT by A1;
+     end;
+     hence NS is Subset of NAT;
+  end;
+end;
+
+theorem Th27:
+  UnusedVx(f,n) c= Seg n
+proof
+    let x;
+    assume x in UnusedVx(f,n);
+    then x in {i: i in dom f & 1 <= i & i <= n & f.i <> -1} by Def8;
+    then consider i such that
+A1: x=i & i in dom f & 1 <= i & i <= n & f.i <> -1;
+      x in {k: 1 <= k & k <= n } by A1;
+    hence x in Seg n by FINSEQ_1:def 1;
+end;
+
+definition let f be Element of REAL*, n be Nat;
+ cluster UnusedVx(f,n) -> finite;
+ coherence
+ proof
+     UnusedVx(f,n) c= Seg n by Th27;
+   hence thesis by FINSET_1:13;
+ end;
+end;
+
+theorem Th28:
+  OuterVx(f,n) c= UnusedVx(f,n)
+proof
+     let x;
+     assume x in OuterVx(f,n);
+     then x in {k: k in dom f & 1 <= k & k <= n & f.k <> -1 & f.(n+k) <> -1}
+     by Def3;
+     then consider k such that
+A1:  x=k & k in dom f & 1 <= k & k <= n & f.k <> -1 & f.(n+k) <> -1;
+       x in {i: i in dom f & 1 <= i & i <= n & f.i <> -1} by A1;
+     hence x in UnusedVx(f,n) by Def8;
+end;
+
+theorem Th29:
+  OuterVx(f,n) c= Seg n
+proof
+A1: OuterVx(f,n) c= UnusedVx(f,n) by Th28;
+      UnusedVx(f,n) c= Seg n by Th27;
+    hence thesis by A1,XBOOLE_1:1;
+end;
+
+definition let f be Element of REAL*, n be Nat;
+ cluster OuterVx(f,n) -> finite;
+ coherence
+ proof
+     OuterVx(f,n) c= Seg n by Th29;
+   hence thesis by FINSET_1:13;
+ end;
+end;
+
+definition let X be finite Subset of NAT,f be Element of REAL*,n;
+  func Argmin(X,f,n) -> Nat means :Def10:
+    (X<>{} implies ex i st i=it & i in X &
+    (for k st k in X holds f/.(2*n+i) <= f/.(2*n+k)) &
+    (for k st k in X & f/.(2*n+i) = f/.(2*n+k) holds i <= k)) &
+    (X={} implies it=0);
+   existence
+   proof
+      per cases;
+      suppose A1: X={};
+        take F=0;
+        thus (X<>{} implies ex i st i=F & i in X &
+        (for k st k in X holds f/.(2*n+i) <= f/.(2*n+k)) &
+        (for k st k in X & f/.(2*n+i) = f/.(2*n+k) holds i <= k)) &
+        (X={} implies F=0) by A1;
+      suppose A2: X<>{};
+        then reconsider X'=X as non empty finite Subset of NAT;
+         deffunc F(Element of X')= f/.(2*n+$1);
+          consider x being Element of X' such that
+     A3:  for y being Element of X' holds F(x) <= F(y) from MinValue;
+          reconsider x as Nat;
+          defpred P[Nat] means
+            $1 in X & f/.(2*n+x) = f/.(2*n+$1);
+     A4:  ex i st P[i];
+          consider i such that
+     A5:  P[i] & for k st P[k] holds i <= k from Min(A4);
+          take F=i;
+          hereby
+            assume X<>{};
+            take i=F;
+            thus i=F & i in X by A5;
+            thus for k st k in X holds f/.(2*n+i) <= f/.(2*n+k) by A3,A5;
+           thus for k st k in X & f/.(2*n+i) = f/.(2*n+k) holds i <= k by A5;
+          end;
+          thus X={} implies F=0 by A2;
+   end;
+   uniqueness
+   proof
+     let F1,F2 be Nat such that
+A6: (X<>{} implies ex i st i=F1 & i in X &
+    (for k st k in X holds f/.(2*n+i) <= f/.(2*n+k)) &
+    (for k st k in X & f/.(2*n+i) = f/.(2*n+k) holds i <= k)) &
+    (X={} implies F1=0) and
+A7: (X<>{} implies ex i st i=F2 & i in X &
+    (for k st k in X holds f/.(2*n+i) <= f/.(2*n+k)) &
+    (for k st k in X & f/.(2*n+i) = f/.(2*n+k) holds i <= k)) &
+    (X={} implies F2=0);
+    per cases;
+    suppose A8: X<>{};
+       then consider i such that
+A9:    i=F1 & i in X & (for k st k in X holds f/.(2*n+i) <= f/.(2*n+k)) &
+       (for k st k in X & f/.(2*n+i) = f/.(2*n+k) holds i <= k) by A6;
+       consider j such that
+A10:    j=F2 & j in X & (for k st k in X holds f/.(2*n+j) <= f/.(2*n+k)) &
+       for k st k in X & f/.(2*n+j) = f/.(2*n+k) holds j <= k by A7,A8;
+A11:    f/.(2*n+i) <= f/.(2*n+j) by A9,A10;
+         f/.(2*n+j) <= f/.(2*n+i) by A9,A10;
+then A12:    f/.(2*n+j) = f/.(2*n+i) by A11,AXIOMS:21;
+then A13:    i <= j by A9,A10;
+         j <= i by A9,A10,A12;
+       hence F1=F2 by A9,A10,A13,AXIOMS:21;
+    suppose X={};
+       hence F1=F2 by A6,A7;
+   end;
+end;
+
+theorem Th30:
+ OuterVx(f,n) <> {} & j=Argmin(OuterVx(f,n),f,n) implies j in dom f & 1<=j &
+ j<=n & f.j <> -1 & f.(n+j) <> -1
+proof
+     set IN=OuterVx(f,n);
+     assume IN <> {} & j=Argmin(IN,f,n);
+     then consider i such that
+A1:  i=j & i in IN &
+     (for k st k in IN holds f/.(2*n+i) <= f/.(2*n+k)) &
+     (for k st k in IN & f/.(2*n+i) = f/.(2*n+k) holds i <= k) by Def10;
+       j in {k: k in dom f & 1 <= k & k<= n & f.k <> -1 & f.(n+k) <> -1}
+     by A1,Def3;
+     then consider k such that
+A2:  j=k & k in dom f & 1 <= k & k<= n & f.k <> -1 & f.(n+k) <> -1;
+     thus thesis by A2;
+end;
+
+theorem Th31:
+  Argmin(OuterVx(f,n),f,n) <= n
+proof
+    set IN=OuterVx(f,n),
+        Ak=Argmin(IN,f,n);
+    per cases;
+    suppose IN <> {};
+      hence Ak <= n by Th30;
+    suppose IN = {};
+      then Ak=0 by Def10;
+      hence Ak <= n by NAT_1:18;
+end;
+
+definition let n be Nat;
+  func findmin(n) -> Element of Funcs(REAL*,REAL*) means :Def11:
+   dom it = REAL* & for f be Element of REAL* holds it.f=
+    (f,n*n+3*n+1) := (Argmin(OuterVx(f,n),f,n),-1);
+   existence
+   proof
+      set X=REAL*,
+          mi=n*n+3*n+1;
+      defpred P[set,set] means
+        for f be Element of REAL* st $1=f holds
+        $2= (f,mi):=(Argmin(OuterVx(f,n),f,n),-1);
+A1:    now
+          let xx,y1,y2 be set;
+          assume A2: xx in X & P[xx,y1] & P[xx,y2];
+          then reconsider h=xx as Element of REAL*;
+          thus y1= (h,mi):=(Argmin(OuterVx(h,n),h,n),-1) by A2
+          .=y2 by A2;
+       end;
+A3:    now
+           let xx be set;
+           assume xx in X;
+           then reconsider h=xx as Element of REAL*;
+           reconsider y= (h,mi):=(Argmin(OuterVx(h,n),h,n),-1) as set;
+           take y;
+           thus P[xx,y];
+       end;
+       consider F being Function such that
+A4:    dom F=X & for x st x in X holds P[x,F.x] from FuncEx(A1,A3);
+         rng F c= X
+       proof let y;
+           assume y in rng F;
+           then consider xx being set such that
+      A5:  xx in dom F & y = F.xx by FUNCT_1:def 5;
+           reconsider h=xx as Element of REAL* by A4,A5;
+             y = (h,mi):=(Argmin(OuterVx(h,n),h,n),-1) by A4,A5;
+           hence y in X by FINSEQ_1:def 11;
+       end;
+       then reconsider F as Element of Funcs(X,X) by A4,FUNCT_2:def 2;
+       take F;
+       thus dom F = X by A4;
+       let f be Element of REAL*;
+       thus F.f = (f,mi):=(Argmin(OuterVx(f,n),f,n),-1) by A4;
+   end;
+   uniqueness
+   proof
+     set X=REAL*,
+         mi=n*n+3*n+1;
+     let F1,F2 be Element of Funcs(X,X) such that
+A6:  dom F1= X & for f be Element of REAL* holds
+     F1.f= (f,mi):=(Argmin(OuterVx(f,n),f,n),-1) and
+A7:  dom F2= X & for f be Element of REAL* holds
+     F2.f= (f,mi):=(Argmin(OuterVx(f,n),f,n),-1);
+       now
+        let xx be set;
+        assume xx in dom F1;
+        then reconsider h=xx as Element of REAL* by A6;
+        thus F1.xx= (h,mi):=(Argmin(OuterVx(h,n),h,n),-1) by A6
+        .=F2.xx by A7;
+     end;
+     hence F1=F2 by A6,A7,FUNCT_1:9;
+   end;
+end;
+
+theorem Th32:
+  i in dom f & i > n & i <> n*n+3*n+1 implies (findmin n).f.i=f.i
+proof
+    set k=Argmin(OuterVx(f,n),f,n),
+        mi=n*n+3*n+1;
+    assume A1: i in dom f & i > n & i <> mi;
+A2: (findmin n).f.i = ((f,mi):=(k,-1)).i by Def11;
+      k <= n by Th31;
+    hence (findmin n).f.i=f.i by A1,A2,Th19;
+end;
+
+theorem Th33:
+  i in dom f & f.i=-1 & i <> n*n+3*n+1 implies (findmin n).f.i=-1
+proof
+    set k=Argmin(OuterVx(f,n),f,n),
+        mi=n*n+3*n+1;
+    assume A1: i in dom f & f.i=-1 & i <> mi;
+A2: (findmin n).f.i = ((f,mi):=(k,-1)).i by Def11;
+    per cases;
+    suppose i=k;
+      hence (findmin n).f.i=-1 by A1,A2,Th20;
+    suppose i<>k;
+      hence (findmin n).f.i=-1 by A1,A2,Th19;
+end;
+
+theorem Th34:
+  dom ((findmin n).f) = dom f
+proof
+      (findmin n).f = (f,n*n+3*n+1):=(Argmin(OuterVx(f,n),f,n),-1) by Def11;
+    hence thesis by Th21;
+end;
+
+Lm6:
+  k>=1 implies n <= k*n
+proof
+  assume k >= 1;
+  then 1*n <= k*n by NAT_1:20;
+  hence n <= k*n;
+end;
+
+Lm7:
+     3*n < n*n+3*n+1 & n < n*n+3*n+1 & 2*n < n*n+3*n+1
+proof
+       3*n <= n*n+3*n by NAT_1:37;
+     hence
+A1:  3*n < n*n+3*n +1 by NAT_1:38;
+       n <= 3*n by Lm6;
+     hence n < n*n+3*n+1 by A1,AXIOMS:22;
+       2*n <= 3*n by NAT_1:20;
+     hence thesis by A1,AXIOMS:22;
+end;
+
+Lm8:
+ (n<k & k <= 2*n implies not (2*n<k & k <= 3*n) & not (k <=n or k > 3*n)) &
+ ((k <=n or k > 3*n) implies not (2*n<k & k <= 3*n) & not (n<k & k <= 2*n))&
+ (2*n<k & k <= 3*n implies not (n<k & k <= 2*n) & not (k <=n or k > 3*n))
+proof
+A1: 2*n <= 3*n by NAT_1:20;
+    A2: 2*n = n+n by XCMPLX_1:11;
+    thus n<k & k <= 2*n implies
+      (not (2*n<k & k <= 3*n)) &
+      not (k <= n or k > 3*n) by A1,AXIOMS:22;
+    hereby
+     assume A3: k <= n or k > 3*n;
+     per cases by A3;
+     suppose A4:k <= n;
+       hence not (2*n<k & k <= 3*n) by A2,NAT_1:37;
+       thus not (n<k & k <= 2*n) by A4;
+     suppose A5:k > 3*n;
+       hence not (2*n<k & k <= 3*n);
+       thus not (n<k & k <= 2*n) by A1,A5,AXIOMS:22;
+    end;
+    assume A6: 2*n<k & k <= 3*n;
+    hence not (n<k & k <= 2*n);
+    thus not (k <=n or k > 3*n) by A2,A6,NAT_1:37;
+end;
+
+theorem Th35:
+  OuterVx(f,n) <> {} implies ex j st j in OuterVx(f,n) & 1 <= j & j <= n &
+  (findmin n).f.j=-1
+proof
+    set IX=OuterVx(f,n);
+    assume IX <> {};
+    then consider i such that
+A1: i=Argmin(IX,f,n) & i in IX &
+    (for k st k in IX holds f/.(2*n+i) <= f/.(2*n+k)) &
+    (for k st k in IX & f/.(2*n+i) = f/.(2*n+k) holds i <= k) by Def10;
+      i in {k: k in dom f & 1 <= k & k <= n & f.k <> -1 & f.(n+k) <> -1}
+    by A1,Def3;
+     then consider k such that
+A2: i=k & k in dom f & 1 <= k & k <= n & f.k <> -1 & f.(n+k) <> -1;
+    take i;
+    thus i in IX by A1;
+    thus 1 <= i & i <= n by A2;
+    thus (findmin n).f.i = ((f,n*n+3*n+1):=(i,-1)).i by A1,Def11
+    .=-1 by A2,Th20;
+end;
+
+definition let f be Element of REAL*,n,k be Nat;
+  func newpathcost(f,n,k) -> Real equals :Def12:
+   f/.(2*n+f/.(n*n+3*n+1))+ f/.(2*n+n*(f/.(n*n+3*n+1))+k);
+   correctness;
+end;
+
+definition let n,k be Nat,f be Element of REAL*;
+  pred f hasBetterPathAt n,k means :Def13:
+   (f.(n+k)=-1 or f/.(2*n+k) > newpathcost(f,n,k)) &
+   f/.(2*n+n*(f/.(n*n+3*n+1))+k) >= 0 & f.k <> -1;
+end;
+
+definition let f be Element of REAL*,n be Nat;
+  func Relax(f,n) -> Element of REAL* means :Def14:
+   dom it = dom f & for k be Nat st k in dom f holds
+    (n<k & k <= 2*n implies (f hasBetterPathAt n,(k-'n)
+    implies it.k=f/.(n*n+3*n+1)) & (not f hasBetterPathAt n,(k-'n)
+    implies it.k=f.k)) &
+    (2*n <k & k <=3*n implies (f hasBetterPathAt n,(k-'2*n)
+    implies it.k=newpathcost(f,n,k-'2*n)) & (not f hasBetterPathAt n,(k-'2*n)
+    implies it.k=f.k)) &
+    (k<=n or k > 3*n implies it.k=f.k);
+  existence
+  proof
+     set X=dom f;
+A1:  X=Seg len f by FINSEQ_1:def 3;
+     defpred P1[Nat] means f hasBetterPathAt n,($1-'n);
+     defpred P2[Nat] means f hasBetterPathAt n,($1-'2*n);
+     defpred P[set,set] means
+       for k st $1=k & k in X holds
+       (n<k & k <= 2*n implies (P1[k] implies $2=f/.(n*n+3*n+1)) &
+       (not P1[k] implies $2=f.k)) &
+       (2*n <k & k <=3*n implies (P2[k] implies $2=newpathcost(f,n,k-'2*n))&
+       (not P2[k] implies $2=f.k)) &
+       (k<=n or k > 3*n implies $2=f.k);
+A2:    now
+          let xx,y1,y2 be set;
+          assume A3: xx in X & P[xx,y1] & P[xx,y2];
+          then reconsider k=xx as Nat;
+          per cases;
+          suppose A4: n<k & k <= 2*n;
+            hereby
+               per cases;
+               suppose A5: P1[k];
+                hence y1 = f/.(n*n+3*n+1) by A3,A4
+                   .=y2 by A3,A4,A5;
+               suppose A6: not P1[k];
+                hence y1 = f.k by A3,A4
+                   .=y2 by A3,A4,A6;
+            end;
+          suppose A7: 2*n<k & k <= 3*n;
+            hereby
+               per cases;
+               suppose A8: P2[k];
+                hence y1 = newpathcost(f,n,k-'2*n) by A3,A7
+                   .=y2 by A3,A7,A8;
+               suppose A9: not P2[k];
+                hence y1 = f.k by A3,A7
+                   .=y2 by A3,A7,A9;
+            end;
+          suppose A10: k <=n or k > 3*n;
+           hence y1=f.k by A3
+                 .=y2 by A3,A10;
+       end;
+A11:    now
+           let xx be set;
+           assume xx in X;
+           then reconsider k=xx as Nat;
+           per cases;
+           suppose A12: n<k & k <= 2*n;
+              thus ex y1 being set st P[xx,y1]
+              proof
+               per cases;
+               suppose A13: P1[k];
+                take y1 = f/.(n*n+3*n+1);
+                thus P[xx,y1] by A12,A13,Lm8;
+             suppose A14: not P1[k];
+                take y1 = f.k;
+                 thus P[xx,y1] by A12,A14;
+              end;
+           suppose A15: 2*n<k & k <= 3*n;
+              thus ex y1 being set st P[xx,y1]
+              proof
+               per cases;
+               suppose A16: P2[k];
+                take y1 = newpathcost(f,n,k-'2*n);
+                thus P[xx,y1] by A15,A16,Lm8;
+               suppose A17: not P2[k];
+                take y1 = f.k;
+                 thus P[xx,y1] by A15,A17;
+              end;
+           suppose A18: k <=n or k > 3*n;
+              thus ex y1 being set st P[xx,y1]
+              proof
+                take y1=f.k;
+                thus P[xx,y1] by A18,Lm8;
+              end;
+       end;
+       consider F being Function such that
+A19:    dom F=X & for x st x in X holds P[x,F.x] from FuncEx(A2,A11);
+  A20:  rng F c= REAL
+       proof let y1 be set;
+           assume y1 in rng F;
+           then consider xx being set such that
+      A21:  xx in dom F & y1 = F.xx by FUNCT_1:def 5;
+           reconsider k=xx as Nat by A19,A21;
+           per cases;
+            suppose A22: n<k & k <= 2*n;
+              hereby
+               per cases;
+               suppose P1[k];
+                 then y1 = f/.(n*n+3*n+1) by A19,A21,A22;
+                 hence y1 in REAL;
+               suppose not P1[k];
+                 then y1 = f.k by A19,A21,A22
+                    .=f/.k by A19,A21,FINSEQ_4:def 4;
+                 hence y1 in REAL;
+              end;
+            suppose A23: 2*n<k & k <= 3*n;
+              hereby
+               per cases;
+               suppose P2[k];
+                 then y1 = newpathcost(f,n,k-'2*n) by A19,A21,A23;
+                 hence y1 in REAL;
+               suppose not P2[k];
+                 then y1 = f.k by A19,A21,A23
+                    .=f/.k by A19,A21,FINSEQ_4:def 4;
+                 hence y1 in REAL;
+              end;
+            suppose k <=n or k > 3*n;
+                 then y1 = f.k by A19,A21
+                    .=f/.k by A19,A21,FINSEQ_4:def 4;
+                 hence y1 in REAL;
+       end;
+         F is FinSequence by A1,A19,FINSEQ_1:def 2;
+       then F is FinSequence of REAL by A20,FINSEQ_1:def 4;
+       then reconsider F as Element of REAL* by FINSEQ_1:def 11;
+       take F;
+       thus dom F = X by A19;
+       let k;
+          assume k in X;
+          hence (n<k & k <= 2*n implies (P1[k] implies F.k=f/.(n*n+3*n+1)) &
+           (not P1[k] implies F.k=f.k)) & (2*n <k & k <=3*n implies
+           (P2[k] implies F.k=newpathcost(f,n,k-'2*n)) &
+           (not P2[k] implies F.k=f.k)) & (k<=n or k > 3*n implies
+           F.k=f.k) by A19;
+   end;
+   uniqueness
+   proof
+     let F1,F2 be Element of REAL* such that
+A24: dom F1 = dom f & for k be Nat st k in dom f holds
+    (n<k & k <= 2*n implies (f hasBetterPathAt n,(k-'n)
+    implies F1.k=f/.(n*n+3*n+1)) & (not f hasBetterPathAt n,(k-'n)
+    implies F1.k=f.k)) &
+    (2*n <k & k <=3*n implies (f hasBetterPathAt n,(k-'2*n)
+    implies F1.k=newpathcost(f,n,k-'2*n)) & (not f hasBetterPathAt n,(k-'2*n)
+    implies F1.k=f.k)) & (k<=n or k > 3*n implies F1.k=f.k) and
+A25: dom F2 = dom f & for k be Nat st k in dom f holds
+    (n<k & k <= 2*n implies (f hasBetterPathAt n,(k-'n)
+    implies F2.k=f/.(n*n+3*n+1)) & (not f hasBetterPathAt n,(k-'n)
+    implies F2.k=f.k)) &
+    (2*n <k & k <=3*n implies (f hasBetterPathAt n,(k-'2*n)
+    implies F2.k=newpathcost(f,n,k-'2*n)) & (not f hasBetterPathAt n,(k-'2*n)
+    implies F2.k=f.k)) & (k<=n or k > 3*n implies F2.k=f.k);
+      now
+         let xx be set;
+         assume A26:xx in dom F1;
+         then reconsider k=xx as Nat;
+         defpred P1[] means f hasBetterPathAt n,(k-'n);
+         defpred P2[] means f hasBetterPathAt n,(k-'2*n);
+         per cases;
+          suppose A27: n<k & k <= 2*n;
+            hereby
+               per cases;
+               suppose A28: P1[];
+                hence F1.xx = f/.(n*n+3*n+1) by A24,A26,A27
+                   .=F2.xx by A24,A25,A26,A27,A28;
+               suppose A29: not P1[];
+                hence F1.xx = f.k by A24,A26,A27
+                   .=F2.xx by A24,A25,A26,A27,A29;
+            end;
+          suppose A30: 2*n<k & k <= 3*n;
+            hereby
+               per cases;
+               suppose A31: P2[];
+                hence F1.xx = newpathcost(f,n,k-'2*n) by A24,A26,A30
+                   .=F2.xx by A24,A25,A26,A30,A31;
+               suppose A32: not P2[];
+                hence F1.xx = f.k by A24,A26,A30
+                   .=F2.xx by A24,A25,A26,A30,A32;
+            end;
+          suppose A33: k <=n or k > 3*n;
+           hence F1.xx=f.k by A24,A26
+                 .=F2.xx by A24,A25,A26,A33;
+    end;
+     hence F1=F2 by A24,A25,FUNCT_1:9;
+   end;
+end;
+
+definition let n be Nat;
+  func Relax(n) -> Element of Funcs(REAL*,REAL*) means :Def15:
+   dom it = REAL* & for f be Element of REAL* holds
+   it.f=Relax(f,n);
+   existence
+   proof
+      set X=REAL*;
+      defpred P[set,set] means
+       for f be Element of REAL* st $1=f holds
+       $2=Relax(f,n);
+A1:    now
+          let xx,y1,y2 be set;
+          assume A2: xx in X & P[xx,y1] & P[xx,y2];
+          then reconsider h=xx as Element of REAL*;
+          thus y1 = Relax(h,n) by A2
+               .=y2 by A2;
+       end;
+A3:    now
+           let xx be set;
+           assume xx in X;
+           then reconsider h=xx as Element of REAL*;
+           thus ex y1 being set st P[xx,y1]
+           proof
+             take y1 = Relax(h,n);
+             thus P[xx,y1];
+           end;
+       end;
+       consider F being Function such that
+A4:    dom F=X & for x st x in X holds P[x,F.x] from FuncEx(A1,A3);
+         now
+           let y1 be set;
+           assume y1 in rng F;
+           then consider xx being set such that
+      A5:  xx in dom F & y1 = F.xx by FUNCT_1:def 5;
+           reconsider h=xx as Element of REAL* by A4,A5;
+             y1 = Relax(h,n) by A4,A5;
+           hence y1 in X;
+       end;
+       then rng F c= X by TARSKI:def 3;
+       then reconsider F as Element of Funcs(X,X) by A4,FUNCT_2:def 2;
+       take F;
+       thus dom F = X by A4;
+       let f be Element of REAL*;
+       thus F.f=Relax(f,n) by A4;
+   end;
+   uniqueness
+   proof
+     set X=REAL*;
+     let F1,F2 be Element of Funcs(X,X) such that
+A6:  dom F1= X & for f be Element of REAL* holds
+     F1.f=Relax(f,n) and
+A7:  dom F2= X & for f be Element of REAL* holds
+     F2.f=Relax(f,n);
+       now
+         let xx be set;
+         assume xx in dom F1;
+         then reconsider h=xx as Element of REAL* by A6;
+         thus F1.xx= Relax(h,n) by A6
+         .=F2.xx by A7;
+     end;
+     hence F1=F2 by A6,A7,FUNCT_1:9;
+   end;
+end;
+
+theorem Th36:
+    dom ((Relax n).f) = dom f
+proof
+    thus dom ((Relax n).f) = dom Relax(f,n) by Def15
+    .= dom f by Def14;
+end;
+
+theorem Th37:
+ (i <= n or i > 3*n) & i in dom f implies (Relax n).f.i=f.i
+proof
+    assume A1:(i <= n or i > 3*n) & i in dom f;
+    thus (Relax n).f.i=Relax(f,n).i by Def15
+     .=f.i by A1,Def14;
+end;
+
+theorem Th38:
+   dom ((repeat(Relax(n)*findmin(n))).i.f) =
+   dom ((repeat(Relax(n)*findmin(n))).(i+1).f)
+proof
+    set R=Relax(n),
+        M=findmin(n),
+        ff=(repeat (R*M)).i.f;
+   thus dom ((repeat (R*M)).(i+1).f)
+     = dom (R.(M.ff)) by Th23
+    .= dom (M.ff) by Th36
+    .= dom ff by Th34;
+end;
+
+theorem Th39:
+ OuterVx((repeat(Relax(n)*findmin(n))).i.f,n) <> {} implies
+ UnusedVx((repeat(Relax(n)*findmin(n))).(i+1).f,n) c<
+ UnusedVx((repeat(Relax(n)*findmin(n))).i.f,n)
+proof
+    set R=Relax(n),
+        M=findmin(n),
+        ff=(repeat (R*M)).i.f;
+    assume A1: OuterVx(ff,n) <> {};
+    set Fi1=(repeat (R*M)).(i+1).f;
+A2: dom Fi1 = dom ff by Th38
+    .= dom (M.ff) by Th34;
+    consider j such that
+A3: j in OuterVx(ff,n) & 1 <= j & j <= n & (M.ff).j=-1 by A1,Th35;
+    A4: OuterVx(ff,n) c= UnusedVx(ff,n) by Th28;
+A5: UnusedVx(Fi1,n) c= UnusedVx(ff,n)
+    proof let x;
+        assume x in UnusedVx(Fi1,n);
+        then x in {k: k in dom Fi1 & 1 <= k & k <= n & Fi1.k <> -1}
+        by Def8;
+        then consider k such that
+   A6:   x=k & k in dom Fi1 & 1 <= k & k <= n & Fi1.k <> -1;
+   A7:   k in dom ff by A6,Th38;
+         A8: n < n*n+3*n+1 by Lm7;
+           Fi1.k=(R.(M.ff)).k by Th23
+         .=(M.ff).k by A2,A6,Th37;
+         then ff.k <> -1 by A6,A7,A8,Th33;
+         then x in {m: m in dom ff & 1 <= m & m <= n & ff.m <> -1} by A6,A7;
+         hence x in UnusedVx(ff,n) by Def8;
+    end;
+      now
+        let x;
+        assume x in UnusedVx(Fi1,n);
+        then x in {k: k in dom Fi1 & 1 <= k & k <= n & Fi1.k <> -1}
+        by Def8;
+        then consider k such that
+   A9:   x=k & k in dom Fi1 & 1 <= k & k <= n & Fi1.k <> -1;
+           Fi1.k=(R.(M.ff)).k by Th23
+         .=(M.ff).k by A2,A9,Th37;
+         hence (M.ff).x <> -1 by A9;
+    end;
+    then UnusedVx(Fi1,n) <> UnusedVx(ff,n) by A3,A4;
+    hence UnusedVx(Fi1,n) c< UnusedVx(ff,n) by A5,XBOOLE_0:def 8;
+end;
+
+theorem Th40:
+g=(repeat(Relax(n)*findmin(n))).i.f &
+h=(repeat(Relax(n)*findmin(n))).(i+1).f &
+k=Argmin(OuterVx(g,n),g,n) & OuterVx(g,n) <> {} implies
+ UsedVx(h,n)=UsedVx(g,n) \/ {k} & not k in UsedVx(g,n)
+proof
+    set R=Relax(n),
+        M=findmin(n),
+        ff=(repeat (R*M)).i.f,
+        Fi1=(repeat (R*M)).(i+1).f,
+        mi=n*n+3*n+1;
+    assume A1: g=ff & h=Fi1 & k=Argmin(OuterVx(g,n),g,n) & OuterVx(g,n) <> {};
+then A2: dom h = dom ff by Th38;
+then A3: dom h = dom (M.ff) by Th34;
+A4: M.ff = (ff,mi):=(k,-1) by A1,Def11;
+A5: dom g=dom (M.ff) by A1,Th34;
+A6: now let x;
+        assume x in UsedVx(h,n);
+        then x in {m: m in dom h & 1 <= m & m <= n & h.m = -1} by Def9;
+        then consider m such that
+  A7:   x=m & m in dom h & 1 <= m & m <= n & h.m = -1;
+        per cases;
+        suppose m=k;
+           then x in {k} by A7,TARSKI:def 1;
+           hence x in (UsedVx(g,n) \/ {k}) by XBOOLE_0:def 2;
+        suppose A8: m<>k;
+         A9: n < mi by Lm7;
+   A10:   m in dom ff by A1,A7,Th38;
+           -1=(R.(M.ff)).m by A1,A7,Th23
+         .=(M.ff).m by A3,A7,Th37
+         .=ff.m by A4,A7,A8,A9,A10,Th19;
+         then m in {j: j in dom ff & 1 <= j & j <= n & ff.j=-1} by A2,A7;
+         then x in UsedVx(ff,n) by A7,Def9;
+         hence x in (UsedVx(g,n) \/ {k}) by A1,XBOOLE_0:def 2;
+    end;
+      now let x;
+        assume A11: x in (UsedVx(g,n) \/ {k});
+        per cases by A11,XBOOLE_0:def 2;
+        suppose x in UsedVx(g,n);
+         then x in {m: m in dom g & 1 <= m & m <= n & g.m = -1} by Def9;
+         then consider m such that
+    A12:  x=m & m in dom g & 1 <= m & m <= n & g.m = -1;
+         A13: n < mi by Lm7;
+           h.m=(R.(M.ff)).m by A1,Th23
+         .=(M.ff).m by A5,A12,Th37
+         .=-1 by A1,A12,A13,Th33;
+         then m in {j: j in dom h & 1 <= j & j <= n & h.j=-1} by A1,A2,A12;
+         hence x in UsedVx(h,n) by A12,Def9;
+        suppose x in {k};
+    then A14:  x = k by TARSKI:def 1;
+    A15:  k in dom g & 1 <= k & k <= n by A1,Th30;
+           h.k=(R.(M.ff)).k by A1,Th23
+         .=(M.ff).k by A5,A15,Th37
+         .=-1 by A1,A4,A15,Th20;
+         then k in {j: j in dom h & 1 <= j & j <= n & h.j=-1} by A1,A2,A15;
+         hence x in UsedVx(h,n) by A14,Def9;
+    end;
+    hence UsedVx(h,n)=UsedVx(g,n) \/ {k} by A6,TARSKI:2;
+    assume k in UsedVx(g,n);
+    then k in {j: j in dom g & 1 <= j & j <= n & g.j=-1} by Def9;
+    then consider j such that
+A16: j=k & j in dom g & 1 <= j & j <= n & g.j=-1;
+    thus contradiction by A1,A16,Th30;
+end;
+
+theorem Th41:
+ ex i st i<=n & OuterVx((repeat(Relax(n)*findmin(n))).i.f,n) = {}
+proof
+    set R=Relax n,
+        M=findmin n;
+    assume A1:not ex i st i<=n & OuterVx((repeat(R*M)).i.f,n) = {};
+    defpred P[Nat] means
+       $1<=n implies card UnusedVx((repeat(R*M)).$1.f,n) <= n-$1;
+A2: P[0]
+    proof
+      assume 0<=n;
+      set f0=(repeat(R*M)).0 .f;
+        UnusedVx(f0,n) c= Seg n by Th27;
+      then card UnusedVx(f0,n) <= card Seg n by CARD_1:80;
+      hence card UnusedVx(f0,n) <= n-0 by FINSEQ_1:78;
+    end;
+A3: for k st P[k] holds P[k+1]
+    proof
+        let k;
+        assume A4: P[k];
+          now
+            assume A5: k+1 <= n;
+            A6: k <= k+1 by NAT_1:29;
+       then A7:  k <= n by A5,AXIOMS:22;
+        set fk=UnusedVx((repeat(R*M)).k.f,n),
+            fk1=UnusedVx((repeat(R*M)).(k+1).f,n);
+              OuterVx((repeat(R*M)).k.f,n) <> {} by A1,A7;
+            then fk1 c< fk by Th39;
+            then card fk1 < card fk by CARD_2:67;
+            then card fk1 < n-k by A4,A5,A6,AXIOMS:22;
+            then card fk1 + 1 <= n-k by INT_1:20;
+            then card fk1 <= n-k-1 by REAL_1:84;
+            hence card fk1 <= n-(k+1) by XCMPLX_1:36;
+        end;
+        hence P[k+1];
+    end;
+      for k holds P[k] from Ind(A2,A3);
+then A8: P[n];
+    set nf=(repeat(R*M)).n.f;
+      n-n=0 by XCMPLX_1:14;
+    then card UnusedVx(nf,n) = 0 by A8,NAT_1:19;
+then A9: UnusedVx(nf,n) = {} by GRAPH_5:5;
+      OuterVx(nf,n) c= UnusedVx(nf,n) by Th28;
+    then OuterVx(nf,n) = {} by A9,XBOOLE_1:3;
+    hence contradiction by A1;
+end;
+
+Lm9:
+    n-(k+1)+1=n-k
+proof
+    thus n-(k+1)+1=n-k-1+1 by XCMPLX_1:36
+    .=(n-k)+1-1 by XCMPLX_1:29
+    .=n-k by XCMPLX_1:26;
+end;
+
+Lm10:
+    n-k <= n
+proof
+      n <= n+k by NAT_1:29;
+    hence n - k <= n by REAL_1:86;
+end;
+
+Lm11:
+for p,q being FinSequence of NAT,f be Element of REAL*,i,n be Nat
+st (for k st 1<=k & k < len p holds p.(len p-k)=f.(p/.(len p-k+1)+n)) &
+   (for k st 1<=k & k < len q holds q.(len q-k)=f.(q/.(len q-k+1)+n)) &
+    len p <= len q & p.len p = q.len q
+holds for k st 1<=k & k < len p holds p.(len p-k)=q.(len q-k)
+proof
+    let p,q be FinSequence of NAT,f be Element of REAL*,i,n be Nat;
+    assume A1:(for k st 1<=k & k < len p holds p.(len p-k)
+      =f.(p/.(len p-k+1)+n)) & (for k st 1<=k & k < len q holds
+      q.(len q-k)=f.(q/.(len q-k+1)+n)) & len p <= len q & p.len p = q.len q;
+      defpred P[Nat] means
+        $1 < len p implies p.(len p-$1)=q.(len q-$1);
+A2:  P[0] by A1;
+A3:  for k st P[k] holds P[k+1]
+     proof
+        let k;
+        assume A4: P[k];
+          now
+            assume A5: k+1 < len p;
+            A6: k <= k+1 by NAT_1:29;
+       A7:  len p-k <= len p by Lm10;
+       A8:  1 <= len p-k by A5,REAL_1:84;
+       A9:  len q-k <= len q by Lm10;
+              len p - k <= len q - k by A1,REAL_1:49;
+       then A10:  1 <= len q- k by A8,AXIOMS:22;
+       A11:  p/.(len p-k)=p.(len p-k) by A7,A8,Th3
+            .=q/.(len q-k) by A4,A5,A6,A9,A10,Th3,AXIOMS:22;
+       A12:  1 <= k+1 by NAT_1:29;
+       A13:  k+1 < len q by A1,A5,AXIOMS:22;
+       thus p.(len p-(k+1))=f.(p/.(len p-(k+1)+1)+n) by A1,A5,A12
+            .=f.(p/.(len p-k)+n) by Lm9
+            .=f.(q/.(len q-(k+1)+1)+n) by A11,Lm9
+            .=q.(len q-(k+1)) by A1,A12,A13;
+       end;
+       hence P[k+1];
+     end;
+       for k holds P[k] from Ind(A2,A3);
+     hence thesis;
+end;
+
+theorem Th42:
+   dom f = dom ((repeat(Relax(n)*findmin(n))).i.f)
+proof
+    set R=Relax(n),
+        M=findmin(n);
+    defpred P[Nat] means dom f = dom ((repeat(R*M)).$1.f);
+A1: P[0]
+    proof
+      thus dom ((repeat(R*M)).0 .f)= dom ((id (REAL*)).f) by Def2
+      .= dom f by FUNCT_1:35;
+    end;
+A2:  for k st P[k] holds P[k+1] by Th38;
+       for k holds P[k] from Ind(A1,A2);
+     hence thesis;
+end;
+
+definition
+   let f,g be Element of REAL*,m,n;
+   pred f,g equal_at m,n means :Def16:
+     dom f = dom g & for k st k in dom f & m <=k & k <= n holds f.k=g.k;
+end;
+
+theorem Th43:
+   f,f equal_at m,n
+proof
+      dom f = dom f & for k st k in dom f & m <=k & k <= n holds f.k=f.k;
+    hence thesis by Def16;
+end;
+
+theorem Th44:
+   f,g equal_at m,n & g,h equal_at m,n implies f,h equal_at m,n
+proof
+    assume A1:f,g equal_at m,n & g,h equal_at m,n;
+then A2: dom f = dom g & for k st k in dom f & m <=k & k <= n holds f.k=g.k
+    by Def16;
+A3: dom g = dom h & for k st k in dom g & m <=k & k <= n holds g.k=h.k
+    by A1,Def16;
+      now let k;
+        assume A4:k in dom f & m <=k & k <= n;
+        hence f.k=g.k by A1,Def16
+        .=h.k by A1,A2,A4,Def16;
+    end;
+    hence thesis by A2,A3,Def16;
+end;
+
+theorem Th45:
+ (repeat(Relax(n)*findmin(n))).i.f, (repeat(Relax(n)*findmin(n))).(i+1).f
+ equal_at 3*n+1,n*n+3*n
+proof
+    set R=Relax(n),
+        M=findmin(n),
+        ff=(repeat (R*M)).i.f;
+    set Fi1=(repeat (R*M)).(i+1).f;
+A1: dom (Fi1) = dom ff by Th38;
+      now let k;
+         assume A2: k in dom ff & 3*n+1 <= k & k <= n*n+3*n;
+   then A3:   k > 3*n by NAT_1:38;
+   A4:   k in dom (M.ff) by A2,Th34;
+   A5:   k < n*n+3*n+1 by A2,NAT_1:38;
+           3*n >= n by Lm6;
+   then A6:   k > n by A3,AXIOMS:22;
+      thus Fi1.k=(R.(M.ff)).k by Th23
+         .=(M.ff).k by A3,A4,Th37
+         .=ff.k by A2,A5,A6,Th32;
+    end;
+    hence thesis by A1,Def16;
+end;
+
+theorem
+ for F being Element of Funcs(REAL*,REAL*),f being Element of REAL*,n,i be Nat
+st i < LifeSpan(F,f,n) holds OuterVx((repeat F).i.f,n) <> {} by Def4;
+
+theorem Th47:
+  f, (repeat(Relax(n)*findmin(n))).i.f equal_at 3*n+1,n*n+3*n
+proof
+    set R=Relax(n),
+        M=findmin(n),
+        m=3*n+1,
+        mm=n*n+3*n;
+    defpred P[Nat] means
+    f,(repeat(R*M)).$1.f equal_at m,mm;
+A1: P[0]
+    proof
+        (repeat(R*M)).0 .f =f by Th22;
+      hence thesis by Th43;
+    end;
+A2:  for k st P[k] holds P[k+1]
+     proof
+        let k;
+        assume A3: P[k];
+          (repeat(R*M)).k.f, (repeat(R*M)).(k+1).f equal_at m,mm by Th45;
+        hence thesis by A3,Th44;
+     end;
+       for k holds P[k] from Ind(A1,A2);
+     hence thesis;
+end;
+
+theorem Th48:
+1<=n & 1 in dom f & f.(n+1) <> -1 & (for i st 1<=i & i<=n holds f.i=1) &
+(for i st 2<=i & i<=n holds f.(n+i)=-1) implies 1 = Argmin(OuterVx(f,n),f,n) &
+UsedVx(f,n)={} & {1} = UsedVx((repeat(Relax(n)*findmin(n))).1.f,n)
+proof
+   set R=Relax(n),
+       M=findmin(n),
+       f0=(repeat (R*M)).0 .f,
+       RT=repeat (R*M);
+       assume A1: 1<=n & 1 in dom f & f.(n+1) <> -1 &
+         (for i st 1<=i & i<=n holds f.i=1) &
+         for i st 2<=i & i<=n holds f.(n+i)=-1;
+A2:  OuterVx(f,n) <> {}
+     proof
+          f.1=1 by A1;
+        then 1 in {j: j in dom f & 1 <= j & j <= n & f.j <> -1 & f.(n+j) <> -1
+}
+        by A1;
+       hence thesis by Def3;
+     end;
+    set k=Argmin(OuterVx(f,n),f,n);
+    thus
+A3: k=1
+    proof
+       assume A4: k<>1;
+    A5:  1<=k & k<=n & f.k <> -1 & f.(n+k) <> -1 by A2,Th30;
+         then 1 < k by A4,REAL_1:def 5;
+         then 1+1 <= k by INT_1:20;
+         hence contradiction by A1,A5;
+    end;thus
+A6: UsedVx(f,n)={}
+     proof
+       assume UsedVx(f,n)<>{};
+          then consider x such that
+     A7:  x in UsedVx(f,n) by XBOOLE_0:def 1;
+            x in {j: j in dom f & 1 <= j & j <= n & f.j = -1} by A7,Def9;
+          then consider j such that
+     A8:  x=j & j in dom f & 1 <= j & j <= n & f.j = -1;
+          thus contradiction by A1,A8;
+     end;
+A9:  OuterVx(f0,n) <> {} by A2,Th22;
+A10:  Argmin(OuterVx(f0,n),f0,n) = Argmin(OuterVx(f,n),f0,n) by Th22
+     .=1 by A3,Th22;
+   thus UsedVx(RT.1.f,n) = UsedVx(RT.(0+1).f,n)
+    .=UsedVx(f0,n) \/ {1} by A9,A10,Th40
+    .= UsedVx(f,n) \/ {1} by Th22
+    .={1} by A6;
+end;
+
+theorem Th49:
+g=(repeat(Relax(n)*findmin(n))).1.f & h=(repeat(Relax(n)*findmin(n))).i.f
+& 1<=i & i <= LifeSpan(Relax(n)*findmin(n),f,n) & m in UsedVx(g,n)
+ implies m in UsedVx(h,n)
+proof
+   set RF=Relax(n)*findmin(n),
+       RT=repeat RF,
+       cn=LifeSpan(RF,f,n);
+   assume A1: g=RT.1.f & h=RT.i.f & 1<=i & i <= cn & m in UsedVx(g,n);
+    defpred P[Nat] means
+     1<=$1 & $1<=cn implies m in UsedVx(RT.$1.f ,n);
+A2: P[0];
+A3:  for k st P[k] holds P[k+1]
+     proof
+        let k;
+        assume A4: P[k];
+        hereby
+            assume A5: 1<=k+1 & k+1 <= cn;
+            per cases;
+            suppose k=0;
+              hence m in UsedVx(RT.(k+1).f ,n) by A1;
+            suppose k<>0;
+              then k > 0 by NAT_1:19;
+          then A6: k >= 1+ 0 by INT_1:20;
+            k < cn by A5,NAT_1:38;
+              then OuterVx(RT.k.f,n) <> {} by Def4;
+              then UsedVx(RT.(k+1).f,n)=UsedVx(RT.k.f,n) \/
+              {Argmin(OuterVx(RT.k.f,n),RT.k.f,n)} by Th40;
+              then UsedVx(RT.k.f,n) c= UsedVx(RT.(k+1).f,n) by XBOOLE_1:7;
+              hence m in UsedVx(RT.(k+1).f ,n) by A4,A5,A6,NAT_1:38;
+        end;
+     end;
+       for k holds P[k] from Ind(A2,A3);
+     hence thesis by A1;
+end;
+
+definition
+   let p be FinSequence of NAT,f be Element of REAL*,i,n be Nat;
+  pred p is_vertex_seq_at f,i,n means :Def17:
+   p.(len p)=i & for k st 1<=k & k < len p holds
+   p.(len p-k)=f.(n+p/.(len p-k+1));
+end;
+
+definition
+  let p be FinSequence of NAT,f be Element of REAL*,i,n be Nat;
+  pred p is_simple_vertex_seq_at f,i,n means :Def18:
+   (p.1=1 & len p > 1 & p is_vertex_seq_at f,i,n) & p is one-to-one;
+end;
+
+theorem
+  for p,q being FinSequence of NAT,f be Element of REAL*,i,n be Nat
+st p is_simple_vertex_seq_at f,i,n & q is_simple_vertex_seq_at f,i,n
+holds p = q
+proof
+    let p,q be FinSequence of NAT,f be Element of REAL*,i,n be Nat;
+    assume A1: p is_simple_vertex_seq_at f,i,n &
+    q is_simple_vertex_seq_at f,i,n;
+  then A2: p.1=1 & len p > 1 & p is_vertex_seq_at f,i,n by Def18;
+  then A3: p.(len p)=i & for k st 1<=k & k < len p holds
+      p.(len p-k)=f.(p/.(len p-k+1)+n) by Def17;
+  A4: q.1=1 & len q > 1 & q is_vertex_seq_at f,i,n by A1,Def18;
+  then A5: q.(len q)=i & for k st 1<=k & k < len q holds
+      q.(len q-k)=f.(q/.(len q-k+1)+n) by Def17;
+      A6: now
+          assume A7: len p <> len q;
+          per cases;
+          suppose A8: len p < len q;
+            A9: q is one-to-one by A1,Def18;
+                A10: len p -1 > 1-1 by A2,REAL_1:92;
+                then reconsider k=len p -1 as Nat by INT_1:16;
+          A11:   k >= 0+1 by A10,INT_1:20;
+          A12:   len p - k = len p - len p +1 by XCMPLX_1:37
+                .=0+1 by XCMPLX_1:14;
+                  k < len p by INT_1:26;
+          then A13:   1=q.(len q-k) by A2,A3,A5,A8,A11,A12,Lm11;
+          A14:   len q - k > 1 by A8,A12,REAL_1:92;
+                then len q - k > 0 by AXIOMS:22;
+                then reconsider m=len q -k as Nat by INT_1:16;
+                  m <= len q by Lm10;
+                hence contradiction by A4,A9,A13,A14,GRAPH_5:9;
+          suppose A15: len p >= len q;
+          then A16: len p > len q by A7,REAL_1:def 5;
+          A17: p is one-to-one by A1,Def18;
+            hereby
+               per cases;
+               suppose len q <=1;
+                  hence contradiction by A1,Def18;
+               suppose len q > 1;
+                  then A18: len q -1 > 1-1 by REAL_1:92;
+                  then reconsider k=len q -1 as Nat by INT_1:16;
+            A19:   k >= 0+1 by A18,INT_1:20;
+            A20:   len q - k = len q - len q +1 by XCMPLX_1:37
+                  .=0+1 by XCMPLX_1:14;
+                    k < len q by INT_1:26;
+            then A21:   1=p.(len p-k) by A3,A4,A5,A15,A19,A20,Lm11;
+            A22:   len p - k > 1 by A16,A20,REAL_1:92;
+                  then len p - k > 0 by AXIOMS:22;
+                  then reconsider m=len p -k as Nat by INT_1:16;
+                    m <= len p by Lm10;
+                  hence contradiction by A2,A17,A21,A22,GRAPH_5:9;
+            end;
+      end;
+          now let k;
+          assume A23: 1 <=k & k <= len p;
+          per cases;
+          suppose k=len p;
+            hence p.k=q.k by A2,A5,A6,Def17;
+          suppose k <> len p;
+            then k < len p by A23,REAL_1:def 5;
+            then len p-k > k-k by REAL_1:92;
+        then A24: len p-k > 0 by XCMPLX_1:14;
+            then reconsider m=len p-k as Nat by INT_1:16;
+        A25: m >= 0+1 by A24,INT_1:20;
+        A26: len q - m = len q - len p +k by XCMPLX_1:37
+            .=0+k by A6,XCMPLX_1:14;
+        A27: len p - k <= len p -1 by A23,REAL_1:92;
+              len p-1 < len p by INT_1:26;
+            then m < len p by A27,AXIOMS:22;
+            hence p.k=q.k by A3,A5,A6,A25,A26,Lm11;
+       end;
+       hence p=q by A6,FINSEQ_1:18;
+end;
+
+definition
+  let G be Graph,p be FinSequence of the Edges of G,vs be FinSequence;
+ pred p is_oriented_edge_seq_of vs means :Def19:
+    len vs = len p + 1 &
+    for n st 1<=n & n<=len p holds (the Source of G).(p.n) = vs.n
+     & (the Target of G).(p.n) = vs.(n+1);
+end;
+
+theorem
+  for G being oriented Graph,vs be FinSequence,p,q being oriented Chain of G st
+p is_oriented_edge_seq_of vs & q is_oriented_edge_seq_of vs holds p=q
+proof
+    let G be oriented Graph,vs be FinSequence,p,q be oriented Chain of G;
+    assume A1: p is_oriented_edge_seq_of vs & q is_oriented_edge_seq_of vs;
+     then len p+1 = len vs by Def19
+     .= len q +1 by A1,Def19;
+then A2:  len p = len q by XCMPLX_1:2;
+       now let k;
+        assume A3: 1<=k & k <= len p;
+     then A4: (the Source of G).(p.k) = vs.k by A1,Def19
+         .=(the Source of G).(q.k) by A1,A2,A3,Def19;
+     A5: (the Target of G).(p.k) = vs.(k+1) by A1,A3,Def19
+         .=(the Target of G).(q.k) by A1,A2,A3,Def19;
+            p.k in the Edges of G & q.k in the Edges of G by A2,A3,Th2;
+         hence p.k=q.k by A4,A5,GRAPH_1:def 4;
+     end;
+     hence thesis by A2,FINSEQ_1:18;
+end;
+
+theorem
+  for G being Graph,vs1,vs2 be FinSequence,p being oriented Chain of G st p
+is_oriented_edge_seq_of vs1 & p is_oriented_edge_seq_of vs2 & len p >= 1
+holds vs1=vs2
+proof
+    let G be Graph,vs1,vs2 be FinSequence,p be oriented Chain of G;
+    assume A1: p is_oriented_edge_seq_of vs1 & p is_oriented_edge_seq_of vs2
+     & len p >= 1;
+then A2:  len vs1 = len p+1 by Def19
+     .= len vs2 by A1,Def19;
+       now let k;
+        assume A3: 1<=k & k <= len vs1;
+        per cases;
+        suppose k = len vs1;
+     then A4:  k = len p + 1 by A1,Def19;
+          hence vs1.k=(the Target of G).(p.len p) by A1,Def19
+                .=vs2.k by A1,A4,Def19;
+        suppose k <> len vs1;
+          then k < len vs1 by A3,REAL_1:def 5;
+          then k+1 <= len vs1 by INT_1:20;
+          then k+1 <= len p+1 by A1,Def19;
+     then A5:  k <= len p by REAL_1:53;
+          hence vs1.k=(the Source of G).(p.k) by A1,A3,Def19
+                .=vs2.k by A1,A3,A5,Def19;
+     end;
+     hence thesis by A2,FINSEQ_1:18;
+end;
+
+Lm12:
+  1<= i & i <= n implies 1 < 2*n+i & 2*n+i < n*n+3*n+1 & i < 2*n + i
+proof
+   assume A1: 1<= i & i <= n;
+   set m2=2*n+i;
+     2*n+n=2*n+1*n
+     .=(2+1)*n by XCMPLX_1:8;
+then A2:  m2 <= 3*n by A1,REAL_1:55;
+       2*n+1 <= m2 by A1,REAL_1:55;
+then A3:  2*n < m2 by NAT_1:38;
+       1 <= n by A1,AXIOMS:22;
+     then 2*1 <= 2*n by AXIOMS:25;
+     then 2 < m2 by A3,AXIOMS:22;
+    hence 1 < m2 by AXIOMS:22;
+       3*n < n*n+3*n+1 by Lm7;
+    hence m2 < n*n+3*n+1 by A2,AXIOMS:22;
+       n <= 2*n by Lm6;
+     then i <= 2*n by A1,AXIOMS:22;
+     hence i < m2 by A3,AXIOMS:22;
+end;
+
+Lm13:
+   1<= i & i <= n implies 1 < n+i & n+i <= 2*n & n+i < n*n+3*n+1
+proof
+   assume A1: 1<= i & i <= n;
+   set ni=n+i;
+       1 <= n by A1,AXIOMS:22;
+     then 1+1 <= ni by A1,REAL_1:55;
+     hence 1 < ni by NAT_1:38;
+       ni <= n+n by A1,REAL_1:55;
+     hence
+A2:  ni <= 2*n by XCMPLX_1:11;
+       2*n < n*n+3*n+1 by Lm7;
+     hence thesis by A2,AXIOMS:22;
+end;
+
+Lm14:
+    1 <= i & i <= n & j <= n implies 1 < 2*n+n*i+j & i < 2*n+n*i+j &
+    2*n+n*i+j < n*n+3*n+1
+proof
+   assume A1: 1<= i & i <= n & j<=n;
+   set m3=2*n+n*i+j;
+A2:  m3=2*n+(n*i+j) by XCMPLX_1:1;
+A3:  1 <= n by A1,AXIOMS:22;
+     then 2*1 <= 2*n by AXIOMS:25;
+then A4:  1 < 2*n by AXIOMS:22;
+       2*n <= m3 by A2,NAT_1:37;
+     hence 1 < m3 by A4,AXIOMS:22;
+       0 < i by A1,AXIOMS:22;
+     then 1*i <= n*i by A3,AXIOMS:25;
+then A5:  1+i < 2*n+n*i by A4,REAL_1:67;
+       2*n+n*i <= m3 by NAT_1:37;
+     then 1+i < m3 by A5,AXIOMS:22;
+     hence i < m3 by NAT_1:38;
+       2*n+n=2*n+1*n
+     .=(2+1)*n by XCMPLX_1:8;
+then A6:  2*n+j <= 3*n by A1,REAL_1:55;
+A7:  m3 = 2*n+j+n*i by XCMPLX_1:1;
+       0 < n by A1,AXIOMS:22;
+     then n*i <= n*n by A1,AXIOMS:25;
+     then m3 <= n*n+3*n by A6,A7,REAL_1:55;
+     hence thesis by NAT_1:38;
+end;
+
+Lm15:
+    1 <= i & i <= n & 1<=j & j <= n implies 3*n+1 <= 2*n+n*i+j &
+    2*n+n*i+j <= n*n+3*n
+proof
+   assume A1: 1<= i & i <= n & 1<=j & j<=n;
+   set m3=2*n+n*i+j;
+A2:  2*n+n=2*n+1*n
+     .=(2+1)*n by XCMPLX_1:8;
+A3:  0 < n by A1,AXIOMS:22;
+     then n*1 <= n*i by A1,AXIOMS:25;
+     then 2*n + n <= 2*n +n*i by REAL_1:55;
+     hence 3*n+1 <= m3 by A1,A2,REAL_1:55;
+A4:  2*n+j <= 3*n by A1,A2,REAL_1:55;
+A5:  m3 = 2*n + j + n*i by XCMPLX_1:1;
+       n*i <= n*n by A1,A3,AXIOMS:25;
+     hence thesis by A4,A5,REAL_1:55;
+end;
+
+begin :: Data structure for Dijkstra's shortest path algorithm
+:: address  possible value  init. value   comment
+::   1         1 or -1         1          -1 if node v1 is used
+::   2         1 or -1         1          -1 if node v2 is used
+::   :            :            :                  :
+::   n         1  or -1        1          -1 if node vn is used
+::   n+1       0               0          preceding-node of v1 toward v1
+::   n+2       -1 or Node No.  -1         preceding-node of v2 toward v1
+::   :             :           :                  :
+::   2*n       -1 or Node No.  -1         preceding-node of vn toward v1
+::   2*n+1     0               0          cost from v1 to v1
+::   2*n+2     >=0             0          minimum cost from v2 to v1
+::   :            :            :                  :
+::   3*n       >=0             0          minimum cost from vn to v1
+::   3*n+1     weight(v1,v1)              the weight of edge(v1,v1)
+::   3*n+2     weight(v1,v2)              the weight of edge(v1,v2)
+::   :            :                                :
+::   4*n       weight(v1,vn)              the weight of edge(v1,vn)
+::   :            :                                :
+::   n*n+3*n   weight(vn,vn)              the weight of edge(vn,vn)
+::   n*n+3n+1   Node No.                  current node with the shortest path
+
+definition
+   let f be Element of REAL*,G be oriented Graph,n be Nat,
+   W be Function of (the Edges of G), Real>=0;
+  pred f is_Input_of_Dijkstra_Alg G,n,W means :Def20:
+   len f=n*n+3*n+1 & Seg n=the Vertices of G &
+   (for i st 1 <= i & i <= n holds f.i=1 & f.(2*n+i)=0) &
+   f.(n+1)=0 & (for i st 2 <= i & i <= n holds f.(n+i)=-1) &
+   (for i,j being Vertex of G,k,m st k=i & m=j holds
+   f.(2*n+n*k+m)=Weight(i,j,W));
+end;
+
+begin :: The definition of Dijkstra's shortest path algorithm
+
+definition let n be Nat;
+  func DijkstraAlgorithm n -> Element of Funcs(REAL*,REAL*) equals :Def21:
+  while_do(Relax(n)*findmin(n),n);
+  coherence;
+end;
+
+begin :: Justifying the correctness of Dijkstra's shortest path algorithm
+
+reserve p,q for FinSequence of NAT,
+        G for finite oriented Graph,
+        P,Q,R for oriented Chain of G,
+        W for Function of (the Edges of G), Real>=0,
+        v1,v2,v3,v4 for Vertex of G;
+
+Lm16:
+f is_Input_of_Dijkstra_Alg G,n,W & v1=1 & n >= 1 &
+h=(repeat(Relax(n)*findmin(n))).1.f implies (for v3,j st v3<>v1 & v3=j &
+h.(n+j)<>-1 holds ex p,P st p is_simple_vertex_seq_at h,j,n &
+ (for i st 1<=i & i<len p holds p.i in UsedVx(h,n)) &
+P is_oriented_edge_seq_of p & P is_shortestpath_of v1,v3,UsedVx(h,n),W &
+cost(P,W)=h.(2*n+j) & (not v3 in UsedVx(h,n) implies
+P islongestInShortestpath UsedVx(h,n),v1,W )) & (for m,j st h.(n+j) = -1 &
+1<=j & j<=n & m in UsedVx(h,n) holds f.(2*n+n*m+j) = -1) & (for m st
+m in UsedVx(h,n) holds h.(n+m) <> -1)
+proof
+    set R=Relax(n),
+        M=findmin(n),
+        f0=(repeat (R*M)).0 .f,
+        mi=n*n+3*n+1;
+    assume A1: f is_Input_of_Dijkstra_Alg G,n,W & v1=1 & n >= 1 &
+               h=(repeat(Relax(n)*findmin(n))).1.f;
+    set Ak=Argmin(OuterVx(f,n),f,n);
+A2:  1 <= mi by NAT_1:37;
+A3:  len f=mi & f.(n+1) =0 & (for j st 1<=j & j<=n holds f.j=1) &
+     for j st 2<=j & j<=n holds f.(n+j)=-1 by A1,Def20;
+then A4:  1 in dom f by A2,FINSEQ_3:27;
+then A5:  1 = Ak & UsedVx(f,n)={} & {1} = UsedVx(h,n) by A1,A3,Th48;
+A6:  M.f0= M.f by Th22
+     .= (f,mi):=(1,-1) by A5,Def11;
+A7:  dom (M.f0) = dom f0 by Th34
+     .= dom f by Th22;
+   h=(repeat (R*M)).(0+1).f by A1;
+     then h=R.(M.f0) by Th23;
+then A8:  h=Relax(M.f0,n) by Def15;
+A9:  Seg n=the Vertices of G by A1,Def20;
+     then reconsider VG=the Vertices of G as non empty Subset of NAT by A1,
+FINSEQ_1:3;
+       W is_weight>=0of G by GRAPH_5:def 13;
+then A10:  W is_weight_of G by GRAPH_5:50;
+A11:  2*1 <= 2*n by A1,AXIOMS:25;
+       0 <= n by A1,AXIOMS:22;
+then A12:  n*1 <= n*n by A1,AXIOMS:25;
+A13:  2*n < mi by Lm7;
+A14:  2*n+n=2*n+1*n
+     .=(2+1)*n by XCMPLX_1:8;
+    hereby
+         let v3,j;
+         set nj=n+j;
+         assume A15: v3<>v1 & v3=j & h.(n+j)<>-1;
+         then j in VG;
+    then A16:  1<=j & j <= n by A9,FINSEQ_1:3;
+    then A17:  1 < nj & nj <= 2*n & nj < mi by Lm13;
+    then A18:  nj in dom f by A3,FINSEQ_3:27;
+    then A19:  (M.f0).nj = f.nj by A6,A17,Th19;
+    A20:  nj -' n=j by BINARITH:39;
+           n+1 <= nj by A16,REAL_1:55;
+    then A21:  n < nj by NAT_1:38;
+           j > 1 by A1,A15,A16,REAL_1:def 5;
+         then j >= 1+1 by INT_1:20;
+    then f.nj=-1 by A1,A16,Def20;
+    then A22:  M.f0 hasBetterPathAt n,(nj -' n) by A7,A8,A15,A17,A18,A19,A21,
+Def14;
+         set m2=2*n+j;
+    A23:  m2 <= 3*n by A14,A16,REAL_1:55;
+           2*n+1 <= m2 by A16,REAL_1:55;
+    then A24:  2*n < m2 by NAT_1:38;
+    A25:  m2 -' 2*n = j by BINARITH:39;
+    A26:  1 < m2 & m2 < mi by A16,Lm12;
+    then A27:  m2 in dom (M.f0) by A3,A7,FINSEQ_3:27;
+    A28:  mi in dom f by A2,A3,FINSEQ_3:27;
+    then A29:  M.f0/.mi = M.f0.mi by A7,FINSEQ_4:def 4
+         .=1 by A6,A26,A28,Th18;
+         set m3=2*n+n*1+j;
+    A30:  1 < m3 & m3 < mi by A1,A16,Lm14;
+    then A31:  m3 in dom f by A3,FINSEQ_3:27;
+    then A32:  M.f0/.(2*n+n*(M.f0/.mi)+j)=M.f0.m3 by A7,A29,FINSEQ_4:def 4
+         .=f.m3 by A6,A30,A31,Th19
+         .=Weight(v1,v3,W) by A1,A15,Def20;
+         set w1=2*n+1;
+    A33:  1 < w1 & w1 < mi by A1,Lm12;
+    then A34:  w1 in dom f by A3,FINSEQ_3:27;
+    then A35:  M.f0/.(2*n+M.f0/.mi)=M.f0.w1 by A7,A29,FINSEQ_4:def 4
+         .=f.w1 by A6,A33,A34,Th19
+         .=0 by A1,Def20;
+    A36:  Relax(M.f0,n).m2=newpathcost(M.f0,n,m2-'2*n)
+           by A20,A22,A23,A24,A25,A27,Def14
+         .=0 + M.f0/.(2*n+n*(M.f0/.mi)+j) by A25,A35,Def12;
+    A37:  h.nj=1 by A7,A8,A17,A18,A21,A22,A29,Def14;
+           M.f0/.(2*n+n*(M.f0/.mi)+j) >= 0 by A20,A22,Def13;
+         then consider e being set such that
+    A38:  e in the Edges of G & e orientedly_joins v1,v3 by A32,Th24;
+        reconsider pe= <*e*> as (oriented Chain of G) by A38,Th5;
+        reconsider p=<*1,j*> as FinSequence of NAT;
+        take p,pe;
+    A39: p.1=1 & len p = 2 by FINSEQ_1:61;
+    then A40: p.(len p)=j by FINSEQ_1:61;
+          now let k;
+           assume A41: 1 <= k & k < len p;
+           then k < 1+1 by FINSEQ_1:61;
+           then k <= 1 by NAT_1:38;
+       then k=1 by A41,AXIOMS:21;
+           hence p.(len p-k)=h.(n+p/.(len p-k+1)) by A37,A39,A40,FINSEQ_4:24;
+        end;
+    then A42: p is_vertex_seq_at h,j,n by A40,Def17;
+          p is one-to-one by A1,A15,FINSEQ_3:103;
+        hence p is_simple_vertex_seq_at h,j,n by A39,A42,Def18;
+        hereby let i;
+          assume A43: 1<=i & i<len p;
+            then i + 1 <= 1 + 1 by A39,INT_1:20;
+            then i <= 1 by REAL_1:53;
+            then i = 1 by A43,AXIOMS:21;
+            hence p.i in UsedVx(h,n) by A5,A39,TARSKI:def 1;
+        end;
+    A44: len pe = 1 by FINSEQ_1:57;
+    then A45: len p = len pe + 1 by FINSEQ_1:61;
+          now let k;
+           assume 1<=k & k<=len pe;
+       then A46: k=1 by A44,AXIOMS:21;
+          hence (the Source of G).(pe.k)=(the Source of G).e by FINSEQ_1:57
+          .= p.k by A1,A38,A39,A46,GRAPH_4:def 1;
+          thus (the Target of G).(pe.k)=(the Target of G).e by A46,FINSEQ_1:57
+          .= p.(k+1) by A15,A38,A39,A40,A46,GRAPH_4:def 1;
+        end;
+        hence pe is_oriented_edge_seq_of p by A45,Def19;
+        thus pe is_shortestpath_of v1,v3,UsedVx(h,n),W by A1,A5,A15,A38,Th14;
+        thus cost(pe,W)=W.(pe.1) by A10,A44,Th4
+        .=W.e by FINSEQ_1:57
+        .=h.(2*n+j) by A8,A32,A36,A38,Th26;
+        assume not v3 in UsedVx(h,n);
+          for v2 st v2 in UsedVx(h,n) & v2 <> v1 &
+           not ex Q st Q is_shortestpath_of v1,v2,UsedVx(h,n),W &
+           cost(Q,W) <= cost(pe,W) holds
+           contradiction by A1,A5,TARSKI:def 1;
+         hence pe islongestInShortestpath UsedVx(h,n),v1,W
+           by GRAPH_5:def 19;
+     end;
+     set nk=n+1;
+A47:  1 < nk & nk <= 2*n & nk < mi by A1,Lm13;
+A48:  n < nk by NAT_1:38;
+A49:  nk in dom f by A3,A47,FINSEQ_3:27;
+then A50:  nk in dom f0 by Th22;
+       M.f0.1=-1 by A4,A6,Th20;
+     then not M.f0 hasBetterPathAt n,1 by Def13;
+     then not M.f0 hasBetterPathAt n,nk-'n by BINARITH:39;
+then A51:  h.nk=M.f0.nk by A7,A8,A47,A48,A49,Def14
+     .=f0.nk by A47,A48,A50,Th32
+     .=0 by A3,Th22;
+     hereby let m,j;
+       assume A52: h.(n+j) = -1 & 1<=j & j <= n & m in UsedVx(h,n);
+         set nj=n+j;
+           nj <= n+n by A52,REAL_1:55;
+    then A53:  nj <= 2*n by XCMPLX_1:11;
+    then A54:  nj < mi by A13,AXIOMS:22;
+           1+1 <= nj by A1,A52,REAL_1:55;
+    then 1 < nj by NAT_1:38;
+    then A55:  nj in dom f by A3,A54,FINSEQ_3:27;
+    A56:  nj -' n=j by BINARITH:39;
+           n+1 <= nj by A52,REAL_1:55;
+    then A57:  n < nj by NAT_1:38;
+         set m2=2*n+j;
+    A58:  m2 <= 3*n by A14,A52,REAL_1:55;
+           2*n+1 <= m2 by A52,REAL_1:55;
+    then A59:  2*n < m2 by NAT_1:38;
+           3*n < mi by Lm7;
+    then A60:  m2 < mi by A58,AXIOMS:22;
+           2 < m2 by A11,A59,AXIOMS:22;
+    then A61:  1 < m2 by AXIOMS:22;
+    A62:  mi in dom f by A2,A3,FINSEQ_3:27;
+    then A63:  M.f0/.mi = M.f0.mi by A7,FINSEQ_4:def 4
+         .=1 by A6,A60,A61,A62,Th18;
+    then A64:  not M.f0 hasBetterPathAt n,(nj-'n) by A7,A8,A52,A53,A55,A57,
+Def14
+;
+         A65: n < mi by Lm7;
+    then A66:  j < mi by A52,AXIOMS:22;
+    A67:  j <> 1 by A51,A52;
+           j in dom f by A3,A52,A66,FINSEQ_3:27;
+    then A68:  M.f0.j=f.j by A6,A52,A65,A67,Th19
+         .=1 by A1,A52,Def20;
+           M.f0.nj=-1 by A7,A8,A52,A53,A55,A57,A64,Def14;
+    then A69:  not M.f0/.(2*n+n*(M.f0/.mi)+j) >= 0 by A56,A64,A68,Def13;
+         set m3=2*n+n*1+j;
+           m3 = 2*n+(n*1+j) by XCMPLX_1:1;
+         then 2 <= m3 by A11,NAT_1:37;
+    then A70:  1 < m3 by AXIOMS:22;
+    A71:  m3=(1+2)*n+j by XCMPLX_1:8;
+           j <= n*n by A12,A52,AXIOMS:22;
+         then m3 <= 3*n + n*n by A71,REAL_1:55;
+    then A72:  m3 < mi by NAT_1:38;
+    then A73:  m3 in dom f by A3,A70,FINSEQ_3:27;
+         reconsider v2=j as Vertex of G by A9,A52,FINSEQ_1:3;
+    A74:  M.f0/.(2*n+n*(M.f0/.mi)+j)=M.f0.m3 by A7,A63,A73,FINSEQ_4:def 4;
+       M.f0.m3=f.m3 by A6,A70,A72,A73,Th19
+         .=Weight(v1,v2,W) by A1,Def20;
+         then not ex e be set st e in the Edges of G & e orientedly_joins v1,
+v2
+         by A69,A74,Th24;
+    then A75:  Weight(v1,v2,W)=-1 by Def7;
+           m=1 by A5,A52,TARSKI:def 1;
+         hence f.(2*n+n*m+j) = -1 by A1,A75,Def20;
+    end;
+    let m;
+    assume m in UsedVx(h,n);
+    then m=1 by A5,TARSKI:def 1;
+    hence h.(n+m) <> -1 by A51;
+end;
+
+Lm17:
+g=(repeat(Relax(n)*findmin(n))).k.f & h=(repeat(Relax(n)*findmin(n))).(k+1).f
+& OuterVx(g,n) <> {} & i in UsedVx(g,n) & len f=n*n+3*n+1 implies
+h.(n+i)=g.(n+i)
+proof
+    set R=Relax(n),
+        M=findmin(n),
+        RF=repeat (R*M);
+    set mi=n*n+3*n+1,
+        Ak=Argmin(OuterVx(g,n),g,n);
+    assume A1: g=RF.k.f & h=RF.(k+1).f & OuterVx(g,n) <> {} & i in UsedVx(g,n)
+      & len f= mi;
+A2:  M.g= (g,mi):=(Ak,-1) by Def11;
+A3:  h=R.(M.g) by A1,Th23
+     .=Relax(M.g,n) by Def15;
+A4:  Ak<=n & g.Ak <> -1 by A1,Th30;
+       i in {j: j in dom g & 1 <= j & j <= n & g.j = -1} by A1,Def9;
+         then consider j such that
+A5:  i=j & j in dom g & 1 <= j & j <= n & g.j = -1;
+     set ni=n+i;
+       ni <= n+n by A5,REAL_1:55;
+then A6:  ni <= 2*n by XCMPLX_1:11;
+A7:  ni -' n=i by BINARITH:39;
+       n+1 <= ni by A5,REAL_1:55;
+then A8:  n < ni by NAT_1:38;
+     A9: n < mi by Lm7;
+     A10: 2*n < mi by Lm7;
+then A11:  ni < mi by A6,AXIOMS:22;
+       1 <= ni by A5,NAT_1:37;
+     then ni in dom f by A1,A11,FINSEQ_3:27;
+then A12:  ni in dom g by A1,Th42;
+then A13:  ni in dom (M.g) by Th34;
+       now
+        assume M.g hasBetterPathAt n,i;
+        then M.g.i<>-1 by Def13;
+        hence contradiction by A2,A4,A5,A9,Th19;
+     end;
+     hence h.ni=M.g.ni by A3,A6,A7,A8,A13,Def14
+     .=g.ni by A2,A4,A6,A8,A10,A12,Th19;
+end;
+
+Lm18:
+g=(repeat(Relax(n)*findmin(n))).k.f & h=(repeat(Relax(n)*findmin(n))).(k+1).f
+& OuterVx(g,n) <> {} & len f=n*n+3*n+1 & p is_simple_vertex_seq_at g,j,n &
+g.(n+j)=h.(n+j) & (for i st 1<=i & i<len p holds p.i in UsedVx(g,n)) implies
+p is_simple_vertex_seq_at h,j,n
+proof
+     set RT=repeat(Relax(n)*findmin(n));
+     assume A1: g=RT.k.f & h=RT.(k+1).f & OuterVx(g,n) <> {} &
+        len f=n*n+3*n+1 & p is_simple_vertex_seq_at g,j,n & g.(n+j)=h.(n+j) &
+        (for i st 1<=i & i<len p holds p.i in UsedVx(g,n));
+then A2: (p.1=1 & len p > 1 & p is_vertex_seq_at g,j,n) & p is one-to-one
+    by Def18;
+then A3:  p.(len p)=j by Def17;
+       now let k;
+        assume A4:1<=k & k < len p;
+        then k - k < len p - k by REAL_1:92;
+    then A5: 0 < len p - k by XCMPLX_1:14;
+        then reconsider m=len p - k as Nat by INT_1:16;
+    A6: 1+0 < m + 1 by A5,REAL_1:67;
+          m <= len p - 1 by A4,REAL_1:92;
+        then m +1 <= len p-1+1 by REAL_1:55;
+        then m +1 <= len p+1-1 by XCMPLX_1:29;
+    then A7: m+1 <= len p by XCMPLX_1:26;
+    then A8: p/.(m+1)=p.(m+1) by A6,FINSEQ_4:24;
+        per cases;
+        suppose m+1=len p;
+           hence p.(len p-k)=h.(n+p/.(len p-k+1)) by A1,A2,A3,A4,A8,Def17;
+        suppose m+1<>len p;
+            then m+1 < len p by A7,REAL_1:def 5;
+        then A9: p/.(m+1) in UsedVx(g,n) by A1,A6,A8;
+           thus p.(len p-k)=g.(n+p/.(len p-k+1)) by A2,A4,Def17
+           .=h.(n+p/.(len p-k+1)) by A1,A9,Lm17;
+     end;
+     then p is_vertex_seq_at h,j,n by A3,Def17;
+     hence thesis by A2,Def18;
+end;
+
+Lm19:
+g=(repeat(Relax(n)*findmin(n))).k.f & h=(repeat(Relax(n)*findmin(n))).(k+1).f
+& OuterVx(g,n) <> {} & len f=n*n+3*n+1 & p is_simple_vertex_seq_at g,m,n &
+m=h.(n+j) & g.(n+m)=h.(n+m) & m<>j & not j in UsedVx(g,n) &
+(for i st 1<=i & i<len p holds p.i in UsedVx(g,n)) implies
+p^<*j*> is_simple_vertex_seq_at h,j,n
+proof
+     set RT=repeat(Relax(n)*findmin(n));
+     assume A1: g=RT.k.f & h=RT.(k+1).f & OuterVx(g,n) <> {} & len f=n*n+3*n+1
+        & p is_simple_vertex_seq_at g,m,n & m=h.(n+j) & g.(n+m)=h.(n+m) &
+        m<>j & not j in UsedVx(g,n) & (for i st 1<=i & i<len p holds
+        p.i in UsedVx(g,n));
+then A2: (p.1=1 & len p > 1 & p is_vertex_seq_at g,m,n) & p is one-to-one
+     by Def18;
+then A3:  p.(len p)=m by Def17;
+     set q=p^<*j*>;
+A4:  len q=len p+ 1 by FINSEQ_2:19;
+then A5:  len q > 1 by A2,NAT_1:38;
+A6:  q.1=1 by A2,Lm1;
+A7:  q.(len q)=j by A4,FINSEQ_1:59;
+       now let ii be Nat;
+        assume A8:1<=ii & ii < len q;
+        then ii - ii < len q - ii by REAL_1:92;
+    then A9: 0 < len q - ii by XCMPLX_1:14;
+        then reconsider mm=len q - ii as Nat by INT_1:16;
+    A10: 1+0 < mm + 1 by A9,REAL_1:67;
+          mm <= len q - 1 by A8,REAL_1:92;
+        then mm +1 <= len q-1+1 by REAL_1:55;
+        then mm +1 <= len q+1-1 by XCMPLX_1:29;
+    then A11: mm+1 <= len q by XCMPLX_1:26;
+    then A12: q/.(mm+1)=q.(mm+1) by A10,FINSEQ_4:24;
+        per cases;
+        suppose A13: mm+1=len q;
+           then mm=len p by A4,XCMPLX_1:2;
+           hence q.(len q-ii)=h.(n+q/.(len q-ii+1))
+             by A1,A2,A3,A7,A12,A13,Lm1;
+        suppose mm+1<>len q;
+            then A14: mm+1 < len q by A11,REAL_1:def 5;
+        then A15: mm < len p by A4,REAL_1:55;
+        A16: mm+1 <= len p by A4,A14,INT_1:20;
+              1+0 <= mm by A9,INT_1:20;
+        then A17: q.(len q-ii)=p.mm by A15,Lm1;
+            hereby
+               per cases;
+               suppose A18: mm+1=len p;
+                 then mm+1=len p-1+1 by XCMPLX_1:27;
+           then A19:   mm=len p-1 by XCMPLX_1:2;
+           A20:   p/.(len p-1+1)=p/.len p by XCMPLX_1:27
+                 .=m by A2,A3,FINSEQ_4:24;
+               q/.(len q-ii+1)=m by A2,A3,A12,A18,Lm1;
+                hence q.(len q-ii)=h.(n+q/.(len q-ii+1)) by A1,A2,A17,A19,A20,
+Def17;
+               suppose mm+1<>len p;
+           then A21:  mm+1 < len p by A16,REAL_1:def 5;
+           A22:  p/.(mm+1)=p.(mm+1) by A10,A16,FINSEQ_4:24;
+           then A23:  p/.(mm+1) in UsedVx(g,n) by A1,A10,A21;
+                set i2=ii-1;
+           A24:  mm=len p+(1-ii) by A4,XCMPLX_1:29
+                .=len p-i2 by XCMPLX_1:38;
+           A25:  now assume i2 <= 1;
+                   then len p - 1 <= len p -i2 by REAL_1:92;
+                   hence contradiction by A21,A24,REAL_1:86;
+                 end;
+           A26:  q/.(len q-ii+1)= q.(mm+1) by A10,A11,FINSEQ_4:24
+                 .=p/.(mm+1) by A10,A16,A22,Lm1;
+                   i2 > 0 by A25,AXIOMS:22;
+                 then reconsider i3=i2 as Nat by INT_1:16;
+                   i2 < len q -1 by A8,REAL_1:92;
+                 then i2 < len p by A4,XCMPLX_1:26;
+                 hence q.(len q-ii)
+                 = g.(n+p/.(len p-i3+1)) by A2,A17,A24,A25,Def17
+                 .=h.(n+q/.(len q-ii+1)) by A1,A23,A24,A26,Lm17;
+           end;
+     end;
+then A27:  q is_vertex_seq_at h,j,n by A7,Def17;
+       now assume j in rng p;
+          then consider i such that
+     A28:  i in dom p & j = p.i by FINSEQ_2:11;
+     A29:  1<=i & i <= len p by A28,FINSEQ_3:27;
+          per cases;
+          suppose i = len p;
+          hence contradiction by A1,A2,A28,Def17;
+          suppose i <> len p;
+             then i < len p by A29,REAL_1:def 5;
+          hence contradiction by A1,A28,A29;
+    end;
+    then q is one-to-one by A2,Th1;
+    hence thesis by A5,A6,A27,Def18;
+end;
+
+Lm20:
+f is_Input_of_Dijkstra_Alg G,n,W & W is_weight>=0of G & v2=i & v1<>v2 & 1<=i &
+i<=n & P is_shortestpath_of v1,v2,V,W & (for m,j st g.(n+j) = -1 &
+1<=j & j<=n & m in V holds f.(2*n+n*m+j) = -1) implies g.(n+i) <> -1
+proof
+    assume A1: f is_Input_of_Dijkstra_Alg G,n,W & W is_weight>=0of G & v2=i &
+     v1<>v2 & 1<=i & i<=n & P is_shortestpath_of v1,v2,V,W &
+     (for m,j st g.(n+j) = -1 & 1<=j & j<=n & m in V holds f.(2*n+n*m+j)=-1);
+    assume A2:g.(n+i)=-1;
+       P is_orientedpath_of v1,v2,V by A1,GRAPH_5:def 18;
+     then consider q being Simple(oriented Chain of G) such that
+A3:  q is_shortestpath_of v1,v2,V,W by A1,GRAPH_5:66;
+       q is_orientedpath_of v1,v2,V by A3,GRAPH_5:def 18;
+then A4:  q is_orientedpath_of v1,v2 & vertices(q) \ {v2} c= V by GRAPH_5:def 4
+;
+     set FT=the Target of G;
+A5:  q <> {} & FT.(q.(len q))= v2 by A4,GRAPH_5:def 3;
+     consider vs being FinSequence of the Vertices of G such that
+A6:  vs is_oriented_vertex_seq_of q &
+     for n1,m1 be Nat st 1<=n1 & n1<m1 & m1<=len vs & vs.n1=vs.m1
+     holds n1=1 & m1=len vs by GRAPH_4:def 7;
+A7:  len vs = len q + 1 & for n1 be Nat st 1<=n1 & n1<=len q holds
+     q.n1 orientedly_joins vs/.n1, vs/.(n1+1) by A6,GRAPH_4:def 5;
+A8:  len q >= 1 by A5,GRAPH_5:8;
+     set e=q.len q;
+A9:  e orientedly_joins vs/.len q, vs/.(len q+1) by A6,A8,GRAPH_4:def 5;
+       len q in dom q by A8,FINSEQ_3:27;
+then A10:  e in the Edges of G by FINSEQ_2:13;
+A11:  len q < len vs by A7,NAT_1:38;
+A12:  1 < len q+1 by A8,NAT_1:38;
+A13:  vs/.len q=vs.len q by A8,A11,FINSEQ_4:24;
+     then reconsider v3=vs.len q as Vertex of G;
+A14:  v2=vs/.(len q+1) by A5,A9,GRAPH_4:def 1;
+then A15:  v2=vs.len vs by A7,A12,FINSEQ_4:24;
+A16:  now
+        assume A17: v3=v2;
+     A18: q.1 orientedly_joins vs/.1, vs/.(1+1) by A6,A8,GRAPH_4:def 5;
+           v1 =(the Source of G).(q.1) by A4,GRAPH_5:def 3
+         .=vs/.1 by A18,GRAPH_4:def 1
+         .=vs.1 by A7,A12,FINSEQ_4:24
+         .=v3 by A6,A8,A11,A15,A17;
+         hence contradiction by A1,A17;
+      end;
+A19:  Seg n=the Vertices of G by A1,Def20;
+       len q in dom vs by A8,A11,FINSEQ_3:27;
+     then v3 in Seg n by A19,FINSEQ_2:13;
+     then reconsider m=v3 as Nat;
+A20:  f.(2*n+n*m+i)=Weight(v3,v2,W) by A1,Def20;
+A21:  not v3 in {v2} by A16,TARSKI:def 1;
+       v3=(the Source of G).e by A9,A13,GRAPH_4:def 1;
+     then v3 in vertices(q) by A8,Lm4;
+     then m in (vertices(q) \ {v2}) by A21,XBOOLE_0:def 4;
+     then f.(2*n+n*m+i)=-1 by A1,A2,A4;
+     hence contradiction by A9,A10,A13,A14,A20,Th24;
+end;
+
+Lm21:
+f is_Input_of_Dijkstra_Alg G,n,W & v1=1 & n >= 1 &
+g=(repeat(Relax(n)*findmin(n))).k.f
+& h=(repeat(Relax(n)*findmin(n))).(k+1).f & OuterVx(g,n) <> {} & k >=1 &
+1 in UsedVx(g,n) & (for v3,j st v3<>v1 & v3=j & g.(n+j)<>-1 holds
+ex p,P st p is_simple_vertex_seq_at g,j,n &(for i st 1<=i & i<len p holds
+p.i in UsedVx(g,n)) & P is_oriented_edge_seq_of p & P is_shortestpath_of
+v1,v3,UsedVx(g,n),W & cost(P,W)=g.(2*n+j) & (not v3 in UsedVx(g,n) implies
+P islongestInShortestpath UsedVx(g,n),v1,W)) & (for m,j st g.(n+j) = -1 &
+1<=j & j<=n & m in UsedVx(g,n) holds f.(2*n+n*m+j) = -1) & (for m st
+m in UsedVx(g,n) holds g.(n+m) <> -1)
+implies
+(for v3,j st v3<>v1 & v3=j & h.(n+j)<>-1 holds ex p,P st
+p is_simple_vertex_seq_at h,j,n & (for i st 1<=i & i<len p holds p.i
+in UsedVx(h,n)) & P is_oriented_edge_seq_of p & P is_shortestpath_of v1,v3,
+UsedVx(h,n),W & cost(P,W)=h.(2*n+j) & (not v3 in UsedVx(h,n) implies
+P islongestInShortestpath UsedVx(h,n),v1,W )) & (for m,j st h.(n+j) = -1 &
+1<=j & j<=n & m in UsedVx(h,n) holds f.(2*n+n*m+j) = -1) & (for m st
+m in UsedVx(h,n) holds h.(n+m) <> -1)
+proof
+    set R=Relax(n),
+        M=findmin(n),
+        IN=OuterVx(g,n),
+        Ug=UsedVx(g,n);
+    assume A1: f is_Input_of_Dijkstra_Alg G,n,W & v1=1 & n >= 1 &
+    g=(repeat(R*M)).k.f & h=(repeat(R*M)).(k+1).f & IN <> {} & k >=1 &
+    1 in Ug;
+    assume A2: for v3,j st v3<>v1 & v3=j & g.(n+j)<>-1 holds ex p,P st p
+      is_simple_vertex_seq_at g,j,n & (for i st 1<=i & i<len p holds
+      p.i in Ug) & P is_oriented_edge_seq_of p & P is_shortestpath_of v1,v3,
+      Ug,W & cost(P,W)=g.(2*n+j) & (not v3 in Ug implies
+      P islongestInShortestpath Ug,v1,W);
+    assume A3: (for m,j st g.(n+j) = -1 & 1<=j & j<=n & m in Ug holds
+      f.(2*n+n*m+j) = -1) & (for m st m in UsedVx(g,n) holds g.(n+m) <> -1);
+    set mi=n*n+3*n+1,
+         Ak=Argmin(IN,g,n);
+A4:  1 <= mi by NAT_1:37;
+A5:  len f=mi by A1,Def20;
+A6:  M.g= (g,mi):=(Ak,-1) by Def11;
+A7:  dom (M.g) = dom g by Th34;
+   h=R.(M.g) by A1,Th23;
+then A8:  h=Relax(M.g,n) by Def15;
+A9:  Seg n=the Vertices of G by A1,Def20;
+     then reconsider VG=the Vertices of G as non empty Subset of NAT by A1,
+FINSEQ_1:3;
+A10:  W is_weight>=0of G by GRAPH_5:def 13;
+then A11:  W is_weight_of G by GRAPH_5:50;
+A12:  2*n+n=2*n+1*n
+     .=(2+1)*n by XCMPLX_1:8;
+A13:  dom f=dom g by A1,Th42;
+A14:  Ak in dom g & 1<=Ak & Ak<=n & g.Ak <> -1 & g.(n+Ak) <> -1 by A1,Th30;
+     set Uh=UsedVx(h,n);
+A15:  Uh=Ug \/ {Ak} & not Ak in Ug by A1,Th40;
+then A16:  Ug c= Uh by XBOOLE_1:7;
+A17:  n < mi by Lm7;
+A18:  dom f=dom h by A1,Th42;
+     reconsider vk=Ak as Vertex of G by A9,A14,FINSEQ_1:3;
+     consider pk being FinSequence of NAT,PK be oriented Chain of G such that
+A19:  pk is_simple_vertex_seq_at g,Ak,n & (for i st 1<=i & i<len pk holds
+     pk.i in Ug) & PK is_oriented_edge_seq_of pk & PK is_shortestpath_of
+     v1,vk,Ug,W & cost(PK,W)=g.(2*n+Ak) & (not vk in Ug implies PK
+     islongestInShortestpath Ug,v1,W) by A1,A2,A14,A15;
+     consider kk being Nat such that
+A20:  kk=Ak & kk in IN & (for i st i in IN holds g/.(2*n+kk) <= g/.(2*n+i)) &
+     (for i st i in IN & g/.(2*n+kk) = g/.(2*n+i) holds kk <= i) by A1,Def10;
+     set nAk=2*n+Ak;
+A21: 1 < nAk & nAk < mi & Ak < nAk by A14,Lm12;
+then A22: nAk in dom g by A5,A13,FINSEQ_3:27;
+     A23: f,g equal_at 3*n+1,n*n+3*n by A1,Th47;
+       PK is_orientedpath_of v1,vk,Ug by A19,GRAPH_5:def 18;
+then A24: PK is_orientedpath_of v1,vk by GRAPH_5:def 4;
+     then PK <> {} by GRAPH_5:def 3;
+then A25: len PK >= 1 by GRAPH_5:8;
+A26:  mi in dom g by A4,A5,A13,FINSEQ_3:27;
+then A27:  M.g/.mi = M.g.mi by A7,FINSEQ_4:def 4
+    .=Ak by A6,A14,A17,A26,Th18;
+A28: M.g/.nAk=M.g.nAk by A7,A22,FINSEQ_4:def 4
+     .=cost(PK,W) by A6,A19,A21,A22,Th19;
+     set nk=n+Ak;
+A29:  1 < nk & nk <= 2*n & nk < mi by A14,Lm13;
+       n+1 <= nk by A14,REAL_1:55;
+then A30:  n < nk by NAT_1:38;
+A31:  nk in dom g by A5,A13,A29,FINSEQ_3:27;
+then A32:  M.g.nk=g.nk by A29,A30,Th32;
+       now
+        set Wke=M.g/.(2*n+n*(M.g/.mi)+Ak);
+         assume M.g hasBetterPathAt n,Ak;
+     then A33: (M.g.nk=-1 or M.g/.nAk > newpathcost(M.g,n,Ak)) & Wke >= 0 by
+Def13;
+         then M.g/.nAk+Wke >= M.g/.nAk+0 by REAL_1:55;
+         hence contradiction by A1,A27,A32,A33,Def12,Th30;
+     end;
+     then not M.g hasBetterPathAt n,nk-'n by BINARITH:39;
+then A34: h.nk=g.nk by A7,A8,A29,A30,A31,A32,Def14;
+    hereby let v3,j;
+    assume A35: v3<>v1 & v3=j & h.(n+j)<>-1;
+         set nj=n+j;
+           j in VG by A35;
+    then A36:  1<=j & j <= n by A9,FINSEQ_1:3;
+    then A37:  1 < nj & nj <= 2*n & nj < mi by Lm13;
+    then A38:  nj in dom g by A5,A13,FINSEQ_3:27;
+    A39:  nj -' n=j by BINARITH:39;
+           n+1 <= nj by A36,REAL_1:55;
+    then A40:  n < nj by NAT_1:38;
+         set m2=2*n+j;
+    A41:  m2 <= 3*n by A12,A36,REAL_1:55;
+           2*n+1 <= m2 by A36,REAL_1:55;
+    then A42:  2*n < m2 by NAT_1:38;
+    A43:  m2 -' 2*n = j by BINARITH:39;
+    A44:  1 < m2 & m2 < mi by A36,Lm12;
+    then A45:  m2 in dom g by A5,A13,FINSEQ_3:27;
+    A46:  m2 in dom (M.g) by A5,A7,A13,A44,FINSEQ_3:27;
+    A47:  M.g.nj = g.nj by A6,A14,A37,A38,A40,Th19;
+           n <= 2*n by Lm6;
+         then n < m2 by A42,AXIOMS:22;
+    then A48:  M.g.m2 = g.m2 by A6,A14,A44,A45,Th19;
+   A49:  j < mi by A17,A36,AXIOMS:22;
+   then A50:  j in dom g by A5,A13,A36,FINSEQ_3:27;
+    A51:  j in dom h by A5,A18,A36,A49,FINSEQ_3:27;
+         set Akj=2*n+n*Ak+j;
+    A52:  1 < Akj & Ak < Akj & Akj < mi by A14,A36,Lm14;
+    then A53:  Akj in dom g by A5,A13,FINSEQ_3:27;
+    A54:  3*n+1 <=Akj & Akj <= n*n+3*n by A14,A36,Lm15;
+    A55:  M.g/.(2*n+n*(M.g/.mi)+j)=M.g.Akj by A7,A27,A53,FINSEQ_4:def 4
+         .=g.Akj by A6,A52,A53,Th19
+         .=f.Akj by A13,A23,A53,A54,Def16
+        .=Weight(vk,v3,W) by A1,A35,Def20;
+    A56:  M.g/.m2 = g.m2 by A7,A45,A48,FINSEQ_4:def 4;
+         per cases;
+         suppose A57: not M.g hasBetterPathAt n,(nj-'n);
+       then A58: h.nj=g.nj by A7,A8,A37,A38,A40,A47,Def14;
+           then consider p,P such that
+       A59: p is_simple_vertex_seq_at g,j,n & (for i st 1<=i & i<len p holds
+           p.i in Ug) & P is_oriented_edge_seq_of p & P is_shortestpath_of
+           v1,v3,Ug,W & cost(P,W)=g.m2 & (not v3 in Ug implies
+           P islongestInShortestpath Ug,v1,W) by A2,A35;
+           take p,P;
+           thus p is_simple_vertex_seq_at h,j,n by A1,A5,A58,A59,Lm18;
+           hereby let i;
+              assume 1<=i & i<len p;
+              then p.i in Ug by A59;
+              hence p.i in Uh by A16;
+           end;
+           thus P is_oriented_edge_seq_of p by A59;
+           hereby
+             per cases;
+             suppose M.g.j=-1;
+               then Relax(M.g,n).j=-1 by A7,A36,A50,Def14;
+               then j in {i: i in dom h & 1 <= i & i <= n & h.i = -1}
+                 by A8,A36,A51;
+               then j in Uh by Def9;
+               then A60: j in Ug or j in {Ak} by A15,XBOOLE_0:def 2;
+                 now let Q,v4;
+                  assume A61:not v4 in Ug & Q is_shortestpath_of v1,v4,Ug,W;
+              A62: v4 in VG;
+                  then reconsider j4=v4 as Nat;
+              A63: 1<=j4 & j4<=n by A9,A62,FINSEQ_1:3;
+              then A64: g.(n+j4) <> -1 by A1,A3,A10,A61,Lm20;
+                  then consider q,R such that
+              A65: q is_simple_vertex_seq_at g,j4,n & (for i st 1<=i & i<len q
+                  holds q.i in Ug) & R is_oriented_edge_seq_of q &
+                  R is_shortestpath_of v1,v4,Ug,W & cost(R,W)=g.(2*n+j4) &
+                  (not v4 in Ug implies R islongestInShortestpath Ug,v1,W)
+                  by A1,A2,A61;
+              A66: cost(R,W)=cost(Q,W) by A61,A65,Th9;
+                  per cases by A60,TARSKI:def 1;
+                  suppose j in Ug;
+                     then consider PP being oriented Chain of G such that
+                A67: PP is_shortestpath_of v1,v3,Ug,W & cost(PP,W) <= cost(R,W)
+                    by A35,A61,A65,GRAPH_5:def 19;
+                    thus cost(P,W) <= cost(Q,W) by A59,A66,A67,Th9;
+                  suppose A68: j = Ak;
+                      j4 <= mi by A17,A63,AXIOMS:22;
+                then A69: j4 in dom g by A5,A13,A63,FINSEQ_3:27;
+                      now assume g.j4=-1;
+                      then j4 in {i: i in dom g & 1 <= i & i <= n & g.i = -1}
+                      by A63,A69;
+                      hence contradiction by A61,Def9;
+                    end;
+                    then j4 in {i: i in dom g & 1 <= i & i <= n & g.i <> -1 &
+                    g.(n+i) <> -1} by A63,A64,A69;
+                    then j4 in IN by Def3;
+                then A70: g/.(2*n+Ak) <= g/.(2*n+j4) by A20;
+                A71: g/.(2*n+Ak) = g.(2*n+Ak) by A22,FINSEQ_4:def 4;
+                      1 < 2*n+j4 & 2*n+j4 < mi by A63,Lm12;
+                    then 2*n+j4 in dom g by A5,A13,FINSEQ_3:27;
+                    hence cost(P,W) <= cost(Q,W)
+                      by A59,A65,A66,A68,A70,A71,FINSEQ_4:def 4;
+               end;
+               hence P is_shortestpath_of v1,v3,Uh,W
+               by A10,A16,A35,A59,GRAPH_5:68;
+
+            suppose A72: M.g.j <> -1;
+               hereby
+                 per cases;
+                  suppose A73: M.g/.(2*n+n*(M.g/.mi)+j) >= 0;
+             then A74:  M.g/.m2 <= newpathcost(M.g,n,j) by A39,A57,A72,Def13;
+             A75:  M.g/.m2 = cost(P,W) by A46,A48,A59,FINSEQ_4:def 4;
+             A76:  newpathcost(M.g,n,j)=M.g/.(2*n+M.g/.mi)
+                    + M.g/.(2*n+n*(M.g/.mi)+j) by Def12;
+                  consider e be set such that
+            A77:  e in the Edges of G & e orientedly_joins vk,v3 by A55,A73,
+Th24;
+                 reconsider pe= <*e*> as (oriented Chain of G) by A77,Th5;
+            A78:  len pe = 1 & pe.1=e by FINSEQ_1:57;
+                 then consider Q such that
+            A79: Q=PK^pe & Q is_orientedpath_of v1,v3 by A24,A25,A77,GRAPH_5:37
+;
+                  cost(pe,W) = W.(pe.1) by A11,A78,Th4
+                .=Weight(vk,v3,W) by A77,A78,Th26;
+                then cost(Q,W)=newpathcost(M.g,n,j) by A11,A27,A28,A55,A76,A79,
+GRAPH_5:58;
+                hence P is_shortestpath_of v1,v3,Uh,W
+                  by A1,A10,A15,A19,A25,A35,A59,A74,A75,A77,A79,GRAPH_5:69;
+
+              suppose M.g/.(2*n+n*(M.g/.mi)+j) < 0;
+               then not ex e be set st e in the Edges of G &
+                e orientedly_joins vk,v3 by A55,Th24;
+               hence P is_shortestpath_of v1,v3,Uh,W
+                 by A1,A10,A15,A19,A35,A59,Th13;
+             end;
+           end;
+           thus cost(P,W)=h.m2 by A8,A39,A41,A42,A43,A46,A48,A57,A59,Def14;
+           hereby
+              assume A80: not v3 in Uh;
+         then A81:  not v3 in Ug by A15,XBOOLE_0:def 2;
+                now let v2;
+                  assume A82:v2 in Uh & v2 <> v1;
+                   per cases by A15,A82,XBOOLE_0:def 2;
+                 suppose v2 in {Ak};
+               then A83: v2 = vk by TARSKI:def 1;
+                   take PK;
+                  thus PK is_shortestpath_of v1,v2,Uh,W by A15,A19,A83,Th8;
+                 now assume g.j = -1;
+                     then j in {i: i in dom g & 1 <= i & i <= n & g.i = -1}
+                     by A36,A50;
+                     hence contradiction by A35,A81,Def9;
+                   end;
+                  then j in {i: i in dom g & 1 <= i & i <= n & g.i <> -1 &
+                    g.(n+i) <> -1} by A35,A36,A50,A58;
+                  then j in IN by Def3;
+              then A84: g/.nAk <= g/.m2 by A20;
+                    g/.nAk=cost(PK,W) by A19,A22,FINSEQ_4:def 4;
+                  hence cost(PK,W) <= cost(P,W) by A45,A59,A84,FINSEQ_4:def 4;
+                 suppose A85: v2 in Ug;
+                   then consider Q such that
+               A86: Q is_shortestpath_of v1,v2,Ug,W & cost(Q,W) <= cost(P,W)
+                   by A15,A59,A80,A82,GRAPH_5:def 19,XBOOLE_0:def 2;
+               A87: now let R,v4;
+                    assume A88: not v4 in Ug & R is_shortestpath_of v1,v4,Ug,W;
+                      A89: v4 in VG;
+                      then reconsider j4=v4 as Nat;
+                        1<=j4 & j4<=n by A9,A89,FINSEQ_1:3;
+                  then g.(n+j4) <> -1 by A1,A3,A10,A88,Lm20;
+                      then consider rn being FinSequence of NAT,RR
+                      be oriented Chain of G such that
+                  A90: rn is_simple_vertex_seq_at g,j4,n & (for i st 1<=i &
+                      i<len rn holds rn.i in Ug) & RR is_oriented_edge_seq_of
+                      rn & RR is_shortestpath_of v1,v4,Ug,W & cost(RR,W)
+                      =g.(2*n+j4) & (not v4 in Ug implies
+                      RR islongestInShortestpath Ug,v1,W) by A1,A2,A88;
+                      consider QQ being oriented Chain of G such that
+                  A91: QQ is_shortestpath_of v1,v2,Ug,W &
+                      cost(QQ,W) <= cost(RR,W) by A82,A85,A88,A90,GRAPH_5:def
+19;
+                        cost(QQ,W)= cost(Q,W) by A86,A91,Th9;
+                     hence cost(Q,W) <= cost(R,W) by A88,A90,A91,Th9;
+                  end;
+                  take Q;
+                  thus Q is_shortestpath_of v1,v2,Uh,W
+                  by A10,A16,A82,A86,A87,GRAPH_5:68;
+                  thus cost(Q,W) <= cost(P,W) by A86;
+             end;
+             hence P islongestInShortestpath Uh,v1,W by GRAPH_5:def 19;
+          end;
+
+        suppose A92: M.g hasBetterPathAt n,(nj-'n);
+           then A93: Relax(M.g,n).nj=Ak by A7,A27,A37,A38,A40,Def14;
+      A94:  (M.g.nj=-1 or M.g/.m2 > newpathcost(M.g,n,j)) &
+           M.g/.(2*n+n*(M.g/.mi)+j) >= 0 & M.g.j <> -1 by A39,A92,Def13;
+      A95:  newpathcost(M.g,n,j)
+           =M.g/.nAk+Weight(vk,v3,W) by A27,A55,Def12;
+      A96:  now assume A97: Ak = j;
+                then A98: M.g.nj <> -1 by A6,A14,A37,A38,A40,Th19;
+                  M.g/.m2+Weight(vk,v3,W) >= M.g/.m2+0 by A55,A94,REAL_1:55;
+                hence contradiction by A39,A92,A95,A97,A98,Def13;
+           end;
+      A99:   now assume j in UsedVx(g,n);
+               then j in {i: i in dom g & 1 <= i & i <= n & g.i = -1} by Def9;
+               then consider i such that
+           A100: j=i & i in dom g & 1 <= i & i <= n & g.i = -1;
+               thus contradiction by A17,A94,A100,Th33;
+            end;
+           consider e being set such that
+      A101:  e in the Edges of G & e orientedly_joins vk,v3 by A55,A94,Th24;
+           reconsider pe= <*e*> as (oriented Chain of G) by A101,Th5;
+      A102:  len pe = 1 & pe.1=e by FINSEQ_1:57;
+           then consider Q such that
+      A103:  Q=PK^pe & Q is_orientedpath_of v1,v3 by A24,A25,A101,GRAPH_5:37;
+           take q=pk^<*j*>,Q;
+           thus q is_simple_vertex_seq_at h,j,n by A1,A5,A8,A19,A34,A93,A96,A99
+,Lm19;
+      A104:  len pk > 1 & pk is_vertex_seq_at g,Ak,n by A19,Def18;
+      then A105:  q.len pk=pk.len pk by Lm1
+           .= Ak by A104,Def17;
+           hereby
+              let i;
+              assume A106: 1<=i & i<len q;
+              then i < len pk +1 by FINSEQ_2:19;
+          then A107: i <= len pk by NAT_1:38;
+                now per cases;
+                suppose i=len pk;
+                  hence q.i in {Ak} or q.i in Ug by A105,TARSKI:def 1;
+                suppose i<>len pk;
+              then A108: i < len pk by A107,REAL_1:def 5;
+                    q.i=pk.i by A106,A107,Lm1;
+                  hence q.i in {Ak} or q.i in Ug by A19,A106,A108;
+              end;
+              hence q.i in Uh by A15,XBOOLE_0:def 2;
+           end;
+       A109: len Q =len PK+1 by A102,A103,FINSEQ_1:35;
+       A110: len pk=len PK+1 by A19,Def19;
+       then A111: len q=len Q + 1 by A109,FINSEQ_2:19;
+           set FS=the Source of G,
+               FT=the Target of G;
+              now let i;
+                 assume A112: 1<=i & i<=len Q;
+                 per cases;
+                 suppose A113: i=len Q;
+                 then A114: Q.i=e by A102,A103,A109,Lm2;
+              then A115: FS.(Q.i)= vk & FT.(Q.i) = v3 by A101,GRAPH_4:def 1;
+                 thus FS.(Q.i)=q.i by A101,A105,A109,A110,A113,A114,GRAPH_4:def
+1;
+                 thus FT.(Q.i) = q.(i+1) by A35,A109,A110,A113,A115,FINSEQ_1:59
+;
+                 suppose i<>len Q;
+                 then A116: i < len Q by A112,REAL_1:def 5;
+             then A117: i <= len PK by A109,NAT_1:38;
+             then A118: FS.(PK.i) = pk.i & FT.(PK.i) = pk.(i+1) by A19,A112,
+Def19;
+             A119: Q.i=PK.i by A103,A112,A117,Lm1;
+             A120: i+1 <= len pk by A109,A110,A116,NAT_1:38;
+                 thus FS.(Q.i) = q.i by A109,A110,A112,A118,A119,Lm1;
+                   1 <= i+1 by NAT_1:37;
+                 hence FT.(Q.i)=q.(i+1) by A118,A119,A120,Lm1;
+           end;
+           hence Q is_oriented_edge_seq_of q by A111,Def19;
+      A121:  cost(PK,W)+cost(pe,W)=cost(Q,W) by A11,A103,GRAPH_5:58;
+           A122: cost(pe,W) = W.(pe.1) by A11,A102,Th4
+           .=Weight(vk,v3,W) by A101,A102,Th26;
+      then A123:  newpathcost(M.g,n,j)=cost(Q,W) by A27,A28,A55,A121,Def12;
+           hereby
+               per cases;
+               suppose A124: g.nj=-1;
+                 now let v2;
+                    assume A125: v2 in Ug;
+                    then reconsider m=v2 as Nat;
+                      -1= f.(2*n+n*m+j) by A3,A36,A124,A125
+                    .=Weight(v2,v3,W) by A1,A35,Def20;
+                    hence not ex e be set st e in the Edges of G &
+                    e orientedly_joins v2,v3 by Th24;
+                end;
+                hence Q is_shortestpath_of v1,v3,Uh,W
+                  by A1,A15,A19,A35,A101,A103,Th15;
+
+               suppose A126: g.nj <> -1;
+                 then consider p,P such that
+             A127: p is_simple_vertex_seq_at g,j,n & (for i st 1<=i & i<len p
+                 holds p.i in Ug) & P is_oriented_edge_seq_of p &
+                 P is_shortestpath_of v1,v3,Ug,W & cost(P,W)=g.m2 &
+                 (not v3 in Ug implies P islongestInShortestpath Ug,v1,W)
+                 by A2,A35;
+                  thus Q is_shortestpath_of v1,v3,Uh,W by A1,A6,A10,A14,A15,A19
+,A25,A28,A35,A37,A38,A40,A56,A94,A95,A101,A103,A121,A122,A126,A127,Th19,GRAPH_5
+:69;
+           end;
+           thus cost(Q,W)=h.m2 by A8,A39,A41,A42,A43,A46,A92,A123,Def14;
+             0 <= cost(pe,W) by A10,GRAPH_5:54;
+      then A128:  cost(PK,W)+0 <= cost(Q,W) by A121,REAL_1:55;
+           hereby
+              assume not v3 in Uh;
+                now let v2;
+                  assume A129:v2 in Uh & v2 <> v1;
+                   per cases by A15,A129,XBOOLE_0:def 2;
+                 suppose v2 in {Ak};
+              then A130:  v2 = Ak by TARSKI:def 1;
+                   take PK;
+                  thus PK is_shortestpath_of v1,v2,Uh,W by A15,A19,A130,Th8;
+                  thus cost(PK,W) <= cost(Q,W) by A128;
+                 suppose A131: v2 in Ug;
+                   then consider P such that
+               A132: P is_shortestpath_of v1,v2,Ug,W & cost(P,W) <= cost(PK,W)
+                   by A1,A19,A129,Th40,GRAPH_5:def 19;
+               A133: now let R,v4;
+                    assume A134: not v4 in Ug & R is_shortestpath_of v1,v4,Ug,W
+;
+                      A135: v4 in VG;
+                      then reconsider j4=v4 as Nat;
+                        1<=j4 & j4<=n by A9,A135,FINSEQ_1:3;
+                  then g.(n+j4) <> -1 by A1,A3,A10,A134,Lm20;
+                      then consider rn being FinSequence of NAT,RR
+                      be oriented Chain of G such that
+                  A136: rn is_simple_vertex_seq_at g,j4,n & (for i st 1<=i &
+                      i<len rn holds rn.i in Ug) & RR is_oriented_edge_seq_of
+                      rn & RR is_shortestpath_of v1,v4,Ug,W & cost(RR,W)
+                      =g.(2*n+j4) & (not v4 in Ug implies
+                      RR islongestInShortestpath Ug,v1,W) by A1,A2,A134;
+                      consider PP being oriented Chain of G such that
+                  A137: PP is_shortestpath_of v1,v2,Ug,W &
+                      cost(PP,W) <= cost(RR,W) by A129,A131,A134,A136,GRAPH_5:
+def 19;
+                        cost(PP,W)= cost(P,W) by A132,A137,Th9;
+                     hence cost(P,W) <= cost(R,W) by A134,A136,A137,Th9;
+                  end;
+                  take P;
+                  thus P is_shortestpath_of v1,v2,Uh,W
+                  by A10,A16,A129,A132,A133,GRAPH_5:68;
+                  thus cost(P,W) <= cost(Q,W) by A128,A132,AXIOMS:22;
+              end;
+              hence Q islongestInShortestpath Uh,v1,W by GRAPH_5:def 19;
+          end;
+    end;
+    hereby let m,j;
+       assume A138: h.(n+j) = -1 & 1<=j & j<=n & m in Uh;
+       set nj=n+j;
+  A139:  1 < nj & nj <= 2*n & nj < mi by A138,Lm13;
+  then A140:  nj in dom g by A5,A13,FINSEQ_3:27;
+         n+1 <= nj by A138,REAL_1:55;
+  then A141:  n < nj by NAT_1:38;
+  A142:  now
+         assume M.g hasBetterPathAt n,nj-'n;
+           then h.nj=Ak by A7,A8,A27,A139,A140,A141,Def14;
+           hence contradiction by A138,NAT_1:18;
+       end;
+  A143:  M.g.nj=g.nj by A6,A14,A139,A140,A141,Th19;
+  then A144:  g.nj=-1 by A7,A8,A138,A139,A140,A141,A142,Def14;
+  then A145:  not j in Ug by A3;
+     j < mi by A17,A138,AXIOMS:22;
+  then A146:  j in dom g by A5,A13,A138,FINSEQ_3:27;
+         now
+           assume g.j=-1;
+           then j in {i: i in dom g & 1 <= i & i <= n & g.i = -1} by A138,A146
+;
+           hence contradiction by A145,Def9;
+        end;
+  then A147:   M.g.j <> -1 by A6,A14,A17,A138,A144,A146,Th19;
+          not M.g hasBetterPathAt n,j by A142,BINARITH:39;
+  then A148:   M.g/.(2*n+n*(M.g/.mi)+j) < 0 by A143,A144,A147,Def13;
+        reconsider v3=j as Vertex of G by A9,A138,FINSEQ_1:3;
+        set Akj=2*n+n*Ak+j;
+    A149:  1 < Akj & Ak < Akj & Akj < mi by A14,A138,Lm14;
+    then A150:  Akj in dom g by A5,A13,FINSEQ_3:27;
+    A151:  3*n+1 <=Akj & Akj <= n*n+3*n by A14,A138,Lm15;
+    A152:  f.Akj=Weight(vk,v3,W) by A1,Def20;
+    A153:  M.g/.(2*n+n*(M.g/.mi)+j)=M.g.Akj by A7,A27,A150,FINSEQ_4:def 4
+         .=g.Akj by A6,A149,A150,Th19
+         .=Weight(vk,v3,W) by A13,A23,A150,A151,A152,Def16;
+         per cases by A15,A138,XBOOLE_0:def 2;
+         suppose m in {Ak};
+       then A154:  m=Ak by TARSKI:def 1;
+              not ex e be set st e in the Edges of G & e orientedly_joins vk,v3
+            by A148,A153,Th24;
+            then Weight(vk,v3,W)=-1 by Def7;
+            hence f.(2*n+n*m+j) = -1 by A1,A154,Def20;
+         suppose m in Ug;
+            hence f.(2*n+n*m+j) = -1 by A3,A138,A144;
+    end;
+    let m;
+    assume A155: m in Uh;
+    per cases by A15,A155,XBOOLE_0:def 2;
+    suppose A156: m in Ug;
+      then h.(n+m)=g.(n+m) by A1,A5,Lm17;
+      hence h.(n+m) <> -1 by A3,A156;
+    suppose m in {Ak};
+      hence h.(n+m) <> -1 by A14,A34,TARSKI:def 1;
+end;
+
+theorem
+  f is_Input_of_Dijkstra_Alg G,n,W & v1=1 & 1 <> v2 & v2=i & n >= 1 &
+g=(DijkstraAlgorithm(n)).f implies the Vertices of G = UsedVx(g,n) \/
+UnusedVx(g,n) & (v2 in UsedVx(g,n) implies ex p,P st
+p is_simple_vertex_seq_at g,i,n & P is_oriented_edge_seq_of p &
+P is_shortestpath_of v1,v2,W & cost(P,W)=g.(2*n+i)) &
+(v2 in UnusedVx(g,n) implies not ex Q st Q is_orientedpath_of v1,v2)
+proof
+     assume A1: f is_Input_of_Dijkstra_Alg G,n,W & v1=1 & 1 <> v2 & v2=i &
+        n >= 1 & g=(DijkstraAlgorithm(n)).f;
+     set R=Relax(n),
+         M=findmin(n),
+         RM=repeat (R*M),
+         cn=LifeSpan(R*M,f,n),
+         mi=n*n+3*n+1;
+A2:  g = while_do(R*M,n).f by A1,Def21
+     .= RM.cn.f by Def5;
+     defpred P[Nat] means
+     $1 <= cn implies (for v3,j st v3<>v1 & v3=j & RM.$1.f.(n+j)<>-1 holds
+      ex p,P st p is_simple_vertex_seq_at RM.$1.f,j,n & (for m st 1<=m &
+      m<len p holds p.m in UsedVx(RM.$1.f,n)) & P is_oriented_edge_seq_of p
+      & P is_shortestpath_of v1,v3,UsedVx(RM.$1.f,n),W &
+      cost(P,W)=RM.$1.f.(2*n+j) & (not v3 in UsedVx(RM.$1.f,n) implies
+      P islongestInShortestpath UsedVx(RM.$1.f,n),v1,W )) &
+      (for m,j st RM.$1.f.(n+j) = -1 & 1<=j & j<=n & m in UsedVx(RM.$1.f,n)
+      holds f.(2*n+n*m+j) = -1) & (for m st m in UsedVx(RM.$1.f,n) holds
+      RM.$1.f.(n+m) <> -1);
+A3:  RM.0 .f = f by Th22;
+A4:  Seg n=the Vertices of G by A1,Def20;
+     then reconsider VG=the Vertices of G as non empty Subset of NAT by A1,
+FINSEQ_1:3;
+A5:  1 <= mi by NAT_1:37;
+A6:  len f=mi & f.1=1 & f.(n+1) =0 & (for m st 1<=m & m<=n holds f.m=1) &
+     for m st 2<=m & m<=n holds f.(n+m)=-1 by A1,Def20;
+then A7:  1 in dom f by A5,FINSEQ_3:27;
+then UsedVx(f,n)={} & {1} = UsedVx(RM.1.f,n) by A1,A6,Th48;
+then A8:  1 in UsedVx(RM.1.f,n) by TARSKI:def 1;
+A9:  P[0]
+     proof
+        assume 0 <= cn;
+        set UV=UsedVx(RM.0 .f,n),
+            h=RM.0 .f;
+        hereby let v3,j;
+          assume A10: v3<>v1 & v3=j & h.(n+j)<>-1;
+          assume not (ex p,P st p is_simple_vertex_seq_at h,j,n &
+          (for m st 1<=m & m<len p holds p.m in UV) &
+          P is_oriented_edge_seq_of p & P is_shortestpath_of v1,v3,UV,W &
+          cost(P,W)=h.(2*n+j) & (not v3 in UV implies
+          P islongestInShortestpath UV,v1,W));
+            v3 in VG;
+      then A11: 1<=j & j<=n by A4,A10,FINSEQ_1:3;
+          then 1 < j by A1,A10,REAL_1:def 5;
+          then 1+1 <= j by INT_1:20;
+          hence contradiction by A1,A3,A10,A11,Def20;
+        end;
+        thus for m,j st h.(n+j) = -1 & 1<=j & j<=n & m in UV &
+          not f.(2*n+n*m+j) = -1 holds contradiction by A1,A3,A6,A7,Th48;
+        let m;
+        assume A12: m in UsedVx(h,n);
+        assume h.(n+m) = -1;
+        thus contradiction by A1,A3,A6,A7,A12,Th48;
+     end;
+A13:  for k st P[k] holds P[k+1]
+     proof
+        let k;
+        assume A14: P[k];
+          now
+          assume A15: k+1 <= cn;
+      then A16: k < cn by NAT_1:38;
+          set FK=RM.k.f;
+          set FK1=RM.(k+1).f,
+              UV1=UsedVx(FK1,n);
+      A17: OuterVx(FK,n) <> {} by A16,Def4;
+          per cases;
+          suppose k=0;
+          hence (for v3,j st v3<>v1 & v3=j & FK1.(n+j)<>-1 holds ex p,P st p
+             is_simple_vertex_seq_at FK1,j,n & (for m st 1<=m & m<len p holds
+             p.m in UV1) & P is_oriented_edge_seq_of p & P is_shortestpath_of
+             v1,v3,UV1,W & cost(P,W)=FK1.(2*n+j) & (not v3 in UV1 implies
+            P islongestInShortestpath UV1,v1,W )) & (for m,j st FK1.(n+j) = -1
+            & 1<=j & j<=n & m in UV1 holds f.(2*n+n*m+j) = -1) &
+            (for m st m in UV1 holds FK1.(n+m) <> -1) by A1,Lm16;
+          suppose k<>0;
+                then k > 0 by NAT_1:19;
+            then A18: k >= 1+0 by INT_1:20;
+                then 1 in UsedVx(FK,n) by A8,A16,Th49;
+           hence (for v3,j st v3<>v1 & v3=j & FK1.(n+j)<>-1 holds ex p,P st p
+             is_simple_vertex_seq_at FK1,j,n & (for m st 1<=m & m<len p holds
+            p.m in UV1) & P is_oriented_edge_seq_of p & P is_shortestpath_of
+            v1,v3,UV1,W & cost(P,W)=FK1.(2*n+j) & (not v3 in UV1 implies
+            P islongestInShortestpath UV1,v1,W )) & (for m,j st FK1.(n+j) = -1
+            & 1<=j & j<=n & m in UV1 holds f.(2*n+n*m+j) = -1) &
+           (for m st m in UV1 holds FK1.(n+m) <> -1) by A1,A14,A15,A17,A18,Lm21
+,NAT_1:38;
+       end;
+       hence P[k+1];
+     end;
+     set Ug=UsedVx(g,n),
+         Vg=UnusedVx(g,n);
+     A19: for k holds P[k] from Ind(A9,A13);
+A20:  VG c= Ug \/ Vg
+     proof let x;
+          assume A21: x in VG;
+          then reconsider j=x as Nat;
+     A22:  1 <= j & j <= n by A4,A21,FINSEQ_1:3;
+            n < mi by Lm7;
+          then j < mi by A22,AXIOMS:22;
+          then j in dom f by A6,A22,FINSEQ_3:27;
+     then A23:  j in dom g by A2,Th42;
+          per cases;
+          suppose g.j=-1;
+            then j in {k: k in dom g & 1 <= k & k <= n & g.k = -1} by A22,A23;
+            then x in Ug by Def9;
+            hence x in Ug \/ Vg by XBOOLE_0:def 2;
+          suppose g.j<>-1;
+            then j in {k: k in dom g & 1 <= k & k <= n & g.k <> -1} by A22,A23
+;
+            then x in Vg by Def8;
+            hence x in Ug \/ Vg by XBOOLE_0:def 2;
+     end;
+       Ug \/ Vg c= VG
+     proof let x;
+          assume A24: x in Ug \/ Vg;
+          per cases by A24,XBOOLE_0:def 2;
+          suppose x in Ug;
+            then x in {k: k in dom g & 1 <= k & k <= n & g.k = -1} by Def9;
+            then consider k such that
+      A25:   x = k & k in dom g & 1 <= k & k <= n & g.k = -1;
+           thus x in VG by A4,A25,FINSEQ_1:3;
+          suppose x in Vg;
+            then x in {k: k in dom g & 1 <= k & k <= n & g.k <> -1} by Def8;
+            then consider k such that
+      A26:   x = k & k in dom g & 1 <= k & k <= n & g.k <> -1;
+            thus x in VG by A4,A26,FINSEQ_1:3;
+     end;
+     hence
+A27:  the Vertices of G = Ug \/ Vg by A20,XBOOLE_0:def 10;
+    consider ii being Nat such that
+A28:  ii<=n & OuterVx(RM.ii.f,n) = {} by Th41;
+A29:  OuterVx(g,n) = {} by A2,A28,Def4;
+A30:  now let v3,v4;
+        assume A31: v3 in Ug & v4 in Vg;
+            v3 in VG;
+          then reconsider m=v3 as Nat;
+            v4 in {k: k in dom g & 1 <= k & k <= n & g.k <> -1} by A31,Def8;
+          then consider j such that
+      A32: v4 = j & j in dom g & 1 <= j & j <= n & g.j <> -1;
+            now assume g.(n+j) <> -1;
+             then j in {k: k in dom g & 1 <= k & k <= n & g.k <> -1 &
+             g.(n+k) <> -1} by A32;
+             hence contradiction by A29,Def3;
+          end;
+          then -1=f.(2*n+n*m+j) by A2,A19,A31,A32
+          .=Weight(v3,v4,W) by A1,A32,Def20;
+          hence not ex e st e in the Edges of G &
+                e orientedly_joins v3,v4 by Th24;
+     end;
+       now assume A33: cn=0;
+         1 in {k: k in dom f & 1 <= k & k <= n &
+       f.k <> -1 & f.(n+k) <> -1} by A1,A6,A7;
+       hence contradiction by A2,A3,A29,A33,Def3;
+     end;
+     then cn > 0 by NAT_1:19;
+     then cn >= 1+0 by INT_1:20;
+then A34:  v1 in Ug by A1,A2,A8,Th49;
+     hereby
+        assume v2 in Ug;
+        then g.(n+i) <> -1 by A1,A2,A19;
+        then consider p,P such that
+A35:    p is_simple_vertex_seq_at g,i,n & (for m st 1<=m & m<len p holds p.m
+       in Ug) & P is_oriented_edge_seq_of p & P is_shortestpath_of v1,v2,Ug,W
+       & cost(P,W)=g.(2*n+i) & (not v2 in Ug implies P
+       islongestInShortestpath Ug,v1,W ) by A1,A2,A19;
+       take p,P;
+       thus p is_simple_vertex_seq_at g,i,n by A35;
+       thus P is_oriented_edge_seq_of p by A35;
+       thus P is_shortestpath_of v1,v2,W by A27,A30,A34,A35,Th16;
+       thus cost(P,W)=g.(2*n+i) by A35;
+     end;
+     thus thesis by A27,A30,A34,Th11;
+end;

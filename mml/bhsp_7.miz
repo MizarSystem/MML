@@ -1,0 +1,1121 @@
+:: On Some Properties of Real {H}ilbert Space, {II}
+::  by Hiroshi Yamazaki , Yasumasa Suzuki , Takao Inou\'e and Yasunari Shidama
+::
+:: Received April 17, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1,
+      ARYTM_3, RELAT_1, ABSVALUE, BINOP_1, SQUARE_1, SEQ_2, PROB_2, BHSP_1,
+      BHSP_3, FINSET_1, VECTSP_1, HAHNBAN, FINSEQ_1, SETWISEO, FINSOP_1,
+      BHSP_5, BHSP_6, SEMI_AF1;
+ notation TARSKI, SUBSET_1, XBOOLE_0, ZFMISC_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, STRUCT_0, REAL_1, NAT_1, FUNCT_1, FUNCT_2, RELAT_1, PRE_TOPC,
+      RLVECT_1, ABSVALUE, BHSP_1, BHSP_3, SQUARE_1, SEQ_2, BINOP_1, FINSET_1,
+      VECTSP_1, SETWISEO, HAHNBAN, FINSEQ_1, FINSOP_1, BHSP_5, BHSP_6;
+ constructors REAL_1, NAT_1, DOMAIN_1, SQUARE_1, SEQ_2, PREPOWER, BINOP_1,
+      BHSP_3, SETWISEO, HAHNBAN1, FINSOP_1, BHSP_5, BHSP_6, MEMBERED;
+ clusters RELSET_1, STRUCT_0, XREAL_0, XBOOLE_0, FINSET_1, BHSP_5, MEMBERED,
+      NUMBERS, ORDINAL2;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+ definitions TARSKI;
+ theorems XBOOLE_0, XBOOLE_1, SQUARE_1, REAL_2, AXIOMS, ZFMISC_1, REAL_1,
+      XREAL_0, ABSVALUE, FUNCT_1, NAT_1, FINSET_1, FUNCT_2, RVSUM_1, RLVECT_1,
+      VECTSP_1, SEQ_2, SEQ_4, BHSP_1, BHSP_5, BHSP_6, UNIFORM1, CHAIN_1,
+      XCMPLX_1;
+ schemes NAT_1, RECDEF_1, FUNCT_2;
+
+begin :: Necessary and sufficient condition for summable set
+
+  reserve X for RealUnitarySpace;
+
+  reserve x, y, y1, y2 for Point of X;
+
+Lm1:
+  for x, y, z, e be Real
+  holds abs(x-y) < e/2 & abs(y-z) < e/2 implies abs(x-z) <e
+proof
+    let x, y, z, e be Real;
+    assume
+    A1: abs(x-y) < e/2 & abs(y-z) <e/2;
+    A2: (x-y)+(y-z) = x-z by XCMPLX_1:39;
+    A3: abs((x-y)+(y-z)) <= abs(x-y)+abs(y-z) by ABSVALUE:13;
+      abs(x-y)+abs(y-z) < e/2+e/2 by A1,REAL_1:67;
+    then abs(x-y)+abs(y-z) < e by XCMPLX_1:66;
+    hence abs(x-z) < e by A2,A3,AXIOMS:22;
+end;
+
+Lm2: for p being real number st p > 0 ex k be Nat st 1/(k+1) < p
+  proof
+    let p be real number;
+    assume p > 0;
+    then A1: 0 < p" by REAL_1:72;
+    consider k1 be Nat such that
+    A2: p" < k1 by SEQ_4:10;
+    take k = k1;
+      p"+0 < k1+1 by A2,REAL_1:67;
+    then 1/(k1+1) < 1/p" by A1,SEQ_2:10;
+    hence 1/(k+1) < p by XCMPLX_1:218;
+  end;
+
+Lm3: for p being real number,
+           m being Nat st p > 0 ex i be Nat st 1/(i+1) < p & i >= m
+  proof
+    let p be real number,
+        m be Nat;
+    assume p > 0;
+    then A1: 0<p" by REAL_1:72;
+    consider k1 be Nat such that
+    A2: p"<k1 by SEQ_4:10;
+    take i = k1+m;
+      k1 <= k1 + m by NAT_1:29;
+    then p" < i by A2,AXIOMS:22;
+    then p"+0 < i+1 by REAL_1:67;
+    then 1/(i+1) < 1/p" by A1,SEQ_2:10;
+    hence 1/(i+1) < p & m <= i by NAT_1:29,XCMPLX_1:218;
+  end;
+
+theorem Th1:
+  for Y be Subset of X
+  for L be Functional of X
+  holds Y is_summable_set_by L
+  iff
+  (for e be Real st 0 < e holds
+  ex Y0 be finite Subset of X st
+    Y0 is non empty & Y0 c= Y &
+    (for Y1 be finite Subset of X st
+      Y1 is non empty & Y1 c= Y & Y0 misses Y1
+     holds
+     abs(setopfunc(Y1, the carrier of X, REAL, L, addreal)) <e ))
+proof
+  let Y be Subset of X;
+  let L be Functional of X;
+  thus Y is_summable_set_by L implies
+  for e be Real st 0 < e holds
+  ex Y0 be finite Subset of X st
+    Y0 is non empty & Y0 c= Y &
+    (for Y1 be finite Subset of X st
+      Y1 is non empty & Y1 c= Y & Y0 misses Y1
+     holds
+     abs(setopfunc(Y1, the carrier of X, REAL, L, addreal)) <e)
+  proof
+    assume Y is_summable_set_by L;
+    then consider r be Real such that
+    A1: for e be Real st e > 0
+    ex Y0 be finite Subset of X st
+    Y0 is non empty & Y0 c= Y &
+    for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+    holds
+    abs(r - setopfunc(Y1, the carrier of X, REAL, L, addreal)) < e
+    by BHSP_6:def 6;
+      for e be Real st 0 < e holds
+    ex Y0 be finite Subset of X st
+    Y0 is non empty & Y0 c= Y &
+    (for Y1 be finite Subset of X st
+    Y1 is non empty & Y1 c= Y & Y0 misses Y1
+    holds
+    abs(setopfunc(Y1, the carrier of X, REAL, L, addreal)) <e)
+    proof
+      let e be Real such that
+      A2: 0 < e;
+        0 <e/2 by A2,SEQ_2:6;
+      then consider Y0 be finite Subset of X such that
+      A3: Y0 is non empty & Y0 c= Y &
+      for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+      holds abs(r - setopfunc(Y1, the carrier of X, REAL, L, addreal))
+      < e/2 by A1;
+        for Y1 be finite Subset of X st
+      Y1 is non empty & Y1 c= Y & Y0 misses Y1 holds
+      abs(setopfunc(Y1, the carrier of X, REAL, L, addreal)) < e
+      proof
+        let Y1 be finite Subset of X such that
+        A4: Y1 is non empty & Y1 c= Y & Y0 misses Y1;
+        set Y1' = Y0 \/ Y1;
+          Y1' = Y0 \/ Y1 & Y0 c= Y1' & Y1' c= Y &
+        Y1' is finite Subset of X
+        by A3,A4,XBOOLE_1:7,8;
+        then abs(r - setopfunc(Y1', the carrier of X, REAL, L, addreal))
+        < e/2 by A3;
+        then A5: abs(setopfunc(Y1', the carrier of X, REAL, L, addreal)-r)
+        < e/2 by UNIFORM1:13;
+        A6: abs(r - setopfunc(Y0, the carrier of X, REAL, L, addreal))
+        < e/2 by A3;
+          dom L = the carrier of X by FUNCT_2:def 1;
+        then setopfunc(Y1', the carrier of X, REAL, L, addreal)
+        = addreal.(setopfunc(Y0, the carrier of X, REAL, L, addreal),
+         setopfunc(Y1, the carrier of X, REAL, L, addreal))
+        by A4,BHSP_5:14,RVSUM_1:5,6,7
+        .= setopfunc(Y0, the carrier of X, REAL, L, addreal)
+         + setopfunc(Y1, the carrier of X, REAL, L, addreal)
+        by VECTSP_1:def 4;
+        then setopfunc(Y1, the carrier of X, REAL, L, addreal)
+        = setopfunc(Y1', the carrier of X, REAL, L, addreal)
+        - setopfunc(Y0, the carrier of X, REAL, L, addreal) by XCMPLX_1:26;
+        hence thesis by A5,A6,Lm1;
+      end;
+      hence thesis by A3;
+    end;
+    hence thesis;
+  end;
+
+::: <== :::
+
+    assume
+    A7: for e be Real st 0 < e holds
+    ex Y0 be finite Subset of X st
+    Y0 is non empty & Y0 c= Y &
+    for Y1 be finite Subset of X st
+    Y1 is non empty & Y1 c= Y & Y0 misses Y1 holds
+    abs(setopfunc(Y1, the carrier of X, REAL, L, addreal)) <e;
+
+      ex r be Real st
+    for e be Real st 0 < e
+    ex Y0 be finite Subset of X st
+    Y0 is non empty & Y0 c= Y &
+    for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+    holds abs(r - setopfunc(Y1, the carrier of X, REAL, L, addreal)) < e
+    proof
+    defpred _P[set,set] means $2 is finite Subset of X &
+      $2 is non empty & $2 c= Y &
+      for z be Real st z=$1
+      for Y1 be finite Subset of X
+      st Y1 is non empty & Y1 c= Y & $2 misses Y1
+      holds abs(setopfunc(Y1, the carrier of X, REAL, L, addreal)) < 1/(z+1);
+
+      A8: ex B being Function of NAT,bool Y st
+      for x be set st x in NAT holds _P[x,B.x] proof
+          now
+          let x be set such that
+          A9: x in NAT;
+          reconsider xx = x as Nat by A9;
+          reconsider e = 1/(xx+1) as Real;
+            0 <= xx by NAT_1:18;
+          then 0 < xx + 1 by NAT_1:38;
+          then 0/(xx + 1) < 1/(xx + 1) by REAL_1:73;
+          then consider Y0 be finite Subset of X such that
+          A10: Y0 is non empty & Y0 c= Y &
+          for Y1 be finite Subset of X st
+          Y1 is non empty & Y1 c= Y & Y0 misses Y1
+          holds abs(setopfunc(Y1, the carrier of X, REAL, L, addreal))
+          < e by A7;
+          A11: Y0 in bool Y by A10,ZFMISC_1:def 1;
+            for z be Real st z = x
+          for Y1 be finite Subset of X st
+          Y1 is non empty & Y1 c= Y & Y0 misses Y1
+          holds abs(setopfunc(Y1, the carrier of X, REAL, L, addreal))
+          < 1/(z+1) by A10;
+          hence ex y be set st y in bool Y &
+          y is finite Subset of X &
+          y is non empty & y c= Y &
+          for z be Real st z=x
+          for Y1 be finite Subset of X st
+          Y1 is non empty & Y1 c= Y & y misses Y1
+          holds abs(setopfunc(Y1, the carrier of X, REAL, L, addreal))
+          < 1/(z+1) by A10,A11;
+        end;
+        then A12: for x be set st x in NAT
+        ex y be set st y in bool Y & _P[x,y];
+        thus thesis from FuncEx1(A12);
+      end;
+
+        ex A be Function of NAT, bool Y st
+      for i be Nat holds
+      A.i is finite Subset of X &
+      A.i is non empty &
+      A.i c= Y &
+      (for Y1 be finite Subset of X st
+      Y1 is non empty & Y1 c= Y & A.i misses Y1
+      holds abs(setopfunc(Y1, the carrier of X, REAL, L, addreal))
+      < 1/(i+1)) &
+      for j be Nat st i <= j holds A.i c= A.j
+      proof
+        consider B being Function of NAT,bool Y such that
+        A13: for x be set st x in NAT holds
+        B.x is finite Subset of X &
+        B.x is non empty &
+        B.x c= Y &
+        for z be Real st z=x
+        for Y1 be finite Subset of X st
+        Y1 is non empty & Y1 c= Y & B.x misses Y1
+        holds abs(setopfunc(Y1, the carrier of X, REAL, L, addreal))
+        < 1/(z+1) by A8;
+        deffunc _G(Nat,set) = B.($1+1) \/ $2;
+          ex A being Function st dom A = NAT &
+        A.0 = B.0 &
+        for n being Element of NAT holds A.(n+1) = _G(n,A.n) from LambdaRecEx;
+        then consider A being Function such that
+        A14: dom A = NAT &
+        A.0 = B.0 & for n being Element of NAT holds A.(n+1) = B.(n+1) \/ A.n;
+        defpred _R[Nat] means
+        A.$1 is finite Subset of X &
+        A.$1 is non empty & A.$1 c= Y &
+        (for Y1 be finite Subset of X st
+        Y1 is non empty & Y1 c= Y & A.$1 misses Y1
+        holds abs(setopfunc(Y1, the carrier of X, REAL, L, addreal))
+        < 1/($1+1)) &
+        for j be Nat st $1 <= j holds A.$1 c= A.j;
+
+          for j0 be Nat st j0=0 holds
+        for j be Nat st j0 <= j holds A.j0 c= A.j
+        proof
+          let j0 be Nat such that
+          A15: j0 = 0;
+          defpred _P[Nat] means j0 <= $1 implies A.j0 c= A.$1;
+          A16: _P[0] by A15;
+          A17:
+          now
+            let j be Nat such that
+            A18: _P[j];
+              A.(j+1) = (B.(j+1) \/ A.j) by A14;
+            then A.j c= A.(j+1) by XBOOLE_1:7;
+            hence _P[j+1] by A15,A18,NAT_1:18,XBOOLE_1:1;
+          end;
+          thus for j be Nat holds _P[j] from Ind(A16, A17);
+        end;
+        then A19: _R[0] by A13,A14;
+        A20:
+        now
+          let n be Nat such that
+          A21: _R[n];
+          A22: A.(n+1) = B.(n+1) \/ A.n by A14;
+          A23: B.(n+1) is finite Subset of X by A13;
+          A24: ex z be set st z in A.n by A21,XBOOLE_0:def 1;
+          A25: for Y1 be finite Subset of X st
+          Y1 is non empty & Y1 c= Y & A.(n+1) misses Y1
+          holds abs(setopfunc(Y1, the carrier of X, REAL, L, addreal))
+          < 1/((n+1)+1)
+          proof
+            let Y1 be finite Subset of X such that
+            A26: Y1 is non empty & Y1 c= Y & A.(n+1) misses Y1;
+              A.(n+1) = B.(n+1) \/ A.n by A14;
+            then B.(n+1) c= A.(n+1) by XBOOLE_1:7;
+            then Y1 is non empty & Y1 c= Y & B.(n+1) misses Y1
+            by A26,XBOOLE_1:63;
+            hence abs(setopfunc(Y1, the carrier of X, REAL, L, addreal))
+            < 1/((n+1)+1) by A13;
+          end;
+            defpred _P[Nat] means  (n+1) <= $1 implies A.(n+1) c= A.$1;
+            for j be Nat holds _P[j] proof
+            A27: _P[0] by NAT_1:19;
+            A28: for j being Nat st _P[j] holds _P[j+1] proof
+              let j be Nat such that
+              A29: _P[j] and
+              A30: n+1 <= j+1;
+
+                now per cases;
+                case n = j;
+                hence A.(n+1) c= A.(j+1);
+
+                case
+                A31: n <> j;
+                  n <= j by A30,REAL_1:53;
+                then A32: n < j by A31,REAL_1:def 5;
+                  A.(j+1) = (B.(j+1) \/ A.j) by A14;
+                then A.j c= A.(j+1) by XBOOLE_1:7;
+                hence A.(n+1) c= A.(j+1) by A29,A32,NAT_1:38,XBOOLE_1:1;
+              end;
+              hence A.(n+1) c= A.(j+1);
+            end;
+            thus thesis from Ind(A27, A28);
+          end;
+          hence _R[n+1]
+          by A21,A22,A23,A24,A25,FINSET_1:14,XBOOLE_0:def 2,XBOOLE_1:8;
+        end;
+
+        A33: for i be Nat holds _R[i] from Ind(A19,A20);
+
+          rng A c= bool Y
+        proof
+          let y be set such that
+          A34: y in rng A;
+          consider x be set such that
+          A35: x in dom A & y = A.x by A34,FUNCT_1:def 5;
+          reconsider i = x as Nat by A14,A35;
+            A.i c= Y by A33;
+          hence y in bool Y by A35,ZFMISC_1:def 1;
+        end;
+        then A is Function of NAT, bool Y by A14,FUNCT_2:4;
+        hence thesis by A33;
+      end;
+      then consider A be Function of NAT, bool Y such that
+      A36: for i be Nat holds
+      A.i is finite Subset of X &
+      A.i is non empty & A.i c= Y &
+      (for Y1 be finite Subset of X st
+      Y1 is non empty & Y1 c= Y & A.i misses Y1
+      holds abs(setopfunc(Y1, the carrier of X, REAL, L, addreal))< 1/(i+1)) &
+      for j be Nat st i <= j holds A.i c= A.j;
+      defpred _P[set,set] means
+      ex Y1 be finite Subset of X st
+      Y1 is non empty & A.$1 = Y1 &
+      $2 = setopfunc(Y1, the carrier of X, REAL, L, addreal);
+
+      A37: for x be set st x in NAT ex y be set st y in REAL & _P[x,y]
+      proof
+        let x be set such that
+        A38: x in NAT;
+        reconsider i=x as Nat by A38;
+        A39: A.i is finite Subset of X &
+        A.i is non empty &
+        A.i c= Y &
+        (for Y1 be finite Subset of X st
+        Y1 is non empty & Y1 c= Y & A.x misses Y1
+        holds abs(setopfunc(Y1, the carrier of X, REAL, L, addreal))
+        < 1/(i+1)) &
+        for j be Nat st i <= j holds A.i c= A.j by A36;
+        then reconsider Y1 = A.x as finite Subset of X;
+        reconsider
+        y = setopfunc(Y1, the carrier of X, REAL, L, addreal) as set;
+          ex Y1 be finite Subset of X st
+        Y1 is non empty & A.x = Y1 &
+        y = setopfunc(Y1, the carrier of X, REAL, L, addreal) by A39;
+        hence thesis;
+      end;
+
+        ex F being Function of NAT, REAL st for x be set st x in NAT holds
+         _P[x,F.x] from FuncEx1(A37);
+      then consider F being Function of NAT, REAL such that
+      A40: for x be set st x in NAT holds
+      ex Y1 be finite Subset of X st
+      Y1 is non empty & A.x = Y1
+      & F.x = setopfunc(Y1, the carrier of X, REAL, L, addreal);
+      set seq = F;
+      A41: for e be real number st e > 0
+      ex k be Nat st for n, m be Nat st n >= k & m >= k
+      holds abs((seq.n) - (seq.m)) < e
+      proof
+        let e be real number such that
+        A42: e > 0;
+        A43: e/2 > 0/2 by A42,REAL_1:73;
+        then consider k be Nat such that
+        A44: 1/(k+1) < e/2 by Lm2;
+        take k;
+          let n, m be Nat such that
+          A45: n >= k & m >= k;
+          consider Y0 be finite Subset of X such that
+          A46: Y0 is non empty & A.k = Y0 & seq.k
+          = setopfunc(Y0, the carrier of X, REAL, L, addreal) by A40;
+          consider Y1 be finite Subset of X such that
+          A47: Y1 is non empty & A.n = Y1 &
+          seq.n = setopfunc(Y1, the carrier of X, REAL, L, addreal) by A40;
+
+          consider Y2 be finite Subset of X such that
+          A48: Y2 is non empty & A.m = Y2 &
+          seq.m = setopfunc(Y2, the carrier of X, REAL, L, addreal) by A40;
+          A49: Y0 c= Y1 by A36,A45,A46,A47;
+          A50: Y0 c= Y2 by A36,A45,A46,A48;
+            now
+            per cases;
+            case A51: Y0 = Y1;
+              now per cases;
+              case Y0 = Y2;
+              then (seq.n) - (seq.m) = 0 by A47,A48,A51,XCMPLX_1:14;
+              hence abs((seq.n) - (seq.m)) < e by A42,ABSVALUE:7;
+
+              case A52: Y0 <> Y2;
+                ex Y02 be finite Subset of X st
+              Y02 is non empty & Y02 c= Y & Y02 misses Y0 & Y0 \/ Y02 = Y2
+              proof
+                take Y02 = Y2 \ Y0;
+                A53: Y2 \ Y0 c= Y2 by XBOOLE_1:36;
+                  Y0 \/ Y02 = Y0 \/ Y2 by XBOOLE_1:39
+                .= Y2 by A50,XBOOLE_1:12;
+                hence thesis by A48,A52,A53,XBOOLE_1:1,79;
+              end;
+              then consider
+              Y02 be finite Subset of X such that
+              A54: Y02 is non empty & Y02 c= Y &
+              Y02 misses Y0 & Y0 \/ Y02 = Y2;
+                dom L = the carrier of X by FUNCT_2:def 1;
+              then A55: setopfunc(Y2, the carrier of X, REAL, L, addreal)
+              = addreal.(
+              setopfunc(Y0, the carrier of X, REAL, L, addreal),
+              setopfunc(Y02, the carrier of X, REAL, L, addreal))
+              by A54,BHSP_5:14,RVSUM_1:5,6,7
+              .= setopfunc(Y0, the carrier of X, REAL, L, addreal)
+              + setopfunc(Y02, the carrier of X, REAL, L, addreal)
+              by VECTSP_1:def 4;
+                abs(setopfunc(Y02, the carrier of X, REAL, L, addreal))
+              < 1/(k+1) by A36,A46,A54;
+              then A56: abs(setopfunc(Y02, the carrier of X, REAL, L, addreal))
+              < e/2 by A44,AXIOMS:22;
+              A57: abs((seq.n) - (seq.m))
+              = abs(setopfunc(Y0, the carrier of X, REAL, L, addreal)
+              - setopfunc(Y0, the carrier of X, REAL, L, addreal)
+              - setopfunc(Y02, the carrier of X, REAL, L,addreal))
+              by A47,A48,A51,A55,XCMPLX_1:36
+              .= abs(0-setopfunc(Y02, the carrier of X, REAL,
+              L, addreal)) by XCMPLX_1:14
+              .= abs(-setopfunc(Y02, the carrier of X, REAL,
+              L, addreal)) by XCMPLX_1:150
+              .= abs(setopfunc(Y02, the carrier of X, REAL,
+              L, addreal)) by ABSVALUE:17;
+                e/2 < e by A42,SEQ_2:4;
+              hence abs((seq.n) - (seq.m)) < e by A56,A57,AXIOMS:22;
+            end;
+            hence abs((seq.n) - (seq.m)) < e;
+
+            case
+            A58: Y0 <> Y1;
+              now
+              per cases;
+              case
+              A59: Y0 = Y2;
+                ex Y01 be finite Subset of X st
+              Y01 is non empty & Y01 c= Y &
+              Y01 misses Y0 & Y0 \/ Y01 = Y1
+              proof
+                take Y01 = Y1 \ Y0;
+                A60: Y1 \ Y0 c= Y1 by XBOOLE_1:36;
+                  Y0 \/ Y01 = Y0 \/ Y1 by XBOOLE_1:39
+                .= Y1 by A49,XBOOLE_1:12;
+                hence thesis by A47,A58,A60,XBOOLE_1:1,79;
+              end;
+              then consider
+              Y01 be finite Subset of X such that
+              A61: Y01 is non empty & Y01 c= Y &
+              Y01 misses Y0 & Y0 \/ Y01 = Y1;
+                dom L = the carrier of X by FUNCT_2:def 1;
+              then setopfunc(Y1, the carrier of X, REAL, L, addreal)
+              = addreal.(
+              setopfunc(Y0, the carrier of X, REAL, L, addreal),
+              setopfunc(Y01, the carrier of X, REAL, L, addreal))
+              by A61,BHSP_5:14,RVSUM_1:5,6,7
+              .= setopfunc(Y0, the carrier of X, REAL, L, addreal)
+              + setopfunc(Y01, the carrier of X, REAL, L, addreal)
+              by VECTSP_1:def 4;
+              then A62: seq.n - seq.k
+              = setopfunc(Y01, the carrier of X, REAL, L, addreal)
+              by A46,A47,XCMPLX_1:26;
+              A63: seq.k - seq.m = 0 by A46,A48,A59,XCMPLX_1:14;
+              A64: seq.n - seq.m = seq.n -seq.k+seq.k - seq.m
+              by XCMPLX_1:27
+              .= setopfunc(Y01, the carrier of X, REAL, L, addreal)
+              + (seq.k - seq.m) by A62,XCMPLX_1:29
+              .= setopfunc(Y01, the carrier of X, REAL, L, addreal)
+              by A63;
+                abs(setopfunc(Y01, the carrier of X, REAL, L, addreal))
+              < 1/(k+1) by A36,A46,A61;
+              then abs((seq.n) - (seq.m)) < e/2 by A44,A64,AXIOMS:22;
+              then abs((seq.n) - (seq.m))+ 0 < e/2 + e/2 by A43,REAL_1:67;
+              hence abs((seq.n) - (seq.m)) < e by XCMPLX_1:66;
+              case
+              A65: Y0<>Y2;
+                ex Y01 be finite Subset of X st
+              Y01 is non empty & Y01 c= Y &
+              Y01 misses Y0 & Y0 \/ Y01 = Y1
+              proof
+                take Y01 = Y1 \ Y0;
+                A66: Y1 \ Y0 c= Y1 by XBOOLE_1:36;
+                  Y0 \/ Y01 = Y0 \/ Y1 by XBOOLE_1:39
+                .= Y1 by A49,XBOOLE_1:12;
+                hence thesis by A47,A58,A66,XBOOLE_1:1,79;
+              end;
+              then consider
+              Y01 be finite Subset of X such that
+              A67: Y01 is non empty & Y01 c= Y &
+              Y01 misses Y0 & Y0 \/ Y01 = Y1;
+                ex Y02 be finite Subset of X st
+              Y02 is non empty & Y02 c= Y & Y02 misses Y0 & Y0 \/ Y02 = Y2
+              proof
+                take Y02 = Y2 \ Y0;
+                A68: Y2 \ Y0 c= Y2 by XBOOLE_1:36;
+                  Y0 \/ Y02 = Y0 \/ Y2 by XBOOLE_1:39
+                .= Y2 by A50,XBOOLE_1:12;
+                hence thesis by A48,A65,A68,XBOOLE_1:1,79;
+              end;
+              then consider
+              Y02 be finite Subset of X such that
+              A69: Y02 is non empty & Y02 c= Y &
+              Y02 misses Y0 & Y0 \/ Y02 = Y2;
+                abs(setopfunc(Y01, the carrier of X, REAL, L, addreal))
+              < 1/(k+1) by A36,A46,A67;
+              then A70: abs(setopfunc(Y01, the carrier of X, REAL, L, addreal))
+              < e/2 by A44,AXIOMS:22;
+                abs(setopfunc(Y02, the carrier of X, REAL, L, addreal))
+              < 1/(k+1) by A36,A46,A69;
+              then abs(setopfunc(Y02, the carrier of X, REAL, L, addreal))
+              < e/2 by A44,AXIOMS:22;
+              then abs(setopfunc(Y01, the carrier of X, REAL, L, addreal))
+              + abs(setopfunc(Y02, the carrier of X, REAL, L, addreal))
+              < e/2 + e/2 by A70,REAL_1:67;
+              then A71: abs(setopfunc(Y01, the carrier of X, REAL, L, addreal))
+              + abs(setopfunc(Y02, the carrier of X, REAL, L, addreal))
+              < e by XCMPLX_1:66;
+                dom L = the carrier of X by FUNCT_2:def 1;
+              then A72: setopfunc(Y1, the carrier of X, REAL, L, addreal)
+              = addreal.(setopfunc(Y0, the carrier of X, REAL, L, addreal),
+              setopfunc(Y01, the carrier of X, REAL, L, addreal))
+              by A67,BHSP_5:14,RVSUM_1:5,6,7
+              .= setopfunc(Y0, the carrier of X, REAL, L, addreal)
+              + setopfunc(Y01, the carrier of X, REAL, L, addreal)
+              by VECTSP_1:def 4;
+                dom L = the carrier of X by FUNCT_2:def 1;
+              then A73: setopfunc(Y2, the carrier of X, REAL, L, addreal)
+              = addreal.(setopfunc(Y0, the carrier of X, REAL, L, addreal),
+              setopfunc(Y02, the carrier of X, REAL, L, addreal))
+              by A69,BHSP_5:14,RVSUM_1:5,6,7
+              .= setopfunc(Y0, the carrier of X, REAL, L, addreal)
+              + setopfunc(Y02, the carrier of X, REAL, L, addreal)
+              by VECTSP_1:def 4;
+              A74: seq.n - seq.k
+              = setopfunc(Y01, the carrier of X, REAL, L, addreal)
+              by A46,A47,A72,XCMPLX_1:26;
+              A75: seq.m - seq.k
+              = setopfunc(Y02, the carrier of X, REAL, L, addreal)
+              by A46,A48,A73,XCMPLX_1:26;
+                seq.n - seq.m = seq.n -(seq.k-seq.k) - seq.m by XCMPLX_1:17
+              .= seq.n - seq.k + seq.k - seq.m by XCMPLX_1:37
+              .= seq.n - seq.k + (seq.k - seq.m) by XCMPLX_1:29
+              .= setopfunc(Y01, the carrier of X, REAL, L, addreal)
+              - setopfunc(Y02, the carrier of X, REAL, L, addreal)
+              by A74,A75,XCMPLX_1:38;
+              then abs((seq.n) - (seq.m))
+              <= abs(setopfunc(Y01, the carrier of X, REAL, L, addreal))
+              + abs(setopfunc(Y02, the carrier of X, REAL, L, addreal))
+              by ABSVALUE:19;
+              hence abs((seq.n) - (seq.m)) < e by A71,AXIOMS:22;
+            end;
+            hence abs((seq.n) - (seq.m)) < e;
+          end;
+          hence abs((seq.n) - (seq.m)) < e;
+      end;
+        for e be real number st 0 < e ex k be Nat
+      st for m be Nat st k <= m holds abs(seq.m -seq.k)<e
+      proof
+        let e be real number such that
+        A76: 0 < e;
+        consider k be Nat such that
+        A77: for n, m be Nat st n >= k & m >= k
+        holds abs((seq.n) - (seq.m)) < e by A41,A76;
+          for m be Nat st k <= m holds abs(seq.m - seq.k)<e by A77;
+        hence thesis;
+      end;
+      then seq is convergent by SEQ_4:58;
+      then consider x be real number such that
+      A78: for r be real number st r > 0
+      ex m be Nat st for n be Nat st n >= m
+      holds abs(seq.n - x) < r by SEQ_2:def 6;
+      reconsider r=x as Real by XREAL_0:def 1;
+
+      A79: for e be Real st 0 < e
+      ex Y0 be finite Subset of X st
+      Y0 is non empty & Y0 c= Y &
+      for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+      holds
+      abs(r - setopfunc(Y1, the carrier of X, REAL, L, addreal)) < e
+      proof
+        let e be Real such that
+        A80: e > 0;
+        A81: e/2 > 0/2 by A80,REAL_1:73;
+        then consider m be Nat such that
+        A82: for n be Nat st n >= m holds abs((seq.n)-r) < e/2 by A78;
+        consider i be Nat such that
+        A83: 1/(i+1) < e/2 & i >= m by A81,Lm3;
+        consider Y0 be finite Subset of X such that
+        A84: Y0 is non empty & A.i = Y0 &
+        seq.i = setopfunc(Y0, the carrier of X, REAL, L, addreal) by A40;
+        A85: abs(setopfunc(Y0, the carrier of X, REAL, L, addreal) - r)
+        < e/2 by A82,A83,A84;
+
+          now
+          let Y1 be finite Subset of X such that
+          A86: Y0 c= Y1 & Y1 c= Y;
+
+            now per cases;
+            case Y0 = Y1;
+            then abs(r - setopfunc(Y1, the carrier of X, REAL, L, addreal))
+            < e/2 by A85,UNIFORM1:13;
+            then abs(x - setopfunc(Y1, the carrier of X, REAL, L, addreal))
+            + 0 < e/2 + e/2 by A81,REAL_1:67;
+            hence
+              abs(r - setopfunc(Y1, the carrier of X, REAL, L, addreal))
+            < e by XCMPLX_1:66;
+
+            case
+            A87: Y0 <> Y1;
+              ex Y2 be finite Subset of X st
+            Y2 is non empty & Y2 c= Y & Y0 misses Y2 & Y0 \/ Y2 = Y1
+            proof
+              take Y2 = Y1 \ Y0;
+              A88: Y1 \ Y0 c= Y1 by XBOOLE_1:36;
+                Y0 \/ Y2 = Y0 \/ Y1 by XBOOLE_1:39
+              .= Y1 by A86,XBOOLE_1:12;
+              hence thesis by A86,A87,A88,XBOOLE_1:1,79;
+            end;
+            then consider Y2 be finite Subset of X such that
+            A89: Y2 is non empty & Y2 c= Y & Y0 misses Y2 & Y0 \/ Y2 = Y1;
+              abs(setopfunc(Y2, the carrier of X, REAL, L, addreal))
+            < 1/(i+1) by A36,A84,A89;
+            then A90: abs(setopfunc(Y2, the carrier of X, REAL, L, addreal))
+            < e/2 by A83,AXIOMS:22;
+              dom L = the carrier of X by FUNCT_2:def 1;
+            then setopfunc(Y1, the carrier of X, REAL, L, addreal)-r
+            = addreal.(
+            setopfunc(Y0, the carrier of X, REAL, L, addreal),
+            setopfunc(Y2, the carrier of X, REAL, L, addreal)) - r
+            by A89,BHSP_5:14,RVSUM_1:5,6,7
+            .= setopfunc(Y0, the carrier of X, REAL, L, addreal)
+            + setopfunc(Y2, the carrier of X, REAL, L, addreal) - r
+            by VECTSP_1:def 4
+            .= setopfunc(Y0, the carrier of X, REAL, L, addreal) - r
+            + setopfunc(Y2, the carrier of X, REAL, L, addreal)
+            by XCMPLX_1:29;
+            then abs(setopfunc(Y1, the carrier of X, REAL, L, addreal)-r)
+            <= abs(setopfunc(Y0, the carrier of X, REAL, L, addreal) - r)
+            + abs(setopfunc(Y2, the carrier of X, REAL, L, addreal))
+            by ABSVALUE:21;
+            then A91: abs(x - setopfunc(Y1, the carrier of X, REAL, L, addreal)
+)
+            <= abs(setopfunc(Y0, the carrier of X, REAL, L, addreal) - r)
+            + abs(setopfunc(Y2, the carrier of X, REAL, L, addreal))
+            by UNIFORM1:13;
+              abs(setopfunc(Y0, the carrier of X, REAL, L, addreal) - r)
+            + abs(setopfunc(Y2, the carrier of X, REAL, L, addreal))
+            < e/2 + e/2 by A85,A90,REAL_1:67;
+            then abs(setopfunc(Y0, the carrier of X, REAL, L, addreal)-r)
+            + abs(setopfunc(Y2, the carrier of X, REAL, L, addreal))
+            < e by XCMPLX_1:66;
+            hence abs(r - setopfunc(Y1, the carrier of X, REAL, L, addreal))
+            < e by A91,AXIOMS:22;
+          end;
+          hence
+            abs(r - setopfunc(Y1, the carrier of X, REAL, L, addreal)) < e;
+        end;
+        hence thesis by A84;
+      end;
+      take r;
+      thus thesis by A79;
+    end;
+    hence thesis by BHSP_6:def 6;
+end;
+
+theorem Th2:
+  for X st the add of X is commutative associative &
+  the add of X has_a_unity
+  for S be finite OrthogonalFamily of X st S is non empty
+  for I be Function of the carrier of X, the carrier of X st
+  S c= dom I & (for y st y in S holds I.y = y)
+  for H be Function of the carrier of X, REAL st
+  S c= dom H & (for y st y in S holds H.y= (y.|.y))
+  holds
+  setopfunc(S, the carrier of X, the carrier of X, I, the add of X)
+  .|. setopfunc(S, the carrier of X, the carrier of X, I, the add of X)
+  = setopfunc(S, the carrier of X, REAL, H, addreal)
+proof
+  let X such that
+  A1: the add of X is commutative associative & the add of X has_a_unity;
+  let S be finite OrthogonalFamily of X such that
+  A2: S is non empty;
+  let I be Function of the carrier of X, the carrier of X such that
+  A3: S c= dom I & (for y st y in S holds I.y = y);
+  let H be Function of the carrier of X, REAL such that
+  A4: S c= dom H & (for y st y in S holds H.y= y.|.y);
+  consider p be FinSequence of the carrier of X such that
+  A5: p is one-to-one & rng p = S &
+  setopfunc(S, (the carrier of X), (the carrier of X), I, (the add of X))
+  = (the add of X) "**" Func_Seq(I, p) by A1,A3,BHSP_5:def 5;
+  A6: setopfunc(S, the carrier of X, REAL, H, addreal)
+  = addreal "**" Func_Seq(H, p)
+  by A4,A5,BHSP_5:def 5,RVSUM_1:5,6,7;
+  A7: for y1, y2 st (y1 in S & y2 in S & y1 <> y2)
+  holds (the scalar of X).[I.y1, I.y2] = 0
+  proof
+    let y1, y2;
+    assume
+    A8: y1 in S & y2 in S & y1 <> y2;
+    then A9: I.y1 = y1 & I.y2 = y2 by A3;
+      y1.|.y2 = 0 by A8,BHSP_5:def 8;
+    hence thesis by A9,BHSP_1:def 1;
+  end;
+
+    for y st y in S holds H.y = (the scalar of X).[I.y, I.y]
+  proof
+    let y;
+    assume
+    A10: y in S;
+    then A11: I.y = y by A3;
+      H.y = (y.|.y) by A4,A10
+    .= (the scalar of X).[I.y, I.y] by A11,BHSP_1:def 1;
+    hence thesis;
+  end;
+  then (the scalar of X).[(the add of X) "**" Func_Seq(I, p),
+  (the add of X) "**" Func_Seq(I, p)] = addreal "**" Func_Seq(H, p)
+  by A2,A3,A4,A5,A7,BHSP_5:9;
+  hence thesis by A5,A6,BHSP_1:def 1;
+end;
+
+theorem Th3:
+  for X st the add of X is commutative associative &
+  the add of X has_a_unity
+  for S be finite OrthogonalFamily of X st S is non empty
+  for H be Functional of X st
+  S c= dom H & (for x st x in S holds H.x = (x.|.x))
+  holds
+  (setsum(S)).|.(setsum(S))
+  = setopfunc(S, the carrier of X, REAL, H, addreal)
+proof
+  let X such that
+  A1: the add of X is commutative associative & the add of X has_a_unity;
+  let S be finite OrthogonalFamily of X such that
+  A2: S is non empty;
+  let H be Functional of X such that
+  A3: S c= dom H & (for x st x in S holds H.x = (x.|.x));
+      deffunc _F(set) = $1;
+  A4: for x be set st x in the carrier of X
+  holds _F(x) in the carrier of X;
+  consider I be Function of the carrier of X, the carrier of X such that
+  A5: for x be set st x in the carrier of X holds I.x = _F(x) from Lambda1(A4);
+  A6: dom I = the carrier of X by FUNCT_2:def 1;
+  then A7: setsum(S)
+  = setopfunc(S, the carrier of X, the carrier of X, I, the add of X)
+  by A1,A5,BHSP_6:1;
+    S c= dom I & for x st x in S holds I.x = x by A5,A6;
+  hence thesis by A1,A2,A3,A7,Th2;
+end;
+
+theorem Th4:
+  for Y be OrthogonalFamily of X
+  for Z be Subset of X
+  holds
+  Z is Subset of Y implies Z is OrthogonalFamily of X
+proof
+  let Y be OrthogonalFamily of X;
+  let Z be Subset of X;
+  assume Z is Subset of Y;
+  then for x, y st x in Z & y in Z & x <> y holds x.|.y = 0
+  by BHSP_5:def 8;
+  hence thesis by BHSP_5:def 8;
+end;
+
+theorem Th5:
+  for Y be OrthonormalFamily of X
+  for Z be Subset of X
+  holds
+  Z is Subset of Y implies Z is OrthonormalFamily of X
+proof
+  let Y be OrthonormalFamily of X;
+  let Z be Subset of X;
+  assume
+  A1: Z is Subset of Y;
+    Y is OrthogonalFamily of X &
+  for x st x in Y holds x.|.x = 1 by BHSP_5:def 9;
+  then A2: Z is OrthogonalFamily of X by A1,Th4;
+    for x st x in Z holds x.|.x = 1 by A1,BHSP_5:def 9;
+  hence thesis by A2,BHSP_5:def 9;
+end;
+
+begin :: Equivalence of summability
+
+theorem Th6:
+  for X st the add of X is commutative associative &
+  the add of X has_a_unity & X is_Hilbert_space
+  for S be OrthonormalFamily of X
+  for H be Functional of X st
+  S c= dom H & (for x st x in S holds H.x = (x.|.x))
+  holds
+  S is summable_set iff S is_summable_set_by H
+proof
+  let X such that
+  A1: the add of X is commutative associative &
+  the add of X has_a_unity & X is_Hilbert_space;
+  let S be OrthonormalFamily of X;
+  let H be Functional of X such that
+  A2: S c= dom H & (for x st x in S holds H.x = (x.|.x));
+
+  A3:
+  now
+    assume
+    A4: S is summable_set;
+      now
+      let e be Real such that
+      A5: 0 < e;
+      set e' = sqrt e;
+        0 < e' by A5,SQUARE_1:93;
+      then consider e1 be Real such that
+      A6: 0 < e1 & e1 < e' by CHAIN_1:1;
+        e1^2 < e'^2 by A6,SQUARE_1:78;
+      then e1*e1 < (sqrt e)^2 by SQUARE_1:def 3;
+      then A7: e1 > 0 & e1*e1 < e by A5,A6,SQUARE_1:def 4;
+      consider Y0 be finite Subset of X such that
+      A8: Y0 is non empty & Y0 c= S &
+      (for Y1 be finite Subset of X st Y1 is non empty &
+      Y1 c= S & Y0 misses Y1 holds ||.setsum(Y1).|| < e1)
+      by A1,A4,A6,BHSP_6:10;
+      take Y0;
+      thus Y0 is non empty & Y0 c= S by A8;
+
+      let Y1 be finite Subset of X such that
+      A9: Y1 is non empty & Y1 c= S & Y0 misses Y1;
+      A10: 0 <= ||.setsum(Y1).|| by BHSP_1:34;
+        ||.setsum(Y1).|| < e1 by A8,A9;
+      then ||.setsum(Y1).||^2 < e1^2 by A10,SQUARE_1:78;
+      then ||.setsum(Y1).||^2 < e1*e1 by SQUARE_1:def 3;
+      then A11: ||.setsum(Y1).||^2 < e by A7,AXIOMS:22;
+        Y1 is finite OrthonormalFamily of X by A9,Th5;
+      then A12: Y1 is finite OrthogonalFamily of X by BHSP_5:def 9;
+      A13: Y1 c= dom H by A2,A9,XBOOLE_1:1;
+        for x st x in Y1 holds H.x = (x.|.x) by A2,A9;
+      then A14: (setsum(Y1)).|.(setsum(Y1))
+      = setopfunc(Y1, the carrier of X, REAL, H, addreal)
+      by A1,A9,A12,A13,Th3;
+      A15: ||.setsum(Y1).|| = sqrt ((setsum(Y1)).|.(setsum(Y1)))
+      by BHSP_1:def 4;
+        0 <= (setsum(Y1)).|.(setsum(Y1)) by BHSP_1:def 2;
+      then A16: ||.setsum(Y1).||^2
+      = setopfunc(Y1, the carrier of X, REAL, H, addreal)
+      by A14,A15,SQUARE_1:def 4;
+        0 <= setopfunc(Y1, the carrier of X, REAL, H, addreal)
+      by A14,BHSP_1:def 2;
+      hence abs(setopfunc(Y1, the carrier of X, REAL, H, addreal)) < e
+      by A11,A16,ABSVALUE:def 1;
+    end;
+    hence S is_summable_set_by H by Th1;
+  end;
+
+    now
+    assume
+    A17: S is_summable_set_by H;
+      now
+      let e be Real such that
+      A18: 0 < e;
+      set e1 = e * e;
+        0 < e1 & e1 = e*e by A18,SQUARE_1:21;
+      then consider Y0 be finite Subset of X such that
+      A19: Y0 is non empty & Y0 c= S &
+      (for Y1 be finite Subset of X st
+      Y1 is non empty & Y1 c= S & Y0 misses Y1
+      holds abs(setopfunc(Y1, the carrier of X, REAL, H, addreal)) < e1)
+      by A17,Th1;
+
+        now
+        let Y1 be finite Subset of X such that
+        A20: Y1 is non empty & Y1 c= S & Y0 misses Y1;
+        set F = setopfunc(Y1, the carrier of X, REAL, H, addreal);
+        A21: abs F < e1 by A19,A20;
+          F <= abs F by ABSVALUE:11;
+        then F - e1 < abs F - abs F by A21,REAL_1:92;
+        then F - e1 < 0 by XCMPLX_1:14;
+        then A22: F < e1 by SQUARE_1:12;
+          Y1 is finite OrthonormalFamily of X by A20,Th5;
+        then A23: Y1 is finite OrthogonalFamily of X by BHSP_5:def 9;
+        A24: Y1 c= dom H by A2,A20,XBOOLE_1:1;
+          (for x st x in Y1 holds H.x= (x.|.x)) by A2,A20;
+        then A25: (setsum Y1).|.(setsum Y1) = F by A1,A20,A23,A24,Th3;
+        A26: 0 <= (setsum Y1).|.(setsum Y1) by BHSP_1:def 2;
+          ||.setsum Y1.|| = sqrt ((setsum Y1).|.(setsum Y1)) by BHSP_1:def 4;
+        then ||.setsum Y1.||^2 < e1 by A22,A25,A26,SQUARE_1:def 4;
+        then A27: ||.setsum Y1.||^2 < e^2 by SQUARE_1:def 3;
+        A28: 0 <= ||.setsum Y1.|| by BHSP_1:34;
+          0 <= ||.setsum Y1.||^2 by SQUARE_1:72;
+        then sqrt(||.setsum(Y1).||^2) < sqrt(e^2) by A27,SQUARE_1:95;
+        then sqrt(||.setsum(Y1).||^2) < e by A18,SQUARE_1:89;
+        hence ||.setsum(Y1).|| < e by A28,SQUARE_1:89;
+      end;
+      hence ex Y0 be finite
+      Subset of X st Y0 is non empty & Y0 c= S &
+      (for Y1 be finite Subset of X st Y1 is non empty &
+      Y1 c= S & Y0 misses Y1
+      holds ||.setsum(Y1).|| < e) by A19;
+    end;
+    hence S is summable_set by A1,BHSP_6:10;
+  end;
+  hence thesis by A3;
+end;
+
+theorem Th7:
+  for S be Subset of X st
+  S is non empty & S is summable_set
+  holds
+  (for e be Real st 0 < e ex Y0 be finite Subset of X st
+  Y0 is non empty & Y0 c= S &
+  for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= S
+  holds abs(((sum(S)).|.(sum(S))) - ((setsum(Y1)).|.(setsum(Y1)))) < e)
+proof
+  let S be Subset of X such that
+  A1: S is non empty & S is summable_set;
+    let e be Real such that
+    A2: 0 < e;
+      0 <= ||.sum(S).|| by BHSP_1:34;
+    then 0 <= 2*||.sum(S).|| by REAL_2:121;
+    then A3: 0+0 < 2*||.sum(S).||+1 by REAL_1:67;
+    set e' = e/(2*||.sum(S).||+1);
+      0 < e' by A2,A3,REAL_2:127;
+    then consider Y01 be finite Subset of X such that
+    A4: Y01 is non empty & Y01 c= S &
+    for Y1 be finite Subset of X st Y01 c= Y1 & Y1 c= S
+    holds ||.sum(S) - setsum(Y1).|| < e' by A1,BHSP_6:def 3;
+    consider Y02 be finite Subset of X such that
+    A5: Y02 is non empty & Y02 c= S &
+    for Y1 be finite Subset of X st Y02 c= Y1 & Y1 c= S
+    holds ||.sum(S) - setsum(Y1).|| < 1 by A1,BHSP_6:def 3;
+    set Y0 = Y01 \/ Y02;
+      ex x being set st x in Y01 by A4,XBOOLE_0:def 1;
+    then A6: Y0 is non empty by XBOOLE_0:def 2;
+    A7: Y0 c= S by A4,A5,XBOOLE_1:8;
+      for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= S
+    holds abs(((sum(S)).|.(sum(S))) - ((setsum(Y1)).|.(setsum(Y1)))) < e
+    proof
+      let Y1 be finite Subset of X such that
+      A8: Y0 c= Y1 & Y1 c= S;
+      set F = (sum(S)).|.(sum(S)), G = (setsum(Y1)).|.(setsum(Y1));
+      set SS = sum(S)-setsum(Y1), SY = setsum(Y1);
+        abs(F - G) = abs(F - ((sum(S)).|.SY)
+      + (((sum(S)).|.SY) - G)) by XCMPLX_1:39
+      .= abs(((sum(S)).|.SS) + (((sum(S)).|.SY) - G)) by BHSP_1:17
+      .= abs(((sum(S)).|.SS) + (SS.|.SY)) by BHSP_1:16;
+      then A9: abs(F - G)
+      <= abs(((sum(S)).|.SS)) + abs(SS.|.SY) by ABSVALUE:13;
+        abs(((sum(S)).|.SS)) <= ||.sum(S).||*||.SS.|| by BHSP_1:35;
+      then abs(F - G) + abs(((sum(S)).|.SS)) <= abs(((sum(S)).|.SS))
+      + abs(SS.|.SY) + ||.sum(S).||*||.SS.|| by A9,REAL_1:55;
+      then abs(F - G) + abs(((sum(S)).|.SS))
+      <= (abs(SS.|.SY) + ||.sum(S).||*||.SS.||)
+      + abs(((sum(S)).|.SS)) by XCMPLX_1:1;
+      then A10: abs(F - G)
+      <= abs(SS.|.SY) + ||.sum(S).||*||.SS.|| by REAL_1:53;
+        abs(SS.|.SY) <= ||.SS.||*||.SY.|| by BHSP_1:35;
+      then abs(F - G) + abs(SS.|.SY) <= abs(SS.|.SY)
+      + ||.sum(S).||*||.SS.|| + ||.SS.||*||.SY.|| by A10,REAL_1:55;
+      then abs(F - G) + abs(SS.|.SY)
+      <= ||.sum(S).||*||.SS.|| + ||.SS.||*||.SY.||
+      + abs(SS.|.SY) by XCMPLX_1:1;
+      then abs(F - G) <= ||.SS.||*||.sum(S).||
+      + ||.SS.||*||.SY.|| by REAL_1:53;
+      then A11: abs(F - G) <= ||.SS.||*(||.sum(S).|| + ||.SY.||) by XCMPLX_1:8;
+        ||.SY.|| = ||.-SY.|| by BHSP_1:37
+      .= ||.0.X - SY.|| by RLVECT_1:27
+      .= ||.-sum(S) + sum(S) - SY.|| by RLVECT_1:16
+      .= ||.-sum(S) + SS.|| by RLVECT_1:42;
+      then ||.SY.|| <= ||.-sum(S).|| + ||.SS.|| by BHSP_1:36;
+      then A12: ||.SY.|| <= ||.sum(S).|| + ||.SS.|| by BHSP_1:37;
+        Y02 c= Y1 by A8,XBOOLE_1:11;
+      then ||.SS.|| < 1 by A5,A8;
+      then ||.SS.|| + ||.SY.||
+      < 1 + (||.sum(S).|| + ||.SS.||) by A12,REAL_1:67;
+      then ||.SY.|| + ||.sum(S) - SY.||
+      < 1 + ||.sum(S).|| + ||.SS.|| by XCMPLX_1:1;
+      then ||.SY.|| + ||.SS.|| - ||.SS.|| < 1 + ||.sum(S).||
+      + ||.SS.|| - ||.SS.|| by REAL_1:92;
+      then ||.SY.|| < 1 + ||.sum(S).|| + ||.SS.|| - ||.SS.|| by XCMPLX_1:26;
+      then ||.SY.|| < 1 + ||.sum(S).|| by XCMPLX_1:26;
+      then ||.sum(S).|| + ||.SY.||
+      < 1 + ||.sum(S).|| + ||.sum(S).|| by REAL_1:67;
+      then ||.sum(S).|| + ||.SY.||
+      < 1 + (||.sum(S).|| + ||.sum(S).||) by XCMPLX_1:1;
+      then A13: ||.sum(S).|| + ||.SY.|| < 2*||.sum(S).|| + 1 by XCMPLX_1:11;
+        0 <= ||.SS.|| by BHSP_1:34;
+      then A14:||.SS.||*(||.sum(S).|| + ||.SY.||)
+      <= ||.SS.||*(2*||.sum(S).|| + 1) by A13,AXIOMS:25;
+        Y01 c= Y1 by A8,XBOOLE_1:11;
+      then ||.SS.|| < e' by A4,A8;
+      then ||.SS.||*(2*||.sum(S).|| + 1)
+      < e'*(2*||.sum(S).|| + 1) by A3,REAL_1:70;
+      then ||.SS.||*(||.sum(S).|| + ||.SY.||)
+      + ||.SS.||*(2*||.sum(S).|| + 1) < e'*(2*||.sum(S).|| + 1)
+      + ||.SS.||*(2*||.sum(S).|| + 1) by A14,REAL_1:67;
+      then ||.SS.||*(||.sum(S).|| + ||.SY.||)
+      + ||.SS.||*(2*||.sum(S).|| + 1)
+      - ||.SS.||*(2*||.sum(S).|| + 1) < e'*(2*||.sum(S).|| + 1)
+      + ||.SS.||*(2*||.sum(S).|| + 1)
+      - ||.SS.||*(2*||.sum(S).|| + 1) by REAL_1:92;
+      then ||.SS.||*(||.sum(S).|| + ||.SY.||)
+      < e'*(2*||.sum(S).|| + 1) + ||.SS.||*(2*||.sum(S).|| + 1)
+      - ||.SS.||*(2*||.sum(S).|| + 1) by XCMPLX_1:26;
+      then ||.SS.||*(||.sum(S).|| + ||.SY.||)
+      < e'*(2*||.sum(S).|| + 1) by XCMPLX_1:26;
+      then ||.SS.||*(||.sum(S).|| + ||.SY.||) < e by A3,XCMPLX_1:88;
+      then abs(F - G) + ||.SS.||*(||.sum(S).|| + ||.SY.||)
+      < e + ||.SS.||*(||.sum(S).|| + ||.SY.||) by A11,REAL_1:67;
+      then abs(F - G) + ||.SS.||*(||.sum(S).|| + ||.SY.||)
+      - ||.SS.||*(||.sum(S).|| + ||.SY.||)
+      < e + ||.SS.||*(||.sum(S).|| + ||.SY.||)
+      - ||.SS.||*(||.sum(S).|| + ||.SY.||) by REAL_1:92;
+      then abs(F - G) < e + ||.SS.||*(||.sum(S).|| + ||.SY.||)
+      - ||.SS.||*(||.sum(S).|| + ||.SY.||) by XCMPLX_1:26;
+      hence thesis by XCMPLX_1:26;
+    end;
+    hence thesis by A6,A7;
+end;
+
+Lm4: for p1, p2 being real number st
+      for e be Real st 0 < e holds abs(p1 - p2) < e holds p1 = p2
+proof
+   let p1, p2 be real number;
+A1:abs(p1-p2) is Real by XREAL_0:def 1;
+   assume
+A2:for e be Real st 0 < e holds abs(p1 - p2) < e;
+   assume p1 <> p2;
+   then p1 - p2 <> 0 by XCMPLX_1:15;
+   then 0 < abs(p1-p2) by ABSVALUE:6;
+   hence contradiction by A1,A2;
+end;
+
+theorem
+    for X st the add of X is commutative associative &
+  the add of X has_a_unity & X is_Hilbert_space
+  for S be OrthonormalFamily of X st S is non empty
+  for H be Functional of X st
+  S c= dom H & (for x st x in S holds H.x = (x.|.x))
+  holds
+  S is summable_set implies (sum(S)).|.(sum(S)) = sum_byfunc(S, H)
+proof
+  let X such that
+  A1: the add of X is commutative associative &
+  the add of X has_a_unity & X is_Hilbert_space;
+  let S be OrthonormalFamily of X such that
+  A2: S is non empty;
+  let H be Functional of X such that
+  A3: S c= dom H & (for x st x in S holds H.x= (x.|.x));
+  assume
+  A4: S is summable_set;
+  then A5: S is_summable_set_by H by A1,A3,Th6;
+  A6: for Y1 be finite Subset of X st
+  Y1 is non empty & Y1 c= S holds (setsum(Y1)).|.(setsum(Y1))
+  = setopfunc(Y1, the carrier of X, REAL, H,addreal)
+  proof
+    let Y1 be finite Subset of X such that
+    A7: Y1 is non empty & Y1 c= S;
+    A8: Y1 c= dom H by A3,A7,XBOOLE_1:1;
+      Y1 is finite OrthonormalFamily of X by A7,Th5;
+    then A9: Y1 is finite OrthogonalFamily of X by BHSP_5:def 9;
+      for x st x in Y1 holds H.x = (x.|.x) by A3,A7;
+    hence thesis by A1,A7,A8,A9,Th3;
+  end;
+  set p1 = (sum(S)).|.(sum(S)), p2 = sum_byfunc(S, H);
+    for e be Real st 0 < e holds abs(p1 - p2) < e
+  proof
+    let e be Real such that
+    A10: 0 < e;
+    A11: 0/2 < e/2 by A10,REAL_1:73;
+    then consider Y01 be finite Subset of X such that
+    A12: Y01 is non empty & Y01 c= S &
+    for Y1 be finite Subset of X st Y01 c= Y1 & Y1 c= S
+    holds
+    abs(p1 - ((setsum Y1).|.(setsum Y1))) < e/2 by A2,A4,Th7;
+    consider Y02 be finite Subset of X such that
+    A13: Y02 is non empty & Y02 c= S &
+    for Y1 be finite Subset of X st Y02 c= Y1 & Y1 c= S
+    holds
+    abs(p2 - setopfunc(Y1, the carrier of X, REAL, H, addreal))
+    < e/2 by A5,A11,BHSP_6:def 7;
+    set Y1 = Y01 \/ Y02;
+    set r = setopfunc(Y1, the carrier of X, REAL, H, addreal);
+    reconsider Y011 = Y01 as non empty set by A12;
+    A14: Y1 is finite Subset of X &
+    Y01 c= Y1 & Y02 c= Y1 & Y1 c= S by A12,A13,XBOOLE_1:7,8;
+    then A15: abs(p2 - r) < e/2 by A13;
+      Y1 = Y011 \/ Y02;
+    then (setsum(Y1)).|.(setsum(Y1)) = r by A6,A14;
+    then A16: abs(p1 - r) < e/2 by A12,A14;
+      p1 - p2 = (p1 - r) + (r - p2) by XCMPLX_1:39;
+    then A17: abs(p1-p2) <= abs(p1-r) + abs(r-p2) by ABSVALUE:13;
+      abs(p1-r) + abs(p2-r) < e/2 + e/2 by A15,A16,REAL_1:67;
+    then abs(p1-r) + abs(p2-r) < e by XCMPLX_1:66;
+    then abs(p1-r) + abs(r-p2) < e by UNIFORM1:13;
+    hence thesis by A17,AXIOMS:22;
+  end;
+  hence thesis by Lm4;
+end;
+

@@ -1,0 +1,305 @@
+:: Many-Argument Relations
+::  by Edmund Woronowicz
+::
+:: Received June 1, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCOP_1, FUNCT_2, RELAT_1, FINSEQ_1, BOOLE, QC_LANG1, ZF_LANG,
+      MARGREL1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, FINSEQ_1, RELAT_1,
+      FUNCOP_1, FRAENKEL;
+ constructors FINSEQ_1, FUNCOP_1, FRAENKEL, MEMBERED, XBOOLE_0;
+ clusters RELSET_1, FUNCOP_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin
+ reserve x,z for set;
+ reserve k for Nat;
+ reserve D for non empty set;
+
+definition let B,A be non empty set, b be Element of B;
+ redefine func A --> b -> Element of Funcs(A,B);
+end;
+
+definition let IT be set;
+  attr IT is relation-like means
+:: MARGREL1:def 1
+   (for x being set st x in IT holds x is FinSequence) &
+          for a,b being FinSequence st a in IT & b in IT holds len a = len b;
+end;
+
+definition
+  cluster relation-like set;
+end;
+
+definition
+  mode relation is relation-like set;
+end;
+
+ reserve X for set;
+ reserve p,r for relation;
+ reserve a,a1,a2,b for FinSequence;
+
+canceled 6;
+
+theorem :: MARGREL1:7
+    X c= p implies X is relation-like;
+
+theorem :: MARGREL1:8
+    {a} is relation-like;
+
+ scheme rel_exist{A() -> set, P[FinSequence]}:
+    ex r st for a holds a in r iff a in A() & P[a]
+  provided
+  for a,b st P[a] & P[b] holds len a = len b;
+
+definition
+ let p,r;
+ redefine pred p = r means
+:: MARGREL1:def 2
+for a holds a in p iff a in r;
+end;
+
+definition
+ cluster {} -> relation-like;
+end;
+
+theorem :: MARGREL1:9
+ for p st for a holds not a in p holds p = {};
+
+ definition let p;
+  assume  p <> {};
+ canceled;
+
+   func the_arity_of p -> Nat means
+:: MARGREL1:def 4
+       for a st a in p holds it = len a;
+ end;
+
+definition let k;
+  mode relation_length of k -> relation means
+:: MARGREL1:def 5
+     for a st a in it holds len a = k;
+end;
+
+definition
+  let X be set;
+  mode relation of X -> relation means
+:: MARGREL1:def 6
+     for a st a in it holds rng a c= X;
+end;
+
+canceled 10;
+
+theorem :: MARGREL1:20
+  {} is relation of X;
+
+theorem :: MARGREL1:21
+  {} is relation_length of k;
+
+definition let X, k;
+  mode relation of X,k -> relation means
+:: MARGREL1:def 7
+      it is relation of X & it is relation_length of k;
+end;
+
+definition let D;
+   func relations_on D -> set means
+:: MARGREL1:def 8
+  for X holds X in it iff X c= D* &
+    for a,b being FinSequence of D st a in X & b in X holds len a = len b;
+end;
+
+definition let D;
+   cluster relations_on D -> non empty;
+end;
+
+definition
+  let D be non empty set;
+  mode relation of D is Element of relations_on D;
+end;
+
+reserve a,b for FinSequence of D;
+reserve p,r for Element of relations_on D;
+
+canceled 4;
+
+theorem :: MARGREL1:26
+    X c= r implies X is Element of relations_on D;
+
+theorem :: MARGREL1:27
+    {a} is Element of relations_on D;
+
+theorem :: MARGREL1:28
+    for x,y being Element of D holds {<*x,y*>} is Element of relations_on D;
+
+definition
+ let D,p,r;
+ redefine pred p = r means
+:: MARGREL1:def 9
+for a holds a in p iff a in r;
+end;
+
+scheme rel_D_exist{D() -> non empty set, P[FinSequence of D()]}:
+  ex r being Element of relations_on D() st
+   for a being FinSequence of D() holds a in r iff P[a]
+  provided
+     for a,b being FinSequence of D() st P[a] & P[b] holds len a = len b;
+
+definition let D;
+  func empty_rel(D) -> Element of relations_on D means
+:: MARGREL1:def 10
+   not a in it;
+ end;
+
+canceled 3;
+
+theorem :: MARGREL1:32
+    empty_rel(D) = {};
+
+definition
+  let D,p;
+  assume  p <> empty_rel(D);
+   func the_arity_of p -> Nat means
+:: MARGREL1:def 11
+       a in p implies it = len a;
+ end;
+
+scheme rel_D_exist2{D() -> non empty set, k() -> Nat, P[FinSequence of D()]}:
+  ex r being Element of relations_on D() st
+    for a being FinSequence of D() st len a = k() holds a in r iff P[a];
+
+ definition
+  func BOOLEAN -> set equals
+:: MARGREL1:def 12
+{0,1};
+ end;
+
+ definition
+  cluster BOOLEAN -> non empty;
+ end;
+
+ definition
+  func FALSE -> Element of BOOLEAN equals
+:: MARGREL1:def 13
+0;
+  func TRUE -> Element of BOOLEAN equals
+:: MARGREL1:def 14
+1;
+ end;
+
+canceled 3;
+
+theorem :: MARGREL1:36
+    FALSE = 0 & TRUE = 1;
+
+theorem :: MARGREL1:37
+    BOOLEAN = {FALSE,TRUE};
+
+theorem :: MARGREL1:38
+    FALSE <> TRUE;
+
+definition
+ let x be set;
+ attr x is boolean means
+:: MARGREL1:def 15
+ x in BOOLEAN;
+end;
+
+definition
+ cluster boolean set;
+ cluster -> boolean Element of BOOLEAN;
+end;
+
+reserve u,v,w for boolean set;
+
+theorem :: MARGREL1:39
+ v = FALSE or v = TRUE;
+
+  definition
+    let v be boolean set;
+  func 'not' v equals
+:: MARGREL1:def 16
+     TRUE if v = FALSE,
+               FALSE if v = TRUE;
+
+    let w be boolean set;
+  func v '&' w equals
+:: MARGREL1:def 17
+    TRUE if v = TRUE & w =TRUE
+      otherwise FALSE;
+  commutativity;
+ end;
+
+  definition let v be boolean set;
+  cluster 'not' v -> boolean;
+  let w be boolean set;
+  cluster v '&' w -> boolean;
+ end;
+
+definition let v be Element of BOOLEAN;
+  redefine func 'not' v -> Element of BOOLEAN;
+  let w be Element of BOOLEAN;
+  func v '&' w -> Element of BOOLEAN;
+end;
+
+theorem :: MARGREL1:40
+  'not' 'not' v = v;
+
+theorem :: MARGREL1:41
+  (v = FALSE iff 'not' v = TRUE) &
+      (v = TRUE iff 'not' v = FALSE);
+
+canceled;
+
+theorem :: MARGREL1:43
+    v <> TRUE iff v = FALSE;
+
+canceled;
+
+theorem :: MARGREL1:45
+   (v '&' w = TRUE iff v = TRUE & w = TRUE) &
+        (v '&' w = FALSE iff v = FALSE or w = FALSE);
+
+theorem :: MARGREL1:46
+   v '&' 'not' v = FALSE;
+
+theorem :: MARGREL1:47
+    'not'(v '&''not' v) = TRUE;
+
+canceled;
+
+theorem :: MARGREL1:49
+    FALSE '&' v = FALSE;
+
+theorem :: MARGREL1:50
+    TRUE '&' v = v;
+
+theorem :: MARGREL1:51
+    v '&' v = FALSE implies v = FALSE;
+
+theorem :: MARGREL1:52
+    v '&' (w '&' u) = (v '&' w) '&' u;
+
+ definition let X;
+    func ALL(X) equals
+:: MARGREL1:def 18
+     TRUE if not FALSE in X
+      otherwise FALSE;
+ end;
+
+ definition
+  let X;
+  cluster ALL X -> boolean;
+ end;
+
+definition let X;
+  redefine func ALL X -> Element of BOOLEAN;
+end;
+
+theorem :: MARGREL1:53
+    (not FALSE in X iff ALL(X) = TRUE) &
+      (FALSE in X iff ALL(X) = FALSE);

@@ -1,0 +1,1989 @@
+:: More on the Lattice of Many Sorted Equivalence Relations
+::  by Robert Milewski
+::
+:: Received February 9, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary PBOOLE, MSUALG_5, EQREL_1, RELAT_1, FUNCT_1, MSUALG_4, PRALG_2,
+      LATTICES, BOOLE, CLOSURE2, MSUALG_2, SETFAM_1, FUNCT_4, CANTOR_1,
+      ZF_REFLE, BHSP_3, LATTICE3, MSSUBFAM, NAT_LAT, RCOMP_1, REAL_LAT,
+      SQUARE_1, BINOP_1, SUPINF_1, ORDINAL2, ARYTM_3, ARYTM_1, SEQ_2, MSUALG_7;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, SUPINF_1, REAL_1,
+      SQUARE_1, STRUCT_0, RELSET_1, DOMAIN_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      RCOMP_1, EQREL_1, BINOP_1, PBOOLE, LATTICES, LATTICE3, NAT_LAT, REAL_LAT,
+      PRALG_2, MSUALG_2, MSUALG_3, MSUALG_4, MSUALG_5, CANTOR_1, SETFAM_1,
+      MSSUBFAM, CLOSURE2;
+ constructors DOMAIN_1, SUPINF_1, SQUARE_1, REAL_1, BINOP_1, LATTICE3,
+      REAL_LAT, RCOMP_1, MSUALG_3, MSUALG_5, CANTOR_1, CLOSURE2, MEMBERED,
+      MSSUBFAM;
+ clusters SUBSET_1, STRUCT_0, LATTICE3, SUPINF_1, MSSUBFAM, CLOSURE2, LATTICES,
+      XREAL_0, RELSET_1, XBOOLE_0, MEMBERED;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, LATTICE3, XBOOLE_0;
+ theorems STRUCT_0, TARSKI, PBOOLE, PRALG_2, MSSUBFAM, LATTICE3, VECTSP_8,
+      MSUALG_2, MSUALG_4, MSUALG_5, ZFMISC_1, CANTOR_1, RELSET_1, SETFAM_1,
+      EQREL_1, LATTICES, NAT_LAT, BINOP_1, FUNCT_1, REAL_LAT, FUNCT_2,
+      SQUARE_1, REAL_1, REAL_2, RCOMP_1, SUPINF_1, MSUALG_3, CLOSURE2,
+      XBOOLE_0, XBOOLE_1, XCMPLX_1;
+ schemes DOMAIN_1;
+
+begin
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     ::    LATTICE OF MANY SORTED EQUIVALENCE RELATIONS IS COMPLETE   ::
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  reserve I for non empty set;
+  reserve M for ManySortedSet of I;
+  reserve Y,x,y,i for set;
+  reserve r,r1,r2 for Real;
+
+  theorem
+     for X be set holds
+    x in the carrier of EqRelLatt X iff x is Equivalence_Relation of X
+   proof
+    let X be set;
+    A1: the carrier of EqRelLatt X = { x1 where x1 is Relation of X,X :
+     x1 is Equivalence_Relation of X } by MSUALG_5:def 2;
+    thus x in the carrier of EqRelLatt X implies x is Equivalence_Relation of
+X
+    proof
+     assume x in the carrier of EqRelLatt X;
+     then consider x1 be Relation of X,X such that
+      A2: x = x1 & x1 is Equivalence_Relation of X by A1;
+     thus x is Equivalence_Relation of X by A2;
+    end;
+    thus x is Equivalence_Relation of X implies
+     x in the carrier of EqRelLatt X by A1;
+   end;
+
+  theorem Th2:
+   id M is Equivalence_Relation of M
+   proof
+    set J = id M;
+      for i be set st i in I holds J.i is Relation of M.i
+    proof
+     let i be set; assume i in I;
+     then J.i = id (M.i) by MSUALG_3:def 1;
+     hence J.i is Relation of M.i;
+    end;
+    then reconsider J as ManySortedRelation of M by MSUALG_4:def 2;
+      for i be set, R be Relation of M.i st i in I & J.i = R holds
+     R is Equivalence_Relation of M.i
+    proof
+     let i be set;
+     let R be Relation of M.i; assume
+      A1: i in I & J.i = R;
+     then J.i = id (M.i) by MSUALG_3:def 1;
+     hence R is Equivalence_Relation of M.i by A1,EQREL_1:6;
+    end;
+    hence thesis by MSUALG_4:def 3;
+   end;
+
+  theorem Th3:
+   [|M,M|] is Equivalence_Relation of M
+   proof
+    set J = [|M,M|];
+      for i be set st i in I holds J.i is Relation of M.i
+    proof
+     let i be set; assume i in I;
+     then J.i = [:M.i,M.i:] by PRALG_2:def 9;
+     hence J.i is Relation of M.i by RELSET_1:def 1;
+    end;
+    then reconsider J as ManySortedRelation of M by MSUALG_4:def 2;
+      for i be set, R be Relation of M.i st i in I & J.i = R holds
+     R is Equivalence_Relation of M.i
+    proof
+     let i be set;
+     let R be Relation of M.i; assume
+      A1: i in I & J.i = R;
+     then J.i = [:M.i,M.i:] by PRALG_2:def 9
+        .= nabla M.i by EQREL_1:def 1;
+     hence R is Equivalence_Relation of M.i by A1,EQREL_1:7;
+    end;
+    hence thesis by MSUALG_4:def 3;
+   end;
+
+  definition let I,M;
+   cluster EqRelLatt M -> bounded;
+   coherence
+   proof
+      ex c being Element of EqRelLatt M st
+     for a being Element of EqRelLatt M
+      holds c"/\"a = c & a"/\"c = c
+    proof
+     reconsider c' = id M as Equivalence_Relation of M by Th2;
+     reconsider c = c' as Element of EqRelLatt M
+                                                          by MSUALG_5:def 5;
+     take c;
+     let a be Element of EqRelLatt M;
+     reconsider a' = a as Equivalence_Relation of M by MSUALG_5:def 5;
+     A1: now let i be set; assume A2: i in I;
+      then reconsider i' = i as Element of I;
+      reconsider a2 = a'.i' as Equivalence_Relation of M.i by MSUALG_4:def 3;
+      thus (c' /\ a').i = c'.i /\ a'.i by A2,PBOOLE:def 8
+         .= id (M.i) /\ a2 by MSUALG_3:def 1
+         .= id (M.i) by EQREL_1:17
+         .= c'.i by A2,MSUALG_3:def 1;
+     end;
+     thus c"/\"a = (the L_meet of EqRelLatt M).(c,a) by LATTICES:def 2
+       .= c' /\ a' by MSUALG_5:def 5
+       .= c by A1,PBOOLE:3;
+     hence a"/\"c = c;
+    end;
+    then A3: EqRelLatt M is lower-bounded by LATTICES:def 13;
+      ex c being Element of EqRelLatt M st
+     for a being Element of EqRelLatt M holds
+      c"\/"a = c & a"\/"c = c
+    proof
+     reconsider c' = [|M,M|] as Equivalence_Relation of M by Th3;
+     reconsider c = c' as Element of EqRelLatt M
+                                                          by MSUALG_5:def 5;
+     take c;
+     let a be Element of EqRelLatt M;
+     reconsider a' = a as Equivalence_Relation of M by MSUALG_5:def 5;
+     A4: now let i be set; assume A5: i in I;
+      then reconsider i' = i as Element of I;
+      consider K1 be ManySortedRelation of M such that
+       A6: K1 = c' \/ a' & c' "\/" a' = EqCl K1 by MSUALG_5:def 4;
+      reconsider K2 = c'.i' , a2 = a'.i' as Equivalence_Relation of M.i
+                                                          by MSUALG_4:def 3;
+        (c' \/ a').i = c'.i \/ a'.i by A5,PBOOLE:def 7
+           .= [:M.i,M.i:] \/ a'.i by A5,PRALG_2:def 9
+           .= nabla M.i \/ a2 by EQREL_1:def 1
+           .= nabla M.i by MSUALG_5:4
+           .= [:M.i,M.i:] by EQREL_1:def 1
+           .= c'.i by A5,PRALG_2:def 9;
+      hence (c' "\/" a').i = EqCl K2 by A6,MSUALG_5:def 3
+         .= c'.i by MSUALG_5:3;
+     end;
+     thus c"\/"a = (the L_join of EqRelLatt M).(c,a) by LATTICES:def 1
+       .= c' "\/" a' by MSUALG_5:def 5
+       .= c by A4,PBOOLE:3;
+     hence a"\/"c = c;
+    end;
+    then EqRelLatt M is upper-bounded by LATTICES:def 14;
+    hence thesis by A3,LATTICES:def 15;
+   end;
+  end;
+
+  theorem
+     Bottom EqRelLatt M = id M
+   proof
+    set K = id M;
+      K is Equivalence_Relation of M by Th2;
+    then reconsider K as Element of EqRelLatt M
+                                                          by MSUALG_5:def 5;
+      now let a be Element of EqRelLatt M;
+     reconsider K' = K , a' = a as Equivalence_Relation of M
+                                                          by MSUALG_5:def 5;
+     A1: now let i be set; assume A2: i in I;
+      then reconsider i' = i as Element of I;
+      reconsider a2 = a'.i' as Equivalence_Relation of M.i by MSUALG_4:def 3;
+      thus (K' /\ a').i = K'.i /\ a'.i by A2,PBOOLE:def 8
+         .= id (M.i) /\ a2 by MSUALG_3:def 1
+         .= id (M.i) by EQREL_1:17
+         .= K'.i by A2,MSUALG_3:def 1;
+     end;
+     thus K "/\" a = (the L_meet of EqRelLatt M).(K,a) by LATTICES:def 2
+       .= K' /\ a' by MSUALG_5:def 5
+       .= K by A1,PBOOLE:3;
+     hence a "/\" K = K;
+    end;
+    hence thesis by LATTICES:def 16;
+   end;
+
+  theorem
+     Top EqRelLatt M = [|M,M|]
+   proof
+    set K = [|M,M|];
+      K is Equivalence_Relation of M by Th3;
+    then reconsider K as Element of EqRelLatt M
+                                                          by MSUALG_5:def 5;
+      now let a be Element of EqRelLatt M;
+     reconsider K' = K , a' = a as Equivalence_Relation of M
+                                                          by MSUALG_5:def 5;
+     A1: now let i be set; assume A2: i in I;
+      then reconsider i' = i as Element of I;
+      consider K1 be ManySortedRelation of M such that
+       A3: K1 = K' \/ a' & K' "\/" a' = EqCl K1 by MSUALG_5:def 4;
+      reconsider K2 = K'.i' , a2 = a'.i' as
+                              Equivalence_Relation of M.i by MSUALG_4:def 3;
+        (K' \/ a').i = K'.i \/ a'.i by A2,PBOOLE:def 7
+           .= [:M.i,M.i:] \/ a'.i by A2,PRALG_2:def 9
+           .= nabla M.i \/ a2 by EQREL_1:def 1
+           .= nabla M.i by MSUALG_5:4
+           .= [:M.i,M.i:] by EQREL_1:def 1
+           .= K'.i by A2,PRALG_2:def 9;
+      hence (K' "\/" a').i = EqCl K2 by A3,MSUALG_5:def 3
+         .= K'.i by MSUALG_5:3;
+     end;
+     thus K "\/" a = (the L_join of EqRelLatt M).(K,a) by LATTICES:def 1
+       .= K' "\/" a' by MSUALG_5:def 5
+       .= K by A1,PBOOLE:3;
+     hence a "\/" K = K;
+    end;
+    hence thesis by LATTICES:def 17;
+   end;
+
+  theorem Th6:
+   for X be Subset of EqRelLatt M holds
+    X is SubsetFamily of [|M,M|]
+   proof
+    let X be Subset of EqRelLatt M;
+      now let x;
+     assume x in the carrier of EqRelLatt M;
+     then reconsider x' = x as Equivalence_Relation of M by MSUALG_5:def 5;
+       now let i be set;
+      assume i in I;
+      then reconsider i' = i as Element of I;
+        x'.i' c= [:M.i',M.i':];
+      hence x'.i c= [|M,M|].i by PRALG_2:def 9;
+     end;
+     then x' c= [|M,M|] by PBOOLE:def 5;
+     then x' is ManySortedSubset of [|M,M|] by MSUALG_2:def 1;
+     hence x in Bool [|M,M|] by CLOSURE2:def 1;
+    end;
+    then the carrier of EqRelLatt M c= Bool [|M,M|] by TARSKI:def 3;
+    then bool the carrier of EqRelLatt M c= bool Bool [|M,M|] by ZFMISC_1:79;
+    then X in bool Bool [|M,M|] by TARSKI:def 3;
+    hence thesis;
+   end;
+
+  theorem Th7:
+   for a,b be Element of EqRelLatt M,
+       A,B be Equivalence_Relation of M st a = A & b = B holds
+    a [= b iff A c= B
+   proof
+    let a,b be Element of EqRelLatt M;
+    let A,B be Equivalence_Relation of M;
+    assume A1: a = A & b = B;
+    thus a [= b implies A c= B
+    proof
+     assume A2: a [= b;
+       A /\ B = (the L_meet of EqRelLatt M).(A,B) by MSUALG_5:def 5
+          .= a "/\" b by A1,LATTICES:def 2
+          .= A by A1,A2,LATTICES:21;
+     hence A c= B by PBOOLE:17;
+    end;
+    thus A c= B implies a [= b
+    proof
+     assume A3: A c= B;
+       a "/\" b = (the L_meet of EqRelLatt M).(A,B) by A1,LATTICES:def 2
+           .= A /\ B by MSUALG_5:def 5
+           .= a by A1,A3,PBOOLE:25;
+     hence a [= b by LATTICES:21;
+    end;
+   end;
+
+  theorem Th8:
+   for X be Subset of EqRelLatt M,
+       X1 be SubsetFamily of [|M,M|] st X1 = X
+   for a,b be Equivalence_Relation of M st a = meet |:X1:| & b in X holds
+    a c= b
+   proof
+    let X be Subset of EqRelLatt M;
+    let X1 be SubsetFamily of [|M,M|] such that A1: X1 = X;
+    let a,b be Equivalence_Relation of M such that
+     A2: a = meet |:X1:| & b in X;
+      now let i;
+     assume A3: i in I;
+     then A4: |:X1:|.i = { x.i where x is Element of Bool [|M,M|] : x in X1 }
+                                                        by A1,A2,CLOSURE2:15;
+     consider Q be Subset-Family of ([|M,M|].i) such that
+      A5: Q = |:X1:|.i & meet |:X1:|.i = Intersect Q by A3,MSSUBFAM:def 2;
+     reconsider b' = b as Element of Bool [|M,M|] by A1,A2;
+     A6: b'.i in |:X1:|.i by A1,A2,A4;
+     then A7: a.i = meet (|:X1:|.i) by A2,A5,CANTOR_1:def 3;
+       for y st y in meet (|:X1:|.i) holds y in b.i by A6,SETFAM_1:def 1;
+     hence a.i c= b.i by A7,TARSKI:def 3;
+    end;
+    hence a c= b by PBOOLE:def 5;
+   end;
+
+  theorem Th9:
+   for X be Subset of EqRelLatt M,
+       X1 be SubsetFamily of [|M,M|] st X1 = X & X is non empty holds
+    meet |:X1:| is Equivalence_Relation of M
+   proof
+    let X be Subset of EqRelLatt M;
+    let X1 be SubsetFamily of [|M,M|];
+    assume A1: X1 = X & X is non empty;
+    set a = meet |:X1:|;
+      now let i be set;
+     assume A2: i in I;
+       a c= [|M,M|] by MSUALG_2:def 1;
+     then a.i c= [|M,M|].i by A2,PBOOLE:def 5;
+     then a.i c= [:M.i,M.i:] by A2,PRALG_2:def 9;
+     hence a.i is Relation of M.i by RELSET_1:def 1;
+    end;
+    then reconsider a as ManySortedRelation of M by MSUALG_4:def 2;
+      now let i be set, R be Relation of M.i;
+     assume A3: i in I & a.i = R;
+     then consider Q be Subset-Family of ([|M,M|].i) such that
+      A4: Q = |:X1:|.i & R = Intersect Q by MSSUBFAM:def 2;
+     reconsider Q as Subset-Family of [:M.i,M.i:] by A3,PRALG_2:def 9;
+     reconsider X1' = X1 as non empty SubsetFamily of [|M,M|] by A1;
+       |:X1':| is non-empty;
+     then A5: Q <> {} by A3,A4,PBOOLE:def 16;
+     A6: |:X1':|.i = { x.i where x is Element of Bool [|M,M|] : x in X1 }
+                                                           by A3,CLOSURE2:15;
+     reconsider i' = i as Element of I by A3;
+     reconsider b = |:X1:|.i' as Subset-Family of [:M.i,M.i:]
+                                                           by PRALG_2:def 9;
+       now let Y;
+      assume Y in b;
+      then consider z be Element of Bool [|M,M|] such that
+       A7: Y = z.i & z in X by A1,A6;
+        z c= [|M,M|] by MSUALG_2:def 1;
+      then z.i c= [|M,M|].i by A3,PBOOLE:def 5;
+      then z.i c= [:M.i,M.i:] by A3,PRALG_2:def 9;
+      then reconsider Y1 = Y as Relation of M.i by A7,RELSET_1:def 1;
+        z is Equivalence_Relation of M by A7,MSUALG_5:def 5;
+      then Y1 is Equivalence_Relation of M.i by A3,A7,MSUALG_4:def 3;
+      hence Y is Equivalence_Relation of M.i;
+     end;
+     then meet b is Equivalence_Relation of M.i by A4,A5,EQREL_1:19;
+     hence R is Equivalence_Relation of M.i by A4,A5,CANTOR_1:def 3;
+    end;
+    hence thesis by MSUALG_4:def 3;
+   end;
+
+  definition let L be non empty LattStr;
+   redefine attr L is complete means :Def1:
+    for X being Subset of L
+     ex a being Element of L
+      st X is_less_than a &
+      for b being Element of L
+       st X is_less_than b holds a [= b;
+   compatibility
+   proof
+    thus L is complete implies
+    ( for X being Subset of L
+       ex a being Element of L
+        st X is_less_than a &
+        for b being Element of L
+         st X is_less_than b holds a [= b ) by LATTICE3:def 18;
+    assume A1: for X being Subset of L
+     ex a being Element of L
+      st X is_less_than a &
+      for b being Element of L
+       st X is_less_than b holds a [= b;
+    let X be set;
+    defpred P[set] means $1 in X;
+    set Y = { c where c is Element of L : P[c] };
+      Y is Subset of L from SubsetD;
+    then consider p being Element of L such that
+     A2: Y is_less_than p and
+     A3: for r being Element of L
+                                     st Y is_less_than r holds p [= r by A1;
+    take p;
+    thus X is_less_than p
+    proof
+     let q be Element of L;
+     assume q in X;
+     then q in Y;
+     hence q [= p by A2,LATTICE3:def 17;
+    end;
+    let r be Element of L;
+    assume A4: X is_less_than r;
+      now let q be Element of L;
+     assume q in Y;
+     then consider v be Element of L such that
+      A5: q = v & v in X;
+     thus q [= r by A4,A5,LATTICE3:def 17;
+    end;
+    then Y is_less_than r by LATTICE3:def 17;
+    hence p [= r by A3;
+   end;
+  end;
+
+  theorem Th10:
+   EqRelLatt M is complete
+   proof
+      for X being Subset of EqRelLatt M
+     ex a being Element of EqRelLatt M st a is_less_than X &
+      for b being Element of EqRelLatt M st b is_less_than X
+       holds b [= a
+    proof
+     let X be Subset of EqRelLatt M;
+     reconsider X1 = X as SubsetFamily of [|M,M|] by Th6;
+     per cases;
+      suppose A1: X is empty;
+       take a = Top EqRelLatt M;
+         for q be Element of EqRelLatt M st q in X holds a [= q
+                                                                      by A1;
+       hence a is_less_than X by LATTICE3:def 16;
+       let b be Element of EqRelLatt M;
+       assume b is_less_than X;
+       thus b [= a by LATTICES:45;
+      suppose A2: X is non empty;
+       then reconsider a = meet |:X1:| as Equivalence_Relation of M by Th9;
+       set a' = a;
+       reconsider a as Element of EqRelLatt M
+                                                          by MSUALG_5:def 5;
+       take a;
+         now let q be Element of EqRelLatt M;
+        reconsider q' = q as Equivalence_Relation of M by MSUALG_5:def 5;
+        assume q in X;
+        then a' c= q' by Th8;
+        hence a [= q by Th7;
+       end;
+       hence a is_less_than X by LATTICE3:def 16;
+         now let b be Element of EqRelLatt M;
+        reconsider b' = b as Equivalence_Relation of M by MSUALG_5:def 5;
+        assume A3: b is_less_than X;
+          now let i;
+         assume A4: i in I;
+         reconsider X1' = X1 as non empty SubsetFamily of [|M,M|] by A2;
+           |:X1':| is non-empty;
+         then A5: |:X1:|.i <> {} by A4,PBOOLE:def 16;
+         consider Q be Subset-Family of ([|M,M|].i) such that
+          A6: Q = |:X1:|.i & meet |:X1:|.i = Intersect Q
+                                                       by A4,MSSUBFAM:def 2;
+           now let Z be set;
+          assume A7: Z in |:X1:|.i;
+            |:X1':|.i = { x.i where x is Element of Bool [|M,M|] : x in X1 }
+                                                           by A4,CLOSURE2:15;
+          then consider z be Element of Bool [|M,M|] such that
+           A8: Z = z.i & z in X1 by A7;
+          reconsider z' = z as Element of EqRelLatt M by A8;
+          reconsider z'' = z' as Equivalence_Relation of M by MSUALG_5:def 5;
+            b [= z' by A3,A8,LATTICE3:def 16;
+          then b' c= z'' by Th7;
+          hence b'.i c= Z by A4,A8,PBOOLE:def 5;
+         end;
+         then b'.i c= meet (|:X1:|.i) by A5,SETFAM_1:6;
+         hence b'.i c= meet |:X1:|.i by A5,A6,CANTOR_1:def 3;
+        end;
+        then b' c= meet |:X1:| by PBOOLE:def 5;
+        hence b [= a by Th7;
+       end;
+       hence thesis;
+    end;
+    hence thesis by VECTSP_8:def 6;
+   end;
+
+  definition
+   let I,M;
+   cluster EqRelLatt M -> complete;
+   coherence by Th10;
+  end;
+
+  theorem
+     for X be Subset of EqRelLatt M,
+       X1 be SubsetFamily of [|M,M|] st X1 = X & X is non empty
+   for a,b be Equivalence_Relation of M st a = meet |:X1:| &
+    b = "/\" (X,EqRelLatt M) holds a = b
+   proof
+    let X be Subset of EqRelLatt M;
+    let X1 be SubsetFamily of [|M,M|];
+    assume A1: X1 = X & X is non empty;
+    let a,b be Equivalence_Relation of M;
+    reconsider a' = a as Element of EqRelLatt M
+                                                          by MSUALG_5:def 5;
+    assume A2: a = meet |:X1:| & b = "/\" (X,EqRelLatt M);
+      now let q be Element of EqRelLatt M;
+     reconsider q' = q as Equivalence_Relation of M by MSUALG_5:def 5;
+     assume q in X;
+     then a c= q' by A1,A2,Th8;
+     hence a' [= q by Th7;
+    end;
+    then A3: a' is_less_than X by LATTICE3:def 16;
+      now let c be Element of EqRelLatt M;
+     reconsider c' = c as Equivalence_Relation of M by MSUALG_5:def 5;
+     assume A4: c is_less_than X;
+     reconsider X1' = X1 as non empty SubsetFamily of [|M,M|] by A1;
+     reconsider S = |:X1':| as non-empty MSSubsetFamily of [|M,M|];
+       now let Z1 be ManySortedSet of I;
+      assume A5: Z1 in S;
+        now let i;
+       assume A6: i in I;
+       then A7: Z1.i in |:X1:|.i by A5,PBOOLE:def 4;
+         |:X1':|.i = { x1.i where x1 is Element of Bool [|M,M|] : x1 in X1 }
+                                                           by A6,CLOSURE2:15;
+       then consider z be Element of Bool [|M,M|] such that
+        A8: Z1.i = z.i & z in X1 by A7;
+       reconsider z' = z as Element of EqRelLatt M by A1,A8;
+       reconsider z1 = z' as Equivalence_Relation of M by MSUALG_5:def 5;
+         c [= z' by A1,A4,A8,LATTICE3:def 16;
+       then c' c= z1 by Th7;
+       hence c'.i c= Z1.i by A6,A8,PBOOLE:def 5;
+      end;
+      hence c' c= Z1 by PBOOLE:def 5;
+     end;
+     then c' c= meet |:X1:| by MSSUBFAM:45;
+     hence c [= a' by A2,Th7;
+    end;
+    hence a = b by A2,A3,LATTICE3:34;
+   end;
+
+begin
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     ::           SUBLATTICES  INHERITING  SUP'S  AND  INF'S          ::
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  definition
+   let L be Lattice;
+   let IT be SubLattice of L;
+   attr IT is /\-inheriting means :Def2:
+    for X being Subset of IT holds
+     "/\" (X,L) in the carrier of IT;
+
+   attr IT is \/-inheriting means :Def3:
+    for X being Subset of IT holds
+     "\/" (X,L) in the carrier of IT;
+  end;
+
+  theorem Th12:
+   for L be Lattice,
+       L' be SubLattice of L,
+       a,b be Element of L,
+       a',b' be Element of L' st a = a' & b = b' holds
+       ( a "\/" b = a' "\/" b' & a "/\" b = a' "/\" b' )
+   proof
+    let L be Lattice;
+    let L' be SubLattice of L;
+    let a,b be Element of L;
+    let a',b' be Element of L';
+    assume A1: a = a' & b = b';
+    thus a "\/" b = (the L_join of L).(a,b) by LATTICES:def 1
+     .= (the L_join of L). [a',b'] by A1,BINOP_1:def 1
+     .= ((the L_join of L) | [:the carrier of L',the carrier of L':]). [a',b']
+                                                                by FUNCT_1:72
+     .= ((the L_join of L) | [:the carrier of L',the carrier of L':]).(a',b')
+                                                            by BINOP_1:def 1
+     .= (the L_join of L').(a',b') by NAT_LAT:def 16
+     .= a' "\/" b' by LATTICES:def 1;
+    thus a "/\" b = (the L_meet of L).(a,b) by LATTICES:def 2
+     .= (the L_meet of L). [a',b'] by A1,BINOP_1:def 1
+     .= ((the L_meet of L) | [:the carrier of L',the carrier of L':]). [a',b']
+                                                                by FUNCT_1:72
+     .= ((the L_meet of L) | [:the carrier of L',the carrier of L':]).(a',b')
+                                                            by BINOP_1:def 1
+     .= (the L_meet of L').(a',b') by NAT_LAT:def 16
+     .= a' "/\" b' by LATTICES:def 2;
+   end;
+
+  theorem Th13:
+   for L be Lattice,
+       L' be SubLattice of L,
+       X be Subset of L',
+       a be Element of L,
+       a' be Element of L' st a = a' holds
+    a is_less_than X iff a' is_less_than X
+   proof
+    let L be Lattice;
+    let L' be SubLattice of L;
+    let X be Subset of L';
+    let a be Element of L;
+    let a' be Element of L';
+    assume A1: a = a';
+    thus a is_less_than X implies a' is_less_than X
+    proof
+     assume A2: a is_less_than X;
+       now let q' be Element of L';
+        the carrier of L' c= the carrier of L by NAT_LAT:def 16;
+      then reconsider q = q' as Element of L by TARSKI:def 3;
+      assume q' in X;
+      then A3: a [= q by A2,LATTICE3:def 16;
+        a' "/\" q' = a "/\" q by A1,Th12
+              .= a' by A1,A3,LATTICES:21;
+      hence a' [= q' by LATTICES:21;
+     end;
+     hence a' is_less_than X by LATTICE3:def 16;
+    end;
+    thus a' is_less_than X implies a is_less_than X
+    proof
+     assume A4: a' is_less_than X;
+       now let q be Element of L;
+      assume A5: q in X;
+      then reconsider q' = q as Element of L';
+      A6: a' [= q' by A4,A5,LATTICE3:def 16;
+        a "/\" q = a' "/\" q' by A1,Th12
+            .= a by A1,A6,LATTICES:21;
+      hence a [= q by LATTICES:21;
+     end;
+     hence a is_less_than X by LATTICE3:def 16;
+    end;
+   end;
+
+  theorem Th14:
+   for L be Lattice,
+       L' be SubLattice of L,
+       X be Subset of L',
+       a be Element of L,
+       a' be Element of L' st a = a' holds
+    X is_less_than a iff X is_less_than a'
+   proof
+    let L be Lattice;
+    let L' be SubLattice of L;
+    let X be Subset of L';
+    let a be Element of L;
+    let a' be Element of L';
+    assume A1: a = a';
+    thus X is_less_than a implies X is_less_than a'
+    proof
+     assume A2: X is_less_than a;
+       now let q' be Element of L';
+        the carrier of L' c= the carrier of L by NAT_LAT:def 16;
+      then reconsider q = q' as Element of L by TARSKI:def 3;
+      assume q' in X;
+      then A3: q [= a by A2,LATTICE3:def 17;
+        q' "/\" a' = q "/\" a by A1,Th12
+              .= q' by A3,LATTICES:21;
+      hence q' [= a' by LATTICES:21;
+     end;
+     hence X is_less_than a' by LATTICE3:def 17;
+    end;
+    thus X is_less_than a' implies X is_less_than a
+    proof
+     assume A4: X is_less_than a';
+       now let q be Element of L;
+      assume A5: q in X;
+      then reconsider q' = q as Element of L';
+      A6: q' [= a' by A4,A5,LATTICE3:def 17;
+        q "/\" a = q' "/\" a' by A1,Th12
+            .= q by A6,LATTICES:21;
+      hence q [= a by LATTICES:21;
+     end;
+     hence X is_less_than a by LATTICE3:def 17;
+    end;
+   end;
+
+  theorem Th15:
+   for L be complete Lattice,
+       L' be SubLattice of L st L' is /\-inheriting holds
+    L' is complete
+   proof
+    let L be complete Lattice;
+    let L' be SubLattice of L such that
+     A1: L' is /\-inheriting;
+      for X being Subset of L'
+     ex a being Element of L' st a is_less_than X &
+      for b being Element of L' st b is_less_than X
+       holds b [= a
+    proof
+     let X be Subset of L';
+     set a = "/\" (X,L);
+     reconsider a' = a as Element of L' by A1,Def2;
+     take a';
+       a is_less_than X by LATTICE3:34;
+     hence a' is_less_than X by Th13;
+     let b' be Element of L';
+       the carrier of L' c= the carrier of L by NAT_LAT:def 16;
+     then reconsider b = b' as Element of L by TARSKI:def 3;
+     assume b' is_less_than X;
+     then b is_less_than X by Th13;
+     then A2: b [= a by LATTICE3:40;
+       b' "/\" a' = b "/\" a by Th12
+             .= b' by A2,LATTICES:21;
+     hence b' [= a' by LATTICES:21;
+    end;
+    hence thesis by VECTSP_8:def 6;
+   end;
+
+  theorem Th16:
+   for L be complete Lattice,
+       L' be SubLattice of L st L' is \/-inheriting holds
+    L' is complete
+   proof
+    let L be complete Lattice;
+    let L' be SubLattice of L such that
+     A1: L' is \/-inheriting;
+      for X being Subset of L'
+     ex a being Element of L' st
+      X is_less_than a & for b being Element of L' st
+       X is_less_than b holds a [= b
+    proof
+     let X be Subset of L';
+     set a = "\/" (X,L);
+     reconsider a' = a as Element of L' by A1,Def3;
+     take a';
+       X is_less_than a by LATTICE3:def 21;
+     hence X is_less_than a' by Th14;
+     let b' be Element of L';
+       the carrier of L' c= the carrier of L by NAT_LAT:def 16;
+     then reconsider b = b' as Element of L by TARSKI:def 3;
+     assume X is_less_than b';
+     then X is_less_than b by Th14;
+     then A2: a [= b by LATTICE3:def 21;
+       a' "/\" b' = a "/\" b by Th12
+             .= a' by A2,LATTICES:21;
+     hence a' [= b' by LATTICES:21;
+    end;
+    hence thesis by Def1;
+   end;
+
+  definition
+   let L be complete Lattice;
+   cluster complete SubLattice of L;
+   existence
+   proof
+    reconsider L1 = L as SubLattice of L by NAT_LAT:75;
+    take L1;
+    thus thesis;
+   end;
+  end;
+
+  definition
+   let L be complete Lattice;
+   cluster /\-inheriting -> complete SubLattice of L;
+   coherence by Th15;
+   cluster \/-inheriting -> complete SubLattice of L;
+   coherence by Th16;
+  end;
+
+  theorem Th17:
+   for L be complete Lattice,
+       L' be SubLattice of L st L' is /\-inheriting
+   for A' be Subset of L' holds
+    "/\" (A',L) = "/\" (A',L')
+   proof
+    let L be complete Lattice;
+    let L' be SubLattice of L;
+    assume A1: L' is /\-inheriting;
+    then reconsider L'1 = L' as complete SubLattice of L by Th15;
+    let A' be Subset of L';
+    set a = "/\" (A',L);
+    reconsider a' = a as Element of L'1 by A1,Def2;
+      a is_less_than A' & for c be Element of L
+     st c is_less_than A' holds c [= a by LATTICE3:34;
+    then A2: a' is_less_than A' by Th13;
+      now let c' be Element of L'1;
+       the carrier of L'1 c= the carrier of L by NAT_LAT:def 16;
+     then reconsider c = c' as Element of L by TARSKI:def 3;
+     assume c' is_less_than A';
+     then c is_less_than A' by Th13;
+     then A3: c [= a by LATTICE3:34;
+       c' "/\" a' = c "/\" a by Th12
+             .= c' by A3,LATTICES:21;
+     hence c' [= a' by LATTICES:21;
+    end;
+    hence thesis by A2,LATTICE3:34;
+   end;
+
+  theorem Th18:
+   for L be complete Lattice,
+       L' be SubLattice of L st L' is \/-inheriting
+   for A' be Subset of L' holds
+    "\/" (A',L) = "\/" (A',L')
+   proof
+    let L be complete Lattice;
+    let L' be SubLattice of L;
+    assume A1: L' is \/-inheriting;
+    then reconsider L'1 = L' as complete SubLattice of L by Th16;
+    let A' be Subset of L';
+    set a = "\/" (A',L);
+    reconsider a' = a as Element of L'1 by A1,Def3;
+      A' is_less_than a & for c be Element of L
+     st A' is_less_than c holds a [= c by LATTICE3:def 21;
+    then A2: A' is_less_than a' by Th14;
+      now let c' be Element of L'1;
+       the carrier of L'1 c= the carrier of L by NAT_LAT:def 16;
+     then reconsider c = c' as Element of L by TARSKI:def 3;
+     assume A' is_less_than c';
+     then A' is_less_than c by Th14;
+     then A3: a [= c by LATTICE3:def 21;
+       a' "/\" c' = a "/\" c by Th12
+             .= a' by A3,LATTICES:21;
+     hence a' [= c' by LATTICES:21;
+    end;
+    hence thesis by A2,LATTICE3:def 21;
+   end;
+
+  theorem
+     for L be complete Lattice,
+       L' be SubLattice of L st L' is /\-inheriting
+   for A be Subset of L,
+       A' be Subset of L' st A = A' holds
+    "/\" A = "/\" A' by Th17;
+
+  theorem
+     for L be complete Lattice,
+       L' be SubLattice of L st L' is \/-inheriting
+   for A be Subset of L,
+       A' be Subset of L' st A = A' holds
+    "\/" A = "\/" A' by Th18;
+
+begin
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     ::      SEGMENT  OF  REAL  NUMBERS  AS  A  COMPLETE  LATTICE     ::
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  definition
+   let r1,r2 such that A1: r1 <= r2;
+   func RealSubLatt(r1,r2) -> strict Lattice means :Def4:
+    the carrier of it = [.r1,r2.] &
+    the L_join of it = maxreal|([:[.r1,r2.],[.r1,r2.]:] qua set) &
+    the L_meet of it = minreal|([:[.r1,r2.],[.r1,r2.]:] qua set);
+   existence
+   proof
+      r2 in { r : r1 <= r & r <= r2 } by A1;
+    then reconsider A = [.r1,r2.] as non empty set by RCOMP_1:def 1;
+      [:A,A:] c= [:REAL,REAL:] by ZFMISC_1:119;
+    then reconsider Ma = maxreal|[:A,A:] , Mi = minreal|[:A,A:]
+                                   as Function of [:A,A:],REAL by FUNCT_2:38;
+    A2: dom Ma = [:A,A:] & dom Mi = [:A,A:] by FUNCT_2:def 1;
+      now let x;
+     assume A3: x in dom Ma;
+     then consider x1,x2 be set such that A4: x = [x1,x2] by ZFMISC_1:102;
+     A5: x1 in A & x2 in A by A3,A4,ZFMISC_1:106;
+     then x1 in { r : r1 <= r & r <= r2 } by RCOMP_1:def 1;
+     then consider y1 be Element of REAL such that
+      A6: x1 = y1 & r1 <= y1 & y1 <= r2;
+       x2 in { r : r1 <= r & r <= r2 } by A5,RCOMP_1:def 1;
+     then consider y2 be Element of REAL such that
+      A7: x2 = y2 & r1 <= y2 & y2 <= r2;
+       Ma.x = maxreal. [x1,x2] by A3,A4,FUNCT_1:72
+         .= maxreal.(x1,x2) by BINOP_1:def 1
+         .= max(y1,y2) by A6,A7,REAL_LAT:def 2;
+     then Ma.x = y1 or Ma.x = y2 by SQUARE_1:49;
+     then Ma.x in { r : r1 <= r & r <= r2 } by A6,A7;
+     hence Ma.x in A by RCOMP_1:def 1;
+    end;
+    then reconsider Ma as BinOp of A by A2,FUNCT_2:5;
+      now let x;
+     assume A8: x in dom Mi;
+     then consider x1,x2 be set such that A9: x = [x1,x2] by ZFMISC_1:102;
+     A10: x1 in A & x2 in A by A8,A9,ZFMISC_1:106;
+     then x1 in { r : r1 <= r & r <= r2 } by RCOMP_1:def 1;
+     then consider y1 be Element of REAL such that
+      A11: x1 = y1 & r1 <= y1 & y1 <= r2;
+       x2 in { r : r1 <= r & r <= r2 } by A10,RCOMP_1:def 1;
+     then consider y2 be Element of REAL such that
+      A12: x2 = y2 & r1 <= y2 & y2 <= r2;
+       Mi.x = minreal. [x1,x2] by A8,A9,FUNCT_1:72
+         .= minreal.(x1,x2) by BINOP_1:def 1
+         .= min(y1,y2) by A11,A12,REAL_LAT:def 1;
+     then Mi.x = y1 or Mi.x = y2 by SQUARE_1:38;
+     then Mi.x in { r : r1 <= r & r <= r2 } by A11,A12;
+     hence Mi.x in A by RCOMP_1:def 1;
+    end;
+    then reconsider Mi as BinOp of A by A2,FUNCT_2:5;
+    set R = Real_Lattice;
+    A13: now let x be Element of A;
+       x in A;
+     then x in { r : r1 <= r & r <= r2 } by RCOMP_1:def 1;
+     then consider y be Element of REAL such that
+     A14: x = y & r1 <= y & y <= r2;
+     thus x is Element of R by A14,REAL_LAT:def 4;
+    end;
+    set L' = LattStr (# A , Ma , Mi #);
+    reconsider L = L' as non empty LattStr by STRUCT_0:def 1;
+    A15: now let a,b be Element of L;
+     thus a"\/"b = (the L_join of L).(a,b) by LATTICES:def 1
+           .= (maxreal|[:A,A:]). [a,b] by BINOP_1:def 1
+           .= maxreal. [a,b] by FUNCT_1:72
+           .= maxreal.(a,b) by BINOP_1:def 1;
+     thus a"/\"b = (the L_meet of L).(a,b) by LATTICES:def 2
+           .= (minreal|[:A,A:]). [a,b] by BINOP_1:def 1
+           .= minreal. [a,b] by FUNCT_1:72
+           .= minreal.(a,b) by BINOP_1:def 1;
+    end;
+    A16: now let p,q be Element of L;
+     reconsider p' = p, q' = q as Element of R by A13;
+     thus p"\/"q = maxreal.(p,q) by A15
+              .= maxreal.(q',p') by REAL_LAT:8
+              .= q"\/"p by A15;
+    end;
+    A17: now let p,q,r be Element of L;
+     reconsider p' = p , q' = q , r' = r as Element of R by A13;
+     thus p"\/"(q"\/"r) = maxreal.(p,q"\/"r) by A15
+                   .= maxreal.(p,maxreal.(q,r)) by A15
+                   .= maxreal.(maxreal.(p',q'),r') by REAL_LAT:10
+                   .= maxreal.(p"\/"q,r) by A15
+                   .= (p"\/"q)"\/"r by A15;
+    end;
+    A18: now let p,q be Element of L;
+     reconsider p' = p , q' = q as Element of R by A13;
+     thus (p"/\"q)"\/"q = maxreal.(p"/\"q,q) by A15
+                   .= maxreal.(minreal.(p',q'),q') by A15
+                   .= q by REAL_LAT:12;
+    end;
+    A19: now let p,q be Element of L;
+     reconsider p' = p , q' = q as Element of R by A13;
+     thus p"/\"q = minreal.(p,q) by A15
+              .= minreal.(q',p') by REAL_LAT:9
+              .= q"/\"p by A15;
+    end;
+    A20: now let p,q,r be Element of L;
+     reconsider p' = p , q' = q , r' = r as Element of R by A13;
+     thus p"/\"(q"/\"r) = minreal.(p,q"/\"r) by A15
+                   .= minreal.(p,minreal.(q,r)) by A15
+                   .= minreal.(minreal.(p',q'),r') by REAL_LAT:11
+                   .= minreal.(p"/\"q,r) by A15
+                   .= (p"/\"q)"/\"r by A15;
+    end;
+      now let p,q be Element of L;
+     reconsider p' = p , q' = q as Element of R by A13;
+     thus p"/\"(p"\/"q) = minreal.(p,p"\/"q) by A15
+                   .= minreal.(p',maxreal.(p',q')) by A15
+                   .= p by REAL_LAT:13;
+    end;
+    then L is join-commutative join-associative meet-absorbing
+        meet-commutative meet-associative join-absorbing
+     by A16,A17,A18,A19,A20,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+    then reconsider L' as strict Lattice by LATTICES:def 10;
+    take L';
+    thus thesis;
+   end;
+   uniqueness;
+  end;
+
+  theorem Th21:
+   for r1,r2 st r1 <= r2 holds
+    RealSubLatt(r1,r2) is complete
+   proof
+    let r1,r2 such that A1: r1 <= r2;
+    set A = [.r1,r2.];
+    set L' = RealSubLatt(r1,r2);
+    reconsider R1 = r1 , R2 = r2 as R_eal by SUPINF_1:10;
+    A2: the carrier of L' = [.r1,r2.] &
+    the L_join of L' = maxreal|([:[.r1,r2.],[.r1,r2.]:] qua set) &
+    the L_meet of L' = minreal|([:[.r1,r2.],[.r1,r2.]:] qua set) by A1,Def4;
+      now let X be Subset of L';
+     per cases;
+      suppose A3: X is empty;
+       thus ex a be Element of L' st a is_less_than X &
+       for b being Element of L'
+        st b is_less_than X holds b [= a
+       proof
+          r2 in { r : r1 <= r & r <= r2 } by A1;
+        then reconsider a = r2 as Element of L'
+                                                       by A2,RCOMP_1:def 1;
+        take a;
+          for q be Element of L' st q in X holds a [= q by A3;
+        hence a is_less_than X by LATTICE3:def 16;
+        let b be Element of L';
+        A4: b in [.r1,r2.] by A2;
+        then b in { r : r1 <= r & r <= r2 } by RCOMP_1:def 1;
+        then consider b1 be Element of REAL such that
+         A5: b = b1 & r1 <= b1 & b1 <= r2;
+        reconsider b' = b as Element of REAL by A4;
+        assume b is_less_than X;
+          b "/\" a = (minreal|([:A,A:] qua set)).(b,a) by A2,LATTICES:def 2
+              .= (minreal|([:A,A:] qua set)). [b,a] by BINOP_1:def 1
+              .= minreal. [b,a] by A2,FUNCT_1:72
+              .= minreal.(b,a) by BINOP_1:def 1
+              .= min(b',r2) by REAL_LAT:def 1
+              .= b by A5,SQUARE_1:def 1;
+        hence b [= a by LATTICES:21;
+       end;
+      suppose A6: X is non empty;
+          X c= REAL by A2,XBOOLE_1:1;
+       then reconsider X1 = X as non empty Subset of ExtREAL by A6,XBOOLE_1:1;
+       thus ex a be Element of L' st a is_less_than X &
+       for b being Element of L'
+        st b is_less_than X holds b [= a
+       proof
+        set A1 = inf X1;
+        A7: A1 is minorant of X1 &
+        for y be R_eal holds
+         (y is minorant of X1 implies y <=' A1) by SUPINF_1:def 17;
+          ex LB be minorant of X1 st LB in REAL
+        proof
+         reconsider LB = r1 - 1 as R_eal by SUPINF_1:10;
+           now let v be R_eal;
+          assume v in X1;
+          then v in the carrier of L';
+          then v in { r : r1 <= r & r <= r2 } by A2,RCOMP_1:def 1;
+          then consider w be Element of REAL such that
+           A8: v = w & r1 <= w & w <= r2;
+            r1 - 1 <= r1 - 0 by REAL_1:92;
+          then r1 - 1 + r1 <= r1 + w by A8,REAL_1:55;
+          then r1 - 1 <= w by REAL_1:53;
+          hence LB <=' v by A8,SUPINF_1:16;
+         end;
+         then reconsider LB as minorant of X1 by SUPINF_1:def 10;
+         take LB;
+         thus LB in REAL;
+        end;
+        then A9: X1 is bounded_below by SUPINF_1:def 12;
+          not X = {+infty}
+        proof
+         A10: X c= REAL by A2,XBOOLE_1:1;
+         assume X = {+infty};
+         then +infty in X by TARSKI:def 1;
+         hence contradiction by A10,SUPINF_1:2;
+        end;
+        then A11: A1 is Real by A9,SUPINF_1:84;
+          now let v be R_eal;
+         assume v in X1;
+         then v in A by A2;
+         then v in { r : r1 <= r & r <= r2 } by RCOMP_1:def 1;
+         then consider w be Element of REAL such that
+          A12: v = w & r1 <= w & w <= r2;
+         thus R1 <=' v by A12,SUPINF_1:16;
+        end;
+        then R1 is minorant of X1 by SUPINF_1:def 10;
+        then R1 <=' A1 by SUPINF_1:def 17;
+        then consider R1' ,A1' be Real such that
+         A13: R1' = R1 & A1' = A1 & R1' <= A1' by A11,SUPINF_1:16;
+        consider g be Element of X1;
+          g in [.r1,r2.] by A2,TARSKI:def 3;
+        then g in { r : r1 <= r & r <= r2 } by RCOMP_1:def 1;
+        then consider w be Element of REAL such that
+         A14: g = w & r1 <= w & w <= r2;
+        A15: g <=' R2 by A14,SUPINF_1:16;
+          A1 <=' g by A7,SUPINF_1:def 10;
+        then A1 <=' R2 by A15,SUPINF_1:29;
+        then consider A' ,R2' be Real such that
+         A16: A' = A1 & R2' = R2 & A' <= R2' by A11,SUPINF_1:16;
+          A' in { r : r1 <= r & r <= r2 } by A13,A16;
+        then reconsider a = A1 as Element of L'
+                                                          by A2,A16,RCOMP_1:def
+1;
+          a in [.r1,r2.] by A2;
+        then reconsider a' = a as Element of REAL;
+        take a;
+          now let q be Element of L';
+           q in [.r1,r2.] by A2;
+         then reconsider q' = q as Element of REAL;
+         reconsider Q = q' as R_eal;
+         A17: A1 = a';
+         assume q in X;
+         then A1 <=' Q by A7,SUPINF_1:def 10;
+         then consider a1 , q1 be Real such that
+          A18: a1 = A1 & q1 = Q & a1 <= q1 by A17,SUPINF_1:16;
+           a "/\" q = (minreal|([:A,A:] qua set)).(a,q) by A2,LATTICES:def 2
+               .= (minreal|([:A,A:] qua set)). [a,q] by BINOP_1:def 1
+               .= minreal. [a,q] by A2,FUNCT_1:72
+               .= minreal.(a,q) by BINOP_1:def 1
+               .= min(a',q') by REAL_LAT:def 1
+               .= a by A18,SQUARE_1:def 1;
+         hence a [= q by LATTICES:21;
+        end;
+        hence a is_less_than X by LATTICE3:def 16;
+        let b be Element of L';
+          b in [.r1,r2.] by A2;
+        then reconsider b' = b as Element of REAL;
+        reconsider B = b' as R_eal;
+        assume A19: b is_less_than X;
+          now let h be R_eal;
+         assume A20: h in X;
+         then reconsider h1 = h as Element of L';
+           h in [.r1,r2.] by A2,A20;
+         then reconsider h' = h as Real;
+         A21: b [= h1 by A19,A20,LATTICE3:def 16;
+           min(b',h') = minreal.(b,h1) by REAL_LAT:def 1
+                       .= minreal. [b,h1] by BINOP_1:def 1
+                       .= (minreal|([:A,A:] qua set)). [b,h1] by A2,FUNCT_1:72
+                       .= (minreal|([:A,A:] qua set)).(b,h1) by BINOP_1:def 1
+                       .= b "/\" h1 by A2,LATTICES:def 2
+                       .= b' by A21,LATTICES:21;
+         then b' <= h' by SQUARE_1:def 1;
+         hence B <=' h by SUPINF_1:16;
+        end;
+        then B is minorant of X1 by SUPINF_1:def 10;
+        then B <=' A1 by SUPINF_1:def 17;
+        then consider b1 , a1 be Real such that
+         A22: b1 = B & a1 = A1 & b1 <= a1 by A11,SUPINF_1:16;
+          b "/\" a = (minreal|([:A,A:] qua set)).(b,a) by A2,LATTICES:def 2
+              .= (minreal|([:A,A:] qua set)). [b,a] by BINOP_1:def 1
+              .= minreal. [b,a] by A2,FUNCT_1:72
+              .= minreal.(b,a) by BINOP_1:def 1
+              .= min(b',a') by REAL_LAT:def 1
+              .= b by A22,SQUARE_1:def 1;
+        hence b [= a by LATTICES:21;
+       end;
+    end;
+    hence thesis by VECTSP_8:def 6;
+   end;
+
+  theorem Th22:
+   ex L' be SubLattice of RealSubLatt(0,1) st
+    L' is \/-inheriting non /\-inheriting
+   proof
+    set R = Real_Lattice;
+    A1: 0 in { r : 0 <= r & r <= 1 };
+    then reconsider A = [.0,1.] as non empty set by RCOMP_1:def 1;
+    set L = RealSubLatt(0,1);
+    A2: A = the carrier of L &
+     the L_join of L = maxreal|([:[.0,1.],[.0,1.]:] qua set) &
+     the L_meet of L = minreal|([:[.0,1.],[.0,1.]:] qua set) by Def4;
+    then reconsider Ma = maxreal|([:A,A:] qua set),
+               Mi = minreal|([:A,A:] qua set) as BinOp of A;
+    reconsider L as complete Lattice by Th21;
+    set B = {0,1} \/ ].1/2,1.[;
+    A3: B = {0} \/ { x where x is Element of REAL : 1/2 < x & x <= 1 }
+    proof
+     thus B c= {0} \/ { x where x is Element of REAL : 1/2 < x & x <= 1 }
+     proof
+      let x1 be set;
+      assume A4: x1 in B;
+        now per cases by A4,XBOOLE_0:def 2;
+       suppose x1 in {0,1};
+        then x1 = 0 or x1 = 1 by TARSKI:def 2;
+        then x1 in {0} or x1 in
+         { x where x is Element of REAL : 1/2 < x & x <= 1 }
+                                                 by TARSKI:def 1;
+        hence x1 in {0} \/ { x where x is Element of REAL : 1/2 < x & x <= 1 }
+                                                             by XBOOLE_0:def 2;
+       suppose x1 in ].1/2,1.[;
+        then x1 in { r : 1/2 < r & r < 1 } by RCOMP_1:def 2;
+        then consider y be Element of REAL such that
+         A5: x1 = y & 1/2 < y & y < 1;
+          y in { x where x is Element of REAL : 1/2 < x & x <= 1 } by A5;
+        hence x1 in {0} \/ { x where x is Element of REAL : 1/2 < x & x <= 1 }
+                                                           by A5,XBOOLE_0:def 2
+;
+      end;
+      hence x1 in {0} \/ { x where x is Element of REAL : 1/2 < x & x <= 1 };
+     end;
+     thus {0} \/ { x where x is Element of REAL : 1/2 < x & x <= 1 } c= B
+     proof
+      let x1 be set;
+      assume A6: x1 in {0} \/ { x where x is Element of REAL : 1/2 < x & x <=
+ 1 };
+        now per cases by A6,XBOOLE_0:def 2;
+       suppose x1 in {0};
+        then x1 = 0 by TARSKI:def 1;
+        then x1 in {0,1} by TARSKI:def 2;
+        hence x1 in B by XBOOLE_0:def 2;
+       suppose x1 in { x where x is Element of REAL : 1/2 < x & x <= 1 };
+        then consider y be Element of REAL such that
+         A7: x1 = y & 1/2 < y & y <= 1;
+          y < 1 or y = 1 by A7,REAL_1:def 5;
+        then y in { r : 1/2 < r & r < 1 } or y = 1 by A7;
+        then y in ].1/2,1.[ or y in {0,1} by RCOMP_1:def 2,TARSKI:def 2;
+        hence x1 in B by A7,XBOOLE_0:def 2;
+      end;
+      hence x1 in B;
+     end;
+    end;
+    reconsider B as non empty set;
+    A8: now let x1 be set;
+     assume A9: x1 in B;
+       now per cases by A3,A9,XBOOLE_0:def 2;
+      suppose x1 in {0};
+      then x1 = 0 by TARSKI:def 1;
+      hence x1 in A by A1,RCOMP_1:def 1;
+      suppose x1 in { x where x is Element of REAL : 1/2 < x & x <= 1 };
+      then consider y be Element of REAL such that
+       A10: x1 = y & 1/2 < y & y <= 1;
+        0 + 1/2 <= 1/2 + y by A10,REAL_1:55;
+      then 0 <= y by REAL_1:53;
+      then x1 in { r : 0 <= r & r <= 1 } by A10;
+      hence x1 in A by RCOMP_1:def 1;
+     end;
+     hence x1 in A;
+    end;
+    then A11: B c= A by TARSKI:def 3;
+    then A12: [:B,B:] c= [:A,A:] by ZFMISC_1:119;
+    then reconsider ma = Ma|[:B,B:] , mi = Mi|[:B,B:]
+                                      as Function of [:B,B:],A by FUNCT_2:38;
+    A13: dom ma = [:B,B:] & dom mi = [:B,B:] by FUNCT_2:def 1;
+      now let x' be set;
+     assume A14: x' in dom ma;
+     then consider x1,x2 be set such that A15: x' = [x1,x2] by ZFMISC_1:102;
+     A16: x1 in B & x2 in B by A14,A15,ZFMISC_1:106;
+       now per cases by A3,A16,XBOOLE_0:def 2;
+      suppose x1 in {0};
+       then A17: x1 = 0 by TARSKI:def 1;
+         now per cases by A3,A16,XBOOLE_0:def 2;
+        suppose x2 in {0};
+         then A18: x2 = 0 by TARSKI:def 1;
+           ma.x' = Ma. [x1,x2] by A14,A15,FUNCT_1:72
+              .= maxreal. [x1,x2] by A12,A13,A14,A15,FUNCT_1:72
+              .= maxreal.(x1,x2) by BINOP_1:def 1
+              .= max(0,0) by A17,A18,REAL_LAT:def 2
+              .= 0;
+         then ma.x' in {0} by TARSKI:def 1;
+         hence ma.x' in B by A3,XBOOLE_0:def 2;
+        suppose x2 in { x where x is Element of REAL : 1/2 < x & x <= 1 };
+         then consider y2 be Element of REAL such that
+          A19: x2 = y2 & 1/2 < y2 & y2 <= 1;
+           ma.x' = Ma. [x1,x2] by A14,A15,FUNCT_1:72
+              .= maxreal. [x1,x2] by A12,A13,A14,A15,FUNCT_1:72
+              .= maxreal.(x1,x2) by BINOP_1:def 1
+              .= max(0,y2) by A17,A19,REAL_LAT:def 2;
+         then ma.x' = 0 or ma.x' = y2 by SQUARE_1:49;
+         then ma.x' in {0} or ma.x' in
+          { x where x is Element of REAL : 1/2 < x & x <= 1 }
+                                                         by A19,TARSKI:def 1;
+         hence ma.x' in B by A3,XBOOLE_0:def 2;
+       end;
+       hence ma.x' in B;
+      suppose x1 in { x where x is Element of REAL : 1/2 < x & x <= 1 };
+       then consider y1 be Element of REAL such that
+        A20: x1 = y1 & 1/2 < y1 & y1 <= 1;
+         now per cases by A3,A16,XBOOLE_0:def 2;
+        suppose x2 in {0};
+         then A21: x2 = 0 by TARSKI:def 1;
+           ma.x' = Ma. [x1,x2] by A14,A15,FUNCT_1:72
+              .= maxreal. [x1,x2] by A12,A13,A14,A15,FUNCT_1:72
+              .= maxreal.(x1,x2) by BINOP_1:def 1
+              .= max(y1,0) by A20,A21,REAL_LAT:def 2;
+         then ma.x' = y1 or ma.x' = 0 by SQUARE_1:49;
+         then ma.x' in { x where x is Element of REAL : 1/2 < x & x <= 1 }
+          or ma.x' in {0} by A20,TARSKI:def 1;
+         hence ma.x' in B by A3,XBOOLE_0:def 2;
+        suppose x2 in { x where x is Element of REAL : 1/2 < x & x <= 1 };
+         then consider y2 be Element of REAL such that
+          A22: x2 = y2 & 1/2 < y2 & y2 <= 1;
+           ma.x' = Ma. [x1,x2] by A14,A15,FUNCT_1:72
+              .= maxreal. [x1,x2] by A12,A13,A14,A15,FUNCT_1:72
+              .= maxreal.(x1,x2) by BINOP_1:def 1
+              .= max(y1,y2) by A20,A22,REAL_LAT:def 2;
+         then ma.x' = y1 or ma.x' = y2 by SQUARE_1:49;
+         then ma.x' in { x where x is Element of REAL : 1/2 < x & x <= 1 }
+                                                                    by A20,A22;
+         hence ma.x' in B by A3,XBOOLE_0:def 2;
+       end;
+       hence ma.x' in B;
+     end;
+     hence ma.x' in B;
+    end;
+    then reconsider ma as BinOp of B by A13,FUNCT_2:5;
+      now let x' be set;
+     assume A23: x' in dom mi;
+     then consider x1,x2 be set such that A24: x' = [x1,x2] by ZFMISC_1:102;
+     A25: x1 in B & x2 in B by A23,A24,ZFMISC_1:106;
+       now per cases by A3,A25,XBOOLE_0:def 2;
+      suppose x1 in {0};
+       then A26: x1 = 0 by TARSKI:def 1;
+         now per cases by A3,A25,XBOOLE_0:def 2;
+        suppose x2 in {0};
+         then A27: x2 = 0 by TARSKI:def 1;
+           mi.x' = Mi. [x1,x2] by A23,A24,FUNCT_1:72
+              .= minreal. [x1,x2] by A12,A13,A23,A24,FUNCT_1:72
+              .= minreal.(x1,x2) by BINOP_1:def 1
+              .= min(0,0) by A26,A27,REAL_LAT:def 1
+              .= 0;
+         then mi.x' in {0} by TARSKI:def 1;
+         hence mi.x' in B by A3,XBOOLE_0:def 2;
+        suppose x2 in { x where x is Element of REAL : 1/2 < x & x <= 1 };
+         then consider y2 be Element of REAL such that
+          A28: x2 = y2 & 1/2 < y2 & y2 <= 1;
+           mi.x' = Mi. [x1,x2] by A23,A24,FUNCT_1:72
+              .= minreal. [x1,x2] by A12,A13,A23,A24,FUNCT_1:72
+              .= minreal.(x1,x2) by BINOP_1:def 1
+              .= min(0,y2) by A26,A28,REAL_LAT:def 1;
+         then mi.x' = 0 or mi.x' = y2 by SQUARE_1:38;
+         then mi.x' in {0} or mi.x' in
+          { x where x is Element of REAL : 1/2 < x & x <= 1 }
+                                                         by A28,TARSKI:def 1;
+         hence mi.x' in B by A3,XBOOLE_0:def 2;
+       end;
+       hence mi.x' in B;
+      suppose x1 in { x where x is Element of REAL : 1/2 < x & x <= 1 };
+       then consider y1 be Element of REAL such that
+        A29: x1 = y1 & 1/2 < y1 & y1 <= 1;
+         now per cases by A3,A25,XBOOLE_0:def 2;
+        suppose x2 in {0};
+         then A30: x2 = 0 by TARSKI:def 1;
+           mi.x' = Mi. [x1,x2] by A23,A24,FUNCT_1:72
+              .= minreal. [x1,x2] by A12,A13,A23,A24,FUNCT_1:72
+              .= minreal.(x1,x2) by BINOP_1:def 1
+              .= min(y1,0) by A29,A30,REAL_LAT:def 1;
+         then mi.x' = y1 or mi.x' = 0 by SQUARE_1:38;
+         then mi.x' in { x where x is Element of REAL : 1/2 < x & x <= 1 }
+          or mi.x' in {0} by A29,TARSKI:def 1;
+         hence mi.x' in B by A3,XBOOLE_0:def 2;
+        suppose x2 in { x where x is Element of REAL : 1/2 < x & x <= 1 };
+         then consider y2 be Element of REAL such that
+          A31: x2 = y2 & 1/2 < y2 & y2 <= 1;
+           mi.x' = Mi. [x1,x2] by A23,A24,FUNCT_1:72
+              .= minreal. [x1,x2] by A12,A13,A23,A24,FUNCT_1:72
+              .= minreal.(x1,x2) by BINOP_1:def 1
+              .= min(y1,y2) by A29,A31,REAL_LAT:def 1;
+         then mi.x' = y1 or mi.x' = y2 by SQUARE_1:38;
+         then mi.x' in { x where x is Element of REAL : 1/2 < x & x <= 1 }
+                                                                    by A29,A31;
+         hence mi.x' in B by A3,XBOOLE_0:def 2;
+       end;
+       hence mi.x' in B;
+     end;
+     hence mi.x' in B;
+    end;
+    then reconsider mi as BinOp of B by A13,FUNCT_2:5;
+    reconsider L' = LattStr (# B , ma , mi #) as non empty LattStr
+      by STRUCT_0:def 1;
+    A32: now let x1 be Element of A;
+       x1 in A;
+     then x1 in { r : 0 <= r & r <= 1 } by RCOMP_1:def 1;
+     then consider y1 be Element of REAL such that
+      A33: x1 = y1 & 0 <= y1 & y1 <= 1;
+     thus x1 is Element of R by A33,REAL_LAT:def 4;
+    end;
+    A34: now let x1 be Element of B;
+       now per cases by A3,XBOOLE_0:def 2;
+      suppose x1 in {0};
+       then x1 = 0 by TARSKI:def 1;
+       hence x1 is Element of L by A1,A2,RCOMP_1:def 1;
+      suppose x1 in { x where x is Element of REAL : 1/2 < x & x <= 1 };
+       then consider y be Element of REAL such that
+        A35: x1 = y & 1/2 < y & y <= 1;
+         0 + 1/2 <= 1/2 + y by A35,REAL_1:55;
+       then 0 <= y by REAL_1:53;
+       then x1 in { r : 0 <= r & r <= 1 } by A35;
+       hence x1 is Element of L by A2,RCOMP_1:def 1;
+     end;
+     hence x1 is Element of L;
+    end;
+    A36: now let a,b be Element of L';
+     A37: [a,b] in [:B,B:];
+     thus a"\/"b = (the L_join of L').(a,b) by LATTICES:def 1
+           .= (Ma|[:B,B:]). [a,b] by BINOP_1:def 1
+           .= (maxreal|[:A,A:]). [a,b] by FUNCT_1:72
+           .= maxreal. [a,b] by A12,A37,FUNCT_1:72
+           .= maxreal.(a,b) by BINOP_1:def 1;
+     thus a"/\"b = (the L_meet of L').(a,b) by LATTICES:def 2
+           .= (Mi|[:B,B:]). [a,b] by BINOP_1:def 1
+           .= (minreal|[:A,A:]). [a,b] by FUNCT_1:72
+           .= minreal. [a,b] by A12,A37,FUNCT_1:72
+           .= minreal.(a,b) by BINOP_1:def 1;
+    end;
+    A38: now let p,q be Element of L';
+     reconsider p' = p , q' = q as Element of L by A34;
+     reconsider p' , q' as Element of R by A2,A32;
+     thus p"\/"q = maxreal.(p,q) by A36
+              .= maxreal.(q',p') by REAL_LAT:8
+              .= q"\/"p by A36;
+    end;
+    A39: now let p,q,r be Element of L';
+     reconsider p' = p , q' = q , r' = r as Element of L by A34;
+     reconsider p' , q' , r' as Element of R by A2,A32;
+     thus p"\/"(q"\/"r) = maxreal.(p,q"\/"r) by A36
+                   .= maxreal.(p,maxreal.(q,r)) by A36
+                   .= maxreal.(maxreal.(p',q'),r') by REAL_LAT:10
+                   .= maxreal.(p"\/"q,r) by A36
+                   .= (p"\/"q)"\/"r by A36;
+    end;
+    A40: now let p,q be Element of L';
+     reconsider p' = p , q' = q as Element of L by A34;
+     reconsider p' , q' as Element of R by A2,A32;
+     thus (p"/\"q)"\/"q = maxreal.(p"/\"q,q) by A36
+                   .= maxreal.(minreal.(p',q'),q') by A36
+                   .= q by REAL_LAT:12;
+    end;
+    A41: now let p,q be Element of L';
+     reconsider p' = p , q' = q as Element of L by A34;
+     reconsider p' , q' as Element of R by A2,A32;
+     thus p"/\"q = minreal.(p,q) by A36
+              .= minreal.(q',p') by REAL_LAT:9
+              .= q"/\"p by A36;
+    end;
+    A42: now let p,q,r be Element of L';
+     reconsider p' = p , q' = q , r' = r as Element of L by A34;
+     reconsider p' , q' , r' as Element of R by A2,A32;
+     thus p"/\"(q"/\"r) = minreal.(p,q"/\"r) by A36
+                   .= minreal.(p,minreal.(q,r)) by A36
+                   .= minreal.(minreal.(p',q'),r') by REAL_LAT:11
+                   .= minreal.(p"/\"q,r) by A36
+                   .= (p"/\"q)"/\"r by A36;
+    end;
+      now let p,q be Element of L';
+     reconsider p' = p , q' = q as Element of L by A34;
+     reconsider p' , q' as Element of R by A2,A32;
+     thus p"/\"(p"\/"q) = minreal.(p,p"\/"q) by A36
+                   .= minreal.(p',maxreal.(p',q')) by A36
+                   .= p by REAL_LAT:13;
+    end;
+    then L' is join-commutative join-associative meet-absorbing
+        meet-commutative meet-associative join-absorbing
+     by A38,A39,A40,A41,A42,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+    then reconsider L' as Lattice by LATTICES:def 10;
+    reconsider L' as SubLattice of RealSubLatt(0,1) by A2,A11,NAT_LAT:def 16;
+    take L';
+      now let X be Subset of L';
+     thus "\/" (X,L) in the carrier of L'
+     proof
+        "\/" (X,L) in [.0,1.] by A2;
+      then "\/" (X,L) in { r : 0 <= r & r <= 1 } by RCOMP_1:def 1;
+      then consider y be Element of REAL such that
+       A43: y = "\/" (X,L) & 0 <= y & y <= 1;
+      A44: X is_less_than "\/" (X,L) by LATTICE3:def 21;
+      assume A45: not "\/" (X,L) in the carrier of L';
+      then not "\/" (X,L) in {0} & not "\/" (X,L) in { x where x is Element
+                              of REAL : 1/2 < x & x <= 1 } by A3,XBOOLE_0:def 2
+;
+      then A46: y <= 1/2 by A43;
+        now let z' be set;
+       assume A47: z' in X;
+       then reconsider z = z' as Element of L';
+       reconsider z as Element of L by A2,A8;
+       reconsider z1 = z as Element of REAL by TARSKI:def 3;
+       A48: z [= "\/" (X,L) by A44,A47,LATTICE3:def 17;
+         min(z1,y) = minreal.(z,"\/" (X,L)) by A43,REAL_LAT:def 1
+                    .= minreal. [z,"\/" (X,L)] by BINOP_1:def 1
+                    .= (minreal|[:A,A:]). [z,"\/" (X,L)] by A2,FUNCT_1:72
+                    .= (minreal|[:A,A:]).(z,"\/" (X,L)) by BINOP_1:def 1
+                    .= z "/\" "\/" (X,L) by A2,LATTICES:def 2
+                    .= z1 by A48,LATTICES:21;
+       then z1 <= y by SQUARE_1:def 1;
+       then y + z1 <= 1/2 + y by A46,REAL_1:55;
+       then for v be Element of REAL holds not (z1 = v & 1/2 < v & v <= 1)
+                                             by REAL_1:53;
+       then not z1 in { x where x is Element of REAL : 1/2 < x & x <= 1 };
+       hence z' in {0} by A3,XBOOLE_0:def 2;
+      end;
+      then A49: X c= {0} by TARSKI:def 3;
+        0 in { r : 0 <= r & r <= 1 };
+      then reconsider w = 0 as Element of L by A2,RCOMP_1:def 1;
+        now per cases by A49,ZFMISC_1:39;
+       suppose X = {};
+        then for q be Element of L st q in X holds q [= w;
+        then A50: X is_less_than w by LATTICE3:def 17;
+          now let r1 be Element of L;
+           r1 in [.0,1.] by A2;
+         then r1 in { r : 0 <= r & r <= 1 } by RCOMP_1:def 1;
+         then consider e be Element of REAL such that
+          A51: r1 = e & 0 <= e & e <= 1;
+         assume X is_less_than r1;
+           w "/\" r1 = (minreal|[:A,A:]).(w,r1) by A2,LATTICES:def 2
+                .= (minreal|[:A,A:]). [w,r1] by BINOP_1:def 1
+                .= minreal. [w,r1] by A2,FUNCT_1:72
+                .= minreal.(w,r1) by BINOP_1:def 1
+                .= min(0,e) by A51,REAL_LAT:def 1
+                .= w by A51,SQUARE_1:def 1;
+         hence w [= r1 by LATTICES:21;
+        end;
+        then "\/" (X,L) = w by A50,LATTICE3:def 21;
+        then "\/" (X,L) in {0} by TARSKI:def 1;
+        hence contradiction by A3,A45,XBOOLE_0:def 2;
+       suppose X = {0};
+        then "\/" (X,L) = w by LATTICE3:43;
+        then "\/" (X,L) in {0} by TARSKI:def 1;
+        hence contradiction by A3,A45,XBOOLE_0:def 2;
+      end;
+      hence contradiction;
+     end;
+    end;
+    hence L' is \/-inheriting by Def3;
+      now set X = { x where x is Element of REAL : 1/2 < x & x <= 1 };
+       for x1 be set st x1 in { x where x is Element of REAL : 1/2 < x & x <= 1
+}
+      holds x1 in B by A3,XBOOLE_0:def 2;
+     then reconsider X as Subset of L' by TARSKI:def 3;
+     take X;
+       1/2 in { x where x is Element of REAL : 0 <= x & x <= 1 };
+     then reconsider z = 1/2 as Element of L by A2,RCOMP_1:def 1
+;
+       now let q be Element of L;
+        q in A by A2;
+      then q in { r : 0 <= r & r <= 1 } by RCOMP_1:def 1;
+      then consider q' be Element of REAL such that
+       A52: q = q' & 0 <= q' & q' <= 1;
+      assume q in X;
+      then consider y be Element of REAL such that
+       A53: q = y & 1/2 < y & y <= 1;
+        z "/\" q = (minreal|[:A,A:]).(z,q) by A2,LATTICES:def 2
+            .= (minreal|[:A,A:]). [z,q] by BINOP_1:def 1
+            .= minreal. [z,q] by A2,FUNCT_1:72
+            .= minreal.(z,q) by BINOP_1:def 1
+            .= min(1/2,q') by A52,REAL_LAT:def 1
+            .= z by A52,A53,SQUARE_1:def 1;
+      hence z [= q by LATTICES:21;
+     end;
+     then A54: z is_less_than X by LATTICE3:def 16;
+       now let b be Element of L;
+        b in A by A2;
+      then b in { r : 0 <= r & r <= 1 } by RCOMP_1:def 1;
+      then consider b' be Element of REAL such that
+       A55: b = b' & 0 <= b' & b' <= 1;
+      assume A56: b is_less_than X;
+      A57: b' <= 1/2
+      proof
+       assume A58: 1/2 < b';
+       then 1/2 + b' < b' + b' by REAL_1:53;
+       then A59: (1/2 + b')/2 < (b' + b')/2 by REAL_1:73;
+       then (1/2 + b')/2 < b' by XCMPLX_1:65;
+       then (1/2 + b')/2 + b' <= b' + 1 by A55,REAL_1:55;
+       then A60: (1/2 + b')/2 <= 1 by REAL_1:53;
+         0 + 0 <= 1/2 + b' by A55,REAL_1:55;
+       then 0 <= (1/2 + b')/2 by REAL_2:125;
+       then (1/2 + b')/2 in { r : 0 <= r & r <= 1} by A60;
+       then reconsider c = (1/2 + b')/2 as Element of L
+                                                         by A2,RCOMP_1:def 1;
+         1/2 + 1/2 < b' + 1/2 by A58,REAL_1:53;
+       then 1/2 < (1/2 + b')/2 by REAL_1:73;
+       then A61: (1/2 + b')/2 in X by A60;
+         b' in X by A55,A58;
+       then b = "/\" (X,L) by A55,A56,LATTICE3:42;
+       then b [= c by A61,LATTICE3:38;
+       then b' = b "/\" c by A55,LATTICES:21
+              .= (minreal|[:A,A:]).(b,c) by A2,LATTICES:def 2
+              .= (minreal|[:A,A:]). [b,c] by BINOP_1:def 1
+              .= minreal. [b,c] by A2,FUNCT_1:72
+              .= minreal.(b,c) by BINOP_1:def 1
+              .= min(b',(1/2 + b')/2) by A55,REAL_LAT:def 1;
+       then b' <= (1/2 + b')/2 by SQUARE_1:def 1;
+       hence contradiction by A59,XCMPLX_1:65;
+      end;
+        b "/\" z = (minreal|[:A,A:]).(b,z) by A2,LATTICES:def 2
+            .= (minreal|[:A,A:]). [b,z] by BINOP_1:def 1
+            .= minreal. [b,z] by A2,FUNCT_1:72
+            .= minreal.(b,z) by BINOP_1:def 1
+            .= min(b',1/2) by A55,REAL_LAT:def 1
+            .= b by A55,A57,SQUARE_1:def 1;
+      hence b [= z by LATTICES:21;
+     end;
+     then A62: "/\"(X,L) = 1/2 by A54,LATTICE3:34;
+     A63: not 1/2 in {0} by TARSKI:def 1;
+       for y be Element of REAL holds not ( y = 1/2 & 1/2 < y & y <= 1);
+     then not 1/2 in { x where x is Element of REAL : 1/2 < x & x <= 1 };
+     hence not "/\" (X,L) in the carrier of L' by A3,A62,A63,XBOOLE_0:def 2;
+    end;
+    hence thesis by Def2;
+   end;
+
+  theorem
+     ex L be complete Lattice,
+      L' be SubLattice of L st
+    L' is \/-inheriting non /\-inheriting
+   proof
+    reconsider L = RealSubLatt(0,1) as complete Lattice by Th21;
+    take L;
+    thus thesis by Th22;
+   end;
+
+  theorem Th24:
+   ex L' be SubLattice of RealSubLatt(0,1) st
+    L' is /\-inheriting non \/-inheriting
+   proof
+    set R = Real_Lattice;
+    A1: 1 in { r : 0 <= r & r <= 1 };
+    then reconsider A = [.0,1.] as non empty set by RCOMP_1:def 1;
+    set L = RealSubLatt(0,1);
+    A2: A = the carrier of L &
+     the L_join of L = maxreal|([:[.0,1.],[.0,1.]:] qua set) &
+     the L_meet of L = minreal|([:[.0,1.],[.0,1.]:] qua set) by Def4;
+    set Ma = maxreal|([:A,A:] qua set);
+    set Mi = minreal|([:A,A:] qua set);
+    reconsider Ma , Mi as BinOp of A by A2;
+    reconsider L as complete Lattice by Th21;
+    set B = {0,1} \/ ].0,1/2.[;
+    A3: B = {1} \/ { x where x is Element of REAL : 0 <= x & x < 1/2 }
+    proof
+     thus B c= {1} \/ { x where x is Element of REAL : 0 <= x & x < 1/2 }
+     proof
+      let x1 be set;
+      assume A4: x1 in B;
+        now per cases by A4,XBOOLE_0:def 2;
+       suppose x1 in {0,1};
+        then x1 = 0 or x1 = 1 by TARSKI:def 2;
+        then x1 in {1} or x1 in
+         { x where x is Element of REAL : 0 <= x & x < 1/2 }
+                                                         by TARSKI:def 1;
+        hence x1 in {1} \/ { x where x is Element of REAL : 0 <= x & x < 1/2 }
+                                                             by XBOOLE_0:def 2;
+       suppose x1 in ].0,1/2.[;
+        then x1 in { r : 0 < r & r < 1/2 } by RCOMP_1:def 2;
+        then consider y be Element of REAL such that
+         A5: x1 = y & 0 < y & y < 1/2;
+          y in { x where x is Element of REAL : 0 <= x & x < 1/2 } by A5;
+        hence x1 in {1} \/ { x where x is Element of REAL : 0 <= x & x < 1/2 }
+                                                           by A5,XBOOLE_0:def 2
+;
+      end;
+      hence x1 in {1} \/ { x where x is Element of REAL : 0 <= x & x < 1/2 };
+     end;
+     thus {1} \/ { x where x is Element of REAL : 0 <= x & x < 1/2 } c= B
+     proof
+      let x1 be set;
+      assume A6: x1 in {1} \/ { x where x is Element of REAL : 0 <=
+ x & x < 1/2 };
+        now per cases by A6,XBOOLE_0:def 2;
+       suppose x1 in {1};
+        then x1 = 1 by TARSKI:def 1;
+        then x1 in {0,1} by TARSKI:def 2;
+        hence x1 in B by XBOOLE_0:def 2;
+       suppose x1 in { x where x is Element of REAL : 0 <= x & x < 1/2 };
+        then consider y be Element of REAL such that
+         A7: x1 = y & 0 <= y & y < 1/2;
+         y in { r : 0 < r & r < 1/2 } or y = 0 by A7;
+        then y in ].0,1/2.[ or y in {0,1} by RCOMP_1:def 2,TARSKI:def 2;
+        hence x1 in B by A7,XBOOLE_0:def 2;
+      end;
+      hence x1 in B;
+     end;
+    end;
+    reconsider B as non empty set;
+    A8: now let x1 be set;
+     assume A9: x1 in B;
+       now per cases by A3,A9,XBOOLE_0:def 2;
+      suppose x1 in {1};
+      then x1 = 1 by TARSKI:def 1;
+      hence x1 in A by A1,RCOMP_1:def 1;
+      suppose x1 in { x where x is Element of REAL : 0 <= x & x < 1/2 };
+      then consider y be Element of REAL such that
+       A10: x1 = y & 0 <= y & y < 1/2;
+        y + 1/2 <= 1/2 + 1 by A10,REAL_1:55;
+      then y <= 1 by REAL_1:53;
+      then x1 in { r : 0 <= r & r <= 1 } by A10;
+      hence x1 in A by RCOMP_1:def 1;
+     end;
+     hence x1 in A;
+    end;
+    then A11: B c= A by TARSKI:def 3;
+    then A12: [:B,B:] c= [:A,A:] by ZFMISC_1:119;
+    then reconsider ma = Ma|[:B,B:] , mi = Mi|[:B,B:]
+                                      as Function of [:B,B:],A by FUNCT_2:38;
+    A13: dom ma = [:B,B:] & dom mi = [:B,B:] by FUNCT_2:def 1;
+      now let x' be set;
+     assume A14: x' in dom ma;
+     then consider x1,x2 be set such that A15: x' = [x1,x2] by ZFMISC_1:102;
+     A16: x1 in B & x2 in B by A14,A15,ZFMISC_1:106;
+       now per cases by A3,A16,XBOOLE_0:def 2;
+      suppose x1 in {1};
+       then A17: x1 = 1 by TARSKI:def 1;
+         now per cases by A3,A16,XBOOLE_0:def 2;
+        suppose x2 in {1};
+         then A18: x2 = 1 by TARSKI:def 1;
+           ma.x' = Ma. [x1,x2] by A14,A15,FUNCT_1:72
+              .= maxreal. [x1,x2] by A12,A13,A14,A15,FUNCT_1:72
+              .= maxreal.(x1,x2) by BINOP_1:def 1
+              .= max(1,1) by A17,A18,REAL_LAT:def 2
+              .= 1;
+         then ma.x' in {1} by TARSKI:def 1;
+         hence ma.x' in B by A3,XBOOLE_0:def 2;
+        suppose x2 in { x where x is Element of REAL : 0 <= x & x < 1/2 };
+         then consider y2 be Element of REAL such that
+          A19: x2 = y2 & 0 <= y2 & y2 < 1/2;
+           ma.x' = Ma. [x1,x2] by A14,A15,FUNCT_1:72
+              .= maxreal. [x1,x2] by A12,A13,A14,A15,FUNCT_1:72
+              .= maxreal.(x1,x2) by BINOP_1:def 1
+              .= max(1,y2) by A17,A19,REAL_LAT:def 2;
+         then ma.x' = 1 or ma.x' = y2 by SQUARE_1:49;
+         then ma.x' in {1} or ma.x' in
+          { x where x is Element of REAL : 0 <= x & x < 1/2 }
+                                                         by A19,TARSKI:def 1;
+         hence ma.x' in B by A3,XBOOLE_0:def 2;
+       end;
+       hence ma.x' in B;
+      suppose x1 in { x where x is Element of REAL : 0 <= x & x < 1/2 };
+       then consider y1 be Element of REAL such that
+        A20: x1 = y1 & 0 <= y1 & y1 < 1/2;
+         now per cases by A3,A16,XBOOLE_0:def 2;
+        suppose x2 in {1};
+         then A21: x2 = 1 by TARSKI:def 1;
+           ma.x' = Ma. [x1,x2] by A14,A15,FUNCT_1:72
+              .= maxreal. [x1,x2] by A12,A13,A14,A15,FUNCT_1:72
+              .= maxreal.(x1,x2) by BINOP_1:def 1
+              .= max(y1,1) by A20,A21,REAL_LAT:def 2;
+         then ma.x' = y1 or ma.x' = 1 by SQUARE_1:49;
+         then ma.x' in { x where x is Element of REAL : 0 <= x & x < 1/2 }
+          or ma.x' in {1} by A20,TARSKI:def 1;
+         hence ma.x' in B by A3,XBOOLE_0:def 2;
+        suppose x2 in { x where x is Element of REAL : 0 <= x & x < 1/2 };
+         then consider y2 be Element of REAL such that
+          A22: x2 = y2 & 0 <= y2 & y2 < 1/2;
+           ma.x' = Ma. [x1,x2] by A14,A15,FUNCT_1:72
+              .= maxreal. [x1,x2] by A12,A13,A14,A15,FUNCT_1:72
+              .= maxreal.(x1,x2) by BINOP_1:def 1
+              .= max(y1,y2) by A20,A22,REAL_LAT:def 2;
+         then ma.x' = y1 or ma.x' = y2 by SQUARE_1:49;
+         then ma.x' in { x where x is Element of REAL : 0 <= x & x < 1/2 }
+                                                                    by A20,A22;
+         hence ma.x' in B by A3,XBOOLE_0:def 2;
+       end;
+       hence ma.x' in B;
+     end;
+     hence ma.x' in B;
+    end;
+    then reconsider ma as BinOp of B by A13,FUNCT_2:5;
+      now let x' be set;
+     assume A23: x' in dom mi;
+     then consider x1,x2 be set such that A24: x' = [x1,x2] by ZFMISC_1:102;
+     A25: x1 in B & x2 in B by A23,A24,ZFMISC_1:106;
+       now per cases by A3,A25,XBOOLE_0:def 2;
+      suppose x1 in {1};
+       then A26: x1 = 1 by TARSKI:def 1;
+         now per cases by A3,A25,XBOOLE_0:def 2;
+        suppose x2 in {1};
+         then A27: x2 = 1 by TARSKI:def 1;
+           mi.x' = Mi. [x1,x2] by A23,A24,FUNCT_1:72
+              .= minreal. [x1,x2] by A12,A13,A23,A24,FUNCT_1:72
+              .= minreal.(x1,x2) by BINOP_1:def 1
+              .= min(1,1) by A26,A27,REAL_LAT:def 1
+              .= 1;
+         then mi.x' in {1} by TARSKI:def 1;
+         hence mi.x' in B by A3,XBOOLE_0:def 2;
+        suppose x2 in { x where x is Element of REAL : 0 <= x & x < 1/2 };
+         then consider y2 be Element of REAL such that
+          A28: x2 = y2 & 0 <= y2 & y2 < 1/2;
+           mi.x' = Mi. [x1,x2] by A23,A24,FUNCT_1:72
+              .= minreal. [x1,x2] by A12,A13,A23,A24,FUNCT_1:72
+              .= minreal.(x1,x2) by BINOP_1:def 1
+              .= min(1,y2) by A26,A28,REAL_LAT:def 1;
+         then mi.x' = 1 or mi.x' = y2 by SQUARE_1:38;
+         then mi.x' in {1} or mi.x' in
+          { x where x is Element of REAL : 0 <= x & x < 1/2 }
+                                                         by A28,TARSKI:def 1;
+         hence mi.x' in B by A3,XBOOLE_0:def 2;
+       end;
+       hence mi.x' in B;
+      suppose x1 in { x where x is Element of REAL : 0 <= x & x < 1/2 };
+       then consider y1 be Element of REAL such that
+        A29: x1 = y1 & 0 <= y1 & y1 < 1/2;
+         now per cases by A3,A25,XBOOLE_0:def 2;
+        suppose x2 in {1};
+         then A30: x2 = 1 by TARSKI:def 1;
+           mi.x' = Mi. [x1,x2] by A23,A24,FUNCT_1:72
+              .= minreal. [x1,x2] by A12,A13,A23,A24,FUNCT_1:72
+              .= minreal.(x1,x2) by BINOP_1:def 1
+              .= min(y1,1) by A29,A30,REAL_LAT:def 1;
+         then mi.x' = y1 or mi.x' = 1 by SQUARE_1:38;
+         then mi.x' in { x where x is Element of REAL : 0 <= x & x < 1/2 }
+          or mi.x' in {1} by A29,TARSKI:def 1;
+         hence mi.x' in B by A3,XBOOLE_0:def 2;
+        suppose x2 in { x where x is Element of REAL : 0 <= x & x < 1/2 };
+         then consider y2 be Element of REAL such that
+          A31: x2 = y2 & 0 <= y2 & y2 < 1/2;
+           mi.x' = Mi. [x1,x2] by A23,A24,FUNCT_1:72
+              .= minreal. [x1,x2] by A12,A13,A23,A24,FUNCT_1:72
+              .= minreal.(x1,x2) by BINOP_1:def 1
+              .= min(y1,y2) by A29,A31,REAL_LAT:def 1;
+         then mi.x' = y1 or mi.x' = y2 by SQUARE_1:38;
+         then mi.x' in { x where x is Element of REAL : 0 <= x & x < 1/2 }
+                                                                    by A29,A31;
+         hence mi.x' in B by A3,XBOOLE_0:def 2;
+       end;
+       hence mi.x' in B;
+     end;
+     hence mi.x' in B;
+    end;
+    then reconsider mi as BinOp of B by A13,FUNCT_2:5;
+    reconsider L' = LattStr (# B , ma , mi #) as non empty LattStr
+      by STRUCT_0:def 1;
+    A32: now let x1 be Element of A;
+       x1 in A;
+     then x1 in { r : 0 <= r & r <= 1 } by RCOMP_1:def 1;
+     then consider y1 be Element of REAL such that
+      A33: x1 = y1 & 0 <= y1 & y1 <= 1;
+     thus x1 is Element of R by A33,REAL_LAT:def 4;
+    end;
+    A34: now let x1 be Element of B;
+       now per cases by A3,XBOOLE_0:def 2;
+      suppose x1 in {1};
+       then x1 = 1 by TARSKI:def 1;
+       hence x1 is Element of L by A1,A2,RCOMP_1:def 1;
+      suppose x1 in { x where x is Element of REAL : 0 <= x & x < 1/2 };
+       then consider y be Element of REAL such that
+        A35: x1 = y & 0 <= y & y < 1/2;
+         y + 1/2 <= 1/2 + 1 by A35,REAL_1:55;
+       then y <= 1 by REAL_1:53;
+       then x1 in { r : 0 <= r & r <= 1 } by A35;
+       hence x1 is Element of L by A2,RCOMP_1:def 1;
+     end;
+     hence x1 is Element of L;
+    end;
+    A36: now let a,b be Element of L';
+     A37: [a,b] in [:B,B:];
+     thus a"\/"b = (the L_join of L').(a,b) by LATTICES:def 1
+           .= (Ma|[:B,B:]). [a,b] by BINOP_1:def 1
+           .= (maxreal|[:A,A:]). [a,b] by FUNCT_1:72
+           .= maxreal. [a,b] by A12,A37,FUNCT_1:72
+           .= maxreal.(a,b) by BINOP_1:def 1;
+     thus a"/\"b = (the L_meet of L').(a,b) by LATTICES:def 2
+           .= (Mi|[:B,B:]). [a,b] by BINOP_1:def 1
+           .= (minreal|[:A,A:]). [a,b] by FUNCT_1:72
+           .= minreal. [a,b] by A12,A37,FUNCT_1:72
+           .= minreal.(a,b) by BINOP_1:def 1;
+    end;
+    A38: now let p,q be Element of L';
+     reconsider p' = p , q' = q as Element of L by A34;
+     reconsider p' , q' as Element of R by A2,A32;
+     thus p"\/"q = maxreal.(p,q) by A36
+              .= maxreal.(q',p') by REAL_LAT:8
+              .= q"\/"p by A36;
+    end;
+    A39: now let p,q,r be Element of L';
+     reconsider p' = p , q' = q , r' = r as Element of L by A34;
+     reconsider p' , q' , r' as Element of R by A2,A32;
+     thus p"\/"(q"\/"r) = maxreal.(p,q"\/"r) by A36
+                   .= maxreal.(p,maxreal.(q,r)) by A36
+                   .= maxreal.(maxreal.(p',q'),r') by REAL_LAT:10
+                   .= maxreal.(p"\/"q,r) by A36
+                   .= (p"\/"q)"\/"r by A36;
+    end;
+    A40: now let p,q be Element of L';
+     reconsider p' = p , q' = q as Element of L by A34;
+     reconsider p' , q' as Element of R by A2,A32;
+     thus (p"/\"q)"\/"q = maxreal.(p"/\"q,q) by A36
+                   .= maxreal.(minreal.(p',q'),q') by A36
+                   .= q by REAL_LAT:12;
+    end;
+    A41: now let p,q be Element of L';
+     reconsider p' = p , q' = q as Element of L by A34;
+     reconsider p' , q' as Element of R by A2,A32;
+     thus p"/\"q = minreal.(p,q) by A36
+              .= minreal.(q',p') by REAL_LAT:9
+              .= q"/\"p by A36;
+    end;
+    A42: now let p,q,r be Element of L';
+     reconsider p' = p , q' = q , r' = r as Element of L by A34;
+     reconsider p' , q' , r' as Element of R by A2,A32;
+     thus p"/\"(q"/\"r) = minreal.(p,q"/\"r) by A36
+                   .= minreal.(p,minreal.(q,r)) by A36
+                   .= minreal.(minreal.(p',q'),r') by REAL_LAT:11
+                   .= minreal.(p"/\"q,r) by A36
+                   .= (p"/\"q)"/\"r by A36;
+    end;
+      now let p,q be Element of L';
+     reconsider p' = p , q' = q as Element of L by A34;
+     reconsider p' , q' as Element of R by A2,A32;
+     thus p"/\"(p"\/"q) = minreal.(p,p"\/"q) by A36
+                   .= minreal.(p',maxreal.(p',q')) by A36
+                   .= p by REAL_LAT:13;
+    end;
+    then L' is join-commutative join-associative meet-absorbing
+          meet-commutative meet-associative join-absorbing
+    by A38,A39,A40,A41,A42,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+    then reconsider L' as Lattice by LATTICES:def 10;
+    reconsider L' as SubLattice of RealSubLatt(0,1) by A2,A11,NAT_LAT:def 16;
+    take L';
+      now let X be Subset of L';
+     thus "/\" (X,L) in the carrier of L'
+     proof
+        "/\" (X,L) in [.0,1.] by A2;
+      then "/\" (X,L) in { r : 0 <= r & r <= 1 } by RCOMP_1:def 1;
+      then consider y be Element of REAL such that
+       A43: y = "/\" (X,L) & 0 <= y & y <= 1;
+      A44: "/\" (X,L) is_less_than X by LATTICE3:34;
+      assume A45: not "/\" (X,L) in the carrier of L';
+      then not "/\" (X,L) in {1} & not "/\" (X,L) in { x where x is Element
+                              of REAL : 0 <= x & x < 1/2 } by A3,XBOOLE_0:def 2
+;
+      then A46: 1/2 <= y by A43;
+        now let z' be set;
+       assume A47: z' in X;
+       then reconsider z = z' as Element of L';
+       reconsider z as Element of L by A2,A8;
+       reconsider z1 = z as Element of REAL by TARSKI:def 3;
+       A48: "/\" (X,L) [= z by A44,A47,LATTICE3:def 16;
+          min(z1,y) = minreal.(z,"/\" (X,L)) by A43,REAL_LAT:def 1
+                    .= minreal. [z,"/\" (X,L)] by BINOP_1:def 1
+                    .= (minreal|[:A,A:]). [z,"/\" (X,L)] by A2,FUNCT_1:72
+                    .= (minreal|[:A,A:]).(z,"/\" (X,L)) by BINOP_1:def 1
+                    .= z "/\" "/\" (X,L) by A2,LATTICES:def 2
+                    .= y by A43,A48,LATTICES:21;
+       then y <= z1 by SQUARE_1:def 1;
+       then y + 1/2 <= z1 + y by A46,REAL_1:55;
+       then for v be Element of REAL holds not (z1 = v & 0 <= v & v < 1/2)
+                                                            by REAL_1:53;
+       then not z1 in { x where x is Element of REAL : 0 <= x & x < 1/2 };
+       hence z' in {1} by A3,XBOOLE_0:def 2;
+      end;
+      then A49: X c= {1} by TARSKI:def 3;
+        1 in { r : 0 <= r & r <= 1 };
+      then reconsider w = 1 as Element of L by A2,RCOMP_1:def 1;
+        now per cases by A49,ZFMISC_1:39;
+       suppose X = {};
+        then for q be Element of L st q in X holds w [= q;
+        then A50: w is_less_than X by LATTICE3:def 16;
+          now let r1 be Element of L;
+           r1 in [.0,1.] by A2;
+         then r1 in { r : 0 <= r & r <= 1 } by RCOMP_1:def 1;
+         then consider e be Element of REAL such that
+          A51: r1 = e & 0 <= e & e <= 1;
+         assume r1 is_less_than X;
+           r1 "/\" w = (minreal|[:A,A:]).(r1,w) by A2,LATTICES:def 2
+                .= (minreal|[:A,A:]). [r1,w] by BINOP_1:def 1
+                .= minreal. [r1,w] by A2,FUNCT_1:72
+                .= minreal.(r1,w) by BINOP_1:def 1
+                .= min(e,1) by A51,REAL_LAT:def 1
+                .= r1 by A51,SQUARE_1:def 1;
+         hence r1 [= w by LATTICES:21;
+        end;
+        then "/\" (X,L) = w by A50,LATTICE3:34;
+        then "/\" (X,L) in {1} by TARSKI:def 1;
+        hence contradiction by A3,A45,XBOOLE_0:def 2;
+       suppose X = {1};
+        then "/\" (X,L) = w by LATTICE3:43;
+        then "/\" (X,L) in {1} by TARSKI:def 1;
+        hence contradiction by A3,A45,XBOOLE_0:def 2;
+      end;
+      hence contradiction;
+     end;
+    end;
+    hence L' is /\-inheriting by Def2;
+      now set X = { x where x is Element of REAL : 0 <= x & x < 1/2 };
+       for x1 be set st x1 in { x where x is Element of REAL : 0 <= x & x < 1/2
+}
+      holds x1 in B by A3,XBOOLE_0:def 2;
+     then reconsider X as Subset of L' by TARSKI:def 3;
+     take X;
+       1/2 in { x where x is Element of REAL : 0 <= x & x <= 1 };
+     then reconsider z = 1/2 as Element of L
+     by A2,RCOMP_1:def 1;
+       now let q be Element of L;
+        q in A by A2;
+      then q in { r : 0 <= r & r <= 1 } by RCOMP_1:def 1;
+      then consider q' be Element of REAL such that
+       A52: q = q' & 0 <= q' & q' <= 1;
+      assume q in X;
+      then consider y be Element of REAL such that
+       A53: q = y & 0 <= y & y < 1/2;
+        q "/\" z = (minreal|[:A,A:]).(q,z) by A2,LATTICES:def 2
+            .= (minreal|[:A,A:]). [q,z] by BINOP_1:def 1
+            .= minreal. [q,z] by A2,FUNCT_1:72
+            .= minreal.(q,z) by BINOP_1:def 1
+            .= min(q',1/2) by A52,REAL_LAT:def 1
+            .= q by A52,A53,SQUARE_1:def 1;
+      hence q [= z by LATTICES:21;
+     end;
+     then A54: X is_less_than z by LATTICE3:def 17;
+       now let b be Element of L;
+        b in A by A2;
+      then b in { r : 0 <= r & r <= 1 } by RCOMP_1:def 1;
+      then consider b' be Element of REAL such that
+       A55: b = b' & 0 <= b' & b' <= 1;
+      assume A56: X is_less_than b;
+      A57: 1/2 <= b'
+      proof
+       assume A58: b' < 1/2;
+       then b' + b' < 1/2 + b' by REAL_1:53;
+       then A59: (b' + b')/2 < (1/2 + b')/2 by REAL_1:73;
+       then b' < (1/2 + b')/2 by XCMPLX_1:65;
+       then b' + 0 <= (1/2 + b')/2 + b' by A55,REAL_1:55;
+       then A60: 0 <= (1/2 + b')/2 by REAL_1:53;
+         1/2 + b' <= 1 + 1 by A55,REAL_1:55;
+       then (1/2 + b')/2 <= (1 + 1)/2 by REAL_1:73;
+       then (1/2 + b')/2 in { r : 0 <= r & r <= 1} by A60;
+       then reconsider c = (1/2 + b')/2 as Element of L
+                                                    by A2,RCOMP_1:def 1;
+         b' + 1/2 < 1/2 + 1/2 by A58,REAL_1:53;
+       then (1/2 + b')/2 < 1/2 by REAL_1:73;
+       then A61: (1/2 + b')/2 in X by A60;
+         b' in X by A55,A58;
+       then b = "\/" (X,L) by A55,A56,LATTICE3:41;
+       then c [= b by A61,LATTICE3:38;
+       then (1/2 + b')/2 = c "/\" b by LATTICES:21
+                        .= (minreal|[:A,A:]).(c,b) by A2,LATTICES:def 2
+                        .= (minreal|[:A,A:]). [c,b] by BINOP_1:def 1
+                        .= minreal. [c,b] by A2,FUNCT_1:72
+                        .= minreal.(c,b) by BINOP_1:def 1
+                        .= min((1/2 + b')/2,b') by A55,REAL_LAT:def 1;
+       then (1/2 + b')/2 <= b' by SQUARE_1:def 1;
+       hence contradiction by A59,XCMPLX_1:65;
+      end;
+        z "/\" b = (minreal|[:A,A:]).(z,b) by A2,LATTICES:def 2
+            .= (minreal|[:A,A:]). [z,b] by BINOP_1:def 1
+            .= minreal. [z,b] by A2,FUNCT_1:72
+            .= minreal.(z,b) by BINOP_1:def 1
+            .= min(1/2,b') by A55,REAL_LAT:def 1
+            .= z by A57,SQUARE_1:def 1;
+      hence z [= b by LATTICES:21;
+     end;
+     then A62: "\/" (X,L) = 1/2 by A54,LATTICE3:def 21;
+     A63: not 1/2 in {1} by TARSKI:def 1;
+       for y be Element of REAL holds not ( y = 1/2 & 0 <= y & y < 1/2);
+     then not 1/2 in { x where x is Element of REAL : 0 <= x & x < 1/2 };
+     hence not "\/" (X,L) in the carrier of L' by A3,A62,A63,XBOOLE_0:def 2;
+    end;
+    hence thesis by Def3;
+   end;
+
+  theorem
+     ex L be complete Lattice,
+      L' be SubLattice of L st
+    L' is /\-inheriting non \/-inheriting
+   proof
+    reconsider L = RealSubLatt(0,1) as complete Lattice by Th21;
+    take L;
+    thus thesis by Th24;
+   end;

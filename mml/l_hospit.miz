@@ -1,0 +1,2497 @@
+:: The de l'Hospital Theorem
+::  by Ma{\l}gorzata Korolkiewicz
+::
+:: Received February 20, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary PARTFUN1, SEQ_1, FCONT_1, RELAT_1, LIMFUNC3, SEQ_2, ORDINAL2,
+      BOOLE, FUNCT_1, LIMFUNC2, LIMFUNC1, RCOMP_1, ARYTM_1, FDIFF_1, ARYTM_3,
+      SEQM_3, ARYTM;
+ notation TARSKI, XBOOLE_0, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1,
+      NAT_1, SEQ_1, SEQ_2, SEQM_3, RELSET_1, PARTFUN1, RFUNCT_1, RCOMP_1,
+      RFUNCT_2, FCONT_1, FDIFF_1, LIMFUNC1, LIMFUNC2, LIMFUNC3;
+ constructors REAL_1, NAT_1, SEQ_2, SEQM_3, PROB_1, RFUNCT_1, RCOMP_1,
+      RFUNCT_2, FCONT_1, FDIFF_1, LIMFUNC1, LIMFUNC2, LIMFUNC3, PARTFUN1,
+      MEMBERED, XBOOLE_0;
+ clusters FCONT_3, RELSET_1, XREAL_0, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI;
+ theorems TARSKI, REAL_1, NAT_1, RFUNCT_1, RCOMP_1, FCONT_1, FDIFF_1, SQUARE_1,
+      REAL_2, ROLLE, SEQ_2, SEQ_4, LIMFUNC2, LIMFUNC1, RFUNCT_2, SEQM_3,
+      LIMFUNC3, PROB_1, ZFMISC_1, FUNCT_1, AXIOMS, SEQ_1, XREAL_0, XBOOLE_0,
+      XBOOLE_1, XCMPLX_0, XCMPLX_1;
+ schemes SEQ_1, RCOMP_1;
+
+begin
+
+ reserve f,g for PartFunc of REAL,REAL,
+         r,r1,r2,g1,g2,g3,g4,g5,g6,x,x0,t,c for Real,
+         a,b,s for Real_Sequence,
+         n,k for Nat;
+
+theorem
+  f is_continuous_in x0 &
+(for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f &
+  g2<r2 & x0<g2 & g2 in dom f) implies
+f is_convergent_in x0
+ proof
+  assume A1: f is_continuous_in x0 &
+   for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 &
+   g1<x0 & g1 in dom f & g2<r2 &
+   x0<g2 & g2 in dom f;
+    now
+   let s such that A2: s is convergent & lim s=x0 & rng s c= dom f \ {x0};
+       dom f \ {x0} c= dom f by XBOOLE_1:36;
+     then rng s c= dom f by A2,XBOOLE_1:1;
+     hence f*s is convergent & lim (f*s) = f.x0 by A1,A2,FCONT_1:def 1;
+  end;
+  hence thesis by A1,LIMFUNC3:def 1;
+ end;
+
+theorem Th2:
+f is_right_convergent_in x0 & lim_right(f,x0) = t iff
+(for r st x0<r ex t st t<r & x0<t & t in dom f) &
+for a st a is convergent & lim a = x0 &
+rng a c= dom f /\ right_open_halfline(x0) holds
+f*a is convergent & lim(f*a) = t
+ proof
+  thus f is_right_convergent_in x0 & lim_right(f,x0) = t implies
+   (for r st x0<r ex t st t<r & x0<t & t in dom f) &
+   for a st a is convergent & lim a = x0 &
+   rng a c= dom f /\ right_open_halfline(x0) holds
+   f*a is convergent & lim(f*a) = t by LIMFUNC2:def 4,def 8;
+  thus (for r st x0<r ex t st t<r & x0<t & t in dom f) &
+   (for a st a is convergent & lim a = x0 &
+   rng a c= dom f /\ right_open_halfline(x0) holds
+   f*a is convergent & lim(f*a) = t) implies
+   f is_right_convergent_in x0 & lim_right(f,x0) = t
+   proof
+    assume A1: (for r st x0<r ex t st t<r & x0<t & t in dom f) &
+     for a st a is convergent & lim a = x0 &
+      rng a c= dom f /\ right_open_halfline(x0) holds
+      f*a is convergent & lim(f*a) = t;
+    hence f is_right_convergent_in x0 by LIMFUNC2:def 4;
+    hence thesis by A1,LIMFUNC2:def 8;
+   end;
+ end;
+
+theorem Th3:
+f is_left_convergent_in x0 & lim_left(f,x0) = t iff
+(for r st r<x0 ex t st r<t & t<x0 & t in dom f) &
+for a st a is convergent & lim a = x0 &
+rng a c= dom f /\ left_open_halfline(x0) holds
+f*a is convergent & lim(f*a) = t
+ proof
+  thus f is_left_convergent_in x0 & lim_left(f,x0) = t implies
+   (for r st r<x0 ex t st r<t & t<x0 & t in dom f) &
+   for a st a is convergent & lim a = x0 &
+   rng a c= dom f /\ left_open_halfline(x0) holds
+   f*a is convergent & lim(f*a) = t by LIMFUNC2:def 1,def 7;
+  thus (for r st r<x0 ex t st r<t & t<x0 & t in dom f) &
+   (for a st a is convergent & lim a = x0 &
+   rng a c= dom f /\ left_open_halfline(x0) holds
+   f*a is convergent & lim(f*a) = t) implies
+   f is_left_convergent_in x0 & lim_left(f,x0) = t
+   proof
+    assume A1: (for r st r<x0 ex t st r<t & t<x0 & t in dom f) &
+     for a st a is convergent & lim a = x0 &
+      rng a c= dom f /\ left_open_halfline(x0) holds
+      f*a is convergent & lim(f*a) = t;
+    hence f is_left_convergent_in x0 by LIMFUNC2:def 1;
+    hence thesis by A1,LIMFUNC2:def 7;
+   end;
+ end;
+
+theorem Th4:
+(ex N being Neighbourhood of x0 st N\{x0} c=dom f) implies
+(for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom f & g2<r2 & x0<g2 & g2 in dom f)
+ proof
+  given N being Neighbourhood of x0 such that
+  A1: N\{x0} c= dom f;
+  consider r be real number such that
+  A2: 0<r & N=].x0-r,x0+r.[ by RCOMP_1:def 7;
+A3: r is Real by XREAL_0:def 1;
+  then N\{x0}=].x0-r,x0.[ \/ ].x0,x0+r.[ by A2,LIMFUNC3:4;
+  hence thesis by A1,A2,A3,LIMFUNC3:5;
+ end;
+
+theorem
+  (ex N being Neighbourhood of x0 st f is_differentiable_on N &
+g is_differentiable_on N & N \ {x0} c= dom (f/g) &
+N c= dom ((f`|N)/(g`|N)) & f.x0 = 0 & g.x0 = 0 &
+(f`|N)/(g`|N) is_divergent_to+infty_in x0)
+implies f/g is_divergent_to+infty_in x0
+ proof
+  given N being Neighbourhood of x0 such that
+  A1: f is_differentiable_on N & g is_differentiable_on N &
+     N \ {x0} c= dom (f/g) & N c= dom ((f`|N)/(g`|N)) &
+     f.x0 = 0 & g.x0 = 0 & (f`|N)/(g`|N) is_divergent_to+infty_in x0;
+  consider r be real number such that
+  A2: 0<r & N = ].x0-r,x0+r.[ by RCOMP_1:def 7;
+A3: r is Real by XREAL_0:def 1;
+  A4: for x st x0<x & x<x0+r ex c st c in ].x0,x.[ & (f/g).x=((f`|N)/(g`|N)).c
+   proof
+    let x such that
+    A5: x0<x & x<x0+r;
+    A6: f is_continuous_on N by A1,FDIFF_1:33;
+    A7: g is_continuous_on N by A1,FDIFF_1:33;
+    A8: x0-r<x0 by A2,SQUARE_1:29;
+      x0+0<x0+r by A2,REAL_1:67;
+    then x0 in {g1: x0-r<g1 & g1<x0+r} by A8;
+    then A9: x0 in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+      x0-r<x by A5,A8,AXIOMS:22;
+    then x in {g1: x0-r<g1 & g1<x0+r} by A5;
+    then x in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+    then A10: [.x0,x.] c= N by A2,A9,RCOMP_1:17;
+    then f is_continuous_on [.x0,x.] by A6,FCONT_1:17;
+    then A11: (g.x)(#)f is_continuous_on [.x0,x.] by FCONT_1:21;
+      g is_continuous_on [.x0,x.] by A7,A10,FCONT_1:17;
+    then (f.x)(#)g is_continuous_on [.x0,x.] by FCONT_1:21;
+    then A12: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x0,x.] by A11,FCONT_1:19
+;
+    A13: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
+    A14: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A15: N c= dom ((g.x)(#)f) by A6,A13,FCONT_1:14;
+    A16: N c= dom ((f.x)(#)g) by A7,A14,FCONT_1:14;
+    A17: ].x0,x.[ c= [.x0,x.] by RCOMP_1:15;
+    then A18: ].x0,x.[ c= N by A10,XBOOLE_1:1;
+    then A19: f is_differentiable_on ].x0,x.[ by A1,FDIFF_1:34;
+    A20: ].x0,x.[ c= dom ((g.x)(#)f) by A15,A18,XBOOLE_1:1;
+    then A21: (g.x)(#)f is_differentiable_on ].x0,x.[ by A19,FDIFF_1:28;
+    A22: ].x0,x.[ c= dom ((f.x)(#)g) by A16,A18,XBOOLE_1:1;
+    then ].x0,x.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A20,XBOOLE_1:19
+;
+    then A23: ].x0,x.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    A24: g is_differentiable_on ].x0,x.[ by A1,A18,FDIFF_1:34;
+    then A25: (f.x)(#)g is_differentiable_on ].x0,x.[ by A22,FDIFF_1:28;
+    then A26: (f.x)(#)g-(g.x)(#)
+f is_differentiable_on ].x0,x.[ by A21,A23,FDIFF_1:27;
+    set f1 = (f.x)(#)g - (g.x)(#)f;
+    A27: [.x0,x.] c= dom f1 by A12,FCONT_1:def 2;
+    A28: x0 in [.x0,x.] & x in [.x0,x.] by A5,RCOMP_1:15;
+    then x0 in dom f1 & x in dom f1 by A27;
+    then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
+ dom ((g.x)
+(#)f)
+     by SEQ_1:def 4;
+    then A29: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
+(#)g) &
+    x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
+    A30: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A27,A28,SEQ_1:def 4
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A29,SEQ_1:def 6
+         .= 0 - (g.x)*0 by A1,A29,SEQ_1:def 6
+         .= 0;
+      f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A27,A28,SEQ_1:def 4
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A29,SEQ_1:def 6
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A29,SEQ_1:def 6
+         .= 0 by XCMPLX_1:14;
+    then consider t such that
+    A31: t in ].x0,x.[ & diff(f1,t)=0 by A5,A12,A26,A30,ROLLE:1;
+    take t;
+    A32: (f.x)(#)g is_differentiable_in t by A25,A31,FDIFF_1:16;
+      (g.x)(#)f is_differentiable_in t by A21,A31,FDIFF_1:16;
+    then A33: 0=diff((f.x)(#)g,t) - diff((g.x)(#)f,t) by A31,A32,FDIFF_1:22;
+    A34: g is_differentiable_in t by A24,A31,FDIFF_1:16;
+      f is_differentiable_in t by A19,A31,FDIFF_1:16;
+    then 0=diff((f.x)(#)g,t) - (g.x)*diff(f,t) by A33,FDIFF_1:23;
+    then 0=(f.x)*diff(g,t) - (g.x)*diff(f,t) by A34,FDIFF_1:23;
+    then A35: (f.x)*diff(g,t)=(g.x)*diff(f,t) by XCMPLX_1:15;
+      [.x0,x.]\{x0} c= N\{x0} by A10,XBOOLE_1:33;
+    then A36: [.x0,x.]\{x0} c= dom(f/g) by A1,XBOOLE_1:1;
+    then A37: [.x0,x.]\{x0} c= dom f /\ (dom g\g"{0}) by RFUNCT_1:def 4;
+      dom f /\ (dom g\g"{0}) c= dom g\g"{0} by XBOOLE_1:17;
+    then A38: [.x0,x.]\{x0} c= dom g\g"{0} by A37,XBOOLE_1:1;
+      not x in {x0} by A5,TARSKI:def 1;
+    then A39: x in [.x0,x.]\{x0} by A28,XBOOLE_0:def 4;
+    then A40: x in dom g & not x in g"{0} by A38,XBOOLE_0:def 4;
+    A41: now assume g.x=0;
+         then g.x in {0} by TARSKI:def 1;
+         hence contradiction by A40,FUNCT_1:def 13;
+        end;
+    A42: [.x0,x.] c= dom ((f`|N)/(g`|N)) by A1,A10,XBOOLE_1:1;
+    then A43: [.x0,x.] c= dom (f`|N) /\ (dom (g`|N)\(g`|N)"{0}) by RFUNCT_1:def
+4;
+      dom (f`|N) /\ (dom (g`|N) \ (g`|N)"{0}) c= dom (g`|N)\(g`|N)"{0}
+     by XBOOLE_1:17;
+    then A44: [.x0,x.] c= dom (g`|N)\(g`|N)"{0} by A43,XBOOLE_1:1;
+    A45: t in [.x0,x.] by A17,A31;
+    then A46: t in dom (g`|N) & not t in (g`|N)"{0} by A44,XBOOLE_0:def 4;
+       now assume diff(g,t)=0;
+         then (g`|N).t=0 by A1,A10,A45,FDIFF_1:def 8;
+         then (g`|N).t in {0} by TARSKI:def 1;
+         hence contradiction by A46,FUNCT_1:def 13;
+        end;
+    then (f.x)/(g.x) = diff(f,t)/diff(g,t) by A35,A41,XCMPLX_1:95;
+    then (f.x)*(g.x)" = diff(f,t)/diff(g,t) by XCMPLX_0:def 9;
+    then (f.x)*(g.x)" = diff(f,t)*diff(g,t)" by XCMPLX_0:def 9;
+    then (f/g).x = diff(f,t)*diff(g,t)" by A36,A39,RFUNCT_1:def 4;
+    then (f/g).x = ((f`|N).t)*diff(g,t)" by A1,A10,A45,FDIFF_1:def 8;
+    then (f/g).x = ((f`|N).t)*((g`|N).t)" by A1,A10,A45,FDIFF_1:def 8;
+    hence thesis by A31,A42,A45,RFUNCT_1:def 4;
+   end;
+    for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom (f/g) & g2<r2 &
+   x0<g2 & g2 in dom (f/g) by A1,Th4;
+  then A47: (for r1 st x0<r1 ex t st t<r1 & x0<t & t in dom (f/g)) &
+      for r1 st r1<x0 ex t st r1<t & t<x0 & t in dom (f/g) by LIMFUNC3:8;
+    for a st a is convergent & lim a = x0 &
+  rng a c= dom (f/g) /\ right_open_halfline(x0) holds
+  (f/g)*a is divergent_to+infty
+   proof
+    let a;
+    assume A48: a is convergent & lim a = x0 &
+               rng a c= dom (f/g) /\ right_open_halfline(x0);
+    then consider k such that
+    A49: for n st k<=n holds x0-r<a.n & a.n<x0+r by A2,A3,LIMFUNC3:7;
+    set a1 = a^\k;
+     A50: now let n;
+          A51: a1.n = a.(n+k) by SEQM_3:def 9;
+            a.(n+k) in rng a by RFUNCT_2:10;
+          then a.(n+k) in right_open_halfline(x0) by A48,XBOOLE_0:def 3;
+          then a.(n+k) in {g1:x0<g1} by LIMFUNC1:def 3;
+          then ex g1 st a.(n+k)=g1 & x0<g1;
+          hence x0<a1.n by SEQM_3:def 9;
+            k<=n+k by NAT_1:37;
+          hence a1.n<x0+r by A49,A51;
+         end;
+     defpred X[Nat,real number] means
+        $2 in ].x0,a1.$1.[ & (((f/g)*a)^\k).$1=((f`|N)/(g`|N)).$2;
+    A52: for n ex c be real number st X[n,c]
+         proof
+          let n;
+            x0<a1.n & a1.n<x0+r by A50;
+          then consider c such that
+          A53: c in ].x0,a1.n.[ & (f/g).(a1.n)=((f`|N)/(g`|N)).c by A4;
+          take c;
+            dom (f/g) /\ right_open_halfline(x0) c= dom (f/g) by XBOOLE_1:17
+;
+          then A54: rng a c= dom (f/g) by A48,XBOOLE_1:1;
+            rng a1 c= rng a by RFUNCT_2:7;
+          then rng a1 c= dom (f/g) by A54,XBOOLE_1:1;
+          then ((f/g)*(a^\k)).n=((f`|N)/(g`|N)).c by A53,RFUNCT_2:21;
+          hence thesis by A53,A54,RFUNCT_2:22;
+         end;
+    consider b such that
+    A55: for n holds X[n,b.n] from RealSeqChoice(A52);
+    deffunc U(set) = x0;
+    consider d being Real_Sequence such that
+    A56: for n holds d.n=U(n) from ExRealSeq;
+       now
+      let n;
+        d.n=x0 & d.(n+1)=x0 by A56;
+      hence d.n=d.(n+1);
+     end;
+    then A57: d is constant by SEQM_3:16;
+    then A58: d is convergent by SEQ_4:39;
+    A59: lim d=d.0 by A57,SEQ_4:41
+            .=x0 by A56;
+    A60: a1 is convergent & lim a1=x0 by A48,SEQ_4:33;
+     A61: now
+          let n;
+            b.n in ].x0,a1.n.[ by A55;
+          then b.n in {g1:x0<g1 & g1<a1.n} by RCOMP_1:def 2;
+          then ex g1 st g1=b.n & x0<g1 & g1<a1.n; hence d.n<=b.n & b.n<=a1.n
+by A56;
+         end;
+    then A62: b is convergent by A58,A59,A60,SEQ_2:33;
+    A63: lim b=x0 by A58,A59,A60,A61,SEQ_2:34;
+    A64: x0-r<x0 by A2,SQUARE_1:29;
+      x0<x0+r by A2,REAL_2:174;
+    then x0 in {g2: x0-r<g2 & g2<x0+r} by A64;
+    then A65: x0 in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+    A66: rng b c= dom ((f`|N)/(g`|N)) \{x0}
+     proof
+      let x be set;
+      assume x in rng b;
+      then consider n such that A67: x=b.n by RFUNCT_2:9;
+      A68: x0<a1.n & a1.n<x0+r by A50;
+      A69: x in ].x0,a1.n.[ by A55,A67;
+      then x in {g1:x0<g1 & g1<a1.n} by RCOMP_1:def 2; then A70: ex g1 st
+ g1 = x & x0<g1 & g1<a1.n;
+      A71: ].x0,a1.n.[ c= [.x0,a1.n.] by RCOMP_1:15;
+        x0-r<a1.n by A64,A68,AXIOMS:22;
+      then a1.n in {g3: x0-r<g3 & g3<x0+r} by A68;
+      then a1.n in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+      then [.x0,a1.n.] c= ].x0-r,x0+r.[ by A65,RCOMP_1:17;
+      then ].x0,a1.n.[ c= ].x0-r,x0+r.[ by A71,XBOOLE_1:1;
+      then A72: ].x0,a1.n.[ c= dom ((f`|N)/(g`|N)) by A1,A2,XBOOLE_1:1;
+        not x in {x0} by A70,TARSKI:def 1;
+      hence x in dom ((f`|N)/(g`|N))\{x0} by A69,A72,XBOOLE_0:def 4;
+     end;
+      dom ((f`|N)/(g`|N)) \{x0} c= dom ((f`|N)/(g`|N)) by XBOOLE_1:36;
+    then A73: rng b c= dom ((f`|N)/(g`|N)) by A66,XBOOLE_1:1;
+    A74: ((f`|N)/(g`|N))*b is divergent_to+infty by A1,A62,A63,A66,LIMFUNC3:def
+2;
+       now
+      let n;
+        (((f/g)*a)^\k).n=((f`|N)/(g`|N)).(b.n) by A55;
+      hence (((f`|N)/(g`|N))*b).n <= (((f/g)*a)^\k).n by A73,RFUNCT_2:21;
+     end;
+     then ((f/g)*a)^\k is divergent_to+infty by A74,LIMFUNC1:69;
+    hence thesis by LIMFUNC1:34;
+   end;
+  then A75: f/g is_right_divergent_to+infty_in x0 by A47,LIMFUNC2:def 5;
+  A76: for x st x0-r<x & x<x0 ex c st c in ].x,x0.[ & (f/g).x=((f`|N)/(g`|N)).c
+   proof
+    let x such that
+    A77: x0-r<x & x<x0;
+    A78: f is_continuous_on N by A1,FDIFF_1:33;
+    A79: g is_continuous_on N by A1,FDIFF_1:33;
+    A80: x0-r<x0 by A2,SQUARE_1:29;
+    A81: x0+0<x0+r by A2,REAL_1:67;
+    then x0 in {g1: x0-r<g1 & g1<x0+r} by A80;
+    then A82: x0 in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+      x<x0+r by A77,A81,AXIOMS:22;
+    then x in {g1: x0-r<g1 & g1<x0+r} by A77;
+    then x in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+    then A83: [.x,x0.] c= N by A2,A82,RCOMP_1:17;
+    then f is_continuous_on [.x,x0.] by A78,FCONT_1:17;
+    then A84: (g.x)(#)f is_continuous_on [.x,x0.] by FCONT_1:21;
+      g is_continuous_on [.x,x0.] by A79,A83,FCONT_1:17;
+    then (f.x)(#)g is_continuous_on [.x,x0.] by FCONT_1:21;
+    then A85: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x,x0.] by A84,FCONT_1:19
+;
+    A86: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
+    A87: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A88: N c= dom ((g.x)(#)f) by A78,A86,FCONT_1:14;
+    A89: N c= dom ((f.x)(#)g) by A79,A87,FCONT_1:14;
+    A90: ].x,x0.[ c= [.x,x0.] by RCOMP_1:15;
+    then A91: ].x,x0.[ c= N by A83,XBOOLE_1:1;
+    then A92: f is_differentiable_on ].x,x0.[ by A1,FDIFF_1:34;
+    A93: ].x,x0.[ c= dom ((g.x)(#)f) by A88,A91,XBOOLE_1:1;
+    then A94: (g.x)(#)f is_differentiable_on ].x,x0.[ by A92,FDIFF_1:28;
+    A95: ].x,x0.[ c= dom ((f.x)(#)g) by A89,A91,XBOOLE_1:1;
+    then ].x,x0.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A93,XBOOLE_1:19
+;
+    then A96: ].x,x0.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    A97: g is_differentiable_on ].x,x0.[ by A1,A91,FDIFF_1:34;
+    then A98: (f.x)(#)g is_differentiable_on ].x,x0.[ by A95,FDIFF_1:28;
+    then A99: (f.x)(#)g-(g.x)(#)
+f is_differentiable_on ].x,x0.[ by A94,A96,FDIFF_1:27;
+    set f1 = (f.x)(#)g - (g.x)(#)f;
+    A100: [.x,x0.] c= dom f1 by A85,FCONT_1:def 2;
+    A101: x0 in [.x,x0.] & x in [.x,x0.] by A77,RCOMP_1:15;
+    then x0 in dom f1 & x in dom f1 by A100;
+    then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
+ dom ((g.x)
+(#)f)
+     by SEQ_1:def 4;
+    then A102: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
+(#)
+g) &
+    x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
+    A103: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A100,A101,SEQ_1:def 4
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A102,SEQ_1:def 6
+         .= 0 - (g.x)*0 by A1,A102,SEQ_1:def 6
+         .= 0;
+      f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A100,A101,SEQ_1:def 4
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A102,SEQ_1:def 6
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A102,SEQ_1:def 6
+         .= 0 by XCMPLX_1:14;
+    then consider t such that
+    A104: t in ].x,x0.[ & diff(f1,t)=0 by A77,A85,A99,A103,ROLLE:1;
+    take t;
+    A105: (f.x)(#)g is_differentiable_in t by A98,A104,FDIFF_1:16;
+      (g.x)(#)f is_differentiable_in t by A94,A104,FDIFF_1:16;
+    then A106: 0=diff((f.x)(#)g,t) - diff((g.x)(#)f,t) by A104,A105,FDIFF_1:22;
+    A107: g is_differentiable_in t by A97,A104,FDIFF_1:16;
+      f is_differentiable_in t by A92,A104,FDIFF_1:16;
+    then 0=diff((f.x)(#)g,t) - (g.x)*diff(f,t) by A106,FDIFF_1:23;
+    then 0=(f.x)*diff(g,t) - (g.x)*diff(f,t) by A107,FDIFF_1:23;
+    then A108: (f.x)*diff(g,t)=(g.x)*diff(f,t) by XCMPLX_1:15;
+      [.x,x0.]\{x0} c= N\{x0} by A83,XBOOLE_1:33;
+    then A109: [.x,x0.]\{x0} c= dom(f/g) by A1,XBOOLE_1:1;
+    then A110: [.x,x0.]\{x0} c= dom f /\ (dom g\g"{0}) by RFUNCT_1:def 4;
+      dom f /\ (dom g\g"{0}) c= dom g\g"{0} by XBOOLE_1:17;
+    then A111: [.x,x0.]\{x0} c= dom g\g"{0} by A110,XBOOLE_1:1;
+      not x in {x0} by A77,TARSKI:def 1;
+    then A112: x in [.x,x0.]\{x0} by A101,XBOOLE_0:def 4;
+    then A113: x in dom g & not x in g"{0} by A111,XBOOLE_0:def 4;
+    A114: now assume g.x=0;
+         then g.x in {0} by TARSKI:def 1;
+         hence contradiction by A113,FUNCT_1:def 13;
+        end;
+    A115: [.x,x0.] c= dom ((f`|N)/(g`|N)) by A1,A83,XBOOLE_1:1;
+    then A116: [.x,x0.] c= dom (f`|N) /\ (dom (g`|N)\(g`|N)"{0}) by RFUNCT_1:
+def 4;
+      dom (f`|N) /\ (dom (g`|N) \ (g`|N)"{0}) c= dom (g`|N)\(g`|N)"{0}
+     by XBOOLE_1:17;
+    then A117: [.x,x0.] c= dom (g`|N)\(g`|N)"{0} by A116,XBOOLE_1:1;
+    A118: t in [.x,x0.] by A90,A104;
+    then A119: t in dom (g`|N) & not t in (g`|N)"{0} by A117,XBOOLE_0:def 4;
+       now assume diff(g,t)=0;
+         then (g`|N).t=0 by A1,A83,A118,FDIFF_1:def 8;
+         then (g`|N).t in {0} by TARSKI:def 1;
+         hence contradiction by A119,FUNCT_1:def 13;
+        end;
+    then (f.x)/(g.x) = diff(f,t)/diff(g,t) by A108,A114,XCMPLX_1:95;
+    then (f.x)*(g.x)" = diff(f,t)/diff(g,t) by XCMPLX_0:def 9;
+    then (f.x)*(g.x)" = diff(f,t)*diff(g,t)" by XCMPLX_0:def 9;
+    then (f/g).x = diff(f,t)*diff(g,t)" by A109,A112,RFUNCT_1:def 4;
+    then (f/g).x = ((f`|N).t)*diff(g,t)" by A1,A83,A118,FDIFF_1:def 8;
+    then (f/g).x = ((f`|N).t)*((g`|N).t)" by A1,A83,A118,FDIFF_1:def 8;
+    hence thesis by A104,A115,A118,RFUNCT_1:def 4;
+   end;
+    for a st a is convergent & lim a = x0 &
+  rng a c= dom (f/g) /\ left_open_halfline(x0) holds
+   (f/g)*a is divergent_to+infty
+   proof
+    let a;
+    assume A120: a is convergent & lim a = x0 &
+               rng a c= dom (f/g) /\ left_open_halfline(x0);
+    then consider k such that
+    A121: for n st k<=n holds x0-r<a.n & a.n<x0+r by A2,A3,LIMFUNC3:7;
+    set a1 = a^\k;
+     A122: now let n;
+          A123: a1.n = a.(n+k) by SEQM_3:def 9;
+            a.(n+k) in rng a by RFUNCT_2:10;
+          then a.(n+k) in left_open_halfline(x0) by A120,XBOOLE_0:def 3;
+          then a.(n+k) in {g1:g1<x0} by PROB_1:def 15;
+          then ex g1 st a.(n+k)=g1 & g1<x0;
+          hence a1.n<x0 by SEQM_3:def 9;
+            k<=n+k by NAT_1:37;
+          hence x0-r<a1.n by A121,A123;
+         end;
+        defpred X[Nat, real number] means
+          $2 in ].a1.$1,x0.[ & (((f/g)*a)^\k).$1=((f`|N)/(g`|N)).$2;
+    A124: for n ex c be real number st X[n,c]
+         proof
+          let n;
+            x0-r<a1.n & a1.n<x0 by A122;
+          then consider c such that
+          A125: c in ].a1.n,x0.[ & (f/g).(a1.n)=((f`|N)/(g`|N)).c by A76;
+          take c;
+            dom (f/g) /\ left_open_halfline(x0) c= dom (f/g) by XBOOLE_1:17;
+          then A126: rng a c= dom (f/g) by A120,XBOOLE_1:1;
+            rng a1 c= rng a by RFUNCT_2:7;
+          then rng a1 c= dom (f/g) by A126,XBOOLE_1:1;
+          then ((f/g)*(a^\k)).n=((f`|N)/(g`|N)).c by A125,RFUNCT_2:21;
+          hence thesis by A125,A126,RFUNCT_2:22;
+         end;
+    consider b such that
+    A127: for n holds X[n,b.n] from RealSeqChoice(A124);
+    deffunc U(set) = x0;
+    consider d being Real_Sequence such that
+    A128: for n holds d.n=U(n) from ExRealSeq;
+       now
+      let n;
+        d.n=x0 & d.(n+1)=x0 by A128;
+      hence d.n=d.(n+1);
+     end;
+    then A129: d is constant by SEQM_3:16;
+    then A130: d is convergent by SEQ_4:39;
+    A131: lim d=d.0 by A129,SEQ_4:41
+            .=x0 by A128;
+    A132: a1 is convergent & lim a1=x0 by A120,SEQ_4:33;
+     A133: now
+          let n;
+            b.n in ].a1.n,x0.[ by A127;
+          then b.n in {g1:a1.n<g1 & g1<x0} by RCOMP_1:def 2;
+          then ex g1 st g1=b.n & a1.n<g1 & g1<x0; hence a1.n<=b.n & b.n<=
+d.n by A128;
+         end;
+    then A134: b is convergent by A130,A131,A132,SEQ_2:33;
+    A135: lim b=x0 by A130,A131,A132,A133,SEQ_2:34;
+    A136: x0-r<x0 by A2,SQUARE_1:29;
+    A137: x0<x0+r by A2,REAL_2:174;
+    then x0 in {g2: x0-r<g2 & g2<x0+r} by A136;
+    then A138: x0 in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+    A139: rng b c= dom ((f`|N)/(g`|N)) \{x0}
+     proof
+      let x be set;
+      assume x in rng b;
+      then consider n such that A140: x=b.n by RFUNCT_2:9;
+      A141: x0-r<a1.n & a1.n<x0 by A122;
+      A142: x in ].a1.n,x0.[ by A127,A140;
+      then x in {g1:a1.n<g1 & g1<x0} by RCOMP_1:def 2; then A143: ex g1 st
+ g1 = x & a1.n<g1 & g1<x0;
+      A144: ].a1.n,x0.[ c= [.a1.n,x0.] by RCOMP_1:15;
+        a1.n<x0+r by A137,A141,AXIOMS:22;
+      then a1.n in {g3: x0-r<g3 & g3<x0+r} by A141;
+      then a1.n in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+      then [.a1.n,x0.] c= ].x0-r,x0+r.[ by A138,RCOMP_1:17;
+      then ].a1.n,x0.[ c= ].x0-r,x0+r.[ by A144,XBOOLE_1:1;
+      then A145: ].a1.n,x0.[ c= dom ((f`|N)/(g`|N)) by A1,A2,XBOOLE_1:1;
+        not x in {x0} by A143,TARSKI:def 1;
+      hence x in dom ((f`|N)/(g`|N))\{x0} by A142,A145,XBOOLE_0:def 4;
+     end;
+      dom ((f`|N)/(g`|N)) \{x0} c= dom ((f`|N)/(g`|N)) by XBOOLE_1:36;
+    then A146: rng b c= dom ((f`|N)/(g`|N)) by A139,XBOOLE_1:1;
+    A147: ((f`|N)/(g`|N))*b is divergent_to+infty by A1,A134,A135,A139,LIMFUNC3
+:def 2;
+       now
+      let n;
+        (((f/g)*a)^\k).n=((f`|N)/(g`|N)).(b.n) by A127;
+      hence (((f`|N)/(g`|N))*b).n <= (((f/g)*a)^\k).n by A146,RFUNCT_2:21;
+     end;
+    then ((f/g)*a)^\k is divergent_to+infty by A147,LIMFUNC1:69;
+    hence thesis by LIMFUNC1:34;
+   end;
+  then f/g is_left_divergent_to+infty_in x0 by A47,LIMFUNC2:def 2;
+  hence thesis by A75,LIMFUNC3:15;
+ end;
+
+theorem
+  (ex N being Neighbourhood of x0 st f is_differentiable_on N &
+g is_differentiable_on N & N \ {x0} c= dom (f/g) &
+N c= dom ((f`|N)/(g`|N)) & f.x0 = 0 & g.x0 = 0 &
+(f`|N)/(g`|N) is_divergent_to-infty_in x0)
+implies f/g is_divergent_to-infty_in x0
+ proof
+  given N being Neighbourhood of x0 such that
+  A1: f is_differentiable_on N & g is_differentiable_on N &
+     N \ {x0} c= dom (f/g) & N c= dom ((f`|N)/(g`|N)) &
+     f.x0 = 0 & g.x0 = 0 &
+     (f`|N)/(g`|N) is_divergent_to-infty_in x0;
+  consider r be real number such that
+  A2: 0<r & N = ].x0-r,x0+r.[ by RCOMP_1:def 7;
+A3: r is Real by XREAL_0:def 1;
+  A4: for x st x0<x & x<x0+r ex c st c in ].x0,x.[ & (f/g).x=((f`|N)/(g`|N)).c
+   proof
+    let x such that
+    A5: x0<x & x<x0+r;
+    A6: f is_continuous_on N by A1,FDIFF_1:33;
+    A7: g is_continuous_on N by A1,FDIFF_1:33;
+    A8: x0-r<x0 by A2,SQUARE_1:29;
+      x0+0<x0+r by A2,REAL_1:67;
+    then x0 in {g1: x0-r<g1 & g1<x0+r} by A8;
+    then A9: x0 in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+      x0-r<x by A5,A8,AXIOMS:22;
+    then x in {g1: x0-r<g1 & g1<x0+r} by A5;
+    then x in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+    then A10: [.x0,x.] c= N by A2,A9,RCOMP_1:17;
+    then f is_continuous_on [.x0,x.] by A6,FCONT_1:17;
+    then A11: (g.x)(#)f is_continuous_on [.x0,x.] by FCONT_1:21;
+      g is_continuous_on [.x0,x.] by A7,A10,FCONT_1:17;
+    then (f.x)(#)g is_continuous_on [.x0,x.] by FCONT_1:21;
+    then A12: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x0,x.] by A11,FCONT_1:19
+;
+    A13: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
+    A14: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A15: N c= dom ((g.x)(#)f) by A6,A13,FCONT_1:14;
+    A16: N c= dom ((f.x)(#)g) by A7,A14,FCONT_1:14;
+    A17: ].x0,x.[ c= [.x0,x.] by RCOMP_1:15;
+    then A18: ].x0,x.[ c= N by A10,XBOOLE_1:1;
+    then A19: f is_differentiable_on ].x0,x.[ by A1,FDIFF_1:34;
+    A20: ].x0,x.[ c= dom ((g.x)(#)f) by A15,A18,XBOOLE_1:1;
+    then A21: (g.x)(#)f is_differentiable_on ].x0,x.[ by A19,FDIFF_1:28;
+    A22: ].x0,x.[ c= dom ((f.x)(#)g) by A16,A18,XBOOLE_1:1;
+    then ].x0,x.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A20,XBOOLE_1:19
+;
+    then A23: ].x0,x.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    A24: g is_differentiable_on ].x0,x.[ by A1,A18,FDIFF_1:34;
+    then A25: (f.x)(#)g is_differentiable_on ].x0,x.[ by A22,FDIFF_1:28;
+    then A26: (f.x)(#)g-(g.x)(#)
+f is_differentiable_on ].x0,x.[ by A21,A23,FDIFF_1:27;
+    set f1 = (f.x)(#)g - (g.x)(#)f;
+    A27: [.x0,x.] c= dom f1 by A12,FCONT_1:def 2;
+    A28: x0 in [.x0,x.] & x in [.x0,x.] by A5,RCOMP_1:15;
+    then x0 in dom f1 & x in dom f1 by A27;
+    then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
+ dom ((g.x)
+(#)f)
+     by SEQ_1:def 4;
+    then A29: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
+(#)g) &
+    x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
+    A30: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A27,A28,SEQ_1:def 4
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A29,SEQ_1:def 6
+         .= 0 - (g.x)*0 by A1,A29,SEQ_1:def 6
+         .= 0;
+      f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A27,A28,SEQ_1:def 4
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A29,SEQ_1:def 6
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A29,SEQ_1:def 6
+         .= 0 by XCMPLX_1:14;
+    then consider t such that
+    A31: t in ].x0,x.[ & diff(f1,t)=0 by A5,A12,A26,A30,ROLLE:1;
+    take t;
+    A32: (f.x)(#)g is_differentiable_in t by A25,A31,FDIFF_1:16;
+      (g.x)(#)f is_differentiable_in t by A21,A31,FDIFF_1:16;
+    then A33: 0=diff((f.x)(#)g,t) - diff((g.x)(#)f,t) by A31,A32,FDIFF_1:22;
+    A34: g is_differentiable_in t by A24,A31,FDIFF_1:16;
+      f is_differentiable_in t by A19,A31,FDIFF_1:16;
+    then 0=diff((f.x)(#)g,t) - (g.x)*diff(f,t) by A33,FDIFF_1:23;
+    then 0=(f.x)*diff(g,t) - (g.x)*diff(f,t) by A34,FDIFF_1:23;
+    then A35: (f.x)*diff(g,t)=(g.x)*diff(f,t) by XCMPLX_1:15;
+      [.x0,x.]\{x0} c= N\{x0} by A10,XBOOLE_1:33;
+    then A36: [.x0,x.]\{x0} c= dom(f/g) by A1,XBOOLE_1:1;
+    then A37: [.x0,x.]\{x0} c= dom f /\ (dom g\g"{0}) by RFUNCT_1:def 4;
+      dom f /\ (dom g\g"{0}) c= dom g\g"{0} by XBOOLE_1:17;
+    then A38: [.x0,x.]\{x0} c= dom g\g"{0} by A37,XBOOLE_1:1;
+      not x in {x0} by A5,TARSKI:def 1;
+    then A39: x in [.x0,x.]\{x0} by A28,XBOOLE_0:def 4;
+    then A40: x in dom g & not x in g"{0} by A38,XBOOLE_0:def 4;
+    A41: now assume g.x=0;
+         then g.x in {0} by TARSKI:def 1;
+         hence contradiction by A40,FUNCT_1:def 13;
+        end;
+    A42: [.x0,x.] c= dom ((f`|N)/(g`|N)) by A1,A10,XBOOLE_1:1;
+    then A43: [.x0,x.] c= dom (f`|N) /\ (dom (g`|N)\(g`|N)"{0}) by RFUNCT_1:def
+4;
+      dom (f`|N) /\ (dom (g`|N) \ (g`|N)"{0}) c= dom (g`|N)\(g`|N)"{0}
+     by XBOOLE_1:17;
+    then A44: [.x0,x.] c= dom (g`|N)\(g`|N)"{0} by A43,XBOOLE_1:1;
+    A45: t in [.x0,x.] by A17,A31;
+    then A46: t in dom (g`|N) & not t in (g`|N)"{0} by A44,XBOOLE_0:def 4;
+       now assume diff(g,t)=0;
+         then (g`|N).t=0 by A1,A10,A45,FDIFF_1:def 8;
+         then (g`|N).t in {0} by TARSKI:def 1;
+         hence contradiction by A46,FUNCT_1:def 13;
+        end;
+    then (f.x)/(g.x) = diff(f,t)/diff(g,t) by A35,A41,XCMPLX_1:95;
+    then (f.x)*(g.x)" = diff(f,t)/diff(g,t) by XCMPLX_0:def 9;
+    then (f.x)*(g.x)" = diff(f,t)*diff(g,t)" by XCMPLX_0:def 9;
+    then (f/g).x = diff(f,t)*diff(g,t)" by A36,A39,RFUNCT_1:def 4;
+    then (f/g).x = ((f`|N).t)*diff(g,t)" by A1,A10,A45,FDIFF_1:def 8;
+    then (f/g).x = ((f`|N).t)*((g`|N).t)" by A1,A10,A45,FDIFF_1:def 8;
+    hence thesis by A31,A42,A45,RFUNCT_1:def 4;
+   end;
+    for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom (f/g) & g2<r2 &
+   x0<g2 & g2 in dom (f/g) by A1,Th4;
+  then A47: (for r1 st x0<r1 ex t st t<r1 & x0<t & t in dom (f/g)) &
+      for r1 st r1<x0 ex t st r1<t & t<x0 & t in dom (f/g) by LIMFUNC3:8;
+    for a st a is convergent & lim a = x0 &
+  rng a c= dom (f/g) /\ right_open_halfline(x0) holds
+  (f/g)*a is divergent_to-infty
+   proof
+    let a;
+    assume A48: a is convergent & lim a = x0 &
+               rng a c= dom (f/g) /\ right_open_halfline(x0);
+    then consider k such that
+    A49: for n st k<=n holds x0-r<a.n & a.n<x0+r by A2,A3,LIMFUNC3:7;
+    set a1 = a^\k;
+     A50: now let n;
+          A51: a1.n = a.(n+k) by SEQM_3:def 9;
+            a.(n+k) in rng a by RFUNCT_2:10;
+          then a.(n+k) in right_open_halfline(x0) by A48,XBOOLE_0:def 3;
+          then a.(n+k) in {g1:x0<g1} by LIMFUNC1:def 3;
+          then ex g1 st a.(n+k)=g1 & x0<g1;
+          hence x0<a1.n by SEQM_3:def 9;
+            k<=n+k by NAT_1:37;
+          hence a1.n<x0+r by A49,A51;
+         end;
+        defpred X[Nat,real number] means
+            $2 in ].x0,a1.$1.[ & (((f/g)*a)^\k).$1=((f`|N)/(g`|N)).$2;
+    A52: for n ex c be real number st X[n,c]
+         proof
+          let n;
+            x0<a1.n & a1.n<x0+r by A50;
+          then consider c such that
+          A53: c in ].x0,a1.n.[ & (f/g).(a1.n)=((f`|N)/(g`|N)).c by A4;
+          take c;
+            dom (f/g) /\ right_open_halfline(x0) c= dom (f/g) by XBOOLE_1:17
+;
+          then A54: rng a c= dom (f/g) by A48,XBOOLE_1:1;
+            rng a1 c= rng a by RFUNCT_2:7;
+          then rng a1 c= dom (f/g) by A54,XBOOLE_1:1;
+          then ((f/g)*(a^\k)).n=((f`|N)/(g`|N)).c by A53,RFUNCT_2:21;
+          hence thesis by A53,A54,RFUNCT_2:22;
+         end;
+    consider b such that
+    A55: for n holds X[n,b.n] from RealSeqChoice(A52);
+    deffunc U(set) = x0;
+    consider d being Real_Sequence such that
+    A56: for n holds d.n=U(n) from ExRealSeq;
+       now
+      let n;
+        d.n=x0 & d.(n+1)=x0 by A56;
+      hence d.n=d.(n+1);
+     end;
+    then A57: d is constant by SEQM_3:16;
+    then A58: d is convergent by SEQ_4:39;
+    A59: lim d=d.0 by A57,SEQ_4:41
+            .=x0 by A56;
+    A60: a1 is convergent & lim a1=x0 by A48,SEQ_4:33;
+     A61: now
+          let n;
+            b.n in ].x0,a1.n.[ by A55;
+          then b.n in {g1:x0<g1 & g1<a1.n} by RCOMP_1:def 2;
+          then ex g1 st g1=b.n & x0<g1 & g1<a1.n; hence d.n<=b.n & b.n<=a1.n
+by A56;
+         end;
+    then A62: b is convergent by A58,A59,A60,SEQ_2:33;
+    A63: lim b=x0 by A58,A59,A60,A61,SEQ_2:34;
+    A64: x0-r<x0 by A2,SQUARE_1:29;
+      x0<x0+r by A2,REAL_2:174;
+    then x0 in {g2: x0-r<g2 & g2<x0+r} by A64;
+    then A65: x0 in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+    A66: rng b c= dom ((f`|N)/(g`|N)) \{x0}
+     proof
+      let x be set;
+      assume x in rng b;
+      then consider n such that A67: x=b.n by RFUNCT_2:9;
+      A68: x0<a1.n & a1.n<x0+r by A50;
+      A69: x in ].x0,a1.n.[ by A55,A67;
+      then x in {g1:x0<g1 & g1<a1.n} by RCOMP_1:def 2; then A70: ex g1 st
+ g1 = x & x0<g1 & g1<a1.n;
+      A71: ].x0,a1.n.[ c= [.x0,a1.n.] by RCOMP_1:15;
+        x0-r<a1.n by A64,A68,AXIOMS:22;
+      then a1.n in {g3: x0-r<g3 & g3<x0+r} by A68;
+      then a1.n in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+      then [.x0,a1.n.] c= ].x0-r,x0+r.[ by A65,RCOMP_1:17;
+      then ].x0,a1.n.[ c= ].x0-r,x0+r.[ by A71,XBOOLE_1:1;
+      then A72: ].x0,a1.n.[ c= dom ((f`|N)/(g`|N)) by A1,A2,XBOOLE_1:1;
+        not x in {x0} by A70,TARSKI:def 1;
+      hence x in dom ((f`|N)/(g`|N))\{x0} by A69,A72,XBOOLE_0:def 4;
+     end;
+      dom ((f`|N)/(g`|N)) \{x0} c= dom ((f`|N)/(g`|N)) by XBOOLE_1:36;
+    then A73: rng b c= dom ((f`|N)/(g`|N)) by A66,XBOOLE_1:1;
+    A74: ((f`|N)/(g`|N))*b is divergent_to-infty by A1,A62,A63,A66,LIMFUNC3:def
+3;
+       now
+      let n;
+        (((f/g)*a)^\k).n=((f`|N)/(g`|N)).(b.n) by A55;
+      hence (((f/g)*a)^\k).n <= (((f`|N)/(g`|N))*b).n by A73,RFUNCT_2:21;
+     end;
+    then ((f/g)*a)^\k is divergent_to-infty by A74,LIMFUNC1:70;
+    hence thesis by LIMFUNC1:34;
+   end;
+  then A75: f/g is_right_divergent_to-infty_in x0 by A47,LIMFUNC2:def 6;
+  A76: for x st x0-r<x & x<x0 ex c st c in ].x,x0.[ & (f/g).x=((f`|N)/(g`|N)).c
+   proof
+    let x such that
+    A77: x0-r<x & x<x0;
+    A78: f is_continuous_on N by A1,FDIFF_1:33;
+    A79: g is_continuous_on N by A1,FDIFF_1:33;
+    A80: x0-r<x0 by A2,SQUARE_1:29;
+    A81: x0+0<x0+r by A2,REAL_1:67;
+    then x0 in {g1: x0-r<g1 & g1<x0+r} by A80;
+    then A82: x0 in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+      x<x0+r by A77,A81,AXIOMS:22;
+    then x in {g1: x0-r<g1 & g1<x0+r} by A77;
+    then x in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+    then A83: [.x,x0.] c= N by A2,A82,RCOMP_1:17;
+    then f is_continuous_on [.x,x0.] by A78,FCONT_1:17;
+    then A84: (g.x)(#)f is_continuous_on [.x,x0.] by FCONT_1:21;
+      g is_continuous_on [.x,x0.] by A79,A83,FCONT_1:17;
+    then (f.x)(#)g is_continuous_on [.x,x0.] by FCONT_1:21;
+    then A85: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x,x0.] by A84,FCONT_1:19
+;
+    A86: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
+    A87: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A88: N c= dom ((g.x)(#)f) by A78,A86,FCONT_1:14;
+    A89: N c= dom ((f.x)(#)g) by A79,A87,FCONT_1:14;
+    A90: ].x,x0.[ c= [.x,x0.] by RCOMP_1:15;
+    then A91: ].x,x0.[ c= N by A83,XBOOLE_1:1;
+    then A92: f is_differentiable_on ].x,x0.[ by A1,FDIFF_1:34;
+    A93: ].x,x0.[ c= dom ((g.x)(#)f) by A88,A91,XBOOLE_1:1;
+    then A94: (g.x)(#)f is_differentiable_on ].x,x0.[ by A92,FDIFF_1:28;
+    A95: ].x,x0.[ c= dom ((f.x)(#)g) by A89,A91,XBOOLE_1:1;
+    then ].x,x0.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A93,XBOOLE_1:19
+;
+    then A96: ].x,x0.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    A97: g is_differentiable_on ].x,x0.[ by A1,A91,FDIFF_1:34;
+    then A98: (f.x)(#)g is_differentiable_on ].x,x0.[ by A95,FDIFF_1:28;
+    then A99: (f.x)(#)g-(g.x)(#)
+f is_differentiable_on ].x,x0.[ by A94,A96,FDIFF_1:27;
+    set f1 = (f.x)(#)g - (g.x)(#)f;
+    A100: [.x,x0.] c= dom f1 by A85,FCONT_1:def 2;
+    A101: x0 in [.x,x0.] & x in [.x,x0.] by A77,RCOMP_1:15;
+    then x0 in dom f1 & x in dom f1 by A100;
+    then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
+ dom ((g.x)
+(#)f)
+     by SEQ_1:def 4;
+    then A102: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
+(#)
+g) &
+    x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
+    A103: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A100,A101,SEQ_1:def 4
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A102,SEQ_1:def 6
+         .= 0 - (g.x)*0 by A1,A102,SEQ_1:def 6
+         .= 0;
+      f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A100,A101,SEQ_1:def 4
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A102,SEQ_1:def 6
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A102,SEQ_1:def 6
+         .= 0 by XCMPLX_1:14;
+    then consider t such that
+    A104: t in ].x,x0.[ & diff(f1,t)=0 by A77,A85,A99,A103,ROLLE:1;
+    take t;
+    A105: (f.x)(#)g is_differentiable_in t by A98,A104,FDIFF_1:16;
+      (g.x)(#)f is_differentiable_in t by A94,A104,FDIFF_1:16;
+    then A106: 0=diff((f.x)(#)g,t) - diff((g.x)(#)f,t) by A104,A105,FDIFF_1:22;
+    A107: g is_differentiable_in t by A97,A104,FDIFF_1:16;
+      f is_differentiable_in t by A92,A104,FDIFF_1:16;
+    then 0=diff((f.x)(#)g,t) - (g.x)*diff(f,t) by A106,FDIFF_1:23;
+    then 0=(f.x)*diff(g,t) - (g.x)*diff(f,t) by A107,FDIFF_1:23;
+    then A108: (f.x)*diff(g,t)=(g.x)*diff(f,t) by XCMPLX_1:15;
+      [.x,x0.]\{x0} c= N\{x0} by A83,XBOOLE_1:33;
+    then A109: [.x,x0.]\{x0} c= dom(f/g) by A1,XBOOLE_1:1;
+    then A110: [.x,x0.]\{x0} c= dom f /\ (dom g\g"{0}) by RFUNCT_1:def 4;
+      dom f /\ (dom g\g"{0}) c= dom g\g"{0} by XBOOLE_1:17;
+    then A111: [.x,x0.]\{x0} c= dom g\g"{0} by A110,XBOOLE_1:1;
+      not x in {x0} by A77,TARSKI:def 1;
+    then A112: x in [.x,x0.]\{x0} by A101,XBOOLE_0:def 4;
+    then A113: x in dom g & not x in g"{0} by A111,XBOOLE_0:def 4;
+    A114: now assume g.x=0;
+         then g.x in {0} by TARSKI:def 1;
+         hence contradiction by A113,FUNCT_1:def 13;
+        end;
+    A115: [.x,x0.] c= dom ((f`|N)/(g`|N)) by A1,A83,XBOOLE_1:1;
+    then A116: [.x,x0.] c= dom (f`|N) /\ (dom (g`|N)\(g`|N)"{0}) by RFUNCT_1:
+def 4;
+      dom (f`|N) /\ (dom (g`|N) \ (g`|N)"{0}) c= dom (g`|N)\(g`|N)"{0}
+     by XBOOLE_1:17;
+    then A117: [.x,x0.] c= dom (g`|N)\(g`|N)"{0} by A116,XBOOLE_1:1;
+    A118: t in [.x,x0.] by A90,A104;
+    then A119: t in dom (g`|N) & not t in (g`|N)"{0} by A117,XBOOLE_0:def 4;
+       now assume diff(g,t)=0;
+         then (g`|N).t=0 by A1,A83,A118,FDIFF_1:def 8;
+         then (g`|N).t in {0} by TARSKI:def 1;
+         hence contradiction by A119,FUNCT_1:def 13;
+        end;
+    then (f.x)/(g.x) = diff(f,t)/diff(g,t) by A108,A114,XCMPLX_1:95;
+    then (f.x)*(g.x)" = diff(f,t)/diff(g,t) by XCMPLX_0:def 9;
+    then (f.x)*(g.x)" = diff(f,t)*diff(g,t)" by XCMPLX_0:def 9;
+    then (f/g).x = diff(f,t)*diff(g,t)" by A109,A112,RFUNCT_1:def 4;
+    then (f/g).x = ((f`|N).t)*diff(g,t)" by A1,A83,A118,FDIFF_1:def 8;
+    then (f/g).x = ((f`|N).t)*((g`|N).t)" by A1,A83,A118,FDIFF_1:def 8;
+    hence thesis by A104,A115,A118,RFUNCT_1:def 4;
+   end;
+    for a st a is convergent & lim a = x0 &
+  rng a c= dom (f/g) /\ left_open_halfline(x0) holds
+  (f/g)*a is divergent_to-infty
+   proof
+    let a;
+    assume A120: a is convergent & lim a = x0 &
+               rng a c= dom (f/g) /\ left_open_halfline(x0);
+    then consider k such that
+    A121: for n st k<=n holds x0-r<a.n & a.n<x0+r by A2,A3,LIMFUNC3:7;
+    set a1 = a^\k;
+     A122: now let n;
+          A123: a1.n = a.(n+k) by SEQM_3:def 9;
+            a.(n+k) in rng a by RFUNCT_2:10;
+          then a.(n+k) in left_open_halfline(x0) by A120,XBOOLE_0:def 3;
+          then a.(n+k) in {g1:g1<x0} by PROB_1:def 15;
+          then ex g1 st a.(n+k)=g1 & g1<x0;
+          hence a1.n<x0 by SEQM_3:def 9;
+            k<=n+k by NAT_1:37;
+          hence x0-r<a1.n by A121,A123;
+         end;
+        defpred X[Nat,real number] means
+          $2 in ].a1.$1,x0.[ & (((f/g)*a)^\k).$1=((f`|N)/(g`|N)).$2;
+    A124: for n ex c be real number st X[n,c]
+         proof
+          let n;
+            x0-r<a1.n & a1.n<x0 by A122;
+          then consider c such that
+          A125: c in ].a1.n,x0.[ & (f/g).(a1.n)=((f`|N)/(g`|N)).c by A76;
+          take c;
+            dom (f/g) /\ left_open_halfline(x0) c= dom (f/g) by XBOOLE_1:17;
+          then A126: rng a c= dom (f/g) by A120,XBOOLE_1:1;
+            rng a1 c= rng a by RFUNCT_2:7;
+          then rng a1 c= dom (f/g) by A126,XBOOLE_1:1;
+          then ((f/g)*(a^\k)).n=((f`|N)/(g`|N)).c by A125,RFUNCT_2:21;
+          hence thesis by A125,A126,RFUNCT_2:22;
+         end;
+    consider b such that
+    A127: for n holds X[n,b.n] from RealSeqChoice(A124);
+    deffunc U(set) = x0;
+    consider d being Real_Sequence such that
+    A128: for n holds d.n=U(n) from ExRealSeq;
+       now
+      let n;
+        d.n=x0 & d.(n+1)=x0 by A128;
+      hence d.n=d.(n+1);
+     end;
+    then A129: d is constant by SEQM_3:16;
+    then A130: d is convergent by SEQ_4:39;
+    A131: lim d=d.0 by A129,SEQ_4:41
+            .=x0 by A128;
+    A132: a1 is convergent & lim a1=x0 by A120,SEQ_4:33;
+    A133: now
+          let n;
+            b.n in ].a1.n,x0.[ by A127;
+          then b.n in {g1:a1.n<g1 & g1<x0} by RCOMP_1:def 2;
+          then ex g1 st g1=b.n & a1.n<g1 & g1<x0; hence a1.n<=b.n & b.n<=
+d.n by A128;
+        end;
+    then A134: b is convergent by A130,A131,A132,SEQ_2:33;
+    A135: lim b=x0 by A130,A131,A132,A133,SEQ_2:34;
+    A136: x0-r<x0 by A2,SQUARE_1:29;
+    A137: x0<x0+r by A2,REAL_2:174;
+    then x0 in {g2: x0-r<g2 & g2<x0+r} by A136;
+    then A138: x0 in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+    A139: rng b c= dom ((f`|N)/(g`|N)) \{x0}
+     proof
+      let x be set;
+      assume x in rng b;
+      then consider n such that A140: x=b.n by RFUNCT_2:9;
+      A141: x0-r<a1.n & a1.n<x0 by A122;
+      A142: x in ].a1.n,x0.[ by A127,A140;
+      then x in {g1:a1.n<g1 & g1<x0} by RCOMP_1:def 2; then A143: ex g1 st
+ g1 = x & a1.n<g1 & g1<x0;
+      A144: ].a1.n,x0.[ c= [.a1.n,x0.] by RCOMP_1:15;
+        a1.n<x0+r by A137,A141,AXIOMS:22;
+      then a1.n in {g3: x0-r<g3 & g3<x0+r} by A141;
+      then a1.n in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+      then [.a1.n,x0.] c= ].x0-r,x0+r.[ by A138,RCOMP_1:17;
+      then ].a1.n,x0.[ c= ].x0-r,x0+r.[ by A144,XBOOLE_1:1;
+      then A145: ].a1.n,x0.[ c= dom ((f`|N)/(g`|N)) by A1,A2,XBOOLE_1:1;
+        not x in {x0} by A143,TARSKI:def 1;
+      hence x in dom ((f`|N)/(g`|N))\{x0} by A142,A145,XBOOLE_0:def 4;
+     end;
+      dom ((f`|N)/(g`|N)) \{x0} c= dom ((f`|N)/(g`|N)) by XBOOLE_1:36;
+    then A146: rng b c= dom ((f`|N)/(g`|N)) by A139,XBOOLE_1:1;
+    A147: ((f`|N)/(g`|N))*b is divergent_to-infty by A1,A134,A135,A139,LIMFUNC3
+:def 3;
+       now
+      let n;
+        (((f/g)*a)^\k).n=((f`|N)/(g`|N)).(b.n) by A127;
+      hence (((f/g)*a)^\k).n <= (((f`|N)/(g`|N))*b).n by A146,RFUNCT_2:21;
+     end;
+    then ((f/g)*a)^\k is divergent_to-infty by A147,LIMFUNC1:70;
+    hence thesis by LIMFUNC1:34;
+   end;
+  then f/g is_left_divergent_to-infty_in x0 by A47,LIMFUNC2:def 3;
+  hence thesis by A75,LIMFUNC3:16;
+ end;
+
+theorem
+  (ex r st r>0 & f is_differentiable_on ].x0,x0+r.[ &
+g is_differentiable_on ].x0,x0+r.[ & ].x0,x0+r.[ c= dom (f/g) &
+[.x0,x0+r.] c= dom ((f`|(].x0,x0+r.[))/(g`|(].x0,x0+r.[))) &
+f.x0 = 0 & g.x0 = 0 &
+f is_continuous_in x0 & g is_continuous_in x0 &
+(f`|(].x0,x0+r.[))/(g`|(].x0,x0+r.[)) is_right_convergent_in x0) implies
+f/g is_right_convergent_in x0 & ex r st r>0 &
+lim_right(f/g,x0) = lim_right(((f`|(].x0,x0+r.[))/(g`|(].x0,x0+r.[))),x0)
+ proof
+  given r such that
+  A1: r>0 & f is_differentiable_on ].x0,x0+r.[ &
+     g is_differentiable_on ].x0,x0+r.[ & ].x0,x0+r.[ c= dom (f/g) &
+     [.x0,x0+r.] c= dom ((f`|(].x0,x0+r.[))/(g`|(].x0,x0+r.[))) &
+     f.x0 = 0 & g.x0 = 0 & f is_continuous_in x0 & g is_continuous_in x0 &
+    (f`|(].x0,x0+r.[))/(g`|(].x0,x0+r.[)) is_right_convergent_in x0;
+  A2: for x st x0<x & x<x0+r ex c st c in ].x0,x.[ &
+  (f/g).x=((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[)).c
+   proof
+    let x; assume
+    A3: x0<x & x<x0+r;
+    then x in {g1:x0<g1 & g1<x0+r};
+    then A4: x in ].x0,x0+r.[ by RCOMP_1:def 2;
+    A5: f is_continuous_on ].x0,x0+r.[ by A1,FDIFF_1:33;
+    A6: g is_continuous_on ].x0,x0+r.[ by A1,FDIFF_1:33;
+    A7: ].x0,x.[ c= ].x0,x0+r.[
+       proof
+         let y be set;
+         assume y in ].x0,x.[;
+         then y in {g2:x0<g2 & g2<x} by RCOMP_1:def 2;
+         then consider g2 such that A8: g2=y & x0<g2 & g2<x;
+           g2<x0+r by A3,A8,AXIOMS:22;
+         then y in {g3:x0<g3 & g3<x0+r} by A8;
+         hence y in ].x0,x0+r.[ by RCOMP_1:def 2;
+        end;
+    then A9: f is_differentiable_on ].x0,x.[ by A1,FDIFF_1:34;
+    A10: g is_differentiable_on ].x0,x.[ by A1,A7,FDIFF_1:34;
+      f is_differentiable_in x by A1,A4,FDIFF_1:16;
+    then A11: f is_continuous_in x by FDIFF_1:32;
+      g is_differentiable_in x by A1,A4,FDIFF_1:16;
+    then A12: g is_continuous_in x by FDIFF_1:32;
+    A13: f is_continuous_on [.x0,x.] & g is_continuous_on [.x0,x.]
+        proof
+        A14: [.x0,x.] c= dom f
+             proof
+                ].x0,x0+r.[ c= dom f by A5,FCONT_1:14;
+              then A15: ].x0,x.[ c= dom f by A7,XBOOLE_1:1;
+              A16: x0 in dom f by A1,FCONT_1:2;
+                x in dom f by A11,FCONT_1:2;
+              then {x0,x} c= dom f by A16,ZFMISC_1:38;
+              then ].x0,x.[ \/ {x0,x} c= dom f by A15,XBOOLE_1:8;
+              hence thesis by A3,RCOMP_1:11;
+             end;
+          for s st rng s c= [.x0,x.] & s is convergent & lim s in [.x0,x.]
+             holds f*s is convergent & f.(lim s) = lim (f*s)
+         proof
+          let s;
+          assume A17: rng s c= [.x0,x.] & s is convergent & lim s in [.x0,x.];
+          set z = lim s;
+          A18: rng s c= dom f by A14,A17,XBOOLE_1:1;
+A19:          z in ].x0,x.[ \/ {x0,x} by A3,A17,RCOMP_1:11;
+            now per cases by A19,XBOOLE_0:def 2;
+          suppose z in ].x0,x.[;
+           then f is_differentiable_in z by A1,A7,FDIFF_1:16;
+           then f is_continuous_in z by FDIFF_1:32;
+           hence thesis by A17,A18,FCONT_1:def 1;
+          suppose A20: z in {x0,x};
+              now per cases by A20,TARSKI:def 2;
+             suppose z = x0;
+              hence thesis by A1,A17,A18,FCONT_1:def 1;
+             suppose z = x;
+              hence thesis by A11,A17,A18,FCONT_1:def 1;
+             end;
+            hence thesis;
+           end;
+          hence thesis;
+         end;
+        hence f is_continuous_on [.x0,x.] by A14,FCONT_1:14;
+        A21: [.x0,x.] c= dom g
+             proof
+                ].x0,x0+r.[ c= dom g by A6,FCONT_1:14;
+              then A22: ].x0,x.[ c= dom g by A7,XBOOLE_1:1;
+              A23: x0 in dom g by A1,FCONT_1:2;
+                x in dom g by A12,FCONT_1:2;
+              then {x0,x} c= dom g by A23,ZFMISC_1:38;
+              then ].x0,x.[ \/ {x0,x} c= dom g by A22,XBOOLE_1:8;
+              hence thesis by A3,RCOMP_1:11;
+             end;
+          for s st rng s c= [.x0,x.] & s is convergent & lim s in [.x0,x.]
+             holds g*s is convergent & g.(lim s) = lim (g*s)
+         proof let s such that
+          A24: rng s c= [.x0,x.] & s is convergent & lim s in [.x0,x.];
+          set z = lim s;
+          A25: rng s c= dom g by A21,A24,XBOOLE_1:1;
+A26:          z in ].x0,x.[ \/ {x0,x} by A3,A24,RCOMP_1:11;
+            now per cases by A26,XBOOLE_0:def 2;
+          suppose z in ].x0,x.[;
+           then g is_differentiable_in z by A1,A7,FDIFF_1:16;
+           then g is_continuous_in z by FDIFF_1:32;
+           hence thesis by A24,A25,FCONT_1:def 1;
+          suppose A27: z in {x0,x};
+              now per cases by A27,TARSKI:def 2;
+             suppose z = x0;
+              hence thesis by A1,A24,A25,FCONT_1:def 1;
+             suppose z = x;
+              hence thesis by A12,A24,A25,FCONT_1:def 1;
+             end;
+            hence thesis;
+           end;
+          hence thesis;
+         end;
+        hence thesis by A21,FCONT_1:14;
+      end;
+    then A28: (g.x)(#)f is_continuous_on [.x0,x.] by FCONT_1:21;
+      (f.x)(#)g is_continuous_on [.x0,x.] by A13,FCONT_1:21;
+    then A29: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x0,x.] by A28,FCONT_1:19
+;
+    A30: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
+    A31: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A32: ].x0,x0+r.[ c= dom ((g.x)(#)f) by A5,A30,FCONT_1:14;
+    A33: ].x0,x0+r.[ c= dom ((f.x)(#)g) by A6,A31,FCONT_1:14;
+    A34: ].x0,x.[ c= dom ((g.x)(#)f) by A7,A32,XBOOLE_1:1;
+    then A35: (g.x)(#)f is_differentiable_on ].x0,x.[ by A9,FDIFF_1:28;
+    A36: ].x0,x.[ c= dom ((f.x)(#)g) by A7,A33,XBOOLE_1:1;
+    then ].x0,x.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A34,XBOOLE_1:19;
+    then A37: ].x0,x.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    A38: (f.x)(#)g is_differentiable_on ].x0,x.[ by A10,A36,FDIFF_1:28;
+    then A39: (f.x)(#)g-(g.x)(#)
+f is_differentiable_on ].x0,x.[ by A35,A37,FDIFF_1:27;
+    set f1 = (f.x)(#)g - (g.x)(#)f;
+    A40: [.x0,x.] c= dom f1 by A29,FCONT_1:def 2;
+    A41: x0 in [.x0,x.] & x in [.x0,x.] by A3,RCOMP_1:15;
+    then x0 in dom f1 & x in dom f1 by A40;
+    then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
+ dom ((g.x)
+(#)f)
+     by SEQ_1:def 4;
+    then A42: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
+(#)g) &
+    x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
+    A43: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A40,A41,SEQ_1:def 4
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A42,SEQ_1:def 6
+         .= 0 - (g.x)*0 by A1,A42,SEQ_1:def 6
+         .= 0;
+      f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A40,A41,SEQ_1:def 4
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A42,SEQ_1:def 6
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A42,SEQ_1:def 6
+         .= 0 by XCMPLX_1:14;
+    then consider t such that
+    A44: t in ].x0,x.[ & diff(f1,t)=0 by A3,A29,A39,A43,ROLLE:1;
+    take t;
+    A45: (f.x)(#)g is_differentiable_in t by A38,A44,FDIFF_1:16;
+      (g.x)(#)f is_differentiable_in t by A35,A44,FDIFF_1:16;
+    then A46: 0=diff((f.x)(#)g,t) - diff((g.x)(#)f,t) by A44,A45,FDIFF_1:22;
+    A47: g is_differentiable_in t by A1,A7,A44,FDIFF_1:16;
+      f is_differentiable_in t by A1,A7,A44,FDIFF_1:16;
+    then 0=diff((f.x)(#)g,t) - (g.x)*diff(f,t) by A46,FDIFF_1:23;
+    then 0=(f.x)*diff(g,t) - (g.x)*diff(f,t) by A47,FDIFF_1:23;
+    then A48: (f.x)*diff(g,t)=(g.x)*diff(f,t) by XCMPLX_1:15;
+       now
+      let y be set;
+      assume y in [.x0,x.]\{x0};
+      then A49: y in [.x0,x.] & not y in {x0} by XBOOLE_0:def 4;
+      then y in {g4: x0<=g4 & g4<=x} by RCOMP_1:def 1;
+      then consider g4 such that A50: g4=y & x0<=g4 & g4<=x;
+      A51: g4<x0+r by A3,A50,AXIOMS:22;
+        x0<>g4 by A49,A50,TARSKI:def 1;
+      then x0<g4 by A50,REAL_1:def 5;
+      then y in {g5: x0<g5 & g5<x0+r} by A50,A51;
+      hence y in ].x0,x0+r.[ by RCOMP_1:def 2;
+     end;
+    then [.x0,x.]\{x0} c= ].x0,x0+r.[ by TARSKI:def 3;
+    then A52: [.x0,x.]\{x0} c= dom(f/g) by A1,XBOOLE_1:1;
+    then A53: [.x0,x.]\{x0} c= dom f /\ (dom g\g"{0}) by RFUNCT_1:def 4;
+      dom f /\ (dom g\g"{0}) c= dom g\g"{0} by XBOOLE_1:17;
+    then A54: [.x0,x.]\{x0} c= dom g\g"{0} by A53,XBOOLE_1:1;
+      not x in {x0} by A3,TARSKI:def 1;
+    then A55: x in [.x0,x.]\{x0} by A41,XBOOLE_0:def 4;
+    then A56: x in dom g & not x in g"{0} by A54,XBOOLE_0:def 4;
+    A57: now assume g.x=0;
+         then g.x in {0} by TARSKI:def 1;
+         hence contradiction by A56,FUNCT_1:def 13;
+        end;
+    A58: x0<=x0+r by A1,REAL_2:174;
+    A59: ].x0,x0+r.[ c= [.x0,x0+r.] by RCOMP_1:15;
+      x0 in {g6: x0<=g6 & g6<=x0+r} by A58;
+    then x0 in [.x0,x0+r.] by RCOMP_1:def 1;
+    then [.x0,x.] c= [.x0,x0+r.] by A4,A59,RCOMP_1:16;
+    then A60: [.x0,x.] c= dom ((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[)) by A1,
+XBOOLE_1:1
+;
+    then A61: [.x0,x.] c= dom (f`|].x0,x0+r.[) /\
+    (dom (g`|].x0,x0+r.[)\(g`|].x0,x0+r.[)"{0})
+    by RFUNCT_1:def 4;
+      dom (f`|].x0,x0+r.[) /\ (dom (g`|].x0,x0+r.[) \ (g`|].x0,x0+r.[)"{0}) c=
+    dom (g`|].x0,x0+r.[)\(g`|].x0,x0+r.[)"{0}
+     by XBOOLE_1:17;
+    then A62: [.x0,x.] c= dom (g`|].x0,x0+r.[)\(g`|].x0,x0+r.[)"{0} by A61,
+XBOOLE_1:1
+;
+      ].x0,x.[ c= [.x0,x.] by RCOMP_1:15;
+    then A63: t in [.x0,x.] by A44;
+    then A64: t in dom (g`|].x0,x0+r.[) &
+    not t in (g`|].x0,x0+r.[)"{0} by A62,XBOOLE_0:def 4;
+       now assume diff(g,t)=0;
+         then (g`|].x0,x0+r.[).t=0 by A1,A7,A44,FDIFF_1:def 8;
+         then (g`|].x0,x0+r.[).t in {0} by TARSKI:def 1;
+         hence contradiction by A64,FUNCT_1:def 13;
+        end;
+    then (f.x)/(g.x) = diff(f,t)/diff(g,t) by A48,A57,XCMPLX_1:95;
+    then (f.x)*(g.x)" = diff(f,t)/diff(g,t) by XCMPLX_0:def 9;
+    then (f.x)*(g.x)" = diff(f,t)*diff(g,t)" by XCMPLX_0:def 9;
+    then (f/g).x = diff(f,t)*diff(g,t)" by A52,A55,RFUNCT_1:def 4;
+    then (f/g).x = ((f`|].x0,x0+r.[).t)*diff(g,t)" by A1,A7,A44,FDIFF_1:def 8;
+    then (f/g).x = ((f`|].x0,x0+r.[).t)*((g`|].x0,x0+r.[).t)" by A1,A7,A44,
+FDIFF_1:def 8;
+    hence thesis by A44,A60,A63,RFUNCT_1:def 4;
+   end;
+  A65: for r1 st x0<r1 ex t st t<r1 & x0<t & t in dom (f/g) by A1,LIMFUNC2:4;
+  A66: for a st a is convergent & lim a = x0 &
+   rng a c= dom (f/g) /\ right_open_halfline(x0) holds
+   (f/g)*a is convergent &
+   lim((f/g)*a) = lim_right(((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[)),x0)
+   proof
+    let a;
+    assume A67: a is convergent & lim a = x0 &
+               rng a c= dom (f/g) /\ right_open_halfline(x0);
+    then consider k such that
+    A68: for n st k<=n holds x0-r<a.n & a.n<x0+r by A1,LIMFUNC3:7;
+    set a1 = a^\k;
+     A69: now let n;
+          A70: a1.n = a.(n+k) by SEQM_3:def 9;
+            a.(n+k) in rng a by RFUNCT_2:10;
+          then a.(n+k) in right_open_halfline(x0) by A67,XBOOLE_0:def 3;
+          then a.(n+k) in {g1:x0<g1} by LIMFUNC1:def 3;
+          then ex g1 st a.(n+k)=g1 & x0<g1;
+          hence x0<a1.n by SEQM_3:def 9;
+            k<=n+k by NAT_1:37;
+          hence a1.n<x0+r by A68,A70;
+         end;
+        defpred X[Nat,real number] means
+            $2 in ].x0,a1.$1.[ &
+    (((f/g)*a)^\k).$1=((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[)).$2;
+    A71: for n ex c be real number st X[n,c]
+         proof
+          let n;
+            x0<a1.n & a1.n<x0+r by A69;
+          then consider c such that
+          A72: c in ].x0,a1.n.[ &
+          (f/g).(a1.n)=((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[)).c by A2;
+          take c;
+            dom (f/g) /\ right_open_halfline(x0) c= dom (f/g) by XBOOLE_1:17
+;
+          then A73: rng a c= dom (f/g) by A67,XBOOLE_1:1;
+            rng a1 c= rng a by RFUNCT_2:7;
+          then rng a1 c= dom (f/g) by A73,XBOOLE_1:1;
+          then ((f/g)*(a^\k)).n=((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[)).c
+          by A72,RFUNCT_2:21;
+          hence thesis by A72,A73,RFUNCT_2:22;
+         end;
+    consider b such that
+    A74: for n holds X[n,b.n] from RealSeqChoice(A71);
+    deffunc U(set) = x0;
+    consider d being Real_Sequence such that
+    A75: for n holds d.n=U(n) from ExRealSeq;
+       now
+      let n;
+        d.n=x0 & d.(n+1)=x0 by A75;
+      hence d.n=d.(n+1);
+     end;
+    then A76: d is constant by SEQM_3:16;
+    then A77: d is convergent by SEQ_4:39;
+    A78: lim d=d.0 by A76,SEQ_4:41
+            .=x0 by A75;
+    A79: a1 is convergent & lim a1=x0 by A67,SEQ_4:33;
+     A80: now
+          let n;
+            b.n in ].x0,a1.n.[ by A74;
+          then b.n in {g1:x0<g1 & g1<a1.n} by RCOMP_1:def 2;
+          then ex g1 st g1=b.n & x0<g1 & g1<a1.n; hence d.n<=b.n & b.n<=a1.n
+by A75;
+         end;
+    then A81: b is convergent by A77,A78,A79,SEQ_2:33;
+    A82: lim b=x0 by A77,A78,A79,A80,SEQ_2:34;
+    A83: rng b c=
+    dom ((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[)) /\ right_open_halfline(x0)
+     proof
+      let x be set;
+      assume x in rng b;
+      then consider n such that A84: x=b.n by RFUNCT_2:9;
+      A85: x0<a1.n & a1.n<x0+r by A69;
+      A86: x in ].x0,a1.n.[ by A74,A84;
+      then x in {g1:x0<g1 & g1<a1.n} by RCOMP_1:def 2; then ex g1 st
+ g1 = x & x0<g1 & g1<a1.n;
+      then x in {g2: x0<g2};
+      then A87: x in right_open_halfline(x0) by LIMFUNC1:def 3;
+      A88: ].x0,a1.n.[ c= [.x0,a1.n.] by RCOMP_1:15;
+        x0<=x0+r by A1,REAL_2:174;
+      then x0 in {g3: x0<=g3 & g3<=x0+r};
+      then A89: x0 in [.x0,x0+r.] by RCOMP_1:def 1;
+        a1.n in {g4: x0<=g4 & g4<=x0+r} by A85;
+      then a1.n in [.x0,x0+r.] by RCOMP_1:def 1;
+      then [.x0,a1.n.] c= [.x0,x0+r.] by A89,RCOMP_1:16;
+      then ].x0,a1.n.[ c= [.x0,x0+r.] by A88,XBOOLE_1:1;
+      then ].x0,a1.n.[ c= dom ((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[))
+      by A1,XBOOLE_1:1; hence x in dom ((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[)) /\
+      right_open_halfline(x0) by A86,A87,XBOOLE_0:def 3;
+     end;
+      dom ((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[)) /\ right_open_halfline(x0) c=
+    dom ((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[)) by XBOOLE_1:17;
+    then A90: rng b c= dom ((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[)) by A83,XBOOLE_1:
+1;
+      lim_right(((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[)),x0)=
+    lim_right(((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[)),x0);
+    then A91: ((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[))*b is convergent &
+    lim (((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[))*b) =
+    lim_right(((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[)),x0)
+      by A1,A81,A82,A83,LIMFUNC2:def 8;
+    A92: now take m = 0; let n such that m <=n;
+           (((f/g)*a)^\k).n=((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[)).(b.n) by A74;
+         hence (((f/g)*a)^\k).n = (((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[))*b).n
+         by A90,RFUNCT_2:21;
+        end;
+    then A93: ((f/g)*a)^\k is convergent by A91,SEQ_4:31;
+       lim (((f/g)*a)^\k) =
+    lim_right(((f`|].x0,x0+r.[)/(g`|].x0,x0+r.[)),x0) by A91,A92,SEQ_4:32;
+    hence thesis by A93,SEQ_4:35,36;
+   end;
+  hence f/g is_right_convergent_in x0 by A65,Th2;
+  take r; thus r>0 by A1;
+  thus thesis by A65,A66,Th2;
+ end;
+
+theorem
+  (ex r st r>0 & f is_differentiable_on ].x0-r,x0.[ &
+g is_differentiable_on ].x0-r,x0.[ & ].x0-r,x0.[ c= dom (f/g) &
+[.x0-r,x0.] c= dom ((f`|(].x0-r,x0.[))/(g`|(].x0-r,x0.[))) &
+f.x0 = 0 & g.x0 = 0 &
+f is_continuous_in x0 & g is_continuous_in x0 &
+(f`|(].x0-r,x0.[))/(g`|(].x0-r,x0.[)) is_left_convergent_in x0) implies
+f/g is_left_convergent_in x0 & ex r st r>0 &
+lim_left(f/g,x0) = lim_left(((f`|(].x0-r,x0.[))/(g`|(].x0-r,x0.[))),x0)
+ proof
+  given r such that
+  A1: r>0 & f is_differentiable_on ].x0-r,x0.[ &
+     g is_differentiable_on ].x0-r,x0.[ & ].x0-r,x0.[ c= dom (f/g) &
+     [.x0-r,x0.] c= dom ((f`|(].x0-r,x0.[))/(g`|(].x0-r,x0.[))) &
+     f.x0 = 0 & g.x0 = 0 &
+     f is_continuous_in x0 & g is_continuous_in x0 &
+     (f`|(].x0-r,x0.[))/(g`|(].x0-r,x0.[)) is_left_convergent_in x0;
+  A2: for x st x0-r<x & x<x0 ex c st c in ].x,x0.[ &
+  (f/g).x=((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[)).c
+   proof
+    let x; assume
+    A3: x0-r<x & x<x0;
+    then x in {g1:x0-r<g1 & g1<x0};
+    then A4: x in ].x0-r,x0.[ by RCOMP_1:def 2;
+    A5: f is_continuous_on ].x0-r,x0.[ by A1,FDIFF_1:33;
+    A6: g is_continuous_on ].x0-r,x0.[ by A1,FDIFF_1:33;
+    A7: ].x,x0.[ c= ].x0-r,x0.[
+       proof
+         let y be set;
+         assume y in ].x,x0.[;
+         then y in {g2:x<g2 & g2<x0} by RCOMP_1:def 2;
+         then consider g2 such that A8: g2=y & x<g2 & g2<x0;
+           x0-r<g2 by A3,A8,AXIOMS:22;
+         then y in {g3:x0-r<g3 & g3<x0} by A8;
+         hence y in ].x0-r,x0.[ by RCOMP_1:def 2;
+        end;
+    then A9: f is_differentiable_on ].x,x0.[ by A1,FDIFF_1:34;
+    A10: g is_differentiable_on ].x,x0.[ by A1,A7,FDIFF_1:34;
+      f is_differentiable_in x by A1,A4,FDIFF_1:16;
+    then A11: f is_continuous_in x by FDIFF_1:32;
+      g is_differentiable_in x by A1,A4,FDIFF_1:16;
+    then A12: g is_continuous_in x by FDIFF_1:32;
+    A13: f is_continuous_on [.x,x0.] & g is_continuous_on [.x,x0.]
+        proof
+        A14: [.x,x0.] c= dom f
+             proof
+                ].x0-r,x0.[ c= dom f by A5,FCONT_1:14;
+              then A15: ].x,x0.[ c= dom f by A7,XBOOLE_1:1;
+              A16: x0 in dom f by A1,FCONT_1:2;
+                x in dom f by A11,FCONT_1:2;
+              then {x,x0} c= dom f by A16,ZFMISC_1:38;
+              then ].x,x0.[ \/ {x,x0} c= dom f by A15,XBOOLE_1:8;
+              hence thesis by A3,RCOMP_1:11;
+             end;
+          for s st rng s c= [.x,x0.] & s is convergent & lim s in [.x,x0.]
+             holds f*s is convergent & f.(lim s) = lim (f*s)
+         proof
+          let s;
+          assume A17: rng s c= [.x,x0.] & s is convergent & lim s in [.x,x0.];
+          set z = lim s;
+          A18: rng s c= dom f by A14,A17,XBOOLE_1:1;
+A19:          z in ].x,x0.[ \/ {x,x0} by A3,A17,RCOMP_1:11;
+            now per cases by A19,XBOOLE_0:def 2;
+          suppose z in ].x,x0.[;
+           then f is_differentiable_in z by A1,A7,FDIFF_1:16;
+           then f is_continuous_in z by FDIFF_1:32;
+           hence thesis by A17,A18,FCONT_1:def 1;
+          suppose A20: z in {x,x0};
+              now per cases by A20,TARSKI:def 2;
+             suppose z = x0;
+              hence thesis by A1,A17,A18,FCONT_1:def 1;
+             suppose z = x;
+              hence thesis by A11,A17,A18,FCONT_1:def 1;
+             end;
+            hence thesis;
+           end;
+          hence thesis;
+         end;
+        hence f is_continuous_on [.x,x0.] by A14,FCONT_1:14;
+        A21: [.x,x0.] c= dom g
+             proof
+                ].x0-r,x0.[ c= dom g by A6,FCONT_1:14;
+              then A22: ].x,x0.[ c= dom g by A7,XBOOLE_1:1;
+              A23: x0 in dom g by A1,FCONT_1:2;
+                x in dom g by A12,FCONT_1:2;
+              then {x,x0} c= dom g by A23,ZFMISC_1:38;
+              then ].x,x0.[ \/ {x,x0} c= dom g by A22,XBOOLE_1:8;
+              hence thesis by A3,RCOMP_1:11;
+             end;
+          for s st rng s c= [.x,x0.] & s is convergent & lim s in [.x,x0.]
+             holds g*s is convergent & g.(lim s) = lim (g*s)
+         proof let s such that
+          A24: rng s c= [.x,x0.] & s is convergent & lim s in [.x,x0.];
+          set z = lim s;
+          A25: rng s c= dom g by A21,A24,XBOOLE_1:1;
+A26:          z in ].x,x0.[ \/ {x,x0} by A3,A24,RCOMP_1:11;
+            now per cases by A26,XBOOLE_0:def 2;
+          suppose z in ].x,x0.[;
+           then g is_differentiable_in z by A1,A7,FDIFF_1:16;
+           then g is_continuous_in z by FDIFF_1:32;
+           hence thesis by A24,A25,FCONT_1:def 1;
+          suppose A27: z in {x,x0};
+              now per cases by A27,TARSKI:def 2;
+             suppose z = x0;
+              hence thesis by A1,A24,A25,FCONT_1:def 1;
+             suppose z = x;
+              hence thesis by A12,A24,A25,FCONT_1:def 1;
+             end;
+            hence thesis;
+           end;
+          hence thesis;
+         end;
+        hence thesis by A21,FCONT_1:14;
+      end;
+    then A28: (g.x)(#)f is_continuous_on [.x,x0.] by FCONT_1:21;
+      (f.x)(#)g is_continuous_on [.x,x0.] by A13,FCONT_1:21;
+    then A29: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x,x0.] by A28,FCONT_1:19
+;
+    A30: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
+    A31: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A32: ].x0-r,x0.[ c= dom ((g.x)(#)f) by A5,A30,FCONT_1:14;
+    A33: ].x0-r,x0.[ c= dom ((f.x)(#)g) by A6,A31,FCONT_1:14;
+    A34: ].x,x0.[ c= dom ((g.x)(#)f) by A7,A32,XBOOLE_1:1;
+    then A35: (g.x)(#)f is_differentiable_on ].x,x0.[ by A9,FDIFF_1:28;
+    A36: ].x,x0.[ c= dom ((f.x)(#)g) by A7,A33,XBOOLE_1:1;
+    then ].x,x0.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A34,XBOOLE_1:19;
+    then A37: ].x,x0.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    A38: (f.x)(#)g is_differentiable_on ].x,x0.[ by A10,A36,FDIFF_1:28;
+    then A39: (f.x)(#)g-(g.x)(#)
+f is_differentiable_on ].x,x0.[ by A35,A37,FDIFF_1:27;
+    set f1 = (f.x)(#)g - (g.x)(#)f;
+    A40: [.x,x0.] c= dom f1 by A29,FCONT_1:def 2;
+    A41: x0 in [.x,x0.] & x in [.x,x0.] by A3,RCOMP_1:15;
+    then x0 in dom f1 & x in dom f1 by A40;
+    then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
+ dom ((g.x)
+(#)f)
+     by SEQ_1:def 4;
+    then A42: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
+(#)g) &
+    x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
+    A43: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A40,A41,SEQ_1:def 4
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A42,SEQ_1:def 6
+         .= 0 - (g.x)*0 by A1,A42,SEQ_1:def 6
+         .= 0;
+      f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A40,A41,SEQ_1:def 4
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A42,SEQ_1:def 6
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A42,SEQ_1:def 6
+         .= 0 by XCMPLX_1:14;
+    then consider t such that
+    A44: t in ].x,x0.[ & diff(f1,t)=0 by A3,A29,A39,A43,ROLLE:1;
+    take t;
+    A45: (f.x)(#)g is_differentiable_in t by A38,A44,FDIFF_1:16;
+      (g.x)(#)f is_differentiable_in t by A35,A44,FDIFF_1:16;
+    then A46: 0=diff((f.x)(#)g,t) - diff((g.x)(#)f,t) by A44,A45,FDIFF_1:22;
+    A47: g is_differentiable_in t by A1,A7,A44,FDIFF_1:16;
+      f is_differentiable_in t by A1,A7,A44,FDIFF_1:16;
+    then 0=diff((f.x)(#)g,t) - (g.x)*diff(f,t) by A46,FDIFF_1:23;
+    then 0=(f.x)*diff(g,t) - (g.x)*diff(f,t) by A47,FDIFF_1:23;
+    then A48: (f.x)*diff(g,t)=(g.x)*diff(f,t) by XCMPLX_1:15;
+       now
+      let y be set;
+      assume y in [.x,x0.]\{x0};
+      then A49: y in [.x,x0.] & not y in {x0} by XBOOLE_0:def 4;
+      then y in {g4: x<=g4 & g4<=x0} by RCOMP_1:def 1;
+      then consider g4 such that A50: g4=y & x<=g4 & g4<=x0;
+      A51: x0-r<g4 by A3,A50,AXIOMS:22;
+        x0<>g4 by A49,A50,TARSKI:def 1;
+      then g4<x0 by A50,REAL_1:def 5;
+      then y in {g5: x0-r<g5 & g5<x0} by A50,A51;
+      hence y in ].x0-r,x0.[ by RCOMP_1:def 2;
+     end;
+    then [.x,x0.]\{x0} c= ].x0-r,x0.[ by TARSKI:def 3;
+    then A52: [.x,x0.]\{x0} c= dom(f/g) by A1,XBOOLE_1:1;
+    then A53: [.x,x0.]\{x0} c= dom f /\ (dom g\g"{0}) by RFUNCT_1:def 4;
+      dom f /\ (dom g\g"{0}) c= dom g\g"{0} by XBOOLE_1:17;
+    then A54: [.x,x0.]\{x0} c= dom g\g"{0} by A53,XBOOLE_1:1;
+      not x in {x0} by A3,TARSKI:def 1;
+    then A55: x in [.x,x0.]\{x0} by A41,XBOOLE_0:def 4;
+    then A56: x in dom g & not x in g"{0} by A54,XBOOLE_0:def 4;
+    A57: now assume g.x=0;
+         then g.x in {0} by TARSKI:def 1;
+         hence contradiction by A56,FUNCT_1:def 13;
+        end;
+    A58: x0-r<=x0 by A1,REAL_2:174;
+    A59: ].x0-r,x0.[ c= [.x0-r,x0.] by RCOMP_1:15;
+      x0 in {g6: x0-r<=g6 & g6<=x0} by A58;
+    then x0 in [.x0-r,x0.] by RCOMP_1:def 1;
+    then [.x,x0.] c= [.x0-r,x0.] by A4,A59,RCOMP_1:16;
+    then A60: [.x,x0.] c= dom ((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[)) by A1,
+XBOOLE_1:1
+;
+    then A61: [.x,x0.] c= dom (f`|].x0-r,x0.[) /\
+    (dom (g`|].x0-r,x0.[)\(g`|].x0-r,x0.[)"{0})
+    by RFUNCT_1:def 4;
+      dom (f`|].x0-r,x0.[) /\ (dom (g`|].x0-r,x0.[) \ (g`|].x0-r,x0.[)"{0}) c=
+    dom (g`|].x0-r,x0.[)\(g`|].x0-r,x0.[)"{0}
+     by XBOOLE_1:17;
+    then A62: [.x,x0.] c= dom (g`|].x0-r,x0.[)\(g`|].x0-r,x0.[)"{0} by A61,
+XBOOLE_1:1
+;
+      ].x,x0.[ c= [.x,x0.] by RCOMP_1:15;
+    then A63: t in [.x,x0.] by A44;
+    then A64: t in dom (g`|].x0-r,x0.[) &
+    not t in (g`|].x0-r,x0.[)"{0} by A62,XBOOLE_0:def 4;
+       now assume diff(g,t)=0;
+         then (g`|].x0-r,x0.[).t=0 by A1,A7,A44,FDIFF_1:def 8;
+         then (g`|].x0-r,x0.[).t in {0} by TARSKI:def 1;
+         hence contradiction by A64,FUNCT_1:def 13;
+        end;
+    then (f.x)/(g.x) = diff(f,t)/diff(g,t) by A48,A57,XCMPLX_1:95;
+    then (f.x)*(g.x)" = diff(f,t)/diff(g,t) by XCMPLX_0:def 9;
+    then (f.x)*(g.x)" = diff(f,t)*diff(g,t)" by XCMPLX_0:def 9;
+    then (f/g).x = diff(f,t)*diff(g,t)" by A52,A55,RFUNCT_1:def 4;
+    then (f/g).x = ((f`|].x0-r,x0.[).t)*diff(g,t)" by A1,A7,A44,FDIFF_1:def 8;
+    then (f/g).x = ((f`|].x0-r,x0.[).t)*((g`|].x0-r,x0.[).t)" by A1,A7,A44,
+FDIFF_1:def 8;
+    hence thesis by A44,A60,A63,RFUNCT_1:def 4;
+   end;
+  A65: for r1 st r1<x0 ex t st r1<t & t<x0 & t in dom (f/g) by A1,LIMFUNC2:3;
+  A66: for a st a is convergent & lim a = x0 &
+  rng a c= dom (f/g) /\ left_open_halfline(x0) holds
+  (f/g)*a is convergent &
+  lim((f/g)*a) = lim_left (((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[)),x0)
+   proof
+    let a;
+    assume A67: a is convergent & lim a = x0 &
+               rng a c= dom (f/g) /\ left_open_halfline(x0);
+    then consider k such that
+    A68: for n st k<=n holds x0-r<a.n & a.n<x0+r by A1,LIMFUNC3:7;
+    set a1 = a^\k;
+     A69: now let n;
+          A70: a1.n = a.(n+k) by SEQM_3:def 9;
+            a.(n+k) in rng a by RFUNCT_2:10;
+          then a.(n+k) in left_open_halfline(x0) by A67,XBOOLE_0:def 3;
+          then a.(n+k) in {g1:g1<x0} by PROB_1:def 15;
+          then ex g1 st a.(n+k)=g1 & g1<x0;
+          hence a1.n<x0 by SEQM_3:def 9;
+            k<=n+k by NAT_1:37;
+          hence x0-r<a1.n by A68,A70;
+         end;
+        defpred X[Nat,real number] means
+          $2 in ].a1.$1,x0.[ &
+    (((f/g)*a)^\k).$1=((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[)).$2;
+    A71: for n ex c be real number st X[n,c]
+         proof
+          let n;
+            x0-r<a1.n & a1.n<x0 by A69;
+          then consider c such that
+          A72: c in ].a1.n,x0.[ & (f/g).(a1.n)=
+          ((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[)).c by A2;
+          take c;
+            dom (f/g) /\ left_open_halfline(x0) c= dom (f/g) by XBOOLE_1:17;
+          then A73: rng a c= dom (f/g) by A67,XBOOLE_1:1;
+            rng a1 c= rng a by RFUNCT_2:7;
+          then rng a1 c= dom (f/g) by A73,XBOOLE_1:1;
+          then ((f/g)*(a^\k)).n=((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[)).c
+          by A72,RFUNCT_2:21;
+          hence thesis by A72,A73,RFUNCT_2:22;
+         end;
+    consider b such that
+    A74: for n holds X[n,b.n] from RealSeqChoice(A71);
+    deffunc U(set) = x0;
+    consider d being Real_Sequence such that
+    A75: for n holds d.n=U(n) from ExRealSeq;
+       now
+      let n;
+        d.n=x0 & d.(n+1)=x0 by A75;
+      hence d.n=d.(n+1);
+     end;
+    then A76: d is constant by SEQM_3:16;
+    then A77: d is convergent by SEQ_4:39;
+    A78: lim d=d.0 by A76,SEQ_4:41
+            .=x0 by A75;
+    A79: a1 is convergent & lim a1=x0 by A67,SEQ_4:33;
+     A80: now
+          let n;
+            b.n in ].a1.n,x0.[ by A74;
+          then b.n in {g1:a1.n<g1 & g1<x0} by RCOMP_1:def 2;
+          then ex g1 st g1=b.n & a1.n<g1 & g1<x0; hence a1.n<=b.n & b.n<=d.n
+by A75;
+         end;
+    then A81: b is convergent by A77,A78,A79,SEQ_2:33;
+    A82: lim b=x0 by A77,A78,A79,A80,SEQ_2:34;
+    A83: rng b c=
+    dom ((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[)) /\ left_open_halfline(x0)
+     proof
+      let x be set;
+      assume x in rng b;
+      then consider n such that A84: x=b.n by RFUNCT_2:9;
+      A85: x0-r<a1.n & a1.n<x0 by A69;
+      A86: x in ].a1.n,x0.[ by A74,A84;
+      then x in {g1:a1.n<g1 & g1<x0} by RCOMP_1:def 2; then ex g1 st
+ g1 = x & a1.n<g1 & g1<x0;
+      then x in {g2: g2<x0};
+      then A87: x in left_open_halfline(x0) by PROB_1:def 15;
+      A88: ].a1.n,x0.[ c= [.a1.n,x0.] by RCOMP_1:15;
+        x0-r<=x0 by A1,REAL_2:174;
+      then x0 in {g3: x0-r<=g3 & g3<=x0};
+      then A89: x0 in [.x0-r,x0.] by RCOMP_1:def 1;
+        a1.n in {g4: x0-r<=g4 & g4<=x0} by A85;
+      then a1.n in [.x0-r,x0.] by RCOMP_1:def 1;
+      then [.a1.n,x0.] c= [.x0-r,x0.] by A89,RCOMP_1:16;
+      then ].a1.n,x0.[ c= [.x0-r,x0.] by A88,XBOOLE_1:1;
+      then ].a1.n,x0.[ c= dom ((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[)) by A1,
+XBOOLE_1:1;
+hence x in dom ((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[)) /\
+      left_open_halfline(x0) by A86,A87,XBOOLE_0:def 3;
+     end;
+      dom ((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[)) /\ left_open_halfline(x0) c=
+    dom ((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[)) by XBOOLE_1:17;
+    then A90: rng b c= dom ((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[)) by A83,XBOOLE_1:
+1;
+      lim_left(((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[)),x0)=
+    lim_left(((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[)),x0);
+    then A91: ((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[))*b is convergent &
+    lim (((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[))*b) =
+    lim_left(((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[)),x0)
+      by A1,A81,A82,A83,LIMFUNC2:def 7;
+    A92: now take m = 0; let n such that m <=n;
+           (((f/g)*a)^\k).n=((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[)).(b.n) by A74;
+         hence (((f/g)*a)^\k).n = (((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[))*b).n
+         by A90,RFUNCT_2:21;
+        end;
+    then A93: ((f/g)*a)^\k is convergent by A91,SEQ_4:31;
+       lim (((f/g)*a)^\k) =
+    lim_left(((f`|].x0-r,x0.[)/(g`|].x0-r,x0.[)),x0) by A91,A92,SEQ_4:32;
+    hence thesis by A93,SEQ_4:35,36;
+   end;
+  hence f/g is_left_convergent_in x0 by A65,Th3;
+  take r; thus r>0 by A1;
+  thus thesis by A65,A66,Th3;
+ end;
+
+theorem
+  (ex N being Neighbourhood of x0 st f is_differentiable_on N &
+g is_differentiable_on N & N \ {x0} c= dom (f/g) &
+N c= dom ((f`|N)/(g`|N)) & f.x0 = 0 & g.x0 = 0 &
+(f`|N)/(g`|N) is_convergent_in x0) implies
+f/g is_convergent_in x0 &
+(ex N being Neighbourhood of x0 st lim(f/g,x0) = lim(((f`|N)/(g`|N)),x0))
+ proof
+  given N being Neighbourhood of x0 such that
+  A1: f is_differentiable_on N & g is_differentiable_on N &
+     N \ {x0} c= dom (f/g) & N c= dom ((f`|N)/(g`|N)) &
+     f.x0 = 0 & g.x0 = 0 & (f`|N)/(g`|N) is_convergent_in x0;
+  consider r be real number such that
+  A2: 0<r & N = ].x0-r,x0+r.[ by RCOMP_1:def 7;
+A3: r is Real by XREAL_0:def 1;
+  A4: for x st x0<x & x<x0+r ex c st c in ].x0,x.[ & (f/g).x=((f`|N)/(g`|N)).c
+   proof
+    let x such that
+    A5: x0<x & x<x0+r;
+    A6: f is_continuous_on N by A1,FDIFF_1:33;
+    A7: g is_continuous_on N by A1,FDIFF_1:33;
+    A8: x0-r<x0 by A2,SQUARE_1:29;
+      x0+0<x0+r by A2,REAL_1:67;
+    then x0 in {g1: x0-r<g1 & g1<x0+r} by A8;
+    then A9: x0 in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+      x0-r<x by A5,A8,AXIOMS:22;
+    then x in {g1: x0-r<g1 & g1<x0+r} by A5;
+    then x in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+    then A10: [.x0,x.] c= N by A2,A9,RCOMP_1:17;
+    then f is_continuous_on [.x0,x.] by A6,FCONT_1:17;
+    then A11: (g.x)(#)f is_continuous_on [.x0,x.] by FCONT_1:21;
+      g is_continuous_on [.x0,x.] by A7,A10,FCONT_1:17;
+    then (f.x)(#)g is_continuous_on [.x0,x.] by FCONT_1:21;
+    then A12: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x0,x.] by A11,FCONT_1:19
+;
+    A13: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
+    A14: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A15: N c= dom ((g.x)(#)f) by A6,A13,FCONT_1:14;
+    A16: N c= dom ((f.x)(#)g) by A7,A14,FCONT_1:14;
+    A17: ].x0,x.[ c= [.x0,x.] by RCOMP_1:15;
+    then A18: ].x0,x.[ c= N by A10,XBOOLE_1:1;
+    then A19: f is_differentiable_on ].x0,x.[ by A1,FDIFF_1:34;
+    A20: ].x0,x.[ c= dom ((g.x)(#)f) by A15,A18,XBOOLE_1:1;
+    then A21: (g.x)(#)f is_differentiable_on ].x0,x.[ by A19,FDIFF_1:28;
+    A22: ].x0,x.[ c= dom ((f.x)(#)g) by A16,A18,XBOOLE_1:1;
+    then ].x0,x.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A20,XBOOLE_1:19
+;
+    then A23: ].x0,x.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    A24: g is_differentiable_on ].x0,x.[ by A1,A18,FDIFF_1:34;
+    then A25: (f.x)(#)g is_differentiable_on ].x0,x.[ by A22,FDIFF_1:28;
+    then A26: (f.x)(#)g-(g.x)(#)
+f is_differentiable_on ].x0,x.[ by A21,A23,FDIFF_1:27;
+    set f1 = (f.x)(#)g - (g.x)(#)f;
+    A27: [.x0,x.] c= dom f1 by A12,FCONT_1:def 2;
+    A28: x0 in [.x0,x.] & x in [.x0,x.] by A5,RCOMP_1:15;
+    then x0 in dom f1 & x in dom f1 by A27;
+    then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
+ dom ((g.x)
+(#)f)
+     by SEQ_1:def 4;
+    then A29: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
+(#)g) &
+    x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
+    A30: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A27,A28,SEQ_1:def 4
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A29,SEQ_1:def 6
+         .= 0 - (g.x)*0 by A1,A29,SEQ_1:def 6
+         .= 0;
+      f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A27,A28,SEQ_1:def 4
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A29,SEQ_1:def 6
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A29,SEQ_1:def 6
+         .= 0 by XCMPLX_1:14;
+    then consider t such that
+    A31: t in ].x0,x.[ & diff(f1,t)=0 by A5,A12,A26,A30,ROLLE:1;
+    take t;
+    A32: (f.x)(#)g is_differentiable_in t by A25,A31,FDIFF_1:16;
+      (g.x)(#)f is_differentiable_in t by A21,A31,FDIFF_1:16;
+    then A33: 0=diff((f.x)(#)g,t) - diff((g.x)(#)f,t) by A31,A32,FDIFF_1:22;
+    A34: g is_differentiable_in t by A24,A31,FDIFF_1:16;
+      f is_differentiable_in t by A19,A31,FDIFF_1:16;
+    then 0=diff((f.x)(#)g,t) - (g.x)*diff(f,t) by A33,FDIFF_1:23;
+    then 0=(f.x)*diff(g,t) - (g.x)*diff(f,t) by A34,FDIFF_1:23;
+    then A35: (f.x)*diff(g,t)=(g.x)*diff(f,t) by XCMPLX_1:15;
+      [.x0,x.]\{x0} c= N\{x0} by A10,XBOOLE_1:33;
+    then A36: [.x0,x.]\{x0} c= dom(f/g) by A1,XBOOLE_1:1;
+    then A37: [.x0,x.]\{x0} c= dom f /\ (dom g\g"{0}) by RFUNCT_1:def 4;
+      dom f /\ (dom g\g"{0}) c= dom g\g"{0} by XBOOLE_1:17;
+    then A38: [.x0,x.]\{x0} c= dom g\g"{0} by A37,XBOOLE_1:1;
+      not x in {x0} by A5,TARSKI:def 1;
+    then A39: x in [.x0,x.]\{x0} by A28,XBOOLE_0:def 4;
+    then A40: x in dom g & not x in g"{0} by A38,XBOOLE_0:def 4;
+    A41: now assume g.x=0;
+         then g.x in {0} by TARSKI:def 1;
+         hence contradiction by A40,FUNCT_1:def 13;
+        end;
+    A42: [.x0,x.] c= dom ((f`|N)/(g`|N)) by A1,A10,XBOOLE_1:1;
+    then A43: [.x0,x.] c= dom (f`|N) /\ (dom (g`|N)\(g`|N)"{0}) by RFUNCT_1:def
+4;
+      dom (f`|N) /\ (dom (g`|N) \ (g`|N)"{0}) c= dom (g`|N)\(g`|N)"{0}
+     by XBOOLE_1:17;
+    then A44: [.x0,x.] c= dom (g`|N)\(g`|N)"{0} by A43,XBOOLE_1:1;
+    A45: t in [.x0,x.] by A17,A31;
+    then A46: t in dom (g`|N) & not t in (g`|N)"{0} by A44,XBOOLE_0:def 4;
+       now assume diff(g,t)=0;
+         then (g`|N).t=0 by A1,A10,A45,FDIFF_1:def 8;
+         then (g`|N).t in {0} by TARSKI:def 1;
+         hence contradiction by A46,FUNCT_1:def 13;
+        end;
+    then (f.x)/(g.x) = diff(f,t)/diff(g,t) by A35,A41,XCMPLX_1:95;
+    then (f.x)*(g.x)" = diff(f,t)/diff(g,t) by XCMPLX_0:def 9;
+    then (f.x)*(g.x)" = diff(f,t)*diff(g,t)" by XCMPLX_0:def 9;
+    then (f/g).x = diff(f,t)*diff(g,t)" by A36,A39,RFUNCT_1:def 4;
+    then (f/g).x = ((f`|N).t)*diff(g,t)" by A1,A10,A45,FDIFF_1:def 8;
+    then (f/g).x = ((f`|N).t)*((g`|N).t)" by A1,A10,A45,FDIFF_1:def 8;
+    hence thesis by A31,A42,A45,RFUNCT_1:def 4;
+   end;
+    for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom (f/g) & g2<r2 &
+   x0<g2 & g2 in dom (f/g) by A1,Th4;
+  then A47: (for r1 st x0<r1 ex t st t<r1 & x0<t & t in dom (f/g)) &
+      for r1 st r1<x0 ex t st r1<t & t<x0 & t in dom (f/g) by LIMFUNC3:8;
+    for a st a is convergent & lim a = x0 &
+  rng a c= dom (f/g) /\ right_open_halfline(x0) holds
+  (f/g)*a is convergent & lim((f/g)*a) = lim(((f`|N)/(g`|N)),x0)
+   proof
+    let a;
+    assume A48: a is convergent & lim a = x0 &
+               rng a c= dom (f/g) /\ right_open_halfline(x0);
+    then consider k such that
+    A49: for n st k<=n holds x0-r<a.n & a.n<x0+r by A2,A3,LIMFUNC3:7;
+    set a1 = a^\k;
+     A50: now let n;
+          A51: a1.n = a.(n+k) by SEQM_3:def 9;
+            a.(n+k) in rng a by RFUNCT_2:10;
+          then a.(n+k) in right_open_halfline(x0) by A48,XBOOLE_0:def 3;
+          then a.(n+k) in {g1:x0<g1} by LIMFUNC1:def 3;
+          then ex g1 st a.(n+k)=g1 & x0<g1;
+          hence x0<a1.n by SEQM_3:def 9;
+            k<=n+k by NAT_1:37;
+          hence a1.n<x0+r by A49,A51;
+         end;
+        defpred X[Nat,real number] means
+         $2 in ].x0,a1.$1.[ & (((f/g)*a)^\k).$1=((f`|N)/(g`|N)).$2;
+    A52: for n ex c be real number st X[n,c]
+         proof
+          let n;
+            x0<a1.n & a1.n<x0+r by A50;
+          then consider c such that
+          A53: c in ].x0,a1.n.[ & (f/g).(a1.n)=((f`|N)/(g`|N)).c by A4;
+          take c;
+            dom (f/g) /\ right_open_halfline(x0) c= dom (f/g) by XBOOLE_1:17
+;
+          then A54: rng a c= dom (f/g) by A48,XBOOLE_1:1;
+            rng a1 c= rng a by RFUNCT_2:7;
+          then rng a1 c= dom (f/g) by A54,XBOOLE_1:1;
+          then ((f/g)*(a^\k)).n=((f`|N)/(g`|N)).c by A53,RFUNCT_2:21;
+          hence thesis by A53,A54,RFUNCT_2:22;
+         end;
+    consider b such that
+    A55: for n holds X[n,b.n] from RealSeqChoice(A52);
+    deffunc U(set) = x0;
+    consider d being Real_Sequence such that
+    A56: for n holds d.n=U(n) from ExRealSeq;
+       now
+      let n;
+        d.n=x0 & d.(n+1)=x0 by A56;
+      hence d.n=d.(n+1);
+     end;
+    then A57: d is constant by SEQM_3:16;
+    then A58: d is convergent by SEQ_4:39;
+    A59: lim d=d.0 by A57,SEQ_4:41
+            .=x0 by A56;
+    A60: a1 is convergent & lim a1=x0 by A48,SEQ_4:33;
+     A61: now
+          let n;
+            b.n in ].x0,a1.n.[ by A55;
+          then b.n in {g1:x0<g1 & g1<a1.n} by RCOMP_1:def 2;
+          then ex g1 st g1=b.n & x0<g1 & g1<a1.n; hence d.n<=b.n & b.n<=a1.n
+by A56;
+         end;
+    then A62: b is convergent by A58,A59,A60,SEQ_2:33;
+    A63: lim b=x0 by A58,A59,A60,A61,SEQ_2:34;
+    A64: x0-r<x0 by A2,SQUARE_1:29;
+      x0<x0+r by A2,REAL_2:174;
+    then x0 in {g2: x0-r<g2 & g2<x0+r} by A64;
+    then A65: x0 in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+    A66: rng b c= dom ((f`|N)/(g`|N)) \{x0}
+     proof
+      let x be set;
+      assume x in rng b;
+      then consider n such that A67: x=b.n by RFUNCT_2:9;
+      A68: x0<a1.n & a1.n<x0+r by A50;
+      A69: x in ].x0,a1.n.[ by A55,A67;
+      then x in {g1:x0<g1 & g1<a1.n} by RCOMP_1:def 2; then A70: ex g1 st
+ g1 = x & x0<g1 & g1<a1.n;
+      A71: ].x0,a1.n.[ c= [.x0,a1.n.] by RCOMP_1:15;
+        x0-r<a1.n by A64,A68,AXIOMS:22;
+      then a1.n in {g3: x0-r<g3 & g3<x0+r} by A68;
+      then a1.n in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+      then [.x0,a1.n.] c= ].x0-r,x0+r.[ by A65,RCOMP_1:17;
+      then ].x0,a1.n.[ c= ].x0-r,x0+r.[ by A71,XBOOLE_1:1;
+      then A72: ].x0,a1.n.[ c= dom ((f`|N)/(g`|N)) by A1,A2,XBOOLE_1:1;
+        not x in {x0} by A70,TARSKI:def 1;
+      hence x in dom ((f`|N)/(g`|N))\{x0} by A69,A72,XBOOLE_0:def 4;
+     end;
+      dom ((f`|N)/(g`|N)) \{x0} c= dom ((f`|N)/(g`|N)) by XBOOLE_1:36;
+    then A73: rng b c= dom ((f`|N)/(g`|N)) by A66,XBOOLE_1:1;
+      lim(((f`|N)/(g`|N)),x0)=lim(((f`|N)/(g`|N)),x0);
+    then A74: ((f`|N)/(g`|N))*b is convergent &
+    lim (((f`|N)/(g`|N))*b) = lim(((f`|N)/(g`|N)),x0)
+      by A1,A62,A63,A66,LIMFUNC3:def 4;
+    A75: now take m = 0; let n such that m <=n;
+           (((f/g)*a)^\k).n=((f`|N)/(g`|N)).(b.n) by A55;
+         hence (((f/g)*a)^\k).n = (((f`|N)/(g`|N))*b).n by A73,RFUNCT_2:21;
+        end;
+    then A76: ((f/g)*a)^\k is convergent by A74,SEQ_4:31;
+       lim (((f/g)*a)^\k) = lim(((f`|N)/(g`|N)),x0) by A74,A75,SEQ_4:32;
+    hence thesis by A76,SEQ_4:35,36;
+   end;
+  then A77: f/g is_right_convergent_in x0 & lim_right(f/g,x0)=lim(((f`|N)/(g`|N
+)),x0)
+      by A47,Th2;
+  A78: for x st x0-r<x & x<x0 ex c st c in ].x,x0.[ & (f/g).x=((f`|N)/(g`|N)).c
+   proof
+    let x such that
+    A79: x0-r<x & x<x0;
+    A80: f is_continuous_on N by A1,FDIFF_1:33;
+    A81: g is_continuous_on N by A1,FDIFF_1:33;
+    A82: x0-r<x0 by A2,SQUARE_1:29;
+    A83: x0+0<x0+r by A2,REAL_1:67;
+    then x0 in {g1: x0-r<g1 & g1<x0+r} by A82;
+    then A84: x0 in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+      x<x0+r by A79,A83,AXIOMS:22;
+    then x in {g1: x0-r<g1 & g1<x0+r} by A79;
+    then x in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+    then A85: [.x,x0.] c= N by A2,A84,RCOMP_1:17;
+    then f is_continuous_on [.x,x0.] by A80,FCONT_1:17;
+    then A86: (g.x)(#)f is_continuous_on [.x,x0.] by FCONT_1:21;
+      g is_continuous_on [.x,x0.] by A81,A85,FCONT_1:17;
+    then (f.x)(#)g is_continuous_on [.x,x0.] by FCONT_1:21;
+    then A87: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x,x0.] by A86,FCONT_1:19
+;
+    A88: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
+    A89: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A90: N c= dom ((g.x)(#)f) by A80,A88,FCONT_1:14;
+    A91: N c= dom ((f.x)(#)g) by A81,A89,FCONT_1:14;
+    A92: ].x,x0.[ c= [.x,x0.] by RCOMP_1:15;
+    then A93: ].x,x0.[ c= N by A85,XBOOLE_1:1;
+    then A94: f is_differentiable_on ].x,x0.[ by A1,FDIFF_1:34;
+    A95: ].x,x0.[ c= dom ((g.x)(#)f) by A90,A93,XBOOLE_1:1;
+    then A96: (g.x)(#)f is_differentiable_on ].x,x0.[ by A94,FDIFF_1:28;
+    A97: ].x,x0.[ c= dom ((f.x)(#)g) by A91,A93,XBOOLE_1:1;
+    then ].x,x0.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A95,XBOOLE_1:19
+;
+    then A98: ].x,x0.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    A99: g is_differentiable_on ].x,x0.[ by A1,A93,FDIFF_1:34;
+    then A100: (f.x)(#)g is_differentiable_on ].x,x0.[ by A97,FDIFF_1:28;
+    then A101: (f.x)(#)g-(g.x)(#)
+f is_differentiable_on ].x,x0.[ by A96,A98,FDIFF_1:27
+;
+    set f1 = (f.x)(#)g - (g.x)(#)f;
+    A102: [.x,x0.] c= dom f1 by A87,FCONT_1:def 2;
+    A103: x0 in [.x,x0.] & x in [.x,x0.] by A79,RCOMP_1:15;
+    then x0 in dom f1 & x in dom f1 by A102;
+    then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
+ dom ((g.x)
+(#)f)
+     by SEQ_1:def 4;
+    then A104: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
+(#)
+g) &
+    x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
+    A105: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A102,A103,SEQ_1:def 4
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A104,SEQ_1:def 6
+         .= 0 - (g.x)*0 by A1,A104,SEQ_1:def 6
+         .= 0;
+      f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A102,A103,SEQ_1:def 4
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A104,SEQ_1:def 6
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A104,SEQ_1:def 6
+         .= 0 by XCMPLX_1:14;
+    then consider t such that
+    A106: t in ].x,x0.[ & diff(f1,t)=0 by A79,A87,A101,A105,ROLLE:1;
+    take t;
+    A107: (f.x)(#)g is_differentiable_in t by A100,A106,FDIFF_1:16;
+      (g.x)(#)f is_differentiable_in t by A96,A106,FDIFF_1:16;
+    then A108: 0=diff((f.x)(#)g,t) - diff((g.x)(#)f,t) by A106,A107,FDIFF_1:22;
+    A109: g is_differentiable_in t by A99,A106,FDIFF_1:16;
+      f is_differentiable_in t by A94,A106,FDIFF_1:16;
+    then 0=diff((f.x)(#)g,t) - (g.x)*diff(f,t) by A108,FDIFF_1:23;
+    then 0=(f.x)*diff(g,t) - (g.x)*diff(f,t) by A109,FDIFF_1:23;
+    then A110: (f.x)*diff(g,t)=(g.x)*diff(f,t) by XCMPLX_1:15;
+      [.x,x0.]\{x0} c= N\{x0} by A85,XBOOLE_1:33;
+    then A111: [.x,x0.]\{x0} c= dom(f/g) by A1,XBOOLE_1:1;
+    then A112: [.x,x0.]\{x0} c= dom f /\ (dom g\g"{0}) by RFUNCT_1:def 4;
+      dom f /\ (dom g\g"{0}) c= dom g\g"{0} by XBOOLE_1:17;
+    then A113: [.x,x0.]\{x0} c= dom g\g"{0} by A112,XBOOLE_1:1;
+      not x in {x0} by A79,TARSKI:def 1;
+    then A114: x in [.x,x0.]\{x0} by A103,XBOOLE_0:def 4;
+    then A115: x in dom g & not x in g"{0} by A113,XBOOLE_0:def 4;
+    A116: now assume g.x=0;
+         then g.x in {0} by TARSKI:def 1;
+         hence contradiction by A115,FUNCT_1:def 13;
+        end;
+    A117: [.x,x0.] c= dom ((f`|N)/(g`|N)) by A1,A85,XBOOLE_1:1;
+    then A118: [.x,x0.] c= dom (f`|N) /\ (dom (g`|N)\(g`|N)"{0}) by RFUNCT_1:
+def 4;
+      dom (f`|N) /\ (dom (g`|N) \ (g`|N)"{0}) c= dom (g`|N)\(g`|N)"{0}
+     by XBOOLE_1:17;
+    then A119: [.x,x0.] c= dom (g`|N)\(g`|N)"{0} by A118,XBOOLE_1:1;
+    A120: t in [.x,x0.] by A92,A106;
+    then A121: t in dom (g`|N) & not t in (g`|N)"{0} by A119,XBOOLE_0:def 4;
+       now assume diff(g,t)=0;
+         then (g`|N).t=0 by A1,A85,A120,FDIFF_1:def 8;
+         then (g`|N).t in {0} by TARSKI:def 1;
+         hence contradiction by A121,FUNCT_1:def 13;
+        end;
+    then (f.x)/(g.x) = diff(f,t)/diff(g,t) by A110,A116,XCMPLX_1:95;
+    then (f.x)*(g.x)" = diff(f,t)/diff(g,t) by XCMPLX_0:def 9;
+    then (f.x)*(g.x)" = diff(f,t)*diff(g,t)" by XCMPLX_0:def 9;
+    then (f/g).x = diff(f,t)*diff(g,t)" by A111,A114,RFUNCT_1:def 4;
+    then (f/g).x = ((f`|N).t)*diff(g,t)" by A1,A85,A120,FDIFF_1:def 8;
+    then (f/g).x = ((f`|N).t)*((g`|N).t)" by A1,A85,A120,FDIFF_1:def 8;
+    hence thesis by A106,A117,A120,RFUNCT_1:def 4;
+   end;
+    for a st a is convergent & lim a = x0 &
+  rng a c= dom (f/g) /\ left_open_halfline(x0) holds
+  (f/g)*a is convergent & lim((f/g)*a) = lim(((f`|N)/(g`|N)),x0)
+   proof
+    let a;
+    assume A122: a is convergent & lim a = x0 &
+               rng a c= dom (f/g) /\ left_open_halfline(x0);
+    then consider k such that
+    A123: for n st k<=n holds x0-r<a.n & a.n<x0+r by A2,A3,LIMFUNC3:7;
+    set a1 = a^\k;
+     A124: now let n;
+          A125: a1.n = a.(n+k) by SEQM_3:def 9;
+            a.(n+k) in rng a by RFUNCT_2:10;
+          then a.(n+k) in left_open_halfline(x0) by A122,XBOOLE_0:def 3;
+          then a.(n+k) in {g1:g1<x0} by PROB_1:def 15;
+          then ex g1 st a.(n+k)=g1 & g1<x0;
+          hence a1.n<x0 by SEQM_3:def 9;
+            k<=n+k by NAT_1:37;
+          hence x0-r<a1.n by A123,A125;
+         end;
+        defpred X[Nat,real number] means
+        $2 in ].a1.$1,x0.[ & (((f/g)*a)^\k).$1=((f`|N)/(g`|N)).$2;
+    A126: for n ex c be real number st X[n,c]
+         proof
+          let n;
+            x0-r<a1.n & a1.n<x0 by A124;
+          then consider c such that
+          A127: c in ].a1.n,x0.[ & (f/g).(a1.n)=((f`|N)/(g`|N)).c by A78;
+          take c;
+            dom (f/g) /\ left_open_halfline(x0) c= dom (f/g) by XBOOLE_1:17;
+          then A128: rng a c= dom (f/g) by A122,XBOOLE_1:1;
+            rng a1 c= rng a by RFUNCT_2:7;
+          then rng a1 c= dom (f/g) by A128,XBOOLE_1:1;
+          then ((f/g)*(a^\k)).n=((f`|N)/(g`|N)).c by A127,RFUNCT_2:21;
+          hence thesis by A127,A128,RFUNCT_2:22;
+         end;
+    consider b such that
+    A129: for n holds X[n,b.n] from RealSeqChoice(A126);
+    deffunc U(set) = x0;
+    consider d being Real_Sequence such that
+    A130: for n holds d.n=U(n) from ExRealSeq;
+       now
+      let n;
+        d.n=x0 & d.(n+1)=x0 by A130;
+      hence d.n=d.(n+1);
+     end;
+    then A131: d is constant by SEQM_3:16;
+    then A132: d is convergent by SEQ_4:39;
+    A133: lim d=d.0 by A131,SEQ_4:41
+            .=x0 by A130;
+    A134: a1 is convergent & lim a1=x0 by A122,SEQ_4:33;
+     A135: now
+          let n;
+            b.n in ].a1.n,x0.[ by A129;
+          then b.n in {g1:a1.n<g1 & g1<x0} by RCOMP_1:def 2;
+          then ex g1 st g1=b.n & a1.n<g1 & g1<x0; hence a1.n<=b.n & b.n<=
+d.n by A130;
+         end;
+    then A136: b is convergent by A132,A133,A134,SEQ_2:33;
+    A137: lim b=x0 by A132,A133,A134,A135,SEQ_2:34;
+    A138: x0-r<x0 by A2,SQUARE_1:29;
+    A139: x0<x0+r by A2,REAL_2:174;
+    then x0 in {g2: x0-r<g2 & g2<x0+r} by A138;
+    then A140: x0 in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+    A141: rng b c= dom ((f`|N)/(g`|N)) \{x0}
+     proof
+      let x be set;
+      assume x in rng b;
+      then consider n such that A142: x=b.n by RFUNCT_2:9;
+      A143: x0-r<a1.n & a1.n<x0 by A124;
+      A144: x in ].a1.n,x0.[ by A129,A142;
+      then x in {g1:a1.n<g1 & g1<x0} by RCOMP_1:def 2; then A145: ex g1 st
+ g1 = x & a1.n<g1 & g1<x0;
+      A146: ].a1.n,x0.[ c= [.a1.n,x0.] by RCOMP_1:15;
+        a1.n<x0+r by A139,A143,AXIOMS:22;
+      then a1.n in {g3: x0-r<g3 & g3<x0+r} by A143;
+      then a1.n in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+      then [.a1.n,x0.] c= ].x0-r,x0+r.[ by A140,RCOMP_1:17;
+      then ].a1.n,x0.[ c= ].x0-r,x0+r.[ by A146,XBOOLE_1:1;
+      then A147: ].a1.n,x0.[ c= dom ((f`|N)/(g`|N)) by A1,A2,XBOOLE_1:1;
+        not x in {x0} by A145,TARSKI:def 1;
+      hence x in dom ((f`|N)/(g`|N))\{x0} by A144,A147,XBOOLE_0:def 4;
+     end;
+      dom ((f`|N)/(g`|N)) \{x0} c= dom ((f`|N)/(g`|N)) by XBOOLE_1:36;
+    then A148: rng b c= dom ((f`|N)/(g`|N)) by A141,XBOOLE_1:1;
+      lim(((f`|N)/(g`|N)),x0)=lim(((f`|N)/(g`|N)),x0);
+    then A149: ((f`|N)/(g`|N))*b is convergent &
+    lim (((f`|N)/(g`|N))*b) = lim(((f`|N)/(g`|N)),x0)
+    by A1,A136,A137,A141,LIMFUNC3:def 4;
+    A150: now take m = 0; let n such that m <=n;
+           (((f/g)*a)^\k).n=((f`|N)/(g`|N)).(b.n) by A129;
+         hence (((f/g)*a)^\k).n = (((f`|N)/(g`|N))*b).n by A148,RFUNCT_2:21;
+        end;
+    then A151: ((f/g)*a)^\k is convergent by A149,SEQ_4:31;
+       lim (((f/g)*a)^\k) = lim(((f`|N)/(g`|N)),x0) by A149,A150,SEQ_4:32;
+    hence thesis by A151,SEQ_4:35,36;
+   end;
+  then A152: f/g is_left_convergent_in x0 & lim_left(f/g,x0)=lim(((f`|N)/(g`|N)
+),x0)
+      by A47,Th3;
+  hence f/g is_convergent_in x0 by A77,LIMFUNC3:34;
+  take N;
+  thus thesis by A77,A152,LIMFUNC3:34;
+ end;
+
+theorem
+  (ex N being Neighbourhood of x0 st f is_differentiable_on N &
+g is_differentiable_on N & N \ {x0} c= dom (f/g) &
+N c= dom ((f`|N)/(g`|N)) & f.x0 = 0 & g.x0 = 0 &
+(f`|N)/(g`|N) is_continuous_in x0)
+implies f/g is_convergent_in x0 & lim(f/g,x0) = diff(f,x0)/diff(g,x0)
+ proof
+  given N being Neighbourhood of x0 such that
+  A1: f is_differentiable_on N & g is_differentiable_on N &
+     N \ {x0} c= dom (f/g) & N c= dom ((f`|N)/(g`|N)) &
+     f.x0 = 0 & g.x0 = 0 &
+     (f`|N)/(g`|N) is_continuous_in x0;
+  consider r be real number such that
+  A2: 0<r & N = ].x0-r,x0+r.[ by RCOMP_1:def 7;
+  A3: r is Real by XREAL_0:def 1;
+  A4: for x st x0<x & x<x0+r ex c st c in ].x0,x.[ & (f/g).x=((f`|N)/(g`|N)).c
+   proof
+    let x such that
+    A5: x0<x & x<x0+r;
+    A6: f is_continuous_on N by A1,FDIFF_1:33;
+    A7: g is_continuous_on N by A1,FDIFF_1:33;
+    A8: x0-r<x0 by A2,SQUARE_1:29;
+      x0+0<x0+r by A2,REAL_1:67;
+    then x0 in {g1: x0-r<g1 & g1<x0+r} by A8;
+    then A9: x0 in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+      x0-r<x by A5,A8,AXIOMS:22;
+    then x in {g1: x0-r<g1 & g1<x0+r} by A5;
+    then x in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+    then A10: [.x0,x.] c= N by A2,A9,RCOMP_1:17;
+    then f is_continuous_on [.x0,x.] by A6,FCONT_1:17;
+    then A11: (g.x)(#)f is_continuous_on [.x0,x.] by FCONT_1:21;
+      g is_continuous_on [.x0,x.] by A7,A10,FCONT_1:17;
+    then (f.x)(#)g is_continuous_on [.x0,x.] by FCONT_1:21;
+    then A12: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x0,x.] by A11,FCONT_1:19
+;
+    A13: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
+    A14: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A15: N c= dom ((g.x)(#)f) by A6,A13,FCONT_1:14;
+    A16: N c= dom ((f.x)(#)g) by A7,A14,FCONT_1:14;
+    A17: ].x0,x.[ c= [.x0,x.] by RCOMP_1:15;
+    then A18: ].x0,x.[ c= N by A10,XBOOLE_1:1;
+    then A19: f is_differentiable_on ].x0,x.[ by A1,FDIFF_1:34;
+    A20: ].x0,x.[ c= dom ((g.x)(#)f) by A15,A18,XBOOLE_1:1;
+    then A21: (g.x)(#)f is_differentiable_on ].x0,x.[ by A19,FDIFF_1:28;
+    A22: ].x0,x.[ c= dom ((f.x)(#)g) by A16,A18,XBOOLE_1:1;
+    then ].x0,x.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A20,XBOOLE_1:19
+;
+    then A23: ].x0,x.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    A24: g is_differentiable_on ].x0,x.[ by A1,A18,FDIFF_1:34;
+    then A25: (f.x)(#)g is_differentiable_on ].x0,x.[ by A22,FDIFF_1:28;
+    then A26: (f.x)(#)g-(g.x)(#)
+f is_differentiable_on ].x0,x.[ by A21,A23,FDIFF_1:27;
+    set f1 = (f.x)(#)g - (g.x)(#)f;
+    A27: [.x0,x.] c= dom f1 by A12,FCONT_1:def 2;
+    A28: x0 in [.x0,x.] & x in [.x0,x.] by A5,RCOMP_1:15;
+    then x0 in dom f1 & x in dom f1 by A27;
+    then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
+ dom ((g.x)
+(#)f)
+     by SEQ_1:def 4;
+    then A29: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
+(#)g) &
+    x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
+    A30: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A27,A28,SEQ_1:def 4
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A29,SEQ_1:def 6
+         .= 0 - (g.x)*0 by A1,A29,SEQ_1:def 6
+         .= 0;
+      f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A27,A28,SEQ_1:def 4
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A29,SEQ_1:def 6
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A29,SEQ_1:def 6
+         .= 0 by XCMPLX_1:14;
+    then consider t such that
+    A31: t in ].x0,x.[ & diff(f1,t)=0 by A5,A12,A26,A30,ROLLE:1;
+    take t;
+    A32: (f.x)(#)g is_differentiable_in t by A25,A31,FDIFF_1:16;
+      (g.x)(#)f is_differentiable_in t by A21,A31,FDIFF_1:16;
+    then A33: 0=diff((f.x)(#)g,t) - diff((g.x)(#)f,t) by A31,A32,FDIFF_1:22;
+    A34: g is_differentiable_in t by A24,A31,FDIFF_1:16;
+      f is_differentiable_in t by A19,A31,FDIFF_1:16;
+    then 0=diff((f.x)(#)g,t) - (g.x)*diff(f,t) by A33,FDIFF_1:23;
+    then 0=(f.x)*diff(g,t) - (g.x)*diff(f,t) by A34,FDIFF_1:23;
+    then A35: (f.x)*diff(g,t)=(g.x)*diff(f,t) by XCMPLX_1:15;
+      [.x0,x.]\{x0} c= N\{x0} by A10,XBOOLE_1:33;
+    then A36: [.x0,x.]\{x0} c= dom(f/g) by A1,XBOOLE_1:1;
+    then A37: [.x0,x.]\{x0} c= dom f /\ (dom g\g"{0}) by RFUNCT_1:def 4;
+      dom f /\ (dom g\g"{0}) c= dom g\g"{0} by XBOOLE_1:17;
+    then A38: [.x0,x.]\{x0} c= dom g\g"{0} by A37,XBOOLE_1:1;
+      not x in {x0} by A5,TARSKI:def 1;
+    then A39: x in [.x0,x.]\{x0} by A28,XBOOLE_0:def 4;
+    then A40: x in dom g & not x in g"{0} by A38,XBOOLE_0:def 4;
+    A41: now assume g.x=0;
+         then g.x in {0} by TARSKI:def 1;
+         hence contradiction by A40,FUNCT_1:def 13;
+        end;
+    A42: [.x0,x.] c= dom ((f`|N)/(g`|N)) by A1,A10,XBOOLE_1:1;
+    then A43: [.x0,x.] c= dom (f`|N) /\ (dom (g`|N)\(g`|N)"{0}) by RFUNCT_1:def
+4;
+      dom (f`|N) /\ (dom (g`|N) \ (g`|N)"{0}) c= dom (g`|N)\(g`|N)"{0}
+     by XBOOLE_1:17;
+    then A44: [.x0,x.] c= dom (g`|N)\(g`|N)"{0} by A43,XBOOLE_1:1;
+    A45: t in [.x0,x.] by A17,A31;
+    then A46: t in dom (g`|N) & not t in (g`|N)"{0} by A44,XBOOLE_0:def 4;
+       now assume diff(g,t)=0;
+         then (g`|N).t=0 by A1,A10,A45,FDIFF_1:def 8;
+         then (g`|N).t in {0} by TARSKI:def 1;
+         hence contradiction by A46,FUNCT_1:def 13;
+        end;
+    then (f.x)/(g.x) = diff(f,t)/diff(g,t) by A35,A41,XCMPLX_1:95;
+    then (f.x)*(g.x)" = diff(f,t)/diff(g,t) by XCMPLX_0:def 9;
+    then (f.x)*(g.x)" = diff(f,t)*diff(g,t)" by XCMPLX_0:def 9;
+    then (f/g).x = diff(f,t)*diff(g,t)" by A36,A39,RFUNCT_1:def 4;
+    then (f/g).x = ((f`|N).t)*diff(g,t)" by A1,A10,A45,FDIFF_1:def 8;
+    then (f/g).x = ((f`|N).t)*((g`|N).t)" by A1,A10,A45,FDIFF_1:def 8;
+    hence thesis by A31,A42,A45,RFUNCT_1:def 4;
+   end;
+    for r1,r2 st r1<x0 & x0<r2
+  ex g1,g2 st r1<g1 & g1<x0 & g1 in dom (f/g) & g2<r2 &
+    x0<g2 & g2 in dom (f/g) by A1,Th4;
+  then A47: (for r1 st x0<r1 ex t st t<r1 & x0<t & t in dom (f/g)) &
+       for r1 st r1<x0 ex t st r1<t & t<x0 & t in dom (f/g) by LIMFUNC3:8;
+    for a st a is convergent & lim a = x0 &
+  rng a c= dom (f/g) /\ right_open_halfline(x0) holds
+  (f/g)*a is convergent & lim((f/g)*a) = diff(f,x0)/diff(g,x0)
+   proof
+    let a;
+    assume A48: a is convergent & lim a = x0 &
+               rng a c= dom (f/g) /\ right_open_halfline(x0);
+    then consider k such that
+    A49: for n st k<=n holds x0-r<a.n & a.n<x0+r by A2,A3,LIMFUNC3:7;
+    set a1 = a^\k;
+     A50: now let n;
+          A51: a1.n = a.(n+k) by SEQM_3:def 9;
+            a.(n+k) in rng a by RFUNCT_2:10;
+          then a.(n+k) in right_open_halfline(x0) by A48,XBOOLE_0:def 3;
+          then a.(n+k) in {g1:x0<g1} by LIMFUNC1:def 3;
+          then ex g1 st a.(n+k)=g1 & x0<g1;
+          hence x0<a1.n by SEQM_3:def 9;
+            k<=n+k by NAT_1:37;
+          hence a1.n<x0+r by A49,A51;
+         end;
+        defpred X[Nat,real number] means
+         $2 in ].x0,a1.$1.[ & (((f/g)*a)^\k).$1=((f`|N)/(g`|N)).$2;
+    A52: for n ex c be real number st X[n,c]
+         proof
+          let n;
+            x0<a1.n & a1.n<x0+r by A50;
+          then consider c such that
+          A53: c in ].x0,a1.n.[ & (f/g).(a1.n)=((f`|N)/(g`|N)).c by A4;
+          take c;
+            dom (f/g) /\ right_open_halfline(x0) c= dom (f/g) by XBOOLE_1:17
+;
+          then A54: rng a c= dom (f/g) by A48,XBOOLE_1:1;
+            rng a1 c= rng a by RFUNCT_2:7;
+          then rng a1 c= dom (f/g) by A54,XBOOLE_1:1;
+          then ((f/g)*(a^\k)).n=((f`|N)/(g`|N)).c by A53,RFUNCT_2:21;
+          hence thesis by A53,A54,RFUNCT_2:22;
+         end;
+    consider b such that
+    A55: for n holds X[n,b.n] from RealSeqChoice(A52);
+    deffunc U(set) = x0;
+    consider d being Real_Sequence such that
+    A56: for n holds d.n=U(n) from ExRealSeq;
+       now
+      let n;
+        d.n=x0 & d.(n+1)=x0 by A56;
+      hence d.n=d.(n+1);
+     end;
+    then A57: d is constant by SEQM_3:16;
+    then A58: d is convergent by SEQ_4:39;
+    A59: lim d=d.0 by A57,SEQ_4:41
+            .=x0 by A56;
+    A60: a1 is convergent & lim a1=x0 by A48,SEQ_4:33;
+     A61: now
+          let n;
+            b.n in ].x0,a1.n.[ by A55;
+          then b.n in {g1:x0<g1 & g1<a1.n} by RCOMP_1:def 2;
+          then ex g1 st g1=b.n & x0<g1 & g1<a1.n; hence d.n<=b.n & b.n<=a1.n
+by A56;
+         end;
+    then A62: b is convergent by A58,A59,A60,SEQ_2:33;
+    A63: lim b=x0 by A58,A59,A60,A61,SEQ_2:34;
+    A64: x0-r<x0 by A2,SQUARE_1:29;
+      x0<x0+r by A2,REAL_2:174;
+    then x0 in {g2: x0-r<g2 & g2<x0+r} by A64;
+    then A65: x0 in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+    A66: rng b c= dom ((f`|N)/(g`|N)) /\ right_open_halfline(x0)
+     proof
+      let x be set;
+      assume x in rng b;
+      then consider n such that A67: x=b.n by RFUNCT_2:9;
+      A68: x0<a1.n & a1.n<x0+r by A50;
+      A69: x in ].x0,a1.n.[ by A55,A67;
+      then x in {g1:x0<g1 & g1<a1.n} by RCOMP_1:def 2;
+      then ex g1 st g1=x & x0<g1 & g1<a1.n;
+      then x in {g2:x0<g2};
+      then A70: x in right_open_halfline(x0) by LIMFUNC1:def 3;
+       A71: ].x0,a1.n.[ c= [.x0,a1.n.] by RCOMP_1:15;
+        x0-r<a1.n by A64,A68,AXIOMS:22;
+      then a1.n in {g3: x0-r<g3 & g3<x0+r} by A68;
+      then a1.n in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+      then [.x0,a1.n.] c= ].x0-r,x0+r.[ by A65,RCOMP_1:17;
+      then ].x0,a1.n.[ c= ].x0-r,x0+r.[ by A71,XBOOLE_1:1;
+      then ].x0,a1.n.[ c= dom ((f`|N)/(g`|N)) by A1,A2,XBOOLE_1:1;
+hence x in dom ((f`|N)/(g`|N)) /\
+right_open_halfline(x0) by A69,A70,XBOOLE_0:def 3;
+     end;
+      dom ((f`|N)/(g`|N)) /\ right_open_halfline(x0) c= dom ((f`|N)/(g`|N))
+    by XBOOLE_1:17;
+    then A72: rng b c= dom ((f`|N)/(g`|N)) by A66,XBOOLE_1:1;
+     then ((f`|N)/(g`|N))*b is convergent &
+    lim (((f`|N)/(g`|N))*b) = ((f`|N)/(g`|N)).x0
+    by A1,A62,A63,FCONT_1:def 1;
+    then lim (((f`|N)/(g`|N))*b) = ((f`|N).x0)*((g`|N).x0)" by A1,A2,A65,
+RFUNCT_1:def 4
+                           .= diff(f,x0)*((g`|N).x0)" by A1,A2,A65,FDIFF_1:def
+8
+                           .= diff(f,x0)*diff(g,x0)" by A1,A2,A65,FDIFF_1:def 8
+;
+    then A73: ((f`|N)/(g`|N))*b is convergent &
+        lim (((f`|N)/(g`|N))*b) = diff(f,x0)*diff(g,x0)" by A1,A62,A63,A72,
+FCONT_1:def 1;
+    A74: now take m = 0; let n such that m <=n;
+           (((f/g)*a)^\k).n=((f`|N)/(g`|N)).(b.n) by A55;
+         hence (((f/g)*a)^\k).n = (((f`|N)/(g`|N))*b).n by A72,RFUNCT_2:21;
+        end;
+    then A75: ((f/g)*a)^\k is convergent by A73,SEQ_4:31;
+       lim (((f/g)*a)^\k) = diff(f,x0)*diff(g,x0)" by A73,A74,SEQ_4:32;
+    then lim(((f/g)*a)^\k) = diff(f,x0)/diff(g,x0) by XCMPLX_0:def 9;
+    hence thesis by A75,SEQ_4:35,36;
+   end;
+  then A76: f/g is_right_convergent_in x0 & lim_right(f/g,x0)=diff(f,x0)/diff(g
+,x0)
+      by A47,Th2;
+  A77: for x st x0-r<x & x<x0 ex c st c in ].x,x0.[ & (f/g).x=((f`|N)/(g`|N)).c
+   proof
+    let x such that
+    A78: x0-r<x & x<x0;
+    A79: f is_continuous_on N by A1,FDIFF_1:33;
+    A80: g is_continuous_on N by A1,FDIFF_1:33;
+    A81: x0-r<x0 by A2,SQUARE_1:29;
+    A82: x0+0<x0+r by A2,REAL_1:67;
+    then x0 in {g1: x0-r<g1 & g1<x0+r} by A81;
+    then A83: x0 in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+      x<x0+r by A78,A82,AXIOMS:22;
+    then x in {g1: x0-r<g1 & g1<x0+r} by A78;
+    then x in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+    then A84: [.x,x0.] c= N by A2,A83,RCOMP_1:17;
+    then f is_continuous_on [.x,x0.] by A79,FCONT_1:17;
+    then A85: (g.x)(#)f is_continuous_on [.x,x0.] by FCONT_1:21;
+      g is_continuous_on [.x,x0.] by A80,A84,FCONT_1:17;
+    then (f.x)(#)g is_continuous_on [.x,x0.] by FCONT_1:21;
+    then A86: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x,x0.] by A85,FCONT_1:19
+;
+    A87: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
+    A88: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A89: N c= dom ((g.x)(#)f) by A79,A87,FCONT_1:14;
+    A90: N c= dom ((f.x)(#)g) by A80,A88,FCONT_1:14;
+    A91: ].x,x0.[ c= [.x,x0.] by RCOMP_1:15;
+    then A92: ].x,x0.[ c= N by A84,XBOOLE_1:1;
+    then A93: f is_differentiable_on ].x,x0.[ by A1,FDIFF_1:34;
+    A94: ].x,x0.[ c= dom ((g.x)(#)f) by A89,A92,XBOOLE_1:1;
+    then A95: (g.x)(#)f is_differentiable_on ].x,x0.[ by A93,FDIFF_1:28;
+    A96: ].x,x0.[ c= dom ((f.x)(#)g) by A90,A92,XBOOLE_1:1;
+    then ].x,x0.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A94,XBOOLE_1:19
+;
+    then A97: ].x,x0.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    A98: g is_differentiable_on ].x,x0.[ by A1,A92,FDIFF_1:34;
+    then A99: (f.x)(#)g is_differentiable_on ].x,x0.[ by A96,FDIFF_1:28;
+    then A100: (f.x)(#)g-(g.x)(#)
+f is_differentiable_on ].x,x0.[ by A95,A97,FDIFF_1:27
+;
+    set f1 = (f.x)(#)g - (g.x)(#)f;
+    A101: [.x,x0.] c= dom f1 by A86,FCONT_1:def 2;
+    A102: x0 in [.x,x0.] & x in [.x,x0.] by A78,RCOMP_1:15;
+    then x0 in dom f1 & x in dom f1 by A101;
+    then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
+ dom ((g.x)
+(#)f)
+     by SEQ_1:def 4;
+    then A103: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
+(#)
+g) &
+    x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
+    A104: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A101,A102,SEQ_1:def 4
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A103,SEQ_1:def 6
+         .= 0 - (g.x)*0 by A1,A103,SEQ_1:def 6
+         .= 0;
+      f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A101,A102,SEQ_1:def 4
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A103,SEQ_1:def 6
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A103,SEQ_1:def 6
+         .= 0 by XCMPLX_1:14;
+    then consider t such that
+    A105: t in ].x,x0.[ & diff(f1,t)=0 by A78,A86,A100,A104,ROLLE:1;
+    take t;
+    A106: (f.x)(#)g is_differentiable_in t by A99,A105,FDIFF_1:16;
+      (g.x)(#)f is_differentiable_in t by A95,A105,FDIFF_1:16;
+    then A107: 0=diff((f.x)(#)g,t) - diff((g.x)(#)f,t) by A105,A106,FDIFF_1:22;
+    A108: g is_differentiable_in t by A98,A105,FDIFF_1:16;
+      f is_differentiable_in t by A93,A105,FDIFF_1:16;
+    then 0=diff((f.x)(#)g,t) - (g.x)*diff(f,t) by A107,FDIFF_1:23;
+    then 0=(f.x)*diff(g,t) - (g.x)*diff(f,t) by A108,FDIFF_1:23;
+    then A109: (f.x)*diff(g,t)=(g.x)*diff(f,t) by XCMPLX_1:15;
+      [.x,x0.]\{x0} c= N\{x0} by A84,XBOOLE_1:33;
+    then A110: [.x,x0.]\{x0} c= dom(f/g) by A1,XBOOLE_1:1;
+    then A111: [.x,x0.]\{x0} c= dom f /\ (dom g\g"{0}) by RFUNCT_1:def 4;
+      dom f /\ (dom g\g"{0}) c= dom g\g"{0} by XBOOLE_1:17;
+    then A112: [.x,x0.]\{x0} c= dom g\g"{0} by A111,XBOOLE_1:1;
+      not x in {x0} by A78,TARSKI:def 1;
+    then A113: x in [.x,x0.]\{x0} by A102,XBOOLE_0:def 4;
+    then A114: x in dom g & not x in g"{0} by A112,XBOOLE_0:def 4;
+    A115: now assume g.x=0;
+         then g.x in {0} by TARSKI:def 1;
+         hence contradiction by A114,FUNCT_1:def 13;
+        end;
+    A116: [.x,x0.] c= dom ((f`|N)/(g`|N)) by A1,A84,XBOOLE_1:1;
+    then A117: [.x,x0.] c= dom (f`|N) /\ (dom (g`|N)\(g`|N)"{0}) by RFUNCT_1:
+def 4;
+      dom (f`|N) /\ (dom (g`|N) \ (g`|N)"{0}) c= dom (g`|N)\(g`|N)"{0}
+     by XBOOLE_1:17;
+    then A118: [.x,x0.] c= dom (g`|N)\(g`|N)"{0} by A117,XBOOLE_1:1;
+    A119: t in [.x,x0.] by A91,A105;
+    then A120: t in dom (g`|N) & not t in (g`|N)"{0} by A118,XBOOLE_0:def 4;
+       now assume diff(g,t)=0;
+         then (g`|N).t=0 by A1,A84,A119,FDIFF_1:def 8;
+         then (g`|N).t in {0} by TARSKI:def 1;
+         hence contradiction by A120,FUNCT_1:def 13;
+        end;
+    then (f.x)/(g.x) = diff(f,t)/diff(g,t) by A109,A115,XCMPLX_1:95;
+    then (f.x)*(g.x)" = diff(f,t)/diff(g,t) by XCMPLX_0:def 9;
+    then (f.x)*(g.x)" = diff(f,t)*diff(g,t)" by XCMPLX_0:def 9;
+    then (f/g).x = diff(f,t)*diff(g,t)" by A110,A113,RFUNCT_1:def 4;
+    then (f/g).x = ((f`|N).t)*diff(g,t)" by A1,A84,A119,FDIFF_1:def 8;
+    then (f/g).x = ((f`|N).t)*((g`|N).t)" by A1,A84,A119,FDIFF_1:def 8;
+    hence thesis by A105,A116,A119,RFUNCT_1:def 4;
+   end;
+    for a st a is convergent & lim a = x0 &
+  rng a c= dom (f/g) /\ left_open_halfline(x0) holds
+  (f/g)*a is convergent & lim((f/g)*a) = diff(f,x0)/diff(g,x0)
+   proof
+    let a;
+    assume A121: a is convergent & lim a = x0 &
+               rng a c= dom (f/g) /\ left_open_halfline(x0);
+    then consider k such that
+    A122: for n st k<=n holds x0-r<a.n & a.n<x0+r by A2,A3,LIMFUNC3:7;
+    set a1 = a^\k;
+     A123: now let n;
+          A124: a1.n = a.(n+k) by SEQM_3:def 9;
+            a.(n+k) in rng a by RFUNCT_2:10;
+          then a.(n+k) in left_open_halfline(x0) by A121,XBOOLE_0:def 3;
+          then a.(n+k) in {g1:g1<x0} by PROB_1:def 15;
+          then ex g1 st a.(n+k)=g1 & g1<x0;
+          hence a1.n<x0 by SEQM_3:def 9;
+            k<=n+k by NAT_1:37;
+          hence x0-r<a1.n by A122,A124;
+         end;
+        defpred X[Nat,real number] means
+          $2 in ].a1.$1,x0.[ & (((f/g)*a)^\k).$1=((f`|N)/(g`|N)).$2;
+    A125: for n ex c be real number st X[n,c]
+         proof
+          let n;
+            x0-r<a1.n & a1.n<x0 by A123;
+          then consider c such that
+          A126: c in ].a1.n,x0.[ & (f/g).(a1.n)=((f`|N)/(g`|N)).c by A77;
+          take c;
+            dom (f/g) /\ left_open_halfline(x0) c= dom (f/g) by XBOOLE_1:17;
+          then A127: rng a c= dom (f/g) by A121,XBOOLE_1:1;
+            rng a1 c= rng a by RFUNCT_2:7;
+          then rng a1 c= dom (f/g) by A127,XBOOLE_1:1;
+          then ((f/g)*(a^\k)).n=((f`|N)/(g`|N)).c by A126,RFUNCT_2:21;
+          hence thesis by A126,A127,RFUNCT_2:22;
+         end;
+    consider b such that
+    A128: for n holds X[n,b.n] from RealSeqChoice(A125);
+    deffunc U(set) = x0;
+    consider d being Real_Sequence such that
+    A129: for n holds d.n=U(n) from ExRealSeq;
+       now
+      let n;
+        d.n=x0 & d.(n+1)=x0 by A129;
+      hence d.n=d.(n+1);
+     end;
+    then A130: d is constant by SEQM_3:16;
+    then A131: d is convergent by SEQ_4:39;
+    A132: lim d=d.0 by A130,SEQ_4:41
+            .=x0 by A129;
+    A133: a1 is convergent & lim a1=x0 by A121,SEQ_4:33;
+     A134: now
+          let n;
+            b.n in ].a1.n,x0.[ by A128;
+          then b.n in {g1:a1.n<g1 & g1<x0} by RCOMP_1:def 2;
+          then ex g1 st g1=b.n & a1.n<g1 & g1<x0; hence a1.n<=b.n & b.n<=
+d.n by A129;
+         end;
+    then A135: b is convergent by A131,A132,A133,SEQ_2:33;
+    A136: lim b=x0 by A131,A132,A133,A134,SEQ_2:34;
+    A137: x0-r<x0 by A2,SQUARE_1:29;
+    A138: x0<x0+r by A2,REAL_2:174;
+    then x0 in {g2: x0-r<g2 & g2<x0+r} by A137;
+    then A139: x0 in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+    A140: rng b c= dom ((f`|N)/(g`|N)) /\ left_open_halfline(x0)
+     proof
+      let x be set;
+      assume x in rng b;
+      then consider n such that A141: x=b.n by RFUNCT_2:9;
+      A142: x0-r<a1.n & a1.n<x0 by A123;
+      A143: x in ].a1.n,x0.[ by A128,A141;
+      then x in {g1:a1.n<g1 & g1<x0} by RCOMP_1:def 2;
+      then ex g1 st g1=x & a1.n<g1 & g1<x0;
+      then x in {g2:g2<x0};
+      then A144: x in left_open_halfline(x0) by PROB_1:def 15;
+       A145: ].a1.n,x0.[ c= [.a1.n,x0.] by RCOMP_1:15;
+        a1.n<x0+r by A138,A142,AXIOMS:22;
+      then a1.n in {g3: x0-r<g3 & g3<x0+r} by A142;
+      then a1.n in ].x0-r,x0+r.[ by RCOMP_1:def 2;
+      then [.a1.n,x0.] c= ].x0-r,x0+r.[ by A139,RCOMP_1:17;
+      then ].a1.n,x0.[ c= ].x0-r,x0+r.[ by A145,XBOOLE_1:1;
+      then ].a1.n,x0.[ c= dom ((f`|N)/(g`|N)) by A1,A2,XBOOLE_1:1;
+hence x in dom ((f`|N)/(g`|N)) /\
+left_open_halfline(x0) by A143,A144,XBOOLE_0:def 3;
+     end;
+      dom ((f`|N)/(g`|N)) /\ left_open_halfline(x0) c= dom ((f`|N)/(g`|N))
+    by XBOOLE_1:17;
+    then A146: rng b c= dom ((f`|N)/(g`|N)) by A140,XBOOLE_1:1;
+     then ((f`|N)/(g`|N))*b is convergent &
+    lim (((f`|N)/(g`|N))*b) = ((f`|N)/(g`|N)).x0
+    by A1,A135,A136,FCONT_1:def 1;
+    then lim (((f`|N)/(g`|N))*b) = ((f`|N).x0)*((g`|N).x0)" by A1,A2,A139,
+RFUNCT_1:def 4
+                           .= diff(f,x0)*((g`|N).x0)" by A1,A2,A139,FDIFF_1:def
+8
+                           .= diff(f,x0)*diff(g,x0)" by A1,A2,A139,FDIFF_1:def
+8;
+    then A147: ((f`|N)/(g`|N))*b is convergent &
+        lim (((f`|N)/(g`|N))*b) = diff(f,x0)*diff(g,x0)" by A1,A135,A136,A146,
+FCONT_1:def 1;
+    A148: now take m = 0; let n such that m <=n;
+           (((f/g)*a)^\k).n=((f`|N)/(g`|N)).(b.n) by A128;
+         hence (((f/g)*a)^\k).n = (((f`|N)/(g`|N))*b).n by A146,RFUNCT_2:21;
+        end;
+    then A149: ((f/g)*a)^\k is convergent by A147,SEQ_4:31;
+       lim (((f/g)*a)^\k) = diff(f,x0)*diff(g,x0)" by A147,A148,SEQ_4:32;
+    then lim(((f/g)*a)^\k) = diff(f,x0)/diff(g,x0) by XCMPLX_0:def 9;
+    hence thesis by A149,SEQ_4:35,36;
+   end;
+  then f/g is_left_convergent_in x0 & lim_left(f/g,x0)=diff(f,x0)/diff(g,x0)
+      by A47,Th3;
+  hence thesis by A76,LIMFUNC3:34;
+ end;

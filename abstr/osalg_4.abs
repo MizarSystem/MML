@@ -1,0 +1,660 @@
+:: Order Sorted Quotient Algebra
+::  by Josef Urban
+::
+:: Received September 19, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_1, MSUALG_1, FUNCT_1, RELAT_1, PBOOLE, BOOLE, EQREL_1,
+      ZF_REFLE, QC_LANG1, PRALG_1, FINSEQ_1, TDGROUP, CARD_3, GROUP_6, ALG_1,
+      FINSEQ_4, SEQM_3, PRALG_2, MSUALG_3, WELLORD1, MSUALG_4, OSALG_1,
+      ORDERS_1, NATTRA_1, RELAT_2, FINSEQ_5, ARYTM_1, TARSKI, YELLOW18,
+      YELLOW15, SETFAM_1, COH_SP, QUANTAL1, OSALG_4;
+ notation ZFMISC_1, TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1,
+      RELSET_1, PARTFUN1, EQREL_1, SETFAM_1, STRUCT_0, XCMPLX_0, XREAL_0,
+      ORDERS_1, ORDERS_3, NAT_1, FUNCT_2, FINSEQ_1, CARD_3, FINSEQ_4, FINSEQ_5,
+      PBOOLE, WAYBEL_0, PRALG_1, MSUALG_1, MSUALG_3, PRALG_2, OSALG_1, OSALG_3,
+      MSUALG_4, YELLOW18;
+ constructors ORDERS_3, INT_1, NAT_1, FINSEQ_5, FINSEQ_4, MSUALG_3, WAYBEL_0,
+      OSALG_3, MSUALG_4, EQREL_1, YELLOW18;
+ clusters MSUALG_1, PRALG_1, MSUALG_3, PRALG_2, RELSET_1, SETFAM_1, STRUCT_0,
+      FINSEQ_5, INT_1, RELAT_1, ORDERS_3, FILTER_1, SUBSET_1, OSALG_1,
+      MSUALG_4, MSAFREE, PARTFUN1;
+ requirements BOOLE, SUBSET, NUMERALS, REAL, ARITHM;
+
+
+begin
+
+definition
+  let R be non empty Poset;
+  cluster Relation-yielding OrderSortedSet of R;
+end;
+
+:: this is a stronger condition for relation than just being order-sorted
+definition
+  let R be non empty Poset;
+  let A,B be ManySortedSet of the carrier of R;
+  let IT be ManySortedRelation of A,B;
+  attr IT is os-compatible means
+:: OSALG_4:def 1
+  for s1,s2 being Element of R st s1 <= s2
+  for x,y being set st x in A.s1 & y in B.s1 holds
+  [x,y] in IT.s1 iff [x,y] in IT.s2;
+end;
+
+definition
+  let R be non empty Poset;
+  let A,B be ManySortedSet of the carrier of R;
+  cluster os-compatible ManySortedRelation of A,B;
+end;
+
+definition
+  let R be non empty Poset;
+  let A,B be ManySortedSet of the carrier of R;
+  mode OrderSortedRelation of A,B is os-compatible ManySortedRelation of A,B;
+  canceled;
+end;
+
+theorem :: OSALG_4:1
+    for R being non empty Poset,
+      A,B being ManySortedSet of the carrier of R,
+      OR being ManySortedRelation of A,B holds
+      OR is os-compatible implies OR is OrderSortedSet of R;
+
+definition
+  let R be non empty Poset;
+  let A,B be ManySortedSet of R;
+  cluster os-compatible -> order-sorted ManySortedRelation of A,B;
+end;
+
+definition
+  let R be non empty Poset;
+  let A be ManySortedSet of the carrier of R;
+  mode OrderSortedRelation of A is OrderSortedRelation of A,A;
+end;
+
+definition
+ let S be OrderSortedSign,
+     U1 be OSAlgebra of S;
+ mode OrderSortedRelation of U1 -> ManySortedRelation of U1 means
+:: OSALG_4:def 3
+ it is os-compatible;
+end;
+
+:: REVISE: the definition of ManySorted diagonal from MSUALG_6
+:: should be moved to MSUALG_4; the "compatible" attr from MSUALG_6
+:: should replace the MSCongruence-like
+
+definition
+ let S be OrderSortedSign,
+     U1 be OSAlgebra of S;
+ cluster MSEquivalence-like OrderSortedRelation of U1;
+end;
+
+:: REVISE: we need the fact that id has the type,
+:: the original prf can be simplified
+definition
+  let S be OrderSortedSign,
+  U1 be non-empty OSAlgebra of S;
+  cluster MSCongruence-like (MSEquivalence-like OrderSortedRelation of U1);
+end;
+
+definition
+  let S be OrderSortedSign,
+  U1 be non-empty OSAlgebra of S;
+  mode OSCongruence of U1 is
+  MSCongruence-like (MSEquivalence-like OrderSortedRelation of U1);
+end;
+
+:: TODO: a smooth transition between Relations and Graphs would
+:: be useful here, the FinSequence approach seemed to me faster than
+:: transitive closure of R \/ R" .. maybe not, can be later a theorem
+:: all could be done generally for reflexive (or with small
+:: modification even non reflexive) Relations
+
+:: I found ex post that attributes disconnected and connected defined
+:: in ORDERS_3 have st. in common here, but the theory there is not developed
+:: suggested improvements: f connects x,y; x is_connected_with y;
+:: connected iff for x,y holds x is_connected_with y
+:: finally I found this is the EqCl from MSUALG_5 - should be merged
+definition
+  let R be non empty Poset;
+  func Path_Rel R -> Equivalence_Relation of the carrier of R means
+:: OSALG_4:def 4
+   for x,y being set holds [x,y] in it iff
+  x in the carrier of R & y in the carrier of R &
+  ex p being FinSequence of the carrier of R
+  st 1 < len p & p.1 = x & p.(len p) = y &
+  for n being Nat st 2 <= n & n <= len p
+  holds [p.n,p.(n-1)] in the InternalRel of R or
+        [p.(n-1),p.n] in the InternalRel of R;
+end;
+
+theorem :: OSALG_4:2
+  for R being non empty Poset, s1,s2 being Element of R
+  st s1 <= s2 holds [s1,s2] in Path_Rel R;
+
+:: again, should be defined for Relations probably
+definition
+  let R be non empty Poset;
+  let s1,s2 be Element of R;
+  pred s1 ~= s2 means
+:: OSALG_4:def 5
+  [s1,s2] in Path_Rel R;
+  reflexivity;
+  symmetry;
+end;
+
+theorem :: OSALG_4:3
+    for R being non empty Poset,
+      s1,s2,s3 being Element of R holds
+  s1 ~= s2 & s2 ~= s3 implies s1 ~= s3;
+
+:: do for Relations
+definition
+  let R be non empty Poset;
+  func Components R -> non empty (Subset-Family of R) equals
+:: OSALG_4:def 6
+  Class Path_Rel R;
+end;
+
+definition
+  let R be non empty Poset;
+  cluster -> non empty Element of Components R;
+end;
+
+definition
+  let R be non empty Poset;
+  mode Component of R is Element of Components R;
+  canceled;
+end;
+
+definition
+  let R be non empty Poset;
+  let s1 be Element of R;
+  func CComp s1 -> Component of R equals
+:: OSALG_4:def 8
+  Class(Path_Rel R,s1);
+end;
+
+theorem :: OSALG_4:4
+  for R being non empty Poset,
+      s1 be Element of R holds
+  s1 in CComp(s1);
+
+theorem :: OSALG_4:5
+  for R being non empty Poset,
+      s1,s2 being Element of R st s1 <= s2 holds
+  CComp(s1) = CComp(s2);
+
+definition
+  let R be non empty Poset;
+  let A be ManySortedSet of the carrier of R;
+  let C be Component of R;
+  func A-carrier_of C equals
+:: OSALG_4:def 9
+  union {A.s where s is Element of R: s in C};
+end;
+
+theorem :: OSALG_4:6
+  for R being non empty Poset,
+      A being ManySortedSet of the carrier of R,
+      s being (Element of R),
+      x being set st x in A.s holds
+  x in A-carrier_of CComp(s);
+
+definition
+  let R be non empty Poset;
+  attr R is locally_directed means
+:: OSALG_4:def 10
+   for C being Component of R holds C is directed;
+end;
+
+theorem :: OSALG_4:7
+  for R being discrete non empty Poset holds
+  for x,y being Element of R st
+  [x,y] in Path_Rel R holds x = y;
+
+theorem :: OSALG_4:8
+  for R being discrete non empty Poset,
+      C being Component of R
+  ex x being Element of R st
+  C = {x};
+
+theorem :: OSALG_4:9
+  for R being discrete non empty Poset holds R is locally_directed;
+
+:: the system could generate this one from the following
+definition
+  cluster locally_directed (non empty Poset);
+end;
+
+definition
+  cluster locally_directed OrderSortedSign;
+end;
+
+definition
+  cluster discrete -> locally_directed (non empty Poset);
+end;
+
+definition
+  let S be locally_directed (non empty Poset);
+  cluster -> directed Component of S;
+end;
+
+theorem :: OSALG_4:10
+  {} is Equivalence_Relation of {};
+
+:: Much of what follows can be done generally for OrderSortedRelations
+:: of OrderSortedSets (and not just OrderSortedRelations of OSAlgebras),
+:: unfortunately, multiple inheritence would be needed to widen the
+:: latter to the former
+
+:: Classes on connected components
+definition
+  let S be locally_directed OrderSortedSign;
+  let A be OSAlgebra of S;
+  let E be MSEquivalence-like OrderSortedRelation of A;
+  let C be Component of S;
+  func CompClass(E,C) -> Equivalence_Relation of
+  (the Sorts of A)-carrier_of C means
+:: OSALG_4:def 11
+   for x,y being set holds
+  [x,y] in it iff ex s1 being Element of S
+  st s1 in C & [x,y] in E.s1;
+end;
+
+:: we could give a name to Class CompClass(E,C)
+:: restriction of Class CompClass(E,C) to A.s1
+definition
+  let S be locally_directed OrderSortedSign;
+  let A be OSAlgebra of S;
+  let E be MSEquivalence-like OrderSortedRelation of A;
+  let s1 be Element of S;
+  func OSClass(E,s1) -> Subset of Class(CompClass(E,CComp(s1))) means
+:: OSALG_4:def 12
+
+  for z being set holds z in it iff
+  ex x being set st x in (the Sorts of A).s1 &
+  z = Class( CompClass(E,CComp(s1)), x);
+end;
+
+definition
+  let S be locally_directed OrderSortedSign;
+  let A be non-empty OSAlgebra of S;
+  let E be MSEquivalence-like OrderSortedRelation of A;
+  let s1 be Element of S;
+  cluster OSClass(E,s1) -> non empty;
+end;
+
+theorem :: OSALG_4:11
+  for S being locally_directed OrderSortedSign,
+   A being OSAlgebra of S,
+   E being (MSEquivalence-like OrderSortedRelation of A),
+   s1,s2 being Element of S st s1 <= s2
+  holds OSClass(E,s1) c= OSClass(E,s2);
+
+:: finally, this is analogy of the Many-Sorted Class E for order-sorted E
+:: this definition should work for order-sorted MSCongruence too
+:: if non-empty not needed, prove the following cluster
+definition
+  let S be locally_directed OrderSortedSign;
+  let A be OSAlgebra of S;
+  let E be MSEquivalence-like OrderSortedRelation of A;
+  func OSClass E -> OrderSortedSet of S means
+:: OSALG_4:def 13
+   for s1 being Element of S holds
+  it.s1 = OSClass(E,s1);
+end;
+
+definition
+  let S be locally_directed OrderSortedSign;
+  let A be non-empty OSAlgebra of S;
+  let E be MSEquivalence-like OrderSortedRelation of A;
+  cluster OSClass E -> non-empty;
+end;
+
+:: order-sorted equiv of Class(R,x)
+definition
+  let S be locally_directed OrderSortedSign;
+  let U1 be non-empty OSAlgebra of S;
+  let E be MSEquivalence-like OrderSortedRelation of U1;
+  let s be Element of S;
+  let x be Element of (the Sorts of U1).s;
+  func OSClass(E,x) -> Element of OSClass(E,s) equals
+:: OSALG_4:def 14
+    Class( CompClass(E, CComp(s)), x);
+end;
+
+theorem :: OSALG_4:12
+    for R being locally_directed (non empty Poset),
+      x,y being Element of R
+    st (ex z being Element of R st z <= x & z <= y)
+  holds ex u being Element of R st x <= u & y <= u;
+
+theorem :: OSALG_4:13
+  for S be locally_directed OrderSortedSign,
+      U1 be non-empty OSAlgebra of S,
+      E be (MSEquivalence-like OrderSortedRelation of U1),
+      s be (Element of S),
+      x,y be Element of (the Sorts of U1).s holds
+  OSClass(E,x) = OSClass(E,y) iff [x,y] in E.s;
+
+theorem :: OSALG_4:14
+  for S be locally_directed OrderSortedSign,
+      U1 be non-empty OSAlgebra of S,
+      E be (MSEquivalence-like OrderSortedRelation of U1),
+      s1,s2 be (Element of S),
+      x be Element of (the Sorts of U1).s1 st
+      s1 <= s2 holds
+   for y being Element of (the Sorts of U1).s2
+      st y = x holds OSClass(E,x) = OSClass(E,y);
+
+begin
+          ::::::::::::::::::::::::::::::::::::::
+          ::   Order Sorted Quotient Algebra  ::
+          ::::::::::::::::::::::::::::::::::::::
+:: take care (or even prove counterexample) - order-sorted
+:: ManySortedFunction generaly doesnot exist
+
+reserve S for locally_directed OrderSortedSign;
+reserve o for Element of the OperSymbols of S;
+
+:: multiclasses
+definition let S,o;
+           let A be non-empty OSAlgebra of S;
+           let R be OSCongruence of A;
+           let x be Element of Args(o,A);
+func R #_os x -> Element of product ((OSClass R) * (the_arity_of o)) means
+:: OSALG_4:def 15
+
+     for n be Nat st n in dom (the_arity_of o)
+     ex y being Element of (the Sorts of A).((the_arity_of o)/.n)
+     st y = x.n & it.n = OSClass(R, y);
+end;
+
+:: the quotient will be different for order-sorted;
+:: this def seems ok for order-sorted
+definition let S,o;
+  let A be non-empty OSAlgebra of S;
+  let R be OSCongruence of A;
+func OSQuotRes(R,o) ->
+Function of ((the Sorts of A) * the ResultSort of S).o,
+              ((OSClass R) * the ResultSort of S).o means
+:: OSALG_4:def 16
+ for x being Element of (the Sorts of A).(the_result_sort_of o)
+  holds it.x = OSClass(R,x);
+
+func OSQuotArgs(R,o) ->
+Function of ((the Sorts of A)# * the Arity of S).o,
+            ((OSClass R)# * the Arity of S).o means
+:: OSALG_4:def 17
+  for x be Element of Args(o,A) holds it.x = R #_os x;
+end;
+
+definition let S;
+  let A be non-empty OSAlgebra of S;
+  let R be OSCongruence of A;
+  func OSQuotRes R ->
+  ManySortedFunction of ((the Sorts of A) * the ResultSort of S),
+                        ((OSClass R) * the ResultSort of S) means
+:: OSALG_4:def 18
+   for o being OperSymbol of S holds it.o = OSQuotRes(R,o);
+
+ func OSQuotArgs R ->
+ ManySortedFunction of (the Sorts of A)# * the Arity of S,
+                       (OSClass R)# * the Arity of S means
+:: OSALG_4:def 19
+    for o be OperSymbol of S holds it.o = OSQuotArgs(R,o);
+end;
+
+theorem :: OSALG_4:15
+for A be non-empty OSAlgebra of S,
+    R be OSCongruence of A, x be set
+ st x in ((OSClass R)# * the Arity of S).o
+ ex a be Element of Args(o,A) st x = R #_os a;
+
+definition let S,o;
+  let A be non-empty OSAlgebra of S;
+  let R be OSCongruence of A;
+  func OSQuotCharact(R,o) ->
+  Function of ((OSClass R)# * the Arity of S).o,
+              ((OSClass R) * the ResultSort of S).o means
+:: OSALG_4:def 20
+  for a be Element of Args(o,A) st
+    R #_os a in ((OSClass R)# * the Arity of S).o
+    holds it.(R #_os a) = ((OSQuotRes(R,o)) * (Den(o,A))).a;
+end;
+
+definition let S;
+  let A be non-empty OSAlgebra of S;
+  let R be OSCongruence of A;
+ func OSQuotCharact R -> ManySortedFunction of
+      (OSClass R)# * the Arity of S, (OSClass R) * the ResultSort of S
+      means
+:: OSALG_4:def 21
+      for o be OperSymbol of S holds it.o = OSQuotCharact(R,o);
+end;
+
+definition let S;
+  let U1 be non-empty OSAlgebra of S;
+  let R be OSCongruence of U1;
+  func QuotOSAlg(U1,R) -> OSAlgebra of S equals
+:: OSALG_4:def 22
+    MSAlgebra(# OSClass R, OSQuotCharact R #);
+end;
+
+:: we could note that for discrete the QuotOSAlg and QuotMsAlg are equal
+
+definition let S; let U1 be non-empty OSAlgebra of S;
+ let R be OSCongruence of U1;
+ cluster QuotOSAlg (U1,R) -> strict non-empty;
+end;
+
+definition let S; let U1 be non-empty OSAlgebra of S;
+           let R be OSCongruence of U1;
+           let s be Element of S;
+ func OSNat_Hom(U1,R,s) ->
+      Function of (the Sorts of U1).s,OSClass(R,s) means
+:: OSALG_4:def 23
+  for x being Element of (the Sorts of U1).s holds
+    it.x = OSClass(R,x);
+end;
+
+definition let S; let U1 be non-empty OSAlgebra of S;
+           let R be OSCongruence of U1;
+ func OSNat_Hom(U1,R) ->
+      ManySortedFunction of U1, QuotOSAlg (U1,R) means
+:: OSALG_4:def 24
+  for s be Element of S holds it.s = OSNat_Hom(U1,R,s);
+end;
+
+theorem :: OSALG_4:16
+    for U1 be non-empty OSAlgebra of S,
+  R be OSCongruence of U1 holds
+  OSNat_Hom(U1,R) is_epimorphism U1, QuotOSAlg (U1,R) &
+  OSNat_Hom(U1,R) is order-sorted;
+
+theorem :: OSALG_4:17
+  for U1,U2 being non-empty OSAlgebra of S,
+      F being ManySortedFunction of U1,U2 st
+      F is_homomorphism U1,U2 & F is order-sorted holds
+  MSCng(F) is OSCongruence of U1;
+
+:: just a casting func, currently no other way how to employ the type system
+definition let S; let U1,U2 be non-empty OSAlgebra of S;
+           let F be ManySortedFunction of U1,U2;
+ assume  F is_homomorphism U1,U2 & F is order-sorted;
+ func OSCng(F) -> OSCongruence of U1 equals
+:: OSALG_4:def 25
+  MSCng(F);
+end;
+
+definition let S; let U1,U2 be non-empty OSAlgebra of S;
+           let F be ManySortedFunction of U1,U2;
+           let s be Element of S;
+assume  F is_homomorphism U1,U2 & F is order-sorted;
+func OSHomQuot(F,s) -> Function of
+ (the Sorts of (QuotOSAlg (U1,OSCng F))).s,(the Sorts of U2).s means
+:: OSALG_4:def 26
+ for x be Element of (the Sorts of U1).s holds
+  it.(OSClass(OSCng(F),x)) = (F.s).x;
+end;
+
+:: this seems a bit too permissive, but same as the original
+:: we should assume F order-sorted probably
+definition let S; let U1,U2 be non-empty OSAlgebra of S;
+           let F be ManySortedFunction of U1,U2;
+func OSHomQuot(F) ->
+     ManySortedFunction of (QuotOSAlg (U1, OSCng F)),U2 means
+:: OSALG_4:def 27
+ for s be Element of S holds it.s = OSHomQuot(F,s);
+end;
+
+theorem :: OSALG_4:18
+for U1,U2 be non-empty OSAlgebra of S,
+ F be ManySortedFunction of U1,U2 st
+  F is_homomorphism U1,U2 & F is order-sorted holds
+   OSHomQuot(F) is_monomorphism QuotOSAlg (U1,OSCng F),U2 &
+   OSHomQuot(F) is order-sorted;
+
+theorem :: OSALG_4:19
+for U1,U2 be non-empty OSAlgebra of S,
+ F be ManySortedFunction of U1,U2 st
+  F is_epimorphism U1,U2 & F is order-sorted holds
+   OSHomQuot(F) is_isomorphism QuotOSAlg (U1,OSCng F),U2;
+
+theorem :: OSALG_4:20
+  for U1,U2 be non-empty OSAlgebra of S,
+ F be ManySortedFunction of U1,U2 st
+  F is_epimorphism U1,U2 & F is order-sorted holds
+   QuotOSAlg (U1,OSCng F),U2 are_isomorphic;
+
+:: monotone OSCongruence ... monotonicity is properly stronger
+:: than MSCongruence, so we define it more broadly and prove the
+:: ccluster then, however if used for other things than OSCongruences
+:: the name of the attribute should be changed
+:: this condition is nontrivial only for nonmonotone osas (see further),
+:: where Den(o1,U1).x1 can differ from Den(o2,U2).x1
+:: is OK for constants ... their Args is always {{}}, so o1 <= o2
+:: implies for them [Den(o1,U1).{},Den(o2,U1).{}] in R
+definition
+ let S be OrderSortedSign,
+     U1 be non-empty OSAlgebra of S,
+     R be MSEquivalence-like OrderSortedRelation of U1;
+  attr R is monotone means
+:: OSALG_4:def 28
+  for o1,o2 being OperSymbol of S st o1 <= o2
+  for x1 being Element of Args(o1,U1)
+  for x2 being Element of Args(o2,U1) st
+      ( for y being Nat st y in dom x1 holds
+        [x1.y,x2.y] in R.((the_arity_of o2)/.y)
+      )
+  holds [Den(o1,U1).x1,Den(o2,U1).x2] in R.(the_result_sort_of o2);
+end;
+
+theorem :: OSALG_4:21
+  for S being OrderSortedSign,
+      U1 being non-empty OSAlgebra of S holds
+  [| the Sorts of U1, the Sorts of U1 |] is OSCongruence of U1;
+
+theorem :: OSALG_4:22
+  for S being OrderSortedSign,
+      U1 being non-empty OSAlgebra of S,
+      R being OSCongruence of U1 st
+      R = [| (the Sorts of U1), (the Sorts of U1) |] holds
+      R is monotone;
+
+definition
+  let S be OrderSortedSign,
+      U1 be non-empty OSAlgebra of S;
+cluster monotone OSCongruence of U1;
+end;
+
+definition
+ let S be OrderSortedSign,
+     U1 be non-empty OSAlgebra of S;
+cluster monotone (MSEquivalence-like OrderSortedRelation of U1);
+end;
+
+theorem :: OSALG_4:23
+  for S being OrderSortedSign,
+      U1 being non-empty OSAlgebra of S,
+      R being monotone (MSEquivalence-like OrderSortedRelation of U1)
+  holds R is MSCongruence-like;
+
+definition
+ let S be OrderSortedSign,
+     U1 be non-empty OSAlgebra of S;
+cluster monotone -> MSCongruence-like
+                   (MSEquivalence-like OrderSortedRelation of U1);
+end;
+
+theorem :: OSALG_4:24
+  for S being OrderSortedSign,
+      U1 being monotone non-empty OSAlgebra of S,
+      R being OSCongruence of U1 holds
+      R is monotone;
+
+definition
+  let S be OrderSortedSign,
+      U1 be monotone non-empty OSAlgebra of S;
+cluster -> monotone OSCongruence of U1;
+end;
+
+:: monotonicity of quotient by monotone oscongruence
+definition let S;
+  let U1 be non-empty OSAlgebra of S;
+  let R be monotone OSCongruence of U1;
+cluster QuotOSAlg(U1,R) -> monotone;
+end;
+
+theorem :: OSALG_4:25
+  for S ::being locally_directed OrderSortedSign,
+for U1 be non-empty OSAlgebra of S,
+   R be monotone OSCongruence of U1 holds
+    QuotOSAlg(U1,R) is monotone OSAlgebra of S;
+
+theorem :: OSALG_4:26
+    for U1 being non-empty OSAlgebra of S,
+      U2 being monotone non-empty OSAlgebra of S,
+      F being ManySortedFunction of U1,U2 st
+      F is_homomorphism U1,U2 & F is order-sorted holds
+  OSCng(F) is monotone;
+
+:: these are a bit more general versions of OSHomQuot, that
+:: I need for OSAFREE; more proper way how to do this is restating
+:: the MSUALG_9 quotient theorems for OSAs, but that's more work
+definition let S; let U1,U2 be non-empty OSAlgebra of S;
+           let F be ManySortedFunction of U1,U2;
+           let R be OSCongruence of U1;
+           let s be Element of S;
+assume  F is_homomorphism U1,U2 & F is order-sorted
+           & R c= OSCng F;
+func OSHomQuot(F,R,s) -> Function of
+ (the Sorts of (QuotOSAlg (U1,R))).s,(the Sorts of U2).s means
+:: OSALG_4:def 29
+ for x be Element of (the Sorts of U1).s holds
+  it.(OSClass(R,x)) = (F.s).x;
+end;
+
+:: this seems a bit too permissive, but same as the original
+:: we should assume F order-sorted probably
+definition let S; let U1,U2 be non-empty OSAlgebra of S;
+           let F be ManySortedFunction of U1,U2;
+           let R be OSCongruence of U1;
+func OSHomQuot(F,R) ->
+     ManySortedFunction of (QuotOSAlg (U1, R)),U2 means
+:: OSALG_4:def 30
+ for s be Element of S holds it.s = OSHomQuot(F,R,s);
+end;
+
+theorem :: OSALG_4:27
+  for U1,U2 be non-empty OSAlgebra of S,
+ F be ManySortedFunction of U1,U2,
+ R be OSCongruence of U1 st
+  F is_homomorphism U1,U2 & F is order-sorted & R c= OSCng F
+  holds
+   OSHomQuot(F,R) is_homomorphism QuotOSAlg (U1,R),U2 &
+   OSHomQuot(F,R) is order-sorted;

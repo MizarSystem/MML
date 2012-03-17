@@ -1,0 +1,11 @@
+HIDDEN
+XBOOLE_0
+ZFMISC_1
+SUBSET_1
+#
+AndScheme
+#
+M1 W1 ;;;
+R1 ËM2 F1 ;;;B1 &P1 B1 ;P2 B1 ;;K3 ËM2 F1 ;;;B1 P1 B1 ;ËM2 F1 ;;;B1 P2 B1 ;;;;
+#
+!

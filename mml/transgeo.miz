@@ -1,0 +1,1918 @@
+:: Transformations in Affine Spaces
+::  by Henryk Oryszczyszyn and Krzysztof Pra\.zmowski
+::
+:: Received May 31, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_2, FUNCT_1, BOOLE, RELAT_1, RELAT_2, ANALOAF, DIRAF, PARSP_1,
+      INCSP_1, AFF_1, TRANSGEO;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_2, FUNCT_1, RELSET_1,
+      STRUCT_0, ANALOAF, DIRAF, PARTFUN1, FUNCT_2, AFF_1;
+ constructors DOMAIN_1, RELAT_2, AFF_1, MEMBERED, PARTFUN1, XBOOLE_0;
+ clusters ANALOAF, DIRAF, RELSET_1, STRUCT_0, FUNCT_2, MEMBERED, ZFMISC_1,
+      PARTFUN1, FUNCT_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions RELAT_2;
+ theorems DOMAIN_1, FUNCT_1, FUNCT_2, ANALOAF, DIRAF, AFF_1, PASCH, TARSKI,
+      ZFMISC_1, RELAT_1, REALSET1, XBOOLE_0;
+ schemes FUNCT_2;
+
+begin
+
+ reserve A for non empty set,
+         a,b,x,y,z,t for Element of A,
+         f,g,h for Permutation of A;
+
+definition let A be set, f,g be Permutation of A;
+ redefine func g*f -> Permutation of A;
+ coherence proof thus g*f is Permutation of A; end;
+end;
+
+canceled;
+
+theorem Th2:
+   ex x st f.x=y
+ proof
+    y in A & rng f = A by FUNCT_2:def 3;
+  then ex x being set st x in dom f & f.x = y by FUNCT_1:def 5;
+  hence thesis;
+ end;
+
+canceled;
+
+theorem Th4:
+   f.x=y iff (f").y=x
+   proof A1: f is one-to-one & rng f = A &
+    f is Function of A,A by FUNCT_2:def 3;
+       now assume f.x=y;
+     then f".(f.x)=f".y & x in A;
+     then f".(f.x)=f".y & x in dom f by FUNCT_2:def 1;
+     hence x=f".y by FUNCT_1:56; end;
+    hence thesis by A1,FUNCT_1:57;
+   end;
+
+definition let A,f,g;
+ func f\g -> Permutation of A equals
+  :Def1: (g*f)*g";
+  coherence;
+ end;
+
+scheme EXPermutation{A() -> non empty set,P[set,set]}:
+  ex f being Permutation of A()
+   st for x,y being Element of A() holds f.x=y iff P[x,y]
+  provided
+A1:  for x being Element of A()
+      ex y being Element of A() st P[x,y] and
+A2:  for y being Element of A()
+      ex x being Element of A() st P[x,y] and
+A3:  for x,y,x' being Element of A()
+       st P[x,y] & P[x',y] holds x=x' and
+A4:  for x,y,y' being Element of A()
+       st P[x,y] & P[x,y'] holds y=y'
+ proof
+   defpred X[Element of A(),Element of A()] means P[$1,$2];
+A5:  for x being Element of A()
+      ex y being Element of A() st X[x,y] by A1;
+  consider f being Function of A(), A() such that
+A6: for x being Element of A() holds X[x,f.x] from FuncExD(A5);
+    now
+     now let x1,x2 be set;
+    assume
+A7:    x1 in A() & x2 in A();
+    then P[x1,f.x1] & P[x2,f.x2] &
+      f.x1 is Element of A() & f.x2 is Element of A() by A6,FUNCT_2:7;
+    hence f.x1 = f.x2 implies x1 = x2 by A3,A7;
+   end;
+   hence f is one-to-one by FUNCT_2:25;
+     now
+     thus rng f c= A();
+       now let y be set;
+       assume A8: y in A();
+       then consider x being Element of A() such that
+A9:       P[x,y] by A2;
+         P[x,f.x] & f.x is Element of A() by A6;
+       then f.x = y & A() <> {} by A4,A8,A9;
+       hence y in rng f by FUNCT_2:6;
+     end;
+     hence A() c= rng f by TARSKI:def 3;
+   end;
+   hence rng f = A() by XBOOLE_0:def 10;
+  end;
+  then reconsider f as Permutation of A() by FUNCT_2:83;
+  take f;
+  let x,y be Element of A();
+  thus f.x=y implies P[x,y] by A6;
+  assume
+A10:   P[x,y];
+    P[x,f.x] by A6;
+  hence thesis by A4,A10;
+ end;
+
+canceled 4;
+
+theorem
+   f.(f".x) = x & f".(f.x) = x by Th4;
+
+canceled;
+
+theorem
+   f*(id A) = (id A)*f
+proof f*(id A)=f by FUNCT_2:23; hence thesis by FUNCT_2:23; end;
+
+Lm1: f*g=f*h implies g=h
+  proof assume f*g=f*h;
+    then (f"*f)*g=f"*(f*h) by RELAT_1:55;
+    then (f"*f)*g=(f"*f)*h by RELAT_1:55;
+    then (id A)*g=(f"*f)*h by FUNCT_2:88;
+    then (id A)*g=(id A)*h by FUNCT_2:88;
+    then g=(id A)*h by FUNCT_2:23;
+   hence thesis by FUNCT_2:23;
+  end;
+
+Lm2: g*f=h*f implies g=h
+  proof assume g*f=h*f;
+    then g*(f*f")=(h*f)*f" by RELAT_1:55;
+    then g*(f*f")=h*(f*f") by RELAT_1:55;
+    then g*(id A)=h*(f*f") by FUNCT_2:88;
+    then g*(id A)=h*(id A) by FUNCT_2:88;
+    then g=h*(id A) by FUNCT_2:23;
+   hence thesis by FUNCT_2:23;
+  end;
+
+canceled;
+
+theorem
+   g*f=h*f or f*g=f*h implies g=h by Lm1,Lm2;
+
+canceled 2;
+
+theorem
+   (f*g)\h = (f\h)*(g\h)
+  proof thus
+     (f*g)\h = (h*(f*g))*h" by Def1
+          .= (h*(f*((id A)*g)))*h" by FUNCT_2:23
+          .= (h*(f*((h"*h)*g)))*h" by FUNCT_2:88
+          .= (h*(f*(h"*(h*g))))*h" by RELAT_1:55
+          .= (h*((f*h")*(h*g)))*h" by RELAT_1:55
+          .= ((h*(f*h"))*(h*g))*h" by RELAT_1:55
+          .= (h*(f*h"))*((h*g)*h") by RELAT_1:55
+          .= ((h*f)*h")*((h*g)*h") by RELAT_1:55
+          .= (f\h)*((h*g)*h") by Def1
+          .= (f\h)*(g\h) by Def1;
+  end;
+
+theorem
+   (f")\g = (f\g)"
+ proof thus (f\g)" = ((g*f)*g")" by Def1
+        .= (g")"*(g*f)" by FUNCT_1:66
+        .= (g")"*(f"*g") by FUNCT_1:66
+        .= g*(f"*g") by FUNCT_1:65
+        .= (g*f")*g" by RELAT_1:55
+        .= f"\g by Def1;
+ end;
+
+theorem
+   f\(g*h) = (f\h)\g
+ proof
+  thus f\(g*h) = ((g*h)*f)*(g*h)" by Def1
+              .= ((g*h)*f)*(h"*g") by FUNCT_1:66
+              .= (((g*h)*f)*h")*g" by RELAT_1:55
+              .= ((g*(h*f))*h")*g" by RELAT_1:55
+              .= (g*((h*f)*h"))*g" by RELAT_1:55
+              .= (g*(f\h))*g" by Def1
+              .= (f\h)\g by Def1;
+ end;
+
+theorem
+   (id A)\f = id A
+ proof
+  thus (id A)\f = (f*(id A))*f" by Def1
+                            .= f*f" by FUNCT_2:23
+                            .= id A by FUNCT_2:88;
+ end;
+
+theorem
+   f\(id A) = f
+ proof thus f\(id A) = ((id A)*f)*(id A)" by Def1
+                       .= f*(id A)" by FUNCT_2:23
+                       .= f*(id A) by FUNCT_1:67
+                       .= f by FUNCT_2:23;
+ end;
+
+theorem
+   f.a=a implies (f\g).(g.a)=g.a
+ proof assume A1: f.a=a; A2: g".(g.a) = (g"*g).a by FUNCT_2:70
+                                   .= (id A).a by FUNCT_2:88
+                                   .= a by FUNCT_1:35;
+  thus (f\g).(g.a) = ((g*f)*g").(g.a) by Def1
+              .= (g*f).a by A2,FUNCT_2:70
+              .= g.a by A1,FUNCT_2:70;
+  end;
+
+reserve R for Relation of [:A,A:];
+
+definition let A,f,R;
+ pred f is_FormalIz_of R means
+ :Def2: for x,y holds [[x,y],[f.x,f.y]] in R;
+end;
+
+canceled;
+
+theorem
+ Th23: R is_reflexive_in [:A,A:] implies id A is_FormalIz_of R
+  proof assume A1: for x being set st x in [:A,A:] holds [x,x] in R;
+   let x,y;
+   A2: (id A).x = x & (id A).y = y by FUNCT_1:35;
+     [x,y] in [:A,A:] by ZFMISC_1:def 2;
+   hence thesis by A1,A2;
+  end;
+
+theorem
+ Th24: R is_symmetric_in [:A,A:] & f is_FormalIz_of R
+                                       implies f" is_FormalIz_of R
+  proof assume A1: for x,y being set st x in [:A,A:] & y in [:A,A:] &
+                                            [x,y] in R holds [y,x] in R;
+   assume A2: for x,y holds [[x,y],[f.x,f.y]] in R;
+   let x,y;
+   A3: f.(f".x) = x & f.(f".y) =y by Th4;
+     [[f".x,f".y],[f.(f".x),f.(f".y)]] in R & [f".x,f".y] in [:A,A:] &
+    [f.(f".x),f.(f".y)] in [:A,A:] by A2,ZFMISC_1:def 2;
+   hence thesis by A1,A3;
+ end;
+
+theorem
+    R is_transitive_in [:A,A:] & f is_FormalIz_of R
+                 & g is_FormalIz_of R implies (f*g) is_FormalIz_of R
+   proof assume that A1: (for x,y,z being set st x in [:A,A:] &
+    y in [:A,A:] & z in [:A,A:] & [x,y] in R & [y,z] in R holds [x,z] in R)
+    and A2: (for x,y holds [[x,y],[f.x,f.y]] in R) &
+    (for x,y holds [[x,y],[g.x,g.y]] in R);
+    let x,y;
+       f.(g.x) = (f*g).x & f.(g.y) = (f*g).y by FUNCT_2:70;
+    then [[x,y],[g.x,g.y]] in R & [[g.x,g.y],[(f*g).x,(f*g).y]] in R &
+    [x,y] in [:A,A:] & [g.x,g.y] in [:A,A:] &
+            [(f*g).x,(f*g).y] in [:A,A:] by A2,ZFMISC_1:def 2;
+    hence [[x,y],[(f*g).x,(f*g).y]] in R by A1;
+   end;
+
+theorem Th26:
+   (for a,b,x,y,z,t st [[x,y],[a,b]] in R & [[a,b],[z,t]] in R & a<>b
+     holds [[x,y],[z,t]] in R) & (for x,y,z holds [[x,x],[y,z]] in R) &
+   f is_FormalIz_of R & g is_FormalIz_of R implies f*g is_FormalIz_of R
+   proof assume that A1: for a,b,x,y,z,t st
+    [[x,y],[a,b]] in R & [[a,b],[z,t]] in R & a<>b holds [[x,y],[z,t]] in R
+    and A2: for x,y,z holds [[x,x],[y,z]] in R
+    and A3: (for x,y holds [[x,y],[f.x,f.y]] in R) &
+    (for x,y holds [[x,y],[g.x,g.y]] in R);
+    let x,y;
+       f.(g.x) = (f*g).x & f.(g.y) = (f*g).y by FUNCT_2:70;
+    then A4: [[x,y],[g.x,g.y]] in R & [[g.x,g.y],[(f*g).x,(f*g).y]] in R &
+    [x,y] in [:A,A:] & [g.x,g.y] in [:A,A:] &
+            [(f*g).x,(f*g).y] in [:A,A:] by A3,ZFMISC_1:def 2;
+     now assume g.x = g.y; then x = y by FUNCT_2:85;
+    hence [[x,y],[(f*g).x,(f*g).y]] in R by A2;
+   end;
+   hence [[x,y],[(f*g).x,(f*g).y]] in R by A1,A4;
+   end;
+
+definition
+ let A; let f; let R;
+ pred f is_automorphism_of R means :Def3:
+  for x,y,z,t holds ([[x,y],[z,t]] in R iff [[f.x,f.y],[f.z,f.t]] in R);
+end;
+
+canceled;
+
+theorem Th28:
+ id A is_automorphism_of R
+ proof let x,y,z,t;
+  A1: (id A).x = x & (id A).y = y & (id A).z = z & (id A).t = t by FUNCT_1:35;
+  hence [[x,y],[z,t]] in R implies
+   [[(id A).x,(id A).y],[(id A).z,(id A).t]] in R;
+  assume [[(id A).x,(id A).y],[(id A).z,(id A).t]] in R;
+   hence [[x,y],[z,t]] in R by A1;
+ end;
+
+theorem Th29:
+ f is_automorphism_of R implies f" is_automorphism_of R
+ proof assume A1: for x,y,z,t holds
+   ([[x,y],[z,t]] in R iff [[f.x,f.y],[f.z,f.t]] in R);
+  let x,y,z,t;
+     f.(f".x) = x & f.(f".y) = y & f.(f".z) = z & f.(f".t) = t by Th4;
+   hence thesis by A1;
+ end;
+
+theorem Th30:
+ f is_automorphism_of R & g is_automorphism_of R implies
+                                    g*f is_automorphism_of R
+ proof assume A1: (for x,y,z,t holds
+   ([[x,y],[z,t]] in R iff [[f.x,f.y],[f.z,f.t]] in R)) &
+ (for x,y,z,t holds ([[x,y],[z,t]] in R iff [[g.x,g.y],[g.z,g.t]] in R));
+  let x,y,z,t;
+  A2: g.(f.x) = (g*f).x & g.(f.y) = (g*f).y &
+      g.(f.z) = (g*f).z & g.(f.t) = (g*f).t by FUNCT_2:70;
+     ([[x,y],[z,t]] in R iff [[f.x,f.y],[f.z,f.t]] in R) &
+   ([[f.x,f.y],[f.z,f.t]] in R iff
+             [[g.(f.x),g.(f.y)],[g.(f.z),g.(f.t)]] in R) by A1;
+   hence thesis by A2;
+ end;
+
+theorem
+   R is_symmetric_in [:A,A:] & R is_transitive_in [:A,A:] &
+            f is_FormalIz_of R implies f is_automorphism_of R
+proof assume that
+ A1: for x,y being set st x in [:A,A:] & y in [:A,A:] &
+                            [x,y] in R holds [y,x] in R and
+ A2: for x,y,z being set st x in [:A,A:] &
+   y in [:A,A:] & z in [:A,A:] & [x,y] in R & [y,z] in R holds [x,z] in R and
+ A3: for x,y holds [[x,y],[f.x,f.y]] in R;
+ let x,y,z,t;
+ A4: [x,y] in [:A,A:] & [z,t] in [:A,A:] & [f.x,f.y] in [:A,A:] &
+     [f.z,f.t] in [:A,A:] by ZFMISC_1:def 2;
+  A5: now assume A6: [[x,y],[z,t]] in R;
+    [[x,y],[f.x,f.y]] in R & [[z,t],[f.z,f.t]] in R by A3;
+  then [[f.x,f.y],[x,y]] in R & [[z,t],[f.z,f.t]] in R by A1,A4;
+  then [[f.x,f.y],[z,t]] in R & [[z,t],[f.z,f.t]] in R by A2,A4,A6;
+  hence [[f.x,f.y],[f.z,f.t]] in R by A2,A4; end;
+    now assume A7: [[f.x,f.y],[f.z,f.t]] in R;
+    [[x,y],[f.x,f.y]] in R & [[z,t],[f.z,f.t]] in R by A3;
+  then [[x,y],[f.z,f.t]] in R & [[f.z,f.t],[z,t]] in R by A1,A2,A4,A7;
+  hence [[x,y],[z,t]] in R by A2,A4; end;
+  hence thesis by A5;
+ end;
+
+theorem
+   (for a,b,x,y,z,t st [[x,y],[a,b]] in R & [[a,b],[z,t]] in R & a<>b
+     holds [[x,y],[z,t]] in R) & (for x,y,z holds [[x,x],[y,z]] in R) &
+    R is_symmetric_in [:A,A:] &
+   f is_FormalIz_of R implies f is_automorphism_of R
+   proof assume that A1: for a,b,x,y,z,t st
+    [[x,y],[a,b]] in R & [[a,b],[z,t]] in R & a<>b holds [[x,y],[z,t]] in R
+    and A2: for x,y,z holds [[x,x],[y,z]] in R and
+    A3: for x,y being set st x in [:A,A:] & y in [:A,A:] &
+                            [x,y] in R holds [y,x] in R and
+    A4: for x,y holds [[x,y],[f.x,f.y]] in R;
+    A5: for x,y,z holds [[y,z],[x,x]] in R proof let x,y,z;
+     A6: [y,z] in [:A,A:] & [x,x] in [:A,A:] by ZFMISC_1:def 2;
+       [[x,x],[y,z]] in R by A2; hence thesis by A3,A6; end;
+ let x,y,z,t;
+ A7: [x,y] in [:A,A:] & [z,t] in [:A,A:] & [f.x,f.y] in [:A,A:] &
+     [f.z,f.t] in [:A,A:] by ZFMISC_1:def 2;
+  A8: [[x,y],[f.x,f.y]] in R & [[z,t],[f.z,f.t]] in R by A4;
+  then A9: [[f.x,f.y],[x,y]] in R & [[f.z,f.t],[z,t]] in R by A3,A7;
+  A10: now assume A11: [[x,y],[z,t]] in R;
+      now assume A12: x<>y & z<>t; then [[f.x,f.y],[z,t]] in R
+    by A1,A9,A11; hence [[f.x,f.y],[f.z,f.t]] in R by A1,A8,A12; end;
+   hence [[f.x,f.y],[f.z,f.t]] in R by A2,A5; end;
+     now assume A13: [[f.x,f.y],[f.z,f.t]] in R;
+   A14: now assume f.x = f.y; then x=y by FUNCT_2:85;
+    hence [[x,y],[z,t]] in R by A2; end;
+   A15: now assume f.z = f.t; then z=t by FUNCT_2:85;
+    hence [[x,y],[z,t]] in R by A5; end;
+      now assume A16: f.x<>f.y & f.z<>f.t; then [[x,y],[f.z,f.t]] in R
+    by A1,A8,A13; hence [[x,y],[z,t]] in R by A1,A9,A16; end;
+   hence [[x,y],[z,t]] in R by A14,A15; end;
+ hence thesis by A10;
+end;
+
+theorem
+     f is_FormalIz_of R & g is_automorphism_of R
+          implies f\g is_FormalIz_of R
+ proof assume that
+  A1: for x,y holds [[x,y],[f.x,f.y]] in R and
+  A2: for x,y,z,t holds ([[x,y],[z,t]] in R iff
+                          [[g.x,g.y],[g.z,g.t]] in R);
+  let x,y;
+  A3: g.(g".x) = x & g.(g".y) = y by Th4;
+    [[g".x,g".y],[f.(g".x),f.(g".y)]] in R by A1;
+  then [[x,y],[g.(f.(g".x)),g.(f.(g".y))]] in R by A2,A3;
+  then [[x,y],[(g*f).(g".x),g.(f.(g".y))]] in R by FUNCT_2:70;
+  then [[x,y],[(g*f).(g".x),(g*f).(g".y)]] in R by FUNCT_2:70;
+  then [[x,y],[((g*f)*g").x,(g*f).(g".y)]] in R by FUNCT_2:70;
+  then [[x,y],[((g*f)*g").x,((g*f)*g").y]] in R by FUNCT_2:70;
+  then [[x,y],[(f\g).x,((g*f)*g").y]] in R by Def1;
+  hence [[x,y],[(f\g).x,(f\g).y]] in R by Def1;
+ end;
+
+reserve AS for non empty AffinStruct;
+
+definition let AS; let f be Permutation of the carrier of AS;
+  pred f is_DIL_of AS means
+  :Def4: f is_FormalIz_of the CONGR of AS;
+end;
+
+reserve a,b,x,y for Element of AS;
+
+canceled;
+
+theorem Th35: for f being Permutation of the carrier of AS holds
+      (f is_DIL_of AS iff (for a,b holds a,b // f.a,f.b))
+  proof let f be Permutation of the carrier of AS;
+   A1: now assume f is_DIL_of AS;
+    then A2: f is_FormalIz_of the CONGR of AS by Def4;
+    let a,b; [[a,b],[f.a,f.b]] in the CONGR of AS by A2,Def2;
+    hence a,b // f.a,f.b by ANALOAF:def 2; end;
+      now assume A3: for a,b holds a,b // f.a,f.b;
+      for x,y holds [[x,y],[f.x,f.y]] in the CONGR of AS proof
+      let x,y; x,y // f.x,f.y by A3; hence thesis by ANALOAF:def 2; end;
+    then f is_FormalIz_of the CONGR of AS by Def2;
+    hence f is_DIL_of AS by Def4; end;
+   hence thesis by A1; end;
+
+definition let IT be non empty AffinStruct;
+ attr IT is CongrSpace-like means
+  :Def5: (for x,y,z,t,a,b being Element of IT st
+           x,y // a,b & a,b // z,t & a<>b holds x,y // z,t) &
+           (for x,y,z being Element of IT holds
+           x,x // y,z) &
+           (for x,y,z,t being Element of IT st
+           x,y // z,t holds z,t // x,y) &
+           (for x,y being Element of IT holds
+           x,y // x,y);
+end;
+
+definition
+ cluster strict CongrSpace-like (non empty AffinStruct);
+  existence
+   proof consider OAS being strict OAffinSpace;
+       (for x,y,z,t,a,b being Element of OAS st
+           x,y // a,b & a,b // z,t & a<>b holds x,y // z,t) &
+     (for x,y,z being Element of OAS holds
+          x,x // y,z) &
+     (for x,y,z,t being Element of OAS st
+          x,y // z,t holds z,t // x,y) &
+      for x,y being Element of OAS holds
+          x,y // x,y by DIRAF:4,5,6,7;
+      then OAS is CongrSpace-like by Def5;
+     hence thesis;
+   end;
+end;
+
+definition
+  mode CongrSpace is CongrSpace-like (non empty AffinStruct);
+end;
+
+reserve CS for CongrSpace;
+
+Lm3: the CONGR of CS is_reflexive_in [:the carrier of CS,the carrier of CS:]
+ proof let x be set; assume
+     x in [:the carrier of CS,the carrier of CS:];
+  then consider x1,x2 being Element of CS such that
+  A1: x=[x1,x2] by DOMAIN_1:9;
+    x1,x2 // x1,x2 by Def5;
+  hence [x,x] in the CONGR of CS by A1,ANALOAF:def 2;
+ end;
+
+Lm4: the CONGR of CS is_symmetric_in [:the carrier of CS,the carrier of CS:]
+ proof let x,y be set; assume that
+  A1: x in [:the carrier of CS,the carrier of CS:] &
+  y in [:the carrier of CS,the carrier of CS:] and
+  A2: [x,y] in the CONGR of CS;
+  consider x1,x2 being Element of CS such that
+  A3: x=[x1,x2] by A1,DOMAIN_1:9;
+  consider y1,y2 being Element of CS such that
+  A4: y=[y1,y2] by A1,DOMAIN_1:9;
+    x1,x2 // y1,y2 by A2,A3,A4,ANALOAF:def 2; then y1,y2 // x1,x2 by Def5;
+hence [y,x] in the CONGR of CS by A3,A4,ANALOAF:def 2; end;
+
+canceled;
+
+theorem Th37: id the carrier of CS is_DIL_of CS
+ proof
+    the CONGR of CS is_reflexive_in
+   [:the carrier of CS,the carrier of CS:] by Lm3;
+ then id the carrier of CS is_FormalIz_of the CONGR of CS by Th23;
+ hence thesis by Def4; end;
+
+theorem Th38: for f being Permutation of the carrier of CS st
+           f is_DIL_of CS holds f" is_DIL_of CS
+ proof let f be Permutation of the carrier of CS;
+  assume f is_DIL_of CS; then f is_FormalIz_of the CONGR of CS &
+   the CONGR of CS is_symmetric_in
+        [:the carrier of CS,the carrier of CS:] by Def4,Lm4;
+   then f" is_FormalIz_of the CONGR of CS by Th24;
+   hence thesis by Def4;
+ end;
+
+theorem Th39: for f,g being Permutation of the carrier of CS st
+    f is_DIL_of CS & g is_DIL_of CS holds f*g is_DIL_of CS
+ proof let f,g be Permutation of the carrier of CS;
+  assume f is_DIL_of CS & g is_DIL_of CS;
+  then A1: f is_FormalIz_of the CONGR of CS &
+                   g is_FormalIz_of the CONGR of CS by Def4;
+   A2: now let a,b,x,y,z,t be Element of CS;
+     assume [[x,y],[a,b]] in the CONGR of CS &
+      [[a,b],[z,t]] in the CONGR of CS & a<>b;
+      then x,y // a,b & a,b // z,t & a<>b by ANALOAF:def 2;
+      then x,y // z,t by Def5;
+      hence [[x,y],[z,t]] in the CONGR of CS by ANALOAF:def 2;
+      end;
+      now let x,y,z be Element of CS;
+       x,x // y,z by Def5;
+     hence [[x,x],[y,z]] in the CONGR of CS by ANALOAF:def 2;
+    end;
+   then f*g is_FormalIz_of the CONGR of CS by A1,A2,Th26;
+   hence thesis by Def4;
+ end;
+
+reserve OAS for OAffinSpace;
+reserve a,b,c,d,p,q,r,x,y,z,t,u for Element of OAS;
+
+theorem Th40: OAS is CongrSpace-like proof
+ thus for x,y,z,t,a,b being Element of OAS st
+   x,y // a,b & a,b // z,t & a<>b holds x,y // z,t by DIRAF:6;
+ thus for x,y,z being Element of OAS holds
+        x,x // y,z by DIRAF:7;
+ thus for x,y,z,t being Element of OAS st
+        x,y // z,t holds z,t // x,y by DIRAF:5;
+ thus for x,y being Element of OAS holds
+        x,y // x,y by DIRAF:4;
+end;
+
+reserve f,g for Permutation of the carrier of OAS;
+
+definition let OAS; let f be Permutation of the carrier of OAS;
+  attr f is positive_dilatation means
+  :Def6: f is_DIL_of OAS;
+  synonym f is_CDil;
+end;
+
+canceled;
+
+theorem Th42: for f being Permutation of the carrier of OAS holds
+  (f is_CDil iff (for a,b holds a,b // f.a,f.b))
+ proof let f be Permutation of the carrier of OAS;
+ A1: now assume f is_CDil; then f is_DIL_of OAS by Def6;
+   hence for a,b holds a,b // f.a,f.b by Th35; end;
+    now assume for a,b holds a,b // f.a,f.b; then f is_DIL_of OAS by Th35;
+   hence f is_CDil by Def6; end;
+ hence thesis by A1; end;
+
+definition let OAS; let f be Permutation of the carrier of OAS;
+  attr f is negative_dilatation means
+  :Def7: for a,b holds a,b // f.b,f.a;
+  synonym f is_SDil;
+end;
+
+canceled;
+
+theorem Th44: id the carrier of OAS is_CDil
+  proof OAS is CongrSpace by Th40; then id the carrier of OAS is_DIL_of OAS
+  by Th37; hence thesis by Def6; end;
+
+theorem for f being Permutation of the carrier of OAS st
+       f is_CDil holds f" is_CDil
+  proof let f be Permutation of the carrier of OAS such that A1: f is_CDil;
+  A2: OAS is CongrSpace by Th40;
+    f is_DIL_of OAS by A1,Def6; then f" is_DIL_of OAS by A2,Th38;
+  hence thesis by Def6; end;
+
+theorem for f,g being Permutation of the carrier of OAS st
+      f is_CDil & g is_CDil holds f*g is_CDil
+  proof let f,g be Permutation of the carrier of OAS; assume
+    f is_CDil & g is_CDil; then f is_DIL_of OAS & g is_DIL_of OAS &
+  OAS is CongrSpace by Def6,Th40;
+  then f*g is_DIL_of OAS by Th39; hence thesis by Def6; end;
+
+theorem
+   not ex f st f is_SDil & f is_CDil
+  proof given f such that A1: f is_SDil & f is_CDil;
+   consider a,b such that A2: a<>b by REALSET1:def 20;
+     a,b // f.a,f.b & a,b // f.b,f.a by A1,Def7,Th42;
+   then f.a,f.b // f.b,f.a by A2,ANALOAF:def 5; then f.a = f.b by ANALOAF:def 5
+;
+   hence contradiction by A2,FUNCT_2:85;
+  end;
+
+theorem
+   f is_SDil implies f" is_SDil
+  proof assume A1: f is_SDil; let x,y;
+    set x'=f".x, y'=f".y;
+      f.x'=x & f.y'=y by Th4; then y',x' // x,y by A1,Def7;
+   hence x,y // f".y,f".x by DIRAF:5;
+  end;
+
+theorem f is_CDil & g is_SDil
+                    implies f*g is_SDil & g*f is_SDil
+  proof assume that A1: f is_CDil and A2: g is_SDil;
+   thus x,y // (f*g).y,(f*g).x
+     proof set x'=g.x; set y'=g.y;
+       A3: (f*g).x= f.x' & (f*g).y=f.y' by FUNCT_2:70;
+       A4: x,y // y',x' by A2,Def7;
+A5:       y',x' // f.y',f.x' by A1,Th42;
+         now assume x'=y'; then x=y by FUNCT_2:85;
+        hence x,y // (f*g).y,(f*g).x by DIRAF:7;
+       end;
+      hence x,y // (f*g).y,(f*g).x by A3,A4,A5,DIRAF:6;
+     end;
+   thus x,y // (g*f).y,(g*f).x
+     proof set x'=f.x; set y'=f.y;
+     A6: (g*f).x= g.x' & (g*f).y=g.y' by FUNCT_2:70;
+       A7: x,y // x',y' by A1,Th42;
+A8:       x',y' // g.y',g.x' by A2,Def7;
+         now assume x'=y'; then x=y by FUNCT_2:85;
+        hence x,y // (g*f).y,(g*f).x by DIRAF:7;
+       end;
+      hence x,y // (g*f).y,(g*f).x by A6,A7,A8,DIRAF:6;
+     end;
+  end;
+
+definition let OAS; let f be Permutation of the carrier of OAS;
+  attr f is dilatation means
+  :Def8: f is_FormalIz_of lambda(the CONGR of OAS);
+  synonym f is_Dil;
+end;
+
+canceled;
+
+theorem Th51:
+ for f being Permutation of the carrier of OAS holds
+       (f is_Dil iff (for a,b holds a,b '||' f.a,f.b))
+ proof let f be Permutation of the carrier of OAS;
+ A1: now assume f is_Dil;
+  then A2: f is_FormalIz_of lambda(the CONGR of OAS) by Def8;
+  let a,b; [[a,b],[f.a,f.b]] in lambda(the CONGR of OAS) by A2,Def2;
+  hence a,b '||' f.a,f.b by DIRAF:23; end;
+    now assume A3: for a,b holds a,b '||' f.a,f.b;
+     now let a,b; a,b '||' f.a,f.b by A3; hence
+      [[a,b],[f.a,f.b]] in lambda(the CONGR of OAS) by DIRAF:23; end;
+   then f is_FormalIz_of lambda(the CONGR of OAS) by Def2;
+   hence f is_Dil by Def8; end;
+ hence thesis by A1; end;
+
+theorem
+   f is_CDil or f is_SDil implies f is_Dil
+  proof assume A1: f is_CDil or f is_SDil;
+      now let x,y; x,y // f.x,f.y or x,y // f.y,f.x by A1,Def7,Th42;
+    hence x,y '||' f.x,f.y by DIRAF:def 4; end;
+  hence thesis by Th51; end;
+
+theorem
+   for f being Permutation of the carrier of OAS st f is_Dil
+ ex f' being Permutation of the carrier of Lambda(OAS) st
+   f=f' & f' is_DIL_of Lambda(OAS)
+ proof let f be Permutation of the carrier of OAS; assume f is_Dil;
+ then A1: f is_FormalIz_of lambda(the CONGR of OAS) by Def8;
+A2: Lambda(OAS) =
+ AffinStruct(#the carrier of OAS, lambda(the CONGR of OAS)#) by DIRAF:def 2;
+ then reconsider f'=f as Permutation of the carrier of Lambda(OAS);
+ take f';
+ thus thesis by A1,A2,Def4; end;
+
+ theorem
+    for f being Permutation of the carrier of Lambda(OAS)
+    st f is_DIL_of Lambda(OAS) ex f' being Permutation of the carrier of OAS
+    st f=f' & f' is_Dil
+  proof let f be Permutation of the carrier of Lambda(OAS);
+  assume f is_DIL_of Lambda(OAS);
+  then A1: f is_FormalIz_of the CONGR of Lambda(OAS) by Def4;
+A2:  Lambda(OAS) =
+  AffinStruct(#the carrier of OAS, lambda(the CONGR of OAS)#) by DIRAF:def 2;
+  then reconsider f'=f as Permutation of the carrier of OAS;
+  take f';
+  thus thesis by A1,A2,Def8; end;
+
+theorem
+   id the carrier of OAS is_Dil
+  proof
+     now let x,y; (id the carrier of OAS).x = x &
+      (id the carrier of OAS).y = y by FUNCT_1:35;
+    hence x,y '||' (id the carrier of OAS).x,(id the carrier of OAS).y
+       by DIRAF:24; end;
+   hence thesis by Th51;
+  end;
+
+theorem Th56:
+ f is_Dil implies f" is_Dil
+  proof assume A1: f is_Dil;
+     now let x,y;
+     set x'=f".x; set y'=f".y;
+       f.x'=x & f.y'=y by Th4; then x',y' '||' x,y by A1,Th51;
+     hence x,y '||' f".x,f".y by DIRAF:27; end;
+   hence thesis by Th51;
+  end;
+
+theorem Th57:
+ f is_Dil & g is_Dil implies f*g is_Dil
+  proof assume that A1: f is_Dil and A2: g is_Dil;
+     now let x,y; set x'=g.x; set y'=g.y;
+    A3: (f*g).x= f.x' by FUNCT_2:70; A4: (f*g).y=f.y' by FUNCT_2:70;
+A5:    x,y '||' x',y' & x',y' '||' f.x',f.y' by A1,A2,Th51;
+      now assume x'=y'; then x=y by FUNCT_2:85;
+     hence x,y '||' (f*g).x,(f*g).y by DIRAF:25;
+    end;
+   hence x,y '||' (f*g).x,(f*g).y by A3,A4,A5,DIRAF:28; end;
+  hence thesis by Th51;
+  end;
+
+theorem Th58:
+f is_Dil implies (for a,b,c,d holds a,b '||' c,d iff f.a,f.b '||' f.c,f.d)
+  proof assume A1: f is_Dil; let a,b,c,d;
+    A2: a,b '||' f.a,f.b by A1,Th51;
+    A3: c,d '||' f.c,f.d by A1,Th51;
+    A4: now assume a,b '||' c,d;
+         then A5: f.a,f.b '||' c,d or a=b by A2,DIRAF:28;
+            now assume A6: f.a,f.b '||' c,d;
+               c = d implies f.a,f.b '||' f.c,f.d by DIRAF:25;
+           hence f.a,f.b '||' f.c,f.d by A3,A6,DIRAF:28;
+          end;
+         hence f.a,f.b '||' f.c,f.d by A5,DIRAF:25;
+        end;
+      now assume A7: f.a,f.b '||' f.c,f.d;
+      A8: now assume f.a=f.b; then a=b by FUNCT_2:85;
+           hence a,b '||' c,d by DIRAF:25;
+          end;
+        now assume A9: a,b '||' f.c,f.d;
+          now assume f.c = f.d; then c = d by FUNCT_2:85;
+         hence a,b '||' c,d by DIRAF:25;
+        end;
+       hence a,b '||' c,d by A3,A9,DIRAF:28;
+      end;
+     hence a,b '||' c,d by A2,A7,A8,DIRAF:28;
+    end;
+   hence thesis by A4;
+  end;
+
+theorem Th59:
+ f is_Dil implies (for a,b,c holds LIN a,b,c iff LIN f.a,f.b,f.c)
+  proof assume A1: f is_Dil; let a,b,c;
+      a,b '||' a,c iff f.a,f.b '||' f.a,f.c by A1,Th58;
+   hence LIN a,b,c iff LIN f.a,f.b,f.c by DIRAF:def 5;
+  end;
+
+theorem Th60:
+ f is_Dil & LIN x,f.x,y implies LIN x,f.x,f.y
+  proof assume A1: f is_Dil; assume A2: LIN x,f.x,y;
+      now assume A3: x<>y;
+        x,f.x '||' x,y & x,y '||' f.x,f.y by A1,A2,Th51,DIRAF:def 5;
+      then x,f.x '||' f.x,f.y by A3,DIRAF:28;
+      then f.x,x '||' f.x,f.y by DIRAF:27;
+      then LIN f.x,x,f.y by DIRAF:def 5; hence LIN x,f.x,f.y by DIRAF:36;
+    end;
+   hence thesis by DIRAF:37;
+  end;
+
+theorem Th61:
+ a,b '||' c,d implies (a,c '||' b,d or (ex x st LIN a,c,x & LIN b,d,x))
+ proof assume A1: a,b '||' c,d;
+  assume A2: not a,c '||' b,d;
+  A3: now assume a=b; then LIN a,c,a & LIN b,d,a by DIRAF:37;
+   hence thesis; end;
+     now assume A4: a<>b;
+   consider z such that A5: a,b '||' c,z & a,c '||' b,z by DIRAF:31;
+   A6: now assume b=z; then b,a '||' b,c by A5,DIRAF:27;
+    then LIN b,a,c by DIRAF:def 5; then LIN a,c,b & LIN b,d,b by DIRAF:36,37;
+    hence thesis; end;
+      now assume A7: b<>z;
+      c,d '||' c,z by A1,A4,A5,DIRAF:28; then LIN c,d,z by DIRAF:def 5;
+   then LIN d,c,z by DIRAF:36; then d,c '||' d,z by DIRAF:def 5;
+   then z,d '||' d,c by DIRAF:27; then consider t such that
+   A8: b,d '||' d,t & b,z '||' c,t by A2,A5,DIRAF:32;
+     a,c '||' c,t by A5,A7,A8,DIRAF:28;
+   then c,a '||' c,t & d,b '||' d,t by A8,DIRAF:27;
+   then LIN c,a,t & LIN d,b,t by DIRAF:def 5;
+   then LIN a,c,t & LIN b,d,t by DIRAF:36;
+   hence thesis; end;
+   hence thesis by A6; end;
+  hence thesis by A3;
+ end;
+
+theorem Th62:
+f is_Dil implies ((f=id the carrier of OAS or for x holds f.x<>x) iff
+             (for x,y holds x,f.x '||' y,f.y))
+  proof assume A1: f is_Dil;
+    A2: now assume A3: f=(id the carrier of OAS) or for z holds f.z<>z;
+         let x,y; A4: x,y '||' f.x,f.y by A1,Th51;
+          A5: now assume f=(id the carrier of OAS); then f.y=y by FUNCT_1:35;
+                hence x,f.x '||' y,f.y by DIRAF:25; end;
+            now assume A6: for z holds f.z<>z;
+            assume A7: not x,f.x '||' y,f.y; then consider z
+            such that A8: LIN x,f.x,z & LIN y,f.y,z by A4,Th61;
+            set t=f.z; LIN x,f.x,t by A1,A8,Th60;
+            then A9: x,f.x '||' z,t by A8,DIRAF:40;
+              LIN y,f.y,z & LIN y,f.y,t & y<>f.y by A1,A6,A8,Th60;
+            then y,f.y '||' z,t by DIRAF:40;
+            then z<>t & z,t '||' y,f.y by A6,DIRAF:27;
+           hence contradiction by A7,A9,DIRAF:28;
+          end;
+         hence x,f.x '||' y,f.y by A3,A5;
+        end;
+      now assume A10: for x,y holds x,f.x '||' y,f.y;
+      assume A11: f<>(id the carrier of OAS);
+      given x such that A12: f.x=x;
+      consider y such that
+      A13: f.y<>(id the carrier of OAS).y by A11,FUNCT_2:113;
+      A14:f.y<>y by A13,FUNCT_1:35; x,y '||' f.x,f.y by A1,Th51;
+      then A15: LIN x,y,f.y by A12,DIRAF:def 5;
+      then A16: LIN y,f.y,x by DIRAF:36; LIN y,x,f.y by A15,DIRAF:36;
+      then A17: y,x '||' y,f.y by DIRAF:def 5; x<>y by A12,A13,FUNCT_1:35;
+      then consider z such that A18: not LIN x,y,z by DIRAF:43;
+        x,z '||' f.x,f.z by A1,Th51; then LIN x,z,f.z by A12,DIRAF:def 5;
+      then A19: LIN z,f.z,x by DIRAF:36;
+A20:      now assume z=f.z; then z,y '||' z,f.y by A1,Th51;
+        then LIN z,y,f.y by DIRAF:def 5;
+        then LIN y,f.y,y & LIN y,f.y,z by DIRAF:36,37;
+       hence contradiction by A14,A16,A18,DIRAF:38; end;
+         LIN z,f.z,z by DIRAF:37;
+      then A21: z,f.z '||' x,z by A19,DIRAF:40;
+        y,f.y '||' z,f.z by A10; then y,f.y '||' x,z by A20,A21,DIRAF:28;
+      then y,x '||' x,z by A14,A17,DIRAF:28;
+      then x,y '||' x,z by DIRAF:27;
+     hence contradiction by A18,DIRAF:def 5;
+    end; hence thesis by A2;
+  end;
+
+theorem Th63:
+  f is_Dil & f.a=a & f.b=b & not LIN a,b,x implies f.x=x
+  proof assume that A1: f is_Dil and A2: f.a=a & f.b=b and A3: not LIN a,b,x;
+    assume A4: f.x<>x; a,x '||' a,f.x by A1,A2,Th51;
+    then LIN a,x,f.x by DIRAF:def 5; then A5: LIN x,f.x,a by DIRAF:36;
+      b,x '||' b,f.x by A1,A2,Th51; then LIN b,x,f.x by DIRAF:def 5;
+    then LIN x,f.x,x & LIN x,f.x,b by DIRAF:36,37;
+   hence contradiction by A3,A4,A5,DIRAF:38;
+  end;
+
+theorem Th64:
+f is_Dil & f.a=a & f.b=b & a<>b implies f=(id the carrier of OAS)
+  proof assume that A1: f is_Dil and A2: f.a=a & f.b=b & a<>b;
+      now let x;
+     A3:  not LIN a,b,x implies f.x=x by A1,A2,Th63;
+       now assume A4: LIN a,b,x;
+        now assume A5: x<>a; consider z such that
+       A6: not LIN a,b,z by A2,DIRAF:43;
+       A7: f.z=z by A1,A2,A6,Th63;
+         not LIN a,z,x
+       proof assume LIN a,z,x;
+         then LIN a,x,a & LIN a,x,z & LIN a,x,b by A4,DIRAF:36,37;
+        hence contradiction by A5,A6,DIRAF:38;
+       end;
+      hence f.x=x by A1,A2,A7,Th63;
+      end;
+      hence f.x=x by A2;
+     end;
+     hence f.x=(id the carrier of OAS).x by A3,FUNCT_1:35;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+
+theorem
+    f is_Dil & g is_Dil & f.a=g.a & f.b=g.b implies a=b or f=g
+  proof assume that A1: f is_Dil & g is_Dil and
+     A2: f.a=g.a & f.b=g.b;
+    assume A3: a<>b; A4: (g"*f).a=g".(g.a) by A2,FUNCT_2:70 .=a by Th4;
+    A5: (g"*f).b=g".(g.b) by A2,FUNCT_2:70
+    .=b by Th4;
+      g" is_Dil by A1,Th56; then g"*f is_Dil by A1,Th57;
+    then A6: g"*f=(id the carrier of OAS) by A3,A4,A5,Th64;
+      now let x; g".(f.x)=(g"*f).x by FUNCT_2:70;
+      then g".(f.x)=x by A6,FUNCT_1:35;
+     hence g.x=f.x by Th4;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+
+definition let OAS; let f be Permutation of the carrier of OAS;
+  attr f is translation means
+  :Def9: f is_Dil & (f = id the carrier of OAS or for a holds a<>f.a);
+  synonym f is_Tr;
+end;
+
+canceled;
+
+theorem
+Th67: f is_Dil implies (f is_Tr iff (for x,y holds x,f.x '||' y,f.y))
+  proof assume A1: f is_Dil;
+    then (f=id the carrier of OAS or for x holds f.x<>x) iff
+             (for x,y holds x,f.x '||' y,f.y) by Th62;
+   hence thesis by A1,Def9;
+  end;
+
+canceled;
+
+theorem Th69:
+  f is_Tr & g is_Tr & f.a=g.a & not LIN a,f.a,x implies f.x=g.x
+  proof assume that A1: f is_Tr & g is_Tr and A2: f.a=g.a and
+A3: not LIN a,f.a,x;
+    A4: f is_Dil & g is_Dil by A1,Def9;
+    set b=f.a, y=f.x, z=g.x;
+    A5: a,x '||' b,y & a,b '||' x,y by A1,A4,Th51,Th67;
+      a,x '||' b,z & a,b '||' x,z by A1,A2,A4,Th51,Th67;
+   hence f.x=g.x by A3,A5,PASCH:12;
+  end;
+
+theorem Th70:
+f is_Tr & g is_Tr & f.a=g.a implies f=g
+  proof assume that
+    A1: f is_Tr and A2: g is_Tr and A3: f.a=g.a;
+    A4: f is_Dil by A1,Def9;
+    set b=f.a;
+    A5: now assume b=a;
+          then f=id the carrier of OAS &
+            g=id the carrier of OAS by A1,A2,A3,Def9;
+         hence thesis;
+        end;
+      now assume A6: a<>b;
+        for x holds f.x=g.x
+        proof let x;
+            now assume A7: LIN a,b,x;
+              now assume x<>a; consider p such that
+              A8: not LIN a,b,p by A6,DIRAF:43;
+              A9: f.p=g.p by A1,A2,A3,A8,Th69;
+                f<>(id the carrier of OAS) by A6,FUNCT_1:35;
+              then A10: f.p<>p & f.x<>x by A1,Def9;
+                not LIN p,f.p,x
+                proof assume LIN p,f.p,x;
+                  then LIN p,f.p,x & LIN p,f.p,f.x & LIN p,f.p,p
+                                                  by A4,Th60,DIRAF:37;
+                  then A11: LIN x,f.x,p by A10,DIRAF:38;
+                  A12: LIN a,b,f.x by A4,A7,Th60;
+                    LIN a,b,a by DIRAF:37;
+                  then A13: LIN x,f.x,a by A6,A7,A12,DIRAF:38;
+                    LIN a,b,b by DIRAF:37;
+                  then LIN x,f.x,b by A6,A7,A12,DIRAF:38;
+                 hence contradiction by A8,A10,A11,A13,DIRAF:38;
+                end;
+             hence f.x=g.x by A1,A2,A9,Th69;
+            end;
+           hence f.x=g.x by A3;
+          end;
+         hence f.x=g.x by A1,A2,A3,Th69;
+        end;
+       hence thesis by FUNCT_2:113;
+      end;
+     hence thesis by A5;
+  end;
+
+theorem Th71:
+ f is_Tr implies f" is_Tr
+  proof assume A1: f is_Tr; then f is_Dil by Def9;
+    then A2: f" is_Dil by Th56;
+A3: f=(id the carrier of OAS) implies f"=(id the carrier of OAS) by FUNCT_1:67;
+      now assume A4: for x holds f.x<>x;
+      given y such that A5: f".y=y;
+        f.y=y by A5,Th4;
+     hence contradiction by A4;
+    end;
+   hence thesis by A1,A2,A3,Def9;
+  end;
+
+theorem
+   f is_Tr & g is_Tr implies (f*g) is_Tr
+  proof assume that A1: f is_Tr and A2: g is_Tr;
+    A3: f is_Dil by A1,Def9; g is_Dil by A2,Def9;
+    then A4: (f*g) is_Dil by A3,Th57;
+      now assume A5: (f*g)<>(id the carrier of OAS);
+        for x holds (f*g).x<>x
+        proof given x such that
+          A6: (f*g).x=x; f.(g.x)=x by A6,FUNCT_2:70;
+          then g.x=f".x & f" is_Tr by A1,Th4,Th71;
+          then f*g=f*f" by A2,Th70;
+         hence contradiction by A5,FUNCT_2:88;
+        end;
+     hence thesis by A4,Def9;
+    end;
+   hence thesis by A4,Def9;
+  end;
+
+Lm5:
+ f is_Tr & not LIN a,f.a,b implies
+         a,b // f.a,f.b & a,f.a // b,f.b
+  proof assume that A1: f is_Tr and A2: not LIN a,f.a,b;
+    A3: f is_Dil by A1,Def9; then A4: a,b '||' f.a,f.b by Th51;
+      a,f.a '||' b,f.b by A1,A3,Th67;
+   hence a,b // f.a,f.b & a,f.a // b,f.b by A2,A4,PASCH:21;
+  end;
+
+Lm6: f is_Tr & a<>f.a & LIN a,f.a,b implies a,f.a // b,f.b
+  proof assume that A1: f is_Tr and A2: a<>f.a and
+    A3: LIN a,f.a,b;
+    A4: f is_Dil by A1,Def9; consider p such that
+    A5: not LIN a,f.a,p by A2,DIRAF:43; f<>(id the carrier of OAS) by A2,
+FUNCT_1:35;
+    then A6: p<>f.p & b<>f.b by A1,Def9;
+    A7: not LIN p,f.p,a
+      proof assume LIN p,f.p,a;
+        then LIN p,f.p,p & LIN p,f.p,a & LIN p,f.p,f.a by A4,Th60,DIRAF:37;
+       hence contradiction by A5,A6,DIRAF:38;
+      end;
+   A8: not LIN p,f.p,b
+      proof assume A9: LIN p,f.p,b;
+          LIN a,f.a,b & LIN a,f.a,f.b & LIN a,f.a,a by A3,A4,Th60,DIRAF:37;
+        then LIN b,f.b,a by A2,DIRAF:38;
+        then A10: LIN b,f.b,f.a & LIN b,f.b,a by A4,Th60;
+        A11: LIN p,f.p,f.b by A4,A9,Th60; LIN p,f.p,p by DIRAF:37;
+        then LIN b,f.b,p by A6,A9,A11,DIRAF:38;
+       hence contradiction by A5,A6,A10,DIRAF:38;
+      end;
+    A12: p,a // f.p,f.a & p,f.p // a,f.a by A1,A7,Lm5;
+       p,b // f.p,f.b & p,f.p // b,f.b by A1,A8,Lm5;
+   hence a,f.a // b,f.b by A6,A12,ANALOAF:def 5;
+  end;
+
+Lm7: f is_Tr & Mid a,f.a,b & a<>f.a implies a,b // f.a,f.b
+ proof assume that A1: f is_Tr and A2: Mid a,f.a,b and A3: a<>f.a;
+A4:   LIN a,f.a,b by A2,DIRAF:34; then A5: a,f.a // b,f.b by A1,A3,Lm6;
+    now assume A6: b<>f.a; Mid b,f.a,a by A2,DIRAF:13;
+   then b,f.a // f.a,a by DIRAF:def 3; then b,f.a // b,a by ANALOAF:def 5;
+   then A7: a,b // f.a,b by DIRAF:5;
+     a,f.a // f.a,b by A2,DIRAF:def 3; then f.a,b // b,f.b by A3,A5,ANALOAF:def
+5
+;
+   then f.a,b // f.a,f.b by ANALOAF:def 5;
+   hence a,b // f.a,f.b by A6,A7,DIRAF:6; end;
+ hence thesis by A1,A3,A4,Lm6; end;
+
+Lm8: f is_Tr & a<>f.a & b<>f.a & Mid a,b,f.a implies a,b // f.a,f.b
+ proof assume A1: f is_Tr & a<>f.a & b<>f.a & Mid a,b,f.a;
+  then A2: f<>(id the carrier of OAS) by FUNCT_1:35;
+  A3: f is_Dil by A1,Def9; A4: LIN a,b,f.a by A1,DIRAF:34;
+  then A5: LIN a,f.a,b by DIRAF:36;
+  A6: a,b // b,f.a by A1,DIRAF:def 3;
+     now assume A7: a<>b;
+A8:   a,b '||' f.a,f.b by A3,Th51;
+     now assume A9: a,b // f.b,f.a;
+    A10: Mid f.a,f.b,b proof a,b // a,f.a & a,f.a // b,f.b by A1,A5,A6,Lm6,
+ANALOAF:def 5; then a,b // b,f.b by A1,DIRAF:6;
+      then b,f.b // f.b,f.a by A7,A9,ANALOAF:def 5
+; then Mid b,f.b,f.a by DIRAF:def 3;
+      hence thesis by DIRAF:13; end;
+    consider q such that A11: not LIN a,f.a,q by A1,DIRAF:43;
+    consider x such that A12: q,b // b,x & q,a // f.a,x by A6,A7,ANALOAF:def 5;
+    A13: x<>f.a proof assume x=f.a;
+     then Mid q,b,f.a by A12,DIRAF:def 3; then LIN q,b,f.a by DIRAF:34;
+     then LIN f.a,b,q & LIN f.a,b,a & LIN f.a,b,b by A4,DIRAF:36,37;
+     then LIN a,b,q & LIN a,b,f.a & LIN a,b,a by A1,DIRAF:36,38;
+     hence contradiction by A7,A11,DIRAF:38; end;
+    A14: not LIN x,f.a,b proof assume LIN x,f.a,b; then LIN
+ f.a,x,b by DIRAF:36;
+     then f.a,x '||' f.a,b & q,a '||' f.a,x by A12,DIRAF:def 4,def 5;
+     then f.a,b '||' q,a & LIN f.a,b,a by A4,A13,DIRAF:28,36;
+     then f.a,b '||' q,a & f.a,b '||' f.a,a by DIRAF:def 5;
+     then f.a,a '||' q,a by A1,DIRAF:28; then a,f.a '||' a,q by DIRAF:27;
+     hence contradiction by A11,DIRAF:def 5; end;
+    A15: a,q // f.a,f.q & a,f.a // q,f.q & a<>q by A1,A11,Lm5,DIRAF:37;
+      Mid q,b,x by A12,DIRAF:def 3;
+    then A16: Mid x,b,q by DIRAF:13;
+    A17: LIN x,f.a,f.q proof a,q // x,f.a by A12,DIRAF:5;
+     then f.a,f.q // x,f.a by A15,ANALOAF:def 5
+; then f.a,f.q '||' f.a,x by DIRAF:def 4;
+     then LIN f.a,f.q,x by DIRAF:def 5; hence thesis by DIRAF:36; end;
+       f.a,b '||' q,f.q proof LIN f.a,a,b by A4,DIRAF:36;
+     then f.a,a '||' f.a,b by DIRAF:def 5;
+     then a,f.a '||' b,f.a & a,f.a '||' q,f.q by A15,DIRAF:27,def 4;
+     then b,f.a '||' q,f.q by A1,DIRAF:28; hence thesis by DIRAF:27; end;
+    then Mid x,f.a,f.q by A14,A16,A17,PASCH:15; then consider y such that
+    A18: Mid x,y,b & Mid y,f.b,f.q by A10,A14,PASCH:35;
+    A19: LIN x,y,b & LIN y,f.b,f.q by A18,DIRAF:34;
+    A20: LIN b,f.b,a & LIN b,f.b,f.a
+     proof A21: LIN a,f.a,f.b & LIN a,f.a,a by A3,A5,Th60,DIRAF:37;
+      hence LIN b,f.b,a by A1,A5,DIRAF:38; LIN a,f.a,f.a by DIRAF:37;
+      hence LIN b,f.b,f.a by A1,A5,A21,DIRAF:38; end;
+    A22: b<>f.b by A1,A2,Def9;
+    then A23: not LIN b,f.b,q by A11,A20,DIRAF:38;
+    A24: not LIN b,f.b,f.q proof assume LIN b,f.b,f.q;
+     then LIN b,f.b,f.q & b,f.b '||' q,f.q by A1,A3,Th67;
+     then LIN b,f.b,f.q & b,f.b '||' f.q,q by DIRAF:27;
+     hence contradiction by A22,A23,DIRAF:39; end;
+    A25: x<>b by A14,DIRAF:37;
+A26:LIN x,b,q & LIN x,b,y & LIN x,b,b by A16,A19,DIRAF:34,36,37;
+    then A27: LIN y,b,q by A25,DIRAF:38;
+    A28: f.b<>f.q & b<>q by A24,DIRAF:37;
+    A29: b,q '||' f.b,f.q by A3,Th51;
+      LIN f.b,f.q,y & LIN b,q,y by A19,A25,A26,DIRAF:36,38;
+    then f.b,f.q '||' f.b,y & b,q '||' b,y by DIRAF:def 5;
+    then b,q '||' f.b,y & b,q '||' b,y by A28,A29,DIRAF:28;
+    then f.b,y '||' b,y by A28,DIRAF:28; then y,b '||' y,f.b by DIRAF:27;
+    then LIN y,b,f.b & LIN y,b,b by DIRAF:37,def 5;
+    hence contradiction by A19,A23,A24,A27,DIRAF:38; end;
+   hence thesis by A8,DIRAF:def 4; end;
+  hence thesis by DIRAF:7;
+ end;
+
+Lm9: f is_Tr & a<>f.a & LIN a,f.a,b implies a,b // f.a,f.b
+ proof assume A1: f is_Tr & a<>f.a & LIN a,f.a,b;
+   then f<>(id the carrier of OAS) by FUNCT_1:35;
+  then A2: b<>f.b by A1,Def9;
+  A3: f is_Dil by A1,Def9;
+     now assume A4: a<>b;
+   A5:  Mid a,f.a,b implies thesis by A1,Lm7;
+   A6: now assume A7: Mid f.a,a,b;
+      LIN a,f.a,f.b & LIN a,f.a,a by A1,A3,Th60,DIRAF:37;
+then A8:    LIN b,f.b,a by A1,DIRAF:38;
+    A9: now assume Mid b,f.b,a; then b,a // f.b,f.a by A1,A2,Lm7;
+     hence thesis by DIRAF:5; end;
+    A10: now assume Mid b,a,f.b; then A11: b,a // f.b,f.a or a=f.b
+    by A1,A2,Lm8;
+       now assume a=f.b; then a=f.b & a,f.a // b,f.b by A1,Lm6;
+      hence thesis by DIRAF:5; end;
+     hence thesis by A11,DIRAF:5; end;
+       now assume Mid f.b,b,a; then Mid a,b,f.b & Mid b,a,f.a by A7,DIRAF:13;
+     then a,b // b,f.b & b,a // a,f.a by DIRAF:def 3;
+     then A12: a,b // a,f.b & a,b // f.a,a by ANALOAF:def 5;
+     then f.a,a // a,f.b by A4,ANALOAF:def 5;
+     then f.a,a // f.a,f.b by ANALOAF:def 5;
+     hence thesis by A12,DIRAF:6; end;
+     hence thesis by A8,A9,A10,DIRAF:35; end;
+      now assume A13: Mid a,b,f.a;
+         b=f.a implies thesis by A1,Lm6;
+    hence thesis by A1,A13,Lm8; end;
+   hence thesis by A1,A5,A6,DIRAF:35; end;
+  hence thesis by DIRAF:7;
+ end;
+
+theorem
+Th73: f is_Tr implies f is_CDil
+  proof assume A1: f is_Tr;
+    A2:  f=id the carrier of OAS implies thesis by Th44;
+      now assume A3: for x holds f.x<>x;
+        for a,b holds a,b // f.a,f.b
+        proof let a,b; A4: a<>f.a by A3;
+            not LIN a,f.a,b implies a,b // f.a,f.b by A1,Lm5;
+        hence a,b // f.a,f.b by A1,A4,Lm9; end;
+     hence thesis by Th42; end;
+   hence thesis by A1,A2,Def9; end;
+
+theorem
+Th74: f is_Dil & f.p=p & Mid q,p,f.q & not LIN p,q,x
+                                         implies Mid x,p,f.x
+  proof assume that A1: f is_Dil and
+    A2: f.p=p and A3: Mid q,p,f.q and A4: not LIN p,q,x;
+      p,x '||' p,f.x by A1,A2,Th51;
+    then A5: LIN p,x,f.x by DIRAF:def 5; q,x '||' f.q,f.x by A1,Th51;
+    then q,x '||' f.x,f.q by DIRAF:27;
+   hence Mid x,p,f.x by A3,A4,A5,PASCH:13;
+  end;
+
+theorem
+Th75: f is_Dil & f.p=p & Mid q,p,f.q & q<>p implies Mid x,p,f.x
+  proof assume that A1: f is_Dil and
+    A2: f.p=p and A3: Mid q,p,f.q and A4: q<>p;
+      now assume A5: LIN p,q,x; consider r such that
+      A6: not LIN p,q,r by A4,DIRAF:43;
+      A7: Mid r,p,f.r by A1,A2,A3,A6,Th74;
+         x=p or not LIN p,r,x
+        proof assume A8: x<>p & LIN p,r,x;
+          then LIN p,x,r & LIN p,x,q & LIN p,x,p by A5,DIRAF:36,37;
+         hence contradiction by A6,A8,DIRAF:38;
+        end;
+     hence thesis by A1,A2,A7,Th74,DIRAF:14;
+    end;
+   hence thesis by A1,A2,A3,Th74;
+  end;
+
+theorem Th76:
+ f is_Dil & f.p=p & q<>p & Mid q,p,f.q & not LIN p,x,y
+                                     implies x,y // f.y,f.x
+  proof assume A1: f is_Dil;
+   then A2: x,y '||' f.x,f.y by Th51;
+    assume f.p=p & q<>p & Mid q,p,f.q;
+    then Mid x,p,f.x & Mid y,p,f.y by A1,Th75;
+    then x,p // p,f.x & y,p // p,f.y by DIRAF:def 3;
+   hence thesis by A2,PASCH:19;
+  end;
+
+theorem
+Th77: f is_Dil & f.p=p & q<>p & Mid q,p,f.q & LIN p,x,y
+                                    implies x,y // f.y,f.x
+  proof assume that A1: f is_Dil and
+    A2: f.p=p and A3: q<>p and A4: Mid q,p,f.q and A5: LIN p,x,y;
+    A6: Mid x,p,f.x by A1,A2,A3,A4,Th75;
+    A7: Mid y,p,f.y by A1,A2,A3,A4,Th75;
+    A8: now assume A9: x=p; then y,x // x,f.y by A7,DIRAF:def 3;
+          hence thesis by A2,A9,DIRAF:5; end;
+      now assume A10: x<>p & y<>p & x<>y; then consider u such that
+      A11: not LIN p,x,u by DIRAF:43; consider r such that
+      A12: x,y '||' u,r and A13: x,u '||' y,r by DIRAF:31;
+      A14: not LIN x,y,u
+        proof assume LIN x,y,u;
+          then LIN x,y,u & LIN x,y,p & LIN x,y,x by A5,DIRAF:36,37;
+         hence contradiction by A10,A11,DIRAF:38;
+        end;
+      then A15: x,y // u,r by A12,A13,PASCH:21;
+      A16: not LIN p,u,r
+        proof
+A17:      now assume u=r;
+            then u,x '||' u,y by A13,DIRAF:27;
+            then LIN u,x,y by DIRAF:def 5;
+           hence contradiction by A14,DIRAF:36;
+          end;
+          assume LIN p,u,r; then A18: LIN u,r,p by DIRAF:36;
+            LIN x,y,p by A5,DIRAF:36; then x,y '||' x,p by DIRAF:def 5;
+          then x,y '||' p,x by DIRAF:27;
+          then A19: u,r '||' p,x by A10,A12,DIRAF:28;
+          then A20: LIN u,r,x by A17,A18,DIRAF:39;
+            p,x '||' p,y by A5,DIRAF:def 5;
+          then u,r '||' p,y by A10,A19,DIRAF:28;
+          then LIN u,r,y & LIN u,r,u by A17,A18,DIRAF:37,39;
+         hence contradiction by A14,A17,A20,DIRAF:38;
+        end;
+      then A21: u,r // f.r,f.u by A1,A2,A3,A4,Th76;
+      set u'=f.u, r'=f.r, x'=f.x, y'=f.y;
+        x',y' '||' u',r' & x',u' '||' y',r' & not LIN x',y',u'
+                                             by A1,A12,A13,A14,Th58,Th59;
+      then x',y' // u',r' by PASCH:21;
+      then A22: r',u' // y',x' by DIRAF:5; A23: u<>r by A16,DIRAF:37;
+      then A24: u<>r & u'<>r' by FUNCT_2:85;
+        x,y // r',u' by A15,A21,A23,DIRAF:6;
+     hence thesis by A22,A24,DIRAF:6;
+    end;
+   hence thesis by A2,A6,A8,DIRAF:7,def 3;
+  end;
+
+theorem
+Th78: f is_Dil & f.p=p & q<>p & Mid q,p,f.q implies f is_SDil
+  proof assume that A1: f is_Dil and
+    A2: f.p=p and A3: q<>p and A4: Mid q,p,f.q;
+      x,y // f.y,f.x
+      proof not LIN p,x,y implies
+                        x,y // f.y,f.x by A1,A2,A3,A4,Th76;
+       hence x,y // f.y,f.x by A1,A2,A3,A4,Th77;
+      end;
+   hence thesis by Def7;
+  end;
+
+theorem
+Th79: f is_Dil & f.p=p & (for x holds p,x // p,f.x) implies
+                               (for y,z holds y,z // f.y,f.z)
+  proof assume that A1: f is_Dil and A2: f.p=p and
+    A3: p,x // p,f.x;
+    A4: not LIN p,y,z implies y,z // f.y,f.z
+      proof assume A5: not LIN p,y,z;
+          p,y // p,f.y & p,z // p,f.z & y,z '||' f.y,f.z by A1,A3,Th51;
+       hence y,z // f.y,f.z by A5,PASCH:20;
+      end;
+    let y,z;
+      LIN p,y,z implies y,z // f.y,f.z
+      proof assume A6: LIN p,y,z;
+        A7: now assume p=z; then z,y // f.z,f.y by A2,A3;
+             hence y,z // f.y,f.z by DIRAF:5;
+            end;
+          now assume A8: p<>y & y<>z & z<>p;
+          then consider q such that
+          A9: not LIN p,y,q by DIRAF:43; consider r such that
+          A10: y,z '||' q,r and A11: y,q '||' z,r by DIRAF:31;
+          A12: not LIN y,z,q
+            proof assume LIN y,z,q;
+              then LIN y,z,q & LIN y,z,p & LIN y,z,y by A6,DIRAF:36,37;
+             hence contradiction by A8,A9,DIRAF:38;
+            end;
+          then A13: y,z // q,r by A10,A11,PASCH:21;
+          A14: q<>r
+            proof assume q=r;
+              then q,y '||' q,z by A11,DIRAF:27; then LIN q,y,z by DIRAF:def 5;
+             hence contradiction by A12,DIRAF:36;
+            end;
+          then A15: f.q<>f.r by FUNCT_2:85;
+             not LIN p,q,r
+            proof assume LIN p,q,r; then A16: LIN q,r,p by DIRAF:36;
+                LIN y,p,z by A6,DIRAF:36; then y,p '||' y,z by DIRAF:def 5;
+              then y,z '||' p,y by DIRAF:27;
+              then q,r '||' p,y by A8,A10,DIRAF:28;
+              then LIN q,r,y & LIN q,r,q by A14,A16,DIRAF:37,39;
+             hence contradiction by A9,A14,A16,DIRAF:38;
+            end;
+          then A17: q,r // f.q,f.r by A4;
+          A18: f.y,f.z '||' f.q,f.r by A1,A10,Th58;
+          A19: f.y,f.q '||' f.z,f.r by A1,A11,Th58;
+             not LIN f.y,f.z,f.q by A1,A12,Th59;
+          then f.y,f.z // f.q,f.r by A18,A19,PASCH:21;
+          then A20: f.q,f.r // f.y,f.z by DIRAF:5;
+            y,z // f.q,f.r by A13,A14,A17,DIRAF:6;
+         hence y,z // f.y,f.z by A15,A20,DIRAF:6;
+        end;
+      hence thesis by A2,A3,A7,DIRAF:7;
+     end;
+   hence thesis by A4;
+  end;
+
+theorem
+   f is_Dil implies f is_CDil or f is_SDil
+  proof assume A1: f is_Dil;
+    A2: now assume for x holds f.x<>x; then f is_Tr by A1,Def9;
+        hence f is_CDil by Th73;
+       end;
+      now given p such that A3: f.p=p;
+      A4: now assume for x holds p,x // p,f.x;
+            then for x,y holds x,y // f.x,f.y by A1,A3,Th79;
+           hence f is_CDil by Th42;
+          end;
+        now given q such that
+        A5: not p,q // p,f.q;
+          p,q '||' p,f.q by A1,A3,Th51; then p,q // f.q,p by A5,DIRAF:def 4;
+        then q,p // p,f.q by DIRAF:5;
+        then Mid q,p,f.q & p<>q by A5,DIRAF:def 3;
+       hence f is_SDil by A1,A3,Th78;
+      end;
+     hence thesis by A4;
+    end;
+   hence thesis by A2;
+  end;
+
+reserve AFS for AffinSpace;
+reserve a,b,c,d,d1,d2,p,x,y,z,t for Element of AFS;
+
+canceled;
+
+theorem Th82: AFS is CongrSpace-like
+ proof
+  thus for x,y,z,t,a,b st x,y // a,b & a,b // z,t & a<>b
+                                           holds x,y // z,t by AFF_1:14;
+  thus for x,y,z holds x,x // y,z by AFF_1:12;
+  thus for x,y,z,t st x,y // z,t holds z,t // x,y by AFF_1:13;
+  thus for x,y holds x,y // x,y by AFF_1:11;
+ end;
+
+theorem Lambda(OAS) is CongrSpace proof Lambda(OAS) is AffinSpace
+ by DIRAF:48; hence thesis by Th82; end;
+
+reserve f,g for Permutation of the carrier of AFS;
+
+definition let AFS; let f;
+  attr f is dilatation means
+  :Def10: f is_DIL_of AFS;
+  synonym f is_Dil;
+end;
+
+canceled;
+
+theorem Th85:
+  f is_Dil iff (for a,b holds a,b // f.a,f.b)
+  proof thus f is_Dil implies (for a,b holds a,b // f.a,f.b)
+   proof assume f is_Dil; then A1: f is_DIL_of AFS by Def10;
+    let a,b;
+    thus a,b // f.a,f.b by A1,Th35;
+   end;
+   assume for a,b holds a,b // f.a,f.b;
+    then f is_DIL_of AFS by Th35;
+    hence thesis by Def10;
+   end;
+
+theorem Th86:
+ id the carrier of AFS is_Dil
+  proof
+     now let x,y; (id the carrier of AFS).x = x &
+      (id the carrier of AFS).y = y by FUNCT_1:35;
+    hence x,y // (id the carrier of AFS).x,(id the carrier of AFS).y
+       by AFF_1:11; end;
+   hence thesis by Th85;
+  end;
+
+theorem Th87:
+ f is_Dil implies f" is_Dil
+  proof assume A1: f is_Dil;
+     now let x,y;
+     set x'=f".x; set y'=f".y;
+       f.x'=x & f.y'=y by Th4; then x',y' // x,y by A1,Th85;
+     hence x,y // f".x,f".y by AFF_1:13; end;
+   hence thesis by Th85;
+  end;
+
+theorem Th88:
+ f is_Dil & g is_Dil implies (f*g) is_Dil
+  proof assume that A1: f is_Dil and A2: g is_Dil;
+     now let x,y; set x'=g.x; set y'=g.y;
+    A3: (f*g).x= f.x' by FUNCT_2:70; A4: (f*g).y=f.y' by FUNCT_2:70;
+A5:    x,y // x',y' & x',y' // f.x',f.y' by A1,A2,Th85;
+      now assume x'=y'; then x=y by FUNCT_2:85;
+     hence x,y // (f*g).x,(f*g).y by AFF_1:12;
+    end;
+   hence x,y // (f*g).x,(f*g).y by A3,A4,A5,AFF_1:14; end;
+  hence thesis by Th85;
+  end;
+
+theorem Th89:
+f is_Dil implies (for a,b,c,d holds a,b // c,d iff f.a,f.b // f.c,f.d)
+  proof assume A1: f is_Dil; let a,b,c,d;
+    A2: a,b // f.a,f.b by A1,Th85;
+    A3: c,d // f.c,f.d by A1,Th85;
+    A4: now assume a,b // c,d;
+         then A5: f.a,f.b // c,d or a=b by A2,AFF_1:14;
+            now assume A6: f.a,f.b // c,d;
+               c = d implies f.a,f.b // f.c,f.d by AFF_1:12;
+           hence f.a,f.b // f.c,f.d by A3,A6,AFF_1:14;
+          end;
+         hence f.a,f.b // f.c,f.d by A5,AFF_1:12;
+        end;
+      now assume A7: f.a,f.b // f.c,f.d;
+      A8: now assume f.a=f.b; then a=b by FUNCT_2:85;
+           hence a,b // c,d by AFF_1:12;
+          end;
+        now assume A9: a,b // f.c,f.d;
+          now assume f.c = f.d; then c = d by FUNCT_2:85;
+         hence a,b // c,d by AFF_1:12;
+        end;
+       hence a,b // c,d by A3,A9,AFF_1:14;
+      end;
+     hence a,b // c,d by A2,A7,A8,AFF_1:14;
+    end;
+   hence thesis by A4;
+  end;
+
+theorem
+   f is_Dil implies (for a,b,c holds LIN a,b,c iff LIN f.a,f.b,f.c)
+  proof assume A1: f is_Dil; let a,b,c;
+      a,b // a,c iff f.a,f.b // f.a,f.c by A1,Th89;
+   hence LIN a,b,c iff LIN f.a,f.b,f.c by AFF_1:def 1;
+  end;
+
+theorem Th91:
+ f is_Dil & LIN x,f.x,y implies LIN x,f.x,f.y
+  proof assume A1: f is_Dil; assume A2: LIN x,f.x,y;
+      now assume A3: x<>y;
+        x,f.x // x,y & x,y // f.x,f.y by A1,A2,Th85,AFF_1:def 1;
+      then x,f.x // f.x,f.y by A3,AFF_1:14;
+      then f.x,x // f.x,f.y by AFF_1:13;
+      then LIN f.x,x,f.y by AFF_1:def 1; hence LIN x,f.x,f.y by AFF_1:15;
+    end;
+   hence thesis by AFF_1:16;
+  end;
+
+theorem Th92:
+ a,b // c,d implies (a,c // b,d or (ex x st LIN a,c,x & LIN b,d,x))
+ proof assume A1: a,b // c,d;
+  assume A2: not a,c // b,d;
+  A3: now assume a=b; then LIN a,c,a & LIN b,d,a by AFF_1:16;
+   hence thesis; end;
+     now assume A4: a<>b;
+   consider z such that A5: a,b // c,z & a,c // b,z by DIRAF:47;
+   A6: now assume b=z; then b,a // b,c by A5,AFF_1:13;
+    then LIN b,a,c by AFF_1:def 1; then LIN a,c,b & LIN b,d,b by AFF_1:15,16;
+    hence thesis; end;
+      now assume A7: b<>z;
+      c,d // c,z by A1,A4,A5,AFF_1:14; then LIN c,d,z by AFF_1:def 1;
+   then LIN d,c,z by AFF_1:15; then d,c // d,z by AFF_1:def 1;
+   then z,d // d,c by AFF_1:13; then consider t such that
+   A8: b,d // d,t & b,z // c,t by A2,A5,DIRAF:47;
+     a,c // c,t by A5,A7,A8,AFF_1:14;
+   then c,a // c,t & d,b // d,t by A8,AFF_1:13;
+   then LIN c,a,t & LIN d,b,t by AFF_1:def 1;
+   then LIN a,c,t & LIN b,d,t by AFF_1:15;
+   hence thesis; end;
+   hence thesis by A6; end;
+  hence thesis by A3;
+ end;
+
+theorem Th93:
+f is_Dil implies ((f=id the carrier of AFS or for x holds f.x<>x) iff
+             (for x,y holds x,f.x // y,f.y))
+  proof assume A1: f is_Dil;
+    A2: now assume A3: f=id the carrier of AFS or for z holds f.z<>z;
+         let x,y; A4: x,y // f.x,f.y by A1,Th85;
+          A5: now assume f=(id the carrier of AFS); then f.y=y by FUNCT_1:35;
+                hence x,f.x // y,f.y by AFF_1:12; end;
+            now assume A6: for z holds f.z<>z;
+            assume A7: not x,f.x // y,f.y; then consider z
+            such that A8: LIN x,f.x,z & LIN y,f.y,z by A4,Th92;
+            set t=f.z; LIN x,f.x,t by A1,A8,Th91;
+            then A9: x,f.x // z,t by A8,AFF_1:19;
+              LIN y,f.y,z & LIN y,f.y,t & y<>f.y by A1,A6,A8,Th91;
+            then y,f.y // z,t by AFF_1:19;
+            then z<>t & z,t // y,f.y by A6,AFF_1:13;
+           hence contradiction by A7,A9,AFF_1:14;
+          end;
+         hence x,f.x // y,f.y by A3,A5;
+        end;
+      now assume A10: for x,y holds x,f.x // y,f.y;
+      assume A11: f<>(id the carrier of AFS);
+      given x such that A12: f.x=x;
+      consider y such that
+      A13: f.y<>(id the carrier of AFS).y by A11,FUNCT_2:113;
+      A14:f.y<>y by A13,FUNCT_1:35; x,y // f.x,f.y by A1,Th85;
+      then A15: LIN x,y,f.y by A12,AFF_1:def 1;
+      then A16: LIN y,f.y,x by AFF_1:15; LIN y,x,f.y by A15,AFF_1:15;
+      then A17: y,x // y,f.y by AFF_1:def 1; x<>y by A12,A13,FUNCT_1:35;
+      then consider z such that A18: not LIN x,y,z by AFF_1:22;
+        x,z // f.x,f.z by A1,Th85; then LIN x,z,f.z by A12,AFF_1:def 1;
+      then A19: LIN z,f.z,x by AFF_1:15;
+A20:      now assume z=f.z; then z,y //z,f.y by A1,Th85;
+        then LIN z,y,f.y by AFF_1:def 1;
+        then LIN y,f.y,y & LIN y,f.y,z by AFF_1:15,16;
+       hence contradiction by A14,A16,A18,AFF_1:17; end;
+         LIN z,f.z,z by AFF_1:16;
+      then A21: z,f.z // x,z by A19,AFF_1:19;
+        y,f.y // z,f.z by A10; then y,f.y // x,z by A20,A21,AFF_1:14;
+      then y,x // x,z by A14,A17,AFF_1:14;
+      then x,y // x,z by AFF_1:13;
+     hence contradiction by A18,AFF_1:def 1;
+    end; hence thesis by A2;
+  end;
+
+theorem Th94:
+  f is_Dil & f.a=a & f.b=b & not LIN a,b,x implies f.x=x
+  proof assume that A1: f is_Dil and
+    A2: f.a=a & f.b=b and A3: not LIN a,b,x;
+    assume A4: f.x<>x; a,x // a,f.x by A1,A2,Th85;
+    then LIN a,x,f.x by AFF_1:def 1; then A5: LIN x,f.x,a by AFF_1:15;
+      b,x // b,f.x by A1,A2,Th85; then LIN b,x,f.x by AFF_1:def 1;
+    then LIN x,f.x,x & LIN x,f.x,b by AFF_1:15,16;
+   hence contradiction by A3,A4,A5,AFF_1:17;
+  end;
+
+theorem Th95:
+  f is_Dil & f.a=a & f.b=b & a<>b implies f=id the carrier of AFS
+  proof assume that A1: f is_Dil and A2: f.a=a & f.b=b & a<>b;
+      now let x;
+     A3:  not LIN a,b,x implies f.x=x by A1,A2,Th94;
+       now assume A4: LIN a,b,x;
+        now assume A5: x<>a; consider z such that
+       A6: not LIN a,b,z by A2,AFF_1:22;
+       A7: f.z=z by A1,A2,A6,Th94;
+         not LIN a,z,x
+       proof assume LIN a,z,x;
+         then LIN a,x,a & LIN a,x,z & LIN a,x,b by A4,AFF_1:15,16;
+        hence contradiction by A5,A6,AFF_1:17;
+       end;
+      hence f.x=x by A1,A2,A7,Th94;
+      end;
+      hence f.x=x by A2;
+     end;
+     hence f.x=(id the carrier of AFS).x by A3,FUNCT_1:35;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+
+theorem
+  f is_Dil & g is_Dil & f.a=g.a & f.b=g.b implies a=b or f=g
+  proof assume that A1: f is_Dil & g is_Dil and
+     A2: f.a=g.a & f.b=g.b;
+    assume A3: a<>b; A4: (g"*f).a=g".(g.a) by A2,FUNCT_2:70 .=a by Th4;
+    A5: (g"*f).b=g".(g.b) by A2,FUNCT_2:70 .=b by Th4;
+      g" is_Dil by A1,Th87; then g"*f is_Dil by A1,Th88;
+    then A6: g"*f=(id the carrier of AFS) by A3,A4,A5,Th95;
+      now let x; g".(f.x)=(g"*f).x by FUNCT_2:70;
+      then g".(f.x)=x by A6,FUNCT_1:35;
+     hence g.x=f.x by Th4;
+    end;
+   hence thesis by FUNCT_2:113;
+  end;
+
+theorem Th97:
+ not LIN a,b,c & a,b // c,d1 & a,b // c,d2 & a,c // b,d1 &
+       a,c // b,d2 implies d1=d2
+  proof assume that A1: not LIN a,b,c and A2: a,b // c,d1 and
+     A3: a,b // c,d2 and A4: a,c // b,d1 and A5: a,c // b,d2;
+   assume A6: d1<>d2; A7: a<>b & a<>c by A1,AFF_1:16;
+   then A8: c,d1 // c,d2 by A2,A3,AFF_1:14;
+      b,d1 // b,d2 by A4,A5,A7,AFF_1:14;
+   then A9: LIN c,d1,d2 & LIN b,d1,d2 by A8,AFF_1:def 1;
+   then A10: LIN d1,d2,c & LIN d1,d2,b by AFF_1:15;
+     LIN d1,d2,c & LIN d1,d2,d1 by A9,AFF_1:15,16;
+   then d1,d2 // c,d1 by AFF_1:19;
+   then A11: d1,d2 // a,b or c = d1 by A2,AFF_1:14;
+     now assume c = d1;
+     then c,a // c,b by A4,AFF_1:13;
+     then LIN c,a,b by AFF_1:def 1;
+    hence contradiction by A1,AFF_1:15; end;
+   then d1,d2 // b,a by A11,AFF_1:13;
+   then LIN d1,d2,a by A6,A10,AFF_1:18;
+  hence contradiction by A1,A6,A10,AFF_1:17;
+ end;
+
+definition let AFS; let f;
+  attr f is translation means
+  :Def11: f is_Dil & (f = id the carrier of AFS or
+  (for a holds a<>f.a));
+  synonym f is_Tr;
+ end;
+
+canceled;
+
+theorem
+   id the carrier of AFS is_Tr
+  proof id the carrier of AFS is_Dil by Th86;
+   hence thesis by Def11;
+  end;
+
+theorem Th100: f is_Dil implies
+                 (f is_Tr iff (for x,y holds x,f.x // y,f.y))
+  proof assume A1: f is_Dil;
+    then (f=(id the carrier of AFS) or for x holds f.x<>x) iff
+             (for x,y holds x,f.x // y,f.y) by Th93;
+   hence thesis by A1,Def11;
+  end;
+
+canceled;
+
+theorem Th102:
+  f is_Tr & g is_Tr & f.a=g.a & not LIN a,f.a,x implies f.x=g.x
+  proof assume that A1: f is_Tr & g is_Tr and A2: f.a=g.a and
+  A3: not LIN a,f.a,x;
+    A4: f is_Dil & g is_Dil by A1,Def11;
+    set b=f.a, y=f.x, z=g.x;
+    A5: a,x // b,y & a,b // x,y by A1,A4,Th85,Th100;
+      a,x // b,z & a,b // x,z by A1,A2,A4,Th85,Th100;
+   hence f.x=g.x by A3,A5,Th97;
+  end;
+
+theorem Th103:
+ f is_Tr & g is_Tr & f.a=g.a implies f=g
+  proof assume that
+    A1: f is_Tr and A2: g is_Tr and A3: f.a=g.a;
+    A4: f is_Dil by A1,Def11;
+    set b=f.a;
+    A5: now assume b=a;
+          then f=id the carrier of AFS &
+                         g=id the carrier of AFS by A1,A2,A3,Def11;
+         hence thesis;
+        end;
+      now assume A6: a<>b;
+        for x holds f.x=g.x
+        proof let x;
+            now assume A7: LIN a,b,x;
+              now assume x<>a; consider p such that
+              A8: not LIN a,b,p by A6,AFF_1:22;
+              A9: f.p=g.p by A1,A2,A3,A8,Th102;
+                f<>(id the carrier of AFS) by A6,FUNCT_1:35;
+              then A10: f.p<>p & f.x<>x by A1,Def11;
+                not LIN p,f.p,x
+                proof assume LIN p,f.p,x;
+                  then LIN p,f.p,x & LIN p,f.p,f.x & LIN p,f.p,p
+                                                  by A4,Th91,AFF_1:16;
+                  then A11: LIN x,f.x,p by A10,AFF_1:17;
+                  A12: LIN a,b,f.x by A4,A7,Th91;
+                    LIN a,b,a by AFF_1:16;
+                  then A13: LIN x,f.x,a by A6,A7,A12,AFF_1:17;
+                    LIN a,b,b by AFF_1:16;
+                  then LIN x,f.x,b by A6,A7,A12,AFF_1:17;
+                 hence contradiction by A8,A10,A11,A13,AFF_1:17;
+                end;
+             hence f.x=g.x by A1,A2,A9,Th102;
+            end;
+           hence f.x=g.x by A3;
+          end;
+         hence f.x=g.x by A1,A2,A3,Th102;
+        end;
+       hence thesis by FUNCT_2:113;
+      end;
+     hence thesis by A5;
+  end;
+
+theorem Th104:
+ f is_Tr implies f" is_Tr
+  proof assume A1: f is_Tr; then f is_Dil by Def11;
+    then A2: f" is_Dil by Th87;
+A3:  f=(id the carrier of AFS) implies f"=(id the carrier of AFS) by FUNCT_1:67
+;
+      now assume A4: for x holds f.x<>x;
+      given y such that A5: f".y=y;
+        f.y=y by A5,Th4;
+     hence contradiction by A4;
+    end;
+   hence thesis by A1,A2,A3,Def11;
+  end;
+
+theorem
+   f is_Tr & g is_Tr implies (f*g) is_Tr
+  proof assume that A1: f is_Tr and A2: g is_Tr;
+    A3: f is_Dil by A1,Def11; g is_Dil by A2,Def11;
+    then A4: (f*g) is_Dil by A3,Th88;
+      now assume A5: (f*g)<>(id the carrier of AFS);
+        for x holds (f*g).x<>x
+        proof given x such that
+          A6: (f*g).x=x; f.(g.x)=x by A6,FUNCT_2:70;
+          then g.x=f".x & f" is_Tr by A1,Th4,Th104;
+          then (f*g) = f*f" by A2,Th103;
+         hence contradiction by A5,FUNCT_2:88;
+        end;
+     hence thesis by A4,Def11;
+    end;
+   hence thesis by A4,Def11;
+  end;
+
+definition let AFS; let f;
+ attr f is collineation means
+     f is_automorphism_of the CONGR of AFS;
+  synonym f is_Col;
+end;
+
+canceled;
+
+theorem Th107:
+ f is_Col iff (for x,y,z,t holds (x,y // z,t iff f.x,f.y // f.z,f.t))
+  proof thus f is_Col implies
+     (for x,y,z,t holds x,y // z,t iff f.x,f.y // f.z,f.t)
+   proof assume A1: f is_automorphism_of the CONGR of AFS;
+    let x,y,z,t;
+     thus x,y // z,t implies f.x,f.y // f.z,f.t
+      proof assume x,y // z,t;
+       then [[x,y],[z,t]] in the CONGR of AFS by ANALOAF:def 2;
+       then [[f.x,f.y],[f.z,f.t]] in the CONGR of AFS by A1,Def3;
+       hence thesis by ANALOAF:def 2; end;
+     assume f.x,f.y // f.z,f.t;
+      then [[f.x,f.y],[f.z,f.t]] in the CONGR of AFS by ANALOAF:def 2;
+      then [[x,y],[z,t]] in the CONGR of AFS by A1,Def3;
+     hence thesis by ANALOAF:def 2;
+   end;
+  assume A2: for x,y,z,t holds (x,y // z,t iff f.x,f.y // f.z,f.t);
+   let x,y,z,t; x,y // z,t iff f.x,f.y // f.z,f.t by A2;
+    hence thesis by ANALOAF:def 2;
+ end;
+
+theorem Th108:
+ f is_Col implies (LIN x,y,z iff LIN f.x,f.y,f.z)
+ proof assume f is_Col;
+  then x,y // x,z iff f.x,f.y // f.x,f.z by Th107;
+  hence thesis by AFF_1:def 1;
+ end;
+
+theorem
+   f is_Col & g is_Col implies f" is_Col & f*g is_Col &
+  id the carrier of AFS is_Col
+ proof assume f is_automorphism_of the CONGR of AFS &
+    g is_automorphism_of the CONGR of AFS;
+  hence f" is_automorphism_of the CONGR of AFS &
+   f*g is_automorphism_of the CONGR of AFS by Th29,Th30;
+  thus id the carrier of AFS is_automorphism_of the CONGR of AFS by Th28;
+ end;
+
+reserve A,C,K for Subset of AFS;
+
+theorem
+Th110: a in A implies f.a in f.:A
+ proof assume A1: a in A;
+     dom f = the carrier of AFS by FUNCT_2:67;hence thesis by A1,FUNCT_1:def 12
+;
+ end;
+
+theorem Th111: x in f.:A iff ex y st y in A & f.y=x
+ proof thus x in f.:A implies ex y st y in A & f.y=x
+  proof assume x in f.:A; then consider y being set such that
+   A1: y in dom f & y in A & x=f.y by FUNCT_1:def 12;
+   thus thesis by A1; end;
+  given y such that A2: y in A & f.y=x;
+    dom f = the carrier of AFS by FUNCT_2:67;
+  hence thesis by A2,FUNCT_1:def 12;
+ end;
+
+theorem Th112:
+ f.:A=f.:C implies A=C proof assume A1: f.:A=f.:C;
+  A2: A c= C proof now let a be set; assume A3: a in A;
+    then reconsider a'=a as Element of AFS;
+    set x=f.a'; x in f.:A by A3,Th110;
+    then ex b st b in C & f.b=x by A1,Th111;
+    hence a in C by FUNCT_2:85; end; hence thesis by TARSKI:def 3; end;
+     C c= A proof now let b be set; assume A4: b in C;
+    then reconsider b'=b as Element of AFS;
+    set y=f.b'; y in f.:C by A4,Th110;
+    then ex a st a in A & f.a=y by A1,Th111;
+    hence b in A by FUNCT_2:85; end; hence thesis by TARSKI:def 3; end;
+ hence thesis by A2,XBOOLE_0:def 10; end;
+
+theorem Th113:
+ f is_Col implies f.:(Line(a,b))=Line(f.a,f.b)
+ proof assume A1: f is_Col;
+  A2: f.:(Line(a,b)) c= Line(f.a,f.b)
+   proof now let x be set; assume A3: x in f.:(Line(a,b));
+    then reconsider x'=x as Element of AFS;
+   consider y such that
+     A4: y in Line(a,b) & f.y=x' by A3,Th111;
+       LIN a,b,y by A4,AFF_1:def 2; then LIN f.a,f.b,x' by A1,A4,Th108;
+     hence x in Line(f.a,f.b) by AFF_1:def 2; end;
+    hence thesis by TARSKI:def 3; end;
+     Line(f.a,f.b) c= f.:(Line(a,b))
+    proof now let x be set; assume A5: x in Line(f.a,f.b);
+    then reconsider x'=x as Element of AFS;
+     consider y such that A6: f.y=x' by Th2;
+       LIN f.a,f.b,f.y by A5,A6,AFF_1:def 2; then LIN a,b,y by A1,Th108;
+     then y in Line(a,b) by AFF_1:def 2;
+     hence x in f.:(Line(a,b)) by A6,Th111; end;
+    hence thesis by TARSKI:def 3; end;
+ hence thesis by A2,XBOOLE_0:def 10; end;
+
+theorem
+   f is_Col & K is_line implies f.:K is_line
+ proof assume that A1: f is_Col and A2: K is_line;
+      consider a,b such that A3: a<>b & K=Line(a,b) by A2,AFF_1:def 3;
+      set p=f.a; set q=f.b; A4: f.:K=Line(p,q) by A1,A3,Th113;
+        p<>q by A3,FUNCT_2:85; hence thesis by A4,AFF_1:def 3; end;
+
+theorem Th115:
+  f is_Col & A // C implies f.:A // f.:C
+ proof assume that A1: f is_Col and A2: A // C;
+      consider a,b,c,d such that
+A3: a<>b & c <>d & a,b // c,d & A=Line(a,b) & C=Line(c,d) by A2,AFF_1:51;
+    A4: f.:A=Line(f.a,f.b) & f.:C=Line(f.c,f.d) by A1,A3,Th113;
+    A5: f.a<>f.b & f.c <>f.d by A3,FUNCT_2:85;
+      f.a,f.b // f.c,f.d by A1,A3,Th107;
+ hence thesis by A4,A5,AFF_1:51; end;
+
+reserve AFP for AffinPlane,
+        A,C,D,K for Subset of AFP,
+        a,b,c,d,p,x,y for Element of AFP,
+        f for Permutation of the carrier of AFP;
+
+theorem
+   (for A st A is_line holds f.:A is_line) implies f is_Col
+ proof assume A1: for A st A is_line holds f.:A is_line;
+ A2: a<>b implies f.:(Line(a,b))=Line(f.a,f.b) proof assume A3: a<>b;
+  set A=Line(a,b); set x=f.a; set y=f.b;
+   A4: x<>y by A3,FUNCT_2:85;
+  set K=Line(x,y); set M=f.:A;
+   A5: A is_line & K is_line by A4,AFF_1:def 3;
+   then A6: M is_line by A1;
+     a in A & b in A by AFF_1:26;
+   then x in K & y in K & x in M & y in M by Th110,AFF_1:26;
+ hence thesis by A4,A5,A6,AFF_1:30; end;
+ A7: A // C implies f.:A // f.:C proof assume A8: A // C;
+     then A is_line & C is_line by AFF_1:50;
+    then A9: f.:A is_line & f.:C is_line by A1;
+       A<>C implies thesis proof assume A10: A<>C; assume not f.:A // f.:C;
+    then consider x such that
+     A11: x in f.:A & x in f.:C by A9,AFF_1:72; consider a such that
+     A12: a in A & x=f.a by A11,Th111; consider b such that
+     A13: b in C & x=f.b by A11,Th111; a=b by A12,A13,FUNCT_2:85
+;hence contradiction by A8,A10,A12,A13,AFF_1:59; end;
+ hence thesis by A9,AFF_1:55; end;
+ A14: f.:A is_line implies A is_line
+  proof assume A15: f.:A is_line; set K=f.:A;
+  consider x,y such that A16: x<>y & K=Line(x,y) by A15,AFF_1:def 3;
+    A17: x in K & y in K by A16,AFF_1:26;
+  then consider a such that A18: a in A & f.a=x by Th111;
+  consider b such that A19: b in A & f.b=y by A17,Th111;
+  set C=Line(a,b); A20: C is_line by A16,A18,A19,AFF_1:def 3;
+    f.:C=K by A2,A16,A18,A19;
+  hence thesis by A20,Th112; end;
+ A21: f.:A // f.:C implies A // C proof assume A22: f.:A // f.:C;
+ set K=f.:A; set M=f.:C;
+      K is_line & M is_line by A22,AFF_1:50;
+   then A23: A is_line & C is_line by A14;
+       now assume A<>C;
+      then A24: K<>M by Th112;
+    assume not A // C; then consider p such that
+      A25: p in A & p in C by A23,AFF_1:72; set x=f.p;
+        x in K & x in M by A25,Th110;
+      hence contradiction by A22,A24,AFF_1:59; end;
+ hence thesis by A23,AFF_1:55; end;
+ A26: a,b // c,d implies f.a,f.b // f.c,f.d
+  proof assume A27: a,b // c,d;
+       now assume A28: a<>b & c <>d; set A=Line(a,b); set C=Line(c,d);
+    set K=f.:A; set M=f.:C;
+      A29: A // C by A27,A28,AFF_1:51;
+         a in A & b in A & c in C & d in C by AFF_1:26;
+      then A30: f.a in K & f.b in K & f.c in M & f.d in M by Th110;
+        K // M by A7,A29; hence thesis by A30,AFF_1:53; end;
+ hence thesis by AFF_1:12; end;
+    f.a,f.b // f.c,f.d implies a,b // c,d
+  proof assume A31: f.a,f.b // f.c,f.d;
+  set x=f.a; set y=f.b; set z=f.c; set t=f.d;
+       now assume A32: a<>b & c <>d; set A=Line(a,b); set C=Line(c,d);
+    set K=f.:A; set M=f.:C;
+      A33: a in A & b in A & c in C & d in C by AFF_1:26;
+      A34: x<>y & z<>t by A32,FUNCT_2:85;
+        K=Line(x,y) & M=Line(z,t) by A2,A32; then K // M by A31,A34,AFF_1:51;
+      then A // C by A21; hence thesis by A33,AFF_1:53; end;
+ hence thesis by AFF_1:12; end;
+    hence thesis by A26,Th107;
+ end;
+
+theorem
+  f is_Col & K is_line & (for x st x in K holds f.x=x) &
+        not p in K & f.p=p implies f=id the carrier of AFP
+ proof assume that A1: f is_Col and A2: K is_line and
+        A3: for x st x in K holds f.x=x and
+        A4: not p in K & f.p=p;
+ A5: for x holds f.x=x proof let x;
+       now assume not x in K; consider a,b such that
+       A6: a in K & b in K & a<>b by A2,AFF_1:31;
+       set A=Line(p,a); set M=Line(p,b);
+       A7: A is_line & M is_line by A4,A6,AFF_1:def 3;
+       then consider C such that A8: x in C & A // C by AFF_1:63;
+       consider D such that A9: x in D & M // D by A7,AFF_1:63;
+       A10: C is_line & D is_line & A is_line by A8,A9,AFF_1:50;
+       A11: p in A & p in M by AFF_1:26;
+       A12: a in A & b in M by AFF_1:26;
+       A13: not C // K proof assume C // K;
+           then A // K by A8,AFF_1:58;
+           hence contradiction by A4,A6,A11,A12,AFF_1:59; end;
+       A14: not D // K proof assume D // K;
+           then M // K by A9,AFF_1:58;
+           hence contradiction by A4,A6,A11,A12,AFF_1:59; end;
+       consider c such that
+                      A15: c in C & c in K by A2,A10,A13,AFF_1:72;
+       consider d such that
+                      A16: d in D & d in K by A2,A10,A14,AFF_1:72;
+       A17: f.:A=A proof f.:A=Line(f.p,f.a) by A1,Th113;
+            hence thesis by A3,A4,A6; end;
+       A18: f.:M=M proof f.:M=Line(f.p,f.b) by A1,Th113;
+            hence thesis by A3,A4,A6; end;
+       A19: f.:C=C proof f.:A // f.:C by A1,A8,Th115;
+            then A20: f.:C // C by A8,A17,AFF_1:58;
+              f.c = c by A3,A15; then c in f.:C by A15,Th110;
+            hence thesis by A15,A20,AFF_1:59; end;
+       A21: f.:D=D proof f.:M // f.:D by A1,A9,Th115;
+            then A22: f.:D // D by A9,A18,AFF_1:58;
+              f.d=d by A3,A16; then d in f.:D by A16,Th110;
+            hence thesis by A16,A22,AFF_1:59; end;
+         x=f.x proof assume A23: x<>f.x;
+              f.x in C & f.x in D by A8,A9,A19,A21,Th110;
+            then C=D by A8,A9,A10,A23,AFF_1:30; then A // M by A8,A9,AFF_1:58
+; then A=M by A11,AFF_1:59;
+            hence contradiction by A2,A4,A6,A10,A11,A12,AFF_1:30; end;
+      hence thesis; end;
+   hence thesis by A3; end;
+    for x holds f.x=(id the carrier of AFP).x proof let x;
+         f.x=x by A5;
+       hence thesis by FUNCT_1:35; end;
+hence thesis by FUNCT_2:113; end;

@@ -1,0 +1,416 @@
+:: On the Order on a Special Polygon
+::  by Andrzej Trybulec and Yatsuka Nakamura
+::
+:: Received November 30, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, TARSKI, FINSEQ_1, RELAT_1, JORDAN3, ARYTM_1, FINSEQ_4,
+      FUNCT_1, COMPTS_1, EUCLID, PRE_TOPC, MCART_1, PSCOMP_1, TOPREAL1,
+      GOBOARD1, REALSET1, GOBOARD4, FINSEQ_6, SEQM_3, GOBOARD5, FUNCT_5,
+      SUBSET_1, ORDINAL2, SPPOL_1, SPRECT_1, SPPOL_2, FINSEQ_5, TOPREAL2,
+      SPRECT_2, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, REAL_1,
+      FUNCT_1, FUNCT_2, FINSEQ_1, STRUCT_0, FINSEQ_4, FINSEQ_5, REALSET1,
+      FINSEQ_6, NAT_1, BINARITH, PRE_TOPC, COMPTS_1, EUCLID, TOPREAL1,
+      TOPREAL2, GOBOARD1, GOBOARD4, SPPOL_1, SPPOL_2, GOBOARD5, JORDAN3,
+      PSCOMP_1, SPRECT_1;
+ constructors PSCOMP_1, GOBOARD5, JORDAN3, GOBOARD4, BINARITH, REALSET1,
+      SPPOL_1, FINSEQ_5, REAL_1, SEQM_3, TOPREAL4, SPRECT_1, TOPREAL2,
+      COMPTS_1, FINSEQ_4, GOBOARD1;
+ clusters STRUCT_0, EUCLID, RELSET_1, GOBOARD5, SPPOL_2, GOBOARD2, GOBOARD4,
+      PSCOMP_1, SPRECT_1, XREAL_0, FINSEQ_1, ARYTM_3, MEMBERED;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Preliminaries
+
+theorem :: SPRECT_2:1
+ for A,B,C,p being set st A /\ B c= {p} & p in C & C misses B
+  holds A \/ C misses B;
+
+theorem :: SPRECT_2:2
+ for A,B,C,p being set st A /\ C = {p} & p in B & B c= C
+  holds A /\ B = {p};
+
+canceled;
+
+theorem :: SPRECT_2:4
+ for A,B being set
+  st for x,y being set st x in A & y in B holds x misses y
+ holds union A misses union B;
+
+begin :: Finite sequences
+
+reserve i,j,k,l,m,n for Nat,
+        D for non empty set,
+        f for FinSequence of D;
+
+theorem :: SPRECT_2:5
+ i <= j & i in dom f & j in dom f & k in dom mid(f,i,j) implies k+i-'1 in dom f
+;
+
+theorem :: SPRECT_2:6
+ i > j & i in dom f & j in dom f & k in dom mid(f,i,j) implies i -' k + 1 in
+ dom f;
+
+theorem :: SPRECT_2:7
+ i <= j & i in dom f & j in dom f & k in dom mid(f,i,j) implies
+  (mid(f,i,j))/.k = f/.(k+i-'1);
+
+theorem :: SPRECT_2:8
+ i > j & i in dom f & j in dom f & k in dom mid(f,i,j) implies
+  (mid(f,i,j))/.k = f/.(i-' k +1);
+
+theorem :: SPRECT_2:9
+  i in dom f & j in dom f implies len mid(f,i,j) >= 1;
+
+theorem :: SPRECT_2:10
+  i in dom f & j in dom f & len mid(f,i,j) = 1 implies i = j;
+
+theorem :: SPRECT_2:11
+ i in dom f & j in dom f implies mid(f,i,j) is non empty;
+
+theorem :: SPRECT_2:12
+ i in dom f & j in dom f implies (mid(f,i,j))/.1 = f/.i;
+
+theorem :: SPRECT_2:13
+ i in dom f & j in dom f implies (mid(f,i,j))/.len mid(f,i,j) = f/.j;
+
+begin :: Compact sets on the plane
+
+reserve X for compact Subset of TOP-REAL 2;
+
+theorem :: SPRECT_2:14
+ for p being Point of TOP-REAL 2 st p in X & p`2 = N-bound X
+   holds p in N-most X;
+
+theorem :: SPRECT_2:15
+ for p being Point of TOP-REAL 2 st p in X & p`2 = S-bound X
+   holds p in S-most X;
+
+theorem :: SPRECT_2:16
+ for p being Point of TOP-REAL 2 st p in X & p`1 = W-bound X
+   holds p in W-most X;
+
+theorem :: SPRECT_2:17
+ for p being Point of TOP-REAL 2 st p in X & p`1 = E-bound X
+   holds p in E-most X;
+
+begin :: Finite sequences on the plane
+
+theorem :: SPRECT_2:18
+ for f being FinSequence of TOP-REAL 2 st 1 <= i & i <= j & j <= len f
+  holds L~mid(f,i,j) = union{ LSeg(f,k): i <= k & k < j};
+
+theorem :: SPRECT_2:19
+ for f being FinSequence of TOP-REAL 2
+  holds dom X_axis f = dom f;
+
+theorem :: SPRECT_2:20
+ for f being FinSequence of TOP-REAL 2
+  holds dom Y_axis f = dom f;
+
+reserve p,q,r for Real;
+
+theorem :: SPRECT_2:21
+ for a,b,c being Point of TOP-REAL 2
+  st b in LSeg(a,c) & a`1 <= b`1 & c`1 <= b`1
+ holds a = b or b = c or a`1 = b`1 & c`1 = b`1;
+
+theorem :: SPRECT_2:22
+ for a,b,c being Point of TOP-REAL 2
+  st b in LSeg(a,c) & a`2 <= b`2 & c`2 <= b`2
+ holds a = b or b = c or a`2 = b`2 & c`2 = b`2;
+
+theorem :: SPRECT_2:23
+ for a,b,c being Point of TOP-REAL 2
+  st b in LSeg(a,c) & a`1 >= b`1 & c`1 >= b`1
+ holds a = b or b = c or a`1 = b`1 & c`1 = b`1;
+
+theorem :: SPRECT_2:24
+ for a,b,c being Point of TOP-REAL 2
+  st b in LSeg(a,c) & a`2 >= b`2 & c`2 >= b`2
+ holds a = b or b = c or a`2 = b`2 & c`2 = b`2;
+
+begin :: The area of a sequence
+
+definition
+ let f, g be FinSequence of TOP-REAL 2;
+ pred g is_in_the_area_of f means
+:: SPRECT_2:def 1
+ for n st n in dom g holds
+   W-bound L~f <= (g/.n)`1 & (g/.n)`1 <= E-bound L~f &
+   S-bound L~f <= (g/.n)`2 & (g/.n)`2 <= N-bound L~f;
+end;
+
+theorem :: SPRECT_2:25
+ for f being non trivial FinSequence of TOP-REAL 2
+   holds f is_in_the_area_of f;
+
+theorem :: SPRECT_2:26
+ for f, g being FinSequence of TOP-REAL 2
+   st g is_in_the_area_of f
+ for i,j st i in dom g & j in dom g
+   holds mid(g,i,j) is_in_the_area_of f;
+
+theorem :: SPRECT_2:27
+ for f being non trivial FinSequence of TOP-REAL 2
+ for i,j st i in dom f & j in dom f
+   holds mid(f,i,j) is_in_the_area_of f;
+
+theorem :: SPRECT_2:28
+ for f,g,h being FinSequence of TOP-REAL 2
+   st g is_in_the_area_of f & h is_in_the_area_of f
+ holds g^h is_in_the_area_of f;
+
+theorem :: SPRECT_2:29
+ for f being non trivial FinSequence of TOP-REAL 2
+  holds <*NE-corner L~f*> is_in_the_area_of f;
+
+theorem :: SPRECT_2:30
+ for f being non trivial FinSequence of TOP-REAL 2
+  holds <*NW-corner L~f*> is_in_the_area_of f;
+
+theorem :: SPRECT_2:31
+ for f being non trivial FinSequence of TOP-REAL 2
+  holds <*SE-corner L~f*> is_in_the_area_of f;
+
+theorem :: SPRECT_2:32
+ for f being non trivial FinSequence of TOP-REAL 2
+  holds <*SW-corner L~f*> is_in_the_area_of f;
+
+begin :: Horizontal and vertical connections
+
+definition
+ let f, g be FinSequence of TOP-REAL 2;
+ pred g is_a_h.c._for f means
+:: SPRECT_2:def 2
+ g is_in_the_area_of f &
+   (g/.1)`1 = W-bound L~f & (g/.len g)`1 = E-bound L~f;
+ pred g is_a_v.c._for f means
+:: SPRECT_2:def 3
+ g is_in_the_area_of f &
+   (g/.1)`2 = S-bound L~f & (g/.len g)`2 = N-bound L~f;
+end;
+
+theorem :: SPRECT_2:33
+ for f being FinSequence of TOP-REAL 2,
+     g,h being one-to-one special FinSequence of TOP-REAL 2
+  st 2 <= len g & 2 <= len h & g is_a_h.c._for f & h is_a_v.c._for f
+holds L~g meets L~h;
+
+begin :: Orientation
+
+definition let f be FinSequence of TOP-REAL 2;
+ attr f is clockwise_oriented means
+:: SPRECT_2:def 4
+ (Rotate(f,N-min L~f))/.2 in N-most L~f;
+end;
+
+theorem :: SPRECT_2:34
+ for f being non constant standard special_circular_sequence
+    st f/.1 = N-min L~f holds
+  f is clockwise_oriented iff f/.2 in N-most L~f;
+
+definition
+ cluster R^2-unit_square -> compact;
+end;
+
+theorem :: SPRECT_2:35
+ N-bound R^2-unit_square = 1;
+
+theorem :: SPRECT_2:36
+ W-bound R^2-unit_square = 0;
+
+theorem :: SPRECT_2:37
+ E-bound R^2-unit_square = 1;
+
+theorem :: SPRECT_2:38
+   S-bound R^2-unit_square = 0;
+
+theorem :: SPRECT_2:39
+ N-most R^2-unit_square = LSeg(|[0,1]|,|[1,1]|);
+
+theorem :: SPRECT_2:40
+   N-min R^2-unit_square = |[0,1]|;
+
+definition
+ let X be non vertical non horizontal non empty compact Subset of TOP-REAL 2;
+ cluster SpStSeq X -> clockwise_oriented;
+end;
+
+definition
+ cluster clockwise_oriented (non constant standard special_circular_sequence);
+end;
+
+theorem :: SPRECT_2:41
+ for f being non constant standard special_circular_sequence,
+     i,j st i > j & (1 < j & i <= len f or 1 <= j & i < len f)
+  holds mid(f,i,j) is S-Sequence_in_R2;
+
+theorem :: SPRECT_2:42
+ for f being non constant standard special_circular_sequence,
+     i,j st i < j & (1 < i & j <= len f or 1 <= i & j < len f)
+  holds mid(f,i,j) is S-Sequence_in_R2;
+
+reserve f for non trivial FinSequence of TOP-REAL 2;
+
+theorem :: SPRECT_2:43
+  N-min L~f in rng f;
+
+theorem :: SPRECT_2:44
+  N-max L~f in rng f;
+
+theorem :: SPRECT_2:45
+  S-min L~f in rng f;
+
+theorem :: SPRECT_2:46
+  S-max L~f in rng f;
+
+theorem :: SPRECT_2:47
+  W-min L~f in rng f;
+
+theorem :: SPRECT_2:48
+  W-max L~f in rng f;
+
+theorem :: SPRECT_2:49
+  E-min L~f in rng f;
+
+theorem :: SPRECT_2:50
+  E-max L~f in rng f;
+
+reserve f for non constant standard special_circular_sequence;
+
+theorem :: SPRECT_2:51
+ 1 <= i & i <= j & j < m & m <= n & n <= len f &
+ (1 < i or n < len f) implies L~mid(f,i,j) misses L~mid(f,m,n);
+
+theorem :: SPRECT_2:52
+ 1 <= i & i <= j & j < m & m <= n & n <= len f &
+ (1 < i or n < len f) implies L~mid(f,i,j) misses L~mid(f,n,m);
+
+theorem :: SPRECT_2:53
+ 1 <= i & i <= j & j < m & m <= n & n <= len f &
+ (1 < i or n < len f) implies L~mid(f,j,i) misses L~mid(f,n,m);
+
+theorem :: SPRECT_2:54
+ 1 <= i & i <= j & j < m & m <= n & n <= len f &
+ (1 < i or n < len f) implies L~mid(f,j,i) misses L~mid(f,m,n);
+
+theorem :: SPRECT_2:55
+ (N-min L~f)`1 < (N-max L~f)`1;
+
+theorem :: SPRECT_2:56
+ N-min L~f <> N-max L~f;
+
+theorem :: SPRECT_2:57
+ (E-min L~f)`2 < (E-max L~f)`2;
+
+theorem :: SPRECT_2:58
+   E-min L~f <> E-max L~f;
+
+theorem :: SPRECT_2:59
+ (S-min L~f)`1 < (S-max L~f)`1;
+
+theorem :: SPRECT_2:60
+ S-min L~f <> S-max L~f;
+
+theorem :: SPRECT_2:61
+ (W-min L~f)`2 < (W-max L~f)`2;
+
+theorem :: SPRECT_2:62
+ W-min L~f <> W-max L~f;
+
+theorem :: SPRECT_2:63
+ LSeg(NW-corner L~f,N-min L~f) misses LSeg(N-max L~f,NE-corner L~f);
+
+theorem :: SPRECT_2:64
+ for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL 2
+  st f is_S-Seq & p <> f/.1 & (p`1 = (f/.1)`1 or p`2 = (f/.1)`2)
+    & LSeg(p,f/.1) /\ L~f = {f/.1}
+  holds <*p*>^f is S-Sequence_in_R2;
+
+theorem :: SPRECT_2:65
+ for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL 2
+  st f is_S-Seq & p <> f/.len f & (p`1 = (f/.len f)`1 or p`2 = (f/.len f)`2)
+    & LSeg(p,f/.len f) /\ L~f = {f/.len f}
+  holds f^<*p*> is S-Sequence_in_R2;
+
+begin  :: Appending corners
+
+theorem :: SPRECT_2:66
+ for i,j st i in dom f & j in dom f & mid(f,i,j) is S-Sequence_in_R2 &
+  f/.j = N-max L~f & N-max L~f <> NE-corner L~f
+ holds mid(f,i,j)^<*NE-corner L~f*> is S-Sequence_in_R2;
+
+theorem :: SPRECT_2:67
+   for i,j st i in dom f & j in dom f & mid(f,i,j) is S-Sequence_in_R2 &
+  f/.j = E-max L~f & E-max L~f <> NE-corner L~f
+ holds mid(f,i,j)^<*NE-corner L~f*> is S-Sequence_in_R2;
+
+theorem :: SPRECT_2:68
+ for i,j st i in dom f & j in dom f & mid(f,i,j) is S-Sequence_in_R2 &
+  f/.j = S-max L~f & S-max L~f <> SE-corner L~f
+ holds mid(f,i,j)^<*SE-corner L~f*> is S-Sequence_in_R2;
+
+theorem :: SPRECT_2:69
+ for i,j st i in dom f & j in dom f & mid(f,i,j) is S-Sequence_in_R2 &
+  f/.j = E-max L~f & E-max L~f <> NE-corner L~f
+ holds mid(f,i,j)^<*NE-corner L~f*> is S-Sequence_in_R2;
+
+theorem :: SPRECT_2:70
+ for i,j st i in dom f & j in dom f & mid(f,i,j) is S-Sequence_in_R2 &
+  f/.i = N-min L~f & N-min L~f <> NW-corner L~f
+ holds <*NW-corner L~f*>^mid(f,i,j) is S-Sequence_in_R2;
+
+theorem :: SPRECT_2:71
+ for i,j st i in dom f & j in dom f & mid(f,i,j) is S-Sequence_in_R2 &
+  f/.i = W-min L~f & W-min L~f <> SW-corner L~f
+ holds <*SW-corner L~f*>^mid(f,i,j) is S-Sequence_in_R2;
+
+definition
+ let f be non constant standard special_circular_sequence;
+ cluster L~f -> being_simple_closed_curve;
+end;
+
+begin :: The order
+
+theorem :: SPRECT_2:72
+ f/.1 = N-min L~f implies (N-min L~f)..f < (N-max L~f)..f;
+
+theorem :: SPRECT_2:73
+   f/.1 = N-min L~f implies (N-max L~f)..f > 1;
+
+reserve z for clockwise_oriented
+              (non constant standard special_circular_sequence);
+
+theorem :: SPRECT_2:74
+   z/.1 = N-min L~z & N-max L~z <> E-max L~z
+  implies (N-max L~z)..z < (E-max L~z)..z;
+
+theorem :: SPRECT_2:75
+   z/.1 = N-min L~z implies (E-max L~z)..z < (E-min L~z)..z;
+
+theorem :: SPRECT_2:76
+ z/.1 = N-min L~z & E-min L~z <> S-max L~z implies
+  (E-min L~z)..z < (S-max L~z)..z;
+
+theorem :: SPRECT_2:77
+ z/.1 = N-min L~z implies (S-max L~z)..z < (S-min L~z)..z;
+
+theorem :: SPRECT_2:78
+   z/.1 = N-min L~z & S-min L~z <> W-min L~z implies
+  (S-min L~z)..z < (W-min L~z)..z;
+
+theorem :: SPRECT_2:79
+ z/.1 = N-min L~z & N-min L~z <> W-max L~z
+  implies (W-min L~z)..z < (W-max L~z)..z;
+
+theorem :: SPRECT_2:80
+   z/.1 = N-min L~z implies (W-min L~z)..z < len z;
+
+theorem :: SPRECT_2:81
+   f/.1 = N-min L~f implies (W-max L~f)..f < len f;
+

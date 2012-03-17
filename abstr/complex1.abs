@@ -1,0 +1,453 @@
+:: The Complex Numbers
+::  by Czes{\l}aw Byli\'nski
+::
+:: Received March 1, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, ARYTM_3, SQUARE_1, ARYTM_1, RELAT_1, ABSVALUE, COMPLEX1,
+      FUNCT_2, BOOLE, FUNCT_1, FUNCOP_1, ORDINAL2, XCMPLX_0, OPPCAT_1,
+      ORDINAL1, XREAL_0;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ARYTM_3, ARYTM_0, NUMBERS,
+      XCMPLX_0, XREAL_0, REAL_1, ABSVALUE, SQUARE_1, RELAT_1, FUNCT_1, FUNCT_2,
+      FUNCT_4;
+ constructors REAL_1, ABSVALUE, SQUARE_1, FRAENKEL, ARYTM_2, FUNCT_4, MEMBERED,
+      XBOOLE_0, ARYTM_0;
+ clusters XREAL_0, SQUARE_1, FRAENKEL, RELSET_1, FUNCT_2, XCMPLX_0, MEMBERED,
+      ZFMISC_1, XBOOLE_0;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+ reserve a,b,c,d for Element of REAL;
+
+canceled;
+
+theorem :: COMPLEX1:2
+  for a, b being real number holds
+   a^2 + b^2 = 0 iff a = 0 & b = 0;
+
+:: Complex Numbers
+
+definition
+ cluster -> complex Element of COMPLEX;
+end;
+
+definition let z be complex number;
+ canceled;
+
+ func Re z means
+:: COMPLEX1:def 2
+ it = z if z in REAL
+  otherwise
+   ex f being Function of 2,REAL st z = f & it = f.0;
+
+ func Im z means
+:: COMPLEX1:def 3
+ it = 0 if z in REAL
+  otherwise
+   ex f being Function of 2,REAL st z = f & it = f.1;
+end;
+
+definition let z be complex number;
+  cluster Re z -> real;
+  cluster Im z -> real;
+end;
+
+definition let z be complex number;
+ redefine func Re z -> Real;
+ redefine func Im z -> Real;
+end;
+
+canceled 2;
+
+theorem :: COMPLEX1:5
+ for f being Function of 2,REAL
+  ex a,b st f = (0,1)-->(a,b);
+
+canceled;
+
+theorem :: COMPLEX1:7
+   Re [*a,b*] = a & Im [*a,b*] = b;
+
+theorem :: COMPLEX1:8
+  for z being complex number holds [*Re z, Im z*] = z;
+
+theorem :: COMPLEX1:9
+  for z1, z2 being complex number st
+   Re z1 = Re z2 & Im z1 = Im z2 holds z1 = z2;
+
+definition let z1,z2 be complex number;
+ canceled;
+ redefine pred z1 = z2 means
+:: COMPLEX1:def 5
+Re z1 = Re z2 & Im z1 = Im z2;
+end;
+
+definition
+  func 0c -> Element of COMPLEX equals
+:: COMPLEX1:def 6
+ 0;
+
+  func 1r -> Element of COMPLEX equals
+:: COMPLEX1:def 7
+  1;
+
+ redefine func <i> -> Element of COMPLEX equals
+:: COMPLEX1:def 8
+  [*0,1*];
+end;
+
+definition
+ cluster 0c -> zero;
+end;
+
+canceled 2;
+
+theorem :: COMPLEX1:12
+  Re(0c) = 0 & Im(0c) = 0;
+
+theorem :: COMPLEX1:13
+  for z being complex number holds
+    z = 0c iff (Re z)^2 + (Im z)^2 = 0;
+
+theorem :: COMPLEX1:14
+  0 = 0c;
+
+theorem :: COMPLEX1:15
+  Re(1r) = 1 & Im(1r) = 0;
+
+canceled;
+
+theorem :: COMPLEX1:17
+  Re(<i>) = 0 & Im(<i>) = 1;
+
+ reserve z,z1,z2 for Element of COMPLEX;
+
+definition let z1,z2;
+ redefine func z1 + z2 -> Element of COMPLEX equals
+:: COMPLEX1:def 9
+  [* Re z1 + Re z2, Im z1 + Im z2 *];
+end;
+
+canceled;
+
+theorem :: COMPLEX1:19
+  for z1, z2 being complex number holds
+   Re(z1 + z2) = Re z1 + Re z2 & Im(z1 + z2) = Im z1 + Im z2;
+
+canceled 2;
+
+theorem :: COMPLEX1:22
+     0c + z = z;
+
+definition let z1,z2;
+ redefine func z1 * z2 -> Element of COMPLEX equals
+:: COMPLEX1:def 10
+  [* Re z1 * Re z2 - Im z1 * Im z2, Re z1 * Im z2 + Re z2 * Im z1 *];
+end;
+
+canceled;
+
+theorem :: COMPLEX1:24
+  for z1, z2 being complex number holds
+   Re(z1 * z2) = Re z1 * Re z2 - Im z1 * Im z2 &
+   Im(z1 * z2) = Re z1 * Im z2 + Re z2 * Im z1;
+
+canceled 3;
+
+theorem :: COMPLEX1:28
+   0c*z = 0c;
+
+theorem :: COMPLEX1:29
+   1r*z = z;
+
+theorem :: COMPLEX1:30
+   Im z1 = 0 & Im z2 = 0 implies Re(z1*z2) = Re z1 * Re z2 & Im(z1*z2) = 0;
+
+theorem :: COMPLEX1:31
+  Re z1 = 0 & Re z2 = 0 implies Re(z1*z2) = - Im z1 * Im z2 & Im(z1*z2) = 0;
+
+theorem :: COMPLEX1:32
+   Re(z*z) = (Re z)^2 - (Im z)^2 & Im(z*z) = 2*(Re z *Im z);
+
+definition let z;
+  redefine func -z -> Element of COMPLEX equals
+:: COMPLEX1:def 11
+   [* -Re z , -Im z *];
+end;
+
+canceled;
+
+theorem :: COMPLEX1:34
+  for z being complex number holds
+   Re(-z) = -(Re z) & Im(-z) = -(Im z);
+
+canceled 2;
+
+theorem :: COMPLEX1:37
+   <i>*<i> = -1r;
+
+canceled 8;
+
+theorem :: COMPLEX1:46
+   -z = (-1r)*z;
+
+definition let z1,z2;
+ redefine func z1 - z2 -> Element of COMPLEX equals
+:: COMPLEX1:def 12
+  [* Re z1 - Re z2 , Im z1 - Im z2 *];
+end;
+
+canceled;
+
+theorem :: COMPLEX1:48
+  Re(z1 - z2) = Re z1 - Re z2 & Im(z1 - z2) = Im z1 - Im z2;
+
+canceled 3;
+
+theorem :: COMPLEX1:52
+   z - 0c = z;
+
+definition let z;
+  redefine func z" -> Element of COMPLEX equals
+:: COMPLEX1:def 13
+  [* Re z / ((Re z)^2+(Im z)^2) , (- Im z) / ((Re z)^2+(Im z)^2) *];
+end;
+
+canceled 11;
+
+theorem :: COMPLEX1:64
+  for z being complex number holds
+   Re(z") = Re z / ((Re z)^2+(Im z)^2) &
+   Im(z") = (- Im z) / ((Re z)^2+(Im z)^2);
+
+theorem :: COMPLEX1:65
+   z <> 0c implies z*z" = 1r;
+
+canceled 3;
+
+theorem :: COMPLEX1:69
+   z2 <> 0c & z1*z2 = 1r implies z1 = z2";
+
+canceled;
+
+theorem :: COMPLEX1:71
+   1r" = 1r;
+
+theorem :: COMPLEX1:72
+   <i>" = -<i>;
+
+canceled 6;
+
+theorem :: COMPLEX1:79
+  Re z <> 0 & Im z = 0 implies Re(z") = (Re z)" & Im(z") = 0;
+
+theorem :: COMPLEX1:80
+  Re z = 0 & Im z <> 0 implies Re(z") = 0 & Im(z") = -(Im z)";
+
+definition let z1,z2;
+  redefine func z1 / z2 -> Element of COMPLEX equals
+:: COMPLEX1:def 14
+  [* (Re z1 * Re z2 + Im z1 * Im z2) / ((Re z2)^2 + (Im z2)^2),
+              (Re z2 * Im z1 - Re z1 * Im z2) / ((Re z2)^2 + (Im z2)^2) *];
+end;
+
+canceled;
+
+theorem :: COMPLEX1:82
+   Re(z1 / z2) = (Re z1 * Re z2 + Im z1 * Im z2) / ((Re z2)^2 + (Im z2)^2) &
+   Im(z1 / z2) = (Re z2 * Im z1 - Re z1 * Im z2) / ((Re z2)^2 + (Im z2)^2);
+
+canceled;
+
+theorem :: COMPLEX1:84
+   z<>0c implies z" = 1r/z;
+
+theorem :: COMPLEX1:85
+   z/1r = z;
+
+theorem :: COMPLEX1:86
+   z<>0c implies z/z = 1r;
+
+theorem :: COMPLEX1:87
+   0c/z = 0c;
+
+canceled 3;
+
+theorem :: COMPLEX1:91
+   z2<>0c & z1/z2 = 1r implies z1 = z2;
+
+canceled 17;
+
+theorem :: COMPLEX1:109
+   Im z1 = 0 & Im z2 = 0 & Re z2 <> 0 implies
+    Re(z1/z2) = (Re z1)/(Re z2) & Im(z1/z2) = 0;
+
+theorem :: COMPLEX1:110
+   Re z1 = 0 & Re z2 = 0 & Im z2 <> 0 implies
+    Re(z1/z2) = (Im z1)/(Im z2) & Im(z1/z2) = 0;
+
+definition let z be complex number;
+  func z*' -> complex number equals
+:: COMPLEX1:def 15
+   [*Re z,-Im z*];
+ involutiveness;
+end;
+
+definition let z be complex number;
+  redefine func z*' -> Element of COMPLEX;
+end;
+
+canceled;
+
+theorem :: COMPLEX1:112
+  for z being complex number holds
+   Re (z*') = Re z & Im (z*') = -Im z;
+
+theorem :: COMPLEX1:113
+   0c*' = 0c;
+
+theorem :: COMPLEX1:114
+   z*' = 0c implies z = 0c;
+
+theorem :: COMPLEX1:115
+   1r*' = 1r;
+
+theorem :: COMPLEX1:116
+   <i>*' = -<i>;
+
+canceled;
+
+theorem :: COMPLEX1:118
+  (z1 + z2)*' = z1*' + z2*';
+
+theorem :: COMPLEX1:119
+  (-z)*' = -(z*');
+
+theorem :: COMPLEX1:120
+   (z1 - z2)*' = z1*' - z2*';
+
+theorem :: COMPLEX1:121
+  (z1*z2)*' = z1*'*z2*';
+
+theorem :: COMPLEX1:122
+  z"*' = z*'";
+
+theorem :: COMPLEX1:123
+   (z1/z2)*' = (z1*')/(z2*');
+
+theorem :: COMPLEX1:124
+   Im z = 0 implies z*' = z;
+
+theorem :: COMPLEX1:125
+   Re z = 0 implies z*' = -z;
+
+theorem :: COMPLEX1:126
+   Re(z*z*') = (Re z)^2 + (Im z)^2 & Im(z*z*') = 0;
+
+theorem :: COMPLEX1:127
+   Re(z + z*') = 2*Re z & Im(z + z*') = 0;
+
+theorem :: COMPLEX1:128
+   Re(z - z*') = 0 & Im(z - z*') = 2*Im z;
+
+definition let z be complex number;
+  func |.z.| equals
+:: COMPLEX1:def 16
+  sqrt ((Re z)^2 + (Im z)^2);
+end;
+
+definition let z be complex number;
+  cluster |.z.| -> real;
+end;
+
+definition let z be complex number;
+  redefine func |.z.| -> Real;
+end;
+
+canceled;
+
+theorem :: COMPLEX1:130
+  |.0c.| = 0;
+
+theorem :: COMPLEX1:131
+  for z being complex number st |.z.| = 0 holds z = 0c;
+
+theorem :: COMPLEX1:132
+  for z being complex number holds 0 <= |.z.|;
+
+theorem :: COMPLEX1:133
+   for z being complex number holds z <> 0c iff 0 < |.z.|;
+
+theorem :: COMPLEX1:134
+   |.1r.| = 1;
+
+theorem :: COMPLEX1:135
+   |.<i>.| = 1;
+
+theorem :: COMPLEX1:136
+   for z being complex number st Im z = 0 holds |.z.| = abs(Re z);
+
+theorem :: COMPLEX1:137
+   for z being complex number st Re z = 0 holds |.z.| = abs(Im z);
+
+theorem :: COMPLEX1:138
+  for z being complex number holds |.-z.| = |.z.|;
+
+ reserve z for complex number;
+
+theorem :: COMPLEX1:139
+  |.z*'.| = |.z.|;
+
+theorem :: COMPLEX1:140
+   Re z <= |.z.|;
+
+theorem :: COMPLEX1:141
+   Im z <= |.z.|;
+
+theorem :: COMPLEX1:142
+  for z1, z2 being complex number holds
+   |.z1 + z2.| <= |.z1.| + |.z2.|;
+
+theorem :: COMPLEX1:143
+  |.z1 - z2.| <= |.z1.| + |.z2.|;
+
+theorem :: COMPLEX1:144
+   |.z1.| - |.z2.| <= |.z1 + z2.|;
+
+theorem :: COMPLEX1:145
+  |.z1.| - |.z2.| <= |.z1 - z2.|;
+
+theorem :: COMPLEX1:146
+  |.z1 - z2.| = |.z2 - z1.|;
+
+theorem :: COMPLEX1:147
+  |.z1 - z2.| = 0 iff z1 = z2;
+
+theorem :: COMPLEX1:148
+   z1 <> z2 iff 0 < |.z1 - z2.|;
+
+theorem :: COMPLEX1:149
+   |.z1 - z2.| <= |.z1 - z.| + |.z - z2.|;
+
+theorem :: COMPLEX1:150
+   abs(|.z1.| - |.z2.|) <= |.z1 - z2.|;
+
+theorem :: COMPLEX1:151
+  for z1, z2 being complex number holds
+   |.z1*z2.| = |.z1.|*|.z2.|;
+
+theorem :: COMPLEX1:152
+  z <> 0c implies |.z".| = |.z.|";
+
+theorem :: COMPLEX1:153
+   z2 <> 0c implies |.z1.|/|.z2.| = |.z1/z2.|;
+
+theorem :: COMPLEX1:154
+   |.z*z.| = (Re z)^2 + (Im z)^2;
+
+theorem :: COMPLEX1:155
+   |.z*z.| = |.z*z*'.|;

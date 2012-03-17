@@ -1,0 +1,1878 @@
+:: Lattice of Fuzzy Sets
+::  by Takashi Mitsuishi and Grzegorz Bancerek
+::
+:: Received August 12, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary LFUZZY_0, ORDERS_1, ARYTM, RELAT_2, LATTICES, RCOMP_1, FUNCT_1,
+      RELAT_1, QC_LANG1, FUZZY_3, SEQ_1, TARSKI, FUZZY_1, GROUP_1, LATTICE2,
+      LATTICE3, WAYBEL_0, MEASURE5, SQUARE_1, BOOLE, YELLOW_0, SEQ_2, INTEGRA1,
+      SEQ_4, PRE_TOPC, BHSP_3, ORDINAL2, YELLOW_1, PBOOLE, FUNCT_2, PARTFUN1,
+      MONOID_0, CARD_3, WAYBEL_3, WAYBEL_1, FUNCOP_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_2, DOMAIN_1,
+      ORDINAL1, PARTFUN1, SUBSET_1, NUMBERS, XREAL_0, REAL_1, SQUARE_1, SEQ_1,
+      SEQ_4, RCOMP_1, RELSET_1, STRUCT_0, ORDERS_1, PRE_TOPC, PBOOLE, MONOID_0,
+      LATTICE3, YELLOW_0, WAYBEL_0, YELLOW_1, WAYBEL_1, WAYBEL_3, FUZZY_1,
+      FUZZY_3, FUZZY_4, INTEGRA1, PRE_CIRC;
+ constructors XCMPLX_0, SQUARE_1, INTEGRA1, WAYBEL_2, YELLOW10, PSCOMP_1,
+      WAYBEL_3, FUZZY_4, DOMAIN_1, ORDERS_3, PRE_CIRC, MONOID_0;
+ clusters SUBSET_1, LATTICE3, XREAL_0, YELLOW14, RELSET_1, ORDERS_4, STRUCT_0,
+      MONOID_0, WAYBEL_2, WAYBEL10, WAYBEL17, WAYBEL_3, MEMBERED;
+ requirements BOOLE, SUBSET, NUMERALS, REAL;
+ definitions TARSKI, XBOOLE_0, RELAT_1, STRUCT_0, LATTICE3, YELLOW_0, WAYBEL_0,
+      WAYBEL_1;
+ theorems ZFMISC_1, ORDERS_1, STRUCT_0, WAYBEL_1, AXIOMS, RCOMP_1, FUNCT_1,
+      XBOOLE_1, LATTICE3, SQUARE_1, YELLOW_0, TOPREAL5, INTEGRA1, XREAL_0,
+      XBOOLE_0, TARSKI, SEQ_4, TOPMETR3, JORDAN5A, PSCOMP_1, FUNCT_2, YELLOW_2,
+      WAYBEL_3, YELLOW_3, PBOOLE, CARD_3, YELLOW_1, FUNCOP_1, FUZZY_2, FUZZY_4,
+      FUNCT_3, FUZZY_1, PARTFUN1, MONOID_0, WAYBEL_0;
+ schemes YELLOW_0, PRALG_2, YELLOW_3, FRAENKEL;
+
+begin :: Posets of Real Numbers
+
+definition
+  let R be RelStr;
+  attr R is real means:
+Def1:
+   the carrier of R c= REAL &
+   for x,y being real number st x in the carrier of R & y in the carrier of R
+    holds [x,y] in the InternalRel of R iff x <= y;
+end;
+
+definition
+  let R be RelStr;
+  attr R is interval means:
+Def2:
+   R is real & ex a,b being real number st a <= b & the carrier of R = [.a,b.];
+end;
+
+definition
+  cluster interval -> real non empty RelStr;
+  coherence
+  proof
+   let R being RelStr;
+   assume
+A1:R is real;
+   given a,b being real number such that
+A2:a <= b & the carrier of R = [.a,b.];
+   thus R is real by A1;
+   thus the carrier of R is non empty by A2,RCOMP_1:15;
+  end;
+end;
+
+definition
+  cluster empty -> real RelStr;
+  coherence
+  proof
+   let R being RelStr;
+   assume
+A1:the carrier of R is empty;
+   hence the carrier of R c= REAL by XBOOLE_1:2;
+   thus thesis by A1;
+  end;
+end;
+
+theorem Th1:
+  for X being Subset of REAL
+  ex R being strict RelStr st
+   the carrier of R = X & R is real
+  proof
+   let X be Subset of REAL;
+   per cases;
+    suppose A1: X is empty;
+      consider E being empty strict RelStr;
+      take E;
+      thus thesis by A1,STRUCT_0:def 1;
+    suppose X is non empty; then
+      reconsider Y = X as non empty set;
+      defpred X[set,set] means
+       ex x,y being real number st $1=x & $2=y & x<=y;
+      consider L being non empty strict RelStr
+      such that
+A2:   the carrier of L = Y and
+A3:   for a,b being Element of L holds a <= b iff X[a,b] from RelStrEx;
+      take L;
+      thus the carrier of L = X by A2;
+      thus the carrier of L c= REAL by A2;
+      let x,y be real number;
+      assume x in the carrier of L & y in the carrier of L; then
+      reconsider a = x, b = y as Element of L;
+      a <= b iff [x,y] in the InternalRel of L by ORDERS_1:def 9; then
+      [x,y] in the InternalRel of L iff
+               ex x,y being real number st a=x & b=y & x<=y by A3;
+      hence [x,y] in the InternalRel of L iff x <= y;
+  end;
+
+definition
+  cluster interval strict RelStr;
+  existence
+   proof
+    set X = [. 0,1 qua real number .];
+    consider R being strict RelStr such that
+A1:  the carrier of R = X & R is real by Th1;
+    take R;
+    thus thesis by A1,Def2;
+   end;
+end;
+
+theorem Th2:
+  for R1,R2 being real RelStr
+   st the carrier of R1 = the carrier of R2
+   holds the RelStr of R1 = the RelStr of R2
+   proof
+    let R1, R2 be real RelStr such that
+A1: the carrier of R1 = the carrier of R2;
+    set X = the carrier of R1;
+    the InternalRel of R1 = the InternalRel of R2
+       proof
+         let a,b be set;
+A2:      X c= REAL by Def1;
+         hereby assume
+A3:       [a,b] in the InternalRel of R1; then
+A4:       a in X & b in X by ZFMISC_1:106;
+          then reconsider a' = a, b' = b as Element of REAL by A2;
+          a' <= b' by A3,A4,Def1;
+          hence [a,b] in the InternalRel of R2 by A1,A4,Def1;
+         end;
+         assume
+A5:     [a,b] in the InternalRel of R2; then
+A6:      a in X & b in X by A1,ZFMISC_1:106; then
+         reconsider a' = a, b' = b as Element of REAL by A2;
+A7:       a' <= b' by A1,A5,A6,Def1;
+         thus [a,b] in the InternalRel of R1 by A6,A7,Def1;
+       end;
+    hence thesis by A1;
+ end;
+
+definition
+  let R be non empty real RelStr;
+  cluster -> real Element of R;
+  coherence
+    proof
+     let x be Element of R;
+A1:  the carrier of R c= REAL by Def1;
+     x in the carrier of R;then
+     x is Element of REAL by A1;
+     hence x is real;
+    end;
+end;
+
+definition
+ let X be Subset of REAL;
+ func RealPoset X -> real strict RelStr means:
+Def3:
+  the carrier of it = X;
+existence
+ proof
+   ex R being strict RelStr st the carrier of R = X & R is real by Th1;
+   hence thesis;
+  end;
+  uniqueness by Th2;
+end;
+
+definition
+  let X be non empty Subset of REAL;
+  cluster RealPoset X -> non empty;
+  coherence
+  proof
+    thus the carrier of RealPoset X is non empty by Def3;
+  end;
+end;
+
+definition
+  let R be RelStr;
+  let x,y be Element of R;
+  redefine pred x <= y;
+   synonym x <<= y; synonym y >>= x; antonym x ~<= y; antonym y ~>= x;
+end;
+
+definition
+  let x,y be real number;
+  redefine pred x <= y;
+   synonym x <R= y; antonym y <R x; synonym y >R= x; antonym x >R y;
+end;
+
+theorem Th3:
+ for R being non empty real RelStr
+ for x,y being Element of R
+  holds x <R= y iff x <<= y
+  proof
+    let R be non empty real RelStr;
+    let x,y be Element of R;
+    [x,y] in the InternalRel of R iff x <R= y by Def1;
+    hence thesis by ORDERS_1:def 9;
+  end;
+
+definition
+  cluster real -> reflexive antisymmetric transitive RelStr;
+  coherence
+   proof
+     let R be RelStr such that
+A1:   R is real;
+     per cases;
+      suppose R is empty; then
+        R is empty RelStr;
+        hence thesis;
+      suppose R is non empty; then
+        reconsider R' = R as non empty real RelStr by A1;
+A2:     R' is reflexive
+         proof
+           let x be Element of R';
+           thus thesis by Th3;
+         end;
+A3:     R' is antisymmetric
+         proof
+           let x,y be Element of R';
+           assume x <<= y & x >>= y; then
+           x <R= y & x >R= y by Th3;
+           hence x = y by AXIOMS:21;
+         end;
+        R' is transitive
+         proof
+           let x,y,z be Element of R';
+           assume x <<= y & y <<= z; then
+           x <R= y & y <R= z by Th3; then
+           x <R= z by AXIOMS:22;
+           hence thesis by Th3;
+         end;
+        hence thesis by A2,A3;
+   end;
+end;
+
+definition
+  cluster -> connected (real non empty RelStr);
+  coherence
+  proof
+    let R be non empty real RelStr;
+    let x,y be Element of R;
+    x <R= y or x >R= y;
+    hence thesis by Th3;
+  end;
+end;
+
+definition
+ let R be non empty real RelStr;
+ let x,y be Element of R;
+ redefine func max(x,y) -> Element of R;
+ coherence by SQUARE_1:49;
+end;
+
+definition
+ let R be non empty real RelStr;
+ let x,y be Element of R;
+ redefine func min(x,y) -> Element of R;
+ coherence  by SQUARE_1:38;
+end;
+
+definition
+  cluster -> with_suprema with_infima (real non empty RelStr);
+  coherence;
+end;
+
+reserve X for non empty Subset of REAL,
+   x,y,z,w for real number,
+   R for real non empty RelStr,
+   a,b,c for Element of R;
+
+theorem Th4:
+  a"\/"b = max(a,b)
+  proof
+    max(a,b) >R= a & max(a,b) >R= b by SQUARE_1:46;then
+A1: max(a,b) >>= a & max(a,b) >>= b by Th3;
+    for d being Element of R st d >>= a & d >>= b holds max(a,b) <<= d
+      proof
+       let d be Element of R;
+       assume d >>= a & d >>= b;then
+       d >R= a & d >R= b by Th3;then
+       max(a,b) <R= d by SQUARE_1:50;
+       hence max(a,b) <<= d by Th3;
+      end;
+    hence thesis by A1,YELLOW_0:22;
+  end;
+
+theorem Th5:
+  a"/\"b = min(a,b)
+  proof
+    min(a,b) <= a & min(a,b) <= b by SQUARE_1:35;then
+A1: min(a,b) <<= a & min(a,b) <<= b by Th3;
+    for d being Element of R st d <<= a & d <<= b holds min(a,b) >>= d
+    proof
+      let d being Element of R;
+      assume d <<= a & d <<= b; then
+      d <= a & d <= b by Th3; then
+      d <= min(a,b) by SQUARE_1:39;
+      hence thesis by Th3;
+    end;
+    hence thesis by A1,YELLOW_0:23;
+  end;
+
+theorem Th6:
+  (ex x st x in the carrier of R & for y st y in the carrier of R holds x <= y)
+    iff R is lower-bounded
+    proof
+     hereby given x such that
+A1:   x in the carrier of R &
+      for y st y in the carrier of R holds x <R= y;
+      reconsider a = x as Element of R by A1;
+      now let b;assume b in the carrier of R;
+        b >R= a by A1;
+        hence a <<= b by Th3;
+      end;
+      then
+      a is_<=_than the carrier of R by LATTICE3:def 8;
+      hence R is lower-bounded by YELLOW_0:def 4;
+     end;
+     given x being Element of R such that
+A2:  x is_<=_than the carrier of R;
+     take x;
+     thus x in the carrier of R;
+     let y; assume y in the carrier of R; then
+     reconsider b = y as Element of R;
+     x <<= b by A2,LATTICE3:def 8;
+     hence x <= y by Th3;
+    end;
+
+theorem Th7:
+  (ex x st x in the carrier of R & for y st y in the carrier of R holds x >= y)
+    iff R is upper-bounded
+    proof
+      hereby given x such that
+A1:   x in the carrier of R &
+      for y st y in the carrier of R holds x >R= y;
+      reconsider a = x as Element of R by A1;
+      now let b;assume b in the carrier of R;
+        a >R= b by A1;
+        hence a >>= b by Th3;
+      end;
+      then
+      a is_>=_than the carrier of R by LATTICE3:def 9;
+      hence R is upper-bounded by YELLOW_0:def 5;
+     end;
+     given x being Element of R such that
+A2:  x is_>=_than the carrier of R;
+     take x;
+     thus x in the carrier of R;
+     let y; assume y in the carrier of R; then
+     reconsider b = y as Element of R;
+     x >>= b by A2,LATTICE3:def 9;
+     hence x >= y by Th3;
+    end;
+
+definition
+  cluster interval -> bounded (non empty RelStr);
+  coherence
+   proof
+     let R being non empty RelStr;
+     assume
+A1:  R is real;
+     given x,y being real number such that
+A2:  x <= y & the carrier of R = [.x,y.];
+     ex x st x in the carrier of R
+     & for y st y in the carrier of R holds x >= y
+       proof
+        take y;
+        thus y in the carrier of R by A2,RCOMP_1:15;
+        let z;
+        assume z in the carrier of R;
+        hence thesis by A2,TOPREAL5:1;
+       end;
+     then
+A3:  R is upper-bounded by A1,Th7;
+     ex x st x in the carrier of R &
+     for y st y in the carrier of R holds x <= y
+       proof
+        take x;
+        thus x in the carrier of R by A2,RCOMP_1:15;
+        let z;
+        assume z in the carrier of R;
+        hence thesis by A2,TOPREAL5:1;
+       end;
+     then
+     R is lower-bounded by A1,Th6;
+     hence R is bounded by A3,YELLOW_0:def 6;
+   end;
+end;
+
+theorem Th8:
+for R being interval non empty RelStr, X being set holds
+ex_sup_of X,R
+ proof
+  let R being interval non empty RelStr;
+  let X being set;
+  consider a,b being real number such that
+A1:a <= b & the carrier of R = [.a,b.] by Def2;
+  reconsider a,b as Real by XREAL_0:def 1;
+A2:X /\ [.a,b.] c= [.a,b.] by XBOOLE_1:17;then
+  reconsider Y = X /\ [.a,b.] as Subset of REAL by XBOOLE_1:1;
+  [.a,b.] is closed-interval by A1,INTEGRA1:def 1;then
+A3:[.a,b.] is bounded_above by INTEGRA1:3;then
+A4:Y is bounded_above by A2,RCOMP_1:4;
+  ex a being Element of R st Y is_<=_than a &
+  for b being Element of R st Y is_<=_than b holds a <<= b
+   proof
+    per cases;
+     suppose
+A5:   Y is empty;
+      a in [.a,b.] by A1,RCOMP_1:15;then
+      reconsider x = a as Element of R by A1;
+      take x;
+      thus Y is_<=_than x by A5,YELLOW_0:6;
+      let y be Element of R;
+      x <= y by A1,TOPREAL5:1;
+      hence thesis by Th3;
+     suppose A6:Y is non empty;
+     upper_bound [.a,b.] = b by A1,JORDAN5A:20;then
+A7:  upper_bound Y <= b by A2,A3,A6,PSCOMP_1:13;
+     consider c being Element of Y;
+A8:  c in Y by A6;then
+     reconsider c as Real;
+A9:  c <= upper_bound Y by A4,A6,SEQ_4:def 4;
+     a<=c by A2,A8,TOPREAL5:1;then
+     a <= upper_bound Y by A9,AXIOMS:22;then
+     upper_bound Y in [.a,b.] by A7,TOPREAL5:1; then
+     reconsider x = upper_bound Y as Element of R by A1;
+     take x;
+A10:  for b being Element of R st b in Y holds b <<= x
+      proof
+       let b be Element of R;
+       assume b in Y;
+       then b <= upper_bound Y by A4,SEQ_4:def 4;
+       hence thesis by Th3;
+      end;
+     for y being Element of R st Y is_<=_than y holds x <<= y
+      proof
+       let y be Element of R;
+       assume A11:Y is_<=_than y;
+       for z being real number st z in Y holds z <= y
+        proof
+         let z being real number;
+         assume
+A12:      z in Y; then
+         z in [.a,b.] by XBOOLE_0:def 3;then
+         reconsider z as Element of R by A1;
+         z <<= y by A11,A12,LATTICE3:def 9;
+         hence thesis by Th3;
+        end;
+       then
+       upper_bound Y <= y by A6,TOPMETR3:1;
+       hence thesis by Th3;
+      end;
+     hence thesis by A10,LATTICE3:def 9;
+   end;
+  then
+  ex_sup_of Y,R by YELLOW_0:15;
+  hence thesis by A1,YELLOW_0:50;
+ end;
+
+definition
+  cluster -> complete (interval non empty RelStr);
+  coherence
+  proof let R be interval non empty RelStr;
+    for X being Subset of R holds ex_sup_of X,R by Th8;
+    hence thesis by YELLOW_0:53;
+  end;
+end;
+
+definition
+  cluster -> distributive Chain;
+  coherence
+   proof
+     let C be Chain;
+     for x,y,z being Element of C holds
+     x "/\" (y "\/" z) = (x "/\" y) "\/" (x "/\" z)
+     proof
+       let x,y,z be Element of C;
+A1:    x <= x by YELLOW_0:def 1;
+       per cases by WAYBEL_0:def 29;
+      suppose A2:x <= y & x <= z & y <= z;
+A3:    x "/\" (y "\/" z) = x "/\" z                    by A2,YELLOW_0:24
+       .= x                                            by A2,YELLOW_0:25;
+       (x "/\" y) "\/" (x "/\" z) = x  "\/" (x "/\" z) by A2,YELLOW_0:25
+       .= x  "\/" x                                    by A2,YELLOW_0:25
+       .= x                                            by A1,YELLOW_0:24;
+       hence  thesis by A3;
+      suppose A4:x <= y & x <= z & y >= z;
+A5:    x "/\" (y "\/" z) = x "/\" y                    by A4,YELLOW_0:24
+       .= x                                            by A4,YELLOW_0:25;
+       (x "/\" y) "\/" (x "/\" z) = x  "\/" (x "/\" z) by A4,YELLOW_0:25
+       .= x  "\/" x                                    by A4,YELLOW_0:25
+       .= x                                            by A1,YELLOW_0:24;
+       hence  thesis by A5;
+      suppose A6:x <= y & x >= z & y <= z;then
+       z <= y by YELLOW_0:def 2;then
+A7:    z = y by A6,YELLOW_0:def 3;
+A8:    x "/\" (y "\/" z) = x "/\" z                    by A6,YELLOW_0:24
+       .= z                                            by A6,YELLOW_0:25;
+       (x "/\" y) "\/" (x "/\" z) = x  "\/" (x "/\" z) by A6,YELLOW_0:25
+       .= x  "\/" z                                    by A6,YELLOW_0:25
+       .= x                                            by A6,YELLOW_0:24;
+       hence  thesis by A6,A7,A8,YELLOW_0:def 3;
+      suppose A9:x <= y & x >= z & y >= z;
+A10:    x "/\" (y "\/" z) = x "/\" y                    by A9,YELLOW_0:24
+       .= x                                            by A9,YELLOW_0:25;
+       (x "/\" y) "\/" (x "/\" z) = x  "\/" (x "/\" z) by A9,YELLOW_0:25
+       .= x  "\/" z                                    by A9,YELLOW_0:25
+       .= x                                            by A9,YELLOW_0:24;
+       hence  thesis by A10;
+      suppose A11:x >= y & x <= z & y <= z;
+A12:    x "/\" (y "\/" z) = x "/\" z                    by A11,YELLOW_0:24
+              .= x                                     by A11,YELLOW_0:25;
+       (x "/\" y) "\/" (x "/\" z) =  y "\/" (x "/\" z) by A11,YELLOW_0:25
+              .= y  "\/" x                             by A11,YELLOW_0:25
+              .= x                                     by A11,YELLOW_0:24;
+       hence  thesis by A12;
+      suppose A13:x >= y & x <= z & y >= z;then
+       z >= y by YELLOW_0:def 2;then
+A14:     z = y by A13,YELLOW_0:def 3;
+A15:    x "/\" (y "\/" z) = x "/\" y                    by A13,YELLOW_0:24
+                        .= y                           by A13,YELLOW_0:25;
+       (x "/\" y) "\/" (x "/\" z) =  y "\/" (x "/\" z) by A13,YELLOW_0:25
+                                 .= y  "\/" x          by A13,YELLOW_0:25
+                                            .= x       by A13,YELLOW_0:24;
+       hence  thesis by A13,A14,A15,YELLOW_0:def 3;
+      suppose A16:x >= y & x >= z & y <= z;
+A17:    x "/\" (y "\/" z) = x "/\" z                    by A16,YELLOW_0:24
+                        .= z                           by A16,YELLOW_0:25;
+       (x "/\" y) "\/" (x "/\" z) =  y "\/" (x "/\" z) by A16,YELLOW_0:25
+                                 .= y  "\/" z          by A16,YELLOW_0:25
+                                            .= z       by A16,YELLOW_0:24;
+       hence  thesis by A17;
+      suppose A18:x >= y & x >= z & y >= z;
+A19:    x "/\" (y "\/" z) = x "/\" y                    by A18,YELLOW_0:24
+                        .= y                           by A18,YELLOW_0:25;
+       (x "/\" y) "\/" (x "/\" z) =  y "\/" (x "/\" z) by A18,YELLOW_0:25
+                                 .= y  "\/" z          by A18,YELLOW_0:25
+                                            .= y       by A18,YELLOW_0:24;
+       hence  thesis by A19;
+     end;
+     hence thesis by WAYBEL_1:def 3;
+   end;
+end;
+
+definition
+  cluster -> Heyting (interval non empty RelStr);
+  coherence
+   proof let R be interval non empty RelStr;
+     thus R is LATTICE;
+     let x be Element of R;
+     set f = x "/\";
+     f is sups-preserving
+     proof
+       let X be Subset of R;
+       assume ex_sup_of X,R;
+       thus ex_sup_of f.:X,R by Th8;
+A1:    f.sup X is_>=_than f.:X
+       proof
+         let a be Element of R; assume a in f.:X; then
+         consider y being set such that
+A2:      y in the carrier of R & y in X & a = f.y by FUNCT_2:115;
+         reconsider y as Element of R by A2;
+         y <<= sup X & a = x "/\" y & f.sup X = x "/\" sup X & x <<= x
+          by A2,WAYBEL_1:def 18,YELLOW_0:def 1,YELLOW_2:24;
+         hence thesis by YELLOW_3:2;
+       end;
+       now let b being Element of R such that
+A3:      b is_>=_than f.:X;
+         per cases;
+         suppose
+A4:      x is_>=_than X; then
+         x >>= sup X by YELLOW_0:32; then
+A5:      x "/\" sup X = sup X by YELLOW_0:25;
+         b is_>=_than X
+          proof
+           let a be Element of R;
+           assume
+A6:       a in X;       then
+           x >>= a by A4,LATTICE3:def 9;then
+           x "/\" a = a by YELLOW_0:25;then
+A7:        a = f.a by WAYBEL_1:def 18;
+           f.a in f.:X by A6,FUNCT_2:43;
+           hence thesis by A3,A7,LATTICE3:def 9;
+          end; then
+         b >>= sup X by YELLOW_0:32;
+         hence f.sup X <<= b by A5,WAYBEL_1:def 18;
+         suppose not x is_>=_than X; then
+         consider a being Element of R such that
+A8:      a in X & not x >>= a by LATTICE3:def 9;
+A9:      x <<= a by A8,WAYBEL_0:def 29;
+A10:      x = x "/\" a by A9,YELLOW_0:25
+          .= f.a by WAYBEL_1:def 18;
+         a <<= sup X by A8,YELLOW_2:24;then
+         x <<= sup X by A9,ORDERS_1:26;then
+         x = x "/\"sup X by YELLOW_0:25;then
+A11:     x = f.sup X by WAYBEL_1:def 18;
+         f.a in f.:X by A8,FUNCT_2:43;
+         hence f.sup X <<= b by A3,A10,A11,LATTICE3:def 9;
+       end;
+       hence sup (f.:X) = f.sup X by A1,YELLOW_0:30;
+     end;
+     hence thesis by WAYBEL_1:18;
+   end;
+end;
+
+definition
+  cluster [.0,1 .] -> non empty;
+  coherence
+   proof
+    [. 0,1 .] is closed-interval by INTEGRA1:def 1;
+    hence thesis by INTEGRA1:2;
+   end;
+end;
+
+definition
+  cluster RealPoset [.0,1 .] -> interval;
+  coherence
+   proof
+    the carrier of RealPoset [. 0,1 .] =  [. 0,1 .] by Def3;
+    hence thesis by Def2;
+   end;
+end;
+
+begin :: Product of Heyting Lattices
+
+theorem Th9:
+ for I being non empty set
+ for J being RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I
+  st for i being Element of I holds J.i is sup-Semilattice
+ holds product J is with_suprema
+  proof
+   let I being non empty set;
+   let J being RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I
+   such that
+A1:for i being Element of I holds J.i is sup-Semilattice;
+   set IT = product J;
+   for x,y being Element of IT
+      ex z being Element of IT st x <= z & y <= z &
+    for z' being Element of IT st x <= z' & y <= z' holds z <= z'
+    proof
+     let x,y being Element of IT;
+     deffunc U(Element of I) = x.$1 "\/" y.$1;
+     consider z be ManySortedSet of I such that
+A2:  for i be Element of I holds z.i = U(i) from LambdaDMS;
+A3:  dom z = I by PBOOLE:def 3;
+     for i being Element of I holds z.i is Element of J.i
+      proof
+       let i being Element of I;
+       z.i = x.i "\/" y.i by A2;
+       hence thesis;
+      end;
+     then
+     reconsider z as Element of product J by A3,WAYBEL_3:27;
+     take z;
+     for i being Element of I holds x.i <= z.i & y.i <= z.i
+      proof
+       let i being Element of I;
+       J.i is antisymmetric with_suprema RelStr &
+       z.i = x.i "\/" y.i by A1,A2;
+       hence thesis by YELLOW_0:22;
+      end;
+     hence x <= z & y <= z by WAYBEL_3:28;
+     let z' be Element of IT;
+     assume A4:x <= z' & y <= z';
+     for i being Element of I holds z.i <= z'.i
+      proof
+       let i being Element of I;
+       J.i is antisymmetric with_suprema RelStr &
+       z'.i >= x.i & z'.i >= y.i & z.i = x.i "\/" y.i by A1,A2,A4,WAYBEL_3:28;
+       hence thesis by YELLOW_0:22;
+      end;
+      hence z <= z' by WAYBEL_3:28;
+    end;
+   hence thesis by LATTICE3:def 10;
+  end;
+
+theorem Th10:
+ for I being non empty set
+ for J being RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I
+  st for i being Element of I holds J.i is Semilattice
+ holds product J is with_infima
+  proof
+   let I being non empty set;
+   let J being RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I
+   such that
+A1:for i being Element of I holds J.i is Semilattice;
+   set IT = product J;
+   for x,y being Element of IT
+      ex z being Element of IT st x >= z & y >= z &
+    for z' being Element of IT st x >= z' & y >= z' holds z >= z'
+    proof
+     let x,y being Element of IT;
+     deffunc U(Element of I) = x.$1 "/\" y.$1;
+     consider z be ManySortedSet of I such that
+A2:  for i be Element of I holds z.i = U(i) from LambdaDMS;
+A3:  dom z = I by PBOOLE:def 3;
+     for i being Element of I holds z.i is Element of J.i
+      proof
+       let i being Element of I;
+       z.i = x.i "/\" y.i by A2;
+       hence thesis;
+      end;
+     then
+     reconsider z as Element of product J by A3,WAYBEL_3:27;
+     take z;
+     for i being Element of I holds x.i >= z.i & y.i >= z.i
+      proof
+       let i being Element of I;
+       J.i is antisymmetric with_infima RelStr &
+       z.i = x.i "/\" y.i by A1,A2;
+       hence thesis by YELLOW_0:23;
+      end;
+     hence x >= z & y >= z by WAYBEL_3:28;
+     let z' be Element of IT;
+     assume A4:x >= z' & y >= z';
+     for i being Element of I holds z.i >= z'.i
+      proof
+       let i being Element of I;
+       J.i is antisymmetric with_infima RelStr &
+       x.i >= z'.i & z'.i <= y.i & z.i = x.i "/\" y.i by A1,A2,A4,WAYBEL_3:28;
+       hence thesis by YELLOW_0:23;
+      end;
+      hence z >= z' by WAYBEL_3:28;
+    end;
+   hence thesis by LATTICE3:def 11;
+  end;
+
+theorem Th11:
+  for I being non empty set
+  for J being RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I
+   st for i being Element of I holds J.i is Semilattice
+  for f,g being Element of product J, i being Element of I
+   holds (f "/\" g).i = (f.i) "/\" (g.i)
+   proof
+    let I being non empty set;
+    let J being RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I
+    such that
+A1: for i being Element of I holds J.i is Semilattice;
+    let f,g being Element of product J;
+    let i being Element of I;
+A2: for i being Element of I holds J.i is antisymmetric by A1;
+A3: J.i is Semilattice by A1;
+A4: product J is antisymmetric with_infima by A1,A2,Th10,WAYBEL_3:30;
+A5: (f "/\" g).i <= (f.i) "/\" (g.i)
+     proof
+      f >= f "/\" g & g >= f "/\" g by A4,YELLOW_0:23;then
+      f.i >= (f "/\" g).i & g.i >= (f "/\" g).i by WAYBEL_3:28;
+      hence thesis by A3,YELLOW_0:23;
+     end;
+    (f "/\" g).i >= (f.i) "/\" (g.i)
+    proof
+     deffunc U(Element of I) = f.$1 "/\" g.$1;
+     consider z be ManySortedSet of I such that
+A6:  for i be Element of I holds z.i = U(i) from LambdaDMS;
+A7:  dom z = I by PBOOLE:def 3;
+     for i being Element of I holds z.i is Element of J.i
+      proof
+       let i being Element of I;
+       z.i = f.i "/\" g.i by A6;
+       hence thesis;
+      end;
+     then
+     reconsider z as Element of product J by A7,WAYBEL_3:27;
+     for i being Element of I holds z.i <= f.i & z.i <= g.i
+      proof
+       let i being Element of I;
+A8:    J.i is antisymmetric with_infima RelStr by A1;
+       z.i = f.i "/\" g.i by A6;
+       hence thesis by A8,YELLOW_0:23;
+      end;
+     then
+     z <= f & z <= g by WAYBEL_3:28;then
+A9:  f "/\" g >= z by A4,YELLOW_0:23;
+     for i being Element of I holds (f "/\" g).i  >= f.i "/\" g.i
+      proof
+       let i being Element of I;
+       f.i "/\" g.i = z.i & (f "/\" g).i  >= z.i by A6,A9,WAYBEL_3:28;
+       hence  thesis;
+      end;
+     hence thesis;
+    end;
+    hence thesis by A3,A5,YELLOW_0:def 3;
+   end;
+
+theorem Th12:
+  for I being non empty set
+  for J being RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I
+   st for i being Element of I holds J.i is sup-Semilattice
+  for f,g being Element of product J, i being Element of I
+   holds (f "\/" g).i = (f.i) "\/" (g.i)
+   proof
+    let I being non empty set;
+    let J being RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I
+    such that
+A1: for i being Element of I holds J.i is sup-Semilattice;
+    let f,g being Element of product J;
+    let i being Element of I;
+A2: for i being Element of I holds J.i is antisymmetric by A1;
+A3: J.i is sup-Semilattice by A1;
+A4: product J is antisymmetric with_suprema by A1,A2,Th9,WAYBEL_3:30;
+A5: (f "\/" g).i >= (f.i) "\/" (g.i)
+     proof
+      f <= f "\/" g & g <= f "\/" g by A4,YELLOW_0:22;then
+      f.i <= (f "\/" g).i & g.i <= (f "\/" g).i by WAYBEL_3:28;
+      hence thesis by A3,YELLOW_0:22;
+     end;
+    (f "\/" g).i <= (f.i) "\/" (g.i)
+    proof
+     deffunc U(Element of I) = f.$1 "\/" g.$1;
+     consider z be ManySortedSet of I such that
+A6:  for i be Element of I holds z.i = U(i) from LambdaDMS;
+A7:  dom z = I by PBOOLE:def 3;
+     for i being Element of I holds z.i is Element of J.i
+      proof
+       let i being Element of I;
+       z.i = f.i "\/" g.i by A6;
+       hence thesis;
+      end;
+     then
+     reconsider z as Element of product J by A7,WAYBEL_3:27;
+     for i being Element of I holds z.i >= f.i & z.i >= g.i
+      proof
+       let i being Element of I;
+A8:    J.i is antisymmetric with_suprema RelStr by A1;
+       z.i = f.i "\/" g.i by A6;
+       hence thesis by A8,YELLOW_0:22;
+      end;
+     then
+     z >= f & z >= g by WAYBEL_3:28;then
+A9:  f "\/" g <= z by A4,YELLOW_0:22;
+     for i being Element of I holds (f "\/" g).i  <= f.i "\/" g.i
+      proof
+       let i being Element of I;
+       f.i "\/" g.i = z.i & (f "\/" g).i  <= z.i by A6,A9,WAYBEL_3:28;
+       hence thesis;
+      end;
+     hence thesis;
+    end;
+    hence thesis by A3,A5,YELLOW_0:def 3;
+   end;
+
+theorem Th13:
+  for I being non empty set
+  for J being RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I
+   st for i being Element of I holds J.i is Heyting complete LATTICE
+   holds product J is complete Heyting
+   proof
+     let I be non empty set;
+     let J be RelStr-yielding non-Empty reflexive-yielding ManySortedSet of I
+     such that
+A1: for i being Element of I holds J.i is Heyting complete LATTICE;
+     set H = product J;
+A2: for i being Element of I holds J.i is Semilattice by A1;
+A3: for i being Element of I holds J.i is complete LATTICE by A1; then
+     reconsider H as complete LATTICE by WAYBEL_3:31;
+     H = H;
+     hence product J is complete & product J is LATTICE;
+     let f be Element of product J;
+     reconsider g = f as Element of H;
+     reconsider F = f "/\" as map of H,H;
+     F is sups-preserving
+      proof
+        let X be Subset of H;
+        reconsider Y = F.:X, X' = X as Subset of product J;
+        reconsider sX =
+        sup X as Element of product J;
+        assume ex_sup_of X, H;
+        thus ex_sup_of F.:X, H by YELLOW_0:17;
+        reconsider f1 = sup (F.:X), f2 = F.sup X as Element of product J;
+A4:    dom f1 = I & dom f2 = I by WAYBEL_3:27;
+        now let x be set;
+          assume x in dom f1; then
+          reconsider i = x as Element of I by WAYBEL_3:27;
+A5:      J.i is complete Heyting LATTICE by A1; then
+          (f.i) "/\" is lower_adjoint by WAYBEL_1:def 19; then
+          (f.i) "/\" is sups-preserving by A5,WAYBEL_1:14; then
+A6:      (f.i) "/\" preserves_sup_of pi(X',i) & ex_sup_of pi(X',i), J.i
+            by A5,WAYBEL_0:def 33,YELLOW_0:17;
+          f2 = g "/\" sup X by WAYBEL_1:def 18; then
+A7:      f2.i = (f.i) "/\" (sX.i) by A2,Th11
+              .= (f.i) "/\" sup pi(X', i) by A3,WAYBEL_3:32
+              .= ((f.i) "/\").sup pi(X',i) by WAYBEL_1:def 18
+              .= sup (((f.i) "/\").:pi(X',i)) by A6,WAYBEL_0:def 31;
+          pi(Y,i) = ((f.i) "/\").:pi(X',i)
+           proof
+            thus pi(Y,i) c= ((f.i) "/\").:pi(X',i)
+             proof
+              let a be set;
+              assume
+              a in pi(Y,i);then
+              consider f3 being Function such that
+A8:            f3 in Y & a = f3.i by CARD_3:def 6;
+              reconsider f3 as Element of product J by A8;
+              consider h being set such that
+A9:          h in dom F & h in X & f3=F.h by A8,FUNCT_1:def 12;
+              reconsider h as Element of product J by A9;
+A10:          f3.i = (f "/\" h).i by A9,WAYBEL_1:def 18
+                  .= f.i "/\" h.i by A2,Th11
+                  .= (f.i "/\").(h.i) by WAYBEL_1:def 18;
+              (h.i) in pi(X',i) by A9,CARD_3:def 6;
+              hence a in ((f.i) "/\").:pi(X',i) by A8,A10,FUNCT_2:43;
+             end;
+            thus ((f.i) "/\").:pi(X',i) c= pi(Y,i)
+             proof
+              let b be set; assume
+              b in ((f.i) "/\").:pi(X',i);then
+              consider f4 being set such that
+A11:           f4 in dom ((f.i) "/\") & f4 in pi(X',i) & b = ((f.i) "/\").f4
+               by FUNCT_1:def 12;
+              consider f5 being Function such that
+A12:            f5 in X' & f4 = f5.i by A11,CARD_3:def 6;
+              reconsider f5 as Element of product J by A12;
+A13:           ((f.i) "/\").f4 = (f.i) "/\" (f5.i) by A12,WAYBEL_1:def 18
+              .= (f "/\" f5).i by A2,Th11;
+              (f "/\" f5) = f "/\". f5 by WAYBEL_1:def 18;then
+              (f "/\" f5) in f"/\" .: X by A12,FUNCT_2:43;
+              hence b in pi(Y,i) by A11,A13,CARD_3:def 6;
+             end;
+           end;
+          hence f1.x = f2.x by A3,A7,WAYBEL_3:32;
+        end;
+        hence sup (F.:X) = F.sup X by A4,FUNCT_1:9;
+      end;
+     hence thesis by WAYBEL_1:18;
+   end;
+
+definition
+   let A be non empty set;
+   let R be complete Heyting LATTICE;
+   cluster R |^ A -> Heyting;
+   coherence
+    proof
+     for i being Element of A holds (A --> R).i is complete Heyting LATTICE
+       by FUNCOP_1:13; then
+     product (A --> R) is complete Heyting by Th13;
+     hence thesis by YELLOW_1:def 5;
+   end;
+end;
+
+begin :: Lattice of Fuzzy Sets
+
+definition
+   let A be non empty set;
+   func FuzzyLattice A -> Heyting complete LATTICE equals:
+   Def4:
+   (RealPoset [. 0,1 .]) |^ A;
+   coherence;
+end;
+
+theorem Th14:
+  for A being non empty set holds
+    the carrier of FuzzyLattice A = Funcs(A, [. 0, 1 .])
+   proof
+    let A be non empty set;
+    thus the carrier of FuzzyLattice A
+    = the carrier of (RealPoset [. 0,1 .]) |^ A by Def4
+    .= Funcs (A, the carrier of RealPoset [. 0,1 .]) by YELLOW_1:28
+    .= Funcs (A, [. 0,1 .]) by Def3;
+   end;
+
+Lm1:
+for A being non empty set holds
+FuzzyLattice A is constituted-Functions
+ proof
+  let A be non empty set;
+  for a being Element of FuzzyLattice A holds a is Function
+   proof
+    let a be Element of FuzzyLattice A;
+    a in the carrier of FuzzyLattice A;then
+    a in Funcs(A, [. 0, 1 .]) by Th14;then
+    ex f being Function st a = f & dom f = A & rng f c= [. 0, 1 .]
+       by FUNCT_2:def 2;
+    hence thesis;
+   end;
+  hence thesis by MONOID_0:def 1;
+ end;
+
+definition
+   let A be non empty set;
+   cluster FuzzyLattice A -> constituted-Functions;
+   coherence by Lm1;
+end;
+
+theorem Th15:
+for R being complete Heyting LATTICE,
+X being Subset of R,
+y be Element of R holds
+"\/"(X,R) "/\" y = "\/"({x "/\" y where x is Element of R: x in X},R)
+proof
+ let R be complete Heyting LATTICE,
+ X be Subset of R,
+ y be Element of R;
+A1:for z being Element of R holds z "/\" has_an_upper_adjoint &
+  ex_sup_of X,R by WAYBEL_1:def 19,YELLOW_0:17;
+ set Z = {y "/\" x where x is Element of R: x in X},
+     W = {x "/\" y where x is Element of R: x in X};
+ Z = W
+  proof
+   thus Z c= W
+    proof
+     let z be set;
+     assume z in Z;then
+     consider x being Element of R such that
+A2:  z = y "/\" x and
+A3:  x in X;
+     thus thesis by A2,A3;
+    end;
+   thus W c= Z
+    proof
+     let w be set;
+     assume w in W;then
+     consider x being Element of R such that
+A4:  w = x "/\" y and
+A5:  x in X;
+     thus thesis by A4,A5;
+    end;
+  end;
+ hence thesis by A1,WAYBEL_1:66;
+end;
+
+Lm2:
+  for X being non empty set
+  for a being Element of FuzzyLattice X holds
+  a is Membership_Func of X
+  proof
+    let X be non empty set;
+    let a be Element of FuzzyLattice X;
+    a in the carrier of FuzzyLattice X;then
+    a in Funcs(X, [. 0,1 .]) by Th14;then
+    consider f being Function such that
+A1: a = f & dom f = X & rng f c= [. 0,1 .] by FUNCT_2:def 2;
+    reconsider a as PartFunc of X, [. 0,1 .] by A1,PARTFUN1:25;
+    reconsider a as PartFunc of X, REAL by PARTFUN1:31;
+    dom a = X & rng a c= [. 0,1 .] by A1;
+    hence thesis by FUZZY_1:def 1;
+  end;
+
+definition
+  let X be non empty set;
+  let a be Element of FuzzyLattice X;
+  func @a -> Membership_Func of X equals :Def5: a;
+  coherence by Lm2;
+end;
+
+Lm3:
+for X be non empty set
+for f be Membership_Func of X holds
+f is Element of FuzzyLattice X
+ proof
+  let X be non empty set;
+  let f be Membership_Func of X;
+  dom f = X & rng f c= [. 0,1 .] by FUZZY_1:def 1;then
+  f in Funcs(X, [. 0,1 .]) by FUNCT_2:def 2;then
+  f in the carrier of FuzzyLattice X by Th14;
+  hence thesis;
+ end;
+
+definition
+  let X be non empty set;
+  let f be Membership_Func of X;
+  func (X,f)@ -> Element of FuzzyLattice X equals :Def6: f;
+  coherence by Lm3;
+end;
+
+definition
+  let X be non empty set;
+  let f be Membership_Func of X;
+  let x be Element of X;
+  redefine func f.x -> Element of RealPoset [. 0,1 .];
+  coherence
+   proof
+    0 <= f.x & f.x <= 1 by FUZZY_2:1;then
+A1: f.x in [. 0,1 .] by TOPREAL5:1;
+    [. 0,1 .] = the carrier of RealPoset [. 0,1 .] by Def3;
+    hence thesis by A1;
+   end;
+end;
+
+definition
+  let X be non empty set;
+  let f be Element of FuzzyLattice X;
+  let x be Element of X;
+  redefine func f.x -> Element of RealPoset [. 0,1 .];
+  coherence
+   proof
+    0 <= @f.x & @f.x <= 1 by FUZZY_2:1;
+    hence thesis by Def5;
+   end;
+end;
+
+reserve C for non empty set, c for Element of C,
+   f,g for Membership_Func of C,
+   s,t for Element of FuzzyLattice C;
+
+theorem Th16:
+  (for c holds f.c <R= g.c) iff (C,f)@ <<= (C,g)@
+  proof
+A1: FuzzyLattice C = (RealPoset [. 0,1 .]) |^ C by Def4;
+A2: (RealPoset [. 0,1 .]) |^ C = product (C --> RealPoset [. 0,1 .])
+      by YELLOW_1:def 5;
+A3: (for c holds f.c <R= g.c) implies (C,f)@ <<= (C,g)@
+    proof
+     assume
+A4:  for c holds f.c <R= g.c;
+     set f' = (C,f)@, g' = (C,g)@;
+     reconsider f',g' as Element of product (C --> RealPoset [. 0,1 .])
+         by A2,Def4;
+     for c holds f'.c <<= g'.c
+      proof
+       let c be Element of C;
+A5:    (C --> RealPoset [. 0,1 .]).c = RealPoset [. 0,1 .] by FUNCOP_1:13;
+       set f1 = f.c, g1=g.c;
+       f1 <R= g1 & f = f' & g = g' by A4,Def6;
+       hence thesis by A5,Th3;
+      end;
+     hence (C,f)@ <<= (C,g)@ by A1,A2,WAYBEL_3:28;
+    end;
+   (C,f)@ <<= (C,g)@ implies (for c holds f.c <R= g.c)
+    proof
+     assume
+A6:  (C,f)@ <<= (C,g)@;
+     reconsider ff = (C,f)@, gg = (C,g)@ as Element of
+         product (C --> RealPoset [. 0,1 .]) by A2,Def4;
+     let c;
+A7:    (C --> RealPoset [. 0,1 .]).c = RealPoset [. 0,1 .] by FUNCOP_1:13;
+      ff.c <<= gg.c & (C,f)@ = f & (C,g)@ = g by A1,A2,A6,Def6,WAYBEL_3:28;
+      hence thesis by A7,Th3;
+    end;
+   hence thesis by A3;
+  end;
+
+theorem
+  s <<= t iff for c holds @s.c <R= @t.c
+  proof
+    @s = s & @t = t by Def5; then
+    (C,@s)@ = s & (C,@t)@ = t by Def6;
+    hence thesis by Th16;
+  end;
+
+theorem Th18:
+  max(f,g) = (C,f)@ "\/" (C,g)@
+   proof
+A1: FuzzyLattice C = (RealPoset [. 0,1 .]) |^ C by Def4;
+A2: (RealPoset [. 0,1 .]) |^ C = product (C --> RealPoset [. 0,1 .])
+      by YELLOW_1:def 5;
+    set fg = (C,f)@ "\/" (C,g)@, R = RealPoset [. 0,1 .], J = C --> R;
+    now let c;
+A3:   for c being Element of C holds J.c is sup-Semilattice by FUNCOP_1:13;
+      reconsider f' = (C,f)@ , g' = (C,g)@ as Element of product J
+        by A2,Def4;
+A4:   J.c = RealPoset [. 0,1 .] by FUNCOP_1:13;
+      thus (@fg).c = (f' "\/" g').c by A1,A2,Def5
+      .= ((C,f)@.c) "\/" ((C,g)@.c) by A3,A4,Th12
+      .= max((C,f)@.c, (C,g)@.c) by Th4
+      .= max (f.c, (C,g)@.c) by Def6
+      .= max(f.c, g.c) by Def6;
+    end; then
+    @fg = max(f,g) by FUZZY_1:def 6;
+    hence thesis by Def5;
+  end;
+
+theorem
+ s "\/" t = max(@s, @t)
+  proof
+    @s = s & @t = t by Def5; then
+    (C,@s)@ = s & (C,@t)@ = t by Def6;
+    hence thesis by Th18;
+  end;
+
+theorem Th20:
+  min(f,g) = (C,f)@ "/\" (C,g)@
+   proof
+A1: FuzzyLattice C = (RealPoset [. 0,1 .]) |^ C by Def4;
+A2: (RealPoset [. 0,1 .]) |^ C = product (C --> RealPoset [. 0,1 .])
+      by YELLOW_1:def 5;
+    set fg = (C,f)@ "/\" (C,g)@, R = RealPoset [. 0,1 .], J = C --> R;
+    now let c;
+A3:   for c being Element of C holds J.c is Semilattice by FUNCOP_1:13;
+A4:   J.c = RealPoset [. 0,1 .] by FUNCOP_1:13;
+      thus (@fg).c = fg.c by Def5
+      .= ((C,f)@.c) "/\" ((C,g)@.c) by A1,A2,A3,A4,Th11
+      .= min((C,f)@ .c, (C,g)@.c) by Th5
+      .= min (f.c, (C,g)@.c) by Def6  .= min(f.c, g.c) by Def6;
+    end; then
+    @fg = min(f,g) by FUZZY_1:def 5;
+    hence thesis by Def5;
+  end;
+
+theorem
+ s "/\" t = min(@s, @t)
+  proof
+    @s = s & @t = t by Def5; then
+    (C,@s)@ = s & (C,@t)@ = t by Def6;
+    hence thesis by Th20;
+  end;
+
+begin :: Associativity of composition of fuzzy relations
+
+scheme SupDistributivity { L() -> complete LATTICE,
+  X, Y() -> non empty set,  F(set,set) -> Element of L(), P,Q[set]}:
+  "\/"({ "\/"({F(x,y) where y is Element of Y(): Q[y]}, L())
+         where x is Element of X(): P[x] }, L())
+  = "\/"({F(x,y) where x is Element of X(), y is Element of Y():
+   P[x] & Q[y]}, L())
+  proof
+    defpred R[set] means
+      ex x being Element of X() st P[x] &
+      for a being set holds a in $1 iff
+        ex y being Element of Y() st a = F(x,y) & Q[y];
+A1: "\/" ({ "\/"(A,L()) where A is Subset of L(): R[A] },L())
+      = "\/" (union {A where A is Subset of L(): R[A]}, L()) from Sup_of_Sups;
+A2: union {A where A is Subset of L(): R[A]} =
+      {F(x,y) where x is Element of X(), y is Element of Y(): P[x] & Q[y]}
+     proof
+      thus union {A where A is Subset of L(): R[A]} c=
+      {F(x,y) where x is Element of X(), y is Element of Y(): P[x] & Q[y]}
+       proof
+        let a be set;
+        assume
+        a in union {A where A is Subset of L(): R[A]};then
+        consider A1 be set such that
+A3:     a in A1 & A1 in {A where A is Subset of L(): R[A]} by TARSKI:def 4;
+        consider A2 being Subset of L() such that
+A4:     A1 = A2 & R[A2] by A3;
+        consider x being Element of X() such that
+A5:     P[x] and
+A6:     for a being set holds a in A2 iff ex  y being Element of Y()
+        st a = F(x,y) & Q[y] by A4;
+        ex y being Element of Y() st a = F(x,y) & Q[y]
+         by A3,A4,A6;
+        hence thesis by A5;
+       end;
+      thus {F(x,y) where x is Element of X(), y is Element of Y(): P[x] & Q[y]}
+      c=
+      union {A where A is Subset of L(): R[A]}
+       proof
+        let a be set;
+        assume
+        a in {F(x,y) where x is Element of X(), y is Element of Y()
+              : P[x] & Q[y]};
+        then
+        consider x being Element of X(), y being Element of Y() such that
+A7:     a = F(x,y) & P[x] & Q[y];
+        set A1 = {F(x,y') where y' is Element of Y(): Q[y']};
+        A1 c= the carrier of L()
+         proof
+          let b be set;
+          assume b in A1;then
+          ex y' being Element of Y() st b = F(x,y') & Q[y'];
+          hence thesis;
+         end;
+        then
+        reconsider A1 as Subset of L();
+A8:     a in A1 by A7;
+        R[A1]
+         proof
+          take x;
+          thus P[x] by A7;
+          let a be set;
+          thus thesis;
+         end;
+        then
+        A1 in {A where A is Subset of L(): R[A]};
+        hence thesis by A8,TARSKI:def 4;
+       end;
+     end;
+    { "\/"(A,L()) where A is Subset of L(): R[A] } =
+      { "\/"({F(x,y) where y is Element of Y(): Q[y]}, L())
+      where x is Element of X(): P[x] }
+      proof
+      thus { "\/"(A,L()) where A is Subset of L(): R[A] } c=
+            {  "\/"({F(x,y) where y is Element of Y(): Q[y]}, L())
+             where x is Element of X(): P[x] }
+       proof
+        let a be set;
+        assume a in { "\/"(A,L()) where A is Subset of L(): R[A] };then
+        consider A1 being Subset of L() such that
+A9:     a = "\/"(A1,L()) & R[A1];
+        consider x being Element of X() such that
+A10:     P[x] & for a being set holds a in A1 iff
+        ex y being Element of Y() st a = F(x,y) & Q[y] by A9;
+        now let a be set;
+          a in {F(x,y) where y is Element of Y(): Q[y]} iff
+          ex y being Element of Y() st a = F(x,y) & Q[y];
+          hence
+          a in A1 iff
+          a in {F(x,y) where y is Element of Y(): Q[y]} by A10;
+        end; then
+        A1 = {F(x,y) where y is Element of Y(): Q[y]} by TARSKI:2;
+        hence thesis by A9,A10;
+       end;
+      thus { "\/"({F(x,y) where y is Element of Y(): Q[y]}, L())
+             where x is Element of X(): P[x] } c=
+           { "\/"(A,L()) where A is Subset of L(): R[A] }
+       proof
+        let a be set;
+        assume a in { "\/"({F(x,y) where y is Element of Y(): Q[y]}, L())
+                         where x is Element of X(): P[x] };
+        then
+        consider x being Element of X() such that
+A11:     a = "\/"({F(x,y) where y is Element of Y(): Q[y]}, L()) &     P[x];
+        ex A1 being Subset of L() st a = "\/"(A1,L()) & R[A1]
+         proof
+          consider A1 being Subset of L();
+          set A2 = {F(x,y) where y is Element of Y(): Q[y]};
+          A2 c= the carrier of L()
+           proof
+            let b be set;    assume b in A2;then
+            ex y being Element of Y() st b = F(x,y) & Q[y];
+            hence thesis;
+           end;
+          then
+          reconsider A1 = A2 as Subset of L();
+          R[A1]
+           proof
+            take x;
+            thus  P[x] by A11;
+            thus for a being set holds a in A1
+            iff ex y being Element of Y() st a = F(x,y) & Q[y];
+           end;
+          hence thesis by A11;
+         end;
+        hence thesis;
+       end;
+      end;
+    hence thesis by A1,A2;
+  end;
+
+scheme SupDistributivity' { L() -> complete LATTICE,
+  X, Y() -> non empty set, F(set,set) -> Element of L(), P,Q[set]}:
+  "\/"({ "\/"({F(x,y) where x is Element of X(): P[x]},L())
+         where y is Element of Y(): Q[y] }, L())
+  = "\/"({F(x,y) where x is Element of X(), y is Element of Y():
+        P[x] & Q[y]}, L())
+  proof
+    defpred R[set] means
+      ex y being Element of Y() st Q[y] &
+      for a being set holds a in $1 iff
+        ex x being Element of X() st  a = F(x,y) & P[x];
+A1: "\/" ({ "\/"(A,L()) where A is Subset of L(): R[A] },L())
+      = "\/" (union {A where A is Subset of L(): R[A]}, L()) from Sup_of_Sups;
+A2: union {A where A is Subset of L(): R[A]} =
+      {F(x,y) where x is Element of X(), y is Element of Y(): P[x] & Q[y]}
+     proof
+      thus union {A where A is Subset of L(): R[A]} c=
+      {F(x,y) where x is Element of X(), y is Element of Y(): P[x] & Q[y]}
+       proof
+        let a be set;
+        assume
+        a in union {A where A is Subset of L(): R[A]};then
+        consider A1 be set such that
+A3:     a in A1 & A1 in {A where A is Subset of L(): R[A]} by TARSKI:def 4;
+        consider A2 being Subset of L() such that
+A4:     A1 = A2 & R[A2] by A3;
+        consider y being Element of Y() such that
+A5:     Q[y] and
+A6:     for a being set holds a in A2 iff ex x being Element of X()
+        st a = F(x,y) & P[x] by A4;
+        ex x being Element of X() st a = F(x,y) & P[x] by A3,A4,A6;
+        hence thesis by A5;
+       end;
+      thus {F(x,y) where x is Element of X(), y is Element of Y(): P[x] & Q[y]}
+      c=
+      union {A where A is Subset of L(): R[A]}
+       proof
+        let a be set;
+        assume
+        a in {F(x,y) where x is Element of X(), y is Element of Y()
+              : P[x] & Q[y]};
+        then
+        consider x being Element of X(), y being Element of Y() such that
+A7:     a = F(x,y) & P[x] & Q[y];
+        set A1 = {F(x',y) where x' is Element of X(): P[x']};
+        A1 c= the carrier of L()
+         proof
+          let b be set;
+          assume b in A1;then
+          ex x' being Element of X() st b = F(x',y) & P[x'];
+          hence thesis;
+         end;
+        then
+        reconsider A1 as Subset of L();
+A8:     a in A1 by A7;
+        R[A1]
+         proof
+          take y;
+          thus Q[y] by A7;
+          let a be set;
+          thus thesis;
+         end;
+        then
+        A1 in {A where A is Subset of L(): R[A]};
+        hence thesis by A8,TARSKI:def 4;
+       end;
+     end;
+    { "\/"(A,L()) where A is Subset of L(): R[A] } =
+      { "\/"({F(x,y) where x is Element of X(): P[x]}, L())
+      where y is Element of Y(): Q[y] }
+      proof
+       thus { "\/"(A,L()) where A is Subset of L(): R[A] } c=
+            {  "\/"({F(x,y) where x is Element of X(): P[x]}, L())
+             where y is Element of Y(): Q[y] }
+       proof
+        let a be set;
+        assume a in { "\/"(A,L()) where A is Subset of L(): R[A] };then
+        consider A1 being Subset of L() such that
+A9:     a = "\/"(A1,L()) & R[A1];
+        consider y being Element of Y() such that
+A10:     Q[y] & for a being set holds a in A1 iff
+        ex x being Element of X() st a = F(x,y) & P[x] by A9;
+        now let a be set;
+          a in {F(x,y) where x is Element of X(): P[x]} iff
+          ex x being Element of X() st a = F(x,y) & P[x];
+          hence
+          a in A1 iff
+          a in {F(x,y) where x is Element of X(): P[x]} by A10;
+        end; then
+        A1 = {F(x,y) where x is Element of X(): P[x]} by TARSKI:2;
+        hence thesis by A9,A10;
+       end;
+      thus { "\/"({F(x,y) where x is Element of X(): P[x]}, L())
+             where y is Element of Y(): Q[y] } c=
+           { "\/"(A,L()) where A is Subset of L(): R[A] }
+       proof
+        let a be set;
+        assume a in { "\/"({F(x,y) where x is Element of X(): P[x]}, L())
+                         where y is Element of Y(): Q[y] };
+        then
+        consider y being Element of Y() such that
+A11:     a = "\/"({F(x,y) where x is Element of X(): P[x]}, L()) & Q[y];
+        ex A1 being Subset of L() st a = "\/"(A1,L()) & R[A1]
+         proof
+          consider A1 being Subset of L();
+          set A2 = {F(x,y) where x is Element of X(): P[x]};
+          A2 c= the carrier of L()
+           proof
+            let b be set;    assume b in A2;then
+            ex x being Element of X() st b = F(x,y) & P[x];
+            hence thesis;
+           end;
+          then
+          reconsider A1 = A2 as Subset of L();
+          R[A1]
+           proof
+            take y;
+            thus Q[y] by A11;
+            thus for a being set holds a in A1
+            iff ex x being Element of X() st a = F(x,y) & P[x];
+           end;
+          hence thesis by A11;
+         end;
+        hence thesis;
+       end;
+      end;
+    hence thesis by A1,A2;
+   end;
+
+scheme FraenkelF'R'{ A() -> non empty set,B() -> non empty set,
+F1, F2(set,set) -> set, P[set,set]  } :
+    { F1(u1,v1) where u1 is (Element of A()), v1 is Element of B() : P[u1,v1] }
+  = { F2(u2,v2) where u2 is (Element of A()), v2 is Element of B() : P[u2,v2] }
+ provided
+A1:for u being (Element of A()), v being Element of B()
+      st P[u,v] holds F1(u,v) = F2(u,v)
+  proof
+   set A =
+   { F1(u1,v1) where u1 is (Element of A()), v1 is Element of B() : P[u1,v1] },
+   C =
+   { F2(u3,v3) where u3 is (Element of A()), v3 is Element of B() : P[u3,v3] };
+   for a be set holds a in A iff a in C
+    proof
+     let a be set;
+      hereby assume a in A;then
+       consider u being (Element of A()), v being Element of B() such that
+A2:    a =  F1(u,v) & P[u,v];
+       a = F2(u,v) by A1,A2;
+       hence a in C by A2;
+      end;
+      assume a in C; then
+      consider u being (Element of A()), v being Element of B() such that
+A3:    a =  F2(u,v) & P[u,v];
+       a = F1(u,v) by A1,A3;
+       hence a in A by A3;
+    end;
+    hence thesis by TARSKI:2;
+   end;
+
+scheme FraenkelF6''R
+ { A() -> non empty set, B() -> non empty set,
+   F1, F2(set,set) -> set, P[set,set], Q[set,set] } :
+    { F1(u1,v1) where u1 is (Element of A()), v1 is Element of B() : P[u1,v1] }
+  = { F2(u2,v2) where u2 is (Element of A()), v2 is Element of B() : Q[u2,v2] }
+ provided
+A1:for u being (Element of A()), v being Element of B()
+      holds P[u,v] iff Q[u,v]
+  and
+A2:for u being (Element of A()), v being Element of B()
+     st P[u,v] holds F1(u,v) = F2(u,v)
+  proof
+    deffunc U(set,set) = F1($1,$2);
+    deffunc V(set,set) = F2($1,$2);
+    defpred X[set,set] means P[$1,$2];
+    defpred Y[set,set] means Q[$1,$2];
+A3:for u being (Element of A()), v being Element of B()
+      holds X[u,v] iff Y[u,v] by A1;
+A4:for u being (Element of A()), v being Element of B()
+     st X[u,v] holds U(u,v) = V(u,v) by A2;
+   set A =
+   { U(u1,v1) where u1 is (Element of A()), v1 is Element of B() : X[u1,v1] },
+   B =
+   { V(u2,v2) where u2 is (Element of A()), v2 is Element of B() : Y[u2,v2] },
+   C =
+   { V(u3,v3) where u3 is (Element of A()), v3 is Element of B() : X[u3,v3] };
+A5:C = B from Fraenkel6''(A3);
+   A = C from FraenkelF'R'(A4);
+   hence thesis by A5;
+  end;
+
+scheme SupCommutativity { L() -> complete LATTICE, X, Y() -> non empty set,
+  F1, F2(set,set) -> Element of L(), P,Q[set]}:
+    "\/"({ "\/"({F1(x,y) where y is Element of Y(): Q[y]}, L())
+           where x is Element of X(): P[x] }, L())
+  = "\/"({ "\/"({F2(x',y') where x' is Element of X(): P[x']}, L())
+           where y' is Element of Y(): Q[y'] }, L())
+  provided
+A1:  for x being Element of X(), y being Element of Y() st P[x] & Q[y]
+   holds F1(x,y) = F2(x,y)
+  proof
+    deffunc U(set,set) = F1($1,$2);
+    deffunc V(set,set) = F2($1,$2);
+    defpred X[set,set] means P[$1] & Q[$2];
+    defpred Y[set,set] means P[$1] & Q[$2];
+A2:  for x being Element of X(), y being Element of Y() st X[x,y]
+   holds U(x,y) = V(x,y) by A1;
+A3: for x being Element of X(), y being Element of Y() holds
+        X[x,y] iff Y[x,y];
+A4: {U(x',y') where x' is Element of X(), y' is Element of Y(): X[x',y']}
+    = {V(x,y) where x is Element of X(), y is Element of Y(): Y[x,y]}
+       from FraenkelF6''R(A3,A2);
+    defpred P'[set] means P[$1];
+    defpred Q'[set] means Q[$1];
+A5:   "\/"({ "\/"({U(x,y) where y is Element of Y(): Q'[y]}, L())
+           where x is Element of X(): P'[x] }, L())
+     ="\/"({U(x,y) where x is Element of X(), y is Element of Y():
+         P'[x] & Q'[y]}, L()) from SupDistributivity;
+    "\/"({ "\/"({V(x',y') where x' is Element of X(): P'[x']}, L())
+           where y' is Element of Y(): Q'[y'] }, L())
+    ="\/"({V(x',y') where x' is Element of X(), y' is Element of Y():
+         P'[x'] & Q'[y']}, L()) from SupDistributivity'
+    .="\/"({U(x',y') where x' is Element of X(), y' is Element of Y():
+         P'[x'] & Q'[y']}, L()) by A4;
+   hence thesis by A5;
+  end;
+
+Lm4:
+ for x being Element of RealPoset [. 0,1 .] holds x is Real
+  proof
+   let x be Element of RealPoset [. 0,1 .];
+   x in the carrier of RealPoset [. 0,1 .] &
+   the carrier of RealPoset [. 0,1 .] = [. 0,1 .] by Def3;
+   hence thesis;
+  end;
+
+Lm5:
+ for x being Element of [. 0,1 .] holds x is Element of RealPoset [. 0,1 .]
+   by Def3;
+
+Lm6:
+  for X,Y,Z being non empty set
+  for R being RMembership_Func of X,Y
+  for S being RMembership_Func of Y,Z
+  for x being Element of X, z being Element of Z
+   holds
+   rng min(R,S,x,z) =
+         {R. [x,y] "/\" S. [y,z] where y is Element of Y: not contradiction} &
+   rng min(R,S,x,z) <> {}
+    proof
+     let X,Y,Z being non empty set;
+     let R being RMembership_Func of X,Y;
+     let S being RMembership_Func of Y,Z;
+     let x being Element of X, z being Element of Z;
+A1:  Y = dom min(R,S,x,z)
+     & min(R,S,x,z) is PartFunc of dom min(R,S,x,z), rng min(R,S,x,z)
+          by FUZZY_1:def 1,PARTFUN1:24;
+     set L
+     = {R. [x,y] "/\" S. [y,z] where y is Element of Y: not contradiction};
+     for c be set holds c in L iff c in rng min(R,S,x,z)
+      proof
+       let c be set;
+       hereby assume c in L;then
+       consider y being Element of Y such that
+A2:    c = R. [x,y] "/\" S. [y,z];
+       c = min(R. [x,y], S. [y,z] qua real number) by A2,Th5
+        .= min(R,S,x,z).y by FUZZY_4:def 3;
+       hence c in rng min(R,S,x,z) by A1,PARTFUN1:27;
+       end;
+       assume c in rng min(R,S,x,z);then
+       consider y being Element of Y such that
+A3:    y in dom min(R,S,x,z) & c = min(R,S,x,z).y by PARTFUN1:26;
+       c = min(R. [x,y], S. [y,z] qua real number) by A3,FUZZY_4:def 3
+        .= R. [x,y] "/\" S. [y,z] by Th5;
+       hence c in L;
+      end;
+     hence rng min(R,S,x,z) = L by TARSKI:2;
+     thus rng min(R,S,x,z) <> {}
+       proof
+        ex d be set st d in rng min(R,S,x,z)
+         proof
+          consider y being Element of Y;
+          take d = min(R,S,x,z).y;
+          thus d in rng min(R,S,x,z) by A1,PARTFUN1:27;
+         end;
+        hence thesis;
+       end;
+    end;
+
+theorem Th22:
+  for X,Y,Z being non empty set
+  for R being RMembership_Func of X,Y
+  for S being RMembership_Func of Y,Z
+  for x being Element of X, z being Element of Z
+   holds  (R (#) S). [x,z] = "\/"({R. [x,y] "/\" S. [y,z]
+      where y is Element of Y: not contradiction}, RealPoset [. 0,1 .])
+   proof
+    let X,Y,Z being non empty set;
+    let R being RMembership_Func of X,Y;
+    let S being RMembership_Func of Y,Z;
+    let x being Element of X, z being Element of Z;
+A1: (R (#) S). [x,z] = upper_bound(rng(min(R,S,x,z))) by FUZZY_4:def 4;
+    set
+    L = {R. [x,y] "/\" S. [y,z] where y is Element of Y: not contradiction};
+A2: (R (#) S). [x,z] is_>=_than L
+     proof
+      for b being Element of RealPoset [. 0,1 .] st b in L holds
+        (R (#) S). [x,z] >>= b
+       proof
+        let b be Element of RealPoset [. 0,1 .];
+        assume b in L;then
+        consider y being Element of Y such that
+A3:     b = R. [x,y] "/\" S. [y,z] & not contradiction;
+        reconsider b as Real by Lm4;
+A4:     dom min(R,S,x,z) = Y by FUZZY_1:def 1;
+        b = min(R. [x,y], S. [y,z] qua real number) by A3,Th5
+        .= min(R,S,x,z).y by FUZZY_4:def 3; then
+        b <= upper_bound rng min(R,S,x,z) by A4,FUZZY_4:1;
+        hence thesis by A1,Th3;
+       end;
+       hence thesis by LATTICE3:def 9;
+     end;
+    for b being Element of RealPoset [. 0,1 .] st
+     b is_>=_than L holds (R (#) S). [x,z] <<= b
+     proof
+      let b be Element of RealPoset [. 0,1 .];
+      assume
+A5:   b is_>=_than
+      {R. [x,y] "/\" S. [y,z] where y is Element of Y: not contradiction};
+A6:   Y = dom min(R,S,x,z) & rng min(R,S,x,z) c= [. 0,1 .]
+      & min(R,S,x,z) is PartFunc of dom min(R,S,x,z), rng min(R,S,x,z)
+          by FUZZY_1:def 1,PARTFUN1:24;
+A7:   L = rng min(R,S,x,z) by Lm6;
+A8:   rng min(R,S,x,z) <> {} by Lm6;
+      for r being real number st r in rng min(R,S,x,z) holds r <= b
+       proof
+        let r be real number;
+        assume
+A9:     r in rng min(R,S,x,z);then
+        reconsider r as Element of RealPoset [. 0,1 .] by A6,Lm5;
+        r <<= b by A5,A7,A9,LATTICE3:def 9;
+        hence thesis by Th3;
+       end;
+      then
+      upper_bound rng min(R,S,x,z) <= b by A8,TOPMETR3:1;
+      hence thesis by A1,Th3;
+     end;
+    hence thesis by A2,YELLOW_0:32;
+   end;
+
+Lm7:
+  for X,Y,Z being non empty set
+  for R being RMembership_Func of X,Y
+  for S being RMembership_Func of Y,Z
+  for x being Element of X, z being Element of Z
+  for a being Element of RealPoset [. 0,1 .]
+   holds
+  (R (#) S). [x,z] "/\" a = "\/"({R. [x,y] "/\" S. [y,z] "/\" a
+      where y is Element of Y: not contradiction}, RealPoset [. 0,1 .])
+   proof
+    let X,Y,Z being non empty set;
+    let R being RMembership_Func of X,Y;
+    let S being RMembership_Func of Y,Z;
+    let x being Element of X, z being Element of Z;
+    let a being Element of RealPoset [. 0,1 .];
+    {R. [x,y] "/\" S. [y,z] where y is Element of Y: not contradiction}
+    c= the carrier of RealPoset [. 0,1 .]
+     proof
+      let d be set;assume
+      d in {R. [x,y] "/\" S. [y,z] where y is Element of Y: not contradiction};
+      then
+      consider t being Element of Y such that
+A1:   d = R. [x,t] "/\" S. [t,z] & not contradiction;
+      thus thesis by A1;
+     end;
+    then
+A2: {R. [x,y] "/\" S. [y,z] where y is Element of Y: not contradiction}
+    is Subset of RealPoset [. 0,1 .];
+A3: (R (#) S). [x,z] "/\" a
+      = "\/"({R. [x,y] "/\" S. [y,z]
+        where y is Element of Y: not contradiction}, RealPoset [. 0,1 .])
+      "/\" a by Th22
+     .= "\/"({b "/\" a where b is Element of RealPoset [. 0,1 .]:
+     b in {R. [x,y] "/\" S. [y,z] where y is Element of Y: not contradiction}},
+     RealPoset [. 0,1 .]) by A2,Th15;
+     set  A = {b "/\" a where b is Element of RealPoset [. 0,1 .]:
+                b in {R. [x,y] "/\" S. [y,z] where y is Element of Y:
+               not contradiction}},
+          B = {R. [x,y] "/\" S. [y,z] "/\" a where y is Element of Y:
+               not contradiction};
+     for c be set holds c in A iff c in B
+      proof
+       let c be set;
+        hereby assume c in A;then
+         consider b being Element of RealPoset [. 0,1 .] such that
+A4:      c = b "/\" a &
+         b in {R. [x,y] "/\" S. [y,z]
+                where y is Element of Y:not contradiction};
+         consider y being Element of Y such that
+A5:      b = R. [x,y] "/\" S. [y,z]  & not contradiction by A4;
+         thus c in B by A4,A5;
+        end;
+         assume c in B;then
+         consider y being Element of Y such that
+A6:      c = R. [x,y] "/\" S. [y,z] "/\" a & not contradiction;
+         R. [x,y] "/\" S. [y,z] in {R. [x,y1] "/\" S. [y1,z]
+         where y1 is Element of Y: not contradiction};
+         hence c in A by A6;
+      end;
+     hence thesis by A3,TARSKI:2;
+   end;
+
+Lm8:
+  for X,Y,Z being non empty set
+  for R being RMembership_Func of X,Y
+  for S being RMembership_Func of Y,Z
+  for x being Element of X, z being Element of Z
+  for a being Element of RealPoset [. 0,1 .]
+   holds
+   a "/\" (R (#) S). [x,z]  = "\/"({a "/\" R. [x,y] "/\" S. [y,z]
+      where y is Element of Y: not contradiction}, RealPoset [. 0,1 .])
+   proof
+    let X,Y,Z being non empty set;
+    let R being RMembership_Func of X,Y;
+    let S being RMembership_Func of Y,Z;
+    let x being Element of X, z being Element of Z;
+    let a being Element of RealPoset [. 0,1 .];
+    set A = {a "/\" R. [x,y] "/\" S. [y,z] where y is Element of Y:
+             not contradiction},
+        B = {R. [x,y] "/\" S. [y,z] "/\" a where y is Element of Y:
+             not contradiction};
+     for b be set holds b in A iff b in B
+      proof
+       let b be set;
+       hereby assume b in A; then
+         consider y being Element of Y such that
+ A1:     b = a "/\" R. [x,y] "/\" S. [y,z];
+         b = R. [x,y] "/\" S. [y,z] "/\" a by A1,LATTICE3:16;
+         hence b in B;
+       end;
+        assume b in B; then
+          consider y being Element of Y such that
+A2:       b = R. [x,y] "/\" S. [y,z] "/\" a;
+          b = a "/\" R. [x,y] "/\" S. [y,z] by A2,LATTICE3:16;
+          hence b in A;
+      end;
+    then A = B by TARSKI:2;
+    hence thesis by Lm7;
+   end;
+
+theorem
+  for X,Y,Z,W being non empty set
+  for R being RMembership_Func of X,Y
+  for S being RMembership_Func of Y,Z
+  for T being RMembership_Func of Z,W
+   holds (R (#) S) (#) T = R (#) (S (#) T)
+   proof
+    let X,Y,Z,W be non empty set;
+    let R be RMembership_Func of X,Y;
+    let S be RMembership_Func of Y,Z;
+    let T be RMembership_Func of Z,W;
+A1: dom ((R (#) S) (#) T) = [:X,W:] &
+    dom (R (#) (S (#) T))= [:X,W:] by FUZZY_1:def 1;
+    for x being set, w being set st x in X & w in W holds
+    ((R (#) S) (#) T). [x,w] = (R (#) (S (#) T)). [x,w]
+     proof
+      let x being set, w being set; assume
+A2:   x in X & w in W; then
+      reconsider x as Element of X;
+      reconsider w as Element of W by A2;
+A3:   ((R (#) S) (#) T). [x,w]  = "\/"({((R (#) S). [x,z]) "/\" T. [z,w]
+      where z is Element of Z: not contradiction}, RealPoset [. 0,1 .]) &
+      (R (#) (S (#) T)). [x,w] = "\/"({R. [x,y] "/\" ((S (#) T). [y,w])
+      where y is Element of Y: not contradiction}, RealPoset [. 0,1 .])
+      by Th22;
+      set A = {"\/"({R. [x,y] "/\" S. [y,z] "/\" T. [z,w]
+           where y is Element of Y: not contradiction}, RealPoset [. 0,1 .])
+           where z is Element of Z :not contradiction} ,
+       B = {(R (#) S). [x,z] "/\" T. [z,w] where z is Element of Z
+         :not contradiction};
+A4:   for a be set holds a in A iff a in B
+       proof
+        let a be set;
+          hereby assume a in A;then
+           consider z being Element of Z such that
+A5:        a = "\/"({R. [x,y] "/\" S. [y,z] "/\" T. [z,w]
+            where y is Element of Y: not contradiction}, RealPoset [. 0,1 .]);
+           a = (R (#) S). [x,z] "/\" T. [z,w] by A5,Lm7;
+           hence a in B;
+          end;
+          assume a in B;then
+          consider z being Element of Z such that
+A6:       a = (R (#) S). [x,z] "/\" T. [z,w];
+          a = "\/"({R. [x,y] "/\" S. [y,z] "/\" T. [z,w]
+             where y is Element of Y: not contradiction}, RealPoset [. 0,1 .])
+               by A6,Lm7;
+          hence a in A;
+       end;
+      set C =
+      {"\/"({R. [x,y] "/\" S. [y,z] "/\" T. [z,w]
+        where z is Element of Z: not contradiction}, RealPoset [. 0,1 .])
+        where y is Element of Y :not contradiction} ,
+      D = {R. [x,y] "/\" ((S (#) T). [y,w]) where y is Element of Y
+           : not contradiction};
+      for c be set holds c in C iff c in D
+       proof
+       let c be set;
+        hereby assume c in C;then
+         consider y being Element of Y such that
+A7:       c = "\/"({R. [x,y] "/\" S. [y,z] "/\" T. [z,w]
+           where z is Element of Z: not contradiction}, RealPoset [. 0,1 .]);
+          c = R. [x,y] "/\" (S (#) T). [y,w] by A7,Lm8;
+          hence c in D;
+        end;
+        assume c in D;then
+          consider y being Element of Y such that
+A8:       c = R. [x,y] "/\" ((S (#) T). [y,w]);
+          c = "\/"({R. [x,y] "/\" S. [y,z] "/\" T. [z,w]
+            where z is Element of Z: not contradiction}, RealPoset [. 0,1 .])
+            by A8,Lm8;
+        hence c in C;
+       end;
+      then
+A9:   C = D by TARSKI:2;
+      defpred X[set] means not contradiction;
+      deffunc U(Element of Y,Element of Z)
+        = R. [x,$1] "/\" S. [$1,$2] "/\" T. [$2,w];
+      deffunc V(Element of Z,Element of Y)
+        = R. [x,$2] "/\" S. [$2,$1] "/\" T. [$1,w];
+A10:   for y being Element of Y, z being Element of Z st X[y] & X[z]
+      holds U(y,z) = U(y,z);
+      "\/"({"\/"({U(y,z)
+          where z is Element of Z: X[z]}, RealPoset [. 0,1 .])
+          where y is Element of Y :X[y]}, RealPoset [. 0,1 .])
+     ="\/"({"\/"({U(y1,z1)
+          where y1 is Element of Y: X[y1]}, RealPoset [. 0,1 .])
+          where z1 is Element of Z :X[z1]}, RealPoset [. 0,1 .])
+              from SupCommutativity(A10);
+      hence thesis by A3,A4,A9,TARSKI:2;
+     end;
+    hence thesis by A1,FUNCT_3:6;
+   end;

@@ -1,0 +1,141 @@
+:: Some Properties for Convex Combinations
+::  by Noboru Endou , Yasumasa Suzuki and Yasunari Shidama
+::
+:: Received April 3, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, FUNCT_1, PROB_2, ARYTM_1, RELAT_1, BHSP_1, FINSEQ_1,
+      BOOLE, JORDAN1, SETFAM_1, CONNSP_3, ARYTM_3, RLSUB_1, CONVEX1, FINSEQ_4,
+      SEQ_1, CARD_1, RLVECT_2, JORDAN3, TARSKI, FUNCT_2, RFINSEQ, FINSET_1,
+      CONVEX2;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1,
+      FINSEQ_1, RELAT_1, FUNCT_1, FINSET_1, CARD_1, NAT_1, SETFAM_1, STRUCT_0,
+      FUNCT_2, RLVECT_1, RLSUB_1, RLSUB_2, FINSEQ_4, RLVECT_2, RVSUM_1, BHSP_1,
+      RUSUB_4, CONVEX1, TOPREAL1, JORDAN3, RFINSEQ;
+ constructors REAL_1, SEQ_1, RUSUB_5, FINSEQ_4, CONVEX1, JORDAN3, NAT_1,
+      MONOID_0, WELLORD2, TOPREAL1, MATRIX_2, RFINSEQ, RLSUB_2, MEMBERED;
+ clusters RELSET_1, FINSEQ_1, ARYTM_3, STRUCT_0, RLVECT_1, SEQ_1, RUSUB_4,
+      CONVEX1, BINARITH, XREAL_0, MEMBERED;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Convex Combination on Convex Family
+
+theorem :: CONVEX2:1
+  for V being non empty RLSStruct, M,N being convex Subset of V holds
+ M /\ N is convex;
+
+theorem :: CONVEX2:2
+  for V being RealUnitarySpace-like (non empty UNITSTR), M being Subset of V,
+ F being FinSequence of the carrier of V, B being FinSequence of REAL st
+  M = {u where u is VECTOR of V :
+        for i being Nat st i in (dom F /\ dom B) holds
+         ex v being VECTOR of V st v = F.i & u .|. v <= B.i}
+    holds M is convex;
+
+theorem :: CONVEX2:3
+  for V being RealUnitarySpace-like (non empty UNITSTR), M being Subset of V,
+ F being FinSequence of the carrier of V, B being FinSequence of REAL st
+  M = {u where u is VECTOR of V :
+        for i being Nat st i in (dom F /\ dom B) holds
+         ex v being VECTOR of V st v = F.i & u .|. v < B.i}
+    holds M is convex;
+
+theorem :: CONVEX2:4
+  for V being RealUnitarySpace-like (non empty UNITSTR), M being Subset of V,
+ F being FinSequence of the carrier of V, B being FinSequence of REAL st
+  M = {u where u is VECTOR of V :
+        for i being Nat st i in (dom F /\ dom B) holds
+         ex v being VECTOR of V st v = F.i & u .|. v >= B.i}
+    holds M is convex;
+
+theorem :: CONVEX2:5
+  for V being RealUnitarySpace-like (non empty UNITSTR), M being Subset of V,
+ F being FinSequence of the carrier of V, B being FinSequence of REAL st
+  M = {u where u is VECTOR of V :
+        for i being Nat st i in (dom F /\ dom B) holds
+         ex v being VECTOR of V st v = F.i & u .|. v > B.i}
+    holds M is convex;
+
+theorem :: CONVEX2:6
+  for V being RealLinearSpace, M being Subset of V holds
+ (for N being Subset of V, L being Linear_Combination of N st
+  L is convex & N c= M holds Sum(L) in M)
+   iff M is convex;
+
+definition let V be RealLinearSpace, M be Subset of V;
+ func LinComb(M) -> set means
+:: CONVEX2:def 1
+   for L being set holds
+  L in it iff L is Linear_Combination of M;
+end;
+
+definition let V be RealLinearSpace;
+ cluster convex Linear_Combination of V;
+end;
+
+definition let V be RealLinearSpace;
+ mode Convex_Combination of V is convex Linear_Combination of V;
+end;
+
+definition let V be RealLinearSpace, M be non empty Subset of V;
+ cluster convex Linear_Combination of M;
+end;
+
+definition let V be RealLinearSpace, M be non empty Subset of V;
+ mode Convex_Combination of M is convex Linear_Combination of M;
+end;
+
+theorem :: CONVEX2:7
+for V being RealLinearSpace, M be Subset of V holds
+ Convex-Family M <> {};
+
+theorem :: CONVEX2:8
+  for V being RealLinearSpace, M being Subset of V holds M c= conv(M);
+
+theorem :: CONVEX2:9
+for V being RealLinearSpace, L1,L2 being Convex_Combination of V,
+ r being Real st 0 < r & r < 1 holds
+  r*L1 + (1-r)*L2 is Convex_Combination of V;
+
+theorem :: CONVEX2:10
+  for V being RealLinearSpace, M being non empty Subset of V,
+ L1,L2 being Convex_Combination of M,
+ r being Real st 0 < r & r < 1 holds
+  r*L1 + (1-r)*L2 is Convex_Combination of M;
+
+theorem :: CONVEX2:11
+  for V being RealLinearSpace holds
+ ex L being Linear_Combination of V st L is convex;
+
+theorem :: CONVEX2:12
+  for V being RealLinearSpace, M being non empty Subset of V holds
+ ex L being Linear_Combination of M st L is convex;
+
+begin  :: Miscellaneous
+
+theorem :: CONVEX2:13
+  for V being RealLinearSpace, W1,W2 being Subspace of V holds
+ Up(W1+W2) = Up(W1) + Up(W2);
+
+theorem :: CONVEX2:14
+  for V being RealLinearSpace, W1,W2 being Subspace of V holds
+ Up(W1 /\ W2) = Up(W1) /\ Up(W2);
+
+theorem :: CONVEX2:15
+  for V being RealLinearSpace, L1, L2 being Convex_Combination of V,
+ a,b being Real st a * b > 0 holds
+  Carrier(a*L1 + b*L2) = Carrier(a * L1) \/ Carrier(b * L2);
+
+theorem :: CONVEX2:16
+  for F,G being Function st F,G are_fiberwise_equipotent
+ for x1,x2 being set st x1 in dom F & x2 in dom F & x1 <> x2 holds
+  ex z1,z2 being set st
+   z1 in dom G & z2 in dom G & z1 <> z2 & F.x1 = G.z1 & F.x2 = G.z2;
+
+theorem :: CONVEX2:17
+  for V being RealLinearSpace, L being Linear_Combination of V,
+ A being Subset of V st A c= Carrier(L) holds
+  ex L1 being Linear_Combination of V st Carrier(L1) = A;

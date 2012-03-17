@@ -1,0 +1,1838 @@
+:: Definable Functions
+::  by Grzegorz Bancerek
+::
+:: Received September 26, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ZF_LANG, FUNCT_1, ZF_MODEL, ARYTM_3, BOOLE, QC_LANG3, FINSET_1,
+      RELAT_1, ZFMODEL1;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, XREAL_0, NAT_1, RELAT_1,
+      FUNCT_1, FINSET_1, PARTFUN1, FUNCT_2, ZF_LANG, ZF_MODEL, ZFMODEL1,
+      ZF_LANG1;
+ constructors NAT_1, ENUMSET1, ZF_MODEL, ZFMODEL1, ZF_LANG1, XREAL_0, MEMBERED,
+      PARTFUN1, XBOOLE_0;
+ clusters FUNCT_1, FINSET_1, ZF_LANG, RELSET_1, FINSEQ_1, XREAL_0, ARYTM_3,
+      ZFMISC_1, FUNCT_2, PARTFUN1, XBOOLE_0;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, ZF_MODEL, ZFMODEL1, XBOOLE_0;
+ theorems TARSKI, AXIOMS, ZFMISC_1, ENUMSET1, REAL_1, NAT_1, FUNCT_1, FUNCT_2,
+      ZF_MODEL, ZFMODEL1, ZF_LANG1, RELSET_1, XBOOLE_0, XBOOLE_1;
+ schemes NAT_1, PARTFUN1, ZF_LANG1;
+
+begin
+
+ reserve x,y,z,x1,x2,x3,x4,y1,y2,s for Variable,
+         M for non empty set,
+         a,b for set, i,j,k for Nat,
+         m,m1,m2,m3,m4 for Element of M,
+         H,H1,H2 for ZF-formula,
+         v,v',v1,v2 for Function of VAR,M;
+
+
+
+theorem
+ Th1: Free (H/(x,y)) c= (Free H \ {x}) \/ {y}
+  proof defpred P[ZF-formula] means Free ($1/(x,y)) c= (Free $1 \ {x}) \/ {y};
+A1:  for x1,x2 holds P[x1 '=' x2] & P[x1 'in' x2]
+     proof let x1,x2;
+         (x1 = x or x1 <> x) & (x2 = x or x2 <> x);
+      then consider y1,y2 such that
+A2:    x1 <> x & x2 <> x & y1 = x1 & y2 = x2 or
+       x1 = x & x2 <> x & y1 = y & y2 = x2 or
+       x1 <> x & x2 = x & y1 = x1 & y2 = y or
+       x1 = x & x2 = x & y1 = y & y2 = y;
+         (x1 '=' x2)/(x,y) = y1 '=' y2 & (x1 'in' x2)/(x,y) = y1 'in' y2
+        by A2,ZF_LANG1:166,168;
+then A3:    Free ((x1 '=' x2)/(x,y)) = {y1,y2} & Free (x1 '=' x2) = {x1,x2} &
+        Free ((x1 'in' x2)/(x,y)) = {y1,y2} & Free (x1 'in' x2) = {x1,x2}
+         by ZF_LANG1:63,64;
+         {y1,y2} c= ({x1,x2} \ {x}) \/ {y}
+        proof let a; assume a in {y1,y2};
+          then (a = x1 or a = x2) & a <> x or a = y by A2,TARSKI:def 2;
+          then a in {x1,x2} & not a in {x} or a in {y} by TARSKI:def 1,def 2
+;
+          then a in {x1,x2} \ {x} or a in {y} by XBOOLE_0:def 4;
+         hence thesis by XBOOLE_0:def 2;
+        end;
+      hence thesis by A3;
+     end;
+A4:  for H st P[H] holds P['not' H]
+     proof let H;
+         Free 'not'(H/(x,y)) = Free (H/(x,y)) & Free 'not' H = Free H &
+        ('not' H)/(x,y) = 'not'(H/(x,y)) by ZF_LANG1:65,170;
+      hence thesis;
+     end;
+A5:  for H1,H2 st P[H1] & P[H2] holds P[H1 '&' H2]
+     proof let H1,H2; assume P[H1] & P[H2];
+then A6:    Free ((H1/(x,y)) '&' (H2/(x,y))) = Free (H1/(x,y)) \/ Free (H2/(x,y
+)) &
+        Free (H1 '&' H2) = Free H1 \/ Free H2 &
+        (H1 '&' H2)/(x,y) = (H1/(x,y)) '&' (H2/(x,y)) &
+        Free (H1/(x,y)) \/ Free (H2/(x,y)) c=
+         ((Free H1 \ {x}) \/ {y}) \/ ((Free H2 \ {x}) \/ {y})
+          by XBOOLE_1:13,ZF_LANG1:66,172;
+         ((Free H1 \ {x}) \/ {y}) \/ ((Free H2 \ {x}) \/ {y}) c=
+         ((Free H1 \/ Free H2) \ {x}) \/ {y}
+        proof let a; assume
+            a in ((Free H1 \ {x}) \/ {y}) \/ ((Free H2 \ {x}) \/ {y});
+          then a in (Free H1 \ {x}) \/ {y} or a in (Free H2 \ {x}) \/ {y}
+           by XBOOLE_0:def 2;
+          then a in Free H1 \ {x} or a in Free H2 \ {x} or a in {y} by XBOOLE_0
+:def 2
+;
+          then (a in Free H1 or a in Free H2) & not a in {x} or a in {y}
+           by XBOOLE_0:def 4;
+          then a in Free H1 \/ Free H2 & not a in {x} or a in
+ {y} by XBOOLE_0:def 2;
+          then a in (Free H1 \/ Free H2) \ {x} or a in {y} by XBOOLE_0:def 4;
+         hence thesis by XBOOLE_0:def 2;
+        end;
+      hence thesis by A6,XBOOLE_1:1;
+     end;
+A7:  for H,z st P[H] holds P[All(z,H)]
+     proof let H,z; z = x or z <> x;
+      then consider s such that
+A8:    z = x & s = y or z <> x & s = z;
+      assume P[H];
+then A9:    Free All(s,H/(x,y)) = Free (H/(x,y)) \ {s} &
+        Free All(z,H) = Free H \ {z} & All(z,H)/(x,y) = All(s,H/(x,y)) &
+        Free (H/(x,y)) \ {s} c= ((Free H \ {x}) \/ {y}) \ {s}
+         by A8,XBOOLE_1:33,ZF_LANG1:67,173,174;
+          ((Free H \ {x}) \/ {y}) \ {s} c= ((Free H \ {z}) \ {x}) \/ {y}
+         proof let a; assume A10: a in ((Free H \ {x}) \/ {y}) \ {s};
+        then a in (Free H \ {x}) \/ {y} & not a in {s} by XBOOLE_0:def 4;
+           then a in Free H \ {x} or a in {y} by XBOOLE_0:def 2;
+           then ((a in Free H & not a in {z}) & not a in {x}) or a in {y}
+            by A8,A10,XBOOLE_0:def 4;
+           then (a in Free H \ {z} & not a in {x}) or a in {y} by XBOOLE_0:def
+4
+;
+           then a in (Free H \ {z}) \ {x} or a in {y} by XBOOLE_0:def 4;
+          hence thesis by XBOOLE_0:def 2;
+         end;
+      hence thesis by A9,XBOOLE_1:1;
+     end;
+      for H holds P[H] from ZF_Induction(A1,A4,A5,A7);
+   hence thesis;
+  end;
+
+theorem
+ Th2: not y in variables_in H implies
+  (x in Free H implies Free (H/(x,y)) = (Free H \ {x}) \/ {y}) &
+   (not x in Free H implies Free (H/(x,y)) = Free H)
+  proof defpred P[ZF-formula] means
+    not y in variables_in $1 implies
+     (x in Free $1 implies Free ($1/(x,y)) = (Free $1 \ {x}) \/ {y}) &
+      (not x in Free $1 implies Free ($1/(x,y)) = Free $1);
+A1:  for x1,x2 holds P[x1 '=' x2] & P[x1 'in' x2]
+     proof let x1,x2;
+         (x1 = x or x1 <> x) & (x2 = x or x2 <> x);
+      then consider y1,y2 such that
+A2:    x1 <> x & x2 <> x & y1 = x1 & y2 = x2 or
+       x1 = x & x2 <> x & y1 = y & y2 = x2 or
+       x1 <> x & x2 = x & y1 = x1 & y2 = y or
+       x1 = x & x2 = x & y1 = y & y2 = y;
+         (x1 '=' x2)/(x,y) = y1 '=' y2 & (x1 'in' x2)/(x,y) = y1 'in' y2
+        by A2,ZF_LANG1:166,168;
+then A3:    Free ((x1 '=' x2)/(x,y)) = {y1,y2} & Free (x1 '=' x2) = {x1,x2} &
+        Free ((x1 'in' x2)/(x,y)) = {y1,y2} & Free (x1 'in' x2) = {x1,x2}
+         by ZF_LANG1:63,64;
+A4:    variables_in (x1 '=' x2) = {x1,x2} & variables_in (x1 'in' x2) = {x1,x2}
+        by ZF_LANG1:151,152;
+      thus P[x1 '=' x2]
+        proof assume
+         not y in variables_in (x1 '=' x2);
+         thus x in Free (x1 '=' x2) implies
+            Free ((x1 '=' x2)/(x,y)) = (Free (x1 '=' x2) \ {x}) \/ {y}
+           proof assume A5: x in Free (x1 '=' x2);
+            thus Free ((x1 '=' x2)/(x,y)) c= (Free (x1 '=' x2) \ {x}) \/ {y}
+              by Th1;
+            let a; assume a in (Free (x1 '=' x2) \ {x}) \/ {y};
+             then a in Free (x1 '=' x2) \ {x} or a in {y} by XBOOLE_0:def 2;
+             then a in Free (x1 '=' x2) & not a in {x} or a in
+ {y} by XBOOLE_0:def 4;
+             then (a = x1 or a = x2) & a <> x or a = y by A3,TARSKI:def 1,def 2
+;
+            hence thesis by A2,A3,A5,TARSKI:def 2;
+           end;
+         assume not x in Free (x1 '=' x2);
+         hence thesis by A3,A4,ZF_LANG1:196;
+        end;
+      assume
+      not y in variables_in (x1 'in' x2);
+      thus x in Free (x1 'in' x2) implies
+         Free ((x1 'in' x2)/(x,y)) = (Free (x1 'in' x2) \ {x}) \/ {y}
+        proof assume A6: x in Free (x1 'in' x2);
+         thus Free ((x1 'in' x2)/(x,y)) c= (Free (x1 'in' x2) \ {x}) \/ {y}
+           by Th1;
+         let a; assume a in (Free (x1 'in' x2) \ {x}) \/ {y};
+          then a in Free (x1 'in' x2) \ {x} or a in {y} by XBOOLE_0:def 2;
+          then a in Free (x1 'in'
+ x2) & not a in {x} or a in {y} by XBOOLE_0:def 4;
+          then (a = x1 or a = x2) & a <> x or a = y by A3,TARSKI:def 1,def 2;
+         hence thesis by A2,A3,A6,TARSKI:def 2;
+        end;
+      assume not x in Free (x1 'in' x2);
+      hence thesis by A3,A4,ZF_LANG1:196;
+     end;
+A7:  for H st P[H] holds P['not' H]
+     proof let H;
+         Free 'not'(H/(x,y)) = Free (H/(x,y)) & Free 'not' H = Free H &
+        variables_in 'not' H = variables_in H &
+        ('not' H)/(x,y) = 'not'(H/(x,y))
+         by ZF_LANG1:65,153,170;
+      hence thesis;
+     end;
+A8:  for H1,H2 st P[H1] & P[H2] holds P[H1 '&' H2]
+     proof let H1,H2; assume that
+A9:    P[H1] & P[H2] and
+A10:    not y in variables_in (H1 '&' H2);
+A11:    Free (H1 '&' H2) = Free H1 \/ Free H2 &
+       Free ((H1/(x,y)) '&' (H2/(x,y))) = Free (H1/(x,y)) \/ Free (H2/(x,y)) &
+       variables_in (H1 '&' H2) = variables_in H1 \/ variables_in H2
+        by ZF_LANG1:66,154;
+      set H = H1 '&' H2;
+A12:    H/(x,y) = (H1/(x,y)) '&' (H2/(x,y)) by ZF_LANG1:172;
+      thus x in Free H implies Free (H/(x,y)) = (Free H \ {x}) \/ {y}
+        proof assume A13: x in Free H;
+A14:       now assume not x in Free H1;
+         then x in Free H2 & Free (H1/(x,y)) = Free H1 & Free H1 = Free H1 \ {
+x}
+             by A9,A10,A11,A13,XBOOLE_0:def 2,ZFMISC_1:65;
+           hence
+              Free (H/(x,y)) = (Free H1 \ {x}) \/ (Free H2 \ {x}) \/ {y}
+              by A9,A10,A11,A12,XBOOLE_0:def 2,XBOOLE_1:4
+                          .= (Free H \ {x}) \/ {y} by A11,XBOOLE_1:42;
+          end;
+A15:       now assume not x in Free H2;
+         then x in Free H1 & Free (H2/(x,y)) = Free H2 & Free H2 = Free H2 \ {
+x}
+             by A9,A10,A11,A13,XBOOLE_0:def 2,ZFMISC_1:65;
+           hence
+              Free (H/(x,y)) = (Free H1 \ {x}) \/ (Free H2 \ {x}) \/ {y}
+              by A9,A10,A11,A12,XBOOLE_0:def 2,XBOOLE_1:4
+                          .= (Free H \ {x}) \/ {y} by A11,XBOOLE_1:42;
+          end;
+            now assume x in Free H1 & x in Free H2;
+           hence
+              Free (H/(x,y)) = {y} \/ (Free H1 \ {x}) \/ (Free H2 \ {x}) \/
+ {y} by A9,A10,A11,A12,XBOOLE_0:def 2,XBOOLE_1:4
+              .= {y} \/ ((Free H1 \ {x}) \/ (Free H2 \ {x})) \/ {y} by XBOOLE_1
+:4
+              .= (Free H \ {x}) \/ {y} \/ {y} by A11,XBOOLE_1:42
+              .= (Free H \ {x}) \/ ({y} \/ {y}) by XBOOLE_1:4
+              .= (Free H \ {x}) \/ {y};
+          end;
+         hence Free (H/(x,y)) = (Free H \ {x}) \/ {y} by A14,A15;
+        end;
+      assume not x in Free (H1 '&' H2);
+      hence thesis by A9,A10,A11,XBOOLE_0:def 2,ZF_LANG1:172;
+     end;
+A16:  for H,z st P[H] holds P[All(z,H)]
+     proof let H,z; z = x or z <> x;
+      then consider s such that
+A17:    z = x & s = y or z <> x & s = z;
+      assume that
+A18:    P[H] and
+A19:    not y in variables_in All(z,H);
+      set G = All(z,H)/(x,y);
+A20:    Free All(z,H) = Free H \ {z} &
+        Free All(s,H/(x,y)) = Free (H/(x,y)) \ {s} &
+        variables_in All(z,H) = variables_in H \/ {z}
+         by ZF_LANG1:67,155;
+    then not y in variables_in H & not y in {z} by A19,XBOOLE_0:def 2;
+then A21:    y <> z & G = All(s,H/(x,y)) by A17,TARSKI:def 1,ZF_LANG1:173,174;
+      thus x in Free All(z,H) implies Free G = (Free All(z,H) \ {x}) \/ {y}
+        proof assume x in Free All(z,H);
+then A22:          x in Free H & not x in {z} by A20,XBOOLE_0:def 4;
+         thus Free G c= (Free All(z,H) \ {x}) \/ {y}
+           proof let a; assume a in Free G;
+then A23:          a in (Free H \ {x}) \/ {y} & not a in
+ {z} by A17,A18,A19,A20,A21,A22,TARSKI:def 1,XBOOLE_0:def 2,def 4;
+             then a in Free H \ {x} or a in {y} by XBOOLE_0:def 2;
+             then a in Free H & not a in {x} or a in {y} by XBOOLE_0:def 4;
+             then a in Free All(z,H) & not a in {x} or a in {y}
+              by A20,A23,XBOOLE_0:def 4;
+             then a in Free All(z,H) \ {x} or a in {y} by XBOOLE_0:def 4;
+            hence thesis by XBOOLE_0:def 2;
+           end;
+         let a; assume a in (Free All(z,H) \ {x}) \/ {y};
+          then a in Free All(z,H) \ {x} or a in {y} by XBOOLE_0:def 2;
+          then a in Free All(z,H) & not a in {x} or a in {y} & a = y
+           by TARSKI:def 1,XBOOLE_0:def 4;
+          then (a in Free H & not a in {x} or a in {y}) & not a in {z}
+           by A19,A20,XBOOLE_0:def 2,def 4;
+          then (a in Free H \ {x} or a in {y}) & not a in {z} by XBOOLE_0:def 4
+;
+          then a in (Free H \ {x}) \/ {y} & not a in {z} by XBOOLE_0:def 2;
+         hence thesis by A17,A18,A19,A20,A21,A22,TARSKI:def 1,XBOOLE_0:def 2,
+def 4
+;
+        end;
+      assume not x in Free All(z,H);
+then A24:    not x in Free H or x in {z} by A20,XBOOLE_0:def 4;
+A25:    Free All(z,H) c= variables_in All(z,H) by ZF_LANG1:164;
+A26:    now assume A27: x in Free H;
+        thus Free G = Free All(z,H)
+          proof
+           thus Free G c= Free All(z,H)
+             proof let a; assume a in Free G;
+               then a in (Free H \ {z}) \/ {y} & not a in {y} by A17,A18,A19,
+A20,A21,A24,A27,TARSKI:def 1,XBOOLE_0:def 2,def 4;
+              hence thesis by A20,XBOOLE_0:def 2;
+             end;
+           let a; assume A28: a in Free All(z,H);
+then A29:         a in (Free H \ {x}) \/ {y} & a in variables_in All(z,H)
+             by A17,A20,A24,A25,A27,TARSKI:def 1,XBOOLE_0:def 2;
+              a <> y by A19,A25,A28;
+            then not a in {y} by TARSKI:def 1;
+           hence thesis by A17,A18,A19,A20,A21,A24,A27,A29,TARSKI:def 1,
+XBOOLE_0:def 2,def 4;
+          end;
+       end;
+         now assume not x in Free H;
+         then Free G = (Free H \ {z}) \ {y} & not y in Free All(z,H) or
+          Free G = Free H \ {z} by A17,A18,A19,A20,A21,A25,XBOOLE_0:def 2,
+ZFMISC_1:65;
+        hence thesis by A20,ZFMISC_1:65;
+       end;
+      hence Free G = Free All(z,H) by A26;
+     end;
+      for H holds P[H] from ZF_Induction(A1,A7,A8,A16);
+   hence thesis;
+  end;
+
+theorem
+   variables_in H is finite
+  proof variables_in H = rng H \ {0,1,2,3,4} by ZF_LANG1:def 3;
+   hence thesis;
+  end;
+
+theorem
+ Th4: (ex i st for j st x.j in variables_in H holds j < i) &
+   ex x st not x in variables_in H
+  proof defpred P[ZF-formula] means
+    ex i st for j st x.j in variables_in $1 holds j < i;
+A1:  for x,y holds P[x '=' y] & P[x 'in' y]
+     proof let x,y;
+      consider i such that
+A2:    x = x.i by ZF_LANG1:87;
+      consider j such that
+A3:    y = x.j by ZF_LANG1:87;
+         i <= i+j & j <= j+i & i+j = j+i by NAT_1:29;
+then A4:    i < i+j+1 & j < i+j+1 by NAT_1:38;
+A5:    variables_in (x '=' y) = {x,y} & variables_in (x 'in' y) = {x,y}
+        by ZF_LANG1:151,152;
+      thus P[x '=' y]
+        proof take i+j+1; let k be Nat; assume
+            x.k in variables_in (x '=' y);
+          then x.k = x.i or x.k = x.j by A2,A3,A5,TARSKI:def 2;
+         hence thesis by A4,ZF_LANG1:86;
+        end;
+      take i+j+1; let k be Nat; assume x.k in variables_in (x 'in' y);
+       then x.k = x.i or x.k = x.j by A2,A3,A5,TARSKI:def 2;
+      hence thesis by A4,ZF_LANG1:86;
+     end;
+A6:  for H st P[H] holds P['not' H]
+     proof let H; variables_in 'not' H = variables_in H by ZF_LANG1:153;
+      hence thesis;
+     end;
+A7:  for H1,H2 st P[H1] & P[H2] holds P[H1 '&' H2]
+     proof let H1,H2;
+      given i1 being Nat such that
+A8:    for j st x.j in variables_in H1 holds j < i1;
+      given i2 being Nat such that
+A9:    for j st x.j in variables_in H2 holds j < i2;
+         i1 <= i2 or i1 > i2;
+      then consider i such that
+A10:    i1 <= i2 & i = i2 or i1 > i2 & i = i1;
+      take i; let j; assume x.j in variables_in (H1 '&' H2);
+       then x.j in variables_in H1 \/ variables_in H2 by ZF_LANG1:154;
+       then x.j in variables_in H1 or x.j in variables_in H2 by XBOOLE_0:def 2
+;
+       then j < i1 or j < i2 by A8,A9;
+      hence thesis by A10,AXIOMS:22;
+     end;
+A11:  for H,x st P[H] holds P[All(x,H)]
+     proof let H,x;
+      given i1 being Nat such that
+A12:    for j st x.j in variables_in H holds j < i1;
+      consider i2 be Nat such that
+A13:    x = x.i2 by ZF_LANG1:87;
+         i1 <= i2+1 or i1 > i2+1;
+      then consider i such that
+A14:    i1 <= i2+1 & i = i2+1 or i1 > i2+1 & i = i1;
+      take i; let j; assume x.j in variables_in All(x,H);
+       then x.j in variables_in H \/ {x} by ZF_LANG1:155;
+       then x.j in variables_in H or x.j in {x} & i2+0 = i2 & 0 < 1
+        by XBOOLE_0:def 2;
+       then j < i1 or x.j = x.i2 & i2 < i2+1 by A12,A13,REAL_1:53,TARSKI:def 1
+;
+       then j < i1 or j < i2+1 by ZF_LANG1:86;
+      hence thesis by A14,AXIOMS:22;
+     end;
+      for H holds P[H] from ZF_Induction(A1,A6,A7,A11);
+   then consider i such that
+A15:  for j st x.j in variables_in H holds j < i;
+   thus ex i st for j st x.j in variables_in H holds j < i by A15;
+   take x.i; thus thesis by A15;
+  end;
+
+theorem
+ Th5: not x in variables_in H implies (M,v |= H iff M,v |= All(x,H))
+  proof Free H c= variables_in H by ZF_LANG1:164;
+    then (x in Free H implies x in variables_in H) & v/(x,v.x) = v
+     by ZF_LANG1:78;
+   hence thesis by ZFMODEL1:10,ZF_LANG1:80;
+  end;
+
+theorem
+ Th6: not x in variables_in H implies (M,v |= H iff M,v/(x,m) |= H)
+  proof
+      (M,v |= All(x,H) implies M,v/(x,m) |= H) &
+     (M,v/(x,m) |= All(x,H) implies M,(v/(x,m))/(x,v.x) |= H) &
+      (v/(x,m))/(x,v.x) = v/(x,v.x) & v/(x,v.x) = v
+     by ZF_LANG1:78,80;
+   hence thesis by Th5;
+  end;
+
+theorem
+ Th7: x <> y & y <> z & z <> x implies
+  v/(x,m1)/(y,m2)/(z,m3) = v/(z,m3)/(y,m2)/(x,m1) &
+   v/(x,m1)/(y,m2)/(z,m3) = v/(y,m2)/(z,m3)/(x,m1)
+  proof assume x <> y & y <> z & z <> x;
+    then v/(x,m1)/(y,m2) = v/(y,m2)/(x,m1) & v/(z,m3)/(y,m2) = v/(y,m2)/(z,m3)
+&
+    v/(y,m2)/(x,m1)/(z,m3) = v/(y,m2)/(z,m3)/(x,m1) by ZF_LANG1:79;
+   hence thesis;
+  end;
+
+theorem
+ Th8: x1 <> x2 & x1 <> x3 & x1 <> x4 & x2 <> x3 & x2 <> x4 & x3 <> x4 implies
+  v/(x1,m1)/(x2,m2)/(x3,m3)/(x4,m4) = v/(x2,m2)/(x3,m3)/(x4,m4)/(x1,m1) &
+   v/(x1,m1)/(x2,m2)/(x3,m3)/(x4,m4) = v/(x3,m3)/(x4,m4)/(x1,m1)/(x2,m2) &
+    v/(x1,m1)/(x2,m2)/(x3,m3)/(x4,m4) = v/(x4,m4)/(x2,m2)/(x3,m3)/(x1,m1)
+  proof assume
+      x1 <> x2 & x1 <> x3 & x1 <> x4 & x2 <> x3 & x2 <> x4 & x3 <> x4;
+    then v/(x1,m1)/(x2,m2)/(x3,m3) = v/(x2,m2)/(x3,m3)/(x1,m1) &
+    v/(x2,m2)/(x3,m3)/(x1,m1)/(x4,m4) = v/(x2,m2)/(x3,m3)/(x4,m4)/(x1,m1) &
+    v/(x1,m1)/(x2,m2)/(x3,m3)/(x4,m4) = v/(x1,m1)/(x3,m3)/(x4,m4)/(x2,m2) &
+    v/(x1,m1)/(x3,m3)/(x4,m4)/(x2,m2) = v/(x3,m3)/(x4,m4)/(x1,m1)/(x2,m2) &
+    v/(x2,m2)/(x3,m3)/(x4,m4) = v/(x4,m4)/(x2,m2)/(x3,m3) by Th7,ZF_LANG1:79;
+   hence thesis;
+  end;
+
+theorem
+ Th9: v/(x1,m1)/(x2,m2)/(x1,m) = v/(x2,m2)/(x1,m) &
+  v/(x1,m1)/(x2,m2)/(x3,m3)/(x1,m) = v/(x2,m2)/(x3,m3)/(x1,m) &
+  v/(x1,m1)/(x2,m2)/(x3,m3)/(x4,m4)/(x1,m) = v/(x2,m2)/(x3,m3)/(x4,m4)/(x1,m)
+  proof
+    A1: v/(x1,m1)/(x2,m2)/(x1,m) = v/(x2,m2)/(x1,m1)/(x1,m) or x1 = x2
+     by ZF_LANG1:79;
+   hence
+   v/(x1,m1)/(x2,m2)/(x1,m) = v/(x2,m2)/(x1,m) by ZF_LANG1:78;
+      x1 = x3 or x1 <> x3;
+    then A2: v/(x1,m1)/(x2,m2)/(x3,m3)/(x1,m) = v/(x1,m1)/(x2,m2)/(x1,m)/(x3,m3
+) &
+    v/(x2,m2)/(x3,m3)/(x1,m) = v/(x2,m2)/(x1,m)/(x3,m3) or
+    v/(x1,m1)/(x2,m2)/(x3,m3)/(x1,m) = v/(x1,m1)/(x2,m2)/(x1,m) &
+    v/(x2,m2)/(x3,m3)/(x1,m) = v/(x2,m2)/(x1,m)
+     by ZF_LANG1:78,79;
+   hence
+   v/(x1,m1)/(x2,m2)/(x3,m3)/(x1,m) = v/(x2,m2)/(x3,m3)/(x1,m) by A1,ZF_LANG1:
+78
+;
+      x1 = x4 or x1 <> x4;
+    then v/(x1,m1)/(x2,m2)/(x3,m3)/(x4,m4)/(x1,m) =
+      v/(x1,m1)/(x2,m2)/(x3,m3)/(x1,m)/(x4,m4) &
+    v/(x2,m2)/(x3,m3)/(x1,m)/(x4,m4) =
+      v/(x2,m2)/(x3,m3)/(x4,m4)/(x1,m) or
+    v/(x1,m1)/(x2,m2)/(x3,m3)/(x4,m4)/(x1,m) =
+      v/(x1,m1)/(x2,m2)/(x3,m3)/(x1,m) &
+    v/(x2,m2)/(x3,m3)/(x4,m4)/(x1,m) =
+      v/(x2,m2)/(x3,m3)/(x1,m) by ZF_LANG1:78,79;
+   hence v/(x1,m1)/(x2,m2)/(x3,m3)/(x4,m4)/(x1,m) =
+          v/(x2,m2)/(x3,m3)/(x4,m4)/(x1,m) by A1,A2,ZF_LANG1:78;
+  end;
+
+theorem
+ Th10: not x in Free H implies (M,v |= H iff M,v/(x,m) |= H)
+  proof assume A1:not x in Free H;
+    then (M,v |= H implies M,v |= All(x,H)) &
+    (M,v |= All(x,H) implies M,v/(x,m) |= H) by ZFMODEL1:10,ZF_LANG1:80;
+   hence M,v |= H implies M,v/(x,m) |= H;
+   assume M,v/(x,m) |= H;
+    then M,v/(x,m) |= All(x,H) & v/(x,m)/(x,v.x) = v/(x,v.x) & v/(x,v.x) = v
+     by A1,ZFMODEL1:10,ZF_LANG1:78;
+   hence thesis by ZF_LANG1:80;
+  end;
+
+theorem Th11:
+ not x.0 in Free H & M,v |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) implies
+   for m1,m2 holds def_func'(H,v).m1 = m2 iff M,v/(x.3,m1)/(x.4,m2) |= H
+  proof assume
+A1:  not x.0 in Free H & M,v |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)));
+   let m1,m2;
+      x.3 <> x.4 by ZF_LANG1:86;
+then A2:  v/(x.3,m1)/(x.4,m2).(x.4) = m2 & v/(x.3,m1).(x.3) = m1 &
+     v/(x.3,m1)/(x.4,m2).(x.3) = v/(x.3,m1).(x.3) by ZF_LANG1:def 1;
+      now let y; assume
+A3:    v/(x.3,m1)/(x.4,m2).y <> v.y;
+     assume x.0 <> y & x.3 <> y & x.4 <> y;
+      then v/(x.3,m1)/(x.4,m2).y = v/(x.3,m1).y & v/(x.3,m1).y = v.y
+       by ZF_LANG1:def 1;
+     hence contradiction by A3;
+    end;
+   hence def_func'(H,v).m1 = m2 iff M,v/(x.3,m1)/(x.4,m2) |= H
+     by A1,A2,ZFMODEL1:def 1;
+  end;
+ Lm1: x.0 <> x.3 & x.0 <> x.4 & x.3 <> x.4 by ZF_LANG1:86;
+
+theorem
+ Th12: Free H c= {x.3,x.4} & M |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)))
+   implies def_func'(H,v) = def_func(H,M)
+  proof assume
+A1:  Free H c= {x.3,x.4} & M |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)));
+    then A2:  not x.0 in Free H & M,v |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '='
+x.0)))
+     by Lm1,TARSKI:def 2,ZF_MODEL:def 5;
+      now let a; assume a in M;
+     then reconsider m = a as Element of M;
+     set r = def_func'(H,v).m;
+        M,v/(x.3,m)/(x.4,r) |= H & v/(x.3,m)/(x.4,r).(x.4) = r &
+      v/(x.3,m)/(x.4,r).(x.3) = v/(x.3,m).(x.3) & v/(x.3,m).(x.3) = m
+       by A2,Lm1,Th11,ZF_LANG1:def 1;
+     hence def_func'(H,v).a = def_func(H,M).a by A1,ZFMODEL1:def 2;
+    end;
+   hence thesis by FUNCT_2:18;
+  end;
+
+theorem
+ Th13: not x in variables_in H implies (M,v |= H/(y,x) iff M,v/(y,v.x) |= H)
+  proof
+   defpred V[ZF-formula] means not x in variables_in $1 implies
+     for v holds M,v |= $1/(y,x) iff M,v/(y,v.x) |= $1;
+A1:  for x1,x2 holds V[x1 '=' x2] & V[x1 'in' x2]
+     proof let x1,x2;
+A2:    (x1 = y or x1 <> y) & (x2 = y or x2 <> y);
+      thus V[x1 '=' x2]
+        proof assume
+         not x in variables_in (x1 '=' x2);
+         let v;
+         consider y1,y2 such that
+A3:       x1 <> y & x2 <> y & y1 = x1 & y2 = x2 or
+          x1 = y & x2 <> y & y1 = x & y2 = x2 or
+          x1 <> y & x2 = y & y1 = x1 & y2 = x or
+          x1 = y & x2 = y & y1 = x & y2 = x by A2;
+A4:       (x1 '=' x2)/(y,x) = y1 '=' y2 by A3,ZF_LANG1:166;
+A5:       v/(y,v.x).x1 = v.y1 & v/(y,v.x).x2 = v.y2 by A3,ZF_LANG1:def 1;
+         thus M,v |= (x1 '=' x2)/(y,x) implies M,v/(y,v.x) |= x1 '=' x2
+           proof assume M,v |= (x1 '=' x2)/(y,x);
+             then v.y1 = v.y2 by A4,ZF_MODEL:12;
+            hence M,v/(y,v.x) |= x1 '=' x2 by A5,ZF_MODEL:12;
+           end;
+         assume M,v/(y,v.x) |= x1 '=' x2;
+          then v/(y,v.x).x1 = v/(y,v.x).x2 by ZF_MODEL:12;
+         hence M,v |= (x1 '=' x2)/(y,x) by A4,A5,ZF_MODEL:12;
+        end;
+      assume
+      not x in variables_in (x1 'in' x2);
+      let v;
+      consider y1,y2 such that
+A6:    x1 <> y & x2 <> y & y1 = x1 & y2 = x2 or
+       x1 = y & x2 <> y & y1 = x & y2 = x2 or
+       x1 <> y & x2 = y & y1 = x1 & y2 = x or
+       x1 = y & x2 = y & y1 = x & y2 = x by A2;
+A7:    (x1 'in' x2)/(y,x) = y1 'in' y2 by A6,ZF_LANG1:168;
+A8:    v/(y,v.x).x1 = v.y1 & v/(y,v.x).x2 = v.y2 by A6,ZF_LANG1:def 1;
+      thus M,v |= (x1 'in' x2)/(y,x) implies M,v/(y,v.x) |= x1 'in' x2
+        proof assume M,v |= (x1 'in' x2)/(y,x);
+          then v.y1 in v.y2 by A7,ZF_MODEL:13;
+         hence M,v/(y,v.x) |= x1 'in' x2 by A8,ZF_MODEL:13;
+        end;
+      assume M,v/(y,v.x) |= x1 'in' x2;
+       then v/(y,v.x).x1 in v/(y,v.x).x2 by ZF_MODEL:13;
+      hence M,v |= (x1 'in' x2)/(y,x) by A7,A8,ZF_MODEL:13;
+     end;
+A9:  for H st V[H] holds V['not' H]
+     proof let H such that
+A10:    not x in variables_in H implies
+        for v holds M,v |= H/(y,x) iff M,v/(y,v.x) |= H;
+      assume A11: not x in variables_in 'not' H;
+      let v;
+      thus M,v |= ('not' H)/(y,x) implies M,v/(y,v.x) |= 'not' H
+        proof assume M,v |= ('not' H)/(y,x);
+          then M,v |= 'not'(H/(y,x)) by ZF_LANG1:170;
+          then not M,v |= H/(y,x) by ZF_MODEL:14;
+          then not M,v/(y,v.x) |= H by A10,A11,ZF_LANG1:153;
+         hence M,v/(y,v.x) |= 'not' H by ZF_MODEL:14;
+        end;
+      assume M,v/(y,v.x) |= 'not' H;
+       then not M,v/(y,v.x) |= H by ZF_MODEL:14;
+       then not M,v |= H/(y,x) by A10,A11,ZF_LANG1:153;
+       then M,v |= 'not'(H/(y,x)) by ZF_MODEL:14;
+      hence M,v |= ('not' H)/(y,x) by ZF_LANG1:170;
+     end;
+A12:  for H1,H2 st V[H1] & V[H2] holds V[H1 '&' H2]
+     proof let H1,H2 such that
+A13:    not x in variables_in H1 implies
+        for v holds M,v |= H1/(y,x) iff M,v/(y,v.x) |= H1 and
+A14:    not x in variables_in H2 implies
+        for v holds M,v |= H2/(y,x) iff M,v/(y,v.x) |= H2;
+      assume not x in variables_in (H1 '&' H2);
+then A15:       not x in variables_in H1 \/ variables_in H2 by ZF_LANG1:154;
+      let v;
+      thus M,v |= (H1 '&' H2)/(y,x) implies M,v/(y,v.x) |= H1 '&' H2
+        proof assume M,v |= (H1 '&' H2)/(y,x);
+          then M,v |= (H1/(y,x)) '&' (H2/(y,x)) by ZF_LANG1:172;
+          then M,v |= H1/(y,x) & M,v |= H2/(y,x) by ZF_MODEL:15;
+          then M,v/(y,v.x) |= H1 & M,v/(y,v.x) |= H2 by A13,A14,A15,XBOOLE_0:
+def 2;
+         hence M,v/(y,v.x) |= H1 '&' H2 by ZF_MODEL:15;
+        end;
+      assume M,v/(y,v.x) |= H1 '&' H2;
+       then M,v/(y,v.x) |= H1 & M,v/(y,v.x) |= H2 by ZF_MODEL:15;
+       then M,v |= H1/(y,x) & M,v |= H2/(y,x) by A13,A14,A15,XBOOLE_0:def 2;
+       then M,v |= (H1/(y,x)) '&' (H2/(y,x)) by ZF_MODEL:15;
+      hence M,v |= (H1 '&' H2)/(y,x) by ZF_LANG1:172;
+     end;
+A16:  for H,z st V[H] holds V[All(z,H)]
+     proof let H,z such that
+A17:    not x in variables_in H implies
+        for v holds M,v |= H/(y,x) iff M,v/(y,v.x) |= H;
+      assume
+A18:    not x in variables_in All(z,H);
+         Free All(z,H) c= variables_in All(z,H) by ZF_LANG1:164;
+then A19:    not x in Free All(z,H) by A18;
+A20:       not x in variables_in H \/ {z} by A18,ZF_LANG1:155;
+    then not x in variables_in H & not x in {z} & Free H c= variables_in H
+        by XBOOLE_0:def 2,ZF_LANG1:164;
+then A21:    x <> z & not x in Free H & for v holds
+        M,v |= H/(y,x) iff M,v/(y,v.x) |= H by A17,TARSKI:def 1;
+         z = y or z <> y;
+      then consider s being Variable such that
+A22:    z = y & s = x or z <> y & s = z;
+      let v;
+      thus M,v |= All(z,H)/(y,x) implies M,v/(y,v.x) |= All(z,H)
+        proof assume M,v |= All(z,H)/(y,x);
+then A23:          M,v |= All(s,H/(y,x)) by A22,ZF_LANG1:173,174;
+A24:       now assume
+A25:         z = y & s = x;
+              now let m; M,v/(x,m) |= H/(y,x) by A23,A25,ZF_LANG1:80;
+              then M,(v/(x,m))/(y,v/(x,m).x) |= H & v/(x,m).x = m &
+              (v/(x,m))/(y,m) = (v/(y,m))/(x,m)
+               by A21,A25,ZF_LANG1:79,def 1;
+              then M,(v/(y,m))/(x,m) |= All(x,H) by A21,ZFMODEL1:10;
+              then ((v/(y,m))/(x,m))/(x,v/(y,m).x) = (v/(y,m))/(x,v/(y,m).x) &
+               M,((v/(y,m))/(x,m))/(x,v/(y,m).x) |= H
+                by ZF_LANG1:78,80;
+             hence M,v/(y,m) |= H by ZF_LANG1:78;
+            end;
+            then M,v |= All(y,H) by ZF_LANG1:80;
+           hence thesis by A25,ZF_LANG1:81;
+          end;
+            now assume
+A26:         z <> y & s = z;
+              now let m; M,v/(z,m) |= H/(y,x) by A23,A26,ZF_LANG1:80;
+              then M,(v/(z,m))/(y,v/(z,m).x) |= H & v/(z,m).x = v.x &
+              (v/(z,m))/(y,v.x) = (v/(y,v.x))/(z,m)
+               by A21,A26,ZF_LANG1:79,def 1;
+             hence M,(v/(y,v.x))/(z,m) |= H;
+            end;
+           hence thesis by ZF_LANG1:80;
+          end;
+         hence M,v/(y,v.x) |= All(z,H) by A22,A24;
+        end;
+      assume
+A27:     M,v/(y,v.x) |= All(z,H);
+A28:    now assume
+A29:      z = y & s = x;
+         then M,v |= All(y,H) by A27,ZF_LANG1:81;
+then A30:      M,v |= All(x,All(y,H)) by A19,A29,ZFMODEL1:10;
+           now let m;
+             M,v/(x,m) |= All(y,H) by A30,ZF_LANG1:80;
+           then M,(v/(x,m))/(y,m) |= H & v/(x,m).x = m
+            by ZF_LANG1:80,def 1;
+          hence M,v/(x,m) |= H/(y,x) by A17,A20,XBOOLE_0:def 2;
+         end;
+         then M,v |= All(x,H/(y,x)) by ZF_LANG1:80;
+        hence thesis by A29,ZF_LANG1:174;
+       end;
+         now assume
+A31:      z <> y & s = z;
+           now let m; M,(v/(y,v.x))/(z,m) |= H by A27,ZF_LANG1:80;
+           then M,(v/(z,m))/(y,v.x) |= H by A31,ZF_LANG1:79;
+           then M,(v/(z,m))/(y,v/(z,m).x) |= H by A21,ZF_LANG1:def 1;
+          hence M,v/(z,m) |= H/(y,x) by A17,A20,XBOOLE_0:def 2;
+         end;
+         then M,v |= All(z,H/(y,x)) by ZF_LANG1:80;
+        hence thesis by A31,ZF_LANG1:173;
+       end;
+      hence thesis by A22,A28;
+     end;
+      for H holds V[H] from ZF_Induction(A1,A9,A12,A16);
+   hence thesis;
+  end;
+
+theorem
+ Th14: not x in variables_in H & M,v |= H implies M,v/(x,v.y) |= H/(y,x)
+  proof assume
+A1:  not x in variables_in H & M,v |= H;
+      x = y or x <> y;
+    then v/(x,v.y)/(y,v.y) = v/(y,v.y)/(x,v.y) & v/(x,v.y).x = v.y &
+    v/(y,v.y) = v & M,v/(x,v.y) |= H
+     by A1,Th6,ZF_LANG1:78,79,def 1;
+   hence thesis by A1,Th13;
+  end;
+
+theorem Th15:
+ not x.0 in Free H & M,v |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) &
+  not x in variables_in H & y <> x.3 & y <> x.4 & not y in Free H &
+   x <> x.0 & x <> x.3 & x <> x.4 implies not x.0 in Free (H/(y,x)) &
+   M,v/(x,v.y) |= All(x.3,Ex(x.0,All(x.4,H/(y,x) <=> x.4 '=' x.0))) &
+   def_func'(H,v) = def_func'(H/(y,x),v/(x,v.y))
+  proof set F = H/(y,x), f = v/(x,v.y);
+   assume that
+A1:  not x.0 in Free H & M,v |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) and
+A2:  not x in variables_in H & y <> x.3 & y <> x.4 & not y in Free H &
+     x <> x.0 & x <> x.3 & x <> x.4;
+
+      Free F c= variables_in F & not x.0 in variables_in F or
+    not x.0 in {x} & not x.0 in Free H \ {y}
+     by A1,A2,TARSKI:def 1,XBOOLE_0:def 4;
+    then not x.0 in Free F or Free F c= (Free H \ {y}) \/ {x} &
+     not x.0 in (Free H \ {y}) \/ {x} by Th1,XBOOLE_0:def 2;
+   hence
+A3:  not x.0 in Free F;
+A4:  x.0 <> x.3 & x.0 <> x.4 & x.3 <> x.4 by ZF_LANG1:86;
+      now let m3;
+        M,v/(x.3,m3) |= Ex(x.0,All(x.4,H <=> x.4 '=' x.0))
+       by A1,ZF_LANG1:80;
+     then consider m such that
+A5:   M,v/(x.3,m3)/(x.0,m) |= All(x.4,H <=> x.4 '=' x.0) by ZF_LANG1:82;
+     set f1 = f/(x.3,m3)/(x.0,m);
+        now let m4;
+A6:     M,v/(x.3,m3)/(x.0,m)/(x.4,m4) |= H <=> x.4 '=' x.0 by A5,ZF_LANG1:80;
+A7:     v/(x.3,m3)/(x.0,m)/(x.4,m4).(x.4) = m4 &
+        v/(x.3,m3)/(x.0,m)/(x.4,m4).(x.0) = v/(x.3,m3)/(x.0,m).(x.0) &
+        v/(x.3,m3)/(x.0,m).(x.0) = m &
+        f1/(x.4,m4).(x.4) = m4 & f1/(x.4,m4).(x.0) = f1.(x.0) &
+        f1.(x.0) = m by A4,ZF_LANG1:def 1;
+A8:      now assume M,f1/(x.4,m4) |= F;
+          then M,f1/(x.4,m4)/(y,f1/(x.4,m4).x) |= H by A2,Th13;
+          then M,f1/(x.4,m4) |= H by A2,Th10;
+          then M,v/(x.3,m3)/(x.0,m)/(x.4,m4)/(x,v.y) |= H
+           by A2,A4,Th8;
+          then M,v/(x.3,m3)/(x.0,m)/(x.4,m4) |= H by A2,Th6;
+          then M,v/(x.3,m3)/(x.0,m)/(x.4,m4) |= x.4 '=' x.0
+           by A6,ZF_MODEL:19;
+          then m = m4 by A7,ZF_MODEL:12;
+         hence M,f1/(x.4,m4) |= x.4 '=' x.0 by A7,ZF_MODEL:12;
+        end;
+          now assume M,f1/(x.4,m4) |= x.4 '=' x.0;
+          then m = m4 by A7,ZF_MODEL:12;
+          then M,v/(x.3,m3)/(x.0,m)/(x.4,m4) |= x.4 '=' x.0
+           by A7,ZF_MODEL:12;
+          then M,v/(x.3,m3)/(x.0,m)/(x.4,m4) |= H by A6,ZF_MODEL:19;
+          then M,v/(x.3,m3)/(x.0,m)/(x.4,m4)/(x,v.y) |= H
+           by A2,Th6;
+          then M,f1/(x.4,m4) |= H by A2,A4,Th8;
+          then M,f1/(x.4,m4)/(y,f1/(x.4,m4).x) |= H by A2,Th10;
+         hence M,f1/(x.4,m4) |= F by A2,Th13;
+        end;
+       hence M,f1/(x.4,m4) |= F <=> x.4 '=' x.0 by A8,ZF_MODEL:19;
+      end;
+      then M,f1 |= All(x.4,F <=> x.4 '=' x.0) by ZF_LANG1:80;
+     hence M,f/(x.3,m3) |= Ex(x.0,All(x.4,F <=> x.4 '=' x.0))
+       by ZF_LANG1:82;
+    end;
+   hence A9: M,f |= All(x.3,Ex(x.0,All(x.4,F <=> x.4 '=' x.0)))
+      by ZF_LANG1:80;
+      now let a; assume
+     a in M;
+     then reconsider m = a as Element of M;
+
+     set m' = def_func'(H,v).m;
+        M,v/(x.3,m)/(x.4,m') |= H by A1,Th11;
+      then M,v/(x.3,m)/(x.4,m')/(x,v.y) |= H by A2,Th6;
+      then M,f/(x.3,m)/(x.4,m') |= H by A2,A4,Th7;
+then A10:    M,f/(x.3,m)/(x.4,m')/(x,f/(x.3,m)/(x.4,m').y) |= F by A2,Th14;
+        Free F = Free H & Free H c= variables_in H by A2,Th2,ZF_LANG1:164;
+      then not x in Free F by A2;
+      then M,f/(x.3,m)/(x.4,m') |= F by A10,Th10;
+     hence def_func'(H,v).a = def_func'(F,f).a by A3,A9,Th11;
+    end;
+   hence def_func'(H,v) = def_func'(F,f) by FUNCT_2:18;
+  end;
+
+theorem
+    not x in variables_in H implies (M |= H/(y,x) iff M |= H)
+  proof assume
+A1:  not x in variables_in H;
+   thus M |= H/(y,x) implies M |= H
+     proof assume
+A2:     M,v |= H/(y,x);
+      let v;
+         M,v/(x,v.y) |= H/(y,x) & v/(x,v.y).x = v.y by A2,ZF_LANG1:def 1;
+       then M,(v/(x,v.y))/(y,v.y) |= H by A1,Th13;
+       then M,((v/(x,v.y))/(y,v.y))/(x,v.x) |= H & (x = y or x <> y)
+        by A1,Th6;
+       then M,(v/(x,v.y))/(x,v.x) |= H or
+       M,((v/(y,v.y))/(x,v.y))/(x,v.x) |= H by ZF_LANG1:79;
+       then M,v/(x,v.x) |= H or M,(v/(y,v.y))/(x,v.x) |= H by ZF_LANG1:78;
+       then M,v/(x,v.x) |= H by ZF_LANG1:78;
+      hence M,v |= H by ZF_LANG1:78;
+     end;
+   assume
+A3:  M,v |= H;
+   let v; M,v/(y,v.x) |= H by A3;
+   hence M,v |= H/(y,x) by A1,Th13;
+  end;
+
+theorem Th17:
+ not x.0 in Free H1 & M,v1 |= All(x.3,Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0)))
+  implies
+   ex H2,v2 st (for j st j < i & x.j in variables_in H2 holds j = 3 or j = 4) &
+    not x.0 in Free H2 & M,v2 |= All(x.3,Ex(x.0,All(x.4,H2 <=> x.4 '=' x.0))) &
+     def_func'(H1,v1) = def_func'(H2,v2)
+  proof
+   defpred ZF[ZF-formula,Nat] means
+    for v1 st not x.0 in Free $1 &
+     M,v1 |= All(x.3,Ex(x.0,All(x.4,$1 <=> x.4 '=' x.0)))
+     ex H2,v2 st (for j st j < $2 & x.j in variables_in H2 holds
+      j = 3 or j = 4) & not x.0 in Free H2 &
+     M,v2 |= All(x.3,Ex(x.0,All(x.4,H2 <=> x.4 '=' x.0))) &
+      def_func'($1,v1) = def_func'(H2,v2);
+    defpred P[Nat] means for H holds ZF[H,$1];
+A1:  P[0]
+     proof let H;
+      let v1 such that
+A2:    not x.0 in Free H & M,v1 |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)));
+      take H,v1;
+      thus thesis by A2,NAT_1:18;
+     end;
+A3:  for i st P[i] holds P[i+1]
+     proof let i such that
+A4:    ZF[H,i];
+      let H,v1 such that
+A5:    not x.0 in Free H & M,v1 |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)));
+A6:    i <> 0 & i <> 3 & i <> 4 implies thesis
+        proof assume
+A7:       i <> 0 & i <> 3 & i <> 4;
+         consider H1,v' such that
+A8:       for j st j < i & x.j in variables_in H1 holds j = 3 or j = 4 and
+A9:       not x.0 in Free H1 &
+           M,v' |= All(x.3,Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0))) and
+A10:       def_func'(H,v1) = def_func'(H1,v') by A4,A5;
+         consider k being Nat such that
+A11:       for j st x.j in variables_in All(x.4,x.i,H1) holds j < k by Th4;
+            not x.k in variables_in All(x.4,x.i,H1) & x.i in {x.4,x.i} &
+           x.4 in {x.4,x.i} &
+           variables_in All(x.4,x.i,H1) = variables_in H1 \/ {x.4,x.i}
+            by A11,TARSKI:def 2,ZF_LANG1:160;
+then A12:       not x.k in variables_in H1 & x.i in variables_in All(x.4,x.i,H1
+) &
+          x.4 in variables_in All(x.4,x.i,H1) by XBOOLE_0:def 2;
+then A13:      i < k & 4 < k by A11;
+         take H2 = H1/(x.i,x.k),v2 = v'/(x.k,v'.(x.i));
+
+            0 <> k & 3 <> k & 4 <> k & 0 <> i & 3 <> i & 4 <> i & i <> k
+           by A7,A11,A12;
+then A14:     x.0 <> x.k & x.3 <> x.k & x.4 <> x.k & x.i <> x.k &
+          x.0 <> x.i & x.3 <> x.i & x.4 <> x.i by ZF_LANG1:86;
+A15:       x.0 <> x.3 & x.0 <> x.4 & x.3 <> x.4 by ZF_LANG1:86;
+            not x.0 in Free H1 \ {x.i} & not x.0 in {x.k}
+           by A9,A14,TARSKI:def 1,XBOOLE_0:def 4;
+then A16:          not x.0 in (Free H1 \ {x.i}) \/ {x.k} &
+          Free H2 c= (Free H1 \ {x.i}) \/ {x.k} by Th1,XBOOLE_0:def 2;
+then A17:       not x.0 in Free H2;
+         thus for j st j < i+1 & x.j in variables_in H2 holds j = 3 or j = 4
+           proof let j; assume j < i+1;
+             then A18: j <= i by NAT_1:38;
+then A19:          j = i or j < i by REAL_1:def 5;
+               x.i in {x.i} by TARSKI:def 1;
+             then not x.i in variables_in H1 \ {x.i} & not x.i in {x.k}
+              by A14,TARSKI:def 1,XBOOLE_0:def 4;
+then A20:          not x.i in (variables_in H1 \ {x.i}) \/ {x.k} &
+             variables_in H2 c= (variables_in H1 \ {x.i}) \/ {x.k}
+              by XBOOLE_0:def 2,ZF_LANG1:201;
+            assume
+A21:          x.j in variables_in H2;
+then x.j in (variables_in H1 \ {x.i}) \/ {x.k} & x.j <> x.i & j < k
+              by A13,A18,A20,AXIOMS:22;
+             then not x.j in {x.i} & (x.j in variables_in H1 \ {x.i} or x.j in
+{x.k})&
+             x.j <> x.k by TARSKI:def 1,XBOOLE_0:def 2,ZF_LANG1:86;
+             then x.j in variables_in H1 by TARSKI:def 1,XBOOLE_0:def 4;
+            hence thesis by A8,A19,A20,A21;
+           end;
+         thus not x.0 in Free H2 by A16;
+A22:       All(x.3,Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0)))/(x.i,x.k)
+            = All(x.3,Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0))/(x.i,x.k))
+               by A14,ZF_LANG1:173
+           .= All(x.3,Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0)/(x.i,x.k)))
+               by A14,ZF_LANG1:178
+           .= All(x.3,Ex(x.0,All(x.4,(H1 <=> x.4 '=' x.0)/(x.i,x.k))))
+               by A14,ZF_LANG1:173
+           .= All(x.3,Ex(x.0,All(x.4,H2 <=> ((x.4 '=' x.0)/(x.i,x.k)))))
+               by ZF_LANG1:177
+           .= All(x.3,Ex(x.0,All(x.4,H2 <=> x.4 '=' x.0)))
+               by A14,ZF_LANG1:166;
+A23:       variables_in All(x.3,Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0)))
+            = variables_in Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0)) \/ {x.3}
+               by ZF_LANG1:155
+           .= variables_in All(x.4,H1 <=> x.4 '=' x.0) \/ {x.0} \/ {x.3}
+               by ZF_LANG1:159
+           .= variables_in (H1 <=> x.4 '=' x.0) \/ {x.4} \/ {x.0} \/ {x.3}
+               by ZF_LANG1:155
+           .= variables_in H1 \/ variables_in (x.4 '=' x.0) \/ {x.4} \/
+               {x.0} \/ {x.3} by ZF_LANG1:158
+           .= variables_in H1 \/ {x.4,x.0} \/ {x.4} \/ {x.0} \/ {x.3}
+               by ZF_LANG1:151;
+            not x.k in {x.4,x.0} by A14,TARSKI:def 2;
+          then not x.k in variables_in H1 \/ {x.4,x.0} & not x.k in {x.4}
+           by A12,A14,TARSKI:def 1,XBOOLE_0:def 2;
+          then not x.k in variables_in H1 \/ {x.4,x.0} \/ {x.4} & not x.k in {
+x.0}
+           by A14,TARSKI:def 1,XBOOLE_0:def 2;
+          then not x.k in variables_in H1 \/ {x.4,x.0} \/ {x.4} \/ {x.0} &
+           not x.k in {x.3} by A14,TARSKI:def 1,XBOOLE_0:def 2;
+then A24:       not x.k in
+ variables_in All(x.3,Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0)))&
+          not x.i in variables_in All(x.3,Ex(x.0,All(x.4,H2 <=> x.4 '=' x.0)))
+           by A14,A22,A23,XBOOLE_0:def 2,ZF_LANG1:198;
+          then M,v2 |= All(x.3,Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0))) &
+           v2.(x.k) = v'.(x.i) & v'/(x.i,v'.(x.i)) = v' &
+            v2/(x.i,v2.(x.k)) = v'/(x.i,v2.(x.k))/(x.k,v'.(x.i))
+           by A9,A14,Th6,ZF_LANG1:78,79,def 1;
+         hence
+A25:       M,v2 |= All(x.3,Ex(x.0,All(x.4,H2 <=> x.4 '=' x.0))) by A22,A24,Th13
+;
+            now let e be set; assume e in M;
+           then reconsider m = e as Element of M;
+           M,v'/(x.3,m) |= Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0))
+             by A9,ZF_LANG1:80;
+           then consider m' being Element of M such that
+A26:         M,v'/(x.3,m)/(x.0,m') |= All(x.4,H1 <=> x.4 '=' x.0)
+             by ZF_LANG1:82;
+              v'/(x.3,m)/(x.0,m')/(x.4,m').(x.4) = m' &
+            v'/(x.3,m)/(x.0,m')/(x.4,m').(x.0) = v'/(x.3,m)/(x.0,m').(x.0) &
+            v'/(x.3,m)/(x.0,m').(x.0) = m' by A15,ZF_LANG1:def 1;
+then A27:            M,v'/(x.3,m)/(x.0,m')/(x.4,m') |= H1 <=> x.4 '=' x.0 &
+            M,v'/(x.3,m)/(x.0,m')/(x.4,m') |= x.4 '=' x.0
+             by A26,ZF_LANG1:80,ZF_MODEL:12;
+then A28:         M,v'/(x.3,m)/(x.0,m')/(x.4,m') |= H1 by ZF_MODEL:19;
+A29:         v'/(x.3,m)/(x.0,m')/(x.4,m') = v'/(x.3,m)/(x.4,m')/(x.0,m') &
+            v2/(x.3,m)/(x.0,m')/(x.4,m') = v2/(x.3,m)/(x.4,m')/(x.0,m') &
+            v2/(x.3,m)/(x.4,m')/(x.0,m') =
+             v'/(x.3,m)/(x.4,m')/(x.0,m')/(x.k,v'.(x.i))
+              by A14,A15,Th8,ZF_LANG1:79;
+then A30:         M,v2/(x.3,m)/(x.4,m')/(x.0,m') |= H1 by A12,A28,Th6;
+              v2/(x.3,m)/(x.4,m')/(x.0,m').(x.k) = v2/(x.3,m)/(x.4,m').(x.k) &
+            v2/(x.3,m).(x.k) = v2/(x.3,m)/(x.4,m').(x.k) &
+            v2/(x.3,m).(x.k) = v2.(x.k) &
+            v2/(x.3,m)/(x.4,m')/(x.0,m')/(x.i,v2.(x.k)) =
+             v2/(x.i,v2.(x.k))/(x.3,m)/(x.4,m')/(x.0,m') &
+            v2/(x.i,v2.(x.k)) = v'/(x.i,v2.(x.k))/(x.k,v'.(x.i)) &
+            v2.(x.k) = v'.(x.i) & v'/(x.i,v'.(x.i)) = v'
+             by A14,A15,Th8,ZF_LANG1:78,79,def 1;
+            then M,v'/(x.3,m)/(x.4,m')/(x.0,m') |= H1 &
+            M,v2/(x.3,m)/(x.4,m')/(x.0,m') |= H2 by A12,A27,A29,A30,Th13,
+ZF_MODEL:19;
+            then M,v'/(x.3,m)/(x.4,m') |= H1 & M,v2/(x.3,m)/(x.4,m') |= H2
+             by A9,A17,Th10;
+            then def_func'(H2,v2).m = m' & def_func'(H1,v').m = m'
+               by A9,A17,A25,Th11;
+           hence def_func'(H2,v2).e = def_func'(H1,v').e;
+          end;
+         hence def_func'(H2,v2) = def_func'(H,v1) by A10,FUNCT_2:18;
+        end;
+A31:    now assume
+A32:      i = 3 or i = 4;
+        thus thesis
+          proof consider H2,v2 such that
+A33:         for j st j < i & x.j in variables_in H2 holds j = 3 or j = 4 and
+A34:         not x.0 in Free H2 &
+             M,v2 |= All(x.3,Ex(x.0,All(x.4,H2 <=> x.4 '=' x.0))) and
+A35:         def_func'(H,v1) = def_func'(H2,v2) by A4,A5;
+           take H2,v2;
+           thus for j st j < i+1 & x.j in variables_in H2 holds j = 3 or j = 4
+             proof let j; assume
+A36:            j < i+1 & x.j in variables_in H2;
+               then j <= i by NAT_1:38;
+               then j < i or j = i by REAL_1:def 5;
+              hence thesis by A32,A33,A36;
+             end;
+           thus thesis by A34,A35;
+          end;
+       end;
+         i = 0 implies thesis
+        proof assume
+A37:       i = 0;
+         consider k such that
+A38:       for j st x.j in variables_in H holds j < k by Th4;
+            k > 4 or not k > 4;
+         then consider k1 being Nat such that
+A39:       k > 4 & k1 = k or not k > 4 & k1 = 5;
+         take F = H/(x.0,x.k1), v1/(x.k1,v1.(x.0));
+            k1 <> 0 & k1 <> 3 & k1 <> 4 by A39;
+then A40:       x.k1 <> x.0 & x.k1 <> x.3 & x.k1 <> x.4 by ZF_LANG1:86;
+A41:      not x.k1 in variables_in H
+           proof assume not thesis;
+             then k1 < k by A38;
+            hence contradiction by A39,AXIOMS:22;
+           end;
+         thus for j st j < i+1 & x.j in variables_in F holds j = 3 or j = 4
+           proof let j; assume j < i+1;
+             then j <= 0 & j >= 0 by A37,NAT_1:18,38;
+             then j = 0;
+            hence thesis by A40,ZF_LANG1:198;
+           end;
+            x.0 <> x.3 & x.0 <> x.4 by ZF_LANG1:86;
+         hence thesis by A5,A40,A41,Th15;
+        end;
+      hence thesis by A6,A31;
+     end;
+      for i holds P[i] from Ind(A1,A3);
+   hence thesis;
+  end;
+
+theorem
+   not x.0 in Free H1 & M,v1 |= All(x.3,Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0)))
+  implies
+   ex H2,v2 st Free H1 /\ Free H2 c= {x.3,x.4} & not x.0 in Free H2 &
+    M,v2 |= All(x.3,Ex(x.0,All(x.4,H2 <=> x.4 '=' x.0))) &
+     def_func'(H1,v1) = def_func'(H2,v2)
+  proof assume
+A1:  not x.0 in Free H1 & M,v1 |= All(x.3,Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0)));
+   consider i such that
+A2:  for j st x.j in variables_in H1 holds j < i by Th4;
+   consider H2,v2 such that
+A3:  for j st j < i & x.j in variables_in H2 holds j=3 or j=4 and
+A4:  not x.0 in Free H2 &
+      M,v2 |= All(x.3,Ex(x.0,All(x.4,H2 <=> x.4 '=' x.0))) &
+       def_func'(H1,v1) = def_func'(H2,v2) by A1,Th17;
+   take H2,v2;
+   thus Free H1 /\ Free H2 c= {x.3,x.4}
+     proof let a; assume
+    A5: a in Free H1 /\ Free H2;
+then A6:    a in Free H1 & a in Free H2 & Free H1 c= VAR by XBOOLE_0:def 3;
+      reconsider x = a as Variable by A5;
+      consider j such that
+A7:    x = x.j by ZF_LANG1:87;
+       A8: Free H1 c= variables_in H1 & Free H2 c= variables_in H2
+        by ZF_LANG1:164;
+       then j < i by A2,A6,A7;
+       then j = 3 or j = 4 by A3,A6,A7,A8;
+      hence thesis by A7,TARSKI:def 2;
+     end;
+   thus thesis by A4;
+  end;
+
+::
+:: Definable functions
+::
+
+ reserve F,G for Function;
+
+theorem
+   F is_definable_in M & G is_definable_in M implies F*G is_definable_in M
+  proof given H1 such that
+A1: Free H1 c= { x.3,x.4 } and
+A2: M |= All(x.3,Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0))) and
+A3: F = def_func(H1,M);
+   given H2 such that
+A4: Free H2 c= { x.3,x.4 } and
+A5: M |= All(x.3,Ex(x.0,All(x.4,H2 <=> x.4 '=' x.0))) and
+A6: G = def_func(H2,M);
+   consider x such that
+A7:  not x in variables_in All(x.0,x.3,x.4,H1 '&' H2) by Th4;
+      variables_in All(x.0,x.3,x.4,H1 '&' H2) =
+     variables_in (H1 '&' H2) \/ {x.0,x.3,x.4} &
+    variables_in (H1 '&' H2) = variables_in H1 \/ variables_in H2
+     by ZF_LANG1:154,162;
+    then not x in variables_in H1 \/ variables_in H2 & not x in {x.0,x.3,x.4}
+     by A7,XBOOLE_0:def 2;
+then A8:  not x in variables_in H1 & not x in
+ variables_in H2 & x <> x.0 & x <> x.3 &
+     x <> x.4 by ENUMSET1:14,XBOOLE_0:def 2;
+   take H = Ex(x,(H1/(x.3,x)) '&' (H2/(x.4,x)));
+   set x0 = x.0, x3 = x.3, x4 = x.4;
+A9: x0 <> x3 & x0 <> x4 & x3 <> x4 by ZF_LANG1:86;
+then A10: not x0 in Free H1 & not x0 in Free H2 by A1,A4,TARSKI:def 2;
+   thus
+A11: Free H c= {x.3,x.4}
+     proof let a; assume a in Free H;
+       then a in Free ((H1/(x.3,x)) '&' (H2/(x.4,x))) \ {x} by ZF_LANG1:71;
+then A12:    a in Free ((H1/(x.3,x)) '&' (H2/(x.4,x))) & not a in {x}
+        by XBOOLE_0:def 4;
+       then a in Free (H1/(x.3,x)) \/ Free (H2/(x.4,x)) by ZF_LANG1:66;
+       then Free (H1/(x.3,x)) c= (Free H1 \ {x.3}) \/
+ {x} & a in Free (H1/(x.3,x)) or
+       Free (H2/(x.4,x)) c= (Free H2 \ {x.4}) \/ {x} & a in Free (H2/(x.4,x))
+        by Th1,XBOOLE_0:def 2;
+       then Free H1 \ {x.3} c= Free H1 & a in (Free H1 \ {x.3}) \/ {x} or
+       Free H2 \ {x.4} c= Free H2 & a in (Free H2 \ {x.4}) \/ {x}
+        by XBOOLE_1:36;
+       then Free H1 \ {x.3} c= {x.3,x.4} & a in Free H1 \ {x.3} or
+       Free H2 \ {x.4} c= {x.3,x.4} & a in Free H2 \ {x.4}
+        by A1,A4,A12,XBOOLE_0:def 2,XBOOLE_1:1;
+      hence thesis;
+     end;
+   thus
+A13: M |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)))
+     proof let v;
+         now let m3 be Element of M;
+            M,v |= All(x3,Ex(x0,All(x4,H2 <=> x4 '=' x0)))
+           by A5,ZF_MODEL:def 5;
+          then M,v/(x3,m3) |= Ex(x0,All(x4,H2 <=> x4 '=' x0))
+           by ZF_LANG1:80;
+         then consider m0 being Element of M such that
+A14:       M,v/(x3,m3)/(x0,m0) |= All(x4,H2 <=> x4 '=' x0)
+           by ZF_LANG1:82;
+            M,v |= All(x3,Ex(x0,All(x4,H1 <=> x4 '=' x0)))
+           by A2,ZF_MODEL:def 5;
+          then M,v/(x3,m0) |= Ex(x0,All(x4,H1 <=> x4 '=' x0))
+           by ZF_LANG1:80;
+         then consider m being Element of M such that
+A15:       M,v/(x3,m0)/(x0,m) |= All(x4,H1 <=> x4 '=' x0)
+           by ZF_LANG1:82;
+            now let m4 be Element of M;
+A16:         now assume M,v/(x3,m3)/(x0,m)/(x4,m4) |= H;
+             then consider m' being Element of M such that
+A17:           M,v/(x3,m3)/(x0,m)/(x4,m4)/(x,m') |=
+                (H1/(x3,x)) '&' (H2/(x4,x)) by ZF_LANG1:82;
+              set v' = v/(x3,m3)/(x0,m)/(x4,m4)/(x,m');
+                M,v' |= H1/(x3,x) & M,v' |= H2/(x4,x) & v'.x = m'
+               by A17,ZF_LANG1:def 1,ZF_MODEL:15;
+then A18:           M,v'/(x3,m') |= H1 & M,v'/(x4,m') |= H2 by A8,Th13;
+                v'/(x4,m') = v/(x3,m3)/(x0,m)/(x,m')/(x4,m') by Th9
+                        .= v/(x3,m3)/(x0,m)/(x4,m')/(x,m')
+                 by A8,ZF_LANG1:79;
+              then v/(x3,m3)/(x0,m)/(x4,m') = v/(x3,m3)/(x4,m')/(x0,m) &
+              v/(x3,m3)/(x4,m')/(x0,m0) = v/(x3,m3)/(x4,m')/(x0,m)/(x0,m0) &
+              v/(x3,m3)/(x0,m0)/(x4,m') = v/(x3,m3)/(x4,m')/(x0,m0) &
+              M,v/(x3,m3)/(x0,m)/(x4,m') |= H2
+               by A8,A9,A18,Th6,ZF_LANG1:78,79;
+              then M,v/(x3,m3)/(x0,m0)/(x4,m') |= H2 &
+              M,v/(x3,m3)/(x0,m0)/(x4,m') |= H2 <=> x4 '=' x0
+                by A10,A14,Th10,ZF_LANG1:80;
+              then M,v/(x3,m3)/(x0,m0)/(x4,m') |= x4 '=' x0 by ZF_MODEL:19;
+              then v/(x3,m3)/(x0,m0)/(x4,m').x4 = v/(x3,m3)/(x0,m0)/(x4,m').x0
+&
+              v/(x3,m3)/(x0,m0)/(x4,m').x4 = m' & v/(x3,m3)/(x0,m0).x0 = m0 &
+              v/(x3,m3)/(x0,m0)/(x4,m').x0 = v/(x3,m3)/(x0,m0).x0
+               by A9,ZF_LANG1:def 1,ZF_MODEL:12;
+              then v'/(x3,m') = v/(x3,m3)/(x0,m)/(x4,m4)/(x3,m0)/(x,m')
+                by A8,ZF_LANG1:79
+                        .= v/(x0,m)/(x4,m4)/(x3,m0)/(x,m') by Th9
+                        .= v/(x3,m0)/(x0,m)/(x4,m4)/(x,m') by A9,Th7;
+              then M,v/(x3,m0)/(x0,m)/(x4,m4) |= H1 &
+              M,v/(x3,m0)/(x0,m)/(x4,m4) |= H1 <=> x4 '=' x0
+               by A8,A15,A18,Th6,ZF_LANG1:80;
+              then M,v/(x3,m0)/(x0,m)/(x4,m4) |= x4 '=' x0 by ZF_MODEL:19;
+              then v/(x3,m0)/(x0,m)/(x4,m4).x4 = v/(x3,m0)/(x0,m)/(x4,m4).x0 &
+              v/(x3,m0)/(x0,m)/(x4,m4).x4 = m4 & v/(x3,m0)/(x0,m).x0 = m &
+              v/(x3,m3)/(x0,m)/(x4,m4).x4 = m4 & v/(x3,m3)/(x0,m).x0 = m &
+              v/(x3,m0)/(x0,m)/(x4,m4).x0 = v/(x3,m0)/(x0,m).x0 &
+              v/(x3,m3)/(x0,m)/(x4,m4).x0 = v/(x3,m3)/(x0,m).x0
+               by A9,ZF_LANG1:def 1,ZF_MODEL:12;
+             hence M,v/(x3,m3)/(x0,m)/(x4,m4) |= x4 '=' x0 by ZF_MODEL:12;
+            end;
+              now assume M,v/(x3,m3)/(x0,m)/(x4,m4) |= x4 '=' x0;
+              then v/(x3,m3)/(x0,m)/(x4,m4).x4 = v/(x3,m3)/(x0,m)/(x4,m4).x0 &
+              v/(x3,m0)/(x0,m)/(x4,m4).x4 = m4 & v/(x3,m0)/(x0,m).x0 = m &
+              v/(x3,m3)/(x0,m)/(x4,m4).x4 = m4 & v/(x3,m3)/(x0,m).x0 = m &
+              v/(x3,m0)/(x0,m)/(x4,m4).x0 = v/(x3,m0)/(x0,m).x0 &
+              v/(x3,m3)/(x0,m)/(x4,m4).x0 = v/(x3,m3)/(x0,m).x0
+               by A9,ZF_LANG1:def 1,ZF_MODEL:12;
+              then M,v/(x3,m0)/(x0,m)/(x4,m4) |= H1 <=> x4 '=' x0 &
+              M,v/(x3,m0)/(x0,m)/(x4,m4) |= x4 '=' x0
+               by A15,ZF_LANG1:80,ZF_MODEL:12;
+              then M,v/(x3,m0)/(x0,m)/(x4,m4) |= H1 by ZF_MODEL:19;
+then A19:           M,v/(x3,m0)/(x0,m)/(x4,m4)/(x,m0) |= H1 by A8,Th6;
+              set v' = v/(x3,m3)/(x0,m)/(x4,m4)/(x,m0);
+
+                v/(x3,m3)/(x0,m0)/(x4,m0).x4 = m0 & v/(x3,m3)/(x0,m0).x0 = m0 &
+              v/(x3,m3)/(x0,m0)/(x4,m0).x0 = v/(x3,m3)/(x0,m0).x0
+               by A9,ZF_LANG1:def 1;
+              then M,v/(x3,m3)/(x0,m0)/(x4,m0) |= H2 <=> x4 '=' x0 &
+              M,v/(x3,m3)/(x0,m0)/(x4,m0) |= x4 '=' x0
+               by A14,ZF_LANG1:80,ZF_MODEL:12;
+              then M,v/(x3,m3)/(x0,m0)/(x4,m0) |= H2 by ZF_MODEL:19;
+              then M,v/(x3,m3)/(x0,m0)/(x4,m0)/(x0,m) |= H2 &
+              v/(x3,m3)/(x0,m0)/(x4,m0)/(x0,m) = v/(x3,m3)/(x4,m0)/(x0,m) &
+              v/(x3,m3)/(x0,m)/(x4,m0) = v/(x3,m3)/(x4,m0)/(x0,m)
+               by A9,A10,Th9,Th10,ZF_LANG1:79;
+then A20:           M,v/(x3,m3)/(x0,m)/(x4,m0)/(x,m0) |= H2 & v'.x = m0
+               by A8,Th6,ZF_LANG1:def 1;
+                v'/(x4,m0) = v/(x3,m3)/(x0,m)/(x,m0)/(x4,m0) by Th9
+                        .= v/(x3,m3)/(x0,m)/(x4,m0)/(x,m0)
+                 by A8,ZF_LANG1:79;
+then A21:           M,v' |= H2/(x4,x) by A8,A20,Th13;
+                v'/(x3,m0) = v/(x3,m3)/(x0,m)/(x4,m4)/(x3,m0)/(x,m0)
+                 by A8,ZF_LANG1:79
+                        .= v/(x0,m)/(x4,m4)/(x3,m0)/(x,m0) by Th9
+                        .= v/(x3,m0)/(x0,m)/(x4,m4)/(x,m0) by A9,Th7;
+              then M,v' |= H1/(x3,x) by A8,A19,A20,Th13;
+              then M,v' |= (H1/(x3,x)) '&' (H2/(x4,x)) by A21,ZF_MODEL:15;
+             hence M,v/(x3,m3)/(x0,m)/(x4,m4) |= H by ZF_LANG1:82;
+            end;
+           hence M,v/(x3,m3)/(x0,m)/(x4,m4) |= H <=> x4 '=' x0
+             by A16,ZF_MODEL:19;
+          end;
+          then M,v/(x3,m3)/(x0,m) |= All(x4,H <=> x4 '=' x0) by ZF_LANG1:80;
+         hence M,v/(x3,m3) |= Ex(x0,All(x4,H <=> x4 '=' x0))
+           by ZF_LANG1:82;
+       end;
+      hence M,v |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) by ZF_LANG1:80;
+     end;
+   reconsider F,G as Function of M,M by A3,A6;
+      now let v;
+     thus M,v |= H implies (F*G).(v.x3) = v.x4
+       proof assume M,v |= H;
+        then consider m such that
+A22:       M,v/(x,m) |= (H1/(x3,x)) '&' (H2/(x4,x)) by ZF_LANG1:82;
+           M,v/(x,m) |= (H1/(x3,x)) & M,v/(x,m) |= (H2/(x4,x)) &
+          v/(x,m).x = m by A22,ZF_LANG1:def 1,ZF_MODEL:15;
+         then M,v/(x,m)/(x3,m) |= H1 & M,v/(x,m)/(x4,m) |= H2 by A8,Th13;
+         then F.(v/(x,m)/(x3,m).x3) = v/(x,m)/(x3,m).x4 & v/(x,m)/(x3,m).x3 =
+m &
+         G.(v/(x,m)/(x4,m).x3) = v/(x,m)/(x4,m).x4 & v/(x,m)/(x4,m).x4 = m &
+         v/(x,m)/(x3,m).x4 = v/(x,m).x4 & v/(x,m)/(x4,m).x3 = v/(x,m).x3 &
+         v.x4 = v/(x,m).x4 & v.x3 = v/(x,m).x3
+          by A1,A2,A3,A4,A5,A6,A8,A9,ZFMODEL1:def 2,ZF_LANG1:def 1;
+        hence thesis by FUNCT_2:21;
+       end;
+
+     set m = G.(v.x3);
+     assume (F*G).(v.x3) = v.x4;
+      then F.m = v.x4 & v/(x3,m).x4 = v.x4 & v/(x4,m).x3 = v.x3 &
+       v/(x4,m).x4 = m & v/(x3,m).x3 = m
+        by A9,FUNCT_2:21,ZF_LANG1:def 1;
+      then M,v/(x4,m) |= H2 & M,v/(x3,m) |= H1 &
+       v/(x,m)/(x3,m) = v/(x3,m)/(x,m) & v/(x,m)/(x4,m) = v/(x4,m)/(x,m)
+       by A1,A2,A3,A4,A5,A6,A8,ZFMODEL1:def 2,ZF_LANG1:79;
+      then M,v/(x,m)/(x3,m) |= H1 & M,v/(x,m)/(x4,m) |= H2 & v/(x,m).x = m
+       by A8,Th6,ZF_LANG1:def 1;
+      then M,v/(x,m) |= (H1/(x3,x)) & M,v/(x,m) |= (H2/(x4,x)) by A8,Th13;
+      then M,v/(x,m) |= (H1/(x3,x)) '&' (H2/(x4,x)) by ZF_MODEL:15;
+     hence M,v |= H by ZF_LANG1:82;
+    end;
+   hence thesis by A11,A13,ZFMODEL1:def 2;
+  end;
+
+theorem Th20:
+ not x.0 in Free H implies
+  (M,v |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) iff
+   for m1 ex m2 st for m3 holds M,v/(x.3,m1)/(x.4,m3) |= H iff m3 = m2)
+  proof assume
+A1:  not x.0 in Free H;
+   thus M,v |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) implies
+      for m1 ex m2 st for m3 holds M,v/(x.3,m1)/(x.4,m3) |= H iff m3 = m2
+     proof assume
+A2:     M,v |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)));
+      let m1;
+         M,v/(x.3,m1) |= Ex(x.0,All(x.4,H <=> x.4 '=' x.0))
+        by A2,ZF_LANG1:80;
+      then consider m2 such that
+A3:     M,v/(x.3,m1)/(x.0,m2) |= All(x.4,H <=> x.4 '=' x.0) by ZF_LANG1:82;
+      take m2; let m3;
+      thus M,v/(x.3,m1)/(x.4,m3) |= H implies m3 = m2
+        proof assume M,v/(x.3,m1)/(x.4,m3) |= H;
+          then M,v/(x.3,m1)/(x.4,m3)/(x.0,m2) |= H by A1,Th10;
+          then M,v/(x.3,m1)/(x.0,m2)/(x.4,m3) |= H <=> x.4 '=' x.0 &
+          M,v/(x.3,m1)/(x.0,m2)/(x.4,m3) |= H
+           by A3,Lm1,ZF_LANG1:79,80;
+          then v/(x.3,m1)/(x.0,m2)/(x.4,m3).(x.4) = m3 &
+          m2 = v/(x.3,m1)/(x.0,m2).(x.0) &
+          v/(x.3,m1)/(x.0,m2)/(x.4,m3).(x.0) = v/(x.3,m1)/(x.0,m2).(x.0) &
+          M,v/(x.3,m1)/(x.0,m2)/(x.4,m3) |= x.4 '=' x.0
+           by Lm1,ZF_LANG1:def 1,ZF_MODEL:19;
+         hence m3 = m2 by ZF_MODEL:12;
+        end;
+         v/(x.3,m1)/(x.0,m3)/(x.4,m3).(x.4) = m3 &
+       v/(x.3,m1)/(x.0,m3)/(x.4,m3).(x.0) = v/(x.3,m1)/(x.0,m3).(x.0) &
+       v/(x.3,m1)/(x.0,m3).(x.0) = m3 by Lm1,ZF_LANG1:def 1;
+then A4:     M,v/(x.3,m1)/(x.0,m3)/(x.4,m3) |= x.4 '=' x.0 by ZF_MODEL:12;
+      assume m3 = m2;
+       then M,v/(x.3,m1)/(x.0,m3)/(x.4,m3) |= H <=> x.4 '=' x.0
+        by A3,ZF_LANG1:80;
+       then M,v/(x.3,m1)/(x.0,m3)/(x.4,m3) |= H by A4,ZF_MODEL:19;
+       then M,v/(x.3,m1)/(x.4,m3)/(x.0,m3) |= H by Lm1,ZF_LANG1:79;
+      hence thesis by A1,Th10;
+     end;
+   assume
+A5:  for m1 ex m2 st for m3 holds M,v/(x.3,m1)/(x.4,m3) |= H iff m3 = m2;
+      now let m1;
+     consider m2 such that
+A6:    M,v/(x.3,m1)/(x.4,m3) |= H iff m3 = m2 by A5;
+        now let m3;
+A7:      v/(x.3,m1)/(x.0,m2)/(x.4,m3).(x.4) = m3 &
+        v/(x.3,m1)/(x.0,m2)/(x.4,m3).(x.0) = v/(x.3,m1)/(x.0,m2).(x.0) &
+        v/(x.3,m1)/(x.0,m2).(x.0) = m2 by Lm1,ZF_LANG1:def 1;
+A8:      now assume M,v/(x.3,m1)/(x.0,m2)/(x.4,m3) |= H;
+          then M,v/(x.3,m1)/(x.4,m3)/(x.0,m2) |= H by Lm1,ZF_LANG1:79;
+          then M,v/(x.3,m1)/(x.4,m3) |= H by A1,Th10;
+          then m3 = m2 by A6;
+         hence M,v/(x.3,m1)/(x.0,m2)/(x.4,m3) |= x.4 '=' x.0 by A7,ZF_MODEL:12
+;
+        end;
+          now assume M,v/(x.3,m1)/(x.0,m2)/(x.4,m3) |= x.4 '=' x.0;
+          then m3 = m2 by A7,ZF_MODEL:12;
+          then M,v/(x.3,m1)/(x.4,m3) |= H by A6;
+          then M,v/(x.3,m1)/(x.4,m3)/(x.0,m2) |= H by A1,Th10;
+         hence M,v/(x.3,m1)/(x.0,m2)/(x.4,m3) |= H by Lm1,ZF_LANG1:79;
+        end;
+       hence M,v/(x.3,m1)/(x.0,m2)/(x.4,m3) |= H <=> x.4 '=' x.0
+         by A8,ZF_MODEL:19;
+      end;
+      then M,v/(x.3,m1)/(x.0,m2) |= All(x.4,H <=> x.4 '=' x.0) by ZF_LANG1:80;
+     hence M,v/(x.3,m1) |= Ex(x.0,All(x.4,H <=> x.4 '=' x.0)) by ZF_LANG1:82;
+    end;
+   hence thesis by ZF_LANG1:80;
+  end;
+
+theorem
+   F is_definable_in M & G is_definable_in M & Free H c= {x.3} implies
+  for FG be Function st dom FG = M & for v holds
+   (M,v |= H implies FG.(v.x.3) = F.(v.x.3)) &
+   (M,v |= 'not' H implies FG.(v.x.3) = G.(v.x.3)) holds FG is_definable_in M
+  proof given H1 such that
+A1: Free H1 c= {x.3,x.4} and
+A2: M |= All(x.3,Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0))) and
+A3: F = def_func(H1,M);
+   given H2 such that
+A4: Free H2 c= {x.3,x.4} and
+A5: M |= All(x.3,Ex(x.0,All(x.4,H2 <=> x.4 '=' x.0))) and
+A6: G = def_func(H2,M);
+   assume
+A7:  Free H c= {x.3};
+    then A8: not x.4 in Free H by Lm1,TARSKI:def 1;
+   let FG be Function such that
+A9: dom FG = M and
+A10:  for v holds (M,v |= H implies FG.(v.x.3) = F.(v.x.3)) &
+     (M,v |= 'not' H implies FG.(v.x.3) = G.(v.x.3));
+   take I = H '&' H1 'or' 'not' H '&' H2;
+A11:  Free ('not' H) = Free H by ZF_LANG1:65;
+      Free (H '&' H1) = Free H \/ Free H1 &
+    Free ('not' H '&' H2) = Free ('not' H) \/ Free H2 &
+    {x.3} \/ {x.3,x.4} = {x.3,x.3,x.4} & {x.3,x.3,x.4} = {x.3,x.4}
+     by ENUMSET1:42,70,ZF_LANG1:66;
+    then Free I = Free (H '&' H1) \/ Free ('not' H '&' H2) &
+    Free (H '&' H1) c= {x.3,x.4} & Free ('not' H '&' H2) c= {x.3,x.4}
+     by A1,A4,A7,A11,XBOOLE_1:13,ZF_LANG1:68;
+   hence
+A12: Free I c= {x.3,x.4} by XBOOLE_1:8;
+    then A13:  not x.0 in Free I & not x.0 in Free H1 & not x.0 in Free H2
+     by A1,A4,Lm1,TARSKI:def 2;
+      now let v;
+        now let m3;
+          M,v |= All(x.3,Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0)))
+         by A2,ZF_MODEL:def 5;
+       then consider m1 such that
+A14:     M,v/(x.3,m3)/(x.4,m4) |= H1 iff m4 = m1 by A13,Th20;
+          M,v |= All(x.3,Ex(x.0,All(x.4,H2 <=> x.4 '=' x.0)))
+         by A5,ZF_MODEL:def 5;
+       then consider m2 such that
+A15:     M,v/(x.3,m3)/(x.4,m4) |= H2 iff m4 = m2 by A13,Th20;
+
+          not M,v/(x.3,m3) |= 'not' H & M,v/(x.3,m3) |= H or
+        M,v/(x.3,m3) |= 'not' H & not M,v/(x.3,m3) |= H
+         by ZF_MODEL:14;
+       then consider m such that
+A16:     not M,v/(x.3,m3) |= 'not' H & M,v/(x.3,m3) |= H & m = m1 or
+        M,v/(x.3,m3) |= 'not' H & m = m2 & not M,v/(x.3,m3) |= H;
+       take m; let m4;
+       thus M,v/(x.3,m3)/(x.4,m4) |= I implies m4 = m
+         proof assume M,v/(x.3,m3)/(x.4,m4) |= I;
+           then M,v/(x.3,m3)/(x.4,m4) |= H '&' H1 or
+           M,v/(x.3,m3)/(x.4,m4) |= 'not' H '&' H2 by ZF_MODEL:17;
+           then M,v/(x.3,m3)/(x.4,m4) |= H & M,v/(x.3,m3)/(x.4,m4) |= H1 or
+           M,v/(x.3,m3)/(x.4,m4) |= 'not' H & M,v/(x.3,m3)/(x.4,m4) |= H2
+            by ZF_MODEL:15;
+          hence m4 = m by A8,A11,A14,A15,A16,Th10;
+         end;
+       assume m4 = m;
+        then M,v/(x.3,m3)/(x.4,m4) |= H & M,v/(x.3,m3)/(x.4,m4) |= H1 or
+        M,v/(x.3,m3)/(x.4,m4) |= 'not' H & M,v/(x.3,m3)/(x.4,m4) |= H2
+         by A8,A11,A14,A15,A16,Th10;
+        then M,v/(x.3,m3)/(x.4,m4) |= H '&' H1 or
+        M,v/(x.3,m3)/(x.4,m4) |= 'not' H '&' H2 by ZF_MODEL:15;
+       hence M,v/(x.3,m3)/(x.4,m4) |= I by ZF_MODEL:17;
+      end;
+     hence M,v |= All(x.3,Ex(x.0,All(x.4,I <=> x.4 '=' x.0))) by A13,Th20;
+    end;
+   hence
+A17: M |= All(x.3,Ex(x.0,All(x.4,I <=> x.4 '=' x.0))) by ZF_MODEL:def 5;
+      rng FG c= M
+     proof let a; assume a in rng FG;
+      then consider b such that
+A18:    b in M & a = FG.b by A9,FUNCT_1:def 5;
+      reconsider b as Element of M by A18;
+      consider v;
+
+         v/(x.3,b).(x.3) = b & (M,v/(x.3,b) |= H or M,v/(x.3,b) |= 'not' H)
+        by ZF_LANG1:def 1,ZF_MODEL:14;
+       then FG.b = def_func(H1,M).b or FG.b = def_func(H2,M).b by A3,A6,A10;
+      hence a in M by A18;
+     end;
+   then reconsider f = FG as Function of M,M by A9,FUNCT_2:def 1,RELSET_1:11;
+      now let a; assume a in M;
+     then reconsider m3 = a as Element of M;
+     set m4 = def_func(I,M).m3; consider v;
+        M,v |= All(x.3,Ex(x.0,All(x.4,I <=> x.4 '=' x.0))) &
+       def_func(I,M) = def_func'(I,v) by A12,A17,Th12,ZF_MODEL:def 5;
+      then M,v/(x.3,m3)/(x.4,m4) |= I by A13,Th11;
+      then M,v/(x.3,m3)/(x.4,m4) |= H '&' H1 or
+      M,v/(x.3,m3)/(x.4,m4) |= 'not' H '&' H2 by ZF_MODEL:17;
+      then M,v/(x.3,m3)/(x.4,m4) |= H & M,v/(x.3,m3)/(x.4,m4) |= H1 &
+      M,v |= All(x.3,Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0))) &
+      def_func(H1,M) = def_func'(H1,v) or
+      M,v/(x.3,m3)/(x.4,m4) |= 'not' H & M,v/(x.3,m3)/(x.4,m4) |= H2 &
+      M,v |= All(x.3,Ex(x.0,All(x.4,H2 <=> x.4 '=' x.0))) &
+      def_func(H2,M) = def_func'(H2,v)
+       by A1,A2,A4,A5,Th12,ZF_MODEL:15,def 5;
+      then v/(x.3,m3).(x.3) = m3 & (M,v/(x.3,m3) |= H & m4 = F.m3 or
+      M,v/(x.3,m3) |= 'not'
+ H & m4 = G.m3) by A3,A6,A8,A11,A13,Th10,Th11,ZF_LANG1:def 1
+;
+     hence f.a = def_func(I,M).a by A10;
+    end;
+   hence FG = def_func(I,M) by FUNCT_2:18;
+  end;
+
+theorem
+   F is_parametrically_definable_in M & G is_parametrically_definable_in M
+   implies G*F is_parametrically_definable_in M
+  proof given H1 being ZF-formula, v1 being Function of VAR,M such that
+A1: {x.0,x.1,x.2} misses Free H1 and
+A2: M,v1 |= All(x.3,Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0))) and
+A3: F = def_func'(H1,v1);
+   given H2 being ZF-formula, v2 being Function of VAR,M such that
+A4: {x.0,x.1,x.2} misses Free H2 and
+A5: M,v2 |= All(x.3,Ex(x.0,All(x.4,H2 <=> x.4 '=' x.0))) and
+A6: G = def_func'(H2,v2);
+   consider i such that
+A7:  for j st x.j in variables_in H2 holds j < i by Th4;
+      i > 4 or not i > 4;
+   then consider i3 being Nat such that
+A8: i > 4 & i3 = i or not i > 4 & i3 = 5;
+A9: i <= i3 by A8,AXIOMS:22;
+      x.0 in {x.0,x.1,x.2} by ENUMSET1:14;
+then A10: not x.0 in Free H1 & not x.0 in Free H2 by A1,A4,XBOOLE_0:3;
+   then consider H3 being ZF-formula, v3 being Function of VAR,M such that
+A11: for j st j < i3 & x.j in variables_in H3 holds j = 3 or j = 4 and
+A12: not x.0 in Free H3 & M,v3 |= All(x.3,Ex(x.0,All(x.4,H3 <=> x.4 '=' x.0)))
+   and
+A13:def_func'(H1,v1) = def_func'(H3,v3) by A2,Th17;
+A14: {x.0,x.1,x.2} misses Free H3
+     proof
+A15:  i3 > 0 & i3 > 1 & i3 > 2 by A8,AXIOMS:22;
+      assume {x.0,x.1,x.2} meets Free H3;
+      then consider a such that A16: a in {x.0,x.1,x.2} & a in Free H3 by
+XBOOLE_0:3
+;
+   (a = x.0 or a = x.1 or a = x.2) & Free H3 c= variables_in H3
+        by A16,ENUMSET1:13,ZF_LANG1:164;
+      hence contradiction by A11,A15,A16;
+     end;
+   consider k1 being Nat such that
+A17:  for j st x.j in variables_in H3 holds j < k1 by Th4;
+      k1 > i3 or k1 <= i3;
+   then consider k being Nat such that
+A18: k1 > i3 & k = k1 or k1 <= i3 & k = i3+1;
+A19: not x.k in variables_in H2
+     proof assume not thesis; then k < i by A7;
+      hence contradiction by A9,A18,AXIOMS:22,NAT_1:38;
+     end;
+A20: not x.k in variables_in H3
+     proof assume not thesis; then k < k1 by A17;
+      hence contradiction by A18,NAT_1:38;
+     end;
+      k <> 4 & k <> 3 & k <> 0 by A8,A18,AXIOMS:22,NAT_1:38;
+then A21: x.k <> x.0 & x.k <> x.3 & x.k <> x.4 by ZF_LANG1:86;
+   take H = Ex(x.k,(H3/(x.4,x.k)) '&' (H2/(x.3,x.k)));
+   defpred C[set] means $1 in Free H3;
+   deffunc F(set) = v3.$1;
+   deffunc G(set) = v2.$1;
+   consider v being Function such that
+A22:  dom v = VAR & for a st a in VAR holds (C[a] implies v.a = F(a)) &
+      (not C[a] implies v.a = G(a)) from LambdaC;
+      rng v c= M
+     proof let b; assume b in rng v;
+      then consider a such that
+A23:    a in dom v & b = v.a by FUNCT_1:def 5;
+      reconsider a as Variable by A22,A23;
+         a in Free H3 or not a in Free H3;
+       then b = v3.a or b = v2.a by A22,A23;
+      hence thesis;
+     end;
+   then reconsider v as Function of VAR,M by A22,FUNCT_2:def 1,RELSET_1:11;
+   take v;
+     A24: now let a; assume
+A25:    a in {x.0,x.1,x.2};
+      assume a in Free H;
+       then a in Free ((H3/(x.4,x.k)) '&' (H2/(x.3,x.k))) \ {x.k}
+        by ZF_LANG1:71;
+then A26:    a in Free ((H3/(x.4,x.k)) '&' (H2/(x.3,x.k))) & not a in {x.k} &
+        Free ((H3/(x.4,x.k)) '&' (H2/(x.3,x.k))) = Free (H3/(x.4,x.k)) \/
+         Free (H2/(x.3,x.k)) by XBOOLE_0:def 4,ZF_LANG1:66;
+       then Free (H3/(x.4,x.k)) c= (Free H3 \ {x.4}) \/ {x.k} &
+       a in Free (H3/(x.4,x.k)) or a in Free (H2/(x.3,x.k)) &
+       Free (H2/(x.3,x.k)) c= (Free H2 \ {x.3}) \/ {x.k}
+        by Th1,XBOOLE_0:def 2;
+       then a in Free H3 \ {x.4} or a in Free H2 \ {x.3} by A26,XBOOLE_0:def 2
+;
+       then a in Free H3 or a in Free H2 by XBOOLE_0:def 4;
+      hence contradiction by A4,A14,A25,XBOOLE_0:3;
+     end;
+   hence
+   {x.0,x.1,x.2} misses Free H by XBOOLE_0:3;
+      x.0 in {x.0,x.1,x.2} by ENUMSET1:14;
+then A27: not x.0 in Free H by A24;
+A28: x in Free H2 implies not x in Free H3 or x = x.3 or x = x.4
+     proof
+A29:    Free H2 c= variables_in H2 & Free H3 c= variables_in H3
+        by ZF_LANG1:164;
+      consider j such that
+A30:    x = x.j by ZF_LANG1:87;
+      assume A31: x in Free H2 & x in Free H3;
+       then j < i by A7,A29,A30; then j < i3 by A9,AXIOMS:22;
+      hence thesis by A11,A29,A30,A31;
+     end;
+      now let m1;
+     consider m such that
+A32:   M,v3/(x.3,m1)/(x.4,m4) |= H3 iff m4 = m by A12,Th20;
+     consider r being Element of M such that
+A33:   M,v2/(x.3,m)/(x.4,m4) |= H2 iff m4 = r by A5,A10,Th20;
+     take r; let m3;
+     thus M,v/(x.3,m1)/(x.4,m3) |= H implies m3 = r
+       proof assume M,v/(x.3,m1)/(x.4,m3) |= H;
+        then consider n being Element of M such that
+A34:      M,v/(x.3,m1)/(x.4,m3)/(x.k,n) |= (H3/(x.4,x.k)) '&' (H2/(x.3,x.k))
+          by ZF_LANG1:82;
+A35:      M,v/(x.3,m1)/(x.4,m3)/(x.k,n) |= H3/(x.4,x.k) &
+         v/(x.3,m1)/(x.4,m3)/(x.k,n).(x.k) = n &
+         M,v/(x.3,m1)/(x.4,m3)/(x.k,n) |= H2/(x.3,x.k)
+          by A34,ZF_LANG1:def 1,ZF_MODEL:15;
+         then M,v/(x.3,m1)/(x.4,m3)/(x.k,n)/(x.4,n) |= H3 by A20,Th13;
+         then M,v/(x.3,m1)/(x.k,n)/(x.4,n) |= H3 by Th9;
+         then M,v/(x.3,m1)/(x.4,n)/(x.k,n) |= H3 by A21,ZF_LANG1:79;
+then A36:      M,v/(x.3,m1)/(x.4,n) |= H3 by A20,Th6;
+           now let x;
+          assume A37: x in Free H3;
+             (x = x.3 or x = x.4 or x <> x.3 & x <> x.4) &
+           v/(x.3,m1)/(x.4,n).(x.4) = n & v3/(x.3,m1)/(x.4,n).(x.4) = n &
+           v/(x.3,m1).(x.3) = m1 & v3/(x.3,m1).(x.3) = m1 &
+           v/(x.3,m1)/(x.4,n).(x.3) = v/(x.3,m1).(x.3) &
+           v3/(x.3,m1)/(x.4,n).(x.3) = v3/(x.3,m1).(x.3)
+            by Lm1,ZF_LANG1:def 1;
+           then v/(x.3,m1)/(x.4,n).x = v3/(x.3,m1)/(x.4,n).x or
+           v/(x.3,m1).x = v.x & v3/(x.3,m1).x = v3.x &
+           v/(x.3,m1)/(x.4,n).x = v/(x.3,m1).x &
+           v3/(x.3,m1)/(x.4,n).x = v3/(x.3,m1).x by ZF_LANG1:def 1;
+          hence v/(x.3,m1)/(x.4,n).x = v3/(x.3,m1)/(x.4,n).x by A22,A37;
+         end;
+         then M,v3/(x.3,m1)/(x.4,n) |= H3 by A36,ZF_LANG1:84;
+         then n = m by A32;
+         then M,v/(x.3,m1)/(x.4,m3)/(x.k,m)/(x.3,m) |= H2 by A19,A35,Th13;
+         then M,v/(x.4,m3)/(x.k,m)/(x.3,m) |= H2 by Th9;
+         then M,v/(x.3,m)/(x.4,m3)/(x.k,m) |= H2 by A21,Lm1,Th7;
+then A38:      M,v/(x.3,m)/(x.4,m3) |= H2 by A19,Th6;
+           now let x;
+          assume x in Free H2;
+           then not x in Free H3 & x <> x.3 & x <> x.4 or x = x.3 or x = x.4
+            by A28;
+           then v/(x.3,m)/(x.4,m3).x = v/(x.3,m).x & v/(x.3,m).x = v.x &
+           v.x = v2.x & v2.x = v2/(x.3,m).x &
+           v2/(x.3,m).x = v2/(x.3,m)/(x.4,m3).x or
+           v/(x.3,m)/(x.4,m3).x = v/(x.3,m).x & v/(x.3,m).x = m &
+           v2/(x.3,m)/(x.4,m3).x = v2/(x.3,m).x & v2/(x.3,m).x = m or
+           v/(x.3,m)/(x.4,m3).x = m3 & v2/(x.3,m)/(x.4,m3).x = m3
+            by A22,Lm1,ZF_LANG1:def 1;
+          hence v/(x.3,m)/(x.4,m3).x = v2/(x.3,m)/(x.4,m3).x;
+         end;
+         then M,v2/(x.3,m)/(x.4,m3) |= H2 by A38,ZF_LANG1:84;
+        hence thesis by A33;
+       end;
+     assume m3 = r;
+      then v2/(x.3,m)/(x.4,m3).(x.3) = v2/(x.3,m).(x.3) & v2/(x.3,m).(x.3) = m
+&
+      M,v2/(x.3,m)/(x.4,m3) |= H2 by A33,Lm1,ZF_LANG1:def 1;
+      then M,v2/(x.3,m)/(x.4,m3)/(x.k,m) |= H2/(x.3,x.k) by A19,Th14;
+then A39:   M,v2/(x.4,m3)/(x.k,m)/(x.3,m) |= H2/(x.3,x.k) &
+      not x.3 in variables_in (H2/(x.3,x.k)) by A21,Lm1,Th7,ZF_LANG1:198;
+then A40:   M,v2/(x.4,m3)/(x.k,m) |= H2/(x.3,x.k) by Th6;
+        v3/(x.3,m1)/(x.4,m).(x.4) = m & M,v3/(x.3,m1)/(x.4,m) |= H3
+       by A32,ZF_LANG1:def 1;
+      then M,v3/(x.3,m1)/(x.4,m)/(x.k,m) |= H3/(x.4,x.k) by A20,Th14;
+then A41:   not x.4 in variables_in (H3/(x.4,x.k)) &
+      M,v3/(x.3,m1)/(x.k,m)/(x.4,m) |= H3/(x.4,x.k)
+       by A21,ZF_LANG1:79,198;
+then A42:   M,v3/(x.3,m1)/(x.k,m) |= H3/(x.4,x.k) by Th6;
+        now let x;
+A43:     Free (H2/(x.3,x.k)) c= (Free H2 \ {x.3}) \/ {x.k} by Th1;
+       assume x in Free (H2/(x.3,x.k));
+        then x in Free H2 \ {x.3} or x in {x.k} by A43,XBOOLE_0:def 2;
+        then x in Free H2 & not x in {x.3} or x = x.k by TARSKI:def 1,XBOOLE_0:
+def 4
+;
+        then (not x in Free H3 & x.4 <> x & x <> x.k or x = x.3 or x = x.4) &
+        x <> x.3 or v/(x.4,m3)/(x.k,m).x = m & v2/(x.4,m3)/(x.k,m).x = m
+         by A28,TARSKI:def 1,ZF_LANG1:def 1;
+        then v/(x.4,m3)/(x.k,m).x = v/(x.4,m3).x & v/(x.4,m3).x = v.x &
+        v.x = v2.x & v2.x = v2/(x.4,m3).x &
+        v2/(x.4,m3).x = v2/(x.4,m3)/(x.k,m).x or
+        v/(x.4,m3)/(x.k,m).x = v/(x.4,m3).x & v/(x.4,m3).x = m3 &
+        m3 = v2/(x.4,m3).x & v2/(x.4,m3).x = v2/(x.4,m3)/(x.k,m).x or
+        v/(x.4,m3)/(x.k,m).x = v2/(x.4,m3)/(x.k,m).x
+         by A21,A22,ZF_LANG1:def 1;
+       hence v/(x.4,m3)/(x.k,m).x = v2/(x.4,m3)/(x.k,m).x;
+      end;
+      then M,v/(x.4,m3)/(x.k,m) |= H2/(x.3,x.k) by A40,ZF_LANG1:84;
+      then M,v/(x.4,m3)/(x.k,m)/(x.3,m1) |= H2/(x.3,x.k) by A39,Th6;
+then A44:   M,v/(x.3,m1)/(x.4,m3)/(x.k,m) |= H2/(x.3,x.k) by A21,Lm1,Th7;
+        now let x;
+A45:     Free (H3/(x.4,x.k)) c= (Free H3 \ {x.4}) \/ {x.k} by Th1;
+       assume x in Free (H3/(x.4,x.k));
+        then x in Free H3 \ {x.4} or x in {x.k} by A45,XBOOLE_0:def 2;
+        then x in Free H3 & not x in {x.4} or x = x.k by TARSKI:def 1,XBOOLE_0:
+def 4
+;
+        then (x in Free H3 & x.3 <> x & x <> x.k or x = x.4 or x = x.3) &
+        x <> x.4 or v/(x.3,m1)/(x.k,m).x = m & v3/(x.3,m1)/(x.k,m).x = m
+         by TARSKI:def 1,ZF_LANG1:def 1;
+        then v/(x.3,m1)/(x.k,m).x = v/(x.3,m1).x & v/(x.3,m1).x = v.x &
+        v.x = v3.x & v3.x = v3/(x.3,m1).x &
+        v3/(x.3,m1).x = v3/(x.3,m1)/(x.k,m).x or
+        v/(x.3,m1)/(x.k,m).x = v/(x.3,m1).x & v/(x.3,m1).x = m1 &
+        m1 = v3/(x.3,m1).x & v3/(x.3,m1).x = v3/(x.3,m1)/(x.k,m).x or
+        v/(x.3,m1)/(x.k,m).x = v3/(x.3,m1)/(x.k,m).x
+         by A21,A22,ZF_LANG1:def 1;
+       hence v/(x.3,m1)/(x.k,m).x = v3/(x.3,m1)/(x.k,m).x;
+      end;
+      then M,v/(x.3,m1)/(x.k,m) |= H3/(x.4,x.k) by A42,ZF_LANG1:84;
+      then M,v/(x.3,m1)/(x.k,m)/(x.4,m3) |= H3/(x.4,x.k) by A41,Th6;
+      then M,v/(x.3,m1)/(x.4,m3)/(x.k,m) |= H3/(x.4,x.k)
+       by A21,ZF_LANG1:79;
+      then M,v/(x.3,m1)/(x.4,m3)/(x.k,m) |= (H3/(x.4,x.k)) '&' (H2/(x.3,x.k))
+       by A44,ZF_MODEL:15;
+     hence M,v/(x.3,m1)/(x.4,m3) |= H by ZF_LANG1:82;
+    end;
+   hence
+A46:  M,v |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) by A27,Th20;
+   reconsider F' = F, G' = G as Function of M,M by A3,A6;
+      now let a; assume
+     a in M;
+     then reconsider m1 = a as Element of M;
+     set m3 = def_func'(H,v).m1;
+        M,v/(x.3,m1)/(x.4,m3) |= H by A27,A46,Th11;
+     then consider n being Element of M such that
+A47:   M,v/(x.3,m1)/(x.4,m3)/(x.k,n) |= (H3/(x.4,x.k)) '&' (H2/(x.3,x.k))
+       by ZF_LANG1:82;
+A48:   M,v/(x.3,m1)/(x.4,m3)/(x.k,n) |= H3/(x.4,x.k) &
+      v/(x.3,m1)/(x.4,m3)/(x.k,n).(x.k) = n &
+      M,v/(x.3,m1)/(x.4,m3)/(x.k,n) |= H2/(x.3,x.k)
+       by A47,ZF_LANG1:def 1,ZF_MODEL:15;
+      then M,v/(x.3,m1)/(x.4,m3)/(x.k,n)/(x.4,n) |= H3 by A20,Th13;
+      then M,v/(x.3,m1)/(x.k,n)/(x.4,n) |= H3 by Th9;
+      then M,v/(x.3,m1)/(x.4,n)/(x.k,n) |= H3 by A21,ZF_LANG1:79;
+then A49:   M,v/(x.3,m1)/(x.4,n) |= H3 by A20,Th6;
+        now let x;
+       assume A50: x in Free H3;
+          (x = x.3 or x = x.4 or x <> x.3 & x <> x.4) &
+        v/(x.3,m1)/(x.4,n).(x.4) = n & v3/(x.3,m1)/(x.4,n).(x.4) = n &
+        v/(x.3,m1).(x.3) = m1 & v3/(x.3,m1).(x.3) = m1 &
+        v/(x.3,m1)/(x.4,n).(x.3) = v/(x.3,m1).(x.3) &
+        v3/(x.3,m1)/(x.4,n).(x.3) = v3/(x.3,m1).(x.3)
+         by Lm1,ZF_LANG1:def 1;
+        then v/(x.3,m1)/(x.4,n).x = v3/(x.3,m1)/(x.4,n).x or
+        v/(x.3,m1).x = v.x & v3/(x.3,m1).x = v3.x &
+        v/(x.3,m1)/(x.4,n).x = v/(x.3,m1).x &
+        v3/(x.3,m1)/(x.4,n).x = v3/(x.3,m1).x by ZF_LANG1:def 1;
+       hence v/(x.3,m1)/(x.4,n).x = v3/(x.3,m1)/(x.4,n).x by A22,A50;
+      end;
+then A51:      M,v3/(x.3,m1)/(x.4,n) |= H3 by A49,ZF_LANG1:84;
+        M,v/(x.3,m1)/(x.4,m3)/(x.k,n)/(x.3,n) |= H2 by A19,A48,Th13;
+      then M,v/(x.4,m3)/(x.k,n)/(x.3,n) |= H2 by Th9;
+      then M,v/(x.3,n)/(x.4,m3)/(x.k,n) |= H2 by A21,Lm1,Th7;
+then A52:   M,v/(x.3,n)/(x.4,m3) |= H2 by A19,Th6;
+        now let x;
+       assume x in Free H2;
+        then not x in Free H3 & x <> x.3 & x <> x.4 or x = x.3 or x = x.4
+         by A28;
+        then v/(x.3,n)/(x.4,m3).x = v/(x.3,n).x & v/(x.3,n).x = v.x &
+        v.x = v2.x & v2.x = v2/(x.3,n).x &
+        v2/(x.3,n).x = v2/(x.3,n)/(x.4,m3).x or
+        v/(x.3,n)/(x.4,m3).x = v/(x.3,n).x & v/(x.3,n).x = n &
+        v2/(x.3,n)/(x.4,m3).x = v2/(x.3,n).x & v2/(x.3,n).x = n or
+        v/(x.3,n)/(x.4,m3).x = m3 & v2/(x.3,n)/(x.4,m3).x = m3
+         by A22,Lm1,ZF_LANG1:def 1;
+       hence v/(x.3,n)/(x.4,m3).x = v2/(x.3,n)/(x.4,m3).x;
+      end;
+      then M,v2/(x.3,n)/(x.4,m3) |= H2 by A52,ZF_LANG1:84;
+      then G'.n = m3 & (G'*F').m1 = G'.(F'.m1) by A5,A6,A10,Th11,FUNCT_2:21;
+     hence (G'*F').a = def_func'(H,v).a by A3,A12,A13,A51,Th11;
+    end;
+   hence G*F = def_func'(H,v) by FUNCT_2:18;
+  end;
+
+theorem
+   {x.0,x.1,x.2} misses Free H1 &
+ M,v |= All(x.3,Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0))) &
+ {x.0,x.1,x.2} misses Free H2 &
+ M,v |= All(x.3,Ex(x.0,All(x.4,H2 <=> x.4 '=' x.0))) &
+ {x.0,x.1,x.2} misses Free H & not x.4 in Free H
+  implies for FG be Function st dom FG = M & for m holds
+   (M,v/(x.3,m) |= H implies FG.m = def_func'(H1,v).m) &
+   (M,v/(x.3,m) |= 'not' H implies FG.m = def_func'(H2,v).m) holds
+     FG is_parametrically_definable_in M
+  proof assume that
+A1: {x.0,x.1,x.2} misses Free H1 &
+    M,v |= All(x.3,Ex(x.0,All(x.4,H1 <=> x.4 '=' x.0))) and
+A2: {x.0,x.1,x.2} misses Free H2 &
+    M,v |= All(x.3,Ex(x.0,All(x.4,H2 <=> x.4 '=' x.0))) and
+A3: {x.0,x.1,x.2} misses Free H & not x.4 in Free H;
+   let FG be Function such that
+A4: dom FG = M and
+A5: (M,v/(x.3,m) |= H implies FG.m = def_func'(H1,v).m) &
+    (M,v/(x.3,m) |= 'not' H implies FG.m = def_func'(H2,v).m);
+   take p = H '&' H1 'or' 'not' H '&' H2, v;
+A6:  Free 'not' H = Free H by ZF_LANG1:65;
+A7: now
+     let x be set; assume x in Free p;
+      then x in Free (H '&' H1) \/ Free ('not' H '&' H2) by ZF_LANG1:68;
+      then (x in Free (H '&' H1) or x in Free ('not' H '&' H2)) &
+      Free (H '&' H1) = Free H \/ Free H1 &
+      Free ('not' H '&' H2) = Free 'not' H \/ Free H2
+       by XBOOLE_0:def 2,ZF_LANG1:66;
+     hence x in Free H or x in Free H1 or x in Free H2 by A6,XBOOLE_0:def 2;
+    end;
+      x.0 in {x.0,x.1,x.2} by ENUMSET1:14;
+then A8: not x.0 in Free H & not x.0 in Free H1 & not x.0 in Free H2
+     by A1,A2,A3,XBOOLE_0:3;
+then A9: not x.0 in Free p by A7;
+       now let a; assume
+A10:    a in {x.0,x.1,x.2} & a in Free p;
+       then a in Free H or a in Free H1 or a in Free H2 by A7;
+      hence contradiction by A1,A2,A3,A10,XBOOLE_0:3;
+     end;
+   hence {x.0,x.1,x.2} misses Free p by XBOOLE_0:3;
+      now let m3;
+     consider r1 being Element of M such that
+A11:   M,v/(x.3,m3)/(x.4,m4) |= H1 iff m4 = r1 by A1,A8,Th20;
+     consider r2 being Element of M such that
+A12:   M,v/(x.3,m3)/(x.4,m4) |= H2 iff m4 = r2 by A2,A8,Th20;
+
+        M,v/(x.3,m3) |= H & not M,v/(x.3,m3) |= 'not' H or
+      not M,v/(x.3,m3) |= H & M,v/(x.3,m3) |= 'not' H
+       by ZF_MODEL:14;
+     then consider r being Element of M such that
+A13:   M,v/(x.3,m3) |= H & not M,v/(x.3,m3) |= 'not' H & r = r1 or
+      not M,v/(x.3,m3) |= H & M,v/(x.3,m3) |= 'not' H & r = r2;
+     take r; let m4;
+     thus M,v/(x.3,m3)/(x.4,m4) |= p implies m4 = r
+       proof assume M,v/(x.3,m3)/(x.4,m4) |= p;
+         then M,v/(x.3,m3)/(x.4,m4) |= H '&' H1 or
+         M,v/(x.3,m3)/(x.4,m4) |= 'not' H '&' H2 by ZF_MODEL:17;
+         then M,v/(x.3,m3)/(x.4,m4) |= H & M,v/(x.3,m3)/(x.4,m4) |= H1 or
+         M,v/(x.3,m3)/(x.4,m4) |= 'not' H & M,v/(x.3,m3)/(x.4,m4) |= H2
+          by ZF_MODEL:15;
+        hence thesis by A3,A6,A11,A12,A13,Th10;
+       end;
+     assume m4 = r;
+      then M,v/(x.3,m3)/(x.4,m4) |= H & M,v/(x.3,m3)/(x.4,m4) |= H1 or
+      M,v/(x.3,m3)/(x.4,m4) |= 'not' H & M,v/(x.3,m3)/(x.4,m4) |= H2
+       by A3,A6,A11,A12,A13,Th10;
+      then M,v/(x.3,m3)/(x.4,m4) |= H '&' H1 or
+      M,v/(x.3,m3)/(x.4,m4) |= 'not' H '&' H2 by ZF_MODEL:15;
+     hence M,v/(x.3,m3)/(x.4,m4) |= p by ZF_MODEL:17;
+    end;
+   hence
+A14: M,v |= All(x.3,Ex(x.0,All(x.4,p <=> x.4 '=' x.0))) by A9,Th20;
+      rng FG c= M
+     proof let a; assume a in rng FG;
+      then consider b such that
+A15:    b in M & a = FG.b by A4,FUNCT_1:def 5;
+      reconsider b as Element of M by A15;
+
+         M,v/(x.3,b) |= H or M,v/(x.3,b) |= 'not' H by ZF_MODEL:14;
+       then a = def_func'(H1,v).b or a = def_func'(H2,v).b by A5,A15;
+      hence thesis;
+     end;
+   then reconsider f = FG as Function of M,M by A4,FUNCT_2:def 1,RELSET_1:11;
+      now let a; assume a in M;
+     then reconsider m = a as Element of M;
+     set r = def_func'(p,v).m;
+        M,v/(x.3,m)/(x.4,r) |= p by A9,A14,Th11;
+      then M,v/(x.3,m)/(x.4,r) |= H '&' H1 or
+      M,v/(x.3,m)/(x.4,r) |= 'not' H '&' H2 by ZF_MODEL:17;
+      then M,v/(x.3,m)/(x.4,r) |= H & M,v/(x.3,m)/(x.4,r) |= H1 or
+      M,v/(x.3,m)/(x.4,r) |= 'not' H & M,v/(x.3,m)/(x.4,r) |= H2
+       by ZF_MODEL:15;
+      then M,v/(x.3,m) |= H & r = def_func'(H1,v).m or
+      M,v/(x.3,m) |= 'not'
+ H & r = def_func'(H2,v).m by A1,A2,A3,A6,A8,Th10,Th11;
+     hence f.a = def_func'(p,v).a by A5;
+    end;
+   hence thesis by FUNCT_2:18;
+  end;
+
+theorem
+ Th24: id M is_definable_in M
+  proof
+   take H = x.3 '=' x.4;
+   thus A1: Free H c= {x.3,x.4} by ZF_LANG1:63;
+      now let v;
+        now let m3;
+          now let m4;
+A2:        v/(x.3,m3)/(x.0,m3)/(x.4,m4).(x.3) = v/(x.3,m3)/(x.0,m3).(x.3) &
+          m3 = v/(x.3,m3).(x.3) &
+          v/(x.3,m3)/(x.0,m3).(x.3) = v/(x.3,m3).(x.3) &
+          v/(x.3,m3)/(x.0,m3)/(x.4,m4).(x.0) = v/(x.3,m3)/(x.0,m3).(x.0) &
+          v/(x.3,m3)/(x.0,m3).(x.0) = m3 &
+          v/(x.3,m3)/(x.0,m3)/(x.4,m4).(x.4) = m4 by Lm1,ZF_LANG1:def 1;
+A3:        now assume M,v/(x.3,m3)/(x.0,m3)/(x.4,m4) |= H;
+            then v/(x.3,m3)/(x.0,m3)/(x.4,m4).(x.3) =
+              v/(x.3,m3)/(x.0,m3)/(x.4,m4).(x.4) by ZF_MODEL:12;
+           hence M,v/(x.3,m3)/(x.0,m3)/(x.4,m4) |= x.4 '=' x.0
+             by A2,ZF_MODEL:12;
+          end;
+            now assume M,v/(x.3,m3)/(x.0,m3)/(x.4,m4) |= x.4 '=' x.0;
+            then m4 = m3 by A2,ZF_MODEL:12;
+           hence M,v/(x.3,m3)/(x.0,m3)/(x.4,m4) |= H by A2,ZF_MODEL:12;
+          end;
+         hence M,v/(x.3,m3)/(x.0,m3)/(x.4,m4) |= H <=> x.4 '=' x.0
+           by A3,ZF_MODEL:19;
+        end;
+        then M,v/(x.3,m3)/(x.0,m3) |= All(x.4,H <=> x.4 '=' x.0) by ZF_LANG1:80
+;
+       hence M,v/(x.3,m3) |= Ex(x.0,All(x.4,H <=> x.4 '=' x.0))
+         by ZF_LANG1:82;
+      end;
+     hence M,v |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) by ZF_LANG1:80;
+    end;
+   hence
+A4: M |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) by ZF_MODEL:def 5;
+   reconsider i = id M as Function of M,M;
+      now let a; assume
+      a in M;
+     then reconsider m = a as Element of M;
+     consider v;
+A5:    v/(x.3,m)/(x.4,m).(x.3) = v/(x.3,m).(x.3) & m = v/(x.3,m).(x.3) &
+      v/(x.3,m)/(x.4,m).(x.4) = m by Lm1,ZF_LANG1:def 1;
+      then M,v/(x.3,m)/(x.4,m) |= H by ZF_MODEL:12;
+      then def_func(H,M).m = m by A1,A4,A5,ZFMODEL1:def 2;
+     hence i.a = def_func(H,M).a by FUNCT_1:35;
+    end;
+   hence id M = def_func(H,M) by FUNCT_2:18;
+  end;
+
+theorem
+   id M is_parametrically_definable_in M
+  proof id M is_definable_in M by Th24;
+   hence thesis by ZFMODEL1:18;
+  end;

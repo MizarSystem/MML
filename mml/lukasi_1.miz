@@ -1,0 +1,1096 @@
+:: Propositional Calculus
+::  by Grzegorz Bancerek, Agata Darmochwa\l and Andrzej Trybulec
+::
+:: Received September 26, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary CQC_LANG, ZF_LANG, CQC_THE1, QC_LANG1, QMAX_1;
+ notation SUBSET_1, CQC_LANG, CQC_THE1;
+ constructors CQC_THE1, XBOOLE_0;
+ clusters CQC_LANG, ZFMISC_1, XBOOLE_0;
+ definitions CQC_THE1;
+ theorems CQC_THE1, QC_LANG2;
+
+begin
+
+reserve p, q, r, s, t for Element of CQC-WFF;
+reserve X for Subset of CQC-WFF;
+
+theorem   :: Hypothetical syllogism
+Th1: (p => q) => ((q => r) => (p => r)) in TAUT
+ proof
+     (p => q) => ('not'(q '&' 'not' r) => 'not'(p '&' 'not'
+r)) in TAUT by CQC_THE1:80;
+   then (p => q) => ((q => r) => 'not'(p '&' 'not'
+r)) in TAUT by QC_LANG2:def 2;
+   hence thesis by QC_LANG2:def 2;
+ end;
+
+theorem Th2: p => q in TAUT implies (q => r) => (p => r) in TAUT
+ proof assume
+A1: p => q in TAUT;
+     (p => q) => ((q => r) => (p => r)) in TAUT by Th1;
+  hence (q => r) => (p => r) in TAUT by A1,CQC_THE1:82;
+ end;
+
+theorem Th3:
+ p => q in TAUT & q => r in TAUT implies p => r in TAUT
+ proof assume that
+A1: p => q in TAUT and
+A2: q => r in TAUT;
+     (p => q) => ((q => r) => (p => r)) in TAUT by Th1;
+   then (q => r) => (p => r) in TAUT by A1,CQC_THE1:82;
+  hence p => r in TAUT by A2,CQC_THE1:82;
+ end;
+
+theorem Th4: :: Identity law
+ p => p in TAUT
+  proof
+     ('not' p => p) => p in TAUT & p => ('not'
+p => p) in TAUT by CQC_THE1:78,79;
+   hence thesis by Th3;
+  end;
+
+Lm1: (((q => r) => (p => r)) => s) => ((p => q) => s) in TAUT
+ proof
+    (p => q) => ((q => r) => (p => r)) in TAUT by Th1;
+  hence thesis by Th2;
+ end;
+
+Lm2:
+ (p => (q => r)) => ((s => q) => (p => (s => r))) in TAUT
+  proof
+A1:  ((((q => r) => (s => r)) => (p => (s => r))) =>
+     ((s => q) => (p => (s => r)))) =>
+      ((p => (q => r)) => ((s => q) => (p => (s => r)))) in TAUT by Lm1;
+      (((q => r) => (s => r)) => (p => (s => r))) =>
+    ((s => q) => (p => (s => r))) in TAUT by Lm1;
+   hence thesis by A1,CQC_THE1:82;
+  end;
+
+Lm3:
+ (p => q) => (((p => r) => s) => ((q => r) => s)) in TAUT
+ proof
+    ((q => r) => (p => r)) => (((p => r) => s) => ((q => r) => s)) in TAUT &
+  (((q => r) => (p => r)) => (((p => r) => s) => ((q => r) => s))) =>
+  ((p => q) => (((p => r) => s) => ((q => r) => s))) in TAUT by Lm1,Th1;
+  hence thesis by CQC_THE1:82;
+ end;
+
+Lm4:
+ (t => ((p => r) => s)) => ((p => q) => (t => ((q => r) => s))) in TAUT
+proof
+    ((p => q) => (((p => r) => s) => ((q => r) => s))) in TAUT &
+  ((p => q) => (((p => r) => s) => ((q => r) => s))) =>
+  ((t => ((p => r) => s)) => ((p => q) => (t => ((q => r) => s)))) in TAUT
+     by Lm2,Lm3;
+ hence thesis by CQC_THE1:82;
+end;
+
+Lm5:
+ (('not' p => q) => r) => (p => r) in TAUT
+proof
+    p => ('not' p => q) in TAUT by CQC_THE1:79;
+ hence thesis by Th2;
+end;
+
+Lm6:
+ p => ((('not' p => r) => s) => ((q => r) => s)) in TAUT
+proof
+   ('not' p => q) => ((('not' p => r) => s) => ((q => r) => s)) in TAUT &
+ ( (('not' p => q) => ((('not' p => r) => s) => ((q => r) => s)) )
+ =>
+ (p => ((('not' p => r) => s) => ((q => r) => s)))) in TAUT
+  by Lm3,Lm5;
+ hence thesis by CQC_THE1:82;
+end;
+
+Lm7:
+ (q => (('not' p => p) => p)) => (('not' p => p) => p) in TAUT
+proof
+A1: ('not' p => p) => p in TAUT &
+   ('not'(('not' p => p) => p) => (('not' p => p) => p)) => (('not'
+p => p) => p) in TAUT
+     by CQC_THE1:78;
+     (('not' p => p) => p) =>
+    ((('not'(('not' p => p) => p) => (('not' p => p) => p)) => (('not'
+p => p) => p)) =>
+     ((q => (('not' p => p) => p)) => (('not'
+p => p) => p))) in TAUT by Lm6;
+   then (('not'(('not' p => p) => p) => (('not' p => p) => p)) => (('not'
+p => p) => p)) =>
+    ((q => (('not' p => p) => p)) => (('not'
+p => p) => p)) in TAUT by A1,CQC_THE1:82;
+ hence thesis by A1,CQC_THE1:82;
+end;
+
+Lm8:
+ t => (('not' p => p) => p) in TAUT
+proof
+    ('not' t => (('not' p => p) => p)) => (('not' p => p) => p) in TAUT &
+  (('not' t => (('not' p => p) => p)) => (('not' p => p) => p)) =>
+  (t => (('not' p => p) => p)) in TAUT by Lm5,Lm7;
+ hence thesis by CQC_THE1:82;
+end;
+
+Lm9:
+ ('not' p => q) => (t => ((q => p) => p)) in TAUT
+proof
+    t => (('not' p => p) => p) in TAUT &
+  (t => (('not' p => p) => p)) =>
+  (('not' p => q) => (t => ((q => p) => p))) in TAUT by Lm4,Lm8;
+ hence thesis by CQC_THE1:82;
+end;
+
+Lm10:
+ ((t => ((q => p) => p)) => r) => (('not' p => q) => r) in TAUT
+proof
+    ('not' p => q) => (t => ((q => p) => p)) in TAUT &
+  (('not' p => q) => (t => ((q => p) => p))) =>
+  (((t => ((q => p) => p)) => r) => (('not' p => q) => r)) in TAUT
+    by Lm9,Th1;
+ hence thesis by CQC_THE1:82;
+end;
+
+Lm11:
+ ('not' p => q) => ((q => p) => p) in TAUT
+proof
+    ('not'((q => p) => p) => ((q => p) => p)) => ((q => p) => p) in TAUT &
+  (('not'((q => p) => p) => ((q => p) => p)) => ((q => p) => p)) =>
+  (('not' p => q) => ((q => p) => p)) in TAUT by Lm10,CQC_THE1:78;
+ hence thesis by CQC_THE1:82;
+end;
+
+Lm12:
+ p => ((q => p) => p) in TAUT
+proof
+    ('not' p => q) => ((q => p) => p) in TAUT &
+  (('not' p => q) => ((q => p) => p)) => (p => ((q => p) => p)) in TAUT
+   by Lm5,Lm11;
+ hence thesis by CQC_THE1:82;
+end;
+
+theorem  :: Simplification
+Th5:
+ q => (p => q) in TAUT
+proof
+A1:q => (('not' p => q) => q) in TAUT & p => ('not'
+p => q) in TAUT by Lm12,CQC_THE1:79;
+    (q => (('not' p => q) => q)) => ((p => ('not'
+p => q)) => (q => (p => q))) in TAUT
+   by Lm2;
+  then (p => ('not' p => q)) => (q => (p => q)) in TAUT by A1,CQC_THE1:82;
+ hence thesis by A1,CQC_THE1:82;
+end;
+
+theorem
+Th6:
+ ((p => q) => r) => (q => r) in TAUT
+proof
+    q => (p => q) in TAUT &
+  (q => (p => q)) => (((p => q) => r) => (q => r)) in TAUT
+   by Th1,Th5;
+ hence thesis by CQC_THE1:82;
+end;
+
+theorem  :: Modus ponendo ponens
+Th7:
+ q => ((q => p) => p) in TAUT
+proof
+    ('not' p => q) => ((q => p) => p) in TAUT &
+  (('not' p => q) => ((q => p) => p)) => (q => ((q => p) => p)) in TAUT
+   by Lm11,Th6;
+ hence thesis by CQC_THE1:82;
+end;
+
+theorem  :: Contraposition
+Th8:
+ (s => (q => p)) => (q => (s => p)) in TAUT
+proof
+    q => ((q => p) => p) in TAUT &
+  (q => ((q => p) => p)) => ((s => (q => p)) => (q => (s => p))) in TAUT
+   by Lm2,Th7;
+ hence thesis by CQC_THE1:82;
+end;
+
+theorem
+Th9:
+ (q => r) => ((p => q) => (p => r)) in TAUT
+proof
+    (p => q) => ((q => r) => (p => r)) in TAUT &
+  ((p => q) => ((q => r) => (p => r))) =>
+   ((q => r) => ((p => q) => (p => r))) in TAUT
+    by Th1,Th8;
+ hence thesis by CQC_THE1:82;
+end;
+
+Lm13:
+ ((q => (s => p)) => r) => ((s => (q => p)) => r) in TAUT
+proof
+    (s => (q => p)) => (q => (s => p)) in TAUT &
+  ((s => (q => p)) => (q => (s => p))) =>
+  (((q => (s => p)) => r) => ((s => (q => p)) => r)) in TAUT
+   by Th1,Th8;
+ hence thesis by CQC_THE1:82;
+end;
+
+Lm14:
+ ((p => q) => p) => p in TAUT
+proof
+    ('not' p => (p => q)) => (((p => q) => p) => p) in TAUT &
+  (('not' p => (p => q)) => (((p => q) => p) => p)) =>
+  ((p => ('not' p => q)) => (((p => q) => p) => p)) in TAUT
+    by Lm11,Lm13;
+  then p => ('not' p => q) in TAUT &
+  (p => ('not' p => q)) => (((p => q) => p) => p) in
+ TAUT by CQC_THE1:79,82;
+ hence thesis by CQC_THE1:82;
+end;
+
+Lm15:
+ ((p => r) => s) => ((p => q) => ((q => r) => s)) in TAUT
+proof
+    (p => q) => (((p => r) => s) => ((q => r) => s)) in TAUT &
+  ((p => q) => (((p => r) => s) => ((q => r) => s))) =>
+  (((p => r) => s) => ((p => q) => ((q => r) => s))) in TAUT
+   by Lm3,Th8;
+ hence thesis by CQC_THE1:82;
+end;
+
+Lm16:
+ ((p => q) => r) => ((r => p) => p) in TAUT
+proof
+    ((p => q) => p) => p in TAUT &
+  (((p => q) => p) => p) => (((p => q) => r) => ((r => p) => p)) in TAUT
+   by Lm14,Lm15;
+ hence thesis by CQC_THE1:82;
+end;
+
+Lm17:
+ (((r => p) => p) => s) => (((p => q) => r) => s) in TAUT
+proof
+    ((p => q) => r) => ((r => p) => p) in TAUT &
+  (((p => q) => r) => ((r => p) => p)) =>
+  ((((r => p) => p) => s) => (((p => q) => r) => s)) in TAUT
+   by Lm16,Th1;
+ hence thesis by CQC_THE1:82;
+end;
+
+Lm18:
+ ((q => r) => p) => ((q => p) => p) in TAUT
+proof
+    ((p => q) => q) => ((q => p) => p) in TAUT &
+  (((p => q) => q) => ((q => p) => p)) =>
+  (((q => r) => p) => ((q => p) => p)) in TAUT
+   by Lm16,Lm17;
+ hence thesis by CQC_THE1:82;
+end;
+
+theorem  :: A Hilbert axiom
+Th10:
+ (q => (q => r)) => (q => r) in TAUT
+proof
+    (q => r) => (q => r) in TAUT &
+  ((q => r) => (q => r)) => ((q => (q => r)) => (q => r)) in TAUT
+   by Lm18,Th4;
+ hence thesis by CQC_THE1:82;
+end;
+
+Lm19:
+ (q => s) => (((q => r) => p) => ((s => p) => p)) in TAUT
+proof
+    ((q => r) => p) => ((q => p) => p) in TAUT &
+  (((q => r) => p) => ((q => p) => p)) =>
+  ((q => s) => (((q => r) => p) => ((s => p) => p))) in TAUT
+   by Lm4,Lm18;
+ hence thesis by CQC_THE1:82;
+end;
+
+Lm20:
+ ((q => r) => p) => ((q => s) => ((s => p) => p)) in TAUT
+proof
+    (q => s) => (((q => r) => p) => ((s => p) => p)) in TAUT &
+  ((q => s) => (((q => r) => p) => ((s => p) => p))) =>
+  (((q => r) => p) => ((q => s) => ((s => p) => p))) in TAUT
+   by Lm19,Th8;
+ hence thesis by CQC_THE1:82;
+end;
+
+Lm21:
+ (q => s) => ((s => (p => (q => r))) => (p => (q => r))) in TAUT
+proof
+    (q => r) => (p => (q => r)) in TAUT &
+  ((q => r) => (p => (q => r))) =>
+  ((q => s) => ((s => (p => (q => r))) => (p => (q => r)))) in TAUT
+   by Lm20,Th5;
+ hence thesis by CQC_THE1:82;
+end;
+
+Lm22:
+ (s => (p => (q => r))) => ((q => s) => (p => (q => r))) in TAUT
+proof
+    (q => s) => ((s => (p => (q => r))) => (p => (q => r))) in TAUT &
+  ((q => s) => ((s => (p => (q => r))) => (p => (q => r)))) =>
+  ((s => (p => (q => r))) => ((q => s) => (p => (q => r)))) in TAUT
+   by Lm21,Th8;
+ hence thesis by CQC_THE1:82;
+end;
+
+theorem  :: Frege's law
+Th11:
+ (p => (q => r)) => ((p => q) => (p => r)) in TAUT
+proof
+    (q => r) => ((p => q) => (p => r)) in TAUT &
+  ((q => r) => ((p => q) => (p => r))) =>
+  ((p => (q => r)) => ((p => q) => (p => r))) in TAUT
+   by Lm22,Th9;
+ hence thesis by CQC_THE1:82;
+end;
+
+theorem Th12:
+ 'not' VERUM => p in TAUT
+ proof
+    VERUM => ('not' VERUM => p) in TAUT by CQC_THE1:79;
+  hence thesis by CQC_THE1:77,82;
+ end;
+
+theorem
+ Th13: q in TAUT implies p => q in TAUT
+  proof
+      q => (p => q) in TAUT by Th5;
+   hence thesis by CQC_THE1:82;
+  end;
+
+theorem
+   p in TAUT implies (p => q) => q in TAUT
+  proof
+   assume A1: p in TAUT;
+     p => ((p => q) => q) in TAUT by Th7;
+   hence thesis by A1,CQC_THE1:82;
+  end;
+
+theorem Th15:
+ s => (q => p) in TAUT implies q => (s => p) in TAUT
+  proof
+   assume A1: s => (q => p) in TAUT;
+     (s => (q => p)) => (q => (s => p)) in TAUT by Th8;
+   hence thesis by A1,CQC_THE1:82;
+  end;
+
+theorem
+ Th16: s => (q => p) in TAUT & q in TAUT implies s => p in TAUT
+  proof assume
+     s => (q => p) in TAUT;
+    then q => (s => p) in TAUT by Th15;
+   hence thesis by CQC_THE1:82;
+  end;
+
+theorem
+   s => (q => p) in TAUT & q in TAUT & s in TAUT implies p in TAUT
+  proof assume
+      s => (q => p) in TAUT & q in TAUT;
+    then s => p in TAUT by Th16;
+   hence thesis by CQC_THE1:82;
+  end;
+
+theorem
+   q => (q => r) in TAUT implies q => r in TAUT
+  proof
+      (q => (q => r)) => (q => r) in TAUT by Th10;
+   hence thesis by CQC_THE1:82;
+  end;
+
+theorem Th19:
+ (p => (q => r)) in TAUT implies (p => q) => (p => r) in TAUT
+  proof
+   assume A1: p => (q => r) in TAUT;
+     (p => (q => r)) => ((p => q) => (p => r)) in TAUT by Th11;
+   hence thesis by A1,CQC_THE1:82;
+  end;
+
+theorem
+ Th20: (p => (q => r)) in TAUT & p => q in TAUT implies p => r in TAUT
+  proof assume
+     (p => (q => r)) in TAUT;
+    then (p => q) => (p => r) in TAUT by Th19;
+   hence thesis by CQC_THE1:82;
+  end;
+
+theorem
+   (p => (q => r)) in TAUT & p => q in TAUT & p in TAUT implies r in TAUT
+  proof assume
+      (p => (q => r)) in TAUT & p => q in TAUT;
+    then p => r in TAUT by Th20;
+   hence thesis by CQC_THE1:82;
+  end;
+
+theorem Th22:
+ p => (q => r) in TAUT & p => (r => s ) in TAUT implies p => (q => s) in TAUT
+  proof assume that
+A1:  p => (q => r) in TAUT and
+A2:  p => (r => s ) in TAUT;
+      (q => r) => ((r => s) => (q => s)) in TAUT by Th1;
+    then p => ((q => r) => ((r => s) => (q => s))) in TAUT by Th13;
+    then p => ((r => s) => (q => s)) in TAUT by A1,Th20;
+   hence thesis by A2,Th20;
+  end;
+
+theorem
+  p => VERUM in TAUT by Th13,CQC_THE1:77;
+
+Lm23: 'not' p => (p => 'not' VERUM) in TAUT
+ proof
+     p => ('not' p => 'not' VERUM) in TAUT by CQC_THE1:79;
+  hence thesis by Th15;
+ end;
+
+Lm24: ('not' p => 'not' VERUM) => p in TAUT
+ proof
+     'not' VERUM => p in TAUT by Th12;
+   then 'not' p => ('not' VERUM => p) in TAUT &
+   ('not' p => ('not' VERUM => p)) => (('not' p => 'not' VERUM) => ('not'
+p => p)) in TAUT
+     by Th11,Th13;
+then A1: ('not' p => 'not' VERUM) => ('not' p => p) in TAUT by CQC_THE1:82;
+     ('not' p => p) => p in TAUT by CQC_THE1:78;
+  hence thesis by A1,Th3;
+ end;
+
+theorem
+ Th24: ('not' p => 'not' q) => (q => p) in TAUT
+  proof
+      q => ('not' q => 'not' VERUM) in TAUT &
+    ('not' q => 'not' VERUM) => (('not' p => 'not' q) => ('not' p => 'not'
+VERUM)) in TAUT
+     by Th9,CQC_THE1:79;
+then A1:  q => (('not' p => 'not' q) => ('not' p => 'not' VERUM)) in TAUT by
+Th3;
+      ('not' p => 'not' VERUM) => p in TAUT by Lm24;
+    then q => (('not' p => 'not' VERUM) => p) in TAUT by Th13;
+    then q => (('not' p => 'not' q) => p) in TAUT by A1,Th22;
+   hence thesis by Th15;
+  end;
+
+theorem
+ Th25: 'not' 'not' p => p in TAUT
+  proof
+      'not' 'not' p => ('not' p => 'not' VERUM) in TAUT & ('not' p => 'not'
+VERUM) => (VERUM => p) in TAUT
+     by Lm23,Th24;
+    then 'not' 'not' p => (VERUM => p) in TAUT by Th3;
+    then VERUM in TAUT & VERUM => ('not' 'not' p => p) in TAUT by Th15,CQC_THE1
+:77;
+   hence thesis by CQC_THE1:82;
+  end;
+
+Lm25:
+  now let p;
+      'not' 'not' p => p in TAUT by Th25;
+then A1:  (p => 'not' VERUM) => ('not' 'not' p => 'not' VERUM) in TAUT by Th2;
+      ('not' 'not' p => 'not' VERUM) => 'not' p in TAUT by Lm24;
+   hence (p => 'not' VERUM) => 'not' p in TAUT by A1,Th3;
+  end;
+
+theorem
+ Th26: (p => q) => ('not' q => 'not' p) in TAUT
+  proof
+      (p => 'not' VERUM) => 'not' p in TAUT by Lm25;
+then A1:  'not' q => ((p => 'not' VERUM) => 'not' p) in TAUT by Th13;
+A2:  'not' q => (q => 'not' VERUM) in TAUT by Lm23;
+      (q => 'not' VERUM) => ((p => q) => (p => 'not' VERUM)) in TAUT by Th9;
+    then 'not' q => ((p => q) => (p => 'not' VERUM)) in TAUT by A2,Th3;
+    then 'not' q => ((p => q) => 'not' p) in TAUT by A1,Th22;
+   hence thesis by Th15;
+  end;
+
+theorem Th27:
+ p => 'not' 'not' p in TAUT
+  proof
+      (VERUM => p) => ('not' p => 'not' VERUM) in TAUT &
+    ('not' p => 'not' VERUM) => 'not' 'not' p in TAUT
+      by Lm25,Th26;
+then A1:  (VERUM => p) => 'not' 'not' p in TAUT by Th3;
+      p => (VERUM => p) in TAUT by Th5;
+   hence thesis by A1,Th3;
+  end;
+
+theorem Th28:
+ ('not' 'not' p => q) => (p => q) in TAUT & (p => q) => ('not' 'not'
+p => q) in TAUT
+  proof
+     (p => 'not' 'not' p) => (('not' 'not' p => q) => (p => q)) in TAUT &
+   p => 'not' 'not' p in TAUT by Th1,Th27;
+   hence ('not' 'not' p => q) => (p => q) in TAUT by Th2;
+     ('not' 'not' p => p) => ((p => q) => ('not' 'not' p => q)) in TAUT &
+   'not' 'not' p => p in TAUT by Th1,Th25;
+   hence thesis by Th2;
+  end;
+
+theorem Th29:
+ (p => 'not' 'not' q) => (p => q) in TAUT & (p => q) => (p => 'not' 'not'
+q) in TAUT
+  proof
+     'not' 'not' q => q in TAUT by Th25;
+then (p => ('not' 'not' q => q)) => ((p => 'not' 'not' q) => (p => q)) in TAUT
+&
+    p => ('not' 'not' q => q) in TAUT by Th11,Th13;
+   hence (p => 'not' 'not' q) => (p => q) in TAUT by CQC_THE1:82;
+     q => 'not' 'not' q in TAUT by Th27;
+then (p => (q => 'not' 'not' q)) => ((p => q) => (p => 'not' 'not' q)) in TAUT
+&
+    p => (q => 'not' 'not' q) in TAUT by Th11,Th13;
+   hence thesis by CQC_THE1:82;
+  end;
+
+theorem Th30:
+ (p => 'not' q) => (q => 'not' p) in TAUT
+  proof
+     (p => 'not' q) => ('not' 'not' q => 'not' p) in TAUT &
+    ('not' 'not' q => 'not' p) => (q => 'not' p) in TAUT by Th26,Th28;
+   hence thesis by Th3;
+  end;
+
+theorem Th31:
+ ('not' p => q) => ('not' q => p) in TAUT
+  proof
+     ('not' p => q) => ('not' q => 'not' 'not' p) in TAUT &
+    ('not' q => 'not' 'not' p) => ('not' q => p) in TAUT by Th26,Th29;
+   hence thesis by Th3;
+  end;
+
+theorem (p => 'not' p) => 'not' p in TAUT
+ proof
+    ('not' 'not' p => 'not' p) => 'not' p in TAUT &
+  (p => 'not' p) => ('not' 'not' p => 'not' p) in TAUT
+   by Th28,CQC_THE1:78;
+  hence thesis by Th3;
+ end;
+
+theorem
+   'not' p => (p => q) in TAUT
+  proof
+     'not' p => ('not' 'not' p => q) in TAUT & ('not' 'not'
+p => q) => (p => q) in TAUT
+    by Th28,CQC_THE1:79;
+   hence thesis by Th3;
+  end;
+
+theorem Th34:
+ p => q in TAUT iff 'not' q => 'not' p in TAUT
+  proof
+   thus p => q in TAUT implies 'not' q => 'not' p in TAUT
+    proof
+       (p => q) => ('not' q => 'not' p) in TAUT by Th26;
+     hence thesis by CQC_THE1:82;
+    end;
+   thus 'not' q => 'not' p in TAUT implies p => q in TAUT
+    proof
+       ('not' q => 'not' p) => (p => q) in TAUT by Th24;
+     hence thesis by CQC_THE1:82;
+    end;
+  end;
+
+theorem
+   'not' p => 'not' q in TAUT implies q => p in TAUT by Th34;
+
+theorem
+   p in TAUT iff 'not' 'not' p in TAUT
+  proof
+   thus p in TAUT implies 'not' 'not' p in TAUT
+     proof
+      assume A1: p in TAUT;
+        p => 'not' 'not' p in TAUT by Th27;
+      hence thesis by A1,CQC_THE1:82;
+     end;
+   assume A2: 'not' 'not' p in TAUT;
+      'not' 'not' p => p in TAUT by Th25;
+   hence thesis by A2,CQC_THE1:82;
+  end;
+
+theorem (p => q) in TAUT iff (p => 'not' 'not' q) in TAUT
+ proof
+  thus (p => q) in TAUT implies (p => 'not' 'not' q) in TAUT
+   proof
+    assume A1: p => q in TAUT;
+      (p => q) => (p => 'not' 'not' q) in TAUT by Th29;
+    hence thesis by A1,CQC_THE1:82;
+   end;
+  assume A2: p => 'not' 'not' q in TAUT;
+     (p => 'not' 'not' q) => (p => q) in TAUT by Th29;
+  hence thesis by A2,CQC_THE1:82;
+ end;
+
+theorem (p => q) in TAUT iff ('not' 'not' p => q) in TAUT
+ proof
+  thus (p => q) in TAUT implies ('not' 'not' p => q) in TAUT
+   proof
+    assume A1: p => q in TAUT;
+      (p => q) => ('not' 'not' p => q) in TAUT by Th28;
+    hence thesis by A1,CQC_THE1:82;
+   end;
+  assume A2: 'not' 'not' p => q in TAUT;
+     ('not' 'not' p => q) => (p => q) in TAUT by Th28;
+  hence thesis by A2,CQC_THE1:82;
+ end;
+
+theorem
+   p => 'not' q in TAUT implies q => 'not' p in TAUT
+  proof
+   assume A1: p => 'not' q in TAUT;
+     (p => 'not' q) => (q => 'not' p) in TAUT by Th30;
+   hence thesis by A1,CQC_THE1:82;
+  end;
+
+theorem
+   'not' p => q in TAUT implies 'not' q => p in TAUT
+  proof
+   assume A1: 'not' p => q in TAUT;
+     ('not' p => q) => ('not' q => p) in TAUT by Th31;
+   hence thesis by A1,CQC_THE1:82;
+  end;
+
+:: predykat |- i schematy konsekwencji
+
+theorem
+Th41:|- (p => q) => ((q => r) => (p => r))
+ proof
+  thus (p => q) => ((q => r) => (p => r)) in TAUT by Th1;
+ end;
+
+theorem |- p => q implies |- (q => r) => (p => r)
+ proof
+  assume A1: |- p => q;
+    |- (p => q) => ((q => r) => (p => r)) by Th41;
+  hence thesis by A1,CQC_THE1:104;
+ end;
+
+theorem Th43:
+ |- p => q & |- q => r implies |- p => r
+ proof
+  assume |- p => q & |- q => r;
+  then p => q in TAUT & q => r in TAUT by CQC_THE1:def 11;
+  hence p => r in TAUT by Th3;
+ end;
+
+theorem
+Th44: |- p => p
+ proof
+  thus p => p in TAUT by Th4;
+ end;
+
+theorem
+Th45: |- p => (q => p)
+ proof
+  thus p => (q => p) in TAUT by Th5;
+ end;
+
+theorem
+   |- p implies |- q => p
+ proof
+  assume |- p;
+   then p in TAUT by CQC_THE1:def 11;
+  hence q => p in TAUT by Th13;
+ end;
+
+theorem Th47:
+  |- (s => (q => p)) => (q => (s => p))
+   proof
+    thus (s => (q => p)) => (q => (s => p)) in TAUT by Th8;
+   end;
+
+theorem
+Th48: |- p => (q => r) implies |- q => (p => r)
+ proof
+  assume |- p => (q => r);
+  then p => (q => r) in TAUT by CQC_THE1:def 11;
+  hence q => (p => r) in TAUT by Th15;
+ end;
+
+theorem
+   |- p => (q => r) & |- q implies |- p => r
+  proof
+   assume |- p => (q => r);
+   then |- q => (p => r) by Th48;
+   hence thesis by CQC_THE1:104;
+  end;
+
+theorem
+   |- p => VERUM & |- 'not' VERUM => p
+  proof
+   thus p => VERUM in TAUT by Th13,CQC_THE1:77;
+   thus 'not' VERUM => p in TAUT by Th12;
+  end;
+
+theorem Th51:
+ |- p => ((p => q) => q)
+  proof
+   thus p => ((p => q) => q) in TAUT by Th7;
+  end;
+
+theorem Th52:
+ |- (q => (q => r)) => (q => r)
+  proof
+   thus (q => (q => r)) => (q => r) in TAUT by Th10;
+  end;
+
+theorem
+   |- q => (q => r) implies |- q => r
+  proof
+   assume A1: |- q => (q => r);
+     |- (q => (q => r)) => (q => r) by Th52;
+   hence thesis by A1,CQC_THE1:104;
+  end;
+
+theorem
+Th54: |- (p => (q => r)) => ((p => q) => (p => r))
+ proof
+  thus (p => (q => r)) => ((p => q) => (p => r)) in TAUT by Th11;
+ end;
+
+theorem Th55:
+ |- p => (q => r) implies |- (p => q) => (p => r)
+  proof
+   assume A1:|- p => (q => r);
+     |- (p => (q => r)) => ((p => q) => (p => r)) by Th54;
+   hence thesis by A1,CQC_THE1:104;
+  end;
+
+theorem
+   |- p => (q => r) & |- p => q implies |- p => r
+  proof
+   assume A1:|- p => (q => r) & |- p => q;
+   then |- (p => q) => (p => r) by Th55;
+   hence thesis by A1,CQC_THE1:104;
+  end;
+
+theorem Th57:
+ |- ((p => q) => r) => (q => r)
+  proof
+   thus ((p => q) => r) => (q => r) in TAUT by Th6;
+  end;
+
+theorem
+   |- (p => q) => r implies |- q => r
+  proof
+   assume A1: |- (p => q) => r;
+      |- ((p => q) => r) => (q => r) by Th57;
+   hence thesis by A1,CQC_THE1:104;
+  end;
+
+theorem Th59: |- (p => q) => ((r => p) => (r => q))
+ proof
+  thus (p => q) => ((r => p) => (r => q)) in TAUT by Th9;
+ end;
+
+theorem
+   |- p => q implies |- (r => p) => (r => q)
+ proof
+  assume A1: |- p => q;
+    |- (p => q) => ((r => p) => (r => q)) by Th59;
+  hence thesis by A1,CQC_THE1:104;
+ end;
+
+theorem Th61:
+ |- (p => q) => ('not' q => 'not' p)
+  proof
+   thus (p => q) => ('not' q => 'not' p) in TAUT by Th26;
+  end;
+
+theorem Th62:
+ |- ('not' p => 'not' q) => (q => p)
+  proof
+   thus ('not' p => 'not' q) => (q => p) in TAUT by Th24;
+  end;
+
+theorem
+   |- 'not' p => 'not' q iff |- q => p
+ proof
+  thus |- 'not' p => 'not' q implies |- q => p
+   proof
+    assume A1: |- 'not' p => 'not' q;
+      |- ('not' p => 'not' q) => (q => p) by Th62;
+    hence thesis by A1,CQC_THE1:104;
+   end;
+  assume A2: |- q => p;
+      |- (q => p) => ('not' p => 'not' q) by Th61;
+  hence |- 'not' p => 'not' q by A2,CQC_THE1:104;
+ end;
+
+theorem
+Th64: |- p => 'not' 'not' p
+ proof
+  thus p => 'not' 'not' p in TAUT by Th27;
+ end;
+
+theorem
+Th65: |- 'not' 'not' p => p
+ proof
+  thus 'not' 'not' p => p in TAUT by Th25;
+ end;
+
+theorem
+    |- 'not' 'not' p iff |- p
+   proof
+    thus |- 'not' 'not' p implies |- p
+     proof
+      assume A1: |- 'not' 'not' p;
+        |- 'not' 'not' p => p by Th65;
+      hence thesis by A1,CQC_THE1:104;
+     end;
+    assume A2: |- p;
+      |- p => 'not' 'not' p by Th64;
+   hence thesis by A2,CQC_THE1:104;
+ end;
+
+
+theorem Th67: |- ('not' 'not' p => q) => (p => q)
+ proof
+  thus ('not' 'not' p => q) => (p => q) in TAUT by Th28;
+ end;
+
+theorem |- 'not' 'not' p => q iff |- p => q
+ proof
+  thus |- 'not' 'not' p => q implies |- p => q
+   proof
+    assume A1: |- 'not' 'not' p => q;
+      |- ('not' 'not' p => q) => (p => q) by Th67;
+    hence thesis by A1,CQC_THE1:104;
+   end;
+  assume A2: |- p => q;
+     |- 'not' 'not' p => p by Th65;
+   hence thesis by A2,Th43;
+ end;
+
+theorem Th69: |- (p => 'not' 'not' q) => (p => q)
+ proof
+  thus (p => 'not' 'not' q) => (p => q) in TAUT by Th29;
+ end;
+
+theorem |- p => 'not' 'not' q iff |- p => q
+ proof
+  thus |- p => 'not' 'not' q implies |- p => q
+   proof
+    assume A1: |- p => 'not' 'not' q;
+      |- (p => 'not' 'not' q) => (p => q) by Th69;
+    hence thesis by A1,CQC_THE1:104;
+   end;
+  assume A2: |- p => q;
+     |- q => 'not' 'not' q by Th64;
+   hence thesis by A2,Th43;
+ end;
+
+theorem Th71:
+ |- (p => 'not' q) => (q => 'not' p)
+  proof
+   thus (p => 'not' q) => (q => 'not' p) in TAUT by Th30;
+  end;
+
+theorem
+   |- p => 'not' q implies |- q => 'not' p
+  proof
+   assume A1: |- p => 'not' q;
+      |- (p => 'not' q) => (q => 'not' p) by Th71;
+    hence thesis by A1,CQC_THE1:104;
+  end;
+
+theorem Th73:
+ |- ('not' p => q) => ('not' q => p)
+  proof
+   thus ('not' p => q) => ('not' q => p) in TAUT by Th31;
+  end;
+
+theorem
+   |- 'not' p => q implies |- 'not' q => p
+  proof
+   assume A1: |- 'not' p => q;
+     |- ('not' p => q) => ('not' q => p) by Th73;
+   hence thesis by A1,CQC_THE1:104;
+  end;
+
+theorem X|- p => q implies X|- (q => r) => (p => r)
+ proof
+  assume A1: X|- p => q;
+    |- (p => q) => ((q => r) => (p => r)) by Th41;
+  then X|- (p => q) => ((q => r) => (p => r)) by CQC_THE1:98;
+  hence X|- (q => r) => (p => r) by A1,CQC_THE1:92;
+ end;
+
+theorem Th76: X|- p => q & X|- q => r implies X|- p => r
+ proof
+  assume A1: X|- p => q & X|- q => r;
+    |- (p => q) => ((q => r) => (p => r)) by Th41;
+  then X|- (p => q) => ((q => r) => (p => r)) by CQC_THE1:98;
+  then X|- (q => r) => (p => r) by A1,CQC_THE1:92;
+  hence thesis by A1,CQC_THE1:92;
+ end;
+
+theorem X|- p => p
+ proof
+    |- p => p by Th44;
+  hence thesis by CQC_THE1:98;
+ end;
+
+theorem
+   X|- p implies X|- q => p
+  proof
+   assume A1: X|- p;
+     |- p => (q => p) by Th45;
+   then X|- p => (q => p) by CQC_THE1:98;
+   hence thesis by A1,CQC_THE1:92;
+  end;
+
+theorem
+   X |- p implies X |- (p => q) => q
+  proof
+   assume A1: X |- p;
+     |- p => ((p => q) => q) by Th51;
+   then X |- p => ((p => q) => q) by CQC_THE1:98;
+   hence thesis by A1,CQC_THE1:92;
+  end;
+
+theorem Th80:
+  X |- p => (q => r) implies X |- q => (p => r)
+   proof
+    assume A1: X |- p => (q => r);
+       |- (p => (q => r)) => (q => (p => r)) by Th47;
+     then X|- (p => (q => r)) => (q => (p => r)) by CQC_THE1:98;
+     hence thesis by A1,CQC_THE1:92;
+   end;
+
+theorem
+    X |- p => (q => r) & X |- q implies X |- p => r
+   proof
+    assume X |- p => (q => r);
+     then X |- q => (p => r) by Th80;
+     hence thesis by CQC_THE1:92;
+   end;
+
+theorem
+   X |- p => (p => q) implies X |- p => q
+  proof
+   assume A1: X |- p => (p => q);
+     |- (p => (p => q)) => (p => q) by Th52;
+   then X|- (p => (p => q)) => (p => q) by CQC_THE1:98;
+   hence thesis by A1,CQC_THE1:92;
+  end;
+
+theorem
+   X |- (p => q) => r implies X |- q => r
+  proof
+   assume A1: X |- (p => q) => r;
+     |- ((p => q) => r) => (q => r) by Th57;
+   then X|- ((p => q) => r) => (q => r) by CQC_THE1:98;
+   hence thesis by A1,CQC_THE1:92;
+  end;
+
+theorem Th84:
+ X |- p => (q => r) implies X |- (p => q) => (p =>r)
+  proof
+   assume A1: X|- p => (q => r);
+     |- (p => (q => r)) => ((p => q) => (p =>r)) by Th54;
+   then X |- (p => (q => r)) => ((p => q) => (p =>r)) by CQC_THE1:98;
+   hence thesis by A1,CQC_THE1:92;
+  end;
+
+theorem
+   X |- p => (q => r) & X|- p => q implies X |- p => r
+  proof
+   assume X|- p => (q => r);
+   then X |- (p => q) => (p =>r) by Th84;
+   hence thesis by CQC_THE1:92;
+  end;
+
+theorem
+   X|- 'not' p => 'not' q iff X|- q => p
+ proof
+  thus X|- 'not' p => 'not' q implies X|- q => p
+   proof
+    assume A1: X|- 'not' p => 'not' q;
+      |- ('not' p => 'not' q) => (q => p) by Th62;
+    then X|- ('not' p => 'not' q) => (q => p) by CQC_THE1:98;
+    hence thesis by A1,CQC_THE1:92;
+   end;
+  assume A2: X|- q => p;
+      |- (q => p) => ('not' p => 'not' q) by Th61;
+    then X|- (q => p) => ('not' p => 'not' q) by CQC_THE1:98;
+  hence X|- 'not' p => 'not' q by A2,CQC_THE1:92;
+ end;
+
+theorem
+    X|- 'not' 'not' p iff X|- p
+   proof
+    thus X|- 'not' 'not' p implies X|- p
+     proof
+      assume A1: X|- 'not' 'not' p;
+        |- 'not' 'not' p => p by Th65;
+      then X|- 'not' 'not' p => p by CQC_THE1:98;
+      hence thesis by A1,CQC_THE1:92;
+     end;
+    assume A2: X|- p;
+      |- p => 'not' 'not' p by Th64;
+    then X|- p => 'not' 'not' p by CQC_THE1:98;
+   hence thesis by A2,CQC_THE1:92;
+ end;
+
+theorem X|- p => 'not' 'not' q iff X|- p => q
+ proof
+  thus X|- p => 'not' 'not' q implies X|- p => q
+   proof
+    assume A1: X|- p => 'not' 'not' q;
+      |- (p => 'not' 'not' q) => (p => q) by Th69;
+    then X|- (p => 'not' 'not' q) => (p => q) by CQC_THE1:98;
+    hence thesis by A1,CQC_THE1:92;
+   end;
+  assume A2: X|- p => q;
+     |- q => 'not' 'not' q by Th64;
+   then X|- q => 'not' 'not' q by CQC_THE1:98;
+   hence thesis by A2,Th76;
+ end;
+
+theorem X|- 'not' 'not' p => q iff X|- p => q
+ proof
+  thus X|- 'not' 'not' p => q implies X|- p => q
+   proof
+    assume A1: X|- 'not' 'not' p => q;
+      |- ('not' 'not' p => q) => (p => q) by Th67;
+    then X|- ('not' 'not' p => q) => (p => q) by CQC_THE1:98;
+    hence thesis by A1,CQC_THE1:92;
+   end;
+  assume A2: X|- p => q;
+     |- 'not' 'not' p => p by Th65;
+   then X|- 'not' 'not' p => p by CQC_THE1:98;
+   hence thesis by A2,Th76;
+ end;
+
+theorem Th90:
+ X|- p => 'not' q implies X|- q => 'not' p
+  proof
+   assume A1: X|- p => 'not' q;
+      |- (p => 'not' q) => (q => 'not' p) by Th71;
+    then X|- (p => 'not' q) => (q => 'not' p) by CQC_THE1:98;
+    hence thesis by A1,CQC_THE1:92;
+  end;
+
+theorem Th91:
+ X|- 'not' p => q implies X|- 'not' q => p
+  proof
+   assume A1: X|- 'not' p => q;
+     |- ('not' p => q) => ('not' q => p) by Th73;
+   then X|- ('not' p => q) => ('not' q => p) by CQC_THE1:98;
+   hence thesis by A1,CQC_THE1:92;
+  end;
+
+theorem
+   X|- p => 'not' q & X |- q implies X|- 'not' p
+  proof assume X|- p => 'not' q; then X |- q => 'not' p by Th90;
+   hence thesis by CQC_THE1:92;
+  end;
+
+theorem
+   X|- 'not' p => q & X |- 'not' q implies X|- p
+  proof assume X|- 'not' p => q; then X |- 'not' q => p by Th91;
+   hence thesis by CQC_THE1:92;
+  end;
+

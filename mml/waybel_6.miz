@@ -1,0 +1,2523 @@
+:: Irreducible and Prime Elements
+::  by Beata Madras
+::
+:: Received December 1, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary WAYBEL_0, ORDERS_1, FUNCT_1, RELAT_1, FUNCT_4, QUANTAL1, RELAT_2,
+      ORDINAL2, LATTICES, REALSET1, PRE_TOPC, YELLOW_0, BHSP_3, FUNCOP_1,
+      BOOLE, LATTICE3, SEQM_3, WAYBEL_2, WAYBEL_3, TARSKI, FILTER_0, SUBSET_1,
+      ORDERS_2, ZFMISC_1, FINSET_1, YELLOW_1, FUNCT_3, FRAENKEL, LATTICE2,
+      OPPCAT_1, WAYBEL_5, ZF_REFLE, PBOOLE, YELLOW_2, FUNCT_6, CARD_3, PRALG_1,
+      FINSEQ_4, WAYBEL_6, HAHNBAN;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
+      FINSET_1, RELAT_1, ORDINAL1, RELAT_2, REALSET1, STRUCT_0, ORDERS_1,
+      PRE_TOPC, CARD_3, FRAENKEL, LATTICE3, FUNCT_1, FUNCT_2, FUNCT_3, FUNCT_6,
+      PBOOLE, PRALG_1, PRALG_2, YELLOW_0, YELLOW_1, WAYBEL_0, WAYBEL_1,
+      YELLOW_2, YELLOW_4, WAYBEL_2, WAYBEL_3, WAYBEL_4, WAYBEL_5, BORSUK_1,
+      YELLOW_7, FUNCT_7;
+ constructors WAYBEL_5, WAYBEL_4, NAT_1, RELAT_2, BORSUK_1, YELLOW_4, ORDERS_3,
+      WAYBEL_1, WAYBEL_2, WAYBEL_3, PRALG_2, FUNCT_7, MEMBERED;
+ clusters SUBSET_1, WAYBEL_0, WAYBEL_2, WAYBEL_3, YELLOW_0, STRUCT_0, ORDERS_1,
+      LATTICE3, PBOOLE, FINSET_1, WAYBEL_1, WAYBEL_5, PRALG_1, YELLOW_7,
+      YELLOW_4, RELSET_1, ARYTM_3, XBOOLE_0, FRAENKEL, MEMBERED, ZFMISC_1,
+      FUNCT_2, PARTFUN1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, RELAT_2, LATTICE3, WAYBEL_0, WAYBEL_1, WAYBEL_2, WAYBEL_5,
+      FUNCT_1, ORDERS_3, XBOOLE_0;
+ theorems WAYBEL_3, TARSKI, YELLOW_0, ZFMISC_1, WAYBEL_0, ORDERS_1, WAYBEL_4,
+      FUNCT_2, FUNCT_1, LATTICE3, NAT_1, PRE_TOPC, WAYBEL_1, YELLOW_1,
+      YELLOW_5, WAYBEL_2, YELLOW_2, FINSET_1, WAYBEL_5, CARD_3, PBOOLE,
+      PRALG_2, FUNCT_6, YELLOW_7, ORDERS_2, RELAT_2, FRAENKEL, CARD_5, FUNCT_3,
+      YELLOW_6, YELLOW_4, YELLOW_3, BORSUK_1, FUNCOP_1, RELAT_1, RELSET_1,
+      PRALG_1, ORDINAL1, XBOOLE_0, XBOOLE_1, FUNCT_7, XCMPLX_1;
+ schemes FUNCT_1, FINSET_1, WAYBEL_3, ZFREFLE1, NAT_1, YELLOW_2, YELLOW_3,
+      COMPTS_1;
+
+begin
+
+reserve x,y,Y,Z for set,
+        L for LATTICE,
+        l for Element of L,
+        n,k for Nat;
+
+:: Preliminaries
+
+scheme NonUniqExD1 { Z() ->non empty RelStr, X() -> Subset of Z(),
+                   Y() -> non empty Subset of Z(), P[set,set] }:
+ ex f being Function of X(),Y() st
+   for e be Element of Z() st e in X()
+    ex u be Element of Z() st u in Y() & u = f.e & P[e,u]
+  provided
+A1: for e be Element of Z() st e in X() ex u be Element of Z()
+  st u in Y() & P[e,u]
+ proof
+   defpred p[set,set] means P[$1,$2];
+A2: for e be set st e in X() ex u be set st u in Y() & p[e,u]
+   proof
+    let e be set; assume A3: e in X();
+     then reconsider e1 = e as Element of X();
+     reconsider e1 as Element of Z() by A3;
+     consider u be Element of Z() such that A4: u in Y() & P[e1,u] by A1,A3;
+     reconsider u1 = u as set;
+     take u1;
+     thus thesis by A4;
+   end;
+  consider f being Function such that
+A5: dom f = X() & rng f c= Y() and
+A6: for e be set st e in X() holds p[e,f.e] from NonUniqBoundFuncEx(A2);
+  reconsider f as Function of X(),Y() by A5,FUNCT_2:def 1,RELSET_1:11;
+A7: for e be Element of Z() st e in X()
+  ex u be Element of Z() st u in Y() & u = f.e & P[e,u]
+   proof
+    let e be Element of Z(); assume A8: e in X();
+    then reconsider e1 = f.e as Element of Y() by FUNCT_2:7;
+    reconsider fe = e1 as Element of Z();
+    take fe;
+    thus thesis by A6,A8;
+   end;
+  take f;
+  thus thesis by A7;
+ end;
+
+
+definition
+let L be LATTICE;
+let A be non empty Subset of L;
+let f be Function of A,A;
+let n be Element of NAT;
+ redefine func iter (f,n) -> Function of A,A;
+coherence by FUNCT_7:85;
+end;
+
+
+definition
+let L be LATTICE;
+let C,D be non empty Subset of L;
+let f be Function of C,D;
+let c be Element of C;
+ redefine func f.c -> Element of L;
+coherence
+ proof
+    f.c in D;
+  hence thesis;
+ end;
+end;
+
+definition
+let L be non empty Poset;
+cluster -> filtered directed Chain of L;
+coherence
+ proof
+  let C be Chain of L;
+A1:the InternalRel of L is_strongly_connected_in C by ORDERS_1:def 11;
+  thus C is filtered
+   proof
+    let x,y be Element of L; assume A2: x in C & y in C;
+    then [x,y] in the InternalRel of L or [y,x] in the InternalRel of L
+                             by A1,RELAT_2:def 7;
+then A3:  x <= y or y <= x by ORDERS_1:def 9;
+      x <= x & y <= y;
+    hence thesis by A2,A3;
+   end;
+  let x,y be Element of L; assume A4: x in C & y in C;
+  then [x,y] in the InternalRel of L or [y,x] in the InternalRel of L
+                           by A1,RELAT_2:def 7;
+then A5:x <= y or y <= x by ORDERS_1:def 9;
+    x <= x & y <= y;
+  hence thesis by A4,A5;
+ end;
+end;
+
+definition
+cluster strict continuous distributive lower-bounded LATTICE;
+existence
+ proof
+  consider x1 being set, R be Order of {x1};
+   reconsider RS = RelStr(#{x1},R#) as trivial reflexive non empty RelStr;
+  take RS;
+  thus thesis;
+ end;
+end;
+
+theorem Th1:
+for S,T being Semilattice, f being map of S,T
+holds f is meet-preserving iff for x,y being Element of S holds
+ f.(x "/\" y) = f. x "/\" f.y
+proof
+ let S,T be Semilattice, f be map of S,T;
+A1: dom f = the carrier of S by FUNCT_2:def 1;
+ thus f is meet-preserving implies
+  for x,y being Element of S holds f.(x "/\" y) = f. x "/\" f.y
+  proof
+   assume A2: f is meet-preserving;
+   let z,y be Element of S;
+A3: f.:{z,y} = {f.z,f.y} by A1,FUNCT_1:118;
+A4: ex_inf_of {z,y},S by YELLOW_0:21;
+A5: f preserves_inf_of {z,y} by A2,WAYBEL_0:def 34;
+    thus f.(z "/\" y) = f.inf {z,y} by YELLOW_0:40
+     .= inf({f.z,f.y}) by A3,A4,A5,WAYBEL_0:def 30
+     .= f.z "/\" f.y by YELLOW_0:40;
+  end;
+  assume A6: for x,y being Element of S holds f.(x "/\" y) = f. x "/\" f.y;
+      for z,y being Element of S holds f preserves_inf_of {z,y}
+     proof
+      let z,y be Element of S;
+A7:   f.:{z,y} = {f.z,f.y} by A1,FUNCT_1:118;
+then A8:    ex_inf_of {z,y},S implies ex_inf_of f.:{z,y},T
+          by YELLOW_0:21;
+        inf (f.:{z,y}) = f.z "/\" f.y by A7,YELLOW_0:40
+                   .= f.(z "/\" y) by A6
+                   .= f.inf {z,y} by YELLOW_0:40;
+      hence thesis by A8,WAYBEL_0:def 30;
+     end;
+  hence f is meet-preserving by WAYBEL_0:def 34;
+end;
+
+
+theorem Th2:
+for S,T being sup-Semilattice, f being map of S,T holds
+f is join-preserving iff for x,y being Element of S holds
+ f.(x "\/" y) = f. x "\/" f.y
+ proof
+ let S,T be sup-Semilattice, f be map of S,T;
+A1: dom f = the carrier of S by FUNCT_2:def 1;
+ thus f is join-preserving implies
+  for x,y being Element of S holds f.(x "\/" y) = f. x "\/" f.y
+  proof
+   assume A2: f is join-preserving;
+   let z,y be Element of S;
+A3: f.:{z,y} = {f.z,f.y} by A1,FUNCT_1:118;
+A4: ex_sup_of {z,y},S by YELLOW_0:20;
+A5: f preserves_sup_of {z,y} by A2,WAYBEL_0:def 35;
+    thus f.(z "\/" y) = f.sup {z,y} by YELLOW_0:41
+     .= sup ({f.z,f.y}) by A3,A4,A5,WAYBEL_0:def 31
+     .= f.z "\/" f.y by YELLOW_0:41;
+  end;
+  assume A6: for x,y being Element of S holds f.(x "\/" y) = f. x "\/" f.y;
+      for z,y being Element of S holds f preserves_sup_of {z,y}
+     proof
+      let z,y be Element of S;
+A7:   f.:{z,y} = {f.z,f.y} by A1,FUNCT_1:118;
+then A8:    ex_sup_of {z,y},S implies ex_sup_of f.:{z,y},T
+          by YELLOW_0:20;
+        sup (f.:{z,y}) = f.z "\/" f.y by A7,YELLOW_0:41
+                   .= f.(z "\/" y) by A6
+                   .= f.sup {z,y} by YELLOW_0:41;
+      hence thesis by A8,WAYBEL_0:def 31;
+     end;
+  hence f is join-preserving by WAYBEL_0:def 35;
+end;
+
+
+theorem Th3:
+for S,T being LATTICE, f being map of S,T st T is distributive &
+f is meet-preserving join-preserving one-to-one holds
+S is distributive
+ proof
+  let S,T be LATTICE, f be map of S,T; assume that
+A1: T is distributive and
+A2: f is meet-preserving join-preserving one-to-one;
+  let x,y,z be Element of S;
+    f.( x "/\" (y "\/" z)) = f. x "/\" f.(y "\/" z) by A2,Th1
+  .= f. x "/\" (f.y "\/" f.z) by A2,Th2
+  .= (f.x "/\" f.y) "\/" (f.x "/\" f.z) by A1,WAYBEL_1:def 3
+  .= (f.x "/\" f.y) "\/" f.(x "/\" z) by A2,Th1
+  .= f.(x "/\" y) "\/" f.(x "/\" z) by A2,Th1
+  .= f.((x "/\" y) "\/" (x "/\" z))by A2,Th2;
+  hence x "/\" (y "\/" z) = (x "/\" y) "\/" (x "/\" z) by A2,FUNCT_2:25;
+ end;
+
+
+definition
+let S,T be complete LATTICE;
+cluster sups-preserving map of S,T;
+ existence
+  proof
+set t = Bottom T;
+set f = S --> t;
+   take f;
+   let X be Subset of S;
+   assume ex_sup_of X,S;
+   thus ex_sup_of f.:X,T by YELLOW_0:17;
+A1: (f.:X) c= rng f by RELAT_1:144;
+A2: f = (the carrier of S) --> t by BORSUK_1:def 3;
+   then rng f c= {t} by FUNCOP_1:19;
+   then (f.:X) c= {t} by A1,XBOOLE_1:1;
+then A3:(f.:X) = {t} or (f.:X) = {} by ZFMISC_1:39;
+   per cases;
+   suppose X = {};
+   then (f.:X) = {} by RELAT_1:149;
+   then sup (f.:X) = t by YELLOW_0:def 11;
+   hence sup (f.:X) = f.sup X by A2,FUNCOP_1:13;
+   suppose X <> {};
+   then reconsider X1 = X as non empty Subset of S;
+   consider x be Element of X1;
+     f.x in (f.:X) by FUNCT_2:43;
+   hence sup (f.:X) = t by A3,YELLOW_0:39
+                  .= f.sup X by A2,FUNCOP_1:13;
+  end;
+end;
+
+Lm1:
+for S,T being with_suprema non empty Poset
+for f being map of S, T holds
+f is directed-sups-preserving implies f is monotone
+proof
+  let S,T be with_suprema non empty Poset;
+  let f be map of S, T;
+  assume
+A1: f is directed-sups-preserving;
+  let x, y be Element of S such that
+A2: x <= y;
+  let afx, bfy be Element of T such that
+A3: afx = f.x & bfy = f.y;
+A4:  y = y"\/"x by A2,YELLOW_0:24;
+    x <= y & y <= y by A2;
+then A5: {x, y} is_<=_than y by YELLOW_0:8;
+    for b being Element of S st {x, y} is_<=_than b holds y <= b by YELLOW_0:8;
+  then A6: ex_sup_of {x, y},S by A5,YELLOW_0:30;
+    for a, b being Element of S st a in {x, y} & b in {x, y}
+    ex z being Element of S st z in {x, y} & a <= z & b <= z
+  proof
+    let a, b be Element of S such that
+  A7: a in {x, y} & b in {x, y};
+    take y;
+    thus y in {x, y} by TARSKI:def 2;
+    thus a <= y & b <= y by A2,A7,TARSKI:def 2;
+  end;
+  then {x, y} is directed non empty by WAYBEL_0:def 1;
+  then f preserves_sup_of {x, y} by A1,WAYBEL_0:def 37;
+then A8: sup(f.:{x, y}) = f.sup{x, y} by A6,WAYBEL_0:def 31
+                 .= f.y by A4,YELLOW_0:41;
+    dom f = the carrier of S by FUNCT_2:def 1;
+  then f.y = sup{f.x, f.y} by A8,FUNCT_1:118
+     .= f.y"\/"f.x by YELLOW_0:41;
+  hence afx <= bfy by A3,YELLOW_0:22;
+end;
+
+
+theorem Th4:
+for S,T being complete LATTICE, f being sups-preserving map of S,T st
+T is meet-continuous & f is meet-preserving one-to-one holds
+S is meet-continuous
+ proof
+  let S,T be complete LATTICE, f be sups-preserving map of S,T;
+  assume that
+A1: T is meet-continuous and
+A2: f is meet-preserving one-to-one;
+A3: f is monotone by Lm1;
+A4: T is meet-continuous LATTICE by A1;
+     S is satisfying_MC
+    proof
+     let x be Element of S, D be non empty directed Subset of S;
+A5:  dom f = the carrier of S & rng f c= the carrier of T by FUNCT_2:def 1;
+A6:  ex_sup_of D,S & f preserves_sup_of D by WAYBEL_0:75,def 33;
+     reconsider Y = {x} as directed non empty Subset of S by WAYBEL_0:5;
+A7:  ex_sup_of Y"/\"D,S & f preserves_sup_of {x}"/\"D by WAYBEL_0:75,def 33;
+A8:    {f.x} "/\" (f.:D) =
+       {(f.x) "/\" y where y is Element of T: y in (f.:D)} by YELLOW_4:42;
+A9:    {x} "/\" D =
+       {x "/\" y where y is Element of S: y in D} by YELLOW_4:42;
+A10:  {f.x} "/\" (f.:D) c= f.:({x}"/\"D)
+      proof
+       let p be set; assume p in {f.x} "/\" (f.:D);
+       then consider y be Element of T such that A11:p = (f.x) "/\" y & y in (f
+.:D) by A8;
+       consider k be set such that A12: k in dom f & k in D & y = f.k
+                                                   by A11,FUNCT_1:def 12;
+       reconsider k as Element of S by A12;
+     f preserves_inf_of {x,k} by A2,WAYBEL_0:def 34;
+then A13:    p = f.(x "/\" k) by A11,A12,YELLOW_3:8;
+         (x "/\" k) in {x "/\" a where a is Element of S: a in D} by A12;
+       then (x "/\" k) in dom f & (x "/\" k) in ({x} "/\" D) by A5,YELLOW_4:42
+;
+       hence p in f.:({x}"/\"D) by A13,FUNCT_1:def 12;
+      end;
+A14:  f.:({x}"/\"D) c= {f.x} "/\" (f.:D)
+      proof
+       let p be set; assume p in f.:({x}"/\"D);
+       then consider m be set such that
+       A15: m in dom f & m in ({x} "/\" D) & p = f.m by FUNCT_1:def 12;
+       reconsider m as Element of S by A15;
+       consider a be Element of S such that
+       A16: m = x "/\" a & a in D by A9,A15;
+       reconsider fa = f.a as Element of T;
+       A17: fa in f.:D by A5,A16,FUNCT_1:def 12;
+         f preserves_inf_of {x,a} by A2,WAYBEL_0:def 34;
+       then p = (f.x) "/\" fa by A15,A16,YELLOW_3:8;
+        hence thesis by A8,A17;
+      end;
+    reconsider X = f.:D as directed Subset of T by A3,YELLOW_2:17;
+       f.(x "/\" sup D) = (f.x) "/\" (f.sup D) by A2,Th1
+     .= (f.x) "/\" sup X by A6,WAYBEL_0:def 31
+     .= sup ({f.x} "/\" X) by A4,WAYBEL_2:def 6
+     .= sup (f.:({x} "/\" D)) by A10,A14,XBOOLE_0:def 10
+     .= f.(sup ({x} "/\" D)) by A7,WAYBEL_0:def 31;
+     hence x "/\" sup D = sup ({x} "/\" D) by A2,A5,FUNCT_1:def 8;
+    end;
+   hence thesis by WAYBEL_2:def 7;
+ end;
+
+
+begin :: Open sets
+
+definition       ::def 3.1, p.68
+let L be non empty reflexive RelStr,
+    X be Subset of L;
+attr X is Open means :Def1:
+for x be Element of L st x in X ex y be Element of L st y in X & y << x;
+end;
+
+
+theorem
+  for L be up-complete LATTICE, X be upper Subset of L holds
+X is Open iff for x be Element of L st x in X holds waybelow x meets X
+ proof
+  let L be up-complete LATTICE, X be upper Subset of L;
+ hereby assume A1: X is Open;
+  thus for x be Element of L st x in X holds waybelow x meets X
+   proof
+    let x be Element of L; assume x in X;
+    then consider y be Element of L such that A2: y in X & y << x by A1,Def1;
+      y in {y1 where y1 is Element of L: y1 << x} by A2;
+    then y in waybelow x by WAYBEL_3:def 3;
+    hence waybelow x meets X by A2,XBOOLE_0:3;
+   end;
+ end;
+ assume A3: for x be Element of L st x in X holds waybelow x meets X;
+    now let x1 be Element of L; assume
+     x1 in X;
+   then (waybelow x1) meets X by A3;
+   then consider y such that A4: y in (waybelow x1) and A5: y in X by XBOOLE_0:
+3;
+      waybelow x1 = {y1 where y1 is Element of L: y1 << x1} by WAYBEL_3:def 3;
+   then consider z be Element of L such that
+   A6: z = y & z << x1 by A4;
+   thus ex z be Element of L st z in X & z << x1 by A5,A6;
+  end;
+ hence X is Open by Def1;
+ end;
+
+
+theorem  ::3.2, p.68
+  for L be up-complete LATTICE, X be upper Subset of L holds
+X is Open iff X = union {wayabove x where x is Element of L : x in X}
+ proof
+  let L be up-complete LATTICE, X be upper Subset of L;
+  hereby assume A1: X is Open;
+A2: X c= union {wayabove x where x is Element of L : x in X}
+    proof
+     let z be set; assume A3: z in X;
+     then reconsider x1 = z as Element of X;
+     reconsider x1 as Element of L by A3;
+     consider y be Element of L such that
+A4:  y in X & y << x1 by A1,A3,Def1;
+       x1 in {y1 where y1 is Element of L: y1 >> y} by A4;
+then A5:  x1 in wayabove y by WAYBEL_3:def 4;
+       wayabove y in {wayabove x where x is Element of L : x in X} by A4;
+     hence thesis by A5,TARSKI:def 4;
+    end;
+     union {wayabove x where x is Element of L : x in X} c= X
+    proof
+     let z be set; assume
+       z in union {wayabove x where x is Element of L : x in X};
+     then consider Y be set such that
+A6:  z in Y and
+A7:  Y in {wayabove x where x is Element of L : x in X} by TARSKI:def 4;
+     consider x be Element of L such that
+A8:  Y = wayabove x & x in X by A7;
+       z in {y where y is Element of L: y >> x} by A6,A8,WAYBEL_3:def 4;
+     then consider z1 be Element of L such that A9: z1 = z & z1 >> x;
+       x <= z1 by A9,WAYBEL_3:1;
+     hence thesis by A8,A9,WAYBEL_0:def 20;
+    end;
+   hence X = union {wayabove x where x is Element of L : x in X}
+                                                       by A2,XBOOLE_0:def 10;
+  end;
+  assume A10: X = union {wayabove x where x is Element of L : x in X};
+     now let x1 be Element of L; assume
+      x1 in X;
+     then consider Y be set such that
+A11:  x1 in Y and
+A12:  Y in {wayabove x where x is Element of L : x in X} by A10,TARSKI:def 4;
+     consider x be Element of L such that
+A13:  Y = wayabove x & x in X by A12;
+       x1 in {y where y is Element of L: y >> x} by A11,A13,WAYBEL_3:def 4;
+     then consider z1 be Element of L such that
+A14:  z1 = x1 & z1 >> x;
+    thus ex x be Element of L st x in X & x << x1 by A13,A14;
+  end;
+  hence X is Open by Def1;
+ end;
+
+
+definition
+let L be up-complete lower-bounded LATTICE;
+cluster Open Filter of L;
+existence
+ proof
+  take [#]L;
+    now let x be Element of L; assume x in [#]L;
+   A1: [#]L = the carrier of L by PRE_TOPC:12;
+     Bottom L << x by WAYBEL_3:4;
+   hence ex y be Element of L st y in [#]L & y << x by A1;
+  end;
+  hence thesis by Def1;
+ end;
+end;
+
+
+theorem
+  for L be lower-bounded continuous LATTICE, x be Element of L holds
+(wayabove x) is Open
+ proof
+  let L be lower-bounded continuous LATTICE,
+      x be Element of L;
+     for l be Element of L st l in (wayabove x)
+    ex y be Element of L st y in (wayabove x) & y << l
+    proof
+     let l be Element of L; assume l in (wayabove x);
+     then x << l by WAYBEL_3:8;
+     then consider y be Element of L such that
+A1:  x << y & y << l by WAYBEL_4:53;
+     take y;
+     thus thesis by A1,WAYBEL_3:8;
+    end;
+  hence thesis by Def1;
+ end;
+
+
+theorem Th8:  ::3.3, p.68
+for L be lower-bounded continuous LATTICE, x,y be Element of L st x << y holds
+ex F be Open Filter of L st y in F & F c= wayabove x
+ proof
+  let L be lower-bounded continuous LATTICE,
+      x,y be Element of L; assume
+   A1: x << y;
+then A2: y in (wayabove x) by WAYBEL_3:8;
+   reconsider W = (wayabove x) as non empty Subset of L by A1,WAYBEL_3:8;
+   defpred P[Element of L, Element of L] means $2 << $1;
+A3: for z be Element of L st z in W
+   ex z1 be Element of L st z1 in W & P[z,z1]
+    proof
+     let z be Element of L; assume z in W;
+     then x << z by WAYBEL_3:8;
+     then consider x' be Element of L such that
+A4:  x << x' & x' << z by WAYBEL_4:53;
+       x' in W by A4,WAYBEL_3:8;
+     hence thesis by A4;
+    end;
+  consider f be Function of W,W such that
+A5: for z be Element of L st z in W
+  ex z1 be Element of L st z1 in W & z1 = f.z & P[z,z1] from NonUniqExD1(A3);
+    dom f = W by FUNCT_2:def 1;
+then A6: y in (dom f \/ rng f) by A2,XBOOLE_0:def 2;
+set F = union {uparrow z where z is Element of L : ex n st z = iter(f,n).y};
+    now let u1 be set; assume u1 in F;
+   then consider Y be set such that
+A7: u1 in Y and
+A8: Y in {uparrow z where z is Element of L : ex n st z = iter(f,n).y}
+                        by TARSKI:def 4;
+   consider z be Element of L such that
+A9: Y = uparrow z and
+      ex n st z = iter(f,n).y by A8;
+   reconsider z1 = {z} as Subset of L;
+     u1 in uparrow z1 by A7,A9,WAYBEL_0:def 18;
+   then u1 in {a where a is Element of L:
+        ex b being Element of L st a >= b & b in z1} by WAYBEL_0:15;
+   then consider a be Element of L such that
+A10: a = u1 and
+     ex b being Element of L st a >= b & b in z1;
+   thus u1 in the carrier of L by A10;
+  end;
+  then F c= the carrier of L by TARSKI:def 3;
+  then reconsider F as Subset of L;
+    y <= y;
+then A11: y in uparrow y by WAYBEL_0:18;
+    iter(f,0).y = (id(dom f \/ rng f)).y by FUNCT_7:70
+             .= y by A6,FUNCT_1:35;
+  then A12: uparrow y in {uparrow z where z is Element of L : ex n st z = iter(
+f,n).y};
+set V = {uparrow z where z is Element of L : ex n st z = iter(f,n).y};
+    now let u1 be set; assume u1 in V;
+   then consider z be Element of L such that
+A13: u1 = uparrow z and
+      ex n st z = iter(f,n).y;
+   thus u1 in bool the carrier of L by A13;
+  end;
+   then reconsider V as Subset of bool the carrier of L by TARSKI:def 3;
+   A14: for X being Subset of L st X in V holds X is upper
+    proof
+     let X be Subset of L; assume X in V;
+     then consider z be Element of L such that
+A15:  X = uparrow z and
+       ex n st z = iter(f,n).y;
+     thus X is upper by A15;
+    end;
+A16: for X being Subset of L st X in V holds X is filtered
+     proof
+      let X be Subset of L; assume X in V;
+      then consider z be Element of L such that
+A17:   X = uparrow z and
+        ex n st z = iter(f,n).y;
+      thus X is filtered by A17;
+     end;
+   A18: for X,Y being Subset of L st X in V & Y in V
+   ex Z being Subset of L st Z in V & X \/ Y c= Z
+    proof
+     let X,Y be Subset of L; assume A19: X in V & Y in V;
+     then consider z1 be Element of L such that
+A20:  X = uparrow z1 and
+A21:  ex n st z1 = iter(f,n).y;
+     consider n1 be Nat such that
+A22:  z1 = iter(f,n1).y by A21;
+     consider z2 be Element of L such that
+A23:  Y = uparrow z2 and
+A24:  ex n st z2 = iter(f,n).y by A19;
+     consider n2 be Nat such that
+A25:  z2 = iter(f,n2).y by A24;
+     reconsider y1 = y as Element of W by A1,WAYBEL_3:8;
+A26:  for n holds
+      for k holds iter(f,n+k).y1 <= iter(f,n).y1
+      proof
+       let n;
+       defpred P[Nat] means iter(f,n+$1).y1 <= iter(f,n).y1;
+A27:   P[0];
+A28:   for k st P[k] holds P[k+1]
+        proof
+         let k; assume A29: iter(f,n+k).y1 <= iter(f,n).y1;
+         set nk = iter(f,n+k).y1;
+           nk in W by FUNCT_2:7;
+         then consider znk be Element of L such that
+A30:      znk in W & znk = f.nk & znk << nk by A5;
+       dom iter(f,n+k) = W by FUNCT_2:def 1;
+then A31:      znk = (f*(iter(f,n+k))).y1 by A30,FUNCT_1:23
+            .= iter(f,n+k+1).y1 by FUNCT_7:73
+            .= iter(f,n+(k+1)).y1 by XCMPLX_1:1;
+           znk <= nk by A30,WAYBEL_3:1;
+         hence thesis by A29,A31,ORDERS_1:26;
+        end;
+         for k holds P[k] from Ind(A27,A28);
+       hence thesis;
+      end;
+set z = z1 "/\" z2;
+A32: now per cases;
+      suppose n1 <= n2;
+      then consider k such that A33: n1 + k = n2 by NAT_1:28;
+        z2 <= z1 by A22,A25,A26,A33;
+      hence uparrow z in V by A19,A23,YELLOW_0:25;
+      suppose n2 <= n1;
+      then consider k such that A34: n2 + k = n1 by NAT_1:28;
+        z1 <= z2 by A22,A25,A26,A34;
+      hence uparrow z in V by A19,A20,YELLOW_0:25;
+     end;
+       z <= z1 & z <= z2 by YELLOW_0:23;
+     then uparrow z1 c= uparrow z & uparrow z2 c= uparrow z by WAYBEL_0:22;
+     then (uparrow z1) \/ (uparrow z2) c= uparrow z by XBOOLE_1:8;
+     hence thesis by A20,A23,A32;
+    end;
+    now let u1 be Element of L; assume u1 in F;
+   then consider Y be set such that
+A35: u1 in Y and
+A36: Y in {uparrow z where z is Element of L : ex n st z = iter(f,n).y}
+                        by TARSKI:def 4;
+   consider z be Element of L such that
+A37: Y = uparrow z and
+A38: ex n st z = iter(f,n).y by A36;
+   consider n such that
+A39: z = iter(f,n).y by A38;
+   reconsider z1 = {z} as Subset of L;
+     u1 in uparrow z1 by A35,A37,WAYBEL_0:def 18;
+   then u1 in {a where a is Element of L:
+        ex b being Element of L st a >= b & b in z1} by WAYBEL_0:15;
+   then consider a be Element of L such that
+A40: a = u1 and
+A41:ex b being Element of L st a >= b & b in z1;
+   consider b being Element of L such that
+A42:a >= b & b in z1 by A41;
+   A43: b = z by A42,TARSKI:def 1;
+     z in W by A2,A39,FUNCT_2:7;
+   then consider z' be Element of L such that
+A44: z' in W & z' = f.z & z' << z by A5;
+A45: z' << u1 by A40,A42,A43,A44,WAYBEL_3:2;
+     z' <= z';
+then A46: z' in uparrow z' by WAYBEL_0:18;
+  dom iter(f,n) = W by FUNCT_2:def 1;
+   then z' = (f*(iter(f,n))).y by A2,A39,A44,FUNCT_1:23
+     .= iter(f,n+1).y by FUNCT_7:73;
+   then uparrow z' in {uparrow p where p is Element of L : ex n st p = iter(f,
+n).y};
+   then z' in F by A46,TARSKI:def 4;
+   hence ex g be Element of L st g in F & g << u1 by A45;
+  end;
+  then reconsider F as Open Filter of L by A11,A12,A14,A16,A18,Def1,TARSKI:def
+4,WAYBEL_0:28,47;
+  take F;
+    now let u1 be set; assume A47: u1 in F;
+   then consider Y be set such that
+A48: u1 in Y and
+A49: Y in {uparrow z where z is Element of L : ex n st z = iter(f,n).y}
+                        by TARSKI:def 4;
+   consider z be Element of L such that
+A50: Y = uparrow z and
+A51: ex n st z = iter(f,n).y by A49;
+   consider n such that
+A52: z = iter(f,n).y by A51;
+  reconsider u = u1 as Element of L by A47;
+A53: z <= u by A48,A50,WAYBEL_0:18;
+     z in wayabove x by A2,A52,FUNCT_2:7;
+   then x << z by WAYBEL_3:8;
+   then x << u by A53,WAYBEL_3:2;
+   hence u1 in wayabove x by WAYBEL_3:8;
+  end;
+  hence thesis by A11,A12,TARSKI:def 3,def 4;
+ end;
+
+
+theorem Th9:   ::3.4, p.69
+for L being complete LATTICE, X being Open upper Subset of L holds
+for x being Element of L st x in (X`)
+ex m being Element of L st x <= m & m is_maximal_in (X`)
+ proof
+  let L be complete LATTICE, X be Open upper Subset of L;
+  let x be Element of L; assume A1: x in (X`);
+set A = {C where C is Chain of L : C c= (X`) & x in C};
+   reconsider x1 = {x} as Chain of L by ORDERS_1:35;
+     x1 c= (X`) & x in x1 by A1,ZFMISC_1:37;
+   then A2: x1 in A;
+     for Z be set st Z <> {} & Z c= A & Z is c=-linear
+   holds union Z in A
+   proof
+    let Z be set; assume that
+A3: Z <> {} & Z c= A and
+A4: Z is c=-linear;
+      now let Y; assume Y in Z;
+     then Y in A by A3;
+     then ex C be Chain of L st Y = C & C c= (X`) & x in C;
+     hence Y c= the carrier of L;
+    end;
+    then union Z c= the carrier of L by ZFMISC_1:94;
+    then reconsider UZ = union Z as Subset of L;
+      the InternalRel of L is_strongly_connected_in UZ
+     proof
+      let a,b be set; assume A5: a in UZ & b in UZ;
+      then consider az be set such that
+A6:   a in az & az in Z by TARSKI:def 4;
+      consider bz be set such that
+A7:   b in bz & bz in Z by A5,TARSKI:def 4;
+        az, bz are_c=-comparable by A4,A6,A7,ORDINAL1:def 9;
+      then A8: az c= bz or bz c= az by XBOOLE_0:def 9;
+        az in A by A3,A6;
+      then ex C be Chain of L st az = C & C c= (X`) & x in C;
+      then reconsider az as Chain of L;
+        bz in A by A3,A7;
+      then ex C be Chain of L st bz = C & C c= (X`) & x in C;
+      then reconsider bz as Chain of L;
+    the InternalRel of L is_strongly_connected_in az &
+      the InternalRel of L is_strongly_connected_in bz by ORDERS_1:def 11;
+      hence thesis by A6,A7,A8,RELAT_2:def 7;
+     end;
+    then reconsider UZ as Chain of L by ORDERS_1:def 11;
+      now let Y; assume Y in Z;
+     then Y in A by A3;
+     then ex C be Chain of L st Y = C & C c= (X`) & x in C;
+     hence Y c= (X`);
+    end;
+then A9: UZ c= (X`) by ZFMISC_1:94;
+    consider Y be Element of Z;
+  Y in Z by A3;
+    then Y in A by A3;
+    then ex C be Chain of L st Y = C & C c= (X`) & x in C;
+    then x in UZ by A3,TARSKI:def 4;
+    hence thesis by A9;
+   end;
+   then consider Y1 be set such that
+A10: Y1 in A & for Z st Z in A & Z <> Y1 holds not Y1 c= Z by A2,ORDERS_2:79;
+   consider Y be Chain of L such that A11: Y = Y1 & Y c= (X`) & x in Y by A10;
+set m = sup Y;
+A12: m is_>=_than Y by YELLOW_0:32;
+A13: X` = [#](L) \ X by PRE_TOPC:17
+     .= (the carrier of L) \ X by PRE_TOPC:12;
+    now assume m in X;
+   then consider y be Element of L such that A14: y in X & y << m by Def1;
+   consider d being Element of L such that
+A15:d in Y & y <= d by A11,A14,WAYBEL_3:def 1;
+     d in X by A14,A15,WAYBEL_0:def 20;
+   hence contradiction by A11,A13,A15,XBOOLE_0:def 4;
+  end;
+then A16:m in (X`) by A13,XBOOLE_0:def 4;
+    m is_>=_than Y by YELLOW_0:32;
+then A17:x <= m by A11,LATTICE3:def 9;
+    now given y being Element of L such that A18: y in (X`) & y > m;
+A19: m <= y & m <> y by A18,ORDERS_1:def 10;
+set Y2 = Y \/ {y};
+     the InternalRel of L is_strongly_connected_in Y2
+    proof
+     let a,b be set; assume A20: a in Y2 & b in Y2;
+     per cases by A20,XBOOLE_0:def 2;
+     suppose A21: a in Y & b in Y;
+        the InternalRel of L is_strongly_connected_in Y by ORDERS_1:def 11;
+      hence [a,b] in the InternalRel of L or
+      [b,a] in the InternalRel of L by A21,RELAT_2:def 7;
+     suppose A22: a in Y & b in {y};
+      then reconsider b1 = b as Element of L;
+      reconsider a1 = a as Element of L by A22;
+A23:   b1 = y by A22,TARSKI:def 1;
+        a1 <= m by A12,A22,LATTICE3:def 9;
+      then a1 <= b1 by A19,A23,ORDERS_1:26;
+      hence [a,b] in the InternalRel of L or
+      [b,a] in the InternalRel of L by ORDERS_1:def 9;
+     suppose A24: a in {y} & b in Y;
+      then reconsider b1 = a as Element of L;
+      reconsider a1 = b as Element of L by A24;
+A25:   b1 = y by A24,TARSKI:def 1;
+        a1 <= m by A12,A24,LATTICE3:def 9;
+      then a1 <= b1 by A19,A25,ORDERS_1:26;
+      hence [a,b] in the InternalRel of L or
+      [b,a] in the InternalRel of L by ORDERS_1:def 9;
+
+     suppose A26: a in {y} & b in {y};
+      then reconsider a1 = a as Element of L;
+        a = y & b = y & a1 <= a1 by A26,TARSKI:def 1;
+      hence [a,b] in the InternalRel of L or
+      [b,a] in the InternalRel of L by ORDERS_1:def 9;
+    end;
+   then reconsider Y2 as Chain of L by ORDERS_1:def 11;
+     {y} c= (X`) by A18,ZFMISC_1:37;
+   then Y2 c= (X`) & x in Y2 by A11,XBOOLE_0:def 2,XBOOLE_1:8;
+then A27:Y2 in A;
+   A28: now assume y in Y;
+    then y <= m by A12,LATTICE3:def 9;
+    hence contradiction by A18,ORDERS_1:30;
+   end;
+     y in {y} by TARSKI:def 1;
+   then A29: y in Y2 by XBOOLE_0:def 2;
+     Y c= Y2 by XBOOLE_1:7;
+   hence contradiction by A10,A11,A27,A28,A29;
+  end;
+  then m is_maximal_in (X`) by A16,WAYBEL_4:56;
+  hence thesis by A17;
+ end;
+
+
+begin :: Irreducible elements
+
+definition   ::def 3.5, p.69
+let G be non empty RelStr,
+    g be Element of G;
+attr g is meet-irreducible means :Def2:
+for x,y being Element of G st g = x "/\" y holds x = g or y = g;
+synonym g is irreducible;
+end;
+
+
+definition
+let G be non empty RelStr,
+    g be Element of G;
+attr g is join-irreducible means
+  for x,y being Element of G st g = x "\/" y holds x = g or y = g;
+end;
+
+
+definition
+let L be non empty RelStr;
+func IRR L -> Subset of L means :Def4:
+for x be Element of L holds x in it iff x is irreducible;
+existence
+ proof
+   defpred P[Element of L] means $1 is irreducible;
+  consider X being Subset of L such that
+A1: for x being Element of L holds x in X iff P[x] from SSubsetEx;
+  take X;
+  thus thesis by A1;
+ end;
+uniqueness
+ proof
+  let X,Y be Subset of L such that
+A2: for x be Element of L holds x in X iff x is irreducible and
+A3: for x be Element of L holds x in Y iff x is irreducible;
+    now let x; assume A4: x in X;
+   then reconsider x1 = x as Element of L;
+     x1 is irreducible by A2,A4;
+   hence x in Y by A3;
+  end;
+then A5: X c= Y by TARSKI:def 3;
+    now let x; assume A6: x in Y;
+   then reconsider x1 = x as Element of L;
+     x1 is irreducible by A3,A6;
+   hence x in X by A2;
+  end;
+  then Y c= X by TARSKI:def 3;
+  hence X = Y by A5,XBOOLE_0:def 10;
+ end;
+end;
+
+
+theorem Th10:
+for L being upper-bounded antisymmetric with_infima non empty RelStr holds
+Top L is irreducible
+ proof
+  let L be upper-bounded with_infima antisymmetric non empty RelStr;
+  let x,y be Element of L; assume x "/\" y = Top L;
+then A1: x >= Top L & y >= Top L by YELLOW_0:23;
+     x <= Top L or y <= Top L by YELLOW_0:45;
+  hence x = Top L or y = Top L by A1,ORDERS_1:25;
+ end;
+
+
+definition
+let L be upper-bounded antisymmetric with_infima non empty RelStr;
+cluster irreducible Element of L;
+existence
+ proof
+  take Top L;
+  thus thesis by Th10;
+ end;
+end;
+
+
+theorem
+  for L being Semilattice, x being Element of L holds
+x is irreducible iff
+for A being finite non empty Subset of L st x = inf A holds x in A
+  proof let L be Semilattice, I be Element of L;
+   thus I is irreducible implies
+    for A being finite non empty Subset of L st I = inf A holds I in A
+     proof assume
+A1:     for x,y being Element of L st I = x"/\"y holds I = x or I = y;
+      let A be finite non empty Subset of L;
+A2:     A is finite;
+      defpred P[set] means $1 is non empty & I = "/\"($1,L) implies I in $1;
+A3:     P[{}];
+A4:     now let x,B be set such that
+A5:      x in A & B c= A and
+A6:      P[B];
+         thus P[B \/ {x}] proof assume
+A7:      B \/ {x} is non empty & I = "/\"(B \/ {x},L);
+           B c= the carrier of L by A5,XBOOLE_1:1;
+        then reconsider C = B as finite Subset of L
+          by A5,FINSET_1:13;
+        reconsider a = x as Element of L by A5;
+        per cases;
+        suppose B = {};
+          then "/\"(B \/ {a},L) = a & a in B \/ {a} by TARSKI:def 1,YELLOW_0:39
+;
+         hence I in B \/ {x} by A7;
+        suppose
+A8:       B <> {}; then ex_inf_of C, L & ex_inf_of {a}, L by YELLOW_0:55;
+          then A9: "/\"(B \/ {x},L) = (inf C)"/\"inf {a} & inf {a} = a
+           by YELLOW_0:39,YELLOW_2:4;
+         hereby per cases by A1,A7,A9;
+           suppose inf C = I;
+            then consider b being Element of L such that
+A10:          b in B & b = I by A6,A8;
+            thus I in B \/ {x} by A10,XBOOLE_0:def 2;
+           suppose
+A11:          a = I;
+               a in {a} by TARSKI:def 1;
+            hence I in B \/ {x} by A11,XBOOLE_0:def 2;
+         end;
+        end;
+       end;
+         P[A] from Finite(A2,A3,A4);
+      hence thesis;
+     end;
+   assume
+A12:  for A being finite non empty Subset of L st I = inf A holds I in A;
+   let a,b be Element of L; assume I = a"/\"b;
+    then I = inf {a,b} by YELLOW_0:40;
+    then I in {a,b} by A12;
+   hence thesis by TARSKI:def 2;
+  end;
+
+
+theorem
+  for L be LATTICE,l be Element of L
+st (uparrow l \ {l}) is Filter of L holds l is irreducible
+ proof
+  let L be LATTICE,
+      l be Element of L; assume
+A1: (uparrow l \ {l}) is Filter of L;
+  set F = (uparrow l \ {l});
+    now let x,y be Element of L; assume
+A2: l = x "/\" y & x <> l & y <> l;
+   then l <= x & l <= y by YELLOW_0:23;
+   then x in uparrow l & y in uparrow l by WAYBEL_0:18;
+   then x in F & y in F by A2,ZFMISC_1:64;
+   then consider z being Element of L such that
+A3: z in F & z <= x & z <= y by A1,WAYBEL_0:def 2;
+     l >= z by A2,A3,YELLOW_0:23;
+   then l in F by A1,A3,WAYBEL_0:def 20;
+   hence contradiction by ZFMISC_1:64;
+  end;
+  hence thesis by Def2;
+ end;
+
+
+theorem Th13:  ::3.6, p.69
+for L be LATTICE, p be Element of L, F be Filter of L st
+p is_maximal_in (F`) holds p is irreducible
+ proof
+  let L be LATTICE,
+      p be Element of L,
+      F be Filter of L such that
+A1: p is_maximal_in (F`);
+A2: F` = [#](L) \ F by PRE_TOPC:17
+     .= (the carrier of L) \ F by PRE_TOPC:12;
+  set X = (the carrier of L)\F;
+A3: p in X by A1,A2,WAYBEL_4:56;
+    now let x,y be Element of L; assume
+A4: p = x "/\" y & x <> p & y <> p;
+     now assume x in F & y in F;
+    then consider z being Element of L such that
+A5: z in F & z <= x & z <= y by WAYBEL_0:def 2;
+      p >= z by A4,A5,YELLOW_0:23;
+    then p in F by A5,WAYBEL_0:def 20;
+    hence contradiction by A3,XBOOLE_0:def 4;
+   end;
+then A6: x in X or y in X by XBOOLE_0:def 4;
+     p <= x & p <= y by A4,YELLOW_0:23;
+   then p < x & p < y by A4,ORDERS_1:def 10;
+   hence contradiction by A1,A2,A6,WAYBEL_4:56;
+  end;
+  hence thesis by Def2;
+ end;
+
+
+theorem Th14: ::3.7, p.69
+for L be lower-bounded continuous LATTICE, x,y be Element of L st not y <= x
+holds ex p be Element of L st p is irreducible & x <= p & not y <= p
+ proof
+  let L be lower-bounded continuous LATTICE,
+      x,y be Element of L such that
+A1: not y <= x;
+    (for x being Element of L holds waybelow x is non empty directed) &
+  L is up-complete satisfying_axiom_of_approximation;
+  then consider u being Element of L such that
+A2: u << y & not u <= x by A1,WAYBEL_3:24;
+  consider F be Open Filter of L such that
+A3: y in F & F c= wayabove u by A2,Th8;
+A4: wayabove u c= uparrow u by WAYBEL_3:11;
+A5: F` = [#](L) \ F by PRE_TOPC:17
+     .= (the carrier of L) \ F by PRE_TOPC:12;
+    now assume x in F;
+   then x in uparrow u by A3,A4,TARSKI:def 3;
+   hence contradiction by A2,WAYBEL_0:18;
+  end;
+  then x in (the carrier of L)\F by XBOOLE_0:def 4;
+  then consider m being Element of L such that
+A6: x <= m & m is_maximal_in (F`) by A5,Th9;
+A7: F` = [#](L) \ F by PRE_TOPC:17
+     .= (the carrier of L) \ F by PRE_TOPC:12;
+A8: m in (F`) by A6,WAYBEL_4:56;
+  A9: now assume y <= m;
+   then m in F by A3,WAYBEL_0:def 20;
+   hence contradiction by A7,A8,XBOOLE_0:def 4;
+  end;
+  take m;
+  thus thesis by A6,A9,Th13;
+ end;
+
+begin :: Order generating sets
+
+definition ::def 3.8, p.70
+let L be non empty RelStr,
+    X be Subset of L;
+attr X is order-generating means :Def5:
+for x be Element of L holds
+ ex_inf_of (uparrow x) /\ X,L & x = inf ((uparrow x) /\ X);
+end;
+
+
+theorem Th15:  ::3.9 (1-2), p.70
+for L be up-complete lower-bounded LATTICE, X be Subset of L holds
+X is order-generating iff
+for l being Element of L ex Y be Subset of X st l = "/\" (Y,L)
+ proof
+  let L be up-complete lower-bounded LATTICE, X be Subset of L;
+  thus X is order-generating implies
+   for l being Element of L ex Y be Subset of X st l = "/\" (Y,L)
+   proof
+    assume A1: X is order-generating;
+    let l be Element of L;
+      for x st x in ((uparrow l) /\ X) holds
+     x in X by XBOOLE_0:def 3;
+    then reconsider Y = ((uparrow l) /\ X) as Subset of X by TARSKI:def 3;
+      l = "/\" (Y,L) by A1,Def5;
+    hence thesis;
+   end;
+  thus (for l being Element of L ex Y be Subset of X st l = "/\" (Y,L))
+implies
+   X is order-generating
+   proof
+    assume A2: (for l being Element of L ex Y be Subset of X st l = "/\"
+ (Y,L));
+    let l be Element of L;
+    consider Y be Subset of X such that A3: l = "/\" (Y,L) by A2;
+set S = ((uparrow l) /\ X);
+    thus ex_inf_of S,L by YELLOW_0:17;
+      now let x be Element of L; assume x in S;
+     then x in (uparrow l) & x in X by XBOOLE_0:def 3;
+     hence l <= x by WAYBEL_0:18;
+    end;
+then A4: l is_<=_than S by LATTICE3:def 8;
+      for b be Element of L st b is_<=_than S holds b <= l
+     proof
+      let b be Element of L; assume A5: b is_<=_than S;
+        now let x be Element of L; assume A6: x in Y;
+         l is_<=_than Y by A3,YELLOW_0:33;
+       then l <= x by A6,LATTICE3:def 8;
+then x in uparrow l by WAYBEL_0:18;
+       then x in S by A6,XBOOLE_0:def 3;
+       hence b <= x by A5,LATTICE3:def 8;
+      end;
+      then b is_<=_than Y by LATTICE3:def 8;
+      hence b <= l by A3,YELLOW_0:33;
+     end;
+    hence l = inf S by A4,YELLOW_0:33;
+   end;
+ end;
+
+
+theorem  ::3.9 (1-3), p.70
+  for L be up-complete lower-bounded LATTICE, X be Subset of L holds
+X is order-generating iff
+for Y be Subset of L st X c= Y & for Z be Subset of Y holds "/\"
+(Z,L) in Y holds
+the carrier of L = Y
+ proof
+  let L be up-complete lower-bounded LATTICE, X be Subset of L;
+  thus X is order-generating implies
+       (for Y be Subset of L st X c= Y &
+       for Z be Subset of Y holds "/\"(Z,L) in Y holds
+       the carrier of L = Y)
+   proof
+    assume A1: X is order-generating;
+    let Y be Subset of L; assume that
+A2: X c= Y and
+A3: for Z be Subset of Y holds "/\"(Z,L) in Y;
+      now let l1 be set; assume l1 in the carrier of L;
+     then reconsider l = l1 as Element of L;
+A4:  l = inf ((uparrow l) /\ X) by A1,Def5;
+A5:  (uparrow l) /\ Y c= Y by XBOOLE_1:17;
+       (uparrow l) /\ X c= (uparrow l) /\ Y by A2,XBOOLE_1:26;
+     then (uparrow l) /\ X c= Y by A5,XBOOLE_1:1;
+     hence l1 in Y by A3,A4;
+    end;
+    hence the carrier of L c= Y by TARSKI:def 3;
+    thus Y c= the carrier of L;
+   end;
+  thus (for Y be Subset of L st X c= Y &
+       for Z be Subset of Y holds "/\"(Z,L) in Y holds the carrier of L = Y)
+       implies X is order-generating
+   proof
+    assume
+A6: for Y be Subset of L st
+    X c= Y & for Z be Subset of Y holds "/\"(Z,L) in Y holds
+    the carrier of L = Y;
+    set Y = {"/\"(Z,L) where Z is Subset of L : Z c= X};
+      now let x; assume x in Y;
+     then consider Z be Subset of L such that A7: x = "/\"(Z,L) & Z c= X;
+     thus x in the carrier of L by A7;
+    end;
+    then Y c= the carrier of L by TARSKI:def 3;
+    then reconsider Y as Subset of L;
+      now let x; assume A8: x in X;
+     then reconsider x1 = x as Element of L;
+A9:  {x1} c= X by A8,ZFMISC_1:37;
+     reconsider x2 = {x1} as Subset of L;
+       x1 = "/\"(x2,L) by YELLOW_0:39;
+     hence x in Y by A9;
+    end;
+    then
+A10: X c= Y by TARSKI:def 3;
+      for l being Element of L ex Z be Subset of X st l = "/\" (Z,L)
+     proof
+      let l be Element of L;
+        for Z be Subset of Y holds "/\"(Z,L) in Y
+       proof
+        let Z be Subset of Y;
+        defpred P[Subset of L] means $1 c= X & "/\"($1,L) in Z;
+        set N = {"/\"(A,L) where A is Subset of L : P[A]};
+          now let x; assume A11: x in Z;
+         then x in Y;
+         then consider Z be Subset of L such that
+A12:      x = "/\"(Z,L) & Z c= X;
+         thus x in N by A11,A12;
+        end;
+then A13:     Z c= N by TARSKI:def 3;
+          now let x; assume x in N;
+         then consider S be Subset of L such that
+A14:      x = "/\"(S,L) & S c= X & "/\"(S,L) in Z;
+         thus x in Z by A14;
+        end;
+        then N c= Z by TARSKI:def 3;
+        then
+A15:     "/\"(Z,L) = "/\"(N,L) by A13,XBOOLE_0:def 10
+               .= "/\" (union {A where A is Subset of L : P[A]}, L)
+                 from Inf_of_Infs;
+set S = union {A where A is Subset of L : A c= X & "/\"(A,L) in Z};
+          now let x; assume x in S;
+         then consider Y be set such that
+A16:      x in Y and
+A17:      Y in {A where A is Subset of L : A c= X & "/\"
+(A,L) in Z} by TARSKI:def 4;
+         consider A be Subset of L such that
+A18:       Y = A & A c= X & "/\"(A,L) in Z by A17;
+         thus x in the carrier of L by A16,A18;
+        end;
+        then S c= the carrier of L by TARSKI:def 3;
+        then reconsider S as Subset of L;
+          now let B be set; assume
+           B in {A where A is Subset of L : A c= X & "/\"(A,L) in Z};
+         then consider A be Subset of L such that A19: B = A & A c= X & "/\"(A,
+L) in
+ Z;
+         thus B c= X by A19;
+        end;
+        then S c= X by ZFMISC_1:94;
+        hence "/\"(Z,L) in Y by A15;
+       end;
+      then the carrier of L = Y by A6,A10;
+      then l in Y;
+      then consider Z be Subset of L such that
+A20:    l = "/\" (Z,L) & Z c= X;
+      thus thesis by A20;
+     end;
+    hence thesis by Th15;
+   end;
+ end;
+
+
+theorem Th17:  ::3.9 (1-4), p.70
+for L be up-complete lower-bounded LATTICE, X be Subset of L holds
+X is order-generating iff
+(for l1,l2 be Element of L st not l2 <= l1 ex p be Element of L st
+p in X & l1 <= p & not l2 <= p)
+ proof
+  let L be up-complete lower-bounded LATTICE, X be Subset of L;
+  thus X is order-generating implies
+   (for l1,l2 be Element of L st not l2 <= l1 ex p be Element of L st
+   p in X & l1 <= p & not l2 <= p)
+  proof
+   assume A1: X is order-generating;
+   let l1,l2 be Element of L; assume A2: not l2 <= l1;
+   consider P be Subset of X such that A3: l1 = "/\" (P,L) by A1,Th15;
+     now assume for p be Element of L st p in P holds l2 <= p;
+    then l2 is_<=_than P by LATTICE3:def 8;
+    hence contradiction by A2,A3,YELLOW_0:33;
+   end;
+   then consider p be Element of L such that A4: p in P & not l2 <= p;
+   take p;
+     l1 is_<=_than P by A3,YELLOW_0:33;
+   hence thesis by A4,LATTICE3:def 8;
+  end;
+  thus (for l1,l2 be Element of L st not l2 <= l1 ex p be Element of L st
+   p in X & l1 <= p & not l2 <= p) implies X is order-generating
+  proof
+   assume
+A5: (for l1,l2 be Element of L st not l2 <= l1 ex p be Element of L st
+    p in X & l1 <= p & not l2 <= p);
+   let l be Element of L;
+set y = inf ((uparrow l) /\ X);
+   thus ex_inf_of (uparrow l) /\ X,L by YELLOW_0:17;
+A6: y is_<=_than ((uparrow l) /\ X ) by YELLOW_0:33;
+     now assume A7: y <> l;
+      l is_<=_than ((uparrow l) /\ X )
+     proof
+      let b be Element of L; assume b in ((uparrow l) /\ X );
+      then b in (uparrow l) by XBOOLE_0:def 3;
+      hence thesis by WAYBEL_0:18;
+     end;
+    then l <= y by YELLOW_0:33;
+then A8:    not y < l by ORDERS_1:30;
+      now per cases by A8,ORDERS_1:def 10;
+    suppose not y <= l;
+     then consider p be Element of L such that
+A9:  p in X & l <= p & not y <= p by A5;
+       p in (uparrow l) by A9,WAYBEL_0:18;
+     then p in (uparrow l) /\ X by A9,XBOOLE_0:def 3;
+     hence contradiction by A6,A9,LATTICE3:def 8;
+    suppose y = l;
+     hence contradiction by A7;
+    end;
+    hence contradiction;
+   end;
+   hence l = y;
+  end;
+ end;
+
+
+theorem Th18:           ::3.10, p.70
+for L be lower-bounded continuous LATTICE, X be Subset of L st X = IRR L \ {
+Top L}
+holds X is order-generating
+ proof
+  let L be lower-bounded continuous LATTICE, X be Subset of L; assume
+A1: X = IRR L \ {Top L};
+    for l1,l2 be Element of L st not l2 <= l1 ex p be Element of L st
+  p in X & l1 <= p & not l2 <= p
+   proof
+    let x,y be Element of L; assume not y <= x;
+    then consider p be Element of L such that
+A2: p is irreducible & x <= p & not y <= p by Th14;
+A3: p <> Top L by A2,YELLOW_0:45;
+      p in IRR L by A2,Def4;
+    then p in X by A1,A3,ZFMISC_1:64;
+    hence thesis by A2;
+   end;
+  hence thesis by Th17;
+ end;
+
+theorem Th19:
+for L being lower-bounded continuous LATTICE, X,Y being Subset of L st
+X is order-generating & X c= Y holds Y is order-generating
+ proof
+  let L be lower-bounded continuous LATTICE, X,Y be Subset of L; assume
+A1: X is order-generating & X c= Y;
+  let x be Element of L;
+  thus ex_inf_of (uparrow x) /\ Y,L by YELLOW_0:17;
+A2:ex_inf_of ((uparrow x) /\ Y),L by YELLOW_0:17;
+A3:ex_inf_of ((uparrow x) /\ X),L by YELLOW_0:17;
+A4:ex_inf_of (uparrow x),L by WAYBEL_0:39;
+    (uparrow x) /\ Y c= (uparrow x) by XBOOLE_1:17;
+  then inf ((uparrow x) /\ Y) >= inf (uparrow x) by A2,A4,YELLOW_0:35;
+then A5: inf ((uparrow x) /\ Y) >= x by WAYBEL_0:39;
+    (uparrow x) /\ X c= (uparrow x) /\ Y by A1,XBOOLE_1:26;
+  then inf ((uparrow x) /\ X) >= inf ((uparrow x) /\ Y) by A2,A3,YELLOW_0:35;
+  then x >= inf ((uparrow x) /\ Y) by A1,Def5;
+  hence x = inf((uparrow x) /\ Y) by A5,ORDERS_1:25;
+ end;
+
+begin :: Prime elements
+
+definition   ::def 3.11, p.70
+let L be non empty RelStr;
+let l be Element of L;
+attr l is prime means :Def6:
+for x,y be Element of L st x "/\" y <= l holds x <= l or y <= l;
+end;
+
+
+definition
+let L be non empty RelStr;
+func PRIME L -> Subset of L means :Def7:
+for x be Element of L holds x in it iff x is prime;
+existence
+ proof defpred P[Element of L] means $1 is prime;
+  consider X being Subset of L such that
+A1: for x being Element of L holds x in X iff P[x] from SSubsetEx;
+  take X;
+  thus thesis by A1;
+ end;
+uniqueness
+ proof
+  let X,Y be Subset of L; assume that
+A2: for x be Element of L holds x in X iff x is prime and
+A3: for x be Element of L holds x in Y iff x is prime;
+  thus X c= Y
+   proof
+    let x; assume A4: x in X;
+    then reconsider x1 = x as Element of L;
+      x1 is prime by A2,A4;
+    hence thesis by A3;
+   end;
+  thus Y c= X
+   proof
+    let x; assume A5: x in Y;
+    then reconsider x1 = x as Element of L;
+      x1 is prime by A3,A5;
+    hence thesis by A2;
+   end;
+ end;
+end;
+
+
+definition
+let L be non empty RelStr;
+let l be Element of L;
+attr l is co-prime means :Def8:
+l~ is prime;
+end;
+
+
+theorem Th20:
+for L being upper-bounded antisymmetric non empty RelStr holds Top L is prime
+ proof
+  let L be upper-bounded antisymmetric non empty RelStr;
+  let x,y be Element of L; assume x "/\" y <= Top L;
+  thus x <= Top L or y <= Top L by YELLOW_0:45;
+ end;
+
+
+theorem
+  for L being lower-bounded antisymmetric non empty RelStr holds Bottom
+L is co-prime
+ proof
+  let L be lower-bounded antisymmetric non empty RelStr;
+    Top (L~) is prime by Th20;
+  hence (Bottom L)~ is prime by YELLOW_7:33;
+ end;
+
+
+definition
+let L be upper-bounded antisymmetric non empty RelStr;
+cluster prime Element of L;
+existence
+ proof
+  take Top L;
+  thus thesis by Th20;
+ end;
+end;
+
+
+theorem Th22:
+for L being Semilattice, l being Element of L holds
+l is prime iff
+for A being finite non empty Subset of L st l >= inf A
+ ex a being Element of L st a in A & l >= a
+  proof
+   let L be Semilattice, l be Element of L;
+   thus l is prime implies
+   for A being finite non empty Subset of L st l >= inf A
+   ex a being Element of L st a in A & l >= a
+     proof assume
+A1:     for x,y being Element of L st l >= x"/\"y holds l >= x or l >= y;
+      let A be finite non empty Subset of L;
+A2:     A is finite;
+      defpred P[set] means $1 is non empty & l >= "/\"($1,L)
+        implies (ex k being Element of L st k in $1 & l >= k);
+A3:     P[{}];
+A4:     now let x,B be set such that
+A5:      x in A & B c= A and
+A6:      P[B];
+         thus P[B \/ {x}] proof assume
+A7:      B \/ {x} is non empty & l >= "/\"(B \/ {x},L);
+           B c= the carrier of L by A5,XBOOLE_1:1;
+        then reconsider C = B as finite Subset of L
+          by A5,FINSET_1:13;
+        reconsider a = x as Element of L by A5;
+        per cases;
+        suppose B = {};
+          then "/\"(B \/ {a},L) = a & a in B \/ {a} by TARSKI:def 1,YELLOW_0:39
+;
+         hence ex k being Element of L st k in B \/ {x} & l >= k by A7;
+        suppose
+A8:       B <> {}; then ex_inf_of C, L & ex_inf_of {a}, L by YELLOW_0:55;
+          then A9: "/\"(B \/ {x},L) = (inf C)"/\"inf {a} & inf {a} = a
+           by YELLOW_0:39,YELLOW_2:4;
+         hereby per cases by A1,A7,A9;
+           suppose inf C <= l;
+            then consider b being Element of L such that
+A10:          b in B & b <= l by A6,A8;
+               b in B \/ {x} by A10,XBOOLE_0:def 2;
+            hence ex k being Element of L st k in B \/ {x} & l >= k by A10;
+           suppose
+A11:          a <= l;
+               a in {a} by TARSKI:def 1;
+             then a in B \/ {x} by XBOOLE_0:def 2;
+            hence ex k being Element of L st k in B \/ {x} & l >= k by A11;
+         end;
+        end;
+       end;
+         P[A] from Finite(A2,A3,A4);
+      hence thesis;
+     end;
+   assume A12: for A being finite non empty Subset of L st l >= inf A
+   ex a being Element of L st a in A & l >= a;
+   let a,b be Element of L; assume A13: a "/\" b <= l;
+   set A = {a,b};
+     inf A = a"/\"b by YELLOW_0:40;
+   then consider k being Element of L such that A14: k in A & l >= k by A12,A13
+;
+   thus thesis by A14,TARSKI:def 2;
+  end;
+
+
+theorem Th23:
+for L being sup-Semilattice, x being Element of L holds
+x is co-prime iff
+for A being finite non empty Subset of L st x <= sup A
+ ex a being Element of L st a in A & x <= a
+ proof
+  let L be sup-Semilattice, x be Element of L;
+  thus x is co-prime implies
+  for A being finite non empty Subset of L st x <= sup A
+  ex a being Element of L st a in A & x <= a
+   proof
+    assume x is co-prime;
+then A1:  x~ is prime by Def8;
+    let A be finite non empty Subset of L; assume x <= sup A;
+then A2: x~ >= (sup A)~ by LATTICE3:9;
+      L~ = RelStr(#the carrier of L, (the InternalRel of L)~#)
+                                             by LATTICE3:def 5;
+    then reconsider A1 = A as finite non empty Subset of L~;
+A3: ex_sup_of A,L by YELLOW_0:54;
+then A4: ex_inf_of A,L~ by YELLOW_7:10;
+      "\/"(A,L) is_>=_than A by A3,YELLOW_0:def 9;
+then A5:  "\/"(A,L)~ is_<=_than A by YELLOW_7:8;
+      now let y be Element of L~; assume y is_<=_than A;
+      then ~y is_>=_than A by YELLOW_7:9;
+      then ~y >= "\/"(A,L) by A3,YELLOW_0:def 9;
+     hence y <= "\/"(A,L)~ by YELLOW_7:2;
+    end;
+    then (sup A)~ = (inf A1) by A4,A5,YELLOW_0:def 10;
+   then consider a being Element of L~ such that A6: a in A1 & x~ >= a by A1,A2
+,Th22;
+   take ~a;
+   thus thesis by A6,LATTICE3:def 7,YELLOW_7:2;
+  end;
+  thus (for A being finite non empty Subset of L st x <= sup A
+   ex a being Element of L st a in A & x <= a) implies x is co-prime
+  proof
+   assume A7: for A being finite non empty Subset of L st x <= sup A
+    ex a being Element of L st a in A & x <= a;
+     now let a,b be Element of L~; assume A8: a "/\" b <= x~;
+    set A = {~a,~b};
+A9: sup A = (~a)"\/"(~b) by YELLOW_0:41;
+A10: ~(a "/\" b) = (a "/\" b) by LATTICE3:def 7;
+      x <= ~(a "/\" b) by A8,YELLOW_7:2;
+    then x <= (~a)"\/"(~b) by A10,YELLOW_7:24;
+    then consider l being Element of L such that A11: l in A & x <= l by A7,A9;
+      l = ~a or l = ~b by A11,TARSKI:def 2;
+    hence a <= x~ or b <= x~ by A11,YELLOW_7:2;
+   end;
+   then x~ is prime by Def6;
+   hence thesis by Def8;
+  end;
+ end;
+
+
+theorem Th24:
+for L being LATTICE, l being Element of L st l is prime
+holds l is irreducible
+ proof
+  let L be LATTICE, l be Element of L; assume A1: l is prime;
+  let x,y be Element of L; assume
+A2: l = x "/\" y;
+then A3: l <= x & l <= y by YELLOW_0:23;
+    x "/\" y <= l by A2;
+  then x <= l or y <= l by A1,Def6;
+  hence x = l or y = l by A3,ORDERS_1:25;
+ end;
+
+
+theorem Th25:   ::3.12 (1-2), p.70
+for l holds
+l is prime iff for x being set, f being map of L,BoolePoset {x} st
+ (for p be Element of L holds f.p = {} iff p <= l) holds
+ f is meet-preserving join-preserving
+ proof
+  let l;
+  thus l is prime implies
+  for x being set, f being map of L,BoolePoset {x} st
+  (for p be Element of L holds f.p = {} iff p <= l) holds
+  f is meet-preserving join-preserving
+   proof
+    assume A1: l is prime;
+    let x be set, f be map of L,BoolePoset {x}; assume
+A2: for p be Element of L holds f.p = {} iff p <= l;
+A3: dom f = the carrier of L & rng f c= the carrier of BoolePoset {x}
+                                                by FUNCT_2:def 1;
+A4: the carrier of BoolePoset {x} = the carrier of InclPoset bool {x}
+                                           by YELLOW_1:4
+                                 .= bool {x} by YELLOW_1:1
+                                 .= { {} , {x}} by ZFMISC_1:30;
+      for z,y being Element of L holds f preserves_inf_of {z,y}
+     proof
+      let z,y be Element of L;
+A5:   f.:{z,y} = {f.z,f.y} by A3,FUNCT_1:118;
+then A6:    ex_inf_of {z,y},L implies ex_inf_of f.:{z,y},BoolePoset {x}
+          by YELLOW_0:21;
+A7:   now per cases by A4,TARSKI:def 2;
+       suppose A8: f.z = {} & f.y = {};
+        then z "/\" y <= z & z <= l by A2,YELLOW_0:23;
+        then A9: z "/\" y <= l by ORDERS_1:26;
+        thus f.z "/\" f.y = {} /\ {} by A8,YELLOW_1:17
+                       .= f.(z "/\" y) by A2,A9;
+       suppose A10: f.z = {x} & f.y = {x};
+        then z "/\" y <= y & not y <= l & not z <= l by A2,YELLOW_0:23;
+        then not z "/\" y <= l by A1,Def6;
+        then A11: not f.(z "/\" y) = {} by A2;
+        thus f.z "/\" f.y = {x} /\ {x} by A10,YELLOW_1:17
+                       .= f.(z "/\" y) by A4,A11,TARSKI:def 2;
+       suppose A12: f.z = {} & f.y = {x};
+        then z "/\" y <= z & z <= l by A2,YELLOW_0:23;
+        then A13: z "/\" y <= l by ORDERS_1:26;
+        thus f.z "/\" f.y = {} /\ {x} by A12,YELLOW_1:17
+                       .= f.(z "/\" y) by A2,A13;
+       suppose A14: f.z = {x} & f.y = {};
+        then z "/\" y <= y & y <= l by A2,YELLOW_0:23;
+        then A15: z "/\" y <= l by ORDERS_1:26;
+        thus f.z "/\" f.y = {x} /\ {} by A14,YELLOW_1:17
+                       .= f.(z "/\" y) by A2,A15;
+      end;
+        inf (f.:{z,y}) = f.z "/\" f.y by A5,YELLOW_0:40
+                   .= f.inf {z,y} by A7,YELLOW_0:40;
+      hence thesis by A6,WAYBEL_0:def 30;
+     end;
+    hence f is meet-preserving by WAYBEL_0:def 34;
+      for z,y being Element of L holds f preserves_sup_of {z,y}
+     proof
+      let z,y be Element of L;
+A16:   f.:{z,y} = {f.z,f.y} by A3,FUNCT_1:118;
+then A17:    ex_sup_of {z,y},L implies ex_sup_of f.:{z,y},BoolePoset {x}
+          by YELLOW_0:20;
+A18:   now per cases by A4,TARSKI:def 2;
+       suppose A19: f.z = {} & f.y = {};
+        then z <= l & y <= l by A2;
+        then A20: z "\/" y <= l by YELLOW_0:22;
+        thus f.z "\/" f.y = {} \/ {} by A19,YELLOW_1:17
+                       .= f.(z "\/" y) by A2,A20;
+       suppose A21: f.z = {x} & f.y = {x};
+        then z "\/" y >= z & not z <= l by A2,YELLOW_0:22;
+        then not z "\/" y <= l by ORDERS_1:26;
+        then A22: not f.(z "\/" y) = {} by A2;
+        thus f.z "\/" f.y = {x} \/ {x} by A21,YELLOW_1:17
+                       .= f.(z "\/" y) by A4,A22,TARSKI:def 2;
+       suppose A23: f.z = {} & f.y = {x};
+        then z "\/" y >= y & not y <= l by A2,YELLOW_0:22;
+        then not z "\/" y <= l by ORDERS_1:26;
+        then A24: not f.(z "\/" y) = {} by A2;
+        thus f.z "\/" f.y = {} \/ {x} by A23,YELLOW_1:17
+                       .= f.(z "\/" y) by A4,A24,TARSKI:def 2;
+       suppose A25: f.z = {x} & f.y = {};
+        then z "\/" y >= z & not z <= l by A2,YELLOW_0:22;
+        then not z "\/" y <= l by ORDERS_1:26;
+        then A26: not f.(z "\/" y) = {} by A2;
+        thus f.z "\/" f.y = {x} \/ {} by A25,YELLOW_1:17
+                       .= f.(z "\/" y) by A4,A26,TARSKI:def 2;
+      end;
+        sup (f.:{z,y}) = f.z "\/" f.y by A16,YELLOW_0:41
+                   .= f.sup {z,y} by A18,YELLOW_0:41;
+      hence thesis by A17,WAYBEL_0:def 31;
+     end;
+    hence f is join-preserving by WAYBEL_0:def 35;
+   end;
+  thus (for x being set, f being map of L,BoolePoset {x} st
+  (for p be Element of L holds f.p = {} iff p <= l) holds
+  f is meet-preserving join-preserving) implies l is prime
+   proof
+    assume A27: (for x being set, f being map of L,BoolePoset {x} st
+           (for p be Element of L holds f.p = {} iff p <= l) holds
+            f is meet-preserving join-preserving);
+    let z,y be Element of L; assume
+A28:  z "/\" y <= l;
+    consider x being set;
+A29: the carrier of BoolePoset {x} = the carrier of InclPoset bool {x}
+                                           by YELLOW_1:4
+                                 .= bool {x} by YELLOW_1:1
+                                 .= { {} , {x}} by ZFMISC_1:30;
+    defpred P[Element of L, set] means $1 <= l iff $2 = {};
+A30:  for a being Element of L ex b being Element of BoolePoset {x} st P[a,b]
+     proof
+      let a be Element of L;
+        now per cases;
+      suppose A31: a <= l;
+       set b = {};
+         b in the carrier of BoolePoset {x} by A29,TARSKI:def 2;
+       then reconsider b as Element of BoolePoset {x};
+         a <= l iff b = {} by A31;
+       hence thesis;
+      suppose A32: not a <= l;
+       set b = {x};
+         b in the carrier of BoolePoset {x} by A29,TARSKI:def 2;
+       then reconsider b as Element of BoolePoset {x};
+         a <= l iff b = {} by A32;
+       hence thesis;
+      end;
+      hence thesis;
+     end;
+    consider f being map of L,BoolePoset {x} such that
+A33:  for p be Element of L holds P[p, f.p] from NonUniqExMD(A30);
+   dom f = the carrier of L & rng f c= the carrier of BoolePoset {x}
+                                                by FUNCT_2:def 1;
+then A34: f.:{z,y} = {f.z,f.y} by FUNCT_1:118;
+A35: ex_inf_of {z,y},L by YELLOW_0:21;
+      f is meet-preserving by A27,A33;
+then A36: f preserves_inf_of {z,y} by WAYBEL_0:def 34;
+A37: {} = f.(z "/\" y) by A28,A33
+     .= f.inf {z,y} by YELLOW_0:40
+     .= inf({f.z,f.y}) by A34,A35,A36,WAYBEL_0:def 30
+     .= f.z "/\" f.y by YELLOW_0:40
+     .= f.z /\ f.y by YELLOW_1:17;
+      now assume not f.z = {} & not f.y = {};
+     then f.z = {x} & f.y = {x} by A29,TARSKI:def 2;
+     hence contradiction by A37;
+    end;
+    hence z <= l or y <= l by A33;
+   end;
+end;
+
+
+theorem Th26:  ::3.12 (1-3), p.70
+for L being upper-bounded LATTICE, l being Element of L st l <> Top L holds
+l is prime iff (downarrow l)` is Filter of L
+ proof
+  let L be upper-bounded LATTICE, l be Element of L;
+  assume A1: l <> Top L;
+A2: (downarrow l)` = [#](L) \ (downarrow l) by PRE_TOPC:17
+     .= (the carrier of L) \ (downarrow l) by PRE_TOPC:12;
+set X1 = (the carrier of L)\(downarrow l);
+    for x be set st x in X1 holds x in the carrier of L by XBOOLE_0:def 4;
+  then X1 c= the carrier of L by TARSKI:def 3;
+  then reconsider X = X1 as Subset of L;
+  thus l is prime implies (downarrow l)` is Filter of L
+   proof
+    assume A3: l is prime;
+    A4: now let x,y be Element of L; assume x in X & y in X;
+     then x in the carrier of L & not x in (downarrow l) &
+     y in the carrier of L & not y in (downarrow l) by XBOOLE_0:def 4;
+then A5:  not x <= l & not y <= l by WAYBEL_0:17;
+A6:  x "/\" y <= x & x "/\" y <= y by YELLOW_0:23;
+       now assume x "/\" y in (downarrow l);
+      then x "/\" y <= l by WAYBEL_0:17;
+      hence contradiction by A3,A5,Def6;
+     end;
+     then x "/\" y in X by XBOOLE_0:def 4;
+     hence ex z being Element of L st z in X & z <= x & z <= y by A6;
+    end;
+    A7: now let x,y be Element of L; assume
+A8:  x in X & x <= y;
+     then x in the carrier of L & not x in (downarrow l) by XBOOLE_0:def 4;
+then not x <= l by WAYBEL_0:17;
+     then not y <= l by A8,ORDERS_1:26;
+     then not y in (downarrow l) by WAYBEL_0:17;
+     hence y in X by XBOOLE_0:def 4;
+    end;
+      now assume Top L in (downarrow l);
+     then Top L <= l by WAYBEL_0:17;
+     then Top L < l by A1,ORDERS_1:def 10;
+     then not l <= Top L by ORDERS_1:30;
+     hence contradiction by YELLOW_0:45;
+    end;
+    hence thesis by A2,A4,A7,WAYBEL_0:def 2,def 20,XBOOLE_0:def 4;
+   end;
+  thus (downarrow l)` is Filter of L implies l is prime
+   proof
+    assume A9: (downarrow l)` is Filter of L;
+    let x,y be Element of L; assume A10: x "/\" y <= l;
+      l <= l;
+then A11: l in (downarrow l) by WAYBEL_0:17;
+      now assume not x <= l & not y <= l;
+     then not x in (downarrow l) & not y in (downarrow l) by WAYBEL_0:17;
+     then x in X & y in X by XBOOLE_0:def 4;
+     then consider z being Element of L such that
+A12:  z in X & z <= x & z <= y by A2,A9,WAYBEL_0:def 2;
+       z <= x "/\" y by A12,YELLOW_0:23;
+     then z <= l by A10,ORDERS_1:26;
+     then l in X by A2,A9,A12,WAYBEL_0:def 20;
+     hence contradiction by A11,XBOOLE_0:def 4;
+    end;
+    hence x <= l or y <= l;
+   end;
+ end;
+
+
+theorem Th27:       ::3.12 (1-4), p.70
+for L being distributive LATTICE
+for l being Element of L holds
+l is prime iff l is irreducible
+ proof
+  let L be distributive LATTICE,l be Element of L;
+  thus l is prime implies l is irreducible by Th24;
+  thus l is irreducible implies l is prime
+   proof
+    assume A1: l is irreducible;
+    let x,y be Element of L; assume x "/\" y <= l;
+    then l = l "\/" (x "/\" y) by YELLOW_0:24
+     .= (l "\/" x) "/\" (l "\/" y) by WAYBEL_1:6;
+    then l = l "\/" x or l = l "\/" y by A1,Def2;
+    hence x <= l or y <= l by YELLOW_0:24;
+   end;
+ end;
+
+
+theorem Th28:
+for L being distributive LATTICE holds
+PRIME L = IRR L
+ proof
+ let L be distributive LATTICE;
+    now let l1 be set; assume A1: l1 in PRIME L;
+   then reconsider l = l1 as Element of PRIME L;
+   reconsider l as Element of L by A1;
+     l is prime by A1,Def7;
+   then l is irreducible by Th27;
+   hence l1 in IRR L by Def4;
+  end;
+  hence PRIME L c= IRR L by TARSKI:def 3;
+    now let l1 be set; assume A2: l1 in IRR L;
+   then reconsider l = l1 as Element of IRR L;
+   reconsider l as Element of L by A2;
+     l is irreducible by A2,Def4;
+   then l is prime by Th27;
+   hence l1 in PRIME L by Def7;
+  end;
+  hence IRR L c= PRIME L by TARSKI:def 3;
+ end;
+
+
+theorem  ::3.12 (1-5), p.70
+  for L being Boolean LATTICE
+for l being Element of L st l <> Top L holds
+l is prime iff for x be Element of L st x > l holds x = Top L
+ proof
+  let L be Boolean LATTICE,
+      l be Element of L; assume
+A1: l <> Top L;
+  thus l is prime implies (for x be Element of L st x > l holds x = Top L)
+   proof
+    assume A2: l is prime;
+    let x be Element of L; assume A3: x > l;
+    consider y being Element of L such that
+A4: y is_a_complement_of x by WAYBEL_1:def 24;
+A5: x "\/" y = Top L & x "/\" y = Bottom L by A4,WAYBEL_1:def 23;
+    then x "/\" y <= l by YELLOW_0:44;
+then x <= l or y <= l by A2,Def6;
+    then y < x by A3,ORDERS_1:32;
+    then y <= x by ORDERS_1:def 10;
+    hence thesis by A5,YELLOW_0:24;
+   end;
+  thus (for x be Element of L st x > l holds x = Top L) implies l is prime
+   proof
+    assume A6: for z be Element of L st z > l holds z = Top L;
+    let x,y be Element of L; assume A7: x "/\" y <= l;
+    assume A8: not x <= l & not y <= l;
+A9: l = l "\/" (x "/\" y) by A7,YELLOW_0:24
+     .= (l "\/" x) "/\" (l "\/" y) by WAYBEL_1:6;
+then A10: l <= (l "\/" x) & l <= (l "\/" y) by YELLOW_0:23;
+      l <> (l "\/" x) by A8,YELLOW_0:24;
+    then l < (l "\/" x) by A10,ORDERS_1:def 10;
+then A11: (l "\/" x) = Top L by A6;
+      l <> (l "\/" y) by A8,YELLOW_0:24;
+    then l < (l "\/" y) by A10,ORDERS_1:def 10;
+    then (l "\/" y) = Top L by A6;
+    hence contradiction by A1,A9,A11,YELLOW_5:2;
+   end;
+ end;
+
+
+theorem  ::3.12 (1-6), p.70
+  for L being continuous distributive lower-bounded LATTICE
+for l being Element of L st l <> Top L holds
+l is prime iff ex F being Open Filter of L st l is_maximal_in (F`)
+ proof
+  let L be continuous distributive lower-bounded LATTICE,
+      l be Element of L; assume A1: l <> Top L;
+    set F = (downarrow l)`;
+A2: (downarrow l)` = [#](L) \ (downarrow l) by PRE_TOPC:17
+     .= (the carrier of L) \ (downarrow l) by PRE_TOPC:12;
+  thus l is prime implies ex F being Open Filter of L st l is_maximal_in (F`)
+   proof
+    assume A3: l is prime;
+A4:  (for x being Element of L holds waybelow x is non empty directed) &
+    L is up-complete satisfying_axiom_of_approximation;
+      now let x be Element of L; assume x in F;
+     then not x in (downarrow l) by A2,XBOOLE_0:def 4;
+     then not x <= l by WAYBEL_0:17;
+     then consider y be Element of L such that
+A5:  y << x & not y <= l by A4,WAYBEL_3:24;
+       not y in (downarrow l) by A5,WAYBEL_0:17;
+     then y in F by A2,XBOOLE_0:def 4;
+     hence ex y be Element of L st y in F & y << x by A5;
+    end;
+    then reconsider F as Open Filter of L by A1,A3,Def1,Th26;
+    take F;
+      l <= l;
+then A6: l in (F`) by WAYBEL_0:17;
+      now given y being Element of L such that A7: y in (F`) & y > l;
+       y <= l by A7,WAYBEL_0:17;
+     hence contradiction by A7,ORDERS_1:30;
+    end;
+    hence l is_maximal_in (F`) by A6,WAYBEL_4:56;
+   end;
+ thus (ex F being Open Filter of L st l is_maximal_in (F`)) implies l is prime
+  proof
+   assume ex O being Open Filter of L st l is_maximal_in (O`);
+then A8: l is irreducible by Th13;
+     now let x,y be Element of L; assume A9: x "/\" y <= l;
+    assume A10: not x <= l & not y <= l;
+      l = l "\/" (x "/\" y) by A9,YELLOW_0:24
+     .= (l "\/" x) "/\" (l "\/" y) by WAYBEL_1:6;
+    then l = (l "\/" x) or l = (l "\/" y) by A8,Def2;
+    hence contradiction by A10,YELLOW_0:24;
+   end;
+   hence l is prime by Def6;
+  end;
+ end;
+
+
+theorem Th31:
+for L being RelStr, X being Subset of L holds
+chi(X, the carrier of L) is map of L, BoolePoset {{}}
+  proof
+   let L be RelStr, X be Subset of L;
+     the carrier of BoolePoset {{}} = the carrier of InclPoset bool {{}}
+                                           by YELLOW_1:4
+                                 .= bool {{}} by YELLOW_1:1
+                                 .= {0,1} by CARD_5:1,ZFMISC_1:30;
+   hence thesis;
+  end;
+
+
+theorem Th32:
+for L being non empty RelStr, p,x being Element of L holds
+chi((downarrow p)`,the carrier of L).x = {} iff x <= p
+  proof
+   let L be non empty RelStr, p,x be Element of L;
+     not x in (downarrow p)` iff x in downarrow p by YELLOW_6:10;
+   hence thesis by FUNCT_3:def 3,WAYBEL_0:17;
+  end;
+
+theorem Th33:
+for L being upper-bounded LATTICE, f being map of L,BoolePoset {{}},
+p being prime Element of L st
+chi((downarrow p)`,the carrier of L) = f holds
+f is meet-preserving join-preserving
+ proof
+  let L be upper-bounded LATTICE, f be map of L,BoolePoset {{}},
+      p be prime Element of L; assume
+     chi((downarrow p)`,the carrier of L) = f;
+   then for x being Element of L holds f.x = {} iff x <= p by Th32;
+  hence thesis by Th25;
+ end;
+
+theorem Th34:   ::3.13, p.71
+for L being complete LATTICE st PRIME L is order-generating holds
+L is distributive meet-continuous
+ proof
+  let L be complete LATTICE; assume A1: PRIME L is order-generating;
+  set H = {chi((downarrow p)`, the carrier of L) where p is Element of L:
+           p is prime};
+  consider p' being prime Element of L;
+A2: chi((downarrow p')`, the carrier of L) in H;
+     now let x be set; assume x in H;
+     then
+      ex p being Element of L st x = chi((downarrow p)`, the carrier of L) &
+      p is prime;
+     hence x is Function;
+   end;
+  then reconsider H as functional non empty set by A2,FRAENKEL:def 1;
+A3: the carrier of BoolePoset H = the carrier of InclPoset bool H
+                                                           by YELLOW_1:4
+                               .= bool H by YELLOW_1:1;
+  deffunc F(set) = {f where f is Element of H: f.$1 = 1};
+  consider F being Function such that
+A4: dom F = the carrier of L and
+A5: for x being set st x in the carrier of L holds F.x = F(x) from Lambda;
+     rng F c= the carrier of BoolePoset H
+   proof
+    let y; assume y in rng F;
+    then consider x such that A6: x in dom F & y = F.x by FUNCT_1:def 5;
+A7: y = {f where f is Element of H: f.x = 1} by A4,A5,A6;
+      y c= H
+     proof
+      let p be set; assume p in y;
+      then ex f be Element of H st p = f & f.x = 1 by A7;
+      hence thesis;
+     end;
+    hence y in the carrier of BoolePoset H by A3;
+   end;
+  then F is Function of the carrier of L,the carrier of BoolePoset H
+    by A4,FUNCT_2:def 1,RELSET_1:11;
+  then reconsider F as map of L, BoolePoset H;
+A8: F is meet-preserving
+    proof
+     let x,y be Element of L;
+      assume ex_inf_of {x,y},L;
+      thus ex_inf_of F.:{x,y},BoolePoset H by YELLOW_0:17;
+A9:   F.:{x,y} = {F.x,F.y} by A4,FUNCT_1:118;
+A10: {f where f is Element of H: f.x = 1} /\ {f where f is Element of H: f.y =
+1}
+      c= {f where f is Element of H: f.(x "/\" y) = 1}
+     proof
+      let p be set; assume
+        p in ({f where f is Element of H: f.x = 1} /\
+      {f where f is Element of H: f.y = 1});
+then A11:   p in {f where f is Element of H: f.x = 1} &
+      p in {f where f is Element of H: f.y = 1} by XBOOLE_0:def 3;
+      then consider f1 be Element of H such that A12: f1 = p & f1.x = 1;
+      consider f2 be Element of H such that A13: f2 = p & f2.y = 1 by A11;
+        f1 in H;
+      then consider a be Element of L such that
+A14:   chi((downarrow a)`, the carrier of L) = f1 & a is prime;
+      reconsider f1 as map of L,BoolePoset {{}} by A14,Th31;
+        dom f1 = the carrier of L by FUNCT_2:def 1;
+then A15:   {f1.x,f1.y} = f1.:{x,y} by FUNCT_1:118;
+        for x being Element of L holds f1.x = {} iff x <= a by A14,Th32;
+      then f1 is meet-preserving by A14,Th25;
+      then f1 preserves_inf_of {x,y} & ex_inf_of {x,y}, L &
+      x"/\"y = inf {x,y} & (f1.x)"/\"(f1.y) = inf {f1.x,f1.y}
+       by WAYBEL_0:def 34,YELLOW_0:17,40;
+      then f1.(x "/\" y) = (f1.x)"/\"(f1.y) by A15,WAYBEL_0:def 30
+       .= 1 by A12,A13,YELLOW_5:2;
+      hence thesis by A12;
+     end;
+A16: {f where f is Element of H: f.(x "/\" y) = 1} c=
+  {f where f is Element of H: f.x = 1} /\ {f where f is Element of H: f.y = 1}
+    proof
+     let p be set; assume
+       p in {f where f is Element of H: f.(x "/\" y) = 1};
+     then consider g be Element of H such that A17: g = p & g.(x "/\" y) = 1;
+       g in H;
+     then consider a be Element of L such that
+A18:  chi((downarrow a)`, the carrier of L) = g & a is prime;
+     reconsider g as map of L,BoolePoset {{}} by A18,Th31;
+       dom g = the carrier of L by FUNCT_2:def 1;
+then A19:  {g.x,g.y} = g.:{x,y} by FUNCT_1:118;
+A20:  1 = Top BoolePoset {{}} by CARD_5:1,YELLOW_1:19;
+A21:  g.x <= Top BoolePoset {{}} & g.y <= Top BoolePoset {{}} by YELLOW_0:45;
+       g is meet-preserving by A18,Th33;
+     then g preserves_inf_of {x,y} & ex_inf_of {x,y}, L &
+      x"/\"y = inf {x,y} & (g.x)"/\"(g.y) = inf {g.x,g.y}
+          by WAYBEL_0:def 34,YELLOW_0:17,40;
+     then g.(x "/\" y) = (g.x)"/\"(g.y) by A19,WAYBEL_0:def 30;
+then A22:  g.x >= Top BoolePoset {{}} & g.y >= Top BoolePoset {{}}
+                          by A17,A20,YELLOW_0:23;
+then A23:  g.x = 1 by A20,A21,ORDERS_1:25;
+       g.y = 1 by A20,A21,A22,ORDERS_1:25;
+     then p in {f where f is Element of H: f.x = 1} &
+     p in {f where f is Element of H: f.y = 1} by A17,A23;
+     hence thesis by XBOOLE_0:def 3;
+    end;
+      thus inf (F.:{x,y}) = F.x "/\" F.y by A9,YELLOW_0:40
+        .= (F.x) /\ (F.y) by YELLOW_1:17
+        .= {f where f is Element of H: f.x = 1} /\ (F.y) by A5
+        .= {f where f is Element of H: f.x = 1} /\
+           {f where f is Element of H: f.y = 1} by A5
+        .= {f where f is Element of H: f.(x "/\" y) = 1} by A10,A16,XBOOLE_0:
+def 10
+        .= F.(x "/\" y) by A5
+        .= F.inf {x,y} by YELLOW_0:40;
+    end;
+A24: F is join-preserving
+    proof
+     let x,y be Element of L;
+      assume ex_sup_of {x,y},L;
+      thus ex_sup_of F.:{x,y},BoolePoset H by YELLOW_0:17;
+A25:   F.:{x,y} = {F.x,F.y} by A4,FUNCT_1:118;
+A26: {f where f is Element of H: f.x = 1} \/ {f where f is Element of H: f.y =
+1}
+      c= {f where f is Element of H: f.(x "\/" y) = 1}
+     proof
+      let p be set; assume
+A27:    p in ({f where f is Element of H: f.x = 1} \/
+      {f where f is Element of H: f.y = 1});
+      per cases by A27,XBOOLE_0:def 2;
+      suppose p in {f where f is Element of H: f.x = 1};
+      then consider f1 be Element of H such that A28: f1 = p & f1.x = 1;
+        f1 in H;
+      then consider a be Element of L such that
+A29:   chi((downarrow a)`, the carrier of L) = f1 & a is prime;
+      reconsider f1 as map of L,BoolePoset {{}} by A29,Th31;
+        dom f1 = the carrier of L by FUNCT_2:def 1;
+then A30:   {f1.x,f1.y} = f1.:{x,y} by FUNCT_1:118;
+A31:   1 = Top BoolePoset {{}} by CARD_5:1,YELLOW_1:19;
+A32:  f1.y <= Top BoolePoset {{}} by YELLOW_0:45;
+        for x being Element of L holds f1.x = {} iff x <= a by A29,Th32;
+      then f1 is join-preserving by A29,Th25;
+      then f1 preserves_sup_of {x,y} & ex_sup_of {x,y}, L &
+      x"\/"y = sup {x,y} & (f1.x)"\/"(f1.y) = sup {f1.x,f1.y}
+       by WAYBEL_0:def 35,YELLOW_0:17,41;
+      then f1.(x "\/" y) = (f1.x)"\/"(f1.y) by A30,WAYBEL_0:def 31
+       .= 1 by A28,A31,A32,YELLOW_0:24;
+      hence thesis by A28;
+      suppose p in {f where f is Element of H: f.y = 1};
+      then consider f1 be Element of H such that A33: f1 = p & f1.y = 1;
+        f1 in H;
+      then consider b be Element of L such that
+A34:   chi((downarrow b)`, the carrier of L) = f1 & b is prime;
+      reconsider f1 as map of L,BoolePoset {{}} by A34,Th31;
+        dom f1 = the carrier of L by FUNCT_2:def 1;
+then A35:   {f1.x,f1.y} = f1.:{x,y} by FUNCT_1:118;
+A36:   1 = Top BoolePoset {{}} by CARD_5:1,YELLOW_1:19;
+A37:  f1.x <= Top BoolePoset {{}} by YELLOW_0:45;
+        for x being Element of L holds f1.x = {} iff x <= b by A34,Th32;
+      then f1 is join-preserving by A34,Th25;
+      then f1 preserves_sup_of {x,y} & ex_sup_of {x,y}, L &
+      x"\/"y = sup {x,y} & (f1.x)"\/"(f1.y) = sup {f1.x,f1.y}
+                       by WAYBEL_0:def 35,YELLOW_0:17,41;
+      then f1.(x "\/" y) = (f1.y)"\/"(f1.x) by A35,WAYBEL_0:def 31
+        .= 1 by A33,A36,A37,YELLOW_0:24;
+      hence thesis by A33;
+     end;
+A38: {f where f is Element of H: f.(x "\/" y) = 1} c=
+  {f where f is Element of H: f.x = 1} \/ {f where f is Element of H: f.y = 1}
+    proof
+     let p be set; assume
+       p in {f where f is Element of H: f.(x "\/" y) = 1};
+     then consider g be Element of H such that A39: g = p & g.(x "\/" y) = 1;
+       g in H;
+     then consider a be Element of L such that
+A40:  chi((downarrow a)`, the carrier of L) = g & a is prime;
+     reconsider g as map of L,BoolePoset {{}} by A40,Th31;
+A41: dom g = the carrier of L & rng g c= the carrier of BoolePoset {{}}
+                                                by FUNCT_2:def 1;
+A42: the carrier of BoolePoset {{}} = the carrier of InclPoset bool {{}}
+                                           by YELLOW_1:4
+                                 .= bool {{}} by YELLOW_1:1
+                                 .= { {} , {{}}} by ZFMISC_1:30;
+A43:   g.:{x,y} = {g.x,g.y} by A41,FUNCT_1:118;
+A44:   (g.x = {} or g.x = {{}}) & (g.y = {} or g.y = {{}}) by A42,TARSKI:def 2;
+A45:  1 = Top BoolePoset {{}} by CARD_5:1,YELLOW_1:19;
+       g is join-preserving by A40,Th33;
+     then A46: g preserves_sup_of {x,y} & ex_sup_of {x,y}, L &
+      x"\/"y = sup {x,y} & (g.x)"\/"(g.y) = sup {g.x,g.y}
+          by WAYBEL_0:def 35,YELLOW_0:17,41;
+       now assume g.x = {} & g.y = {};
+       then (g.x)"\/"(g.y) = {} \/ {} by YELLOW_1:17
+                       .= 0;
+       hence contradiction by A39,A43,A46,WAYBEL_0:def 31;
+     end;
+     then g.x = Top BoolePoset {{}} or g.y = Top BoolePoset {{}}
+                          by A44,YELLOW_1:19;
+     then p in {f where f is Element of H: f.x = 1} or
+     p in {f where f is Element of H: f.y = 1} by A39,A45;
+     hence thesis by XBOOLE_0:def 2;
+    end;
+      thus sup (F.:{x,y}) = F.x "\/" F.y by A25,YELLOW_0:41
+        .= (F.x) \/ (F.y) by YELLOW_1:17
+        .= {f where f is Element of H: f.x = 1} \/ (F.y) by A5
+        .= {f where f is Element of H: f.x = 1} \/
+           {f where f is Element of H: f.y = 1} by A5
+        .= {f where f is Element of H: f.(x "\/" y) = 1} by A26,A38,XBOOLE_0:
+def 10
+        .= F.(x "\/" y) by A5
+        .= F.sup {x,y} by YELLOW_0:41;
+    end;
+A47: F is one-to-one
+    proof
+     let x1,x2 be set; assume A48: x1 in dom F & x2 in
+ dom F & F.x1 = F.x2;
+     then reconsider l1 = x1 as Element of L by A4;
+     reconsider l2 = x2 as Element of L by A4,A48;
+       now assume A49: l1 <> l2;
+A50:  F.l1 = {f where f is Element of H: f.l1 = 1} by A5;
+A51:  F.l2 = {f where f is Element of H: f.l2 = 1} by A5;
+     per cases by A49,ORDERS_1:25;
+     suppose not l1 <= l2;
+     then consider p be Element of L such that
+A52:  p in PRIME L & l2 <= p & not l1 <= p by A1,Th17;
+set CH = chi((downarrow p)`,the carrier of L);
+       p is prime by A52,Def7;
+     then CH in H;
+     then reconsider CH as Element of H;
+A53:  dom CH = the carrier of L & rng CH c= {0,1} by FUNCT_2:def 1,RELSET_1:12;
+     then CH.l1 in rng CH by FUNCT_1:def 5;
+then A54:  CH.l1 = 0 or CH.l1 = 1 by A53,TARSKI:def 2;
+       now assume CH in F.l2;
+      then ex f be Element of H st f = CH & f.l2 = 1 by A51;
+      hence contradiction by A52,Th32;
+     end;
+     hence contradiction by A48,A50,A52,A54,Th32;
+     suppose not l2 <= l1;
+     then consider p be Element of L such that
+A55:  p in PRIME L & l1 <= p & not l2 <= p by A1,Th17;
+set CH = chi((downarrow p)`,the carrier of L);
+       p is prime by A55,Def7;
+     then CH in H;
+     then reconsider CH as Element of H;
+A56:  dom CH = the carrier of L & rng CH c= {0,1} by FUNCT_2:def 1,RELSET_1:12;
+     then CH.l2 in rng CH by FUNCT_1:def 5;
+then A57:  CH.l2 = 0 or CH.l2 = 1 by A56,TARSKI:def 2;
+       now assume CH in F.l1;
+      then ex f be Element of H st f = CH & f.l1 = 1 by A50;
+      hence contradiction by A55,Th32;
+     end;
+     hence contradiction by A48,A51,A55,A57,Th32;
+     end;
+     hence thesis;
+    end;
+  hence L is distributive by A8,A24,Th3;
+    F is sups-preserving
+   proof
+    let X be Subset of L;
+      F preserves_sup_of X
+     proof
+      assume ex_sup_of X,L;
+      thus ex_sup_of (F.:X),BoolePoset H by YELLOW_0:17;
+A58:   F.(sup X) = {g where g is Element of H: g.(sup X) = 1} by A5;
+A59:    sup (F.:X) c= F.(sup X)
+       proof
+        let a be set; assume a in sup (F.:X);
+        then a in union (F.:X) by YELLOW_1:21;
+        then consider Y be set such that
+A60:     a in Y & Y in (F.:X) by TARSKI:def 4;
+        consider z be set such that
+A61:     z in dom F & z in X & Y = F.z by A60,FUNCT_1:def 12;
+        reconsider z as Element of L by A61;
+          F.z = {f where f is Element of H: f.z = 1} by A5;
+        then consider f be Element of H such that
+A62:     a = f & f.z = 1 by A60,A61;
+          f in H;
+        then consider p be Element of L such that
+A63:     f = chi((downarrow p)`, the carrier of L) & p is prime;
+A64:    dom f = the carrier of L & rng f c= {0,1}
+                 by A63,FUNCT_2:def 1,RELSET_1:12;
+       then f.(sup X) in rng f by FUNCT_1:def 5;
+then A65:    f.(sup X) = 0 or f.(sup X) = 1 by A64,TARSKI:def 2;
+          now assume f.(sup X) = 0;
+then A66:      sup X <= p by A63,Th32;
+           sup X is_>=_than X by YELLOW_0:32;
+         then z <= sup X by A61,LATTICE3:def 9;
+         then z <= p by A66,ORDERS_1:26;
+         hence contradiction by A62,A63,Th32;
+        end;
+        hence a in F.(sup X) by A58,A62,A65;
+       end;
+        F.(sup X) c= sup (F.:X)
+       proof
+        let a be set; assume a in F.(sup X);
+        then consider f be Element of H such that A67: a = f & f.(sup X) = 1
+by A58;
+          f in H;
+        then consider p be Element of L such that
+A68:     f = chi((downarrow p)`, the carrier of L) & p is prime;
+A69:     not sup X <= p by A67,A68,Th32;
+          now assume for l be Element of L st l in X holds l <= p;
+         then X is_<=_than p by LATTICE3:def 9;
+         hence contradiction by A69,YELLOW_0:32;
+        end;
+        then consider l be Element of L such that
+A70:     l in X & not l <= p;
+A71:    dom f = the carrier of L & rng f c= {0,1}
+                by A68,FUNCT_2:def 1,RELSET_1:12;
+       then f.l in rng f by FUNCT_1:def 5;
+then f.l = 0 or f.l = 1 by A71,TARSKI:def 2;
+        then f in {g where g is Element of H: g.l = 1} by A68,A70,Th32;
+then A72:     f in F.l by A5;
+          (F.l) in (F.:X) by A4,A70,FUNCT_1:def 12;
+        then a in union (F.:X) by A67,A72,TARSKI:def 4;
+        hence a in sup (F.:X) by YELLOW_1:21;
+       end;
+      hence sup (F.:X) = F.(sup X) by A59,XBOOLE_0:def 10;
+     end;
+    hence thesis;
+   end;
+  hence L is meet-continuous by A8,A47,Th4;
+ end;
+
+
+theorem Th35:    ::3.14 (1-3), p.71
+for L being lower-bounded continuous LATTICE holds
+L is distributive iff PRIME L is order-generating
+ proof
+  let L be lower-bounded continuous LATTICE;
+  thus L is distributive implies PRIME L is order-generating
+   proof
+    assume L is distributive;
+then A1: PRIME L = IRR L by Th28;
+A2: IRR L \ {Top L} c= IRR L by XBOOLE_1:36;
+      IRR L \ {Top L} is order-generating by Th18;
+    hence thesis by A1,A2,Th19;
+   end;
+  thus PRIME L is order-generating implies L is distributive by Th34;
+ end;
+
+
+theorem  ::3.14 (1-2), p.71
+  for L being lower-bounded continuous LATTICE holds
+L is distributive iff L is Heyting
+ proof
+  let L be lower-bounded continuous LATTICE;
+  thus L is distributive implies L is Heyting
+   proof
+    assume L is distributive;
+    then PRIME L is order-generating by Th35;
+    then L is distributive meet-continuous by Th34;
+    hence thesis by WAYBEL_2:56;
+   end;
+  thus L is Heyting implies L is distributive by WAYBEL_1:69;
+ end;
+
+
+theorem Th37:
+for L being continuous complete LATTICE st
+ for l being Element of L ex X being Subset of L st l = sup X &
+ for x being Element of L st x in X holds x is co-prime
+for l being Element of L holds l = "\/"((waybelow l) /\ PRIME(L opp), L)
+ proof
+  let L be continuous complete LATTICE; assume
+A1: for l being Element of L ex X being Subset of L st l = sup X &
+    for x being Element of L st x in X holds x is co-prime;
+  let l be Element of L;
+  defpred P[set,set] means $2 c= PRIME L~ & $1 = "\/"($2,L);
+A2: for e be set st e in the carrier of L ex u be set st P[e,u]
+     proof
+      let e be set; assume e in the carrier of L;
+      then reconsider l = e as Element of L;
+      consider X being Subset of L such that A3: l = sup X &
+       for x being Element of L st x in X holds x is co-prime by A1;
+        now let p1 be set; assume A4: p1 in X;
+       then reconsider p = p1 as Element of L;
+         p is co-prime by A3,A4;
+then A5:    p~ is prime by Def8;
+         p = p~ by LATTICE3:def 6;
+       hence p1 in PRIME L~ by A5,Def7;
+      end;
+then X c= PRIME L~ by TARSKI:def 3;
+      hence thesis by A3;
+     end;
+  consider f being Function such that
+A6: dom f = the carrier of L and
+A7: for e be set st e in the carrier of L holds P[e, f.e]
+     from NonUniqFuncEx(A2);
+A8:l = sup waybelow l by WAYBEL_3:def 5;
+A9: waybelow l c= {sup X where X is Subset of L :
+     X in rng f & sup X in waybelow l}
+   proof
+    let e be set; assume A10: e in waybelow l;
+then A11: e = "\/"((f.e),L) & e is Element of L by A7;
+A12: f.e in rng f by A6,A10,FUNCT_1:def 5;
+   A13: L~= RelStr(#the carrier of L,(the InternalRel of L)~#)
+ by LATTICE3:def 5;
+      f.e c= PRIME L~ by A7,A10;
+    then f.e c= the carrier of L~ by XBOOLE_1:1;
+    then f.e is Subset of L by A13;
+    hence thesis by A10,A11,A12;
+   end;
+   defpred P[Subset of L] means $1 in rng f & sup $1 in waybelow l;
+    {sup X where X is Subset of L : P[X] } c= waybelow l
+   proof
+    let e be set; assume
+      e in {sup X where X is Subset of L : X in rng f & sup X in
+ waybelow l};
+    then consider X be Subset of L such that
+A14: e = sup X & X in rng f & sup X in waybelow l;
+    thus thesis by A14;
+   end;
+   then
+A15:l = "\/"({sup X where X is Subset of L : P[X]}, L) by A8,A9,XBOOLE_0:def 10
+     .= "\/"(union {X where X is Subset of L : P[X]}, L) from Sup_of_Sups;
+set Z = union {X where X is Subset of L : X in rng f & sup X in waybelow l};
+A16: ex_sup_of Z,L by YELLOW_0:17;
+A17: ex_sup_of ((waybelow l) /\ PRIME(L~)),L by YELLOW_0:17;
+A18: ex_sup_of (waybelow l),L by YELLOW_0:17;
+    Z c= (waybelow l) /\ PRIME(L~)
+   proof
+    let e be set; assume e in Z;
+    then consider Y be set such that
+A19: e in Y & Y in {X where X is Subset of L : X in rng f & sup X in
+ waybelow l}
+                    by TARSKI:def 4;
+    consider X be Subset of L such that
+A20: Y = X & X in rng f & sup X in waybelow l by A19;
+    consider r be set such that A21: r in dom f & X = f.r by A20,FUNCT_1:def 5;
+    A22: X c= PRIME(L~) by A6,A7,A21;
+    reconsider e1 = e as Element of L by A19,A20;
+      e1 <= sup X by A19,A20,YELLOW_2:24;
+    then e in waybelow l by A20,WAYBEL_0:def 19;
+    hence thesis by A19,A20,A22,XBOOLE_0:def 3;
+   end;
+then A23:l <= "\/"((waybelow l) /\ PRIME(L~),L) by A15,A16,A17,YELLOW_0:34;
+    (waybelow l) /\ PRIME(L~) c= waybelow l by XBOOLE_1:17;
+  then "\/"((waybelow l) /\
+ PRIME(L~),L) <= "\/"(waybelow l,L) by A17,A18,YELLOW_0:34
+;
+  hence l = "\/"((waybelow l) /\ PRIME(L~), L) by A8,A23,ORDERS_1:25;
+ end;
+
+
+Lm2:    ::3.15 (1->2)
+for L being continuous complete LATTICE st
+  for l being Element of L ex X being Subset of L st l = sup X &
+  for x being Element of L st x in X holds x is co-prime
+holds L is completely-distributive
+ proof
+  let L be continuous complete LATTICE such that
+A1: for l being Element of L ex X being Subset of L st l = sup X &
+    for x being Element of L st x in X holds x is co-prime;
+  thus L is complete;
+  let J be non empty set, K be non-empty ManySortedSet of J;
+  let F be DoubleIndexedSet of K,L;
+A2: Inf Sups F >= Sup Infs Frege F by WAYBEL_5:16;
+  set l = Inf Sups F;
+  set X = (waybelow l) /\ PRIME(L~);
+A3: X c= waybelow l by XBOOLE_1:17;
+   then X c= the carrier of L by XBOOLE_1:1;
+  then reconsider X as Subset of L;
+A4: Inf Sups F = sup X by A1,Th37;
+A5: dom F = J by PBOOLE:def 3;
+A6: for x being Element of L st x in X holds x is co-prime
+    proof
+     let x be Element of L; assume x in X;
+then A7:  x in PRIME(L~) by XBOOLE_0:def 3;
+       x = x~ by LATTICE3:def 6;
+     then x~ is prime by A7,Def7;
+     hence x is co-prime by Def8;
+    end;
+A8: inf rng Sups F = Inf Sups F by YELLOW_2:def 6;
+     X is_<=_than Sup Infs Frege F
+    proof
+     let p be Element of L; assume A9: p in X;
+     defpred P[set,set] means
+      $2 in K.$1 & [p,(F.$1).$2] in the InternalRel of L;
+A10:    for j being set st j in J ex k being set st P[j,k]
+       proof
+        let j1 be set; assume j1 in J;
+        then reconsider j = j1 as Element of J;
+A11:     p << l by A3,A9,WAYBEL_3:7;
+          dom (Sups F) = J by A5,FUNCT_2:def 1;
+then A12:     (Sups F).j in rng Sups F by FUNCT_1:def 5;
+          Sup (F.j) = (Sups F).j by A5,WAYBEL_5:def 1;
+then A13:     l <= Sup (F.j) by A8,A12,YELLOW_2:24;
+       Sup (F.j) = sup rng (F.j) by YELLOW_2:def 5;
+        then consider A being finite Subset of L such that
+A14:     A c= rng (F.j) & p <= sup A by A11,A13,WAYBEL_3:18;
+        consider k be Element of K.j;
+          A c= A \/ {F.j.k} &
+       ex_sup_of A,L & ex_sup_of (A \/ {F.j.k}),L by XBOOLE_1:7,YELLOW_0:17
+;
+        then sup A <= sup (A \/ {F.j.k}) by YELLOW_0:34;
+then A15:     p <= sup (A \/ {F.j.k}) by A14,ORDERS_1:26;
+          p is co-prime by A6,A9;
+        then consider a be Element of L such that
+A16:     a in (A \/ {F.j.k}) & p <= a by A15,Th23;
+        per cases by A16,XBOOLE_0:def 2;
+        suppose a in A;
+         then consider k1 be set such that
+A17:      k1 in dom (F.j) & a = F.j.k1 by A14,FUNCT_1:def 5;
+         reconsider k1 as Element of K.j by A17,FUNCT_2:def 1;
+           [p,(F.j).k1] in the InternalRel of L by A16,A17,ORDERS_1:def 9;
+         hence thesis;
+        suppose a in {F.j.k};
+         then a = F.j.k by TARSKI:def 1;
+         then [p,(F.j).k] in the InternalRel of L by A16,ORDERS_1:def 9;
+         hence thesis;
+       end;
+     consider f1 being Function such that
+A18:    dom f1 = J and
+A19:    for j being set st j in J holds P[j, f1.j] from NonUniqFuncEx(A10);
+       now let g be set; assume A20: g in dom f1;
+        F.g is Function;
+      then g in F"SubFuncs rng F by A5,A18,A20,FUNCT_6:28;
+      hence g in dom doms F by FUNCT_6:def 2;
+     end;
+then A21:   dom f1 c= dom doms F by TARSKI:def 3;
+       now let g be set; assume g in dom doms F;
+      then g in F"SubFuncs rng F by FUNCT_6:def 2;
+      hence g in dom f1 by A5,A18,FUNCT_6:28;
+     end;
+     then A22: dom doms F c= dom f1 by TARSKI:def 3;
+then A23:   dom f1 = dom doms F by A21,XBOOLE_0:def 10;
+     A24: for b be set st b in dom doms F holds f1.b in (doms F).b
+      proof
+       let b be set; assume A25: b in dom doms F;
+then A26:     F.b is Function of K.b, the carrier of L by A18,A22,WAYBEL_5:6;
+         (doms F).b = dom (F.b) by A5,A18,A22,A25,FUNCT_6:31
+                 .= K.b by A26,FUNCT_2:def 1;
+       hence f1.b in (doms F).b by A18,A19,A22,A25;
+      end;
+then A27:  f1 in product doms F by A23,CARD_3:18;
+     reconsider f = f1 as Element of product doms F by A23,A24,CARD_3:18;
+     reconsider F1 = F as Function-yielding Function;
+     A28: (Frege F1).f1 = F1..f1 by A27,PRALG_2:def 8;
+        p is_<=_than rng ((Frege F).f)
+       proof
+        let b be Element of L; assume b in rng ((Frege F).f);
+        then consider a be set such that
+A29:      a in dom ((Frege F).f) & b = ((Frege F).f).a by FUNCT_1:def 5;
+        reconsider a as Element of J by A5,A28,A29,PRALG_1:def 18;
+          f in dom Frege F & a in dom F by A5,A27,PBOOLE:def 3;
+        then ((Frege F).f).a = (F.a).(f1.a) by WAYBEL_5:9;
+        then [p,((Frege F).f).a] in the InternalRel of L by A19;
+        hence p <= b by A29,ORDERS_1:def 9;
+       end;
+      then p <= inf rng ((Frege F).f) by YELLOW_0:33;
+then A30:    p <= Inf((Frege F).f) by YELLOW_2:def 6;
+     reconsider D = product doms F as non empty set by A23,A24,CARD_3:18;
+     reconsider f2 = f as Element of D;
+     reconsider P= D --> J as ManySortedSet of D;
+     reconsider R = Frege F as DoubleIndexedSet of P, L;
+        Inf(R.f2) in rng Infs (R) by WAYBEL_5:14;
+      then Inf((Frege F).f) <= sup rng Infs Frege F by YELLOW_2:24;
+      then Inf((Frege F).f) <= Sup Infs Frege F by YELLOW_2:def 5;
+     hence thesis by A30,ORDERS_1:26;
+    end;
+   then sup X <= Sup Infs Frege F by YELLOW_0:32;
+  hence Inf Sups F = Sup Infs Frege F by A2,A4,ORDERS_1:25;
+ end;
+
+
+Lm3:   ::3.15 (2->3)
+for L being completely-distributive complete LATTICE holds
+L is distributive continuous & L~ is continuous
+ proof
+  let L be completely-distributive complete LATTICE;
+    L~ is completely-distributive by YELLOW_7:51;
+  hence thesis by WAYBEL_5:24;
+ end;
+
+Lm4:   ::3.15 (3->1)
+for L being complete LATTICE st
+L is distributive continuous & L~ is continuous holds
+for l being Element of L ex X being Subset of L st l = sup X &
+ for x being Element of L st x in X holds x is co-prime
+ proof
+  let L be complete LATTICE; assume that
+A1: L is distributive continuous and
+A2: L~ is continuous;
+  let l be Element of L;
+  reconsider L as distributive continuous complete LATTICE by A1;
+    l = l~ by LATTICE3:def 6;
+  then reconsider l1 = l as Element of L~;
+    PRIME L~ is order-generating by A2,Th35;
+  then consider Y be Subset of (PRIME L~) such that
+A3:l1 = "/\" (Y,L~) by Th15;
+  A4: L~= RelStr(#the carrier of L,(the InternalRel of L)~#)
+ by LATTICE3:def 5;
+    Y c= the carrier of L~ by XBOOLE_1:1;
+  then reconsider Y as Subset of L by A4;
+A5:for x being Element of L st x in Y holds x is co-prime
+    proof
+     let x be Element of L; assume A6: x in Y;
+       x = x~ by LATTICE3:def 6;
+     then x~ is prime by A6,Def7;
+     hence thesis by Def8;
+    end;
+    ex_sup_of Y,L by YELLOW_0:17;
+  then "\/"(Y,L) = "/\"(Y,L~) by YELLOW_7:12;
+  hence thesis by A3,A5;
+ end;
+
+theorem  ::3.15 (2-1), p.72
+  for L being complete LATTICE holds
+L is completely-distributive iff
+L is continuous &
+for l being Element of L ex X being Subset of L st l = sup X &
+for x being Element of L st x in X holds x is co-prime
+ proof
+  let L be complete LATTICE;
+  thus L is completely-distributive implies
+   L is continuous &
+   for l being Element of L ex X being Subset of L st l = sup X &
+   for x being Element of L st x in X holds x is co-prime
+  proof
+   assume L is completely-distributive;
+   then reconsider L as completely-distributive LATTICE;
+     L is distributive continuous & L~ is continuous by Lm3;
+   hence thesis by Lm4;
+  end;
+  thus L is continuous &
+   (for l being Element of L ex X being Subset of L st l = sup X &
+   for x being Element of L st x in X holds x is co-prime) implies
+   L is completely-distributive by Lm2;
+ end;
+
+theorem  ::3.15 (2-3), p.72
+  for L being complete LATTICE holds
+L is completely-distributive iff
+L is distributive continuous & L opp is continuous
+ proof
+  let L be complete LATTICE;
+  thus L is completely-distributive implies
+  L is distributive continuous & L~ is continuous by Lm3;
+  assume A1: L is distributive continuous & L~ is continuous;
+  then reconsider L as distributive continuous LATTICE;
+    for l being Element of L ex X being Subset of L st l = sup X &
+  for x being Element of L st x in X holds x is co-prime by A1,Lm4;
+  hence thesis by Lm2;
+ end;

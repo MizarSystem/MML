@@ -1,0 +1,307 @@
+:: On the Segmentation of a Simple Closed Curve
+::  by Andrzej Trybulec
+::
+:: Received August 18, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary JORDAN_A, TOPREAL1, TBSP_1, PSCOMP_1, JORDAN3, JORDAN6, BOOLE,
+      RCOMP_1, FINSEQ_4, SQUARE_1, TOPREAL2, ARYTM_3, METRIC_1, GOBRD10,
+      PRE_TOPC, EUCLID, FINSEQ_1, GR_CY_1, RELAT_1, FUNCT_1, ARYTM, ARYTM_1,
+      WEIERSTR, PCOMPS_1, FINSET_1, REALSET1, TOPMETR, CONNSP_2, COMPLEX1,
+      SEQ_2, ORDINAL2, COMPTS_1, SUBSET_1, LATTICES;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, ORDINAL2, ORDINAL1, NUMBERS,
+      XCMPLX_0, XREAL_0, REAL_1, NAT_1, FINSET_1, REALSET1, FUNCT_1, FUNCT_2,
+      BINOP_1, FINSEQ_1, FINSEQ_4, BINARITH, SQUARE_1, PRE_CIRC, SEQ_4,
+      RCOMP_1, TOPMETR, CONNSP_2, STRUCT_0, PRE_TOPC, TBSP_1, PCOMPS_1,
+      COMPTS_1, SFMASTR3, BORSUK_1, METRIC_1, EUCLID, TOPREAL1, TOPREAL2,
+      JGRAPH_1, GOBRD10, WEIERSTR, JORDAN5C, JORDAN6, JORDAN7, PSCOMP_1,
+      JORDAN1K;
+ constructors FINSEQ_4, JORDAN7, GOBRD10, PRE_CIRC, SFMASTR3, REALSET1,
+      BINARITH, PSCOMP_1, JORDAN5C, REAL_1, SQUARE_1, JORDAN6, TBSP_1,
+      CONNSP_1, JORDAN9, TOPRNS_1, JORDAN1K, RCOMP_1, CARD_4, DOMAIN_1, TOPS_2;
+ clusters RELSET_1, FINSEQ_1, STRUCT_0, EUCLID, TOPREAL6, PRELAMB, SUBSET_1,
+      JORDAN1B, REVROT_1, REALSET1, ARYTM_3, BORSUK_1, XREAL_0, WAYBEL_2,
+      PSCOMP_1, RCOMP_1, FINSET_1, XBOOLE_0, MEMBERED, PRE_CIRC;
+ requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
+
+
+begin :: Preliminaries
+
+ reserve x,y,A for set;
+
+scheme AndScheme{A()-> non empty set, P,Q[set]}:
+  { a where a is Element of A(): P[a] & Q[a] }
+   = { a1 where a1 is Element of A(): P[a1] }
+   /\ { a2 where a2 is Element of A(): Q[a2] };
+
+reserve C,C1,C2 for Simple_closed_curve,
+        X,Y for non empty set,
+        p,q,p1,p2,q1,q2,z1,z2 for Point of TOP-REAL 2,
+        i,j,k,m,n for Nat,
+        r,s for real number,
+        e for Real;
+
+theorem :: JORDAN_A:1
+ for A,B being finite non empty Subset of REAL
+  holds min(A \/ B) = min(min A, min B);
+
+definition let T be non empty TopSpace;
+ cluster compact non empty Subset of T;
+end;
+
+theorem :: JORDAN_A:2
+ for T being non empty TopSpace, f being continuous RealMap of T,
+     A being compact Subset of T
+  holds f.:A is compact;
+
+theorem :: JORDAN_A:3
+ for A being compact Subset of REAL, B being non empty Subset of REAL st B c= A
+  holds inf B in A;
+
+theorem :: JORDAN_A:4
+ for A,B being compact non empty Subset of TOP-REAL n,
+     f being continuous RealMap of [:TOP-REAL n, TOP-REAL n:],
+     g being RealMap of TOP-REAL n
+      st for p being Point of TOP-REAL n
+          ex G being Subset of REAL
+           st G = { f.(p,q) where q is Point of TOP-REAL n : q in B } &
+              g.p = inf G
+   holds inf(f.:[:A,B:]) = inf(g.:A);
+
+theorem :: JORDAN_A:5
+ for A,B being compact non empty Subset of TOP-REAL n,
+     f being continuous RealMap of [:TOP-REAL n, TOP-REAL n:],
+     g being RealMap of TOP-REAL n
+      st for q being Point of TOP-REAL n
+          ex G being Subset of REAL
+           st G = { f.(p,q) where p is Point of TOP-REAL n : p in A } &
+              g.q = inf G
+   holds inf(f.:[:A,B:]) = inf(g.:B );
+
+theorem :: JORDAN_A:6
+ q in Lower_Arc C & q <> W-min C implies LE E-max C, q, C;
+
+theorem :: JORDAN_A:7
+ q in Upper_Arc C implies LE q, E-max C, C;
+
+begin :: The Euclidean distance
+
+definition let n;
+ func Eucl_dist n -> RealMap of [:TOP-REAL n, TOP-REAL n:] means
+:: JORDAN_A:def 1
+  for p,q being Point of TOP-REAL n holds it.(p,q) =|.p - q.|;
+end;
+
+definition let T be non empty TopSpace, f be RealMap of T;
+ redefine attr f is continuous means
+:: JORDAN_A:def 2
+  for p being Point of T, N being Neighbourhood of f.p
+   ex V being a_neighborhood of p st f.:V c= N;
+end;
+
+definition let n;
+ cluster Eucl_dist n -> continuous;
+end;
+
+begin :: On the distance between subsets of a Euclidean space
+
+theorem :: JORDAN_A:8
+ :: JORDAN1K:39, JGRAPH_1:55
+ for A,B being non empty compact Subset of TOP-REAL n st A misses B
+  holds dist_min(A,B) > 0;
+
+begin :: On the segments
+
+theorem :: JORDAN_A:9
+ LE p,q,C & LE q, E-max C, C & p <> q implies
+  Segment(p,q,C) = Segment(Upper_Arc C,W-min C,E-max C,p,q);
+
+theorem :: JORDAN_A:10
+ LE E-max C, q, C implies
+  Segment(E-max C,q,C) = Segment(Lower_Arc C,E-max C,W-min C,E-max C,q);
+
+theorem :: JORDAN_A:11
+ LE E-max C, q, C implies
+  Segment(q,W-min C,C) = Segment(Lower_Arc C,E-max C,W-min C,q,W-min C);
+
+theorem :: JORDAN_A:12
+ LE p,q,C & LE E-max C, p, C implies
+  Segment(p,q,C) = Segment(Lower_Arc C,E-max C,W-min C,p,q);
+
+theorem :: JORDAN_A:13
+ LE p,E-max C,C & LE E-max C, q, C implies
+  Segment(p,q,C) = R_Segment(Upper_Arc C,W-min C,E-max C,p)
+     \/  L_Segment(Lower_Arc C,E-max C,W-min C,q);
+
+theorem :: JORDAN_A:14
+ LE p,E-max C,C implies
+  Segment(p,W-min C,C) = R_Segment(Upper_Arc C,W-min C,E-max C,p)
+     \/  L_Segment(Lower_Arc C,E-max C,W-min C,W-min C);
+
+theorem :: JORDAN_A:15
+ R_Segment(Upper_Arc C,W-min C,E-max C,p) =
+  Segment(Upper_Arc C,W-min C,E-max C,p,E-max C);
+
+theorem :: JORDAN_A:16
+ L_Segment(Lower_Arc C,E-max C,W-min C,p) =
+  Segment(Lower_Arc C,E-max C,W-min C,E-max C,p);
+
+theorem :: JORDAN_A:17
+for p being Point of TOP-REAL 2 st p in C & p <> W-min C
+ holds Segment(p,W-min C,C) is_an_arc_of p,W-min C;
+
+theorem :: JORDAN_A:18
+for p,q being Point of TOP-REAL 2 st p<> q & LE p,q,C
+ holds Segment(p,q,C) is_an_arc_of p,q;
+
+theorem :: JORDAN_A:19   :: poprawic JORDAN7:7
+ C = Segment(W-min C,W-min C,C);
+
+theorem :: JORDAN_A:20
+for q being Point of TOP-REAL 2 st q in C
+ holds Segment(q,W-min C,C) is compact;
+
+theorem :: JORDAN_A:21
+for q1,q2 being Point of TOP-REAL 2 st LE q1,q2,C
+ holds Segment(q1,q2,C) is compact;
+
+begin :: The concept of a segmentation
+
+definition let C;
+ mode Segmentation of C -> FinSequence of TOP-REAL 2 means
+:: JORDAN_A:def 3
+ it/.1=W-min C & it is one-to-one & 8<=len it & rng it c= C &
+   (for i being Nat st 1<=i & i<len it holds LE it/.i,it/.(i+1),C) &
+   (for i being Nat st 1<=i & i+1<len it holds
+   Segment(it/.i,it/.(i+1),C) /\  Segment(it/.(i+1),it/.(i+2),C)={it/.(i+1)}) &
+   Segment(it/.len it,it/.1,C) /\  Segment(it/.1,it/.2,C)={it/.1} &
+   Segment(it/.(len it-' 1),it/.len it,C)/\ Segment(it/.len it,it/.1,C)
+          ={it/.len it} &
+   Segment(it/.(len it-'1),it/.len it,C) misses Segment(it/.1,it/.2,C) &
+   (for i,j being Nat st 1<=i & i < j & j < len it & not i,j are_adjacent1
+    holds Segment(it/.i,it/.(i+1),C) misses Segment(it/.j,it/.(j+1),C)) &
+   for i being Nat st 1 < i & i+1 < len it holds
+      Segment(it/.len it,it/.1,C) misses Segment(it/.i,it/.(i+1),C);
+end;
+
+definition let C;
+ cluster -> non trivial Segmentation of C;
+end;
+
+theorem :: JORDAN_A:22
+ for S being Segmentation of C, i st 1<=i & i <= len S
+  holds S/.i in C;
+
+begin :: The segments of a segmentation
+
+definition let C; let i be natural number;
+ let S be Segmentation of C;
+ func Segm(S,i) -> Subset of TOP-REAL 2 equals
+:: JORDAN_A:def 4
+ Segment(S/.i,S/.(i+1),C) if 1<=i & i<len S
+   otherwise Segment(S/.len S,S/.1,C);
+end;
+
+theorem :: JORDAN_A:23
+ for S being Segmentation of C st i in dom S holds Segm(S,i) c= C;
+
+definition let C; let S be Segmentation of C, i;
+ cluster Segm(S,i) -> non empty compact;
+end;
+
+theorem :: JORDAN_A:24
+ for S being Segmentation of C, p st p in C
+  ex i being natural number st i in dom S & p in Segm(S,i);
+
+theorem :: JORDAN_A:25
+ for S being Segmentation of C
+ for i,j st 1<=i & i< j & j<len S & not i,j are_adjacent1
+  holds Segm(S,i) misses Segm(S,j);
+
+theorem :: JORDAN_A:26
+ for S being Segmentation of C
+ for j st 1<j & j<len S -' 1
+  holds Segm(S,len S) misses Segm(S,j);
+
+theorem :: JORDAN_A:27
+ for S being Segmentation of C
+ for i,j st 1<=i & i< j & j<len S & i,j are_adjacent1
+  holds Segm(S,i) /\  Segm(S,j)={S/.(i+1)};
+
+theorem :: JORDAN_A:28
+ for S being Segmentation of C
+ for i,j st 1<=i & i< j & j<len S & i,j are_adjacent1
+  holds Segm(S,i) meets Segm(S,j);
+
+theorem :: JORDAN_A:29
+ for S being Segmentation of C
+  holds Segm(S,len S) /\ Segm(S,1) = {S/.1};
+
+theorem :: JORDAN_A:30
+ for S being Segmentation of C
+  holds Segm(S,len S) meets Segm(S,1);
+
+theorem :: JORDAN_A:31
+ for S being Segmentation of C
+  holds Segm(S,len S) /\ Segm(S,len S -' 1) = {S/.len S};
+
+theorem :: JORDAN_A:32
+ for S being Segmentation of C
+  holds Segm(S,len S) meets Segm(S,len S -' 1);
+
+begin :: The diameter of a segmentation
+
+definition let n;
+ let C be Subset of TOP-REAL n;
+ func diameter C -> Real means
+:: JORDAN_A:def 5
+ ex W being Subset of Euclid n
+   st W = C & it = diameter W;
+end;
+
+definition let C;
+ let S be Segmentation of C;
+ func diameter S -> Real means
+:: JORDAN_A:def 6
+ ex S1 being non empty finite Subset of REAL st
+    S1 = { diameter Segm(S,i): i in dom S} & it = max S1;
+end;
+
+theorem :: JORDAN_A:33
+ for S being Segmentation of C, i
+   holds diameter Segm(S,i) <= diameter S;
+
+theorem :: JORDAN_A:34
+ for S being Segmentation of C, e being Real
+  st for i holds diameter Segm(S,i) < e
+ holds diameter S < e;
+
+theorem :: JORDAN_A:35
+ for e being Real st e > 0
+  ex S being Segmentation of C st diameter S < e;
+
+begin :: The concept of the gap of a segmentation
+
+definition let C;
+ let S be Segmentation of C;
+ func S-Gap S -> Real means
+:: JORDAN_A:def 7
+ ex S1,S2 being non empty finite Subset of REAL st
+    S1 = { dist_min(Segm(S,i),Segm(S,j)):
+          1<=i & i< j & j<len S & not i,j are_adjacent1} &
+    S2 = { dist_min(Segm(S,len S),Segm(S,k)): 1<k & k<len S -' 1 } &
+    it = min(min S1,min S2);
+end;
+
+theorem :: JORDAN_A:36
+ for S being Segmentation of C
+  ex F being finite non empty Subset of REAL st
+   F = { dist_min(Segm(S,i),Segm(S,j)):
+          1<=i & i<j & j<=len S & Segm(S,i) misses Segm(S,j)} &
+   S-Gap S = min F;
+
+theorem :: JORDAN_A:37
+ for S being Segmentation of C holds S-Gap S > 0;
+

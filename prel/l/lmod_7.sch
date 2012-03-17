@@ -1,0 +1,52 @@
+HIDDEN
+RELAT_1
+FUNCT_1
+XBOOLE_0
+ZFMISC_1
+SUBSET_1
+RELSET_1
+FUNCT_2
+MULTOP_1
+#
+ElementEq
+UnOpEq
+TriOpEq
+QuaOpEq
+Fraenkel1_Ex
+Fr_0
+Fr_1
+Fr_2
+Fr_3
+Fr_4
+#
+M1 ;;
+M2 F1 ;;M2 F1 ;;ª&M1 ;&ª&R2 B3 B1 ;ªP1 B3 ;;ª&P1 B3 ;ªR2 B3 B1 ;;;M1 ;&ª&R2 B3 B2 ;ªP1 B3 ;;ª&P1 B3 ;ªR2 B3 B2 ;;;ªR1 B1 B2 ;;;
+#
+M1 W5 ;;M1 ;;
+M5 V3 ;V6 F1 ;F1 ;;F1 ;F1 ;;M5 V3 ;V6 F1 ;F1 ;;F1 ;F1 ;;ª&M2 F1 ;;R1 K48 F1 ;F1 ;B1 B3 ;F2 B3 ;;M2 F1 ;;R1 K48 F1 ;F1 ;B2 B3 ;F2 B3 ;;ªR1 B1 B2 ;;;
+#
+M1 W5 ;;M1 ;;
+M5 V3 ;V6 K20 F1 ;F1 ;F1 ;;F1 ;;K20 F1 ;F1 ;F1 ;;F1 ;;M5 V3 ;V6 K20 F1 ;F1 ;F1 ;;F1 ;;K20 F1 ;F1 ;F1 ;;F1 ;;ª&M2 F1 ;;M2 F1 ;;M2 F1 ;;R1 K50 F1 ;F1 ;F1 ;F1 ;B1 B3 B4 B5 ;F2 B3 B4 B5 ;;M2 F1 ;;M2 F1 ;;M2 F1 ;;R1 K50 F1 ;F1 ;F1 ;F1 ;B2 B3 B4 B5 ;F2 B3 B4 B5 ;;ªR1 B1 B2 ;;;
+#
+M1 W5 ;;M1 ;;
+M5 V3 ;V6 K21 F1 ;F1 ;F1 ;F1 ;;F1 ;;K21 F1 ;F1 ;F1 ;F1 ;;F1 ;;M5 V3 ;V6 K21 F1 ;F1 ;F1 ;F1 ;;F1 ;;K21 F1 ;F1 ;F1 ;F1 ;;F1 ;;ª&M2 F1 ;;M2 F1 ;;M2 F1 ;;M2 F1 ;;R1 K52 F1 ;F1 ;F1 ;F1 ;F1 ;B1 B3 B4 B5 B6 ;F2 B3 B4 B5 B6 ;;M2 F1 ;;M2 F1 ;;M2 F1 ;;M2 F1 ;;R1 K52 F1 ;F1 ;F1 ;F1 ;F1 ;B2 B3 B4 B5 B6 ;F2 B3 B4 B5 B6 ;;ªR1 B1 B2 ;;;
+#
+M1 W5 ;;M1 W5 ;;M2 F2 ;;;
+ªM2 K18 F2 ;;;ªR1 B1 èM2 F1 ;;;F3 B2 ;P1 B2 ;;;
+#
+M1 W5 ;;M2 F1 ;;;
+P1 F2 ;;R2 F2 ;èM2 F1 ;;;B1 P1 B1 ;;;
+#
+M1 ;M1 W5 ;;M2 F2 ;;;
+&ª&R2 F3 ;F1 ;;ªP1 F3 ;;;ª&P1 F3 ;;ªR2 F3 ;F1 ;;;;R1 F1 ;èM2 F2 ;;;B1 P1 B1 ;;;
+#
+M1 ;M1 W5 ;;M2 F2 ;;;
+P1 F3 ;;R2 F3 ;F1 ;;R1 F1 ;èM2 F2 ;;;B1 P1 B1 ;;;
+#
+M1 ;M1 ;M1 W5 ;;;
+&ª&R2 F1 ;F2 ;;M2 F3 ;;ª&R1 F1 ;B1 ;P1 B1 ;;;ª&ªM2 F3 ;;ª&R1 F1 ;B1 ;P1 B1 ;;ªR2 F1 ;F2 ;;;;R1 F2 ;èM2 F3 ;;;B1 P1 B1 ;;;
+#
+M1 W5 ;;M1 W5 ;;M1 ;M2 F1 ;;M1 ;;
+&ª&R2 F4 ;F5 F3 ;;;ªM2 F2 ;;ª&R2 B1 F3 ;;ªP1 F4 ;B1 ;;;ª&M2 F2 ;;ª&R2 B1 F3 ;;ªP1 F4 ;B1 ;;ªR2 F4 ;F5 F3 ;;;;;R1 F5 F3 ;;èM2 F1 ;;;B1 P2 B1 F3 ;;;&ª&P2 F4 ;F3 ;;ªM2 F2 ;;ª&R2 B1 F3 ;;ªP1 F4 ;B1 ;;;ª&M2 F2 ;;ª&R2 B1 F3 ;;ªP1 F4 ;B1 ;;ªP2 F4 ;F3 ;;;;;
+#
+!

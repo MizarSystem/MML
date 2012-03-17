@@ -1,0 +1,1666 @@
+:: Propositional Calculus for Boolean Valued Functions, II
+::  by Shunichi Kobayashi and Yatsuka Nakamura
+::
+:: Received March 13, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_2, MARGREL1, BVFUNC_1, ZF_LANG, BINARITH;
+ notation XBOOLE_0, SUBSET_1, FRAENKEL, MARGREL1, VALUAT_1, BINARITH, BVFUNC_1;
+ constructors BINARITH, BVFUNC_1;
+ clusters MARGREL1, VALUAT_1, BINARITH, FRAENKEL;
+ theorems MARGREL1, BINARITH, BVFUNC_1, VALUAT_1;
+
+begin
+
+::Chap. 1  Propositional Calculus
+
+reserve Y for non empty set;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+a 'imp' (b 'imp' (a '&' b))=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+    Pj(a 'imp' (b 'imp' (a '&' b)),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(a 'imp' (b 'imp' (a '&' b)),x)
+    ='not' Pj(a,x) 'or' Pj(b 'imp' (a '&' b),x) by BVFUNC_1:def 11
+   .='not' Pj(a,x) 'or' ('not' Pj(b,x) 'or' Pj(a '&' b,x)) by BVFUNC_1:def 11
+   .='not' Pj(a,x) 'or' ('not'
+Pj(b,x) 'or' (Pj(a,x) '&' Pj(b,x))) by VALUAT_1:def 6
+   .='not' Pj(a,x) 'or' (('not' Pj(b,x) 'or' Pj(a,x)) '&' ('not'
+Pj(b,x) 'or' Pj(b,x)))
+     by BINARITH:23
+   .='not' Pj(a,x) 'or' (TRUE '&' ('not' Pj(b,x) 'or' Pj(a,x))) by BINARITH:18
+   .='not' Pj(a,x) 'or' (Pj(a,x) 'or' 'not' Pj(b,x)) by MARGREL1:50
+   .=('not' Pj(a,x) 'or' Pj(a,x)) 'or' 'not' Pj(b,x)
+     by BINARITH:20
+   .=TRUE 'or' 'not' Pj(b,x)
+     by BINARITH:18
+   .=TRUE by BINARITH:19;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+(a 'imp' b) 'imp' ((b 'imp' a) 'imp' (a 'eqv' b))=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+    Pj((a 'imp' b) 'imp' ((b 'imp' a) 'imp' (a 'eqv' b)),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj((a 'imp' b) 'imp' ((b 'imp' a) 'imp' (a 'eqv' b)),x)
+    ='not' Pj(a 'imp' b,x) 'or' Pj((b 'imp' a) 'imp' (a 'eqv' b),x)
+     by BVFUNC_1:def 11
+   .='not'( 'not' Pj(a,x) 'or' Pj(b,x)) 'or'
+   Pj((b 'imp' a) 'imp' (a 'eqv' b),x)
+     by BVFUNC_1:def 11
+   .='not'( 'not' Pj(a,x) 'or' Pj(b,x)) 'or' ('not'
+Pj(b 'imp' a,x) 'or' Pj(a 'eqv' b,x))
+     by BVFUNC_1:def 11
+   .='not'( 'not' Pj(a,x) 'or' Pj(b,x)) 'or'
+     ('not'( 'not' Pj(b,x) 'or' Pj(a,x)) 'or' Pj(a 'eqv' b,x))
+     by BVFUNC_1:def 11
+   .=('not' 'not' Pj(a,x) '&' 'not' Pj(b,x)) 'or'
+     ('not'( 'not' Pj(b,x) 'or' Pj(a,x)) 'or' Pj(a 'eqv' b,x))
+     by BINARITH:10
+   .=('not' 'not' Pj(a,x) '&' 'not' Pj(b,x)) 'or'
+     (('not' 'not' Pj(b,x) '&' 'not' Pj(a,x)) 'or' Pj(a 'eqv' b,x))
+     by BINARITH:10
+   .=(Pj(a,x) '&' 'not' Pj(b,x)) 'or'
+     (('not' 'not' Pj(b,x) '&' 'not' Pj(a,x)) 'or' Pj(a 'eqv' b,x))
+     by MARGREL1:40
+   .=(Pj(a,x) '&' 'not' Pj(b,x)) 'or'
+     ((Pj(b,x) '&' 'not' Pj(a,x)) 'or' Pj(a 'eqv' b,x))
+     by MARGREL1:40
+   .=(Pj(a,x) '&' 'not' Pj(b,x)) 'or' ((Pj(b,x) '&' 'not' Pj(a,x)) 'or'
+      'not'( Pj(a,x) 'xor' Pj(b,x)))
+     by BVFUNC_1:def 12
+   .=(Pj(a,x) '&' 'not' Pj(b,x)) 'or' ((Pj(b,x) '&' 'not' Pj(a,x)) 'or'
+      'not'( ('not' Pj(a,x) '&' Pj(b,x)) 'or' (Pj(a,x) '&' 'not' Pj(b,x))))
+     by BINARITH:def 2
+   .=(Pj(a,x) '&' 'not' Pj(b,x)) 'or' (('not' Pj(a,x) '&' Pj(b,x)) 'or'
+      ('not'( 'not' Pj(a,x) '&' Pj(b,x)) '&' 'not'( Pj(a,x) '&' 'not'
+Pj(b,x)))) by BINARITH:10
+   .=(Pj(a,x) '&' 'not' Pj(b,x)) 'or'
+    ((('not' Pj(a,x) '&' Pj(b,x)) 'or' 'not'( 'not' Pj(a,x) '&' Pj(b,x))) '&'
+     (('not' Pj(a,x) '&' Pj(b,x)) 'or' 'not'( Pj(a,x) '&' 'not' Pj(b,x))))
+     by BINARITH:23
+   .=(Pj(a,x) '&' 'not' Pj(b,x)) 'or'
+    (TRUE '&'
+     (('not' Pj(a,x) '&' Pj(b,x)) 'or' 'not'( Pj(a,x) '&' 'not' Pj(b,x))))
+     by BINARITH:18
+   .=(Pj(a,x) '&' 'not' Pj(b,x)) 'or'
+     ('not'( Pj(a,x) '&' 'not' Pj(b,x)) 'or' ('not'
+Pj(a,x) '&' Pj(b,x))) by MARGREL1:50
+   .=((Pj(a,x) '&' 'not' Pj(b,x)) 'or'
+     'not'( Pj(a,x) '&' 'not' Pj(b,x))) 'or' ('not' Pj(a,x) '&' Pj(b,x))
+     by BINARITH:20
+   .=TRUE 'or' ('not' Pj(a,x) '&' Pj(b,x))
+     by BINARITH:18
+   .=TRUE by BINARITH:19;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+(a 'or' b) 'eqv' (b 'or' a)=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+    Pj((a 'or' b) 'eqv' (b 'or' a),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj((a 'or' b) 'eqv' (b 'or' a),x)
+    ='not'( Pj(a 'or' b,x) 'xor' Pj(b 'or' a,x))
+    by BVFUNC_1:def 12
+   .='not'( ('not' Pj(a 'or' b,x) '&' Pj(b 'or' a,x)) 'or'
+       (Pj(a 'or' b,x) '&' 'not' Pj(b 'or' a,x)))
+    by BINARITH:def 2
+   .=('not'( 'not' Pj(a 'or' b,x) '&' Pj(b 'or' a,x)) '&'
+      'not'( Pj(a 'or' b,x) '&' 'not' Pj(b 'or' a,x)))
+    by BINARITH:10
+   .=(('not' 'not' Pj(a 'or' b,x) 'or' 'not' Pj(b 'or' a,x)) '&'
+      'not'( Pj(a 'or' b,x) '&' 'not' Pj(b 'or' a,x)))
+    by BINARITH:9
+   .=(('not' 'not' Pj(a 'or' b,x) 'or' 'not' Pj(b 'or' a,x)) '&'
+      ('not' Pj(a 'or' b,x) 'or' 'not' 'not' Pj(b 'or' a,x)))
+    by BINARITH:9
+   .=((Pj(a 'or' b,x) 'or' 'not' Pj(b 'or' a,x)) '&'
+      ('not' Pj(a 'or' b,x) 'or' 'not' 'not' Pj(b 'or' a,x)))
+    by MARGREL1:40
+   .=TRUE '&'
+      ('not' Pj(a 'or' b,x) 'or' Pj(a 'or' b,x))
+    by BINARITH:18
+   .=TRUE '&' TRUE by BINARITH:18
+   .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+((a '&' b) 'imp' c) 'imp' (a 'imp' (b 'imp' c))=I_el(Y)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+    Pj(((a '&' b) 'imp' c) 'imp' (a 'imp' (b 'imp' c)),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(((a '&' b) 'imp' c) 'imp' (a 'imp' (b 'imp' c)),x)
+    ='not' Pj((a '&' b) 'imp' c,x) 'or' Pj(a 'imp' (b 'imp' c),x)
+    by BVFUNC_1:def 11
+   .='not'( 'not' Pj(a '&' b,x) 'or' Pj(c,x)) 'or' Pj(a 'imp' (b 'imp' c),x)
+    by BVFUNC_1:def 11
+   .='not'( 'not'
+(Pj(a,x) '&' Pj(b,x)) 'or' Pj(c,x)) 'or' Pj(a 'imp' (b 'imp' c),x)
+    by VALUAT_1:def 6
+   .='not'( 'not'( Pj(a,x) '&' Pj(b,x)) 'or' Pj(c,x)) 'or'
+     ('not' Pj(a,x) 'or' Pj(b 'imp' c,x))
+    by BVFUNC_1:def 11
+   .='not'( 'not'( Pj(a,x) '&' Pj(b,x)) 'or' Pj(c,x)) 'or'
+     ('not' Pj(a,x) 'or' ('not' Pj(b,x) 'or' Pj(c,x)))
+    by BVFUNC_1:def 11
+   .='not'( ('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(c,x)) 'or'
+     ('not' Pj(a,x) 'or' ('not' Pj(b,x) 'or' Pj(c,x)))
+    by BINARITH:9
+   .='not'( ('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(c,x)) 'or'
+      (('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(c,x))
+    by BINARITH:20
+   .=TRUE by BINARITH:18;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+(a 'imp' (b 'imp' c)) 'imp' ((a '&' b) 'imp' c)=I_el(Y)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+    Pj((a 'imp' (b 'imp' c)) 'imp' ((a '&' b) 'imp' c),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj((a 'imp' (b 'imp' c)) 'imp' ((a '&' b) 'imp' c),x)
+    ='not' Pj(a 'imp' (b 'imp' c),x) 'or' Pj((a '&' b) 'imp' c,x)
+    by BVFUNC_1:def 11
+   .='not'( 'not' Pj(a,x) 'or' Pj(b 'imp' c,x)) 'or'
+   Pj((a '&' b) 'imp' c,x)
+    by BVFUNC_1:def 11
+   .='not'( 'not' Pj(a,x) 'or' ('not'
+Pj(b,x) 'or' Pj(c,x))) 'or' Pj((a '&' b) 'imp' c,x)
+    by BVFUNC_1:def 11
+   .='not'( 'not' Pj(a,x) 'or' ('not' Pj(b,x) 'or' Pj(c,x))) 'or'
+     ('not' Pj(a '&' b,x) 'or' Pj(c,x))
+    by BVFUNC_1:def 11
+   .='not'( 'not' Pj(a,x) 'or' ('not' Pj(b,x) 'or' Pj(c,x))) 'or'
+     ('not'( Pj(a,x) '&' Pj(b,x)) 'or' Pj(c,x))
+    by VALUAT_1:def 6
+   .='not'( 'not' Pj(a,x) 'or' ('not' Pj(b,x) 'or' Pj(c,x))) 'or'
+     (('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(c,x))
+    by BINARITH:9
+   .='not'( ('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(c,x)) 'or'
+      (('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(c,x))
+    by BINARITH:20
+   .=TRUE by BINARITH:18;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+(c 'imp' a) 'imp' ((c 'imp' b) 'imp' (c 'imp' (a '&' b)))=I_el(Y)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+    Pj((c 'imp' a) 'imp' ((c 'imp' b) 'imp' (c 'imp' (a '&' b))),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj((c 'imp' a) 'imp' ((c 'imp' b) 'imp' (c 'imp' (a '&' b))),x)
+    ='not' Pj(c 'imp' a,x) 'or' Pj((c 'imp' b) 'imp' (c 'imp' (a '&' b)),x)
+    by BVFUNC_1:def 11
+   .='not'( 'not' Pj(c,x) 'or' Pj(a,x)) 'or'
+     Pj((c 'imp' b) 'imp' (c 'imp' (a '&' b)),x)
+    by BVFUNC_1:def 11
+   .='not'( 'not' Pj(c,x) 'or' Pj(a,x)) 'or'
+     ('not' Pj(c 'imp' b,x) 'or' Pj(c 'imp' (a '&' b),x))
+    by BVFUNC_1:def 11
+   .='not'( 'not' Pj(c,x) 'or' Pj(a,x)) 'or'
+     ('not'( 'not' Pj(c,x) 'or' Pj(b,x)) 'or' Pj(c 'imp' (a '&' b),x))
+    by BVFUNC_1:def 11
+   .='not'( 'not' Pj(c,x) 'or' Pj(a,x)) 'or'
+     ('not'( 'not' Pj(c,x) 'or' Pj(b,x)) 'or' ('not' Pj(c,x) 'or'
+     Pj(a '&' b,x)))
+    by BVFUNC_1:def 11
+   .='not'( 'not' Pj(c,x) 'or' Pj(a,x)) 'or'
+     ('not'( 'not' Pj(c,x) 'or' Pj(b,x)) 'or' ('not'
+Pj(c,x) 'or' (Pj(a,x) '&' Pj(b,x))))
+    by VALUAT_1:def 6
+   .=('not' 'not' Pj(c,x) '&' 'not' Pj(a,x)) 'or'
+     ('not'( 'not' Pj(c,x) 'or' Pj(b,x)) 'or' ('not'
+Pj(c,x) 'or' (Pj(a,x) '&' Pj(b,x))))
+    by BINARITH:10
+   .=('not' 'not' Pj(c,x) '&' 'not' Pj(a,x)) 'or'
+     (('not' 'not' Pj(c,x) '&' 'not' Pj(b,x)) 'or' ('not'
+Pj(c,x) 'or' (Pj(a,x) '&' Pj(b,x))))
+    by BINARITH:10
+   .=(Pj(c,x) '&' 'not' Pj(a,x)) 'or'
+     (('not' 'not' Pj(c,x) '&' 'not' Pj(b,x)) 'or' ('not'
+Pj(c,x) 'or' (Pj(a,x) '&' Pj(b,x))))
+    by MARGREL1:40
+   .=(Pj(c,x) '&' 'not' Pj(a,x)) 'or'
+     ((Pj(c,x) '&' 'not' Pj(b,x)) 'or' ('not'
+Pj(c,x) 'or' (Pj(a,x) '&' Pj(b,x))))
+    by MARGREL1:40
+   .=(Pj(c,x) '&' 'not' Pj(a,x)) 'or'
+     ((Pj(c,x) '&' 'not' Pj(b,x)) 'or'
+      (('not' Pj(c,x) 'or' Pj(a,x)) '&' ('not' Pj(c,x) 'or' Pj(b,x))))
+    by BINARITH:23
+   .=(Pj(c,x) '&' 'not' Pj(a,x)) 'or'
+     (((Pj(c,x) '&' 'not' Pj(b,x)) 'or' ('not' Pj(c,x) 'or' Pj(a,x))) '&'
+      ((Pj(c,x) '&' 'not' Pj(b,x)) 'or' ('not' Pj(c,x) 'or' Pj(b,x))))
+    by BINARITH:23
+   .=(Pj(c,x) '&' 'not' Pj(a,x)) 'or'
+     (((Pj(c,x) '&' 'not' Pj(b,x)) 'or' ('not' Pj(c,x) 'or' Pj(a,x))) '&'
+      ((Pj(c,x) '&' 'not' Pj(b,x)) 'or' ('not'
+      Pj(c,x) 'or' 'not' 'not' Pj(b,x))))
+    by MARGREL1:40
+   .=(Pj(c,x) '&' 'not' Pj(a,x)) 'or'
+     (((Pj(c,x) '&' 'not' Pj(b,x)) 'or' ('not' Pj(c,x) 'or' Pj(a,x))) '&'
+      ((Pj(c,x) '&' 'not' Pj(b,x)) 'or' 'not'( Pj(c,x) '&' 'not' Pj(b,x))))
+    by BINARITH:9
+   .=(Pj(c,x) '&' 'not' Pj(a,x)) 'or'
+     (TRUE '&'
+      ((Pj(c,x) '&' 'not' Pj(b,x)) 'or' ('not'
+Pj(c,x) 'or' Pj(a,x)))) by BINARITH:18
+   .=(Pj(c,x) '&' 'not' Pj(a,x)) 'or'
+     (('not' Pj(c,x) 'or' Pj(a,x)) 'or' (Pj(c,x) '&' 'not'
+Pj(b,x))) by MARGREL1:50
+   .=((Pj(c,x) '&' 'not' Pj(a,x)) 'or' ('not' Pj(c,x) 'or' Pj(a,x))) 'or'
+     (Pj(c,x) '&' 'not' Pj(b,x))
+    by BINARITH:20
+   .=((Pj(c,x) '&' 'not' Pj(a,x)) 'or' ('not' Pj(c,x) 'or' 'not' 'not'
+Pj(a,x))) 'or'
+     (Pj(c,x) '&' 'not' Pj(b,x))
+    by MARGREL1:40
+   .=((Pj(c,x) '&' 'not' Pj(a,x)) 'or' 'not'( Pj(c,x) '&' 'not' Pj(a,x))) 'or'
+     (Pj(c,x) '&' 'not' Pj(b,x))
+    by BINARITH:9
+   .=TRUE 'or'
+     (Pj(c,x) '&' 'not' Pj(b,x))
+    by BINARITH:18
+   .=TRUE by BINARITH:19;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+((a 'or' b) 'imp' c) 'imp' ((a 'imp' c) 'or' (b 'imp' c))=I_el(Y)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+    Pj(((a 'or' b) 'imp' c) 'imp' ((a 'imp' c) 'or' (b 'imp' c)),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(((a 'or' b) 'imp' c) 'imp' ((a 'imp' c) 'or' (b 'imp' c)),x)
+    ='not' Pj((a 'or' b) 'imp' c,x) 'or' Pj((a 'imp' c) 'or' (b 'imp' c),x)
+    by BVFUNC_1:def 11
+   .='not'( 'not' Pj(a 'or' b,x) 'or' Pj(c,x)) 'or'
+      Pj((a 'imp' c) 'or' (b 'imp' c),x)
+    by BVFUNC_1:def 11
+   .='not'( 'not'( Pj(a,x) 'or' Pj(b,x)) 'or' Pj(c,x)) 'or'
+      Pj((a 'imp' c) 'or' (b 'imp' c),x)
+    by BVFUNC_1:def 7
+   .='not'( 'not'( Pj(a,x) 'or' Pj(b,x)) 'or' Pj(c,x)) 'or'
+      (Pj(a 'imp' c,x) 'or' Pj(b 'imp' c,x))
+    by BVFUNC_1:def 7
+   .='not'( 'not'( Pj(a,x) 'or' Pj(b,x)) 'or' Pj(c,x)) 'or'
+      (('not' Pj(a,x) 'or' Pj(c,x)) 'or' Pj(b 'imp' c,x))
+    by BVFUNC_1:def 11
+   .='not'( 'not'( Pj(a,x) 'or' Pj(b,x)) 'or' Pj(c,x)) 'or'
+      (('not' Pj(a,x) 'or' Pj(c,x)) 'or' ('not' Pj(b,x) 'or' Pj(c,x)))
+    by BVFUNC_1:def 11
+   .=('not' 'not'( Pj(a,x) 'or' Pj(b,x)) '&' 'not' Pj(c,x)) 'or'
+      (('not' Pj(a,x) 'or' Pj(c,x)) 'or' ('not' Pj(b,x) 'or' Pj(c,x)))
+    by BINARITH:10
+   .=('not' Pj(c,x) '&' (Pj(a,x) 'or' Pj(b,x))) 'or'
+      (('not' Pj(a,x) 'or' Pj(c,x)) 'or' ('not'
+Pj(b,x) 'or' Pj(c,x))) by MARGREL1:40
+   .=((Pj(b,x) '&' 'not' Pj(c,x)) 'or' (Pj(a,x) '&' 'not' Pj(c,x))) 'or'
+      (('not' Pj(a,x) 'or' Pj(c,x)) 'or' ('not'
+Pj(b,x) 'or' Pj(c,x))) by BINARITH:22
+   .=((Pj(b,x) '&' 'not' Pj(c,x)) 'or' (Pj(a,x) '&' 'not' Pj(c,x))) 'or'
+      (('not' Pj(a,x) 'or' 'not' 'not' Pj(c,x)) 'or' ('not'
+      Pj(b,x) 'or' Pj(c,x)))
+    by MARGREL1:40
+   .=((Pj(b,x) '&' 'not' Pj(c,x)) 'or' (Pj(a,x) '&' 'not' Pj(c,x))) 'or'
+      ('not'( Pj(a,x) '&' 'not' Pj(c,x)) 'or' ('not' Pj(b,x) 'or' Pj(c,x)))
+    by BINARITH:9
+   .=(((Pj(b,x) '&' 'not' Pj(c,x)) 'or' (Pj(a,x) '&' 'not' Pj(c,x))) 'or'
+      'not'( Pj(a,x) '&' 'not' Pj(c,x))) 'or' ('not' Pj(b,x) 'or' Pj(c,x))
+    by BINARITH:20
+   .=((Pj(b,x) '&' 'not' Pj(c,x)) 'or' ((Pj(a,x) '&' 'not' Pj(c,x)) 'or'
+      'not'( Pj(a,x) '&' 'not' Pj(c,x)))) 'or' ('not' Pj(b,x) 'or' Pj(c,x))
+    by BINARITH:20
+   .=((Pj(b,x) '&' 'not' Pj(c,x)) 'or' TRUE) 'or' ('not' Pj(b,x) 'or' Pj(c,x))
+    by BINARITH:18
+   .=TRUE 'or' ('not' Pj(b,x) 'or' Pj(c,x))
+    by BINARITH:19
+   .=TRUE by BINARITH:19;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+(a 'imp' c) 'imp' ((b 'imp' c) 'imp' ((a 'or' b) 'imp' c))=I_el(Y)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+    Pj((a 'imp' c) 'imp' ((b 'imp' c) 'imp' ((a 'or' b) 'imp' c)),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj((a 'imp' c) 'imp' ((b 'imp' c) 'imp' ((a 'or' b) 'imp' c)),x)
+    ='not' Pj(a 'imp' c,x) 'or' Pj((b 'imp' c) 'imp' ((a 'or' b) 'imp' c),x)
+    by BVFUNC_1:def 11
+   .='not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or'
+     Pj((b 'imp' c) 'imp' ((a 'or' b) 'imp' c),x)
+    by BVFUNC_1:def 11
+   .='not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or'
+     ('not' Pj(b 'imp' c,x) 'or' Pj((a 'or' b) 'imp' c,x))
+    by BVFUNC_1:def 11
+   .='not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or'
+     ('not'( 'not' Pj(b,x) 'or' Pj(c,x)) 'or' Pj((a 'or' b) 'imp' c,x))
+    by BVFUNC_1:def 11
+   .='not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or'
+     ('not'( 'not' Pj(b,x) 'or' Pj(c,x)) 'or' ('not' Pj(a 'or' b,x) 'or'
+     Pj(c,x)))
+    by BVFUNC_1:def 11
+   .='not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or'
+     ('not'( 'not' Pj(b,x) 'or' Pj(c,x)) 'or' ('not'
+(Pj(a,x) 'or' Pj(b,x)) 'or' Pj(c,x)))
+    by BVFUNC_1:def 7
+   .='not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or'
+     ('not'( 'not' Pj(b,x) 'or' Pj(c,x)) 'or' (Pj(c,x) 'or' ('not' Pj(a,x) '&'
+'not' Pj(b,x)))) by BINARITH:10
+   .='not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or'
+     ('not'( 'not' Pj(b,x) 'or' Pj(c,x)) 'or'
+     ((Pj(c,x) 'or' 'not' Pj(a,x)) '&' ('not'
+Pj(b,x) 'or' Pj(c,x)))) by BINARITH:23
+   .='not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or'
+     (('not'( 'not' Pj(b,x) 'or' Pj(c,x)) 'or' (Pj(c,x) 'or' 'not'
+     Pj(a,x))) '&'
+      ('not'( 'not' Pj(b,x) 'or' Pj(c,x)) 'or' ('not' Pj(b,x) 'or'
+      Pj(c,x))))
+    by BINARITH:23
+   .='not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or'
+     (TRUE '&'
+      ('not'( 'not' Pj(b,x) 'or' Pj(c,x)) 'or' (Pj(c,x) 'or' 'not'
+Pj(a,x)))) by BINARITH:18
+   .='not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or'
+      ('not'( 'not' Pj(b,x) 'or' Pj(c,x)) 'or' ('not'
+Pj(a,x) 'or' Pj(c,x))) by MARGREL1:50
+   .=('not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or'
+      ('not' Pj(a,x) 'or' Pj(c,x))) 'or' 'not'( 'not' Pj(b,x) 'or' Pj(c,x))
+    by BINARITH:20
+   .=TRUE 'or' 'not'( 'not' Pj(b,x) 'or' Pj(c,x))
+    by BINARITH:18
+   .=TRUE by BINARITH:19;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+((a 'imp' c) '&' (b 'imp' c)) 'imp' ((a 'or' b) 'imp' c)=I_el(Y)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+    Pj(((a 'imp' c) '&' (b 'imp' c)) 'imp' ((a 'or' b) 'imp' c),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(((a 'imp' c) '&' (b 'imp' c)) 'imp' ((a 'or' b) 'imp' c),x)
+    ='not' Pj((a 'imp' c) '&' (b 'imp' c),x) 'or' Pj((a 'or' b) 'imp' c,x)
+    by BVFUNC_1:def 11
+   .='not'( Pj(a 'imp' c,x) '&' Pj(b 'imp' c,x)) 'or' Pj((a 'or' b) 'imp' c,x)
+    by VALUAT_1:def 6
+   .='not'( ('not' Pj(a,x) 'or' Pj(c,x)) '&' Pj(b 'imp' c,x)) 'or'
+     Pj((a 'or' b) 'imp' c,x) by BVFUNC_1:def 11
+   .='not'( ('not' Pj(a,x) 'or' Pj(c,x)) '&' ('not' Pj(b,x) 'or' Pj(c,x))) 'or'
+     Pj((a 'or' b) 'imp' c,x) by BVFUNC_1:def 11
+   .='not'( ('not' Pj(a,x) 'or' Pj(c,x)) '&' ('not' Pj(b,x) 'or' Pj(c,x))) 'or'
+     ('not' Pj(a 'or' b,x) 'or' Pj(c,x))
+    by BVFUNC_1:def 11
+   .='not'( ('not' Pj(a,x) 'or' Pj(c,x)) '&' ('not' Pj(b,x) 'or' Pj(c,x))) 'or'
+     ('not'( Pj(a,x) 'or' Pj(b,x)) 'or' Pj(c,x))
+    by BVFUNC_1:def 7
+   .=('not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or' 'not'( 'not'
+Pj(b,x) 'or' Pj(c,x))) 'or'
+     (Pj(c,x) 'or' 'not'( Pj(a,x) 'or' Pj(b,x))) by BINARITH:9
+   .=('not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or' 'not'( 'not'
+Pj(b,x) 'or' Pj(c,x))) 'or'
+     (Pj(c,x) 'or' ('not' Pj(a,x) '&' 'not' Pj(b,x))) by BINARITH:10
+   .=('not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or' 'not'( 'not'
+Pj(b,x) 'or' Pj(c,x))) 'or'
+     (('not' Pj(a,x) 'or' Pj(c,x)) '&' (Pj(c,x) 'or' 'not'
+Pj(b,x))) by BINARITH:23
+   .=(('not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or' 'not'( 'not'
+Pj(b,x) 'or' Pj(c,x))) 'or'
+     ('not' Pj(a,x) 'or' Pj(c,x))) '&'
+     (('not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or' 'not'( 'not'
+Pj(b,x) 'or' Pj(c,x))) 'or'
+     ('not' Pj(b,x) 'or' Pj(c,x))) by BINARITH:23
+   .=('not'( 'not' Pj(b,x) 'or' Pj(c,x)) 'or' ('not'( 'not'
+Pj(a,x) 'or' Pj(c,x)) 'or'
+     ('not' Pj(a,x) 'or' Pj(c,x)))) '&'
+     (('not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or' 'not'( 'not'
+Pj(b,x) 'or' Pj(c,x))) 'or'
+     ('not' Pj(b,x) 'or' Pj(c,x)))
+    by BINARITH:20
+   .=('not'( 'not' Pj(b,x) 'or' Pj(c,x)) 'or' ('not'( 'not'
+Pj(a,x) 'or' Pj(c,x)) 'or'
+     ('not' Pj(a,x) 'or' Pj(c,x)))) '&'
+     ('not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or' ('not'( 'not'
+Pj(b,x) 'or' Pj(c,x)) 'or'
+     ('not' Pj(b,x) 'or' Pj(c,x))))
+    by BINARITH:20
+   .=('not'( 'not' Pj(b,x) 'or' Pj(c,x)) 'or' TRUE) '&'
+     ('not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or' ('not'( 'not'
+Pj(b,x) 'or' Pj(c,x)) 'or'
+     ('not' Pj(b,x) 'or' Pj(c,x))))
+    by BINARITH:18
+   .=('not'( 'not' Pj(b,x) 'or' Pj(c,x)) 'or' TRUE) '&'
+     ('not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or' TRUE) by BINARITH:18
+   .=TRUE '&' ('not'( 'not' Pj(a,x) 'or' Pj(c,x)) 'or' TRUE) by BINARITH:19
+   .=TRUE '&' TRUE by BINARITH:19
+   .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+(a 'imp' (b '&' 'not' b)) 'imp' 'not' a=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+    Pj((a 'imp' (b '&' 'not' b)) 'imp' 'not' a,x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj((a 'imp' (b '&' 'not' b)) 'imp' 'not' a,x)
+    ='not' Pj(a 'imp' (b '&' 'not' b),x) 'or' Pj('not' a,x) by BVFUNC_1:def 11
+   .='not'( 'not' Pj(a,x) 'or' Pj(b '&' 'not' b,x)) 'or' Pj('not'
+a,x) by BVFUNC_1:def 11
+   .='not'( 'not' Pj(a,x) 'or' (Pj(b,x) '&' Pj('not' b,x))) 'or' Pj('not'
+a,x) by VALUAT_1:def 6
+   .=('not' 'not' Pj(a,x) '&' 'not'( Pj(b,x) '&' Pj('not' b,x))) 'or' Pj('not'
+a,x) by BINARITH:10
+   .=(Pj(a,x) '&' 'not'( Pj(b,x) '&' Pj('not' b,x))) 'or' Pj('not'
+a,x) by MARGREL1:40
+   .=(Pj(a,x) '&' ('not' Pj(b,x) 'or' 'not' Pj('not' b,x))) 'or' Pj('not'
+a,x) by BINARITH:9
+   .=(Pj(a,x) '&' ('not' Pj(b,x) 'or' 'not' 'not' Pj(b,x))) 'or' Pj('not'
+a,x) by VALUAT_1:def 5
+   .=(Pj(a,x) '&' TRUE) 'or' Pj('not' a,x) by BINARITH:18
+   .=Pj(a,x) 'or' Pj('not' a,x) by MARGREL1:50
+   .=Pj(a,x) 'or' 'not' Pj(a,x) by VALUAT_1:def 5
+   .=TRUE by BINARITH:18;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+((a 'or' b) '&' (a 'or' c)) 'imp' (a 'or' (b '&' c))=I_el(Y)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+    Pj(((a 'or' b) '&' (a 'or' c)) 'imp' (a 'or' (b '&' c)),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(((a 'or' b) '&' (a 'or' c)) 'imp' (a 'or' (b '&' c)),x)
+    ='not' Pj((a 'or' b) '&' (a 'or' c),x) 'or' Pj(a 'or' (b '&' c),x)
+    by BVFUNC_1:def 11
+   .='not'( Pj(a 'or' b,x) '&' Pj(a 'or' c,x)) 'or' Pj(a 'or' (b '&' c),x)
+    by VALUAT_1:def 6
+   .='not'
+((Pj(a,x) 'or' Pj(b,x)) '&' Pj(a 'or' c,x)) 'or' Pj(a 'or' (b '&' c),x)
+    by BVFUNC_1:def 7
+   .='not'( (Pj(a,x) 'or' Pj(b,x)) '&' (Pj(a,x) 'or' Pj(c,x))) 'or'
+     Pj(a 'or' (b '&' c),x)
+    by BVFUNC_1:def 7
+   .='not'( (Pj(a,x) 'or' Pj(b,x)) '&' (Pj(a,x) 'or' Pj(c,x))) 'or'
+     (Pj(a,x) 'or' Pj(b '&' c,x))
+    by BVFUNC_1:def 7
+   .='not'( (Pj(a,x) 'or' Pj(b,x)) '&' (Pj(a,x) 'or' Pj(c,x))) 'or'
+     (Pj(a,x) 'or' (Pj(b,x) '&' Pj(c,x)))
+    by VALUAT_1:def 6
+   .='not'( (Pj(a,x) 'or' Pj(b,x)) '&' (Pj(a,x) 'or' Pj(c,x))) 'or'
+     ((Pj(a,x) 'or' Pj(b,x)) '&' (Pj(a,x) 'or' Pj(c,x)))
+    by BINARITH:23
+   .=('not'( Pj(a,x) 'or' Pj(b,x)) 'or' 'not'( Pj(a,x) 'or' Pj(c,x))) 'or'
+     ((Pj(a,x) 'or' Pj(b,x)) '&' (Pj(a,x) 'or' Pj(c,x)))
+    by BINARITH:9
+   .=(('not'( Pj(a,x) 'or' Pj(c,x)) 'or' 'not'( Pj(a,x) 'or' Pj(b,x))) 'or'
+     (Pj(a,x) 'or' Pj(b,x))) '&'
+     (('not'( Pj(a,x) 'or' Pj(b,x)) 'or' 'not'( Pj(a,x) 'or' Pj(c,x))) 'or'
+     (Pj(a,x) 'or' Pj(c,x))) by BINARITH:23
+   .=('not'( Pj(a,x) 'or' Pj(c,x)) 'or' ('not'( Pj(a,x) 'or' Pj(b,x)) 'or'
+     (Pj(a,x) 'or' Pj(b,x)))) '&'
+     (('not'( Pj(a,x) 'or' Pj(b,x)) 'or' 'not'( Pj(a,x) 'or' Pj(c,x))) 'or'
+     (Pj(a,x) 'or' Pj(c,x)))
+    by BINARITH:20
+   .=('not'( Pj(a,x) 'or' Pj(c,x)) 'or' ('not'( Pj(a,x) 'or' Pj(b,x)) 'or'
+     (Pj(a,x) 'or' Pj(b,x)))) '&'
+     ('not'( Pj(a,x) 'or' Pj(b,x)) 'or' ('not'( Pj(a,x) 'or' Pj(c,x)) 'or'
+     (Pj(a,x) 'or' Pj(c,x))))
+    by BINARITH:20
+   .=('not'( Pj(a,x) 'or' Pj(c,x)) 'or' TRUE) '&'
+     ('not'( Pj(a,x) 'or' Pj(b,x)) 'or' ('not'( Pj(a,x) 'or' Pj(c,x)) 'or'
+     (Pj(a,x) 'or' Pj(c,x))))
+    by BINARITH:18
+   .=('not'( Pj(a,x) 'or' Pj(c,x)) 'or' TRUE) '&'
+     ('not'( Pj(a,x) 'or' Pj(b,x)) 'or' TRUE) by BINARITH:18
+   .=TRUE '&' ('not'( Pj(a,x) 'or' Pj(b,x)) 'or' TRUE) by BINARITH:19
+   .=TRUE '&' TRUE by BINARITH:19
+   .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+(a '&' (b 'or' c)) 'imp' ((a '&' b) 'or' (a '&' c))=I_el(Y)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+    Pj((a '&' (b 'or' c)) 'imp' ((a '&' b) 'or' (a '&' c)),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj((a '&' (b 'or' c)) 'imp' ((a '&' b) 'or' (a '&' c)),x)
+    ='not' Pj(a '&' (b 'or' c),x) 'or' Pj((a '&' b) 'or' (a '&' c),x)
+    by BVFUNC_1:def 11
+   .='not'( Pj(a,x) '&' Pj(b 'or' c,x)) 'or' Pj((a '&' b) 'or' (a '&' c),x)
+    by VALUAT_1:def 6
+   .='not'
+(Pj(a,x) '&' (Pj(b,x) 'or' Pj(c,x))) 'or' Pj((a '&' b) 'or' (a '&' c),x)
+    by BVFUNC_1:def 7
+   .='not'( Pj(a,x) '&' (Pj(b,x) 'or' Pj(c,x))) 'or'
+     (Pj(a '&' b,x) 'or' Pj(a '&' c,x)) by BVFUNC_1:def 7
+   .='not'( Pj(a,x) '&' (Pj(b,x) 'or' Pj(c,x))) 'or'
+     ((Pj(a,x) '&' Pj(b,x)) 'or' Pj(a '&' c,x))
+    by VALUAT_1:def 6
+   .='not'( Pj(a,x) '&' (Pj(b,x) 'or' Pj(c,x))) 'or'
+     ((Pj(a,x) '&' Pj(b,x)) 'or' (Pj(a,x) '&' Pj(c,x)))
+    by VALUAT_1:def 6
+   .='not'( (Pj(a,x) '&' Pj(b,x)) 'or' (Pj(a,x) '&' Pj(c,x))) 'or'
+     ((Pj(a,x) '&' Pj(b,x)) 'or' (Pj(a,x) '&' Pj(c,x)))
+    by BINARITH:22
+   .= ((Pj(a,x) '&' Pj(b,x)) 'or' (Pj(a,x) '&' Pj(c,x))) 'or'
+      ('not'( Pj(a,x) '&' Pj(b,x)) '&' 'not'
+(Pj(a,x) '&' Pj(c,x))) by BINARITH:10
+   .= (((Pj(a,x) '&' Pj(c,x)) 'or' (Pj(a,x) '&' Pj(b,x))) 'or'
+      'not'( Pj(a,x) '&' Pj(b,x))) '&'
+      (((Pj(a,x) '&' Pj(b,x)) 'or' (Pj(a,x) '&' Pj(c,x))) 'or'
+      'not'( Pj(a,x) '&' Pj(c,x))) by BINARITH:23
+   .= ((Pj(a,x) '&' Pj(c,x)) 'or' ((Pj(a,x) '&' Pj(b,x)) 'or'
+      'not'( Pj(a,x) '&' Pj(b,x)))) '&'
+      (((Pj(a,x) '&' Pj(b,x)) 'or' (Pj(a,x) '&' Pj(c,x))) 'or'
+      'not'( Pj(a,x) '&' Pj(c,x))) by BINARITH:20
+   .= ((Pj(a,x) '&' Pj(c,x)) 'or' ((Pj(a,x) '&' Pj(b,x)) 'or'
+      'not'( Pj(a,x) '&' Pj(b,x)))) '&'
+      ((Pj(a,x) '&' Pj(b,x)) 'or' ((Pj(a,x) '&' Pj(c,x)) 'or'
+      'not'( Pj(a,x) '&' Pj(c,x)))) by BINARITH:20
+   .= ((Pj(a,x) '&' Pj(c,x)) 'or' TRUE) '&'
+      ((Pj(a,x) '&' Pj(b,x)) 'or' ((Pj(a,x) '&' Pj(c,x)) 'or'
+      'not'( Pj(a,x) '&' Pj(c,x))))
+    by BINARITH:18
+   .= ((Pj(a,x) '&' Pj(c,x)) 'or' TRUE) '&'
+      ((Pj(a,x) '&' Pj(b,x)) 'or' TRUE)
+    by BINARITH:18
+   .= TRUE '&' ((Pj(a,x) '&' Pj(b,x)) 'or' TRUE) by BINARITH:19
+   .= TRUE '&' TRUE by BINARITH:19
+   .= TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+((a 'or' c) '&' (b 'or' c)) 'imp' ((a '&' b) 'or' c)=I_el(Y)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+    Pj(((a 'or' c) '&' (b 'or' c)) 'imp' ((a '&' b) 'or' c),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(((a 'or' c) '&' (b 'or' c)) 'imp' ((a '&' b) 'or' c),x)
+    ='not' Pj((a 'or' c) '&' (b 'or' c),x) 'or' Pj((a '&' b) 'or' c,x)
+    by BVFUNC_1:def 11
+   .='not'( Pj(a 'or' c,x) '&' Pj(b 'or' c,x)) 'or' Pj((a '&' b) 'or' c,x)
+    by VALUAT_1:def 6
+   .='not'
+((Pj(a,x) 'or' Pj(c,x)) '&' Pj(b 'or' c,x)) 'or' Pj((a '&' b) 'or' c,x)
+    by BVFUNC_1:def 7
+   .='not'( (Pj(a,x) 'or' Pj(c,x)) '&' (Pj(b,x) 'or' Pj(c,x))) 'or'
+     Pj((a '&' b) 'or' c,x) by BVFUNC_1:def 7
+   .=('not'( Pj(a,x) 'or' Pj(c,x)) 'or' 'not'( Pj(b,x) 'or' Pj(c,x))) 'or'
+     Pj((a '&' b) 'or' c,x) by BINARITH:9
+   .=('not'( Pj(a,x) 'or' Pj(c,x)) 'or' 'not'( Pj(b,x) 'or' Pj(c,x))) 'or'
+     (Pj(a '&' b,x) 'or' Pj(c,x)) by BVFUNC_1:def 7
+   .=('not'( Pj(a,x) 'or' Pj(c,x)) 'or' 'not'( Pj(b,x) 'or' Pj(c,x))) 'or'
+     (Pj(c,x) 'or' (Pj(a,x) '&' Pj(b,x))) by VALUAT_1:def 6
+   .=('not'( Pj(a,x) 'or' Pj(c,x)) 'or' 'not'( Pj(b,x) 'or' Pj(c,x))) 'or'
+     ((Pj(a,x) 'or' Pj(c,x)) '&' (Pj(c,x) 'or' Pj(b,x))) by BINARITH:23
+   .=(('not'( Pj(a,x) 'or' Pj(c,x)) 'or' 'not'( Pj(b,x) 'or' Pj(c,x))) 'or'
+     (Pj(a,x) 'or' Pj(c,x))) '&'
+     (('not'( Pj(a,x) 'or' Pj(c,x)) 'or' 'not'( Pj(b,x) 'or' Pj(c,x))) 'or'
+     (Pj(b,x) 'or' Pj(c,x))) by BINARITH:23
+   .=('not'( Pj(b,x) 'or' Pj(c,x)) 'or' ('not'( Pj(a,x) 'or' Pj(c,x)) 'or'
+     (Pj(a,x) 'or' Pj(c,x)))) '&'
+     (('not'( Pj(a,x) 'or' Pj(c,x)) 'or' 'not'( Pj(b,x) 'or' Pj(c,x))) 'or'
+     (Pj(b,x) 'or' Pj(c,x)))
+    by BINARITH:20
+   .=('not'( Pj(b,x) 'or' Pj(c,x)) 'or' ('not'( Pj(a,x) 'or' Pj(c,x)) 'or'
+     (Pj(a,x) 'or' Pj(c,x)))) '&'
+     ('not'( Pj(a,x) 'or' Pj(c,x)) 'or' ('not'( Pj(b,x) 'or' Pj(c,x)) 'or'
+     (Pj(b,x) 'or' Pj(c,x)))) by BINARITH:20
+   .=('not'( Pj(b,x) 'or' Pj(c,x)) 'or' TRUE) '&'
+     ('not'( Pj(a,x) 'or' Pj(c,x)) 'or' ('not'( Pj(b,x) 'or' Pj(c,x)) 'or'
+     (Pj(b,x) 'or' Pj(c,x)))) by BINARITH:18
+   .=('not'( Pj(b,x) 'or' Pj(c,x)) 'or' TRUE) '&'
+     ('not'( Pj(a,x) 'or' Pj(c,x)) 'or' TRUE) by BINARITH:18
+   .=TRUE '&' ('not'( Pj(a,x) 'or' Pj(c,x)) 'or' TRUE) by BINARITH:19
+   .=TRUE '&' TRUE by BINARITH:19
+   .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+((a 'or' b) '&' c) 'imp' ((a '&' c) 'or' (b '&' c))=I_el(Y)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+    Pj(((a 'or' b) '&' c) 'imp' ((a '&' c) 'or' (b '&' c)),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(((a 'or' b) '&' c) 'imp' ((a '&' c) 'or' (b '&' c)),x)
+    ='not' Pj((a 'or' b) '&' c,x) 'or' Pj((a '&' c) 'or' (b '&' c),x)
+    by BVFUNC_1:def 11
+   .='not'( Pj((a 'or' b),x) '&' Pj(c,x)) 'or' Pj((a '&' c) 'or' (b '&' c),x)
+    by VALUAT_1:def 6
+   .='not'( (Pj(a,x) 'or' Pj(b,x)) '&' Pj(c,x)) 'or'
+     Pj((a '&' c) 'or' (b '&' c),x) by BVFUNC_1:def 7
+   .='not'( (Pj(a,x) 'or' Pj(b,x)) '&' Pj(c,x)) 'or'
+     (Pj(a '&' c,x) 'or' Pj(b '&' c,x)) by BVFUNC_1:def 7
+   .='not'( (Pj(a,x) 'or' Pj(b,x)) '&' Pj(c,x)) 'or'
+     ((Pj(a,x) '&' Pj(c,x)) 'or' Pj(b '&' c,x)) by VALUAT_1:def 6
+   .='not'( Pj(c,x) '&' (Pj(a,x) 'or' Pj(b,x))) 'or'
+     ((Pj(a,x) '&' Pj(c,x)) 'or' (Pj(b,x) '&' Pj(c,x))) by VALUAT_1:def 6
+   .='not'( (Pj(c,x) '&' Pj(a,x)) 'or' (Pj(c,x) '&' Pj(b,x))) 'or'
+     ((Pj(a,x) '&' Pj(c,x)) 'or' (Pj(b,x) '&' Pj(c,x))) by BINARITH:22
+   .=((Pj(a,x) '&' Pj(c,x)) 'or' (Pj(b,x) '&' Pj(c,x))) 'or'
+     ('not'( Pj(a,x) '&' Pj(c,x)) '&' 'not'( Pj(b,x) '&' Pj(c,x)))
+     by BINARITH:10
+   .=(((Pj(b,x) '&' Pj(c,x)) 'or' (Pj(a,x) '&' Pj(c,x))) 'or'
+     'not'( Pj(a,x) '&' Pj(c,x))) '&'
+     (((Pj(a,x) '&' Pj(c,x)) 'or' (Pj(b,x) '&' Pj(c,x))) 'or'
+     'not'( Pj(b,x) '&' Pj(c,x))) by BINARITH:23
+   .=((Pj(b,x) '&' Pj(c,x)) 'or' ((Pj(a,x) '&' Pj(c,x)) 'or'
+     'not'( Pj(a,x) '&' Pj(c,x)))) '&'
+     (((Pj(a,x) '&' Pj(c,x)) 'or' (Pj(b,x) '&' Pj(c,x))) 'or'
+     'not'( Pj(b,x) '&' Pj(c,x))) by BINARITH:20
+   .=((Pj(b,x) '&' Pj(c,x)) 'or' ((Pj(a,x) '&' Pj(c,x)) 'or'
+     'not'( Pj(a,x) '&' Pj(c,x)))) '&'
+     ((Pj(a,x) '&' Pj(c,x)) 'or' ((Pj(b,x) '&' Pj(c,x)) 'or'
+     'not'( Pj(b,x) '&' Pj(c,x)))) by BINARITH:20
+   .=((Pj(b,x) '&' Pj(c,x)) 'or' TRUE) '&'
+     ((Pj(a,x) '&' Pj(c,x)) 'or' ((Pj(b,x) '&' Pj(c,x)) 'or'
+     'not'( Pj(b,x) '&' Pj(c,x)))) by BINARITH:18
+   .=((Pj(b,x) '&' Pj(c,x)) 'or' TRUE) '&'
+     ((Pj(a,x) '&' Pj(c,x)) 'or' TRUE) by BINARITH:18
+   .=TRUE '&' ((Pj(a,x) '&' Pj(c,x)) 'or' TRUE) by BINARITH:19
+   .=TRUE '&' TRUE by BINARITH:19
+   .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+(a '&' b)=I_el(Y) implies (a 'or' b)=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  assume A1: (a '&' b)=I_el(Y);
+    for x being Element of Y holds
+    Pj(a 'or' b,x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(a '&' b,x)= TRUE by A1,BVFUNC_1:def 14;
+    then Pj(a,x) '&' Pj(b,x)=TRUE by VALUAT_1:def 6;
+    then Pj(a,x)=TRUE & Pj(b,x)=TRUE by MARGREL1:45;
+    then Pj(a 'or' b,x)
+    =TRUE 'or' TRUE by BVFUNC_1:def 7
+   .=TRUE by BINARITH:19;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+(a 'imp' b)=I_el(Y) implies (a 'or' c) 'imp' (b 'or' c)=I_el(Y)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+  assume A1: (a 'imp' b)=I_el(Y);
+    for x being Element of Y holds
+    Pj((a 'or' c) 'imp' (b 'or' c),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(a 'imp' b,x)= TRUE by A1,BVFUNC_1:def 14;
+    then A2:'not' Pj(a,x) 'or' Pj(b,x) = TRUE by BVFUNC_1:def 11;
+      Pj((a 'or' c) 'imp' (b 'or' c),x)
+    ='not' Pj(a 'or' c,x) 'or' Pj(b 'or' c,x) by BVFUNC_1:def 11
+   .='not'( Pj(a,x) 'or' Pj(c,x)) 'or' Pj(b 'or' c,x) by BVFUNC_1:def 7
+   .='not'( Pj(a,x) 'or' Pj(c,x)) 'or' (Pj(b,x) 'or' Pj(c,x)) by BVFUNC_1:def 7
+   .=(Pj(b,x) 'or' Pj(c,x)) 'or' ('not' Pj(a,x) '&' 'not' Pj(c,x))
+   by BINARITH:10
+   .=((Pj(c,x) 'or' Pj(b,x)) 'or' 'not' Pj(a,x)) '&'
+     ((Pj(b,x) 'or' Pj(c,x)) 'or' 'not' Pj(c,x)) by BINARITH:23
+   .=(Pj(c,x) 'or' ('not' Pj(a,x) 'or' Pj(b,x))) '&'
+     ((Pj(b,x) 'or' Pj(c,x)) 'or' 'not' Pj(c,x)) by BINARITH:20
+   .=TRUE '&' ((Pj(b,x) 'or' Pj(c,x)) 'or' 'not' Pj(c,x)) by A2,BINARITH:19
+   .=TRUE '&' (Pj(b,x) 'or' (Pj(c,x) 'or' 'not' Pj(c,x))) by BINARITH:20
+   .=TRUE '&' (Pj(b,x) 'or' TRUE) by BINARITH:18
+   .=TRUE '&' TRUE by BINARITH:19
+   .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+(a 'imp' b)=I_el(Y) implies (a '&' c) 'imp' (b '&' c)=I_el(Y)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+  assume A1: (a 'imp' b)=I_el(Y);
+    for x being Element of Y holds
+    Pj((a '&' c) 'imp' (b '&' c),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(a 'imp' b,x)= TRUE by A1,BVFUNC_1:def 14;
+    then A2:'not' Pj(a,x) 'or' Pj(b,x) = TRUE by BVFUNC_1:def 11;
+      Pj((a '&' c) 'imp' (b '&' c),x)
+    ='not' Pj(a '&' c,x) 'or' Pj(b '&' c,x) by BVFUNC_1:def 11
+   .='not'( Pj(a,x) '&' Pj(c,x)) 'or' Pj(b '&' c,x) by VALUAT_1:def 6
+   .='not'( Pj(a,x) '&' Pj(c,x)) 'or' (Pj(b,x) '&' Pj(c,x)) by VALUAT_1:def 6
+   .=('not' Pj(a,x) 'or' 'not' Pj(c,x)) 'or' (Pj(b,x) '&' Pj(c,x))
+   by BINARITH:9
+   .=(('not' Pj(c,x) 'or' 'not' Pj(a,x)) 'or' Pj(b,x)) '&'
+     (('not' Pj(a,x) 'or' 'not' Pj(c,x)) 'or' Pj(c,x)) by BINARITH:23
+   .=('not' Pj(c,x) 'or' ('not' Pj(a,x) 'or' Pj(b,x))) '&'
+     (('not' Pj(a,x) 'or' 'not' Pj(c,x)) 'or' Pj(c,x)) by BINARITH:20
+   .=('not' Pj(c,x) 'or' ('not' Pj(a,x) 'or' Pj(b,x))) '&'
+     ('not' Pj(a,x) 'or' ('not' Pj(c,x) 'or' Pj(c,x))) by BINARITH:20
+   .=('not' Pj(c,x) 'or' ('not' Pj(a,x) 'or' Pj(b,x))) '&'
+     ('not' Pj(a,x) 'or' TRUE) by BINARITH:18
+   .=('not' Pj(c,x) 'or' TRUE) '&' TRUE by A2,BINARITH:19
+   .=TRUE '&' TRUE by BINARITH:19
+   .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+(c 'imp' a)=I_el(Y) & (c 'imp' b)=I_el(Y) implies
+c 'imp' (a '&' b)=I_el(Y)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+  assume A1:(c 'imp' a)=I_el(Y) & (c 'imp' b)=I_el(Y);
+    for x being Element of Y holds
+    Pj(c 'imp' (a '&' b),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(c 'imp' a,x)= TRUE by A1,BVFUNC_1:def 14;
+    then A2:'not' Pj(c,x) 'or' Pj(a,x) = TRUE by BVFUNC_1:def 11;
+      Pj(c 'imp' b,x)= TRUE by A1,BVFUNC_1:def 14;
+    then A3:'not' Pj(c,x) 'or' Pj(b,x) = TRUE by BVFUNC_1:def 11;
+      Pj(c 'imp' (a '&' b),x)
+    ='not' Pj(c,x) 'or' Pj(a '&' b,x) by BVFUNC_1:def 11
+   .='not' Pj(c,x) 'or' (Pj(a,x) '&' Pj(b,x)) by VALUAT_1:def 6
+   .=TRUE '&' TRUE by A2,A3,BINARITH:23
+   .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+(a 'imp' c)=I_el(Y) & (b 'imp' c)=I_el(Y) implies
+(a 'or' b) 'imp' c = I_el(Y)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+  assume A1:(a 'imp' c)=I_el(Y) & (b 'imp' c)=I_el(Y);
+    for x being Element of Y holds
+    Pj((a 'or' b) 'imp' c,x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(a 'imp' c,x)= TRUE by A1,BVFUNC_1:def 14;
+    then A2:'not' Pj(a,x) 'or' Pj(c,x) = TRUE by BVFUNC_1:def 11;
+      Pj(b 'imp' c,x)= TRUE by A1,BVFUNC_1:def 14;
+    then A3:'not' Pj(b,x) 'or' Pj(c,x) = TRUE by BVFUNC_1:def 11;
+      Pj((a 'or' b) 'imp' c,x)
+    ='not' Pj(a 'or' b,x) 'or' Pj(c,x) by BVFUNC_1:def 11
+   .='not'( Pj(a,x) 'or' Pj(b,x)) 'or' Pj(c,x) by BVFUNC_1:def 7
+   .=Pj(c,x) 'or' ('not' Pj(a,x) '&' 'not' Pj(b,x)) by BINARITH:10
+   .=TRUE '&' TRUE by A2,A3,BINARITH:23
+   .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+(a 'or' b)=I_el(Y) & 'not' a=I_el(Y) implies b=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  assume A1:(a 'or' b)=I_el(Y) & 'not' a=I_el(Y);
+    for x being Element of Y holds
+    Pj(b,x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(a 'or' b,x)= TRUE by A1,BVFUNC_1:def 14;
+    then A2:Pj(a,x) 'or' Pj(b,x) = TRUE by BVFUNC_1:def 7;
+      Pj('not' a,x)= TRUE by A1,BVFUNC_1:def 14;
+    then 'not' Pj(a,x) = TRUE by VALUAT_1:def 5;
+    then Pj(a,x) = FALSE by MARGREL1:41;
+    hence thesis by A2,BINARITH:7;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c,d being Element of Funcs(Y,BOOLEAN) holds
+(a 'imp' b)=I_el(Y) & (c 'imp' d)=I_el(Y) implies
+(a '&' c) 'imp' (b '&' d)=I_el(Y)
+proof
+  let a,b,c,d be Element of Funcs(Y,BOOLEAN);
+  assume A1:(a 'imp' b)=I_el(Y) & (c 'imp' d)=I_el(Y);
+    for x being Element of Y holds
+    Pj((a '&' c) 'imp' (b '&' d),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(a 'imp' b,x)= TRUE by A1,BVFUNC_1:def 14;
+    then A2:'not' Pj(a,x) 'or' Pj(b,x) = TRUE by BVFUNC_1:def 11;
+      Pj(c 'imp' d,x)= TRUE by A1,BVFUNC_1:def 14;
+    then A3:'not' Pj(c,x) 'or' Pj(d,x) = TRUE by BVFUNC_1:def 11;
+      Pj((a '&' c) 'imp' (b '&' d),x)
+    ='not' Pj(a '&' c,x) 'or' Pj(b '&' d,x) by BVFUNC_1:def 11
+   .='not'( Pj(a,x) '&' Pj(c,x)) 'or' Pj(b '&' d,x) by VALUAT_1:def 6
+   .='not'( Pj(a,x) '&' Pj(c,x)) 'or' (Pj(b,x) '&' Pj(d,x)) by VALUAT_1:def 6
+   .=('not' Pj(a,x) 'or' 'not' Pj(c,x)) 'or' (Pj(b,x) '&' Pj(d,x))
+   by BINARITH:9
+   .=(('not' Pj(c,x) 'or' 'not' Pj(a,x)) 'or' Pj(b,x)) '&'
+     (('not' Pj(a,x) 'or' 'not' Pj(c,x)) 'or' Pj(d,x)) by BINARITH:23
+   .=('not' Pj(c,x) 'or' ('not' Pj(a,x) 'or' Pj(b,x))) '&'
+     (('not' Pj(a,x) 'or' 'not' Pj(c,x)) 'or' Pj(d,x)) by BINARITH:20
+   .=('not' Pj(c,x) 'or' TRUE) '&' ('not' Pj(a,x) 'or' TRUE)
+   by A2,A3,BINARITH:20
+   .=TRUE '&' ('not' Pj(a,x) 'or' TRUE) by BINARITH:19
+   .=TRUE '&' TRUE by BINARITH:19
+   .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c,d being Element of Funcs(Y,BOOLEAN) holds
+(a 'imp' b)=I_el(Y) & (c 'imp' d)=I_el(Y) implies
+(a 'or' c) 'imp' (b 'or' d) =I_el(Y)
+proof
+  let a,b,c,d be Element of Funcs(Y,BOOLEAN);
+  assume A1:(a 'imp' b)=I_el(Y) & (c 'imp' d)=I_el(Y);
+    for x being Element of Y holds
+    Pj((a 'or' c) 'imp' (b 'or' d),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(a 'imp' b,x)= TRUE by A1,BVFUNC_1:def 14;
+    then A2:'not' Pj(a,x) 'or' Pj(b,x) = TRUE by BVFUNC_1:def 11;
+      Pj(c 'imp' d,x)= TRUE by A1,BVFUNC_1:def 14;
+    then A3:'not' Pj(c,x) 'or' Pj(d,x) = TRUE by BVFUNC_1:def 11;
+      Pj((a 'or' c) 'imp' (b 'or' d),x)
+    ='not' Pj(a 'or' c,x) 'or' Pj(b 'or' d,x) by BVFUNC_1:def 11
+   .='not'( Pj(a,x) 'or' Pj(c,x)) 'or' Pj(b 'or' d,x) by BVFUNC_1:def 7
+   .='not'( Pj(a,x) 'or' Pj(c,x)) 'or' (Pj(b,x) 'or' Pj(d,x)) by BVFUNC_1:def 7
+   .=(Pj(b,x) 'or' Pj(d,x)) 'or' ('not' Pj(a,x) '&' 'not' Pj(c,x))
+   by BINARITH:10
+   .=((Pj(d,x) 'or' Pj(b,x)) 'or' 'not' Pj(a,x)) '&'
+     ((Pj(b,x) 'or' Pj(d,x)) 'or' 'not' Pj(c,x)) by BINARITH:23
+   .=(Pj(d,x) 'or' (Pj(b,x) 'or' 'not' Pj(a,x))) '&'
+     ((Pj(b,x) 'or' Pj(d,x)) 'or' 'not' Pj(c,x)) by BINARITH:20
+   .=(Pj(d,x) 'or' TRUE) '&' (Pj(b,x) 'or' TRUE) by A2,A3,BINARITH:20
+   .=TRUE '&' (Pj(b,x) 'or' TRUE) by BINARITH:19
+   .=TRUE '&' TRUE by BINARITH:19
+   .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+(a '&' 'not' b) 'imp' 'not' a=I_el(Y) implies (a 'imp' b)=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  assume A1: (a '&' 'not' b) 'imp' 'not' a=I_el(Y);
+    for x being Element of Y holds
+    Pj(a 'imp' b,x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj((a '&' 'not' b) 'imp' 'not' a,x)=TRUE by A1,BVFUNC_1:def 14;
+    then 'not' Pj(a '&' 'not' b,x) 'or' Pj('not' a,x) = TRUE by BVFUNC_1:def 11
+;
+    then 'not'( Pj(a,x) '&' Pj('not' b,x)) 'or' Pj('not'
+a,x)=TRUE by VALUAT_1:def 6;
+    then ('not' Pj(a,x) 'or' 'not' Pj('not' b,x)) 'or' Pj('not'
+a,x)=TRUE by BINARITH:9;
+    then ('not' Pj(a,x) 'or' 'not' 'not' Pj(b,x)) 'or' Pj('not'
+a,x)=TRUE by VALUAT_1:def 5;
+    then ('not' Pj(a,x) 'or' 'not' 'not' Pj(b,x)) 'or' 'not'
+Pj(a,x)=TRUE by VALUAT_1:def 5;
+    then ('not' Pj(a,x) 'or' Pj(b,x)) 'or' 'not' Pj(a,x)=TRUE by MARGREL1:40;
+    then Pj(b,x) 'or' ('not' Pj(a,x) 'or' 'not' Pj(a,x))=TRUE by BINARITH:20;
+    then Pj(b,x) 'or' 'not' Pj(a,x)=TRUE by BINARITH:21;
+    hence thesis by BVFUNC_1:def 11;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+canceled;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+a 'imp' 'not' b=I_el(Y) implies b 'imp' 'not' a=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  assume A1:a 'imp' 'not' b=I_el(Y);
+    for x being Element of Y holds Pj(b 'imp' 'not' a,x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(a 'imp' 'not' b,x)=TRUE by A1,BVFUNC_1:def 14;
+    then ('not' Pj(a,x)) 'or' Pj('not' b,x)=TRUE by BVFUNC_1:def 11;
+    then A2:'not' Pj(a,x) 'or' 'not' Pj(b,x)=TRUE by VALUAT_1:def 5;
+      Pj(b 'imp' 'not' a,x)
+     =('not' Pj(b,x)) 'or' Pj('not' a,x) by BVFUNC_1:def 11
+    .=TRUE by A2,VALUAT_1:def 5;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+'not' a 'imp' b=I_el(Y) implies 'not' b 'imp' a=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+  assume A1:'not' a 'imp' b=I_el(Y);
+    for x being Element of Y holds Pj('not' b 'imp' a,x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj('not' a 'imp' b,x)=TRUE by A1,BVFUNC_1:def 14;
+    then ('not' Pj('not' a,x)) 'or' Pj(b,x)=TRUE by BVFUNC_1:def 11;
+    then 'not' 'not' Pj(a,x) 'or' Pj(b,x)=TRUE by VALUAT_1:def 5;
+    then A2:Pj(a,x) 'or' Pj(b,x)=TRUE by MARGREL1:40;
+      Pj('not' b 'imp' a,x)
+     =('not' Pj('not' b,x)) 'or' Pj(a,x) by BVFUNC_1:def 11
+    .=('not' 'not' Pj(b,x)) 'or' Pj(a,x) by VALUAT_1:def 5
+    .=TRUE by A2,MARGREL1:40;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+a 'imp' (a 'or' b)=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds Pj(a 'imp' (a 'or' b),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(a 'imp' (a 'or' b),x)
+    ='not' Pj(a,x) 'or' Pj(a 'or' b,x) by BVFUNC_1:def 11
+   .='not' Pj(a,x) 'or' (Pj(a,x) 'or' Pj(b,x)) by BVFUNC_1:def 7
+   .=('not' Pj(a,x) 'or' Pj(a,x)) 'or' Pj(b,x) by BINARITH:20
+   .=TRUE 'or' Pj(b,x) by BINARITH:18
+   .=TRUE by BINARITH:19;
+   hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+(a 'or' b) 'imp' ('not' a 'imp' b)=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds Pj((a 'or' b) 'imp' ('not' a 'imp' b),x)=
+TRUE
+  proof
+    let x be Element of Y;
+      Pj((a 'or' b) 'imp' ('not' a 'imp' b),x)
+    ='not' Pj(a 'or' b,x) 'or' Pj('not' a 'imp' b,x) by BVFUNC_1:def 11
+   .='not'( Pj(a,x) 'or' Pj(b,x)) 'or' Pj('not' a 'imp' b,x) by BVFUNC_1:def 7
+   .='not'( Pj(a,x) 'or' Pj(b,x)) 'or' ('not' Pj('not'
+a,x) 'or' Pj(b,x)) by BVFUNC_1:def 11
+   .=('not' Pj(a,x) '&' 'not' Pj(b,x)) 'or' ('not' Pj('not'
+a,x) 'or' Pj(b,x)) by BINARITH:10
+   .=('not' Pj(a,x) '&' 'not' Pj(b,x)) 'or' ('not' 'not'
+Pj(a,x) 'or' Pj(b,x)) by VALUAT_1:def 5
+   .=(Pj(a,x) 'or' Pj(b,x)) 'or' ('not' Pj(a,x) '&' 'not' Pj(b,x))
+   by MARGREL1:40
+   .=((Pj(a,x) 'or' Pj(b,x)) 'or' 'not' Pj(a,x)) '&'
+     ((Pj(a,x) 'or' Pj(b,x)) 'or' 'not' Pj(b,x)) by BINARITH:23
+   .=((Pj(a,x) 'or' 'not' Pj(a,x)) 'or' Pj(b,x)) '&'
+     ((Pj(a,x) 'or' Pj(b,x)) 'or' 'not' Pj(b,x)) by BINARITH:20
+   .=((Pj(a,x) 'or' 'not' Pj(a,x)) 'or' Pj(b,x)) '&'
+     (Pj(a,x) 'or' (Pj(b,x) 'or' 'not' Pj(b,x))) by BINARITH:20
+   .=(TRUE 'or' Pj(b,x)) '&'
+     (Pj(a,x) 'or' (Pj(b,x) 'or' 'not' Pj(b,x))) by BINARITH:18
+   .=(TRUE 'or' Pj(b,x)) '&' (Pj(a,x) 'or' TRUE) by BINARITH:18
+   .=TRUE '&' (Pj(a,x) 'or' TRUE) by BINARITH:19
+   .=TRUE '&' TRUE by BINARITH:19
+   .=TRUE by MARGREL1:45;
+   hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+'not'( a 'or' b) 'imp' ('not' a '&' 'not' b)=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds Pj('not'( a 'or' b) 'imp' ('not' a '&' 'not'
+b),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj('not'( a 'or' b) 'imp' ('not' a '&' 'not' b),x)
+    ='not' Pj('not'( a 'or' b),x) 'or' Pj('not' a '&' 'not' b,x)
+    by BVFUNC_1:def 11
+   .='not' 'not' Pj(a 'or' b,x) 'or' Pj('not' a '&' 'not' b,x)
+   by VALUAT_1:def 5
+   .=Pj(a 'or' b,x) 'or' Pj('not' a '&' 'not' b,x) by MARGREL1:40
+   .=(Pj(a,x) 'or' Pj(b,x)) 'or' Pj('not' a '&' 'not' b,x) by BVFUNC_1:def 7
+   .=(Pj(a,x) 'or' Pj(b,x)) 'or' (Pj('not' a,x) '&' Pj('not'
+b,x)) by VALUAT_1:def 6
+   .=(Pj(a,x) 'or' Pj(b,x)) 'or' ('not' Pj(a,x) '&' Pj('not'
+b,x)) by VALUAT_1:def 5
+   .=(Pj(a,x) 'or' Pj(b,x)) 'or' ('not' Pj(a,x) '&' 'not'
+Pj(b,x)) by VALUAT_1:def 5
+   .=((Pj(a,x) 'or' Pj(b,x)) 'or' 'not' Pj(a,x)) '&'
+     ((Pj(a,x) 'or' Pj(b,x)) 'or' 'not' Pj(b,x)) by BINARITH:23
+   .=((Pj(a,x) 'or' 'not' Pj(a,x)) 'or' Pj(b,x)) '&'
+     ((Pj(a,x) 'or' Pj(b,x)) 'or' 'not' Pj(b,x)) by BINARITH:20
+   .=((Pj(a,x) 'or' 'not' Pj(a,x)) 'or' Pj(b,x)) '&'
+     (Pj(a,x) 'or' (Pj(b,x) 'or' 'not' Pj(b,x))) by BINARITH:20
+   .=(TRUE 'or' Pj(b,x)) '&'
+     (Pj(a,x) 'or' (Pj(b,x) 'or' 'not' Pj(b,x))) by BINARITH:18
+   .=(TRUE 'or' Pj(b,x)) '&' (Pj(a,x) 'or' TRUE) by BINARITH:18
+   .=TRUE '&' (Pj(a,x) 'or' TRUE) by BINARITH:19
+   .=TRUE '&' TRUE by BINARITH:19
+   .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+('not' a '&' 'not' b) 'imp' 'not'( a 'or' b)=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds Pj(('not' a '&' 'not' b) 'imp' 'not'
+(a 'or' b),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(('not' a '&' 'not' b) 'imp' 'not'( a 'or' b),x)
+    ='not' Pj('not' a '&' 'not' b,x) 'or' Pj('not'( a 'or' b),x)
+    by BVFUNC_1:def 11
+   .='not' Pj('not' a '&' 'not' b,x) 'or' 'not' Pj(a 'or' b,x)
+   by VALUAT_1:def 5
+   .='not'( Pj('not' a,x) '&' Pj('not' b,x)) 'or' 'not'
+Pj(a 'or' b,x) by VALUAT_1:def 6
+   .='not'( 'not' Pj(a,x) '&' Pj('not' b,x)) 'or' 'not'
+Pj(a 'or' b,x) by VALUAT_1:def 5
+   .='not'( 'not' Pj(a,x) '&' 'not' Pj(b,x)) 'or' 'not'
+Pj(a 'or' b,x) by VALUAT_1:def 5
+   .=('not' 'not' Pj(a,x) 'or' 'not' 'not' Pj(b,x)) 'or' 'not'
+Pj(a 'or' b,x) by BINARITH:9
+   .=(Pj(a,x) 'or' 'not' 'not' Pj(b,x)) 'or' 'not' Pj(a 'or' b,x)
+   by MARGREL1:40
+   .=(Pj(a,x) 'or' Pj(b,x)) 'or' 'not' Pj(a 'or' b,x) by MARGREL1:40
+   .=(Pj(a,x) 'or' Pj(b,x)) 'or' 'not'( Pj(a,x) 'or' Pj(b,x))
+   by BVFUNC_1:def 7
+   .=(Pj(a,x) 'or' Pj(b,x)) 'or' ('not' Pj(a,x) '&' 'not' Pj(b,x))
+   by BINARITH:10
+   .=((Pj(a,x) 'or' Pj(b,x)) 'or' 'not' Pj(a,x)) '&'
+     ((Pj(a,x) 'or' Pj(b,x)) 'or' 'not' Pj(b,x)) by BINARITH:23
+   .=((Pj(a,x) 'or' 'not' Pj(a,x)) 'or' Pj(b,x)) '&'
+     ((Pj(a,x) 'or' Pj(b,x)) 'or' 'not' Pj(b,x)) by BINARITH:20
+   .=((Pj(a,x) 'or' 'not' Pj(a,x)) 'or' Pj(b,x)) '&'
+     (Pj(a,x) 'or' (Pj(b,x) 'or' 'not' Pj(b,x))) by BINARITH:20
+   .=(TRUE 'or' Pj(b,x)) '&'
+     (Pj(a,x) 'or' (Pj(b,x) 'or' 'not' Pj(b,x))) by BINARITH:18
+   .=(TRUE 'or' Pj(b,x)) '&' (Pj(a,x) 'or' TRUE) by BINARITH:18
+   .=TRUE '&' (Pj(a,x) 'or' TRUE) by BINARITH:19
+   .=TRUE '&' TRUE by BINARITH:19
+   .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+'not'( a 'or' b) 'imp' 'not' a=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds Pj('not'( a 'or' b) 'imp' 'not' a,x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj('not'( a 'or' b) 'imp' 'not' a,x)
+    ='not' Pj('not'( a 'or' b),x) 'or' Pj('not' a,x) by BVFUNC_1:def 11
+   .='not' 'not' Pj(a 'or' b,x) 'or' Pj('not' a,x) by VALUAT_1:def 5
+   .='not' 'not' Pj(a 'or' b,x) 'or' 'not' Pj(a,x) by VALUAT_1:def 5
+   .=Pj(a 'or' b,x) 'or' 'not' Pj(a,x) by MARGREL1:40
+   .=(Pj(a,x) 'or' Pj(b,x)) 'or' 'not' Pj(a,x) by BVFUNC_1:def 7
+   .=(Pj(a,x) 'or' 'not' Pj(a,x)) 'or' Pj(b,x) by BINARITH:20
+   .=TRUE 'or' Pj(b,x) by BINARITH:18
+   .=TRUE by BINARITH:19;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a being Element of Funcs(Y,BOOLEAN) holds
+(a 'or' a) 'imp' a=I_el(Y)
+proof
+  let a be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds Pj((a 'or' a) 'imp' a,x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj((a 'or' a) 'imp' a,x)
+    ='not' Pj(a 'or' a,x) 'or' Pj(a,x) by BVFUNC_1:def 11
+   .='not'( Pj(a,x) 'or' Pj(a,x)) 'or' Pj(a,x) by BVFUNC_1:def 7
+   .=('not' Pj(a,x) '&' 'not' Pj(a,x)) 'or' Pj(a,x) by BINARITH:10
+   .='not' Pj(a,x) 'or' Pj(a,x) by BINARITH:16
+   .=TRUE by BINARITH:18;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+(a '&' 'not' a) 'imp' b=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds Pj((a '&' 'not' a) 'imp' b,x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj((a '&' 'not' a) 'imp' b,x)
+    ='not' Pj(a '&' 'not' a,x) 'or' Pj(b,x) by BVFUNC_1:def 11
+   .='not'( Pj(a,x) '&' Pj('not' a,x)) 'or' Pj(b,x) by VALUAT_1:def 6
+   .='not'( Pj(a,x) '&' 'not' Pj(a,x)) 'or' Pj(b,x) by VALUAT_1:def 5
+   .=('not' Pj(a,x) 'or' 'not' 'not' Pj(a,x)) 'or' Pj(b,x) by BINARITH:9
+   .=TRUE 'or' Pj(b,x) by BINARITH:18
+   .=TRUE by BINARITH:19;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+(a 'imp' b) 'imp' ('not' a 'or' b)=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds Pj((a 'imp' b) 'imp' ('not' a 'or' b),x)=
+TRUE
+  proof
+    let x be Element of Y;
+      Pj((a 'imp' b) 'imp' ('not' a 'or' b),x)
+    ='not' Pj(a 'imp' b,x) 'or' Pj('not' a 'or' b,x) by BVFUNC_1:def 11
+   .='not'( 'not' Pj(a,x) 'or' Pj(b,x)) 'or' Pj('not'
+a 'or' b,x) by BVFUNC_1:def 11
+   .='not'( 'not' Pj(a,x) 'or' Pj(b,x)) 'or' (Pj('not'
+a,x) 'or' Pj(b,x)) by BVFUNC_1:def 7
+   .=('not' 'not' Pj(a,x) '&' 'not' Pj(b,x)) 'or' (Pj('not'
+a,x) 'or' Pj(b,x)) by BINARITH:10
+   .=(Pj(a,x) '&' 'not' Pj(b,x)) 'or' (Pj('not' a,x) 'or' Pj(b,x))
+   by MARGREL1:40
+   .=('not' Pj(a,x) 'or' Pj(b,x)) 'or' (Pj(a,x) '&' 'not'
+Pj(b,x)) by VALUAT_1:def 5
+   .=(('not' Pj(a,x) 'or' Pj(b,x)) 'or' Pj(a,x)) '&'
+     (('not' Pj(a,x) 'or' Pj(b,x)) 'or' 'not' Pj(b,x)) by BINARITH:23
+   .=(('not' Pj(a,x) 'or' Pj(a,x)) 'or' Pj(b,x)) '&'
+     (('not' Pj(a,x) 'or' Pj(b,x)) 'or' 'not' Pj(b,x)) by BINARITH:20
+   .=(('not' Pj(a,x) 'or' Pj(a,x)) 'or' Pj(b,x)) '&'
+     ('not' Pj(a,x) 'or' (Pj(b,x) 'or' 'not' Pj(b,x))) by BINARITH:20
+   .=(TRUE 'or' Pj(b,x)) '&'
+     ('not' Pj(a,x) 'or' (Pj(b,x) 'or' 'not' Pj(b,x))) by BINARITH:18
+   .=(TRUE 'or' Pj(b,x)) '&' ('not' Pj(a,x) 'or' TRUE) by BINARITH:18
+   .=TRUE '&' ('not' Pj(a,x) 'or' TRUE) by BINARITH:19
+   .=TRUE '&' TRUE by BINARITH:19
+   .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+(a '&' b) 'imp' 'not'( a 'imp' 'not' b)=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds Pj((a '&' b) 'imp' 'not'( a 'imp' 'not'
+b),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj((a '&' b) 'imp' 'not'( a 'imp' 'not' b),x)
+    ='not' Pj(a '&' b,x) 'or' Pj('not'( a 'imp' 'not' b),x) by BVFUNC_1:def 11
+   .='not'( Pj(a,x) '&' Pj(b,x)) 'or' Pj('not'( a 'imp' 'not'
+b),x) by VALUAT_1:def 6
+   .='not'( Pj(a,x) '&' Pj(b,x)) 'or' 'not' Pj(a 'imp' 'not'
+b,x) by VALUAT_1:def 5
+   .=('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' 'not' Pj(a 'imp' 'not'
+b,x) by BINARITH:9
+   .=('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' 'not'( 'not' Pj(a,x) 'or' Pj('not'
+b,x)) by BVFUNC_1:def 11
+   .=('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' 'not'( 'not' Pj(a,x) 'or' 'not'
+Pj(b,x)) by VALUAT_1:def 5
+   .=('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' ('not' 'not'
+   Pj(a,x) '&' 'not' 'not'
+Pj(b,x)) by BINARITH:10
+   .=('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' (Pj(a,x) '&' 'not' 'not'
+Pj(b,x)) by MARGREL1:40
+   .=('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' (Pj(a,x) '&' Pj(b,x))
+   by MARGREL1:40
+   .=(('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(a,x)) '&'
+     (('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(b,x)) by BINARITH:23
+   .=(('not' Pj(a,x) 'or' Pj(a,x)) 'or' 'not' Pj(b,x)) '&'
+     (('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(b,x)) by BINARITH:20
+   .=(('not' Pj(a,x) 'or' Pj(a,x)) 'or' 'not' Pj(b,x)) '&'
+     ('not' Pj(a,x) 'or' ('not' Pj(b,x) 'or' Pj(b,x))) by BINARITH:20
+   .=(TRUE 'or' 'not' Pj(b,x)) '&'
+     ('not' Pj(a,x) 'or' ('not' Pj(b,x) 'or' Pj(b,x))) by BINARITH:18
+   .=(TRUE 'or' 'not' Pj(b,x)) '&'
+     ('not' Pj(a,x) 'or' TRUE) by BINARITH:18
+   .=TRUE '&' ('not' Pj(a,x) 'or' TRUE) by BINARITH:19
+   .=TRUE '&' TRUE by BINARITH:19
+   .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+'not'( a 'imp' 'not' b) 'imp' (a '&' b)=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds Pj('not'( a 'imp' 'not'
+b) 'imp' (a '&' b),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj('not'( a 'imp' 'not' b) 'imp' (a '&' b),x)
+    ='not' Pj('not'( a 'imp' 'not' b),x) 'or' Pj(a '&' b,x) by BVFUNC_1:def 11
+   .='not' 'not' Pj(a 'imp' 'not' b,x) 'or' Pj(a '&' b,x) by VALUAT_1:def 5
+   .='not' 'not' Pj(a 'imp' 'not'
+b,x) 'or' (Pj(a,x) '&' Pj(b,x)) by VALUAT_1:def 6
+   .='not' 'not'( 'not' Pj(a,x) 'or' Pj('not'
+b,x)) 'or' (Pj(a,x) '&' Pj(b,x)) by BVFUNC_1:def 11
+   .=('not' Pj(a,x) 'or' Pj('not' b,x)) 'or' (Pj(a,x) '&' Pj(b,x))
+   by MARGREL1:40
+   .=('not' Pj(a,x) 'or' 'not'
+Pj(b,x)) 'or' (Pj(a,x) '&' Pj(b,x)) by VALUAT_1:def 5
+   .=(('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(a,x)) '&'
+     (('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(b,x)) by BINARITH:23
+   .=(('not' Pj(a,x) 'or' Pj(a,x)) 'or' 'not' Pj(b,x)) '&'
+     (('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(b,x)) by BINARITH:20
+   .=(('not' Pj(a,x) 'or' Pj(a,x)) 'or' 'not' Pj(b,x)) '&'
+     ('not' Pj(a,x) 'or' ('not' Pj(b,x) 'or' Pj(b,x))) by BINARITH:20
+   .=(TRUE 'or' 'not' Pj(b,x)) '&'
+     ('not' Pj(a,x) 'or' ('not' Pj(b,x) 'or' Pj(b,x))) by BINARITH:18
+   .=(TRUE 'or' 'not' Pj(b,x)) '&'
+     ('not' Pj(a,x) 'or' TRUE) by BINARITH:18
+   .=TRUE '&' ('not' Pj(a,x) 'or' TRUE) by BINARITH:19
+   .=TRUE '&' TRUE by BINARITH:19
+   .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+'not'( a '&' b) 'imp' ('not' a 'or' 'not' b)=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds Pj('not'( a '&' b) 'imp' ('not' a 'or' 'not'
+b),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj('not'( a '&' b) 'imp' ('not' a 'or' 'not' b),x)
+    ='not' Pj('not'( a '&' b),x) 'or' Pj('not' a 'or' 'not' b,x)
+    by BVFUNC_1:def 11
+   .='not' 'not' Pj(a '&' b,x) 'or' Pj('not' a 'or' 'not' b,x)
+   by VALUAT_1:def 5
+   .=Pj(a '&' b,x) 'or' Pj('not' a 'or' 'not' b,x) by MARGREL1:40
+   .=(Pj(a,x) '&' Pj(b,x)) 'or' Pj('not' a 'or' 'not' b,x)
+   by VALUAT_1:def 6
+   .=(Pj('not' a,x) 'or' Pj('not'
+b,x)) 'or' (Pj(a,x) '&' Pj(b,x)) by BVFUNC_1:def 7
+   .=('not' Pj(a,x) 'or' Pj('not'
+b,x)) 'or' (Pj(a,x) '&' Pj(b,x)) by VALUAT_1:def 5
+   .=('not' Pj(a,x) 'or' 'not'
+Pj(b,x)) 'or' (Pj(a,x) '&' Pj(b,x)) by VALUAT_1:def 5
+   .=(('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(a,x)) '&'
+     (('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(b,x)) by BINARITH:23
+   .=(('not' Pj(a,x) 'or' Pj(a,x)) 'or' 'not' Pj(b,x)) '&'
+     (('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(b,x)) by BINARITH:20
+   .=(('not' Pj(a,x) 'or' Pj(a,x)) 'or' 'not' Pj(b,x)) '&'
+     ('not' Pj(a,x) 'or' ('not' Pj(b,x) 'or' Pj(b,x))) by BINARITH:20
+   .=(TRUE 'or' 'not' Pj(b,x)) '&'
+     ('not' Pj(a,x) 'or' ('not' Pj(b,x) 'or' Pj(b,x))) by BINARITH:18
+   .=(TRUE 'or' 'not' Pj(b,x)) '&' ('not' Pj(a,x) 'or' TRUE) by BINARITH:18
+   .=TRUE '&' ('not' Pj(a,x) 'or' TRUE) by BINARITH:19
+   .=TRUE '&' TRUE by BINARITH:19
+   .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+('not' a 'or' 'not' b) 'imp' 'not'( a '&' b)=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds Pj(('not' a 'or' 'not' b) 'imp' 'not'
+(a '&' b),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(('not' a 'or' 'not' b) 'imp' 'not'( a '&' b),x)
+    ='not' Pj('not' a 'or' 'not' b,x) 'or' Pj('not'( a '&' b),x)
+    by BVFUNC_1:def 11
+   .='not' Pj('not' a 'or' 'not' b,x) 'or' 'not' Pj(a '&' b,x)
+   by VALUAT_1:def 5
+   .='not'( Pj('not' a,x) 'or' Pj('not' b,x)) 'or' 'not'
+Pj(a '&' b,x) by BVFUNC_1:def 7
+   .='not'( 'not' Pj(a,x) 'or' Pj('not' b,x)) 'or' 'not'
+Pj(a '&' b,x) by VALUAT_1:def 5
+   .='not'( 'not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' 'not'
+Pj(a '&' b,x) by VALUAT_1:def 5
+   .='not'( 'not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' 'not'
+(Pj(a,x) '&' Pj(b,x)) by VALUAT_1:def 6
+   .=('not' 'not' Pj(a,x) '&' 'not' 'not' Pj(b,x)) 'or' 'not'
+(Pj(a,x) '&' Pj(b,x)) by BINARITH:10
+   .=('not' 'not' Pj(a,x) '&' 'not' 'not' Pj(b,x)) 'or'
+   ('not' Pj(a,x) 'or' 'not'
+Pj(b,x)) by BINARITH:9
+   .=(Pj(a,x) '&' 'not' 'not' Pj(b,x)) 'or' ('not' Pj(a,x) 'or' 'not'
+Pj(b,x)) by MARGREL1:40
+   .=('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' (Pj(a,x) '&' Pj(b,x))
+   by MARGREL1:40
+   .=(('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(a,x)) '&'
+     (('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(b,x)) by BINARITH:23
+   .=(('not' Pj(a,x) 'or' Pj(a,x)) 'or' 'not' Pj(b,x)) '&'
+     (('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(b,x)) by BINARITH:20
+   .=(('not' Pj(a,x) 'or' Pj(a,x)) 'or' 'not' Pj(b,x)) '&'
+     ('not' Pj(a,x) 'or' ('not' Pj(b,x) 'or' Pj(b,x))) by BINARITH:20
+   .=(TRUE 'or' 'not' Pj(b,x)) '&'
+     ('not' Pj(a,x) 'or' ('not' Pj(b,x) 'or' Pj(b,x))) by BINARITH:18
+   .=(TRUE 'or' 'not' Pj(b,x)) '&'
+     ('not' Pj(a,x) 'or' TRUE) by BINARITH:18
+   .=TRUE '&'
+     ('not' Pj(a,x) 'or' TRUE) by BINARITH:19
+   .=TRUE '&' TRUE by BINARITH:19
+   .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+(a '&' b) 'imp' a=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds Pj((a '&' b) 'imp' a,x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj((a '&' b) 'imp' a,x)
+    ='not' Pj(a '&' b,x) 'or' Pj(a,x) by BVFUNC_1:def 11
+   .='not'( Pj(a,x) '&' Pj(b,x)) 'or' Pj(a,x) by VALUAT_1:def 6
+   .=('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(a,x) by BINARITH:9
+   .=('not' Pj(a,x) 'or' Pj(a,x)) 'or' 'not' Pj(b,x) by BINARITH:20
+   .=TRUE 'or' 'not' Pj(b,x) by BINARITH:18
+   .=TRUE by BINARITH:19;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+(a '&' b) 'imp' (a 'or' b)=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds Pj((a '&' b) 'imp' (a 'or' b),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj((a '&' b) 'imp' (a 'or' b),x)
+    ='not' Pj(a '&' b,x) 'or' Pj(a 'or' b,x) by BVFUNC_1:def 11
+   .='not'( Pj(a,x) '&' Pj(b,x)) 'or' Pj(a 'or' b,x) by VALUAT_1:def 6
+   .=('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(a 'or' b,x) by BINARITH:9
+   .=('not' Pj(a,x) 'or' 'not'
+Pj(b,x)) 'or' (Pj(a,x) 'or' Pj(b,x)) by BVFUNC_1:def 7
+   .=(('not' Pj(b,x) 'or' 'not'
+Pj(a,x)) 'or' Pj(a,x)) 'or' Pj(b,x) by BINARITH:20
+   .=('not' Pj(b,x) 'or' ('not'
+Pj(a,x) 'or' Pj(a,x))) 'or' Pj(b,x) by BINARITH:20
+   .=('not' Pj(b,x) 'or' TRUE) 'or' Pj(b,x) by BINARITH:18
+   .=TRUE 'or' Pj(b,x) by BINARITH:19
+   .=TRUE by BINARITH:19;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+(a '&' b) 'imp' b=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds Pj((a '&' b) 'imp' b,x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj((a '&' b) 'imp' b,x)
+    ='not' Pj(a '&' b,x) 'or' Pj(b,x) by BVFUNC_1:def 11
+   .='not'( Pj(a,x) '&' Pj(b,x)) 'or' Pj(b,x) by VALUAT_1:def 6
+   .=('not' Pj(a,x) 'or' 'not' Pj(b,x)) 'or' Pj(b,x) by BINARITH:9
+   .='not' Pj(a,x) 'or' ('not' Pj(b,x) 'or' Pj(b,x)) by BINARITH:20
+   .='not' Pj(a,x) 'or' TRUE by BINARITH:18
+   .=TRUE by BINARITH:19;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a being Element of Funcs(Y,BOOLEAN) holds
+a 'imp' a '&' a=I_el(Y)
+proof
+  let a be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds Pj(a 'imp' (a '&' a),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(a 'imp' a '&' a,x)
+    ='not' Pj(a,x) 'or' Pj(a '&' a,x) by BVFUNC_1:def 11
+   .='not' Pj(a,x) 'or' (Pj(a,x) '&' Pj(a,x)) by VALUAT_1:def 6
+   .=('not' Pj(a,x) 'or' Pj(a,x)) '&'
+     ('not' Pj(a,x) 'or' Pj(a,x)) by BINARITH:23
+   .=TRUE '&'
+     ('not' Pj(a,x) 'or' Pj(a,x)) by BINARITH:18
+   .=TRUE '&'
+     TRUE by BINARITH:18
+   .=TRUE by MARGREL1:45;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+(a 'eqv' b) 'imp' (a 'imp' b)=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds Pj((a 'eqv' b) 'imp' (a 'imp' b),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj((a 'eqv' b) 'imp' (a 'imp' b),x)
+    ='not' Pj(a 'eqv' b,x) 'or' Pj(a 'imp' b,x) by BVFUNC_1:def 11
+   .='not' 'not'( Pj(a,x) 'xor' Pj(b,x)) 'or'
+     Pj(a 'imp' b,x) by BVFUNC_1:def 12
+   .=(Pj(a,x) 'xor' Pj(b,x)) 'or'
+     Pj(a 'imp' b,x) by MARGREL1:40
+   .=(('not' Pj(a,x) '&' Pj(b,x)) 'or' (Pj(a,x) '&' 'not' Pj(b,x))) 'or'
+     Pj(a 'imp' b,x) by BINARITH:def 2
+   .=(('not' Pj(a,x) '&' Pj(b,x)) 'or' (Pj(a,x) '&' 'not' Pj(b,x))) 'or'
+     ('not' Pj(a,x) 'or' Pj(b,x)) by BVFUNC_1:def 11
+   .=(('not' Pj(a,x) '&' Pj(b,x)) 'or' (Pj(a,x) '&' 'not' Pj(b,x))) 'or'
+     ('not' Pj(a,x) 'or' 'not' 'not' Pj(b,x)) by MARGREL1:40
+   .=(('not' Pj(a,x) '&' Pj(b,x)) 'or' (Pj(a,x) '&' 'not' Pj(b,x))) 'or'
+     'not'( Pj(a,x) '&' 'not' Pj(b,x)) by BINARITH:9
+   .=('not' Pj(a,x) '&' Pj(b,x)) 'or' ((Pj(a,x) '&' 'not' Pj(b,x)) 'or'
+     'not'( Pj(a,x) '&' 'not' Pj(b,x))) by BINARITH:20
+   .=('not' Pj(a,x) '&' Pj(b,x)) 'or' TRUE by BINARITH:18
+   .=TRUE by BINARITH:19;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b being Element of Funcs(Y,BOOLEAN) holds
+(a 'eqv' b) 'imp' (b 'imp' a)=I_el(Y)
+proof
+  let a,b be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds Pj((a 'eqv' b) 'imp' (b 'imp' a),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj((a 'eqv' b) 'imp' (b 'imp' a),x)
+    ='not' Pj(a 'eqv' b,x) 'or' Pj(b 'imp' a,x) by BVFUNC_1:def 11
+   .='not' 'not'( Pj(a,x) 'xor' Pj(b,x)) 'or'
+     Pj(b 'imp' a,x) by BVFUNC_1:def 12
+   .=(Pj(a,x) 'xor' Pj(b,x)) 'or'
+     Pj(b 'imp' a,x) by MARGREL1:40
+   .=(('not' Pj(a,x) '&' Pj(b,x)) 'or' (Pj(a,x) '&' 'not' Pj(b,x))) 'or'
+     Pj(b 'imp' a,x) by BINARITH:def 2
+   .=(('not' Pj(a,x) '&' Pj(b,x)) 'or' (Pj(a,x) '&' 'not' Pj(b,x))) 'or'
+     (Pj(a,x) 'or' 'not' Pj(b,x)) by BVFUNC_1:def 11
+   .=('not' Pj(a,x) '&' Pj(b,x)) 'or' ((Pj(a,x) '&' 'not' Pj(b,x)) 'or'
+     (Pj(a,x) 'or' 'not' Pj(b,x))) by BINARITH:20
+   .=('not' Pj(a,x) '&' Pj(b,x)) 'or' ((Pj(a,x) '&' 'not' Pj(b,x)) 'or'
+     ('not' 'not' Pj(a,x) 'or' 'not' Pj(b,x))) by MARGREL1:40
+   .=('not' Pj(a,x) '&' Pj(b,x)) 'or' ('not'( 'not' Pj(a,x) '&' Pj(b,x)) 'or'
+     (Pj(a,x) '&' 'not' Pj(b,x))) by BINARITH:9
+   .=(('not' Pj(a,x) '&' Pj(b,x)) 'or' 'not'( 'not' Pj(a,x) '&' Pj(b,x))) 'or'
+     (Pj(a,x) '&' 'not' Pj(b,x)) by BINARITH:20
+   .=TRUE 'or' (Pj(a,x) '&' 'not' Pj(b,x)) by BINARITH:18
+   .=TRUE by BINARITH:19;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+((a 'or' b) 'or' c) 'imp' (a 'or' (b 'or' c))=I_el(Y)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+    Pj(((a 'or' b) 'or' c) 'imp' (a 'or' (b 'or' c)),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(((a 'or' b) 'or' c) 'imp' (a 'or' (b 'or' c)),x)
+    ='not' Pj((a 'or' b) 'or' c,x) 'or' Pj(a 'or' (b 'or' c),x)
+     by BVFUNC_1:def 11
+   .='not'( Pj(a 'or' b,x) 'or' Pj(c,x)) 'or' Pj(a 'or' (b 'or' c),x)
+     by BVFUNC_1:def 7
+   .='not'( (Pj(a,x) 'or' Pj(b,x)) 'or' Pj(c,x)) 'or' Pj(a 'or' (b 'or' c),x)
+     by BVFUNC_1:def 7
+   .='not'( (Pj(a,x) 'or' Pj(b,x)) 'or' Pj(c,x)) 'or'
+     (Pj(a,x) 'or' Pj(b 'or' c,x))
+     by BVFUNC_1:def 7
+   .='not'( (Pj(a,x) 'or' Pj(b,x)) 'or' Pj(c,x)) 'or'
+     (Pj(a,x) 'or' (Pj(b,x) 'or' Pj(c,x)))
+     by BVFUNC_1:def 7
+   .='not'( (Pj(a,x) 'or' Pj(b,x)) 'or' Pj(c,x)) 'or'
+      ((Pj(a,x) 'or' Pj(b,x)) 'or' Pj(c,x))
+     by BINARITH:20
+   .=TRUE by BINARITH:18;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+((a '&' b) '&' c) 'imp' (a '&' (b '&' c))=I_el(Y)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+    Pj(((a '&' b) '&' c) 'imp' (a '&' (b '&' c)),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj(((a '&' b) '&' c) 'imp' (a '&' (b '&' c)),x)
+    ='not' Pj((a '&' b) '&' c,x) 'or' Pj(a '&' (b '&' c),x)
+     by BVFUNC_1:def 11
+   .='not'( Pj(a '&' b,x) '&' Pj(c,x)) 'or' Pj(a '&' (b '&' c),x)
+     by VALUAT_1:def 6
+   .='not'( (Pj(a,x) '&' Pj(b,x)) '&' Pj(c,x)) 'or' Pj(a '&' (b '&' c),x)
+     by VALUAT_1:def 6
+   .='not'( (Pj(a,x) '&' Pj(b,x)) '&' Pj(c,x)) 'or'
+     (Pj(a,x) '&' Pj(b '&' c,x))
+     by VALUAT_1:def 6
+   .='not'( (Pj(a,x) '&' Pj(b,x)) '&' Pj(c,x)) 'or'
+     (Pj(a,x) '&' (Pj(b,x) '&' Pj(c,x)))
+     by VALUAT_1:def 6
+   .='not'( (Pj(a,x) '&' Pj(b,x)) '&' Pj(c,x)) 'or'
+      ((Pj(a,x) '&' Pj(b,x)) '&' Pj(c,x))
+     by MARGREL1:52
+   .=TRUE by BINARITH:18;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+
+theorem for a,b,c being Element of Funcs(Y,BOOLEAN) holds
+(a 'or' (b 'or' c)) 'imp' ((a 'or' b) 'or' c)=I_el(Y)
+proof
+  let a,b,c be Element of Funcs(Y,BOOLEAN);
+    for x being Element of Y holds
+    Pj((a 'or' (b 'or' c)) 'imp' ((a 'or' b) 'or' c),x)=TRUE
+  proof
+    let x be Element of Y;
+      Pj((a 'or' (b 'or' c)) 'imp' ((a 'or' b) 'or' c),x)
+    ='not' Pj(a 'or' (b 'or' c),x) 'or' Pj((a 'or' b) 'or' c,x)
+     by BVFUNC_1:def 11
+   .='not'( Pj(a,x) 'or' Pj(b 'or' c,x)) 'or' Pj((a 'or' b) 'or' c,x)
+     by BVFUNC_1:def 7
+   .='not'( Pj(a,x) 'or' (Pj(b,x) 'or' Pj(c,x))) 'or' Pj((a 'or' b) 'or' c,x)
+     by BVFUNC_1:def 7
+   .='not'( Pj(a,x) 'or' (Pj(b,x) 'or' Pj(c,x))) 'or'
+      (Pj(a 'or' b,x) 'or' Pj(c,x))
+     by BVFUNC_1:def 7
+   .='not'( Pj(a,x) 'or' (Pj(b,x) 'or' Pj(c,x))) 'or'
+      ((Pj(a,x) 'or' Pj(b,x)) 'or' Pj(c,x))
+     by BVFUNC_1:def 7
+   .='not'( Pj(a,x) 'or' (Pj(b,x) 'or' Pj(c,x))) 'or'
+      (Pj(a,x) 'or' (Pj(b,x) 'or' Pj(c,x)))
+     by BINARITH:20
+   .=TRUE by BINARITH:18;
+    hence thesis;
+  end;
+  hence thesis by BVFUNC_1:def 14;
+end;
+

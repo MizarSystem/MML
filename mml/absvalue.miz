@@ -1,0 +1,1006 @@
+:: Some Properties of Functions Modul and Signum
+::  by Jan Popio{\l}ek
+::
+:: Received June 21, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, ARYTM_1, ARYTM_3, RELAT_1, ABSVALUE;
+ notation ORDINAL1, XCMPLX_0, XREAL_0, REAL_1;
+ constructors REAL_1, XCMPLX_0, XREAL_0, XBOOLE_0;
+ clusters XREAL_0, REAL_1, ARYTM_3, ZFMISC_1, XBOOLE_0;
+ requirements REAL, NUMERALS, SUBSET, ARITHM;
+ theorems XREAL_0, AXIOMS, REAL_1, XCMPLX_0, XCMPLX_1;
+
+begin
+
+ reserve x, y, z, s, t for real number;
+
+definition let x;
+     func abs x -> real number equals :Def1:
+             x if 0 <= x
+             otherwise -x;
+     coherence;
+     consistency;
+     projectivity by REAL_1:66;
+end;
+
+definition let x be Real;
+   redefine func abs x -> Real;
+   coherence by XREAL_0:def 1;
+end;
+
+canceled 4;
+
+theorem Th5:
+  0 <= abs(x)
+proof
+    x < 0 implies 0 <= abs(x)
+     proof
+        assume
+    A1: x < 0;
+        then abs(x) = -x by Def1;
+        hence thesis by A1,REAL_1:26,50;
+     end;
+  hence thesis by Def1;
+end;
+
+theorem Th6:
+  x <> 0 implies 0 < abs(x)
+proof
+  assume x <> 0;
+  then A1: x < 0 or 0 < x by AXIOMS:21;
+    x < 0 implies 0 < abs(x)
+  proof
+    assume
+    A2: x < 0;
+    then abs(x) = -x by Def1;
+    hence thesis by A2,REAL_1:66;
+  end;
+  hence thesis by A1,Def1;
+end;
+
+theorem
+    x = 0 iff abs(x) = 0 by Def1,Th6;
+
+canceled;
+
+theorem
+    abs(x) = -x & x <> 0 implies x < 0
+proof
+  assume that
+  A1: abs(x) = -x and
+  A2: x <> 0 and
+  A3: not x < 0;
+    0 < x by A2,A3,REAL_1:def 5;
+  then -x < 0 by REAL_1:26,50;
+  hence contradiction by A1,A3,Def1;
+end;
+
+theorem Th10:
+  abs(x*y) = abs(x) * abs(y)
+proof
+  A1: x < 0 & y < 0 implies abs(x*y) = abs(x) * abs(y)
+  proof
+    assume that
+    A2: x < 0 and
+    A3: y < 0;
+A4: x * 0 < x * y by A2,A3,REAL_1:71;
+    A5: abs(y) = -y by A3,Def1;
+    A6: abs(x*y) = x * y by A4,Def1;
+    A7: (-x) * (-y) = - ((-x) * y) by XCMPLX_1:175;
+      -((-x) * y) = -(-(x * y)) by XCMPLX_1:175;
+    hence thesis by A2,A5,A6,A7,Def1;
+  end;
+  A8: x < 0 & 0 < y implies abs(x*y) = abs(x) * abs(y)
+  proof
+    assume that
+    A9: x < 0 and
+    A10: 0 < y;
+A11:x * y < 0 * y by A9,A10,REAL_1:70;
+      abs(x) = -x by A9,Def1;
+    then abs(x) * abs(y) = (-x) * y by A10,Def1;
+    then abs(x) * abs(y) = -(x * y) by XCMPLX_1:175;
+    hence thesis by A11,Def1;
+  end;
+A12:x < 0 & y = 0 implies abs(x*y) = abs(x) * abs(y)
+  proof
+    assume that
+      x < 0 and
+    A13: y = 0;
+      abs(y) = 0 by A13,Def1;
+    hence thesis by A13;
+  end;
+  A14: 0 <= x & 0 <= y implies abs(x*y) = abs(x) * abs(y)
+  proof
+    assume that
+    A15: 0 <= x and
+                A16: 0 <= y;
+A17:            0 * y <= x * y by A15,A16,AXIOMS:25;
+                   abs(x) = x by A15,Def1;
+                then abs(x) * abs(y) = x * y by A16,Def1;
+                    hence thesis by A17,Def1;
+               end;
+          A18: 0 < x & y < 0 implies abs(x*y) = abs(x) * abs(y)
+               proof
+                    assume that
+                A19: 0 < x and
+                A20: y < 0;
+A21:            x * y < x * 0 by A19,A20,REAL_1:70;
+                  abs(x) = x by A19,Def1;
+                then abs(x) * abs(y) = x * (-y) by A20,Def1;
+                then abs(x) * abs(y) = -(x * y) by XCMPLX_1:175;
+                     hence thesis by A21,Def1;
+               end;
+             x = 0 implies abs(x*y) = abs(x) * abs(y)
+                proof
+                     assume
+                 A22: x = 0;
+                  then abs(x) = 0 by Def1;
+                     hence thesis by A22;
+                end;
+    hence thesis by A1,A8,A12,A14,A18,REAL_1:def 5;
+    end;
+
+theorem Th11:
+  -abs(x) <= x & x <= abs(x)
+proof
+  A1: x < 0 implies -abs(x) <= x & x <= abs(x)
+  proof
+    assume
+    A2: x < 0;
+    then A3: abs(x) = -x by Def1;
+      0 < -x by A2,REAL_1:66;
+    hence thesis by A2,A3,AXIOMS:22;
+  end;
+    0 <= x implies -abs(x) <= x & x <= abs(x)
+  proof
+    assume
+    A4: 0 <= x;
+    then A5: abs(x) = x by Def1;
+      -x <= 0 by A4,REAL_1:26,50;
+    hence thesis by A4,A5,AXIOMS:22;
+  end;
+  hence thesis by A1;
+end;
+
+theorem Th12:
+  -y <= x & x <= y iff abs(x) <= y
+proof
+  A1: -y <= x & x <= y implies abs(x) <= y
+  proof
+    assume that
+    A2: -y <= x and
+    A3: x <= y;
+      -x <= -(-y) by A2,REAL_1:50;
+     then x < 0 implies abs(x) <= y by Def1;
+    hence thesis by A3,Def1;
+    end;
+    abs(x) <= y implies -y <= x & x <= y
+  proof
+    assume
+    A4: abs(x) <= y;
+      0 <= abs(x) by Th5;
+    then A5: 0 <= y by A4,AXIOMS:22;
+    A6: 0 < x or x < 0 or x = 0 by AXIOMS:21;
+    A7: 0 < x implies -y <= x & x <= y
+    proof
+      assume
+      A8: 0 < x;
+        -y <= 0 by A5,REAL_1:26,50;
+      hence thesis by A4,A8,Def1,AXIOMS:22;
+    end;
+      x < 0 implies -y <= x & x <= y
+    proof
+      assume
+      A9: x < 0;
+      then -x <= y by A4,Def1;
+      then -y <= -(-x) by REAL_1:50;
+      hence thesis by A5,A9,AXIOMS:22;
+    end;
+    hence thesis by A5,A6,A7,REAL_1:26,50;
+  end;
+  hence thesis by A1;
+end;
+
+theorem Th13:
+  abs(x+y) <= abs(x) + abs(y)
+proof
+  A1: -abs(x) <= x & x <= abs(x) by Th11;
+    -abs(y) <= y & y <= abs(y) by Th11;
+  then -abs(x) + -abs(y) <= x + y & x + y <= abs(x) + abs(y) by A1,REAL_1:55;
+  then (-abs(x)) - abs(y) <= x + y & x + y <= abs(x) + abs(y) by XCMPLX_0:def 8
+;
+  then -(abs(y) -(-abs(x))) <= x + y &
+  x + y <= abs(x) + abs(y) by XCMPLX_1:143;
+  then -(abs(y) + -(-abs(x))) <= x + y &
+  x + y <= abs(x) + abs(y) by XCMPLX_0:def 8;
+  hence thesis by Th12;
+end;
+
+theorem Th14:
+  x <> 0 implies abs(x) * abs(1/x) = 1
+         proof
+              assume
+          A1: x <> 0;
+          A2: abs(x) * abs(1/x) = abs(x * (1/x)) by Th10;
+             abs(x * (1/x)) = abs 1 by A1,XCMPLX_1:107;
+               hence thesis by A2,Def1;
+         end;
+
+theorem Th15:
+  abs(1/x) = 1/abs(x)
+   proof
+    per cases;
+    suppose
+A1:   x = 0;
+     hence abs(1/x) = abs(1*0") by XCMPLX_0:def 9
+        .= abs (1*0) by XCMPLX_0:def 7
+        .= 0 by Def1
+        .= 1*0" by XCMPLX_0:def 7
+        .= 1/0 by XCMPLX_0:def 9
+        .= 1/abs(x) by A1,Def1;
+    suppose
+    A2: x <> 0;
+    then (abs(x) * abs(1/x)) * (1/abs(x)) = 1 * (1/abs(x)) by Th14;
+    then A3: abs(1/x) * (abs(x) * (1/abs(x))) = 1/abs(x) by XCMPLX_1:4;
+       abs(x) <> 0 by A2,Th6;
+    then abs(1/x) * 1 = 1/abs(x) by A3,XCMPLX_1:107;
+        hence thesis;
+   end;
+
+theorem
+    abs(x/y) = abs(x)/abs(y)
+proof
+    x/y = x*(1*y") by XCMPLX_0:def 9
+  .= x*(1/y) by XCMPLX_0:def 9;
+  then abs(x/y) = abs(x) * abs(1/y) by Th10;
+  then abs(x/y) = (abs(x)/1) * (1/abs(y)) by Th15;
+  then abs(x/y) = (abs(x) * 1 )/(1 * abs(y)) by XCMPLX_1:77;
+  hence thesis;
+end;
+
+theorem Th17:
+  abs(x) = abs(-x)
+         proof
+          A1: x < 0 or 0 < x or x = 0 by AXIOMS:21;
+          A2: x < 0 implies abs(x) = abs(-x)
+              proof
+                   assume
+                 x < 0;
+                then abs(x) = -x by Def1;
+                    hence thesis;
+                    end;
+             0 < x implies abs(x) = abs(-x)
+              proof
+                   assume
+                  0 < x;
+               then -x < 0 by REAL_1:26,50;
+                then abs(-x) = -(-x) by Def1;
+                    hence thesis;
+                    end;
+         hence thesis by A1,A2;
+         end;
+
+theorem Th18:
+  abs(x) - abs(y) <= abs(x-y)
+proof
+    x = x + 0;
+  then x = x + ( -y + y ) by XCMPLX_0:def 6
+  .= ( x + -y ) + y by XCMPLX_1:1
+  .= ( x - y ) + y by XCMPLX_0:def 8;
+  then abs(x) <= abs(x-y) + abs(y) by Th13;
+  hence thesis by REAL_1:86;
+end;
+
+theorem
+    abs(x-y) <= abs(x) + abs(y)
+proof
+    abs(x-y) = abs(x + -y) by XCMPLX_0:def 8;
+  then abs(x-y) <= abs(x) + abs(-y) by Th13;
+  hence thesis by Th17;
+end;
+
+canceled;
+
+theorem
+    abs(x) <= z & abs(y) <= t implies abs(x+y) <= z + t
+proof
+  assume that
+  A1: abs(x) <= z and
+  A2: abs(y) <= t;
+  A3: abs(x+y) <= abs(x) + abs(y) by Th13;
+    abs(x) + abs(y) <= z + t by A1,A2,REAL_1:55;
+  hence thesis by A3,AXIOMS:22;
+end;
+
+theorem
+    abs(abs(x) - abs(y)) <= abs(x-y)
+         proof
+          A1: abs(x) - abs(y) <= abs(x-y) by Th18;
+          A2: abs(y) - abs(x) <= abs(y - x) by Th18;
+          A3: abs(y - x) = abs(-(1 * (x - y))) by XCMPLX_1:143
+                       .= abs((-1) * (x - y)) by XCMPLX_1:175
+                       .= abs(-1) * abs(x-y) by Th10;
+A4:        abs(-1) = -(-1) by Def1
+                    .= 1;
+            -( abs(x) - abs(y) ) <= abs(y - x) by A2,XCMPLX_1:143;
+          then -abs(x-y) <= -( -( abs(x) - abs(y) ) ) by A3,A4,REAL_1:50;
+         hence thesis by A1,Th12;
+         end;
+
+canceled;
+
+theorem
+    0 <= x * y implies abs(x+y) = abs(x) + abs(y)
+proof
+    assume
+A1: 0 <= x * y;
+    A2: x * y = 0 implies abs(x+y) = abs(x) + abs(y)
+    proof
+      assume
+A3:   x * y = 0;
+      A4: x = 0 implies abs(x+y) = abs(x) + abs(y)
+      proof
+        assume
+        A5: x = 0;
+        then abs(x) + abs(y) = 0 + abs(y) by Def1
+                                        .= abs(y);
+        hence thesis by A5;
+      end;
+        y = 0 implies abs(x+y) = abs(x) + abs(y)
+      proof
+        assume
+        A6: y = 0;
+        then abs(x) + abs(y) = abs(x) + 0 by Def1
+        .= abs(x);
+        hence thesis by A6;
+      end;
+      hence thesis by A3,A4,XCMPLX_1:6;
+    end;
+      0 < x * y implies abs(x+y) = abs(x) + abs(y)
+    proof
+      assume
+      A7: 0 < x * y;
+      A8: 0 < x * y implies x < 0 & y < 0 or 0 < x & 0 < y
+      proof
+        assume
+        A9: 0 < x * y;
+        then A10: x <> 0 & y <> 0;
+A11:    x < 0 & 0 < y implies x * y < x * 0 by REAL_1:71;
+          0 < x & y < 0 implies x * y < x * 0 by REAL_1:70;
+        hence thesis by A9,A10,A11,AXIOMS:21;
+      end;
+      A12: 0 < x & 0 < y implies abs(x+y) = abs(x) + abs(y)
+      proof
+        assume that
+        A13: 0 < x and
+        A14: 0 < y;
+A15:    0 + 0 < x + y by A13,A14,REAL_1:67;
+          abs(x) = x by A13,Def1;
+        then abs(x) + abs(y) = x + y by A14,Def1;
+        hence thesis by A15,Def1;
+      end;
+        x < 0 & y < 0 implies abs(x+y) = abs(x) + abs(y)
+      proof
+        assume that
+        A16: x < 0 and
+        A17: y < 0;
+A18:    x + y < 0 + 0 by A16,A17,REAL_1:67;
+          abs(x) = -x by A16,Def1;
+        then abs(x) + abs(y) = -(1 * x) + -(1 * y) by A17,Def1
+        .= (-1) * x + -(1 * y) by XCMPLX_1:175
+        .= (-1) * x + (-1) * y by XCMPLX_1:175
+        .= (-1) * ( x + y ) by XCMPLX_1:8
+        .= - ( 1 * ( x + y ) ) by XCMPLX_1:175
+        .= - ( x + y );
+        hence thesis by A18,Def1;
+      end;
+      hence thesis by A7,A8,A12;
+    end;
+    hence thesis by A1,A2,REAL_1:def 5;
+end;
+
+theorem
+    abs(x+y) = abs(x) + abs(y) implies 0 <= x * y
+proof
+    assume that
+A1: abs(x+y) = abs(x) + abs(y) and
+A2: not ( 0 <= x * y );
+A3: x * y < 0 implies x < 0 & 0 < y or 0 < x & y < 0
+    proof
+      assume
+      A4: x * y < 0;
+      then A5: x <> 0 & y <> 0;
+A6:   x < 0 & y < 0 implies 0 * x < x * y by REAL_1:71;
+        0 < x & 0 < y implies x * 0 < x * y by REAL_1:70;
+      hence thesis by A4,A5,A6,AXIOMS:21;
+    end;
+A7: x < 0 & 0 < y & x + y < 0 implies not ( abs(x+y) = abs(x) + abs(y) )
+    proof
+      assume that
+A8:   x < 0 and
+A9:   0 < y and
+A10:  x + y < 0;
+        -y < 0 by A9,REAL_1:26,50;
+      then -y + 0 < 0 + y by A9,REAL_1:67;
+      then -(1 * x) + -y < -x + y by REAL_1:53;
+      then (-1) * x + -(1 * y) < -x + y by XCMPLX_1:175;
+      then (-1) * x + (-1) * y < -x + y by XCMPLX_1:175;
+      then (-1) * ( x + y ) < -x + y by XCMPLX_1:8;
+      then A11: -( 1 * ( x + y ) ) < -x + y by XCMPLX_1:175;
+      A12: abs(x) = -x by A8,Def1;
+        abs(y) = y by A9,Def1;
+      hence thesis by A10,A11,A12,Def1;
+    end;
+A13: x < 0 & 0 < y & 0 <= x + y implies not ( abs(x+y) = abs(x) + abs(y) )
+      proof
+           assume that
+       A14: x < 0 and
+       A15: 0 < y and
+       A16: 0 <= x + y;
+          0 < -x by A14,REAL_1:66;
+       then x + 0 < 0 + -x by A14,REAL_1:67;
+       then A17: x + y < -x + y by REAL_1:53;
+       A18: abs(x) = -x by A14,Def1;
+          abs(y) = y by A15,Def1;
+            hence thesis by A16,A17,A18,Def1;
+            end;
+   A19: 0 < x & y < 0 & x + y < 0 implies not ( abs(x+y) = abs(x) + abs(y) )
+      proof
+           assume that
+       A20: 0 < x and
+       A21: y < 0 and
+       A22: x + y < 0;
+         -x < 0 by A20,REAL_1:26,50;
+       then -x + 0 < 0 + x by A20,REAL_1:67;
+       then -(1 * x) + -y < x + -y by REAL_1:53;
+       then (-1) * x + -(1 * y) < x + -y by XCMPLX_1:175;
+       then (-1) * x + (-1) * y < x + -y by XCMPLX_1:175;
+       then (-1) * ( x + y ) < x + -y by XCMPLX_1:8;
+       then A23: - (1 * ( x + y )) < x + -y by XCMPLX_1:175;
+       A24: abs(x) = x by A20,Def1;
+          abs(y) = -y by A21,Def1;
+            hence thesis by A22,A23,A24,Def1;
+            end;
+      0 < x & y < 0 & 0 <= x + y implies not ( abs(x+y) = abs(x) + abs(y) )
+      proof
+           assume that
+       A25: 0 < x and
+       A26: y < 0 and
+       A27: 0 <= x + y;
+          0 < -y by A26,REAL_1:66;
+       then 0 + y < -y + 0 by A26,REAL_1:67;
+       then A28: x + y < x + -y by REAL_1:53;
+       A29: abs(x) = x by A25,Def1;
+          abs(y) = -y by A26,Def1;
+            hence thesis by A27,A28,A29,Def1;
+   end;
+  hence contradiction by A1,A2,A3,A7,A13,A19;
+end;
+
+theorem
+    abs(x+y)/(1 + abs(x+y)) <= abs(x)/(1 + abs(x)) + abs(y)/(1 +abs(y))
+         proof
+              set a = abs(x), b = abs(y), c = abs(x+y);
+          A1: c <= a + b by Th13;
+          A2: 0 <= a by Th5;
+          A3: 0 <= b by Th5;
+          A4: 0 <= c by Th5;
+A5:           0 + 0 <= a + b by A2,A3,REAL_1:55;
+          then A6: 0 + 0 < 1 + (a + b) by REAL_1:67;
+          A7: 0 < 1 + (a + b) by A5,REAL_1:67;
+          A8: 0 < 1 + a + b by A6,XCMPLX_1:1;
+A9:           0 + 0 < 1 + c by A4,REAL_1:67;
+A10:           0 + 0 < 1 + a by A2,REAL_1:67;
+A11:           0 + 0 < 1 + b by A3,REAL_1:67;
+             s <= t & 0 < 1 + s & 0 < 1 + t implies s/(1 + s) <= t/(1 + t)
+             proof
+                  assume that
+              A12: s <= t and
+              A13: 0 < 1 + s and
+              A14: 0 < 1 + t;
+                s * 1 + s * t <= t + s * t by A12,AXIOMS:24;
+              then s * (1 + t) <= 1 * t + s * t by XCMPLX_1:8;
+              then A15: s * (1 + t) <= (1 + s) * t by XCMPLX_1:8;
+              A16: 0 < (1 + s)" by A13,REAL_1:72;
+              A17: 0 < (1 + t)" by A14,REAL_1:72;
+                s * (1 + t) * (1 + s)" <= t * (1 + s) * (1 + s)" by A15,A16,
+AXIOMS:25;
+              then s * (1 + t) * (1 + s)" <= t * ((1 + s) * (1 + s)")
+                  by XCMPLX_1:4;
+              then s * (1 + t) * (1 + s)" <= t * 1 by A13,XCMPLX_0:def 7;
+              then (s * (1 + s)") * (1 + t) <= t by XCMPLX_1:4;
+              then (s * (1 + s)") * (1 + t) * (1 + t)" <= t * (1 + t)"
+                  by A17,AXIOMS:25;
+              then (s * (1 + s)") * ((1 + t) * (1 + t)") <= t * (1 + t)" by
+XCMPLX_1:4;
+              then (s * (1 + s)") * 1 <= t * (1 + t)" by A14,XCMPLX_0:def 7;
+              then s/(1 + s) <= t * (1 + t)" by XCMPLX_0:def 9;
+                 hence thesis by XCMPLX_0:def 9;
+                 end;
+          then c/(1 + c) <= (a + b)/(1 + (a + b)) by A1,A7,A9;
+          then A18: c/(1 + c) <= (a + b)/(1 + a + b) by XCMPLX_1:1;
+             (a + b)/(1 + a + b) <= a/(1 + a) + b/(1 + b)
+             proof
+              A19: (a + b)/(1 + a + b) = a/(1 + a + b) + b/(1 + a + b) by
+XCMPLX_1:63;
+          A20: 0 < 1 + a & 0 < 1 + a + b implies a/(1 + a + b) <= a/(1 + a)
+             proof
+                  assume that
+              A21: 0 < 1 + a and
+              A22: 0 < 1 + a + b;
+                 0 * b <= a * b by A2,A3,AXIOMS:25;
+              then 0 + a <= a * b + a by AXIOMS:24;
+              then a <= a * b + a * 1;
+              then a <= a * (1 + b) by XCMPLX_1:8;
+              then a * 1 + a * a <= a * (1 + b) + a * a by AXIOMS:24;
+              then a * (1 + a) <= a * (1 + b) + a * a by XCMPLX_1:8;
+              then a * (1 + a) <= a * ((1 + b) + a) by XCMPLX_1:8;
+              then A23: a * (1 + a) <= a * (1 + a + b) by XCMPLX_1:1;
+              A24: 0 <= (1 + a)" by A21,REAL_1:72;
+              A25: 0 <= (1 + a + b)" by A22,REAL_1:72;
+                 a * (1 + a) * (1 + a)" <= a * (1 + a + b) * (1 + a)"
+                  by A23,A24,AXIOMS:25;
+              then a * ((1 + a) * (1 + a)") <= a * (1 + a + b) * (1 + a)" by
+XCMPLX_1:4;
+              then a * 1 <= a * (1 + a + b) * (1 + a)" by A10,XCMPLX_0:def 7;
+              then a <= (a * (1 + a)") * (1 + a + b) by XCMPLX_1:4;
+              then a * (1 + a + b)" <= (a * (1 + a)") * (1 + a + b) * (1 + a
+                  + b)" by A25,AXIOMS:25;
+              then a * (1 + a + b)" <= (a * (1 + a)") * ((1 + a + b) * ( 1 +
+                  a + b)") by XCMPLX_1:4;
+              then a * (1 + a + b)" <= (a * (1 + a)") * 1 by A8,XCMPLX_0:def 7
+;
+              then a/(1 + a + b) <= a * (1 + a)" by XCMPLX_0:def 9;
+                  hence thesis by XCMPLX_0:def 9;
+                  end;
+             0 < 1 + b & 0 < 1 + a + b implies b/(1 + a + b) <= b/(1 + b)
+             proof
+                  assume that
+              A26: 0 < 1 + b and
+              A27: 0 < 1 + a + b;
+                 0 * b <= a * b by A2,A3,AXIOMS:25;
+              then 0 + b <= a * b + b by AXIOMS:24;
+              then b <= a * b + 1 * b;
+              then b <= (1 + a) * b by XCMPLX_1:8;
+              then b * 1 + b * b <= (1 + a) * b + b * b by AXIOMS:24;
+              then b * (1 + b) <= (1 + a) * b + b * b by XCMPLX_1:8;
+              then A28: b * (1 + b) <= b * (1 + a + b) by XCMPLX_1:8;
+              A29: 0 <= (1 + b)" by A26,REAL_1:72;
+              A30: 0 <= (1 + a + b)" by A27,REAL_1:72;
+                 (b * (1 + b)) * (1 + b)" <= (b * (1 + a + b)) * (1 + b)"
+                  by A28,A29,AXIOMS:25;
+              then b * ((1 + b) * (1 + b)") <= (b * (1 + a + b)) * (1 + b)"
+                  by XCMPLX_1:4;
+              then b * 1 <= (b * (1 + a + b)) * (1 + b)" by A11,XCMPLX_0:def 7
+;
+              then b <= (b * (1 + b)") * (1 + a + b) by XCMPLX_1:4;
+              then b * (1 + a + b)" <= ((b * (1 + b)") * (1 + a + b )) *
+                  (1 + a + b)" by A30,AXIOMS:25;
+              then b * (1 + a + b)" <= (b * (1 + b)") * ((1 + a + b) *
+                  (1 + a + b)") by XCMPLX_1:4;
+              then b * (1 + a + b)" <= (b * (1 + b)") * 1 by A8,XCMPLX_0:def 7
+;
+              then b/(1 + a + b) <= b * (1 + b)" by XCMPLX_0:def 9;
+                  hence thesis by XCMPLX_0:def 9;
+                  end;
+                  hence thesis by A3,A10,A19,A20,REAL_1:55,67;
+                  end;
+         hence thesis by A18,AXIOMS:22;
+         end;
+
+definition let x;
+            func sgn x equals
+     :Def2:   1 if 0 < x,
+             -1 if x < 0
+            otherwise 0;
+  coherence;
+  consistency;
+end;
+
+definition let x;
+    cluster sgn x -> real;
+  coherence
+  proof
+         0 < x or 0 > x or x = 0 by REAL_1:def 5;
+       hence thesis by Def2;
+  end;
+end;
+
+definition let x be Real;
+    redefine func sgn x -> Real;
+  coherence by XREAL_0:def 1;
+end;
+
+canceled 4;
+
+theorem
+    sgn x = 1 implies 0 < x
+         proof
+              assume that
+          A1: sgn x = 1 and
+          A2: not ( 0 < x );
+            x < 0 or x = 0 by A2,REAL_1:def 5;
+              hence contradiction by A1,Def2;
+              end;
+
+theorem
+    sgn x = -1 implies x < 0
+    proof
+              assume that
+          A1: sgn x = -1 and
+          A2: not ( x < 0 );
+            0 < x or x = 0 by A2,REAL_1:def 5;
+               hence contradiction by A1,Def2;
+               end;
+
+theorem Th33:
+  sgn x = 0 implies x = 0
+proof
+  assume that
+  A1: sgn x = 0 and
+  A2: x <> 0;
+    0 < x or x < 0 by A2,AXIOMS:21;
+  hence contradiction by A1,Def2;
+end;
+
+theorem
+    x = abs(x) * sgn x
+  proof
+          A1: 0 < x implies x = abs(x) * sgn x
+              proof
+                   assume
+               A2: 0 < x;
+               then abs(x) = x by Def1;
+               then abs(x) * sgn x = x * 1 by A2,Def2;
+                    hence thesis;
+                    end;
+          A3: x < 0 implies x = abs(x) * sgn x
+              proof
+                   assume
+               A4: x < 0;
+               then abs(x) = -x by Def1;
+               then abs(x) * sgn x = (-x) * (-1) by A4,Def2
+                                 .= -(-( x * 1 )) by XCMPLX_1:176
+                                 .= x;
+                    hence thesis;
+                    end;
+             x = 0 implies x = abs(x) * sgn x
+              proof
+                   assume
+               A5: x = 0;
+                then sgn x = 0 by Def2;
+                    hence thesis by A5;
+                    end;
+         hence thesis by A1,A3,AXIOMS:21;
+         end;
+
+theorem Th35:
+  sgn (x * y) = sgn x * sgn y
+  proof
+          A1: 0 < x & 0 < y implies sgn (x * y) = sgn x * sgn y
+              proof
+                   assume that
+               A2: 0 < x and
+               A3: 0 < y;
+A4:            0 * y < x * y by A2,A3,REAL_1:70;
+               A5: sgn x = 1 by A2,Def2;
+                  sgn y = 1 by A3,Def2;
+                    hence thesis by A4,A5,Def2;
+                    end;
+          A6: 0 < x & y < 0 implies sgn (x * y) = sgn x * sgn y
+              proof
+                   assume that
+               A7: 0 < x and
+               A8: y < 0;
+A9:            x * y < 0 * y by A7,A8,REAL_1:71;
+                  sgn y = -1 by A8,Def2;
+                then sgn x * sgn y = 1 * (-1) by A7,Def2
+                                 .= -1;
+                hence thesis by A9,Def2;
+                    end;
+          A10: x < 0 & 0 < y implies sgn (x * y) = sgn x * sgn y
+              proof
+                   assume that
+               A11: x < 0 and
+               A12: 0 < y;
+A13:           x * y < 0 * y by A11,A12,REAL_1:70;
+                  sgn y = 1 by A12,Def2;
+                then sgn x * sgn y = -1 by A11,Def2;
+                    hence thesis by A13,Def2;
+                    end;
+          A14: x < 0 & y < 0 implies sgn (x * y) = sgn x * sgn y
+              proof
+                   assume that
+               A15: x < 0 and
+               A16: y < 0;
+A17:           x * 0 < x * y by A15,A16,REAL_1:71;
+                  sgn y = -1 by A16,Def2;
+                then sgn x * sgn y = (-1) * (-1) by A15,Def2
+                                 .= 1;
+                    hence thesis by A17,Def2;
+                    end;
+             x = 0 or y = 0 implies sgn (x * y) = sgn x * sgn y
+              proof
+                   assume
+               A18: x = 0 or y = 0;
+                then sgn x = 0 or sgn y = 0 by Def2;
+                    hence thesis by A18,Def2;
+                    end;
+         hence thesis by A1,A6,A10,A14,AXIOMS:21;
+         end;
+
+theorem
+    sgn sgn x = sgn x
+proof
+  A1: 0 < x or x < 0 or x = 0 by AXIOMS:21;
+  A2: 0 < x implies sgn sgn x = sgn x
+  proof
+    assume
+A3: 0 < x;
+    then sgn sgn x = sgn 1 by Def2
+    .= 1 by Def2;
+    hence thesis by A3,Def2;
+  end;
+    x < 0 implies sgn sgn x = sgn x
+  proof
+    assume
+A4: x < 0;
+    then sgn sgn x = sgn (-1) by Def2
+    .= -1 by Def2;
+    hence thesis by A4,Def2;
+  end;
+  hence thesis by A1,A2,Def2;
+end;
+
+theorem
+    sgn (x + y) <= sgn x + sgn y + 1
+proof
+  A1: 0 < x & 0 < y implies sgn (x + y) <= sgn x + sgn y + 1
+  proof
+    assume that
+    A2: 0 < x and
+    A3: 0 < y;
+A4: 0 + 0 < x + y by A2,A3,REAL_1:67;
+    A5: sgn x = 1 by A2,Def2;
+    A6: sgn y = 1 by A3,Def2;
+      sgn x < sgn x + 1 by REAL_1:69;
+    then sgn x + 0 < sgn x + 1 + 1 by REAL_1:67;
+    hence thesis by A4,A5,A6,Def2;
+  end;
+  A7: 0 < x & y < 0 implies sgn (x + y) <= sgn x + sgn y +1
+  proof
+    assume that
+    A8: 0 < x and
+    A9: y < 0;
+      sgn x = 1 by A8,Def2;
+    then A10: sgn x + sgn y + 1 = 1 + -1 + 1 by A9,Def2
+    .= 1;
+A11:x + y < 0 or x + y = 0 or 0 < x + y by AXIOMS:21;
+    A12: sgn (x + y) = 0 implies sgn (x + y) <= sgn x + sgn y + 1 by A10;
+      sgn (x + y) = -1 implies sgn (x + y) <= sgn x + sgn y + 1 by A10;
+    hence thesis by A10,A11,A12,Def2;
+  end;
+  A13: x < 0 & 0 < y implies sgn (x + y) <= sgn x + sgn y + 1
+  proof
+    assume that
+    A14: x < 0 and
+    A15: 0 < y;
+      sgn x = -1 by A14,Def2;
+    then A16: sgn x + sgn y + 1 = -1 + 1 + 1 by A15,Def2
+    .= 1;
+A17:x + y < 0 or x + y = 0 or 0 < x + y by AXIOMS:21;
+    A18: sgn (x + y) = 0 implies sgn (x + y) <= sgn x + sgn y + 1 by A16;
+      sgn (x + y) = -1 implies sgn (x + y) <= sgn x + sgn y + 1 by A16;
+    hence thesis by A16,A17,A18,Def2;
+  end;
+  A19: x < 0 & y < 0 implies sgn (x + y) <= sgn x + sgn y + 1
+  proof
+    assume that
+    A20: x < 0 and
+    A21: y < 0;
+A22:x + y < 0 + 0 by A20,A21,REAL_1:67;
+      sgn y = -1 by A21,Def2;
+    then sgn x + sgn y + 1 = -1 + -1 + 1 by A20,Def2
+    .= -1;
+    hence thesis by A22,Def2;
+  end;
+    x = 0 or y = 0 implies sgn (x + y) <= sgn x + sgn y + 1
+  proof
+    A23: x = 0 implies sgn (x + y) <= sgn x + sgn y + 1
+    proof
+      assume
+      A24: x = 0;
+      then sgn x + sgn y + 1 = 0 + sgn y + 1 by Def2
+       .= sgn y + 1;
+      hence thesis by A24,REAL_1:69;
+    end;
+      y = 0 implies sgn (x + y) <= sgn x + sgn y + 1
+    proof
+      assume
+      A25: y = 0;
+      then sgn x + sgn y + 1 = sgn x + 0 + 1 by Def2
+      .= sgn x + 1;
+      hence thesis by A25,REAL_1:69;
+    end;
+    hence thesis by A23;
+    end;
+  hence thesis by A1,A7,A13,A19,AXIOMS:21;
+end;
+
+theorem Th38:
+  x <> 0 implies sgn x * sgn (1/x) = 1
+proof
+  assume x <> 0;
+  then sgn ( x * (1/x) ) = sgn 1 by XCMPLX_1:107;
+  then sgn ( x * (1/x) ) = 1 by Def2;
+  hence thesis by Th35;
+end;
+
+theorem Th39:
+  1/(sgn x) = sgn (1/x)
+  proof
+   per cases;
+    suppose
+A1:  x = 0;
+     hence 1/(sgn x) = 1/0 by Def2
+         .= 1*0" by XCMPLX_0:def 9
+         .= 0 by XCMPLX_0:def 7
+         .= sgn(1*0) by Def2
+         .= sgn(1*0") by XCMPLX_0:def 7
+         .= sgn (1/x) by A1,XCMPLX_0:def 9;
+    suppose
+A2:  x <> 0;
+     then A3: sgn x <> 0 by Th33;
+       (sgn x * sgn (1/x)) * (1/(sgn x)) = 1 * (1/(sgn x)) by A2,Th38;
+     then sgn (1/x) * (sgn x * (1/(sgn x))) = 1/(sgn x) by XCMPLX_1:4;
+     then sgn (1/x) * 1 = 1 /(sgn x) by A3,XCMPLX_1:107;
+         hence thesis;
+  end;
+
+theorem
+    sgn x + sgn y - 1 <= sgn ( x + y )
+  proof
+          A1: x < 0 & y < 0 implies sgn x + sgn y - 1 <= sgn (x + y)
+              proof
+                   assume that
+               A2: x < 0 and
+               A3: y < 0;
+A4:                x + y < 0 + 0 by A2,A3,REAL_1:67;
+
+               A5: sgn x = -1 by A2,Def2;
+               A6: sgn y = -1 by A3,Def2;
+A7:            sgn x = sgn (x + y) by A4,A5,Def2;
+                 sgn (x + y) + -1 - 1 < sgn (x + y) + -1 - 1 + 1 by REAL_1:69;
+               then sgn (x + y) + -1 - 1 < sgn (x + y) + -1 + -1 + 1 by
+XCMPLX_0:def 8;
+               then A8:sgn (x + y) + -1 - 1 < sgn (x + y) + -1 + ( -1 + 1 )
+                    by XCMPLX_1:1;
+                  sgn (x + y) + -1 < sgn (x + y) + -1 + 1 by REAL_1:69;
+               then sgn (x + y) + -1 < sgn (x + y) + (-1 + 1) by XCMPLX_1:1;
+                    hence thesis by A6,A7,A8,AXIOMS:22;
+                    end;
+          A9: x < 0 & 0 < y implies sgn x + sgn y - 1 <= sgn (x + y)
+              proof
+                   assume that
+               A10: x < 0 and
+               A11: 0 < y;
+                  sgn x = -1 by A10,Def2;
+               then A12: sgn x + sgn y = -1 + 1 by A11,Def2
+                                .= 0;
+                  x + y < 0 or x + y = 0 or 0 < x + y by AXIOMS:21;
+               then sgn (x + y) = -1 or sgn (x + y) = 0 or sgn (x + y) = 1
+                   by Def2;
+                    hence thesis by A12;
+                    end;
+          A13: 0 < x & y < 0 implies sgn x + sgn y - 1 <= sgn (x + y)
+              proof
+                   assume that
+               A14: 0 < x and
+               A15: y < 0;
+                  sgn x = 1 by A14,Def2;
+               then A16:sgn x + sgn y = 1 + -1 by A15,Def2
+                                .= 0;
+                  x + y < 0 or x + y = 0 or 0 < x + y by AXIOMS:21;
+               then sgn (x + y) = -1 or sgn (x + y) = 0 or sgn (x + y) = 1
+                   by Def2;
+                    hence thesis by A16;
+                    end;
+          A17: 0 < x & 0 < y implies sgn x + sgn y - 1 <= sgn (x + y)
+              proof
+                   assume that
+               A18: 0 < x and
+               A19: 0 < y;
+A20:                0 + 0 < x + y by A18,A19,REAL_1:67;
+                  sgn y = 1 by A19,Def2;
+                then sgn x + sgn y - 1 = 1 + 1 - 1 by A18,Def2
+                                    .= 1;
+                   hence thesis by A20,Def2;
+                   end;
+             x = 0 or y = 0 implies sgn x + sgn y - 1 <= sgn (x + y)
+              proof
+                   assume
+               A21: x = 0 or y = 0;
+               A22: x = 0 implies sgn x + sgn y - 1 <= sgn (x + y)
+                   proof
+                        assume
+                    A23: x = 0;
+                    then A24: sgn x + sgn y - 1 = 0 + sgn y - 1 by Def2
+                                          .= sgn y - 1;
+                       sgn y - 1 < sgn y - 1 + 1 by REAL_1:69;
+                    then sgn y - 1 < sgn y + -1 + 1 by XCMPLX_0:def 8;
+                    then sgn y - 1 < sgn y + (-1 + 1) by XCMPLX_1:1;
+                         hence thesis by A23,A24;
+                         end;
+                  y = 0 implies sgn x + sgn y - 1 <= sgn (x + y)
+                   proof
+                        assume
+                    A25: y = 0;
+                    then A26: sgn x + sgn y - 1 = sgn x + 0 - 1 by Def2
+                                          .= sgn x - 1;
+                       sgn x - 1 < sgn x - 1 + 1 by REAL_1:69;
+                    then sgn x - 1 < sgn x + -1 + 1 by XCMPLX_0:def 8;
+                    then sgn x - 1 < sgn x + (-1 + 1) by XCMPLX_1:1;
+                         hence thesis by A25,A26;
+                         end;
+                   hence thesis by A21,A22;
+                   end;
+         hence thesis by A1,A9,A13,A17,AXIOMS:21;
+         end;
+
+theorem
+     sgn x = sgn (1/x)
+  proof
+   per cases;
+   suppose
+A1:  x = 0;
+      1/0 = 1*0" by XCMPLX_0:def 9 .= 1*0 by XCMPLX_0:def 7;
+    hence thesis by A1;
+   suppose
+A2: x <> 0;
+          A3: x < 0 implies sgn x = sgn (1/x)
+              proof
+                assume
+              A4: x < 0;
+               then sgn x = -1 by Def2;
+               then sgn (1/x) = 1/(-1) by Th39;
+                    hence thesis by A4,Def2;
+                    end;
+             0 < x implies sgn x = sgn (1/x)
+              proof
+                   assume
+A5:                0 < x;
+                  sgn (1/x) = 1/(sgn x) by Th39;
+                then sgn (1/x) = 1/1 by A5,Def2
+                             .= 1;
+                    hence thesis by A5,Def2;
+                    end;
+         hence thesis by A2,A3,AXIOMS:21;
+         end;
+
+theorem
+    sgn (x/y) = (sgn x)/(sgn y)
+   proof
+    per cases;
+    suppose
+A1:   y = 0;
+     hence sgn (x/y) = sgn (x*0") by XCMPLX_0:def 9
+          .= sgn (x*0) by XCMPLX_0:def 7
+          .= (sgn x)*0 by Def2
+          .= (sgn x)*0" by XCMPLX_0:def 7
+          .= (sgn x)/0 by XCMPLX_0:def 9
+          .= (sgn x)/(sgn y) by A1,Def2;
+    suppose
+A2:  y <> 0;
+        x/y = (x/y) * 1
+            .= (x/y) * (y * (1/y)) by A2,XCMPLX_1:107
+            .= ((x/y) * y) * (1/y) by XCMPLX_1:4
+            .= x * (1/y) by A2,XCMPLX_1:88;
+      then sgn (x/y) = sgn x * sgn (1/y) by Th35
+                  .= ((sgn x)/1) * (1/(sgn y)) by Th39
+                  .= (sgn x * 1)/(1 * sgn y) by XCMPLX_1:77
+                  .= (sgn x)/(1 * sgn y);
+    hence thesis;
+   end;

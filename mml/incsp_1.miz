@@ -1,0 +1,1499 @@
+:: Axioms of Incidency
+::  by Wojciech A. Trybulec
+::
+:: Received April 14, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, BOOLE, INCSP_1;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, DOMAIN_1, RELSET_1;
+ constructors DOMAIN_1, RELSET_1, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI;
+ theorems ENUMSET1, TARSKI, ZFMISC_1, RELSET_1, XBOOLE_0, XBOOLE_1;
+
+begin
+
+definition
+  struct IncProjStr (# Points, Lines -> non empty set,
+                    Inc -> Relation of the Points, the Lines #);
+end;
+
+definition
+ struct (IncProjStr) IncStruct (# Points, Lines, Planes -> non empty set,
+                    Inc -> Relation of the Points,the Lines,
+                    Inc2 -> Relation of the Points,the Planes,
+                    Inc3 -> Relation of the Lines,the Planes #);
+end;
+
+ definition let S be IncProjStr;
+  mode POINT of S is Element of the Points of S;
+  mode LINE of S is Element of the Lines of S;
+ end;
+
+ definition let S be IncStruct;
+  mode PLANE of S is Element of the Planes of S;
+ end;
+
+ reserve S for IncStruct;
+ reserve A,B,C,D for POINT of S;
+ reserve L for LINE of S;
+ reserve P for PLANE of S;
+ reserve F,G for Subset of the Points of S;
+
+::    Definitions of predicates: on, is_collinear, is_coplanar
+
+ definition let S be IncProjStr; let A be POINT of S, L be LINE of S;
+  pred A on L means
+   :Def1: [A,L] in the Inc of S;
+ end;
+
+ definition let S; let A be POINT of S, P be PLANE of S;
+  pred A on P means
+   :Def2: [A,P] in the Inc2 of S;
+ end;
+
+ definition let S; let L be LINE of S, P be PLANE of S;
+  pred L on P means
+   :Def3: [L,P] in the Inc3 of S;
+ end;
+
+ definition let S be IncProjStr;
+   let F be Subset of the Points of S, L be LINE of S;
+  pred F on L means
+   :Def4: for A being POINT of S st A in F holds A on L;
+ end;
+
+ definition let S; let F be Subset of the Points of S, P be PLANE of S;
+  pred F on P means
+   :Def5: for A st A in F holds A on P;
+ end;
+
+ definition let S be IncProjStr; let F be Subset of the Points of S;
+  attr F is linear means
+   :Def6: ex L being LINE of S st F on L;
+  synonym F is_collinear;
+ end;
+
+ definition let S be IncStruct; let F be Subset of the Points of S;
+  attr F is planar means
+   :Def7: ex P be PLANE of S st F on P;
+  synonym F is_coplanar;
+ end;
+
+::  Definitional theorems of predicates: on, is_collinear, is_coplanar
+
+canceled 10;
+
+theorem Th11:
+ {A,B} on L iff A on L & B on L
+  proof
+   thus {A,B} on L implies A on L & B on L
+    proof assume A1: {A,B} on L;
+        A in {A,B} & B in {A,B} by TARSKI:def 2;
+     hence thesis by A1,Def4;
+    end;
+     assume A2: A on L & B on L;
+    let C be POINT of S;
+     assume C in {A,B};
+   hence thesis by A2,TARSKI:def 2;
+  end;
+
+theorem Th12:
+ {A,B,C} on L iff A on L & B on L & C on L
+  proof
+   thus {A,B,C} on L implies A on L & B on L & C on L
+    proof assume A1: {A,B,C} on L;
+        A in {A,B,C} & B in {A,B,C} & C in {A,B,C} by ENUMSET1:14;
+     hence thesis by A1,Def4;
+    end;
+     assume A2: A on L & B on L & C on L;
+    let D be POINT of S;
+     assume D in {A,B,C};
+   hence thesis by A2,ENUMSET1:def 1;
+  end;
+
+theorem Th13:
+ {A,B} on P iff A on P & B on P
+  proof
+   thus {A,B} on P implies A on P & B on P
+    proof assume A1: {A,B} on P;
+        A in {A,B} & B in {A,B} by TARSKI:def 2;
+     hence thesis by A1,Def5;
+    end;
+     assume A2: A on P & B on P;
+    let C be POINT of S;
+     assume C in {A,B};
+   hence thesis by A2,TARSKI:def 2;
+  end;
+
+theorem Th14:
+ {A,B,C} on P iff A on P & B on P & C on P
+  proof
+   thus {A,B,C} on P implies A on P & B on P & C on P
+    proof assume A1: {A,B,C} on P;
+        A in {A,B,C} & B in {A,B,C} & C in {A,B,C} by ENUMSET1:14;
+     hence thesis by A1,Def5;
+    end;
+     assume A2: A on P & B on P & C on P;
+    let D be POINT of S;
+     assume D in {A,B,C};
+   hence thesis by A2,ENUMSET1:def 1;
+  end;
+
+theorem Th15:
+ {A,B,C,D} on P iff A on P & B on P & C on P & D on P
+  proof
+   thus {A,B,C,D} on P implies A on P & B on P & C on P & D on P
+    proof assume A1: {A,B,C,D} on P;
+        A in {A,B,C,D} & B in {A,B,C,D} & C in {A,B,C,D} & D in {A,B,C,D}
+                                                       by ENUMSET1:19;
+     hence thesis by A1,Def5;
+    end;
+     assume A2: A on P & B on P & C on P & D on P;
+    let E be POINT of S;
+     assume E in {A,B,C,D};
+   hence thesis by A2,ENUMSET1:18;
+  end;
+
+theorem Th16:
+ G c= F & F on L implies G on L
+  proof assume that A1: G c= F and A2: F on L;
+   let A be POINT of S; assume A in G;
+    hence thesis by A1,A2,Def4;
+  end;
+
+theorem Th17:
+ G c= F & F on P implies G on P
+  proof assume that A1: G c= F and A2: F on P;
+   let A be POINT of S; assume A in G;
+    hence thesis by A1,A2,Def5;
+  end;
+
+theorem Th18:
+ F on L & A on L iff F \/ {A} on L
+  proof
+   thus F on L & A on L implies F \/ {A} on L
+    proof assume A1: F on L & A on L;
+     let C be POINT of S;
+      assume C in F \/ {A};
+       then C in F or C in {A} by XBOOLE_0:def 2;
+      hence C on L by A1,Def4,TARSKI:def 1;
+    end;
+     assume A2: F \/ {A} on L;
+        F c= F \/ {A} by XBOOLE_1:7;
+    hence F on L by A2,Th16;
+        {A} c= F \/ {A} by XBOOLE_1:7;
+      then {A,A} c= F \/ {A} by ENUMSET1:69;
+      then {A,A} on L by A2,Th16;
+    hence A on L by Th11;
+  end;
+
+theorem Th19:
+ F on P & A on P iff F \/ {A} on P
+  proof
+   thus F on P & A on P implies F \/ {A} on P
+    proof assume A1: F on P & A on P;
+     let C be POINT of S;
+      assume C in F \/ {A};
+       then C in F or C in {A} by XBOOLE_0:def 2;
+      hence C on P by A1,Def5,TARSKI:def 1;
+    end;
+     assume A2: F \/ {A} on P;
+        F c= F \/ {A} by XBOOLE_1:7;
+    hence F on P by A2,Th17;
+        {A} c= F \/ {A} by XBOOLE_1:7;
+      then {A,A} c= F \/ {A} by ENUMSET1:69;
+      then {A,A} on P by A2,Th17;
+    hence A on P by Th13;
+  end;
+
+theorem Th20:
+ F \/ G on L iff F on L & G on L
+  proof
+   thus F \/ G on L implies F on L & G on L
+    proof assume A1: F \/ G on L;
+        F c= F \/ G & G c= F \/ G by XBOOLE_1:7;
+     hence thesis by A1,Th16;
+    end;
+     assume A2: F on L & G on L;
+   let C be POINT of S;
+     assume C in F \/ G;
+      then C in F or C in G by XBOOLE_0:def 2;
+   hence thesis by A2,Def4;
+  end;
+
+theorem Th21:
+ F \/ G on P iff F on P & G on P
+  proof
+   thus F \/ G on P implies F on P & G on P
+    proof assume A1: F \/ G on P;
+        F c= F \/ G & G c= F \/ G by XBOOLE_1:7;
+     hence thesis by A1,Th17;
+    end;
+     assume A2: F on P & G on P;
+   let C be POINT of S;
+     assume C in F \/ G;
+      then C in F or C in G by XBOOLE_0:def 2;
+   hence thesis by A2,Def5;
+  end;
+
+theorem
+   G c= F & F is_collinear implies G is_collinear
+  proof assume that A1: G c= F and A2: F is_collinear;
+    consider L such that A3: F on L by A2,Def6;
+   take L;
+    let A be POINT of S; assume A in G;
+    hence thesis by A1,A3,Def4;
+  end;
+
+theorem
+   G c= F & F is_coplanar implies G is_coplanar
+  proof assume that A1: G c= F and A2: F is_coplanar;
+    consider P such that A3: F on P by A2,Def7;
+   take P;
+    let A be POINT of S; assume A in G;
+    hence thesis by A1,A3,Def5;
+  end;
+
+ reconsider Po = {0,1,2,3} as non empty set by ENUMSET1:19;
+ reserve a,b,c for Element of Po;
+ reconsider _Zero = 0, One = 1, Two = 2, Three = 3 as Element of Po
+                                                           by ENUMSET1:19;
+   {_Zero,One} in {{a,b}: a <> b };
+ then reconsider Li = {{a,b}: a <> b } as non empty set;
+   {_Zero,One,Two} in {{a,b,c}: a <> b & a <> c & b <> c };
+ then reconsider Pl = {{a,b,c}: a <> b & a <> c & b <> c } as non empty set;
+ reserve k,l for Element of Li;
+ reserve p,q for Element of Pl;
+
+ set i1 = {[a,l]: a in l};
+   i1 c= [:Po,Li:]
+  proof let x be set;
+   assume x in i1;
+    then ex a,l st x =[a,l] & a in l;
+   hence x in [:Po,Li:];
+  end;
+ then reconsider i1 as Relation of Po,Li by RELSET_1:def 1;
+
+ set i2 = {[a,p]: a in p};
+   i2 c= [:Po,Pl:]
+  proof let x be set;
+   assume x in i2;
+    then ex a,p st x =[a,p] & a in p;
+   hence x in [:Po,Pl:];
+  end;
+ then reconsider i2 as Relation of Po,Pl by RELSET_1:def 1;
+
+ set i3 = {[l,p]: l c= p};
+   i3 c= [:Li,Pl:]
+  proof let x be set;
+   assume x in i3;
+    then ex l,p st x =[l,p] & l c= p;
+   hence x in [:Li,Pl:];
+  end;
+ then reconsider i3 as Relation of Li,Pl by RELSET_1:def 1;
+
+::    Introduction of mode IncSpace
+
+Lm1:
+ now
+  set S = IncStruct (# Po,Li,Pl,i1,i2,i3 #);
+   A1: [a,l] in i1 implies a in l
+    proof assume [a,l] in i1;
+      then consider b,k such that A2: [a,l] = [b,k] and A3: b in k;
+         a = b & l = k by A2,ZFMISC_1:33;
+     hence thesis by A3;
+    end;
+   A4: [a,p] in i2 implies a in p
+    proof assume [a,p] in i2;
+      then consider b,q such that A5: [a,p] = [b,q] and A6: b in q;
+         a = b & p = q by A5,ZFMISC_1:33;
+     hence thesis by A6;
+    end;
+   A7: [l,p] in i3 implies l c= p
+    proof assume [l,p] in i3;
+     then consider k,q such that A8: [l,p] = [k,q] and A9: k c= q;
+        l = k & p = q by A8,ZFMISC_1:33;
+     hence thesis by A9;
+    end;
+
+  thus for L being LINE of S ex A,B being POINT of S
+        st A <> B & {A,B} on L
+   proof let L be LINE of S;
+     reconsider l = L as Element of Li;
+        l in Li;
+      then consider a,b such that A10: l = {a,b} and A11: a <> b;
+     reconsider A = a, B = b as POINT of S;
+     take A,B;
+    thus A <> B by A11;
+       a in l & b in l by A10,TARSKI:def 2;
+     then [a,l] in i1 & [b,l] in i1;
+     then A on L & B on L by Def1;
+    hence {A,B} on L by Th11;
+   end;
+
+  thus A12: for A,B being POINT of S ex L being LINE of S st {A,B} on L
+   proof let A,B be POINT of S;
+     reconsider a = A ,b = B as Element of Po;
+     A13: now assume a <> b;
+       then {a,b} in Li;
+       then consider l such that A14: l = {a,b};
+       reconsider L = l as LINE of S;
+         a in l & b in l by A14,TARSKI:def 2;
+       then [a,l] in i1 & [b,l] in i1;
+       then A on L & B on L by Def1;
+       then {A,B} on L by Th11;
+      hence thesis;
+     end;
+       now assume A15: a = b;
+        for a ex c st a <> c
+       proof let a;
+         A16: now assume a = 0; then a <> One; hence thesis; end;
+           now assume a = 1 or a = 2 or a = 3;
+           then a <> _Zero; hence thesis;
+         end;
+        hence thesis by A16,ENUMSET1:18;
+       end;
+      then consider c being Element of Po such that A17: a <> c;
+        {a,c} in Li by A17;
+      then consider l such that A18: l = {a,c};
+      reconsider L = l as LINE of S;
+         a in l by A18,TARSKI:def 2;
+       then [a,l] in i1;
+       then A on L & B on L by A15,Def1;
+       then {A,B} on L by Th11;
+      hence thesis;
+     end;
+    hence thesis by A13;
+   end;
+
+  thus for A,B being (POINT of S), K,L being LINE of S
+        st A <> B & {A,B} on K & {A,B} on L holds K = L
+    proof let A,B be (POINT of S), K,L be LINE of S;
+     assume that A19: A <> B and A20: {A,B} on K and A21: {A,B} on L;
+     reconsider k = K,l = L as Element of Li;
+      A22: A on K & B on K by A20,Th11;
+      A23: A on L & B on L by A21,Th11;
+     reconsider a = A, b = B as Element of Po;
+        [a,k] in i1 & [b,k] in i1 by A22,Def1;
+      then A24: a in k & b in k by A1;
+        [a,l] in i1 & [b,l] in i1 by A23,Def1;
+      then A25: a in l & b in l by A1;
+        k in Li;
+     then consider x1,x2 being Element of Po such that
+       A26: k = {x1,x2} and x1 <> x2;
+A27:       (a = x1 or a = x2) & (b = x1 or b = x2) by A24,A26,TARSKI:def 2;
+
+        l in Li;
+     then consider x3,x4 being Element of Po such that
+       A28: l = {x3,x4} and x3 <> x4;
+         (a = x3 or a = x4) & (b = x3 or b = x4) by A25,A28,TARSKI:def 2;
+     hence thesis by A19,A26,A27,A28;
+    end;
+
+  thus for P being PLANE of S ex A being POINT of S st A on P
+   proof let P be PLANE of S;
+     reconsider p = P as Element of Pl;
+        p in Pl;
+     then consider a,b,c such that A29: p = {a,b,c} and
+                                      a <> b & a <> c & b <> c;
+     reconsider A = a as POINT of S;
+    take A;
+       a in p by A29,ENUMSET1:def 1;
+     then [a,p] in i2;
+    hence A on P by Def2;
+   end;
+
+  thus for A,B,C being POINT of S ex P being PLANE of S st {A,B,C} on P
+   proof let A,B,C be POINT of S;
+     reconsider a = A, b = B, c = C as Element of Po;
+      A30: now assume a <> b & a <> c & b <> c;
+        then {a,b,c} in Pl;
+        then consider p such that A31: p = {a,b,c};
+        reconsider P = p as PLANE of S;
+          a in p & b in p & c in p by A31,ENUMSET1:def 1;
+        then [a,p] in i2 & [b,p] in i2 & [c,p] in i2;
+        then A on P & B on P & C on P by Def2;
+        then {A,B,C} on P by Th14;
+       hence thesis;
+      end;
+      A32: now assume A33: a = b & a = c & b = c;
+          for a ex b,c st a <> b & a <> c & b <> c
+         proof let a;
+           A34: now assume a = 0 or a = 1;
+             then a <> Two & a <> Three & Two <> Three;
+            hence thesis;
+           end;
+             now assume a = 2 or a = 3;
+             then a <> _Zero & a <> One & _Zero <> One;
+            hence thesis;
+           end;
+          hence thesis by A34,ENUMSET1:18;
+         end;
+        then consider x,y being Element of Po such that
+                                     A35: a <> x & a <> y & x <> y;
+           {a,x,y} in Pl by A35;
+         then consider p such that A36: p = {a,x,y};
+         reconsider P = p as PLANE of S;
+           a in p by A36,ENUMSET1:def 1;
+         then [a,p] in i2;
+         then A on P by Def2;
+         then {A,B,C} on P by A33,Th14;
+       hence thesis;
+      end;
+        now assume A37: (a = b & a <> c) or (a = c & a <> b) or (b = c & a <> b
+)
+;
+        then consider x,y being Element of Po such that
+         A38: (x = a or x = b or x = c) & (y = a or y = b or y = c) and
+         A39: x <> y;
+            for a,b ex c st a <> c & b <> c
+           proof let a,b;
+             A40: now assume a = 0 & (b = 0 or b = 1 or b = 2);
+               then a <> Three & b <> Three;
+              hence thesis;
+             end;
+             A41: now assume a = 0 & b = 3;
+               then a <> One & b <> One;
+              hence thesis;
+             end;
+             A42: now
+               assume (a = 1 or a = 2 or a = 3) & (b = 1 or b = 2 or b = 3);
+                then a <> _Zero & b <> _Zero;
+              hence thesis;
+             end;
+            A43: now assume (a = 1 or a = 2) & b = 0;
+              then a <> Three & b <> Three;
+             hence thesis;
+            end;
+              now assume a=3 & b = 0; then a <> Two & b <> Two;
+             hence thesis;
+            end;
+            hence thesis by A40,A41,A42,A43,ENUMSET1:18;
+           end;
+         then consider z being Element of Po such that A44: x <> z & y <> z;
+           {x,y,z} in Pl by A39,A44;
+         then consider p such that A45: p = {x,y,z};
+        reconsider P = p as PLANE of S;
+           a in p & b in p & c in p by A37,A38,A39,A45,ENUMSET1:def 1;
+         then [a,p] in i2 & [b,p] in i2 & [c,p] in i2;
+         then A on P & B on P & C on P by Def2;
+         then {A,B,C} on P by Th14;
+       hence thesis;
+      end;
+     hence thesis by A30,A32;
+   end;
+
+  thus for A,B,C being (POINT of S), P,Q being PLANE of S
+        st not {A,B,C} is_collinear & {A,B,C} on P & {A,B,C} on Q holds P = Q
+   proof let A,B,C be (POINT of S), P,Q be PLANE of S;
+    assume that A46: not {A,B,C} is_collinear and
+                A47: {A,B,C} on P and A48: {A,B,C} on Q;
+    reconsider p = P,q = Q as Element of Pl;
+     A49: now assume A50: A = B or A = C or B = C;
+       consider K being LINE of S such that A51: {A,B} on K by A12;
+       consider L being LINE of S such that A52: {A,C} on L by A12;
+        A53: A on K & B on K & A on L & C on L by A51,A52,Th11;
+          not {A,B,C} on K & not {A,B,C} on L by A46,Def6;
+      hence contradiction by A50,A53,Th12;
+     end;
+     A54: A on P & B on P & C on P by A47,Th14;
+    reconsider a = A, b = B, c = C as Element of Po;
+       [a,p] in i2 & [b,p] in i2 & [c,p] in i2 by A54,Def2;
+     then A55: a in p & b in p & c in p by A4;
+       p in Pl;
+    then consider x1,x2,x3 being Element of Po such that
+       A56: p = {x1,x2,x3} and x1 <> x2 & x1 <> x3 & x2 <> x3;
+     A57: (a = x1 or a = x2 or a = x3) & (b = x1 or b = x2 or b = x3) &
+      (c = x1 or c = x2 or c = x3) by A55,A56,ENUMSET1:def 1;
+       A on Q & B on Q & C on Q by A48,Th14;
+     then [a,q] in i2 & [b,q] in i2 & [c,q] in i2 by Def2;
+     then A58: a in q & b in q & c in q by A4;
+       q in Pl;
+    then consider x1,x2,x3 being Element of Po such that
+       A59: q = {x1,x2,x3} and x1 <> x2 & x1 <> x3 & x2 <> x3;
+       (a = x1 or a = x2 or a = x3) & (b = x1 or b = x2 or b = x3) &
+      (c = x1 or c = x2 or c = x3) by A58,A59,ENUMSET1:def 1;
+    hence thesis by A49,A56,A57,A59,ENUMSET1:98,99,100,102;
+   end;
+
+  thus for L being (LINE of S), P being PLANE of S
+        st ex A,B being POINT of S st A <> B & {A,B} on L & {A,B} on P
+         holds L on P
+   proof let L be (LINE of S), P be PLANE of S;
+     given A,B being POINT of S such that A60: A <> B and
+                                          A61: {A,B} on L and A62: {A,B} on P;
+     reconsider l = L as Element of Li;
+     reconsider p = P as Element of Pl;
+     reconsider a = A, b = B as Element of Po;
+        A on L & B on L by A61,Th11;
+      then [a,l] in i1 & [b,l] in i1 by Def1;
+      then A63: a in l & b in l by A1;
+        A on P & B on P by A62,Th13;
+      then [a,p] in i2 & [b,p] in i2 by Def2;
+      then A64: a in p & b in p by A4;
+        now let x be set;
+        assume A65: x in l;
+           l in Li;
+         then consider x1,x2 being Element of Po such that
+          A66: l = {x1,x2} and x1 <> x2;
+           (a = x1 or a = x2) & (b = x1 or b = x2) by A63,A66,TARSKI:def 2;
+       hence x in p by A60,A64,A65,A66,TARSKI:def 2;
+      end;
+      then l c= p by TARSKI:def 3;
+      then [l,p] in i3;
+    hence L on P by Def3;
+   end;
+
+  thus for A being (POINT of S), P,Q being PLANE of S
+        st A on P & A on Q
+         ex B being POINT of S st A <> B & B on P & B on Q
+   proof let A be (POINT of S), P,Q be PLANE of S;
+     assume that A67: A on P and A68: A on Q;
+      reconsider a = A as Element of Po;
+      reconsider p = P,q = Q as Element of Pl;
+         p in Pl;
+       then consider x1,x2,x3 being Element of Po such that
+                 A69: p = {x1,x2,x3} and A70: x1 <> x2 & x1 <> x3 & x2 <> x3;
+         q in Pl;
+       then consider y1,y2,y3 being Element of Po such that
+                 A71: q = {y1,y2,y3} and A72: y1 <> y2 & y1 <> y3 & y2 <> y3;
+       A73: x1 in p & x2 in p & x3 in p by A69,ENUMSET1:def 1;
+       A74: y1 in q & y2 in q & y3 in q by A71,ENUMSET1:def 1;
+         [a,p] in i2 by A67,Def2;
+       then a in p by A4;
+       then a = x1 or a = x2 or a = x3 by A69,ENUMSET1:def 1;
+      then consider z1,z2 being Element of Po such that A75: z1 in p & z2 in p
+                           and A76: z1 <> a & z2 <> a and A77: z1 <> z2 by A70,
+A73;
+         [a,q] in i2 by A68,Def2;
+       then a in q by A4;
+       then a = y1 or a = y2 or a = y3 by A71,ENUMSET1:def 1;
+      then consider z3,z4 being Element of Po such that A78: z3 in q & z4 in q
+                           and A79: z3 <> a & z4 <> a and A80: z3 <> z4 by A72,
+A74;
+         now assume A81: z1 <> z3 & z1 <> z4 & z2 <> z3 & z2 <> z4;
+        per cases by ENUMSET1:18;
+         suppose A82: a = 0;
+            then A83: (z1 = 1 or z1 = 2 or z1 = 3) &
+                    (z2 = 1 or z2 = 2 or z2 = 3) by A76,ENUMSET1:18;
+              (z3 = 1 or z3 = 2 or z3 = 3) &
+            (z4 = 1 or z4 = 2 or z4 = 3) by A79,A82,ENUMSET1:18;
+          hence contradiction by A77,A80,A81,A83;
+         suppose A84: a = 1;
+           then A85: (z1 = 0 or z1 = 2 or z1 = 3) &
+                   (z2 = 0 or z2 = 2 or z2 = 3) by A76,ENUMSET1:18;
+             (z3 = 0 or z3 = 2 or z3 = 3) &
+           (z4 = 0 or z4 = 2 or z4 = 3) by A79,A84,ENUMSET1:18;
+          hence contradiction by A77,A80,A81,A85;
+         suppose A86: a = 2;
+            then A87: (z1 = 0 or z1 = 1 or z1 = 3) &
+                    (z2 = 0 or z2 = 1 or z2 = 3) by A76,ENUMSET1:18;
+              (z3 = 0 or z3 = 1 or z3 = 3) &
+            (z4 = 0 or z4 = 1 or z4 = 3) by A79,A86,ENUMSET1:18;
+          hence contradiction by A77,A80,A81,A87;
+         suppose A88: a = 3;
+           then A89: (z1 = 0 or z1 = 1 or z1 = 2) &
+                   (z2 = 0 or z2 = 1 or z2 = 2) by A76,ENUMSET1:18;
+             (z3 = 0 or z3 = 1 or z3 = 2) &
+           (z4 = 0 or z4 = 1 or z4 = 2) by A79,A88,ENUMSET1:18;
+          hence contradiction by A77,A80,A81,A89;
+       end;
+     then consider z being Element of Po such that
+                         A90: z in p & z in q and A91: a <> z by A75,A76,A78;
+      reconsider B = z as POINT of S;
+      take B;
+    thus A <> B by A91;
+        [z,p] in i2 & [z,q] in i2 by A90;
+    hence B on P & B on Q by Def2;
+   end;
+
+  thus ex A,B,C,D being POINT of S st not {A,B,C,D} is_coplanar
+   proof
+     reconsider Three = 3 as Element of Po by ENUMSET1:19;
+     reconsider A = _Zero, B = One, C = Two, D = Three as POINT of S;
+    take A,B,C,D;
+     assume {A,B,C,D} is_coplanar;
+      then consider P being PLANE of S such that A92: {A,B,C,D} on P by Def7;
+      reconsider p = P as Element of Pl;
+         p in Pl;
+      then consider a,b,c such that A93: p = {a,b,c}
+                                and a <> b & a <> c & b <> c;
+         A on P & B on P & C on P & D on P by A92,Th15;
+       then [_Zero,p] in i2 & [One,p] in i2 & [Two,p] in i2 & [Three,p] in i2
+                                                    by Def2;
+       then _Zero in p & One in p & Two in p & Three in p by A4;
+       then (_Zero = a or _Zero = b or _Zero = c) &
+            (One = a or One = b or One = c) &
+            (Two = a or Two = b or Two = c) &
+            (Three = a or Three = b or Three = c) by A93,ENUMSET1:def 1;
+    hence contradiction;
+   end;
+
+  thus for A being (POINT of S), L being (LINE of S), P being PLANE of S
+        st A on L & L on P holds A on P
+   proof let A be (POINT of S), L be (LINE of S), P be PLANE of S;
+     reconsider a = A as Element of Po;
+     reconsider l = L as Element of Li;
+     reconsider p = P as Element of Pl;
+    assume A on L & L on P;
+      then [a,l] in i1 & [l,p] in i3 by Def1,Def3;
+      then a in l & l c= p by A1,A7;
+      then [a,p] in i2;
+    hence A on P by Def2;
+  end;
+ end;
+
+ definition let IT be IncStruct;
+  attr IT is IncSpace-like means
+   :Def8:
+    (for L being LINE of IT ex A,B being POINT of IT st A <> B & {A,B} on L) &
+    (for A,B being POINT of IT ex L being LINE of IT st {A,B} on L) &
+    (for A,B being (POINT of IT), K,L being LINE of IT
+      st A <> B & {A,B} on K & {A,B} on L holds K = L) &
+    (for P being PLANE of IT ex A being POINT of IT st A on P) &
+    (for A,B,C being POINT of IT ex P being PLANE of IT st {A,B,C} on P) &
+    (for A,B,C being (POINT of IT), P,Q being PLANE of IT
+      st not {A,B,C} is_collinear & {A,B,C} on P & {A,B,C} on Q
+       holds P = Q) &
+    (for L being (LINE of IT), P being PLANE of IT
+      st ex A,B being POINT of IT st A <> B & {A,B} on L & {A,B} on P
+       holds L on P) &
+    (for A being (POINT of IT), P,Q being PLANE of IT
+      st A on P & A on Q ex B being POINT of IT st A <> B & B on P & B on Q) &
+    (ex A,B,C,D being POINT of IT st not {A,B,C,D} is_coplanar) &
+    (for A being (POINT of IT), L being (LINE of IT), P being PLANE of IT
+      st A on L & L on P holds A on P);
+ end;
+
+definition
+ cluster strict IncSpace-like IncStruct;
+  existence
+   proof
+       IncStruct (# Po,Li,Pl,i1,i2,i3 #) is IncSpace-like by Def8,Lm1;
+    hence thesis;
+   end;
+end;
+
+definition
+  mode IncSpace is IncSpace-like IncStruct;
+end;
+
+ reserve S for IncSpace;
+ reserve A,B,C,D,E for POINT of S;
+ reserve K,L,L1,L2 for LINE of S;
+ reserve P,P1,P2,Q for PLANE of S;
+ reserve F for Subset of the Points of S;
+
+::                Axioms of Incidency
+
+canceled 11;
+
+theorem Th35:
+ F on L & L on P implies F on P
+  proof assume that A1: F on L and A2: L on P;
+   let A be POINT of S;
+    assume A in F;
+     then A on L by A1,Def4;
+   hence thesis by A2,Def8;
+  end;
+
+::     Collinearity of points & coplanariy of points & lines
+
+theorem Th36:
+ {A,A,B} is_collinear
+  proof consider K such that A1: {A,B} on K by Def8;
+   take K;
+   thus thesis by A1,ENUMSET1:70;
+  end;
+
+theorem Th37:
+ {A,A,B,C} is_coplanar
+  proof consider P such that A1: {A,B,C} on P by Def8;
+   take P;
+   thus thesis by A1,ENUMSET1:71;
+  end;
+
+theorem Th38:
+ {A,B,C} is_collinear implies {A,B,C,D} is_coplanar
+  proof given L such that A1: {A,B,C} on L;
+   assume A2: not {A,B,C,D} is_coplanar;
+    consider P such that A3: {A,B,D} on P by Def8;
+       {A,B} \/ {C} on L & {A,B} \/ {D} on P by A1,A3,ENUMSET1:43;
+     then A <> B & {A,B} on L & {A,B} on P by A2,Th18,Th21,Th37;
+     then L on P by Def8;
+     then {A,B,C} on P by A1,Th35;
+     then A on P & B on P & C on P & D on P by A3,Th14;
+     then {A,B,C,D} on P by Th15;
+   hence contradiction by A2,Def7;
+  end;
+
+theorem Th39:
+ A <> B & {A,B} on L & not C on L implies not {A,B,C} is_collinear
+  proof assume that A1: A <> B & {A,B} on L and A2: not C on L;
+   given K such that A3: {A,B,C} on K;
+      {A,B} \/ {C} on K by A3,ENUMSET1:43;
+    then {A,B} on K by Th20;
+    then L = K by A1,Def8;
+   hence contradiction by A2,A3,Th12;
+  end;
+
+theorem Th40:
+ not {A,B,C} is_collinear & {A,B,C} on P & not D on P implies
+  not {A,B,C,D} is_coplanar
+   proof assume that A1: not {A,B,C} is_collinear & {A,B,C} on P
+                 and A2: not D on P;
+    given Q such that A3: {A,B,C,D} on Q;
+       {A,B,C} \/ {D} on Q by A3,ENUMSET1:46;
+     then {A,B,C} on Q by Th19;
+     then P = Q by A1,Def8;
+    hence contradiction by A2,A3,Th15;
+   end;
+
+theorem
+   not(ex P st K on P & L on P) implies K <> L
+  proof assume that A1: not(ex P st K on P & L on P) and A2: K = L;
+    consider A,B such that A3: A <> B and A4: {A,B} on K by Def8;
+    consider C,D such that A5: C <> D and A6: {C,D} on L by Def8;
+       A on K & B on K & C on K by A2,A4,A6,Th11;
+     then {A,B,C} on K by Th12;
+     then {A,B,C} is_collinear by Def6;
+     then {A,B,C,D} is_coplanar by Th38;
+    then consider Q such that A7: {A,B,C,D} on Q by Def7;
+       A on Q & B on Q & C on Q & D on Q by A7,Th15;
+     then {A,B} on Q & {C,D} on Q by Th13;
+     then K on Q & L on Q by A3,A4,A5,A6,Def8;
+   hence contradiction by A1;
+  end;
+
+ Lm2: ex B st A <> B & B on L
+  proof consider B,C such that A1: B <> C & {B,C} on L by Def8;
+      (A <> C or A <> B) & B on L & C on L by A1,Th11;
+   hence thesis;
+  end;
+
+theorem
+   not(ex P st L on P & L1 on P & L2 on P) &
+  (ex A st A on L & A on L1 & A on L2) implies L <> L1
+   proof assume A1: not(ex P st L on P & L1 on P & L2 on P);
+    given A such that A2: A on L and A3: A on L1 and A4: A on L2;
+    assume A5: L = L1;
+     consider B such that A6: A <> B and A7: B on L by Lm2;
+     consider C such that A8: A <> C and A9: C on L1 by Lm2;
+     consider D such that A10: A <> D and A11: D on L2 by Lm2;
+         {A,B,C} on L by A3,A5,A7,A9,Th12;
+      then {A,B,C} is_collinear by Def6;
+      then {A,B,C,D} is_coplanar by Th38;
+     then consider Q such that A12: {A,B,C,D} on Q by Def7;
+        {A,B} \/ {C,D} on Q by A12,ENUMSET1:45;
+      then {A,B} on Q & {A,B} on L by A2,A7,Th11,Th21;
+      then A13: L on Q by A6,Def8;
+        {A,C,B} on L1 by A3,A5,A7,A9,Th12;
+      then {A,C} \/ {B} on L1 & A on Q & C on Q by A12,Th15,ENUMSET1:43;
+      then {A,C} on L1 & {A,C} on Q by Th13,Th20;
+      then A14: L1 on Q by A8,Def8;
+        A on Q & D on Q by A12,Th15;
+      then {A,D} on L2 & {A,D} on Q by A4,A11,Th11,Th13;
+      then L2 on Q by A10,Def8;
+    hence contradiction by A1,A13,A14;
+   end;
+
+theorem
+   L1 on P & L2 on P & not L on P & L1 <> L2 implies
+  not(ex Q st L on Q & L1 on Q & L2 on Q)
+   proof assume that A1: L1 on P and A2: L2 on P
+                 and A3: not L on P and A4: L1 <> L2;
+    given Q such that A5: L on Q & L1 on Q & L2 on Q;
+     consider A,B such that A6: A <> B and A7: {A,B} on L1 by Def8;
+     consider C,C1 being POINT of S such that
+                  A8: C <> C1 and A9: {C,C1} on L2 by Def8;
+     consider D,E such that A10: D <> E and A11: {D,E} on L by Def8;
+        {C,C1} on Q & {D,E} on Q by A5,A9,A11,Th35;
+      then C on Q & C1 on Q & D on Q & E on Q by Th13;
+      then {A,B} on Q & {C,D} on Q & {C,E} on Q & {C1,D} on Q &
+           {C1,E} on Q by A5,A7,Th13,Th35;
+      then {A,B} \/ {C,D} on Q & {A,B} \/ {C,E} on Q &
+           {A,B} \/ {C1,D} on Q & {A,B} \/ {C1,E} on Q by Th21;
+      then {A,B,C,D} on Q & {A,B,C,E} on Q & {A,B,C1,D} on Q &
+           {A,B,C1,E} on Q by ENUMSET1:45;
+      then A12: {A,B,C,D} is_coplanar & {A,B,C,E} is_coplanar &
+              {A,B,C1,D} is_coplanar & {A,B,C1,E} is_coplanar by Def7;
+         now assume C on L1 & C1 on L1;
+        then {C,C1} on L1 by Th11;
+        hence contradiction by A4,A8,A9,Def8;
+       end;
+      then A13: not {A,B,C} is_collinear or not {A,B,C1} is_collinear by A6,A7,
+Th39;
+        {C,C1} on P by A2,A9,Th35;
+      then {A,B} on P & C on P & C1 on P by A1,A7,Th13,Th35;
+      then {A,B} \/ {C} on P & {A,B} \/ {C1} on P by Th19;
+      then A14: {A,B,C} on P & {A,B,C1} on P by ENUMSET1:43;
+        not {D,E} on P by A3,A10,A11,Def8;
+      then not D on P or not E on P by Th13;
+     hence contradiction by A12,A13,A14,Th40;
+   end;
+
+::     Lines & planes
+
+theorem Th44:
+ ex P st A on P & L on P
+  proof consider B,C such that A1: B <> C and A2: {B,C} on L by Def8;
+    consider P such that A3: {B,C,A} on P by Def8;
+   take P;
+   thus A on P by A3,Th14;
+       {B,C} \/ {A} on P by A3,ENUMSET1:43;
+     then {B,C} on P by Th19;
+   hence L on P by A1,A2,Def8;
+  end;
+
+theorem Th45:
+ (ex A st A on K & A on L) implies (ex P st K on P & L on P)
+  proof given A such that A1: A on K & A on L;
+    consider B such that A2: A <> B and A3: B on K by Lm2;
+    consider C such that A4: A <> C and A5: C on L by Lm2;
+    consider P such that A6: {A,B,C} on P by Def8;
+   take P;
+       A on P & B on P & C on P by A6,Th14;
+     then {A,B} on K & {A,C} on L & {A,B} on P & {A,C} on P
+                                                      by A1,A3,A5,Th11,Th13;
+   hence thesis by A2,A4,Def8;
+  end;
+
+theorem
+   A <> B implies ex L st for K holds {A,B} on K iff K = L
+  proof assume A1: A <> B;
+    consider L such that A2: {A,B} on L by Def8;
+   take L;
+   thus {A,B} on K iff L = K by A1,A2,Def8;
+  end;
+
+theorem
+   not {A,B,C} is_collinear implies ex P st for Q holds {A,B,C} on Q iff P = Q
+  proof assume A1: not {A,B,C} is_collinear;
+    consider P such that A2: {A,B,C} on P by Def8;
+   take P;
+   thus {A,B,C} on Q iff P = Q by A1,A2,Def8;
+  end;
+
+theorem Th48:
+ not A on L implies ex P st for Q holds A on Q & L on Q iff P = Q
+  proof assume A1: not A on L;
+   consider B,C such that A2: B <> C and A3: {B,C} on L by Def8;
+   consider P such that A4: {B,C,A} on P by Def8;
+    take P; let Q;
+     thus A on Q & L on Q implies P = Q
+      proof
+       assume that A5: A on Q and A6: L on Q;
+          {B,C} on Q by A3,A6,Th35;
+        then B on Q & C on Q by Th13;
+        then A7: {B,C,A} on Q by A5,Th14;
+          not {B,C,A} is_collinear by A1,A2,A3,Th39;
+       hence P = Q by A4,A7,Def8;
+      end;
+        {B,C} \/ {A} on P by A4,ENUMSET1:43;
+      then A on P & {B,C} on P by Th19;
+     hence P = Q implies A on Q & L on Q by A2,A3,Def8;
+  end;
+
+theorem Th49:
+ K <>L & (ex A st A on K & A on L) implies
+  ex P st for Q holds K on Q & L on Q iff P = Q
+   proof assume that A1: K <> L and A2: ex A st A on K & A on L;
+     consider A such that A3: A on K and A4: A on L by A2;
+     consider B such that A5: A <> B and A6: B on K by Lm2;
+     consider C such that A7: A <> C and A8: C on L by Lm2;
+     consider P such that A9: {A,B,C} on P by Def8;
+      take P; let Q;
+       thus K on Q & L on Q implies P = Q
+        proof assume A10: K on Q & L on Q;
+            {A,C} on L by A4,A8,Th11;
+          then not {A,C} on K by A1,A7,Def8;
+          then not C on K & {A,B} on K by A3,A6,Th11;
+          then A11: not {A,B,C} is_collinear by A5,Th39;
+            A on Q & B on Q & C on Q by A3,A6,A8,A10,Def8;
+          then {A,B,C} on Q by Th14;
+         hence P = Q by A9,A11,Def8;
+        end;
+           A on P & B on P & C on P by A9,Th14;
+         then {A,B} on K & {A,C} on L & {A,B} on P & {A,C} on P
+                                                     by A3,A4,A6,A8,Th11,Th13;
+       hence P = Q implies K on Q & L on Q by A5,A7,Def8;
+   end;
+
+::    Definitions of functions: Line, Plane
+
+definition let S; let A,B;
+ assume A1: A <> B;
+ func Line(A,B) -> LINE of S means
+  :Def9: {A,B} on it;
+ correctness by A1,Def8;
+end;
+
+definition let S; let A,B,C;
+ assume A1: not {A,B,C} is_collinear;
+ func Plane(A,B,C) -> PLANE of S means
+  :Def10: {A,B,C} on it;
+ correctness by A1,Def8;
+end;
+
+definition let S; let A,L;
+ assume A1: not A on L;
+ func Plane(A,L) -> PLANE of S means
+  :Def11: A on it & L on it;
+ existence by Th44;
+ uniqueness
+  proof let P,Q;
+   assume A2: A on P & L on P & A on Q & L on Q;
+    consider P1 such that A3: for P2 holds A on P2 & L on P2 iff P1 = P2
+                                                                  by A1,Th48;
+      P1 = P & P1 = Q by A2,A3;
+   hence thesis;
+  end;
+end;
+
+definition let S; let K,L;
+ assume that A1: K <> L and A2: (ex A st A on K & A on L);
+ func Plane(K,L) -> PLANE of S means
+  :Def12: K on it & L on it;
+ existence by A2,Th45;
+ uniqueness
+  proof let P,Q;
+   assume A3: K on P & L on P & K on Q & L on Q;
+    consider P1 such that A4: for P2 holds K on P2 & L on P2 iff P1 = P2
+                                                            by A1,A2,Th49
+;
+       P = P1 & Q = P1 by A3,A4;
+   hence thesis;
+  end;
+end;
+
+::    Definitional theorems of functions: Line, Plane
+
+canceled 7;
+
+theorem
+   A <> B implies Line(A,B) = Line(B,A)
+  proof assume A1: A <> B;
+    then {A,B} on Line(A,B) & {A,B} on Line(B,A) by Def9;
+   hence thesis by A1,Def8;
+  end;
+
+theorem Th58:
+ not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(A,C,B)
+  proof assume A1: not {A,B,C} is_collinear;
+    then not {A,C,B} is_collinear by ENUMSET1:98;
+    then {A,C,B} on Plane(A,C,B) by Def10;
+    then {A,B,C} on Plane(A,B,C) & {A,B,C} on Plane(A,C,B)
+                                            by A1,Def10,ENUMSET1:98;
+   hence thesis by A1,Def8;
+  end;
+
+theorem Th59:
+ not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(B,A,C)
+  proof assume A1: not {A,B,C} is_collinear;
+    then not {B,A,C} is_collinear by ENUMSET1:99;
+    then {B,A,C} on Plane(B,A,C) by Def10;
+    then {A,B,C} on Plane(A,B,C) & {A,B,C} on Plane(B,A,C)
+                                            by A1,Def10,ENUMSET1:99;
+   hence thesis by A1,Def8;
+  end;
+
+theorem
+   not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(B,C,A)
+  proof
+    assume A1: not {A,B,C} is_collinear;
+     then A2: not {B,C,A} is_collinear by ENUMSET1:100;
+   thus Plane(A,B,C) = Plane(B,A,C) by A1,Th59
+                    .= Plane(B,C,A) by A2,Th58;
+  end;
+
+theorem Th61:
+ not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(C,A,B)
+  proof assume A1: not {A,B,C} is_collinear;
+    then A2: not {C,A,B} is_collinear by ENUMSET1:100;
+   thus Plane(A,B,C) = Plane(A,C,B) by A1,Th58
+                    .= Plane(C,A,B) by A2,Th59;
+  end;
+
+theorem
+   not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(C,B,A)
+  proof assume A1: not {A,B,C} is_collinear;
+    then A2: not {C,B,A} is_collinear by ENUMSET1:102;
+   thus Plane(A,B,C) = Plane(C,A,B) by A1,Th61
+                    .= Plane(C,B,A) by A2,Th58;
+  end;
+
+canceled;
+
+theorem
+   K <> L & (ex A st A on K & A on L) implies
+  Plane(K,L) = Plane(L,K)
+   proof assume A1: K <> L;
+     given A such that A2: A on K & A on L;
+      consider B such that A3: A <> B and A4: B on K by Lm2;
+      consider C such that A5: A <> C and A6: C on L by Lm2;
+     set P1 = Plane(K,L); set P2 = Plane(L,K);
+        K on P1 & L on P1 & K on P2 & L on P2 by A1,A2,Def12;
+      then A on P1 & B on P1 & C on P1 & A on P2 & B on P2 & C on P2
+                                                          by A2,A4,A6,Def8;
+      then A7: {A,B,C} on P1 & {A,B,C} on P2 by Th14;
+        now assume {A,B,C} is_collinear;
+       then consider L1 such that A8: {A,B,C} on L1 by Def6;
+          A on L1 & B on L1 & C on L1 by A8,Th12;
+        then {A,B} on L1 & {A,B} on K & {A,C} on L1 & {A,C} on L
+                                                          by A2,A4,A6,Th11;
+        then K = L1 & L = L1 by A3,A5,Def8;
+       hence contradiction by A1;
+      end;
+    hence thesis by A7,Def8;
+   end;
+
+theorem Th65:
+ A <> B & C on Line(A,B) implies {A,B,C} is_collinear
+  proof assume A <> B;
+    then {A,B} on Line(A,B) by Def9;
+    then A1: A on Line(A,B) & B on Line(A,B) by Th11;
+   assume C on Line(A,B);
+    then {A,B,C} on Line(A,B) by A1,Th12;
+  hence thesis by Def6;
+ end;
+
+theorem
+   A <> B & A <> C & {A,B,C} is_collinear implies Line(A,B) = Line(A,C)
+  proof assume A1: A <> B; then A2: {A,B} on Line(A,B) by Def9;
+   assume A3: A <> C;
+   assume {A,B,C} is_collinear;
+    then A on Line(A,B) & C on Line(A,B) by A1,A2,Th11,Th39;
+    then {A,C} on Line(A,B) by Th11;
+   hence thesis by A3,Def9;
+  end;
+
+theorem
+   not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(C,Line(A,B))
+  proof assume A1: not {A,B,C} is_collinear;
+
+    then A <> B by Th36;
+    then A2: {A,B} on Line(A,B) by Def9;
+    then A on Line(A,B) & B on Line(A,B) by Th11;
+    then C on Line(A,B) implies {A,B,C} on Line(A,B) by Th12;
+    then C on Plane(C,Line(A,B)) & Line(A,B) on Plane(C,Line(A,B)) by A1,Def6,
+Def11;
+    then C on Plane(C,Line(A,B)) & {A,B} on Plane(C,Line(A,B)) by A2,Th35;
+    then {A,B} \/ {C} on Plane(C,Line(A,B)) by Th19;
+    then {A,B,C} on Plane(C,Line(A,B)) by ENUMSET1:43;
+   hence thesis by A1,Def10;
+  end;
+
+theorem
+   not {A,B,C} is_collinear & D on Plane(A,B,C) implies {A,B,C,D} is_coplanar
+  proof assume not {A,B,C} is_collinear & D on Plane(A,B,C);
+    then {A,B,C} on Plane(A,B,C) & D on Plane(A,B,C) by Def10;
+    then {A,B,C} \/ {D} on Plane(A,B,C) by Th19;
+    then {A,B,C,D} on Plane(A,B,C) by ENUMSET1:46;
+   hence thesis by Def7;
+  end;
+
+theorem
+   not C on L & {A,B} on L & A <> B implies Plane(C,L) = Plane(A,B,C)
+  proof assume that A1: not C on L and A2: {A,B} on L and A3: A <> B;
+   set P1 = Plane(C,L);
+      C on P1 & L on P1 by A1,Def11;
+    then C on P1 & {A,B} on P1 by A2,Th35;
+    then {A,B} \/ {C} on P1 by Th19;
+    then A4: {A,B,C} on P1 by ENUMSET1:43;
+       not {A,B,C} is_collinear by A1,A2,A3,Th39;
+   hence thesis by A4,Def10;
+  end;
+
+theorem
+   not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(Line(A,B),Line(A,C))
+  proof set P2 = Plane(Line(A,B),Line(A,C));
+        set L1 = Line(A,B); set L2 = Line(A,C);
+   assume A1: not {A,B,C} is_collinear;
+    then not {A,C,B} is_collinear by ENUMSET1:98;
+    then A2: A <> B & A <> C by A1,Th36;
+    then A3: {A,B} on L1 & {A,C} on L2 by Def9;
+    then A4: A on L1 & A on L2 by Th11;
+      {A,C} on L2 by A2,Def9;
+    then C on L2 by Th11;
+    then L1 <> L2 by A1,A2,Th65;
+    then L1 on P2 & L2 on P2 by A4,Def12;
+    then {A,B} on P2 & {A,C} on P2 by A3,Th35;
+    then {A,B} on P2 & C on P2 by Th13;
+    then {A,B} \/ {C} on P2 by Th19;
+    then {A,B,C} on P2 by ENUMSET1:43;
+   hence thesis by A1,Def10;
+  end;
+
+Lm3: ex A,B,C,D st A on P & not {A,B,C,D} is_coplanar
+  proof consider A such that A1: A on P by Def8;
+    consider A1,B1,C1,D1 being POINT of S such that
+                         A2: not {A1,B1,C1,D1} is_coplanar by Def8;
+       now assume A3: not A1 on P;
+       A4: now assume A5: A on Line(A1,B1);
+         set Q = Plane(A1,B1,C1);
+          A6: A1 <> B1 by A2,Th37;
+          then A7: {A1,B1} on Line(A1,B1) by Def9;
+          then A1 on Line(A1,B1) by Th11;
+          then A8: {A,A1} on Line(A1,B1) by A5,Th11;
+          A9: not {A1,B1,C1} is_collinear by A2,Th38;
+          then A10: {A1,B1,C1} on Q by Def10;
+          then D1 on Q implies {A1,B1,C1} \/ {D1} on Q by Th19;
+          then A11: D1 on Q implies {A1,B1,C1,D1} on Q by ENUMSET1:46;
+            {A1,B1} on Line (A1,B1) by A6,Def9;
+          then C1 on Line(A1,B1) implies {A1,B1} \/ {C1} on Line(A1,B1)
+                                                               by Th18;
+          then C1 on Line(A1,B1) implies {A1,B1,C1} on Line(A1,B1)
+                                                               by ENUMSET1:43;
+          then A12: not {A,A1,C1} is_collinear by A1,A3,A8,A9,Def6,Th39;
+            {A1,B1} \/ {C1} on Q by A10,ENUMSET1:43;
+          then {A1,B1} on Q by Th21;
+          then Line(A1,B1) on Q & {A1,B1,C1} on Q by A6,A7,A9,Def8,Def10;
+          then A on Q & A1 on Q & C1 on Q by A5,Def8,Th14;
+          then {A,A1,C1} on Plane(A1,B1,C1) by Th14;
+          then not {A,A1,C1,D1} is_coplanar by A2,A11,A12,Def7,Th40;
+        hence thesis by A1;
+       end;
+        now assume A13: not A on Line(A1,B1);
+        set Q = Plane(A1,B1,A);
+         A14: A1 <> B1 by A2,Th37;
+         then {A1,B1} on Line(A1,B1) by Def9;
+         then A15: not {A1,B1,A} is_collinear by A13,A14,Th39;
+         then A16: {A1,B1,A} on Q by Def10;
+         then {A1,B1} \/ {A} on Q by ENUMSET1:43;
+         then {A1,B1} on Q by Th19;
+         then {C1,D1} on Q implies {A1,B1} \/ {C1,D1} on Q by Th21;
+         then {C1,D1} on Q implies {A1,B1,C1,D1} on Q by ENUMSET1:45;
+         then not C1 on Q or not D1 on Q by A2,Def7,Th13;
+         then not {A1,B1,A,C1} is_coplanar or not {A1,B1,A,D1} is_coplanar
+                                                             by A15,A16,Th40;
+         then not {A,A1,B1,C1} is_coplanar or not {A,A1,B1,D1} is_coplanar
+                                                             by ENUMSET1:110;
+       hence thesis by A1;
+      end;
+     hence thesis by A4;
+    end;
+   hence thesis by A2;
+  end;
+
+::   The fourth axiom of incidency
+
+theorem Th71:
+ ex A,B,C st {A,B,C} on P & not {A,B,C} is_collinear
+  proof
+   consider A1,B1,C1,D1 being POINT of S such that A1: A1 on P and
+      A2: not {A1,B1,C1,D1} is_coplanar by Lm3;
+       not {A1,B1,C1,D1} on P by A2,Def7;
+     then not {B1,C1,D1,A1} on P by ENUMSET1:111;
+     then not {B1,C1,D1} \/ {A1} on P by ENUMSET1:46;
+     then not {B1,C1,D1} on P by A1,Th19;
+     then not B1 on P or not C1 on P or not D1 on P by Th14;
+    then consider X being POINT of S such that
+             A3: X = B1 or X = C1 or X = D1 and A4: not X on P;
+       not {B1,C1,A1,D1} is_coplanar &
+      not {B1,D1,A1,C1} is_coplanar & not {C1,D1,A1,B1} is_coplanar
+                                 by A2,ENUMSET1:110,112,118;
+     then B1 <> C1 & B1 <> D1 & C1 <> D1 by Th37;
+    then consider Y,Z being POINT of S such that
+             A5: (Y = B1 or Y = C1 or Y = D1) & (Z = B1 or Z = C1 or Z = D1) &
+                Y <> X & Z <> X & Y <> Z by A3;
+      A6: now assume {A1,X,Y,Z} is_coplanar;
+      then {A1,D1,B1,C1} is_coplanar or {A1,D1,C1,B1} is_coplanar by A2,A3,A5,
+ENUMSET1:104;
+       hence contradiction by A2,ENUMSET1:105,107;
+      end;
+     set P1 = Plane(X,Y,A1), P2 = Plane(X,Z,A1);
+       not {A1,X,Y} is_collinear by A6,Th38;
+     then not {X,Y,A1} is_collinear by ENUMSET1:100;
+     then A7: {X,Y,A1} on P1 by Def10;
+     then A8: A1 on P1 by Th14;
+    then consider B such that A9: A1 <> B and A10: B on P1 and A11: B on P by
+A1,Def8;
+       not {X,Z,A1,Y} is_coplanar by A6,ENUMSET1:112;
+     then not {X,Z,A1} is_collinear by Th38;
+     then A12: {X,Z,A1} on P2 by Def10;
+     then A13: A1 on P2 by Th14;
+    then consider C such that A14: A1 <> C and A15: C on P and A16: C on P2 by
+A1,Def8
+;
+
+  take A1,B,C; thus {A1,B,C} on P by A1,A11,A15,Th14;
+
+   given K such that A17: {A1,B,C} on K;
+     A18: B on K by A17,Th12;
+    consider E such that A19: B <> E and A20: E on K by Lm2;
+       {A1,C,B} on K by A17,ENUMSET1:98;
+     then {A1,B} \/ {C} on K & {A1,C} \/ {B} on K by A17,ENUMSET1:43;
+     then A21: {A1,B} on K & {A1,C} on K & {A1,B} on P1 & {A1,C} on P2
+                                                 by A8,A10,A13,A16,Th13,Th20;
+     then K on P1 & K on P2 by A9,A14,Def8;
+     then A22: B on P2 & E on P1 & E on P2 by A18,A20,Def8;
+
+      A23: now assume {X,B,E} is_collinear;
+        then consider L such that A24: {X,B,E} on L by Def6;
+         A25: {E,B,X} on L by A24,ENUMSET1:102;
+           {A1,B} on P by A1,A11,Th13;
+         then K on P by A9,A21,Def8;
+         then E on P & {E,B} \/ {X} on L by A20,A25,Def8,ENUMSET1:43;
+         then {E,B} on P & {E,B} on L by A11,Th13,Th18;
+         then L on P & X on L by A19,A24,Def8,Th12;
+       hence contradiction by A4,Def8;
+      end;
+
+        X on P1 & X on P2 by A7,A12,Th14;
+      then {X,B,E} on P1 & {X,B,E} on P2 by A10,A22,Th14;
+      then P1 = P2 by A23,Def8;
+      then Z on P1 by A12,Th14;
+      then {X,Y,A1} \/ {Z} on P1 by A7,Th19;
+      then {X,Y,A1,Z} on P1 by ENUMSET1:46;
+      then {X,Y,A1,Z} is_coplanar by Def7;
+   hence contradiction by A6,ENUMSET1:110;
+  end;
+
+::    Fundamental existence theorems
+
+theorem
+   ex A,B,C,D st A on P & not {A,B,C,D} is_coplanar by Lm3;
+
+theorem
+   ex B st A <> B & B on L by Lm2;
+
+theorem Th74:
+ A <> B implies ex C st C on P & not {A,B,C} is_collinear
+  proof assume A1: A <> B;
+   consider L such that A2: {A,B} on L by Def8;
+   consider C,D,E such that A3: {C,D,E} on P and
+                            A4: not {C,D,E} is_collinear by Th71;
+      not {C,D,E} on L by A4,Def6;
+    then not C on L or not D on L or not E on L by Th12;
+    then (not {A,B,C} is_collinear or not {A,B,D} is_collinear or
+          not {A,B,E} is_collinear) & C on P & D on P & E on P
+                                                      by A1,A2,A3,Th14,Th39;
+   hence thesis;
+  end;
+
+theorem Th75:
+ not {A,B,C} is_collinear implies ex D st not {A,B,C,D} is_coplanar
+  proof assume A1: not {A,B,C} is_collinear;
+    consider P such that A2: {A,B,C} on P by Def8;
+    consider A1,B1,C1,D1 being POINT of S such that
+       A3: not {A1,B1,C1,D1} is_coplanar by Def8;
+       not {A1,B1,C1,D1} on P by A3,Def7;
+     then not A1 on P or not B1 on P or not C1 on P or not D1 on P by Th15;
+     then not {A,B,C,A1} is_coplanar or not {A,B,C,B1} is_coplanar or
+       not {A,B,C,C1} is_coplanar or not {A,B,C,D1} is_coplanar by A1,A2,Th40;
+   hence thesis;
+  end;
+
+theorem Th76:
+ ex B,C st {B,C} on P & not {A,B,C} is_collinear
+  proof
+   A1: now assume A on P;
+    then consider B such that A2: A <> B and A3: B on P & B on P by Def8;
+    consider C such that A4: C on P and A5: not {A,B,C} is_collinear by A2,Th74
+;
+       {B,C} on P by A3,A4,Th13;
+    hence thesis by A5;
+   end;
+     now assume A6: not A on P;
+    consider B,C,D such that A7: {B,C,D} on P and
+                             A8: not {B,C,D} is_collinear by Th71;
+     take B, C;
+       {B,C} \/ {D} on P by A7,ENUMSET1:43;
+    hence A9: {B,C} on P by Th19;
+     assume {A,B,C} is_collinear;
+      then consider K such that A10: {A,B,C} on K by Def6;
+         {B,C,A} on K by A10,ENUMSET1:100;
+       then A11: {B,C} \/ {A} on K by ENUMSET1:43;
+       then B <> C & {B,C} on K by A8,Th20,Th36;
+       then K on P & A on K by A9,A11,Def8,Th18;
+     hence contradiction by A6,Def8;
+    end;
+   hence thesis by A1;
+  end;
+
+theorem Th77:
+ A <> B implies (ex C,D st not {A,B,C,D} is_coplanar)
+  proof assume A1: A <> B;
+    consider P;
+    consider C such that C on P and A2: not {A,B,C} is_collinear by A1,Th74;
+       ex D st not {A,B,C,D} is_coplanar by A2,Th75;
+   hence thesis;
+  end;
+
+theorem
+   ex B,C,D st not {A,B,C,D} is_coplanar
+  proof
+    consider L; consider B such that A1: A <> B and B on L by Lm2;
+       ex C,D st not {A,B,C,D} is_coplanar by A1,Th77;
+   hence thesis;
+  end;
+
+theorem
+   ex L st not A on L & L on P
+  proof consider B,C such that A1: {B,C} on P
+                           and A2: not {A,B,C} is_collinear by Th76;
+    consider L such that A3: {B,C} on L by Def8;
+   take L;
+       A on L implies {B,C} \/ {A} on L by A3,Th18;
+     then A on L implies {B,C,A} on L by ENUMSET1:43;
+     then A on L implies {A,B,C} on L by ENUMSET1:100;
+   hence not A on L by A2,Def6;
+       not {B,C,A} is_collinear by A2,ENUMSET1:100;
+     then B <> C by Th36;
+   hence L on P by A1,A3,Def8;
+  end;
+
+theorem Th80:
+ A on P implies (ex L,L1,L2 st L1 <> L2 & L1 on P & L2 on P &
+                  not L on P & A on L & A on L1 & A on L2)
+  proof assume A1: A on P;
+    consider B,C such that A2: {B,C} on P and
+                           A3: not {A,B,C} is_collinear by Th76;
+    consider D such that A4: not {A,B,C,D} is_coplanar by A3,Th75;
+   take L3 = Line(A,D),L1 = Line(A,B),L2 = Line(A,C);
+    A5: not {A,C,B} is_collinear by A3,ENUMSET1:98;
+    then A6: A <> C by Th36;
+    then A7: {A,C} on L2 by Def9;
+    then B on L2 implies {A,C} \/ {B} on L2 by Th18;
+    then A8: B on L2 implies {A,C,B} on L2 by ENUMSET1:43;
+    A9: A <> B by A3,Th36;
+    then A10: {A,B} on L1 by Def9;
+   hence L1 <> L2 by A5,A8,Def6,Th11;
+    A11: {A} \/ {B,C} on P by A1,A2,Th19;
+    then A12: {A,B,C} on P by ENUMSET1:42;
+    then {A,B} \/ {C} on P by ENUMSET1:43;
+    then {A,B} on P by Th21;
+   hence L1 on P by A9,A10,Def8;
+      {A,C,B} on P by A11,ENUMSET1:42;
+    then {A,C} \/ {B} on P by ENUMSET1:43;
+    then {A,C} on P by Th19;
+   hence L2 on P by A6,A7,Def8;
+      not {A,D,B,C} is_coplanar by A4,ENUMSET1:105;
+    then A <> D by Th37;
+    then A13: {A,D} on L3 by Def9;
+    then L3 on P implies {A,D} on P by Th35;
+    then L3 on P implies D on P by Th13;
+    then L3 on P implies {A,B,C} \/ {D} on P by A12,Th19;
+    then L3 on P implies {A,B,C,D} on P by ENUMSET1:46;
+   hence not L3 on P by A4,Def7;
+   thus thesis by A7,A10,A13,Th11;
+  end;
+
+theorem
+   ex L,L1,L2 st A on L & A on L1 & A on L2 &
+  not(ex P st L on P & L1 on P & L2 on P)
+   proof consider P such that A1: {A,A,A} on P by Def8;
+         A on P by A1,Th14;
+     then consider L,L1,L2 such that A2: L1 <> L2 and
+                                A3: L1 on P & L2 on P & not L on P and
+                                A4: A on L & A on L1 & A on L2 by Th80;
+    take L,L1,L2;
+     thus A on L & A on L1 & A on L2 by A4;
+     given Q such that A5: L on Q & L1 on Q & L2 on Q;
+      consider B such that A6: A <> B and A7: B on L1 by Lm2;
+      consider C such that A8: A <> C and A9: C on L2 by Lm2;
+       A10: {A,B} on L1 & {A,C} on L2 by A4,A7,A9,Th11;
+       then {A,B} on P & {A,B} on Q & C on P & C on Q by A3,A5,A9,Def8,Th35;
+       then {A,B} \/ {C} on P & {A,B} \/ {C} on Q by Th19;
+       then A11: {A,B,C} on P & {A,B,C} on Q by ENUMSET1:43;
+         now given K such that A12: {A,B,C} on K;
+            {A,C,B} on K by A12,ENUMSET1:98;
+          then {A,C} \/ {B} on K & {A,B} \/ {C} on K by A12,ENUMSET1:43;
+          then {A,B} on K & {A,C} on K by Th18;
+          then K = L1 & K = L2 by A6,A8,A10,Def8;
+        hence contradiction by A2;
+       end;
+       then not {A,B,C} is_collinear by Def6;
+     hence contradiction by A3,A5,A11,Def8;
+   end;
+
+theorem
+   ex P st A on P & not L on P
+  proof consider B such that A1: A <> B and A2: B on L by Lm2;
+    consider C,D such that A3: not {A,B,C,D} is_coplanar by A1,Th77;
+   take P = Plane(A,C,D);
+    A4: not {A,C,D,B} is_coplanar by A3,ENUMSET1:105;
+    then not {A,C,D} is_collinear by Th38;
+    then A5: {A,C,D} on P by Def10;
+   hence A on P by Th14;
+      B on P implies {A,C,D} \/ {B} on P by A5,Th19;
+    then B on P implies {A,C,D,B} on P by ENUMSET1:46;
+   hence not L on P by A2,A4,Def7,Def8;
+  end;
+
+theorem
+   ex A st A on P & not A on L
+  proof consider A,B such that A1: A <> B and A2: {A,B} on L by Def8;
+    consider C such that A3: C on P and A4: not {A,B,C} is_collinear by A1,Th74
+;
+   take C;
+   thus C on P by A3;
+       C on L implies {A,B} \/ {C} on L by A2,Th18;
+     then C on L implies {A,B,C} on L by ENUMSET1:43;
+   hence thesis by A4,Def6;
+  end;
+
+theorem
+   ex K st not(ex P st L on P & K on P)
+  proof consider A,B such that A1: A <> B and A2: {A,B} on L by Def8;
+    consider C,D such that A3: not {A,B,C,D} is_coplanar by A1,Th77;
+   take K = Line(C,D);
+   given P such that A4: L on P & K on P;
+       not {C,D,A,B} is_coplanar by A3,ENUMSET1:118;
+     then C <> D by Th37;
+     then {C,D} on K by Def9;
+     then {A,B} on P & {C,D} on P by A2,A4,Th35;
+     then {A,B} \/ {C,D} on P by Th21;
+     then {A,B,C,D} on P by ENUMSET1:45;
+   hence thesis by A3,Def7;
+  end;
+
+theorem
+   ex P,Q st P <> Q & L on P & L on Q
+  proof consider A,B such that A1: A <> B and A2: {A,B} on L by Def8;
+    consider C,D such that A3: not {A,B,C,D} is_coplanar by A1,Th77;
+   take P = Plane (A,B,C), Q = Plane(A,B,D);
+       not {A,B,D,C} is_coplanar by A3,ENUMSET1:103;
+     then not {A,B,C} is_collinear & not {A,B,D} is_collinear by A3,Th38;
+     then A4: {A,B,C} on P & {A,B,D} on Q by Def10;
+     then {A,B,C} on P & D on Q by Th14;
+     then P = Q implies {A,B,C} \/ {D} on P by Th19;
+     then P = Q implies {A,B,C,D} on P by ENUMSET1:46;
+   hence P <> Q by A3,Def7;
+       {A,B} \/ {C} on P & {A,B} \/ {D} on Q by A4,ENUMSET1:43;
+     then {A,B} on P & {A,B} on Q by Th21;
+   hence thesis by A1,A2,Def8;
+  end;
+
+::  Intersection of lines and planes
+
+canceled;
+
+theorem
+   not L on P & {A,B} on L & {A,B} on P implies A = B by Def8;
+
+theorem
+   P <> Q implies not(ex A st A on P & A on Q) or
+  (ex L st for B holds B on P & B on Q iff B on L)
+   proof assume A1: P <> Q;
+     given A such that A2: A on P & A on Q;
+      consider C such that A3: A <> C & C on P & C on Q by A2,Def8;
+    take L = Line(A,C);
+         {A,C} on L & {A,C} on P & {A,C} on Q by A2,A3,Def9,Th13;
+       then A4:L on P & L on Q by A3,Def8;
+    let B;
+    thus B on P & B on Q implies B on L
+     proof
+      assume that A5: B on P & B on Q and A6: not B on L;
+       consider P1 such that
+                A7: for P2 holds B on P2 & L on P2 iff P1 = P2
+                                                  by A6,Th48;
+           P = P1 & Q = P1 by A4,A5,A7;
+      hence contradiction by A1;
+     end;
+    thus B on L implies B on P & B on Q by A4,Def8;
+   end;

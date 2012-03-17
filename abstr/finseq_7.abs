@@ -1,0 +1,180 @@
+:: On Replace Function and Swap Function for Finite Sequences
+::  by Hiroshi Yamazaki , Yoshinori Fujisawa and Yatsuka Nakamura
+::
+:: Received August 28, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, ARYTM_1, RELAT_1, FUNCT_1, RFINSEQ, FINSEQ_4, FUNCT_4,
+      BOOLE, FINSEQ_7;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1, BINARITH,
+      FUNCT_1, FINSEQ_1, FINSEQ_4, RFINSEQ, TOPREAL1, FUNCT_7;
+ constructors REAL_1, BINARITH, REALSET1, RFINSEQ, TOPREAL1, FINSEQ_4, INT_1,
+      FUNCT_7, CQC_LANG, MEMBERED;
+ clusters FINSEQ_1, FINSEQ_5, RELSET_1, INT_1, TOPREAL1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Some Basic Theorems
+
+reserve D for non empty set,
+  f, g, h for FinSequence of D,
+  p, p1, p2, p3, q for Element of D,
+  i, j, k, l, n for Nat;
+
+theorem :: FINSEQ_7:1
+  1 <= i & j <= len f & i < j implies
+    f = (f|(i-'1))^<*f.i*>^((f/^i)|(j-'i-'1))^<*f.j*>^(f/^j);
+
+theorem :: FINSEQ_7:2
+    len g = len h & len g < i & i <= len (g^f) implies (g^f).i = (h^f).i;
+
+theorem :: FINSEQ_7:3
+    1 <= i & i <= len f implies f.i = (g^f).(len g + i);
+
+theorem :: FINSEQ_7:4
+    i in dom(f/^n) implies (f/^n).i = f.(n+i);
+
+begin :: Definition of Replace Function and its properties
+
+definition
+  let D be non empty set;
+  let f be FinSequence of D;
+  let i be Nat;
+  let p be Element of D;
+  redefine func f +* (i, p) -> FinSequence of D equals
+:: FINSEQ_7:def 1
+    (f|(i-'1))^<*p*>^(f/^i) if 1 <= i & i <= len f
+    otherwise f;
+  synonym Replace(f, i, p);
+end;
+
+canceled 2;
+
+theorem :: FINSEQ_7:7
+  len Replace(f, i, p) = len f;
+
+theorem :: FINSEQ_7:8
+    rng Replace(f, i, p) c= rng f \/ {p};
+
+theorem :: FINSEQ_7:9
+    1 <= i & i <= len f implies p in rng Replace(f, i, p);
+
+theorem :: FINSEQ_7:10
+    1 <= i & i <= len f implies Replace(f, i, p)/.i = p;
+
+theorem :: FINSEQ_7:11
+    1 <= i & i <= len f implies
+    for k st (0 < k & k <= len f - i)
+      holds Replace(f, i, p).(i + k) = (f/^i).k;
+
+theorem :: FINSEQ_7:12
+  1 <= k & k <= len f & k <> i implies Replace(f, i, p)/.k = f/.k;
+
+theorem :: FINSEQ_7:13
+  1 <= i & i < j & j <= len f implies
+    Replace(Replace(f, j, q), i, p)
+      = (f|(i-'1))^<*p*>^(f/^i)|(j-'i-'1)^<*q*>^(f/^j);
+
+theorem :: FINSEQ_7:14
+    Replace(<*p*>, 1, q) = <*q*>;
+
+theorem :: FINSEQ_7:15
+  Replace(<*p1, p2*>, 1, q) = <*q, p2*>;
+
+theorem :: FINSEQ_7:16
+  Replace(<*p1, p2*>, 2, q) = <*p1, q*>;
+
+theorem :: FINSEQ_7:17
+  Replace(<*p1, p2, p3*>, 1, q) = <*q, p2, p3*>;
+
+theorem :: FINSEQ_7:18
+  Replace(<*p1, p2, p3*>, 2, q) = <*p1, q, p3*>;
+
+theorem :: FINSEQ_7:19
+  Replace(<*p1, p2, p3*>, 3, q) = <*p1, p2, q*>;
+
+begin :: Definition of Swap Function and its properties
+
+definition
+  let D be non empty set;
+  let f be FinSequence of D;
+  let i, j be Nat;
+  func Swap(f, i, j) -> FinSequence of D equals
+:: FINSEQ_7:def 2
+      Replace(Replace(f, i, f/.j), j, f/.i)
+        if 1 <= i & i <= len f & 1 <= j & j <= len f
+      otherwise f;
+end;
+
+theorem :: FINSEQ_7:20
+  len Swap(f, i, j) = len f;
+
+theorem :: FINSEQ_7:21
+  Swap(f, i, i) = f;
+
+theorem :: FINSEQ_7:22
+    Swap(Swap(f,i,j),j,i) = f;
+
+theorem :: FINSEQ_7:23
+  Swap(f, i, j) = Swap(f, j, i);
+
+theorem :: FINSEQ_7:24
+    rng Swap(f,i,j) = rng f;
+
+theorem :: FINSEQ_7:25
+    Swap(<*p1, p2*>, 1, 2) = <*p2, p1*>;
+
+theorem :: FINSEQ_7:26
+    Swap(<*p1, p2, p3*>, 1, 2) = <*p2, p1, p3*>;
+
+theorem :: FINSEQ_7:27
+    Swap(<*p1, p2, p3*>, 1, 3) = <*p3, p2, p1*>;
+
+theorem :: FINSEQ_7:28
+    Swap(<*p1, p2, p3*>, 2, 3) = <*p1, p3, p2*>;
+
+theorem :: FINSEQ_7:29
+  1 <= i & i < j & j <= len f implies
+    Swap(f, i, j) = (f|(i-'1))^<*f/.j*>^(f/^i)|(j-'i-'1)^<*f/.i*>^(f/^j);
+
+theorem :: FINSEQ_7:30
+    1 < i & i <= len f implies
+    Swap(f, 1, i) = <*f/.i*>^((f/^1)|(i-'2))^<*f/.1*>^(f/^i);
+
+theorem :: FINSEQ_7:31
+    1 <= i & i < len f implies
+    Swap(f, i, len f)
+      = (f|(i-'1))^<*f/.len f*>^((f/^i)|(len f-'i-'1))^<*f/.i*>;
+
+theorem :: FINSEQ_7:32
+  i <> k & j <> k & 1 <= k & k <= len f implies
+    Swap(f, i, j)/.k = f/.k;
+
+theorem :: FINSEQ_7:33
+  1 <= i & i <= len f & 1 <= j & j <= len f
+    implies Swap(f, i, j)/.i = f/.j & Swap(f, i, j)/.j = f/.i;
+
+begin :: Properties of composed function of Replace Function and Swap Function
+
+theorem :: FINSEQ_7:34
+  1 <= i & i <= len f & 1 <= j & j <= len f
+    implies Replace(Swap(f, i, j), i, p) = Swap(Replace(f, j, p), i, j);
+
+theorem :: FINSEQ_7:35
+  i <> k & j <> k & 1 <= i & i <= len f & 1 <= j
+    & j <= len f & 1 <= k & k <= len f implies
+    Swap(Replace(f, k, p), i, j) = Replace(Swap(f, i, j), k, p);
+
+theorem :: FINSEQ_7:36
+    i <> k & j <> k & 1 <= i & i <= len f &
+    1 <= j & j <= len f & 1 <= k & k <= len f implies
+    Swap(Swap(f, i, j), j, k) = Swap(Swap(f, i, k), i, j);
+
+theorem :: FINSEQ_7:37
+      i <> k & j <> k & l <> i & l <> j &
+    1 <= i & i <= len f & 1 <= j & j <= len f &
+    1 <= k & k <= len f & 1 <= l & l <= len f implies
+      Swap(Swap(f, i, j), k, l) = Swap(Swap(f, k, l), i, j);
+

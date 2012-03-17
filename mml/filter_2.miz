@@ -1,0 +1,1832 @@
+:: Ideals
+::  by Grzegorz Bancerek
+::
+:: Received October 24, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary BINOP_1, RELAT_1, FUNCT_1, LATTICE2, LATTICES, SUBSET_1, LATTICE4,
+      FILTER_0, BOOLE, NAT_LAT, ZF_LANG, FILTER_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, FUNCT_1, DOMAIN_1,
+      BINOP_1, LATTICES, NAT_LAT, FILTER_0, LATTICE2, MCART_1, RELSET_1,
+      LATTICE4;
+ constructors DOMAIN_1, BINOP_1, NAT_LAT, FILTER_0, LATTICE2, LATTICE4,
+      XBOOLE_0;
+ clusters LATTICES, FILTER_0, NAT_LAT, LATTICE2, FUNCT_1, STRUCT_0, RLSUB_2,
+      RELSET_1, LATTICE4, SUBSET_1, XBOOLE_0, ZFMISC_1;
+ requirements SUBSET, BOOLE;
+ definitions BINOP_1, LATTICES, LATTICE2, FILTER_0, TARSKI, LATTICE4, XBOOLE_0;
+ theorems TARSKI, ZFMISC_1, DOMAIN_1, FUNCT_1, FUNCT_2, BINOP_1, SUBSET_1,
+      NAT_LAT, LATTICES, FILTER_0, LATTICE2, LATTICE4, RELSET_1, XBOOLE_0,
+      XBOOLE_1, RELAT_1;
+
+begin :: Some Properties of the Restriction of Binary Operations
+
+theorem Th1:
+ for D being non empty set, S being non empty Subset of D,
+  f being BinOp of D, g being BinOp of S st g = f|[:S,S:] holds
+   (f is commutative implies g is commutative) &
+   (f is idempotent implies g is idempotent) &
+   (f is associative implies g is associative)
+  proof let D be non empty set, S be non empty Subset of D;
+   let f be BinOp of D, g be BinOp of S;
+   assume
+A1:  g = f|[:S,S:];
+A2:  dom g = [:S,S:] by FUNCT_2:def 1;
+   thus f is commutative implies g is commutative
+     proof assume
+A3:     for a,b being Element of D holds f.(a,b) = f.(b,a);
+      let a,b be Element of S qua non empty set;
+      reconsider a' = a, b' = b as Element of S;
+      reconsider a', b' as Element of D;
+      thus g.(a,b) = g.[a,b] by BINOP_1:def 1
+                  .= f.[a,b] by A1,A2,FUNCT_1:70
+                  .= f.(a',b') by BINOP_1:def 1
+                  .= f.(b',a') by A3
+                  .= f.[b,a] by BINOP_1:def 1
+                  .= g.[b,a] by A1,A2,FUNCT_1:70
+                  .= g.(b,a) by BINOP_1:def 1;
+     end;
+   thus f is idempotent implies g is idempotent
+     proof assume
+A4:     for a being Element of D holds f.(a,a) = a;
+      let a be Element of S;
+      thus g.(a,a) = g.[a,a] by BINOP_1:def 1 .= f.[a,a] by A1,A2,FUNCT_1:70
+                .= f.(a,a) by BINOP_1:def 1 .= a by A4;
+     end;
+   assume
+A5:  for a,b,c being Element of D holds f.(f.(a,b),c) = f.(a,f.(b,c));
+   let a,b,c be Element of S qua non empty set;
+   reconsider a' = a, b' = b, c' = c as Element of S;
+   reconsider a', b', c' as Element of D;
+   thus g.(g.(a,b),c) = g.[g.(a,b),c] by BINOP_1:def 1
+               .= f.[g.(a,b),c] by A1,A2,FUNCT_1:70
+               .= f.[g.[a,b],c] by BINOP_1:def 1
+               .= f.[f.[a,b],c] by A1,A2,FUNCT_1:70
+               .= f.(f.[a,b],c) by BINOP_1:def 1
+               .= f.(f.(a,b),c) by BINOP_1:def 1
+               .= f.(a',f.(b',c')) by A5
+               .= f.(a,f.[b,c]) by BINOP_1:def 1
+               .= f.(a,g.[b,c]) by A1,A2,FUNCT_1:70
+               .= f.(a,g.(b,c)) by BINOP_1:def 1
+               .= f.[a,g.(b,c)] by BINOP_1:def 1
+               .= g.[a,g.(b,c)] by A1,A2,FUNCT_1:70
+               .= g.(a,g.(b,c)) by BINOP_1:def 1;
+  end;
+
+theorem
+   for D being non empty set, S being non empty Subset of D,
+   f being BinOp of D, g being BinOp of S
+  for d being Element of D, d' being Element of S st
+   g = f|[:S,S:] & d' = d holds
+    (d is_a_left_unity_wrt f implies d' is_a_left_unity_wrt g) &
+    (d is_a_right_unity_wrt f implies d' is_a_right_unity_wrt g) &
+    (d is_a_unity_wrt f implies d' is_a_unity_wrt g)
+  proof let D be non empty set, S be non empty Subset of D, f be BinOp of D;
+   let g be BinOp of S, d be Element of D, d' be Element of S such that
+A1:  g = f|[:S,S:] & d' = d;
+A2:  dom g = [:S,S:] by FUNCT_2:def 1;
+   thus d is_a_left_unity_wrt f implies d' is_a_left_unity_wrt g
+     proof assume
+A3:     for a being Element of D holds f.(d,a) = a;
+      let a be Element of S;
+      thus g.(d',a) = g.[d',a] by BINOP_1:def 1 .= f.[d',a] by A1,A2,FUNCT_1:70
+             .= f.(d,a) by A1,BINOP_1:def 1 .= a by A3;
+     end;
+   thus d is_a_right_unity_wrt f implies d' is_a_right_unity_wrt g
+     proof assume
+A4:     for a being Element of D holds f.(a,d) = a;
+      let a be Element of S;
+      thus g.(a,d') = g.[a,d'] by BINOP_1:def 1 .= f.[a,d'] by A1,A2,FUNCT_1:70
+             .= f.(a,d) by A1,BINOP_1:def 1 .= a by A4;
+     end;
+   assume
+A5: d is_a_unity_wrt f;
+      now let s be Element of S;
+     reconsider s' = s as Element of D;
+A6:    [s,d'] in [:S,S:] & [d',s] in
+ [:S,S:] & dom g = [:S,S:] by FUNCT_2:def 1;
+     thus g.(d',s) = g.[d',s] by BINOP_1:def 1
+                  .= f.[d,s'] by A1,A6,FUNCT_1:70
+                  .= f.(d,s') by BINOP_1:def 1
+                  .= s by A5,BINOP_1:11;
+     thus g.(s,d') = g.[s,d'] by BINOP_1:def 1
+                  .= f.[s',d] by A1,A6,FUNCT_1:70
+                  .= f.(s',d) by BINOP_1:def 1
+                  .= s by A5,BINOP_1:11;
+    end;
+   hence thesis by BINOP_1:11;
+  end;
+
+theorem Th3:
+ for D being non empty set, S being non empty Subset of D,
+  f1,f2 being BinOp of D, g1,g2 being BinOp of S st
+   g1 = f1|[:S,S:] & g2 = f2|[:S,S:] holds
+    (f1 is_left_distributive_wrt f2 implies g1 is_left_distributive_wrt g2) &
+    (f1 is_right_distributive_wrt f2 implies g1 is_right_distributive_wrt g2)
+  proof let D be non empty set, S be non empty Subset of D,
+    f1,f2 be BinOp of D, g1,g2 be BinOp of S such that
+A1:   g1 = f1|[:S,S:] & g2 = f2|[:S,S:];
+   thus f1 is_left_distributive_wrt f2 implies g1 is_left_distributive_wrt g2
+     proof assume
+A2:     for a,b,c being Element of D holds
+        f1.(a,f2.(b,c)) = f2.(f1.(a,b),f1.(a,c));
+      let a,b,c be Element of S;
+      set ab = g1.(a,b), ac = g1.(a,c), bc = g2.(b,c);
+      reconsider a' = a, b' = b, c' = c as Element of D;
+         [a,b] in [:S,S:] & [a,c] in [:S,S:] & [b,c] in [:S,S:] &
+       [a,bc] in [:S,S:] & [ab,ac] in [:S,S:] &
+       dom g1 = [:S,S:] & dom g2 = [:S,S:] by FUNCT_2:def 1;
+       then g2.(b,c) = g2.[b,c] & g2.[b,c] = f2.[b,c] & f2.[b',c'] = f2.(b',c'
+) &
+       g1.(a,b) = g1.[a,b] & g1.[a,b] = f1.[a,b] & f1.[a',b'] = f1.(a',b') &
+       g1.(a,c) = g1.[a,c] & g1.[a,c] = f1.[a,c] & f1.[a',c'] = f1.(a',c') &
+       g1.(a,bc) = g1.[a,bc] & g1.[a,bc] = f1.[a,bc] & f1.[a,bc] = f1.(a,bc) &
+       g2.(ab,ac) = g2.[ab,ac] & g2.[ab,ac] = f2.[ab,ac] &
+       f2.[ab,ac] = f2.(ab,ac) by A1,BINOP_1:def 1,FUNCT_1:70;
+      hence g1.(a,g2.(b,c)) = g2.(g1.(a,b),g1.(a,c)) by A2;
+     end;
+   assume
+A3:  for a,b,c being Element of D holds
+     f1.(f2.(a,b),c) = f2.(f1.(a,c),f1.(b,c));
+   let a,b,c be Element of S;
+   set ab = g2.(a,b), ac = g1.(a,c), bc = g1.(b,c);
+   reconsider a' = a, b' = b, c' = c as Element of D;
+      [a,b] in [:S,S:] & [a,c] in [:S,S:] & [b,c] in [:S,S:] &
+    [a,bc] in [:S,S:] & [ab,ac] in [:S,S:] &
+    dom g1 = [:S,S:] & dom g2 = [:S,S:] by FUNCT_2:def 1;
+    then g1.(b,c) = g1.[b,c] & g1.[b,c] = f1.[b,c] & f1.[b',c'] = f1.(b',c') &
+    g2.(a,b) = g2.[a,b] & g2.[a,b] = f2.[a,b] & f2.[a',b'] = f2.(a',b') &
+    g1.(a,c) = g1.[a,c] & g1.[a,c] = f1.[a,c] & f1.[a',c'] = f1.(a',c') &
+    g1.(ab,c) = g1.[ab,c] & g1.[ab,c] = f1.[ab,c] & f1.[ab,c] = f1.(ab,c) &
+    g2.(ac,bc) = g2.[ac,bc] & g2.[ac,bc] = f2.[ac,bc] &
+    f2.[ac,bc] = f2.(ac,bc) by A1,BINOP_1:def 1,FUNCT_1:70;
+   hence g1.(g2.(a,b),c) = g2.(g1.(a,c),g1.(b,c)) by A3;
+  end;
+
+theorem
+   for D being non empty set, S being non empty Subset of D,
+  f1,f2 being BinOp of D, g1,g2 being BinOp of S st
+   g1 = f1|[:S,S:] & g2 = f2|[:S,S:] holds
+    f1 is_distributive_wrt f2 implies g1 is_distributive_wrt g2
+  proof let D be non empty set, S be non empty Subset of D,
+     f1,f2 be BinOp of D;
+   let g1,g2 be BinOp of S; assume
+      g1 = f1|[:S,S:] & g2 = f2|[:S,S:] &
+    f1 is_left_distributive_wrt f2 & f1 is_right_distributive_wrt f2;
+   hence
+      g1 is_left_distributive_wrt g2 & g1 is_right_distributive_wrt g2 by Th3;
+  end;
+
+theorem Th5:
+ for D being non empty set, S being non empty Subset of D,
+  f1,f2 being BinOp of D, g1,g2 being BinOp of S st
+   g1 = f1|[:S,S:] & g2 = f2|[:S,S:] holds
+    f1 absorbs f2 implies g1 absorbs g2
+  proof let D be non empty set, S be non empty Subset of D,
+     f1,f2 be BinOp of D;
+   let g1,g2 be BinOp of S; assume
+A1:  g1 = f1|[:S,S:] & g2 = f2|[:S,S:];
+   assume
+A2:  for a,b being Element of D holds f1.(a,f2.(a,b)) = a;
+   let a,b be Element of S;
+A3:  dom g1 = [:S,S:] & dom g2 = [:S,S:] by FUNCT_2:def 1;
+   thus g1.(a,g2.(a,b)) = g1.[a,g2.(a,b)] by BINOP_1:def 1
+          .= f1.[a,g2.(a,b)] by A1,A3,FUNCT_1:70
+          .= f1.[a,g2.[a,b]] by BINOP_1:def 1
+          .= f1.[a,f2.[a,b]] by A1,A3,FUNCT_1:70
+          .= f1.[a,f2.(a,b)] by BINOP_1:def 1
+          .= f1.(a,f2.(a,b)) by BINOP_1:def 1
+          .= a by A2;
+  end;
+
+begin :: Closed Subsets of a Lattice
+
+definition let D be non empty set, X1,X2 be Subset of D;
+ redefine pred X1 = X2 means
+    for x being Element of D holds x in X1 iff x in X2;
+  compatibility by SUBSET_1:8;
+end;
+
+ deffunc carr(LattStr) = the carrier of $1;
+ deffunc join(LattStr) = the L_join of $1;
+ deffunc met(LattStr) = the L_meet of $1;
+
+ reserve L for Lattice,
+  p,q,r for Element of L,
+  p',q',r' for Element of L.:,
+  x,y for set;
+
+theorem Th6:
+ for L1,L2 being LattStr st the LattStr of L1 = the LattStr of L2 holds
+   L1.: = L2.:
+  proof let L1,L2 be LattStr; assume
+A1:  the LattStr of L1 = the LattStr of L2;
+   thus L1.: = LattStr(#carr(L1),met(L1),join(L1)#) by LATTICE2:def 2
+           .= L2.: by A1,LATTICE2:def 2;
+  end;
+
+theorem Th7:
+ L.:.: = the LattStr of L
+  proof (the LattStr of L).: = L.: by Th6; hence thesis by LATTICE2:19;
+  end;
+
+theorem Th8:
+ for L1,L2 being non empty LattStr st the LattStr of L1 = the LattStr of L2
+  for a1,b1 being Element of L1,
+      a2,b2 being Element of L2 st
+   a1 = a2 & b1 = b2 holds
+    a1"\/"b1 = a2"\/"b2 & a1"/\"b1 = a2"/\"b2 & (a1 [= b1 iff a2 [= b2)
+  proof let L1,L2 be non empty LattStr such that
+A1:  the LattStr of L1 = the LattStr of L2;
+   let a1,b1 be Element of L1,
+       a2,b2 be Element of L2 such that
+A2:  a1 = a2 & b1 = b2;
+   thus
+A3:  a1"\/"b1 = join(L1).(a1,b1) by LATTICES:def 1
+          .= a2"\/"b2 by A1,A2,LATTICES:def 1;
+   thus a1"/\"b1 = met(L1).(a1,b1) by LATTICES:def 2
+              .= a2"/\"b2 by A1,A2,LATTICES:def 2;
+      (a1 [= b1 iff a1"\/"b1 = b1) & (a2"\/"
+b2 = b2 iff a2 [= b2) by LATTICES:def 3;
+   hence a1 [= b1 iff a2 [= b2 by A2,A3;
+  end;
+
+theorem Th9:
+ for L1,L2 being 0_Lattice st the LattStr of L1 = the LattStr of L2 holds
+   Bottom L1 = Bottom L2
+  proof let L1,L2 be 0_Lattice; assume
+A1:  the LattStr of L1 = the LattStr of L2;
+   then reconsider c = Bottom L1 as Element of L2;
+      now let a be Element of L2;
+     reconsider b = a as Element of L1 by A1;
+        Bottom L1"/\"b = Bottom L1 by LATTICES:40;
+     hence c"/\"a = c & a"/\"c = c by A1,Th8;
+    end;
+   hence thesis by LATTICES:def 16;
+  end;
+
+theorem Th10:
+ for L1,L2 being 1_Lattice st the LattStr of L1 = the LattStr of L2 holds
+   Top L1 = Top L2
+  proof let L1,L2 be 1_Lattice; assume
+A1:  the LattStr of L1 = the LattStr of L2;
+   then reconsider c = Top L1 as Element of L2;
+      now let a be Element of L2;
+     reconsider b = a as Element of L1 by A1;
+        Top L1"\/"b = Top L1 by LATTICES:44;
+     hence c"\/"a = c & a"\/"c = c by A1,Th8;
+    end;
+   hence thesis by LATTICES:def 17;
+  end;
+
+theorem Th11:
+ for L1,L2 being C_Lattice st the LattStr of L1 = the LattStr of L2
+  for a1,b1 being Element of L1,
+      a2,b2 being Element of L2 st
+   a1 = a2 & b1 = b2 & a1 is_a_complement_of b1 holds
+    a2 is_a_complement_of b2
+  proof let L1,L2 be C_Lattice such that
+A1:  the LattStr of L1 = the LattStr of L2;
+   let a1,b1 be Element of L1,
+       a2,b2 be Element of L2 such that
+A2:  a1 = a2 & b1 = b2;
+   assume a1 is_a_complement_of b1;
+then A3:  a1"\/"b1 = Top L1 & a1"/\"b1 = Bottom L1 by LATTICES:def 18;
+      a2"\/"b2 = a1"\/"b1 & a2"/\"b2 = a1"/\"b1 by A1,A2,Th8;
+   hence a2"\/"b2 = Top L2 & b2"\/"a2 = Top
+L2 & a2"/\"b2 = Bottom L2 & b2"/\"a2 = Bottom L2
+     by A1,A3,Th9,Th10;
+  end;
+
+theorem
+   for L1,L2 being B_Lattice st the LattStr of L1 = the LattStr of L2
+  for a being Element of L1,
+      b being Element of L2 st a = b
+   holds a` = b`
+  proof let L1,L2 be B_Lattice such that
+A1:  the LattStr of L1 = the LattStr of L2;
+   let a be Element of L1,
+       b be Element of L2 such that
+A2:  a = b;
+   reconsider b' = a` as Element of L2 by A1;
+      a` is_a_complement_of a by LATTICES:def 21;
+    then b' is_a_complement_of b by A1,A2,Th11;
+   hence thesis by LATTICES:def 21;
+  end;
+
+theorem
+   for X being Subset of L
+    st for p,q holds p in X & q in X iff p"/\"q in X holds
+   X is ClosedSubset of L
+  proof let X be Subset of L such that
+A1:  for p,q holds p in X & q in X iff p"/\"q in X;
+   let p,q; p"/\"(p"\/"q) = p by LATTICES:def 9;
+   hence thesis by A1;
+  end;
+
+theorem Th14:
+ for X being Subset of L
+    st for p,q holds p in X & q in X iff p"\/"q in X holds
+   X is ClosedSubset of L
+  proof let X be Subset of L such that
+A1:  for p,q holds p in X & q in X iff p"\/"q in X;
+   let p,q; (p"/\"q)"\/"q = q by LATTICES:def 8;
+   hence thesis by A1;
+  end;
+
+definition let L;
+ redefine mode Filter of L -> non empty ClosedSubset of L;
+  coherence by LATTICE4:11;
+end;
+
+definition let L;
+ redefine func <.L.) -> Filter of L;
+  coherence;
+ let p be Element of L;
+ func <.p.) -> Filter of L;
+  coherence;
+end;
+
+definition let L; let D be non empty Subset of L;
+ redefine func <.D.) -> Filter of L;
+  coherence;
+end;
+
+definition let L be D_Lattice; let F1,F2 be Filter of L;
+ redefine func F1 "/\" F2 -> Filter of L;
+  coherence proof thus F1"/\"F2 is Filter of L; end;
+end;
+
+definition let L;
+ canceled;
+
+ mode Ideal of L -> non empty ClosedSubset of L means :Def3:
+  p in it & q in it iff p "\/" q in it;
+  existence
+   proof
+    carr(L) c= carr(L);
+    then reconsider I = carr(L) as non empty Subset of L;
+    I is ClosedSubset of L proof let p,q; thus thesis; end;
+     then reconsider I as non empty ClosedSubset of L;
+    take I; thus thesis;
+   end;
+end;
+
+theorem Th15:
+ for X being non empty Subset of L st
+   for p,q holds p in X & q in X iff p "\/" q in X holds X is Ideal of L
+  proof let X be non empty Subset of L; assume
+A1:  for p,q holds p in X & q in X iff p "\/" q in X;
+    then X is ClosedSubset of L by Th14;
+   hence thesis by A1,Def3;
+  end;
+
+theorem Th16:
+ for L1,L2 being Lattice st the LattStr of L1 = the LattStr of L2
+   for x st x is Filter of L1 holds x is Filter of L2
+  proof let L1,L2 be Lattice such that
+A1:  the LattStr of L1 = the LattStr of L2;
+   let x; assume x is Filter of L1;
+   then reconsider F = x as Filter of L1;
+      now let a,b be Element of L2;
+     reconsider a' = a, b' = b as Element of L1 by A1;
+        a"/\"b = a'"/\"b' by A1,Th8;
+     hence a in F & b in F iff a"/\"b in F by FILTER_0:def 1;
+    end;
+   hence thesis by A1,FILTER_0:def 1;
+  end;
+
+theorem Th17:
+ for L1,L2 being Lattice st the LattStr of L1 = the LattStr of L2
+   for x st x is Ideal of L1 holds x is Ideal of L2
+  proof let L1,L2 be Lattice such that
+A1:  the LattStr of L1 = the LattStr of L2;
+   let x; assume x is Ideal of L1;
+   then reconsider F = x as Ideal of L1;
+      now let a,b be Element of L2;
+     reconsider a' = a, b' = b as Element of L1 by A1;
+        a"\/"b = a'"\/"b' by A1,Th8;
+     hence a in F & b in F iff a"\/"b in F by Def3;
+    end;
+   hence thesis by A1,Th15;
+  end;
+
+definition let L,p;
+ func p.: -> Element of L.: equals :Def4:
+   p;
+  coherence by LATTICE2:18;
+end;
+
+definition let L; let p be Element of L.:;
+ func .:p -> Element of L equals :Def5:
+   p;
+  coherence by LATTICE2:18;
+end;
+
+theorem Th18:
+ .:(p.:) = p & ( .:p').: = p'
+  proof p.: = p & .:(p.:) = p.: & .:p' = p' & ( .:p').: = .:p' by Def4,Def5;
+   hence thesis;
+  end;
+
+theorem Th19:
+ p"/\"q = p.:"\/"q.: & p"\/"q = p.:"/\"q.: & p'"/\"q' = .:p'"\/".:
+q' & p'"\/"q' = .:p' "/\".:q'
+  proof p.: = p & .:p' = p' & .:q' = q' & q.: = q by Def4,Def5;
+   hence thesis by LATTICE2:52;
+  end;
+
+theorem Th20:
+ (p [= q iff q.: [= p.:) & (p' [= q' iff .:q' [= .:p')
+  proof p.: = p & .:p' = p' & .:q' = q' & q.: = q by Def4,Def5;
+   hence thesis by LATTICE2:53,54;
+  end;
+
+theorem Th21:
+ x is Ideal of L iff x is Filter of L.:
+  proof
+   thus x is Ideal of L implies x is Filter of L.:
+     proof assume x is Ideal of L;
+      then reconsider I = x as Ideal of L;
+      reconsider I as non empty Subset of L.:
+      by LATTICE2:18;
+         I is Filter of L.:
+        proof let p',q';
+            p' = .:p' & q' = .:q' & p'"/\"q' = .:p'"\/".:q' by Def5,Th19;
+         hence thesis by Def3;
+        end;
+      hence thesis;
+     end;
+   assume x is Filter of L.:;
+   then reconsider F = x as Filter of L.:;
+   reconsider F as non empty Subset of L by LATTICE2:18;
+      now let p,q;
+        p = p.: & q = q.: & p.:"/\"q.: = p"\/"q by Def4,Th19;
+     hence p in F & q in F iff p"\/"q in F by FILTER_0:def 1;
+    end;
+   hence thesis by Th15;
+  end;
+
+ definition let L; let X be Subset of L;
+  func X.: -> Subset of L.: equals :Def6:
+    X;
+   coherence by LATTICE2:18;
+ end;
+
+ definition let L; let X be Subset of L.:;
+  func .:X -> Subset of L equals :Def7:
+    X;
+   coherence by LATTICE2:18;
+ end;
+
+definition let L; let D be non empty Subset of L;
+ cluster D.: -> non empty;
+  coherence by Def6;
+end;
+
+definition let L; let D be non empty Subset of L.:;
+ cluster .:D -> non empty;
+  coherence by Def7;
+end;
+
+definition let L; let S be ClosedSubset of L;
+ redefine func S.: -> ClosedSubset of L.:;
+  coherence
+   proof let p',q';
+       S.: = S & carr(L.:) = carr(L) & .:p' = p' & .:q' = q' & p'"\/"q' = .:
+p'"/\"
+.:q' &
+     .:p'"\/".:q' = p'"/\"q' by Def5,Def6,Th19,LATTICE2:18;
+    hence thesis by LATTICE4:def 10;
+   end;
+end;
+
+definition let L; let S be non empty ClosedSubset of L;
+ redefine func S.: -> non empty ClosedSubset of L.:;
+  coherence
+   proof reconsider D' = S as non empty Subset of L;
+       D'.: is non empty & S.: is ClosedSubset of L.:;
+    hence thesis;
+   end;
+end;
+
+definition let L; let S be ClosedSubset of L.:;
+ redefine func .:S -> ClosedSubset of L;
+  coherence
+   proof let p,q;
+       .:S = S & carr(L.:) = carr(L) & p.: = p & q.: = q & p"\/"q = p.:"/\"q.:
+&
+     p.:"\/"q.: = p"/\"q by Def4,Def7,Th19,LATTICE2:18;
+    hence thesis by LATTICE4:def 10;
+   end;
+end;
+
+definition let L; let S be non empty ClosedSubset of L.:;
+ redefine func .:S -> non empty ClosedSubset of L;
+  coherence
+   proof reconsider D' = S as non empty Subset of L.:;
+       .:D' is non empty & .:S is ClosedSubset of L;
+    hence thesis;
+   end;
+end;
+
+definition let L; let F be Filter of L;
+ redefine func F.: -> Ideal of L.:;
+  coherence
+   proof reconsider D = F.: as non empty Subset of L.:;
+       now let p',q';
+         F.: = F & carr(L.:) = carr(L) & .:p' = p' & .:q' = q' &
+       p'"\/"q' = .:p'"/\".:q' & .:p'"\/".:q' = p'"/\"q' &
+       for p,q holds p in F & q in F iff p"/\"q in F
+        by Def5,Def6,Th19,FILTER_0:def 1,LATTICE2:18;
+      hence p' in D & q' in D iff p'"\/"q' in D;
+     end;
+    hence thesis by Th15;
+   end;
+end;
+
+definition let L; let F be Filter of L.:;
+ redefine func .:F -> Ideal of L;
+  coherence
+   proof reconsider D = .:F as non empty Subset of L;
+       now let p,q;
+         .:F = F & carr(L.:) = carr(L) & p.: = p & q.: = q &
+       p"\/"q = p.:"/\"q.: & p.:"\/"q.: = p"/\"q &
+       for p',q' holds p' in F & q' in F iff p'"/\"q' in F
+        by Def4,Def7,Th19,FILTER_0:def 1,LATTICE2:18;
+      hence p in D & q in D iff p"\/"q in D;
+     end;
+    hence thesis by Th15;
+   end;
+end;
+
+definition let L; let I be Ideal of L;
+ redefine func I.: -> Filter of L.:;
+  coherence
+   proof reconsider D = I.: as non empty Subset of L.:;
+       D is Filter of L.:
+      proof let p',q';
+          I.: = I & carr(L.:) = carr(L) & .:p' = p' & .:q' = q' &
+        p'"\/"q' = .:p'"/\".:q' & .:p'"\/".:q' = p'"/\"q' &
+        for p,q holds p in I & q in I iff p"\/"q in I
+         by Def3,Def5,Def6,Th19,LATTICE2:18;
+        hence thesis;
+      end;
+    hence thesis;
+   end;
+end;
+
+definition let L; let I be Ideal of L.:;
+ redefine func .:I -> Filter of L;
+  coherence
+   proof reconsider D = .:I as non empty Subset of L;
+       D is Filter of L
+      proof let p,q;
+          .:I = I & carr(L.:) = carr(L) & p.: = p & q.: = q &
+        p"\/"q = p.:"/\"q.: & p.:"\/"q.: = p"/\"q &
+        for p',q' holds p' in I & q' in I iff p'"\/"q' in I
+         by Def3,Def4,Def7,Th19,LATTICE2:18;
+        hence thesis;
+      end;
+    hence thesis;
+   end;
+end;
+
+theorem
+ Th22: for D being non empty Subset of L holds D is Ideal of L
+ iff
+  (for p,q st p in D & q in D holds p "\/" q in D) &
+   for p,q st p in D & q [= p holds q in D
+  proof let D be non empty Subset of L;
+   thus D is Ideal of L implies (for p,q st p in D & q in D holds p "\/" q in
+ D) &
+      for p,q st p in D & q [= p holds q in D
+     proof assume
+A1:     D is Ideal of L;
+      hence for p,q st p in D & q in D holds p"\/"q in D by Def3;
+      let p,q; assume p in D & q [= p;
+       then q"\/"p in D by LATTICES:def 3;
+      hence q in D by A1,Def3;
+     end;
+   assume that
+A2:  for p,q st p in D & q in D holds p"\/"q in D and
+A3:  for p,q st p in D & q [= p holds q in D;
+      now let p,q; p [= p"\/"q & q [= q"\/"p & p"\/"q = q"\/"p by LATTICES:22
+;
+     hence p in D & q in D iff p"\/"q in D by A2,A3;
+    end;
+   hence thesis by Th15;
+  end;
+
+ reserve I,J for Ideal of L, F for Filter of L;
+
+theorem Th23:
+ p in I implies p"/\"q in I & q"/\"p in I
+  proof p"/\"q [= p & p"/\"q = q"/\"p by LATTICES:23;
+   hence thesis by Th22;
+  end;
+
+theorem
+   ex p st p in I
+  proof consider i being Element of I
+     qua non empty Subset of L;
+      i is Element of L;
+   hence thesis;
+  end;
+
+theorem
+   L is lower-bounded implies Bottom L in I
+  proof assume L is lower-bounded;
+    then Top (L.:) = Bottom L & L.: is upper-bounded by LATTICE2:63,78;
+    then Bottom L in I.: by FILTER_0:12;
+   hence thesis by Def6;
+  end;
+
+theorem
+   L is lower-bounded implies {Bottom L} is Ideal of L
+  proof assume L is lower-bounded;
+    then Top (L.:) = Bottom L & L.: is upper-bounded by LATTICE2:63,78;
+    then {Bottom L} is Filter of L.: by FILTER_0:13;
+   hence thesis by Th21;
+  end;
+
+theorem
+   {p} is Ideal of L implies L is lower-bounded
+  proof assume {p} is Ideal of L;
+    then p = p.: & {p} is Filter of L.: by Def4,Th21;
+    then L.: is upper-bounded by FILTER_0:14;
+   hence L is lower-bounded by LATTICE2:63;
+  end;
+
+begin :: Ideals Generated by Subsets of a Lattice
+
+theorem
+ Th28: the carrier of L is Ideal of L
+  proof carr(L) = carr(L.:) by LATTICE2:18;
+    then carr(L) is Filter of L.: by FILTER_0:15;
+   hence carr(L) is Ideal of L by Th21;
+  end;
+
+ definition let L;
+  func (.L.> -> Ideal of L equals :Def8:
+    the carrier of L;
+   coherence by Th28;
+ end;
+
+ definition let L,p;
+  func (.p.> -> Ideal of L equals :Def9:
+    { q : q [= p };
+   coherence
+    proof set X = { q : q [= p };
+        p in X; then reconsider X as non empty set;
+        X c= carr(L)
+       proof let x; assume x in X; then ex q st x = q & q [= p;
+        hence x in carr(L);
+       end;
+     then reconsider X as non empty Subset of L;
+        now let q,r;
+       thus q in X & r in X implies q"\/"r in X
+         proof assume q in X & r in X;
+           then (ex r st q = r & r [= p) & (ex q st r = q & q [= p);
+           then q"\/"r [= p by FILTER_0:6;
+          hence q"\/"r in X;
+         end;
+       assume q"\/"r in X;
+        then ex s being Element of L st q"\/"r = s & s [= p;
+        then q"\/"r [= p & q [= q"\/"r & r [= r"\/"q & q"\/"r = r"\/"q
+         by LATTICES:22;
+        then r [= p & q [= p by LATTICES:25;
+       hence q in X & r in X;
+      end; hence thesis by Th15;
+    end;
+ end;
+
+theorem Th29:
+ q in (.p.> iff q [= p
+  proof (.p.> = { r: r [= p } by Def9;
+    then q in (.p.> iff ex r st q = r & r [= p;
+   hence thesis;
+  end;
+
+theorem
+ Th30: (.p.> = <.p.:.) & (.p.:.> = <.p.)
+  proof
+      (.p.> = .:<.p.:.)
+     proof let q;
+         (q in (.p.> iff q [= p) & (q.: in <.p.:.) iff p.: [= q.:) &
+       (p.: [= q.: iff q [= p) & p.: = p & q.: = q & .:<.p.:.) = <.p.:.)
+        by Def4,Def7,Th20,Th29,FILTER_0:18;
+      hence thesis;
+     end;
+   hence (.p.> = <.p.:.) by Def7;
+      .:(.p.:.> = <.p.)
+     proof let q;
+         (q.: in (.p.:.> iff q.: [= p.:) & (q in <.p.) iff p [= q) &
+       (p [= q iff q.: [= p.:) & p.: = p & q.: = q & .:(.p.:.> = (.p.:.>
+        by Def4,Def7,Th20,Th29,FILTER_0:18;
+      hence thesis;
+     end;
+   hence (.p.:.> = <.p.) by Def7;
+  end;
+
+theorem
+   p in (.p.> & p "/\" q in (.p.> & q "/\" p in (.p.>
+  proof p [= p & p"/\"q [= p & q"/\"p = p"/\"q by LATTICES:23;
+   hence thesis by Th29;
+  end;
+
+theorem
+   L is upper-bounded implies (.L.> = (.Top L.>
+  proof assume L is upper-bounded;
+    then L.: is lower-bounded & Top L = Bottom (L.:) by LATTICE2:64,79;
+    then <.L.:.) = <.Bottom (L.:).) & <.L.:.) = carr(L.:) & carr(L.:) = carr(L
+) &
+    (.L.> = carr(L) & Bottom (L.:) = (Top L).:
+     by Def4,Def8,FILTER_0:20,def 2,LATTICE2:18;
+   hence thesis by Th30;
+  end;
+
+ definition let L,I;
+  pred I is_max-ideal means
+     I <> the carrier of L & for J st I c= J & J <> the carrier of L
+     holds I = J;
+ end;
+
+theorem
+ Th33: I is_max-ideal iff I.: is_ultrafilter
+  proof
+A1:  I = I.: & carr(L.:) = carr(L) by Def6,LATTICE2:18;
+   thus I is_max-ideal implies I.: is_ultrafilter
+     proof assume
+A2:     I <> carr(L) & for J st I c= J & J <> carr(L) holds I = J;
+      hence I.: <> carr(L.:) by A1;
+      let F be Filter of L.:; .:F = F by Def7;
+      hence thesis by A1,A2;
+     end;
+   assume
+A3:  I.: <> carr(L.:) & for F being Filter of L.: st I.: c= F & F <> carr(L.:)
+     holds I.: = F;
+   hence I <> carr(L) by A1;
+   let J be Ideal of L; J.: = J by Def6;
+   hence thesis by A1,A3;
+  end;
+
+theorem
+   L is upper-bounded implies for I st I <> the carrier of L
+   ex J st I c= J & J is_max-ideal
+  proof assume L is upper-bounded;
+then A1:  L.: is lower-bounded & carr(L) = carr(L.:) by LATTICE2:18,64;
+   let I; assume I <> carr(L);
+    then I.: <> carr(L.:) by A1,Def6;
+   then consider F being Filter of L.: such that
+A2:  I.: c= F & F is_ultrafilter by A1,FILTER_0:22;
+   take .:F; .:F = F & ( .:F).: = .:F & I.: = I by Def6,Def7;
+   hence thesis by A2,Th33;
+  end;
+
+theorem
+   (ex r st p "\/" r <> p) implies (.p.> <> the carrier of L
+  proof given r such that
+A1:  p"\/"r <> p;
+      p"\/"r = p.:"/\"r.: & p = p.: by Def4,Th19;
+    then <.p.:.) <> carr(L.:) & carr(L.:) = carr(L) by A1,FILTER_0:23,LATTICE2:
+18;
+   hence thesis by Th30;
+  end;
+
+theorem
+   L is upper-bounded & p <> Top L implies ex I st p in I & I is_max-ideal
+  proof assume L is upper-bounded;
+then A1:  L.: is lower-bounded & p = p.: & Bottom (L.:
+) = Top L by Def4,LATTICE2:64,79;
+   assume p <> Top L;
+   then consider F being Filter of L.: such that
+A2:  p.: in F & F is_ultrafilter by A1,FILTER_0:24;
+   take .:F; .:F = F & ( .:F).: = .:F by Def6,Def7;
+   hence thesis by A2,Def4,Th33;
+  end;
+
+ reserve D for non empty Subset of L,
+  D' for non empty Subset of L.:;
+
+ definition let L,D;
+  func (.D.> -> Ideal of L means :Def11:
+   D c= it & for I st D c= I holds it c= I;
+   existence
+    proof take I = .:<.D.:.);
+A1:    D.: = D & I = <.D.:.) & D.: c= <.D.:.) &
+      for F being Filter of L.: st D.: c= F holds <.D.:.) c= F
+       by Def6,Def7,FILTER_0:def 5;
+     hence D c= I; let J; J.: = J by Def6;
+     hence thesis by A1;
+    end;
+   uniqueness
+    proof let I1,I2 be Ideal of L such that
+A2:   D c= I1 & for I st D c= I holds I1 c= I and
+A3:   D c= I2 & for I st D c= I holds I2 c= I;
+        I1 c= I2 & I2 c= I1 by A2,A3;
+     hence thesis by XBOOLE_0:def 10;
+    end;
+ end;
+
+Lm1: for L1,L2 being Lattice, D1 being non empty Subset of L1,
+  D2 being non empty Subset of L2
+    st the LattStr of L1 = the LattStr of L2 &
+   D1 = D2 holds <.D1.) = <.D2.) & (.D1.> = (.D2.>
+  proof let L1,L2 be Lattice;
+   let D1 be non empty Subset of L1,
+       D2 be non empty Subset of L2; assume
+A1:  the LattStr of L1 = the LattStr of L2 & D1 = D2;
+    then D1 c= <.D1.) & (for I being Filter of L1 st D1 c= I holds <.D1.) c= I
+) &
+    D2 c= <.D2.) & (for I being Filter of L2 st D2 c= I holds <.D2.) c= I) &
+    <.D1.) is Filter of L2 & <.D2.) is Filter of L1 by Th16,FILTER_0:def 5;
+   hence <.D1.) c= <.D2.) & <.D2.) c= <.D1.) by A1;
+      D1 c= (.D1.> & (for I being Ideal of L1 st D1 c= I holds (.D1.> c= I) &
+    D2 c= (.D2.> & (for I being Ideal of L2 st D2 c= I holds (.D2.> c= I) &
+    (.D1.> is Ideal of L2 & (.D2.> is Ideal of L1 by A1,Def11,Th17;
+   hence (.D1.> c= (.D2.> & (.D2.> c= (.D1.> by A1;
+  end;
+
+theorem
+ Th37: <.D.:.) = (.D.> & <.D.) = (.D.:.> & <..:D'.) = (.D'.> & <.D'.) = (..:
+D'.>
+  proof
+A1:  D = D.: & D.: = D.:.: & D' = .:D' &
+ ( .:D').: = .:D' & ( .:D').:.: = ( .:D').: &
+    the LattStr of L = L.:.: by Def6,Def7,Th7;
+then A2:  <.D.:.:.) = <.D.) & <.( .:D').:.:.) = <..:D'.) & (.( .:D').:
+.> = (.D'.> by Lm1;
+      for L,D holds <.D.:.) = (.D.>
+     proof let L,D;
+         D.: = D & (.D.>.: = (.D.> & .:<.D.:.) = <.D.:.) by Def6,Def7;
+       then D c= (.D.> & (D c= <.D.:.) implies (.D.> c= <.D.:.)) &
+       D c= <.D.:.) & (D c= (.D.> implies <.D.:.) c= (.D.>)
+        by Def11,FILTER_0:def 5;
+      hence thesis by XBOOLE_0:def 10;
+     end;
+   hence thesis by A1,A2;
+  end;
+
+theorem
+ Th38: (.I.> = I
+  proof (.I.> c= I & I c= (.I.> by Def11;
+   hence thesis by XBOOLE_0:def 10;
+  end;
+
+ reserve D1,D2 for non empty Subset of L,
+  D1',D2' for non empty Subset of L.:;
+
+theorem
+   (D1 c= D2 implies (.D1.> c= (.D2.>) & (.(.D.>.> c= (.D.>
+  proof D2 c= (.D2.> by Def11;
+    then D1 c= D2 implies D1 c= (.D2.> by XBOOLE_1:1;
+   hence thesis by Def11;
+  end;
+
+theorem
+   p in D implies (.p.> c= (.D.>
+  proof
+      p = p.: & <.p.:.) = (.p.> & D = D.: & <.D.:.) = (.D.>
+     by Def4,Def6,Th30,Th37;
+   hence thesis by FILTER_0:29;
+  end;
+
+theorem
+   D = {p} implies (.D.> = (.p.>
+  proof
+      p = p.: & <.p.:.) = (.p.> & D = D.: & <.D.:.) = (.D.>
+     by Def4,Def6,Th30,Th37;
+   hence thesis by FILTER_0:30;
+  end;
+
+theorem Th42:
+ L is upper-bounded & Top
+L in D implies (.D.> = (.L.> & (.D.> = the carrier of L
+  proof assume L is upper-bounded;
+then A1:  L.: is lower-bounded & Bottom (L.:) = Top L & D.:
+ = D by Def6,LATTICE2:64,79;
+   assume Top L in D;
+    then <.D.:.) = <.L.:.) & <.D.:.) = carr(L.:) & carr(L.:) = carr(L) & <.D.:
+.) = (.D.>
+     by A1,Th37,FILTER_0:31,LATTICE2:18;
+   hence thesis by Def8;
+  end;
+
+theorem
+   L is upper-bounded & Top L in I implies I = (.L.> & I = the carrier of L
+  proof (.I.> = I by Th38; hence thesis by Th42;
+  end;
+
+ definition let L,I;
+  attr I is prime means
+     p "/\" q in I iff p in I or q in I;
+ end;
+
+theorem Th44:
+ I is prime iff I.: is prime
+  proof
+   thus I is prime implies I.: is prime
+    proof assume
+A1:    p "/\" q in I iff p in I or q in I;
+     let p',q';
+        p'"\/"q' = ( .:p')"/\"( .:q') & .:p' = p' & .:q' = q' & I.: = I
+       by Def5,Def6,Th19;
+     hence thesis by A1;
+    end;
+   assume
+A2:  p'"\/"q' in I.: iff p' in I.: or q' in I.:;
+   let p,q;
+      (p.:)"\/"(q.:) = p"/\"q & p.: = p & q.: = q & I.: = I by Def4,Def6,Th19;
+   hence thesis by A2;
+  end;
+
+ definition let L,D1,D2;
+  func D1 "\/" D2 -> Subset of L equals :Def13:
+    { p"\/"q : p in D1 & q in D2 };
+   coherence
+    proof
+     set X = { p"\/"q : p in D1 & q in D2 };
+        X c= carr(L)
+       proof let x; assume x in X;
+         then ex p,q st x = p"\/"q & p in D1 & q in D2;
+        hence thesis;
+       end; hence thesis;
+    end;
+ end;
+
+ definition let L,D1,D2;
+  cluster D1 "\/" D2 -> non empty;
+   coherence
+    proof
+    consider p1 being Element of D1,
+                   p2 being Element of D2;
+     set X = { p"\/"q : p in D1 & q in D2 };
+        p1"\/"p2 in X;
+     then reconsider X as non empty set;
+       X = D1 "\/" D2 by Def13;
+     hence thesis;
+    end;
+ end;
+
+Lm2: for L1,L2 being Lattice,
+         D1,E1 being non empty Subset of L1,
+  D2,E2 being non empty Subset of L2
+  st the LattStr of L1 = the LattStr of L2 &
+   D1 = D2 & E1 = E2 holds D1"/\"E1 = D2"/\"E2
+  proof let L1,L2 be Lattice, D1,E1 be non empty Subset of L1;
+   let D2,E2 be non empty Subset of L2 such that
+A1:  the LattStr of L1 = the LattStr of L2 & D1 = D2 & E1 = E2;
+   thus D1"/\"E1 c= D2"/\"E2
+     proof let x; assume x in D1"/\"E1;
+      then consider a,b being Element of L1 such that
+A2:     x = a"/\"b & a in D1 & b in E1 by FILTER_0:45;
+      reconsider a' = a, b' = b as Element of L2 by A1;
+         x = a'"/\"b' by A1,A2,Th8;
+      hence thesis by A1,A2,FILTER_0:44;
+     end;
+   let x; assume x in D2"/\"E2;
+   then consider a,b being Element of L2 such that
+A3:  x = a"/\"b & a in D2 & b in E2 by FILTER_0:45;
+   reconsider a' = a, b' = b as Element of L1 by A1;
+      x = a'"/\"b' by A1,A3,Th8;
+   hence thesis by A1,A3,FILTER_0:44;
+  end;
+
+theorem
+ Th45: D1 "\/" D2 = D1.: "/\" D2.: & D1.: "\/" D2.: = D1 "/\" D2 &
+   D1' "\/" D2' = .:D1' "/\" .:D2' & .:D1' "\/" .:D2' = D1' "/\" D2'
+  proof
+A1:  for L,D1,D2 holds D1"\/"D2 = D1.:"/\"D2.:
+     proof let L,D1,D2;
+A2:     D1"\/"D2 = { p"\/"q: p in D1 & q in D2} &
+       D1.:"/\"D2.: = { p'"/\"q': p' in D1.: & q' in D2.:
+} by Def13,FILTER_0:def 9;
+A3:     D1 = D1.: & D2 = D2.: by Def6;
+      thus D1"\/"D2 c= D1.:"/\"D2.:
+        proof let x; assume x in D1"\/"D2;
+         then consider p,q such that
+A4:        x = p"\/"q & p in D1 & q in D2 by A2;
+            p = p.: & q = q.: & p"\/"q = p.:"/\"q.: by Def4,Th19;
+         hence thesis by A2,A3,A4;
+        end;
+      thus D1.:"/\"D2.: c= D1"\/"D2
+        proof let x; assume x in D1.:"/\"D2.:;
+         then consider p',q' such that
+A5:        x = p'"/\"q' & p' in D1 & q' in D2 by A2,A3;
+            p' = .:p' & q' = .:q' & .:p'"\/".:q' = p'"/\"q' by Def5,Th19;
+         hence thesis by A2,A5;
+        end;
+     end;
+A6:  the LattStr of L = L.:.: &
+    D1.: = D1 & D1.:.: = D1.: & D2.: = D2 & D2.:.: = D2.: & .:D1' = D1' &
+  ( .:D1').: = .:D1' & .:D2' = D2' & ( .:D2').: = .:D2' & D1'.: = D1' & D2'.:
+ = D2'
+     by Def6,Def7,Th7;
+   then D1.:.: "/\" D2.:.: = D1 "/\" D2 & D1'.: "/\" D2'.: = .:D1' "/\" .:
+D2' by Lm2;
+   hence thesis by A1,A6;
+  end;
+
+theorem
+   p in D1 & q in D2 implies p"\/"q in D1 "\/" D2 & q"\/"p in D1 "\/" D2
+  proof
+      D1"\/"D2 = { p1"\/"p2 where p1 is Element of carr(L),
+               p2 is Element of carr(L): p1 in D1 & p2 in D2} &
+    p"\/"q = q"\/"p by Def13;
+   hence thesis;
+  end;
+
+theorem
+   x in D1 "\/" D2 implies ex p,q st x = p"\/"q & p in D1 & q in D2
+  proof
+      D1"\/"D2 = { p"\/"q : p in D1 & q in D2 } by Def13;
+   hence thesis;
+  end;
+
+theorem
+   D1 "\/" D2 = D2 "\/" D1
+  proof
+A1:  D1"\/"D2 = { p"\/"q : p in D1 & q in D2 } by Def13;
+A2:  D2"\/"D1 = { p"\/"q : p in D2 & q in D1 } by Def13;
+   let r;
+   thus r in D1"\/"D2 implies r in D2"\/"D1
+     proof assume r in D1"\/"D2;
+      then consider p,q such that
+A3:     r = p"\/"q & p in D1 & q in D2 by A1;
+      thus thesis by A2,A3;
+     end;
+   assume r in D2"\/"D1;
+   then consider p,q such that
+A4:  r = p"\/"q & p in D2 & q in D1 by A2;
+   thus thesis by A1,A4;
+  end;
+
+ definition let L be D_Lattice; let I1,I2 be Ideal of L;
+  redefine func I1 "\/" I2 -> Ideal of L;
+   coherence
+    proof
+     reconsider K = L.: as D_Lattice by LATTICE2:65;
+     reconsider J1 = I1.:, J2 = I2.: as Filter of K;
+        I1"\/"I2 = I1.:"/\"I2.: & J1"/\"J2 = (J1"/\"J2).: & the LattStr of L =
+L.:.: by Def6,Th7,Th45;
+     hence I1"\/"I2 is Ideal of L by Th17;
+    end;
+ end;
+
+theorem
+   (.D1 \/ D2.> = (.(.D1.> \/ D2.> & (.D1 \/ D2.> = (.D1 \/ (.D2.>.>
+  proof
+      (.(.D1.> \/ D2.> = <.((.D1.> \/ D2).:.) & (.D1.> = <.D1.:.) &
+    (.D1 \/ (.D2.>.> = <.(D1 \/ (.D2.>).:.) & (.D2.> = <.D2.:.) &
+    (.D1 \/ D2.> = <.(D1 \/ D2).:.) & (D1 \/ (.D2.>).: = D1 \/ (.D2.> &
+    (D1 \/ D2).: = D1 \/ D2 & D1.: = D1 & D2.: = D2 &
+    ((.D1.> \/ D2).: = (.D1.> \/ D2 & (.D1.>.: = (.D1.> & (.D2.>.: = (.D2.>
+     by Def6,Th37;
+   hence (.D1 \/ D2.> = (.(.D1.> \/ D2.> & (.D1 \/ D2.> = (.D1 \/ (.D2.>.>
+     by FILTER_0:47;
+  end;
+
+theorem
+   (.I \/ J.> = { r : ex p,q st r [= p"\/"q & p in I & q in J }
+  proof
+     (.I \/ J.> = <.(I \/ J).:.) & (I \/ J).: = I \/ J & I.: = I & J.: = J
+    by Def6,Th37;
+then A1: (.I \/ J.> = { r': ex p',q' st p'"/\"q' [= r' & p' in I & q' in J }
+     by FILTER_0:48;
+   thus (.I \/ J.> c= { r : ex p,q st r [= p"\/"q & p in I & q in J }
+     proof let x; assume x in (.I \/ J.>;
+      then consider r' such that
+A2:     x = r' & ex p',q' st p'"/\"q' [= r' & p' in I & q' in J by A1;
+      consider p',q' such that
+A3:     p'"/\"q' [= r' & p' in I & q' in J by A2;
+         .:r' [= .:(p'"/\"q') & .:(p'"/\"q') = p'"/\"q' & p'"/\"q' = .:p'"\/".:
+q' &
+       .:p' = p' & .:q' = q' & .:r' = r' by A3,Def5,Th19,Th20;
+      hence thesis by A2,A3;
+     end;
+   let x; assume x in { r : ex p,q st r [= p"\/"q & p in I & q in J };
+   then consider r such that
+A4:  x = r & ex p,q st r [= p"\/"q & p in I & q in J;
+   consider p,q such that
+A5:  r [= p"\/"q & p in I & q in J by A4;
+      (p"\/"q).: [= r.: & (p"\/"q).: = p"\/"q & p"\/"q = p.:"/\"
+q.: & p.: = p & q.: = q & r.: = r
+     by A5,Def4,Th19,Th20;
+   hence thesis by A1,A4,A5;
+  end;
+
+theorem
+   I c= I "\/" J & J c= I "\/" J
+  proof I"\/"J = I.:"/\"J.: & I.: = I & J.: = J by Def6,Th45;
+   hence thesis by FILTER_0:49;
+  end;
+
+theorem
+   (.I \/ J.> = (.I "\/" J.>
+  proof
+      (.I \/ J.> = <.(I \/ J).:.) & (I \/ J).: = I \/ J & I.: = I & J.: = J &
+    I.:"/\"J.: = I"\/"J & (I"\/"J).: = I"\/"J & (.I"\/"J.> = <.(I"\/"J).:.)
+     by Def6,Th37,Th45;
+   hence thesis by FILTER_0:50;
+  end;
+
+ reserve B for B_Lattice, I_B,J_B for Ideal of B,
+    a,b for Element of B;
+
+theorem
+ Th53: L is C_Lattice iff L.: is C_Lattice
+  proof
+    A1: (L is bounded iff L is lower-bounded & L is upper-bounded) &
+    (L.: is bounded iff L.: is lower-bounded & L.: is upper-bounded) &
+    (L is lower-bounded iff L.: is upper-bounded) &
+    (L is upper-bounded iff L.: is lower-bounded)
+     by LATTICE2:63,64,LATTICES:def 15;
+   thus L is C_Lattice implies L.: is C_Lattice
+     proof assume A2: L is C_Lattice;
+         now let p';
+        consider q such that
+A3:       q is_a_complement_of .:p' by A2,LATTICES:def 19;
+        take r = q.:;
+           L is lower-bounded & L is upper-bounded & .:(q.:) = q & q"\/".:
+p' = Top L &
+         q"/\".:p' = Bottom L by A2,A3,Th18,LATTICES:def 18;
+         then q.:"/\"p' = Top L & q.:"\/"p' = Bottom L & Top (L.:
+) = Bottom L & Bottom (L.:) = Top L
+          by Th19,LATTICE2:78,79;
+        hence r is_a_complement_of p' by LATTICES:def 18;
+       end;
+      hence thesis by A1,A2,LATTICES:def 19;
+     end;
+   assume A4: L.: is C_Lattice;
+      now let p;
+     consider q' such that
+A5:    q' is_a_complement_of p.: by A4,LATTICES:def 19;
+     take r = .:q';
+        L is lower-bounded & L is upper-bounded & .:(p.:) = p & q'"\/"p.: = Top
+(L.:) &
+      q'"/\"p.: = Bottom (L.:) by A4,A5,Th18,LATTICE2:63,64,LATTICES:def 18;
+      then .:q'"/\"p = Top (L.:) & .:q'"\/"p = Bottom (L.:) & Top (L.:
+) = Bottom L &
+Bottom (L.:) = Top L
+       by Th19,LATTICE2:78,79;
+     hence r is_a_complement_of p by LATTICES:def 18;
+    end;
+   hence thesis by A1,A4,LATTICES:def 19;
+  end;
+
+theorem Th54:
+ L is B_Lattice iff L.: is B_Lattice
+  proof
+      (L is C_Lattice iff L.: is C_Lattice) &
+    (L is distributive iff L.: is distributive) &
+    (L is C_Lattice & L is distributive iff L is B_Lattice) &
+    (L.: is C_Lattice & L.: is distributive iff L.: is B_Lattice)
+     by Th53,LATTICE2:65,LATTICES:def 20;
+   hence thesis;
+  end;
+
+
+definition let B be B_Lattice;
+ cluster B.: -> Boolean Lattice-like;
+  coherence by Th54;
+end;
+
+reserve a' for Element of (B qua Lattice).:;
+
+Lm3: a.:` = a`
+  proof
+      Top (B.:) = Bottom B & Top B = Bottom
+(B.:) & a.:`"\/"a.: = Top (B.:) & a.:`"/\"a.: = Bottom (B.:)
+     by LATTICE2:78,79,LATTICES:47,48;
+then A1:  .:(a.:`)"\/".:(a.:) = Top
+B & .:(a.:`)"/\".:(a.:) = Bottom B & .:(a.:) = a.: & .:(a.:`) = a.:` &
+    a.: = a by Def4,Def5,Th19;
+    then .:(a.:`) is_a_complement_of a by LATTICES:def 18;
+   hence thesis by A1,LATTICES:def 21;
+  end;
+
+theorem Th55:
+ a.:` = a` & ( .:a')` = a'`
+  proof ( .:a').: = .:a' & .:a' = a' by Def4,Def5;
+   hence thesis by Lm3;
+  end;
+
+theorem
+   (.I_B \/ J_B.> = I_B "\/" J_B
+  proof
+   reconsider FB = I_B.:, GB = J_B.: as Filter of B.:;
+A1:  FB = I_B & GB = J_B by Def6;
+   thus (.I_B \/ J_B.> = <.(I_B \/ J_B).:.) by Th37
+         .= <.FB \/ GB.) by A1,Def6
+         .= FB"/\"GB by FILTER_0:52
+         .= I_B "\/" J_B by Th45;
+  end;
+
+theorem
+   I_B is_max-ideal iff
+   I_B <> the carrier of B & for a holds a in I_B or a` in I_B
+  proof
+   reconsider FB = I_B.: as Filter of B.:;
+A1:  FB is_ultrafilter iff FB <> carr(B.:) &
+     for a being Element of B.: holds a in FB or a` in FB
+       by FILTER_0:57;
+A2:  FB = I_B & carr(B) = carr(B.:) by Def6,LATTICE2:18;
+   thus I_B is_max-ideal implies I_B <> carr(B) &
+    for a holds a in I_B or a` in I_B
+     proof assume
+A3:     I_B is_max-ideal;
+      hence I_B <> carr(B) by A1,A2,Th33;
+      let a; reconsider b = a as Element of B.: by LATTICE2:18;
+         b in FB or b` in FB & a.:` = a` by A1,A3,Th33,Th55;
+      hence thesis by A2,Def4;
+     end;
+   assume
+A4:  I_B <> carr(B) & for a holds a in I_B or a` in I_B;
+      now let a be Element of B.:;
+    reconsider b = a as Element of B by LATTICE2:18;
+        b in FB or b` in FB &
+      ( .:(a qua Element of (B qua Lattice).:))` = a`
+       by A2,A4,Th55;
+     hence a in FB or a` in FB by Def5;
+    end;
+   hence thesis by A1,A2,A4,Th33;
+  end;
+
+theorem
+   I_B <> (.B.> & I_B is prime iff I_B is_max-ideal
+  proof
+   reconsider F = I_B.: as Filter of B.:;
+      <.B.:.) = carr(B.:) by FILTER_0:def 2 .= carr(B) by LATTICE2:18
+        .= (.B.> by Def8;
+    then F <> (.B.> & F is prime iff F is_ultrafilter by FILTER_0:58;
+hence thesis by Def6,Th33,Th44;
+  end;
+
+theorem
+   I_B is_max-ideal implies for a holds a in I_B iff not a` in I_B
+  proof
+   reconsider FB = I_B.: as Filter of B.:;
+   assume I_B is_max-ideal;
+    then FB is_ultrafilter by Th33;
+then A1:  FB = I_B & for a' holds a' in FB iff not a'` in FB by Def6,FILTER_0:
+59;
+   let a; a.: = a & a.:` = a` by Def4,Lm3;
+   hence thesis by A1;
+  end;
+
+theorem
+   a <> b implies ex I_B st I_B is_max-ideal &
+   (a in I_B & not b in I_B or not a in I_B & b in I_B)
+  proof
+A1:  a.: = a & b.: = b by Def4;
+   assume a <> b;
+   then consider FB being Filter of B.: such that
+A2:  FB is_ultrafilter & (a.: in FB & not b.: in FB or not a.: in FB & b.:
+ in FB)
+     by A1,FILTER_0:60;
+   take IB = .:(FB qua Filter of (B qua Lattice).:);
+      IB.: = .:(FB qua Subset of (B qua Lattice).:) by Def6 .=
+FB
+    by Def7;
+   hence IB is_max-ideal by A2,Th33;
+    thus thesis by A1,A2,Def7;
+  end;
+
+ reserve P for non empty ClosedSubset of L,
+  o1,o2 for BinOp of P;
+
+theorem
+ Th61: (the L_join of L)|[:P,P:] is BinOp of P &
+  (the L_meet of L)|[:P,P:] is BinOp of P
+  proof
+      [:P,P:] c= [:carr(L),carr(L):] & dom join(L) = [:carr(L),carr(L):] &
+    dom met(L) = [:carr(L),carr(L):] by FUNCT_2:def 1;
+then A1:  dom (join(L)|[:P,P:]) = [:P,P:] &
+    dom (met(L)|[:P,P:]) = [:P,P:] by RELAT_1:91;
+      rng (join(L)|[:P,P:]) c= P
+     proof let x; assume x in rng (join(L)|[:P,P:]);
+      then consider y such that
+A2:     y in [:P,P:] & x = (join(L)|[:P,P:]).y by A1,FUNCT_1:def 5;
+      consider p1,p2 being Element of P such that
+A3:     y = [p1,p2] by A2,DOMAIN_1:9;
+         x = join(L).[p1,p2] by A1,A2,A3,FUNCT_1:70
+        .= join(L).(p1,p2) by BINOP_1:def 1
+        .= p1"\/"p2 by LATTICES:def 1;
+      hence thesis by LATTICE4:def 10;
+     end;
+   hence join(L)|[:P,P:] is BinOp of P by A1,FUNCT_2:def 1,RELSET_1:11;
+      rng (met(L)|[:P,P:]) c= P
+     proof let x; assume x in rng (met(L)|[:P,P:]);
+      then consider y such that
+A4:     y in [:P,P:] & x = (met(L)|[:P,P:]).y by A1,FUNCT_1:def 5;
+      consider p1,p2 being Element of P such that
+A5:     y = [p1,p2] by A4,DOMAIN_1:9;
+         x = met(L).[p1,p2] by A1,A4,A5,FUNCT_1:70
+        .= met(L).(p1,p2) by BINOP_1:def 1
+        .= p1"/\"p2 by LATTICES:def 2;
+      hence thesis by LATTICE4:def 10;
+     end;
+   hence met(L)|[:P,P:] is BinOp of P by A1,FUNCT_2:def 1,RELSET_1:11;
+  end;
+
+theorem Th62:
+ o1 = (the L_join of L)|[:P,P:] & o2 = (the L_meet of L)|[:P,P:] implies
+  o1 is commutative & o1 is associative &
+   o2 is commutative & o2 is associative &
+    o1 absorbs o2 & o2 absorbs o1
+  proof
+      join(L) is commutative & join(L) is associative &
+    met(L) is commutative & met(L) is associative &
+    join(L) absorbs met(L) & met(L) absorbs join(L)
+     by LATTICE2:40,41;
+   hence thesis by Th1,Th5;
+  end;
+
+ definition let L,p,q; assume
+A1: p [= q;
+  func [#p,q#] -> non empty ClosedSubset of L equals :Def14:
+    {r: p [= r & r [= q};
+   coherence
+    proof set P = {r: p [= r & r [= q};
+        p in P by A1;
+     then reconsider P as non empty set;
+        P c= carr(L)
+       proof let x be set; assume x in P;
+         then ex r st x = r & p [= r & r [= q; hence thesis;
+       end;
+     then reconsider P as non empty Subset of L;
+        P is ClosedSubset of L
+       proof let p1,p2 be Element of L;
+        assume p1 in P & p2 in P;
+         then (ex r st p1 = r & p [= r & r [= q) &
+         (ex r st p2 = r & p [= r & r [= q);
+         then p [= p1"\/"p2 & p [= p1"/\"p2 & p1"\/"p2 [= q & p1"/\"p2 [= q
+          by FILTER_0:2,3,6,7;
+        hence p1"/\"p2 in P & p1"\/"p2 in P;
+       end;
+     hence thesis;
+    end;
+ end;
+
+theorem Th63:
+ p [= q implies (r in [#p,q#] iff p [= r & r [= q)
+  proof assume p [= q;
+    then [#p,q#] = {s where s is Element of L: p [= s & s [= q}
+    by Def14;
+    then r in [#p,q#] iff ex s being Element of L
+    st r = s & p [= s & s [= q;
+   hence thesis;
+  end;
+
+theorem
+  p [= q implies p in [#p,q#] & q in [#p,q#] by Th63;
+
+theorem
+   [#p,p#] = {p}
+  proof let q;
+   hereby assume q in [#p,p#];
+      then p [= q & q [= p by Th63;
+      then q = p by LATTICES:26;
+     hence q in {p} by TARSKI:def 1;
+    end;
+      p in [#p,p#] by Th63;
+   hence thesis by TARSKI:def 1;
+  end;
+
+theorem
+   L is upper-bounded implies <.p.) = [#p,Top L#]
+  proof assume
+A1:  L is upper-bounded;
+   let q;
+      p [= Top L & q [= Top L by A1,LATTICES:45;
+    then (q in <.p.) iff p [= q) & (q in [#p,Top
+L#] iff p [= q) by Th63,FILTER_0:18;
+   hence thesis;
+  end;
+
+theorem
+   L is lower-bounded implies (.p.> = [#Bottom L,p#]
+  proof assume
+A1:  L is lower-bounded;
+   let q;
+      Bottom L [= p & Bottom L [= q by A1,LATTICES:41;
+    then (q in (.p.> iff q [= p) & (q in [#Bottom L,p#] iff q [= p) by Th29,
+Th63;
+   hence thesis;
+  end;
+
+theorem
+   for L1,L2 being Lattice
+  for F1 being Filter of L1, F2 being Filter of L2 st
+   the LattStr of L1 = the LattStr of L2 & F1 = F2 holds latt F1 = latt F2
+  proof let L1,L2 be Lattice, F1 be Filter of L1, F2 be Filter of L2;
+   consider o1,o2 being BinOp of F1 such that
+A1:  o1 = (the L_join of L1)|([:F1,F1:] qua set) &
+    o2 = (the L_meet of L1)|([:F1,F1:] qua set) &
+    latt F1 = LattStr (#F1, o1, o2#) by FILTER_0:def 10;
+   consider p1,p2 being BinOp of F2 such that
+A2:  p1 = (the L_join of L2)|([:F2,F2:] qua set) &
+    p2 = (the L_meet of L2)|([:F2,F2:] qua set) &
+    latt F2 = LattStr (#F2, p1, p2#) by FILTER_0:def 10;
+   thus thesis by A1,A2;
+  end;
+
+begin :: Sublattices
+
+definition let L;
+ redefine mode SubLattice of L means :Def15:
+   ex P,o1,o2 st o1 = (the L_join of L)|[:P,P:] &
+    o2 = (the L_meet of L)|[:P,P:] & the LattStr of it = LattStr (#P, o1, o2#);
+  compatibility
+   proof let K be Lattice;
+    thus K is SubLattice of L implies
+      ex P,o1,o2 st o1 = (the L_join of L)|[:P,P:] &
+       o2 = (the L_meet of L)|[:P,P:] & the LattStr of K = LattStr(#P,o1,o2#)
+      proof assume A1: K is SubLattice of L;
+then A2:      carr(K) c= carr(L) & join(K) = join(L)|[:carr(K), carr(K):] &
+        met(K) = met(L)|[:carr(K), carr(K):] by NAT_LAT:def 16;
+       reconsider P = carr(K) as non empty Subset of L by A1,
+NAT_LAT:def 16;
+          P is ClosedSubset of L
+         proof let p,q be Element of L; assume p in P & q in P;
+         then [p,q] in [:P,P:] & dom join(K) = [:P,P:] & dom met(K) = [:P,P:]
+            by FUNCT_2:def 1,ZFMISC_1:106;
+           then join(L).(p,q) = join(L).[p,q] & met(L).(p,q) = met(L).[p,q] &
+           join(L).[p,q] = join(K).[p,q] & met(L).[p,q] = met(K).[p,q] &
+           join(K).[p,q] in P & met(K).[p,q] in P
+            by A2,BINOP_1:def 1,FUNCT_1:70,FUNCT_2:7;
+          hence thesis by LATTICES:def 1,def 2;
+         end;
+       then reconsider P as non empty ClosedSubset of L;
+       take P;
+       reconsider o1 = join(K), o2 = met(K) as BinOp of P;
+       take o1, o2;
+       thus thesis by A1,NAT_LAT:def 16;
+      end;
+    given P,o1,o2 such that
+A3:   o1 = (the L_join of L)|[:P,P:] &
+     o2 = (the L_meet of L)|[:P,P:] & the LattStr of K = LattStr (#P, o1, o2#);
+    thus K is SubLattice of L by A3,NAT_LAT:def 16;
+   end;
+ synonym Sublattice of L;
+end;
+
+theorem Th69:
+ for K being Sublattice of L, a being Element of K
+ holds a is Element of L
+  proof let K be Sublattice of L; carr(K) c= carr(L) by NAT_LAT:def 16;
+   hence thesis by TARSKI:def 3;
+  end;
+
+ definition let L,P;
+  func latt (L,P) -> Sublattice of L means :Def16:
+   ex o1,o2 st o1 = (the L_join of L)|[:P,P:] &
+    o2 = (the L_meet of L)|[:P,P:] & it = LattStr (#P, o1, o2#);
+   existence
+    proof
+     reconsider o1 = join(L)|[:P,P:], o2 = met(L)|[:P,P:] as BinOp of P
+       by Th61;
+        o1 = join(L)|[:P,P:] & o2 = met(L)|[:P,P:];
+      then o1 is commutative associative & o2 is commutative associative &
+      o1 absorbs o2 & o2 absorbs o1 by Th62;
+     then reconsider K = LattStr (#P, o1, o2#) as strict Lattice by LATTICE2:17
+;
+     reconsider K as strict Sublattice of L by NAT_LAT:def 16;
+     take K,o1,o2; thus thesis;
+    end;
+   uniqueness;
+ end;
+
+ definition let L,P;
+  cluster latt (L,P) -> strict;
+   coherence
+    proof
+      consider o1,o2 such that
+         o1 = (the L_join of L)|[:P,P:] & o2 = (the L_meet of L)|[:P,P:] and
+A1:     latt(L,P) = LattStr (#P, o1, o2#) by Def16;
+     thus thesis by A1;
+    end;
+ end;
+
+definition let L; let l be Sublattice of L;
+ redefine func l.: -> strict Sublattice of L.:;
+  coherence
+   proof consider P, o1, o2 such that
+A1:   o1 = join(L)|[:P,P:] & o2 = met(L)|[:P,P:] &
+     the LattStr of l = LattStr (#P, o1, o2#) by Def15;
+       l.: is Sublattice of L.:
+      proof take P.:;
+          P.: = P & l.: = LattStr (#P, o2, o1#) & join(L.:) = met(L) &
+        met(L.:) = join(L) by A1,Def6,LATTICE2:18,def 2;
+       hence thesis by A1;
+      end;
+    hence thesis;
+   end;
+end;
+
+theorem Th70:
+ latt F = latt (L,F)
+  proof
+      ex o1, o2 being BinOp of F st o1 = join(L)|([:F,F:] qua set) &
+    o2 = met(L)|([:F,F:] qua set) & latt (L,F) = LattStr (#F, o1, o2#)
+     by Def16;
+   hence thesis by FILTER_0:def 10;
+  end;
+
+theorem Th71:
+ latt (L,P) = (latt (L.:,P.:)).:
+  proof consider o1, o2 such that
+A1:  o1 = join(L)|[:P,P:] & o2 = met(L)|[:P,P:] &
+     latt (L,P) = LattStr (#P, o1, o2#) by Def16;
+   consider o3, o4 being BinOp of P.: such that
+A2:  o3 = join(L.:)|[:P.:,P.: :] & o4 = met(L.:)|[:P.:,P.: :] &
+    latt (L.:,P.:) = LattStr (#P.:, o3, o4#) by Def16;
+      (latt (L.:,P.:)).: = LattStr (#P.:, o4, o3#) & P.: = P & met(L.:
+) = join(L) &
+    met(L) = join(L.:) by A2,Def6,LATTICE2:18,def 2;
+   hence thesis by A1,A2;
+  end;
+
+theorem
+   latt (L,(.L.>) = the LattStr of L & latt (L,<.L.)) = the LattStr of L
+  proof consider o1,o2 being BinOp of (.L.> such that
+A1:  o1 = (the L_join of L)|[:(.L.>,(.L.>:] &
+    o2 = (the L_meet of L)|[:(.L.>,(.L.>:] &
+    latt (L,(.L.>) = LattStr (#(.L.>, o1, o2#) by Def16;
+A2:  dom join(L) = [:carr(L), carr(L):] & dom met(L) = [:carr(L), carr(L):]
+     by FUNCT_2:def 1;
+A3:  join(L)|dom join(L) = join(L) & met(L)|dom met(L) = met(L) by RELAT_1:97;
+      <.L.) = carr(L) & (.L.> = carr(L) by Def8,FILTER_0:def 2;
+   hence thesis by A1,A2,A3;
+  end;
+
+theorem Th73:
+ the carrier of latt (L,P) = P &
+ the L_join of latt (L,P) = (the L_join of L)|[:P,P:] &
+ the L_meet of latt (L,P) = (the L_meet of L)|[:P,P:]
+  proof
+      ex o1, o2 st o1 = join(L)|[:P,P:] & o2 = met(L)|[:P,P:] &
+     latt (L,P) = LattStr (#P, o1, o2#) by Def16;
+   hence thesis;
+  end;
+
+theorem Th74:
+ for p,q for p',q' being Element of latt (L,P) st
+   p = p' & q = q' holds p"\/"q = p'"\/"q' & p"/\"q = p'"/\"q'
+  proof let p,q; let p',q' be Element of latt (L,P); assume
+A1:  p = p' & q = q';
+   consider o1, o2 such that
+A2:  o1 = join(L)|[:P,P:] & o2 = met(L)|[:P,P:] &
+     latt (L,P) = LattStr (#P, o1, o2#) by Def16;
+A3:  dom o1 = [:P,P:] & dom o2 = [:P,P:] & [p',q'] in [:P,P:]
+     by A2,FUNCT_2:def 1;
+   thus p"\/"q = join(L).(p,q) by LATTICES:def 1
+            .= join(L).[p,q] by BINOP_1:def 1
+            .= o1.[p',q'] by A1,A2,A3,FUNCT_1:70
+            .= o1.(p',q') by BINOP_1:def 1
+            .= p'"\/"q' by A2,LATTICES:def 1;
+   thus p"/\"q = met(L).(p,q) by LATTICES:def 2
+            .= met(L).[p,q] by BINOP_1:def 1
+            .= o2.[p',q'] by A1,A2,A3,FUNCT_1:70
+            .= o2.(p',q') by BINOP_1:def 1
+            .= p'"/\"q' by A2,LATTICES:def 2;
+  end;
+
+theorem Th75:
+ for p,q for p',q' being Element of latt (L,P) st
+   p = p' & q = q' holds p [= q iff p' [= q'
+  proof let p,q; let p',q' be Element of latt(L,P); assume
+A1:  p = p' & q = q';
+   thus p [= q implies p' [= q'
+     proof assume p"\/"q = q; hence p'"\/"q' = q' by A1,Th74; end;
+   assume p'"\/"q' = q'; hence p"\/"q = q by A1,Th74;
+  end;
+
+theorem
+   L is lower-bounded implies latt (L,I) is lower-bounded
+  proof given c being Element of L such that
+A1:  for a being Element of L holds c"/\"a = c & a"/\"c = c;
+   consider b' being Element of latt (L,I);
+   reconsider b = b' as Element of L by Th69;
+      carr(latt (L,I)) = I & c"/\"b = c by A1,Th73;
+   then reconsider c' = c as Element of latt (L,I) by Th23;
+   take c'; let a' be Element of latt (L,I);
+   reconsider a = a' as Element of L by Th69;
+   thus c'"/\"a' = c"/\"a by Th74 .= c' by A1;
+   hence a'"/\"c' = c';
+  end;
+
+theorem
+   L is modular implies latt (L,P) is modular
+  proof assume
+A1:  for a,b,c being Element of L st a [= c
+holds a"\/"(b"/\"c) = (a"\/"b)"/\"c;
+   let a',b',c' be Element of latt (L,P);
+   reconsider a = a', b = b', c = c', bc = b'"/\"c', ab = a'"\/"b'
+     as Element of L by Th69;
+   assume a' [= c';
+then A2:  a [= c by Th75;
+   thus a'"\/"(b'"/\"c') = a"\/"bc by Th74
+       .= a"\/"(b"/\"c) by Th74 .= (a"\/"b)"/\"c by A1,A2
+       .= ab"/\"c by Th74
+       .= (a'"\/"b')"/\"c' by Th74;
+  end;
+
+theorem Th78:
+ L is distributive implies latt (L,P) is distributive
+  proof assume
+A1:  for a,b,c being Element of L
+holds a"/\"(b"\/"c) = (a"/\"b)"\/"(a"/\"c);
+   let a',b',c' be Element of latt (L,P);
+   reconsider a = a', b = b', c = c', bc = b'"\/"c', ab = a'"/\"b', ac = a'"/\"
+c'
+     as Element of L by Th69;
+   thus a'"/\"(b'"\/"c') = a"/\"bc by Th74 .= a"/\"(b"\/"c) by Th74
+     .= (a"/\"b)"\/"(a"/\"c) by A1 .= ab"\/"(a"/\"c) by Th74 .= ab"\/"
+ac by Th74
+     .= (a'"/\"b')"\/"(a'"/\"c') by Th74;
+  end;
+
+theorem
+   L is implicative & p [= q implies latt (L,[#p,q#]) is implicative
+  proof assume A1: L is implicative;
+then A2:  L is I_Lattice; assume
+A3:  p [= q;
+   set P = [#p,q#], K = latt (L,P);
+A4:  carr(K) = P by Th73;
+   let a',b' be Element of latt (L,P);
+   reconsider a = a', b = b' as Element of L by Th69;
+A5:  a [= q & p [= a & b [= q & p [= b by A3,A4,Th63;
+   set c = a => b;
+   set d = (c"\/"p)"/\"q;
+      p [= c"\/"p by LATTICES:22;
+    then d [= q & p [= d by A3,FILTER_0:7,LATTICES:23;
+   then reconsider d' = d as Element of K by A3,A4,Th63;
+   take d';
+A6:  p"\/"(c"/\"a) = (p"\/"c)"/\"a & (p"\/"c)"/\"a"/\"q = a"/\"d & a"/\"d = a'
+"/\"d'
+     by A2,A5,Th74,LATTICES:def 7,def 12;
+      a"/\"c [= b by A1,FILTER_0:def 8;
+    then p"\/"(a"/\"c) [= b by A5,FILTER_0:6;
+    then (p"\/"(a"/\"c))"/\"q [= b by FILTER_0:2;
+   hence a'"/\"d' [= b' by A6,Th75;
+   let e' be Element of K;
+   reconsider e = e', ae = a'"/\"e' as Element of L by Th69;
+   assume a'"/\"e' [= b'; then ae [= b by Th75;
+    then a"/\"e [= b & p [= e by A3,A4,Th63,Th74;
+    then e [= c & e = e"\/"p & e [= q
+     by A1,A3,A4,Th63,FILTER_0:def 8,LATTICES:def 3;
+    then e [= c"\/"p & e = e"/\"q by FILTER_0:1,LATTICES:21;
+    then e [= d by LATTICES:27;
+   hence e' [= d' by Th75;
+  end;
+
+theorem Th80:
+ latt (L,(.p.>) is upper-bounded
+  proof
+A1:  (.p.>.: = (.p.> by Def6;
+A2:  latt (L,(.p.>) = (latt (L.:,(.p.>.:)).: by Th71
+                  .= (latt (L.:,<.p.:.))).: by A1,Th30
+                  .= (latt <.p.:.)).: by Th70;
+      latt <.p.:.) is lower-bounded by FILTER_0:70;
+   hence thesis by A2,LATTICE2:63;
+  end;
+
+theorem Th81:
+ Top latt (L,(.p.>) = p
+  proof
+A1:  (.p.>.: = (.p.> by Def6;
+A2:  latt <.p.:.) is lower-bounded by FILTER_0:70;
+      latt (L,(.p.>) = (latt (L.:,(.p.>.:)).: by Th71
+                  .= (latt (L.:,<.p.:.))).: by A1,Th30
+                  .= (latt <.p.:.)).: by Th70;
+   hence Top latt (L,(.p.>) = Bottom latt <.p.:.) by A2,LATTICE2:78
+     .= p.: by FILTER_0:71 .= p by Def4;
+  end;
+
+theorem Th82:
+ L is lower-bounded implies
+   latt (L,(.p.>) is lower-bounded & Bottom latt (L,(.p.>) = Bottom L
+  proof
+A1:  (.p.>.: = (.p.> by Def6;
+A2:  latt (L,(.p.>) = (latt (L.:,(.p.>.:)).: by Th71
+                  .= (latt (L.:,<.p.:.))).: by A1,Th30
+                  .= (latt <.p.:.)).: by Th70;
+   assume
+A3:  L is lower-bounded;
+then A4:  L.: is upper-bounded by LATTICE2:63;
+then A5:  latt <.p.:.) is upper-bounded by FILTER_0:66;
+   hence latt (L,(.p.>) is lower-bounded by A2,LATTICE2:64;
+      Top latt <.p.:.) = Top (L.:) by A4,FILTER_0:72;
+   hence Bottom latt (L,(.p.>) = Top (L.:) by A2,A5,LATTICE2:79
+        .= Bottom L by A3,LATTICE2:78;
+  end;
+
+theorem Th83:
+ L is lower-bounded implies latt (L,(.p.>) is bounded
+  proof assume L is lower-bounded;
+    then latt (L,(.p.>) is lower-bounded upper-bounded Lattice by Th80,Th82;
+   hence thesis;
+  end;
+
+theorem Th84:
+ p [= q implies latt (L,[#p,q#]) is bounded &
+   Top latt (L,[#p,q#]) = q & Bottom latt (L,[#p,q#]) = p
+  proof assume
+A1:  p [= q;
+A2:  carr(latt (L,[#p,q#])) = [#p,q#] by Th73;
+   then reconsider p' = p, q' = q as Element of latt (L,[#p,q#])
+   by A1,Th63;
+A3:  now let a' be Element of latt (L,[#p,q#]);
+     reconsider a = a' as Element of L by Th69;
+A4:   p [= a by A1,A2,Th63;
+     thus p'"/\"a' = p"/\"a by Th74 .= p' by A4,LATTICES:21;
+     hence a'"/\"p' = p';
+    end;
+A5:  now let a' be Element of latt (L,[#p,q#]);
+     reconsider a = a' as Element of L by Th69;
+A6:   a [= q by A1,A2,Th63;
+     thus q'"\/"a' = q"\/"a by Th74 .= q' by A6,LATTICES:def 3;
+     hence a'"\/"q' = q';
+    end;
+then A7: latt (L,[#p,q#]) is lower-bounded upper-bounded Lattice
+     by A3,LATTICES:def 13,def 14;
+   hence latt (L,[#p,q#]) is bounded;
+   thus thesis by A3,A5,A7,LATTICES:def 16,def 17;
+  end;
+
+theorem
+   L is C_Lattice & L is modular implies latt (L,(.p.>) is C_Lattice
+  proof assume
+A1:  L is C_Lattice & L is modular;
+   then reconsider K = latt (L,(.p.>) as bounded Lattice by Th83;
+      K is complemented
+     proof let b' be Element of K;
+      reconsider b = b' as Element of L by Th69;
+      consider a being Element of L such that
+A2:     a is_a_complement_of b by A1,LATTICES:def 19;
+A3:     a"\/"b = Top L & a"/\"b = Bottom L by A2,LATTICES:def 18;
+A4:     p"/\"a [= p & carr(K) = (.p.> by Th73,LATTICES:23;
+      then reconsider a' = p"/\"a as Element of K by Th29;
+      take a';
+A5:     b [= p by A4,Th29;
+      thus a'"\/"b' = (p"/\"a)"\/"b by Th74 .= (b"\/"a)"/\"
+p by A1,A5,LATTICES:def 12
+        .= p by A1,A3,LATTICES:43
+        .= Top K by Th81;
+      hence b'"\/"a' = Top K;
+      thus a'"/\"b' = (p"/\"a)"/\"b by Th74 .= p"/\"Bottom
+L by A3,LATTICES:def 7
+        .= Bottom L by A1,LATTICES:40 .= Bottom K by A1,Th82;
+      hence thesis;
+     end;
+   hence thesis;
+  end;
+
+theorem Th86:
+ L is C_Lattice & L is modular & p [= q implies
+   latt (L,[#p,q#]) is C_Lattice
+  proof assume
+A1:  L is C_Lattice & L is modular & p [= q;
+   then reconsider K = latt (L,[#p,q#]) as bounded Lattice by Th84;
+      K is complemented
+     proof let b' be Element of K;
+      reconsider b = b' as Element of L by Th69;
+      consider a being Element of L such that
+A2:     a is_a_complement_of b by A1,LATTICES:def 19;
+A3:     a"\/"b = Top L & a"/\"b = Bottom L by A2,LATTICES:def 18;
+         a"/\"q [= q by LATTICES:23;
+then A4:     p [= p"\/"(a"/\"q) & p"\/"(a"/\"q) [= q & carr(K) = [#p,q#]
+        by A1,Th73,FILTER_0:6,LATTICES:22;
+      then reconsider a' = p"\/"(a"/\"q) as Element of K by A1,
+Th63;
+      take a';
+A5:     b [= q & p [= b by A1,A4,Th63;
+      thus a'"\/"b' = (p"\/"(a"/\"q))"\/"b by Th74 .= b"\/"p"\/"(a"/\"
+q) by LATTICES:def 5
+        .= b"\/"(a"/\"q) by A5,LATTICES:def 3 .= (Top L)"/\"q by A1,A3,A5,
+LATTICES:def 12
+        .= q by A1,LATTICES:43 .= Top K by A1,Th84;
+      hence b'"\/"a' = Top K;
+      thus a'"/\"b' = (p"\/"(a"/\"q))"/\"b by Th74
+        .= p"\/"((a"/\"q)"/\"b) by A1,A5,LATTICES:def 12
+        .= p"\/"(q"/\"Bottom L) by A3,LATTICES:def 7
+        .= p"\/"Bottom L by A1,LATTICES:40
+        .= p by A1,LATTICES:39 .= Bottom K by A1,Th84;
+      hence thesis;
+     end;
+   hence thesis;
+  end;
+
+theorem
+   L is B_Lattice & p [= q implies latt (L,[#p,q#]) is B_Lattice
+  proof assume
+      L is B_Lattice & p [= q;
+    then latt (L,[#p,q#]) is bounded complemented distributive Lattice
+     by Th78,Th86;
+   hence thesis;
+  end;
+

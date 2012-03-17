@@ -1,0 +1,2235 @@
+:: Robbins Algebras vs. Boolean Algebras
+::  by Adam Grabowski
+::
+:: Received June 12, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary LATTICES, BINOP_1, BOOLE, MIDSP_1, VECTSP_2, REALSET1, SUBSET_1,
+      FUNCT_1, ARYTM_3, ARYTM_1, MIDSP_2, ROBBINS1;
+ notation TARSKI, XBOOLE_0, REALSET1, STRUCT_0, LATTICES, VECTSP_2, BINOP_1,
+      FUNCT_1, FUNCT_2, MIDSP_1;
+ constructors VECTSP_2, BINOP_1, LATTICES, REALSET1, MIDSP_2, PARTFUN1;
+ clusters STRUCT_0, RELSET_1, LATTICES, TEX_2, LATTICE2;
+ definitions LATTICES;
+ theorems STRUCT_0, LATTICES, REALSET1, BINOP_1;
+ schemes BINOP_1;
+
+begin :: Preliminaries
+
+definition
+ struct (1-sorted) ComplStr
+     (# carrier -> set,
+          Compl -> UnOp of the carrier #);
+end;
+
+definition
+ struct(\/-SemiLattStr, ComplStr) ComplLattStr
+     (# carrier -> set,
+         L_join -> BinOp of the carrier,
+          Compl -> UnOp of the carrier #);
+end;
+
+definition
+  struct (ComplLattStr, LattStr) OrthoLattStr
+     (# carrier -> set,
+        L_join, L_meet -> BinOp of the carrier,
+        Compl -> UnOp of the carrier #);
+end;
+
+definition
+  func TrivComplLat -> strict ComplLattStr equals :Def1:
+    ComplLattStr (# {{}}, op2, op1 #);
+  coherence;
+end;
+
+definition
+  func TrivOrtLat -> strict OrthoLattStr equals :Def2:
+    OrthoLattStr (# {{}}, op2, op2, op1 #);
+  coherence;
+end;
+
+definition
+  cluster TrivComplLat -> non empty trivial;
+  coherence by Def1,REALSET1:def 13,STRUCT_0:def 1;
+
+  cluster TrivOrtLat -> non empty trivial;
+  coherence by Def2,REALSET1:def 13,STRUCT_0:def 1;
+end;
+
+definition
+  cluster strict non empty trivial OrthoLattStr;
+  existence
+  proof
+    take TrivOrtLat;
+    thus thesis;
+  end;
+
+  cluster strict non empty trivial ComplLattStr;
+  existence
+  proof
+    take TrivComplLat;
+    thus thesis;
+  end;
+end;
+
+definition let L be non empty trivial ComplLattStr;
+  cluster the ComplStr of L -> non empty trivial;
+  coherence
+  proof
+      the carrier of the ComplStr of L is trivial by REALSET1:def 13;
+    hence thesis by REALSET1:def 13,STRUCT_0:def 1;
+  end;
+end;
+
+definition
+  cluster strict non empty trivial ComplStr;
+  existence
+  proof
+    take the ComplStr of TrivOrtLat;
+    thus thesis;
+  end;
+end;
+
+definition let L be non empty ComplStr;
+ let x be Element of L;
+ func x` -> Element of L equals :Def3:
+   (the Compl of L).x;
+ coherence;
+end;
+
+definition let L be non empty ComplLattStr,
+               x,y be Element of L;
+  redefine func x "\/" y;
+  synonym x + y;
+end;
+
+definition let L be non empty ComplLattStr;
+ let x,y be Element of L;
+ func x *' y -> Element of L equals
+:Def4: (x` "\/" y`)`;
+ coherence;
+end;
+
+definition let L be non empty ComplLattStr;
+  attr L is Robbins means :Def5:
+   for x, y being Element of L holds
+     ((x + y)` + (x + y`)`)` = x;
+
+  attr L is Huntington means :Def6:
+   for x, y being Element of L holds
+     (x` + y`)` + (x` + y)` = x;
+end;
+
+definition let G be non empty \/-SemiLattStr;
+  attr G is join-idempotent means :Def7:
+   for x being Element of G holds
+       x "\/" x = x;
+end;
+
+definition
+  cluster TrivComplLat -> join-commutative join-associative Robbins
+    Huntington join-idempotent;
+  coherence
+  proof
+    set L = TrivComplLat;
+    thus for x, y being Element of L holds
+      x + y = y + x by REALSET1:def 20;
+    thus for x, y, z being Element of L holds
+      x + y + z = x + (y + z) by REALSET1:def 20;
+    thus for x, y be Element of L holds
+      ((x + y)` + (x + y`)`)` = x by REALSET1:def 20;
+    thus for x, y being Element of L holds
+      (x` + y`)` + (x` + y)` = x by REALSET1:def 20;
+    let x be Element of L;
+    thus thesis by REALSET1:def 20;
+  end;
+
+  cluster TrivOrtLat -> join-commutative join-associative Huntington Robbins;
+  coherence
+  proof
+    set L = TrivOrtLat;
+    thus for x, y being Element of L holds
+      x + y = y + x by REALSET1:def 20;
+    thus for x, y, z being Element of L holds
+      x + y + z = x + (y + z) by REALSET1:def 20;
+    thus for x, y being Element of L holds
+      (x` + y`)` + (x` + y)` = x by REALSET1:def 20;
+    let x, y be Element of L;
+    thus thesis by REALSET1:def 20;
+  end;
+end;
+
+definition
+  cluster TrivOrtLat -> meet-commutative meet-associative
+                        meet-absorbing join-absorbing;
+  coherence
+  proof
+    set L = TrivOrtLat;
+    thus for x, y being Element of L holds
+      x "/\" y = y "/\" x by REALSET1:def 20;
+    thus for x, y, z being Element of L holds
+      x "/\" y "/\" z = x "/\" (y "/\" z) by REALSET1:def 20;
+    thus for x, y being Element of L holds
+      (x "/\" y) "\/" y = y by REALSET1:def 20;
+    let x, y be Element of L;
+    thus x "/\" (x "\/" y) = x by REALSET1:def 20;
+  end;
+end;
+
+definition
+ cluster strict join-associative join-commutative Robbins
+   join-idempotent Huntington (non empty ComplLattStr);
+ existence
+ proof
+   take TrivComplLat;
+   thus thesis;
+ end;
+end;
+
+definition
+  cluster strict Lattice-like Robbins Huntington (non empty OrthoLattStr);
+  existence
+  proof
+    take TrivOrtLat;
+    thus thesis;
+  end;
+end;
+
+definition let L be join-commutative (non empty ComplLattStr),
+               x,y be Element of L;
+  redefine func x + y;
+  commutativity by LATTICES:def 4;
+end;
+
+theorem Th1: :: 4.8
+  for L being Huntington join-commutative join-associative
+    (non empty ComplLattStr),
+      a, b being Element of L holds
+  (a *' b) + (a *' b`) = a
+proof
+  let L be Huntington join-commutative join-associative
+    (non empty ComplLattStr),
+      a, b be Element of L;
+  thus (a *' b) + (a *' b`) = (a` + b`)` + (a *' b`) by Def4
+       .= (a` + b`)` + (a` + b``)` by Def4
+       .= a by Def6;
+end;
+
+theorem Th2: :: 4.9
+  for L being Huntington join-commutative join-associative
+    (non empty ComplLattStr),
+      a being Element of L holds
+  a + a` = a` + a``
+  proof
+    let L be Huntington join-commutative join-associative
+      (non empty ComplLattStr),
+        a be Element of L;
+    set y = a`, z = y``;
+A1:  a = ((a` + y``)` + (a` + y`)`) by Def6;
+      a` = ((a`` + a```)` + (a`` + a``)`) by Def6;
+then a + a`
+     = (y + z)` + (y + y`)` + (y` + y`)` + (y` + z)` by A1,LATTICES:def 5
+    .= (y` + y`)` + (y + y`)` + (y + z)` + (y` + z)` by LATTICES:def 5
+    .= (y` + y)` + (y` + y`)` + ((y + z)` + (y` + z)`) by LATTICES:def 5
+    .= y + ((y + z)` + (y` + z)`) by Def6
+    .= y + y` by Def6;
+    hence thesis;
+  end;
+
+theorem Th3: :: 4.10
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      x being Element of L holds
+    x`` = x
+  proof
+    let L be join-commutative join-associative Huntington
+      (non empty ComplLattStr),
+        x be Element of L;
+    set y = x`;
+A1:  (y`` + y`)` + (y`` + y)` = y` by Def6;
+      (y + y``)` + (y + y`)` = x by Def6;
+    hence thesis by A1,Th2;
+  end;
+
+theorem Th4: :: 4.11 revised p. 557 without idempotency
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b being Element of L holds
+    a + a` = b + b`
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b be Element of L;
+  thus a + a` = (a` + b``)` + (a` + b`)` + a` by Def6
+          .= (a` + b``)` + (a` + b`)` + ((a`` + b``)` + (a`` + b`)`) by Def6
+          .= (a`` + b`)` + ((a`` + b``)` + ((a` + b``)` + (a` + b`)`))
+              by LATTICES:def 5
+          .= (a`` + b`)` + ((a` + b`)` + ((a` + b``)` + (a`` + b``)`))
+              by LATTICES:def 5
+          .= (a`` + b`)` + (a` + b`)` + ((a` + b``)` + (a`` + b``)`)
+              by LATTICES:def 5
+          .= b + ((a`` + b``)` + (a` + b``)`) by Def6
+          .= b + b` by Def6;
+end;
+
+theorem Th5: :: 4.12
+  for L being join-commutative join-associative join-idempotent Huntington
+    (non empty ComplLattStr)
+  ex c being Element of L st
+   for a being Element of L holds c + a = c & a + a` = c
+proof
+  let L be join-commutative join-associative join-idempotent Huntington
+    (non empty ComplLattStr);
+  consider b be Element of L;
+  take c = b` + b;
+  let a be Element of L;
+  thus c + a = a` + a + a by Th4
+            .= a` + (a + a) by LATTICES:def 5
+            .= a` + a by Def7
+            .= c by Th4;
+  thus thesis by Th4;
+end;
+
+theorem Th6: :: 4.12
+  for L being join-commutative join-associative join-idempotent Huntington
+    (non empty ComplLattStr) holds
+   L is upper-bounded
+proof
+  let L be join-commutative join-associative join-idempotent Huntington
+    (non empty ComplLattStr);
+  consider c being Element of L such that
+A1:for a being Element of L holds c + a = c & a + a` = c
+     by Th5;
+    for a being Element of L holds a + c = c & a + a` = c
+     by A1;
+  hence thesis by A1,LATTICES:def 14;
+end;
+
+definition
+  cluster join-commutative join-associative join-idempotent Huntington
+    -> upper-bounded (non empty ComplLattStr);
+  coherence by Th6;
+end;
+
+definition let L be join-commutative join-associative join-idempotent
+  Huntington (non empty ComplLattStr);
+  redefine func Top L means :Def8:
+   ex a being Element of L st
+    it = a + a`;
+  compatibility
+  proof
+    let IT be Element of L;
+    hereby assume A1: IT = Top L;
+      consider a being Element of L;
+      take a;
+        for b being Element of L holds a + a` + b = a + a` &
+          b + (a + a`) = a + a`
+      proof
+        let b be Element of L;
+          a + a` + b = b + b` + b by Th4
+                  .= b` + (b + b) by LATTICES:def 5
+                  .= b` + b by Def7
+                  .= a` + a by Th4;
+        hence thesis;
+      end;
+      hence IT = a + a` by A1,LATTICES:def 17;
+    end;
+    given a being Element of L such that A2: IT = a + a`;
+A3:  for b being Element of L holds a + a` + b = a + a`
+    proof
+      let b be Element of L;
+        a + a` + b = b + b` + b by Th4
+                .= b` + (b + b) by LATTICES:def 5
+                .= b` + b by Def7
+                .= a` + a by Th4;
+      hence thesis;
+    end;
+    then for b being Element of L holds b + (a + a`) = a + a`;
+    hence IT = Top L by A2,A3,LATTICES:def 17;
+  end;
+end;
+
+theorem Th7: :: 4.13
+  for L being join-commutative join-associative join-idempotent Huntington
+    (non empty ComplLattStr)
+  ex c being Element of L st
+   for a being Element of L holds c *' a = c & (a + a`)` = c
+proof
+  let L be join-commutative join-associative join-idempotent Huntington
+    (non empty ComplLattStr);
+  consider b be Element of L;
+  take c = (b` + b)`;
+  let a be Element of L;
+  thus c *' a = ((b` + b)`` + a`)` by Def4
+             .= ((b` + b) + a`)` by Th3
+             .= ((a` + a) + a`)` by Th4
+             .= (a + (a` + a`))` by LATTICES:def 5
+             .= (a + a`)` by Def7
+             .= c by Th4;
+  thus thesis by Th4;
+end;
+
+theorem Th8: :: 4.18
+  for L being join-commutative join-associative (non empty ComplLattStr),
+      a, b being Element of L holds
+    a *' b = b *' a
+proof
+  let L be join-commutative join-associative (non empty ComplLattStr),
+      a, b be Element of L;
+  thus a *' b = (a` + b`)` by Def4
+        .= b *' a by Def4;
+end;
+
+definition let L be join-commutative join-associative (non empty ComplLattStr);
+ let x,y be Element of L;
+ redefine func x *' y;
+ commutativity by Th8;
+end;
+
+definition let L be join-commutative join-associative join-idempotent
+    Huntington (non empty ComplLattStr);
+  func Bot L -> Element of L means :Def9:
+   for a being Element of L holds it *' a = it;
+  existence
+  proof
+   consider c being Element of L such that
+A1:  for a being Element of L holds c *' a = c & (a + a`)` = c
+      by Th7;
+   thus thesis by A1;
+  end;
+  uniqueness
+    proof
+     let c1,c2 be Element of L such that
+A2:    for a being Element of L holds c1 *' a = c1 and
+A3:    for a being Element of L holds c2 *' a = c2;
+     thus c1 = c2 *' c1 by A2
+            .= c2 by A3;
+    end;
+end;
+
+theorem Th9:
+  for L being join-commutative join-associative join-idempotent Huntington
+    (non empty ComplLattStr),
+      a being Element of L holds
+  Bot L = (a + a`)`
+proof
+  let L be join-commutative join-associative join-idempotent Huntington
+    (non empty ComplLattStr),
+      a be Element of L;
+    for b being Element of L holds (a + a`)` *' b = (a + a`)`
+  proof
+    let b be Element of L;
+      (a + a`)` *' b = (b + b`)` *' b by Th4
+                  .= ((b + b`)`` + b`)` by Def4
+                  .= ((b + b`) + b`)` by Th3
+                  .= (b + (b` + b`))` by LATTICES:def 5
+                  .= (b + b`)` by Def7
+                  .= (a` + a)` by Th4;
+    hence thesis;
+  end;
+  hence thesis by Def9;
+end;
+
+theorem Th10:
+  for L being join-commutative join-associative join-idempotent Huntington
+    (non empty ComplLattStr) holds
+  (Top L)` = Bot L & Top L = (Bot L)`
+proof
+  let L be join-commutative join-associative join-idempotent Huntington
+    (non empty ComplLattStr);
+  consider a be Element of L;
+  thus (Top L)` = (a + a`)` by Def8
+               .= Bot L by Th9;
+  hence Top L = (Bot L)` by Th3;
+end;
+
+theorem Th11: :: 4.14
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b being Element of L st
+    a` = b` holds a = b
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b being Element of L;
+  assume A1: a` = b`;
+  thus a = a`` by Th3 .= b by A1,Th3;
+end;
+
+theorem Th12: :: 4.15 proof without join-idempotency, no top at all
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b being Element of L holds
+    a + (b + b`)` = a
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b be Element of L;
+  set O = b + b`;
+A1:O`` = O by Th3;
+A2:O` = (O`` + O``)` + (O`` + O`)` by Def6
+          .= (O + O)` + O` by A1,Th4;
+ O = O + O` by Th4
+        .= O + O` + (O + O)` by A2,LATTICES:def 5
+        .= O + (O + O)` by Th4;
+then A3:O + O = O + O + (O + O)` by LATTICES:def 5
+       .= O by Th4;
+A4:O = a` + a by Th4;
+  hence a + O` = ((a` + a`)` + (a` + a)`) + ((a` + a)` + (a` + a)`)
+                  by A2,A3,Def6
+              .= (a` + a`)` + ((a` + a)` + (a` + a)`)
+                  by A2,A3,A4,LATTICES:def 5
+              .= a by A2,A3,A4,Def6;
+end;
+
+theorem Th13: :: 4.5
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a being Element of L holds
+    a + a = a
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a be Element of L;
+A1:(a + a)` = (a`` + a`)` + (a + a)` by Th12
+          .= (a`` + a`)` + (a`` + a)` by Th3
+          .= a` by Def6;
+  thus a + a = (a + a)`` by Th3
+            .= a by A1,Th3;
+end;
+
+definition
+  cluster join-commutative join-associative Huntington ->
+    join-idempotent (non empty ComplLattStr);
+  coherence
+  proof
+    let L be non empty ComplLattStr;
+    assume L is join-commutative join-associative Huntington;
+    then for a being Element of L holds a + a = a by Th13;
+    hence thesis by Def7;
+  end;
+end;
+
+theorem Th14: :: 4.15
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a being Element of L holds
+    a + Bot L = a
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a be Element of L;
+    a = (a` + a`)` + (a` + a)` by Def6
+   .= a`` + (a` + a)` by Def7
+   .= a + (a` + a)` by Th3;
+  hence thesis by Th9;
+end;
+
+theorem :: 4.16
+    for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a being Element of L holds
+    a *' Top L = a
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a be Element of L;
+    a *' Top L = (a` + (Top L)`)` by Def4
+            .= (a` + Bot L)` by Th10
+            .= a`` by Th14
+            .= a by Th3;
+  hence thesis;
+end;
+
+theorem Th16: :: 4.17
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a being Element of L holds
+    a *' a` = Bot L
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a be Element of L;
+  thus a *' a` = (a` + a``)` by Def4
+              .= (Top L)` by Def8
+              .= Bot L by Th10;
+end;
+
+theorem Th17: :: 4.19
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b, c being Element of L holds
+    a *' (b *' c) = a *' b *' c
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b, c be Element of L;
+  thus a *' b *' c = (a` + b`)` *' c by Def4
+                  .= ((a` + b`)`` + c`)` by Def4
+                  .= (a` + b` + c`)` by Th3
+                  .= (a` + (b` + c`))` by LATTICES:def 5
+                  .= (a` + (b` + c`)``)` by Th3
+                  .= (a` + (b *' c)`)` by Def4
+                  .= a *' (b *' c) by Def4;
+end;
+
+theorem Th18: :: 4.20
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b being Element of L holds
+    a + b = (a` *' b`)`
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b be Element of L;
+    a` *' b` = (a`` + b``)` by Def4
+          .= (a`` + b)` by Th3
+          .= (a + b)` by Th3;
+  hence (a` *' b`)` = a + b by Th3;
+end;
+
+theorem :: 4.21
+    for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a being Element of L holds
+    a *' a = a
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a be Element of L;
+  thus a *' a = (a` + a`)` by Def4
+             .= a`` by Def7
+             .= a by Th3;
+end;
+
+theorem :: 4.22
+    for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a being Element of L holds
+    a + Top L = Top L
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a be Element of L;
+  thus a + Top L = a + (a + a`) by Def8
+                .= a + a + a` by LATTICES:def 5
+                .= a + a` by Def7
+                .= Top L by Def8;
+end;
+
+theorem Th21: :: 4.24
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b being Element of L holds
+    a + (a *' b) = a
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a,b be Element of L;
+  thus a + (a *' b) = (a *' b) + ((a *' b) + (a *' b`)) by Th1
+                  .= (a *' b) + (a *' b) + (a *' b`) by LATTICES:def 5
+                  .= (a *' b) + (a *' b`) by Def7
+                  .= a by Th1;
+end;
+
+theorem Th22: :: 4.25
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b being Element of L holds
+    a *' (a + b) = a
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a,b be Element of L;
+  thus a *' (a + b) = (a` + (a + b)`)` by Def4
+                  .= (a` + (a` *' b`)``)` by Th18
+                  .= (a` + (a` *' b`))` by Th3
+                  .= a`` by Th21
+                  .= a by Th3;
+end;
+
+theorem Th23: :: 4.26
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b being Element of L st
+    a` + b = Top L & b` + a = Top L holds a = b
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b be Element of L;
+  assume A1: a` + b = Top L & b` + a = Top L;
+  thus a = (a` + b`)` + (a` + b)` by Def6
+        .= b by A1,Def6;
+end;
+
+theorem Th24: :: 4.27
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b being Element of L st
+    a + b = Top L & a *' b = Bot L holds a` = b
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b be Element of L;
+  assume a + b = Top L;
+then A1: a`` + b = Top L by Th3;
+  assume a *' b = Bot L;
+then A2:(a` + b`)` = Bot L by Def4;
+    b` + a` = (a` + b`)`` by Th3
+         .= Top L by A2,Th10;
+  hence thesis by A1,Th23;
+end;
+
+theorem Th25: :: 4.28
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b, c being Element of L holds
+  (a *' b *' c) + (a *' b *' c`) + (a *' b` *' c) +
+  (a *' b` *' c`) + (a` *' b *' c) + (a` *' b *' c`) +
+  (a` *' b` *' c) + (a` *' b` *' c`) = Top L
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b, c be Element of L;
+  set A = a *' b *' c, B = a *' b *' c`, C = a *' b` *' c;
+  set D = a *' b` *' c`, E = a` *' b *' c, F = a` *' b *' c`;
+  set G = a` *' b` *' c, H = a` *' b` *' c`;
+    A + B + C + D + E + F + G + H = (a *' b) + C + D + E + F + G + H by Th1
+    .= (a *' b) + (C + D) + E + F + G + H by LATTICES:def 5
+    .= (a *' b) + (a *' b`) + E + F + G + H by Th1
+    .= (a *' b) + (a *' b`) + (E + F) + G + H by LATTICES:def 5
+    .= (a *' b) + (a *' b`) + (a` *' b) + G + H by Th1
+    .= (a *' b) + (a *' b`) + (a` *' b) + (G + H) by LATTICES:def 5
+    .= (a *' b) + (a *' b`) + (a` *' b) + (a` *' b`) by Th1
+    .= a + (a` *' b) + (a` *' b`) by Th1
+    .= a + ((a` *' b) + (a` *' b`)) by LATTICES:def 5
+    .= a + a` by Th1;
+  hence thesis by Def8;
+end;
+
+theorem Th26: :: 4.29
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b, c being Element of L holds
+  (a *' c) *' (b *' c`) = Bot L &
+  (a *' b *' c) *' (a` *' b *' c) = Bot L &
+  (a *' b` *' c) *' (a` *' b *' c) = Bot L &
+  (a *' b *' c) *' (a` *' b` *' c) = Bot L &
+  (a *' b *' c`) *' (a` *' b` *' c`) = Bot L &
+  (a *' b` *' c) *' (a` *' b *' c) = Bot L
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b, c be Element of L;
+  A1: for a, b, c being Element of L holds
+     (a *' c) *' (b *' c`) = Bot L
+     proof
+       let a, b, c be Element of L;
+       thus (a *' c) *' (b *' c`) = (a *' c) *' c` *' b by Th17
+         .= a *' (c *' c`) *' b by Th17
+         .= a *' Bot L *' b by Th16
+         .= Bot L *' b by Def9
+         .= Bot L by Def9;
+     end;
+  hence (a *' c) *' (b *' c`) = Bot L;
+  thus a *' b *' c *' (a` *' b *' c) = a *' (b *' c) *' (a` *' b *' c)
+     by Th17
+    .= b *' c *' a *' (a` *' b) *' c by Th17
+    .= b *' c *' a *' a` *' b *' c by Th17
+    .= b *' c *' (a *' a`) *' b *' c by Th17
+    .= b *' c *' (a *' a`) *' (b *' c) by Th17
+    .= b *' c *' Bot L *' (b *' c) by Th16
+    .= Bot L *' (b *' c) by Def9
+    .= Bot L by Def9;
+  thus (a *' b` *' c) *' (a` *' b *' c) = a *' (b` *' c) *' (a` *' b *'
+ c) by Th17
+     .= (b` *' c) *' a *' (a` *' (b *' c)) by Th17
+     .= (b` *' c) *' a *' a` *' (b *' c) by Th17
+     .= (b` *' c) *' (a *' a`) *' (b *' c) by Th17
+     .= (b` *' c) *' Bot L *' (b *' c) by Th16
+     .= Bot L *' (b *' c) by Def9
+     .= Bot L by Def9;
+  thus (a *' b *' c) *' (a` *' b` *' c) = (a *' (b *' c)) *' (a` *' b` *' c)
+     by Th17
+     .= (a *' (b *' c)) *' (a` *' (b` *' c)) by Th17
+     .= Bot L by A1;
+  thus (a *' b *' c`) *' (a` *' b` *' c`)
+      = (a *' (b *' c`)) *' (a` *' b` *' c`) by Th17
+     .= (a *' (b *' c`)) *' (a` *' (b` *' c`)) by Th17
+     .= Bot L by A1;
+  thus (a *' b` *' c) *' (a` *' b *' c)
+      = (a *' (b` *' c)) *' (a` *' b *' c) by Th17
+     .= (a *' (b` *' c)) *' (a` *' (b *' c)) by Th17
+     .= Bot L by A1;
+end;
+
+theorem Th27: :: 4.30
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b, c being Element of L holds
+    (a *' b) + (a *' c) = (a *' b *' c) + (a *' b *' c`) + (a *' b` *' c)
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b, c be Element of L;
+  set A = a *' b *' c;
+    a *' c = (a *' c *' b) + (a *' c *' b`) by Th1
+        .= A + (a *' c *' b`) by Th17
+        .= A + (a *' b` *' c) by Th17;
+  hence (a *' b) + (a *' c) = A + (a *' b *' c`) +
+    (A + (a *' b` *' c)) by Th1
+    .= A + ((a *' b *' c`) + A) + (a *' b` *' c)
+          by LATTICES:def 5
+    .= A + A + (a *' b *' c`) + (a *' b` *' c)
+          by LATTICES:def 5
+    .= A + (a *' b *' c`) + (a *' b` *' c) by Def7;
+end;
+
+theorem Th28: :: 4.31
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b, c being Element of L holds
+    (a *' (b + c))` = (a *' b` *' c`) + (a` *' b *' c) + (a` *' b *' c`)
+                   + (a` *' b` *' c) + (a` *' b` *' c`)
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b, c be Element of L;
+  set D = a *' b` *' c`, E = a` *' b *' c, F = a` *' b *' c`;
+  set G = a` *' b` *' c, H = a` *' b` *' c`;
+A1:(a *' (b + c))` = (a` + (b + c)`)`` by Def4
+                 .= a` + (b + c)` by Th3
+                 .= a` + (b` *' c`)`` by Th18
+                 .= a` + (b` *' c`) by Th3;
+A2:a` = (a` *' b) + (a` *' b`) by Th1
+    .= E + F + (a` *' b`) by Th1
+    .= E + F + (G + H) by Th1;
+ b` *' c` = (a *' (b` *' c`)) + (a` *' (b` *' c`)) by Th1
+          .= D + (a` *' (b` *' c`)) by Th17
+          .= D + H by Th17;
+  hence (a *' (b + c))` = E + F + (G + H) + H + D by A1,A2,LATTICES:def 5
+      .= E + F + G + H + H + D by LATTICES:def 5
+      .= E + F + G + (H + H) + D by LATTICES:def 5
+      .= E + F + G + H + D by Def7
+      .= D + (E + F + (G + H)) by LATTICES:def 5
+      .= D + (E + F) + (G + H) by LATTICES:def 5
+      .= D + (E + F) + G + H by LATTICES:def 5
+      .= D + E + F + G + H by LATTICES:def 5;
+end;
+
+theorem Th29: :: 4.32
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b, c being Element of L holds
+    ((a *' b) + (a *' c)) + (a *' (b + c))` = Top L
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b, c be Element of L;
+  set A = a *' b *' c, B = a *' b *' c`, C = a *' b` *' c;
+  set D = a *' b` *' c`, E = a` *' b *' c, F = a` *' b *' c`;
+  set G = a` *' b` *' c, H = a` *' b` *' c`;
+  set ABC = A + B + C, GH = G + H;
+A1:(a *' (b + c))` = D + E + F + G + H by Th28;
+    (a *' b) + (a *' c) = ABC by Th27;
+  then (a *' b) + (a *' c) + (a *' (b + c))` =
+       ABC + (D + E + F + GH) by A1,LATTICES:def 5
+    .= ABC + (D + E + (F + GH)) by LATTICES:def 5
+    .= ABC + (D + E) + (F + GH) by LATTICES:def 5
+    .= ABC + D + E + (F + GH) by LATTICES:def 5
+    .= ABC + D + (E + (F + GH)) by LATTICES:def 5
+    .= ABC + D + (E + (F + G + H)) by LATTICES:def 5
+    .= ABC + D + E + (F + G + H) by LATTICES:def 5
+    .= ABC + D + E + (F + GH) by LATTICES:def 5
+    .= ABC + D + E + F + GH by LATTICES:def 5
+    .= ABC + D + E + F + G + H by LATTICES:def 5
+    .= Top L by Th25;
+  hence thesis;
+end;
+
+theorem Th30:  :: 4.33
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b, c being Element of L holds
+    ((a *' b) + (a *' c)) *' (a *' (b + c))` = Bot L
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b, c be Element of L;
+  set A = a *' b *' c, B = a *' b *' c`, C = a *' b` *' c;
+  set D = a *' b` *' c`, E = a` *' b *' c, F = a` *' b *' c`;
+  set G = a` *' b` *' c, H = a` *' b` *' c`;
+  set DEFG = D + E + F + G;
+A1: C *' D = Bot L by Th26;
+A2: A *' G = Bot L & B *' H = Bot L & C *' E = Bot L by Th26;
+A3:(a *' (b + c))` = DEFG + H by Th28;
+ (A *' D) + (A *' E) = Bot L + (A *' E) by Th26
+                     .= Bot L + Bot L by Th26
+                     .= Bot L by Def7;
+  then Top L = Bot L + (A *' (D + E))` by Th29
+       .= (A *' (D + E))` by Th14;
+  then Bot L = (A *' (D + E))`` by Th10
+          .= A *' (D + E) by Th3;
+  then (A *' (D + E)) + (A *' F) = Bot L + Bot L by Th26
+                        .= Bot L by Def7;
+  then Top L = Bot L + (A *' (D + E + F))` by Th29
+       .= (A *' (D + E + F))` by Th14;
+  then Bot L = (A *' (D + E + F))`` by Th10
+          .= A *' (D + E + F) by Th3;
+  then (A *' (D + E + F)) + (A *' G) = Bot L by A2,Def7;
+  then Top L = Bot L + (A *' DEFG)` by Th29
+       .= (A *' DEFG)` by Th14;
+  then Bot L = (A *' DEFG)`` by Th10
+          .= A *' DEFG by Th3;
+then A4:(A *' DEFG) + (A *' H) = Bot L + Bot L by Th26
+                        .= Bot L by Def7;
+    (B *' D) + (B *' E) = Bot L + (B *' E) by Th26
+                     .= Bot L + Bot L by Th26
+                     .= Bot L by Def7;
+  then Top L = Bot L + (B *' (D + E))` by Th29
+       .= (B *' (D + E))` by Th14;
+  then Bot L = (B *' (D + E))`` by Th10
+          .= B *' (D + E) by Th3;
+  then (B *' (D + E)) + (B *' F) = Bot L + Bot L by Th26
+                           .= Bot L by Def7;
+  then Top L = Bot L + (B *' (D + E + F))` by Th29
+       .= (B *' (D + E + F))` by Th14;
+  then Bot L = (B *' (D + E + F))`` by Th10
+          .= B *' (D + E + F) by Th3;
+  then (B *' (D + E + F)) + (B *' G) = Bot L + Bot L by Th26
+                        .= Bot L by Def7;
+  then Top L = Bot L + (B *' DEFG)` by Th29
+       .= (B *' DEFG)` by Th14;
+  then Bot L = (B *' DEFG)`` by Th10
+          .= B *' DEFG by Th3;
+then A5:(B *' DEFG) + (B *' H) = Bot L by A2,Def7;
+A6:Top L = Bot L + (A *' (DEFG + H))` by A4,Th29
+       .= (A *' (DEFG + H))` by Th14;
+A7:Top L = Bot L + (B *' (DEFG + H))` by A5,Th29
+       .= (B *' (DEFG + H))` by Th14;
+    (C *' D) + (C *' E) = Bot L + Bot L by A1,Th26
+                     .= Bot L by Def7;
+  then Top L = Bot L + (C *' (D + E))` by Th29
+       .= (C *' (D + E))` by Th14;
+  then Bot L = (C *' (D + E))`` by Th10
+          .= C *' (D + E) by Th3;
+  then (C *' (D + E)) + (C *' F) = Bot L + Bot L by Th26
+                        .= Bot L by Def7;
+  then Top L = Bot L + (C *' (D + E + F))` by Th29
+       .= (C *' (D + E + F))` by Th14;
+  then Bot L = (C *' (D + E + F))`` by Th10
+          .= C *' (D + E + F) by Th3;
+  then (C *' (D + E + F)) + (C *' G) = Bot L + Bot L by Th26
+                        .= Bot L by Def7;
+  then Top L = Bot L + (C *' DEFG)` by Th29
+       .= (C *' DEFG)` by Th14;
+  then Bot L = (C *' DEFG)`` by Th10
+          .= C *' DEFG by Th3;
+  then (C *' DEFG) + (C *' H) = Bot L + Bot L by Th26
+                        .= Bot L by Def7;
+then A8:Top L = Bot L + (C *' (DEFG + H))` by Th29
+        .= (C *' (DEFG + H))` by Th14;
+A9: A *' (DEFG + H) = (A *' (DEFG + H))`` by Th3
+                   .= Bot L by A6,Th10;
+A10: B *' (DEFG + H) = (B *' (DEFG + H))`` by Th3
+                   .= Bot L by A7,Th10;
+A11: C *' (DEFG + H) = (C *' (DEFG + H))`` by Th3
+                   .= Bot L by A8,Th10;
+    (A *' (DEFG + H)) + (B *' (DEFG + H))
+                    = Bot L by A9,A10,Def7;
+  then Top L = Bot L + ((A + B) *' (DEFG + H))` by Th29
+       .= ((A + B) *' (DEFG + H))` by Th14;
+  then Bot L = ((A + B) *' (DEFG + H))`` by Th10
+          .= (A + B) *' (DEFG + H) by Th3;
+  then ((A + B) *' (DEFG + H)) + (C *' (DEFG + H))
+      = Bot L by A11,Def7;
+  then Top L = Bot L + ((A + B + C) *' (DEFG + H))` by Th29
+       .= ((A + B + C) *' (DEFG + H))` by Th14;
+  then Bot L = ((A + B + C) *' (DEFG + H))`` by Th10
+          .= (A + B + C) *' (DEFG + H) by Th3;
+  hence thesis by A3,Th27;
+end;
+
+theorem Th31: :: 4.34
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b, c being Element of L holds
+    a *' (b + c) = (a *' b) + (a *' c)
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b, c be Element of L;
+A1:(a *' b) + (a *' c) + (a *' (b + c))` = Top L by Th29;
+    ((a *' b) + (a *' c)) *' (a *' (b + c))` = Bot L by Th30;
+  then ((a *' b) + (a *' c))` = (a *' (b + c))` by A1,Th24;
+  hence thesis by Th11;
+end;
+
+theorem :: 4.35
+    for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b, c being Element of L holds
+    a + (b *' c) = (a + b) *' (a + c)
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr),
+      a, b, c be Element of L;
+  thus a + (b *' c) = a + (b` + c`)` by Def4
+              .= (a` *' (b` + c`)``)` by Th18
+              .= (a` *' (b` + c`))` by Th3
+              .= ((a` *' b`) + (a` *' c`))` by Th31
+              .= ((a` *' b`)` *' (a` *' c`)`)`` by Th18
+              .= (a` *' b`)` *' (a` *' c`)` by Th3
+              .= (a + b) *' (a` *' c`)` by Th18
+              .= (a + b) *' (a + c) by Th18;
+end;
+
+begin :: Pre-Ortholattices
+
+definition let L be non empty OrthoLattStr;
+  attr L is well-complemented means :Def10:
+    for a being Element of L holds
+     a` is_a_complement_of a;
+end;
+
+definition
+  cluster TrivOrtLat -> Boolean well-complemented;
+  coherence
+  proof
+    set L = TrivOrtLat;
+    thus L is lower-bounded
+    proof
+      consider c being Element of L;
+      take c;
+      thus thesis by REALSET1:def 20;
+    end;
+    thus L is upper-bounded;
+    thus L is complemented
+    proof
+      let b be Element of L;
+      take a = b;
+        a is_a_complement_of b
+      proof
+        thus a "\/" b = Top L & b "\/" a = Top L &
+             a "/\" b = Bottom L & b "/\" a = Bottom L by REALSET1:def 20;
+      end;
+      hence thesis;
+    end;
+    thus L is distributive
+    proof
+      let x, y, z be Element of L;
+      thus thesis by REALSET1:def 20;
+    end;
+    thus L is well-complemented
+    proof
+      let a be Element of L;
+      thus a` is_a_complement_of a
+      proof
+        thus a` "\/" a = Top L & a "\/" a` = Top L &
+             a` "/\" a = Bottom L & a "/\" a` = Bottom L by REALSET1:def 20;
+      end;
+    end;
+  end;
+end;
+
+definition
+  mode preOrthoLattice is Lattice-like (non empty OrthoLattStr);
+end;
+
+definition
+  cluster strict Boolean well-complemented preOrthoLattice;
+  existence
+  proof
+    take TrivOrtLat;
+    thus thesis;
+  end;
+end;
+
+theorem Th33:
+  for L being distributive well-complemented preOrthoLattice,
+      x being Element of L
+     holds x`` = x
+  proof
+    let L be distributive well-complemented preOrthoLattice;
+    let x be Element of L;
+A1:  x` is_a_complement_of x by Def10;
+      x`` is_a_complement_of x` by Def10;
+then A2:  x`` + x` = Top L & x`` "/\" x` = Bottom L by LATTICES:def 18;
+      x` "\/" x = Top L & x` "/\" x = Bottom L by A1,LATTICES:def 18;
+    hence thesis by A2,LATTICES:32;
+  end;
+
+theorem Th34:
+  for L being bounded distributive well-complemented preOrthoLattice,
+      x, y being Element of L
+     holds x "/\" y = (x` "\/" y`)`
+  proof
+    let L be bounded distributive well-complemented preOrthoLattice;
+    let x, y be Element of L;
+      x` is_a_complement_of x by Def10;
+then A1:  x` "\/" x = Top L & x` "/\" x = Bottom L by LATTICES:def 18;
+      y` is_a_complement_of y by Def10;
+then A2:  y` "\/" y = Top L & y` "/\" y = Bottom L by LATTICES:def 18;
+A3: (x` "\/" y`) "/\" (x "/\" y)
+        = (x "/\" y "/\" x`) "\/" (x "/\" y "/\" y`) by LATTICES:def 11
+       .= (y "/\" (x "/\" x`)) "\/" (x "/\" y "/\" y`) by LATTICES:def 7
+       .= (y "/\" Bottom L) "\/" (x "/\" (y "/\" y`)) by A1,LATTICES:def 7
+       .= Bottom L "\/" (x "/\" Bottom L) by A2,LATTICES:40
+       .= Bottom L "\/" Bottom L by LATTICES:40
+       .= Bottom L by LATTICES:39;
+A4:  x` "\/" Top L = Top L "\/" x` by LATTICES:def 4 .= Top L by LATTICES:44;
+A5:  y` "\/" Top L = Top L "\/" y` by LATTICES:def 4 .= Top L by LATTICES:44;
+A6: (x` "\/" y`) "\/" (x "/\" y) = (x` "\/" y` "\/" x) "/\" (x` "\/" y` "\/" y)
+       by LATTICES:31
+       .= (y` "\/" x` "\/" x) "/\" (x` "\/" y` "\/" y) by LATTICES:def 4
+       .= (y` "\/" x` "\/" x) "/\" Top L by A2,A4,LATTICES:def 5
+       .= Top L "/\" Top L by A1,A5,LATTICES:def 5
+       .= Top L by LATTICES:43;
+    A7: (x "/\" y)` is_a_complement_of (x "/\" y) by Def10;
+then A8:  (x "/\" y)` "\/" (x "/\" y) = Top L & (x "/\" y)` "/\" (x "/\" y) =
+Bottom L
+       by LATTICES:def 18;
+      (x "/\" y) + (x "/\" y)` = (x "/\" y) + (x` + y`) by A6,A7,LATTICES:def
+18
+;
+    then (x "/\" y)` = x` "\/" y` by A3,A8,LATTICES:32;
+    hence thesis by Th33;
+  end;
+
+begin :: Correspondence between boolean preOrthoLattice and boolean lattice
+      :: according to the definition given in \cite{LATTICES.ABS}
+
+definition let L be non empty ComplLattStr;
+  func CLatt L -> strict OrthoLattStr means :Def11:
+    the carrier of it = the carrier of L &
+    the L_join of it = the L_join of L &
+    the Compl of it = the Compl of L &
+    for a, b being Element of L holds
+      (the L_meet of it).(a,b) = a *' b;
+  existence
+  proof
+    deffunc F(Element of L, Element of L)=
+          $1 *' $2;
+    consider K being BinOp of the carrier of L such that
+A1:  for a, b being Element of L holds
+      K.(a,b) = F(a,b) from BinOpLambda;
+    take OrthoLattStr (# the carrier of L, the L_join of L, K,
+      the Compl of L #);
+    thus thesis by A1;
+  end;
+  uniqueness
+  proof
+    let L1, L2 be strict OrthoLattStr such that
+A2: the carrier of L1 = the carrier of L &
+    the L_join of L1 = the L_join of L &
+    the Compl of L1 = the Compl of L &
+    for a, b being Element of L holds
+      (the L_meet of L1).(a,b) = a *' b and
+A3: the carrier of L2 = the carrier of L &
+    the L_join of L2 = the L_join of L &
+    the Compl of L2 = the Compl of L &
+    for a, b being Element of L holds
+      (the L_meet of L2).(a,b) = a *' b;
+    reconsider A = the L_meet of L1, B = the L_meet of L2 as
+      BinOp of the carrier of L by A2,A3;
+      now let a, b be Element of L;
+      thus A.(a,b) = a *' b by A2
+                  .= B.(a,b) by A3;
+    end;
+    hence thesis by A2,A3,BINOP_1:2;
+  end;
+end;
+
+definition let L be non empty ComplLattStr;
+  cluster CLatt L -> non empty;
+  coherence
+  proof
+      the carrier of CLatt L = the carrier of L by Def11;
+    hence thesis by STRUCT_0:def 1;
+  end;
+end;
+
+definition let L be join-commutative (non empty ComplLattStr);
+  cluster CLatt L -> join-commutative;
+  coherence
+  proof
+    let a,b be Element of CLatt L;
+A1:  the carrier of L = the carrier of CLatt L by Def11;
+    the L_join of L = the L_join of CLatt L by Def11;
+    hence a "\/" b = (the L_join of L).(a,b) by LATTICES:def 1
+                .= (the L_join of L).(b,a) by A1,BINOP_1:def 2
+                .= (the L_join of CLatt L).(b,a) by Def11
+                .= b "\/" a by LATTICES:def 1;
+  end;
+end;
+
+definition let L be join-associative (non empty ComplLattStr);
+  cluster CLatt L -> join-associative;
+  coherence
+  proof
+    let a, b, c be Element of CLatt L;
+    set K = the L_join of L, M = the L_join of CLatt L;
+A1:  the carrier of L = the carrier of CLatt L by Def11;
+A2:  K = M by Def11;
+    thus (a "\/" b) "\/" c = M.(a "\/" b,c) by LATTICES:def 1
+                  .= M.(M.(a,b),c) by LATTICES:def 1
+                  .= K.(a,K.(b,c)) by A1,A2,BINOP_1:def 3
+                  .= M.(a,b "\/" c) by A2,LATTICES:def 1
+                  .= a "\/" (b "\/" c) by LATTICES:def 1;
+  end;
+end;
+
+definition let L be join-commutative join-associative (non empty ComplLattStr);
+  cluster CLatt L -> meet-commutative;
+  coherence
+  proof
+    let a, b be Element of CLatt L;
+    reconsider a' = a, b' = b as Element of L by Def11;
+    thus a "/\" b = (the L_meet of CLatt L).(a,b) by LATTICES:def 2
+               .= b' *' a' by Def11
+               .= (the L_meet of CLatt L).(b,a) by Def11
+               .= b "/\" a by LATTICES:def 2;
+  end;
+end;
+
+theorem Th35:
+  for L being non empty ComplLattStr,
+      a, b being Element of L,
+      a', b' being Element of CLatt L st
+   a = a' & b = b' holds a *' b = a' "/\" b' & a + b = a' "\/" b' & a` = a'`
+proof
+  let L be non empty ComplLattStr,
+      a, b be Element of L,
+      a', b' be Element of CLatt L;
+  assume A1: a = a' & b = b';
+  thus a *' b = (the L_meet of CLatt L).(a,b) by Def11
+            .= a' "/\" b' by A1,LATTICES:def 2;
+  thus a + b = (the L_join of L).(a,b) by LATTICES:def 1
+            .= (the L_join of CLatt L).(a,b) by Def11
+            .= a' "\/" b' by A1,LATTICES:def 1;
+  thus a` = (the Compl of L).a by Def3
+         .= (the Compl of CLatt L).a by Def11
+         .= a'` by A1,Def3;
+end;
+
+definition let L be join-commutative join-associative Huntington
+  (non empty ComplLattStr);
+  cluster CLatt L -> meet-associative join-absorbing meet-absorbing;
+  coherence
+  proof
+    hereby let a, b, c be Element of CLatt L;
+      reconsider a' = a, b' = b, c' = c as Element of L
+        by Def11;
+A1:    a' *' b' = a "/\" b & b' *' c' = b "/\" c by Th35;
+      hence a "/\" b "/\" c = a' *' b' *' c' by Th35
+                      .= a' *' (b' *' c') by Th17
+                      .= a "/\" (b "/\" c) by A1,Th35;
+    end;
+    hereby let a, b be Element of CLatt L;
+      reconsider a' = a, b' = b as Element of L by Def11;
+     a' + b' = a "\/" b by Th35;
+      hence a "/\" (a "\/" b) = a' *' (a' + b') by Th35
+                        .= a by Th22;
+    end;
+    let a, b be Element of CLatt L;
+    reconsider a' = a, b' = b as Element of L by Def11;
+   a' *' b' = a "/\" b by Th35;
+    hence (a "/\" b) "\/" b = (a' *' b') + b' by Th35
+                      .= b by Th21;
+  end;
+end;
+
+definition let L be Huntington (non empty ComplLattStr);
+  cluster CLatt L -> Huntington;
+  coherence
+  proof
+    let x, y be Element of CLatt L;
+    reconsider x' = x, y' = y as Element of L by Def11;
+A1:  x` = x'` & y` = y'` by Th35;
+    then x` + y` = x'` + y'` by Th35;
+then A2:  (x` + y`)` = (x'` + y'`)` by Th35;
+      x` + y = x'` + y' by A1,Th35;
+    then (x` + y)` = (x'` + y')` by Th35;
+    hence (x` + y`)` + (x` + y)` = (x'` + y'`)` + (x'` + y')` by A2,Th35
+                                .= x by Def6;
+  end;
+end;
+
+definition let L be join-commutative join-associative Huntington
+  (non empty ComplLattStr);
+  cluster CLatt L -> lower-bounded;
+  coherence
+  proof
+    thus CLatt L is lower-bounded
+    proof
+      set c' = Bot L;
+      reconsider c = c' as Element of CLatt L by Def11;
+      take c;
+      let a be Element of CLatt L;
+      reconsider a' = a as Element of L by Def11;
+      thus c "/\" a = c' *' a' by Th35 .= c by Def9;
+      hence a "/\" c = c;
+    end;
+  end;
+end;
+
+theorem Th36:
+  for L being join-commutative join-associative Huntington
+    (non empty ComplLattStr) holds
+   Bot L = Bottom CLatt L
+proof
+  let L be join-commutative join-associative Huntington
+    (non empty ComplLattStr);
+    the carrier of CLatt L = the carrier of L by Def11;
+  then reconsider C = Bot L as Element of CLatt L;
+    for a being Element of CLatt L holds C "/\" a = C & a "/\"
+ C = C
+  proof
+    let a be Element of CLatt L;
+    reconsider a' = a as Element of L by Def11;
+    thus C "/\" a = Bot L *' a' by Th35
+               .= C by Def9;
+    hence thesis;
+  end;
+  hence thesis by LATTICES:def 16;
+end;
+
+definition let L be join-commutative join-associative Huntington
+  (non empty ComplLattStr);
+  cluster CLatt L -> complemented distributive bounded;
+  coherence
+  proof
+A1:  the Compl of CLatt L = the Compl of L by Def11;
+    thus CLatt L is complemented
+    proof
+      let b be Element of CLatt L;
+      take a = b`;
+      reconsider a' = a, b' = b as Element of L by Def11;
+      thus a + b = Top CLatt L by Def8;
+      thus b + a = Top CLatt L by Def8;
+A2:    a'` = (the Compl of L).a' by Def3
+         .= a` by A1,Def3
+         .= b' by Th3;
+      thus a "/\" b = a' *' b' by Th35
+                 .= (a'` + b'`)` by Def4
+                 .= Bot L by A2,Th9
+                 .= Bottom CLatt L by Th36;
+      hence b "/\" a = Bottom CLatt L;
+    end;
+    hereby let a, b, c be Element of CLatt L;
+      reconsider a' = a, b' = b, c' = c as Element of L
+        by Def11;
+A3:    b' + c' = b "\/" c & a "/\" b = a' *' b' & a "/\" c = a' *' c' by Th35;
+      hence a "/\" (b "\/" c) = a' *' (b' + c') by Th35
+                        .= (a' *' b') + (a' *' c') by Th31
+                        .= (a "/\" b) "\/" (a "/\" c) by A3,Th35;
+    end;
+    thus CLatt L is lower-bounded;
+    thus CLatt L is upper-bounded;
+  end;
+end;
+
+begin :: Proofs according to Bernd Ingo Dahn
+
+definition let G be non empty ComplLattStr,
+               x be Element of G;
+  redefine func x`;
+  synonym -x;
+end;
+
+definition let G be join-commutative (non empty ComplLattStr);
+  redefine attr G is Huntington means :Def12:
+   for x, y being Element of G holds
+    -(-x + -y) + -(x + -y) = y;
+  compatibility
+  proof
+    thus G is Huntington implies
+      for x, y being Element of G holds
+      -(-x + -y) + -(x + -y) = y by Def6;
+    assume A1: for x, y being Element of G holds
+      -(-x + -y) + -(x + -y) = y;
+    let x, y be Element of G;
+      (x` + y`)` + (x` + y)` = x by A1;
+    hence thesis;
+  end;
+end;
+
+definition let G be non empty ComplLattStr;
+  attr G is with_idempotent_element means :Def13:
+   ex x being Element of G st x + x = x;
+  correctness;
+end;
+
+ reserve G for Robbins join-associative join-commutative
+   (non empty ComplLattStr);
+ reserve x, y, z, u, v for Element of G;
+
+definition let G be non empty ComplLattStr,
+               x, y be Element of G;
+  func \delta (x, y) -> Element of G equals :Def14:
+   -(-x + y);
+  coherence;
+end;
+
+definition let G be non empty ComplLattStr,
+               x, y be Element of G;
+  func Expand (x, y) -> Element of G equals :Def15:
+   \delta (x + y, \delta(x, y));
+  coherence;
+end;
+
+definition let G be non empty ComplLattStr,
+               x be Element of G;
+  func x _0 -> Element of G equals :Def16:
+   -(-x + x);
+  coherence;
+
+  func Double x -> Element of G equals :Def17:
+    x + x;
+  coherence;
+end;
+
+definition let G be non empty ComplLattStr,
+               x be Element of G;
+  func x _1 -> Element of G equals :Def18:
+   x _0 + x;
+  coherence;
+  func x _2 -> Element of G equals :Def19:
+   x _0 + Double x;
+  coherence;
+  func x _3 -> Element of G equals :Def20:
+   x _0 + (Double x + x);
+  coherence;
+  func x _4 -> Element of G equals :Def21:
+   x _0 + (Double x + Double x);
+  coherence;
+end;
+
+theorem Th37:
+  \delta ((x + y), (\delta (x, y))) = y
+proof
+  thus \delta ((x + y), (\delta (x, y))) = \delta (x + y, -(-x + y)) by Def14
+         .= -(-(x + y) + -(-x + y)) by Def14
+         .= y by Def5;
+end;
+
+theorem Th38:
+  Expand (x, y) = y
+proof
+  thus Expand (x, y) = \delta (x + y, \delta(x, y)) by Def15
+               .= y by Th37;
+end;
+
+theorem Th39:
+  \delta (-x + y, z) = -(\delta (x, y) + z)
+proof
+  thus \delta (-x + y, z) = -(-(-x + y) + z) by Def14
+                    .= -(\delta (x, y) + z) by Def14;
+end;
+
+theorem Th40:
+  \delta (x, x) = x _0
+proof
+  thus \delta (x, x) = -(-x + x) by Def14
+               .= x _0 by Def16;
+end;
+
+theorem Th41:
+  \delta (Double x, x _0) = x
+proof
+  thus \delta (Double x, x _0) = \delta (Double x, \delta (x, x)) by Th40
+                    .= \delta (x + x, \delta (x, x)) by Def17
+                    .= Expand (x, x) by Def15
+                    .= x by Th38;
+end;
+
+theorem Th42: :: Lemma 1
+  \delta (x _2, x) = x _0
+proof
+  thus \delta (x _2, x) = \delta (Double x + x _0, x) by Def19
+                  .= \delta (Double x + x _0, \delta (Double x, x _0)) by Th41
+      .= Expand (Double x, x _0) by Def15
+      .= x _0 by Th38;
+end;
+
+theorem Th43:
+  x _2 + x = x _3
+proof
+  thus x _2 + x = x _0 + Double x + x by Def19
+          .= x _0 + (Double x + x) by LATTICES:def 5
+          .= x _3 by Def20;
+end;
+
+theorem Th44:
+  x _4 + x _0 = x _3 + x _1
+proof
+  thus x _4 + x _0 = x _0 + (Double x + Double x) + x _0 by Def21
+          .= (x _0 + Double x) + Double x + x _0 by LATTICES:def 5
+          .= (x _0 + Double x) + (x + x) + x _0 by Def17
+          .= (x _0 + Double x) + x + x + x _0 by LATTICES:def 5
+          .= (x _0 + (Double x + x)) + x + x _0 by LATTICES:def 5
+          .= x _3 + x + x _0 by Def20
+          .= x _3 + (x + x _0) by LATTICES:def 5
+          .= x _3 + x _1 by Def18;
+end;
+
+theorem Th45:
+  x _3 + x _0 = x _2 + x _1
+proof
+  thus x _3 + x _0 = x _0 + (Double x + x) + x _0 by Def20
+          .= (x _0 + Double x) + x + x _0 by LATTICES:def 5
+          .= x _2 + x + x _0 by Def19
+          .= x _2 + (x + x _0) by LATTICES:def 5
+          .= x _2 + x _1 by Def18;
+end;
+
+theorem Th46:
+  x _3 + x = x _4
+proof
+  thus x _3 + x = x _0 + (Double x + x) + x by Def20
+          .= x _0 + (Double x + x + x) by LATTICES:def 5
+          .= x _0 + (Double x + (x + x)) by LATTICES:def 5
+          .= x _0 + (Double x + Double x) by Def17
+          .= x _4 by Def21;
+end;
+
+theorem Th47: :: Lemma 2
+  \delta (x _3, x _0) = x
+proof
+  thus x = Expand (x _2, x) by Th38
+     .= \delta (x + x _2, \delta (x _2, x)) by Def15
+     .= \delta (x + x _2, x _0) by Th42
+     .= \delta (x _3, x _0) by Th43;
+end;
+
+theorem Th48:  :: Left Argument Substitution
+  -x = -y implies \delta (x, z) = \delta (y,z)
+proof
+  assume A1: -x = -y;
+  thus \delta (x, z) = -(-x + z) by Def14
+               .= \delta (y,z) by A1,Def14;
+end;
+
+theorem Th49: :: Exchange
+  \delta (x, -y) = \delta (y, -x)
+proof
+  thus \delta (x, -y) = -(-x + -y) by Def14
+                .= \delta (y, -x) by Def14;
+end;
+
+theorem Th50: :: Lemma 3
+  \delta (x _3, x) = x _0
+proof
+A1:  x = Expand (-x _3 + x _0, x) by Th38
+   .= \delta (-x _3 + x _0 + x, \delta (-x _3 + x _0, x)) by Def15
+   .= \delta (-x _3 + (x _0 + x), \delta (-x _3 + x _0, x)) by LATTICES:def 5
+   .= \delta (-x _3 + x _1, \delta (-x _3 + x _0, x)) by Def18
+   .= \delta (-x _3 + x _1, -(\delta (x _3, x _0) + x)) by Th39
+   .= \delta (-x _3 + x _1, -(x + x)) by Th47
+   .= \delta (-x _3 + x _1, -Double x) by Def17;
+A2:  -Double x = Expand (-x _3 + x _1, -Double x) by Th38
+     .= \delta (-x _3 + x _1 + -Double x, x) by A1,Def15;
+  set alpha = -x _3 + x _1 + -Double x;
+A3:-Double x = -(-alpha + x) by A2,Def14;
+A4:x = \delta (Double x, x _0) by Th41 .= \delta (-alpha + x, x _0)
+     by A3,Th48;
+ -x _3 = Expand (x _1 + -Double x, -x _3) by Th38
+  .= \delta (x _1 + -Double x + -x _3, \delta (x _1 + -Double x, -x _3))
+      by Def15
+  .= \delta (-x _3 + x _1 + -Double x, \delta (x _1 + -Double x, -x _3))
+                   by LATTICES:def 5
+  .= \delta (alpha, \delta (x _3, -(x _1 + -Double x))) by Th49
+  .= \delta (alpha, \delta (x _3, \delta (Double x, x _1))) by Def14
+  .= \delta (alpha, \delta (x _0 + (x + Double x), \delta (Double x, x _1)))
+    by Def20
+  .= \delta (alpha, \delta (x _0 + x + Double x, \delta (Double x, x _1)))
+            by LATTICES:def 5
+  .= \delta (alpha, \delta (Double x + x _1, \delta (Double x, x _1))) by Def18
+  .= \delta (alpha, Expand (Double x, x _1)) by Def15
+  .= \delta (alpha, x _1) by Th38
+  .= -(-alpha + x _1) by Def14;
+  hence \delta (x _3, x) = \delta (-alpha + x _1, x) by Th48
+     .= \delta (-alpha + (x _0 + x), x) by Def18
+     .= \delta (-alpha + x + x _0, \delta (-alpha + x, x _0))
+                         by A4,LATTICES:def 5
+     .= Expand (-alpha + x, x _0) by Def15
+     .= x _0 by Th38;
+end;
+
+theorem Th51: :: Lemma 4
+  \delta (x _1 + x _3, x) = x _0
+proof
+    x _0 = Expand (x _4, x _0) by Th38
+      .= \delta (x _4 + x _0, \delta (x _4, x _0)) by Def15
+      .= \delta (x _4 + x _0, \delta (x _4, \delta (x _3, x))) by Th50
+      .= \delta (x _3 + x _1, \delta (x _4, \delta (x _3, x))) by Th44
+      .= \delta (x _3 + x _1, \delta (x _3 + x, \delta (x _3, x))) by Th46
+      .= \delta (x _3 + x _1, Expand (x _3, x)) by Def15
+      .= \delta (x _3 + x _1, x) by Th38;
+  hence thesis;
+end;
+
+theorem Th52: :: Lemma 5
+  \delta (x _1 + x _2, x) = x _0
+proof
+  thus x _0 = Expand (x _3, x _0) by Th38
+      .= \delta (x _3 + x _0, \delta(x _3, x _0)) by Def15
+      .= \delta (x _1 + x _2, \delta(x _3, x _0)) by Th45
+      .= \delta (x _1 + x _2, x) by Th47;
+end;
+
+theorem Th53: :: Lemma 6
+  \delta (x _1 + x _3, x _0) = x
+proof
+  thus x = Expand (x _1 + x _2, x) by Th38
+   .= \delta (x _1 + x _2 + x, \delta(x _1 + x _2, x)) by Def15
+   .= \delta (x _1 + (x _2 + x), \delta(x _1 + x _2, x)) by LATTICES:def 5
+   .= \delta (x _1 + x _3, \delta(x _1 + x _2, x)) by Th43
+   .= \delta (x _1 + x _3, x _0) by Th52;
+end;
+
+definition let G, x;
+  func \beta x -> Element of G equals :Def22:
+   -(x _1 + x _3) + x + -(x _3);
+  coherence;
+end;
+
+theorem Th54: :: Lemma 7
+  \delta (\beta x, x) = -x _3
+proof
+  thus -x _3 =
+  \delta (-(x _1 + x _3) + x + -(x _3), \delta (-(x _1 + x _3) + x, -(x _3)))
+     by Th37
+     .= \delta (\beta x, \delta (-(x _1 + x _3) + x, -(x _3))) by Def22
+     .= \delta (\beta x, \delta (x _3, -(-(x _1 + x _3) + x))) by Th49
+     .= \delta (\beta x, \delta (x _3, \delta (x _1 + x _3, x))) by Def14
+     .= \delta (\beta x, \delta (x _3, x _0)) by Th51
+     .= \delta (\beta x, x) by Th47;
+end;
+
+theorem Th55: :: Lemma 8
+  \delta (\beta x, x) = -(x _1 + x _3)
+proof
+  thus -(x _1 + x _3) =
+  \delta (-(x _1 + x _3) + (x + -(x _3)), \delta (x + -(x _3), -(x _1 + x _3)))
+     by Th37
+.=\delta (-(x _1 + x _3) + x + -(x _3), \delta (x + -(x _3), -(x _1 + x _3)))
+     by LATTICES:def 5
+  .= \delta (\beta x, \delta (x + -(x _3), -(x _1 + x _3))) by Def22
+  .= \delta (\beta x, \delta (x _1 + x _3, -(x + -x _3))) by Th49
+  .= \delta (\beta x, \delta (x _1 + x _3, \delta (x _3, x))) by Def14
+  .= \delta (\beta x, \delta (x _1 + x _3, x _0)) by Th50
+  .= \delta (\beta x, x) by Th53;
+end;
+
+theorem :: Winker Second Condition
+    ex y, z st -(y + z) = -z
+proof
+  consider x;
+  take y = x _1, z = x _3;
+    -(y + z) = \delta (\beta x, x) by Th55
+    .= -z by Th54;
+  hence thesis;
+end;
+
+begin :: Proofs according to Bill McCune
+
+theorem
+    (for z holds --z = z) implies G is Huntington
+proof
+  assume A1: for z holds --z = z;
+  let x, y;
+A2: --(-(-x + -y) + -(x + -y)) = --y by Def5;
+    -(-x + -y) + -(x + -y) = --(-(-x + -y) + -(x + -y)) by A1
+      .= y by A1,A2;
+  hence thesis;
+end;
+
+theorem Th58:
+  G is with_idempotent_element implies G is Huntington
+proof
+  assume G is with_idempotent_element;
+  then consider C being Element of G such that
+A1: C + C = C by Def13;
+
+  assume G is non Huntington;
+  then consider B, A being Element of G such that
+A2: -(-B + -A) + -(B + -A) <> A by Def12;
+
+A3: C = -(-C + -(C + -C)) by A1,Def5;
+
+A4: now let x;
+      thus C + x = -(-(-C + (C+x)) + -(C + (C+x))) by Def5
+                .= -(-(-C + C+x) + -(C + (C+x))) by LATTICES:def 5
+                .= -(-(C + -C + x) + -(C + x)) by A1,LATTICES:def 5;
+   end;
+
+A5: -(C + -(C + -C + -C)) = -C by A3,Def5;
+
+A6: C = -(-(C + C) + -(-C + -(C + -C) + C)) by A3,Def5
+      .= -(-C + -(C + -C + -(C + -C))) by A1,LATTICES:def 5;
+
+     set D = C + -C + -C;
+
+ -(-C + -(C + -C + -C))
+          = -(-(-(C + -C + -C) + C) + -(C + C + (-C + -C)))
+             by A1,A5,LATTICES:def 5
+         .= -(-(-(C + -C + -C) + C) + -(C + (C + (-C + -C))))
+             by LATTICES:def 5
+         .= -(-(-D + C) + -(D + C)) by LATTICES:def 5
+         .= C by Def5;
+
+then -(C + -C) = -(C + -C + -C) by A5,Def5;
+
+then A7:C = C + -(C + -C) by A4,A5,A6;
+
+A8:now let x;
+      thus x = -(-(C + -(C + -C) + x) + -(-C + -(C + -C) + x)) by A3,A7,Def5
+     .= -(-(C + (-(C + -C) + x)) + -(-C + -(C + -C) + x)) by LATTICES:def 5
+     .= -(-(C + (-(C + -C) + x)) + -(-C + (-(C + -C) + x))) by LATTICES:def 5
+     .= -(C + -C) + x by Def5;
+    end;
+
+A9:now let x;
+      thus -(C + -C) = -(-(-x + -(C + -C)) + -(x + -(C + -C))) by Def5
+                    .= -(--x + -(x + -(C + -C))) by A8
+                    .= -(--x + -x) by A8;
+    end;
+
+A10:now let x;
+     thus --x = -(-(-x + --x) + -(x + --x)) by Def5
+        .= -(-(C + -C) + -(x + --x)) by A9
+        .= --(x + --x) by A8;
+   end;
+
+A11:now let x;
+      thus -x = -(-(---x + -x) + -(--x + -x)) by Def5
+             .= -(-(---x + -x) + -(C + -C)) by A9
+             .= --(---x + -x) by A8
+             .= ---x by A10;
+    end;
+
+A12:now let x, y;
+      thus y = -(-(-x + y) + -(x + y)) by Def5
+            .= ---(-(-x + y) + -(x + y)) by A11
+            .= --y by Def5;
+    end;
+
+ now let x, y;
+      thus -(-x + y) + -(x + y) = --(-(-x + y) + -(x + y)) by A12 .= -y
+        by Def5;
+    end;
+
+  then -(-B + -A) + -(B + -A) = --A .= A by A12;
+  hence thesis by A2;
+end;
+
+definition
+  cluster TrivComplLat -> with_idempotent_element;
+  coherence
+  proof
+    consider x be Element of TrivComplLat;
+    take x;
+    thus x = x + x by REALSET1:def 20;
+  end;
+end;
+
+definition
+  cluster with_idempotent_element ->
+    Huntington (Robbins join-associative join-commutative
+      (non empty ComplLattStr));
+  coherence by Th58;
+end;
+
+theorem Th59:
+  (ex c, d being Element of G st c + d = c) implies
+    G is Huntington
+proof
+  given C, D being Element of G such that
+A1: C + D = C;
+
+A2: -(-C + -(D + -C)) = D by A1,Def5;
+
+A3: now let x, y;
+     thus -(-(D + -(C + x) + y) + -(C + x + y))
+        = -(-(-(C + x) + (D + y)) + -(C + D + x + y)) by A1,LATTICES:def 5
+       .= -(-(-(C + x) + (D + y)) + -(C + x + D + y)) by LATTICES:def 5
+       .= -(-(-(C + x) + (D + y)) + -((C + x) + (D + y))) by LATTICES:def 5
+       .= D + y by Def5;
+   end;
+
+A4: now let x, y, z;
+       set k = -(-x + y) + -(x + y);
+       thus -(-(-(-x + y) + -(x + y) + z) + -(y + z))
+          = -(-(k + z) + -(-k + z)) by Def5
+         .= z by Def5;
+     end;
+
+A5: now let x, y, z;
+       set k = -(-x + y);
+       thus -(-(-(-x + y) + x + y) + y) =
+         -(-(k + x + y) + -(k + -(x + y))) by Def5
+         .= -(-(k + (x + y)) + -(k + -(x + y))) by LATTICES:def 5
+         .= -(-x + y) by Def5;
+     end;
+
+A6: now let x;
+       thus D = -(-(-(-x + C) + -(x + C) + D) + -(C + D)) by A4
+        .= -(-C + -(D + -(C + -x) + -(C + x))) by A1,LATTICES:def 5;
+     end;
+
+     set E = D + -C;
+     set L = -(D + -C);
+
+A7:   -(D + -(C + -E)) = -E by A2,Def5;
+
+ now
+     thus -(L + -(C + L)) = -(-(D + -(C + L)) + -((D + C) + L)) by A1,A2,Def5
+                    .= -(-(D + -(C + L)) + -(D + (C + L))) by LATTICES:def 5
+                    .= D by Def5;
+     end;
+
+then A8: -(D + -(D + -C + -(C + -(D + -C)))) = -(C + -(D + -C)) by Def5;
+
+      set L = C + -(D + -C);
+
+A9: C = -(-(D + -L + C) + -(-(D + -C) + C)) by A7,Def5
+       .= -(-L + -(C + -L)) by A1,LATTICES:def 5;
+
+A10: now let x, y, z;
+         set k = -(-x + y);
+           -(-(k + x + y) + y) = k by A5;
+        hence z = -(-(-(-(-x + y) + x + y) + y + z) + -(-(-x + y) + z))
+          by Def5;
+       end;
+
+A11: -(C + -(D + -C))
+                = -(D + -(D + -(C + -(D + -C)) + -C)) by A8,LATTICES:def 5
+               .= -C by A2,A7,Def5;
+
+then A12: -(C + -(C + -(C + -C))) = -(C + -C) by A9,Def5;
+
+      set K = -(C + C + -(C + -C));
+
+     K = -(C + -(C + -C) + C) by LATTICES:def 5;
+
+then C = -(-(C + -C) + K) by A12,Def5;
+
+then -(C + -(C + -C + K)) = K by Def5;
+
+then K = -(-(K + C + -C) + C) by LATTICES:def 5
+        .= -(-(-(-(C + -C) + C + C) + C + -C) + C) by LATTICES:def 5
+        .= -C by A9,A10,A11;
+
+then D + -(C + -C)
+       = -(-(D + -(C + C) + -(C + -C)) + -C) by A3
+      .= -(-C + -(D + -(C + -C) + -(C + C))) by LATTICES:def 5
+      .= D by A6;
+
+then A13: C + -(C + -C) = C by A1,LATTICES:def 5;
+
+A14: now let x;
+      thus x = -(-(C + -(C + -C) + x) + -(-C + -(C + -C) + x)) by A9,A11,A13,
+Def5
+       .= -(-(C + (-(C + -C) + x)) + -(-C + -(C + -C) + x)) by LATTICES:def 5
+       .= -(-(C + (-(C + -C) + x)) + -(-C + (-(C + -C) + x)))
+              by LATTICES:def 5
+       .= -(C + -C) + x by Def5;
+    end;
+
+  set e = -(C + -C);
+    e = e + e by A14;
+  then G is with_idempotent_element by Def13;
+  hence thesis by Th58;
+end;
+
+theorem Th60:
+  ex y, z st y + z = z
+proof
+A1: now let x, y;
+     thus -(x + y) = -(-(-(-x + y) + -(x + y)) + -(-x + y + -(x + y))) by Def5
+          .= -(y + -(-x + y + -(x + y))) by Def5
+          .= -(-(-(x + y) + -x + y) + y) by LATTICES:def 5;
+     end;
+
+A2: now let x, y;
+   thus -(-x + y) = -(-(-(x + y) + -(-x + y)) + -((x + y) + -(-x + y)))
+     by Def5
+        .= -(y + -(x + y + -(-x + y))) by Def5
+        .= -(-(-(-x + y) + x + y) + y) by LATTICES:def 5;
+     end;
+
+A3: now let x, y;
+   thus y = -(-(-(-(-x + y) + x + y) + y) + -((-(-x + y) + x + y) + y))
+      by Def5
+         .= -(-(-x + y) + -((-(-x + y) + x + y) + y)) by A2
+         .= -(-(-(-x + y) + x + (y + y)) + -(-x + y)) by LATTICES:def 5
+         .= -(-(-(-x + y) + x + Double y) + -(-x + y)) by Def17;
+     end;
+
+A4: now let x, y, z;
+       thus z = -(-(-(-(-(-x + y) + x + Double y) + -(-x + y)) + z) +
+          -(-(-(-x + y) + x + Double y) + -(-x + y) + z)) by Def5
+       .= -(-(-(-(-x + y) + x + Double y) + -(-x + y) + z) + -(y + z)) by A3;
+     end;
+
+A5:now let x, y, z;
+       set k = -(-(-x + y) + x + Double y) + -(-x + y) + z;
+       thus -(y + z) = -(-(-k + -(y + z)) + -(k + -(y + z))) by Def5
+         .= -(z + -(k + -(y + z))) by A4
+         .= -(-(-(-(-x + y) + x + Double y) + -(-x + y) + -(y + z) + z) + z)
+           by LATTICES:def 5;
+     end;
+
+A6: now let x, y, z, u;
+  set k = -(-(-(-x + y) + x + Double y) + -(-x + y) + -(y + z) + z) + z;
+  thus u = -(-(-k + u) + -(k + u)) by Def5
+   .= -(-(-(y + z) + u) + -(k + u)) by A5;
+end;
+
+A7: now let x, y, z, v;
+    set k = -(-(Double v + v) + v);
+    set l = -(-(Double v + v) + v) + Double v;
+    set v5 = Double v + Double v + v;
+
+A8: -(Double v + v + l) = -(-(-(Double v + v + l) +
+              -(Double v + v) + l) + l) by A1
+         .= -(-(-(Double v + v + l) + l + -(Double v + v)) + l)
+            by LATTICES:def 5;
+
+  thus k = -(-(-(v + Double v) + k) +
+     -((-(-(-(-(Double v + v) + v) + (Double v + v) + Double v) +
+       -(-(Double v + v) + v) +
+       -(v + Double v) + Double v) + Double v) + k)) by A6
+       .= -(-(-(v + Double v) + k) +
+     -((-(-(Double v + v + k + Double v) + k +
+       Double v + -(v + Double v)) + Double v) + k)) by LATTICES:def 5
+       .= -(-(-(v + Double v) + k) +
+     -((-(-((Double v + v) + k + Double v) + (k +
+       Double v) + -(v + Double v)) + Double v) + k)) by LATTICES:def 5
+    .= -(-(-(v + Double v) + k) + -((-(-(Double v + v + (k + Double v)) + l +
+         -(v + Double v)) + Double v) + k)) by LATTICES:def 5
+       .= -(-(-(v + Double v) + k) + -(-(-(Double v + v + l) + l +
+         -(v + Double v)) + l)) by LATTICES:def 5
+       .= -(-(-(Double v + v) + k) + -(Double v + v + Double v + k))
+       by A8,LATTICES:def 5
+       .= -(-(-(Double v + v) + k) + -(v5 + k)) by LATTICES:def 5;
+  end;
+
+A9:now let x;
+     set k = -(-(Double x + x) + x) + -(Double x + x);
+     set l = -(-(-(Double x + x) + x) + (Double x + Double x + x));
+A10:  -(Double x + x) = -(-(-(-(-(Double x + x) + x) + (Double x + x) +
+       Double x) +
+       -(-(Double x + x) + x) + -(Double x + x)) + -(x + -(Double x + x)))
+         by A4
+    .= -(-(-(-(-(Double x + x) + x) + (Double x + x) + Double x) + k) +
+        -(x + -(Double x + x))) by LATTICES:def 5
+    .= -(-(-(-(-(Double x + x) + x) + (Double x + x + Double x)) + k) +
+        -(x + -(Double x + x))) by LATTICES:def 5
+    .= -(-(l + k) + -(x + -(Double x + x))) by LATTICES:def 5;
+      l = -(-(-k + l) + -(k + l)) by Def5
+     .= -(-(-(Double x + x) + x) + -(k + l)) by A7;
+    hence -(-(-(Double x + x) + x) + (Double x + Double x + x)) =
+      -(Double x + x) by A10;
+   end;
+
+A11:now let x;
+      thus -(-(Double x + x) + x) + Double x =
+        -(-(-(Double x + x) + (-(-(Double x + x) + x) + Double x)) +
+          -((Double x + x) + (-(-(Double x + x) + x) + Double x))) by Def5
+        .= -(-(-(Double x + x) + (-(-(Double x + x) + x) + Double x)) +
+            -((-(-(Double x + x) + x) + ((Double x + x) + Double x))))
+              by LATTICES:def 5
+        .= -(-(-(Double x + x) + (-(-(Double x + x) + x) + Double x)) +
+            -((-(-(Double x + x) + x) + (Double x + Double x + x))))
+            by LATTICES:def 5
+        .= -(-(-(Double x + x) + (-(-(Double x + x) + x) + Double x)) +
+            -(Double x + x)) by A9
+        .= -(-(-(-(Double x + x) + x) + -(Double x + x) + Double x) +
+          -(Double x + x)) by LATTICES:def 5;
+    end;
+
+A12: now let x;
+A13:    -(-(Double x + x) + x) = -(-(-(-(Double x + x) + x) +
+           (Double x + x) + x) + x) by A2
+         .= -(-(-(-(Double x + x) + x) + (Double x + x + x)) + x)
+            by LATTICES:def 5
+         .= -(-(-(-(Double x + x) + x) + (Double x + (x + x))) + x)
+            by LATTICES:def 5
+         .= -(-(-(-(Double x + x) + x) + (Double x + Double x)) + x)
+            by Def17;
+       thus x = -(-(-(-(-(Double x + x) + x) + (Double x + Double x)) + x) +
+              -(-(-(Double x + x) + x) + (Double x + Double x) + x)) by Def5
+        .= -(-(-(-(-(Double x + x) + x) + (Double x + Double x)) + x) +
+              -(-(-(Double x + x) + x) + ((Double x + Double x) + x)))
+               by LATTICES:def 5
+        .= -(-(-(Double x + x) + x) + -(Double x + x)) by A9,A13;
+     end;
+
+A14:now let x, y;
+       thus y = -(-(-(-(-(Double x + x) + x) + -(Double x + x)) + y) +
+           -(-(-(Double x + x) + x) + -(Double x + x) + y)) by Def5
+        .= -(-(-(-(Double x + x) + x) + -(Double x + x) + y) + -(x + y))
+          by A12;
+     end;
+
+A15: now let x, y;
+      thus
+        Double x = -(-(-(-(Double x + x) + x) + -(Double x + x) + Double x) +
+        -(x + Double x)) by A14
+         .= -(-(Double x + x) + x) + Double x by A11;
+      end;
+
+  consider x;
+  set c = Double x, d = -(-(Double x + x) + x);
+  take d, c;
+  thus thesis by A15;
+end;
+
+definition
+ cluster Robbins -> Huntington (join-associative join-commutative
+   (non empty ComplLattStr));
+ coherence
+ proof
+   let K be join-associative join-commutative (non empty ComplLattStr);
+   assume A1: K is Robbins;
+   then consider y, z be Element of K such that
+A2:   y + z = z by Th60;
+   thus thesis by A1,A2,Th59;
+ end;
+end;
+
+definition let L be non empty OrthoLattStr;
+  attr L is de_Morgan means :Def23:
+   for x, y being Element of L holds x "/\" y = (x` "\/" y`)`;
+end;
+
+definition let L be non empty ComplLattStr;
+  cluster CLatt L -> de_Morgan;
+  coherence
+  proof
+    let x, y be Element of CLatt L;
+    reconsider x' = x, y' = y as Element of L by Def11;
+      x'` = x` & y'` = y` by Th35;
+    then x'` "\/" y'` = x` "\/" y` by Th35;
+  then (x'` "\/" y'`)` = (x` "\/" y`)` by Th35;
+    then (x` "\/" y`)` = x' *' y' by Def4;
+    hence thesis by Th35;
+  end;
+end;
+
+theorem Th61:
+  for L being well-complemented join-commutative meet-commutative
+    (non empty OrthoLattStr),
+      x being Element of L holds
+    x + x` = Top L & x "/\" x` = Bottom L
+  proof
+   let L be well-complemented join-commutative meet-commutative
+     (non empty OrthoLattStr),
+       x be Element of L;
+A1:  x` is_a_complement_of x by Def10;
+    hence x + x` = Top L by LATTICES:def 18;
+    thus thesis by A1,LATTICES:def 18;
+  end;
+
+theorem Th62:
+  for L being bounded distributive well-complemented preOrthoLattice holds
+    (Top L)` = Bottom L
+  proof
+    let L be bounded distributive well-complemented preOrthoLattice;
+    consider x being Element of L;
+      (Top L)` = (x`` + x`)` by Th61
+         .= x` "/\" x by Th34
+         .= Bottom L by Th61;
+    hence thesis;
+  end;
+
+definition
+  cluster TrivOrtLat -> de_Morgan;
+  coherence
+  proof
+    let x, y be Element of TrivOrtLat;
+    thus thesis by REALSET1:def 20;
+  end;
+end;
+
+definition
+  cluster strict de_Morgan Boolean Robbins Huntington preOrthoLattice;
+  existence
+  proof
+    take TrivOrtLat;
+    thus thesis;
+  end;
+end;
+
+Lm1:
+  for L being de_Morgan (non empty OrthoLattStr),
+      a,b being Element of L holds
+    a *' b = a "/\" b
+  proof
+    let L be de_Morgan (non empty OrthoLattStr),
+        a,b be Element of L;
+    thus a *' b = (a` "\/" b`)` by Def4
+              .= a "/\" b by Def23;
+  end;
+
+definition
+  cluster join-associative join-commutative de_Morgan ->
+    meet-commutative (non empty OrthoLattStr);
+  coherence
+  proof
+    let L be non empty OrthoLattStr;
+    assume A1: L is join-associative join-commutative de_Morgan;
+    let a,b be Element of L;
+    thus a "/\" b = a *' b by A1,Lm1
+               .= b *' a by A1,Th8
+               .= b "/\" a by A1,Lm1;
+  end;
+end;
+
+theorem Th63:
+  for L being Huntington de_Morgan preOrthoLattice holds
+   Bot L = Bottom L
+proof
+  let L be Huntington de_Morgan preOrthoLattice;
+  reconsider C = Bot L as Element of L;
+A1:for a being Element of L holds C "/\" a = C & a "/\" C = C
+  proof
+    let a be Element of L;
+    reconsider a' = a as Element of L;
+    thus C "/\" a = Bot L *' a' by Lm1
+               .= C by Def9;
+    hence thesis;
+  end;
+  then L is lower-bounded by LATTICES:def 13;
+  hence thesis by A1,LATTICES:def 16;
+end;
+
+definition
+  cluster Boolean -> Huntington (well-complemented preOrthoLattice);
+  coherence
+  proof
+    let L be well-complemented preOrthoLattice;
+    assume A1: L is Boolean;
+then A2:  L is bounded distributive complemented by LATTICES:def 20;
+    reconsider L' = L as Boolean preOrthoLattice by A1;
+A3:  for x being Element of L' holds
+      Top L' "/\" x = x by LATTICES:43;
+      now let x, y be Element of L;
+      thus (x` "\/" y`)` "\/" (x` "\/" y)` = (x "/\" y) + (x` + y)` by A2,Th34
+              .= (x + (x` + y)`) "/\" (y + (x` + y)`) by A2,LATTICES:31
+              .= (x + (x` + y``)`) "/\" (y + (x` + y)`) by A2,Th33
+              .= (x + (x "/\" y`)) "/\" (y + (x` + y)`) by A2,Th34
+              .= x "/\" (y + (x` + y)`) by LATTICES:def 8
+              .= x "/\" (y + (x` + y``)`) by A2,Th33
+              .= x "/\" (y + (x "/\" y`)) by A2,Th34
+              .= x "/\" ((y + x) "/\" (y + y`)) by A2,LATTICES:31
+              .= (x "/\" (y + x)) "/\" (y + y`) by LATTICES:def 7
+              .= x "/\" (y + y`) by LATTICES:def 9
+              .= x "/\" Top L by Th61
+              .= x by A3;
+    end;
+    hence thesis by Def6;
+  end;
+end;
+
+definition
+  cluster Huntington -> Boolean (de_Morgan preOrthoLattice);
+  coherence
+  proof
+    let L be de_Morgan preOrthoLattice;
+    assume A1: L is Huntington;
+    then reconsider L' = L as Huntington preOrthoLattice;
+    thus L is bounded
+    proof
+A2:    L' is upper-bounded;
+        L is lower-bounded
+      proof
+        set c' = Bot L';
+        reconsider c = c' as Element of L;
+        take c;
+        let a be Element of L;
+        reconsider a' = a as Element of L';
+        thus c "/\" a = c' *' a' by Lm1 .= c by Def9;
+        thus a "/\" c = c' *' a' by Lm1 .= c by Def9;
+      end;
+      hence thesis by A2,LATTICES:def 15;
+    end;
+    thus L is complemented
+    proof
+      let b be Element of L;
+      take a = b`;
+      A3: L' is join-idempotent;
+      hence a + b = Top L by Def8;
+      thus b + a = Top L by A3,Def8;
+      thus a "/\" b = a *' b by Lm1
+                 .= (a` + b`)` by Def4
+                 .= Bot L' by Th9
+                 .= Bottom L by Th63;
+      hence b "/\" a = Bottom L;
+    end;
+    thus L is distributive
+    proof
+      let a, b, c be Element of L;
+A4:    a "/\" b = a *' b & a "/\" c = a *' c by Lm1;
+      thus a "/\" (b "\/" c) = a *' (b + c) by Lm1
+                        .= (a "/\" b) "\/" (a "/\" c) by A1,A4,Th31;
+    end;
+  end;
+end;
+
+definition
+  cluster Robbins de_Morgan -> Boolean preOrthoLattice;
+  coherence
+  proof
+    let L be preOrthoLattice;
+    assume L is Robbins de_Morgan;
+    then reconsider L' = L as Robbins de_Morgan preOrthoLattice;
+    thus L is bounded
+    proof
+        L' is upper-bounded;
+      hence thesis;
+    end;
+      now let b be Element of L';
+      take a = b`;
+      thus a + b = Top L' by Def8;
+      thus a "/\" b = a *' b by Lm1
+                 .= (a` + b`)` by Def4
+                 .= Bot L' by Th9
+                 .= Bottom L' by Th63;
+    end;
+    hence L is complemented;
+      now let a, b, c be Element of L';
+A1:    a "/\" b = a *' b & a "/\" c = a *' c by Lm1;
+      thus a "/\" (b "\/" c) = a *' (b + c) by Lm1
+                        .= (a "/\" b) "\/" (a "/\" c) by A1,Th31;
+    end;
+    hence L is distributive;
+  end;
+
+  cluster Boolean -> Robbins (well-complemented preOrthoLattice);
+  coherence
+  proof
+    let L be well-complemented preOrthoLattice;
+    assume L is Boolean;
+    then reconsider L' = L as Boolean well-complemented preOrthoLattice;
+      now let x, y be Element of L';
+      thus ((x + y)` + (x + y`)`)` = (x + y) "/\" (x + y`) by Th34
+             .= ((x + y) "/\" x) + ((x + y) "/\" y`) by LATTICES:def 11
+             .= ((x + y) "/\" x) + ((x "/\" y`) + (y "/\" y`))
+                   by LATTICES:def 11
+             .= ((x + y) "/\" x) + ((x "/\" y`) + (y` + y``)`) by Th34
+             .= x + ((x "/\" y`) + (y` + y``)`) by LATTICES:def 9
+             .= x + (x "/\" y`) + (y` + y``)` by LATTICES:def 5
+             .= x + (y` + y``)` by LATTICES:def 8
+             .= x + (Top L')` by Th61
+             .= x + Bottom L' by Th62
+             .= x by LATTICES:39;
+    end;
+    hence thesis by Def5;
+  end;
+end;
+

@@ -1,0 +1,301 @@
+:: Oriented Metric-Affine Plane - Part I
+::  by Jaroslaw Zajkowski
+::
+:: Received October 24, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, ARYTM_1, ANALMETR, FUNCT_3, ANALOAF, SYMSP_1, RELAT_1,
+      ANALORT;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, REAL_1, RELSET_1, RLVECT_1, STRUCT_0,
+      ANALOAF, ANALMETR, GEOMTRAP;
+ constructors REAL_1, ANALMETR, GEOMTRAP, TDGROUP, DOMAIN_1, XREAL_0, MEMBERED,
+      XBOOLE_0;
+ clusters TDGROUP, RELSET_1, STRUCT_0, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+definition let V be Abelian (non empty LoopStr),
+                   v,w be Element of V;
+ redefine func v + w;
+ commutativity;
+end;
+
+ reserve
+         V for RealLinearSpace,
+         u,u1,u2,v,v1,v2,w,w1,x,y for VECTOR of V,
+
+         a,a1,a2,b,b1,b2,c1,c2,n,k1,k2 for Real;
+
+definition let V,x,y;
+ let u;
+ func Ortm(x,y,u) -> VECTOR of V equals
+:: ANALORT:def 1
+ pr1(x,y,u)*x + (-pr2(x,y,u))*y;
+end;
+
+theorem :: ANALORT:1
+  Gen x,y implies Ortm(x,y,u+v)=Ortm(x,y,u)+Ortm(x,y,v);
+
+theorem :: ANALORT:2
+  Gen x,y implies Ortm(x,y,n*u)= n*Ortm(x,y,u);
+
+theorem :: ANALORT:3
+    Gen x,y implies Ortm(x,y,0.V) = 0.V;
+
+theorem :: ANALORT:4
+  Gen x,y implies Ortm(x,y,-u) = -Ortm(x,y,u);
+
+theorem :: ANALORT:5
+  Gen x,y implies Ortm(x,y,u-v)=Ortm(x,y,u)-Ortm(x,y,v);
+
+theorem :: ANALORT:6
+  Gen x,y & Ortm(x,y,u)=Ortm(x,y,v) implies u=v;
+
+theorem :: ANALORT:7
+  Gen x,y implies Ortm(x,y,Ortm(x,y,u))=u;
+
+theorem :: ANALORT:8
+ Gen x,y implies ex v st u=Ortm(x,y,v);
+
+definition let V,x,y; let u;
+  func Orte(x,y,u) -> VECTOR of V equals
+:: ANALORT:def 2
+  pr2(x,y,u)*x + (-pr1(x,y,u))*y;
+end;
+
+theorem :: ANALORT:9
+  Gen x,y implies Orte(x,y,-v)= -Orte(x,y,v);
+
+theorem :: ANALORT:10
+  Gen x,y implies Orte(x,y,u+v)=Orte(x,y,u) + Orte(x,y,v);
+
+theorem :: ANALORT:11
+  Gen x,y implies Orte(x,y,u-v)=Orte(x,y,u)-Orte(x,y,v);
+
+theorem :: ANALORT:12
+  Gen x,y implies Orte(x,y,n*u)=n*Orte(x,y,u);
+
+theorem :: ANALORT:13
+  Gen x,y & Orte(x,y,u)=Orte(x,y,v) implies u=v;
+
+theorem :: ANALORT:14
+  Gen x,y implies Orte(x,y,Orte(x,y,u)) = -u;
+
+theorem :: ANALORT:15
+  Gen x,y implies ex v st Orte(x,y,v) = u;
+
+definition let V; let x,y,u,v,u1,v1;
+ pred u,v,u1,v1 are_COrte_wrt x,y means
+:: ANALORT:def 3
+   Orte(x,y,u),Orte(x,y,v) // u1,v1;
+ pred u,v,u1,v1 are_COrtm_wrt x,y means
+:: ANALORT:def 4
+   Ortm(x,y,u),Ortm(x,y,v) // u1,v1;
+end;
+
+theorem :: ANALORT:16
+  Gen x,y implies (u,v // u1,v1 implies
+     Orte(x,y,u),Orte(x,y,v) // Orte(x,y,u1),Orte(x,y,v1));
+
+theorem :: ANALORT:17
+  Gen x,y implies (u,v // u1,v1 implies
+     Ortm(x,y,u),Ortm(x,y,v) // Ortm(x,y,u1),Ortm(x,y,v1));
+
+theorem :: ANALORT:18
+  Gen x,y implies (u,u1,v,v1 are_COrte_wrt x,y implies
+   v,v1,u1,u are_COrte_wrt x,y);
+
+theorem :: ANALORT:19
+  Gen x,y implies (u,u1,v,v1 are_COrtm_wrt x,y implies
+   v,v1,u,u1 are_COrtm_wrt x,y);
+
+theorem :: ANALORT:20
+  u,u,v,w are_COrte_wrt x,y;
+
+theorem :: ANALORT:21
+    u,u,v,w are_COrtm_wrt x,y;
+
+theorem :: ANALORT:22
+    u,v,w,w are_COrte_wrt x,y;
+
+theorem :: ANALORT:23
+    u,v,w,w are_COrtm_wrt x,y;
+
+theorem :: ANALORT:24
+   Gen x,y implies u,v,Orte(x,y,u),Orte(x,y,v) are_Ort_wrt x,y;
+
+theorem :: ANALORT:25
+    u,v,Orte(x,y,u),Orte(x,y,v) are_COrte_wrt x,y;
+
+theorem :: ANALORT:26
+    u,v,Ortm(x,y,u),Ortm(x,y,v) are_COrtm_wrt x,y;
+
+theorem :: ANALORT:27
+    Gen x,y implies (u,v // u1,v1 iff ex u2,v2 st u2<>v2 &
+         u2,v2,u,v are_COrte_wrt x,y & u2,v2,u1,v1 are_COrte_wrt x,y);
+
+theorem :: ANALORT:28
+    Gen x,y implies (u,v // u1,v1 iff ex u2,v2 st u2<>v2 &
+         u2,v2,u,v are_COrtm_wrt x,y & u2,v2,u1,v1 are_COrtm_wrt x,y);
+
+theorem :: ANALORT:29
+    Gen x,y implies (u,v,u1,v1 are_Ort_wrt x,y iff
+         u,v,u1,v1 are_COrte_wrt x,y or u,v,v1,u1 are_COrte_wrt x,y);
+
+theorem :: ANALORT:30
+    Gen x,y & u,v,u1,v1 are_COrte_wrt x,y & u,v,v1,u1 are_COrte_wrt x,y
+   implies u=v or u1=v1;
+
+theorem :: ANALORT:31
+    Gen x,y & u,v,u1,v1 are_COrtm_wrt x,y & u,v,v1,u1 are_COrtm_wrt x,y
+    implies u=v or u1=v1;
+
+theorem :: ANALORT:32
+    Gen x,y & u,v,u1,v1 are_COrte_wrt x,y & u,v,u1,w are_COrte_wrt x,y
+    implies u,v,v1,w are_COrte_wrt x,y or u,v,w,v1 are_COrte_wrt x,y;
+
+theorem :: ANALORT:33
+    Gen x,y & u,v,u1,v1 are_COrtm_wrt x,y & u,v,u1,w are_COrtm_wrt x,y
+    implies u,v,v1,w are_COrtm_wrt x,y or u,v,w,v1 are_COrtm_wrt x,y;
+
+theorem :: ANALORT:34
+    u,v,u1,v1 are_COrte_wrt x,y implies v,u,v1,u1 are_COrte_wrt x,y;
+
+theorem :: ANALORT:35
+    u,v,u1,v1 are_COrtm_wrt x,y implies v,u,v1,u1 are_COrtm_wrt x,y;
+
+theorem :: ANALORT:36
+    Gen x,y & u,v,u1,v1 are_COrte_wrt x,y & u,v,v1,w are_COrte_wrt x,y
+implies u,v,u1,w are_COrte_wrt x,y;
+
+theorem :: ANALORT:37
+    Gen x,y & u,v,u1,v1 are_COrtm_wrt x,y & u,v,v1,w are_COrtm_wrt x,y
+   implies u,v,u1,w are_COrtm_wrt x,y;
+
+theorem :: ANALORT:38
+    Gen x,y implies for u,v,w ex u1 st w<>u1 & w,u1,u,v are_COrte_wrt x,y;
+
+theorem :: ANALORT:39
+    Gen x,y implies for u,v,w ex u1 st w<>u1 & w,u1,u,v are_COrtm_wrt x,y;
+
+theorem :: ANALORT:40
+  Gen x,y implies for u,v,w ex u1 st w<>u1 & u,v,w,u1 are_COrte_wrt x,y;
+
+theorem :: ANALORT:41
+  Gen x,y implies for u,v,w ex u1 st w<>u1 & u,v,w,u1 are_COrtm_wrt x,y;
+
+theorem :: ANALORT:42
+    Gen x,y & u,u1,v,v1 are_COrte_wrt x,y & w,w1,v,v1 are_COrte_wrt x,y &
+      w,w1,u2,v2 are_COrte_wrt x,y implies
+      w=w1 or v=v1 or u,u1,u2,v2 are_COrte_wrt x,y;
+
+theorem :: ANALORT:43
+    Gen x,y & u,u1,v,v1 are_COrtm_wrt x,y & w,w1,v,v1 are_COrtm_wrt x,y &
+      w,w1,u2,v2 are_COrtm_wrt x,y implies
+      w=w1 or v=v1 or u,u1,u2,v2 are_COrtm_wrt x,y;
+
+canceled 2;
+
+theorem :: ANALORT:46
+    Gen x,y & u,u1,v,v1 are_COrte_wrt x,y & v,v1,w,w1 are_COrte_wrt x,y
+     & u2,v2,w,w1 are_COrte_wrt x,y implies
+     u,u1,u2,v2 are_COrte_wrt x,y or v=v1 or w=w1;
+
+theorem :: ANALORT:47
+    Gen x,y & u,u1,v,v1 are_COrtm_wrt x,y & v,v1,w,w1 are_COrtm_wrt x,y
+     & u2,v2,w,w1 are_COrtm_wrt x,y implies
+     u,u1,u2,v2 are_COrtm_wrt x,y or v=v1 or w=w1;
+
+theorem :: ANALORT:48
+    Gen x,y & u,u1,v,v1 are_COrte_wrt x,y & v,v1,w,w1 are_COrte_wrt x,y
+     & u,u1,u2,v2 are_COrte_wrt x,y implies
+     u2,v2,w,w1 are_COrte_wrt x,y or v=v1 or u=u1;
+
+theorem :: ANALORT:49
+    Gen x,y & u,u1,v,v1 are_COrtm_wrt x,y & v,v1,w,w1 are_COrtm_wrt x,y
+     & u,u1,u2,v2 are_COrtm_wrt x,y implies
+     u2,v2,w,w1 are_COrtm_wrt x,y or v=v1 or u=u1;
+
+theorem :: ANALORT:50
+    Gen x,y implies (for v,w,u1,v1,w1 holds
+  (not (v,v1,w,u1 are_COrte_wrt x,y) &
+  not (v,v1,u1,w are_COrte_wrt x,y) & u1,w1,u1,w are_COrte_wrt x,y)
+  implies ex u2 st
+  ((v,v1,v,u2 are_COrte_wrt x,y or v,v1,u2,v are_COrte_wrt x,y) &
+  (u1,w1,u1,u2 are_COrte_wrt x,y or u1,w1,u2,u1 are_COrte_wrt x,y)));
+
+theorem :: ANALORT:51
+  Gen x,y implies (ex u,v,w st (u,v,u,w are_COrte_wrt x,y &
+for v1,w1 st v1,w1,u,v are_COrte_wrt x,y holds
+(not v1,w1,u,w are_COrte_wrt x,y & not v1,w1,w,u are_COrte_wrt x,y
+or v1=w1)));
+
+theorem :: ANALORT:52
+    Gen x,y implies (for v,w,u1,v1,w1 holds
+  (not v,v1,w,u1 are_COrtm_wrt x,y &
+   not v,v1,u1,w are_COrtm_wrt x,y & u1,w1,u1,w are_COrtm_wrt x,y)
+  implies ex u2 st
+  ((v,v1,v,u2 are_COrtm_wrt x,y or v,v1,u2,v are_COrtm_wrt x,y) &
+  (u1,w1,u1,u2 are_COrtm_wrt x,y or u1,w1,u2,u1 are_COrtm_wrt x,y)));
+
+theorem :: ANALORT:53
+  Gen x,y implies (ex u,v,w st (u,v,u,w are_COrtm_wrt x,y &
+for v1,w1 holds (v1,w1,u,v are_COrtm_wrt x,y implies
+(not v1,w1,u,w are_COrtm_wrt x,y & not v1,w1,w,u are_COrtm_wrt x,y
+or v1=w1))));
+
+reserve uu,vv for set;
+
+definition let V;let x,y;
+ func CORTE(V,x,y) -> Relation of [:the carrier of V,the carrier of V:] means
+:: ANALORT:def 5
+ [uu,vv] in it iff
+ex u1,u2,v1,v2 st uu=[u1,u2] & vv=[v1,v2] & u1,u2,v1,v2 are_COrte_wrt x,y;
+end;
+
+definition let V;let x,y;
+ func CORTM(V,x,y) -> Relation of [:the carrier of V,the carrier of V:] means
+:: ANALORT:def 6
+ [uu,vv] in it iff
+ ex u1,u2,v1,v2 st uu=[u1,u2] & vv=[v1,v2] & u1,u2,v1,v2 are_COrtm_wrt x,y;
+end;
+
+definition let V;let x,y;
+ func CESpace(V,x,y) -> strict AffinStruct equals
+:: ANALORT:def 7
+  AffinStruct (# the carrier of V,CORTE(V,x,y) #);
+end;
+
+definition let V;let x,y;
+ cluster CESpace(V,x,y) -> non empty;
+end;
+
+definition let V;let x,y;
+ func CMSpace(V,x,y) -> strict AffinStruct equals
+:: ANALORT:def 8
+  AffinStruct (# the carrier of V,CORTM(V,x,y) #);
+end;
+
+definition let V;let x,y;
+ cluster CMSpace(V,x,y) -> non empty;
+end;
+
+theorem :: ANALORT:54
+  uu is Element of CESpace(V,x,y) iff uu is VECTOR of V;
+
+theorem :: ANALORT:55
+  uu is Element of CMSpace(V,x,y) iff uu is VECTOR of V;
+
+reserve p,q,r,s for Element of CESpace(V,x,y);
+
+theorem :: ANALORT:56
+  u=p & v=q & u1=r & v1=s implies (p,q // r,s iff u,v,u1,v1 are_COrte_wrt x,y);
+
+reserve p,q,r,s for Element of CMSpace(V,x,y);
+
+theorem :: ANALORT:57
+  u=p & v=q & u1=r & v1=s implies (p,q // r,s iff u,v,u1,v1 are_COrtm_wrt x,y);

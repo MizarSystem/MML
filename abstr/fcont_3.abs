@@ -1,0 +1,184 @@
+:: Monotonic and Continuous Real Function
+::  by Jaros{\l}aw Kotowicz
+::
+:: Received January 10, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary SEQ_1, PARTFUN1, SUBSET_1, PRE_TOPC, RELAT_1, SEQ_2, ORDINAL2,
+      BOOLE, LIMFUNC1, FUNCT_1, SEQM_3, PROB_1, ARYTM, RCOMP_1, ARYTM_1,
+      ABSVALUE, ARYTM_3, FCONT_1, RFUNCT_2, SQUARE_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, NAT_1, FUNCT_1, SEQ_1, RELSET_1, SEQ_2, SEQM_3, ABSVALUE,
+      PARTFUN1, SQUARE_1, PARTFUN2, RCOMP_1, RFUNCT_2, FCONT_1, LIMFUNC1;
+ constructors REAL_1, NAT_1, SEQ_2, SEQM_3, ABSVALUE, PROB_1, PARTFUN1,
+      PARTFUN2, RCOMP_1, RFUNCT_2, FCONT_1, LIMFUNC1, MEMBERED, XBOOLE_0;
+ clusters RELSET_1, PARTFUN2, RFUNCT_2, XREAL_0, SEQ_1, ARYTM_3, MEMBERED,
+      ZFMISC_1, XBOOLE_0, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+ reserve x,X for set;
+ reserve x0,r,r1,r2,g,g1,g2,p,s for Real;
+ reserve n,m for Nat;
+ reserve a,b,d for Real_Sequence;
+ reserve f for PartFunc of REAL,REAL;
+
+theorem :: FCONT_3:1
+[#] REAL is closed;
+
+theorem :: FCONT_3:2
+  {} REAL is open;
+
+theorem :: FCONT_3:3
+{} REAL is closed;
+
+theorem :: FCONT_3:4
+[#] REAL is open;
+
+theorem :: FCONT_3:5
+right_closed_halfline(r) is closed;
+
+theorem :: FCONT_3:6
+left_closed_halfline(r) is closed;
+
+theorem :: FCONT_3:7
+right_open_halfline(r) is open;
+
+theorem :: FCONT_3:8
+left_open_halfline(r) is open;
+
+definition let r;
+ cluster right_open_halfline(r) -> open;
+ cluster halfline(r) -> open;
+end;
+
+definition let p,g be real number;
+ cluster ].p,g.[ -> open;
+end;
+
+theorem :: FCONT_3:9
+0 < r & g in ].x0 - r,x0 + r.[ iff ex r1 st g = x0 + r1 & abs(r1) < r;
+
+theorem :: FCONT_3:10
+  0 < r & g in ].x0 - r,x0 + r.[ iff g - x0 in ].-r,r.[;
+
+theorem :: FCONT_3:11
+left_closed_halfline(p) = {p} \/ left_open_halfline(p);
+
+theorem :: FCONT_3:12
+right_closed_halfline(p) = {p} \/ right_open_halfline(p);
+
+theorem :: FCONT_3:13
+for x0 be real number holds
+(for n holds a.n = x0 - p/(n+1)) implies a is convergent & lim a = x0;
+
+theorem :: FCONT_3:14
+for x0 be real number holds
+(for n holds a.n = x0 + p/(n+1)) implies a is convergent & lim a = x0;
+
+theorem :: FCONT_3:15
+  f is_continuous_in x0 & f.x0 <> r &
+(ex N be Neighbourhood of x0 st N c= dom f) implies
+ex N be Neighbourhood of x0 st N c= dom f & for g st g in N holds f.g <> r;
+
+theorem :: FCONT_3:16
+  f is_increasing_on X or f is_decreasing_on X implies f|X is one-to-one;
+
+theorem :: FCONT_3:17
+for f be one-to-one PartFunc of REAL,REAL st f is_increasing_on X holds
+ (f|X)" is_increasing_on f.:X;
+
+theorem :: FCONT_3:18
+for f be one-to-one PartFunc of REAL,REAL st f is_decreasing_on X holds
+ (f|X)" is_decreasing_on f.:X;
+
+theorem :: FCONT_3:19
+X c= dom f & f is_monotone_on X & (ex p st f.:
+X = left_open_halfline(p)) implies
+f is_continuous_on X;
+
+theorem :: FCONT_3:20
+X c= dom f & f is_monotone_on X &
+(ex p st f.:X = right_open_halfline(p)) implies f is_continuous_on X;
+
+theorem :: FCONT_3:21
+X c= dom f & f is_monotone_on X & (ex p st f.:
+X=left_closed_halfline(p)) implies
+f is_continuous_on X;
+
+theorem :: FCONT_3:22
+X c= dom f & f is_monotone_on X &
+(ex p st f.:X = right_closed_halfline(p)) implies f is_continuous_on X;
+
+theorem :: FCONT_3:23
+X c= dom f & f is_monotone_on X & (ex p,g st f.:X = ].p,g.[) implies
+f is_continuous_on X;
+
+theorem :: FCONT_3:24
+X c= dom f & f is_monotone_on X & f.:X = REAL implies
+f is_continuous_on X;
+
+theorem :: FCONT_3:25
+for f be one-to-one PartFunc of REAL,REAL st
+(f is_increasing_on ].p,g.[ or f is_decreasing_on ].p,g.[) &
+].p,g.[ c= dom f holds (f|].p,g.[)" is_continuous_on f.:].p,g.[;
+
+theorem :: FCONT_3:26
+  for f be one-to-one PartFunc of REAL,REAL st
+ (f is_increasing_on left_open_halfline(p) or
+  f is_decreasing_on left_open_halfline(p)) &
+  left_open_halfline(p) c= dom f holds
+(f|left_open_halfline(p))" is_continuous_on f.:left_open_halfline(p);
+
+theorem :: FCONT_3:27
+  for f be one-to-one PartFunc of REAL,REAL st
+(f is_increasing_on right_open_halfline(p) or
+f is_decreasing_on right_open_halfline(p)) &
+right_open_halfline(p) c= dom f holds
+(f|right_open_halfline(p))" is_continuous_on f.:right_open_halfline(p);
+
+theorem :: FCONT_3:28
+  for f be one-to-one PartFunc of REAL,REAL st
+(f is_increasing_on left_closed_halfline(p) or
+f is_decreasing_on left_closed_halfline(p)) &
+left_closed_halfline(p) c= dom f holds
+(f|left_closed_halfline(p))" is_continuous_on f.:left_closed_halfline(p);
+
+theorem :: FCONT_3:29
+  for f be one-to-one PartFunc of REAL,REAL st
+(f is_increasing_on right_closed_halfline(p) or
+f is_decreasing_on right_closed_halfline(p)) &
+right_closed_halfline(p) c= dom f holds
+(f|right_closed_halfline(p))" is_continuous_on f.:right_closed_halfline(p);
+
+theorem :: FCONT_3:30
+  for f be one-to-one PartFunc of REAL,REAL st
+(f is_increasing_on [#](REAL) or f is_decreasing_on [#]
+(REAL)) & f is total holds
+f" is_continuous_on rng f;
+
+theorem :: FCONT_3:31
+  f is_continuous_on ].p,g.[ &
+(f is_increasing_on ].p,g.[ or f is_decreasing_on ].p,g.[) implies
+rng (f|].p,g.[) is open;
+
+theorem :: FCONT_3:32
+  f is_continuous_on left_open_halfline(p) &
+(f is_increasing_on left_open_halfline(p) or
+f is_decreasing_on left_open_halfline(p)) implies
+rng (f|left_open_halfline(p)) is open;
+
+theorem :: FCONT_3:33
+  f is_continuous_on right_open_halfline(p) &
+(f is_increasing_on right_open_halfline(p) or
+f is_decreasing_on right_open_halfline(p)) implies
+rng (f|right_open_halfline(p)) is open;
+
+theorem :: FCONT_3:34
+  f is_continuous_on [#](REAL) &
+(f is_increasing_on [#](REAL) or f is_decreasing_on [#](REAL)) implies
+rng f is open;

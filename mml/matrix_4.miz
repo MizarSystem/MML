@@ -1,0 +1,1367 @@
+:: Calculation of Matrices of Field Elements. Part {I}
+::  by Yatsuka Nakamura and Hiroshi Yamazaki
+::
+:: Received August 8, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, FINSEQ_1, RELAT_1, FUNCT_1, ARYTM_1, VECTSP_1, INCSP_1,
+      RLVECT_1, FINSEQ_2, RVSUM_1, MATRIX_1, TREES_1, CAT_3, PARTFUN1;
+ notation TARSKI, XBOOLE_0, FINSEQ_2, SUBSET_1, XREAL_0, REAL_1, NAT_1,
+      RELAT_1, FUNCT_1, STRUCT_0, FINSEQ_1, BINOP_1, ZFMISC_1, FINSEQOP,
+      MATRIX_3, MATRIX_1, VECTSP_1, FVSUM_1, FUNCT_3, RLVECT_1;
+ constructors DOMAIN_1, NAT_1, TOPMETR, INT_1, MATRIX_3, FVSUM_1, FUNCT_3,
+      SETWOP_2;
+ clusters FUNCT_1, STRUCT_0, INT_1, RELSET_1, XBOOLE_0;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+ theorems FINSEQ_1, FUNCT_1, FUNCT_2, NAT_1, ZFMISC_1, XBOOLE_0, BINOP_1,
+      RLVECT_1, MATRIX_3, VECTSP_1, FVSUM_1, MATRIX_1, FINSEQ_2, FUNCOP_1,
+      FINSEQOP, FUNCT_3;
+
+begin
+
+ reserve a,b,r,y1,y2,lambda for Real, i,j,n for Nat;
+
+definition let K be Field, M1, M2 be Matrix of K;
+  func M1-M2 -> Matrix of K equals
+  :Def1: M1+(-M2);
+  correctness;
+end;
+
+theorem Th1: for K being Field, M being Matrix of K
+  st len M>0 holds --M=M
+proof let K be Field, M being Matrix of K;
+  assume A1: len M>0;
+  A2: len (-M) = len M & width (-M) = width (M) by MATRIX_3:def 2;
+  len (--M) = len (-M) & width (--M) = width (-M)
+  by MATRIX_3:def 2;then
+  A3: len (--M) =len M & width (--M)= width M by MATRIX_3:def 2;
+  A4: M is Matrix of len M,width M,K by A1,MATRIX_1:20;
+  A5: -M is Matrix of len M,width M,K by A1,A2,MATRIX_1:20;
+  A6: Indices (-M)=Indices (M) by A4,A5,MATRIX_1:27;
+
+  for i,j st [i,j] in Indices (M) holds (M)*(i,j) = (--M)*(i,j)
+  proof let i,j be Nat;
+    assume A7: [i,j] in Indices M;then
+    A8: (-M)*(i,j)= -(M*(i,j)) by MATRIX_3:def 2;
+    (-(-M))*(i,j) = --(M*(i,j))
+    by A6,A7,A8,MATRIX_3:def 2;
+    hence (M)*(i,j) = (--M)*(i,j) by RLVECT_1:30;
+  end;
+  hence --M = M by A3,MATRIX_1:21;
+end;
+
+theorem Th2: for K being Field,M being Matrix of K
+  st len M>0 holds M+(-M)=0.(K,len M,width M)
+proof let K be Field,M be Matrix of K;
+  assume len M>0;then
+  M is Matrix of len M,width M,K by MATRIX_1:20;
+  hence M+(-M)=0.(K,len M,width M) by MATRIX_3:7;
+end;
+
+theorem Th3: for K being Field,M being Matrix of K
+  st len M>0 holds M - M=0.(K,len M,width M)
+proof let K be Field,M be Matrix of K;
+  assume A1: len M>0;
+  M-M=M+-M by Def1;
+  hence M - M=0.(K,len M,width M) by A1,Th2;
+end;
+
+theorem
+  for K being Field,M1,M2,M3 being Matrix of K
+  st len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2=width M3 &
+  len M1>0 &
+  M1+M3=M2+M3 holds M1=M2
+proof let K be Field,M1,M2,M3 be Matrix of K;
+  assume A1: len M1=len M2 & len M2=len M3  &
+  width M1=width M2 & width M2=width M3 & len M1>0 &
+  M1+M3=M2+M3;
+  A2: len (-M3)=len M3 & width (-M3)=width (M3) by MATRIX_3:def 2;
+  M1+(M3+(-M3))=M2+M3+(-M3) by A1,A2,MATRIX_3:5;then
+  A3: M1+(M3+-M3)=M2+(M3+(-M3)) by A1,A2,MATRIX_3:5;
+  A4: M3+-M3=0.(K,len M1,width M1) by A1,Th2;
+  A5: M1 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  M2 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  then
+  M2+0.(K,len M1,width M1)=M2 by MATRIX_3:6;
+  hence M1 = M2 by A3,A4,A5,MATRIX_3:6;
+end;
+
+theorem Th5: for K being Field,M1,M2 being Matrix of K
+  st len M2>0 holds
+  M1--M2=M1+M2
+proof let K be Field,M1,M2 be Matrix of K;
+  assume A1: len M2>0;
+  M1--M2=M1+--M2 by Def1;
+  hence M1--M2=M1+M2 by A1,Th1;
+end;
+
+theorem
+  for K being Field,M1,M2 being Matrix of K
+  st len M1=len M2 & width M1=width M2 & len M1>0 &
+  M1 = M1 + M2 holds M2 = 0.(K,len M1,width M1)
+proof let K be Field,M1,M2 be Matrix of K;
+  assume A1: len M1=len M2 & width M1=width M2 &  len M1>0 &
+  M1 = M1 + M2;
+  A2: len (-M1)=len M1 & width (-M1)=width (M1) by MATRIX_3:def 2;
+
+  0.(K,len M1,width M1)=M1+M2+(-M1) by A1,Th2;then
+  0.(K,len M1,width M1)=M2+M1+(-M1) by A1,MATRIX_3:4;then
+  0.(K,len M1,width M1)=M2+(M1+(-M1)) by A1,A2,MATRIX_3:5;then
+  A3: 0.(K,len M1,width M1)=M2+(0.(K,len M1,width M1))
+               by A1,Th2;
+  M2 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  hence M2 = 0.(K,len M1,width M1) by A3,MATRIX_3:6;
+end;
+
+theorem Th7: for K being Field,M1,M2 being Matrix of K
+  st len M1=len M2 & width M1=width M2 & len M1>0 &
+  M1 - M2 = 0.(K,len M1,width M1) holds M1 = M2
+proof let K be Field,M1,M2 be Matrix of K;
+  assume A1: len M1=len M2 & width M1=width M2 & len M1>0 &
+  M1 - M2 = 0.(K,len M1,width M1);
+  A2: len (0.(K,len M1,width M1))=len M1 by MATRIX_1:def 3;then
+  A3: width (0.(K,len M1,width M1))=width M1 by A1,MATRIX_1:20;
+  A4: M1 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  A5: M2 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  M1+(-M2)= 0.(K,len M1,width M1) by A1,Def1;then
+  A6: M1+(-M2)+M2 = M2+0.(K,len M1,width M1) by A1,A2,A3,MATRIX_3:4
+  .=M2 by A5,MATRIX_3:6;
+  A7: len (-M2)=len M2 & width (-M2)=width (M2) by MATRIX_3:def 2;then
+  M1+((-M2)+M2)=M2 by A1,A6,MATRIX_3:5;then
+  M1+(M2+(-M2))=M2 by A7,MATRIX_3:4;then
+  M1+(0.(K,len M1,width M1))=M2 by A5,MATRIX_3:7;
+  hence M1 = M2 by A4,MATRIX_3:6;
+end;
+
+theorem Th8: for K being Field,M1,M2 being Matrix of K
+  st len M1=len M2 & width M1=width M2 &
+  len M1 >0 & M1+M2= 0.(K,len M1,width M1) holds M2=-M1
+proof let K be Field,M1,M2 be Matrix of K;
+  assume A1: len M1=len M2 & width M1=width M2 &
+  len M1 >0 & M1+M2= 0.(K,len M1,width M1);
+  A2: len (-M2)=len M2 & width (-M2)=width M2 by MATRIX_3:def 2;
+  M1+(--M2)= 0.(K,len M1,width M1) by A1,Th1;then
+  M1-(-M2)= 0.(K,len M1,width M1) by Def1;then
+  M1=-M2 by A1,A2,Th7;
+  hence M2=-M1 by A1,Th1;
+end;
+
+theorem Th9: for n,m being Nat,K being Field st n>0
+  holds -(0.(K,n,m))=0.(K,n,m)
+proof let n,m be Nat,K be Field;
+  assume A1: n>0;
+  A2: len (0.(K,n,m))=n by MATRIX_1:def 3;then
+  A3: width (0.(K,n,m))=m by A1,MATRIX_1:20;
+  0.(K,n,m) + 0.(K,n,m) = 0.(K,n,m) by MATRIX_3:6;
+  hence -(0.(K,n,m))=0.(K,n,m) by A1,A2,A3,Th8;
+end;
+
+theorem
+  for K being Field,M1,M2 being Matrix of K
+  st len M1=len M2 & width M1=width M2 & len M1>0 &
+  M2 - M1 = M2 holds M1=0.(K,len M1,width M1)
+proof let K be Field,M1,M2 be Matrix of K;
+  assume A1: len M1=len M2 & width M1=width M2 & len M1>0 &
+  M2 - M1 = M2;
+  then
+  A2: M2 is Matrix of len M1, width M1, K by MATRIX_1:20;
+  A3: len (-M1)=len M1 & width (-M1)=width (M1) by MATRIX_3:def 2;
+  A4: len (-M2)=len M2 & width (-M2)=width (M2) by MATRIX_3:def 2;
+  A5: -M1 is Matrix of len (M1),width (M1),K by A1,A3,MATRIX_1:20;
+  M2+(-M1)=M2 by A1,Def1;then
+  M2+(-M1)+(-M2) = 0.(K,len M1,width M1)
+                by A2,MATRIX_3:7;then
+  (-M1)+M2+(-M2)=  0.(K,len M1,width M1)
+                by A1,A3,MATRIX_3:4;then
+  (-M1)+(M2+(-M2))=  0.(K,len M1,width M1)
+                by A1,A3,A4,MATRIX_3:5;then
+  -M1+ (0.(K,len M1,width M1))=0.(K,len M1,width M1)
+                by A2,MATRIX_3:7;then
+  -M1= 0.(K,len M1,width M1) by A5,MATRIX_3:6;then
+  M1=- 0.(K,len M1,width M1) by A1,Th1;
+ hence M1=0.(K,len M1,width M1) by A1,Th9;
+end;
+
+theorem Th11: for K being Field,M1,M2 being Matrix of K
+st len M1=len M2 & width M1=width M2 & len M1>0 holds
+    M1 = M1 -(M2 - M2)
+proof let K being Field,M1,M2 be Matrix of K;
+ assume A1: len M1=len M2 & width M1=width M2
+   & len M1>0;then
+  A2: M1 -(M2 - M2)=M1-0.(K,len M1,width M1) by Th3
+               .=M1 +-0.(K,len M1,width M1) by Def1
+               .=M1+0.(K,len M1,width M1) by A1,Th9;
+  M1 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+ hence M1 = M1 -(M2 - M2) by A2,MATRIX_3:6;
+end;
+
+theorem Th12:  for K being Field,M1,M2 being Matrix of K
+st len M1=len M2 & width M1=width M2 & len M1>0 holds
+    - (M1 + M2) = -M1+-M2
+proof let K be Field,M1,M2 be Matrix of K;
+ assume A1: len M1=len M2 & width M1=width M2 & len M1>0;
+  A2: len (-M1)=len M1 & width (-M1)=width M1 by MATRIX_3:def 2;
+  A3: len (-M2)=len M2 & width (-M2)=width M2 by MATRIX_3:def 2;
+  A4: len (M1+M2)=len M1 & width (M1+M2)=width M1 by MATRIX_3:def 3;
+  A5: len (-M1+-M2)=len M1 & width (-M1+-M2)=width M1
+                      by A2,MATRIX_3:def 3;
+  A6: M2 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  A7: M1 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  M1+M2 +(-M1+-M2) =M1+M2+(-M2+-M1) by A1,A2,A3,MATRIX_3:4
+                  .=M1+M2+-M2+-M1 by A1,A2,A3,A4,MATRIX_3:5
+                  .=M1+(M2+-M2)+-M1 by A1,A3,MATRIX_3:5
+                  .=M1+0.(K,len M1,width M1)+-M1 by A6,MATRIX_3:7
+                  .=M1+-M1 by A7,MATRIX_3:6
+                  .=0.(K,len M1,width M1) by A7,MATRIX_3:7;
+ hence - (M1 + M2) = -M1+-M2 by A1,A4,A5,Th8;
+end;
+
+theorem
+  for K being Field,M1,M2 being Matrix of K
+st len M1=len M2 & width M1=width M2 & len M1>0 holds
+    M1 - (M1 - M2) = M2
+proof let K be Field,M1,M2 be Matrix of K;
+ assume A1: len M1=len M2 & width M1=width M2 & len M1>0;
+  A2: len (-M1)=len M1 & width (-M1)=width M1 by MATRIX_3:def 2;
+  A3: len (-M2)=len M2 & width (-M2)=width M2 by MATRIX_3:def 2;
+  A4: M2 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  A5: M1 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  A6: len (0.(K,len M1,width M1))=len M1 by MATRIX_1:def 3;then
+  A7: width (0.(K,len M1,width M1))=width M1 by A1,MATRIX_1:20;
+  M1 - (M1 - M2)=M1 +- (M1 - M2) by Def1
+  .=M1 +- (M1 +- M2) by Def1
+  .=M1+(-M1+--M2) by A1,A3,Th12
+  .=M1+(-M1+M2) by A1,Th1
+  .=M1+-M1+M2 by A1,A2,MATRIX_3:5
+  .=0.(K,len M1,width M1)+M2 by A5,MATRIX_3:7
+  .=M2+0.(K,len M1,width M1) by A1,A6,A7,MATRIX_3:4
+  .=M2 by A4,MATRIX_3:6;
+  hence M1 - (M1 - M2) = M2;
+end;
+
+theorem Th14: for K being Field,M1,M2,M3 being Matrix of K
+  st len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 &
+  M1 - M3 = M2 - M3 holds M1 = M2
+proof let K be Field,M1,M2,M3 be Matrix of K;
+  assume A1: len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 &
+  M1 - M3 = M2 - M3;
+  A2: len (-M3)=len M3 & width (-M3)=width M3 by MATRIX_3:def 2;
+  A3: M3 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  A4: M2 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  A5: M1 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  M1+-M3=M2-M3 by A1,Def1;then
+  M1+-M3=M2+-M3 by Def1;then
+  M1+-M3+M3=M2+(-M3+M3) by A1,A2,MATRIX_3:5;then
+  M1+-M3+M3=M2+(M3+-M3) by A2,MATRIX_3:4;then
+  M1+-M3+M3=M2+0.(K,len M1,width M1) by A3,MATRIX_3:7;then
+  M1+-M3+M3=M2 by A4,MATRIX_3:6;then
+  M1+(-M3+M3)=M2 by A1,A2,MATRIX_3:5;then
+  M1+(M3+-M3)=M2 by A2,MATRIX_3:4;then
+  M1+0.(K,len M1,width M1)=M2 by A3,MATRIX_3:7;
+  hence M1 = M2 by A5,MATRIX_3:6;
+end;
+
+theorem Th15: for K being Field,M1,M2,M3 being Matrix of K
+  st len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 &
+  M3 - M1 = M3 - M2 holds M1 = M2
+proof let K be Field,M1,M2,M3 be Matrix of K;
+  assume A1: len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 &
+  M3 - M1 = M3 - M2;
+  A2: len (-M1)=len M1 & width (-M1)=width M1 by MATRIX_3:def 2;
+  A3: len (-M2)=len M2 & width (-M2)=width M2 by MATRIX_3:def 2;
+  A4: len (-M3)=len M3 & width (-M3)=width M3 by MATRIX_3:def 2;
+  A5: M3 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  A6: -M2 is Matrix of len M1,width M1,K by A1,A3,MATRIX_1:20;
+  A7: -M1 is Matrix of len M1,width M1,K by A1,A2,MATRIX_1:20;
+  M3-M1=M3+-M2 by A1,Def1;then
+  M3+-M1=M3+-M2 by Def1;then
+  -M1+M3=M3+-M2 by A1,A2,MATRIX_3:4;then
+  -M1+M3=-M2+M3 by A1,A3,MATRIX_3:4;then
+  -M1+M3+-M3=-M2+(M3+-M3) by A1,A3,A4,MATRIX_3:5;then
+  -M1+M3+-M3=-M2+0.(K,len M1,width M1) by A5,MATRIX_3:7;then
+  -M1+M3+-M3=-M2 by A6,MATRIX_3:6;then
+  -M1+(M3+-M3)=-M2 by A1,A2,A4,MATRIX_3:5;then
+  -M1+0.(K,len M1,width M1)=-M2 by A5,MATRIX_3:7;then
+  -M1=-M2 by A7,MATRIX_3:6;then
+  --M1=M2 by A1,Th1;
+ hence M1 = M2 by A1,Th1;
+end;
+
+theorem Th16: for K being Field,M1,M2,M3 being Matrix of K
+  st len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 holds
+  M1 - M2 - M3 = M1 - M3 - M2
+proof let K be Field,M1,M2,M3 be Matrix of K;
+  assume A1: len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0;
+  A2: len (-M2)=len M2 & width (-M2)=width M2 by MATRIX_3:def 2;
+  A3: len (-M3)=len M3 & width (-M3)=width M3 by MATRIX_3:def 2;
+  thus M1 - M2 - M3 = M1-M2+-M3 by Def1
+                  .= M1+-M2+-M3 by Def1
+                  .=M1+(-M2+-M3) by A1,A2,A3,MATRIX_3:5
+                  .=M1+(-M3+-M2) by A1,A2,A3,MATRIX_3:4
+                  .=M1+-M3+-M2 by A1,A2,A3,MATRIX_3:5
+                  .=M1-M3+-M2 by Def1
+                  .= M1 - M3 - M2 by Def1;
+end;
+
+theorem
+  for K being Field,M1,M2,M3 being Matrix of K
+  st len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 holds
+  M1 - M3 = (M1 - M2) - (M3 - M2)
+proof let K be Field,M1,M2,M3 being Matrix of K;
+  assume A1: len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0;
+  A2: len (-M2)=len M2 & width (-M2)=width M2 by MATRIX_3:def 2;
+  A3: len (-M3)=len M3 & width (-M3)=width M3 by MATRIX_3:def 2;
+  A4: M2 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  A5: M1 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  A6: len (M1+-M2)=len M1 & width (M1+-M2)=width M1
+                      by MATRIX_3:def 3;
+  (M1 - M2) - (M3 - M2)=(M1-M2)+-(M3-M2) by Def1
+                       .=(M1-M2)+-(M3+-M2) by Def1
+                       .=M1+-M2+-(M3+-M2) by Def1
+                       .=M1+-M2+(-M3+--M2) by A1,A2,Th12
+                       .=M1+-M2+(-M3+M2) by A1,Th1
+                       .=M1+-M2+(M2+-M3) by A1,A3,MATRIX_3:4
+                       .=M1+-M2+M2+-M3 by A1,A3,A6,MATRIX_3:5
+                       .=M1+(-M2+M2)+-M3 by A1,A2,MATRIX_3:5
+                       .=M1+(M2+-M2)+-M3 by A2,MATRIX_3:4
+                       .=M1+0.(K,len M1,width M1)+-M3
+                                         by A4,MATRIX_3:7
+                       .=M1+-M3 by A5,MATRIX_3:6;
+  hence M1 - M3 = (M1 - M2) - (M3 - M2) by Def1;
+end;
+
+theorem Th18: for K being Field,M1,M2,M3 being Matrix of K
+  st len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 holds
+  (M3 - M1) - (M3 - M2) = M2 - M1
+proof let K be Field,M1,M2,M3 be Matrix of K;
+  assume A1: len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0;
+  A2: len (-M1)=len M1 & width (-M1)=width M1 by MATRIX_3:def 2;
+  A3: len (-M2)=len M2 & width (-M2)=width M2 by MATRIX_3:def 2;
+  A4: len (-M3)=len M3 & width (-M3)=width M3 by MATRIX_3:def 2;
+  A5: M3 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  A6: -M1 is Matrix of len M1,width M1,K by A1,A2,MATRIX_1:20;
+  A7: len (-M1+M3)=len M1 & width (-M1+M3)=width M1
+                      by A2,MATRIX_3:def 3;
+  (M3 - M1) - (M3 - M2)=(M3+-M1)-(M3-M2) by Def1
+  .=(M3+-M1)-(M3+-M2) by Def1
+  .=(-M1+M3)-(M3+-M2) by A1,A2,MATRIX_3:4
+  .=(-M1+M3)+-(M3+-M2) by Def1
+  .=(-M1+M3)+(-M3+--M2) by A1,A3,Th12
+  .=(-M1+M3)+(-M3+M2) by A1,Th1
+  .=(-M1+M3)+-M3+M2 by A1,A4,A7,MATRIX_3:5
+  .=-M1+(M3+-M3)+M2 by A1,A2,A4,MATRIX_3:5
+  .=-M1+(0.(K,len M1,width M1))+M2 by A5,MATRIX_3:7
+  .=-M1+M2 by A6,MATRIX_3:6
+  .=M2+-M1 by A1,A2,MATRIX_3:4;
+ hence (M3 - M1) - (M3 - M2) = M2 - M1 by Def1;
+end;
+
+theorem
+  for K being Field,M1,M2,M3,M4 being Matrix of K
+  st len M1=len M2 & len M2=len M3 & len M3=len M4 &
+  width M1=width M2 & width M2 = width M3 & width M3=width M4 &
+  len M1>0 &  M1 - M2 = M3 - M4 holds M1 - M3 = M2 - M4
+proof let K be Field,M1,M2,M3,M4 be Matrix of K;
+  assume A1: len M1=len M2 & len M2=len M3 & len M3=len M4 &
+  width M1=width M2 & width M2 = width M3 & width M3=width M4 &
+  len M1>0 &  M1 - M2 = M3 - M4;
+  A2: len (-M2)=len M2 & width (-M2)=width M2 by MATRIX_3:def 2;
+  A3: len (-M3)=len M3 & width (-M3)=width M3 by MATRIX_3:def 2;
+  A4: len (-M4)=len M1 & width (-M4)=width M1 by A1,MATRIX_3:def 2;
+  A5: len (M1+-M3)=len M1 & width (M1+-M3)=width M1 by MATRIX_3:def 3;
+  A6: len (M3+-M4)=len M1 & width (M3+-M4)=width M1 by A1,MATRIX_3:def 3;
+  A7: len (M2+-M4)=len M1 & width (M2+-M4)=width M1 by A1,MATRIX_3:def 3;
+  A8: len (M1+-M2)=len M1 & width (M1+-M2)=width M1 by MATRIX_3:def 3;
+  A9: len (M1+-M3)=len M1 & width (M1+-M3)=width M1 by MATRIX_3:def 3;
+  A10: M3+-M4 is Matrix of len M1,width M1,K by A1,A6,MATRIX_1:20;
+  M1+-M2 = M3-M4 by A1,Def1;then
+  M1+-M2 = M3+-M4 by Def1;then
+  M1+-M2+-(M3 +- M4)=0.(K,len M1,width M1) by A10,MATRIX_3:7;then
+  M1+-M2+(-M3 +-- M4)=0.(K,len M1,width M1) by A1,A4,Th12;then
+  M1+-M2+(-M3 + M4)=0.(K,len M1,width M1) by A1,Th1;then
+  M1+-M2+-M3 + M4=0.(K,len M1,width M1) by A1,A3,A8,MATRIX_3:5;then
+  M1+(-M2+-M3) + M4=0.(K,len M1,width M1) by A1,A2,A3,MATRIX_3:5;then
+  M1+(-M3+-M2) + M4=0.(K,len M1,width M1) by A1,A2,A3,MATRIX_3:4;then
+  M1+-M3+-M2 + M4=0.(K,len M1,width M1) by A1,A2,A3,MATRIX_3:5;then
+  M1+-M3+(-M2 + M4)=0.(K,len M1,width M1) by A1,A2,A9,MATRIX_3:5;then
+  M1+-M3+(-M2 + --M4)=0.(K,len M1,width M1) by A1,Th1;then
+  M1+-M3+-(M2 + -M4)=0.(K,len M1,width M1) by A1,A4,Th12;then
+  M1+-M3-(M2 + -M4)=0.(K,len M1,width M1) by Def1;then
+  M1+-M3=M2+-M4 by A1,A5,A7,Th7;then
+  M1-M3=M2+-M4 by Def1;
+ hence M1 - M3 = M2 - M4 by Def1;
+end;
+
+theorem Th20: for K being Field,M1,M2 being Matrix of K
+st len M1=len M2 & width M1=width M2 & len M1>0 holds
+ M1 = M1 + (M2 - M2)
+proof let K be Field,M1,M2 be Matrix of K;
+ assume A1: len M1=len M2 & width M1=width M2 & len M1>0;
+  A2: M1 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  A3: M2 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+ thus M1+(M2-M2)=M1+(M2+-M2) by Def1
+               .=M1+0.(K,len M1,width M1) by A3,MATRIX_3:7
+               .=M1 by A2,MATRIX_3:6;
+end;
+
+theorem Th21: for K being Field,M1,M2 being Matrix of K
+st len M1=len M2 & width M1=width M2 & len M1>0 holds
+ M1 = M1 + M2 - M2
+proof let K be Field,M1,M2 be Matrix of K;
+ assume A1: len M1=len M2 & width M1=width M2 & len M1>0;then
+  A2: len (-M2)=len M1 & width (-M2)=width M1 by MATRIX_3:def 2;
+ thus M1+M2-M2=M1+M2+-M2 by Def1 .=M1+(M2+-M2) by A1,A2,MATRIX_3:5
+         .= M1+(M2-M2) by Def1 .=M1 by A1,Th20;
+:: hence M1 = M1 + M2 - M2;
+end;
+
+theorem Th22: for K being Field,M1,M2 being Matrix of K
+st len M1=len M2 & width M1=width M2 & len M1>0 holds
+ M1 = M1 - M2 + M2
+proof let K be Field,M1,M2 be Matrix of K;
+ assume A1: len M1=len M2 & width M1=width M2 & len M1>0;then
+  A2: len (-M2)=len M1 & width (-M2)=width M1 by MATRIX_3:def 2;
+ thus M1 - M2 + M2=M1+-M2+M2 by Def1 .=M1+(-M2+M2) by A1,A2,MATRIX_3:5
+                 .=M1+(M2+-M2) by A1,A2,MATRIX_3:4
+                 .=M1+(M2-M2) by Def1 .=M1 by A1,Th20;
+end;
+
+theorem
+  for K being Field,M1,M2,M3 being Matrix of K
+  st len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2=width M3 & len M1>0 holds
+  M1 + M3 = (M1 + M2) + (M3 - M2)
+proof let K be Field,M1,M2,M3 be Matrix of K;
+  assume A1: len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2=width M3 & len M1>0;then
+  A2: len (-M2)=len M1 & width (-M2)=width M1 by MATRIX_3:def 2;
+  A3: len (M1+M2)=len M1 & width (M1+M2)=width M1 by MATRIX_3:def 3;
+  thus (M1 + M2) + (M3 - M2)=M1+M2+(M3+-M2) by Def1
+                      .=M1+M2+(-M2+M3) by A1,A2,MATRIX_3:4
+                      .=M1+M2+-M2+M3 by A1,A2,A3,MATRIX_3:5
+                      .=M1+(M2+-M2)+M3 by A1,A2,MATRIX_3:5
+                      .=M1+(M2-M2)+M3 by Def1
+                      .=M1+M3 by A1,Th20;
+end;
+
+theorem
+  for K being Field,M1,M2,M3 being Matrix of K
+  st len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 holds
+  M1 + M2 - M3 = M1 - M3 + M2
+proof let K be Field,M1,M2,M3 be Matrix of K;
+  assume A1: len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0;then
+  A2: len (-M3)=len M1 & width (-M3)=width M1 by MATRIX_3:def 2;
+  thus M1 + M2 - M3 = M1+M2+-M3 by Def1
+                   .=M1+(M2+-M3) by A1,A2,MATRIX_3:5
+                   .=M1+(-M3+M2) by A1,A2,MATRIX_3:4
+                   .=M1+-M3+M2 by A1,A2,MATRIX_3:5
+                   .= M1 - M3 + M2 by Def1;
+end;
+
+theorem
+  for K being Field,M1,M2,M3 being Matrix of K
+  st len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 holds
+  M1 - M2 + M3 = M3 - M2 + M1
+proof let K be Field,M1,M2,M3 be Matrix of K;
+  assume A1: len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0;then
+  A2: len (-M2)=len M1 & width (-M2)=width M1 by MATRIX_3:def 2;
+  thus M1 - M2 + M3 = M1+-M2+M3 by Def1
+                  .=-M2+M1+M3 by A2,MATRIX_3:4
+                  .=-M2+(M1+M3) by A1,A2,MATRIX_3:5
+                  .=-M2+(M3+M1) by A1,MATRIX_3:4
+                  .=-M2+M3+M1 by A1,A2,MATRIX_3:5
+                  .=M3+-M2+M1 by A1,A2,MATRIX_3:4
+                  .=M3 - M2 + M1 by Def1;
+end;
+
+theorem Th26: for K being Field,M1,M2,M3 being Matrix of K
+ st len M1=len M2 & len M2=len M3 &
+ width M1=width M2 & width M2 = width M3 & len M1>0 holds
+ M1 + M3 = (M1 + M2) - (M2 - M3)
+proof let K be Field,M1,M2,M3 be Matrix of K;
+ assume A1: len M1=len M2 & len M2=len M3 &
+ width M1=width M2 & width M2 = width M3 & len M1>0;then
+  A2: M1 is Matrix of len M1,width M1,K by MATRIX_1:20;
+  A3: M2 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  A4: len (-M2)=len M1 & width (-M2)=width M1 by A1,MATRIX_3:def 2;
+  A5: len (-M3)=len M1 & width (-M3)=width M1 by A1,MATRIX_3:def 2;
+  A6: len (M1+M2)=len M1 & width (M1+M2)=width M1 by MATRIX_3:def 3;
+ thus M1 + M3 = M1+0.(K,len M1,width M1)+M3 by A2,MATRIX_3:6
+             .=M1+(M2+-M2)+M3 by A3,MATRIX_3:7
+             .=M1+M2+-M2+M3 by A1,A4,MATRIX_3:5
+             .=M1+M2+(-M2+M3) by A1,A4,A6,MATRIX_3:5
+             .=M1+M2+(-M2+--M3) by A1,Th1
+             .=M1+M2+-(M2+-M3) by A1,A5,Th12
+             .=M1+M2+-(M2-M3) by Def1
+             .=(M1 + M2) - (M2 - M3)by Def1;
+end;
+
+theorem
+  for K being Field,M1,M2,M3 being Matrix of K
+  st len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 holds
+  M1 - M3 = (M1 + M2) - (M3 + M2)
+proof let K be Field,M1,M2,M3 be Matrix of K;
+  assume A1: len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0;then
+  A2: len (-M3)=len M1 & width (-M3)=width M1 by MATRIX_3:def 2;
+  thus M1 - M3 = M1+-M3 by Def1 .=(M1+M2)-(M2-(-M3)) by A1,A2,Th26
+             .=(M1+M2)-(M2+-(-M3)) by Def1
+             .=(M1+M2)-(M2+M3) by A1,Th1
+             .=(M1 + M2) - (M3 + M2) by A1,MATRIX_3:4;
+end;
+
+theorem Th28: for K being Field,M1,M2,M3,M4 being Matrix of K
+ st len M1=len M2 & len M2=len M3 & len M3=len M4 &
+ width M1=width M2 & width M2 = width M3 & width M3=width M4 &
+ len M1>0 &  M1 + M2 = M3 + M4 holds M1 - M3 = M4 - M2
+proof let K be Field,M1,M2,M3,M4 be Matrix of K;
+ assume A1: len M1=len M2 & len M2=len M3 & len M3=len M4 &
+ width M1=width M2 & width M2 = width M3 & width M3=width M4 &
+ len M1>0 &  M1 + M2 = M3 + M4;then
+  A2: len (-M2)=len M1 & width (-M2)=width M1 by MATRIX_3:def 2;
+  A3: len (M4+-M2)=len M1 & width (M4+-M2)=width M1 by A1,MATRIX_3:def 3;
+  M1+M2=M4+M3 by A1,MATRIX_3:4;then
+  M1+M2+-M2=M4+(M3+-M2) by A1,A2,MATRIX_3:5;then
+  M1+M2+-M2=M4+(-M2+M3) by A1,A2,MATRIX_3:4;then
+  M1+(M2+-M2)=M4+(-M2+M3) by A1,A2,MATRIX_3:5;then
+  M1+(M2-M2)=M4+(-M2+M3) by Def1;then
+  M1=M4+(-M2+M3) by A1,Th20;then
+  M1=M4+-M2+M3 by A1,A2,MATRIX_3:5;then
+  M1-M3=M4+-M2 by A1,A3,Th21;
+ hence M1 - M3 = M4 - M2 by Def1;
+end;
+
+theorem
+  for K being Field,M1,M2,M3,M4 being Matrix of K
+  st len M1=len M2 & len M2=len M3 & len M3=len M4 &
+  width M1=width M2 & width M2 = width M3 & width M3=width M4 &
+  len M1>0 &  M1 - M3 = M4 - M2 holds M1 + M2 = M3 + M4
+proof let K be Field,M1,M2,M3,M4 be Matrix of K;
+  assume A1: len M1=len M2 & len M2=len M3 & len M3=len M4 &
+  width M1=width M2 & width M2 = width M3 & width M3=width M4 &
+  len M1>0 &  M1 - M3 = M4 - M2;
+  A2: len (-M2)=len M1 & width (-M2)=width M1 by A1,MATRIX_3:def 2;
+  A3: len (-M3)=len M1 & width (-M3)=width M1 by A1,MATRIX_3:def 2;
+  M1+-M3=M4-M2 by A1,Def1;then
+  M1+-M3=M4+-M2 by Def1;then
+  M1+-M3=-M2+M4 by A1,A2,MATRIX_3:4;then
+  M1--M2=M4--M3 by A1,A2,A3,Th28;then
+  M1+M2=M4--M3 by A1,Th5;then
+  M1+M2=M4+M3 by A1,Th5;
+ hence M1 + M2 = M3 + M4 by A1,MATRIX_3:4;
+end;
+
+theorem
+  for K being Field,M1,M2,M3,M4 being Matrix of K
+  st len M1=len M2 & len M2=len M3 & len M3=len M4 &
+  width M1=width M2 & width M2 = width M3 & width M3=width M4 &
+  len M1>0 &  M1 + M2 = M3 - M4 holds M1 + M4 = M3 - M2
+proof let K be Field,M1,M2,M3,M4 be Matrix of K;
+  assume A1: len M1=len M2 & len M2=len M3 & len M3=len M4 &
+  width M1=width M2 & width M2 = width M3 & width M3=width M4 &
+  len M1>0 &  M1 + M2 = M3 - M4;then
+  A2: len (-M4)=len M1 & width (-M4)=width M1 by MATRIX_3:def 2;
+  M1+M2=M3+-M4 by A1,Def1;then
+  M1+M2=-M4+M3 by A1,A2,MATRIX_3:4;then
+  M1--M4=M3-M2 by A1,A2,Th28;
+  hence M1 + M4 = M3 - M2 by A1,Th5;
+end;
+
+theorem Th31: for K being Field,M1,M2,M3 being Matrix of K
+ st len M1=len M2 & len M2=len M3 &
+ width M1=width M2 & width M2 = width M3 & len M1>0 holds
+ M1 - (M2 + M3) = M1 - M2 - M3
+proof let K be Field,M1,M2,M3 be Matrix of K;
+ assume A1: len M1=len M2 & len M2=len M3 &
+ width M1=width M2 & width M2 = width M3 & len M1>0;then
+  A2: len (-M2)=len M1 & width (-M2)=width M1 by MATRIX_3:def 2;
+  A3: len (-M3)=len M1 & width (-M3)=width M1 by A1,MATRIX_3:def 2;
+  M1-(M2+M3)=M1+-(M2+M3) by Def1
+           .=M1+(-M2+-M3) by A1,Th12
+           .=M1+-M2+-M3 by A2,A3,MATRIX_3:5
+           .=M1-M2+-M3 by Def1;
+ hence M1 - (M2 + M3) = M1 - M2 - M3 by Def1;
+end;
+
+theorem
+  for K being Field,M1,M2,M3 being Matrix of K
+  st len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 holds
+  M1 - (M2 - M3) = M1 - M2 + M3
+proof let K be Field,M1,M2,M3 be Matrix of K;
+  assume A1: len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0; then
+  A2: len (-M3)=len M1 & width (-M3)=width M1 by MATRIX_3:def 2;
+
+  M1-(M2-M3)=M1-(M2+-M3) by Def1
+  .= M1-M2--M3 by A1,A2,Th31
+  .=M1+-M2--M3 by Def1 .=M1+-M2+M3 by A1,Th5;
+  hence M1 - (M2 - M3) = M1 - M2 + M3 by Def1;
+end;
+
+theorem
+  for K being Field,M1,M2,M3 being Matrix of K
+  st len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 holds
+  M1 - (M2 - M3) = M1 +( M3 - M2)
+proof let K be Field,M1,M2,M3 be Matrix of K;
+  assume A1: len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0;
+  A2: len (-M3)=len M1 & width (-M3)=width M1 by A1,MATRIX_3:def 2;
+  M1-(M2-M3)=M1+-(M2-M3) by Def1
+            .=M1+-(M2+-M3) by Def1
+            .=M1+-(-M3+M2) by A1,A2,MATRIX_3:4
+            .=M1+(--M3+-M2) by A1,A2,Th12
+            .=M1+(M3+-M2) by A1,Th1;
+ hence M1 - (M2 - M3) = M1 +( M3 - M2) by Def1;
+end;
+
+theorem
+  for K being Field,M1,M2,M3 being Matrix of K
+  st len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 holds
+  M1 - M3 = (M1-M2)+(M2 - M3)
+proof let K be Field,M1,M2,M3 be Matrix of K;
+  assume A1: len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0;then
+  A2: len (-M2)=len M1 & width (-M2)=width M1 by MATRIX_3:def 2;
+  A3: len (-M3)=len M1 & width (-M3)=width M1 by A1,MATRIX_3:def 2;
+  A4: len (M1+-M2)=len M1 & width (M1+-M2)=width M1 by MATRIX_3:def 3;
+  (M1-M2)+(M2 - M3)=M1+-M2+(M2-M3) by Def1
+                  .=M1+-M2+(M2+-M3) by Def1
+                  .=M1+-M2+M2+-M3 by A1,A3,A4,MATRIX_3:5
+                  .=M1+(-M2+M2)+-M3 by A1,A2,MATRIX_3:5
+                  .=M1+(M2+-M2)+-M3 by A1,A2,MATRIX_3:4
+                  .=M1+(M2-M2)+-M3 by Def1
+                  .=M1+-M3 by A1,Th20;
+ hence M1 - M3 = (M1-M2)+(M2 - M3) by Def1;
+end;
+
+theorem
+  for K being Field,M1,M2,M3 being Matrix of K
+  st len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 &
+  -M1=-M2 holds  M1=M2
+proof let K be Field,M1,M2,M3 be Matrix of K;
+  assume A1: len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 &
+  -M1=-M2;then
+  --M1=M2 by Th1;
+  hence M1=M2 by A1,Th1;
+end;
+
+theorem
+  for K being Field,M being Matrix of K
+  st len M>0 & -M=0.(K,len M,width M) holds
+  M= 0.(K,len M,width M)
+proof let K be Field,M be Matrix of K;
+  assume A1: len M>0 & -M=0.(K,len M,width M);then
+  --M = 0.(K,len M,width M) by Th9;
+  hence M= 0.(K,len M,width M) by A1,Th1;
+end;
+
+theorem
+  for K being Field,M1,M2 being Matrix of K
+  st len M1=len M2 & width M1=width M2 & len M1>0 &
+  M1 + -M2 = 0.(K,len M1,width M1) holds M1 = M2
+proof let K be Field,M1,M2 be Matrix of K;
+  assume A1: len M1=len M2 & width M1=width M2 & len M1>0 &
+  M1 + -M2 = 0.(K,len M1,width M1);then
+  M1-M2=0.(K,len M1,width M1) by Def1;
+  hence M1 = M2 by A1,Th7;
+end;
+
+theorem Th38: for K being Field,M1,M2 being Matrix of K
+st len M1=len M2 & width M1=width M2 & len M1>0 holds
+ M1=M1+M2+(-M2)
+proof let K be Field,M1,M2 be Matrix of K;
+ assume A1: len M1=len M2 & width M1=width M2 & len M1>0;
+  M1+M2+(-M2)=M1+M2-M2 by Def1;
+ hence M1=M1+M2+(-M2) by A1,Th21;
+end;
+
+theorem
+  for K being Field,M1,M2 being Matrix of K
+  st len M1=len M2 & width M1=width M2 & len M1>0 holds
+  M1=M1+(M2 + -M2)
+proof let K be Field,M1,M2 be Matrix of K;
+  assume A1: len M1=len M2 & width M1=width M2 & len M1>0;
+  M1+(M2 + -M2)=M1+(M2-M2) by Def1;
+ hence M1=M1+(M2 + -M2) by A1,Th20;
+end;
+
+theorem
+  for K being Field,M1,M2 being Matrix of K
+  st len M1=len M2 & width M1=width M2 & len M1>0 holds
+  M1=(-M2+M1)+M2
+proof let K be Field,M1,M2 be Matrix of K;
+  assume A1: len M1=len M2 & width M1=width M2 & len M1>0;then
+  len (-M2)=len M1 & width (-M2)=width M1 by MATRIX_3:def 2;then
+  (-M2+M1)+M2=M1+-M2+M2 by MATRIX_3:4
+            .=M1-M2+M2 by Def1;
+ hence M1=(-M2+M1)+M2 by A1,Th22;
+end;
+
+theorem
+  for K being Field,M1,M2 being Matrix of K
+  st len M1=len M2 & width M1=width M2 & len M1>0 holds
+  -(-M1+M2)=M1+-M2
+proof let K be Field,M1,M2 be Matrix of K;
+  assume A1: len M1=len M2 & width M1=width M2 & len M1>0;
+  A2: len (-M1)=len M1 & width (-M1)=width M1 by MATRIX_3:def 2;
+  -(-M1+M2)=--M1+-M2 by A1,A2,Th12;
+  hence -(-M1+M2)=M1+-M2 by A1,Th1;
+end;
+
+theorem
+  for K being Field,M1,M2 being Matrix of K
+  st len M1=len M2 & width M1=width M2 & len M1>0 holds
+  M1+M2=-(-M1+-M2)
+proof let K be Field,M1,M2 be Matrix of K;
+  assume A1: len M1=len M2 & width M1=width M2 & len M1>0;then
+  A2: len (-M2)=len M1 & width (-M2)=width M1 by MATRIX_3:def 2;
+  len (-M1)=len M1 & width (-M1)=width M1 by MATRIX_3:def 2;then
+  -(-M1+-M2)=--M1+--M2 by A1,A2,Th12
+           .=M1+--M2 by A1,Th1;
+ hence M1+M2=-(-M1+-M2) by A1,Th1;
+end;
+
+theorem
+  for K being Field,M1,M2 being Matrix of K
+  st len M1=len M2 & width M1=width M2 & len M1>0 holds
+  -(M1 - M2) = M2 - M1
+proof let K be Field,M1,M2 be Matrix of K;
+  assume A1: len M1=len M2 & width M1=width M2 & len M1>0;then
+  A2: len (-M2)=len M1 & width (-M2)=width M1 by MATRIX_3:def 2;
+  A3: len (-M1)=len M1 & width (-M1)=width M1 by MATRIX_3:def 2;
+  -(M1-M2)=-(M1+-M2) by Def1 .=-M1+--M2 by A1,A2,Th12
+         .=-M1+M2 by A1,Th1 .=M2+-M1 by A1,A3,MATRIX_3:4;
+  hence -(M1 - M2) = M2 - M1 by Def1;
+end;
+
+theorem Th44: for K being Field,M1,M2 being Matrix of K
+  st len M1=len M2 & width M1=width M2 & len M1>0 holds
+  - M1 - M2 = - M2 - M1
+proof let K be Field,M1,M2 be Matrix of K;
+  assume len M1=len M2 & width M1=width M2 & len M1>0;then
+  A1: len (-M2)=len M1 & width (-M2)=width M1 by MATRIX_3:def 2;
+  A2: len (-M1)=len M1 & width (-M1)=width M1 by MATRIX_3:def 2;
+  -M1-M2=-M1+-M2 by Def1 .=-M2+-M1 by A1,A2,MATRIX_3:4;
+  hence - M1 - M2 = - M2 - M1 by Def1;
+end;
+
+theorem
+  for K being Field,M1,M2 being Matrix of K
+  st len M1=len M2 & width M1=width M2 & len M1>0 holds
+  M1 = - M2 - (- M1 - M2)
+proof let K be Field,M1,M2 be Matrix of K;
+  assume A1: len M1=len M2 & width M1=width M2 & len M1>0;then
+  A2: len (-M2)=len M1 & width (-M2)=width M1 by MATRIX_3:def 2;
+  A3: len (-M1)=len M1 & width (-M1)=width M1 by MATRIX_3:def 2;
+  A4: len (M1+M2)=len M1 & width (M1+M2)=width M1 by MATRIX_3:def 3;
+  -M2-(-M1-M2)=-M2+-(-M1-M2) by Def1
+             .=-M2+-(-M1+-M2) by Def1
+             .=-M2+(--M1+--M2) by A1,A2,A3,Th12
+             .=-M2+(M1+--M2) by A1,Th1
+             .=-M2+(M1+M2) by A1,Th1
+             .=M1+M2+-M2 by A2,A4,MATRIX_3:4;
+  hence M1 = - M2 - (- M1 - M2) by A1,Th38;
+end;
+
+theorem Th46: for K being Field,M1,M2,M3 being Matrix of K
+  st len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 holds
+  - M1 - M2 - M3 = - M1 - M3 - M2
+proof let K be Field,M1,M2,M3 be Matrix of K;
+  assume A1: len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0;
+  len (-M1)=len M1 & width (-M1)=width M1 by MATRIX_3:def 2;
+  hence - M1 - M2 - M3 = - M1 - M3 - M2 by A1,Th16;
+end;
+
+theorem Th47:
+  for K being Field, M1, M2, M3 being Matrix of K
+  st len M1 = len M2 & len M2 = len M3 &
+  width M1 = width M2 & width M2 = width M3 & len M1>0 holds
+  - M1 - M2 - M3 = - M2 - M3 - M1
+proof
+  let K being Field, M1, M2, M3 being Matrix of K
+  such that
+  A1: len M1 = len M2 & len M2 = len M3 &
+  width M1 = width M2 & width M2 = width M3 & len M1>0;
+  - M1 - M2 - M3 = - M2 - M1 - M3 by A1,Th44;
+  hence thesis by A1,Th46;
+end;
+
+theorem
+  for K being Field, M1, M2, M3 being Matrix of K
+  st len M1=len M2 & len M2=len M3 &
+  width M1=width M2 & width M2 = width M3 & len M1>0 holds
+  - M1 - M2 - M3 = - M3 - M2 - M1
+proof
+  let K being Field, M1, M2, M3 being Matrix of K
+  such that
+  A1: len M1 = len M2 & len M2 = len M3 &
+  width M1 = width M2 & width M2 = width M3 & len M1>0;
+  - M1 - M2 - M3 = - M1 - M3 - M2 by A1,Th46;
+  hence thesis by A1,Th47;
+end;
+
+theorem
+  for K being Field, M1, M2, M3 being Matrix of K
+  st len M1 = len M2 & len M2 = len M3 &
+  width M1 = width M2 & width M2 = width M3 & len M1>0 holds
+  (M3 - M1) - (M3 - M2) = - (M1 - M2)
+proof
+  let K being Field, M1, M2, M3 being Matrix of K such that
+  A1: len M1 = len M2 & len M2 = len M3 &
+  width M1 = width M2 & width M2 = width M3 & len M1>0;
+  A2: len (-M1) = len M1 & width (-M1) = width M1 by MATRIX_3:def 2;
+  A3: len (-M2) = len M2 & width (-M2) = width M2 by MATRIX_3:def 2;
+  (M3 - M1) - (M3 - M2) = M2 - M1 by A1,Th18
+  .= M2 + (- M1) by Def1
+  .= (- M1) + M2 by A1,A2,MATRIX_3:4
+  .= (- M1) +--M2 by A1,Th1
+  .= - (M1 + -M2) by A1,A3,Th12;
+  hence thesis by Def1;
+end;
+
+theorem
+  for K being Field, M being Matrix of K
+  st len M>0 holds
+  0.(K, len M, width M) - M = - M
+proof
+  let K being Field, M being Matrix of K
+  such that
+  A1: len M>0;
+  A2: len (-M) = len M & width (-M) = width M by MATRIX_3:def 2;
+  A3: len (0.(K, len M, width M)) = len M by MATRIX_1:def 3;
+  then
+  A4: width (0.(K, len M, width M)) = width M by A1,MATRIX_1:20;
+  A5: -M is Matrix of len M, width M, K by A1,A2,MATRIX_1:20;
+  0.(K, len M, width M) - M = 0.(K, len M, width M) + (-M) by Def1
+  .= (-M) + 0.(K, len M, width M) by A2,A3,A4,MATRIX_3:4;
+  hence thesis by A5,MATRIX_3:6;
+end;
+
+theorem
+  for K being Field, M1, M2 being Matrix of K
+  st len M1 = len M2 & width M1 = width M2 & len M1>0 holds
+  M1 + M2 = M1 - - M2 by Th5;
+
+theorem
+  for K being Field, M1, M2 being Matrix of K
+  st len M1 = len M2 & width M1 = width M2 & len M1>0 holds
+  M1 = M1 - (M2 + -M2)
+proof
+  let K being Field, M1, M2 being Matrix of K such that
+  A1: len M1 = len M2 & width M1 = width M2 & len M1>0;
+  M1 =  M1 - (M2 - M2) by A1,Th11;
+  hence thesis by Def1;
+end;
+
+theorem
+  for K being Field, M1, M2, M3 being Matrix of K
+  st len M1 = len M2 & len M2 = len M3 &
+  width M1 = width M2 & width M2 = width M3 & len M1>0 &
+  M1 - M3 = M2 + - M3 holds M1 = M2
+proof
+  let K being Field, M1, M2, M3 being Matrix of K
+  such that
+  A1: len M1 = len M2 & len M2 = len M3 &
+  width M1 = width M2 & width M2 = width M3 & len M1>0 &
+  M1 - M3 = M2 + - M3;
+  M1 - M3 = M2 - M3 by A1,Def1;
+  hence thesis by A1,Th14;
+end;
+
+theorem
+  for K being Field, M1, M2, M3 being Matrix of K
+  st len M1 = len M2 & len M2 = len M3 &
+  width M1 = width M2 & width M2 = width M3 & len M1>0 &
+  M3 - M1 = M3 + - M2 holds M1 = M2
+proof
+  let K being Field, M1, M2, M3 being Matrix of K
+  such that
+  A1: len M1 = len M2 & len M2 = len M3 &
+  width M1 = width M2 & width M2 = width M3 & len M1>0 &
+  M3 - M1 = M3 + - M2;
+  M3 - M1 = M3 - M2 by A1,Def1;
+  hence thesis by A1,Th15;
+end;
+
+theorem Th55: for K being Field,A,B being Matrix of K st
+  len A=len B & width A=width B holds Indices A=Indices B
+proof let K be Field,A,B be Matrix of K;
+  assume A1: len A=len B & width A=width B;
+  A2: Indices A = [:dom A,Seg width A:] by MATRIX_1:def 5;
+  A3: Indices B = [:dom B,Seg width B:] by MATRIX_1:def 5;
+  dom A = Seg len A by FINSEQ_1:def 3;
+  hence Indices A = Indices B by A1,A2,A3,FINSEQ_1:def 3;
+end;
+
+theorem Th56:   :: EUCLID_2:9
+  for K being Field,x,y,z being FinSequence of (the carrier of K) st
+  len x=len y & len y=len z holds
+  mlt(x+y,z) = mlt(x,z)+mlt(y,z)
+proof let K be Field,x,y,z be FinSequence of (the carrier of K);
+  assume
+  A1: len x=len y & len y=len z;
+  then reconsider x2=x, y2=y, z2=z
+  as Element of (len x)-tuples_on (the carrier of K) by FINSEQ_2:110;
+  A2: dom y=Seg len x by A1,FINSEQ_1:def 3;
+  A3: dom z=Seg len x by A1,FINSEQ_1:def 3;
+  A4: dom x =Seg len x by FINSEQ_1:def 3;
+  A5: dom (x+y) = Seg len (x2+y2) by FINSEQ_1:def 3
+  .=Seg len x by FINSEQ_2:109
+  .=dom z by A1,FINSEQ_1:def 3;
+
+  A6: dom (mlt(x+y,z))=Seg len(mlt(x2+y2,z2)) by FINSEQ_1:def 3
+                 .=Seg len x by FINSEQ_2:109
+                 .=Seg len (mlt(x2,z2)+mlt(y2,z2)) by FINSEQ_2:109
+                 .= dom (mlt(x2,z2)+mlt(y2,z2)) by FINSEQ_1:def 3;
+  A7: dom (mlt(x,z))=Seg len(mlt(x2,z2)) by FINSEQ_1:def 3
+                 .=Seg len x by FINSEQ_2:109;then
+  A8: dom (mlt(x,z)) =Seg len (mlt(x2,z2)+mlt(y2,z2)) by FINSEQ_2:109
+                 .= dom (mlt(x2,z2)+mlt(y2,z2)) by FINSEQ_1:def 3;
+  A9: dom (mlt(y,z))=Seg len(mlt(y2,z2)) by FINSEQ_1:def 3
+                 .=Seg len x by FINSEQ_2:109;then
+
+  A10: dom (mlt(y,z))=Seg len (mlt(x2,z2)+mlt(y2,z2)) by FINSEQ_2:109
+  .= dom (mlt(x2,z2)+mlt(y2,z2)) by FINSEQ_1:def 3;
+  for i being Nat st i in dom (mlt(x+y,z)) holds
+  mlt(x+y,z).i = (mlt(x,z)+mlt(y,z)).i
+  proof let i be Nat;
+    assume A11: i in dom mlt(x+y,z);
+    len (x2+y2)=len x by FINSEQ_2:109; then
+    A12: dom (x2+y2)=Seg len x by FINSEQ_1:def 3;
+    A15: rng x c= the carrier of K by FINSEQ_1:def 4;
+    A16: rng y c= the carrier of K by FINSEQ_1:def 4;
+    A17: rng z c= the carrier of K by FINSEQ_1:def 4;
+    A18: rng (x+y) c= the carrier of K by FINSEQ_1:def 4;
+    A21: mlt(x+y,z)=(the mult of K).:(x+y,z) by FVSUM_1:def 7;
+    dom (the mult of K) = [:the carrier of K,the carrier of K:]
+                    by FUNCT_2:def 1;then
+    [:rng (x+y),rng z:] c= dom (the mult of K)
+                    by A17,A18,ZFMISC_1:119;then
+    A22: dom (mlt(x+y,z)) = dom(x+y) /\ dom z by A21,FUNCOP_1:84;then
+    A23: i in Seg len x by A11,A12,XBOOLE_0:def 3;then
+    A24: i in dom x by FINSEQ_1:def 3;then
+    A25: x.i in rng x by FUNCT_1:def 5;
+
+    i in dom y by A1,A23,FINSEQ_1:def 3;then
+    A26: y.i in rng y by FUNCT_1:def 5;
+
+    i in dom z by A11,A22,XBOOLE_0:def 3;then
+    A27: z.i in rng z by FUNCT_1:def 5;
+
+    (x+y).i in rng (x+y) by A12,A23,FUNCT_1:def 5;then
+    reconsider a=x.i, b=y.i, d=(x+y).i, e=z.i
+    as Element of K
+    by A15,A16,A17,A18,A25,A26,A27;
+    A29: dom ((the mult of K)*(x,z))
+    = dom ((the mult of K)*([:x,z:])) by FINSEQOP:def 4;
+    dom (the mult of K)= [:the carrier of K,the carrier of K:]
+                    by FUNCT_2:def 1;then
+    A30: [a,e] in dom (the mult of K) by ZFMISC_1:106;
+    A31: ([:x,z:]).([i,i]) in dom (the mult of K)
+    by A3,A4,A11,A12,A22,A30,FUNCT_3:def 9;
+    dom ([:x,z:])=[:dom x,dom z:] by FUNCT_3:def 9;then
+    [i,i] in dom ([:x,z:]) by A3,A4,A11,A12,A22,ZFMISC_1:106;then
+    A32: [i,i] in dom ((the mult of K)*(x,z)) by A29,A31,FUNCT_1:21;
+    A33: dom ((the mult of K)*(y,z))
+    = dom ((the mult of K)*([:y,z:])) by FINSEQOP:def 4;
+    dom (the mult of K)= [:the carrier of K,the carrier of K:]
+    by FUNCT_2:def 1;then
+    A34: [b,e] in dom (the mult of K) by ZFMISC_1:106;
+
+    A35: ([:y,z:]).([i,i]) in dom (the mult of K)
+    by A2,A3,A11,A12,A22,A34,FUNCT_3:def 9;
+
+    dom ([:y,z:])=[:dom y,dom z:] by FUNCT_3:def 9;then
+    [i,i] in dom ([:y,z:]) by A2,A3,A11,A12,A22,ZFMISC_1:106;then
+    A36: [i,i] in dom ((the mult of K)*(y,z)) by A33,A35,FUNCT_1:21;
+
+    dom ([:x,z:])=[:dom x,dom z:] by FUNCT_3:def 9;then
+    A37: [i,i] in dom ([:x,z:]) by A3,A4,A11,A12,A22,ZFMISC_1:106;
+
+    dom ([:y,z:])=[:dom y,dom z:] by FUNCT_3:def 9;then
+    A38: [i,i] in dom ([:y,z:]) by A2,A3,A11,A12,A22,ZFMISC_1:106;
+
+    dom (<:x,z:>) = (dom x) /\ (dom x) by A3,A4,FUNCT_3:def 8
+    .= dom x;then
+    A39: i in dom (<:x,z:>) by A23,FINSEQ_1:def 3;
+
+    dom (<:y,z:>) =(dom x) /\ (dom x) by A2,A3,A4,FUNCT_3:def 8
+    .= dom x;then
+    A40: i in dom (<:y,z:>) by A23,FINSEQ_1:def 3;
+
+    dom (<:x+y,z:>) = dom (x+y) /\ dom (z) by FUNCT_3:def 8
+    .= dom x by A3,A5,FINSEQ_1:def 3;then
+    A41: i in dom (<:x+y,z:>) by A23,FINSEQ_1:def 3;
+
+    A42: dom (<:x,y:>)= dom (x) /\ dom (y) by FUNCT_3:def 8
+    .= dom x by A2,A4;
+
+    A43: dom (<:mlt(x,z),mlt(y,z):>) = dom (mlt(x,z)) /\ dom (mlt(y,z))
+    by FUNCT_3:def 8
+    .= dom x by A7,A9,FINSEQ_1:def 3;
+
+    A44: (x+y).i = ((the add of K).:(x,y)).i by FVSUM_1:def 3
+    .= ((the add of K)*(<:x,y:>)).i by FUNCOP_1:def 3
+    .= (the add of K).((<:x,y:>).i) by A24,A42,FUNCT_1:23
+    .= (the add of K).([x.i,y.i]) by A2,A4,A23,FUNCT_3:69
+    .= a+b by RLVECT_1:def 3;
+
+    A45: mlt(x+y,z).i = ((the mult of K).:(x+y,z)).i by FVSUM_1:def 7
+    .= ((the mult of K)*<:x+y,z:>).i by FUNCOP_1:def 3
+    .= (the mult of K).((<:x+y,z:>).i) by A41,FUNCT_1:23
+    .= (the mult of K).([(x+y).i,z.i]) by A5,A11,A22,FUNCT_3:69
+    .= (the mult of K).((x+y).i,z.i) by BINOP_1:def 1
+    .= d*e by VECTSP_1:def 10;
+
+    A46: a*e=(the mult of K).(a,e) by VECTSP_1:def 10
+    .=(the mult of K).([x.i,z.i]) by BINOP_1:def 1
+    .=((the mult of K)*(x,z)).([i,i]) by A32,FINSEQOP:82
+    .=((the mult of K)*[:x,z:]).([i,i]) by FINSEQOP:def 4
+    .=(the mult of K).([:x,z:].([i,i])) by A37,FUNCT_1:23
+    .=(the mult of K).([x.i,z.i]) by A3,A4,A11,A12,A22,FUNCT_3:def 9
+    .=(the mult of K).((<:x,z:>).i) by A3,A4,A11,A12,A22,FUNCT_3:69
+    .=((the mult of K)*(<:x,z:>)).i by A39,FUNCT_1:23
+    .=((the mult of K).:(x,z)).i by FUNCOP_1:def 3
+    .=mlt(x,z).i by FVSUM_1:def 7;
+
+    A47: b*e=(the mult of K).(b,e) by VECTSP_1:def 10
+    .=(the mult of K).([y.i,z.i]) by BINOP_1:def 1
+    .=((the mult of K)*(y,z)).([i,i]) by A36,FINSEQOP:82
+    .=((the mult of K)*[:y,z:]).([i,i]) by FINSEQOP:def 4
+    .=(the mult of K).([:y,z:].([i,i])) by A38,FUNCT_1:23
+    .=(the mult of K).([y.i,z.i]) by A2,A3,A11,A12,A22,FUNCT_3:def 9
+    .=(the mult of K).((<:y,z:>).i) by A2,A3,A11,A12,A22,FUNCT_3:69
+    .= ((the mult of K)*(<:y,z:>)).i by A40,FUNCT_1:23
+    .= ((the mult of K).:(y,z)).i by FUNCOP_1:def 3
+    .= mlt(y,z).i by FVSUM_1:def 7;
+
+    A48: ((the add of K).:(mlt(x,z),mlt(y,z)))
+    =(mlt(x,z)+mlt(y,z)) by FVSUM_1:def 3;
+    a*e+b*e = (the add of K).([a*e,b*e]) by RLVECT_1:def 3
+    .=(the add of K).((<:mlt(x,z),mlt(y,z):>).i)
+    by A7,A8,A10,A23,A46,A47,FUNCT_3:69
+    .= ((the add of K)*<:mlt(x,z),mlt(y,z):>).i by A24,A43,FUNCT_1:23
+    .=(mlt(x,z)+mlt(y,z)).i by A48,FUNCOP_1:def 3;
+    hence thesis by A44,A45,VECTSP_1:def 18;
+  end;
+  hence thesis by A6,FINSEQ_1:17;
+end;
+
+theorem Th57:   :: EUCLID_2:9
+  for K being Field,x,y,z being FinSequence of (the carrier of K) st
+  len x=len y & len y=len z holds
+  mlt(z,x+y) = mlt(z,x)+mlt(z,y)
+proof let K be Field,x,y,z be FinSequence of (the carrier of K);
+  assume A1: len x=len y & len y=len z;then
+  reconsider x2=x,y2=y,z2=z as
+  Element of (len x)-tuples_on (the carrier of K) by FINSEQ_2:110;
+  mlt(z,x+y) = mlt(x2+y2,z2) by FVSUM_1:77
+  .=mlt(x2,z2)+mlt(y,z) by A1,Th56
+  .=mlt(z,x)+mlt(y2,z2) by FVSUM_1:77;
+  hence thesis by FVSUM_1:77;
+end;
+
+theorem
+  for D being non empty set,M being Matrix of D holds
+  len M >0 implies for n being Nat holds
+  (M is Matrix of n,width M, D) iff n = len M by MATRIX_1:20,def 3;
+
+theorem Th59: for K being Field,j being Nat,A,B being Matrix of K
+  st len A=len B & width A=width B & (ex j being Nat st [i,j] in Indices A)
+  holds Line(A+B,i)=Line(A,i)+Line(B,i)
+proof let K be Field,j be Nat,A,B being Matrix of K;
+  assume A1: len A=len B & width A=width B &
+  (ex j being Nat st [i,j] in Indices A);then
+  consider j being Nat such that
+  A2: [i,j] in Indices A;
+  A3: len (A+B)=len A & width (A+B)=width A by MATRIX_3:def 3;then
+  A4: Indices (A+B)=Indices A by Th55;
+  Indices A=[:dom A,Seg width A:] by MATRIX_1:def 5;then
+  i in dom A by A2,ZFMISC_1:106;then
+  A5: i in Seg len A by FINSEQ_1:def 3;
+
+  reconsider a= Line(A,i),b=Line(B,i)
+  as Element of (width A)-tuples_on (the carrier of K) by A1;
+
+  A6: len (Line(A,i)+Line(B,i))=len (a+b)
+  .= width A by FINSEQ_2:109;
+  A7: len (Line(A+B,i)) = width A by A3,MATRIX_1:def 8;
+  for k being Nat st 1<=k & k<=len (Line(A+B,i)) holds
+    (Line(A+B,i)).k=(Line(A,i)+Line(B,i)).k
+   proof let k be Nat;assume
+    A8: 1<=k & k<=len (Line(A+B,i));
+    A9: len (Line(A+B,i)) = width A by A3,MATRIX_1:def 8;
+    A10: len (Line(A,i))=width(A) by MATRIX_1:def 8;
+    A11: len (Line(B,i))=width(B) by MATRIX_1:def 8;
+    A12: i in dom (A+B) & k in Seg width (A+B)
+                     by A3,A5,A8,A9,FINSEQ_1:3,def 3;then
+    [i,k] in [: dom (A+B),Seg width (A+B):] by ZFMISC_1:106;then
+    A13: [i,k] in Indices (A+B) by MATRIX_1:def 5;
+    A14: (Line(A+B,i)).k= (A+B)*(i,k) by A12,MATRIX_1:def 8
+                   .= A*(i,k)+B*(i,k) by A4,A13,MATRIX_3:def 3;
+     A15: k in Seg len (Line(A,i)) by A8,A9,A10,FINSEQ_1:3;then
+     k in dom Line(A,i) by FINSEQ_1:def 3;then
+     reconsider d=Line(A,i).k as Element of K
+                      by FINSEQ_2:13;
+     k in Seg len (Line(B,i)) by A1,A8,A9,A11,FINSEQ_1:3;then
+     k in dom Line(B,i) by FINSEQ_1:def 3;then
+     reconsider e=Line(B,i).k as Element of K
+                      by FINSEQ_2:13;
+     len (Line(A,i)+Line(B,i))= len (a+b)
+     .= width A by FINSEQ_2:109
+     .= len (Line(A,i)) by FINSEQ_2:109;then
+     k in dom (Line(A,i)+Line(B,i)) by A15,FINSEQ_1:def 3;then
+     A16: (Line(A,i)+Line(B,i)).k=d+e by FVSUM_1:21;
+    Line(A,i).k=A*(i,k) by A10,A15,MATRIX_1:def 8;
+    hence (Line(A+B,i)).k=(Line(A,i)+Line(B,i)).k
+    by A1,A10,A14,A15,A16,MATRIX_1:def 8;
+    end;
+  hence Line(A+B,i)=Line(A,i)+Line(B,i) by A6,A7,FINSEQ_1:18;
+end;
+
+theorem Th60: for K being Field,j being Nat,A,B being Matrix of K
+  st len A=len B & width A=width B & (ex i being Nat st [i,j] in Indices A)
+  holds Col(A+B,j)=Col(A,j)+Col(B,j)
+proof let K be Field,j be Nat,A,B being Matrix of K;
+  assume A1: len A=len B & width A=width B &
+  (ex i being Nat st [i,j] in Indices A);then
+  consider i being Nat such that
+  A2: [i,j] in Indices A;
+  A3: len (A+B)=len A & width (A+B)=width A by MATRIX_3:def 3;then
+  A4: Indices (A+B)=Indices A by Th55;
+
+  A5: Indices A=[:dom A,Seg width A:] by MATRIX_1:def 5;
+
+  reconsider a = Col(A,j),b=Col(B,j)
+  as Element of (len A)-tuples_on (the carrier of K) by A1;
+
+  A6: len (Col(A,j)+Col(B,j)) = len (a+b)
+  .= len A by FINSEQ_2:109;
+  A7: len (Col(A+B,j)) = len A by A3,MATRIX_1:def 9;
+
+  for k being Nat st 1<=k & k<=len (Col(A+B,j)) holds
+  (Col(A+B,j)).k=(Col(A,j)+Col(B,j)).k
+  proof let k be Nat;assume
+    A8: 1<=k & k<=len (Col(A+B,j));
+    A9: len (Col(A+B,j)) = len A by A3,MATRIX_1:def 9;
+    A10: len (Col(A,j))=len(A) by MATRIX_1:def 9;
+    A11: len (Col(B,j))=len(B) by MATRIX_1:def 9;
+
+    k in Seg len A by A8,A9,FINSEQ_1:3;then
+    A12: k in dom (A+B) & j in Seg width (A+B)
+    by A2,A3,A5,FINSEQ_1:def 3,ZFMISC_1:106;then
+    [k,j] in [: dom (A+B),Seg width (A+B):] by ZFMISC_1:106;then
+    A13: [k,j] in Indices (A+B) by MATRIX_1:def 5;
+
+    A14: (Col(A+B,j)).k= (A+B)*(k,j) by A12,MATRIX_1:def 9
+    .= A*(k,j)+B*(k,j) by A4,A13,MATRIX_3:def 3;
+    A15: k in Seg len (Col(A,j)) by A8,A9,A10,FINSEQ_1:3;then
+    k in dom Col(A,j) by FINSEQ_1:def 3;then
+    reconsider d = Col(A,j).k as Element of K by FINSEQ_2:13;
+
+    k in Seg len (Col(B,j)) by A1,A8,A9,A11,FINSEQ_1:3;then
+    k in dom Col(B,j) by FINSEQ_1:def 3;then
+    reconsider e=Col(B,j).k as Element of K by FINSEQ_2:13;
+
+    len (Col(A,j)+Col(B,j)) = len (a+b)
+    .= len A by FINSEQ_2:109
+    .= len (Col(A,j)) by FINSEQ_2:109;then
+    k in dom (Col(A,j)+Col(B,j)) by A15,FINSEQ_1:def 3;then
+    A16: (Col(A,j)+Col(B,j)).k=d+e by FVSUM_1:21;
+    A17: dom A=Seg len A by FINSEQ_1:def 3.=dom B by A1,FINSEQ_1:def 3;
+    A18: k in dom A by A10,A15,FINSEQ_1:def 3;then
+    Col(A,j).k=A*(k,j) by MATRIX_1:def 9;
+    hence (Col(A+B,j)).k=(Col(A,j)+Col(B,j)).k
+    by A14,A16,A17,A18,MATRIX_1:def 9;
+  end;
+  hence Col(A+B,j)=Col(A,j)+Col(B,j) by A6,A7,FINSEQ_1:18;
+end;
+
+theorem Th61:   ::MATRLIN:34
+  for V1 being Field,P1,P2 be FinSequence of the carrier of V1
+  st len P1 = len P2
+  holds
+  Sum(P1+P2) = (Sum P1) + (Sum P2)
+proof
+  let V1 being Field,
+  P1,P2 be FinSequence of the carrier of V1; assume
+  A1: len P1 = len P2;
+  reconsider R1 = P1, R2 = P2 as
+  Element of (len P1)-tuples_on (the carrier of V1) by A1,FINSEQ_2:110;
+  thus Sum(P1+P2) = Sum (R1 + R2)
+  .= Sum P1 + Sum P2 by FVSUM_1:95;
+end;
+
+theorem
+  for K being Field,A,B,C being Matrix of K
+  st len B=len C & width B=width C & width A=len B & len A>0 & len B>0
+  holds A*(B+C)=A*B + A*C
+proof let K be Field,A,B,C be Matrix of K;
+  assume A1: len B=len C & width B=width C & width A=len B
+    & len A>0 & len B>0;
+  A2: len (B+C)=len B & width (B+C)=width B by MATRIX_3:def 3;then
+  A3: len (A*(B+C))=len A & width (A*(B+C))=width (B+C)
+                  by A1,MATRIX_3:def 4;then
+  reconsider M1=A*(B+C) as Matrix of (len A),(width B),K
+  by A1,A2,MATRIX_1:20;
+
+  A4: len (A*B)=len A & width (A*B)=width (B) by A1,MATRIX_3:def 4;
+  A5: len (A*C)=len A & width (A*C)=width (C) by A1,MATRIX_3:def 4;
+  A6: Indices(M1)=Indices(A*B) by A2,A3,A4,Th55;
+  A7: Indices(M1)=Indices(A*C) by A1,A2,A3,A5,Th55;
+  A8: len (A*B +A*C)=len (A*B) & width(A*B+A*C)=width (A*B)
+                     by MATRIX_3:def 3;then
+  reconsider M2= A*B+A*C as Matrix of (len A),(width B),K
+  by A1,A4,MATRIX_1:20;
+
+  for i,j being Nat st [i,j] in Indices M1 holds M1*(i,j)=M2*(i,j)
+  proof let i,j be Nat;
+    assume A9: [i,j] in Indices M1;
+    len Line(A,i) = len B by A1,MATRIX_1:def 8;then
+    A10: len Line(A,i) =len Col(B,j) by MATRIX_1:def 9;
+    len Line(A,i) = len C by A1,MATRIX_1:def 8;then
+    A11: len Line(A,i) = len Col(C,j) by MATRIX_1:def 9;
+    A12: [:dom B,Seg width B:]=Indices B by MATRIX_1:def 5;
+    A13: dom B = Seg len B by FINSEQ_1:def 3;
+    1+0<=len B by A1,NAT_1:38;then
+    A14: 1 in dom B by A13,FINSEQ_1:3;
+
+    [i,j] in [:dom (A*B),Seg width (B):] by A4,A6,A9,MATRIX_1:def 5;then
+    j in Seg width B by ZFMISC_1:106;then
+    A15: [1,j] in Indices B by A12,A14,ZFMISC_1:106;
+
+   reconsider q1=Line(A,i),q2=Col(B,j),q3=Col(C,j)
+   as Element of (len B)-tuples_on (the carrier of K) by A1;
+
+   A16: len (mlt(Line(A,i),Col(B,j)))=len (mlt(q1,q2))
+   .=len B by FINSEQ_2:109 .=len (mlt(q1,q3)) by FINSEQ_2:109
+   .= len(mlt(Line(A,i),Col(C,j)));
+   A17: M1*(i,j)=Line(A,i) "*" Col(B+C,j) by A1,A2,A9,MATRIX_3:def 4
+
+            .=Sum(mlt(Line(A,i),Col(B+C,j))) by FVSUM_1:def 10
+            .=Sum(mlt(Line(A,i),Col(B,j)+Col(C,j))) by A1,A15,Th60
+            .=Sum(mlt(Line(A,i),Col(B,j))+mlt(Line(A,i),Col(C,j)))
+                          by A10,A11,Th57
+            .= Sum(mlt(Line(A,i),Col(B,j)))+
+                  Sum(mlt(Line(A,i),Col(C,j))) by A16,Th61;
+
+    M2*(i,j)=(A*B)*(i,j)+(A*C)*(i,j) by A6,A9,MATRIX_3:def 3
+            .=(Line(A,i) "*" Col(B,j)) +(A*C)*(i,j)
+                                   by A1,A6,A9,MATRIX_3:def 4
+            .=(Line(A,i) "*" Col(B,j)) +(Line(A,i) "*" Col(C,j))
+                                by A1,A7,A9,MATRIX_3:def 4
+            .=(Line(A,i) "*" Col(B,j))
+               +Sum(mlt(Line(A,i),Col(C,j))) by FVSUM_1:def 10
+            .= Sum(mlt(Line(A,i),Col(B,j)))
+               +Sum(mlt(Line(A,i),Col(C,j))) by FVSUM_1:def 10;
+    hence M1*(i,j)=M2*(i,j) by A17;
+  end;
+  hence A*(B+C) = A*B + A*C by A2,A3,A4,A8,MATRIX_1:21;
+end;
+
+theorem
+  for K being Field,A,B,C being Matrix of K
+  st len B=len C & width B=width C & len A=width B & len B>0 & len A>0
+  holds (B+C)*A=B*A + C*A
+proof let K be Field,A,B,C be Matrix of K;
+  assume A1: len B=len C & width B=width C & len A=width B
+  & len B>0 & len A>0;
+  A2: len (B+C)=len B & width (B+C)=width B by MATRIX_3:def 3;then
+  A3: len ((B+C)*A)=len B & width ((B+C)*A)=width (A)
+                  by A1,MATRIX_3:def 4;then
+  reconsider M1=(B+C)*A as Matrix of (len B),(width A),K by A1,MATRIX_1:20;
+
+  A4: len (B*A)=len B & width (B*A)=width (A) by A1,MATRIX_3:def 4;
+  A5: len (C*A)=len C & width (C*A)=width (A) by A1,MATRIX_3:def 4;
+  A6: Indices(M1)=Indices(B*A) by A3,A4,Th55;
+  A7: Indices(M1)=Indices(C*A) by A1,A3,A5,Th55;
+
+  A8: len (B*A +C*A)=len (B*A) & width(B*A+C*A)=width (B*A)
+                     by MATRIX_3:def 3;then
+  reconsider M2= B*A+C*A as Matrix of (len B),(width A),K
+  by A1,A4,MATRIX_1:20;
+
+  for i,j being Nat st [i,j] in Indices M1 holds M1*(i,j)=M2*(i,j)
+  proof let i,j be Nat;
+    assume A9: [i,j] in Indices M1;
+    len Col(A,j) = width B by A1,MATRIX_1:def 9;then
+    A10: len Col(A,j) =len Line(B,i) by MATRIX_1:def 8;
+    len Col(A,j) = width C by A1,MATRIX_1:def 9;then
+    A11: len Col(A,j) = len Line(C,i) by MATRIX_1:def 8;
+    A12: [:dom B,Seg width B:]=Indices B by MATRIX_1:def 5;
+
+    1+0<=width B by A1,NAT_1:38;then
+    A13: 1 in Seg width B by FINSEQ_1:3;
+
+    [i,j] in [:dom (B*A),Seg width (A):] by A4,A6,A9,MATRIX_1:def 5;then
+    i in dom (B*A) by ZFMISC_1:106;then
+    i in Seg len (B) by A4,FINSEQ_1:def 3;then
+    i in dom (B) by FINSEQ_1:def 3;then
+    A14: [i,1] in Indices B by A12,A13,ZFMISC_1:106;
+    reconsider q1=Line(B,i),q2=Line(C,i),q3=Col(A,j)
+               as Element of (len A)-tuples_on (the carrier of K) by A1;
+    A15: len (mlt(Line(B,i),Col(A,j)))=len (mlt(q1,q3))
+    .=len A by FINSEQ_2:109 .=len (mlt(q2,q3)) by FINSEQ_2:109
+    .= len(mlt(Line(C,i),Col(A,j)));
+    A16: M1*(i,j)=Line(B+C,i) "*" Col(A,j) by A1,A2,A9,MATRIX_3:def 4
+            .=Sum(mlt(Line(B+C,i),Col(A,j))) by FVSUM_1:def 10
+            .=Sum(mlt(Line(B,i)+Line(C,i),Col(A,j))) by A1,A14,Th59
+            .=Sum(mlt(Line(B,i),Col(A,j))+mlt(Line(C,i),Col(A,j)))
+                          by A10,A11,Th56
+            .= Sum(mlt(Line(B,i),Col(A,j)))+
+                  Sum(mlt(Line(C,i),Col(A,j))) by A15,Th61;
+
+    M2*(i,j)=(B*A)*(i,j)+(C*A)*(i,j) by A6,A9,MATRIX_3:def 3
+            .=(Line(B,i) "*" Col(A,j)) +(C*A)*(i,j)
+                                   by A1,A6,A9,MATRIX_3:def 4
+            .=(Line(B,i) "*" Col(A,j)) +(Line(C,i) "*" Col(A,j))
+                                by A1,A7,A9,MATRIX_3:def 4
+            .=(Line(B,i) "*" Col(A,j))
+               +Sum(mlt(Line(C,i),Col(A,j))) by FVSUM_1:def 10
+            .= Sum(mlt(Line(B,i),Col(A,j)))
+               +Sum(mlt(Line(C,i),Col(A,j))) by FVSUM_1:def 10;
+    hence M1*(i,j)=M2*(i,j) by A16;
+  end;
+  hence (B+C)*A = B*A + C*A by A3,A4,A8,MATRIX_1:21;
+end;
+
+theorem
+  for K being Field,n,m,k being Nat,
+  M1 being Matrix of n,m,K,
+  M2 being Matrix of m,k,K st width M1=len M2 & 0< len M1 & 0<len M2 holds
+  M1*M2 is Matrix of n,k,K
+proof let K be Field,n,m,k be Nat,
+  M1 be Matrix of n,m,K,
+  M2 be Matrix of m,k,K;
+  assume A1: width M1=len M2 & 0< len M1 & 0< len M2;then
+  A2: len (M1*M2)=len M1 & width (M1*M2)=width M2 by MATRIX_3:def 4;
+  A3: len M1=n by MATRIX_1:def 3;
+  width M1=m by A1,MATRIX_1:def 3; then
+  width M2=k by A1,MATRIX_1:20;
+  hence M1*M2 is Matrix of n,k,K by A1,A2,A3,MATRIX_1:20;
+end;

@@ -1,0 +1,1561 @@
+:: Basic Properties of Extended Real Numbers
+::  by Noboru Endou , Katsumi Wasaki and Yasunari Shidama
+::
+:: Received September 7, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary SUPINF_1, MEASURE6, ARYTM_3, ARYTM_1, RLVECT_1, ARYTM, COMPLEX1;
+ notation ORDINAL1, XCMPLX_0, XREAL_0, REAL_1, SUPINF_1, SUPINF_2, MEASURE6;
+ constructors REAL_1, SUPINF_2, MEASURE6, MEMBERED;
+ clusters XREAL_0, MEMBERED, XBOOLE_0;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ theorems TARSKI, SUPINF_1, MEASURE5, MEASURE6, REAL_1, REAL_2, SUPINF_2,
+      AXIOMS, MEASURE3, SQUARE_1, HAHNBAN, XBOOLE_0, XCMPLX_0, XCMPLX_1;
+
+begin
+
+ reserve x,y,z for R_eal;
+ reserve a for Real;
+
+theorem Th1:
+  x <> +infty & x <> -infty implies x is Real
+proof
+   assume A1:x <> +infty & x <> -infty;
+     x in REAL or x in {-infty,+infty} by SUPINF_1:def 6,XBOOLE_0:def 2;
+   hence thesis by A1,TARSKI:def 2;
+end;
+
+theorem Th2:
+  -infty <' +infty
+proof
+   consider a being Real;
+     a in REAL;
+   then R_EAL a in REAL by MEASURE6:def 1;
+   then -infty <' R_EAL a & R_EAL a <' +infty by SUPINF_1:31;
+   hence thesis by SUPINF_1:29;
+end;
+
+theorem Th3:
+  x <' y implies x <> +infty & y <> -infty
+proof
+   assume A1:x <' y;
+      now
+     thus x <> +infty by A1,SUPINF_1:20;
+    thus y <> -infty by A1,SUPINF_1:21;
+   end;
+   hence thesis;
+end;
+
+theorem Th4:
+  (x = +infty iff -x = -infty) & (x = -infty iff -x = +infty)
+proof
+     -x = +infty implies x = -infty
+   proof
+    assume -x = +infty;
+    then --x = -infty by SUPINF_2:def 3;
+    hence thesis;
+   end;
+   hence thesis by SUPINF_2:4;
+end;
+
+theorem Th5:
+  x - -y = x + y
+proof
+  thus x - -y = x + - -y by SUPINF_2:def 4
+             .= x + y;
+end;
+
+canceled;
+
+theorem Th7:
+  x <> -infty & y <> +infty & x <=' y implies x <> +infty & y <> -infty
+proof
+   assume A1:x <> -infty & y <> +infty & x <=' y;
+   assume A2:not (x <> +infty & y <> -infty);
+     now per cases by A2;
+    suppose x = +infty;
+    hence contradiction by A1,SUPINF_1:24;
+    suppose y = -infty;
+    hence contradiction by A1,SUPINF_1:23;
+   end;
+   hence thesis;
+end;
+
+Lm1:
+  x in REAL implies x + -infty = -infty & x + +infty = +infty
+proof
+  assume x in REAL;
+  hence thesis by SUPINF_1:2,6,SUPINF_2:def 2;
+end;
+
+Lm2:
+  x in REAL & y in REAL implies x + y in REAL
+  proof
+    assume x in REAL & y in REAL;
+    then consider a,b being Real such that
+A1: x = a & y = b & x + y = a + b by SUPINF_2:def 2;
+    thus thesis by A1;
+  end;
+
+theorem Th8:
+  not (x = +infty & y = -infty) & not (x = -infty & y = +infty) &
+  not ((y = +infty & z = -infty) or (y = -infty & z = +infty)) &
+  not ((x = +infty & z = -infty) or (x = -infty & z = +infty)) implies
+  x + y + z = x + (y + z)
+proof
+   assume that
+A1:not (x = +infty & y = -infty or x = -infty & y = +infty) and
+A2:not ((y = +infty & z = -infty) or (y = -infty & z = +infty)) and
+A3:not ((x = +infty & z = -infty) or (x = -infty & z = +infty));
+     now per cases by A1,A2,A3,SUPINF_2:2;
+     suppose x in REAL & y in REAL & z in REAL;
+     then reconsider A = x, B = y, C = z as Real;
+       A + B = x + y & B + C = y + z by SUPINF_2:1;
+     then A + B + C = x + y + z & A + (B + C) = x + (y + z) by SUPINF_2:1;
+     hence thesis by XCMPLX_1:1;
+     suppose A4: x in REAL & y = +infty & z in REAL;
+     then x + y = +infty & y + z = +infty by Lm1;
+     hence thesis by A4;
+     suppose A5: x in REAL & y = -infty & z in REAL;
+     then x + y = -infty & y + z = -infty by Lm1;
+     hence thesis by A5;
+     suppose A6: x = -infty & y in REAL & z in REAL;
+then x + y = -infty by SUPINF_1:2,SUPINF_2:def 2;
+then A7:   x + y + z = -infty by A6,SUPINF_1:2,SUPINF_2:def 2;
+       ex a,b being Real st y = a & z = b & y + z = a + b
+       by A6,SUPINF_2:def 2;
+     then y + z <> +infty by SUPINF_1:2;
+     hence thesis by A6,A7,SUPINF_2:def 2;
+
+     suppose A8: x = +infty & y in REAL & z in REAL;
+then x + y = +infty by SUPINF_1:6,SUPINF_2:def 2;
+then A9:   x + y + z = +infty by A8,SUPINF_1:6,SUPINF_2:def 2;
+       ex a,b being Real st y = a & z = b & y + z = a + b
+       by A8,SUPINF_2:def 2;
+     then y + z <> -infty by SUPINF_1:6;
+     hence thesis by A8,A9,SUPINF_2:def 2;
+
+     suppose A10: x in REAL & y in REAL & z = +infty;
+then y + z = +infty by Lm1;
+then A11:   x + (y + z) = +infty by A10,SUPINF_1:6,SUPINF_2:def 2;
+       x + y in REAL by A10,Lm2;
+     hence thesis by A10,A11,SUPINF_1:6,SUPINF_2:def 2;
+
+     suppose A12: x in REAL & y in REAL & z = -infty;
+then y + z = -infty by Lm1;
+then A13:   x + (y + z) = -infty by A12,SUPINF_1:2,SUPINF_2:def 2;
+       x + y in REAL by A12,Lm2;
+     hence thesis by A12,A13,SUPINF_1:2,SUPINF_2:def 2;
+
+     suppose A14: x = +infty & y = +infty & z in REAL;
+then x + y = +infty by SUPINF_1:14,SUPINF_2:def 2;
+then A15:   x + y + z = +infty by A14,SUPINF_1:6,SUPINF_2:def 2;
+       y + z <> -infty by A14,Lm1,SUPINF_1:14;
+     hence thesis by A14,A15,SUPINF_2:def 2;
+     suppose A16: x in REAL & y = -infty & z = -infty;
+then A17:   x + y = -infty by SUPINF_1:2,SUPINF_2:def 2;
+     then x + y + z = -infty by A16,SUPINF_1:14,SUPINF_2:def 2;
+     hence thesis by A16,A17;
+     suppose A18: x = -infty & y = -infty & z in REAL;
+then A19:   x + y = -infty by SUPINF_2:19,def 2;
+     then x + y + z = -infty by A18,SUPINF_1:2,SUPINF_2:def 2;
+     hence thesis by A18,A19;
+     suppose x = -infty & y in REAL & z = -infty or
+             x = -infty & y = -infty & z = -infty or
+             x = +infty & y in REAL & z = +infty or
+             x = +infty & y = +infty & z = +infty;
+     hence thesis;
+
+     suppose A20: x in REAL & y = +infty & z = +infty;
+     then x + y = +infty & y + z = +infty by Lm1,SUPINF_1:14,SUPINF_2:def 2;
+     hence thesis by A20;
+   end;
+   hence thesis;
+end;
+
+theorem Th9:
+  x + -x = 0.
+proof
+   per cases by SUPINF_2:2;
+   suppose x in REAL;
+   then consider a being Real such that
+A1:x = a & -x = -a by SUPINF_2:def 3;
+     x + -x = a + -a & -x + x = -a + a by A1,SUPINF_2:1;
+   hence thesis by SUPINF_2:def 1,XCMPLX_0:def 6;
+   suppose x = -infty;
+   hence thesis by SUPINF_1:6,14,SUPINF_2:4,def 2;
+   suppose x = +infty;
+   hence thesis by SUPINF_1:6,14,SUPINF_2:4,def 2;
+end;
+
+canceled;
+
+theorem
+    not (x = +infty & y = -infty) & not (x = -infty & y = +infty) &
+  not (y = +infty & z = +infty) & not (y = -infty & z = -infty) &
+  not (x = +infty & z = +infty) & not (x = -infty & z = -infty) implies
+  x + y - z = x + (y - z)
+proof
+  assume A1: not (x = +infty & y = -infty) & not (x = -infty & y = +infty) &
+  not (y = +infty & z = +infty) & not (y = -infty & z = -infty) &
+  not (x = +infty & z = +infty) & not (x = -infty & z = -infty);
+then A2:not (y = +infty & -z = -infty) & not (y = -infty & -z = +infty) &
+  not (x = +infty & -z = -infty) & not (x = -infty & -z = +infty) by Th4;
+  thus x + y - z = x + y + -z by SUPINF_2:def 4
+         .= x + (y + -z) by A1,A2,Th8
+         .= x + (y - z) by SUPINF_2:def 4;
+end;
+
+begin  :: Operations "x * y","x / y", "|.x.|" in R_eal numbers
+
+definition
+  let x,y be R_eal;
+func x * y -> R_eal means :Def1:
+ (ex a,b being Real st (x = a & y = b & it = a * b)) or
+ (((0. <' x & y=+infty) or (0. <' y & x=+infty) or (x <' 0. & y=-infty) or
+ (y <' 0. & x = -infty)) & it = +infty) or
+ (((x <' 0. & y=+infty) or (y <' 0. & x=+infty) or (0. <' x & y=-infty) or
+ (0. <' y & x = -infty)) & it = -infty) or
+ ((x = 0. or y = 0.) & it = 0.);
+existence
+proof
+     (x in REAL or x in {-infty,+infty}) & (y in REAL or y in {-infty,+infty})
+   by SUPINF_1:def 6,XBOOLE_0:def 2;
+then A1:(x in REAL & y in REAL) or (0. <' x & y = +infty) or
+   (0. <' y & x = +infty) or (x <' 0. & y = +infty) or
+   (y <' 0. & x = +infty) or (0. <' x & y = -infty) or
+   (0. <' y & x = -infty) or (x <' 0. & y = -infty) or
+   (y <' 0. & x = -infty) or (x = 0.) or (y = 0.)
+   by SUPINF_1:22,TARSKI:def 2;
+     ex Z being R_eal st
+   ((ex a,b being Real st (x = a & y = b & Z = a * b)) or
+   (((0. <' x & y = +infty) or (0. <' y & x = +infty)) & Z = +infty) or
+   (((x <' 0. & y = +infty) or (y <' 0. & x = +infty)) & Z = -infty) or
+   (((0. <' x & y = -infty) or (0. <' y & x = -infty)) & Z = -infty) or
+   (((x <' 0. & y = -infty) or (y <' 0. & x = -infty)) & Z = +infty) or
+   ((x = 0. or y = 0.) & Z = 0.))
+   proof
+     x in REAL & y in REAL implies ex Z being R_eal st
+    (ex a,b being Real st (x = a & y = b & Z = a * b))
+    proof
+     assume x in REAL & y in REAL;
+     then reconsider x,y as Real;
+     reconsider Z = x * y as R_eal by SUPINF_1:10;
+     take Z;
+     thus thesis;
+    end;
+    hence thesis by A1;
+   end;
+   hence thesis;
+end;
+uniqueness by SUPINF_1:31,SUPINF_2:def 1;
+end;
+
+canceled;
+
+theorem Th13:
+for x,y being R_eal holds
+ for a,b being Real holds
+ (x = a & y = b) implies x * y = a * b
+proof
+   let x,y be R_eal;
+    let a,b be Real;
+    assume A1:x = a & y = b;
+then A2: -infty <' x & x <' +infty & -infty <' y & y <' +infty by SUPINF_1:31;
+      now per cases by A2,Def1;
+     suppose (ex a,b being Real st (x = a & y = b & x * y = a * b));
+     then consider a1,b1 being Real such that
+A3:  x = a1 & y = b1 & x * y = a1 * b1;
+     thus thesis by A1,A3;
+     suppose ((x = 0. or y = 0.) & x * y = 0.);
+     hence thesis by A1,SUPINF_2:def 1;
+   end;
+   hence thesis;
+end;
+
+canceled 3;
+
+theorem Th17:
+for x,y being R_eal holds x * y = y * x
+proof
+   let x,y be R_eal;
+     now per cases by Def1;
+    suppose
+      ex a,b being Real st (x = a & y = b & x * y = a * b);
+    then consider a1,b1 being Real such that
+A1: x = a1 & y = b1 & x * y = a1 * b1;
+    thus thesis by A1,Def1;
+    suppose
+      ((0. <' x & y=+infty) or (0. <' y & x=+infty) or (x <' 0. & y=-infty) or
+    (y <' 0. & x = -infty)) & x * y = +infty;
+    hence thesis by Def1;
+    suppose
+      ((x <' 0. & y=+infty) or (y <' 0. & x=+infty) or (0. <' x & y=-infty) or
+    (0. <' y & x = -infty)) & x * y = -infty;
+    hence thesis by Def1;
+    suppose (x = 0. or y = 0.) & x * y = 0.;
+    hence thesis by Def1;
+   end;
+   hence thesis;
+end;
+
+definition let x,y be R_eal;
+ redefine func x*y;
+ commutativity by Th17;
+end;
+
+Lm3:
+x = a & 0 < a implies 0. <' x
+proof
+   assume that A1:x = a and A2:0 < a;
+     0. <=' x & x <> 0. by A1,A2,SUPINF_1:16,SUPINF_2:def 1;
+   hence thesis by SUPINF_1:22;
+end;
+
+Lm4:
+x = a & a < 0 implies x <' 0.
+proof
+   assume that A1:x = a and A2:a < 0;
+     x <=' 0. & x <> 0. by A1,A2,SUPINF_1:16,SUPINF_2:def 1;
+   hence thesis by SUPINF_1:22;
+end;
+
+theorem
+    x = a implies (0 < a iff 0. <' x) by Lm3,SUPINF_1:16,SUPINF_2:def 1;
+
+theorem
+    x = a implies (a < 0 iff x <' 0.) by Lm4,SUPINF_1:16,SUPINF_2:def 1;
+
+theorem Th20:
+(0. <' x & 0. <' y) or (x <' 0. & y <' 0.) implies 0. <' x * y
+proof
+   assume A1:(0. <' x & 0. <' y) or (x <' 0. & y <' 0.);
+     now per cases by A1;
+    suppose A2:0. <' x & 0. <' y;
+      now per cases by A2,Def1,SUPINF_2:19;
+     suppose ex a,b being Real st (x = a & y = b & x * y = a * b);
+     then consider a,b being Real such that
+A3:  x = a & y = b & x * y = a * b;
+       0 < a & 0 < b by A2,A3,SUPINF_1:16,SUPINF_2:def 1;
+     then 0 < a * b by REAL_2:122;
+     hence thesis by A3,Lm3;
+     suppose ((0. <' x & y=+infty) or (0. <' y & x=+infty)) & x * y = +infty;
+     hence thesis by SUPINF_2:19;
+    end;
+    hence thesis;
+    suppose A4:x <' 0. & y <' 0.;
+      now per cases by A4,Def1,SUPINF_2:19;
+     suppose ex a,b being Real st (x = a & y = b & x * y = a * b);
+     then consider a,b being Real such that
+A5:  x = a & y = b & x * y = a * b;
+       a < 0 & b < 0 by A4,A5,SUPINF_1:16,SUPINF_2:def 1;
+     then 0 < a * b by REAL_2:122;
+     hence thesis by A5,Lm3;
+     suppose ((x <' 0. & y=-infty) or (y <' 0. & x=-infty)) & x * y = +infty;
+     hence thesis by SUPINF_2:19;
+    end;
+    hence thesis;
+   end;
+   hence thesis;
+end;
+
+theorem Th21:
+(0. <' x & y <' 0.) or (x <' 0. & 0. <' y) implies x * y <' 0.
+proof
+   assume A1:(0. <' x & y <' 0.) or (x <' 0. & 0. <' y);
+     now per cases by A1;
+    suppose A2:0. <' x & y <' 0.;
+      now per cases by A2,Def1,SUPINF_2:19;
+     suppose ex a,b being Real st (x = a & y = b & x * y = a * b);
+     then consider a,b being Real such that
+A3:  x = a & y = b & x * y = a * b;
+       0 < a & b < 0 by A2,A3,SUPINF_1:16,SUPINF_2:def 1;
+     then a * b < 0 by SQUARE_1:24;
+     hence thesis by A3,Lm4;
+     suppose ((0. <' x & y=-infty) or (y <' 0. & x=+infty)) & x * y = -infty;
+     hence thesis by SUPINF_2:19;
+    end;
+    hence thesis;
+    suppose A4:x <' 0. & 0. <' y;
+      now per cases by A4,Def1,SUPINF_2:19;
+     suppose ex a,b being Real st (x = a & y = b & x * y = a * b);
+     then consider a,b being Real such that
+A5:  x = a & y = b & x * y = a * b;
+       a < 0 & 0 < b by A4,A5,SUPINF_1:16,SUPINF_2:def 1;
+     then a * b < 0 by SQUARE_1:24;
+     hence thesis by A5,Lm4;
+     suppose ((x <' 0. & y=+infty) or (0. <' y & x=-infty)) & x * y = -infty;
+     hence thesis by SUPINF_2:19;
+    end;
+    hence thesis;
+   end;
+   hence thesis;
+end;
+
+theorem
+  x * y = 0. iff (x = 0. or y = 0.)
+proof
+     x * y = 0. implies (x = 0. or y = 0.)
+   proof
+    assume A1:x * y = 0.;
+    assume A2:x <> 0. & y <> 0.;
+      now per cases by A2,SUPINF_1:22;
+     suppose (x <' 0. & y <' 0.) or (0. <' x & 0. <' y);
+     hence contradiction by A1,Th20;
+     suppose (x <' 0. & 0. <' y) or (0. <' x & y <' 0.);
+     hence contradiction by A1,Th21;
+    end;
+    hence thesis;
+   end;
+   hence thesis by Def1;
+end;
+
+theorem
+    x*y*z = x*(y*z)
+proof
+     now per cases by Def1;
+    suppose ex a,b being Real st (x = a & y = b & x * y = a * b);
+    then consider a,b being Real such that
+A1: x = a & y = b & x * y = a * b;
+A2: y <> +infty & y <> -infty by A1,SUPINF_1:31;
+      now per cases by A2,Def1;
+     suppose ex b1,c being Real st (y = b1 & z = c & y * z = b1 * c);
+     then consider b1,c being Real such that
+A3:  y = b1 & z = c & y * z = b1 * c;
+A4:  x * y * z = a * b * c by A1,A3,Th13;
+       x * (y * z) = a * (b * c) by A1,A3,Th13;
+     hence thesis by A4,XCMPLX_1:4;
+
+     suppose A5:0. <' y & z=+infty & y * z = +infty;
+then A6:  b > 0 by A1,SUPINF_1:16,SUPINF_2:def 1;
+
+       now per cases;
+      suppose A7:a > 0;
+      then a * b > 0 by A6,REAL_2:122;
+      then 0. <' x * y by A1,Lm3;
+then A8:  x * y * z = +infty by A5,Def1;
+        0. <' x by A1,A7,Lm3;
+      hence thesis by A5,A8,Def1;
+      suppose A9:a = 0;
+      then x * y * z = 0. by A1,Def1,SUPINF_2:def 1;
+      hence thesis by A1,A9,Def1,SUPINF_2:def 1;
+      suppose A10:a < 0;
+      then a * b < 0 by A6,SQUARE_1:24;
+      then x * y <' 0. by A1,Lm4;
+then A11:  x * y * z = -infty by A5,Def1;
+        x <' 0. by A1,A10,Lm4;
+      hence thesis by A5,A11,Def1;
+     end;
+     hence thesis;
+
+     suppose A12:y <' 0. & z=-infty & y * z = +infty;
+then A13: b < 0 by A1,SUPINF_1:16,SUPINF_2:def 1;
+       now per cases;
+      suppose A14:a > 0;
+      then a * b < 0 by A13,SQUARE_1:24;
+      then x * y <' 0. by A1,Lm4;
+then A15:  x * y * z = +infty by A12,Def1;
+        0. <' x by A1,A14,Lm3;
+      hence thesis by A12,A15,Def1;
+      suppose A16:a = 0;
+      then x * y * z = 0. by A1,Def1,SUPINF_2:def 1;
+      hence thesis by A1,A16,Def1,SUPINF_2:def 1;
+      suppose A17:a < 0;
+      then a * b > 0 by A13,REAL_2:122;
+      then 0. <' x * y by A1,Lm3;
+then A18:  x * y * z = -infty by A12,Def1;
+        x <' 0. by A1,A17,Lm4;
+      hence thesis by A12,A18,Def1;
+     end;
+     hence thesis;
+
+     suppose A19:y <' 0. & z=+infty & y * z = -infty;
+then A20: b < 0 by A1,SUPINF_1:16,SUPINF_2:def 1;
+       now per cases;
+      suppose A21:a > 0;
+      then a * b < 0 by A20,SQUARE_1:24;
+      then x * y <' 0. by A1,Lm4;
+then A22:  x * y * z = -infty by A19,Def1;
+        0. <' x by A1,A21,Lm3;
+      hence thesis by A19,A22,Def1;
+      suppose A23:a = 0;
+      then x * y * z = 0. by A1,Def1,SUPINF_2:def 1;
+      hence thesis by A1,A23,Def1,SUPINF_2:def 1;
+      suppose A24:a < 0;
+      then a * b > 0 by A20,REAL_2:122;
+      then 0. <' x * y by A1,Lm3;
+then A25:  x * y * z = +infty by A19,Def1;
+        x <' 0. by A1,A24,Lm4;
+      hence thesis by A19,A25,Def1;
+     end;
+     hence thesis;
+     suppose A26:0. <' y & z=-infty & y * z = -infty;
+then A27: 0 < b by A1,SUPINF_1:16,SUPINF_2:def 1;
+       now per cases;
+      suppose A28:a > 0;
+      then a * b > 0 by A27,REAL_2:122;
+      then 0. <' x * y by A1,Lm3;
+then A29:  x * y * z = -infty by A26,Def1;
+        0. <' x by A1,A28,Lm3;
+      hence thesis by A26,A29,Def1;
+      suppose A30:a = 0;
+      then x * y * z = 0. by A1,Def1,SUPINF_2:def 1;
+      hence thesis by A1,A30,Def1,SUPINF_2:def 1;
+      suppose A31:a < 0;
+      then a * b < 0 by A27,SQUARE_1:24;
+      then x * y <' 0. by A1,Lm4;
+then A32:  x * y * z = +infty by A26,Def1;
+        x <' 0. by A1,A31,Lm4;
+      hence thesis by A26,A32,Def1;
+     end;
+     hence thesis;
+     suppose A33:y = 0. & y * z = 0.;
+     then x * y * z = 0. by Def1;
+     hence thesis by A33,Def1;
+     suppose A34:z = 0. & y * z = 0.;
+     then x * y * z = 0. by Def1;
+     hence thesis by A34,Def1;
+    end;
+    hence thesis;
+
+    suppose A35:0. <' x & y=+infty & x * y = +infty;
+      now per cases by SUPINF_1:22;
+     suppose 0. <' z;
+     then y * z = +infty by A35,Def1;
+     hence thesis by A35;
+     suppose A36:0. = z;
+then A37: x * y * z = 0. by Def1;
+       y * z = 0. by A36,Def1;
+     hence thesis by A37,Def1;
+     suppose z <' 0.;
+     then y * z = -infty by A35,Def1;
+     hence thesis by A35,Def1;
+    end;
+    hence thesis;
+    suppose A38:0. <' y & x=+infty & x * y = +infty;
+      now per cases by SUPINF_1:22;
+     suppose A39:0. <' z;
+then A40: x * y * z = +infty by A38,Def1;
+       0. <' y * z by A38,A39,Th20;
+     hence thesis by A38,A40,Def1;
+     suppose A41:0. = z;
+then A42: x * y * z = 0. by Def1;
+       y * z = 0. by A41,Def1;
+     hence thesis by A42,Def1;
+     suppose A43:z <' 0.;
+then A44: x * y * z = -infty by A38,Def1;
+       y * z <' 0. by A38,A43,Th21;
+     hence thesis by A38,A44,Def1;
+    end;
+    hence thesis;
+    suppose A45:x <' 0. & y = -infty & x * y = +infty;
+      now per cases by SUPINF_1:22;
+     suppose A46:0. <' z;
+     then x * y * z = +infty by A45,Def1;
+     hence thesis by A45,A46,Def1;
+     suppose A47:0. = z;
+then A48: x * y * z = 0. by Def1;
+       y * z = 0. by A47,Def1;
+     hence thesis by A48,Def1;
+     suppose A49:z <' 0.;
+then A50: x * y * z = -infty by A45,Def1;
+       y * z = +infty by A45,A49,Def1;
+     hence thesis by A45,A50,Def1;
+    end;
+    hence thesis;
+    suppose A51:y <' 0. & x = -infty & x * y = +infty;
+      now per cases by SUPINF_1:22;
+     suppose A52:0. <' z;
+then A53: x * y * z = +infty by A51,Def1;
+       y * z <' 0. by A51,A52,Th21;
+     hence thesis by A51,A53,Def1;
+     suppose A54:0. = z;
+then A55: x * y * z = 0. by Def1;
+       y * z = 0. by A54,Def1;
+     hence thesis by A55,Def1;
+     suppose A56:z <' 0.;
+then A57: x * y * z = -infty by A51,Def1;
+       0. <' y * z by A51,A56,Th20;
+     hence thesis by A51,A57,Def1;
+    end;
+    hence thesis;
+    suppose A58:x <' 0. & y=+infty & x * y = -infty;
+      now per cases by SUPINF_1:22;
+     suppose A59:0. <' z;
+     then y * z = +infty by A58,Def1;
+     hence thesis by A58,A59,Def1;
+     suppose A60:0. = z;
+then A61: x * y * z = 0. by Def1;
+       y * z = 0. by A60,Def1;
+     hence thesis by A61,Def1;
+     suppose A62:z <' 0.;
+then A63: x * y * z = +infty by A58,Def1;
+       y * z = -infty by A58,A62,Def1;
+     hence thesis by A58,A63,Def1;
+    end;
+    hence thesis;
+    suppose A64:y <' 0. & x=+infty & x * y = -infty;
+      now per cases by SUPINF_1:22;
+     suppose A65:0. <' z;
+then A66: x * y * z = -infty by A64,Def1;
+       y * z <' 0. by A64,A65,Th21;
+     hence thesis by A64,A66,Def1;
+     suppose A67:0. = z;
+then A68: x * y * z = 0. by Def1;
+       y * z = 0. by A67,Def1;
+     hence thesis by A68,Def1;
+     suppose A69:z <' 0.;
+then A70: x * y * z = +infty by A64,Def1;
+       0. <' y * z by A64,A69,Th20;
+     hence thesis by A64,A70,Def1;
+    end;
+    hence thesis;
+    suppose A71:0. <' x & y = -infty & x * y = -infty;
+      now per cases by SUPINF_1:22;
+     suppose 0. <' z;
+     then y * z = -infty by A71,Def1;
+     hence thesis by A71;
+     suppose A72:0. = z;
+then A73: x * y * z = 0. by Def1;
+       y * z = 0. by A72,Def1;
+     hence thesis by A73,Def1;
+     suppose z <' 0.;
+     then y * z = +infty by A71,Def1;
+     hence thesis by A71,Def1;
+    end;
+    hence thesis;
+    suppose A74:0. <' y & x = -infty & x * y = -infty;
+      now per cases by SUPINF_1:22;
+     suppose A75:0. <' z;
+then A76: x * y * z = -infty by A74,Def1;
+       0. <' y * z by A74,A75,Th20;
+     hence thesis by A74,A76,Def1;
+     suppose A77:0. = z;
+then A78: x * y * z = 0. by Def1;
+       y * z = 0. by A77,Def1;
+     hence thesis by A78,Def1;
+     suppose A79:z <' 0.;
+then A80: x * y * z = +infty by A74,Def1;
+       y * z <' 0. by A74,A79,Th21;
+     hence thesis by A74,A80,Def1;
+    end;
+    hence thesis;
+    suppose A81:x = 0. & x * y = 0.;
+    then x * y * z = 0. by Def1;
+    hence thesis by A81,Def1;
+    suppose A82:y = 0. & x * y = 0.;
+    then x * y * z = 0. by Def1;
+    hence thesis by A82;
+   end;
+   hence thesis;
+end;
+
+theorem Th24:
+-0. = 0. by REAL_1:26,SUPINF_2:3,def 1;
+
+theorem
+  (0. <' x iff -x <' 0.) & (x <' 0. iff 0. <' -x) by Th24,SUPINF_2:17;
+
+theorem Th26:
+  -(x * y) = x * (-y) & -(x * y) = (-x) * y
+proof
+     now per cases by Def1;
+    suppose ex a,b being Real st (x = a & y = b & x * y = a * b);
+    then consider a,b being Real such that
+A1: x = a & y = b & x * y = a * b;
+A2: -x = -a & -y = -b & -(x * y) = -(a * b) by A1,SUPINF_2:3;
+    then x * (-y) = a * (-b) & (-x) * y = (-a) * b by A1,Th13;
+    hence thesis by A2,XCMPLX_1:175;
+    suppose A3:((0. <' x & y=+infty) or (0. <' y & x=+infty) or
+    (x <' 0. & y=-infty) or (y <' 0. & x = -infty)) & x * y = +infty;
+then A4: -(x * y) = -infty by Th4;
+A5: ((-x <' 0. & y=+infty) or (0. <' y & -x=-infty) or
+    (0.<'-x & y=-infty) or (y<'0. & -x=+infty))
+    by A3,Th4,Th24,SUPINF_2:17;
+      ((0. <' x & -y=-infty) or (-y <' 0. & x=+infty) or
+    (x<'0. & -y=+infty) or (0.<'-y & x=-infty))
+    by A3,Th4,Th24,SUPINF_2:17;
+    hence thesis by A4,A5,Def1;
+    suppose A6:((x <' 0. & y=+infty) or (y <' 0. & x=+infty) or
+    (0. <' x & y=-infty) or (0. <' y & x = -infty)) & x * y = -infty;
+then A7: -(x * y) = +infty by Th4;
+A8: ((0. <' -x & y=+infty) or (y <' 0. & -x=-infty) or
+    (-x <' 0. & y=-infty) or (0. <' y & -x=+infty))
+    by A6,Th4,Th24,SUPINF_2:17;
+      ((x <' 0. & -y=-infty) or (0. <' -y & x=+infty) or
+    (0. <' x & -y=+infty) or (-y <' 0. & x=-infty))
+    by A6,Th4,Th24,SUPINF_2:17;
+    hence thesis by A7,A8,Def1;
+    suppose (x = 0. or y = 0.) & x * y = 0.;
+    hence thesis by Def1,Th24;
+   end;
+   hence thesis;
+end;
+
+theorem
+    x <> +infty & x <> -infty & x * y = +infty implies y = +infty or y = -infty
+proof
+   assume A1:x <> +infty & x <> -infty & x * y = +infty;
+   assume A2:y <> +infty & y <> -infty;
+   reconsider a=x as Real by A1,Th1;
+   reconsider b=y as Real by A2,Th1;
+     x * y = a * b by Th13;
+   hence contradiction by A1,SUPINF_1:31;
+end;
+
+theorem
+    x <> +infty & x <> -infty & x * y = -infty implies y = +infty or y = -infty
+proof
+   assume A1:x <> +infty & x <> -infty & x * y = -infty;
+   assume A2:y <> +infty & y <> -infty;
+   reconsider a=x as Real by A1,Th1;
+   reconsider b=y as Real by A2,Th1;
+     x * y = a * b by Th13;
+   hence contradiction by A1,SUPINF_1:31;
+end;
+
+theorem Th29:
+  x <> +infty & x <> -infty implies x * (y + z) = x * y + x * z
+proof
+   assume
+ x <> +infty & x <> -infty;
+   then reconsider a = x as Real by Th1;
+   per cases by SUPINF_2:def 2;
+    suppose A1: y + z = 0.;
+   y = -z
+    proof
+      assume A2: y <> -z;
+then A3:   -y <> z;
+      per cases by SUPINF_2:2;
+      suppose A4: y in REAL;
+     z in REAL
+      proof
+        assume A5: not z in REAL;
+        per cases by A5,SUPINF_2:2;
+        suppose z = -infty;
+        hence thesis by A1,A4,Lm1,SUPINF_2:19;
+        suppose z = +infty;
+        hence thesis by A1,A4,Lm1,SUPINF_2:19;
+      end;
+      then consider a,b being Real such that
+A6:    y = a & z = b & y + z = a + b by A4,SUPINF_2:def 2;
+      consider a' being Real such that
+A7:   y = a' & -y = -a' by A4,SUPINF_2:def 3;
+        z <> -a by A2,A6,A7;
+      hence thesis by A1,A6,SUPINF_2:def 1,XCMPLX_0:def 6;
+      suppose y = -infty;
+      hence thesis by A1,A3,SUPINF_2:4,19,def 2;
+
+      suppose A8: y = +infty;
+      then z <> -infty by A3,SUPINF_2:def 3;
+      hence thesis by A1,A8,SUPINF_2:19,def 2;
+    end;
+    then x * y + x * z = -(x * z) + x * z by Th26
+                 .= 0. by Th9;
+    hence thesis by A1,Def1;
+    suppose y in REAL & z in REAL;
+    then consider b,c being Real such that
+A9: y = b & z = c & y + z = b + c by SUPINF_2:def 2;
+A10: x * (y + z) = a * (b + c) by A9,Th13 .= a * b + a * c by XCMPLX_1:8;
+      x * y = a * b & x * z = a * c by A9,Th13;
+    hence thesis by A10,SUPINF_2:1;
+    suppose A11:y = +infty & z <> -infty;
+      now per cases;
+     suppose a < 0;
+then A12:  x <' 0. by Lm4;
+then A13:  x * y = -infty by A11,Def1;
+       now per cases;
+      suppose z = +infty;
+      then x * z = -infty by A12,Def1;
+      then x * y + x * z = -infty by A13,SUPINF_1:14,SUPINF_2:def 2;
+      hence thesis by A11,A13,SUPINF_2:def 2;
+      suppose z <> +infty;
+      then reconsider c = z as Real by A11,Th1;
+        x * z = a * c by Th13;
+then A14:    +infty <> x * z by SUPINF_1:31;
+        y + z = +infty by A11,SUPINF_2:def 2;
+      then x * (y + z) = -infty by A12,Def1;
+      hence thesis by A13,A14,SUPINF_2:def 2;
+     end;
+     hence thesis;
+     suppose a = 0;
+     then x * (y + z) = 0. & x * y = 0. & x * z = 0. by Def1,SUPINF_2:def 1;
+     hence thesis by SUPINF_2:18;
+     suppose a > 0;
+then A15:  0. <' x by Lm3;
+then A16:  x * y = +infty by A11,Def1;
+       now per cases;
+      suppose z = +infty;
+      then x * z = +infty by A15,Def1;
+      then x * y + x * z = +infty by A16,SUPINF_1:14,SUPINF_2:def 2;
+      hence thesis by A11,A16,SUPINF_2:def 2;
+      suppose z <> +infty;
+      then reconsider c = z as Real by A11,Th1;
+        x * z = a * c by Th13;
+then A17:    -infty <> x * z by SUPINF_1:31;
+        y + z = +infty by A11,SUPINF_2:def 2;
+      then x * (y + z) = +infty by A15,Def1;
+      hence thesis by A16,A17,SUPINF_2:def 2;
+     end;
+     hence thesis;
+    end;
+    hence thesis;
+
+    suppose A18:y = -infty & z <> +infty;
+      now per cases;
+     suppose a < 0;
+then A19:  x <' 0. by Lm4;
+then A20:  x * y = +infty by A18,Def1;
+       now per cases;
+      suppose z = -infty;
+      then x * z = +infty by A19,Def1;
+      then x * y + x * z = +infty by A20,SUPINF_1:14,SUPINF_2:def 2;
+      hence thesis by A18,A20,SUPINF_2:def 2;
+      suppose z <> -infty;
+      then reconsider c = z as Real by A18,Th1;
+        x * z = a * c by Th13;
+then A21:    -infty <> x * z by SUPINF_1:31;
+        y + z = -infty by A18,SUPINF_2:def 2;
+      then x * (y + z) = +infty by A19,Def1;
+      hence thesis by A20,A21,SUPINF_2:def 2;
+     end;
+     hence thesis;
+     suppose a = 0;
+     then x * (y + z) = 0. & x * y = 0. & x * z = 0. by Def1,SUPINF_2:def 1;
+     hence thesis by SUPINF_2:18;
+     suppose a > 0;
+then A22: 0. <' x by Lm3;
+then A23: x * y = -infty by A18,Def1;
+       now per cases;
+      suppose z = -infty;
+      then x * z = -infty by A22,Def1;
+      then x * y + x * z = -infty by A23,SUPINF_1:14,SUPINF_2:def 2;
+      hence thesis by A18,A23,SUPINF_2:def 2;
+      suppose z <> -infty;
+      then reconsider c = z as Real by A18,Th1;
+        x * z = a * c by Th13;
+then A24:    +infty <> x * z by SUPINF_1:31;
+        y + z = -infty by A18,SUPINF_2:def 2;
+then x * (y + z) = -infty by A22,Def1;
+      hence thesis by A23,A24,SUPINF_2:def 2;
+     end;
+     hence thesis;
+    end;
+    hence thesis;
+
+    suppose A25:z = +infty & y <> -infty;
+      now per cases;
+     suppose a < 0;
+then A26:  x <' 0. by Lm4;
+then A27:  x * z = -infty by A25,Def1;
+       now per cases;
+      suppose y = +infty;
+      then x * y = -infty by A26,Def1;
+      then x * y + x * z = -infty by A27,SUPINF_1:14,SUPINF_2:def 2;
+      hence thesis by A25,A27,SUPINF_2:def 2;
+
+      suppose y <> +infty;
+      then reconsider b = y as Real by A25,Th1;
+A28:    x * y = a * b by Th13;
+        y + z = +infty by A25,SUPINF_2:def 2;
+then x * (y + z) = -infty by A26,Def1;
+      hence thesis by A27,A28,Lm1;
+     end;
+     hence thesis;
+     suppose a = 0;
+     then x * (y + z) = 0. & x * y = 0. & x * z = 0. by Def1,SUPINF_2:def 1;
+     hence thesis by SUPINF_2:18;
+     suppose a > 0;
+then A29: 0. <' x by Lm3;
+then A30: x * z = +infty by A25,Def1;
+       now per cases;
+      suppose y = +infty;
+      then x * y = +infty by A29,Def1;
+      then x * y + x * z = +infty by A30,SUPINF_1:14,SUPINF_2:def 2;
+      hence thesis by A25,A30,SUPINF_2:def 2;
+
+      suppose y <> +infty;
+      then reconsider b = y as Real by A25,Th1;
+A31:    x * y = a * b by Th13;
+        y + z = +infty by A25,SUPINF_2:def 2;
+then x * (y + z) = +infty by A29,Def1;
+      hence thesis by A30,A31,Lm1;
+     end;
+     hence thesis;
+    end;
+    hence thesis;
+
+    suppose A32:z = -infty & y <> +infty;
+      now per cases;
+     suppose a < 0;
+then A33:  x <' 0. by Lm4;
+then A34:  x * z = +infty by A32,Def1;
+       now per cases;
+      suppose y = -infty;
+      then x * y = +infty by A33,Def1;
+      then x * y + x * z = +infty by A34,SUPINF_1:14,SUPINF_2:def 2;
+      hence thesis by A32,A34,SUPINF_2:def 2;
+
+      suppose y <> -infty;
+      then reconsider b = y as Real by A32,Th1;
+A35:    x * y = a * b by Th13;
+        y + z = -infty by A32,SUPINF_2:def 2;
+      then x * (y + z) = +infty by A33,Def1;
+      hence thesis by A34,A35,Lm1;
+     end;
+     hence thesis;
+     suppose a = 0;
+     then x * (y + z) = 0. & x * y = 0. & x * z = 0. by Def1,SUPINF_2:def 1;
+     hence thesis by SUPINF_2:18;
+     suppose a > 0;
+then A36: 0. <' x by Lm3;
+then A37: x * z = -infty by A32,Def1;
+       now per cases;
+      suppose y = -infty;
+      then x * y = -infty by A36,Def1;
+      then x * y + x * z = -infty by A37,SUPINF_1:14,SUPINF_2:def 2;
+      hence thesis by A32,A37,SUPINF_2:def 2;
+
+      suppose y <> -infty;
+      then reconsider b = y as Real by A32,Th1;
+A38:    x * y = a * b by Th13;
+        y + z = -infty by A32,SUPINF_2:def 2;
+then x * (y + z) = -infty by A36,Def1;
+      hence thesis by A37,A38,Lm1;
+     end;
+     hence thesis;
+    end;
+    hence thesis;
+end;
+
+theorem
+  not ((y = +infty & z = +infty) or (y = -infty & z = -infty)) &
+x <> +infty & x <> -infty implies x * (y - z) = x * y - x * z
+proof
+   assume not ((y = +infty & z = +infty) or (y = -infty & z = -infty)) &
+   x <> +infty & x <> -infty;
+then A1:x * (y + -z) = x * y + x * (-z) by Th29;
+     y - (--z) = y + -z by Th5;
+then x * (y - z) = x * y + -(x * z) by A1,Th26;
+   hence thesis by SUPINF_2:def 4;
+end;
+
+definition
+let x,y be R_eal;
+assume A1:not((x=-infty or x=+infty) & (y=-infty or y=+infty)) & y <> 0.;
+func x / y -> R_eal means :Def2:
+(ex a,b being Real st (x = a & y = b & it = a / b)) or
+(((x=+infty & 0. <' y) or (x=-infty & y <' 0.)) & it = +infty) or
+(((x=-infty & 0. <' y) or (x=+infty & y <' 0.)) & it = -infty) or
+((y = -infty or y = +infty) & it = 0.);
+existence
+proof
+     now per cases by A1;
+    suppose x<>-infty & x<>+infty & y <> 0.;
+then A2: x is Real by MEASURE3:2;
+      y in REAL or y in {-infty,+infty} by SUPINF_1:def 6,XBOOLE_0:def 2;
+then A3: y in REAL or y = +infty or y = -infty by TARSKI:def 2;
+      ex Z being R_eal st
+    (ex a,b being Real st (x = a & y = b & Z = a / b)) or
+    ((y = -infty or y = +infty) & Z = 0.)
+    proof
+       y in REAL implies ex Z being R_eal st
+     ex a,b being Real st (x = a & y = b & Z = a / b)
+     proof
+      assume y in REAL;
+      then consider a,b being Real such that
+A4:   x = a & y = b by A2;
+      reconsider Z = a / b as R_eal by SUPINF_1:10;
+      take Z;
+      thus thesis by A4;
+     end;
+     hence thesis by A3;
+    end;
+    hence thesis;
+    suppose A5:y<>-infty & y<>+infty & y <> 0.;
+then A6:y is Real by MEASURE3:2;
+      x in REAL or x in {-infty,+infty} by SUPINF_1:def 6,XBOOLE_0:def 2;
+then A7:x in REAL or x = +infty or x = -infty by TARSKI:def 2;
+      ex Z being R_eal st
+    (ex a,b being Real st (x = a & y = b & Z = a / b)) or
+    (((x=+infty & 0. <' y) or (x=-infty & y <' 0.)) & Z = +infty) or
+    (((x=-infty & 0. <' y) or (x=+infty & y <' 0.)) & Z = -infty)
+    proof
+A8: x in REAL implies ex Z being R_eal st
+     ex a,b being Real st x = a & y = b & Z = a / b
+     proof
+      assume x in REAL;
+      then consider a,b being Real such that
+A9: x = a & y = b by A6;
+      reconsider Z = a / b as R_eal by SUPINF_1:10;
+      take Z;
+      thus thesis by A9;
+     end;
+       0. <' y or y <' 0. by A5,SUPINF_1:22;
+     hence thesis by A7,A8;
+    end;
+    hence thesis;
+   end;
+   hence thesis;
+end;
+uniqueness by A1,SUPINF_1:31;
+end;
+
+canceled;
+
+theorem Th32: for x,y being R_eal st y <> 0. holds
+for a,b being Real st x = a & y = b holds x / y = a / b
+proof
+   let x,y be R_eal;
+   assume A1:y <> 0.;
+   let a,b be Real;
+   assume A2:x = a & y = b;
+     a <> +infty & a <> -infty & b <> +infty & b <> -infty by SUPINF_1:31;
+   then consider a1,b1 being Real such that
+A3:x = a1 & y = b1 & x / y = a1 / b1 by A1,A2,Def2;
+   thus thesis by A2,A3;
+end;
+
+theorem for x,y being R_eal st x <> -infty & x <> +infty &
+(y = -infty or y = +infty) holds x / y = 0. by Def2,SUPINF_2:19;
+
+theorem for x being R_eal st x <> -infty & x <> +infty & x <> 0. holds
+x / x = 1
+proof
+   let x be R_eal;
+   assume A1:x <> -infty & x <> +infty & x <> 0.;
+   then consider a,b being Real such that
+A2:x = a & x = b & x / x = a / b by Def2;
+   thus thesis by A1,A2,SUPINF_2:def 1,XCMPLX_1:60;
+end;
+
+definition let x be R_eal;
+  func |. x .| -> R_eal equals :Def3:
+  x if 0. <=' x otherwise -x;
+  coherence;
+  consistency;
+end;
+
+canceled;
+
+theorem
+    for x being R_eal st 0. <' x holds |.x.| = x by Def3;
+
+theorem
+    for x being R_eal st x <' 0. holds |.x.| = -x by Def3;
+
+theorem
+    for a,b being Real holds R_EAL(a*b) = R_EAL a * R_EAL b
+proof
+   let a,b be Real;
+   reconsider c = a*b as real number;
+A1:R_EAL(a*b) = c by MEASURE6:def 1;
+   reconsider a,b as real number;
+     R_EAL a = a & R_EAL b = b by MEASURE6:def 1;
+   hence thesis by A1,Th13;
+end;
+
+theorem
+    for a,b being Real st b <> 0 holds R_EAL(a/b) = R_EAL a / R_EAL b
+proof
+   let a,b be Real;
+   assume A1:b <> 0;
+   reconsider a,b as R_eal by SUPINF_1:10;
+   reconsider a,b as real number;
+   set c = a/b;
+   reconsider a,b as Real;
+A2:R_EAL(a/b) = c by MEASURE6:def 1;
+     R_EAL a = a & R_EAL b = b by MEASURE6:def 1;
+   hence thesis by A1,A2,Th32,SUPINF_2:def 1;
+end;
+
+theorem
+  for x,y being R_eal st x <=' y & (x <' +infty & -infty <' y) holds 0. <=' y-x
+proof
+   let x,y being R_eal;
+   assume that A1:x <=' y and A2:(x <' +infty & -infty <' y);
+   per cases;
+     suppose x = -infty;
+     hence thesis by A2,SUPINF_2:7,19;
+     suppose x <> -infty;
+     hence thesis by A1,A2,MEASURE5:1;
+end;
+
+theorem
+    for x,y being R_eal st x <' y & (x <' +infty & -infty <' y) holds 0. <' y-x
+proof
+   let x,y be R_eal;
+   assume that A1:x <' y and A2:x <' +infty & -infty <' y;
+   per cases;
+    suppose y = +infty;
+    hence thesis by A2,SUPINF_2:6,19;
+    suppose A3:y <> +infty;
+      now per cases;
+     suppose x = -infty;
+     hence thesis by A2,SUPINF_2:7,19;
+     suppose A4:x <> -infty;
+     A5: y <=' +infty by SUPINF_1:20;
+then A6:  x is Real by A1,A4,Th1;
+     reconsider a = x as Real by A1,A4,A5,Th1;
+A7:  y is Real by A2,A3,Th1;
+     reconsider b = y as Real by A2,A3,Th1;
+A8:  y - x = b - a by SUPINF_2:5;
+     consider p,q being Real such that
+A9:  p = x & q = y & p <= q by A1,A6,A7,SUPINF_1:16;
+       a < b by A1,A9,REAL_1:def 5;
+     then b - a > 0 by SQUARE_1:11;
+     hence thesis by A8,Lm3;
+    end;
+    hence thesis;
+end;
+
+theorem
+    x <=' y & 0. <=' z implies x*z <=' y*z
+proof
+   assume that A1:x <=' y and A2:0. <=' z;
+   per cases by A2,SUPINF_1:22;
+    suppose z = 0.;
+    then x*z = 0. & y*z = 0. by Def1;
+    hence thesis;
+    suppose A3:0. <' z;
+      now per cases;
+     suppose A4:x<' +infty & -infty <' y;
+       now per cases;
+      suppose A5:z = +infty;
+        now per cases by SUPINF_1:22;
+       suppose A6:x = 0.;
+then A7:    x*z = 0. & 0. <=' y by A1,Def1;
+         now per cases by A1,A6,SUPINF_1:22;
+        suppose 0.= y;
+        hence thesis by A6;
+        suppose 0. <' y;
+        hence thesis by A3,A7,Th20;
+       end;
+       hence thesis;
+       suppose x <' 0.;
+       then x*z = -infty by A5,Def1;
+       hence thesis by SUPINF_1:21;
+       suppose A8:0. <' x;
+then A9:    x*z = +infty by A5,Def1;
+         now per cases by A1,SUPINF_1:22;
+        suppose y = x;
+        hence thesis;
+        suppose x <' y;
+        then 0. <' y by A8,SUPINF_1:29; hence thesis by A5,A9,Def1;
+       end;
+       hence thesis;
+      end;
+      hence thesis;
+      suppose z <>+infty;
+      then reconsider c = z as Real by A3,Th1,SUPINF_2:19;
+        now per cases;
+       suppose x = -infty;
+       then x*z = -infty by A3,Def1;
+       hence thesis by SUPINF_1:21;
+       suppose x <> -infty;
+then A10:   x is Real by A4,Th1;
+         now per cases;
+        suppose y = +infty;
+        then y*z = +infty by A3,Def1;
+        hence thesis by SUPINF_1:20;
+        suppose y <> +infty;
+        then y is Real by A4,Th1;
+        then consider a,b being Real such that
+A11:    a = x & b = y & a <= b by A1,A10,SUPINF_1:16;
+A12:    x*z = a*c & y*z = b*c by A11,Th13;
+          c > 0 by A3,SUPINF_1:16,SUPINF_2:def 1;
+        then a*c <= b*c by A11,AXIOMS:25;
+        hence thesis by A12,SUPINF_1:16;
+       end;
+       hence thesis;
+      end;
+      hence thesis;
+     end;
+     hence thesis;
+     suppose A13: not (x <' +infty & -infty <' y);
+       now per cases by A13,SUPINF_1:23,24;
+      suppose x = +infty; hence thesis by A1,SUPINF_1:24;
+      suppose y = -infty; hence thesis by A1,SUPINF_1:23;
+     end;
+     hence thesis;
+    end;
+    hence thesis;
+end;
+
+theorem
+    x <=' y & z <=' 0. implies y*z <=' x*z
+proof
+   assume that A1:x <=' y and A2:z <=' 0.;
+   per cases by A2,SUPINF_1:22;
+    suppose z = 0.;
+    then x*z = 0. & y*z = 0. by Def1;
+    hence thesis;
+    suppose A3:z <' 0.;
+      now per cases;
+     suppose A4:x<' +infty & -infty <' y;
+       now per cases;
+      suppose A5:z = -infty;
+        now per cases by SUPINF_1:22;
+       suppose A6:x = 0.;
+then A7:    x*z = 0. & 0. <=' y by A1,Def1;
+         now per cases by A1,A6,SUPINF_1:22;
+        suppose 0.= y;
+        hence thesis by A6;
+        suppose 0. <' y;
+        hence thesis by A3,A7,Th21;
+       end;
+       hence thesis;
+       suppose x <' 0.;
+       then x*z = +infty by A5,Def1;
+       hence thesis by SUPINF_1:20;
+       suppose A8:0. <' x;
+then A9:    x*z = -infty by A5,Def1;
+         now per cases by A1,SUPINF_1:22;
+        suppose y = x;
+        hence thesis;
+        suppose x <' y;
+        then 0. <' y by A8,SUPINF_1:29; hence thesis by A5,A9,Def1;
+       end;
+       hence thesis;
+      end;
+      hence thesis;
+      suppose z <>-infty;
+      then reconsider c = z as Real by A3,Th1,SUPINF_2:19;
+        now per cases;
+       suppose x = -infty;
+       then x*z = +infty by A3,Def1;
+       hence thesis by SUPINF_1:20;
+       suppose x <> -infty;
+then A10:   x is Real by A4,Th1;
+         now per cases;
+        suppose y = +infty;
+        then y*z = -infty by A3,Def1;
+        hence thesis by SUPINF_1:21;
+        suppose y <> +infty;
+        then y is Real by A4,Th1;
+        then consider a,b being Real such that
+A11:    a = x & b = y & a <= b by A1,A10,SUPINF_1:16;
+A12:    x*z = a*c & y*z = b*c by A11,Th13;
+          c < 0 by A3,SUPINF_1:16,SUPINF_2:def 1;
+        then a*c >= b*c by A11,REAL_1:52;
+        hence thesis by A12,SUPINF_1:16;
+       end;
+       hence thesis;
+      end;
+      hence thesis;
+     end;
+     hence thesis;
+     suppose A13: not (x <' +infty & -infty <' y);
+       now per cases by A13,SUPINF_1:23,24;
+      suppose x = +infty; hence thesis by A1,SUPINF_1:24;
+      suppose y = -infty; hence thesis by A1,SUPINF_1:23;
+     end;
+     hence thesis;
+    end;
+    hence thesis;
+end;
+
+theorem
+    x <' y & 0. <' z & z <> +infty implies x*z <' y*z
+proof
+   assume that A1:x <' y and A2:0. <' z and A3:z <> +infty;
+A4:x <' +infty & -infty <' y
+   proof
+    assume A5: not (x <' +infty & -infty <' y);
+      now per cases by A5,SUPINF_1:23,24;
+     suppose x = +infty;
+     hence contradiction by A1,SUPINF_1:20;
+     suppose y = -infty;
+     hence contradiction by A1,SUPINF_1:21;
+    end;
+    hence thesis;
+   end;
+    reconsider c = z as Real by A2,A3,Th1,SUPINF_2:19;
+      now per cases;
+     suppose x = -infty;
+then A6:  x*z = -infty by A2,Def1;
+       now per cases;
+      suppose y = +infty;
+      then y * z = +infty by A2,Def1;
+      hence thesis by A6,SUPINF_1:29,SUPINF_2:19;
+      suppose y <> +infty;
+      then reconsider b = y as Real by A4,Th1;
+        y * z = b * c by Th13;
+      hence thesis by A6,SUPINF_1:31;
+     end;
+     hence thesis;
+     suppose A7:x <> -infty;
+then A8: x is Real by A4,Th1;
+     reconsider a = x as Real by A4,A7,Th1;
+A9:  x * z = a * c by Th13;
+       now per cases;
+      suppose y = +infty;
+      then y*z = +infty by A2,Def1;
+      hence thesis by A9,SUPINF_1:31;
+      suppose y <> +infty;
+      then y is Real by A4,Th1;
+      then consider a,b being Real such that
+A10:  a = x & b = y & a <= b by A1,A8,SUPINF_1:16;
+A11:   a < b by A1,A10,REAL_1:def 5;
+A12:  x*z = a*c & y*z = b*c by A10,Th13;
+        c > 0 by A2,SUPINF_1:16,SUPINF_2:def 1;
+then A13:   a*c <= b*c & a*c <> b*c by A11,REAL_1:70;
+      then x*z <=' y*z by A12,SUPINF_1:16;
+      hence thesis by A12,A13,SUPINF_1:22;
+     end;
+     hence thesis;
+   end;
+   hence thesis;
+end;
+
+theorem
+    x <' y & z <' 0. & z <> -infty implies y*z <' x*z
+proof
+   assume that A1:x <' y and A2:z <' 0. and A3:z <> -infty;
+A4:x <' +infty & -infty <' y
+   proof
+    assume A5: not (x <' +infty & -infty <' y);
+      now per cases by A5,SUPINF_1:23,24;
+     suppose x = +infty;
+     hence contradiction by A1,SUPINF_1:20;
+     suppose y = -infty;
+     hence contradiction by A1,SUPINF_1:21;
+    end;
+    hence thesis;
+   end;
+    reconsider c = z as Real by A2,A3,Th1,SUPINF_2:19;
+      now per cases;
+     suppose x = -infty;
+then A6:  x*z = +infty by A2,Def1;
+       now per cases;
+      suppose y = +infty;
+      then y * z = -infty by A2,Def1;
+      hence thesis by A6,SUPINF_1:29,SUPINF_2:19;
+      suppose y <> +infty;
+      then reconsider b = y as Real by A4,Th1;
+        y * z = b * c by Th13;
+      hence thesis by A6,SUPINF_1:31;
+     end;
+     hence thesis;
+     suppose A7:x <> -infty;
+then A8: x is Real by A4,Th1;
+     reconsider a = x as Real by A4,A7,Th1;
+A9:  x * z = a * c by Th13;
+       now per cases;
+      suppose y = +infty;
+      then y*z = -infty by A2,Def1;
+      hence thesis by A9,SUPINF_1:31;
+      suppose y <> +infty;
+      then y is Real by A4,Th1;
+      then consider a,b being Real such that
+A10:  a = x & b = y & a <= b by A1,A8,SUPINF_1:16;
+A11:   a < b by A1,A10,REAL_1:def 5;
+A12:  x*z = a*c & y*z = b*c by A10,Th13;
+        c < 0 by A2,SUPINF_1:16,SUPINF_2:def 1;
+then A13:   a*c >= b*c & a*c <> b*c by A11,REAL_1:71;
+      then y*z <=' x*z by A12,SUPINF_1:16;
+      hence thesis by A12,A13,SUPINF_1:22;
+     end;
+     hence thesis;
+   end;
+   hence thesis;
+end;
+
+theorem
+  (x is Real & y is Real) implies
+  (x <' y iff ex p,q being Real st (p = x & q = y & p < q))
+proof
+   assume A1:x is Real & y is Real;
+   then reconsider a = x as Real;
+   reconsider b = y as Real by A1;
+ x <' y implies ex p,q being Real st (p = x & q = y & p < q)
+   proof
+    assume x <' y;
+    then a < b by HAHNBAN:12;
+    hence thesis;
+   end;
+   hence thesis by HAHNBAN:12;
+end;
+
+theorem
+    x <> -infty & y <> +infty & x <=' y & 0. <' z implies x/z <=' y/z
+proof
+   assume that A1:x <> -infty & y <> +infty and A2:x <=' y and
+   A3:0. <' z;
+A4:x <> +infty & y <> -infty by A1,A2,Th7;
+   then reconsider a = x as Real by A1,Th1;
+   reconsider b = y as Real by A1,A4,Th1;
+     now per cases;
+    suppose A5:z = +infty;
+then x/z = 0. by A1,A3,A4,Def2;
+    hence thesis by A1,A3,A4,A5,Def2;
+    suppose A6: z <> +infty;
+    then z <> -infty by A3,Th7;
+    then reconsider c = z as Real by A6,Th1;
+A7: x/z = a/c & y/z = b/c by A3,Th32;
+      a <= b & 0 < c by A2,A3,HAHNBAN:12,SUPINF_2:def 1;
+    then a/c <= b/c by REAL_1:73;
+    hence thesis by A7,HAHNBAN:12;
+   end;
+   hence thesis;
+end;
+
+theorem
+    x <=' y & 0. <' z & z <> +infty implies x/z <=' y/z
+proof
+   assume that A1:x <=' y and A2:0. <' z and A3:z <> +infty;
+A4:z <> -infty by A2,A3,Th7;
+     now per cases;
+    suppose A5:x<>-infty;
+      now per cases;
+     suppose A6:y <> +infty;
+       -infty <=' x & y <=' +infty by SUPINF_1:20,21;
+     then A7: -infty <' x & y <' +infty by A5,A6,SUPINF_1:22;
+     then reconsider a = x as Real by A1,Th1;
+     reconsider b = y as Real by A1,A7,Th1;
+       z <> -infty by A2,A3,Th7;
+     then reconsider c = z as Real by A3,Th1;
+A8:  x/z = a/c & y/z = b/c by A2,Th32;
+       a <= b & 0 < c by A1,A2,HAHNBAN:12,SUPINF_2:def 1;
+     then a/c <= b/c by REAL_1:73;
+     hence thesis by A8,HAHNBAN:12;
+     suppose y = +infty;
+     then y/z = +infty by A2,A3,A4,Def2;
+     hence thesis by SUPINF_1:20;
+    end;
+    hence thesis;
+    suppose x=-infty;
+    then x/z = -infty by A2,A3,A4,Def2;
+    hence thesis by SUPINF_1:21;
+   end;
+   hence thesis;
+end;
+
+theorem
+    x <> -infty & y <> +infty & x <=' y & z <' 0. implies y/z <=' x/z
+proof
+   assume that A1:x <> -infty & y <> +infty and A2:x <=' y and
+   A3:z <' 0.;
+A4:x <> +infty & y <> -infty by A1,A2,Th7;
+   then reconsider a = x as Real by A1,Th1;
+   reconsider b = y as Real by A1,A4,Th1;
+     now per cases;
+    suppose A5:z = -infty;
+then x/z = 0. by A1,A3,A4,Def2;
+    hence thesis by A1,A3,A4,A5,Def2;
+    suppose z <> -infty;
+    then reconsider c = z as Real by A3,Th1,SUPINF_2:19;
+A6: x/z = a/c & y/z = b/c by A3,Th32;
+      a <= b & 0 > c by A2,A3,HAHNBAN:12,SUPINF_2:def 1;
+    then a/c >= b/c by REAL_1:74;
+    hence thesis by A6,HAHNBAN:12;
+   end;
+   hence thesis;
+end;
+
+theorem
+    x <=' y & z <' 0. & z <> -infty implies y/z <=' x/z
+proof
+   assume that A1:x <=' y and A2:z <' 0. and A3:z <> -infty;
+A4:z <> +infty by A2,A3,Th7;
+     now per cases;
+    suppose A5:x<>-infty;
+      now per cases;
+     suppose A6:y <> +infty;
+       -infty <=' x & y <=' +infty by SUPINF_1:20,21;
+     then A7: -infty <' x & y <' +infty by A5,A6,SUPINF_1:22;
+     then reconsider a = x as Real by A1,Th1;
+     reconsider b = y as Real by A1,A7,Th1;
+     reconsider c = z as Real by A2,A3,Th1,SUPINF_2:19;
+A8:  x/z = a/c & y/z = b/c by A2,Th32;
+       a <= b & c < 0 by A1,A2,HAHNBAN:12,SUPINF_2:def 1;
+     then a/c >= b/c by REAL_1:74;
+     hence thesis by A8,HAHNBAN:12;
+     suppose y = +infty;
+     then y/z = -infty by A2,A3,A4,Def2;
+     hence thesis by SUPINF_1:21;
+    end;
+    hence thesis;
+    suppose x=-infty;
+    then x/z = +infty by A2,A3,A4,Def2;
+    hence thesis by SUPINF_1:20;
+   end;
+   hence thesis;
+end;
+
+theorem
+    x <' y & 0. <' z & z <> +infty implies x/z <' y/z
+proof
+   assume that A1:x <' y and A2:0. <' z & z <> +infty;
+A3:x <> +infty & y <> -infty by A1,Th3;
+A4:z <> -infty by A2,Th7;
+   then reconsider c = z as Real by A2,Th1;
+     now per cases;
+    suppose y <> +infty;
+    then reconsider b = y as Real by A3,Th1;
+A5: y/z = b/c by A2,Th32;
+      now per cases;
+     suppose x <> -infty;
+     then reconsider a = x as Real by A3,Th1;
+A6:  x/z = a/c by A2,Th32;
+       a < b & 0 < c by A1,A2,HAHNBAN:12,SUPINF_2:def 1;
+     then a/c < b/c by REAL_1:73;
+     hence thesis by A5,A6,HAHNBAN:12;
+     suppose x = -infty;
+     then x/z = -infty by A2,A4,Def2;
+     hence thesis by A5,SUPINF_1:31;
+    end;
+    hence thesis;
+    suppose y = +infty;
+then A7: y/z = +infty by A2,A4,Def2;
+      now per cases;
+     suppose x <> -infty;
+     then reconsider a = x as Real by A3,Th1;
+       x/z = a/c by A2,Th32;
+     hence thesis by A7,SUPINF_1:31;
+     suppose x = -infty;
+     hence thesis by A2,A4,A7,Def2,Th2;
+    end;
+    hence thesis;
+   end;
+   hence thesis;
+end;
+
+theorem
+    x <' y & z <' 0. & z <> -infty implies y/z <' x/z
+proof
+   assume that A1:x <' y and A2:z <' 0. & z <> -infty;
+A3:x <> +infty & y <> -infty by A1,Th3;
+A4:z <> +infty by A2,Th7;
+   then reconsider c = z as Real by A2,Th1;
+   per cases;
+    suppose y <> +infty;
+    then reconsider b = y as Real by A3,Th1;
+A5: y/z = b/c by A2,Th32;
+      now per cases;
+     suppose x <> -infty;
+     then reconsider a = x as Real by A3,Th1;
+A6:  x/z = a/c by A2,Th32;
+       a < b & c < 0 by A1,A2,HAHNBAN:12,SUPINF_2:def 1;
+     then a/c > b/c by REAL_1:74;
+     hence thesis by A5,A6,HAHNBAN:12;
+     suppose x = -infty;
+     then x/z = +infty by A2,A4,Def2;
+     hence thesis by A5,SUPINF_1:31;
+    end;
+    hence thesis;
+    suppose y = +infty;
+then A7: y/z = -infty by A2,A4,Def2;
+      now per cases;
+     suppose x <> -infty;
+     then reconsider a = x as Real by A3,Th1;
+       x/z = a/c by A2,Th32;
+     hence thesis by A7,SUPINF_1:31;
+     suppose x = -infty;
+     hence thesis by A2,A4,A7,Def2,Th2;
+    end;
+    hence thesis;
+end;
+

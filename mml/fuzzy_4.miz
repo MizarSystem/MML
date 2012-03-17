@@ -1,0 +1,1756 @@
+:: Properties of Fuzzy Relation
+::  by Noboru Endou , Takashi Mitsuishi and Keiji Ohkubo
+::
+:: Received June 25, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary FUZZY_1, RELAT_1, FUNCT_1, LATTICES, ORDINAL2, RCOMP_1, INTEGRA1,
+      SEQ_2, ARYTM_1, FUZZY_3, FUNCT_3, BOOLE, PARTFUN1, SUBSET_1, SQUARE_1,
+      SEQ_1, FUZZY_4, ARYTM;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, SQUARE_1, RELSET_1, PARTFUN1, SEQ_1, SEQ_4, RFUNCT_1, INTEGRA1,
+      RCOMP_1, PSCOMP_1, FUZZY_1, FUZZY_2, FUZZY_3;
+ constructors SQUARE_1, INTEGRA2, RFUNCT_1, REAL_1, PSCOMP_1, FUZZY_2, FUZZY_3;
+ clusters XREAL_0, RELSET_1, SUBSET_1, INTEGRA1, MEMBERED;
+ requirements NUMERALS, REAL, SUBSET, BOOLE;
+ definitions TARSKI;
+ theorems FUZZY_1, FUNCT_3, AXIOMS, PARTFUN1, FUNCT_1, INTEGRA1, INTEGRA2,
+      SQUARE_1, REAL_2, ZFMISC_1, RFUNCT_3, FUZZY_3, SEQ_4, PSCOMP_1, SUBSET_1,
+      RCOMP_1, XBOOLE_0;
+ schemes PARTFUN1;
+
+begin :: Basic properties of the membership function
+
+ reserve a,c,c1,c2,x,y,z,z1,z2 for set;
+ reserve C1,C2,C3 for non empty set;
+
+
+definition
+let C1 be non empty set;
+let F be Membership_Func of C1;
+cluster rng F -> non empty;
+coherence
+proof
+     dom F = C1 by FUZZY_1:def 1;
+   then consider y being Element of C1 such that
+A1:y in dom F by SUBSET_1:10;
+     F.y in rng F by A1,FUNCT_1:def 5;
+   hence thesis;
+end;
+end;
+
+theorem Th1:
+for F be Membership_Func of C1 holds
+(rng F is bounded) & (for x st x in dom F holds F.x <= sup rng F) &
+(for x st x in dom F holds F.x >= inf rng F)
+proof
+   let F be Membership_Func of C1;
+A1:rng F is bounded
+   proof
+A2: rng F c= [.0,1.] by FUZZY_1:def 1;
+      [.0,1.] is closed-interval Subset of REAL by INTEGRA1:def 1;
+    hence thesis by A2,RCOMP_1:5;
+   end;
+A3:for x st x in dom F holds F.x <= sup rng F
+   proof
+    let x;
+    assume x in dom F;
+then A4: F.x in rng F by FUNCT_1:def 5;
+      rng F is bounded_above by A1,SEQ_4:def 3;
+    hence thesis by A4,SEQ_4:def 4;
+   end;
+     for x st x in dom F holds F.x >= inf rng F
+   proof
+    let x;
+    assume x in dom F;
+then A5: F.x in rng F by FUNCT_1:def 5;
+      rng F is bounded_below by A1,SEQ_4:def 3;
+    hence thesis by A5,SEQ_4:def 5;
+   end;
+   hence thesis by A1,A3;
+end;
+
+theorem
+  for F,G be Membership_Func of C1 holds
+(for x st x in C1 holds F.x <= G.x) implies sup rng F <= sup rng G
+proof
+ let F,G be Membership_Func of C1;
+ assume A1:for c st c in C1 holds F.c <= G.c;
+     rng F is bounded by Th1;
+then A2:rng F is bounded_above by SEQ_4:def 3;
+A3:for s being real number st 0<s ex y st y in dom F & sup rng F - s <= G.y
+  proof
+   let s being real number;
+   assume 0<s;
+   then consider r being real number such that
+A4:r in rng F & sup rng F-s<r by A2,SEQ_4:def 4;
+   consider y being set such that
+A5:y in dom F & r = F.y by A4,FUNCT_1:def 5;
+     r <= G.y by A1,A5;
+   then sup rng F-s <= G.y by A4,AXIOMS:22;
+   hence thesis by A5;
+  end;
+    for s being real number st 0<s holds sup rng F - s <= sup rng G
+  proof
+   let s being real number;
+   assume 0<s;
+   then consider y such that
+A6:y in dom F & sup rng F - s <= G.y by A3;
+     y in C1 by A6;
+   then y in dom G by FUZZY_1:def 1;
+   then G.y <= sup rng G by Th1;
+   hence thesis by A6,AXIOMS:22;
+  end;
+  hence thesis by REAL_2:182;
+ end;
+
+theorem Th3:
+for f be RMembership_Func of C1,C2, c be Element of [:C1,C2:] holds
+0 <= f.c & f.c <= 1
+proof
+ let f being RMembership_Func of C1,C2;
+ let c be Element of [:C1,C2:];
+   (Zmf(C1,C2)).c <= f.c & f.c <= (Umf(C1,C2)).c by FUZZY_3:52;
+ then chi({},[:C1,C2:]).c <= f.c &
+ f.c <= chi([:C1,C2:],[:C1,C2:]).c by FUZZY_3:def 1,def 2;
+ hence thesis by FUNCT_3:def 3;
+end;
+
+theorem
+  for f be RMembership_Func of C1,C2, x,y st [x,y] in [:C1,C2:] holds
+0 <= f. [x,y] & f. [x,y] <= 1 by Th3;
+
+begin
+:: Definition and properties of converse fuzzy relation
+
+definition
+let C1,C2 be non empty set;
+let h be RMembership_Func of C2,C1;
+func converse h -> RMembership_Func of C1,C2 means :Def1:
+for x,y st [x,y] in [:C1,C2:] holds it. [x,y] = h. [y,x];
+existence
+proof
+   defpred P[set,set,set] means $3 = h. [$2,$1];
+A1:for x,y,z st x in C1 & y in C2 & P[x,y,z] holds z in REAL;
+A2:for x,y,z1,z2 st x in C1 & y in C2 & P[x,y,z1] & P[x,y,z2] holds z1=z2;
+  consider IT being PartFunc of [:C1,C2:],REAL such that
+A3:(for x,y holds [x,y] in dom IT iff x in C1 & y in C2
+   & ex z st P[x,y,z])
+   & (for x,y st [x,y] in dom IT holds P[x,y,IT. [x,y]])
+     from PartFuncEx2(A1,A2);
+ A4:dom IT = [:C1,C2:] & rng IT c= [.0,1.]
+  proof
+  A5:dom IT = [:C1,C2:]
+   proof
+     [:C1,C2:] c= dom IT
+    proof
+     A6:for x,y being set st [x,y] in [:C1,C2:] holds [x,y] in dom IT
+     proof
+      let x,y be set;
+      assume [x,y] in [:C1,C2:];
+      then A7:x in C1 & y in C2 by ZFMISC_1:106;
+        ex z st z = h. [y,x];
+      hence thesis by A3,A7;
+     end;
+       for z st z in [:C1,C2:] ex x,y st z = [x,y]
+     proof
+      let z being set;
+      assume z in [:C1,C2:];
+      then ex x,y st x in C1 & y in C2 & z = [x,y] by ZFMISC_1:def 2;
+      hence thesis;
+     end;
+     hence thesis by A6,ZFMISC_1:111;
+    end;
+    hence thesis by XBOOLE_0:def 10;
+   end;
+    rng IT c= [.0,1.]
+  proof
+A8:rng h c= [.0,1.] by FUZZY_1:def 1;
+    let c being set; assume c in rng IT;
+    then consider z being Element of [:C1,C2:] such that
+A9:z in dom IT & c = IT.z by PARTFUN1:26;
+    reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
+      A = [. inf A, sup A .] by INTEGRA1:5;
+then A10:0=inf A & 1=sup A by INTEGRA1:6;
+    consider x,y being set such that
+A11:x in C1 & y in C2 & z = [x,y] by ZFMISC_1:def 2;
+      [y,x] in [:C2,C1:] by A11,ZFMISC_1:106;
+    then [y,x] in dom h by FUZZY_1:def 1;
+    then h. [y,x] in rng h by FUNCT_1:def 5;
+    then 0 <= h. [y,x] & h. [y,x] <= 1 by A8,A10,INTEGRA2:1;
+    then 0 <= IT.z & IT.z <= 1 by A3,A9,A11;
+    hence thesis by A9,A10,INTEGRA2:1;
+  end;
+  hence thesis by A5;
+  end;
+then IT is RMembership_Func of C1,C2 by FUZZY_1:def 1;
+ hence thesis by A3,A4;
+ end;
+uniqueness
+proof
+  let F,G be RMembership_Func of C1,C2;
+  assume that
+A12:for x,y st [x,y] in [:C1,C2:] holds F. [x,y] = h. [y,x]
+  and
+A13:for x,y st [x,y] in [:C1,C2:] holds G. [x,y] = h. [y,x];
+A14:[:C1,C2:] = dom F & [:C1,C2:] = dom G by FUZZY_1:def 1;
+    for x,y st x in C1 & y in C2 holds F. [x,y] = G. [x,y]
+  proof
+   let x,y be set;
+   assume x in C1 & y in C2;
+   then [x,y] in [:C1,C2:] by ZFMISC_1:106;
+   then F. [x,y] = h. [y,x] & G. [x,y] = h. [y,x] by A12,A13;
+   hence thesis;
+  end;
+ hence thesis by A14,FUNCT_3:6;
+end;
+end;
+
+definition
+let C1,C2 be non empty set;
+let f be RMembership_Func of C2,C1;
+let R be FuzzyRelation of C2,C1,f;
+func R" -> FuzzyRelation of C1,C2,(converse f) equals
+   [:[:C1,C2:],(converse f).:[:C1,C2:]:];
+ correctness by FUZZY_1:def 2;
+end;
+
+theorem Th5:
+for f be RMembership_Func of C1,C2 holds
+converse converse f = f
+proof
+ let f being RMembership_Func of C1,C2;
+A1:for c being Element of [:C1,C2:] st c in [:C1,C2:] holds
+ (converse converse f).c = f.c
+ proof
+  let c being Element of [:C1,C2:];
+  assume c in [:C1,C2:];
+  consider x,y being set such that
+A2:x in C1 & y in C2 & c = [x,y] by ZFMISC_1:def 2;
+A3:[y,x] in [:C2,C1:] by A2,ZFMISC_1:106;
+    (converse converse f).c = (converse f). [y,x] by A2,Def1;
+  hence thesis by A2,A3,Def1;
+ end;
+   dom(converse converse f) = [:C1,C2:] & dom f = [:C1,C2:] by FUZZY_1:def 1;
+ hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem
+  for f be RMembership_Func of C1,C2, R be FuzzyRelation of C1,C2,f holds
+(R")" = R
+proof
+ let f being RMembership_Func of C1,C2, R being FuzzyRelation of C1,C2,f;
+   converse converse f = f by Th5;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th7:
+for f be RMembership_Func of C1,C2 holds
+1_minus(converse f) = converse(1_minus f)
+proof
+ let f being RMembership_Func of C1,C2;
+A1:for c being Element of [:C2,C1:] st c in [:C2,C1:] holds
+ (1_minus(converse f)).c = (converse(1_minus f)).c
+ proof
+  let c being Element of [:C2,C1:];
+  assume c in [:C2,C1:];
+  consider y,x being set such that
+A2:y in C2 & x in C1 & c = [y,x] by ZFMISC_1:def 2;
+A3:[x,y] in [:C1,C2:] by A2,ZFMISC_1:106;
+    (1_minus(converse f)).c = 1-(converse f). [y,x] by A2,FUZZY_1:def 7
+  .= 1-f. [x,y] by A2,Def1
+  .= (1_minus f). [x,y] by A3,FUZZY_1:def 7;
+  hence thesis by A2,Def1;
+ end;
+   dom(1_minus(converse f)) = [:C2,C1:] & [:C2,C1:] = dom converse(1_minus f)
+ by FUZZY_1:def 1;
+ hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem
+  for f be RMembership_Func of C1,C2, R be FuzzyRelation of C1,C2,f holds
+(R")` = (R`)"
+proof
+let f being RMembership_Func of C1,C2, R being FuzzyRelation of C1,C2,f;
+  1_minus(converse f) = converse(1_minus f) by Th7;
+hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th9:
+for f,g be RMembership_Func of C1,C2 holds
+converse max(f,g) = max(converse f,converse g)
+proof
+ let f,g be RMembership_Func of C1,C2;
+A1:dom converse max(f,g) = [:C2,C1:] &
+ dom max(converse f,converse g) = [:C2,C1:] by FUZZY_1:def 1;
+   for c being Element of [:C2,C1:] st c in [:C2,C1:]
+ holds (converse max(f,g)).c = max(converse f,converse g).c
+ proof
+  let c being Element of [:C2,C1:];
+  assume c in [:C2,C1:];
+  consider y,x such that
+A2:y in C2 & x in C1 & c = [y,x] by ZFMISC_1:def 2;
+A3:[x,y] in [:C1,C2:] by A2,ZFMISC_1:106;
+    (converse max(f,g)).c = max(f,g). [x,y] by A2,Def1
+  .=max(f. [x,y],g. [x,y]) by A3,FUZZY_1:def 6
+  .=max((converse f). [y,x], g. [x,y]) by A2,Def1
+  .=max((converse f). [y,x],(converse g). [y,x]) by A2,Def1;
+  hence thesis by A2,FUZZY_1:def 6;
+ end;
+ hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem
+  for f,g be RMembership_Func of C1,C2,
+R be FuzzyRelation of C1,C2,f, S be FuzzyRelation of C1,C2,g holds
+(R \/ S)" = R" \/ S"
+proof
+let f,g be RMembership_Func of C1,C2,
+R be FuzzyRelation of C1,C2,f,
+S be FuzzyRelation of C1,C2,g;
+  converse max(f,g) = max(converse f,converse g) by Th9;
+hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th11:
+for f,g be RMembership_Func of C1,C2 holds
+converse min(f,g) = min(converse f,converse g)
+proof
+ let f,g be RMembership_Func of C1,C2;
+A1:dom converse min(f,g) = [:C2,C1:] &
+ dom min(converse f,converse g) = [:C2,C1:] by FUZZY_1:def 1;
+   for c being Element of [:C2,C1:] st c in [:C2,C1:]
+ holds (converse min(f,g)).c = min(converse f,converse g).c
+ proof
+  let c being Element of [:C2,C1:];
+  assume c in [:C2,C1:];
+  consider y,x such that
+A2:y in C2 & x in C1 & c = [y,x] by ZFMISC_1:def 2;
+A3:[x,y] in [:C1,C2:] by A2,ZFMISC_1:106;
+    (converse min(f,g)).c = min(f,g). [x,y] by A2,Def1
+  .=min(f. [x,y],g. [x,y]) by A3,FUZZY_1:def 5
+  .=min((converse f). [y,x], g. [x,y]) by A2,Def1
+  .=min((converse f). [y,x],(converse g). [y,x]) by A2,Def1;
+  hence thesis by A2,FUZZY_1:def 5;
+ end;
+ hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem
+  for f,g be RMembership_Func of C1,C2,
+R be FuzzyRelation of C1,C2,f, S be FuzzyRelation of C1,C2,g holds
+(R /\ S)" = R" /\ S"
+proof
+let f,g be RMembership_Func of C1,C2,
+R be FuzzyRelation of C1,C2,f,
+S be FuzzyRelation of C1,C2,g;
+  converse min(f,g) = min(converse f,converse g) by Th11;
+hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th13:
+for f,g be RMembership_Func of C1,C2,
+x,y st x in C1 & y in C2 holds f. [x,y] <= g. [x,y]
+implies (converse f). [y,x] <= (converse g). [y,x]
+proof
+ let f,g being RMembership_Func of C1,C2, x,y;
+ assume A1: x in C1 & y in C2 & f. [x,y] <= g. [x,y];
+ then [y,x] in [:C2,C1:] by ZFMISC_1:106;
+ then f. [x,y] = (converse f). [y,x] & g. [x,y] = (converse g). [y,x] by Def1;
+ hence thesis by A1;
+end;
+
+theorem
+  for f,g be RMembership_Func of C1,C2,
+R be FuzzyRelation of C1,C2,f, S be FuzzyRelation of C1,C2,g holds
+R c= S implies R" c= S"
+proof
+ let f,g be RMembership_Func of C1,C2,
+     R be FuzzyRelation of C1,C2,f, S be FuzzyRelation of C1,C2,g;
+ assume A1:R c= S;
+   for c being Element of [:C2,C1:] holds (converse f).c <= (converse g).c
+ proof
+  let c being Element of [:C2,C1:];
+    ex y,x st y in C2 & x in C1 & c = [y,x] by ZFMISC_1:def 2;
+  then consider x,y being set such that
+A2:x in C1 & y in C2 & c = [y,x];
+    [x,y] in [:C1,C2:] by A2,ZFMISC_1:106;
+  then f. [x,y] <= g. [x,y] by A1,FUZZY_1:def 4;
+  hence thesis by A2,Th13;
+ end;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+theorem Th15:
+for f,g be RMembership_Func of C1,C2 holds
+converse(min(f,1_minus g)) = min(converse f,1_minus(converse g))
+proof
+ let f,g be RMembership_Func of C1,C2;
+     converse(min(f,1_minus g))
+  =min(converse f,converse 1_minus g) by Th11;
+ hence thesis by Th7;
+end;
+
+theorem
+  for f,g be RMembership_Func of C1,C2,
+R be FuzzyRelation of C1,C2,f, S be FuzzyRelation of C1,C2,g holds
+(R \ S)" = R" \ S"
+proof
+ let f,g be RMembership_Func of C1,C2,
+ R be FuzzyRelation of C1,C2,f, S be FuzzyRelation of C1,C2,g;
+   converse(min(f,1_minus g)) = min(converse f,1_minus(converse g)) by Th15;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th17:
+for f,g be RMembership_Func of C1,C2 holds
+converse max(min(f,1_minus g),min(1_minus f,g))
+=max( min(converse f,1_minus(converse g)),
+      min(1_minus(converse f),converse g) )
+proof
+ let f,g be RMembership_Func of C1,C2;
+     converse max(min(f,1_minus g),min(1_minus f,g))
+  =max(converse min(f,1_minus g),converse min(1_minus f,g)) by Th9
+ .=max(min(converse f,converse 1_minus g),converse min(1_minus f,g)) by Th11
+ .=max(min(converse f,converse 1_minus g),
+       min(converse 1_minus f,converse g)) by Th11
+ .=max(min(converse f,1_minus (converse g)),
+       min(converse 1_minus f,converse g)) by Th7;
+ hence thesis by Th7;
+end;
+
+theorem
+  for f,g be RMembership_Func of C1,C2,
+R be FuzzyRelation of C1,C2,f, S be FuzzyRelation of C1,C2,g holds
+(R \+\ S)" = R" \+\ S"
+proof
+ let f,g be RMembership_Func of C1,C2,
+ R be FuzzyRelation of C1,C2,f, S be FuzzyRelation of C1,C2,g;
+   converse max(min(f,1_minus g),min(1_minus f,g))
+=max(min(converse f,1_minus(converse g)),min(1_minus(converse f),converse g))
+ by Th17;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+begin
+:: Definition and properties of the composition
+
+definition
+let C1,C2,C3 be non empty set;
+let h be RMembership_Func of C1,C2;
+let g be RMembership_Func of C2,C3;
+let x,z be set;
+assume A1:x in C1 & z in C3;
+func min(h,g,x,z) -> Membership_Func of C2 means :Def3:
+for y being Element of C2 holds it.y = min(h. [x,y],g. [y,z]);
+existence
+proof
+  defpred P[set,set] means $2 = min(h. [x,$1],g. [$1,z]);
+A2:for y,c st y in C2 & P[y,c] holds c in REAL;
+A3:for y,c1,c2 st y in C2 & P[y,c1] & P[y,c2] holds c1=c2;
+   consider IT being PartFunc of C2,REAL such that
+A4:(for y holds y in dom IT iff y in C2 & ex c st P[y,c]) &
+   (for y st y in dom IT holds P[y,IT.y])
+    from PartFuncEx(A2,A3);
+A5:dom IT = C2 & rng IT c= [.0,1.]
+  proof
+   thus dom IT = C2
+   proof
+     C2 c= dom IT
+    proof
+      let y being set;
+      assume A6:y in C2;
+        ex c st c = min(h. [x,y],g. [y,z]);
+      hence thesis by A4,A6;
+    end;
+    hence thesis by XBOOLE_0:def 10;
+   end;
+A7:rng h c= [.0,1.] & rng g c= [.0,1.] by FUZZY_1:def 1;
+    let c being set; assume c in rng IT;
+    then consider y being Element of C2 such that
+A8:y in dom IT & c = IT.y by PARTFUN1:26;
+    reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
+      A = [. inf A, sup A .] by INTEGRA1:5;
+then A9:0=inf A & 1=sup A by INTEGRA1:6;
+      [x,y] in [:C1,C2:] & [y,z] in [:C2,C3:] by A1,ZFMISC_1:106;
+    then [x,y] in dom h & [y,z] in dom g by FUZZY_1:def 1;
+    then h. [x,y] in rng h & g. [y,z] in rng g by FUNCT_1:def 5;
+then A10:0 <= h. [x,y] & h. [x,y] <= 1 & 0 <= g. [y,z] & g. [y,z] <= 1
+             by A7,A9,INTEGRA2:1;
+      h. [x,y] >= min(h. [x,y],g. [y,z]) & g. [y,z] >= min(h. [x,y],g. [y,z])
+             by SQUARE_1:35;
+    then 0 <= min(h. [x,y],g. [y,z]) & min(h. [x,y],g. [y,z]) <= 1
+             by A10,AXIOMS:22,SQUARE_1:39;
+    then 0 <= IT.y & IT.y <= 1 by A4,A8;
+    hence thesis by A8,A9,INTEGRA2:1;
+  end;
+then A11:IT is Membership_Func of C2 by FUZZY_1:def 1;
+   for y being Element of C2 holds IT.y = min(h. [x,y],g. [y,z]) by A4,A5;
+ hence thesis by A11;
+end;
+uniqueness
+proof
+ let F,G be Membership_Func of C2;
+ assume that
+A12:for y being Element of C2 holds F.y = min(h. [x,y],g. [y,z]) and
+A13:for y being Element of C2 holds G.y = min(h. [x,y],g. [y,z]);
+A14:dom F = C2 & dom G = C2 by FUZZY_1:def 1;
+    for y being Element of C2 st y in C2 holds F.y = G.y
+  proof
+   let y being Element of C2;
+     F.y = min(h. [x,y],g. [y,z]) & G.y = min(h. [x,y],g. [y,z]) by A12,A13;
+   hence thesis;
+  end;
+ hence thesis by A14,PARTFUN1:34;
+end;
+end;
+
+definition
+let C1,C2,C3 be non empty set;
+let h be RMembership_Func of C1,C2;
+let g be RMembership_Func of C2,C3;
+func h(#)g -> RMembership_Func of C1,C3 means :Def4:
+for x,z st [x,z] in [:C1,C3:] holds it. [x,z] = sup(rng(min(h,g,x,z)));
+existence
+proof
+   defpred P[set,set,set] means $3 = sup(rng(min(h,g,$1,$2)));
+A1:for x,z,c st x in C1 & z in C3 & P[x,z,c] holds c in REAL;
+A2:for x,z,c1,c2 st x in C1 & z in C3 & P[x,z,c1] & P[x,z,c2] holds c1=c2;
+  consider IT being PartFunc of [:C1,C3:],REAL such that
+A3:(for x,z holds [x,z] in dom IT iff x in C1 & z in C3 &
+     ex c st P[x,z,c]) &
+    (for x,z st [x,z] in dom IT holds P[x,z,IT. [x,z]])
+    from PartFuncEx2(A1,A2);
+A4:dom IT = [:C1,C3:] & rng IT c= [.0,1.]
+  proof
+A5:dom IT = [:C1,C3:]
+   proof
+     [:C1,C3:] c= dom IT
+    proof
+A6:  for x,z being set st [x,z] in [:C1,C3:] holds [x,z] in dom IT
+     proof
+      let x,z being set;
+      assume [x,z] in [:C1,C3:];
+      then A7:x in C1 & z in C3 by ZFMISC_1:106;
+        ex c st c = sup(rng(min(h,g,x,z)));
+      hence thesis by A3,A7;
+     end;
+       for a st a in [:C1,C3:] ex x,z st a = [x,z]
+     proof
+      let a being set;
+      assume a in [:C1,C3:];
+      then ex x,z st x in C1 & z in C3 & a = [x,z] by ZFMISC_1:def 2;
+      hence thesis;
+     end;
+     hence thesis by A6,ZFMISC_1:111;
+    end;
+    hence thesis by XBOOLE_0:def 10;
+   end;
+    rng IT c= [.0,1.]
+  proof
+    let c being set; assume c in rng IT;
+    then consider a being Element of [:C1,C3:] such that
+A8:a in dom IT & c = IT.a by PARTFUN1:26;
+    reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
+      A = [. inf A, sup A .] by INTEGRA1:5;
+then A9:0=inf A & 1=sup A by INTEGRA1:6;
+A10:0 <= sup(rng(min(h,g,x,z))) & sup(rng(min(h,g,x,z))) <= 1
+    proof
+A11:  rng(min(h,g,x,z)) c= A by FUZZY_1:def 1;
+       A is bounded_above & A is bounded_below by INTEGRA1:3;
+then A12:  sup(rng(min(h,g,x,z))) <= sup A & inf A <= inf(rng(min(h,g,x,z)))
+     by A11,PSCOMP_1:12,13;
+       inf(rng(min(h,g,x,z))) <= sup(rng(min(h,g,x,z)))
+     proof
+    rng(min(h,g,x,z)) is bounded by Th1;
+      hence thesis by SEQ_4:24;
+     end;
+     hence thesis by A9,A12;
+    end;
+    consider x,z being set such that
+A13:x in C1 & z in C3 & a = [x,z] by ZFMISC_1:def 2;
+      IT. [x,z] = sup(rng(min(h,g,x,z))) by A3,A5,A13;
+    then 0 <= IT.a & IT.a <= 1 by A10,A13;
+    hence thesis by A8,A9,INTEGRA2:1;
+  end;
+  hence thesis by A5;
+  end;
+ then IT is RMembership_Func of C1,C3 by FUZZY_1:def 1;
+ hence thesis by A3,A4;
+end;
+uniqueness
+proof
+  let F,G be RMembership_Func of C1,C3;
+  assume that
+A14:for x,z st [x,z] in [:C1,C3:]
+  holds F. [x,z] = sup(rng(min(h,g,x,z)))
+  and
+A15:for x,z st [x,z] in [:C1,C3:]
+  holds G. [x,z] = sup(rng(min(h,g,x,z)));
+A16:dom F = [:C1,C3:] & dom G = [:C1,C3:] by FUZZY_1:def 1;
+    for c being Element of [:C1,C3:] st c in [:C1,C3:] holds F.c = G.c
+  proof
+   let c being Element of [:C1,C3:];
+   consider x,z being set such that
+A17:x in C1 & z in C3 & c = [x,z] by ZFMISC_1:def 2;
+     F. [x,z] = sup(rng(min(h,g,x,z))) &
+   G. [x,z] = sup(rng(min(h,g,x,z))) by A14,A15,A17;
+   hence thesis by A17;
+  end;
+ hence thesis by A16,PARTFUN1:34;
+end;
+end;
+
+definition
+let C1,C2,C3 be non empty set;
+let f be RMembership_Func of C1,C2;
+let g be RMembership_Func of C2,C3;
+let R be FuzzyRelation of C1,C2,f;
+let S be FuzzyRelation of C2,C3,g;
+func R(#)S -> FuzzyRelation of C1,C3,(f(#)g) equals
+   [:[:C1,C3:],(f(#)g).:[:C1,C3:]:];
+ correctness by FUZZY_1:def 2;
+end;
+
+Lm1:
+for f be RMembership_Func of C1,C2,
+    g,h be RMembership_Func of C2,C3,
+    x,z be set st x in C1 & z in C3 holds
+sup(rng(min(f,max(g,h),x,z))) =
+max(sup rng(min(f,g,x,z)),sup rng(min(f,h,x,z)))
+proof
+ let f being RMembership_Func of C1,C2,
+ g,h being RMembership_Func of C2,C3,x,z being set;
+ assume A1:x in C1 & z in C3;
+A2:dom max(min(f,g,x,z),min(f,h,x,z)) = C2 &
+   dom min(f,max(g,h),x,z) = C2 by FUZZY_1:def 1;
+A3:for y be Element of C2 st y in C2 holds
+ max(min(f,g,x,z),min(f,h,x,z)).y =min(f,max(g,h),x,z).y
+ proof
+  let y being Element of C2; assume y in C2;
+A4:[y,z] in [:C2,C3:] by A1,ZFMISC_1:106;
+      max(min(f,g,x,z),min(f,h,x,z)).y
+   =max(min(f,g,x,z).y,min(f,h,x,z).y) by FUZZY_1:def 6
+  .=max(min(f,g,x,z).y,min(f. [x,y],h. [y,z])) by A1,Def3
+  .=max( min(f. [x,y],g. [y,z]),min(f. [x,y],h. [y,z]) ) by A1,Def3
+  .=min(f. [x,y],max(g. [y,z],h. [y,z])) by SQUARE_1:56
+  .=min(f. [x,y],max(g,h). [y,z]) by A4,FUZZY_1:def 6
+  .=min(f,max(g,h),x,z).y by A1,Def3;
+  hence thesis;
+ end;
+ set F = min(f,g,x,z), G = min(f,h,x,z);
+   sup rng max(F,G) = max(sup rng F, sup rng G)
+ proof
+A5:sup rng max(F,G) <= max(sup rng F, sup rng G)
+  proof
+     rng max(F,G) is bounded by Th1;
+then A6:rng max(F,G) is bounded_above by SEQ_4:def 3;
+A7:for s being real number st 0<s ex y st y in dom max(F,G) &
+   sup rng max(F,G) - s < max(F,G).y
+   proof
+    let s being real number;
+    assume 0 < s;
+    then consider r being real number such that
+A8: r in rng max(F,G) & sup rng max(F,G) - s < r by A6,SEQ_4:def 4;
+    consider y being set such that
+A9: y in dom max(F,G) & r = max(F,G).y by A8,FUNCT_1:def 5;
+    thus thesis by A8,A9;
+   end;
+     for s being real number st 0<s holds
+   sup rng max(F,G) - s < max(sup rng F,sup rng G)
+   proof
+    let s being real number;
+    assume 0 < s;
+    then consider y such that
+A10: y in dom max(F,G) & sup rng max(F,G) - s < max(F,G).y by A7;
+A11: max(F,G).y = max(F.y,G.y) by A10,FUZZY_1:def 6;
+      F.y <= sup rng F & G.y <= sup rng G
+    proof
+       for y st y in C2 holds F.y <= sup rng F & G.y <= sup rng G
+     proof
+      let y;
+      assume y in C2;
+      then y in dom F & y in dom G by FUZZY_1:def 1;
+      then A12:   F.y in rng F & G.y in rng G by FUNCT_1:def 5;
+        rng F is bounded & rng G is bounded by Th1;
+      then rng F is bounded_above & rng G is bounded_above by SEQ_4:def 3;
+      hence thesis by A12,SEQ_4:def 4;
+     end;
+     hence thesis by A10;
+    end;
+    then max(F,G).y <= max(sup rng F,sup rng G) by A11,RFUNCT_3:7;
+    hence thesis by A10,AXIOMS:22;
+   end;
+   then for s being real number st 0<s holds
+   sup rng max(F,G) - s <= max(sup rng F,sup rng G);
+   hence thesis by REAL_2:182;
+  end;
+A13:for y st y in C2 holds max(F,G).y <= sup rng max(F,G)
+  proof
+   let y;
+   assume y in C2;
+   then y in dom max(F,G) by FUZZY_1:def 1;
+then A14:max(F,G).y in rng max(F,G) by FUNCT_1:def 5;
+     rng max(F,G) is bounded by Th1;
+   then rng max(F,G) is bounded_above by SEQ_4:def 3;
+   hence thesis by A14,SEQ_4:def 4;
+  end;
+    max(sup rng F, sup rng G) <= sup rng max(F,G)
+  proof
+A15:sup rng F <= sup rng max(F,G)
+   proof
+      rng F is bounded by Th1;
+then A16:rng F is bounded_above by SEQ_4:def 3;
+A17:for s being real number st 0<s ex y st y in dom F &
+   sup rng F - s < F.y
+   proof
+    let s being real number;
+    assume 0 < s;
+    then consider r being real number such that
+A18: r in rng F & sup rng F - s < r by A16,SEQ_4:def 4;
+    consider y being set such that
+A19: y in dom F & r = F.y by A18,FUNCT_1:def 5;
+    thus thesis by A18,A19;
+   end;
+     for s being real number st 0<s holds
+   sup rng F - s <= sup rng max(F,G)
+   proof
+    let s being real number;
+    assume 0<s;
+    then consider y such that
+A20: y in dom F & sup rng F - s < F.y by A17;
+  F.y <= max(F.y,G.y) by SQUARE_1:46;
+    then F.y <= max(F,G).y by A20,FUZZY_1:def 6;
+    then A21: sup rng F - s < max(F,G).y by A20,AXIOMS:22;
+      max(F,G).y <= sup rng max(F,G) by A13,A20;
+    hence thesis by A21,AXIOMS:22;
+   end;
+   hence thesis by REAL_2:182;
+   end;
+     sup rng G <= sup rng max(F,G)
+   proof
+      rng G is bounded by Th1;
+then A22: rng G is bounded_above by SEQ_4:def 3;
+A23:for s being real number st 0<s ex y st y in dom G &
+   sup rng G - s < G.y
+   proof
+    let s being real number;
+    assume 0 < s;
+    then consider r being real number such that
+A24: r in rng G & sup rng G - s < r by A22,SEQ_4:def 4;
+    consider y being set such that
+A25: y in dom G & r = G.y by A24,FUNCT_1:def 5;
+    thus thesis by A24,A25;
+   end;
+     for s being real number st 0<s holds
+   sup rng G - s <= sup rng max(F,G)
+   proof
+    let s being real number;
+    assume 0<s;
+    then consider y such that
+A26: y in dom G & sup rng G - s < G.y by A23;
+  G.y <= max(F.y,G.y) by SQUARE_1:46;
+    then G.y <= max(F,G).y by A26,FUZZY_1:def 6;
+    then A27: sup rng G - s < max(F,G).y by A26,AXIOMS:22;
+      max(F,G).y <= sup rng max(F,G) by A13,A26;
+    hence thesis by A27,AXIOMS:22;
+   end;
+   hence thesis by REAL_2:182;
+   end;
+   hence thesis by A15,SQUARE_1:50;
+  end;
+  hence thesis by A5,AXIOMS:21;
+ end;
+ hence thesis by A2,A3,PARTFUN1:34;
+end;
+
+theorem Th19:
+for f   be RMembership_Func of C1,C2,
+    g,h be RMembership_Func of C2,C3 holds
+f(#)(max(g,h)) = max(f(#)g,f(#)h)
+proof
+ let f be RMembership_Func of C1,C2,g,h be RMembership_Func of C2,C3;
+A1:dom(f(#)(max(g,h))) = [:C1,C3:] & dom(f(#)h) = [:C1,C3:] &
+   dom max(f(#)g,f(#)h) = [:C1,C3:] & dom(f(#)g) = [:C1,C3:] by FUZZY_1:def 1;
+     for c being Element of [:C1,C3:] st c in [:C1,C3:] holds
+   (f(#)(max(g,h))).c = max(f(#)g,f(#)h).c
+ proof
+  let c being Element of [:C1,C3:];
+  consider x,z being set such that
+A2:x in C1 & z in C3 & c = [x,z] by ZFMISC_1:def 2;
+    (f(#)(max(g,h))).c = sup(rng(min(f,max(g,h),x,z))) by A2,Def4
+  .= max(sup rng(min(f,g,x,z)),sup rng(min(f,h,x,z))) by A2,Lm1
+  .= max((f(#)g). [x,z],sup rng(min(f,h,x,z))) by A2,Def4
+  .= max((f(#)g). [x,z],(f(#)h). [x,z]) by A2,Def4
+  .= max(f(#)g,f(#)h).c by A2,FUZZY_1:def 6;
+  hence thesis;
+ end;
+ hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem
+  for f be RMembership_Func of C1,C2, g,h be RMembership_Func of C2,C3,
+R be FuzzyRelation of C1,C2,f, S be FuzzyRelation of C2,C3,g,
+T be FuzzyRelation of C2,C3,h holds
+R(#)(S \/ T) = (R (#) S) \/ (R (#) T)
+proof
+let f being RMembership_Func of C1,C2, g,h being RMembership_Func of C2,C3,
+R being FuzzyRelation of C1,C2,f, S being FuzzyRelation of C2,C3,g,
+T being FuzzyRelation of C2,C3,h;
+  f(#)(max(g,h)) = max(f(#)g,f(#)h) by Th19;
+hence thesis by FUZZY_1:def 3;
+end;
+
+Lm2:
+for f,g be RMembership_Func of C1,C2,
+      h be RMembership_Func of C2,C3,
+    x,z be set st x in C1 & z in C3 holds
+sup(rng(min(max(f,g),h,x,z))) =
+max(sup rng(min(f,h,x,z)),sup rng(min(g,h,x,z)))
+proof
+ let f,g be RMembership_Func of C1,C2, h be RMembership_Func of C2,C3,
+ x,z be set;
+ assume
+A1:x in C1 & z in C3;
+A2:min(max(f,g),h,x,z) = max(min(f,h,x,z),min(g,h,x,z))
+ proof
+A3:dom min(max(f,g),h,x,z) = C2 & dom max(min(f,h,x,z),min(g,h,x,z)) = C2
+  by FUZZY_1:def 1;
+    for y being Element of C2 st y in C2 holds
+  min(max(f,g),h,x,z).y = max(min(f,h,x,z),min(g,h,x,z)).y
+  proof
+   let y being Element of C2;
+   assume y in C2;
+A4:[x,y] in [:C1,C2:] by A1,ZFMISC_1:106;
+     min(max(f,g),h,x,z).y = min(max(f,g). [x,y],h. [y,z]) by A1,Def3
+   .= min(max(f. [x,y],g. [x,y]),h. [y,z]) by A4,FUZZY_1:def 6
+   .= max(min(f. [x,y],h. [y,z]),min(g. [x,y],h. [y,z])) by SQUARE_1:56
+   .= max(min(f. [x,y],h. [y,z]),min(g,h,x,z).y) by A1,Def3
+   .= max(min(f,h,x,z).y,min(g,h,x,z).y) by A1,Def3;
+   hence thesis by FUZZY_1:def 6;
+  end;
+  hence thesis by A3,PARTFUN1:34;
+ end;
+ set F = min(f,h,x,z), G = min(g,h,x,z);
+     rng max(F,G) is bounded by Th1;
+then A5:rng max(F,G) is bounded_above by SEQ_4:def 3;
+     rng F is bounded by Th1;
+then A6:rng F is bounded_above by SEQ_4:def 3;
+     rng G is bounded by Th1;
+then A7:rng G is bounded_above by SEQ_4:def 3;
+A8:for y st y in dom F holds F.y <= sup rng F
+ proof
+  let y;
+  assume y in dom F;
+  then F.y in rng F by FUNCT_1:def 5;
+  hence thesis by A6,SEQ_4:def 4;
+ end;
+A9:for y st y in dom G holds G.y <= sup rng G
+ proof
+  let y;
+  assume y in dom G;
+  then G.y in rng G by FUNCT_1:def 5;
+  hence thesis by A7,SEQ_4:def 4;
+ end;
+A10:for y st y in dom max(F,G) holds max(F,G).y <= sup rng(max(F,G))
+ proof
+  let y;
+  assume y in dom max(F,G);
+  then max(F,G).y in rng max(F,G) by FUNCT_1:def 5;
+  hence thesis by A5,SEQ_4:def 4;
+ end;
+A11:sup rng(max(F,G)) <= max(sup rng F,sup rng G)
+ proof
+    for s being real number st 0<s holds
+  sup rng max(F,G) - s <= max(sup rng F,sup rng G)
+  proof
+   let s being real number;
+   assume 0<s;
+   then consider r being real number such that
+A12:r in rng max(F,G) & sup rng max(F,G)-s<r by A5,SEQ_4:def 4;
+   consider y be set such that
+A13:y in dom max(F,G) & r = max(F,G).y by A12,FUNCT_1:def 5;
+     y in C2 by A13;
+   then y in dom F & y in dom G by FUZZY_1:def 1;
+   then F.y <= sup rng F & G.y <= sup rng G by A8,A9;
+then A14:max(F.y,G.y) <= max(sup rng F,sup rng G) by RFUNCT_3:7;
+     sup rng max(F,G)-s<=max(F.y,G.y) by A12,A13,FUZZY_1:def 6;
+   hence thesis by A14,AXIOMS:22;
+  end;
+  hence thesis by REAL_2:182;
+ end;
+   sup rng(max(F,G)) >= max(sup rng F,sup rng G)
+ proof
+A15:sup rng F <= sup rng(max(F,G))
+  proof
+A16:for s being real number st 0<s ex y st y in dom F &
+   sup rng F-s <= max(F,G).y
+   proof
+    let s being real number;
+    assume 0<s;
+    then consider r being real number such that
+A17:r in rng F & sup rng F-s<r by A6,SEQ_4:def 4;
+    consider y being set such that
+A18:y in dom F & r = F.y by A17,FUNCT_1:def 5;
+      F.y <= max(F.y,G.y) by SQUARE_1:46;
+    then r <= max(F,G).y by A18,FUZZY_1:def 6;
+    then sup rng F-s <= max(F,G).y by A17,AXIOMS:22;
+    hence thesis by A18;
+   end;
+     for s being real number st 0<s holds sup rng F-s <= sup rng max(F,G)
+   proof
+    let s being real number;
+    assume 0<s;
+    then consider y such that
+A19: y in dom F & sup rng F - s <= max(F,G).y by A16;
+      y in C2 by A19;
+    then y in dom max(F,G) by FUZZY_1:def 1;
+    then max(F,G).y <= sup rng max(F,G) by A10;
+    hence thesis by A19,AXIOMS:22;
+   end;
+   hence thesis by REAL_2:182;
+  end;
+    sup rng G <= sup rng(max(F,G))
+  proof
+A20:for s being real number st 0<s ex y st y in dom G &
+   sup rng G-s <= max(F,G).y
+   proof
+    let s being real number;
+    assume 0<s;
+    then consider r being real number such that
+A21:r in rng G & sup rng G-s<r by A7,SEQ_4:def 4;
+    consider y being set such that
+A22:y in dom G & r = G.y by A21,FUNCT_1:def 5;
+      G.y <= max(F.y,G.y) by SQUARE_1:46;
+    then r <= max(F,G).y by A22,FUZZY_1:def 6;
+    then sup rng G-s <= max(F,G).y by A21,AXIOMS:22;
+    hence thesis by A22;
+   end;
+     for s being real number st 0<s holds sup rng G-s <= sup rng max(F,G)
+   proof
+    let s being real number;
+    assume 0<s;
+    then consider y such that
+A23: y in dom G & sup rng G - s <= max(F,G).y by A20;
+      y in C2 by A23;
+    then y in dom max(F,G) by FUZZY_1:def 1;
+    then max(F,G).y <= sup rng max(F,G) by A10;
+    hence thesis by A23,AXIOMS:22;
+   end;
+   hence thesis by REAL_2:182;
+  end;
+  hence thesis by A15,SQUARE_1:50;
+ end;
+ hence thesis by A2,A11,AXIOMS:21;
+end;
+
+theorem Th21:
+for f,g be RMembership_Func of C1,C2,
+    h   be RMembership_Func of C2,C3 holds
+(max(f,g))(#)h = max(f(#)h,g(#)h)
+proof
+ let f,g be RMembership_Func of C1,C2, h be RMembership_Func of C2,C3;
+A1:dom((max(f,g))(#)h) = [:C1,C3:] & dom(f(#)h) = [:C1,C3:] &
+   dom max(f(#)h,g(#)h) = [:C1,C3:] & dom(g(#)h) = [:C1,C3:] by FUZZY_1:def 1;
+     for c being Element of [:C1,C3:] st c in [:C1,C3:] holds
+   ((max(f,g))(#)h).c = max(f(#)h,g(#)h).c
+ proof
+  let c being Element of [:C1,C3:];
+  consider x,z being set such that
+A2:x in C1 & z in C3 & c = [x,z] by ZFMISC_1:def 2;
+    ((max(f,g))(#)h).c = sup(rng(min(max(f,g),h,x,z))) by A2,Def4
+  .= max(sup rng(min(f,h,x,z)),sup rng(min(g,h,x,z))) by A2,Lm2
+  .= max((f(#)h). [x,z],sup rng(min(g,h,x,z))) by A2,Def4
+  .= max((f(#)h). [x,z],(g(#)h). [x,z]) by A2,Def4
+  .= max(f(#)h,g(#)h).c by A2,FUZZY_1:def 6;
+  hence thesis;
+ end;
+ hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem
+  for f,g be RMembership_Func of C1,C2, h be RMembership_Func of C2,C3,
+R be FuzzyRelation of C1,C2,f, S be FuzzyRelation of C1,C2,g,
+T be FuzzyRelation of C2,C3,h holds
+(R \/ S)(#)T = (R (#) T) \/ (S (#) T)
+proof
+let f,g being RMembership_Func of C1,C2, h being RMembership_Func of C2,C3,
+R being FuzzyRelation of C1,C2,f, S being FuzzyRelation of C1,C2,g,
+T being FuzzyRelation of C2,C3,h;
+  (max(f,g))(#)h = max(f(#)h,g(#)h) by Th21;
+hence thesis by FUZZY_1:def 3;
+end;
+
+Lm3:
+for f   be RMembership_Func of C1,C2,
+    g,h be RMembership_Func of C2,C3,
+    x,z be set st x in C1 & z in C3 holds
+sup(rng(min(f,min(g,h),x,z))) <=
+min(sup rng(min(f,g,x,z)),sup rng(min(f,h,x,z)))
+proof
+ let f be RMembership_Func of C1,C2, g,h be RMembership_Func of C2,C3,
+ x,z be set;
+ assume
+A1:x in C1 & z in C3;
+ set F = min(f,min(g,h),x,z), G = min(f,g,x,z), H = min(f,h,x,z);
+     rng F is bounded by Th1;
+then A2:rng F is bounded_above by SEQ_4:def 3;
+     rng G is bounded by Th1;
+then A3:rng G is bounded_above by SEQ_4:def 3;
+     rng H is bounded by Th1;
+then A4:rng H is bounded_above by SEQ_4:def 3;
+A5:for y st y in dom G holds G.y <= sup rng G
+  proof
+   let y;
+   assume y in dom G;
+   then G.y in rng G by FUNCT_1:def 5;
+   hence thesis by A3,SEQ_4:def 4;
+  end;
+A6:for y st y in dom H holds H.y <= sup rng H
+  proof
+   let y;
+   assume y in dom H;
+   then H.y in rng H by FUNCT_1:def 5;
+   hence thesis by A4,SEQ_4:def 4;
+  end;
+A7:sup rng F <= sup rng G
+ proof
+A8:for s being real number st 0<s ex y st y in dom F & sup rng F - s <= G.y
+  proof
+   let s being real number;
+   assume 0<s;
+   then consider r being real number such that
+A9:r in rng F & sup rng F-s<r by A2,SEQ_4:def 4;
+   consider y being set such that
+A10:y in dom F & r = F.y by A9,FUNCT_1:def 5;
+A11:[y,z] in [:C2,C3:] by A1,A10,ZFMISC_1:106;
+     F.y = min(f. [x,y],min(g,h). [y,z]) by A1,A10,Def3
+      .= min(f. [x,y],min(g. [y,z],h. [y,z])) by A11,FUZZY_1:def 5
+      .= min(min(f. [x,y],g. [y,z]),h. [y,z]) by SQUARE_1:40
+      .= min(G.y,h. [y,z]) by A1,A10,Def3;
+   then r <= G.y by A10,SQUARE_1:35;
+   then sup rng F-s <= G.y by A9,AXIOMS:22;
+   hence thesis by A10;
+   end;
+    for s being real number st 0<s holds sup rng F - s <= sup rng G
+  proof
+   let s being real number;
+   assume 0<s;
+   then consider y such that
+A12:y in dom F & sup rng F - s <= G.y by A8;
+     y in C2 by A12;
+   then y in dom G by FUZZY_1:def 1;
+   then G.y <= sup rng G by A5;
+   hence thesis by A12,AXIOMS:22;
+  end;
+  hence thesis by REAL_2:182;
+ end;
+   sup rng F <= sup rng H
+ proof
+A13:for s being real number st 0<s ex y st y in dom F & sup rng F - s <= H.y
+  proof
+   let s being real number;
+   assume 0<s;
+   then consider r being real number such that
+A14:r in rng F & sup rng F-s<r by A2,SEQ_4:def 4;
+   consider y being set such that
+A15:y in dom F & r = F.y by A14,FUNCT_1:def 5;
+A16:[y,z] in [:C2,C3:] by A1,A15,ZFMISC_1:106;
+     F.y = min(f. [x,y],min(g,h). [y,z]) by A1,A15,Def3
+      .= min(f. [x,y],min(g. [y,z],h. [y,z])) by A16,FUZZY_1:def 5
+      .= min(min(f. [x,y],h. [y,z]),g. [y,z]) by SQUARE_1:40
+      .= min(H.y,g. [y,z]) by A1,A15,Def3;
+   then r <= H.y by A15,SQUARE_1:35;
+   then sup rng F-s <= H.y by A14,AXIOMS:22;
+   hence thesis by A15;
+   end;
+    for s being real number st 0<s holds sup rng F - s <= sup rng H
+  proof
+   let s being real number;
+   assume 0<s;
+   then consider y such that
+A17:y in dom F & sup rng F - s <= H.y by A13;
+     y in C2 by A17;
+   then y in dom H by FUZZY_1:def 1;
+   then H.y <= sup rng H by A6;
+   hence thesis by A17,AXIOMS:22;
+  end;
+  hence thesis by REAL_2:182;
+ end;
+ hence thesis by A7,SQUARE_1:39;
+end;
+
+theorem Th23:
+for f   be RMembership_Func of C1,C2,
+    g,h be RMembership_Func of C2,C3,
+    x,z be set st x in C1 & z in C3 holds
+(f(#)(min(g,h))). [x,z] <= min(f(#)g,f(#)h). [x,z]
+proof
+ let f be RMembership_Func of C1,C2,g,h be RMembership_Func of C2,C3,
+ x,z be set;
+ assume A1:x in C1 & z in C3;
+ then A2:[x,z] in [:C1,C3:] by ZFMISC_1:106;
+then A3:(f(#)(min(g,h))). [x,z] = sup(rng(min(f,min(g,h),x,z))) by Def4;
+   min(f(#)g,f(#)h). [x,z] = min((f(#)g). [x,z],(f(#)h). [x,z])
+   by A2,FUZZY_1:def 5
+ .= min((f(#)g). [x,z],sup rng(min(f,h,x,z))) by A2,Def4
+ .= min(sup rng(min(f,g,x,z)),sup rng(min(f,h,x,z))) by A2,Def4;
+ hence thesis by A1,A3,Lm3;
+end;
+
+theorem
+  for f be RMembership_Func of C1,C2, g,h be RMembership_Func of C2,C3,
+R be FuzzyRelation of C1,C2,f, S be FuzzyRelation of C2,C3,g,
+T be FuzzyRelation of C2,C3,h holds
+R(#)(S /\ T) c= (R(#)S) /\ (R(#)T)
+proof
+ let f being RMembership_Func of C1,C2, g,h being RMembership_Func of C2,C3,
+ R being FuzzyRelation of C1,C2,f,
+ S being FuzzyRelation of C2,C3,g,
+ T being FuzzyRelation of C2,C3,h;
+   for c being Element of [:C1,C3:] holds
+ (f(#)(min(g,h))).c <= min(f(#)g,f(#)h).c
+ proof
+  let c being Element of [:C1,C3:];
+  consider x,z being set such that
+A1:x in C1 & z in C3 & c = [x,z] by ZFMISC_1:def 2;
+  thus thesis by A1,Th23;
+ end;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+Lm4:
+for f,g be RMembership_Func of C1,C2,
+    h   be RMembership_Func of C2,C3,
+    x,z be set st x in C1 & z in C3 holds
+sup(rng(min(min(f,g),h,x,z)))
+<= min(sup(rng(min(f,h,x,z))),sup(rng(min(g,h,x,z))))
+proof
+ let f,g be RMembership_Func of C1,C2, h be RMembership_Func of C2,C3,
+ x,z be set;
+ assume
+A1:x in C1 & z in C3;
+ set F = min(min(f,g),h,x,z), G = min(f,h,x,z), H = min(g,h,x,z);
+     rng F is bounded by Th1;
+then A2:rng F is bounded_above by SEQ_4:def 3;
+     rng G is bounded by Th1;
+then A3:rng G is bounded_above by SEQ_4:def 3;
+     rng H is bounded by Th1;
+then A4:rng H is bounded_above by SEQ_4:def 3;
+A5:for y st y in dom G holds G.y <= sup rng G
+  proof
+   let y;
+   assume y in dom G;
+   then G.y in rng G by FUNCT_1:def 5;
+   hence thesis by A3,SEQ_4:def 4;
+  end;
+A6:for y st y in dom H holds H.y <= sup rng H
+  proof
+   let y;
+   assume y in dom H;
+   then H.y in rng H by FUNCT_1:def 5;
+   hence thesis by A4,SEQ_4:def 4;
+  end;
+A7:sup rng F <= sup rng G
+ proof
+A8:for s being real number st 0<s ex y st y in dom F & sup rng F - s <= G.y
+  proof
+   let s being real number;
+   assume 0<s;
+   then consider r being real number such that
+A9:r in rng F & sup rng F-s<r by A2,SEQ_4:def 4;
+   consider y being set such that
+A10:y in dom F & r = F.y by A9,FUNCT_1:def 5;
+A11:[x,y] in [:C1,C2:] by A1,A10,ZFMISC_1:106;
+     F.y = min(min(f,g). [x,y],h. [y,z]) by A1,A10,Def3
+      .= min(min(f. [x,y],g. [x,y]),h. [y,z]) by A11,FUZZY_1:def 5
+      .= min(min(h. [y,z],f. [x,y]),g. [x,y]) by SQUARE_1:40
+      .= min(G.y,g. [x,y]) by A1,A10,Def3;
+   then r <= G.y by A10,SQUARE_1:35;
+   then sup rng F-s <= G.y by A9,AXIOMS:22;
+   hence thesis by A10;
+   end;
+    for s being real number st 0<s holds sup rng F - s <= sup rng G
+  proof
+   let s being real number;
+   assume 0<s;
+   then consider y such that
+A12:y in dom F & sup rng F - s <= G.y by A8;
+     y in C2 by A12;
+   then y in dom G by FUZZY_1:def 1;
+   then G.y <= sup rng G by A5;
+   hence thesis by A12,AXIOMS:22;
+  end;
+  hence thesis by REAL_2:182;
+ end;
+   sup rng F <= sup rng H
+ proof
+A13:for s being real number st 0<s ex y st y in dom F & sup rng F - s <= H.y
+  proof
+   let s being real number;
+   assume 0<s;
+   then consider r being real number such that
+A14:r in rng F & sup rng F-s<r by A2,SEQ_4:def 4;
+   consider y being set such that
+A15:y in dom F & r = F.y by A14,FUNCT_1:def 5;
+A16:[x,y] in [:C1,C2:] by A1,A15,ZFMISC_1:106;
+     F.y = min(min(f,g). [x,y],h. [y,z]) by A1,A15,Def3
+      .= min(min(f. [x,y],g. [x,y]),h. [y,z]) by A16,FUZZY_1:def 5
+      .= min(f. [x,y],min(h. [y,z],g. [x,y])) by SQUARE_1:40
+      .= min(H.y,f. [x,y]) by A1,A15,Def3;
+   then r <= H.y by A15,SQUARE_1:35;
+   then sup rng F-s <= H.y by A14,AXIOMS:22;
+   hence thesis by A15;
+   end;
+    for s being real number st 0<s holds sup rng F - s <= sup rng H
+  proof
+   let s being real number;
+   assume 0<s;
+   then consider y such that
+A17:y in dom F & sup rng F - s <= H.y by A13;
+     y in C2 by A17;
+   then y in dom H by FUZZY_1:def 1;
+   then H.y <= sup rng H by A6;
+   hence thesis by A17,AXIOMS:22;
+  end;
+  hence thesis by REAL_2:182;
+ end;
+ hence thesis by A7,SQUARE_1:39;
+end;
+
+theorem Th25:
+for f,g be RMembership_Func of C1,C2,
+    h   be RMembership_Func of C2,C3,
+    x,z be set st x in C1 & z in C3 holds
+(min(f,g)(#)h). [x,z] <= min(f(#)h,g(#)h). [x,z]
+proof
+ let f,g be RMembership_Func of C1,C2, h be RMembership_Func of C2,C3,
+ x,z be set;
+ assume A1:x in C1 & z in C3;
+then A2:[x,z] in [:C1,C3:] by ZFMISC_1:106;
+then A3:(min(f,g)(#)h). [x,z] = sup(rng(min(min(f,g),h,x,z))) by Def4;
+   min(f(#)h,g(#)h). [x,z] = min((f(#)h). [x,z],(g(#)h). [x,z])
+   by A2,FUZZY_1:def 5
+ .= min(sup(rng(min(f,h,x,z))),(g(#)h). [x,z]) by A2,Def4
+ .= min(sup(rng(min(f,h,x,z))),sup(rng(min(g,h,x,z)))) by A2,Def4;
+ hence thesis by A1,A3,Lm4;
+end;
+
+theorem
+  for f,g be RMembership_Func of C1,C2, h be RMembership_Func of C2,C3,
+R be FuzzyRelation of C1,C2,f, S be FuzzyRelation of C1,C2,g,
+T be FuzzyRelation of C2,C3,h holds
+(R /\ S)(#)T c= (R(#)T) /\ (S(#)T)
+proof
+ let f,g being RMembership_Func of C1,C2, h being RMembership_Func of C2,C3,
+ R being FuzzyRelation of C1,C2,f,
+ S being FuzzyRelation of C1,C2,g,
+ T being FuzzyRelation of C2,C3,h;
+   for c being Element of [:C1,C3:] holds (min(f,g)(#)h).c <= min(f(#)h,g(#)h).
+c
+ proof
+  let c being Element of [:C1,C3:];
+  consider x,z being set such that
+A1:x in C1 & z in C3 & c = [x,z] by ZFMISC_1:def 2;
+  thus thesis by A1,Th25;
+ end;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+Lm5:
+for f be RMembership_Func of C1,C2, g be RMembership_Func of C2,C3,
+x,z be set st x in C1 & z in C3 holds
+sup rng min(converse g,converse f,z,x) = sup rng min(f,g,x,z)
+proof
+ let f be RMembership_Func of C1,C2, g be RMembership_Func of C2,C3,
+ x,z be set;
+ assume A1:x in C1 & z in C3;
+A2:sup rng min(converse g,converse f,z,x) <= sup rng min(f,g,x,z)
+ proof
+     rng min(converse g,converse f,z,x) is bounded by Th1;
+then A3:rng min(converse g,converse f,z,x) is bounded_above by SEQ_4:def 3;
+    for s being real number st 0<s holds
+  sup rng min(converse g,converse f,z,x) - s <= sup rng min(f,g,x,z)
+  proof
+   let s being real number;
+   assume s>0;
+   then consider r being real number such that
+A4:r in rng min(converse g,converse f,z,x) &
+   sup rng min(converse g,converse f,z,x) - s < r by A3,SEQ_4:def 4;
+   consider y be set such that
+A5:y in dom min(converse g,converse f,z,x) &
+   r = min(converse g,converse f,z,x).y by A4,FUNCT_1:def 5;
+ y in C2 by A5;
+then A6:[z,y] in [:C3,C2:] & [y,x] in [:C2,C1:] & y in dom min(f,g,x,z)
+   by A1,FUZZY_1:def 1,ZFMISC_1:106;
+then A7:min(f,g,x,z).y <= sup rng min(f,g,x,z) by Th1;
+     r = min((converse g). [z,y],(converse f). [y,x]) by A1,A5,Def3
+   .= min(g. [y,z],(converse f). [y,x]) by A6,Def1
+   .= min(g. [y,z],f. [x,y]) by A6,Def1
+   .= min(f,g,x,z).y by A1,A5,Def3;
+   hence thesis by A4,A7,AXIOMS:22;
+  end;
+  hence thesis by REAL_2:182;
+ end;
+   sup rng min(converse g,converse f,z,x) >= sup rng min(f,g,x,z)
+ proof
+     rng min(f,g,x,z) is bounded by Th1;
+then A8:rng min(f,g,x,z) is bounded_above by SEQ_4:def 3;
+    for s being real number st 0<s holds
+  sup rng min(f,g,x,z) - s <= sup rng min(converse g,converse f,z,x)
+  proof
+   let s being real number;
+   assume s>0;
+   then consider r being real number such that
+A9:r in rng min(f,g,x,z) &
+   sup rng min(f,g,x,z) - s < r by A8,SEQ_4:def 4;
+   consider y be set such that
+A10:y in dom min(f,g,x,z) &
+   r = min(f,g,x,z).y by A9,FUNCT_1:def 5;
+     y in C2 by A10;
+   then A11:[z,y] in [:C3,C2:] & [y,x] in [:C2,C1:] &
+   y in dom min(converse g,converse f,z,x)
+                                    by A1,FUZZY_1:def 1,ZFMISC_1:106;
+then A12:min(converse g,converse f,z,x).y <=
+   sup rng min(converse g,converse f,z,x) by Th1;
+      r = min(f. [x,y],g. [y,z]) by A1,A10,Def3
+   .= min((converse f). [y,x],g. [y,z]) by A11,Def1
+   .= min((converse f). [y,x],(converse g). [z,y]) by A11,Def1
+   .= min(converse g,converse f,z,x).y by A1,A10,Def3;
+   hence thesis by A9,A12,AXIOMS:22;
+  end;
+  hence thesis by REAL_2:182;
+ end;
+ hence thesis by A2,AXIOMS:21;
+end;
+
+theorem Th27:
+for f be RMembership_Func of C1,C2, g be RMembership_Func of C2,C3 holds
+converse(f(#)g) = (converse g)(#)(converse f)
+proof
+ let f be RMembership_Func of C1,C2, g be RMembership_Func of C2,C3;
+A1:dom converse(f(#)g) = [:C3,C1:] &
+ dom((converse g)(#)(converse f)) = [:C3,C1:] by FUZZY_1:def 1;
+   for c being Element of [:C3,C1:] st c in [:C3,C1:] holds
+ (converse(f(#)g)).c = ((converse g)(#)(converse f)).c
+ proof
+  let c being Element of [:C3,C1:];
+  assume c in [:C3,C1:];
+   consider z,x be set such that
+A2:z in C3 & x in C1 & c =[z,x] by ZFMISC_1:def 2;
+A3:[x,z] in [:C1,C3:] by A2,ZFMISC_1:106;
+A4:(converse(f(#)g)).c = (f(#)g). [x,z] by A2,Def1
+  .= sup rng min(f,g,x,z) by A3,Def4;
+    ((converse g)(#)(converse f)).c =
+    sup rng min(converse g,converse f,z,x) by A2,Def4;
+  hence thesis by A2,A4,Lm5;
+  end;
+ hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem
+  for f be RMembership_Func of C1,C2, g be RMembership_Func of C2,C3,
+R be FuzzyRelation of C1,C2,f, S be FuzzyRelation of C2,C3,g holds
+(R(#)S)" = (S")(#)(R")
+proof
+let f being RMembership_Func of C1,C2, g being RMembership_Func of C2,C3,
+R being FuzzyRelation of C1,C2,f, S being FuzzyRelation of C2,C3,g;
+  converse(f(#)g) = (converse g)(#)(converse f) by Th27;
+hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th29:
+for f,g be RMembership_Func of C1,C2,
+    h,k be RMembership_Func of C2,C3, x,z be set st
+x in C1 & z in C3 &
+(for y be set st y in C2 holds f. [x,y]<=g. [x,y] & h. [y,z]<=k. [y,z]) holds
+(f(#)h). [x,z] <= (g(#)k). [x,z]
+proof
+ let f,g be RMembership_Func of C1,C2,
+     h,k be RMembership_Func of C2,C3, x,z be set;
+ assume
+A1:x in C1 & z in C3 &
+ (for y be set st y in C2 holds f. [x,y]<=g. [x,y] & h. [y,z]<=k. [y,z]);
+ then [x,z] in [:C1,C3:] by ZFMISC_1:106;
+ then A2:(f(#)h). [x,z] = sup (rng (min(f,h,x,z))) &
+ (g(#)k). [x,z] = sup rng min(g,k,x,z) by Def4;
+   sup (rng (min(f,h,x,z))) <= sup rng min(g,k,x,z)
+ proof
+     rng min(f,h,x,z) is bounded by Th1;
+then A3:rng min(f,h,x,z) is bounded_above by SEQ_4:def 3;
+    for s being real number st s>0 holds
+  sup (rng (min(f,h,x,z))) - s <= sup rng min(g,k,x,z)
+  proof
+   let s being real number;
+   assume s>0;
+   then consider r be real number such that
+A4:r in rng min(f,h,x,z) & sup rng min(f,h,x,z)-s<r by A3,SEQ_4:def 4;
+   consider y being set such that
+A5:y in dom min(f,h,x,z) & r=min(f,h,x,z).y by A4,FUNCT_1:def 5;
+     y in C2 by A5;
+   then A6:y in dom min(g,k,x,z) by FUZZY_1:def 1;
+     min(f,h,x,z).y <= sup rng min(g,k,x,z)
+   proof
+      f. [x,y]<=g. [x,y] & h. [y,z]<=k. [y,z] by A1,A5;
+    then min(f. [x,y],h. [y,z]) <= min(g. [x,y],k. [y,z]) by FUZZY_1:44;
+    then A7: min(f,h,x,z).y <= min(g. [x,y],k. [y,z]) by A1,A5,Def3;
+      min(g. [x,y],k. [y,z]) = min(g,k,x,z).y by A1,A5,Def3;
+    then min(g. [x,y],k. [y,z]) <= sup rng min(g,k,x,z) by A6,Th1;
+    hence thesis by A7,AXIOMS:22;
+   end;
+   hence thesis by A4,A5,AXIOMS:22;
+  end;
+  hence thesis by REAL_2:182;
+ end;
+ hence thesis by A2;
+end;
+
+theorem
+  for f,g be RMembership_Func of C1,C2, h,k be RMembership_Func of C2,C3,
+R be FuzzyRelation of C1,C2,f, S be FuzzyRelation of C1,C2,g,
+T be FuzzyRelation of C2,C3,h, W be FuzzyRelation of C2,C3,k holds
+R c= S & T c= W implies R(#)T c= S(#)W
+proof
+ let f,g be RMembership_Func of C1,C2, h,k being RMembership_Func of C2,C3,
+ R be FuzzyRelation of C1,C2,f, S being FuzzyRelation of C1,C2,g,
+ T be FuzzyRelation of C2,C3,h, W being FuzzyRelation of C2,C3,k;
+ assume A1:R c= S & T c= W;
+   for c being Element of [:C1,C3:] holds (f(#)h).c <= (g(#)k).c
+ proof
+  let c be Element of [:C1,C3:];
+  consider x,z being set such that
+A2:x in C1 & z in C3 & c = [x,z] by ZFMISC_1:def 2;
+    for y be set st y in C2 holds f. [x,y]<=g. [x,y] & h. [y,z]<=k. [y,z]
+  proof
+   let y be set;
+   assume y in C2;
+   then [x,y] in [:C1,C2:] & [y,z] in [:C2,C3:] by A2,ZFMISC_1:106;
+   hence thesis by A1,FUZZY_1:def 4;
+  end;
+  hence thesis by A2,Th29;
+ end;
+ hence thesis by FUZZY_1:def 4;
+end;
+
+begin
+:: Definition of identity relation
+:: and properties of universe relation and zero relation
+
+definition
+let C1,C2 be non empty set;
+func Imf(C1,C2) -> RMembership_Func of C1,C2 means
+  for x,y st [x,y] in [:C1,C2:]
+holds (x=y implies it. [x,y] = 1) & (not x=y implies it. [x,y] = 0);
+existence
+proof
+   defpred P[set,set,set] means
+     ($1=$2 implies $3 = 1) & (not $1=$2 implies $3 = 0);
+A1:for x,y,z st x in C1 & y in C2 & P[x,y,z] holds z in REAL;
+A2:for x,y,z1,z2 st x in C1 & y in C2 & P[x,y,z1] & P[x,y,z2] holds z1=z2;
+  consider IT being PartFunc of [:C1,C2:],REAL such that
+A3:(for x,y holds [x,y] in dom IT iff x in C1 & y in C2
+   & ex z st P[x,y,z])
+   & (for x,y st [x,y] in dom IT holds P[x,y,IT. [x,y]])
+     from PartFuncEx2(A1,A2);
+A4:dom IT = [:C1,C2:] & rng IT c= [.0,1.]
+   proof
+A5: dom IT = [:C1,C2:]
+    proof
+       [:C1,C2:] c= dom IT
+     proof
+A6:   for x,y being set st [x,y] in [:C1,C2:] holds [x,y] in dom IT
+      proof
+       let x,y be set;
+       assume [x,y] in [:C1,C2:];
+then A7:    x in C1 & y in C2 by ZFMISC_1:106;
+         ex z st ((x=y implies z = 1) & (not x=y implies z = 0))
+       proof
+          not x=y implies
+         ex z st (x=y implies z = 1) & (not x=y implies z = 0);
+        hence thesis;
+       end;
+       hence thesis by A3,A7;
+      end;
+         for c st c in [:C1,C2:] ex x,y st c = [x,y]
+        proof
+        let c being set;
+        assume c in [:C1,C2:];
+        then ex x,y st x in C1 & y in C2 & c = [x,y] by ZFMISC_1:def 2;
+        hence thesis;
+        end;
+       hence thesis by A6,ZFMISC_1:111;
+      end;
+      hence thesis by XBOOLE_0:def 10;
+     end;
+     rng IT c= [.0,1.]
+   proof
+     let c being set;
+     assume c in rng IT;
+     then consider z being Element of [:C1,C2:] such that
+A8: z in dom IT & c = IT.z by PARTFUN1:26;
+     consider x,y being set such that
+A9:x in C1 & y in C2 & z = [x,y] by ZFMISC_1:def 2;
+   1 in [.0,1.] & 0 in [.0,1.]
+     proof
+      reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
+        A = [. inf A, sup A .] by INTEGRA1:5;
+      then 0=inf A & 1=sup A by INTEGRA1:6;
+      hence thesis by INTEGRA2:1;
+     end;
+     then (x=y implies IT. [x,y] in [.0,1.]) & (x<>y implies IT. [x,y] in [.0,
+1.])
+      by A3,A8,A9;
+     hence thesis by A8,A9;
+   end;
+   hence thesis by A5;
+  end;
+ then IT is RMembership_Func of C1,C2 by FUZZY_1:def 1;
+ hence thesis by A3,A4;
+end;
+uniqueness
+proof
+ let F,G be RMembership_Func of C1,C2;
+ assume that
+A10:for x,y st [x,y] in [:C1,C2:]
+   holds (x=y implies F. [x,y] = 1) & (not x=y implies F. [x,y] = 0)
+ and
+A11:for x,y st [x,y] in [:C1,C2:]
+   holds (x=y implies G. [x,y] = 1) & (not x=y implies G. [x,y] = 0);
+A12: dom F = [:C1,C2:] & dom G = [:C1,C2:] by FUZZY_1:def 1;
+     for x,y st x in C1 & y in C2 holds F. [x,y] = G. [x,y]
+ proof
+  let x,y be set;
+  assume x in C1 & y in C2;
+  then [x,y] in [:C1,C2:] by ZFMISC_1:106;
+  then (x=y implies F. [x,y] = 1) & (not x=y implies F. [x,y] = 0) &
+  (x=y implies G. [x,y] = 1) & (not x=y implies G. [x,y] = 0) by A10,A11;
+  hence thesis;
+ end;
+ hence thesis by A12,FUNCT_3:6;
+end;
+end;
+
+theorem Th31:
+for c be Element of [:C1,C2:] holds
+(Zmf(C1,C2)).c = 0 & (Umf(C1,C2)).c = 1
+proof
+ let c be Element of [:C1,C2:];
+   chi({},[:C1,C2:]).c = Zmf(C1,C2).c & chi([:C1,C2:],[:C1,C2:]).c = Umf(C1,C2)
+.
+c
+                                  by FUZZY_3:def 1,def 2;
+ hence thesis by FUNCT_3:def 3;
+end;
+
+theorem
+  for x,y st [x,y] in [:C1,C2:] holds
+(Zmf(C1,C2)). [x,y] = 0 & (Umf(C1,C2)). [x,y] = 1 by Th31;
+
+Lm6:
+for f be RMembership_Func of C2,C3, x,z be set st x in C1 & z in C3 holds
+sup rng min(Zmf(C1,C2),f,x,z) = Zmf(C1,C3). [x,z]
+proof
+ let f be RMembership_Func of C2,C3,
+ x,z be set;
+ assume
+A1:x in C1 & z in C3;
+A2:sup rng min(Zmf(C1,C2),f,x,z) <= Zmf(C1,C3). [x,z]
+ proof
+     rng min(Zmf(C1,C2),f,x,z) is bounded by Th1;
+then A3:rng min(Zmf(C1,C2),f,x,z) is bounded_above by SEQ_4:def 3;
+    for s being real number st 0<s holds
+  sup rng min(Zmf(C1,C2),f,x,z) - s <= Zmf(C1,C3). [x,z]
+  proof
+   let s being real number;
+   assume s>0;
+   then consider r being real number such that
+A4:r in rng min(Zmf(C1,C2),f,x,z) &
+   sup rng min(Zmf(C1,C2),f,x,z) - s < r by A3,SEQ_4:def 4;
+   consider y be set such that
+A5:y in dom min(Zmf(C1,C2),f,x,z) &
+   r = min(Zmf(C1,C2),f,x,z).y by A4,FUNCT_1:def 5;
+ A6:[x,y] in [:C1,C2:] & [y,z] in [:C2,C3:] & [x,z] in [:C1,C3:]
+                                               by A1,A5,ZFMISC_1:106;
+   then A7:   chi({},[:C1,C2:]). [x,y] = 0 & chi({},[:C1,C3:]). [x,z] = 0 by
+FUNCT_3:def 3;
+A8:0 <= f. [y,z] by A6,Th3;
+     r = min(Zmf(C1,C2). [x,y],f. [y,z]) by A1,A5,Def3
+    .= min(0,f. [y,z]) by A7,FUZZY_3:def 1
+    .= 0 by A8,SQUARE_1:def 1
+    .= Zmf(C1,C3). [x,z] by A7,FUZZY_3:def 1;
+   hence thesis by A4;
+  end;
+  hence thesis by REAL_2:182;
+ end;
+ sup rng min(Zmf(C1,C2),f,x,z) >= Zmf(C1,C3). [x,z]
+ proof
+A9:rng min(Zmf(C1,C2),f,x,z) c= [.0,1.] by FUZZY_1:def 1;
+  reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
+    A = [. inf A, sup A .] by INTEGRA1:5;
+then A10:0=inf A & 1=sup A by INTEGRA1:6;
+ A is bounded_below by INTEGRA1:3;
+then A11:inf A <= inf rng min(Zmf(C1,C2),f,x,z) by A9,PSCOMP_1:12;
+ rng min(Zmf(C1,C2),f,x,z) is bounded by Th1;
+then A12:inf rng min(Zmf(C1,C2),f,x,z) <= sup rng min(Zmf(C1,C2),f,x,z)
+             by SEQ_4:24;
+    [x,z] in [:C1,C3:] by A1,ZFMISC_1:106;
+  then chi({},[:C1,C3:]). [x,z] = 0 by FUNCT_3:def 3;
+  hence thesis by A10,A11,A12,FUZZY_3:def 1;
+ end;
+ hence thesis by A2,AXIOMS:21;
+end;
+
+Lm7:
+for f be RMembership_Func of C2,C3 holds
+Zmf(C1,C2)(#)f = Zmf(C1,C3)
+proof
+ let f be RMembership_Func of C2,C3;
+A1:dom(Zmf(C1,C2)(#)f) = [:C1,C3:] &
+ dom(Zmf(C1,C3)) = [:C1,C3:] by FUZZY_1:def 1;
+   for c being Element of [:C1,C3:] st c in [:C1,C3:] holds
+ (Zmf(C1,C2)(#)f).c = Zmf(C1,C3).c
+ proof
+  let c be Element of [:C1,C3:];
+  consider x,z being set such that
+A2:x in C1 & z in C3 & c = [x,z] by ZFMISC_1:def 2;
+     (Zmf(C1,C2)(#)f).c
+   = sup rng min(Zmf(C1,C2),f,x,z) by A2,Def4
+  .= Zmf(C1,C3).c by A2,Lm6;
+  hence thesis;
+ end;
+ hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem
+  for f be RMembership_Func of C2,C3,
+    O1 be Zero_Relation of C1,C2,
+    O2 be Zero_Relation of C1,C3,
+    R be FuzzyRelation of C2,C3,f holds
+O1(#)R = O2
+proof
+ let f be RMembership_Func of C2,C3,
+ O1 be Zero_Relation of C1,C2,
+ O2 be Zero_Relation of C1,C3,
+ R be FuzzyRelation of C2,C3,f;
+ set C = [:C1,C2:], D = [:C1,C3:];
+   EMF C = Zmf (C1,C2) & EMF D = Zmf (C1,C3) by FUZZY_3:45;
+ then EMF(C)(#)f = EMF D by Lm7;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+Lm8:
+for f be RMembership_Func of C1,C2, x,z be set st x in C1 & z in C3 holds
+sup rng min(f,Zmf(C2,C3),x,z) = Zmf(C1,C3). [x,z]
+proof
+ let f be RMembership_Func of C1,C2,
+ x,z be set;
+ assume
+A1:x in C1 & z in C3;
+A2:sup rng min(f,Zmf(C2,C3),x,z) <= Zmf(C1,C3). [x,z]
+ proof
+     rng min(f,Zmf(C2,C3),x,z) is bounded by Th1;
+then A3:rng min(f,Zmf(C2,C3),x,z) is bounded_above by SEQ_4:def 3;
+    for s being real number st 0<s holds
+  sup rng min(f,Zmf(C2,C3),x,z) - s <= Zmf(C1,C3). [x,z]
+  proof
+   let s being real number;
+   assume s>0;
+   then consider r being real number such that
+A4:r in rng min(f,Zmf(C2,C3),x,z) &
+   sup rng min(f,Zmf(C2,C3),x,z) - s < r by A3,SEQ_4:def 4;
+   consider y be set such that
+A5:y in dom min(f,Zmf(C2,C3),x,z) &
+   r = min(f,Zmf(C2,C3),x,z).y by A4,FUNCT_1:def 5;
+ A6:[x,y] in [:C1,C2:] & [y,z] in [:C2,C3:] & [x,z] in [:C1,C3:]
+                                               by A1,A5,ZFMISC_1:106;
+then A7:   chi({},[:C2,C3:]). [y,z] = 0 & chi({},[:C1,C3:]). [x,z] = 0 by
+FUNCT_3:def 3;
+A8:0 <= f. [x,y] by A6,Th3;
+     r = min(f. [x,y],Zmf(C2,C3). [y,z]) by A1,A5,Def3
+    .= min(f. [x,y],0) by A7,FUZZY_3:def 1
+    .= 0 by A8,SQUARE_1:def 1
+    .= Zmf(C1,C3). [x,z] by A7,FUZZY_3:def 1;
+   hence thesis by A4;
+  end;
+  hence thesis by REAL_2:182;
+ end;
+ sup rng min(f,Zmf(C2,C3),x,z) >= Zmf(C1,C3). [x,z]
+ proof
+A9:rng min(f,Zmf(C2,C3),x,z) c= [.0,1.] by FUZZY_1:def 1;
+  reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
+    A = [. inf A, sup A .] by INTEGRA1:5;
+then A10:0=inf A & 1=sup A by INTEGRA1:6;
+ A is bounded_below by INTEGRA1:3;
+then A11:inf A <= inf rng min(f,Zmf(C2,C3),x,z) by A9,PSCOMP_1:12;
+ rng min(f,Zmf(C2,C3),x,z) is bounded by Th1;
+then A12:inf rng min(f,Zmf(C2,C3),x,z) <= sup rng min(f,Zmf(C2,C3),x,z)
+             by SEQ_4:24;
+    [x,z] in [:C1,C3:] by A1,ZFMISC_1:106;
+  then chi({},[:C1,C3:]). [x,z] = 0 by FUNCT_3:def 3;
+  hence thesis by A10,A11,A12,FUZZY_3:def 1;
+ end;
+ hence thesis by A2,AXIOMS:21;
+end;
+
+theorem Th34:
+for f be RMembership_Func of C1,C2 holds
+f(#)Zmf(C2,C3) = Zmf(C1,C3)
+proof
+ let f be RMembership_Func of C1,C2;
+A1:dom(f(#)Zmf(C2,C3)) = [:C1,C3:] &
+ dom(Zmf(C1,C3)) = [:C1,C3:] by FUZZY_1:def 1;
+   for c being Element of [:C1,C3:] st c in [:C1,C3:] holds
+ (f(#)Zmf(C2,C3)).c = Zmf(C1,C3).c
+ proof
+  let c be Element of [:C1,C3:];
+  consider x,z being set such that
+A2:x in C1 & z in C3 & c = [x,z] by ZFMISC_1:def 2;
+     (f(#)Zmf(C2,C3)).c
+   = sup rng min(f,Zmf(C2,C3),x,z) by A2,Def4
+  .= Zmf(C1,C3).c by A2,Lm8;
+  hence thesis;
+ end;
+ hence thesis by A1,PARTFUN1:34;
+end;
+
+theorem
+  for f be RMembership_Func of C1,C2,
+O1 be Zero_Relation of C2,C3,
+O2 be Zero_Relation of C1,C3,
+R be FuzzyRelation of C1,C2,f holds
+R(#)O1 = O2
+proof
+ let f be RMembership_Func of C1,C2,
+ O1 be Zero_Relation of C2,C3,
+ O2 be Zero_Relation of C1,C3;
+ set C = [:C2,C3:], D = [:C1,C3:];
+   EMF C = Zmf (C2,C3) & EMF D = Zmf (C1,C3) by FUZZY_3:45;
+ then f(#)EMF(C) = EMF D by Th34;
+ hence thesis by FUZZY_1:def 3;
+end;
+
+theorem Th36:
+for f be RMembership_Func of C1,C1 holds
+f(#)Zmf(C1,C1) = Zmf(C1,C1)(#)f
+proof
+ let f be RMembership_Func of C1,C1;
+   f(#)Zmf(C1,C1) = Zmf(C1,C1) by Th34;
+ hence thesis by Lm7;
+end;
+
+theorem
+  for f be RMembership_Func of C1,C1,
+O be Zero_Relation of C1,C1,
+R be FuzzyRelation of C1,C1,f holds
+R(#)O = O(#)R
+proof
+ let f be RMembership_Func of C1,C1,
+ O be Zero_Relation of C1,C1,
+ R be FuzzyRelation of C1,C1,f;
+A1: f(#)Zmf(C1,C1) = Zmf(C1,C1)(#)f by Th36;
+ set C = [:C1,C1:];
+  EMF C = Zmf (C1,C1) by FUZZY_3:45;
+ hence thesis by A1,FUZZY_1:def 3;
+end;

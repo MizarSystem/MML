@@ -1,0 +1,1040 @@
+:: Families of Sets
+::  by Beata Padlewska
+::
+:: Received April 5, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, TARSKI, SUBSET_1, SETFAM_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1;
+ constructors TARSKI, SUBSET_1, XBOOLE_0;
+ clusters SUBSET_1, XBOOLE_0, ZFMISC_1;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, XBOOLE_0;
+ theorems TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ENUMSET1, XBOOLE_1;
+ schemes XBOOLE_0;
+
+begin
+
+ reserve X,Y,Z,Z1,Z2,D, x,y for set;
+
+definition let X;
+  func meet X means :Def1:
+                for x holds x in it iff
+               (for Y holds Y in X implies x in Y) if X <> {}
+               otherwise it = {};
+   existence
+   proof
+     thus X <> {} implies ex Z1 st for x holds x in Z1 iff
+                         for Z st Z in X holds x in Z
+     proof assume
+     A1:  X <> {};
+      defpred X[set] means for Z st Z in X holds $1 in Z;
+          consider Y such that
+     A2:  for x holds x in Y iff x in union X & X[x] from Separation;
+     A3:  for x holds x in Y iff for Z st Z in X holds x in Z
+          proof
+                 for x holds (for Z st Z in X holds x in Z) implies x in Y
+               proof
+                let x such that
+               A4:  for Z st Z in X holds x in Z;
+                    consider y being Element of X;
+                      x in y by A1,A4;
+                    then x in union X by A1,TARSKI:def 4;
+                 hence thesis by A2,A4;
+              end;
+            hence thesis by A2;
+          end;
+          take Y;
+          thus thesis by A3;
+       end;
+      thus X = {} implies ex Z st Z = {};
+    end;
+    uniqueness
+     proof
+         let Z1,Z2;
+        now assume that
+     A5:  X <> {} & for x holds x in Z1 iff
+          for Y holds Y in X implies x in Y and
+     A6:  for x holds x in Z2 iff
+          for Y holds Y in X implies x in Y;
+            now let x;
+              x in Z1 iff for Y holds Y in X implies x in Y by A5;
+           hence x in Z1 iff x in Z2 by A6;
+          end;
+       hence Z1 = Z2 by TARSKI:2;
+      end;
+      hence thesis;
+     end;
+     consistency;
+end;
+
+::
+::              Intersection of families of sets
+::
+
+canceled;
+
+theorem
+    meet {} = {} by Def1;
+
+theorem Th3:
+  meet X c= union X
+proof
+A1:  now assume
+A2:    X <> {};
+         now let x such that
+A3:      x in meet X;
+         consider y being Element of X;
+           x in y by A2,A3,Def1;
+        hence x in union X by A2,TARSKI:def 4;
+       end;
+      hence thesis by TARSKI:def 3;
+     end;
+       now assume X = {};
+       then meet X = {} by Def1;
+      hence thesis by XBOOLE_1:2;
+     end;
+   hence meet X c= union X by A1;
+end;
+
+theorem Th4:
+  Z in X implies meet X c= Z
+proof assume
+A1:  Z in X;
+       now thus meet X c= Z
+      proof
+       let x;
+        assume x in meet X;
+       hence x in Z by A1,Def1;
+      end;
+     end;
+   hence meet X c= Z;
+end;
+
+theorem
+    {} in X implies meet X = {}
+proof assume
+     {} in X;
+   then meet X c= {} by Th4;
+   hence thesis by XBOOLE_1:3;
+end;
+
+theorem
+   X <> {} & (for Z1 st Z1 in X holds Z c= Z1) implies Z c= meet X
+proof assume
+A1:  X <> {} & for Z1 st Z1 in X holds Z c= Z1;
+     thus Z c= meet X
+     proof
+      let x such that
+A2:    x in Z;
+         for Y st Y in X holds x in Y
+       proof
+        let Y; assume Y in X;
+         then Z c= Y by A1;
+        hence x in Y by A2;
+       end;
+      hence x in meet X by A1,Def1;
+     end;
+end;
+
+theorem Th7:
+  X <> {} & X c= Y implies meet Y c= meet X
+proof assume
+A1:  X <> {} & X c= Y;
+    let x;
+    assume x in meet Y;
+    then for Z st Z in X holds x in Z by A1,Def1;
+    hence x in meet X by A1,Def1;
+end;
+
+theorem
+    X in Y & X c= Z implies meet Y c= Z
+proof assume
+A1:  X in Y & X c= Z;
+   then meet Y c= X by Th4;
+ hence meet Y c= Z by A1,XBOOLE_1:1;
+end;
+
+theorem
+    X in Y & X misses Z implies meet Y misses Z
+proof assume
+A1:  X in Y & X misses Z;
+   then meet Y c= X by Th4;
+ hence thesis by A1,XBOOLE_1:63;
+end;
+
+theorem
+    X <> {} & Y <> {} implies meet (X \/ Y) = meet X /\ meet Y
+proof assume
+A1:  X <> {} & Y <> {};
+then A2:  X \/ Y <> {} by XBOOLE_1:15;
+       X c= X \/ Y & Y c= X \/ Y by XBOOLE_1:7;
+     then meet (X \/ Y) c= meet X & meet (X \/ Y) c= meet Y by A1,Th7;
+then A3:  meet (X \/ Y) c= meet X /\ meet Y by XBOOLE_1:19;
+       meet X /\ meet Y c= meet (X \/ Y)
+     proof
+      let x;assume x in meet X /\ meet Y;
+then A4:    x in meet X & x in meet Y by XBOOLE_0:def 3;
+         now
+        let Z; assume Z in X \/ Y;
+         then Z in X or Z in Y by XBOOLE_0:def 2;
+        hence x in Z by A4,Def1;
+       end;
+      hence x in meet (X \/ Y) by A2,Def1;
+     end;
+  hence thesis by A3,XBOOLE_0:def 10;
+end;
+
+theorem
+    meet {x} = x
+proof
+      x in {x} by TARSKI:def 1;
+then A1: meet {x} c= x & {x} <> {} by Th4;
+      x c= meet {x}
+    proof
+     let y;assume
+     y in x;
+      then for Z st Z in {x} holds y in Z by TARSKI:def 1;
+     hence y in meet {x} by Def1;
+    end;
+ hence thesis by A1,XBOOLE_0:def 10;
+end;
+
+theorem
+    meet {X,Y} = X /\ Y
+proof
+A1:  X in {X,Y} & Y in {X,Y} by TARSKI:def 2;
+       x in meet {X,Y} iff x in X & x in Y
+     proof
+      thus x in meet {X,Y} implies x in X & x in Y by A1,Def1;
+      assume x in X & x in Y;
+      then for Z holds
+     Z in {X,Y} implies x in Z by TARSKI:def 2;
+     hence x in meet {X,Y} by Def1;
+    end;
+ hence thesis by XBOOLE_0:def 3;
+end;
+
+reserve SFX,SFY,SFZ for set;
+
+definition let SFX,SFY;
+  pred SFX is_finer_than SFY means
+         for X st X in SFX ex Y st Y in SFY & X c= Y;
+  reflexivity;
+  pred SFY is_coarser_than SFX means
+         for Y st Y in SFY ex X st X in SFX & X c= Y;
+  reflexivity;
+end;
+
+canceled 4;
+
+theorem
+    SFX c= SFY implies SFX is_finer_than SFY
+proof assume
+A1:  SFX c= SFY;
+     let X such that
+A2:  X in SFX;
+     take X;
+  thus thesis by A1,A2;
+end;
+
+theorem
+    SFX is_finer_than SFY implies union SFX c= union SFY
+proof
+  assume
+A1:for X st X in SFX ex Y st Y in SFY & X c= Y;
+   thus union SFX c= union SFY
+   proof
+    let x;
+     assume x in union SFX;
+     then consider Y such that
+A2:  x in Y and
+A3:  Y in SFX by TARSKI:def 4;
+     consider Z such that
+A4:  Z in SFY & Y c= Z by A1,A3;
+     thus x in union SFY by A2,A4,TARSKI:def 4;
+   end;
+end;
+
+theorem
+   SFY <> {} & SFY is_coarser_than SFX implies meet SFX c= meet SFY
+proof
+  assume that
+A1: SFY <> {} and
+A2: for Z2 st Z2 in SFY ex Z1 st Z1 in SFX & Z1 c= Z2;
+       now
+      thus meet SFX c= meet SFY
+      proof
+       let x such that
+A3:     x in meet SFX;
+          for Z st Z in SFY holds x in Z
+        proof
+         let Z;
+          assume Z in SFY; then consider Z1 such that
+A4:       Z1 in SFX & Z1 c= Z by A2;
+            x in Z1 by A3,A4,Def1;
+         hence x in Z by A4;
+        end;
+       hence x in meet SFY by A1,Def1;
+      end;
+     end;
+   hence meet SFX c= meet SFY;
+end;
+
+theorem
+    {} is_finer_than SFX
+proof
+  let X; assume
+    X in {};
+  hence ex Y st Y in SFX & X c= Y;
+end;
+
+theorem
+    SFX is_finer_than {} implies SFX = {}
+proof
+  assume
+A1:  for X st X in SFX ex Y st Y in {} & X c= Y;
+     assume
+A2:   not thesis;
+     consider x being Element of SFX;
+        ex Y st Y in {} & x c= Y by A1,A2;
+   hence contradiction;
+end;
+
+canceled;
+
+theorem
+    SFX is_finer_than SFY & SFY is_finer_than SFZ implies
+  SFX is_finer_than SFZ
+proof assume that
+A1:  for X st X in SFX ex Y st Y in SFY & X c= Y and
+A2:  for X st X in SFY ex Y st Y in SFZ & X c= Y;
+     let X; assume
+    X in SFX; then consider Y such that
+A3:  Y in SFY & X c= Y by A1;consider Z such that
+A4:  Z in SFZ & Y c= Z by A2,A3;
+     take Z;
+   thus thesis by A3,A4,XBOOLE_1:1;
+end;
+
+theorem
+    SFX is_finer_than {Y} implies for X st X in SFX holds X c= Y
+proof assume
+A1:  for X st X in SFX ex Z st Z in {Y} & X c= Z;
+     let X; assume
+    X in SFX; then ex Z st Z in {Y} & X c= Z by A1;
+   hence thesis by TARSKI:def 1;
+end;
+
+theorem
+    SFX is_finer_than {X,Y} implies for Z st Z in SFX holds
+   Z c= X or Z c= Y
+proof assume
+A1:  for Z1 st Z1 in SFX ex Z2 st Z2 in {X,Y} & Z1 c= Z2;
+     let Z; assume Z in SFX; then consider Z2 such that
+A2:   Z2 in {X,Y} & Z c= Z2 by A1;
+        {X,Y} = {X} \/ {Y} by ENUMSET1:41;
+      then Z2 in {X} or Z2 in {Y} by A2,XBOOLE_0:def 2;
+   hence thesis by A2,TARSKI:def 1;
+end;
+
+definition let SFX,SFY;
+   func UNION(SFX,SFY) means
+     :Def4:Z in it iff ex X,Y st X in SFX & Y in SFY & Z = X \/ Y;
+    existence
+    proof
+      defpred X[set] means
+       ex Z being set st $1 = Z & ex X,Y st X in SFX & Y in SFY & Z = X \/ Y;
+      consider XX being set such that
+A1:   for x holds x in XX iff x in bool(union SFX \/ union SFY) & X[x]
+       from Separation;
+      take XX;
+        for Z holds Z in XX iff ex X,Y st X in SFX & Y in SFY & Z = X \/ Y
+      proof
+       let Z;
+A2:     now assume Z in XX;
+           then ex Z1 st
+       Z = Z1 & ex X,Y st X in SFX & Y in SFY & Z1 = X \/ Y by A1;
+         hence ex X,Y st X in SFX & Y in SFY & Z = X \/ Y;
+        end;
+          now
+          given X,Y such that
+A3:       X in SFX & Y in SFY & Z = X \/ Y;
+            X c= union SFX & Y c= union SFY by A3,ZFMISC_1:92;
+          then Z c= union SFX \/ union SFY by A3,XBOOLE_1:13;
+         hence Z in XX by A1,A3;
+        end;
+       hence thesis by A2;
+      end;
+     hence thesis;
+    end;
+    uniqueness
+    proof
+     let Z1,Z2 be set;assume that
+A4:    for Z holds Z in Z1 iff
+       ex X,Y st X in SFX & Y in SFY & Z = X \/ Y and
+A5:    for Z holds Z in Z2 iff
+       ex X,Y st X in SFX & Y in SFY & Z = X \/ Y;
+         now let Z;
+           Z in Z1 iff ex X,Y st X in SFX & Y in SFY & Z = X \/ Y by A4;
+        hence Z in Z1 iff Z in Z2 by A5;
+       end;
+      hence Z1 = Z2 by TARSKI:2;
+    end;
+   commutativity
+    proof let SFZ,SFX,SFY;
+     assume
+A6:    for Z holds Z in SFZ iff ex X,Y st X in SFX & Y in SFY & Z = X \/ Y;
+     let Z;
+     hereby assume Z in SFZ;
+       then ex X,Y st X in SFX & Y in SFY & Z = X \/ Y by A6;
+      hence ex Y,X st Y in SFY & X in SFX & Z = Y \/ X;
+     end;
+     thus thesis by A6;
+    end;
+   func INTERSECTION(SFX,SFY) means
+     :Def5:Z in it iff ex X,Y st X in SFX & Y in SFY & Z = X /\ Y;
+    existence
+    proof
+      defpred X[set] means
+       ex Z being set st $1 = Z & ex X,Y st X in SFX & Y in SFY & Z = X /\ Y;
+      consider XX being set such that
+A7:   for x holds x in XX iff x in bool(union SFX /\ union SFY) & X[x]
+       from Separation;
+      take XX;
+        for Z holds Z in XX iff ex X,Y st X in SFX & Y in SFY & Z = X /\ Y
+      proof
+       let Z;
+A8:     now assume Z in XX;
+           then ex Z1 st
+       Z = Z1 & ex X,Y st X in SFX & Y in SFY & Z1 = X /\ Y by A7;
+         hence ex X,Y st X in SFX & Y in SFY & Z = X /\ Y;
+        end;
+          now
+          given X,Y such that
+A9:       X in SFX & Y in SFY & Z = X /\ Y;
+            X c= union SFX & Y c= union SFY by A9,ZFMISC_1:92;
+          then Z c= union SFX /\ union SFY by A9,XBOOLE_1:27;
+         hence Z in XX by A7,A9;
+        end;
+       hence thesis by A8;
+      end;
+     hence thesis;
+    end;
+    uniqueness
+    proof
+     let Z1,Z2 be set;assume that
+A10:    for Z holds Z in Z1 iff
+       ex X,Y st X in SFX & Y in SFY & Z = X /\ Y and
+A11:    for Z holds Z in Z2 iff
+       ex X,Y st X in SFX & Y in SFY & Z = X /\ Y;
+         now let Z;
+           Z in Z1 iff ex X,Y st X in SFX & Y in SFY & Z = X /\ Y by A10;
+        hence Z in Z1 iff Z in Z2 by A11;
+       end;
+      hence Z1 = Z2 by TARSKI:2;
+    end;
+   commutativity
+    proof let SFZ,SFX,SFY;
+     assume
+A12:    for Z holds Z in SFZ iff ex X,Y st X in SFX & Y in SFY & Z = X /\ Y;
+     let Z;
+     hereby assume Z in SFZ;
+       then ex X,Y st X in SFX & Y in SFY & Z = X /\ Y by A12;
+      hence ex Y,X st Y in SFY & X in SFX & Z = Y /\ X;
+     end;
+     thus thesis by A12;
+    end;
+   func DIFFERENCE(SFX,SFY) means
+     :Def6:Z in it iff ex X,Y st X in SFX & Y in SFY & Z = X \ Y;
+    existence
+    proof
+      defpred X[set] means
+       ex Z being set st $1 = Z & ex X,Y st X in SFX & Y in SFY & Z = X \ Y;
+      consider XX being set such that
+A13:   for x holds x in XX iff x in bool union SFX & X[x] from Separation;
+      take XX;
+        for Z holds Z in XX iff ex X,Y st X in SFX & Y in SFY & Z = X \ Y
+      proof
+       let Z;
+A14:     now assume Z in XX;
+           then ex Z1 st
+       Z = Z1 & ex X,Y st X in SFX & Y in SFY & Z1 = X \ Y by A13;
+         hence ex X,Y st X in SFX & Y in SFY & Z = X \ Y;
+        end;
+          now
+          given X,Y such that
+A15:       X in SFX & Y in SFY & Z = X \ Y;
+            X \ Y c= X & X c= union SFX by A15,XBOOLE_1:36,ZFMISC_1:92;
+          then Z c= union SFX by A15,XBOOLE_1:1;
+         hence Z in XX by A13,A15;
+        end;
+       hence thesis by A14;
+      end;
+     hence thesis;
+    end;
+    uniqueness
+    proof
+     let Z1,Z2 be set;assume that
+A16:    for Z holds Z in Z1 iff
+       ex X,Y st X in SFX & Y in SFY & Z = X \ Y and
+A17:    for Z holds Z in Z2 iff
+       ex X,Y st X in SFX & Y in SFY & Z = X \ Y;
+         now let Z;
+           Z in Z1 iff ex X,Y st X in SFX & Y in SFY & Z = X \ Y by A16;
+        hence Z in Z1 iff Z in Z2 by A17;
+       end;
+      hence Z1 = Z2 by TARSKI:2;
+    end;
+end;
+
+canceled 3;
+
+theorem
+    SFX is_finer_than UNION(SFX,SFX)
+proof
+  let X such that
+A1:  X in SFX;
+     take X;
+       X = X \/ X;
+   hence thesis by A1,Def4;
+end;
+
+theorem
+    INTERSECTION(SFX,SFX) is_finer_than SFX
+proof
+ let X; assume
+    X in INTERSECTION(SFX,SFX); then consider Z1,Z2 such that
+A1:  Z1 in SFX & Z2 in SFX & X = Z1 /\ Z2 by Def5;
+     take Z1;
+   thus thesis by A1,XBOOLE_1:17;
+end;
+
+theorem
+    DIFFERENCE(SFX,SFX) is_finer_than SFX
+proof
+  let X; assume
+    X in DIFFERENCE(SFX,SFX); then consider Z1,Z2 such that
+A1:  Z1 in SFX & Z2 in SFX & X = Z1 \ Z2 by Def6;
+     take Z1;
+  thus thesis by A1,XBOOLE_1:36;
+end;
+
+canceled 2;
+
+theorem
+     SFX meets SFY implies meet SFX /\ meet SFY = meet INTERSECTION(SFX,SFY)
+proof assume
+A1:  SFX /\ SFY <> {};
+then A2: SFX <> {} & SFY <> {};
+     consider y being Element of SFX /\ SFY;
+A3: y in SFX & y in SFY by A1,XBOOLE_0:def 3;
+then A4:     y /\ y in INTERSECTION(SFX,SFY) by Def5;
+A5:  meet SFX /\ meet SFY c= meet INTERSECTION(SFX,SFY)
+     proof
+      let x; assume
+         x in meet SFX /\ meet SFY;
+then A6:    x in meet SFX & x in meet SFY by XBOOLE_0:def 3;
+         for Z st Z in INTERSECTION(SFX,SFY) holds x in Z
+       proof
+        let Z; assume
+        Z in INTERSECTION(SFX,SFY); then consider Z1,Z2 such that
+A7:      Z1 in SFX & Z2 in SFY & Z = Z1 /\ Z2 by Def5;
+           x in Z1 & x in Z2 by A6,A7,Def1;
+        hence x in Z by A7,XBOOLE_0:def 3;
+       end;
+      hence x in meet INTERSECTION(SFX,SFY) by A4,Def1;
+     end;
+       meet INTERSECTION(SFX,SFY) c= meet SFX /\ meet SFY
+     proof
+      let x such that
+A8:    x in meet INTERSECTION(SFX,SFY);
+         for Z st Z in SFX holds x in Z
+       proof
+        let Z; assume Z in SFX;
+         then Z /\ y in INTERSECTION(SFX,SFY) by A3,Def5;
+         then x in Z /\ y by A8,Def1;
+        hence x in Z by XBOOLE_0:def 3;
+       end;
+then A9:   x in meet SFX by A2,Def1;
+         for Z st Z in SFY holds x in Z
+       proof
+        let Z; assume Z in SFY;
+          then y /\ Z in INTERSECTION(SFX,SFY) by A3,Def5;
+          then x in y /\ Z by A8,Def1;
+        hence x in Z by XBOOLE_0:def 3;
+       end;
+       then x in meet SFY by A2,Def1;
+      hence x in meet SFX /\ meet SFY by A9,XBOOLE_0:def 3;
+     end;
+  hence thesis by A5,XBOOLE_0:def 10;
+end;
+
+theorem
+    SFY <> {} implies X \/ meet SFY = meet UNION({X},SFY)
+proof assume
+A1:   SFY <> {};consider y being Element of SFY;
+        X in {X} by TARSKI:def 1;
+then A2:      X \/ y in UNION({X},SFY) by A1,Def4;
+A3:   X \/ meet SFY c= meet UNION({X},SFY)
+      proof
+       let x;assume x in X \/ meet SFY;
+then A4:     x in X or x in meet SFY by XBOOLE_0:def 2;
+          for Z st Z in UNION({X},SFY) holds x in Z
+        proof
+          let Z; assume
+          Z in UNION({X},SFY); then consider Z1,Z2 such that
+A5:        Z1 in {X} & Z2 in SFY & Z = Z1 \/ Z2 by Def4;
+             x in Z1 or x in Z2 by A4,A5,Def1,TARSKI:def 1;
+         hence x in Z by A5,XBOOLE_0:def 2;
+        end;
+       hence x in meet UNION({X},SFY) by A2,Def1;
+      end;
+        meet UNION({X},SFY) c= X \/ meet SFY
+      proof
+        let x; assume
+A6:     x in meet UNION({X},SFY);
+        assume
+          not x in X \/ meet SFY;
+then A7:     not x in X & not x in meet SFY by XBOOLE_0:def 2;
+        then consider Z such that
+A8:     Z in SFY & not x in Z by A1,Def1;
+          X in {X} by TARSKI:def 1;
+        then X \/ Z in UNION({X},SFY) by A8,Def4;
+        then x in X \/ Z by A6,Def1;
+       hence contradiction by A7,A8,XBOOLE_0:def 2;
+      end;
+   hence thesis by A3,XBOOLE_0:def 10;
+end;
+
+theorem
+    X /\ union SFY = union INTERSECTION({X},SFY)
+proof
+A1:  X /\ union SFY c= union INTERSECTION({X},SFY)
+     proof
+      let x;assume
+         x in X /\ union SFY;
+then A2:    x in X & x in union SFY by XBOOLE_0:def 3; then consider Y such
+that
+A3:    x in Y & Y in SFY by TARSKI:def 4;
+         X in {X} by TARSKI:def 1;
+then A4:    X /\ Y in INTERSECTION({X},SFY) by A3,Def5;
+         x in X /\ Y by A2,A3,XBOOLE_0:def 3;
+      hence x in union INTERSECTION({X},SFY) by A4,TARSKI:def 4;
+     end;
+       union INTERSECTION({X},SFY) c= X /\ union SFY
+     proof
+      let x;assume
+         x in union INTERSECTION({X},SFY); then consider Z such that
+A5:    x in Z & Z in INTERSECTION({X},SFY) by TARSKI:def 4;
+       consider X1,X2 be set such that
+A6:    X1 in {X} & X2 in SFY & Z = X1 /\ X2 by A5,Def5;
+         X1 = X by A6,TARSKI:def 1;
+       then x in X & x in X2 by A5,A6,XBOOLE_0:def 3;
+       then x in X & x in union SFY by A6,TARSKI:def 4;
+      hence x in X /\ union SFY by XBOOLE_0:def 3;
+     end;
+  hence thesis by A1,XBOOLE_0:def 10;
+end;
+
+theorem
+    SFY <> {} implies X \ union SFY = meet DIFFERENCE({X},SFY)
+proof assume
+A1:  SFY <> {};consider y being Element of SFY;
+A2: X in {X} by TARSKI:def 1;
+then A3: X \ y in DIFFERENCE({X},SFY) by A1,Def6;
+A4:  X \ union SFY c= meet DIFFERENCE({X},SFY)
+     proof
+      let x; assume
+        x in X \ union SFY;
+then A5:      x in X & not x in union SFY by XBOOLE_0:def 4;
+        for Z st Z in DIFFERENCE({X},SFY) holds x in Z
+      proof
+       let Z; assume
+       Z in DIFFERENCE({X},SFY); then consider Z1,Z2 such that
+A6:     Z1 in {X} & Z2 in SFY & Z = Z1 \ Z2 by Def6;
+          x in Z1 & not x in Z2 by A5,A6,TARSKI:def 1,def 4;
+       hence x in Z by A6,XBOOLE_0:def 4;
+      end;
+     hence x in meet DIFFERENCE({X},SFY) by A3,Def1;
+    end;
+      meet DIFFERENCE({X},SFY) c= X \ union SFY
+    proof
+     let x;assume
+A7:   x in meet DIFFERENCE({X},SFY);
+      then x in X \ y by A3,Def1;
+then A8:   x in X by XBOOLE_0:def 4;
+        for Z st Z in SFY holds not x in Z
+      proof
+       let Z; assume Z in SFY;
+        then X \ Z in DIFFERENCE({X},SFY) by A2,Def6;
+        then x in X \ Z by A7,Def1;
+       hence not x in Z by XBOOLE_0:def 4;
+      end;
+      then for Z st x in Z holds not Z in SFY;
+      then not x in union SFY by TARSKI:def 4;
+     hence x in X \ union SFY by A8,XBOOLE_0:def 4;
+    end;
+  hence thesis by A4,XBOOLE_0:def 10;
+end;
+
+theorem
+   SFY <> {} implies X \ meet SFY = union DIFFERENCE({X},SFY)
+proof assume
+A1:  SFY <> {};
+A2:  X in {X} by TARSKI:def 1;
+A3:  X \ meet SFY c= union DIFFERENCE({X},SFY)
+     proof
+      let x;assume
+         x in X \ meet SFY;
+then A4:    x in X & not x in meet SFY by XBOOLE_0:def 4; then consider Z such
+that
+A5:    Z in SFY & not x in Z by A1,Def1;
+A6:    X \ Z in DIFFERENCE({X},SFY) by A2,A5,Def6;
+         x in X \ Z by A4,A5,XBOOLE_0:def 4;
+      hence x in union DIFFERENCE({X},SFY) by A6,TARSKI:def 4;
+     end;
+       union DIFFERENCE({X},SFY) c= X \ meet SFY
+     proof
+      let x;assume
+         x in union DIFFERENCE({X},SFY); then consider Z such that
+A7:    x in Z & Z in DIFFERENCE({X},SFY) by TARSKI:def 4;
+       consider Z1,Z2 such that
+A8:   Z1 in {X} & Z2 in SFY & Z = Z1 \ Z2 by A7,Def6;
+         Z1 = X by A8,TARSKI:def 1;
+then A9:   x in X & not x in Z2 by A7,A8,XBOOLE_0:def 4;
+       then not x in meet SFY by A8,Def1;
+      hence x in X \ meet SFY by A9,XBOOLE_0:def 4;
+     end;
+    hence thesis by A3,XBOOLE_0:def 10;
+end;
+
+theorem
+    union INTERSECTION(SFX,SFY) c= union SFX /\ union SFY
+proof
+  let x; assume
+      x in union INTERSECTION(SFX,SFY); then consider Z such that
+A1: x in Z & Z in INTERSECTION(SFX,SFY) by TARSKI:def 4;
+    consider X,Y such that
+A2: X in SFX & Y in SFY & Z = X /\ Y by A1,Def5;
+      x in X & x in Y by A1,A2,XBOOLE_0:def 3;
+    then x in union SFX & x in union SFY by A2,TARSKI:def 4;
+  hence thesis by XBOOLE_0:def 3;
+end;
+
+theorem
+    SFX <> {} & SFY <> {} implies meet SFX \/ meet SFY c= meet UNION(SFX,SFY)
+proof assume
+A1: SFX <> {} & SFY <> {};
+    let x;assume
+       x in meet SFX \/ meet SFY;
+then A2:  x in meet SFX or x in meet SFY by XBOOLE_0:def 2;
+A3:  for Z st Z in UNION(SFX,SFY) holds x in Z
+     proof
+      let Z; assume
+      Z in UNION(SFX,SFY); then consider X,Y such that
+A4:     X in SFX & Y in SFY & Z = X \/ Y by Def4;
+          x in X or x in Y by A2,A4,Def1;
+       hence x in Z by A4,XBOOLE_0:def 2;
+      end;
+      consider y being Element of SFX;
+      consider z being Element of SFY;
+        y \/ z in UNION(SFX,SFY) by A1,Def4;
+  hence thesis by A3,Def1;
+end;
+
+theorem
+    meet DIFFERENCE (SFX,SFY) c= meet SFX \ meet SFY
+proof per cases;
+ suppose
+A1: SFX = {} or SFY = {};
+     now assume DIFFERENCE (SFX,SFY) <> {};
+     then consider e being set such that
+A2:    e in DIFFERENCE (SFX,SFY) by XBOOLE_0:def 1;
+       ex X,Y st X in SFX & Y in SFY & e = X \ Y by A2,Def6;
+    hence contradiction by A1;
+   end;
+   then meet DIFFERENCE (SFX,SFY) = {} by Def1;
+  hence thesis by XBOOLE_1:2;
+ suppose
+A3: SFX <> {} & SFY <> {};
+    consider z being Element of SFX;
+    consider y being Element of SFY;
+A4:z \ y in DIFFERENCE(SFX,SFY) by A3,Def6;
+   let x such that
+A5:  x in meet DIFFERENCE (SFX,SFY);
+       for Z st Z in SFX holds x in Z
+     proof
+      let Z; assume
+      Z in SFX;
+       then Z \ y in DIFFERENCE (SFX,SFY) by A3,Def6;
+       then x in Z \ y by A5,Def1;
+      hence x in Z by XBOOLE_0:def 4;
+     end;
+then A6:  x in meet SFX by A3,Def1;
+       x in z \ y by A4,A5,Def1;
+     then not x in y by XBOOLE_0:def 4;
+     then not x in meet SFY by A3,Def1;
+   hence thesis by A6,XBOOLE_0:def 4;
+end;
+
+::
+::                  Family of subsets of a set
+::
+
+definition let D be set;
+  mode Subset-Family of D means :Def7:
+   it c= bool D;
+  existence;
+end;
+
+definition let D be set;
+  redefine mode Subset-Family of D -> Subset of bool D;
+  coherence by Def7;
+end;
+
+definition let D be set;
+  cluster empty Subset-Family of D;
+  existence
+  proof
+      {} c= bool D by XBOOLE_1:2;
+    then {} is Subset-Family of D by Def7;
+    hence thesis;
+  end;
+  cluster non empty Subset-Family of D;
+  existence
+  proof
+      {} c= D by XBOOLE_1:2;
+    then bool {} c= bool D by ZFMISC_1:79;
+    then bool {} is Subset-Family of D by Def7;
+    hence thesis;
+  end;
+end;
+
+reserve F,G for Subset-Family of D;
+reserve P for Subset of D;
+
+definition let D,F;
+ redefine func union F -> Subset of D;
+   coherence
+    proof
+       union F c= D
+     proof
+      let x;
+       assume x in union F;
+        then consider Z such that
+A1:     x in Z and
+A2:     Z in F by TARSKI:def 4;
+       thus thesis by A1,A2;
+      end;
+     hence union F is Subset of D;
+    end;
+end;
+
+definition let D,F;
+  redefine func meet F -> Subset of D;
+   coherence
+    proof
+        meet F c= D
+      proof
+       let x such that
+A1:    x in meet F;
+         meet F c= union F by Th3;
+       then x in union F by A1;
+       hence thesis;
+     end;
+    hence thesis;
+   end;
+end;
+
+canceled 2;
+
+theorem Th44:
+  (for P holds P in F iff P in G) implies F=G
+proof
+ assume
+A1: for P holds P in F iff P in G;
+   thus F c= G
+    proof
+     let x; assume x in F;
+     hence thesis by A1;
+    end;
+   let x; assume x in G;
+   hence thesis by A1;
+end;
+
+scheme SubFamEx {A() -> set,P[Subset of A()]}:
+   ex F being Subset-Family of A() st
+   for B being Subset of A() holds B in F iff P[B]
+proof
+      defpred X[set] means ex Z being Subset of A() st $1 = Z & P[Z];
+   consider X being set such that
+A1: for x holds x in X iff x in bool A() & X[x] from Separation;
+      X c= bool A()
+    proof
+     let y;
+      assume y in X;
+     hence thesis by A1;
+    end;
+    then reconsider X as Subset-Family of A() by Def7;
+    take X;
+      for B being Subset of A() holds B in X iff P[B]
+    proof
+     let B be Subset of A();
+     thus B in X implies P[B]
+     proof
+      assume B in X;
+       then ex Z being Subset of A() st B = Z & P[Z] by A1;
+      hence P[B];
+      end;
+      assume P[B];
+     hence B in X by A1;
+   end;
+  hence thesis;
+end;
+
+definition let D,F;
+  func COMPLEMENT(F) -> Subset-Family of D means
+    :Def8:
+     for P being Subset of D holds P in it iff P` in F;
+    existence
+     proof defpred X[Subset of D] means $1` in F;
+      thus ex G being Subset-Family of D st
+       for P being Subset of D holds P in G iff X[P] from SubFamEx;
+     end;
+    uniqueness
+     proof
+      let G,H be Subset-Family of D;assume that
+     A1:  for P holds P in G iff P` in F and
+     A2:  for P holds P in H iff P` in F;
+        now let P;
+         P in G iff P` in F by A1;
+       hence P in G iff P in H by A2;
+      end;
+      hence thesis by Th44;
+     end;
+ involutiveness
+  proof let F,G such that
+A3: for P being Subset of D holds P in F iff P` in G;
+   let P be Subset of D;
+      P`` = P;
+   hence P in G iff P` in F by A3;
+  end;
+end;
+
+canceled;
+
+theorem Th46:
+  F <> {} implies COMPLEMENT(F) <> {}
+proof
+ assume
+A1: F <> {};
+    consider X being Element of F;
+    reconsider X as Subset of D by A1,TARSKI:def 3;
+      X`` = X;
+  hence thesis by A1,Def8;
+end;
+
+theorem
+   F <> {} implies [#] D \ union F = meet (COMPLEMENT(F))
+ proof
+  assume F <> {};
+then A1:  COMPLEMENT(F) <> {} by Th46;
+A2:   for x st x in D holds
+     (for X st X in F holds not x in X) iff
+     (for Y st Y in COMPLEMENT(F) holds x in Y)
+     proof
+      let x such that
+A3:    x in D;
+      thus (for X st X in F holds not x in X) implies
+           (for Y st Y in COMPLEMENT(F) holds x in Y)
+      proof assume
+A4:     for X st X in F holds not x in X;
+        let Y; assume
+A5:      Y in COMPLEMENT(F);
+         then reconsider Y as Subset of D;
+           Y` in F by A5,Def8;
+         then not x in Y` by A4;
+         then not x in D \ Y by SUBSET_1:def 5;
+        hence thesis by A3,XBOOLE_0:def 4;
+       end;
+       assume
+A6:     for Y st Y in COMPLEMENT(F) holds x in Y;
+        let X; assume
+A7:      X in F;
+         then reconsider X as Subset of D;
+           X`` = X;
+         then X` in COMPLEMENT(F) by A7,Def8;
+         then x in X` by A6;
+         then x in D \ X by SUBSET_1:def 5;
+        hence thesis by XBOOLE_0:def 4;
+     end;
+A8:  [#] D \ union F c= meet COMPLEMENT(F)
+     proof
+      let x;
+       assume x in [#] D \ union F;
+       then x in [#] D & not x in union F by XBOOLE_0:def 4;
+       then x in D & for X st X in F holds not x in X by TARSKI:def 4;
+       then for Y st Y in COMPLEMENT(F) holds x in Y by A2;
+      hence x in meet COMPLEMENT(F) by A1,Def1;
+     end;
+       meet COMPLEMENT(F) c= [#] D \ union F
+     proof
+      let x; assume
+A9:    x in meet COMPLEMENT(F);
+then A10:   x in D;
+         for X holds X in COMPLEMENT(F) implies x in X by A9,Def1;
+       then for Y st x in Y holds not Y in F by A2;
+       then A11:not x in union F by TARSKI:def 4;
+         x in [#] D by A10,SUBSET_1:def 4;
+      hence x in [#] D \ union F by A11,XBOOLE_0:def 4;
+     end;
+   hence thesis by A8,XBOOLE_0:def 10;
+end;
+
+theorem
+    F <> {} implies union COMPLEMENT(F) = [#] D \ meet F
+proof assume
+A1:  F <> {};
+A2:  union COMPLEMENT(F) c= [#] D \ meet F
+     proof
+      let x; assume
+A3:    x in union COMPLEMENT(F);
+       then consider X such that A4:x in X & X in
+ COMPLEMENT(F) by TARSKI:def 4;
+         x in D by A3;
+then A5:    x in [#] D by SUBSET_1:def 4;
+       reconsider X as Subset of D by A4;
+       reconsider XX=X` as set;
+         ex Y st Y in F & not x in Y
+       proof
+         take Y = XX;
+        thus Y in F by A4,Def8;
+           Y = D \ X by SUBSET_1:def 5;
+        hence not x in Y by A4,XBOOLE_0:def 4;
+       end;
+       then not x in meet F by Def1;
+      hence thesis by A5,XBOOLE_0:def 4;
+     end;
+       [#] D \ meet F c= union COMPLEMENT(F)
+     proof
+      let x; assume
+A6:     x in [#] D \ meet F;
+then x in [#] D & not x in meet F by XBOOLE_0:def 4;
+        then consider X such that
+A7:     X in F & not x in X by A1,Def1;
+        reconsider X as Subset of D by A7;
+A8:        X`` = X;
+        reconsider XX=X` as set;
+          ex Y st x in Y & Y in COMPLEMENT(F)
+        proof
+          take Y = XX;
+            Y = D \ X by SUBSET_1:def 5;
+         hence x in Y & Y in COMPLEMENT(F) by A6,A7,A8,Def8,XBOOLE_0:def 4;
+        end;
+       hence x in union COMPLEMENT(F) by TARSKI:def 4;
+      end;
+   hence thesis by A2,XBOOLE_0:def 10;
+end;

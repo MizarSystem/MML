@@ -1,0 +1,671 @@
+:: Auxiliary and Approximating Relations
+::  by Adam Grabowski
+::
+:: Received October 21, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_2, ORDERS_1, RELAT_1, WAYBEL_3, LATTICES, LATTICE3, WAYBEL_0,
+      BOOLE, YELLOW_1, SETFAM_1, BHSP_3, YELLOW_0, QUANTAL1, PRE_TOPC, FUNCT_1,
+      FILTER_2, SEQM_3, PARTFUN1, CAT_1, GROUP_1, FUNCOP_1, FUNCT_2, CARD_3,
+      RLVECT_2, WELLORD1, YELLOW_2, FILTER_0, WELLORD2, ORDINAL2, WAYBEL_2,
+      SUBSET_1, ORDERS_2, WAYBEL_4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, STRUCT_0, ORDERS_1,
+      PRE_TOPC, PARTFUN1, LATTICE3, RELAT_1, RELAT_2, RELSET_1, FUNCT_1,
+      FUNCT_2, WELLORD1, YELLOW_0, PRE_CIRC, CARD_3, PRALG_1, YELLOW_1, ALG_1,
+      YELLOW_2, YELLOW_4, WAYBEL_0, WAYBEL_1, WAYBEL_2, WAYBEL_3;
+ constructors ORDERS_3, PRE_CIRC, TOLER_1, WAYBEL_1, WAYBEL_2, WAYBEL_3,
+      YELLOW_4, ALG_1;
+ clusters LATTICE3, RELSET_1, STRUCT_0, WAYBEL_0, WAYBEL_2, WAYBEL_3, YELLOW_1,
+      YELLOW_2, SUBSET_1, PARTFUN1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin :: Auxiliary Relations
+
+definition
+ let L be non empty reflexive RelStr;
+ canceled;
+
+ func L-waybelow -> Relation of L means
+:: WAYBEL_4:def 2
+  for x,y being Element of L holds [x,y] in it iff x << y;
+end;
+
+definition let L be RelStr;
+  func IntRel L -> Relation of L equals
+:: WAYBEL_4:def 3
+    the InternalRel of L;
+end;
+
+definition let L be RelStr, R be Relation of L;
+  attr R is auxiliary(i) means
+:: WAYBEL_4:def 4
+   for x, y being Element of L holds
+    [x,y] in R implies x <= y;
+
+  attr R is auxiliary(ii) means
+:: WAYBEL_4:def 5
+   for x, y, z, u being Element of L holds
+    ( u <= x & [x,y] in R & y <= z implies [u,z] in R );
+end;
+
+definition let L be non empty RelStr, R be Relation of L;
+  attr R is auxiliary(iii) means
+:: WAYBEL_4:def 6
+   for x, y, z being Element of L holds
+   ( [x,z] in R & [y,z] in R implies [(x "\/" y),z] in R );
+
+  attr R is auxiliary(iv) means
+:: WAYBEL_4:def 7
+   for x being Element of L holds [Bottom L,x] in R;
+end;
+
+:: Definition 1.9 p.43
+definition let L be non empty RelStr, R be Relation of L;
+  attr R is auxiliary means
+:: WAYBEL_4:def 8
+   R is auxiliary(i) auxiliary(ii) auxiliary(iii) auxiliary(iv);
+end;
+
+definition let L be non empty RelStr;
+  cluster auxiliary ->
+    auxiliary(i) auxiliary(ii) auxiliary(iii) auxiliary(iv) Relation of L;
+  cluster auxiliary(i) auxiliary(ii) auxiliary(iii) auxiliary(iv) ->
+    auxiliary Relation of L;
+end;
+
+definition let L be lower-bounded with_suprema transitive antisymmetric RelStr;
+ cluster auxiliary Relation of L;
+end;
+
+theorem :: WAYBEL_4:1
+ for L being lower-bounded sup-Semilattice
+  for AR being auxiliary(ii) auxiliary(iii) Relation of L
+   for x, y, z, u being Element of L holds
+   [x, z] in AR & [y, u] in AR implies [x "\/" y, z "\/" u] in AR;
+
+definition let L be lower-bounded sup-Semilattice;
+  cluster auxiliary(i) auxiliary(ii) -> transitive Relation of L;
+end;
+
+definition let L be RelStr;
+  cluster IntRel L -> auxiliary(i);
+end;
+
+definition let L be transitive RelStr;
+  cluster IntRel L -> auxiliary(ii);
+ end;
+
+definition let L be with_suprema antisymmetric RelStr;
+  cluster IntRel L -> auxiliary(iii);
+ end;
+
+definition let L be lower-bounded antisymmetric non empty RelStr;
+  cluster IntRel L -> auxiliary(iv);
+end;
+
+ reserve a for set;
+
+definition let L be lower-bounded sup-Semilattice;
+  func Aux L means
+:: WAYBEL_4:def 9
+   a in it iff a is auxiliary Relation of L;
+end;
+
+definition let L be lower-bounded sup-Semilattice;
+  cluster Aux L -> non empty;
+end;
+
+theorem :: WAYBEL_4:2
+ for L being lower-bounded sup-Semilattice
+  for AR being auxiliary(i) Relation of L holds
+   AR c= IntRel L;
+
+theorem :: WAYBEL_4:3
+   for L being lower-bounded sup-Semilattice holds
+  Top InclPoset Aux L = IntRel L;
+
+definition let L be lower-bounded sup-Semilattice;
+ cluster InclPoset Aux L -> upper-bounded;
+end;
+
+definition let L be non empty RelStr;
+ func AuxBottom L -> Relation of L means
+:: WAYBEL_4:def 10
+  for x,y be Element of L holds [x,y] in it iff x = Bottom L;
+end;
+
+definition let L be lower-bounded sup-Semilattice;
+ cluster AuxBottom L -> auxiliary;
+end;
+
+theorem :: WAYBEL_4:4
+ for L being lower-bounded sup-Semilattice
+  for AR being auxiliary(iv) Relation of L holds AuxBottom L c= AR;
+
+theorem :: WAYBEL_4:5
+   for L being lower-bounded sup-Semilattice
+  for AR being auxiliary(iv) Relation of L holds
+   Bottom InclPoset Aux L = AuxBottom L;
+
+definition let L be lower-bounded sup-Semilattice;
+ cluster InclPoset Aux L -> lower-bounded;
+end;
+
+theorem :: WAYBEL_4:6
+ for L being lower-bounded sup-Semilattice
+  for a,b being auxiliary(i) Relation of L holds
+    a /\ b is auxiliary(i) Relation of L;
+
+theorem :: WAYBEL_4:7
+ for L being lower-bounded sup-Semilattice
+  for a,b being auxiliary(ii) Relation of L holds
+    a /\ b is auxiliary(ii) Relation of L;
+
+theorem :: WAYBEL_4:8
+ for L being lower-bounded sup-Semilattice
+  for a,b being auxiliary(iii) Relation of L holds
+    a /\ b is auxiliary(iii) Relation of L;
+
+theorem :: WAYBEL_4:9
+ for L being lower-bounded sup-Semilattice
+  for a,b being auxiliary(iv) Relation of L holds
+    a /\ b is auxiliary(iv) Relation of L;
+
+theorem :: WAYBEL_4:10
+ for L being lower-bounded sup-Semilattice
+  for a,b being auxiliary Relation of L holds
+    a /\ b is auxiliary Relation of L;
+
+theorem :: WAYBEL_4:11
+ for L being lower-bounded sup-Semilattice
+  for X being non empty Subset of InclPoset Aux L holds
+   meet X is auxiliary Relation of L;
+
+definition let L be lower-bounded sup-Semilattice;
+ cluster InclPoset Aux L -> with_infima;
+end;
+
+definition let L be lower-bounded sup-Semilattice;
+ cluster InclPoset Aux L -> complete;
+end;
+
+definition let L be non empty RelStr, x be Element of L;
+  let AR be Relation of the carrier of L;
+ func AR-below x -> Subset of L equals
+:: WAYBEL_4:def 11
+   {y where y is Element of L: [y,x] in AR};
+ func AR-above x -> Subset of L equals
+:: WAYBEL_4:def 12
+   {y where y is Element of L: [x,y] in AR};
+end;
+
+theorem :: WAYBEL_4:12
+ for L being lower-bounded sup-Semilattice, x being Element of L
+  for AR being auxiliary(i) Relation of L holds
+   AR-below x c= downarrow x;
+
+definition let L be lower-bounded sup-Semilattice, x be Element of L;
+  let AR be auxiliary(iv) Relation of L;
+ cluster AR-below x -> non empty;
+end;
+
+definition let L be lower-bounded sup-Semilattice, x be Element of L;
+  let AR be auxiliary(ii) Relation of L;
+ cluster AR-below x -> lower;
+end;
+
+definition let L be lower-bounded sup-Semilattice, x be Element of L;
+  let AR be auxiliary(iii) Relation of L;
+ cluster AR-below x -> directed;
+end;
+
+definition let L be lower-bounded sup-Semilattice;
+ let AR be auxiliary(ii) auxiliary(iii) auxiliary(iv) Relation of L;
+ func AR-below -> map of L, InclPoset Ids L means
+:: WAYBEL_4:def 13
+  for x be Element of L holds
+   it.x = AR-below x;
+end;
+
+theorem :: WAYBEL_4:13
+ for L being non empty RelStr, AR being Relation of L
+  for a being set, y being Element of L holds
+   a in AR-below y iff [a,y] in AR;
+
+theorem :: WAYBEL_4:14
+   for L being sup-Semilattice, AR being Relation of L
+  for y being Element of L holds
+  a in AR-above y iff [y,a] in AR;
+
+theorem :: WAYBEL_4:15
+   for L being lower-bounded sup-Semilattice, AR being auxiliary(i) Relation of
+L
+  for x being Element of L holds
+   AR = the InternalRel of L implies AR-below x = downarrow x;
+
+definition let L be non empty Poset;
+  func MonSet L -> strict RelStr means
+:: WAYBEL_4:def 14
+   ( a in the carrier of it iff
+    ex s be map of L, InclPoset Ids L st a = s & s is monotone &
+     for x be Element of L holds s.x c= downarrow x ) &
+    for c, d be set holds [c,d] in the InternalRel of it iff
+    ex f,g be map of L, InclPoset Ids L st c = f & d = g &
+     c in the carrier of it & d in the carrier of it & f <= g;
+end;
+
+theorem :: WAYBEL_4:16
+   for L being lower-bounded sup-Semilattice holds
+  MonSet L is full SubRelStr of (InclPoset Ids L)|^(the carrier of L);
+
+theorem :: WAYBEL_4:17
+ for L being lower-bounded sup-Semilattice,
+     AR being auxiliary(ii) Relation of L
+  for x, y being Element of L holds
+   x <= y implies AR-below x c= AR-below y;
+
+definition let L be lower-bounded sup-Semilattice;
+  let AR be auxiliary(ii) auxiliary(iii) auxiliary(iv) Relation of L;
+  cluster AR-below -> monotone;
+end;
+
+theorem :: WAYBEL_4:18
+ for L being lower-bounded sup-Semilattice, AR being auxiliary Relation of L
+  holds
+   AR-below in the carrier of MonSet L;
+
+definition let L be lower-bounded sup-Semilattice;
+ cluster MonSet L -> non empty;
+end;
+
+theorem :: WAYBEL_4:19
+ for L being lower-bounded sup-Semilattice holds
+  IdsMap L in the carrier of MonSet L;
+
+theorem :: WAYBEL_4:20
+   for L being lower-bounded sup-Semilattice, AR being auxiliary Relation of L
+  holds
+   AR-below <= IdsMap L;
+
+theorem :: WAYBEL_4:21
+ for L being lower-bounded non empty Poset
+  for I being Ideal of L holds Bottom L in I;
+
+theorem :: WAYBEL_4:22
+   for L being upper-bounded non empty Poset
+  for F being Filter of L holds Top L in F;
+
+theorem :: WAYBEL_4:23
+ for L being lower-bounded non empty Poset holds
+  downarrow Bottom L = {Bottom L};
+
+theorem :: WAYBEL_4:24
+   for L being upper-bounded non empty Poset holds uparrow Top L = {Top L};
+
+reserve L for lower-bounded sup-Semilattice;
+reserve x for Element of L;
+
+theorem :: WAYBEL_4:25
+ (the carrier of L) --> {Bottom L} is map of L, InclPoset Ids L;
+
+theorem :: WAYBEL_4:26
+ (the carrier of L) --> {Bottom L} in the carrier of MonSet L;
+
+theorem :: WAYBEL_4:27
+   for AR being auxiliary Relation of L holds
+  [(the carrier of L) --> {Bottom L} , AR-below] in the InternalRel of MonSet L
+;
+
+definition let L;
+  cluster MonSet L -> upper-bounded;
+end;
+
+definition let L;
+ func Rel2Map L -> map of InclPoset Aux L, MonSet L means
+:: WAYBEL_4:def 15
+  for AR being auxiliary Relation of L holds it.AR = AR-below;
+end;
+
+theorem :: WAYBEL_4:28
+   for R1, R2 being auxiliary Relation of L st R1 c= R2 holds
+  R1-below <= R2-below;
+
+theorem :: WAYBEL_4:29
+  for R1, R2 being Relation of L st R1 c= R2 holds
+   R1-below x c= R2-below x;
+
+definition let L;
+  cluster Rel2Map L -> monotone;
+end;
+
+definition let L;
+  func Map2Rel L -> map of MonSet L, InclPoset Aux L means
+:: WAYBEL_4:def 16
+   for s be set st s in the carrier of MonSet L
+    ex AR be auxiliary Relation of L st AR = it.s &
+      for x,y be set holds
+       [x,y] in AR iff ex x',y' be Element of L,
+        s' be map of L, InclPoset Ids L st
+     x' = x & y' = y & s' = s & x' in s'.y';
+end;
+
+definition let L;
+  cluster Map2Rel L -> monotone;
+end;
+
+theorem :: WAYBEL_4:30
+  (Map2Rel L) * (Rel2Map L) = id dom (Rel2Map L);
+
+theorem :: WAYBEL_4:31
+  (Rel2Map L) * (Map2Rel L) = id (the carrier of MonSet L);
+
+definition let L;
+  cluster Rel2Map L -> one-to-one;
+end;
+
+:: Proposition 1.10 (i) p.43
+theorem :: WAYBEL_4:32
+  (Rel2Map L)" = Map2Rel L;
+
+:: Proposition 1.10 (ii) p.43
+theorem :: WAYBEL_4:33
+    Rel2Map L is isomorphic;
+
+theorem :: WAYBEL_4:34
+ for L being complete LATTICE, x being Element of L holds
+  meet { I where I is Ideal of L : x <= sup I } = waybelow x;
+
+scheme LambdaC'{ A() -> non empty RelStr, C[set], F(set) -> set,
+  G(set) -> set } :
+ ex f being Function st dom f = the carrier of A() &
+  for x be Element of A() holds
+   (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x));
+
+definition let L be Semilattice, I be Ideal of L;
+  func DownMap I -> map of L, InclPoset Ids L means
+:: WAYBEL_4:def 17
+  for x be Element of L holds
+   ( x <= sup I implies it.x = ( downarrow x ) /\ I ) &
+   ( not x <= sup I implies it.x = downarrow x );
+end;
+
+theorem :: WAYBEL_4:35
+ for L being Semilattice, I being Ideal of L holds
+  DownMap I in the carrier of MonSet L;
+
+theorem :: WAYBEL_4:36
+ for L being with_infima antisymmetric reflexive RelStr, x being Element of L
+ for D being non empty lower Subset of L holds
+  {x} "/\" D = (downarrow x) /\ D;
+
+begin  :: Approximating Relations
+
+:: Definition 1.11 p.44
+definition let L be non empty RelStr, AR be Relation of L;
+  attr AR is approximating means
+:: WAYBEL_4:def 18
+   for x be Element of L holds x = sup (AR-below x);
+end;
+
+definition let L be non empty Poset; let mp be map of L, InclPoset Ids L;
+  attr mp is approximating means
+:: WAYBEL_4:def 19
+  for x be Element of L
+   ex ii be Subset of L st ii = mp.x & x = sup ii;
+end;
+
+:: Lemma 1.12 (i) p.44
+theorem :: WAYBEL_4:37
+  for L being lower-bounded meet-continuous Semilattice, I being Ideal of L
+    holds DownMap I is approximating;
+
+:: Lemma 1.12 (ii) p.44
+theorem :: WAYBEL_4:38
+ for L being lower-bounded continuous LATTICE holds L is meet-continuous;
+
+definition
+  cluster continuous -> meet-continuous (lower-bounded LATTICE);
+end;
+
+:: Lemma 1.12 (iii) p.44
+theorem :: WAYBEL_4:39
+   for L being lower-bounded continuous LATTICE,
+     I being Ideal of L holds DownMap I is approximating;
+
+definition let L be non empty reflexive antisymmetric RelStr;
+  cluster L-waybelow -> auxiliary(i);
+end;
+
+definition let L be non empty reflexive transitive RelStr;
+  cluster L-waybelow -> auxiliary(ii);
+end;
+
+definition let L be with_suprema Poset;
+  cluster L-waybelow -> auxiliary(iii);
+end;
+
+definition let L be /\-complete (non empty Poset);
+  cluster L-waybelow -> auxiliary(iii);
+end;
+
+definition let L be lower-bounded antisymmetric reflexive non empty RelStr;
+  cluster L-waybelow -> auxiliary(iv);
+end;
+
+theorem :: WAYBEL_4:40
+ for L being complete LATTICE, x being Element of L holds
+  (L-waybelow)-below x = waybelow x;
+
+theorem :: WAYBEL_4:41
+ for L being LATTICE holds IntRel L is approximating;
+
+definition let L be lower-bounded continuous LATTICE;
+  cluster L-waybelow -> approximating;
+end;
+
+definition let L be complete LATTICE;
+  cluster approximating auxiliary Relation of L;
+end;
+
+definition let L be complete LATTICE;
+  func App L means
+:: WAYBEL_4:def 20
+   a in it iff a is approximating auxiliary Relation of L;
+end;
+
+definition let L be complete LATTICE;
+  cluster App L -> non empty;
+end;
+
+theorem :: WAYBEL_4:42
+ for L being complete LATTICE
+  for mp being map of L, InclPoset Ids L st
+   mp is approximating & mp in the carrier of MonSet L
+    ex AR being approximating auxiliary Relation of L st AR = (Map2Rel L).mp;
+
+theorem :: WAYBEL_4:43
+ for L being complete LATTICE, x being Element of L holds
+  meet { (DownMap I).x where I is Ideal of L : not contradiction} = waybelow x;
+
+:: Proposition 1.13 p.45
+theorem :: WAYBEL_4:44
+for L being lower-bounded meet-continuous LATTICE, x being Element of L holds
+  meet {AR-below x where AR is auxiliary Relation of L : AR in App L}
+    = waybelow x;
+
+reserve L for complete LATTICE;
+
+:: Proposition 1.14 p.45   ( 1 <=> 2 )
+theorem :: WAYBEL_4:45
+   L is continuous iff
+    (for R being approximating auxiliary Relation of L holds
+      L-waybelow c= R & L-waybelow is approximating);
+
+:: Proposition 1.14 p.45   ( 1 <=> 3 )
+theorem :: WAYBEL_4:46
+    L is continuous iff
+   (L is meet-continuous &
+    ex R being approximating auxiliary Relation of L st
+     for R' being approximating auxiliary Relation of L holds R c= R');
+
+:: Definition 1.15 (SI) p.46
+definition let L be RelStr, AR be Relation of L;
+  attr AR is satisfying_SI means
+:: WAYBEL_4:def 21
+   for x, z be Element of L holds
+   ( [x,z] in AR & x <> z implies
+     ex y be Element of L st ( [x,y] in AR & [y,z] in AR & x <> y ) );
+  synonym AR satisfies_SI;
+end;
+
+:: Definition 1.15 (INT) p.46
+definition let L be RelStr, AR be Relation of L;
+  attr AR is satisfying_INT means
+:: WAYBEL_4:def 22
+   for x, z be Element of L holds
+   ( [x,z] in AR implies
+    ex y be Element of L st ( [x,y] in AR & [y,z] in AR ) );
+  synonym AR satisfies_INT;
+end;
+
+canceled;
+
+theorem :: WAYBEL_4:48
+for L being RelStr, AR being Relation of L
+ holds AR satisfies_SI implies AR satisfies_INT;
+
+definition let L be non empty RelStr;
+  cluster satisfying_SI -> satisfying_INT Relation of L;
+end;
+
+reserve AR for Relation of L;
+reserve x, y, z for Element of L;
+
+theorem :: WAYBEL_4:49
+ for AR being approximating Relation of L st
+  not x <= y holds ex u being Element of L st [u,x] in AR & not u <= y;
+
+:: Lemma 1.16 p.46
+theorem :: WAYBEL_4:50
+ for R being approximating auxiliary(i) auxiliary(iii) Relation of L holds
+  ( [x,z] in R & x <> z ) implies
+   ex y st x <= y & [y,z] in R & x <> y;
+
+:: Lemma 1.17 p.46
+theorem :: WAYBEL_4:51
+ for R being approximating auxiliary Relation of L holds
+  ( x << z & x <> z ) implies
+   ex y being Element of L st [x,y] in R & [y,z] in R & x <> y;
+
+:: Theorem 1.18 p.47
+theorem :: WAYBEL_4:52
+ for L being lower-bounded continuous LATTICE holds
+  L-waybelow satisfies_SI;
+
+definition let L be lower-bounded continuous LATTICE;
+  cluster L-waybelow -> satisfying_SI;
+end;
+
+theorem :: WAYBEL_4:53
+ for L being lower-bounded continuous LATTICE,
+     x,y being Element of L st x << y
+   ex x' being Element of L st x << x' & x' << y;
+
+:: Corollary 1.19 p.47
+theorem :: WAYBEL_4:54
+   for L being lower-bounded continuous LATTICE holds
+   for x,y being Element of L holds
+   ( x << y iff
+    for D being non empty directed Subset of L st y <= sup D
+        ex d being Element of L st d in D & x << d );
+
+begin :: Exercises
+
+definition
+ let L be RelStr, X be Subset of L,
+     R be Relation of the carrier of L;
+ pred X is_directed_wrt R means
+:: WAYBEL_4:def 23
+  for x,y being Element of L st x in X & y in X
+   ex z being Element of L st z in X & [x,z] in R & [y,z] in R;
+end;
+
+theorem :: WAYBEL_4:55
+    for L being RelStr, X being Subset of L st
+   X is_directed_wrt (the InternalRel of L) holds X is directed;
+
+definition
+ let X, x be set;
+ let R be Relation;
+  pred x is_maximal_wrt X,R means
+:: WAYBEL_4:def 24
+   x in X & not ex y being set st y in X & y <> x & [x,y] in R;
+end;
+
+definition
+ let L be RelStr, X be set, x be Element of L;
+  pred x is_maximal_in X means
+:: WAYBEL_4:def 25
+   x is_maximal_wrt X, the InternalRel of L;
+end;
+
+theorem :: WAYBEL_4:56
+   for L being RelStr, X being set, x being Element of L holds
+  x is_maximal_in X iff
+    x in X & not ex y being Element of L st y in X & x < y;
+
+definition
+ let X, x be set;
+ let R be Relation;
+  pred x is_minimal_wrt X,R means
+:: WAYBEL_4:def 26
+   x in X & not ex y being set st y in X & y <> x & [y,x] in R;
+end;
+
+definition
+ let L be RelStr, X be set, x be Element of L;
+  pred x is_minimal_in X means
+:: WAYBEL_4:def 27
+   x is_minimal_wrt X, the InternalRel of L;
+end;
+
+theorem :: WAYBEL_4:57
+   for L being RelStr, X being set, x being Element of L holds
+  x is_minimal_in X iff
+    x in X & not ex y being Element of L st y in X & x > y;
+
+:: Exercise 1.23 (i)    ( 1 => 2 )
+theorem :: WAYBEL_4:58
+   AR satisfies_SI implies
+  ( for x holds ( ex y st y is_maximal_wrt (AR-below x), AR )
+    implies [x,x] in AR );
+
+:: Exercise 1.23 (i)    ( 2 => 1 )
+theorem :: WAYBEL_4:59
+   ( for x holds ( ex y st y is_maximal_wrt (AR-below x), AR )
+   implies [x,x] in AR ) implies AR satisfies_SI;
+
+:: Exercise 1.23 (ii)    ( 3 => 4 )
+theorem :: WAYBEL_4:60
+   for AR being auxiliary(ii) auxiliary(iii) Relation of L holds
+  AR satisfies_INT implies
+   ( for x holds AR-below x is_directed_wrt AR);
+
+:: Exercise 1.23 (ii)    ( 4 => 3 )
+theorem :: WAYBEL_4:61
+   ( for x holds AR-below x is_directed_wrt AR) implies AR satisfies_INT;
+
+:: Exercise 1.23 (iii) p.51
+theorem :: WAYBEL_4:62
+ for R being approximating auxiliary(i) auxiliary(ii) auxiliary(iii)
+   Relation of L st
+  R satisfies_INT holds R satisfies_SI;
+
+definition let L;
+  cluster satisfying_INT ->
+    satisfying_SI (approximating auxiliary Relation of L);
+end;
+

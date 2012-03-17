@@ -1,0 +1,1581 @@
+:: The Well Ordering Relations
+::  by Grzegorz Bancerek
+::
+:: Received April 4, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, RELAT_2, BOOLE, FUNCT_1, ZFMISC_1, WELLORD1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1;
+ constructors TARSKI, RELAT_2, FUNCT_1, SUBSET_1, XBOOLE_0;
+ clusters FUNCT_1, XBOOLE_0, ZFMISC_1;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, XBOOLE_0, FUNCT_1, RELAT_1;
+ theorems TARSKI, XBOOLE_0, FUNCT_1, RELAT_1, RELAT_2, ZFMISC_1, XBOOLE_1;
+ schemes XBOOLE_0, FUNCT_1;
+
+begin
+
+ reserve a,b,c,d,x,y,z,X,Y,Z for set;
+ reserve R,S,T for Relation;
+
+ Lm1: R is reflexive iff for x st x in field R holds [x,x] in R
+  proof
+      (R is reflexive iff R is_reflexive_in field R) &
+     (R is_reflexive_in field R iff for x st x in field R holds [x,x] in R)
+      by RELAT_2:def 1,def 9;
+   hence thesis;
+  end;
+
+ Lm2: R is transitive iff for x,y,z st [x,y] in R & [y,z] in R holds [x,z] in R
+  proof
+   thus R is transitive implies
+      for x,y,z st [x,y] in R & [y,z] in R holds [x,z] in R
+     proof assume R is transitive;
+then A1:       R is_transitive_in field R by RELAT_2:def 16;
+      let x,y,z; assume
+A2:     [x,y] in R & [y,z] in R;
+       then x in field R & y in field R & z in field R by RELAT_1:30;
+      hence thesis by A1,A2,RELAT_2:def 8;
+     end;
+   assume for x,y,z st [x,y] in R & [y,z] in R holds [x,z] in R;
+    then for x,y,z st x in field R & y in field R & z in field R &
+                 [x,y] in R & [y,z] in R holds [x,z] in R;
+    then R is_transitive_in field R by RELAT_2:def 8;
+   hence thesis by RELAT_2:def 16;
+  end;
+
+ Lm3: R is antisymmetric iff for x,y st [x,y] in R & [y,x] in R holds x = y
+  proof
+   thus R is antisymmetric implies
+      for x,y st [x,y] in R & [y,x] in R holds x = y
+     proof assume
+         R is antisymmetric;
+then A1:       R is_antisymmetric_in field R by RELAT_2:def 12;
+      let x,y; assume
+A2:     [x,y] in R & [y,x] in R;
+       then x in field R & y in field R by RELAT_1:30;
+      hence x = y by A1,A2,RELAT_2:def 4;
+     end;
+   assume for x,y st [x,y] in R & [y,x] in R holds x = y;
+    then for x,y st x in field R & y in field R & [x,y] in R & [y,x] in
+ R holds x = y;
+   then R is_antisymmetric_in field R by RELAT_2:def 4;
+   hence thesis by RELAT_2:def 12;
+  end;
+
+ Lm4: R is connected iff for x,y st x in field R & y in field R & x <> y holds
+   [x,y] in R or [y,x] in R
+  proof
+      (R is connected iff R is_connected_in field R) &
+     (R is_connected_in field R iff for x,y st x in field R &
+       y in field R & x <> y holds [x,y] in R or [y,x] in R)
+        by RELAT_2:def 6,def 14;
+   hence thesis;
+  end;
+
+ definition let R,a;
+     defpred P[set] means $1 <> a & [$1,a] in R;
+   func R-Seg(a) -> set means
+:Def1:  x in it iff x <> a & [x,a] in R;
+   existence
+    proof
+     consider X such that
+A1:    x in X iff x in field R & P[x] from Separation;
+     take X; let x;
+     thus x in X implies x <> a & [x,a] in R by A1;
+     assume
+A2:    x <> a & [x,a] in R;
+      then x in field R by RELAT_1:30;
+     hence x in X by A1,A2;
+    end;
+   uniqueness
+    proof let X1,X2 be set such that
+A3:   for b holds b in X1 iff P[b] and
+A4:   for b holds b in X2 iff P[b];
+     thus thesis from Extensionality(A3,A4);
+    end;
+ end;
+
+canceled;
+
+theorem
+ Th2: x in field R or R-Seg(x) = {}
+  proof assume
+A1:  not x in field R;
+    consider y being Element of R-Seg(x);
+   assume R-Seg(x) <> {};
+      then [y,x] in R by Def1;
+     hence contradiction by A1,RELAT_1:30;
+  end;
+
+ definition let R;
+  attr R is well_founded means
+:Def2:   for Y st Y c= field R & Y <> {} ex a st a in Y & R-Seg a misses Y;
+  let X;
+  pred R is_well_founded_in X means
+:Def3:   for Y st Y c= X & Y <> {} ex a st a in Y & R-Seg a misses Y;
+ end;
+
+canceled 2;
+
+theorem
+ Th5: R is well_founded iff R is_well_founded_in field R
+  proof
+   thus R is well_founded implies R is_well_founded_in field R
+     proof assume
+         for Y st Y c= field R & Y <> {} ex a st a in Y & R-Seg(a) misses Y;
+      hence
+         for Y st Y c= field R & Y <> {} ex a st a in Y & R-Seg(a) misses Y;
+     end;
+   assume
+      for Y st Y c= field R & Y <> {} ex a st a in Y & R-Seg(a) misses Y;
+   hence
+      for Y st Y c= field R & Y <> {} ex a st a in Y & R-Seg(a) misses Y;
+  end;
+
+ definition let R;
+  attr R is well-ordering means
+:Def4:
+   R is reflexive & R is transitive & R is antisymmetric &
+    R is connected & R is well_founded;
+  let X;
+  pred R well_orders X means
+:Def5:
+   R is_reflexive_in X & R is_transitive_in X & R is_antisymmetric_in X &
+    R is_connected_in X & R is_well_founded_in X;
+ end;
+
+canceled 2;
+
+theorem
+    R well_orders field R iff R is well-ordering
+  proof
+   thus R well_orders field R implies R is well-ordering
+     proof assume
+         R is_reflexive_in field R & R is_transitive_in field R &
+        R is_antisymmetric_in field R & R is_connected_in field R &
+         R is_well_founded_in field R;
+      hence
+         R is reflexive & R is transitive & R is antisymmetric &
+        R is connected & R is well_founded
+         by Th5,RELAT_2:def 9,def 12,def 14,def 16;
+     end;
+   assume R is reflexive & R is transitive & R is antisymmetric &
+     R is connected & R is well_founded;
+   hence R is_reflexive_in field R & R is_transitive_in field R &
+     R is_antisymmetric_in field R & R is_connected_in field R &
+      R is_well_founded_in field R
+       by Th5,RELAT_2:def 9,def 12,def 14,def 16;
+  end;
+
+theorem
+    R well_orders X implies
+   for Y st Y c= X & Y <> {}
+    ex a st a in Y & for b st b in Y holds [a,b] in R
+  proof assume
+      R well_orders X;
+then A1:  R is_reflexive_in X & R is_connected_in X &
+     R is_well_founded_in X by Def5;
+   let Y; assume
+A2:  Y c= X & Y <> {};
+   then consider a such that
+A3:  a in Y & R-Seg(a) misses Y by A1,Def3;
+   take a;
+   thus a in Y by A3;
+   let b; assume
+A4:  b in Y;
+    then not b in R-Seg(a) by A3,XBOOLE_0:3;
+  then a = b or not [b,a] in R by Def1;
+   then a <> b implies [a,b] in R by A1,A2,A3,A4,RELAT_2:def 6;
+   hence [a,b] in R by A1,A2,A3,RELAT_2:def 1;
+  end;
+
+theorem
+ Th10: R is well-ordering implies
+   for Y st Y c= field R & Y <> {}
+    ex a st a in Y & for b st b in Y holds [a,b] in R
+  proof assume
+      R is well-ordering;
+then A1:  R is reflexive & R is connected & R is well_founded by Def4;
+   let Y; assume
+A2:  Y c= field R & Y <> {};
+   then consider a such that
+A3:  a in Y & R-Seg(a) misses Y by A1,Def2;
+   take a;
+   thus a in Y by A3;
+   let b; assume
+A4:  b in Y;
+    then not b in R-Seg(a) by A3,XBOOLE_0:3;
+then a = b or not [b,a] in R by Def1;
+   then a <> b implies [a,b] in R by A1,A2,A3,A4,Lm4;
+   hence [a,b] in R by A1,A2,A3,Lm1;
+  end;
+
+theorem
+    for R st R is well-ordering & field R <> {}
+       ex a st a in field R & for b st b in field R holds [a,b] in R by Th10;
+
+theorem
+    for R st R is well-ordering & field R <> {} for a st a in field R
+    holds (for b st b in field R holds [b,a] in R) or
+          (ex b st b in field R & [a,b] in R &
+            for c st c in field R & [a,c] in R holds c = a or [b,c] in R )
+   proof let R; assume
+A1:   R is well-ordering & field R <> {};
+then A2:  R is connected & R is antisymmetric & R is reflexive &
+      for Y st Y c= field R & Y <> {}
+       ex a st a in Y & for b st b in Y holds [a,b] in R by Def4,Th10;
+    let a such that
+A3:   a in field R;
+    given b such that
+A4:   b in field R & not [b,a] in R;
+    defpred P[set] means not [$1,a] in R;
+    consider Z such that
+A5:   c in Z iff c in field R & P[c] from Separation;
+       for b holds b in Z implies b in field R by A5;
+then A6:   Z c= field R by TARSKI:def 3;
+       Z <> {} by A4,A5;
+    then consider d such that
+A7:   d in Z & for c st c in Z holds [d,c] in R by A1,A6,Th10;
+    take d;
+    thus
+A8:  d in field R by A5,A7;
+A9:  not [d,a] in R by A5,A7;
+     then a <> d by A7;
+    hence [a,d] in R by A2,A3,A8,A9,Lm4;
+    let c; assume
+A10:   c in field R & [a,c] in R;
+    assume c <> a;
+      then not [c,a] in R by A2,A10,Lm3;
+     then c in Z by A5,A10;
+    hence [d,c] in R by A7;
+   end;
+
+ reserve F,G for Function;
+
+theorem
+ Th13: R-Seg(a) c= field R
+  proof let b; assume b in R-Seg(a);
+    then [b,a] in R by Def1;
+   hence thesis by RELAT_1:30;
+  end;
+
+ definition let R,Y;
+   func R |_2 Y -> Relation equals
+:Def6:   R /\ [:Y,Y:];
+   coherence by RELAT_1:9;
+ end;
+
+canceled;
+
+theorem
+    R |_2 X c= R & R |_2 X c= [:X,X:]
+  proof
+      R |_2 X = R /\ [:X,X:] by Def6;
+   hence thesis by XBOOLE_1:17;
+  end;
+
+theorem
+ Th16: x in R |_2 X iff x in R & x in [:X,X:]
+  proof
+      x in R /\ [:X,X:] iff x in R & x in [:X,X:] by XBOOLE_0:def 3;
+   hence thesis by Def6;
+  end;
+
+theorem
+ Th17: R |_2 X = X|R|X
+  proof let x,y;
+   thus [x,y] in R |_2 X implies [x,y] in X|R|X
+     proof assume [x,y] in R |_2 X;
+then A1:     [x,y] in R & [x,y] in [:X,X:] by Th16;
+then A2:     x in X & y in X by ZFMISC_1:106;
+       then [x,y] in X|R by A1,RELAT_1:def 12;
+      hence [x,y] in X|R|X by A2,RELAT_1:def 11;
+     end;
+   assume [x,y] in X|R|X;
+then A3:  [x,y] in X|R & x in X by RELAT_1:def 11;
+then A4:  [x,y] in R & y in X by RELAT_1:def 12;
+    then [x,y] in [:X,X:] by A3,ZFMISC_1:106;
+   hence thesis by A4,Th16;
+  end;
+
+theorem
+ Th18: R |_2 X = X|(R|X)
+  proof
+   thus R |_2 X = X|R|X by Th17 .= X|(R|X) by RELAT_1:140;
+  end;
+
+Lm5: dom(X|R) c= dom R
+ proof let x; assume x in dom(X|R);
+  then consider y such that
+A1: [x,y] in X|R by RELAT_1:def 4;
+     [x,y] in R by A1,RELAT_1:def 12;
+  hence x in dom R by RELAT_1:def 4;
+ end;
+
+theorem
+ Th19: x in field(R |_2 X) implies x in field R & x in X
+  proof assume x in field(R |_2 X);
+    then x in dom(R |_2 X) \/ rng(R |_2 X) by RELAT_1:def 6;
+then A1:  x in dom(R |_2 X) or x in rng(R |_2 X) by XBOOLE_0:def 2;
+A2:  R |_2 X = X|R|X & R |_2 X = X|(R|X) by Th17,Th18;
+A3:  dom(X|R|X) = dom(X|R) /\ X & dom(X|R) c= dom R &
+     rng(X|(R|X)) = rng(R|X) /\ X & rng(R|X) c= rng R
+      by Lm5,RELAT_1:90,99,119;
+  then x in dom(X|R) & x in X or x in rng(R|X) & x in X by A1,A2,XBOOLE_0:def 3
+;
+  then x in dom R \/ rng R by A3,XBOOLE_0:def 2;
+   hence thesis by A1,A2,A3,RELAT_1:def 6,XBOOLE_0:def 3;
+  end;
+
+theorem
+ Th20: field(R |_2 X) c= field R & field(R |_2 X) c= X
+  proof
+      (for x st x in field(R |_2 X) holds x in field R) &
+     (for x st x in field(R |_2 X) holds x in X) by Th19;
+   hence thesis by TARSKI:def 3;
+  end;
+
+theorem
+ Th21: (R |_2 X)-Seg(a) c= R-Seg(a)
+  proof let x; assume x in (R |_2 X)-Seg(a);
+then A1:  [x,a] in R |_2 X & x <> a by Def1;
+    then [x,a] in R by Th16;
+   hence x in R-Seg(a) by A1,Def1;
+  end;
+
+theorem
+ Th22: R is reflexive implies R |_2 X is reflexive
+  proof assume
+A1:  R is reflexive;
+      now let a; assume
+        a in field(R |_2 X);
+      then a in field R & a in X by Th19;
+      then [a,a] in R & [a,a] in [:X,X:] by A1,Lm1,ZFMISC_1:106;
+     hence [a,a] in R |_2 X by Th16;
+    end;
+   hence thesis by Lm1;
+  end;
+
+theorem
+ Th23: R is connected implies R |_2 Y is connected
+  proof assume
+A1:  R is connected;
+      now let a,b; assume
+        a in field(R |_2 Y) & b in field(R |_2 Y) & a <> b;
+then A2:    a in field R & b in field R & a in Y & b in Y & a <> b by Th19;
+then A3:    [a,b] in R or [b,a] in R by A1,Lm4;
+        [a,b] in [:Y,Y:] & [b,a] in [:Y,Y:] by A2,ZFMISC_1:106;
+     hence [a,b] in R |_2 Y or [b,a] in R |_2 Y by A3,Th16;
+    end;
+   hence thesis by Lm4;
+  end;
+
+theorem
+ Th24: R is transitive implies R |_2 Y is transitive
+  proof assume
+A1:    R is transitive;
+      now let a,b,c; assume
+      [a,b] in R |_2 Y & [b,c] in R |_2 Y;
+then A2:    [a,b] in [:Y,Y:] & [a,b] in R & [b,c] in [:Y,Y:] & [b,c] in R by
+Th16;
+then A3:    [a,c] in R by A1,Lm2;
+        a in Y & c in Y by A2,ZFMISC_1:106;
+      then [a,c] in [:Y,Y:] by ZFMISC_1:106;
+     hence [a,c] in R |_2 Y by A3,Th16;
+    end;
+   hence thesis by Lm2;
+  end;
+
+theorem
+ Th25: R is antisymmetric implies R |_2 Y is antisymmetric
+  proof assume
+A1:    R is antisymmetric;
+      now let a,b; assume
+        [a,b] in R |_2 Y & [b,a] in R |_2 Y;
+      then [a,b] in R & [b,a] in R by Th16;
+     hence a = b by A1,Lm3;
+    end;
+   hence thesis by Lm3;
+  end;
+
+theorem
+ Th26: (R |_2 X) |_2 Y = R |_2 (X /\ Y)
+  proof
+   thus (R |_2 X) |_2 Y = (R |_2 X) /\ [:Y,Y:] by Def6
+      .= (R /\ [:X,X:]) /\ [:Y,Y:] by Def6
+      .= R /\ ([:X,X:] /\ [:Y,Y:]) by XBOOLE_1:16
+      .= R /\ [:X /\ Y,X /\ Y:] by ZFMISC_1:123
+      .= R |_2 (X /\ Y) by Def6;
+  end;
+
+theorem
+    (R |_2 X) |_2 Y = (R |_2 Y) |_2 X
+  proof
+   thus (R |_2 X) |_2 Y = R |_2 (Y /\ X) by Th26
+      .= (R |_2 Y) |_2 X by Th26;
+  end;
+
+theorem
+    (R |_2 Y) |_2 Y = R |_2 Y
+   proof let a,b;
+    thus [a,b] in (R |_2 Y) |_2 Y implies [a,b] in R |_2 Y by Th16;
+    assume
+A1:   [a,b] in R |_2 Y;
+     then [a,b] in [:Y,Y:] by Th16;
+    hence [a,b] in (R |_2 Y) |_2 Y by A1,Th16;
+   end;
+
+theorem
+ Th29: Z c= Y implies (R |_2 Y) |_2 Z = R |_2 Z
+   proof assume
+A1:   Z c= Y;
+    let a,b;
+    thus [a,b] in (R |_2 Y) |_2 Z implies [a,b] in R |_2 Z
+      proof assume [a,b] in (R |_2 Y) |_2 Z;
+then A2:      [a,b] in R |_2 Y & [a,b] in [:Z,Z:] by Th16;
+        then [a,b] in R by Th16;
+       hence [a,b] in R |_2 Z by A2,Th16;
+      end;
+    assume [a,b] in R |_2 Z;
+then A3:   [a,b] in R & [a,b] in [:Z,Z:] by Th16;
+     then a in Z & b in Z by ZFMISC_1:106;
+     then [a,b] in [:Y,Y:] by A1,ZFMISC_1:106;
+     then [a,b] in R |_2 Y by A3,Th16;
+    hence thesis by A3,Th16;
+   end;
+
+theorem
+ Th30: R |_2 field R = R
+   proof let x,y;
+    thus [x,y] in R |_2 field R implies [x,y] in R by Th16;
+    assume
+A1:   [x,y] in R;
+     then x in field R & y in field R by RELAT_1:30;
+     then [x,y] in [:field R,field R:] by ZFMISC_1:106;
+    hence thesis by A1,Th16;
+   end;
+
+theorem
+ Th31: R is well_founded implies R |_2 X is well_founded
+  proof assume
+A1:  for Y st Y c= field R & Y <> {} ex a st a in Y & R-Seg(a) misses Y;
+   let Y such that
+A2:  Y c= field(R |_2 X) & Y <> {};
+      field(R |_2 X) c= field R by Th20;
+  then Y c= field R by A2,XBOOLE_1:1;
+   then consider a such that
+A3:  a in Y & R-Seg(a) misses Y by A1,A2;
+   take a;
+   thus a in Y by A3;
+   assume not thesis;
+     then consider b being set such that
+A4:    b in (R |_2 X)-Seg(a) & b in Y by XBOOLE_0:3;
+        (R |_2 X)-Seg(a) c= R-Seg(a) by Th21;
+   hence contradiction by A3,A4,XBOOLE_0:3;
+  end;
+
+theorem
+ Th32: R is well-ordering implies R |_2 Y is well-ordering
+  proof assume
+      R is well-ordering;
+    then R is reflexive transitive connected antisymmetric well_founded by Def4
+;
+   hence R |_2 Y is reflexive transitive
+     antisymmetric connected well_founded by Th22,Th23,Th24,Th25,Th31;
+  end;
+
+theorem
+ Th33: R is well-ordering implies R-Seg(a),R-Seg(b) are_c=-comparable
+   proof assume
+     R is well-ordering;
+then A1:  R is connected transitive reflexive antisymmetric by Def4;
+A2:  now assume R-Seg(a) = {} or R-Seg(b) = {};
+       then R-Seg(a) c= R-Seg(b) or R-Seg(b) c= R-Seg(a) by XBOOLE_1:2;
+       hence thesis by XBOOLE_0:def 9;
+     end;
+       now assume
+A3:     a in field R & b in field R;
+         now assume a <> b;
+A4:       now assume
+A5:        [a,b] in R;
+             now let c; assume
+               c in R-Seg(a);
+then A6:          [c,a] in R & c <> a by Def1;
+then A7:          [c,b] in R by A1,A5,Lm2;
+                c <> b by A1,A5,A6,Lm3;
+            hence c in R-Seg(b) by A7,Def1;
+           end;
+          hence R-Seg(a) c= R-Seg(b) by TARSKI:def 3;
+         end;
+           now assume
+A8:        [b,a] in R;
+             now let c; assume
+               c in R-Seg(b);
+then A9:          [c,b] in R & c <> b by Def1;
+then A10:          [c,a] in R by A1,A8,Lm2;
+                c <> a by A1,A8,A9,Lm3;
+            hence c in R-Seg(a) by A10,Def1;
+           end;
+          hence R-Seg(b) c= R-Seg(a) by TARSKI:def 3;
+         end;
+        hence thesis by A1,A3,A4,Lm4,XBOOLE_0:def 9;
+       end;
+      hence thesis;
+     end;
+    hence thesis by A2,Th2;
+   end;
+
+canceled;
+
+theorem
+ Th35: R is well-ordering & a in field R & b in R-Seg(a) implies
+     (R |_2 (R-Seg(a)))-Seg(b) = R-Seg(b)
+   proof assume
+A1:   R is well-ordering & a in field R & b in R-Seg(a);
+then A2:  R is transitive reflexive antisymmetric by Def4;
+    set S = R |_2 (R-Seg(a));
+A3:   now let c; assume
+         c in S-Seg(b);
+then A4:    [c,b] in S & c <> b by Def1;
+       then [c,b] in R by Th16;
+      hence c in R-Seg(b) by A4,Def1;
+     end;
+       now let c; assume
+         c in R-Seg(b);
+then A5:    [c,b] in R & c <> b by Def1;
+A6:    [b,a] in R & b <> a by A1,Def1;
+then A7:    [c,a] in R by A2,A5,Lm2;
+          c <> a by A2,A5,A6,Lm3;
+    then c in R-Seg(a) by A7,Def1;
+       then [c,b] in [:R-Seg(a),R-Seg(a):] by A1,ZFMISC_1:106;
+       then [c,b] in S by A5,Th16;
+      hence c in S-Seg(b) by A5,Def1;
+     end;
+     then R-Seg(b) c= S-Seg(b) & S-Seg(b) c= R-Seg(b) by A3,TARSKI:def 3;
+    hence (R |_2 (R-Seg(a)))-Seg(b) = R-Seg(b) by XBOOLE_0:def 10;
+   end;
+
+theorem
+ Th36:  R is well-ordering & Y c= field R implies
+    (Y = field R or (ex a st a in field R & Y = R-Seg(a) ) iff
+     for a st a in Y for b st [b,a] in R holds b in Y )
+   proof assume
+A1:   R is well-ordering & Y c= field R;
+then A2:     R is transitive by Def4;
+A3:     R is antisymmetric by A1,Def4;
+       now given a such that
+A4:    a in field R & Y = R-Seg(a);
+      let b such that
+A5:    b in Y;
+      let c such that
+A6:    [c,b] in R;
+A7:    [b,a] in R & b <> a by A4,A5,Def1;
+then A8:    [c,a] in R & a in field R by A2,A6,Lm2,RELAT_1:30;
+          c <> a by A3,A6,A7,Lm3;
+      hence c in Y by A4,A8,Def1;
+     end;
+    hence Y = field R or (ex a st a in field R & Y = R-Seg(a) ) implies
+      for a st a in Y for b st [b,a] in R holds b in Y by RELAT_1:30;
+A9:     R is connected by A1,Def4;
+    assume
+A10:  for a st a in Y for b st [b,a] in R holds b in Y;
+    assume
+    Y <> field R;
+    then consider d such that
+A11:  not ( d in field R iff d in Y ) by TARSKI:2;
+A12:  field R \ Y <> {} by A1,A11,XBOOLE_0:def 4;
+       a in field R \ Y implies a in field R by XBOOLE_0:def 4;
+     then field R \ Y c= field R by TARSKI:def 3;
+    then consider a such that
+A13:  a in field R \ Y & for b st b in field R \ Y holds [a,b] in
+ R by A1,A12,Th10
+;
+    take a;
+    thus a in field R by A13,XBOOLE_0:def 4;
+    thus Y = R-Seg(a)
+      proof
+A14:     now let b; assume
+A15:       b in Y;
+         assume not b in R-Seg(a);
+then A16:       not [b,a] in R or a = b by Def1;
+A17:       b in field R & a in field R by A1,A13,A15,XBOOLE_0:def 4;
+A18:       not a in Y by A13,XBOOLE_0:def 4;
+         a <> b by A13,A15,XBOOLE_0:def 4;
+          then [a,b] in R by A9,A16,A17,Lm4;
+         hence contradiction by A10,A15,A18;
+        end;
+          now let b; assume
+         b in R-Seg(a);
+then A19:       [b,a] in R & b <> a by Def1;
+then A20:       b in field R by RELAT_1:30;
+         assume not b in Y;
+          then b in field R \ Y by A20,XBOOLE_0:def 4;
+          then [a,b] in R by A13;
+         hence contradiction by A3,A19,Lm3;
+        end;
+       hence thesis by A14,TARSKI:2;
+      end;
+   end;
+
+theorem
+ Th37: R is well-ordering & a in field R & b in field R implies
+        ( [a,b] in R iff R-Seg(a) c= R-Seg(b) )
+   proof
+    assume
+A1:   R is well-ordering & a in field R & b in field R;
+then A2:     R is transitive by Def4;
+A3:     R is reflexive by A1,Def4;
+A4:     R is antisymmetric by A1,Def4;
+A5:     R is connected by A1,Def4;
+    thus [a,b] in R implies R-Seg(a) c= R-Seg(b)
+      proof assume
+A6:      [a,b] in R;
+       let c; assume
+        c in R-Seg(a);
+then A7:      [c,a] in R & c <> a by Def1;
+then A8:      [c,b] in R by A2,A6,Lm2;
+
+          c <> b by A4,A6,A7,Lm3;
+       hence c in R-Seg(b) by A8,Def1;
+      end;
+    assume
+A9:   R-Seg(a) c= R-Seg(b);
+       now assume
+A10:     a <> b;
+      assume not [a,b] in R;
+       then [b,a] in R by A1,A5,A10,Lm4;
+       then b in R-Seg(a) by A10,Def1;
+      hence contradiction by A9,Def1;
+     end;
+    hence thesis by A1,A3,Lm1;
+   end;
+
+theorem
+ Th38: R is well-ordering & a in field R & b in field R implies
+      ( R-Seg(a) c= R-Seg(b) iff a = b or a in R-Seg(b) )
+   proof assume
+A1:   R is well-ordering & a in field R & b in field R;
+    thus R-Seg(a) c= R-Seg(b) implies a = b or a in R-Seg(b)
+      proof assume
+          R-Seg(a) c= R-Seg(b);
+        then [a,b] in R by A1,Th37;
+       hence thesis by Def1;
+      end;
+       now assume a in R-Seg(b);
+       then [a,b] in R by Def1;
+      hence R-Seg(a) c= R-Seg(b) by A1,Th37;
+     end;
+    hence thesis;
+   end;
+
+theorem
+ Th39: R is well-ordering & X c= field R implies field(R |_2 X) = X
+  proof assume
+A1:  R is well-ordering & X c= field R;
+then A2:    R is reflexive by Def4;
+   thus field(R |_2 X) c= X by Th20;
+   let x; assume
+    x in X;
+    then [x,x] in R & [x,x] in [:X,X:] by A1,A2,Lm1,ZFMISC_1:106;
+    then [x,x] in R |_2 X by Th16;
+   hence thesis by RELAT_1:30;
+  end;
+
+theorem
+ Th40: R is well-ordering implies field(R |_2 R-Seg(a)) = R-Seg(a)
+  proof
+      R-Seg(a) c= field R by Th13;
+   hence thesis by Th39;
+  end;
+
+theorem
+ Th41:
+  R is well-ordering implies
+    for Z st for a st a in field R & R-Seg(a) c= Z holds a in Z
+          holds field R c= Z
+   proof
+    assume
+A1:   R is well-ordering;
+     then A2: R is antisymmetric by Def4;
+    let Z such that
+A3:  for a st a in field R & R-Seg(a) c= Z holds a in Z;
+A4:   now let a such that
+A5:    a in field R & for b st [b,a] in R & a <> b holds b in Z;
+         now let b; assume
+           b in R-Seg(a);
+         then [b,a] in R & b <> a by Def1;
+        hence b in Z by A5;
+       end;
+       then R-Seg(a) c= Z by TARSKI:def 3;
+      hence a in Z by A3,A5;
+     end;
+    given a such that
+A6:   a in field R & not a in Z;
+A7:   field R \ Z c= field R by XBOOLE_1:36;
+       field R \ Z <> {} by A6,XBOOLE_0:def 4;
+    then consider a such that
+A8:   a in field R \ Z & for b st b in field R \ Z holds [a,b] in
+ R by A1,A7,Th10;
+     a in field R & not a in Z by A8,XBOOLE_0:def 4;
+    then consider b such that
+A9:   [b,a] in R & b <> a & not b in Z by A4;
+       b in field R by A9,RELAT_1:30;
+     then b in field R \ Z by A9,XBOOLE_0:def 4;
+     then [a,b] in R by A8;
+    hence contradiction by A2,A9,Lm3;
+   end;
+
+theorem
+ Th42: R is well-ordering & a in field R & b in field R &
+  (for c st c in R-Seg(a) holds [c,b] in R & c <> b)
+    implies [a,b] in R
+   proof assume that
+A1:   R is well-ordering & a in field R & b in field R and
+A2:   c in R-Seg(a) implies [c,b] in R & c <> b;
+A3:     R is connected by A1,Def4;
+A4:     R is reflexive by A1,Def4;
+    assume
+A5:   not [a,b] in R;
+then A6:    a <> b by A1,A4,Lm1;
+     then [b,a] in R by A1,A3,A5,Lm4;
+     then b in R-Seg(a) by A6,Def1;
+    hence contradiction by A2;
+   end;
+
+theorem
+ Th43: R is well-ordering & dom F = field R & rng F c= field R &
+      (for a,b st [a,b] in R & a <> b holds [F.a,F.b] in R & F.a <> F.b)
+    implies for a st a in field R holds [a,F.a] in R
+   proof assume that
+A1:   R is well-ordering & dom F = field R & rng F c= field R and
+A2:   [a,b] in R & a <> b implies [F.a,F.b] in R & F.a <> F.b;
+A3:     R is transitive by A1,Def4;
+A4:     R is antisymmetric by A1,Def4;
+    defpred P[set] means [$1,F.$1] in R;
+    consider Z such that
+A5:   a in Z iff a in field R & P[a] from Separation;
+       now let a; assume
+A6:    a in field R;
+       then A7: F.a in rng F by A1,FUNCT_1:def 5;
+      assume
+A8:       R-Seg(a) c= Z;
+      now let b; assume
+A9:     b in R-Seg(a);
+then A10:     [b,F.b] in R by A5,A8;
+       [b,a] in R & b <> a by A9,Def1;
+then A11:     [F.b,F.a] in R & F.b <> F.a by A2;
+        hence [b,F.a] in R by A3,A10,Lm2;
+        thus b <> F.a by A4,A10,A11,Lm3;
+       end;
+       then [a,F.a] in R by A1,A6,A7,Th42;
+      hence a in Z by A5,A6;
+     end;
+then A12:   field R c= Z by A1,Th41;
+    let a;
+    assume a in field R; hence thesis by A5,A12;
+   end;
+
+ definition let R,S,F;
+  pred F is_isomorphism_of R,S means
+:Def7: dom F = field R & rng F = field S & F is one-to-one &
+    for a,b holds [a,b] in R iff a in field R & b in field R & [F.a,F.b] in S;
+ end;
+
+canceled;
+
+theorem
+ Th45: F is_isomorphism_of R,S implies
+   for a,b st [a,b] in R & a <> b holds [F.a,F.b] in S & F.a <> F.b
+  proof assume
+A1:    F is_isomorphism_of R,S;
+then A2:  dom F = field R & rng F = field S & F is one-to-one &
+     for a,b holds [a,b] in R iff a in field R & b in field R & [F.a,F.b] in S
+      by Def7;
+   let a,b; assume
+A3:  [a,b] in R & a <> b;
+  then a in field R & b in field R & [F.a,F.b] in S by A1,Def7;
+   hence thesis by A2,A3,FUNCT_1:def 8;
+  end;
+
+ definition let R,S;
+  pred R,S are_isomorphic means
+:Def8: ex F st F is_isomorphism_of R,S;
+ end;
+
+canceled;
+
+theorem
+ Th47: id(field R) is_isomorphism_of R,R
+   proof
+A1:   dom(id(field R)) = field R by RELAT_1:71;
+A2:   rng(id(field R)) = field R by RELAT_1:71;
+A3:   id(field R) is one-to-one by FUNCT_1:52;
+       now let a,b;
+      thus [a,b] in R implies a in field R & b in field R &
+         [id(field R).a,id(field R).b] in R
+        proof assume
+A4:        [a,b] in R;
+         hence a in field R & b in field R by RELAT_1:30;
+          then id(field R).a = a & id(field R).b = b by FUNCT_1:35;
+         hence thesis by A4;
+        end;
+      assume
+A5:     a in field R & b in field R & [id(field R).a,id(field R).b] in R;
+       then id(field R).a = a & id(field R).b = b by FUNCT_1:35;
+      hence [a,b] in R by A5;
+     end;
+    hence id(field R) is_isomorphism_of R,R by A1,A2,A3,Def7;
+   end;
+
+theorem
+    R,R are_isomorphic
+  proof
+   take id(field R);
+   thus thesis by Th47;
+  end;
+
+theorem
+ Th49: F is_isomorphism_of R,S implies F" is_isomorphism_of S,R
+   proof assume
+A1:  F is_isomorphism_of R,S;
+then A2:   dom F = field R & rng F = field S & F is one-to-one by Def7;
+    hence
+A3:  dom(F") = field S by FUNCT_1:55;
+    thus rng(F") = field R by A2,FUNCT_1:55;
+    thus F" is one-to-one by A2,FUNCT_1:62;
+    let a,b;
+    thus [a,b] in S implies a in field S & b in field S & [F".a,F".b] in R
+      proof assume
+A4:     [a,b] in S;
+       hence
+A5:     a in field S & b in field S by RELAT_1:30;
+then A6:     a = F.(F".a) & b = F.(F".b) by A2,FUNCT_1:57;
+          dom F = rng(F") & F".a in rng(F") & F".b in rng(F")
+         by A2,A3,A5,FUNCT_1:55,def 5;
+       hence thesis by A1,A2,A4,A6,Def7;
+      end;
+    assume
+A7:  a in field S & b in field S & [F".a,F".b] in R;
+  then F.(F".a) = a & F.(F".b) = b by A2,FUNCT_1:57;
+    hence [a,b] in S by A1,A7,Def7;
+   end;
+
+theorem
+ Th50: R,S are_isomorphic implies S,R are_isomorphic
+   proof given F such that
+A1:   F is_isomorphism_of R,S;
+    take F";
+    thus F" is_isomorphism_of S,R by A1,Th49;
+   end;
+
+theorem
+ Th51: F is_isomorphism_of R,S & G is_isomorphism_of S,T implies
+    G*F is_isomorphism_of R,T
+   proof assume
+A1:   dom F = field R & rng F = field S & F is one-to-one &
+      for a,b holds [a,b] in R iff a in field R & b in field R & [F.a,F.b] in
+ S;
+    assume
+A2:   dom G = field S & rng G = field T & G is one-to-one &
+      for a,b holds [a,b] in S iff a in field S & b in field S & [G.a,G.b] in
+ T;
+    hence dom(G*F) = field R by A1,RELAT_1:46;
+    thus rng(G*F) = field T by A1,A2,RELAT_1:47;
+    thus G*F is one-to-one by A1,A2,FUNCT_1:46;
+    let a,b;
+    thus [a,b] in R implies a in field R & b in field R & [(G*F).a,(G*F).b] in
+ T
+      proof assume
+A3:     [a,b] in R;
+       hence
+A4:     a in field R & b in field R by RELAT_1:30;
+A5:     [F.a,F.b] in S by A1,A3;
+          (G*F).a = G.(F.a) & (G*F).b = G.(F.b) by A1,A4,FUNCT_1:23;
+       hence thesis by A2,A5;
+      end;
+    assume
+A6:   a in field R & b in field R & [(G*F).a,(G*F).b] in T;
+then A7:     (G*F).a = G.(F.a) & (G*F).b = G.(F.b) by A1,FUNCT_1:23;
+       F.a in field S & F.b in field S by A1,A6,FUNCT_1:def 5;
+     then [F.a,F.b] in S by A2,A6,A7;
+    hence thesis by A1,A6;
+   end;
+
+theorem
+ Th52: R,S are_isomorphic & S,T are_isomorphic implies R,T are_isomorphic
+   proof given F such that
+A1:   F is_isomorphism_of R,S;
+    given G such that
+A2:   G is_isomorphism_of S,T;
+    take G*F;
+    thus G*F is_isomorphism_of R,T by A1,A2,Th51;
+   end;
+
+theorem
+  Th53: F is_isomorphism_of R,S implies
+     ( R is reflexive implies S is reflexive ) &
+     ( R is transitive implies S is transitive ) &
+     ( R is connected implies S is connected ) &
+     ( R is antisymmetric implies S is antisymmetric ) &
+     ( R is well_founded implies S is well_founded )
+   proof assume
+A1:   F is_isomorphism_of R,S;
+then A2:   dom F = field R & rng F = field S & F is one-to-one &
+      for a,b holds [a,b] in R iff a in field R & b in field R & [F.a,F.b] in S
+       by Def7;
+then A3:   rng(F") = dom F & dom(F") = rng F by FUNCT_1:55;
+    thus R is reflexive implies S is reflexive
+      proof assume
+A4:        R is reflexive;
+          now let a; assume
+A5:       a in field S;
+then A6:       a = F.(F".a) by A2,FUNCT_1:57;
+         F".a in field R by A2,A3,A5,FUNCT_1:def 5;
+          then [F".a,F".a] in R by A4,Lm1;
+         hence [a,a] in S by A1,A6,Def7;
+        end;
+       hence thesis by Lm1;
+      end;
+    thus R is transitive implies S is transitive
+      proof assume
+A7:        R is transitive;
+          now let a,b,c; assume
+A8:       [a,b] in S & [b,c] in S;
+then A9:       a in field S & b in field S & c in field S by RELAT_1:30;
+then A10:       a = F.(F".a) & b = F.(F".b) & c = F.(F".c) by A2,FUNCT_1:57;
+         F".a in field R & F".b in field R & F".c in field R
+           by A2,A3,A9,FUNCT_1:def 5;
+          then [F".a,F".b] in R & [F".b,F".c] in R by A1,A8,A10,Def7;
+          then [F".a,F".c] in R by A7,Lm2;
+         hence [a,c] in S by A1,A10,Def7;
+        end;
+       hence thesis by Lm2;
+      end;
+    thus R is connected implies S is connected
+      proof assume
+A11:        R is connected;
+          now let a,b; assume
+A12:       a in field S & b in field S & a <> b;
+then A13:       a = F.(F".a) & b = F.(F".b) by A2,FUNCT_1:57;
+       then F".a in field R & F".b in field R & F".a <> F".b
+           by A2,A3,A12,FUNCT_1:def 5;
+          then [F".a,F".b] in R or [F".b,F".a] in R by A11,Lm4;
+         hence [a,b] in S or [b,a] in S by A1,A13,Def7;
+        end;
+       hence thesis by Lm4;
+      end;
+    thus R is antisymmetric implies S is antisymmetric
+      proof assume
+A14:        R is antisymmetric;
+          now let a,b; assume
+A15:       [a,b] in S & [b,a] in S;
+then A16:       a in field S & b in field S by RELAT_1:30;
+then A17:       a = F.(F".a) & b = F.(F".b) by A2,FUNCT_1:57;
+            F".a in field R & F".b in field R by A2,A3,A16,FUNCT_1:def 5;
+          then [F".a,F".b] in R & [F".b,F".a] in R by A1,A15,A17,Def7;
+         hence a = b by A14,A17,Lm3;
+        end;
+       hence thesis by Lm3;
+      end;
+    assume
+A18:  for Y st Y c= field R & Y <> {} ex x st x in Y & R-Seg(x) misses Y;
+    let Z; assume
+A19:  Z c= field S & Z <> {};
+then A20:  F"Z c= dom F & F"Z <> {} by A2,RELAT_1:167,174;
+    then consider x such that
+A21:  x in F"Z & R-Seg(x) misses F"Z by A2,A18;
+    take F.x;
+    thus F.x in Z by A21,FUNCT_1:def 13;
+    assume not thesis;
+     then consider y being set such that
+A22:    y in S-Seg(F.x) & y in Z by XBOOLE_0:3;
+A23:    y = F.(F".y) & F".y in dom F by A2,A3,A19,A22,FUNCT_1:57,def 5;
+       then F".y in F"Z by A22,FUNCT_1:def 13;
+       then not F".y in R-Seg(x) by A21,XBOOLE_0:3;
+then A24:   not [F".y,x] in R or F".y = x by Def1;
+         [y,F.x] in S & y <> F.x by A22,Def1;
+       hence contradiction by A2,A20,A21,A23,A24;
+   end;
+
+theorem
+ Th54: R is well-ordering & F is_isomorphism_of R,S implies
+  S is well-ordering
+   proof assume
+       R is reflexive transitive antisymmetric
+      connected well_founded & F is_isomorphism_of R,S;
+    hence S is reflexive transitive antisymmetric connected well_founded
+      by Th53;
+   end;
+
+theorem
+ Th55: R is well-ordering implies
+    for F,G st F is_isomorphism_of R,S & G is_isomorphism_of R,S holds F = G
+   proof assume
+A1:   R is well-ordering;
+    let F,G;
+    assume
+A2:   F is_isomorphism_of R,S & G is_isomorphism_of R,S;
+     then S is well-ordering by A1,Th54;
+then A3:     S is antisymmetric by Def4;
+A4:   dom F = field R & rng F = field S & F is one-to-one &
+      for a,b holds [a,b] in R iff a in field R & b in field R & [F.a,F.b] in S
+       by A2,Def7;
+A5:     F" is_isomorphism_of S,R by A2,Th49;
+then A6:  F" is one-to-one &
+      for a,b holds [a,b] in S iff a in field S & b in field S & [F".a,F".b] in
+ R
+       by Def7;
+A7:   dom G = field R & rng G = field S & G is one-to-one &
+      for a,b holds [a,b] in R iff a in field R & b in field R & [G.a,G.b] in S
+       by A2,Def7;
+A8:     G" is_isomorphism_of S,R by A2,Th49;
+then A9:  G" is one-to-one &
+      for a,b holds [a,b] in S iff a in field S & b in field S & [G".a,G".b] in
+ R
+       by Def7;
+       for a st a in field R holds F.a = G.a
+      proof let a such that
+A10:      a in field R;
+A11:      dom(G") = field S & dom(F") = field S & rng(G") = field R &
+         rng(F") = field R by A4,A7,FUNCT_1:55;
+then A12:      dom(G"*F) = field R & dom(F"*G) = field R by A4,A7,RELAT_1:46;
+A13:     rng(G"*F) = field R & rng(F"*G) = field R by A4,A7,A11,RELAT_1:47;
+          now let a,b; assume
+A14:       [a,b] in R & a <> b;
+then A15:       [F.a,F.b] in S by A2,Def7;
+A16:       a in field R & b in field R by A14,RELAT_1:30;
+       then G".(F.a) = (G"*F).a & G".(F.b) = (G"*F).b by A4,FUNCT_1:23;
+         hence [(G"*F).a,(G"*F).b] in R by A8,A15,Def7;
+            G"*F is one-to-one by A4,A9,FUNCT_1:46;
+         hence (G"*F).a <> (G"*F).b by A12,A14,A16,FUNCT_1:def 8;
+        end;
+then A17:      [a,(G"*F).a] in R by A1,A10,A12,A13,Th43;
+A18:     G".(F.a) = (G"*F).a by A4,A10,FUNCT_1:23;
+          F.a in rng G by A4,A7,A10,FUNCT_1:def 5;
+     then G.(G".(F.a)) = F.a by A7,FUNCT_1:57;
+then A19:      [G.a,F.a] in S by A2,A17,A18,Def7;
+          now let a,b; assume
+A20:       [a,b] in R & a <> b;
+then A21:          [G.a,G.b] in S by A2,Def7;
+A22:       a in field R & b in field R by A20,RELAT_1:30;
+       then F".(G.a) = (F"*G).a & F".(G.b) = (F"*G).b by A7,FUNCT_1:23;
+         hence [(F"*G).a,(F"*G).b] in R by A5,A21,Def7;
+            F"*G is one-to-one by A6,A7,FUNCT_1:46;
+         hence (F"*G).a <> (F"*G).b by A12,A20,A22,FUNCT_1:def 8;
+        end;
+then A23:      [a,(F"*G).a] in R by A1,A10,A12,A13,Th43;
+A24:     F".(G.a) = (F"*G).a by A7,A10,FUNCT_1:23;
+          G.a in rng F by A4,A7,A10,FUNCT_1:def 5;
+     then F.(F".(G.a)) = G.a by A4,FUNCT_1:57;
+        then [F.a,G.a] in S by A2,A23,A24,Def7;
+       hence thesis by A3,A19,Lm3;
+      end;
+    hence thesis by A4,A7,FUNCT_1:9;
+   end;
+
+ definition let R,S;
+  assume
+A1: R is well-ordering & R,S are_isomorphic;
+  func canonical_isomorphism_of(R,S) -> Function means
+:Def9: it is_isomorphism_of R,S;
+  existence by A1,Def8;
+  uniqueness by A1,Th55;
+ end;
+
+canceled;
+
+theorem
+ Th57: R is well-ordering implies
+    for a st a in field R holds not R,R |_2 (R-Seg(a)) are_isomorphic
+   proof assume
+A1:   R is well-ordering;
+then A2:     R is antisymmetric by Def4;
+    let a such that
+A3:   a in field R;
+    assume
+A4:   R,R |_2 (R-Seg(a)) are_isomorphic;
+    set S = R |_2 (R-Seg(a));
+    set F = canonical_isomorphism_of(R,S);
+A5:     F is_isomorphism_of R,S by A1,A4,Def9;
+then A6:   dom F = field R & rng F = field S & F is one-to-one &
+      for c,b holds [c,b] in R iff c in field R & b in field R &
+        [F.c,F.b] in R |_2 (R-Seg(a)) by Def7;
+then A7:  rng F c= field R by Th20;
+       now let b,c; assume
+A8:    [b,c] in R & b <> c;
+       then [F.b,F.c] in R |_2 (R-Seg(a)) by A5,Def7;
+      hence [F.b,F.c] in R by Th16;
+         b in field R & c in field R by A8,RELAT_1:30;
+      hence F.b <> F.c by A6,A8,FUNCT_1:def 8;
+     end;
+then A9:   [a,F.a] in R by A1,A3,A6,A7,Th43;
+       field S = R-Seg(a) by A1,Th40;
+     then F.a in R-Seg(a) by A3,A6,FUNCT_1:def 5;
+   then [F.a,a] in R & F.a <> a by Def1;
+    hence contradiction by A2,A9,Lm3;
+   end;
+
+theorem
+  Th58: R is well-ordering & a in field R & b in field R & a <> b
+    implies not R |_2 (R-Seg(a)),R |_2 (R-Seg(b)) are_isomorphic
+   proof assume
+A1:   R is well-ordering & a in field R & b in field R & a <> b;
+     then A2: R is connected by Def4;
+A3:   now assume
+A4:    R-Seg(a) c= R-Seg(b);
+     set S = R |_2 (R-Seg(b));
+A5:    field S = R-Seg(b) by A1,Th40;
+A6:   a in R-Seg(b)
+        proof
+         assume not a in R-Seg(b);
+          then not [a,b] in R by A1,Def1;
+          then [b,a] in R by A1,A2,Lm4;
+          then b in R-Seg(a) by A1,Def1; hence contradiction by A4,Def1;
+        end;
+then A7:    R-Seg(a) = S-Seg(a) by A1,Th35;
+A8:    S |_2 (R-Seg(a)) = R |_2 (R-Seg(a)) by A4,Th29;
+         S is well-ordering by A1,Th32;
+      then not S,S |_2 (S-Seg(a)) are_isomorphic by A5,A6,Th57;
+      hence thesis by A7,A8,Th50;
+     end;
+A9:   now assume
+A10:    R-Seg(b) c= R-Seg(a);
+     set S = R |_2 (R-Seg(a));
+A11:   field S = R-Seg(a) by A1,Th40;
+A12:   b in R-Seg(a)
+        proof
+         assume not b in R-Seg(a);
+          then not [b,a] in R by A1,Def1;
+          then [a,b] in R by A1,A2,Lm4;
+          then a in R-Seg(b) by A1,Def1; hence contradiction by A10,Def1;
+        end;
+then A13:    R-Seg(b) = S-Seg(b) by A1,Th35;
+A14:    S |_2 (R-Seg(b)) = R |_2 (R-Seg(b)) by A10,Th29;
+        S is well-ordering by A1,Th32;
+      hence thesis by A11,A12,A13,A14,Th57;
+     end;
+      R-Seg(a),R-Seg(b) are_c=-comparable by A1,Th33;
+    hence thesis by A3,A9,XBOOLE_0:def 9;
+   end;
+
+theorem
+ Th59: R is well-ordering & Z c= field R & F is_isomorphism_of R,S
+   implies F|Z is_isomorphism_of R |_2 Z,S |_2 (F.:Z) &
+     R |_2 Z,S |_2 (F.:Z) are_isomorphic
+   proof assume
+A1:   R is well-ordering & Z c= field R & F is_isomorphism_of R,S;
+then A2:   dom F = field R & rng F = field S & F is one-to-one &
+      for a,b holds [a,b] in R iff a in field R & b in field R & [F.a,F.b] in S
+       by Def7;
+A3:   Z = field(R |_2 Z) by A1,Th39;
+        F.:Z c= rng F & S is well-ordering by A1,Th54,RELAT_1:144;
+     then A4:   F.:Z = field(S |_2 (F.:Z)) by A2,Th39;
+    thus F|Z is_isomorphism_of R |_2 Z,S |_2 (F.:Z)
+      proof
+       thus
+A5:      dom(F|Z) = field(R |_2 Z) by A1,A2,A3,RELAT_1:91;
+       thus
+A6:      rng(F|Z) = field(S |_2 (F.:Z)) by A4,RELAT_1:148;
+       thus F|Z is one-to-one by A2,FUNCT_1:84;
+       let a,b;
+       thus [a,b] in R |_2 Z implies
+          a in field(R |_2 Z) & b in field(R |_2 Z) & [F|Z.a,F|Z.b] in S |_2
+ (F.:Z)
+         proof assume
+A7:        [a,b] in R |_2 Z;
+          hence
+A8:        a in field(R |_2 Z) & b in field(R |_2 Z) by RELAT_1:30;
+          [a,b] in R by A7,Th16;
+
+then A9:        [F.a,F.b] in S by A1,Def7;
+A10:        F.a = F|Z.a & F.b = F|Z.b by A5,A8,FUNCT_1:70;
+             F|Z.a in rng(F|Z) & F|Z.b in rng(F|Z) by A5,A8,FUNCT_1:def 5;
+           then [F|Z.a,F|Z.b] in [:F.:Z,F.:Z:] by A4,A6,ZFMISC_1:106;
+          hence thesis by A9,A10,Th16;
+         end;
+       assume
+A11:     a in field(R |_2 Z) & b in field(R |_2 Z) & [F|Z.a,F|Z.b] in
+ S |_2 (F.:Z);
+
+        then F.a = F|Z.a & F.b = F|Z.b by A5,FUNCT_1:70;
+then A12:     [F.a,F.b] in S by A11,Th16;
+          a in field R & b in field R by A11,Th19;
+then A13:     [a,b] in R by A1,A12,Def7;
+          [a,b] in [:Z,Z:] by A3,A11,ZFMISC_1:106;
+       hence thesis by A13,Th16;
+      end;
+    hence R |_2 Z,S |_2 (F.:Z) are_isomorphic by Def8;
+   end;
+
+theorem
+ Th60: R is well-ordering & F is_isomorphism_of R,S implies
+    for a st a in field R ex b st b in field S & F.:(R-Seg(a)) = S-Seg(b)
+   proof assume
+A1:   R is well-ordering & F is_isomorphism_of R,S;
+    let a;
+    assume
+A2:   a in field R;
+A3:   dom F = field R & rng F = field S & F is one-to-one &
+      for a,b holds [a,b] in R iff a in field R & b in field R & [F.a,F.b] in S
+       by A1,Def7;
+    take b = F.a;
+    thus b in field S by A2,A3,FUNCT_1:def 5;
+A4:   c in F.:(R-Seg(a)) implies c in S-Seg(b)
+      proof assume
+        c in F.:(R-Seg(a));
+       then consider d such that
+A5:      d in dom F & d in R-Seg(a) & c = F.d by FUNCT_1:def 12;
+A6:      [d,a] in R & d <> a by A5,Def1;
+then A7:      [c,b] in S by A1,A5,Def7;
+          c <> b by A2,A3,A5,A6,FUNCT_1:def 8;
+       hence c in S-Seg(b) by A7,Def1;
+      end;
+       c in S-Seg(b) implies c in F.:(R-Seg(a))
+      proof assume
+        c in S-Seg(b);
+then A8:      [c,b] in S & c <> b by Def1;
+then A9:      c in field S by RELAT_1:30;
+then A10:      c = F.(F".c) by A3,FUNCT_1:57;
+          rng(F") = dom F & dom(F") = rng F by A3,FUNCT_1:55;
+then A11:      F".c in field R by A3,A9,FUNCT_1:def 5;
+      then [F".c,a] in R by A1,A2,A8,A10,Def7;
+        then F".c in R-Seg(a) by A8,A10,Def1;
+       hence thesis by A3,A10,A11,FUNCT_1:def 12;
+      end;
+    hence thesis by A4,TARSKI:2;
+   end;
+
+theorem
+ Th61: R is well-ordering & F is_isomorphism_of R,S implies
+    for a st a in field R ex b st b in field S &
+     R |_2 (R-Seg(a)),S |_2 (S-Seg(b)) are_isomorphic
+   proof assume
+A1:   R is well-ordering & F is_isomorphism_of R,S;
+    let a;
+    assume
+     a in field R;
+    then consider b such that
+A2:   b in field S & F.:(R-Seg(a)) = S-Seg(b) by A1,Th60;
+A3:     R-Seg(a) c= field R by Th13;
+    take b;
+    thus thesis by A1,A2,A3,Th59;
+   end;
+
+theorem
+ Th62: R is well-ordering & S is well-ordering &
+   a in field R & b in field S & c in
+ field S & R,S |_2 (S-Seg(b)) are_isomorphic &
+    R |_2 (R-Seg(a)),S |_2 (S-Seg(c)) are_isomorphic implies
+     S-Seg(c) c= S-Seg(b) & [c,b] in S
+   proof assume
+A1:   R is well-ordering & S is well-ordering &
+      a in field R & b in field S &
+       c in field S & R,S |_2 (S-Seg(b)) are_isomorphic &
+        R |_2 (R-Seg(a)),S |_2 (S-Seg(c)) are_isomorphic;
+    set P = R |_2 (R-Seg(a));
+    set Q = S |_2 (S-Seg(b));
+    set T = S |_2 (S-Seg(c));
+    set F1 = canonical_isomorphism_of(R,Q);
+A2:   F1 is_isomorphism_of R,Q by A1,Def9;
+       R-Seg(a) c= field R by Th13;
+then A3:   P,Q |_2 (F1.:(R-Seg(a))) are_isomorphic by A1,A2,Th59;
+    consider d such that
+A4:   d in field Q & F1.:(R-Seg(a)) = Q-Seg(d) by A1,A2,Th60;
+A5:   S-Seg(b) = field Q by A1,Th40;
+then A6:   Q-Seg(d) = S-Seg(d) by A1,A4,Th35;
+       T,P are_isomorphic by A1,Th50;
+then A7:   T,Q |_2 (Q-Seg(d)) are_isomorphic by A3,A4,Th52;
+     rng F1 = S-Seg(b) by A2,A5,Def7;
+then A8:   Q-Seg(d) c= S-Seg(b) by A4,RELAT_1:144;
+then A9:   T,S |_2 (S-Seg(d)) are_isomorphic by A6,A7,Th29;
+       d in field S by A4,Th19;
+    hence S-Seg(c) c= S-Seg(b) by A1,A6,A8,A9,Th58;
+    hence thesis by A1,Th37;
+   end;
+
+theorem
+ Th63: R is well-ordering & S is well-ordering implies
+   R,S are_isomorphic or
+    (ex a st a in field R & R |_2 (R-Seg(a)),S are_isomorphic ) or
+     (ex a st a in field S & R,S |_2 (S-Seg(a)) are_isomorphic )
+   proof assume
+A1:   R is well-ordering & S is well-ordering;
+    defpred P[set] means
+     ex b st b in field S & R |_2 (R-Seg($1)),S |_2 (S-Seg(b)) are_isomorphic;
+    consider Z such that
+A2:   a in Z iff a in field R & P[a] from Separation;
+A3:   Z c= field R proof let x; thus thesis by A2; end;
+A4:  S is reflexive & S is antisymmetric &
+      R is connected & R is reflexive by A1,Def4;
+
+     defpred P[set,set] means
+      $2 in field S & R |_2 (R-Seg $1),S |_2 (S-Seg $2) are_isomorphic;
+A5:   for a,b,c st P[a, b] & P[a, c] holds b = c
+      proof let a,b,c; assume
+A6:     b in field S & R |_2 (R-Seg(a)),S |_2 (S-Seg(b)) are_isomorphic &
+        c in field S & R |_2 (R-Seg(a)),S |_2 (S-Seg(c)) are_isomorphic;
+        then S |_2 (S-Seg(b)),R |_2 (R-Seg(a)) are_isomorphic by Th50;
+        then S |_2 (S-Seg(b)),S |_2 (S-Seg(c)) are_isomorphic by A6,Th52;
+       hence b = c by A1,A6,Th58;
+      end;
+     consider F such that
+A7:    [a,b] in F iff a in field R & P[a,b] from GraphFunc(A5);
+A8:    rng F c= field S
+       proof let a; assume a in rng F;
+        then consider b such that
+A9:      b in dom F & a = F.b by FUNCT_1:def 5;
+           [b,a] in F by A9,FUNCT_1:8;
+        hence thesis by A7;
+       end;
+A10:   Z = dom F
+       proof
+        thus a in Z implies a in dom F
+          proof assume
+A11:         a in Z;
+then A12:         a in field R by A2;
+           consider b such that
+A13:         b in field S & R |_2 (R-Seg(a)),S |_2 (S-Seg(b)) are_isomorphic
+             by A2,A11;
+              [a,b] in F by A7,A12,A13;
+           hence thesis by RELAT_1:def 4;
+          end;
+        let a;
+        assume a in dom F;
+         then consider b such that
+A14:       [a,b] in F by RELAT_1:def 4;
+            a in field R & b in field S &
+           R |_2 (R-Seg(a)),S |_2 (S-Seg(b)) are_isomorphic
+            by A7,A14;
+        hence thesis by A2;
+       end;
+A15:      now let a such that
+A16:     a in Z;
+       let b such that
+A17:     [b,a] in R;
+A18:     a in field R by A2,A16;
+       consider c such that
+A19:     c in
+ field S & R |_2 (R-Seg(a)),S |_2 (S-Seg(c)) are_isomorphic by A2,A16
+;
+          now assume
+A20:       a <> b;
+A21:       b in field R by A17,RELAT_1:30;
+         set P = R |_2 (R-Seg(a));
+         set Q = S |_2 (S-Seg(c));
+A22:       P is well-ordering by A1,Th32;
+then A23:       canonical_isomorphism_of(P,Q) is_isomorphism_of P,Q by A19,Def9
+;
+A24:       b in R-Seg(a) & field P = R-Seg(a) by A1,A17,A20,Def1,Th40;
+         then consider d such that
+A25:      d in field Q & P |_2 (P-Seg(b)),Q |_2 (Q-Seg(d)) are_isomorphic
+              by A22,A23,Th61;
+A26:      S-Seg(c) = field Q by A1,Th40;
+A27:       P-Seg(b) = R-Seg(b) by A1,A18,A24,Th35;
+A28:       Q-Seg(d) = S-Seg(d) by A1,A19,A25,A26,Th35;
+A29:       R-Seg(b) c= R-Seg(a) by A1,A18,A21,A24,Th38;
+            [d,c] in S by A25,A26,Def1;
+then A30:       d in field S by RELAT_1:30;
+then A31:       S-Seg(d) c= S-Seg(c) by A1,A19,A25,A26,Th38;
+         P |_2 (R-Seg(b)) = R |_2 (R-Seg(b)) by A29,Th29;
+          then R |_2 (R-Seg(b)),S |_2 (S-Seg(d)) are_isomorphic by A25,A27,A28,
+A31,Th29
+;
+         hence b in Z by A2,A21,A30;
+        end;
+       hence b in Z by A16;
+      end;
+A32:      now let a such that
+A33:     a in rng F;
+       let b such that
+A34:     [b,a] in S;
+       consider c such that
+A35:     c in dom F & a = F.c by A33,FUNCT_1:def 5;
+          [c,a] in F by A35,FUNCT_1:8;
+then A36:     c in field R & a in field S &
+         R |_2 (R-Seg(c)),S |_2 (S-Seg(a)) are_isomorphic by A7;
+          now assume
+A37:       a <> b;
+A38:       b in field S by A34,RELAT_1:30;
+         set P = R |_2 (R-Seg(c));
+         set Q = S |_2 (S-Seg(a));
+A39:       Q,P are_isomorphic by A36,Th50;
+A40:       Q is well-ordering by A1,Th32;
+then A41:       canonical_isomorphism_of(Q,P) is_isomorphism_of Q,P by A39,Def9
+;
+A42:       b in S-Seg(a) & field Q = S-Seg(a) by A1,A34,A37,Def1,Th40;
+         then consider d such that
+A43:      d in field P & Q |_2 (Q-Seg(b)),P |_2 (P-Seg(d)) are_isomorphic
+              by A40,A41,Th61;
+A44:      R-Seg(c) = field P by A1,Th40;
+A45:       Q-Seg(b) = S-Seg(b) by A1,A36,A42,Th35;
+A46:       P-Seg(d) = R-Seg(d) by A1,A36,A43,A44,Th35;
+A47:       S-Seg(b) c= S-Seg(a) by A1,A36,A38,A42,Th38;
+            [d,c] in R by A43,A44,Def1;
+then A48:       d in field R by RELAT_1:30;
+then A49:       R-Seg(d) c= R-Seg(c) by A1,A36,A43,A44,Th38;
+         Q |_2 (S-Seg(b)) = S |_2 (S-Seg(b)) by A47,Th29;
+          then S |_2 (S-Seg(b)),R |_2 (R-Seg(d)) are_isomorphic by A43,A45,A46,
+A49,Th29
+;
+         then R |_2 (R-Seg(d)),S |_2 (S-Seg(b)) are_isomorphic by Th50;
+          then [d,b] in F by A7,A38,A48;
+          then d in dom F & b = F.d by FUNCT_1:8;
+         hence b in rng F by FUNCT_1:def 5;
+        end;
+       hence b in rng F by A33;
+      end;
+A50:   F is_isomorphism_of R |_2 (dom F),S |_2 (rng F)
+       proof
+        thus dom F = field(R |_2 (dom F)) & rng F = field(S |_2
+ (rng F)) by A1,A3,A8,A10,Th39;
+        thus
+A51:       F is one-to-one
+          proof let a,b;
+           assume
+A52:         a in dom F & b in dom F & F.a = F.b;
+            then [a,F.a] in F & [b,F.b] in F by FUNCT_1:8;
+then A53:         a in field R & R |_2 (R-Seg(a)),S |_2
+ (S-Seg(F.a)) are_isomorphic &
+             b in field R & R |_2 (R-Seg(b)),S |_2 (S-Seg(F.a)) are_isomorphic
+              by A7,A52;
+            then S |_2 (S-Seg(F.a)),R |_2 (R-Seg(b)) are_isomorphic by Th50;
+            then R |_2 (R-Seg(a)),R |_2 (R-Seg(b)) are_isomorphic by A53,Th52;
+           hence a = b by A1,A53,Th58;
+          end;
+        let a,b;
+        thus [a,b] in R |_2 (dom F) implies a in field(R |_2 (dom F)) &
+           b in field(R |_2 (dom F)) & [F.a,F.b] in S |_2 (rng F)
+          proof assume
+A54:         [a,b] in R |_2 (dom F);
+           hence a in field(R |_2 (dom F)) & b in field(R |_2 (dom F))
+             by RELAT_1:30;
+then A55:         a in dom F & b in dom F by Th19;
+then A56:         [a,F.a] in F & [b,F.b] in F by FUNCT_1:8;
+then A57:         a in field R & F.a in field S &
+             R |_2 (R-Seg(a)),S |_2 (S-Seg(F.a)) are_isomorphic by A7;
+A58:         b in field R & F.b in field S &
+             R |_2 (R-Seg(b)),S |_2 (S-Seg(F.b)) are_isomorphic by A7,A56;
+A59:        [a,b] in R by A54,Th16;
+then A60:         R-Seg(a) c= R-Seg(b) by A1,A57,A58,Th37;
+              F.a in rng F & F.b in rng F by A55,FUNCT_1:def 5;
+then A61:         [F.a,F.b] in [:rng F,rng F:] by ZFMISC_1:106;
+A62:         a = b implies thesis
+             proof assume a = b;
+               then [F.a,F.b] in S by A4,A57,Lm1;
+              hence thesis by A61,Th16;
+             end;
+              now
+             set P = R |_2 (R-Seg(b));
+             assume
+                a <> b;
+then A63:           a in R-Seg(b) & field P = R-Seg(b) by A1,A59,Def1,Th40;
+then A64:           P-Seg(a) = R-Seg(a) by A1,A58,Th35;
+A65:           P is well-ordering by A1,Th32;
+                P |_2 (P-Seg(a)),S |_2
+ (S-Seg(F.a)) are_isomorphic by A57,A60,A64,Th29
+;
+              then [F.a,F.b] in S by A1,A57,A58,A63,A65,Th62;
+             hence thesis by A61,Th16;
+            end;
+           hence thesis by A62;
+          end;
+        assume A66: a in field(R |_2 (dom F)) & b in field(R |_2 (dom F)) &
+          [F.a,F.b] in S |_2 (rng F);
+then A67:      a in dom F & b in dom F & [F.a,F.b] in S |_2 (rng F) by Th19;
+A68:       [F.a,F.b] in S by A66,Th16;
+        assume
+           not [a,b] in R |_2 (dom F);
+then A69:      not [a,b] in R or not [a,b] in [:dom F,dom F:] by Th16;
+
+A70:      [a,F.a] in F & [b,F.b] in F by A67,FUNCT_1:8;
+then A71:      a in field R & F.a in field S &
+          R |_2 (R-Seg(a)),S |_2 (S-Seg(F.a)) are_isomorphic by A7;
+A72:      b in field R & F.b in field S &
+          R |_2 (R-Seg(b)),S |_2 (S-Seg(F.b)) are_isomorphic by A7,A70;
+A73:      a <> b by A4,A67,A69,A71,Lm1,ZFMISC_1:106;
+then A74:      [b,a] in R by A4,A67,A69,A71,A72,Lm4,ZFMISC_1:106;
+then A75:      R-Seg(b) c= R-Seg(a) by A1,A71,A72,Th37;
+        set P = R |_2 (R-Seg(a));
+A76:      b in R-Seg(a) & field P = R-Seg(a) by A1,A73,A74,Def1,Th40;
+then A77:      P-Seg(b) = R-Seg(b) by A1,A71,Th35;
+A78:      P is well-ordering by A1,Th32;
+           P |_2 (P-Seg(b)),S |_2 (S-Seg(F.b)) are_isomorphic by A72,A75,A77,
+Th29
+;
+         then [F.b,F.a] in S by A1,A71,A72,A76,A78,Th62;
+      then F.a = F.b by A4,A68,Lm3;
+        hence contradiction by A51,A67,A73,FUNCT_1:def 8;
+       end;
+A79:      now given a such that
+A80:     a in field R & Z = R-Seg(a);
+       given b such that
+A81:     b in field S & rng F = S-Seg(b);
+          R |_2 (R-Seg(a)),S |_2
+ (S-Seg(b)) are_isomorphic by A10,A50,A80,A81,Def8
+;
+        then a in Z by A2,A80,A81;
+       hence contradiction by A80,Def1;
+      end;
+A82:    R |_2 Z,S |_2 (rng F) are_isomorphic by A10,A50,Def8;
+A83:   now assume
+A84:     Z = field R & rng F = field S;
+          R |_2 field R = R & S |_2 field S = S by Th30;
+       hence R,S are_isomorphic by A10,A50,A84,Def8;
+      end;
+A85:   now assume
+A86:     Z = field R;
+       given a such that
+A87:     a in field S & rng F = S-Seg(a);
+       take a;
+       thus a in field S by A87;
+       thus R,S |_2 (S-Seg(a)) are_isomorphic by A82,A86,A87,Th30;
+      end;
+        now assume
+A88:     rng F = field S;
+       given a such that
+A89:     a in field R & Z = R-Seg(a);
+       take a;
+       thus a in field R by A89;
+       thus R |_2 (R-Seg(a)),S are_isomorphic by A82,A88,A89,Th30;
+      end;
+     hence thesis by A1,A3,A8,A15,A32,A79,A83,A85,Th36;
+   end;
+
+theorem
+    Y c= field R & R is well-ordering implies
+   R,R |_2 Y are_isomorphic or
+    ex a st a in field R & R |_2 (R-Seg(a)),R |_2 Y are_isomorphic
+   proof assume
+A1:   Y c= field R & R is well-ordering;
+then A2:   R |_2 Y is well-ordering by Th32;
+       now given a such that
+A3:     a in field(R |_2 Y) & R,(R |_2 Y) |_2 ((R |_2
+ Y)-Seg(a)) are_isomorphic;
+         R |_2 Y is well-ordering by A1,Th32;
+then A4:     field(R |_2 Y) = Y &
+        field((R |_2 Y) |_2 ((R |_2 Y)-Seg(a))) = (R |_2
+ Y)-Seg(a) by A1,Th39,Th40;
+      consider F such that
+A5:     F is_isomorphism_of R,(R |_2 Y) |_2 ((R |_2 Y)-Seg(a)) by A3,Def8;
+A6:     dom F = field R & rng F = (R |_2 Y)-Seg(a) by A4,A5,Def7;
+         (R |_2 Y)-Seg(a) c= Y by A4,Th13;
+then A7:     rng F c= field R by A1,A6,XBOOLE_1:1;
+         now let c,b; assume
+A8:         [c,b] in R & c <> b;
+      then [F.c,F.b] in (R |_2 Y) |_2 ((R |_2
+ Y)-Seg(a)) & F.c <> F.b by A5,Th45;
+         then [F.c,F.b] in R |_2 Y by Th16;
+        hence [F.c,F.b] in R & F.c <> F.b by A5,A8,Th16,Th45;
+       end;
+then A9:     [a,F.a] in R by A1,A3,A4,A6,A7,Th43;
+         F.a in rng F by A1,A3,A4,A6,FUNCT_1:def 5;
+then A10:     [F.a,a] in R |_2 Y & F.a <> a by A6,Def1;
+then A11:     [F.a,a] in R by Th16;
+         R is antisymmetric by A1,Def4;
+      hence contradiction by A9,A10,A11,Lm3;
+     end;
+    hence thesis by A1,A2,Th63;
+   end;

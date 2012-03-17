@@ -1,0 +1,1691 @@
+:: On the components of the complement of a special polygonal curve
+::  by Andrzej Trybulec and Yatsuka Nakamura
+::
+:: Received January 21, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary COMPTS_1, PRE_TOPC, SPPOL_2, EUCLID, TOPREAL1, BOOLE, FINSEQ_4,
+      JORDAN3, JORDAN5C, FINSEQ_1, GROUP_2, RELAT_1, FUNCT_1, ARYTM_1,
+      SPRECT_2, SEQM_3, GOBOARD5, PSCOMP_1, GOBOARD9, SPRECT_1, GOBOARD2,
+      TREES_1, MATRIX_1, ARYTM_3, TOPS_1, MCART_1, TOPREAL4, SPPOL_1, FINSEQ_5,
+      FINSEQ_6;
+ notation TARSKI, XBOOLE_0, XREAL_0, REAL_1, NAT_1, FUNCT_1, FINSEQ_1,
+      FINSEQ_4, BINARITH, MATRIX_1, STRUCT_0, PRE_TOPC, TOPS_1, COMPTS_1,
+      EUCLID, TOPREAL1, TOPREAL4, FINSEQ_5, FINSEQ_6, GOBOARD1, GOBOARD2,
+      SPPOL_1, SPPOL_2, GOBOARD5, GOBOARD9, JORDAN3, PSCOMP_1, JORDAN5C,
+      SPRECT_1, SPRECT_2;
+ constructors SPRECT_2, GOBOARD9, FINSEQ_4, JORDAN5C, TOPS_2, TOPMETR,
+      BINARITH, COMPTS_1, TOPS_1, SPRECT_1, TOPREAL4, GOBOARD2, SPPOL_1,
+      PSCOMP_1, JORDAN3, REAL_1, TOPREAL2, MATRIX_2, REALSET1, WAYBEL_3;
+ clusters RELSET_1, SPRECT_1, SPPOL_2, GOBOARD2, FINSEQ_6, BORSUK_2, SPRECT_3,
+      GOBOARD9, REVROT_1, ARYTM_3, PRE_TOPC, WAYBEL_3, MEMBERED;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ theorems TOPREAL1, JORDAN5C, JORDAN3, FINSEQ_3, SPPOL_2, TOPS_1, SPPOL_1,
+      AXIOMS, TOPREAL3, FINSEQ_5, REAL_1, NAT_1, SPRECT_1, JORDAN5B, AMI_5,
+      SPRECT_2, GOBOARD5, FINSEQ_4, GOBOARD7, GOBOARD6, GOBOARD9, ZFMISC_1,
+      TOPREAL4, PSCOMP_1, JORDAN4, FINSEQ_6, FINSEQ_1, GROUP_5, TARSKI,
+      COMPTS_1, EUCLID, SUBSET_1, JORDAN5D, SPRECT_3, REVROT_1, PARTFUN2,
+      XBOOLE_0, XBOOLE_1, XCMPLX_1;
+
+begin
+
+reserve i,j,l for Nat;
+
+definition let T be being_T2 (non empty TopSpace);
+ cluster compact -> closed Subset of T;
+coherence by COMPTS_1:16;
+end;
+
+theorem Th1:
+ for f being S-Sequence_in_R2, Q being closed Subset of TOP-REAL 2
+  st L~f meets Q & not f/.1 in Q
+holds L~R_Cut(f,First_Point(L~f,f/.1,f/.len f,Q)) /\ Q =
+            { First_Point(L~f,f/.1,f/.len f,Q) }
+proof
+ let f be S-Sequence_in_R2, Q be closed Subset of TOP-REAL 2
+ such that
+A1: L~f meets Q and
+A2: not f/.1 in Q;
+  set p1 = f/.1, p2 = f/.len f, fp = First_Point(L~f,p1,p2,Q);
+    len f >= 1+1 by TOPREAL1:def 10;
+then A3: len f > 1 by NAT_1:38;
+A4: L~f /\ Q is closed by TOPS_1:35;
+A5: L~f is_an_arc_of p1,p2 by TOPREAL1:31;
+then A6: fp in L~f /\ Q by A1,A4,JORDAN5C:def 1;
+then A7: fp in Q by XBOOLE_0:def 3;
+A8: fp in L~f by A6,XBOOLE_0:def 3;
+   then A9: 1<=Index(fp,f) & Index(fp,f)<=len f by JORDAN3:41;
+then A10: Index(fp,f) in dom f by FINSEQ_3:27;
+   1 in dom f by A3,FINSEQ_3:27;
+then fp <> f.1 by A2,A7,FINSEQ_4:def 4;
+   then fp in L~R_Cut(f,fp) by A8,JORDAN5B:23;
+   then A11:  fp in L~R_Cut(f,fp) /\ Q by A7,XBOOLE_0:def 3;
+    now
+   assume not L~R_Cut(f,fp) /\ Q c= { fp };
+    then consider q being set such that
+A12:  q in L~R_Cut(f,fp) /\ Q and
+A13:  not q in { fp } by TARSKI:def 3;
+    reconsider q as Point of TOP-REAL 2 by A12;
+A14:  q <> fp by A13,TARSKI:def 1;
+A15:  q in Q by A12,XBOOLE_0:def 3;
+A16:  q in L~R_Cut(f,fp) by A12,XBOOLE_0:def 3;
+      L~R_Cut(f,fp) c= L~f by A8,JORDAN3:76;
+then A17:  LE fp, q, L~f, p1, p2 by A4,A15,A16,JORDAN5C:15;
+   per cases;
+   suppose
+  fp = f.1;
+then A18:  q in L~<*fp*> by A16,JORDAN3:def 5;
+      len<*fp*> = 1 by FINSEQ_1:56;
+   hence contradiction by A18,TOPREAL1:28;
+   suppose
+A19: fp <> f.1;
+    set m = mid(f,1,Index(fp,f));
+      len m = Index(fp,f)-'1+1 by A9,JORDAN4:20;
+    then len m <> 0 by NAT_1:29;
+then A20: m is non empty by FINSEQ_1:25;
+      q in L~(m^<*fp*>) by A16,A19,JORDAN3:def 5;
+    then A21:  q in L~m \/ LSeg(m/.len m,fp) by A20,SPPOL_2:19;
+A22:    Index(fp,f) < len f by A8,JORDAN3:41;
+A23:    fp in LSeg(f,Index(fp,f)) by A8,JORDAN3:42;
+      now per cases by A21,XBOOLE_0:def 2;
+     suppose
+A24:   q in L~m;
+A25:    now assume Index(fp,f) <= 1;
+        then Index(fp,f) = 1 by A9,AXIOMS:21;
+        then len m = 1 by A3,JORDAN4:27;
+       hence contradiction by A24,TOPREAL1:28;
+      end;
+then A26:    LE q, f/.Index(fp,f), L~f, p1, p2 by A9,A24,SPRECT_3:33;
+        f/.Index(fp,f) in LSeg(f/.Index(fp,f),fp) by TOPREAL1:6;
+      then LE f/.Index(fp,f), fp, L~f, p1, p2 by A22,A23,A25,SPRECT_3:40;
+      then LE q, fp, L~f, p1, p2 by A5,A26,JORDAN5C:13;
+     hence contradiction by A5,A14,A17,JORDAN5C:12;
+     suppose
+A27:   q in LSeg(m/.len m,fp);
+         len m in dom m by A20,FINSEQ_5:6;
+       then m/.len m = m.len m by FINSEQ_4:def 4
+              .= f.Index(fp,f) by A9,JORDAN4:22
+              .= f/.Index(fp,f) by A10,FINSEQ_4:def 4;
+       then LE q, fp, L~f, p1, p2 by A9,A22,A23,A27,SPRECT_3:40;
+     hence contradiction by A5,A14,A17,JORDAN5C:12;
+    end;
+   hence contradiction;
+  end;
+ hence L~R_Cut(f,fp) /\ Q = { fp } by A11,ZFMISC_1:39;
+end;
+
+theorem
+   for f being non empty FinSequence of TOP-REAL 2,
+     p being Point of TOP-REAL 2 st f is_S-Seq & p = f/.len f holds
+   L~L_Cut (f,p) = {}
+proof
+ let f be non empty FinSequence of TOP-REAL 2,
+     p be Point of TOP-REAL 2;
+ assume that
+A1: f is_S-Seq and
+A2: p = f/.len f;
+    len f >= 2 by A1,TOPREAL1:def 10;
+  then len f >= 1 by AXIOMS:22;
+  then len f in dom f by FINSEQ_3:27;
+  then p = f.len f by A2,FINSEQ_4:def 4;
+  then L_Cut (f,p) = <*p*> by A1,JORDAN5B:17;
+  then len L_Cut (f,p) = 1 by FINSEQ_1:56;
+ hence thesis by TOPREAL1:28;
+end;
+
+canceled;
+
+theorem Th4:
+ for f being S-Sequence_in_R2, p being Point of TOP-REAL 2, j st
+   1 <=j & j < len f & p in L~mid(f,j,len f)
+  holds LE f/.j, p, L~f, f/.1, f/.len f
+proof
+ let f be S-Sequence_in_R2, p be Point of TOP-REAL 2, j such that
+A1: 1 <=j & j < len f and
+A2: p in L~mid(f,j,len f);
+A3: L~f is_an_arc_of f/.1,f/.len f by TOPREAL1:31;
+  consider i such that
+A4: 1 <= i & i+1 <= len mid(f,j,len f) and
+A5: p in LSeg(mid(f,j,len f),i) by A2,SPPOL_2:13;
+A6: len mid(f,j,len f)=len f-'j+1 by A1,JORDAN4:20;
+    then i <= len f -' j by A4,REAL_1:53;
+    then A7: i + j <= len f by A1,SPRECT_3:7;
+      j+1 <= j+i by A4,AXIOMS:24;
+then A8: j <= j+i-'1 by JORDAN3:12;
+      1+1 <= j+i by A1,A4,REAL_1:55;
+then A9: 1 <= j+i-'1 by JORDAN3:12;
+     i<len f-'j+1 by A4,A6,NAT_1:38;
+   then A10: p in LSeg(f,j+i-'1) by A1,A4,A5,JORDAN4:31;
+     j+i >= i by NAT_1:29;
+   then 1 <= j+i by A4,AXIOMS:22;
+then A11: j+i-'1+1 <= len f by A7,AMI_5:4;
+  then A12:  LE f/.(j+i-'1), p, L~f, f/.1, f/.len f by A9,A10,JORDAN5C:25;
+    j+i-'1+1 >= j+i-'1 by NAT_1:29;
+  then len f >= j+i-'1 by A11,AXIOMS:22;
+  then LE f/.j, f/.(j+i-'1), L~f, f/.1, f/.len f by A1,A8,JORDAN5C:24;
+ hence LE f/.j, p, L~f, f/.1, f/.len f by A3,A12,JORDAN5C:13;
+end;
+
+theorem Th5:
+ for f being S-Sequence_in_R2, p,q being Point of TOP-REAL 2, j st
+   1 <=j & j < len f & p in LSeg(f,j) & q in LSeg(p,f/.(j+1))
+  holds LE p, q, L~f, f/.1, f/.len f
+proof let f be S-Sequence_in_R2, p,q be Point of TOP-REAL 2, j such that
+A1: 1 <=j & j < len f and
+A2: p in LSeg(f,j) and
+A3: q in LSeg(p,f/.(j+1));
+A4: L~f is_an_arc_of f/.1, f/.len f by TOPREAL1:31;
+A5: j+1 <= len f by A1,NAT_1:38;
+then A6: LSeg(f,j) = LSeg(f/.j,f/.(j+1)) by A1,TOPREAL1:def 5;
+      f/.(j+1) in LSeg(f,j) by A1,A5,TOPREAL1:27;
+    then A7:   LSeg(p,f/.(j+1)) c= LSeg(f,j) by A2,A6,TOPREAL1:12;
+then A8: q in LSeg(f,j) by A3;
+A9: LSeg(f,j) c= L~f by TOPREAL3:26;
+  per cases;
+  suppose p = q;
+   hence thesis by A2,A4,A9,JORDAN5C:9;
+  suppose
+A10: q <> p;
+   for i, j being Nat st p in LSeg(f,i) & q in LSeg(f,j)
+  & 1 <= i & i+1 <= len f
+  & 1 <= j & j+1 <= len f holds
+       i <= j & (i = j implies LE p,q,f/.i,f/.(i+1))
+  proof let i1, i2 be Nat such that
+A11: p in LSeg(f,i1) and
+A12: q in LSeg(f,i2) and
+A13: 1 <= i1 & i1+1 <= len f and
+A14: 1 <= i2 & i2+1 <= len f;
+A15: now assume i1 + 1 > j & j+1 > i1;
+      then i1 <= j & j <= i1 by NAT_1:38;
+     hence i1 = j by AXIOMS:21;
+    end;
+A16: p in LSeg(f,i1) /\ LSeg(f,j) by A2,A11,XBOOLE_0:def 3;
+     then LSeg(f,i1) meets LSeg(f,j) by XBOOLE_0:4;
+then A17: i1 + 1 >= j & j + 1 >= i1 by TOPREAL1:def 9;
+    A18: now assume
+A19:   j + 1 = i1;
+        j+(1+1) = j+1+1 by XCMPLX_1:1;
+      then p in {f/.(j+1)} by A1,A13,A16,A19,TOPREAL1:def 8;
+      then p = f/.(j+1) by TARSKI:def 1;
+      then q in {p} by A3,TOPREAL1:7;
+     hence contradiction by A10,TARSKI:def 1;
+    end;
+    then i1 + 1 = j or i1 = j by A15,A17,AXIOMS:21;
+    then A20: i1 <= j by NAT_1:29;
+A21: now assume i2 + 1 > j & j+1 > i2;
+      then i2 <= j & j <= i2 by NAT_1:38;
+     hence i2 = j by AXIOMS:21;
+    end;
+A22: q in LSeg(f,i2) /\ LSeg(f,j) by A3,A7,A12,XBOOLE_0:def 3;
+    then LSeg(f,i2) meets LSeg(f,j) by XBOOLE_0:4;
+    then i2 + 1 >= j & j + 1 >= i2 by TOPREAL1:def 9;
+    then A23:   i2 + 1 = j or i2 = j or j + 1 = i2 by A21,AXIOMS:21;
+      1 <= j+1 by NAT_1:29;
+then A24: j+1 in dom f by A5,FINSEQ_3:27;
+A25: j in dom f by A1,FINSEQ_3:27;
+A26:now assume f/.(j+1)=f/.j;
+      then j = j+1 by A24,A25,PARTFUN2:17;
+     hence contradiction by REAL_1:69;
+    end;
+A27: now assume
+A28:   i2+1 = j;
+        i2+(1+1) = i2+1+1 by XCMPLX_1:1;
+      then q in {f/.j} by A5,A14,A22,A28,TOPREAL1:def 8;
+      then q = f/.j by TARSKI:def 1;
+     hence contradiction by A3,A6,A7,A10,A26,SPPOL_1:24;
+    end;
+    then i2 >= j by A23,NAT_1:29;
+    hence i1 <= i2 by A20,AXIOMS:22;
+    assume
+A29:   i1 = i2;
+       not p in LSeg(q,f/.(j+1)) by A3,A10,SPRECT_3:16;
+     then not LE q,p,f/.j,f/.(j+1) by JORDAN3:65;
+     then LT p,q,f/.j,f/.(j+1) by A2,A6,A12,A15,A17,A18,A26,A27,A29,AXIOMS:21,
+JORDAN3:63;
+    hence LE p,q,f/.i1,f/.(i1+1) by A15,A17,A18,A27,A29,AXIOMS:21,JORDAN3:def 7
+;
+  end;
+ hence LE p, q, L~f, f/.1, f/.len f by A2,A8,A9,A10,JORDAN5C:30;
+end;
+
+theorem Th6:
+ for f being S-Sequence_in_R2, Q being closed Subset of TOP-REAL 2
+  st L~f meets Q & not f/.len f in Q
+holds L~L_Cut(f,Last_Point(L~f,f/.1,f/.len f,Q)) /\ Q =
+            { Last_Point(L~f,f/.1,f/.len f,Q) }
+proof
+ let f be S-Sequence_in_R2, Q be closed Subset of TOP-REAL 2
+ such that
+A1: L~f meets Q and
+A2: not f/.len f in Q;
+  set p1 = f/.1, p2 = f/.len f, lp = Last_Point(L~f,p1,p2,Q);
+    len f >= 1+1 by TOPREAL1:def 10;
+then A3: len f > 1 by NAT_1:38;
+A4: L~f /\ Q is closed by TOPS_1:35;
+A5: L~f is_an_arc_of p1,p2 by TOPREAL1:31;
+then A6: lp in L~f /\ Q by A1,A4,JORDAN5C:def 2;
+then A7: lp in Q by XBOOLE_0:def 3;
+A8: lp in L~f by A6,XBOOLE_0:def 3;
+  then A9: 1<=Index(lp,f) & Index(lp,f)<=len f by JORDAN3:41;
+      len f in dom f by A3,FINSEQ_3:27;
+     then lp <> f.len f by A2,A7,FINSEQ_4:def 4;
+   then lp in L~L_Cut(f,lp) by A8,JORDAN5B:22;
+   then A10:  lp in L~L_Cut(f,lp) /\ Q by A7,XBOOLE_0:def 3;
+    now
+   assume not L~L_Cut(f,lp) /\ Q c= { lp };
+    then consider q being set such that
+A11:  q in L~L_Cut(f,lp) /\ Q and
+A12:  not q in { lp } by TARSKI:def 3;
+    reconsider q as Point of TOP-REAL 2 by A11;
+A13:  q <> lp by A12,TARSKI:def 1;
+A14:  q in Q by A11,XBOOLE_0:def 3;
+A15:  q in L~L_Cut(f,lp) by A11,XBOOLE_0:def 3;
+      L~L_Cut(f,lp) c= L~f by A8,JORDAN3:77;
+then A16:  LE q, lp, L~f, p1, p2 by A4,A14,A15,JORDAN5C:16;
+    set m = mid(f,Index(lp,f)+1,len f);
+A17: Index(lp,f) < len f by A8,JORDAN3:41;
+    then A18: Index(lp,f)+1 <= len f by NAT_1:38;
+A19: 1 <= Index(lp,f)+1 by NAT_1:29;
+    then len m = len f -' (Index(lp,f)+1)+1 by A18,JORDAN4:20;
+    then len m <> 0 by NAT_1:29;
+then A20: m is non empty by FINSEQ_1:25;
+  per cases;
+  suppose lp=f.(Index(lp,f)+1);
+    then A21:  q in L~m by A15,JORDAN3:def 4;
+A22:    lp in LSeg(f,Index(lp,f)) by A8,JORDAN3:42;
+     now assume Index(lp,f)+1 >= len f;
+        then Index(lp,f)+1 = len f by A18,AXIOMS:21;
+        then len m = 1 by A3,JORDAN4:27;
+       hence contradiction by A21,TOPREAL1:28;
+      end;
+then A23:    LE f/.(Index(lp,f)+1), q, L~f, f/.1, f/.len f by A19,A21,Th4;
+        f/.(Index(lp,f)+1) in LSeg(lp,f/.(Index(lp,f)+1)) by TOPREAL1:6;
+      then LE lp, f/.(Index(lp,f)+1), L~f, p1, p2 by A9,A17,A22,Th5;
+      then LE lp, q, L~f, p1, p2 by A5,A23,JORDAN5C:13;
+     hence contradiction by A5,A13,A16,JORDAN5C:12;
+  suppose lp<>f.(Index(lp,f)+1);
+    then q in L~(<*lp*>^m) by A15,JORDAN3:def 4;
+    then A24:  q in L~m \/ LSeg(m/.1,lp) by A20,SPPOL_2:20;
+      1 <= Index(lp,f)+1 by NAT_1:29;
+then A25:    Index(lp,f)+1 in dom f by A18,FINSEQ_3:27;
+A26:    lp in LSeg(f,Index(lp,f)) by A8,JORDAN3:42;
+      now per cases by A24,XBOOLE_0:def 2;
+     suppose
+A27:   q in L~m;
+     now assume Index(lp,f)+1 >= len f;
+        then Index(lp,f)+1 = len f by A18,AXIOMS:21;
+        then len m = 1 by A3,JORDAN4:27;
+       hence contradiction by A27,TOPREAL1:28;
+      end;
+then A28:    LE f/.(Index(lp,f)+1), q, L~f, f/.1, f/.len f by A19,A27,Th4;
+        f/.(Index(lp,f)+1) in LSeg(lp,f/.(Index(lp,f)+1)) by TOPREAL1:6;
+      then LE lp, f/.(Index(lp,f)+1), L~f, p1, p2 by A9,A17,A26,Th5;
+      then LE lp, q, L~f, p1, p2 by A5,A28,JORDAN5C:13;
+     hence contradiction by A5,A13,A16,JORDAN5C:12;
+     suppose
+A29:   q in LSeg(lp,m/.1);
+         1 in dom m by A20,FINSEQ_5:6;
+       then m/.1 = m.1 by FINSEQ_4:def 4
+              .= f.(Index(lp,f)+1) by A3,A18,A19,JORDAN3:27
+              .= f/.(Index(lp,f)+1) by A25,FINSEQ_4:def 4;
+       then LE lp, q, L~f, p1, p2 by A9,A17,A26,A29,Th5;
+     hence contradiction by A5,A13,A16,JORDAN5C:12;
+    end;
+   hence contradiction;
+  end;
+ hence L~L_Cut(f,lp) /\ Q = { lp } by A10,ZFMISC_1:39;
+end;
+
+reserve q for Point of TOP-REAL 2;
+
+Lm1:
+ for f being
+   clockwise_oriented (non constant standard special_circular_sequence)
+  st f/.1 = N-min L~f
+ holds LeftComp f <> RightComp f
+proof
+ let f be clockwise_oriented (non constant standard special_circular_sequence);
+  set A = N-min L~f;
+ assume that
+A1: f/.1 = A and
+A2: LeftComp f = RightComp f;
+A3: LeftComp SpStSeq L~f c= LeftComp f by A1,SPRECT_3:58;
+  consider i such that
+A4: 1 <= i and
+A5: i < len GoB f and
+A6: A = (GoB f)*(i,width GoB f) by SPRECT_3:45;
+  set w = width GoB f;
+A7: len f > 4 by GOBOARD7:36;
+then A8: 1+1 <= len f by AXIOMS:22;
+A9: w > 1 by GOBOARD7:35;
+then A10: w-'1+1 = w by AMI_5:4;
+A11: [i,w] in Indices GoB f by A4,A5,A9,GOBOARD7:10;
+A12: 1 <= i+1 & i+1 <= len GoB f by A5,NAT_1:29,38;
+then A13: [i+1,w] in Indices GoB f by A9,GOBOARD7:10;
+A14: 1 in dom f by FINSEQ_5:6;
+A15:   i in dom GoB f by A4,A5,FINSEQ_3:27;
+   then A16: f/.(1+1) = (GoB f)*(i+1,w) by A1,A6,SPRECT_3:46;
+   then A17: right_cell(f,1) = cell(GoB f,i,w-'1) by A1,A6,A8,A10,A11,A13,
+GOBOARD5:29;
+  set z2 = 1/2*((GoB f)*(i,w-'1)+(GoB f)*(i+1,w)),
+      p1 = 1/2*((GoB f)*(i,w)+(GoB f)*(i+1,w)),
+      p2 = 1/2*((GoB f)*(i,w-'1)+(GoB f)*(i,w));
+A18:  1 <= w-'1 by A9,JORDAN3:12;
+   then A19: z2 in Int cell(GoB f,i,w-'1) by A4,A10,A12,GOBOARD6:34;
+A20: Int right_cell(f,1) c= RightComp f by A8,GOBOARD9:28;
+A21: z2 in RightComp SpStSeq L~f
+  proof
+A22: W-bound L~SpStSeq L~f = W-bound L~f &
+   S-bound L~SpStSeq L~f = S-bound L~f &
+   N-bound L~SpStSeq L~f = N-bound L~f &
+   E-bound L~SpStSeq L~f = E-bound L~f by SPRECT_1:66,67,68,69;
+A23: 1 < i+1 by A4,NAT_1:38;
+A24: 1 <= len GoB f by A4,A5,AXIOMS:22;
+A25: w-'1 < w by A10,REAL_1:69;
+A26: z2 = 1/2*(A+(GoB f)*(i+1,w-'1)) by A4,A6,A10,A12,A18,GOBOARD7:11;
+    then A27:  z2`1 = 1/2*(A+(GoB f)*(i+1,w-'1))`1 by TOPREAL3:9
+             .= 1/2*(A`1+(GoB f)*(i+1,w-'1)`1) by TOPREAL3:7
+             .= 1/2*A`1+1/2*((GoB f)*(i+1,w-'1))`1 by XCMPLX_1:8;
+A28:  z2`2 = 1/2*(A+(GoB f)*(i+1,w-'1))`2 by A26,TOPREAL3:9
+             .= 1/2*(A`2+(GoB f)*(i+1,w-'1)`2) by TOPREAL3:7
+             .= 1/2*(N-bound L~f+(GoB f)*(i+1,w-'1)`2) by PSCOMP_1:94
+             .= 1/2*N-bound L~f+1/2*((GoB f)*(i+1,w-'1))`2 by XCMPLX_1:8;
+A29: 1/2*(W-bound L~f) + 1/2*(W-bound L~f)
+        = 1/2*((W-bound L~f)+(W-bound L~f)) by XCMPLX_1:8
+       .= 1/2*(2*(W-bound L~f)) by XCMPLX_1:11
+       .= (W-bound L~f) by XCMPLX_1:108;
+A30: 1/2*(S-bound L~f) + 1/2*(S-bound L~f)
+        = 1/2*((S-bound L~f)+(S-bound L~f)) by XCMPLX_1:8
+       .= 1/2*(2*(S-bound L~f)) by XCMPLX_1:11
+       .= (S-bound L~f) by XCMPLX_1:108;
+A31: 1/2*(N-bound L~f) + 1/2*(N-bound L~f)
+        = 1/2*((N-bound L~f)+(N-bound L~f)) by XCMPLX_1:8
+       .= 1/2*(2*(N-bound L~f)) by XCMPLX_1:11
+       .= N-bound L~f by XCMPLX_1:108;
+A32: 1/2*(E-bound L~f) + 1/2*(E-bound L~f)
+        = 1/2*((E-bound L~f)+(E-bound L~f)) by XCMPLX_1:8
+       .= 1/2*(2*(E-bound L~f)) by XCMPLX_1:11
+       .= (E-bound L~f) by XCMPLX_1:108;
+       N-min L~f in L~f by SPRECT_1:13;
+     then A`1 >= W-bound L~f by PSCOMP_1:71;
+     then A33: 1/2*A`1 >= 1/2*W-bound L~f by AXIOMS:25;
+A34: (GoB f)*(1,w-'1)`1 = (GoB f)*(1,1)`1 by A18,A24,A25,GOBOARD5:3;
+       (GoB f)*(i+1,w-'1)`1 > (GoB f)*(1,w-'1)`1 by A12,A18,A23,A25,GOBOARD5:4;
+     then (GoB f)*(i+1,w-'1)`1 > W-bound L~f by A34,JORDAN5D:39;
+     then 1/2*((GoB f)*(i+1,w-'1))`1 > 1/2*W-bound L~f by REAL_1:70;
+    then A35: W-bound L~SpStSeq L~f < z2`1 by A22,A27,A29,A33,REAL_1:67;
+A36: A`1 < (N-max L~f)`1 by SPRECT_2:55;
+      N-max L~f in L~f by SPRECT_1:13;
+    then (N-max L~f)`1 <= E-bound L~f by PSCOMP_1:71;
+    then A`1 < E-bound L~f by A36,AXIOMS:22;
+    then A37: 1/2*A`1 < 1/2*E-bound L~f by REAL_1:70;
+A38: (GoB f)*(len GoB f,w-'1)`1 = (GoB f)*(len GoB f,1)`1
+                     by A18,A24,A25,GOBOARD5:3;
+       (GoB f)*(i+1,w-'1)`1 <= (GoB f)*(len GoB f,w-'1)`1 by A12,A18,A25,
+SPRECT_3:25;
+     then (GoB f)*(i+1,w-'1)`1 <= E-bound L~f by A38,JORDAN5D:41;
+     then 1/2*((GoB f)*(i+1,w-'1))`1 <= 1/2*E-bound L~f by AXIOMS:25;
+    then A39: z2`1 < E-bound L~SpStSeq L~f by A22,A27,A32,A37,REAL_1:67;
+     N-bound L~f > S-bound L~f by SPRECT_1:34;
+   then A40: 1/2*N-bound L~f > 1/2*S-bound L~f by REAL_1:70;
+A41: (GoB f)*(i+1,1)`2 = (GoB f)*(1,1)`2 by A9,A12,GOBOARD5:2;
+     (GoB f)*(i+1,w-'1)`2 >= (GoB f)*(i+1,1)`2 by A12,A18,A25,SPRECT_3:24;
+   then (GoB f)*(i+1,w-'1)`2 >= S-bound L~f by A41,JORDAN5D:40;
+   then 1/2*((GoB f)*(i+1,w-'1))`2 >= 1/2*S-bound L~f by AXIOMS:25;
+   then A42: S-bound L~SpStSeq L~f < z2`2 by A22,A28,A30,A40,REAL_1:67;
+A43: (GoB f)*(i+1,w)`2 = (GoB f)*(1,width GoB f)`2 by A9,A12,GOBOARD5:2;
+     (GoB f)*(i+1,w-'1)`2 < (GoB f)*(i+1,w)`2 by A12,A18,A25,GOBOARD5:5;
+   then (GoB f)*(i+1,w-'1)`2 < N-bound L~f by A43,JORDAN5D:42;
+   then 1/2*((GoB f)*(i+1,w-'1))`2 < 1/2*N-bound L~f by REAL_1:70;
+   then A44: z2`2 < N-bound L~SpStSeq L~f by A22,A28,A31,REAL_1:53;
+     RightComp SpStSeq L~f =
+     {q : W-bound L~SpStSeq L~f < q`1 & q`1 < E-bound L~SpStSeq L~f
+        & S-bound L~SpStSeq L~f < q`2 & q`2 < N-bound L~SpStSeq L~f}
+          by SPRECT_3:54;
+   hence thesis by A35,A39,A42,A44;
+  end;
+   consider z1 being set such that
+A45: z1 in LeftComp SpStSeq L~f by XBOOLE_0:def 1;
+     LeftComp SpStSeq L~f misses RightComp SpStSeq L~f by SPRECT_1:96;
+then A46: z1 <> z2 by A21,A45,XBOOLE_0:3;
+   reconsider z1 as Point of TOP-REAL 2 by A45;
+   consider P being Subset of TOP-REAL 2 such that
+A47: P is_S-P_arc_joining z1,z2 and
+A48: P c= RightComp f by A2,A3,A17,A19,A20,A45,A46,TOPREAL4:30;
+   consider Red' being FinSequence of TOP-REAL 2 such that
+A49: Red' is_S-Seq and
+A50: P = L~Red' and
+A51: z1 = Red'/.1 and
+A52: z2 = Red'/.len Red' by A47,TOPREAL4:def 1;
+A53: L~SpStSeq L~f meets L~Red' by A21,A45,A49,A51,A52,SPRECT_3:50;
+A54: 2 in dom f by A8,FINSEQ_3:27;
+A55: len f in dom f by FINSEQ_5:6;
+A56: len f -' 1 >= 1 & len f -' 1 <= len f by A8,JORDAN3:7,12;
+then A57: len f -' 1 in dom f by FINSEQ_3:27;
+       1 <= len f by A55,FINSEQ_3:27;
+then A58: len f -' 1 + 1 = len f by AMI_5:4;
+then A59: len f -' 1 < len f by NAT_1:38;
+A60: <*NW-corner L~f*> is_in_the_area_of f by SPRECT_2:30;
+A61:  w-'1 < width GoB f by A10,NAT_1:38;
+  then Int cell(GoB f,i,w-'1) misses L~SpStSeq L~f by A4,A5,A18,SPRECT_3:72;
+  then A62: not z2 in L~SpStSeq L~f by A19,XBOOLE_0:3;
+A63: LSeg(NW-corner L~f,NE-corner L~f) c= L~SpStSeq L~f by SPRECT_3:26;
+A64: f/.1 = f/.len f by FINSEQ_6:def 1;
+A65:  NW-corner L~f in LSeg(NW-corner L~f,NE-corner L~f) by TOPREAL1:6;
+A66:  N-min L~f in LSeg(NW-corner L~f,NE-corner L~f) by SPRECT_3:28;
+    then A67: LSeg(NW-corner L~f,N-min L~f) c= LSeg(NW-corner L~f,NE-corner L~f
+)
+         by A65,TOPREAL1:12;
+A68: LSeg(NW-corner L~f,NE-corner L~f) is horizontal by SPRECT_3:29;
+  then A69: LSeg(NW-corner L~f,N-min L~f) is horizontal by A67,SPRECT_1:11;
+      1 + 2 <= len f by A7,AXIOMS:22;
+    then A70: LSeg(f,1) /\ LSeg(f,1+1) = {f/.(1+1)} by TOPREAL1:def 8;
+      len f >= 2 + 1 by A7,AXIOMS:22;
+    then len f -' 1 >= 1 + 1 by JORDAN3:12;
+    then len f -' 1 -' 1 >= 1 by JORDAN3:12;
+    then A71:  len f -' 2 >= 1 by JORDAN3:8;
+A72:  len f -' 2 + 1 = len f -' 1 -' 1 + 1 by JORDAN3:8
+        .= len f -' 1 by A56,AMI_5:4;
+      len f >= 2 by A7,AXIOMS:22;
+    then len f -' 2 + 2 = len f by AMI_5:4;
+    then A73: LSeg(f,len f -' 1) /\ LSeg(f,len f -' 2) = {f/.(len f -' 1)}
+         by A71,A72,TOPREAL1:def 8;
+A74: f/.2 in N-most L~f by A1,SPRECT_2:34;
+      N-most L~f c= LSeg(NW-corner L~f,NE-corner L~f) by SPRECT_3:27;
+    then A75: LSeg(f/.1, f/.2) c= LSeg(NW-corner L~f,NE-corner L~f)
+             by A1,A66,A74,TOPREAL1:12;
+A76: ((GoB f)*(i,w-'1))`1 = ((GoB f)*(i,1))`1 by A4,A5,A18,A61,GOBOARD5:3
+            .= A`1 by A4,A5,A6,A9,GOBOARD5:3;
+A77: (GoB f)*(i+1,w)`2 = (GoB f)*(1,w)`2 by A9,A12,GOBOARD5:2
+            .= A`2 by A4,A5,A6,A9,GOBOARD5:2;
+then A78: (f/.2)`2 = N-bound L~f by A16,PSCOMP_1:94;
+A79:  <*(GoB f)*(i+1,w)*> is_in_the_area_of f by A9,A12,SPRECT_3:66;
+       <*(GoB f)*(i,w-'1)*> is_in_the_area_of f by A4,A5,A18,A61,SPRECT_3:66;
+     then <*(GoB f)*(i,w-'1),(GoB f)*(i+1,w)*> is_in_the_area_of f
+      by A79,SPRECT_3:59;
+     then <*z2*> is_in_the_area_of f by SPRECT_3:67;
+     then A80: <*z2*> is_in_the_area_of SpStSeq L~f by SPRECT_3:70;
+A81: (GoB f)*(i,w-'1) = f/.(len f -' 1) by A1,A6,A15,SPRECT_3:46;
+    then LSeg(A,f/.(len f -' 1)) is vertical by A76,SPPOL_1:37;
+    then A82:  LSeg(A,f/.(len f -' 1)) /\ LSeg(NW-corner L~f,A) = { A }
+              by A69,SPRECT_3:22;
+A83: (NW-corner L~f)`2 = A`2 by PSCOMP_1:95;
+A84: (NW-corner L~f)`1 <= A`1 by PSCOMP_1:97;
+  A`1 <= (f/.2)`1 by A74,PSCOMP_1:98;
+     then A in LSeg(NW-corner L~f,f/.2) by A16,A77,A83,A84,GOBOARD7:9;
+     then A85:  LSeg(A,f/.2) /\ LSeg(NW-corner L~f,A) = { A } by TOPREAL1:14;
+     ((GoB f)*(i,w))`2 = ((GoB f)*(1,w))`2 by A4,A5,A9,GOBOARD5:2
+      .= ((GoB f)*(i+1,w))`2 by A9,A12,GOBOARD5:2;
+   then ((GoB f)*(i,w-'1)+(GoB f)*(i,w))`2
+     = ((GoB f)*(i,w-'1))`2+((GoB f)*(i+1,w))`2 by TOPREAL3:7
+    .= ((GoB f)*(i,w-'1)+(GoB f)*(i+1,w))`2 by TOPREAL3:7;
+   then p2`2 = 1/2*((GoB f)*(i,w-'1)+(GoB f)*(i+1,w)) `2 by TOPREAL3:9
+     .= z2`2 by TOPREAL3:9;
+then A86: LSeg(p2,z2) is horizontal by SPPOL_1:36;
+A87: f/.(len f -' 1) in LSeg(f/.(len f -' 1), f/.len f) by TOPREAL1:6;
+A88: (GoB f)*(i,w) = f/.len f by A1,A6,FINSEQ_6:def 1;
+   p2 = 1/2*((GoB f)*(i,w-'1))+(1 - 1/2)*((GoB f)*(i,w)) by EUCLID:36;
+ then A89: p2 in LSeg(f/.(len f -' 1), f/.len f)
+   by A81,A88,SPPOL_1:22;
+then A90: LSeg(p2,f/.(len f -' 1)) c= LSeg(f/.(len f -' 1), f/.len f)
+           by A87,TOPREAL1:12;
+   LSeg(f/.(len f -' 1), f/.len f) = LSeg(f,len f -' 1)
+           by A56,A58,TOPREAL1:def 5;
+ then LSeg(f/.(len f -' 1), f/.len f) c= L~f by TOPREAL3:26;
+then A91: LSeg(p2,f/.(len f -' 1)) c= L~f by A90,XBOOLE_1:1;
+A92: LSeg(p2,f/.(len f -' 1)) c= LSeg(f,len f -' 1)
+          by A56,A58,A90,TOPREAL1:def 5;
+A93: p2`1 = 1/2*((GoB f)*(i,w-'1)+A)`1 by A6,TOPREAL3:9
+       .= 1/2*(A`1+A`1) by A76,TOPREAL3:7
+       .= 1/2*(2*A`1) by XCMPLX_1:11
+       .= (N-min L~f)`1 by XCMPLX_1:108;
+  then A94: LSeg(p2,f/.(len f -' 1)) is vertical by A76,A81,SPPOL_1:37;
+  A95: p2 in LSeg(p2,f/.(len f -' 1)) by TOPREAL1:6;
+then A96: p2 in L~f by A91;
+A97: now assume p2 = A;
+        then f/.(len f -' 1) = f/.len f by A1,A6,A64,A81,SPRECT_3:15;
+       hence contradiction by A55,A57,A58,GOBOARD7:31;
+      end;
+
+       1 + 1 + 1 <= len f by A7,AXIOMS:22;
+     then A98: 1 + 1 <= len f -' 1 by JORDAN3:12;
+     then A99:  1 <= len f -' 1 -' 1 by JORDAN3:12;
+       1 <= len f -' 1 by A98,AXIOMS:22;
+     then A100:  len f -' 1 -'1 + 1 = len f -' 1 by AMI_5:4;
+A101:  len f >= 2 by A7,AXIOMS:22;
+A102: len f -' 1 -' 1 + 2 = len f -' 2 + 2 by JORDAN3:8
+         .= len f by A101,AMI_5:4;
+A103: for i,j st 1 <= i & i <= j & j < len f -' 1 holds
+         L~mid(f,i,j) misses LSeg(p2,f/.(len f -' 1))
+   proof let l,j such that
+A104: 1 <= l and
+A105: l <= j and
+A106: j < len f -' 1;
+       len f -' 1 > l by A105,A106,AXIOMS:22;
+     then len f -' 1 > 1 by A104,AXIOMS:22;
+     then A107:    len f -' 1 < len f by JORDAN3:14;
+     then A108: j < len f by A106,AXIOMS:22;
+    assume L~mid(f,l,j) meets LSeg(p2,f/.(len f -' 1));
+     then L~mid(f,l,j) /\ LSeg(p2,f/.(len f -' 1)) <> {} by XBOOLE_0:def 7;
+     then consider p being Point of TOP-REAL 2 such that
+A109: p in L~mid(f,l,j) /\ LSeg(p2,f/.(len f -' 1)) by SUBSET_1:10;
+A110:  p in LSeg(p2,f/.(len f -' 1)) by A109,XBOOLE_0:def 3;
+       p in L~mid(f,l,j) by A109,XBOOLE_0:def 3;
+     then consider ii being Nat such that
+A111:  1 <= ii and
+A112:  ii+1 <= len mid(f,l,j) and
+A113:  p in LSeg(mid(f,l,j),ii) by SPPOL_2:13;
+     set k = ii+l-'1;
+       len mid(f,l,j) = j-'l+1 by A104,A105,A108,JORDAN4:20;
+     then A114:   ii<j-'l+1 by A112,NAT_1:38;
+     per cases by A105,REAL_1:def 5;
+     suppose l = j;
+      then len mid(f,l,j) = 1 by A104,A108,JORDAN4:27;
+      then L~mid(f,l,j) = {} by TOPREAL1:28;
+     hence thesis by A113,SPPOL_2:17;
+     suppose
+A115:    l < j;
+      then A116:    LSeg(mid(f,l,j),ii)=LSeg(f,k) by A104,A108,A111,A114,
+JORDAN4:31;
+A117:   ii + l >= ii + 1 by A104,AXIOMS:24;
+       ii + 1 >= 1 + 1 by A111,AXIOMS:24;
+     then A118:   ii + l >= 1 + 1 by A117,AXIOMS:22;
+     then A119:   k >= 1 by JORDAN3:12;
+A120:    ii + l >= 1 by A118,AXIOMS:22;
+A121:  now assume k + 1 >= len f -' 1;
+         then k >= len f -'1 -' 1 by SPRECT_3:6;
+         then A122:       ii + l >= len f -' 1 by A120,SPRECT_3:9;
+           ii + l < j -' l + 1 + l by A114,REAL_1:53;
+         then ii + l < j -' l + l + 1 by XCMPLX_1:1;
+         then ii + l < j + 1 by A115,AMI_5:4;
+         then len f -' 1 < j + 1 by A122,AXIOMS:22;
+        hence contradiction by A106,NAT_1:38;
+       end;
+A123:  p in LSeg(f,k) /\ LSeg(f,len f -' 1) by A92,A110,A113,A116,XBOOLE_0:def
+3;
+     then LSeg(f,k) meets LSeg(f,len f -' 1) by XBOOLE_0:4;
+     then k <= 1 by A107,A121,GOBOARD5:def 4;
+     then A124:   k = 1 by A119,AXIOMS:21;
+       LSeg(f,1) /\ LSeg(f,len f -' 1) = { f.1 } by JORDAN4:54
+         .= {f/.1} by A14,FINSEQ_4:def 4;
+     then p = f/.1 by A123,A124,TARSKI:def 1;
+    hence contradiction by A1,A64,A89,A97,A110,SPRECT_3:16;
+   end;
+
+A125: for j st 1 <= j & j < len f -' 1 holds
+   L~mid(f,j,len f -' 1) /\ LSeg(p2,f/.(len f -' 1)) = {f/.(len f -' 1)}
+ proof let j such that
+A126: 1 <= j and
+A127: j < len f -' 1;
+A128:  f/.(len f -' 1) in LSeg(p2,f/.(len f -' 1)) by TOPREAL1:6;
+A129:  1 <= len f -' 1 by A126,A127,AXIOMS:22;
+A130:  len f -' 1 -' 1 = len f -' 2 by JORDAN3:8;
+then A131:  len f -' 2 < len f -' 1 by A129,JORDAN5B:1;
+       j <= len f -' 2 by A127,A130,JORDAN3:12;
+then A132:  LSeg(p2,f/.(len f -' 1)) misses L~mid(f,j,len f -' 2)
+           by A103,A126,A131;
+     len f -' 1 <= len f by GOBOARD9:2;
+   then L~mid(f,j,len f -' 1) = LSeg(f,len f -' 2) \/ L~mid(f,j,len f -' 2)
+         by A126,A127,A130,SPRECT_3:36;
+  hence L~mid(f,j,len f -' 1) /\ LSeg(p2,f/.(len f -' 1))
+             = LSeg(f,len f -' 2) /\ LSeg(p2,f/.(len f -' 1))
+             by A132,XBOOLE_1:78
+            .= {f/.(len f -' 1)} by A73,A92,A128,SPRECT_3:2;
+ end;
+
+A133: LSeg(NW-corner L~f,N-min L~f) misses LSeg(f/.(len f -' 1),p2)
+   proof assume LSeg(NW-corner L~f,A) meets LSeg(f/.(len f -' 1),p2);
+     then LSeg(p2,f/.(len f -' 1)) /\
+ LSeg(NW-corner L~f,A) <> {} by XBOOLE_0:def 7;
+     then consider p being Point of TOP-REAL 2 such that
+A134: p in LSeg(p2,f/.(len f -' 1)) /\ LSeg(NW-corner L~f,A) by SUBSET_1:10;
+A135:  p in LSeg(p2,f/.(len f -' 1)) by A134,XBOOLE_0:def 3;
+       p in LSeg(NW-corner L~f,A) by A134,XBOOLE_0:def 3;
+     then p in { A } by A1,A64,A82,A90,A135,XBOOLE_0:def 3;
+     then p = A by TARSKI:def 1;
+    hence contradiction by A1,A64,A89,A97,A135,SPRECT_3:16;
+   end;
+     p2`2 <> A`2 by A93,A97,TOPREAL3:11;
+   then A136: LSeg(NW-corner L~f,N-min L~f) misses LSeg(z2,p2)
+         by A69,A86,SPRECT_3:21;
+     set G = GoB f;
+A137:  LSeg(z2,p2) c= Int cell(G,i,w-'1) \/ { p2 } by A4,A5,A10,A18,A61,
+GOBOARD6:43;
+A138: Int cell(GoB f,i,w-'1) misses L~f by A5,A61,GOBOARD7:14;
+       L~f /\ (Int cell(G,i,w-'1) \/ { p2 })
+       = L~f /\ Int cell(G,i,w-'1) \/ L~f /\ { p2 } by XBOOLE_1:23
+      .= {} \/ L~f /\ { p2 } by A138,XBOOLE_0:def 7
+      .= L~f /\ { p2 };
+     then A139:   LSeg(z2,p2) /\ L~f c= L~f /\ { p2 } by A137,XBOOLE_1:26;
+       L~f /\ { p2 } c= { p2 } by XBOOLE_1:17;
+     then A140:  LSeg(z2,p2) /\ L~f c= { p2 } by A139,XBOOLE_1:1;
+A141: for i,j st 1 <= i & i < j & j < len f holds
+         L~mid(f,i,j) misses LSeg(z2,p2)
+   proof let l,j such that
+A142: 1 <= l and
+A143: l < j and
+A144: j < len f;
+    assume L~mid(f,l,j) meets LSeg(z2,p2);
+     then L~mid(f,l,j) /\ LSeg(z2,p2) <> {} by XBOOLE_0:def 7;
+     then consider p being Point of TOP-REAL 2 such that
+A145: p in L~mid(f,l,j) /\ LSeg(z2,p2) by SUBSET_1:10;
+A146:  p in LSeg(z2,p2) by A145,XBOOLE_0:def 3;
+       p in L~mid(f,l,j) by A145,XBOOLE_0:def 3;
+     then consider ii being Nat such that
+A147:  1 <= ii and
+A148:  ii+1 <= len mid(f,l,j) and
+A149:  p in LSeg(mid(f,l,j),ii) by SPPOL_2:13;
+A150:  len mid(f,l,j) = j-'l+1 by A142,A143,A144,JORDAN4:20;
+     then ii<j-'l+1 by A148,NAT_1:38;
+     then A151:   p in LSeg(f,ii+l-'1) by A142,A143,A144,A147,A149,JORDAN4:31;
+     then A152:  p in LSeg(f,ii+l-'1) /\ LSeg(z2,p2) by A146,XBOOLE_0:def 3;
+     set k = ii+l-'1;
+A153:   ii + l >= ii + 1 by A142,AXIOMS:24;
+       ii + 1 >= 1 + 1 by A147,AXIOMS:24;
+     then ii + l >= 1 + 1 by A153,AXIOMS:22;
+     then A154:   k >= 1 by JORDAN3:12;
+       len f >= 1 + 1 by A7,AXIOMS:22;
+     then A155:  len f -' 1 >= 1 by JORDAN3:12;
+       LSeg(f,k) c= L~f by TOPREAL3:26;
+     then LSeg(f,k) /\ LSeg(z2,p2) c= L~f /\ LSeg(z2,p2) by XBOOLE_1:26;
+     then LSeg(f,k) /\ LSeg(z2,p2) c= { p2 } by A140,XBOOLE_1:1;
+     then p = p2 by A152,TARSKI:def 1;
+     then p2 in LSeg(f,k) /\ LSeg(f/.(len f -' 1), f/.len f)
+          by A89,A151,XBOOLE_0:def 3;
+     then A156:   p2 in LSeg(f,k) /\ LSeg(f,len f -' 1) by A58,A155,TOPREAL1:
+def 5;
+then A157:  LSeg(f,k) meets LSeg(f,len f -' 1) by XBOOLE_0:4;
+    per cases by A59,A157,GOBOARD5:def 4;
+    suppose k <= 1;
+     then A158:   k = 1 by A154,AXIOMS:21;
+       LSeg(f,1) /\ LSeg(f,len f -' 1) = {f.1} by JORDAN4:54
+         .= {f/.1} by A14,FINSEQ_4:def 4;
+    hence contradiction by A1,A97,A156,A158,TARSKI:def 1;
+    suppose k+1 >= len f -' 1;
+     then A159:  k >= len f -' 1 -' 1 by SPRECT_3:6;
+       ii+l >= l by NAT_1:29;
+     then A160: ii+l >= 1 by A142,AXIOMS:22;
+       ii <= j -' l by A148,A150,REAL_1:53;
+     then ii + l <= j by A143,SPRECT_3:7;
+     then ii+l < len f by A144,AXIOMS:22;
+     then ii+l-'1 < len f -' 1 by A160,SPRECT_3:9;
+     then ii+l-'1 <= len f -' 1 -' 1 by JORDAN3:12;
+     then k = len f -' 1 -' 1 by A159,AXIOMS:21;
+     then p2 in {f/.(len f -' 1)} by A99,A100,A102,A156,TOPREAL1:def 8;
+     then p2 = f/.(len f -' 1) by TARSKI:def 1;
+    hence contradiction by A6,A81,A97,SPRECT_3:15;
+   end;
+     f is_in_the_area_of f by SPRECT_2:25;
+then A161: <*p2*> is_in_the_area_of f by A91,A95,SPRECT_3:63;
+  then A162: <*p2*> is_in_the_area_of SpStSeq L~f by SPRECT_3:70;
+    <*p2,z2*> = <*p2*>^<*z2*> by FINSEQ_1:def 9;
+  then <*p2,z2*> is_in_the_area_of SpStSeq L~f by A80,A162,SPRECT_2:28;
+  then A163: L~SpStSeq L~f /\ LSeg(p2,z2) c= { p2 } by A62,SPRECT_3:64;
+   w-'1 <= width(GoB f) by GOBOARD9:2;
+ then ((GoB f)*(i,w-'1))`1 = ((GoB f)*(i,1))`1 by A4,A5,A18,GOBOARD5:3
+      .= ((GoB f)*(i,w))`1 by A4,A5,A9,GOBOARD5:3;
+ then ((GoB f)*(i,w)+(GoB f)*(i+1,w))`1
+   = ((GoB f)*(i,w-'1))`1+((GoB f)*(i+1,w))`1 by TOPREAL3:7
+  .= ((GoB f)*(i,w-'1)+(GoB f)*(i+1,w))`1 by TOPREAL3:7;
+ then p1`1 = 1/2*((GoB f)*(i,w-'1)+(GoB f)*(i+1,w))`1 by TOPREAL3:9
+   .= z2`1 by TOPREAL3:9;
+then A164: LSeg(p1,z2) is vertical by SPPOL_1:37;
+A165: f/.2 in LSeg(f/.1, f/.(1+1)) by TOPREAL1:6;
+   p1 = 1/2*((GoB f)*(i,w))+(1-1/2)*((GoB f)*(i+1,w)) by EUCLID:36;
+ then A166: p1 in LSeg(f/.1, f/.2) by A1,A6,A16,SPPOL_1:22;
+then A167: LSeg(p1,f/.2) c= LSeg(f/.1, f/.2) by A165,TOPREAL1:12;
+ A168:  LSeg(f/.1, f/.(1+1)) = LSeg(f,1) by A8,TOPREAL1:def 5;
+ then LSeg(f/.1, f/.2) c= L~f by TOPREAL3:26;
+then A169: LSeg(p1,f/.2) c= L~f by A167,XBOOLE_1:1;
+A170: p1`2 = 1/2*(A+(GoB f)*(i+1,w))`2 by A6,TOPREAL3:9
+       .= 1/2*(A`2+A`2) by A77,TOPREAL3:7
+       .= 1/2*(2*A`2) by XCMPLX_1:11
+       .= (N-min L~f)`2 by XCMPLX_1:108
+       .= N-bound L~f by PSCOMP_1:94;
+   A171: p1 in LSeg(p1,f/.2) by TOPREAL1:6;
+A172: now assume p1 = A;
+        then f/.1 = f/.(1+1) by A1,A6,A16,SPRECT_3:15;
+       hence contradiction by A14,A54,GOBOARD7:31;
+      end;
+A173: for i,j st 2 < i & i <= j & j<= len f holds
+         L~mid(f,i,j) misses LSeg(p1,f/.2)
+   proof let l,j such that
+A174: 2 < l and
+A175: l <= j and
+A176: j<= len f;
+A177: 1 < l by A174,AXIOMS:22;
+    assume L~mid(f,l,j) meets LSeg(p1,f/.2);
+     then L~mid(f,l,j) /\ LSeg(p1,f/.2) <> {} by XBOOLE_0:def 7;
+     then consider p being Point of TOP-REAL 2 such that
+A178: p in L~mid(f,l,j) /\ LSeg(p1,f/.2) by SUBSET_1:10;
+A179:  p in LSeg(p1,f/.2) by A178,XBOOLE_0:def 3;
+       p in L~mid(f,l,j) by A178,XBOOLE_0:def 3;
+     then consider ii being Nat such that
+A180:  1 <= ii and
+A181:  ii+1 <= len mid(f,l,j) and
+A182:  p in LSeg(mid(f,l,j),ii) by SPPOL_2:13;
+     set k = ii+l-'1;
+A183:  len mid(f,l,j) = j-'l+1 by A175,A176,A177,JORDAN4:20;
+     then A184:   ii<j-'l+1 by A181,NAT_1:38;
+A185:   ii + l > ii + 2 by A174,REAL_1:53;
+       ii + 2 >= 1 + 2 by A180,AXIOMS:24;
+     then ii + l > 1 + 2 by A185,AXIOMS:22;
+     then A186:   k > 1+1 by SPRECT_3:5;
+     per cases by A175,REAL_1:def 5;
+     suppose l = j;
+      then len mid(f,l,j) = 1 by A176,A177,JORDAN4:27;
+      then L~mid(f,l,j) = {} by TOPREAL1:28;
+     hence thesis by A182,SPPOL_2:17;
+     suppose l < j;
+    then LSeg(mid(f,l,j),ii)=LSeg(f,k) by A176,A177,A180,A184,JORDAN4:31;
+then A187:  p in LSeg(f,k) /\ LSeg(f,1) by A167,A168,A179,A182,XBOOLE_0:def 3;
+     then LSeg(f,k) meets LSeg(f,1) by XBOOLE_0:4;
+     then k+1 >= len f by A186,GOBOARD5:def 4;
+     then A188:  k >= len f -' 1 by SPRECT_3:6;
+       ii <= j -' l by A181,A183,REAL_1:53;
+     then ii + l <= j by A175,SPRECT_3:7;
+     then ii+l <= len f by A176,AXIOMS:22;
+     then ii+l-'1 <= len f -' 1 by JORDAN3:5;
+     then A189:  k = len f -' 1 by A188,AXIOMS:21;
+       LSeg(f,1) /\ LSeg(f,len f -' 1) = { f.1 } by JORDAN4:54
+         .= {f/.1} by A14,FINSEQ_4:def 4;
+     then p = f/.1 by A187,A189,TARSKI:def 1;
+    hence contradiction by A1,A166,A172,A179,SPRECT_3:16;
+   end;
+A190: for j st 2 < j & j <= len f holds
+         L~mid(f,2,j) /\ LSeg(p1,f/.2) = {f/.2}
+   proof let j such that
+A191: 2 < j and
+A192: j <= len f;
+       2+1 <= j by A191,NAT_1:38;
+then A193:  LSeg(p1,f/.2) misses L~mid(f,2+1,j) by A173,A192;
+A194:  f/.2 in LSeg(p1,f/.2) by TOPREAL1:6;
+       L~mid(f,2,j) = LSeg(f,2) \/ L~mid(f,2+1,j) by A191,A192,SPRECT_3:35;
+    hence L~mid(f,2,j) /\ LSeg(p1,f/.2)
+           = LSeg(f,2) /\ LSeg(p1,f/.2) by A193,XBOOLE_1:78
+          .= {f/.2} by A70,A167,A168,A194,SPRECT_3:2;
+   end;
+A195:    LSeg(p1,f/.2) misses LSeg(NW-corner L~f,A)
+   proof assume LSeg(p1,f/.2) meets LSeg(NW-corner L~f,A);
+     then LSeg(p1,f/.2) /\ LSeg(NW-corner L~f,A) <> {} by XBOOLE_0:def 7;
+     then consider p being Point of TOP-REAL 2 such that
+A196: p in LSeg(p1,f/.2) /\ LSeg(NW-corner L~f,A) by SUBSET_1:10;
+A197:  p in LSeg(p1,f/.2) by A196,XBOOLE_0:def 3;
+       p in LSeg(NW-corner L~f,A) by A196,XBOOLE_0:def 3;
+     then p in { A } by A1,A85,A167,A197,XBOOLE_0:def 3;
+     then p = A by TARSKI:def 1;
+    hence contradiction by A1,A166,A172,A197,SPRECT_3:16;
+   end;
+A198: LSeg(NW-corner L~f,N-min L~f) misses LSeg(z2,p1)
+   proof assume LSeg(NW-corner L~f,N-min L~f) meets LSeg(z2,p1);
+     then LSeg(NW-corner L~f,N-min L~f) /\ LSeg(z2,p1) <> {} by XBOOLE_0:def 7
+;
+     then consider p being Point of TOP-REAL 2 such that
+A199: p in LSeg(NW-corner L~f,N-min L~f) /\ LSeg(z2,p1) by SUBSET_1:10;
+A200:  p in LSeg(NW-corner L~f,N-min L~f) by A199,XBOOLE_0:def 3;
+A201:  p in LSeg(z2,p1) by A199,XBOOLE_0:def 3;
+       LSeg(NW-corner L~f,NE-corner L~f) /\ LSeg(z2,p1) = {p1}
+            by A68,A75,A164,A166,SPRECT_3:23;
+     then p in {p1} by A67,A200,A201,XBOOLE_0:def 3;
+     then p1 in LSeg(NW-corner L~f,N-min L~f) by A200,TARSKI:def 1;
+     then p1 in LSeg(NW-corner L~f,N-min L~f) /\ L~f by A169,A171,XBOOLE_0:def
+3;
+     then p1 in { N-min L~f } by PSCOMP_1:102;
+    hence contradiction by A172,TARSKI:def 1;
+   end;
+A202: for i,j st 1 < i & i < j & j<= len f holds
+         L~mid(f,i,j) misses LSeg(z2,p1)
+   proof let l,j such that
+A203: 1 < l and
+A204: l < j and
+A205: j<= len f;
+    assume L~mid(f,l,j) meets LSeg(z2,p1);
+     then L~mid(f,l,j) /\ LSeg(z2,p1) <> {} by XBOOLE_0:def 7;
+     then consider p being Point of TOP-REAL 2 such that
+A206: p in L~mid(f,l,j) /\ LSeg(z2,p1) by SUBSET_1:10;
+A207:  p in LSeg(z2,p1) by A206,XBOOLE_0:def 3;
+       p in L~mid(f,l,j) by A206,XBOOLE_0:def 3;
+     then consider ii being Nat such that
+A208:  1 <= ii and
+A209:  ii+1 <= len mid(f,l,j) and
+A210:  p in LSeg(mid(f,l,j),ii) by SPPOL_2:13;
+A211:  len mid(f,l,j) = j-'l+1 by A203,A204,A205,JORDAN4:20;
+     then ii<j-'l+1 by A209,NAT_1:38;
+     then A212:   p in LSeg(f,ii+l-'1) by A203,A204,A205,A208,A210,JORDAN4:31;
+     then A213:  p in LSeg(f,ii+l-'1) /\ LSeg(z2,p1) by A207,XBOOLE_0:def 3;
+     set k = ii+l-'1, G = GoB f;
+A214:   ii + l > ii + 1 by A203,REAL_1:53;
+       ii + 1 >= 1 + 1 by A208,AXIOMS:24;
+     then ii + l > 1 + 1 by A214,AXIOMS:22;
+     then A215:   k > 1 by SPRECT_3:5;
+A216:  LSeg(z2,p1) c= Int cell(G,i,w-'1) \/ { p1 } by A4,A5,A10,A18,A61,
+GOBOARD6:44;
+A217: Int cell(GoB f,i,w-'1) misses L~f by A5,A61,GOBOARD7:14;
+       L~f /\ (Int cell(G,i,w-'1) \/ { p1 })
+       = L~f /\ Int cell(G,i,w-'1) \/ L~f /\ { p1 } by XBOOLE_1:23
+      .= {} \/ L~f /\ { p1 } by A217,XBOOLE_0:def 7
+      .= L~f /\ { p1 };
+     then A218:   LSeg(z2,p1) /\ L~f c= L~f /\ { p1 } by A216,XBOOLE_1:26;
+       L~f /\ { p1 } c= { p1 } by XBOOLE_1:17;
+     then A219:  LSeg(z2,p1) /\ L~f c= { p1 } by A218,XBOOLE_1:1;
+A220:  len f >= 2 by A7,AXIOMS:22;
+       LSeg(f,k) c= L~f by TOPREAL3:26;
+     then LSeg(f,k) /\ LSeg(z2,p1) c= L~f /\ LSeg(z2,p1) by XBOOLE_1:26;
+     then LSeg(f,k) /\ LSeg(z2,p1) c= { p1 } by A219,XBOOLE_1:1;
+     then p = p1 by A213,TARSKI:def 1;
+     then p1 in LSeg(f,k) /\ LSeg(f/.1,f/.(1+1)) by A166,A212,XBOOLE_0:def 3;
+     then A221:   p1 in LSeg(f,k) /\ LSeg(f,1) by A220,TOPREAL1:def 5;
+     then LSeg(f,k) meets LSeg(f,1) by XBOOLE_0:4;
+then A222:   k <= 1+1 or k+1 >= len f by GOBOARD5:def 4;
+    per cases by A222;
+    suppose
+A223:   k <= 2;
+       k >= 1+1 by A215,NAT_1:38;
+     then A224:   k = 2 by A223,AXIOMS:21;
+       1 + 2 <= len f by A7,AXIOMS:22;
+     then p1 in {f/.(1+1)} by A221,A224,TOPREAL1:def 8;
+     then p1 = f/.(1+1) by TARSKI:def 1;
+    hence contradiction by A6,A16,A172,SPRECT_3:15;
+    suppose k+1 >= len f;
+     then A225:  k >= len f -' 1 by SPRECT_3:6;
+       ii <= j -' l by A209,A211,REAL_1:53;
+     then ii + l <= j by A204,SPRECT_3:7;
+     then ii+l <= len f by A205,AXIOMS:22;
+     then ii+l-'1 <= len f -' 1 by JORDAN3:5;
+     then A226:  k = len f -' 1 by A225,AXIOMS:21;
+       LSeg(f,1) /\ LSeg(f,len f -' 1) = { f.1 } by JORDAN4:54
+         .= {f/.1} by A14,FINSEQ_4:def 4;
+    hence contradiction by A1,A172,A221,A226,TARSKI:def 1;
+   end;
+    LSeg(f/.1,f/.2) c= L~SpStSeq L~f by A1,SPRECT_3:48;
+  then A227: L~SpStSeq L~f /\ LSeg(p1,z2) = { p1 }
+           by A62,A80,A166,SPRECT_3:65;
+A228: LSeg(p1,f/.2) is horizontal by A78,A170,SPPOL_1:36;
+   A229: p1 in LSeg(p1,f/.2) by TOPREAL1:6;
+then A230: p1 in L~f by A169;
+     f is_in_the_area_of f by SPRECT_2:25;
+then A231: <*p1*> is_in_the_area_of f by A169,A229,SPRECT_3:63;
+     RightComp f misses L~f by SPRECT_3:42;
+then A232: L~f misses L~Red' by A48,A50,XBOOLE_1:63;
+ reconsider Red' as S-Sequence_in_R2 by A49;
+    len Red' in dom Red' by FINSEQ_5:6;
+then A233:  z2 in L~Red' by A52,SPPOL_2:48;
+  set u1 = Last_Point(L~Red',Red'/.1,Red'/.len Red',L~SpStSeq L~f),
+      Red = L_Cut(Red',u1),
+      u2 = First_Point(L~Red,Red/.1,Red/.len Red,LSeg(z2,p1)),
+      u3 = First_Point(L~Red,Red/.1,Red/.len Red,LSeg(z2,p2));
+        NW-corner L~SpStSeq L~f = NW-corner L~f by SPRECT_1:70;
+then A234: u1 <> NW-corner L~f by A21,A45,A51,A52,SPRECT_3:55;
+A235: L~Red' is_an_arc_of z1,z2 by A51,A52,TOPREAL1:31;
+    L~Red' /\ L~SpStSeq L~f is closed by TOPS_1:35;
+then A236: u1 in L~Red' /\ L~SpStSeq L~f by A51,A52,A53,A235,JORDAN5C:def 2;
+  then A237: u1 in L~SpStSeq L~f by XBOOLE_0:def 3;
+A238: u1 in L~Red' by A236,XBOOLE_0:def 3;
+A239:
+ now assume u1 in L~f;
+   then u1 in L~f /\ L~Red' by A238,XBOOLE_0:def 3;
+  hence contradiction by A232,XBOOLE_0:def 7;
+ end;
+    len Red' in dom Red' by FINSEQ_5:6;
+then u1 <> Red'.len Red' by A52,A62,A237,FINSEQ_4:def 4;
+  then reconsider Red as S-Sequence_in_R2 by A238,JORDAN3:69;
+  1 in dom Red by FINSEQ_5:6;
+then A240: Red/.1 =Red.1 by FINSEQ_4:def 4
+     .= u1 by A238,JORDAN3:58;
+A241: L~SpStSeq L~f /\ L~Red = { u1 } by A52,A53,A62,Th6;
+    len Red' in dom Red' by FINSEQ_5:6;
+  then z2 = Red'.len Red' by A52,FINSEQ_4:def 4;
+then A242: z2 in L~Red by A62,A233,A237,A238,JORDAN5B:25;
+     Red is_in_the_area_of SpStSeq L~f by A21,A45,A51,A52,SPRECT_3:71;
+   then A243: Red is_in_the_area_of f by SPRECT_3:70;
+     A244: L~Red c= L~Red' by A238,JORDAN3:77;
+then A245: L~f misses L~Red by A232,XBOOLE_1:63;
+   z2 in LSeg(p1,z2) by TOPREAL1:6;
+then A246: LSeg(p1,z2) meets L~Red by A242,XBOOLE_0:3;
+   z2 in LSeg(p2,z2) by TOPREAL1:6;
+then A247: LSeg(p2,z2) meets L~Red by A242,XBOOLE_0:3;
+A248: L~Red /\ LSeg(p1,z2) is closed by TOPS_1:35;
+A249: L~Red /\ LSeg(p2,z2) is closed by TOPS_1:35;
+    L~Red is_an_arc_of Red/.1,Red/.len Red by TOPREAL1:31;
+then A250: u3 in LSeg(p2,z2) /\ L~Red by A247,A249,JORDAN5C:def 1;
+then A251: u3 in L~Red by XBOOLE_0:def 3;
+A252: u3 in LSeg(p2,z2) by A250,XBOOLE_0:def 3;
+A253: u3 <> p2 by A91,A95,A232,A244,A251,XBOOLE_0:3;
+   p2 in LSeg(p2,z2) by TOPREAL1:6;
+then A254: LSeg(p2,u3) c= LSeg(p2,z2) by A252,TOPREAL1:12;
+ then A255: LSeg(u3,p2) is horizontal by A86,SPRECT_1:11;
+A256: LSeg(NW-corner L~f,N-min L~f) misses LSeg(u3,p2) by A136,A254,XBOOLE_1:63
+;
+A257: for i,j st 1 <= i & i < j & j < len f holds
+         L~mid(f,i,j) misses LSeg(u3,p2)
+   proof let i,j;
+    assume 1 <= i & i < j & j < len f;
+     then L~mid(f,i,j) misses LSeg(z2,p2) by A141;
+    hence thesis by A254,XBOOLE_1:63;
+   end;
+A258:
+  now assume
+A259:  u3 = Red.1;
+     1 in dom Red by FINSEQ_5:6;
+   then u3 in L~SpStSeq L~f by A237,A240,A259,FINSEQ_4:def 4;
+   then u3 in LSeg(p2,z2) /\ L~SpStSeq L~f by A252,XBOOLE_0:def 3;
+   hence contradiction by A163,A253,TARSKI:def 1;
+  end;
+    L~Red is_an_arc_of Red/.1,Red/.len Red by TOPREAL1:31;
+then A260: u2 in LSeg(p1,z2) /\ L~Red by A246,A248,JORDAN5C:def 1;
+then A261: u2 in L~Red by XBOOLE_0:def 3;
+A262: u2 in LSeg(p1,z2) by A260,XBOOLE_0:def 3;
+A263: u2 <> p1 by A169,A229,A232,A244,A261,XBOOLE_0:3;
+   p1 in LSeg(p1,z2) by TOPREAL1:6;
+then A264: LSeg(p1,u2) c= LSeg(p1,z2) by A262,TOPREAL1:12;
+  then A265: LSeg(p1,u2) is vertical by A164,SPRECT_1:12;
+A266: LSeg(NW-corner L~f,N-min L~f) misses LSeg(u2,p1) by A198,A264,XBOOLE_1:63
+;
+A267: for i,j st 1 < i & i < j & j<= len f holds
+         L~mid(f,i,j) misses LSeg(u2,p1)
+   proof let i,j;
+    assume 1 < i & i < j & j<= len f;
+     then L~mid(f,i,j) misses LSeg(z2,p1) by A202;
+    hence thesis by A264,XBOOLE_1:63;
+   end;
+A268:
+  now assume
+A269:  u2 = Red.1;
+     1 in dom Red by FINSEQ_5:6;
+   then u2 in L~SpStSeq L~f by A237,A240,A269,FINSEQ_4:def 4;
+   then u2 in { p1 } by A227,A262,XBOOLE_0:def 3;
+   hence contradiction by A263,TARSKI:def 1;
+  end;
+  reconsider Red2=R_Cut(Red,u3) as S-Sequence_in_R2 by A251,A258,JORDAN3:70;
+A270: Rev Red2 is S-Sequence_in_R2 by SPPOL_2:47;
+A271: Red2/.1 = u1 by A240,A251,SPRECT_3:39;
+A272: len Red2 in dom Red2 by FINSEQ_5:6;
+A273: (Rev Red2)/.1 = Red2/.len Red2 by FINSEQ_5:68
+          .= Red2.len Red2 by A272,FINSEQ_4:def 4
+          .= u3 by A251,JORDAN3:59;
+then A274: ((Rev Red2)/.1)`2 = p2`2 & (Rev Red2)/.1 <> p2
+             by A86,A91,A95,A232,A244,A251,A252,SPRECT_3:19,XBOOLE_0:3;
+A275: L~Rev Red2 = L~Red2 by SPPOL_2:22;
+    u3 in L~Red2 & u3 in LSeg(p2,u3) by A251,A258,JORDAN5B:23,TOPREAL1:6;
+then A276: u3 in L~Red2 /\ LSeg(p2,u3) by XBOOLE_0:def 3;
+    now assume u1 in LSeg(p2,z2);
+    then u1 in L~SpStSeq L~f /\ LSeg(p2,z2) by A237,XBOOLE_0:def 3;
+   hence contradiction by A96,A163,A239,TARSKI:def 1;
+  end;
+  then LSeg(p2,z2) /\ L~Red2={ u3 } by A240,A247,Th1;
+  then LSeg(p2,u3) /\ L~Red2 c={ u3 } by A254,XBOOLE_1:26;
+  then LSeg(p2,u3) /\ L~Red2={ u3 } by A276,ZFMISC_1:39;
+  then reconsider RB2 = <*p2*>^Rev Red2 as S-Sequence_in_R2
+            by A270,A273,A274,A275,SPRECT_3:31;
+A277: L~Red2 c= L~Red by A251,JORDAN3:76;
+     LSeg(p2,f/.(len f -' 1)) misses L~Red by A91,A245,XBOOLE_1:63;
+   then LSeg(p2,f/.(len f -' 1)) misses L~Red2 by A277,XBOOLE_1:63;
+   then A278: LSeg(p2,f/.(len f -' 1)) /\ L~Red2 = {} by XBOOLE_0:def 7;
+    1 in dom Red2 by FINSEQ_5:6;
+  then u1 in L~Red2 by A271,SPPOL_2:48;
+  then u1 in L~SpStSeq L~f /\ L~Red2 & L~SpStSeq L~f /\ L~Red2 c= { u1 }
+        by A237,A241,A277,XBOOLE_0:def 3,XBOOLE_1:26;
+then A279: L~SpStSeq L~f /\ L~Red2 = { u1 } by ZFMISC_1:39;
+  reconsider Red1=R_Cut(Red,u2) as S-Sequence_in_R2 by A261,A268,JORDAN3:70;
+    len Red1 in dom Red1 by FINSEQ_5:6;
+then A280: Red1/.len Red1 = Red1.len Red1 by FINSEQ_4:def 4
+                  .= u2 by A261,JORDAN3:59;
+A281: Red1/.1 = u1 by A240,A261,SPRECT_3:39;
+A282: (Red1/.len Red1)`1 = p1`1 & Red1/.len Red1 <> p1
+           by A164,A169,A229,A232,A244,A261,A262,A280,SPRECT_3:20,XBOOLE_0:3;
+    u2 in L~Red1 & u2 in LSeg(p1,u2) by A261,A268,JORDAN5B:23,TOPREAL1:6;
+then A283: u2 in L~Red1 /\ LSeg(p1,u2) by XBOOLE_0:def 3;
+    now assume u1 in LSeg(p1,z2);
+    then u1 in L~SpStSeq L~f /\ LSeg(p1,z2) by A237,XBOOLE_0:def 3;
+   hence contradiction by A227,A230,A239,TARSKI:def 1;
+  end;
+  then LSeg(p1,z2) /\ L~Red1={ u2 } by A240,A246,Th1;
+  then LSeg(p1,u2) /\ L~Red1 c={ u2 } by A264,XBOOLE_1:26;
+  then LSeg(p1,u2) /\ L~Red1={ u2 } by A283,ZFMISC_1:39;
+  then reconsider RB1 = Red1^<*p1*> as S-Sequence_in_R2
+     by A280,A282,SPRECT_2:65;
+A284: L~Red1 c= L~Red by A261,JORDAN3:76;
+     LSeg(p1,f/.2) misses L~Red by A169,A245,XBOOLE_1:63;
+   then LSeg(p1,f/.2) misses L~Red1 by A284,XBOOLE_1:63;
+   then A285: LSeg(p1,f/.2) /\ L~Red1 = {} by XBOOLE_0:def 7;
+   1 in dom Red1 by FINSEQ_5:6;
+then A286: u1 in L~Red1 by A281,SPPOL_2:48;
+ then u1 in L~SpStSeq L~f /\ L~Red1 & L~SpStSeq L~f /\ L~Red1 c= { u1 }
+       by A237,A241,A284,XBOOLE_0:def 3,XBOOLE_1:26;
+then A287: L~SpStSeq L~f /\ L~Red1 = { u1 } by ZFMISC_1:39;
+    len Rev Red2 = len Red2 by FINSEQ_5:def 3;
+then A288: RB2/.len RB2 = (Rev Red2)/.len Red2 by SPRECT_3:11
+           .= u1 by A271,FINSEQ_5:68;
+A289: RB2/.1 = p2 by FINSEQ_5:16;
+   L~Rev Red2 = L~Red2 by SPPOL_2:22;
+then A290: L~RB2 = L~Red2 \/ LSeg(p2,u3) by A273,SPPOL_2:20;
+then A291: LSeg(p2,f/.(len f -' 1)) /\ L~RB2
+         = {} \/ LSeg(p2,f/.(len f -' 1)) /\ LSeg(u3,p2) by A278,XBOOLE_1:23
+        .={ p2 } by A94,A255,SPRECT_3:22;
+    <*u3*> is_in_the_area_of f by A243,A251,SPRECT_3:63;
+ then Red2 is_in_the_area_of f by A243,A251,SPRECT_3:69;
+ then Rev Red2 is_in_the_area_of f by SPRECT_3:68;
+then A292: RB2 is_in_the_area_of f by A161,SPRECT_2:28;
+   1 in dom Red1 by FINSEQ_5:6;
+then A293: RB1/.1 = u1 by A281,GROUP_5:95;
+   len <*p1*> = 1 by FINSEQ_1:56;
+ then len RB1 = len Red1 + 1 by FINSEQ_1:35;
+then A294: RB1/.len RB1 = p1 by TOPREAL4:1;
+A295: L~RB1 = L~Red1 \/ LSeg(u2,p1) by A280,SPPOL_2:19;
+then A296: LSeg(p1,f/.2) /\ L~RB1
+            = {} \/ LSeg(p1,f/.2) /\ LSeg(u2,p1) by A285,XBOOLE_1:23
+           .={ p1 } by A228,A265,SPRECT_3:22;
+    <*u2*> is_in_the_area_of f by A243,A261,SPRECT_3:63;
+  then Red1 is_in_the_area_of f by A243,A261,SPRECT_3:69;
+then A297: RB1 is_in_the_area_of f by A231,SPRECT_2:28;
+A298: L~Red' is_an_arc_of z1,z2 by A47,A50,TOPREAL4:3;
+    L~Red' /\ L~SpStSeq L~f is closed by TOPS_1:35;
+  then u1 in L~Red' /\ L~SpStSeq L~f by A51,A52,A53,A298,JORDAN5C:def 2;
+  then u1 in L~SpStSeq L~f by XBOOLE_0:def 3;
+  then u1 in
+   (LSeg(NW-corner L~f,NE-corner L~f) \/ LSeg(NE-corner L~f,SE-corner L~f)) \/
+   (LSeg(SE-corner L~f,SW-corner L~f) \/ LSeg(SW-corner L~f,NW-corner L~f))
+       by SPRECT_1:43;
+then A299: u1 in LSeg(NW-corner L~f,NE-corner L~f) \/ LSeg(NE-corner L~f,
+SE-corner L~f)
+    or
+   u1 in LSeg(SE-corner L~f,SW-corner L~f) \/ LSeg(SW-corner L~f,NW-corner L~f)
+       by XBOOLE_0:def 2;
+     N-most L~f = LSeg(NW-corner L~f, NE-corner L~f) /\ L~f by PSCOMP_1:def 39
+;
+   then A300:  N-most L~f c= LSeg(NW-corner L~f,NE-corner L~f) &
+    A in N-most L~f by PSCOMP_1:101,XBOOLE_1:17;
+   then LSeg(NW-corner L~f,NE-corner L~f)
+     = LSeg(NW-corner L~f,A) \/ LSeg(A,NE-corner L~f) by TOPREAL1:11;
+   then A301: u1 in LSeg(NW-corner L~f,NE-corner L~f) implies
+    u1 in LSeg(NW-corner L~f,A) or u1 in LSeg(A,NE-corner L~f) by XBOOLE_0:def
+2;
+ per cases by A299,A301,XBOOLE_0:def 2;
+ suppose
+A302: u1 in LSeg(NW-corner L~f,A);
+  set i1 = (S-min L~f)..f, i2 = (E-min L~f)..f;
+A303: S-min L~f in rng f by SPRECT_2:45;
+then A304: i1 in dom f by FINSEQ_4:30;
+A305: E-min L~f in rng f by SPRECT_2:49;
+then A306: i2 in dom f by FINSEQ_4:30;
+      (S-max L~f)..f < i1 &
+    i2 <= (S-max L~f)..f by A1,SPRECT_2:76,77;
+then A307: i2 < i1 by AXIOMS:22;
+      (W-min L~f)..f < len f &
+    i1 <= (W-min L~f)..f by A1,SPRECT_2:78,80;
+then A308: i1 < len f by AXIOMS:22;
+      (N-max L~f)..f > 1 by A1,SPRECT_2:73;
+then A309: (N-max L~f)..f >= 1+1 by NAT_1:38;
+      (N-max L~f)..f <= (E-max L~f)..f by A1,SPRECT_2:74;
+then A310: 2 <= (E-max L~f)..f by A309,AXIOMS:22;
+      (E-max L~f)..f < (E-min L~f)..f by A1,SPRECT_2:75;
+then A311: 2 < i2 by A310,AXIOMS:22;
+then A312: 2 < i1 by A307,AXIOMS:22;
+  then 1 < i1 by AXIOMS:22;
+  then reconsider M1 = mid(f,i1,len f) as S-Sequence_in_R2 by A308,JORDAN4:52;
+    (NW-corner L~f)`2 = N-bound L~f & A`2 = N-bound L~f
+    by PSCOMP_1:75,94;
+then A313: u1`2 = (NW-corner L~f)`2 by A302,GOBOARD7:6;
+    u1 in LSeg(NW-corner L~f,u1) by TOPREAL1:6;
+  then u1 in LSeg(NW-corner L~f,u1) /\ L~Red1 by A286,XBOOLE_0:def 3;
+then A314: { u1 } c= LSeg(NW-corner L~f,u1) /\ L~Red1 by ZFMISC_1:37;
+A315: NW-corner L~f in LSeg(NW-corner L~f,NE-corner L~f) by TOPREAL1:6;
+     then LSeg(NW-corner L~f,A) c= LSeg(NW-corner L~f,NE-corner L~f)
+       by A300,TOPREAL1:12;
+  then LSeg(NW-corner L~f,u1) c= LSeg(NW-corner L~f,NE-corner L~f)
+      by A302,A315,TOPREAL1:12;
+  then LSeg(NW-corner L~f,u1) c= L~SpStSeq L~f by A63,XBOOLE_1:1;
+  then LSeg(NW-corner L~f,u1) /\ L~Red1 c= { u1 } by A287,XBOOLE_1:26;
+  then A316: LSeg(NW-corner L~f,u1) /\ L~Red1={ u1 } by A314,XBOOLE_0:def 10;
+    NW-corner L~f in LSeg(NW-corner L~f,A) by TOPREAL1:6;
+  then A317:  LSeg(NW-corner L~f,u1) c= LSeg(NW-corner L~f,A) by A302,TOPREAL1:
+12;
+  then LSeg(NW-corner L~f,u1) misses LSeg(u2,p1) by A266,XBOOLE_1:63;
+  then LSeg(NW-corner L~f,u1) /\ LSeg(u2,p1) = {} by XBOOLE_0:def 7;
+  then LSeg(NW-corner L~f,u1) /\ L~RB1
+            = { u1 } \/ {} by A295,A316,XBOOLE_1:23
+           .= { u1 };
+  then reconsider M3 = <*NW-corner L~f*>^RB1 as S-Sequence_in_R2
+                              by A234,A293,A313,SPRECT_3:31;
+A318: i2 <= len f by A306,FINSEQ_3:27;
+  then reconsider M4 = mid(f,2,i2) as S-Sequence_in_R2 by A311,JORDAN4:52;
+A319: M3/.len M3 = p1 by A294,SPRECT_3:11;
+A320: M4/.1 = f/.2 by A54,A306,SPRECT_2:12;
+A321: L~M3 = LSeg(NW-corner L~f,RB1/.1) \/ L~RB1 by SPPOL_2:20;
+A322: L~M4 c= L~f by A54,A306,SPRECT_3:34;
+A323:  now assume L~f meets LSeg(NW-corner L~f,u1);
+      then consider u being set such that
+A324:    u in L~f and
+A325:    u in LSeg(NW-corner L~f,u1) by XBOOLE_0:3;
+      reconsider u as Point of TOP-REAL 2 by A324;
+A326:   u in LSeg(NW-corner L~f,A) /\ L~f by A317,A324,A325,XBOOLE_0:def 3;
+        LSeg(NW-corner L~f,A) /\ L~f = {A} by PSCOMP_1:102;
+      then u = A by A326,TARSKI:def 1;
+     hence contradiction by A239,A302,A324,A325,SPRECT_3:16;
+    end;
+then A327: L~M4 misses LSeg(NW-corner L~f,u1) by A322,XBOOLE_1:63;
+      L~M4 misses L~Red by A245,A322,XBOOLE_1:63;
+then A328: L~M4 misses L~Red1 by A284,XBOOLE_1:63;
+      L~M4 misses LSeg(u2,p1) by A267,A311,A318;
+    then L~RB1 misses L~M4 by A295,A328,XBOOLE_1:70;
+then A329: L~M3 misses L~M4 by A293,A321,A327,XBOOLE_1:70;
+      LSeg(p1,f/.2) misses LSeg(NW-corner L~f,u1) by A195,A317,XBOOLE_1:63
+;
+    then LSeg(p1,f/.2) /\ LSeg(NW-corner L~f,u1) = {} by XBOOLE_0:def 7;
+then A330: LSeg(p1,f/.2) /\ L~M3
+         = {} \/ LSeg(p1,f/.2) /\ L~RB1 by A293,A321,XBOOLE_1:23
+        .= { p1 } by A296;
+      LSeg(p1,f/.2) /\ L~M4 = { f/.2 }
+      & (M3/.len M3)`2 = (M4/.1)`2 by A78,A170,A190,A294,A311,A318,A320,
+SPRECT_3:11;
+  then reconsider M2 = M3^M4 as S-Sequence_in_R2
+          by A319,A320,A329,A330,SPRECT_3:38;
+A331: len M2 >= 2 & len M1 >= 2 by TOPREAL1:def 10;
+A332: M1 is_in_the_area_of f by A55,A304,SPRECT_2:27;
+A333: (M1/.1)`2 = (f/.i1)`2 by A55,A304,SPRECT_2:12
+         .= (S-min L~f)`2 by A303,FINSEQ_5:41
+         .= S-bound L~f by PSCOMP_1:114;
+     (M1/.len M1)`2 = (f/.len f)`2 by A55,A304,SPRECT_2:13
+         .= (f/.1)`2 by FINSEQ_6:def 1
+         .= N-bound L~f by A1,PSCOMP_1:94;
+then A334: M1 is_a_v.c._for f by A332,A333,SPRECT_2:def 3;
+      <*NW-corner L~f*>^RB1 is_in_the_area_of f &
+   mid(f,2,i2) is_in_the_area_of f
+     by A54,A60,A297,A306,SPRECT_2:27,28;
+then A335: M2 is_in_the_area_of f by SPRECT_2:28;
+     M2 = <*NW-corner L~f*>^(RB1^mid(f,2,i2)) by FINSEQ_1:45;
+then A336: (M2/.1)`1 = (NW-corner L~f)`1 by FINSEQ_5:16
+        .= W-bound L~f by PSCOMP_1:74;
+     (M2/.len M2)`1 = (mid(f,2,i2)/.len mid(f,2,i2))`1 by SPRECT_3:11
+         .= (f/.i2)`1 by A54,A306,SPRECT_2:13
+         .= (E-min L~f)`1 by A305,FINSEQ_5:41
+         .= E-bound L~f by PSCOMP_1:104;
+   then M2 is_a_h.c._for f by A335,A336,SPRECT_2:def 2;
+  then A337: L~M1 meets L~M2 by A331,A334,SPRECT_2:33;
+      L~M2 = L~M3 \/ LSeg(M3/.len M3,M4/.1) \/ L~M4 &
+   L~M1 misses L~M4 by A307,A308,A311,SPPOL_2:23,SPRECT_2:51;
+   then L~M1 meets L~M3 \/ LSeg(M3/.len M3,M4/.1) &
+   L~M1 misses LSeg(p1,f/.2) by A173,A308,A312,A337,XBOOLE_1:70;
+then A338: L~M1 meets L~M3 by A319,A320,XBOOLE_1:70;
+     1 < i1 by A312,AXIOMS:22;
+then A339: L~M1 misses LSeg(u2,p1) by A267,A308;
+     L~M1 c= L~f by A55,A304,SPRECT_3:34;
+   then L~M1 misses LSeg(NW-corner L~f,u1) &
+  L~M3 = LSeg(NW-corner L~f,RB1/.1) \/ L~RB1 by A323,SPPOL_2:20,XBOOLE_1:63;
+  then L~M1 meets L~RB1 by A293,A338,XBOOLE_1:70;
+  then L~M1 meets L~Red1 by A295,A339,XBOOLE_1:70;
+then A340: L~M1 meets L~Red by A284,XBOOLE_1:63;
+    L~M1 c= L~f by A55,A304,SPRECT_3:34;
+ hence contradiction by A245,A340,XBOOLE_1:63;
+ suppose that
+A341: u1 in LSeg(A,NE-corner L~f) and
+A342: N-min L~f = NW-corner L~f;
+  set i1 = (S-max L~f)..f, i2 = (E-max L~f)..f;
+A343: S-max L~f in rng f by SPRECT_2:46;
+then A344: i1 in dom f by FINSEQ_4:30;
+A345: E-max L~f in rng f by SPRECT_2:50;
+then A346: i2 in dom f by FINSEQ_4:30;
+A347: (E-max L~f)..f < (E-min L~f)..f by A1,SPRECT_2:75;
+      (E-min L~f)..f <= (S-max L~f)..f by A1,SPRECT_2:76;
+then A348: i2 < i1 by A347,AXIOMS:22;
+A349: (S-min L~f)..f <= (W-min L~f)..f by A1,SPRECT_2:78;
+      (S-max L~f)..f < (S-min L~f)..f by A1,SPRECT_2:77;
+    then (S-max L~f)..f < (W-min L~f)..f by A349,AXIOMS:22;
+then A350: (S-max L~f)..f + 1 <= (W-min L~f)..f by NAT_1:38;
+      (W-min L~f)..f < len f by A1,SPRECT_2:80;
+    then (S-max L~f)..f + 1 < len f by A350,AXIOMS:22;
+then A351: i1 < len f -' 1 by A58,AXIOMS:24;
+A352: (N-max L~f)..f > 1 by A1,SPRECT_2:73;
+      (N-max L~f)..f <= (E-max L~f)..f by A1,SPRECT_2:74;
+then A353: 1 < i2 by A352,AXIOMS:22;
+then A354: 1 < i1 by A348,AXIOMS:22;
+  then reconsider M4 = mid(f,i1,len f -' 1) as S-Sequence_in_R2
+                                             by A58,A351,JORDAN4:51;
+A355: M4/.len M4 = f/.(len f -' 1) by A57,A344,SPRECT_2:13;
+      L~M4 c= L~f by A57,A344,SPRECT_3:34;
+    then L~M4 misses L~Red by A245,XBOOLE_1:63;
+then A356: L~M4 misses L~Red2 by A277,XBOOLE_1:63;
+      L~M4 misses LSeg(u3,p2) by A59,A257,A351,A354;
+then A357: L~RB2 misses L~M4 by A290,A356,XBOOLE_1:70;
+   LSeg(M4/.len M4,p2) /\ L~M4={ M4/.len M4 } by A125,A351,A354,A355;
+  then reconsider M1 = M4^RB2 as S-Sequence_in_R2
+              by A76,A81,A93,A289,A291,A355,A357,SPRECT_3:38;
+    i1 < len f by A351,JORDAN3:7;
+  then A358: i2 < len f by A348,AXIOMS:22;
+  then i2+1 <= len f by NAT_1:38;
+  then reconsider M2 = mid(f,1,i2) as S-Sequence_in_R2 by A353,JORDAN4:51;
+A359: len M2 >= 2 & len M1 >= 2 by TOPREAL1:def 10;
+    mid(f,i1,len f -' 1) is_in_the_area_of f by A57,A344,SPRECT_2:27;
+then A360: M1 is_in_the_area_of f by A292,SPRECT_2:28;
+      mid(f,i1,len f -' 1) is non empty by A57,A344,SPRECT_2:11;
+    then 1 in dom mid(f,i1,len f -' 1) by FINSEQ_5:6;
+then A361: (M1/.1)`2 = (mid(f,i1,len f -' 1)/.1)`2 by GROUP_5:95
+         .= (f/.i1)`2 by A57,A344,SPRECT_2:12
+         .= (S-max L~f)`2 by A343,FINSEQ_5:41
+         .= S-bound L~f by PSCOMP_1:114;
+A362: (NE-corner L~f)`2 = N-bound L~f & A`2 = N-bound L~f
+     by PSCOMP_1:77,94;
+     (M1/.len M1)`2 = (RB2/.len RB2)`2 by SPRECT_3:11
+         .= N-bound L~f by A288,A341,A362,GOBOARD7:6;
+then A363: M1 is_a_v.c._for f by A360,A361,SPRECT_2:def 3;
+A364: M2 is_in_the_area_of f by A14,A346,SPRECT_2:27;
+A365: (M2/.1)`1 = (f/.1)`1 by A14,A346,SPRECT_2:12
+        .= W-bound L~f by A1,A342,PSCOMP_1:74;
+     (M2/.len M2)`1 = (f/.i2)`1 by A14,A346,SPRECT_2:13
+         .= (E-max L~f)`1 by A345,FINSEQ_5:41
+         .= E-bound L~f by PSCOMP_1:104;
+   then M2 is_a_h.c._for f by A364,A365,SPRECT_2:def 2;
+  then A366: L~M1 meets L~M2 by A359,A363,SPRECT_2:33;
+A367: L~M1 = L~M4 \/ LSeg(M4/.len M4,p2) \/ L~RB2 by A289,SPPOL_2:23
+       .= L~M4 \/ (LSeg(M4/.len M4,p2) \/ L~RB2) by XBOOLE_1:4;
+A368: L~M2 misses LSeg(u3,p2) by A257,A353,A358;
+    L~M2 misses L~M4 by A59,A348,A351,A353,SPRECT_2:51;
+  then A369:  L~M2 meets L~RB2 \/ LSeg(p2,M4/.len M4) by A366,A367,XBOOLE_1:70;
+    i2 < len f -' 1 by A348,A351,AXIOMS:22;
+  then L~M2 misses LSeg(p2,f/.(len f -' 1)) by A103,A353;
+  then L~M2 meets L~RB2 by A355,A369,XBOOLE_1:70;
+  then L~M2 meets L~Red2 by A290,A368,XBOOLE_1:70;
+then A370: L~M2 meets L~Red by A277,XBOOLE_1:63;
+    L~M2 c= L~f by A14,A346,SPRECT_3:34;
+ hence contradiction by A245,A370,XBOOLE_1:63;
+ suppose that
+A371: u1 in LSeg(A,NE-corner L~f) and
+A372: N-min L~f <> NW-corner L~f;
+A373: W-max L~f <> N-min L~f by A372,PSCOMP_1:124;
+  set i1 = (S-min L~f)..f, i2 = (E-max L~f)..f;
+A374: S-min L~f in rng f by SPRECT_2:45;
+then A375: i1 in dom f by FINSEQ_4:30;
+A376: E-max L~f in rng f by SPRECT_2:50;
+then A377: i2 in dom f by FINSEQ_4:30;
+     (E-max L~f)..f < (E-min L~f)..f &
+    (E-min L~f)..f <= (S-max L~f)..f by A1,SPRECT_2:75,76;
+then A378: (E-max L~f)..f < (S-max L~f)..f by AXIOMS:22;
+      (S-max L~f)..f < (S-min L~f)..f by A1,SPRECT_2:77;
+then A379: i2 < i1 by A378,AXIOMS:22;
+      (S-min L~f)..f <= (W-min L~f)..f &
+    (W-min L~f)..f < (W-max L~f)..f by A1,A373,SPRECT_2:78,79;
+    then (S-min L~f)..f < (W-max L~f)..f by AXIOMS:22;
+    then (S-min L~f)..f + 1 <= (W-max L~f)..f &
+    (W-max L~f)..f < len f by A1,NAT_1:38,SPRECT_2:81;
+    then (S-min L~f)..f + 1 < len f by AXIOMS:22;
+then A380: i1 < len f -' 1 by A58,AXIOMS:24;
+      (N-max L~f)..f > 1 &
+    (N-max L~f)..f <= (E-max L~f)..f by A1,SPRECT_2:73,74;
+then A381: 1 < i2 by AXIOMS:22;
+then A382: 1 < i1 by A379,AXIOMS:22;
+  then reconsider M4 = mid(f,i1,len f -' 1) as S-Sequence_in_R2
+                                             by A58,A380,JORDAN4:51;
+A383: M4/.len M4 = f/.(len f -' 1) by A57,A375,SPRECT_2:13;
+      L~M4 c= L~f by A57,A375,SPRECT_3:34;
+    then L~M4 misses L~Red by A245,XBOOLE_1:63;
+then A384: L~M4 misses L~Red2 by A277,XBOOLE_1:63;
+      L~M4 misses LSeg(u3,p2) by A59,A257,A380,A382;
+then A385: L~RB2 misses L~M4 by A290,A384,XBOOLE_1:70;
+   LSeg(M4/.len M4,p2) /\ L~M4={ M4/.len M4 } by A125,A380,A382,A383;
+  then reconsider M1 = M4^RB2 as S-Sequence_in_R2
+         by A76,A81,A93,A289,A291,A383,A385,SPRECT_3:38;
+    i1 < len f by A380,JORDAN3:7;
+  then A386: i2 < len f by A379,AXIOMS:22;
+  then i2+1 <= len f by NAT_1:38;
+  then reconsider M3 = mid(f,1,i2) as S-Sequence_in_R2 by A381,JORDAN4:51;
+A387: M3/.1 = f/.1 by A14,A377,SPRECT_2:12;
+A388: (N-min L~f)`2 = (NW-corner L~f)`2 by PSCOMP_1:95;
+A389: M3/.1 = N-min L~f by A1,A14,A377,SPRECT_2:12;
+A390: LSeg(NW-corner L~f, N-min L~f) /\ L~f = {N-min L~f} by PSCOMP_1:102;
+    L~M3 c= L~f by A14,A377,SPRECT_3:34;
+  then A391: LSeg(NW-corner L~f,N-min L~f) /\ L~M3 c= { N-min L~f } by A390,
+XBOOLE_1:26;
+    1 in dom M3 by FINSEQ_5:6;
+then A392: N-min L~f in L~M3 by A389,SPPOL_2:48;
+      N-min L~f in LSeg(NW-corner L~f,N-min L~f) by TOPREAL1:6;
+  then N-min L~f in LSeg(NW-corner L~f,N-min L~f) /\ L~M3 by A392,XBOOLE_0:def
+3;
+  then {N-min L~f} c= LSeg(NW-corner L~f,N-min L~f) /\ L~M3 by ZFMISC_1:37;
+  then LSeg(NW-corner L~f,N-min L~f) /\ L~M3={ N-min L~f } by A391,XBOOLE_0:def
+10;
+  then reconsider M2 = <*NW-corner L~f*>^M3 as S-Sequence_in_R2
+                              by A372,A388,A389,SPRECT_3:31;
+A393: len M2 >= 2 & len M1 >= 2 by TOPREAL1:def 10;
+    mid(f,i1,len f -' 1) is_in_the_area_of f by A57,A375,SPRECT_2:27;
+then A394: M1 is_in_the_area_of f by A292,SPRECT_2:28;
+      mid(f,i1,len f -' 1) is non empty by A57,A375,SPRECT_2:11;
+    then 1 in dom mid(f,i1,len f -' 1) by FINSEQ_5:6;
+then A395: (M1/.1)`2 = (mid(f,i1,len f -' 1)/.1)`2 by GROUP_5:95
+         .= (f/.i1)`2 by A57,A375,SPRECT_2:12
+         .= (S-min L~f)`2 by A374,FINSEQ_5:41
+         .= S-bound L~f by PSCOMP_1:114;
+A396: (NE-corner L~f)`2 = N-bound L~f & A`2 = N-bound L~f
+       by PSCOMP_1:77,94;
+     (M1/.len M1)`2 = u1`2 by A288,SPRECT_3:11
+         .= N-bound L~f by A371,A396,GOBOARD7:6;
+then A397: M1 is_a_v.c._for f by A394,A395,SPRECT_2:def 3;
+     mid(f,1,i2) is_in_the_area_of f by A14,A377,SPRECT_2:27;
+then A398: M2 is_in_the_area_of f by A60,SPRECT_2:28;
+A399: (M2/.1)`1 = (NW-corner L~f)`1 by FINSEQ_5:16
+        .= W-bound L~f by PSCOMP_1:74;
+     (M2/.len M2)`1 = (mid(f,1,i2)/.len mid(f,1,i2))`1 by SPRECT_3:11
+         .= (f/.i2)`1 by A14,A377,SPRECT_2:13
+         .= (E-max L~f)`1 by A376,FINSEQ_5:41
+         .= E-bound L~f by PSCOMP_1:104;
+   then M2 is_a_h.c._for f by A398,A399,SPRECT_2:def 2;
+  then A400: L~M1 meets L~M2 by A393,A397,SPRECT_2:33;
+A401: L~M1 = L~M4 \/ LSeg(M4/.len M4,p2) \/ L~RB2 by A289,SPPOL_2:23
+       .= L~M4 \/ (LSeg(M4/.len M4,p2) \/ L~RB2) by XBOOLE_1:4;
+
+A402: now
+    L~M4 c= L~f by A57,A375,SPRECT_3:34;
+  then A403: LSeg(NW-corner L~f,N-min L~f) /\ L~M4 c= { N-min L~f } by A390,
+XBOOLE_1:26;
+     assume LSeg(NW-corner L~f,N-min L~f) meets L~M4;
+      then LSeg(NW-corner L~f,N-min L~f) /\ L~M4 <> {} by XBOOLE_0:def 7;
+      then LSeg(NW-corner L~f,N-min L~f) /\ L~M4 = { N-min L~f }
+         by A403,ZFMISC_1:39;
+      then N-min L~f in LSeg(NW-corner L~f,N-min L~f) /\ L~M4 by TARSKI:def 1;
+      then N-min L~f in L~M4 by XBOOLE_0:def 3;
+     hence contradiction by A1,A59,A380,A382,SPRECT_3:47;
+    end;
+     now
+     NW-corner L~f in LSeg(NW-corner L~f,NE-corner L~f) &
+   A in LSeg(NW-corner L~f,NE-corner L~f) by A300,TOPREAL1:6;
+   then LSeg(NW-corner L~f,A) c= LSeg(NW-corner L~f,NE-corner L~f)
+       by TOPREAL1:12;
+   then LSeg(NW-corner L~f,N-min L~f) c= L~SpStSeq L~f by A63,XBOOLE_1:1;
+then A404: LSeg(NW-corner L~f,N-min L~f) /\ L~Red2 c= { u1 } by A279,XBOOLE_1:
+26;
+    assume LSeg(NW-corner L~f,N-min L~f) meets L~Red2;
+     then LSeg(NW-corner L~f,N-min L~f) /\ L~Red2 <> {} by XBOOLE_0:def 7;
+     then LSeg(NW-corner L~f,N-min L~f) /\ L~Red2 = { u1} by A404,ZFMISC_1:39;
+     then u1 in LSeg(NW-corner L~f,N-min L~f) /\ L~Red2 by TARSKI:def 1;
+     then u1 in LSeg(NW-corner L~f,N-min L~f) by XBOOLE_0:def 3;
+     then A405:  u1 in LSeg(NW-corner L~f,A) /\
+ LSeg(A,NE-corner L~f) by A371,XBOOLE_0:def 3;
+       LSeg(NW-corner L~f,A) /\ LSeg(A,NE-corner L~f) = {A}
+     by A300,TOPREAL1:14;
+     then u1 = A by A405,TARSKI:def 1;
+    hence contradiction by A239,SPRECT_1:13;
+   end;
+   then LSeg(NW-corner L~f,N-min L~f) misses L~RB2 by A256,A290,XBOOLE_1:70;
+
+   then LSeg(NW-corner L~f,N-min L~f) misses LSeg(M4/.len M4,p2) \/ L~RB2
+                                         by A133,A383,XBOOLE_1:70;
+   then LSeg(NW-corner L~f,N-min L~f) misses L~M1 &
+  L~M2 = LSeg(NW-corner L~f,M3/.1) \/
+ L~M3 by A401,A402,SPPOL_2:20,XBOOLE_1:70;
+  then A406: L~M3 meets L~M1 by A1,A387,A400,XBOOLE_1:70;
+    L~M3 misses L~M4 by A59,A379,A380,A381,SPRECT_2:51;
+  then A407:  L~M3 meets L~RB2 \/ LSeg(p2,M4/.len M4) by A401,A406,XBOOLE_1:70;
+    i2 < len f -' 1 by A379,A380,AXIOMS:22;
+  then L~M3 misses LSeg(p2,f/.(len f -' 1)) by A103,A381;
+  then L~M3 meets L~RB2 &
+  L~M3 misses LSeg(u3,p2) by A257,A381,A383,A386,A407,XBOOLE_1:70;
+  then L~M3 meets L~Red2 by A290,XBOOLE_1:70;
+then A408: L~M3 meets L~Red by A277,XBOOLE_1:63;
+    L~M3 c= L~f by A14,A377,SPRECT_3:34;
+ hence contradiction by A245,A408,XBOOLE_1:63;
+ suppose that
+A409: u1 in LSeg(NE-corner L~f,SE-corner L~f) and
+A410: N-min L~f = W-max L~f;
+A411: N-min L~f = NW-corner L~f by A410,PSCOMP_1:124;
+  set i1 = (S-max L~f)..f, i2 = (N-max L~f)..f, i3 = (W-min L~f)..f;
+A412: S-max L~f in rng f by SPRECT_2:46;
+then A413: i1 in dom f by FINSEQ_4:30;
+A414: N-max L~f in rng f by SPRECT_2:44;
+then A415: i2 in dom f by FINSEQ_4:30;
+   W-min L~f in rng f by SPRECT_2:47;
+then A416: i3 in dom f by FINSEQ_4:30;
+A417: (S-max L~f)..f < (S-min L~f)..f by A1,SPRECT_2:77;
+      (S-min L~f)..f <= (W-min L~f)..f by A1,SPRECT_2:78;
+then A418: i3 > i1 by A417,AXIOMS:22;
+A419: 1 < i2 by A1,SPRECT_2:73;
+A420: (N-max L~f)..f <= (E-max L~f)..f by A1,SPRECT_2:74;
+      (E-max L~f)..f < (E-min L~f)..f by A1,SPRECT_2:75;
+then A421: (N-max L~f)..f < (E-min L~f)..f by A420,AXIOMS:22;
+      (E-min L~f)..f <= (S-max L~f)..f by A1,SPRECT_2:76;
+then A422: i2 < i1 by A421,AXIOMS:22;
+      i1 <= len f by A413,FINSEQ_3:27;
+then A423: mid(f,i2,i1) is S-Sequence_in_R2 by A419,A422,JORDAN4:52;
+A424: mid(f,i1,i2) = Rev mid(f,i2,i1) by JORDAN4:30;
+  then reconsider M1 = mid(f,i1,i2) as S-Sequence_in_R2 by A423,SPPOL_2:47;
+A425: len M1 >= 2 & len RB2 >= 2 by TOPREAL1:def 10;
+A426: M1 is_in_the_area_of f by A413,A415,SPRECT_2:27;
+A427: (M1/.1)`2 = (f/.i1)`2 by A413,A415,SPRECT_2:12
+         .= (S-max L~f)`2 by A412,FINSEQ_5:41
+         .= S-bound L~f by PSCOMP_1:114;
+     (M1/.len M1)`2 = (f/.i2)`2 by A413,A415,SPRECT_2:13
+         .= (N-max L~f)`2 by A414,FINSEQ_5:41
+         .= N-bound L~f by PSCOMP_1:94;
+then A428: M1 is_a_v.c._for f by A426,A427,SPRECT_2:def 3;
+A429: (RB2/.1)`1 = W-bound L~f by A93,A289,A411,PSCOMP_1:74;
+  (NE-corner L~f)`1 = E-bound L~f & (SE-corner L~f)`1 = E-bound L~f
+                            by PSCOMP_1:76,78;
+   then (RB2/.len RB2)`1 = E-bound L~f by A288,A409,GOBOARD7:5;
+   then RB2 is_a_h.c._for f by A292,A429,SPRECT_2:def 2;
+  then A430: L~M1 meets L~RB2 by A425,A428,SPRECT_2:33;
+    i3 <= len f by A416,FINSEQ_3:27;
+  then i1 < len f by A418,AXIOMS:22;
+  then L~mid(f,i2,i1) misses LSeg(u3,p2) by A257,A419,A422;
+ then L~M1 misses LSeg(u3,p2) by A424,SPPOL_2:22;
+  then L~M1 meets L~Red2 by A290,A430,XBOOLE_1:70;
+then A431: L~M1 meets L~Red by A277,XBOOLE_1:63;
+    L~M1 c= L~f by A413,A415,SPRECT_3:34;
+ hence contradiction by A245,A431,XBOOLE_1:63;
+ suppose that
+A432: u1 in LSeg(NE-corner L~f,SE-corner L~f) and
+A433: N-min L~f <> W-max L~f;
+  set i1 = (S-max L~f)..f, i2 = (N-max L~f)..f, i3 = (W-min L~f)..f;
+A434: S-max L~f in rng f by SPRECT_2:46;
+then A435: i1 in dom f by FINSEQ_4:30;
+A436: N-max L~f in rng f by SPRECT_2:44;
+then A437: i2 in dom f by FINSEQ_4:30;
+A438: W-min L~f in rng f by SPRECT_2:47;
+then A439: i3 in dom f by FINSEQ_4:30;
+A440: (S-max L~f)..f < (S-min L~f)..f by A1,SPRECT_2:77;
+      (S-min L~f)..f <= (W-min L~f)..f by A1,SPRECT_2:78;
+then A441: i3 > i1 by A440,AXIOMS:22;
+A442: 1 < i2 by A1,SPRECT_2:73;
+A443: (N-max L~f)..f <= (E-max L~f)..f by A1,SPRECT_2:74;
+      (E-max L~f)..f < (E-min L~f)..f by A1,SPRECT_2:75;
+then A444: (N-max L~f)..f < (E-min L~f)..f by A443,AXIOMS:22;
+      (E-min L~f)..f <= (S-max L~f)..f by A1,SPRECT_2:76;
+then A445: i2 < i1 by A444,AXIOMS:22;
+      (W-max L~f)..f < len f by A1,SPRECT_2:81;
+    then A446: (W-max L~f)..f <= len f -' 1 by JORDAN3:12;
+      (W-min L~f)..f < (W-max L~f)..f by A1,A433,SPRECT_2:79;
+then A447: i3 < len f -' 1 by A446,AXIOMS:22;
+      i1 <= len f by A435,FINSEQ_3:27;
+then A448: mid(f,i2,i1) is S-Sequence_in_R2 by A442,A445,JORDAN4:52;
+A449: mid(f,i1,i2) = Rev mid(f,i2,i1) by JORDAN4:30;
+  then reconsider M1 = mid(f,i1,i2) as S-Sequence_in_R2 by A448,SPPOL_2:47;
+A450: 1 <= i3 by A439,FINSEQ_3:27;
+  then reconsider M3 = mid(f,i3,len f -' 1) as S-Sequence_in_R2
+                                          by A58,A447,JORDAN4:51;
+A451: M3/.len M3 = f/.(len f -' 1) by A57,A439,SPRECT_2:13;
+      L~M3 c= L~f by A57,A439,SPRECT_3:34;
+    then L~M3 misses L~Red by A245,XBOOLE_1:63;
+then A452: L~M3 misses L~Red2 by A277,XBOOLE_1:63;
+      L~M3 misses LSeg(u3,p2) by A59,A257,A447,A450;
+then A453: L~RB2 misses L~M3 by A290,A452,XBOOLE_1:70;
+   LSeg(M3/.len M3,p2) /\ L~M3={ M3/.len M3 } by A125,A447,A450,A451;
+  then reconsider M2 = M3^RB2 as S-Sequence_in_R2
+       by A76,A81,A93,A289,A291,A451,A453,SPRECT_3:38;
+A454: len M2 >= 2 & len M1 >= 2 by TOPREAL1:def 10;
+A455: M1 is_in_the_area_of f by A435,A437,SPRECT_2:27;
+A456: (M1/.1)`2 = (f/.i1)`2 by A435,A437,SPRECT_2:12
+         .= (S-max L~f)`2 by A434,FINSEQ_5:41
+         .= S-bound L~f by PSCOMP_1:114;
+     (M1/.len M1)`2 = (f/.i2)`2 by A435,A437,SPRECT_2:13
+         .= (N-max L~f)`2 by A436,FINSEQ_5:41
+         .= N-bound L~f by PSCOMP_1:94;
+then A457: M1 is_a_v.c._for f by A455,A456,SPRECT_2:def 3;
+     mid(f,i3,len f -' 1) is_in_the_area_of f by A57,A439,SPRECT_2:27;
+then A458: M2 is_in_the_area_of f by A292,SPRECT_2:28;
+     mid(f,i3,len f -' 1) is non empty by A57,A439,SPRECT_2:11;
+   then 1 in dom mid(f,i3,len f -' 1) by FINSEQ_5:6;
+   then A459: (M2/.1)`1 = (mid(f,i3,len f -' 1)/.1)`1 by GROUP_5:95
+           .= (f/.i3)`1 by A57,A439,SPRECT_2:12
+           .= (W-min L~f)`1 by A438,FINSEQ_5:41
+           .= W-bound L~f by PSCOMP_1:84;
+A460: (NE-corner L~f)`1 = E-bound L~f & (SE-corner L~f)`1 = E-bound L~f
+                            by PSCOMP_1:76,78;
+     (M2/.len M2)`1 = (RB2/.len RB2)`1 by SPRECT_3:11
+           .= E-bound L~f by A288,A432,A460,GOBOARD7:5;
+   then M2 is_a_h.c._for f by A458,A459,SPRECT_2:def 2;
+  then A461: L~M1 meets L~M2 by A454,A457,SPRECT_2:33;
+A462: L~M2 = L~M3 \/ LSeg(M3/.len M3,p2) \/ L~RB2 by A289,SPPOL_2:23
+       .= L~M3 \/ (LSeg(M3/.len M3,p2) \/ L~RB2) by XBOOLE_1:4;
+    i3 < len f by A58,A447,NAT_1:38;
+  then i1 < len f by A441,AXIOMS:22;
+  then L~mid(f,i2,i1) misses LSeg(u3,p2) by A257,A442,A445;
+then A463: L~M1 misses LSeg(u3,p2) by A449,SPPOL_2:22;
+    L~M1 misses L~M3 by A59,A441,A442,A445,A447,SPRECT_2:54;
+  then A464:  L~M1 meets L~RB2 \/ LSeg(p2,M3/.len M3) by A461,A462,XBOOLE_1:70;
+    i1 < len f -' 1 by A441,A447,AXIOMS:22;
+  then L~mid(f,i2,i1) misses LSeg(p2,f/.(len f -' 1)) by A103,A442,A445;
+  then L~M1 misses LSeg(p2,f/.(len f -' 1)) by A449,SPPOL_2:22;
+  then L~M1 meets L~RB2 by A451,A464,XBOOLE_1:70;
+  then L~M1 meets L~Red2 by A290,A463,XBOOLE_1:70;
+then A465: L~M1 meets L~Red by A277,XBOOLE_1:63;
+    L~M1 c= L~f by A435,A437,SPRECT_3:34;
+ hence contradiction by A245,A465,XBOOLE_1:63;
+ suppose
+A466: u1 in LSeg(SE-corner L~f,SW-corner L~f);
+  set i1 = (E-min L~f)..f, i2 = (W-min L~f)..f;
+A467: E-min L~f in rng f by SPRECT_2:49;
+then A468: i1 in dom f by FINSEQ_4:30;
+A469: W-min L~f in rng f by SPRECT_2:47;
+then A470: i2 in dom f by FINSEQ_4:30;
+A471: (N-max L~f)..f > 1 by A1,SPRECT_2:73;
+      (N-max L~f)..f <= (E-max L~f)..f by A1,SPRECT_2:74;
+then A472: (E-max L~f)..f > 1 by A471,AXIOMS:22;
+      (E-max L~f)..f < (E-min L~f)..f by A1,SPRECT_2:75;
+then A473: 1 < i1 by A472,AXIOMS:22;
+A474: (E-min L~f)..f <= (S-max L~f)..f by A1,SPRECT_2:76;
+      (S-max L~f)..f < (S-min L~f)..f by A1,SPRECT_2:77;
+then A475: (E-min L~f)..f < (S-min L~f)..f by A474,AXIOMS:22;
+      (S-min L~f)..f <= (W-min L~f)..f by A1,SPRECT_2:78;
+then A476: i1 < i2 by A475,AXIOMS:22;
+A477: i2 <= len f by A470,FINSEQ_3:27;
+then A478: mid(f,i1,i2) is S-Sequence_in_R2 by A473,A476,JORDAN4:52;
+A479: mid(f,i2,i1) = Rev mid(f,i1,i2) by JORDAN4:30;
+  then reconsider M2 = mid(f,i2,i1) as S-Sequence_in_R2 by A478,SPPOL_2:47;
+A480: len M2 >= 2 & len RB1 >= 2 by TOPREAL1:def 10;
+    (SE-corner L~f)`2 = S-bound L~f & (SW-corner L~f)`2 = S-bound L~f
+     by PSCOMP_1:73,79;
+ then (RB1/.1)`2 = S-bound L~f by A293,A466,GOBOARD7:6;
+then A481: RB1 is_a_v.c._for f by A170,A294,A297,SPRECT_2:def 3;
+A482: M2 is_in_the_area_of f by A468,A470,SPRECT_2:27;
+A483: (M2/.len M2)`1 = (f/.i1)`1 by A468,A470,SPRECT_2:13
+         .= (E-min L~f)`1 by A467,FINSEQ_5:41
+         .= E-bound L~f by PSCOMP_1:104;
+     (M2/.1)`1 = (f/.i2)`1 by A468,A470,SPRECT_2:12
+         .= (W-min L~f)`1 by A469,FINSEQ_5:41
+         .= W-bound L~f by PSCOMP_1:84;
+  then M2 is_a_h.c._for f by A482,A483,SPRECT_2:def 2;
+  then A484: L~RB1 meets L~M2 by A480,A481,SPRECT_2:33;
+   L~mid(f,i1,i2) misses LSeg(u2,p1) by A267,A473,A476,A477;
+  then L~M2 misses LSeg(u2,p1) by A479,SPPOL_2:22;
+  then L~M2 meets L~Red1 by A295,A484,XBOOLE_1:70;
+  then A485: L~M2 meets L~Red by A284,XBOOLE_1:63;
+    L~M2 c= L~f by A468,A470,SPRECT_3:34;
+ hence contradiction by A245,A485,XBOOLE_1:63;
+ suppose
+A486: u1 in LSeg(SW-corner L~f,NW-corner L~f);
+  set i1 = (S-min L~f)..f, i3 = (E-min L~f)..f;
+A487: S-min L~f in rng f by SPRECT_2:45;
+then A488: i1 in dom f by FINSEQ_4:30;
+A489: E-min L~f in rng f by SPRECT_2:49;
+then A490: i3 in dom f by FINSEQ_4:30;
+A491: (E-min L~f)..f <= (S-max L~f)..f by A1,SPRECT_2:76;
+      (S-max L~f)..f < (S-min L~f)..f by A1,SPRECT_2:77;
+then A492: i3 < i1 by A491,AXIOMS:22;
+A493: (W-min L~f)..f < len f by A1,SPRECT_2:80;
+      (S-min L~f)..f <= (W-min L~f)..f by A1,SPRECT_2:78;
+then A494: i1 < len f by A493,AXIOMS:22;
+A495: (N-max L~f)..f > 1 by A1,SPRECT_2:73;
+      (N-max L~f)..f <= (E-max L~f)..f by A1,SPRECT_2:74;
+    then (E-max L~f)..f > 1 by A495,AXIOMS:22;
+then A496: (E-max L~f)..f >= 1+1 by NAT_1:38;
+      (E-max L~f)..f < (E-min L~f)..f by A1,SPRECT_2:75;
+then A497: 2 < i3 by A496,AXIOMS:22;
+then A498: 2 < i1 by A492,AXIOMS:22;
+  then A499: 1 < i1 by AXIOMS:22;
+  then reconsider M1 = mid(f,i1,len f) as S-Sequence_in_R2 by A494,JORDAN4:52;
+A500:  i3 <= len f by A490,FINSEQ_3:27;
+  then reconsider M3 = mid(f,2,i3) as S-Sequence_in_R2 by A497,JORDAN4:52;
+A501: M3/.1 = f/.2 by A54,A490,SPRECT_2:12;
+      L~M3 c= L~f by A54,A490,SPRECT_3:34;
+    then L~M3 misses L~Red by A245,XBOOLE_1:63;
+then A502: L~M3 misses L~Red1 by A284,XBOOLE_1:63;
+      L~M3 misses LSeg(u2,p1) by A267,A497,A500;
+then A503: L~RB1 misses L~M3 by A295,A502,XBOOLE_1:70;
+     LSeg(p1,M3/.1) /\ L~M3={ M3/.1 } by A190,A497,A500,A501;
+   then reconsider M2 = RB1^M3 as S-Sequence_in_R2
+        by A78,A170,A294,A296,A501,A503,SPRECT_3:38;
+A504: len M2 >= 2 & len M1 >= 2 by TOPREAL1:def 10;
+A505: M1 is_in_the_area_of f by A55,A488,SPRECT_2:27;
+A506: (M1/.1)`2 = (f/.i1)`2 by A55,A488,SPRECT_2:12
+         .= (S-min L~f)`2 by A487,FINSEQ_5:41
+         .= S-bound L~f by PSCOMP_1:114;
+     (M1/.len M1)`2 = (f/.len f)`2 by A55,A488,SPRECT_2:13
+         .= (f/.1)`2 by FINSEQ_6:def 1
+         .= N-bound L~f by A1,PSCOMP_1:94;
+then A507: M1 is_a_v.c._for f by A505,A506,SPRECT_2:def 3;
+     mid(f,2,i3) is_in_the_area_of f by A54,A490,SPRECT_2:27;
+then A508: M2 is_in_the_area_of f by A297,SPRECT_2:28;
+A509: (NW-corner L~f)`1 = W-bound L~f & (SW-corner L~f)`1 = W-bound L~f
+                            by PSCOMP_1:72,74;
+      1 in dom RB1 by FINSEQ_5:6;
+then A510: (M2/.1)`1 = (RB1/.1)`1 by GROUP_5:95
+         .= W-bound L~f by A293,A486,A509,GOBOARD7:5;
+     (M2/.len M2)`1 = (mid(f,2,i3)/.len mid(f,2,i3))`1 by SPRECT_3:11
+           .= (f/.i3)`1 by A54,A490,SPRECT_2:13
+           .= (E-min L~f)`1 by A489,FINSEQ_5:41
+           .= E-bound L~f by PSCOMP_1:104;
+  then M2 is_a_h.c._for f by A508,A510,SPRECT_2:def 2;
+  then A511: L~M1 meets L~M2 by A504,A507,SPRECT_2:33;
+A512: L~M2 = L~RB1 \/ LSeg(p1,M3/.1) \/ L~M3 by A294,SPPOL_2:23;
+A513: L~M1 misses LSeg(u2,p1) by A267,A494,A499;
+    L~M1 misses L~M3 by A492,A494,A497,SPRECT_2:51;
+  then A514:  L~M1 meets L~RB1 \/ LSeg(p1,M3/.1) by A511,A512,XBOOLE_1:70;
+    L~M1 misses LSeg(p1,f/.2) by A173,A494,A498;
+  then L~M1 meets L~RB1 by A501,A514,XBOOLE_1:70;
+  then L~M1 meets L~Red1 by A295,A513,XBOOLE_1:70;
+then A515: L~M1 meets L~Red by A284,XBOOLE_1:63;
+    L~M1 c= L~f by A55,A488,SPRECT_3:34;
+ hence contradiction by A245,A515,XBOOLE_1:63;
+end;
+
+Lm2:
+ for f being non constant standard special_circular_sequence
+  st f/.1 = N-min L~f
+ holds LeftComp f <> RightComp f
+proof let f be non constant standard special_circular_sequence such that
+A1: f/.1 = N-min L~f;
+ per cases by REVROT_1:38;
+ suppose f is clockwise_oriented;
+ hence LeftComp f <> RightComp f by A1,Lm1;
+ suppose
+A2: Rev f is clockwise_oriented;
+A3: N-min L~Rev f = N-min L~f by SPPOL_2:22
+    .= Rev f/.len f by A1,FINSEQ_5:68
+    .= Rev f/.len Rev f by FINSEQ_5:def 3
+    .= Rev f/.1 by FINSEQ_6:def 1;
+    LeftComp Rev f = RightComp f &
+  RightComp Rev f = LeftComp f by GOBOARD9:26,27;
+ hence LeftComp f <> RightComp f by A2,A3,Lm1;
+end;
+
+theorem
+   for f being non constant standard special_circular_sequence
+ holds LeftComp f <> RightComp f
+proof let f be non constant standard special_circular_sequence;
+  set g = Rotate(f,N-min L~f);
+A1: N-min L~f in rng f by SPRECT_2:43;
+    L~f = L~g by REVROT_1:33;
+  then A2: g/.1 = N-min L~g by A1,FINSEQ_6:98;
+    LeftComp g = LeftComp f & RightComp g = RightComp f by REVROT_1:36,37;
+ hence LeftComp f <> RightComp f by A2,Lm2;
+end;
+

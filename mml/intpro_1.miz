@@ -1,0 +1,1895 @@
+:: Intuitionistic Propositional Calculus in the Extended Framework with Modal
+:: Operator, Part I
+::  by Takao Inou\'e
+::
+:: Received April 3, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, RELAT_1, FUNCT_1, ZF_LANG, BOOLE, INTPRO_1, QC_LANG2;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1, NAT_1,
+      FINSEQ_1;
+ constructors NAT_1, CQC_LANG, MEMBERED;
+ clusters RELSET_1, MEMBERED, NUMBERS, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET;
+ definitions TARSKI;
+ theorems TARSKI, FINSEQ_1, XBOOLE_0, XBOOLE_1;
+ schemes XBOOLE_0;
+
+begin :: Intuitionistic propositional calculus IPC in the extended
+      :: language with modal operator
+
+definition let E be set;
+  attr E is with_FALSUM means :Def1:
+      <*0*>in E;
+end;
+
+definition let E be set;
+  attr E is with_int_implication means :Def2:
+  for p, q being FinSequence st
+         p in E & q in E holds <*1*>^p^q in E;
+end;
+
+definition let E be set;
+  attr E is with_int_conjunction means :Def3:
+     for p, q being FinSequence st
+     p in E & q in E holds <*2*>^p^q in E;
+end;
+
+definition let E be set;
+  attr E is with_int_disjunction means :Def4:
+     for p, q being FinSequence st
+         p in E & q in E holds <*3*>^p^q in E;
+end;
+
+definition let E be set;
+  attr E is with_int_propositional_variables means :Def5:
+     for n being Nat holds <* 5+2*n *> in E;
+end;
+
+definition let E be set;
+  attr E is with_modal_operator means :Def6:
+  for p being FinSequence st
+         p in E holds <*6*>^p in E;
+end;
+
+:: We reserve <*4*> for verum for a possible formulation.
+:: So do we <* 5+2*n+1 *> for every n >= 1 for introduction of a number of
+:: other logical connectives (e.g. for polymodal logics,
+:: hybrid logics, recent computer-oriented logics and so on).
+
+definition let E be set;
+  attr E is MC-closed means :Def7:
+   E c= NAT* &
+   E is with_FALSUM with_int_implication
+        with_int_conjunction with_int_disjunction
+        with_int_propositional_variables
+        with_modal_operator;
+end;
+
+Lm1: for E be set st E is MC-closed holds E is non empty
+proof
+  let E be set;
+  assume E is MC-closed;
+  then E is with_FALSUM by Def7;
+  hence thesis by Def1;
+end;
+
+definition
+  cluster MC-closed ->
+     with_FALSUM with_int_implication
+     with_int_conjunction with_int_disjunction
+     with_int_propositional_variables
+     with_modal_operator non empty set;
+  coherence by Def7,Lm1;
+  cluster
+      with_FALSUM with_int_implication
+      with_int_conjunction with_int_disjunction
+      with_int_propositional_variables
+      with_modal_operator -> MC-closed Subset of NAT*;
+  coherence by Def7;
+end;
+
+definition
+  func MC-wff -> set means :Def8:
+   it is MC-closed &
+   for E being set st E is MC-closed holds it c= E;
+existence
+  proof
+    defpred P[set] means
+    for E being set st E is MC-closed holds $1 in E;
+     consider E0 being set such that
+A1:   for x being set holds x in E0 iff x in NAT* & P[x]
+               from Separation;
+  A2: <*0*> in NAT* by FINSEQ_1:def 11;
+  A3: for E being set st E is MC-closed holds <*0*> in E
+      proof
+        let E be set; assume E is MC-closed;
+        then E is with_FALSUM by Def7;
+        hence thesis by Def1;
+      end;
+   then reconsider E0 as non empty set by A1,A2;
+   take E0;
+A4: E0 c= NAT*
+   proof let x be set;
+     thus thesis by A1;
+   end;
+     <*0*> in E0 by A1,A2,A3;
+then A5:E0 is with_FALSUM by Def1;
+     for n being Nat holds <* 5+2*n *> in E0
+   proof let n be Nat;
+     set p = 5+2*n;
+     reconsider h = <*p*> as FinSequence of NAT;
+A6:  h in NAT* by FINSEQ_1:def 11;
+       for E being set st E is MC-closed holds <*p*> in E
+     proof
+       let E be set;
+       assume E is MC-closed;
+       then E is with_int_propositional_variables by Def7;
+       hence thesis by Def5;
+     end;
+     hence thesis by A1,A6;
+   end;
+then A7: E0 is with_int_propositional_variables by Def5;
+     for p, q being FinSequence
+    st p in E0 & q in E0 holds <*1*>^p^q in E0
+        proof
+          let p, q be FinSequence such that
+        A8: p in E0 & q in E0;
+              p in NAT* & q in NAT* by A1,A8;
+            then reconsider p'=p, q'=q as FinSequence of NAT by FINSEQ_1:def 11
+;
+       A9: <*1*>^p'^q' in NAT* by FINSEQ_1:def 11;
+              for E being set
+              st E is MC-closed holds <*1*>^p^q in E
+                proof let E be set; assume
+                A10:    E is MC-closed;
+then A11:               E is with_int_implication by Def7;
+                    p in E & q in E by A1,A8,A10;
+                  hence thesis by A11,Def2;
+                end;
+           hence <*1*>^p^q in E0 by A1,A9;
+        end;
+then A12: E0 is with_int_implication by Def2;
+     for p, q being FinSequence
+    st p in E0 & q in E0 holds <*2*>^p^q in E0
+         proof
+          let p, q be FinSequence such that
+        A13: p in E0 & q in E0;
+              p in NAT* & q in NAT* by A1,A13;
+            then reconsider p'=p, q'=q as FinSequence of NAT by FINSEQ_1:def 11
+;
+       A14: <*2*>^p'^q' in NAT* by FINSEQ_1:def 11;
+              for E being set
+              st E is MC-closed holds <*2*>^p^q in E
+                proof let E be set; assume
+                A15:    E is MC-closed;
+then A16:              E is with_int_conjunction by Def7;
+                    p in E & q in E by A1,A13,A15;
+                  hence thesis by A16,Def3;
+                end;
+           hence <*2*>^p^q in E0 by A1,A14;
+        end;
+then A17: E0 is with_int_conjunction by Def3;
+     for p, q being FinSequence
+    st p in E0 & q in E0 holds <*3*>^p^q in E0
+        proof
+          let p, q be FinSequence such that
+        A18: p in E0 & q in E0;
+              p in NAT* & q in NAT* by A1,A18;
+            then reconsider p'=p, q'=q as FinSequence of NAT by FINSEQ_1:def 11
+;
+       A19: <*3*>^p'^q' in NAT* by FINSEQ_1:def 11;
+              for E being set
+              st E is MC-closed holds <*3*>^p^q in E
+                proof let E be set; assume
+                A20:    E is MC-closed;
+then A21:             E is with_int_disjunction by Def7;
+                    p in E & q in E by A1,A18,A20;
+                  hence thesis by A21,Def4;
+                end;
+           hence <*3*>^p^q in E0 by A1,A19;
+        end;
+then A22: E0 is with_int_disjunction by Def4;
+     for p being FinSequence
+    st p in E0 holds <*6*>^p in E0
+        proof
+          let p be FinSequence such that
+        A23: p in E0;
+              p in NAT* by A1,A23;
+            then reconsider p'=p as FinSequence of NAT by FINSEQ_1:def 11;
+        A24: <*6*>^p' in NAT* by FINSEQ_1:def 11;
+              for E being set
+              st E is MC-closed holds <*6*>^p in E
+                proof let E be set; assume
+                  A25:  E is MC-closed;
+then A26:               E is with_modal_operator by Def7;
+                    p in E by A1,A23,A25;
+                  hence thesis by A26,Def6;
+                end;
+           hence <*6*>^p in E0 by A1,A24;
+        end;
+   then E0 is with_modal_operator by Def6;
+  hence E0 is MC-closed by A4,A5,A7,A12,A17,A22,Def7;
+   let E be set such that
+A27:   E is MC-closed;
+   let x be set; assume
+     x in E0;
+   hence thesis by A1,A27;
+  end;
+uniqueness
+  proof
+    let E1, E2 be set such that
+A28:  E1 is MC-closed & for E being set
+        st E is MC-closed holds E1 c= E and
+A29:  E2 is MC-closed & for E being set
+        st E is MC-closed holds E2 c= E;
+      E1 c= E2 & E2 c= E1 by A28,A29;
+  hence E1 = E2 by XBOOLE_0:def 10;
+  end;
+end;
+
+definition
+  cluster MC-wff -> MC-closed;
+  coherence by Def8;
+end;
+
+definition
+  cluster MC-closed non empty set;
+  existence
+  proof
+    take MC-wff;
+    thus thesis;
+  end;
+end;
+
+definition
+  cluster -> Relation-like Function-like Element of MC-wff;
+coherence
+   proof let p be Element of MC-wff;
+       MC-wff c= NAT* & p in MC-wff by Def7;
+     hence thesis by FINSEQ_1:def 11;
+   end;
+end;
+
+definition
+  cluster -> FinSequence-like Element of MC-wff;
+coherence
+   proof let p be Element of MC-wff;
+       MC-wff c= NAT* & p in MC-wff by Def7;
+     hence thesis by FINSEQ_1:def 11;
+   end;
+end;
+
+definition
+  mode MC-formula is Element of MC-wff;
+end;
+
+definition
+  func FALSUM -> MC-formula equals
+    <*0*>;
+correctness by Def1;
+
+  let p, q be Element of MC-wff;
+  func p => q -> MC-formula equals
+    <*1*>^p^q;
+correctness by Def2;
+
+  func p '&' q -> MC-formula equals
+    <*2*>^p^q;
+correctness by Def3;
+
+  func p 'or' q -> MC-formula equals
+    <*3*>^p^q;
+correctness by Def4;
+end;
+
+definition
+let p be Element of MC-wff;
+  func Nes p -> MC-formula equals
+    <*6*>^p;
+correctness by Def6;
+end;
+
+ reserve T, X, Y for Subset of MC-wff;
+ reserve p, q, r, s for Element of MC-wff;
+
+definition let T be Subset of MC-wff;
+  attr T is IPC_theory means :Def14:
+    for p, q, r being Element of MC-wff holds
+    p => (q => p) in T &
+    (p => (q => r)) => ((p => q) => (p => r)) in T &
+    (p '&' q) => p in T &
+    (p '&' q) => q in T &
+    p => (q => (p '&' q)) in T &
+    p => (p 'or' q) in T &
+    q => (p 'or' q) in T &
+    (p => r) => ((q => r) => ((p 'or' q) => r)) in T &
+    FALSUM => p in T &
+    (p in T & p => q in T implies q in T);
+ correctness;
+end;
+
+definition let X;
+  func CnIPC X -> Subset of MC-wff means :Def15:
+  r in it iff for T st T is IPC_theory & X c= T holds r in T;
+ existence
+  proof
+    defpred P[set] means
+    for T st T is IPC_theory & X c= T holds $1 in T;
+   consider Y being set such that
+A1: for a being set holds a in Y iff
+     a in MC-wff & P[a] from Separation;
+      Y c= MC-wff
+    proof
+     let a be set; assume a in Y;
+     hence a in MC-wff by A1;
+    end;
+   then reconsider Z = Y as Subset of MC-wff;
+   take Z;
+   thus r in Z iff for T st T is IPC_theory & X c= T holds r in T by A1;
+  end;
+ uniqueness
+  proof
+   let Y,Z be Subset of MC-wff such that
+    A2: r in Y iff for T st T is IPC_theory & X c= T holds r in T and
+    A3: r in Z iff for T st T is IPC_theory & X c= T holds r in T;
+     for a being set holds a in Y iff a in Z
+    proof
+     let a be set;
+     hereby assume A4: a in Y;
+       then reconsider t=a as Element of MC-wff;
+         for T st T is IPC_theory & X c= T holds t in T by A2,A4;
+       hence a in Z by A3;
+      end;
+       assume A5: a in Z;
+       then reconsider t=a as Element of MC-wff;
+         for T st T is IPC_theory & X c= T holds t in T by A3,A5;
+       hence a in Y by A2;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+end;
+
+definition
+  func IPC-Taut -> Subset of MC-wff equals :Def16:
+    CnIPC({}(MC-wff));
+  correctness;
+end;
+
+definition
+  let p be Element of MC-wff;
+  func neg p -> MC-formula equals
+        (p => FALSUM);
+correctness;
+end;
+
+definition
+  func IVERUM -> MC-formula equals :Def18:
+  (FALSUM => FALSUM);
+correctness;
+end;
+
+theorem Th1:
+  p => (q => p) in CnIPC (X)
+ proof
+    T is IPC_theory & X c= T implies p => (q => p) in T by Def14;
+  hence thesis by Def15;
+ end;
+
+theorem Th2:
+  (p => (q => r)) => ((p => q) => (p => r)) in CnIPC (X)
+ proof
+    T is IPC_theory & X c= T implies
+    (p => (q => r)) => ((p => q) => (p => r)) in T by Def14;
+  hence thesis by Def15;
+ end;
+
+theorem Th3:
+  p '&' q => p in CnIPC(X)
+ proof
+    T is IPC_theory & X c= T implies p '&' q => p in T by Def14;
+  hence thesis by Def15;
+ end;
+
+theorem Th4:
+  p '&' q => q in CnIPC(X)
+ proof
+    T is IPC_theory & X c= T implies p '&' q => q in T by Def14;
+  hence thesis by Def15;
+ end;
+
+theorem Th5:
+  p => (q => (p '&' q)) in CnIPC (X)
+ proof
+    T is IPC_theory & X c= T implies p => (q => (p '&' q)) in T by Def14;
+  hence thesis by Def15;
+ end;
+
+theorem Th6:
+  p => (p 'or' q) in CnIPC (X)
+ proof
+    T is IPC_theory & X c= T implies p => (p 'or' q) in T by Def14;
+  hence thesis by Def15;
+ end;
+
+theorem Th7:
+  q => (p 'or' q) in CnIPC (X)
+ proof
+    T is IPC_theory & X c= T implies q => (p 'or' q) in T by Def14;
+  hence thesis by Def15;
+ end;
+
+theorem Th8:
+  (p => r) => ((q => r) => ((p 'or' q) => r)) in CnIPC (X)
+ proof
+    T is IPC_theory & X c= T
+  implies (p => r) => ((q => r) => ((p 'or' q) => r)) in T by Def14;
+  hence thesis by Def15;
+ end;
+
+theorem Th9:
+  FALSUM => p in CnIPC (X)
+ proof
+    T is IPC_theory & X c= T implies FALSUM => p in T by Def14;
+  hence thesis by Def15;
+ end;
+
+theorem Th10:
+  p in CnIPC(X) & p => q in CnIPC(X) implies q in CnIPC(X)
+ proof
+  assume A1: p in CnIPC(X) & p => q in CnIPC(X);
+    T is IPC_theory & X c= T implies q in T
+  proof
+    assume A2: T is IPC_theory & X c= T;
+    then p in T & p => q in T by A1,Def15;
+    hence thesis by A2,Def14;
+  end;
+  hence thesis by Def15;
+ end;
+
+theorem Th11: T is IPC_theory & X c= T implies CnIPC(X) c= T
+ proof
+  assume that A1:T is IPC_theory and A2: X c= T;
+  let a be set;
+  thus thesis by A1,A2,Def15;
+ end;
+
+theorem Th12:
+  X c= CnIPC(X)
+ proof
+  let a be set;
+  assume A1: a in X;
+  then reconsider t = a as Element of MC-wff;
+    for T st T is IPC_theory & X c= T holds t in T by A1;
+  hence a in CnIPC(X) by Def15;
+ end;
+
+theorem Th13:
+  X c= Y implies CnIPC(X) c= CnIPC(Y)
+ proof
+  assume A1: X c= Y;
+  thus CnIPC(X) c= CnIPC(Y)
+   proof
+    let a be set; assume A2: a in CnIPC(X);
+    then reconsider t = a as Element of MC-wff;
+      for T st T is IPC_theory & Y c= T holds t in T
+     proof
+      let T such that A3: T is IPC_theory and A4: Y c= T;
+        X c= T by A1,A4,XBOOLE_1:1;
+      hence t in T by A2,A3,Def15;
+     end;
+    hence thesis by Def15;
+   end;
+ end;
+
+Lm2: CnIPC(CnIPC(X)) c= CnIPC(X)
+ proof
+  let a be set; assume A1: a in CnIPC(CnIPC(X));
+  then reconsider t = a as Element of MC-wff;
+    for T st T is IPC_theory & X c= T holds t in T
+   proof
+    let T; assume that A2: T is IPC_theory and A3: X c= T;
+      CnIPC(X) c= T by A2,A3,Th11;
+    hence t in T by A1,A2,Def15;
+   end;
+  hence thesis by Def15;
+ end;
+
+theorem :: Th14:
+    CnIPC(CnIPC(X)) = CnIPC(X)
+ proof
+    CnIPC(CnIPC(X)) c= CnIPC(X) & CnIPC(X) c= CnIPC(CnIPC(X)) by Lm2,Th12;
+  hence thesis by XBOOLE_0:def 10;
+ end;
+
+Lm3:
+CnIPC(X) is IPC_theory
+ proof
+  let p, q, r;
+  thus p => (q => p) in CnIPC(X) by Th1;
+  thus (p => (q => r)) => ((p => q) => (p => r)) in CnIPC(X) by Th2;
+  thus (p '&' q) => p in CnIPC(X) by Th3;
+  thus (p '&' q) => q in CnIPC(X) by Th4;
+  thus p => (q => (p '&' q)) in CnIPC(X) by Th5;
+  thus p => (p 'or' q) in CnIPC(X) by Th6;
+  thus q => (p 'or' q) in CnIPC(X) by Th7;
+  thus (p => r) => ((q => r) => ((p 'or' q) => r)) in CnIPC(X) by Th8;
+  thus FALSUM => p in CnIPC(X) by Th9;
+  thus (p in CnIPC(X) & p => q in CnIPC(X) implies q in CnIPC(X)) by Th10;
+ end;
+
+definition let X be Subset of MC-wff;
+  cluster CnIPC(X) -> IPC_theory;
+  coherence by Lm3;
+end;
+
+theorem Th15:
+  T is IPC_theory iff CnIPC(T) = T
+ proof
+   hereby assume A1: T is IPC_theory;
+    A2: T c= CnIPC(T) by Th12;
+      CnIPC(T) c= T
+     proof
+      let a be set; assume a in CnIPC(T);
+      hence a in T by A1,Def15;
+     end;
+    hence CnIPC(T) = T by A2,XBOOLE_0:def 10;
+   end;
+  thus CnIPC(T) = T implies T is IPC_theory;
+ end;
+
+theorem :: Th16:
+    T is IPC_theory implies IPC-Taut c= T
+ proof
+  assume A1: T is IPC_theory;
+    {}(MC-wff) c= T by XBOOLE_1:2;
+  then IPC-Taut c= CnIPC(T) by Def16,Th13;
+  hence thesis by A1,Th15;
+ end;
+
+definition
+  cluster IPC-Taut -> IPC_theory;
+  coherence by Def16;
+end;
+
+begin  :: Formulas provable in IPC : implication
+
+theorem Th17:  :: Identity law
+  p => p in IPC-Taut
+proof
+A1:p => (p => p) in IPC-Taut by Def14;
+A2:(p => ((p => p) => p))
+      => ((p => (p => p)) => (p => p)) in IPC-Taut by Def14;
+      p => ((p => p) => p) in IPC-Taut by Def14;
+    then (p => (p => p)) => (p => p) in IPC-Taut by A2,Def14;
+  hence thesis by A1,Def14;
+end;
+
+theorem Th18:
+  q in IPC-Taut implies p => q in IPC-Taut
+  proof
+      q => (p => q) in IPC-Taut by Def14;
+    hence thesis by Def14;
+  end;
+
+theorem :: Th19:
+    IVERUM in IPC-Taut by Def14,Def18;
+
+theorem :: Th20:
+    (p => q) => (p => p) in IPC-Taut
+proof
+    (p => p) in IPC-Taut by Th17;
+  hence thesis by Th18;
+end;
+
+theorem :: Th21:
+    (q => p) => (p => p) in IPC-Taut
+proof
+    (p => p) in IPC-Taut by Th17;
+  hence thesis by Th18;
+end;
+
+theorem Th22:
+  (q => r) => ((p => q) => (p => r)) in IPC-Taut
+proof
+A1:((p => (q => r)) => ((p => q) => (p => r))) =>
+     ( (q => r) => ((p => (q => r)) => ((p => q) => (p => r)))) in IPC-Taut
+         by Def14;
+     ((p => (q => r)) => ((p => q) => (p => r))) in IPC-Taut by Def14;
+then A2: ( (q => r) => ((p => (q => r)) => ((p => q) => (p => r)))) in IPC-Taut
+      by A1,Def14;
+      ( (q => r) => ((p => (q => r)) => ((p => q) => (p => r))))
+      => (((q => r) => (p => (q => r))) =>
+    ((q => r) => ((p => q) => (p => r)))) in IPC-Taut
+      by Def14;
+then A3: ((q => r) => (p => (q => r))) =>
+     ((q => r) => ((p => q) => (p => r))) in IPC-Taut
+       by A2,Def14;
+      (q => r) => (p => (q => r)) in IPC-Taut by Def14;
+  hence thesis by A3,Def14;
+end;
+
+theorem Th23:
+  p => (q => r) in IPC-Taut implies q => (p => r) in IPC-Taut
+proof
+  assume A1: p => (q => r) in IPC-Taut;
+    (p => (q => r)) => ((p => q) => (p => r)) in IPC-Taut by Def14;
+then A2:  ((p => q) => (p => r)) in IPC-Taut by A1,Def14;
+    ((p => q) => (p => r)) => ((q => (p => q)) => (q => (p => r))) in IPC-Taut
+    by Th22;
+then A3:((q => (p => q)) => (q => (p => r))) in IPC-Taut by A2,Def14;
+    q => (p => q) in IPC-Taut by Def14;
+  hence thesis by A3,Def14;
+end;
+
+theorem Th24: :: Hypothetical syllogism
+  (p => q) => ((q => r) => (p => r)) in IPC-Taut
+proof
+    (q => r) => ((p => q) => (p => r)) in IPC-Taut by Th22;
+  hence thesis by Th23;
+end;
+
+theorem Th25:
+  p => q in IPC-Taut implies (q => r) => (p => r) in IPC-Taut
+ proof assume
+A1: p => q in IPC-Taut;
+     (p => q) => ((q => r) => (p => r)) in IPC-Taut by Th24;
+  hence (q => r) => (p => r) in IPC-Taut by A1,Def14;
+ end;
+
+theorem Th26:
+  p => q in IPC-Taut & q => r in IPC-Taut implies p => r in IPC-Taut
+ proof assume that
+A1: p => q in IPC-Taut and
+A2: q => r in IPC-Taut;
+     (p => q) => ((q => r) => (p => r)) in IPC-Taut by Th24;
+   then (q => r) => (p => r) in IPC-Taut by A1,Def14;
+  hence p => r in IPC-Taut by A2,Def14;
+ end;
+
+Lm4: (((q => r) => (p => r)) => s) => ((p => q) => s) in IPC-Taut
+ proof
+    (p => q) => ((q => r) => (p => r)) in IPC-Taut by Th24;
+  hence thesis by Th25;
+ end;
+
+theorem Th27:
+ (p => (q => r)) => ((s => q) => (p => (s => r))) in IPC-Taut
+  proof
+A1:  ((((q => r) => (s => r)) => (p => (s => r))) =>
+     ((s => q) => (p => (s => r)))) =>
+      ((p => (q => r)) => ((s => q) => (p => (s => r)))) in IPC-Taut by Lm4;
+      (((q => r) => (s => r)) => (p => (s => r))) =>
+    ((s => q) => (p => (s => r))) in IPC-Taut by Lm4;
+   hence thesis by A1,Def14;
+  end;
+
+theorem :: Th28:
+    ((p => q) => r) => (q => r) in IPC-Taut
+proof
+    q => (p => q) in IPC-Taut &
+  (q => (p => q)) => (((p => q) => r) => (q => r)) in IPC-Taut
+    by Def14,Th24;
+ hence thesis by Def14;
+end;
+
+theorem Th29: :: Contraposition
+  (p => (q => r)) => (q => (p => r)) in IPC-Taut
+proof
+    (p => (q => r)) => ((p => q) => (p => r)) in IPC-Taut by Def14;
+then A1:(p => q) => ((p => (q => r)) => (p => r)) in IPC-Taut by Th23;
+    ((p => q) => ((p => (q => r)) => (p => r))) =>
+    ((q => (p => q)) => (q => ((p => (q => r)) => (p => r)))) in IPC-Taut
+      by Th22;
+then A2:(q => (p => q)) => (q => ((p => (q => r)) => (p => r))) in IPC-Taut
+    by A1,Def14;
+    q => (p => q) in IPC-Taut by Def14;
+  then (q => ((p => (q => r)) => (p => r))) in IPC-Taut by A2,Def14;
+  hence thesis by Th23;
+end;
+
+theorem Th30:  :: A Hilbert axiom
+  (p => (p => q)) => (p => q) in IPC-Taut
+proof
+A1:p => p in IPC-Taut by Th17;
+    (p => (p => q)) => ((p => p) => (p => q)) in IPC-Taut by Def14;
+  then (p => p) => ((p => (p => q)) => (p => q)) in IPC-Taut by Th23;
+  hence thesis by A1,Def14;
+end;
+
+theorem :: Th31: :: Modus ponendo ponens
+    q => ((q => p) => p) in IPC-Taut
+proof
+A1:(q => p) => (q => p) in IPC-Taut by Th17;
+    ((q => p) => (q => p)) => (q => ((q => p) => p)) in IPC-Taut by Th29;
+  hence thesis by A1,Def14;
+end;
+
+theorem Th32:
+  s => (q => p) in IPC-Taut & q in IPC-Taut implies s => p in IPC-Taut
+proof
+  assume A1: s => (q => p) in IPC-Taut & q in IPC-Taut;
+    (s => (q => p)) => (q => (s => p)) in IPC-Taut by Th29;
+  then q => (s => p) in IPC-Taut by A1,Def14;
+  hence thesis by A1,Def14;
+end;
+
+begin :: Formulas provable in IPC : conjunction
+
+theorem Th33:
+  p => (p '&' p) in IPC-Taut
+proof
+A1:p => (p => (p '&' p)) in IPC-Taut by Def14;
+    (p => (p => (p '&' p))) => (p => (p '&' p)) in IPC-Taut by Th30;
+  hence thesis by A1,Def14;
+end;
+
+theorem Th34:
+  (p '&' q) in IPC-Taut iff p in IPC-Taut & q in IPC-Taut
+proof
+  hereby assume A1: p '&' q in IPC-Taut;
+      (p '&' q) => p in IPC-Taut & (p '&' q) => q in IPC-Taut by Def14;
+    hence p in IPC-Taut & q in IPC-Taut by A1,Def14;
+  end;
+  assume A2: p in IPC-Taut & q in IPC-Taut;
+    p => (q => (p '&' q)) in IPC-Taut by Def14;
+  then q => (p '&' q) in IPC-Taut by A2,Def14;
+  hence thesis by A2,Def14;
+end;
+
+theorem :: Th35:
+    (p '&' q) in IPC-Taut iff (q '&' p) in IPC-Taut
+proof
+  hereby assume p '&' q in IPC-Taut;
+    then p in IPC-Taut & q in IPC-Taut by Th34;
+    hence q '&' p in IPC-Taut by Th34;
+  end;
+  assume q '&' p in IPC-Taut;
+  then q in IPC-Taut & p in IPC-Taut by Th34;
+  hence p '&' q in IPC-Taut by Th34;
+end;
+
+theorem Th36:
+  (( p '&' q ) => r ) => ( p => ( q => r )) in IPC-Taut
+proof
+       ( q => ( p '&' q )) => ((( p '&' q ) => r ) => ( q => r )) in IPC-Taut
+     by Th24;
+then A1: p => (( q => ( p '&' q )) => ((( p '&' q ) => r ) => ( q => r )))
+    in IPC-Taut by Th18;
+    set qp = ( q => ( p '&' q ));
+    set pr = (( p '&' q ) => r) => ( q => r );
+      ( p => ( qp => pr )) => ( ( p => qp ) => ( p => pr )) in IPC-Taut by
+Def14
+;
+    then A2: ( ( p => qp ) => ( p => pr )) in IPC-Taut by A1,Def14;
+      p => ( q => ( p '&' q )) in IPC-Taut by Def14;
+then A3: p => ((( p '&' q ) => r ) => ( q => r )) in IPC-Taut by A2,Def14;
+       (p => ((( p '&' q ) => r ) => ( q => r ))) =>
+     ((( p '&' q ) => r ) => ( p => ( q => r ))) in IPC-Taut by Th29;
+     hence thesis by A3,Def14;
+end;
+
+theorem Th37:
+  ( p => ( q => r )) => (( p '&' q ) => r ) in IPC-Taut
+proof
+  A1: ( p '&' q ) => q in IPC-Taut by Def14;
+       (( p '&' q ) => q) => (( q => r ) => (( p '&' q ) => r )) in IPC-Taut
+     by Th24;
+     then ( q => r ) => (( p '&' q ) => r ) in IPC-Taut by A1,Def14;
+  then A2: p => (( q => r ) => (( p '&' q ) => r )) in IPC-Taut by Th18;
+       p => (( q => r ) => (( p '&' q ) => r )) =>
+     ((p => ( q => r )) => ( p => (( p '&' q ) => r ))) in IPC-Taut
+     by Def14;
+  then A3: (p => ( q => r )) => ( p => (( p '&' q ) => r )) in IPC-Taut
+     by A2,Def14;
+       ( p => (( p '&' q ) => r )) => ((p '&' q ) => ( p => r )) in IPC-Taut
+     by Th29;
+  then A4: (p => ( q => r )) => ((p '&' q ) => ( p => r )) in IPC-Taut by A3,
+Th26;
+  A5: ((p '&' q ) => ( p => r )) => ((( p '&' q ) => p ) => (( p '&' q )
+     => r )) in IPC-Taut by Def14;
+       ( p '&' q ) => p in IPC-Taut by Def14;
+     then ((p '&' q ) => ( p => r )) => (( p '&' q ) => r ) in IPC-Taut by A5,
+Th32;
+     hence thesis by A4,Th26;
+end;
+
+theorem Th38:
+  ( r => p ) => (( r => q ) => ( r => ( p '&' q ))) in IPC-Taut
+proof
+       p => ( q => ( p '&' q )) in IPC-Taut by Def14;
+  then A1: r => ( p => ( q => ( p '&' q ))) in IPC-Taut by Th18;
+       (r => ( p => ( q => ( p '&' q )))) =>
+     (( r => p ) => ( r => ( q => ( p '&' q )))) in IPC-Taut by Def14;
+  then A2: ( r => p ) => ( r => ( q => ( p '&' q ))) in IPC-Taut by A1,Def14;
+       ( r => ( q => ( p '&' q ))) => (( r => q ) => ( r => ( p '&' q )))
+     in IPC-Taut by Def14;
+     hence thesis by A2,Th26;
+end;
+
+theorem Th39:
+  ( (p => q) '&' p ) => q in IPC-Taut
+proof
+  set P = p => q;
+A1:( P => P ) => (( P '&' p ) => q ) in IPC-Taut by Th37;
+    P => P in IPC-Taut by Th17;
+  hence thesis by A1,Def14;
+end;
+
+theorem :: Th40:
+    (( (p => q) '&' p ) '&' s ) => q in IPC-Taut
+proof
+  set P = (p => q) '&' p;
+A1:(P '&' s) => P in IPC-Taut by Def14;
+    P => q in IPC-Taut by Th39;
+  hence thesis by A1,Th26;
+end;
+
+theorem :: Th41:
+    (q => s) => (( p '&' q ) => s) in IPC-Taut
+proof
+  set P = p '&' q;
+A1:(P => q) => ((q => s) => (P => s)) in IPC-Taut by Th24;
+    P => q in IPC-Taut by Def14;
+  hence thesis by A1,Def14;
+end;
+
+theorem Th42:
+  (q => s) => (( q '&' p ) => s) in IPC-Taut
+proof
+  set P = q '&' p;
+A1:(P => q) => ((q => s) => (P => s)) in IPC-Taut by Th24;
+    P => q in IPC-Taut by Def14;
+  hence thesis by A1,Def14;
+end;
+
+theorem Th43:
+  ( (p '&' s) => q ) => ((p '&' s) => (q '&' s)) in IPC-Taut
+proof
+  set P = p '&' s;
+A1:P => s in IPC-Taut by Def14;
+    ( P => q ) => (( P => s ) => ( P => ( q '&' s ))) in IPC-Taut by Th38;
+  hence thesis by A1,Th32;
+end;
+
+theorem Th44:
+  ( p => q ) => ((p '&' s) => (q '&' s)) in IPC-Taut
+proof
+A1:(p => q) => (( p '&' s ) => q) in IPC-Taut by Th42;
+    ( (p '&' s) => q ) => ((p '&' s) => (q '&' s)) in IPC-Taut by Th43;
+  hence thesis by A1,Th26;
+end;
+
+theorem Th45:
+  (( p => q ) '&' ( p '&' s )) => ( q '&' s ) in IPC-Taut
+proof
+  set P = p => q, Q = p '&' s, S = q '&' s;
+A1:( P => ( Q => S )) => (( P '&' Q ) => S ) in IPC-Taut by Th37;
+  P => (Q => S) in IPC-Taut by Th44;
+  hence thesis by A1,Def14;
+end;
+
+theorem Th46:
+  ( p '&' q ) => ( q '&' p ) in IPC-Taut
+proof
+  set P = p '&' q;
+A1:( P => q ) => (( P => p ) => ( P => ( q '&' p ))) in IPC-Taut by Th38;
+    P => q in IPC-Taut by Def14;
+then A2:( P => p ) => ( P => ( q '&' p )) in IPC-Taut by A1,Def14;
+    P => p in IPC-Taut by Def14;
+  hence thesis by A2,Def14;
+end;
+
+theorem Th47:
+  ( p => q ) '&' ( p '&' s ) => ( s '&' q ) in IPC-Taut
+proof
+A1:( p => q ) '&' ( p '&' s ) => ( q '&' s ) in IPC-Taut by Th45;
+    ( q '&' s ) => ( s '&' q ) in IPC-Taut by Th46;
+  hence thesis by A1,Th26;
+end;
+
+theorem Th48:
+  ( p => q ) => (( p '&' s ) => ( s '&' q )) in IPC-Taut
+proof
+  set P = p => q, Q = p '&' s, S = s '&' q;
+A1:(( P '&' Q ) => S ) => ( P => ( Q => S )) in IPC-Taut by Th36;
+    P '&' Q => S in IPC-Taut by Th47;
+  hence thesis by A1,Def14;
+end;
+
+theorem Th49:
+  ( p => q ) => (( s '&' p ) => ( s '&' q )) in IPC-Taut
+proof
+  set P = p => q, Q = p '&' s, S = s '&' q, T = s '&' p;
+A1:(P => (Q => S)) => ((T => Q) => (P => (T => S))) in IPC-Taut by Th27;
+    P => (Q => S) in IPC-Taut by Th48;
+then A2:(T => Q) => (P => (T => S)) in IPC-Taut by A1,Def14;
+    T => Q in IPC-Taut by Th46;
+  hence thesis by A2,Def14;
+end;
+
+theorem :: Th50:
+    ( p '&' (s '&' q) ) => ( p '&' (q '&' s) ) in IPC-Taut
+proof
+  set P = s '&' q, Q = q '&' s;
+A1:( P => Q ) => (( p '&' P ) => ( p '&' Q )) in IPC-Taut by Th49;
+    P => Q in IPC-Taut by Th46;
+  hence thesis by A1,Def14;
+end;
+
+theorem :: Th51:
+    ( ( p => q ) '&' (p => s) ) => ( p => (q '&' s) ) in IPC-Taut
+proof
+  set P = p => q, Q = p => s, S = p => (q '&' s);
+A1:( P => ( Q => S )) => (( P '&' Q ) => S ) in IPC-Taut by Th37;
+    P => (Q => S) in IPC-Taut by Th38;
+  hence thesis by A1,Def14;
+end;
+
+Lm5:
+  ( (p '&' q) '&' s ) => q in IPC-Taut
+proof
+A1:((p '&' q) '&' s) => (p '&' q) in IPC-Taut by Def14;
+    (p '&' q) => q in IPC-Taut by Def14;
+  hence thesis by A1,Th26;
+end;
+
+Lm6:
+  ( (p '&' q) '&' s ) '&' ( (p '&' q) '&' s ) => ( (p '&' q) '&' s ) '&' q
+     in IPC-Taut
+proof
+  set P = (p '&' q) '&' s;
+A1:( P => q ) => (( P '&' P ) => ( P '&' q )) in IPC-Taut by Th49;
+    P => q in IPC-Taut by Lm5;
+  hence thesis by A1,Def14;
+end;
+
+Lm7:
+  (p '&' q) '&' s => ((p '&' q) '&' s) '&' q in IPC-Taut
+proof
+A1:( (p '&' q) '&' s ) => ( (p '&' q) '&' s ) '&' ( (p '&' q) '&' s )
+    in IPC-Taut by Th33;
+    ( (p '&' q) '&' s ) '&' ( (p '&' q) '&' s ) => ( (p '&' q) '&' s ) '&' q
+     in IPC-Taut by Lm6;
+  hence thesis by A1,Th26;
+end;
+
+Lm8:
+  (p '&' q) '&' s => (p '&' s) in IPC-Taut
+proof
+  set P = p '&' q;
+A1:( P => p ) => ((P '&' s) => (p '&' s)) in IPC-Taut by Th44;
+    P => p in IPC-Taut by Def14;
+  hence thesis by A1,Def14;
+end;
+
+Lm9:
+  (p '&' q) '&' s '&' q => (p '&' s) '&' q in IPC-Taut
+proof
+  set P = p '&' q '&' s, Q = p '&' s;
+A1:( P => Q ) => ((P '&' q) => (Q '&' q)) in IPC-Taut by Th44;
+    P => Q in IPC-Taut by Lm8;
+  hence thesis by A1,Def14;
+end;
+
+Lm10:
+  (p '&' q) '&' s => (p '&' s) '&' q in IPC-Taut
+proof
+A1:(p '&' q) '&' s => ((p '&' q) '&' s) '&' q in IPC-Taut by Lm7;
+    (p '&' q) '&' s '&' q => (p '&' s) '&' q in IPC-Taut by Lm9;
+  hence thesis by A1,Th26;
+end;
+
+Lm11:
+  (p '&' s) '&' q => (s '&' p) '&' q in IPC-Taut
+proof
+  set P = p '&' s, Q = s '&' p;
+A1:( P => Q ) => ((P '&' q) => (Q '&' q)) in IPC-Taut by Th44;
+    P => Q in IPC-Taut by Th46;
+  hence thesis by A1,Def14;
+end;
+
+Lm12:
+  (p '&' q) '&' s => (s '&' p) '&' q in IPC-Taut
+proof
+A1:(p '&' q) '&' s => (p '&' s) '&' q in IPC-Taut by Lm10;
+    (p '&' s) '&' q => (s '&' p) '&' q in IPC-Taut by Lm11;
+  hence thesis by A1,Th26;
+end;
+
+Lm13:
+  (p '&' q) '&' s => (s '&' q) '&' p in IPC-Taut
+proof
+A1:(p '&' q) '&' s => (s '&' p) '&' q in IPC-Taut by Lm12;
+    (s '&' p) '&' q => (s '&' q) '&' p in IPC-Taut by Lm10;
+  hence thesis by A1,Th26;
+end;
+
+Lm14:
+  (p '&' q) '&' s => p '&' (s '&' q) in IPC-Taut
+proof
+A1:(p '&' q) '&' s => (s '&' q) '&' p in IPC-Taut by Lm13;
+    (s '&' q) '&' p => p '&' (s '&' q) in IPC-Taut by Th46;
+  hence thesis by A1,Th26;
+end;
+
+Lm15:
+  p '&' (s '&' q) => p '&' (q '&' s) in IPC-Taut
+proof
+  set P = s '&' q, Q = q '&' s;
+A1:( P => Q ) => (( p '&' P ) => ( p '&' Q )) in IPC-Taut by Th49;
+    s '&' q => q '&' s in IPC-Taut by Th46;
+  hence thesis by A1,Def14;
+end;
+
+theorem :: Th52:
+    (p '&' q) '&' s => p '&' (q '&' s) in IPC-Taut
+proof
+A1:(p '&' q) '&' s => p '&' (s '&' q) in IPC-Taut by Lm14;
+    p '&' (s '&' q) => p '&' (q '&' s) in IPC-Taut by Lm15;
+  hence thesis by A1,Th26;
+end;
+
+Lm16:
+  p '&' (q '&' s) => (s '&' q) '&' p in IPC-Taut
+proof
+A1:p '&' (q '&' s) => p '&' (s '&' q) in IPC-Taut by Lm15;
+    p '&' (s '&' q) => (s '&' q) '&' p in IPC-Taut by Th46;
+  hence thesis by A1,Th26;
+end;
+
+Lm17:
+  (s '&' q) '&' p => (q '&' s) '&' p in IPC-Taut
+proof
+  set P = s '&' q, Q = q '&' s;
+A1:( P => Q ) => ((P '&' p) => (Q '&' p)) in IPC-Taut by Th44;
+    s '&' q => q '&' s in IPC-Taut by Th46;
+  hence thesis by A1,Def14;
+end;
+
+Lm18:
+  p '&' (q '&' s) => (q '&' s) '&' p in IPC-Taut
+proof
+A1:p '&' (q '&' s) => (s '&' q) '&' p in IPC-Taut by Lm16;
+    (s '&' q) '&' p => (q '&' s) '&' p in IPC-Taut by Lm17;
+  hence thesis by A1,Th26;
+end;
+
+Lm19:
+  p '&' (q '&' s) => (p '&' s) '&' q in IPC-Taut
+proof
+A1:p '&' (q '&' s) => (q '&' s) '&' p in IPC-Taut by Lm18;
+    (q '&' s) '&' p => (p '&' s) '&' q in IPC-Taut by Lm13;
+  hence thesis by A1,Th26;
+end;
+
+Lm20:
+  p '&' (q '&' s) => p '&' (s '&' q) in IPC-Taut
+proof
+  set P = q '&' s, Q = s '&' q;
+A1:( P => Q ) => (( p '&' P ) => ( p '&' Q )) in IPC-Taut by Th49;
+    q '&' s => s '&' q in IPC-Taut by Th46;
+  hence thesis by A1,Def14;
+end;
+
+theorem :: Th53:
+    p '&' (q '&' s) => (p '&' q) '&' s in IPC-Taut
+proof
+A1:p '&' (q '&' s) => p '&' (s '&' q) in IPC-Taut by Lm20;
+    p '&' (s '&' q) => (p '&' q) '&' s in IPC-Taut by Lm19;
+  hence thesis by A1,Th26;
+end;
+
+begin :: Formulas provable in IPC: disjunction
+
+theorem Th54:
+  (p 'or' p) => p in IPC-Taut
+proof
+A1:p => p in IPC-Taut by Th17;
+    (p => p) => ((p => p) => ((p 'or' p) => p)) in IPC-Taut by Def14;
+  then (p => p) => ((p 'or' p) => p) in IPC-Taut by A1,Def14;
+  hence thesis by A1,Def14;
+end;
+
+theorem :: Th55:
+    p in IPC-Taut or q in IPC-Taut implies (p 'or' q) in IPC-Taut
+proof
+  assume A1: p in IPC-Taut or q in IPC-Taut;
+    now per cases by A1;
+   case A2: p in IPC-Taut;
+       p => (p 'or' q) in IPC-Taut by Def14;
+     hence thesis by A2,Def14;
+   case A3: q in IPC-Taut;
+       q => (p 'or' q) in IPC-Taut by Def14;
+     hence thesis by A3,Def14;
+  end;
+hence thesis;
+end;
+
+theorem Th56:
+  (p 'or' q) => (q 'or' p) in IPC-Taut
+proof
+A1: (p => (q 'or' p)) => ((q => (q 'or' p)) => ((p 'or' q) => (q 'or' p)))
+                                in IPC-Taut by Def14;
+A2: p => (q 'or' p) in IPC-Taut by Def14;
+A3: q => (q 'or' p) in IPC-Taut by Def14;
+  ((q => (q 'or' p)) => ((p 'or' q) => (q 'or' p)))
+                                in IPC-Taut by A1,A2,Def14;
+hence thesis by A3,Def14;
+end;
+
+theorem :: Th57:
+    (p 'or' q) in IPC-Taut iff (q 'or' p) in IPC-Taut
+proof
+  hereby assume A1: p 'or' q in IPC-Taut;
+      (p 'or' q) => (q 'or' p) in IPC-Taut by Th56;
+    hence q 'or' p in IPC-Taut by A1,Def14;
+  end;
+  assume A2: q 'or' p in IPC-Taut;
+      (q 'or' p) => (p 'or' q) in IPC-Taut by Th56;
+    hence p 'or' q in IPC-Taut by A2,Def14;
+end;
+
+theorem Th58:
+  (p => q) => (p => (q 'or' s)) in IPC-Taut
+proof
+  A1: q => (q 'or' s) in IPC-Taut by Def14;
+    (q => (q 'or' s)) => ((p => q) => (p => (q 'or' s))) in IPC-Taut by Th22;
+  hence thesis by A1,Def14;
+end;
+
+theorem Th59:
+  (p => q) => (p => (s 'or' q)) in IPC-Taut
+proof
+  A1: q => (s 'or' q) in IPC-Taut by Def14;
+    (q => (s 'or' q)) => ((p => q) => (p => (s 'or' q))) in IPC-Taut by Th22;
+  hence thesis by A1,Def14;
+end;
+
+theorem Th60:
+  ( p => q ) => ((p 'or' s) => (q 'or' s)) in IPC-Taut
+proof
+  set P = p 'or' s, Q = q 'or' s;
+    (p => Q) => ((s => Q) => (P => Q)) in IPC-Taut by Def14;
+  then A1: (s => Q) => ((p => Q) => (P => Q)) in IPC-Taut by Th23;
+         s => Q in IPC-Taut by Def14;
+  then A2: (p => Q) => (P => Q) in IPC-Taut by A1,Def14;
+        (p => q) => (p => Q) in IPC-Taut by Th58;
+  hence thesis by A2,Th26;
+end;
+
+
+theorem Th61:
+  p => q in IPC-Taut implies (p 'or' s) => (q 'or' s) in IPC-Taut
+proof
+  assume A1: p => q in IPC-Taut;
+    ( p => q ) => ((p 'or' s) => (q 'or' s)) in IPC-Taut by Th60;
+  hence thesis by A1,Def14;
+end;
+
+theorem Th62:
+  ( p => q ) => (( s 'or' p ) => ( s 'or' q )) in IPC-Taut
+proof
+  set P = s 'or' p, Q = s 'or' q;
+  A1: (s => Q) => ((p => Q) => (P => Q)) in IPC-Taut by Def14;
+         s => Q in IPC-Taut by Def14;
+  then A2: (p => Q) => (P => Q) in IPC-Taut by A1,Def14;
+        (p => q) => (p => Q) in IPC-Taut by Th59;
+  hence thesis by A2,Th26;
+end;
+
+theorem Th63:
+  p => q in IPC-Taut implies ( s 'or' p ) => ( s 'or' q ) in IPC-Taut
+proof
+  assume A1: p => q in IPC-Taut;
+    ( p => q ) => (( s 'or' p ) => ( s 'or' q )) in IPC-Taut by Th62;
+  hence thesis by A1,Def14;
+end;
+
+theorem Th64:
+  ( p 'or' (q 'or' s) ) => ( q 'or' (p 'or' s) ) in IPC-Taut
+proof
+  set P = p 'or' s, Q = q 'or' s;
+    s => P in IPC-Taut by Def14;
+  then (q 'or' s) => (q 'or' P) in IPC-Taut by Th63;
+  :: Q => (q 'or' P)  in IPC-Taut; then
+  then A1: (p 'or' Q) => (p 'or' (q 'or' P)) in IPC-Taut by Th63;
+    (p 'or' (q 'or' P)) => ((q 'or' P) 'or' p) in IPC-Taut by Th56;
+  then A2: (p 'or' Q) => ((q 'or' P) 'or' p) in IPC-Taut by A1,Th26;
+  A3: p => P in IPC-Taut by Def14;
+    P => (q 'or' P) in IPC-Taut by Def14;
+  then p => (q 'or' P) in IPC-Taut by A3,Th26;
+  then A4: ((q 'or' P) 'or' p) => ((q 'or' P) 'or' (q 'or' P))
+                     in IPC-Taut by Th63;
+    ((q 'or' P) 'or' (q 'or' P)) => (q 'or' P) in IPC-Taut by Th54;
+  then ((q 'or' P) 'or' p) => (q 'or' P) in IPC-Taut by A4,Th26;
+  hence thesis by A2,Th26;
+end;
+
+theorem :: Th65:
+    ( p 'or' (q 'or' s) ) => ( (p 'or' q) 'or' s ) in IPC-Taut
+proof
+     (q 'or' s) => (s 'or' q) in IPC-Taut by Th56;
+  then A1: (p 'or' (q 'or' s)) => (p 'or' (s 'or' q)) in IPC-Taut by Th63;
+     (p 'or' (s 'or' q)) => (s 'or' (p 'or' q)) in IPC-Taut by Th64;
+  then A2: (p 'or' (q 'or' s)) => (s 'or' (p 'or' q))
+                             in IPC-Taut by A1,Th26;
+    (s 'or' (p 'or' q)) => ((p 'or' q) 'or' s) in IPC-Taut by Th56;
+  hence thesis by A2,Th26;
+end;
+
+theorem :: Th66:
+    ( (p 'or' q) 'or' s ) => ( p 'or' (q 'or' s) ) in IPC-Taut
+proof
+    (p 'or' q) => (q 'or' p) in IPC-Taut by Th56;
+  then A1: ((p 'or' q) 'or' s) => ((q 'or' p) 'or' s) in IPC-Taut by Th61;
+    ((q 'or' p) 'or' s) => (s 'or' (q 'or' p)) in IPC-Taut by Th56;
+  then A2: ((p 'or' q) 'or' s) => (s 'or' (q 'or' p)) in IPC-Taut by A1,Th26;
+    (q 'or' p) => (p 'or' q) in IPC-Taut by Th56;
+  then (s 'or' (q 'or' p)) => (s 'or' (p 'or' q)) in IPC-Taut by Th63;
+  then A3: ((p 'or' q) 'or' s) => (s 'or' (p 'or' q)) in IPC-Taut by A2,Th26;
+    (s 'or' (p 'or' q)) => (p 'or' (s 'or' q)) in IPC-Taut by Th64;
+  then A4: ((p 'or' q) 'or' s) => (p 'or' (s 'or' q)) in IPC-Taut by A3,Th26;
+    (s 'or' q) => (q 'or' s) in IPC-Taut by Th56;
+  then (p 'or' (s 'or' q)) => (p 'or' (q 'or' s)) in IPC-Taut by Th63;
+   hence thesis by A4,Th26;
+end;
+
+begin :: Classical propositional calculus CPC
+
+reserve T, X, Y for Subset of MC-wff;
+reserve p, q, r for Element of MC-wff;
+
+definition let T be Subset of MC-wff;
+  attr T is CPC_theory means :Def19:
+    for p, q, r being Element of MC-wff holds
+    p => (q => p) in T &
+    (p => (q => r)) => ((p => q) => (p => r)) in T &
+    (p '&' q) => p in T &
+    (p '&' q) => q in T &
+    p => (q => (p '&' q)) in T &
+    p => (p 'or' q) in T &
+    q => (p 'or' q) in T &
+    (p => r) => ((q => r) => ((p 'or' q) => r)) in T &
+    FALSUM => p in T &
+    p 'or' (p => FALSUM) in T &
+    (p in T & p => q in T implies q in T);
+ correctness;
+end;
+
+theorem Th67:
+T is CPC_theory implies T is IPC_theory
+proof
+assume A1: T is CPC_theory;
+let p, q, r be Element of MC-wff;
+thus thesis by A1,Def19;
+end;
+
+definition let X;
+  func CnCPC X -> Subset of MC-wff means :Def20:
+  r in it iff for T st T is CPC_theory & X c= T holds r in T;
+ existence
+  proof
+    defpred P[set] means
+    for T st T is CPC_theory & X c= T holds $1 in T;
+   consider Y being set such that
+A1: for a being set holds a in Y iff
+     a in MC-wff & P[a] from Separation;
+      Y c= MC-wff
+    proof
+     let a be set; assume a in Y;
+     hence a in MC-wff by A1;
+    end;
+   then reconsider Z = Y as Subset of MC-wff;
+   take Z;
+   thus r in Z iff for T st T is CPC_theory & X c= T holds r in T by A1;
+  end;
+ uniqueness
+  proof
+   let Y,Z be Subset of MC-wff such that
+    A2: r in Y iff for T st T is CPC_theory & X c= T holds r in T and
+    A3: r in Z iff for T st T is CPC_theory & X c= T holds r in T;
+     for a being set holds a in Y iff a in Z
+    proof
+     let a be set;
+     hereby assume A4: a in Y;
+       then reconsider t=a as Element of MC-wff;
+         for T st T is CPC_theory & X c= T holds t in T by A2,A4;
+       hence a in Z by A3;
+      end;
+       assume A5: a in Z;
+       then reconsider t=a as Element of MC-wff;
+         for T st T is CPC_theory & X c= T holds t in T by A3,A5;
+       hence a in Y by A2;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+end;
+
+definition
+  func CPC-Taut -> Subset of MC-wff equals :Def21:
+    CnCPC({}(MC-wff));
+  correctness;
+end;
+
+theorem Th68:
+CnIPC (X) c= CnCPC (X)
+proof
+  let a be set;
+  assume A1: a in CnIPC (X);
+  then reconsider r = a as Element of MC-wff;
+    for T st T is CPC_theory & X c= T holds r in T
+      proof
+        let T such that A2: T is CPC_theory and A3: X c= T;
+          T is IPC_theory by A2,Th67;
+        hence r in T by A1,A3,Def15;
+      end;
+  hence thesis by Def20;
+end;
+
+theorem Th69:
+  p => (q => p) in CnCPC (X) &
+ (p => (q => r)) => ((p => q) => (p => r)) in CnCPC (X) &
+  p '&' q => p in CnCPC (X) &
+  p '&' q => q in CnCPC (X) &
+  p => (q => (p '&' q)) in CnCPC (X) &
+  p => (p 'or' q) in CnCPC (X) &
+  q => (p 'or' q) in CnCPC (X) &
+  (p => r) => ((q => r) => ((p 'or' q) => r)) in CnCPC (X) &
+  FALSUM => p in CnCPC (X) &
+  p 'or' (p => FALSUM) in CnCPC (X)
+proof
+thus p => (q => p) in CnCPC (X)
+   proof
+   A1: p => (q => p) in CnIPC (X) by Th1;
+     CnIPC(X) c= CnCPC(X) by Th68;
+   hence thesis by A1;
+   end;
+
+thus (p => (q => r)) => ((p => q) => (p => r)) in CnCPC (X)
+   proof
+   A2: (p => (q => r)) => ((p => q) => (p => r)) in CnIPC (X) by Th2;
+     CnIPC(X) c= CnCPC(X) by Th68;
+   hence thesis by A2;
+   end;
+
+thus p '&' q => p in CnCPC (X)
+   proof
+   A3: p '&' q => p in CnIPC (X) by Th3;
+     CnIPC(X) c= CnCPC(X) by Th68;
+   hence thesis by A3;
+   end;
+
+thus p '&' q => q in CnCPC (X)
+   proof
+   A4: p '&' q => q in CnIPC (X) by Th4;
+     CnIPC(X) c= CnCPC(X) by Th68;
+   hence thesis by A4;
+   end;
+
+thus p => (q => (p '&' q)) in CnCPC (X)
+   proof
+   A5: p => (q => (p '&' q)) in CnIPC (X) by Th5;
+     CnIPC(X) c= CnCPC(X) by Th68;
+   hence thesis by A5;
+   end;
+
+thus p => (p 'or' q) in CnCPC (X)
+   proof
+   A6: p => (p 'or' q) in CnIPC (X) by Th6;
+     CnIPC(X) c= CnCPC(X) by Th68;
+   hence thesis by A6;
+   end;
+
+thus q => (p 'or' q) in CnCPC (X)
+   proof
+   A7: q => (p 'or' q) in CnIPC (X) by Th7;
+     CnIPC(X) c= CnCPC(X) by Th68;
+   hence thesis by A7;
+   end;
+
+thus (p => r) => ((q => r) => ((p 'or' q) => r)) in CnCPC (X)
+   proof
+   A8: (p => r) => ((q => r) => ((p 'or' q) => r)) in CnIPC (X) by Th8;
+     CnIPC(X) c= CnCPC(X) by Th68;
+   hence thesis by A8;
+   end;
+
+thus FALSUM => p in CnCPC (X)
+   proof
+   A9: FALSUM => p in CnIPC (X) by Th9;
+     CnIPC(X) c= CnCPC(X) by Th68;
+   hence thesis by A9;
+   end;
+
+thus p 'or' (p => FALSUM) in CnCPC (X)
+    proof
+        T is CPC_theory & X c= T implies
+                       p 'or' (p => FALSUM) in T by Def19;
+      hence thesis by Def20;
+    end;
+end;
+
+theorem Th70:
+p in CnCPC(X) & p => q in CnCPC(X) implies q in CnCPC(X)
+proof
+  assume A1: p in CnCPC(X) & p => q in CnCPC(X);
+    T is CPC_theory & X c= T implies q in T
+    proof
+      assume A2: T is CPC_theory & X c= T;
+      then p in T & p => q in T by A1,Def20;
+      hence thesis by A2,Def19;
+    end;
+  hence thesis by Def20;
+end;
+
+
+theorem Th71: T is CPC_theory & X c= T implies CnCPC(X) c= T
+ proof
+  assume that A1:T is CPC_theory and A2: X c= T;
+  let a be set;
+  thus thesis by A1,A2,Def20;
+ end;
+
+theorem Th72:
+  X c= CnCPC(X)
+ proof
+  let a be set;
+  assume A1: a in X;
+  then reconsider t = a as Element of MC-wff;
+    for T st T is CPC_theory & X c= T holds t in T by A1;
+  hence a in CnCPC(X) by Def20;
+ end;
+
+theorem Th73:
+  X c= Y implies CnCPC(X) c= CnCPC(Y)
+ proof
+  assume A1: X c= Y;
+  thus CnCPC(X) c= CnCPC(Y)
+   proof
+    let a be set; assume A2: a in CnCPC(X);
+    then reconsider t = a as Element of MC-wff;
+      for T st T is CPC_theory & Y c= T holds t in T
+     proof
+      let T such that A3: T is CPC_theory and A4: Y c= T;
+        X c= T by A1,A4,XBOOLE_1:1;
+      hence t in T by A2,A3,Def20;
+     end;
+    hence thesis by Def20;
+   end;
+ end;
+
+Lm21: CnCPC(CnCPC(X)) c= CnCPC(X)
+ proof
+  let a be set; assume A1: a in CnCPC(CnCPC(X));
+  then reconsider t = a as Element of MC-wff;
+    for T st T is CPC_theory & X c= T holds t in T
+   proof
+    let T; assume that A2: T is CPC_theory and A3: X c= T;
+      CnCPC(X) c= T by A2,A3,Th71;
+    hence t in T by A1,A2,Def20;
+   end;
+  hence thesis by Def20;
+ end;
+
+theorem :: Th6C:
+    CnCPC(CnCPC(X)) = CnCPC(X)
+ proof
+    CnCPC(CnCPC(X)) c= CnCPC(X) & CnCPC(X) c= CnCPC(CnCPC(X)) by Lm21,Th72;
+  hence thesis by XBOOLE_0:def 10;
+ end;
+
+Lm22:
+CnCPC(X) is CPC_theory
+ proof
+  let p, q, r;
+  thus p => (q => p) in CnCPC(X) by Th69;
+  thus (p => (q => r)) => ((p => q) => (p => r)) in CnCPC(X) by Th69;
+  thus (p '&' q) => p in CnCPC(X) by Th69;
+  thus (p '&' q) => q in CnCPC(X) by Th69;
+  thus p => (q => (p '&' q)) in CnCPC(X) by Th69;
+  thus p => (p 'or' q) in CnCPC(X) by Th69;
+  thus q => (p 'or' q) in CnCPC(X) by Th69;
+  thus (p => r) => ((q => r) => ((p 'or' q) => r)) in CnCPC(X) by Th69;
+  thus FALSUM => p in CnCPC(X) by Th69;
+  thus p 'or' (p => FALSUM) in CnCPC (X) by Th69;
+  thus (p in CnCPC(X) & p => q in CnCPC(X) implies q in CnCPC(X)) by Th70;
+ end;
+
+definition let X be Subset of MC-wff;
+  cluster CnCPC(X) -> CPC_theory;
+  coherence by Lm22;
+end;
+
+theorem Th75:
+  T is CPC_theory iff CnCPC(T) = T
+ proof
+   hereby assume A1: T is CPC_theory;
+    A2: T c= CnCPC(T) by Th72;
+      CnCPC(T) c= T
+     proof
+      let a be set; assume a in CnCPC(T);
+      hence a in T by A1,Def20;
+     end;
+    hence CnCPC(T) = T by A2,XBOOLE_0:def 10;
+   end;
+  thus CnCPC(T) = T implies T is CPC_theory;
+ end;
+
+theorem :: Th8C:
+    T is CPC_theory implies CPC-Taut c= T
+ proof
+  assume A1: T is CPC_theory;
+    {}(MC-wff) c= T by XBOOLE_1:2;
+  then CPC-Taut c= CnCPC(T) by Def21,Th73;
+  hence thesis by A1,Th75;
+ end;
+
+definition
+  cluster CPC-Taut -> CPC_theory;
+  coherence by Def21;
+end;
+
+theorem :: CPCincIPC:
+  IPC-Taut c= CPC-Taut by Def16,Def21,Th68;
+
+begin :: Modal calculus S4
+
+reserve T, X, Y for Subset of MC-wff;
+reserve p, q, r for Element of MC-wff;
+
+definition let T be Subset of MC-wff;
+  attr T is S4_theory means :Def22:
+    for p, q, r being Element of MC-wff holds
+    p => (q => p) in T &
+    (p => (q => r)) => ((p => q) => (p => r)) in T &
+    (p '&' q) => p in T &
+    (p '&' q) => q in T &
+    p => (q => (p '&' q)) in T &
+    p => (p 'or' q) in T &
+    q => (p 'or' q) in T &
+    (p => r) => ((q => r) => ((p 'or' q) => r)) in T &
+    FALSUM => p in T &
+    p 'or' (p => FALSUM) in T &
+    (Nes (p => q)) => ((Nes p) => (Nes q)) in T &
+    (Nes p) => p in T &
+    (Nes p) => Nes (Nes p) in T &
+    (p in T & p => q in T implies q in T) &
+    (p in T implies Nes p in T);
+ correctness;
+end;
+
+theorem Th78:
+T is S4_theory implies T is CPC_theory
+proof
+ assume A1: T is S4_theory;
+ let p, q, r be Element of MC-wff;
+ thus thesis by A1,Def22;
+end;
+
+theorem :: S4TincIPCT:
+  T is S4_theory implies T is IPC_theory
+proof
+assume A1: T is S4_theory;
+let p, q, r be Element of MC-wff;
+thus thesis by A1,Def22;
+end;
+
+definition let X;
+  func CnS4 X -> Subset of MC-wff means :Def23:
+  r in it iff for T st T is S4_theory & X c= T holds r in T;
+ existence
+  proof
+    defpred P[set] means
+    for T st T is S4_theory & X c= T holds $1 in T;
+   consider Y being set such that
+A1: for a being set holds a in Y iff
+     a in MC-wff & P[a] from Separation;
+      Y c= MC-wff
+    proof
+     let a be set; assume a in Y;
+     hence a in MC-wff by A1;
+    end;
+   then reconsider Z = Y as Subset of MC-wff;
+   take Z;
+   thus r in Z iff for T st T is S4_theory & X c= T holds r in T by A1;
+  end;
+ uniqueness
+  proof
+   let Y,Z be Subset of MC-wff such that
+    A2: r in Y iff for T st T is S4_theory & X c= T holds r in T and
+    A3: r in Z iff for T st T is S4_theory & X c= T holds r in T;
+     for a being set holds a in Y iff a in Z
+    proof
+     let a be set;
+     hereby assume A4: a in Y;
+       then reconsider t=a as Element of MC-wff;
+         for T st T is S4_theory & X c= T holds t in T by A2,A4;
+       hence a in Z by A3;
+      end;
+       assume A5: a in Z;
+       then reconsider t=a as Element of MC-wff;
+         for T st T is S4_theory & X c= T holds t in T by A3,A5;
+       hence a in Y by A2;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+end;
+
+definition
+  func S4-Taut -> Subset of MC-wff equals :Def24:
+    CnS4({}(MC-wff));
+  correctness;
+end;
+
+theorem Th80:
+CnCPC (X) c= CnS4 (X)
+proof
+  let a be set;
+  assume A1: a in CnCPC (X);
+  then reconsider r = a as Element of MC-wff;
+    for T st T is S4_theory & X c= T holds r in T
+      proof
+        let T such that A2: T is S4_theory and A3: X c= T;
+          T is CPC_theory by A2,Th78;
+        hence thesis by A1,A3,Def20;
+      end;
+  hence thesis by Def23;
+end;
+
+theorem Th81:
+CnIPC (X) c= CnS4 (X)
+proof
+A1: CnIPC (X) c= CnCPC (X) by Th68;
+  CnCPC (X) c= CnS4 (X) by Th80;
+hence thesis by A1,XBOOLE_1:1;
+end;
+
+theorem Th82:
+  p => (q => p) in CnS4 (X) &
+ (p => (q => r)) => ((p => q) => (p => r)) in CnS4 (X) &
+  p '&' q => p in CnS4 (X) &
+  p '&' q => q in CnS4 (X) &
+  p => (q => (p '&' q)) in CnS4 (X) &
+  p => (p 'or' q) in CnS4 (X) &
+  q => (p 'or' q) in CnS4 (X) &
+  (p => r) => ((q => r) => ((p 'or' q) => r)) in CnS4 (X) &
+  FALSUM => p in CnS4 (X) &
+  p 'or' (p => FALSUM) in CnS4 (X)
+proof
+thus p => (q => p) in CnS4 (X)
+   proof
+   A1: p => (q => p) in CnIPC (X) by Th1;
+     CnIPC (X) c= CnS4 (X) by Th81;
+   hence thesis by A1;
+   end;
+
+thus (p => (q => r)) => ((p => q) => (p => r)) in CnS4 (X)
+   proof
+   A2: (p => (q => r)) => ((p => q) => (p => r)) in CnIPC (X) by Th2;
+     CnIPC (X) c= CnS4 (X) by Th81;
+   hence thesis by A2;
+   end;
+
+thus p '&' q => p in CnS4 (X)
+   proof
+   A3: p '&' q => p in CnIPC (X) by Th3;
+     CnIPC (X) c= CnS4 (X) by Th81;
+   hence thesis by A3;
+   end;
+
+thus p '&' q => q in CnS4 (X)
+   proof
+   A4: p '&' q => q in CnIPC (X) by Th4;
+     CnIPC (X) c= CnS4 (X) by Th81;
+   hence thesis by A4;
+   end;
+
+thus p => (q => (p '&' q)) in CnS4 (X)
+   proof
+   A5: p => (q => (p '&' q)) in CnIPC (X) by Th5;
+     CnIPC (X) c= CnS4 (X) by Th81;
+   hence thesis by A5;
+   end;
+
+thus p => (p 'or' q) in CnS4 (X)
+   proof
+   A6: p => (p 'or' q) in CnIPC (X) by Th6;
+     CnIPC (X) c= CnS4 (X) by Th81;
+   hence thesis by A6;
+   end;
+
+thus q => (p 'or' q) in CnS4 (X)
+   proof
+   A7: q => (p 'or' q) in CnIPC (X) by Th7;
+     CnIPC (X) c= CnS4 (X) by Th81;
+   hence thesis by A7;
+   end;
+
+thus (p => r) => ((q => r) => ((p 'or' q) => r)) in CnS4 (X)
+   proof
+   A8: (p => r) => ((q => r) => ((p 'or' q) => r)) in CnIPC (X) by Th8;
+     CnIPC (X) c= CnS4 (X) by Th81;
+   hence thesis by A8;
+   end;
+
+thus FALSUM => p in CnS4 (X)
+   proof
+   A9: FALSUM => p in CnIPC (X) by Th9;
+     CnIPC (X) c= CnS4 (X) by Th81;
+   hence thesis by A9;
+   end;
+
+thus p 'or' (p => FALSUM) in CnS4 (X)
+    proof
+        T is S4_theory & X c= T implies
+                       p 'or' (p => FALSUM) in T by Def22;
+      hence thesis by Def23;
+    end;
+end;
+
+theorem Th83:
+p in CnS4 (X) & p => q in CnS4 (X) implies q in CnS4 (X)
+proof
+  assume A1: p in CnS4 (X) & p => q in CnS4 (X);
+    T is S4_theory & X c= T implies q in T
+    proof
+      assume A2: T is S4_theory & X c= T;
+      then p in T & p => q in T by A1,Def23;
+      hence thesis by A2,Def22;
+    end;
+  hence thesis by Def23;
+end;
+
+theorem Th84:
+(Nes (p => q)) => ((Nes p) => (Nes q)) in CnS4 (X)
+ proof
+    T is S4_theory & X c= T
+         implies (Nes (p => q)) => ((Nes p) => (Nes q)) in T by Def22;
+  hence thesis by Def23;
+ end;
+
+theorem Th85:
+(Nes p) => p in CnS4 (X)
+ proof
+    T is S4_theory & X c= T implies (Nes p) => p in T by Def22;
+  hence thesis by Def23;
+ end;
+
+theorem Th86:
+(Nes p) => Nes (Nes p) in CnS4 (X)
+ proof
+    T is S4_theory & X c= T implies (Nes p) => Nes (Nes p) in T by Def22;
+  hence thesis by Def23;
+ end;
+
+theorem Th87:
+p in CnS4 (X) implies Nes p in CnS4 (X)
+proof
+  assume A1: p in CnS4 (X);
+    T is S4_theory & X c= T implies Nes p in T
+    proof
+      assume A2: T is S4_theory & X c= T;
+      then p in T by A1,Def23;
+      hence thesis by A2,Def22;
+    end;
+  hence thesis by Def23;
+end;
+
+theorem Th88: T is S4_theory & X c= T implies CnS4(X) c= T
+ proof
+  assume that A1:T is S4_theory and A2: X c= T;
+  let a be set;
+  thus thesis by A1,A2,Def23;
+ end;
+
+theorem Th89:
+  X c= CnS4(X)
+ proof
+  let a be set;
+  assume A1: a in X;
+  then reconsider t = a as Element of MC-wff;
+    for T st T is S4_theory & X c= T holds t in T by A1;
+  hence a in CnS4(X) by Def23;
+ end;
+
+theorem Th90:
+  X c= Y implies CnS4(X) c= CnS4(Y)
+ proof
+  assume A1: X c= Y;
+  thus CnS4(X) c= CnS4(Y)
+   proof
+    let a be set; assume A2: a in CnS4(X);
+    then reconsider t = a as Element of MC-wff;
+      for T st T is S4_theory & Y c= T holds t in T
+     proof
+      let T such that A3: T is S4_theory and A4: Y c= T;
+        X c= T by A1,A4,XBOOLE_1:1;
+      hence t in T by A2,A3,Def23;
+     end;
+    hence thesis by Def23;
+   end;
+ end;
+
+Lm23: CnS4(CnS4(X)) c= CnS4(X)
+ proof
+  let a be set; assume A1: a in CnS4(CnS4(X));
+  then reconsider t = a as Element of MC-wff;
+    for T st T is S4_theory & X c= T holds t in T
+   proof
+    let T; assume that A2: T is S4_theory and A3: X c= T;
+      CnS4(X) c= T by A2,A3,Th88;
+    hence t in T by A1,A2,Def23;
+   end;
+  hence thesis by Def23;
+ end;
+
+theorem :: Th10M:
+    CnS4(CnS4(X)) = CnS4(X)
+ proof
+    CnS4(CnS4(X)) c= CnS4(X) & CnS4(X) c= CnS4(CnS4(X)) by Lm23,Th89;
+  hence thesis by XBOOLE_0:def 10;
+ end;
+
+Lm24:
+CnS4(X) is S4_theory
+ proof
+  let p, q, r;
+  thus p => (q => p) in CnS4(X) by Th82;
+  thus (p => (q => r)) => ((p => q) => (p => r)) in CnS4(X) by Th82;
+  thus (p '&' q) => p in CnS4(X) by Th82;
+  thus (p '&' q) => q in CnS4(X) by Th82;
+  thus p => (q => (p '&' q)) in CnS4(X) by Th82;
+  thus p => (p 'or' q) in CnS4(X) by Th82;
+  thus q => (p 'or' q) in CnS4(X) by Th82;
+  thus (p => r) => ((q => r) => ((p 'or' q) => r)) in CnS4(X) by Th82;
+  thus FALSUM => p in CnS4(X) by Th82;
+  thus p 'or' (p => FALSUM) in CnS4 (X) by Th82;
+  thus (Nes (p => q)) => ((Nes p) => (Nes q)) in CnS4(X) by Th84;
+  thus (Nes p) => p in CnS4(X) by Th85;
+  thus (Nes p) => Nes (Nes p) in CnS4(X) by Th86;
+  thus p in CnS4(X) & p => q in CnS4(X) implies q in CnS4(X) by Th83;
+  thus (p in CnS4(X) implies Nes p in CnS4(X)) by Th87;
+ end;
+
+definition let X be Subset of MC-wff;
+  cluster CnS4(X) -> S4_theory;
+  coherence by Lm24;
+end;
+
+theorem Th92:
+  T is S4_theory iff CnS4(T) = T
+ proof
+   hereby assume A1: T is S4_theory;
+    A2: T c= CnS4(T) by Th89;
+      CnS4(T) c= T
+     proof
+      let a be set; assume a in CnS4(T);
+      hence a in T by A1,Def23;
+     end;
+    hence CnS4(T) = T by A2,XBOOLE_0:def 10;
+   end;
+  thus CnS4(T) = T implies T is S4_theory;
+ end;
+
+theorem :: Th12M:
+    T is S4_theory implies S4-Taut c= T
+ proof
+  assume A1: T is S4_theory;
+    {}(MC-wff) c= T by XBOOLE_1:2;
+  then S4-Taut c= CnS4(T) by Def24,Th90;
+  hence thesis by A1,Th92;
+ end;
+
+definition
+  cluster S4-Taut -> S4_theory;
+  coherence by Def24;
+end;
+
+theorem :: S4incCPC:
+  CPC-Taut c= S4-Taut by Def21,Def24,Th80;
+
+theorem :: S4incIPC:
+  IPC-Taut c= S4-Taut by Def16,Def24,Th81;

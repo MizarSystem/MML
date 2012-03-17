@@ -1,0 +1,1095 @@
+:: Domains of Submodules, Join and Meet of Finite Sequences of Submodules
+:: and Quotient Modules
+::  by Micha{\l} Muzalewski
+::
+:: Received March 29, 1993
+:: Copyright (c) 1993 Association of Mizar Users
+
+environ
+
+ vocabulary BINOP_1, FUNCT_1, MULTOP_1, FUNCSDOM, VECTSP_1, VECTSP_2, RLVECT_2,
+      FINSEQ_1, RMOD_3, ARYTM_1, RLVECT_1, REALSET1, RLVECT_3, BOOLE, MOD_3,
+      RLSUB_1, RLSUB_2, INCSP_1, PARTFUN1, PRELAMB, SETWISEO, LATTICES,
+      QC_LANG1, FINSEQ_4, ARYTM_3, LMOD_7;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, STRUCT_0, FUNCT_2,
+      BINOP_1, FINSEQ_1, SETWISEO, SETWOP_2, LATTICES, MULTOP_1, RLVECT_1,
+      ANPROJ_1, VECTSP_1, FUNCSDOM, VECTSP_2, VECTSP_4, VECTSP_5, VECTSP_6,
+      LMOD_5, MOD_3, LMOD_6;
+ constructors BINOP_1, DOMAIN_1, SETWISEO, MULTOP_1, ANPROJ_1, VECTSP_6,
+      LMOD_5, MOD_3, LMOD_6, FINSOP_1, LATTICE2, MEMBERED, XBOOLE_0;
+ clusters VECTSP_1, VECTSP_4, STRUCT_0, VECTSP_5, RELSET_1, SUBSET_1, LATTICES,
+      LATTICE2, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements BOOLE, SUBSET;
+ definitions RLVECT_1, STRUCT_0, XBOOLE_0;
+ theorems BINOP_1, FUNCT_2, RLVECT_1, LMOD_5, LMOD_6, MOD_3, MULTOP_1,
+      SETWISEO, SUBSET_1, TARSKI, VECTSP_1, VECTSP_4, VECTSP_5, VECTSP_6,
+      ZFMISC_1, ANPROJ_1, LATTICE2, XBOOLE_0, XBOOLE_1;
+ schemes BINOP_1, COMPLSP1, FUNCT_2, XBOOLE_0;
+
+begin                     ::
+                          ::  Schemes
+                          ::
+
+ scheme ElementEq {A()->set,P[set]} : for X1,X2 being Element of A() st
+(for x being set holds x in X1 iff P[x]) &
+(for x being set holds x in X2 iff P[x])
+ holds X1 = X2
+proof let X1,X2 be Element of A() such that
+  A1: for x being set holds x in X1 iff P[x] and
+  A2: for x being set holds x in X2 iff P[x];
+    now let x be set; x in X1 iff P[x] by A1;
+  hence x in X1 iff x in X2 by A2;end;
+  hence thesis by TARSKI:2;
+end;
+
+ scheme UnOpEq
+  {A() -> non empty set, F(Element of A()) -> set}:
+  for f1,f2 being UnOp of A() st
+     (for a being Element of A() holds f1.(a) = F(a))
+   & (for a being Element of A() holds f2.(a) = F(a))
+  holds f1 = f2
+proof let f1,f2 be UnOp of A() such that
+  A1: for a being Element of A() holds f1.(a) = F(a) and
+  A2: for a being Element of A() holds f2.(a) = F(a);
+    now let a be Element of A();
+    thus f1.(a) = F(a) by A1 .= f2.(a) by A2;end;
+  hence thesis by FUNCT_2:113;
+end;
+
+ scheme TriOpEq
+  {A() -> non empty set,
+   F(Element of A(),Element of A(),Element of A()) -> set}:
+  for f1,f2 being TriOp of A() st
+     (for a,b,c being Element of A() holds f1.(a,b,c) = F(a,b,c))
+   & (for a,b,c being Element of A() holds f2.(a,b,c) = F(a,b,c))
+  holds f1 = f2
+proof let f1,f2 be TriOp of A() such that
+  A1: for a,b,c being Element of A() holds f1.(a,b,c) = F(a,b,c) and
+  A2: for a,b,c being Element of A() holds f2.(a,b,c) = F(a,b,c);
+    now let a,b,c be Element of A();
+    thus f1.(a,b,c) = F(a,b,c) by A1 .= f2.(a,b,c) by A2;end;
+  hence thesis by MULTOP_1:4;
+end;
+
+ scheme QuaOpEq {A() -> non empty set,
+  F(Element of A(),Element of A(),Element of A(),Element of A()) -> set}:
+  for f1,f2 being QuaOp of A() st
+     (for a,b,c,d being Element of A() holds f1.(a,b,c,d) = F(a,b,c,d))
+   & (for a,b,c,d being Element of A() holds f2.(a,b,c,d) = F(a,b,c,d))
+  holds f1 = f2
+proof let f1,f2 be QuaOp of A() such that
+  A1: for a,b,c,d being Element of A() holds f1.(a,b,c,d) = F(a,b,c,d) and
+  A2: for a,b,c,d being Element of A() holds f2.(a,b,c,d) = F(a,b,c,d);
+    now let a,b,c,d be Element of A();
+    thus f1.(a,b,c,d) = F(a,b,c,d) by A1 .= f2.(a,b,c,d) by A2;end;
+  hence thesis by MULTOP_1:8;
+end;
+
+scheme Fraenkel1_Ex {A, D() -> non empty set,
+ F(set) -> Element of D(), P[set]} : ex S being Subset of D()
+ st S = {F(x) where x is Element of A() : P[x]}
+proof
+  defpred X[set] means P[$1];
+  deffunc U(set) = F($1);
+  reconsider S={U(x) where x is Element of A() : X[x]} as Subset of D()
+ from SubsetFD;
+  take S;
+  thus thesis;
+end;
+
+scheme Fr_0 {A() -> non empty set, x() -> Element of A(), P[set]} : P[x()]
+ provided A1: x() in {a where a is Element of A() : P[a]}
+proof
+    ex a being Element of A() st x()=a & P[a] by A1;
+ hence thesis;
+end;
+
+scheme Fr_1 {X() -> set, A() -> non empty set, a() -> Element of A(), P[set]} :
+ a() in X() iff P[a()] provided
+ A1: X() = {a where a is Element of A() : P[a]}
+proof
+  defpred X[set] means P[$1];
+ A2: X() = {a where a is Element of A() : X[a]} by A1;
+ thus a() in X() implies P[a()]
+  proof
+   assume a() in X();
+    then A3: a() in {a where a is Element of A() : X[a]} by A2;
+   thus X[a()] from Fr_0(A3);
+  end;
+ assume P[a()];
+ hence thesis by A2;
+end;
+
+scheme Fr_2 {X() -> set, A() -> non empty set, a() -> Element of A(), P[set]}:
+  P[a()]
+ provided A1: a() in X() and A2: X() = {a where a is Element of A() : P[a]}
+proof
+  defpred X[set] means P[$1];
+  A3: a() in {a where a is Element of A() : X[a]} by A1,A2;
+ thus X[a()] from Fr_0(A3);
+end;
+
+scheme Fr_3 {x() -> set, X() -> set, A() -> non empty set, P[set]} :
+ x() in X() iff ex a being Element of A() st x()=a & P[a]
+ provided A1: X() = {a where a is Element of A() : P[a]} by A1;
+
+scheme Fr_4 {D1,D2() -> non empty set, B() -> set,
+ a() -> Element of D1(), F(set) -> set, P[set,set], Q[set,set]} :
+ a() in F(B()) iff for b being Element of D2() st b in B() holds P[a(),b]
+ provided A1: F(B()) = {a where a is Element of D1() : Q[a,B()]} and
+ A2: Q[a(),B()] iff for b being Element of D2() st b in B() holds P[a(),b]
+proof
+ thus a() in F(B()) implies for b being Element of D2() st b in
+B() holds P[a(),b]
+  proof
+   defpred X[set] means Q[$1,B()];
+   assume a() in F(B());
+    then A3: a() in {a where a is Element of D1() : X[a]} by A1;
+      X[a()] from Fr_0(A3);
+   hence thesis by A2;
+  end;
+ assume for b being Element of D2() st b in B() holds P[a(),b];
+ hence thesis by A1,A2;
+end;
+
+begin :: Main Part
+
+reserve x for set,
+        K for Ring,
+        r for Scalar of K,
+        V for LeftMod of K,
+        a,b,a1,a2 for Vector of V,
+        A,A1,A2 for Subset of V,
+        l for Linear_Combination of A,
+        W for Subspace of V,
+        Li for FinSequence of Submodules(V);
+
+Lm1:
+ for G being AbGroup, a,b,c being Element of G holds
+  -(a-b) = -a-(-b) & a-b+c = a+c-b
+   proof
+    let G be AbGroup, a,b,c be Element of G;
+    thus -(a-b) = -a+b by VECTSP_1:64 .= -a+-(-b) by RLVECT_1:30
+               .= -a-(-b) by RLVECT_1:def 11;
+    thus a-b+c = a+-b+c by RLVECT_1:def 11
+              .= a+c+-b by RLVECT_1:def 6
+              .= a+c-b by RLVECT_1:def 11;
+   end;
+
+            ::
+            ::    1. Auxiliary theorems about free-modules
+            ::
+
+theorem Th1:
+ K is non trivial & A is linearly-independent implies not 0.V in A
+proof assume
+  A1: K is non trivial & A is linearly-independent;
+  then 0.K <> 1_ K by LMOD_6:def 2;
+  hence thesis by A1,LMOD_5:3;
+end;
+
+theorem Th2:
+ not a in A implies l.a = 0.K
+proof assume
+  A1: not a in A;
+    Carrier l c= A by VECTSP_6:def 7;
+  then not a in Carrier l by A1;
+  hence thesis by VECTSP_6:20;
+end;
+
+theorem
+   K is trivial implies (for l holds Carrier(l) = {}) & Lin A is trivial
+  proof assume
+    A1: K is trivial;
+    thus A2: for l holds Carrier l = {}
+     proof let l; assume
+A3:   Carrier l <> {}; consider x being Element of Carrier l;
+       consider a such that
+       A4: x = a & l.a <> 0.K by A3,VECTSP_6:19;
+       thus contradiction by A1,A4,LMOD_6:5;
+     end;
+      now let a be Vector of Lin A; a in Lin A by RLVECT_1:3;
+      then consider l such that
+      A5: a = Sum(l) by MOD_3:11;
+        Carrier l = {} by A2;
+      then a = 0.V by A5,VECTSP_6:45;
+     hence a=0.(Lin A) by VECTSP_4:19; end;
+    hence thesis by ANPROJ_1:def 8;
+  end;
+
+theorem Th4:
+ V is non trivial implies for A st A is base holds A <> {}
+  proof assume
+   A1: V is non trivial;let A such that
+   A2: A is base and
+   A3: A = {};
+    A4: A = {}(the carrier of V) by A3;
+      the VectSpStr of V = Lin A by A2,MOD_3:def 2 .= (0).V by A4,MOD_3:13;
+   hence contradiction by A1,LMOD_6:7;
+  end;
+
+theorem Th5:
+ A1 \/ A2 is linearly-independent & A1 misses A2
+  implies Lin A1 /\ Lin A2 = (0).V
+proof assume
+  A1: A1 \/ A2 is linearly-independent & A1 /\ A2 = {};
+  reconsider P=Lin A1 /\ Lin A2 as strict Subspace of V;
+  set Z=the carrier of P;
+  A2: Z=(the carrier of Lin A1)/\
+         (the carrier of Lin A2) by VECTSP_5:def 2;
+  A3: now let x; assume x in Z;
+      then x in the carrier of Lin A1
+    & x in the carrier of Lin A2 by A2,XBOOLE_0:def 3;
+    then A4: x in Lin A1 & x in Lin A2 by RLVECT_1:def 1;
+    then consider l1 being Linear_Combination of A1 such that
+    A5: x = Sum(l1) by MOD_3:11;
+    consider l2 being Linear_Combination of A2 such that
+    A6: x = Sum(l2) by A4,MOD_3:11;
+    A7: Carrier l1 c= A1 & Carrier l2 c= A2 by VECTSP_6:def 7;
+    then A8: Carrier l1 \/ Carrier l2 c= A1 \/ A2 by XBOOLE_1:13;
+      Carrier(l1 - l2) c= Carrier l1 \/ Carrier l2 by VECTSP_6:74;
+    then Carrier(l1 - l2) c= A1 \/ A2 by A8,XBOOLE_1:1;
+    then reconsider l = l1 - l2 as Linear_Combination of A1 \/ A2
+ by VECTSP_6:def 7;
+      Sum(l) = Sum(l1) - Sum(l2) by VECTSP_6:80 .= 0.V by A5,A6,VECTSP_1:66;
+    then A9: Carrier l = {} by A1,LMOD_5:def 1;
+      Carrier l1 = {}
+     proof assume
+A10:   Carrier l1 <> {};
+       consider x being Element of Carrier l1;
+       consider b such that
+       A11: x = b & l1.b <> 0.K by A10,VECTSP_6:19;
+         b in A1 by A7,A10,A11,TARSKI:def 3;
+       then A12: not b in A2 by A1,XBOOLE_0:def 3;
+         0.K = l.b by A9,VECTSP_6:20 .= l1.b - l2.b by VECTSP_6:73;
+       then l1.b = l2.b by RLVECT_1:35 .= 0.K by A12,Th2;
+      hence contradiction by A11;
+     end;
+   hence x = 0.V by A5,VECTSP_6:45;end;
+     0.V in Lin A1 /\ Lin A2 by VECTSP_4:25;
+   then x in Z iff x=0.V by A3,RLVECT_1:def 1;
+    then Z = {0.V} by TARSKI:def 1;
+  hence thesis by VECTSP_4:def 3;
+end;
+
+theorem Th6:
+ A is base & A = A1 \/ A2 & A1 misses A2 implies
+  V is_the_direct_sum_of Lin A1,Lin A2
+proof assume
+ A1: A is base & A = A1 \/ A2 & A1 misses A2;
+  set W=the VectSpStr of V;
+  A2: A is linearly-independent & Lin A = W by A1,MOD_3:def 2;
+  then A3: W = Lin A1 + Lin A2 by A1,MOD_3:19;
+    Lin A1 /\ Lin A2 = (0).V by A1,A2,Th5;
+ hence thesis by A3,VECTSP_5:def 4;
+end;
+
+begin               ::
+                    :: 2. Domains of submodules
+                    ::
+
+definition let K,V;
+  mode SUBMODULE_DOMAIN of V -> non empty set means
+:Def1:
+ x in it implies x is strict Subspace of V;
+   existence
+    proof
+      consider a being strict Subspace of V;
+      set D = {a};
+      take D;
+      thus thesis by TARSKI:def 1;
+    end;
+end;
+
+definition let K,V;
+ redefine func Submodules(V) -> SUBMODULE_DOMAIN of V;
+   coherence
+    proof
+        now let x; assume x in Submodules(V);
+       then consider W being strict Subspace of V such that
+       A1: W = x by VECTSP_5:def 3;
+       thus x is strict Subspace of V by A1;end;
+      hence thesis by Def1;
+    end;
+end;
+
+definition let K,V; let D be SUBMODULE_DOMAIN of V;
+ redefine mode Element of D -> strict Subspace of V;
+   coherence by Def1;
+end;
+
+definition let K,V; let D be SUBMODULE_DOMAIN of V;
+ cluster strict Element of D;
+ existence
+    proof
+      consider x being Element of D;
+      take x;
+      thus thesis;
+    end;
+end;
+
+definition let K,V;
+  assume A1: V is non trivial;
+  mode LINE of V -> strict Subspace of V means
+   ex a st a<>0.V & it = <:a:>;
+   existence
+    proof consider a such that
+      A2: a<>0.V by A1,ANPROJ_1:def 8;
+      take <:a:>;
+      thus thesis by A2;
+    end;
+end;
+
+definition let K,V;
+  mode LINE_DOMAIN of V -> non empty set means :Def3:
+ x in it implies x is LINE of V;
+   existence
+    proof
+      consider a being LINE of V;
+      set D = {a};
+      take D;
+      thus thesis by TARSKI:def 1;
+    end;
+end;
+
+definition let K,V;
+  func lines(V) -> LINE_DOMAIN of V means
+   x in it iff x is LINE of V;
+   existence
+    proof
+      set D = {a where a is Element of Submodules(V): a is LINE of V};
+      consider a1 being LINE of V;
+      reconsider a2 = a1 as Element of Submodules(V) by VECTSP_5:def 3;
+        a2 in D;
+      then reconsider D as non empty set;
+      A1: now let x; assume x in D;
+        then consider a being Element of Submodules(V) such that
+        A2: x = a & a is LINE of V;
+        thus x is LINE of V by A2;end;
+      then reconsider D' = D as LINE_DOMAIN of V by Def3;
+      take D';
+        now let x;
+        thus x in D' implies x is LINE of V by A1;
+        thus x is LINE of V implies x in D'
+         proof
+           assume
+           A3: x is LINE of V;
+           then reconsider x1 = x as Element of Submodules(V)
+            by VECTSP_5:def 3;
+             x1 in D by A3;
+           hence thesis;
+         end;end;
+      hence thesis;
+    end;
+   uniqueness
+    proof
+      let D1,D2 be LINE_DOMAIN of V such that
+      A4: x in D1 iff x is LINE of V and
+      A5: x in D2 iff x is LINE of V;
+        now let x;
+          x in D1 iff x is LINE of V by A4;
+        hence x in D1 iff x in D2 by A5;end;
+      hence thesis by TARSKI:2;
+    end;
+end;
+
+definition let K,V; let D be LINE_DOMAIN of V;
+ redefine mode Element of D -> LINE of V;
+   coherence by Def3;
+end;
+
+definition let K,V;
+  assume that
+A1: V is non trivial and
+A2: V is free;
+  mode HIPERPLANE of V -> strict Subspace of V means
+   ex a st a<>0.V & V is_the_direct_sum_of <:a:>,it;
+   existence
+    proof
+      consider A being Subset of V such that
+      A3: A is base by A2,MOD_3:def 3;
+      reconsider A as Subset of V;
+      A4: A is linearly-independent by A3,MOD_3:def 2;
+A5:   A <> {} by A1,A3,Th4;
+      consider x being Element of A;
+A6:      K is non trivial by A1,LMOD_6:6;
+      reconsider a = x as Vector of V by A5,TARSKI:def 3;
+      reconsider A1 = {a} as Subset of V;
+      set A2 = A\A1; set H = Lin(A2);
+        A1 c= A by A5,ZFMISC_1:37;
+      then A7: A = A1 \/ A2 by XBOOLE_1:45;
+        A1 misses A2 by XBOOLE_1:79;
+      then A8: V is_the_direct_sum_of Lin(A1),H by A3,A7,Th6;
+      A9: ex a st a<>0.V & V is_the_direct_sum_of <:a:>,H
+       proof
+        take a; thus thesis by A4,A5,A6,A8,Th1,LMOD_6:def 6;
+       end;
+      take H;
+      thus thesis by A9;
+    end;
+end;
+
+definition let K,V;
+  mode HIPERPLANE_DOMAIN of V -> non empty set means
+:Def6:
+ x in it implies x is HIPERPLANE of V;
+   existence
+    proof
+      consider a being HIPERPLANE of V;
+      set D = {a};
+      take D;
+      thus thesis by TARSKI:def 1;
+    end;
+end;
+
+definition let K,V;
+  func hiperplanes(V) -> HIPERPLANE_DOMAIN of V means
+   x in it iff x is HIPERPLANE of V;
+   existence
+    proof
+      set D = {a where a is Element of Submodules(V): a is HIPERPLANE of V};
+      consider a1 being HIPERPLANE of V;
+      reconsider a2 = a1 as Element of Submodules(V) by VECTSP_5:def 3;
+        a2 in D;
+      then reconsider D as non empty set;
+      A1: now let x; assume x in D;
+        then consider a being Element of Submodules(V) such that
+        A2: x = a & a is HIPERPLANE of V;
+        thus x is HIPERPLANE of V by A2;end;
+      then reconsider D' = D as HIPERPLANE_DOMAIN of V by Def6;
+      take D';
+        now let x;
+        thus x in D' implies x is HIPERPLANE of V by A1;
+        thus x is HIPERPLANE of V implies x in D'
+         proof assume x is HIPERPLANE of V;
+           then reconsider W=x as HIPERPLANE of V;
+           reconsider x1 = W as Element of Submodules(V) by VECTSP_5:def 3;
+             x1 in D;
+           hence thesis;
+         end;end;
+      hence thesis;
+    end;
+   uniqueness
+    proof
+      let D1,D2 be HIPERPLANE_DOMAIN of V such that
+      A3: x in D1 iff x is HIPERPLANE of V and
+      A4: x in D2 iff x is HIPERPLANE of V;
+        now let x;
+          x in D1 iff x is HIPERPLANE of V by A3;
+        hence x in D1 iff x in D2 by A4;end;
+      hence thesis by TARSKI:2;
+    end;
+end;
+
+definition let K,V; let D be HIPERPLANE_DOMAIN of V;
+ redefine mode Element of D -> HIPERPLANE of V;
+   coherence by Def6;
+end;
+
+begin   ::
+        :: 3. Join and meet of finite sequences of submodules
+        ::
+
+definition let K,V,Li;
+  func Sum Li -> Element of Submodules(V) equals
+    SubJoin(V) $$ Li;
+   coherence;
+  func /\ Li -> Element of Submodules(V) equals
+    SubMeet(V) $$ Li;
+   coherence;
+end;
+
+canceled 5;
+
+theorem
+   for G being Lattice holds the L_join of G is commutative associative &
+  the L_meet of G is commutative associative by LATTICE2:27,29,31,32;
+
+canceled;
+
+theorem
+   SubJoin(V) is commutative associative & SubJoin(V) has_a_unity
+  & (0).V = the_unity_wrt SubJoin(V)
+proof
+  set S0=Submodules(V), S1=SubJoin(V);
+  reconsider L=LattStr(#(S0 qua non empty set),(S1 qua BinOp of S0),
+   (SubMeet(V) qua BinOp of S0)#) as Lattice by VECTSP_5:75;
+     S1=the L_join of L;
+  hence S1 is commutative associative;
+  set e=(0).V; reconsider e'=@e as Element of (S0 qua non empty set);
+  A1: e'=e by LMOD_6:def 3;
+    now let a' be Element of (S0 qua non empty set);
+    reconsider b=a' as Element of S0;
+    reconsider a=b as strict Subspace of V;
+    thus S1.(e',a') = e+a by A1,VECTSP_5:def 7
+                   .= a' by VECTSP_5:13;
+    thus S1.(a',e') = a+e by A1,VECTSP_5:def 7
+                   .= a' by VECTSP_5:13;end;
+  then A2: e' is_a_unity_wrt (S1 qua BinOp of S0) by BINOP_1:11;
+  hence S1 has_a_unity by SETWISEO:def 2;
+  thus thesis by A1,A2,BINOP_1:def 8;
+end;
+
+theorem
+   SubMeet(V) is commutative associative & SubMeet(V)
+  has_a_unity & (Omega).V = the_unity_wrt SubMeet(V)
+proof
+  set S0=Submodules(V), S2=SubMeet(V);
+  reconsider L=LattStr(#(S0 qua non empty set),(SubJoin(V) qua BinOp of S0),
+   (S2 qua BinOp of S0)#) as Lattice by VECTSP_5:75;
+     S2=the L_meet of L;
+  hence S2 is commutative associative;
+  set e=(Omega).V; reconsider e'=@e as Element of (S0 qua non empty set);
+  A1: e'=e by LMOD_6:def 3;
+    now let a' be Element of (S0 qua non empty set);
+    reconsider b=a' as Element of S0;
+    reconsider a=b as strict Subspace of V;
+    thus (S2 qua BinOp of S0).(e',a') = e/\a by A1,VECTSP_5:def 8
+                   .= a' by VECTSP_5:27;
+    thus (S2 qua BinOp of S0).(a',e') = a/\e by A1,VECTSP_5:def 8
+                   .= a' by VECTSP_5:27;end;
+then A2: e' is_a_unity_wrt (S2 qua BinOp of S0) by BINOP_1:11;
+  hence S2 has_a_unity by SETWISEO:def 2;
+  thus thesis by A1,A2,BINOP_1:def 8;
+end;
+
+begin                ::
+                     :: 4. Sum of subsets of module
+                     ::
+
+definition let K,V,A1,A2;
+  func A1 + A2 -> Subset of V means
+  x in it iff ex a1,a2 st a1 in A1 & a2 in A2 & x = a1+a2;
+   existence
+    proof
+      set S = {a1+a2 : a1 in A1 & a2 in A2};
+      A1: now let x; assume x in S;
+        then consider a1,a2 such that
+        A2: x = a1+a2 & a1 in A1 & a2 in A2;
+        thus ex a1,a2 st a1 in A1 & a2 in A2 & x = a1+a2 by A2;end;
+        now let x; assume x in S;
+        then consider a1,a2 such that
+        A3: x = a1+a2 & a1 in A1 & a2 in A2;
+        thus x in the carrier of V by A3;end;
+       then S is Subset of V by TARSKI:def 3;
+       then reconsider S' = S as Subset of V;
+      take S';
+      thus thesis by A1;
+    end;
+   uniqueness
+    proof
+      let D1,D2 be Subset of V such that
+      A4: x in D1 iff ex a1,a2 st a1 in A1 & a2 in A2 & x = a1+a2 and
+      A5: x in D2 iff ex a1,a2 st a1 in A1 & a2 in A2 & x = a1+a2;
+        now let x;
+          x in D1 iff ex a1,a2 st a1 in A1 & a2 in A2 & x = a1+a2 by A4;
+        hence x in D1 iff x in D2 by A5;end;
+      hence thesis by TARSKI:2;
+    end;
+end;
+
+begin                ::
+                     ::    5. Vector of subset
+                     ::
+
+definition let K,V,A;
+  assume A1: A <> {};
+  mode Vector of A -> Vector of V means :Def11:
+ it is Element of A;
+   existence
+    proof
+      consider x being Element of V such that
+      A2: x in A by A1,SUBSET_1:10;
+      take x;
+      thus thesis by A2;
+    end;
+end;
+
+theorem
+   A1 <> {} & A1 c= A2 implies for x st x is Vector of A1 holds x is Vector of
+A2
+proof assume
+  A1: A1 <> {} & A1 c= A2;
+  let x; assume x is Vector of A1; then reconsider a=x as Vector of A1;
+    a is Element of A1 by A1,Def11;
+   then a in A2 by A1,TARSKI:def 3;
+  hence thesis by Def11;
+end;
+
+                        ::
+                        ::  6. Quotient modules
+                        ::
+
+theorem Th17:
+ a2 in a1 + W iff a1 - a2 in W
+  proof
+      a1 - (a1 - a2) = a1 - a1 + a2 by RLVECT_1:43
+                  .= 0.V + a2 by VECTSP_1:66
+                  .= a2 by VECTSP_1:7;
+    hence thesis by VECTSP_4:76;
+  end;
+
+theorem Th18:
+ a1 + W = a2 + W iff a1 - a2 in W
+  proof
+      a2 in a1 + W iff a1 + W = a2 + W by VECTSP_4:70;
+    hence thesis by Th17;
+  end;
+
+definition let K,V,W;
+  func V..W -> set means
+:Def12: x in it iff ex a st x = a + W;
+   existence
+    proof
+      take {a + W : not contradiction};
+      thus thesis;
+    end;
+   uniqueness
+    proof
+      defpred X[set] means ex a st $1 = a + W;
+     thus for S1,S2 being set st
+      (for x holds x in S1 iff X[x]) & (for x holds x in S2 iff X[x])
+         holds S1 = S2 from SetEq;
+    end;
+end;
+
+definition let K,V,W;
+  cluster V..W -> non empty;
+   coherence
+    proof
+        a + W in V..W by Def12;
+      hence thesis;
+    end;
+end;
+
+definition let K,V,W,a;
+  func a..W -> Element of V..W equals
+:Def13:  a + W;
+   coherence by Def12;
+end;
+
+theorem Th19:
+ for x being Element of V..W ex a st x = a..W
+  proof
+    let x be Element of V..W;
+    consider a such that
+    A1: x = a + W by Def12;
+    take a;
+    thus thesis by A1,Def13;
+  end;
+
+theorem Th20:
+ a1..W = a2..W iff a1 - a2 in W
+  proof
+     a1..W = a1 + W & a2..W = a2 + W by Def13;
+   hence thesis by Th18;
+  end;
+
+reserve S1,S2 for Element of V..W;
+
+definition let K,V,W,S1;
+  func -S1 -> Element of V..W means
+   S1 = a..W implies it = (-a)..W;
+   existence
+    proof
+      consider a1 such that
+      A1: S1 = a1..W by Th19;
+      A2: now let a be Vector of V; assume
+           S1 = a..W;
+        then a1 - a in W by A1,Th20;
+        then -(a1 -a) in W by VECTSP_4:30;
+        then -a1 - (-a) in W by Lm1;
+        hence (-a1)..W = (-a)..W by Th20;end;
+      take (-a1)..W;
+      thus thesis by A2;
+    end;
+   uniqueness
+    proof
+      let S,T be Element of V..W such that
+      A3: S1 = a..W implies S = (-a)..W and
+      A4: S1 = a..W implies T = (-a)..W;
+      consider a1 such that
+      A5: S1 = a1..W by Th19;
+      thus S = (-a1)..W by A3,A5 .= T by A4,A5;
+    end;
+  let S2;
+  func S1 + S2 -> Element of V..W means
+:Def15: S1 = a1..W & S2 = a2..W implies it = (a1+a2)..W;
+   existence
+    proof
+      consider a1 such that
+      A6: S1 = a1..W by Th19;
+      consider a2 such that
+      A7: S2 = a2..W by Th19;
+      A8: now let b1,b2 be Vector of V such that
+        A9: S1 = b1..W and
+        A10: S2 = b2..W;
+        A11: a1 - b1 in W by A6,A9,Th20;
+          a2 - b2 in W by A7,A10,Th20;
+        then A12: (a1 - b1) + (a2 - b2) in W by A11,VECTSP_4:28;
+          (a1-b1) + (a2-b2) = a1-b1+a2-b2 by RLVECT_1:42
+                         .= a1+a2-b1-b2 by Lm1
+                         .= (a1+a2) - (b1 + b2) by VECTSP_1:64;
+        hence (a1 + a2)..W = (b1 + b2)..W by A12,Th20;end;
+      take (a1 + a2)..W;
+      thus thesis by A8;
+    end;
+   uniqueness
+    proof
+      let S,T be Element of V..W such that
+      A13: S1 = a1..W & S2 = a2..W implies S = (a1+a2)..W and
+      A14: S1 = a1..W & S2 = a2..W implies T = (a1+a2)..W;
+      consider a1 such that
+      A15: S1 = a1..W by Th19;
+      consider a2 such that
+      A16: S2 = a2..W by Th19;
+      thus S = (a1+a2)..W by A13,A15,A16 .= T by A14,A15,A16;
+    end;
+end;
+
+definition let K,V,W;
+  deffunc U(Element of V..W) = -$1;
+  func COMPL W -> UnOp of V..W means
+   it.S1 = -S1;
+   existence
+    proof
+     thus ex U being UnOp of V..W st
+      for S1 holds U.S1 = U(S1) from LambdaD;
+    end;
+   uniqueness
+    proof
+     thus for U1,U2 being UnOp of V..W st
+      (for S1 holds U1.S1 = U(S1)) & (for S1 holds U2.S1 = U(S1))
+      holds U1 = U2 from UnOpEq;
+    end;
+  deffunc U(Element of V..W,Element of V..W) = $1 + $2;
+  func ADD W -> BinOp of V..W means
+:Def17: it.(S1,S2) = S1 + S2;
+   existence
+    proof
+     thus ex B being BinOp of V..W st
+      for S1,S2 holds B.(S1,S2) = U(S1,S2) from BinOpLambda;
+    end;
+   uniqueness
+    proof
+     thus for B1,B2 being BinOp of V..W  st
+      (for S1,S2 holds B1.(S1,S2) = U(S1,S2)) &
+      (for S1,S2 holds B2.(S1,S2) = U(S1,S2))
+       holds B1 = B2 from BinOpDefuniq;
+    end;
+end;
+
+definition let K,V,W;
+  func V.W -> strict LoopStr equals
+:Def18:  LoopStr(#V..W,ADD W,(0.V)..W#);
+   coherence;
+end;
+
+definition let K,V,W;
+ cluster V.W -> non empty;
+ coherence
+  proof
+      V.W = LoopStr(#V..W,ADD W,(0.V)..W#) by Def18;
+   hence the carrier of V.W is non empty;
+  end;
+end;
+
+theorem Th21:
+ a..W is Element of V.W
+  proof
+      V.W = LoopStr(#V..W,ADD W,(0.V)..W#) by Def18;
+    hence thesis;
+  end;
+
+definition let K,V,W,a;
+  func a.W -> Element of V.W equals
+:Def19:  a..W;
+   coherence by Th21;
+end;
+
+theorem Th22:
+ for x being Element of V.W ex a st x = a.W
+  proof
+    let x be Element of V.W;
+      V.W = LoopStr(#V..W,ADD W,(0.V)..W#) by Def18;
+    then consider a such that
+    A1: x = a..W by Th19;
+    take a;
+    thus thesis by A1,Def19;
+  end;
+
+theorem Th23:
+ a1.W = a2.W iff a1 - a2 in W
+  proof
+      a1.W = a1..W & a2.W = a2..W by Def19;
+    hence thesis by Th20;
+  end;
+
+theorem Th24:
+ a.W + b.W = (a+b).W & 0.(V.W) = (0.V).W
+  proof
+    A1: V.W = LoopStr(#V..W,ADD W,(0.V)..W#) by Def18;
+    A2: a.W = a..W & b.W = b..W & (-a).W = (-a)..W & (0.V).W = (0.V)..W
+ by Def19;
+    hence a.W + b.W = (ADD W).(a..W,b..W) by A1,RLVECT_1:5
+                  .= a..W + b..W by Def17
+                  .= (a+b)..W by Def15
+                  .= (a+b).W by Def19;
+    thus 0.(V.W) = (0.V).W by A1,A2,RLVECT_1:def 2;
+  end;
+
+definition let K,V,W;
+ cluster V.W -> Abelian add-associative right_zeroed right_complementable;
+   coherence
+   proof
+    set G = V.W;
+    hereby let x,y be Element of G;
+      consider a being Vector of V such that
+      A1: x = a.W by Th22;
+      consider b being Vector of V such that
+      A2: y = b.W by Th22;
+         x+y = (a+b).W & y+x = (b+a).W by A1,A2,Th24;
+      hence x+y = y+x;
+    end;
+    hereby let x,y,z be Element of G;
+      consider a being Vector of V such that
+      A3: x = a.W by Th22;
+      consider b being Vector of V such that
+      A4: y = b.W by Th22;
+      consider c being Vector of V such that
+      A5: z = c.W by Th22;
+      A6: x+y = (a+b).W & y+x = (b+a).W & y+z = (b+c).W by A3,A4,A5,Th24;
+      hence (x+y)+z = (a+b+c).W by A5,Th24 .= (a+(b+c)).W by RLVECT_1:def 6
+                  .= x+(y+z) by A3,A6,Th24;
+    end;
+    hereby let x be Element of G;
+      consider a being Vector of V such that
+      A7: x = a.W by Th22;
+        0.G = (0.V).W by Th24;
+      hence x+(0.G) = (a+0.V).W by A7,Th24 .= x by A7,RLVECT_1:10;
+    end;
+    let x be Element of G;
+      consider a being Vector of V such that
+      A8: x = a.W by Th22;
+      consider b being Vector of V such that
+A9:    a + b = 0.V by RLVECT_1:def 8;
+      reconsider b' = b.W as Element of G;
+      take b';
+      thus x+b' = (0.V).W by A8,A9,Th24 .= 0.G by Th24;
+  end;
+end;
+
+reserve S for Element of V.W;
+
+definition let K,V,W,r,S;
+  func r*S -> Element of V.W means
+:Def20: S = a.W implies it = (r*a).W;
+  existence
+   proof
+     consider a1 such that
+     A1: S = a1.W by Th22;
+     A2: now let a; assume
+          S = a.W;
+       then a - a1 in W by A1,Th23;
+       then r*(a-a1) in W by VECTSP_4:29;
+       then r*a - r*a1 in W by VECTSP_1:70;
+       hence (r*a).W = (r*a1).W by Th23;end;
+     take (r*a1).W;
+     thus thesis by A2;
+   end;
+  uniqueness
+   proof
+     let S1,S2 be Element of V.W such that
+     A3: S = a.W implies S1 = (r*a).W and
+     A4: S = a.W implies S2 = (r*a).W;
+     consider a1 such that
+     A5: S = a1.W by Th22;
+     thus S1 = (r*a1).W by A3,A5 .= S2 by A4,A5;
+   end;
+end;
+
+definition let K,V,W;
+  func LMULT W -> Function of [:the carrier of K,the carrier of V.W:],
+                                 the carrier of V.W means
+:Def21: it.(r,S) = r*S;
+   existence
+    proof
+      deffunc U(Scalar of K,Element of V.W) = $1 * $2;
+      consider F being Function of [:the carrier of K,the carrier of V.W:],
+       the carrier of V.W such that
+      A1: F.[r,S] = U(r,S) from Lambda2D;
+      take F;
+        now let r,S; thus F.(r,S) = F.[r,S] by BINOP_1:def 1 .= r*S by A1;end;
+      hence thesis;
+    end;
+   uniqueness
+    proof
+      let F,G be Function of [:the carrier of K,the carrier of V.W:],
+       the carrier of V.W such that
+      A2: F.(r,S) = r*S and
+      A3: G.(r,S) = r*S;
+        now let r,S; thus F.(r,S) = r*S by A2 .= G.(r,S) by A3;end;
+      hence thesis by BINOP_1:2;
+    end;
+end;
+
+begin
+
+definition let K,V,W;
+  func V/W -> strict VectSpStr over K equals
+:Def22:  VectSpStr(#the carrier of V.W,the add of V.W,
+   the Zero of V.W,LMULT W#);
+   coherence;
+end;
+
+definition let K,V,W;
+ cluster V/W -> non empty;
+ coherence
+  proof
+      V/W = VectSpStr(#the carrier of V.W,the add of V.W,
+                     the Zero of V.W,LMULT W#) by Def22;
+   hence the carrier of V/W is non empty;
+  end;
+end;
+
+canceled;
+
+theorem Th26:
+ a.W is Vector of V/W
+  proof
+      V/W = VectSpStr(#the carrier of V.W,the add of V.W,
+   the Zero of V.W,LMULT W#) by Def22;
+    hence thesis;
+  end;
+
+theorem Th27:
+ for x being Vector of V/W holds x is Element of V.W
+  proof
+    let x be Vector of V/W;
+      V/W = VectSpStr(#the carrier of V.W,the add of V.W,
+   the Zero of V.W,LMULT W#) by Def22;
+    hence thesis;
+  end;
+
+definition let K,V,W,a;
+  func a/W -> Vector of V/W equals
+:Def23:  a.W;
+   coherence by Th26;
+end;
+
+theorem Th28:
+ for x being Vector of V/W ex a st x = a/W
+  proof
+    let x be Vector of V/W;
+      V/W = VectSpStr(#the carrier of V.W,the add of V.W,
+   the Zero of V.W,LMULT W#) by Def22;
+    then consider a such that
+    A1: x = a.W by Th22;
+    take a;
+    thus thesis by A1,Def23;
+  end;
+
+theorem
+   a1/W = a2/W iff a1 - a2 in W
+  proof
+      a1.W = a1/W & a2.W = a2/W by Def23;
+    hence thesis by Th23;
+  end;
+
+Lm2:
+for x,y being Element of V.W, a,b being Vector of V/W
+  st a=x & b=y holds a+b=x+y
+proof
+A1: V/W = VectSpStr(#the carrier of V.W,the add of V.W,
+    the Zero of V.W,LMULT W#) by Def22;
+     let x,y be Element of V.W;
+     let x',y' be Vector of V/W;
+     assume A2: x = x' & y = y';
+     thus x + y = (the add of V.W).(x,y) by RLVECT_1:5 .=
+     x'+ y' by A1,A2,RLVECT_1:5;
+end;
+
+theorem Th30:
+ a/W + b/W = (a+b)/W & r*(a/W) = (r*a)/W
+  proof
+A1: a/W = a.W & b/W = b.W & (a+b)/W = (a+b).W & (r*a)/W = (r*a).W by Def23;
+    A2: V/W = VectSpStr(#the carrier of V.W,the add of V.W,
+     the Zero of V.W,LMULT W#) by Def22;
+    thus a/W + b/W = a.W + b.W by A1,Lm2
+                  .= (a+b)/W by A1,Th24;
+    thus r*(a/W) = (LMULT W).(r,a.W) by A1,A2,VECTSP_1:def 24
+                .= r*(a.W qua Element of V.W) by Def21
+                .= (r*a)/W by A1,Def20;
+  end;
+
+Lm3:
+  V/W is Abelian add-associative right_zeroed right_complementable
+  proof
+A1: V/W = VectSpStr(#the carrier of V.W,the add of V.W,
+    the Zero of V.W,LMULT W#) by Def22;
+A2:now
+     let x,y,z be Element of V.W;
+     let x',y',z' be Vector of V/W;
+     assume A3: x = x' & y = y' & z = z';
+     thus x + y = (the add of V.W).(x,y) by RLVECT_1:5 .=
+     x'+ y' by A1,A3,RLVECT_1:5;
+    end;
+    thus V/W is Abelian
+     proof let x,y be Vector of V/W;
+      reconsider x'= x, y'= y as Element of V.W by Th27;
+      thus x+y = x'+ y' by A2 .= y + x by A2;
+     end;
+     hereby let x,y,z be Vector of V/W;
+      reconsider x'= x, y'= y, z'= z as Element of V.W by Th27;
+A4:  x + y = x'+ y' by A2;
+A5:  y + z = y'+ z' by A2;
+      thus (x+y)+z = (x'+ y') + z' by A2,A4
+       .= x'+ (y'+ z') by RLVECT_1:def 6 .=
+      x + (y + z) by A2,A5;
+     end;
+      A6:  0.(V/W) = the Zero of V.W by A1,RLVECT_1:def 2
+ .= 0.(V.W) by RLVECT_1:def 2;
+     hereby let x be Vector of V/W;
+      reconsider x'= x as Element of V.W by Th27;
+      thus x+(0.(V/W)) = x'+ (0.(V.W)) by A2,A6 .= x by RLVECT_1:10;
+     end;
+     let x be Vector of V/W;
+      reconsider x'= x as Element of V.W by Th27;
+      consider b being Element of V.W such that
+A7:    x' + b = 0.(V.W) by RLVECT_1:def 8;
+      reconsider b' = b as Vector of V/W by A1;
+      take b';
+      thus x+b' = 0.(V/W) by A2,A6,A7;
+  end;
+
+theorem Th31:
+ V/W is strict LeftMod of K
+  proof
+      now let x,y be Scalar of K, v,w be Vector of V/W;
+      consider a such that
+      A1: v = a/W by Th28;
+      consider b such that
+      A2: w = b/W by Th28;
+      A3: (x*a)/W = x*v & (x*b)/W = x*w & (y*a)/W = y*v & (y*b)/W = y*w
+ by A1,A2,Th30;
+      thus x*(v+w) = x*((a+b)/W) by A1,A2,Th30
+                  .= (x*(a+b))/W by Th30
+                  .= (x*a+x*b)/W by VECTSP_1:def 26
+                  .= x*v+x*w by A3,Th30;
+      thus (x+y)*v = ((x+y)*a)/W by A1,Th30
+                  .= (x*a+y*a)/W by VECTSP_1:def 26
+                  .= x*v+y*v by A3,Th30;
+      thus (x*y)*v = ((x*y)*a)/W by A1,Th30
+                  .= (x*(y*a))/W by VECTSP_1:def 26
+                  .= x*((y*a)/W) by Th30
+                  .= x*(y*v) by A1,Th30;
+      thus 1_ K*v = (1_ K*a)/W by A1,Th30
+                .= v by A1,VECTSP_1:def 26;end;
+    hence thesis by Lm3,VECTSP_1:def 26;
+  end;
+
+definition let K,V,W;
+  cluster V/W -> VectSp-like;
+   coherence by Th31;
+end;
+

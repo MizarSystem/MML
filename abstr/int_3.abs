@@ -1,0 +1,311 @@
+:: The Ring of Integers, Euclidean Rings and Modulo Integers
+::  by Christoph Schwarzweller
+::
+:: Received February 4, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary BINOP_1, INT_1, FUNCT_1, VECTSP_1, RELAT_1, ARYTM_1, GR_CY_1,
+      FUNCT_7, RLVECT_1, VECTSP_2, LATTICES, ABSVALUE, EUCLID, NAT_1, FUNCSDOM,
+      GCD_1, ARYTM_3, INT_2, MCART_1, ORDINAL2, NAT_LAT, INT_3;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL2, NUMBERS, XCMPLX_0, XREAL_0,
+      RLVECT_1, MCART_1, RELAT_1, FUNCT_1, STRUCT_0, FUNCT_2, GCD_1, VECTSP_1,
+      VECTSP_2, FUNCSDOM, BINOP_1, REAL_1, EUCLID, GR_CY_1, INT_1, FUNCT_7,
+      NAT_LAT, INT_2, NAT_1, GROUP_1;
+ constructors DOMAIN_1, GROUP_2, REAL_1, GCD_1, NAT_1, EUCLID, GR_CY_1,
+      FUNCT_7, NAT_LAT, ALGSTR_2, SEQ_1, MEMBERED;
+ clusters STRUCT_0, FUNCT_1, VECTSP_2, XREAL_0, INT_1, RELSET_1, GCD_1, SEQ_1,
+      MEMBERED, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+definition
+func multint -> BinOp of INT means
+:: INT_3:def 1
+ for a,b being Element of INT holds it.(a,b) = multreal.(a,b);
+end;
+
+definition
+func compint -> UnOp of INT means
+:: INT_3:def 2
+   for a being Element of INT holds it.(a) = compreal.(a);
+end;
+
+definition
+func INT.Ring -> doubleLoopStr equals
+:: INT_3:def 3
+ doubleLoopStr(#INT,addint,multint,In (1,INT),In (0,INT)#);
+end;
+
+definition
+ cluster INT.Ring -> strict non empty;
+end;
+
+definition
+ cluster INT.Ring -> Abelian add-associative right_zeroed right_complementable
+                     well-unital distributive commutative associative
+                     domRing-like non degenerated;
+end;
+
+definition
+let a,b be Element of INT.Ring;
+pred a <= b means
+:: INT_3:def 4
+ ex a',b' being Integer st a' = a & b' = b & a' <= b';
+reflexivity;
+connectedness;
+synonym b >= a;
+antonym b < a;
+antonym a > b;
+end;
+
+definition
+let a be Element of INT.Ring;
+func abs(a) -> Element of INT.Ring equals
+:: INT_3:def 5
+ a if a >= 0.INT.Ring
+ otherwise - a;
+end;
+
+definition
+func absint -> Function of the carrier of INT.Ring,NAT means
+:: INT_3:def 6
+ for a being Element of INT.Ring holds
+ it.a = absreal.(a);
+end;
+
+theorem :: INT_3:1
+for a being Element of INT.Ring holds
+absint.a = abs(a);
+
+theorem :: INT_3:2
+for a,b,q1,q2,r1,r2 being Element of INT.Ring
+st b <> 0.INT.Ring &
+   a = q1 * b + r1 & 0.INT.Ring <= r1 & r1 < abs(b) &
+   a = q2 * b + r2 & 0.INT.Ring <= r2 & r2 < abs(b)
+holds q1 = q2 & r1 = r2;
+
+definition
+let a,b be Element of INT.Ring;
+assume b <> 0.INT.Ring;
+func a div b -> Element of INT.Ring means
+:: INT_3:def 7
+ ex r being Element of INT.Ring st
+ a = it * b + r & 0.INT.Ring <= r & r < abs(b);
+end;
+
+definition
+let a,b be Element of INT.Ring;
+assume b <> 0.INT.Ring;
+func a mod b -> Element of INT.Ring means
+:: INT_3:def 8
+ ex q being Element of INT.Ring st
+ a = q * b + it & 0.INT.Ring <= it & it < abs(b);
+end;
+
+theorem :: INT_3:3
+  for a,b being Element of INT.Ring
+st b <> 0.INT.Ring holds a = (a div b) * b + (a mod b);
+
+
+::: Euclidian Domains
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+begin
+
+definition
+let I be non empty doubleLoopStr;
+attr I is Euclidian means
+:: INT_3:def 9
+ ex f being Function of the carrier of I,NAT st
+ (for a,b being Element of I st b <> 0.I holds
+  (ex q,r being Element of I st
+  (a = q * b + r & (r = 0.I or f.r < f.b))));
+end;
+
+definition
+ cluster INT.Ring -> Euclidian;
+end;
+
+definition
+cluster strict Euclidian domRing-like non degenerated well-unital
+        distributive commutative Ring;
+end;
+
+definition
+mode EuclidianRing is Euclidian domRing-like non degenerated well-unital
+     distributive commutative Ring;
+end;
+
+definition
+cluster strict EuclidianRing;
+end;
+
+definition
+let E be Euclidian (non empty doubleLoopStr);
+mode DegreeFunction of E ->
+              Function of the carrier of E,NAT means
+:: INT_3:def 10
+ (for a,b being Element of E
+  st b <> 0.E holds
+  (ex q,r being Element of E st
+  (a = q * b + r & (r = 0.E or it.r < it.b))));
+end;
+
+theorem :: INT_3:4
+for E being EuclidianRing holds E is gcdDomain;
+
+definition
+cluster Euclidian -> gcd-like (domRing-like non degenerated
+    Abelian add-associative right_zeroed right_complementable
+    associative commutative right_unital right-distributive
+     (non empty doubleLoopStr));
+end;
+
+definition
+redefine func absint -> DegreeFunction of INT.Ring;
+end;
+
+theorem :: INT_3:5
+for F being commutative associative left_unital Field-like right_zeroed
+  (non empty doubleLoopStr) holds F is Euclidian;
+
+definition
+cluster commutative associative left_unital Field-like right_zeroed Field-like
+  -> Euclidian (non empty doubleLoopStr);
+end;
+
+theorem :: INT_3:6
+  for F being commutative associative left_unital Field-like right_zeroed
+  (non empty doubleLoopStr)
+for f being Function of the carrier of F,NAT holds
+f is DegreeFunction of F;
+
+
+::: Some Theorems about DIV and MOD
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+begin
+
+canceled;
+
+theorem :: INT_3:8
+for n being Nat st n > 0
+for a,k being Integer holds
+(a + n * k) div n = (a div n) + k & (a + n * k) mod n = a mod n;
+
+theorem :: INT_3:9
+for n being Nat st n > 0
+for a being Integer holds a mod n >= 0 & a mod n < n;
+
+theorem :: INT_3:10
+for n being Nat st n > 0
+for a being Integer holds
+((0 <= a & a < n) implies a mod n = a) &
+((0 > a & a >= -n) implies a mod n = n + a);
+
+theorem :: INT_3:11
+for n being Nat st n > 0
+for a being Integer holds a mod n = 0 iff n divides a;
+
+theorem :: INT_3:12
+for n being Nat st n > 0
+for a,b being Integer holds
+a mod n = b mod n iff a,b are_congruent_mod n;
+
+theorem :: INT_3:13
+for n being Nat st n > 0
+for a being Integer holds (a mod n) mod n = a mod n;
+
+theorem :: INT_3:14
+for n being Nat st n > 0
+for a,b being Integer holds (a + b) mod n = ((a mod n) + (b mod n)) mod n;
+
+theorem :: INT_3:15
+for n being Nat st n > 0
+for a,b being Integer holds (a * b) mod n = ((a mod n) * (b mod n)) mod n;
+
+theorem :: INT_3:16
+for a,b being Integer ex s,t being Integer st a gcd b = s * a + t * b;
+
+
+::: Modulo Integers
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+begin
+
+definition
+let n be Nat such that n > 0;
+func multint(n) -> BinOp of Segm(n) means
+:: INT_3:def 11
+ for k,l being Element of Segm(n) holds
+ it.(k,l) = (k * l) mod n;
+end;
+
+definition
+let n be Nat such that n > 0;
+func compint(n) -> UnOp of Segm(n) means
+:: INT_3:def 12
+ for k being Element of Segm(n) holds
+ it.k = (n - k) mod n;
+end;
+
+theorem :: INT_3:17
+for n being Nat st n > 0
+for a,b being Element of Segm(n) holds
+(a + b < n iff (addint(n)).(a,b) = a + b) &
+(a + b >= n iff (addint(n)).(a,b) = (a + b) - n);
+
+theorem :: INT_3:18
+for n being Nat st n > 0
+for a,b being Element of Segm(n)
+for k being Nat holds
+(k * n <= a * b & a * b < (k + 1) * n)
+iff (multint(n)).(a,b) = a * b - k * n;
+
+theorem :: INT_3:19
+  for n being Nat st n > 0
+for a being Element of Segm(n) holds
+(a = 0 iff (compint(n)).(a) = 0) &
+(a <> 0 iff (compint(n)).(a) = n - a);
+
+definition let n be Nat;
+func INT.Ring(n) -> doubleLoopStr equals
+:: INT_3:def 13
+ doubleLoopStr(#Segm(n),addint(n),multint(n),In (1,Segm(n)),In (0,Segm(n))#);
+end;
+
+definition let n be Nat;
+ cluster INT.Ring(n) -> strict non empty;
+end;
+
+theorem :: INT_3:20
+INT.Ring 1 is degenerated & INT.Ring 1 is Ring &
+INT.Ring 1 is Field-like well-unital distributive commutative;
+
+definition
+ cluster strict degenerated well-unital distributive Field-like commutative
+  Ring;
+end;
+
+theorem :: INT_3:21
+for n being Nat st n > 1 holds
+ INT.Ring(n) is non degenerated &
+ INT.Ring(n) is well-unital distributive commutative Ring;
+
+theorem :: INT_3:22
+for p being Nat st p > 1 holds
+ INT.Ring(p) is add-associative right_zeroed right_complementable
+    Abelian commutative associative left_unital distributive
+      Field-like non degenerated (non empty doubleLoopStr)
+  iff p is Prime;
+
+definition
+let p be Prime;
+ cluster INT.Ring(p) -> add-associative right_zeroed right_complementable
+   Abelian commutative associative left_unital distributive Field-like
+    non degenerated;
+end;

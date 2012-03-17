@@ -1,0 +1,1963 @@
+:: Bounds in Posets and Relational Substructures
+::  by Grzegorz Bancerek
+::
+:: Received September 10, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary ORDERS_1, RELAT_1, RELAT_2, BHSP_3, LATTICE3, REALSET1, BOOLE,
+      SUBSET_1, LATTICES, FILTER_0, FILTER_1, ORDINAL2, FINSET_1, WELLORD1,
+      CAT_1, YELLOW_0;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_2, RELSET_1, FINSET_1,
+      TOLER_1, STRUCT_0, LATTICES, REALSET1, PRE_TOPC, ORDERS_1, LATTICE3;
+ constructors LATTICE3, PRE_TOPC, REALSET1, TOLER_1;
+ clusters STRUCT_0, FINSET_1, RELSET_1, ORDERS_1, LATTICE3, XBOOLE_0;
+ requirements BOOLE, SUBSET;
+ definitions STRUCT_0, RELAT_2, ORDERS_1, LATTICE3, REALSET1;
+ theorems TARSKI, ZFMISC_1, RELAT_2, WELLORD1, ORDERS_1, LATTICE3, PRE_TOPC,
+      XBOOLE_0, XBOOLE_1;
+ schemes FINSET_1, RELSET_1;
+
+begin :: Reexamination of poset concepts
+
+scheme RelStrEx {X() -> non empty set, P[set,set]}:
+ ex L being non empty strict RelStr st the carrier of L = X() &
+  for a,b being Element of L holds a <= b iff P[a,b]
+  proof defpred p[set,set] means P[$1,$2];
+    consider R being Relation of X() such that
+A1:for a,b being Element of X() holds [a,b] in R iff p[a,b] from Rel_On_Dom_Ex;
+   take L = RelStr(#X(),R#);
+   thus the carrier of L = X();
+   let a,b be Element of L;
+      a <= b iff [a,b] in R by ORDERS_1:def 9;
+   hence thesis by A1;
+  end;
+
+definition let A be non empty RelStr;
+ redefine attr A is reflexive means
+    for x being Element of A holds x <= x;
+ compatibility
+  proof
+   thus A is reflexive implies for x being Element of A holds x <= x
+     by ORDERS_1:24;
+   assume
+A1:  for x being Element of A holds x <= x;
+   let x be set; assume x in the carrier of A;
+   then reconsider x as Element of A;
+      x <= x by A1;
+   hence thesis by ORDERS_1:def 9;
+  end;
+end;
+
+definition let A be RelStr;
+ redefine attr A is transitive means
+    for x,y,z being Element of A st x <= y & y <= z holds x <= z;
+ compatibility
+  proof
+   thus A is transitive implies
+    for x,y,z being Element of A st x <= y & y <= z holds x <=
+ z by ORDERS_1:26;
+   assume
+A1:  for x,y,z being Element of A st x <= y & y <= z holds x <= z;
+   let x,y,z be set; assume
+A2:  x in the carrier of A & y in the carrier of A & z in the carrier of A;
+   assume
+A3:  [x,y] in the InternalRel of A & [y,z] in the InternalRel of A;
+   reconsider x,y,z as Element of A by A2;
+      x <= y & y <= z by A3,ORDERS_1:def 9;
+    then x <= z by A1;
+   hence thesis by ORDERS_1:def 9;
+  end;
+ attr A is antisymmetric means
+    for x,y being Element of A st x <= y & y <= x holds x = y;
+ compatibility
+  proof
+   thus A is antisymmetric implies
+    for x,y being Element of A st x <= y & y <= x holds x = y by ORDERS_1:25;
+   assume
+A4:  for x,y being Element of A st x <= y & y <= x holds x = y;
+   let x,y be set; assume
+A5:  x in the carrier of A & y in the carrier of A;
+   assume
+A6:  [x,y] in the InternalRel of A & [y,x] in the InternalRel of A;
+   reconsider x,y as Element of A by A5;
+      x <= y & y <= x by A6,ORDERS_1:def 9;
+   hence thesis by A4;
+  end;
+end;
+
+definition
+ cluster complete -> with_suprema with_infima (non empty RelStr);
+ coherence by LATTICE3:12;
+ cluster trivial -> complete transitive antisymmetric
+         (non empty reflexive RelStr);
+ coherence
+  proof let L be non empty reflexive RelStr; assume
+A1:  for x,y being Element of L holds x = y;
+   consider x being Element of L;
+   thus L is complete
+    proof let X be set; take x;
+     thus for y be Element of L st y in X holds y <= x by A1;
+     let y be Element of L;
+        y = x by A1;
+     hence thesis by ORDERS_1:24;
+    end;
+   thus L is transitive
+     proof let x,y,z be Element of L;
+      thus thesis by A1;
+     end;
+   let x be Element of L; thus thesis by A1;
+  end;
+end;
+
+definition
+ let x be set;
+ let R be Relation of {x};
+ cluster RelStr(#{x},R#) -> trivial;
+ coherence
+  proof let z1,z2 be Element of RelStr(#{x},R#);
+      z1 = x & z2 = x by TARSKI:def 1;
+   hence thesis;
+  end;
+end;
+
+definition
+ cluster strict trivial non empty reflexive RelStr;
+ existence
+  proof consider x being set;
+   consider O being Order of {x};
+   take RelStr(#{x}, O#);
+   thus thesis;
+  end;
+end;
+
+theorem Th1:
+ for P1,P2 being RelStr st the RelStr of P1 = the RelStr of P2
+ for a1,b1 being Element of P1 for a2,b2 being Element of P2
+  st a1 = a2 & b1 = b2
+  holds (a1 <= b1 implies a2 <= b2) & (a1 < b1 implies a2 < b2)
+  proof let P1,P2 be RelStr such that
+A1:  the RelStr of P1 = the RelStr of P2;
+   let a1,b1 be Element of P1;
+   let a2,b2 be Element of P2;
+    (a1 <= b1 iff [a1,b1] in the InternalRel of P1) &
+    (a2 <= b2 iff [a2,b2] in the InternalRel of P2) by ORDERS_1:def 9;
+   hence thesis by A1,ORDERS_1:def 10;
+  end;
+
+theorem Th2:
+ for P1,P2 being RelStr st the RelStr of P1 = the RelStr of P2
+ for X being set
+ for a1 being Element of P1 for a2 being Element of P2 st a1 = a2
+  holds
+   (X is_<=_than a1 implies X is_<=_than a2) &
+   (X is_>=_than a1 implies X is_>=_than a2)
+  proof let P1,P2 be RelStr such that
+A1:  the RelStr of P1 = the RelStr of P2;
+   let X be set;
+   let a1 be Element of P1, a2 be Element of P2 such that
+A2:  a1 = a2;
+   thus X is_<=_than a1 implies X is_<=_than a2
+    proof assume
+A3:    for b being Element of P1 st b in X holds b <= a1;
+     let b2 be Element of P2;
+     reconsider b1 = b2 as Element of P1 by A1;
+     assume b2 in X; then b1 <= a1 by A3;
+     hence b2 <= a2 by A1,A2,Th1;
+    end;
+   assume
+A4:  for b being Element of P1 st b in X holds a1 <= b;
+   let b2 be Element of P2;
+   reconsider b1 = b2 as Element of P1 by A1;
+   assume b2 in X; then a1 <= b1 by A4;
+   hence a2 <= b2 by A1,A2,Th1;
+  end;
+
+theorem
+   for P1,P2 being RelStr
+  st the RelStr of P1 = the RelStr of P2 & P1 is complete
+  holds P2 is complete
+   proof let P1,P2 be RelStr such that
+A1:   the RelStr of P1 = the RelStr of P2 and
+A2:   for X being set ex a being Element of P1 st X is_<=_than a &
+      for b being Element of P1 st X is_<=_than b holds a <= b;
+    let X be set;
+    consider a being Element of P1 such that
+A3:   X is_<=_than a and
+A4:   for b being Element of P1 st X is_<=_than b holds a <= b by A2;
+    reconsider a' = a as Element of P2 by A1;
+    take a'; thus X is_<=_than a' by A1,A3,Th2;
+    let b' be Element of P2;
+    reconsider b = b' as Element of P1 by A1;
+    assume X is_<=_than b';
+     then X is_<=_than b by A1,Th2;
+     then a <= b by A4;
+    hence thesis by A1,Th1;
+   end;
+
+theorem Th4:
+ for L being transitive RelStr, x,y being Element of L st x <= y
+ for X being set holds
+  (y is_<=_than X implies x is_<=_than X) &
+  (x is_>=_than X implies y is_>=_than X)
+  proof let L be transitive RelStr, x,y be Element of L; assume
+A1:  x <= y;
+   let X be set;
+   hereby assume
+A2:   y is_<=_than X;
+    thus x is_<=_than X
+     proof let z be Element of L; assume z in X;
+       then z >= y by A2,LATTICE3:def 8;
+      hence x <= z by A1,ORDERS_1:26;
+     end;
+   end;
+   assume
+A3:  x is_>=_than X;
+   let z be Element of L; assume z in X;
+    then x >= z by A3,LATTICE3:def 9;
+   hence z <= y by A1,ORDERS_1:26;
+  end;
+
+theorem Th5:
+ for L being non empty RelStr, X being set, x being Element of L holds
+   (x is_>=_than X iff x is_>=_than X /\ the carrier of L) &
+   (x is_<=_than X iff x is_<=_than X /\ the carrier of L)
+  proof let L be non empty RelStr, X be set, x be Element of L;
+   set Y = X /\ the carrier of L;
+   thus X is_<=_than x implies Y is_<=_than x
+    proof assume
+A1:    for b being Element of L st b in X holds b <= x;
+     let b be Element of L;
+     assume b in Y;
+      then b in X by XBOOLE_0:def 3;
+     hence b <= x by A1;
+    end;
+   thus Y is_<=_than x implies X is_<=_than x
+    proof assume
+A2:    for b being Element of L st b in Y holds b <= x;
+     let b be Element of L;
+     assume b in X;
+      then b in Y by XBOOLE_0:def 3;
+     hence b <= x by A2;
+    end;
+   thus X is_>=_than x implies Y is_>=_than x
+    proof assume
+A3:    for b being Element of L st b in X holds b >= x;
+     let b be Element of L;
+     assume b in Y;
+      then b in X by XBOOLE_0:def 3;
+     hence b >= x by A3;
+    end;
+   thus Y is_>=_than x implies X is_>=_than x
+    proof assume
+A4:    for b being Element of L st b in Y holds b >= x;
+     let b be Element of L;
+     assume b in X;
+      then b in Y by XBOOLE_0:def 3;
+     hence b >= x by A4;
+    end;
+  end;
+
+theorem Th6:
+ for L being RelStr, a being Element of L holds
+  {} is_<=_than a & {} is_>=_than a
+  proof let L be RelStr, a be Element of L;
+   thus {} is_<=_than a
+    proof let b be Element of L; thus thesis; end;
+   let b be Element of L; thus thesis;
+  end;
+
+theorem Th7:
+ for L being RelStr, a,b being Element of L holds
+  (a is_<=_than {b} iff a <= b) &
+  (a is_>=_than {b} iff b <= a)
+  proof let L be RelStr, a,b be Element of L;
+A1:  b in {b} by TARSKI:def 1;
+   hence a is_<=_than {b} implies a <= b by LATTICE3:def 8;
+   hereby assume
+A2:   a <= b;
+    thus a is_<=_than {b}
+     proof let c be Element of L;
+      thus thesis by A2,TARSKI:def 1;
+     end;
+   end;
+   thus a is_>=_than {b} implies a >= b by A1,LATTICE3:def 9;
+   assume
+A3:  a >= b;
+   let c be Element of L;
+   thus thesis by A3,TARSKI:def 1;
+  end;
+
+theorem Th8:
+ for L being RelStr, a,b,c being Element of L holds
+  (a is_<=_than {b,c} iff a <= b & a <= c) &
+  (a is_>=_than {b,c} iff b <= a & c <= a)
+  proof let L be RelStr, a,b,c be Element of L;
+A1:  b in {b,c} & c in {b,c} by TARSKI:def 2;
+   hence a is_<=_than {b,c} implies a <= b & a <= c by LATTICE3:def 8;
+   hereby assume
+A2:   a <= b & a <= c;
+    thus a is_<=_than {b,c}
+     proof let c be Element of L;
+      thus thesis by A2,TARSKI:def 2;
+     end;
+   end;
+   thus a is_>=_than {b,c} implies a >= b & a >= c by A1,LATTICE3:def 9;
+   assume
+A3:  a >= b & a >= c;
+   let c be Element of L;
+   thus thesis by A3,TARSKI:def 2;
+  end;
+
+theorem Th9:
+ for L being RelStr, X,Y being set st X c= Y
+ for x being Element of L holds
+  (x is_<=_than Y implies x is_<=_than X) &
+  (x is_>=_than Y implies x is_>=_than X)
+  proof let L be RelStr, X,Y be set such that
+A1:  X c= Y;
+   let x be Element of L;
+   thus x is_<=_than Y implies x is_<=_than X
+    proof assume
+A2:    for y being Element of L st y in Y holds y >= x;
+     let y be Element of L;
+     thus thesis by A1,A2;
+    end;
+   assume
+A3:  for y being Element of L st y in Y holds y <= x;
+   let y be Element of L;
+   thus thesis by A1,A3;
+  end;
+
+theorem Th10:
+ for L being RelStr, X,Y being set, x being Element of L holds
+  (x is_<=_than X & x is_<=_than Y implies x is_<=_than X \/ Y) &
+  (x is_>=_than X & x is_>=_than Y implies x is_>=_than X \/ Y)
+  proof let L be RelStr, X,Y be set, x be Element of L;
+   thus x is_<=_than X & x is_<=_than Y implies x is_<=_than X \/ Y
+    proof assume that
+A1:    for y being Element of L st y in X holds y >= x and
+A2:    for y being Element of L st y in Y holds y >= x;
+     let y be Element of L;
+        y in X \/ Y implies y in X or y in Y by XBOOLE_0:def 2;
+     hence thesis by A1,A2;
+    end;
+   assume that
+A3:  for y being Element of L st y in X holds y <= x and
+A4:  for y being Element of L st y in Y holds y <= x;
+   let y be Element of L;
+      y in X \/ Y implies y in X or y in Y by XBOOLE_0:def 2;
+   hence thesis by A3,A4;
+  end;
+
+theorem Th11:
+ for L being transitive RelStr
+ for X being set, x,y being Element of L st X is_<=_than x & x <= y
+  holds X is_<=_than y
+  proof let L be transitive RelStr;
+   let X be set, x,y be Element of L such that
+A1:  for y being Element of L st y in X holds y <= x and
+A2:  x <= y;
+   let z be Element of L; assume z in X;
+    then z <= x by A1;
+   hence thesis by A2,ORDERS_1:26;
+  end;
+
+theorem Th12:
+ for L being transitive RelStr
+ for X being set, x,y being Element of L st X is_>=_than x & x >= y
+  holds X is_>=_than y
+  proof let L be transitive RelStr;
+   let X be set, x,y be Element of L such that
+A1:  for y being Element of L st y in X holds y >= x and
+A2:  x >= y;
+   let z be Element of L; assume z in X;
+    then z >= x by A1;
+   hence thesis by A2,ORDERS_1:26;
+  end;
+
+definition
+ let L be non empty RelStr;
+ cluster [#]L -> non empty;
+ coherence by PRE_TOPC:12;
+end;
+
+begin :: Least upper and greatest lower bounds
+
+definition
+ let L be RelStr;
+ attr L is lower-bounded means:Def4:
+  ex x being Element of L st x is_<=_than the carrier of L;
+ attr L is upper-bounded means:Def5:
+  ex x being Element of L st x is_>=_than the carrier of L;
+end;
+
+definition
+ let L be RelStr;
+ attr L is bounded means L is lower-bounded upper-bounded;
+end;
+
+theorem
+   for P1,P2 being RelStr st the RelStr of P1 = the RelStr of P2 holds
+  (P1 is lower-bounded implies P2 is lower-bounded) &
+  (P1 is upper-bounded implies P2 is upper-bounded)
+  proof let P1,P2 be RelStr such that
+A1:  the RelStr of P1 = the RelStr of P2;
+   thus P1 is lower-bounded implies P2 is lower-bounded
+    proof given x being Element of P1 such that
+A2:    x is_<=_than the carrier of P1;
+     reconsider y = x as Element of P2 by A1;
+     take y; thus thesis by A1,A2,Th2;
+    end;
+   given x being Element of P1 such that
+A3:  x is_>=_than the carrier of P1;
+   reconsider y = x as Element of P2 by A1;
+   take y; thus thesis by A1,A3,Th2;
+  end;
+
+definition
+ cluster complete -> bounded (non empty RelStr);
+ coherence
+  proof let L be non empty RelStr; assume
+A1:  for X being set ex a being Element of L st
+     X is_<=_than a &
+     for b being Element of L st X is_<=_than b holds a <= b;
+   then consider a0 being Element of L such that
+      {} is_<=_than a0 and
+A2:  for b being Element of L st {} is_<=_than b holds a0 <= b;
+   consider a1 being Element of L such that
+A3:  the carrier of L is_<=_than a1 and
+      for b being Element of L st
+     the carrier of L is_<=_than b holds a1 <= b by A1;
+   reconsider a0, a1 as Element of L;
+   hereby take a0;
+    thus a0 is_<=_than the carrier of L
+     proof let b be Element of L; assume
+         b in the carrier of L;
+      reconsider b as Element of L;
+         {} is_<=_than b by Th6;
+      hence thesis by A2;
+     end;
+   end;
+   take a1; thus thesis by A3;
+  end;
+ cluster bounded -> lower-bounded upper-bounded RelStr;
+ coherence
+  proof let L be RelStr; assume L is lower-bounded upper-bounded;
+   hence L is lower-bounded upper-bounded;
+  end;
+ cluster lower-bounded upper-bounded -> bounded RelStr;
+ coherence
+  proof let L be RelStr; assume L is lower-bounded upper-bounded;
+   hence L is lower-bounded upper-bounded;
+  end;
+end;
+
+definition
+ cluster complete (non empty Poset);
+  :: with_infima with_suprema (lower, upper) bounded
+ existence
+  proof consider L being complete (non empty Poset);
+   take L; thus thesis;
+  end;
+end;
+
+definition
+ let L be RelStr;
+ let X be set;
+ pred ex_sup_of X,L means:Def7:
+  ex a being Element of L st X is_<=_than a &
+   (for b being Element of L st X is_<=_than b holds b >= a) &
+   for c being Element of L st X is_<=_than c &
+     for b being Element of L st X is_<=_than b holds b >= c
+   holds c = a;
+ pred ex_inf_of X,L means:Def8:
+  ex a being Element of L st X is_>=_than a &
+   (for b being Element of L st X is_>=_than b holds b <= a) &
+   for c being Element of L st X is_>=_than c &
+     for b being Element of L st X is_>=_than b holds b <= c
+   holds c = a;
+end;
+
+theorem Th14:
+ for L1,L2 being RelStr st the RelStr of L1 = the RelStr of L2
+ for X being set holds
+   (ex_sup_of X,L1 implies ex_sup_of X,L2) &
+   (ex_inf_of X,L1 implies ex_inf_of X,L2)
+  proof let L1,L2 be RelStr such that
+A1:   the RelStr of L1 = the RelStr of L2;
+   let X be set;
+   thus ex_sup_of X,L1 implies ex_sup_of X,L2
+    proof given a being Element of L1 such that
+A2:    X is_<=_than a and
+A3:    for b being Element of L1 st X is_<=_than b holds b >= a and
+A4:    for c being Element of L1 st X is_<=_than c &
+       for b being Element of L1 st X is_<=_than b holds b >= c
+      holds c = a;
+     reconsider a' = a as Element of L2 by A1;
+     take a';
+     thus X is_<=_than a' by A1,A2,Th2;
+     hereby let b' be Element of L2;
+      reconsider b = b' as Element of L1 by A1;
+      assume X is_<=_than b';
+       then X is_<=_than b by A1,Th2;
+       then b >= a by A3;
+      hence b' >= a' by A1,Th1;
+     end;
+     let c' be Element of L2;
+     reconsider c = c' as Element of L1 by A1;
+     assume X is_<=_than c';
+then A5:    X is_<=_than c by A1,Th2;
+     assume
+A6:    for b' being Element of L2 st X is_<=_than b' holds b' >= c';
+        now let b be Element of L1;
+       reconsider b' = b as Element of L2 by A1;
+       assume X is_<=_than b;
+        then X is_<=_than b' by A1,Th2;
+        then b' >= c' by A6;
+       hence b >= c by A1,Th1;
+      end;
+     hence c' = a' by A4,A5;
+    end;
+   given a being Element of L1 such that
+A7:  X is_>=_than a and
+A8:  for b being Element of L1 st X is_>=_than b holds b <= a and
+A9:  for c being Element of L1 st X is_>=_than c &
+     for b being Element of L1 st X is_>=_than b holds b <= c
+    holds c = a;
+   reconsider a' = a as Element of L2 by A1;
+   take a';
+   thus X is_>=_than a' by A1,A7,Th2;
+   hereby let b' be Element of L2;
+    reconsider b = b' as Element of L1 by A1;
+    assume X is_>=_than b';
+     then X is_>=_than b by A1,Th2;
+     then b <= a by A8;
+    hence b' <= a' by A1,Th1;
+   end;
+   let c' be Element of L2;
+   reconsider c = c' as Element of L1 by A1;
+   assume X is_>=_than c';
+then A10:  X is_>=_than c by A1,Th2;
+   assume
+A11:  for b' being Element of L2 st X is_>=_than b' holds b' <= c';
+      now let b be Element of L1;
+     reconsider b' = b as Element of L2 by A1;
+     assume X is_>=_than b;
+      then X is_>=_than b' by A1,Th2;
+      then b' <= c' by A11;
+     hence b <= c by A1,Th1;
+    end;
+   hence c' = a' by A9,A10;
+  end;
+
+theorem Th15:
+ for L being antisymmetric RelStr, X being set holds
+  ex_sup_of X,L iff ex a being Element of L st X is_<=_than a &
+   for b being Element of L st X is_<=_than b holds a <= b
+  proof let L be antisymmetric RelStr, X be set;
+   hereby assume ex_sup_of X,L;
+     then ex a being Element of L st X is_<=_than a &
+      (for b being Element of L st X is_<=_than b holds b >= a) &
+      for c being Element of L st X is_<=_than c &
+       for b being Element of L st X is_<=_than b holds b >= c
+      holds c = a by Def7;
+    hence ex a being Element of L st X is_<=_than a &
+     for b being Element of L st X is_<=_than b holds a <= b;
+   end;
+   given a being Element of L such that
+A1:  X is_<=_than a and
+A2:  for b being Element of L st X is_<=_than b holds a <= b;
+   take a;
+   thus X is_<=_than a & for b being Element of L st X is_<=_than b holds b >=
+ a
+     by A1,A2;
+   let c be Element of L; assume
+      X is_<=_than c & for b being Element of L st X is_<=_than
+ b holds b >= c;
+    then a <= c & c <= a by A1,A2;
+   hence c = a by ORDERS_1:25;
+  end;
+
+theorem Th16:
+ for L being antisymmetric RelStr, X being set holds
+  ex_inf_of X,L iff ex a being Element of L st X is_>=_than a &
+   for b being Element of L st X is_>=_than b holds a >= b
+  proof let L be antisymmetric RelStr, X be set;
+   hereby assume ex_inf_of X,L;
+     then ex a being Element of L st X is_>=_than a &
+      (for b being Element of L st X is_>=_than b holds b <= a) &
+      for c being Element of L st X is_>=_than c &
+       for b being Element of L st X is_>=_than b holds b <= c
+      holds c = a by Def8;
+    hence ex a being Element of L st X is_>=_than a &
+     for b being Element of L st X is_>=_than b holds a >= b;
+   end;
+   given a being Element of L such that
+A1:  X is_>=_than a and
+A2:  for b being Element of L st X is_>=_than b holds a >= b;
+   take a;
+   thus X is_>=_than a & for b being Element of L st X is_>=_than b holds a >=
+     b by A1,A2;
+   let c be Element of L; assume
+      X is_>=_than c & for b being Element of L st X is_>=_than
+ b holds c >= b;
+    then a <= c & c <= a by A1,A2;
+   hence c = a by ORDERS_1:25;
+  end;
+
+theorem Th17:
+ for L being complete non empty antisymmetric RelStr, X being set
+  holds ex_sup_of X,L & ex_inf_of X,L
+  proof let L be complete non empty antisymmetric RelStr, X be set;
+      ex a being Element of L st X is_<=_than a &
+    for b being Element of L st X is_<=_than b holds a <= b
+     by LATTICE3:def 12;
+   hence ex_sup_of X,L by Th15;
+   set Y = {c where c is Element of L: c is_<=_than X};
+   consider a being Element of L such that
+A1:  Y is_<=_than a and
+A2:  for b being Element of L st Y is_<=_than b holds a <= b
+      by LATTICE3:def 12;
+      now take a;
+     thus a is_<=_than X
+      proof let b be Element of L; assume
+A3:      b in X;
+          Y is_<=_than b
+         proof let c be Element of L; assume
+             c in Y;
+           then ex d being Element of L st c = d & d is_<=_than X;
+          hence thesis by A3,LATTICE3:def 8;
+         end;
+       hence thesis by A2;
+      end;
+     let b be Element of L; assume b is_<=_than X;
+      then b in Y;
+     hence b <= a by A1,LATTICE3:def 9;
+    end;
+   hence thesis by Th16;
+  end;
+
+theorem Th18:
+ for L being antisymmetric RelStr
+ for a,b,c being Element of L holds
+  c = a"\/"b & ex_sup_of {a,b},L iff c >= a & c >= b &
+   for d being Element of L st d >= a & d >= b holds c <= d
+  proof let L be antisymmetric RelStr;
+   let a,b,c be Element of L;
+   hereby assume that
+A1:   c = a"\/"b and
+A2:   ex_sup_of {a,b},L;
+    consider c1 being Element of L such that
+A3:  {a,b} is_<=_than c1 and
+A4:  for d being Element of L st {a,b} is_<=_than d holds c1 <= d by A2,Th15;
+A5:  now let d be Element of L; assume a <= d & b <= d;
+       then {a,b} is_<=_than d by Th8;
+      hence c1 <= d by A4;
+     end;
+       a <= c1 & b <= c1 by A3,Th8;
+    hence c >= a & c >= b &
+     for d being Element of L st d >= a & d >= b holds c <= d
+       by A1,A5,LATTICE3:def 13;
+   end;
+   assume
+A6:  c >= a & c >= b & for d being Element of L st d >= a & d >= b holds c <=
+ d;
+   hence c = a"\/"b by LATTICE3:def 13;
+      now take c;
+     thus c is_>=_than {a,b} by A6,Th8;
+     let d be Element of L; assume d is_>=_than {a,b};
+      then d >= a & d >= b by Th8;
+     hence c <= d by A6;
+    end;
+   hence thesis by Th15;
+  end;
+
+theorem Th19:
+ for L being antisymmetric RelStr
+ for a,b,c being Element of L holds
+  c = a"/\"b & ex_inf_of {a,b},L iff c <= a & c <= b &
+   for d being Element of L st d <= a & d <= b holds c >= d
+  proof let L be antisymmetric RelStr;
+   let a,b,c be Element of L;
+   hereby assume that
+A1:   c = a"/\"b and
+A2:   ex_inf_of {a,b},L;
+    consider c1 being Element of L such that
+A3:  {a,b} is_>=_than c1 and
+A4:  for d being Element of L st {a,b} is_>=_than d holds c1 >= d by A2,Th16;
+A5:  now let d be Element of L; assume a >= d & b >= d;
+       then {a,b} is_>=_than d by Th8;
+      hence c1 >= d by A4;
+     end;
+    a >= c1 & b >= c1 by A3,Th8;
+    hence c <= a & c <= b &
+     for d being Element of L st d <= a & d <= b holds c >= d
+        by A1,A5,LATTICE3:def 14;
+   end;
+   assume
+A6:  c <= a & c <= b & for d being Element of L st d <= a & d <= b holds c >=
+ d;
+   hence c = a"/\"b by LATTICE3:def 14;
+      now take c; thus c is_<=_than {a,b} by A6,Th8;
+     let d be Element of L; assume d is_<=_than {a,b};
+      then d <= a & d <= b by Th8;
+     hence c >= d by A6;
+    end;
+   hence thesis by Th16;
+  end;
+
+theorem Th20:
+ for L being antisymmetric RelStr holds L is with_suprema iff
+  for a,b being Element of L holds ex_sup_of {a,b},L
+  proof let L be antisymmetric RelStr;
+   hereby assume
+A1:   L is with_suprema;
+    let a,b be Element of L;
+       ex z being Element of L st a <= z & b <= z &
+      for z' being Element of L st a <= z' & b <= z' holds z <= z'
+       by A1,LATTICE3:def 10;
+    hence ex_sup_of {a,b},L by Th18;
+   end;
+   assume
+A2:  for a,b being Element of L holds ex_sup_of {a,b},L;
+   let x,y be Element of L; take x"\/"y;
+      ex_sup_of {x,y},L by A2;
+   hence thesis by Th18;
+  end;
+
+theorem Th21:
+ for L being antisymmetric RelStr holds L is with_infima iff
+  for a,b being Element of L holds ex_inf_of {a,b},L
+  proof let L be antisymmetric RelStr;
+   hereby assume
+A1:   L is with_infima;
+    let a,b be Element of L;
+       ex z being Element of L st a >= z & b >= z &
+      for z' being Element of L st a >= z' & b >= z' holds z >= z'
+       by A1,LATTICE3:def 11;
+    hence ex_inf_of {a,b},L by Th19;
+   end;
+   assume
+A2:  for a,b being Element of L holds ex_inf_of {a,b},L;
+   let x,y be Element of L; take x"/\"y;
+      ex_inf_of {x,y},L by A2;
+   hence thesis by Th19;
+  end;
+
+theorem Th22:
+ for L being antisymmetric with_suprema RelStr
+ for a,b,c being Element of L holds
+  c = a"\/"b iff c >= a & c >= b &
+   for d being Element of L st d >= a & d >= b holds c <= d
+  proof let A be antisymmetric with_suprema RelStr;
+   let a,b be Element of A;
+      ex x being Element of A st a <= x & b <= x &
+     for c being Element of A st a <= c & b <= c holds x <= c
+      by LATTICE3:def 10;
+   hence thesis by LATTICE3:def 13;
+  end;
+
+theorem Th23:
+ for L being antisymmetric with_infima RelStr
+ for a,b,c being Element of L holds
+  c = a"/\"b iff c <= a & c <= b &
+   for d being Element of L st d <= a & d <= b holds c >= d
+  proof let A be antisymmetric with_infima RelStr;
+   let a,b be Element of A;
+      ex x being Element of A st a >= x & b >= x &
+     for c being Element of A st a >= c & b >= c holds x >= c
+      by LATTICE3:def 11;
+   hence thesis by LATTICE3:def 14;
+  end;
+
+theorem
+   for L being antisymmetric reflexive with_suprema RelStr
+ for a,b being Element of L holds a = a"\/"b iff a >= b
+  proof let L be antisymmetric reflexive with_suprema RelStr;
+   let a,b be Element of L;
+      a <= a & for d being Element of L st d >= a & d >= b holds a <= d;
+   hence thesis by Th22;
+  end;
+
+theorem
+   for L being antisymmetric reflexive with_infima RelStr
+ for a,b being Element of L holds a = a"/\"b iff a <= b
+  proof let L be antisymmetric reflexive with_infima RelStr;
+   let a,b be Element of L;
+      a <= a & for d being Element of L st d <= a & d <= b holds a >= d;
+   hence thesis by Th23;
+  end;
+
+definition
+ let L be RelStr;
+ let X be set;
+ func "\/"(X,L) -> Element of L means:Def9:  :: Definition 1.1
+  X is_<=_than it &
+   for a being Element of L st X is_<=_than a holds it <= a
+  if ex_sup_of X,L;
+ uniqueness
+  proof let a1,a2 be Element of L; given a being Element of L such that
+A1:  X is_<=_than a &
+    (for b being Element of L st X is_<=_than b holds b >= a) &
+    for c being Element of L st X is_<=_than c &
+      for b being Element of L st X is_<=_than b holds b >= c
+    holds c = a;
+   assume
+A2:  not thesis;
+    then a1 = a & a2 = a by A1;
+   hence contradiction by A2;
+  end;
+ existence
+  proof
+     ex_sup_of X,L implies ex a being Element of L st X is_<=_than a &
+    (for b being Element of L st X is_<=_than b holds b >= a) &
+    for c being Element of L st X is_<=_than c &
+      for b being Element of L st X is_<=_than b holds b >= c
+    holds c = a by Def7;
+   hence thesis;
+  end;
+ correctness;
+ func "/\"(X,L) -> Element of L means:Def10:   :: Definition 1.1
+  X is_>=_than it &
+   for a being Element of L st X is_>=_than a holds a <= it
+  if ex_inf_of X,L;
+ uniqueness
+  proof let a1,a2 be Element of L; given a being Element of L such that
+A3:  X is_>=_than a &
+    (for b being Element of L st X is_>=_than b holds b <= a) &
+    for c being Element of L st X is_>=_than c &
+      for b being Element of L st X is_>=_than b holds b <= c
+    holds c = a;
+   assume
+A4:  not thesis;
+    then a1 = a & a2 = a by A3;
+   hence contradiction by A4;
+  end;
+ existence
+  proof
+      ex_inf_of X,L implies ex a being Element of L st X is_>=_than a &
+     (for b being Element of L st X is_>=_than b holds b <= a) &
+     for c being Element of L st X is_>=_than c &
+       for b being Element of L st X is_>=_than b holds b <= c
+     holds c = a by Def8;
+   hence thesis;
+  end;
+ correctness;
+end;
+
+theorem
+   for L1,L2 being RelStr st the RelStr of L1 = the RelStr of L2
+ for X being set st ex_sup_of X,L1 holds "\/"(X,L1) = "\/"(X,L2)
+  proof let L1,L2 be RelStr such that
+A1:  the RelStr of L1 = the RelStr of L2;
+   let X be set; assume
+A2:  ex_sup_of X,L1;
+then A3:  ex_sup_of X,L2 by A1,Th14;
+   reconsider c = "\/"(X,L1) as Element of L2 by A1;
+      X is_<=_than "\/"(X,L1) by A2,Def9;
+then A4:  X is_<=_than c by A1,Th2;
+      now let a be Element of L2;
+     reconsider b = a as Element of L1 by A1;
+     assume X is_<=_than a;
+      then X is_<=_than b by A1,Th2;
+      then b >= "\/"(X,L1) by A2,Def9;
+     hence a >= c by A1,Th1;
+    end;
+   hence thesis by A3,A4,Def9;
+  end;
+
+theorem
+   for L1,L2 being RelStr st the RelStr of L1 = the RelStr of L2
+ for X being set st ex_inf_of X,L1 holds "/\"(X,L1) = "/\"(X,L2)
+  proof let L1,L2 be RelStr such that
+A1:  the RelStr of L1 = the RelStr of L2;
+   let X be set; assume
+A2:  ex_inf_of X,L1;
+then A3:  ex_inf_of X,L2 by A1,Th14;
+   reconsider c = "/\"(X,L1) as Element of L2 by A1;
+      X is_>=_than "/\"(X,L1) by A2,Def10;
+then A4:  X is_>=_than c by A1,Th2;
+      now let a be Element of L2;
+     reconsider b = a as Element of L1 by A1;
+     assume X is_>=_than a;
+      then X is_>=_than b by A1,Th2;
+      then b <= "/\"(X,L1) by A2,Def10;
+     hence a <= c by A1,Th1;
+    end;
+   hence thesis by A3,A4,Def10;
+  end;
+
+theorem
+   for L being complete (non empty Poset), X being set holds
+  "\/"(X,L) = "\/"(X, latt L) & "/\"(X,L) = "/\"(X, latt L)
+  proof let L be complete (non empty Poset), X be set;
+A1:  the RelStr of L = LattPOSet latt L by LATTICE3:def 15;
+   then reconsider x = "\/"(X,L) as Element of LattPOSet latt L;
+   consider a being Element of L such that
+A2: X is_<=_than a and
+A3: for b being Element of L st X is_<=_than b holds a <= b
+     by LATTICE3:def 12;
+A4: ex_sup_of X,L by A2,A3,Th15;
+    then X is_<=_than "\/"(X,L) by Def9;
+    then X is_<=_than x by A1,Th2;
+then A5:  X is_less_than %x by LATTICE3:31;
+      now let a be Element of latt L;
+     reconsider a' = a% as Element of L by A1;
+     assume X is_less_than a;
+      then X is_<=_than a% by LATTICE3:30;
+      then X is_<=_than a' by A1,Th2;
+      then "\/"(X,L) <= a' by A4,Def9;
+      then x <= a% & (%x)% = %x & %x = x by A1,Th1,LATTICE3:def 3,def 4;
+     hence %x [= a by LATTICE3:7;
+    end;
+    then %x = "\/"(X,latt L) by A5,LATTICE3:def 21;
+   hence "\/"(X,L) = "\/"(X, latt L) by LATTICE3:def 4;
+      LattPOSet latt L = RelStr(#the carrier of latt L, LattRel latt L#)
+     by LATTICE3:def 2;
+   then reconsider y = "/\"(X,latt L) as Element of L by A1;
+      "/\"(X,latt L) is_less_than X by LATTICE3:34;
+    then ("/\"(X,latt L))% is_<=_than X & ("/\"(X,latt L))% = y
+     by LATTICE3:28,def 3;
+then A6:  y is_<=_than X by A1,Th2;
+A7:  now let a be Element of L;
+     reconsider a' = a as Element of LattPOSet latt L by A1;
+     assume a is_<=_than X;
+      then a' is_<=_than X by A1,Th2;
+      then %a' is_less_than X by LATTICE3:29;
+      then %a' [= "/\"(X,latt L) & %a' = a' & (%a')% = %a'
+       by LATTICE3:34,def 3,def 4;
+      then a' <= ("/\"(X,latt L))% & ("/\"(X,latt L))% = y by LATTICE3:7,def 3
+;
+     hence a <= y by A1,Th1;
+    end;
+    then ex_inf_of X,L by A6,Th16;
+   hence thesis by A6,A7,Def10;
+  end;
+
+theorem
+   for L being complete Lattice, X being set holds
+  "\/"(X,L) = "\/"(X, LattPOSet L) & "/\"(X,L) = "/\"(X, LattPOSet L)
+  proof let L be complete Lattice, X be set;
+      X is_less_than "\/"(X,L) by LATTICE3:def 21;
+then A1:  X is_<=_than ("\/"(X,L))% by LATTICE3:30;
+A2:  now let r be Element of LattPOSet L; assume
+        X is_<=_than r;
+      then X is_less_than %r by LATTICE3:31;
+      then "\/"(X,L) [= %r & (%r)% = %r & %r = r by LATTICE3:def 3,def 4,def 21
+;
+     hence ("\/"(X,L))% <= r by LATTICE3:7;
+    end;
+    then ex_sup_of X, LattPOSet L by A1,Th15;
+    then "\/"(X, LattPOSet L) = ("\/"(X,L))% by A1,A2,Def9;
+   hence "\/"(X,L) = "\/"(X, LattPOSet L) by LATTICE3:def 3;
+      X is_great_than "/\"(X,L) by LATTICE3:34;
+then A3:  X is_>=_than ("/\"(X,L))% by LATTICE3:28;
+A4:  now let r be Element of LattPOSet L; assume
+        X is_>=_than r;
+      then X is_great_than %r by LATTICE3:29;
+      then %r [= "/\"(X,L) & (%r)% = %r & %r = r by LATTICE3:34,def 3,def 4;
+     hence ("/\"(X,L))% >= r by LATTICE3:7;
+    end;
+    then ex_inf_of X, LattPOSet L by A3,Th16;
+    then "/\"(X, LattPOSet L) = ("/\"(X,L))% by A3,A4,Def10;
+   hence thesis by LATTICE3:def 3;
+  end;
+
+theorem Th30:
+ for L being antisymmetric RelStr
+ for a being Element of L, X being set holds
+  a = "\/"(X,L) & ex_sup_of X,L iff a is_>=_than X &
+   for b being Element of L st b is_>=_than X holds a <= b
+  proof let L be antisymmetric RelStr;
+   let a be Element of L, X be set;
+      (a is_>=_than X & for b being Element of L st b is_>=_than X holds a <= b
+)
+    implies ex_sup_of X,L by Th15;
+   hence thesis by Def9;
+  end;
+
+theorem Th31:
+ for L being antisymmetric RelStr
+ for a being Element of L, X being set holds
+  a = "/\"(X,L) & ex_inf_of X,L iff a is_<=_than X &
+   for b being Element of L st b is_<=_than X holds a >= b
+  proof let L be antisymmetric RelStr;
+   let a be Element of L, X be set;
+      (a is_<=_than X & for b being Element of L st b is_<=_than X holds a >= b
+)
+    implies ex_inf_of X,L by Th16;
+   hence thesis by Def10;
+  end;
+
+theorem
+   for L being complete antisymmetric non empty RelStr
+ for a being Element of L, X being set holds
+  a = "\/"(X,L) iff a is_>=_than X &
+   for b being Element of L st b is_>=_than X holds a <= b
+  proof let L be complete antisymmetric non empty RelStr;
+   let a be Element of L, X be set;
+      ex_sup_of X,L by Th17;
+   hence thesis by Th30;
+  end;
+
+theorem
+   for L being complete antisymmetric (non empty RelStr)
+ for a being Element of L, X being set holds
+  a = "/\"(X,L) iff a is_<=_than X &
+   for b being Element of L st b is_<=_than X holds a >= b
+  proof let L be complete (non empty antisymmetric RelStr);
+   let a be Element of L, X be set;
+      ex_inf_of X,L by Th17;
+   hence thesis by Th31;
+  end;
+
+theorem Th34:
+ for L being RelStr, X,Y being set
+  st X c= Y & ex_sup_of X,L & ex_sup_of Y,L
+  holds "\/"(X,L) <= "\/"(Y,L)
+  proof let L be RelStr, X,Y be set; assume
+A1:  X c= Y & ex_sup_of X,L & ex_sup_of Y,L;
+      "\/"(Y,L) is_>=_than X
+     proof let x be Element of L; assume
+         x in X;
+       then x in Y & "\/"(Y,L) is_>=_than Y by A1,Def9;
+      hence thesis by LATTICE3:def 9;
+     end;
+    hence thesis by A1,Def9;
+  end;
+
+theorem Th35:
+ for L being RelStr, X,Y being set
+  st X c= Y & ex_inf_of X,L & ex_inf_of Y,L
+  holds "/\"(X,L) >= "/\"(Y,L)
+  proof let L be RelStr, X,Y be set; assume
+A1:  X c= Y & ex_inf_of X,L & ex_inf_of Y,L;
+      "/\"(Y,L) is_<=_than X
+     proof let x be Element of L; assume
+         x in X;
+       then x in Y & "/\"(Y,L) is_<=_than Y by A1,Def10;
+      hence thesis by LATTICE3:def 8;
+     end;
+    hence thesis by A1,Def10;
+  end;
+
+theorem
+   for L being antisymmetric transitive RelStr, X,Y being set
+  st ex_sup_of X,L & ex_sup_of Y,L & ex_sup_of X \/ Y, L
+  holds "\/"(X \/ Y, L) = "\/"(X,L)"\/""\/"(Y,L)
+  proof let L be antisymmetric transitive RelStr;
+   let X,Y be set such that
+A1:  ex_sup_of X,L & ex_sup_of Y,L & ex_sup_of X \/ Y, L;
+   set a = "\/"(X,L), b = "\/"(Y,L), c = "\/"(X \/ Y, L);
+      X c= X \/ Y & Y c= X \/ Y by XBOOLE_1:7;
+then A2:  c >= a & c >= b by A1,Th34;
+A3:  a is_>=_than X & b is_>=_than Y by A1,Th30;
+      now let d be Element of L; assume d >= a & d >= b;
+      then d is_>=_than X & d is_>=_than Y by A3,Th4;
+      then d is_>=_than X \/ Y by Th10;
+     hence c <= d by A1,Th30;
+    end;
+   hence "\/"(X \/ Y, L) = "\/"(X,L)"\/""\/"(Y,L) by A2,Th18;
+  end;
+
+theorem
+   for L being antisymmetric transitive RelStr, X,Y being set
+  st ex_inf_of X,L & ex_inf_of Y,L & ex_inf_of X \/ Y, L
+  holds "/\"(X \/ Y, L) = "/\"(X,L) "/\" "/\"(Y,L)
+  proof let L be antisymmetric transitive RelStr;
+   let X,Y be set such that
+A1:  ex_inf_of X,L & ex_inf_of Y,L & ex_inf_of X \/ Y, L;
+   set a = "/\"(X,L), b = "/\"(Y,L), c = "/\"(X \/ Y, L);
+      X c= X \/ Y & Y c= X \/ Y by XBOOLE_1:7;
+then A2:  c <= a & c <= b by A1,Th35;
+A3:  a is_<=_than X & b is_<=_than Y by A1,Th31;
+      now let d be Element of L; assume d <= a & d <= b;
+      then d is_<=_than X & d is_<=_than Y by A3,Th4;
+      then d is_<=_than X \/ Y by Th10;
+     hence c >= d by A1,Th31;
+    end;
+   hence thesis by A2,Th19;
+  end;
+
+definition
+ let L be RelStr;
+ let X be Subset of L;
+ redefine func "\/"(X,L); synonym sup X; func "/\"(X,L); synonym inf X;
+end;
+
+theorem Th38:
+ for L being non empty reflexive antisymmetric RelStr
+ for a being Element of L holds ex_sup_of {a},L & ex_inf_of {a},L
+  proof let L be non empty reflexive antisymmetric RelStr, a be Element of L;
+      a <= a;
+then A1:  a is_<=_than {a} & a is_>=_than {a} by Th7;
+      for b being Element of L st b is_>=_than {a} holds b >= a by Th7;
+   hence ex_sup_of {a},L by A1,Th15;
+      for b being Element of L st b is_<=_than {a} holds b <= a by Th7;
+   hence ex_inf_of {a},L by A1,Th16;
+  end;
+
+theorem
+   for L being non empty reflexive antisymmetric RelStr
+ for a being Element of L holds sup {a} = a & inf {a} = a
+  proof let L be non empty reflexive antisymmetric RelStr;
+   let a be Element of L;
+      a <= a;
+then A1:  a is_<=_than {a} & a is_>=_than {a} by Th7;
+      for b being Element of L st b is_>=_than {a} holds b >= a by Th7;
+   hence sup {a} = a by A1,Th30;
+      for b being Element of L st b is_<=_than {a} holds b <= a by Th7;
+   hence inf {a} = a by A1,Th31;
+  end;
+
+theorem Th40:
+ for L being with_infima Poset, a,b being Element of L holds inf {a,b} = a"/\"b
+  proof let L be with_infima Poset, a,b be Element of L;
+      a"/\"b <= a & a"/\"b <= b by Th23;
+then A1:  a"/\"b is_<=_than {a,b} by Th8;
+A2:  now let c be Element of L; assume c is_<=_than {a,b};
+      then c <= a & c <= b by Th8;
+     hence c <= a"/\"b by Th23;
+    end;
+    then ex_inf_of {a,b}, L by A1,Th16;
+   hence inf {a,b} = a"/\"b by A1,A2,Def10;
+  end;
+
+theorem Th41:
+ for L being with_suprema Poset, a,b being Element of L holds sup {a,b} = a"\/"
+b
+  proof let L be with_suprema Poset, a,b be Element of L;
+      a"\/"b >= a & a"\/"b >= b by Th22;
+then A1:  a"\/"b is_>=_than {a,b} by Th8;
+A2:  now let c be Element of L; assume c is_>=_than {a,b};
+      then c >= a & c >= b by Th8;
+     hence c >= a"\/"b by Th22;
+    end;
+    then ex_sup_of {a,b}, L by A1,Th15;
+   hence sup {a,b} = a"\/"b by A1,A2,Def9;
+  end;
+
+theorem Th42:
+ for L being lower-bounded antisymmetric non empty RelStr holds
+  ex_sup_of {},L & ex_inf_of the carrier of L, L
+  proof let L be lower-bounded antisymmetric non empty RelStr;
+   consider a being Element of L such that
+A1:  a is_<=_than the carrier of L by Def4;
+      now take a; thus a is_>=_than {} by Th6;
+     thus for b being Element of L st b is_>=_than {} holds a <= b
+      by A1,LATTICE3:def 8;
+    end;
+   hence ex_sup_of {},L by Th15;
+      for b being Element of L st the carrier of L is_>=_than b holds a >= b
+     by LATTICE3:def 8;
+   hence thesis by A1,Th16;
+  end;
+
+theorem Th43:
+ for L being upper-bounded antisymmetric non empty RelStr holds
+  ex_inf_of {},L & ex_sup_of the carrier of L, L
+  proof let L be upper-bounded antisymmetric non empty RelStr;
+   consider a being Element of L such that
+A1:  a is_>=_than the carrier of L by Def5;
+      now take a; thus a is_<=_than {} by Th6;
+     thus for b being Element of L st b is_<=_than {} holds a >= b
+      by A1,LATTICE3:def 9;
+    end;
+   hence ex_inf_of {},L by Th16;
+      for b being Element of L st the carrier of L is_<=_than b holds a <= b
+     by LATTICE3:def 9;
+   hence thesis by A1,Th15;
+  end;
+
+definition
+ let L be RelStr;
+ func Bottom L -> Element of L equals:
+Def11:
+   "\/"({},L);
+ correctness;
+ func Top L -> Element of L equals:
+Def12:
+   "/\"({},L);
+ correctness;
+end;
+
+theorem
+   for L being lower-bounded antisymmetric non empty RelStr
+ for x being Element of L holds Bottom L <= x
+  proof let L be lower-bounded antisymmetric non empty RelStr;
+   let x be Element of L;
+      Bottom L = "\/"({},L) & {} is_<=_than x & ex_sup_of {},L by Def11,Th6,
+Th42
+;
+   hence Bottom L <= x by Th30;
+  end;
+
+theorem
+   for L being upper-bounded antisymmetric non empty RelStr
+ for x being Element of L holds x <= Top L
+  proof let L be upper-bounded non empty antisymmetric RelStr;
+   let x be Element of L;
+      Top L = "/\"({},L) & {} is_>=_than x & ex_inf_of {},L by Def12,Th6,Th43;
+   hence x <= Top L by Th31;
+  end;
+
+theorem Th46:
+ for L being non empty RelStr, X,Y being set st
+  for x being Element of L holds x is_>=_than X iff x is_>=_than Y
+ holds ex_sup_of X,L implies ex_sup_of Y,L
+  proof let L be non empty RelStr, X,Y be set such that
+A1:  for x being Element of L holds x is_>=_than X iff x is_>=_than Y;
+   given a being Element of L such that
+A2:  X is_<=_than a and
+A3:  for b being Element of L st X is_<=_than b holds a <= b and
+A4:  for c being Element of L st X is_<=_than c &
+      for b being Element of L st X is_<=_than b holds c <= b
+    holds c = a;
+   take a; thus Y is_<=_than a by A1,A2;
+   hereby let b be Element of L; assume Y is_<=_than b;
+     then X is_<=_than b by A1;
+    hence a <= b by A3;
+   end;
+   let c be Element of L; assume Y is_<=_than c;
+then A5:  X is_<=_than c by A1;
+   assume
+A6:  for b being Element of L st Y is_<=_than b holds c <= b;
+      now let b be Element of L; assume X is_<=_than b;
+      then Y is_<=_than b by A1;
+     hence c <= b by A6;
+    end;
+   hence c = a by A4,A5;
+  end;
+
+theorem Th47:
+ for L being non empty RelStr, X,Y being set st
+  ex_sup_of X,L &
+  for x being Element of L holds x is_>=_than X iff x is_>=_than Y
+ holds "\/"(X,L) = "\/"(Y,L)
+  proof let L be non empty RelStr, X,Y be set; assume
+A1:  ex_sup_of X,L;
+   assume
+A2:  for x being Element of L holds x is_>=_than X iff x is_>=_than Y;
+then A3:  ex_sup_of Y,L by A1,Th46;
+      X is_<=_than "\/"(X,L) by A1,Def9;
+then A4:  Y is_<=_than "\/"(X,L) by A2;
+      now let b be Element of L; assume Y is_<=_than b;
+      then X is_<=_than b by A2;
+     hence "\/"(X,L) <= b by A1,Def9;
+    end;
+   hence thesis by A3,A4,Def9;
+  end;
+
+theorem Th48:
+ for L being non empty RelStr, X,Y being set st
+  for x being Element of L holds x is_<=_than X iff x is_<=_than Y
+ holds ex_inf_of X,L implies ex_inf_of Y,L
+  proof let L be non empty RelStr, X,Y be set such that
+A1:  for x being Element of L holds x is_<=_than X iff x is_<=_than Y;
+   given a being Element of L such that
+A2:  X is_>=_than a and
+A3:  for b being Element of L st X is_>=_than b holds a >= b and
+A4:  for c being Element of L st X is_>=_than c &
+      for b being Element of L st X is_>=_than b holds c >= b
+    holds c = a;
+   take a; thus Y is_>=_than a by A1,A2;
+   hereby let b be Element of L; assume Y is_>=_than b;
+     then X is_>=_than b by A1;
+    hence a >= b by A3;
+   end;
+   let c be Element of L; assume Y is_>=_than c;
+then A5:  X is_>=_than c by A1;
+   assume
+A6:  for b being Element of L st Y is_>=_than b holds c >= b;
+      now let b be Element of L; assume X is_>=_than b;
+      then Y is_>=_than b by A1;
+     hence c >= b by A6;
+    end;
+   hence c = a by A4,A5;
+  end;
+
+theorem Th49:
+ for L being non empty RelStr, X,Y being set st
+  ex_inf_of X,L &
+  for x being Element of L holds x is_<=_than X iff x is_<=_than Y
+ holds "/\"(X,L) = "/\"(Y,L)
+  proof let L be non empty RelStr, X,Y be set; assume
+A1:  ex_inf_of X,L;
+   assume
+A2:  for x being Element of L holds x is_<=_than X iff x is_<=_than Y;
+then A3:  ex_inf_of Y,L by A1,Th48;
+      X is_>=_than "/\"(X,L) by A1,Def10;
+then A4:  Y is_>=_than "/\"(X,L) by A2;
+      now let b be Element of L; assume Y is_>=_than b;
+      then X is_>=_than b by A2;
+     hence "/\"(X,L) >= b by A1,Def10;
+    end;
+   hence thesis by A3,A4,Def10;
+  end;
+
+theorem Th50:
+ for L being non empty RelStr, X being set holds
+   (ex_sup_of X,L iff ex_sup_of X /\ the carrier of L, L) &
+   (ex_inf_of X,L iff ex_inf_of X /\ the carrier of L, L)
+  proof let L be non empty RelStr, X be set;
+   set Y = X /\ the carrier of L;
+      (for x being Element of L holds x is_<=_than X iff x is_<=_than Y) &
+    for x being Element of L holds x is_>=_than X iff x is_>=_than Y by Th5;
+   hence thesis by Th46,Th48;
+  end;
+
+theorem
+   for L being non empty RelStr, X being set
+  st ex_sup_of X,L or ex_sup_of X /\ the carrier of L, L
+  holds "\/"(X,L) = "\/"(X /\ the carrier of L, L)
+  proof let L be non empty RelStr, X be set;
+   set Y = X /\ the carrier of L; assume
+      ex_sup_of X,L or ex_sup_of Y,L;
+    then ex_sup_of X,L &
+    for x being Element of L holds x is_>=_than X iff x is_>=_than Y
+     by Th5,Th50;
+   hence thesis by Th47;
+  end;
+
+theorem
+   for L being non empty RelStr, X being set
+  st ex_inf_of X,L or ex_inf_of X /\ the carrier of L, L
+  holds "/\"(X,L) = "/\"(X /\ the carrier of L, L)
+  proof let L be non empty RelStr, X be set;
+   set Y = X /\ the carrier of L; assume
+      ex_inf_of X,L or ex_inf_of Y,L;
+    then ex_inf_of X,L &
+    for x being Element of L holds x is_<=_than X iff x is_<=_than Y
+     by Th5,Th50;
+   hence thesis by Th49;
+  end;
+
+theorem
+   for L being non empty RelStr st
+  for X being Subset of L holds ex_sup_of X,L
+ holds L is complete
+  proof let L be non empty RelStr such that
+A1:  for X being Subset of L holds ex_sup_of X,L;
+   let X be set; take "\/"(X,L);
+      X /\ the carrier of L c= the carrier of L by XBOOLE_1:17;
+   then reconsider Y = X /\ the carrier of L as Subset of L;
+      ex_sup_of Y,L by A1;
+    then ex_sup_of X,L by Th50;
+   hence thesis by Def9;
+  end;
+
+theorem
+   for L being non empty Poset holds L is with_suprema iff
+   for X being finite non empty Subset of L holds ex_sup_of X,L
+  proof let L be non empty Poset;
+   hereby assume
+A1:   L is with_suprema;
+    let X be finite non empty Subset of L;
+    defpred P[set] means $1 is non empty implies ex_sup_of $1,L;
+A2:  X is finite;
+A3:  P[{}];
+A4:  for x,Y being set st x in X & Y c= X & P[Y] holds P[Y \/ {x}]
+     proof let x,Y be set such that
+A5:    x in X & Y c= X and
+A6:    Y is non empty implies ex_sup_of Y,L;
+      assume Y \/ {x} is non empty;
+      reconsider z = x as Element of L by A5;
+      per cases; suppose Y is empty;
+        then Y \/ {x} = {z};
+       hence ex_sup_of Y \/ {x}, L by Th38;
+      suppose
+A7:      Y is non empty;
+       thus ex_sup_of Y \/ {x}, L
+        proof take a = "\/"(Y,L)"\/"z;
+A8:       ex_sup_of {"\/"(Y,L),z},L by A1,Th20;
+          then Y is_<=_than "\/"(Y,L) & "\/"
+(Y,L) <= a & z <= a by A6,A7,Def9,Th18;
+          then Y is_<=_than a & {x} is_<=_than a by Th7,Th11;
+         hence
+A9:       Y \/ {x} is_<=_than a by Th10;
+         hereby let b be Element of L; assume
+A10:        Y \/ {x} is_<=_than b;
+             Y c= Y \/ {x} & z in {x} by TARSKI:def 1,XBOOLE_1:7;
+           then Y is_<=_than b & z in Y \/ {x} by A10,Th9,XBOOLE_0:def 2;
+           then "\/"(Y,L) <= b & z <= b by A6,A7,A10,Def9,LATTICE3:def 9;
+          hence b >= a by A8,Th18;
+         end;
+         let c be Element of L such that
+A11:       Y \/ {x} is_<=_than c and
+A12:       for b being Element of L st Y \/ {x} is_<=_than b holds b >= c;
+A13:       a >= c by A9,A12;
+            Y c= Y \/ {x} & z in {x} by TARSKI:def 1,XBOOLE_1:7;
+          then Y is_<=_than c & z in Y \/ {x} by A11,Th9,XBOOLE_0:def 2;
+          then "\/"(Y,L) <= c & z <= c by A6,A7,A11,Def9,LATTICE3:def 9;
+          then c >= a by A8,Th18;
+         hence c = a by A13,ORDERS_1:25;
+        end;
+     end;
+       P[X] from Finite(A2,A3,A4);
+    hence ex_sup_of X,L;
+   end;
+   assume for X being finite non empty Subset of L holds ex_sup_of X,L;
+    then for a,b being Element of L holds ex_sup_of {a,b},L;
+   hence thesis by Th20;
+  end;
+
+theorem
+   for L being non empty Poset holds L is with_infima iff
+  for X being finite non empty Subset of L holds ex_inf_of X,L
+  proof let L be non empty Poset;
+   hereby assume
+A1:   L is with_infima;
+    let X be finite non empty Subset of L;
+    defpred P[set] means $1 is non empty implies ex_inf_of $1,L;
+A2:   X is finite;
+A3:   P[{}];
+A4:   for x,Y being set st x in X & Y c= X & P[Y] holds P[Y \/ {x}]
+      proof let x,Y be set such that
+A5:    x in X & Y c= X and
+A6:    Y is non empty implies ex_inf_of Y,L;
+      assume Y \/ {x} is non empty;
+      reconsider z = x as Element of L by A5;
+      per cases; suppose Y is empty;
+        then Y \/ {x} = {z};
+       hence ex_inf_of Y \/ {x}, L by Th38;
+      suppose
+A7:      Y is non empty;
+       thus ex_inf_of Y \/ {x}, L
+        proof take a = "/\"(Y,L)"/\"z;
+A8:       ex_inf_of {"/\"(Y,L),z},L by A1,Th21;
+          then Y is_>=_than "/\"(Y,L) & "/\"(Y,L) >= a & z >=
+ a by A6,A7,Def10,Th19;
+          then Y is_>=_than a & {x} is_>=_than a by Th7,Th12;
+         hence
+A9:       Y \/ {x} is_>=_than a by Th10;
+         hereby let b be Element of L; assume
+A10:        Y \/ {x} is_>=_than b;
+             Y c= Y \/ {x} & z in {x} by TARSKI:def 1,XBOOLE_1:7;
+           then Y is_>=_than b & z in Y \/ {x} by A10,Th9,XBOOLE_0:def 2;
+           then "/\"(Y,L) >= b & z >= b by A6,A7,A10,Def10,LATTICE3:def 8;
+          hence b <= a by A8,Th19;
+         end;
+         let c be Element of L such that
+A11:       Y \/ {x} is_>=_than c and
+A12:       for b being Element of L st Y \/ {x} is_>=_than b holds b <= c;
+A13:       a <= c by A9,A12;
+            Y c= Y \/ {x} & z in {x} by TARSKI:def 1,XBOOLE_1:7;
+          then Y is_>=_than c & z in Y \/ {x} by A11,Th9,XBOOLE_0:def 2;
+          then "/\"(Y,L) >= c & z >= c by A6,A7,A11,Def10,LATTICE3:def 8;
+          then c <= a by A8,Th19;
+         hence c = a by A13,ORDERS_1:25;
+        end;
+     end;
+     P[X] from Finite(A2,A3,A4);
+    hence ex_inf_of X,L;
+   end;
+   assume for X being finite non empty Subset of L holds ex_inf_of X,L;
+    then for a,b being Element of L holds ex_inf_of {a,b},L;
+   hence thesis by Th21;
+  end;
+
+begin :: Relational substructures
+
+theorem Th56:
+ for X being set, R being Relation of X holds R = R|_2 X
+  proof let X be set, R be Relation of X;
+      R /\ [:X, X:] = R by XBOOLE_1:28;
+   hence thesis by WELLORD1:def 6;
+  end;
+
+definition
+ let L be RelStr;
+ mode SubRelStr of L -> RelStr means :Def13:
+  the carrier of it c= the carrier of L &
+  the InternalRel of it c= the InternalRel of L;
+ existence;
+end;
+
+definition
+ let L be RelStr;
+ let S be SubRelStr of L;
+ attr S is full means :Def14:
+  the InternalRel of S = (the InternalRel of L)|_2 the carrier of S;
+end;
+
+definition
+ let L be RelStr;
+ cluster strict full SubRelStr of L;
+ existence
+  proof set S = RelStr(#the carrier of L, the InternalRel of L#);
+      S is SubRelStr of L
+     proof thus the carrier of S c= the carrier of L;
+      thus thesis;
+     end;
+   then reconsider S as SubRelStr of L;
+   take S; thus S is strict;
+   thus the InternalRel of S = (the InternalRel of L)|_2 the carrier of S
+     by Th56;
+  end;
+end;
+
+definition
+ let L be non empty RelStr;
+ cluster non empty full strict SubRelStr of L;
+ existence
+  proof set S = RelStr(#the carrier of L, the InternalRel of L#);
+      S is SubRelStr of L
+     proof thus the carrier of S c= the carrier of L;
+      thus thesis;
+     end;
+   then reconsider S as SubRelStr of L;
+   take S;
+   thus the carrier of S is non empty;
+   thus the InternalRel of S = (the InternalRel of L)|_2 the carrier of S
+     by Th56;
+   thus thesis;
+  end;
+end;
+
+theorem Th57:
+ for L being RelStr, X being Subset of L holds
+  RelStr(#X, (the InternalRel of L)|_2 X#) is full SubRelStr of L
+  proof let L be RelStr, X be Subset of L;
+   set S = RelStr(#X, (the InternalRel of L)|_2 X#);
+      S is SubRelStr of L
+     proof thus the carrier of S c= the carrier of L;
+      thus the InternalRel of S c= the InternalRel of L by WELLORD1:15;
+     end;
+   then reconsider S as SubRelStr of L;
+      S is full
+     proof
+      thus the InternalRel of S = (the InternalRel of L)|_2 the carrier of S;
+     end;
+   hence thesis;
+  end;
+
+theorem Th58:
+ for L being RelStr, S1,S2 being full SubRelStr of L
+  st the carrier of S1 = the carrier of S2
+  holds the RelStr of S1 = the RelStr of S2
+  proof let L be RelStr, S1,S2 be full SubRelStr of L;
+      the InternalRel of S1 = (the InternalRel of L)|_2 the carrier of S1 &
+    the InternalRel of S2 = (the InternalRel of L)|_2 the carrier of S2
+     by Def14;
+   hence thesis;
+  end;
+
+definition let L be RelStr;
+ let X be Subset of L;
+ func subrelstr X -> full strict SubRelStr of L means
+    the carrier of it = X;
+ uniqueness by Th58;
+ existence
+  proof RelStr(#X, (the InternalRel of L)|_2 X#) is full SubRelStr of L
+    by Th57;
+   hence thesis;
+  end;
+end;
+
+theorem Th59:
+ for L being non empty RelStr, S being non empty SubRelStr of L
+ for x being Element of S holds x is Element of L
+  proof let L be non empty RelStr, S be non empty SubRelStr of L;
+   let x be Element of S;
+      x in the carrier of S & the carrier of S c= the carrier of L by Def13;
+   hence thesis;
+  end;
+
+theorem Th60:
+ for L being RelStr, S being SubRelStr of L
+ for a,b being Element of L for x,y being Element of S
+  st x = a & y = b & x <= y holds a <= b
+  proof let L be RelStr, S be SubRelStr of L;
+   let a,b be Element of L, x,y be Element of S such that
+A1:  x = a & y = b;
+A2:  the InternalRel of S c= the InternalRel of L by Def13;
+   assume [x,y] in the InternalRel of S;
+   hence [a,b] in the InternalRel of L by A1,A2;
+  end;
+
+theorem Th61:
+ for L being RelStr, S being full SubRelStr of L
+ for a,b being Element of L for x,y being Element of S
+  st x = a & y = b & a <= b & x in the carrier of S & y in the carrier of S
+  holds x <= y
+  proof let L be RelStr, S be full SubRelStr of L;
+    let a,b be Element of L, x,y be Element of S such that
+A1:   x = a & y = b;
+A2:   the InternalRel of S = (the InternalRel of L)|_2 the carrier of S
+      by Def14;
+   assume
+A3:  [a,b] in the InternalRel of L;
+   assume x in the carrier of S & y in the carrier of S;
+    then [x,y] in [:the carrier of S,the carrier of S:] by ZFMISC_1:106;
+   hence [x,y] in the InternalRel of S by A1,A2,A3,WELLORD1:16;
+  end;
+
+theorem Th62:
+ for L being non empty RelStr, S being non empty full SubRelStr of L
+ for X being set, a being Element of L for x being Element of S st x = a
+  holds (a is_<=_than X implies x is_<=_than X) &
+        (a is_>=_than X implies x is_>=_than X)
+  proof let L be non empty RelStr, S be non empty full SubRelStr of L,X be set;
+   let a be Element of L; let x be Element of S; assume
+A1:  x = a;
+   hereby assume
+A2:   a is_<=_than X;
+    thus x is_<=_than X
+     proof let y be Element of S; reconsider b = y as Element of L by Th59;
+      assume y in X;
+       then a <= b & x in the carrier of S & y in the carrier of S by A2,
+LATTICE3:def 8;
+      hence thesis by A1,Th61;
+     end;
+   end;
+   assume
+A3:  a is_>=_than X;
+   let y be Element of S; reconsider b = y as Element of L by Th59;
+   assume y in X;
+    then a >= b & x in the carrier of S & y in
+ the carrier of S by A3,LATTICE3:def 9;
+   hence thesis by A1,Th61;
+  end;
+
+theorem Th63:
+ for L being non empty RelStr, S being non empty SubRelStr of L
+ for X being Subset of S
+ for a being Element of L for x being Element of S st x = a
+  holds (x is_<=_than X implies a is_<=_than X) &
+        (x is_>=_than X implies a is_>=_than X)
+  proof let L be non empty RelStr, S be non empty SubRelStr of L;
+   let X be Subset of S;
+   let a be Element of L; let x be Element of S; assume
+A1:  x = a;
+   hereby assume
+A2:   x is_<=_than X;
+    thus a is_<=_than X
+     proof let b be Element of L; assume
+A3:     b in X; then reconsider y = b as Element of S;
+         x <= y by A2,A3,LATTICE3:def 8;
+      hence thesis by A1,Th60;
+     end;
+   end;
+   assume
+A4:  x is_>=_than X;
+   let b be Element of L; assume
+A5:  b in X; then reconsider y = b as Element of S;
+      x >= y by A4,A5,LATTICE3:def 9;
+   hence thesis by A1,Th60;
+  end;
+
+definition
+ let L be reflexive RelStr;
+ cluster -> reflexive (full SubRelStr of L);
+ coherence
+  proof let S be full SubRelStr of L;
+A1:  the carrier of S c= the carrier of L &
+    the InternalRel of S = (the InternalRel of L)|_2 the carrier of S
+     by Def13,Def14;
+   let x be set; assume
+A2:   x in the carrier of S;
+then A3:  x in the carrier of L & [x,x] in [:the carrier of S, the carrier of S
+:]
+     by A1,ZFMISC_1:106;
+      the InternalRel of L is_reflexive_in the carrier of L
+     by ORDERS_1:def 4;
+    then [x,x] in the InternalRel of L by A1,A2,RELAT_2:def 1;
+   hence [x,x] in the InternalRel of S by A1,A3,WELLORD1:16;
+  end;
+end;
+
+definition
+ let L be transitive RelStr;
+ cluster -> transitive (full SubRelStr of L);
+ coherence
+  proof let S be full SubRelStr of L;
+   let x,y,z be Element of S;
+   assume
+A1:  x <= y & y <= z;
+    then [x,y] in the InternalRel of S & [y,z] in the InternalRel of S
+     by ORDERS_1:def 9;
+then A2:  x in the carrier of S & y in the carrier of S & z in the carrier of S
+     by ZFMISC_1:106;
+      the carrier of S c= the carrier of L by Def13;
+   then reconsider a = x, b = y, c = z as Element of L by A2;
+      a <= b & b <= c by A1,Th60;
+    then a <= c by ORDERS_1:26;
+   hence thesis by A2,Th61;
+  end;
+end;
+
+definition
+ let L be antisymmetric RelStr;
+ cluster -> antisymmetric (full SubRelStr of L);
+ coherence
+  proof let S be full SubRelStr of L;
+   let x,y be Element of S;
+   assume
+A1:  x <= y & y <= x;
+    then [x,y] in the InternalRel of S by ORDERS_1:def 9;
+then A2:  x in the carrier of S & y in the carrier of S by ZFMISC_1:106;
+    the carrier of S c= the carrier of L by Def13;
+   then reconsider a = x, b = y as Element of L by A2;
+      a <= b & b <= a by A1,Th60;
+   hence thesis by ORDERS_1:25;
+  end;
+end;
+
+definition
+ let L be non empty RelStr;
+ let S be SubRelStr of L;
+ attr S is meet-inheriting means:Def16:
+  for x,y being Element of L st
+    x in the carrier of S & y in the carrier of S & ex_inf_of {x,y},L
+   holds inf {x,y} in the carrier of S;
+ attr S is join-inheriting means:Def17:
+  for x,y being Element of L st
+    x in the carrier of S & y in the carrier of S & ex_sup_of {x,y},L
+   holds sup {x,y} in the carrier of S;
+end;
+
+definition
+ let L be non empty RelStr;
+ let S be SubRelStr of L;
+ attr S is infs-inheriting means
+    for X being Subset of S st ex_inf_of X,L holds "/\"(X,L) in the carrier of
+S
+;
+ attr S is sups-inheriting means
+    for X being Subset of S st ex_sup_of X,L holds "\/"(X,L) in the carrier of
+S
+;
+end;
+
+definition
+ let L be non empty RelStr;
+ cluster infs-inheriting -> meet-inheriting SubRelStr of L;
+ coherence
+  proof let S be SubRelStr of L; assume
+A1:  for X being Subset of S st ex_inf_of X,L holds "/\"(X,L) in
+ the carrier of S;
+   let x,y be Element of L; assume
+      x in the carrier of S & y in the carrier of S;
+    then {x,y} c= the carrier of S by ZFMISC_1:38;
+    then {x,y} is Subset of S;
+   hence thesis by A1;
+  end;
+ cluster sups-inheriting -> join-inheriting SubRelStr of L;
+ coherence
+  proof let S be SubRelStr of L; assume
+A2:  for X being Subset of S st ex_sup_of X,L holds "\/"(X,L) in
+ the carrier of S;
+   let x,y be Element of L; assume
+      x in the carrier of S & y in the carrier of S;
+    then {x,y} c= the carrier of S by ZFMISC_1:38;
+    then {x,y} is Subset of S;
+   hence thesis by A2;
+  end;
+end;
+
+definition
+ let L be non empty RelStr;
+ cluster infs-inheriting sups-inheriting non empty full strict SubRelStr of L;
+ existence
+  proof the carrier of L c= the carrier of L &
+    (the InternalRel of L)|_2 the carrier of L = the InternalRel of L
+     by Th56;
+   then reconsider S = RelStr(#the carrier of L, the InternalRel of L#)
+    as non empty full strict SubRelStr of L by Th57;
+   take S;
+   thus S is infs-inheriting proof let X be Subset of S; thus thesis; end;
+   thus S is sups-inheriting proof let X be Subset of S; thus thesis; end;
+   thus thesis;
+  end;
+end;
+
+theorem Th64:
+ for L being non empty transitive RelStr
+ for S being non empty full SubRelStr of L
+ for X being Subset of S st ex_inf_of X,L & "/\"(X,L) in the carrier of S
+  holds ex_inf_of X,S & "/\"(X,S) = "/\"(X,L)
+  proof let L be non empty transitive RelStr;
+   let S be non empty full SubRelStr of L;
+   let X be Subset of S; assume that
+A1:  ex_inf_of X,L and
+A2: "/\"(X,L) in the carrier of S;
+   reconsider a = "/\"(X,L) as Element of S by A2;
+   consider a' being Element of L such that
+A3:  X is_>=_than a' & for b being Element of L st X is_>=_than b holds b <= a'
+   and
+    for c being Element of L st X is_>=_than c &
+     for b being Element of L st X is_>=_than b holds b <= c
+    holds c = a' by A1,Def8;
+A4:  a' = "/\"(X,L) by A1,A3,Def10;
+A5:  now "/\"(X,L) is_<=_than X by A1,Def10;
+     hence a is_<=_than X by Th62;
+     let b be Element of S; reconsider b' = b as Element of L by Th59;
+     assume b is_<=_than X;
+      then b' is_<=_than X by Th63;
+      then b' <= "/\"(X,L) by A1,Def10;
+     hence b <= a by Th61;
+    end;
+   thus ex_inf_of X,S
+    proof take a; thus a is_<=_than X &
+      for b being Element of S st b is_<=_than X holds b <= a by A5;
+     let c be Element of S; reconsider c' = c as Element of L by Th59;
+     assume X is_>=_than c;
+then A6:    X is_>=_than c' by Th63;
+     assume for b being Element of S st X is_>=_than b holds b <= c;
+then A7:   a <= c by A5;
+        now let b be Element of L; assume X is_>=_than b;
+        then b <= a' & a' <= c' by A3,A4,A7,Th60;
+       hence b <= c' by ORDERS_1:26;
+      end;
+     hence c = a by A1,A6,Def10;
+    end;
+   hence thesis by A5,Def10;
+  end;
+
+theorem Th65:
+ for L being non empty transitive RelStr
+ for S being non empty full SubRelStr of L
+ for X being Subset of S st ex_sup_of X,L & "\/"(X,L) in the carrier of S
+  holds ex_sup_of X,S & "\/"(X,S) = "\/"(X,L)
+  proof let L be non empty transitive RelStr;
+   let S be non empty full SubRelStr of L;
+   let X be Subset of S; assume that
+A1:  ex_sup_of X,L and
+A2:  "\/"(X,L) in the carrier of S;
+   reconsider a = "\/"(X,L) as Element of S by A2;
+   consider a' being Element of L such that
+A3:  X is_<=_than a' & for b being Element of L st X is_<=_than b holds b >= a'
+   and
+    for c being Element of L st X is_<=_than c &
+     for b being Element of L st X is_<=_than b holds b >= c
+    holds c = a' by A1,Def7;
+A4:  a' = "\/"(X,L) by A1,A3,Def9;
+A5:  now "\/"(X,L) is_>=_than X by A1,Def9;
+     hence a is_>=_than X by Th62;
+     let b be Element of S; reconsider b' = b as Element of L by Th59;
+     assume b is_>=_than X;
+      then b' is_>=_than X by Th63;
+      then b' >= "\/"(X,L) by A1,Def9;
+     hence b >= a by Th61;
+    end;
+   thus ex_sup_of X,S
+    proof take a; thus a is_>=_than X &
+      for b being Element of S st b is_>=_than X holds b >= a by A5;
+     let c be Element of S; reconsider c' = c as Element of L by Th59;
+     assume X is_<=_than c;
+then A6:    X is_<=_than c' by Th63;
+     assume for b being Element of S st X is_<=_than b holds b >= c;
+then A7:   a >= c by A5;
+        now let b be Element of L; assume X is_<=_than b;
+        then b >= a' & a' >= c' by A3,A4,A7,Th60;
+       hence b >= c' by ORDERS_1:26;
+      end;
+     hence c = a by A1,A6,Def9;
+    end;
+   hence thesis by A5,Def9;
+  end;
+
+theorem
+  for L being non empty transitive RelStr
+ for S being non empty full SubRelStr of L
+ for x,y being Element of S st ex_inf_of {x,y},L &
+    "/\"({x,y},L) in the carrier of S
+  holds ex_inf_of {x,y},S & "/\"({x,y},S) = "/\"({x,y},L) by Th64;
+
+theorem
+  for L being non empty transitive RelStr
+ for S being non empty full SubRelStr of L
+ for x,y being Element of S st ex_sup_of {x,y},L &
+     "\/"({x,y},L) in the carrier of S
+  holds ex_sup_of {x,y},S & "\/"({x,y},S) = "\/"({x,y},L) by Th65;
+
+definition
+ let L be with_infima antisymmetric transitive RelStr;
+ cluster -> with_infima (non empty meet-inheriting full SubRelStr of L);
+ coherence
+  proof let S be non empty meet-inheriting full SubRelStr of L;
+      now let x,y be Element of S;
+     reconsider a = x, b = y as Element of L by Th59;
+A1:   ex_inf_of {a,b}, L by Th21;
+      then "/\"({a,b},L) in the carrier of S by Def16;
+     hence ex_inf_of {x,y}, S by A1,Th64;
+    end;
+   hence thesis by Th21;
+  end;
+end;
+
+definition
+ let L be with_suprema antisymmetric transitive RelStr;
+ cluster -> with_suprema (non empty join-inheriting full SubRelStr of L);
+ coherence
+  proof let S be non empty join-inheriting full SubRelStr of L;
+      now let x,y be Element of S;
+     reconsider a = x, b = y as Element of L by Th59;
+A1:  ex_sup_of {a,b}, L by Th20;
+     then "\/"({a,b},L) in the carrier of S by Def17;
+     hence ex_sup_of {x,y}, S by A1,Th65;
+    end;
+   hence thesis by Th20;
+  end;
+end;
+
+theorem
+   for L being complete (non empty Poset)
+ for S being non empty full SubRelStr of L
+ for X being Subset of S st "/\"(X,L) in the carrier of S
+  holds "/\"(X,S) = "/\"(X,L)
+  proof let L be complete (non empty Poset);
+   let S be non empty full SubRelStr of L;
+   let X be Subset of S such that
+A1:   "/\"(X,L) in the carrier of S;
+     ex_inf_of X,L by Th17;
+   hence thesis by A1,Th64;
+  end;
+
+theorem
+   for L being complete (non empty Poset)
+ for S being non empty full SubRelStr of L
+ for X being Subset of S st "\/"(X,L) in the carrier of S
+  holds "\/"(X,S) = "\/"(X,L)
+  proof let L be complete (non empty Poset);
+   let S be non empty full SubRelStr of L;
+   let X be Subset of S such that
+A1: "\/"(X,L) in the carrier of S;
+     ex_sup_of X,L by Th17;
+   hence thesis by A1,Th65;
+  end;
+
+theorem
+   for L being with_infima Poset
+ for S being meet-inheriting non empty full SubRelStr of L
+ for x,y being Element of S, a,b be Element of L
+  st a = x & b = y holds x"/\"y = a"/\"b
+  proof let L be with_infima Poset;
+   let S be meet-inheriting non empty full SubRelStr of L;
+   let x,y be Element of S, a,b be Element of L such that
+A1:  a = x & b = y;
+A2:  ex_inf_of {a,b},L by Th21;
+    then "/\"({x,y},L) in the carrier of S by A1,Def16;
+   then ex_inf_of {x,y},S & "/\"({x,y},S) = "/\"({x,y},L) & a"/\"b = inf {a,b}
+     by A1,A2,Th40,Th64;
+   hence thesis by A1,Th40;
+  end;
+
+theorem
+   for L being with_suprema Poset
+ for S being join-inheriting non empty full SubRelStr of L
+ for x,y being Element of S, a,b be Element of L
+  st a = x & b = y holds x"\/"y = a"\/"b
+  proof let L be with_suprema Poset;
+   let S be join-inheriting non empty full SubRelStr of L;
+   let x,y be Element of S, a,b be Element of L such that
+A1:  a = x & b = y;
+A2: ex_sup_of {a,b},L by Th20;
+    then "\/"({x,y},L) in the carrier of S by A1,Def17;
+    then ex_sup_of {x,y},S & "\/"({x,y},S) = "\/"({x,y},L) & a"\/"b = sup {a,b
+}
+     by A1,A2,Th41,Th65;
+   hence thesis by A1,Th41;
+  end;

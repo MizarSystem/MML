@@ -1,0 +1,1041 @@
+:: Real Linear Space of Real Sequences
+::  by Noboru Endou , Yasumasa Suzuki and Yasunari Shidama
+::
+:: Received April 3, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, RELAT_1, ABSVALUE, ORDINAL2,
+      BINOP_1, SQUARE_1, PROB_1, FUNCT_2, RLSUB_1, SEQ_1, SEQ_2, SERIES_1,
+      BHSP_1, SUPINF_2, RSSPACE;
+ notation TARSKI, SUBSET_1, XBOOLE_0, ZFMISC_1, ORDINAL1, NUMBERS, XREAL_0,
+      STRUCT_0, REAL_1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, RLVECT_1,
+      ABSVALUE, RLSUB_1, BHSP_1, SQUARE_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1,
+      BINOP_1;
+ constructors REAL_1, NAT_1, DOMAIN_1, SQUARE_1, SEQ_2, SERIES_1, PREPOWER,
+      PARTFUN1, BINOP_1, RLSUB_1, BHSP_3, MEMBERED;
+ clusters RELSET_1, STRUCT_0, RLVECT_1, SEQ_1, BHSP_1, XREAL_0, MEMBERED;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+ definitions TARSKI, RLVECT_1;
+ theorems XBOOLE_0, STRUCT_0, RELAT_1, SQUARE_1, TARSKI, ABSVALUE, ZFMISC_1,
+      REAL_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1, COMSEQ_3, INT_1, FUNCT_1, NAT_1,
+      FUNCT_2, RLVECT_1, RLSUB_1, SEQ_4, BINOP_1, XCMPLX_0, XCMPLX_1;
+ schemes NAT_1, BINOP_1, SEQ_1, XBOOLE_0, COMPLSP1, FUNCT_2;
+
+begin :: Sum of the result of operation with each element of a set
+
+Lm1:
+for seq being Real_Sequence holds seq in Funcs(NAT,REAL)
+proof
+   let seq be Real_Sequence;
+A1:dom seq = NAT &
+   for x being set st x in NAT holds seq.x is real by SEQ_1:3;
+     for y being set st y in rng seq holds y in REAL
+   proof
+     let y being set;
+     assume y in rng seq;
+     then consider x being set such that
+A2:  x in dom seq & y = seq.x by FUNCT_1:def 5;
+     thus thesis by A2;
+   end;
+   then rng seq c= REAL by TARSKI:def 3;
+   hence thesis by A1,FUNCT_2:def 2;
+end;
+
+definition
+ func the_set_of_RealSequences -> non empty set means :Def1:
+  for x being set holds x in it iff x is Real_Sequence;
+  existence
+  proof
+    defpred P[set] means $1 is Real_Sequence;
+    consider IT being set such that
+A1:  for x being set holds x in IT
+      iff x in Funcs(NAT,REAL) & P[x] from Separation;
+      IT is non empty
+    proof
+      consider zeroseq be Real_Sequence;
+        zeroseq in Funcs(NAT,REAL) by Lm1;
+      hence thesis by A1;
+    end;
+    then reconsider IT as non empty set;
+    take IT;
+      for x being set holds x is Real_Sequence implies x in IT
+    proof
+      let x be set;
+      assume
+A2:   x is Real_Sequence;
+      then x in Funcs(NAT,REAL) by Lm1;
+      hence thesis by A1,A2;
+    end;
+    hence thesis by A1;
+  end;
+  uniqueness
+  proof
+    let X1,X2 be non empty set;
+    assume that
+A3: for x being set holds x in X1 iff x is Real_Sequence and
+A4: for x being set holds x in X2 iff x is Real_Sequence;
+A5: X1 c= X2
+    proof
+      let x be set;
+      assume x in X1;
+      then x is Real_Sequence by A3;
+      hence thesis by A4;
+    end;
+      X2 c= X1
+    proof
+      let x be set;
+      assume x in X2;
+      then x is Real_Sequence by A4;
+      hence thesis by A3;
+    end;
+    hence thesis by A5,XBOOLE_0:def 10;
+  end;
+end;
+
+definition
+  let a be set such that
+  A1:a in the_set_of_RealSequences;
+  func seq_id(a) -> Real_Sequence equals :Def2:
+   a;
+  coherence by A1,Def1;
+end;
+
+definition
+ let a be set such that
+ A1:a in REAL;
+ func R_id(a) -> Real equals :Def3:
+  a;
+coherence by A1;
+end;
+
+theorem Th1:
+ex ADD be BinOp of the_set_of_RealSequences st
+  (for a,b being Element of the_set_of_RealSequences
+    holds ADD.(a,b) = seq_id(a)+seq_id(b)) & ADD is commutative associative
+proof
+  defpred P[Element of the_set_of_RealSequences,
+  Element of the_set_of_RealSequences,Element of the_set_of_RealSequences]
+          means  $3=seq_id($1)+seq_id($2);
+A1: for x,y being Element of the_set_of_RealSequences
+      ex z being Element of the_set_of_RealSequences st P[x,y,z]
+  proof
+  let x,y be Element of the_set_of_RealSequences;
+    seq_id(x)+seq_id(y) is Element of the_set_of_RealSequences by Def1;
+  hence thesis;
+end;
+  ex ADD be BinOp of the_set_of_RealSequences st
+     for a,b being Element of the_set_of_RealSequences
+       holds P[a,b,ADD.(a,b)] from BinOpEx(A1);
+then consider ADD be BinOp of the_set_of_RealSequences such that
+A2:     for a,b being Element of the_set_of_RealSequences
+         holds ADD.(a,b) = seq_id(a)+seq_id(b);
+A3: ADD is commutative
+ proof
+    now let a,b being Element of the_set_of_RealSequences;
+  thus ADD.(a,b) = seq_id(a)+seq_id(b) by A2
+             .= ADD.(b,a) by A2;
+  end;
+  hence thesis by BINOP_1:def 2;
+  end;
+  ADD is associative
+ proof
+    now let a,b,c be Element of the_set_of_RealSequences;
+  A4: seq_id(ADD.(b,c)) = ADD.(b,c) by Def2
+                       .=seq_id(b)+seq_id(c) by A2;
+  A5: seq_id(a)+seq_id(b) = ADD.(a,b) by A2
+                        .=seq_id(ADD.(a,b)) by Def2;
+  thus ADD.(a,ADD.(b,c)) = seq_id(a)+seq_id(ADD.(b,c)) by A2
+             .= (seq_id(a)+seq_id(b))+seq_id(c) by A4,SEQ_1:20
+             .= ADD.(ADD.(a,b),c) by A2,A5;
+  end;
+  hence thesis by BINOP_1:def 3;
+  end;
+hence thesis by A2,A3;
+end;
+
+theorem Th2:
+ex f be Function of [: REAL, the_set_of_RealSequences :],
+  the_set_of_RealSequences st
+   for r,x be set st r in REAL & x in the_set_of_RealSequences
+      holds f.[r,x] = R_id(r) (#) seq_id(x)
+proof
+  deffunc F(set,set) = R_id($1) (#) seq_id($2);
+A1: for r,x be set st r in REAL & x in the_set_of_RealSequences holds
+   F(r,x) in the_set_of_RealSequences by Def1;
+    ex f be Function of [:REAL, the_set_of_RealSequences:],
+  the_set_of_RealSequences st
+   for r,x be set st r in REAL & x in the_set_of_RealSequences
+      holds f.[r,x] = F(r,x) from Lambda2(A1);
+  hence thesis;
+end;
+
+definition
+  func l_add -> BinOp of the_set_of_RealSequences means :Def4:
+    for a,b being Element of the_set_of_RealSequences holds
+      it.(a,b) = seq_id(a)+seq_id(b);
+  existence by Th1;
+  uniqueness
+    proof
+      deffunc O(Element of the_set_of_RealSequences,
+      Element of the_set_of_RealSequences)=seq_id($1)+seq_id($2);
+      for o1,o2 being BinOp of the_set_of_RealSequences st
+        (for a,b being Element of the_set_of_RealSequences
+        holds o1.(a,b) = O(a,b)) &
+        (for a,b being Element of the_set_of_RealSequences
+        holds o2.(a,b) = O(a,b))
+        holds o1 = o2 from BinOpDefuniq;
+       hence thesis;
+    end;
+end;
+
+definition
+ func l_mult -> Function of [: REAL, the_set_of_RealSequences :],
+  the_set_of_RealSequences means :Def5:
+   for r,x be set st r in REAL & x in the_set_of_RealSequences
+      holds it.[r,x] = R_id(r)(#)seq_id(x);
+existence by Th2;
+uniqueness
+proof
+let mult1,mult2 be Function of [: REAL, the_set_of_RealSequences :],
+  the_set_of_RealSequences such that
+  A1:for r,x be set st r in REAL & x in the_set_of_RealSequences
+      holds mult1.[r,x] = R_id(r)(#)seq_id(x)
+   and
+  A2: for r,x be set st r in REAL & x in the_set_of_RealSequences
+      holds mult2.[r,x] = R_id(r)(#)seq_id(x);
+     for r being Element of REAL
+        for x being Element of the_set_of_RealSequences holds
+          mult1.(r,x) = mult2.(r,x)
+   proof
+    let r being Element of REAL;
+    let x  being Element of the_set_of_RealSequences;
+    thus mult1.(r,x) = mult1.[r,x] by BINOP_1:def 1
+                    .= R_id(r)(#)seq_id(x) by A1
+                    .= mult2.[r,x] by A2
+                    .= mult2.(r,x) by BINOP_1:def 1;
+  end;
+  hence thesis by BINOP_1:2;
+end;
+end;
+
+definition
+ func Zeroseq -> Element of the_set_of_RealSequences means :Def6:
+ for n be Nat holds (seq_id it).n=0;
+existence
+proof
+  deffunc F(set)= 0;
+ consider zeroseq be Real_Sequence such that
+    A1: for n be Nat holds zeroseq.n=F(n) from ExRealSeq;
+    A2: zeroseq is Element of the_set_of_RealSequences by Def1;
+    reconsider z1=zeroseq as set;
+     z1 in the_set_of_RealSequences by Def1;
+     then seq_id(zeroseq) = zeroseq by Def2;
+    hence thesis by A1,A2;
+end;
+uniqueness
+proof
+   let x,y be Element of the_set_of_RealSequences such that
+A3:for n be Nat holds (seq_id(x)).n=0 and
+A4:for n be Nat holds (seq_id(y)).n=0;
+A5:for s be set st s in NAT holds (seq_id(x)).s = (seq_id(y)).s
+   proof
+     let s be set;
+     assume
+A6:  s in NAT;
+     then (seq_id y).s = 0 by A4;
+     hence thesis by A3,A6;
+   end;
+     x=seq_id(x) by Def2
+   .=seq_id(y) by A5,SEQ_1:8;
+   hence thesis by Def2;
+end;
+end;
+
+theorem Th3:
+for x be Real_Sequence holds seq_id x = x
+proof
+let x be Real_Sequence;
+    reconsider x1=x as set;
+     x1 in the_set_of_RealSequences by Def1;
+    hence seq_id(x) = x by Def2;
+end;
+
+theorem Th4:
+for v,w being VECTOR of
+ RLSStruct(#the_set_of_RealSequences,Zeroseq,l_add,l_mult#) holds
+  v + w = seq_id(v)+seq_id(w)
+proof
+   let v,w being VECTOR of
+     RLSStruct (# the_set_of_RealSequences,Zeroseq, l_add,l_mult #);
+   thus v + w = l_add.[v,w] by RLVECT_1:def 3
+      .=l_add.(v,w) by BINOP_1:def 1
+      .=seq_id(v)+seq_id(w) by Def4;
+end;
+
+theorem Th5:
+for r being Real,
+ v being VECTOR of RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #)
+  holds r * v = r(#)seq_id(v)
+proof
+   let r be Real;
+   let v be VECTOR of
+     RLSStruct(# the_set_of_RealSequences,Zeroseq, l_add,l_mult #);
+   thus r*v = l_mult.[r,v] by RLVECT_1:def 4
+           .= R_id(r)(#)seq_id(v) by Def5
+           .= r(#)seq_id(v) by Def3;
+end;
+
+definition
+  cluster RLSStruct (# the_set_of_RealSequences, Zeroseq, l_add, l_mult #) ->
+    Abelian;
+  coherence
+  proof
+     let v,w being VECTOR of
+     RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #);
+       v + w = seq_id(v)+seq_id(w) by Th4;
+     hence thesis by Th4;
+  end;
+end;
+
+Lm2:
+ for u,v being VECTOR of
+ RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #) holds
+  u + v = v + u;
+
+theorem Th6:
+for u,v,w being VECTOR of
+ RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #) holds
+  (u + v) + w = u + (v + w)
+proof
+   let u,v,w be VECTOR of
+     RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #);
+     (u+v) + w = seq_id(u+v)+seq_id(w) by Th4
+           .= seq_id(seq_id(u)+seq_id(v))+seq_id(w) by Th4
+           .= (seq_id(u)+seq_id(v)) +seq_id(w) by Th3
+           .= seq_id(u)+(seq_id(v)+seq_id(w)) by SEQ_1:20
+           .= seq_id(u)+seq_id(seq_id(v)+seq_id(w)) by Th3
+           .= seq_id(u) + seq_id(v+w) by Th4;
+   hence thesis by Th4;
+end;
+
+theorem Th7:
+for v being VECTOR of
+ RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #) holds
+  v + 0.RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #) = v
+proof
+   let v being VECTOR of
+     RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #);
+   set V=RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #);
+A1:v + 0.V = seq_id(v)+seq_id(0.V) by Th4
+          .= seq_id(v)+seq_id(Zeroseq) by RLVECT_1:def 2;
+ for s be set st s in NAT holds
+    (seq_id(v)+seq_id(Zeroseq)).s=(seq_id(v)).s
+   proof
+     let s be set such that
+A2:  s in NAT;
+       (seq_id(v)+seq_id(Zeroseq)).s
+          = (seq_id(v)).s+(seq_id(Zeroseq)).s by A2,SEQ_1:11
+         .= (seq_id(v)).s + 0 by A2,Def6;
+     hence thesis;
+   end;
+   hence v + 0.V=seq_id(v) by A1,SEQ_1:8 .=v by Def2;
+end;
+
+theorem Th8:
+for v being VECTOR of
+ RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #)
+  ex w being VECTOR of
+   RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #) st
+    v + w = 0.RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #)
+proof
+   let v be VECTOR of
+    RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #);
+   set V = RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #);
+A1:0.V = Zeroseq by RLVECT_1:def 2;
+   reconsider w=-seq_id(v) as VECTOR of V by Def1;
+     v+w=Zeroseq
+   proof
+A2:  v+w = seq_id(v)+seq_id(w) by Th4
+        .= seq_id(v)+(-seq_id(v)) by Th3;
+   for s be set st s in NAT holds
+     (seq_id(v)+(-seq_id(v)) ).s=(seq_id(Zeroseq)).s
+     proof
+       let s be set such that
+A3:    s in NAT;
+         (seq_id(v)+(-seq_id(v))).s
+         = (seq_id(v)).s+(-seq_id(v)).s by A3,SEQ_1:11
+        .= (seq_id(v)).s + (-((seq_id(v)).s)) by A3,SEQ_1:14
+        .= 0 by XCMPLX_0:def 6
+        .= (seq_id(Zeroseq)).s by A3,Def6;
+       hence thesis;
+     end;
+     then seq_id(v)+(-seq_id(v)) = seq_id(Zeroseq) by SEQ_1:8
+      .=Zeroseq by Def2;
+     hence thesis by A2;
+   end;
+   hence thesis by A1;
+end;
+
+theorem Th9:
+for a being Real, v,w being VECTOR of
+ RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #) holds
+  a * (v + w) = a * v + a * w
+proof
+   let a be Real;
+   let v,w being VECTOR of
+    RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #);
+A1:a * (v + w) =a(#)seq_id(v + w) by Th5
+           .=a(#)seq_id(seq_id(v) + seq_id(w)) by Th4
+           .=a(#)(seq_id(v) + seq_id(w)) by Th3
+           .=a(#)seq_id(v) + a(#)seq_id(w) by SEQ_1:30;
+     a*v + a*w = seq_id(a*v)+seq_id(a*w) by Th4
+          .=seq_id(a(#)seq_id(v)) + seq_id(a*w) by Th5
+          .=seq_id(a(#)seq_id(v)) + seq_id(a(#)seq_id(w)) by Th5
+          .=a(#)seq_id(v) + seq_id(a(#)seq_id(w)) by Th3
+          .=a(#)seq_id(v) + a(#)seq_id(w) by Th3;
+   hence thesis by A1;
+end;
+
+theorem Th10:
+for a,b being Real, v being VECTOR of
+ RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #) holds
+  (a + b) * v = a * v + b * v
+proof
+   let a,b be Real;
+   let v being VECTOR of
+    RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #);
+A1:(a+b)(#)seq_id(v) =a(#)seq_id(v)+b(#)seq_id(v)
+   proof
+    for s be set st s in NAT holds
+   ((a+b)(#)seq_id(v)).s=(a(#)seq_id(v)+b(#)seq_id(v)).s
+     proof
+       let s be set such that
+A2:    s in NAT;
+A3:    for p,q,r be Real holds (p+q)*r=p*r+q*r
+       proof
+         let p,q,r be Real;
+           (p+q)*r=(p+q+0)*r
+                    .=p*r+q*r+0*r by XCMPLX_1:9;
+         hence thesis;
+       end;
+         ((a+b)(#)seq_id(v)).s = (a+b)*(seq_id(v)).s by A2,SEQ_1:13
+          .= a*((seq_id(v)).s)+b*((seq_id(v)).s) by A3
+          .= (a(#)seq_id(v)).s+b*(seq_id(v)).s by A2,SEQ_1:13
+          .= (a(#)seq_id(v)).s+(b(#)seq_id(v)).s by A2,SEQ_1:13;
+       hence thesis by A2,SEQ_1:11;
+     end;
+     hence (a+b)(#)seq_id(v)=a(#)seq_id(v)+b(#)seq_id(v) by SEQ_1:8;
+   end;
+     a*v + b*v = seq_id(a*v)+seq_id(b*v) by Th4
+          .=seq_id(a(#)seq_id(v)) + seq_id(b*v) by Th5
+          .=seq_id(a(#)seq_id(v)) + seq_id(b(#)seq_id(v)) by Th5
+          .=a(#)seq_id(v) + seq_id(b(#)seq_id(v)) by Th3
+          .=a(#)seq_id(v) + b(#)seq_id(v) by Th3;
+   hence thesis by A1,Th5;
+end;
+
+theorem Th11:
+for a,b be Real, v being VECTOR of
+ RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #) holds
+  (a * b) * v = a * (b * v)
+proof
+   let a,b be Real;
+   let v being VECTOR of
+    RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #);
+     (a * b) * v =(a*b)(#)seq_id(v) by Th5
+                .=a(#)(b(#)seq_id(v)) by SEQ_1:31
+                .=a(#)seq_id(b(#)seq_id(v)) by Th3
+                .=a(#)seq_id(b*v) by Th5;
+   hence thesis by Th5;
+end;
+
+theorem Th12:
+for v being VECTOR of
+ RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #) holds 1 * v = v
+proof
+   let v being VECTOR of
+    RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #);
+     1 * v =1(#)seq_id(v) by Th5 .=seq_id(v) by SEQ_1:35;
+   hence thesis by Def2;
+end;
+
+definition
+  func Linear_Space_of_RealSequences -> RealLinearSpace equals :Def7:
+   RLSStruct (# the_set_of_RealSequences, Zeroseq, l_add, l_mult #);
+  correctness by Lm2,Th6,Th7,Th8,Th9,Th10,Th11,Th12,RLVECT_1:7;
+end;
+
+definition
+let X be RealLinearSpace;
+let X1 be Subset of X such that
+A1:X1 is lineary-closed & X1 is non empty;
+func Add_(X1,X) -> BinOp of X1 equals :Def8:
+(the add of X) | [:X1,X1:];
+correctness
+proof
+A2:[:X1,X1:] c= [:the carrier of X,the carrier of X:] by ZFMISC_1:119;
+A3:dom (the add of X)
+  = [:the carrier of X,the carrier of X:] by FUNCT_2:def 1;
+then A4: dom ((the add of X) | [:X1,X1:]) =[:X1,X1:] by A2,RELAT_1:91;
+     for z be set st z in [:X1,X1:] holds ((the add of X) | [:X1,X1:]).z in X1
+   proof
+     let z be set such that
+A5:  z in [:X1,X1:];
+     consider r,x  be set such that
+A6:  r in X1 & x in X1 & z=[r,x] by A5,ZFMISC_1:def 2;
+     reconsider y=x,r1=r as VECTOR of X by A6;
+  [r,x] in dom ((the add of X) | [:X1,X1:]) by A2,A3,A5,A6,RELAT_1:91;
+     then ((the add of X) | [:X1,X1:]).z
+        = (the add of X).[r,x] by A6,FUNCT_1:70
+       .= r1+y by RLVECT_1:def 3;
+     hence thesis by A1,A6,RLSUB_1:def 1;
+   end;
+   hence thesis by A4,FUNCT_2:5;
+end;
+end;
+
+definition
+let X be RealLinearSpace;
+let X1 be Subset of X such that
+A1: X1 is lineary-closed & X1 is non empty;
+func Mult_(X1,X) -> Function of [:REAL,X1:], X1 equals :Def9:
+(the Mult of X) | [:REAL,X1:];
+correctness
+proof
+A2:[:REAL,X1:] c= [:REAL,the carrier of X:] by ZFMISC_1:118;
+A3: dom (the Mult of X) = [:REAL,the carrier of X:] by FUNCT_2:def 1;
+then A4: dom ((the Mult of X) | [:REAL,X1:]) =[:REAL,X1:] by A2,RELAT_1:91;
+     for z be set st z in [:REAL,X1:] holds
+     ((the Mult of X) | [:REAL,X1:]).z in X1
+   proof
+     let z be set such that
+A5:  z in [:REAL,X1:];
+     consider r,x  be set such that
+A6:  r in REAL & x in X1 & z=[r,x] by A5,ZFMISC_1:def 2;
+     reconsider y=x as VECTOR of X by A6;
+     reconsider r as Real by A6;
+  [r,x] in dom ((the Mult of X) | [:REAL,X1:]) by A2,A3,A5,A6,RELAT_1:91;
+     then ((the Mult of X) | [:REAL,X1:]).z
+       = (the Mult of X).[r,x] by A6,FUNCT_1:70
+      .= r*y by RLVECT_1:def 4;
+     hence thesis by A1,A6,RLSUB_1:def 1;
+   end;
+   hence thesis by A4,FUNCT_2:5;
+end;
+end;
+
+definition
+let X be RealLinearSpace, X1 be Subset of X such that
+A1: X1 is lineary-closed & X1 is non empty;
+func Zero_(X1,X) -> Element of X1 equals :Def10:
+  0.X;
+correctness
+proof
+   consider v be Element of X1;
+     v in X1 by A1;
+   then reconsider v as Element of X;
+     v-v=0.X by RLVECT_1:28;
+   hence thesis by A1,RLSUB_1:6;
+end;
+end;
+
+theorem Th13:
+for V be RealLinearSpace, V1 be Subset of V
+ st V1 is lineary-closed & V1 is non empty holds
+  RLSStruct (# V1,Zero_(V1,V), Add_(V1,V),Mult_(V1,V) #) is Subspace of V
+proof
+   let V be RealLinearSpace;
+   let V1 be Subset of V such that
+A1:V1 is lineary-closed & V1 is non empty;
+A2:Zero_(V1,V) = 0.V by A1,Def10;
+A3:Add_(V1,V)= (the add of V) | [:V1,V1:] by A1,Def8;
+     Mult_(V1,V) = (the Mult of V) | [:REAL,V1:] by A1,Def9;
+   hence thesis by A1,A2,A3,RLSUB_1:32;
+end;
+
+definition
+  func the_set_of_l2RealSequences -> Subset of
+  Linear_Space_of_RealSequences means :Def11:
+  it is non empty &
+  for x being set holds x in it iff
+  (x in the_set_of_RealSequences &
+  seq_id(x)(#)seq_id(x) is summable);
+existence
+proof
+  defpred P[set] means seq_id($1)(#)seq_id($1) is summable;
+   consider IT being set such that
+A1:for x being set holds x in IT
+    iff x in the_set_of_RealSequences & P[x] from Separation;
+A2:IT is non empty
+   proof
+       seq_id(Zeroseq)(#)seq_id(Zeroseq) is summable
+     proof
+       reconsider rseq=(seq_id(Zeroseq)(#)seq_id(Zeroseq)) as Real_Sequence;
+         now let n be Nat;
+         thus rseq.n =((seq_id(Zeroseq)).n ) * ((seq_id(Zeroseq)).n )
+          by SEQ_1:12
+          .=((seq_id(Zeroseq)).n ) * (0) by Def6
+          .=0;
+       end;
+       then rseq is absolutely_summable by COMSEQ_3:3;
+       hence thesis by SERIES_1:40;
+     end;
+     hence thesis by A1;
+  end;
+    IT is Subset of the_set_of_RealSequences
+   proof
+       for x be set st x in IT holds x in the_set_of_RealSequences by A1;
+     hence thesis by TARSKI:def 3;
+   end;
+   hence thesis by A1,A2,Def7;
+end;
+uniqueness
+proof
+   let X1,X2 be Subset of Linear_Space_of_RealSequences;
+   assume that
+A3:X1 is non empty &
+    for x being set holds x in X1 iff
+     (x in the_set_of_RealSequences & seq_id(x)(#)seq_id(x) is summable)
+   and
+A4:X2 is non empty &
+    for x being set holds x in X2 iff
+     (x in the_set_of_RealSequences & seq_id(x)(#)seq_id(x) is summable);
+A5: X1 c= X2
+    proof
+      let x be set;
+      assume x in X1;
+      then x in the_set_of_RealSequences
+        & seq_id(x)(#)seq_id(x) is summable by A3;
+      hence thesis by A4;
+    end;
+      X2 c= X1
+    proof
+      let x be set;
+      assume x in X2;
+      then x in the_set_of_RealSequences
+        & seq_id(x)(#)seq_id(x) is summable by A4;
+      hence thesis by A3;
+    end;
+    hence thesis by A5,XBOOLE_0:def 10;
+  end;
+end;
+
+theorem Th14:
+the_set_of_l2RealSequences is lineary-closed &
+ the_set_of_l2RealSequences is non empty
+proof
+set W = the_set_of_l2RealSequences;
+A1:for v,u be VECTOR of Linear_Space_of_RealSequences st
+    v in the_set_of_l2RealSequences &
+    u in the_set_of_l2RealSequences
+        holds v + u in the_set_of_l2RealSequences
+   proof
+     let v,u be VECTOR of Linear_Space_of_RealSequences such that
+A2: v in W & u in W;
+  (seq_id(v+u))(#)(seq_id(v+u)) is summable
+     proof
+A3:  (seq_id(v))(#)(seq_id(v)) is summable by A2,Def11;
+A4:  (seq_id(u))(#)(seq_id(u)) is summable by A2,Def11;
+       set p = (seq_id(v))(#)(seq_id(v));
+       set q = (seq_id(u))(#)(seq_id(u));
+       set r = (seq_id(v+u))(#)(seq_id(v+u));
+A5:  2(#)p is summable by A3,SERIES_1:13;
+   2(#)q is summable by A4,SERIES_1:13;
+then A6:  2(#)p+2(#)q is summable by A5,SERIES_1:10;
+A7:  for n be Nat holds 0<=r.n
+       proof
+        let n be Nat;
+          r.n=(seq_id(v+u)).n * (seq_id(v+u)).n by SEQ_1:12;
+        hence thesis by REAL_1:93;
+      end;
+  for n be Nat holds r.n <=(2(#)p+2(#)q).n
+      proof
+        let n be Nat;
+        set s = seq_id(v);
+        set t = seq_id(u);
+        reconsider sn=s.n, tn=t.n as Real;
+A8:     seq_id(v+u)=seq_id(seq_id(v)+seq_id(u)) by Def7,Th4
+                    .=seq_id(v)+seq_id(u) by Th3;
+A9:     r.n=(seq_id(v+u)).n * (seq_id(v+u)).n by SEQ_1:12
+         .=(s.n+t.n) * (seq_id(v)+seq_id(u)).n by A8,SEQ_1:11
+         .=(s.n+t.n) * (s.n+t.n) by SEQ_1:11
+         .=((s.n)+(t.n))^2 by SQUARE_1:def 3
+         .= sn^2 + 2*sn*tn + tn^2 by SQUARE_1:63;
+      (2(#)p+2(#)q).n=(2(#)p).n +(2(#)q).n by SEQ_1:11
+                    .= 2*p.n + (2(#)q).n by SEQ_1:13
+                    .= 2*p.n + 2*q.n by SEQ_1:13
+                    .= 2*(s.n*s.n) + 2*q.n by SEQ_1:12
+                    .= 2*(s.n*s.n) + 2*(t.n*t.n) by SEQ_1:12
+                    .= 2*sn^2 + 2*(t.n*t.n) by SQUARE_1:def 3
+                    .= 2*sn^2 + 2*tn^2 by SQUARE_1:def 3;
+then A10:     (2(#)p+2(#)q).n - r.n
+          = 2*sn^2 + 2*tn^2 - (sn^2 + 2*sn*tn) - tn^2 by A9,XCMPLX_1:36
+         .= 2*sn^2 + 2*tn^2 - sn^2 - 2*sn*tn - tn^2 by XCMPLX_1:36
+         .= 2*sn^2 - sn^2 + 2*tn^2 - 2*sn*tn - tn^2 by XCMPLX_1:29
+         .= sn^2 + sn^2 - sn^2 + 2*tn^2 - 2*sn*tn - tn^2 by XCMPLX_1:11
+         .= sn^2 + 2*tn^2 - 2*sn*tn - tn^2 by XCMPLX_1:26
+         .= sn^2 - 2*sn*tn + 2*tn^2 - tn^2 by XCMPLX_1:29
+         .= sn^2 - 2*sn*tn + (2*tn^2 - tn^2) by XCMPLX_1:29
+         .= sn^2 - 2*sn*tn + (tn^2 + tn^2 - tn^2) by XCMPLX_1:11
+          .= sn^2 - 2 * sn * tn + tn^2 by XCMPLX_1:26
+         .= (sn-tn)^2 by SQUARE_1:64;
+         0 <= (sn-tn)^2 by SQUARE_1:72;
+       then 0 + r.n <= (2(#)p+2(#)q).n - r.n + r.n by A10,REAL_1:55;
+       then r.n <= (2(#)p+2(#)q).n - (r.n - r.n) by XCMPLX_1:37;
+      hence thesis by XCMPLX_1:17;
+     end;
+     hence thesis by A6,A7,SERIES_1:24;
+    end;
+    hence v+u in W by Def7,Def11;
+end;
+  for a be Real for v be VECTOR of Linear_Space_of_RealSequences
+    st v in W holds a * v in W
+    proof
+let a be Real;
+let v be VECTOR of Linear_Space_of_RealSequences such that
+    A11: v in W;
+      (seq_id(a*v))(#)(seq_id(a*v)) is summable
+    proof
+     A12: (seq_id(v))(#)(seq_id(v)) is summable by A11,Def11;
+       seq_id(a*v)=seq_id(a(#)seq_id(v)) by Def7,Th5
+                     .=a(#)seq_id(v) by Th3;
+     then (seq_id(a*v))(#)(seq_id(a*v))
+          =a(#)((a(#)seq_id(v))(#) seq_id(v)) by SEQ_1:27
+         .=a(#)(a(#)( seq_id(v)(#)seq_id(v))) by SEQ_1:26
+         .=(a*a)(#)(seq_id(v)(#)seq_id(v)) by SEQ_1:31;
+     hence thesis by A12,SERIES_1:13;
+    end;
+    hence a*v in W by Def7,Def11;
+  end;
+  hence thesis by A1,Def11,RLSUB_1:def 1;
+end;
+
+theorem
+  RLSStruct(# the_set_of_l2RealSequences,
+        Zero_(the_set_of_l2RealSequences,Linear_Space_of_RealSequences),
+        Add_(the_set_of_l2RealSequences,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_l2RealSequences,Linear_Space_of_RealSequences) #)
+is Subspace of Linear_Space_of_RealSequences by Th13,Th14;
+
+theorem Th16:
+RLSStruct (# the_set_of_l2RealSequences,
+        Zero_(the_set_of_l2RealSequences,Linear_Space_of_RealSequences),
+        Add_(the_set_of_l2RealSequences,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_l2RealSequences,Linear_Space_of_RealSequences) #)
+is RealLinearSpace by Th13,Th14;
+
+theorem
+   the carrier of Linear_Space_of_RealSequences = the_set_of_RealSequences &
+(for x be set holds
+  x is Element of Linear_Space_of_RealSequences
+  iff x is Real_Sequence )
+& (for x be set holds x is VECTOR of Linear_Space_of_RealSequences
+  iff x is Real_Sequence )
+&(for u be VECTOR of Linear_Space_of_RealSequences
+  holds u =seq_id(u) )
+&(for u,v be VECTOR of Linear_Space_of_RealSequences
+  holds u+v =seq_id(u)+seq_id(v) )
+&( for r be Real for u be VECTOR of Linear_Space_of_RealSequences
+  holds r*u =r(#)seq_id(u) ) by Def1,Def2,Def7,Th4,Th5;
+
+theorem Th18:
+ex f be Function of
+[: the_set_of_l2RealSequences, the_set_of_l2RealSequences :], REAL st
+  ( for x,y be set st
+        x in the_set_of_l2RealSequences & y in the_set_of_l2RealSequences
+      holds f.[x,y] = Sum(seq_id(x)(#)seq_id(y)) )
+proof
+  set X = the_set_of_l2RealSequences;
+  deffunc F(set,set) = Sum(seq_id($1)(#)seq_id($2));
+A1: for x,y being set st x in X & y in X holds F(x,y) in REAL;
+    ex f being Function of [:X,X:],REAL st
+    for x,y being set st x in X & y in X holds
+    f.[x,y] = F(x,y) from Lambda2(A1);
+  hence thesis;
+end;
+
+definition
+ func l_scalar -> Function of
+  [:the_set_of_l2RealSequences, the_set_of_l2RealSequences:], REAL means
+    (for x,y be set st
+    x in the_set_of_l2RealSequences & y in the_set_of_l2RealSequences
+     holds it.[x,y] = Sum(seq_id(x)(#)seq_id(y)));
+existence by Th18;
+uniqueness
+proof
+  set X = the_set_of_l2RealSequences;
+  let scalar1, scalar2 be Function of [: X, X :], REAL such that
+  A1:(for x,y be set st x in X & y in X
+      holds scalar1.[x,y] = Sum(seq_id(x)(#)seq_id(y))) and
+  A2:(for x,y be set st x in X & y in X
+      holds scalar2.[x,y] = Sum(seq_id(x)(#)seq_id(y)));
+     for x, y be set st x in X & y in X holds scalar1.[x,y] = scalar2.[x,y]
+   proof
+     let x,y be set such that A3: x in X & y in X;
+     thus scalar1.[x,y] = Sum(seq_id(x)(#)seq_id(y)) by A1,A3
+                 .= scalar2.[x,y] by A2,A3;
+  end;
+  hence thesis by FUNCT_2:118;
+end;
+end;
+
+definition
+  cluster UNITSTR (# the_set_of_l2RealSequences,
+        Zero_(the_set_of_l2RealSequences,Linear_Space_of_RealSequences),
+         Add_(the_set_of_l2RealSequences,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_l2RealSequences,Linear_Space_of_RealSequences),
+        l_scalar #) -> non empty;
+  coherence
+  proof
+      the_set_of_l2RealSequences is non empty by Def11;
+    hence thesis by STRUCT_0:def 1;
+  end;
+end;
+
+definition
+func l2_Space -> non empty UNITSTR equals :Def13:
+ UNITSTR (# the_set_of_l2RealSequences,
+        Zero_(the_set_of_l2RealSequences,Linear_Space_of_RealSequences),
+         Add_(the_set_of_l2RealSequences,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_l2RealSequences,Linear_Space_of_RealSequences),
+        l_scalar #);
+correctness;
+end;
+
+theorem Th19:
+for l be UNITSTR st
+RLSStruct (# the carrier of l, the Zero of l, the add of l,
+        the Mult of l #) is RealLinearSpace holds l is RealLinearSpace
+proof
+  let l be UNITSTR such that
+A1: RLSStruct (# the carrier of l, the Zero of l, the add of l,
+        the Mult of l #) is RealLinearSpace;
+    the carrier of l is non empty by A1,STRUCT_0:def 1;
+  then reconsider l as non empty RLSStruct by STRUCT_0:def 1;
+  reconsider l0=RLSStruct (# the carrier of l,
+        the Zero of l, the add of l,
+        the Mult of l #) as RealLinearSpace by A1;
+A2: for v,w being VECTOR of l holds v + w = w + v
+  proof
+    let v,w be VECTOR of l;
+    reconsider v1=v as VECTOR of l0;
+    reconsider w1=w as VECTOR of l0;
+    thus v+w = (the add of l).[v1,w1] by RLVECT_1:def 3
+       .=v1+w1 by RLVECT_1:def 3
+       .= (the add of l).[w1,v1] by RLVECT_1:def 3
+       .= w +v by RLVECT_1:def 3;
+  end;
+A3:for u,v,w being VECTOR of l holds (u + v) + w = u + (v + w)
+  proof
+    let u,v,w be VECTOR of l;
+    reconsider u1=u as VECTOR of l0;
+    reconsider v1=v as VECTOR of l0;
+    reconsider w1=w as VECTOR of l0;
+    thus (u + v) + w
+        = (the add of l).[(u+v),w] by RLVECT_1:def 3
+       .= (the add of l).[(the add of l).[u,v],w] by RLVECT_1:def 3
+       .= (the add of l).[(u1+v1),w] by RLVECT_1:def 3
+       .= (u1+v1)+w1 by RLVECT_1:def 3
+       .= u1+(v1+w1) by RLVECT_1:def 6
+       .= (the add of l).[u1,(v1+w1)] by RLVECT_1:def 3
+       .= (the add of l).[u1,(the add of l).[v1,w1]] by RLVECT_1:def 3
+       .= (the add of l).[u,(v+w)] by RLVECT_1:def 3
+       .= u+(v+w) by RLVECT_1:def 3;
+  end;
+A4: for v being VECTOR of l holds v + 0.l = v
+proof
+let v be VECTOR of l;
+    reconsider v1=v as VECTOR of l0;
+    A5:0.l=the Zero of l by RLVECT_1:def 2
+          .=0.l0 by RLVECT_1:def 2;
+    thus v+0.l=(the add of l).[v,0.l] by RLVECT_1:def 3
+        .= v1 + 0.l0 by A5,RLVECT_1:def 3
+        .= v by RLVECT_1:def 7;
+end;
+
+A6:for v being VECTOR of l ex w being VECTOR of l st v + w = 0.l
+proof
+    let v be VECTOR of l;
+    reconsider v1=v as VECTOR of l0;
+    A7:0.l=the Zero of l by RLVECT_1:def 2
+          .=0.l0 by RLVECT_1:def 2;
+    consider w1 being VECTOR of l0 such that
+    A8: v1 + w1 = 0.l0 by RLVECT_1:def 8;
+    reconsider w = w1 as VECTOR of l;
+    A9:v+w = (the add of l).[v,w] by RLVECT_1:def 3
+       .=0.l by A7,A8,RLVECT_1:def 3;
+    take w;
+    thus thesis by A9;
+end;
+
+A10:for a be Real for v,w being VECTOR of l holds
+         a * (v + w) = a * v + a * w
+  proof
+    let a be Real;
+    let v,w be VECTOR of l;
+    reconsider v1=v, w1=w as VECTOR of l0;
+    thus a*(v+w) = (the Mult of l).[a,(v+w)] by RLVECT_1:def 4
+       .= (the Mult of l).[a,(the add of l).[v1,w1]] by RLVECT_1:def 3
+       .= (the Mult of l).[a,(v1+w1)] by RLVECT_1:def 3
+       .=a*(v1+w1) by RLVECT_1:def 4
+       .=a*v1+a*w1 by RLVECT_1:def 9
+       .=(the add of l).[a*v1,a*w1] by RLVECT_1:def 3
+       .=(the add of l).[(the Mult of l).[a,v1],a*w1] by RLVECT_1:def 4
+       .=(the add of l).[(the Mult of l).[a,v1],
+                (the Mult of l).[a,w1]] by RLVECT_1:def 4
+       .=(the add of l).[a*v, (the Mult of l).[a,w]] by RLVECT_1:def 4
+       .=(the add of l).[a*v, a*w] by RLVECT_1:def 4
+       .= a*v +a*w by RLVECT_1:def 3;
+  end;
+
+A11:for a,b be Real for v being VECTOR of l
+   holds (a + b) * v = a * v + b * v
+  proof
+    let a,b be Real;
+    let v be VECTOR of l;
+    reconsider v1=v as VECTOR of l0;
+    thus (a+b)*v = (the Mult of l).[(a+b),v] by RLVECT_1:def 4
+       .=(a+b)*v1 by RLVECT_1:def 4
+       .=a*v1+b*v1 by RLVECT_1:def 9
+       .=(the add of l).[a*v1,b*v1] by RLVECT_1:def 3
+       .=(the add of l).[(the Mult of l).[a,v1],b*v1] by RLVECT_1:def 4
+       .=(the add of l).[(the Mult of l).[a,v1],
+                (the Mult of l).[b,v1]] by RLVECT_1:def 4
+       .=(the add of l).[a*v, (the Mult of l).[b,v]] by RLVECT_1:def 4
+       .=(the add of l).[a*v, b*v] by RLVECT_1:def 4
+       .= a*v +b*v by RLVECT_1:def 3;
+  end;
+
+A12:for a,b be Real for v being VECTOR of l holds (a * b) * v = a * (b * v)
+  proof
+    let a,b be Real;
+    let v be VECTOR of l;
+    reconsider v1=v as VECTOR of l0;
+    thus (a*b)*v = (the Mult of l).[a*b,v] by RLVECT_1:def 4
+       .=(a*b)*v1 by RLVECT_1:def 4
+       .=a*(b*v1) by RLVECT_1:def 9
+       .=(the Mult of l).[a,b*v1] by RLVECT_1:def 4
+       .=(the Mult of l).[a,(the Mult of l).[b,v1]] by RLVECT_1:def 4
+       .=(the Mult of l).[a,b*v] by RLVECT_1:def 4
+       .= a*(b*v) by RLVECT_1:def 4;
+  end;
+     for v being VECTOR of l holds 1 * v = v
+   proof
+     let v be VECTOR of l;
+     reconsider v1=v as VECTOR of l0;
+     thus 1*v= (the Mult of l).[1,v] by RLVECT_1:def 4
+            .= 1*v1 by RLVECT_1:def 4
+            .= v by RLVECT_1:def 9;
+   end;
+   hence thesis by A2,A3,A4,A6,A10,A11,A12,RLVECT_1:7;
+end;
+
+theorem
+  for rseq be Real_Sequence
+   st (for n be Nat holds rseq.n=0) holds
+   rseq is summable & Sum rseq = 0
+   proof
+      let rseq be Real_Sequence such that
+      A1: for n be Nat holds rseq.n=0;
+      A2: for m be Nat holds Partial_Sums (rseq).m = 0
+           proof
+            let m be Nat;
+               defpred P[Nat] means rseq.$1 = (Partial_Sums rseq).$1;
+               A3: P[0] by SERIES_1:def 1;
+               A4: for k be Nat st P[k] holds P[k+1]
+                proof let k be Nat such that
+                   A5: rseq.k = (Partial_Sums (rseq)).k;
+                    thus rseq.(k+1) = 0 + (rseq).(k+1)
+                    .= rseq.k + rseq.(k+1) by A1
+                    .= (Partial_Sums rseq).(k+1) by A5,SERIES_1:def 1;
+                 end;
+                   for n be Nat holds P[n] from Ind(A3,A4);
+                 hence (Partial_Sums (rseq)).m = rseq.m
+                    .= 0 by A1;
+            end;
+           Sum rseq = 0 & rseq is summable
+              proof
+              A6: for p be real number st 0<p ex n be Nat
+                   st for m be Nat st n<=m holds
+                     abs((Partial_Sums rseq).m-0)<p
+                 proof
+                 let p be real number such that
+                 A7: 0<p;
+                 take 0;
+                 let m be Nat such that 0<=m;
+                   abs((Partial_Sums rseq).m-0)
+                 = abs(0-0) by A2
+                 .= 0 by ABSVALUE:def 1;
+                 hence abs((Partial_Sums (rseq)).m-0)<p by A7;
+               end;
+              then A8:Partial_Sums (rseq) is convergent by SEQ_2:def 6;
+              then lim (Partial_Sums (rseq)) = 0 by A6,SEQ_2:def 7;
+           hence thesis by A8,SERIES_1:def 2,def 3;
+         end;
+  hence thesis;
+end;
+
+theorem
+  for rseq be Real_Sequence
+   st ( (for n be Nat holds 0 <= rseq.n) & rseq is summable & Sum rseq=0)
+   holds for n be Nat holds rseq.n =0
+   proof
+      let rseq be Real_Sequence such that
+      A1: for n be Nat holds 0 <= rseq.n and
+      A2: rseq is summable and
+      A3: Sum rseq=0;
+      A4: Partial_Sums rseq is non-decreasing by A1,SERIES_1:19;
+      A5: Partial_Sums rseq is bounded_above by A1,A2,SERIES_1:20;
+      A6: for n be Nat holds (Partial_Sums rseq).n <= Sum rseq
+        proof
+          let n be Nat;
+            (Partial_Sums(rseq)).n <= lim Partial_Sums rseq by A4,A5,SEQ_4:54;
+          hence (Partial_Sums(rseq)).n <=Sum rseq by SERIES_1:def 3;
+        end;
+        now assume
+              ex n be Nat st rseq.n <> 0;
+         then consider n1 be Nat such that
+         A7:  rseq.n1 <> 0;
+      A8:  for n be Nat holds 0 <= Partial_Sums(rseq).n
+           proof
+              let n be Nat;
+               A9: n=n+0;
+              A10:Partial_Sums(rseq).0 = rseq.0 by SERIES_1:def 1;
+               0 <=rseq.0 by A1;
+              hence 0 <=Partial_Sums(rseq).n by A4,A9,A10,SEQM_3:11;
+           end;
+        Partial_Sums(rseq).n1 >0
+      proof
+          now per cases;
+          case
+           A11: n1=0;
+             then Partial_Sums(rseq).(n1)=rseq.0 by SERIES_1:def 1;
+             hence Partial_Sums(rseq).(n1) > 0 by A1,A7,A11;
+          case
+            A12: n1<>0;
+                0 <= n1 by NAT_1:18;
+ then A13:          0 + 1 <= n1 by A12,INT_1:20;
+              set nn=n1-1;
+             A14: nn is Nat by A13,INT_1:18;
+          A15: nn+1 = n1-(1-1) by XCMPLX_1:37
+                 .=n1;
+             A16: 0 <= rseq.n1 by A1;
+               0 <= Partial_Sums(rseq).nn by A8,A14;
+             then rseq.(n1)+0 <= rseq.(n1)+Partial_Sums(rseq).nn
+             by REAL_1:55;
+             hence Partial_Sums(rseq).n1 > 0 by A7,A14,A15,A16,SERIES_1:def 1;
+          end;
+         hence Partial_Sums(rseq).n1 > 0;
+      end;
+      hence contradiction by A3,A6;
+   end;
+hence thesis;
+end;
+
+definition
+  cluster l2_Space -> Abelian add-associative right_zeroed
+    right_complementable RealLinearSpace-like;
+  coherence by Def13,Th16,Th19;
+end;
